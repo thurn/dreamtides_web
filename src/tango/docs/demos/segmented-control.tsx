@@ -11,7 +11,6 @@ import {
   SegmentedControl,
   type SegmentedOption,
 } from "../../components/controls/SegmentedControl";
-import type { ControlTreatment } from "../../components/controls/control-treatment";
 import type { TangoComponent } from "../registry";
 
 const OPTIONS: SegmentedOption[] = [
@@ -32,7 +31,6 @@ interface SegmentedControlDemoArgs {
   value?: string;
   size?: "sm" | "md";
   full?: boolean;
-  treatment?: ControlTreatment;
 }
 
 /**
@@ -47,7 +45,6 @@ function SegmentedControlDemo({
   value,
   size = "md",
   full = false,
-  treatment = "accent",
 }: SegmentedControlDemoArgs) {
   const [selected, setSelected] = useState(() => value ?? firstValue(options));
 
@@ -64,7 +61,6 @@ function SegmentedControlDemo({
       onChange={setSelected}
       size={size}
       full={full}
-      treatment={treatment}
     />
   );
 }
@@ -73,9 +69,9 @@ export const segmentedControlDemo: TangoComponent = {
   id: "segmented-control",
   title: "Segmented Control",
   blurb:
-    "The compact tab and filter switch used for type filters, sort direction, and small mode toggles. The `treatment` prop picks its surface material from the shared control vocabulary — the same one Select renders from — so a filter and a sort dropdown side by side read as one cluster.",
+    "The compact tab and filter switch used for type filters, sort direction, and small mode toggles. Its surface is the shared glass control material — the same one Select renders from — so a filter and a sort dropdown side by side read as one cluster.",
   callout:
-    "Choose the `treatment` once for a whole control cluster, not per control. The default 'accent' is the liquid-glass pill with a violet selected segment; sprite / flat / glass / outline are the sibling materials.",
+    "The track is the shared liquid-glass control surface with a neutral frosted selected segment, so a whole filter/sort cluster reads as one material.",
   group: "Components",
   docName: "SegmentedControl",
   Component: SegmentedControlDemo,
@@ -94,10 +90,10 @@ const [filter, setFilter] = useState("All");
 />`,
     },
     {
-      label: "With a treatment",
-      note: "Pass the shared surface material chosen for the control cluster.",
+      label: "Full width",
+      note: "Set `full` to stretch the track to its container, each segment sharing the width equally.",
       code: `<SegmentedControl
-  treatment="sprite"
+  full
   options={["All", "Characters", "Events"]}
   value={filter}
   onChange={setFilter}
@@ -110,7 +106,6 @@ const [filter, setFilter] = useState("All");
       value: "All",
       size: "md",
       full: false,
-      treatment: "accent",
     },
   },
 };

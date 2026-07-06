@@ -25,10 +25,7 @@ import type { QuestState } from "../types/quest";
 import { Pressable } from "../tango/primitives/Pressable";
 import { token } from "../tango/primitives/tokens";
 import { useIsDesktop } from "../tango/screens/use-is-desktop";
-import {
-  cornerButtonChrome,
-  useDeckButtonFamily,
-} from "../tango/screens/deck-button-family";
+import { glassIconButtonChrome } from "../tango/components/controls/control-treatment";
 
 /** The App-shell overlay handlers the menu triggers. */
 interface DreamscapeQuestMenuProps {
@@ -108,10 +105,6 @@ export function DreamscapeQuestMenu({
 }: DreamscapeQuestMenuProps) {
   const { state } = useQuest();
   const isDesktop = useIsDesktop();
-  // While elevated over the mobile deck viewer, the menu button joins that
-  // screen's button family so all four buttons read as one set; on the plain
-  // dreamscape it keeps its own corner-chrome look.
-  const deckButtonFamily = useDeckButtonFamily();
   // Trigger sizing. The button clears the 44px touch floor on mobile and grows
   // again on desktop to sit alongside the larger dreamscape chrome; the edge
   // inset keeps it clear of the screen corner (more so on desktop, where there
@@ -282,16 +275,10 @@ export function DreamscapeQuestMenu({
           color: token("--text-primary"),
           fontSize: menuGlyphSize,
           cursor: "pointer",
-          // Elevated over the deck viewer: wear that screen's button family.
-          // Otherwise the dreamscape's own solid corner-chrome surface.
-          ...(elevated
-            ? cornerButtonChrome(deckButtonFamily)
-            : {
-                borderRadius: token("--radius-control"),
-                background: token("--surface-glass-strong"),
-                border: `1px solid ${token("--border-soft")}`,
-                boxShadow: token("--shadow-md"),
-              }),
+          // The shared glass icon-button surface — a fully-round liquid-glass
+          // disc, matching the deck viewer's close control and glass filter/sort
+          // controls, on the dreamscape and while elevated over the deck viewer.
+          ...glassIconButtonChrome(),
         }}
       >
         <i className="bxf bx-menu" aria-hidden="true" />

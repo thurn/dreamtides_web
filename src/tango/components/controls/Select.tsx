@@ -13,12 +13,11 @@
 // styles in one button. A menu entry may carry a compact `triggerLabel` for the
 // collapsed trigger while the menu itself shows the fuller `label`.
 //
-// The trigger's surface is the shared control material, chosen by `treatment`
-// (sprite / flat / glass / accent / outline) from control-treatment.ts — the
-// SAME vocabulary SegmentedControl renders from. The dropdown MENU is a solid
-// raised popover in every treatment: a menu must stay legible over scene art
-// and dense card grids, so it does not take on the translucent or outline
-// materials the resting trigger may use.
+// The trigger's surface is the shared liquid-glass control material from
+// control-treatment.ts — the SAME material SegmentedControl renders from. The
+// dropdown MENU is a solid raised popover: a menu must stay legible over scene
+// art and dense card grids, so it does not take on the translucent material the
+// resting trigger wears.
 //
 // The menu is portaled to the document body and positioned against the
 // trigger's box, so it floats above any scroll container or stacking context
@@ -39,10 +38,7 @@ import { HOVER_SCALE, PRESS_SCALE, usePress } from "../../primitives/Pressable";
 import { GlowIcon } from "./GlowIcon";
 import { type Glyph, GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import {
-  type ControlTreatment,
-  controlChrome,
-} from "./control-treatment";
+import { controlChrome } from "./control-treatment";
 
 /** Height/scale variants, matching SegmentedControl's. */
 type SelectSize = "sm" | "md";
@@ -82,11 +78,6 @@ export interface SelectProps {
    * Select sits against the right side of a bar so the menu stays on-screen.
    */
   align?: "start" | "end";
-  /**
-   * Surface material for the trigger — one of the shared control treatments.
-   * Default 'accent'. The menu stays a solid raised popover regardless.
-   */
-  treatment?: ControlTreatment;
   /** Accessible label for the trigger. */
   ariaLabel?: string;
 }
@@ -114,8 +105,8 @@ interface MenuAnchor {
 }
 
 /**
- * Select — a dropdown control whose trigger wears the shared control treatment
- * and whose menu is a portaled raised popover. `options` is the choice list,
+ * Select — a dropdown control whose trigger wears the shared glass control
+ * surface and whose menu is a portaled raised popover. `options` is the choice list,
  * `value` the selected value, `onChange(value)` fires on pick.
  */
 export function Select({
@@ -126,11 +117,10 @@ export function Select({
   size = "md",
   full = false,
   align = "start",
-  treatment = "accent",
   ariaLabel,
 }: SelectProps): ReactElement {
   const spec = SIZES[size];
-  const chrome = controlChrome(treatment);
+  const chrome = controlChrome();
   const { pressed, hovered, bind } = usePress();
 
   const [open, setOpen] = useState(false);
@@ -205,7 +195,7 @@ export function Select({
           gap: 8,
           width: full ? "100%" : "auto",
           height: spec.height,
-          padding: chrome.triggerPadding ?? spec.padding,
+          padding: spec.padding,
           boxSizing: "border-box",
           font: spec.font,
           color: token("--text-primary"),
@@ -220,9 +210,6 @@ export function Select({
               : "none",
           transition: `transform ${token("--dur-fast")} ${token("--ease-out")}`,
           ...chrome.trigger,
-          // A treatment with one flat ink (the sprite button) paints the whole
-          // label, so it wins over the per-part token colors below via inherit.
-          ...chrome.triggerText,
         }}
       >
         {leadingGlyph !== undefined && (
@@ -240,10 +227,7 @@ export function Select({
             textAlign: "left",
             overflow: "hidden",
             textOverflow: "ellipsis",
-            color:
-              chrome.triggerText !== undefined
-                ? "inherit"
-                : token("--text-primary"),
+            color: token("--text-primary"),
           }}
         >
           {label}

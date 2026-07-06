@@ -12,11 +12,11 @@
 // The top of the screen holds a lean control band: the corner close control,
 // and two dropdown buttons on one line — a filter button (type: All /
 // Characters / Events) and a sort button (deck order, cost, spark, name). All
-// four buttons (the close control, the elevated dreamscape menu that floats in
-// from the App shell, and the filter/sort controls) wear one harmonious button
-// family (see `deck-button-family`), so the band reads as a set. Filter and
-// sort are local presentation state; the pure `mobile-deck-filter` module
-// derives the visible grid from the full deck and that state.
+// four buttons (the glass-disc close control, the elevated dreamscape menu that
+// floats in from the App shell, and the glass filter/sort controls) wear the
+// one shared liquid-glass surface, so the band reads as a set. Filter and sort
+// are local presentation state; the pure `mobile-deck-filter` module derives
+// the visible grid from the full deck and that state.
 //
 // PURE: renders from a view-model and reports dismissal through `onClose`. All
 // state here is local presentation state (which card is being peeked, the
@@ -33,18 +33,8 @@ import { GameCard } from "../components/card/CardView";
 import { Pressable } from "../primitives/Pressable";
 import { groupPanelStyle } from "../components/controls/GroupPanel";
 import { GlowIcon } from "../components/controls/GlowIcon";
-import { SegmentedControl } from "../components/controls/SegmentedControl";
 import { Select } from "../components/controls/Select";
-import type { ControlTreatment } from "../components/controls/control-treatment";
-import {
-  type DeckButtonFamily,
-  DECK_BUTTON_FAMILIES,
-  DECK_BUTTON_FAMILY_LABELS,
-  cornerButtonChrome,
-  familyControlTreatment,
-  setDeckButtonFamily,
-  useDeckButtonFamily,
-} from "./deck-button-family";
+import { glassIconButtonChrome } from "../components/controls/control-treatment";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
@@ -131,12 +121,6 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
   const [filterSort, setFilterSort] = useState<DeckFilterSort>(
     DEFAULT_DECK_FILTER_SORT,
   );
-  // The active button family — the material the close control and filter/sort
-  // controls wear. Held in a shared store (not local state) so the App-owned
-  // menu button, which renders in a separate tree, restyles in step; the
-  // dev-only switcher below flips it live to compare families on the real
-  // screen. `DEFAULT_DECK_BUTTON_FAMILY` is what production renders.
-  const family = useDeckButtonFamily();
 
   const visibleCards = useMemo(
     () => filterAndSortDeckCards(view.cards, filterSort),
@@ -238,12 +222,10 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
 
       <TopBand
         onClose={onClose}
-        family={family}
         controls={
           <DeckControls
             filterSort={filterSort}
             onFilterSortChange={setFilterSort}
-            treatment={familyControlTreatment(family)}
           />
         }
       />
@@ -286,13 +268,6 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
       </div>
 
       {peek !== null && <PeekOverlay peek={peek} />}
-
-      {import.meta.env.DEV && (
-        <ButtonFamilySwitcher
-          family={family}
-          onFamilyChange={setDeckButtonFamily}
-        />
-      )}
     </div>
   );
 }
@@ -328,18 +303,16 @@ const CONTROL_BUTTON_PX = 48;
  * The top band: the corner close control and the filter/sort `controls` row.
  * The top-left corner is left clear for the dreamscape utility menu, which lifts
  * above this overlay while it is open (see `DreamscapeQuestMenu`'s `elevated`)
- * and wears the same button `family`; the close control on the right is the same
- * family's corner surface. Nothing sits in the center — the region the device's
- * screen cutout (notch / Dynamic Island / punch-hole) claims — so the band never
- * fights the hardware.
+ * and wears the same glass surface; the close control on the right is a matching
+ * glass disc. Nothing sits in the center — the region the device's screen cutout
+ * (notch / Dynamic Island / punch-hole) claims — so the band never fights the
+ * hardware.
  */
 function TopBand({
   onClose,
-  family,
   controls,
 }: {
   onClose: () => void;
-  family: DeckButtonFamily;
   controls: React.ReactNode;
 }) {
   return (
@@ -379,7 +352,7 @@ function TopBand({
             placeItems: "center",
             fontSize: 26,
             cursor: "pointer",
-            ...cornerButtonChrome(family),
+            ...glassIconButtonChrome(),
           }}
         >
           <GlowIcon iconClass={GLYPHS.close} color="text-primary" size="1em" />
@@ -393,21 +366,18 @@ function TopBand({
 }
 
 /**
- * The deck's filter + sort controls: two dropdown buttons on a single line — a
- * filter button (a funnel glyph and the current type) at the leading edge and a
- * sort button (up/down arrows and the current order) at the trailing edge. Both
- * wear the chosen control `treatment`. There is no segmented slider: a mobile
- * band has room for two compact buttons, not a three-way switch plus a
- * dropdown, so every treatment renders the same button pair.
+ * The deck's filter + sort controls: two glass dropdown buttons on a single
+ * line — a filter button (a funnel glyph and the current type) at the leading
+ * edge and a sort button (up/down arrows and the current order) at the trailing
+ * edge. There is no segmented slider: a mobile band has room for two compact
+ * buttons, not a three-way switch plus a dropdown.
  */
 function DeckControls({
   filterSort,
   onFilterSortChange,
-  treatment,
 }: {
   filterSort: DeckFilterSort;
   onFilterSortChange: (next: DeckFilterSort) => void;
-  treatment: ControlTreatment;
 }) {
   return (
     <div
@@ -422,7 +392,6 @@ function DeckControls({
       <Select
         size="sm"
         leadingGlyph={GLYPHS.filter}
-        treatment={treatment}
         align="start"
         ariaLabel={`Filter: ${filterSort.typeFilter}`}
         options={DECK_TYPE_FILTER_OPTIONS.map((option) => ({
@@ -440,7 +409,6 @@ function DeckControls({
       <Select
         size="sm"
         leadingGlyph={GLYPHS.sort}
-        treatment={treatment}
         align="end"
         ariaLabel={`Sort: ${deckSortLabel(filterSort.sort)}`}
         options={DECK_SORT_OPTIONS.map((option) => ({
@@ -569,66 +537,6 @@ function GridPlaceholder({ message }: { message: string }) {
       }}
     >
       {message}
-    </div>
-  );
-}
-
-/**
- * Dev-only floating switcher that flips the button family live, so the families
- * can be compared on the real deck screen — each one restyles all four buttons
- * (the close control, the elevated menu, and the filter/sort controls) at once.
- * Rendered only under `import.meta.env.DEV`; it is exploration scaffolding,
- * removed once a family is chosen. Built from Tango's own SegmentedControl so it
- * needs no raw-element lint exemptions.
- */
-function ButtonFamilySwitcher({
-  family,
-  onFamilyChange,
-}: {
-  family: DeckButtonFamily;
-  onFamilyChange: (next: DeckButtonFamily) => void;
-}) {
-  return (
-    <div
-      style={{
-        position: "absolute",
-        left: "50%",
-        transform: "translateX(-50%)",
-        bottom: `calc(${token("--safe-bottom")} + ${token("--space-3")})`,
-        zIndex: 70,
-        display: "grid",
-        gap: token("--space-2"),
-        justifyItems: "center",
-        maxWidth: `calc(100vw - ${token("--space-6")})`,
-        padding: `${token("--space-2")} ${token("--space-3")}`,
-        borderRadius: token("--radius-panel"),
-        background: token("--surface-glass-strong"),
-        border: `1px solid ${token("--border-soft")}`,
-        boxShadow: token("--shadow-lg"),
-      }}
-    >
-      <div
-        style={{
-          font: token("--t-eyebrow"),
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
-          color: token("--text-muted"),
-        }}
-      >
-        Button family (dev)
-      </div>
-      <div style={{ maxWidth: "100%", overflowX: "auto" }}>
-        <SegmentedControl
-          size="sm"
-          treatment="flat"
-          options={DECK_BUTTON_FAMILIES.map((value) => ({
-            value,
-            label: DECK_BUTTON_FAMILY_LABELS[value],
-          }))}
-          value={family}
-          onChange={(value) => onFamilyChange(value as DeckButtonFamily)}
-        />
-      </div>
     </div>
   );
 }

@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/tango#/select`
 
 The compact dropdown control, and Tango's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. Two of them share a single line where a segmented control would not fit.
 
-> **Guidance:** The trigger is single-font by construction — one leading glyph, one selection label, one chevron — so a caller cannot mix two type voices in a button. Give a menu entry a compact `triggerLabel` to keep the collapsed button narrow while the menu shows the full phrase. The trigger wears the shared control `treatment`; the menu stays a solid raised popover.
+> **Guidance:** The trigger is single-font by construction — one leading glyph, one selection label, one chevron — so a caller cannot mix two type voices in a button. Give a menu entry a compact `triggerLabel` to keep the collapsed button narrow while the menu shows the full phrase. The trigger wears the shared glass control surface; the menu stays a solid raised popover.
 
 ## Props
 
@@ -21,7 +21,6 @@ The compact dropdown control, and Tango's standard mobile filter/sort control: a
 | `size` | `SelectSize` = `"sm" \| "md"` | no | `md` | Height/scale. Default 'md'. |
 | `full` | `boolean` | no | `false` | Stretch the trigger to fill the container width. |
 | `align` | `"start" \| "end"` | no | `start` | Which trigger edge the menu aligns to. 'start' (default) opens flush to the leading edge; 'end' opens flush to the trailing edge — use it when the Select sits against the right side of a bar so the menu stays on-screen. |
-| `treatment` | `ControlTreatment` = `"accent" \| "flat" \| "sprite" \| "glass" \| "outline"` | no | `accent` | Surface material for the trigger — one of the shared control treatments. Default 'accent'. The menu stays a solid raised popover regardless. |
 | `ariaLabel` | `string` | no | — | Accessible label for the trigger. |
 
 ### `options`: the `SelectOption` model
@@ -65,7 +64,6 @@ Set `align="end"` when the Select sits against the trailing edge so its menu sta
 <Select
   leadingGlyph={GLYPHS.sort}
   align="end"
-  treatment="sprite"
   options={sortOptions}
   value={sort}
   onChange={setSort}

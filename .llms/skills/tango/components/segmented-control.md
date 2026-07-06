@@ -6,9 +6,9 @@
 
 Components · Live demo & interactive props: `/tango#/segmented-control`
 
-The compact tab and filter switch used for type filters, sort direction, and small mode toggles. The `treatment` prop picks its surface material from the shared control vocabulary — the same one Select renders from — so a filter and a sort dropdown side by side read as one cluster.
+The compact tab and filter switch used for type filters, sort direction, and small mode toggles. Its surface is the shared glass control material — the same one Select renders from — so a filter and a sort dropdown side by side read as one cluster.
 
-> **Guidance:** Choose the `treatment` once for a whole control cluster, not per control. The default 'accent' is the liquid-glass pill with a violet selected segment; sprite / flat / glass / outline are the sibling materials.
+> **Guidance:** The track is the shared liquid-glass control surface with a neutral frosted selected segment, so a whole filter/sort cluster reads as one material.
 
 ## Props
 
@@ -19,7 +19,6 @@ The compact tab and filter switch used for type filters, sort direction, and sma
 | `onChange` | `((value: string) => void)` | no | — | Fires with the newly-selected segment's value when the user switches. |
 | `size` | `SegmentedControlSize` = `"sm" \| "md"` | no | `md` | Height/scale. Default 'md'. |
 | `full` | `boolean` | no | `false` | Stretch to fill the container width, each segment sharing it equally. |
-| `treatment` | `ControlTreatment` = `"accent" \| "flat" \| "sprite" \| "glass" \| "outline"` | no | `accent` | Surface material for the track and its segments — one of the shared control treatments (sprite / flat / glass / accent / outline). Default 'accent': the liquid-glass track with a violet accent-gradient selected segment. |
 
 ## Usage
 
@@ -40,13 +39,13 @@ const [filter, setFilter] = useState("All");
 />
 ```
 
-### With a treatment
+### Full width
 
-Pass the shared surface material chosen for the control cluster.
+Set `full` to stretch the track to its container, each segment sharing the width equally.
 
 ```tsx
 <SegmentedControl
-  treatment="sprite"
+  full
   options={["All", "Characters", "Events"]}
   value={filter}
   onChange={setFilter}

@@ -156,24 +156,3 @@ Tango mobile dreamscape redesign — follow-ups / known items
      `fontVariantNumeric`, drawing the same warning for `font`.
    Both are cosmetic (dev-mode only, no runtime effect). Fix by splitting the
    shorthand into longhand properties on the offending elements.
-
-4. Deck viewer button family is a pending design decision (converge).
-   The Mobile Deck Viewer's four buttons — the elevated dreamscape menu, the
-   close control, and the filter/sort dropdowns — wear one harmonious "button
-   family" chosen from four options (glass / flat / outline / sprite), defined in
-   src/tango/screens/deck-button-family.ts. A family pairs a corner icon-button
-   surface (`cornerButtonChrome`, worn by the menu + close) with the matching
-   `ControlTreatment` its filter/sort controls wear (`controlChrome` in
-   src/tango/components/controls/control-treatment.ts), both drawn from the same
-   recipe so the two shapes cannot drift. `glass` is the shipped default; a
-   dev-only floating switcher in MobileDeckViewer flips the family live (writing
-   a small shared store the App-owned menu button also subscribes to) so the
-   options can be compared on the real screen. Per the Tango "requested
-   divergence must converge" rule, the push that stabilizes this design must end
-   with a decision:
-     - bake the chosen family as the fixed look, deleting the dev switcher and
-       the live store, and collapse the `ControlTreatment` enum to what is still
-       used across screens;
-     - decide whether `cornerButtonChrome` (an icon button that wears a control
-       treatment) should be promoted into a real Tango component (e.g. an
-       IconButton with a `treatment` prop) rather than living screen-local.

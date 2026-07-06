@@ -6,7 +6,6 @@
 
 import { useEffect, useState } from "react";
 import { Select, type SelectOption } from "../../components/controls/Select";
-import type { ControlTreatment } from "../../components/controls/control-treatment";
 import { GLYPHS } from "../../primitives/glyph";
 import type { TangoComponent } from "../registry";
 
@@ -25,7 +24,6 @@ interface SelectDemoArgs {
   size?: "sm" | "md";
   full?: boolean;
   align?: "start" | "end";
-  treatment?: ControlTreatment;
 }
 
 /**
@@ -40,7 +38,6 @@ function SelectDemo({
   size = "md",
   full = false,
   align = "start",
-  treatment = "accent",
 }: SelectDemoArgs) {
   const [selected, setSelected] = useState(
     () => value ?? options[0]?.value ?? "",
@@ -61,7 +58,6 @@ function SelectDemo({
       size={size}
       full={full}
       align={align}
-      treatment={treatment}
     />
   );
 }
@@ -72,7 +68,7 @@ export const selectDemo: TangoComponent = {
   blurb:
     "The compact dropdown control, and Tango's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. Two of them share a single line where a segmented control would not fit.",
   callout:
-    "The trigger is single-font by construction — one leading glyph, one selection label, one chevron — so a caller cannot mix two type voices in a button. Give a menu entry a compact `triggerLabel` to keep the collapsed button narrow while the menu shows the full phrase. The trigger wears the shared control `treatment`; the menu stays a solid raised popover.",
+    "The trigger is single-font by construction — one leading glyph, one selection label, one chevron — so a caller cannot mix two type voices in a button. Give a menu entry a compact `triggerLabel` to keep the collapsed button narrow while the menu shows the full phrase. The trigger wears the shared glass control surface; the menu stays a solid raised popover.",
   group: "Components",
   docName: "Select",
   Component: SelectDemo,
@@ -102,7 +98,6 @@ const [sort, setSort] = useState("deck");
       code: `<Select
   leadingGlyph={GLYPHS.sort}
   align="end"
-  treatment="sprite"
   options={sortOptions}
   value={sort}
   onChange={setSort}
@@ -116,7 +111,6 @@ const [sort, setSort] = useState("deck");
       size: "md",
       full: false,
       align: "start",
-      treatment: "accent",
     },
   },
 };

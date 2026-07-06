@@ -1994,20 +1994,6 @@
       "required": false,
       "defaultValue": "false",
       "description": "Stretch to fill the container width, each segment sharing it equally."
-    },
-    {
-      "name": "treatment",
-      "tsType": "ControlTreatment",
-      "unionMembers": [
-        "accent",
-        "flat",
-        "sprite",
-        "glass",
-        "outline"
-      ],
-      "required": false,
-      "defaultValue": "accent",
-      "description": "Surface material for the track and its segments — one of the shared control\ntreatments (sprite / flat / glass / accent / outline). Default 'accent':\nthe liquid-glass track with a violet accent-gradient selected segment."
     }
   ],
   "Select": [
@@ -2095,20 +2081,6 @@
       "required": false,
       "defaultValue": "start",
       "description": "Which trigger edge the menu aligns to. 'start' (default) opens flush to the\nleading edge; 'end' opens flush to the trailing edge — use it when the\nSelect sits against the right side of a bar so the menu stays on-screen."
-    },
-    {
-      "name": "treatment",
-      "tsType": "ControlTreatment",
-      "unionMembers": [
-        "accent",
-        "flat",
-        "sprite",
-        "glass",
-        "outline"
-      ],
-      "required": false,
-      "defaultValue": "accent",
-      "description": "Surface material for the trigger — one of the shared control treatments.\nDefault 'accent'. The menu stays a solid raised popover regardless."
     },
     {
       "name": "ariaLabel",
