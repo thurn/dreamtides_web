@@ -555,16 +555,64 @@ const SPARK_ORB_RATIO = 0.16;
 
 /**
  * Rules-text ceiling size as a fraction of the rendered card width, matching
- * the `--cv-rules-font-cap` (4.2cqw) display cap in `index.css`. The fitter
- * writes the chosen size straight onto the element, so this ceiling is the
- * size a card whose text fits renders at; the fit only drops below it when the
- * text overflows the reserved area. The text box reserves three lines at the
- * larger `--cv-rules-font-size`, so text up to a little over three capped lines
- * still holds the cap before the fitter shrinks it. The floor fraction bounds
- * how small a wordy card may shrink before its overflow is clipped.
+ * the `--cv-rules-font-cap` display cap in `index.css`. The fitter writes the
+ * chosen size straight onto the element, so this ceiling is the size a card
+ * whose text fits renders at; the fit only drops below it when the text
+ * overflows the reserved area. The text box reserves three lines at the larger
+ * `--cv-rules-font-size`, so text up to a little over three capped lines still
+ * holds the cap before the fitter shrinks it. The floor fraction bounds how
+ * small a wordy card may shrink before its overflow is clipped.
+ *
+ * Mobile viewports use a larger ceiling (`RULES_FONT_RATIO_MOBILE`, matching
+ * the raised `--cv-rules-font-cap` in the `.card-view` mobile media query):
+ * card frame sizes are all `cqw`, so a card reads at a fixed physical size for
+ * its width on any device, which leaves the ability text hard to read on the
+ * small cards a phone renders. The raised ceiling feeds the same auto-shrink
+ * fit into the taller mobile box, lifting the whole rules body a couple
+ * notches. Both ratios must track their CSS counterparts so the JS search
+ * ceiling and the CSS render cap stay equal at each breakpoint.
  */
 const RULES_FONT_RATIO = 0.042;
+const RULES_FONT_RATIO_MOBILE = 0.0485;
 const RULES_MIN_FONT_FRACTION = 0.5;
+
+/**
+ * Below this viewport width a card lifts its rules-text sizing. Mirrors the
+ * app's desktop/mobile line (`DESKTOP_MIN_WIDTH` / `useIsDesktop`, 900px) and
+ * the `@media (max-width: 899.98px)` block on `.card-view` in `index.css` that
+ * raises the matching box + render-cap CSS vars; the query and that media block
+ * must move together so the JS fit ceiling and the CSS cap agree.
+ */
+const MOBILE_CARD_TEXT_QUERY = "(max-width: 899.98px)";
+
+/**
+ * True on mobile-width viewports, where a card renders its larger rules-text
+ * sizing. Live via matchMedia so resizing or rotating re-evaluates, mirroring
+ * InfoCard's `useFinePointer` idiom.
+ */
+function useMobileCardText(): boolean {
+  const [mobile, setMobile] = useState<boolean>(() =>
+    typeof window === "undefined" || typeof window.matchMedia !== "function"
+      ? false
+      : window.matchMedia(MOBILE_CARD_TEXT_QUERY).matches,
+  );
+
+  useEffect(() => {
+    if (
+      typeof window === "undefined" ||
+      typeof window.matchMedia !== "function"
+    ) {
+      return;
+    }
+    const query = window.matchMedia(MOBILE_CARD_TEXT_QUERY);
+    const onChange = (): void => setMobile(query.matches);
+    onChange();
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
+
+  return mobile;
+}
 
 /**
  * Visual treatment for a rarity bucket. A rarity adds a shimmer overlay
@@ -827,8 +875,13 @@ export function GameCard({
   // lines still fits the fixed text box. The ceiling sits just above the
   // `--cv-rules-font-cap` display cap (text that fits keeps the shared type
   // scale); the fitted size only drops below the cap when the text overflows
-  // the reserved area.
-  const rulesMaxFontPx = widthPx * RULES_FONT_RATIO;
+  // the reserved area. Mobile viewports raise both the ceiling and the CSS box
+  // + cap together, so the same fit lands a couple notches larger.
+  const mobileCardText = useMobileCardText();
+  const rulesFontRatio = mobileCardText
+    ? RULES_FONT_RATIO_MOBILE
+    : RULES_FONT_RATIO;
+  const rulesMaxFontPx = widthPx * rulesFontRatio;
   const rulesMinFontPx = rulesMaxFontPx * RULES_MIN_FONT_FRACTION;
   const { ref: rulesFitRef, fontSize: rulesFontPx } = useFitText(
     rulesMaxFontPx,
