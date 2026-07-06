@@ -9,11 +9,14 @@
 // dismisses the zoom so the grid scrolls, so browsing and inspecting never
 // fight.
 //
-// The top of the screen holds a control band — the title, the card count, the
-// close control, and two dropdown buttons on one line: a filter button (type:
-// All / Characters / Events) and a sort button (deck order, cost, spark, name).
-// Filter and sort are local presentation state; the pure `mobile-deck-filter`
-// module derives the visible grid from the full deck and that state.
+// The top of the screen holds a lean control band: the corner close control,
+// and two dropdown buttons on one line — a filter button (type: All /
+// Characters / Events) and a sort button (deck order, cost, spark, name). All
+// four buttons (the close control, the elevated dreamscape menu that floats in
+// from the App shell, and the filter/sort controls) wear one harmonious button
+// family (see `deck-button-family`), so the band reads as a set. Filter and
+// sort are local presentation state; the pure `mobile-deck-filter` module
+// derives the visible grid from the full deck and that state.
 //
 // PURE: renders from a view-model and reports dismissal through `onClose`. All
 // state here is local presentation state (which card is being peeked, the
@@ -22,7 +25,7 @@
 // module, whose guarantee is proven over a full touch-point sweep by
 // scripts/deck-peek-clearance-analysis.mjs.
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import type { CardData } from "../../types/cards";
 import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
@@ -32,10 +35,16 @@ import { groupPanelStyle } from "../components/controls/GroupPanel";
 import { GlowIcon } from "../components/controls/GlowIcon";
 import { SegmentedControl } from "../components/controls/SegmentedControl";
 import { Select } from "../components/controls/Select";
+import type { ControlTreatment } from "../components/controls/control-treatment";
 import {
-  type ControlTreatment,
-  CONTROL_TREATMENTS,
-} from "../components/controls/control-treatment";
+  type DeckButtonFamily,
+  DECK_BUTTON_FAMILIES,
+  DECK_BUTTON_FAMILY_LABELS,
+  cornerButtonChrome,
+  familyControlTreatment,
+  setDeckButtonFamily,
+  useDeckButtonFamily,
+} from "./deck-button-family";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
@@ -69,8 +78,6 @@ export interface DeckCardView {
 
 /** The full view-model the screen renders. */
 export interface MobileDeckView {
-  /** The heading shown in the top band (e.g. "Deck"). */
-  title: string;
   /** The deck's cards in display order. */
   cards: DeckCardView[];
 }
@@ -92,14 +99,6 @@ const COLUMNS = 4;
  * down once a drag is clearly underway.
  */
 const MOVE_SLOP_PX = 10;
-
-/**
- * Minimum real top safe-area inset (px) that counts as a center screen cutout
- * (a notch / Dynamic Island). Only then is the centered title dropped below the
- * corner controls to clear the cutout; on flat-top screens it stays up in line
- * with the controls rather than floating down between them.
- */
-const CENTER_CUTOUT_MIN_INSET_PX = 24;
 
 /**
  * Reads a length token's resolved pixel value off the `.tango` root, for the
@@ -132,12 +131,12 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
   const [filterSort, setFilterSort] = useState<DeckFilterSort>(
     DEFAULT_DECK_FILTER_SORT,
   );
-  // Exploration knob (dev only): the control surface material. The floating
-  // switcher below flips it live so the treatment options can be compared on the
-  // real screen. `DEFAULT_CONTROL_TREATMENT` is what production renders.
-  const [treatment, setTreatment] = useState<ControlTreatment>(
-    DEFAULT_CONTROL_TREATMENT,
-  );
+  // The active button family — the material the close control and filter/sort
+  // controls wear. Held in a shared store (not local state) so the App-owned
+  // menu button, which renders in a separate tree, restyles in step; the
+  // dev-only switcher below flips it live to compare families on the real
+  // screen. `DEFAULT_DECK_BUTTON_FAMILY` is what production renders.
+  const family = useDeckButtonFamily();
 
   const visibleCards = useMemo(
     () => filterAndSortDeckCards(view.cards, filterSort),
@@ -238,14 +237,13 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
       <GlassBackdrop />
 
       <TopBand
-        title={view.title}
-        count={view.cards.length}
         onClose={onClose}
+        family={family}
         controls={
           <DeckControls
             filterSort={filterSort}
             onFilterSortChange={setFilterSort}
-            treatment={treatment}
+            treatment={familyControlTreatment(family)}
           />
         }
       />
@@ -290,9 +288,9 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
       {peek !== null && <PeekOverlay peek={peek} />}
 
       {import.meta.env.DEV && (
-        <ControlTreatmentSwitcher
-          treatment={treatment}
-          onTreatmentChange={setTreatment}
+        <ButtonFamilySwitcher
+          family={family}
+          onFamilyChange={setDeckButtonFamily}
         />
       )}
     </div>
@@ -323,53 +321,27 @@ function GlassBackdrop() {
   );
 }
 
-/**
- * Reads the device's real top safe-area inset (px) off a hidden probe. Zero on
- * flat-top screens; a notch / Dynamic Island reports its height here. Measured
- * rather than assumed so the title only drops below the controls when a genuine
- * center cutout is present. Returns the inset and the ref to mount on the probe.
- */
-function useTopSafeInset(): {
-  inset: number;
-  probeRef: React.RefObject<HTMLDivElement | null>;
-} {
-  const probeRef = useRef<HTMLDivElement>(null);
-  const [inset, setInset] = useState(0);
-  useEffect(() => {
-    if (probeRef.current === null) return;
-    const measured = Number.parseFloat(
-      getComputedStyle(probeRef.current).paddingTop,
-    );
-    if (!Number.isNaN(measured)) setInset(measured);
-  }, []);
-  return { inset, probeRef };
-}
-
 /** Height reserved for a corner control button, matching the close control. */
 const CONTROL_BUTTON_PX = 48;
 
 /**
- * The top band: the corner controls, a centered "Deck" title, the card count,
- * and the filter/sort `controls` row. The top-left corner is left clear for the
- * dreamscape utility menu, which lifts above this overlay while it is open (see
- * `DreamscapeQuestMenu`'s `elevated`); the close control on the right mirrors
- * that menu button's look. The title sits in line with the corner controls, and
- * only drops below them on screens whose center cutout (notch / Dynamic Island)
- * it would otherwise collide with.
+ * The top band: the corner close control and the filter/sort `controls` row.
+ * The top-left corner is left clear for the dreamscape utility menu, which lifts
+ * above this overlay while it is open (see `DreamscapeQuestMenu`'s `elevated`)
+ * and wears the same button `family`; the close control on the right is the same
+ * family's corner surface. Nothing sits in the center — the region the device's
+ * screen cutout (notch / Dynamic Island / punch-hole) claims — so the band never
+ * fights the hardware.
  */
 function TopBand({
-  title,
-  count,
   onClose,
+  family,
   controls,
 }: {
-  title: string;
-  count: number;
   onClose: () => void;
+  family: DeckButtonFamily;
   controls: React.ReactNode;
 }) {
-  const { inset: topInset, probeRef } = useTopSafeInset();
-  const hasCenterCutout = topInset >= CENTER_CUTOUT_MIN_INSET_PX;
   return (
     <div
       style={{
@@ -388,25 +360,9 @@ function TopBand({
         borderBottom: `1px solid ${token("--border-soft")}`,
       }}
     >
-      {/* Hidden probe reading the raw top inset, so the cutout test uses the
-          device's real safe area rather than the band's own clamped padding. */}
-      <div
-        ref={probeRef}
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          top: 0,
-          height: 0,
-          paddingTop: "env(safe-area-inset-top, 0px)",
-          pointerEvents: "none",
-          visibility: "hidden",
-        }}
-      />
-
-      {/* Header row: the close button anchored at the right corner (the left is
-          left empty for the elevated dreamscape menu), with the centered title
-          and count sharing the row — dropped below the controls only to clear a
-          center cutout. */}
+      {/* Corner row: the close control anchored at the right corner; the left is
+          left empty for the elevated dreamscape menu. The center stays clear for
+          the screen cutout. */}
       <div style={{ position: "relative", minHeight: CONTROL_BUTTON_PX }}>
         <Pressable
           as="button"
@@ -418,56 +374,16 @@ function TopBand({
             right: 0,
             width: CONTROL_BUTTON_PX,
             height: CONTROL_BUTTON_PX,
-            borderRadius: token("--radius-control"),
-            background: token("--surface-glass-strong"),
-            border: `1px solid ${token("--border-soft")}`,
-            boxShadow: token("--shadow-md"),
             color: token("--text-primary"),
             display: "grid",
             placeItems: "center",
             fontSize: 26,
             cursor: "pointer",
+            ...cornerButtonChrome(family),
           }}
         >
           <GlowIcon iconClass={GLYPHS.close} color="text-primary" size="1em" />
         </Pressable>
-
-        <div
-          style={{
-            textAlign: "center",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            minHeight: CONTROL_BUTTON_PX,
-            // Drop below the corner controls only when a center cutout would
-            // otherwise sit behind the title; on flat-top screens it stays in
-            // line with the controls instead of floating down between them.
-            paddingTop: hasCenterCutout
-              ? `calc(${String(CONTROL_BUTTON_PX)}px + ${token("--space-2")})`
-              : 0,
-          }}
-        >
-          <div
-            style={{
-              font: token("--t-title"),
-              color: token("--text-primary"),
-              textShadow: token("--text-outline-media"),
-            }}
-          >
-            {title}
-          </div>
-          <div
-            style={{
-              marginTop: token("--space-1"),
-              font: token("--t-body-sm"),
-              color: token("--text-muted"),
-              textShadow: token("--text-outline-media"),
-            }}
-          >
-            {String(count)} {count === 1 ? "card" : "cards"}
-          </div>
-        </div>
       </div>
 
       {/* The filter/sort control row. */}
@@ -475,9 +391,6 @@ function TopBand({
     </div>
   );
 }
-
-/** The control treatment production renders (the switcher previews the rest). */
-const DEFAULT_CONTROL_TREATMENT: ControlTreatment = "sprite";
 
 /**
  * The deck's filter + sort controls: two dropdown buttons on a single line — a
@@ -660,28 +573,20 @@ function GridPlaceholder({ message }: { message: string }) {
   );
 }
 
-/** Human labels for the treatment segments in the dev switcher. */
-const TREATMENT_LABELS: Record<ControlTreatment, string> = {
-  sprite: "Sprite",
-  flat: "Flat",
-  glass: "Glass",
-  accent: "Accent",
-  outline: "Outline",
-};
-
 /**
- * Dev-only floating switcher that flips the control treatment live, so the
- * treatment options can be compared on the real deck screen. Rendered only under
- * `import.meta.env.DEV`; it is exploration scaffolding, removed once a treatment
- * is chosen. Built from Tango's own SegmentedControl so it needs no raw-element
- * lint exemptions.
+ * Dev-only floating switcher that flips the button family live, so the families
+ * can be compared on the real deck screen — each one restyles all four buttons
+ * (the close control, the elevated menu, and the filter/sort controls) at once.
+ * Rendered only under `import.meta.env.DEV`; it is exploration scaffolding,
+ * removed once a family is chosen. Built from Tango's own SegmentedControl so it
+ * needs no raw-element lint exemptions.
  */
-function ControlTreatmentSwitcher({
-  treatment,
-  onTreatmentChange,
+function ButtonFamilySwitcher({
+  family,
+  onFamilyChange,
 }: {
-  treatment: ControlTreatment;
-  onTreatmentChange: (next: ControlTreatment) => void;
+  family: DeckButtonFamily;
+  onFamilyChange: (next: DeckButtonFamily) => void;
 }) {
   return (
     <div
@@ -710,18 +615,18 @@ function ControlTreatmentSwitcher({
           color: token("--text-muted"),
         }}
       >
-        Treatment (dev)
+        Button family (dev)
       </div>
       <div style={{ maxWidth: "100%", overflowX: "auto" }}>
         <SegmentedControl
           size="sm"
           treatment="flat"
-          options={CONTROL_TREATMENTS.map((value) => ({
+          options={DECK_BUTTON_FAMILIES.map((value) => ({
             value,
-            label: TREATMENT_LABELS[value],
+            label: DECK_BUTTON_FAMILY_LABELS[value],
           }))}
-          value={treatment}
-          onChange={(value) => onTreatmentChange(value as ControlTreatment)}
+          value={family}
+          onChange={(value) => onFamilyChange(value as DeckButtonFamily)}
         />
       </div>
     </div>

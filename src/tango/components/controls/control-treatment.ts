@@ -105,8 +105,13 @@ export interface ControlChrome {
   triggerGlyphColor: TangoColor;
 }
 
-/** The liquid-glass track shared by the `glass` and `accent` treatments. */
-function glassTrack(): CSSProperties {
+/**
+ * The liquid-glass track shared by the `glass` and `accent` treatments. Also
+ * the shared material for the deck viewer's glass button family (its corner
+ * icon buttons wear this exact surface), exported so that pairing reuses the
+ * one recipe rather than re-declaring it.
+ */
+export function glassTrack(): CSSProperties {
   return {
     // The same liquid-glass recipe GroupPanel uses (fill + specular sheen +
     // blur/saturate backdrop + layered rim/wash/drop shadow), inlined here so
@@ -149,7 +154,7 @@ const SPRITE_BORDER_WIDTH = 9;
  * the label (`fill`). This is the sprite button both a Select trigger and a
  * selected segment wear — flat text sits directly on the metal, no dark overlay.
  */
-function spriteButton(): CSSProperties {
+export function spriteButton(): CSSProperties {
   return {
     background: "transparent",
     borderStyle: "solid",

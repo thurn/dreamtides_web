@@ -84,7 +84,7 @@ describe("toDeckCardView", () => {
 });
 
 describe("buildMobileDeckView", () => {
-  it("keeps deck (acquisition) order and titles the view", () => {
+  it("keeps deck (acquisition) order", () => {
     const a = makeCard({ cardNumber: 1, id: asCardId("a") });
     const b = makeCard({ cardNumber: 2, id: asCardId("b") });
     const deck = [
@@ -94,7 +94,6 @@ describe("buildMobileDeckView", () => {
 
     const view = buildMobileDeckView(deck, database(a, b));
 
-    expect(view.title).toBe("Deck");
     expect(view.cards.map((c) => c.entryId)).toEqual(["e2", "e1"]);
   });
 

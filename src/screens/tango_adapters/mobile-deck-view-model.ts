@@ -69,5 +69,5 @@ export function buildMobileDeckView(
     const view = toDeckCardView(entry, cardDatabase);
     if (view !== null) cards.push(view);
   }
-  return { title: "Deck", cards };
+  return { cards };
 }
