@@ -281,7 +281,7 @@ export function MultiplayerRoomGate({
         */}
         <div
           data-connected-count
-          className="pointer-events-none fixed top-1 left-2 z-40 select-none rounded-sm px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider opacity-50"
+          className="pointer-events-none fixed top-1 left-1/2 z-40 -translate-x-1/2 select-none rounded-sm px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider opacity-50"
           style={{
             color: "#94a3b8",
             background: "rgba(10, 6, 18, 0.55)",
