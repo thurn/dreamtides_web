@@ -6,24 +6,24 @@
 
 Components · Live demo & interactive props: `/tango#/info-card`
 
-The one press-to-reveal information card. Its media treatment varies by content — object, icon, tide, or text — over a single fixed liquid-glass shell and reveal contract.
+The one press-to-reveal information card. Its media treatment varies by content — object, portrait, icon, tide, or text — over a single fixed liquid-glass shell and reveal contract.
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `variant` | `"object" \| "text" \| "icon" \| "tide"` | no | — | Which media treatment. Omit — or pass 'text' — for the text variant. |
+| `variant` | `"object" \| "text" \| "icon" \| "portrait" \| "tide"` | no | — | Which media treatment. Omit — or pass 'text' — for the text variant. |
 | `image` | `ArtRef` | yes | — | The media the card is built around, as an {@link ArtRef}. Required. |
 | `imageCrop` | `ImageCrop` = `"top" \| "center"` | no | — | How the media is cropped. Default `"top"`. |
-| `imageFilter` | `MediaFilter` = `"dreamsign-portrait" \| "dreamsign-portrait-bane" \| "spark-glow" \| "energy-glow"` | no | — | A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). |
+| `imageFilter` | `MediaFilter` = `"dreamsign-portrait" \| "dreamsign-portrait-bane" \| "spark-glow" \| "energy-glow"` | no | — | A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). A named media {@link MediaFilter} (e.g. a spark glow). |
 | `frame` | `boolean` | no | — | true = framed portrait, false = contained transparent object. Default false. |
 | `title` | `string` | no | — | The card's headline. Plain text — resolve names before display. |
 | `body` | `RichText` | no | — | The reveal copy, as a {@link RichText} value (plain / rules / note / stack). |
+| `subtitle` | `string` | no | — | An epithet under the name — a smaller serif line in white, mirroring the Dreamcaller-select name/epithet pairing. Plain text; resolve before display. An epithet under the name — a smaller serif subtitle in white, mirroring the Dreamcaller-select name/epithet pairing. Plain text; resolve before display. |
 | `glyph` | `Glyph` | yes | — | The {@link Glyph} the disc renders. Required. |
 | `tide` | `Tide` = `"ember" \| "valor" \| "vision" \| "wild" \| "shadow"` | yes | — | Which of the five tides. Fixes the disc color/mark and the alignment label. |
 | `meta` | `string` | no | — | Small mono/uppercase overline above the title. |
 | `leadGlyph` | `Glyph` | no | — | A small leading {@link Glyph}. |
-| `subtitle` | `string` | no | — | An epithet under the name — a smaller serif subtitle in white, mirroring the Dreamcaller-select name/epithet pairing. Plain text; resolve before display. |
 
 ### `body`: the `RichText` model
 
@@ -75,6 +75,20 @@ A media object with `image` (an `ArtRef`); set `frame` for a framed portrait, om
   frame
   title="Seld Rakor"
   body={richText.rules("Whenever you Reclaim a card, deal 1 damage.")}
+/>
+```
+
+### Portrait variant
+
+A full-width contained rectangular image across the top (inset, not full-bleed), with the name, an optional `subtitle` epithet, and the body below. Used for the Dreamcaller profile reveal.
+
+```tsx
+<InfoCard
+  variant="portrait"
+  image={artRef.dreamcaller("0025")}
+  title="Threxan"
+  subtitle="the Resounding Wrath"
+  body={richText.rules("At the start of your first turn, draw a card.")}
 />
 ```
 

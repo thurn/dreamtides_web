@@ -6,14 +6,15 @@
 //
 // The media props are seeded so that EVERY variant renders real content the
 // moment the reader switches the `variant` control: `image` is a real
-// Dreamcaller `ArtRef` (drives the object media) and `glyph` is a named
-// `Glyph` (drives the icon-disc variant), the same production art the
+// Dreamcaller `ArtRef` (drives the object / portrait media) and `glyph` is a
+// named `Glyph` (drives the icon-disc variant), the same production art the
 // full-screen mockup uses — the text default still leads with `leadGlyph`.
 //
 // InfoCardProps is a discriminated union on `variant` — each media variant
-// requires the media it renders (object requires `image`, icon requires
-// `glyph`) — so the demo seeds `image`, `frame` and `glyph` in defaultArgs and
-// every variant the reader selects renders a complete card. The raw component
+// requires the media it renders (object / portrait require `image`, icon
+// requires `glyph`) — so the demo seeds `image`, `frame` and `glyph` in
+// defaultArgs and every variant the reader selects renders a complete card. The
+// raw component
 // assigns directly to the registry's `Component` slot (whose props are the
 // dynamic `Record<string, unknown>` the control panel builds), so no wrapper is
 // needed. `docName` points at the react-docgen display name the metadata is
@@ -29,7 +30,7 @@ export const infoCardDemo: TangoComponent = {
   id: "info-card",
   title: "Info Card",
   blurb:
-    "The one press-to-reveal information card. Its media treatment varies by content — object, icon, tide, or text — over a single fixed liquid-glass shell and reveal contract.",
+    "The one press-to-reveal information card. Its media treatment varies by content — object, portrait, icon, tide, or text — over a single fixed liquid-glass shell and reveal contract.",
   group: "Components",
   docName: "InfoCard",
   Component: InfoCard,
@@ -68,6 +69,17 @@ import { GLYPHS } from "src/tango/primitives/glyph";
   frame
   title="Seld Rakor"
   body={richText.rules("Whenever you Reclaim a card, deal 1 damage.")}
+/>`,
+    },
+    {
+      label: "Portrait variant",
+      note: "A full-width contained rectangular image across the top (inset, not full-bleed), with the name, an optional `subtitle` epithet, and the body below. Used for the Dreamcaller profile reveal.",
+      code: `<InfoCard
+  variant="portrait"
+  image={artRef.dreamcaller("0025")}
+  title="Threxan"
+  subtitle="the Resounding Wrath"
+  body={richText.rules("At the start of your first turn, draw a card.")}
 />`,
     },
     {
@@ -114,10 +126,10 @@ import { GLYPHS } from "src/tango/primitives/glyph";
       meta: "Tide",
       title: "Singular Storm",
       leadGlyph: GLYPHS.water,
-      // Real media so switching `variant` to object / icon renders genuine art
-      // rather than an empty frame. `image` is a real Dreamcaller portrait,
-      // `frame` gives the object variant its framed treatment, and `glyph`
-      // fills the icon-disc variant.
+      // Real media so switching `variant` to object / portrait / icon renders
+      // genuine art rather than an empty frame. `image` is a real Dreamcaller
+      // portrait, `frame` gives the object variant its framed treatment, and
+      // `glyph` fills the icon-disc variant.
       image: artRef.dreamcaller("0025"),
       frame: true,
       glyph: glyph("bxf bx-store-alt-2"),

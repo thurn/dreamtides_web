@@ -1349,11 +1349,12 @@
   "InfoCard": [
     {
       "name": "variant",
-      "tsType": "\"object\" | \"text\" | \"icon\" | \"tide\"",
+      "tsType": "\"object\" | \"text\" | \"icon\" | \"portrait\" | \"tide\"",
       "unionMembers": [
         "object",
         "text",
         "icon",
+        "portrait",
         "tide"
       ],
       "required": false,
@@ -1390,7 +1391,7 @@
       ],
       "required": false,
       "defaultValue": null,
-      "description": "A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object)."
+      "description": "A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object).\nA named media {@link MediaFilter} (e.g. a spark glow)."
     },
     {
       "name": "frame",
@@ -1426,6 +1427,14 @@
           }
         ]
       }
+    },
+    {
+      "name": "subtitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "An epithet under the name — a smaller serif line in white, mirroring the\nDreamcaller-select name/epithet pairing. Plain text; resolve before display.\nAn epithet under the name — a smaller serif subtitle in white, mirroring\nthe Dreamcaller-select name/epithet pairing. Plain text; resolve before\ndisplay."
     },
     {
       "name": "glyph",
@@ -1464,14 +1473,6 @@
       "required": false,
       "defaultValue": null,
       "description": "A small leading {@link Glyph}."
-    },
-    {
-      "name": "subtitle",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "An epithet under the name — a smaller serif subtitle in white, mirroring\nthe Dreamcaller-select name/epithet pairing. Plain text; resolve before\ndisplay."
     }
   ],
   "LeaveSiteButton": [

@@ -2,9 +2,10 @@
 // each reveal one of InfoCard's media variants through the shared press /
 // hover reveal engine (InfoCard.PressInfo + the variants on one shell).
 // Each trigger anchors its card to the full-viewport stageRef so the cards clamp
-// against the real screen edges. The object media resolves from a real asset in
-// `public/` (a Dreamcaller portrait); the icon and text variants use tokenized
-// glyphs, and the epithet trigger shows the text variant's name/epithet pairing.
+// against the real screen edges. The portrait and object media resolve from a
+// real asset in `public/` (a Dreamcaller portrait); the icon and text variants
+// use tokenized glyphs, and the epithet trigger shows the text variant's
+// name/epithet pairing.
 
 import { useRef } from "react";
 import { InfoCard } from "../../components/overlay/InfoCard";
@@ -122,21 +123,36 @@ export function InfoCardMockup() {
         <Trigger
           stageRef={stageRef}
           label="Dreamcaller"
-          variant="object"
+          variant="portrait"
           glyph="bxf bx-user-circle"
           card={
             <InfoCard
-              variant="object"
-              frame
+              variant="portrait"
               image={artRef.dreamcaller("0025")}
-              title="Threxan, the Resounding Wrath"
+              title="Threxan"
+              subtitle="the Resounding Wrath"
               body={richText.rules("At the start of your first turn, draw a card.")}
             />
           }
         />
         <Trigger
           stageRef={stageRef}
-          label="Dreamcaller"
+          label="Reward"
+          variant="object"
+          glyph="bxf bx-gift"
+          card={
+            <InfoCard
+              variant="object"
+              frame
+              image={artRef.dreamcaller("0025")}
+              title="Seld Rakor"
+              body={richText.rules("Whenever you Reclaim a card, deal 1 damage.")}
+            />
+          }
+        />
+        <Trigger
+          stageRef={stageRef}
+          label="Epithet"
           variant="text"
           glyph="bxf bx-user-circle"
           card={

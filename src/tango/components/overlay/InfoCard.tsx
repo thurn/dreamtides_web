@@ -10,11 +10,13 @@
 //   - one shadow/rim treatment  — glassSurfaceStyle's layered glass edge
 //   - one type scale            — headline (serif) / body (rules) / meta (mono)
 // Only the MEDIA treatment varies by content, via `variant`:
-//   - object — a centered framed portrait OR contained transparent object
-//   - icon   — a glyph disc beside the title
-//   - tide   — a tide's own colored disc + alignment label
-//   - text   — an optional small lead glyph + title, with an optional epithet
-//              (a smaller serif subtitle in white) under the name
+//   - object   — a centered framed portrait OR contained transparent object
+//   - portrait — a full-width contained rectangular image across the top, with
+//                the name, an optional epithet, and body below
+//   - icon     — a glyph disc beside the title
+//   - tide     — a tide's own colored disc + alignment label
+//   - text     — an optional small lead glyph + title, with an optional epithet
+//                (a smaller serif subtitle in white) under the name
 //
 // The placement / timing engine ships alongside it and is attached as
 // statics: `InfoCard.PressPopover / PressInfo / usePressReveal / anchorRect /
@@ -147,7 +149,7 @@ export const SITE_DISC: React.CSSProperties = {
 };
 
 /** Which media treatment an InfoCard renders. */
-export type InfoCardVariant = "object" | "icon" | "tide" | "text";
+export type InfoCardVariant = "object" | "portrait" | "icon" | "tide" | "text";
 
 /**
  * The copy every InfoCard carries, shared across all media variants. The
@@ -177,6 +179,27 @@ export interface InfoCardObjectProps extends InfoCardCommonProps {
   imageFilter?: MediaFilter;
   /** true = framed portrait, false = contained transparent object. Default false. */
   frame?: boolean;
+}
+
+/**
+ * portrait variant — a full-width contained rectangular image across the top of
+ * the card (inset from the edges, not full-bleed), with the name, an optional
+ * epithet, and the body left-aligned below. Built for the Dreamcaller profile
+ * reveal. The image IS its media, so `image` is required.
+ */
+export interface InfoCardPortraitProps extends InfoCardCommonProps {
+  variant: "portrait";
+  /** The media the card is built around, as an {@link ArtRef}. Required. */
+  image: ArtRef;
+  /** How the media is cropped. Default `"top"`. */
+  imageCrop?: ImageCrop;
+  /** A named media {@link MediaFilter} (e.g. a spark glow). */
+  imageFilter?: MediaFilter;
+  /**
+   * An epithet under the name — a smaller serif line in white, mirroring the
+   * Dreamcaller-select name/epithet pairing. Plain text; resolve before display.
+   */
+  subtitle?: string;
 }
 
 /**
@@ -232,6 +255,7 @@ export interface InfoCardTextProps extends InfoCardCommonProps {
  */
 export type InfoCardProps =
   | InfoCardObjectProps
+  | InfoCardPortraitProps
   | InfoCardIconProps
   | InfoCardTideProps
   | InfoCardTextProps;
@@ -325,6 +349,51 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
         {media}
         <div style={{ ...tHeadline, textAlign: "center" }}>{titleContent}</div>
         {Body}
+      </div>
+    );
+  }
+
+  /* --- portrait: a full-width contained rectangular image across the top
+     (inset from the card edges), name + optional epithet + body left-aligned
+     below. The image sits on the card's own glass as a rounded rectangle with
+     a hairline inset ring, never bleeding to the shell edge. --- */
+  if (props.variant === "portrait") {
+    const { image, imageCrop = "top", imageFilter, subtitle } = props;
+    return (
+      <div style={{ ...shell, padding: `${String(PADY)}px ${String(PADX)}px` }}>
+        <div
+          style={{
+            width: "100%",
+            height: 150,
+            marginBottom: 12,
+            overflow: "hidden",
+            borderRadius: token("--radius-control"),
+            // faithfully-copied inset hairline highlight, matching the object
+            // variant's framed portrait so both media frames read identically.
+            boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.08)",
+          }}
+        >
+          <img
+            src={resolveArtRef(image)}
+            alt=""
+            draggable={false}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              objectPosition: resolveImageCrop(imageCrop),
+              userSelect: "none",
+              filter: imageFilter ? resolveMediaFilter(imageFilter) : undefined,
+            }}
+          />
+        </div>
+        <div style={{ ...tHeadline, marginBottom: subtitle ? 2 : body ? 7 : 0 }}>
+          {titleContent}
+        </div>
+        {subtitle !== undefined && subtitle !== "" && (
+          <div style={{ ...tEpithet, marginBottom: body ? 7 : 0 }}>{subtitle}</div>
+        )}
+        {body != null && <div style={{ ...tBody }}>{renderRichText(body)}</div>}
       </div>
     );
   }
