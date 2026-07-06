@@ -49,14 +49,12 @@ const { usePressReveal, anchorRect, PressPopover, PRESS_SCALE, HOVER_SCALE } = I
 /** Height/scale variants. */
 type TidePillSize = "sm" | "md";
 
-/** The sm pill's own text/box metrics. TideCluster's flying clones must land
- * pixel-identical on the sm pills they become, so the flyer reads these same
- * constants — sizing is shared through this export, never re-declared. */
-export const PILL_SM_FONT_PX = 12;
-export const PILL_SM_PAD_Y = 3;
-export const PILL_SM_PAD_X = 9;
+/** The sm pill's own text/box metrics. */
+const PILL_SM_FONT_PX = 12;
+const PILL_SM_PAD_Y = 3;
+const PILL_SM_PAD_X = 9;
 /** Gap between the pill's icon and its label, both sizes. */
-export const PILL_ICON_GAP_PX = 6;
+const PILL_ICON_GAP_PX = 6;
 
 export interface TidePillProps {
   /** The tide/affiliation name. Resolve any UUID to the display name before

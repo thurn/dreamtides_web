@@ -54,10 +54,9 @@ export const TIDES: Record<Tide, TideSpec> = {
 };
 
 /**
- * The fixed icon + tinted colors for a tide, so any component (a TidePill, the
- * collapsed TideCluster, or the shared InfoCard's tide variant) can render a
- * tide's disc / flying clone pixel-identically — without duplicating the tone
- * table.
+ * The fixed icon + tinted colors for a tide, so any component (a TidePill, a
+ * TideDisc, or the shared InfoCard's tide variant) can render a tide's disc
+ * pixel-identically — without duplicating the tone table.
  */
 export function tideVisual(tide: Tide): TideSpec {
   return TIDES[tide];

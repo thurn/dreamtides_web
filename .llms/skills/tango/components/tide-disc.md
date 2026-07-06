@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/tide-disc`
 
-The single collapsed tide mark: a small colored disc carrying the tide's glyph — the atom the Tide Cluster and the desktop select's hover-reveal tide row both render from.
+The single tide mark: a colored disc carrying the tide's glyph, sized 'sm' (desktop select) or 'lg' (mobile select) — the atom both Dreamcaller-select tide rows render from.
 
 ## Props
 
@@ -14,17 +14,18 @@ The single collapsed tide mark: a small colored disc carrying the tide's glyph �
 | --- | --- | --- | --- | --- |
 | `tide` | `Tide` = `"ember" \| "valor" \| "vision" \| "wild" \| "shadow"` | yes | — | Which of the five tides. Fixes the disc's color and glyph. |
 | `id` | `string` | yes | — | Stable id (a tide deck id) for the `data-tide-disc` QA hook. |
-| `label` | `string` | no | — | Accessible label (e.g. "Tide: Valor"). When unset the disc is decorative and hidden from assistive tech — the resting cluster's discs, whose parent toggle button carries the semantics. |
-| `interactive` | `boolean` | no | `false` | Interactive discs brighten on hover and show a pointer cursor — set this when the caller wires the disc up as a reveal trigger (the wrapper's shared hover-enlarge handles the scale). Default false: a resting-cluster disc is inert. |
+| `label` | `string` | no | — | Accessible label (e.g. "Tide: Valor"). When unset the disc is decorative and hidden from assistive tech. |
+| `size` | `TideDiscSize` = `"sm" \| "lg"` | no | `sm` | Which enumerated {@link TideDiscSize} to render. Default 'sm'. |
+| `interactive` | `boolean` | no | `false` | Interactive discs brighten on hover and show a pointer cursor — set this when the caller wires the disc up as a reveal trigger (the wrapper's shared hover-enlarge handles the scale). Default false. |
 
 ## Usage
 
 ```tsx
 import { TideDisc } from "src/tango/components/hud/TideDisc";
 
-// Decorative (inside a labelled control, like the resting cluster):
-<TideDisc tide="valor" id={tideDeckId} />
-
 // As a reveal trigger (brightens on hover, pointer cursor):
 <TideDisc tide="valor" id={tideDeckId} label="Tide: Valor" interactive />
+
+// The larger, more touch-friendly disc (mobile select):
+<TideDisc tide="valor" id={tideDeckId} label="Tide: Valor" size="lg" interactive />
 ```

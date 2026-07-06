@@ -11,15 +11,119 @@ import { RulesText } from "../components/card/RulesText";
 import { CardTermDefinitions } from "../components/card/CardTermDefinitions";
 import { InfoCard } from "../components/overlay/InfoCard";
 import { richText } from "../components/card/rich-text";
-import { type TideClusterTideView } from "../components/hud/TideCluster";
+import { TideDisc, type TideDiscSize } from "../components/hud/TideDisc";
+import { type Tide } from "../components/hud/tide-spec";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { extractGlossaryTerms } from "../../data/glossary-terms";
 
-/** One tide shown on a Dreamcaller, already resolved to display copy. It is
- * exactly the cluster's tide view, re-exported under the screen's own name so
- * the view-model builder keeps importing `DreamcallerTideView` from here. */
-export type DreamcallerTideView = TideClusterTideView;
+/** One tide shown on a Dreamcaller, already resolved to display copy. Both the
+ * desktop triptych and the mobile carousel render their tide discs (and each
+ * disc's InfoCard reveal) from this view. */
+export interface DreamcallerTideView {
+  /** Stable id (a tide deck id) for the React key / QA hook. */
+  id: string;
+  /** Display name shown on the tide's reveal card. */
+  label: string;
+  /** Description revealed through the disc's InfoCard reveal. */
+  description: string;
+  /** Which of the five tides fixes the disc's icon + color. */
+  tide: Tide;
+}
+
+/** How many tide discs render at most; a Dreamcaller with more shows the first
+ * few (the rest are the same pools, just less prominent). Shared by both
+ * layouts so the cap reads identically on desktop and mobile. */
+export const MAX_TIDE_DISCS = 4;
+
+/** What a tide-disc reveal explains above the specific tide's own card. */
+const TIDES_BLURB =
+  "Pools of cards you will see during the quest. Different tides are used every time you play.";
+
+/** One tide mark wired up as a reveal trigger: the shared {@link TideDisc}, at
+ * the given {@link TideDiscSize}, that reveals — through the shared InfoCard —
+ * what tides are (the general blurb) stacked ABOVE this specific tide's own
+ * colored card. Informational: the disc brightens on hover but a press does not
+ * compress it (there is no action to press). Both Dreamcaller-select layouts
+ * render their tide rows from this, so the reveal reads identically on each.
+ *
+ * `hitSlop` pads the pressable around the disc (mobile touch targets) without
+ * growing the disc itself; the caller reabsorbs the padding with negative
+ * margins so the visual layout is unchanged. */
+export function TideDiscReveal({
+  tide,
+  stageRef,
+  size = "sm",
+  hitSlop,
+}: {
+  tide: DreamcallerTideView;
+  stageRef: React.RefObject<HTMLElement | null>;
+  size?: TideDiscSize;
+  hitSlop?: string;
+}) {
+  const disc = (
+    <TideDisc
+      tide={tide.tide}
+      id={tide.id}
+      label={`Tide: ${tide.label}`}
+      size={size}
+      interactive
+    />
+  );
+  return (
+    <InfoCard.PressInfo
+      stageRef={stageRef}
+      compress={false}
+      card={
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: token("--space-3"),
+          }}
+        >
+          <InfoCard
+            variant="icon"
+            glyph={GLYPHS.water}
+            title="Tides"
+            body={richText.plain(TIDES_BLURB)}
+          />
+          <InfoCard
+            variant="tide"
+            tide={tide.tide}
+            title={tide.label}
+            body={richText.plain(tide.description)}
+          />
+        </div>
+      }
+    >
+      {hitSlop != null ? (
+        <span style={{ display: "inline-flex", padding: hitSlop }}>{disc}</span>
+      ) : (
+        disc
+      )}
+    </InfoCard.PressInfo>
+  );
+}
+
+/** The plain "Tides:" caption above/beside a tide-disc row — the uppercase
+ * eyebrow both layouts label their tides with. A static caption, not a reveal
+ * trigger. */
+export function TidesLabel() {
+  return (
+    <span
+      style={{
+        font: token("--t-eyebrow"),
+        letterSpacing: token("--tracking-eyebrow"),
+        textTransform: "uppercase",
+        color: token("--text-secondary"),
+        lineHeight: 1,
+      }}
+    >
+      Tides:
+    </span>
+  );
+}
 
 /** One signature card (kept for the shared view type; unused by the carousel). */
 export interface DreamcallerSignatureCardView {

@@ -12,24 +12,20 @@ import { useRef, useState } from "react";
 import { Motes } from "../components/hud/Motes";
 import { GroupPanel } from "../components/controls/GroupPanel";
 import { Button } from "../components/controls/Button";
-import { TideDisc, TIDE_DISC_PX } from "../components/hud/TideDisc";
-import { InfoCard } from "../components/overlay/InfoCard";
-import { richText } from "../components/card/rich-text";
-import { GLYPHS } from "../primitives/glyph";
+import { TIDE_DISC_PX } from "../components/hud/TideDisc";
 import { token } from "../primitives/tokens";
 import { dreamcallerCutoutSrc } from "../components/hud/DreamcallerPortrait";
 import {
   AbilityReveal,
   ConsoleDivider,
   EssenceReveal,
+  MAX_TIDE_DISCS,
+  TideDiscReveal,
+  TidesLabel,
   type DreamcallerOfferView,
   type DreamcallerTideView,
   type QuestStartScreenProps,
 } from "./quest-start-shared";
-
-/** How many tide discs render at most; a Dreamcaller with more shows the first
- * few (the rest are the same pools, just less prominent). */
-const MAX_TIDE_DISCS = 4;
 
 /** Desktop column metrics. Box measures are content-driven layout, so these are
  * caller numbers. Each column is a fixed-width figure stage with a narrower,
@@ -45,10 +41,6 @@ const CARD_OVERLAP = 275; // how far the card's center rides up over the figure
  * copy grows the box and is nudged down by a gentle scale rather than crammed.
  * Box measures are content-driven layout, so this is a caller number. */
 const ABILITY_BOX_MIN_H = 40;
-
-/** What the "Tides (i)" reveal explains, mirroring the legacy select screen. */
-const TIDES_BLURB =
-  "Pools of cards you will see during the quest. Different tides are used every time you play.";
 
 /** The desktop screen's small purple eyebrow title, pinned near the top of the
  * screen — the mobile ScreenHeader's uppercase accent treatment, in flow. */
@@ -197,55 +189,6 @@ function PortraitName({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
   );
 }
 
-/** One hover-only tide mark: the shared TideDisc, wired up as a reveal
- * trigger. On hover / press it reveals, through the shared InfoCard, what
- * tides are (the general blurb) stacked ABOVE this specific tide's own colored
- * card. Informational — the disc brightens on hover (TideDisc's `interactive`
- * state) but a press does not compress it (there is no action to press). */
-function TideDiscReveal({
-  tide,
-  stageRef,
-}: {
-  tide: DreamcallerTideView;
-  stageRef: React.RefObject<HTMLElement | null>;
-}) {
-  return (
-    <InfoCard.PressInfo
-      stageRef={stageRef}
-      compress={false}
-      card={
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: token("--space-3"),
-          }}
-        >
-          <InfoCard
-            variant="icon"
-            glyph={GLYPHS.water}
-            title="Tides"
-            body={richText.plain(TIDES_BLURB)}
-          />
-          <InfoCard
-            variant="tide"
-            tide={tide.tide}
-            title={tide.label}
-            body={richText.plain(tide.description)}
-          />
-        </div>
-      }
-    >
-      <TideDisc
-        tide={tide.tide}
-        id={tide.id}
-        label={`Tide: ${tide.label}`}
-        interactive
-      />
-    </InfoCard.PressInfo>
-  );
-}
-
 /** The desktop tides display: a plain "Tides:" label, followed by a row of
  * hover-only tide discs (capped at {@link MAX_TIDE_DISCS}). Nothing expands —
  * each disc reveals, on hover, what tides are plus its own tide's card. The
@@ -261,17 +204,7 @@ function StaticTides({
     <div
       style={{ display: "flex", alignItems: "center", gap: token("--space-4") }}
     >
-      <span
-        style={{
-          font: token("--t-eyebrow"),
-          letterSpacing: token("--tracking-eyebrow"),
-          textTransform: "uppercase",
-          color: token("--text-secondary"),
-          lineHeight: 1,
-        }}
-      >
-        Tides:
-      </span>
+      <TidesLabel />
 
       <span
         style={{ display: "flex", alignItems: "center", gap: token("--space-2") }}

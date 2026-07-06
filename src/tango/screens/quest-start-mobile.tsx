@@ -10,7 +10,6 @@ import { Motes } from "../components/hud/Motes";
 import { GroupPanel } from "../components/controls/GroupPanel";
 import { Button } from "../components/controls/Button";
 import { GlowIcon } from "../components/controls/GlowIcon";
-import { TideCluster } from "../components/hud/TideCluster";
 import { Pressable } from "../primitives/Pressable";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
@@ -19,9 +18,17 @@ import {
   AbilityReveal,
   ConsoleDivider,
   EssenceReveal,
+  MAX_TIDE_DISCS,
+  TideDiscReveal,
+  TidesLabel,
   type DreamcallerOfferView,
   type QuestStartScreenProps,
 } from "./quest-start-shared";
+
+/** Invisible touch slop padded around each mobile tide disc so it is easier to
+ * press; the disc row reabsorbs it with negative margins so the visual layout
+ * is unchanged. A spacing step, so the token is right. */
+const TIDE_HIT_SLOP = token("--space-2");
 
 /** The full-bleed cinematic figure for one Dreamcaller: the transparent
  * full-body cutout standing on an ambient tinted backdrop, feet anchored to
@@ -118,39 +125,50 @@ function DreamcallerConsole({
 
       <ConsoleDivider />
 
-      <div
-        style={{
-          display: "flex",
-          // The essence aligns to the FIRST row of the tides (the TideCluster's
-          // header), not the whole block, which grows downward as the cluster
-          // expands — so the row is top-aligned and the essence is centered
-          // within a header-height box below.
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          gap: token("--space-5"),
-          marginTop: token("--space-3"),
-        }}
-      >
-        {hasTides ? (
-          <span data-dreamcaller-tides={dreamcaller.id}>
-            <TideCluster tides={dreamcaller.tides} stageRef={stageRef} />
-          </span>
-        ) : (
-          <span />
-        )}
-        {/* Center the essence within a box the height of the tides' first row,
-            keeping "200" level with the "Tides" label (a 24px disc in space-2
-            padding) in both the collapsed and expanded states. Box measures are
-            content-driven layout, so raw px is right. */}
+      <div style={{ marginTop: token("--space-3") }}>
+        {/* Top row: the "Tides:" caption on the left and the starting essence on
+            the right. The essence stays TOP-aligned, level with the caption, as
+            the disc row stacks below it — matching the desktop tides treatment. */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            minHeight: `calc(24px + 2 * ${token("--space-2")})`,
+            justifyContent: "space-between",
+            gap: token("--space-5"),
           }}
         >
+          {hasTides ? <TidesLabel /> : <span />}
           <EssenceReveal dreamcaller={dreamcaller} stageRef={stageRef} />
         </div>
+
+        {hasTides && (
+          <div
+            data-dreamcaller-tides={dreamcaller.id}
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              // Left-aligned under the caption. Each disc carries invisible
+              // TIDE_HIT_SLOP touch padding; the row pulls its margins in by
+              // that slop so the discs' visual bounds still start at the
+              // caption's left edge and sit one --space-3 below it.
+              marginTop: `calc(${token("--space-3")} - ${TIDE_HIT_SLOP})`,
+              marginLeft: `calc(-1 * ${TIDE_HIT_SLOP})`,
+              marginRight: `calc(-1 * ${TIDE_HIT_SLOP})`,
+              marginBottom: `calc(-1 * ${TIDE_HIT_SLOP})`,
+            }}
+          >
+            {dreamcaller.tides.slice(0, MAX_TIDE_DISCS).map((tide) => (
+              <TideDiscReveal
+                key={tide.id}
+                tide={tide}
+                stageRef={stageRef}
+                size="lg"
+                hitSlop={TIDE_HIT_SLOP}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       <div

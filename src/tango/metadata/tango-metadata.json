@@ -2270,53 +2270,6 @@
     }
   ],
   "Tide": [],
-  "TideCluster": [
-    {
-      "name": "tides",
-      "tsType": "TideClusterTideView[]",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "The tides to disclose.",
-      "nested": {
-        "name": "TideClusterTideView",
-        "fields": [
-          {
-            "name": "id",
-            "tsType": "string",
-            "optional": false,
-            "description": "Stable id (a tide deck id) for the React key / QA hook."
-          },
-          {
-            "name": "label",
-            "tsType": "string",
-            "optional": false,
-            "description": "Display name shown on the pill."
-          },
-          {
-            "name": "description",
-            "tsType": "string",
-            "optional": false,
-            "description": "Description revealed through the pill's own InfoCard reveal."
-          },
-          {
-            "name": "tide",
-            "tsType": "Tide",
-            "optional": false,
-            "description": "Which of the five tides fixes the icon + color."
-          }
-        ]
-      }
-    },
-    {
-      "name": "stageRef",
-      "tsType": "RefObject<HTMLElement | null>",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Screen root the pill reveals anchor + clamp against (preferred)."
-    }
-  ],
   "TideDisc": [
     {
       "name": "tide",
@@ -2346,7 +2299,18 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Accessible label (e.g. \"Tide: Valor\"). When unset the disc is decorative\nand hidden from assistive tech — the resting cluster's discs, whose parent\ntoggle button carries the semantics."
+      "description": "Accessible label (e.g. \"Tide: Valor\"). When unset the disc is decorative\nand hidden from assistive tech."
+    },
+    {
+      "name": "size",
+      "tsType": "TideDiscSize",
+      "unionMembers": [
+        "sm",
+        "lg"
+      ],
+      "required": false,
+      "defaultValue": "sm",
+      "description": "Which enumerated {@link TideDiscSize} to render. Default 'sm'."
     },
     {
       "name": "interactive",
@@ -2354,7 +2318,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "false",
-      "description": "Interactive discs brighten on hover and show a pointer cursor — set this\nwhen the caller wires the disc up as a reveal trigger (the wrapper's\nshared hover-enlarge handles the scale). Default false: a\nresting-cluster disc is inert."
+      "description": "Interactive discs brighten on hover and show a pointer cursor — set this\nwhen the caller wires the disc up as a reveal trigger (the wrapper's\nshared hover-enlarge handles the scale). Default false."
     }
   ],
   "TidePill": [

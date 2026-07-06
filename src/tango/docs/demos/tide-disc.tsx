@@ -1,6 +1,6 @@
 // Registry demo entry for TideDisc — see tide-pill.tsx for the recipe. Shows
-// the five tides' discs side by side, plus an interactive disc that brightens
-// on hover the way the desktop select's reveal triggers do.
+// the five tides' discs at both sizes, interactive so they brighten on hover
+// the way the select screens' reveal triggers do.
 
 import { TideDisc } from "../../components/hud/TideDisc";
 import type { Tide } from "../../components/hud/tide-spec";
@@ -10,10 +10,23 @@ const ALL_TIDES: Tide[] = ["ember", "valor", "vision", "wild", "shadow"];
 
 function TideDiscDemo() {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-      {ALL_TIDES.map((tide) => (
-        <TideDisc key={tide} tide={tide} id={`demo-${tide}`} interactive />
-      ))}
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        {ALL_TIDES.map((tide) => (
+          <TideDisc key={tide} tide={tide} id={`demo-sm-${tide}`} interactive />
+        ))}
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        {ALL_TIDES.map((tide) => (
+          <TideDisc
+            key={tide}
+            tide={tide}
+            id={`demo-lg-${tide}`}
+            size="lg"
+            interactive
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -22,7 +35,7 @@ export const tideDiscDemo: TangoComponent = {
   id: "tide-disc",
   title: "Tide Disc",
   blurb:
-    "The single collapsed tide mark: a small colored disc carrying the tide's glyph — the atom the Tide Cluster and the desktop select's hover-reveal tide row both render from.",
+    "The single tide mark: a colored disc carrying the tide's glyph, sized 'sm' (desktop select) or 'lg' (mobile select) — the atom both Dreamcaller-select tide rows render from.",
   group: "Components",
   docName: "TideDisc",
   Component: TideDiscDemo,
@@ -30,11 +43,11 @@ export const tideDiscDemo: TangoComponent = {
     {
       code: `import { TideDisc } from "src/tango/components/hud/TideDisc";
 
-// Decorative (inside a labelled control, like the resting cluster):
-<TideDisc tide="valor" id={tideDeckId} />
-
 // As a reveal trigger (brightens on hover, pointer cursor):
-<TideDisc tide="valor" id={tideDeckId} label="Tide: Valor" interactive />`,
+<TideDisc tide="valor" id={tideDeckId} label="Tide: Valor" interactive />
+
+// The larger, more touch-friendly disc (mobile select):
+<TideDisc tide="valor" id={tideDeckId} label="Tide: Valor" size="lg" interactive />`,
     },
   ],
   demo: {
