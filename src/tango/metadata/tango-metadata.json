@@ -1,4 +1,73 @@
 {
+  "AtlasDreamsignCard": [
+    {
+      "name": "model",
+      "tsType": "AtlasDreamsignModel",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "",
+      "nested": {
+        "name": "AtlasDreamsignModel",
+        "fields": [
+          {
+            "name": "name",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "iconUrl",
+            "tsType": "string | null",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "rulesText",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "anchorLeft",
+            "tsType": "number",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "anchorTop",
+            "tsType": "number",
+            "optional": false,
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "previewIsMini",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Whether the companion preview is the compact (unrevealed) width."
+    },
+    {
+      "name": "stageWidth",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "stageHeight",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    }
+  ],
   "AtlasEdge": [
     {
       "name": "kind",
@@ -44,6 +113,112 @@
       "required": true,
       "defaultValue": null,
       "description": "End y, in the atlas svg's coordinate space."
+    }
+  ],
+  "AtlasMap": [
+    {
+      "name": "stageWidth",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The fixed design canvas the stage scales to fit (letterboxed)."
+    },
+    {
+      "name": "stageHeight",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "nodes",
+      "tsType": "AtlasMapNode[]",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Placed nodes, laid out by the view model (starter at bottom, boss at top).",
+      "nested": {
+        "name": "AtlasMapNode",
+        "fields": [
+          {
+            "name": "view",
+            "tsType": "AtlasNodeView",
+            "optional": false,
+            "description": "Presentational data for the {@link AtlasNode} face."
+          },
+          {
+            "name": "preview",
+            "tsType": "AtlasPreviewModel",
+            "optional": false,
+            "description": "The floating detail card shown while this node is hovered."
+          },
+          {
+            "name": "dreamsign",
+            "tsType": "AtlasDreamsignModel | null",
+            "optional": false,
+            "description": "The companion known-dreamsign card, or null when the node carries none."
+          }
+        ]
+      }
+    },
+    {
+      "name": "edges",
+      "tsType": "AtlasMapEdge[]",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Forward connectors between nodes.",
+      "nested": {
+        "name": "AtlasMapEdge",
+        "fields": [
+          {
+            "name": "key",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "x1",
+            "tsType": "number",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "y1",
+            "tsType": "number",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "x2",
+            "tsType": "number",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "y2",
+            "tsType": "number",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "kind",
+            "tsType": "AtlasEdgeKind",
+            "optional": false,
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "onEnterNode",
+      "tsType": "(nodeId: string) => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Enter a node's dreamscape; fired on a tap / click of an available node."
     }
   ],
   "AtlasNode": [
@@ -141,6 +316,129 @@
     {
       "name": "onClick",
       "tsType": "(nodeId: string) => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    }
+  ],
+  "AtlasPreview": [
+    {
+      "name": "model",
+      "tsType": "AtlasPreviewModel",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "",
+      "nested": {
+        "name": "AtlasPreviewModel",
+        "fields": [
+          {
+            "name": "anchorLeft",
+            "tsType": "number",
+            "optional": false,
+            "description": "Node centre in stage coordinates — the card anchors beside it."
+          },
+          {
+            "name": "anchorTop",
+            "tsType": "number",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "isUnrevealed",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "An unrevealed non-boss node shows the compact \"unseen dream\" card."
+          },
+          {
+            "name": "isBoss",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "The boss node shows the red Final Dream card."
+          },
+          {
+            "name": "bossSubtitle",
+            "tsType": "string | null",
+            "optional": false,
+            "description": "Boss incarnation title / short deck description (boss card only)."
+          },
+          {
+            "name": "bossDescription",
+            "tsType": "string | null",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "dreamscapeName",
+            "tsType": "string | null",
+            "optional": false,
+            "description": "Revealed dreamscape name (header title)."
+          },
+          {
+            "name": "sceneUrl",
+            "tsType": "string | null",
+            "optional": false,
+            "description": "Rectangular scene art URL for the header."
+          },
+          {
+            "name": "guideName",
+            "tsType": "string | null",
+            "optional": false,
+            "description": "Resident guide name + portrait URL, or null for the starter."
+          },
+          {
+            "name": "guidePortraitUrl",
+            "tsType": "string | null",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "siteName",
+            "tsType": "string | null",
+            "optional": false,
+            "description": "Signature-site display name and its glyph class."
+          },
+          {
+            "name": "siteIconClass",
+            "tsType": "string | null",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "bonusText",
+            "tsType": "string | null",
+            "optional": false,
+            "description": "The guide's home-site bonus copy."
+          },
+          {
+            "name": "affiliationName",
+            "tsType": "string | null",
+            "optional": false,
+            "description": "Card affiliation name, or null for a neutral on-ramp."
+          }
+        ]
+      }
+    },
+    {
+      "name": "hasDreamsign",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Whether the hovered node also carries a known dreamsign (widens the flip)."
+    },
+    {
+      "name": "stageWidth",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "stageHeight",
+      "tsType": "number",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,

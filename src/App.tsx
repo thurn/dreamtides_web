@@ -39,6 +39,7 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { STARTER_CARD_NUMBERS } from "./data/starter-cards";
 import { getSavedQuest } from "./state/saved-quests";
 import { logEvent } from "./logging";
+import { regenerateAtlasInPlace } from "./atlas/regenerate-atlas";
 import type { RuntimeConfig } from "./runtime/runtime-config";
 import { DECK_VIEWER_SCENE_ID, findQaScene } from "./runtime/qa-scenes";
 import { useQuestUrlSync } from "./runtime/use-quest-url-sync";
@@ -72,16 +73,19 @@ export function QuestApp({
   // and interactive once dismissed.
   const showStarterDeckIntro =
     state.dreamcaller !== null && !state.hasSeenStartingDeckPopup;
-  // The Tango dreamscape re-homes the persistent bottom bar into its own
-  // in-screen QuestStatusBar and its utility menu into the top-left
-  // DreamscapeQuestMenu, so the app-shell legacy HUD is suppressed there to
-  // avoid a doubled bottom bar.
+  // The Tango quest map screens (dreamscape, atlas) re-home the persistent
+  // bottom bar into their own in-screen QuestStatusBar and their utility menu
+  // into the top-left DreamscapeQuestMenu, so the app-shell legacy HUD is
+  // suppressed there to avoid a doubled bottom bar.
+  const atlasUsesTango =
+    runtimeConfig.uiVariant === "tango" && state.screen.type === "atlas";
   const dreamscapeUsesTango =
     runtimeConfig.uiVariant === "tango" && state.screen.type === "dreamscape";
+  const tangoScreenUsesQuestMenu = dreamscapeUsesTango || atlasUsesTango;
   const showHud =
     state.screen.type !== "questStart"
     && !isBattleSiteHudHidden(state)
-    && !dreamscapeUsesTango;
+    && !tangoScreenUsesQuestMenu;
   const isDesktopViewport = useIsDesktop();
   const [deckViewerOpen, setDeckViewerOpen] = useState(false);
   const [poolViewerOpen, setPoolViewerOpen] = useState(false);
@@ -383,6 +387,15 @@ export function QuestApp({
     setJourneyExplanationOpen((prev) => !prev);
   }, []);
 
+  const handleRegenerateAtlas = useCallback(() => {
+    regenerateAtlasInPlace({
+      state,
+      questContent,
+      updateAtlas: mutations.updateAtlas,
+      setCurrentDreamscape: mutations.setCurrentDreamscape,
+    });
+  }, [state, questContent, mutations]);
+
   const handleCloseJourneyExplanation = useCallback(() => {
     setJourneyExplanationOpen(false);
   }, []);
@@ -464,7 +477,7 @@ export function QuestApp({
           onJourneyExplanationChange={setJourneyExplanation}
           onViewDeck={handleOpenDeckViewer}
         />
-        {dreamscapeUsesTango && state.dreamcaller !== null && (
+        {tangoScreenUsesQuestMenu && state.dreamcaller !== null && (
           <ErrorBoundary scope="overlay:dreamscape-menu">
             <DreamscapeQuestMenu
               onOpenDeckViewer={handleOpenDeckViewer}
@@ -474,6 +487,7 @@ export function QuestApp({
               onOpenQuestEditor={handleOpenQuestEditor}
               hasDraftData={hasDraftData}
               onLoadQuestState={mutations.loadQuestState}
+              onRegenerateAtlas={atlasUsesTango ? handleRegenerateAtlas : undefined}
               elevated={deckViewerOpen && !isDesktopViewport}
             />
           </ErrorBoundary>

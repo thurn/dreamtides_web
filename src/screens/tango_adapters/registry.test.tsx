@@ -11,8 +11,11 @@ describe("tangoScreenFor", () => {
     expect(tangoScreenFor({ type: "dreamscape" })).not.toBeNull();
   });
 
+  it("resolves the migrated atlas screen to a Tango node", () => {
+    expect(tangoScreenFor({ type: "atlas" })).not.toBeNull();
+  });
+
   it("returns null for screens not yet migrated, so ScreenRouter falls back to legacy", () => {
-    expect(tangoScreenFor({ type: "atlas" })).toBeNull();
     expect(tangoScreenFor({ type: "site", siteId: "site-1" })).toBeNull();
     expect(tangoScreenFor({ type: "questComplete" })).toBeNull();
     expect(tangoScreenFor({ type: "questFailed" })).toBeNull();

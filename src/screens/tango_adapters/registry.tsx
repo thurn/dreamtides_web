@@ -13,6 +13,7 @@ import type { ReactNode } from "react";
 import type { Screen, SiteState } from "../../types/quest";
 import { QuestStartScreenAdapter } from "./QuestStartScreenAdapter";
 import { DreamscapeScreenAdapter } from "./DreamscapeScreenAdapter";
+import { AtlasScreenAdapter } from "./AtlasScreenAdapter";
 
 /**
  * App-level actions a Tango screen may trigger that live outside quest state —
@@ -39,6 +40,8 @@ export function tangoScreenFor(
       return <QuestStartScreenAdapter />;
     case "dreamscape":
       return <DreamscapeScreenAdapter onViewDeck={handlers.onViewDeck} />;
+    case "atlas":
+      return <AtlasScreenAdapter onViewDeck={handlers.onViewDeck} />;
     default:
       return null;
   }

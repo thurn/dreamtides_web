@@ -1,0 +1,221 @@
+import { describe, expect, it } from "vitest";
+import { LayerName } from "../../types/layer-name";
+import type {
+  DreamAtlas,
+  DreamscapeNode,
+  QuestState,
+} from "../../types/quest";
+import type { QuestContent } from "../../data/quest-content";
+import { MINIMAL_ATLAS_CONFIG } from "../../__test-helpers__/atlas-fixtures";
+import {
+  ATLAS_STAGE_HEIGHT,
+  ATLAS_STAGE_WIDTH,
+  atlasChoiceLayer,
+  atlasEdgeKind,
+  buildAtlasHudView,
+  buildAtlasMapNodes,
+  buildAtlasView,
+  resolveAtlasNodeGeometry,
+} from "./atlas-view-model";
+
+/** A structurally valid but content-free QuestContent for builder tests. */
+const EMPTY_CONTENT: QuestContent = {
+  cardDatabase: new Map(),
+  dreamcallers: [],
+  dreamwellCards: [],
+  dreamsignTemplates: [],
+  dreamscapes: [],
+  affiliations: [],
+  guides: [],
+  atlasConfig: MINIMAL_ATLAS_CONFIG,
+};
+
+function makeNode(
+  id: string,
+  layer: LayerName,
+  position: { x: number; y: number },
+  overrides: Partial<DreamscapeNode> = {},
+): DreamscapeNode {
+  return {
+    id,
+    layer,
+    indexInLayer: 0,
+    dreamscapeId: null,
+    biomeName: "",
+    biomeColor: "",
+    sites: [],
+    position,
+    state: "unrevealed",
+    enhancedSiteType: null,
+    forwardIds: [],
+    backwardIds: [],
+    knownDreamsignId: null,
+    ...overrides,
+  };
+}
+
+/**
+ * A three-layer atlas: a completed starter, an available middle node, and the
+ * boss at the deepest layer, wired starter → middle → boss.
+ */
+function makeVerticalAtlas(): DreamAtlas {
+  const starter = makeNode("starter", LayerName.One, { x: 0, y: 0 }, {
+    state: "completed",
+    forwardIds: ["middle"],
+  });
+  const middle = makeNode("middle", LayerName.Two, { x: 100, y: -40 }, {
+    state: "available",
+    forwardIds: ["boss"],
+  });
+  const boss = makeNode("boss", LayerName.Seven, { x: 600, y: 40 }, {
+    state: "revealedLocked",
+  });
+  return {
+    layers: [["starter"], ["middle"], [], [], [], [], ["boss"]],
+    nodes: { starter, middle, boss },
+    startingNodeId: "starter",
+    bossNodeId: "boss",
+    currentNodeId: null,
+    knownDreamsignCarrierIds: [],
+  };
+}
+
+describe("resolveAtlasNodeGeometry", () => {
+  it("runs the layer axis vertically bottom-up: starter at the bottom, boss at the top", () => {
+    const geometry = resolveAtlasNodeGeometry(makeVerticalAtlas());
+    const starter = geometry.get("starter");
+    const middle = geometry.get("middle");
+    const boss = geometry.get("boss");
+    expect(starter && middle && boss).toBeTruthy();
+    // The starter (layer axis min) is lowest on screen (largest `top`); the boss
+    // (layer axis max) is highest (smallest `top`); the middle sits between them.
+    expect(starter!.top).toBeGreaterThan(middle!.top);
+    expect(middle!.top).toBeGreaterThan(boss!.top);
+    // The starter is the bottommost node and the boss is the topmost.
+    const tops = [starter!.top, middle!.top, boss!.top];
+    expect(Math.max(...tops)).toBe(starter!.top);
+    expect(Math.min(...tops)).toBe(boss!.top);
+  });
+
+  it("sizes the starter and boss larger than a regular node", () => {
+    const geometry = resolveAtlasNodeGeometry(makeVerticalAtlas());
+    expect(geometry.get("starter")!.size).toBe(geometry.get("boss")!.size);
+    expect(geometry.get("middle")!.size).toBeLessThan(
+      geometry.get("starter")!.size,
+    );
+    expect(geometry.get("starter")!.isStarter).toBe(true);
+    expect(geometry.get("boss")!.isBoss).toBe(true);
+  });
+
+  it("returns an empty map for an atlas with no positioned nodes", () => {
+    const atlas = makeVerticalAtlas();
+    expect(resolveAtlasNodeGeometry({ ...atlas, nodes: {} }).size).toBe(0);
+  });
+});
+
+describe("atlasChoiceLayer", () => {
+  it("reports the layer of the available frontier", () => {
+    expect(atlasChoiceLayer(makeVerticalAtlas())).toBe(LayerName.Two);
+  });
+
+  it("is null once no node is available", () => {
+    const atlas = makeVerticalAtlas();
+    atlas.nodes.middle.state = "completed";
+    expect(atlasChoiceLayer(atlas)).toBeNull();
+  });
+});
+
+describe("atlasEdgeKind", () => {
+  const from = (state: DreamscapeNode["state"], layer: LayerName) =>
+    makeNode("f", layer, { x: 0, y: 0 }, { state });
+  const to = (state: DreamscapeNode["state"], layer: LayerName) =>
+    makeNode("t", layer, { x: 0, y: 0 }, { state });
+
+  it("draws a traveled edge between two completed nodes", () => {
+    expect(
+      atlasEdgeKind(
+        from("completed", LayerName.One),
+        to("completed", LayerName.Two),
+        LayerName.Three,
+      ),
+    ).toBe("traveled");
+  });
+
+  it("draws an open edge from a completed node into the available frontier", () => {
+    expect(
+      atlasEdgeKind(
+        from("completed", LayerName.One),
+        to("available", LayerName.Two),
+        LayerName.Two,
+      ),
+    ).toBe("open");
+  });
+
+  it("dots an edge that originates deeper than the current frontier", () => {
+    expect(
+      atlasEdgeKind(
+        from("revealedLocked", LayerName.Four),
+        to("unrevealed", LayerName.Five),
+        LayerName.Two,
+      ),
+    ).toBe("locked");
+  });
+
+  it("draws a dim edge for everything at or before the frontier", () => {
+    expect(
+      atlasEdgeKind(
+        from("available", LayerName.Two),
+        to("revealedLocked", LayerName.Three),
+        LayerName.Two,
+      ),
+    ).toBe("dim");
+  });
+});
+
+describe("buildAtlasMapNodes", () => {
+  it("produces one item per positioned node, carrying its face and preview", () => {
+    const items = buildAtlasMapNodes(makeVerticalAtlas(), EMPTY_CONTENT);
+    expect(items).toHaveLength(3);
+    const boss = items.find((item) => item.view.node.id === "boss");
+    expect(boss?.view.isBoss).toBe(true);
+    expect(boss?.preview.isBoss).toBe(true);
+    // An unrevealed non-boss node's preview reads as unrevealed.
+    const middle = items.find((item) => item.view.node.id === "middle");
+    expect(middle?.preview.isUnrevealed).toBe(false); // available, not unrevealed
+  });
+});
+
+describe("buildAtlasHudView", () => {
+  it("maps essence and deck size from run state", () => {
+    const state = {
+      essence: 7,
+      deck: [{}, {}, {}],
+      dreamcaller: null,
+      dreamsigns: [],
+    } as unknown as QuestState;
+    const hud = buildAtlasHudView(state);
+    expect(hud.essence).toBe(7);
+    expect(hud.deck).toBe(3);
+    expect(hud.dreamcaller).toBeUndefined();
+    expect(hud.dreamsigns).toEqual([]);
+  });
+});
+
+describe("buildAtlasView", () => {
+  it("assembles the portrait stage, nodes, edges, and HUD", () => {
+    const state = {
+      essence: 0,
+      deck: [],
+      dreamcaller: null,
+      dreamsigns: [],
+      completionLevel: 1,
+    } as unknown as QuestState;
+    const view = buildAtlasView(makeVerticalAtlas(), EMPTY_CONTENT, state);
+    expect(view.stageWidth).toBe(ATLAS_STAGE_WIDTH);
+    expect(view.stageHeight).toBe(ATLAS_STAGE_HEIGHT);
+    expect(view.nodes).toHaveLength(3);
+    // starter → middle and middle → boss.
+    expect(view.edges).toHaveLength(2);
+    expect(view.hud.essence).toBe(0);
+  });
+});

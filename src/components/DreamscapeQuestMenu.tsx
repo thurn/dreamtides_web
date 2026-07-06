@@ -1,10 +1,11 @@
-// DreamscapeQuestMenu — the top-left utility menu for the Tango dreamscape
-// screen. The Tango dreamscape suppresses the legacy bottom HUD (the persistent
-// bar is re-homed into the Tango `QuestStatusBar`), so the HUD's utility
-// actions — deck viewer, glossary, pool viewer, save/load, and the debug tools
-// — are re-homed here: a floating hamburger in the top-left corner that drops a
-// solid-surface menu, styled from Tango tokens and pressed through the shared
-// `Pressable` feedback.
+// DreamscapeQuestMenu — the top-left utility menu for the Tango quest map
+// screens (the dreamscape and the Dream Atlas). Those screens suppress the
+// legacy bottom HUD (the persistent bar is re-homed into the Tango
+// `QuestStatusBar`), so the HUD's utility actions — deck viewer, glossary, pool
+// viewer, save/load, and the debug tools — are re-homed here: a floating
+// hamburger in the top-left corner that drops a solid-surface menu, styled from
+// Tango tokens and pressed through the shared `Pressable` feedback. The atlas
+// screen additionally supplies its debug "Regenerate Atlas" action here.
 //
 // It is App-shell chrome (mounted beside the screen router, like the legacy
 // HUD), so it owns its own open/submenu/save state and wires the App's overlay
@@ -41,6 +42,11 @@ interface DreamscapeQuestMenuProps {
    * because only the live multiplayer provider supplies it (matching the HUD).
    */
   onLoadQuestState?: (state: QuestState, source: string) => void;
+  /**
+   * Debug: rebuild the atlas with the current generation logic. Supplied only
+   * on the atlas screen; when present, a "Regenerate Atlas" row is shown.
+   */
+  onRegenerateAtlas?: () => void;
   /**
    * Lifts the menu above a full-screen overlay so it stays reachable from on
    * top of it — set while the mobile deck viewer is open, which otherwise
@@ -101,6 +107,7 @@ export function DreamscapeQuestMenu({
   onOpenQuestEditor,
   hasDraftData,
   onLoadQuestState,
+  onRegenerateAtlas,
   elevated = false,
 }: DreamscapeQuestMenuProps) {
   const { state } = useQuest();
@@ -300,6 +307,9 @@ export function DreamscapeQuestMenu({
                   <MenuRow icon="bxf bx-package" label="Package Debug" onClick={() => runAction(onOpenDebugScreen)} />
                 )}
                 <MenuRow icon="bxf bx-edit-alt" label="Edit Quest State" onClick={() => runAction(onOpenQuestEditor)} />
+                {onRegenerateAtlas !== undefined && (
+                  <MenuRow icon="bxf bx-refresh-cw" label="Regenerate Atlas" onClick={() => runAction(onRegenerateAtlas)} />
+                )}
                 <MenuRow icon="bxf bx-save" label="Save Quest" onClick={() => void handleSaveQuest()} />
                 {onLoadQuestState !== undefined && (
                   <MenuRow icon="bxf bx-folder-open" label="Load Quest" onClick={handleOpenLoadMenu} />
