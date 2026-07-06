@@ -1,6 +1,7 @@
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -26,11 +27,24 @@ import { checkGeneratedCardData } from "./scripts/generated-card-data-drift.mjs"
 import { regenerateCardData } from "./scripts/setup-assets.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const buildGitSha = resolveBuildGitSha();
 export const generatedCardDataWatchPaths = [
   path.join(__dirname, "data", "tabula", "cards_v2.toml"),
   path.join(__dirname, "public", "card-data.json"),
   path.join(__dirname, "public", "cards_v2-data.json"),
 ].map((filePath) => path.resolve(filePath));
+
+function resolveBuildGitSha(): string {
+  try {
+    return execFileSync("git", ["rev-parse", "--short=12", "HEAD"], {
+      cwd: __dirname,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+  } catch {
+    return "unknown";
+  }
+}
 
 /** Vite plugin that writes quest log events to disk during development. */
 function questLogPlugin(): Plugin {
@@ -712,6 +726,9 @@ function firebaseConfigGuardPlugin(): Plugin {
 }
 
 export default defineConfig({
+  define: {
+    "import.meta.env.VITE_BUILD_GIT_SHA": JSON.stringify(buildGitSha),
+  },
   plugins: [
     firebaseConfigGuardPlugin(),
     react(),

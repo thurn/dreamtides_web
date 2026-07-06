@@ -20,6 +20,7 @@ import {
   saveQuest,
   type SavedQuestSummary,
 } from "../state/saved-quests";
+import { BUILD_GIT_SHA } from "../runtime/build-info";
 import type { QuestState } from "../types/quest";
 import { Pressable } from "../tango/primitives/Pressable";
 import { token } from "../tango/primitives/tokens";
@@ -218,6 +219,15 @@ export function DreamscapeQuestMenu({
     }
   }
 
+  function handleViewBuildSha(): void {
+    closeMenu();
+    logEvent("build_sha_viewed", {
+      source: "dreamscape_menu",
+      gitSha: BUILD_GIT_SHA,
+    });
+    flashStatus(`Build Git SHA: ${BUILD_GIT_SHA}`);
+  }
+
   const panelStyle = {
     position: "absolute",
     left: 0,
@@ -293,6 +303,7 @@ export function DreamscapeQuestMenu({
                 {onLoadQuestState !== undefined && (
                   <MenuRow icon="bxf bx-folder-open" label="Load Quest" onClick={handleOpenLoadMenu} />
                 )}
+                <MenuRow icon="bxf bx-code-alt" label="Build SHA" onClick={handleViewBuildSha} />
                 <MenuRow icon="bxf bx-arrow-to-bottom" label="Download Log" onClick={() => runAction(downloadLog)} />
               </>
             ) : (
