@@ -9,14 +9,16 @@
 // dismisses the zoom so the grid scrolls, so browsing and inspecting never
 // fight.
 //
-// The top of the screen holds a lean control band: the corner close control,
-// and two dropdown buttons on one line — a filter button (type: All /
-// Characters / Events) and a sort button (deck order, cost, spark, name). All
-// four buttons (the glass-disc close control, the elevated dreamscape menu that
-// floats in from the App shell, and the glass filter/sort controls) wear the
-// one shared liquid-glass surface, so the band reads as a set. Filter and sort
-// are local presentation state; the pure `mobile-deck-filter` module derives
-// the visible grid from the full deck and that state.
+// The top of the screen holds a lean control band: a centered "Deck" title, the
+// corner close control, and two dropdown buttons on one line — a filter button
+// (All / Characters / Events, plus a per-subtype option for any subtype the deck
+// is heavy in) and a sort button (Name, Drafted, Cost, Spark, Subtype — every
+// sort low to high). All four buttons (the glass-disc close control, the
+// elevated dreamscape menu that floats in from the App shell, and the glass
+// filter/sort controls) wear the one shared liquid-glass surface, so the band
+// reads as a set. Filter and sort are local presentation state; the pure
+// `mobile-deck-filter` module derives both the available filter options and the
+// visible grid from the full deck and that state.
 //
 // PURE: renders from a view-model and reports dismissal through `onClose`. All
 // state here is local presentation state (which card is being peeked, the
@@ -44,13 +46,15 @@ import {
   type PeekRect,
 } from "./mobile-deck-peek";
 import {
+  type DeckControlOption,
   type DeckFilterSort,
   type DeckSortId,
   type DeckTypeFilter,
   DECK_SORT_OPTIONS,
-  DECK_TYPE_FILTER_OPTIONS,
   DEFAULT_DECK_FILTER_SORT,
+  buildDeckTypeFilterOptions,
   deckSortLabel,
+  deckTypeFilterLabel,
   filterAndSortDeckCards,
 } from "./mobile-deck-filter";
 
@@ -120,6 +124,13 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
   const [peek, setPeek] = useState<PeekState | null>(null);
   const [filterSort, setFilterSort] = useState<DeckFilterSort>(
     DEFAULT_DECK_FILTER_SORT,
+  );
+
+  // The type-filter menu is derived from the deck itself, so a deck heavy in one
+  // subtype gains a one-tap filter down to it (see buildDeckTypeFilterOptions).
+  const typeFilterOptions = useMemo(
+    () => buildDeckTypeFilterOptions(view.cards),
+    [view.cards],
   );
 
   const visibleCards = useMemo(
@@ -225,6 +236,7 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
         controls={
           <DeckControls
             filterSort={filterSort}
+            typeFilterOptions={typeFilterOptions}
             onFilterSortChange={setFilterSort}
           />
         }
@@ -300,13 +312,14 @@ function GlassBackdrop() {
 const CONTROL_BUTTON_PX = 48;
 
 /**
- * The top band: the corner close control and the filter/sort `controls` row.
- * The top-left corner is left clear for the dreamscape utility menu, which lifts
- * above this overlay while it is open (see `DreamscapeQuestMenu`'s `elevated`)
- * and wears the same glass surface; the close control on the right is a matching
- * glass disc. Nothing sits in the center — the region the device's screen cutout
- * (notch / Dynamic Island / punch-hole) claims — so the band never fights the
- * hardware.
+ * The top band: a centered "Deck" title, the corner close control, and the
+ * filter/sort `controls` row. The top-left corner is left clear for the
+ * dreamscape utility menu, which lifts above this overlay while it is open (see
+ * `DreamscapeQuestMenu`'s `elevated`) and wears the same glass surface; the
+ * close control on the right is a matching glass disc. The title sits centered
+ * between them, dropping in just below the device's screen cutout (notch /
+ * Dynamic Island / punch-hole) — the band's top padding already clears the
+ * cutout — so it names the screen without fighting the hardware.
  */
 function TopBand({
   onClose,
@@ -330,13 +343,26 @@ function TopBand({
         paddingLeft: token("--gutter"),
         paddingRight: token("--gutter"),
         paddingBottom: token("--space-4"),
-        borderBottom: `1px solid ${token("--border-soft")}`,
+        borderBottom: `1px solid ${token("--border-mid")}`,
       }}
     >
-      {/* Corner row: the close control anchored at the right corner; the left is
-          left empty for the elevated dreamscape menu. The center stays clear for
-          the screen cutout. */}
+      {/* Corner row: the "Deck" title centered under the screen cutout, the close
+          control anchored at the right corner, and the left corner left empty for
+          the elevated dreamscape menu. */}
       <div style={{ position: "relative", minHeight: CONTROL_BUTTON_PX }}>
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "grid",
+            placeItems: "center",
+            font: token("--t-title-sm"),
+            color: token("--text-primary"),
+            pointerEvents: "none",
+          }}
+        >
+          Deck
+        </div>
         <Pressable
           as="button"
           aria-label="Close deck"
@@ -374,9 +400,11 @@ function TopBand({
  */
 function DeckControls({
   filterSort,
+  typeFilterOptions,
   onFilterSortChange,
 }: {
   filterSort: DeckFilterSort;
+  typeFilterOptions: DeckControlOption<DeckTypeFilter>[];
   onFilterSortChange: (next: DeckFilterSort) => void;
 }) {
   return (
@@ -393,8 +421,11 @@ function DeckControls({
         size="sm"
         leadingGlyph={GLYPHS.filter}
         align="start"
-        ariaLabel={`Filter: ${filterSort.typeFilter}`}
-        options={DECK_TYPE_FILTER_OPTIONS.map((option) => ({
+        ariaLabel={`Filter: ${deckTypeFilterLabel(
+          filterSort.typeFilter,
+          typeFilterOptions,
+        )}`}
+        options={typeFilterOptions.map((option) => ({
           value: option.value,
           label: option.label,
         }))}

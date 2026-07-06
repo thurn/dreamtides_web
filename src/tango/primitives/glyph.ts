@@ -73,8 +73,10 @@ export const GLYPHS = {
   infoFilled: g("bxf bx-info-circle"),
   chevronLeft: g("bx bx-chevron-left"),
   chevronRight: g("bx bx-chevron-right"),
-  /** The downward chevron on a closed Select trigger; rotates open on reveal. */
+  /** A downward chevron. */
   chevronDown: g("bx bx-chevron-down"),
+  /** The filled downward caret that marks a Select trigger as a dropdown. */
+  caretDown: g("bxf bx-caret-down"),
   /** Filled up/down arrows — the leading mark on a sort dropdown button. */
   sort: g("bxf bx-arrow-up-down"),
   /** Filled funnel — the leading mark on a filter dropdown button. */

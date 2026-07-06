@@ -43,7 +43,7 @@ export interface ControlChrome {
    * glass material as the track. Carries its own border radius.
    */
   trigger: CSSProperties;
-  /** Fill color for the Select trigger's leading glyph and chevron. */
+  /** Fill color for the Select trigger's leading glyph and dropdown caret. */
   triggerGlyphColor: TangoColor;
 }
 
@@ -83,7 +83,9 @@ export function controlChrome(): ControlChrome {
   return {
     track,
     trigger: track,
-    triggerGlyphColor: "text-secondary",
+    // White so the leading glyph and dropdown caret read crisply against the
+    // frosted glass.
+    triggerGlyphColor: "text-primary",
     trackPadding: 4,
     segmentGap: 2,
     segmentRadius: token("--radius-inset"),

@@ -10,11 +10,11 @@ import { GLYPHS } from "../../primitives/glyph";
 import type { TangoComponent } from "../registry";
 
 const OPTIONS: SelectOption[] = [
-  { value: "deck", label: "Deck Order", triggerLabel: "Deck" },
-  { value: "cost-asc", label: "Cost (Low to High)", triggerLabel: "Cost ↑" },
-  { value: "cost-desc", label: "Cost (High to Low)", triggerLabel: "Cost ↓" },
-  { value: "spark-desc", label: "Spark (High to Low)", triggerLabel: "Spark ↓" },
-  { value: "name-asc", label: "Name (A to Z)", triggerLabel: "Name" },
+  { value: "name", label: "Name" },
+  { value: "drafted", label: "Drafted" },
+  { value: "cost", label: "Cost" },
+  { value: "spark", label: "Spark" },
+  { value: "subtype", label: "Subtype" },
 ];
 
 interface SelectDemoArgs {
@@ -68,7 +68,7 @@ export const selectDemo: TangoComponent = {
   blurb:
     "The compact dropdown control, and Tango's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. Two of them share a single line where a segmented control would not fit.",
   callout:
-    "The trigger is single-font by construction — one leading glyph, one selection label, one chevron — so a caller cannot mix two type voices in a button. Give a menu entry a compact `triggerLabel` to keep the collapsed button narrow while the menu shows the full phrase. The trigger wears the shared glass control surface; the menu stays a solid raised popover.",
+    "The trigger is single-font by construction — one leading glyph, one selection label, one dropdown caret — so a caller cannot mix two type voices in a button. It reserves the width of its widest option's label, so the button holds one size and never jitters as the selection changes. Give a menu entry a compact `triggerLabel` to show a shorter form on the collapsed button while the menu shows the full phrase. Trigger and menu wear the same liquid glass, so the open control reads as one continuous surface.",
   group: "Components",
   docName: "Select",
   Component: SelectDemo,
@@ -79,14 +79,14 @@ export const selectDemo: TangoComponent = {
 import { Select } from "src/tango/components/controls/Select";
 import { GLYPHS } from "src/tango/primitives/glyph";
 
-const [sort, setSort] = useState("deck");
+const [sort, setSort] = useState("name");
 
 <Select
   leadingGlyph={GLYPHS.sort}
   options={[
-    { value: "deck", label: "Deck Order", triggerLabel: "Deck" },
-    { value: "cost-asc", label: "Cost (Low to High)", triggerLabel: "Cost ↑" },
-    { value: "name-asc", label: "Name (A to Z)", triggerLabel: "Name" },
+    { value: "name", label: "Name" },
+    { value: "drafted", label: "Drafted" },
+    { value: "cost", label: "Cost" },
   ]}
   value={sort}
   onChange={setSort}
@@ -107,7 +107,7 @@ const [sort, setSort] = useState("deck");
   demo: {
     defaultArgs: {
       options: OPTIONS,
-      value: "deck",
+      value: "name",
       size: "md",
       full: false,
       align: "start",

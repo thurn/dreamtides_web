@@ -4,20 +4,24 @@
 // Where a full choice list would eat a whole row, Select collapses it to one
 // resting trigger — a leading glyph (a filled funnel for a filter, filled
 // up/down arrows for a sort), the current selection's label, and a dropdown
-// chevron — that reveals the rest on tap. Two of them sit on a single line
+// caret — that reveals the rest on tap. Two of them sit on a single line
 // where a segmented control could not.
 //
-// The trigger is single-font BY CONSTRUCTION: it renders exactly one text run,
-// the selection label (glyph and chevron are icons, not a second type voice).
-// There is no eyebrow or secondary-text slot, so a caller cannot mix two font
-// styles in one button. A menu entry may carry a compact `triggerLabel` for the
-// collapsed trigger while the menu itself shows the fuller `label`.
+// The trigger reserves the width of its WIDEST option's label, so the button
+// holds one size as the selection changes and never jitters when a menu pick
+// swaps a short label for a long one. All option labels are stacked in one grid
+// cell; only the selected one is visible, and the hidden siblings set the width.
+//
+// The trigger is single-font BY CONSTRUCTION: it renders exactly one visible
+// text run, the selection label (glyph and caret are icons, not a second type
+// voice). There is no eyebrow or secondary-text slot, so a caller cannot mix two
+// font styles in one button. A menu entry may carry a compact `triggerLabel` for
+// the collapsed trigger while the menu itself shows the fuller `label`.
 //
 // The trigger's surface is the shared liquid-glass control material from
 // control-treatment.ts — the SAME material SegmentedControl renders from. The
-// dropdown MENU is a solid raised popover: a menu must stay legible over scene
-// art and dense card grids, so it does not take on the translucent material the
-// resting trigger wears.
+// dropdown MENU wears that same liquid glass, so the open control reads as one
+// continuous glass surface with the trigger that summoned it.
 //
 // The menu is portaled to the document body and positioned against the
 // trigger's box, so it floats above any scroll container or stacking context
@@ -38,7 +42,7 @@ import { HOVER_SCALE, PRESS_SCALE, usePress } from "../../primitives/Pressable";
 import { GlowIcon } from "./GlowIcon";
 import { type Glyph, GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import { controlChrome } from "./control-treatment";
+import { controlChrome, glassTrack } from "./control-treatment";
 
 /** Height/scale variants, matching SegmentedControl's. */
 type SelectSize = "sm" | "md";
@@ -128,11 +132,6 @@ export function Select({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const selected = options.find((option) => option.value === value);
-  // The trigger shows the compact form when the option supplies one, so a long
-  // menu entry stays narrow on the collapsed button.
-  const label = selected?.triggerLabel ?? selected?.label ?? "";
-
   const close = useCallback(() => setOpen(false), []);
 
   const openMenu = useCallback(() => {
@@ -219,21 +218,40 @@ export function Select({
             size="1.1em"
           />
         )}
-        {/* The one and only text run on the trigger — a single font by
-            construction, so a caller cannot mix two type voices in one button. */}
+        {/* The trigger's text — a single font by construction, so a caller
+            cannot mix two type voices in one button. Every option's label is
+            stacked in one grid cell; only the selected one shows, and the hidden
+            siblings hold the trigger at the width of the WIDEST label so the
+            button never resizes as the selection changes. */}
         <span
           style={{
+            display: "grid",
             flex: full ? 1 : undefined,
-            textAlign: "left",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            color: token("--text-primary"),
+            justifyItems: "start",
+            minWidth: 0,
           }}
         >
-          {label}
+          {options.map((option) => (
+            <span
+              key={option.value}
+              aria-hidden={option.value === value ? undefined : true}
+              style={{
+                gridArea: "1 / 1",
+                visibility: option.value === value ? "visible" : "hidden",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: "100%",
+                textAlign: "left",
+                color: token("--text-primary"),
+              }}
+            >
+              {option.triggerLabel ?? option.label}
+            </span>
+          ))}
         </span>
         <GlowIcon
-          iconClass={GLYPHS.chevronDown}
+          iconClass={GLYPHS.caretDown}
           color={chrome.triggerGlyphColor}
           size="1.1em"
         />
@@ -253,10 +271,10 @@ export function Select({
               minWidth: anchor.width,
               zIndex: 90,
               padding: token("--space-1"),
+              // The menu wears the same liquid glass as the trigger, so the open
+              // control reads as one continuous glass surface.
+              ...glassTrack(),
               borderRadius: token("--radius-popover"),
-              background: token("--surface-glass"),
-              border: `1px solid ${token("--border-soft")}`,
-              boxShadow: token("--shadow-lg"),
             }}
           >
             {options.map((option) => (
@@ -301,7 +319,9 @@ function MenuItem({ option, active, onPick }: MenuItemProps): ReactElement {
         gap: 8,
         width: "100%",
         minHeight: 36,
-        padding: `0 ${token("--space-3")}`,
+        // Generous side padding so a long label has room off both edges,
+        // especially the trailing end where nothing else breaks the line.
+        padding: `0 ${token("--space-5")}`,
         border: "none",
         borderRadius: token("--radius-inset"),
         background: lit ? token("--surface-hover") : "transparent",
@@ -317,13 +337,14 @@ function MenuItem({ option, active, onPick }: MenuItemProps): ReactElement {
       <span
         aria-hidden="true"
         style={{
-          width: "1em",
+          width: "1.1em",
           display: "inline-flex",
           justifyContent: "center",
           opacity: active ? 1 : 0,
         }}
       >
-        <GlowIcon iconClass={GLYPHS.check} color="accent" size="1em" />
+        {/* White so the selected-row mark stands out against the glass. */}
+        <GlowIcon iconClass={GLYPHS.check} color="text-primary" size="1.2em" />
       </span>
       {option.label}
     </button>
