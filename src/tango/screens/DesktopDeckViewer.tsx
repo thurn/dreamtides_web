@@ -1,11 +1,12 @@
 // DesktopDeckViewer — the wide-viewport Tango rendering of the player's deck.
 //
-// On desktop the deck is not a full-screen takeover but a large FLOATING MODAL
-// PANEL: a single liquid-glass surface centered over a dimmed scene, capped in
-// width so it stays a panel (not an edge-to-edge sheet) even on an ultrawide
-// display. Clicking the scrim or pressing Escape dismisses it.
+// On desktop the deck is a FULL-SCREEN viewer: one liquid-glass surface fills
+// the whole viewport, so its frosted blur covers everything behind it. The
+// deck's content is grouped and centered inside a width cap so it stays readable
+// rather than stretching edge-to-edge on an ultrawide display. Clicking the
+// blurred margin around the content, or pressing Escape, dismisses it.
 //
-// The panel is three regions:
+// The viewer is three regions:
 //   - a header naming the screen and carrying the corner close disc;
 //   - a LEFT SIDEBAR profiling the run — the Dreamcaller's portrait, name,
 //     title, and rules text, then the collected dreamsigns as hoverable art;
@@ -16,7 +17,7 @@
 // a card-type segmented switch, a subtype dropdown, a sort-key dropdown, a sort
 // DIRECTION toggle, and an S/M/L card-size toggle. Every control wears the one
 // shared liquid-glass surface (SegmentedControl / Select), so the whole bar
-// reads as a set with the header's glass close disc and the panel it sits on.
+// reads as a set with the header's glass close disc and the surface it sits on.
 //
 // A card grows in place on HOVER (HoverZoomCard) — the desktop analog of the
 // mobile press-zoom — bringing its rules text to a legible size and stacking the
@@ -87,13 +88,12 @@ export interface DesktopDeckViewerProps {
 }
 
 /**
- * Panel size caps (box measures — content-driven layout, not token spacing).
- * The width cap keeps the panel a floating panel on an ultrawide display rather
- * than an edge-to-edge sheet; the viewport fractions keep it inside any screen.
+ * Content width cap (box measure — content-driven layout, not token spacing).
+ * The full-screen glass fills the viewport; this caps the width of the content
+ * grouped inside it so it stays readable and centered rather than stretching
+ * edge-to-edge on an ultrawide display.
  */
-const PANEL_MAX_WIDTH_PX = 1180;
-const PANEL_WIDTH_VW = 94;
-const PANEL_MAX_HEIGHT_VH = 90;
+const CONTENT_MAX_WIDTH_PX = 1180;
 
 /** Fixed width of the left profile sidebar. */
 const SIDEBAR_WIDTH_PX = 268;
@@ -105,8 +105,10 @@ const DREAMSIGN_TILE_PX = 46;
 const CLOSE_BUTTON_PX = 40;
 
 /**
- * The desktop deck viewer: a floating glass panel over a dismiss scrim, with a
- * profile sidebar and a filtered, sortable, resizable grid of the deck.
+ * The desktop deck viewer: a full-screen liquid-glass surface whose frosted
+ * blur covers the whole viewport, with the run's deck — a header, a profile
+ * sidebar, and a filtered, sortable, resizable grid — grouped and centered
+ * inside a width cap. An outside press (the blurred margin) or Escape closes it.
  */
 export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
   const [filterSort, setFilterSort] = useState<DesktopDeckFilterSort>(
@@ -139,16 +141,17 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
   return (
     <div
       className="tango"
-      // A fully transparent catcher, NOT a scrim: the scene behind the panel is
-      // never dimmed, washed, or blurred — Tango never darkens the scene. The
-      // panel floats on its own liquid-glass rim and drop shadow, and its glass
-      // samples the LIVE warm scene, so the controls inside read the same warm
-      // neutral as the mobile viewer rather than a dark plum. This layer only
-      // catches an outside press to dismiss the viewer.
+      // The liquid-glass surface fills the whole viewport, so its frosted blur
+      // covers everything behind it. An outside press — on the blurred margin
+      // around the centered content — dismisses the viewer.
       onPointerDown={onClose}
       style={{
+        ...glassSurfaceStyle(),
+        // Edge-to-edge: no floating rim radius when the glass IS the viewport.
         position: "fixed",
         inset: 0,
+        borderRadius: 0,
+        border: "none",
         zIndex: 60,
         display: "grid",
         placeItems: "center",
@@ -159,24 +162,22 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
         role="dialog"
         aria-modal="true"
         aria-label="Your deck"
-        // The panel itself is the press boundary: presses inside it never reach
-        // the scrim, so only an outside press closes.
+        // Presses inside the content never reach the surface, so only an outside
+        // press closes.
         onPointerDown={(e) => {
           e.stopPropagation();
         }}
         style={{
-          ...glassSurfaceStyle(),
-          borderRadius: token("--radius-hero"),
-          width: `min(${String(PANEL_MAX_WIDTH_PX)}px, ${String(PANEL_WIDTH_VW)}vw)`,
-          height: `${String(PANEL_MAX_HEIGHT_VH)}vh`,
-          maxHeight: `${String(PANEL_MAX_HEIGHT_VH)}vh`,
+          // Group the content toward the center inside a width cap so it stays
+          // readable rather than stretching edge-to-edge on an ultrawide display.
+          width: `min(${String(CONTENT_MAX_WIDTH_PX)}px, 100%)`,
+          height: "100%",
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
         }}
       >
         <Header count={view.cards.length} onClose={onClose} />
-
         <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
           <Sidebar
             dreamcaller={view.dreamcaller}
