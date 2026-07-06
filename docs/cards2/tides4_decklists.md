@@ -123,7 +123,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Fractured Vessel
 - 1× Cinderheart
 - 1× Cost of Victory
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Pyrokinetic Surge
 - 1× Blight Weaver
 - 1× Verdant Pioneer
@@ -217,7 +217,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 1× Dune Reaper
 - 1× Saltless Mariner
 - 1× Fractured Vessel
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Pyrokinetic Surge
 - 1× Dawnrunner
 - 1× Blight Weaver
@@ -447,7 +447,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Return to Nowhere
 - 1× Oracle of Shifting Skies
 - 1× Forgotten Sleeper
-- 1× Cascading Detonation
+- 1× Entropy Cascade
 - 1× Cascade of Reflections
 
 ## Seraveth signature — Void Accelerant
@@ -525,7 +525,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Wondrous Clearing
 - 1× Cost of Victory
 - 1× Urban Cipher
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Emberwatch Veteran
 - 1× Ash Harbinger
 - 1× Pyrokinetic Surge
@@ -727,7 +727,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Gleamharvester
 - 1× Cost of Victory
 - 1× Urban Cipher
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Emberwatch Veteran
 - 1× Ash Harbinger
 - 1× Pyrokinetic Surge
@@ -830,7 +830,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Saltless Mariner
 - 1× Cinderheart
 - 1× Cost of Victory
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Emberwatch Veteran
 - 1× Ash Harbinger
 - 1× Pyrokinetic Surge
@@ -929,7 +929,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Breach Artist
 - 1× Spirit of Smoldering Echoes
 - 1× Cost of Victory
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Duskshore Virtuoso
 - 1× Starcatcher
 - 1× Paradox Corps Enforcer
@@ -958,7 +958,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× The Power Within
 - 1× A New Adventure
 - 1× Moonlit Voyage
-- 1× Cascading Detonation
+- 1× Entropy Cascade
 - 1× Cascade of Reflections
 
 ## Zeva signature — Event Chain Combo
@@ -1036,7 +1036,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Breach Artist
 - 1× Spirit of Smoldering Echoes
 - 1× Cost of Victory
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Duskshore Virtuoso
 - 1× Last Beacon
 - 1× Starcatcher
@@ -1069,7 +1069,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× The Power Within
 - 1× A New Adventure
 - 1× Moonlit Voyage
-- 1× Cascading Detonation
+- 1× Entropy Cascade
 - 1× Cascade of Reflections
 
 ## Kasane signature — Event Copy Engine
@@ -1104,7 +1104,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 2× Flash of Power
 - 2× Echoes of Eternity
 - 2× A New Adventure
-- 2× Cascading Detonation
+- 2× Entropy Cascade
 - 2× Cascade of Reflections
 - 1× Sanctum Awakened
 - 1× Fractured Veil
@@ -1187,7 +1187,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 2× Torchbearer of the Abyss
 - 2× Arc Gate Opening
 - 2× Key Sifter
-- 2× Cascading Detonation
+- 2× Entropy Cascade
 - 1× Unleashed Destruction
 - 1× Crimson Pilgrimage
 - 1× Sanctum Awakened
@@ -1291,7 +1291,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 2× Arc Gate Opening
 - 2× Rubble Diviner
 - 2× Wandering Archivist
-- 2× Cascading Detonation
+- 2× Entropy Cascade
 - 1× Unleashed Destruction
 - 1× Sanctum Awakened
 - 1× Scorched Reckoning
@@ -2093,7 +2093,7 @@ Tide-fac-03 is an event-heavy (34 events, 11 characters) tide built around assem
 - 2× Ashlight Caller
 - 2× Iconoclast
 - 2× Arc Gate Opening
-- 2× Cascading Detonation
+- 2× Entropy Cascade
 - 2× Cascade of Reflections
 - 1× Crimson Pilgrimage
 - 1× Data Pulse
@@ -2415,7 +2415,7 @@ Tide-fac-09 is almost entirely characters (39 of 45 copies), built around a tigh
 - 1× Key Sifter
 - 1× Echoes of Eternity
 - 1× Return to Nowhere
-- 1× Cascading Detonation
+- 1× Entropy Cascade
 - 1× Cascade of Reflections
 
 ## Lean: Architect of Memory — Discard Event Engine
@@ -2468,7 +2468,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Door to Possibility
 - 1× Pinnacle Ascendant
 - 1× Wandering Archivist
-- 1× Cascading Detonation
+- 1× Entropy Cascade
 - 1× Cascade of Reflections
 
 ## Lean: Infernal Cavalier — Dissolved Void Loop
@@ -2826,7 +2826,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Key Sifter
 - 1× Return to Nowhere
 - 1× Oracle of Shifting Skies
-- 1× Cascading Detonation
+- 1× Entropy Cascade
 - 1× Cascade of Reflections
 
 ## Lean: The Thinning — Abandon Score Grind
@@ -2867,7 +2867,7 @@ Tide-fac-18 is built around two interlocking halves: an energy ramp package and 
 - 1× Stolen Genesis
 - 1× Duskwall Delver
 - 1× Fargazer
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Pyrokinetic Surge
 - 1× Dawnrunner
 - 1× Blight Weaver
@@ -2925,7 +2925,7 @@ Tide-fac-20 is an event-heavy combo tide (34 events, 11 characters) built around
 - 1× Echoes of Eternity
 - 1× Return to Nowhere
 - 1× A New Adventure
-- 1× Cascading Detonation
+- 1× Entropy Cascade
 
 ## Lean: Vigilant Howler — Spirit Animal ✦ Scaling
 
@@ -3211,7 +3211,7 @@ Tide-fac-26 is a character-heavy survivor tide built around the abandon trigger 
 - 1× Stolen Genesis
 - 1× Duskwall Delver
 - 1× Cost of Victory
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Defiant Holdout
 - 1× Silent Gatherer
 - 1× Exiles of the Last Light
@@ -3265,7 +3265,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Fargazer
 - 1× Cinderheart
 - 1× Cost of Victory
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Aurora Conductor
 - 1× Dawnrunner
 - 1× Defiant Holdout
@@ -3379,7 +3379,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Oracle of Shifting Skies
 - 1× Pinnacle Ascendant
 - 1× Wandering Archivist
-- 1× Cascading Detonation
+- 1× Entropy Cascade
 - 1× Cascade of Reflections
 
 ## Lean: Harbor Warden — Dissolution Loop Warriors
@@ -3517,7 +3517,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Duskwall Delver
 - 1× Fargazer
 - 1× Cinderheart
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Dawnrunner
 - 1× Defiant Holdout
 - 1× Exiles of the Last Light

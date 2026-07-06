@@ -121,7 +121,7 @@
         {"id":"8624f9c7-dc92-4f4a-9c79-319b9c121b19","name":"Cinderheart","subtype":"Visitor","text":"When you abandon a character, this character gains +1✦.\n\n▸Dissolved: Gain ⍟ equal to this character's ✦.","copies":1},
         {"id":"8904714c-38a9-491f-92ce-5cb5ece26ab1","name":"Plunge into the Abyss","text":"Put an enemy on top of the opponent's deck.","copies":1},
         {"id":"8a971ba7-9dfb-45be-bfbb-bf5e4f11974a","name":"Cost of Victory","text":"You may discard a card as an additional cost to play this event. Dissolve a ≤2● cost enemy. If the additional cost was paid, dissolve any enemy instead.","copies":1},
-        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Burning Pursuit","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
+        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Exile","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
         {"id":"8cb543d7-e70b-4526-b473-bb17dcaee2a7","name":"Planetgazer","subtype":"Child","text":"▸Materialized: Foresee 2.\n\n❖ – 1●: Move this character to an unoccupied character position.","copies":1},
         {"id":"954e8d50-d494-4fb2-b4c7-74979083b774","name":"Paradox Corps Enforcer","subtype":"Outsider","text":"Phasing\n\nWhen an outsider you control scores ⍟, foresee 1 and draw a card.","copies":1},
         {"id":"97b359ee-5a7a-4f54-bd65-e6221a893208","name":"Pyrokinetic Surge","text":"To play this card, discard a card or pay 5⍟. Dissolve an enemy.","copies":1},
@@ -176,7 +176,7 @@
         {"id":"6b739127-1a23-4c5d-877a-8829dd7a8b8c","name":"Entropy Spike","subtype":"Survivor","text":"▸Dissolved: Choose one: Gain 1●, or gain 1 maximum ●.","copies":2},
         {"id":"7b55efd1-6d9f-4156-9de7-1c71ccc410cb","name":"Stolen Genesis","text":"To play this card, abandon a character. Materialize a random character with higher cost from your deck.\n\nReclaim 3●","copies":2},
         {"id":"8571d7b3-5401-4678-9e81-e14538c8c46e","name":"Fargazer","subtype":"Explorer","text":"When you play a character, erode 1.\n\nReclaim 2●","copies":2},
-        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Burning Pursuit","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":2},
+        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Exile","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":2},
         {"id":"a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa","name":"Kindred Sparks","subtype":"Survivor","text":"If you control a survivor, you may play this card from your hand or void for 1●.","copies":2},
         {"id":"a7c2ee76-48c9-4587-8f01-81d00ae280cb","name":"Defiant Holdout","subtype":"Survivor","text":"▸Dissolved: Materialize X 1✦ survivor figments, where X is this character's spark.","copies":2},
         {"id":"b56b3411-50c7-4cc9-90e0-d4ffcaec73c6","name":"Exiles of the Last Light","subtype":"Survivor","text":"Abandon another character: Gain 1●. The opponent gains 1⍟.","copies":2},
@@ -460,7 +460,7 @@
         {"id":"f3f97e2c-3bb6-4a20-9880-f59c50e5af93","name":"Obliterator of Worlds","subtype":"Ancient","text":"Abandon a character: Store 1⧗.\n\nX⧗: Dissolve an enemy with X✦.","copies":1},
         {"id":"f68774ce-0e94-489f-90a5-68e03a549ff6","name":"Vigil Keeper","subtype":"Survivor","text":"When a survivor you control is dissolved, draw a card.","copies":1},
         {"id":"f7084ba7-8c85-4847-80df-b0c98ec77d78","name":"Carrion Shepherd","subtype":"Visitor","text":"▸Dawn: Give a wraith you control +1✦. If you control no wraiths, materialize a 0✦ wraith figment with vengeful instead.","copies":1},
-        {"id":"fb967cc1-4199-4a08-8070-724e07cebea5","name":"Cascading Detonation","text":"The next time you play an event this turn, copy it twice.\n\nReclaim 5●.","copies":1},
+        {"id":"fb967cc1-4199-4a08-8070-724e07cebea5","name":"Entropy Cascade","text":"The next time you play an event this turn, copy it twice.\n\nReclaim 5●.","copies":1},
         {"id":"fc4b06d6-3b30-4769-af98-88fcea5b54dd","name":"Cascade of Reflections","text":"Until end of turn, when you play an event, copy it.","copies":1},
         {"id":"fd355778-abea-4513-844c-91bf75929ebe","name":"Immortal Reaper","subtype":"Warrior","text":"2●, Banish a card from your void: Materialize this character from your void.","copies":1}
       ]
@@ -547,7 +547,7 @@
         {"id":"8624f9c7-dc92-4f4a-9c79-319b9c121b19","name":"Cinderheart","subtype":"Visitor","text":"When you abandon a character, this character gains +1✦.\n\n▸Dissolved: Gain ⍟ equal to this character's ✦.","copies":1},
         {"id":"89c0d03c-2199-415a-bc66-89e451034328","name":"Sylvan Matriarch","subtype":"Ancient","text":"When you materialize a non-figment character, it gains +X✦ where X is this character's ✦.","copies":1},
         {"id":"8adfa141-6864-4f5f-a9ca-59306eaf5432","name":"Urban Cipher","subtype":"Detective","text":"▸Materialized: Discard your hand, then draw 3 cards.","copies":1},
-        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Burning Pursuit","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
+        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Exile","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
         {"id":"956aaeb1-5280-4294-bf80-73079f35c5f6","name":"Ash Harbinger","subtype":"Ancient","text":"☪, Discard a card: Materialize a 1✦ warrior figment.\n\n☪, Abandon 2 warrior figments: Dissolve a ≤4✦ enemy.","copies":1},
         {"id":"965ce3b2-a722-475c-99c5-5b35685d2404","name":"Dreamvale Monarch","subtype":"Spirit Animal","text":"▸Materialized: Draw a card.","copies":1},
         {"id":"97b359ee-5a7a-4f54-bd65-e6221a893208","name":"Pyrokinetic Surge","text":"To play this card, discard a card or pay 5⍟. Dissolve an enemy.","copies":1},
@@ -656,7 +656,7 @@
         {"id":"8a8af982-d1a1-42a0-9229-5e3af13e8dbe","name":"Eruption","text":"Dissolve a ≤2✦ enemy.\n\nWhen an enemy scores ⍟, return this card from your void to your hand.","copies":1},
         {"id":"8a971ba7-9dfb-45be-bfbb-bf5e4f11974a","name":"Cost of Victory","text":"You may discard a card as an additional cost to play this event. Dissolve a ≤2● cost enemy. If the additional cost was paid, dissolve any enemy instead.","copies":1},
         {"id":"8b5eb29c-146f-46fb-9407-55004128fba7","name":"Keeper of Forgotten Light","subtype":"Ancient","text":"When you materialize a non-figment ≤2● cost character, draw a card with ephemeral.","copies":1},
-        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Burning Pursuit","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
+        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Exile","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
         {"id":"8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd","name":"Ash Sower","subtype":"Warrior","text":"Support – Supported characters have +3✦.\n\n❖ – Abandon a character: Move this character to the abandoned character's position.","copies":1},
         {"id":"8f69312f-4bec-4671-99da-e752ec6d4cbc","name":"Seek Answers","text":"Draw 2 cards, then discard a card.\n\nWhen you discard this card, it gains reclaim.","copies":1},
         {"id":"9a18d375-1b6d-4df4-95ec-c7c5c3f36379","name":"Pattern Seeker","subtype":"Child","text":"When you discard a card, draw a card with ephemeral.","copies":1},
@@ -764,7 +764,7 @@
         {"id":"8a971ba7-9dfb-45be-bfbb-bf5e4f11974a","name":"Cost of Victory","text":"You may discard a card as an additional cost to play this event. Dissolve a ≤2● cost enemy. If the additional cost was paid, dissolve any enemy instead.","copies":1},
         {"id":"8adfa141-6864-4f5f-a9ca-59306eaf5432","name":"Urban Cipher","subtype":"Detective","text":"▸Materialized: Discard your hand, then draw 3 cards.","copies":1},
         {"id":"8b5eb29c-146f-46fb-9407-55004128fba7","name":"Keeper of Forgotten Light","subtype":"Ancient","text":"When you materialize a non-figment ≤2● cost character, draw a card with ephemeral.","copies":1},
-        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Burning Pursuit","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
+        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Exile","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
         {"id":"9495f501-f627-4b74-a848-b3d928641229","name":"Emberwatch Veteran","subtype":"Visitor","text":"Discard a card: This character gains vengeful this turn.","copies":1},
         {"id":"956aaeb1-5280-4294-bf80-73079f35c5f6","name":"Ash Harbinger","subtype":"Ancient","text":"☪, Discard a card: Materialize a 1✦ warrior figment.\n\n☪, Abandon 2 warrior figments: Dissolve a ≤4✦ enemy.","copies":1},
         {"id":"97b359ee-5a7a-4f54-bd65-e6221a893208","name":"Pyrokinetic Surge","text":"To play this card, discard a card or pay 5⍟. Dissolve an enemy.","copies":1},
@@ -827,7 +827,7 @@
         {"id":"7def28c4-d75a-47e1-ae86-5b7093cc0419","name":"Duskwall Delver","subtype":"Survivor","text":"When a character you control is dissolved, you may pay 1● to materialize this character from your void.","copies":2},
         {"id":"8571d7b3-5401-4678-9e81-e14538c8c46e","name":"Fargazer","subtype":"Explorer","text":"When you play a character, erode 1.\n\nReclaim 2●","copies":2},
         {"id":"8624f9c7-dc92-4f4a-9c79-319b9c121b19","name":"Cinderheart","subtype":"Visitor","text":"When you abandon a character, this character gains +1✦.\n\n▸Dissolved: Gain ⍟ equal to this character's ✦.","copies":2},
-        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Burning Pursuit","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":2},
+        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Exile","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":2},
         {"id":"a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa","name":"Kindred Sparks","subtype":"Survivor","text":"If you control a survivor, you may play this card from your hand or void for 1●.","copies":2},
         {"id":"a7c2ee76-48c9-4587-8f01-81d00ae280cb","name":"Defiant Holdout","subtype":"Survivor","text":"▸Dissolved: Materialize X 1✦ survivor figments, where X is this character's spark.","copies":2},
         {"id":"b56b3411-50c7-4cc9-90e0-d4ffcaec73c6","name":"Exiles of the Last Light","subtype":"Survivor","text":"Abandon another character: Gain 1●. The opponent gains 1⍟.","copies":2},
@@ -974,7 +974,7 @@
         {"id":"8571d7b3-5401-4678-9e81-e14538c8c46e","name":"Fargazer","subtype":"Explorer","text":"When you play a character, erode 1.\n\nReclaim 2●","copies":1},
         {"id":"87aba308-00b4-40d8-a46f-4e6f58a664a8","name":"Breach Artist","subtype":"Outsider","text":"Phasing\n\nWhen you return a character you control to hand, reduce its cost by 2●.","copies":1},
         {"id":"8a971ba7-9dfb-45be-bfbb-bf5e4f11974a","name":"Cost of Victory","text":"You may discard a card as an additional cost to play this event. Dissolve a ≤2● cost enemy. If the additional cost was paid, dissolve any enemy instead.","copies":1},
-        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Burning Pursuit","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
+        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Exile","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
         {"id":"8d35aec1-29ad-432c-9c23-25a52804cbae","name":"Duskshore Virtuoso","subtype":"Musician","text":"When you play an event, store 1⧗.\n\n3⧗: This character gains +5✦.","copies":1},
         {"id":"954e8d50-d494-4fb2-b4c7-74979083b774","name":"Paradox Corps Enforcer","subtype":"Outsider","text":"Phasing\n\nWhen an outsider you control scores ⍟, foresee 1 and draw a card.","copies":1},
         {"id":"97b359ee-5a7a-4f54-bd65-e6221a893208","name":"Pyrokinetic Surge","text":"To play this card, discard a card or pay 5⍟. Dissolve an enemy.","copies":1},
@@ -1087,7 +1087,7 @@
         {"id":"8571d7b3-5401-4678-9e81-e14538c8c46e","name":"Fargazer","subtype":"Explorer","text":"When you play a character, erode 1.\n\nReclaim 2●","copies":1},
         {"id":"87aba308-00b4-40d8-a46f-4e6f58a664a8","name":"Breach Artist","subtype":"Outsider","text":"Phasing\n\nWhen you return a character you control to hand, reduce its cost by 2●.","copies":1},
         {"id":"8a971ba7-9dfb-45be-bfbb-bf5e4f11974a","name":"Cost of Victory","text":"You may discard a card as an additional cost to play this event. Dissolve a ≤2● cost enemy. If the additional cost was paid, dissolve any enemy instead.","copies":1},
-        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Burning Pursuit","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
+        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Exile","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
         {"id":"954e8d50-d494-4fb2-b4c7-74979083b774","name":"Paradox Corps Enforcer","subtype":"Outsider","text":"Phasing\n\nWhen an outsider you control scores ⍟, foresee 1 and draw a card.","copies":1},
         {"id":"97b359ee-5a7a-4f54-bd65-e6221a893208","name":"Pyrokinetic Surge","text":"To play this card, discard a card or pay 5⍟. Dissolve an enemy.","copies":1},
         {"id":"99101fce-f2b4-4032-b999-317ce3e4a6dd","name":"Keeper of the Tides","subtype":"Visitor","text":"▸Materialized: Prevent a played ≤2● cost card.\n\n❖ – 1●: Move this character to an unoccupied character position.","copies":1},
@@ -1144,7 +1144,7 @@
         {"id":"c430ed7b-523e-4580-9a53-d43d11265633","name":"Flash of Power","text":"Gain 5●.","copies":2},
         {"id":"d1c25546-dcf2-481e-8f00-9afef3adf24b","name":"Rubble Diviner","subtype":"Visitor","text":"▸Challenge: You may pay 2● and discard a card to draw two cards.","copies":2},
         {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Wandering Archivist","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":2},
-        {"id":"fb967cc1-4199-4a08-8070-724e07cebea5","name":"Cascading Detonation","text":"The next time you play an event this turn, copy it twice.\n\nReclaim 5●.","copies":2},
+        {"id":"fb967cc1-4199-4a08-8070-724e07cebea5","name":"Entropy Cascade","text":"The next time you play an event this turn, copy it twice.\n\nReclaim 5●.","copies":2},
         {"id":"fc4b06d6-3b30-4769-af98-88fcea5b54dd","name":"Cascade of Reflections","text":"Until end of turn, when you play an event, copy it.","copies":2},
         {"id":"006e2f95-59a2-4cda-a777-e64f4aa31060","name":"Unleashed Destruction","text":"Dissolve a ≤2● cost enemy.\n\nReclaim 5●.","copies":1},
         {"id":"01d53e49-7833-4122-a970-b72c73ad2c28","name":"Crimson Pilgrimage","text":"Look at the top 4 cards of your deck. Choose one: Draw 1 of the cards, or draw 2 of the cards and they gain ephemeral.","copies":1},
@@ -1331,7 +1331,7 @@
         {"id":"ed4d5342-0690-40b7-ab48-6b76035466f2","name":"Chaos Crasher","subtype":"Visitor","text":"☪, Discard a card: Erode 2.\n\n4●, Abandon this character: Return a character from your void to your hand.","copies":1},
         {"id":"f3f97e2c-3bb6-4a20-9880-f59c50e5af93","name":"Obliterator of Worlds","subtype":"Ancient","text":"Abandon a character: Store 1⧗.\n\nX⧗: Dissolve an enemy with X✦.","copies":1},
         {"id":"f7c68226-def4-4eb0-bdfe-b028482e1351","name":"Forgotten Sleeper","subtype":"Synth","text":"If you've discarded a card this turn, this character costs 3● less.","copies":1},
-        {"id":"fb967cc1-4199-4a08-8070-724e07cebea5","name":"Cascading Detonation","text":"The next time you play an event this turn, copy it twice.\n\nReclaim 5●.","copies":1}
+        {"id":"fb967cc1-4199-4a08-8070-724e07cebea5","name":"Entropy Cascade","text":"The next time you play an event this turn, copy it twice.\n\nReclaim 5●.","copies":1}
       ]
     },
     {
@@ -1443,7 +1443,7 @@
         {"id":"f79c63f6-7cf1-4030-be39-217fd3c2fb7f","name":"Fury of the Clan","text":"If you control 3 or more warriors, dissolve an enemy. Otherwise, dissolve a ≤2✦ enemy.\n","copies":1},
         {"id":"f7c68226-def4-4eb0-bdfe-b028482e1351","name":"Forgotten Sleeper","subtype":"Synth","text":"If you've discarded a card this turn, this character costs 3● less.","copies":1},
         {"id":"f82c7407-b642-4ab1-8878-171f9121b3eb","name":"Canopy Lookout","subtype":"Warrior","text":"Abandon this character: Draw a card.","copies":1},
-        {"id":"fb967cc1-4199-4a08-8070-724e07cebea5","name":"Cascading Detonation","text":"The next time you play an event this turn, copy it twice.\n\nReclaim 5●.","copies":1}
+        {"id":"fb967cc1-4199-4a08-8070-724e07cebea5","name":"Entropy Cascade","text":"The next time you play an event this turn, copy it twice.\n\nReclaim 5●.","copies":1}
       ]
     },
     {
@@ -2279,7 +2279,7 @@
         {"id":"c430ed7b-523e-4580-9a53-d43d11265633","name":"Flash of Power","text":"Gain 5●.","copies":1},
         {"id":"c86c1364-6ac4-4c90-8053-4e49441a2c83","name":"Key Sifter","subtype":"Tinkerer","text":"Once per turn, when you discard one or more cards, draw that many cards.","copies":1},
         {"id":"f7b135ea-4894-46ab-b41d-ba2f74b070a1","name":"A New Adventure","text":"Draw two cards, then discard two cards. Gain 3●.","copies":1},
-        {"id":"fb967cc1-4199-4a08-8070-724e07cebea5","name":"Cascading Detonation","text":"The next time you play an event this turn, copy it twice.\n\nReclaim 5●.","copies":1}
+        {"id":"fb967cc1-4199-4a08-8070-724e07cebea5","name":"Entropy Cascade","text":"The next time you play an event this turn, copy it twice.\n\nReclaim 5●.","copies":1}
       ]
     },
     {
@@ -2429,7 +2429,7 @@
         {"id":"7530e916-e4b9-4988-b3ac-0e400c7a04ff","name":"Pilgrim of Old Stones","subtype":"Explorer","text":"▸Materialized: Discard a chosen card from the opponent's hand. They draw a card.","copies":1},
         {"id":"831bc7cf-e8c9-4943-8156-91b7397ef849","name":"Resilient Wanderer","subtype":"Survivor","text":"▸Dissolved: Draw a card.\n\n▸Dawn: If this card is in your void, you may pay 1● to return it to your hand.","copies":1},
         {"id":"8a971ba7-9dfb-45be-bfbb-bf5e4f11974a","name":"Cost of Victory","text":"You may discard a card as an additional cost to play this event. Dissolve a ≤2● cost enemy. If the additional cost was paid, dissolve any enemy instead.","copies":1},
-        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Burning Pursuit","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
+        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Exile","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
         {"id":"8e003d04-e489-4c55-9c72-fc5612909d07","name":"Last Beacon","subtype":"Visitor","text":"3●, ☪: Materialize a 1✦ outsider figment.\n\nWhen an outsider you control scores ⍟, draw a card and gain ⍟ equal to its ● cost.","copies":1},
         {"id":"954e8d50-d494-4fb2-b4c7-74979083b774","name":"Paradox Corps Enforcer","subtype":"Outsider","text":"Phasing\n\nWhen an outsider you control scores ⍟, foresee 1 and draw a card.","copies":1},
         {"id":"97b359ee-5a7a-4f54-bd65-e6221a893208","name":"Pyrokinetic Surge","text":"To play this card, discard a card or pay 5⍟. Dissolve an enemy.","copies":1},
@@ -2480,7 +2480,7 @@
         {"id":"831bc7cf-e8c9-4943-8156-91b7397ef849","name":"Resilient Wanderer","subtype":"Survivor","text":"▸Dissolved: Draw a card.\n\n▸Dawn: If this card is in your void, you may pay 1● to return it to your hand.","copies":1},
         {"id":"87aba308-00b4-40d8-a46f-4e6f58a664a8","name":"Breach Artist","subtype":"Outsider","text":"Phasing\n\nWhen you return a character you control to hand, reduce its cost by 2●.","copies":1},
         {"id":"8a971ba7-9dfb-45be-bfbb-bf5e4f11974a","name":"Cost of Victory","text":"You may discard a card as an additional cost to play this event. Dissolve a ≤2● cost enemy. If the additional cost was paid, dissolve any enemy instead.","copies":1},
-        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Burning Pursuit","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
+        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Exile","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
         {"id":"954e8d50-d494-4fb2-b4c7-74979083b774","name":"Paradox Corps Enforcer","subtype":"Outsider","text":"Phasing\n\nWhen an outsider you control scores ⍟, foresee 1 and draw a card.","copies":1},
         {"id":"99101fce-f2b4-4032-b999-317ce3e4a6dd","name":"Keeper of the Tides","subtype":"Visitor","text":"▸Materialized: Prevent a played ≤2● cost card.\n\n❖ – 1●: Move this character to an unoccupied character position.","copies":1},
         {"id":"b56ef7e8-c634-4d40-ac08-fab591dfbc4a","name":"Miraculous Arrival","text":"Offering\n\nDraw 2 cards.","copies":1},
@@ -3190,7 +3190,7 @@
         {"id":"7def28c4-d75a-47e1-ae86-5b7093cc0419","name":"Duskwall Delver","subtype":"Survivor","text":"When a character you control is dissolved, you may pay 1● to materialize this character from your void.","copies":1},
         {"id":"8571d7b3-5401-4678-9e81-e14538c8c46e","name":"Fargazer","subtype":"Explorer","text":"When you play a character, erode 1.\n\nReclaim 2●","copies":1},
         {"id":"8624f9c7-dc92-4f4a-9c79-319b9c121b19","name":"Cinderheart","subtype":"Visitor","text":"When you abandon a character, this character gains +1✦.\n\n▸Dissolved: Gain ⍟ equal to this character's ✦.","copies":1},
-        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Burning Pursuit","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
+        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Exile","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
         {"id":"9d63ba3e-fafb-466e-8418-ce5f8941ba30","name":"Dawnrunner","subtype":"Child","text":"▸Night: If you control no shadow figments, materialize a 2✦ shadow figment.","copies":1},
         {"id":"a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa","name":"Kindred Sparks","subtype":"Survivor","text":"If you control a survivor, you may play this card from your hand or void for 1●.","copies":1},
         {"id":"b56b3411-50c7-4cc9-90e0-d4ffcaec73c6","name":"Exiles of the Last Light","subtype":"Survivor","text":"Abandon another character: Gain 1●. The opponent gains 1⍟.","copies":1},
@@ -3255,7 +3255,7 @@
         {"id":"d24ea640-638d-4ce2-b15d-b3f4588bda6b","name":"Echoes of Eternity","text":"The next time you play a ≤2● cost event this turn, copy it.","copies":1},
         {"id":"e455225f-c444-44a2-8796-805cae2b755f","name":"Oracle of Shifting Skies","subtype":"Visionary","text":"When you play an event, foresee 1.","copies":1},
         {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Wandering Archivist","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":1},
-        {"id":"fb967cc1-4199-4a08-8070-724e07cebea5","name":"Cascading Detonation","text":"The next time you play an event this turn, copy it twice.\n\nReclaim 5●.","copies":1}
+        {"id":"fb967cc1-4199-4a08-8070-724e07cebea5","name":"Entropy Cascade","text":"The next time you play an event this turn, copy it twice.\n\nReclaim 5●.","copies":1}
       ]
     },
     {
@@ -3394,7 +3394,7 @@
         {"id":"7530e916-e4b9-4988-b3ac-0e400c7a04ff","name":"Pilgrim of Old Stones","subtype":"Explorer","text":"▸Materialized: Discard a chosen card from the opponent's hand. They draw a card.","copies":1},
         {"id":"831bc7cf-e8c9-4943-8156-91b7397ef849","name":"Resilient Wanderer","subtype":"Survivor","text":"▸Dissolved: Draw a card.\n\n▸Dawn: If this card is in your void, you may pay 1● to return it to your hand.","copies":1},
         {"id":"8a971ba7-9dfb-45be-bfbb-bf5e4f11974a","name":"Cost of Victory","text":"You may discard a card as an additional cost to play this event. Dissolve a ≤2● cost enemy. If the additional cost was paid, dissolve any enemy instead.","copies":1},
-        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Burning Pursuit","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
+        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Exile","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
         {"id":"8e003d04-e489-4c55-9c72-fc5612909d07","name":"Last Beacon","subtype":"Visitor","text":"3●, ☪: Materialize a 1✦ outsider figment.\n\nWhen an outsider you control scores ⍟, draw a card and gain ⍟ equal to its ● cost.","copies":1},
         {"id":"954e8d50-d494-4fb2-b4c7-74979083b774","name":"Paradox Corps Enforcer","subtype":"Outsider","text":"Phasing\n\nWhen an outsider you control scores ⍟, foresee 1 and draw a card.","copies":1},
         {"id":"97b359ee-5a7a-4f54-bd65-e6221a893208","name":"Pyrokinetic Surge","text":"To play this card, discard a card or pay 5⍟. Dissolve an enemy.","copies":1},
@@ -3449,7 +3449,7 @@
         {"id":"7530e916-e4b9-4988-b3ac-0e400c7a04ff","name":"Pilgrim of Old Stones","subtype":"Explorer","text":"▸Materialized: Discard a chosen card from the opponent's hand. They draw a card.","copies":1},
         {"id":"831bc7cf-e8c9-4943-8156-91b7397ef849","name":"Resilient Wanderer","subtype":"Survivor","text":"▸Dissolved: Draw a card.\n\n▸Dawn: If this card is in your void, you may pay 1● to return it to your hand.","copies":1},
         {"id":"8a971ba7-9dfb-45be-bfbb-bf5e4f11974a","name":"Cost of Victory","text":"You may discard a card as an additional cost to play this event. Dissolve a ≤2● cost enemy. If the additional cost was paid, dissolve any enemy instead.","copies":1},
-        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Burning Pursuit","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
+        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Exile","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
         {"id":"954e8d50-d494-4fb2-b4c7-74979083b774","name":"Paradox Corps Enforcer","subtype":"Outsider","text":"Phasing\n\nWhen an outsider you control scores ⍟, foresee 1 and draw a card.","copies":1},
         {"id":"99101fce-f2b4-4032-b999-317ce3e4a6dd","name":"Keeper of the Tides","subtype":"Visitor","text":"▸Materialized: Prevent a played ≤2● cost card.\n\n❖ – 1●: Move this character to an unoccupied character position.","copies":1},
         {"id":"b56ef7e8-c634-4d40-ac08-fab591dfbc4a","name":"Miraculous Arrival","text":"Offering\n\nDraw 2 cards.","copies":1},
@@ -3500,7 +3500,7 @@
         {"id":"648237c5-ceff-4a28-aaf8-4aa099eae80d","name":"The Dread Sovereign","subtype":"Ancient","text":"X●, ☪, Abandon another character: Discover a character with cost X●, then materialize it.","copies":1},
         {"id":"6b739127-1a23-4c5d-877a-8829dd7a8b8c","name":"Entropy Spike","subtype":"Survivor","text":"▸Dissolved: Choose one: Gain 1●, or gain 1 maximum ●.","copies":1},
         {"id":"7def28c4-d75a-47e1-ae86-5b7093cc0419","name":"Duskwall Delver","subtype":"Survivor","text":"When a character you control is dissolved, you may pay 1● to materialize this character from your void.","copies":1},
-        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Burning Pursuit","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
+        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Exile","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
         {"id":"a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa","name":"Kindred Sparks","subtype":"Survivor","text":"If you control a survivor, you may play this card from your hand or void for 1●.","copies":1},
         {"id":"a7c2ee76-48c9-4587-8f01-81d00ae280cb","name":"Defiant Holdout","subtype":"Survivor","text":"▸Dissolved: Materialize X 1✦ survivor figments, where X is this character's spark.","copies":1},
         {"id":"b56b3411-50c7-4cc9-90e0-d4ffcaec73c6","name":"Exiles of the Last Light","subtype":"Survivor","text":"Abandon another character: Gain 1●. The opponent gains 1⍟.","copies":1},
@@ -3553,7 +3553,7 @@
         {"id":"7b55efd1-6d9f-4156-9de7-1c71ccc410cb","name":"Stolen Genesis","text":"To play this card, abandon a character. Materialize a random character with higher cost from your deck.\n\nReclaim 3●","copies":1},
         {"id":"8571d7b3-5401-4678-9e81-e14538c8c46e","name":"Fargazer","subtype":"Explorer","text":"When you play a character, erode 1.\n\nReclaim 2●","copies":1},
         {"id":"8624f9c7-dc92-4f4a-9c79-319b9c121b19","name":"Cinderheart","subtype":"Visitor","text":"When you abandon a character, this character gains +1✦.\n\n▸Dissolved: Gain ⍟ equal to this character's ✦.","copies":1},
-        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Burning Pursuit","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
+        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Exile","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
         {"id":"9d63ba3e-fafb-466e-8418-ce5f8941ba30","name":"Dawnrunner","subtype":"Child","text":"▸Night: If you control no shadow figments, materialize a 2✦ shadow figment.","copies":1},
         {"id":"a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa","name":"Kindred Sparks","subtype":"Survivor","text":"If you control a survivor, you may play this card from your hand or void for 1●.","copies":1},
         {"id":"a7c2ee76-48c9-4587-8f01-81d00ae280cb","name":"Defiant Holdout","subtype":"Survivor","text":"▸Dissolved: Materialize X 1✦ survivor figments, where X is this character's spark.","copies":1},
@@ -3812,7 +3812,7 @@
         {"id":"7ffb1179-6c94-4f80-9613-ece2b799f19d","name":"Saltless Mariner","subtype":"Explorer","text":"Veil\n\nAbandon a character: Gain 1⍟.","copies":1},
         {"id":"8571d7b3-5401-4678-9e81-e14538c8c46e","name":"Fargazer","subtype":"Explorer","text":"When you play a character, erode 1.\n\nReclaim 2●","copies":1},
         {"id":"8624f9c7-dc92-4f4a-9c79-319b9c121b19","name":"Cinderheart","subtype":"Visitor","text":"When you abandon a character, this character gains +1✦.\n\n▸Dissolved: Gain ⍟ equal to this character's ✦.","copies":1},
-        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Burning Pursuit","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
+        {"id":"8bf53fe6-8a25-401e-9a99-84343a026bb0","name":"Exile","text":"This event costs 1● less for each character you control. Dissolve an enemy.","copies":1},
         {"id":"9d63ba3e-fafb-466e-8418-ce5f8941ba30","name":"Dawnrunner","subtype":"Child","text":"▸Night: If you control no shadow figments, materialize a 2✦ shadow figment.","copies":1},
         {"id":"a7c2ee76-48c9-4587-8f01-81d00ae280cb","name":"Defiant Holdout","subtype":"Survivor","text":"▸Dissolved: Materialize X 1✦ survivor figments, where X is this character's spark.","copies":1},
         {"id":"b56b3411-50c7-4cc9-90e0-d4ffcaec73c6","name":"Exiles of the Last Light","subtype":"Survivor","text":"Abandon another character: Gain 1●. The opponent gains 1⍟.","copies":1},
@@ -4088,7 +4088,7 @@
         {"id":"c06b993d-a1f4-42ad-85a9-ebf611d9a129","name":"Surge of Fury","text":"Trigger the '▸Dawn' ability of each character you control. Awaken each character you control.","copies":1},
         {"id":"d217303e-b115-484a-b22c-0e44d5701389","name":"Broadcast Array","text":"This event cannot be prevented. Gain 2⍟ for each card you have played this turn.","copies":1},
         {"id":"f7b135ea-4894-46ab-b41d-ba2f74b070a1","name":"A New Adventure","text":"Draw two cards, then discard two cards. Gain 3●.","copies":1},
-        {"id":"fb967cc1-4199-4a08-8070-724e07cebea5","name":"Cascading Detonation","text":"The next time you play an event this turn, copy it twice.\n\nReclaim 5●.","copies":1},
+        {"id":"fb967cc1-4199-4a08-8070-724e07cebea5","name":"Entropy Cascade","text":"The next time you play an event this turn, copy it twice.\n\nReclaim 5●.","copies":1},
         {"id":"fc4b06d6-3b30-4769-af98-88fcea5b54dd","name":"Cascade of Reflections","text":"Until end of turn, when you play an event, copy it.","copies":1}
       ]
     },

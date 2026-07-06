@@ -493,7 +493,7 @@
       ]
     },
     "8bf53fe6-8a25-401e-9a99-84343a026bb0": {
-      "name": "Burning Pursuit",
+      "name": "Exile",
       "needs": [],
       "supports": [
         "events"
@@ -597,7 +597,7 @@
       ]
     },
     "fb967cc1-4199-4a08-8070-724e07cebea5": {
-      "name": "Cascading Detonation",
+      "name": "Entropy Cascade",
       "needs": [
         {
           "theme": "events",
@@ -2343,7 +2343,7 @@
       ]
     },
     "9e9efbc0-d438-48a9-9551-85c93fb33f3e": {
-      "name": "Lithic Severance",
+      "name": "Fracture Fate",
       "needs": [],
       "supports": [
         "events"

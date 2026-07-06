@@ -129,7 +129,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Cinderheart
 - 1× Plunge into the Abyss
 - 1× Cost of Victory
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Planetgazer
 - 1× Paradox Corps Enforcer
 - 1× Pyrokinetic Surge
@@ -179,7 +179,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 2× Entropy Spike
 - 2× Stolen Genesis
 - 2× Fargazer
-- 2× Burning Pursuit
+- 2× Exile
 - 2× Kindred Sparks
 - 2× Defiant Holdout
 - 2× Exiles of the Last Light
@@ -453,7 +453,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Obliterator of Worlds
 - 1× Vigil Keeper
 - 1× Carrion Shepherd
-- 1× Cascading Detonation
+- 1× Entropy Cascade
 - 1× Cascade of Reflections
 - 1× Immortal Reaper
 
@@ -535,7 +535,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Cinderheart
 - 1× Sylvan Matriarch
 - 1× Urban Cipher
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Ash Harbinger
 - 1× Dreamvale Monarch
 - 1× Pyrokinetic Surge
@@ -639,7 +639,7 @@ Tide-sig-06 is a heavily character-weighted deck (84 of 110 copies are character
 - 1× Eruption
 - 1× Cost of Victory
 - 1× Keeper of Forgotten Light
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Ash Sower
 - 1× Seek Answers
 - 1× Pattern Seeker
@@ -742,7 +742,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Cost of Victory
 - 1× Urban Cipher
 - 1× Keeper of Forgotten Light
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Emberwatch Veteran
 - 1× Ash Harbinger
 - 1× Pyrokinetic Surge
@@ -800,7 +800,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 2× Duskwall Delver
 - 2× Fargazer
 - 2× Cinderheart
-- 2× Burning Pursuit
+- 2× Exile
 - 2× Kindred Sparks
 - 2× Defiant Holdout
 - 2× Exiles of the Last Light
@@ -942,7 +942,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Fargazer
 - 1× Breach Artist
 - 1× Cost of Victory
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Duskshore Virtuoso
 - 1× Paradox Corps Enforcer
 - 1× Pyrokinetic Surge
@@ -1050,7 +1050,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Fargazer
 - 1× Breach Artist
 - 1× Cost of Victory
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Paradox Corps Enforcer
 - 1× Pyrokinetic Surge
 - 1× Keeper of the Tides
@@ -1102,7 +1102,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 2× Flash of Power
 - 2× Rubble Diviner
 - 2× Wandering Archivist
-- 2× Cascading Detonation
+- 2× Entropy Cascade
 - 2× Cascade of Reflections
 - 1× Unleashed Destruction
 - 1× Crimson Pilgrimage
@@ -1284,7 +1284,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Chaos Crasher
 - 1× Obliterator of Worlds
 - 1× Forgotten Sleeper
-- 1× Cascading Detonation
+- 1× Entropy Cascade
 
 ## Ovanel signature — Event Storm Ramp
 
@@ -1391,7 +1391,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Fury of the Clan
 - 1× Forgotten Sleeper
 - 1× Canopy Lookout
-- 1× Cascading Detonation
+- 1× Entropy Cascade
 
 ## Yveth Coravel signature — Spirit Animal Ramp
 
@@ -2177,7 +2177,7 @@ Tide-fac-03 is an event-heavy (34 events, 11 characters) tide built around assem
 - 1× Flash of Power
 - 1× Key Sifter
 - 1× A New Adventure
-- 1× Cascading Detonation
+- 1× Entropy Cascade
 
 ## Lean: Nexus Wayfinder — Free Swarm Deploy
 
@@ -2312,7 +2312,7 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Pilgrim of Old Stones
 - 1× Resilient Wanderer
 - 1× Cost of Victory
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Last Beacon
 - 1× Paradox Corps Enforcer
 - 1× Pyrokinetic Surge
@@ -2359,7 +2359,7 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Resilient Wanderer
 - 1× Breach Artist
 - 1× Cost of Victory
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Paradox Corps Enforcer
 - 1× Keeper of the Tides
 - 1× Miraculous Arrival
@@ -3006,7 +3006,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Duskwall Delver
 - 1× Fargazer
 - 1× Cinderheart
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Dawnrunner
 - 1× Kindred Sparks
 - 1× Exiles of the Last Light
@@ -3066,7 +3066,7 @@ Tide-fac-20 is an event-heavy combo tide (34 events, 11 characters) built around
 - 1× Echoes of Eternity
 - 1× Oracle of Shifting Skies
 - 1× Wandering Archivist
-- 1× Cascading Detonation
+- 1× Entropy Cascade
 
 ## Lean: Nightprowler Panther
 
@@ -3192,7 +3192,7 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 - 1× Pilgrim of Old Stones
 - 1× Resilient Wanderer
 - 1× Cost of Victory
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Last Beacon
 - 1× Paradox Corps Enforcer
 - 1× Pyrokinetic Surge
@@ -3242,7 +3242,7 @@ This tide runs an even split of characters and events, with its mechanical ident
 - 1× Pilgrim of Old Stones
 - 1× Resilient Wanderer
 - 1× Cost of Victory
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Paradox Corps Enforcer
 - 1× Keeper of the Tides
 - 1× Miraculous Arrival
@@ -3288,7 +3288,7 @@ Tide-fac-26 is a character-heavy survivor tide built around the abandon trigger 
 - 1× The Dread Sovereign
 - 1× Entropy Spike
 - 1× Duskwall Delver
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Kindred Sparks
 - 1× Defiant Holdout
 - 1× Exiles of the Last Light
@@ -3336,7 +3336,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Stolen Genesis
 - 1× Fargazer
 - 1× Cinderheart
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Dawnrunner
 - 1× Kindred Sparks
 - 1× Defiant Holdout
@@ -3573,7 +3573,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Saltless Mariner
 - 1× Fargazer
 - 1× Cinderheart
-- 1× Burning Pursuit
+- 1× Exile
 - 1× Dawnrunner
 - 1× Defiant Holdout
 - 1× Exiles of the Last Light
@@ -3821,7 +3821,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Surge of Fury
 - 1× Broadcast Array
 - 1× A New Adventure
-- 1× Cascading Detonation
+- 1× Entropy Cascade
 - 1× Cascade of Reflections
 
 ## Broad: Impending Fury / Vanishing Inquisitor

@@ -2420,10 +2420,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Discover", "Art Rework", "July6"]
-image-number = 1891048579
+tags = ["Discover", "Art Rework", "July6", "Art OK"]
+image-number = 2155438703
 art-owned = false
 card-number = 130
+art = { x = 0, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Burst of Obliteration"
@@ -3381,7 +3382,7 @@ card-number = 181
 art = { x = 0.294, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Burning Pursuit"
+name = "Exile"
 mtg-name = "Lethal Scheme"
 id = "8bf53fe6-8a25-401e-9a99-84343a026bb0"
 rendered-text = "This event costs 1● less for each character you control. Dissolve an enemy."
@@ -3392,10 +3393,11 @@ rarity = ""
 is-fast = true
 is-interrupt = true
 spark = ""
-tags = ["Removal", "Art Rework", "July6", "Ally Audit"]
-image-number = 439817434
+tags = ["Removal", "Art Rework", "July6", "Ally Audit", "Art OK"]
+image-number = 432001897
 art-owned = false
 card-number = 182
+art = { x = 0, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Rite of Summoning"
@@ -3443,7 +3445,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "July7", "Art OK"]
+tags = ["Art Rework", "Art OK"]
 image-number = 2269064817
 art-owned = false
 card-number = 185
@@ -7290,7 +7292,7 @@ card-number = 392
 art = { x = 0.671, y = 0.032, scale = 1.17 }
 
 [[cards]]
-name = "Cascading Detonation"
+name = "Entropy Cascade"
 mtg-name = "Increasing Vengeance"
 id = "fb967cc1-4199-4a08-8070-724e07cebea5"
 rendered-text = """
@@ -7304,10 +7306,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July6"]
-image-number = 2256745745
+tags = ["Art Rework", "July6", "Art OK"]
+image-number = 1068257321
 art-owned = false
 card-number = 393
+art = { x = -0.126, y = 0.897, scale = 1.07 }
 
 [[cards]]
 name = "Price of Redemption"
@@ -9459,7 +9462,7 @@ card-number = 508
 art = { x = -0.342, y = 0.032, scale = 1.17 }
 
 [[cards]]
-name = "Lithic Severance"
+name = "Fracture Fate"
 mtg-name = "Swift Reconfiguration"
 id = "9e9efbc0-d438-48a9-9551-85c93fb33f3e"
 rendered-text = "An enemy loses all abilities  until the opponent pays 3●."
@@ -9470,10 +9473,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July6"]
-image-number = 1694993302
+tags = ["Art Rework", "July6", "Art OK"]
+image-number = 2182865341
 art-owned = false
 card-number = 509
+art = { x = 0.672, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Nocturne Strummer"
