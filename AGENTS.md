@@ -84,17 +84,24 @@ example the Dream Atlas boss preview), append `?goto=<scene>` to the dev URL (e.
 `http://localhost:5174/?goto=atlas`) to boot straight onto that screen. The
 registered scenes and the full `?goto=` mechanics are documented in
 `docs/quest_prototype/qa_scenes.md` (source of truth: `src/runtime/qa-scenes.ts`).
-When tearing down the QA server, kill only the process you started — capture its
-PID at launch, or match its exact port (`pkill -f "vite --port 5174"`). Never run
-a broad `pkill -f vite` (or `pkill -f "firebase|vite|emulator"`): it matches
-every Vite process regardless of port and terminates the developer's 5173 server
-too. Validate the feature through the
+
+Isolate every `agent-browser` call with a unique `--session <name>` (the shared
+`default` session is one persistent Chrome that keeps stale tabs and viewport
+across runs), assert `location.href` + `window.innerWidth` before each
+screenshot, and tear down only your own server — `npm run dev` spawns a
+`dev-with-emulator.mjs`/`vite --strictPort` tree, so `pkill -f "vite --port N"`
+misses it and a broad `pkill -f vite` kills the developer's 5173 server. Full
+session, assert-before-acting, and teardown detail is in
+[docs/quest_prototype/qa_tooling.md](docs/quest_prototype/qa_tooling.md).
+
+Validate the feature through the
 normal player workflow, inspect the captured error buffer for render errors,
 unhandled rejections, and console errors, and check the UI state directly in
 the browser. Confirm controls are usable, expected state changes occur, text
 and controls are fully visible, layout spacing is stable, elements are free of
 clipping or overlap, and the resulting screen is visually coherent at the
-tested viewport sizes.
+tested viewport sizes. Full `agent-browser` session, teardown, and
+assert-before-acting details are in `docs/quest_prototype/qa_tooling.md`.
 
 # Deploy
 
