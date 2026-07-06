@@ -125,6 +125,85 @@ export function TidesLabel() {
   );
 }
 
+/** The tides cluster shared by BOTH Dreamcaller-select layouts: a top row with
+ * the "Tides:" caption on the left and the starting-essence on the right, and —
+ * below it, left-aligned under the caption — the tide discs at the larger 'lg'
+ * size (capped at {@link MAX_TIDE_DISCS}). The desktop triptych and the mobile
+ * carousel both render this so the arrangement (discs stacked beneath the
+ * caption, essence held top-right) reads identically on each.
+ *
+ * `hitSlop`, when set, pads each disc's touch target (the mobile carousel) and
+ * the disc row reabsorbs that padding with negative margins so the visual layout
+ * is unchanged; the padding's own spacing is what separates adjacent discs.
+ * Without it (the desktop triptych, a fine pointer) the row spaces its discs
+ * with an explicit gap that matches the mobile inter-disc distance. */
+export function TidesEssenceBlock({
+  dreamcaller,
+  stageRef,
+  hitSlop,
+}: {
+  dreamcaller: DreamcallerOfferView;
+  stageRef: React.RefObject<HTMLElement | null>;
+  hitSlop?: string;
+}) {
+  const hasTides = dreamcaller.tides.length > 0;
+  return (
+    <div>
+      {/* Top row: the "Tides:" caption on the left and the starting essence on
+          the right. The essence stays TOP-aligned, level with the caption, as
+          the disc row stacks below it. */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: token("--space-5"),
+        }}
+      >
+        {hasTides ? <TidesLabel /> : <span />}
+        <EssenceReveal dreamcaller={dreamcaller} stageRef={stageRef} />
+      </div>
+
+      {hasTides && (
+        <div
+          data-dreamcaller-tides={dreamcaller.id}
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            // Adjacent discs sit one --space-4 apart. On a touch layout the
+            // hitSlop padding on each disc already supplies that distance (two
+            // --space-2 pads meet), so no explicit gap is added there; on a
+            // fine-pointer layout there is no padding, so the gap is explicit.
+            gap: hitSlop != null ? undefined : token("--space-4"),
+            // Left-aligned under the caption, one --space-3 below it. When a
+            // hitSlop pads each disc's touch target, the row pulls its margins
+            // in by that slop so the discs' visual bounds still start at the
+            // caption's left edge and sit one --space-3 below it.
+            marginTop:
+              hitSlop != null
+                ? `calc(${token("--space-3")} - ${hitSlop})`
+                : token("--space-3"),
+            marginLeft: hitSlop != null ? `calc(-1 * ${hitSlop})` : undefined,
+            marginRight: hitSlop != null ? `calc(-1 * ${hitSlop})` : undefined,
+            marginBottom: hitSlop != null ? `calc(-1 * ${hitSlop})` : undefined,
+          }}
+        >
+          {dreamcaller.tides.slice(0, MAX_TIDE_DISCS).map((tide) => (
+            <TideDiscReveal
+              key={tide.id}
+              tide={tide}
+              stageRef={stageRef}
+              size="lg"
+              hitSlop={hitSlop}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /** One signature card (kept for the shared view type; unused by the carousel). */
 export interface DreamcallerSignatureCardView {
   id: string;

@@ -49,10 +49,10 @@ export interface ControlChrome {
 
 /**
  * The liquid-glass surface shared by the controls and the glass icon button:
- * the same recipe GroupPanel uses (fill + specular sheen + blur/saturate
- * backdrop + layered rim/wash/drop shadow), inlined here so the control surface
- * reads as a member of the one grouping-surface family. Returns the material
- * without a border radius; the caller supplies that.
+ * the same recipe as the shared glassSurfaceStyle material (fill + specular
+ * sheen + blur/saturate backdrop + layered rim/wash/drop shadow), inlined here
+ * so the control surface reads as a member of the one glass-surface family.
+ * Returns the material without a border radius; the caller supplies that.
  */
 export function glassTrack(): CSSProperties {
   return {

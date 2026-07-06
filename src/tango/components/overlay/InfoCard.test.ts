@@ -18,7 +18,7 @@
 import * as React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { groupPanelStyle } from "../controls/GroupPanel";
+import { glassSurfaceStyle } from "../controls/glass-surface";
 import {
   CLICK_WINDOW,
   computePopoverPosition,
@@ -30,11 +30,11 @@ import {
 } from "./InfoCard";
 
 describe("InfoCard shell treatment", () => {
-  it("uses the shared GroupPanel liquid-glass material at the fixed fill opacity", () => {
+  it("uses the shared liquid-glass material at the fixed fill opacity", () => {
     const html = renderToStaticMarkup(
       React.createElement(InfoCard, { title: "Essence" }),
     );
-    const glass = groupPanelStyle();
+    const glass = glassSurfaceStyle();
 
     expect(html).toContain("rgba(18,14,28,0.5)");
     expect(html).toContain(

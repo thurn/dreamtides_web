@@ -49,7 +49,7 @@ The reference files and the index are projections of the component sources
 | Tide Disc | Components | [components/tide-disc.md](components/tide-disc.md) | The single tide mark: a colored disc carrying the tide's glyph, sized 'sm' (desktop select) or 'lg' (mobile select) — the atom both Dreamcaller-select tide rows render from. |
 | Motes | Components | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
 | Info Card | Components | [components/info-card.md](components/info-card.md) | The one press-to-reveal information card. |
-| Group Panel | Components | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a liquid-glass pane that collects dense, related values into one unit. |
+| Group Panel | Components | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |
 | Quest Status Bar | Components | [components/quest-status-bar.md](components/quest-status-bar.md) | The persistent, transparent bottom HUD for quest screens. |
 | Rules Text | Components | [components/rules-text.md](components/rules-text.md) | Renders Dreamtides rules copy from card data — resource pips, ability carets, and glossary keywords styled in place — so ability text reads the same everywhere it appears. |
 | Game Card | Components | [components/game-card.md](components/game-card.md) | The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name. |

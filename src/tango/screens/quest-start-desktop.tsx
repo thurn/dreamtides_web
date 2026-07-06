@@ -12,18 +12,13 @@ import { useRef, useState } from "react";
 import { Motes } from "../components/hud/Motes";
 import { GroupPanel } from "../components/controls/GroupPanel";
 import { Button } from "../components/controls/Button";
-import { TIDE_DISC_PX } from "../components/hud/TideDisc";
 import { token } from "../primitives/tokens";
 import { dreamcallerCutoutSrc } from "../components/hud/DreamcallerPortrait";
 import {
   AbilityReveal,
   ConsoleDivider,
-  EssenceReveal,
-  MAX_TIDE_DISCS,
-  TideDiscReveal,
-  TidesLabel,
+  TidesEssenceBlock,
   type DreamcallerOfferView,
-  type DreamcallerTideView,
   type QuestStartScreenProps,
 } from "./quest-start-shared";
 
@@ -65,8 +60,8 @@ function DesktopTitle() {
 
 /** The Dreamcaller's transparent full-body cutout, standing unframed on the
  * screen's shared background over a soft ambient glow. Feet anchor to the
- * bottom of the stage, where the console card rides up over the legs and its
- * glass blurs them. Falls back to a tinted monogram disc on a 404. */
+ * bottom of the stage, where the console card rides up over the legs and
+ * covers them. Falls back to a tinted monogram disc on a 404. */
 function StandingFigure({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
   const [broken, setBroken] = useState(false);
   const glow = (
@@ -189,42 +184,14 @@ function PortraitName({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
   );
 }
 
-/** The desktop tides display: a plain "Tides:" label, followed by a row of
- * hover-only tide discs (capped at {@link MAX_TIDE_DISCS}). Nothing expands —
- * each disc reveals, on hover, what tides are plus its own tide's card. The
- * label itself is a static caption, not a reveal trigger. */
-function StaticTides({
-  tides,
-  stageRef,
-}: {
-  tides: DreamcallerTideView[];
-  stageRef: React.RefObject<HTMLElement | null>;
-}) {
-  return (
-    <div
-      style={{ display: "flex", alignItems: "center", gap: token("--space-4") }}
-    >
-      <TidesLabel />
-
-      <span
-        style={{ display: "flex", alignItems: "center", gap: token("--space-2") }}
-      >
-        {tides.slice(0, MAX_TIDE_DISCS).map((tide) => (
-          <TideDiscReveal key={tide.id} tide={tide} stageRef={stageRef} />
-        ))}
-      </span>
-    </div>
-  );
-}
-
 /** The console card for one Dreamcaller. It is narrower than its column and
  * center-aligned under the figure, riding up over the legs; its interior is an
  * even --space-6 rhythm stack — padding, then the ability text, divider, tides
  * row, and Choose button each separated by one step. The ability region takes
  * its natural height, and the card is pulled up by half its own height
  * (`translateY(-50%)`) so cards of different heights share one vertical center
- * line, positioned by {@link CARD_OVERLAP}. Spreading GroupPanel's glass onto
- * our own node is the sanctioned rung-2 way to size the pane. */
+ * line, positioned by {@link CARD_OVERLAP}. Spreading GroupPanel's card surface
+ * onto our own node is the sanctioned rung-2 way to size the pane. */
 function DreamcallerCard({
   dreamcaller,
   onChoose,
@@ -234,7 +201,6 @@ function DreamcallerCard({
   onChoose: () => void;
   stageRef: React.RefObject<HTMLElement | null>;
 }) {
-  const hasTides = dreamcaller.tides.length > 0;
   return (
     <div
       data-dreamcaller-column={dreamcaller.id}
@@ -269,33 +235,11 @@ function DreamcallerCard({
         <ConsoleDivider flush />
       </div>
 
-      {/* Tides row: the "Tides:" label + hover discs on the left, the
-          starting-essence chip on the right. */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: token("--space-4"),
-          marginTop: token("--space-6"),
-        }}
-      >
-        {hasTides ? (
-          <span data-dreamcaller-tides={dreamcaller.id}>
-            <StaticTides tides={dreamcaller.tides} stageRef={stageRef} />
-          </span>
-        ) : (
-          <span />
-        )}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            minHeight: TIDE_DISC_PX,
-          }}
-        >
-          <EssenceReveal dreamcaller={dreamcaller} stageRef={stageRef} />
-        </div>
+      {/* Tides cluster: the "Tides:" caption + starting-essence on one row, the
+          tide discs stacked below the caption at the larger 'lg' size — the same
+          shared arrangement the mobile carousel renders. */}
+      <div style={{ marginTop: token("--space-6") }}>
+        <TidesEssenceBlock dreamcaller={dreamcaller} stageRef={stageRef} />
       </div>
 
       <div

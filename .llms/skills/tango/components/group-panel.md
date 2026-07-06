@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/group-panel`
 
-The information-grouping card: a liquid-glass pane that collects dense, related values into one unit. It earns its backdrop by organizing information, not by holding a lone label.
+The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. It earns its place by organizing information, not by holding a lone label — and reads as a distinct surface from InfoCard's glass.
 
 ## Props
 
@@ -16,7 +16,7 @@ The information-grouping card: a liquid-glass pane that collects dense, related 
 
 ## Usage
 
-A fixed-shape liquid-glass pane that collects genuinely dense, related content (a heading, a body, a labelled value row) into one backdrop. It takes no styling props — only children.
+A fixed-shape flat card that collects genuinely dense, related content (a heading, a body, a labelled value row) into one surface. It takes no styling props — only children.
 
 ```tsx
 import { GroupPanel } from "src/tango/components/controls/GroupPanel";

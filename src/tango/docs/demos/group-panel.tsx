@@ -1,5 +1,5 @@
 // Registry demo entry for GroupPanel — see info-card.tsx for the recipe this
-// follows. GroupPanel is a fixed-shape glass pane with no styling props, so it
+// follows. GroupPanel is a fixed-shape flat card with no styling props, so it
 // seeds no editable controls; `children` is a ReactNode slot with no generated
 // control, so it's seeded via sampleContent with a representative "dense
 // related info" grouping (a rules line, a hairline divider, and a labelled
@@ -12,13 +12,13 @@ export const groupPanelDemo: TangoComponent = {
   id: "group-panel",
   title: "Group Panel",
   blurb:
-    "The information-grouping card: a liquid-glass pane that collects dense, related values into one unit. It earns its backdrop by organizing information, not by holding a lone label.",
+    "The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. It earns its place by organizing information, not by holding a lone label — and reads as a distinct surface from InfoCard's glass.",
   group: "Components",
   docName: "GroupPanel",
   Component: GroupPanel,
   usage: [
     {
-      note: "A fixed-shape liquid-glass pane that collects genuinely dense, related content (a heading, a body, a labelled value row) into one backdrop. It takes no styling props — only children.",
+      note: "A fixed-shape flat card that collects genuinely dense, related content (a heading, a body, a labelled value row) into one surface. It takes no styling props — only children.",
       code: `import { GroupPanel } from "src/tango/components/controls/GroupPanel";
 
 <GroupPanel>

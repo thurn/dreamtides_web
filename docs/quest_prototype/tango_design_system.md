@@ -366,7 +366,7 @@ radius) but stays deliberately restrained so the components are the focus.
 | **TidePill** | `components/` | Import from Claude Design; **keep the name** (tides are an active concept) |
 | **Motes** | `components/` | Import from Claude Design (atmospheric particle layer; `warm`/`violet` tint; the one sanctioned opacity animation) |
 | **QuestStatusBar** | `components/` | Import from Claude Design (the transparent bottom HUD) |
-| **GroupPanel** | `components/` | **Port the design's CSS-only** liquid-glass pane (`backdrop-filter` blur/saturate + specular gradient + inset rim/wash + drop shadow). No third-party library — the source ships no dependency |
+| **GroupPanel** | `components/` | A flat, solid deep-plum card (`--surface-card` fill, no border, `--shadow-card` drop shadow) — a distinct surface from InfoCard's glass. The CSS-only liquid-glass recipe (`backdrop-filter` blur/saturate + specular gradient + inset rim/wash + drop shadow) lives in `glassSurfaceStyle` (`components/controls/glass-surface.ts`), shared by InfoCard and the deck-viewer backdrop |
 | **GameCard** | `components/` | Move production `CardView` + its closure into Tango, clean up for reuse (the design's `GameCard` is itself a port of `CardView`) |
 | **RulesText** | `components/` | Move production `RulesText` + `card-text` + `PipBadge` into Tango |
 | **Dreamsign** | `components/` | Unify local (`DreamsignHoverCard` / `DreamsignArtTile`) with the design's `Dreamsign`; route its touch-down preview through `InfoCard` (`object` variant) |

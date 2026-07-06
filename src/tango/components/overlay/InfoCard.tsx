@@ -5,9 +5,9 @@
 //
 // The shell is fixed and shared (a liquid-glass pane, not a scrim):
 //   - no colored border, no arrow / caret pointing back at the origin
-//   - one glass material       — GroupPanel's translucent chrome recipe
+//   - one glass material       — the shared glassSurfaceStyle chrome recipe
 //   - one corner radius         — --radius-popover
-//   - one shadow/rim treatment  — GroupPanel's layered glass edge
+//   - one shadow/rim treatment  — glassSurfaceStyle's layered glass edge
 //   - one type scale            — headline (serif) / body (rules) / meta (mono)
 // Only the MEDIA treatment varies by content, via `variant`:
 //   - object — a centered framed portrait OR contained transparent object
@@ -48,7 +48,7 @@ import {
   resolveMediaFilter,
 } from "../../primitives/media";
 import { renderRichText, type RichText } from "../card/rich-text";
-import { groupPanelStyle } from "../controls/GroupPanel";
+import { glassSurfaceStyle } from "../controls/glass-surface";
 import { tideVisual, tideAlignmentLabel, type Tide } from "../hud/tide-spec";
 
 /* ---- faithfully-copied layout literals from the design source (not tokens:
@@ -87,7 +87,7 @@ export function setRevealDelay(ms: number): void {
 
 /* ---- the shared shell + type scale (the coherent vocabulary) ---- */
 const shell: React.CSSProperties = {
-  ...groupPanelStyle(),
+  ...glassSurfaceStyle(),
   background: INFO_CARD_GLASS_BACKGROUND,
   width: CARD_W,
   boxSizing: "border-box",

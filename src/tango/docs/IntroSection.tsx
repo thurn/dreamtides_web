@@ -92,7 +92,7 @@ const exampleBodyStyle: CSSProperties = {
 
 /**
  * A worked example of legibility-ladder rung two: a live `GroupPanel`
- * collecting several related values into one glass pane, rather than the
+ * collecting several related values into one flat card, rather than the
  * page describing the pattern in the abstract.
  */
 function GroupPanelExample(): ReactElement {
@@ -176,7 +176,7 @@ export function IntroSection(): ReactElement {
             plate or blur. Rung two is <strong>GroupPanel</strong>, the one
             card used to collect genuinely dense, related information — several
             values, a heading with a body and an action — into a single
-            liquid-glass pane. There is no rung for a scrim, wash, or vignette
+            flat card. There is no rung for a scrim, wash, or vignette
             painted over scene art to fake legibility; the ladder simply does
             not include one.
           </p>

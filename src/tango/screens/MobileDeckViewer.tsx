@@ -33,7 +33,7 @@ import type { CardData } from "../../types/cards";
 import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
 import { GameCard } from "../components/card/CardView";
 import { Pressable } from "../primitives/Pressable";
-import { groupPanelStyle } from "../components/controls/GroupPanel";
+import { glassSurfaceStyle } from "../components/controls/glass-surface";
 import { GlowIcon } from "../components/controls/GlowIcon";
 import { Select } from "../components/controls/Select";
 import { glassIconButtonChrome } from "../components/controls/control-treatment";
@@ -285,14 +285,14 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
 }
 
 /**
- * The full-bleed frosted-glass backdrop behind the deck. Reuses GroupPanel's
+ * The full-bleed frosted-glass backdrop behind the deck. Reuses the shared
  * liquid-glass recipe but takes only its fill and blur/saturate backdrop — the
  * card's rim, radius, and drop shadow are card affordances that do not belong
  * on an edge-to-edge surface — so the dreamscape behind refracts through as
  * glass without a floating panel border at the screen edges.
  */
 function GlassBackdrop() {
-  const glass = groupPanelStyle();
+  const glass = glassSurfaceStyle();
   return (
     <div
       aria-hidden="true"

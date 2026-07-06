@@ -1,6 +1,6 @@
 // The mobile (narrow-viewport) Dreamcaller-select layout: a full-bleed swipe
 // carousel, one Dreamcaller per page, with the full-body character cutout
-// standing on an ambient backdrop behind a frosted GroupPanel console. It shares
+// standing on an ambient backdrop behind a flat GroupPanel console. It shares
 // the view types and the ability / essence reveals with the desktop triptych via
 // `quest-start-shared`; `QuestStartScreen` picks between the two by viewport.
 // PURE: renders from a view-model and reports the chosen Dreamcaller via `onPick`.
@@ -17,10 +17,7 @@ import { dreamcallerCutoutSrc } from "../components/hud/DreamcallerPortrait";
 import {
   AbilityReveal,
   ConsoleDivider,
-  EssenceReveal,
-  MAX_TIDE_DISCS,
-  TideDiscReveal,
-  TidesLabel,
+  TidesEssenceBlock,
   type DreamcallerOfferView,
   type QuestStartScreenProps,
 } from "./quest-start-shared";
@@ -32,7 +29,7 @@ const TIDE_HIT_SLOP = token("--space-2");
 
 /** The full-bleed cinematic figure for one Dreamcaller: the transparent
  * full-body cutout standing on an ambient tinted backdrop, feet anchored to
- * the bottom of the page so the legs sink behind the console's glass. */
+ * the bottom of the page so the legs sink behind the console. */
 function FullBleedPortrait({
   dreamcaller,
 }: {
@@ -77,11 +74,10 @@ function FullBleedPortrait({
         src={dreamcallerCutoutSrc(dreamcaller.imageNumber)}
         alt={`${dreamcaller.name}, ${dreamcaller.title}`}
         draggable={false}
-        // The figure is the scene the console's frosted glass blurs through, so
-        // it must paint as early as possible: a late-arriving figure leaves the
-        // GroupPanel's `backdrop-filter` with nothing to refract, then "pops"
-        // the blur in once the art finally paints. Fetch it eagerly at high
-        // priority and decode async so it lands with the first frame.
+        // The figure is the page's hero image — the cinematic focus the whole
+        // layout is built around — so it must paint as early as possible rather
+        // than fading in after the chrome. Fetch it eagerly at high priority and
+        // decode async so it lands with the first frame.
         fetchPriority="high"
         loading="eager"
         decoding="async"
@@ -106,9 +102,8 @@ function FullBleedPortrait({
   );
 }
 
-/** The mobile carousel's frosted-glass console beneath a portrait: ability
- * text, a hairline, the collapsible tides cluster + starting essence, and the
- * Choose action. */
+/** The mobile carousel's flat console beneath a portrait: ability text, a
+ * hairline, the tides cluster + starting essence, and the Choose action. */
 function DreamcallerConsole({
   dreamcaller,
   stageRef,
@@ -118,7 +113,6 @@ function DreamcallerConsole({
   stageRef: React.RefObject<HTMLElement | null>;
   onChoose: () => void;
 }) {
-  const hasTides = dreamcaller.tides.length > 0;
   return (
     <GroupPanel>
       <AbilityReveal text={dreamcaller.renderedText} stageRef={stageRef} />
@@ -135,49 +129,11 @@ function DreamcallerConsole({
       </div>
 
       <div style={{ marginTop: token("--space-6") }}>
-        {/* Top row: the "Tides:" caption on the left and the starting essence on
-            the right. The essence stays TOP-aligned, level with the caption, as
-            the disc row stacks below it — matching the desktop tides treatment. */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: token("--space-5"),
-          }}
-        >
-          {hasTides ? <TidesLabel /> : <span />}
-          <EssenceReveal dreamcaller={dreamcaller} stageRef={stageRef} />
-        </div>
-
-        {hasTides && (
-          <div
-            data-dreamcaller-tides={dreamcaller.id}
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              alignItems: "center",
-              // Left-aligned under the caption. Each disc carries invisible
-              // TIDE_HIT_SLOP touch padding; the row pulls its margins in by
-              // that slop so the discs' visual bounds still start at the
-              // caption's left edge and sit one --space-3 below it.
-              marginTop: `calc(${token("--space-3")} - ${TIDE_HIT_SLOP})`,
-              marginLeft: `calc(-1 * ${TIDE_HIT_SLOP})`,
-              marginRight: `calc(-1 * ${TIDE_HIT_SLOP})`,
-              marginBottom: `calc(-1 * ${TIDE_HIT_SLOP})`,
-            }}
-          >
-            {dreamcaller.tides.slice(0, MAX_TIDE_DISCS).map((tide) => (
-              <TideDiscReveal
-                key={tide.id}
-                tide={tide}
-                stageRef={stageRef}
-                size="lg"
-                hitSlop={TIDE_HIT_SLOP}
-              />
-            ))}
-          </div>
-        )}
+        <TidesEssenceBlock
+          dreamcaller={dreamcaller}
+          stageRef={stageRef}
+          hitSlop={TIDE_HIT_SLOP}
+        />
       </div>
 
       <div
@@ -341,13 +297,9 @@ function DreamcallerPage({
           bottom: 0,
           zIndex: 4,
           padding: `0 ${token("--gutter")} calc(${token("--safe-bottom")} + ${token("--space-5")})`,
-          // The console slides up into place, but its opacity is NOT animated:
-          // the GroupPanel's frosted glass uses `backdrop-filter`, and an
-          // ancestor at `opacity < 1` flattens this subtree into a group the
-          // filter cannot sample the scene through — so a fade would leave the
-          // glass washed-out until opacity reached exactly 1, then "pop" the
-          // blur in. Revealing by transform alone keeps the backdrop live the
-          // whole time.
+          // The console slides up into place as its page becomes active — a
+          // transform-only reveal, no opacity fade, so the flat card simply
+          // rises into view without cross-fading over the portrait behind it.
           transform: active ? "translateY(0)" : "translateY(16px)",
           transition: `transform ${token("--dur-base")} ${token("--ease-out")}`,
         }}
