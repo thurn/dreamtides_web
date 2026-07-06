@@ -1758,7 +1758,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "true",
-      "description": "Whether the element compresses (scale-down) while pressed. Default true.\nSet false for a surface you hover to reveal information but cannot act on\n(a tide disc, an essence value): its pointer handlers, cursor, and\ntap-highlight suppression stay, but a press must not read as an actionable\nbutton by shrinking. This is a behavioral variant of the one press\nfeedback, not a style escape hatch."
+      "description": "Whether the element compresses (scale-down) while pressed. Default true.\nSet false for a surface you hover to reveal information but cannot act on\n(a tide disc, an essence value): its pointer handlers, cursor,\nhover-enlarge, and tap-highlight suppression stay, but a press must not\nread as an actionable button by shrinking. This is a behavioral variant of\nthe one press feedback, not a style escape hatch."
     },
     {
       "name": "children",
@@ -2229,7 +2229,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "false",
-      "description": "Interactive discs brighten on hover and show a pointer cursor — set this\nwhen the caller wires the disc up as a reveal trigger. Default false: a\nresting-cluster disc is inert."
+      "description": "Interactive discs brighten on hover and show a pointer cursor — set this\nwhen the caller wires the disc up as a reveal trigger (the wrapper's\nshared hover-enlarge handles the scale). Default false: a\nresting-cluster disc is inert."
     }
   ],
   "TidePill": [

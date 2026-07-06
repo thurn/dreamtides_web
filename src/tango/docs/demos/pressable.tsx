@@ -30,7 +30,7 @@ export const pressableDemo: TangoComponent = {
   id: "pressable",
   title: "Pressable",
   blurb:
-    "The one press-feedback primitive. Wrap any element in it and that element gains the shared press-down compression, so every interactive surface in Tango presses with the identical feel.",
+    "The one press-feedback primitive. Wrap any element in it and that element gains the shared press-down compression plus the shared hover-enlarge on a hover-capable pointer, so every interactive surface in Tango presses and invites the cursor with the identical feel.",
   callout:
     "Reach for a higher-level component first. Pressable is a low-level building block — before wrapping raw markup in it, look for an existing Tango component (Button, TidePill, SegmentedControl, SiteNode, …) that already bakes in the press feedback. Use Pressable only when you're building a genuinely new interactive surface no component covers.",
   group: "Primitives",
@@ -39,7 +39,7 @@ export const pressableDemo: TangoComponent = {
   usage: [
     {
       label: "Wrap any element",
-      note: "Pressable adds the shared scale-down feedback and a pointer cursor to whatever it wraps. Pass the tag via `as`; extra HTML attributes (onClick, aria-*) forward to the rendered element.",
+      note: "Pressable adds the shared press scale-down, the shared hover-enlarge (mouse/pen — touch never hovers), and a pointer cursor to whatever it wraps. Pass the tag via `as`; extra HTML attributes (onClick, aria-*) forward to the rendered element.",
       code: `import { Pressable } from "src/tango/primitives/Pressable";
 
 <Pressable as="button" onClick={handleActivate}>
@@ -55,7 +55,7 @@ export const pressableDemo: TangoComponent = {
     },
     {
       label: "No compression (hover-only)",
-      note: "Set `compress={false}` for a surface you hover to reveal information but cannot act on — its pointer handlers and cursor stay, but a press does not scale it down, so it never reads as an actionable button.",
+      note: "Set `compress={false}` for a surface you hover to reveal information but cannot act on — its pointer handlers, cursor, and hover-enlarge stay, but a press does not scale it down, so it never reads as an actionable button.",
       code: `<Pressable as="span" compress={false}>
   <span className="my-target">Reveal on hover</span>
 </Pressable>`,

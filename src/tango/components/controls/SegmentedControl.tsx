@@ -21,7 +21,7 @@
 // (components/pills/SegmentedControl.jsx / .d.ts).
 
 import type { ReactElement } from "react";
-import { PRESS_SCALE, usePress } from "../../primitives/Pressable";
+import { HOVER_SCALE, PRESS_SCALE, usePress } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { groupPanelStyle } from "./GroupPanel";
 
@@ -78,7 +78,7 @@ interface SegmentProps {
  * the `usePress` hook directly rather than the `<Pressable>` wrapper.
  */
 function Segment({ option, active, full, font, onSelect }: SegmentProps): ReactElement {
-  const { pressed, bind } = usePress();
+  const { pressed, hovered, bind } = usePress();
 
   return (
     <button
@@ -105,7 +105,11 @@ function Segment({ option, active, full, font, onSelect }: SegmentProps): ReactE
         whiteSpace: "nowrap",
         WebkitTapHighlightColor: "transparent",
         transformOrigin: "center",
-        transform: pressed ? `scale(${String(PRESS_SCALE)})` : "none",
+        transform: pressed
+          ? `scale(${String(PRESS_SCALE)})`
+          : hovered
+            ? `scale(${String(HOVER_SCALE)})`
+            : "none",
         transition: `color ${token("--dur-fast")}, background ${token("--dur-base")}, transform ${token("--dur-fast")}`,
       }}
     >

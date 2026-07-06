@@ -15,7 +15,7 @@ The single collapsed tide mark: a small colored disc carrying the tide's glyph �
 | `tide` | `Tide` = `"ember" \| "valor" \| "vision" \| "wild" \| "shadow"` | yes | — | Which of the five tides. Fixes the disc's color and glyph. |
 | `id` | `string` | yes | — | Stable id (a tide deck id) for the `data-tide-disc` QA hook. |
 | `label` | `string` | no | — | Accessible label (e.g. "Tide: Valor"). When unset the disc is decorative and hidden from assistive tech — the resting cluster's discs, whose parent toggle button carries the semantics. |
-| `interactive` | `boolean` | no | `false` | Interactive discs brighten on hover and show a pointer cursor — set this when the caller wires the disc up as a reveal trigger. Default false: a resting-cluster disc is inert. |
+| `interactive` | `boolean` | no | `false` | Interactive discs brighten on hover and show a pointer cursor — set this when the caller wires the disc up as a reveal trigger (the wrapper's shared hover-enlarge handles the scale). Default false: a resting-cluster disc is inert. |
 
 ## Usage
 

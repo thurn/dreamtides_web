@@ -28,9 +28,8 @@
 // Ported from the Claude Design "Dreamtides Mobile" project
 // (components/buttons/Button.jsx / .d.ts).
 
-import { useState } from "react";
 import buttonPurple from "../../assets/Button_Purple.png";
-import { PRESS_SCALE, usePress } from "../../primitives/Pressable";
+import { HOVER_SCALE, PRESS_SCALE, usePress } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 
 /** Height/scale variants. 'lg' is the taller commit height. */
@@ -76,10 +75,6 @@ const COST_ICON_CLASSES: Record<ButtonCostKind, string> = {
   points: "bxf bx-star-circle",
   counter: "bxf bx-hourglass",
 };
-
-/** Scale-UP factor on hover (fine pointer) — the counterpart to the shared
- * scale-DOWN press feedback: the button lifts slightly toward the pointer. */
-const HOVER_SCALE = 1.03;
 
 export interface ButtonProps {
   /** Height/scale. 'lg' is the taller commit height ("Begin Your Dream") — commit is a size, not a variant. */
@@ -129,13 +124,7 @@ export function Button({
 }: ButtonProps) {
   const spec = SIZES[size];
   const borderWidth = spec.borderWidth;
-  // onPointerLeave clears the hover lift as well as the press state, so the two
-  // can never get stuck together (leave both while the pointer is off the
-  // button).
-  const [hovered, setHovered] = useState(false);
-  const { pressed, bind } = usePress({
-    onPointerLeave: () => setHovered(false),
-  });
+  const { pressed, hovered, bind } = usePress();
   const on = pressed && !disabled;
   const lifted = hovered && !on && !disabled;
   // Hover glow (a violet drop-shadow that follows the sprite's chamfered alpha,
@@ -157,7 +146,6 @@ export function Button({
       disabled={disabled}
       aria-label={ariaLabel}
       onClick={disabled ? undefined : onClick}
-      onPointerEnter={disabled ? undefined : () => setHovered(true)}
       {...(disabled ? {} : bind)}
       style={{
         position: "relative",

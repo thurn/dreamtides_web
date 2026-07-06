@@ -44,7 +44,7 @@ import { TIDES, type Tide } from "./tide-spec";
 // from TidePill.
 export { tideVisual, type Tide } from "./tide-spec";
 
-const { usePressReveal, anchorRect, PressPopover, PRESS_SCALE } = InfoCard;
+const { usePressReveal, anchorRect, PressPopover, PRESS_SCALE, HOVER_SCALE } = InfoCard;
 
 /** Height/scale variants. */
 type TidePillSize = "sm" | "md";
@@ -102,7 +102,7 @@ export function TidePill({
       ? `${String(PILL_SM_PAD_Y)}px ${String(PILL_SM_PAD_X)}px`
       : "5px 12px";
   const ref = React.useRef<HTMLSpanElement>(null);
-  const { pressed, shown, begin, end, enter, leave, heldPastTap } =
+  const { pressed, hovered, shown, begin, end, enter, leave, heldPastTap } =
     usePressReveal();
   const [anchor, setAnchor] = React.useState<ReturnType<
     typeof anchorRect
@@ -178,7 +178,11 @@ export function TidePill({
         userSelect: "none",
         zIndex: pressed ? 60 : undefined,
         transformOrigin: "center",
-        transform: pressed ? `scale(${String(PRESS_SCALE)})` : "none",
+        transform: pressed
+          ? `scale(${String(PRESS_SCALE)})`
+          : hovered
+            ? `scale(${String(HOVER_SCALE)})`
+            : "none",
         transition: `transform ${token("--dur-fast")} ${token("--ease-out")}`,
       }}
     >

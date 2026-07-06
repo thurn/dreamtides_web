@@ -16,6 +16,13 @@
   transition: transform var(--dur-fast) var(--ease-out);
   transform-origin: center bottom;
 }
+/* Hover-capable pointers get the shared hover-enlarge; the :active rule
+   below wins while pressed via the :not guard. */
+@media (hover: hover) {
+  .tango .qsbDeck:hover:not(:active) {
+    transform: scale(var(--hover-scale, 1.03));
+  }
+}
 .tango .qsbDeck:active {
   transform: scale(var(--press-scale, 0.94));
 }

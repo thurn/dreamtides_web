@@ -260,3 +260,9 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 | `--cv-rules-highlight-color` | `var(--primitive-spark-500)` | glossary-term amber |
 | `--cv-selection-color` | `var(--primitive-orange-500)` | #f97316 default ring |
 | `--cv-paragraph-gap` | `0.4em` | index.css — gap between ability blocks |
+
+## Other
+
+| Token | Value | Notes |
+| --- | --- | --- |
+| `--hover-scale` | `1.03` |  |

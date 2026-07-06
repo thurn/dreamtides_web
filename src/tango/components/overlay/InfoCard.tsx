@@ -37,7 +37,7 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { Pressable, PRESS_SCALE } from "../../primitives/Pressable";
+import { Pressable, PRESS_SCALE, HOVER_SCALE } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { type Glyph } from "../../primitives/glyph";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
@@ -612,6 +612,11 @@ function useFinePointer(): boolean {
 export interface UsePressRevealResult {
   /** true from pointer-down to release (drive the immediate press scale). */
   pressed: boolean;
+  /**
+   * true while a fine pointer hovers the trigger (drive the shared
+   * HOVER_SCALE enlargement; press takes precedence). Always false on touch.
+   */
+  hovered: boolean;
   /** true while the InfoCard should be revealed (gate the popover on this). */
   shown: boolean;
   /** true on a fine pointer / mouse (hover reveals); false on touch (press reveals). */
@@ -647,6 +652,7 @@ export function usePressReveal(
 ): UsePressRevealResult {
   const fine = useFinePointer();
   const [pressed, setPressed] = React.useState(false);
+  const [hovered, setHovered] = React.useState(false);
   const [shown, setShown] = React.useState(false);
   const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const downAt = React.useRef(0);
@@ -689,9 +695,11 @@ export function usePressReveal(
   };
 
   const enter = (): void => {
-    // Fine pointer only: hover reveals. On touch, enter fires right before down
-    // and must NOT double-drive the reveal.
+    // Fine pointer only: hover reveals and enlarges. On touch, enter fires
+    // right before down and must NOT double-drive the reveal (or leave the
+    // trigger stuck enlarged after the finger lifts).
     if (fine) {
+      setHovered(true);
       reveal();
     }
   };
@@ -699,6 +707,7 @@ export function usePressReveal(
   const leave = (): void => {
     clear();
     setPressed(false);
+    setHovered(false);
     setShown(false);
   };
 
@@ -706,7 +715,7 @@ export function usePressReveal(
 
   React.useEffect(() => clear, []);
 
-  return { pressed, shown, fine, begin, end, enter, leave, heldPastTap };
+  return { pressed, hovered, shown, fine, begin, end, enter, leave, heldPastTap };
 }
 
 /* ================================================================
@@ -880,6 +889,7 @@ interface InfoCardStatics {
   setRevealDelay: typeof setRevealDelay;
   SITE_DISC: React.CSSProperties;
   PRESS_SCALE: number;
+  HOVER_SCALE: number;
   CLICK_WINDOW: number;
 }
 
@@ -898,5 +908,6 @@ export const InfoCard: typeof InfoCardComponent & InfoCardStatics =
     setRevealDelay,
     SITE_DISC,
     PRESS_SCALE,
+    HOVER_SCALE,
     CLICK_WINDOW,
   });

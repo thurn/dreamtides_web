@@ -4,7 +4,11 @@
 // primitive so the gesture feels identical everywhere:
 //   - a single scale-DOWN factor (PRESS_SCALE = 0.94, the --press-scale
 //     token) — controls compress under the finger/pointer, they never
-//     balloon outward
+//     balloon outward while pressed
+//   - a single hover scale-UP factor (HOVER_SCALE = 1.03, the --hover-scale
+//     token) — on a hover-capable pointer (mouse/pen), every pressable or
+//     info-revealing surface slightly enlarges under the cursor, so "this
+//     responds to you" reads identically everywhere. Touch never hovers.
 //   - pointer cursor when actionable, default cursor when disabled
 //   - tap-highlight suppression (no blue mobile flash)
 //   - one eased, fast transition (skipped entirely when the user has
@@ -39,8 +43,17 @@ import { forwardRef, useEffect, useState } from "react";
  */
 export const PRESS_SCALE = 0.94;
 
-/** The four pointer handlers usePress binds to drive its `pressed` state. */
+/**
+ * The one hover-enlarge factor. Always slightly > 1: on a hover-capable
+ * pointer, every pressable or hover-revealing surface grows by this amount
+ * under the cursor. Mirrors the --hover-scale token so JS and CSS :hover
+ * rules stay identical. Press wins while both apply.
+ */
+export const HOVER_SCALE = 1.03;
+
+/** The five pointer handlers usePress binds to drive its `pressed` and `hovered` state. */
 export interface PressBind {
+  onPointerEnter: (event: React.PointerEvent<HTMLElement>) => void;
   onPointerDown: (event: React.PointerEvent<HTMLElement>) => void;
   onPointerUp: (event: React.PointerEvent<HTMLElement>) => void;
   onPointerLeave: (event: React.PointerEvent<HTMLElement>) => void;
@@ -50,7 +63,13 @@ export interface PressBind {
 export interface UsePressResult {
   /** true from pointer-down until release / leave / cancel. */
   pressed: boolean;
-  /** the four pointer handlers to spread onto your element. */
+  /**
+   * true while a hover-capable pointer (mouse/pen — never touch) is over the
+   * element. Drives the shared HOVER_SCALE enlargement; press takes
+   * precedence while both are true.
+   */
+  hovered: boolean;
+  /** the five pointer handlers to spread onto your element. */
   bind: PressBind;
 }
 
@@ -62,6 +81,17 @@ export interface UsePressResult {
  */
 export function usePress(handlers?: Partial<PressBind>): UsePressResult {
   const [pressed, setPressed] = useState(false);
+  const [hovered, setHovered] = useState(false);
+
+  const enter = (event: React.PointerEvent<HTMLElement>): void => {
+    // Only a hover-capable pointer hovers. On touch, pointerenter fires as
+    // part of every tap, and a "hover" that only clears on the next touch
+    // would leave the element stuck enlarged after the finger lifts.
+    if (event.pointerType !== "touch") {
+      setHovered(true);
+    }
+    handlers?.onPointerEnter?.(event);
+  };
 
   const down = (event: React.PointerEvent<HTMLElement>): void => {
     // Only the PRIMARY button begins a press, matching native `:active`:
@@ -74,19 +104,26 @@ export function usePress(handlers?: Partial<PressBind>): UsePressResult {
   };
 
   const up =
-    (name: keyof PressBind) =>
+    (name: keyof PressBind, endsHover: boolean) =>
     (event: React.PointerEvent<HTMLElement>): void => {
       setPressed(false);
+      // pointerup keeps the hover (the mouse is still over the element);
+      // leave/cancel end it.
+      if (endsHover) {
+        setHovered(false);
+      }
       handlers?.[name]?.(event);
     };
 
   return {
     pressed,
+    hovered,
     bind: {
+      onPointerEnter: enter,
       onPointerDown: down,
-      onPointerUp: up("onPointerUp"),
-      onPointerLeave: up("onPointerLeave"),
-      onPointerCancel: up("onPointerCancel"),
+      onPointerUp: up("onPointerUp", false),
+      onPointerLeave: up("onPointerLeave", true),
+      onPointerCancel: up("onPointerCancel", true),
     },
   };
 }
@@ -125,10 +162,10 @@ export interface PressableProps extends React.HTMLAttributes<HTMLElement> {
   /**
    * Whether the element compresses (scale-down) while pressed. Default true.
    * Set false for a surface you hover to reveal information but cannot act on
-   * (a tide disc, an essence value): its pointer handlers, cursor, and
-   * tap-highlight suppression stay, but a press must not read as an actionable
-   * button by shrinking. This is a behavioral variant of the one press
-   * feedback, not a style escape hatch.
+   * (a tide disc, an essence value): its pointer handlers, cursor,
+   * hover-enlarge, and tap-highlight suppression stay, but a press must not
+   * read as an actionable button by shrinking. This is a behavioral variant of
+   * the one press feedback, not a style escape hatch.
    */
   compress?: boolean;
   /** Content rendered inside the pressable element. */
@@ -137,8 +174,9 @@ export interface PressableProps extends React.HTMLAttributes<HTMLElement> {
 
 /**
  * Pressable — renders `as` (default `<button>`) with the standardized
- * press-down feedback, pointer cursor, and tap-highlight suppression.
- * Forwards ref and every extra prop (onClick, aria-*, className, ...).
+ * press-down feedback, hover-enlarge (on a hover-capable pointer), pointer
+ * cursor, and tap-highlight suppression. Forwards ref and every extra prop
+ * (onClick, aria-*, className, ...).
  *
  * Notes:
  *   - Writes only `transform`, so DON'T put a base positioning transform on
@@ -153,6 +191,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
       disabled = false,
       compress = true,
       style,
+      onPointerEnter,
       onPointerDown,
       onPointerUp,
       onPointerLeave,
@@ -162,7 +201,8 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
     },
     ref,
   ) {
-    const { pressed, bind } = usePress({
+    const { pressed, hovered, bind } = usePress({
+      onPointerEnter,
       onPointerDown,
       onPointerUp,
       onPointerLeave,
@@ -214,8 +254,16 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
           transition: reducedMotion
             ? "none"
             : `transform var(--dur-fast) var(--ease-out)`,
-          transform:
-            pressed && !disabled && compress ? `scale(${PRESS_SCALE})` : "none",
+          // Press wins over hover; hover-enlarge applies even when
+          // compress=false (an info-reveal surface still invites the cursor),
+          // and disabled suppresses both.
+          transform: disabled
+            ? "none"
+            : pressed && compress
+              ? `scale(${PRESS_SCALE})`
+              : hovered
+                ? `scale(${HOVER_SCALE})`
+                : "none",
           ...style,
           ...(disabled ? { pointerEvents: "none" } : {}),
         }}

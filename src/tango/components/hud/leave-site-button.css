@@ -37,6 +37,13 @@
 .leave-site-btn:hover:not(:disabled) {
   filter: brightness(1.1);
 }
+/* Hover-capable pointers get the shared hover-enlarge; the :active rule
+   below wins while pressed via the :not guard. */
+@media (hover: hover) {
+  .leave-site-btn:hover:not(:disabled):not(:active) {
+    transform: scale(var(--hover-scale, 1.03));
+  }
+}
 .leave-site-btn:active:not(:disabled) {
   transform: scale(var(--press-scale));
 }

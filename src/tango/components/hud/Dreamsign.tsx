@@ -42,7 +42,7 @@ import type { Dreamsign as DreamsignData } from "../../../types/quest";
 import { assetUrl } from "../../../runtime/asset-url";
 import { artRef } from "../../primitives/art";
 
-const { usePressReveal, anchorRect, PressPopover, PRESS_SCALE } = InfoCard;
+const { usePressReveal, anchorRect, PressPopover, PRESS_SCALE, HOVER_SCALE } = InfoCard;
 
 /** Desaturation applied to bane art so a bane reads as a warning before its
  * art does — the one signal that survives the chrome-free tile. */
@@ -165,7 +165,7 @@ export function Dreamsign({
 }: DreamsignProps): React.ReactElement {
   const [imageBroken, setImageBroken] = React.useState(false);
   const ref = React.useRef<HTMLSpanElement>(null);
-  const { pressed, shown, begin, end, enter, leave, heldPastTap } =
+  const { pressed, hovered, shown, begin, end, enter, leave, heldPastTap } =
     usePressReveal();
   const [anchor, setAnchor] = React.useState<ReturnType<
     typeof anchorRect
@@ -208,7 +208,11 @@ export function Dreamsign({
     WebkitTapHighlightColor: "transparent",
     userSelect: "none",
     zIndex: pressed ? 60 : undefined,
-    transform: pressed ? `scale(${String(PRESS_SCALE)})` : "scale(1)",
+    transform: pressed
+      ? `scale(${String(PRESS_SCALE)})`
+      : hovered
+        ? `scale(${String(HOVER_SCALE)})`
+        : "scale(1)",
     transition: `transform ${token("--dur-fast")} ${token("--ease-out")}`,
   };
 

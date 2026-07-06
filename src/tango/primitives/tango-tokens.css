@@ -426,6 +426,13 @@
      enlarge). Reconciled to the shipped 0.94. */
   --press-scale: 0.94; /* @kind other */
 
+  /* ---- The one hover-enlarge factor ----
+     Every pressable or hover-revealing surface — JS <Pressable>/usePress AND
+     CSS-only controls via :hover — grows by EXACTLY this under a
+     hover-capable pointer. Always slightly > 1; press wins while both
+     apply. Mirrors HOVER_SCALE in Pressable.tsx. */
+  --hover-scale: 1.03; /* @kind other */
+
   /* ---- Elevation shadows (cool, purple-black — never neutral gray) ---- */
   --shadow-sm: 0 1px 3px rgba(4, 2, 10, 0.5);
   --shadow-md: 0 6px 18px rgba(4, 2, 10, 0.55);

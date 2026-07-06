@@ -10,7 +10,9 @@
 // caller (TideCluster's toggle button, the desktop select's
 // `InfoCard.PressInfo`). The one interaction the disc owns is its hover
 // brightening, enabled via `interactive` when the caller wires the disc up as
-// a reveal trigger.
+// a reveal trigger; the shared hover-enlarge comes from that pressable
+// wrapper, so the disc itself never scales (scaling here too would compound
+// with the wrapper's transform into a double enlargement).
 
 import * as React from "react";
 import { GlowIcon } from "../controls/GlowIcon";
@@ -33,7 +35,8 @@ export interface TideDiscProps {
    * toggle button carries the semantics. */
   label?: string;
   /** Interactive discs brighten on hover and show a pointer cursor — set this
-   * when the caller wires the disc up as a reveal trigger. Default false: a
+   * when the caller wires the disc up as a reveal trigger (the wrapper's
+   * shared hover-enlarge handles the scale). Default false: a
    * resting-cluster disc is inert. */
   interactive?: boolean;
 }
@@ -57,7 +60,17 @@ export function TideDisc({
       data-tide-disc={id}
       aria-label={label}
       aria-hidden={label === undefined ? true : undefined}
-      onPointerEnter={interactive ? () => setHovered(true) : undefined}
+      onPointerEnter={
+        interactive
+          ? // Touch never hovers: on a tap, pointerenter fires with no
+            // matching un-hover, which would leave the disc stuck enlarged.
+            (event) => {
+              if (event.pointerType !== "touch") {
+                setHovered(true);
+              }
+            }
+          : undefined
+      }
       onPointerLeave={interactive ? () => setHovered(false) : undefined}
       style={{
         width: TIDE_DISC_PX,
