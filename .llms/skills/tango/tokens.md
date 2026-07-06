@@ -201,7 +201,6 @@ Durations, easings, and the two material-continuity transitions (object-travel, 
 | `--ease-dream` | `cubic-bezier(0.22, 0.61, 0.36, 1)` |  |
 | `--ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` |  |
 | `--ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` |  |
-| `--dur-snappy` | `80ms` |  |
 | `--dur-fast` | `140ms` |  |
 | `--dur-base` | `240ms` |  |
 | `--dur-slow` | `420ms` |  |

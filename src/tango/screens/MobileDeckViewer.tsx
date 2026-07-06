@@ -2,11 +2,11 @@
 //
 // The deck is shown as a scrolling grid of full cards, four across. At that
 // size the cards' rules text is present but small, so the screen's whole job is
-// the press-and-hold zoom: hold a card and a fixed-size, fully legible copy
-// pops out of the tile — rising above the finger, or shifting beside it for
-// cards near the top — and snaps away on release. The rest of the screen is
-// left untouched (no scrim, no dimming). A quick flick still scrolls the grid —
-// the zoom only arms after a short hold — so browsing and inspecting never
+// the press zoom: press a card and a fully legible copy appears instantly at
+// the top of the screen, shifted off the finger so its rules text is readable
+// while the finger is still down; it snaps away on release. The rest of the
+// screen is left untouched (no scrim, no dimming). Dragging past a small slop
+// dismisses the zoom so the grid scrolls, so browsing and inspecting never
 // fight.
 //
 // The top of the screen keeps a reserved band for the filtering/searching
@@ -14,9 +14,10 @@
 // card count, and the close control there.
 //
 // PURE: renders from a view-model and reports dismissal through `onClose`. All
-// state here is local presentation state (which card is being peeked, and the
-// expand animation phase). The finger-avoidance placement math lives in the
-// unit-tested `mobile-deck-peek` module.
+// state here is local presentation state (which card is being peeked). The
+// finger-clearing placement math lives in the unit-tested `mobile-deck-peek`
+// module, whose guarantee is proven over a full touch-point sweep by
+// scripts/deck-peek-clearance-analysis.mjs.
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -29,10 +30,9 @@ import { GlowIcon } from "../components/controls/GlowIcon";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
-import { LARGE_CARD_TEXT_BASE_WIDTH } from "../components/card/card-display-scale";
 import {
   computePeekBox,
-  peekOriginTransform,
+  peekWidthForViewport,
   type PeekRect,
 } from "./mobile-deck-peek";
 
@@ -67,27 +67,12 @@ export interface MobileDeckViewerProps {
 const COLUMNS = 4;
 
 /**
- * How long (ms) a press must be held before the zoom arms. Below this a touch
- * is treated as the start of a scroll, so flicking through the grid never
- * summons a card. A box measure of interaction feel, not a spacing token.
- */
-const HOLD_MS = 150;
-
-/**
- * How far (px) the pointer may drift during the arming window before the press
- * is reclassified as a scroll and the zoom is cancelled.
+ * How far (px) the pointer may drift from the touch point before the press is
+ * reclassified as a scroll and the zoom is dismissed, letting the grid scroll.
+ * The zoom itself appears immediately on press-down; this only tears it back
+ * down once a drag is clearly underway.
  */
 const MOVE_SLOP_PX = 10;
-
-/**
- * The fixed width (px) every pressed card enlarges to. Pinned to the width at
- * which a `large` card's rules text saturates at full scale, so the card grows
- * exactly until its text is comfortably readable and no further — past this the
- * text would not get any bigger, only the frame would. Held constant so every
- * card pops to the same scale; clamped smaller only when the viewport is too
- * narrow to hold it inside the side margins.
- */
-const PEEK_WIDTH_PX = LARGE_CARD_TEXT_BASE_WIDTH;
 
 /**
  * Minimum real top safe-area inset (px) that counts as a center screen cutout
@@ -113,8 +98,10 @@ function readLengthToken(name: `--${string}`): number {
 interface PeekState {
   view: DeckCardView;
   box: PeekRect;
-  /** Transform mapping the zoom box back onto the pressed tile, for the grow. */
-  originTransform: string;
+  /** The touch point that summoned it, tracked so a drag can dismiss it. */
+  pointerId: number;
+  startX: number;
+  startY: number;
 }
 
 /**
@@ -123,42 +110,10 @@ interface PeekState {
  */
 export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
   const [peek, setPeek] = useState<PeekState | null>(null);
-  // The expand animation phase: false paints the zoom collapsed onto its tile,
-  // then a frame later it flips true and the CSS transition grows it out.
-  const [expanded, setExpanded] = useState(false);
-
-  // Press bookkeeping. Kept in refs so the window-level release/scroll handlers
-  // read live values without re-subscribing.
-  const holdTimerRef = useRef<number | null>(null);
-  const pressRef = useRef<{
-    pointerId: number;
-    startX: number;
-    startY: number;
-    tileRect: PeekRect;
-    view: DeckCardView;
-  } | null>(null);
-
-  const clearHold = useCallback(() => {
-    if (holdTimerRef.current !== null) {
-      window.clearTimeout(holdTimerRef.current);
-      holdTimerRef.current = null;
-    }
-    pressRef.current = null;
-  }, []);
 
   const dismissPeek = useCallback(() => {
-    clearHold();
     setPeek(null);
-    setExpanded(false);
-  }, [clearHold]);
-
-  // Grow the zoom out of its tile one frame after it mounts, so the transition
-  // has a collapsed start state to animate from.
-  useEffect(() => {
-    if (peek === null) return;
-    const raf = requestAnimationFrame(() => setExpanded(true));
-    return () => cancelAnimationFrame(raf);
-  }, [peek]);
+  }, []);
 
   // Release anywhere dismisses the zoom and ends the press.
   useEffect(() => {
@@ -182,56 +137,53 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  const armPeek = useCallback(() => {
-    const press = pressRef.current;
-    holdTimerRef.current = null;
-    if (press === null || typeof window === "undefined") return;
-    const box = computePeekBox({
-      tile: press.tileRect,
-      viewport: { width: window.innerWidth, height: window.innerHeight },
-      safeTop: readLengthToken("--safe-top"),
-      safeBottom: readLengthToken("--safe-bottom"),
-      gap: readLengthToken("--space-7"),
-      sideMargin: readLengthToken("--gutter"),
-      aspect: CARD_ASPECT_RATIO_VALUE,
-      targetWidth: PEEK_WIDTH_PX,
-    });
-    setExpanded(false);
-    setPeek({
-      view: press.view,
-      box,
-      originTransform: peekOriginTransform(box, press.tileRect),
-    });
-  }, []);
-
+  // Show the enlarged card the instant a card is pressed — no hold, no grow.
+  // The card jumps to the top of the screen and shifts off the finger so the
+  // rules text is readable while the finger is still down.
   const handleTilePointerDown = useCallback(
     (e: React.PointerEvent<HTMLElement>, cardView: DeckCardView) => {
-      if (peek !== null) return;
-      clearHold();
-      pressRef.current = {
+      if (peek !== null || typeof window === "undefined") return;
+      const sideMargin = readLengthToken("--gutter");
+      const width = peekWidthForViewport({
+        viewportWidth: window.innerWidth,
+        sideMargin,
+        columns: COLUMNS,
+        columnGap: readLengthToken("--space-4"),
+      });
+      // Anchor the finger to the pressed card's center: the modelled occlusion
+      // circle covers the whole tile, so the placement clears it wherever on the
+      // card the finger actually landed.
+      const tile = e.currentTarget.getBoundingClientRect();
+      const box = computePeekBox({
+        viewport: { width: window.innerWidth, height: window.innerHeight },
+        safeTop: readLengthToken("--safe-top"),
+        safeBottom: readLengthToken("--safe-bottom"),
+        sideMargin,
+        aspect: CARD_ASPECT_RATIO_VALUE,
+        width,
+        finger: { x: tile.left + tile.width / 2, y: tile.top + tile.height / 2 },
+      });
+      setPeek({
+        view: cardView,
+        box,
         pointerId: e.pointerId,
         startX: e.clientX,
         startY: e.clientY,
-        tileRect: e.currentTarget.getBoundingClientRect(),
-        view: cardView,
-      };
-      holdTimerRef.current = window.setTimeout(armPeek, HOLD_MS);
+      });
     },
-    [armPeek, clearHold, peek],
+    [peek],
   );
 
-  // During the arming window, a drift past the slop means the finger is
-  // scrolling, not inspecting — cancel the pending zoom and let the grid scroll.
+  // A drift past the slop means the finger is scrolling, not inspecting — drop
+  // the zoom and let the grid scroll.
   const handleGridPointerMove = useCallback(
     (e: React.PointerEvent<HTMLElement>) => {
-      const press = pressRef.current;
-      if (press === null || holdTimerRef.current === null) return;
-      if (press.pointerId !== e.pointerId) return;
-      const dx = e.clientX - press.startX;
-      const dy = e.clientY - press.startY;
-      if (Math.hypot(dx, dy) > MOVE_SLOP_PX) clearHold();
+      if (peek === null || peek.pointerId !== e.pointerId) return;
+      const dx = e.clientX - peek.startX;
+      const dy = e.clientY - peek.startY;
+      if (Math.hypot(dx, dy) > MOVE_SLOP_PX) dismissPeek();
     },
-    [clearHold],
+    [peek, dismissPeek],
   );
 
   return (
@@ -293,9 +245,7 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
         )}
       </div>
 
-      {peek !== null && (
-        <PeekOverlay peek={peek} expanded={expanded} />
-      )}
+      {peek !== null && <PeekOverlay peek={peek} />}
     </div>
   );
 }
@@ -495,8 +445,8 @@ function TopBand({
   );
 }
 
-/** One grid tile: the full card (rules text and all) that arms the zoom on
- *  press-and-hold, where it enlarges to a comfortably legible size. */
+/** One grid tile: the full card (rules text and all) that pops the zoom the
+ *  instant it is pressed, enlarged to a comfortably legible size. */
 function DeckTile({
   cardView,
   onPointerDown,
@@ -515,7 +465,7 @@ function DeckTile({
         onPointerDown(e, cardView);
       }}
       onContextMenu={(e: React.MouseEvent) => {
-        // Suppress the OS long-press callout so the hold reads as a zoom.
+        // Suppress the OS long-press callout so a held press reads as a zoom.
         e.preventDefault();
       }}
       style={{
@@ -544,13 +494,13 @@ function DeckTile({
 }
 
 /**
- * The held zoom: just the enlarged card, portaled above the grid and grown out
- * of the pressed tile via a snappy container transform. Nothing else on screen
- * is touched — no scrim, no dimming — so the deck stays fully visible behind it.
+ * The held zoom: just the enlarged card, portaled above the grid and shown
+ * instantly at its placed box — no grow, no fade. Nothing else on screen is
+ * touched (no scrim, no dimming), so the deck stays fully visible behind it.
  * Purely visual (`pointer-events: none`) so the finger that summoned it is never
  * intercepted; the press is tracked entirely on the grid underneath.
  */
-function PeekOverlay({ peek, expanded }: { peek: PeekState; expanded: boolean }) {
+function PeekOverlay({ peek }: { peek: PeekState }) {
   return createPortal(
     <div
       className="tango"
@@ -568,9 +518,6 @@ function PeekOverlay({ peek, expanded }: { peek: PeekState; expanded: boolean })
           left: peek.box.left,
           top: peek.box.top,
           width: peek.box.width,
-          transformOrigin: "top left",
-          transform: expanded ? "none" : peek.originTransform,
-          transition: `transform ${token("--dur-snappy")} ${token("--ease-out")}`,
           filter: `drop-shadow(${token("--shadow-card")})`,
         }}
       >

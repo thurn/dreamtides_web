@@ -250,7 +250,6 @@ export const TOKENS = {
   "--ease-dream": { var: "var(--ease-dream)", value: "cubic-bezier(0.22, 0.61, 0.36, 1)", kind: "other" },
   "--ease-out": { var: "var(--ease-out)", value: "cubic-bezier(0.16, 1, 0.3, 1)", kind: "other" },
   "--ease-in-out": { var: "var(--ease-in-out)", value: "cubic-bezier(0.65, 0, 0.35, 1)", kind: "other" },
-  "--dur-snappy": { var: "var(--dur-snappy)", value: "80ms", kind: "other" },
   "--dur-fast": { var: "var(--dur-fast)", value: "140ms", kind: "other" },
   "--dur-base": { var: "var(--dur-base)", value: "240ms", kind: "other" },
   "--dur-slow": { var: "var(--dur-slow)", value: "420ms", kind: "other" },
