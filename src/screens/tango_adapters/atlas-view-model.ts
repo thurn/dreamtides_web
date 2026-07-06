@@ -14,12 +14,11 @@ import {
   reachableAtlasNodeIds,
   revealedAtlasSite,
   siteTypeIcon,
-  siteTypeName,
 } from "../../atlas/atlas-generator";
 import {
-  dreamscapeSceneUrl,
-  dreamsignIconUrl,
-  guidePortraitUrl,
+  BOSS_DISPLAY,
+  BOSS_DREAMSCAPE_ID,
+  BOSS_FIGURE_ID,
 } from "../../tango/components/atlas/atlas-display";
 import type { AtlasEdgeKind } from "../../tango/components/atlas/AtlasEdge";
 import type {
@@ -27,9 +26,9 @@ import type {
   AtlasMapNode,
 } from "../../tango/components/atlas/AtlasMap";
 import type {
-  AtlasDreamsignModel,
-  AtlasPreviewModel,
-} from "../../tango/components/atlas/AtlasPreview";
+  AtlasDreamsignCard,
+  AtlasNodeCard,
+} from "../../tango/components/atlas/AtlasNodeReveal";
 import { artRef } from "../../tango/primitives/art";
 import { glyph } from "../../tango/primitives/glyph";
 import type { AtlasHudView, AtlasView } from "../../tango/screens/AtlasScreen";
@@ -258,63 +257,18 @@ export function buildAtlasMapEdges(
   return edges;
 }
 
-/** Resolves the hover-preview model for one node from quest content. */
-function buildPreviewModel(
-  node: DreamscapeNode,
-  geo: NodeGeometry,
-  questContent: QuestContent,
-  atlas: DreamAtlas,
-  isReachable: boolean,
-): AtlasPreviewModel {
-  const isBoss = geo.isBoss;
-  // An unreachable node presents the compact "unseen dream" card rather than
-  // leaking the dreamscape it was briefly revealed as.
-  const dreamscape =
-    isReachable && node.dreamscapeId !== null
-      ? (questContent.dreamscapes.find((d) => d.id === node.dreamscapeId) ?? null)
-      : null;
-  const guide =
-    dreamscape?.guideId != null
-      ? (questContent.guides.find((g) => g.id === dreamscape.guideId) ?? null)
-      : null;
-  const affiliation =
-    dreamscape?.affiliationId != null
-      ? (questContent.affiliations.find((a) => a.id === dreamscape.affiliationId) ??
-        null)
-      : null;
-  const bossIncarnation =
-    isBoss && atlas.bossIncarnationId != null
-      ? ((questContent.apollyonIncarnations ?? []).find(
-          (i) => i.id === atlas.bossIncarnationId,
-        ) ?? null)
-      : null;
+/** The compact "unseen dream" body shown for an unrevealed / unreachable node. */
+const UNSEEN_DREAM_BODY =
+  "This dreamscape is revealed only as you draw near. Travel onward to learn what waits here.";
+/** The body shown for the starting dreamscape (a revealed dreamscape with no guide). */
+const STARTER_BODY = "A quiet place where every dream quest begins.";
 
-  return {
-    anchorLeft: geo.left,
-    anchorTop: geo.top,
-    isUnrevealed: (node.state === "unrevealed" || !isReachable) && !isBoss,
-    isBoss,
-    bossSubtitle: bossIncarnation?.title ?? null,
-    bossDescription: bossIncarnation?.description ?? null,
-    dreamscapeName: dreamscape?.name ?? null,
-    sceneUrl: dreamscape !== null ? dreamscapeSceneUrl(dreamscape.id) : null,
-    guideName: guide?.name ?? null,
-    guidePortraitUrl: guide !== null ? guidePortraitUrl(guide.id) : null,
-    siteName: dreamscape !== null ? siteTypeName(dreamscape.signatureSite) : null,
-    siteIconClass:
-      dreamscape !== null ? siteTypeIcon(dreamscape.signatureSite) : null,
-    bonusText: guide?.homeSpecialty ?? null,
-    affiliationName: affiliation?.name ?? null,
-  };
-}
-
-/** Resolves the known-dreamsign card model for a node, or null when it has none. */
-function buildDreamsignModel(
+/** Resolves a node's pre-revealed known-dreamsign card, or null when it has none. */
+function buildDreamsignCard(
   node: DreamscapeNode,
-  geo: NodeGeometry,
   questContent: QuestContent,
   isReachable: boolean,
-): AtlasDreamsignModel | null {
+): AtlasDreamsignCard | null {
   // An unreachable node hides its known-dreamsign card along with the rest of
   // its revealed content.
   if (!isReachable || node.knownDreamsignId === null) {
@@ -328,11 +282,88 @@ function buildDreamsignModel(
   }
   return {
     name: dreamsign.name,
-    iconUrl:
-      dreamsign.imageName != null ? dreamsignIconUrl(dreamsign.imageName) : null,
+    art: dreamsign.imageName != null ? artRef.dreamsign(dreamsign.imageName) : null,
     rulesText: dreamsign.effectDescription,
-    anchorLeft: geo.left,
-    anchorTop: geo.top,
+  };
+}
+
+/**
+ * Resolves the InfoCard reveal content for one node — the mobile-cut card the
+ * atlas node reveals on press / hover.
+ *
+ * A revealed dreamscape FEATURES its resident Dream Guide, composited on top of
+ * the dreamscape scene, with the guide's name as the headline — the dreamscape's
+ * own name (decorative on mobile) is dropped. The boss superimposes Apollyon on
+ * Limbo the same way. A guideless revealed place (the starter) shows the scene
+ * alone. An unreachable / unrevealed node shows the compact "unseen dream" text
+ * card. A pre-revealed known dreamsign is carried as its own companion card. The
+ * labelled site / bonus / affiliation rows of the legacy desktop card are cut.
+ */
+function buildNodeCard(
+  node: DreamscapeNode,
+  geo: NodeGeometry,
+  questContent: QuestContent,
+  atlas: DreamAtlas,
+  isReachable: boolean,
+): AtlasNodeCard {
+  const dreamsign = buildDreamsignCard(node, questContent, isReachable);
+
+  if (geo.isBoss) {
+    const bossIncarnation =
+      atlas.bossIncarnationId != null
+        ? ((questContent.apollyonIncarnations ?? []).find(
+            (i) => i.id === atlas.bossIncarnationId,
+          ) ?? null)
+        : null;
+    return {
+      isUnrevealed: false,
+      isBoss: true,
+      sceneArt: artRef.dreamscapeScene(BOSS_DREAMSCAPE_ID),
+      figureArt: artRef.dreamGuide(BOSS_FIGURE_ID),
+      eyebrow: "Final Dream",
+      title: BOSS_DISPLAY.place,
+      body: bossIncarnation?.description ?? BOSS_DISPLAY.intro,
+      dreamsign,
+    };
+  }
+
+  // An unreachable node forgets whatever dreamscape it was revealed as, so it
+  // presents the compact "unseen dream" card rather than leaking it.
+  const dreamscape =
+    isReachable && node.dreamscapeId !== null
+      ? (questContent.dreamscapes.find((d) => d.id === node.dreamscapeId) ?? null)
+      : null;
+
+  if (node.state === "unrevealed" || !isReachable || dreamscape === null) {
+    return {
+      isUnrevealed: true,
+      isBoss: false,
+      sceneArt: null,
+      figureArt: null,
+      eyebrow: null,
+      title: "An Unseen Dream",
+      body: UNSEEN_DREAM_BODY,
+      dreamsign: null,
+    };
+  }
+
+  const guide =
+    dreamscape.guideId != null
+      ? (questContent.guides.find((g) => g.id === dreamscape.guideId) ?? null)
+      : null;
+
+  // With a resident guide, feature the guide composited on the dreamscape scene,
+  // their name as the headline. A guideless place (the starter) shows the scene
+  // alone.
+  return {
+    isUnrevealed: false,
+    isBoss: false,
+    sceneArt: artRef.dreamscapeScene(dreamscape.id),
+    figureArt: guide !== null ? artRef.dreamGuide(guide.id) : null,
+    eyebrow: null,
+    title: guide?.name ?? "",
+    body: guide?.homeSpecialty ?? STARTER_BODY,
+    dreamsign,
   };
 }
 
@@ -405,8 +436,7 @@ export function buildAtlasMapNodes(
         knownDreamsignRef,
         badgeScale: profile.badgeScale,
       },
-      preview: buildPreviewModel(node, geo, questContent, atlas, isReachable),
-      dreamsign: buildDreamsignModel(node, geo, questContent, isReachable),
+      card: buildNodeCard(node, geo, questContent, atlas, isReachable),
     });
   }
   return items;

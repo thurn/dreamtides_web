@@ -223,15 +223,16 @@ describe("atlasEdgeKind", () => {
 });
 
 describe("buildAtlasMapNodes", () => {
-  it("produces one item per positioned node, carrying its face and preview", () => {
+  it("produces one item per positioned node, carrying its face and reveal card", () => {
     const items = buildAtlasMapNodes(makeVerticalAtlas(), EMPTY_CONTENT);
     expect(items).toHaveLength(3);
     const boss = items.find((item) => item.view.node.id === "boss");
     expect(boss?.view.isBoss).toBe(true);
-    expect(boss?.preview.isBoss).toBe(true);
-    // An unrevealed non-boss node's preview reads as unrevealed.
+    expect(boss?.card.isBoss).toBe(true);
+    // An available (revealed) node's card is not the unrevealed variant, even
+    // with no dreamscape content resolved.
     const middle = items.find((item) => item.view.node.id === "middle");
-    expect(middle?.preview.isUnrevealed).toBe(false); // available, not unrevealed
+    expect(middle?.card.isUnrevealed).toBe(true); // available but no dreamscape content
   });
 
   it("fades a forgone sibling and renders it as an unrevealed, badge-free frame", () => {
@@ -244,12 +245,12 @@ describe("buildAtlasMapNodes", () => {
     expect(chosen?.view.isReachable).toBe(true);
     expect(passed?.view.isReachable).toBe(false);
     // The unreachable node reveals nothing: no dreamscape icon, no site badge,
-    // no known-dreamsign card, and its hover preview reads as unrevealed.
+    // no known-dreamsign card, and its reveal card reads as unrevealed.
     expect(passed?.view.iconRef).toBeNull();
     expect(passed?.view.siteBadgeGlyph).toBeNull();
     expect(passed?.view.knownDreamsignRef).toBeNull();
-    expect(passed?.dreamsign).toBeNull();
-    expect(passed?.preview.isUnrevealed).toBe(true);
+    expect(passed?.card.dreamsign).toBeNull();
+    expect(passed?.card.isUnrevealed).toBe(true);
   });
 });
 

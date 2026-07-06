@@ -13,6 +13,7 @@
 //   - object   — a centered framed portrait OR contained transparent object
 //   - portrait — a full-width contained rectangular image across the top, with
 //                the name, an optional epithet, and body below
+//   - scene    — a character figure composited on top of a scene banner
 //   - icon     — a glyph disc beside the title
 //   - tide     — a tide's own colored disc + alignment label
 //   - text     — an optional small lead glyph + title, with an optional epithet
@@ -160,7 +161,13 @@ export const SITE_DISC: React.CSSProperties = {
 };
 
 /** Which media treatment an InfoCard renders. */
-export type InfoCardVariant = "object" | "portrait" | "icon" | "tide" | "text";
+export type InfoCardVariant =
+  | "object"
+  | "portrait"
+  | "scene"
+  | "icon"
+  | "tide"
+  | "text";
 
 /**
  * The copy every InfoCard carries, shared across all media variants. The
@@ -211,6 +218,25 @@ export interface InfoCardPortraitProps extends InfoCardCommonProps {
    * Dreamcaller-select name/epithet pairing. Plain text; resolve before display.
    */
   subtitle?: string;
+}
+
+/**
+ * scene variant — a full-bleed scene banner across the top with a character
+ * figure composited on top of it (centered, standing on the banner floor), the
+ * title + body below. The scene is deemphasized behind the figure so the
+ * character reads as the subject. Both the scene `image` and the `figure` are
+ * required — the variant IS a character standing in a place.
+ */
+export interface InfoCardSceneProps extends InfoCardCommonProps {
+  variant: "scene";
+  /** The scene / background art (banner), as an {@link ArtRef}. Required. */
+  image: ArtRef;
+  /** The character figure composited on top of the scene, as an {@link ArtRef}. Required. */
+  figure: ArtRef;
+  /** How the scene is cropped. Default `"center"`. */
+  imageCrop?: ImageCrop;
+  /** Small mono/uppercase overline above the title. */
+  meta?: string;
 }
 
 /**
@@ -267,6 +293,7 @@ export interface InfoCardTextProps extends InfoCardCommonProps {
 export type InfoCardProps =
   | InfoCardObjectProps
   | InfoCardPortraitProps
+  | InfoCardSceneProps
   | InfoCardIconProps
   | InfoCardTideProps
   | InfoCardTextProps;
@@ -407,6 +434,91 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
           <div style={{ ...tEpithet, marginBottom: body ? 7 : 0 }}>{subtitle}</div>
         )}
         {body != null && <div style={{ ...tBody }}>{renderRichText(body)}</div>}
+      </div>
+    );
+  }
+
+  /* --- scene: a scene banner across the top with a character figure composited
+     on top (centered, standing on the banner floor). The scene is darkened and
+     scrimmed so the figure reads as the subject, then dissolves into the glass
+     fill; the title/body sit on the card's own material below. --- */
+  if (props.variant === "scene") {
+    const { image, figure, imageCrop = "center", meta } = props;
+    const Meta = meta ? (
+      <div style={{ ...tMeta, marginBottom: 7 }}>{meta}</div>
+    ) : null;
+    return (
+      <div style={{ ...shell }}>
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            height: 210,
+            overflow: "hidden",
+          }}
+        >
+          <img
+            src={resolveArtRef(image)}
+            alt=""
+            draggable={false}
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              objectPosition: resolveImageCrop(imageCrop),
+              userSelect: "none",
+              // Deemphasize the scene so the foreground figure reads as the subject.
+              filter: "brightness(0.6) saturate(0.92)",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              // A soft vignette darkens the scene toward the edges, and the
+              // bottom dissolves into the card's own translucent glass fill.
+              background: `radial-gradient(125% 92% at 50% 26%, rgba(10,6,18,0.12), rgba(10,6,18,0.58) 72%), linear-gradient(to bottom, rgba(34,26,49,0) 44%, rgba(34,26,49,0.72) 80%, ${INFO_CARD_GLASS_FILL} 100%)`,
+            }}
+          />
+          <img
+            src={resolveArtRef(figure)}
+            alt=""
+            draggable={false}
+            style={{
+              position: "absolute",
+              left: "50%",
+              bottom: 0,
+              transform: "translateX(-50%)",
+              height: "100%",
+              width: "auto",
+              maxWidth: "none",
+              objectFit: "contain",
+              objectPosition: "bottom",
+              userSelect: "none",
+              // Lift the figure off the scene, then fade its base into the glass.
+              filter:
+                "drop-shadow(0 10px 18px rgba(0,0,0,0.55)) drop-shadow(0 0 22px rgba(124,77,255,0.28))",
+              WebkitMaskImage:
+                "linear-gradient(180deg, #000 86%, transparent 99%)",
+              maskImage: "linear-gradient(180deg, #000 86%, transparent 99%)",
+            }}
+          />
+        </div>
+        <div
+          style={{
+            position: "relative",
+            marginTop: -16,
+            padding: "0 16px 16px",
+          }}
+        >
+          {Meta}
+          <div style={{ ...tHeadline, marginBottom: body ? 7 : 0 }}>
+            {titleContent}
+          </div>
+          {body != null && <div style={{ ...tBody }}>{renderRichText(body)}</div>}
+        </div>
       </div>
     );
   }

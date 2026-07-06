@@ -91,6 +91,7 @@ export function AtlasScreen({ view, onEnterNode, onViewDeck }: AtlasScreenProps)
         nodes={view.nodes}
         edges={view.edges}
         onEnterNode={onEnterNode}
+        stageRef={stageRef}
       />
 
       <QuestStatusBar

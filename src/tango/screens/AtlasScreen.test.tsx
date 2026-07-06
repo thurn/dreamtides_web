@@ -7,13 +7,22 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { LayerName } from "../../types/layer-name";
 import type { DreamscapeNode } from "../../types/quest";
 import type { AtlasMapNode } from "../components/atlas/AtlasMap";
-import type { AtlasPreviewModel } from "../components/atlas/AtlasPreview";
+import type { AtlasNodeCard } from "../components/atlas/AtlasNodeReveal";
 import { AtlasScreen, type AtlasView } from "./AtlasScreen";
 
-/** Stub matchMedia (jsdom lacks it; Pressable + useIsDesktop read it). */
-function stubViewport(desktop: boolean): void {
+/**
+ * Stub matchMedia (jsdom lacks it; Pressable + useIsDesktop + the InfoCard
+ * press engine read it). `fine` reports a fine pointer with hover (mouse /
+ * desktop), so a plain `.click()` on a node selects it (the touch path selects
+ * on pointer-up instead).
+ */
+function stubViewport(desktop: boolean, fine = true): void {
   window.matchMedia = ((query: string) => ({
-    matches: query.includes("min-width") ? desktop : false,
+    matches: query.includes("min-width")
+      ? desktop
+      : query.includes("hover")
+        ? fine
+        : false,
     media: query,
     onchange: null,
     addEventListener: () => undefined,
@@ -67,22 +76,16 @@ function makeNode(
   };
 }
 
-function emptyPreview(): AtlasPreviewModel {
+function emptyCard(): AtlasNodeCard {
   return {
-    anchorLeft: 0,
-    anchorTop: 0,
     isUnrevealed: true,
     isBoss: false,
-    bossSubtitle: null,
-    bossDescription: null,
-    dreamscapeName: null,
-    sceneUrl: null,
-    guideName: null,
-    guidePortraitUrl: null,
-    siteName: null,
-    siteIconClass: null,
-    bonusText: null,
-    affiliationName: null,
+    sceneArt: null,
+    figureArt: null,
+    eyebrow: null,
+    title: "An Unseen Dream",
+    body: "An unseen dream.",
+    dreamsign: null,
   };
 }
 
@@ -104,8 +107,11 @@ function nodeItem(
       siteBadgeGlyph: null,
       knownDreamsignRef: null,
     },
-    preview: { ...emptyPreview(), isBoss: extra.isBoss ?? false },
-    dreamsign: null,
+    card: {
+      ...emptyCard(),
+      isUnrevealed: !(extra.isBoss ?? false),
+      isBoss: extra.isBoss ?? false,
+    },
   };
 }
 

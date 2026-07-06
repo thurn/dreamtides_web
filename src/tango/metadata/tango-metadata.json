@@ -1250,12 +1250,13 @@
   "InfoCard": [
     {
       "name": "variant",
-      "tsType": "\"object\" | \"text\" | \"icon\" | \"portrait\" | \"tide\"",
+      "tsType": "\"object\" | \"text\" | \"icon\" | \"portrait\" | \"scene\" | \"tide\"",
       "unionMembers": [
         "object",
         "text",
         "icon",
         "portrait",
+        "scene",
         "tide"
       ],
       "required": false,
@@ -1268,7 +1269,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "The media the card is built around, as an {@link ArtRef}. Required."
+      "description": "The media the card is built around, as an {@link ArtRef}. Required.\nThe scene / background art (banner), as an {@link ArtRef}. Required."
     },
     {
       "name": "imageCrop",
@@ -1279,7 +1280,7 @@
       ],
       "required": false,
       "defaultValue": null,
-      "description": "How the media is cropped. Default `\"top\"`."
+      "description": "How the media is cropped. Default `\"top\"`.\nHow the scene is cropped. Default `\"center\"`."
     },
     {
       "name": "imageFilter",
@@ -1338,6 +1339,22 @@
       "description": "An epithet under the name — a smaller serif line in white, mirroring the\nDreamcaller-select name/epithet pairing. Plain text; resolve before display.\nAn epithet under the name — a smaller serif subtitle in white, mirroring\nthe Dreamcaller-select name/epithet pairing. Plain text; resolve before\ndisplay."
     },
     {
+      "name": "figure",
+      "tsType": "ArtRef",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The character figure composited on top of the scene, as an {@link ArtRef}. Required."
+    },
+    {
+      "name": "meta",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Small mono/uppercase overline above the title."
+    },
+    {
       "name": "glyph",
       "tsType": "Glyph",
       "unionMembers": [],
@@ -1358,14 +1375,6 @@
       "required": true,
       "defaultValue": null,
       "description": "Which of the five tides. Fixes the disc color/mark and the alignment label."
-    },
-    {
-      "name": "meta",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Small mono/uppercase overline above the title."
     },
     {
       "name": "leadGlyph",

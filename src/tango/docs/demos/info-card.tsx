@@ -83,6 +83,17 @@ import { GLYPHS } from "src/tango/primitives/glyph";
 />`,
     },
     {
+      label: "Scene variant",
+      note: "A character `figure` composited on top of a scene `image` (both `ArtRef`s), centered and standing on the banner floor, with the scene deemphasized behind them — a character in a place. Used for the atlas node reveals (a Dream Guide over their dreamscape, Apollyon over Limbo).",
+      code: `<InfoCard
+  variant="scene"
+  image={artRef.dreamscapeScene("frostforge")}
+  figure={artRef.dreamGuide("durgan_forgehammer")}
+  title="Durgan Forgehammer"
+  body={richText.plain("Durgan can transfigure any card in your deck.")}
+/>`,
+    },
+    {
       label: "Icon variant",
       note: "A `glyph` on a disc — used for site / place descriptions.",
       code: `<InfoCard
@@ -132,6 +143,9 @@ import { GLYPHS } from "src/tango/primitives/glyph";
       // `glyph` fills the icon-disc variant.
       image: artRef.dreamcaller("0025"),
       frame: true,
+      // Seeds the scene variant's foreground figure so switching `variant` to
+      // scene composites a real character over the banner rather than nothing.
+      figure: artRef.dreamGuide("apollyon"),
       glyph: glyph("bxf bx-store-alt-2"),
       // Seeds the tide-disc variant so switching `variant` to tide renders a
       // real colored disc + alignment label rather than an empty card.

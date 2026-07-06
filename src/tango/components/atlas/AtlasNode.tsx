@@ -1,4 +1,9 @@
-import type { CSSProperties, ReactNode } from "react";
+import type {
+  CSSProperties,
+  PointerEventHandler,
+  ReactNode,
+  Ref,
+} from "react";
 import type { DreamscapeNode } from "../../../types/quest";
 import { BOSS_DISPLAY, ROUND_FRAME_URL } from "./atlas-display";
 import { type Glyph } from "../../primitives/glyph";
@@ -40,10 +45,34 @@ export interface AtlasNodeView {
 
 interface AtlasNodeProps {
   view: AtlasNodeView;
+  /** Draws the node in its revealed/hover glow + scale-up state. */
   hovered: boolean;
-  onEnter: (nodeId: string) => void;
-  onLeave: () => void;
-  onClick: (nodeId: string) => void;
+  /**
+   * Ref to the node's root element, so a caller can anchor an input-adaptive
+   * press-reveal (InfoCard) to it and measure it against the stage.
+   */
+  rootRef?: Ref<HTMLDivElement>;
+  /**
+   * Mouse/focus reveal driver: fired with the node id when the pointer or
+   * keyboard focus enters the node. Optional — a caller driving the reveal
+   * through the pointer handlers below omits it.
+   */
+  onEnter?: (nodeId: string) => void;
+  /** Paired with {@link onEnter}: fired on mouse leave / blur. */
+  onLeave?: () => void;
+  /** Activation: fired with the node id on click and on Enter / Space. */
+  onClick?: (nodeId: string) => void;
+  /**
+   * Input-adaptive press-reveal handlers, wired to the node's root so the
+   * InfoCard engine (`usePressReveal`) can reveal on touch press-down and on
+   * fine-pointer hover. A caller either wires these OR the {@link onEnter} /
+   * {@link onLeave} mouse pair, never both.
+   */
+  onPointerEnter?: PointerEventHandler<HTMLDivElement>;
+  onPointerDown?: PointerEventHandler<HTMLDivElement>;
+  onPointerUp?: PointerEventHandler<HTMLDivElement>;
+  onPointerLeave?: PointerEventHandler<HTMLDivElement>;
+  onPointerCancel?: PointerEventHandler<HTMLDivElement>;
 }
 
 /**
@@ -58,9 +87,15 @@ interface AtlasNodeProps {
 export function AtlasNode({
   view,
   hovered,
+  rootRef,
   onEnter,
   onLeave,
   onClick,
+  onPointerEnter,
+  onPointerDown,
+  onPointerUp,
+  onPointerLeave,
+  onPointerCancel,
 }: AtlasNodeProps) {
   const { node, isStarter, isBoss } = view;
   const isAvailable = node.state === "available";
@@ -108,6 +143,7 @@ export function AtlasNode({
 
   return (
     <div
+      ref={rootRef}
       className={className}
       style={
         {
@@ -115,6 +151,11 @@ export function AtlasNode({
           top: view.top,
           width: view.size,
           height: view.size,
+          // A press-hold to read a node must not be hijacked by the browser as a
+          // scroll / pan gesture, which would cancel the pointer and drop the
+          // reveal.
+          touchAction: "none",
+          WebkitTapHighlightColor: "transparent",
           // Drives the badge sizing in atlas.css — every badge is a fraction of
           // this so they scale together with the node's diameter.
           "--atlas-node-size": `${String(view.size)}px`,
@@ -130,20 +171,29 @@ export function AtlasNode({
       data-node-starting={isStarter ? "true" : undefined}
       data-node-known-dreamsign={view.knownDreamsignRef !== null ? "true" : undefined}
       onMouseEnter={() => {
-        onEnter(node.id);
+        onEnter?.(node.id);
       }}
-      onMouseLeave={onLeave}
+      onMouseLeave={() => {
+        onLeave?.();
+      }}
       onFocus={() => {
-        onEnter(node.id);
+        onEnter?.(node.id);
       }}
-      onBlur={onLeave}
+      onBlur={() => {
+        onLeave?.();
+      }}
+      onPointerEnter={onPointerEnter}
+      onPointerDown={onPointerDown}
+      onPointerUp={onPointerUp}
+      onPointerLeave={onPointerLeave}
+      onPointerCancel={onPointerCancel}
       onClick={() => {
-        onClick(node.id);
+        onClick?.(node.id);
       }}
       onKeyDown={(event) => {
         if (isAvailable && (event.key === "Enter" || event.key === " ")) {
           event.preventDefault();
-          onClick(node.id);
+          onClick?.(node.id);
         }
       }}
     >

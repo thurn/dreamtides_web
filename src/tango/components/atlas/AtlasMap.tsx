@@ -1,9 +1,11 @@
 // AtlasMap — the Dream Atlas map surface: the run graph of nodes and edges
 // fitted into a fixed design stage that scales to fit its container
-// (letterboxed). It owns the `.dream-atlas` scope the node / edge / preview
-// CSS is written under, the uniform scale-to-fit, and the hover state that
-// reveals a node's detail card. Callers (the atlas screen) compose it with the
-// atmosphere and HUD around it and hand it the placed view models.
+// (letterboxed). It owns the `.dream-atlas` scope the node / edge CSS is written
+// under and the uniform scale-to-fit. Each node reveals its detail through the
+// shared InfoCard press engine (see {@link AtlasNodeReveal}) — hover on desktop,
+// press-down on touch. Callers (the atlas screen) compose it with the atmosphere
+// and HUD around it and hand it the placed view models plus the stage root the
+// reveals anchor against.
 //
 // A component, not a screen: the `.dream-atlas` scope and the `.node` / `.edge`
 // class names the child components emit are class-based styling, which belongs
@@ -11,24 +13,20 @@
 // layout; this surface only scales and reveals.
 
 import { useEffect, useState } from "react";
-import { AtlasNode, type AtlasNodeView } from "./AtlasNode";
+import { type AtlasNodeView } from "./AtlasNode";
 import { AtlasEdge, type AtlasEdgeKind } from "./AtlasEdge";
 import {
-  AtlasPreview,
-  AtlasDreamsignCard,
-  type AtlasPreviewModel,
-  type AtlasDreamsignModel,
-} from "./AtlasPreview";
+  AtlasNodeReveal,
+  type AtlasNodeCard,
+} from "./AtlasNodeReveal";
 import "./atlas.css";
 
-/** One placed node: its face view plus the resolved hover cards. */
+/** One placed node: its face view plus the resolved InfoCard reveal content. */
 export interface AtlasMapNode {
   /** Presentational data for the {@link AtlasNode} face. */
   view: AtlasNodeView;
-  /** The floating detail card shown while this node is hovered. */
-  preview: AtlasPreviewModel;
-  /** The companion known-dreamsign card, or null when the node carries none. */
-  dreamsign: AtlasDreamsignModel | null;
+  /** The InfoCard reveal content shown while this node is pressed / hovered. */
+  card: AtlasNodeCard;
 }
 
 /** One connector between two nodes, in stage coordinates. */
@@ -51,11 +49,13 @@ interface AtlasMapProps {
   edges: AtlasMapEdge[];
   /** Enter a node's dreamscape; fired on a tap / click of an available node. */
   onEnterNode: (nodeId: string) => void;
+  /** Screen root the node reveals anchor + clamp against (viewport coordinates). */
+  stageRef: React.RefObject<HTMLElement | null>;
 }
 
 /**
- * The scaled Dream Atlas stage: draws the edges beneath the nodes, reveals the
- * hovered node's {@link AtlasPreview}, and uniformly scales the fixed design
+ * The scaled Dream Atlas stage: draws the edges beneath the nodes, reveals each
+ * node's detail InfoCard on press / hover, and uniformly scales the fixed design
  * canvas to fit the viewport.
  */
 export function AtlasMap({
@@ -64,8 +64,8 @@ export function AtlasMap({
   nodes,
   edges,
   onEnterNode,
+  stageRef,
 }: AtlasMapProps) {
-  const [hover, setHover] = useState<string | null>(null);
   const [scale, setScale] = useState(1);
 
   useEffect(() => {
@@ -81,12 +81,11 @@ export function AtlasMap({
     };
   }, [stageWidth, stageHeight]);
 
-  const hovered = hover !== null
-    ? (nodes.find((item) => item.view.node.id === hover) ?? null)
-    : null;
-
   return (
-    <div className="dream-atlas" style={{ position: "absolute", inset: 0, zIndex: 2 }}>
+    <div
+      className="dream-atlas"
+      style={{ position: "absolute", inset: 0, zIndex: 2 }}
+    >
       <div
         style={{
           position: "absolute",
@@ -118,35 +117,14 @@ export function AtlasMap({
 
         <div className="nodes">
           {nodes.map((item) => (
-            <AtlasNode
+            <AtlasNodeReveal
               key={item.view.node.id}
-              view={item.view}
-              hovered={hover === item.view.node.id}
-              onEnter={setHover}
-              onLeave={() => {
-                setHover(null);
-              }}
-              onClick={onEnterNode}
+              item={item}
+              stageRef={stageRef}
+              onEnterNode={onEnterNode}
             />
           ))}
         </div>
-
-        {hovered && (
-          <AtlasPreview
-            model={hovered.preview}
-            hasDreamsign={hovered.dreamsign !== null}
-            stageWidth={stageWidth}
-            stageHeight={stageHeight}
-          />
-        )}
-        {hovered?.dreamsign != null && (
-          <AtlasDreamsignCard
-            model={hovered.dreamsign}
-            previewIsMini={hovered.preview.isUnrevealed}
-            stageWidth={stageWidth}
-            stageHeight={stageHeight}
-          />
-        )}
       </div>
     </div>
   );

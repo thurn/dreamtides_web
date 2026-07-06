@@ -42,6 +42,12 @@ export type ArtRef =
       /** A dreamscape's rectangular scene art, keyed by its dreamscape id. */
       readonly kind: "dreamscape-scene";
       readonly dreamscapeId: string;
+    }
+  | {
+      /** A Dream Guide's transparent full-body character render, keyed by its
+       * guide id. */
+      readonly kind: "dream-guide";
+      readonly guideId: string;
     };
 
 /** Resolve an {@link ArtRef} to a hosted art URL through the asset pipeline. */
@@ -57,6 +63,8 @@ export function resolveArtRef(ref: ArtRef): string {
       return assetUrl(`/dreamscape-icons/${ref.dreamscapeId}.png`);
     case "dreamscape-scene":
       return assetUrl(`/dreamscapes/${ref.dreamscapeId}.png`);
+    case "dream-guide":
+      return assetUrl(`/dream-guides/${ref.guideId}.png`);
   }
 }
 
@@ -78,5 +86,9 @@ export const artRef = {
   dreamscapeScene: (dreamscapeId: string): ArtRef => ({
     kind: "dreamscape-scene",
     dreamscapeId,
+  }),
+  dreamGuide: (guideId: string): ArtRef => ({
+    kind: "dream-guide",
+    guideId,
   }),
 } as const;
