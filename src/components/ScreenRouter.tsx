@@ -60,9 +60,11 @@ function screenKey(screen: Screen): string {
 export function ScreenRouter({
   runtimeConfig,
   onJourneyExplanationChange,
+  onViewDeck,
 }: {
   runtimeConfig: RuntimeConfig;
   onJourneyExplanationChange?: (explanation: JourneyExplanation | null) => void;
+  onViewDeck?: () => void;
 }) {
   const { state } = useQuest();
   const { screen } = state;
@@ -71,7 +73,9 @@ export function ScreenRouter({
   // default); a screen not yet migrated resolves to null and falls through to
   // the legacy switch below, so the app stays fully navigable during migration.
   const tangoScreen =
-    runtimeConfig.uiVariant === "tango" ? tangoScreenFor(screen) : null;
+    runtimeConfig.uiVariant === "tango"
+      ? tangoScreenFor(screen, { onViewDeck })
+      : null;
 
   // Record which UI served each screen, one entry per navigation, so a
   // production run's screen-by-screen variant history is reconstructable from

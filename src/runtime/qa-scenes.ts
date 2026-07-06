@@ -112,6 +112,30 @@ const DREAMSCAPE_SCENE: QaScene = {
 };
 
 /**
+ * The scene id that opens the deck-viewer overlay. The overlay is App-local
+ * state (not a `Screen`), so parking on it takes two steps: this scene builds
+ * the underlying dreamscape state (giving the run a full deck to show), and
+ * `QuestApp` opens the overlay when it sees this scene id. Exported so App and
+ * this registry name it from one place rather than duplicating the string.
+ */
+export const DECK_VIEWER_SCENE_ID = "deckviewer";
+
+/**
+ * The deck-viewer overlay, parked on the starter dreamscape so the run carries
+ * a full deck. Otherwise reached only by tapping the HUD deck sprite; parking
+ * here lets the mobile deck grid and its press-and-hold zoom be QA'd (and
+ * device-framed) from a URL.
+ */
+const DECK_VIEWER_SCENE: QaScene = {
+  id: DECK_VIEWER_SCENE_ID,
+  label: "Deck Viewer",
+  description:
+    "The deck viewer overlay over the starter dreamscape, opened on boot so " +
+    "the card grid and press-and-hold zoom can be QA'd from a URL.",
+  build: dreamscapeSceneState(3),
+};
+
+/**
  * Builds a scene parked directly on a site screen of `siteType`. Most site
  * screens are otherwise reachable only after winning the keeper battle and
  * choosing the dreamscape whose resident guide tends that site type, so this
@@ -239,6 +263,7 @@ export const QA_SCENES: readonly QaScene[] = [
   DREAMCALLER_SELECT_SCENE,
   ATLAS_SCENE,
   DREAMSCAPE_SCENE,
+  DECK_VIEWER_SCENE,
   siteScene("transfiguration", "Transfiguration", "Transfiguration"),
   siteScene(
     "transfiguration-enhanced",

@@ -98,6 +98,8 @@ export interface QuestStatusBarProps {
   dreamsigns?: QsbDreamsign[];
   /** Deck size (used in the deck button's aria-label). */
   deck?: number | string;
+  /** Open the deck viewer — fired on a tap / click of the deck sprite. */
+  onViewDeck?: () => void;
   dreamcaller?: QsbDreamcaller;
   /** HUD size. `compact` (default) is the mobile / touch size; `grand` is the
    * larger desktop size the dreamscape screen picks above the wide-viewport
@@ -593,6 +595,7 @@ function QsbEssence({
 function QsbHudBar({
   essence = 0,
   deck = 0,
+  onViewDeck,
   dreamcaller,
   stageRef,
   scale = 1,
@@ -600,6 +603,7 @@ function QsbHudBar({
 }: {
   essence?: number;
   deck?: number | string;
+  onViewDeck?: () => void;
   dreamcaller?: QsbDreamcaller;
   stageRef: React.RefObject<HTMLElement | null>;
   scale?: number;
@@ -625,6 +629,7 @@ function QsbHudBar({
         type="button"
         className="qsbDeck"
         aria-label={`View deck — ${String(deck)} cards`}
+        onClick={onViewDeck}
         style={{
           height: Math.round(66 * scale),
           flex: "none",
@@ -665,6 +670,7 @@ export function QuestStatusBar({
   essence,
   dreamsigns = [],
   deck = 0,
+  onViewDeck,
   dreamcaller,
   size = "compact",
 }: QuestStatusBarProps): ReactElement {
@@ -697,6 +703,7 @@ export function QuestStatusBar({
         <QsbHudBar
           essence={essence}
           deck={deck}
+          onViewDeck={onViewDeck}
           dreamcaller={dreamcaller}
           stageRef={stageRef}
           scale={scale}

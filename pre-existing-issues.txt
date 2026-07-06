@@ -145,3 +145,14 @@ Tango mobile dreamscape redesign — follow-ups / known items
    nothing is blocked — but the corner reads cluttered in a shared room.
    Consider relocating the presence pill or folding connection state into the
    Tango chrome.
+
+3. React "mixing shorthand and non-shorthand style properties" dev warnings.
+   Two long-standing React dev-only warnings surface on the Tango dreamscape
+   (observed while QAing the deck viewer, but unrelated to it):
+   - `QsbHudBar` (`src/tango/components/hud/QuestStatusBar.tsx`) sets both the
+     `padding` shorthand and `paddingBottom` on the same element, so React warns
+     when it updates `padding`.
+   - Card-number / resource rendering sets the `font` shorthand alongside
+     `fontVariantNumeric`, drawing the same warning for `font`.
+   Both are cosmetic (dev-mode only, no runtime effect). Fix by splitting the
+   shorthand into longhand properties on the offending elements.

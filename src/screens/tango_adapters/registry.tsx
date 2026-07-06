@@ -15,16 +15,30 @@ import { QuestStartScreenAdapter } from "./QuestStartScreenAdapter";
 import { DreamscapeScreenAdapter } from "./DreamscapeScreenAdapter";
 
 /**
+ * App-level actions a Tango screen may trigger that live outside quest state —
+ * currently opening the deck-viewer overlay, which `QuestApp` owns. Threaded
+ * from `ScreenRouter` so an in-screen HUD control (the dreamscape deck sprite)
+ * can raise the same overlay the quest menu does.
+ */
+export interface TangoScreenHandlers {
+  /** Open the deck-viewer overlay. */
+  onViewDeck?: () => void;
+}
+
+/**
  * The Tango implementation of a top-level `Screen`, or null when none exists yet
  * (the caller then renders the legacy screen). Only screens listed here are
  * served by the Tango UI; every other screen falls back to legacy.
  */
-export function tangoScreenFor(screen: Screen): ReactNode | null {
+export function tangoScreenFor(
+  screen: Screen,
+  handlers: TangoScreenHandlers = {},
+): ReactNode | null {
   switch (screen.type) {
     case "questStart":
       return <QuestStartScreenAdapter />;
     case "dreamscape":
-      return <DreamscapeScreenAdapter />;
+      return <DreamscapeScreenAdapter onViewDeck={handlers.onViewDeck} />;
     default:
       return null;
   }

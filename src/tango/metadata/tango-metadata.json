@@ -1832,6 +1832,14 @@
       "description": "Deck size (used in the deck button's aria-label)."
     },
     {
+      "name": "onViewDeck",
+      "tsType": "(() => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Open the deck viewer — fired on a tap / click of the deck sprite."
+    },
+    {
       "name": "dreamcaller",
       "tsType": "QsbDreamcaller",
       "unionMembers": [],

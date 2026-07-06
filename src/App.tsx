@@ -26,6 +26,8 @@ import { MultiplayerBattleProvider } from "./state/multiplayer-battle-context";
 import { ScreenRouter } from "./components/ScreenRouter";
 import { HUD } from "./components/HUD";
 import { DeckViewer } from "./components/DeckViewer";
+import { MobileDeckViewerAdapter } from "./screens/tango_adapters/MobileDeckViewerAdapter";
+import { useIsDesktop } from "./tango/screens/use-is-desktop";
 import { PoolViewer } from "./components/PoolViewer";
 import { StartingDeckModal } from "./components/StartingDeckModal";
 import { DreamscapeQuestMenu } from "./components/DreamscapeQuestMenu";
@@ -38,7 +40,7 @@ import { STARTER_CARD_NUMBERS } from "./data/starter-cards";
 import { getSavedQuest } from "./state/saved-quests";
 import { logEvent } from "./logging";
 import type { RuntimeConfig } from "./runtime/runtime-config";
-import { findQaScene } from "./runtime/qa-scenes";
+import { DECK_VIEWER_SCENE_ID, findQaScene } from "./runtime/qa-scenes";
 import { useQuestUrlSync } from "./runtime/use-quest-url-sync";
 import type { QuestState } from "./types/quest";
 import {
@@ -80,6 +82,7 @@ export function QuestApp({
     state.screen.type !== "questStart"
     && !isBattleSiteHudHidden(state)
     && !dreamscapeUsesTango;
+  const isDesktopViewport = useIsDesktop();
   const [deckViewerOpen, setDeckViewerOpen] = useState(false);
   const [poolViewerOpen, setPoolViewerOpen] = useState(false);
   const [glossaryOpen, setGlossaryOpen] = useState(false);
@@ -92,6 +95,7 @@ export function QuestApp({
   const previousScreenTypeRef = useRef(state.screen.type);
   const startInBattleFiredRef = useRef(false);
   const gotoSceneFiredRef = useRef(false);
+  const openDeckFiredRef = useRef(false);
   const loadQuestFiredRef = useRef(false);
   const loadQuestName = runtimeConfig.loadQuestName ?? null;
   // `?loadQuest=<name>` boot flow: 'pending' holds a loading screen until the
@@ -140,6 +144,22 @@ export function QuestApp({
     gotoSceneFiredRef.current = true;
     mutations.bootstrapQaScene(gotoScene);
   }, [runtimeConfig.gotoScene, state.dreamcaller, mutations]);
+
+  // `?goto=deckviewer`: the deck-viewer overlay is App-local state, not a
+  // `Screen`, so its QA scene parks on the dreamscape (via `bootstrapQaScene`
+  // above, giving the run a deck) and this effect opens the overlay once the
+  // dreamcaller exists. Fires once per mount.
+  useEffect(() => {
+    if (
+      runtimeConfig.gotoScene !== DECK_VIEWER_SCENE_ID ||
+      openDeckFiredRef.current ||
+      state.dreamcaller === null
+    ) {
+      return;
+    }
+    openDeckFiredRef.current = true;
+    setDeckViewerOpen(true);
+  }, [runtimeConfig.gotoScene, state.dreamcaller]);
 
   // `?loadQuest=<name>`: fetch the named snapshot from the dev server and
   // replace the room's quest state with it, then render the loaded run. Once
@@ -442,6 +462,7 @@ export function QuestApp({
         <ScreenRouter
           runtimeConfig={runtimeConfig}
           onJourneyExplanationChange={setJourneyExplanation}
+          onViewDeck={handleOpenDeckViewer}
         />
         {dreamscapeUsesTango && state.dreamcaller !== null && (
           <ErrorBoundary scope="overlay:dreamscape-menu">
@@ -453,6 +474,7 @@ export function QuestApp({
               onOpenQuestEditor={handleOpenQuestEditor}
               hasDraftData={hasDraftData}
               onLoadQuestState={mutations.loadQuestState}
+              elevated={deckViewerOpen && !isDesktopViewport}
             />
           </ErrorBoundary>
         )}
@@ -482,11 +504,18 @@ export function QuestApp({
           from the fallback.
         */}
         <ErrorBoundary scope="overlay:deck-viewer" onClose={handleCloseDeckViewer}>
-          <DeckViewer
-            isOpen={deckViewerOpen}
-            onClose={handleCloseDeckViewer}
-            cardDatabase={cardDatabase}
-          />
+          {isDesktopViewport ? (
+            <DeckViewer
+              isOpen={deckViewerOpen}
+              onClose={handleCloseDeckViewer}
+              cardDatabase={cardDatabase}
+            />
+          ) : (
+            <MobileDeckViewerAdapter
+              isOpen={deckViewerOpen}
+              onClose={handleCloseDeckViewer}
+            />
+          )}
         </ErrorBoundary>
         <ErrorBoundary scope="overlay:pool-viewer" onClose={handleClosePoolViewer}>
           <PoolViewer

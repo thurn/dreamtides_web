@@ -297,10 +297,27 @@ beforeEach(() => {
       IS_REACT_ACT_ENVIRONMENT?: boolean;
     }
   ).IS_REACT_ACT_ENVIRONMENT = true;
+  // These specs exercise the legacy desktop deck-viewer overlay (mocked as
+  // `deckViewerMock`); report a desktop viewport so `useIsDesktop` selects it
+  // rather than the narrow-viewport `MobileDeckViewerAdapter`.
+  vi.stubGlobal(
+    "matchMedia",
+    vi.fn((query: string) => ({
+      matches: query.includes("min-width"),
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })),
+  );
 });
 
 afterEach(() => {
   document.body.innerHTML = "";
+  vi.unstubAllGlobals();
 });
 
 describe("App", () => {

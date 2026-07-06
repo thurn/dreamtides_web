@@ -53,6 +53,8 @@ export interface DreamscapeScreenProps {
   view: DreamscapeView;
   /** Enter a site; fired on a tap / click of an interactive node only. */
   onSelectSite: (siteId: string) => void;
+  /** Open the deck viewer; fired from the HUD deck sprite. */
+  onViewDeck?: () => void;
 }
 
 /**
@@ -60,7 +62,11 @@ export interface DreamscapeScreenProps {
  * the seeded scatter of {@link SiteNode}s over it, drifting {@link Motes}, and
  * the persistent {@link QuestStatusBar} docked to the bottom.
  */
-export function DreamscapeScreen({ view, onSelectSite }: DreamscapeScreenProps) {
+export function DreamscapeScreen({
+  view,
+  onSelectSite,
+  onViewDeck,
+}: DreamscapeScreenProps) {
   // The stage the site reveals and the QuestStatusBar popovers portal into, so
   // their placement and on-screen clamp use stage coordinates.
   const stageRef = useRef<HTMLDivElement>(null);
@@ -119,6 +125,7 @@ export function DreamscapeScreen({ view, onSelectSite }: DreamscapeScreenProps) 
         stageRef={stageRef}
         essence={view.hud.essence}
         deck={view.hud.deck}
+        onViewDeck={onViewDeck}
         dreamcaller={view.hud.dreamcaller}
         dreamsigns={view.hud.dreamsigns}
         size={isDesktop ? "grand" : "compact"}

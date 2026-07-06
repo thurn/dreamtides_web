@@ -19,7 +19,11 @@ import {
  * view-model (seeded scatter + bottom-HUD data), enters a site on select, and
  * logs the presented overview once per dreamscape for reconstruction.
  */
-export function DreamscapeScreenAdapter() {
+export function DreamscapeScreenAdapter({
+  onViewDeck,
+}: {
+  onViewDeck?: () => void;
+}) {
   const { state, mutations } = useQuest();
   const { currentDreamscape, completionLevel } = state;
   const node =
@@ -84,5 +88,11 @@ export function DreamscapeScreenAdapter() {
     return null;
   }
 
-  return <DreamscapeScreen view={view} onSelectSite={handleSelectSite} />;
+  return (
+    <DreamscapeScreen
+      view={view}
+      onSelectSite={handleSelectSite}
+      onViewDeck={onViewDeck}
+    />
+  );
 }

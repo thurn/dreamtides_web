@@ -39,6 +39,12 @@ interface DreamscapeQuestMenuProps {
    * because only the live multiplayer provider supplies it (matching the HUD).
    */
   onLoadQuestState?: (state: QuestState, source: string) => void;
+  /**
+   * Lifts the menu above a full-screen overlay so it stays reachable from on
+   * top of it — set while the mobile deck viewer is open, which otherwise
+   * paints over this corner chrome.
+   */
+  elevated?: boolean;
 }
 
 type MenuView = "root" | "load";
@@ -93,6 +99,7 @@ export function DreamscapeQuestMenu({
   onOpenQuestEditor,
   hasDraftData,
   onLoadQuestState,
+  elevated = false,
 }: DreamscapeQuestMenuProps) {
   const { state } = useQuest();
   const isDesktop = useIsDesktop();
@@ -235,7 +242,9 @@ export function DreamscapeQuestMenu({
         position: "fixed",
         top: `max(env(safe-area-inset-top), ${String(menuEdgeInset)}px)`,
         left: `max(env(safe-area-inset-left), ${String(menuEdgeInset)}px)`,
-        zIndex: 60,
+        // Above the deck-viewer overlay (z 60) when it is open, so the menu stays
+        // reachable from on top of it; the default corner chrome level otherwise.
+        zIndex: elevated ? 65 : 60,
       }}
     >
       <Pressable

@@ -25,14 +25,29 @@ back and finish the promote/clean-up cycle after Discord (step 4 below).
 ## 2. Screenshot the change on devices
 
 Use the [device-screenshots](../device-screenshots/SKILL.md) skill to render
-the change on the relevant targets. Serve the app from the **worktree** on a
-non-default port and point the tool at it (`--url`/`--start`, never port 5173).
+the change inside **device images** — the phone body/bezel frame, via
+`--frame`, not a bare browser viewport. Serve the app from the **worktree** on
+a non-default port and point the tool at it (`--url`/`--start`, never port
+5173).
 
-- Pick targets that matter for the change: a phone (e.g. `iphone-16`) plus a
-  desktop viewport for most UI work; add more only when the change behaves
-  differently across form factors.
+- **A mobile change is captured on all six phone targets, framed.** Pass every
+  phone id with `--frame` in one run:
+
+  ```bash
+  node scripts/device-screenshots.mjs --frame \
+    -d iphone-16 -d iphone-se-3 -d galaxy-s25-ultra \
+    -d galaxy-a16-5g -d razr-plus-2025 -d galaxy-z-flip7 \
+    --scene <scene> --url http://localhost:<port> -o "$WORKTREE/screenshots"
+  ```
+
+  Six framed phones is the deliverable for a mobile change — one phone is not
+  enough, and an unframed viewport is not a device image. Add a desktop
+  viewport as well when the change also alters the desktop layout.
 - Jump straight to the affected screen with `--scene`/`--route`/`--query` so
-  the capture shows the change, not the landing page.
+  the capture shows the change, not the landing page. If the change is an
+  overlay or state only reachable by interaction, add a `?goto=` QA scene for
+  it (`src/runtime/qa-scenes.ts`) rather than a one-off URL flag — the tool
+  loads a URL and cannot click.
 - Write captures somewhere stable under the worktree (e.g.
   `$WORKTREE/screenshots/`) so they survive until Discord and are removed with
   the worktree on clean-up.

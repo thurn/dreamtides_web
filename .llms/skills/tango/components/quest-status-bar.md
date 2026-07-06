@@ -16,6 +16,7 @@ The persistent, transparent bottom HUD for quest screens. The essence total, dec
 | `essence` | `number` | no | — | Essence total shown in the HUD. |
 | `dreamsigns` | `QsbDreamsign[]` | no | `[]` | The dreamsigns to dock (a small set inline; more collapse to a stack + viewer). |
 | `deck` | `string \| number` | no | `0` | Deck size (used in the deck button's aria-label). |
+| `onViewDeck` | `(() => void)` | no | — | Open the deck viewer — fired on a tap / click of the deck sprite. |
 | `dreamcaller` | `QsbDreamcaller` | no | — |  |
 | `size` | `"compact" \| "grand"` | no | `compact` | HUD size. `compact` (default) is the mobile / touch size; `grand` is the larger desktop size the dreamscape screen picks above the wide-viewport breakpoint. |
 
