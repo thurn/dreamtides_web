@@ -8,8 +8,10 @@
 //
 // The viewer is three regions:
 //   - a header naming the screen and carrying the corner close disc;
-//   - a LEFT SIDEBAR profiling the run — the Dreamcaller's portrait, name,
-//     title, and rules text, then the collected dreamsigns as hoverable art;
+//   - a LEFT SIDEBAR profiling the run — the Dreamcaller as a bare portrait
+//     that reveals its name, title, and ability on hover / press through the
+//     shared InfoCard (the same reveal the quest status bar's Dreamcaller bust
+//     uses), then the collected dreamsigns as hoverable art;
 //   - the MAIN column: a control bar, then a scrolling grid of the deck's cards.
 //
 // The desktop control bar spends the room the mobile band lacks on granular,
@@ -28,8 +30,16 @@
 // from "the whole deck + that state" to "the visible grid" lives in the pure,
 // tested `desktop-deck-filter` module.
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { CSSProperties, ReactNode, RefObject } from "react";
+import { createPortal } from "react-dom";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
 import { GameCard } from "../components/card/CardView";
 import { HoverZoomCard } from "../components/card/HoverZoomCard";
@@ -39,7 +49,9 @@ import {
   type DreamcallerVisual,
 } from "../components/hud/DreamcallerPortrait";
 import { Dreamsign } from "../components/hud/Dreamsign";
-import { RulesText } from "../components/card/RulesText";
+import { InfoCard, type AnchorRect } from "../components/overlay/InfoCard";
+import { richText } from "../components/card/rich-text";
+import { artRef } from "../primitives/art";
 import { Pressable } from "../primitives/Pressable";
 import { Select } from "../components/controls/Select";
 import { SegmentedControl } from "../components/controls/SegmentedControl";
@@ -62,9 +74,11 @@ import {
   filterAndSortDesktopDeckCards,
 } from "./desktop-deck-filter";
 
+const { PressPopover, usePressReveal, anchorRect } = InfoCard;
+
 /** The Dreamcaller shown in the sidebar: the portrait's visual plus rules text. */
 export interface DeckDreamcallerView extends DreamcallerVisual {
-  /** The Dreamcaller's ability text, rendered through the shared RulesText. */
+  /** The Dreamcaller's ability text, revealed through the shared InfoCard. */
   renderedText: string;
 }
 
@@ -98,11 +112,20 @@ const CONTENT_MAX_WIDTH_PX = 1180;
 /** Fixed width of the left profile sidebar. */
 const SIDEBAR_WIDTH_PX = 268;
 
-/** Edge length of a collected-dreamsign art tile in the sidebar. */
-const DREAMSIGN_TILE_PX = 62;
+/**
+ * Edge length of a collected-dreamsign art tile in the sidebar. Sized so that
+ * two tiles sit side by side in one row of the two-column grid: the sidebar's
+ * content width (SIDEBAR_WIDTH_PX less its --space-6 padding on each side) minus
+ * the inter-tile --space-3 gap, halved.
+ */
+const DREAMSIGN_TILE_PX = 112;
 
-/** Fixed width of the Dreamcaller portrait in the sidebar profile. */
-const DREAMCALLER_PORTRAIT_PX = 196;
+/**
+ * Edge length of the Dreamcaller portrait in the sidebar. Matched to a
+ * dreamsign tile so the run's collectibles — the Dreamcaller and its
+ * dreamsigns — read at one consistent scale down the column.
+ */
+const DREAMCALLER_PORTRAIT_PX = DREAMSIGN_TILE_PX;
 
 /** Edge length of the corner close disc, matching the glass control height. */
 const CLOSE_BUTTON_PX = 40;
@@ -381,7 +404,9 @@ function Sidebar({
         gap: token("--space-7"),
       }}
     >
-      {dreamcaller !== null && <DreamcallerBlock dreamcaller={dreamcaller} />}
+      {dreamcaller !== null && (
+        <DreamcallerBlock dreamcaller={dreamcaller} stageRef={stageRef} />
+      )}
       <DreamsignsBlock
         dreamsigns={dreamsigns}
         maxDreamsigns={maxDreamsigns}
@@ -391,35 +416,81 @@ function Sidebar({
   );
 }
 
-/** The Dreamcaller profile: portrait, name, title, and rules text. */
-function DreamcallerBlock({ dreamcaller }: { dreamcaller: DeckDreamcallerView }) {
+/**
+ * The Dreamcaller profile: a bare portrait alone, with its name, title, and
+ * ability tucked into a hover / press reveal instead of laid out beneath it.
+ * The reveal is the shared InfoCard `portrait` variant driven by the one
+ * press-reveal engine (hover on a fine pointer, press-hold on touch) and
+ * portalled into the screen stage — the same reveal the quest status bar's
+ * Dreamcaller bust uses, so the two read identically.
+ */
+function DreamcallerBlock({
+  dreamcaller,
+  stageRef,
+}: {
+  dreamcaller: DeckDreamcallerView;
+  stageRef: RefObject<HTMLDivElement | null>;
+}) {
+  const ref = useRef<HTMLElement>(null);
+  const { shown, begin, end, enter, leave } = usePressReveal();
+  const [anchor, setAnchor] = useState<AnchorRect | null>(null);
+  useLayoutEffect(() => {
+    if (shown && stageRef.current && ref.current) {
+      setAnchor(anchorRect(stageRef.current, ref.current));
+    } else {
+      setAnchor(null);
+    }
+  }, [shown, stageRef]);
+
+  const ability = dreamcaller.renderedText.trim();
   return (
     <section
       style={{ display: "flex", flexDirection: "column", gap: token("--space-3") }}
     >
       <SidebarSectionHeader label="Dreamcaller" />
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <DreamcallerPortrait
-          dreamcaller={dreamcaller}
-          variant="panel"
-          size={DREAMCALLER_PORTRAIT_PX}
-        />
+        {/* The portrait itself is the reveal trigger: Pressable owns the one
+            shared press/hover scale, while usePressReveal (its pointer handlers
+            chained through) owns the show/hide of the portalled InfoCard. */}
+        <Pressable
+          as="button"
+          ref={ref}
+          aria-label={`${dreamcaller.name}, ${dreamcaller.title}`}
+          onPointerEnter={enter}
+          onPointerDown={begin}
+          onPointerUp={end}
+          onPointerLeave={leave}
+          onPointerCancel={end}
+          style={{
+            width: DREAMCALLER_PORTRAIT_PX,
+            padding: 0,
+            border: "none",
+            background: "none",
+          }}
+        >
+          <DreamcallerPortrait
+            dreamcaller={dreamcaller}
+            variant="panel"
+            size={DREAMCALLER_PORTRAIT_PX}
+          />
+        </Pressable>
       </div>
-      <div
-        style={{ display: "flex", flexDirection: "column", gap: token("--space-1") }}
-      >
-        <div style={{ font: token("--t-title-sm"), color: token("--text-primary") }}>
-          {dreamcaller.name}
-        </div>
-        <div style={{ font: token("--t-caption"), color: token("--text-secondary") }}>
-          {dreamcaller.title}
-        </div>
-      </div>
-      {dreamcaller.renderedText.trim() !== "" && (
-        <div style={{ font: token("--t-body-sm"), color: token("--text-on-accent") }}>
-          <RulesText text={dreamcaller.renderedText} />
-        </div>
-      )}
+      {shown &&
+        anchor &&
+        stageRef.current &&
+        createPortal(
+          <PressPopover anchor={anchor}>
+            <InfoCard
+              variant="portrait"
+              image={artRef.dreamcaller(dreamcaller.imageNumber)}
+              imageCrop="top"
+              title={dreamcaller.name}
+              subtitle={dreamcaller.title}
+              body={ability !== "" ? richText.rules(ability) : undefined}
+            />
+          </PressPopover>,
+          stageRef.current,
+        )}
     </section>
   );
 }
@@ -450,7 +521,7 @@ function DreamsignsBlock({
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: `repeat(3, ${String(DREAMSIGN_TILE_PX)}px)`,
+            gridTemplateColumns: `repeat(2, ${String(DREAMSIGN_TILE_PX)}px)`,
             gap: token("--space-3"),
             justifyContent: "center",
             justifyItems: "center",
