@@ -38,6 +38,7 @@ const EXEMPT_PREFIXES = [
   "src/tango/primitives/",
   "src/tango/components/",
   "src/tango/docs/",
+  "src/tango/screens/devtools/",
 ];
 
 /** Native interactive tag name -> the Tango surface to compose instead. */

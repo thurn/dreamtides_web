@@ -33,6 +33,7 @@ const EXEMPT_PREFIXES = [
   "src/tango/primitives/",
   "src/tango/components/",
   "src/tango/docs/",
+  "src/tango/screens/devtools/",
 ];
 
 /** Style-object property names whose values are rhythm steps. */

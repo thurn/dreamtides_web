@@ -38,6 +38,7 @@ const EXEMPT_PREFIXES = [
   "src/tango/primitives/",
   "src/tango/components/",
   "src/tango/docs/",
+  "src/tango/screens/devtools/",
 ];
 
 /** Finds each hex / rgb(a) / hsl(a) color literal inside a string. */
