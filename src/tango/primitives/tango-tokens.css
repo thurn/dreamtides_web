@@ -104,6 +104,7 @@
   /* ---- Color: lines & scrims ---- */
   --primitive-line-soft: rgba(255, 255, 255, 0.07);
   --primitive-line-mid:  rgba(255, 255, 255, 0.12);
+  --primitive-line-strong: rgba(255, 255, 255, 0.18);
   --primitive-line-violet: rgba(168, 85, 247, 0.40);
   --primitive-scrim-700: rgba(5, 3, 10, 0.72);   /* modal backdrop */
   --primitive-scrim-900: rgba(5, 3, 10, 0.90);
@@ -179,6 +180,7 @@
   /* ---- Lines / borders ---- */
   --border-soft: var(--primitive-line-soft);
   --border-mid: var(--primitive-line-mid);
+  --border-strong: var(--primitive-line-strong);
   --border-accent: var(--primitive-line-violet);
 
   /* ---- Scrims (full-surface darkening behind a focused element) ---- */

@@ -222,13 +222,16 @@ export function Select({
             cannot mix two type voices in one button. Every option's label is
             stacked in one grid cell; only the selected one shows, and the hidden
             siblings hold the trigger at the width of the WIDEST label so the
-            button never resizes as the selection changes. */}
+            button never resizes as the selection changes. Each label keeps its
+            full intrinsic width (no overflow clip / percentage max-width, which
+            would collapse the auto-sized grid track and truncate the label until
+            the next relayout) — the button is always wide enough to show any
+            label in full. */}
         <span
           style={{
             display: "grid",
             flex: full ? 1 : undefined,
             justifyItems: "start",
-            minWidth: 0,
           }}
         >
           {options.map((option) => (
@@ -239,9 +242,6 @@ export function Select({
                 gridArea: "1 / 1",
                 visibility: option.value === value ? "visible" : "hidden",
                 whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                maxWidth: "100%",
                 textAlign: "left",
                 color: token("--text-primary"),
               }}
@@ -270,7 +270,10 @@ export function Select({
               ...menuPosition,
               minWidth: anchor.width,
               zIndex: 90,
-              padding: token("--space-1"),
+              // No inner padding: option rows run edge to edge so a selected /
+              // hovered row is a full-width rectangle. `overflow: hidden` lets
+              // the popover's rounded corners clip the top and bottom rows.
+              overflow: "hidden",
               // The menu wears the same liquid glass as the trigger, so the open
               // control reads as one continuous glass surface.
               ...glassTrack(),
@@ -323,10 +326,13 @@ function MenuItem({ option, active, onPick }: MenuItemProps): ReactElement {
         // especially the trailing end where nothing else breaks the line.
         padding: `0 ${token("--space-5")}`,
         border: "none",
-        borderRadius: token("--radius-inset"),
+        // A full-width rectangle band — the menu's own rounded corners clip it,
+        // so no per-row radius.
+        borderRadius: 0,
         background: lit ? token("--surface-hover") : "transparent",
         font: token("--t-body-sm"),
-        color: active ? token("--text-primary") : token("--text-secondary"),
+        // Every row is white; only the background marks selection / hover.
+        color: token("--text-primary"),
         textAlign: "left",
         cursor: "pointer",
         whiteSpace: "nowrap",

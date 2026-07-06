@@ -85,6 +85,7 @@ Hairlines and dividers.
 | --- | --- | --- |
 | `--border-soft` | `var(--primitive-line-soft)` |  |
 | `--border-mid` | `var(--primitive-line-mid)` |  |
+| `--border-strong` | `var(--primitive-line-strong)` |  |
 | `--border-accent` | `var(--primitive-line-violet)` |  |
 | `--line` | `var(--dt-line)` | rgba(168,85,247,.18) — purple hairline |
 | `--line-strong` | `var(--dt-line-strong)` | rgba(168,85,247,.42) |

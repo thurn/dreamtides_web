@@ -9,8 +9,9 @@
 // dismisses the zoom so the grid scrolls, so browsing and inspecting never
 // fight.
 //
-// The top of the screen holds a lean control band: a centered "Deck" title, the
-// corner close control, and two dropdown buttons on one line — a filter button
+// The top of the screen holds a lean control band: a centered "Your Deck" title,
+// the corner close control, and two dropdown buttons on one line — a filter
+// button
 // (All / Characters / Events, plus a per-subtype option for any subtype the deck
 // is heavy in) and a sort button (Name, Drafted, Cost, Spark, Subtype — every
 // sort low to high). All four buttons (the glass-disc close control, the
@@ -312,14 +313,15 @@ function GlassBackdrop() {
 const CONTROL_BUTTON_PX = 48;
 
 /**
- * The top band: a centered "Deck" title, the corner close control, and the
+ * The top band: a centered "Your Deck" title, the corner close control, and the
  * filter/sort `controls` row. The top-left corner is left clear for the
  * dreamscape utility menu, which lifts above this overlay while it is open (see
  * `DreamscapeQuestMenu`'s `elevated`) and wears the same glass surface; the
  * close control on the right is a matching glass disc. The title sits centered
  * between them, dropping in just below the device's screen cutout (notch /
  * Dynamic Island / punch-hole) — the band's top padding already clears the
- * cutout — so it names the screen without fighting the hardware.
+ * cutout — so it names the screen without fighting the hardware. A neutral
+ * hairline at the strong step closes the band.
  */
 function TopBand({
   onClose,
@@ -343,12 +345,14 @@ function TopBand({
         paddingLeft: token("--gutter"),
         paddingRight: token("--gutter"),
         paddingBottom: token("--space-4"),
-        borderBottom: `1px solid ${token("--border-mid")}`,
+        // A neutral hairline closing the band, at the strong step so it reads
+        // clearly over the scene art the deck floats on.
+        borderBottom: `1px solid ${token("--border-strong")}`,
       }}
     >
-      {/* Corner row: the "Deck" title centered under the screen cutout, the close
-          control anchored at the right corner, and the left corner left empty for
-          the elevated dreamscape menu. */}
+      {/* Corner row: the "Your Deck" title centered under the screen cutout, the
+          close control anchored at the right corner, and the left corner left
+          empty for the elevated dreamscape menu. */}
       <div style={{ position: "relative", minHeight: CONTROL_BUTTON_PX }}>
         <div
           style={{
@@ -361,7 +365,7 @@ function TopBand({
             pointerEvents: "none",
           }}
         >
-          Deck
+          Your Deck
         </div>
         <Pressable
           as="button"
