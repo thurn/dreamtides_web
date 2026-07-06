@@ -1870,10 +1870,10 @@
     },
     {
       "name": "size",
-      "tsType": "\"grand\" | \"compact\"",
+      "tsType": "\"compact\" | \"grand\"",
       "unionMembers": [
-        "grand",
-        "compact"
+        "compact",
+        "grand"
       ],
       "required": false,
       "defaultValue": "compact",
@@ -2095,17 +2095,6 @@
       "required": true,
       "defaultValue": null,
       "description": "Enter the site; fired on a tap / click of an interactive node only."
-    },
-    {
-      "name": "scale",
-      "tsType": "\"wayside\" | \"grand\"",
-      "unionMembers": [
-        "wayside",
-        "grand"
-      ],
-      "required": false,
-      "defaultValue": "wayside",
-      "description": "Disc size. `wayside` (default) is the mobile / touch size; `grand` is the\nlarger desktop size the dreamscape screen picks above the wide-viewport\nbreakpoint."
     }
   ],
   "StatTile": [

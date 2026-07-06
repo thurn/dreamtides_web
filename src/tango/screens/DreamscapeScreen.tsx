@@ -65,9 +65,9 @@ export function DreamscapeScreen({ view, onSelectSite }: DreamscapeScreenProps) 
   // their placement and on-screen clamp use stage coordinates.
   const stageRef = useRef<HTMLDivElement>(null);
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
-  // Above the wide-viewport breakpoint the scene is the same, only larger: the
-  // site discs and the bottom HUD scale up so they hold their presence over the
-  // full-bleed art instead of stranding a phone-sized UI on a big screen.
+  // Above the wide-viewport breakpoint the bottom HUD scales up so its essence,
+  // deck, and Dreamcaller read at a comfortable desktop size. The site discs
+  // keep their one system size at every viewport.
   const isDesktop = useIsDesktop();
 
   return (
@@ -112,7 +112,6 @@ export function DreamscapeScreen({ view, onSelectSite }: DreamscapeScreenProps) 
             motion
             stageRef={stageRef}
             onSelect={onSelectSite}
-            scale={isDesktop ? "grand" : "wayside"}
           />
         ))}
 

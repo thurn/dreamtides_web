@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/site-node`
 
-The dreamscape site disc: a floating circular node over scene art carrying a glyph and accent ring. It has no text label — pressing or hovering reveals the site's name and detail through the shared InfoCard. The screen positions each node (via `model.pos`) and picks its `scale` — `wayside` on mobile, `grand` on desktop — but does not resize or recolor it directly.
+The dreamscape site disc: a floating circular node over scene art carrying a glyph and accent ring. It has no text label — pressing or hovering reveals the site's name and detail through the shared InfoCard. The screen positions each node (via `model.pos`); it does not resize or recolor it.
 
 ## Props
 
@@ -16,7 +16,6 @@ The dreamscape site disc: a floating circular node over scene art carrying a gly
 | `motion` | `boolean` | yes | — | Enable the calm floaty drift (disabled under reduced-motion via CSS). |
 | `stageRef` | `RefObject<HTMLElement \| null>` | yes | — | Screen root the reveal anchors + clamps against (for popover placement). |
 | `onSelect` | `(siteId: string) => void` | yes | — | Enter the site; fired on a tap / click of an interactive node only. |
-| `scale` | `"wayside" \| "grand"` | no | `wayside` | Disc size. `wayside` (default) is the mobile / touch size; `grand` is the larger desktop size the dreamscape screen picks above the wide-viewport breakpoint. |
 
 ### `model`: the `DreamscapeSiteModel` model
 
