@@ -456,21 +456,52 @@ button:disabled {
 }
 
 /*
- * Mobile rules-text bump. Every card frame size is a `cqw` (a fraction of the
+ * Mobile card-frame bump. Every card frame size is a `cqw` (a fraction of the
  * card's own width), so a card reads at a fixed physical size for its width on
- * any device — which leaves the small ability text hard to read on the narrow
- * cards a phone renders. Below the app's desktop breakpoint (mirrors
- * `DESKTOP_MIN_WIDTH` / `useIsDesktop`, and the `MOBILE_CARD_TEXT_QUERY` the
- * CardView fitter keys off) lift the rules body a couple notches: a larger
- * render cap, and a proportionally larger reserved size so the three-line box
- * grows and reaches a little further up over the art. The auto-shrink logic is
- * unchanged — it fits the same way into the taller box from the new larger
- * ceiling. Only the rules body moves; the name and type keep their sizes.
+ * any device — which leaves the frame small and the ability text hard to read
+ * on the narrow cards a phone renders. Below the app's desktop breakpoint
+ * (mirrors `DESKTOP_MIN_WIDTH` / `useIsDesktop`, and the `MOBILE_CARD_TEXT_QUERY`
+ * the CardView fitter keys off) scale the readable frame elements up together
+ * by one shared factor (~1.155) so the card grows as a coherent whole rather
+ * than a big-text card with tiny chrome:
+ *
+ *   - Rules body: a larger render cap plus a proportionally larger reserved
+ *     size, so the three-line box grows and reaches a little further up over
+ *     the art. The CardView auto-shrink fitter raises its ceiling to match the
+ *     cap (`RULES_FONT_RATIO_MOBILE`), so wordy cards still fit the taller box.
+ *   - Name and type/subtype text.
+ *   - Energy and spark corner orbs and their digits (the digit auto-shrink cap
+ *     is the CSS `--cv-*-orb-font-size`, so raising it lifts the rendered
+ *     digit; the JS search ceilings already sit above it and need no change).
+ *   - The name-bar geometry that seats the larger orbs and name — bar height,
+ *     radius, gap, paddings, and multi-cost orb overlap — scaled by the same
+ *     factor so the bar keeps its proportions and clears the bigger orbs. The
+ *     bar's anchor position (top/left/inset) holds, so the assembly grows in
+ *     place from the top-left corner.
  */
 @media (max-width: 899.98px) {
   .card-view {
+    /* Rules body. */
     --cv-rules-font-size: 5.2cqw;
     --cv-rules-font-cap: 4.85cqw;
+
+    /* Name and type/subtype text. */
+    --cv-name-font-size: 6cqw;
+    --cv-type-font-size: 5.7cqw;
+
+    /* Corner orbs and their digits. */
+    --cv-energy-orb-size: 13.85cqw;
+    --cv-energy-orb-font-size: 10.4cqw;
+    --cv-spark-orb-font-size: 10.4cqw;
+    --cv-energy-orb-overlap: 5.5cqw;
+
+    /* Name-bar geometry scaled to seat the larger orbs and name. */
+    --cv-namebar-height: 10.4cqw;
+    --cv-namebar-radius: 2.95cqw;
+    --cv-namebar-gap: 2.08cqw;
+    --cv-namebar-pad-left: 10.15cqw;
+    --cv-namebar-pad-left-multi: 21.5cqw;
+    --cv-namebar-pad-right: 1.75cqw;
   }
 }
 
