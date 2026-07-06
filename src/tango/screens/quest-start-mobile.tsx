@@ -123,9 +123,18 @@ function DreamcallerConsole({
     <GroupPanel>
       <AbilityReveal text={dreamcaller.renderedText} stageRef={stageRef} />
 
-      <ConsoleDivider />
+      {/* An even --space-6 rhythm around the divider, matching the desktop card:
+          one step above (equal to the GroupPanel's own --space-6 top padding, so
+          the ability text has balanced space above and below it) and one step
+          below. This lands the ability-baseline→divider and divider→tides-caption
+          visual gaps within a sub-pixel of each other (the residual is the two
+          fonts' differing built-in leading, which token-scale margins cannot
+          split finer). */}
+      <div style={{ marginTop: token("--space-6") }}>
+        <ConsoleDivider flush />
+      </div>
 
-      <div style={{ marginTop: token("--space-3") }}>
+      <div style={{ marginTop: token("--space-6") }}>
         {/* Top row: the "Tides:" caption on the left and the starting essence on
             the right. The essence stays TOP-aligned, level with the caption, as
             the disc row stacks below it — matching the desktop tides treatment. */}
