@@ -19,11 +19,18 @@
 set -uo pipefail
 
 # Patterns identifying this project's dev-server processes. Each is matched
-# against the full command line with `pgrep -f`.
+# against the full command line with `pgrep -f`. These cover every way this
+# repo starts a dev server or Firebase emulator: the dev wrapper, any Vite dev
+# or preview server (default 5173 plus QA servers on other ports), the Firebase
+# emulator launcher (`emulators:start` and `emulators:exec`), and the Java
+# database emulator process.
 patterns=(
   "scripts/dev-with-emulator.mjs"
+  "vite --port"
   "vite --strictPort"
+  "vite preview"
   "firebase emulators:start"
+  "firebase emulators:exec"
   "firebase-database-emulator"
 )
 
