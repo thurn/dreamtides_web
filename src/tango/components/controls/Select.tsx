@@ -42,7 +42,11 @@ import { HOVER_SCALE, PRESS_SCALE, usePress } from "../../primitives/Pressable";
 import { GlowIcon } from "./GlowIcon";
 import { type Glyph, GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import { controlChrome, glassTrack } from "./control-treatment";
+import {
+  CONTROL_INACTIVE_COLOR,
+  controlChrome,
+  glassTrack,
+} from "./control-treatment";
 
 /** Height/scale variants, matching SegmentedControl's. */
 type SelectSize = "sm" | "md";
@@ -331,8 +335,7 @@ function MenuItem({ option, active, onPick }: MenuItemProps): ReactElement {
         borderRadius: 0,
         background: lit ? token("--surface-hover") : "transparent",
         font: token("--t-body-sm"),
-        // Every row is white; only the background marks selection / hover.
-        color: token("--text-primary"),
+        color: active ? token("--text-on-accent") : CONTROL_INACTIVE_COLOR,
         textAlign: "left",
         cursor: "pointer",
         whiteSpace: "nowrap",

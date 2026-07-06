@@ -2,7 +2,7 @@
 //
 // An Apple-style translucent glass material: a deep-chrome fill at reduced
 // alpha over a blur+saturate backdrop, topped with a faint specular sheen, a
-// hairline rim, a soft violet interior wash, and a drop shadow. Because the
+// hairline rim, a soft neutral interior wash, and a drop shadow. Because the
 // fill is translucent and the backdrop blurs, whatever scene art sits behind
 // the surface refracts through it as glass. CSS-only (no WebGL refraction), so
 // it is safe on iOS Safari.
@@ -31,16 +31,16 @@ export function glassSurfaceStyle(): React.CSSProperties {
     // topped with a faint top-left specular sheen. Bespoke glass literals: no
     // design-system token maps to the translucent fill or sheen gradient.
     background:
-      "linear-gradient(150deg, rgba(255,255,255,0.07), rgba(255,255,255,0) 42%), rgba(18,14,28,0.5)",
+      "linear-gradient(150deg, rgba(255,255,255,0.07), rgba(255,255,255,0) 42%), rgba(14,14,16,0.54)",
     backdropFilter: "blur(22px) saturate(1.5)",
     WebkitBackdropFilter: "blur(22px) saturate(1.5)",
-    border: `1px solid ${token("--border-soft")}`,
+    border: "1px solid rgba(255,255,255,0.14)",
     borderRadius: token("--radius-popover"),
     // Layered rim / interior wash / drop shadow — bespoke glass literals with
     // no matching elevation token.
     boxShadow: [
       "inset 0 1px 1px rgba(255,255,255,0.22)", // top specular rim
-      "inset 0 -18px 30px rgba(120,70,170,0.10)", // soft interior wash
+      "inset 0 -18px 30px rgba(255,255,255,0.04)", // soft interior wash
       "0 10px 34px rgba(6,2,14,0.5)", // drop
     ].join(", "),
   };

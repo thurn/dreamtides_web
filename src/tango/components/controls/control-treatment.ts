@@ -47,6 +47,10 @@ export interface ControlChrome {
   triggerGlyphColor: TangoColor;
 }
 
+/** Neutral light-gray chrome for inactive control labels. */
+export const CONTROL_INACTIVE_COLOR =
+  `color-mix(in srgb, ${token("--text-on-accent")} 72%, transparent)`;
+
 /**
  * The liquid-glass surface shared by the controls and the glass icon button:
  * the same recipe as the shared glassSurfaceStyle material (fill + specular
@@ -57,13 +61,13 @@ export interface ControlChrome {
 export function glassTrack(): CSSProperties {
   return {
     background:
-      "linear-gradient(150deg, rgba(255,255,255,0.07), rgba(255,255,255,0) 42%), rgba(18,14,28,0.5)",
+      "linear-gradient(150deg, rgba(255,255,255,0.07), rgba(255,255,255,0) 42%), rgba(14,14,16,0.54)",
     backdropFilter: "blur(22px) saturate(1.5)",
     WebkitBackdropFilter: "blur(22px) saturate(1.5)",
-    border: `1px solid ${token("--border-soft")}`,
+    border: "1px solid rgba(255,255,255,0.14)",
     boxShadow: [
       "inset 0 1px 1px rgba(255,255,255,0.22)",
-      "inset 0 -18px 30px rgba(120,70,170,0.10)",
+      "inset 0 -18px 30px rgba(255,255,255,0.04)",
       "0 10px 34px rgba(6,2,14,0.5)",
     ].join(", "),
   };
@@ -99,11 +103,11 @@ export function controlChrome(): ControlChrome {
     // warm-neutral glass of the track and the sibling Select trigger.
     segmentActive: {
       background: "rgba(255,255,255,0.16)",
-      border: `1px solid ${token("--border-mid")}`,
+      border: "1px solid rgba(255,255,255,0.22)",
       boxShadow: token("--inset-top"),
       color: token("--text-primary"),
     },
-    segmentInactive: { color: token("--text-muted") },
+    segmentInactive: { color: CONTROL_INACTIVE_COLOR },
   };
 }
 

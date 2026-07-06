@@ -28,8 +28,8 @@
 // from "the whole deck + that state" to "the visible grid" lives in the pure,
 // tested `desktop-deck-filter` module.
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import type { CSSProperties, ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { CSSProperties, ReactNode, RefObject } from "react";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
 import { GameCard } from "../components/card/CardView";
 import { HoverZoomCard } from "../components/card/HoverZoomCard";
@@ -76,7 +76,7 @@ export interface DesktopDeckView {
   dreamcaller: DeckDreamcallerView | null;
   /** The dreamsigns collected so far, in collection order. */
   dreamsigns: DreamsignData[];
-  /** The dreamsign cap, shown as the denominator of the count. */
+  /** The run's dreamsign cap. */
   maxDreamsigns: number;
 }
 
@@ -99,10 +99,21 @@ const CONTENT_MAX_WIDTH_PX = 1180;
 const SIDEBAR_WIDTH_PX = 268;
 
 /** Edge length of a collected-dreamsign art tile in the sidebar. */
-const DREAMSIGN_TILE_PX = 46;
+const DREAMSIGN_TILE_PX = 96;
 
 /** Edge length of the corner close disc, matching the glass control height. */
 const CLOSE_BUTTON_PX = 40;
+
+/**
+ * Hover target widths (px) for each card-size preset. Small keeps the original
+ * target so tiny cards still enlarge enough to read; medium steps down to keep
+ * MacBook-sized desktop cards from jumping to the max scale.
+ */
+const HOVER_TARGET_WIDTH_PX: Readonly<Record<DeckCardSize, number>> = {
+  small: 340,
+  medium: 300,
+  large: 340,
+};
 
 /**
  * The desktop deck viewer: a full-screen liquid-glass surface whose frosted
@@ -111,6 +122,7 @@ const CLOSE_BUTTON_PX = 40;
  * inside a width cap. An outside press (the blurred margin) or Escape closes it.
  */
 export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
+  const stageRef = useRef<HTMLDivElement | null>(null);
   const [filterSort, setFilterSort] = useState<DesktopDeckFilterSort>(
     DEFAULT_DESKTOP_DECK_FILTER_SORT,
   );
@@ -140,6 +152,7 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
 
   return (
     <div
+      ref={stageRef}
       className="tango"
       // A transparent host: the frosted glass is a separate sibling backdrop
       // layer (GlassBackdrop) so the filter/sort controls, which are its
@@ -180,7 +193,6 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          overflow: "hidden",
         }}
       >
         <Header count={view.cards.length} onClose={onClose} />
@@ -188,7 +200,7 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
           <Sidebar
             dreamcaller={view.dreamcaller}
             dreamsigns={view.dreamsigns}
-            maxDreamsigns={view.maxDreamsigns}
+            stageRef={stageRef}
           />
           <main
             style={{
@@ -248,7 +260,7 @@ function Eyebrow({ children }: { children: ReactNode }) {
         font: token("--t-eyebrow"),
         letterSpacing: token("--tracking-eyebrow"),
         textTransform: "uppercase",
-        color: token("--text-muted"),
+        color: token("--text-on-accent"),
       }}
     >
       {children}
@@ -270,7 +282,6 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
         justifyContent: "space-between",
         gap: token("--space-5"),
         padding: `${token("--space-6")} ${token("--space-7")}`,
-        borderBottom: `1px solid ${token("--border-strong")}`,
       }}
     >
       <div
@@ -313,18 +324,17 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
 function Sidebar({
   dreamcaller,
   dreamsigns,
-  maxDreamsigns,
+  stageRef,
 }: {
   dreamcaller: DeckDreamcallerView | null;
   dreamsigns: DreamsignData[];
-  maxDreamsigns: number;
+  stageRef: RefObject<HTMLDivElement | null>;
 }) {
   return (
     <aside
       style={{
         width: SIDEBAR_WIDTH_PX,
         flex: "none",
-        borderRight: `1px solid ${token("--border-strong")}`,
         overflowY: "auto",
         padding: token("--space-6"),
         display: "flex",
@@ -333,7 +343,7 @@ function Sidebar({
       }}
     >
       {dreamcaller !== null && <DreamcallerBlock dreamcaller={dreamcaller} />}
-      <DreamsignsBlock dreamsigns={dreamsigns} maxDreamsigns={maxDreamsigns} />
+      <DreamsignsBlock dreamsigns={dreamsigns} stageRef={stageRef} />
     </aside>
   );
 }
@@ -352,12 +362,12 @@ function DreamcallerBlock({ dreamcaller }: { dreamcaller: DeckDreamcallerView })
         <div style={{ font: token("--t-title-sm"), color: token("--text-primary") }}>
           {dreamcaller.name}
         </div>
-        <div style={{ font: token("--t-body-sm"), color: token("--text-secondary") }}>
+        <div style={{ font: token("--t-body-sm"), color: token("--text-on-accent") }}>
           {dreamcaller.title}
         </div>
       </div>
       {dreamcaller.renderedText.trim() !== "" && (
-        <div style={{ font: token("--t-body-sm"), color: token("--text-secondary") }}>
+        <div style={{ font: token("--t-body-sm"), color: token("--text-on-accent") }}>
           <RulesText text={dreamcaller.renderedText} />
         </div>
       )}
@@ -365,37 +375,19 @@ function DreamcallerBlock({ dreamcaller }: { dreamcaller: DeckDreamcallerView })
   );
 }
 
-/** The collected dreamsigns: a count and a wrap of hoverable art tiles. */
+/** The collected dreamsigns as hoverable art tiles. */
 function DreamsignsBlock({
   dreamsigns,
-  maxDreamsigns,
+  stageRef,
 }: {
   dreamsigns: DreamsignData[];
-  maxDreamsigns: number;
+  stageRef: RefObject<HTMLDivElement | null>;
 }) {
   return (
     <section
       style={{ display: "flex", flexDirection: "column", gap: token("--space-4") }}
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "baseline",
-          justifyContent: "space-between",
-          gap: token("--space-3"),
-        }}
-      >
-        <Eyebrow>Dreamsigns</Eyebrow>
-        <span
-          style={{
-            font: token("--t-eyebrow"),
-            letterSpacing: token("--tracking-eyebrow"),
-            color: token("--text-muted"),
-          }}
-        >
-          {dreamsigns.length} / {maxDreamsigns}
-        </span>
-      </div>
+      <Eyebrow>Dreamsigns</Eyebrow>
       {dreamsigns.length === 0 ? (
         <div style={{ font: token("--t-body-sm"), color: token("--text-muted") }}>
           None collected yet.
@@ -403,9 +395,10 @@ function DreamsignsBlock({
       ) : (
         <div
           style={{
-            display: "flex",
-            flexWrap: "wrap",
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
             gap: token("--space-4"),
+            justifyItems: "center",
           }}
         >
           {dreamsigns.map((sign, index) => (
@@ -413,6 +406,7 @@ function DreamsignsBlock({
               key={sign.id ?? `dreamsign-${String(index)}`}
               dreamsign={sign}
               sizePx={DREAMSIGN_TILE_PX}
+              stageRef={stageRef}
             />
           ))}
         </div>
@@ -438,6 +432,8 @@ function ControlBar({
   subtypeOptions: { value: string; label: string }[];
   onChange: (patch: Partial<DesktopDeckFilterSort>) => void;
 }) {
+  const showSubtypeFilter = filterSort.type !== "Event";
+
   return (
     <div
       style={{
@@ -449,7 +445,6 @@ function ControlBar({
         // instead of floating two clusters against the panel edges.
         gap: token("--space-4"),
         padding: `${token("--space-4")} ${token("--space-6")}`,
-        borderBottom: `1px solid ${token("--border-strong")}`,
       }}
     >
       <SegmentedControl
@@ -459,19 +454,22 @@ function ControlBar({
           label: option.label,
         }))}
         value={filterSort.type}
-        onChange={(value) =>
-          onChange({ type: value as DesktopDeckFilterSort["type"] })
-        }
+        onChange={(value) => {
+          const type = value as DesktopDeckFilterSort["type"];
+          onChange({ type, subtype: type === "Event" ? "all" : filterSort.subtype });
+        }}
       />
-      <Select
-        size="sm"
-        leadingGlyph={GLYPHS.filter}
-        align="start"
-        ariaLabel="Filter by subtype"
-        options={subtypeOptions}
-        value={filterSort.subtype}
-        onChange={(value) => onChange({ subtype: value })}
-      />
+      {showSubtypeFilter && (
+        <Select
+          size="sm"
+          leadingGlyph={GLYPHS.filter}
+          align="start"
+          ariaLabel="Filter by subtype"
+          options={subtypeOptions}
+          value={filterSort.subtype}
+          onChange={(value) => onChange({ subtype: value })}
+        />
+      )}
       {/* Sort key + direction bound with a tighter inner gap than the bar's, so
           the pair reads as one sort control rather than two loose buttons. */}
       <div
@@ -559,7 +557,7 @@ function DeckGrid({
           }}
         >
           {visible.map((cardView) => (
-            <DeckTile key={cardView.entryId} cardView={cardView} />
+            <DeckTile key={cardView.entryId} cardView={cardView} size={size} />
           ))}
         </div>
       )}
@@ -572,7 +570,13 @@ function DeckGrid({
  * glossary definitions stacked beside it. A bane card wears a danger ring so a
  * corrupted card is legible at tile size.
  */
-function DeckTile({ cardView }: { cardView: DeckCardView }) {
+function DeckTile({
+  cardView,
+  size,
+}: {
+  cardView: DeckCardView;
+  size: DeckCardSize;
+}) {
   const tileStyle: CSSProperties = {
     // A fixed aspect box so the filling card resolves a height from the grid's
     // column width; the ring (if any) traces that box.
@@ -587,6 +591,7 @@ function DeckTile({ cardView }: { cardView: DeckCardView }) {
         fill
         glossaryText={cardView.card.renderedText}
         logSurface="desktop-deck-viewer"
+        targetWidthPx={HOVER_TARGET_WIDTH_PX[size]}
       >
         <GameCard
           card={cardView.card}

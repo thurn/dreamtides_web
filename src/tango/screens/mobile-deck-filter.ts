@@ -110,7 +110,7 @@ export function buildDeckTypeFilterOptions(
  */
 export const DECK_SORT_OPTIONS: readonly DeckControlOption<DeckSortId>[] = [
   { value: "name", label: "Name" },
-  { value: "drafted", label: "Drafted" },
+  { value: "drafted", label: "Acquired" },
   { value: "cost", label: "Cost" },
   { value: "spark", label: "Spark" },
   { value: "subtype", label: "Subtype" },

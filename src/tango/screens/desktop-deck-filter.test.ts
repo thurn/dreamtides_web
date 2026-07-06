@@ -74,7 +74,7 @@ describe("filterAndSortDesktopDeckCards — type + subtype filtering", () => {
       type: "Event",
       subtype: "Warrior",
     });
-    expect(ids(result)).toEqual([]);
+    expect(ids(result)).toEqual(["event-a"]);
   });
 });
 

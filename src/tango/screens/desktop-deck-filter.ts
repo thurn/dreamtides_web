@@ -144,8 +144,9 @@ export function filterAndSortDesktopDeckCards(
   cards: readonly DeckCardView[],
   state: DesktopDeckFilterSort,
 ): DeckCardView[] {
+  const subtype = state.type === "Event" ? "all" : state.subtype;
   const filtered = cards.filter(
-    (view) => matchesType(view, state.type) && matchesSubtype(view, state.subtype),
+    (view) => matchesType(view, state.type) && matchesSubtype(view, subtype),
   );
   if (state.sort === "drafted") {
     return state.direction === "asc" ? filtered : [...filtered].reverse();
