@@ -170,7 +170,7 @@ The --space-* scale is the approved spacing system for all layout (margins, padd
 | `--safe-top` | `59px` | status bar + Dynamic Island region |
 | `--safe-bottom` | `34px` | home indicator inset |
 | `--card-aspect` | `5 / 7` |  |
-| `--press-scale` | `0.94` |  |
+| `--press-scale` | `0.9` |  |
 
 ## Shadows & glows
 

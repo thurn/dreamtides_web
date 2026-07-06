@@ -37,12 +37,7 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
-import {
-  Pressable,
-  PRESS_SCALE,
-  HOVER_SCALE,
-  type PressFeedback,
-} from "../../primitives/Pressable";
+import { Pressable, PRESS_SCALE, HOVER_SCALE } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { type Glyph } from "../../primitives/glyph";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
@@ -814,15 +809,6 @@ export interface PressInfoProps {
   as?: React.ElementType;
   /** true = a touch hold still fires the child's click (menu / UI toggle). */
   holdStillClicks?: boolean;
-  /**
-   * How a press animates the trigger — forwarded to {@link Pressable}'s
-   * `pressFeedback`. "compress" (default) for a trigger with an action;
-   * "enlarge" for an info-only trigger (a tide disc, an essence value) so a
-   * touch press still animates — growing to acknowledge the press — without
-   * reading as an actionable button. There is no un-animated option, so an
-   * InfoCard reveal always acknowledges a touch press.
-   */
-  pressFeedback?: PressFeedback;
 }
 
 export function PressInfo({
@@ -833,7 +819,6 @@ export function PressInfo({
   children,
   as = "span",
   holdStillClicks = false,
-  pressFeedback = "compress",
 }: PressInfoProps): React.ReactElement {
   const { shown, fine, begin, end, enter, leave, heldPastTap } =
     usePressReveal();
@@ -860,7 +845,6 @@ export function PressInfo({
     <Pressable
       as={as}
       ref={elRef}
-      pressFeedback={pressFeedback}
       onPointerEnter={enter}
       onPointerDown={begin}
       onPointerUp={end}

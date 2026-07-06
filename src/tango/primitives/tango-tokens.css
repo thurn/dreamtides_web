@@ -422,9 +422,10 @@
 .tango {
   /* ---- The one press-down factor ----
      Every control — JS <Pressable>/usePress AND CSS-only controls via :active —
-     compresses by EXACTLY this on touch-down. Always < 1 (compress, never
-     enlarge). Reconciled to the shipped 0.94. */
-  --press-scale: 0.94; /* @kind other */
+     compresses by EXACTLY this on press. Always < 1 (compress, never enlarge):
+     the press-DOWN half of "scale up on hover, scale down on press". Mirrors
+     PRESS_SCALE in Pressable.tsx. */
+  --press-scale: 0.9; /* @kind other */
 
   /* ---- The one hover-enlarge factor ----
      Every pressable or hover-revealing surface — JS <Pressable>/usePress AND

@@ -225,7 +225,7 @@ export const TOKENS = {
   "--safe-top": { var: "var(--safe-top)", value: "59px" },
   "--safe-bottom": { var: "var(--safe-bottom)", value: "34px" },
   "--card-aspect": { var: "var(--card-aspect)", value: "5 / 7", kind: "other" },
-  "--press-scale": { var: "var(--press-scale)", value: "0.94", kind: "other" },
+  "--press-scale": { var: "var(--press-scale)", value: "0.9", kind: "other" },
   "--hover-scale": { var: "var(--hover-scale)", value: "1.03", kind: "other" },
   "--shadow-sm": { var: "var(--shadow-sm)", value: "0 1px 3px rgba(4, 2, 10, 0.5)" },
   "--shadow-md": { var: "var(--shadow-md)", value: "0 6px 18px rgba(4, 2, 10, 0.55)" },

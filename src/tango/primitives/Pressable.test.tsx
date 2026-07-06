@@ -3,23 +3,20 @@
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import {
-  Pressable,
-  PRESS_SCALE,
-  HOVER_SCALE,
-  type PressableProps,
-} from "./Pressable";
+import { Pressable, PRESS_SCALE, type PressableProps } from "./Pressable";
 
-// The API gap this fixes, asserted at COMPILE time (`tsc --noEmit` checks this
-// file): a reveal trigger with no press animation must be inexpressible. If the
-// API ever regresses to allow it, the `@ts-expect-error` below goes unused and
-// the typecheck fails. Never executed — the types are the whole test.
+// The guarantee, asserted at COMPILE time (`tsc --noEmit` checks this file):
+// every pressable scales down on press with no opt-out, so a reveal trigger
+// with no press animation is inexpressible. There is no feedback prop to turn
+// the animation off — both of these are type errors. If the API ever regresses
+// to add an opt-out, an `@ts-expect-error` below goes unused and typecheck
+// fails. Never executed — the types are the whole test.
 function _pressFeedbackTypeGuards(): PressableProps[] {
-  // @ts-expect-error the `compress={false}` boolean escape hatch is gone.
+  // @ts-expect-error there is no `compress` boolean escape hatch.
   const legacyBoolean: PressableProps = { compress: false };
-  // @ts-expect-error there is no un-animated feedback value; every press animates.
-  const unanimated: PressableProps = { pressFeedback: "none" };
-  return [legacyBoolean, unanimated];
+  // @ts-expect-error there is no `pressFeedback` opt-out; every press scales down.
+  const optOut: PressableProps = { pressFeedback: "enlarge" };
+  return [legacyBoolean, optOut];
 }
 
 // jsdom exposes no real hover, so Pressable behaves as it does under a touch
@@ -72,33 +69,30 @@ afterEach(() => {
 });
 
 describe("Pressable press feedback", () => {
-  it("compresses (scales DOWN) while pressed with the default feedback", () => {
+  it("scales DOWN on press — the default and only behaviour, on touch too", () => {
+    // Under a finger there is no hover to fall back on, so the press transform
+    // IS the only feedback: it must scale down, never sit at "none".
     const { container } = mountInto(<Pressable as="button">x</Pressable>);
     const el = container.querySelector("button");
     if (!el) throw new Error("no button");
     pressDown(el);
     expect(el.style.transform).toBe(`scale(${String(PRESS_SCALE)})`);
+    expect(el.style.transform).not.toBe("none");
   });
 
-  it("enlarge feedback still ANIMATES a touch press — it scales UP, never 'none'", () => {
-    // The whole point of the guarantee: an info-only reveal trigger has no
-    // hover to fall back on under a finger, so its press MUST animate. "enlarge"
-    // grows it instead of leaving it inert.
-    const { container } = mountInto(
-      <Pressable as="span" pressFeedback="enlarge">
-        x
-      </Pressable>,
-    );
+  it("scales an info-only reveal surface DOWN on press, exactly like a button", () => {
+    // A tide disc / essence value wraps a plain Pressable with no opt-out, so it
+    // gets the same press-down feedback as any control.
+    const { container } = mountInto(<Pressable as="span">x</Pressable>);
     const el = container.querySelector("span");
     if (!el) throw new Error("no span");
     pressDown(el);
-    expect(el.style.transform).toBe(`scale(${String(HOVER_SCALE)})`);
-    expect(el.style.transform).not.toBe("none");
+    expect(el.style.transform).toBe(`scale(${String(PRESS_SCALE)})`);
   });
 
   it("disabled suppresses the press animation entirely", () => {
     const { container } = mountInto(
-      <Pressable as="span" pressFeedback="enlarge" disabled>
+      <Pressable as="span" disabled>
         x
       </Pressable>,
     );

@@ -6,7 +6,7 @@
 
 Primitives · Live demo & interactive props: `/tango#/pressable`
 
-The one press-feedback primitive. Wrap any element in it and that element gains the shared press-down compression plus the shared hover-enlarge on a hover-capable pointer, so every interactive surface in Tango presses and invites the cursor with the identical feel.
+The one press-feedback primitive. Wrap any element in it and that element follows the single Dreamtides rule — scale up on hover (on a hover-capable pointer), scale down on press — so every interactive surface presses and invites the cursor with the identical feel.
 
 > **Guidance:** Reach for a higher-level component first. Pressable is a low-level building block — before wrapping raw markup in it, look for an existing Tango component (Button, TidePill, SegmentedControl, SiteNode, …) that already bakes in the press feedback. Use Pressable only when you're building a genuinely new interactive surface no component covers.
 
@@ -16,7 +16,6 @@ The one press-feedback primitive. Wrap any element in it and that element gains 
 | --- | --- | --- | --- | --- |
 | `as` | `ElementType<any, keyof IntrinsicElements>` = `"symbol" \| "object" \| "map" \| "filter" \| "span" \| "div" \| "a" \| "abbr" \| "address" \| "area" \| "article" \| "aside" \| "audio" \| "b" \| "base" \| "bdi" \| "bdo" \| "big" \| "blockquote" \| "body" \| "br" \| "button" \| "canvas" \| "caption" \| "center" \| "cite" \| "code" \| "col" \| "colgroup" \| "data" \| "datalist" \| "dd" \| "del" \| "details" \| "dfn" \| "dialog" \| "dl" \| "dt" \| "em" \| "embed" \| "fieldset" \| "figcaption" \| "figure" \| "footer" \| "form" \| "h1" \| "h2" \| "h3" \| "h4" \| "h5" \| "h6" \| "head" \| "header" \| "hgroup" \| "hr" \| "html" \| "i" \| "iframe" \| "img" \| "input" \| "ins" \| "kbd" \| "keygen" \| "label" \| "legend" \| "li" \| "link" \| "main" \| "mark" \| "menu" \| "menuitem" \| "meta" \| "meter" \| "nav" \| "noindex" \| "noscript" \| "ol" \| "optgroup" \| "option" \| "output" \| "p" \| "param" \| "picture" \| "pre" \| "progress" \| "q" \| "rp" \| "rt" \| "ruby" \| "s" \| "samp" \| "search" \| "slot" \| "script" \| "section" \| "select" \| "small" \| "source" \| "strong" \| "style" \| "sub" \| "summary" \| "sup" \| "table" \| "template" \| "tbody" \| "td" \| "textarea" \| "tfoot" \| "th" \| "thead" \| "time" \| "title" \| "tr" \| "track" \| "u" \| "ul" \| "var" \| "video" \| "wbr" \| "webview" \| "svg" \| "animate" \| "animateMotion" \| "animateTransform" \| "circle" \| "clipPath" \| "defs" \| "desc" \| "ellipse" \| "feBlend" \| "feColorMatrix" \| "feComponentTransfer" \| "feComposite" \| "feConvolveMatrix" \| "feDiffuseLighting" \| "feDisplacementMap" \| "feDistantLight" \| "feDropShadow" \| "feFlood" \| "feFuncA" \| "feFuncB" \| "feFuncG" \| "feFuncR" \| "feGaussianBlur" \| "feImage" \| "feMerge" \| "feMergeNode" \| "feMorphology" \| "feOffset" \| "fePointLight" \| "feSpecularLighting" \| "feSpotLight" \| "feTile" \| "feTurbulence" \| "foreignObject" \| "g" \| "image" \| "line" \| "linearGradient" \| "marker" \| "mask" \| "metadata" \| "mpath" \| "path" \| "pattern" \| "polygon" \| "polyline" \| "radialGradient" \| "rect" \| "set" \| "stop" \| "switch" \| "text" \| "textPath" \| "tspan" \| "use" \| "view"` | no | `button` | Element or component to render. Default 'button'. |
 | `disabled` | `boolean` | no | `false` | Disables press feedback and pointer handlers, and shows the default cursor. |
-| `pressFeedback` | `PressFeedback` = `"compress" \| "enlarge"` | no | `compress` | How a press animates this surface. Default "compress". Every value animates on every pointer (touch included), so a press is always acknowledged: - "compress" — the button scale-DOWN (PRESS_SCALE): for a surface with an ACTION; the shrink reads as "pushed". - "enlarge" — the scale-UP (HOVER_SCALE), matching the hover-enlarge: for an info-only surface you press to REVEAL but cannot act on (a tide disc, an essence value); it grows to acknowledge the press without reading as an actionable button. There is deliberately no "none" — a reveal trigger with no press animation would give a touch user no feedback at all, so the type does not permit it. This is a behavioral variant of the one press feedback, not a style escape hatch. |
 | `children` | `ReactNode` | no | — | Content rendered inside the pressable element. |
 
 ## Usage
@@ -43,12 +42,12 @@ A disabled Pressable detaches its press feedback and shows the default cursor.
 </Pressable>
 ```
 
-### Enlarge feedback (info-only surface)
+### Info-only reveal surface
 
-Set `pressFeedback="enlarge"` for a surface you press to reveal information but cannot act on — a press grows it (matching the hover-enlarge) rather than compressing it, so it acknowledges the press on touch without reading as an actionable button. There is no un-animated option: every press animates.
+Wrap a surface you press to reveal information but cannot act on (a tide disc, an essence value) in the same Pressable — it follows the one rule (up on hover, down on press), so a press is always acknowledged, on touch too. There is no opt-out: an un-animated press is not expressible.
 
 ```tsx
-<Pressable as="span" pressFeedback="enlarge">
+<Pressable as="span">
   <span className="my-target">Reveal on press</span>
 </Pressable>
 ```
