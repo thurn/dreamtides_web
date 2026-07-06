@@ -25,7 +25,7 @@ import { MultiplayerQuestProvider } from "./state/multiplayer-quest-context";
 import { MultiplayerBattleProvider } from "./state/multiplayer-battle-context";
 import { ScreenRouter } from "./components/ScreenRouter";
 import { HUD } from "./components/HUD";
-import { DeckViewer } from "./components/DeckViewer";
+import { DesktopDeckViewerAdapter } from "./screens/tango_adapters/DesktopDeckViewerAdapter";
 import { MobileDeckViewerAdapter } from "./screens/tango_adapters/MobileDeckViewerAdapter";
 import { useIsDesktop } from "./tango/screens/use-is-desktop";
 import { PoolViewer } from "./components/PoolViewer";
@@ -519,10 +519,9 @@ export function QuestApp({
         */}
         <ErrorBoundary scope="overlay:deck-viewer" onClose={handleCloseDeckViewer}>
           {isDesktopViewport ? (
-            <DeckViewer
+            <DesktopDeckViewerAdapter
               isOpen={deckViewerOpen}
               onClose={handleCloseDeckViewer}
-              cardDatabase={cardDatabase}
             />
           ) : (
             <MobileDeckViewerAdapter

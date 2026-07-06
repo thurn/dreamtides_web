@@ -90,9 +90,15 @@ export function controlChrome(): ControlChrome {
     segmentGap: 2,
     segmentRadius: token("--radius-inset"),
     segmentBase: {},
-    // A neutral frosted well — this surface reads as glass, not brand.
+    // A neutral frosted well — this surface reads as glass, not brand. The fill
+    // is a translucent white raised on the glass track (a bespoke glass literal,
+    // the same family as glassTrack's sheen), NOT an opaque surface color: a
+    // solid brand-plum fill (`--surface-hover`, #2a2040) reads as violet over
+    // any scene because it cannot sample the backdrop, whereas this white frost
+    // lets the frosted scene show through so the selected segment matches the
+    // warm-neutral glass of the track and the sibling Select trigger.
     segmentActive: {
-      background: token("--surface-hover"),
+      background: "rgba(255,255,255,0.16)",
       border: `1px solid ${token("--border-mid")}`,
       boxShadow: token("--inset-top"),
       color: token("--text-primary"),

@@ -146,8 +146,10 @@ function sparkKey(card: DeckCardView["card"]): number {
 }
 
 /** Comparator for one sort order. Returns 0 for `drafted` so the caller keeps
- *  the incoming acquisition order via a stable sort. */
-function compareBySort(
+ *  the incoming acquisition order via a stable sort. Shared with the desktop
+ *  deck viewer's filter (`desktop-deck-filter`), which layers a sort direction
+ *  on top of this low-to-high key so both surfaces order a deck identically. */
+export function compareBySort(
   a: DeckCardView,
   b: DeckCardView,
   sort: DeckSortId,

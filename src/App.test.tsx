@@ -94,8 +94,8 @@ const deckViewerMock = vi.fn<(props: DeckViewerMockProps) => ReactNode>(
   ),
 );
 
-vi.mock("./components/DeckViewer", () => ({
-  DeckViewer: (props: DeckViewerMockProps) => deckViewerMock(props),
+vi.mock("./screens/tango_adapters/DesktopDeckViewerAdapter", () => ({
+  DesktopDeckViewerAdapter: (props: DeckViewerMockProps) => deckViewerMock(props),
 }));
 
 interface PoolViewerMockProps {
@@ -298,9 +298,10 @@ beforeEach(() => {
       IS_REACT_ACT_ENVIRONMENT?: boolean;
     }
   ).IS_REACT_ACT_ENVIRONMENT = true;
-  // These specs exercise the legacy desktop deck-viewer overlay (mocked as
-  // `deckViewerMock`); report a desktop viewport so `useIsDesktop` selects it
-  // rather than the narrow-viewport `MobileDeckViewerAdapter`.
+  // These specs exercise the desktop deck-viewer overlay (mocked as
+  // `deckViewerMock`); report a desktop viewport so `useIsDesktop` selects the
+  // `DesktopDeckViewerAdapter` rather than the narrow-viewport
+  // `MobileDeckViewerAdapter`.
   vi.stubGlobal(
     "matchMedia",
     vi.fn((query: string) => ({
