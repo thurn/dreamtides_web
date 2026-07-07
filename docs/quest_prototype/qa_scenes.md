@@ -81,6 +81,7 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `atlas`                  | Dream Atlas resting screen at the first frontier the UI labels "Layer II" (one dreamscape completed), with a generated boss node and Apollyon incarnation (atlas UI + boss-preview QA); same screen as `atlas2` |
 | `atlas2` … `atlas7`      | Dream Atlas resting screen the UI labels "Layer N", with the available frontier on column N (see "Atlas layers" below) |
 | `deckviewer`             | Deck viewer overlay opened over the starter dreamscape (deck grid + press-and-hold zoom) |
+| `startingdeck`           | Starting-deck reveal popup over the starter dreamscape (frosted-glass chrome QA) |
 | `transfiguration`        | Transfiguration site                                             |
 | `transfiguration-enhanced` | Transfiguration site, enhanced                                |
 | `duplication`            | Duplication site                                                |

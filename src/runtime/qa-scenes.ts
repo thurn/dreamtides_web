@@ -213,6 +213,29 @@ const DECK_VIEWER_SCENE: QaScene = {
 };
 
 /**
+ * The starting-deck reveal popup over the starter dreamscape. The popup is
+ * driven by persisted state — it shows the first time a run has a Dreamcaller
+ * and has not yet seen it — so this scene builds the starter dreamscape and
+ * clears `hasSeenStartingDeckPopup`, and `QuestApp` reveals the popup on its
+ * own. Otherwise reached only on the very first entry into a fresh dreamscape;
+ * parking here lets the popup's frosted-glass chrome be QA'd from a URL.
+ */
+const STARTING_DECK_SCENE: QaScene = {
+  id: "startingdeck",
+  label: "Starting Deck",
+  description:
+    "The starting-deck reveal popup over the starter dreamscape, shown on " +
+    "boot so its frosted-glass chrome can be QA'd from a URL.",
+  build: (questContent) => {
+    const state = dreamscapeSceneState(3)(questContent);
+    if (state === null) {
+      return null;
+    }
+    return { ...state, hasSeenStartingDeckPopup: false };
+  },
+};
+
+/**
  * Builds a scene parked directly on a site screen of `siteType`. Most site
  * screens are otherwise reachable only after winning the keeper battle and
  * choosing the dreamscape whose resident guide tends that site type, so this
@@ -351,6 +374,7 @@ export const QA_SCENES: readonly QaScene[] = [
   atlasLayerScene(7),
   DREAMSCAPE_SCENE,
   DECK_VIEWER_SCENE,
+  STARTING_DECK_SCENE,
   siteScene("transfiguration", "Transfiguration", "Transfiguration"),
   siteScene(
     "transfiguration-enhanced",

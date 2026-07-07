@@ -210,3 +210,16 @@ The component QA could proceed by starting Vite directly with
 `./node_modules/.bin/vite --port 5175 --strictPort --host 127.0.0.1`, but the
 repo-level dev wrapper should either launch Vite reliably after emulator startup
 or fail with a clear error and clean up the emulator child it started.
+
+Pre-existing: setup-assets.test.mjs times out flakily under full-suite load
+===========================================================================
+
+Running the whole suite (`npm test`) intermittently fails 2-3 tests in
+scripts/setup-assets.test.mjs (e.g. "passes through tuned starting-essence
+values from the TOML", "retains the rarity field on Legendary cards and omits
+it otherwise"), with the file taking 15+ seconds. Run in isolation
+(`npx vitest run scripts/setup-assets.test.mjs`) all 33 pass in ~5.7s. The
+failures are timeout flakiness from these heavy asset-setup tests contending for
+CPU while the rest of the suite runs in parallel, not a logic failure. A fix
+would raise these tests' per-test timeout (or run the file in its own pool) so
+the full-suite run is deterministic.

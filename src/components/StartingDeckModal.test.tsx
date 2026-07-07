@@ -233,6 +233,21 @@ beforeEach(() => {
       IS_REACT_ACT_ENVIRONMENT?: boolean;
     }
   ).IS_REACT_ACT_ENVIRONMENT = true;
+  // The close disc renders through Tango's `Pressable`, which reads the
+  // reduced-motion media query on mount; jsdom does not implement matchMedia,
+  // so provide a minimal stub.
+  if (!window.matchMedia) {
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })) as unknown as typeof window.matchMedia;
+  }
   setQuestContext();
 });
 
@@ -278,9 +293,14 @@ describe("StartingDeckModal", () => {
     );
     const title = modal?.querySelector("h2");
     expect(title?.textContent).toBe("Starting Deck");
-    expect(title?.className).toContain("text-xl");
-    expect(title?.className).not.toContain("uppercase");
-    expect(title?.className).not.toContain("tracking-");
+    // The title is a plain heading, not an uppercase eyebrow.
+    expect(title?.style.textTransform).not.toBe("uppercase");
+    // The intro copy is near-white and untinted for legibility over the glass —
+    // the primary text role, not the lavender secondary role.
+    const subtitle = Array.from(modal?.querySelectorAll("p") ?? []).find(
+      (p) => p.textContent?.includes("begin the quest"),
+    );
+    expect(subtitle?.style.color).toBe("var(--text-primary)");
     // Both starting cards render.
     expect(
       container.querySelector("[data-testid='starting-deck-modal-card-entry-1']"),
@@ -294,7 +314,9 @@ describe("StartingDeckModal", () => {
     });
   });
 
-  it("keeps the click-outside backdrop visually transparent", () => {
+  it("renders a full-bleed glass overlay on mobile", () => {
+    // Default matchMedia stub reports a narrow viewport, so useIsDesktop() is
+    // false and the popup is the full-bleed overlay.
     const { container, root } = mount(
       <StartingDeckModal
         isOpen
@@ -306,8 +328,52 @@ describe("StartingDeckModal", () => {
     const backdrop = container.querySelector<HTMLElement>(
       "[data-testid='starting-deck-modal-backdrop']",
     );
+    const panel = container.querySelector<HTMLElement>(
+      "[data-testid='starting-deck-modal']",
+    );
     expect(backdrop).not.toBeNull();
-    expect(backdrop?.style.backgroundColor).toBe("transparent");
+    expect(panel).not.toBeNull();
+    // Scoped to `.tango` so the glass tokens resolve.
+    expect(backdrop?.className).toContain("tango");
+    // Full-bleed: the panel fills the overlay rather than being capped.
+    expect(panel?.style.width).toBe("100%");
+    expect(panel?.style.height).toBe("100%");
+    expect(panel?.style.maxWidth).toBe("");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders a bounded centered dialog on desktop", () => {
+    // Report a wide viewport so useIsDesktop() is true.
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches: query.includes("min-width"),
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })) as unknown as typeof window.matchMedia;
+
+    const { container, root } = mount(
+      <StartingDeckModal
+        isOpen
+        onClose={vi.fn()}
+        cardDatabase={makeCardDatabase()}
+      />,
+    );
+
+    const panel = container.querySelector<HTMLElement>(
+      "[data-testid='starting-deck-modal']",
+    );
+    expect(panel).not.toBeNull();
+    // Bounded: capped width and height so the dreamscape shows around it.
+    expect(panel?.style.maxWidth).toContain("min(");
+    expect(panel?.style.maxHeight).toBe("85vh");
+    expect(panel?.style.height).toBe("");
 
     act(() => {
       root.unmount();
@@ -343,7 +409,7 @@ describe("StartingDeckModal", () => {
     });
   });
 
-  it("calls onClose when the red X button is clicked", () => {
+  it("calls onClose when the close disc is clicked", () => {
     const onClose = vi.fn();
     const { container, root } = mount(
       <StartingDeckModal
@@ -387,7 +453,7 @@ describe("StartingDeckModal", () => {
     });
   });
 
-  it("calls onClose when the backdrop is clicked, but not when the modal content itself is clicked", () => {
+  it("does not dismiss on a click of the panel or backdrop (close disc or Escape only)", () => {
     const onClose = vi.fn();
     const { container, root } = mount(
       <StartingDeckModal
@@ -397,28 +463,26 @@ describe("StartingDeckModal", () => {
       />,
     );
 
-    const modal = container.querySelector<HTMLElement>(
+    const panel = container.querySelector<HTMLElement>(
       "[data-testid='starting-deck-modal']",
     );
     act(() => {
-      modal?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      panel?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
-    expect(onClose).not.toHaveBeenCalled();
-
     const backdrop = container.querySelector<HTMLElement>(
       "[data-testid='starting-deck-modal-backdrop']",
     );
     act(() => {
       backdrop?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
-    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClose).not.toHaveBeenCalled();
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("scrolls internally instead of taking the full screen", () => {
+  it("scrolls the card grid internally", () => {
     const { container, root } = mount(
       <StartingDeckModal
         isOpen
