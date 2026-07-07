@@ -25,6 +25,12 @@ import {
   infoCardWidth,
   type AnchorRect,
 } from "../overlay/InfoCard";
+import {
+  AtlasHoverCard,
+  ATLAS_HOVER_DEFAULTS,
+  type AtlasHoverContent,
+  type AtlasHoverTweaks,
+} from "./AtlasHoverCard";
 import { richText } from "../card/rich-text";
 import { type ArtRef } from "../../primitives/art";
 
@@ -73,6 +79,19 @@ export interface AtlasNodeCard {
   body: string;
   /** A pre-revealed known dreamsign carried by this node, shown as its own card. */
   dreamsign: AtlasDreamsignCard | null;
+  /** The dreamscape's own name (or "Limbo" for the boss); null while unrevealed.
+   * Carried for the large desktop hover card, which presents the place and its
+   * guide as distinct lines. */
+  placeName: string | null;
+  /** The resident guide's name, or the boss incarnation title; null for the
+   * guideless starter or an unrevealed node. */
+  guideName: string | null;
+  /** The signature site's display name (e.g. "Dream Augury"); null for the
+   * starter / boss / unrevealed node. */
+  siteName: string | null;
+  /** The dreamscape's affiliation name; null for the starter / boss /
+   * unrevealed node. */
+  affiliation: string | null;
 }
 
 /** One placed node plus its resolved reveal content. */
@@ -109,6 +128,26 @@ function AtlasMainCard({ card }: { card: AtlasNodeCard }): React.ReactElement {
   return <InfoCard variant="text" title={card.title} body={body} />;
 }
 
+/**
+ * Maps a resolved node card to the large desktop hover card's content, or null
+ * when the node has no scene to render as a hero (an unrevealed node). PURE.
+ */
+export function toHoverContent(card: AtlasNodeCard): AtlasHoverContent | null {
+  if (card.sceneArt === null || card.placeName === null) {
+    return null;
+  }
+  return {
+    isBoss: card.isBoss,
+    sceneArt: card.sceneArt,
+    figureArt: card.figureArt,
+    placeName: card.placeName,
+    guideName: card.guideName,
+    siteName: card.siteName,
+    body: card.body,
+    affiliation: card.affiliation,
+  };
+}
+
 /** The companion card for a node's pre-revealed known dreamsign. */
 function AtlasDreamsignCard({
   dreamsign,
@@ -133,23 +172,39 @@ function AtlasDreamsignCard({
 }
 
 /**
- * Renders a node's reveal: the main InfoCard, and — when the node carries a
+ * Renders a node's reveal: the main card, and — when the node carries a
  * pre-revealed known dreamsign — its own companion dreamsign card beside it.
  * `layout` is `"row"` on mobile (the scaled-down pair sits side by side) or
  * `"stack"` on desktop (native-size cards stacked vertically). A pair with
  * variable copy lengths gets natural height with cross-axis centering, per the
  * variable-content-siblings rule.
+ *
+ * On desktop a revealed node's main card is the large {@link AtlasHoverCard}
+ * (scene hero + resident figure on the right + the place / guide / site / bonus
+ * / affiliation panel); mobile and unrevealed nodes keep the compact
+ * {@link AtlasMainCard}.
  */
 function AtlasRevealCard({
   card,
   layout,
+  hoverTweaks,
 }: {
   card: AtlasNodeCard;
   layout: "row" | "stack";
+  hoverTweaks: AtlasHoverTweaks;
 }): React.ReactElement {
   const { dreamsign } = card;
+  // Desktop uses the stack layout; a revealed node there gets the large hover
+  // card. Mobile (row) and unrevealed nodes keep the compact fullBleed / text card.
+  const hoverContent = layout === "stack" ? toHoverContent(card) : null;
+  const main =
+    hoverContent !== null ? (
+      <AtlasHoverCard content={hoverContent} tweaks={hoverTweaks} />
+    ) : (
+      <AtlasMainCard card={card} />
+    );
   if (dreamsign === null) {
-    return <AtlasMainCard card={card} />;
+    return main;
   }
   const isRow = layout === "row";
   return (
@@ -161,7 +216,7 @@ function AtlasRevealCard({
         gap: CARD_STACK_GAP,
       }}
     >
-      <AtlasMainCard card={card} />
+      {main}
       <AtlasDreamsignCard dreamsign={dreamsign} />
     </div>
   );
@@ -174,6 +229,9 @@ interface AtlasNodeRevealProps {
   stageRef: React.RefObject<HTMLElement | null>;
   /** Enter a node's dreamscape; fired on a tap / click of an available node. */
   onEnterNode: (nodeId: string) => void;
+  /** Live geometry / hierarchy for the large desktop hover card. Defaults to the
+   * baked design constants; the Dream Atlas dev tweaks panel overrides it. */
+  hoverTweaks?: AtlasHoverTweaks;
 }
 
 /**
@@ -186,6 +244,7 @@ export function AtlasNodeReveal({
   item,
   stageRef,
   onEnterNode,
+  hoverTweaks = ATLAS_HOVER_DEFAULTS,
 }: AtlasNodeRevealProps): React.ReactElement {
   const { view, card } = item;
   const isAvailable = view.node.state === "available";
@@ -255,7 +314,11 @@ export function AtlasNodeReveal({
             isMobile && card.dreamsign !== null ? "row" : "stack";
           return createPortal(
             <PressPopover anchor={anchor}>
-              <AtlasRevealCard card={card} layout={layout} />
+              <AtlasRevealCard
+                card={card}
+                layout={layout}
+                hoverTweaks={hoverTweaks}
+              />
             </PressPopover>,
             // Portal into `document.body`, NOT the atlas stage root. The stage
             // root is `position: fixed`, which makes it its own stacking context

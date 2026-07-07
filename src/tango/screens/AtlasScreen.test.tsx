@@ -86,6 +86,10 @@ function emptyCard(): AtlasNodeCard {
     title: "An Unseen Dream",
     body: "An unseen dream.",
     dreamsign: null,
+    placeName: null,
+    guideName: null,
+    siteName: null,
+    affiliation: null,
   };
 }
 

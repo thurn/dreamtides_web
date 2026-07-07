@@ -16,12 +16,17 @@
 // node hover previews live in the `AtlasMap` component; this screen composes
 // that surface with the drifting Motes and the docked QuestStatusBar.
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   AtlasMap,
   type AtlasMapEdge,
   type AtlasMapNode,
 } from "../components/atlas/AtlasMap";
+import {
+  ATLAS_HOVER_DEFAULTS,
+  type AtlasHoverTweaks,
+} from "../components/atlas/AtlasHoverCard";
+import { AtlasHoverTweaksPanel } from "./devtools/AtlasHoverTweaksPanel";
 import { Motes } from "../components/hud/Motes";
 import {
   QuestStatusBar,
@@ -73,6 +78,12 @@ export function AtlasScreen({ view, onEnterNode, onViewDeck }: AtlasScreenProps)
   const stageRef = useRef<HTMLDivElement>(null);
   const isDesktop = useIsDesktop();
 
+  // Dev-only exploratory tuning of the large desktop hover card. Local UI state,
+  // gated on DEV; production renders from the baked defaults with no panel.
+  const [hoverTweaks, setHoverTweaks] =
+    useState<AtlasHoverTweaks>(ATLAS_HOVER_DEFAULTS);
+  const showTweaks = import.meta.env.DEV && isDesktop;
+
   return (
     <div
       ref={stageRef}
@@ -94,6 +105,7 @@ export function AtlasScreen({ view, onEnterNode, onViewDeck }: AtlasScreenProps)
         edges={view.edges}
         onEnterNode={onEnterNode}
         stageRef={stageRef}
+        hoverTweaks={hoverTweaks}
       />
 
       <QuestStatusBar
@@ -105,6 +117,10 @@ export function AtlasScreen({ view, onEnterNode, onViewDeck }: AtlasScreenProps)
         dreamsigns={view.hud.dreamsigns}
         size={isDesktop ? "grand" : "compact"}
       />
+
+      {showTweaks && (
+        <AtlasHoverTweaksPanel value={hoverTweaks} onChange={setHoverTweaks} />
+      )}
     </div>
   );
 }

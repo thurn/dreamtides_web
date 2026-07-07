@@ -46,6 +46,136 @@
       "description": "End y, in the atlas svg's coordinate space."
     }
   ],
+  "AtlasHoverCard": [
+    {
+      "name": "content",
+      "tsType": "AtlasHoverContent",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "",
+      "nested": {
+        "name": "AtlasHoverContent",
+        "fields": [
+          {
+            "name": "isBoss",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "The looming boss node — suppresses the site / affiliation, and the\nincarnation title stands in as the guide name."
+          },
+          {
+            "name": "sceneArt",
+            "tsType": "ArtRef",
+            "optional": false,
+            "description": "The scene hero art (the dreamscape scene, or Limbo for the boss)."
+          },
+          {
+            "name": "figureArt",
+            "tsType": "ArtRef | null",
+            "optional": false,
+            "description": "The character render standing on the right (the guide, or the boss); null\nfor a guideless place (the starter)."
+          },
+          {
+            "name": "placeName",
+            "tsType": "string",
+            "optional": false,
+            "description": "The place name (dreamscape, or \"Limbo\")."
+          },
+          {
+            "name": "guideName",
+            "tsType": "string | null",
+            "optional": false,
+            "description": "The resident guide's name, or the boss incarnation title; null for the\nstarter."
+          },
+          {
+            "name": "siteName",
+            "tsType": "string | null",
+            "optional": false,
+            "description": "The signature site's display name (e.g. \"Dream Augury\"); null for the\nstarter / boss."
+          },
+          {
+            "name": "body",
+            "tsType": "string",
+            "optional": false,
+            "description": "The site bonus, starter blurb, or boss incarnation description."
+          },
+          {
+            "name": "affiliation",
+            "tsType": "string | null",
+            "optional": false,
+            "description": "The dreamscape's affiliation name; null for the starter / boss."
+          }
+        ]
+      }
+    },
+    {
+      "name": "tweaks",
+      "tsType": "AtlasHoverTweaks",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "{\n  hierarchy: \"place-forward\",\n  cardWidth: 440,\n  heroHeight: 208,\n  figureHeight: 320,\n  figureFootInset: 0,\n  figureRightInset: 6,\n  textColumnFraction: 0.64,\n  showSite: true,\n  showAffiliation: true,\n}",
+      "description": "",
+      "nested": {
+        "name": "AtlasHoverTweaks",
+        "fields": [
+          {
+            "name": "hierarchy",
+            "tsType": "AtlasHoverHierarchy",
+            "optional": false,
+            "description": "PROPOSAL — which field the card leads with. `place-forward` mirrors the\nlegacy card (the dreamscape is the hero, its guide the accent line);\n`guide-forward` leads with the resident guide (the figure that already\ndominates the card), with the dreamscape as the overline."
+          },
+          {
+            "name": "cardWidth",
+            "tsType": "number",
+            "optional": false,
+            "description": "Overall card width (px) — large, near the legacy card."
+          },
+          {
+            "name": "heroHeight",
+            "tsType": "number",
+            "optional": false,
+            "description": "Height (px) of the scene image band shown above the glass text panel."
+          },
+          {
+            "name": "figureHeight",
+            "tsType": "number",
+            "optional": false,
+            "description": "Dream Guide / boss figure height (px)."
+          },
+          {
+            "name": "figureFootInset",
+            "tsType": "number",
+            "optional": false,
+            "description": "How far (px) the figure's base sits above the card's bottom edge."
+          },
+          {
+            "name": "figureRightInset",
+            "tsType": "number",
+            "optional": false,
+            "description": "Inset (px) of the figure from the card's right edge."
+          },
+          {
+            "name": "textColumnFraction",
+            "tsType": "number",
+            "optional": false,
+            "description": "Fraction (0–1) of the panel width the text column occupies; the remainder\nis the clear zone the figure stands over."
+          },
+          {
+            "name": "showSite",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "Show the site name as the mono eyebrow."
+          },
+          {
+            "name": "showAffiliation",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "Show the affiliation as a subtle tag."
+          }
+        ]
+      }
+    }
+  ],
   "AtlasMap": [
     {
       "name": "stageWidth",
@@ -152,6 +282,73 @@
       "required": true,
       "defaultValue": null,
       "description": "Screen root the node reveals anchor + clamp against (viewport coordinates)."
+    },
+    {
+      "name": "hoverTweaks",
+      "tsType": "AtlasHoverTweaks",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Live geometry / hierarchy for the large desktop hover card (dev tweaks).",
+      "nested": {
+        "name": "AtlasHoverTweaks",
+        "fields": [
+          {
+            "name": "hierarchy",
+            "tsType": "AtlasHoverHierarchy",
+            "optional": false,
+            "description": "PROPOSAL — which field the card leads with. `place-forward` mirrors the\nlegacy card (the dreamscape is the hero, its guide the accent line);\n`guide-forward` leads with the resident guide (the figure that already\ndominates the card), with the dreamscape as the overline."
+          },
+          {
+            "name": "cardWidth",
+            "tsType": "number",
+            "optional": false,
+            "description": "Overall card width (px) — large, near the legacy card."
+          },
+          {
+            "name": "heroHeight",
+            "tsType": "number",
+            "optional": false,
+            "description": "Height (px) of the scene image band shown above the glass text panel."
+          },
+          {
+            "name": "figureHeight",
+            "tsType": "number",
+            "optional": false,
+            "description": "Dream Guide / boss figure height (px)."
+          },
+          {
+            "name": "figureFootInset",
+            "tsType": "number",
+            "optional": false,
+            "description": "How far (px) the figure's base sits above the card's bottom edge."
+          },
+          {
+            "name": "figureRightInset",
+            "tsType": "number",
+            "optional": false,
+            "description": "Inset (px) of the figure from the card's right edge."
+          },
+          {
+            "name": "textColumnFraction",
+            "tsType": "number",
+            "optional": false,
+            "description": "Fraction (0–1) of the panel width the text column occupies; the remainder\nis the clear zone the figure stands over."
+          },
+          {
+            "name": "showSite",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "Show the site name as the mono eyebrow."
+          },
+          {
+            "name": "showAffiliation",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "Show the affiliation as a subtle tag."
+          }
+        ]
+      }
     }
   ],
   "AtlasNode": [
@@ -356,6 +553,73 @@
       "required": true,
       "defaultValue": null,
       "description": "Enter a node's dreamscape; fired on a tap / click of an available node."
+    },
+    {
+      "name": "hoverTweaks",
+      "tsType": "AtlasHoverTweaks",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "{\n  hierarchy: \"place-forward\",\n  cardWidth: 440,\n  heroHeight: 208,\n  figureHeight: 320,\n  figureFootInset: 0,\n  figureRightInset: 6,\n  textColumnFraction: 0.64,\n  showSite: true,\n  showAffiliation: true,\n}",
+      "description": "Live geometry / hierarchy for the large desktop hover card. Defaults to the\nbaked design constants; the Dream Atlas dev tweaks panel overrides it.",
+      "nested": {
+        "name": "AtlasHoverTweaks",
+        "fields": [
+          {
+            "name": "hierarchy",
+            "tsType": "AtlasHoverHierarchy",
+            "optional": false,
+            "description": "PROPOSAL — which field the card leads with. `place-forward` mirrors the\nlegacy card (the dreamscape is the hero, its guide the accent line);\n`guide-forward` leads with the resident guide (the figure that already\ndominates the card), with the dreamscape as the overline."
+          },
+          {
+            "name": "cardWidth",
+            "tsType": "number",
+            "optional": false,
+            "description": "Overall card width (px) — large, near the legacy card."
+          },
+          {
+            "name": "heroHeight",
+            "tsType": "number",
+            "optional": false,
+            "description": "Height (px) of the scene image band shown above the glass text panel."
+          },
+          {
+            "name": "figureHeight",
+            "tsType": "number",
+            "optional": false,
+            "description": "Dream Guide / boss figure height (px)."
+          },
+          {
+            "name": "figureFootInset",
+            "tsType": "number",
+            "optional": false,
+            "description": "How far (px) the figure's base sits above the card's bottom edge."
+          },
+          {
+            "name": "figureRightInset",
+            "tsType": "number",
+            "optional": false,
+            "description": "Inset (px) of the figure from the card's right edge."
+          },
+          {
+            "name": "textColumnFraction",
+            "tsType": "number",
+            "optional": false,
+            "description": "Fraction (0–1) of the panel width the text column occupies; the remainder\nis the clear zone the figure stands over."
+          },
+          {
+            "name": "showSite",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "Show the site name as the mono eyebrow."
+          },
+          {
+            "name": "showAffiliation",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "Show the affiliation as a subtle tag."
+          }
+        ]
+      }
     }
   ],
   "Button": [

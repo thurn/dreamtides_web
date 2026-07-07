@@ -19,6 +19,7 @@ import {
   reachableAtlasNodeIds,
   revealedAtlasSite,
   siteTypeIcon,
+  siteTypeName,
 } from "../../atlas/atlas-generator";
 import {
   BOSS_DISPLAY,
@@ -377,6 +378,12 @@ function buildNodeCard(
       title: bossIncarnation?.title ?? BOSS_DISPLAY.title,
       body: bossIncarnation?.description ?? BOSS_DISPLAY.intro,
       dreamsign,
+      // The desktop hover card presents Limbo as the place with the chosen
+      // incarnation as the guide-line; the boss has no site or affiliation.
+      placeName: BOSS_DISPLAY.place,
+      guideName: bossIncarnation?.title ?? BOSS_DISPLAY.title,
+      siteName: null,
+      affiliation: null,
     };
   }
 
@@ -401,6 +408,12 @@ function buildNodeCard(
       // companion card beneath the "unseen dream" text. Unreachable nodes hide
       // it — `buildDreamsignCard` already returns null for those.
       dreamsign,
+      // An unrevealed node has no scene, so the large desktop hover card falls
+      // back to the compact text card; its detail fields stay null.
+      placeName: null,
+      guideName: null,
+      siteName: null,
+      affiliation: null,
     };
   }
 
@@ -408,6 +421,15 @@ function buildNodeCard(
     dreamscape.guideId != null
       ? (questContent.guides.find((g) => g.id === dreamscape.guideId) ?? null)
       : null;
+  const affiliation =
+    dreamscape.affiliationId != null
+      ? (questContent.affiliations.find(
+          (a) => a.id === dreamscape.affiliationId,
+        ) ?? null)
+      : null;
+  // The starter carries no guide or affiliation, so its signature-site name is
+  // suppressed too; a resident dreamscape shows its signature site's label.
+  const siteName = guide != null ? siteTypeName(dreamscape.signatureSite) : null;
 
   // Show the dreamscape scene as the full-bleed hero, with the resident guide's
   // character render standing prominently over it and the guide's name as the
@@ -422,6 +444,12 @@ function buildNodeCard(
     title: guide?.name ?? dreamscape.name,
     body: guide?.homeSpecialty ?? STARTER_BODY,
     dreamsign,
+    // The large desktop hover card presents the place, its resident guide, the
+    // signature site, and the dreamscape's affiliation as distinct fields.
+    placeName: dreamscape.name,
+    guideName: guide?.name ?? null,
+    siteName,
+    affiliation: affiliation?.name ?? null,
   };
 }
 
