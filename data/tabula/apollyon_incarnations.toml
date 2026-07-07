@@ -12,13 +12,13 @@
 [[incarnations]]
 id = "howl_at_worlds_end"
 title = "Apollyon, the World's End"
-description = "Apollyon has the Aspect of Ravening: Spirit Animals multiply, then rise as one devouring chorus."
+description = "Apollyon has the Aspect of Ravening: Spirit animals multiply, then rise as one devouring chorus."
 deck-type = "Spirit Animal Flood"
 
 [[incarnations]]
 id = "last_causality"
 title = "Apollyon, the End of Causality"
-description = "Apollyon has the Aspect of Catastrophe: Each event births another, until consequence becomes catastrophe."
+description = "Apollyon has the Aspect of Catastrophe: Each event births another, portents of the coming storm."
 deck-type = "Event Chain/Storm"
 
 [[incarnations]]
@@ -41,13 +41,13 @@ deck-type = "Cheap-Character Recursion"
 [[incarnations]]
 id = "closed_grave"
 title = "Apollyon, the Broken Cycle"
-description = "Apollyon has the Aspect of Damnation: Broken souls wind through Death's river."
+description = "Apollyon has the Aspect of Damnation: Broken souls wind through death's river."
 deck-type = "Reclaim Loop"
 
 [[incarnations]]
 id = "keeper_of_cast_off_names"
 title = "Apollyon, the Keeper of Names"
-description = "Apollyon has the Aspect of Abandonment: The discarded become omens."
+description = "Apollyon has the Aspect of Abandonment: The discarded become omens of the coming calamity."
 deck-type = "Discard/Reclaim"
 
 [[incarnations]]
@@ -59,11 +59,11 @@ deck-type = "Void-Density Recursion"
 [[incarnations]]
 id = "the_unplaceable"
 title = "Apollyon, the Unplaceable"
-description = "Apollyon has the Aspect of Violation: Outsiders dissolve every defense."
+description = "Apollyon has the Aspect of Violation: Striking with precision dissolves every defense."
 deck-type = "Outsider Tempo"
 
 [[incarnations]]
 id = "herald_of_the_roused_blade"
 title = "Apollyon, the Herald of Revelation"
-description = "Apollyon has the Aspect of Frenzy: Warriors awaken into the final Rapture."
+description = "Apollyon has the Aspect of Frenzy: Warriors awaken into the final rapture."
 deck-type = "Event/Awaken Warriors"
