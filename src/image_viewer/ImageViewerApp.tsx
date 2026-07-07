@@ -131,7 +131,8 @@ export default function ImageViewerApp() {
     const filtered = manifest.images.filter(
       (image) =>
         selected.has(image.category) &&
-        (displayState.showUsed || !(image.used || image.manuallyUsed)),
+        (displayState.showUsed || !(image.used || image.manuallyUsed)) &&
+        (!displayState.onlyNamed || image.cardNames.length > 0),
     );
     return displayState.randomOrder
       ? shuffleBySeed(filtered, shuffleSeed)
@@ -140,6 +141,7 @@ export default function ImageViewerApp() {
     manifest,
     displayState.category,
     displayState.showUsed,
+    displayState.onlyNamed,
     displayState.randomOrder,
     shuffleSeed,
   ]);

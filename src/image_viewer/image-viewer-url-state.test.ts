@@ -12,15 +12,24 @@ describe("parseImageViewerDisplayState", () => {
     );
   });
 
-  it("parses category, used, random, and columns", () => {
+  it("parses category, used, named, random, and columns", () => {
     expect(
-      parseImageViewerDisplayState("?category=warrior&used=1&random=1&cols=6"),
+      parseImageViewerDisplayState(
+        "?category=warrior&used=1&named=1&random=1&cols=6",
+      ),
     ).toEqual({
       category: "warrior",
       showUsed: true,
+      onlyNamed: true,
       randomOrder: true,
       columns: 6,
     });
+  });
+
+  it("defaults the named filter off", () => {
+    expect(parseImageViewerDisplayState("?category=warrior").onlyNamed).toBe(
+      false,
+    );
   });
 
   it("defaults random order off", () => {
@@ -49,6 +58,7 @@ describe("serializeImageViewerDisplayState", () => {
     const state = {
       category: "events",
       showUsed: true,
+      onlyNamed: true,
       randomOrder: true,
       columns: 8 as const,
     };

@@ -55,6 +55,11 @@ export interface ImageViewerDisplayState {
   category: string;
   /** When true, images already used by a finished card are shown too. */
   showUsed: boolean;
+  /**
+   * When true, only images that have been published under at least one card
+   * name (the orange `cardNames` overlay) are shown.
+   */
+  onlyNamed: boolean;
   /** When true, the visible images are shuffled instead of shown alphabetically. */
   randomOrder: boolean;
   /** Images tiled per row. */

@@ -133,6 +133,20 @@ export default function ImageViewerToolbar({
       <label style={{ ...labelStyle, cursor: "pointer" }}>
         <input
           type="checkbox"
+          checked={displayState.onlyNamed}
+          onChange={(event) =>
+            onDisplayStateChange({
+              ...displayState,
+              onlyNamed: event.target.checked,
+            })
+          }
+        />
+        Only named images
+      </label>
+
+      <label style={{ ...labelStyle, cursor: "pointer" }}>
+        <input
+          type="checkbox"
           checked={displayState.randomOrder}
           onChange={(event) =>
             onDisplayStateChange({
