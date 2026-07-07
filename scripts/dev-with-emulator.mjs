@@ -44,12 +44,14 @@ export function normalizeForwardedViteArgs(argv) {
 }
 
 function spawnChild(command, args, envOverrides = {}) {
+  const useProcessGroup = process.platform !== "win32";
   const child = spawn(command, args, {
     env: {
       ...baseChildEnv,
       ...envOverrides,
     },
     stdio: "inherit",
+    detached: useProcessGroup,
     shell: process.platform === "win32",
   });
   children.add(child);
@@ -59,6 +61,25 @@ function spawnChild(command, args, envOverrides = {}) {
   return child;
 }
 
+function killChild(child, signal) {
+  if (process.platform !== "win32" && child.pid !== undefined) {
+    try {
+      process.kill(-child.pid, signal);
+      return;
+    } catch (error) {
+      if (error?.code !== "ESRCH") {
+        console.warn(
+          `Failed to signal child process group ${child.pid}: ${
+            error instanceof Error ? error.message : error
+          }`,
+        );
+      }
+    }
+  }
+
+  child.kill(signal);
+}
+
 function shutdown(code = 0, signal = "SIGTERM") {
   if (shuttingDown) {
     return;
@@ -66,7 +87,7 @@ function shutdown(code = 0, signal = "SIGTERM") {
   shuttingDown = true;
 
   for (const child of children) {
-    child.kill(signal);
+    killChild(child, signal);
   }
 
   const deadline = Date.now() + 8_000;
@@ -77,6 +98,13 @@ function shutdown(code = 0, signal = "SIGTERM") {
     }
   }, 100);
   timer.unref();
+}
+
+export function formatChildExit(code, signal) {
+  if (typeof code === "number") {
+    return `exit code ${code}`;
+  }
+  return `signal ${signal ?? "unknown"}`;
 }
 
 function waitForExit(child) {
@@ -217,7 +245,7 @@ function registerShutdownHandlers() {
   process.on("exit", () => {
     if (!shuttingDown) {
       for (const child of children) {
-        child.kill("SIGTERM");
+        killChild(child, "SIGTERM");
       }
     }
     cleanupTempConfig();
@@ -257,9 +285,20 @@ export async function runDevWithEmulator(argv = process.argv.slice(2)) {
       firebaseConfigPath,
     ]);
 
+    let viteStarted = false;
     emulator.on("exit", (code, signal) => {
       if (!shuttingDown) {
-        console.error(`Firebase emulator exited with ${signal ?? code}.`);
+        if (!viteStarted) {
+          console.error(
+            `Firebase emulator exited before Vite started (${formatChildExit(
+              code,
+              signal,
+            )}).`,
+          );
+          shutdown(1);
+          return;
+        }
+        console.error(`Firebase emulator exited with ${formatChildExit(code, signal)}.`);
         shutdown(typeof code === "number" ? code : 1);
       }
     });
@@ -267,6 +306,7 @@ export async function runDevWithEmulator(argv = process.argv.slice(2)) {
     await waitForExit(spawnChild(process.execPath, ["scripts/setup-assets.mjs"]));
     await waitForDatabaseEmulator(databasePort);
 
+    viteStarted = true;
     const vite = spawnChild("vite", normalizeForwardedViteArgs(argv), emulatorEnv);
     vite.on("exit", (code, signal) => {
       if (!shuttingDown) {

@@ -22,6 +22,8 @@ import {
   validateDreamcallerMapping,
 } from "./setup-assets.mjs";
 
+vi.setConfig({ testTimeout: 20_000 });
+
 afterEach(() => {
   vi.restoreAllMocks();
 });

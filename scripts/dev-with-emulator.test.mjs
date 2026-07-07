@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { normalizeForwardedViteArgs } from "./dev-with-emulator.mjs";
+import {
+  formatChildExit,
+  normalizeForwardedViteArgs,
+} from "./dev-with-emulator.mjs";
 
 describe("normalizeForwardedViteArgs", () => {
   it("uses the default strict port when no port is provided", () => {
@@ -41,5 +44,16 @@ describe("normalizeForwardedViteArgs", () => {
       "--host",
       "0.0.0.0",
     ]);
+  });
+});
+
+describe("formatChildExit", () => {
+  it("formats numeric exit codes for startup failure messages", () => {
+    expect(formatChildExit(0, null)).toBe("exit code 0");
+    expect(formatChildExit(1, null)).toBe("exit code 1");
+  });
+
+  it("formats signal exits for startup failure messages", () => {
+    expect(formatChildExit(null, "SIGTERM")).toBe("signal SIGTERM");
   });
 });
