@@ -9,8 +9,9 @@
 //
 // A component, not a screen: the `.dream-atlas` scope and the `.node` / `.edge`
 // class names the child components emit are class-based styling, which belongs
-// in a component. The map runs vertically — the placed models decide the
-// layout; this surface only scales and reveals.
+// in a component. The placed models decide the layout — vertical on mobile,
+// left-to-right on desktop; this surface only scales the design stage to fit and
+// reveals each node.
 
 import { useEffect, useState } from "react";
 import { type AtlasNodeView } from "./AtlasNode";
@@ -43,7 +44,7 @@ interface AtlasMapProps {
   /** The fixed design canvas the stage scales to fit (letterboxed). */
   stageWidth: number;
   stageHeight: number;
-  /** Placed nodes, laid out by the view model (starter at bottom, boss at top). */
+  /** Placed nodes, laid out by the view model along its layer axis (starter to boss). */
   nodes: AtlasMapNode[];
   /** Forward connectors between nodes. */
   edges: AtlasMapEdge[];

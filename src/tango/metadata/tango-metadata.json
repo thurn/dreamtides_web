@@ -69,7 +69,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Placed nodes, laid out by the view model (starter at bottom, boss at top).",
+      "description": "Placed nodes, laid out by the view model along its layer axis (starter to boss).",
       "nested": {
         "name": "AtlasMapNode",
         "fields": [

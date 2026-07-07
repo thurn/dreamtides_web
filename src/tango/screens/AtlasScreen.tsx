@@ -1,19 +1,20 @@
 // AtlasScreen — the Tango rendering of the Dream Atlas, the between-dreamscapes
 // map where the player chooses which dreamscape to enter next on the way to the
-// final dream. The mobile redesign runs the map VERTICALLY and reads bottom-up:
-// the First Light Meadow starter sits at the bottom, each layer climbs toward
-// the Apollyon boss battle at the top, and the persistent Tango QuestStatusBar
-// docks the run's essence, deck, Dreamcaller, and dreamsigns along the bottom.
-// The utility menu
-// (deck viewer, glossary, atlas regenerate, ...) lives in the app-shell's
-// top-left hamburger, matching the dreamscape screen — this screen renders no
-// title, layer numerals, or debug chrome of its own.
+// final dream. The map orientation is decided by the view-model per viewport:
+// mobile runs it VERTICALLY, reading bottom-up (the First Light Meadow starter at
+// the bottom, each layer climbing toward the Apollyon boss battle at the top);
+// desktop runs it left-to-right (the starter at the left, advancing to the boss
+// at the right). Either way the persistent Tango QuestStatusBar docks the run's
+// essence, deck, Dreamcaller, and dreamsigns along the bottom. The utility menu
+// (deck viewer, glossary, atlas regenerate, ...) lives in the app-shell chrome —
+// the top-left hamburger on mobile, the top-right gear on desktop — so this
+// screen renders no title, layer numerals, or debug chrome of its own.
 //
 // PURE: it renders from a view-model and reports the chosen node through
 // `onEnterNode`; the adapter owns state, navigation, and logging. The screen
-// owns and exports its view types. The vertical map surface, its scale-to-fit,
-// and the node hover previews live in the `AtlasMap` component; this screen
-// composes that surface with the drifting Motes and the docked QuestStatusBar.
+// owns and exports its view types. The map surface, its scale-to-fit, and the
+// node hover previews live in the `AtlasMap` component; this screen composes
+// that surface with the drifting Motes and the docked QuestStatusBar.
 
 import { useRef } from "react";
 import {
@@ -40,10 +41,11 @@ export interface AtlasHudView {
 
 /** Everything the atlas screen renders, mapped from live quest state. */
 export interface AtlasView {
-  /** The portrait design canvas the stage scales to fit (letterboxed). */
+  /** The design canvas the stage scales to fit (letterboxed): portrait on
+   * mobile, landscape on desktop. */
   stageWidth: number;
   stageHeight: number;
-  /** Placed nodes, bottom (starter) to top (boss). */
+  /** Placed nodes, running starter → boss along the map's layer axis. */
   nodes: AtlasMapNode[];
   /** Forward connectors between nodes. */
   edges: AtlasMapEdge[];

@@ -11,6 +11,8 @@ import {
   ATLAS_LAYOUT_DESKTOP,
   ATLAS_LAYOUT_MOBILE,
   ATLAS_STAGE_HEIGHT,
+  ATLAS_STAGE_LANDSCAPE_HEIGHT,
+  ATLAS_STAGE_LANDSCAPE_WIDTH,
   ATLAS_STAGE_WIDTH,
   atlasChoiceLayer,
   atlasEdgeKind,
@@ -148,6 +150,26 @@ describe("resolveAtlasNodeGeometry", () => {
   it("returns an empty map for an atlas with no positioned nodes", () => {
     const atlas = makeVerticalAtlas();
     expect(resolveAtlasNodeGeometry({ ...atlas, nodes: {} }).size).toBe(0);
+  });
+
+  it("runs the layer axis left-to-right on the landscape (desktop) profile: starter at the left, boss at the right", () => {
+    const geometry = resolveAtlasNodeGeometry(
+      makeVerticalAtlas(),
+      ATLAS_LAYOUT_DESKTOP,
+    );
+    const starter = geometry.get("starter");
+    const middle = geometry.get("middle");
+    const boss = geometry.get("boss");
+    expect(starter && middle && boss).toBeTruthy();
+    // The starter (layer axis min) is leftmost (smallest `left`); the boss
+    // (layer axis max) is rightmost (largest `left`); the middle sits between.
+    expect(starter!.left).toBeLessThan(middle!.left);
+    expect(middle!.left).toBeLessThan(boss!.left);
+    const lefts = [starter!.left, middle!.left, boss!.left];
+    expect(Math.min(...lefts)).toBe(starter!.left);
+    expect(Math.max(...lefts)).toBe(boss!.left);
+    // The within-layer spread fans vertically, so a node's y decides its `top`.
+    expect(middle!.top).toBeLessThan(boss!.top);
   });
 
   it("draws larger nodes on mobile than on desktop so icons stay legible once the narrow viewport scales the stage down", () => {
@@ -299,5 +321,19 @@ describe("buildAtlasView", () => {
     // starter → middle and middle → boss.
     expect(view.edges).toHaveLength(2);
     expect(view.hud.essence).toBe(0);
+  });
+
+  it("assembles a landscape stage on desktop", () => {
+    const state = {
+      essence: 0,
+      deck: [],
+      dreamcaller: null,
+      dreamsigns: [],
+      completionLevel: 1,
+    } as unknown as QuestState;
+    const view = buildAtlasView(makeVerticalAtlas(), EMPTY_CONTENT, state, true);
+    expect(view.stageWidth).toBe(ATLAS_STAGE_LANDSCAPE_WIDTH);
+    expect(view.stageHeight).toBe(ATLAS_STAGE_LANDSCAPE_HEIGHT);
+    expect(view.stageWidth).toBeGreaterThan(view.stageHeight);
   });
 });
