@@ -194,3 +194,19 @@ objects from quest state refreshes. The branch that recorded this issue gates
 the event on the closed-to-open transition; if this regresses, the browser
 console shows repeated `desktop_deck_viewer_opened` records for one overlay
 session.
+
+Pre-existing: dev-with-emulator can exit before Vite starts in a busy multi-worktree environment
+=============================================================================================
+
+While QAing the InfoCard mobile typography worktree, `npm run dev -- --port 5175`
+ran asset setup and started a Realtime Database emulator on 127.0.0.1:9012, then
+the wrapper process exited before launching the Vite child for port 5175. The
+orphaned database emulator kept running until manually terminated. The log
+showed many other emulator suites already running for the same
+`demo-quest-prototype` project and included Firebase's multiple-instance
+warning.
+
+The component QA could proceed by starting Vite directly with
+`./node_modules/.bin/vite --port 5175 --strictPort --host 127.0.0.1`, but the
+repo-level dev wrapper should either launch Vite reliably after emulator startup
+or fail with a clear error and clean up the emulator child it started.

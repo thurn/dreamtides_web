@@ -41,7 +41,11 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { Pressable, PRESS_SCALE, HOVER_SCALE } from "../../primitives/Pressable";
+import {
+  Pressable,
+  PRESS_SCALE,
+  HOVER_SCALE,
+} from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { type Glyph } from "../../primitives/glyph";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
@@ -83,6 +87,8 @@ const FULL_BLEED_INSET = 12;
 const FULL_BLEED_FIGURE_HEIGHT = 208;
 const INFO_CARD_GLASS_FILL = "rgba(18,14,28,0.5)";
 const INFO_CARD_GLASS_BACKGROUND = `linear-gradient(150deg, rgba(255,255,255,0.07), rgba(255,255,255,0) 42%), ${INFO_CARD_GLASS_FILL}`;
+const geometryPx = (px: number): string =>
+  `calc(${String(px)}px * var(--info-card-geometry-scale, 1))`;
 
 /**
  * The fixed width (px) of every InfoCard — its own geometry, not a design-system
@@ -93,68 +99,74 @@ const INFO_CARD_GLASS_BACKGROUND = `linear-gradient(150deg, rgba(255,255,255,0.0
 export const INFO_CARD_WIDTH = CARD_W;
 
 /**
- * On a narrow (mobile) viewport every info card scales down uniformly — text,
- * media, and padding together — so it spans about this fraction of the screen
- * width: small enough to read comfortably on a phone and for two cards to sit
- * side by side. It is capped at native size, so a wide (desktop) viewport,
- * where this fraction already exceeds the native width, renders at scale 1.
+ * On a narrow (mobile) viewport every info card lays out at this fraction of
+ * the screen width. The width is capped at the native card width, so desktop
+ * keeps the authored popover geometry.
  */
 const MOBILE_WIDTH_FRACTION = 0.45;
+const MOBILE_TEXT_SCALE = 0.5;
 
 /**
- * The on-screen scale (≤ 1) for an info card on a `viewportWidth`-px screen:
- * shrink the fixed native width to `fraction` of the screen, never enlarging
- * past native size, so desktop stays 1. PURE. Every info card applies this ONE
- * rule (via a CSS `zoom`, so the card's layout box shrinks with it), which is
- * what keeps their on-screen size consistent everywhere. Exported so a surface
- * laying out around a reveal (the atlas node/dreamsign pair) can ask whether
- * cards are in their scaled-down mobile size.
+ * The laid-out width (px) for an info card on a `viewportWidth`-px screen:
+ * narrow screens use `fraction` of the viewport, capped at native size so
+ * desktop stays unchanged. PURE.
  */
-export function infoCardScale(
+export function infoCardWidth(
   viewportWidth: number,
   fraction: number = MOBILE_WIDTH_FRACTION,
 ): number {
   if (!(viewportWidth > 0)) {
-    return 1;
+    return CARD_W;
   }
-  return Math.min(1, (fraction * viewportWidth) / CARD_W);
+  return Math.min(CARD_W, fraction * viewportWidth);
+}
+
+/**
+ * The internal typography multiplier for the same viewport: mobile-sized cards
+ * use the shared mobile text scale, while native-width cards use the token
+ * type scale. PURE.
+ */
+export function infoCardTextScale(
+  viewportWidth: number,
+  mobileTextScale: number = MOBILE_TEXT_SCALE,
+): number {
+  return infoCardWidth(viewportWidth) < CARD_W ? mobileTextScale : 1;
 }
 
 /* ----------------------------------------------------------------------------
- * DEV-ONLY: a live-tunable override of MOBILE_WIDTH_FRACTION, so the mobile
- * scale can be dialed in from InfoCardScaleTweakPanel (see the tango skill's
- * tweaks-panel loop). In production nothing calls the setter, so the value
- * stays at MOBILE_WIDTH_FRACTION and behaviour is unchanged. Once the value is
- * chosen this whole block, the panel, and its mount are removed and the number
- * is baked into MOBILE_WIDTH_FRACTION above.
+ * DEV-ONLY: a live-tunable override of MOBILE_TEXT_SCALE, so the mobile
+ * typography can be dialed in from InfoCardScaleTweakPanel (see the tango
+ * skill's tweaks-panel loop). In production nothing calls the setter, so the
+ * value stays at MOBILE_TEXT_SCALE. Once chosen, this block, the panel, and its
+ * mount are removed and the number is baked into MOBILE_TEXT_SCALE above.
  * ------------------------------------------------------------------------- */
 /** The baked default, exposed so the tweak panel can offer a "reset". */
-export const MOBILE_WIDTH_FRACTION_DEFAULT = MOBILE_WIDTH_FRACTION;
+export const MOBILE_TEXT_SCALE_DEFAULT = MOBILE_TEXT_SCALE;
 
-let devMobileFraction = MOBILE_WIDTH_FRACTION;
-const devMobileFractionListeners = new Set<() => void>();
+let devMobileTextScale = MOBILE_TEXT_SCALE;
+const devMobileTextScaleListeners = new Set<() => void>();
 
-/** DEV: set the live mobile width fraction and re-render every info card. */
-export function setInfoCardMobileFraction(fraction: number): void {
-  devMobileFraction = fraction;
-  devMobileFractionListeners.forEach((listener) => listener());
+/** DEV: set the live mobile typography multiplier and re-render every info card. */
+export function setInfoCardMobileTextScale(scale: number): void {
+  devMobileTextScale = scale;
+  devMobileTextScaleListeners.forEach((listener) => listener());
 }
 
-function getInfoCardMobileFraction(): number {
-  return devMobileFraction;
+function getInfoCardMobileTextScale(): number {
+  return devMobileTextScale;
 }
 
-function subscribeInfoCardMobileFraction(callback: () => void): () => void {
-  devMobileFractionListeners.add(callback);
-  return () => devMobileFractionListeners.delete(callback);
+function subscribeInfoCardMobileTextScale(callback: () => void): () => void {
+  devMobileTextScaleListeners.add(callback);
+  return () => devMobileTextScaleListeners.delete(callback);
 }
 
-/** DEV: the live mobile width fraction, re-rendering on tweak-panel changes. */
-export function useInfoCardMobileFraction(): number {
+/** DEV: the live mobile typography multiplier, re-rendering on panel changes. */
+export function useInfoCardMobileTextScale(): number {
   return React.useSyncExternalStore(
-    subscribeInfoCardMobileFraction,
-    getInfoCardMobileFraction,
-    getInfoCardMobileFraction,
+    subscribeInfoCardMobileTextScale,
+    getInfoCardMobileTextScale,
+    getInfoCardMobileTextScale,
   );
 }
 
@@ -188,7 +200,7 @@ export function setRevealDelay(ms: number): void {
 const shell: React.CSSProperties = {
   ...glassSurfaceStyle(),
   background: INFO_CARD_GLASS_BACKGROUND,
-  width: CARD_W,
+  width: "var(--info-card-width)",
   boxSizing: "border-box",
   textAlign: "left",
   overflow: "hidden",
@@ -205,21 +217,33 @@ const shell: React.CSSProperties = {
 };
 const tHeadline: React.CSSProperties = {
   margin: 0,
-  font: token("--t-popover-headline"),
+  fontFamily: token("--font-title"),
+  fontSize: "calc(19px * var(--info-card-text-scale, 1))",
+  fontWeight: 600,
+  lineHeight: 1.18,
   color: token("--text-primary"),
   letterSpacing: "-0.01em",
 };
 const tEpithet: React.CSSProperties = {
   margin: 0,
-  font: token("--t-popover-epithet"),
+  fontFamily: token("--font-title"),
+  fontSize: "calc(14px * var(--info-card-text-scale, 1))",
+  fontWeight: 500,
+  lineHeight: 1.25,
   color: token("--text-primary"),
 };
 const tBody: React.CSSProperties = {
-  font: token("--t-popover-body"),
+  fontFamily: token("--font-rules-text"),
+  fontSize: "calc(14px * var(--info-card-text-scale, 1))",
+  fontWeight: 500,
+  lineHeight: 1.45,
   color: token("--text-primary"),
 };
 const tMeta: React.CSSProperties = {
-  font: token("--t-popover-meta"),
+  fontFamily: token("--font-meta"),
+  fontSize: "calc(10.5px * var(--info-card-text-scale, 1))",
+  fontWeight: 700,
+  lineHeight: 1,
   letterSpacing: ".12em",
   textTransform: "uppercase",
   color: token("--text-faint"),
@@ -237,12 +261,7 @@ export const SITE_DISC: React.CSSProperties = {
 };
 
 /** Which media treatment an InfoCard renders. */
-export type InfoCardVariant =
-  | "object"
-  | "fullBleed"
-  | "icon"
-  | "tide"
-  | "text";
+export type InfoCardVariant = "object" | "fullBleed" | "icon" | "tide" | "text";
 
 /**
  * The copy every InfoCard carries, shared across all media variants. The
@@ -370,8 +389,8 @@ export type InfoCardProps =
 /**
  * The info card's variant body (object / fullBleed / icon / tide / text) on the
  * one fixed liquid-glass shell. Rendered at its native geometry; the exported
- * {@link InfoCard} wraps this in the viewport-driven mobile scale-down so the
- * body never has to think about screen size.
+ * {@link InfoCard} supplies the viewport-driven width and text-scale variables
+ * so the body never has to read screen size.
  */
 function InfoCardBody(props: InfoCardProps): React.ReactElement {
   const { title, body } = props;
@@ -382,7 +401,10 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
   const Body =
     body == null ? null : (
       <div
-        style={{ ...tBody, textAlign: variant === "object" ? "center" : "left" }}
+        style={{
+          ...tBody,
+          textAlign: variant === "object" ? "center" : "left",
+        }}
       >
         {renderRichText(body)}
       </div>
@@ -397,8 +419,8 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
     const media = frame ? (
       <div
         style={{
-          width: 124,
-          height: 150,
+          width: geometryPx(124),
+          height: geometryPx(150),
           flex: "none",
           position: "relative",
           overflow: "hidden",
@@ -428,8 +450,8 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
         alt=""
         draggable={false}
         style={{
-          width: 96,
-          height: 96,
+          width: geometryPx(96),
+          height: geometryPx(96),
           objectFit: "contain",
           display: "block",
           filter: imageFilter ? resolveMediaFilter(imageFilter) : undefined,
@@ -440,11 +462,11 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
       <div
         style={{
           ...shell,
-          padding: "18px 16px 16px",
+          padding: `${geometryPx(18)} ${geometryPx(16)} ${geometryPx(16)}`,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: 12,
+          gap: geometryPx(12),
           textAlign: "center",
         }}
       >
@@ -465,8 +487,14 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
      clipped. A long body simply grows the card taller and the image grows with
      it, so the image always fills behind the card. --- */
   if (props.variant === "fullBleed") {
-    const { image, imageCrop = "center", imageFilter, figure, meta, subtitle } =
-      props;
+    const {
+      image,
+      imageCrop = "center",
+      imageFilter,
+      figure,
+      meta,
+      subtitle,
+    } = props;
     const Meta = meta ? (
       <div style={{ ...tMeta, marginBottom: 7 }}>{meta}</div>
     ) : null;
@@ -474,15 +502,15 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
       <div
         style={{
           position: "relative",
-          width: CARD_W,
+          width: "var(--info-card-width)",
           // A square hero by default; grows only if the glass card is taller
           // than the square, in which case the image layer grows with it.
-          minHeight: CARD_W,
+          minHeight: "var(--info-card-width)",
           boxSizing: "border-box",
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
-          padding: FULL_BLEED_INSET,
+          padding: geometryPx(FULL_BLEED_INSET),
         }}
       >
         <div
@@ -526,11 +554,11 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
             style={{
               position: "absolute",
               left: "50%",
-              top: FULL_BLEED_INSET,
+              top: geometryPx(FULL_BLEED_INSET),
               transform: "translateX(-50%)",
-              height: FULL_BLEED_FIGURE_HEIGHT,
+              height: geometryPx(FULL_BLEED_FIGURE_HEIGHT),
               width: "auto",
-              maxWidth: `calc(100% - ${String(FULL_BLEED_INSET * 2)}px)`,
+              maxWidth: `calc(100% - ${geometryPx(FULL_BLEED_INSET * 2)})`,
               objectFit: "contain",
               filter: "drop-shadow(0 8px 18px rgba(0,0,0,0.62))",
               pointerEvents: "none",
@@ -543,7 +571,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
             ...glassSurfaceStyle(),
             background: INFO_CARD_GLASS_BACKGROUND,
             position: "relative",
-            padding: `${String(PADY)}px ${String(PADX)}px`,
+            padding: `${geometryPx(PADY)} ${geometryPx(PADX)}`,
             boxSizing: "border-box",
             textAlign: "left",
             // Same wrapping reset as the shell so on-image copy always wraps to
@@ -553,7 +581,9 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
           }}
         >
           {Meta}
-          <div style={{ ...tHeadline, marginBottom: subtitle ? 2 : body ? 7 : 0 }}>
+          <div
+            style={{ ...tHeadline, marginBottom: subtitle ? 2 : body ? 7 : 0 }}
+          >
             {titleContent}
           </div>
           {subtitle !== undefined && subtitle !== "" && (
@@ -561,7 +591,9 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
               {subtitle}
             </div>
           )}
-          {body != null && <div style={{ ...tBody }}>{renderRichText(body)}</div>}
+          {body != null && (
+            <div style={{ ...tBody }}>{renderRichText(body)}</div>
+          )}
         </div>
       </div>
     );
@@ -571,12 +603,20 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
   if (props.variant === "icon") {
     const { glyph } = props;
     return (
-      <div style={{ ...shell, padding: `${String(PADY)}px ${String(PADX)}px` }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <div
+        style={{ ...shell, padding: `${geometryPx(PADY)} ${geometryPx(PADX)}` }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: geometryPx(12),
+          }}
+        >
           <span
             style={{
-              width: 44,
-              height: 44,
+              width: geometryPx(44),
+              height: geometryPx(44),
               flex: "none",
               borderRadius: "50%",
               display: "grid",
@@ -587,7 +627,10 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
             <i
               className={glyph}
               aria-hidden="true"
-              style={{ fontSize: 21, color: token("--text-on-accent") }}
+              style={{
+                fontSize: geometryPx(21),
+                color: token("--text-on-accent"),
+              }}
             />
           </span>
           <div style={tHeadline}>{titleContent}</div>
@@ -605,12 +648,20 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
     const { tide } = props;
     const v = tideVisual(tide);
     return (
-      <div style={{ ...shell, padding: `${String(PADY)}px ${String(PADX)}px` }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <div
+        style={{ ...shell, padding: `${geometryPx(PADY)} ${geometryPx(PADX)}` }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: geometryPx(12),
+          }}
+        >
           <span
             style={{
-              width: 44,
-              height: 44,
+              width: geometryPx(44),
+              height: geometryPx(44),
               flex: "none",
               borderRadius: "50%",
               display: "grid",
@@ -622,7 +673,10 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
             <i
               className={v.icon}
               aria-hidden="true"
-              style={{ fontSize: 21, color: v.fg }}
+              style={{
+                fontSize: geometryPx(21),
+                color: v.fg,
+              }}
             />
           </span>
           <div>
@@ -646,13 +700,15 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
     <div style={{ ...tMeta, marginBottom: 7 }}>{meta}</div>
   ) : null;
   return (
-    <div style={{ ...shell, padding: `${String(PADY)}px ${String(PADX)}px` }}>
+    <div
+      style={{ ...shell, padding: `${geometryPx(PADY)} ${geometryPx(PADX)}` }}
+    >
       {Meta}
       <div
         style={{
           display: "flex",
           alignItems: "center",
-          gap: 9,
+          gap: geometryPx(9),
           marginBottom: subtitle ? 2 : body ? 7 : 0,
         }}
       >
@@ -660,13 +716,18 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
           <i
             className={leadGlyph}
             aria-hidden="true"
-            style={{ fontSize: 20, color: token("--text-secondary") }}
+            style={{
+              fontSize: geometryPx(20),
+              color: token("--text-secondary"),
+            }}
           />
         )}
         <div style={tHeadline}>{titleContent}</div>
       </div>
       {subtitle !== undefined && subtitle !== "" && (
-        <div style={{ ...tEpithet, marginBottom: body ? 7 : 0 }}>{subtitle}</div>
+        <div style={{ ...tEpithet, marginBottom: body ? 7 : 0 }}>
+          {subtitle}
+        </div>
       )}
       {Body}
     </div>
@@ -678,29 +739,39 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
  * varies (object / fullBleed / icon / tide / text) on one fixed liquid-glass
  * shell (no caret, one GroupPanel material + type scale).
  *
- * Wraps the variant body in the ONE viewport-driven mobile scale-down (see
- * {@link infoCardScale}): on a phone every info card shrinks uniformly to the
- * same fraction of the screen; on desktop it renders at native size. The scale
- * is a CSS `zoom`, which shrinks the card's LAYOUT box (not just its paint), so
- * the press-reveal placement engine and any flow layout that hugs a card
- * measure the real on-screen size with no extra plumbing — and every card reads
- * at a consistent size for its screen.
+ * Wraps the variant body in the ONE viewport-driven mobile layout rule (see
+ * {@link infoCardWidth}): on a phone every info card lays out at the same
+ * fraction of the screen; on desktop it renders at native size. The internal
+ * type scale is a separate shared mobile multiplier so title, epithet, meta,
+ * and body text keep their proportions while the glass text blocks naturally
+ * grow or shrink from the text they contain.
  *
  * The placement/timing engine is attached as statics:
  * `InfoCard.PressPopover / PressInfo / usePressReveal / anchorRect /
  * setRevealDelay / SITE_DISC`.
  */
 function InfoCardComponent(props: InfoCardProps): React.ReactElement {
-  const scale = infoCardScale(useViewportWidth(), useInfoCardMobileFraction());
+  const viewportWidth = useViewportWidth();
+  const cardWidth = infoCardWidth(viewportWidth);
+  const geometryScale = cardWidth / CARD_W;
+  const textScale = infoCardTextScale(
+    viewportWidth,
+    useInfoCardMobileTextScale(),
+  );
+  const style: React.CSSProperties &
+    Record<
+      | "--info-card-width"
+      | "--info-card-geometry-scale"
+      | "--info-card-text-scale",
+      string
+    > = {
+    "--info-card-width": `${String(cardWidth)}px`,
+    "--info-card-geometry-scale": String(geometryScale),
+    "--info-card-text-scale": String(textScale),
+    width: cardWidth,
+  };
   return (
-    <div
-      style={{
-        // `width: max-content` gives the wrapper a definite, content-driven
-        // width (the body's fixed native width) for `zoom` to scale from.
-        width: "max-content",
-        zoom: scale === 1 ? undefined : scale,
-      }}
-    >
+    <div style={style}>
       <InfoCardBody {...props} />
     </div>
   );
@@ -748,7 +819,11 @@ export interface AnchorRect {
  * is allowed to fire); a press whose duration reaches or exceeds the window is
  * a HOLD (returns true → reveal only, the child click is swallowed on touch).
  */
-export function isHold(downT: number, upT: number, clickWindow: number): boolean {
+export function isHold(
+  downT: number,
+  upT: number,
+  clickWindow: number,
+): boolean {
   return upT - downT >= clickWindow;
 }
 
@@ -819,9 +894,13 @@ export function computePopoverPosition(
   const anchorLeft = spanLeft ?? x;
   const anchorRight = spanRight ?? x;
   const obstacleLeft =
-    pointerX == null ? anchorLeft : Math.min(anchorLeft, pointerX - FINGER_RADIUS_PX);
+    pointerX == null
+      ? anchorLeft
+      : Math.min(anchorLeft, pointerX - FINGER_RADIUS_PX);
   const obstacleRight =
-    pointerX == null ? anchorRight : Math.max(anchorRight, pointerX + FINGER_RADIUS_PX);
+    pointerX == null
+      ? anchorRight
+      : Math.max(anchorRight, pointerX + FINGER_RADIUS_PX);
 
   const leftOfObstacle = obstacleLeft - gap - width;
   const rightOfObstacle = obstacleRight + gap;
@@ -893,7 +972,10 @@ function useFinePointer(): boolean {
   );
 
   React.useEffect(() => {
-    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+    if (
+      typeof window === "undefined" ||
+      typeof window.matchMedia !== "function"
+    ) {
       return;
     }
     const query = window.matchMedia(FINE_POINTER_QUERY);
@@ -906,7 +988,7 @@ function useFinePointer(): boolean {
 }
 
 /* ================================================================
-   useViewportWidth — live viewport width driving the mobile scale-down, tracking
+   useViewportWidth — live viewport width driving mobile layout, tracking
    resize / rotate the same way useFinePointer tracks pointer-mode changes.
    ================================================================ */
 function useViewportWidth(): number {
@@ -955,7 +1037,10 @@ export interface UsePressRevealResult {
    * clamp keeps the fingertip disc clear of the card. A ref, so reading it in a
    * layout effect never lags a render.
    */
-  pointerRef: React.MutableRefObject<{ clientX: number; clientY: number } | null>;
+  pointerRef: React.MutableRefObject<{
+    clientX: number;
+    clientY: number;
+  } | null>;
 }
 
 /* ================================================================
@@ -972,9 +1057,9 @@ export interface UsePressRevealResult {
    click window discriminates a TAP (child onClick fires) from a HOLD
    (reveal only).
    ================================================================ */
-export function usePressReveal(
-  { clickWindow = CLICK_WINDOW }: { clickWindow?: number } = {},
-): UsePressRevealResult {
+export function usePressReveal({
+  clickWindow = CLICK_WINDOW,
+}: { clickWindow?: number } = {}): UsePressRevealResult {
   const fine = useFinePointer();
   const [pressed, setPressed] = React.useState(false);
   const [hovered, setHovered] = React.useState(false);
@@ -1048,7 +1133,8 @@ export function usePressReveal(
     setShown(false);
   };
 
-  const heldPastTap = (): boolean => isHold(downAt.current, Date.now(), clickWindow);
+  const heldPastTap = (): boolean =>
+    isHold(downAt.current, Date.now(), clickWindow);
 
   React.useEffect(() => clear, []);
 
@@ -1093,10 +1179,9 @@ export function PressPopover({
     if (!el || !anchor) {
       return;
     }
-    // Measure the card's ACTUAL rendered box. The card sizes itself and scales
-    // down on mobile (a CSS `zoom`, which shrinks the layout box), so its live
-    // `offsetWidth`/`offsetHeight` are the real on-screen dimensions the clamp
-    // positions against — no size needs to be threaded in.
+    // Measure the card's ACTUAL rendered box. The card lays itself out at its
+    // mobile or desktop width, so its live `offsetWidth`/`offsetHeight` are the
+    // real on-screen dimensions the clamp positions against.
     setPos(
       computePopoverPosition(
         anchor,
@@ -1120,7 +1205,7 @@ export function PressPopover({
       className="tango"
       style={{
         position: "absolute",
-        // Hug the card so `offsetWidth` is the card's real (scaled) width.
+        // Hug the card so `offsetWidth` is the card's real layout width.
         width: "max-content",
         zIndex: 90,
         pointerEvents: "none",
@@ -1181,7 +1266,9 @@ export function PressInfo({
 
   React.useLayoutEffect(() => {
     if (shown && stageRef.current && elRef.current) {
-      setAnchor(anchorRect(stageRef.current, elRef.current, pointerRef.current));
+      setAnchor(
+        anchorRect(stageRef.current, elRef.current, pointerRef.current),
+      );
     } else {
       setAnchor(null);
     }

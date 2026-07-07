@@ -1,10 +1,10 @@
-// DEV-ONLY tweak panel — dial in the mobile info-card scale live, then bake the
-// chosen value into MOBILE_WIDTH_FRACTION in InfoCard and DELETE this file (the
-// tweaks-panel loop; see the tango skill's "Tuning taste values" section).
+// DEV-ONLY tweak panel — dial in the mobile info-card typography live, then
+// bake the chosen value into MOBILE_TEXT_SCALE in InfoCard and DELETE this file
+// (the tweaks-panel loop; see the tango skill's "Tuning taste values" section).
 //
-// The mobile scale is a single CSS `zoom` on the whole card, so moving the one
-// slider shrinks the title, body, meta, and the containing card TOGETHER and
-// proportionally — the card gets smaller as the text gets smaller.
+// Mobile InfoCards are always laid out at 45% of the viewport width. This panel
+// controls only the internal text scale, applied proportionally to title, body,
+// meta, and epithet text across every InfoCard variant.
 //
 // This file lives under src/tango/screens/devtools/, which is exempt from the
 // raw-input / hardcoded-value / untokenized-length lint rules, so it may use
@@ -14,11 +14,11 @@
 import * as React from "react";
 import {
   InfoCard,
-  INFO_CARD_WIDTH,
-  infoCardScale,
-  setInfoCardMobileFraction,
-  useInfoCardMobileFraction,
-  MOBILE_WIDTH_FRACTION_DEFAULT,
+  infoCardTextScale,
+  infoCardWidth,
+  MOBILE_TEXT_SCALE_DEFAULT,
+  setInfoCardMobileTextScale,
+  useInfoCardMobileTextScale,
 } from "../../components/overlay/InfoCard";
 import { richText } from "../../components/card/rich-text";
 
@@ -62,20 +62,20 @@ const readoutStyle: React.CSSProperties = {
 
 /**
  * The floating tweak panel. Mount at the app root behind `import.meta.env.DEV`.
- * Renders a slider for the mobile width fraction, a reference-width slider so
+ * Renders a slider for the mobile text multiplier, a reference-width slider so
  * the resulting sizes read out at a chosen phone width, a copy-paste JSON line,
  * and a live text-card preview that reflects the tweak on the real viewport.
  */
 export function InfoCardScaleTweakPanel(): React.ReactElement {
-  const fraction = useInfoCardMobileFraction();
+  const mobileTextScale = useInfoCardMobileTextScale();
   const [refWidth, setRefWidth] = React.useState(390);
   const [collapsed, setCollapsed] = React.useState(false);
 
-  const scaleAtRef = infoCardScale(refWidth, fraction);
-  const cardPx = Math.round(INFO_CARD_WIDTH * scaleAtRef);
-  const titlePx = (NATIVE_TITLE_PX * scaleAtRef).toFixed(1);
-  const bodyPx = (NATIVE_BODY_PX * scaleAtRef).toFixed(1);
-  const json = `{ "mobileWidthFraction": ${fraction.toFixed(3)} }`;
+  const cardPx = Math.round(infoCardWidth(refWidth));
+  const textScaleAtRef = infoCardTextScale(refWidth, mobileTextScale);
+  const titlePx = (NATIVE_TITLE_PX * textScaleAtRef).toFixed(1);
+  const bodyPx = (NATIVE_BODY_PX * textScaleAtRef).toFixed(1);
+  const json = `{ "mobileTextScale": ${mobileTextScale.toFixed(3)} }`;
 
   return (
     <div style={panelStyle}>
@@ -87,7 +87,7 @@ export function InfoCardScaleTweakPanel(): React.ReactElement {
         }}
       >
         <strong style={{ fontSize: 12, letterSpacing: "0.02em" }}>
-          Info-card mobile scale
+          Info-card mobile type
         </strong>
         <button
           type="button"
@@ -108,20 +108,20 @@ export function InfoCardScaleTweakPanel(): React.ReactElement {
       {!collapsed && (
         <>
           <div style={rowStyle}>
-            <span style={{ width: 62, opacity: 0.8 }}>fraction</span>
+            <span style={{ width: 62, opacity: 0.8 }}>type</span>
             <input
               type="range"
-              min={0.2}
-              max={0.55}
+              min={0.35}
+              max={1}
               step={0.005}
-              value={fraction}
+              value={mobileTextScale}
               onChange={(e) =>
-                setInfoCardMobileFraction(Number.parseFloat(e.target.value))
+                setInfoCardMobileTextScale(Number.parseFloat(e.target.value))
               }
               style={{ flex: 1 }}
             />
             <span style={{ width: 40, textAlign: "right" }}>
-              {fraction.toFixed(3)}
+              {mobileTextScale.toFixed(3)}
             </span>
           </div>
 
@@ -141,12 +141,14 @@ export function InfoCardScaleTweakPanel(): React.ReactElement {
 
           <div style={readoutStyle}>
             <div>
-              At {refWidth}px screen — zoom{" "}
-              <strong>{scaleAtRef.toFixed(3)}</strong>
+              At {refWidth}px screen — card <strong>{cardPx}px</strong>
             </div>
             <div>
-              card <strong>{cardPx}px</strong> · title{" "}
-              <strong>{titlePx}px</strong> · body <strong>{bodyPx}px</strong>
+              text multiplier <strong>{textScaleAtRef.toFixed(3)}</strong>
+            </div>
+            <div>
+              title <strong>{titlePx}px</strong> · body{" "}
+              <strong>{bodyPx}px</strong>
             </div>
             <div
               style={{
@@ -165,7 +167,7 @@ export function InfoCardScaleTweakPanel(): React.ReactElement {
             <button
               type="button"
               onClick={() =>
-                setInfoCardMobileFraction(MOBILE_WIDTH_FRACTION_DEFAULT)
+                setInfoCardMobileTextScale(MOBILE_TEXT_SCALE_DEFAULT)
               }
               style={{
                 background: "transparent",
@@ -176,15 +178,15 @@ export function InfoCardScaleTweakPanel(): React.ReactElement {
                 padding: "3px 10px",
               }}
             >
-              reset to {MOBILE_WIDTH_FRACTION_DEFAULT}
+              reset to {MOBILE_TEXT_SCALE_DEFAULT}
             </button>
             <span style={{ opacity: 0.6, fontSize: 11 }}>
               live preview below ↓
             </span>
           </div>
 
-          {/* Live preview: a real InfoCard, which reflects the tweak on the
-              actual viewport (drive a narrow viewport to see the mobile scale).
+          {/* Live preview: a real InfoCard, which reflects the typography tweak
+              on the actual viewport (drive a narrow viewport to see mobile).
               `.tango` re-establishes the token scope the card renders from. */}
           <div
             className="tango"

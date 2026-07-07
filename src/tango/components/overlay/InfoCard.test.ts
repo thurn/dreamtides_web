@@ -27,36 +27,43 @@ import {
   GAP,
   InfoCard,
   INFO_CARD_WIDTH,
-  infoCardScale,
+  infoCardTextScale,
+  infoCardWidth,
   isHold,
   type AnchorRect,
 } from "./InfoCard";
 
-describe("infoCardScale — the viewport-driven mobile scale-down", () => {
-  it("shrinks a card to ~45% of a narrow (mobile) screen", () => {
-    // On a phone the native card is wider than 45% of the screen, so it scales.
+describe("infoCardWidth — the viewport-driven mobile width", () => {
+  it("lays a card out at ~45% of a narrow (mobile) screen", () => {
+    // On a phone the native card is wider than 45% of the screen, so it narrows.
     const screenW = 390;
-    const scale = infoCardScale(screenW);
-    expect(INFO_CARD_WIDTH * scale).toBeCloseTo(0.45 * screenW, 5);
-    expect(scale).toBeLessThan(1);
+    const width = infoCardWidth(screenW);
+    expect(width).toBeCloseTo(0.45 * screenW, 5);
+    expect(width).toBeLessThan(INFO_CARD_WIDTH);
   });
 
-  it("lets two scaled cards sit side by side within a phone screen", () => {
+  it("lets two mobile cards sit side by side within a phone screen", () => {
     const screenW = 360;
-    const scale = infoCardScale(screenW);
-    const pairWidth = (INFO_CARD_WIDTH * 2 + 10) * scale;
+    const pairWidth = infoCardWidth(screenW) * 2 + 10;
     expect(pairWidth).toBeLessThan(screenW);
   });
 
-  it("caps at native size on a wide (desktop) screen, so desktop is unchanged", () => {
-    // 45% of a desktop viewport exceeds the native width, so the scale is 1.
-    expect(infoCardScale(1440)).toBe(1);
-    expect(infoCardScale(768)).toBe(1);
+  it("caps at native size on a wide (desktop) screen", () => {
+    // 45% of a desktop viewport exceeds the native width.
+    expect(infoCardWidth(1440)).toBe(INFO_CARD_WIDTH);
+    expect(infoCardWidth(768)).toBe(INFO_CARD_WIDTH);
   });
 
-  it("returns 1 for a zero / unmeasured viewport width", () => {
-    expect(infoCardScale(0)).toBe(1);
-    expect(infoCardScale(-100)).toBe(1);
+  it("returns native width for a zero / unmeasured viewport width", () => {
+    expect(infoCardWidth(0)).toBe(INFO_CARD_WIDTH);
+    expect(infoCardWidth(-100)).toBe(INFO_CARD_WIDTH);
+  });
+});
+
+describe("infoCardTextScale — the shared mobile typography multiplier", () => {
+  it("uses the mobile text scale only when the card is mobile-sized", () => {
+    expect(infoCardTextScale(390, 0.5)).toBe(0.5);
+    expect(infoCardTextScale(1440, 0.5)).toBe(1);
   });
 });
 
@@ -290,7 +297,9 @@ describe("computePopoverPosition — on-screen clamp", () => {
     const pos = computePopoverPosition(big, WIDTH, HEIGHT, GAP, EDGE);
     // The card's bottom clears the top of the finger disc (pointerY - radius) by
     // at least the gap.
-    expect(pos.top + HEIGHT).toBeLessThanOrEqual(312 - FINGER_RADIUS - GAP + 0.001);
+    expect(pos.top + HEIGHT).toBeLessThanOrEqual(
+      312 - FINGER_RADIUS - GAP + 0.001,
+    );
     assertFullyOnScreen(pos, WIDTH, HEIGHT);
   });
 

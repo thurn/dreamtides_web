@@ -132,8 +132,8 @@ if (pathname === "/editor" || pathname === "/cards") {
     import("./runtime/runtime-config"),
   ]);
 
-  // DEV-ONLY: the floating panel for dialing in the mobile info-card scale.
-  // Removed once the value is baked into MOBILE_WIDTH_FRACTION.
+  // DEV-ONLY: the floating panel for dialing in mobile InfoCard typography.
+  // Removed once the value is baked into MOBILE_TEXT_SCALE.
   const InfoCardScaleTweakPanel = import.meta.env.DEV
     ? (
         await import("./tango/screens/devtools/InfoCardScaleTweakPanel")

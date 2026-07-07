@@ -21,8 +21,8 @@ import { createPortal } from "react-dom";
 import { AtlasNode, type AtlasNodeView } from "./AtlasNode";
 import {
   InfoCard,
-  infoCardScale,
-  useInfoCardMobileFraction,
+  INFO_CARD_WIDTH,
+  infoCardWidth,
   type AnchorRect,
 } from "../overlay/InfoCard";
 import { richText } from "../card/rich-text";
@@ -189,7 +189,6 @@ export function AtlasNodeReveal({
 }: AtlasNodeRevealProps): React.ReactElement {
   const { view, card } = item;
   const isAvailable = view.node.state === "available";
-  const mobileFraction = useInfoCardMobileFraction();
   const { shown, fine, begin, end, enter, leave, heldPastTap, pointerRef } =
     usePressReveal();
   const faceRef = React.useRef<HTMLDivElement>(null);
@@ -197,7 +196,9 @@ export function AtlasNodeReveal({
 
   React.useLayoutEffect(() => {
     if (shown && stageRef.current && faceRef.current) {
-      setAnchor(anchorRect(stageRef.current, faceRef.current, pointerRef.current));
+      setAnchor(
+        anchorRect(stageRef.current, faceRef.current, pointerRef.current),
+      );
     } else {
       setAnchor(null);
     }
@@ -245,26 +246,26 @@ export function AtlasNodeReveal({
       {anchor !== null &&
         stageRef.current !== null &&
         (() => {
-          // Each card scales itself down on mobile (InfoCard's own rule), so a
-          // dreamsign pair fits side by side there; at native (desktop) size the
-          // pair stacks vertically instead. Ask InfoCard whether we are in the
-          // scaled-down mobile size for this screen width.
-          const isMobile = infoCardScale(anchor.w, mobileFraction) < 1;
+          // Each card lays itself out at mobile width on narrow screens, so a
+          // dreamsign pair fits side by side there; at native desktop width the
+          // pair stacks vertically instead. Ask InfoCard whether this screen
+          // width uses the mobile card width.
+          const isMobile = infoCardWidth(anchor.w) < INFO_CARD_WIDTH;
           const layout: "row" | "stack" =
             isMobile && card.dreamsign !== null ? "row" : "stack";
           return createPortal(
             <PressPopover anchor={anchor}>
               <AtlasRevealCard card={card} layout={layout} />
             </PressPopover>,
-          // Portal into `document.body`, NOT the atlas stage root. The stage
-          // root is `position: fixed`, which makes it its own stacking context
-          // at `z-index: auto`; the app-shell hamburger menu button sits at a
-          // higher z-index in the ROOT context, so any popover nested inside the
-          // stage — however high its own z-index — is trapped beneath the menu.
-          // Portaling to the body lets the popover's z-index compete with the
-          // menu directly, so the reveal renders above it. The anchor is still
-          // measured against the stage root (viewport-anchored, unscaled), so
-          // its stage-native coordinates map 1:1 onto the body's viewport space.
+            // Portal into `document.body`, NOT the atlas stage root. The stage
+            // root is `position: fixed`, which makes it its own stacking context
+            // at `z-index: auto`; the app-shell hamburger menu button sits at a
+            // higher z-index in the ROOT context, so any popover nested inside the
+            // stage — however high its own z-index — is trapped beneath the menu.
+            // Portaling to the body lets the popover's z-index compete with the
+            // menu directly, so the reveal renders above it. The anchor is still
+            // measured against the stage root (viewport-anchored, unscaled), so
+            // its stage-native coordinates map 1:1 onto the body's viewport space.
             document.body,
           );
         })()}
