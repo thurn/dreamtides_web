@@ -454,3 +454,212 @@ Priority 3 — token and structure hygiene:
       `HOVER_TARGET_WIDTH_PX` from `HoverZoomCard`'s exported scale. (§5)
 - [ ] Decide and document the deck-viewer platform divergences (filter
       models, mobile card count, size control). (§5)
+
+---
+
+# Addendum — 2026-07-07
+
+**Scope:** the twelve commits after the audit's cut (`2732d2dd` →
+`70bb0bcd`): the InfoCard mobile-scale sequence (`f3ab3d62`, `6bf5ac88`,
+`2fd0ed91`, `72e8c7bb`, `273b8287`), the starting-deck modal glass rework
+(`3f7fb5c6`, `5fe63499`), the device-frame / safe-area subsystem
+(`5c487047`), and the Tango draft screen (`dc0365cb`, `117d2d7e`,
+`70bb0bcd`).
+**Method:** the same structure as above — four parallel area passes plus a
+fifth pass re-verifying every load-bearing claim in the original audit
+against the current tree, followed by hand verification of every claim the
+conclusions below rest on.
+
+## A1. Re-verification: every original finding is still open
+
+No action item from the original audit was completed by the last-24h work,
+and two findings gained new instances:
+
+- **A sixth bespoke glass icon button, at a third size.**
+  `StartingDeckModal.tsx:182-200` hand-declares the close disc —
+  `CLOSE_BUTTON_PX = 44` (`:37`), `fontSize: 22` (`:194`), layout
+  boilerplate re-typed — with `glassIconButtonChrome()` spread at `:196`.
+  44px matches neither observed tuple (40/22, 48/26); the proposed
+  `IconButton` size enum now has a third diameter to absorb. The `GlowIcon`
+  close-glyph line is byte-identical across three files
+  (`StartingDeckModal.tsx:199`, `DesktopDeckViewer.tsx:359`,
+  `MobileDeckViewer.tsx:388`).
+- **The SegmentedControl-as-sort-toggle spread rather than converged**: the
+  refined desktop deck filter bar (`85512102`) now mounts three
+  SegmentedControls (`DesktopDeckViewer.tsx:556, 603, 618`), the middle one
+  still the two-item `↑`/`↓` toggle with its layout-glue comment.
+- Spot re-verification confirmed unchanged: the byte-identical
+  `glassSurfaceStyle()`/`glassTrack()` pair, the opaque `--surface-glass*`
+  tokens (now at `tango-tokens.css:183-184`), both `GlassBackdrop` copies,
+  `StatTile`/`TidePill` at zero consumers, the dead-token set (with one
+  correction: `--glow-danger` is live via `leave-site-button.css:27`; the
+  other five `--glow-*` are orphaned), the four dark-disc gradients, the
+  1.07/1.08 hand-rolled hover scales, and all §5 convergence debt.
+- One nuance to the §3 catalog claim: the generic `InfoCard.PressInfo`
+  engine does have a demo entry (`docs/demos/info-card.tsx:107-120`); the
+  still-true narrow claim is that the atlas demo fakes a `hovered` boolean
+  and `AtlasNodeReveal` — the production integration surface — has no
+  catalog entry.
+
+## A2. The safe-area / device-frame subsystem: day-one drift
+
+`5c487047` built a well-designed runtime channel — device geometry lives
+only in `scripts/screenshot-devices.mjs`, `device-frame.ts` republishes the
+`deviceFrame` URL param as CSS custom properties before first paint, and
+the `tango-tokens.css:53-71` comment defends the `:root` placement. The
+device-screenshots SKILL states the doctrine plainly: app code reads
+`var(--safe-area-inset-*)`, never `env()` directly. And yet, in the same
+set of commits:
+
+- **Three competing mechanisms for "clear the notch" coexist.** (1) The
+  sanctioned injectable channel (`MobileDeckViewer.tsx:343`,
+  `StartingDeckModal.tsx:168`, `DreamscapeQuestMenu.tsx:265-270`,
+  `QuestStatusBar.tsx:634`, `battle.css:2435`). (2) Raw
+  `env(safe-area-inset-top)` — `DraftScreen.tsx:74`, a day-one violation of
+  the subsystem's own doctrine: `env()` resolves to 0 inside the screenshot
+  iframe, so the draft screen silently ignores the injected inset and
+  device-frame simulation has no effect on the newest screen. (3) The
+  static design floors `--safe-top`/`--safe-bottom` (59/34px), used
+  exclusively by both quest-start screens and mixed with mechanism (1)
+  inside `MobileDeckViewer.tsx` (`:187` vs `:343`). `--safe-top`'s 59px
+  numerically coincides with the derived iPhone-16 top inset
+  (`screenshot-devices.mjs` 11+37+11); nothing ties them together.
+- **`--display-cutout-right` is born fully orphaned** — declared, mirrored,
+  documented, written at runtime (`device-frame.ts:65`), read by nothing.
+  `--display-cutout-left`/`-width` are devtool-only (`DeviceFrameDemo`).
+  The §4 dead-token disease, reproduced on day one of a new family.
+- **`device-frame.ts` hand-mirrors the token names as string literals**
+  (`SAFE_AREA_VARS` `:55-60`, `CUTOUT_VARS` `:62-68`) instead of importing
+  from `tokens.ts`; a token rename breaks the injector with no type error.
+- **The docs split brains**: the device-screenshots SKILL is accurate; the
+  tango `tokens.md` has bare generated rows for the new tokens and no
+  narrative chapter stating the one sanctioned mechanism — which is
+  plausibly *why* DraftScreen and quest-start each picked a different one.
+  `DeviceFrameDemo` is reachable only via `?demo=device-frame`, registered
+  in neither `qa-scenes.ts` nor `qa_scenes.md`.
+
+## A3. StartingDeckModal: the boundary failure, not a material failure
+
+The glass work itself is what the system wants: the modal imports the
+shared recipes (`StartingDeckModal.tsx:12-13`) and spreads
+`glassSurfaceStyle()` — no fourth copy of the literals, no new
+`GlassBackdrop` clone. The failures are placement and offering:
+
+- It is a **legacy-tier file wearing full Tango chrome**, importing eight
+  Tango modules — two of them material internals
+  (`glass-surface`, `control-treatment`) — from `src/components/`, where
+  `eslint.config.js:64` scopes precisely zero Tango rules. Its magic
+  numbers (`zIndex: 60`, `min(900px, 90vw)`, `CLOSE_BUTTON_PX = 44`) pass
+  unexamined. No lint rule in the current suite, nor in §7's proposed set,
+  polices this reach-in direction (see A6).
+- **"Glass panel + titled header + corner glass close disc" is now a
+  rule-of-three** (DesktopDeckViewer, MobileDeckViewer, StartingDeckModal),
+  each re-deriving the panel/backdrop/header/disc scaffolding. The missing
+  offering has a name: a `GlassDialog` shell.
+- Safe-area handling is correct in mechanism (token channel, no raw
+  `env()`) but stylistically mixed — raw `var(--safe-area-inset-top)` and
+  `token("--gutter")` composed in one expression (`:168`).
+- The `glass-surface.ts:10` doctrine comment enumerates its consumers and
+  the list is stale (names InfoCard and MobileDeckViewer; omits
+  DesktopDeckViewer and StartingDeckModal) — doctrine drift, §6's exact
+  failure mode, recurring while the audit that named it sat in the tree.
+
+## A4. DraftScreen: the system mostly worked
+
+The first screen built after the audit is strong evidence *for* the
+catalog: token usage is clean throughout, card aspect comes from the
+exported constants, there are no raw interactive elements, no icon
+classes, no glass literals — none of §7's proposed rules would fire on it.
+The predicted button-suite gap did not bite because the screen needs no
+chrome buttons. Pack identity is `cardNumber` end-to-end with names
+resolved only at the display edge. The residue is at the seams:
+
+- **Hamburger clearance went through three hand-guessed formulas in three
+  commits**, none reading the menu's real geometry
+  (`DreamscapeQuestMenu.tsx` `menuBtnSize = 48`, `menuEdgeInset = 18`).
+  The `117d2d7e` fix briefly resurrected the dead `--control-h` token as a
+  wrong proxy (52px for a 48px button); `70bb0bcd` deleted that and now
+  over-reserves via the `--safe-top` floor, clearing the menu by
+  coincidence. Cross-file layout invariants held by hand — §5's hazard —
+  and no single-file lint rule can see it.
+- The raw-`env()` read (A2) is this screen's one doctrine violation.
+- **Born undocumented**: no docs/skill/qa-scene presence for the screen,
+  the floating pick counter, or the pack grid — the pre-existing
+  "no ?goto= scene for Draft" gap outlived the screen's own migration.
+- The adapter carries real bootstrap/effect weight (justified, shared with
+  the legacy path via `draft-site-bootstrap.ts`) but stretches the
+  "adapters are thin wiring" convention; worth stating in the convention
+  doc rather than leaving as vibes.
+
+## A5. InfoCard: settled well, resolved nothing
+
+The five-commit scaling sequence landed in a good place: width and type
+scale are separate baked constants (`MOBILE_WIDTH_FRACTION = 0.45`,
+`MOBILE_TEXT_SCALE = 0.666`, `InfoCard.tsx:106,110`) exposed as pure
+helpers, driven by viewport — not caller props; the tweak panel was
+removed without a trace; the above-only placement logic lives once in the
+shared `computePopoverPosition` engine and every reveal surface routes
+through it. Three findings stand:
+
+- **The violet fill hardened instead of resolving.** It is now a named
+  constant (`INFO_CARD_GLASS_FILL`, `InfoCard.tsx:88`) *and* a test
+  assertion (`InfoCard.test.ts:77` expects `rgba(18,14,28,0.5)`) — the
+  audit's "decide: unify or name it" recommendation is still open, and the
+  test raises the cost of deciding late.
+- **Three unshared mobile thresholds now exist**: InfoCard's implicit
+  ~551px (`CARD_W / MOBILE_WIDTH_FRACTION`), `DESKTOP_MIN_WIDTH = 900`
+  (`use-is-desktop.ts:13`), and CardView's re-typed `899.98px`
+  (`CardView.tsx:586`). The latter two are the same boundary declared
+  twice; the first is a deliberate content-driven cutoff that nothing
+  documents.
+- **The new behavior is invisible in the catalog**: neither the mobile
+  scale nor the above-only placement contract appears in `info-card.md` or
+  the demo — omission drift rather than false claims.
+
+## A6. The lint gap the incident exposed: the reach-in direction
+
+§7's proposed rules all watch Tango's own tier or Tango escaping outward.
+StartingDeckModal demonstrates the third direction: **legacy code reaching
+inward** for design-system internals and assembling Tango-styled UI where
+no rule looks. Notably, the authoring agent followed the material doctrine
+it could see (imported the recipe rather than copying literals) and
+violated only the boundary that exists as prose — confirming §6's thesis
+that write-time mechanical checks are the only guardrails that hold.
+Additions to the §7 program:
+
+- **`no-tango-internals-outside-tango`** — move the material recipes
+  (`glass-surface.ts`, `control-treatment.ts`, future materials) to
+  `src/tango/internal/` and ban `tango/internal` imports outside
+  `src/tango/` via `no-restricted-imports` (the config already uses that
+  machinery at `eslint.config.js:100`). Rendering public Tango components
+  from legacy screens stays legal — that is the migration story (~20
+  legacy files do it today); wearing Tango materials outside the linted
+  tier does not. Would have errored on `StartingDeckModal.tsx:12-13` at
+  write time.
+- **Recipes go fully private once the button suite lands** — after
+  `IconButton`/`GlassButton`/`GlassDialog` exist, nothing outside
+  `src/tango/components/` imports the recipes at all, and the boundary
+  simplifies to "materials have no public export."
+- **`no-raw-safe-area-env`** — raw `env(safe-area-inset-*)` legal only in
+  `tango-tokens.css`; everything else reads the token channel. Would have
+  caught `DraftScreen.tsx:74`. Natural sibling of `no-inline-glass`.
+- **A legacy-tier ratchet** (project-level integrity test): the set of
+  legacy files touching Tango internals is pinned at zero, and new files
+  under `src/components/` are flagged toward the Tango tier.
+- `device-frame.ts` importing its token names from `tokens.ts` (A2) closes
+  the string-literal mirror; no lint rule needed once the import exists.
+
+## Revised action items
+
+The full revised program — new components (`IconButton`, `GlassButton`,
+`GlassDialog`, `economy-spec`), removals, token work, migrations
+(including StartingDeckModal into the Tango tier), enforcement rails, and
+sequencing — is specified in
+`docs/superpowers/specs/2026-07-07-tango-system-revisions-design.md`. That
+spec supersedes the action-item checklist above; items there carry these
+decisions, made 2026-07-07: plan scope is the complete P1-P3 set plus this
+addendum's findings; `IconButton` ships two sizes (40/22, 48/26) and the
+44px disc rounds to `md`; StartingDeckModal migrates to a Tango
+screen/overlay; InfoCard's fill becomes the named `--glass-fill-popover`
+token; `--safe-top`/`--safe-bottom` remain as documented design floors;
+execution is serial phases on one worktree.
