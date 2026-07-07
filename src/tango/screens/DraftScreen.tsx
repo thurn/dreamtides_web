@@ -73,6 +73,11 @@ const OFFER_CELL_WIDTH = `min(calc((100cqw - ${token("--space-5")}) / 2), calc((
  * Dreamcaller bust + home-indicator inset), so the centered pack sits above it. */
 const HUD_CLEARANCE = `calc(${token("--hud-h")} + ${token("--safe-bottom")} + ${token("--space-9")})`;
 
+/** Top clearance so the pack clears the app-shell hamburger (a 48px button at an
+ * ~18px inset, or the device safe-area, whichever is larger) plus a small gap.
+ * Without it the top card row rides under the menu on short, inset-free phones. */
+const MENU_CLEARANCE = `calc(max(env(safe-area-inset-top), ${token("--space-7")}) + ${token("--control-h")})`;
+
 /**
  * The Tango draft screen. Pure and props-driven: full-bleed scene art, the 2x2
  * pack of {@link GameCard}s over it, drifting {@link Motes}, and the persistent
@@ -131,6 +136,8 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
       )}
 
       <Motes on tint="violet" />
+
+      <div style={{ flexShrink: 0, height: MENU_CLEARANCE }} aria-hidden="true" />
 
       <div
         style={{
