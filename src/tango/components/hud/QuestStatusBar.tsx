@@ -564,7 +564,10 @@ function QsbEssence({
         display: "inline-flex",
         alignItems: "center",
         gap: 0,
-        font: `800 ${String(Math.round(22 * scale))}px/1 ${token("--font-ui")}`,
+        fontFamily: token("--font-ui"),
+        fontSize: Math.round(22 * scale),
+        fontWeight: 800,
+        lineHeight: 1,
         fontVariantNumeric: "tabular-nums",
         color: token("--text-primary"),
         cursor: "pointer",
@@ -630,8 +633,10 @@ function QsbHudBar({
         alignItems: "center",
         gap: Math.round(10 * scale),
         height: token("--hud-h"),
-        padding: `0 ${String(Math.round(12 * scale))}px`,
+        paddingTop: 0,
+        paddingRight: Math.round(12 * scale),
         paddingBottom: "var(--safe-area-inset-bottom)",
+        paddingLeft: Math.round(12 * scale),
         ...style,
       }}
     >
