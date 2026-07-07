@@ -157,23 +157,24 @@ Tango mobile dreamscape redesign — follow-ups / known items
    Both are cosmetic (dev-mode only, no runtime effect). Fix by splitting the
    shorthand into longhand properties on the offending elements.
 
-4. Dream Atlas hover previews are a legacy port pending their own Tango step
-   (converge).
-   The mobile Tango atlas screen (src/tango/screens/AtlasScreen.tsx, composed
-   from src/tango/components/atlas/AtlasMap.tsx) renders the node hover cards
-   through AtlasPreview / AtlasDreamsignCard
-   (src/tango/components/atlas/AtlasPreview.tsx + atlas-preview.css), which are a
-   near-verbatim port of the legacy atlas screen's preview cards: fixed pixel
-   widths (320 / 560 / 308), font-awesome / boxicon `<i>` glyph rows, and raw
-   colour values in the CSS. They live in components/ (exempt from the product-UI
-   lint rules) rather than being expressed through Tango's InfoCard engine, so
-   they do not yet follow the popup rule (pointer-anchored InfoCard, hover on
-   fine pointers / touch-hold on touch). This was a deliberate, requested scope
-   split: the hover-card redesign onto InfoCard is the explicit next step. Per
-   the Tango "requested divergence must converge" rule, that next step must
-   either promote these into the InfoCard-based popup family or retire the
-   AtlasPreview fork. (The QuestStatusBar shorthand-style dev warnings this
-   screen also surfaces are already tracked as item 3 above.)
+Tango design-system audit follow-ups (2026-07-06)
+=================================================
+
+The whole-system audit in docs/postmortems/2026-07-06-tango-system-audit.md
+carries a prioritized action-item list covering: the missing glass button
+suite (IconButton / GlassButton; five bespoke declarations today), glass
+material consolidation (duplicated recipe in glass-surface.ts vs
+control-treatment.ts, divergent InfoCard fill, misnamed opaque
+--surface-glass tokens, docs Materials page), catalog deletions (StatTile,
+TidePill, SiteNode's unreachable visited state, AtlasNode dead surface),
+demo representativeness repairs (atlas demo/mockup show impossible states),
+ResourceChip/EssenceValue economy-mark unification, undocumented-workhorse
+docs (DreamcallerPortrait, HoverPopover, HoverZoomCard, GlowIcon, rich-text,
+tide-spec), dead-token pruning (37 zero-reference tokens incl. --card-aspect,
+--cat-*, --tide-earthy, --control-h), convergence folds (QsbSignObject →
+Dreamsign, DreamcallerPortrait standing/fullBleed variant, DreamscapeMotes →
+Motes), and generated adoption counts in tango-docs. See the report's
+"Action items" section for the full checklist.
 
 Pre-existing: npm audit reports dependency vulnerabilities
 ==========================================================

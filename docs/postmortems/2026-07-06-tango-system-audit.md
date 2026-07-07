@@ -1,0 +1,363 @@
+# Tango Design System Audit — July 2026
+
+**Date:** 2026-07-06
+**Scope:** the four screen efforts shipped over the past week, in priority
+order: deck viewer (`DesktopDeckViewer` / `MobileDeckViewer`), Dream Atlas
+(`AtlasScreen` + `components/atlas/`), Dreamscape (`DreamscapeScreen` +
+`SiteNode` + `QuestStatusBar`), and Dreamcaller select (`quest-start-*`).
+**Question:** the screens moved fast; the system did not step back with them.
+What new patterns does the system need, what existing patterns should go, and
+what should change in the core token and component offerings?
+**Method:** five parallel audit passes (one per screen area plus a
+catalog-wide usage inventory), each grounded in file:line evidence, followed
+by hand verification of every load-bearing claim (grep/read in the current
+tree at `2732d2dd`).
+
+---
+
+## Summary
+
+The catalog describes the system as it was mocked up; the four screens
+describe the game as it is. Of the 18 documented components, **10 are
+healthy, 6 have exactly one consumer, and 2 (StatTile, TidePill) render
+nowhere in production** — while roughly ten undocumented modules
+(`DreamcallerPortrait` ~19 consumers, `HoverPopover` 13, `GlowIcon` 8,
+`rich-text` 8, the glass recipes, `tide-spec`) are the actual load-bearing
+system. The drift concentrates in three places:
+
+1. **The button offering is one button short of reality.** Production grew a
+   second, glass button language (icon discs on the deck viewers, the
+   dreamscape gear, the carousel chevrons) that the catalog doesn't name, so
+   every screen hand-rolls it — five declarations, three sizes, two
+   different materials.
+2. **The glass material — the deck viewer's defining pattern — has no docs,
+   no tokens, and three literal sources of truth**, one of which diverges.
+   The token actually *named* `--surface-glass` is an opaque hex, and that
+   name collision has already produced a mismatched control.
+3. **The catalog is not honest about adoption.** Docs-only components carry
+   confident present-tense blurbs; demos showcase states production forbids
+   and omit the states that dominate it; "the ONE X" doctrine comments are
+   validated by convention, not by grep.
+
+What worked should be said too: the tide-disc consolidation from the 07-05
+postmortem verifiably landed (one `TIDE_DISC_PX`, zero screen-local copies),
+the GroupPanel material split converged, the glass icon chrome converged
+after four commits of churn, and the `AtlasPreview` fork was retired into the
+InfoCard press-reveal engine. The convergence trigger works when the author
+knows they forked. The drift below is the kind that trigger can't see:
+doc drift, doctrine drift, and duplication inside the system's own files.
+
+---
+
+## 1. The button suite
+
+`Button.tsx:1-8` states the doctrine: one button, the beveled purple sprite;
+"low-emphasis... actions are plain pressable TEXT / ICON affordances...
+never a second button color." Production has outgrown this. There is now a
+clear second button language — the **glass button** — and because the
+catalog doesn't offer it, every screen improvised:
+
+| Control | Where | Size / glyph | Material |
+|---|---|---|---|
+| Desktop deck close | `DesktopDeckViewer.tsx:343-359` | 40px / 22px | `glassIconButtonChrome()` (real blur glass) |
+| Mobile deck close | `MobileDeckViewer.tsx:370-390` | 48px / 26px | `glassIconButtonChrome()` |
+| Dreamscape/Atlas gear | `DreamscapeQuestMenu.tsx:121-122, 286-297` | 48px / 26px | `glassIconButtonChrome()` |
+| Carousel chevrons | `quest-start-mobile.tsx:220-259` (`EdgeChevron`) | 40px / 22px | **opaque** `--surface-glass` + `--border-soft` — a different material for the same idea |
+| Dreamsigns-panel close | `QuestStatusBar.tsx:398-417` | 34px / raw `<i>` | a third recipe: `--radius-control`, `rgba(255,255,255,0.05)`, no blur, no `GlowIcon` |
+
+The chrome function exists (`control-treatment.ts:122-124`) but it is a style
+recipe, not a component: each call site re-declares width/height/fontSize by
+hand, and two of the five never found the recipe at all. The absence has a
+second-order cost the deck viewer demonstrates: with no glass button in the
+catalog, the only glass *interactive* things an agent can reach for are
+`Select` and `SegmentedControl` — hence a `SegmentedControl` pressed into
+service as a two-item `↑`/`↓` toggle (`DesktopDeckViewer.tsx:603-613`) with
+layout-glue compensating so "the pair reads as one sort control." Some
+controls in the deck viewer should just be buttons.
+
+**Recommendation — offer a full button suite (new components, rung 4):**
+
+- **`Button`** stays the purple sprite: the primary/commit action. Rewrite
+  its doctrine comment to name the suite instead of denying it.
+- **`IconButton`** — the glass disc: `glassIconButtonChrome()` promoted to a
+  component with a `Glyph` prop and an enumerated size (`sm` = 40/22,
+  `md` = 48/26 — exactly the two observed tuples), press feedback via
+  `usePress`. Fold all five call sites onto it; the QuestStatusBar close and
+  `EdgeChevron` are bug-fixes as much as migrations.
+- **`GlassButton`** (label variant) — the same glass material with a text
+  label, for secondary actions that need a real button shape but must not
+  compete with the purple commit. This is the variant the deck viewer's
+  chrome wanted and the "plain text affordance" doctrine failed to supply.
+- Document the decision tree in the demos: purple sprite = commit / primary;
+  glass label = secondary chrome action; glass icon = compact chrome action;
+  plain pressable text = tertiary/inline.
+
+## 2. The glass material
+
+The frosted, backdrop-blurred surface is the deck viewer's defining pattern
+and the InfoCard shell's material — a major new system pattern with **zero
+catalog presence** and no token backing. Current state:
+
+- `glass-surface.ts:33-45` (`glassSurfaceStyle()`) and
+  `control-treatment.ts:61-74` (`glassTrack()`) are **byte-identical,
+  independently maintained copies** of the same fill / sheen /
+  `blur(22px) saturate(1.5)` / rim / 3-layer shadow literals. The second
+  file's own comment admits the inline copy. This is the exact
+  hand-mirrored-constants failure mode the 07-05 postmortem documented for
+  the tide disc, living inside the system's own `components/` directory.
+- `InfoCard.tsx:84-85` overrides the fill with a third value
+  (`rgba(18,14,28,0.5)` violet-black vs the shared `rgba(14,14,16,0.54)`)
+  — so the desktop deck viewer renders **two different glass tints on the
+  same screen** (backdrop + close button vs the Dreamcaller reveal popover).
+- The tokens literally named `--surface-glass` / `--surface-glass-strong`
+  (`tango-tokens.css:151-152`) are **opaque hex chrome with no blur** — and
+  the name collision already misled a call site (`EdgeChevron` above).
+- `GlassBackdrop()` — the full-screen frosted backdrop — is a
+  **character-for-character 15-line copy** in both deck viewers
+  (`DesktopDeckViewer.tsx:271-286`, `MobileDeckViewer.tsx:295-310`), as is
+  their `GridPlaceholder`.
+- `CardView.tsx:1448-1554` blurs its textbox via `--cv-textbox-blur`, a
+  token owned by the legacy `src/index.css:384`, not by Tango.
+
+**Recommendation — make glass a first-class, singly-declared material:**
+
+- Collapse `glassTrack()` into an import of the one recipe; parameterize
+  only radius. Express the recipe's values as semantic tokens
+  (`--glass-fill`, `--glass-blur`, `--glass-sheen`, `--glass-rim`,
+  `--glass-shadow`) so "the ONE glass material" is enforced by the token
+  system rather than by comment.
+- Decide InfoCard's violet fill: either unify onto the shared fill or name
+  it (`--glass-fill-popover`) and document why reveals read warmer.
+- Rename the opaque `--surface-glass*` tokens to what they are
+  (`--surface-chrome*`), eliminating the collision.
+- Extract the shared `GlassBackdrop` (and `GridPlaceholder`) into one
+  module both deck viewers import.
+- Add a **Materials** docs page: liquid glass (what wears it: InfoCard,
+  deck-viewer backdrop, controls, icon buttons) vs the solid `GroupPanel`
+  card vs solid chrome — with the blur-preservation constraint from
+  `c903242a` noted. This is the missing "background blur strategy" chapter.
+- Move `--cv-textbox-blur` into `tango-tokens.css` (the production bridge
+  family already exists for exactly this).
+
+## 3. Catalog honesty — deletions and doc repairs
+
+### Delete
+
+- **`StatTile`** — zero consumers anywhere (its motivating use case, "deck
+  stats," shipped without it). Delete component, demo, and registry entry.
+- **`TidePill`** — zero production renders; only its re-exported `Tide`
+  *type* is imported (`quest-start-view-model.ts:11`). Move the type into
+  `tide-spec.ts` and delete the component and demo.
+- **`SiteNode`'s visited state** — production filters visited sites out
+  before `SiteNode` ever mounts (`DreamscapeScreen.tsx:112-113`; asserted
+  by `DreamscapeScreen.test.tsx:103`). The 0.42 dim, the green check badge,
+  and the "Already visited." reveal note (`SiteNode.tsx:75-77, 133,
+  231-235`) are unreachable. Delete the branch and the demo's visited
+  fixture — this is the "states that will never exist in prod" item, and
+  the checkmark/disabled look goes with it.
+- **`AtlasNode` dead surface**: `eyebrow` is `null` in all three
+  `buildNodeCard` branches (`atlas-view-model.ts:324, 348, 372`), so the
+  InfoCard `meta` wiring is dead; `forgone` and `isReachable: false` are
+  always coincident in production (`atlas-generator.ts:1610-1623`) and
+  share one CSS rule (`atlas.css:139-150`) — collapse them to the single
+  "unreachable" concept they are, or document `forgone` as data-only.
+
+### Repair the demos — they must show production
+
+- The atlas demo's `n-forgone` fixture (`docs/demos/atlas-node.tsx:116-128`)
+  renders bright with an icon and badge; every real forgone node is forced
+  blank and faded (`atlas-view-model.ts:398-432`). No demo row sets
+  `isReachable: false` at all, `badgeScale: 1.5` (the mobile default) is
+  never demoed, and the demo's node sizes (96/112) exist nowhere in
+  production (132/150 desktop, 200/224 mobile — export and import
+  `ATLAS_LAYOUT_*` instead of re-typing numbers).
+- **Demos must mount the production integration surface.** The atlas demo
+  shows a bare `AtlasNode` with a faked hover boolean; production always
+  renders through `AtlasNodeReveal` → InfoCard press-reveal, which has no
+  catalog entry. The `site-node` demo already does this right (live
+  press-reveal wired) — make that the standard. Same for `TideDisc`: its
+  demo shows a bare disc, production only ever renders it inside an
+  `InfoCard.PressInfo` reveal (`quest-start-shared.tsx:65-73`) — the demo
+  should show the disc-with-reveal as the canonical usage.
+- The atlas mockup (`docs/mockups/atlas-map.tsx`) is stale in orientation
+  (horizontal; production is vertical bottom-up), chrome (title block the
+  real screen explicitly omits), and math (its own scale-to-fit copy).
+  Rebuild it from the real `AtlasMap` or label it archived.
+- The locked-battle site demo fixture puts the lock *note* text into the
+  `blurb` slot, rendering near-duplicate sentences no real site shows
+  (`docs/demos/site-node.tsx:71` vs `SiteNode.tsx:71-79`).
+
+### ResourceChip: give it a real job or fold it
+
+`ResourceChip`'s blurb claims "every essence, energy, spark, points, or
+counter number routes through it." Reality: **one** consumer
+(`quest-start-shared.tsx:398`); the role it claims is actually held by the
+legacy `EssenceValue` (10 consumers, all outside Tango), whose own comment
+defers to ResourceChip. Meanwhile `Button.tsx:71-77` hand-mirrors
+ResourceChip's glyph table (`COST_ICON_CLASSES` vs `SPECS`) instead of
+importing a shared spec, and ResourceChip carries open numeric `size` and
+`gap` props — exactly the knobs the customization ladder bans, grandfathered
+from the original port.
+
+**Recommendation:** keep ResourceChip as the one economy mark, but (a)
+extract the kind→glyph/color table into a shared `economy-spec.ts` that
+Button imports too, (b) replace the numeric `size`/`gap` knobs with
+enumerated variants, (c) rewrite the blurb to say what is true today and
+name the plan: legacy screens migrate from `EssenceValue` onto it as they
+Tango-ify, then `EssenceValue` is deleted. What it is *for* is the answer
+to the user-facing question: the HUD/quest-economy number-with-mark —
+Dreamcaller starting essence today, shop prices and reward values as those
+screens migrate.
+
+### Document the workhorses
+
+The undocumented de-facto system (consumer counts from the inventory pass):
+`DreamcallerPortrait` (~19), `HoverPopover` (13), `HoverZoomCard` (8),
+`GlowIcon` (8), `rich-text` (8), `GlossaryDefinitionCard` (6),
+`CardTermDefinitions` (5), `tide-spec` (4), `PipBadge` (3), plus the glass
+modules from §2. This overlaps pre-existing-issue "Tango readiness gaps"
+item 1 — the counts above are the priority order. `AtlasMap` (not the bare
+node/edge) is arguably the documentable atlas surface.
+
+**Adoption signal, generated:** the docs generator should compute and print
+a real-consumer count on the index and each reference page (imports outside
+`src/tango/docs/` and tests). StatTile and TidePill would have been visibly
+"0 consumers" for weeks; ghost components stop being representable. This is
+mechanical and belongs in `npm run tango-docs`.
+
+## 4. Token layer revisions
+
+- **37 semantic tokens have zero references** outside the token file and its
+  generated mirror. Highlights, verified by hand: `--card-aspect` (the real
+  source of truth is `card-aspect.ts`'s TS constants), the entire `--cat-*`
+  category-color set, `--glow-*` family members, `--space-0`,
+  `--tide-earthy`, `--control-h`/`--control-h-sm` (52/40px — matching no
+  real control; `Button` uses 42/50/62). Prune each or wire it up;
+  a token that nothing reads is documentation that lies.
+- **The tide palette bypasses the token system entirely**: the five real
+  tide colors are hex literals in `tide-spec.ts:39-45`, hand-mirroring
+  `src/components/tide-visuals.ts` across the isolation boundary, while the
+  only tide token (`--tide-earthy`) is dead. Either move the palette into
+  `--tide-*` tokens both sides read, or delete the dead token and document
+  `tide-spec.ts` as the palette's home.
+- **The dark "disc" gradient exists in four variants across four files**:
+  `atlas.css:206` and `:243` (`#2a2040/#14101f`, twice in one file),
+  `InfoCard.tsx:168-171` (`SITE_DISC`, `#23212b/#0a0910` — whose comment
+  falsely claims SiteNode shares it), and `site-node.css`
+  (`#1a1525/#0b0815/#060410`). One `--badge-disc-gradient` token (or shared
+  constant), and fix or fulfill the `SITE_DISC` comment.
+- **`atlas.css` is a token/literal mix**: edge gradients and glow rgbas
+  (`rgba(168,85,247,0.6)` ×2, `rgba(250,204,21,0.5)` ×2) sit raw in a file
+  that correctly uses `--dt-*` tokens elsewhere. Promote the repeated ones.
+- **Press feedback is forked from the primitive**: `Pressable.tsx` declares
+  itself "the ONE press-feedback primitive" (`HOVER_SCALE` 1.03), but
+  `AtlasNode` hand-rolls a 1.07 hover scale with no press-down
+  (`atlas.css:152-153`) and `SiteNode` a 1.08 (`SiteNode.tsx:178`). Route
+  the visual feedback through `usePress`, or add a tokenized, documented
+  node-scale exception — two more hand-agreed constants is the worst state.
+
+## 5. Convergence debt — the fold-back list
+
+Forks that stabilized without the promote-or-file decision:
+
+- **Dreamcaller portrait, three renderings**: `DreamcallerPortrait` offers
+  `hero`/`panel`/`thumb`, none full-bleed, so quest-start built
+  `StandingFigure` (`quest-start-desktop.tsx:65-146`) and
+  `FullBleedPortrait` (`quest-start-mobile.tsx:33-103`) — re-deriving the
+  component's fallback treatment verbatim: the identical backdrop gradient
+  string appears character-for-character three times
+  (`DreamcallerPortrait.tsx:48/124`, `quest-start-desktop.tsx:97`) and the
+  monogram fallback three times. Add a `standing`/`fullBleed` variant (or at
+  minimum share the fallback logic), and note that InfoCard's new
+  `fullBleed` variant and quest-start's figure-plus-riding-card composition
+  are the same idiom built twice in the same week.
+- **`QsbSignObject`** (`QuestStatusBar.tsx:112-198`) re-implements the
+  shared `Dreamsign` object for the status-bar strip. Fold onto `Dreamsign`.
+- **`DreamscapeMotes`** (`SiteNode.tsx:258-292`) is a second, bespoke
+  particle field alongside the canonical `Motes`. Consolidate (a tint/mode)
+  or document why they can't share.
+- **Scale-to-fit math** duplicated between `AtlasMap.tsx:71-82` and the
+  atlas mockup — extract `useScaleToFit`.
+- **`HOVER_TARGET_WIDTH_PX`** (`DesktopDeckViewer.tsx:139-143`) is
+  comment-synced to `HoverZoomCard`'s internal `MAX_SCALE`; derive it from
+  an exported constant instead.
+- **Deck filter models**: desktop (`SegmentedControl` type +` Select`
+  subtype) and mobile (one unioned `Select`) maintain two parallel filter
+  modules for the same data. Likely legitimate platform divergence — but it
+  is undocumented, and mobile silently drops the card count the desktop
+  header shows (a content-parity gap that reads as an accident). Decide and
+  write it down.
+- **Misfiled modules**: `SiteNode`, `site-node.css`, and
+  `dreamscape-scatter.ts` are dreamscape-screen components living in
+  `components/atlas/`. Move to `components/dreamscape/`.
+
+## 6. Why this keeps happening
+
+The 07-05 postmortem added a convergence trigger for *requested divergence*,
+and it demonstrably works — every fork the author knew about got folded or
+filed. The drift in this audit is the kind that trigger cannot see:
+
+1. **Doc drift.** Demos and blurbs are written once, at component birth, in
+   confident present tense — and nothing re-checks them against production.
+   The fix is mechanical where possible (generated adoption counts, §3;
+   demo fixtures importing production constants, §3) and conventional where
+   not (demos mount the production integration surface).
+2. **Doctrine drift.** "The ONE button," "the ONE glass material," "shared
+   by SiteNode" — doctrine comments are claims about the whole tree,
+   validated only at write time. When a new sibling lands (a second glass
+   fill, a fifth icon button), no step re-greps the claim. Treat a doctrine
+   comment as an assertion: when a push touches the concept a doctrine
+   names, verify the claim still holds or update it.
+3. **Duplication inside the system itself.** The lint suite guards product
+   screens against escaping the system; it does not guard `src/tango/`
+   against duplicating itself (`glassTrack`, the disc gradients, the
+   Button/ResourceChip glyph tables). The glass tokens in §2 fix the worst
+   instance structurally; the rest is this audit's checklist.
+4. **No stepping-back cadence.** Four screens shipped in a week; each
+   session optimized its screen. This document is the first
+   whole-system pass — the cheap version of keeping it: rerun this audit
+   (the five-pass structure at the top) after each multi-screen push, or
+   monthly, whichever comes first.
+
+---
+
+## Action items
+
+Priority 1 — the system offerings the next screen will need:
+
+- [ ] Promote the button suite: `IconButton` (glass disc, `sm`/`md`),
+      `GlassButton` (label), rewrite `Button.tsx`'s doctrine, migrate the
+      five bespoke call sites, document the decision tree. (§1)
+- [ ] Consolidate glass: one recipe module, `--glass-*` tokens, resolve
+      InfoCard's fill, rename opaque `--surface-glass*` → `--surface-chrome*`,
+      dedupe `GlassBackdrop`/`GridPlaceholder`, add the Materials docs page. (§2)
+- [ ] Delete `StatTile` and `TidePill` (move the `Tide` type to
+      `tide-spec.ts`); delete `SiteNode`'s visited branch and demo fixture;
+      collapse `forgone`/unreachable and the dead `eyebrow` wiring. (§3)
+- [ ] Add generated adoption counts to `npm run tango-docs`. (§3)
+
+Priority 2 — honesty and convergence:
+
+- [ ] Fix the atlas demos/mockup to production shapes (forced-blank forgone,
+      unreachable row, `badgeScale`, real sizes via `ATLAS_LAYOUT_*`,
+      press-reveal mounted); fix the site-node locked fixture. (§3)
+- [ ] ResourceChip: shared economy glyph spec (Button imports it),
+      enumerated sizes, honest blurb, named `EssenceValue` migration plan. (§3)
+- [ ] Fold `QsbSignObject` → `Dreamsign`; add the `DreamcallerPortrait`
+      full-bleed/standing variant (or file the divergence); consolidate
+      `DreamscapeMotes` → `Motes`. (§5)
+- [ ] Document the workhorses in adoption order (`DreamcallerPortrait`,
+      `HoverPopover`, `HoverZoomCard`, `GlowIcon`, `rich-text`, …). (§3)
+
+Priority 3 — token and structure hygiene:
+
+- [ ] Prune or wire the 37 dead tokens; decide the tide-palette home;
+      add the disc-gradient token; tokenize `atlas.css`'s repeated raw
+      colors; move `--cv-textbox-blur` into Tango. (§4)
+- [ ] Route `AtlasNode`/`SiteNode` press feedback through `usePress` or add
+      a tokenized node-scale. (§4)
+- [ ] Move `SiteNode`/`site-node.css`/`dreamscape-scatter.ts` to
+      `components/dreamscape/`; extract `useScaleToFit`; derive
+      `HOVER_TARGET_WIDTH_PX` from `HoverZoomCard`'s exported scale. (§5)
+- [ ] Decide and document the deck-viewer platform divergences (filter
+      models, mobile card count, size control). (§5)
