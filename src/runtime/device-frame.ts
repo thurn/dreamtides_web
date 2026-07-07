@@ -169,6 +169,23 @@ export function applyDeviceFrame(
 }
 
 /**
+ * True when a screen-cutout box has been injected — i.e. this is a screenshot
+ * mock-up of a device with a visible Dynamic Island / punch-hole. The cutout's
+ * geometry is not exposed to the web on real hardware (`env()` gives the safe
+ * insets but not the island's bounding box), so this flag is the signal to opt
+ * into cutout-relative placement (a control beside the island): do it when the
+ * box is known, and fall back to a safe-area layout otherwise.
+ */
+export function hasInjectedDisplayCutout(): boolean {
+  if (typeof document === "undefined") return false;
+  return (
+    getComputedStyle(document.documentElement)
+      .getPropertyValue("--display-cutout")
+      .trim() === "1"
+  );
+}
+
+/**
  * Boot entry point: read a `deviceFrame` param from `search` and, when present
  * and valid, publish it. A no-op on real hardware (no param) or in a non-DOM
  * environment. Returns the applied frame for logging/tests, or `null`.

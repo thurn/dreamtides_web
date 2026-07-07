@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
-import type { CSSProperties } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { CardData } from "../types/cards";
 import type { DeckEntry } from "../types/quest";
@@ -13,6 +13,7 @@ import { glassSurfaceStyle } from "../tango/components/controls/glass-surface";
 import { glassIconButtonChrome } from "../tango/components/controls/control-treatment";
 import { token } from "../tango/primitives/tokens";
 import { useIsDesktop } from "../tango/screens/use-is-desktop";
+import { hasInjectedDisplayCutout } from "../runtime/device-frame";
 import {
   applyCardStatOverride,
   applyDeckEntryCardModification,
@@ -56,6 +57,16 @@ export function StartingDeckModal({
   const isDesktop = useIsDesktop();
   const openTimestampRef = useRef<number>(0);
   const prevOpenRef = useRef(false);
+
+  // On a full-bleed mobile overlay whose screen cutout box is known (a
+  // device-screenshot mock-up), lift the close disc up beside the Dynamic
+  // Island, reclaiming the dead space next to it and leaving the header title
+  // to clear the safe area below. The island's geometry is not exposed on real
+  // hardware, so elsewhere the disc stays on the header's trailing edge.
+  const [beside, setBeside] = useState(false);
+  useEffect(() => {
+    setBeside(!isDesktop && hasInjectedDisplayCutout());
+  }, [isDesktop, isOpen]);
 
   useEffect(() => {
     if (isOpen && !prevOpenRef.current) {
@@ -151,9 +162,10 @@ export function StartingDeckModal({
       ? { padding: token("--space-6") }
       : {
           // Clear the device screen cut-out on a full-bleed overlay.
-          paddingTop: `max(env(safe-area-inset-top, ${token(
-            "--gutter",
-          )}), ${token("--gutter")})`,
+          // `--safe-area-inset-top` carries the real inset on device and the
+          // simulated one in a screenshot mock-up, so the title drops below the
+          // Dynamic Island rather than hiding under it.
+          paddingTop: `max(var(--safe-area-inset-top), ${token("--gutter")})`,
           paddingRight: token("--gutter"),
           paddingLeft: token("--gutter"),
           paddingBottom: token("--space-4"),
@@ -163,6 +175,30 @@ export function StartingDeckModal({
   // Desktop hugs its content (whitespace around a short deck); mobile fills the
   // screen and scrolls internally.
   const scrollFlex = isDesktop ? "0 1 auto" : "1 1 auto";
+
+  // The glass close disc. Rendered on the header's trailing edge by default;
+  // when `beside`, it is instead floated up next to the Dynamic Island.
+  const closeDisc: ReactNode = (
+    <Pressable
+      as="button"
+      aria-label="Close starting deck"
+      onClick={handleClose}
+      data-testid="starting-deck-modal-close"
+      style={{
+        flexShrink: 0,
+        width: CLOSE_BUTTON_PX,
+        height: CLOSE_BUTTON_PX,
+        color: token("--text-primary"),
+        display: "grid",
+        placeItems: "center",
+        fontSize: 22,
+        cursor: "pointer",
+        ...glassIconButtonChrome(),
+      }}
+    >
+      <GlowIcon iconClass={GLYPHS.close} color="text-primary" size="1em" />
+    </Pressable>
+  );
 
   return (
     <AnimatePresence>
@@ -199,8 +235,28 @@ export function StartingDeckModal({
               : { initial: false })}
             data-testid="starting-deck-modal"
           >
-            {/* Header: the title and intro copy with a glass close disc on the
-                trailing edge, closed by a neutral hairline. */}
+            {/* When the screen cutout box is known, the close disc floats up
+                beside the Dynamic Island (vertically centered on it, at the
+                trailing gutter), so the header title clears the safe area below
+                rather than sharing the row with the disc. */}
+            {beside && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: `calc(var(--display-cutout-top) + (var(--display-cutout-height) - ${String(
+                    CLOSE_BUTTON_PX,
+                  )}px) / 2)`,
+                  right: token("--gutter"),
+                  zIndex: 1,
+                }}
+              >
+                {closeDisc}
+              </div>
+            )}
+
+            {/* Header: the title and intro copy, with the glass close disc on
+                the trailing edge unless it has floated beside the island.
+                Closed by a neutral hairline. */}
             <div style={headerStyle}>
               <div
                 style={{
@@ -229,29 +285,7 @@ export function StartingDeckModal({
                   These are the cards you begin the quest with.
                 </p>
               </div>
-              <Pressable
-                as="button"
-                aria-label="Close starting deck"
-                onClick={handleClose}
-                data-testid="starting-deck-modal-close"
-                style={{
-                  flexShrink: 0,
-                  width: CLOSE_BUTTON_PX,
-                  height: CLOSE_BUTTON_PX,
-                  color: token("--text-primary"),
-                  display: "grid",
-                  placeItems: "center",
-                  fontSize: 22,
-                  cursor: "pointer",
-                  ...glassIconButtonChrome(),
-                }}
-              >
-                <GlowIcon
-                  iconClass={GLYPHS.close}
-                  color="text-primary"
-                  size="1em"
-                />
-              </Pressable>
+              {!beside && closeDisc}
             </div>
 
             {/* Scrollable card grid. */}
