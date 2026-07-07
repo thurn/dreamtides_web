@@ -46,6 +46,7 @@ import { SiteGuide } from "./SiteGuide";
 import { guideForSiteType } from "../data/dreamscapes";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { SiteSceneBackdrop } from "./SiteSceneBackdrop";
+import { useIsDesktop } from "../tango/screens/use-is-desktop";
 import type { ReactNode } from "react";
 
 /** Computes a stable key for AnimatePresence from the current screen. */
@@ -120,6 +121,7 @@ export function ScreenRouter({
             siteId={screen.siteId}
             runtimeConfig={runtimeConfig}
             onJourneyExplanationChange={onJourneyExplanationChange}
+            onViewDeck={onViewDeck}
           />
         );
       case "questComplete":
@@ -160,13 +162,18 @@ function SiteScreen({
   siteId,
   runtimeConfig,
   onJourneyExplanationChange,
+  onViewDeck,
 }: {
   siteId: string;
   runtimeConfig: RuntimeConfig;
   onJourneyExplanationChange?: (explanation: JourneyExplanation | null) => void;
+  onViewDeck?: () => void;
 }) {
   const { state, cardDatabase } = useQuest();
   const { atlas, currentDreamscape } = state;
+  // The Tango site screens are mobile-first during the migration; on a desktop
+  // viewport the site falls through to its legacy screen.
+  const isDesktop = useIsDesktop();
 
   const node = currentDreamscape !== null ? atlas.nodes[currentDreamscape] : undefined;
   const site = node?.sites.find((s) => s.id === siteId);
@@ -191,17 +198,22 @@ function SiteScreen({
     );
   }
 
-  // Every other site is presented over its dreamscape's dimmed scene art.
-  // A Tango site screen, when one exists for this site type and `?ui=tango` is
-  // active, takes precedence over the legacy site screen while sharing the same
-  // dreamscape backdrop wrapper; an unmigrated site type resolves to null and
-  // falls through to the legacy screens below.
-  let content: ReactNode;
+  // A Tango site screen (mobile viewport, `?ui=tango`) is self-contained: it
+  // draws its own full-bleed scene and docks its own QuestStatusBar, and per the
+  // Tango legibility rules never darkens the scene — so it renders directly,
+  // without the legacy dimmed backdrop wrapper. An unmigrated site type (or a
+  // desktop viewport) resolves to null and falls through to the legacy screens,
+  // which are presented over the dreamscape's dimmed scene art.
   const tangoSite =
-    runtimeConfig.uiVariant === "tango" ? tangoSiteScreenFor(site) : null;
+    runtimeConfig.uiVariant === "tango" && !isDesktop
+      ? tangoSiteScreenFor(site, { onViewDeck })
+      : null;
   if (tangoSite !== null) {
-    content = tangoSite;
-  } else if (site.type === "Draft") {
+    return tangoSite;
+  }
+
+  let content: ReactNode;
+  if (site.type === "Draft") {
     content = <DraftSiteScreen siteId={siteId} />;
   } else if (site.type === "Shop" || site.type === "DreamsignMarket") {
     // The Dreamsign Market shares the regular Shop UI; ShopScreen detects the

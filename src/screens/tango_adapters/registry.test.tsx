@@ -23,8 +23,13 @@ describe("tangoScreenFor", () => {
 });
 
 describe("tangoSiteScreenFor", () => {
-  it("returns null for every site (no site screens migrated yet)", () => {
-    expect(tangoSiteScreenFor({ type: "Draft" } as SiteState)).toBeNull();
+  it("resolves the migrated Draft site to a Tango node", () => {
+    expect(
+      tangoSiteScreenFor({ type: "Draft", id: "site-1" } as SiteState),
+    ).not.toBeNull();
+  });
+
+  it("returns null for site types not yet migrated, so ScreenRouter falls back to legacy", () => {
     expect(tangoSiteScreenFor({ type: "Reward" } as SiteState)).toBeNull();
   });
 });

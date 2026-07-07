@@ -14,6 +14,7 @@ import type { Screen, SiteState } from "../../types/quest";
 import { QuestStartScreenAdapter } from "./QuestStartScreenAdapter";
 import { DreamscapeScreenAdapter } from "./DreamscapeScreenAdapter";
 import { AtlasScreenAdapter } from "./AtlasScreenAdapter";
+import { DraftSiteScreenAdapter } from "./DraftSiteScreenAdapter";
 
 /**
  * App-level actions a Tango screen may trigger that live outside quest state —
@@ -48,10 +49,25 @@ export function tangoScreenFor(
 }
 
 /**
- * The Tango implementation of a site screen, or null when none exists yet. No
- * site screens are migrated yet, so this always returns null and `ScreenRouter`
- * renders the legacy site screen.
+ * The Tango implementation of a site screen, or null when none exists yet (the
+ * caller then renders the legacy site screen). The Tango site screens are
+ * mobile-first during the migration; the router gates this resolver to the
+ * mobile viewport, so a desktop viewport still falls through to the legacy site
+ * screen.
  */
-export function tangoSiteScreenFor(_site: SiteState): ReactNode | null {
-  return null;
+export function tangoSiteScreenFor(
+  site: SiteState,
+  handlers: TangoScreenHandlers = {},
+): ReactNode | null {
+  switch (site.type) {
+    case "Draft":
+      return (
+        <DraftSiteScreenAdapter
+          siteId={site.id}
+          onViewDeck={handlers.onViewDeck}
+        />
+      );
+    default:
+      return null;
+  }
 }

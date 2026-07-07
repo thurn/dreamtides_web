@@ -43,7 +43,7 @@ import { regenerateAtlasInPlace } from "./atlas/regenerate-atlas";
 import type { RuntimeConfig } from "./runtime/runtime-config";
 import { DECK_VIEWER_SCENE_ID, findQaScene } from "./runtime/qa-scenes";
 import { useQuestUrlSync } from "./runtime/use-quest-url-sync";
-import type { QuestState } from "./types/quest";
+import type { QuestState, SiteType } from "./types/quest";
 import {
   JourneyExplanationOverlay,
   type JourneyExplanation,
@@ -79,16 +79,26 @@ export function QuestApp({
   // bottom bar into their own in-screen QuestStatusBar and their utility menu
   // into the top-left DreamscapeQuestMenu, so the app-shell legacy HUD is
   // suppressed there to avoid a doubled bottom bar.
+  const isDesktopViewport = useIsDesktop();
   const atlasUsesTango =
     runtimeConfig.uiVariant === "tango" && state.screen.type === "atlas";
   const dreamscapeUsesTango =
     runtimeConfig.uiVariant === "tango" && state.screen.type === "dreamscape";
-  const tangoScreenUsesQuestMenu = dreamscapeUsesTango || atlasUsesTango;
+  // The Tango draft site (mobile viewport) re-homes the bottom bar into its own
+  // QuestStatusBar and the utility menu into the top-left hamburger, exactly as
+  // the atlas / dreamscape screens do, so it joins the same suppression + menu
+  // gate. On a desktop viewport the site renders its legacy screen with the
+  // legacy HUD, so it is deliberately excluded here.
+  const draftSiteUsesTango =
+    runtimeConfig.uiVariant === "tango"
+    && !isDesktopViewport
+    && activeSiteType(state) === "Draft";
+  const tangoScreenUsesQuestMenu =
+    dreamscapeUsesTango || atlasUsesTango || draftSiteUsesTango;
   const showHud =
     state.screen.type !== "questStart"
     && !isBattleSiteHudHidden(state)
     && !tangoScreenUsesQuestMenu;
-  const isDesktopViewport = useIsDesktop();
   const [deckViewerOpen, setDeckViewerOpen] = useState(false);
   const [poolViewerOpen, setPoolViewerOpen] = useState(false);
   const [glossaryOpen, setGlossaryOpen] = useState(false);
@@ -622,6 +632,19 @@ function stripLoadQuestParam(): void {
   }
   url.searchParams.delete("loadQuest");
   window.history.replaceState(window.history.state, "", url.toString());
+}
+
+/** The type of the site the run is currently parked on, or null when the
+ * current screen is not a resolvable site. */
+function activeSiteType(state: QuestState): SiteType | null {
+  if (state.screen.type !== "site" || state.currentDreamscape === null) {
+    return null;
+  }
+  const siteId = state.screen.siteId;
+  const site = state.atlas.nodes[state.currentDreamscape]?.sites.find(
+    (candidate) => candidate.id === siteId,
+  );
+  return site?.type ?? null;
 }
 
 function isBattleSiteHudHidden(state: QuestState): boolean {

@@ -19,17 +19,15 @@ import { PipBadge } from "../tango/components/controls/PipBadge";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import {
   countRemainingCards,
-  DEFAULT_DRAFT_CONFIG,
-  enterDraftSite,
   SITE_PICKS,
 } from "../draft/draft-engine";
-import { replayDepsFor } from "../draft/replay/replay-deps";
-import { fresh20DepsFor } from "../draft/fresh20/fresh20-deps";
-import type { FitModel } from "../draft/replay/fit-model";
+import {
+  bootstrapLocalDraftState,
+  enterDraftSiteState,
+  resolveDraftConfig,
+} from "../data/draft-site-bootstrap";
 import type { DraftConfig, DraftState } from "../types/draft";
-import { resolveNodeAffiliationWeights } from "../affiliations/affiliation-weights";
 import type { CardData } from "../types/cards";
-import type { DeckEntry } from "../types/quest";
 import { cardImageUrl } from "../data/card-database";
 import { CARD_ASPECT_RATIO } from "../tango/components/card/card-aspect";
 import { DRAFT_OFFER_CARD_WIDTH } from "../components/card-size";
@@ -389,54 +387,6 @@ function DeckSidebarToggle({
   );
 }
 
-/**
- * Compute a locally-bootstrapped draft state for this site if the live
- * `state.draftState` has not yet been advanced to it. Returns null when
- * either the live state already targets this site (no override needed) or
- * the inputs are not ready (no draft pool / empty card database).
- *
- * This is the synchronous companion to the RTDB write in the bootstrap
- * effect: the first render uses this locally-computed offer so the screen
- * never paints with `currentOffer = []` and then re-renders with the real
- * offer once the snapshot round-trips. That double-render is what produced
- * the visible "fade out / fade in" flicker on draft entry.
- */
-/**
- * Build the per-offer deck-fit deps a draft state needs to reveal an offer:
- * replay and fresh20 each require their own deps; a pool state ignores them
- * (returns `undefined`).
- */
-function offerDepsForDraftState(
-  draftState: DraftState,
-  deck: readonly DeckEntry[],
-  fitModel: FitModel | undefined,
-  cardDatabase: Map<number, CardData>,
-) {
-  if (draftState.mode === "replay") return replayDepsFor(deck, fitModel);
-  if (draftState.mode === "fresh20") {
-    return fresh20DepsFor(deck, fitModel, cardDatabase);
-  }
-  return undefined;
-}
-
-function bootstrapLocalDraftState(
-  liveDraftState: DraftState | null,
-  siteId: string,
-  cardDatabase: Map<number, CardData>,
-  deck: readonly DeckEntry[],
-  fitModel: FitModel | undefined,
-  draftConfig: DraftConfig = DEFAULT_DRAFT_CONFIG,
-): DraftState | null {
-  if (cardDatabase.size === 0) return null;
-  if (liveDraftState === null) return null;
-  if (liveDraftState.activeSiteId === siteId) return null;
-
-  const cloned = JSON.parse(JSON.stringify(liveDraftState)) as DraftState;
-  const offerDeps = offerDepsForDraftState(cloned, deck, fitModel, cardDatabase);
-  enterDraftSite(cloned, siteId, cardDatabase, draftConfig, offerDeps);
-  return cloned;
-}
-
 /** The draft site screen: 4-card pack display, card picking, and summary. */
 export function DraftSiteScreen({ siteId }: { siteId: string }) {
   const { state, mutations, cardDatabase, questContent } = useQuest();
@@ -446,19 +396,13 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
   const draftConfig = useMemo<DraftConfig>(() => {
     const nodeId = state.currentDreamscape;
     const node = nodeId === null ? null : state.atlas.nodes[nodeId] ?? null;
-    const resolved = resolveNodeAffiliationWeights(
+    return resolveDraftConfig(
       node,
       questContent.dreamscapes,
       questContent.affiliations,
       questContent.poolContext?.poolData,
       cardDatabase,
     );
-    if (resolved === null) return DEFAULT_DRAFT_CONFIG;
-    return {
-      ...DEFAULT_DRAFT_CONFIG,
-      affiliationWeights: resolved.weights,
-      affiliationId: resolved.affiliation.id,
-    };
   }, [
     state.currentDreamscape,
     state.atlas,
@@ -607,19 +551,13 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
       return;
     }
 
-    const cloned = JSON.parse(JSON.stringify(state.draftState)) as DraftState;
-    const offerDeps = offerDepsForDraftState(
-      cloned,
-      state.deck,
-      questContent.fitModel,
-      cardDatabase,
-    );
-    enterDraftSite(
-      cloned,
+    const cloned = enterDraftSiteState(
+      state.draftState,
       siteId,
       cardDatabase,
+      state.deck,
+      questContent.fitModel,
       draftConfig,
-      offerDeps,
     );
     draftStateRef.current = cloned;
     setLocalDraftState(cloned);

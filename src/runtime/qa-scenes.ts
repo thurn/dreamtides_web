@@ -375,6 +375,7 @@ export const QA_SCENES: readonly QaScene[] = [
   DREAMSCAPE_SCENE,
   DECK_VIEWER_SCENE,
   STARTING_DECK_SCENE,
+  siteScene("draft", "Draft", "Draft"),
   siteScene("transfiguration", "Transfiguration", "Transfiguration"),
   siteScene(
     "transfiguration-enhanced",
