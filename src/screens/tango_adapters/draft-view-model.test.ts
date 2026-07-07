@@ -117,6 +117,8 @@ describe("buildDraftView", () => {
       offerCardNumbers: [5, 6],
       cardDatabase: db,
       sceneNode: null,
+      site: { data: { draftPickCount: 5 } },
+      sitePicksCompleted: 0,
       state: questState({ essence: 40 }),
     });
     expect(view.offer.map((c) => c.cardNumber)).toEqual([6, 5]);
@@ -126,11 +128,38 @@ describe("buildDraftView", () => {
     expect(view.hud.essence).toBe(40);
   });
 
+  it("derives the 1-indexed pick counter from picks completed and the site's total", () => {
+    const view = buildDraftView({
+      offerCardNumbers: [1],
+      cardDatabase: cardDatabase([card({ cardNumber: 1 })]),
+      sceneNode: null,
+      site: { data: { draftPickCount: 5 } },
+      sitePicksCompleted: 2,
+      state: questState(),
+    });
+    expect(view.pickNumber).toBe(3);
+    expect(view.pickTotal).toBe(5);
+  });
+
+  it("clamps the pick number so a final pack never reads past the total", () => {
+    const view = buildDraftView({
+      offerCardNumbers: [1],
+      cardDatabase: cardDatabase([card({ cardNumber: 1 })]),
+      sceneNode: null,
+      site: { data: { draftPickCount: 5 } },
+      sitePicksCompleted: 5,
+      state: questState(),
+    });
+    expect(view.pickNumber).toBe(5);
+  });
+
   it("produces an empty offer and key for an exhausted pack", () => {
     const view = buildDraftView({
       offerCardNumbers: [],
       cardDatabase: cardDatabase([]),
       sceneNode: null,
+      site: { data: { draftPickCount: 5 } },
+      sitePicksCompleted: 0,
       state: questState(),
     });
     expect(view.offer).toEqual([]);

@@ -4,8 +4,9 @@
 // `DraftSiteScreenAdapter` acquires live state (and mints the draft offer) and
 // calls `buildDraftView`; this module never acquires anything itself.
 
+import { draftSitePickCount } from "../../draft/draft-site-config";
 import type { CardData } from "../../types/cards";
-import type { DreamscapeNode, QuestState } from "../../types/quest";
+import type { DreamscapeNode, QuestState, SiteState } from "../../types/quest";
 import type { DraftHudView, DraftView } from "../../tango/screens/DraftScreen";
 import {
   dreamscapeSceneRef,
@@ -56,18 +57,25 @@ export function buildDraftHudView(state: QuestState): DraftHudView {
 /**
  * The full view-model for the draft screen: the dreamscape scene the draft
  * sits in, the resolved + sorted offer pack (keyed by its card numbers so a new
- * pack cross-fades the grid), and the persistent bottom-HUD data.
+ * pack cross-fades the grid), the floating pick counter, and the persistent
+ * bottom-HUD data.
  */
 export function buildDraftView(params: {
   offerCardNumbers: readonly number[];
   cardDatabase: ReadonlyMap<number, CardData>;
   sceneNode: DreamscapeNode | null;
+  site: Pick<SiteState, "data"> | null;
+  sitePicksCompleted: number;
   state: QuestState;
 }): DraftView {
+  const pickTotal = params.site !== null ? draftSitePickCount(params.site) : 0;
   return {
     scene: params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null,
     offer: resolveOfferCards(params.offerCardNumbers, params.cardDatabase),
     offerKey: params.offerCardNumbers.join(","),
+    // Clamp so the last pack never reads past the total (e.g. "(6/5)").
+    pickNumber: Math.min(params.sitePicksCompleted + 1, Math.max(pickTotal, 1)),
+    pickTotal,
     hud: buildDraftHudView(params.state),
   };
 }

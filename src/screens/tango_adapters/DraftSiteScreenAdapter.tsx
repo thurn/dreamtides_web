@@ -102,6 +102,7 @@ export function DraftSiteScreenAdapter({
     state.currentDreamscape !== null
       ? state.atlas.nodes[state.currentDreamscape] ?? null
       : null;
+  const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
 
   const view = useMemo(
     () =>
@@ -109,9 +110,11 @@ export function DraftSiteScreenAdapter({
         offerCardNumbers: progress.offerCardNumbers,
         cardDatabase,
         sceneNode: node,
+        site,
+        sitePicksCompleted: progress.sitePicksCompleted,
         state,
       }),
-    [progress.offerCardNumbers, cardDatabase, node, state],
+    [progress.offerCardNumbers, progress.sitePicksCompleted, cardDatabase, node, site, state],
   );
 
   const handlePick = useCallback(

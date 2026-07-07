@@ -30,6 +30,8 @@ function view(offer: number[]): DraftView {
     scene: null,
     offer: offer.map(card),
     offerKey: offer.join(","),
+    pickNumber: 1,
+    pickTotal: 5,
     hud: { essence: 100, deck: 12, dreamsigns: [] },
   };
 }
@@ -82,8 +84,9 @@ describe("Tango DraftScreen", () => {
         container.querySelector(`[data-draft-offer-card="${String(cardNumber)}"]`),
       ).not.toBeNull();
     }
-    // No draft chrome: no "Pick" counter or "Draft" title text on the screen.
-    expect(container.textContent ?? "").not.toContain("Pick ");
+    // The one label: a floating "Draft (n/total)" pick counter.
+    const counter = container.querySelector("[data-draft-pick-counter]");
+    expect(counter?.textContent).toBe("Draft (1/5)");
 
     act(() => {
       root.unmount();
