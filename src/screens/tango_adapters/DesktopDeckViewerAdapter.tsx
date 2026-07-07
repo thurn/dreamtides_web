@@ -43,17 +43,20 @@ export function DesktopDeckViewerAdapter({
       state.dreamsigns,
     ],
   );
+  const cardCount = view.cards.length;
+  const dreamsignCount = view.dreamsigns.length;
+  const hasDreamcaller = view.dreamcaller !== null;
 
   useEffect(() => {
     const wasOpen = wasOpenRef.current;
     wasOpenRef.current = isOpen;
     if (!isOpen || wasOpen) return;
     logEvent("desktop_deck_viewer_opened", {
-      cardCount: view.cards.length,
-      dreamsignCount: view.dreamsigns.length,
-      hasDreamcaller: view.dreamcaller !== null,
+      cardCount,
+      dreamsignCount,
+      hasDreamcaller,
     });
-  }, [isOpen, view.cards.length, view.dreamsigns.length, view.dreamcaller]);
+  }, [cardCount, dreamsignCount, hasDreamcaller, isOpen]);
 
   if (!isOpen) return null;
   return <DesktopDeckViewer view={view} onClose={onClose} />;
