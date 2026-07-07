@@ -57,6 +57,14 @@ export interface AtlasSiteInfoCard {
   icon: Glyph;
 }
 
+/** The affiliation note shown under the signature site card on desktop. */
+export interface AtlasAffiliationInfoCard {
+  /** Full InfoCard title, including the affiliation display name. */
+  title: string;
+  /** Sentence-case affiliation card theme (e.g. "Discard", "Figment"). */
+  theme: string;
+}
+
 /**
  * The resolved reveal model for one atlas node — the mobile-cut InfoCard content
  * the view-model builder produces. Plain data (strings + {@link ArtRef}s); the
@@ -106,6 +114,9 @@ export interface AtlasNodeCard {
   /** The signature site's standard info card; null for starter / boss /
    * unrevealed node. */
   siteCard: AtlasSiteInfoCard | null;
+  /** The dreamscape affiliation's standard note card; null for starter / boss /
+   * unrevealed node. */
+  affiliationCard: AtlasAffiliationInfoCard | null;
 }
 
 /** One placed node plus its resolved reveal content. */
@@ -200,6 +211,21 @@ function AtlasSiteInfoCard({
   );
 }
 
+/** A compact note explaining the node's affiliation weighting. */
+function AtlasAffiliationInfoCard({
+  affiliation,
+}: {
+  affiliation: AtlasAffiliationInfoCard;
+}): React.ReactElement {
+  return (
+    <InfoCard
+      variant="text"
+      title={affiliation.title}
+      body={richText.plain(`${affiliation.theme} cards are more likely here.`)}
+    />
+  );
+}
+
 /**
  * Renders a node's reveal: the main card, and — when the node carries a
  * pre-revealed known dreamsign — its own companion dreamsign card beside it.
@@ -225,6 +251,8 @@ function AtlasRevealCard({
 }): React.ReactElement {
   const { dreamsign } = card;
   const siteCard = layout === "desktop" ? card.siteCard : null;
+  const affiliationCard =
+    layout === "desktop" ? card.affiliationCard : null;
   // Desktop uses the desktop layout; a revealed node there gets the large hover
   // card. Mobile (row) and unrevealed nodes keep the compact fullBleed / text card.
   const hoverContent = layout === "desktop" ? toHoverContent(card) : null;
@@ -234,22 +262,36 @@ function AtlasRevealCard({
     ) : (
       <AtlasMainCard card={card} />
     );
-  if (dreamsign === null && siteCard === null) {
+  if (dreamsign === null && siteCard === null && affiliationCard === null) {
     return main;
   }
   if (layout === "desktop") {
+    const hasRightColumn = siteCard !== null || affiliationCard !== null;
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: CARD_STACK_GAP }}>
         <div
           style={{
             display: "flex",
             flexDirection: "row",
-            alignItems: "center",
+            alignItems: "flex-start",
             gap: CARD_STACK_GAP,
           }}
         >
           {main}
-          {siteCard !== null && <AtlasSiteInfoCard site={siteCard} />}
+          {hasRightColumn && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: CARD_STACK_GAP,
+              }}
+            >
+              {siteCard !== null && <AtlasSiteInfoCard site={siteCard} />}
+              {affiliationCard !== null && (
+                <AtlasAffiliationInfoCard affiliation={affiliationCard} />
+              )}
+            </div>
+          )}
         </div>
         {dreamsign !== null && <AtlasDreamsignCard dreamsign={dreamsign} />}
       </div>

@@ -288,7 +288,7 @@ describe("buildAtlasMapNodes", () => {
           aesthetic: "Moonlit forest",
           guideId: "aldric",
           signatureSite: "DreamAugury",
-          affiliationId: "abandon",
+          affiliationId: "figments",
           siteIcon: "dream-augury",
           isStarter: false,
           dreamcallerIds: [],
@@ -306,8 +306,8 @@ describe("buildAtlasMapNodes", () => {
       ],
       affiliations: [
         {
-          id: "abandon",
-          name: "Abandon",
+          id: "figments",
+          name: "Figments",
           signatureCards: [],
           weightStrength: 1,
           opponentBiasStrength: 1,
@@ -323,6 +323,10 @@ describe("buildAtlasMapNodes", () => {
     });
     expect(middle?.card.siteCard?.blurb.length).toBeGreaterThan(0);
     expect(middle?.card.siteCard?.icon).toContain("bx");
+    expect(middle?.card.affiliationCard).toEqual({
+      title: "Affiliation: Figments",
+      theme: "Figment",
+    });
   });
 });
 

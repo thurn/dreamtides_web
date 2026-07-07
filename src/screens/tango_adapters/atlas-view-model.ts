@@ -32,6 +32,7 @@ import type {
   AtlasMapNode,
 } from "../../tango/components/atlas/AtlasMap";
 import type {
+  AtlasAffiliationInfoCard,
   AtlasDreamsignCard,
   AtlasNodeCard,
   AtlasSiteInfoCard,
@@ -349,6 +350,27 @@ function buildSignatureSiteCard(
   };
 }
 
+/** Resolves the affiliation explanatory InfoCard payload. */
+function affiliationCardTheme(name: string): string {
+  const normalized = name.trim().toLowerCase();
+  const withoutArticle = normalized.startsWith("the ")
+    ? normalized.slice("the ".length)
+    : normalized;
+  const singular = withoutArticle.endsWith("s")
+    ? withoutArticle.slice(0, -1)
+    : withoutArticle;
+  return singular.charAt(0).toUpperCase() + singular.slice(1);
+}
+
+/** Resolves the affiliation explanatory InfoCard payload. */
+function buildAffiliationCard(
+  name: string | null,
+): AtlasAffiliationInfoCard | null {
+  return name !== null
+    ? { title: `Affiliation: ${name}`, theme: affiliationCardTheme(name) }
+    : null;
+}
+
 /**
  * Resolves the InfoCard reveal content for one node — the mobile-cut card the
  * atlas node reveals on press / hover.
@@ -398,6 +420,7 @@ function buildNodeCard(
       siteName: null,
       affiliation: null,
       siteCard: null,
+      affiliationCard: null,
     };
   }
 
@@ -429,6 +452,7 @@ function buildNodeCard(
       siteName: null,
       affiliation: null,
       siteCard: null,
+      affiliationCard: null,
     };
   }
 
@@ -446,6 +470,7 @@ function buildNodeCard(
   // suppressed too; a resident dreamscape shows its signature site's label.
   const siteName = guide != null ? siteTypeName(dreamscape.signatureSite) : null;
   const siteCard = guide != null ? buildSignatureSiteCard(dreamscape) : null;
+  const affiliationName = affiliation?.name ?? null;
 
   // Show the dreamscape scene as the full-bleed hero, with the resident guide's
   // character render standing prominently over it and the guide's name as the
@@ -465,8 +490,9 @@ function buildNodeCard(
     placeName: dreamscape.name,
     guideName: guide?.name ?? null,
     siteName,
-    affiliation: affiliation?.name ?? null,
+    affiliation: affiliationName,
     siteCard,
+    affiliationCard: buildAffiliationCard(affiliationName),
   };
 }
 
