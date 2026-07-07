@@ -12,59 +12,58 @@
 [[incarnations]]
 id = "howl_at_worlds_end"
 title = "Apollyon, the World's End"
-description = "Spirit Animals multiply, then rise as one devouring chorus."
+description = "Apollyon has the Aspect of Ravening: Spirit Animals multiply, then rise as one devouring chorus."
 deck-type = "Spirit Animal Flood"
 
 [[incarnations]]
 id = "last_causality"
 title = "Apollyon, the End of Causality"
-description = "Each event births another, until consequence becomes catastrophe."
+description = "Apollyon has the Aspect of Catastrophe: Each event births another, until consequence becomes catastrophe."
 deck-type = "Event Chain/Storm"
 
 [[incarnations]]
 id = "marshal_of_the_final_host"
 title = "Apollyon, the Doom of Humanity"
-description = "Warriors gather in ranks and strike before mercy."
+description = "Apollyon has the Aspect of Slaughter: Warriors gather in ranks and strike before mercy."
 deck-type = "Warrior Support Aggro"
 
 [[incarnations]]
 id = "butcher_of_the_unfallen"
 title = "Apollyon, the Butcher"
-description = "Every sacrifice feeds the survivors."
+description = "Apollyon has the Aspect of Hunger: Every sacrifice feeds the survivors."
 deck-type = "Abandon/Survivor Replenishment"
 
 [[incarnations]]
 id = "crawling_return"
 title = "Apollyon, the Last Word"
-description = "An ethereal host returns endlessly."
+description = "Apollyon has the Aspect of Haunting: An ethereal host returns endlessly."
 deck-type = "Cheap-Character Recursion"
-
 [[incarnations]]
 id = "closed_grave"
 title = "Apollyon, the Broken Cycle"
-description = "Broken souls wind through Death's river."
+description = "Apollyon has the Aspect of Damnation: Broken souls wind through Death's river."
 deck-type = "Reclaim Loop"
 
 [[incarnations]]
 id = "keeper_of_cast_off_names"
 title = "Apollyon, the Keeper of Names"
-description = "The discarded become omens."
+description = "Apollyon has the Aspect of Abandonment: The discarded become omens."
 deck-type = "Discard/Reclaim"
 
 [[incarnations]]
 id = "sovereign_of_the_full_void"
 title = "Apollyon, Sovereign of the Void"
-description = "The onrushing void swells to infinity."
+description = "Apollyon has the Aspect of Oblivion: The onrushing void swells to infinity."
 deck-type = "Void-Density Recursion"
 
 [[incarnations]]
 id = "the_unplaceable"
 title = "Apollyon, the Unplaceable"
-description = "Outsiders dissolve every defense."
+description = "Apollyon has the Aspect of Violation: Outsiders dissolve every defense."
 deck-type = "Outsider Tempo"
 
 [[incarnations]]
 id = "herald_of_the_roused_blade"
 title = "Apollyon, the Herald of Revelation"
-description = "Warriors awaken into the final Rapture."
+description = "Apollyon has the Aspect of Frenzy: Warriors awaken into the final Rapture."
 deck-type = "Event/Awaken Warriors"
