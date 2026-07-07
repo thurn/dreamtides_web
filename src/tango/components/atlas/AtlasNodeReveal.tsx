@@ -55,7 +55,11 @@ export interface AtlasNodeCard {
   /** Scene art (the full-bleed hero image): the dreamscape scene, or Limbo for
    * the boss; null while unrevealed. */
   sceneArt: ArtRef | null;
-  /** Uppercase eyebrow — the boss's "Final Dream"; null otherwise. */
+  /** The centered foreground character render laid over the scene hero: the
+   * resident Dream Guide, or the boss in Limbo; null when the place has no
+   * resident (the starter) or is unrevealed. */
+  figureArt: ArtRef | null;
+  /** Uppercase eyebrow shown above the title on the scene hero; null otherwise. */
   eyebrow: string | null;
   /** Headline: the resident guide's name, the boss place, or "An Unseen Dream". */
   title: string;
@@ -87,6 +91,7 @@ function AtlasMainCard({ card }: { card: AtlasNodeCard }): React.ReactElement {
         variant="fullBleed"
         image={card.sceneArt}
         imageCrop="center"
+        figure={card.figureArt ?? undefined}
         meta={card.eyebrow ?? undefined}
         title={card.title}
         body={body}
@@ -215,7 +220,16 @@ export function AtlasNodeReveal({
           <PressPopover anchor={anchor}>
             <AtlasRevealCard card={card} />
           </PressPopover>,
-          stageRef.current,
+          // Portal into `document.body`, NOT the atlas stage root. The stage
+          // root is `position: fixed`, which makes it its own stacking context
+          // at `z-index: auto`; the app-shell hamburger menu button sits at a
+          // higher z-index in the ROOT context, so any popover nested inside the
+          // stage — however high its own z-index — is trapped beneath the menu.
+          // Portaling to the body lets the popover's z-index compete with the
+          // menu directly, so the reveal renders above it. The anchor is still
+          // measured against the stage root (viewport-anchored, unscaled), so
+          // its stage-native coordinates map 1:1 onto the body's viewport space.
+          document.body,
         )}
     </>
   );

@@ -1330,6 +1330,14 @@
       }
     },
     {
+      "name": "figure",
+      "tsType": "ArtRef",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "An optional foreground character render (a transparent full-body cutout —\na Dream Guide, the boss) laid centered and prominent OVER the hero image,\nstanding above the glass text card. Its own subject of the card; omit for a\nscene-only hero. An {@link ArtRef}, resolved by the component."
+    },
+    {
       "name": "meta",
       "tsType": "string",
       "unionMembers": [],

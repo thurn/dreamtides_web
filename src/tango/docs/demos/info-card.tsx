@@ -73,13 +73,13 @@ import { GLYPHS } from "src/tango/primitives/glyph";
     },
     {
       label: "Full-bleed variant",
-      note: "A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the meta / name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Used for the Dreamcaller profile reveal and the atlas node reveals.",
+      note: "A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the meta / name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Pass an optional `figure` (a transparent character render) to stand a subject centered and prominent over the hero, above the glass card — used for the atlas Dream Guide / boss reveals. Used for the Dreamcaller profile reveal and the atlas node reveals.",
       code: `<InfoCard
   variant="fullBleed"
-  image={artRef.dreamcaller("0025")}
-  title="Threxan"
-  subtitle="the Resounding Wrath"
-  body={richText.rules("At the start of your first turn, draw a card.")}
+  image={artRef.dreamscapeScene("firstlight_meadow")}
+  figure={artRef.dreamGuide("tobias_tanglefur")}
+  title="Tobias Tanglefur"
+  body={richText.rules("Enhances the Garden site at his home dreamscape.")}
 />`,
     },
     {

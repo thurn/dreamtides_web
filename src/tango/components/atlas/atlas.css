@@ -23,15 +23,19 @@
   fill: none;
 }
 .dream-atlas .edge-dim {
-  stroke: rgba(170, 150, 205, 0.42);
-  stroke-width: 3;
+  stroke: rgba(206, 192, 236, 0.92);
+  stroke-width: 3.5;
   stroke-linecap: round;
+  /* A soft dark halo so the pale line stays legible where it crosses the
+     brighter node glows and the lighter centre of the wash. */
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.7));
 }
 .dream-atlas .edge-locked {
-  stroke: rgba(139, 92, 246, 0.44);
-  stroke-width: 3;
-  stroke-dasharray: 3 9;
+  stroke: rgba(182, 154, 248, 0.9);
+  stroke-width: 3.5;
+  stroke-dasharray: 4 8;
   stroke-linecap: round;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.7));
 }
 .dream-atlas .edge-traveled {
   /* Stroke is a per-edge userSpaceOnUse gradient set inline by AtlasEdge so it

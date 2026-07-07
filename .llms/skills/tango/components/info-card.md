@@ -19,6 +19,7 @@ The one press-to-reveal information card. Its media treatment varies by content 
 | `frame` | `boolean` | no | — | true = framed portrait, false = contained transparent object. Default false. |
 | `title` | `string` | no | — | The card's headline. Plain text — resolve names before display. |
 | `body` | `RichText` | no | — | The reveal copy, as a {@link RichText} value (plain / rules / note / stack). |
+| `figure` | `ArtRef` | no | — | An optional foreground character render (a transparent full-body cutout — a Dream Guide, the boss) laid centered and prominent OVER the hero image, standing above the glass text card. Its own subject of the card; omit for a scene-only hero. An {@link ArtRef}, resolved by the component. |
 | `meta` | `string` | no | — | Small mono/uppercase overline above the title, on the glass card. Small mono/uppercase overline above the title. |
 | `subtitle` | `string` | no | — | An epithet under the name — a smaller serif line in white, mirroring the Dreamcaller-select name/epithet pairing. Plain text; resolve before display. An epithet under the name — a smaller serif subtitle in white, mirroring the Dreamcaller-select name/epithet pairing. Plain text; resolve before display. |
 | `glyph` | `Glyph` | yes | — | The {@link Glyph} the disc renders. Required. |
@@ -80,15 +81,15 @@ A media object with `image` (an `ArtRef`); set `frame` for a framed portrait, om
 
 ### Full-bleed variant
 
-A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the meta / name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Used for the Dreamcaller profile reveal and the atlas node reveals.
+A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the meta / name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Pass an optional `figure` (a transparent character render) to stand a subject centered and prominent over the hero, above the glass card — used for the atlas Dream Guide / boss reveals. Used for the Dreamcaller profile reveal and the atlas node reveals.
 
 ```tsx
 <InfoCard
   variant="fullBleed"
-  image={artRef.dreamcaller("0025")}
-  title="Threxan"
-  subtitle="the Resounding Wrath"
-  body={richText.rules("At the start of your first turn, draw a card.")}
+  image={artRef.dreamscapeScene("firstlight_meadow")}
+  figure={artRef.dreamGuide("tobias_tanglefur")}
+  title="Tobias Tanglefur"
+  body={richText.rules("Enhances the Garden site at his home dreamscape.")}
 />
 ```
 

@@ -81,6 +81,7 @@ function emptyCard(): AtlasNodeCard {
     isUnrevealed: true,
     isBoss: false,
     sceneArt: null,
+    figureArt: null,
     eyebrow: null,
     title: "An Unseen Dream",
     body: "An unseen dream.",

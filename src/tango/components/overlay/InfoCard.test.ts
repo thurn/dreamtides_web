@@ -122,6 +122,24 @@ describe("computePopoverPosition — on-screen clamp", () => {
     assertFullyOnScreen(pos, WIDTH, HEIGHT);
   });
 
+  it("pins ABOVE at the top inset rather than flipping below when it misses the full gap", () => {
+    // The card doesn't fit above at the full uniform gap (obstacle top 140,
+    // card 120 + gap 14 + edge 12 = 146 > 140), but it DOES clear the obstacle
+    // pinned to the top inset (edge 12 + height 120 = 132 <= 140). Above is
+    // strongly preferred, so it pins to the top rather than dropping below.
+    const pos = computePopoverPosition(
+      anchor({ top: 140, bottom: 180 }),
+      WIDTH,
+      HEIGHT,
+      GAP,
+      EDGE,
+    );
+    expect(pos.top).toBe(EDGE);
+    // Its bottom stays clear of the anchor top — it is genuinely above the press.
+    expect(pos.top + HEIGHT).toBeLessThanOrEqual(140);
+    assertFullyOnScreen(pos, WIDTH, HEIGHT);
+  });
+
   it("flips BELOW a top-edge anchor with no room above, keeping the gap", () => {
     const pos = computePopoverPosition(
       anchor({ top: 20, bottom: 60 }),

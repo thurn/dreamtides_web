@@ -5,7 +5,7 @@ import { assetUrl } from "../../../runtime/asset-url";
  * renders the run graph as circular dreamscape-icon nodes in an ornate frame,
  * with rich hover-preview cards (scene art + resident Dream Guide). The art
  * resolves directly from ids; this module centralises the id -> URL mapping and
- * the fixed Layer-VII final-dream copy.
+ * the fixed Layer-VII boss (Limbo) copy.
  *
  * Assets are produced by `scripts/setup-assets.mjs` and served from `public/`:
  *   - `/dreamscapes/<id>.png`       rectangular scene art (hover-card header)
@@ -50,7 +50,7 @@ export const STARTER_FLAG_ICON_CLASS = "fa-solid fa-flag";
 export const BOSS_DREAMSCAPE_ID = "limbo";
 
 /**
- * The Layer-VII final dream. The atlas always presents the boss node as Limbo,
+ * The Layer-VII boss dream. The atlas always presents the boss node as Limbo,
  * guarded by Apollyon, independent of which dreamscape the generator assigned
  * the boss node for its battle. Copy is player-facing flavour for the boss
  * hover card.
@@ -59,6 +59,8 @@ export const BOSS_DISPLAY = {
   place: "Limbo",
   name: "Apollyon",
   title: "Apollyon, the Doom of Humanity",
+  /** The Dream Guide id resolving Apollyon's character render (`/dream-guides/apollyon.png`). */
+  guideId: "apollyon",
   sceneUrl: assetUrl("/dreamscapes/limbo.png"),
   iconUrl: assetUrl("/dreamscape-icons/limbo.png"),
   figureUrl: assetUrl("/dream-guides/apollyon.png"),

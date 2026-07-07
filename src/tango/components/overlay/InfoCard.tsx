@@ -75,6 +75,12 @@ const PADY = 14;
 // hero image's edges — how much of the image shows around the card. Its own
 // fixed geometry, not a design-system scale step.
 const FULL_BLEED_INSET = 12;
+// Height (px) of the fullBleed variant's centered foreground `figure` — the
+// transparent character render (a Dream Guide, the boss) that stands prominently
+// over the hero image, above the glass text card. Its own fixed geometry, not a
+// design-system scale step. Sized to nearly fill the square hero so the figure
+// reads as the card's subject; its lower body falls behind the glass text card.
+const FULL_BLEED_FIGURE_HEIGHT = 208;
 const INFO_CARD_GLASS_FILL = "rgba(18,14,28,0.5)";
 const INFO_CARD_GLASS_BACKGROUND = `linear-gradient(150deg, rgba(255,255,255,0.07), rgba(255,255,255,0) 42%), ${INFO_CARD_GLASS_FILL}`;
 
@@ -218,6 +224,13 @@ export interface InfoCardFullBleedProps extends InfoCardCommonProps {
   imageCrop?: ImageCrop;
   /** A named media {@link MediaFilter} (e.g. a spark glow). */
   imageFilter?: MediaFilter;
+  /**
+   * An optional foreground character render (a transparent full-body cutout —
+   * a Dream Guide, the boss) laid centered and prominent OVER the hero image,
+   * standing above the glass text card. Its own subject of the card; omit for a
+   * scene-only hero. An {@link ArtRef}, resolved by the component.
+   */
+  figure?: ArtRef;
   /** Small mono/uppercase overline above the title, on the glass card. */
   meta?: string;
   /**
@@ -388,7 +401,8 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
      clipped. A long body simply grows the card taller and the image grows with
      it, so the image always fills behind the card. --- */
   if (props.variant === "fullBleed") {
-    const { image, imageCrop = "center", imageFilter, meta, subtitle } = props;
+    const { image, imageCrop = "center", imageFilter, figure, meta, subtitle } =
+      props;
     const Meta = meta ? (
       <div style={{ ...tMeta, marginBottom: 7 }}>{meta}</div>
     ) : null;
@@ -434,6 +448,32 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
             }}
           />
         </div>
+        {figure !== undefined && (
+          // The foreground character render, centered and prominent over the
+          // hero image. Absolutely placed so it floats above the scene without
+          // displacing the glass text card; its lower body falls behind the
+          // card (which paints after it in DOM order). A drop shadow lifts the
+          // transparent cutout off the scene for legibility (the on-media
+          // legibility ladder).
+          <img
+            src={resolveArtRef(figure)}
+            alt=""
+            draggable={false}
+            style={{
+              position: "absolute",
+              left: "50%",
+              top: FULL_BLEED_INSET,
+              transform: "translateX(-50%)",
+              height: FULL_BLEED_FIGURE_HEIGHT,
+              width: "auto",
+              maxWidth: `calc(100% - ${String(FULL_BLEED_INSET * 2)}px)`,
+              objectFit: "contain",
+              filter: "drop-shadow(0 8px 18px rgba(0,0,0,0.62))",
+              pointerEvents: "none",
+              userSelect: "none",
+            }}
+          />
+        )}
         <div
           style={{
             ...glassSurfaceStyle(),
@@ -601,9 +641,22 @@ export function isHold(downT: number, upT: number, clickWindow: number): boolean
 
 /**
  * The on-screen clamp. PURE. Places a `width`×`height` popover a uniform
- * `gap` from `anchor`, preferring above then below, and clamps it to stay at
- * least `edge` px from every viewport side (the viewport dims travel on the
- * anchor as `w`/`h`). Returns the popover's { left, top } in stage-native px.
+ * `gap` from `anchor` and clamps it to stay at least `edge` px from every
+ * viewport side (the viewport dims travel on the anchor as `w`/`h`). Returns the
+ * popover's { left, top } in stage-native px.
+ *
+ * ABOVE is strongly preferred — the reveal should sit over the pressed object,
+ * never under the finger — so the vertical placement tries, in order:
+ *   1. above at the full uniform gap (the ideal),
+ *   2. above pinned to the top screen inset with a reduced gap, whenever the
+ *      card still clears the obstacle there — recovering the near-miss cases a
+ *      strict full-gap test would needlessly flip below,
+ *   3. below at the full gap (the last resort, when the card cannot clear the
+ *      press point above at all — e.g. a trigger already near the top edge),
+ *   4. a top-biased clamp when the card fits neither side (taller than the room
+ *      either way).
+ * Because `obstacleTop` already folds in the finger disc on a touch press, an
+ * above placement never covers the finger even at the reduced gap.
  *
  * A card larger than the viewport cannot satisfy every edge; it is pinned to
  * the leading (top-left) inset so at least its title/corner stays reachable.
@@ -631,9 +684,13 @@ export function computePopoverPosition(
   const belowTop = obstacleBottom + gap;
   let t: number;
   if (aboveTop >= edge) {
-    t = aboveTop; // fits above
+    t = aboveTop; // fits fully above at the uniform gap — the ideal
+  } else if (edge + height <= obstacleTop) {
+    // Doesn't fit above at the full gap, but still clears the obstacle when
+    // pinned to the top inset (a reduced gap). Prefer this to dropping below.
+    t = edge;
   } else if (belowTop + height <= h - edge) {
-    t = belowTop; // fits below
+    t = belowTop; // last resort: below the press
   } else {
     t = Math.max(edge, Math.min(aboveTop, h - height - edge)); // clamp into view
   }

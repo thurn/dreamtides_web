@@ -291,12 +291,13 @@ function buildDreamsignCard(
  * atlas node reveals on press / hover.
  *
  * A revealed dreamscape shows its scene as a full-bleed hero image with the
- * resident guide's name as the headline — the dreamscape's own name (decorative
- * on mobile) is dropped. The boss shows Limbo's scene the same way. A guideless
- * revealed place (the starter) shows the scene with an empty headline. An
- * unreachable / unrevealed node shows the compact "unseen dream" text card. A
- * pre-revealed known dreamsign is carried as its own companion card. The
- * labelled site / bonus / affiliation rows of the legacy desktop card are cut.
+ * resident guide's character render standing over it and the guide's name as
+ * the headline. The boss shows Limbo's scene the same way, with Apollyon as the
+ * figure. A guideless revealed place (the starter) shows the scene titled with
+ * the dreamscape's own name and no figure. An unreachable / unrevealed node
+ * shows the compact "unseen dream" text card. A pre-revealed known dreamsign is
+ * carried as its own companion card. The labelled site / bonus / affiliation
+ * rows of the legacy desktop card are cut.
  */
 function buildNodeCard(
   node: DreamscapeNode,
@@ -318,7 +319,9 @@ function buildNodeCard(
       isUnrevealed: false,
       isBoss: true,
       sceneArt: artRef.dreamscapeScene(BOSS_DREAMSCAPE_ID),
-      eyebrow: "Final Dream",
+      // The boss stands over the Limbo scene as its prominent figure.
+      figureArt: artRef.dreamGuide(BOSS_DISPLAY.guideId),
+      eyebrow: null,
       title: BOSS_DISPLAY.place,
       body: bossIncarnation?.description ?? BOSS_DISPLAY.intro,
       dreamsign,
@@ -337,10 +340,15 @@ function buildNodeCard(
       isUnrevealed: true,
       isBoss: false,
       sceneArt: null,
+      figureArt: null,
       eyebrow: null,
       title: "An Unseen Dream",
       body: UNSEEN_DREAM_BODY,
-      dreamsign: null,
+      // A still-unseen dream can carry a pre-revealed known dreamsign (its badge
+      // already shows on the node); pressing it reveals that dreamsign's own
+      // companion card beneath the "unseen dream" text. Unreachable nodes hide
+      // it — `buildDreamsignCard` already returns null for those.
+      dreamsign,
     };
   }
 
@@ -350,14 +358,16 @@ function buildNodeCard(
       : null;
 
   // Show the dreamscape scene as the full-bleed hero, with the resident guide's
-  // name as the headline (a guideless starter shows the scene with an empty
-  // headline) and the home-site bonus as the body.
+  // character render standing prominently over it and the guide's name as the
+  // headline. A guideless place (the starter) has no figure and titles the card
+  // with the dreamscape's own name, so it never reveals as an untitled scene.
   return {
     isUnrevealed: false,
     isBoss: false,
     sceneArt: artRef.dreamscapeScene(dreamscape.id),
+    figureArt: guide != null ? artRef.dreamGuide(guide.id) : null,
     eyebrow: null,
-    title: guide?.name ?? "",
+    title: guide?.name ?? dreamscape.name,
     body: guide?.homeSpecialty ?? STARTER_BODY,
     dreamsign,
   };
