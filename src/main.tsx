@@ -132,14 +132,6 @@ if (pathname === "/editor" || pathname === "/cards") {
     import("./runtime/runtime-config"),
   ]);
 
-  // DEV-ONLY: the floating panel for dialing in mobile InfoCard typography.
-  // Removed once the value is baked into MOBILE_TEXT_SCALE.
-  const InfoCardScaleTweakPanel = import.meta.env.DEV
-    ? (
-        await import("./tango/screens/devtools/InfoCardScaleTweakPanel")
-      ).InfoCardScaleTweakPanel
-    : null;
-
   const runtimeConfig = parseRuntimeConfig(window.location.search);
 
   // Standalone component demos for browser QA. Mount with
@@ -158,7 +150,6 @@ if (pathname === "/editor" || pathname === "/cards") {
       ) : (
         <App runtimeConfig={runtimeConfig} />
       )}
-      {InfoCardScaleTweakPanel && <InfoCardScaleTweakPanel />}
     </>,
   );
 }

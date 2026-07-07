@@ -104,7 +104,10 @@ export const INFO_CARD_WIDTH = CARD_W;
  * keeps the authored popover geometry.
  */
 const MOBILE_WIDTH_FRACTION = 0.45;
-const MOBILE_TEXT_SCALE = 0.5;
+// Mobile InfoCards keep a smaller internal type scale so the overlaid glass
+// text block covers less of image-led reveals. Tune this one constant to adjust
+// title, epithet, meta, and body text proportionally.
+const MOBILE_TEXT_SCALE = 0.666;
 
 /**
  * The laid-out width (px) for an info card on a `viewportWidth`-px screen:
@@ -131,43 +134,6 @@ export function infoCardTextScale(
   mobileTextScale: number = MOBILE_TEXT_SCALE,
 ): number {
   return infoCardWidth(viewportWidth) < CARD_W ? mobileTextScale : 1;
-}
-
-/* ----------------------------------------------------------------------------
- * DEV-ONLY: a live-tunable override of MOBILE_TEXT_SCALE, so the mobile
- * typography can be dialed in from InfoCardScaleTweakPanel (see the tango
- * skill's tweaks-panel loop). In production nothing calls the setter, so the
- * value stays at MOBILE_TEXT_SCALE. Once chosen, this block, the panel, and its
- * mount are removed and the number is baked into MOBILE_TEXT_SCALE above.
- * ------------------------------------------------------------------------- */
-/** The baked default, exposed so the tweak panel can offer a "reset". */
-export const MOBILE_TEXT_SCALE_DEFAULT = MOBILE_TEXT_SCALE;
-
-let devMobileTextScale = MOBILE_TEXT_SCALE;
-const devMobileTextScaleListeners = new Set<() => void>();
-
-/** DEV: set the live mobile typography multiplier and re-render every info card. */
-export function setInfoCardMobileTextScale(scale: number): void {
-  devMobileTextScale = scale;
-  devMobileTextScaleListeners.forEach((listener) => listener());
-}
-
-function getInfoCardMobileTextScale(): number {
-  return devMobileTextScale;
-}
-
-function subscribeInfoCardMobileTextScale(callback: () => void): () => void {
-  devMobileTextScaleListeners.add(callback);
-  return () => devMobileTextScaleListeners.delete(callback);
-}
-
-/** DEV: the live mobile typography multiplier, re-rendering on panel changes. */
-export function useInfoCardMobileTextScale(): number {
-  return React.useSyncExternalStore(
-    subscribeInfoCardMobileTextScale,
-    getInfoCardMobileTextScale,
-    getInfoCardMobileTextScale,
-  );
 }
 
 /** Screen inset (px): the popover is clamped to never come within this of any
@@ -754,10 +720,7 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
   const viewportWidth = useViewportWidth();
   const cardWidth = infoCardWidth(viewportWidth);
   const geometryScale = cardWidth / CARD_W;
-  const textScale = infoCardTextScale(
-    viewportWidth,
-    useInfoCardMobileTextScale(),
-  );
+  const textScale = infoCardTextScale(viewportWidth);
   const style: React.CSSProperties &
     Record<
       | "--info-card-width"
