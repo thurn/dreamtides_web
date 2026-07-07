@@ -258,7 +258,7 @@ function RerollTile({ state, cost, used, available, onClick }: RerollTileProps) 
     <div className={`sh-restock ${state}`}>
       <div className={`sh-restock-tile${used ? " spent" : ""}`}>
         <div className="sh-restock-ico">
-          <i className="bxf bx-refresh" aria-hidden="true" />
+          <i className="bxf bx-refresh-cw" aria-hidden="true" />
         </div>
         <div className="sh-restock-name">{used ? "Restocked" : "Restock"}</div>
         <div className="sh-restock-sub">

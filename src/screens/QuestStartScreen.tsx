@@ -149,7 +149,7 @@ export function QuestStartScreen() {
               transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
             >
               <motion.button
-                className="flex h-[472px] w-full cursor-pointer flex-col rounded-[22px] px-4 pt-4 pb-5 text-left md:px-5"
+                className="flex min-h-[472px] w-full cursor-pointer flex-col rounded-[22px] px-4 pt-4 pb-5 text-left md:px-5"
                 style={{
                   background:
                     "linear-gradient(145deg, #1a1025 0%, #0f0a18 60%, #0d0814 100%)",
