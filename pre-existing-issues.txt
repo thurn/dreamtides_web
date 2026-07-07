@@ -2,20 +2,12 @@ Tango convergence - AtlasHoverCard (desktop Dream Atlas hover reveal)
 ====================================================================
 
 src/tango/components/atlas/AtlasHoverCard.tsx is a screen-local fork of the
-InfoCard fullBleed treatment, built for exploratory design while the desktop
-atlas hover card is still in motion (the "requested divergence" the tango design
-system allows; see the tango skill, "Requested divergence must converge"). It
-reuses InfoCard's glass material and press engine and is structured as a future
-InfoCard variant body.
+InfoCard fullBleed treatment for the desktop atlas hover reveal. It reuses
+InfoCard's glass material and press engine, with settled box-measure constants
+for the selected layout: place-forward main card, standard site companion card,
+and text-only affiliation companion card.
 
-Convergence decision (deferred, not skipped): once the box measures and the
-information-hierarchy proposal settle via the Dream Atlas dev tweaks panel, the
-card promotes into a strict `InfoCard variant="atlasReveal"`, and the tweaks
-scaffolding is removed per the tango tweaks-panel cleanup contract:
-
-  - delete src/tango/screens/devtools/AtlasHoverTweaksPanel.tsx;
-  - delete the `hoverTweaks` plumbing threaded through AtlasScreen -> AtlasMap ->
-    AtlasNodeReveal, and the AtlasHoverTweaks / ATLAS_HOVER_DEFAULTS config;
-  - bake the settled values in as the variant's plain, commented box-measure
-    constants (mirroring FULL_BLEED_FIGURE_HEIGHT et al. in InfoCard.tsx), with
-    the chosen hierarchy either fixed or kept as one enumerated `hierarchy` prop.
+Convergence decision (deferred, not skipped): if this treatment becomes a shared
+popover vocabulary beyond the Dream Atlas, promote it into a strict
+`InfoCard variant="atlasReveal"` with the current box-measure constants carried
+as commented component constants.

@@ -14,15 +14,8 @@
 // The site mechanic is a separate standard site InfoCard beside it, so this card
 // keeps one job and stays quiet.
 //
-// ── An exploratory screen-local fork ────────────────────────────────────────
-// This is the "requested divergence" the tango design system allows while a
-// design is in motion (see the tango skill, "Requested divergence must
-// converge"): the card is tuned live through the Dream Atlas dev tweaks panel
-// against a schema of box measures and two information-hierarchy proposals. It
-// reuses InfoCard's glass material and press engine and is structured as a
-// future InfoCard variant body, so once the values and hierarchy settle it
-// promotes into `InfoCard variant="atlasReveal"`. The convergence decision is
-// tracked in pre-existing-issues.txt.
+// This is a screen-local atlas reveal card that reuses InfoCard's glass material
+// and press engine. The convergence decision is tracked in pre-existing-issues.txt.
 
 import * as React from "react";
 import { token } from "../../primitives/tokens";
@@ -31,54 +24,16 @@ import { resolveImageCrop } from "../../primitives/media";
 import { renderRichText, richText } from "../card/rich-text";
 import { glassSurfaceStyle } from "../controls/glass-surface";
 
-/** Which field leads the card — the two information-hierarchy proposals. */
-export type AtlasHoverHierarchy = "place-forward" | "guide-forward";
-
-/**
- * The live-tunable geometry and hierarchy of the desktop atlas hover card. Every
- * value is a box measure (px / fraction) or a display toggle outside the token
- * system, so the Dream Atlas dev tweaks panel settles them by eye. The exported
- * defaults are the current design constants; production renders from those.
- */
-export interface AtlasHoverTweaks {
-  /**
-   * PROPOSAL — which field the card leads with. `place-forward` mirrors the
-   * legacy card (the dreamscape is the hero, its guide the accent line);
-   * `guide-forward` leads with the resident guide (the figure that already
-   * dominates the card), with the dreamscape as the overline.
-   */
-  hierarchy: AtlasHoverHierarchy;
-  /** Overall card width (px) — large, near the legacy card. */
-  cardWidth: number;
-  /** Height (px) of the scene image band shown above the glass text panel. */
-  heroHeight: number;
-  /** Dream Guide / boss figure height (px). */
-  figureHeight: number;
-  /** How far (px) the figure's base sits above the card's bottom edge. */
-  figureFootInset: number;
-  /** Inset (px) of the figure from the card's right edge. */
-  figureRightInset: number;
-  /** Fraction (0–1) of the panel width the text column occupies; the remainder
-   * is the clear zone the figure stands over. */
-  textColumnFraction: number;
-  /** Show the site name as the mono eyebrow. */
-  showSite: boolean;
-  /** Show the affiliation as a subtle tag. */
-  showAffiliation: boolean;
-}
-
-/** The current design constants — the baked hover-card geometry and hierarchy. */
-export const ATLAS_HOVER_DEFAULTS: AtlasHoverTweaks = {
-  hierarchy: "place-forward",
-  cardWidth: 360,
-  heroHeight: 160,
-  figureHeight: 248,
-  figureFootInset: 0,
-  figureRightInset: 4,
-  textColumnFraction: 0.68,
-  showSite: false,
-  showAffiliation: false,
-};
+/** Overall card width (px), matched to the settled desktop atlas hover scale. */
+const CARD_WIDTH = 360;
+/** Height (px) of the scene image band shown above the glass text panel. */
+const HERO_HEIGHT = 160;
+/** Dream Guide / boss figure height (px). */
+const FIGURE_HEIGHT = 248;
+/** Inset (px) of the figure from the card's right edge. */
+const FIGURE_RIGHT_INSET = 4;
+/** Text-column width inside the glass panel; the right side stays clear for the figure. */
+const TEXT_COLUMN_FRACTION = 0.68;
 
 /**
  * The resolved copy + art the hover card renders. Plain display data (strings
@@ -108,8 +63,7 @@ export interface AtlasHoverContent {
   affiliation: string | null;
 }
 
-/* ---- the four type voices — the whole point of the redesign. All sizes /
-   faces come from tokens; the card carries no fifth or sixth style. ---- */
+/* ---- the three type voices — the card keeps one quiet hierarchy. ---- */
 const V_DISPLAY: React.CSSProperties = {
   margin: 0,
   fontFamily: token("--font-title"),
@@ -127,15 +81,6 @@ const V_ACCENT: React.CSSProperties = {
   lineHeight: 1.25,
   color: token("--accent-bright"),
 };
-const V_EYEBROW: React.CSSProperties = {
-  fontFamily: token("--font-meta"),
-  fontSize: "9.5px",
-  fontWeight: 700,
-  lineHeight: 1,
-  letterSpacing: "0.15em",
-  textTransform: "uppercase",
-  color: token("--text-faint"),
-};
 const V_BODY: React.CSSProperties = {
   fontFamily: token("--font-rules-text"),
   fontSize: "12.5px",
@@ -144,38 +89,18 @@ const V_BODY: React.CSSProperties = {
   color: token("--text-primary"),
 };
 
-/** The bottom-left field stack the card lays out from the active hierarchy. */
+/** The bottom-left field stack the card lays out. */
 interface FieldStack {
-  /** The uppercase mono overline, or null when suppressed / redundant. */
-  eyebrow: string | null;
   /** The display-serif lead name. */
   display: string;
   /** The accent-serif secondary line, or null when absent. */
   accent: string | null;
 }
 
-/**
- * Resolves the eyebrow / display / accent lines for the active hierarchy. PURE.
- * `place-forward` leads with the place and drops the guide beneath it;
- * `guide-forward` leads with the guide and lifts the place into the overline.
- * The eyebrow never repeats the display line (the starter, with no guide, falls
- * back to its place name as the lead).
- */
-export function resolveFieldStack(
-  content: AtlasHoverContent,
-  tweaks: AtlasHoverTweaks,
-): FieldStack {
-  const site = tweaks.showSite ? content.siteName : null;
-  if (tweaks.hierarchy === "guide-forward") {
-    const display = content.guideName ?? content.placeName;
-    // Place rides the overline; suppress it when it already IS the lead line.
-    const eyebrow = display === content.placeName ? site : content.placeName;
-    const accent = display === content.placeName ? null : site;
-    return { eyebrow, display, accent };
-  }
+/** Resolves the place-forward display stack for the settled atlas hover card. */
+export function resolveFieldStack(content: AtlasHoverContent): FieldStack {
   // place-forward: the place is the hero, its guide the accent line.
   return {
-    eyebrow: site,
     display: content.placeName,
     accent: content.guideName,
   };
@@ -183,30 +108,25 @@ export function resolveFieldStack(
 
 interface AtlasHoverCardProps {
   content: AtlasHoverContent;
-  tweaks?: AtlasHoverTweaks;
 }
 
 /**
  * The large desktop Dream Atlas hover card. Renders the scene as a full-bleed
  * glass-refracted hero with the resident figure standing on the right and a
- * bottom-left glass text panel carrying the resolved field stack, site bonus,
- * and affiliation tag. Pure and props-driven; positioned by the shared
+ * bottom-left glass text panel carrying the place, guide, and bonus. Pure and props-driven; positioned by the shared
  * InfoCard press engine (`InfoCard.PressPopover`) exactly like every other
  * Tango reveal.
  */
 export function AtlasHoverCard({
   content,
-  tweaks = ATLAS_HOVER_DEFAULTS,
 }: AtlasHoverCardProps): React.ReactElement {
-  const stack = resolveFieldStack(content, tweaks);
-  const showAffiliation =
-    tweaks.showAffiliation && content.affiliation !== null;
+  const stack = resolveFieldStack(content);
 
   return (
     <div
       style={{
         position: "relative",
-        width: tweaks.cardWidth,
+        width: CARD_WIDTH,
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-end",
@@ -252,9 +172,9 @@ export function AtlasHoverCard({
           draggable={false}
           style={{
             position: "absolute",
-            right: tweaks.figureRightInset,
-            bottom: tweaks.figureFootInset,
-            height: tweaks.figureHeight,
+            right: FIGURE_RIGHT_INSET,
+            bottom: 0,
+            height: FIGURE_HEIGHT,
             width: "auto",
             maxWidth: "56%",
             objectFit: "contain",
@@ -268,7 +188,7 @@ export function AtlasHoverCard({
       )}
 
       {/* Reserve the top image band so the scene reads above the glass panel. */}
-      <div style={{ height: tweaks.heroHeight, flex: "none" }} />
+      <div style={{ height: HERO_HEIGHT, flex: "none" }} />
 
       {/* The glass text panel: full width so the figure stands over its right,
           with the copy constrained to the left text column. */}
@@ -287,15 +207,12 @@ export function AtlasHoverCard({
       >
         <div
           style={{
-            width: `${String(Math.round(tweaks.textColumnFraction * 100))}%`,
+            width: `${String(Math.round(TEXT_COLUMN_FRACTION * 100))}%`,
             display: "flex",
             flexDirection: "column",
             gap: 5,
           }}
         >
-          {stack.eyebrow !== null && stack.eyebrow !== "" && (
-            <div style={V_EYEBROW}>{stack.eyebrow}</div>
-          )}
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <div style={V_DISPLAY}>{stack.display}</div>
             {stack.accent !== null && stack.accent !== "" && (
@@ -303,22 +220,6 @@ export function AtlasHoverCard({
             )}
           </div>
           <div style={V_BODY}>{renderRichText(richText.plain(content.body))}</div>
-          {showAffiliation && (
-            <div style={{ display: "flex", marginTop: 3 }}>
-              <span
-                style={{
-                  ...V_EYEBROW,
-                  color: token("--accent-bright"),
-                  padding: "5px 10px",
-                  borderRadius: token("--radius-control"),
-                  border: "1px solid rgba(168,85,247,0.4)",
-                  background: token("--accent-tint"),
-                }}
-              >
-                {content.affiliation}
-              </span>
-            </div>
-          )}
         </div>
       </div>
     </div>

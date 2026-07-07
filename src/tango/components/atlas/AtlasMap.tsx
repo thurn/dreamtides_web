@@ -20,7 +20,6 @@ import {
   AtlasNodeReveal,
   type AtlasNodeCard,
 } from "./AtlasNodeReveal";
-import { type AtlasHoverTweaks } from "./AtlasHoverCard";
 import "./atlas.css";
 
 /** One placed node: its face view plus the resolved InfoCard reveal content. */
@@ -53,8 +52,6 @@ interface AtlasMapProps {
   onEnterNode: (nodeId: string) => void;
   /** Screen root the node reveals anchor + clamp against (viewport coordinates). */
   stageRef: React.RefObject<HTMLElement | null>;
-  /** Live geometry / hierarchy for the large desktop hover card (dev tweaks). */
-  hoverTweaks?: AtlasHoverTweaks;
 }
 
 /**
@@ -69,7 +66,6 @@ export function AtlasMap({
   edges,
   onEnterNode,
   stageRef,
-  hoverTweaks,
 }: AtlasMapProps) {
   const [scale, setScale] = useState(1);
 
@@ -127,7 +123,6 @@ export function AtlasMap({
               item={item}
               stageRef={stageRef}
               onEnterNode={onEnterNode}
-              hoverTweaks={hoverTweaks}
             />
           ))}
         </div>

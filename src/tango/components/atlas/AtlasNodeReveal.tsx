@@ -27,9 +27,7 @@ import {
 } from "../overlay/InfoCard";
 import {
   AtlasHoverCard,
-  ATLAS_HOVER_DEFAULTS,
   type AtlasHoverContent,
-  type AtlasHoverTweaks,
 } from "./AtlasHoverCard";
 import { richText } from "../card/rich-text";
 import { type ArtRef } from "../../primitives/art";
@@ -243,11 +241,9 @@ function AtlasAffiliationInfoCard({
 function AtlasRevealCard({
   card,
   layout,
-  hoverTweaks,
 }: {
   card: AtlasNodeCard;
   layout: "row" | "desktop";
-  hoverTweaks: AtlasHoverTweaks;
 }): React.ReactElement {
   const { dreamsign } = card;
   const siteCard = layout === "desktop" ? card.siteCard : null;
@@ -258,7 +254,7 @@ function AtlasRevealCard({
   const hoverContent = layout === "desktop" ? toHoverContent(card) : null;
   const main =
     hoverContent !== null ? (
-      <AtlasHoverCard content={hoverContent} tweaks={hoverTweaks} />
+      <AtlasHoverCard content={hoverContent} />
     ) : (
       <AtlasMainCard card={card} />
     );
@@ -319,9 +315,6 @@ interface AtlasNodeRevealProps {
   stageRef: React.RefObject<HTMLElement | null>;
   /** Enter a node's dreamscape; fired on a tap / click of an available node. */
   onEnterNode: (nodeId: string) => void;
-  /** Live geometry / hierarchy for the large desktop hover card. Defaults to the
-   * baked design constants; the Dream Atlas dev tweaks panel overrides it. */
-  hoverTweaks?: AtlasHoverTweaks;
 }
 
 /**
@@ -334,7 +327,6 @@ export function AtlasNodeReveal({
   item,
   stageRef,
   onEnterNode,
-  hoverTweaks = ATLAS_HOVER_DEFAULTS,
 }: AtlasNodeRevealProps): React.ReactElement {
   const { view, card } = item;
   const isAvailable = view.node.state === "available";
@@ -406,7 +398,6 @@ export function AtlasNodeReveal({
               <AtlasRevealCard
                 card={card}
                 layout={layout}
-                hoverTweaks={hoverTweaks}
               />
             </PressPopover>,
             // Portal into `document.body`, NOT the atlas stage root. The stage
