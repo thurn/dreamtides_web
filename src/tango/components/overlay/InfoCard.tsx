@@ -927,7 +927,7 @@ export function anchorRect(
    ================================================================ */
 const FINE_POINTER_QUERY = "(hover: hover) and (pointer: fine)";
 
-function useFinePointer(): boolean {
+export function useFinePointer(): boolean {
   const [fine, setFine] = React.useState<boolean>(() =>
     typeof window === "undefined" || typeof window.matchMedia !== "function"
       ? false

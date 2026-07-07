@@ -6,8 +6,8 @@
 // GameCards centered over it, and the persistent QuestStatusBar docks the run's
 // essence, deck, Dreamcaller, and dreamsigns along the bottom. The utility menu
 // lives in the app-shell's top-left hamburger, matching the dreamscape and
-// atlas screens — this screen renders no title, pick counter, progress bar, or
-// drafted-card rail of its own.
+// atlas screens — the screen's only text is a subtle pick counter riding under
+// the pack; it renders no title, progress bar, or drafted-card rail of its own.
 //
 // PURE: it renders from a view-model and reports the chosen card through
 // `onPick`; the adapter owns the draft state, the pick mutation, and returning
@@ -72,23 +72,25 @@ export interface DraftScreenProps {
 // Top: the device safe-area / cutout (Dynamic Island, status bar), or a floor —
 // nothing is drawn here, so the notch never covers content.
 const TOP_SAFE_OP = `max(env(safe-area-inset-top), ${token("--safe-top")})`;
-// The pick-counter band below the safe zone: the label centered in a tall band
-// so it sits equidistant between the cutout and the top of the pack, with
-// generous white space above and below.
-const COUNTER_BAND_OP = `${token("--space-11")} + ${token("--space-11")}`;
+// Breathing room between the safe zone and the top of the pack.
+const TOP_GAP_OP = token("--space-6");
+// The band under the pack that holds the small pick counter (its gap above the
+// label plus the label's own line).
+const COUNTER_BAND_OP = token("--space-9");
 // Bottom: the docked QuestStatusBar (bar + elevated Dreamcaller bust +
 // home-indicator inset).
 const HUD_CLEARANCE_OP = `${token("--hud-h")} + ${token("--safe-bottom")} + ${token("--space-9")}`;
 const TOP_SAFE = `calc(${TOP_SAFE_OP})`;
-const COUNTER_BAND = `calc(${COUNTER_BAND_OP})`;
+const TOP_GAP = `calc(${TOP_GAP_OP})`;
 const HUD_CLEARANCE = `calc(${HUD_CLEARANCE_OP})`;
 
-// The 2x2 offer cell width: the smaller of half the pack's content-width and the
-// width that keeps two card rows within the space left between the counter band
-// and the HUD clearance (the trailing `--space-8` covers the pack's own
-// padding). Box measures: content-driven layout, width against
-// `container-type: inline-size`.
-const OFFER_CELL_WIDTH = `min(calc((100cqw - ${token("--space-5")}) / 2), calc((100dvh - (${TOP_SAFE_OP}) - (${COUNTER_BAND_OP}) - (${HUD_CLEARANCE_OP}) - ${token("--space-8")}) * ${String(CARD_ASPECT_W)} / ${String(2 * CARD_ASPECT_H)}))`;
+// The 2x2 offer cell width: the smaller of half the pack's content-width (side
+// gutters and the grid gap are all `--space-5`, so the space between the cards
+// equals the space to the screen edges) and the width that keeps two card rows
+// plus their `--space-5` grid gap within the space left between the top gap and
+// the HUD clearance, with the counter band reserved under the pack. Box
+// measures: content-driven layout, width against `container-type: inline-size`.
+const OFFER_CELL_WIDTH = `min(calc((100cqw - ${token("--space-5")}) / 2), calc((100dvh - (${TOP_SAFE_OP}) - (${TOP_GAP_OP}) - (${COUNTER_BAND_OP}) - (${HUD_CLEARANCE_OP}) - ${token("--space-5")}) * ${String(CARD_ASPECT_W)} / ${String(2 * CARD_ASPECT_H)}))`;
 
 /**
  * The Tango draft screen. Pure and props-driven: full-bleed scene art, the 2x2
@@ -150,48 +152,24 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
       <Motes on tint="violet" />
 
       {/* Reserve the top cutout / status-bar zone so nothing rides into the
-          notch. */}
-      <div style={{ flexShrink: 0, height: TOP_SAFE }} aria-hidden="true" />
-
-      {/* The one concession to text: a small pick counter painted directly on
-          the scene with the on-media outline (rung 1 of the legibility ladder)
-          — no scrim, wash, or container. Centered in its own band so it sits
-          equidistant between the cutout above and the pack below. */}
+          notch, plus a short breathing gap above the pack. */}
       <div
-        style={{
-          // Positioned so it paints above the absolute full-bleed scene image
-          // (a static sibling would render behind it, hiding the counter).
-          position: "relative",
-          flexShrink: 0,
-          height: COUNTER_BAND,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <div
-          data-draft-pick-counter=""
-          style={{
-            font: token("--t-title-sm"),
-            color: token("--text-primary"),
-            textShadow: token("--text-outline-media"),
-          }}
-        >
-          {`Draft (${String(view.pickNumber)}/${String(view.pickTotal)})`}
-        </div>
-      </div>
+        style={{ flexShrink: 0, height: `calc(${TOP_SAFE} + ${TOP_GAP})` }}
+        aria-hidden="true"
+      />
 
-      {/* The pack, top-aligned right below the counter band (so the counter sits
-          equidistant between the cutout and the top of the cards) and centered
-          horizontally. The leftover height falls between the pack and the HUD. */}
+      {/* The pack, top-aligned below the safe zone and centered horizontally,
+          with the small pick counter riding just under the cards. The leftover
+          height falls between the counter and the HUD. */}
       <div
         style={{
           position: "relative",
           flex: 1,
           minHeight: 0,
           display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-start",
           paddingLeft: token("--space-5"),
           paddingRight: token("--space-5"),
           containerType: "inline-size",
@@ -246,6 +224,22 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
             })}
           </motion.div>
         </AnimatePresence>
+
+        {/* The one concession to text: a subtle pick counter painted directly
+            on the scene with the on-media outline (rung 1 of the legibility
+            ladder) — no scrim, wash, or container — riding just under the
+            pack. */}
+        <div
+          data-draft-pick-counter=""
+          style={{
+            marginTop: token("--space-6"),
+            font: token("--t-caption"),
+            color: token("--text-secondary"),
+            textShadow: token("--text-outline-media"),
+          }}
+        >
+          {`Draft (${String(view.pickNumber)}/${String(view.pickTotal)})`}
+        </div>
       </div>
 
       <div style={{ flexShrink: 0, height: HUD_CLEARANCE }} aria-hidden="true" />
