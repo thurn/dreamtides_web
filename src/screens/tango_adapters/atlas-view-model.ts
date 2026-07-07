@@ -322,7 +322,10 @@ function buildNodeCard(
       // The boss stands over the Limbo scene as its prominent figure.
       figureArt: artRef.dreamGuide(BOSS_DISPLAY.guideId),
       eyebrow: null,
-      title: BOSS_DISPLAY.place,
+      // Title with the run's chosen Apollyon incarnation (its full name, e.g.
+      // "Apollyon, the World's End"), falling back to the default epithet when
+      // no incarnation was assigned.
+      title: bossIncarnation?.title ?? BOSS_DISPLAY.title,
       body: bossIncarnation?.description ?? BOSS_DISPLAY.intro,
       dreamsign,
     };

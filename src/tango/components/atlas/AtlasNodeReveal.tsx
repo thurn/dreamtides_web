@@ -61,7 +61,8 @@ export interface AtlasNodeCard {
   figureArt: ArtRef | null;
   /** Uppercase eyebrow shown above the title on the scene hero; null otherwise. */
   eyebrow: string | null;
-  /** Headline: the resident guide's name, the boss place, or "An Unseen Dream". */
+  /** Headline: the resident guide's name, the boss's Apollyon incarnation name,
+   * or "An Unseen Dream". */
   title: string;
   /** Body copy: the site bonus, the starter blurb, or the boss / unseen description. */
   body: string;
