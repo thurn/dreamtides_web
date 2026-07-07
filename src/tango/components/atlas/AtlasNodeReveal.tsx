@@ -8,9 +8,9 @@
 //
 // The reveal renders through the design system's InfoCard, cut down for mobile:
 // a full-bleed scene-art hero with the resident guide's name and the home-site
-// bonus as the glass text card laid on top of it — the labelled "Site / Bonus /
-// Affiliation" rows of the desktop card are dropped. A node carrying a
-// pre-revealed known dreamsign shows a second, stacked object card for it.
+// bonus as the glass text card laid on top of it. Desktop uses a lighter large
+// place/guide card plus a companion standard site InfoCard. A node carrying a
+// pre-revealed known dreamsign shows its own companion object card.
 //
 // It routes through InfoCard's `usePressReveal` + `anchorRect` + `PressPopover`,
 // so timing, placement, and the on-screen clamp match every other Tango reveal;
@@ -33,6 +33,7 @@ import {
 } from "./AtlasHoverCard";
 import { richText } from "../card/rich-text";
 import { type ArtRef } from "../../primitives/art";
+import { type Glyph } from "../../primitives/glyph";
 
 const { usePressReveal, anchorRect, PressPopover } = InfoCard;
 
@@ -44,6 +45,16 @@ export interface AtlasDreamsignCard {
   art: ArtRef | null;
   /** The dreamsign's ability text (rendered as Dreamtides rules copy). */
   rulesText: string;
+}
+
+/** The signature site info card shown beside the large desktop atlas reveal. */
+export interface AtlasSiteInfoCard {
+  /** Site type label (e.g. "Dream Augury"). */
+  name: string;
+  /** The same one-line mechanic blurb shown by the dreamscape SiteNode reveal. */
+  blurb: string;
+  /** The site glyph, matching the dreamscape SiteNode reveal. */
+  icon: Glyph;
 }
 
 /**
@@ -92,6 +103,9 @@ export interface AtlasNodeCard {
   /** The dreamscape's affiliation name; null for the starter / boss /
    * unrevealed node. */
   affiliation: string | null;
+  /** The signature site's standard info card; null for starter / boss /
+   * unrevealed node. */
+  siteCard: AtlasSiteInfoCard | null;
 }
 
 /** One placed node plus its resolved reveal content. */
@@ -102,8 +116,7 @@ export interface AtlasNodeRevealItem {
   card: AtlasNodeCard;
 }
 
-/** Gap (px) between the node card and its companion dreamsign card — the space
- * between them whether they stack (desktop) or sit side by side (mobile). */
+/** Gap (px) between the node card and its companion cards. */
 const CARD_STACK_GAP = 10;
 
 /** The main reveal card for a node: a full-bleed scene hero, or a text card. */
@@ -171,18 +184,35 @@ function AtlasDreamsignCard({
   );
 }
 
+/** The standard site reveal card, matching the dreamscape SiteNode info card. */
+function AtlasSiteInfoCard({
+  site,
+}: {
+  site: AtlasSiteInfoCard;
+}): React.ReactElement {
+  return (
+    <InfoCard
+      variant="icon"
+      glyph={site.icon}
+      title={site.name}
+      body={richText.plain(site.blurb)}
+    />
+  );
+}
+
 /**
  * Renders a node's reveal: the main card, and — when the node carries a
  * pre-revealed known dreamsign — its own companion dreamsign card beside it.
- * `layout` is `"row"` on mobile (the scaled-down pair sits side by side) or
- * `"stack"` on desktop (native-size cards stacked vertically). A pair with
+ * `layout` is `"row"` on mobile (the scaled-down companion pair sits side by
+ * side) or `"desktop"` on desktop (the standard site InfoCard sits beside the
+ * large atlas card, while any known-dreamsign card sits underneath). A pair with
  * variable copy lengths gets natural height with cross-axis centering, per the
  * variable-content-siblings rule.
  *
  * On desktop a revealed node's main card is the large {@link AtlasHoverCard}
- * (scene hero + resident figure on the right + the place / guide / site / bonus
- * / affiliation panel); mobile and unrevealed nodes keep the compact
- * {@link AtlasMainCard}.
+ * (scene hero + resident figure on the right + the place / guide / bonus
+ * panel), with the signature site carried by a separate standard site
+ * InfoCard; mobile and unrevealed nodes keep the compact {@link AtlasMainCard}.
  */
 function AtlasRevealCard({
   card,
@@ -190,34 +220,52 @@ function AtlasRevealCard({
   hoverTweaks,
 }: {
   card: AtlasNodeCard;
-  layout: "row" | "stack";
+  layout: "row" | "desktop";
   hoverTweaks: AtlasHoverTweaks;
 }): React.ReactElement {
   const { dreamsign } = card;
-  // Desktop uses the stack layout; a revealed node there gets the large hover
+  const siteCard = layout === "desktop" ? card.siteCard : null;
+  // Desktop uses the desktop layout; a revealed node there gets the large hover
   // card. Mobile (row) and unrevealed nodes keep the compact fullBleed / text card.
-  const hoverContent = layout === "stack" ? toHoverContent(card) : null;
+  const hoverContent = layout === "desktop" ? toHoverContent(card) : null;
   const main =
     hoverContent !== null ? (
       <AtlasHoverCard content={hoverContent} tweaks={hoverTweaks} />
     ) : (
       <AtlasMainCard card={card} />
     );
-  if (dreamsign === null) {
+  if (dreamsign === null && siteCard === null) {
     return main;
   }
-  const isRow = layout === "row";
+  if (layout === "desktop") {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: CARD_STACK_GAP }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: CARD_STACK_GAP,
+          }}
+        >
+          {main}
+          {siteCard !== null && <AtlasSiteInfoCard site={siteCard} />}
+        </div>
+        {dreamsign !== null && <AtlasDreamsignCard dreamsign={dreamsign} />}
+      </div>
+    );
+  }
   return (
     <div
       style={{
         display: "flex",
-        flexDirection: isRow ? "row" : "column",
-        alignItems: isRow ? "center" : "stretch",
+        flexDirection: "row",
+        alignItems: "center",
         gap: CARD_STACK_GAP,
       }}
     >
       {main}
-      <AtlasDreamsignCard dreamsign={dreamsign} />
+      {dreamsign !== null && <AtlasDreamsignCard dreamsign={dreamsign} />}
     </div>
   );
 }
@@ -310,8 +358,7 @@ export function AtlasNodeReveal({
           // pair stacks vertically instead. Ask InfoCard whether this screen
           // width uses the mobile card width.
           const isMobile = infoCardWidth(anchor.w) < INFO_CARD_WIDTH;
-          const layout: "row" | "stack" =
-            isMobile && card.dreamsign !== null ? "row" : "stack";
+          const layout: "row" | "desktop" = isMobile ? "row" : "desktop";
           return createPortal(
             <PressPopover anchor={anchor}>
               <AtlasRevealCard

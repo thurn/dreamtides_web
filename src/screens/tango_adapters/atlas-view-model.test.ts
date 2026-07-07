@@ -274,6 +274,56 @@ describe("buildAtlasMapNodes", () => {
     expect(passed?.card.dreamsign).toBeNull();
     expect(passed?.card.isUnrevealed).toBe(true);
   });
+
+  it("carries a resident dreamscape's signature site as a standard site info card", () => {
+    const atlas = makeVerticalAtlas();
+    atlas.nodes.middle.dreamscapeId = "wilderveil";
+    atlas.nodes.middle.biomeName = "Wilderveil";
+    const content: QuestContent = {
+      ...EMPTY_CONTENT,
+      dreamscapes: [
+        {
+          id: "wilderveil",
+          name: "Wilderveil",
+          aesthetic: "Moonlit forest",
+          guideId: "aldric",
+          signatureSite: "DreamAugury",
+          affiliationId: "abandon",
+          siteIcon: "dream-augury",
+          isStarter: false,
+          dreamcallerIds: [],
+        },
+      ],
+      guides: [
+        {
+          id: "aldric",
+          name: "Aldric, the Seer",
+          homeDreamscapeId: "wilderveil",
+          siteType: "DreamAugury",
+          dialog: [],
+          homeSpecialty: "Aldric offers curated visions of the future.",
+        },
+      ],
+      affiliations: [
+        {
+          id: "abandon",
+          name: "Abandon",
+          signatureCards: [],
+          weightStrength: 1,
+          opponentBiasStrength: 1,
+        },
+      ],
+    };
+
+    const items = buildAtlasMapNodes(atlas, content);
+    const middle = items.find((item) => item.view.node.id === "middle");
+
+    expect(middle?.card.siteCard).toMatchObject({
+      name: "Dream Augury",
+    });
+    expect(middle?.card.siteCard?.blurb.length).toBeGreaterThan(0);
+    expect(middle?.card.siteCard?.icon).toContain("bx");
+  });
 });
 
 describe("buildAtlasMapEdges", () => {

@@ -21,10 +21,20 @@ function residentContent(): AtlasHoverContent {
 }
 
 describe("resolveFieldStack", () => {
+  it("defaults to place-forward with the site eyebrow and affiliation suppressed", () => {
+    const defaults = ATLAS_HOVER_DEFAULTS;
+    expect(defaults.hierarchy).toBe("place-forward");
+    expect(defaults.showSite).toBe(false);
+    expect(defaults.showAffiliation).toBe(false);
+    expect(defaults.cardWidth).toBeLessThan(400);
+    expect(defaults.figureHeight).toBeLessThan(280);
+  });
+
   it("place-forward leads with the place and drops the guide beneath it", () => {
     const stack = resolveFieldStack(residentContent(), {
       ...ATLAS_HOVER_DEFAULTS,
       hierarchy: "place-forward",
+      showSite: true,
     });
     expect(stack.display).toBe("Wilderveil");
     expect(stack.accent).toBe("Aldric, the Seer");
@@ -35,6 +45,7 @@ describe("resolveFieldStack", () => {
     const stack = resolveFieldStack(residentContent(), {
       ...ATLAS_HOVER_DEFAULTS,
       hierarchy: "guide-forward",
+      showSite: true,
     });
     expect(stack.display).toBe("Aldric, the Seer");
     expect(stack.eyebrow).toBe("Wilderveil");

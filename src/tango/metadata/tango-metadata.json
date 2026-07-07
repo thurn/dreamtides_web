@@ -113,7 +113,7 @@
       "tsType": "AtlasHoverTweaks",
       "unionMembers": [],
       "required": false,
-      "defaultValue": "{\n  hierarchy: \"place-forward\",\n  cardWidth: 440,\n  heroHeight: 208,\n  figureHeight: 320,\n  figureFootInset: 0,\n  figureRightInset: 6,\n  textColumnFraction: 0.64,\n  showSite: true,\n  showAffiliation: true,\n}",
+      "defaultValue": "{\n  hierarchy: \"place-forward\",\n  cardWidth: 360,\n  heroHeight: 160,\n  figureHeight: 248,\n  figureFootInset: 0,\n  figureRightInset: 4,\n  textColumnFraction: 0.68,\n  showSite: false,\n  showAffiliation: false,\n}",
       "description": "",
       "nested": {
         "name": "AtlasHoverTweaks",
@@ -559,7 +559,7 @@
       "tsType": "AtlasHoverTweaks",
       "unionMembers": [],
       "required": false,
-      "defaultValue": "{\n  hierarchy: \"place-forward\",\n  cardWidth: 440,\n  heroHeight: 208,\n  figureHeight: 320,\n  figureFootInset: 0,\n  figureRightInset: 6,\n  textColumnFraction: 0.64,\n  showSite: true,\n  showAffiliation: true,\n}",
+      "defaultValue": "{\n  hierarchy: \"place-forward\",\n  cardWidth: 360,\n  heroHeight: 160,\n  figureHeight: 248,\n  figureFootInset: 0,\n  figureRightInset: 4,\n  textColumnFraction: 0.68,\n  showSite: false,\n  showAffiliation: false,\n}",
       "description": "Live geometry / hierarchy for the large desktop hover card. Defaults to the\nbaked design constants; the Dream Atlas dev tweaks panel overrides it.",
       "nested": {
         "name": "AtlasHoverTweaks",

@@ -18,6 +18,7 @@
 import {
   reachableAtlasNodeIds,
   revealedAtlasSite,
+  siteTypeDescription,
   siteTypeIcon,
   siteTypeName,
 } from "../../atlas/atlas-generator";
@@ -33,6 +34,7 @@ import type {
 import type {
   AtlasDreamsignCard,
   AtlasNodeCard,
+  AtlasSiteInfoCard,
 } from "../../tango/components/atlas/AtlasNodeReveal";
 import { artRef } from "../../tango/primitives/art";
 import { glyph } from "../../tango/primitives/glyph";
@@ -336,6 +338,17 @@ function buildDreamsignCard(
   };
 }
 
+/** Resolves the signature site's standard InfoCard payload. */
+function buildSignatureSiteCard(
+  dreamscape: NonNullable<QuestContent["dreamscapes"][number]>,
+): AtlasSiteInfoCard {
+  return {
+    name: siteTypeName(dreamscape.signatureSite),
+    blurb: siteTypeDescription(dreamscape.signatureSite),
+    icon: glyph(siteTypeIcon(dreamscape.signatureSite)),
+  };
+}
+
 /**
  * Resolves the InfoCard reveal content for one node — the mobile-cut card the
  * atlas node reveals on press / hover.
@@ -384,6 +397,7 @@ function buildNodeCard(
       guideName: bossIncarnation?.title ?? BOSS_DISPLAY.title,
       siteName: null,
       affiliation: null,
+      siteCard: null,
     };
   }
 
@@ -414,6 +428,7 @@ function buildNodeCard(
       guideName: null,
       siteName: null,
       affiliation: null,
+      siteCard: null,
     };
   }
 
@@ -430,6 +445,7 @@ function buildNodeCard(
   // The starter carries no guide or affiliation, so its signature-site name is
   // suppressed too; a resident dreamscape shows its signature site's label.
   const siteName = guide != null ? siteTypeName(dreamscape.signatureSite) : null;
+  const siteCard = guide != null ? buildSignatureSiteCard(dreamscape) : null;
 
   // Show the dreamscape scene as the full-bleed hero, with the resident guide's
   // character render standing prominently over it and the guide's name as the
@@ -450,6 +466,7 @@ function buildNodeCard(
     guideName: guide?.name ?? null,
     siteName,
     affiliation: affiliation?.name ?? null,
+    siteCard,
   };
 }
 

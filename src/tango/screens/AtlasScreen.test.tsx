@@ -90,6 +90,7 @@ function emptyCard(): AtlasNodeCard {
     guideName: null,
     siteName: null,
     affiliation: null,
+    siteCard: null,
   };
 }
 

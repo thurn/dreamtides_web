@@ -5,15 +5,14 @@
 // but recomposes them at a larger, legacy-atlas layout: the scene fills the
 // card, the resident Dream Guide (or the boss) stands prominently on the RIGHT,
 // and a glass text panel along the bottom-left carries the place, its guide,
-// the site, the site bonus, and the affiliation.
+// and the resident guide's home-site bonus.
 //
 // The design's guiding constraint is typographic restraint: the legacy atlas
 // card stacked six type styles and two icon families to label every field. This
-// card carries the same information in FOUR voices — a display serif (the lead
-// name), an accent serif (the secondary name), one uppercase mono eyebrow, and
-// the rules-text body — with the affiliation reusing the mono voice inside a
-// subtle tag. Nothing is labelled ("SITE", "BONUS", "AFFILIATION"); position and
-// weight carry the meaning.
+// card carries the main place information in three voices — a display serif
+// (the place), an accent serif (the resident guide), and the rules-text body.
+// The site mechanic is a separate standard site InfoCard beside it, so this card
+// keeps one job and stays quiet.
 //
 // ── An exploratory screen-local fork ────────────────────────────────────────
 // This is the "requested divergence" the tango design system allows while a
@@ -71,14 +70,14 @@ export interface AtlasHoverTweaks {
 /** The current design constants — the baked hover-card geometry and hierarchy. */
 export const ATLAS_HOVER_DEFAULTS: AtlasHoverTweaks = {
   hierarchy: "place-forward",
-  cardWidth: 440,
-  heroHeight: 208,
-  figureHeight: 320,
+  cardWidth: 360,
+  heroHeight: 160,
+  figureHeight: 248,
   figureFootInset: 0,
-  figureRightInset: 6,
-  textColumnFraction: 0.64,
-  showSite: true,
-  showAffiliation: true,
+  figureRightInset: 4,
+  textColumnFraction: 0.68,
+  showSite: false,
+  showAffiliation: false,
 };
 
 /**
@@ -114,23 +113,23 @@ export interface AtlasHoverContent {
 const V_DISPLAY: React.CSSProperties = {
   margin: 0,
   fontFamily: token("--font-title"),
-  fontSize: "26px",
+  fontSize: "22px",
   fontWeight: 600,
   lineHeight: 1.14,
-  letterSpacing: "-0.01em",
+  letterSpacing: 0,
   color: token("--text-primary"),
 };
 const V_ACCENT: React.CSSProperties = {
   margin: 0,
   fontFamily: token("--font-title"),
-  fontSize: "16px",
+  fontSize: "14px",
   fontWeight: 500,
   lineHeight: 1.25,
   color: token("--accent-bright"),
 };
 const V_EYEBROW: React.CSSProperties = {
   fontFamily: token("--font-meta"),
-  fontSize: "10.5px",
+  fontSize: "9.5px",
   fontWeight: 700,
   lineHeight: 1,
   letterSpacing: "0.15em",
@@ -139,7 +138,7 @@ const V_EYEBROW: React.CSSProperties = {
 };
 const V_BODY: React.CSSProperties = {
   fontFamily: token("--font-rules-text"),
-  fontSize: "14px",
+  fontSize: "12.5px",
   fontWeight: 500,
   lineHeight: 1.46,
   color: token("--text-primary"),
@@ -213,7 +212,7 @@ export function AtlasHoverCard({
         justifyContent: "flex-end",
         // The scene image is inset from the card edge on all sides, matching the
         // fullBleed variant's floating-hero treatment.
-        padding: 12,
+        padding: 10,
         boxSizing: "border-box",
       }}
     >
@@ -279,7 +278,7 @@ export function AtlasHoverCard({
           background:
             "linear-gradient(150deg, rgba(255,255,255,0.07), rgba(255,255,255,0) 42%), rgba(18,14,28,0.5)",
           position: "relative",
-          padding: "16px 18px",
+          padding: "13px 15px",
           boxSizing: "border-box",
           whiteSpace: "normal",
           overflowWrap: "break-word",
@@ -291,7 +290,7 @@ export function AtlasHoverCard({
             width: `${String(Math.round(tweaks.textColumnFraction * 100))}%`,
             display: "flex",
             flexDirection: "column",
-            gap: 7,
+            gap: 5,
           }}
         >
           {stack.eyebrow !== null && stack.eyebrow !== "" && (
