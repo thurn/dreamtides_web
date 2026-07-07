@@ -321,7 +321,7 @@
       ]
     },
     "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188": {
-      "name": "Aurora Confluence",
+      "name": "Cleansing Flame",
       "needs": [],
       "supports": [
         "events",
@@ -471,7 +471,7 @@
       ]
     },
     "fbf32510-0bad-4567-859f-b3db6d7be5d5": {
-      "name": "Break the Veil",
+      "name": "Shared Ruin",
       "needs": [],
       "supports": [
         "events",
@@ -2607,7 +2607,7 @@
       "supports": []
     },
     "f8678d24-f18b-4c94-a6c2-50efb8193b7f": {
-      "name": "Moonlit Voyage",
+      "name": "Ossuary Offering",
       "needs": [],
       "supports": [
         "events"
@@ -2668,7 +2668,7 @@
       ]
     },
     "74e82d0d-e107-4207-ad2a-73d016ea54a9": {
-      "name": "Nightmare",
+      "name": "Prismatic Portal",
       "needs": [],
       "supports": [
         "events",
@@ -2775,7 +2775,7 @@
       ]
     },
     "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7": {
-      "name": "Packcaller of Shadows",
+      "name": "Ethereal Call",
       "needs": [
         {
           "theme": "storm",
@@ -2878,7 +2878,7 @@
       ]
     },
     "6475483c-07de-43a0-b419-aaae6f436ec6": {
-      "name": "Peak Plunder",
+      "name": "Sky Collapse",
       "needs": [],
       "supports": [
         "events",
@@ -3149,7 +3149,7 @@
       ]
     },
     "25173cac-333f-4efc-9a03-b532d5783419": {
-      "name": "Ridgecutter",
+      "name": "Stratospheric Voyage",
       "needs": [],
       "supports": [
         "events"
@@ -3960,7 +3960,7 @@
       ]
     },
     "570895fe-cd21-45d2-89ff-162f46978776": {
-      "name": "Starfall Communion",
+      "name": "Reset",
       "needs": [],
       "supports": [
         "discard",
@@ -4607,7 +4607,7 @@
       ]
     },
     "ca0e9275-7fbe-47ce-b776-da5b2607145e": {
-      "name": "Vertiginous Leap",
+      "name": "Break the Veil",
       "needs": [],
       "supports": [
         "events"

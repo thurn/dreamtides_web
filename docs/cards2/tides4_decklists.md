@@ -111,7 +111,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Whisper of the Past
 - 1× Call to the Unknown
 - 1× Desperation
-- 1× Peak Plunder
+- 1× Sky Collapse
 - 1× The Dread Sovereign
 - 1× First Encounter
 - 1× Wake the Fallen
@@ -142,8 +142,8 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Obliterator of Worlds
 - 1× Soul Channeling
 - 1× Carrion Shepherd
-- 1× Moonlit Voyage
-- 1× Break the Veil
+- 1× Ossuary Offering
+- 1× Shared Ruin
 
 ## Caedryn signature — Abandon Payoff
 
@@ -210,7 +210,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 1× Whisper of the Past
 - 1× Call to the Unknown
 - 1× Desperation
-- 1× Peak Plunder
+- 1× Sky Collapse
 - 1× The Dread Sovereign
 - 1× Apocalypse
 - 1× Shatter the Frail
@@ -399,8 +399,8 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Price of Redemption
 - 1× Dreamscatter
 - 1× Oblivion Guide
-- 1× Aurora Confluence
-- 1× Starfall Communion
+- 1× Cleansing Flame
+- 1× Reset
 - 1× Sanctum Approach
 - 1× Pyre Caller
 - 1× Pathfinder Adrift
@@ -502,11 +502,11 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Immolate
 - 1× Curio Dealer
 - 1× Oblivion Guide
-- 1× Aurora Confluence
+- 1× Cleansing Flame
 - 1× Ashen Remnant
 - 1× Whisper of the Past
 - 1× Desperation
-- 1× Peak Plunder
+- 1× Sky Collapse
 - 1× The Dread Sovereign
 - 1× Part the Veil
 - 1× Embersummoner
@@ -553,7 +553,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Carrion Shepherd
 - 1× Forgotten Sleeper
 - 1× Sunset Chronicler
-- 1× Break the Veil
+- 1× Shared Ruin
 - 1× Scrap Reclaimer
 - 1× Immortal Reaper
 - 1× Skull Weaver
@@ -611,12 +611,12 @@ Tide-sig-06 is a heavily character-weighted deck (84 of 110 copies are character
 - 1× Corrupted Host
 - 1× Twilight Reclaimer
 - 1× Immolate
-- 1× Aurora Confluence
+- 1× Cleansing Flame
 - 1× Whisper of the Past
 - 1× Salvage Engine
 - 1× Seeker for the Way
 - 1× Desperation
-- 1× Peak Plunder
+- 1× Sky Collapse
 - 1× Entropy Spike
 - 1× Clockwork Salvager
 - 1× Apocalypse
@@ -653,7 +653,7 @@ Tide-sig-06 is a heavily character-weighted deck (84 of 110 copies are character
 - 1× Chaos Crasher
 - 1× The Calling Night
 - 1× Wandering Archivist
-- 1× Break the Veil
+- 1× Shared Ruin
 - 1× Immortal Reaper
 - 1× Skull Weaver
 
@@ -708,12 +708,12 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Immolate
 - 1× Curio Dealer
 - 1× Oblivion Guide
-- 1× Aurora Confluence
+- 1× Cleansing Flame
 - 1× Ashen Remnant
 - 1× Whisper of the Past
 - 1× Salvage Engine
 - 1× Desperation
-- 1× Peak Plunder
+- 1× Sky Collapse
 - 1× The Dread Sovereign
 - 1× Part the Veil
 - 1× Entropy Spike
@@ -756,7 +756,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Vigil Keeper
 - 1× Forgotten Sleeper
 - 1× Wandering Archivist
-- 1× Break the Veil
+- 1× Shared Ruin
 - 1× Skull Weaver
 
 ## Vaela signature — Abandon Energy Engine
@@ -820,7 +820,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Ashen Remnant
 - 1× Whisper of the Past
 - 1× Desperation
-- 1× Peak Plunder
+- 1× Sky Collapse
 - 1× The Dread Sovereign
 - 1× Part the Veil
 - 1× Grotto Seer
@@ -851,7 +851,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Obliterator of Worlds
 - 1× Soul Channeling
 - 1× Forgotten Sleeper
-- 1× Break the Veil
+- 1× Shared Ruin
 
 ## Edran signature — Evasive Outsider Draw
 
@@ -893,7 +893,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Rift Pilgrim
 - 1× Sunrise Strummer
 - 1× The Thinning
-- 1× Ridgecutter
+- 1× Stratospheric Voyage
 - 1× Call the Lost
 - 1× Abolish
 - 1× Architect of Memory
@@ -915,7 +915,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Pathfinder Adrift
 - 1× Harvest the Forgotten
 - 1× Null Sphere
-- 1× Peak Plunder
+- 1× Sky Collapse
 - 1× Clockwork Prodigy
 - 1× Momentum of the Fallen
 - 1× Shatterpoint Agent
@@ -957,7 +957,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× The Calling Night
 - 1× The Power Within
 - 1× A New Adventure
-- 1× Moonlit Voyage
+- 1× Ossuary Offering
 - 1× Entropy Cascade
 - 1× Cascade of Reflections
 
@@ -970,7 +970,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a central combo engine: play multiple events in one turn, copy them, and cash out the chain for score or decisive board control. The copying payoffs are layered across the pool — Echo Architect makes each event cost 1 more but creates a free copy whenever one resolves; The Ringleader creates an ephemeral copy of the next event you play; Cascade of Reflections copies every event until end of turn; Cascading Detonation copies the next event twice and reclaims itself; and Broadcast Array cashes the whole chain directly into score, uncounterable. To fuel these chains, the tide includes aggressive void reclaim: Dreadwood Emissary gives a void event reclaim on materialization, Spirit of Smoldering Echoes pays 2 energy to reclaim a void event, Archive of the Forgotten reclaims up to two events at once, and From the Barrow grants mass reclaim for a full turn. The interrupt-heavy backbone — Defiant Parry, Ridgecutter, Fractured Veil, Abolish, Crumbling Covenant — keeps opponents off balance while the player assembles their chain. Compared to tide-sig-09, which generates card velocity through discard loops (Pattern Seeker, Key Sifter, Call of Calamity, Minstrel of Falling Light) and leans on character-synergy payoffs in the void (Soulkindler, Pinnacle Ascendant), tide-sig-10 invests that same draw density into setting up a single explosive turn where copied events chain into a winning score burst.
 
 - 2× Fractured Veil
-- 2× Ridgecutter
+- 2× Stratospheric Voyage
 - 2× Fragments of Vision
 - 2× Sunset Chapel Rest
 - 2× Planetgazer
@@ -1013,7 +1013,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Vanishing Inquisitor
 - 1× Dreamscatter
 - 1× Reunion
-- 1× Starfall Communion
+- 1× Reset
 - 1× Sanctum Approach
 - 1× Pathfinder Adrift
 - 1× Harvest the Forgotten
@@ -1068,7 +1068,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× The Calling Night
 - 1× The Power Within
 - 1× A New Adventure
-- 1× Moonlit Voyage
+- 1× Ossuary Offering
 - 1× Entropy Cascade
 - 1× Cascade of Reflections
 
@@ -1084,7 +1084,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 2× Data Pulse
 - 2× Pulse of Sacrifice
 - 2× Echo Architect
-- 2× Ridgecutter
+- 2× Stratospheric Voyage
 - 2× Call the Lost
 - 2× Sunken Radiance
 - 2× Blooming Horror
@@ -1093,7 +1093,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 2× The Ringleader
 - 2× Dreamscatter
 - 2× Reunion
-- 2× Starfall Communion
+- 2× Reset
 - 2× Archive of the Forgotten
 - 2× Canopy of Stars
 - 2× Twice-Lit Portal
@@ -1201,7 +1201,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Fell Swoop
 - 1× Burst of Obliteration
 - 1× Rite of Summoning
-- 1× Ridgecutter
+- 1× Stratospheric Voyage
 - 1× Architect of Memory
 - 1× Blooming Horror
 - 1× Weight of Memory
@@ -1218,8 +1218,8 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× The Waking Titan
 - 1× Dreamscatter
 - 1× Oblivion Guide
-- 1× Aurora Confluence
-- 1× Starfall Communion
+- 1× Cleansing Flame
+- 1× Reset
 - 1× Sanctum Approach
 - 1× Pyre Caller
 - 1× Pathfinder Adrift
@@ -1305,7 +1305,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Burst of Obliteration
 - 1× Rite of Summoning
 - 1× Echo Architect
-- 1× Ridgecutter
+- 1× Stratospheric Voyage
 - 1× Call the Lost
 - 1× Architect of Memory
 - 1× Fallen One
@@ -1321,7 +1321,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Dreamscatter
 - 1× Oblivion Guide
 - 1× Reunion
-- 1× Starfall Communion
+- 1× Reset
 - 1× Sanctum Approach
 - 1× Molten Duel
 - 1× Part the Veil
@@ -1416,7 +1416,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Starlight Guide
 - 1× Nocturne
 - 1× Petal-Seer
-- 1× Packcaller of Shadows
+- 1× Ethereal Call
 - 1× Sky Voyager
 - 1× Dusk Duelist
 - 1× Soulcleft Spinner
@@ -1511,7 +1511,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 1× Wistful Angler
 - 1× Cindermarch
 - 1× Conduit of Resonance
-- 1× Packcaller of Shadows
+- 1× Ethereal Call
 - 1× Sky Voyager
 - 1× Dusk Duelist
 - 1× Soulcleft Spinner
@@ -1594,7 +1594,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 2× Nexus Wayfinder
 - 1× Unleash Ruin
 - 1× Wistful Angler
-- 1× Packcaller of Shadows
+- 1× Ethereal Call
 - 1× Sky Voyager
 - 1× Dusk Duelist
 - 1× Soulcleft Spinner
@@ -1672,7 +1672,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Cindermarch
 - 1× Conduit of Resonance
 - 1× Petal-Seer
-- 1× Packcaller of Shadows
+- 1× Ethereal Call
 - 1× Sky Voyager
 - 1× Dusk Duelist
 - 1× Soulcleft Spinner
@@ -2100,7 +2100,7 @@ Tide-fac-03 is an event-heavy (34 events, 11 characters) tide built around assem
 - 1× Path to Redemption
 - 1× Inverted Reflection
 - 1× Pulse of Sacrifice
-- 1× Ridgecutter
+- 1× Stratospheric Voyage
 - 1× Call the Lost
 - 1× Sunken Radiance
 - 1× Weblight Waif
@@ -2108,7 +2108,7 @@ Tide-fac-03 is an event-heavy (34 events, 11 characters) tide built around assem
 - 1× The Ringleader
 - 1× Dreamscatter
 - 1× Reunion
-- 1× Starfall Communion
+- 1× Reset
 - 1× Archive of the Forgotten
 - 1× Canopy of Stars
 - 1× Twice-Lit Portal
@@ -2234,7 +2234,7 @@ This tide runs an even split of characters and events, with its mechanical ident
 - 1× Threadbreaker
 - 1× Sunrise Strummer
 - 1× The Thinning
-- 1× Ridgecutter
+- 1× Stratospheric Voyage
 - 1× Headtaker Wurm
 - 1× Fragments of Vision
 - 1× Impending Fury
@@ -2267,7 +2267,7 @@ This tide runs an even split of characters and events, with its mechanical ident
 - 1× Secrets of the Deep
 - 1× The Power Within
 - 1× Soul Channeling
-- 1× Moonlit Voyage
+- 1× Ossuary Offering
 
 ## Lean: Sunset Chronicler — Spirit Animal Tokens
 
@@ -2285,7 +2285,7 @@ Tide-fac-07 runs an even split of events and characters (22/23) built around two
 - 1× Ethereal Army
 - 1× Blazing Emberwing
 - 1× Petal-Seer
-- 1× Packcaller of Shadows
+- 1× Ethereal Call
 - 1× Beacon of Tomorrow
 - 1× Lumin-Gate Seer
 - 1× Shardwoven Tyrant
@@ -2349,7 +2349,7 @@ Tide-fac-08 is an 80% character tide built almost entirely around spirit animals
 - 1× Shaper of Memory
 - 1× Corrupted Host
 - 1× Curio Dealer
-- 1× Peak Plunder
+- 1× Sky Collapse
 - 1× Part the Veil
 - 1× Entropy Spike
 - 1× Grotto Seer
@@ -2387,7 +2387,7 @@ Tide-fac-09 is almost entirely characters (39 of 45 copies), built around a tigh
 - 1× Data Pulse
 - 1× Fell the Mighty
 - 1× Pulse of Sacrifice
-- 1× Ridgecutter
+- 1× Stratospheric Voyage
 - 1× Sunken Radiance
 - 1× Blooming Horror
 - 1× Weight of Memory
@@ -2442,7 +2442,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Weblight Waif
 - 1× Shaper of Memory
 - 1× From the Barrow
-- 1× Starfall Communion
+- 1× Reset
 - 1× Pathfinder Adrift
 - 1× Molten Duel
 - 1× Part the Veil
@@ -2794,7 +2794,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Pulse of Sacrifice
 - 1× Rite of Summoning
 - 1× Echo Architect
-- 1× Ridgecutter
+- 1× Stratospheric Voyage
 - 1× Call the Lost
 - 1× Sunken Radiance
 - 1× Architect of Memory
@@ -2804,7 +2804,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Weblight Waif
 - 1× From the Barrow
 - 1× The Waking Titan
-- 1× Starfall Communion
+- 1× Reset
 - 1× Molten Duel
 - 1× Archive of the Forgotten
 - 1× Derelict Voyage
@@ -2861,7 +2861,7 @@ Tide-fac-18 is built around two interlocking halves: an energy ramp package and 
 - 1× Price of Redemption
 - 1× Twilight Reclaimer
 - 1× Immolate
-- 1× Peak Plunder
+- 1× Sky Collapse
 - 1× Entropy Spike
 - 1× Apocalypse
 - 1× Stolen Genesis
@@ -2903,13 +2903,13 @@ Tide-fac-20 is an event-heavy combo tide (34 events, 11 characters) built around
 - 1× Fell the Mighty
 - 1× Pulse of Sacrifice
 - 1× Echo Architect
-- 1× Ridgecutter
+- 1× Stratospheric Voyage
 - 1× Call the Lost
 - 1× Sunken Radiance
 - 1× The Ringleader
 - 1× Dreamscatter
 - 1× Reunion
-- 1× Starfall Communion
+- 1× Reset
 - 1× Archive of the Forgotten
 - 1× Canopy of Stars
 - 1× Twice-Lit Portal
@@ -3042,7 +3042,7 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Threadbreaker
 - 1× Blood Sun Oppressor
 - 1× Sunrise Strummer
-- 1× Ridgecutter
+- 1× Stratospheric Voyage
 - 1× Abolish
 - 1× Headtaker Wurm
 - 1× Impending Fury
@@ -3072,7 +3072,7 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Secrets of the Deep
 - 1× The Power Within
 - 1× Soul Channeling
-- 1× Moonlit Voyage
+- 1× Ossuary Offering
 
 ## Lean: Abyssal Deputy — Counterspell Outsider Draw
 
@@ -3092,7 +3092,7 @@ Tide-fac-24 is built almost entirely on characters (41 of 45 copies), with a sur
 - 1× Defiant Parry
 - 1× Threadbreaker
 - 1× Rift Pilgrim
-- 1× Ridgecutter
+- 1× Stratospheric Voyage
 - 1× Abolish
 - 1× Headtaker Wurm
 - 1× Fragments of Vision
@@ -3300,7 +3300,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 1× Unbroken
 - 1× Shaper of Memory
 - 1× Oblivion Guide
-- 1× Aurora Confluence
+- 1× Cleansing Flame
 - 1× Molten Duel
 - 1× Derelict Voyage
 - 1× Verdant Wayfarer
@@ -3352,7 +3352,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Weblight Waif
 - 1× Shaper of Memory
 - 1× From the Barrow
-- 1× Starfall Communion
+- 1× Reset
 - 1× Pathfinder Adrift
 - 1× Molten Duel
 - 1× Part the Veil
@@ -3558,7 +3558,7 @@ Tide-neu-06 is a character-dense discard engine built around accumulating a larg
 - 1× Shaper of Memory
 - 1× Price of Redemption
 - 1× Oblivion Guide
-- 1× Aurora Confluence
+- 1× Cleansing Flame
 - 1× Verdant Wayfarer
 - 1× Pyrestone Avatar
 - 1× Abandon Constraints
@@ -3594,7 +3594,7 @@ tide-neu-01 is a broad neutral tide built almost entirely from events (23 of 30 
 - 1× Defiant Parry
 - 1× Cragfall
 - 1× Echo Architect
-- 1× Ridgecutter
+- 1× Stratospheric Voyage
 - 1× Wheel of the Heavens
 - 1× Abolish
 - 1× Blooming Horror
@@ -3602,7 +3602,7 @@ tide-neu-01 is a broad neutral tide built almost entirely from events (23 of 30 
 - 1× Gleam Below
 - 1× Dreamscatter
 - 1× Reunion
-- 1× Starfall Communion
+- 1× Reset
 - 1× Pilgrim of Old Stones
 - 1× Crumbling Covenant
 - 1× Ecliptic Vantage

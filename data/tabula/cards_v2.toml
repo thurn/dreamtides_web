@@ -207,7 +207,7 @@ card-number = 11
 art = { x = 0.084, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Moonlit Voyage"
+name = "Ossuary Offering"
 mtg-name = "Night's Whisper"
 id = "f8678d24-f18b-4c94-a6c2-50efb8193b7f"
 rendered-text = "Draw 2 cards. The opponent gains 2⍟."
@@ -218,10 +218,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July7"]
-image-number = 2027158310
+tags = ["Art Rework", "July7", "Art OK"]
+image-number = 389999815
 art-owned = true
 card-number = 12
+art = { x = 0.353, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Spirit Bond"
@@ -2111,7 +2112,7 @@ card-number = 113
 art = { x = 0, y = 0.432, scale = 1.87 }
 
 [[cards]]
-name = "Vertiginous Leap"
+name = "Break the Veil"
 mtg-name = "Thoughtseize"
 id = "ca0e9275-7fbe-47ce-b776-da5b2607145e"
 rendered-text = "Discard a chosen card from the opponent's hand."
@@ -2123,7 +2124,7 @@ is-fast = false
 is-interrupt = false
 spark = ""
 tags = ["Thoughtseize", "Art Rework", "July8"]
-image-number = 410444923
+image-number = 2221518875
 art-owned = false
 card-number = 114
 
@@ -2298,10 +2299,10 @@ card-number = 123
 art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Aurora Confluence"
+name = "Cleansing Flame"
 mtg-name = "Burning Inquiry"
 id = "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188"
-rendered-text = "Choose a player. Discard X chosen cards from that player's hand. That player draws X cards."
+rendered-text = "Choose and discard X cards from your hand or the opponent's hand. That player draws X cards."
 energy-cost = "X"
 card-type = "Event"
 subtype = ""
@@ -2309,10 +2310,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July7"]
-image-number = 313783940
+tags = ["Art Rework", "July7", "Art OK"]
+image-number = 789290998
 art-owned = true
 card-number = 124
+art = { x = 0.092, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Dawnblade Wanderer"
@@ -3663,10 +3665,11 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July7"]
+tags = ["Art Rework", "July7", "Art OK"]
 image-number = 1196004052
 art-owned = false
 card-number = 197
+art = { x = 0.294, y = 0.398, scale = 1.17 }
 
 [[cards]]
 name = "Weight of Memory"
@@ -3930,13 +3933,13 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Cantrips", "Art Rework", "July7"]
+tags = ["Cantrips", "Art Rework", "July7", "Art OK"]
 image-number = 1402715897
 art-owned = false
 card-number = 212
 
 [[cards]]
-name = "Peak Plunder"
+name = "Sky Collapse"
 mtg-name = "Cabal Therapy"
 id = "6475483c-07de-43a0-b419-aaae6f436ec6"
 rendered-text = """
@@ -3950,10 +3953,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Thoughtseize", "Art Rework", "July7"]
-image-number = 1963305271
+tags = ["Thoughtseize", "Art Rework", "July7", "Art OK"]
+image-number = 1402715894
 art-owned = false
 card-number = 213
+art = { x = 0, y = 1, scale = 1.1 }
 
 [[cards]]
 name = "Abandon Constraints"
@@ -3974,7 +3978,7 @@ card-number = 214
 art = { x = 0, y = -0.104, scale = 1 }
 
 [[cards]]
-name = "Ridgecutter"
+name = "Stratospheric Voyage"
 mtg-name = "Snap"
 id = "25173cac-333f-4efc-9a03-b532d5783419"
 rendered-text = "Return a character to hand. Gain 2●."
@@ -3985,10 +3989,11 @@ rarity = ""
 is-fast = true
 is-interrupt = true
 spark = ""
-tags = ["Art Rework", "July7"]
+tags = ["Art Rework", "July7", "Art OK"]
 image-number = 461706646
 art-owned = false
 card-number = 215
+art = { x = -0.106, y = 0.869, scale = 1.27 }
 
 [[cards]]
 name = "Dreadmount Sovereign"
@@ -4673,7 +4678,7 @@ art-owned = false
 card-number = 252
 
 [[cards]]
-name = "Nightmare"
+name = "Prismatic Portal"
 mtg-name = "Sevinne's Reclamation"
 id = "74e82d0d-e107-4207-ad2a-73d016ea54a9"
 rendered-text = """
@@ -4687,10 +4692,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July7"]
-image-number = 1486924805
+tags = ["Art Rework", "July7", "Art OK"]
+image-number = 2586513021
 art-owned = true
 card-number = 253
+art = { x = -0.049, y = 1, scale = 1.07 }
 
 [[cards]]
 name = "Phantom Flotilla"
@@ -6635,7 +6641,7 @@ card-number = 357
 art = { x = -0.046, y = 1, scale = 1.16 }
 
 [[cards]]
-name = "Break the Veil"
+name = "Shared Ruin"
 mtg-name = "Raven's Crime"
 id = "fbf32510-0bad-4567-859f-b3db6d7be5d5"
 rendered-text = """
@@ -6649,10 +6655,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July7"]
-image-number = 2221518875
+tags = ["Art Rework", "July7", "Art OK"]
+image-number = 666342238
 art-owned = true
 card-number = 358
+art = { x = 0.192, y = 1, scale = 1.1 }
 
 [[cards]]
 name = "Planetgazer"
@@ -7916,7 +7923,7 @@ card-number = 425
 art = { x = 0, y = -0.573, scale = 1.67 }
 
 [[cards]]
-name = "Packcaller of Shadows"
+name = "Ethereal Call"
 mtg-name = "Chatterstorm"
 id = "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7"
 rendered-text = "For each card you've played this turn, materialize a 1✦ ethereal figment."
@@ -7927,10 +7934,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Figment Maker", "Art Rework", "July7"]
+tags = ["Figment Maker", "Art Rework", "July7", "Art OK"]
 image-number = 2123360849
 art-owned = false
 card-number = 426
+art = { x = 0.046, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Boundless Wanderer"
@@ -8159,10 +8167,10 @@ card-number = 438
 art = { x = -0.34, y = 1, scale = 1.57 }
 
 [[cards]]
-name = "Starfall Communion"
+name = "Reset"
 mtg-name = "Wheel of Fortune"
 id = "570895fe-cd21-45d2-89ff-162f46978776"
-rendered-text = "Each player discards their hand, then draws 5 cards."
+rendered-text = "Each player discards their hand, then draws 6 cards."
 energy-cost = 3
 card-type = "Event"
 subtype = ""
@@ -8170,10 +8178,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July7"]
-image-number = 2269064819
+tags = ["Art Rework", "July7", "Art OK"]
+image-number = 1139536448
 art-owned = false
 card-number = 439
+art = { x = 0, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Fractured Veil"
