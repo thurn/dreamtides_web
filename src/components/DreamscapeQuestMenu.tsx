@@ -262,12 +262,12 @@ export function DreamscapeQuestMenu({
       data-dreamscape-menu=""
       style={{
         position: "fixed",
-        top: `max(env(safe-area-inset-top), ${String(menuEdgeInset)}px)`,
+        top: `max(var(--safe-area-inset-top), ${String(menuEdgeInset)}px)`,
         // Desktop anchors the glass gear button to the top-right corner; mobile
         // keeps the glass menu button in the top-left.
         ...(isDesktop
-          ? { right: `max(env(safe-area-inset-right), ${String(menuEdgeInset)}px)` }
-          : { left: `max(env(safe-area-inset-left), ${String(menuEdgeInset)}px)` }),
+          ? { right: `max(var(--safe-area-inset-right), ${String(menuEdgeInset)}px)` }
+          : { left: `max(var(--safe-area-inset-left), ${String(menuEdgeInset)}px)` }),
         // Above the deck-viewer overlay (z 60) when it is open, so the menu stays
         // reachable from on top of it; the default corner chrome level otherwise.
         zIndex: elevated ? 65 : 60,

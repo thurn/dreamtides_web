@@ -51,6 +51,38 @@
        below reference those already-loaded families. */
 
 /* ================================================================
+   RUNTIME SAFE-AREA CHANNEL — declared on :root, not .tango.
+   ================================================================
+   Unlike every other block in this sheet, these are declared on :root
+   (never .tango) on purpose. They carry the real device safe-area insets:
+   they must inherit into EVERY subtree (tango or not — the battle log
+   drawer reads them too), and the device-screenshot tool overrides them by
+   setting inline styles on the <html>/:root element (see
+   src/runtime/device-frame.ts). An inline style on :root outranks this
+   stylesheet rule, and a .tango-scoped copy would instead SHADOW the
+   injected value inside tango subtrees — so :root is the only correct home.
+
+   On real hardware these resolve to the device's env(safe-area-inset-*)
+   (0 on an edge with no inset). Product code reads var(--safe-area-inset-*),
+   never env() directly, so the device and the screenshot mock-up resolve the
+   same layout. The paired --display-cutout-* box holds the screen cutout's
+   bounding box (published only in a screenshot with a visible cutout) for
+   deliberately placing UI in the unsafe region beside the Dynamic Island /
+   punch-hole; the 0px defaults are inert until an injection overrides them. */
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-right: env(safe-area-inset-right, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-inset-left: env(safe-area-inset-left, 0px);
+
+  --display-cutout-top: 0px;
+  --display-cutout-left: 0px;
+  --display-cutout-right: 0px;
+  --display-cutout-width: 0px;
+  --display-cutout-height: 0px;
+}
+
+/* ================================================================
    PRIMITIVES — raw values. Reference only within primitives/ + components/.
    ================================================================ */
 

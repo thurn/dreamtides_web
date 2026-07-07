@@ -16,6 +16,32 @@ Island or camera punch-hole) and home indicator over the UI. The status bar
 (clock / battery / Wi-Fi) is omitted so the UI renders edge to edge. `--frame`
 wraps phone targets in a device body/bezel.
 
+### Safe areas match the target
+
+The iframe has no physical display cutout, so the browser reports
+`env(safe-area-inset-*)` as 0. To make a mock-up match hardware, the tool
+encodes the target's safe-area insets (and, for cut-out phones, the cutout's
+bounding box) into a `deviceFrame` query param on the iframe URL. The app
+republishes them as `var(--safe-area-inset-top/right/bottom/left)` and
+`var(--display-cutout-top/left/right/width/height)` (see
+`src/runtime/device-frame.ts` and the `:root` block in
+`src/tango/primitives/tango-tokens.css`). App code reads those variables — never
+`env()` directly — so a notch-clearing layout that works on device also works in
+a mock-up, and the insets zero out on a no-cut-out target like `iphone-se-3`.
+
+`--no-cutout` suppresses the injected cutout box along with the painted island,
+so the app never anchors UI to an island the capture does not show.
+
+To render UI **in** the unsafe region (e.g. a control beside the Dynamic
+Island), position it from the `--display-cutout-*` box. The `?demo=device-frame`
+page demonstrates both a notch-clearing title and a control parked to the right
+of the island:
+
+```bash
+node scripts/device-screenshots.mjs -d iphone-16 --query 'demo=device-frame' \
+  --url http://localhost:5178
+```
+
 Requires Node 18+ and the `agent-browser` CLI. A dev server must be reachable
 (`--url`/`--port`), or pass `--start` to launch one for the run.
 

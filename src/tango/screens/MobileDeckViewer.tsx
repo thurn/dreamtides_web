@@ -338,10 +338,9 @@ function TopBand({
         flexShrink: 0,
         // Align the corner controls with the floating utility menu: clear the
         // notch on notched hardware, else a small top margin (no dead band on a
-        // no-notch phone like the SE).
-        paddingTop: `max(env(safe-area-inset-top, ${token("--gutter")}), ${token(
-          "--gutter",
-        )})`,
+        // no-notch phone like the SE). `--safe-area-inset-top` carries the real
+        // inset on device and the simulated one in a screenshot mock-up.
+        paddingTop: `max(var(--safe-area-inset-top), ${token("--gutter")})`,
         paddingLeft: token("--gutter"),
         paddingRight: token("--gutter"),
         paddingBottom: token("--space-4"),

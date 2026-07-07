@@ -147,6 +147,10 @@ The --space-* scale is the approved spacing system for all layout (margins, padd
 
 | Token | Value | Notes |
 | --- | --- | --- |
+| `--safe-area-inset-top` | `env(safe-area-inset-top, 0px)` |  |
+| `--safe-area-inset-right` | `env(safe-area-inset-right, 0px)` |  |
+| `--safe-area-inset-bottom` | `env(safe-area-inset-bottom, 0px)` |  |
+| `--safe-area-inset-left` | `env(safe-area-inset-left, 0px)` |  |
 | `--space-0` | `0` |  |
 | `--space-1` | `2px` |  |
 | `--space-2` | `4px` |  |
@@ -267,4 +271,9 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 
 | Token | Value | Notes |
 | --- | --- | --- |
+| `--display-cutout-top` | `0px` |  |
+| `--display-cutout-left` | `0px` |  |
+| `--display-cutout-right` | `0px` |  |
+| `--display-cutout-width` | `0px` |  |
+| `--display-cutout-height` | `0px` |  |
 | `--hover-scale` | `1.03` |  |

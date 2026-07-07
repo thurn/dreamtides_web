@@ -14,6 +14,15 @@
  * indicator are drawn *on top* of the rendered UI, exactly as they occlude the
  * real screen, so a mock-up shows what the player can actually see. The
  * optional device frame (`--frame`) draws a bezel/body around the screen.
+ *
+ * Because the app is loaded in an `<iframe>` over a headless viewport with no
+ * physical display cutout, the browser reports `env(safe-area-inset-*)` as 0 —
+ * so a layout that clears the notch via `env()` would collapse and slide under
+ * the painted island. To make the mock-up match hardware, each target's
+ * simulated safe-area insets and screen-cutout bounding box are encoded into a
+ * `deviceFrame` query param on the iframe URL; the app republishes them as CSS
+ * custom properties (see src/runtime/device-frame.ts) so the same layout reads
+ * the simulated values in a screenshot that it reads from `env()` on device.
  */
 
 /**
@@ -29,6 +38,12 @@
  * @property {number} bottom
  * @property {number} left
  *
+ * @typedef {Object} SafeArea
+ * @property {number} top     Top inset in CSS px (status bar / notch region).
+ * @property {number} right   Right inset in CSS px.
+ * @property {number} bottom  Bottom inset in CSS px (home indicator).
+ * @property {number} left    Left inset in CSS px.
+ *
  * @typedef {Object} Device
  * @property {string} id             Stable kebab-case identifier used on the CLI.
  * @property {string} name           Human-readable marketing name.
@@ -39,6 +54,8 @@
  * @property {number} dpr            Device pixel ratio (deviceScaleFactor).
  * @property {number} radius         Screen corner radius in CSS px.
  * @property {Cutout} cutout
+ * @property {SafeArea} [safeArea]  Explicit safe-area insets. When omitted they
+ *   are derived from the cutout + home-indicator geometry (see `deviceSafeArea`).
  * @property {"ios"|"android"|"none"} home  Home-indicator style ("none" = physical button).
  * @property {Bezel} bezel           Bezel thickness per side when `--frame` is set.
  * @property {string} body           Device body/bezel colour.
@@ -179,6 +196,73 @@ export function physicalResolution(device) {
   };
 }
 
+/**
+ * The screen cutout's bounding box in CSS px within the screen, or `null` when
+ * the device has no cutout. The box is what the wrapper paints (see
+ * `renderCutout`): cutouts are horizontally centered, so `left` and `right`
+ * (distance from each screen edge to the box) are equal. Exposing both lets a
+ * layout anchor UI to the cutout from either edge.
+ */
+export function deviceCutoutBox(device) {
+  const c = device.cutout;
+  if (!c || c.type === "none") return null;
+  // A punch-hole is a circle whose diameter is its `height`; an island carries
+  // an explicit width.
+  const width = c.type === "island" ? c.width : c.height;
+  const height = c.height;
+  const inset = (device.logicalWidth - width) / 2;
+  return { top: c.top, left: inset, right: inset, width, height };
+}
+
+/**
+ * The simulated safe-area insets (CSS px) for a device. An explicit
+ * `device.safeArea` wins; otherwise they are derived from the cutout and
+ * home-indicator geometry the wrapper already paints, so the reserved region
+ * always matches what visually occludes the screen. The derived top inset seats
+ * the status-bar/notch band just below the cutout; the bottom inset reserves
+ * the home indicator (iOS gesture bar 34px, Android 24px, physical button 0).
+ */
+export function deviceSafeArea(device) {
+  if (device.safeArea) return device.safeArea;
+  const c = device.cutout;
+  let top = 0;
+  if (c && c.type === "island") top = c.top + c.height + 11;
+  else if (c && c.type === "punch-hole") top = c.top + c.height + 12;
+  let bottom = 0;
+  if (device.home === "ios") bottom = 34;
+  else if (device.home === "android") bottom = 24;
+  return { top, right: 0, bottom, left: 0 };
+}
+
+/**
+ * Build the `deviceFrame` descriptor injected into the app so its safe-area and
+ * cutout-relative layout matches the painted chrome. The cutout box is included
+ * only when the wrapper is actually painting it (`showCutout`), so a
+ * `--no-cutout` capture never exposes an island the player cannot see.
+ */
+export function deviceFrameDescriptor(device, showCutout = true) {
+  const descriptor = { safeArea: deviceSafeArea(device) };
+  if (showCutout) {
+    const cutout = deviceCutoutBox(device);
+    if (cutout) descriptor.cutout = cutout;
+  }
+  return descriptor;
+}
+
+/**
+ * Append the `deviceFrame` query param (URL-encoded JSON descriptor) to the
+ * app URL loaded in the iframe, preserving any existing query and fragment.
+ */
+function withDeviceFrame(appUrl, device, showCutout) {
+  const descriptor = deviceFrameDescriptor(device, showCutout);
+  const encoded = encodeURIComponent(JSON.stringify(descriptor));
+  const hashIndex = appUrl.indexOf("#");
+  const base = hashIndex === -1 ? appUrl : appUrl.slice(0, hashIndex);
+  const hash = hashIndex === -1 ? "" : appUrl.slice(hashIndex);
+  const sep = base.includes("?") ? "&" : "?";
+  return `${base}${sep}deviceFrame=${encoded}${hash}`;
+}
+
 function escapeHtml(value) {
   return String(value)
     .replace(/&/g, "&amp;")
@@ -230,6 +314,7 @@ export function renderWrapper(device, options = {}) {
     ? device.radius + Math.max(bezel.left, bezel.top, bezel.right, bezel.bottom)
     : device.radius;
 
+  const iframeUrl = withDeviceFrame(appUrl, device, showCutout);
   const cutout = renderCutout(device, showCutout);
   const home = renderHome(device, showHome);
   const homeButton =
@@ -369,7 +454,7 @@ export function renderWrapper(device, options = {}) {
       ${caption ? `<div class="caption">${escapeHtml(caption)}</div>` : ""}
       <div class="body">
         <div class="screen">
-          <iframe src="${escapeHtml(appUrl)}" title="${escapeHtml(device.name)}" scrolling="no"></iframe>
+          <iframe src="${escapeHtml(iframeUrl)}" title="${escapeHtml(device.name)}" scrolling="no"></iframe>
           <div class="chrome">
             ${cutout}
             ${home}

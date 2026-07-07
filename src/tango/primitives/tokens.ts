@@ -14,6 +14,15 @@
 // cascade (the `kind` of the last declaration wins too).
 
 export const TOKENS = {
+  "--safe-area-inset-top": { var: "var(--safe-area-inset-top)", value: "env(safe-area-inset-top, 0px)" },
+  "--safe-area-inset-right": { var: "var(--safe-area-inset-right)", value: "env(safe-area-inset-right, 0px)" },
+  "--safe-area-inset-bottom": { var: "var(--safe-area-inset-bottom)", value: "env(safe-area-inset-bottom, 0px)" },
+  "--safe-area-inset-left": { var: "var(--safe-area-inset-left)", value: "env(safe-area-inset-left, 0px)" },
+  "--display-cutout-top": { var: "var(--display-cutout-top)", value: "0px" },
+  "--display-cutout-left": { var: "var(--display-cutout-left)", value: "0px" },
+  "--display-cutout-right": { var: "var(--display-cutout-right)", value: "0px" },
+  "--display-cutout-width": { var: "var(--display-cutout-width)", value: "0px" },
+  "--display-cutout-height": { var: "var(--display-cutout-height)", value: "0px" },
   "--primitive-void-900": { var: "var(--primitive-void-900)", value: "#060410" },
   "--primitive-void-800": { var: "var(--primitive-void-800)", value: "#0a0612" },
   "--primitive-void-700": { var: "var(--primitive-void-700)", value: "#14101f" },

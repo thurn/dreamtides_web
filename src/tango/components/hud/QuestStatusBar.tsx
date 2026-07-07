@@ -631,7 +631,7 @@ function QsbHudBar({
         gap: Math.round(10 * scale),
         height: token("--hud-h"),
         padding: `0 ${String(Math.round(12 * scale))}px`,
-        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        paddingBottom: "var(--safe-area-inset-bottom)",
         ...style,
       }}
     >

@@ -23,6 +23,14 @@ import "./tango/primitives/tango-tokens.css";
 import "./tango/primitives/legibility.css";
 import CardEditorApp from "./editor/CardEditorApp";
 import { verifyFonts } from "./runtime/verify-fonts";
+import { applyDeviceFrameFromSearch } from "./runtime/device-frame";
+
+// Screenshot mock-ups load the app in an iframe with no physical display
+// cutout, so `env(safe-area-inset-*)` reads 0. When the device-screenshot tool
+// injects a `deviceFrame` param, republish its simulated insets + cutout box as
+// CSS custom properties before first paint (a no-op on real hardware). Runs for
+// every route, since any screen can be captured.
+applyDeviceFrameFromSearch(window.location.search);
 
 // Warn (console + on-screen banner) if the card webfonts failed to load, e.g.
 // when the Google Fonts CDN is blocked or offline and cards silently fall
@@ -123,12 +131,14 @@ if (pathname === "/editor" || pathname === "/cards") {
     { HudDreamsignLayoutDemo },
     { JourneyHoverCardDemo },
     { TransfigurationCardDemo },
+    { DeviceFrameDemo },
     { parseRuntimeConfig },
   ] = await Promise.all([
     import("./App.tsx"),
     import("./components/HudDreamsignLayoutDemo"),
     import("./journeys/ui/JourneyHoverCardDemo"),
     import("./components/TransfigurationCardDemo"),
+    import("./tango/screens/devtools/DeviceFrameDemo"),
     import("./runtime/runtime-config"),
   ]);
 
@@ -147,6 +157,8 @@ if (pathname === "/editor" || pathname === "/cards") {
         <JourneyHoverCardDemo />
       ) : demoParam === "transfiguration" ? (
         <TransfigurationCardDemo />
+      ) : demoParam === "device-frame" ? (
+        <DeviceFrameDemo />
       ) : (
         <App runtimeConfig={runtimeConfig} />
       )}

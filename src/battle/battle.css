@@ -2432,7 +2432,7 @@
 .log-drawer {
   position: fixed;
   right: 20px;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 120px);
+  bottom: calc(var(--safe-area-inset-bottom) + 120px);
   width: min(340px, calc(100vw - 40px));
   max-height: min(240px, calc(100vh - 220px));
   background: rgba(10, 6, 18, 0.98);
