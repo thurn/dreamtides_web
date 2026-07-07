@@ -17,39 +17,19 @@ import {
   buildPoolData,
   generatePoolFromData,
 } from "../src/draft/pool/index.ts";
+import { CARDS_V2_POOL_METADATA } from "../src/data/cards-v2-metadata.ts";
+import { DREAMCALLER_THEMES } from "../src/data/dreamcallers-v2-database.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));
 
-const cards = readJson("public/cards_v2-data.json");
+const cards = readJson("public/cards_v2-data.json").map((card) => ({
+  ...card,
+  tides: CARDS_V2_POOL_METADATA[card.id]?.tides ?? [],
+}));
 const decklistsData = readJson("public/decklists-data.json");
 const decklistIdsData = readJson("public/decklist-ids-data.json");
 const dreamcallers = readJson("public/dreamcallers-v2-data.json");
-
-// Theme map copied verbatim from src/data/dreamcallers-v2-database.ts
-// (DREAMCALLER_THEMES) — the single source of truth for a Dreamcaller's tide.
-const DREAMCALLER_THEMES = {
-  "Yveth Coravel": ["blink", "celestial-reverie-combo"],
-  "Kell Tarn": ["cheap-characters", "reclaim-combo"],
-  Caedryn: ["abandon"],
-  Kragg: ["abandon"],
-  Vrakmoth: ["discard-madness"],
-  Seraveth: ["discard-madness"],
-  Corvath: ["discard-madness"],
-  "Kael Voss": ["survivors", "reclaim-combo"],
-  Vaela: ["survivors", "reclaim-combo"],
-  Edran: ["outsiders"],
-  Zeva: ["outsiders"],
-  Kasane: ["storm", "events"],
-  Rael: ["storm", "events"],
-  Ovanel: ["storm", "events"],
-  Grath: ["spirit-animals", "celestial-reverie-combo"],
-  Radulf: ["spirit-animals", "celestial-reverie-combo"],
-  Demetrios: ["spirit-animals", "celestial-reverie-combo"],
-  "Gunnar Deepforge": ["warrior-aggro", "warrior-combo"],
-  Tensho: ["warrior-aggro", "warrior-combo"],
-  Valdren: ["warrior-aggro", "warrior-combo"],
-};
 
 // Pass the id-keyed corpus as the 4th argument so the oracle keys df/idf/cosine
 // on stable UUIDs (same as variant-decklists.ts now does). The name-keyed
@@ -147,7 +127,7 @@ function buildCorpus(pd) {
 }
 const CORPUS = buildCorpus(poolData);
 
-// Returns { counts (uncapped), identity, foldStats:[{size,onSpine}], spine,
+// Returns { counts (uncapped, UUID-keyed), identity, foldStats:[{size,onSpine}], spine,
 // themeCards, starter, onSpineFracControl }.
 function generateDecklistsInstrumented(
   rng,
@@ -308,14 +288,7 @@ function generateDecklistsInstrumented(
   }
   const identity = [...COLORS].filter((c) => C.has(c)).join("");
 
-  // Resolve UUID-keyed counts to display names (matching the oracle's output).
-  const resolvedCounts = new Map();
-  for (const [key, v] of counts) {
-    const name = pd.cardNameById?.get(key) ?? key;
-    resolvedCounts.set(name, Math.min(2, (resolvedCounts.get(name) ?? 0) + v));
-  }
-
-  return { counts: resolvedCounts, identity, foldStats, spine, themeCards, starter };
+  return { counts, identity, foldStats, spine, themeCards, starter };
 }
 
 const capCounts = (counts) => {
