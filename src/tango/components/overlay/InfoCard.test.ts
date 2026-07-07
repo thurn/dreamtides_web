@@ -26,9 +26,39 @@ import {
   FINGER_RADIUS,
   GAP,
   InfoCard,
+  INFO_CARD_WIDTH,
+  infoCardScale,
   isHold,
   type AnchorRect,
 } from "./InfoCard";
+
+describe("infoCardScale — the viewport-driven mobile scale-down", () => {
+  it("shrinks a card to ~45% of a narrow (mobile) screen", () => {
+    // On a phone the native card is wider than 45% of the screen, so it scales.
+    const screenW = 390;
+    const scale = infoCardScale(screenW);
+    expect(INFO_CARD_WIDTH * scale).toBeCloseTo(0.45 * screenW, 5);
+    expect(scale).toBeLessThan(1);
+  });
+
+  it("lets two scaled cards sit side by side within a phone screen", () => {
+    const screenW = 360;
+    const scale = infoCardScale(screenW);
+    const pairWidth = (INFO_CARD_WIDTH * 2 + 10) * scale;
+    expect(pairWidth).toBeLessThan(screenW);
+  });
+
+  it("caps at native size on a wide (desktop) screen, so desktop is unchanged", () => {
+    // 45% of a desktop viewport exceeds the native width, so the scale is 1.
+    expect(infoCardScale(1440)).toBe(1);
+    expect(infoCardScale(768)).toBe(1);
+  });
+
+  it("returns 1 for a zero / unmeasured viewport width", () => {
+    expect(infoCardScale(0)).toBe(1);
+    expect(infoCardScale(-100)).toBe(1);
+  });
+});
 
 describe("InfoCard shell treatment", () => {
   it("uses the shared liquid-glass material at the fixed fill opacity", () => {

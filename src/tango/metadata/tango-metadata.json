@@ -1537,14 +1537,6 @@
       "description": ""
     },
     {
-      "name": "width",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "248",
-      "description": ""
-    },
-    {
       "name": "card",
       "tsType": "ReactNode",
       "unionMembers": [],
@@ -1763,14 +1755,6 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "14",
-      "description": ""
-    },
-    {
-      "name": "width",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "248",
       "description": ""
     }
   ],

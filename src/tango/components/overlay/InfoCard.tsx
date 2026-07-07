@@ -92,6 +92,31 @@ const INFO_CARD_GLASS_BACKGROUND = `linear-gradient(150deg, rgba(255,255,255,0.0
  */
 export const INFO_CARD_WIDTH = CARD_W;
 
+/**
+ * On a narrow (mobile) viewport every info card scales down uniformly — text,
+ * media, and padding together — so it spans about this fraction of the screen
+ * width: small enough to read comfortably on a phone and for two cards to sit
+ * side by side. It is capped at native size, so a wide (desktop) viewport,
+ * where this fraction already exceeds the native width, renders at scale 1.
+ */
+const MOBILE_WIDTH_FRACTION = 0.45;
+
+/**
+ * The on-screen scale (≤ 1) for an info card on a `viewportWidth`-px screen:
+ * shrink the fixed native width to {@link MOBILE_WIDTH_FRACTION} of the screen,
+ * never enlarging past native size, so desktop stays 1. PURE. Every info card
+ * applies this ONE rule (via a CSS `zoom`, so the card's layout box shrinks
+ * with it), which is what keeps their on-screen size consistent everywhere.
+ * Exported so a surface laying out around a reveal (the atlas node/dreamsign
+ * pair) can ask whether cards are in their scaled-down mobile size.
+ */
+export function infoCardScale(viewportWidth: number): number {
+  if (!(viewportWidth > 0)) {
+    return 1;
+  }
+  return Math.min(1, (MOBILE_WIDTH_FRACTION * viewportWidth) / CARD_W);
+}
+
 /** Screen inset (px): the popover is clamped to never come within this of any
  * viewport edge. Exported for the clamp tests. */
 export const EDGE = EDGE_PX;
@@ -302,14 +327,12 @@ export type InfoCardProps =
    InfoCard — content, media variants, one shell.
    ================================================================ */
 /**
- * InfoCard — the one press-to-reveal information card. Its media treatment
- * varies (object / fullBleed / icon / tide / text) on one fixed liquid-glass shell (no
- * caret, one GroupPanel material + type scale). The placement/timing engine is
- * attached as statics:
- * `InfoCard.PressPopover / PressInfo / usePressReveal / anchorRect /
- * setRevealDelay / SITE_DISC`.
+ * The info card's variant body (object / fullBleed / icon / tide / text) on the
+ * one fixed liquid-glass shell. Rendered at its native geometry; the exported
+ * {@link InfoCard} wraps this in the viewport-driven mobile scale-down so the
+ * body never has to think about screen size.
  */
-function InfoCardComponent(props: InfoCardProps): React.ReactElement {
+function InfoCardBody(props: InfoCardProps): React.ReactElement {
   const { title, body } = props;
   // `variant` is optional only on the text member; resolve the default once for
   // the shared body/title styling. The per-variant branches below narrow on the
@@ -609,6 +632,39 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
   );
 }
 
+/**
+ * InfoCard — the one press-to-reveal information card. Its media treatment
+ * varies (object / fullBleed / icon / tide / text) on one fixed liquid-glass
+ * shell (no caret, one GroupPanel material + type scale).
+ *
+ * Wraps the variant body in the ONE viewport-driven mobile scale-down (see
+ * {@link infoCardScale}): on a phone every info card shrinks uniformly to the
+ * same fraction of the screen; on desktop it renders at native size. The scale
+ * is a CSS `zoom`, which shrinks the card's LAYOUT box (not just its paint), so
+ * the press-reveal placement engine and any flow layout that hugs a card
+ * measure the real on-screen size with no extra plumbing — and every card reads
+ * at a consistent size for its screen.
+ *
+ * The placement/timing engine is attached as statics:
+ * `InfoCard.PressPopover / PressInfo / usePressReveal / anchorRect /
+ * setRevealDelay / SITE_DISC`.
+ */
+function InfoCardComponent(props: InfoCardProps): React.ReactElement {
+  const scale = infoCardScale(useViewportWidth());
+  return (
+    <div
+      style={{
+        // `width: max-content` gives the wrapper a definite, content-driven
+        // width (the body's fixed native width) for `zoom` to scale from.
+        width: "max-content",
+        zoom: scale === 1 ? undefined : scale,
+      }}
+    >
+      <InfoCardBody {...props} />
+    </div>
+  );
+}
+
 /* ================================================================
    Pure engine logic (factored out for direct unit testing).
    ================================================================ */
@@ -808,6 +864,28 @@ function useFinePointer(): boolean {
   return fine;
 }
 
+/* ================================================================
+   useViewportWidth — live viewport width driving the mobile scale-down, tracking
+   resize / rotate the same way useFinePointer tracks pointer-mode changes.
+   ================================================================ */
+function useViewportWidth(): number {
+  const [width, setWidth] = React.useState<number>(() =>
+    typeof window === "undefined" ? 0 : window.innerWidth,
+  );
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const onResize = (): void => setWidth(window.innerWidth);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  return width;
+}
+
 export interface UsePressRevealResult {
   /** true from pointer-down to release (drive the immediate press scale). */
   pressed: boolean;
@@ -956,14 +1034,12 @@ export function usePressReveal(
 export interface PressPopoverProps {
   anchor: AnchorRect | null;
   gap?: number;
-  width?: number;
   children?: React.ReactNode;
 }
 
 export function PressPopover({
   anchor,
   gap = GAP,
-  width = CARD_W,
   children,
 }: PressPopoverProps): React.ReactElement {
   const ref = React.useRef<HTMLDivElement>(null);
@@ -976,8 +1052,20 @@ export function PressPopover({
     if (!el || !anchor) {
       return;
     }
-    setPos(computePopoverPosition(anchor, width, el.offsetHeight, gap, EDGE));
-  }, [anchor, gap, width]);
+    // Measure the card's ACTUAL rendered box. The card sizes itself and scales
+    // down on mobile (a CSS `zoom`, which shrinks the layout box), so its live
+    // `offsetWidth`/`offsetHeight` are the real on-screen dimensions the clamp
+    // positions against — no size needs to be threaded in.
+    setPos(
+      computePopoverPosition(
+        anchor,
+        el.offsetWidth,
+        el.offsetHeight,
+        gap,
+        EDGE,
+      ),
+    );
+  }, [anchor, gap]);
 
   return (
     // `.tango` re-establishes the design-system token scope. The popover portals
@@ -991,10 +1079,11 @@ export function PressPopover({
       className="tango"
       style={{
         position: "absolute",
-        width,
+        // Hug the card so `offsetWidth` is the card's real (scaled) width.
+        width: "max-content",
         zIndex: 90,
         pointerEvents: "none",
-        left: pos ? pos.left : anchor ? anchor.x - width / 2 : 0,
+        left: pos ? pos.left : anchor ? anchor.x : 0,
         top: pos ? pos.top : 0,
         // Keep the portal wrapper out of opacity/transform animation layers so
         // the InfoCard shell's backdrop-filter samples the scene like GroupPanel.
@@ -1028,7 +1117,6 @@ export function PressPopover({
 export interface PressInfoProps {
   stageRef: React.RefObject<HTMLElement | null>;
   gap?: number;
-  width?: number;
   /** The InfoCard (or any node) to reveal while pressed/hovered. */
   card?: React.ReactNode;
   children?: React.ReactNode;
@@ -1040,7 +1128,6 @@ export interface PressInfoProps {
 export function PressInfo({
   stageRef,
   gap = GAP,
-  width = CARD_W,
   card,
   children,
   as = "span",
@@ -1083,7 +1170,7 @@ export function PressInfo({
       {anchor &&
         stageRef.current &&
         createPortal(
-          <PressPopover anchor={anchor} gap={gap} width={width}>
+          <PressPopover anchor={anchor} gap={gap}>
             {card}
           </PressPopover>,
           stageRef.current,
