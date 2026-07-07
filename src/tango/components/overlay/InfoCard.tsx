@@ -621,12 +621,28 @@ export interface AnchorRect {
   w: number;
   h: number;
   /**
+   * The anchor box's own left / right edges in stage-native px. When present,
+   * the clamp knows the trigger's horizontal extent, so a card that cannot sit
+   * above the press can be shifted clear of it sideways instead of dropping
+   * below. Absent for a point-only anchor (older call sites), where the clamp
+   * falls back to treating the anchor as a zero-width point at `x`.
+   */
+  spanLeft?: number;
+  spanRight?: number;
+  /**
    * The actual press point's Y in stage-native px, captured on a touch
    * press-down. When present, the clamp keeps a fingertip disc around it clear
    * of the card so the finger holding the trigger down never occludes the
    * reveal. Absent on a fine-pointer hover (no finger to clear).
    */
   pointerY?: number;
+  /**
+   * The actual press point's X in stage-native px, captured on a touch
+   * press-down alongside `pointerY`. Folds the fingertip disc into the
+   * horizontal obstacle a sideways-shifted card must clear. Absent on a
+   * fine-pointer hover.
+   */
+  pointerX?: number;
 }
 
 /**
@@ -645,27 +661,28 @@ export function isHold(downT: number, upT: number, clickWindow: number): boolean
  * viewport side (the viewport dims travel on the anchor as `w`/`h`). Returns the
  * popover's { left, top } in stage-native px.
  *
- * ABOVE is strongly preferred — the reveal should sit over the pressed object,
- * never under the finger — so the vertical placement tries, in order:
- *   1. above at the full uniform gap (the ideal),
- *   2. above pinned to the top screen inset with a reduced gap, whenever the
- *      card still clears the obstacle there — recovering the near-miss cases a
- *      strict full-gap test would needlessly flip below,
- *   3. below at the full gap (the last resort, when the card cannot clear the
- *      press point above at all — e.g. a trigger already near the top edge),
- *   4. a top-biased clamp when the card fits neither side (taller than the room
- *      either way).
- * Because `obstacleTop` already folds in the finger disc on a touch press, an
- * above placement never covers the finger even at the reduced gap.
+ * The reveal sits ABOVE the pressed object and is NEVER placed below it: a card
+ * that cannot fit above is pinned to the top of the screen and shifted sideways
+ * to clear the press area, rather than dropping beneath the finger. The vertical
+ * placement tries, in order:
+ *   1. above at the full uniform gap (the ideal) — centered over the anchor.
+ *   2. pinned to the top screen inset with a reduced gap, whenever the card
+ *      still clears the obstacle there — centered over the anchor.
+ *   3. pinned to the top screen inset and shifted horizontally so the card sits
+ *      beside the press area (to its left or right, whichever has room), when a
+ *      top-pinned card would otherwise overlap the obstacle vertically.
+ * When neither side has room for the card beside the press area (a wide-enough
+ * card against a centered top trigger), the card stays centered at the top —
+ * still above, never below.
+ *
+ * The horizontal obstacle the shift clears is the UNION of the anchor box
+ * (`spanLeft`..`spanRight`, or the point `x` when absent) and, on a touch press,
+ * a `FINGER_RADIUS_PX` disc around `pointerX`. The vertical obstacle is likewise
+ * the union of the anchor box and a disc around `pointerY`, so a touch reveal
+ * never covers the finger.
  *
  * A card larger than the viewport cannot satisfy every edge; it is pinned to
  * the leading (top-left) inset so at least its title/corner stays reachable.
- *
- * When `anchor.pointerY` is set (a touch press-down captured the press point),
- * the vertical obstacle the card clears is the UNION of the anchor box and a
- * `FINGER_RADIUS_PX` disc around the press point, so the finger never occludes
- * the reveal — even when the press lands near the top or bottom edge of a large
- * trigger.
  */
 export function computePopoverPosition(
   anchor: AnchorRect,
@@ -674,27 +691,58 @@ export function computePopoverPosition(
   gap: number,
   edge: number,
 ): { left: number; top: number } {
-  const { x, top, bottom, w, h, pointerY } = anchor;
-  const left = Math.max(edge, Math.min(x - width / 2, w - width - edge));
+  const { x, top, w, spanLeft, spanRight, pointerY, pointerX } = anchor;
+
+  const minLeft = edge;
+  const maxLeft = Math.max(edge, w - width - edge);
+  const clampX = (l: number): number => Math.max(minLeft, Math.min(l, maxLeft));
+  const centeredLeft = clampX(x - width / 2);
+
   const obstacleTop =
     pointerY == null ? top : Math.min(top, pointerY - FINGER_RADIUS_PX);
-  const obstacleBottom =
-    pointerY == null ? bottom : Math.max(bottom, pointerY + FINGER_RADIUS_PX);
   const aboveTop = obstacleTop - gap - height;
-  const belowTop = obstacleBottom + gap;
-  let t: number;
+
+  // 1. Fits fully above at the uniform gap — the ideal. Centered over the anchor.
   if (aboveTop >= edge) {
-    t = aboveTop; // fits fully above at the uniform gap — the ideal
-  } else if (edge + height <= obstacleTop) {
-    // Doesn't fit above at the full gap, but still clears the obstacle when
-    // pinned to the top inset (a reduced gap). Prefer this to dropping below.
-    t = edge;
-  } else if (belowTop + height <= h - edge) {
-    t = belowTop; // last resort: below the press
-  } else {
-    t = Math.max(edge, Math.min(aboveTop, h - height - edge)); // clamp into view
+    return { left: centeredLeft, top: aboveTop };
   }
-  return { left, top: t };
+
+  // 2. Doesn't fit above at the full gap, but a top-pinned card still clears the
+  //    obstacle vertically (a reduced gap). Centered over the anchor.
+  if (edge + height <= obstacleTop) {
+    return { left: centeredLeft, top: edge };
+  }
+
+  // 3. A top-pinned card would overlap the obstacle vertically. Keep it pinned to
+  //    the top of the screen and shift it sideways to clear the press area — the
+  //    reveal never drops below. The horizontal obstacle folds in the finger disc
+  //    on a touch press. Prefer the side of the obstacle with the emptier half of
+  //    the screen; fall back to the other side, or — when the card fits beside
+  //    neither — leave it centered at the top (overlap is then unavoidable).
+  const anchorLeft = spanLeft ?? x;
+  const anchorRight = spanRight ?? x;
+  const obstacleLeft =
+    pointerX == null ? anchorLeft : Math.min(anchorLeft, pointerX - FINGER_RADIUS_PX);
+  const obstacleRight =
+    pointerX == null ? anchorRight : Math.max(anchorRight, pointerX + FINGER_RADIUS_PX);
+
+  const leftOfObstacle = obstacleLeft - gap - width;
+  const rightOfObstacle = obstacleRight + gap;
+  const fitsLeft = leftOfObstacle >= minLeft;
+  const fitsRight = rightOfObstacle <= maxLeft;
+  const preferRight = (obstacleLeft + obstacleRight) / 2 <= w / 2;
+
+  let left: number;
+  if (fitsLeft && fitsRight) {
+    left = preferRight ? rightOfObstacle : leftOfObstacle;
+  } else if (fitsLeft) {
+    left = leftOfObstacle;
+  } else if (fitsRight) {
+    left = rightOfObstacle;
+  } else {
+    left = centeredLeft;
+  }
+  return { left, top: edge };
 }
 
 /* ================================================================
@@ -714,11 +762,21 @@ export function anchorRect(
     x: (r.left - sr.left + r.width / 2) * k,
     top: (r.top - sr.top) * k,
     bottom: (r.bottom - sr.top) * k,
+    // The anchor box's own horizontal edges, so a card that cannot sit above the
+    // press can be shifted clear of the trigger sideways rather than dropped
+    // below it.
+    spanLeft: (r.left - sr.left) * k,
+    spanRight: (r.right - sr.left) * k,
     w: stageEl.clientWidth,
     h: stageEl.clientHeight,
     // The press point (touch only) in the same stage-native space, so the clamp
-    // can keep the fingertip disc clear of the card.
-    ...(pointer != null ? { pointerY: (pointer.clientY - sr.top) * k } : {}),
+    // can keep the fingertip disc clear of the card on both axes.
+    ...(pointer != null
+      ? {
+          pointerY: (pointer.clientY - sr.top) * k,
+          pointerX: (pointer.clientX - sr.left) * k,
+        }
+      : {}),
   };
 }
 

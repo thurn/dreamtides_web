@@ -140,7 +140,11 @@ describe("computePopoverPosition — on-screen clamp", () => {
     assertFullyOnScreen(pos, WIDTH, HEIGHT);
   });
 
-  it("flips BELOW a top-edge anchor with no room above, keeping the gap", () => {
+  it("pins a top-edge anchor to the top of the screen — never below the press", () => {
+    // A top-edge trigger has no room above. The card pins to the top inset
+    // instead of dropping below the press area. A point anchor centered on a
+    // narrow screen leaves no room to sit the card beside it, so it stays
+    // centered at the top — but it is still above, never below.
     const pos = computePopoverPosition(
       anchor({ top: 20, bottom: 60 }),
       WIDTH,
@@ -148,9 +152,53 @@ describe("computePopoverPosition — on-screen clamp", () => {
       GAP,
       EDGE,
     );
-    // card top sits exactly GAP below the anchor bottom
-    expect(pos.top).toBe(60 + GAP);
+    expect(pos.top).toBe(EDGE);
+    // The card top is at the screen top, well above the anchor bottom (60).
+    expect(pos.top).toBeLessThan(60);
     assertFullyOnScreen(pos, WIDTH, HEIGHT);
+  });
+
+  it("shifts a top-edge anchor sideways to clear the press area", () => {
+    // A trigger hugging the LEFT edge near the top: no room above, so the card
+    // pins to the top and shifts to the RIGHT of the trigger rather than
+    // covering it or dropping below.
+    const pos = computePopoverPosition(
+      anchor({ x: 36, spanLeft: EDGE, spanRight: 60, top: 20, bottom: 68 }),
+      WIDTH,
+      HEIGHT,
+      GAP,
+      EDGE,
+    );
+    expect(pos.top).toBe(EDGE);
+    // Card left starts a uniform gap to the right of the trigger's right edge.
+    expect(pos.left).toBe(60 + GAP);
+    assertFullyOnScreen(pos, WIDTH, HEIGHT);
+  });
+
+  it("shifts to the side of the press area with the emptier half of the screen", () => {
+    // On a wide viewport a top trigger in the LEFT half places the card to its
+    // RIGHT (the emptier half); a trigger in the RIGHT half places it to the
+    // LEFT. Both keep the card at the top of the screen.
+    const wide = { w: 1200, h: 800 };
+    const leftTrigger = computePopoverPosition(
+      { x: 500, spanLeft: 460, spanRight: 540, top: 20, bottom: 120, ...wide },
+      WIDTH,
+      HEIGHT,
+      GAP,
+      EDGE,
+    );
+    expect(leftTrigger.top).toBe(EDGE);
+    expect(leftTrigger.left).toBe(540 + GAP); // to the RIGHT of the trigger
+
+    const rightTrigger = computePopoverPosition(
+      { x: 700, spanLeft: 660, spanRight: 740, top: 20, bottom: 120, ...wide },
+      WIDTH,
+      HEIGHT,
+      GAP,
+      EDGE,
+    );
+    expect(rightTrigger.top).toBe(EDGE);
+    expect(rightTrigger.left).toBe(660 - GAP - WIDTH); // to the LEFT of the trigger
   });
 
   it("clamps a left-edge anchor to the screen inset (not off-screen)", () => {
@@ -216,14 +264,45 @@ describe("computePopoverPosition — on-screen clamp", () => {
     assertFullyOnScreen(pos, WIDTH, HEIGHT);
   });
 
-  it("keeps the fingertip disc clear when the card flips below the press point", () => {
-    // A top-edge node with no room above flips below; the card top must clear the
-    // BOTTOM of the finger disc, so a press near the node's low edge still leaves
-    // the finger uncovered.
-    const near = anchor({ top: 20, bottom: 120, pointerY: 118 });
-    const pos = computePopoverPosition(near, WIDTH, HEIGHT, GAP, EDGE);
-    expect(pos.top).toBeGreaterThanOrEqual(118 + FINGER_RADIUS + GAP - 0.001);
-    assertFullyOnScreen(pos, WIDTH, HEIGHT);
+  it("keeps the fingertip disc clear when a top-edge press shifts the card sideways", () => {
+    // A top-edge node with no room above pins to the top and shifts sideways. A
+    // touch press near the node's RIGHT edge pokes the finger disc past the node
+    // box, so the horizontal obstacle the card clears folds in the disc: the card
+    // sits a uniform gap to the right of the finger disc, not just the node box.
+    const wide = { w: 1200, h: 800 };
+    const withPointer = computePopoverPosition(
+      {
+        x: 200,
+        spanLeft: 160,
+        spanRight: 240,
+        top: 20,
+        bottom: 120,
+        pointerX: 235,
+        pointerY: 118,
+        ...wide,
+      },
+      WIDTH,
+      HEIGHT,
+      GAP,
+      EDGE,
+    );
+    // Never below: pinned to the top of the screen.
+    expect(withPointer.top).toBe(EDGE);
+    // Card left clears the RIGHT of the finger disc (pointerX + radius) by the gap.
+    expect(withPointer.left).toBe(235 + FINGER_RADIUS + GAP);
+    // Strictly further right than the same trigger hovered (no finger disc).
+    const withoutPointer = computePopoverPosition(
+      { x: 200, spanLeft: 160, spanRight: 240, top: 20, bottom: 120, ...wide },
+      WIDTH,
+      HEIGHT,
+      GAP,
+      EDGE,
+    );
+    expect(withPointer.left).toBeGreaterThan(withoutPointer.left);
+    // Fully on the wide viewport it was computed against.
+    expect(withPointer.left).toBeGreaterThanOrEqual(EDGE);
+    expect(withPointer.left + WIDTH).toBeLessThanOrEqual(1200 - EDGE);
+    expect(withPointer.top + HEIGHT).toBeLessThanOrEqual(800 - EDGE);
   });
 
   it("ignores the press point on a fine-pointer hover (no pointerY)", () => {
