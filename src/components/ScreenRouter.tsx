@@ -206,7 +206,11 @@ function SiteScreen({
   // which are presented over the dreamscape's dimmed scene art.
   const tangoSite =
     runtimeConfig.uiVariant === "tango" && !isDesktop
-      ? tangoSiteScreenFor(site, { onViewDeck })
+      ? tangoSiteScreenFor(site, {
+          onViewDeck,
+          runtimeConfig,
+          onJourneyExplanationChange,
+        })
       : null;
   if (tangoSite !== null) {
     return tangoSite;

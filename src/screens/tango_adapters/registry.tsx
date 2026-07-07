@@ -10,6 +10,8 @@
 // never a Tango screen directly — the Tango screens are pure and hold no state.
 
 import type { ReactNode } from "react";
+import type { JourneyExplanation } from "../../journeys";
+import type { RuntimeConfig } from "../../runtime/runtime-config";
 import type { Screen, SiteState } from "../../types/quest";
 import { QuestStartScreenAdapter } from "./QuestStartScreenAdapter";
 import { DreamscapeScreenAdapter } from "./DreamscapeScreenAdapter";
@@ -25,6 +27,13 @@ import { DraftSiteScreenAdapter } from "./DraftSiteScreenAdapter";
 export interface TangoScreenHandlers {
   /** Open the deck-viewer overlay. */
   onViewDeck?: () => void;
+  /**
+   * Runtime flags parsed at app boot. Site migrations that replace legacy route
+   * implementations receive the same configuration the legacy route receives.
+   */
+  runtimeConfig?: RuntimeConfig;
+  /** Update the journey-debug explanation panel owned by App. */
+  onJourneyExplanationChange?: (explanation: JourneyExplanation | null) => void;
 }
 
 /**

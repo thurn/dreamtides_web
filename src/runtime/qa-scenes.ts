@@ -376,6 +376,7 @@ export const QA_SCENES: readonly QaScene[] = [
   DECK_VIEWER_SCENE,
   STARTING_DECK_SCENE,
   siteScene("draft", "Draft", "Draft"),
+  siteScene("essence", "Essence", "Essence"),
   siteScene("transfiguration", "Transfiguration", "Transfiguration"),
   siteScene(
     "transfiguration-enhanced",
@@ -398,6 +399,7 @@ export const QA_SCENES: readonly QaScene[] = [
   ),
   siteScene("dreamaugury", "Dream Augury", "DreamAugury"),
   siteScene("dreamaugury-enhanced", "Dream Augury (Enhanced)", "DreamAugury", true),
+  siteScene("reward", "Reward", "Reward"),
   siteScene("tempting", "Offer", "TemptingOffer"),
   siteScene("tempting-enhanced", "Offer (Enhanced)", "TemptingOffer", true),
   siteScene(

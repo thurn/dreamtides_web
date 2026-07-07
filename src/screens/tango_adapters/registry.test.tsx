@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { SiteState } from "../../types/quest";
+import { parseRuntimeConfig } from "../../runtime/runtime-config";
 import { tangoScreenFor, tangoSiteScreenFor } from "./registry";
 
 describe("tangoScreenFor", () => {
@@ -26,6 +27,19 @@ describe("tangoSiteScreenFor", () => {
   it("resolves the migrated Draft site to a Tango node", () => {
     expect(
       tangoSiteScreenFor({ type: "Draft", id: "site-1" } as SiteState),
+    ).not.toBeNull();
+  });
+
+  it("accepts router-owned site context needed by future site migrations", () => {
+    expect(
+      tangoSiteScreenFor(
+        { type: "Draft", id: "site-1" } as SiteState,
+        {
+          runtimeConfig: parseRuntimeConfig("?journey=classic"),
+          onJourneyExplanationChange: () => {},
+          onViewDeck: () => {},
+        },
+      ),
     ).not.toBeNull();
   });
 

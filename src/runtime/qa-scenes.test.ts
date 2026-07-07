@@ -199,3 +199,29 @@ describe("the atlas layer QA scenes", () => {
     expect(findQaScene("atlas1")).toBeNull();
   });
 });
+
+describe("site QA scenes", () => {
+  it("registers direct QA jumps for migration-critical site screens", () => {
+    const expectedSites = [
+      ["draft", "Draft"],
+      ["essence", "Essence"],
+      ["reward", "Reward"],
+    ] as const;
+
+    for (const [sceneId, siteType] of expectedSites) {
+      const state = buildQaScene(sceneId, makeQuestContent());
+      expect(state).not.toBeNull();
+      expect(state?.screen.type).toBe("site");
+      expect(state?.currentDreamscape).not.toBeNull();
+      expect(state?.activeSiteId).toBe(
+        state?.screen.type === "site" ? state.screen.siteId : null,
+      );
+      const node =
+        state?.currentDreamscape === null || state?.currentDreamscape === undefined
+          ? undefined
+          : state?.atlas.nodes[state.currentDreamscape];
+      const activeSite = node?.sites.find((site) => site.id === state?.activeSiteId);
+      expect(activeSite?.type).toBe(siteType);
+    }
+  });
+});

@@ -12,11 +12,21 @@ import type { ComponentType } from "react";
 import { atlasEdgeDemo } from "./demos/atlas-edge";
 import { atlasNodeDemo } from "./demos/atlas-node";
 import { buttonDemo } from "./demos/button";
+import { cardStatOrbDemo } from "./demos/card-stat-orb";
+import { cardTermDefinitionsDemo } from "./demos/card-term-definitions";
+import { dreamcallerPortraitDemo } from "./demos/dreamcaller-portrait";
 import { dreamsignDemo } from "./demos/dreamsign";
+import { essenceValueDemo } from "./demos/essence-value";
 import { gameCardDemo } from "./demos/game-card";
+import { glossaryDefinitionCardDemo } from "./demos/glossary-definition-card";
+import { glowIconDemo } from "./demos/glow-icon";
 import { groupPanelDemo } from "./demos/group-panel";
+import { hoverPopoverDemo } from "./demos/hover-popover";
+import { hoverZoomCardDemo } from "./demos/hover-zoom-card";
 import { infoCardDemo } from "./demos/info-card";
+import { leaveSiteButtonDemo } from "./demos/leave-site-button";
 import { motesDemo } from "./demos/motes";
+import { pipBadgeDemo } from "./demos/pip-badge";
 import { pressableDemo } from "./demos/pressable";
 import { questStatusBarDemo } from "./demos/quest-status-bar";
 import { resourceChipDemo } from "./demos/resource-chip";
@@ -112,7 +122,9 @@ export interface TangoComponent {
 export const TANGO_COMPONENTS: TangoComponent[] = [
   pressableDemo,
   resourceChipDemo,
+  essenceValueDemo,
   buttonDemo,
+  leaveSiteButtonDemo,
   segmentedControlDemo,
   selectDemo,
   statTileDemo,
@@ -120,10 +132,18 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   tideDiscDemo,
   motesDemo,
   infoCardDemo,
+  hoverPopoverDemo,
   groupPanelDemo,
+  glowIconDemo,
+  pipBadgeDemo,
   questStatusBarDemo,
+  dreamcallerPortraitDemo,
   rulesTextDemo,
   gameCardDemo,
+  hoverZoomCardDemo,
+  cardTermDefinitionsDemo,
+  glossaryDefinitionCardDemo,
+  cardStatOrbDemo,
   atlasNodeDemo,
   atlasEdgeDemo,
   dreamsignDemo,

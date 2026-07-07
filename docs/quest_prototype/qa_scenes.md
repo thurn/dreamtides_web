@@ -80,8 +80,11 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `dreamcaller-select`     | Choose-your-Dreamcaller screen a run opens on (`questStart`), without the lobby |
 | `atlas`                  | Dream Atlas resting screen at the first frontier the UI labels "Layer II" (one dreamscape completed), with a generated boss node and Apollyon incarnation (atlas UI + boss-preview QA); same screen as `atlas2` |
 | `atlas2` … `atlas7`      | Dream Atlas resting screen the UI labels "Layer N", with the available frontier on column N (see "Atlas layers" below) |
+| `dreamscape`             | Starter dreamscape overview with site nodes and the QuestStatusBar |
 | `deckviewer`             | Deck viewer overlay opened over the starter dreamscape (deck grid + press-and-hold zoom) |
 | `startingdeck`           | Starting-deck reveal popup over the starter dreamscape (frosted-glass chrome QA) |
+| `draft`                  | Draft site                                                       |
+| `essence`                | Essence site                                                     |
 | `transfiguration`        | Transfiguration site                                             |
 | `transfiguration-enhanced` | Transfiguration site, enhanced                                |
 | `duplication`            | Duplication site                                                |
@@ -94,6 +97,7 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `dreamsignmarket-enhanced` | Dreamsign Market site, enhanced (free restock)                |
 | `dreamaugury`            | Dream Augury site                                               |
 | `dreamaugury-enhanced`   | Dream Augury site, enhanced flag (same UI as regular)           |
+| `reward`                 | Reward site                                                      |
 | `tempting`               | Tempting Offer site                                             |
 | `tempting-enhanced`      | Tempting Offer site, enhanced (Enhanced badge)                  |
 | `dreamsign-revelation`   | Dreamsign Revelation site                                       |
