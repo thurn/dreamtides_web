@@ -321,6 +321,96 @@ filed. The drift in this audit is the kind that trigger cannot see:
 
 ---
 
+## 7. Proposed lint and integrity checks
+
+The existing suite (`no-hardcoded-values`, `no-untokenized-lengths`,
+`no-escape-hatch-props`, `no-raw-interactive-elements`,
+`valid-token-references`, the boundary and adapter rules) guards the
+*product* tier against leaving the system, and it held — the 07-05
+postmortem verified it under pressure. But every failure in this audit
+lives where that suite deliberately doesn't look: inside the exempt
+`src/tango/components/` tier, or in cross-file properties a single-file
+ESLint rule cannot see. Two batches follow — each entry names the finding
+it would have caught.
+
+### New ESLint rules (single-file)
+
+- **`no-inline-glass`** — a raw `backdropFilter` / `blur(Npx)` /
+  `saturate(N)` literal may appear only in the one glass material module;
+  every other file spreads the exported style. Would have caught:
+  `glassTrack()`'s byte-identical copy of `glassSurfaceStyle()` (§2).
+  CardView's token-driven `blur(var(--cv-textbox-blur))` passes once that
+  token moves into Tango.
+- **`no-raw-icon-classes`** — Boxicons class strings (`bxf`, `bx-*`) may
+  appear only in `glyph.ts`; everything else renders a `Glyph` through
+  `GlowIcon`/`PipBadge`. Would have caught: QuestStatusBar's raw
+  `<i className="bxf bx-x">` close button (§1) and the duplicated
+  `Button`/`ResourceChip` icon tables (§3, by forcing the shared economy
+  spec into the registry). A generation-time companion check that every
+  registered glyph class exists in the vendored stylesheet would close the
+  blank-icon class already filed in pre-existing-issues (`bx-refresh`).
+- **`no-adhoc-press-scale`** — a `scale(` inside a transform outside
+  `Pressable.tsx` must reference the exported `HOVER_SCALE`/`PRESS_SCALE`
+  constants, with a companion check for `transform: scale(` in
+  `src/tango/**/*.css`. Would have caught: `AtlasNode`'s 1.07 and
+  `SiteNode`'s 1.08 hand-rolled hover scales (§4).
+- **`no-numeric-style-props`** — an exported component props interface in
+  `src/tango/components/` may not declare a number-typed visual knob
+  (`size`, `gap`, `scale`, `padding`, `radius`, `blur`, `opacity`);
+  variants are enumerated. This is the component-API complement of
+  `no-escape-hatch-props`, which today catches `className`/`style` shapes
+  but not open numbers. Would have caught: `ResourceChip`'s grandfathered
+  `size`/`gap` (§3). The box-measure carve-out is untouched — that
+  applies to caller wrappers, not component APIs.
+- **Extend `no-raw-interactive-elements` into the components tier** — a
+  `role="button"` div or raw `<button>` with hand-rolled key handling
+  outside `Pressable.tsx` errors. Would have caught: `AtlasNode`'s raw
+  `role="button"` div with manual Enter/Space handling (§4).
+- **Extend `valid-token-references` with ownership** — a `var(--x)` inside
+  `src/tango/` must resolve to a token *defined in* `tango-tokens.css`,
+  not merely to some stylesheet in the app. Would have caught:
+  `--cv-textbox-blur`, defined only in the legacy `src/index.css` (§2).
+
+### Project-level integrity checks (cross-file)
+
+ESLint sees one file at a time; these run as unit tests or inside
+`npm run regenerate-assets`, where cross-file state is cheap.
+
+- **`no-orphan-tokens`** — every semantic token in `tango-tokens.css` has
+  at least one reference outside the token file and its generated mirror.
+  Would have flagged all 37 dead tokens (§4) at the moment each became
+  orphaned, forcing the delete-or-wire decision when context was fresh.
+- **`no-ghost-components`** — every docs-registry entry has at least one
+  real consumer (imports outside `src/tango/docs/` and tests), with an
+  explicit `status: "incubating"` field in the demo entry as the sanctioned
+  escape for a component documented deliberately ahead of adoption —
+  rendered as a visible badge in the catalog rather than silently passing.
+  Would have caught: `StatTile` and `TidePill` (§3). The adoption-count
+  generator from §3 supplies the data; this check is its enforcement arm.
+- **Duplicate-literal detector** — an identical visual literal (color,
+  gradient, shadow, filter string above a trivial length) declared in more
+  than one file under `src/tango/` errors, printing both declaration sites.
+  This is the general form of the audit's worst finding and of the tide-disc
+  postmortem's triplicated diameter: it would have caught `glassTrack()`'s
+  copied recipe, the four dark-disc gradients, and the thrice-pasted
+  Dreamcaller monogram gradient (§2, §4, §5). Cheap to implement as a test
+  over source text; a minimum-length threshold keeps `#fff`-class noise out.
+
+Suggested landing order: the integrity trio first (duplicate-literal
+detector, `no-orphan-tokens`, `no-ghost-components`) — those three catch
+everything that actually bit this week — then `no-raw-icon-classes` and
+`no-numeric-style-props`, which close recurring classes, then the rest as
+touch-ups when their files are next open.
+
+Two classes stay deliberately unlinted: doctrine comments ("the ONE X")
+are prose claims — §6's re-grep-on-touch convention is the right tool —
+and demo fixtures re-typing production constants is better solved by
+importing the constants (§3) than by a rule. The `no-name-keyed-cards`
+rule already proposed in pre-existing-issues is a separate, still-open
+concern.
+
+---
+
 ## Action items
 
 Priority 1 — the system offerings the next screen will need:
@@ -348,6 +438,9 @@ Priority 2 — honesty and convergence:
       `DreamscapeMotes` → `Motes`. (§5)
 - [ ] Document the workhorses in adoption order (`DreamcallerPortrait`,
       `HoverPopover`, `HoverZoomCard`, `GlowIcon`, `rich-text`, …). (§3)
+- [ ] Land the integrity-check trio: duplicate-literal detector,
+      `no-orphan-tokens`, `no-ghost-components`; then the new ESLint rules
+      in §7's suggested order. (§7)
 
 Priority 3 — token and structure hygiene:
 
