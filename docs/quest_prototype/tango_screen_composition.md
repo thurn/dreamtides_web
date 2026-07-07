@@ -55,6 +55,21 @@ When a reveal is portaled to `document.body`, it carries its own `.tango` token
 scope and uses viewport-aware placement. Do not rely on a parent screen's
 stacking context for portaled content.
 
+## Reveal Surfaces
+
+Use `InfoCard` for canonical game-object explanations: tide definitions,
+Dreamcaller summaries, dreamsign details, card glossary terms, site previews,
+and HUD press reveals. `InfoCard.PressInfo`, `InfoCard.PressPopover`, and
+`usePressReveal` are the default interaction engine when the same reveal must
+work on fine-pointer hover and touch press.
+
+Use `HoverPopover` for fine-pointer-only helper previews whose trigger or
+content is screen-owned: deck-hover zooms, dense row previews, and side-mounted
+definition stacks. A `HoverPopover` body should still be a canonical Tango
+surface, usually `InfoCard`, `GlossaryDefinitionCard`, `DreamsignInfoCard`, or
+`HoverZoomCard`, so placement can be screen-specific while visual language stays
+shared.
+
 ## Loading And Error States
 
 A Tango screen should render a complete state for each async boundary it owns:
