@@ -19,7 +19,12 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 import { AtlasNode, type AtlasNodeView } from "./AtlasNode";
-import { InfoCard, infoCardScale, type AnchorRect } from "../overlay/InfoCard";
+import {
+  InfoCard,
+  infoCardScale,
+  useInfoCardMobileFraction,
+  type AnchorRect,
+} from "../overlay/InfoCard";
 import { richText } from "../card/rich-text";
 import { type ArtRef } from "../../primitives/art";
 
@@ -184,6 +189,7 @@ export function AtlasNodeReveal({
 }: AtlasNodeRevealProps): React.ReactElement {
   const { view, card } = item;
   const isAvailable = view.node.state === "available";
+  const mobileFraction = useInfoCardMobileFraction();
   const { shown, fine, begin, end, enter, leave, heldPastTap, pointerRef } =
     usePressReveal();
   const faceRef = React.useRef<HTMLDivElement>(null);
@@ -243,7 +249,7 @@ export function AtlasNodeReveal({
           // dreamsign pair fits side by side there; at native (desktop) size the
           // pair stacks vertically instead. Ask InfoCard whether we are in the
           // scaled-down mobile size for this screen width.
-          const isMobile = infoCardScale(anchor.w) < 1;
+          const isMobile = infoCardScale(anchor.w, mobileFraction) < 1;
           const layout: "row" | "stack" =
             isMobile && card.dreamsign !== null ? "row" : "stack";
           return createPortal(

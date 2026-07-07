@@ -103,18 +103,59 @@ const MOBILE_WIDTH_FRACTION = 0.45;
 
 /**
  * The on-screen scale (≤ 1) for an info card on a `viewportWidth`-px screen:
- * shrink the fixed native width to {@link MOBILE_WIDTH_FRACTION} of the screen,
- * never enlarging past native size, so desktop stays 1. PURE. Every info card
- * applies this ONE rule (via a CSS `zoom`, so the card's layout box shrinks
- * with it), which is what keeps their on-screen size consistent everywhere.
- * Exported so a surface laying out around a reveal (the atlas node/dreamsign
- * pair) can ask whether cards are in their scaled-down mobile size.
+ * shrink the fixed native width to `fraction` of the screen, never enlarging
+ * past native size, so desktop stays 1. PURE. Every info card applies this ONE
+ * rule (via a CSS `zoom`, so the card's layout box shrinks with it), which is
+ * what keeps their on-screen size consistent everywhere. Exported so a surface
+ * laying out around a reveal (the atlas node/dreamsign pair) can ask whether
+ * cards are in their scaled-down mobile size.
  */
-export function infoCardScale(viewportWidth: number): number {
+export function infoCardScale(
+  viewportWidth: number,
+  fraction: number = MOBILE_WIDTH_FRACTION,
+): number {
   if (!(viewportWidth > 0)) {
     return 1;
   }
-  return Math.min(1, (MOBILE_WIDTH_FRACTION * viewportWidth) / CARD_W);
+  return Math.min(1, (fraction * viewportWidth) / CARD_W);
+}
+
+/* ----------------------------------------------------------------------------
+ * DEV-ONLY: a live-tunable override of MOBILE_WIDTH_FRACTION, so the mobile
+ * scale can be dialed in from InfoCardScaleTweakPanel (see the tango skill's
+ * tweaks-panel loop). In production nothing calls the setter, so the value
+ * stays at MOBILE_WIDTH_FRACTION and behaviour is unchanged. Once the value is
+ * chosen this whole block, the panel, and its mount are removed and the number
+ * is baked into MOBILE_WIDTH_FRACTION above.
+ * ------------------------------------------------------------------------- */
+/** The baked default, exposed so the tweak panel can offer a "reset". */
+export const MOBILE_WIDTH_FRACTION_DEFAULT = MOBILE_WIDTH_FRACTION;
+
+let devMobileFraction = MOBILE_WIDTH_FRACTION;
+const devMobileFractionListeners = new Set<() => void>();
+
+/** DEV: set the live mobile width fraction and re-render every info card. */
+export function setInfoCardMobileFraction(fraction: number): void {
+  devMobileFraction = fraction;
+  devMobileFractionListeners.forEach((listener) => listener());
+}
+
+function getInfoCardMobileFraction(): number {
+  return devMobileFraction;
+}
+
+function subscribeInfoCardMobileFraction(callback: () => void): () => void {
+  devMobileFractionListeners.add(callback);
+  return () => devMobileFractionListeners.delete(callback);
+}
+
+/** DEV: the live mobile width fraction, re-rendering on tweak-panel changes. */
+export function useInfoCardMobileFraction(): number {
+  return React.useSyncExternalStore(
+    subscribeInfoCardMobileFraction,
+    getInfoCardMobileFraction,
+    getInfoCardMobileFraction,
+  );
 }
 
 /** Screen inset (px): the popover is clamped to never come within this of any
@@ -650,7 +691,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
  * setRevealDelay / SITE_DISC`.
  */
 function InfoCardComponent(props: InfoCardProps): React.ReactElement {
-  const scale = infoCardScale(useViewportWidth());
+  const scale = infoCardScale(useViewportWidth(), useInfoCardMobileFraction());
   return (
     <div
       style={{

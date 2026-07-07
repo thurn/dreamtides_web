@@ -132,6 +132,14 @@ if (pathname === "/editor" || pathname === "/cards") {
     import("./runtime/runtime-config"),
   ]);
 
+  // DEV-ONLY: the floating panel for dialing in the mobile info-card scale.
+  // Removed once the value is baked into MOBILE_WIDTH_FRACTION.
+  const InfoCardScaleTweakPanel = import.meta.env.DEV
+    ? (
+        await import("./tango/screens/devtools/InfoCardScaleTweakPanel")
+      ).InfoCardScaleTweakPanel
+    : null;
+
   const runtimeConfig = parseRuntimeConfig(window.location.search);
 
   // Standalone component demos for browser QA. Mount with
@@ -140,14 +148,17 @@ if (pathname === "/editor" || pathname === "/cards") {
   const demoParam = new URLSearchParams(window.location.search).get("demo");
 
   renderStrict(
-    demoParam === "hud-dreamsign-layout" ? (
-      <HudDreamsignLayoutDemo />
-    ) : demoParam === "journey-hover" ? (
-      <JourneyHoverCardDemo />
-    ) : demoParam === "transfiguration" ? (
-      <TransfigurationCardDemo />
-    ) : (
-      <App runtimeConfig={runtimeConfig} />
-    ),
+    <>
+      {demoParam === "hud-dreamsign-layout" ? (
+        <HudDreamsignLayoutDemo />
+      ) : demoParam === "journey-hover" ? (
+        <JourneyHoverCardDemo />
+      ) : demoParam === "transfiguration" ? (
+        <TransfigurationCardDemo />
+      ) : (
+        <App runtimeConfig={runtimeConfig} />
+      )}
+      {InfoCardScaleTweakPanel && <InfoCardScaleTweakPanel />}
+    </>,
   );
 }
