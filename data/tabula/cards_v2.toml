@@ -2346,7 +2346,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Ritual", "Art Rework", "July9"]
+tags = ["Ritual", "Art Rework", "July9", "Art OK"]
 image-number = 591626951
 art-owned = false
 card-number = 126
@@ -4420,7 +4420,7 @@ card-number = 238
 art = { x = 0, y = 0.398, scale = 1.17 }
 
 [[cards]]
-name = "Derelict Voyage"
+name = "Secrets of the Deep"
 mtg-name = "Chain Lightning"
 id = "6f0b709d-0f57-46de-bfba-6a8b4df2b991"
 rendered-text = """
@@ -4434,8 +4434,8 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July9"]
-image-number = 721324504
+tags = ["Art Rework", "July9", "Art OK"]
+image-number = 2131591273
 art-owned = false
 card-number = 239
 
@@ -4478,7 +4478,7 @@ art-owned = false
 card-number = 241
 
 [[cards]]
-name = "Summons of the Bonded"
+name = "Judgment of the Blade"
 mtg-name = "Ancient Grudge"
 id = "41c14462-86b9-42a4-8a61-859d59ffa466"
 rendered-text = "Dissolve an enemy warrior."
@@ -4489,10 +4489,11 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = ""
-tags = ["Removal", "Art Rework", "July9"]
-image-number = 1570031575
+tags = ["Removal", "Art Rework", "July9", "Art OK"]
+image-number = 2299755783
 art-owned = true
 card-number = 242
+art = { x = 0, y = 0.976, scale = 1.16 }
 
 [[cards]]
 name = "The Calling Night"
@@ -4919,19 +4920,19 @@ art-owned = false
 card-number = 265
 
 [[cards]]
-name = "Crumbling Covenant"
+name = "Cragfall"
 mtg-name = "Mana Leak"
 id = "795a7b54-40d5-42f9-bc3a-9e92bc938c2d"
-rendered-text = "Prevent a played card unless the opponent abandons a ≥2● cost character."
-energy-cost = 2
+rendered-text = "Prevent a played card unless the opponent abandons a non-figment character."
+energy-cost = 1
 card-type = "Event"
 subtype = ""
 rarity = ""
 is-fast = true
 is-interrupt = true
 spark = ""
-tags = ["Counterspell", "Art Rework", "July9"]
-image-number = 2639857435
+tags = ["Counterspell", "Art Rework", "July9", "Art OK"]
+image-number = 1239919309
 art-owned = false
 card-number = 266
 
@@ -6825,13 +6826,13 @@ art-owned = false
 card-number = 367
 
 [[cards]]
-name = "Forsaken Skyline"
+name = "Annihilation from Below"
 mtg-name = "Blast from the Past"
 id = "9d14885c-a757-40cc-b43e-87dbec7ec379"
 rendered-text = '''
 Dissolve a ≤2✦ enemy.
 
-Reclaim 4●. When you discard this card, it gains reclaim 1● instead.
+When you discard this card, it gains reclaim 0●.
 '''
 energy-cost = 2
 card-type = "Event"
@@ -6840,10 +6841,11 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = ""
-tags = ["Removal", "Art Rework", "July9"]
-image-number = 336703103
+tags = ["Removal", "Art Rework", "July9", "Art OK"]
+image-number = 1722480805
 art-owned = false
 card-number = 368
+art = { x = -0.047, y = 1, scale = 1.1 }
 
 [[cards]]
 name = "Cinderblade Legionnaire"
@@ -7181,7 +7183,7 @@ card-number = 386
 art = { x = -0.042, y = -0.276, scale = 1.37 }
 
 [[cards]]
-name = "Aftermath Bloom"
+name = "Temporal Aperture"
 mtg-name = "Tinker"
 id = "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c"
 rendered-text = "To play this event, abandon a warrior. Discover a warrior with higher cost, then materialize it."
@@ -7192,11 +7194,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Discover", "Art Rework", "July9"]
-image-number = 789290998
+tags = ["Discover", "Art Rework", "July9", "Art OK"]
+image-number = 2430444883
 art-owned = false
 card-number = 387
-art = { x = 0, y = 0.032, scale = 1.17 }
+art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Evacuation Enforcer"
@@ -7582,7 +7584,7 @@ card-number = 407
 art = { x = 0.252, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Cragfall"
+name = "Overwhelm"
 mtg-name = "Mana Drain"
 id = "1654d50f-815d-4172-b46b-8baa34a124db"
 rendered-text = "Prevent a played card, then put that card into your hand."
@@ -7593,10 +7595,11 @@ rarity = ""
 is-fast = true
 is-interrupt = true
 spark = ""
-tags = ["Counterspell", "Art Rework", "July9"]
-image-number = 1239919309
+tags = ["Counterspell", "Art Rework", "July9", "Art OK"]
+image-number = 1042405558
 art-owned = true
 card-number = 408
+art = { x = 0, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Turquoise Aurelia"
@@ -7623,7 +7626,7 @@ art = { x = 0, y = 0.266, scale = 1.17 }
 name = "Break the Sequence"
 mtg-name = "Remand"
 id = "475fcc5b-c82d-4ef7-8020-90a8aeb2df53"
-rendered-text = "Prevent a played card, then return it to the opponent's hand. Draw a card."
+rendered-text = "Prevent a played card. Each player draws a card."
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -7631,10 +7634,11 @@ rarity = ""
 is-fast = true
 is-interrupt = true
 spark = ""
-tags = ["Counterspell", "Art Rework", "July9"]
+tags = ["Counterspell", "Art Rework", "July9", "Art OK"]
 image-number = 1200949264
 art-owned = true
 card-number = 410
+art = { x = 0.126, y = 0.398, scale = 1.17 }
 
 [[cards]]
 name = "Amber Aurelia"
@@ -7978,7 +7982,7 @@ art-owned = false
 card-number = 428
 
 [[cards]]
-name = "Conjured Zenith"
+name = "Together Against the Tide"
 mtg-name = "Lingering Souls"
 id = "491e4233-0911-46ed-bced-0498e69b5bba"
 rendered-text = """
@@ -7992,10 +7996,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Figment Maker", "Art Rework", "July9"]
-image-number = 454046968
+tags = ["Figment Maker", "Art Rework", "July9", "Art OK"]
+image-number = 1687930282
 art-owned = false
 card-number = 429
+art = { x = 0.042, y = 1, scale = 1.1 }
 
 [[cards]]
 name = "Dawnhorn Elder"
@@ -8432,7 +8437,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July9"]
+tags = ["Art Rework", "July9", "Art OK"]
 image-number = 644603677
 art-owned = true
 card-number = 453

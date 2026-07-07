@@ -370,7 +370,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 2× Pyrestone Avatar
 - 2× Fargazer
 - 2× Ash Harbinger
-- 2× Forsaken Skyline
+- 2× Annihilation from Below
 - 2× Silent Gatherer
 - 2× Wasteland Arbitrator
 - 2× Rubble Diviner
@@ -415,7 +415,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Part the Veil
 - 1× Entropy Spike
 - 1× Wreckborn
-- 1× Derelict Voyage
+- 1× Secrets of the Deep
 - 1× Clockwork Salvager
 - 1× The Devourer
 - 1× Verdant Wayfarer
@@ -644,7 +644,7 @@ Tide-sig-06 is a heavily character-weighted deck (84 of 110 copies are character
 - 1× Seek Answers
 - 1× Pattern Seeker
 - 1× Astral Angler
-- 1× Forsaken Skyline
+- 1× Annihilation from Below
 - 1× Kindred Sparks
 - 1× Blight Weaver
 - 1× Defiant Holdout
@@ -1042,7 +1042,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Pilgrim of Old Stones
 - 1× Apocalypse
 - 1× Shatter the Frail
-- 1× Crumbling Covenant
+- 1× Cragfall
 - 1× Duskwall Delver
 - 1× Collapse Protocol
 - 1× Resilient Wanderer
@@ -1138,7 +1138,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Molten Duel
 - 1× Part the Veil
 - 1× Archive of the Forgotten
-- 1× Derelict Voyage
+- 1× Secrets of the Deep
 - 1× Clockwork Salvager
 - 1× The Devourer
 - 1× Verdant Wayfarer
@@ -1158,7 +1158,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Somber Flockmaster
 - 1× Ashlight Caller
 - 1× Pattern Seeker
-- 1× Forsaken Skyline
+- 1× Annihilation from Below
 - 1× Revelation Explorer
 - 1× Silent Gatherer
 - 1× Across the Void
@@ -1194,7 +1194,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 2× Part the Veil
 - 2× Grotto Seer
 - 2× Pyrestone Avatar
-- 2× Forsaken Skyline
+- 2× Annihilation from Below
 - 2× Torchbearer of the Abyss
 - 2× Rubble Diviner
 - 2× Pinnacle Ascendant
@@ -1239,7 +1239,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Chronicle Reclaimer
 - 1× Archive of the Forgotten
 - 1× Wreckborn
-- 1× Derelict Voyage
+- 1× Secrets of the Deep
 - 1× Clockwork Salvager
 - 1× The Devourer
 - 1× Verdant Wayfarer
@@ -1346,7 +1346,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Part the Veil
 - 1× Chronicle Reclaimer
 - 1× Mystic Boatman
-- 1× Derelict Voyage
+- 1× Secrets of the Deep
 - 1× Clockwork Salvager
 - 1× Radiants' Captain
 - 1× Shatterpoint Agent
@@ -1366,7 +1366,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Keeper of the Tides
 - 1× Ashlight Caller
 - 1× Pattern Seeker
-- 1× Forsaken Skyline
+- 1× Annihilation from Below
 - 1× Spiral Offering
 - 1× Across the Void
 - 1× Torchbearer of the Abyss
@@ -1773,7 +1773,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Inferno's Herald
 - 1× Gloomantler
 - 1× Standard Bearer
-- 1× Cragfall
+- 1× Overwhelm
 - 1× The Deathsworn
 - 1× Intermezzo Balladeer
 - 1× Emberfang
@@ -1808,7 +1808,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× He Who Lies Dreaming
 - 1× Spirit Field Reclaimer
 - 1× Blade of Unity
-- 1× Crumbling Covenant
+- 1× Cragfall
 - 1× Speaker for the Forgotten
 - 1× Company Commander
 - 1× Dreadmount Sovereign
@@ -1831,7 +1831,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Assault Trooper
 - 1× Warrior's Path
 - 1× Wired Duelist
-- 1× Aftermath Bloom
+- 1× Temporal Aperture
 - 1× Vanguard Charger
 - 1× Tethered Hollow
 - 1× Blood Moon Ronin
@@ -1878,7 +1878,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 1× Inferno's Herald
 - 1× Standard Bearer
 - 1× Defiant Parry
-- 1× Cragfall
+- 1× Overwhelm
 - 1× The Deathsworn
 - 1× Intermezzo Balladeer
 - 1× Stratospheric Voyage
@@ -1929,7 +1929,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 1× Veil Shatter
 - 1× Warrior's Path
 - 1× Wired Duelist
-- 1× Aftermath Bloom
+- 1× Temporal Aperture
 - 1× Blood Moon Ronin
 - 1× Advance Gunner
 - 1× Forge Inheritor
@@ -2024,7 +2024,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× Fangbound
 - 1× Assault Trooper
 - 1× Wired Duelist
-- 1× Aftermath Bloom
+- 1× Temporal Aperture
 - 1× Tethered Hollow
 - 1× Blood Moon Ronin
 - 1× Forge Inheritor
@@ -2558,7 +2558,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 1× Urban Cipher
 - 1× Ash Harbinger
 - 1× Pattern Seeker
-- 1× Forsaken Skyline
+- 1× Annihilation from Below
 - 1× Blight Weaver
 - 1× Silent Gatherer
 - 1× Gateweaver
@@ -2579,7 +2579,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 
 This tide is built almost entirely of warriors (43 of 45 cards) and runs two copies of its central sacrifice-for-energy piece, which converts an abandoned warrior into 2● on demand. That energy feeds a layered cost-reduction suite — one warrior that makes all warriors cost 1● less, another that cuts the first warrior each turn by 3● — letting the deck chain multiple warriors into play in a single turn. Cheap figment-producers (a warrior that spawns a 1✦ figment when played, a Tinkerer that exchanges an abandoned warrior for a figment one step up the curve) supply fresh bodies to sacrifice without depleting the real board. The accumulated energy and board width pay off through wave-pump effects: a Dawn trigger that gives every allied warrior +1✦, a Support character that scales the bonus by headcount, and a fast event that grants a single ally +1✦ per allied warrior as an instant combat trick. Two copies of a zero-cost warrior that gains 1● each Dawn with three allies present reward keeping the board full even after sacrificing. Compared to the nearest sibling (tide-fac-16), which also runs wide warriors but focuses on passive energy trickle and Support-based +✦ amplification without a dedicated sacrifice mechanism, this tide is more aggressive about converting warriors into energy up front and reinvesting immediately; compared to tide-fac-17, which profits from warriors dying to enemy dissolution by chaining void-return triggers, this tide initiates the sacrifice itself as a deliberate resource decision rather than reacting to the opponent's board removal.
 
-- 2× Forsaken Skyline
+- 2× Annihilation from Below
 - 1× Fell the Mighty
 - 1× Call of Corruption
 - 1× Duneguard Captain
@@ -2945,7 +2945,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Seeker for the Way
 - 1× Part the Veil
 - 1× Mystic Boatman
-- 1× Derelict Voyage
+- 1× Secrets of the Deep
 - 1× The Devourer
 - 1× Verdant Wayfarer
 - 1× Grotto Seer
@@ -2956,7 +2956,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Ash Harbinger
 - 1× Keeper of the Tides
 - 1× Pattern Seeker
-- 1× Forsaken Skyline
+- 1× Annihilation from Below
 - 1× Spiral Offering
 - 1× Silent Gatherer
 - 1× Torchbearer of the Abyss
@@ -3381,7 +3381,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Gleamharvester
 - 1× Urban Cipher
 - 1× Ash Harbinger
-- 1× Forsaken Skyline
+- 1× Annihilation from Below
 - 1× Blight Weaver
 - 1× Silent Gatherer
 - 1× Gateweaver
@@ -3403,7 +3403,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 
 This tide is built almost entirely of warriors (43 of 45 cards) and runs two copies of its central sacrifice-for-energy piece, which converts an abandoned warrior into 2● on demand. That energy feeds a layered cost-reduction suite — one warrior that makes all warriors cost 1● less, another that cuts the first warrior each turn by 3● — letting the deck chain multiple warriors into play in a single turn. Cheap figment-producers (a warrior that spawns a 1✦ figment when played, a Tinkerer that exchanges an abandoned warrior for a figment one step up the curve) supply fresh bodies to sacrifice without depleting the real board. The accumulated energy and board width pay off through wave-pump effects: a Dawn trigger that gives every allied warrior +1✦, a Support character that scales the bonus by headcount, and a fast event that grants a single ally +1✦ per allied warrior as an instant combat trick. Two copies of a zero-cost warrior that gains 1● each Dawn with three allies present reward keeping the board full even after sacrificing. Compared to the nearest sibling (tide-fac-16), which also runs wide warriors but focuses on passive energy trickle and Support-based +✦ amplification without a dedicated sacrifice mechanism, this tide is more aggressive about converting warriors into energy up front and reinvesting immediately; compared to tide-fac-17, which profits from warriors dying to enemy dissolution by chaining void-return triggers, this tide initiates the sacrifice itself as a deliberate resource decision rather than reacting to the opponent's board removal.
 
-- 2× Forsaken Skyline
+- 2× Annihilation from Below
 - 1× Fell the Mighty
 - 1× Call of Corruption
 - 1× Duneguard Captain
@@ -3916,7 +3916,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Urban Cipher
 - 1× Ash Harbinger
 - 1× Pattern Seeker
-- 1× Forsaken Skyline
+- 1× Annihilation from Below
 - 1× Silent Gatherer
 - 1× Torchbearer of the Abyss
 - 1× Aerie Defender

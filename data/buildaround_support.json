@@ -76,7 +76,7 @@
       ]
     },
     "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c": {
-      "name": "Aftermath Bloom",
+      "name": "Temporal Aperture",
       "needs": [
         {
           "theme": "warriors",
@@ -755,7 +755,7 @@
       ]
     },
     "491e4233-0911-46ed-bced-0498e69b5bba": {
-      "name": "Conjured Zenith",
+      "name": "Together Against the Tide",
       "needs": [],
       "supports": [
         "figments",
@@ -788,7 +788,7 @@
       ]
     },
     "1654d50f-815d-4172-b46b-8baa34a124db": {
-      "name": "Cragfall",
+      "name": "Overwhelm",
       "needs": [],
       "supports": [
         "events"
@@ -827,7 +827,7 @@
       ]
     },
     "795a7b54-40d5-42f9-bc3a-9e92bc938c2d": {
-      "name": "Crumbling Covenant",
+      "name": "Cragfall",
       "needs": [],
       "supports": [
         "events"
@@ -931,7 +931,7 @@
       ]
     },
     "6f0b709d-0f57-46de-bfba-6a8b4df2b991": {
-      "name": "Derelict Voyage",
+      "name": "Secrets of the Deep",
       "needs": [],
       "supports": [
         "events",
@@ -1665,7 +1665,7 @@
       ]
     },
     "9d14885c-a757-40cc-b43e-87dbec7ec379": {
-      "name": "Forsaken Skyline",
+      "name": "Annihilation from Below",
       "needs": [
         {
           "theme": "discard",
@@ -4077,7 +4077,7 @@
       ]
     },
     "41c14462-86b9-42a4-8a61-859d59ffa466": {
-      "name": "Summons of the Bonded",
+      "name": "Judgment of the Blade",
       "needs": [],
       "supports": [
         "events"

@@ -102,7 +102,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Veil of the Wastes
 - 1× Duskreaper
 - 1× Hope's Vanguard
-- 1× Conjured Zenith
+- 1× Together Against the Tide
 - 1× Collateral Damage
 - 1× Price of Redemption
 - 1× Twilight Reclaimer
@@ -364,7 +364,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 2× Pyrestone Avatar
 - 2× Twice-Lit Portal
 - 2× Seek Answers
-- 2× Forsaken Skyline
+- 2× Annihilation from Below
 - 2× Rubble Diviner
 - 2× Pinnacle Ascendant
 - 2× Wandering Archivist
@@ -408,7 +408,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Desperation
 - 1× Mystic Boatman
 - 1× Wreckborn
-- 1× Derelict Voyage
+- 1× Secrets of the Deep
 - 1× The Devourer
 - 1× Verdant Wayfarer
 - 1× Fleeting Reunion
@@ -633,7 +633,7 @@ Tide-sig-06 is a heavily character-weighted deck (84 of 110 copies are character
 - 1× Emberwatch Veteran
 - 1× Pyrokinetic Surge
 - 1× Pattern Seeker
-- 1× Forsaken Skyline
+- 1× Annihilation from Below
 - 1× Kindred Sparks
 - 1× Defiant Holdout
 - 1× Torchbearer of the Abyss
@@ -885,7 +885,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Call of Corruption
 - 1× Pulse of Sacrifice
 - 1× Threadbreaker
-- 1× Cragfall
+- 1× Overwhelm
 - 1× Blood Sun Oppressor
 - 1× Lanternhearted
 - 1× Rite of Summoning
@@ -920,7 +920,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Momentum of the Fallen
 - 1× Shatterpoint Agent
 - 1× Shatter the Frail
-- 1× Crumbling Covenant
+- 1× Cragfall
 - 1× Twice-Lit Portal
 - 1× Abandon Constraints
 - 1× Collapse Protocol
@@ -1024,7 +1024,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Terminus
 - 1× Pilgrim of Old Stones
 - 1× Shatterpoint Agent
-- 1× Crumbling Covenant
+- 1× Cragfall
 - 1× Canopy of Stars
 - 1× Twice-Lit Portal
 - 1× Dark Lord's Champion
@@ -1111,7 +1111,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Path to Redemption
 - 1× Fell the Mighty
 - 1× Inverted Reflection
-- 1× Cragfall
+- 1× Overwhelm
 - 1× Twilight Troubadour
 - 1× Rite of Summoning
 - 1× Intermezzo Balladeer
@@ -1132,7 +1132,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Molten Duel
 - 1× Momentum of the Fallen
 - 1× Terminus
-- 1× Derelict Voyage
+- 1× Secrets of the Deep
 - 1× Abandon Constraints
 - 1× Frontline Martyr
 - 1× Genesis Burst
@@ -1142,7 +1142,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Duskshore Virtuoso
 - 1× Seek Answers
 - 1× Somber Flockmaster
-- 1× Forsaken Skyline
+- 1× Annihilation from Below
 - 1× Revelation Explorer
 - 1× Guiding Light
 - 1× Annular Recall
@@ -1180,7 +1180,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 2× The Ringleader
 - 2× Molten Duel
 - 2× Part the Veil
-- 2× Derelict Voyage
+- 2× Secrets of the Deep
 - 2× Grotto Seer
 - 2× Twice-Lit Portal
 - 2× Minstrel of Falling Light
@@ -1243,7 +1243,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Somber Flockmaster
 - 1× Ashlight Caller
 - 1× Pattern Seeker
-- 1× Forsaken Skyline
+- 1× Annihilation from Below
 - 1× Silent Gatherer
 - 1× Across the Void
 - 1× Cloudback Courier
@@ -1326,7 +1326,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Molten Duel
 - 1× Part the Veil
 - 1× Archive of the Forgotten
-- 1× Derelict Voyage
+- 1× Secrets of the Deep
 - 1× The Devourer
 - 1× Verdant Wayfarer
 - 1× Grotto Seer
@@ -1347,7 +1347,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Somber Flockmaster
 - 1× Ashlight Caller
 - 1× Pattern Seeker
-- 1× Forsaken Skyline
+- 1× Annihilation from Below
 - 1× Guiding Light
 - 1× Silent Gatherer
 - 1× Torchbearer of the Abyss
@@ -1734,12 +1734,12 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 2× Battlefield Medic
 - 2× Warrior's Path
 - 2× Echo Technician
-- 2× Aftermath Bloom
+- 2× Temporal Aperture
 - 2× Tethered Hollow
 - 2× Ethereal Trailblazer
 - 1× Inferno's Herald
 - 1× Standard Bearer
-- 1× Cragfall
+- 1× Overwhelm
 - 1× Twilight Troubadour
 - 1× Night Raid Commando
 - 1× Dreadcall Warden
@@ -1767,7 +1767,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× He Who Lies Dreaming
 - 1× Spirit Field Reclaimer
 - 1× Blade of Unity
-- 1× Crumbling Covenant
+- 1× Cragfall
 - 1× Speaker for the Forgotten
 - 1× Dreadmount Sovereign
 - 1× Invoker of Myths
@@ -1833,13 +1833,13 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 2× Battlefield Medic
 - 2× Warrior's Path
 - 2× Echo Technician
-- 2× Aftermath Bloom
+- 2× Temporal Aperture
 - 2× Tethered Hollow
 - 2× Ethereal Trailblazer
 - 2× Tranquil Duelist
 - 1× Inferno's Herald
 - 1× Standard Bearer
-- 1× Cragfall
+- 1× Overwhelm
 - 1× Night Raid Commando
 - 1× Intermezzo Balladeer
 - 1× Emberfang
@@ -1929,7 +1929,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 2× Battlefield Medic
 - 2× Warrior's Path
 - 2× Echo Technician
-- 2× Aftermath Bloom
+- 2× Temporal Aperture
 - 2× Tethered Hollow
 - 2× Ethereal Trailblazer
 - 2× Containment Specialist
@@ -2249,7 +2249,7 @@ This tide runs an even split of characters and events, with its mechanical ident
 - 1× Clockwork Prodigy
 - 1× Momentum of the Fallen
 - 1× Pilgrim of Old Stones
-- 1× Crumbling Covenant
+- 1× Cragfall
 - 1× Dark Lord's Champion
 - 1× Collapse Protocol
 - 1× Breach Artist
@@ -2400,7 +2400,7 @@ Tide-fac-09 is almost entirely characters (39 of 45 copies), built around a tigh
 - 1× Sunset Chapel Rest
 - 1× Molten Duel
 - 1× Archive of the Forgotten
-- 1× Derelict Voyage
+- 1× Secrets of the Deep
 - 1× Fleeting Reunion
 - 1× Canopy of Stars
 - 1× Twice-Lit Portal
@@ -2409,7 +2409,7 @@ Tide-fac-09 is almost entirely characters (39 of 45 copies), built around a tigh
 - 1× Seek Answers
 - 1× Somber Flockmaster
 - 1× Ashlight Caller
-- 1× Forsaken Skyline
+- 1× Annihilation from Below
 - 1× Gateweaver
 - 1× Flash of Power
 - 1× Key Sifter
@@ -2457,7 +2457,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Starcatcher
 - 1× Ashlight Caller
 - 1× Pattern Seeker
-- 1× Forsaken Skyline
+- 1× Annihilation from Below
 - 1× Gateweaver
 - 1× Iconoclast
 - 1× Arc Gate Opening
@@ -2518,7 +2518,7 @@ Tide-fac-30 is built almost entirely around spirit animal characters (36 of 45 c
 - 1× Assault Trooper
 - 1× Warrior's Path
 - 1× Echo Technician
-- 1× Aftermath Bloom
+- 1× Temporal Aperture
 - 1× Tethered Hollow
 - 1× Advance Gunner
 - 1× Ethereal Trailblazer
@@ -2666,7 +2666,7 @@ Tide-fac-16 is almost entirely characters (43 of 45 copies), nearly all warriors
 - 1× Assault Trooper
 - 1× Warrior's Path
 - 1× Echo Technician
-- 1× Aftermath Bloom
+- 1× Temporal Aperture
 - 1× Tethered Hollow
 - 1× Ethereal Trailblazer
 - 1× Containment Specialist
@@ -2723,7 +2723,7 @@ This tide is almost entirely warriors (43 of 45 cards) built around a tight loop
 - 1× Assault Trooper
 - 1× Warrior's Path
 - 1× Echo Technician
-- 1× Aftermath Bloom
+- 1× Temporal Aperture
 - 1× Tethered Hollow
 - 1× Tranquil Duelist
 
@@ -2772,7 +2772,7 @@ Tide-fac-16 is almost entirely characters (43 of 45 copies), nearly all warriors
 - 1× Battlefield Medic
 - 1× Warrior's Path
 - 1× Echo Technician
-- 1× Aftermath Bloom
+- 1× Temporal Aperture
 - 1× Tethered Hollow
 - 1× Containment Specialist
 - 1× Tranquil Duelist
@@ -2807,7 +2807,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Reset
 - 1× Molten Duel
 - 1× Archive of the Forgotten
-- 1× Derelict Voyage
+- 1× Secrets of the Deep
 - 1× Canopy of Stars
 - 1× Twice-Lit Portal
 - 1× Abandon Constraints
@@ -3108,7 +3108,7 @@ Tide-fac-24 is built almost entirely on characters (41 of 45 copies), with a sur
 - 1× Clockwork Prodigy
 - 1× Momentum of the Fallen
 - 1× Pilgrim of Old Stones
-- 1× Crumbling Covenant
+- 1× Cragfall
 - 1× Dark Lord's Champion
 - 1× Resilient Wanderer
 - 1× Breach Artist
@@ -3302,7 +3302,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 1× Oblivion Guide
 - 1× Cleansing Flame
 - 1× Molten Duel
-- 1× Derelict Voyage
+- 1× Secrets of the Deep
 - 1× Verdant Wayfarer
 - 1× Pyrestone Avatar
 - 1× Twice-Lit Portal
@@ -3313,7 +3313,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 1× Urban Cipher
 - 1× Ash Harbinger
 - 1× Pattern Seeker
-- 1× Forsaken Skyline
+- 1× Annihilation from Below
 - 1× Silent Gatherer
 - 1× Wasteland Arbitrator
 - 1× Key Sifter
@@ -3367,7 +3367,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Starcatcher
 - 1× Ashlight Caller
 - 1× Pattern Seeker
-- 1× Forsaken Skyline
+- 1× Annihilation from Below
 - 1× Gateweaver
 - 1× Iconoclast
 - 1× Arc Gate Opening
@@ -3429,7 +3429,7 @@ Tide-fac-19 is a character-heavy facet (32 characters, 13 events) built around a
 - 1× Assault Trooper
 - 1× Warrior's Path
 - 1× Echo Technician
-- 1× Aftermath Bloom
+- 1× Temporal Aperture
 - 1× Tethered Hollow
 - 1× Blood Moon Ronin
 - 1× Tranquil Duelist
@@ -3567,7 +3567,7 @@ Tide-neu-06 is a character-dense discard engine built around accumulating a larg
 - 1× Urban Cipher
 - 1× Seek Answers
 - 1× Pattern Seeker
-- 1× Forsaken Skyline
+- 1× Annihilation from Below
 - 1× Silent Gatherer
 - 1× Torchbearer of the Abyss
 - 1× Wasteland Arbitrator
@@ -3592,7 +3592,7 @@ tide-neu-01 is a broad neutral tide built almost entirely from events (23 of 30 
 - 1× Data Pulse
 - 1× Pulse of Sacrifice
 - 1× Defiant Parry
-- 1× Cragfall
+- 1× Overwhelm
 - 1× Echo Architect
 - 1× Stratospheric Voyage
 - 1× Wheel of the Heavens
@@ -3604,7 +3604,7 @@ tide-neu-01 is a broad neutral tide built almost entirely from events (23 of 30 
 - 1× Reunion
 - 1× Reset
 - 1× Pilgrim of Old Stones
-- 1× Crumbling Covenant
+- 1× Cragfall
 - 1× Ecliptic Vantage
 - 1× Starcatcher
 - 1× Revelation Explorer
@@ -3730,7 +3730,7 @@ Tide-neu-04 is built almost entirely of warriors (28 of 30 cards are characters,
 - 1× Assault Trooper
 - 1× Warrior's Path
 - 1× Echo Technician
-- 1× Aftermath Bloom
+- 1× Temporal Aperture
 - 1× Tethered Hollow
 - 1× Ethereal Trailblazer
 
@@ -3757,7 +3757,7 @@ tide-neu-05 is an almost entirely character-based deck (27 of 30 cards) built ar
 - 1× Price of Redemption
 - 1× Molten Duel
 - 1× Entropy Spike
-- 1× Derelict Voyage
+- 1× Secrets of the Deep
 - 1× Dawnrunner
 - 1× Kindred Sparks
 - 1× Exiles of the Last Light
