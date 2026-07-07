@@ -191,6 +191,28 @@ commit.
   down; stale doctrine comments (`glass-surface.ts` consumer list,
   `SITE_DISC`) refreshed.
 
+## Remaining §7 ESLint rules — required, with assigned phases
+
+The five §7 single-file rules not in Phase 0 are required deliverables of
+this program, each landing in the phase that cleans its known violations
+(so every rule ships enabled, with an empty or near-empty baseline):
+
+- **`valid-token-references` ownership extension** — Phase 1, with the
+  `--cv-textbox-blur` move into Tango (its only known violation).
+- **`no-numeric-style-props`** — Phase 2, with ResourceChip's enumerated
+  variants (its grandfathered `size`/`gap` violation).
+- **`no-raw-icon-classes`** — Phase 3, after `economy-spec.ts` (Phase 2)
+  centralizes the glyph tables and the QuestStatusBar raw `<i>` close is
+  migrated; includes the generation-time check that every registered
+  glyph class exists in the vendored stylesheet.
+- **`no-adhoc-press-scale`** — Phase 3, with the `AtlasNode`/`SiteNode`
+  press-feedback routing (its two known violations).
+- **`no-raw-interactive-elements` components-tier extension** — Phase 3,
+  with the `AtlasNode` raw `role="button"` fix.
+
+The program is not complete until all §7 rules (Phase 0's set plus these
+five) are enabled in `eslint.config.js` or the integrity-test suite.
+
 ## Error handling and testing
 
 - Every phase boundary: `npm run lint`, `npm run typecheck`, `npm test`
@@ -218,9 +240,5 @@ commit.
   pre-existing-issues).
 - Rebuilding the deck-viewer filter UX (only the sort-direction control
   and the documented divergence decision).
-- The remaining §7 single-file ESLint rules not named in Phase 0
-  (`no-raw-icon-classes`, `no-numeric-style-props`,
-  `no-adhoc-press-scale`, the `no-raw-interactive-elements` and
-  `valid-token-references` extensions) land opportunistically as their
-  target files are touched in Phases 1–4, in the audit's suggested order,
-  rather than as a dedicated phase.
+- Nothing from the audit's §7 rule list is out of scope; see "Remaining
+  §7 ESLint rules" above for the per-phase landing assignments.
