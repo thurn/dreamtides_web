@@ -1,225 +1,24 @@
-Follow-up: hand-refine the best-fit annotations on five changed tides4 tides
-============================================================================
-
-The curated identity annotations (shortName, displayName, displayDescription,
-summary, description, color) were restored to data/tides4.jsonc by matching each
-baked tide to the pre-removal annotation whose CARD CONTENTS it most resembles
-(not by tide id), so the cosmetic facet renumbering re-homes each annotation onto
-the deck it actually describes. data/tides5.jsonc inherits these by tide name on
-its bake (44 of 64 tides matched). 58 of 64 tides4 tides matched an existing
-annotation at >=85% card overlap.
-
-Five tides changed enough that the applied annotation is a best-fit rather than an
-exact restoration; a hand pass could sharpen them:
-
-  tide-sig-06 (Corvath)   -> "Discard Void Depth / Echoes in the Abyss" (64%);
-      its own pre-removal label, theme preserved.
-  tide-fac-14 (Shadowpaw) -> "Warrior Token Flood / Swelling Ranks" (66%).
-  tide-fac-28 (Oracle)    -> "Warrior Sacrifice Ramp / The Iron Price" (96%);
-      a near-duplicate of tide-fac-10's deck, which carries the same label.
-  tide-fac-29 (Harbor Warden) -> "Abandon Disruption / Sacrifice and Sabotage" (77%).
-  tide-fac-32 (Torchbearer)   -> "Void Depth Discard / Into Oblivion" (66%).
-
-The bake preserves any hand-edited annotations by tide id (tides4) / tide name
-(tides5) on the next re-bake.
-
-
-Pre-existing: spine-redundancy-experiment.mjs port is not faithful
-==================================================================
-
-scripts/spine-redundancy-experiment.mjs carries a hand "re-port" of the
-`decklists` pool variant and self-checks it against the real algorithm
-(`generatePoolFromData`) before reporting. That self-check aborts with
-"PORT IS NOT FAITHFUL" (0/200 pools identical, off by a few cards per pool).
-
-This is pre-existing, not introduced by the card-identity cleanup. On master the
-port translated the (already UUID-keyed) archLists/draftLists through a
-name -> UUID map, which dropped every member (0 of 82 kept for a sampled slug),
-so the port ran with empty archetype/color lists and was already unfaithful. The
-cleanup made the port read those UUID-keyed lists directly, which is strictly
-closer to the real algorithm, but the hand port still drifts from the live
-`decklists` variant in other ways. The experiment is a dormant dev tool (not in
-the build pipeline, lint, typecheck, or test suite). Resolving it means re-syncing
-the port with the current `decklists` variant or replacing it with a call into
-the real generator.
-
-
-Pre-existing: `bxf bx-refresh` is not a real Boxicons v3 filled class
-======================================================================
-
-`src/screens/ShopScreen.tsx:261` renders `<i className="bxf bx-refresh" ... />`
-for its reroll affordance. Boxicons v3's filled set (`src/vendor/boxicons/
-boxicons-filled.css`) has no bare `.bxf.bx-refresh` rule — only suffixed
-variants exist (`bx-refresh-cw`, `bx-refresh-ccw`, `bx-refresh-cw-alt`, etc.),
-so this class resolves to no `::before` content and the icon renders blank
-(confirmed via `getComputedStyle(el, '::before').content === "none"`).
-
-Found while building the Tango `button` mockup (`src/tango/docs/mockups/
-button.tsx`), which had copied the same class for its own reroll row; that copy
-was fixed there to `bxf bx-refresh-cw`. `ShopScreen.tsx`'s live reroll button
-still uses the blank class and should be updated the same way.
-
-
-Pre-existing: QuestStart dreamcaller card overflows at wide desktop widths
-==========================================================================
-
-The dreamcaller-selection card (`src/screens/QuestStartScreen.tsx`) is a
-fixed-height flex column (`h-[472px]`). At wide desktop viewports the 3-column
-layout makes each card wide, so the (square) dreamcaller portrait grows tall
-enough that the card's own "Starting Essence" footer overflows past the fixed
-472px bottom and visually overlaps the tides list rendered below it (measured at
-1440x900: essence bottom 753 vs first tide pill 725-751). At narrower/phone-frame
-viewports the card content fits and there is no overlap.
-
-This is pre-existing and independent of the Tango component move; it is in fact
-reduced by it. Before the move the portrait carried an inline `aspectRatio:
-"0.8 / 1"`, which is TALLER than the square panel portrait it now uses, so the
-overflow (and overlap) was larger on the prior version. A proper fix reworks the
-card so the portrait flex-shrinks into the available space (or the card grows to
-fit its content) rather than letting the footer overflow a fixed height.
-
-Pre-existing: Tango readiness gaps found by the mass-production audit
-=====================================================================
-
-Found during the Tango readiness review (lint hardening + pilot font fix landed
-with this commit); these remain open and block "docs-only" mass production:
-
-1. ~9 exported Tango components have no demo entry and so no generated
-   reference: EssenceValue, LeaveSiteButton, HoverPopover, GlowIcon,
-   DreamcallerPortrait, CardTermDefinitions, HoverZoomCard,
-   GlossaryDefinitionCard, PipBadge, CardStatOrb. Several self-describe as
-   "the ONE way" to do something, and the pilot screen imports five of them —
-   an agent building from the index alone would improvise duplicates.
-
-2. Popup-rule conflict: SKILL.md mandates InfoCard for every
-   reveal-on-interaction popup, but the pilot uses HoverPopover with a
-   hand-styled tooltip (SectionHeading) and HoverPopover is undocumented.
-   Either bless HoverPopover in the docs with a decision rule vs InfoCard, or
-   migrate the pilot's tooltips to InfoCard.
-
-3. tango_design_system.md is a pre-build implementation plan (phases,
-   subagent orchestration, prerequisites) that SKILL.md links as "design
-   philosophy in depth"; the still-true architecture sections deserve
-   extraction into a current-state doc.
-
-4. Screen-composition guidance is missing from the docs: the 1920x1080
-   "stage/scaled frame" concept, per-screen Motes/backdrop policy,
-   QuestStatusBar wiring (no shared HUD view-model builder exists), z-index
-   conventions, target QA viewports, loading/error-state handling, and
-   screen-to-screen transition mechanics.
-
-5. No ?goto= QA scenes exist for Draft, Essence, Reward, or dreamscape
-   screens, so those migrations cannot be browser-QA'd without playing
-   forward.
-
-6. tangoSiteScreenFor's signature carries neither runtimeConfig nor
-   onJourneyExplanationChange, which the DreamAugury route needs
-   (ScreenRouter.tsx:212-222); that migration requires a registry signature
-   change.
-
-7. AGENTS.md declares name-keyed card maps ALWAYS A BUG, but no lint rule
-   enforces it; a typed `no-name-keyed-cards` rule (flag .name-keyed
-   Map/Set/object keys and name-equality comparisons on card types,
-   project-wide) would close the class.
-
-
-Tango mobile dreamscape redesign — follow-ups / known items
-===========================================================
-
-1. Utility-menu consolidation debt (requested-divergence convergence decision).
-   `src/components/DreamscapeQuestMenu.tsx` re-implements the same utility-menu
-   actions and Save/Load flow that `src/components/HUD.tsx` renders (the root
-   action list, the `window.prompt` save, and the fetched Load-Quest submenu).
-   The Tango dreamscape suppresses the legacy app-shell HUD, so its menu had to
-   live somewhere; it was built screen-locally rather than blocked on a refactor.
-   DECISION: converge later by extracting one shared `QuestUtilityMenu` component
-   (owning the open/submenu/save-load state) that both the legacy HUD and the
-   dreamscape's top-left menu render at their respective placements. Until then
-   the two action lists are kept in agreement by hand.
-
-2. Top-left menu button overlaps the multiplayer presence pill.
-   The mockup homes the utility menu at the top-left corner. The pre-existing
-   "N CONNECTED" presence indicator (App.tsx, `fixed top-1 left-2 z-40`,
-   pointer-events-none) sits in the same corner, so the new `z-60` menu button
-   now paints over it. Cosmetic only — the pill is pointer-events-none, so
-   nothing is blocked — but the corner reads cluttered in a shared room.
-   Consider relocating the presence pill or folding connection state into the
-   Tango chrome.
-
-3. React "mixing shorthand and non-shorthand style properties" dev warnings.
-   Two long-standing React dev-only warnings surface on the Tango dreamscape
-   (observed while QAing the deck viewer, but unrelated to it):
-   - `QsbHudBar` (`src/tango/components/hud/QuestStatusBar.tsx`) sets both the
-     `padding` shorthand and `paddingBottom` on the same element, so React warns
-     when it updates `padding`.
-   - Card-number / resource rendering sets the `font` shorthand alongside
-     `fontVariantNumeric`, drawing the same warning for `font`.
-   Both are cosmetic (dev-mode only, no runtime effect). Fix by splitting the
-   shorthand into longhand properties on the offending elements.
-
-Tango design-system audit follow-ups (2026-07-06)
-=================================================
-
-The whole-system audit in docs/postmortems/2026-07-06-tango-system-audit.md
-carries a prioritized action-item list covering: the missing glass button
-suite (IconButton / GlassButton; five bespoke declarations today), glass
-material consolidation (duplicated recipe in glass-surface.ts vs
-control-treatment.ts, divergent InfoCard fill, misnamed opaque
---surface-glass tokens, docs Materials page), catalog deletions (StatTile,
-TidePill, SiteNode's unreachable visited state, AtlasNode dead surface),
-demo representativeness repairs (atlas demo/mockup show impossible states),
-ResourceChip/EssenceValue economy-mark unification, undocumented-workhorse
-docs (DreamcallerPortrait, HoverPopover, HoverZoomCard, GlowIcon, rich-text,
-tide-spec), dead-token pruning (37 zero-reference tokens incl. --card-aspect,
---cat-*, --tide-earthy, --control-h), convergence folds (QsbSignObject →
-Dreamsign, DreamcallerPortrait standing/fullBleed variant, DreamscapeMotes →
-Motes), and generated adoption counts in tango-docs. See the report's
-"Action items" section for the full checklist.
-
-Pre-existing: npm audit reports dependency vulnerabilities
+Pre-existing: Tango design-system audit follow-ups remain
 ==========================================================
 
-Running `npm install` in a fresh worktree reports 15 vulnerabilities in the
-current dependency tree: 2 low, 6 moderate, and 7 high. The install succeeds,
-but the audit output recommends `npm audit fix` for non-breaking updates and
-`npm audit fix --force` for the remaining breaking-change path.
+The Tango readiness pass added missing workhorse component docs/demos, current
+screen-composition guidance, the `essence` and `reward` QA scenes, route context
+for site registry screens, popup guidance for InfoCard versus HoverPopover, and
+a Tango-scoped `no-name-keyed-cards` lint rule.
 
-Pre-existing: Desktop deck viewer open logging repeated while mounted
-=====================================================================
+The broader system-audit checklist still needs a dedicated design-system pass:
+glass button-suite consolidation, glass material consolidation, generated
+adoption counts in Tango docs, catalog deletions, ResourceChip/EssenceValue
+economy-mark convergence, dead-token pruning, atlas demo representativeness
+repairs, and the larger component-convergence folds.
 
-Found while QAing the Tango desktop deck viewer sidebar. The
-`desktop_deck_viewer_opened` event was emitted every few seconds while the
-overlay stayed open because the adapter effect depended on reminted view-model
-objects from quest state refreshes. The branch that recorded this issue gates
-the event on the closed-to-open transition; if this regresses, the browser
-console shows repeated `desktop_deck_viewer_opened` records for one overlay
-session.
 
-Pre-existing: dev-with-emulator can exit before Vite starts in a busy multi-worktree environment
-=============================================================================================
+Pre-existing: npm audit reports firebase-tools dependency vulnerabilities
+=========================================================================
 
-While QAing the InfoCard mobile typography worktree, `npm run dev -- --port 5175`
-ran asset setup and started a Realtime Database emulator on 127.0.0.1:9012, then
-the wrapper process exited before launching the Vite child for port 5175. The
-orphaned database emulator kept running until manually terminated. The log
-showed many other emulator suites already running for the same
-`demo-quest-prototype` project and included Firebase's multiple-instance
-warning.
-
-The component QA could proceed by starting Vite directly with
-`./node_modules/.bin/vite --port 5175 --strictPort --host 127.0.0.1`, but the
-repo-level dev wrapper should either launch Vite reliably after emulator startup
-or fail with a clear error and clean up the emulator child it started.
-
-Pre-existing: setup-assets.test.mjs times out flakily under full-suite load
-===========================================================================
-
-Running the whole suite (`npm test`) intermittently fails 2-3 tests in
-scripts/setup-assets.test.mjs (e.g. "passes through tuned starting-essence
-values from the TOML", "retains the rarity field on Legendary cards and omits
-it otherwise"), with the file taking 15+ seconds. Run in isolation
-(`npx vitest run scripts/setup-assets.test.mjs`) all 33 pass in ~5.7s. The
-failures are timeout flakiness from these heavy asset-setup tests contending for
-CPU while the rest of the suite runs in parallel, not a logic failure. A fix
-would raise these tests' per-test timeout (or run the file in its own pool) so
-the full-suite run is deterministic.
+Non-breaking audit fixes have been applied, but `npm audit --audit-level=moderate`
+still reports 3 moderate findings through `firebase-tools` dependencies
+(`@google-cloud/pubsub` / `@opentelemetry/core`). The only automated fix offered
+by npm is `npm audit fix --force`, which installs `firebase-tools@14.23.0` as a
+breaking downgrade from the current 15.x line. Resolving this safely needs an
+explicit toolchain decision rather than an automatic forced downgrade.
