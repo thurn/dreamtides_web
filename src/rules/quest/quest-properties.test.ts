@@ -27,18 +27,26 @@
 // `Date.now`, no firebase/react — the src/rules/ lint rails).
 //
 // Populated-start approach: FAKE content providers (approach (a) in the task
-// brief). `START_QUEST` bounces unless a `QuestLifecycleContentProvider` is
-// registered, and `ADD_CARD` / `ADD_DREAMSIGN` bounce without a
-// `DeckContentProvider`. We register minimal deterministic fakes in
-// `beforeAll` and clear them (`register*(null)`) in `afterAll`, so no
-// registration leaks into other suites. The lifecycle fake's `startQuest`
-// populates all three run fields (`dreamcaller`, `resolvedPackage`, and a
-// non-null `draftState`) so the nullability invariant has a real precondition
-// to protect. The Draft and Site providers are intentionally left unregistered
-// — `PICK_DRAFT_CARD`, `OPEN_SITE`, the merchant events, and `REROLL_SHOP`
-// then bounce cleanly (a valid outcome for (b)); their draft-state mutation
-// paths only ever assign a non-null clone and are covered by draft.test.ts /
-// shop.test.ts.
+// brief). Four provider seams gate the events this suite folds, so we register
+// minimal deterministic fakes for ALL FOUR in `beforeAll` and clear them
+// (`register*(null)`) in `afterAll`, so no registration leaks into other
+// suites:
+//   - Lifecycle fake — `START_QUEST` populates all three run fields
+//     (`dreamcaller`, `resolvedPackage`, a non-null `draftState`) AND seeds a
+//     Shop atlas site with a shop `siteRuntime`, so the nullability invariant
+//     has a real precondition and `REROLL_SHOP` has a runtime to restock.
+//   - Deck fake — `ADD_CARD` / `ADD_DREAMSIGN` apply.
+//   - Draft fake — `PICK_DRAFT_CARD` applies and REWRITES `draftState` (the
+//     start draft's `sitePicksCompleted` is `SITE_PICKS - 1`, so one pick
+//     completes the site via the engine's completion branch, deterministically
+//     skipping the offer-reveal sampling).
+//   - Site fake — its `rerollShop` returns a result with a NON-NULL
+//     `draftState`, so `REROLL_SHOP` applies and REWRITES `draftState`. This is
+//     the one genuinely at-risk write (`ShopRerollResult.draftState` is
+//     `DraftState | null` — a known Task-26 trap), so suite (a) is its guard.
+// A mutation-count guard in (a) asserts at least one applied event actually
+// wrote `draftState` (vacuity is a hard failure), and a negative-control test
+// proves the nullability checker fires on a deliberate non-carve-out nulling.
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
@@ -55,8 +63,10 @@ import type {
   DreamcallerContent,
   ResolvedDreamcallerPackage,
 } from "../../types/content";
-import type { PoolDraftState } from "../../types/draft";
-import type { Dreamsign } from "../../types/quest";
+import type { DraftState, PoolDraftState } from "../../types/draft";
+import type { Dreamsign, DreamscapeNode } from "../../types/quest";
+import { LayerName } from "../../types/layer-name";
+import { SITE_PICKS } from "../../draft/draft-engine";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
 import {
@@ -64,9 +74,17 @@ import {
   type DeckContentProvider,
 } from "./deck";
 import {
+  registerDraftContentProvider,
+  type DraftContentProvider,
+} from "./draft";
+import {
   registerQuestLifecycleContentProvider,
   type QuestLifecycleContentProvider,
 } from "./lifecycle";
+import {
+  registerSiteContentProvider,
+  type SiteContentProvider,
+} from "./sites";
 
 // ---------------------------------------------------------------------------
 // Fixtures & engine config
@@ -156,18 +174,6 @@ function lifecycleProvider(): QuestLifecycleContentProvider {
     };
   }
 
-  function populatedDraftState(): PoolDraftState {
-    return {
-      mode: "pool",
-      currentOffer: [100, 101, 102],
-      activeSiteId: "draft-site-1",
-      pickNumber: 1,
-      sitePicksCompleted: 0,
-      draftPoolCopiesByCard: { "100": 4, "101": 4, "102": 4 },
-      remainingCopiesByCard: { "100": 3, "101": 4, "102": 4 },
-    };
-  }
-
   return {
     resolveDreamcallerPackage: (dreamcallerId, seed) =>
       packageFor(dreamcallerId, seed),
@@ -189,9 +195,105 @@ function lifecycleProvider(): QuestLifecycleContentProvider {
         remainingDreamsignPool: [...pkg.dreamsignPoolIds],
         draftState: populatedDraftState(),
         currentDreamscape: "node-start",
+        atlas: { ...quest.atlas, nodes: { "node-start": shopNode() } },
+        siteRuntime: {
+          [SHOP_SITE_ID]: {
+            kind: "shop",
+            slots: [],
+            rerollCount: 0,
+            remainingDreamsignPoolIds: [],
+          },
+        },
         screen: { type: "dreamscape" },
       };
     },
+  };
+}
+
+const SHOP_SITE_ID = "shop-site";
+const DRAFT_SITE_ID = "draft-site-1";
+
+/**
+ * A pool draft whose `sitePicksCompleted` is one below `SITE_PICKS`, so a
+ * single `PICK_DRAFT_CARD` completes the site through the engine's completion
+ * branch (`currentOffer = []`) and never reaches the stochastic offer reveal —
+ * making the applied pick deterministic and engine-safe on this fixture while
+ * still REWRITING `draftState` to a non-null value.
+ */
+function populatedDraftState(): PoolDraftState {
+  return {
+    mode: "pool",
+    currentOffer: [100, 101, 102],
+    activeSiteId: DRAFT_SITE_ID,
+    pickNumber: 1,
+    sitePicksCompleted: Math.max(0, SITE_PICKS - 1),
+    draftPoolCopiesByCard: { "100": 4, "101": 4, "102": 4 },
+    remainingCopiesByCard: { "100": 3, "101": 4, "102": 4 },
+  };
+}
+
+/** An atlas node carrying the Shop site `REROLL_SHOP` restocks. */
+function shopNode(): DreamscapeNode {
+  return {
+    id: "node-start",
+    layer: LayerName.One,
+    indexInLayer: 0,
+    dreamscapeId: null,
+    biomeName: "",
+    biomeColor: "",
+    sites: [
+      { id: SHOP_SITE_ID, type: "Shop", isEnhanced: false, isVisited: false },
+    ],
+    position: { x: 0, y: 0 },
+    state: "available",
+    enhancedSiteType: null,
+    forwardIds: [],
+    backwardIds: [],
+    knownDreamsignId: null,
+  };
+}
+
+/** A pool draft the Site fake's `rerollShop` returns (non-null draftState). */
+function rerolledDraftState(): DraftState {
+  return {
+    mode: "pool",
+    currentOffer: [],
+    activeSiteId: DRAFT_SITE_ID,
+    pickNumber: 2,
+    sitePicksCompleted: Math.max(0, SITE_PICKS - 1),
+    draftPoolCopiesByCard: { "100": 4 },
+    remainingCopiesByCard: { "100": 2 },
+  };
+}
+
+/** Draft fake: `PICK_DRAFT_CARD` resolves `card-<n>` and advances the draft. */
+function draftProvider(): DraftContentProvider {
+  return {
+    resolveCardNumber: (cardId) => {
+      const match = /^card-(\d+)$/.exec(cardId);
+      return match ? Number(match[1]) : null;
+    },
+    cardDatabase: () => new Map(),
+    offerDepsFor: () => undefined,
+    draftConfigFor: () => undefined,
+  };
+}
+
+/**
+ * Site fake: `rerollShop` restocks with a NON-NULL `draftState`, so
+ * `REROLL_SHOP` applies and rewrites the run's draft state. `openSite` bounces
+ * (returns null) so `OPEN_SITE` never mutates the seeded runtime; the merchant
+ * seam is left unimplemented so merchant events bounce.
+ */
+function siteProvider(): SiteContentProvider {
+  return {
+    openSite: () => null,
+    rerollShop: () => ({
+      slots: [],
+      remainingDreamsignPoolIds: [],
+      remainingDreamsignPool: [],
+      draftState: rerolledDraftState(),
+    }),
   };
 }
 
@@ -222,12 +324,16 @@ function deckProvider(): DeckContentProvider {
 beforeAll(() => {
   registerQuestLifecycleContentProvider(lifecycleProvider());
   registerDeckContentProvider(deckProvider());
+  registerDraftContentProvider(draftProvider());
+  registerSiteContentProvider(siteProvider());
 });
 
 afterAll(() => {
-  // Clear our registrations so no other suite sees a populated provider.
+  // Clear ALL our registrations so no other suite sees a populated provider.
   registerQuestLifecycleContentProvider(null);
   registerDeckContentProvider(null);
+  registerDraftContentProvider(null);
+  registerSiteContentProvider(null);
 });
 
 // ---------------------------------------------------------------------------
@@ -263,6 +369,24 @@ const DEBUG_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
 /** The three run fields the nullability invariant protects. */
 const RUN_FIELDS = ["draftState", "resolvedPackage", "dreamcaller"] as const;
 
+/**
+ * The nullability checker: returns the name of the first run field that
+ * transitioned non-null → null between `before` and `after`, or `null` when the
+ * step preserved every run field. Shared by the property sweep and the negative
+ * control so the control proves the very checker the sweep relies on can fire.
+ */
+function firstNulledRunField(
+  before: FoldState,
+  after: FoldState,
+): (typeof RUN_FIELDS)[number] | null {
+  for (const field of RUN_FIELDS) {
+    if (before.quest[field] != null && after.quest[field] == null) {
+      return field;
+    }
+  }
+  return null;
+}
+
 // ---------------------------------------------------------------------------
 // Seeded random event generator (non-debug quest event union)
 // ---------------------------------------------------------------------------
@@ -279,7 +403,13 @@ function smallInt(rng: () => number, max: number): number {
   return Math.floor((rng() - 0.5) * 2 * max);
 }
 
-const SITE_IDS = ["draft-site-1", "site-a", "site-b", "unknown-site"] as const;
+const SITE_IDS = [
+  DRAFT_SITE_ID,
+  SHOP_SITE_ID,
+  "site-a",
+  "site-b",
+  "unknown-site",
+] as const;
 const NODE_IDS = ["node-start", "node-a", "node-b"] as const;
 const SITE_TYPES = ["Shop", "Draft", "DreamMerchant", "Battle"] as const;
 
@@ -365,10 +495,17 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent>
     payload: { dreamsignId: `ds-${Math.floor(rng() * 1_000_000)}`, isBane: rng() < 0.5 },
   }),
 
-  // draft (bounces without a DraftContentProvider)
+  // draft — a pick aligned with the start draft's offer ([100,101,102]) so it
+  // APPLIES on the first pick (writing draftState); later picks bounce once the
+  // offer empties. The engine advances on a clone, so draftState stays non-null.
+  (rng) => {
+    const idx = Math.floor(rng() * 3);
+    return { type: "PICK_DRAFT_CARD", payload: { packIndex: idx, cardId: `card-${100 + idx}` } };
+  },
+  // draft — a deliberately mismatched pick (exercises the pack-membership bounce)
   (rng) => ({
     type: "PICK_DRAFT_CARD",
-    payload: { packIndex: Math.floor(rng() * 4), cardId: `card-${100 + Math.floor(rng() * 5)}` },
+    payload: { packIndex: Math.floor(rng() * 5), cardId: `card-${200 + Math.floor(rng() * 5)}` },
   }),
 
   // sites (bounce without a SiteContentProvider / matching runtime)
@@ -394,6 +531,10 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent>
     payload: { siteId: pick(rng, SITE_IDS), slotIndex: Math.floor(rng() * 4) },
   }),
   (rng) => ({ type: "REROLL_SHOP", payload: { siteId: pick(rng, SITE_IDS) } }),
+  // REROLL_SHOP aimed at the seeded Shop site so it APPLIES (rewriting
+  // draftState from the Site fake's non-null restock) at least once per run,
+  // before MARK_SITE_VISITED / a prior reroll can close it.
+  () => ({ type: "REROLL_SHOP", payload: { siteId: SHOP_SITE_ID } }),
   (rng) => ({ type: "GRANT_FREE_REROLLS", payload: { count: Math.floor(rng() * 3) } }),
   (rng) => ({ type: "APPLY_SHOP_DISCOUNT", payload: { percent: Math.floor(rng() * 50) } }),
 
@@ -541,6 +682,8 @@ describe("(a) run-field nullability", () => {
   });
 
   it("no non-debug event transitions a run field non-null → null", () => {
+    let appliedCount = 0;
+    let draftStateWrites = 0;
     for (const { events } of allSequences()) {
       // Fold step by step so every intermediate state is inspectable. This is
       // a faithful single-actor fold: basedOnSeq = seq - 1 makes every
@@ -557,18 +700,59 @@ describe("(a) run-field nullability", () => {
         const before = state;
         const result = reduceGameEvent(before, event, ctx);
         state = result.state;
-        for (const field of RUN_FIELDS) {
-          const wasSet = before.quest[field] != null;
-          const nowNull = state.quest[field] == null;
-          if (wasSet && nowNull) {
-            throw new Error(
-              `event ${event.type} (seq ${seq}) nulled run field "${field}" ` +
-                `— forbidden for non-debug events`,
-            );
+        if (result.outcome === "applied") {
+          appliedCount += 1;
+          // Reference inequality is a sound "wrote draftState" signal: every
+          // reducer case that touches draftState returns a fresh object.
+          if (before.quest.draftState !== state.quest.draftState) {
+            draftStateWrites += 1;
           }
+        }
+        const nulled = firstNulledRunField(before, state);
+        if (nulled !== null) {
+          throw new Error(
+            `event ${event.type} (seq ${seq}) nulled run field "${nulled}" ` +
+              `— forbidden for non-debug events`,
+          );
         }
       }
     }
+
+    // Vacuity guard: if the sweep never exercised an applied draftState write,
+    // the property proved nothing about the at-risk PICK_DRAFT_CARD /
+    // REROLL_SHOP paths. Fail loudly rather than pass vacuously.
+    expect(appliedCount).toBeGreaterThan(SEQUENCE_COUNT); // events broadly apply
+    expect(draftStateWrites).toBeGreaterThan(0); // draftState is actually rewritten
+  });
+
+  it("negative control: the checker flags a non-carve-out event that nulls a run field", () => {
+    // Build a populated start, then a hand-crafted step that nulls draftState.
+    // The step type is a NON-carve-out event, so the checker must flag it —
+    // proving the property above can catch a regression, not just pass.
+    const populated = foldEvents(
+      ENGINE_CONFIG,
+      GENESIS,
+      { seq: 0, state: genesisFoldState(GENESIS) },
+      [START_QUEST_ENTRY],
+      { devMode: false },
+    ).state;
+    expect(populated.quest.draftState).not.toBeNull();
+
+    const nulledDraft: FoldState = {
+      ...populated,
+      quest: { ...populated.quest, draftState: null },
+    };
+    expect(firstNulledRunField(populated, nulledDraft)).toBe("draftState");
+
+    // And it also catches a dreamcaller / resolvedPackage regression.
+    const nulledCaller: FoldState = {
+      ...populated,
+      quest: { ...populated.quest, dreamcaller: null },
+    };
+    expect(firstNulledRunField(populated, nulledCaller)).toBe("dreamcaller");
+
+    // A step that PRESERVES the run fields must NOT be flagged (no false positive).
+    expect(firstNulledRunField(populated, populated)).toBeNull();
   });
 });
 
