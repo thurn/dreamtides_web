@@ -150,11 +150,20 @@ export function createLogClient<S>(
       if (seq > lastEmittedSeq) {
         callbacks.onEventOutcome(event, seq, outcome.outcome);
 
-        // Divergence tripwire: only meaningful for an event we APPLIED. A bounce
-        // left the state unchanged, so comparing a peer's optimistic (applied)
-        // hash against our unchanged state would false-positive on a skewed
-        // prediction that raced into a bounce.
+        // Divergence tripwire. The stamped `stateHashAfter` is the appender's
+        // fold hash for a prediction of THIS event committing at
+        // `basedOnSeq + 1` (RNG is keyed by committed seq). It is only
+        // legitimately comparable when that prediction provably held: zero
+        // intervening seqs, i.e. `basedOnSeq === seq - 1`. Otherwise the
+        // committed seq (hence the RNG key, hence any random draw) differs from
+        // what the appender hashed, and a mismatch would be a false alarm even
+        // with no nondeterminism bug — this fires under ordinary concurrency
+        // whenever a preceding event bounces and the appender's event skews
+        // forward but still applies. Both fields are in the committed log, so
+        // this gate is deterministic and identical across all observers.
+        // `outcome === "applied"` stays as a cheap secondary guard.
         if (
+          event.basedOnSeq === seq - 1 &&
           outcome.outcome === "applied" &&
           typeof event.stateHashAfter === "string" &&
           !divergenceReported.has(seq)

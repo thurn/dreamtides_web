@@ -85,7 +85,7 @@ interface Harness {
   divergences: Array<{ seq: number; expected: string; actual: string }>;
 }
 
-function makeHarness(): {
+function makeHarness(cfg: EngineConfig<ToyState> = config): {
   harness: Harness;
   client: ReturnType<typeof createLogClient<ToyState>>;
 } {
@@ -110,7 +110,7 @@ function makeHarness(): {
     },
   };
 
-  const client = createLogClient<ToyState>(config, io, {
+  const client = createLogClient<ToyState>(cfg, io, {
     onDisplayState: (s) => displayedStates.push(s),
     onEventOutcome: (event, seq, outcome) => outcomes.push({ event, seq, outcome }),
     onDivergence: (info) => divergences.push(info),
@@ -264,6 +264,58 @@ describe("LogClient divergence tripwire", () => {
     // (optimistic, applied) hash must NOT be read as divergence on a bounce.
     const partner = confirmedEvent({ tag: "P", actor: "partner", basedOnSeq: 0 });
     harness.deliver(makeNode({ events: { 1: partner, 2: ownA } }));
+    expect(harness.divergences).toHaveLength(0);
+  });
+
+  it("does not false-positive on a skewed-but-APPLIED event under an rng-drawing reducer", async () => {
+    // A reducer that draws from ctx.rng (keyed by committed seq) so the fold
+    // state — and thus the hash — depends on the seq an event lands at.
+    // `forceBounce` lets a preceding event bounce without intervening.
+    const rngConfig: EngineConfig<ToyState> = {
+      ...config,
+      reducer: (state, event, ctx) => {
+        if (event.payload.forceBounce === true) {
+          return { state, outcome: "bounced" };
+        }
+        if (ctx.intervening === "unknown") {
+          return { state, outcome: "bounced" };
+        }
+        for (const iv of ctx.intervening) {
+          if (iv.actor !== event.actor) {
+            return { state, outcome: "bounced" };
+          }
+        }
+        const draw = ctx.rng(0).toFixed(6);
+        const tag = `${event.payload.tag as string}@${draw}`;
+        return { state: { applied: [...state.applied, tag] }, outcome: "applied" };
+      },
+    };
+    const { harness, client } = makeHarness(rngConfig);
+
+    // Confirm events 1..5 so lastFoldedSeq == 5.
+    const confirmed: Record<number, GameEvent> = {};
+    for (let seq = 1; seq <= 5; seq++) {
+      confirmed[seq] = confirmedEvent({ tag: `c${seq}`, actor: "me", basedOnSeq: seq - 1 });
+    }
+    harness.deliver(makeNode({ events: { ...confirmed } }));
+
+    // Submit E: pending empty, basedOnSeq == 5, predicts seq 6, stamps the
+    // hash of E folded at seq 6 (rng keyed by 6).
+    await client.submit({ type: "T", payload: { tag: "E" }, actor: "me" });
+    const ownE = harness.appended[0];
+    expect(ownE.basedOnSeq).toBe(5);
+    expect(typeof ownE.stateHashAfter).toBe("string");
+
+    // Partner event commits at seq 6 and BOUNCES; E skews forward to seq 7 and
+    // APPLIES (P bounced, so the (5,7) window has zero applied events). E now
+    // folds with rng keyed by 7 -> a different hash than the stamped hash@6,
+    // with NO nondeterminism bug. basedOnSeq(5) != seq-1(6), so no divergence.
+    const partnerBounce = confirmedEvent({ tag: "P", actor: "partner", basedOnSeq: 5 });
+    partnerBounce.payload.forceBounce = true;
+    harness.deliver(makeNode({ events: { ...confirmed, 6: partnerBounce, 7: ownE } }));
+
+    const eOutcome = harness.outcomes.find((o) => o.event.nonce === ownE.nonce);
+    expect(eOutcome?.outcome).toBe("applied");
     expect(harness.divergences).toHaveLength(0);
   });
 });
