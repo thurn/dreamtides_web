@@ -17,6 +17,7 @@ import { QuestStartScreenAdapter } from "./QuestStartScreenAdapter";
 import { DreamscapeScreenAdapter } from "./DreamscapeScreenAdapter";
 import { AtlasScreenAdapter } from "./AtlasScreenAdapter";
 import { DraftSiteScreenAdapter } from "./DraftSiteScreenAdapter";
+import { DreamsignRevelationScreenAdapter } from "./DreamsignRevelationScreenAdapter";
 
 /**
  * App-level actions a Tango screen may trigger that live outside quest state —
@@ -70,6 +71,13 @@ export function tangoSiteScreenFor(
     case "Draft":
       return (
         <DraftSiteScreenAdapter
+          siteId={site.id}
+          onViewDeck={handlers.onViewDeck}
+        />
+      );
+    case "DreamsignRevelation":
+      return (
+        <DreamsignRevelationScreenAdapter
           siteId={site.id}
           onViewDeck={handlers.onViewDeck}
         />

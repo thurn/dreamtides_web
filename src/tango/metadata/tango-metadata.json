@@ -2555,6 +2555,43 @@
       "description": "Enter the site; fired on a tap / click of an interactive node only."
     }
   ],
+  "SpeechBubble": [
+    {
+      "name": "speakerName",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The speaking character's display name."
+    },
+    {
+      "name": "text",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The spoken line. Plain text; the component supplies the bubble voice."
+    },
+    {
+      "name": "arrowSide",
+      "tsType": "\"left\" | \"right\"",
+      "unionMembers": [
+        "left",
+        "right"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Which side carries the arrow pointing toward the character."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional stable test id for product-screen QA."
+    }
+  ],
   "TideDisc": [
     {
       "name": "tide",

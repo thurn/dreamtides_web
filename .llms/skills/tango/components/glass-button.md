@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/glass-button`
 
-Real consumers: **0** (imports outside `src/tango/docs/` and tests).
+Real consumers: **1** (imports outside `src/tango/docs/` and tests).
 
 The labeled glass secondary action — a text label in the control typography on the shared liquid-glass control surface, with an optional leading glyph. It wears the same material as the Select / SegmentedControl trigger, so a secondary action reads as one family with the filter/sort controls it sits beside.
 

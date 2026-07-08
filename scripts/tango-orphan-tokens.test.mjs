@@ -124,7 +124,6 @@ export const BASELINE = [
   // Spacing scale members — sanctioned complete scale; --space-11/-12 also have
   // doc-mockup readers under src/tango/docs/ (excluded from this scan).
   "--space-11",
-  "--space-12",
   // Type scale (--t-*) members — sanctioned complete scale; each bundles
   // weight + size + face for a voice UI code applies by role.
   "--t-button",
@@ -134,8 +133,6 @@ export const BASELINE = [
   "--t-popover-body",
   "--t-popover-epithet",
   "--t-popover-headline",
-  "--t-popover-meta",
-  "--t-serif-body",
   "--tracking-wordmark", // reserved wordmark letter-spacing token
 ];
 

@@ -84,15 +84,16 @@ export function QuestApp({
     runtimeConfig.uiVariant === "tango" && state.screen.type === "atlas";
   const dreamscapeUsesTango =
     runtimeConfig.uiVariant === "tango" && state.screen.type === "dreamscape";
-  // The Tango draft site re-homes the bottom bar into its own
-  // QuestStatusBar and the utility menu into the top-left hamburger, exactly as
-  // the atlas / dreamscape screens do, so it joins the same suppression + menu
-  // gate.
-  const draftSiteUsesTango =
+  // Tango site screens that own their in-screen QuestStatusBar also own the
+  // top-left utility menu, so they join the same suppression + menu gate as
+  // atlas / dreamscape and avoid a doubled app-shell HUD.
+  const activeSite = activeSiteType(state);
+  const tangoSiteUsesQuestMenu =
     runtimeConfig.uiVariant === "tango"
-    && activeSiteType(state) === "Draft";
+    && (activeSite === "Draft"
+      || (!isDesktopViewport && activeSite === "DreamsignRevelation"));
   const tangoScreenUsesQuestMenu =
-    dreamscapeUsesTango || atlasUsesTango || draftSiteUsesTango;
+    dreamscapeUsesTango || atlasUsesTango || tangoSiteUsesQuestMenu;
   const showHud =
     state.screen.type !== "questStart"
     && !isBattleSiteHudHidden(state)
