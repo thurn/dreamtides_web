@@ -134,6 +134,7 @@ export function Motes({
 
   return (
     <div
+      className="tango"
       style={{
         position: "absolute",
         inset: 0,
