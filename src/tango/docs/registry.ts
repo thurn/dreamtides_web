@@ -33,6 +33,7 @@ import { pipBadgeDemo } from "./demos/pip-badge";
 import { pressableDemo } from "./demos/pressable";
 import { questStatusBarDemo } from "./demos/quest-status-bar";
 import { resourceChipDemo } from "./demos/resource-chip";
+import { richTextDemo } from "./demos/rich-text";
 import { rulesTextDemo } from "./demos/rules-text";
 import { segmentedControlDemo } from "./demos/segmented-control";
 import { selectDemo } from "./demos/select";
@@ -150,6 +151,7 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   pipBadgeDemo,
   questStatusBarDemo,
   dreamcallerPortraitDemo,
+  richTextDemo,
   rulesTextDemo,
   gameCardDemo,
   hoverZoomCardDemo,
