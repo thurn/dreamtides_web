@@ -88,7 +88,7 @@ afterEach(() => {
 });
 
 describe("DreamsignRevelationScreen", () => {
-  it("keeps the offer shadow at rest but removes it while pressed", () => {
+  it("renders offer dreamsigns without the revelation shadow", () => {
     const { container, root } = mount(
       <DreamsignRevelationScreen
         view={view()}
@@ -104,7 +104,7 @@ describe("DreamsignRevelationScreen", () => {
       '[data-testid="dreamsign-revelation-art-1"]',
     );
     expect(center).not.toBeNull();
-    expect(center?.style.filter).toContain("drop-shadow");
+    expect(center?.style.filter).toBe("none");
 
     act(() => {
       center?.dispatchEvent(new Event("pointerdown", { bubbles: true }));
