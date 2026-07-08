@@ -102,6 +102,40 @@ const variants: TintVariant[] = [
   },
 ];
 
+const mediaVariants = variants.filter((variant) =>
+  ["baseline", "crimson-underlay", "ruby-rim", "rose-bloom", "danger-chip"].includes(
+    variant.id,
+  ),
+);
+
+interface MediaSample {
+  id: string;
+  title: string;
+  scene: Parameters<typeof dreamscapeSceneUrl>[0];
+  position: string;
+}
+
+const mediaSamples: MediaSample[] = [
+  {
+    id: "warm",
+    title: "Rust Expanse",
+    scene: "rust_expanse",
+    position: "center",
+  },
+  {
+    id: "cool",
+    title: "Winterwake Fjords",
+    scene: "winterwake_fjords",
+    position: "center",
+  },
+  {
+    id: "neon",
+    title: "Grid City",
+    scene: "grid_city",
+    position: "center",
+  },
+];
+
 function TintedGlassButton({
   variant,
 }: {
@@ -161,6 +195,68 @@ function TintedGlassButton({
   );
 }
 
+function VariantButton({ variant }: { variant: TintVariant }) {
+  return variant.id === "baseline" ? (
+    <GlassButton label={variant.label} glyph={variant.glyph} onPress={() => {}} />
+  ) : (
+    <TintedGlassButton variant={variant} />
+  );
+}
+
+function MediaSamplePanel({ sample }: { sample: MediaSample }) {
+  return (
+    <section
+      data-media-sample={sample.id}
+      style={{
+        minHeight: 236,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        gap: token("--space-7"),
+        padding: token("--space-6"),
+        boxSizing: "border-box",
+        borderRadius: token("--radius-panel"),
+        overflow: "hidden",
+        backgroundImage: `url(${dreamscapeSceneUrl(sample.scene)})`,
+        backgroundSize: "cover",
+        backgroundPosition: sample.position,
+        border: "1px solid rgba(255,255,255,0.16)",
+        boxShadow: "0 18px 46px rgba(0,0,0,0.3)",
+      }}
+    >
+      <h2
+        style={{
+          alignSelf: "flex-start",
+          margin: 0,
+          padding: `${token("--space-2")} ${token("--space-4")}`,
+          borderRadius: token("--radius-pill"),
+          background: "rgba(8, 5, 17, 0.48)",
+          border: "1px solid rgba(255,255,255,0.14)",
+          color: token("--text-primary"),
+          font: token("--t-eyebrow"),
+          letterSpacing: token("--tracking-eyebrow"),
+          textTransform: "uppercase",
+        }}
+      >
+        {sample.title}
+      </h2>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: token("--space-4"),
+        }}
+      >
+        {mediaVariants.map((variant) => (
+          <VariantButton key={`${sample.id}-${variant.id}`} variant={variant} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function VariantCard({ variant }: { variant: TintVariant }) {
   return (
     <div
@@ -178,15 +274,7 @@ function VariantCard({ variant }: { variant: TintVariant }) {
       }}
     >
       <div style={{ display: "flex", justifyContent: "center" }}>
-        {variant.id === "baseline" ? (
-          <GlassButton
-            label={variant.label}
-            glyph={variant.glyph}
-            onPress={() => {}}
-          />
-        ) : (
-          <TintedGlassButton variant={variant} />
-        )}
+        <VariantButton variant={variant} />
       </div>
       <div>
         <h2
@@ -217,9 +305,7 @@ export function GlassButtonMockup() {
     <div
       style={{
         ...sceneRoot,
-        backgroundImage: `linear-gradient(to bottom, rgba(8,5,17,0.26) 0%, rgba(8,5,17,0.54) 52%, rgba(8,5,17,0.9) 100%), url(${dreamscapeSceneUrl("rust_expanse")})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        background: token("--bg-app"),
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -258,9 +344,24 @@ export function GlassButtonMockup() {
       </header>
 
       <main
+        data-glass-button-media-lab
+        style={{
+          width: "min(100%, 980px)",
+          display: "flex",
+          flexDirection: "column",
+          gap: token("--space-5"),
+        }}
+      >
+        {mediaSamples.map((sample) => (
+          <MediaSamplePanel key={sample.id} sample={sample} />
+        ))}
+      </main>
+
+      <section
         data-glass-button-tint-lab
         style={{
           width: "min(100%, 980px)",
+          marginTop: token("--space-7"),
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
           gap: token("--space-5"),
@@ -269,7 +370,7 @@ export function GlassButtonMockup() {
         {variants.map((variant) => (
           <VariantCard key={variant.id} variant={variant} />
         ))}
-      </main>
+      </section>
     </div>
   );
 }
