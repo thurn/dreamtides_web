@@ -992,9 +992,10 @@ export function isHold(
  *   3. pinned to the top screen inset and shifted horizontally so the card sits
  *      beside the press area (to its left or right, whichever has room), when a
  *      top-pinned card would otherwise overlap the obstacle vertically.
- * When neither side has room for the card beside the press area (a wide-enough
- * card against a centered top trigger), the card stays centered at the top —
- * still above, never below.
+ * When neither side has room for the card beside a touch press area (a
+ * wide-enough card against a centered top trigger), the card moves to whichever
+ * screen edge puts its center farthest from the finger. Fine-pointer hover has
+ * no finger to avoid, so that fallback stays centered at the top.
  *
  * The horizontal obstacle the shift clears is the UNION of the anchor box
  * (`spanLeft`..`spanRight`, or the point `x` when absent) and, on a touch press,
@@ -1064,6 +1065,13 @@ export function computePopoverPosition(
     left = leftOfObstacle;
   } else if (fitsRight) {
     left = rightOfObstacle;
+  } else if (pointerX != null) {
+    const leftEdgeDistance = Math.abs(pointerX - (minLeft + width / 2));
+    const rightEdgeDistance = Math.abs(pointerX - (maxLeft + width / 2));
+    left =
+      rightEdgeDistance >= leftEdgeDistance
+        ? maxLeft
+        : minLeft;
   } else {
     left = centeredLeft;
   }

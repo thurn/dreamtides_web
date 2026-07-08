@@ -215,6 +215,53 @@ describe("computePopoverPosition — on-screen clamp", () => {
     assertFullyOnScreen(pos, WIDTH, HEIGHT);
   });
 
+  it("shifts a centered top-edge touch press to the far viewport edge when side clearance cannot fully fit", () => {
+    const mobileWidth = infoCardWidth(VP_W);
+    const pos = computePopoverPosition(
+      anchor({
+        x: 195,
+        spanLeft: 120,
+        spanRight: 270,
+        top: 20,
+        bottom: 170,
+        pointerX: 195,
+        pointerY: 80,
+      }),
+      mobileWidth,
+      HEIGHT,
+      GAP,
+      EDGE,
+    );
+
+    expect(pos.top).toBe(EDGE);
+    expect(pos.left).toBeCloseTo(VP_W - mobileWidth - EDGE, 5);
+    expect(pos.left).not.toBeCloseTo(195 - mobileWidth / 2, 5);
+    assertFullyOnScreen(pos, mobileWidth, HEIGHT);
+  });
+
+  it("chooses the edge farthest from an off-center top-edge touch press", () => {
+    const mobileWidth = infoCardWidth(VP_W);
+    const pos = computePopoverPosition(
+      anchor({
+        x: 235,
+        spanLeft: 160,
+        spanRight: 310,
+        top: 20,
+        bottom: 170,
+        pointerX: 235,
+        pointerY: 80,
+      }),
+      mobileWidth,
+      HEIGHT,
+      GAP,
+      EDGE,
+    );
+
+    expect(pos.top).toBe(EDGE);
+    expect(pos.left).toBe(EDGE);
+    assertFullyOnScreen(pos, mobileWidth, HEIGHT);
+  });
+
   it("shifts a top-edge anchor sideways to clear the press area", () => {
     // A trigger hugging the LEFT edge near the top: no room above, so the card
     // pins to the top and shifts to the RIGHT of the trigger rather than
