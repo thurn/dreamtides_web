@@ -1,9 +1,8 @@
 /* Tango design tokens.
    ================================================================
-   Source of truth: the Claude Design "Dreamtides Mobile" project
-   (projectId 10fa84a8-cdc2-4e83-80af-47df24d1c247), tokens/*.css.
-   Every value below is copied verbatim from that project — the hexes,
-   sizes, shadows, and easings are never edited here.
+   Source of truth: the local Tango token contract, seeded from the Claude
+   Design "Dreamtides Mobile" project (projectId
+   10fa84a8-cdc2-4e83-80af-47df24d1c247), tokens/*.css.
 
    Each source file's top-level `:root { ... }` block is rescoped to
    `.tango { ... }` so these tokens only apply within the Tango subtree
@@ -128,10 +127,10 @@
   --primitive-orange-500: #f97316;  /* default selection ring — production SELECTION_DEFAULT_COLOR */
 
   /* ---- Color: text on dark ---- */
-  --primitive-ink-100: #f6f1ff;     /* primary, a warm near-white */
-  --primitive-ink-300: #cabbe2;     /* secondary */
-  --primitive-ink-400: #9c8db8;     /* muted */
-  --primitive-ink-500: #6f6388;     /* faint label / disabled */
+  --primitive-ink-100: #fff8ec;     /* primary, a warm near-white */
+  --primitive-ink-300: #eee3d2;     /* secondary */
+  --primitive-ink-400: #d8ccba;     /* muted */
+  --primitive-ink-500: #bba994;     /* faint label / disabled */
 
   /* ---- Color: lines & scrims ---- */
   --primitive-line-soft: rgba(255, 255, 255, 0.07);
@@ -286,9 +285,9 @@
   --dt-spark-border: var(--primitive-spark-600);
   --dt-enemy: var(--primitive-ember-500);
   --dt-player: var(--primitive-sap-400);
-  --dt-text: #ece7f5;
-  --dt-text-dim: #b3aac8;
-  --dt-text-faint: #7b7299;
+  --dt-text: #fff8ec;
+  --dt-text-dim: #d8ccba;
+  --dt-text-faint: #bba994;
 
   /* Atlas-specific gradients & washes (atlas.css `.dream-atlas`) */
   --dt-wash-journey: radial-gradient(120% 95% at 50% 30%, #241a3a, #140e22 55%, #0a0612); /* @kind other */
@@ -324,14 +323,15 @@
      ================================================================
      These SHORT canonical names are the single layer battle (and atlas,
      and the card) reference so text / line / spark can't diverge per
-     surface. They resolve to the warm, purple-tinted brand values.
+     surface. Text resolves to warm high-contrast neutrals while accents keep
+     the brand hue.
 
      (`--accent`, `--spark`, `--energy`, `--danger`, `--essence` live in
      the semantic block above; the `--font-*` roles live there too. Listed
      here as the canonical contract.) */
-  --text: var(--dt-text);             /* #ece7f5 warm near-white */
-  --text-dim: var(--dt-text-dim);     /* #b3aac8 warm */
-  --text-faint: var(--dt-text-faint); /* #7b7299 purple */
+  --text: var(--dt-text);             /* #fff8ec warm near-white */
+  --text-dim: var(--dt-text-dim);     /* #d8ccba warm */
+  --text-faint: var(--dt-text-faint); /* #bba994 warm muted */
   --surface: var(--surface-card);     /* #1a1525 plum */
   --line: var(--dt-line);             /* rgba(168,85,247,.18) — purple hairline */
   --line-strong: var(--dt-line-strong);/* rgba(168,85,247,.42) */
