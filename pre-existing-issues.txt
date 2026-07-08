@@ -10,3 +10,58 @@ fallback React keys and data attributes derived from dreamsign names when an ID
 is absent. Dreamsign names are display copy and are not guaranteed unique; these
 surfaces should require or synthesize stable UUID-backed identifiers before
 rendering.
+
+Tango sweep findings filed July 8, 2026
+
+- `src/tango/screens/DreamsignRevelationScreen.tsx:341` hand-rolls a purge
+  replacement dialog shell (`role="dialog"`, scrim, panel, title/body/actions)
+  alongside the shared `GlassDialog` shell (`src/tango/components/overlay/GlassDialog.tsx:86`).
+  Decide whether `GlassDialog` needs footer/action affordances or whether this
+  screen can carry the replacement grid and actions in the existing body slot.
+
+- Fixed-corner close/leave controls repeat the same wrapper shape in
+  `src/screens/DreamsignRevelationScreen.tsx:154`,
+  `src/screens/ShopScreen.tsx:200`, `src/screens/PurgeSiteScreen.tsx:447`, and
+  `src/screens/DuplicationSiteScreen.tsx:279`, with only
+  `src/screens/site-leave-control.css:1` shared. Introduce a small
+  product-screen corner close control or a screen-chrome wrapper, then replace
+  the repeated `<div className="tango site-leave-control"><IconButton ... /></div>`
+  call sites.
+
+- `SpeechBubble` exposes and demos a right-arrow branch at
+  `src/tango/components/overlay/SpeechBubble.tsx:29` and
+  `src/tango/docs/demos/speech-bubble.tsx:40`, but the only production caller is
+  the Dreamsign Revelation guide composition at
+  `src/tango/screens/DreamsignRevelationScreen.tsx:185`, which passes
+  `arrowSide="left"`. Decide whether the right-arrow path is a planned surface
+  or collapse the component and demo to the shipped left-arrow composition.
+
+- `QuestStatusBar` documents both `compact` and `grand` sizes at
+  `src/tango/docs/demos/quest-status-bar.tsx:50`, while its demo defaults only
+  to `compact` at `src/tango/docs/demos/quest-status-bar.tsx:75`.
+  Production desktop screens use `size={isDesktop ? "grand" : "compact"}` in
+  `src/tango/screens/AtlasScreen.tsx:99`, `src/tango/screens/DreamscapeScreen.tsx:124`,
+  and `src/tango/screens/DraftScreen.tsx:290`. Add a grand demo/mockup state or
+  make the demo stage responsive enough to show the desktop state.
+
+- `GlassDialog` is documented by a bare component demo at
+  `src/tango/docs/demos/glass-dialog.tsx:21`, while its production integration
+  surface is `StartingDeckOverlay` at `src/tango/screens/StartingDeckOverlay.tsx:105`.
+  Add an integration demo or fixture that exercises the shipped overlay contract
+  (`cutoutAwareClose`, roomy `wide`, card-grid and empty states), or document why
+  the bare shell is the canonical catalog surface.
+
+- Several one-consumer catalog entries need an adoption decision:
+  `ResourceChip`, `GlassButton`, `SpeechBubble`, `SegmentedControl`,
+  `TideDisc`, `AtlasNodeReveal`, and `AtlasMap` each report one real consumer
+  via `scripts/lib/tango-consumers.mjs`. Document the single-screen
+  specialization, mark planned surfaces as incubating, or fold screen-local
+  components into their owning screen modules.
+
+- High-import Tango helper modules act like public primitives without generated
+  references: `src/tango/primitives/art.ts` (~13 imports),
+  `src/tango/components/atlas/atlas-display.ts` (~12),
+  `src/tango/components/card/card-aspect.ts` (~6), and
+  `src/tango/primitives/color.ts` (~5). Add primitive/helper reference pages or
+  route consumers through documented components so these APIs are not discovered
+  only by grep.

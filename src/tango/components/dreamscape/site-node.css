@@ -36,7 +36,7 @@
     border-color 0.16s ease;
 }
 .ds-ico {
-  color: #fff;
+  color: var(--text-on-accent);
   display: grid;
   place-items: center;
   line-height: 1;
@@ -92,8 +92,8 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 .ds-node-badge.locked {
-  background: #14101f;
-  color: #fff;
+  background: var(--bg-band);
+  color: var(--text-on-accent);
 }
 
 @media (prefers-reduced-motion: reduce) {

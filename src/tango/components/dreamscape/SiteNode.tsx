@@ -36,9 +36,10 @@ import "./site-node.css";
 
 const { usePressReveal, anchorRect, PressPopover } = InfoCard;
 
-/** Disc diameter in px; battle guardians scale up from here. The disc's size is
- * the design system's, not a caller knob — the screen positions the node (via
- * `model.pos`); it does not resize it. */
+/** Disc diameter in px. Guardian battles use pulse/badge treatment while the
+ * disc diameter stays fixed. The disc's size is the design system's, not a
+ * caller knob — the screen positions the node (via `model.pos`); it does not
+ * resize it. */
 const NODE_SIZE = 60;
 
 /** The node's fixed accent — the system's violet, not a per-node color. The ring

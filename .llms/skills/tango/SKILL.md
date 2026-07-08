@@ -46,7 +46,7 @@ The reference files and the index are projections of the component sources
 | Component | Group | Consumers | Reference | What it is |
 | --- | --- | --- | --- | --- |
 | Pressable | Primitives | 10 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
-| Resource Chip | Components | 1 | [components/resource-chip.md](components/resource-chip.md) | The canonical value-and-mark pairing for the game economy. |
+| Resource Chip | Components | 1 | [components/resource-chip.md](components/resource-chip.md) | The sized, self-contained value-and-mark chip for the game economy. |
 | Essence Value | Components | 10 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
 | Button | Components | 3 | [components/button.md](components/button.md) | Rung 1 of Tango's four-rung button suite — the beveled purple sprite, the primary/commit action, scaled to any label and to a taller commit height. |
 | Icon Button | Components | 12 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — a corner chrome action worn by the deck viewer's close control and the dreamscape menu button. |

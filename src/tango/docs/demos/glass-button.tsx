@@ -44,7 +44,6 @@ export const glassButtonDemo: TangoComponent = {
     "The labeled glass secondary action — a text label in the control typography on the shared liquid-glass control surface, with an optional leading glyph. It wears the same material as the Select / SegmentedControl trigger, so a secondary action reads as one family with the filter/sort controls it sits beside.",
   callout:
     "Rung two of the four-rung button suite: the beveled purple Button (commit / primary), THIS labeled glass control (a secondary chrome action), the glyph-only glass IconButton (a corner chrome action), and a bare pressable glyph (the lightest inline affordance). It stays quietly below the purple commit Button it defers to.",
-  status: "incubating",
   group: "Components",
   docName: "GlassButton",
   Component: GlassButtonDemo,

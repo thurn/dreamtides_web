@@ -1,10 +1,10 @@
 // Motes — the atmospheric particle layer.
 //
-// Drifting dust motes over a scene or chrome. This is the ONE sanctioned use
-// of opacity animation in the system (Principle two): atmosphere, never
-// object motion, and never a legibility crutch. Depth and mood come from the
-// scene art and from these motes — never from a scrim, wash, or vignette
-// painted over the media.
+// Drifting dust motes over a scene or chrome. This is the sanctioned particle
+// opacity animation in the system (Principle two): atmosphere, never object
+// motion, and never a legibility crutch. Depth and mood come from the scene art
+// and from these motes — never from a scrim, wash, or vignette painted over the
+// media.
 //
 // Two context tints, from tokens:
 //   - warm   (default) — over scene art / a portrait  (--mote-warm)
@@ -110,7 +110,7 @@ export interface MotesProps {
 
 /**
  * Motes — the atmospheric particle layer. Drifting motes tinted by context;
- * the one sanctioned use of opacity animation (atmosphere, never a legibility
+ * the sanctioned particle opacity animation (atmosphere, never a legibility
  * overlay). Fills its positioned parent; respects prefers-reduced-motion.
  */
 export function Motes({

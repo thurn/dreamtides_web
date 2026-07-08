@@ -21,7 +21,7 @@
 //   - the commit action ("Begin Your Dream") is THE SAME BUTTON, taller —
 //     `size="lg"`. Commit is a size, not a variant.
 //   - press feedback routes through the shared press primitive: a
-//     scale-DOWN by --press-scale (0.94), plus a slight brighten. Button
+//     scale-DOWN by --press-scale (0.9), plus a slight brighten. Button
 //     uses the `usePress` hook (not the `<Pressable>` wrapper component)
 //     because it needs to combine the press transform with the brighten
 //     filter on the very same element — exactly the composition case

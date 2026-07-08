@@ -295,7 +295,7 @@ a **Primitives** tier below it, each grouped by kind and name-prefix family.
   fallbacks (`fa-solid fa-hammer`, already present, and `ph-fill ph-cards`, the
   one self-hosted Phosphor fill face).
 - **Motion** — `--ease-dream / -out / -in-out`, `--dur-fast/base/slow`,
-  `--press-scale` (0.94), and the two material-continuity tokens
+  `--press-scale` (0.9), and the two material-continuity tokens
   (`--motion-object-travel`, `--motion-container-transform`).
 - **Glow** — `--glow-accent / -soft / -strong`, `--glow-gold`, `--glow-danger`,
   `--glow-text`, plus the cool purple-black elevation shadows and insets.
@@ -320,8 +320,8 @@ metadata source.
 - Regeneration is wired into `scripts/regenerate-assets.sh`.
 
 The design's own `.d.ts` files already carry rich JSDoc (see the prop surfaces
-for `Button`, `InfoCard`, `TidePill`, `Motes`), so the Tango `.tsx` ports carry
-the same doc comments and the tables come out populated.
+for `Button`, `InfoCard`, `Motes`, and the overlay controls), so the Tango
+`.tsx` ports carry the same doc comments and the tables come out populated.
 
 ### The agent-facing reference (`.llms/skills/tango/`)
 
@@ -376,16 +376,14 @@ radius) but stays deliberately restrained so the components are the focus.
 | Component | Location | Strategy |
 | --- | --- | --- |
 | Design tokens | `primitives/` | Import values from Claude Design `tokens/*.css` → `tango-tokens.css` + generated `tokens.ts` |
-| **Pressable** / `usePress` | `primitives/` | Import from Claude Design (the one press-feedback primitive; scale-down `--press-scale` 0.94) |
+| **Pressable** / `usePress` | `primitives/` | Import from Claude Design (the one press-feedback primitive; scale-down `--press-scale` 0.9) |
 | **Button** | `components/` | Import from Claude Design; beveled purple 9-patch (`Button_Purple.png`), `border-image` 9-slice; sizes `sm/md/lg` (`lg` = taller commit); props `full`, `icon`, `cost`, `frameScale` |
 | **ResourceChip** | `components/` | Import from Claude Design (value + filled-Boxicon mark, tight pairing) |
-| **InfoCard** (+ press-reveal engine) | `components/` | Import from Claude Design; variants `object/hero/icon/text`; statics `PressPopover`, `PressInfo`, `usePressReveal`, `anchorRect`, `setRevealDelay`, `SITE_DISC` |
+| **InfoCard** (+ press-reveal engine) | `components/` | Import from Claude Design; variants `object/card/icon/text`; statics `PressPopover`, `PressInfo`, `usePressReveal`, `anchorRect` |
 | **SegmentedControl** | `components/` | Import from Claude Design |
-| **StatTile** | `components/` | Import from Claude Design |
-| **TidePill** | `components/` | Import from Claude Design; **keep the name** (tides are an active concept) |
-| **Motes** | `components/` | Import from Claude Design (atmospheric particle layer; `warm`/`violet` tint; the one sanctioned opacity animation) |
+| **Motes** | `components/` | Import from Claude Design (atmospheric particle layer; `warm`/`violet`/`dreamscape` tint; sanctioned particle opacity animation) |
 | **QuestStatusBar** | `components/` | Import from Claude Design (the transparent bottom HUD) |
-| **GroupPanel** | `components/` | A flat, solid deep-plum card (`--surface-card` fill, no border, `--shadow-card` drop shadow) — a distinct surface from InfoCard's glass. The CSS-only liquid-glass recipe (`backdrop-filter` blur/saturate + specular gradient + inset rim/wash + drop shadow) lives in `glassSurfaceStyle` (`components/controls/glass-surface.ts`), shared by InfoCard and the deck-viewer backdrop |
+| **GroupPanel** | `components/` | A flat, solid deep-plum card (`--surface-card` fill, no border, `--shadow-card` drop shadow) — a distinct surface from InfoCard's glass. The liquid-glass recipe (`backdrop-filter` blur/saturate + specular gradient + inset rim/wash + drop shadow) lives in `glassSurfaceStyle` (`src/tango/internal/glass-surface.ts`), shared by InfoCard, GlassDialog, IconButton, GlassButton, SpeechBubble, and the deck-viewer backdrop |
 | **GameCard** | `components/` | Move production `CardView` + its closure into Tango, clean up for reuse (the design's `GameCard` is itself a port of `CardView`) |
 | **RulesText** | `components/` | Move production `RulesText` + `card-text` + `PipBadge` into Tango |
 | **Dreamsign** | `components/` | Unify local (`DreamsignHoverCard` / `DreamsignArtTile`) with the design's `Dreamsign`; route its touch-down preview through `InfoCard` (`object` variant) |
@@ -398,7 +396,7 @@ One reveal contract, expressed through whichever gesture is native to the
 device. Neither input is the primary one:
 
 - **Desktop / fine pointer:** hover reveals the `InfoCard`; mouse-down applies
-  the `Pressable` scale-down (0.94). Nothing reveals on press.
+  the `Pressable` scale-down (0.9). Nothing reveals on press.
 - **Touch / coarse pointer:** touch-down reveals the `InfoCard` (and scales);
   release dismisses. No long-press, no close button, no scrim, anchored to the
   touch.
@@ -493,8 +491,8 @@ reference, not by a from-scratch subagent rewrite.
   pipeline (`tango-tokens.css` + generated `tokens.ts`); the ESLint boundary
   zone; the docgen script skeleton; Introduction + Primitives sections.
 - **Phase 1 — Simple primitives/components.** Pressable, ResourceChip, Button,
-  SegmentedControl, StatTile, TidePill, Motes — one subagent each; interactive
-  demos + auto props tables live.
+  SegmentedControl, Motes, TideDisc, and the economy/spec helpers — one subagent
+  each; interactive demos + auto props tables live.
 - **Phase 2 — Press engine & surfaces.** InfoCard + `usePressReveal` (with the
   input-adaptive hover/press model), GroupPanel (CSS port), QuestStatusBar.
 - **Phase 3 — Move production in.** RulesText (+ `card-text`, `PipBadge`) then
@@ -511,4 +509,5 @@ reference, not by a from-scratch subagent rewrite.
 
 - Design-system access is authorized via `/design-login`; the `claude_design`
   MCP `get_file` calls used in Phase 1+ require it to remain authorized.
-- Tides are an active concept, so `TidePill` keeps its name.
+- Tide concepts use `tide-spec` for the palette/types and `TideDisc` for the
+  circular reveal surface.

@@ -465,11 +465,12 @@
      PRESS_SCALE in Pressable.tsx. */
   --press-scale: 0.9; /* @kind other */
 
-  /* ---- The one hover-enlarge factor ----
-     Every pressable or hover-revealing surface — JS <Pressable>/usePress AND
-     CSS-only controls via :hover — grows by EXACTLY this under a
-     hover-capable pointer. Always slightly > 1; press wins while both
-     apply. Mirrors HOVER_SCALE in Pressable.tsx. */
+  /* ---- The standard hover-enlarge factor ----
+     Standard controls and inline reveal surfaces — JS <Pressable>/usePress AND
+     CSS-only controls via :hover — grow by EXACTLY this under a hover-capable
+     pointer. Map nodes use --node-hover-scale for their larger spatial pop.
+     Always slightly > 1; press wins while both apply. Mirrors HOVER_SCALE in
+     Pressable.tsx. */
   --hover-scale: 1.03; /* @kind other */
 
   /* ---- The map-node hover pop ----

@@ -51,8 +51,9 @@ export const PRESS_SCALE = 0.9;
 
 /**
  * The one hover-enlarge factor. Always slightly > 1: on a hover-capable
- * pointer, every pressable or hover-revealing surface grows by this amount
- * under the cursor. Mirrors the --hover-scale token so JS and CSS :hover
+ * pointer, every standard pressable or inline hover-revealing surface grows by
+ * this amount under the cursor. Map nodes use --node-hover-scale for their
+ * larger spatial pop. Mirrors the --hover-scale token so JS and CSS :hover
  * rules stay identical. Press wins while both apply.
  */
 export const HOVER_SCALE = 1.03;

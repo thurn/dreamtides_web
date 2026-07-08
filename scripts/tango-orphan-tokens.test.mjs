@@ -59,7 +59,6 @@ const DOCS_PREFIX = "src/tango/docs/";
 export const BASELINE = [
   // Semantic roles — reserved for a specific use, no current Tango reader.
   "--accent-tint", // reserved low-alpha fill behind accents
-  "--bg-band", // reserved surface: raised background band
   "--surface-raised", // reserved surface: raised card fill (one step above --surface-card)
   "--surface-chip", // reserved surface: chip fill
   "--text-on-card", // reserved text role: card name on card chrome

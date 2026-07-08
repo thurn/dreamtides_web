@@ -24,7 +24,7 @@
   }
 }
 .tango .qsbDeck:active {
-  transform: scale(var(--press-scale, 0.94));
+  transform: scale(var(--press-scale, 0.9));
 }
 
 /* ---- Dreamcaller bust: size + inner portrait scale driven by component vars ---- */

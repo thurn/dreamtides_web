@@ -10,7 +10,7 @@ export const resourceChipDemo: TangoComponent = {
   id: "resource-chip",
   title: "Resource Chip",
   blurb:
-    "The canonical value-and-mark pairing for the game economy. Every essence, energy, spark, points, or counter number routes through it, so the mark and its role color read identically wherever a value appears. Size and spacing are enumerated variants (sm/md/lg, tight/loose), not raw pixels. For a bare essence amount inside flowing text, reach for EssenceValue instead — it inherits the surrounding type.",
+    "The sized, self-contained value-and-mark chip for the game economy. It owns the economy mark, role color, and enumerated size/spacing variants (sm/md/lg, tight/loose) for HUD-like readouts. For a bare essence amount inside flowing text, reach for EssenceValue instead; for a standalone essence mark, use EssenceGlyph; Button owns its inline cost mark through the shared economy spec.",
   group: "Components",
   docName: "ResourceChip",
   Component: ResourceChip,
