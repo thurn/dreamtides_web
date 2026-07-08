@@ -26,11 +26,13 @@
 //     legacy `Math.random` the ensure* family used).
 
 import type { EventContext } from "../../eventlog/types";
+import type { DraftState } from "../../types/draft";
 import type {
   DeckEntry,
   DreamAugurySiteRuntime,
   Dreamsign,
   QuestState,
+  RuntimeShopSlot,
   SiteRuntimeState,
   SiteState,
   TransfigurationType,
@@ -78,6 +80,60 @@ export interface SiteContentProvider {
     site: SiteState;
     rng: (drawIndex: number) => number;
   }): SiteOpenResult | null;
+
+  /**
+   * Regenerate a shop's inventory for a `REROLL_SHOP` restock. The pure reducer
+   * (see `./shop`) owns the free-reroll-vs-essence decision and the essence /
+   * `freeRerolls` / `rerollCount` bookkeeping; only the *content* redraw (which
+   * needs the async-loaded card / Dreamsign catalogues and the run draft pool)
+   * is delegated here, handed a deterministic `rng` derived from `ctx.rng`.
+   * Returns the regenerated slots + Dreamsign pool + draft state, or `null` to
+   * bounce.
+   *
+   * SEAM (Task 26): real registration relocates the legacy `generateShopInventory`
+   * redraw (currently `Math.random`-seeded) behind this method, reading from the
+   * injected `rng`. Absent (or `null`-returning) → `REROLL_SHOP` bounces.
+   */
+  rerollShop?(input: {
+    quest: QuestState;
+    site: SiteState;
+    rng: (drawIndex: number) => number;
+  }): ShopRerollResult | null;
+
+  /**
+   * Resolve a Dream Merchant `ACCEPT_MERCHANT_OFFER` / `DECLINE_MERCHANT` at
+   * `site`. The whole resolution (offer lookup, essence / deck / dreamsign
+   * payload application, site completion) is content-coupled — it reads the
+   * merchant encounter generated from async-loaded quest content — so it lives
+   * entirely behind this seam. Returns the fully-updated `QuestState` (site
+   * already completed) or `null` to bounce (stale encounter, unknown offer,
+   * unaffordable, already-visited). Must not mutate `quest`.
+   *
+   * SEAM (Task 26): real registration relocates the legacy
+   * `resolveMerchantOffer` / `resolveMerchantDecline` (src/journey_v2) behind
+   * this method, sourcing randomness from the injected `rng`. Absent (or
+   * `null`-returning) → the merchant events bounce.
+   */
+  resolveMerchant?(input: {
+    quest: QuestState;
+    site: SiteState;
+    action: "accept" | "decline";
+    payload: Record<string, unknown>;
+    rng: (drawIndex: number) => number;
+  }): QuestState | null;
+}
+
+/**
+ * The regenerated content a `REROLL_SHOP` restock produces: a full replacement
+ * set of unpurchased slots plus the Dreamsign pools and draft state the redraw
+ * consumed. The reducer stores `slots` / `remainingDreamsignPoolIds` on the
+ * shop runtime and `remainingDreamsignPool` / `draftState` on the quest.
+ */
+export interface ShopRerollResult {
+  slots: RuntimeShopSlot[];
+  remainingDreamsignPoolIds: string[];
+  remainingDreamsignPool: string[];
+  draftState: DraftState | null;
 }
 
 let contentProvider: SiteContentProvider | null = null;
@@ -132,7 +188,7 @@ function clampEssence(value: number, cap: number): number {
 }
 
 /** Locate a site by id anywhere in the atlas (relocated legacy `findSite`). */
-function findSite(quest: QuestState, siteId: string): SiteState | null {
+export function findSite(quest: QuestState, siteId: string): SiteState | null {
   for (const node of Object.values(quest.atlas.nodes)) {
     const site = node.sites.find((candidate) => candidate.id === siteId);
     if (site !== undefined) return site;

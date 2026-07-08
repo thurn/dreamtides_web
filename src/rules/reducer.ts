@@ -22,6 +22,7 @@ import type { QuestState } from "../types/quest";
 import * as deck from "./quest/deck";
 import * as draft from "./quest/draft";
 import * as lifecycle from "./quest/lifecycle";
+import * as shop from "./quest/shop";
 import * as sites from "./quest/sites";
 
 /** The reducer's return shape (matches `EngineConfig.reducer`). */
@@ -220,6 +221,36 @@ function routeDomain(
       return questCase(state, sites.forceDreamAuguryArchetype(quest, payload));
     case "COMPLETE_SITE":
       return questCase(state, sites.completeSite(quest, payload));
+
+    // --- shop, merchant & modifiers ---
+    case "BUY_SHOP_SLOT":
+      return questCase(state, shop.buyShopSlot(quest, payload, ctx));
+    case "REROLL_SHOP":
+      return questCase(state, shop.rerollShop(quest, payload, ctx));
+    case "GRANT_FREE_REROLLS":
+      return questCase(state, shop.grantFreeRerolls(quest, payload));
+    case "APPLY_SHOP_DISCOUNT":
+      return questCase(state, shop.applyShopDiscount(quest, payload));
+    case "ACCEPT_MERCHANT_OFFER":
+      return questCase(state, shop.acceptMerchantOffer(quest, payload, ctx));
+    case "DECLINE_MERCHANT":
+      return questCase(state, shop.declineMerchant(quest, payload, ctx));
+    case "PUSH_BATTLE_MODIFIER":
+      return questCase(state, shop.pushBattleModifier(quest, payload));
+    case "PUSH_TEMPORARY_BANE_GRANT":
+      return questCase(state, shop.pushTemporaryBaneGrant(quest, payload, ctx));
+    case "BAN_SITE_TYPE":
+      return questCase(state, shop.banSiteType(quest, payload));
+    case "BOOST_SITE_APPEARANCE":
+      return questCase(state, shop.boostSiteAppearance(quest, payload));
+    case "REPLACE_SITE_TYPE":
+      return questCase(state, shop.replaceSiteType(quest, payload));
+    case "ADD_SITE_TO_DREAMSCAPE":
+      return questCase(state, shop.addSiteToDreamscape(quest, payload));
+    case "UPDATE_ATLAS":
+      return questCase(state, shop.updateAtlas(quest, payload));
+    case "SET_CARD_SOURCE_DEBUG":
+      return questCase(state, shop.setCardSourceDebug(quest, payload));
 
     // --- draft ---
     case "PICK_DRAFT_CARD":
