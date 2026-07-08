@@ -8,9 +8,10 @@
 //
 // The reveal renders through the design system's InfoCard, cut down for mobile:
 // a full-bleed scene-art hero with the resident guide's name and the home-site
-// bonus as the glass text card laid on top of it. Desktop uses a lighter large
-// place/guide card plus a companion standard site InfoCard. A node carrying a
-// pre-revealed known dreamsign shows its own companion object card.
+// bonus as the glass text card laid on top of it. Desktop uses the large
+// InfoCard `atlasReveal` variant plus a companion standard site InfoCard. A
+// node carrying a pre-revealed known dreamsign shows its own companion object
+// card.
 //
 // It routes through InfoCard's `usePressReveal` + `anchorRect` + `PressPopover`,
 // so timing, placement, and the on-screen clamp match every other Tango reveal;
@@ -233,9 +234,8 @@ function AtlasAffiliationInfoCard({
  * variable copy lengths gets natural height with cross-axis centering, per the
  * variable-content-siblings rule.
  *
- * On desktop a revealed node's main card is the large {@link AtlasHoverCard}
- * (scene hero + resident figure on the right + the place / guide / bonus
- * panel), with the signature site carried by a separate standard site
+ * On desktop a revealed node's main card is the large InfoCard atlas-reveal
+ * variant, with the signature site carried by a separate standard site
  * InfoCard; mobile and unrevealed nodes keep the compact {@link AtlasMainCard}.
  */
 function AtlasRevealCard({

@@ -18,6 +18,8 @@
 import * as React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
+import { artRef } from "../../primitives/art";
+import { richText } from "../card/rich-text";
 import { glassSurfaceStyle } from "../controls/glass-surface";
 import {
   CLICK_WINDOW,
@@ -95,6 +97,24 @@ describe("InfoCard shell treatment", () => {
     expect(html).not.toContain("opacity:");
     expect(html).not.toContain("animation:");
     expect(html).not.toContain("transform:");
+  });
+
+  it("renders the atlas reveal as an InfoCard variant with the shared glass fill", () => {
+    const html = renderToStaticMarkup(
+      React.createElement(InfoCard, {
+        variant: "atlasReveal",
+        image: artRef.dreamscapeScene("wilderveil"),
+        figure: artRef.dreamGuide("aldric"),
+        title: "Wilderveil",
+        subtitle: "Aldric, the Seer",
+        body: richText.plain("Aldric offers curated visions of the future."),
+      }),
+    );
+
+    expect(html).toContain("Wilderveil");
+    expect(html).toContain("Aldric, the Seer");
+    expect(html).toContain("rgba(18,14,28,0.5)");
+    expect(html).toContain("width:360px");
   });
 });
 

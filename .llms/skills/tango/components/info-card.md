@@ -6,22 +6,22 @@
 
 Components · Live demo & interactive props: `/tango#/info-card`
 
-The one press-to-reveal information card. Its media treatment varies by content — object, full-bleed, icon, tide, or text — over a single fixed liquid-glass shell and reveal contract.
+The one press-to-reveal information card. Its media treatment varies by content — object, full-bleed, atlas reveal, icon, tide, or text — over a single fixed liquid-glass shell and reveal contract.
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `variant` | `"object" \| "text" \| "icon" \| "fullBleed" \| "tide"` | no | — | Which media treatment. Omit — or pass 'text' — for the text variant. |
-| `image` | `ArtRef` | yes | — | The media the card is built around, as an {@link ArtRef}. Required. The square hero image the card is built on, as an {@link ArtRef}. Required. |
+| `variant` | `"object" \| "text" \| "icon" \| "fullBleed" \| "atlasReveal" \| "tide"` | no | — | Which media treatment. Omit — or pass 'text' — for the text variant. |
+| `image` | `ArtRef` | yes | — | The media the card is built around, as an {@link ArtRef}. Required. The square hero image the card is built on, as an {@link ArtRef}. Required. The scene hero image the card is built on, as an {@link ArtRef}. Required. |
 | `imageCrop` | `ImageCrop` = `"top" \| "center"` | no | — | How the media is cropped. Default `"top"`. How the hero image is cropped. Default `"center"`. |
-| `imageFilter` | `MediaFilter` = `"dreamsign-portrait" \| "dreamsign-portrait-bane" \| "spark-glow" \| "energy-glow"` | no | — | A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). A named media {@link MediaFilter} (e.g. a spark glow). |
+| `imageFilter` | `MediaFilter` = `"dreamsign-portrait" \| "dreamsign-portrait-bane" \| "spark-glow" \| "energy-glow"` | no | — | A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). A named media {@link MediaFilter} (e.g. a spark glow). A named media {@link MediaFilter} for the scene image. |
 | `frame` | `boolean` | no | — | true = framed portrait, false = contained transparent object. Default false. |
 | `title` | `string` | no | — | The card's headline. Plain text — resolve names before display. |
 | `body` | `RichText` | no | — | The reveal copy, as a {@link RichText} value (plain / rules / note / stack). |
-| `figure` | `ArtRef` | no | — | An optional foreground character render (a transparent full-body cutout — a Dream Guide, the boss) laid centered and prominent OVER the hero image, standing above the glass text card. Its own subject of the card; omit for a scene-only hero. An {@link ArtRef}, resolved by the component. |
+| `figure` | `ArtRef` | no | — | An optional foreground character render (a transparent full-body cutout — a Dream Guide, the boss) laid centered and prominent OVER the hero image, standing above the glass text card. Its own subject of the card; omit for a scene-only hero. An {@link ArtRef}, resolved by the component. Optional transparent full-body figure standing on the card's right side. |
 | `meta` | `string` | no | — | Small mono/uppercase overline above the title, on the glass card. Small mono/uppercase overline above the title. |
-| `subtitle` | `string` | no | — | An epithet under the name — a smaller serif line in white, mirroring the Dreamcaller-select name/epithet pairing. Plain text; resolve before display. An epithet under the name — a smaller serif subtitle in white, mirroring the Dreamcaller-select name/epithet pairing. Plain text; resolve before display. |
+| `subtitle` | `string` | no | — | An epithet under the name — a smaller serif line in white, mirroring the Dreamcaller-select name/epithet pairing. Plain text; resolve before display. The resident guide / boss title under the place headline. An epithet under the name — a smaller serif subtitle in white, mirroring the Dreamcaller-select name/epithet pairing. Plain text; resolve before display. |
 | `glyph` | `Glyph` | yes | — | The {@link Glyph} the disc renders. Required. |
 | `tide` | `Tide` = `"ember" \| "valor" \| "vision" \| "wild" \| "shadow"` | yes | — | Which of the five tides. Fixes the disc color/mark and the alignment label. |
 | `leadGlyph` | `Glyph` | no | — | A small leading {@link Glyph}. |
@@ -81,7 +81,7 @@ A media object with `image` (an `ArtRef`); set `frame` for a framed portrait, om
 
 ### Full-bleed variant
 
-A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the meta / name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Pass an optional `figure` (a transparent character render) to stand a subject centered and prominent over the hero, above the glass card — used for the atlas Dream Guide / boss reveals. Used for the Dreamcaller profile reveal and the atlas node reveals.
+A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the meta / name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Pass an optional `figure` (a transparent character render) to stand a subject centered and prominent over the hero, above the glass card. Used for the Dreamcaller profile reveal and the compact atlas node reveals.
 
 ```tsx
 <InfoCard
@@ -90,6 +90,21 @@ A square hero `image` filling the whole card, with the shared glass text card la
   figure={artRef.dreamGuide("tobias_tanglefur")}
   title="Tobias Tanglefur"
   body={richText.rules("Enhances the Garden site at his home dreamscape.")}
+/>
+```
+
+### Atlas reveal variant
+
+The large desktop Dream Atlas reveal: a scene hero, an optional right-side figure, and place / guide / body copy in the shared glass panel. Use this strict variant instead of creating a screen-local fork of InfoCard.
+
+```tsx
+<InfoCard
+  variant="atlasReveal"
+  image={artRef.dreamscapeScene("wilderveil")}
+  figure={artRef.dreamGuide("aldric")}
+  title="Wilderveil"
+  subtitle="Aldric, the Seer"
+  body={richText.plain("Aldric offers curated visions of the future.")}
 />
 ```
 

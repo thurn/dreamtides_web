@@ -114,19 +114,22 @@ documented: the `no-escape-hatch-props` ESLint rule and API contract tests
 fail the build on escape hatches. When lint blocks you, the design is telling
 you to use a variant or wrap — do not disable the rule.
 
-### Requested divergence must converge
+### Component forks do not ship
 
-While a design is in motion, a screen sometimes legitimately needs its own
-take on an existing component concept — exploration moves faster in a
-screen-local rendering than in a shared component, and the user may ask for
-exactly that. Build it locally, keep lint green, iterate freely. But the fork
-is a loan, not a home: **the push that stabilizes the design ends with an
-explicit decision** — either promote the screen-local rendering into the
-component family (rung 3 or 4 above), or file the consolidation in
-`pre-existing-issues.txt`. The decision is the required step; the
-consolidation itself can be deferred. A fork that skips the decision ages
-into a parallel implementation whose duplicated constants are kept in
-agreement only by hand — the case study is the collapsed tide disc in
+A screen may prototype a local rendering while the design is still being
+worked out, but a stabilized push must converge it before merge. If the local
+rendering copies an existing Tango component's material, type scale, media
+treatment, interaction engine, or authored geometry, it is a component fork and
+is not acceptable as production code. The production shape is one of the
+customization ladder outcomes: use the existing component as-is, wrap it for
+layout, add a strict variant to that component, or propose a genuinely new
+component.
+
+`pre-existing-issues.txt` is for issues found outside the current task, not a
+parking lot for a fork created by the current change. A component fork that is
+already present in the tree must be treated as debt to drain: promote it into
+the component family or replace it with an existing component before clearing
+the issue. The case study is the collapsed tide disc in
 [docs/postmortems/2026-07-05-desktop-dreamcaller-select.md](../../../docs/postmortems/2026-07-05-desktop-dreamcaller-select.md),
 which reached three independent declarations of the same diameter across
 three files.

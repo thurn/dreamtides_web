@@ -10,14 +10,16 @@
 //   - one shadow/rim treatment  — glassSurfaceStyle's layered glass edge
 //   - one type scale            — headline (serif) / body (rules) / meta (mono)
 // Only the MEDIA treatment varies by content, via `variant`:
-//   - object    — a centered framed portrait OR contained transparent object
-//   - fullBleed — a square hero image with a glass text card laid on TOP of it:
-//                 the image IS the card, with meta / name / epithet / body
-//                 revealed on the shared glass, floating over the lower image
-//   - icon      — a glyph disc beside the title
-//   - tide      — a tide's own colored disc + alignment label
-//   - text      — an optional small lead glyph + title, with an optional epithet
-//                 (a smaller serif subtitle in white) under the name
+//   - object      — a centered framed portrait OR contained transparent object
+//   - fullBleed   — a square hero image with a glass text card laid on TOP of it:
+//                   the image IS the card, with meta / name / epithet / body
+//                   revealed on the shared glass, floating over the lower image
+//   - atlasReveal — the large desktop Dream Atlas reveal: scene hero, prominent
+//                   right-side figure, and place / guide / bonus glass panel
+//   - icon        — a glyph disc beside the title
+//   - tide        — a tide's own colored disc + alignment label
+//   - text        — an optional small lead glyph + title, with an optional epithet
+//                   (a smaller serif subtitle in white) under the name
 //
 // The placement / timing engine ships alongside it and is attached as
 // statics: `InfoCard.PressPopover / PressInfo / usePressReveal / anchorRect /
@@ -85,6 +87,16 @@ const FULL_BLEED_INSET = 12;
 // design-system scale step. Sized to nearly fill the square hero so the figure
 // reads as the card's subject; its lower body falls behind the glass text card.
 const FULL_BLEED_FIGURE_HEIGHT = 208;
+/** Overall width (px) of the desktop atlas-reveal card's authored layout. */
+const ATLAS_REVEAL_CARD_W = 360;
+/** Scene-image band height (px) above the atlas-reveal glass text panel. */
+const ATLAS_REVEAL_HERO_H = 160;
+/** Dream Guide / boss figure height (px) in the atlas-reveal card. */
+const ATLAS_REVEAL_FIGURE_H = 248;
+/** Inset (px) of the atlas-reveal figure from the card's right edge. */
+const ATLAS_REVEAL_FIGURE_RIGHT = 4;
+/** Fraction of the atlas-reveal glass panel reserved for text. */
+const ATLAS_REVEAL_TEXT_FRACTION = 0.68;
 const INFO_CARD_GLASS_FILL = "rgba(18,14,28,0.5)";
 const INFO_CARD_GLASS_BACKGROUND = `linear-gradient(150deg, rgba(255,255,255,0.07), rgba(255,255,255,0) 42%), ${INFO_CARD_GLASS_FILL}`;
 const geometryPx = (px: number): string =>
@@ -117,11 +129,12 @@ const MOBILE_TEXT_SCALE = 0.666;
 export function infoCardWidth(
   viewportWidth: number,
   fraction: number = MOBILE_WIDTH_FRACTION,
+  nativeWidth: number = CARD_W,
 ): number {
   if (!(viewportWidth > 0)) {
-    return CARD_W;
+    return nativeWidth;
   }
-  return Math.min(CARD_W, fraction * viewportWidth);
+  return Math.min(nativeWidth, fraction * viewportWidth);
 }
 
 /**
@@ -214,6 +227,30 @@ const tMeta: React.CSSProperties = {
   textTransform: "uppercase",
   color: token("--text-faint"),
 };
+const tAtlasHeadline: React.CSSProperties = {
+  margin: 0,
+  fontFamily: token("--font-title"),
+  fontSize: "calc(22px * var(--info-card-text-scale, 1))",
+  fontWeight: 600,
+  lineHeight: 1.14,
+  letterSpacing: 0,
+  color: token("--text-primary"),
+};
+const tAtlasSubtitle: React.CSSProperties = {
+  margin: 0,
+  fontFamily: token("--font-title"),
+  fontSize: "calc(14px * var(--info-card-text-scale, 1))",
+  fontWeight: 500,
+  lineHeight: 1.25,
+  color: token("--accent-bright"),
+};
+const tAtlasBody: React.CSSProperties = {
+  fontFamily: token("--font-rules-text"),
+  fontSize: "calc(12.5px * var(--info-card-text-scale, 1))",
+  fontWeight: 500,
+  lineHeight: 1.46,
+  color: token("--text-primary"),
+};
 
 /**
  * The violet-glow disc shared by the icon variant AND the dreamscape SiteNode,
@@ -227,7 +264,13 @@ export const SITE_DISC: React.CSSProperties = {
 };
 
 /** Which media treatment an InfoCard renders. */
-export type InfoCardVariant = "object" | "fullBleed" | "icon" | "tide" | "text";
+export type InfoCardVariant =
+  | "object"
+  | "fullBleed"
+  | "atlasReveal"
+  | "icon"
+  | "tide"
+  | "text";
 
 /**
  * The copy every InfoCard carries, shared across all media variants. The
@@ -292,6 +335,26 @@ export interface InfoCardFullBleedProps extends InfoCardCommonProps {
 }
 
 /**
+ * atlasReveal variant — the large desktop Dream Atlas reveal: scene art fills
+ * the card, an optional transparent figure stands on the right, and the place /
+ * guide / body copy lives in the shared glass text panel. The geometry is a
+ * strict InfoCard variant so atlas screens do not copy the shell or material.
+ */
+export interface InfoCardAtlasRevealProps extends InfoCardCommonProps {
+  variant: "atlasReveal";
+  /** The scene hero image the card is built on, as an {@link ArtRef}. Required. */
+  image: ArtRef;
+  /** How the hero image is cropped. Default `"center"`. */
+  imageCrop?: ImageCrop;
+  /** A named media {@link MediaFilter} for the scene image. */
+  imageFilter?: MediaFilter;
+  /** Optional transparent full-body figure standing on the card's right side. */
+  figure?: ArtRef;
+  /** The resident guide / boss title under the place headline. */
+  subtitle?: string;
+}
+
+/**
  * icon variant — a glyph disc beside the title, body below. The disc IS its
  * glyph, so `glyph` is required.
  */
@@ -345,6 +408,7 @@ export interface InfoCardTextProps extends InfoCardCommonProps {
 export type InfoCardProps =
   | InfoCardObjectProps
   | InfoCardFullBleedProps
+  | InfoCardAtlasRevealProps
   | InfoCardIconProps
   | InfoCardTideProps
   | InfoCardTextProps;
@@ -565,6 +629,122 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
     );
   }
 
+  /* --- atlasReveal: the desktop Dream Atlas reveal geometry. It shares the
+     full-bleed hero material with InfoCard, but uses a wider scene-led layout:
+     place headline, guide subtitle, and body copy sit in a left text column
+     while the resident figure stands over the panel's right side. --- */
+  if (props.variant === "atlasReveal") {
+    const {
+      image,
+      imageCrop = "center",
+      imageFilter,
+      figure,
+      subtitle,
+    } = props;
+    return (
+      <div
+        style={{
+          position: "relative",
+          width: "var(--info-card-width)",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          padding: geometryPx(10),
+          boxSizing: "border-box",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            borderRadius: token("--radius-popover"),
+            overflow: "hidden",
+            boxShadow: `${token("--shadow-lg")}, inset 0 0 0 1px rgba(255,255,255,0.08)`,
+          }}
+        >
+          <img
+            src={resolveArtRef(image)}
+            alt=""
+            draggable={false}
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              objectPosition: resolveImageCrop(imageCrop),
+              userSelect: "none",
+              filter: imageFilter ? resolveMediaFilter(imageFilter) : undefined,
+            }}
+          />
+        </div>
+        {figure !== undefined && (
+          <img
+            src={resolveArtRef(figure)}
+            alt=""
+            draggable={false}
+            style={{
+              position: "absolute",
+              right: geometryPx(ATLAS_REVEAL_FIGURE_RIGHT),
+              bottom: 0,
+              height: geometryPx(ATLAS_REVEAL_FIGURE_H),
+              width: "auto",
+              maxWidth: "56%",
+              objectFit: "contain",
+              objectPosition: "bottom",
+              filter: "drop-shadow(0 10px 22px rgba(0,0,0,0.66))",
+              pointerEvents: "none",
+              userSelect: "none",
+              zIndex: 2,
+            }}
+          />
+        )}
+        <div
+          style={{ height: geometryPx(ATLAS_REVEAL_HERO_H), flex: "none" }}
+        />
+        <div
+          style={{
+            ...glassSurfaceStyle(),
+            background: INFO_CARD_GLASS_BACKGROUND,
+            position: "relative",
+            padding: `${geometryPx(13)} ${geometryPx(15)}`,
+            boxSizing: "border-box",
+            whiteSpace: "normal",
+            overflowWrap: "break-word",
+            zIndex: 1,
+          }}
+        >
+          <div
+            style={{
+              width: `${String(
+                Math.round(ATLAS_REVEAL_TEXT_FRACTION * 100),
+              )}%`,
+              display: "flex",
+              flexDirection: "column",
+              gap: geometryPx(5),
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: geometryPx(2),
+              }}
+            >
+              <div style={tAtlasHeadline}>{titleContent}</div>
+              {subtitle !== undefined && subtitle !== "" && (
+                <div style={tAtlasSubtitle}>{subtitle}</div>
+              )}
+            </div>
+            {body != null && (
+              <div style={tAtlasBody}>{renderRichText(body)}</div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   /* --- icon: a glyph disc beside the title, description below --- */
   if (props.variant === "icon") {
     const { glyph } = props;
@@ -702,8 +882,8 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
 
 /**
  * InfoCard — the one press-to-reveal information card. Its media treatment
- * varies (object / fullBleed / icon / tide / text) on one fixed liquid-glass
- * shell (no caret, one GroupPanel material + type scale).
+ * varies (object / fullBleed / atlasReveal / icon / tide / text) on one fixed
+ * liquid-glass shell (no caret, one GroupPanel material + type scale).
  *
  * Wraps the variant body in the ONE viewport-driven mobile layout rule (see
  * {@link infoCardWidth}): on a phone every info card lays out at the same
@@ -718,8 +898,14 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
  */
 function InfoCardComponent(props: InfoCardProps): React.ReactElement {
   const viewportWidth = useViewportWidth();
-  const cardWidth = infoCardWidth(viewportWidth);
-  const geometryScale = cardWidth / CARD_W;
+  const nativeWidth =
+    props.variant === "atlasReveal" ? ATLAS_REVEAL_CARD_W : CARD_W;
+  const cardWidth = infoCardWidth(
+    viewportWidth,
+    MOBILE_WIDTH_FRACTION,
+    nativeWidth,
+  );
+  const geometryScale = cardWidth / nativeWidth;
   const textScale = infoCardTextScale(viewportWidth);
   const style: React.CSSProperties &
     Record<

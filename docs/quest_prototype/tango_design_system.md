@@ -44,6 +44,15 @@ green on `npm run lint`, `npm run typecheck`, and `npm test`.
   enumerated variant — is fine when you are confident no existing variant can
   express the need; widening an existing prop into an open value is not. When in
   doubt, match how the other screens solve it rather than inventing a knob.
+- **Component forks do not ship.** A screen may prototype a local rendering
+  while a design is being worked out, but production UI must converge on the
+  Tango catalog before merge. Copying an existing component's material, type
+  scale, media treatment, interaction engine, or authored geometry into a
+  screen-local component creates a parallel design-system component. The
+  acceptable production outcomes are the customization ladder: use the component
+  as-is, wrap it for layout, add a strict variant, or propose a genuinely new
+  component. `pre-existing-issues.txt` records unrelated debt found during a
+  task; it is not a parking lot for a component fork created by that task.
 
 Tango works on **any screen**. Components are token-scaled and responsive; the
 mockup pages render full-screen against the real viewport (sized via browser
