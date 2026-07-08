@@ -34,7 +34,7 @@ import type { CardData } from "../../types/cards";
 import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
 import { GameCard } from "../components/card/CardView";
 import { Pressable } from "../primitives/Pressable";
-import { glassSurfaceStyle } from "../internal/glass-surface";
+import { GlassBackdrop } from "../components/overlay/GlassDialog";
 import { IconButton } from "../components/controls/IconButton";
 import { Select } from "../components/controls/Select";
 import { GLYPHS } from "../primitives/glyph";
@@ -57,6 +57,7 @@ import {
   deckTypeFilterLabel,
   filterAndSortDeckCards,
 } from "./mobile-deck-filter";
+import { GridPlaceholder } from "./deck-viewer-shared";
 
 /** One deck card, resolved for display (transfiguration/type/stat applied). */
 export interface DeckCardView {
@@ -288,30 +289,6 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
 
       {peek !== null && <PeekOverlay peek={peek} />}
     </div>
-  );
-}
-
-/**
- * The full-bleed frosted-glass backdrop behind the deck. Reuses the shared
- * liquid-glass recipe but takes only its fill and blur/saturate backdrop — the
- * card's rim, radius, and drop shadow are card affordances that do not belong
- * on an edge-to-edge surface — so the dreamscape behind refracts through as
- * glass without a floating panel border at the screen edges.
- */
-function GlassBackdrop() {
-  const glass = glassSurfaceStyle();
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        position: "absolute",
-        inset: 0,
-        zIndex: 0,
-        background: glass.background,
-        backdropFilter: glass.backdropFilter,
-        WebkitBackdropFilter: glass.WebkitBackdropFilter,
-      }}
-    />
   );
 }
 
@@ -555,22 +532,4 @@ function EmptyDeck() {
 /** Shown when a filter hides every card in a non-empty deck. */
 function NoMatches() {
   return <GridPlaceholder message="No cards match this filter." />;
-}
-
-/** The centered muted message shared by the empty / no-match grid states. */
-function GridPlaceholder({ message }: { message: string }) {
-  return (
-    <div
-      style={{
-        display: "grid",
-        placeItems: "center",
-        minHeight: "40vh",
-        font: token("--t-body"),
-        color: token("--text-muted"),
-        textAlign: "center",
-      }}
-    >
-      {message}
-    </div>
-  );
 }

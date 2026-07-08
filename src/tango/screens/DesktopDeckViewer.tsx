@@ -56,10 +56,11 @@ import { Pressable } from "../primitives/Pressable";
 import { Select } from "../components/controls/Select";
 import { SegmentedControl } from "../components/controls/SegmentedControl";
 import { IconButton } from "../components/controls/IconButton";
-import { glassSurfaceStyle } from "../internal/glass-surface";
+import { GlassBackdrop } from "../components/overlay/GlassDialog";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { DeckCardView } from "./MobileDeckViewer";
+import { GridPlaceholder } from "./deck-viewer-shared";
 import {
   type DesktopDeckFilterSort,
   type DeckCardSize,
@@ -252,31 +253,6 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
         </div>
       </div>
     </div>
-  );
-}
-
-/**
- * The full-bleed frosted-glass backdrop behind the deck. Takes only the fill
- * and blur/saturate backdrop from the shared liquid-glass recipe — the rim,
- * radius, and drop shadow are dropped for an edge-to-edge surface. Kept a
- * separate z0 sibling of the content (rather than a style on the host
- * container) so the filter/sort controls frost the scene directly instead of
- * double-frosting an ancestor glass surface.
- */
-function GlassBackdrop() {
-  const glass = glassSurfaceStyle();
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        position: "absolute",
-        inset: 0,
-        zIndex: 0,
-        background: glass.background,
-        backdropFilter: glass.backdropFilter,
-        WebkitBackdropFilter: glass.WebkitBackdropFilter,
-      }}
-    />
   );
 }
 
@@ -684,24 +660,6 @@ function DeckTile({
           suppressHoverHelp
         />
       </HoverZoomCard>
-    </div>
-  );
-}
-
-/** The centered muted message shared by the empty / no-match grid states. */
-function GridPlaceholder({ message }: { message: string }) {
-  return (
-    <div
-      style={{
-        display: "grid",
-        placeItems: "center",
-        minHeight: "40vh",
-        font: token("--t-body"),
-        color: token("--text-muted"),
-        textAlign: "center",
-      }}
-    >
-      {message}
     </div>
   );
 }
