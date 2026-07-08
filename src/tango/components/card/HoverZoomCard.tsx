@@ -46,7 +46,7 @@ import { INFO_CARD_WIDTH } from "../overlay/InfoCard";
  * on-screen size. This is the primary knob for "how much does the card zoom":
  * lower it to grow cards less, raise it to grow them more. The effective scale
  * is the smaller of this cap, the {@link TARGET_WIDTH_PX} target, and the
- * viewport-fit limits, so small cards no longer balloon to 2–2.5x.
+ * viewport-fit limits, so small cards grow only within those bounds.
  */
 export const MAX_SCALE = 1.5;
 
@@ -90,8 +90,8 @@ export interface HoverZoomCardProps {
   /**
    * The card's rendered rules text. When provided, the glossary definitions
    * for any gameplay terms in the text are shown in a stack beside the
-   * enlarged card while it is zoomed — the same hover-help the old floating
-   * preview carried. The wrapped card should suppress its own inline term
+   * enlarged card while it is zoomed. The wrapped card should suppress its own
+   * inline term
    * popover (`suppressHoverHelp`) so the definitions appear only here, aligned
    * with the enlarged card rather than the small original underneath.
    */
@@ -140,8 +140,8 @@ function clampOffset(start: number, size: number, viewport: number): number {
  * positioned just outside the enlarged card on whichever side has room (right
  * by default, flipping left near the viewport edge) and pinned within the
  * viewport vertically. Returns null when there is no text or no gameplay terms
- * to define. The stack is part of the pointer-events-none overlay, mirroring
- * the hover-help the floating preview used to carry.
+ * to define. The stack is part of the pointer-events-none overlay, shown
+ * beside the enlarged card so its gameplay terms stay legible while zoomed.
  */
 function renderGlossaryStack(
   zoom: ZoomState,

@@ -21,7 +21,7 @@ Wraps a medium card so hovering grows the card itself in place — the enlarged 
 | `fill` | `boolean` | no | `false` | When true the slot fills its container (100% width and height) instead of shrinking to the card's own size. Set it when the caller's wrapper gives the card a fixed box to occupy (e.g. a battle-hand cell). |
 | `targetWidthPx` | `number` | no | `340` | Width (px) the card grows to. Defaults to {@link TARGET_WIDTH_PX}. |
 | `logSurface` | `string` | no | — | Optional label recorded with the `card_hover_zoom` log event so behaviour can be reconstructed per surface (deck viewer, shop, battle hand, ...). |
-| `glossaryText` | `string` | no | — | The card's rendered rules text. When provided, the glossary definitions for any gameplay terms in the text are shown in a stack beside the enlarged card while it is zoomed — the same hover-help the old floating preview carried. The wrapped card should suppress its own inline term popover (`suppressHoverHelp`) so the definitions appear only here, aligned with the enlarged card rather than the small original underneath. |
+| `glossaryText` | `string` | no | — | The card's rendered rules text. When provided, the glossary definitions for any gameplay terms in the text are shown in a stack beside the enlarged card while it is zoomed. The wrapped card should suppress its own inline term popover (`suppressHoverHelp`) so the definitions appear only here, aligned with the enlarged card rather than the small original underneath. |
 | `testId` | `string` | no | — | `data-testid` applied to the slot element. |
 
 ## Usage

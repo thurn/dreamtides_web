@@ -1396,7 +1396,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "The card's rendered rules text. When provided, the glossary definitions\nfor any gameplay terms in the text are shown in a stack beside the\nenlarged card while it is zoomed — the same hover-help the old floating\npreview carried. The wrapped card should suppress its own inline term\npopover (`suppressHoverHelp`) so the definitions appear only here, aligned\nwith the enlarged card rather than the small original underneath."
+      "description": "The card's rendered rules text. When provided, the glossary definitions\nfor any gameplay terms in the text are shown in a stack beside the\nenlarged card while it is zoomed. The wrapped card should suppress its own\ninline term\npopover (`suppressHoverHelp`) so the definitions appear only here, aligned\nwith the enlarged card rather than the small original underneath."
     },
     {
       "name": "testId",

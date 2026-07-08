@@ -24,7 +24,7 @@
 //      registry is malformed and the count would be a silent lie.
 //   3. Every TS/TSX file under src/ (excluding the doc site and tests) is
 //      scanned for a value import whose specifier resolves to that source file.
-//      A type-only import (`import type { Tide } from ".../TidePill"`, or an
+//      A type-only import (`import type { TideSpec } from ".../tide-spec"`, or an
 //      import declaration whose every named binding is an inline `type`) is not
 //      a consumer.
 
