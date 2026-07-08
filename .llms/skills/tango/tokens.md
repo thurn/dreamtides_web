@@ -175,7 +175,6 @@ Elevation and glow treatments — always these, never an ad-hoc box-shadow.
 | `--shadow-card` | `0 10px 26px rgba(3, 1, 8, 0.55), 0 2px 6px rgba(3, 1, 8, 0.4)` |  |
 | `--shadow-sheet` | `0 -12px 40px rgba(3, 1, 8, 0.6)` |  |
 | `--glow-accent-soft` | `0 0 24px rgba(147, 51, 234, 0.35)` |  |
-| `--glow-danger` | `0 0 0 1px rgba(239, 68, 68, 0.5), 0 6px 22px rgba(239, 68, 68, 0.4)` |  |
 | `--inset-top` | `inset 0 1px 0 rgba(255, 255, 255, 0.08)` |  |
 | `--inset-press` | `inset 0 2px 8px rgba(3, 1, 8, 0.5)` |  |
 

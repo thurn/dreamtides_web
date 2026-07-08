@@ -1,0 +1,8 @@
+.tango.site-leave-control {
+  position: fixed;
+  top: var(--space-6);
+  right: var(--space-6);
+  z-index: 30;
+  display: grid;
+  place-items: center;
+}

@@ -16,7 +16,9 @@ import {
 import { DreamJourneyMobile } from "./DreamJourneyMobile";
 import { DreamJourneyStage } from "./DreamJourneyStage";
 import { OfferColumn } from "./OfferColumn";
-import { LeaveSiteButton } from "../../tango/components/hud/LeaveSiteButton";
+import { IconButton } from "../../tango/components/controls/IconButton";
+import { GLYPHS } from "../../tango/primitives/glyph";
+import "../../screens/site-leave-control.css";
 
 export interface DreamMerchantScreenProps {
   site: SiteState;
@@ -214,11 +216,14 @@ export function DreamMerchantScreen({
           onSelectCandidate={selectCandidate}
           onAccept={acceptOffer}
         />
-        <LeaveSiteButton
-          onLeave={declineEncounter}
-          testId="merchant-walk-away"
-          label="Walk on"
-        />
+        <div className="tango site-leave-control">
+          <IconButton
+            glyph={GLYPHS.close}
+            label="Walk on"
+            onPress={declineEncounter}
+            testId="merchant-walk-away"
+          />
+        </div>
         {validationMessage !== null && (
           <div
             data-testid="merchant-validation-message"
@@ -286,11 +291,14 @@ export function DreamMerchantScreen({
           )
         }
       />
-      <LeaveSiteButton
-        onLeave={declineEncounter}
-        testId="merchant-walk-away"
-        label="Walk on"
-      />
+      <div className="tango site-leave-control">
+        <IconButton
+          glyph={GLYPHS.close}
+          label="Walk on"
+          onPress={declineEncounter}
+          testId="merchant-walk-away"
+        />
+      </div>
     </div>
   );
 }

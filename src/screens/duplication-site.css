@@ -4,9 +4,9 @@
  * can pick one card and add copies of it to the deck. The composition mirrors
  * the sibling Purge and Dreamsign Revelation surfaces: a frosted summary HUD, a
  * centered deck grid of selectable cards, the commit button in the footer, a
- * red close button in the top-right corner to leave, and Deacon Holt with a
- * speech bubble docked to the lower-left in landscape. The creative, additive
- * action reads in violet throughout. All rules are scoped under
+ * top-right leave icon button, and Deacon Holt with a speech bubble docked to
+ * the lower-left in landscape. The creative, additive action reads in violet
+ * throughout. All rules are scoped under
  * `.duplication-site`.
  */
 
@@ -41,9 +41,9 @@
   justify-content: space-between;
   gap: 16px;
   /* Fixed bar height so the duplicate button's vertical center matches the
-   * shared close button (top: 16px, height: 42px → center at 37px) regardless
-   * of whether the Enhanced badge is present. Right padding reserves the
-   * top-right corner for the close button so the button never slides under it. */
+   * leave icon button regardless of whether the Enhanced badge is present.
+   * Right padding reserves the top-right corner so the button never slides
+   * under it. */
   min-height: 74px;
   padding: 0 74px 0 20px;
   z-index: 8;

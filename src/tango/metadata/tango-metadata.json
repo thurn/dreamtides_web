@@ -1559,40 +1559,6 @@
       "description": "A small leading {@link Glyph}."
     }
   ],
-  "LeaveSiteButton": [
-    {
-      "name": "onLeave",
-      "tsType": "() => void",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Invoked when the player leaves the site."
-    },
-    {
-      "name": "label",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "Leave site",
-      "description": "Accessible label / tooltip. Defaults to \"Leave site\"."
-    },
-    {
-      "name": "disabled",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "Disables the button (e.g. while an animation is committing)."
-    },
-    {
-      "name": "testId",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "`data-testid` for the button."
-    }
-  ],
   "Motes": [
     {
       "name": "on",

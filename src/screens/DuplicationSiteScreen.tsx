@@ -6,8 +6,10 @@ import { CardDisplay } from "../components/CardDisplay";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { SiteGuide } from "../components/SiteGuide";
-import { LeaveSiteButton } from "../tango/components/hud/LeaveSiteButton";
+import { IconButton } from "../tango/components/controls/IconButton";
+import { GLYPHS } from "../tango/primitives/glyph";
 import "./duplication-site.css";
+import "./site-leave-control.css";
 
 /** Props for the DuplicationSiteScreen component. */
 interface DuplicationSiteScreenProps {
@@ -53,7 +55,7 @@ function buildCandidates(
  *
  * The surface mirrors the sibling Purge and Dreamsign Revelation screens: a
  * frosted summary HUD, a centered deck grid of selectable cards, the commit
- * button in the footer, a red close button in the top-right corner to leave,
+ * button in the footer, a top-right leave icon button,
  * and the resident guide with a speech bubble docked to the lower-left in
  * landscape. At an
  * enhanced site (Hope's End, Holt's home) the runtime surfaces the entire deck
@@ -274,11 +276,15 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
       {/* Deacon Holt (shared SiteGuide), docked lower-left in landscape. */}
       <SiteGuide siteType="Duplication" isEnhanced={site.isEnhanced} />
 
-      <LeaveSiteButton
-        onLeave={handleClose}
-        testId="duplication-walk-on"
-        disabled={copying || duplicated}
-      />
+      <div className="tango site-leave-control">
+        <IconButton
+          glyph={GLYPHS.close}
+          label="Leave site"
+          onPress={handleClose}
+          testId="duplication-walk-on"
+          disabled={copying || duplicated}
+        />
+      </div>
     </div>
   );
 }

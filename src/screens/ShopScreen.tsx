@@ -11,7 +11,8 @@ import {
   DreamsignInfoCard,
 } from "../tango/components/hud/Dreamsign";
 import { dreamsignIconUrl } from "../tango/components/atlas/atlas-display";
-import { LeaveSiteButton } from "../tango/components/hud/LeaveSiteButton";
+import { IconButton } from "../tango/components/controls/IconButton";
+import { GLYPHS } from "../tango/primitives/glyph";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
@@ -25,6 +26,7 @@ import {
   type ShopSlot,
 } from "../shop/shop-generator";
 import "./shop-screen.css";
+import "./site-leave-control.css";
 
 /** Props for the ShopScreen component. */
 interface ShopScreenProps {
@@ -50,9 +52,9 @@ const SHOP_BUY_MS = 480;
  * variant from `site.type`.
  *
  * The composition mirrors the Purge surface: a frosted wallet HUD, a centered
- * row of card-sized offers plus a reroll tile, a de-emphasized "Leave Shop"
- * link, a deck tray where purchases land, and the guide with a speech bubble
- * docked to the lower-left in landscape (see src/screens/shop-screen.css).
+ * row of card-sized offers plus a reroll tile, a top-right leave icon button,
+ * a deck tray where purchases land, and the guide with a speech bubble docked
+ * to the lower-left in landscape (see src/screens/shop-screen.css).
  */
 export function ShopScreen({ site }: ShopScreenProps) {
   const { state, mutations, cardDatabase } = useQuest();
@@ -195,11 +197,14 @@ export function ShopScreen({ site }: ShopScreenProps) {
       data-testid="shop-screen"
       data-shop-variant={site.type}
     >
-      <LeaveSiteButton
-        onLeave={handleLeave}
-        testId="shop-leave"
-        label="Leave shop"
-      />
+      <div className="tango site-leave-control">
+        <IconButton
+          glyph={GLYPHS.close}
+          label="Leave shop"
+          onPress={handleLeave}
+          testId="shop-leave"
+        />
+      </div>
 
       {/* Offers grid: wares + a single-use restock tile */}
       <div className="sh-grid">

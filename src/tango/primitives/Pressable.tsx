@@ -142,13 +142,13 @@ export function usePress(handlers?: Partial<PressBind>): UsePressResult {
  */
 function usePrefersReducedMotion(): boolean {
   const [reduced, setReduced] = useState(() =>
-    typeof window === "undefined"
+    typeof window === "undefined" || window.matchMedia === undefined
       ? false
       : window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
 
   useEffect(() => {
-    if (typeof window === "undefined") {
+    if (typeof window === "undefined" || window.matchMedia === undefined) {
       return;
     }
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");

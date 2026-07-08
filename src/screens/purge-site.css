@@ -3,10 +3,10 @@
  * dreamscape scene (supplied by the shared site scene backdrop) so the player
  * can spend escalating essence to remove cards for good; banes leave for free.
  * A fixed top bar holds the essence readouts on the left and the purge commit
- * button on the right, above a scrolling grid of selectable cards. A red close
- * button in the top-right corner leaves the site, and Master Takeshi sits with
- * a speech bubble docked to the lower-left in landscape. All rules are scoped
- * under `.purge-site`.
+ * button on the right, above a scrolling grid of selectable cards. A top-right
+ * icon button leaves the site, and Master Takeshi sits with a speech bubble
+ * docked to the lower-left in landscape. All rules are scoped under
+ * `.purge-site`.
  */
 
 /* Fixed full-viewport composition sitting above the shared scene backdrop (also
@@ -34,18 +34,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  /* Extra right padding reserves the top-right corner for the close button so
-   * the purge commit button never slides under it. */
+  /* Extra right padding reserves the top-right corner for the leave icon button
+   * so the purge commit button never slides under it. */
   padding: 18px 74px 18px 20px;
   z-index: 8;
-}
-
-/* Drop the shared close button down so the red X lines up with the essence
- * readouts and the purge commit button. The top bar centers its content on a
- * taller bar than the 16px corner inset the close button defaults to, so without
- * this nudge the X floats above the rest of the row. */
-.purge-site .site-close-btn {
-  top: 32px;
 }
 
 /* ---- Summary HUD bar — frosted, two readouts ---- */

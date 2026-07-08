@@ -5,7 +5,8 @@ import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { dreamsignIconUrl } from "../tango/components/atlas/atlas-display";
 import { SiteGuide } from "../components/SiteGuide";
-import { LeaveSiteButton } from "../tango/components/hud/LeaveSiteButton";
+import { IconButton } from "../tango/components/controls/IconButton";
+import { GLYPHS } from "../tango/primitives/glyph";
 import {
   DREAMSIGN_HOVER_DELAY_MS,
   DreamsignInfoCard,
@@ -13,6 +14,7 @@ import {
 import { HoverPopover } from "../tango/components/overlay/HoverPopover";
 import { DreamsignPurgeOverlay } from "./DreamsignPurgeOverlay";
 import "./dreamsign-revelation.css";
+import "./site-leave-control.css";
 
 /** Props for the DreamsignRevelationScreen component. */
 interface DreamsignRevelationScreenProps {
@@ -26,7 +28,7 @@ const FLY_TO_TRAY_MS = 1000;
  * The Dreamsign Revelation. Sigrún reveals 3 dreamsigns (4 when enhanced) over
  * the dimmed dreamscape scene; the player takes one — which glows and flies
  * toward the Dreamsign collection in the bottom-left HUD — or leaves via the
- * red close button in the top-right corner. Shares the dreamsign-offer data
+ * top-right icon button. Shares the dreamsign-offer data
  * flow with the dreamsign draft (option draw, accept, at-cap purge), but
  * presents it as a full immersive scene rather than the card-grid offering.
  */
@@ -149,11 +151,15 @@ export function DreamsignRevelationScreen({
 
       <SiteGuide siteType="DreamsignRevelation" isEnhanced={site.isEnhanced} />
 
-      <LeaveSiteButton
-        onLeave={handleSkip}
-        testId="dreamsign-revelation-skip"
-        disabled={chosenIndex !== null}
-      />
+      <div className="tango site-leave-control">
+        <IconButton
+          glyph={GLYPHS.close}
+          label="Leave site"
+          onPress={handleSkip}
+          testId="dreamsign-revelation-skip"
+          disabled={chosenIndex !== null}
+        />
+      </div>
     </div>
   );
 }

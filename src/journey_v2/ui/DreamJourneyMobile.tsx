@@ -19,8 +19,9 @@ const PAGE_BACKGROUND =
 /**
  * Mobile uses an overview → detail flow with no tab controls. The overview
  * presides the Merchant over two stacked, tappable summary cards; tapping one
- * opens the full offer UI with a full-width accept. The shared red close button
- * (rendered by the screen) leaves the site from anywhere, and a quiet "‹ Back"
+ * opens the full offer UI with a full-width accept. The shared top-right leave
+ * icon button (rendered by the screen) leaves the site from anywhere, and a
+ * quiet "‹ Back"
  * returns from a detail to the choice.
  */
 export function DreamJourneyMobile({

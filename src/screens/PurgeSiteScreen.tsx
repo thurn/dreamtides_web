@@ -8,7 +8,8 @@ import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { dreamsignIconUrl } from "../tango/components/atlas/atlas-display";
 import { SiteGuide } from "../components/SiteGuide";
-import { LeaveSiteButton } from "../tango/components/hud/LeaveSiteButton";
+import { IconButton } from "../tango/components/controls/IconButton";
+import { GLYPHS } from "../tango/primitives/glyph";
 import {
   MAX_PURGE_PER_VISIT,
   maxAffordablePurgeCount,
@@ -18,6 +19,7 @@ import {
   type PurgePriceModifiers,
 } from "../purge/purge-pricing";
 import "./purge-site.css";
+import "./site-leave-control.css";
 
 /** Props for the PurgeSiteScreen component. */
 interface PurgeSiteScreenProps {
@@ -40,9 +42,9 @@ const CARD_SLOT_WIDTH = 148;
  * src/purge/purge-pricing.ts), so thinning one or two cards stays cheap while
  * emptying a large part of the deck is a major commitment. A fixed top bar
  * holds the essence readouts on the left and the purge commit button on the
- * right, above a scrolling grid of selectable cards. A red close button in the
- * top-right corner leaves the site, and the resident guide sits with a speech
- * bubble docked to the lower-left.
+ * right, above a scrolling grid of selectable cards. A top-right icon button
+ * leaves the site, and the resident guide sits with a speech bubble docked to
+ * the lower-left.
  */
 export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
   const { state, mutations, cardDatabase } = useQuest();
@@ -442,11 +444,15 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
       {/* Master Takeshi (shared SiteGuide), docked lower-left in landscape. */}
       <SiteGuide siteType="Purge" isEnhanced={site.isEnhanced} />
 
-      <LeaveSiteButton
-        onLeave={handleClose}
-        testId="purge-walk-on"
-        disabled={purging !== null}
-      />
+      <div className="tango site-leave-control">
+        <IconButton
+          glyph={GLYPHS.close}
+          label="Leave site"
+          onPress={handleClose}
+          testId="purge-walk-on"
+          disabled={purging !== null}
+        />
+      </div>
     </div>
   );
 }

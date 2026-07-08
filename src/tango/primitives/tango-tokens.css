@@ -501,7 +501,6 @@
 
   /* ---- Violet glow (the signature accent halo) ---- */
   --glow-accent-soft: 0 0 24px rgba(147, 51, 234, 0.35);
-  --glow-danger: 0 0 0 1px rgba(239, 68, 68, 0.5), 0 6px 22px rgba(239, 68, 68, 0.4);
 
   /* ---- Inset / inner detail (card frame bevel, pressed states) ---- */
   --inset-top: inset 0 1px 0 rgba(255, 255, 255, 0.08);  /* @kind shadow */

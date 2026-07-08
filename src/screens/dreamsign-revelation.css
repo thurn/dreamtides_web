@@ -1,7 +1,7 @@
 /*
  * Dreamsign Revelation site screen. Sigrún reveals several dreamsigns over the
  * dimmed dreamscape scene (supplied by the shared site scene backdrop) and the
- * player takes one or leaves via the top-right close button. The composition
+ * player takes one or leaves via the top-right icon button. The composition
  * flows responsively: a centered offer row showing only each dreamsign's art
  * above its Take button (the name and rules text live in the hover card) and
  * Sigrún with a speech bubble docked to the lower-left in landscape. All rules

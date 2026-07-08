@@ -27,7 +27,6 @@ import { groupPanelDemo } from "./demos/group-panel";
 import { hoverPopoverDemo } from "./demos/hover-popover";
 import { iconButtonDemo } from "./demos/icon-button";
 import { infoCardDemo } from "./demos/info-card";
-import { leaveSiteButtonDemo } from "./demos/leave-site-button";
 import { motesDemo } from "./demos/motes";
 import { pipBadgeDemo } from "./demos/pip-badge";
 import { pressableDemo } from "./demos/pressable";
@@ -139,7 +138,6 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   iconButtonDemo,
   glassButtonDemo,
   glassDialogDemo,
-  leaveSiteButtonDemo,
   segmentedControlDemo,
   selectDemo,
   tideDiscDemo,

@@ -240,7 +240,6 @@ export const TOKENS = {
   "--shadow-sheet": { var: "var(--shadow-sheet)", value: "0 -12px 40px rgba(3, 1, 8, 0.6)" },
   "--text-outline-media": { var: "var(--text-outline-media)", value: "1.7px 0 0 #000, 1.6px 0.7px 0 #000, 1.2px 1.2px 0 #000, 0.7px 1.6px 0 #000,\n    0 1.7px 0 #000, -0.7px 1.6px 0 #000, -1.2px 1.2px 0 #000, -1.6px 0.7px 0 #000,\n    -1.7px 0 0 #000, -1.6px -0.7px 0 #000, -1.2px -1.2px 0 #000, -0.7px -1.6px 0 #000,\n    0 -1.7px 0 #000, 0.7px -1.6px 0 #000, 1.2px -1.2px 0 #000, 1.6px -0.7px 0 #000,\n    0 2px 6px rgba(0, 0, 0, 0.7)", kind: "shadow" },
   "--glow-accent-soft": { var: "var(--glow-accent-soft)", value: "0 0 24px rgba(147, 51, 234, 0.35)" },
-  "--glow-danger": { var: "var(--glow-danger)", value: "0 0 0 1px rgba(239, 68, 68, 0.5), 0 6px 22px rgba(239, 68, 68, 0.4)" },
   "--inset-top": { var: "var(--inset-top)", value: "inset 0 1px 0 rgba(255, 255, 255, 0.08)", kind: "shadow" },
   "--inset-press": { var: "var(--inset-press)", value: "inset 0 2px 8px rgba(3, 1, 8, 0.5)", kind: "shadow" },
   "--glass-fill": { var: "var(--glass-fill)", value: "rgba(14, 14, 16, 0.54)", kind: "color" },

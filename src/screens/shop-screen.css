@@ -5,8 +5,8 @@
  * essence on cards and Dreamsigns. The surface is pared down to its essentials:
  * a centered grid of card-sized offers, each with a buy button, plus a
  * single-use restock tile, the resident guide with a speech bubble docked to
- * the lower-left in landscape, and the shared red close button in the top-right
- * corner. All rules are scoped under `.shop-site`.
+ * the lower-left in landscape, and a top-right leave icon button. All rules are
+ * scoped under `.shop-site`.
  */
 
 /* Fixed full-viewport composition sitting above the shared scene backdrop (also
