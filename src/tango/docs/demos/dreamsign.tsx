@@ -48,9 +48,11 @@ const DEMO_DREAMSIGNS: DreamsignData[] = [
 interface DreamsignDemoArgs {
   /** Tile edge length in px (drives every tile in the row). */
   sizePx?: number;
+  /** Tile material: `flat` (chrome-free) or `hud` (drop-shadow + violet glow). */
+  variant?: "flat" | "hud";
 }
 
-function DreamsignDemo({ sizePx = 72 }: DreamsignDemoArgs) {
+function DreamsignDemo({ sizePx = 72, variant = "hud" }: DreamsignDemoArgs) {
   const stageRef = useRef<HTMLDivElement>(null);
   return (
     <div
@@ -76,6 +78,7 @@ function DreamsignDemo({ sizePx = 72 }: DreamsignDemoArgs) {
           key={dreamsign.id}
           dreamsign={dreamsign}
           sizePx={sizePx}
+          variant={variant}
           stageRef={stageRef}
         />
       ))}
@@ -104,6 +107,7 @@ export const dreamsignDemo: TangoComponent = {
   demo: {
     defaultArgs: {
       sizePx: 72,
+      variant: "hud",
     },
   },
 };

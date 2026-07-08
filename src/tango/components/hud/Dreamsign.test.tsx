@@ -152,6 +152,71 @@ describe("Dreamsign", () => {
     });
   });
 
+  it("composes the hud variant's drop-shadow into the tile filter", () => {
+    const sign = makeDreamsign({
+      name: "Moonstone",
+      imageName: "moonstone.png",
+    });
+
+    const { container, root } = mountInto(
+      <Dreamsign dreamsign={sign} sizePx={36} variant="hud" />,
+    );
+
+    const tile = container.querySelector<HTMLElement>(
+      '[data-testid="dreamsign-art-tile"]',
+    );
+    // The hud variant wears the object's own drop-shadow + violet glow so it
+    // lifts off busy scene art; the flat default does not.
+    expect(tile?.style.filter).toContain("drop-shadow");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("wears no drop-shadow in the default flat variant", () => {
+    const sign = makeDreamsign({
+      name: "Moonstone",
+      imageName: "moonstone.png",
+    });
+
+    const { container, root } = mountInto(
+      <Dreamsign dreamsign={sign} sizePx={36} />,
+    );
+
+    const tile = container.querySelector<HTMLElement>(
+      '[data-testid="dreamsign-art-tile"]',
+    );
+    expect(tile?.style.filter).not.toContain("drop-shadow");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("combines the bane desaturation with the hud drop-shadow", () => {
+    const sign = makeDreamsign({
+      name: "Amanita",
+      imageName: "amanita.png",
+      isBane: true,
+    });
+
+    const { container, root } = mountInto(
+      <Dreamsign dreamsign={sign} sizePx={36} variant="hud" />,
+    );
+
+    const tile = container.querySelector<HTMLElement>(
+      '[data-testid="dreamsign-art-tile"]',
+    );
+    // A bane docked in the HUD carries BOTH signals in one composed filter.
+    expect(tile?.style.filter).toContain("grayscale");
+    expect(tile?.style.filter).toContain("drop-shadow");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("falls back to a glyph only when imageName is missing", () => {
     const sign = makeDreamsign({ name: "Untextured" });
 

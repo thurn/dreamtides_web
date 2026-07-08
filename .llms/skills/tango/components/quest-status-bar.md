@@ -16,20 +16,22 @@ The persistent, transparent bottom HUD for quest screens. The essence total, dec
 | --- | --- | --- | --- | --- |
 | `stageRef` | `RefObject<HTMLElement \| null>` | yes | — | Ref to the screen root (position:absolute inset:0 in the scaled frame). Required. |
 | `essence` | `number` | no | — | Essence total shown in the HUD. |
-| `dreamsigns` | `QsbDreamsign[]` | no | `[]` | The dreamsigns to dock (a small set inline; more collapse to a stack + viewer). |
+| `dreamsigns` | `Dreamsign[]` | no | `[]` | The dreamsigns to dock (a small set inline; more collapse to a stack + viewer). |
 | `deck` | `string \| number` | no | `0` | Deck size (used in the deck button's aria-label). |
 | `onViewDeck` | `(() => void)` | no | — | Open the deck viewer — fired on a tap / click of the deck sprite. |
 | `dreamcaller` | `QsbDreamcaller` | no | — |  |
 | `size` | `"compact" \| "grand"` | no | `compact` | HUD size. `compact` (default) is the mobile / touch size; `grand` is the larger desktop size the dreamscape screen picks above the wide-viewport breakpoint. |
 
-### `dreamsigns`: the `QsbDreamsign` model
+### `dreamsigns`: the `Dreamsign` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `id` | `string \| number` | no |  |
+| `id` | `string` | yes |  |
 | `name` | `string` | no |  |
-| `art` | `ArtRef` | no | The dreamsign art, as an {@link ArtRef}. |
-| `ability` | `string` | yes |  |
+| `effectDescription` | `string` | no |  |
+| `imageName` | `string` | yes |  |
+| `imageAlt` | `string` | yes |  |
+| `isBane` | `boolean` | no |  |
 
 ### `dreamcaller`: the `QsbDreamcaller` model
 

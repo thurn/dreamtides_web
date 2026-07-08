@@ -123,8 +123,9 @@ describe("toQsbDreamsigns", () => {
     expect(docked).toHaveLength(1);
     expect(docked[0]?.id).toBe("orb");
     expect(docked[0]?.name).toBe("Dreaming Orb");
-    expect(docked[0]?.ability).toBe("At Dawn, foresee 1.");
-    expect(resolveArtRef(docked[0].art)).toContain("magic-ball.png");
+    expect(docked[0]?.effectDescription).toBe("At Dawn, foresee 1.");
+    expect(docked[0]?.imageName).toBe("magic-ball.png");
+    expect(docked[0]?.isBane).toBe(false);
   });
 });
 

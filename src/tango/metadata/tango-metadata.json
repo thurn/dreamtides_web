@@ -771,6 +771,17 @@
       "required": false,
       "defaultValue": null,
       "description": "Fired on a tap / click that was not a deliberate hold-to-read."
+    },
+    {
+      "name": "variant",
+      "tsType": "\"flat\" | \"hud\"",
+      "unionMembers": [
+        "flat",
+        "hud"
+      ],
+      "required": false,
+      "defaultValue": "flat",
+      "description": "The tile's material. `\"flat\"` (default) is the chrome-free collectible tile\nused in lists over a solid surface; `\"hud\"` composes {@link DS_SHADOW} — a\ndrop-shadow + violet glow — into the tile filter so the object lifts off busy\nscene art in the transparent quest HUD."
     }
   ],
   "DreamsignInfoCard": [
@@ -2203,18 +2214,18 @@
     },
     {
       "name": "dreamsigns",
-      "tsType": "QsbDreamsign[]",
+      "tsType": "Dreamsign[]",
       "unionMembers": [],
       "required": false,
       "defaultValue": "[]",
       "description": "The dreamsigns to dock (a small set inline; more collapse to a stack + viewer).",
       "nested": {
-        "name": "QsbDreamsign",
+        "name": "Dreamsign",
         "fields": [
           {
             "name": "id",
-            "tsType": "string | number",
-            "optional": false,
+            "tsType": "string",
+            "optional": true,
             "description": ""
           },
           {
@@ -2224,15 +2235,27 @@
             "description": ""
           },
           {
-            "name": "art",
-            "tsType": "ArtRef",
+            "name": "effectDescription",
+            "tsType": "string",
             "optional": false,
-            "description": "The dreamsign art, as an {@link ArtRef}."
+            "description": ""
           },
           {
-            "name": "ability",
+            "name": "imageName",
             "tsType": "string",
             "optional": true,
+            "description": ""
+          },
+          {
+            "name": "imageAlt",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "isBane",
+            "tsType": "boolean",
+            "optional": false,
             "description": ""
           }
         ]

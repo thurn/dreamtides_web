@@ -8,8 +8,8 @@
 // `docName` still points at the real QuestStatusBar so the props table reports
 // its actual API.
 //
-// The dreamsign `art` and Dreamcaller `portrait` resolve from real production
-// art in `public/` — the same assets the full-screen mockup uses — so the demo
+// Each dreamsign's `imageName` and the Dreamcaller `portrait` resolve from real
+// production art in `public/` — the same assets the full-screen mockup uses — so the demo
 // shows genuine dreamsign icons and a real Dreamcaller bust rather than
 // stand-in glyphs. `dreamsigns` / `dreamcaller` are ReactNode-free object props
 // seeded via defaultArgs.
@@ -87,22 +87,26 @@ const stageRef = useRef<HTMLDivElement>(null);
         {
           id: "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
           name: "Amplified Acorn",
-          art: artRef.dreamsign("acorn_gold.png"),
-          ability:
+          imageName: "acorn_gold.png",
+          effectDescription:
             "Once per turn, when you discard a card, your next card this turn costs 2● less.",
+          isBane: false,
         },
         {
           id: "278EC1AB-F532-4862-84AE-63DF5E49548C",
           name: "Pyramid Relic",
-          art: artRef.dreamsign("aertfact.png"),
-          ability: "The second character you play each turn costs 1● less.",
+          imageName: "aertfact.png",
+          effectDescription:
+            "The second character you play each turn costs 1● less.",
+          isBane: false,
         },
         {
           id: "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5",
           name: "Bell",
-          art: artRef.dreamsign("bell.png"),
-          ability:
+          imageName: "bell.png",
+          effectDescription:
             "When you play a character from your void, rematerialize it.",
+          isBane: false,
         },
       ],
     },

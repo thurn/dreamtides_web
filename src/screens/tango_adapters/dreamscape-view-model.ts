@@ -116,8 +116,10 @@ export function toQsbDreamsigns(
     docked.push({
       id: sign.id ?? `dreamsign-${String(index)}`,
       name: sign.name,
-      art: artRef.dreamsign(sign.imageName),
-      ability: sign.effectDescription,
+      imageName: sign.imageName,
+      imageAlt: sign.imageAlt,
+      effectDescription: sign.effectDescription,
+      isBane: sign.isBane,
     });
   });
   return docked;

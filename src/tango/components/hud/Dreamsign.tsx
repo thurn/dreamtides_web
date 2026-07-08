@@ -48,6 +48,14 @@ const { usePressReveal, anchorRect, PressPopover, PRESS_SCALE, HOVER_SCALE } = I
  * art does — the one signal that survives the chrome-free tile. */
 const BANE_FILTER = "grayscale(0.7)";
 
+/** The dreamsign object's own drop-shadow + violet glow (its material, not a
+ * legibility overlay) — a faithfully-copied literal with no token equivalent.
+ * Worn by the `hud` variant so a dreamsign lifts off busy scene art; exported so
+ * the HUD's collapsed overflow stack can wear the same material without forking
+ * the literal. */
+export const DS_SHADOW =
+  "drop-shadow(0 3px 6px rgba(0,0,0,0.55)) drop-shadow(0 0 13px rgba(147,51,234,0.32))";
+
 /**
  * Delay before a dreamsign preview opens on an offering / draft card. Tighter
  * than the glossary-tooltip default because players scan a short list of
@@ -147,6 +155,13 @@ export interface DreamsignProps {
   revealTestid?: string;
   /** Fired on a tap / click that was not a deliberate hold-to-read. */
   onPress?: () => void;
+  /**
+   * The tile's material. `"flat"` (default) is the chrome-free collectible tile
+   * used in lists over a solid surface; `"hud"` composes {@link DS_SHADOW} — a
+   * drop-shadow + violet glow — into the tile filter so the object lifts off busy
+   * scene art in the transparent quest HUD.
+   */
+  variant?: "flat" | "hud";
 }
 
 /**
@@ -162,6 +177,7 @@ export function Dreamsign({
   testid = "dreamsign-art-tile",
   revealTestid,
   onPress,
+  variant = "flat",
 }: DreamsignProps): React.ReactElement {
   const [imageBroken, setImageBroken] = React.useState(false);
   const ref = React.useRef<HTMLSpanElement>(null);
@@ -193,7 +209,15 @@ export function Dreamsign({
   };
 
   // No chrome: the art floats on the media with no tile border, background,
-  // frame, or radius. A bane's desaturation is the one carried-over signal.
+  // frame, or radius. A bane's desaturation and the `hud` variant's drop-shadow
+  // are the only material the tile wears; both compose into the one filter.
+  const tileFilter =
+    [
+      dreamsign.isBane ? BANE_FILTER : null,
+      variant === "hud" ? DS_SHADOW : null,
+    ]
+      .filter((part): part is string => part !== null)
+      .join(" ") || "none";
   const tileStyle: CSSProperties = {
     height: sizePx,
     width: sizePx,
@@ -201,7 +225,7 @@ export function Dreamsign({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    filter: dreamsign.isBane ? BANE_FILTER : "none",
+    filter: tileFilter,
     position: "relative",
     cursor: "pointer",
     touchAction: "none",
