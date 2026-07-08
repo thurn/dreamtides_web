@@ -71,6 +71,25 @@ completing the starter dreamscape) — the same screen as `atlas2` — and is th
 natural entry point for boss-preview QA, since the boss node is revealed from that
 depth onward.
 
+## Draft site
+
+`?goto=draft` retypes a starter-dreamscape site to the `Draft` type and parks the
+run on it. The QA foundation seeds a valid `draftState`, so on entry the draft
+screen rolls its first offer and paints a real 2×2 card pack over the starter
+dreamscape, with the floating `Draft (n/total)` pick counter beneath it. Picking a
+card mints and paints the next offer and advances the counter; exhausting the pack
+completes the site and returns to the dreamscape overview.
+
+The Tango draft screen is mobile-gated: the router only swaps in the Tango site
+screen at a mobile viewport, so open this scene with `&ui=tango` at a phone width
+(for example 393×852) to see the Tango pack. A desktop-width viewport falls
+through to the legacy draft screen. Pair with `&deviceFrame=iphone16` to render
+the phone chrome for framed QA, e.g.:
+
+```
+http://localhost:5174/?goto=draft&ui=tango&deviceFrame=iphone16
+```
+
 ## Registered scenes
 
 The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
@@ -83,7 +102,7 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `dreamscape`             | Starter dreamscape overview with site nodes and the QuestStatusBar |
 | `deckviewer`             | Deck viewer overlay opened over the starter dreamscape (deck grid + press-and-hold zoom) |
 | `startingdeck`           | Starting-deck reveal popup over the starter dreamscape (frosted-glass chrome QA) |
-| `draft`                  | Draft site                                                       |
+| `draft`                  | Draft site — the Tango draft screen with a rolled first offer and the floating `Draft (n/total)` pick counter (mobile-gated; see "Draft site" below) |
 | `essence`                | Essence site                                                     |
 | `transfiguration`        | Transfiguration site                                             |
 | `transfiguration-enhanced` | Transfiguration site, enhanced                                |
