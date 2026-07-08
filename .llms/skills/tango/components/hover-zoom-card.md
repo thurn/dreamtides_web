@@ -8,7 +8,9 @@ Components · Live demo & interactive props: `/tango#/hover-zoom-card`
 
 Real consumers: **8** (imports outside `src/tango/docs/` and tests).
 
-The in-place card zoom wrapper for compact card slots: hover grows a portaled copy while the original footprint keeps layout stable.
+Wraps a medium card so hovering grows the card itself in place — the enlarged copy pops out of the layout (above neighbours and any overflow: hidden) while the original keeps its footprint and interactivity; growth is capped at MAX_SCALE 1.5x and a legible-rules-text target width.
+
+> **Guidance:** Layout is the caller's — HoverZoomCard has no style or className escape hatch. Wrap it in your own sized element, and set `fill` when that wrapper gives the card a fixed box to occupy (e.g. a battle-hand slot) rather than letting the card size itself.
 
 ## Props
 
@@ -24,10 +26,26 @@ The in-place card zoom wrapper for compact card slots: hover grows a portaled co
 
 ## Usage
 
+### Plain wrap
+
+The card sizes itself; hovering grows it in place. Pass the card's rendered rules text as `glossaryText` (and `suppressHoverHelp` on the card) so term definitions appear beside the enlarged copy.
+
 ```tsx
 import { HoverZoomCard } from "src/tango/components/card/HoverZoomCard";
 
-<HoverZoomCard glossaryText={card.renderedText}>
+<HoverZoomCard glossaryText={card.renderedText} logSurface="deck-viewer">
   <GameCard card={card} suppressHoverHelp />
 </HoverZoomCard>
+```
+
+### Fill a fixed slot
+
+When your wrapper is a fixed box (a battle-hand cell), set `fill` so the card occupies it fully instead of shrinking to its own size.
+
+```tsx
+<div style={{ width: 168, height: 236 }}>
+  <HoverZoomCard fill glossaryText={card.renderedText} logSurface="battle-hand">
+    <GameCard card={card} suppressHoverHelp />
+  </HoverZoomCard>
+</div>
 ```
