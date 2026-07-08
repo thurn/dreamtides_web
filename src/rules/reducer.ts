@@ -19,6 +19,7 @@ import {
 } from "./events";
 import type { FoldState } from "./fold-state";
 import type { QuestState } from "../types/quest";
+import * as battleEvents from "./battle/battle-events";
 import * as deck from "./quest/deck";
 import * as draft from "./quest/draft";
 import * as lifecycle from "./quest/lifecycle";
@@ -267,6 +268,12 @@ function routeDomain(
       return questCase(state, deck.setDreamsignPool(quest, payload));
     case "SET_DREAMSIGN_IS_BANE":
       return questCase(state, deck.setDreamsignIsBane(quest, payload));
+
+    // --- battle lifecycle (create / tear down the battle slice) ---
+    case "BEGIN_BATTLE":
+      return foldCase(state, battleEvents.beginBattle(state, payload, ctx));
+    case "END_BATTLE":
+      return foldCase(state, battleEvents.endBattle(state, payload));
 
     // --- whole-fold cases (touch the battle slice) ---
     case "RESET_QUEST":
