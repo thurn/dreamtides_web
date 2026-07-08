@@ -216,6 +216,8 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 | `--dt-line` | `rgba(168, 85, 247, 0.18)` |  |
 | `--dt-line-strong` | `rgba(168, 85, 247, 0.42)` |  |
 | `--dt-accent-soft` | `rgba(168, 85, 247, 0.12)` | atlas low-alpha accent fill |
+| `--dt-accent-glow` | `rgba(168, 85, 247, 0.6)` |  |
+| `--dt-gold-glow` | `rgba(250, 204, 21, 0.5)` |  |
 | `--dt-primary` | `var(--primitive-violet-600)` | #7c3aed |
 | `--dt-primary-light` | `var(--primitive-violet-400)` |  |
 | `--dt-accent-strong` | `var(--primitive-violet-400)` | atlas #a855f7 |
@@ -269,3 +271,4 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 | `--glass-sheen` | `linear-gradient(150deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 42%)` |  |
 | `--glass-rim` | `rgba(255, 255, 255, 0.14)` |  |
 | `--glass-shadow` | `inset 0 1px 1px rgba(255, 255, 255, 0.22), inset 0 -18px 30px rgba(255, 255, 255, 0.04), 0 10px 34px rgba(6, 2, 14, 0.5)` |  |
+| `--badge-disc-gradient` | `radial-gradient(closest-side, #2a2040, #14101f)` |  |

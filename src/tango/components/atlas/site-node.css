@@ -29,12 +29,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: radial-gradient(
-    120% 120% at 50% 28%,
-    #1a1525 0%,
-    #0b0815 72%,
-    #060410 100%
-  );
+  background: var(--badge-disc-gradient);
   border: 1px solid rgba(168, 85, 247, 0.45);
   transition:
     box-shadow 0.16s ease,

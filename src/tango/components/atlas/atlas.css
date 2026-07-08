@@ -48,7 +48,7 @@
   /* Stroke is a per-edge userSpaceOnUse gradient set inline by AtlasEdge. */
   stroke-width: 4;
   stroke-linecap: round;
-  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6));
+  filter: drop-shadow(0 0 8px var(--dt-accent-glow));
 }
 .dream-atlas .edge-open-flow {
   stroke: #ede0ff;
@@ -112,7 +112,7 @@
 }
 .dream-atlas .node-available .node-glow {
   background: radial-gradient(closest-side, rgba(168, 85, 247, 0.32), transparent);
-  box-shadow: 0 0 32px 6px rgba(168, 85, 247, 0.6);
+  box-shadow: 0 0 32px 6px var(--dt-accent-glow);
   animation: dream-atlas-pulse 2.6s ease-in-out infinite;
 }
 .dream-atlas .node-revealedLocked .node-glow {
@@ -203,7 +203,7 @@
   width: calc(var(--atlas-node-size) * 0.27 * var(--atlas-badge-scale, 1));
   height: calc(var(--atlas-node-size) * 0.27 * var(--atlas-badge-scale, 1));
   border-radius: 50%;
-  background: linear-gradient(180deg, #2a2040, #14101f);
+  background: var(--badge-disc-gradient);
   border: 1px solid var(--dt-line-strong);
   display: flex;
   align-items: center;
@@ -240,7 +240,7 @@
   height: calc(var(--atlas-node-size) * 0.35 * var(--atlas-badge-scale, 1));
   border-radius: 50%;
   z-index: 7;
-  background: radial-gradient(closest-side, #2a2040, #14101f);
+  background: var(--badge-disc-gradient);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -259,12 +259,12 @@
   position: absolute;
   inset: -2px;
   border-radius: 50%;
-  box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.5);
+  box-shadow: 0 0 0 0 var(--dt-gold-glow);
   animation: dream-atlas-signpulse 2.4s ease-out infinite;
 }
 @keyframes dream-atlas-signpulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.5);
+    box-shadow: 0 0 0 0 var(--dt-gold-glow);
   }
   70%,
   100% {

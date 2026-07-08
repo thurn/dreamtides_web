@@ -266,6 +266,8 @@
   --dt-line: rgba(168, 85, 247, 0.18);
   --dt-line-strong: rgba(168, 85, 247, 0.42);
   --dt-accent-soft: rgba(168, 85, 247, 0.12); /* atlas low-alpha accent fill */
+  --dt-accent-glow: rgba(168, 85, 247, 0.6);  /* @kind color — atlas violet node/edge glow */
+  --dt-gold-glow: rgba(250, 204, 21, 0.5);    /* @kind color — atlas gold known-badge pulse */
   --dt-primary: var(--primitive-violet-600);        /* #7c3aed */
   --dt-primary-light: var(--primitive-violet-400);
   --dt-accent-strong: var(--primitive-violet-400);  /* atlas #a855f7 */
@@ -508,6 +510,7 @@
   --gradient-accent: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); /* @kind other */
   --gradient-gold: linear-gradient(135deg, #ffd34d 0%, #e0a82a 100%);   /* @kind other */
   --gradient-energy: linear-gradient(160deg, #38bdf8 0%, #0ea5e9 100%); /* @kind other */
+  --badge-disc-gradient: radial-gradient(closest-side, #2a2040, #14101f); /* @kind other */
 
   /* ---- Atmospheric mote tints ----
      The ONLY sanctioned use of opacity animation: drifting particles, tinted by
