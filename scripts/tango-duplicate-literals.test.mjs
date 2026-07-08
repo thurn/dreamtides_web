@@ -59,11 +59,6 @@ export const BASELINE = [
     "src/tango/components/card/CardStatOrb.tsx",
     "src/tango/components/controls/PipBadge.tsx",
   ],
-  [
-    "radial-gradient(circle at 50% 20%, color-mix(in srgb, ${token(\"--gold\")}",
-    "src/tango/components/hud/DreamcallerPortrait.tsx",
-    "src/tango/screens/quest-start-desktop.tsx",
-  ],
   // The full-bleed overlay's safe-area top padding, so a mobile header clears
   // the device cutout. GlassDialog is the shell the deck viewers migrate onto
   // in Phase 3; that migration deletes MobileDeckViewer's own copy and this

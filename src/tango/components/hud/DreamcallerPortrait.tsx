@@ -1,10 +1,15 @@
 // DreamcallerPortrait — the ONE way to render a dreamcaller's character art.
-// Three fixed framings (`variant`): a large `hero` showcase, a square `panel`
-// for profile cards / popovers, and a small square `thumb` for HUD rows and
-// resident lists. The art is the transparent full-body cutout standing on a
-// tinted radial backdrop. The frame (radius, border, backdrop, shadow) and the
-// per-variant image crop ARE the design system's; a caller supplies only the
-// dreamcaller data, the variant, and an optional pixel `size`.
+// Five framings (`variant`). Three are self-framing squares/showcases: a large
+// `hero`, a square `panel` for profile cards / popovers, and a small square
+// `thumb` for HUD rows and resident lists. Two are full-bleed fills for a
+// caller's own `position:relative` stage: `standing` (an unframed cutout over a
+// soft ambient glow, feet anchored to the stage floor — the desktop
+// Dreamcaller-select column) and `fullBleed` (an edge-to-edge cinematic cutout
+// over a tinted backdrop — the mobile carousel page). The art is the
+// transparent full-body cutout standing on a tinted radial backdrop. The frame
+// (radius, border, backdrop, shadow) and the per-variant image crop ARE the
+// design system's; a caller supplies only the dreamcaller data, the variant,
+// and an optional pixel `size`.
 //
 // When the art asset 404s the portrait falls back to a tinted monogram disc so
 // a missing image never leaves an empty hole.
@@ -27,17 +32,35 @@ export interface DreamcallerVisual {
 }
 
 /** Which framing the portrait renders. */
-export type DreamcallerPortraitVariant = "hero" | "panel" | "thumb";
+export type DreamcallerPortraitVariant =
+  | "hero"
+  | "panel"
+  | "thumb"
+  | "standing"
+  | "fullBleed";
+
+/** The self-framing variants: each renders its own square/showcase frame chrome
+ * and per-variant crop. `standing`/`fullBleed` instead fill a caller's stage. */
+type FramedVariant = "hero" | "panel" | "thumb";
+
+/** Grows the standing cutout art from the feet past the column width so the
+ * figure reads larger while the feet — and the console card riding over the
+ * legs — stay anchored to the stage floor. */
+const PORTRAIT_STANDING_SCALE = 1.2;
 
 export interface DreamcallerPortraitProps {
   /** The dreamcaller whose art and identity the portrait shows. */
   dreamcaller: DreamcallerVisual;
-  /** Framing: large `hero`, square `panel`, or small square `thumb`. Default `panel`. */
+  /**
+   * Framing: self-framing `hero` / `panel` / `thumb`, or the full-bleed stage
+   * fills `standing` (desktop column) and `fullBleed` (mobile carousel).
+   * Default `panel`.
+   */
   variant?: DreamcallerPortraitVariant;
   /**
    * Fixed pixel width. Panel/thumb stay square, so this also sets their height.
    * A sized portrait never shrinks in a flex row. Omit to fill the container
-   * width.
+   * width. Ignored by `standing`/`fullBleed`, which fill the caller's stage.
    */
   size?: number;
 }
@@ -49,7 +72,7 @@ function portraitBackdrop(): string {
 }
 
 /** Per-variant frame chrome (radius / border / tinted backing / shadow). */
-function frameStyle(variant: DreamcallerPortraitVariant): CSSProperties {
+function frameStyle(variant: FramedVariant): CSSProperties {
   switch (variant) {
     case "hero":
       return {
@@ -79,7 +102,7 @@ function frameStyle(variant: DreamcallerPortraitVariant): CSSProperties {
 }
 
 /** Per-variant crop: each variant frames the character's face consistently. */
-function imageStyle(variant: DreamcallerPortraitVariant): CSSProperties {
+function imageStyle(variant: FramedVariant): CSSProperties {
   switch (variant) {
     case "hero":
       return {
@@ -113,7 +136,7 @@ function imageStyle(variant: DreamcallerPortraitVariant): CSSProperties {
 }
 
 /** The tinted-monogram fallback shown when the art asset fails to load. */
-function fallbackStyle(variant: DreamcallerPortraitVariant): CSSProperties {
+function fallbackStyle(variant: FramedVariant): CSSProperties {
   return {
     display: "flex",
     alignItems: "center",
@@ -121,7 +144,7 @@ function fallbackStyle(variant: DreamcallerPortraitVariant): CSSProperties {
     minHeight: variant === "hero" ? 220 : undefined,
     height: variant === "hero" ? undefined : "100%",
     aspectRatio: variant === "hero" ? undefined : "1 / 1",
-    background: `radial-gradient(circle at 50% 20%, color-mix(in srgb, ${token("--gold")} 24%, transparent) 0%, color-mix(in srgb, ${token("--accent")} 24%, transparent) 38%, ${token("--bg-sunken")} 100%)`,
+    background: portraitBackdrop(),
     color: token("--text-primary"),
     fontWeight: 800,
     letterSpacing: "0.08em",
@@ -146,6 +169,162 @@ export function DreamcallerPortrait({
 }: DreamcallerPortraitProps) {
   const [broken, setBroken] = useState(false);
   const alt = `${dreamcaller.name}, ${dreamcaller.title}`;
+
+  // The full-bleed stage fills — `standing` (desktop column) and `fullBleed`
+  // (mobile carousel) — return a BARE FRAGMENT (no `.tango` wrapper) so a
+  // caller's `PortraitName`/`Motes` overlay siblings still stack in the same
+  // `position:relative` stage. `size` is ignored: they fill the stage.
+  if (variant === "standing") {
+    // A soft ambient glow the cutout stands in, centered low over the feet.
+    const glow = (
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: `radial-gradient(72% 56% at 50% 62%, color-mix(in srgb, ${token("--accent")} 26%, transparent) 0%, color-mix(in srgb, ${token("--gold")} 10%, transparent) 46%, transparent 72%)`,
+          pointerEvents: "none",
+        }}
+      />
+    );
+    if (broken) {
+      return (
+        <>
+          {glow}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              display: "grid",
+              placeItems: "center",
+            }}
+          >
+            <div
+              style={{
+                width: 160,
+                height: 160,
+                borderRadius: "50%",
+                display: "grid",
+                placeItems: "center",
+                background: portraitBackdrop(),
+                color: token("--text-primary"),
+                fontWeight: 800,
+                fontSize: 56,
+                letterSpacing: "0.08em",
+              }}
+            >
+              {dreamcaller.name.charAt(0)}
+            </div>
+          </div>
+        </>
+      );
+    }
+    return (
+      <>
+        {glow}
+        <img
+          src={dreamcallerCutoutSrc(dreamcaller.imageNumber)}
+          alt={alt}
+          draggable={false}
+          fetchPriority="high"
+          loading="eager"
+          decoding="async"
+          onError={() => {
+            setBroken(true);
+          }}
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+            // Feet on the floor of the stage: the head keeps the cutout's own
+            // headroom for the floating name, and the legs drop to the bottom
+            // where the console card rides over them.
+            objectPosition: "50% 100%",
+            // Grow the art from the feet: the cutout is contained within the
+            // column width, so scaling here is how it reads larger (overflowing
+            // the column) while the feet — and thus the card that rides over the
+            // legs — stay anchored to the stage floor.
+            transform: `scale(${String(PORTRAIT_STANDING_SCALE)})`,
+            transformOrigin: "50% 100%",
+            userSelect: "none",
+          }}
+        />
+      </>
+    );
+  }
+
+  if (variant === "fullBleed") {
+    // The tinted cinematic backdrop the edge-to-edge cutout stands on.
+    const backdrop = (
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: `radial-gradient(120% 85% at 50% 24%, color-mix(in srgb, ${token("--gold")} 16%, transparent) 0%, color-mix(in srgb, ${token("--accent")} 22%, transparent) 46%, ${token("--bg-sunken")} 100%)`,
+        }}
+      />
+    );
+    if (broken) {
+      return (
+        <>
+          {backdrop}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              display: "grid",
+              placeItems: "center",
+              color: token("--text-primary"),
+              fontWeight: 800,
+              fontSize: 64,
+              letterSpacing: "0.08em",
+            }}
+          >
+            {dreamcaller.name.charAt(0)}
+          </div>
+        </>
+      );
+    }
+    return (
+      <>
+        {backdrop}
+        <img
+          src={dreamcallerCutoutSrc(dreamcaller.imageNumber)}
+          alt={alt}
+          draggable={false}
+          // The figure is the page's hero image — the cinematic focus the whole
+          // layout is built around — so it must paint as early as possible rather
+          // than fading in after the chrome. Fetch it eagerly at high priority and
+          // decode async so it lands with the first frame.
+          fetchPriority="high"
+          loading="eager"
+          decoding="async"
+          onError={() => {
+            setBroken(true);
+          }}
+          style={{
+            position: "absolute",
+            // Slightly wider than the page so the width-limited `contain` fit
+            // renders the figure large: on a phone the head rises to just below
+            // the title instead of leaving a dead band of backdrop between them.
+            left: "-6%",
+            bottom: 0,
+            width: "112%",
+            height: "96%",
+            objectFit: "contain",
+            objectPosition: "50% 100%",
+            userSelect: "none",
+          }}
+        />
+      </>
+    );
+  }
+
   const sizeStyle: CSSProperties =
     size === undefined
       ? { width: "100%" }

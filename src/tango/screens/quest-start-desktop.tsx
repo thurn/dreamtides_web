@@ -8,12 +8,12 @@
 // carousel via `quest-start-shared`; `QuestStartScreen` picks by viewport.
 // PURE: renders from a view-model and reports the chosen Dreamcaller via `onPick`.
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Motes } from "../components/hud/Motes";
 import { GroupPanel } from "../components/controls/GroupPanel";
 import { Button } from "../components/controls/Button";
 import { token } from "../primitives/tokens";
-import { dreamcallerCutoutSrc } from "../components/hud/DreamcallerPortrait";
+import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
 import {
   AbilityReveal,
   ConsoleDivider,
@@ -27,7 +27,6 @@ import {
  * center-aligned console card riding up over the legs. */
 const COLUMN_W = 400; // the figure stage's width
 const PORTRAIT_H = 715; // the standing figure's stage height
-const PORTRAIT_SCALE = 1.2; // grows the cutout art from the feet past the column
 const CARD_W = 320; // console-card width (narrower than the column, centered)
 const CARD_OVERLAP = 275; // how far the card's center rides up over the figure
 /** The minimum height of the desktop ability-text box — two lines of the rules
@@ -55,93 +54,6 @@ function DesktopTitle() {
     >
       Choose Your Dreamcaller
     </div>
-  );
-}
-
-/** The Dreamcaller's transparent full-body cutout, standing unframed on the
- * screen's shared background over a soft ambient glow. Feet anchor to the
- * bottom of the stage, where the console card rides up over the legs and
- * covers them. Falls back to a tinted monogram disc on a 404. */
-function StandingFigure({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
-  const [broken, setBroken] = useState(false);
-  const glow = (
-    <div
-      aria-hidden="true"
-      style={{
-        position: "absolute",
-        inset: 0,
-        background: `radial-gradient(72% 56% at 50% 62%, color-mix(in srgb, ${token("--accent")} 26%, transparent) 0%, color-mix(in srgb, ${token("--gold")} 10%, transparent) 46%, transparent 72%)`,
-        pointerEvents: "none",
-      }}
-    />
-  );
-  if (broken) {
-    return (
-      <>
-        {glow}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "grid",
-            placeItems: "center",
-          }}
-        >
-          <div
-            style={{
-              width: 160,
-              height: 160,
-              borderRadius: "50%",
-              display: "grid",
-              placeItems: "center",
-              background: `radial-gradient(circle at 50% 20%, color-mix(in srgb, ${token("--gold")} 24%, transparent) 0%, color-mix(in srgb, ${token("--accent")} 24%, transparent) 38%, ${token("--bg-sunken")} 100%)`,
-              color: token("--text-primary"),
-              fontWeight: 800,
-              fontSize: 56,
-              letterSpacing: "0.08em",
-            }}
-          >
-            {dreamcaller.name.charAt(0)}
-          </div>
-        </div>
-      </>
-    );
-  }
-  return (
-    <>
-      {glow}
-      <img
-        src={dreamcallerCutoutSrc(dreamcaller.imageNumber)}
-        alt={`${dreamcaller.name}, ${dreamcaller.title}`}
-        draggable={false}
-        fetchPriority="high"
-        loading="eager"
-        decoding="async"
-        onError={() => {
-          setBroken(true);
-        }}
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          bottom: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "contain",
-          // Feet on the floor of the stage: the head keeps the cutout's own
-          // headroom for the floating name, and the legs drop to the bottom
-          // where the console card rides over them.
-          objectPosition: "50% 100%",
-          // Grow the art from the feet: the cutout is contained within the
-          // column width, so scaling here is how it reads larger (overflowing
-          // the column) while the feet — and thus the card that rides over the
-          // legs — stay anchored to the stage floor.
-          transform: `scale(${String(PORTRAIT_SCALE)})`,
-          transformOrigin: "50% 100%",
-          userSelect: "none",
-        }}
-      />
-    </>
   );
 }
 
@@ -283,7 +195,7 @@ function DreamcallerColumn({
           flex: "none",
         }}
       >
-        <StandingFigure dreamcaller={dreamcaller} />
+        <DreamcallerPortrait dreamcaller={dreamcaller} variant="standing" />
         <PortraitName dreamcaller={dreamcaller} />
       </div>
       <DreamcallerCard

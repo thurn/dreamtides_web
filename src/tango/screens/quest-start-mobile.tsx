@@ -13,7 +13,7 @@ import { GlowIcon } from "../components/controls/GlowIcon";
 import { Pressable } from "../primitives/Pressable";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import { dreamcallerCutoutSrc } from "../components/hud/DreamcallerPortrait";
+import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
 import {
   AbilityReveal,
   ConsoleDivider,
@@ -26,81 +26,6 @@ import {
  * press; the disc row reabsorbs it with negative margins so the visual layout
  * is unchanged. A spacing step, so the token is right. */
 const TIDE_HIT_SLOP = token("--space-2");
-
-/** The full-bleed cinematic figure for one Dreamcaller: the transparent
- * full-body cutout standing on an ambient tinted backdrop, feet anchored to
- * the bottom of the page so the legs sink behind the console. */
-function FullBleedPortrait({
-  dreamcaller,
-}: {
-  dreamcaller: DreamcallerOfferView;
-}) {
-  const [broken, setBroken] = useState(false);
-  const backdrop = (
-    <div
-      aria-hidden="true"
-      style={{
-        position: "absolute",
-        inset: 0,
-        background: `radial-gradient(120% 85% at 50% 24%, color-mix(in srgb, ${token("--gold")} 16%, transparent) 0%, color-mix(in srgb, ${token("--accent")} 22%, transparent) 46%, ${token("--bg-sunken")} 100%)`,
-      }}
-    />
-  );
-  if (broken) {
-    return (
-      <>
-        {backdrop}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "grid",
-            placeItems: "center",
-            color: token("--text-primary"),
-            fontWeight: 800,
-            fontSize: 64,
-            letterSpacing: "0.08em",
-          }}
-        >
-          {dreamcaller.name.charAt(0)}
-        </div>
-      </>
-    );
-  }
-  return (
-    <>
-      {backdrop}
-      <img
-        src={dreamcallerCutoutSrc(dreamcaller.imageNumber)}
-        alt={`${dreamcaller.name}, ${dreamcaller.title}`}
-        draggable={false}
-        // The figure is the page's hero image — the cinematic focus the whole
-        // layout is built around — so it must paint as early as possible rather
-        // than fading in after the chrome. Fetch it eagerly at high priority and
-        // decode async so it lands with the first frame.
-        fetchPriority="high"
-        loading="eager"
-        decoding="async"
-        onError={() => {
-          setBroken(true);
-        }}
-        style={{
-          position: "absolute",
-          // Slightly wider than the page so the width-limited `contain` fit
-          // renders the figure large: on a phone the head rises to just below
-          // the title instead of leaving a dead band of backdrop between them.
-          left: "-6%",
-          bottom: 0,
-          width: "112%",
-          height: "96%",
-          objectFit: "contain",
-          objectPosition: "50% 100%",
-          userSelect: "none",
-        }}
-      />
-    </>
-  );
-}
 
 /** The mobile carousel's flat console beneath a portrait: ability text, a
  * hairline, the tides cluster + starting essence, and the Choose action. */
@@ -283,7 +208,7 @@ function DreamcallerPage({
         overflow: "hidden",
       }}
     >
-      <FullBleedPortrait dreamcaller={dreamcaller} />
+      <DreamcallerPortrait dreamcaller={dreamcaller} variant="fullBleed" />
       <Motes on={active} tint="warm" zIndex={1} />
 
       <DreamcallerTitle dreamcaller={dreamcaller} />

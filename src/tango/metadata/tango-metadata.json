@@ -655,11 +655,13 @@
       "unionMembers": [
         "hero",
         "panel",
-        "thumb"
+        "thumb",
+        "standing",
+        "fullBleed"
       ],
       "required": false,
       "defaultValue": "panel",
-      "description": "Framing: large `hero`, square `panel`, or small square `thumb`. Default `panel`."
+      "description": "Framing: self-framing `hero` / `panel` / `thumb`, or the full-bleed stage\nfills `standing` (desktop column) and `fullBleed` (mobile carousel).\nDefault `panel`."
     },
     {
       "name": "size",
@@ -667,7 +669,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Fixed pixel width. Panel/thumb stay square, so this also sets their height.\nA sized portrait never shrinks in a flex row. Omit to fill the container\nwidth."
+      "description": "Fixed pixel width. Panel/thumb stay square, so this also sets their height.\nA sized portrait never shrinks in a flex row. Omit to fill the container\nwidth. Ignored by `standing`/`fullBleed`, which fill the caller's stage."
     }
   ],
   "DreamscapeMotes": [
@@ -1444,12 +1446,12 @@
   "InfoCard": [
     {
       "name": "variant",
-      "tsType": "\"object\" | \"text\" | \"icon\" | \"fullBleed\" | \"atlasReveal\" | \"tide\"",
+      "tsType": "\"object\" | \"fullBleed\" | \"text\" | \"icon\" | \"atlasReveal\" | \"tide\"",
       "unionMembers": [
         "object",
+        "fullBleed",
         "text",
         "icon",
-        "fullBleed",
         "atlasReveal",
         "tide"
       ],
