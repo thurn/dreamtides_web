@@ -8,14 +8,21 @@
 // it is safe on iOS Safari.
 //
 // This is the ONE glass recipe, shared so it reads identically everywhere it
-// appears. Its four current consumers:
-//   - the InfoCard press-reveal popover shell (which overrides the fill to the
-//     warmer --glass-fill-popover tint),
-//   - the MobileDeckViewer full-bleed frosted backdrop,
-//   - the DesktopDeckViewer full-bleed frosted backdrop,
-//   - the GlassDialog glass panel (the shell the StartingDeckOverlay wears).
-// (control-treatment.ts's glassTrack() — the controls / glass icon button —
-// routes through this recipe too, via glassSurfaceStyle({ radius: null }).)
+// appears. Its consumers:
+//   - the InfoCard press-reveal shell (which overrides the fill to the warmer
+//     --glass-fill-popover tint; its fullBleed / atlasReveal text cards wear the
+//     same recipe),
+//   - GlassDialog — both its GlassBackdrop (the full-bleed frosted layer the
+//     MobileDeckViewer and DesktopDeckViewer render, reduced to fill + blur for
+//     an edge-to-edge surface) and its centered glass panel (the shell the
+//     StartingDeckOverlay wears),
+//   - control-treatment.ts's glassTrack() (via glassSurfaceStyle({ radius: null
+//     })), which flows on to glassIconButtonChrome() → IconButton and
+//     controlChrome() → the Select / SegmentedControl track+trigger and
+//     GlassButton.
+// So the one material reaches the InfoCard reveal shell, GlassDialog (and the
+// shared backdrop the deck viewers frost through), IconButton, GlassButton, and
+// the Select / SegmentedControl control cluster.
 //
 // The material's fill, sheen, blur, rim, and shadow live once as the --glass-*
 // design tokens; this recipe is their ONLY reader. Edit a glass literal in
