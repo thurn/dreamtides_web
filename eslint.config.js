@@ -17,6 +17,7 @@ import tangoNoNameKeyedCards from "./eslint-rules/no-name-keyed-cards.js";
 import tangoNoRawSafeAreaEnv from "./eslint-rules/no-raw-safe-area-env.js";
 import tangoNoInlineGlass from "./eslint-rules/no-inline-glass.js";
 import tangoNoNumericStyleProps from "./eslint-rules/no-numeric-style-props.js";
+import tangoNoPurpleTextOnGlass from "./eslint-rules/no-purple-text-on-glass.js";
 
 // One shared plugin object: flat config rejects two config blocks that bind the
 // same plugin name to different objects, and the tango rules apply to more than
@@ -40,6 +41,7 @@ const tangoPlugin = {
     "no-raw-safe-area-env": tangoNoRawSafeAreaEnv,
     "no-inline-glass": tangoNoInlineGlass,
     "no-numeric-style-props": tangoNoNumericStyleProps,
+    "no-purple-text-on-glass": tangoNoPurpleTextOnGlass,
   },
 };
 
@@ -91,6 +93,7 @@ export default tseslint.config(
       "tango/no-name-keyed-cards": "error",
       "tango/no-raw-safe-area-env": "error",
       "tango/no-inline-glass": "error",
+      "tango/no-purple-text-on-glass": "error",
     },
   },
   {

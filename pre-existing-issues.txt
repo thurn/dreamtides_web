@@ -1,0 +1,6 @@
+Dreamsign Revelation idle logging repeats during QA
+
+While QAing `?goto=dreamsign-revelation&ui=tango` on July 8, 2026, the browser
+console emitted repeated `site_entered` and `dream_guide_presented` quest-log
+events every few seconds while the screen was idle. The visual fix in this
+branch does not touch the site-entry or guide-presentation logging path.

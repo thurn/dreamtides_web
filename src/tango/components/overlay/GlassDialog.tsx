@@ -272,7 +272,7 @@ export function GlassDialog({
                 style={{
                   margin: 0,
                   font: token("--t-body"),
-                  color: token("--text-primary"),
+                  color: token("--text-on-glass-muted"),
                 }}
               >
                 {subtitle}

@@ -40,6 +40,20 @@ Choose glass only for a surface that floats over the scene and should let the
 scene show through. A surface that does not sit over painterly art has no glass
 to refract, so it uses a solid material instead (see "Not glass").
 
+## Text on glass
+
+All text painted on blurred glass uses the glass text tokens:
+
+- `--text-on-glass` for primary labels, names, titles, and spoken copy;
+- `--text-on-glass-muted` for secondary copy.
+
+Accent, essence, points, and production-bridge violet tokens are never text
+colors on blurred glass. The glass material samples scene art, so bright sky,
+snow, gold, and white painterly regions can sit directly behind the glyphs; the
+purple accent family fails that contrast case. Purple may still frame a button,
+glow an object, or color an economy mark on solid chrome, but glass text stays
+white or warm near-white.
+
 ## `--glass-fill-popover`: the warmer reveal tint
 
 There are two glass fills, and the difference is deliberate:

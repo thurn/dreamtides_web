@@ -201,6 +201,8 @@
   --text-faint: var(--dt-text-faint);
   --text-on-accent: #ffffff;
   --text-on-card: #f6f6f5;   /* card name on dark card chrome (parent value) */
+  --text-on-glass: var(--primitive-ink-100); /* high-contrast text on blurred glass; never violet/accent */
+  --text-on-glass-muted: var(--primitive-ink-300); /* secondary text on blurred glass */
 
   /* ---- Accent / primary action ---- */
   --accent: var(--primitive-violet-400);
@@ -514,7 +516,12 @@
      (control-treatment.ts's glassTrack() and InfoCard's press-reveal shell
      both route through that one recipe). No other file may re-declare the
      fill / sheen / blur / rim / shadow — edit them here and every glass surface
-     follows. */
+     follows.
+
+     Text on glass resolves through --text-on-glass / --text-on-glass-muted.
+     Accent, essence, points, and production-bridge violet tokens are never text
+     colors on blurred glass: the blurred backdrop makes that purple treatment
+     fail legibility on bright scene art. */
   --glass-fill: rgba(14, 14, 16, 0.54);  /* @kind color */
   /* The InfoCard reveal tint: a warmer violet-black so a press-reveal popover
      reads distinct from the neutral deck-viewer glass. */

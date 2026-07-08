@@ -97,6 +97,8 @@ export const TOKENS = {
   "--text-faint": { var: "var(--text-faint)", value: "var(--dt-text-faint)" },
   "--text-on-accent": { var: "var(--text-on-accent)", value: "#ffffff" },
   "--text-on-card": { var: "var(--text-on-card)", value: "#f6f6f5" },
+  "--text-on-glass": { var: "var(--text-on-glass)", value: "var(--primitive-ink-100)" },
+  "--text-on-glass-muted": { var: "var(--text-on-glass-muted)", value: "var(--primitive-ink-300)" },
   "--accent": { var: "var(--accent)", value: "var(--primitive-violet-400)" },
   "--accent-strong": { var: "var(--accent-strong)", value: "var(--primitive-violet-600)" },
   "--accent-bright": { var: "var(--accent-bright)", value: "var(--primitive-violet-300)" },

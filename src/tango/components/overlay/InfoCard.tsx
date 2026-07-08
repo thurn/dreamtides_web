@@ -225,7 +225,7 @@ const tMeta: React.CSSProperties = {
   lineHeight: 1,
   letterSpacing: ".12em",
   textTransform: "uppercase",
-  color: token("--text-faint"),
+  color: token("--text-on-glass-muted"),
 };
 const tAtlasHeadline: React.CSSProperties = {
   margin: 0,
@@ -242,7 +242,7 @@ const tAtlasSubtitle: React.CSSProperties = {
   fontSize: "calc(14px * var(--info-card-text-scale, 1))",
   fontWeight: 500,
   lineHeight: 1.25,
-  color: token("--accent-bright"),
+  color: token("--text-on-glass"),
 };
 const tAtlasBody: React.CSSProperties = {
   fontFamily: token("--font-rules-text"),

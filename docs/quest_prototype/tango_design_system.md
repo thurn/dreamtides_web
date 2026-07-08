@@ -259,6 +259,16 @@ the motion tokens, and the elevation/glow shadows carry no `--primitive-` prefix
 they are sanctioned semantic scales, role/intent named, and UI code uses them
 directly.
 
+### Glass text tokens
+
+Blurred glass is a special contrast environment because it samples live scene
+art behind the glyphs. Text on the liquid-glass material uses
+`--text-on-glass` for primary labels, names, titles, and spoken copy, and
+`--text-on-glass-muted` for secondary copy. Accent, essence, points, and
+production-bridge violet tokens are not text colors on glass. Purple remains a
+valid object glow, border, economy mark, and primary-action surface; glyphs on
+blurred glass stay white or warm near-white.
+
 ### Token groups documented in the Tokens section
 
 The `/tango` Tokens section renders every token as a specimen, split into a

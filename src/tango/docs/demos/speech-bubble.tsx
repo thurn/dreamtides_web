@@ -20,7 +20,7 @@ export const speechBubbleDemo: TangoComponent = {
   blurb:
     "A guide-dialog bubble for character-led site screens: the same frosted information material as an InfoCard, with a strict left-or-right arrow that points back to the speaker.",
   callout:
-    "Use it beside character art, not as a general text container. The component owns its glass material, name treatment, quote voice, and arrow geometry; the caller supplies only the speaker name, spoken line, and which side faces the character.",
+    "Use it beside character art, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, and arrow geometry; the caller supplies only the speaker name, spoken line, and which side faces the character.",
   group: "Components",
   docName: "SpeechBubble",
   Component: SpeechBubbleDemo,

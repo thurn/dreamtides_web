@@ -10,7 +10,7 @@ Real consumers: **1** (imports outside `src/tango/docs/` and tests).
 
 A guide-dialog bubble for character-led site screens: the same frosted information material as an InfoCard, with a strict left-or-right arrow that points back to the speaker.
 
-> **Guidance:** Use it beside character art, not as a general text container. The component owns its glass material, name treatment, quote voice, and arrow geometry; the caller supplies only the speaker name, spoken line, and which side faces the character.
+> **Guidance:** Use it beside character art, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, and arrow geometry; the caller supplies only the speaker name, spoken line, and which side faces the character.
 
 ## Props
 

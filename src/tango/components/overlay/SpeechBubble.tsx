@@ -63,7 +63,7 @@ export function SpeechBubble({
           font: token("--t-popover-meta"),
           textTransform: "uppercase",
           letterSpacing: "0.12em",
-          color: token("--accent-bright"),
+          color: token("--text-on-glass"),
         }}
       >
         {speakerName}

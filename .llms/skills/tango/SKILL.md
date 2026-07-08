@@ -203,6 +203,13 @@ lint-enforced in product UI: `no-hardcoded-values` catches raw colors,
 *measures* (width/height/min/max constraints) are content-driven layout and
 stay the caller's numbers.
 
+**Glass text is a special role.** Text on the liquid-glass material uses
+`--text-on-glass` or `--text-on-glass-muted`, never accent / essence / points
+or any violet production-bridge token. Blurred glass samples live scene art;
+purple text fails on bright sky, snow, gold, and white regions behind the
+surface. The `no-purple-text-on-glass` ESLint rule enforces this in files that
+import the shared glass recipes.
+
 The `--dt-*` / `--color-*` / `--cv-*` families are a production bridge: the
 same values re-exported under the production codebase's token names so shared
 elements (above all the game card) resolve identically in either system. In
@@ -281,6 +288,9 @@ adapter against its own inputs. Full rationale:
 - **Legibility ladder**: on-media text uses outline dilation; dense related
   info goes in a `GroupPanel`. A scrim, wash, or vignette painted over scene
   art to fake legibility is not on the ladder.
+- **Glass text contrast**: text on blurred glass is white or warm near-white
+  through `--text-on-glass` / `--text-on-glass-muted`; violet/accent/resource
+  text is not a legibility treatment on glass.
 - **Popup rule**: every reveal-on-interaction popup renders through
   `InfoCard` — pointer-anchored, no close button, no scrim; hover reveals on
   fine pointers, touch-hold on touch.

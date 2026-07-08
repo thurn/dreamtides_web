@@ -38,6 +38,8 @@ Text color roles and letter-spacing. Pick by role (primary/secondary/muted), nev
 | `--text-faint` | `var(--dt-text-faint)` | #bba994 warm muted |
 | `--text-on-accent` | `#ffffff` |  |
 | `--text-on-card` | `#f6f6f5` | card name on dark card chrome (parent value) |
+| `--text-on-glass` | `var(--primitive-ink-100)` | high-contrast text on blurred glass; never violet/accent |
+| `--text-on-glass-muted` | `var(--primitive-ink-300)` | secondary text on blurred glass |
 | `--text` | `var(--dt-text)` | #fff8ec warm near-white |
 | `--text-dim` | `var(--dt-text-dim)` | #d8ccba warm |
 | `--tracking-eyebrow` | `0.14em` |  |
