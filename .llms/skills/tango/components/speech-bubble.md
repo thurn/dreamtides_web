@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/speech-bubble`
 
-Real consumers: **1** (imports outside `src/tango/docs/` and tests).
+Real consumers: **2** (imports outside `src/tango/docs/` and tests).
 
 A guide-dialog bubble for character-led site screens: the same frosted information material as an InfoCard, with a strict left-or-right arrow that points back to the speaker.
 

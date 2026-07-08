@@ -84,14 +84,17 @@ export function QuestApp({
     runtimeConfig.uiVariant === "tango" && state.screen.type === "atlas";
   const dreamscapeUsesTango =
     runtimeConfig.uiVariant === "tango" && state.screen.type === "dreamscape";
-  // Tango screens that own their in-screen QuestStatusBar suppress the app-shell
-  // HUD so the bottom bar is not doubled. Menu ownership is a separate gate:
-  // some site screens dock the Tango status bar without taking over the
-  // top-left utility menu on every viewport.
+  // Tango site screens that own their app-shell chrome suppress the legacy HUD.
+  // Menu ownership is a separate gate: some site screens dock the Tango status
+  // bar without taking over the top-left utility menu on every viewport.
   const activeSite = activeSiteType(state);
-  const tangoSiteOwnsQuestStatusBar =
+  const tangoSiteSuppressesLegacyHud =
     runtimeConfig.uiVariant === "tango"
-    && (activeSite === "Draft" || activeSite === "DreamsignRevelation");
+    && (activeSite === "Draft"
+      || activeSite === "DreamsignRevelation"
+      || activeSite === "Purge");
+  const hidePresencePill =
+    runtimeConfig.uiVariant === "tango" && activeSite === "Purge";
   const tangoSiteUsesQuestMenu =
     runtimeConfig.uiVariant === "tango"
     && (activeSite === "Draft"
@@ -102,7 +105,7 @@ export function QuestApp({
     state.screen.type !== "questStart"
     && !isBattleSiteHudHidden(state)
     && !tangoScreenUsesQuestMenu
-    && !tangoSiteOwnsQuestStatusBar;
+    && !tangoSiteSuppressesLegacyHud;
   const [deckViewerOpen, setDeckViewerOpen] = useState(false);
   const [poolViewerOpen, setPoolViewerOpen] = useState(false);
   const [glossaryOpen, setGlossaryOpen] = useState(false);
@@ -488,6 +491,7 @@ export function QuestApp({
         produces a blank #root with no fallback UI.
       */}
       <ErrorBoundary scope="app-shell">
+        {hidePresencePill && <style>{`[data-connected-count]{display:none}`}</style>}
         <ScreenRouter
           runtimeConfig={runtimeConfig}
           onJourneyExplanationChange={setJourneyExplanation}

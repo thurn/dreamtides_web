@@ -30,6 +30,12 @@ describe("tangoSiteScreenFor", () => {
     ).not.toBeNull();
   });
 
+  it("resolves the migrated Purge site to a Tango node", () => {
+    expect(
+      tangoSiteScreenFor({ type: "Purge", id: "site-1" } as SiteState),
+    ).not.toBeNull();
+  });
+
   it("accepts router-owned site context needed by future site migrations", () => {
     expect(
       tangoSiteScreenFor(
