@@ -43,12 +43,6 @@ const DOCS_PREFIX = "src/tango/docs/";
  * anywhere under src/ (other than the CSS file itself, the generated
  * tokens.ts mirror, docs/, and test/spec files). Produced by running
  * findOrphanTokens() on the tree at authoring (2026-07-07).
- *
- * "--space-11" was added after authoring: its last reader
- * (src/tango/screens/DraftScreen.tsx's pick-counter band) was rewritten to
- * use --space-6/--space-9 instead in the same-day commit
- * 5d28cfa2 ("subtle pick counter under the pack + touch term reveals"),
- * freeing the token to become genuinely orphaned.
  */
 // Every entry below is an orphan with NO static reader (a `var()`/`token()`
 // site outside this source pair) AND no dynamically-constructed reader — the
@@ -121,9 +115,6 @@ export const BASELINE = [
   "--radius-sheet",
   // Scrim scale member (full-screen focus darkening).
   "--scrim-strong",
-  // Spacing scale members — sanctioned complete scale; --space-11/-12 also have
-  // doc-mockup readers under src/tango/docs/ (excluded from this scan).
-  "--space-11",
   // Type scale (--t-*) members — sanctioned complete scale; each bundles
   // weight + size + face for a voice UI code applies by role.
   "--t-button",

@@ -20,7 +20,8 @@ import {
 
 const FALLBACK_GUIDE_ID = "sigrun";
 const FALLBACK_GUIDE_NAME = "Sigrún";
-const FALLBACK_GUIDE_LINE = "The frost reveals what is hidden.";
+const FALLBACK_GUIDE_LINE =
+  "The frost reveals what is hidden. Pick one sign to claim.";
 
 /** Resolve Sigrun, the resident guide for Dreamsign Revelation. */
 export function resolveDreamsignRevelationGuide(

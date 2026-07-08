@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
 import { Button } from "../components/controls/Button";
 import { GlassButton } from "../components/controls/GlassButton";
+import { IconButton } from "../components/controls/IconButton";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { Motes } from "../components/hud/Motes";
 import {
@@ -17,6 +18,7 @@ import {
 } from "../components/hud/QuestStatusBar";
 import { SpeechBubble } from "../components/overlay/SpeechBubble";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
+import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 
 /** The guide who speaks over the Revelation offer. */
@@ -89,7 +91,7 @@ export interface DreamsignRevelationScreenProps {
 const GUIDE_LAYER_TOP = `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}))`;
 const OFFER_TOP = `max(34dvh, calc(${token("--safe-top")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-7")}))`;
 const HUD_CLEARANCE = `calc(${token("--hud-h")} + ${token("--safe-bottom")})`;
-const SKIP_BOTTOM = `calc(${HUD_CLEARANCE} + ${token("--space-7")})`;
+const CLOSE_TOP = token("--space-5");
 const OFFER_TILE_SIZE = 120;
 
 /**
@@ -176,7 +178,7 @@ export function DreamsignRevelationScreen({
             position: "absolute",
             top: token("--space-5"),
             left: "34vw",
-            right: token("--space-5"),
+            right: `calc(${token("--space-5")} + ${token("--space-11")} + ${token("--space-3")})`,
           }}
         >
           <SpeechBubble
@@ -236,11 +238,17 @@ export function DreamsignRevelationScreen({
         style={{
           position: "absolute",
           right: token("--space-5"),
-          bottom: SKIP_BOTTOM,
+          top: CLOSE_TOP,
           zIndex: 42,
         }}
       >
-        <GlassButton label="skip" onPress={onSkip} disabled={disabled} />
+        <IconButton
+          glyph={GLYPHS.close}
+          label="Leave site"
+          onPress={onSkip}
+          disabled={disabled}
+          testId="dreamsign-revelation-close"
+        />
       </div>
 
       <QuestStatusBar
