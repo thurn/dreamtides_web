@@ -90,7 +90,7 @@ const GUIDE_LAYER_TOP = `calc(max(var(--safe-area-inset-top), ${token("--safe-to
 const OFFER_TOP = `max(34dvh, calc(${token("--safe-top")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-7")}))`;
 const HUD_CLEARANCE = `calc(${token("--hud-h")} + ${token("--safe-bottom")})`;
 const SKIP_BOTTOM = `calc(${HUD_CLEARANCE} + ${token("--space-7")})`;
-const OFFER_TILE_SIZE = 88;
+const OFFER_TILE_SIZE = 120;
 
 /**
  * The Tango mobile Dreamsign Revelation screen. Pure and props-driven: it owns
@@ -210,8 +210,8 @@ export function DreamsignRevelationScreen({
             style={{
               display: "grid",
               gridTemplateColumns:
-                view.offer.length > 3 ? "repeat(2, 112px)" : "repeat(3, 101px)",
-              gap: `${token("--space-5")} ${token("--space-4")}`,
+                view.offer.length > 3 ? "repeat(2, 132px)" : "repeat(3, 120px)",
+              gap: token("--space-4"),
               justifyContent: "center",
               alignItems: "start",
             }}
@@ -313,7 +313,6 @@ function RevelationOption({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: token("--space-5"),
         pointerEvents: disabled ? "none" : "auto",
       }}
     >
@@ -323,13 +322,8 @@ function RevelationOption({
         stageRef={stageRef}
         testid={`dreamsign-revelation-art-${String(index)}`}
         revealTestid={`dreamsign-revelation-info-${String(index)}`}
+        onPress={() => onClaim(index)}
         variant="hud"
-      />
-      <Button
-        size="sm"
-        label="Claim"
-        disabled={disabled}
-        onClick={() => onClaim(index)}
       />
     </motion.div>
   );
