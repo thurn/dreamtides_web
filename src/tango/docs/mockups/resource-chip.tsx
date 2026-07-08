@@ -35,11 +35,11 @@ export function ResourceChipMockup() {
           gap: token("--space-4"),
         }}
       >
-        <ResourceChip kind="essence" value={240} chip size={18} gap={6} />
-        <ResourceChip kind="energy" value={3} chip size={18} gap={6} />
-        <ResourceChip kind="spark" value={12} chip size={18} gap={6} />
-        <ResourceChip kind="points" value={1840} chip size={18} gap={6} />
-        <ResourceChip kind="counter" value={2} chip size={18} gap={6} />
+        <ResourceChip kind="essence" value={240} chip size="lg" spacing="loose" />
+        <ResourceChip kind="energy" value={3} chip size="lg" spacing="loose" />
+        <ResourceChip kind="spark" value={12} chip size="lg" spacing="loose" />
+        <ResourceChip kind="points" value={1840} chip size="lg" spacing="loose" />
+        <ResourceChip kind="counter" value={2} chip size="lg" spacing="loose" />
       </div>
 
       {/* Center stage: a reward line, showing the tight inline (non-chip) form
@@ -85,9 +85,9 @@ export function ResourceChipMockup() {
               font: token("--t-display"),
             }}
           >
-            <ResourceChip kind="essence" value={80} size={34} />
+            <ResourceChip kind="essence" value={80} size="lg" />
             <span style={{ color: token("--text-faint"), fontSize: 22 }}>+</span>
-            <ResourceChip kind="spark" value={2} size={34} />
+            <ResourceChip kind="spark" value={2} size="lg" />
           </div>
           <p
             style={{

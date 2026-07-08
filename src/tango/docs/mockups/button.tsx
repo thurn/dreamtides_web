@@ -100,7 +100,7 @@ export function ButtonMockup() {
         >
           Merchant
         </p>
-        <ResourceChip kind="essence" value={PLAYER_ESSENCE} chip size={18} gap={6} />
+        <ResourceChip kind="essence" value={PLAYER_ESSENCE} chip size="lg" spacing="loose" />
       </div>
 
       <div style={{ margin: "auto", width: "100%", maxWidth: 520 }}>

@@ -28,20 +28,13 @@
 // Ported from the Claude Design "Dreamtides Mobile" project
 // (components/buttons/Button.jsx / .d.ts).
 
+import { ECONOMY_MARKS, type EconomyKind } from "../hud/economy-spec";
 import buttonPurple from "../../assets/Button_Purple.png";
 import { HOVER_SCALE, PRESS_SCALE, usePress } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 
 /** Height/scale variants. 'lg' is the taller commit height. */
 type ButtonSize = "sm" | "md" | "lg";
-
-/**
- * Which economy value a button's inline price is denominated in. Mirrors the
- * ResourceChip economy (essence, energy, spark, points, counter) so a button
- * price and a HUD chip read as the same currency. The mark stays the button's
- * on-accent white — only the glyph shape changes with the cost kind.
- */
-type ButtonCostKind = "essence" | "energy" | "spark" | "points" | "counter";
 
 interface SizeSpec {
   height: number;
@@ -61,21 +54,6 @@ const SIZES: Record<ButtonSize, SizeSpec> = {
   lg: { height: 62, font: 19, padding: "0 30px", borderWidth: 18 },
 };
 
-/**
- * The filled-Boxicon mark for each cost kind, matching the ResourceChip economy
- * glyphs (bx-crypto / bx-fire-alt / bx-sparkles / bx-star-circle / bx-hourglass)
- * so a button price reads as the same currency as its HUD chip. The mark is
- * painted in the button's own on-accent white regardless of kind — inside the
- * purple sprite it reads as part of the label, not a separate tinted chip.
- */
-const COST_ICON_CLASSES: Record<ButtonCostKind, string> = {
-  essence: "bxf bx-crypto",
-  energy: "bxf bx-fire-alt",
-  spark: "bxf bx-sparkles",
-  points: "bxf bx-star-circle",
-  counter: "bxf bx-hourglass",
-};
-
 export interface ButtonProps {
   /** Height/scale. 'lg' is the taller commit height ("Begin Your Dream") — commit is a size, not a variant. */
   size?: ButtonSize;
@@ -88,10 +66,10 @@ export interface ButtonProps {
    * currency is set by `costKind` (default essence). */
   cost?: number | null;
   /** Which currency the `cost` is denominated in — essence, energy, spark,
-   * points, or counter. Picks the price mark (bx-crypto / bx-fire-alt /
-   * bx-sparkles / bx-star-circle / bx-hourglass); the mark stays on-accent
-   * white. Default essence. Ignored when `cost` is null. */
-  costKind?: ButtonCostKind;
+   * points, or counter. Picks the shared economy-spec price mark (bx-crypto /
+   * bx-fire-alt / bx-sparkles / bx-star-circle / bx-hourglass); the mark stays
+   * on-accent white. Default essence. Ignored when `cost` is null. */
+  costKind?: EconomyKind;
   /** Fires when the button is activated (no-op while disabled). */
   onClick?: () => void;
   /** Accessible label when the visible content is a bare price with no text. */
@@ -193,7 +171,7 @@ export function Button({
         >
           {cost}
           <i
-            className={COST_ICON_CLASSES[costKind]}
+            className={ECONOMY_MARKS[costKind].glyph}
             aria-hidden="true"
             style={{ fontSize: "1.04em", lineHeight: 1 }}
           />

@@ -18,7 +18,7 @@ The one button in Tango — the beveled purple sprite, scaled to any label and t
 | `full` | `boolean` | no | `false` | Stretch to fill the container width. |
 | `disabled` | `boolean` | no | `false` | Dims the button and detaches its click/press feedback. |
 | `cost` | `number \| null` | no | `null` | Appends an inline price, e.g. cost={100} -> "… 100◆", rendered in the button's own on-accent white so the price reads as part of the label. The currency is set by `costKind` (default essence). |
-| `costKind` | `ButtonCostKind` = `"essence" \| "energy" \| "spark" \| "points" \| "counter"` | no | `essence` | Which currency the `cost` is denominated in — essence, energy, spark, points, or counter. Picks the price mark (bx-crypto / bx-fire-alt / bx-sparkles / bx-star-circle / bx-hourglass); the mark stays on-accent white. Default essence. Ignored when `cost` is null. |
+| `costKind` | `EconomyKind` = `"essence" \| "energy" \| "spark" \| "points" \| "counter"` | no | `essence` | Which currency the `cost` is denominated in — essence, energy, spark, points, or counter. Picks the shared economy-spec price mark (bx-crypto / bx-fire-alt / bx-sparkles / bx-star-circle / bx-hourglass); the mark stays on-accent white. Default essence. Ignored when `cost` is null. |
 | `onClick` | `(() => void)` | no | — | Fires when the button is activated (no-op while disabled). |
 | `ariaLabel` | `string` | no | — | Accessible label when the visible content is a bare price with no text. |
 | `label` | `string` | no | — | The button's text label. Resolve any UUID/name to a plain string before passing it — the button renders copy, never arbitrary caller markup. Omit only for a price-only button (supply `ariaLabel` instead). |

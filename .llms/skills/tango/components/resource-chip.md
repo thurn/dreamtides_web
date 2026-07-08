@@ -8,28 +8,28 @@ Components · Live demo & interactive props: `/tango#/resource-chip`
 
 Real consumers: **1** (imports outside `src/tango/docs/` and tests).
 
-The canonical value-and-mark pairing for the game economy. Every essence, energy, spark, points, or counter number routes through it, so the mark and its role color read identically wherever a value appears.
+The canonical value-and-mark pairing for the game economy. Every essence, energy, spark, points, or counter number routes through it, so the mark and its role color read identically wherever a value appears. Size and spacing are enumerated variants (sm/md/lg, tight/loose), not raw pixels. For a bare essence amount inside flowing text, reach for EssenceValue instead — it inherits the surrounding type.
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `ResourceKind` = `"essence" \| "energy" \| "spark" \| "points" \| "counter"` | no | `essence` | Which economy value: essence, energy, spark, points, counter. Rendered as the parent's filled-Boxicon mark (bx-crypto / bx-fire-alt / bx-sparkles / bx-star-circle / bx-hourglass), colored by role. |
+| `kind` | `EconomyKind` = `"essence" \| "energy" \| "spark" \| "points" \| "counter"` | no | `essence` | Which economy value: essence, energy, spark, points, counter. Rendered as the parent's filled-Boxicon mark (bx-crypto / bx-fire-alt / bx-sparkles / bx-star-circle / bx-hourglass), colored by role. |
 | `value` | `string \| number` | no | — | The numeric value to show. Omit to render the mark alone. |
-| `size` | `number` | no | `16` | Pixel font-size; everything scales from it. |
+| `size` | `ResourceChipSize` = `"sm" \| "md" \| "lg"` | no | `md` | Inline scale — sm (13px) / md (16px, default) / lg (20px). |
 | `chip` | `boolean` | no | `false` | Render as a solid pill badge (for HUD/over-art) instead of inline text. |
-| `gap` | `number` | no | `0` | Space between the value and its mark. Default 0 — a tight pairing (200◆). |
+| `spacing` | `ResourceChipSpacing` = `"tight" \| "loose"` | no | `tight` | Gap between value and mark — tight (0px, default) or loose (4px). |
 
 ## Usage
 
 ### Inline value
 
-An icon + numeric value for a resource, sized to sit inline with text.
+An icon + numeric value for a resource. `size` picks the inline scale — here the large (20px) scale.
 
 ```tsx
 import { ResourceChip } from "src/tango/components/hud/ResourceChip";
 
-<ResourceChip kind="essence" value={200} size={20} />
+<ResourceChip kind="essence" value={200} size="lg" />
 ```
 
 ### Standalone chip
@@ -37,5 +37,13 @@ import { ResourceChip } from "src/tango/components/hud/ResourceChip";
 Set `chip` to draw the value on its own rounded surface instead of bare inline.
 
 ```tsx
-<ResourceChip kind="energy" value={3} size={20} chip />
+<ResourceChip kind="energy" value={3} chip />
+```
+
+### Loosened spacing
+
+The value hugs its mark by default (tight); pass `spacing="loose"` to add a little air.
+
+```tsx
+<ResourceChip kind="spark" value={12} spacing="loose" />
 ```

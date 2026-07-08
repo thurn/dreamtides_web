@@ -1,6 +1,6 @@
 // Registry demo entry for ResourceChip — see pressable.tsx for the recipe this
-// follows. ResourceChip has no ReactNode-slot props (kind/value/size/chip/gap
-// are all primitives with generated controls), so this demo needs only
+// follows. ResourceChip has no ReactNode-slot props (kind/value/size/chip/
+// spacing are all primitives with generated controls), so this demo needs only
 // defaultArgs, no sampleContent.
 
 import { ResourceChip } from "../../components/hud/ResourceChip";
@@ -10,31 +10,36 @@ export const resourceChipDemo: TangoComponent = {
   id: "resource-chip",
   title: "Resource Chip",
   blurb:
-    "The canonical value-and-mark pairing for the game economy. Every essence, energy, spark, points, or counter number routes through it, so the mark and its role color read identically wherever a value appears.",
+    "The canonical value-and-mark pairing for the game economy. Every essence, energy, spark, points, or counter number routes through it, so the mark and its role color read identically wherever a value appears. Size and spacing are enumerated variants (sm/md/lg, tight/loose), not raw pixels. For a bare essence amount inside flowing text, reach for EssenceValue instead — it inherits the surrounding type.",
   group: "Components",
   docName: "ResourceChip",
   Component: ResourceChip,
   usage: [
     {
       label: "Inline value",
-      note: "An icon + numeric value for a resource, sized to sit inline with text.",
+      note: "An icon + numeric value for a resource. `size` picks the inline scale — here the large (20px) scale.",
       code: `import { ResourceChip } from "src/tango/components/hud/ResourceChip";
 
-<ResourceChip kind="essence" value={200} size={20} />`,
+<ResourceChip kind="essence" value={200} size="lg" />`,
     },
     {
       label: "Standalone chip",
       note: "Set `chip` to draw the value on its own rounded surface instead of bare inline.",
-      code: `<ResourceChip kind="energy" value={3} size={20} chip />`,
+      code: `<ResourceChip kind="energy" value={3} chip />`,
+    },
+    {
+      label: "Loosened spacing",
+      note: "The value hugs its mark by default (tight); pass `spacing=\"loose\"` to add a little air.",
+      code: `<ResourceChip kind="spark" value={12} spacing="loose" />`,
     },
   ],
   demo: {
     defaultArgs: {
       kind: "essence",
       value: 200,
-      size: 20,
+      size: "md",
       chip: false,
-      gap: 0,
+      spacing: "tight",
     },
   },
 };

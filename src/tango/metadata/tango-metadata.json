@@ -460,7 +460,7 @@
     },
     {
       "name": "costKind",
-      "tsType": "ButtonCostKind",
+      "tsType": "EconomyKind",
       "unionMembers": [
         "essence",
         "energy",
@@ -470,7 +470,7 @@
       ],
       "required": false,
       "defaultValue": "essence",
-      "description": "Which currency the `cost` is denominated in — essence, energy, spark,\npoints, or counter. Picks the price mark (bx-crypto / bx-fire-alt /\nbx-sparkles / bx-star-circle / bx-hourglass); the mark stays on-accent\nwhite. Default essence. Ignored when `cost` is null."
+      "description": "Which currency the `cost` is denominated in — essence, energy, spark,\npoints, or counter. Picks the shared economy-spec price mark (bx-crypto /\nbx-fire-alt / bx-sparkles / bx-star-circle / bx-hourglass); the mark stays\non-accent white. Default essence. Ignored when `cost` is null."
     },
     {
       "name": "onClick",
@@ -2149,7 +2149,7 @@
   "ResourceChip": [
     {
       "name": "kind",
-      "tsType": "ResourceKind",
+      "tsType": "EconomyKind",
       "unionMembers": [
         "essence",
         "energy",
@@ -2171,11 +2171,15 @@
     },
     {
       "name": "size",
-      "tsType": "number",
-      "unionMembers": [],
+      "tsType": "ResourceChipSize",
+      "unionMembers": [
+        "sm",
+        "md",
+        "lg"
+      ],
       "required": false,
-      "defaultValue": "16",
-      "description": "Pixel font-size; everything scales from it."
+      "defaultValue": "md",
+      "description": "Inline scale — sm (13px) / md (16px, default) / lg (20px)."
     },
     {
       "name": "chip",
@@ -2186,12 +2190,15 @@
       "description": "Render as a solid pill badge (for HUD/over-art) instead of inline text."
     },
     {
-      "name": "gap",
-      "tsType": "number",
-      "unionMembers": [],
+      "name": "spacing",
+      "tsType": "ResourceChipSpacing",
+      "unionMembers": [
+        "tight",
+        "loose"
+      ],
       "required": false,
-      "defaultValue": "0",
-      "description": "Space between the value and its mark. Default 0 — a tight pairing (200◆)."
+      "defaultValue": "tight",
+      "description": "Gap between value and mark — tight (0px, default) or loose (4px)."
     }
   ],
   "RichTextView": [
