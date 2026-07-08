@@ -20,7 +20,7 @@ A dreamsign — a minor passive collectible — shown as its art floating on the
 | `testid` | `string` | no | `dreamsign-art-tile` | Override the tile's `data-testid`. Defaults to `"dreamsign-art-tile"` so the shipped shop / reward / deck-viewer selectors keep working. |
 | `revealTestid` | `string` | no | — | Testid for the portalled reveal content (for stable selectors). |
 | `onPress` | `(() => void)` | no | — | Fired on a tap / click that was not a deliberate hold-to-read. |
-| `variant` | `"flat" \| "hud"` | no | `flat` | The tile's material. `"flat"` (default) is the chrome-free collectible tile used in lists over a solid surface; `"hud"` composes {@link DS_SHADOW} — a drop-shadow + violet glow — into the tile filter so the object lifts off busy scene art in the transparent quest HUD. |
+| `variant` | `"flat" \| "hud" \| "revelation"` | no | `flat` | The tile's material. `"flat"` (default) is the chrome-free collectible tile used in lists over a solid surface; `"hud"` composes {@link DS_SHADOW} — a drop-shadow + violet glow — into the tile filter so the object lifts off busy scene art in the transparent quest HUD. `"revelation"` uses a stronger path-following shadow for large choices over bright Revelation site art. |
 
 ### `dreamsign`: the `Dreamsign` model
 

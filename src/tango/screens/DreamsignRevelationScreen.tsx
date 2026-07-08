@@ -331,7 +331,7 @@ function RevelationOption({
         testid={`dreamsign-revelation-art-${String(index)}`}
         revealTestid={`dreamsign-revelation-info-${String(index)}`}
         onPress={() => onClaim(index)}
-        variant="hud"
+        variant="revelation"
       />
     </motion.div>
   );

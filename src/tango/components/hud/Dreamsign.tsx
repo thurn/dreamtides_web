@@ -56,6 +56,12 @@ const BANE_FILTER = "grayscale(0.7)";
 export const DS_SHADOW =
   "drop-shadow(0 3px 6px rgba(0,0,0,0.55)) drop-shadow(0 0 13px rgba(147,51,234,0.32))";
 
+/** A heavier silhouette shadow for large dreamsigns over bright site art. Unlike
+ * a backdrop plate, CSS drop-shadow follows each art asset's alpha channel, so
+ * the sign still reads as an object resting on the scene. */
+export const DS_REVELATION_SHADOW =
+  "drop-shadow(0 8px 9px rgba(0,0,0,0.72)) drop-shadow(0 1px 2px rgba(0,0,0,0.88)) drop-shadow(0 0 18px rgba(147,51,234,0.46))";
+
 /**
  * Delay before a dreamsign preview opens on an offering / draft card. Tighter
  * than the glossary-tooltip default because players scan a short list of
@@ -173,9 +179,10 @@ export interface DreamsignProps {
    * The tile's material. `"flat"` (default) is the chrome-free collectible tile
    * used in lists over a solid surface; `"hud"` composes {@link DS_SHADOW} — a
    * drop-shadow + violet glow — into the tile filter so the object lifts off busy
-   * scene art in the transparent quest HUD.
+   * scene art in the transparent quest HUD. `"revelation"` uses a stronger
+   * path-following shadow for large choices over bright Revelation site art.
    */
-  variant?: "flat" | "hud";
+  variant?: "flat" | "hud" | "revelation";
 }
 
 /**
@@ -223,12 +230,13 @@ export function Dreamsign({
   };
 
   // No chrome: the art floats on the media with no tile border, background,
-  // frame, or radius. A bane's desaturation and the `hud` variant's drop-shadow
-  // are the only material the tile wears; both compose into the one filter.
+  // frame, or radius. A bane's desaturation and path-following drop-shadows are
+  // the only material the tile wears; both compose into the one filter.
   const tileFilter =
     [
       dreamsign.isBane ? BANE_FILTER : null,
       variant === "hud" ? DS_SHADOW : null,
+      variant === "revelation" ? DS_REVELATION_SHADOW : null,
     ]
       .filter((part): part is string => part !== null)
       .join(" ") || "none";

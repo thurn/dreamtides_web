@@ -764,14 +764,15 @@
     },
     {
       "name": "variant",
-      "tsType": "\"flat\" | \"hud\"",
+      "tsType": "\"flat\" | \"hud\" | \"revelation\"",
       "unionMembers": [
         "flat",
-        "hud"
+        "hud",
+        "revelation"
       ],
       "required": false,
       "defaultValue": "flat",
-      "description": "The tile's material. `\"flat\"` (default) is the chrome-free collectible tile\nused in lists over a solid surface; `\"hud\"` composes {@link DS_SHADOW} — a\ndrop-shadow + violet glow — into the tile filter so the object lifts off busy\nscene art in the transparent quest HUD."
+      "description": "The tile's material. `\"flat\"` (default) is the chrome-free collectible tile\nused in lists over a solid surface; `\"hud\"` composes {@link DS_SHADOW} — a\ndrop-shadow + violet glow — into the tile filter so the object lifts off busy\nscene art in the transparent quest HUD. `\"revelation\"` uses a stronger\npath-following shadow for large choices over bright Revelation site art."
     }
   ],
   "DreamsignInfoCard": [
