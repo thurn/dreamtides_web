@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/tango#/glossary-definition-card`
 
 Real consumers: **6** (imports outside `src/tango/docs/` and tests).
 
-The single keyword-definition tile: one glossary entry rendered through the InfoCard text shell with rules-rich body copy.
+The one keyword-definition tile: a single glossary entry rendered as an InfoCard text card whose headline is the keyword and whose body is the keyword's rules text. Every surface that reveals what a keyword means renders this one tile, so the definition reads in the same glass shell, radius, and type scale as every other reveal beside it. It re-establishes its own `.tango` token scope, so it renders correctly even inside a popover portalled outside the Tango subtree.
 
 ## Props
 
@@ -26,8 +26,18 @@ The single keyword-definition tile: one glossary entry rendered through the Info
 
 ## Usage
 
+### One definition beside a card
+
+Render a single keyword's definition tile next to the card that references it, so the player reads the keyword without an inline tooltip.
+
 ```tsx
 import { GlossaryDefinitionCard } from "src/tango/components/card/GlossaryDefinitionCard";
+import { lookupGlossaryTerm } from "src/data/glossary";
 
-<GlossaryDefinitionCard entry={entry} />
+const entry = lookupGlossaryTerm("reclaim");
+
+<div style={{ display: "flex", gap: 12 }}>
+  <GameCard card={card} />
+  {entry && <GlossaryDefinitionCard entry={entry} />}
+</div>
 ```
