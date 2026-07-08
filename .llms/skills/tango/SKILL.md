@@ -73,6 +73,7 @@ The reference files and the index are projections of the component sources
 | Card Stat Orb | Components | 2 | [components/card-stat-orb.md](components/card-stat-orb.md) | The card-corner resource stat: a centered number over the energy, spark, or Dreamwell-energy glyph with fitted digits and optional tooltip. |
 | Atlas Node | Components | 1 | [components/atlas-node.md](components/atlas-node.md) | One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engine: a framed circular icon whose glow and badges track its state — revealed, known, visited, completed, forgone, or a looming boss — and which reveals its scene / detail card on hover or press. |
 | Atlas Edge | Components | 2 | [components/atlas-edge.md](components/atlas-edge.md) | The connector between two Atlas nodes, drawn inside the map's SVG. |
+| Atlas Map | Components | 1 | [components/atlas-map.md](components/atlas-map.md) | The Dream Atlas map surface — the run graph of dreamscape nodes and their connectors, fitted into a fixed portrait design stage that uniformly scales to fit its container (letterboxed). |
 | Dreamsign | Components | 8 | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
 | Site Node | Components | 2 | [components/site-node.md](components/site-node.md) | The dreamscape site disc: a floating circular node over scene art carrying a glyph and accent ring. |
 <!-- END GENERATED COMPONENT INDEX -->

@@ -10,6 +10,7 @@
 
 import type { ComponentType } from "react";
 import { atlasEdgeDemo } from "./demos/atlas-edge";
+import { atlasMapDemo } from "./demos/atlas-map";
 import { atlasNodeDemo } from "./demos/atlas-node";
 import { buttonDemo } from "./demos/button";
 import { cardStatOrbDemo } from "./demos/card-stat-orb";
@@ -160,6 +161,7 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   cardStatOrbDemo,
   atlasNodeDemo,
   atlasEdgeDemo,
+  atlasMapDemo,
   dreamsignDemo,
   siteNodeDemo,
 ];

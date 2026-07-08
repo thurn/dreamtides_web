@@ -10,8 +10,8 @@
 // To add a mockup: create `mockups/<id>.tsx` exporting a full-screen component,
 // then add one line to {@link MOCKUPS}. Ids absent from the map simply have no
 // mockup (ComponentPage hides the link; TangoApp shows a graceful note). Several
-// ids may share one scene (the Dream Atlas map serves both `atlas-node` and
-// `atlas-edge`).
+// ids may share one scene (the Dream Atlas map serves `atlas-map`, `atlas-node`,
+// and `atlas-edge`).
 
 import type { ComponentType } from "react";
 import { AtlasMapMockup } from "./atlas-map";
@@ -36,6 +36,7 @@ export const MOCKUPS: Record<string, ComponentType> = {
   "game-card": GameCardMockup,
   "quest-status-bar": QuestStatusBarMockup,
   "rules-text": RulesTextMockup,
+  "atlas-map": AtlasMapMockup,
   "atlas-node": AtlasMapMockup,
   "atlas-edge": AtlasMapMockup,
   "site-node": SiteNodeMockup,
