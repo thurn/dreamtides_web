@@ -1310,6 +1310,51 @@
       "description": "`data-testid` applied to the slot element."
     }
   ],
+  "IconButton": [
+    {
+      "name": "glyph",
+      "tsType": "Glyph",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The glyph painted centered in the disc (e.g. `GLYPHS.close`)."
+    },
+    {
+      "name": "size",
+      "tsType": "IconButtonSize",
+      "unionMembers": [
+        "sm",
+        "md"
+      ],
+      "required": false,
+      "defaultValue": "md",
+      "description": "Disc size — `sm` (40/22) or `md` (48/26). Defaults to `md`."
+    },
+    {
+      "name": "label",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The disc's accessible name (`aria-label`); the disc shows only its glyph."
+    },
+    {
+      "name": "onPress",
+      "tsType": "() => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Fires when the disc is activated (no-op while disabled)."
+    },
+    {
+      "name": "disabled",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Detaches the click / press feedback and marks the disc `aria-disabled`."
+    }
+  ],
   "InfoCard": [
     {
       "name": "variant",

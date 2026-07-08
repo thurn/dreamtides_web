@@ -45,10 +45,11 @@ The reference files and the index are projections of the component sources
 <!-- BEGIN GENERATED COMPONENT INDEX (npm run tango-docs) -->
 | Component | Group | Consumers | Reference | What it is |
 | --- | --- | --- | --- | --- |
-| Pressable | Primitives | 10 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
+| Pressable | Primitives | 11 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
 | Resource Chip | Components | 1 | [components/resource-chip.md](components/resource-chip.md) | The canonical value-and-mark pairing for the game economy. |
 | Essence Value | Components | 10 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
 | Button | Components | 2 | [components/button.md](components/button.md) | The one button in Tango — the beveled purple sprite, scaled to any label and to a taller commit height. |
+| Icon Button | Components | 0 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — a corner chrome action worn by the deck viewer's close control and the dreamscape menu button. |
 | Leave Site Button | Components | 5 | [components/leave-site-button.md](components/leave-site-button.md) | The fixed top-right exit control for site screens: a danger-red square X button with consistent placement and accessible labeling. |
 | Segmented Control | Components | 1 | [components/segmented-control.md](components/segmented-control.md) | The compact tab and filter switch used for type filters, sort direction, and small mode toggles. |
 | Select | Components | 2 | [components/select.md](components/select.md) | The compact dropdown control, and Tango's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. |
@@ -59,7 +60,7 @@ The reference files and the index are projections of the component sources
 | Info Card | Components | 14 | [components/info-card.md](components/info-card.md) | The one press-to-reveal information card. |
 | Hover Popover | Components | 13 | [components/hover-popover.md](components/hover-popover.md) | The pointer-and-focus anchored popover primitive for glossary definitions and compact card previews, with viewport-aware placement. |
 | Group Panel | Components | 2 | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |
-| Glow Icon | Components | 9 | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a named glyph, role color, optional soft shadow, and optional emitted-light filter in one square footprint. |
+| Glow Icon | Components | 10 | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a named glyph, role color, optional soft shadow, and optional emitted-light filter in one square footprint. |
 | Pip Badge | Components | 3 | [components/pip-badge.md](components/pip-badge.md) | The compact circular number badge for inline spark and energy references, with the matching resource fill and optional explanatory tooltip. |
 | Quest Status Bar | Components | 3 | [components/quest-status-bar.md](components/quest-status-bar.md) | The persistent, transparent bottom HUD for quest screens. |
 | Dreamcaller Portrait | Components | 19 | [components/dreamcaller-portrait.md](components/dreamcaller-portrait.md) | The framed Dreamcaller character-art component: hero, panel, and thumb crops over the shared tinted portrait backdrop with a monogram fallback. |

@@ -23,6 +23,7 @@ import { glowIconDemo } from "./demos/glow-icon";
 import { groupPanelDemo } from "./demos/group-panel";
 import { hoverPopoverDemo } from "./demos/hover-popover";
 import { hoverZoomCardDemo } from "./demos/hover-zoom-card";
+import { iconButtonDemo } from "./demos/icon-button";
 import { infoCardDemo } from "./demos/info-card";
 import { leaveSiteButtonDemo } from "./demos/leave-site-button";
 import { motesDemo } from "./demos/motes";
@@ -134,6 +135,7 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   resourceChipDemo,
   essenceValueDemo,
   buttonDemo,
+  iconButtonDemo,
   leaveSiteButtonDemo,
   segmentedControlDemo,
   selectDemo,
