@@ -1157,6 +1157,14 @@
       "description": "Accessible name for the close disc. Defaults to `\"Close\"`."
     },
     {
+      "name": "cutoutAwareClose",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "When true, on a full-bleed mobile overlay whose screen-cutout box is known\n(a device-screenshot mock-up) the close disc floats up beside the device\nisland instead of sitting on the header row, so the header title clears the\nsafe area below it. No effect on desktop or on real hardware (where the\nisland geometry is not exposed). Defaults to `false`."
+    },
+    {
       "name": "children",
       "tsType": "ReactNode",
       "unionMembers": [],

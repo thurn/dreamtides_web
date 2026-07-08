@@ -47,8 +47,7 @@ export const glassDialogDemo: TangoComponent = {
   blurb:
     "The glass overlay shell: a modal dialog that frosts the scene behind it — a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and a glass close disc) over a scrolling body. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.",
   callout:
-    "The close disc is the shared IconButton at size `md`, and the close placement is internal — a later cutout-aware placement is an additive, non-breaking extension.",
-  status: "incubating",
+    "The close disc is the shared IconButton at size `md`. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up.",
   group: "Components",
   docName: "GlassDialog",
   Component: GlassDialogDemo,

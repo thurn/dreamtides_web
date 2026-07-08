@@ -17,22 +17,29 @@
 //   - GlassDialog: a modal overlay built on GlassBackdrop — a bounded, centered
 //     glass panel on desktop and a full-bleed frosted overlay on mobile, with a
 //     hairline-closed header (title + optional subtitle + a trailing glass close
-//     disc) over a scrolling body. It is the shell StartingDeckModal's chrome is
-//     modeled on.
+//     disc) over a scrolling body. It is the shell the StartingDeckOverlay wears.
 //
 // The close disc is the shared `IconButton` at size `md` (48px) so the close
 // matches the IconButton size scale rather than inventing a bespoke disc. The
-// close-control PLACEMENT is kept internal to this component: today it always
-// sits on the header's trailing edge, so a later cutout-aware placement (a
-// `closeAnchor`-style option floating the disc beside a device island) is a
-// non-breaking, additive extension.
+// close-control PLACEMENT is kept internal to this component: by default it sits
+// on the header's trailing edge. When `cutoutAwareClose` is set and the dialog
+// is full-bleed on a mobile mock-up with a known screen-cutout box, the disc
+// instead floats up beside the device island (reclaiming the dead space next to
+// it and letting the header title clear the safe area below). There is still
+// exactly one close owner — the disc simply moves — so this is a non-breaking,
+// additive extension.
 
+import { useEffect, useState } from "react";
 import type { CSSProperties, ReactElement, ReactNode } from "react";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { useIsDesktop } from "../../screens/use-is-desktop";
 import { IconButton } from "../controls/IconButton";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
+import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
+
+/** Diameter (px) of the `md` IconButton close disc, for cutout-relative placement. */
+const CLOSE_DISC_PX = 48;
 
 /** Props for {@link GlassBackdrop}. */
 export interface GlassBackdropProps {
@@ -79,6 +86,14 @@ export interface GlassDialogProps {
   onClose: () => void;
   /** Accessible name for the close disc. Defaults to `"Close"`. */
   closeLabel?: string;
+  /**
+   * When true, on a full-bleed mobile overlay whose screen-cutout box is known
+   * (a device-screenshot mock-up) the close disc floats up beside the device
+   * island instead of sitting on the header row, so the header title clears the
+   * safe area below it. No effect on desktop or on real hardware (where the
+   * island geometry is not exposed). Defaults to `false`.
+   */
+  cutoutAwareClose?: boolean;
   /** The scrolling body content. */
   children: ReactNode;
 }
@@ -97,10 +112,22 @@ export function GlassDialog({
   subtitle,
   onClose,
   closeLabel = "Close",
+  cutoutAwareClose = false,
   children,
 }: GlassDialogProps): ReactElement {
   const isDesktop = useIsDesktop();
   const glass = glassSurfaceStyle();
+
+  // On a full-bleed mobile overlay whose screen-cutout box is known (a
+  // device-screenshot mock-up), lift the close disc up beside the island. The
+  // box is not exposed on real hardware, so the disc stays on the header
+  // elsewhere. Resolved after mount (the injected box is a client-only signal).
+  const [besideCutout, setBesideCutout] = useState(false);
+  useEffect(() => {
+    setBesideCutout(
+      cutoutAwareClose && !isDesktop && hasInjectedDisplayCutout(),
+    );
+  }, [cutoutAwareClose, isDesktop]);
 
   // Desktop is a bounded, centered dialog; mobile is a full-bleed overlay whose
   // fill + blur stay but whose card rim, radius, and shadow drop so it reads
@@ -151,6 +178,15 @@ export function GlassDialog({
         }),
   };
 
+  const closeButton = (
+    <IconButton
+      glyph={GLYPHS.close}
+      size="md"
+      label={closeLabel}
+      onPress={onClose}
+    />
+  );
+
   return (
     <div
       role="dialog"
@@ -169,6 +205,23 @@ export function GlassDialog({
     >
       <GlassBackdrop />
       <div style={panelStyle}>
+        {besideCutout && (
+          // The disc floats up beside the device island (vertically centered on
+          // it, at the trailing gutter), so the header title clears the safe
+          // area below rather than sharing the row with the disc.
+          <div
+            style={{
+              position: "absolute",
+              top: `calc(var(--display-cutout-top) + (var(--display-cutout-height) - ${String(
+                CLOSE_DISC_PX,
+              )}px) / 2)`,
+              right: token("--gutter"),
+              zIndex: 1,
+            }}
+          >
+            {closeButton}
+          </div>
+        )}
         <header style={headerStyle}>
           <div
             style={{
@@ -198,12 +251,7 @@ export function GlassDialog({
               </p>
             )}
           </div>
-          <IconButton
-            glyph={GLYPHS.close}
-            size="md"
-            label={closeLabel}
-            onPress={onClose}
-          />
+          {!besideCutout && closeButton}
         </header>
         <div
           style={{

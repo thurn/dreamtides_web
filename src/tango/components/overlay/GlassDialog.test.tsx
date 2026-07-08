@@ -5,6 +5,11 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GlassBackdrop, GlassDialog } from "./GlassDialog";
+import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
+
+vi.mock("../../../runtime/device-frame", () => ({
+  hasInjectedDisplayCutout: vi.fn(() => false),
+}));
 
 function mount(element: ReactElement): {
   container: HTMLDivElement;
@@ -20,6 +25,7 @@ function mount(element: ReactElement): {
 }
 
 beforeEach(() => {
+  vi.mocked(hasInjectedDisplayCutout).mockReturnValue(false);
   (
     globalThis as typeof globalThis & {
       IS_REACT_ACT_ENVIRONMENT?: boolean;
@@ -135,6 +141,56 @@ describe("GlassDialog", () => {
     const header = container.querySelector("header");
     expect(header).not.toBeNull();
     expect(header?.querySelector("p")).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("keeps the close disc on the header row when cutoutAwareClose is set but no cutout box is injected", () => {
+    // Default: hasInjectedDisplayCutout() is false, so even on mobile the disc
+    // stays on the header's trailing edge.
+    const { container, root } = mount(
+      <GlassDialog title="Title" onClose={() => {}} cutoutAwareClose>
+        <div>content</div>
+      </GlassDialog>,
+    );
+
+    const headerButton = container.querySelector("header button");
+    expect(headerButton?.getAttribute("aria-label")).toBe("Close");
+    // Exactly one close control — the disc moves, it never forks.
+    expect(container.querySelectorAll("button")).toHaveLength(1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("floats the close disc beside the island on a full-bleed mobile mock-up with a cutout box", () => {
+    vi.mocked(hasInjectedDisplayCutout).mockReturnValue(true);
+    const onClose = vi.fn();
+    const { container, root } = mount(
+      <GlassDialog title="Title" onClose={onClose} cutoutAwareClose>
+        <div>content</div>
+      </GlassDialog>,
+    );
+
+    // The disc has left the header row...
+    expect(container.querySelector("header button")).toBeNull();
+    // ...and floats in an absolutely positioned wrapper beside the island.
+    const closeButton = container.querySelector<HTMLElement>(
+      'button[aria-label="Close"]',
+    );
+    expect(closeButton).not.toBeNull();
+    const floatWrapper = closeButton?.parentElement as HTMLElement | null;
+    expect(floatWrapper?.style.position).toBe("absolute");
+    // Still exactly one close control.
+    expect(container.querySelectorAll("button")).toHaveLength(1);
+
+    act(() => {
+      closeButton?.click();
+    });
+    expect(onClose).toHaveBeenCalledTimes(1);
 
     act(() => {
       root.unmount();

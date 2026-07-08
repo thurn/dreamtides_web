@@ -8,9 +8,8 @@
 // implementation detail that only src/tango itself may reach into. Two
 // invariants keep that migration from silently backsliding:
 //
-// 1. No file outside src/tango may import from tango/internal. One legacy
-//    file (StartingDeckModal) still reaches in from authoring; Phase 3
-//    removes it. A NEW reach-in fails this test the moment it lands.
+// 1. No file outside src/tango may import from tango/internal. A NEW reach-in
+//    fails this test the moment it lands.
 // 2. The direct children of src/components/*.tsx are pinned to the known
 //    set. New UI work should land in the Tango tier instead of growing this
 //    legacy directory; an intentional add/remove updates COMPONENTS_TSX.
@@ -27,12 +26,10 @@ const TANGO_PREFIX = "src/tango/";
 
 /**
  * Known, already-reviewed files outside src/tango that import from
- * tango/internal. StartingDeckModal migrates onto the Tango tier in Phase 3,
- * emptying this list.
+ * tango/internal. Empty: every screen consumes the public Tango API, so any
+ * hit here is a new reach-in to reject.
  */
-export const INTERNAL_IMPORTERS = [
-  "src/components/StartingDeckModal.tsx",
-];
+export const INTERNAL_IMPORTERS = [];
 
 /**
  * Pinned direct children of src/components/*.tsx. Build new UI in the
@@ -71,8 +68,6 @@ export const COMPONENTS_TSX = [
   "ScreenRouter.tsx",
   "SiteGuide.tsx",
   "SiteSceneBackdrop.tsx",
-  "StartingDeckModal.test.tsx",
-  "StartingDeckModal.tsx",
   "TransfigurationCardDemo.tsx",
 ];
 
@@ -170,10 +165,9 @@ describe("src/tango legacy-tier ratchet", () => {
       findInternalImporters(),
       "A file outside src/tango is importing from tango/internal. " +
         "tango/internal is a private implementation detail of the Tango " +
-        "design system; only src/tango itself may reach into it. The " +
-        "baselined offender (StartingDeckModal.tsx) is removed in Phase 3 " +
-        "of the design-system revisions program — if this is a new " +
-        "reach-in, use the public src/tango API instead.",
+        "design system; only src/tango itself may reach into it. Use the " +
+        "public src/tango API instead, or migrate this screen onto the Tango " +
+        "tier — see the tango-migrate skill.",
     ).toEqual(expected);
   });
 

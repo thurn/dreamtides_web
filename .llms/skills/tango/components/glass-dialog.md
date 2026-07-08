@@ -6,11 +6,11 @@
 
 Components · Live demo & interactive props: `/tango#/glass-dialog`
 
-Real consumers: **2** (imports outside `src/tango/docs/` and tests).
+Real consumers: **3** (imports outside `src/tango/docs/` and tests).
 
 The glass overlay shell: a modal dialog that frosts the scene behind it — a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and a glass close disc) over a scrolling body. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.
 
-> **Guidance:** The close disc is the shared IconButton at size `md`, and the close placement is internal — a later cutout-aware placement is an additive, non-breaking extension.
+> **Guidance:** The close disc is the shared IconButton at size `md`. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up.
 
 ## Props
 
@@ -20,6 +20,7 @@ The glass overlay shell: a modal dialog that frosts the scene behind it — a bo
 | `subtitle` | `string` | no | — | Optional intro line under the title. |
 | `onClose` | `() => void` | yes | — | Dismisses the dialog; fires when the close disc is activated. |
 | `closeLabel` | `string` | no | `Close` | Accessible name for the close disc. Defaults to `"Close"`. |
+| `cutoutAwareClose` | `boolean` | no | `false` | When true, on a full-bleed mobile overlay whose screen-cutout box is known (a device-screenshot mock-up) the close disc floats up beside the device island instead of sitting on the header row, so the header title clears the safe area below it. No effect on desktop or on real hardware (where the island geometry is not exposed). Defaults to `false`. |
 | `children` | `ReactNode` | yes | — | The scrolling body content. |
 
 ## Usage

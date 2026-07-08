@@ -29,7 +29,7 @@ import { DesktopDeckViewerAdapter } from "./screens/tango_adapters/DesktopDeckVi
 import { MobileDeckViewerAdapter } from "./screens/tango_adapters/MobileDeckViewerAdapter";
 import { useIsDesktop } from "./tango/screens/use-is-desktop";
 import { PoolViewer } from "./components/PoolViewer";
-import { StartingDeckModal } from "./components/StartingDeckModal";
+import { StartingDeckOverlayAdapter } from "./screens/tango_adapters/StartingDeckOverlayAdapter";
 import { DreamscapeQuestMenu } from "./components/DreamscapeQuestMenu";
 import { GlossaryPopup } from "./components/GlossaryPopup";
 import { DebugScreen } from "./screens/DebugScreen";
@@ -559,10 +559,9 @@ export function QuestApp({
           scope="overlay:starting-deck-modal"
           onClose={handleBeginQuest}
         >
-          <StartingDeckModal
+          <StartingDeckOverlayAdapter
             isOpen={showStarterDeckIntro}
             onClose={handleBeginQuest}
-            cardDatabase={cardDatabase}
           />
         </ErrorBoundary>
         <ErrorBoundary scope="overlay:glossary" onClose={handleCloseGlossary}>

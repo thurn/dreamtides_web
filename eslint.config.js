@@ -170,16 +170,12 @@ export default tseslint.config(
     // Tango component (Button, InfoCard, SegmentedControl, …) from a legacy
     // screen is the sanctioned migration story and stays legal; a legacy
     // screen wearing a raw material itself bypasses the component layer
-    // entirely and is not. Scoped to all of src/**, ignoring the linted
-    // src/tango/** tier itself (which legitimately imports its own materials)
-    // and one baselined legacy reach-in: StartingDeckModal, which migrates onto
-    // the Tango tier in Phase 3, at which point this `ignores` entry shrinks to
-    // nothing.
+    // entirely and is not. Scoped to all of src/**, ignoring only the linted
+    // src/tango/** tier itself (which legitimately imports its own materials).
+    // Every screen outside src/tango consumes the public Tango API, so no
+    // legacy reach-in is baselined here.
     files: ["src/**/*.{ts,tsx}"],
-    ignores: [
-      "src/tango/**",
-      "src/components/StartingDeckModal.tsx",
-    ],
+    ignores: ["src/tango/**"],
     rules: {
       "no-restricted-imports": [
         "error",

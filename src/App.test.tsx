@@ -115,19 +115,19 @@ vi.mock("./components/PoolViewer", () => ({
   PoolViewer: (props: PoolViewerMockProps) => poolViewerMock(props),
 }));
 
-interface StartingDeckModalMockProps {
+interface StartingDeckOverlayMockProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
 const startingDeckModalMock = vi.fn<
-  (props: StartingDeckModalMockProps) => ReactNode
+  (props: StartingDeckOverlayMockProps) => ReactNode
 >(({ isOpen }) => (
-  <div data-starting-deck-open={String(isOpen)}>Starting Deck Modal</div>
+  <div data-starting-deck-open={String(isOpen)}>Starting Deck Overlay</div>
 ));
 
-vi.mock("./components/StartingDeckModal", () => ({
-  StartingDeckModal: (props: StartingDeckModalMockProps) =>
+vi.mock("./screens/tango_adapters/StartingDeckOverlayAdapter", () => ({
+  StartingDeckOverlayAdapter: (props: StartingDeckOverlayMockProps) =>
     startingDeckModalMock(props),
 }));
 

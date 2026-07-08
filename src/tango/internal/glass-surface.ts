@@ -13,7 +13,7 @@
 //     warmer --glass-fill-popover tint),
 //   - the MobileDeckViewer full-bleed frosted backdrop,
 //   - the DesktopDeckViewer full-bleed frosted backdrop,
-//   - the StartingDeckModal glass panel.
+//   - the GlassDialog glass panel (the shell the StartingDeckOverlay wears).
 // (control-treatment.ts's glassTrack() — the controls / glass icon button —
 // routes through this recipe too, via glassSurfaceStyle({ radius: null }).)
 //
