@@ -11,10 +11,10 @@ import { token } from "../../primitives/tokens";
  * they sit beside, the tide pill, the site disc): one shell, one radius, one
  * type scale.
  *
- * Rendered beside or beneath a card / dreamsign / ability so the player can read
- * what every highlighted keyword means without inline tooltips. Shared by the
- * card hover-help panel (`useCardTermPopover` → `CardView`/`GameCard`), the
- * dreamsign reveal (`DreamsignInfoCard`), and the Dreamcaller ability reveal.
+ * Rendered beside a card / dreamsign / ability so the player can read what
+ * every highlighted keyword means without inline tooltips. Shared by the card
+ * hover-help panel (`useCardTermPopover` → `CardView`/`GameCard`), the dreamsign
+ * reveal (`DreamsignInfoCard`), and the Dreamcaller ability reveal.
  *
  * Returns `null` when the text references no glossary terms, so callers place it
  * unconditionally and it renders nothing for plain text.
@@ -48,10 +48,10 @@ export function CardTermDefinitions({
         display: "flex",
         flexDirection: "column",
         gap: token("--space-3"),
-        // Box measures (content-driven layout): cap height and scroll a long
-        // list, matching the prior panel behavior.
-        maxHeight: "min(70vh, 360px)",
-        overflowY: "auto",
+        // Keep the stack itself visually inert. Each definition owns its glass
+        // shell; the wrapper must not create a scroll track or clipped backdrop
+        // behind multiple keyword cards.
+        overflow: "visible",
       }}
     >
       {terms.map((entry) => (

@@ -50,6 +50,35 @@ function mockRect(rect: Partial<DOMRect>): void {
   vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(full);
 }
 
+function domRect(rect: Partial<DOMRect>): DOMRect {
+  return {
+    width: 100,
+    height: 140,
+    left: 50,
+    top: 50,
+    right: 150,
+    bottom: 190,
+    x: 50,
+    y: 50,
+    toJSON: () => ({}),
+    ...rect,
+  } as DOMRect;
+}
+
+function mockCardAndTooltipRects(cardRect: DOMRect, tooltipRect: DOMRect): void {
+  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+    function getBoundingClientRect(this: HTMLElement) {
+      if (this.classList.contains("card-view")) {
+        return cardRect;
+      }
+      if (this.getAttribute("role") === "tooltip") {
+        return tooltipRect;
+      }
+      return domRect({});
+    },
+  );
+}
+
 function mountGameCard(card: CardData = makeCard()): {
   container: HTMLDivElement;
   root: Root;
@@ -117,12 +146,59 @@ describe("GameCard hover zoom", () => {
     const stack = document.body.querySelector("[data-hover-zoom-glossary]");
     expect(stack).not.toBeNull();
     expect(stack?.textContent).toContain("Bane");
+    expect((stack as HTMLElement | null)?.style.overflow).toBe("visible");
+    expect((stack as HTMLElement | null)?.style.top).toBe("15px");
 
     act(() => {
       window.dispatchEvent(
         new MouseEvent("mousemove", { clientX: 600, clientY: 600 }),
       );
     });
+    expect(document.body.querySelector("[data-hover-zoom-glossary]")).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("top-aligns touch keyword definitions beside the card instead of above it", () => {
+    mockCardAndTooltipRects(
+      domRect({ width: 100, height: 140, left: 40, top: 80, right: 140, bottom: 220 }),
+      domRect({ width: 180, height: 96 }),
+    );
+    const { container, root } = mountGameCard();
+    const card = container.querySelector(".card-view");
+
+    act(() => {
+      card?.dispatchEvent(
+        new MouseEvent("pointerdown", {
+          bubbles: true,
+          clientX: 90,
+          clientY: 120,
+        }),
+      );
+    });
+
+    const tooltip = document.body.querySelector<HTMLElement>("[role='tooltip']");
+    expect(tooltip).not.toBeNull();
+    expect(tooltip?.style.top).toBe("80px");
+    expect(Number.parseFloat(tooltip?.style.left ?? "0")).toBeGreaterThan(140);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("lets parent previews own supplemental definitions", () => {
+    mockRect({ width: 100, height: 140, left: 50, top: 50, right: 150, bottom: 190 });
+    const { container, root } = mountGameCard();
+
+    act(() => {
+      root.render(<GameCard card={makeCard()} termDefinitions="none" />);
+    });
+    hoverCard(container);
+
+    expect(overlay()).not.toBeNull();
     expect(document.body.querySelector("[data-hover-zoom-glossary]")).toBeNull();
 
     act(() => {
@@ -157,6 +233,24 @@ describe("GameCard hover zoom", () => {
       bottom: 20 + Math.round(wide * 1.4),
     });
     const { container, root } = mountGameCard();
+
+    hoverCard(container);
+
+    expect(overlay()).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("does not portal-zoom large readable cards", () => {
+    mockRect({ width: 170, height: 238, left: 20, top: 30, right: 190, bottom: 268 });
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => {
+      root.render(<GameCard card={makeCard()} large />);
+    });
 
     hoverCard(container);
 

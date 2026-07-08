@@ -61,6 +61,7 @@ describe("CardTermDefinitions", () => {
 
     const stack = container.querySelector('[data-testid="defs"]');
     expect(stack).not.toBeNull();
+    expect((stack as HTMLElement | null)?.style.overflow).toBe("visible");
 
     // Each tile is an InfoCard whose headline is the term. Assert the term
     // headings appear in first-occurrence order.

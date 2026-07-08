@@ -988,6 +988,17 @@
       "description": "Hide rules text for dense card surfaces that show identity and stats."
     },
     {
+      "name": "termDefinitions",
+      "tsType": "\"card\" | \"none\"",
+      "unionMembers": [
+        "card",
+        "none"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Keyword-definition reveal behavior. Default `\"card\"` means this card owns\nits keyword InfoCards, positioned beside the card and top-aligned with it.\nUse `\"none\"` only when a parent surface renders those supplemental cards\nbeside a larger main preview of this same card."
+    },
+    {
       "name": "slots",
       "tsType": "CardViewSlots",
       "unionMembers": [],

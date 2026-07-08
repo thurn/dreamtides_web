@@ -10,15 +10,14 @@ import {
   type RefObject,
 } from "react";
 import { createPortal } from "react-dom";
-import { computePopoverPlacement } from "../overlay/hover-popover-placement";
+import {
+  computePopoverPlacement,
+  type PopoverPlacementSide,
+} from "../overlay/hover-popover-placement";
 import {
   CLICK_WINDOW,
-  EDGE,
-  GAP,
-  computePopoverPosition,
   isHold,
   useFinePointer,
-  type AnchorRect,
 } from "../overlay/InfoCard";
 import { CardTermDefinitions } from "./CardTermDefinitions";
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
@@ -45,6 +44,7 @@ interface ShownState {
 interface ResolvedPlacement {
   left: number;
   top: number;
+  side: Extract<PopoverPlacementSide, "left" | "right">;
 }
 
 interface CardTermPopoverHandlers {
@@ -62,9 +62,8 @@ interface CardTermPopoverHandlers {
  * The card's term-definition reveal — the one guarantee that a rendered card
  * can always explain its keywords. While the player hovers (or focuses) the
  * card on a fine pointer, or presses and holds it on touch, a panel listing
- * every glossary term used on the card portals in beside it — never on top of
- * the press, so it never blocks the card. The panel is purely informational
- * and never intercepts pointer events.
+ * every glossary term used on the card portals in beside it, top-aligned to the
+ * card. The panel is purely informational and never intercepts pointer events.
  *
  * Input-adaptive, matching the InfoCard reveal contract:
  *   - fine pointer (mouse / desktop): HOVER reveals after a short deliberate
@@ -73,8 +72,8 @@ interface CardTermPopoverHandlers {
  *     dismisses. The InfoCard click window separates a TAP (the card's own
  *     onClick still fires — picking, selecting) from a HOLD-to-read (the
  *     click is swallowed, so reading a keyword can never trigger the card's
- *     action). Placement uses the InfoCard press clamp, which keeps the panel
- *     above the card and clear of the fingertip.
+ *     action). Placement still follows the card rule: left or right of the
+ *     card, with the definition stack's top edge aligned to the card's top.
  *
  * The hook attaches its show/hide handlers to the card's own root element
  * (spread the returned `triggerHandlers` onto it) and anchors placement to
@@ -234,31 +233,6 @@ export function useCardTermPopover({
       typeof window === "undefined" ? 0 : window.innerWidth;
     const viewportHeight =
       typeof window === "undefined" ? 0 : window.innerHeight;
-    if (shown.pointer !== null) {
-      // Touch: the InfoCard press clamp — above the card, never under the
-      // finger holding it down.
-      const a = shown.anchorRect;
-      const anchor: AnchorRect = {
-        x: a.left + a.width / 2,
-        top: a.top,
-        bottom: a.bottom,
-        spanLeft: a.left,
-        spanRight: a.right,
-        w: viewportWidth,
-        h: viewportHeight,
-        pointerX: shown.pointer.clientX,
-        pointerY: shown.pointer.clientY,
-      };
-      const placement = computePopoverPosition(
-        anchor,
-        rect.width,
-        rect.height,
-        GAP,
-        EDGE,
-      );
-      setResolved({ left: placement.left, top: placement.top });
-      return;
-    }
     const placement = computePopoverPlacement({
       anchor: shown.anchorRect,
       popoverWidth: rect.width,
@@ -268,7 +242,11 @@ export function useCardTermPopover({
       preferred: "right",
       crossAxisAlign: "start",
     });
-    setResolved({ left: placement.left, top: placement.top });
+    setResolved({
+      left: placement.left,
+      top: placement.top,
+      side: placement.side === "left" ? "left" : "right",
+    });
   }, [shown]);
 
   const popoverStyle: CSSProperties =
@@ -285,7 +263,7 @@ export function useCardTermPopover({
             style={popoverStyle}
             role="tooltip"
           >
-            <CardTermDefinitions text={text} />
+            <CardTermDefinitions text={text} side={resolved?.side} />
           </div>,
           document.body,
         )

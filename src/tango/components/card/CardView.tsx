@@ -27,7 +27,7 @@ import { renderRulesText } from "./RulesText";
 import { useCardTermPopover } from "./useCardTermPopover";
 import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
 import { useFitText } from "../controls/useFitText";
-import { INFO_CARD_WIDTH } from "../overlay/InfoCard";
+import { infoCardWidth } from "../overlay/InfoCard";
 
 /**
  * Default chrome accent used for the selection ring fallback. The card's type
@@ -693,9 +693,19 @@ const HOVER_MAX_VIEWPORT_WIDTH_FRACTION = 0.94;
 const HOVER_MAX_VIEWPORT_HEIGHT_FRACTION = 0.92;
 const HOVER_MIN_USEFUL_SCALE = 1.02;
 const HOVER_VIEWPORT_MARGIN_PX = 8;
-const HOVER_GLOSSARY_STACK_WIDTH_PX = INFO_CARD_WIDTH;
 const HOVER_GLOSSARY_STACK_GAP_PX = 10;
 
+/**
+ * Card supplemental-info rules, kept here because every rendered GameCard is
+ * expected to obey them:
+ * - Keyword definition InfoCards sit beside the main card and top-align to it.
+ *   They can flip left/right for viewport fit, but they never appear above the
+ *   card.
+ * - Readable main cards (1x/2x layouts such as draft offers and starting-deck
+ *   cards) grow slightly on press/hover through their surface treatment.
+ * - Dense previews (such as the 4x mobile deck grid) may delegate keyword
+ *   definitions to a parent-owned larger main preview via `termDefinitions`.
+ */
 interface CardHoverZoomState {
   rect: DOMRect;
   scale: number;
@@ -729,6 +739,7 @@ function renderHoverGlossaryStack(
   }
   const scaledWidth = zoom.rect.width * zoom.scale;
   const scaledHeight = zoom.rect.height * zoom.scale;
+  const stackWidth = infoCardWidth(window.innerWidth);
   const centerX = zoom.rect.left + zoom.rect.width / 2;
   const centerY = zoom.rect.top + zoom.rect.height / 2;
   const finalLeft = centerX - scaledWidth / 2 + zoom.dx;
@@ -736,17 +747,16 @@ function renderHoverGlossaryStack(
   const finalRight = finalLeft + scaledWidth;
 
   const fitsRight = finalRight + HOVER_GLOSSARY_STACK_GAP_PX +
-    HOVER_GLOSSARY_STACK_WIDTH_PX + HOVER_VIEWPORT_MARGIN_PX <=
+    stackWidth + HOVER_VIEWPORT_MARGIN_PX <=
     window.innerWidth;
   const rawLeft = fitsRight
     ? finalRight + HOVER_GLOSSARY_STACK_GAP_PX
-    : finalLeft - HOVER_GLOSSARY_STACK_GAP_PX - HOVER_GLOSSARY_STACK_WIDTH_PX;
+    : finalLeft - HOVER_GLOSSARY_STACK_GAP_PX - stackWidth;
   const left = Math.max(
     HOVER_VIEWPORT_MARGIN_PX,
     Math.min(
       rawLeft,
-      window.innerWidth - HOVER_GLOSSARY_STACK_WIDTH_PX -
-        HOVER_VIEWPORT_MARGIN_PX,
+      window.innerWidth - stackWidth - HOVER_VIEWPORT_MARGIN_PX,
     ),
   );
   const top = Math.max(
@@ -758,8 +768,8 @@ function renderHoverGlossaryStack(
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed z-[1000] flex flex-col gap-1 overflow-hidden"
-      style={{ left, top, width: HOVER_GLOSSARY_STACK_WIDTH_PX, maxHeight }}
+      className="pointer-events-none fixed z-[1000] flex flex-col gap-1"
+      style={{ left, top, width: stackWidth, maxHeight, overflow: "visible" }}
       data-hover-zoom-glossary=""
     >
       {terms.map((entry) => (
@@ -885,6 +895,13 @@ export interface CardViewProps {
   figmentTitleBar?: boolean;
   /** Hide rules text for dense card surfaces that show identity and stats. */
   hideRulesText?: boolean;
+  /**
+   * Keyword-definition reveal behavior. Default `"card"` means this card owns
+   * its keyword InfoCards, positioned beside the card and top-aligned with it.
+   * Use `"none"` only when a parent surface renders those supplemental cards
+   * beside a larger main preview of this same card.
+   */
+  termDefinitions?: "card" | "none";
   /** Optional editor wrappers for individual rendered card slots. */
   slots?: CardViewSlots;
   /**
@@ -941,6 +958,7 @@ function GameCardSurface(props: InternalCardViewProps) {
   figment = false,
   figmentTitleBar = false,
   hideRulesText = false,
+  termDefinitions = "card",
   slots = {},
   onRulesFontSizeChange,
   onBoxTopFracChange,
@@ -963,7 +981,11 @@ function GameCardSurface(props: InternalCardViewProps) {
   }, []);
 
   const handleHoverZoomEnter = useCallback(() => {
-    if (!enableHoverZoom || hideRulesText) {
+    // Large/readable card surfaces (draft offers, starting deck) already show
+    // legible text. They use the slight in-place scale feedback on press/hover;
+    // the side keyword stack anchors to the card itself instead of to a larger
+    // portaled copy.
+    if (!enableHoverZoom || hideRulesText || large) {
       return;
     }
     const anchor = cardRef.current;
@@ -1002,7 +1024,7 @@ function GameCardSurface(props: InternalCardViewProps) {
       scale: Number(scale.toFixed(3)),
       targetWidthPx: HOVER_TARGET_WIDTH_PX,
     });
-  }, [cardRef, enableHoverZoom, hideRulesText]);
+  }, [cardRef, enableHoverZoom, hideRulesText, large]);
 
   useEffect(() => {
     if (hoverZoom === null) {
@@ -1061,7 +1083,9 @@ function GameCardSurface(props: InternalCardViewProps) {
                 enableHoverZoom={false}
               />
             </div>
-            {renderHoverGlossaryStack(hoverZoom, card.renderedText)}
+            {termDefinitions === "card"
+              ? renderHoverGlossaryStack(hoverZoom, card.renderedText)
+              : null}
           </>,
           document.body,
         )
@@ -1074,7 +1098,11 @@ function GameCardSurface(props: InternalCardViewProps) {
   const termPopover = useCardTermPopover({
     anchorRef: cardRef,
     text: card.renderedText,
-    enabled: enableTermPopover && hoverZoom === null && !hideRulesText,
+    enabled:
+      termDefinitions === "card" &&
+      enableTermPopover &&
+      hoverZoom === null &&
+      !hideRulesText,
   });
 
   // Auto-shrink the rules body so a card needing more than the reserved three
@@ -1141,6 +1169,13 @@ function GameCardSurface(props: InternalCardViewProps) {
   }
 
   const isInteractive = onClick !== undefined;
+  const respondsToPointer =
+    isInteractive || (termDefinitions === "card" && !hideRulesText);
+  const pointerFeedbackClass = respondsToPointer
+    ? large
+      ? " cursor-pointer hover:scale-[1.02] active:scale-[1.025]"
+      : " cursor-pointer hover:scale-[1.02] active:scale-[0.97]"
+    : "";
   const rarityClass =
     rarityStyle !== null && rarityStyle.cssClass !== null
       ? ` ${rarityStyle.cssClass}`
@@ -1511,7 +1546,7 @@ function GameCardSurface(props: InternalCardViewProps) {
   return (
     <div
       ref={cardRef}
-      className={`card-view relative overflow-hidden rounded-lg transition-transform duration-200${large ? " card-view--large" : ""}${isInteractive ? " cursor-pointer hover:scale-[1.02]" : ""}${rarityClass}`}
+      className={`card-view relative overflow-hidden rounded-lg transition-transform duration-200${large ? " card-view--large" : ""}${pointerFeedbackClass}${rarityClass}`}
       data-card-text-scale={textScale.toFixed(2)}
       data-rarity={rarityAttr}
       data-card-type={card.cardType}
