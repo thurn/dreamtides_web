@@ -241,6 +241,7 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
 
       <TopBand
         onClose={onClose}
+        count={view.cards.length}
         controls={
           <DeckControls
             filterSort={filterSort}
@@ -296,21 +297,25 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
 const CONTROL_BUTTON_PX = 48;
 
 /**
- * The top band: a centered "Your Deck" title, the corner close control, and the
- * filter/sort `controls` row. The top-left corner is left clear for the
- * dreamscape utility menu, which lifts above this overlay while it is open (see
- * `DreamscapeQuestMenu`'s `elevated`) and wears the same glass surface; the
- * close control on the right is a matching glass disc. The title sits centered
- * between them, dropping in just below the device's screen cutout (notch /
- * Dynamic Island / punch-hole) — the band's top padding already clears the
- * cutout — so it names the screen without fighting the hardware. A neutral
- * hairline at the strong step closes the band.
+ * The top band: a centered "Your Deck" title with a card-count eyebrow beneath
+ * it, the corner close control, and the filter/sort `controls` row. The top-left
+ * corner is left clear for the dreamscape utility menu, which lifts above this
+ * overlay while it is open (see `DreamscapeQuestMenu`'s `elevated`) and wears the
+ * same glass surface; the close control on the right is a matching glass disc.
+ * The title sits centered between them, dropping in just below the device's
+ * screen cutout (notch / Dynamic Island / punch-hole) — the band's top padding
+ * already clears the cutout — so it names the screen without fighting the
+ * hardware. The count reads the whole deck (`view.cards.length`), unaffected by
+ * the filter, matching the desktop header's count eyebrow. A neutral hairline at
+ * the strong step closes the band.
  */
 function TopBand({
   onClose,
+  count,
   controls,
 }: {
   onClose: () => void;
+  count: number;
   controls: React.ReactNode;
 }) {
   return (
@@ -346,14 +351,35 @@ function TopBand({
           style={{
             position: "absolute",
             inset: 0,
-            display: "grid",
-            placeItems: "center",
-            font: token("--t-title-sm"),
-            color: token("--text-primary"),
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: token("--space-1"),
             pointerEvents: "none",
           }}
         >
-          Your Deck
+          <div
+            style={{
+              font: token("--t-title-sm"),
+              color: token("--text-primary"),
+            }}
+          >
+            Your Deck
+          </div>
+          {/* Card-count eyebrow: the whole deck's size, styled with the shared
+              eyebrow tokens and pluralized exactly as the desktop header's count
+              is. Reads `view.cards.length`, so the filter never changes it. */}
+          <div
+            style={{
+              font: token("--t-eyebrow"),
+              letterSpacing: token("--tracking-eyebrow"),
+              textTransform: "uppercase",
+              color: token("--text-secondary"),
+            }}
+          >
+            {count} {count === 1 ? "Card" : "Cards"}
+          </div>
         </div>
         <div style={{ position: "absolute", top: 0, right: 0 }}>
           <IconButton

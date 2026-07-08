@@ -9,6 +9,13 @@
 // `buildDeckTypeFilterOptions`), so a deck heavy in one subtype offers a
 // one-tap filter down to it. No React, no DOM: this is the tested core the
 // interactive controls drive.
+//
+// Intentional platform divergence: the desktop viewer (`desktop-deck-filter`)
+// splits these into separate type / subtype / sort-key / sort-direction axes,
+// spending the room the mobile band lacks on more granular controls; here the
+// type and subtype collapse into one dropdown and every sort runs low to high.
+// The low-to-high ordering itself (`compareBySort`) is shared verbatim, so a
+// deck sorts identically on both surfaces.
 
 import type { CardType } from "../../types/cards";
 import type { DeckCardView } from "./MobileDeckViewer";
