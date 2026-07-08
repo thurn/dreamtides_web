@@ -64,6 +64,15 @@ export const BASELINE = [
     "src/tango/components/hud/DreamcallerPortrait.tsx",
     "src/tango/screens/quest-start-desktop.tsx",
   ],
+  // The full-bleed overlay's safe-area top padding, so a mobile header clears
+  // the device cutout. GlassDialog is the shell the deck viewers migrate onto
+  // in Phase 3; that migration deletes MobileDeckViewer's own copy and this
+  // entry with it.
+  [
+    "max(var(--safe-area-inset-top), ${token(\"--gutter\")})",
+    "src/tango/components/overlay/GlassDialog.tsx",
+    "src/tango/screens/MobileDeckViewer.tsx",
+  ],
 ];
 
 /** Whether `fullPath` is walked at all: TS/TSX/CSS source under src/tango. */

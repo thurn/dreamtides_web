@@ -27,6 +27,8 @@ export const CONTAINER_COMPONENTS = [
   "HoverZoomCard",
   "PressPopover",
   "PressInfo",
+  "GlassDialog", // the glass overlay shell — holds caller-supplied body content
+  "GlassBackdrop", // the frosted layer — hosts optional lifted-above-the-frost content
 ];
 
 /**

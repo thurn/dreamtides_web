@@ -19,6 +19,7 @@ import { dreamsignDemo } from "./demos/dreamsign";
 import { essenceValueDemo } from "./demos/essence-value";
 import { gameCardDemo } from "./demos/game-card";
 import { glassButtonDemo } from "./demos/glass-button";
+import { glassDialogDemo } from "./demos/glass-dialog";
 import { glossaryDefinitionCardDemo } from "./demos/glossary-definition-card";
 import { glowIconDemo } from "./demos/glow-icon";
 import { groupPanelDemo } from "./demos/group-panel";
@@ -138,6 +139,7 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   buttonDemo,
   iconButtonDemo,
   glassButtonDemo,
+  glassDialogDemo,
   leaveSiteButtonDemo,
   segmentedControlDemo,
   selectDemo,

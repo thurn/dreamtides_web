@@ -1077,6 +1077,16 @@
       "description": "Grow the rules text box to a taller editing height. The card editor sets\nthis while its rules-text field is open so the inline textarea has room to\nshow and edit several lines at once instead of being clipped to the\nthree-line display cap."
     }
   ],
+  "GlassBackdrop": [
+    {
+      "name": "children",
+      "tsType": "ReactNode",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional content lifted above the frost. Childless, the backdrop is a bare\n`aria-hidden` decorative layer; with children it hosts them over the frost."
+    }
+  ],
   "GlassButton": [
     {
       "name": "label",
@@ -1109,6 +1119,48 @@
       "required": false,
       "defaultValue": "false",
       "description": "Detaches the click / press feedback and marks the button `aria-disabled`."
+    }
+  ],
+  "GlassDialog": [
+    {
+      "name": "title",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The dialog's heading, rendered as an `<h2>`."
+    },
+    {
+      "name": "subtitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional intro line under the title."
+    },
+    {
+      "name": "onClose",
+      "tsType": "() => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Dismisses the dialog; fires when the close disc is activated."
+    },
+    {
+      "name": "closeLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "Close",
+      "description": "Accessible name for the close disc. Defaults to `\"Close\"`."
+    },
+    {
+      "name": "children",
+      "tsType": "ReactNode",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The scrolling body content."
     }
   ],
   "GlossaryDefinitionCard": [
