@@ -44,61 +44,77 @@ const variants: TintVariant[] = [
   {
     id: "crimson-underlay",
     title: "Crimson Underlay",
-    strategy: "Transparent red fill below the sheen",
+    strategy: "Bright red fill below the sheen",
     label: "Discard",
     glyph: GLYPHS.close,
     style: {
       background: makeTintedBackground(
-        "linear-gradient(180deg, rgba(220, 54, 68, 0.24), rgba(110, 14, 28, 0.14))",
+        "linear-gradient(180deg, rgba(255, 71, 88, 0.62), rgba(190, 18, 60, 0.46))",
       ),
-      borderColor: "rgba(255, 156, 166, 0.28)",
+      borderColor: "rgba(255, 185, 194, 0.72)",
+      boxShadow:
+        "inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -16px 34px rgba(144, 10, 34, 0.42), 0 12px 30px rgba(190, 18, 60, 0.26)",
     },
   },
   {
     id: "ruby-rim",
     title: "Ruby Rim",
-    strategy: "Neutral fill with colored rim and inner glow",
+    strategy: "Red rim, red wash, and outer glow",
     label: "Cancel",
     glyph: GLYPHS.close,
     style: {
-      borderColor: "rgba(255, 112, 124, 0.42)",
+      background: makeTintedBackground(
+        "linear-gradient(180deg, rgba(244, 63, 94, 0.28), rgba(136, 19, 55, 0.22))",
+      ),
+      borderColor: "rgba(255, 92, 112, 0.82)",
       boxShadow:
-        "inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -12px 28px rgba(170, 20, 42, 0.18), 0 10px 28px rgba(15, 7, 18, 0.4)",
+        "inset 0 1px 0 rgba(255,255,255,0.24), inset 0 -14px 32px rgba(225, 29, 72, 0.5), 0 0 0 1px rgba(255, 71, 88, 0.22), 0 12px 34px rgba(244, 63, 94, 0.32)",
     },
   },
   {
     id: "rose-bloom",
     title: "Rose Bloom",
-    strategy: "Radial color bloom inside neutral glass",
+    strategy: "Hot rose bloom inside red glass",
     label: "Decline",
     glyph: GLYPHS.close,
     style: {
       background: makeTintedBackground(
-        "radial-gradient(circle at 18% 18%, rgba(255, 135, 157, 0.34), transparent 52%), linear-gradient(180deg, rgba(180, 30, 58, 0.14), rgba(95, 12, 38, 0.1))",
+        "radial-gradient(circle at 18% 18%, rgba(255, 184, 202, 0.72), transparent 54%), linear-gradient(180deg, rgba(244, 63, 94, 0.48), rgba(159, 18, 57, 0.36))",
       ),
-      borderColor: "rgba(255, 185, 196, 0.3)",
+      borderColor: "rgba(255, 205, 213, 0.68)",
+      boxShadow:
+        "inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -16px 34px rgba(159, 18, 57, 0.4), 0 12px 34px rgba(244, 63, 94, 0.26)",
     },
   },
   {
     id: "vermilion-smoke",
     title: "Vermilion Smoke",
-    strategy: "Warmer orange-red mixed lightly into the fill",
+    strategy: "Bright orange-red fill with warm glow",
     label: "Burn",
     glyph: GLYPHS.spark,
     style: {
       background: makeTintedBackground(
-        "linear-gradient(135deg, rgba(236, 88, 42, 0.2), rgba(132, 23, 35, 0.12) 56%, rgba(255,255,255,0.03))",
+        "linear-gradient(135deg, rgba(249, 115, 22, 0.58), rgba(220, 38, 38, 0.44) 56%, rgba(255,255,255,0.05))",
       ),
-      borderColor: "rgba(255, 168, 126, 0.3)",
+      borderColor: "rgba(255, 180, 126, 0.72)",
+      boxShadow:
+        "inset 0 1px 0 rgba(255,255,255,0.26), inset 0 -16px 34px rgba(185, 28, 28, 0.38), 0 12px 34px rgba(249, 115, 22, 0.24)",
     },
   },
   {
     id: "danger-chip",
     title: "Danger Chip",
-    strategy: "Small red well behind the label, glass body intact",
+    strategy: "Bright red label well on a red glass body",
     label: "Banish",
     glyph: GLYPHS.close,
-    style: {},
+    style: {
+      background: makeTintedBackground(
+        "linear-gradient(180deg, rgba(244, 63, 94, 0.34), rgba(136, 19, 55, 0.28))",
+      ),
+      borderColor: "rgba(255, 121, 137, 0.62)",
+      boxShadow:
+        "inset 0 1px 0 rgba(255,255,255,0.24), inset 0 -14px 30px rgba(225, 29, 72, 0.34), 0 12px 32px rgba(190, 18, 60, 0.22)",
+    },
   },
 ];
 
@@ -181,9 +197,10 @@ function TintedGlassButton({
             padding: "0 9px",
             borderRadius: token("--radius-pill"),
             background:
-              "linear-gradient(180deg, rgba(210, 37, 54, 0.72), rgba(124, 15, 30, 0.62))",
-            border: "1px solid rgba(255, 176, 184, 0.22)",
-            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.18)",
+              "linear-gradient(180deg, rgba(255, 57, 76, 0.96), rgba(190, 18, 60, 0.92))",
+            border: "1px solid rgba(255, 221, 226, 0.48)",
+            boxShadow:
+              "inset 0 1px 0 rgba(255,255,255,0.3), 0 0 18px rgba(244, 63, 94, 0.42)",
           }}
         >
           {variant.label}
