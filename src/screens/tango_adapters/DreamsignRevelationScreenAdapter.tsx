@@ -3,7 +3,7 @@
 // invokes the quest mutations after the screen's claim animation starts.
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { logEvent } from "../../logging";
+import { logEventOnce } from "../../logging";
 import type { Dreamsign } from "../../types/quest";
 import { DreamsignRevelationScreen } from "../../tango/screens/DreamsignRevelationScreen";
 import { useQuest } from "../../state/quest-context";
@@ -45,13 +45,23 @@ export function DreamsignRevelationScreenAdapter({
 
   useEffect(() => {
     if (options === null || site === null) return;
-    logEvent("site_entered", { siteType: site.type, isEnhanced: site.isEnhanced, optionCount, ui: "tango" });
-  }, [site, optionCount, options]);
+    logEventOnce(`dreamsign-revelation:${site.id}:site-entered`, "site_entered", {
+      siteType: site.type,
+      isEnhanced: site.isEnhanced,
+      optionCount,
+      ui: "tango",
+    });
+  }, [site?.id, site?.type, site?.isEnhanced, optionCount, options]);
 
   useEffect(() => {
     if (guide === null || site === null) return;
-    logEvent("dream_guide_presented", { guideId: guide.id, siteType: site.type, isEnhanced: site.isEnhanced, ui: "tango" });
-  }, [guide, site]);
+    logEventOnce(`dreamsign-revelation:${site.id}:guide:${guide.id}`, "dream_guide_presented", {
+      guideId: guide.id,
+      siteType: site.type,
+      isEnhanced: site.isEnhanced,
+      ui: "tango",
+    });
+  }, [guide?.id, site?.id, site?.type, site?.isEnhanced]);
 
   useEffect(
     () => () => {

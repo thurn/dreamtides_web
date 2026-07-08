@@ -176,11 +176,13 @@ function makeState(): QuestState {
     remainingDreamsignPool: [],
     dreamsigns: [
       {
+        id: "night-mark",
         name: "Night's Mark",
         effectDescription: "Draw deeper.",
         isBane: false,
       },
       {
+        id: "ashen-debt",
         name: "Ashen Debt",
         effectDescription: "Costs later.",
         isBane: true,

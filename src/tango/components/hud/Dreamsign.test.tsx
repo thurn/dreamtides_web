@@ -30,7 +30,7 @@ function makeDreamsign(
     isBane: overrides.isBane ?? false,
     imageName: overrides.imageName,
     imageAlt: overrides.imageAlt,
-    id: overrides.id,
+    id: overrides.id ?? "test-dreamsign-id",
   };
 }
 
@@ -60,6 +60,15 @@ afterEach(() => {
 });
 
 describe("Dreamsign", () => {
+  it("requires a stable dreamsign id for render data attributes", () => {
+    const sign = makeDreamsign({ name: "Nameless Id", id: undefined });
+    delete sign.id;
+
+    expect(() => {
+      mountInto(<Dreamsign dreamsign={sign} sizePx={64} />);
+    }).toThrow(/Dreamsign tile dreamsign is missing a stable id/);
+  });
+
   it("renders the dreamsign artwork from /dreamsigns/<imageName>", () => {
     const sign = makeDreamsign({
       name: "Black Horn",

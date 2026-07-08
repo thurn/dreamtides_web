@@ -9,6 +9,7 @@ import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "./CardDisplay";
 import { CardOverlay } from "./CardOverlay";
 import { Dreamsign } from "../tango/components/hud/Dreamsign";
+import { requireDreamsignId } from "../data/dreamsigns";
 import {
   getPersistedCardSize,
   persistCardSize,
@@ -646,9 +647,9 @@ export function DeckViewer({
                   </p>
                 ) : (
                   <div className="flex flex-col gap-2">
-                    {state.dreamsigns.map((sign, i) => (
+                    {state.dreamsigns.map((sign) => (
                       <div
-                        key={`${sign.name}-${String(i)}`}
+                        key={requireDreamsignId(sign, "Deck viewer dreamsign")}
                         className="flex items-start gap-2 rounded-lg p-2"
                         style={{
                           background: sign.isBane
@@ -851,9 +852,9 @@ function MobileSidebar({
                     No dreamsigns acquired.
                   </p>
                 ) : (
-                  dreamsigns.map((sign, i) => (
+                  dreamsigns.map((sign) => (
                     <div
-                      key={`mobile-${sign.name}-${String(i)}`}
+                      key={requireDreamsignId(sign, "Mobile deck viewer dreamsign")}
                       className="flex items-start gap-2 rounded-lg p-2"
                       style={{
                         background: sign.isBane

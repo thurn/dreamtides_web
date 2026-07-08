@@ -9,6 +9,7 @@ import {
   siteTypeIcon,
   siteTypeName,
 } from "../../atlas/atlas-generator";
+import { requireDreamsignId } from "../../data/dreamsigns";
 import { draftSitePickCount } from "../../draft/draft-site-config";
 import {
   scatterSites,
@@ -109,12 +110,12 @@ export function toQsbDreamsigns(
   dreamsigns: readonly Dreamsign[],
 ): QsbDreamsign[] {
   const docked: QsbDreamsign[] = [];
-  dreamsigns.forEach((sign, index) => {
+  dreamsigns.forEach((sign) => {
     if (sign.imageName === undefined) {
       return;
     }
     docked.push({
-      id: sign.id ?? `dreamsign-${String(index)}`,
+      id: requireDreamsignId(sign, "QuestStatusBar docked"),
       name: sign.name,
       imageName: sign.imageName,
       imageAlt: sign.imageAlt,

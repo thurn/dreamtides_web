@@ -5,6 +5,7 @@
 
 import { useRef, type RefObject } from "react";
 import { motion } from "framer-motion";
+import { requireDreamsignId } from "../../data/dreamsigns";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
 import { Button } from "../components/controls/Button";
 import { GlassButton } from "../components/controls/GlassButton";
@@ -221,7 +222,10 @@ export function DreamsignRevelationScreen({
           >
             {view.offer.map((dreamsign, index) => (
               <RevelationOption
-                key={dreamsign.id ?? `offered-dreamsign-${String(index)}`}
+                key={requireDreamsignId(
+                  dreamsign,
+                  "Tango Dreamsign Revelation offer",
+                )}
                 dreamsign={dreamsign}
                 index={index}
                 stageRef={stageRef}
@@ -406,7 +410,10 @@ function PurgeDialog({
         >
           {purge.currentDreamsigns.map((dreamsign, index) => (
             <div
-              key={dreamsign.id ?? `owned-dreamsign-${String(index)}`}
+              key={requireDreamsignId(
+                dreamsign,
+                "Tango Dreamsign Revelation purge",
+              )}
               style={{
                 display: "flex",
                 flexDirection: "column",

@@ -50,6 +50,7 @@ import { GlowIcon } from "../controls/GlowIcon";
 import { GLYPHS } from "../../primitives/glyph";
 import { Dreamsign, dreamsignArtUrl, DS_SHADOW } from "./Dreamsign";
 import type { Dreamsign as DreamsignData } from "../../../types/quest";
+import { requireDreamsignId } from "../../../data/dreamsigns";
 import "./quest-status-bar.css";
 
 const { PressPopover, usePressReveal, anchorRect, PRESS_SCALE, HOVER_SCALE } = InfoCard;
@@ -151,7 +152,7 @@ function QsbOverflowStack({
     >
       {signs.map((s, i) => (
         <img
-          key={s.id ?? s.name}
+          key={requireDreamsignId(s, "QuestStatusBar overflow dreamsign")}
           src={dreamsignArtUrl(String(s.imageName))}
           alt=""
           draggable={false}
@@ -251,7 +252,7 @@ function QsbDreamsignStrip({
       <div style={{ ...wrap, gap: 2 }}>
         {signs.map((s) => (
           <Dreamsign
-            key={s.id ?? s.name}
+            key={requireDreamsignId(s, "QuestStatusBar dreamsign strip")}
             variant="hud"
             dreamsign={s}
             sizePx={SIGN}
@@ -329,7 +330,7 @@ function QsbDreamsignWindow({
         >
           {signs.map((s) => (
             <Dreamsign
-              key={s.id ?? s.name}
+              key={requireDreamsignId(s, "QuestStatusBar dreamsign window")}
               variant="hud"
               dreamsign={s}
               sizePx={60}

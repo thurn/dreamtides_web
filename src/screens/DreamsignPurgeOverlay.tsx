@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import type { Dreamsign } from "../types/quest";
+import { requireDreamsignId } from "../data/dreamsigns";
 import {
   OFFERING_NEUTRAL,
   OfferingCardFrame,
@@ -59,7 +60,7 @@ export function DreamsignPurgeOverlay({
       <div className="grid max-w-3xl grid-cols-3 gap-3 md:grid-cols-4">
         {currentDreamsigns.map((sign, index) => (
           <button
-            key={`purge-${sign.name}-${String(index)}`}
+            key={requireDreamsignId(sign, "Dreamsign purge overlay")}
             className="cursor-pointer rounded-lg p-2 text-left transition-colors"
             style={{
               background: "rgba(239, 68, 68, 0.05)",

@@ -4,6 +4,7 @@ import { HoverPopover } from "../tango/components/overlay/HoverPopover";
 import { RulesText } from "../tango/components/card/RulesText";
 import type { Dreamsign } from "../types/quest";
 import { assetUrl } from "../runtime/asset-url";
+import { requireDreamsignId } from "../data/dreamsigns";
 
 /**
  * Compact HUD row of dreamsign thumbnails — one square per owned dreamsign.
@@ -46,9 +47,9 @@ export function HudDreamsignRow({ dreamsigns }: HudDreamsignRowProps) {
       role="list"
       aria-label="Dreamsigns"
     >
-      {visible.map((dreamsign, index) => (
+      {visible.map((dreamsign) => (
         <HudDreamsignIcon
-          key={`${dreamsign.id ?? dreamsign.name}-${String(index)}`}
+          key={requireDreamsignId(dreamsign, "HUD dreamsign row")}
           dreamsign={dreamsign}
         />
       ))}
@@ -79,6 +80,7 @@ function HudDreamsignIcon({ dreamsign }: { dreamsign: Dreamsign }) {
   };
 
   const imgAlt = dreamsign.imageAlt ?? dreamsign.name;
+  const dreamsignId = requireDreamsignId(dreamsign, "HUD dreamsign icon");
 
   return (
     <span className="inline-block">
@@ -96,7 +98,7 @@ function HudDreamsignIcon({ dreamsign }: { dreamsign: Dreamsign }) {
       >
         <span
         data-testid="hud-dreamsign-icon"
-        data-dreamsign-id={dreamsign.id ?? dreamsign.name}
+        data-dreamsign-id={dreamsignId}
         data-is-bane={String(dreamsign.isBane)}
         aria-label={
           dreamsign.isBane
@@ -153,9 +155,9 @@ function HudDreamsignOverflowPill({
             width: 260,
           }}
         >
-          {dreamsigns.map((dreamsign, index) => (
+          {dreamsigns.map((dreamsign) => (
             <div
-              key={`${dreamsign.id ?? dreamsign.name}-${String(index)}`}
+              key={requireDreamsignId(dreamsign, "HUD dreamsign overflow")}
               className="rounded-md px-2 py-1.5"
               style={{
                 background: dreamsign.isBane

@@ -41,6 +41,7 @@ import { token } from "../../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../../types/quest";
 import { assetUrl } from "../../../runtime/asset-url";
 import { artRef } from "../../primitives/art";
+import { requireDreamsignId } from "../../../data/dreamsigns";
 
 const { usePressReveal, anchorRect, PressPopover, PRESS_SCALE, HOVER_SCALE } = InfoCard;
 
@@ -220,6 +221,7 @@ export function Dreamsign({
 
   const showImage = Boolean(dreamsign.imageName) && !imageBroken;
   const imgAlt = dreamsign.imageAlt ?? dreamsign.name;
+  const dreamsignId = requireDreamsignId(dreamsign, "Dreamsign tile");
 
   const onUp = (): void => {
     const tap = !heldPastTap();
@@ -277,7 +279,7 @@ export function Dreamsign({
       ref={ref}
       role="button"
       data-testid={testid}
-      data-dreamsign-id={dreamsign.id ?? dreamsign.name}
+      data-dreamsign-id={dreamsignId}
       data-is-bane={String(dreamsign.isBane)}
       aria-label={
         dreamsign.isBane

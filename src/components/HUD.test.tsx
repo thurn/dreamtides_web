@@ -94,6 +94,7 @@ function makeMutations(): QuestMutations {
 
 function makeDreamsign(name: string): Dreamsign {
   return {
+    id: `test-dreamsign-${name}`,
     name,
     effectDescription: `${name} effect.`,
     isBane: false,

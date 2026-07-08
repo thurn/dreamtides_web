@@ -40,6 +40,7 @@ import {
 } from "react";
 import type { CSSProperties, ReactNode, RefObject } from "react";
 import { createPortal } from "react-dom";
+import { requireDreamsignId } from "../../data/dreamsigns";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
 import { GameCard } from "../components/card/CardView";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
@@ -451,9 +452,9 @@ function DreamsignsBlock({
             justifyItems: "start",
           }}
         >
-          {dreamsigns.map((sign, index) => (
+          {dreamsigns.map((sign) => (
             <Dreamsign
-              key={sign.id ?? `dreamsign-${String(index)}`}
+              key={requireDreamsignId(sign, "Desktop deck viewer dreamsign")}
               dreamsign={sign}
               sizePx={DREAMSIGN_TILE_PX}
               stageRef={stageRef}

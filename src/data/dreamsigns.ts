@@ -43,3 +43,14 @@ export function createDreamsign(
     isBane,
   };
 }
+
+/** Return the stable UUID-backed identifier required for rendering a dreamsign. */
+export function requireDreamsignId(
+  dreamsign: Pick<Dreamsign, "id">,
+  context: string,
+): string {
+  if (dreamsign.id === undefined || dreamsign.id.length === 0) {
+    throw new Error(`${context} dreamsign is missing a stable id.`);
+  }
+  return dreamsign.id;
+}

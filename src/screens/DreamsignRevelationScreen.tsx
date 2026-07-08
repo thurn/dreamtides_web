@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import type { Dreamsign, SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
+import { requireDreamsignId } from "../data/dreamsigns";
 import { dreamsignIconUrl } from "../tango/components/atlas/atlas-display";
 import { SiteGuide } from "../components/SiteGuide";
 import { IconButton } from "../tango/components/controls/IconButton";
@@ -135,15 +136,22 @@ export function DreamsignRevelationScreen({
       ) : (
         <>
           <div className="dsr-row">
-            {offered.map((dreamsign, index) => (
-              <RevelationCard
-                key={`reveal-${dreamsign.id ?? dreamsign.name}`}
-                dreamsign={dreamsign}
-                index={index}
-                state={cardStateFor(mounted, chosenIndex, index)}
-                onTake={handleTake}
-              />
-            ))}
+            {offered.map((dreamsign, index) => {
+              const dreamsignId = requireDreamsignId(
+                dreamsign,
+                "Dreamsign Revelation offer",
+              );
+              return (
+                <RevelationCard
+                  key={`reveal-${dreamsignId}`}
+                  dreamsign={dreamsign}
+                  dreamsignId={dreamsignId}
+                  index={index}
+                  state={cardStateFor(mounted, chosenIndex, index)}
+                  onTake={handleTake}
+                />
+              );
+            })}
           </div>
 
         </>
@@ -183,24 +191,25 @@ function cardStateFor(
  */
 function RevelationCard({
   dreamsign,
+  dreamsignId,
   index,
   state,
   onTake,
 }: {
   readonly dreamsign: Dreamsign;
+  readonly dreamsignId: string;
   readonly index: number;
   readonly state: CardAnimState;
   readonly onTake: (dreamsign: Dreamsign, index: number) => void;
 }) {
   const [imageBroken, setImageBroken] = useState(false);
   const showImage = Boolean(dreamsign.imageName) && !imageBroken;
-  const triggerId = dreamsign.id ?? dreamsign.name;
 
   return (
     <div
       className={`dsr-col state-${state}`}
       style={{ "--i": index } as CSSProperties}
-      data-testid={`dreamsign-revelation-option-${triggerId}`}
+      data-testid={`dreamsign-revelation-option-${dreamsignId}`}
     >
       <div className="flex">
       <HoverPopover
@@ -238,7 +247,7 @@ function RevelationCard({
       <button
         type="button"
         className="dsr-take"
-        data-testid={`dreamsign-revelation-take-${triggerId}`}
+        data-testid={`dreamsign-revelation-take-${dreamsignId}`}
         onClick={() => onTake(dreamsign, index)}
       >
         Take

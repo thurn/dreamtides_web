@@ -1,16 +1,3 @@
-Dreamsign Revelation idle logging repeats during QA
-
-While QAing `?goto=dreamsign-revelation&ui=tango` on July 8, 2026, the browser
-console emitted repeated `site_entered` and `dream_guide_presented` quest-log
-events every few seconds while the screen was idle. The visual fix in this
-branch does not touch the site-entry or guide-presentation logging path.
-
-Legacy Dreamsign Revelation and related dreamsign hover surfaces still contain
-fallback React keys and data attributes derived from dreamsign names when an ID
-is absent. Dreamsign names are display copy and are not guaranteed unique; these
-surfaces should require or synthesize stable UUID-backed identifiers before
-rendering.
-
 Tango sweep findings filed July 8, 2026
 
 - `src/tango/screens/DreamsignRevelationScreen.tsx:341` hand-rolls a purge

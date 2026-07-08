@@ -14,12 +14,12 @@ import type { Dreamsign } from "../types/quest";
 
 function makeDreamsign(overrides: Partial<Dreamsign> & { name: string }): Dreamsign {
   return {
+    id: overrides.id ?? `test-dreamsign-${overrides.name}`,
     name: overrides.name,
     effectDescription: overrides.effectDescription ?? `${overrides.name} effect.`,
     isBane: overrides.isBane ?? false,
     imageName: overrides.imageName,
     imageAlt: overrides.imageAlt,
-    id: overrides.id,
   };
 }
 
