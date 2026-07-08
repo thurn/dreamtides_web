@@ -52,7 +52,6 @@ export function BattleCardHoverPreview({
         <CardDisplay
           card={display}
           large
-          suppressHoverHelp
         />
       </div>
     </div>

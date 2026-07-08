@@ -11,21 +11,23 @@
 // disc into floating up beside a simulated Dynamic Island on a full-bleed mobile
 // mock-up.
 //
-// The body is a scrolling grid of the starting cards in acquisition order, each
-// wrapped in HoverZoomCard so hovering (desktop) or pressing (mobile) grows the
-// card in place for a legible read. The content is intentionally minimal — the
-// title, one line of intro copy, and the cards; there are no filter, sort, or
-// "Continue" controls. Dismissal is the close disc or Escape.
+// The body is a scrolling grid of the starting cards in acquisition order. Each
+// GameCard grows in place on hover (desktop) or press (mobile) for a legible
+// read — that hover-zoom and its glossary stack live inside GameCard itself. On
+// a roomy desktop the dialog widens (`wide`) and the grid columns enlarge so the
+// ten-card starter deck fits as two rows without internal scrolling. The content
+// is intentionally minimal — the title, one line of intro copy, and the cards;
+// there are no filter, sort, or "Continue" controls. Dismissal is the close disc
+// or Escape.
 //
 // PURE: renders from a view-model (`starting-deck-view-model.ts` builds it from
 // live quest state in the adapter) and reports dismissal through `onClose`.
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { ReactElement } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { CardData } from "../../types/cards";
 import { GlassDialog } from "../components/overlay/GlassDialog";
-import { HoverZoomCard } from "../components/card/HoverZoomCard";
 import { GameCard } from "../components/card/CardView";
 import { token } from "../primitives/tokens";
 
@@ -40,9 +42,7 @@ export interface StartingDeckCardView {
   entryId: string;
   /** The resolved card to paint. */
   card: CardData;
-  /** The card's rendered rules text, fed to HoverZoomCard's glossary help. */
-  glossaryText: string;
-  /** `data-testid` for the card's HoverZoomCard wrapper. */
+  /** `data-testid` for the card's grid tile. */
   testId: string;
 }
 
@@ -64,6 +64,44 @@ export interface StartingDeckOverlayProps {
 /** Grid tile min width (px); columns auto-fill to fill the row from there. */
 const CARD_MIN_WIDTH_PX = 140;
 
+/** Grid tile min width (px) on a roomy desktop, where cards read larger. */
+const ROOMY_CARD_MIN_WIDTH_PX = 208;
+
+/**
+ * A roomy desktop is wide AND tall enough to lay the ten-card starter deck out
+ * as an enlarged 5x2 grid without internal scroll, so the overlay widens its
+ * panel and grid there. Mirrors the media query in the shipped starting-deck
+ * modal.
+ */
+const ROOMY_DESKTOP_QUERY = "(min-width: 1400px) and (min-height: 800px)";
+
+/** Tracks whether the viewport matches {@link ROOMY_DESKTOP_QUERY}. */
+function useRoomyDesktop(): boolean {
+  const [roomy, setRoomy] = useState<boolean>(() =>
+    typeof window === "undefined" || typeof window.matchMedia !== "function"
+      ? false
+      : window.matchMedia(ROOMY_DESKTOP_QUERY).matches,
+  );
+
+  useEffect(() => {
+    if (
+      typeof window === "undefined" ||
+      typeof window.matchMedia !== "function"
+    ) {
+      return undefined;
+    }
+    const query = window.matchMedia(ROOMY_DESKTOP_QUERY);
+    const onChange = (): void => setRoomy(query.matches);
+    onChange();
+    query.addEventListener("change", onChange);
+    return () => {
+      query.removeEventListener("change", onChange);
+    };
+  }, []);
+
+  return roomy;
+}
+
 /**
  * The starting-deck reveal overlay. Renders through {@link GlassDialog} (which
  * owns the glass chrome, the desktop/mobile geometry, and the close disc) with a
@@ -74,6 +112,8 @@ export function StartingDeckOverlay({
   view,
   onClose,
 }: StartingDeckOverlayProps): ReactElement {
+  const roomyDesktop = useRoomyDesktop();
+
   // GlassDialog does not bind Escape, so the overlay carries the shipped
   // Escape-to-close behavior. Active only while open.
   useEffect(() => {
@@ -105,6 +145,7 @@ export function StartingDeckOverlay({
             onClose={onClose}
             closeLabel="Close starting deck"
             cutoutAwareClose
+            wide={roomyDesktop}
           >
             {view.cards.length === 0 ? (
               <div
@@ -130,20 +171,15 @@ export function StartingDeckOverlay({
                 style={{
                   display: "grid",
                   gridTemplateColumns: `repeat(auto-fill, minmax(${String(
-                    CARD_MIN_WIDTH_PX,
+                    roomyDesktop ? ROOMY_CARD_MIN_WIDTH_PX : CARD_MIN_WIDTH_PX,
                   )}px, 1fr))`,
                   gap: token("--space-4"),
                 }}
               >
                 {view.cards.map((cardView) => (
-                  <HoverZoomCard
-                    key={cardView.entryId}
-                    logSurface="starting_deck"
-                    glossaryText={cardView.glossaryText}
-                    testId={cardView.testId}
-                  >
-                    <GameCard card={cardView.card} suppressHoverHelp />
-                  </HoverZoomCard>
+                  <div key={cardView.entryId} data-testid={cardView.testId}>
+                    <GameCard card={cardView.card} />
+                  </div>
                 ))}
               </div>
             )}

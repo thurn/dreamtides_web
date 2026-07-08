@@ -198,7 +198,6 @@ export function JourneyCard({
         <div className="block w-full overflow-hidden rounded-[9px]">
           <CardView
             card={card}
-            suppressHoverHelp
             transfiguration={usePreview ? object.transfiguration : undefined}
           />
         </div>
@@ -222,7 +221,6 @@ export function JourneyCard({
             <div className="block w-full overflow-hidden rounded-[12px]">
               <CardView
                 card={card}
-                suppressHoverHelp
                 transfiguration={usePreview ? object.transfiguration : undefined}
               />
             </div>

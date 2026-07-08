@@ -9,7 +9,6 @@ import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "./CardDisplay";
 import { CardOverlay } from "./CardOverlay";
 import { Dreamsign } from "../tango/components/hud/Dreamsign";
-import { HoverZoomCard } from "../tango/components/card/HoverZoomCard";
 import {
   getPersistedCardSize,
   persistCardSize,
@@ -527,30 +526,16 @@ export function DeckViewer({
                               borderRadius: "0.5rem",
                             }
                           : undefined;
-                    // Small and medium tiles grow in place on hover (the card
-                    // itself enlarges until its rules text is comfortably
-                    // legible) so the in-grid card suppresses its own term
-                    // popover to keep the enlarged read clean. Large tiles are
-                    // already wide enough to read, so they neither grow nor
-                    // suppress their term help.
                     const wrappedCardTile = (
                       <div style={cardTileBorderStyle}>
-                        <HoverZoomCard
-                          enabled={cardSize !== "large"}
-                          logSurface="deck_viewer"
-                          glossaryText={resolved.card.renderedText}
-                          testId={`deck-viewer-row-${resolved.entry.entryId}`}
-                        >
-                          <CardDisplay
-                            card={resolved.card}
-                            transfiguration={resolved.transfiguration}
-                            large={cardSize === "large"}
-                            suppressHoverHelp={cardSize !== "large"}
-                            onClick={() => {
-                              handleCardClick(resolved);
-                            }}
-                          />
-                        </HoverZoomCard>
+                        <CardDisplay
+                          card={resolved.card}
+                          transfiguration={resolved.transfiguration}
+                          large={cardSize === "large"}
+                          onClick={() => {
+                            handleCardClick(resolved);
+                          }}
+                        />
                       </div>
                     );
                     return (

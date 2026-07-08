@@ -493,7 +493,6 @@ export default function EditableCard({
         <CardView
           card={visibleCard}
           large={size === "large"}
-          suppressHoverHelp
           onClick={() => onOpenArtEditor(card)}
           onRulesFontSizeChange={handleRulesFontSize}
           eagerRulesFit={eagerRulesFit}
@@ -519,7 +518,6 @@ export default function EditableCard({
       <CardView
         card={visibleCard}
         large={size === "large"}
-        suppressHoverHelp
         slots={slots}
         onRulesFontSizeChange={handleRulesFontSize}
         eagerRulesFit={eagerRulesFit}

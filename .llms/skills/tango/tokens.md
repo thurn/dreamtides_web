@@ -35,11 +35,11 @@ Text color roles and letter-spacing. Pick by role (primary/secondary/muted), nev
 | `--text-primary` | `var(--primitive-ink-100)` |  |
 | `--text-secondary` | `var(--primitive-ink-300)` |  |
 | `--text-muted` | `var(--primitive-ink-400)` |  |
-| `--text-faint` | `var(--dt-text-faint)` | #7b7299 purple |
+| `--text-faint` | `var(--dt-text-faint)` | #bba994 warm muted |
 | `--text-on-accent` | `#ffffff` |  |
 | `--text-on-card` | `#f6f6f5` | card name on dark card chrome (parent value) |
-| `--text` | `var(--dt-text)` | #ece7f5 warm near-white |
-| `--text-dim` | `var(--dt-text-dim)` | #b3aac8 warm |
+| `--text` | `var(--dt-text)` | #fff8ec warm near-white |
+| `--text-dim` | `var(--dt-text-dim)` | #d8ccba warm |
 | `--tracking-eyebrow` | `0.14em` |  |
 | `--tracking-wordmark` | `0.01em` |  |
 | `--text-outline-media` | `1.7px 0 0 #000, 1.6px 0.7px 0 #000, 1.2px 1.2px 0 #000, 0.7px 1.6px 0 #000, 0 1.7px 0 #000, -0.7px 1.6px 0 #000, -1.2px 1.2px 0 #000, -1.6px 0.7px 0 #000, -1.7px 0 0 #000, -1.6px -0.7px 0 #000, -1.2px -1.2px 0 #000, -0.7px -1.6px 0 #000, 0 -1.7px 0 #000, 0.7px -1.6px 0 #000, 1.2px -1.2px 0 #000, 1.6px -0.7px 0 #000, 0 2px 6px rgba(0, 0, 0, 0.7)` |  |
@@ -244,9 +244,9 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 | `--dt-spark-border` | `var(--primitive-spark-600)` |  |
 | `--dt-enemy` | `var(--primitive-ember-500)` |  |
 | `--dt-player` | `var(--primitive-sap-400)` |  |
-| `--dt-text` | `#ece7f5` |  |
-| `--dt-text-dim` | `#b3aac8` |  |
-| `--dt-text-faint` | `#7b7299` |  |
+| `--dt-text` | `#fff8ec` |  |
+| `--dt-text-dim` | `#d8ccba` |  |
+| `--dt-text-faint` | `#bba994` |  |
 | `--dt-wash-journey` | `radial-gradient(120% 95% at 50% 30%, #241a3a, #140e22 55%, #0a0612)` |  |
 | `--dt-gradient-title` | `linear-gradient(90deg, #f3eefb, #c084fc)` |  |
 | `--color-bg` | `#0a0612` |  |

@@ -40,6 +40,8 @@ import { Select } from "../components/controls/Select";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
+import { CardTermDefinitions } from "../components/card/CardTermDefinitions";
+import { infoCardWidth } from "../components/overlay/InfoCard";
 import {
   computePeekBox,
   peekWidthForViewport,
@@ -94,6 +96,8 @@ const COLUMNS = 4;
  * down once a drag is clearly underway.
  */
 const MOVE_SLOP_PX = 10;
+const SUPPLEMENTAL_INFO_GAP_PX = 10;
+const SUPPLEMENTAL_INFO_EDGE_PX = 6;
 
 /**
  * Reads a length token's resolved pixel value off the `.tango` root, for the
@@ -504,7 +508,7 @@ function DeckTile({
       <GameCard
         card={cardView.card}
         transfiguration={cardView.transfiguration}
-        suppressHoverHelp
+        termDefinitions="none"
       />
     </Pressable>
   );
@@ -516,8 +520,16 @@ function DeckTile({
  * touched (no scrim, no dimming), so the deck stays fully visible behind it.
  * Purely visual (`pointer-events: none`) so the finger that summoned it is never
  * intercepted; the press is tracked entirely on the grid underneath.
+ *
+ * The enlarged card is the main card for the interaction, so it keeps the
+ * existing finger-avoidance geometry from `computePeekBox`. Keyword definition
+ * InfoCards are supplemental: they do not avoid the finger independently, and
+ * they never appear above the main card. They sit to the left or right of the
+ * enlarged card, top-aligned with it, matching the Dream Atlas supplemental
+ * card pattern.
  */
 function PeekOverlay({ peek }: { peek: PeekState }) {
+  const supplemental = computeSupplementalInfoPlacement(peek.box);
   return createPortal(
     <div
       className="tango"
@@ -542,12 +554,55 @@ function PeekOverlay({ peek }: { peek: PeekState }) {
           card={peek.view.card}
           transfiguration={peek.view.transfiguration}
           large
-          suppressHoverHelp
+          termDefinitions="none"
         />
       </div>
+      {supplemental !== null && (
+        <div
+          style={{
+            position: "absolute",
+            left: supplemental.left,
+            top: supplemental.top,
+            width: supplemental.width,
+          }}
+          data-mobile-deck-peek-definitions=""
+        >
+          <CardTermDefinitions
+            text={peek.view.card.renderedText}
+            side={supplemental.side}
+          />
+        </div>
+      )}
     </div>,
     document.body,
   );
+}
+
+function computeSupplementalInfoPlacement(box: PeekRect): {
+  left: number;
+  top: number;
+  width: number;
+  side: "left" | "right";
+} | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+  const width = infoCardWidth(window.innerWidth);
+  const rightLeft = box.left + box.width + SUPPLEMENTAL_INFO_GAP_PX;
+  const fitsRight =
+    rightLeft + width <= window.innerWidth - SUPPLEMENTAL_INFO_EDGE_PX;
+  if (fitsRight) {
+    return { left: rightLeft, top: box.top, width, side: "right" };
+  }
+  return {
+    left: Math.max(
+      SUPPLEMENTAL_INFO_EDGE_PX,
+      box.left - SUPPLEMENTAL_INFO_GAP_PX - width,
+    ),
+    top: box.top,
+    width,
+    side: "left",
+  };
 }
 
 /** Shown when the deck has no cards. */

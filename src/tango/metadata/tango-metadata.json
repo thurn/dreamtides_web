@@ -877,7 +877,7 @@
       "tsType": "boolean",
       "unionMembers": [],
       "required": false,
-      "defaultValue": "false",
+      "defaultValue": null,
       "description": ""
     },
     {
@@ -906,7 +906,7 @@
         "white"
       ],
       "required": false,
-      "defaultValue": "selected",
+      "defaultValue": null,
       "description": "The selection-ring {@link TangoColor}. Default the `\"selected\"` role."
     },
     {
@@ -963,7 +963,7 @@
       "tsType": "boolean",
       "unionMembers": [],
       "required": false,
-      "defaultValue": "false",
+      "defaultValue": null,
       "description": "Use larger text sizes for rules text, name, type line, and stats."
     },
     {
@@ -971,7 +971,7 @@
       "tsType": "boolean",
       "unionMembers": [],
       "required": false,
-      "defaultValue": "false",
+      "defaultValue": null,
       "description": "Render the figment frame (rules §Figments): no energy orb, the spark floats\nas a large mark in the top-right corner instead of inside a name bar, and\nthe rules box takes a black-on-light frosted treatment. A figment has no\nname bar by default; pass `figmentTitleBar` to show one (for a named figment\nlike a Legionnaire, or while its name is being edited)."
     },
     {
@@ -979,7 +979,7 @@
       "tsType": "boolean",
       "unionMembers": [],
       "required": false,
-      "defaultValue": "false",
+      "defaultValue": null,
       "description": "In figment mode, render the top title bar holding the card name (left\naligned, dark character-card treatment). Ignored when `figment` is false."
     },
     {
@@ -987,23 +987,26 @@
       "tsType": "boolean",
       "unionMembers": [],
       "required": false,
-      "defaultValue": "false",
+      "defaultValue": null,
       "description": "Hide rules text for dense card surfaces that show identity and stats."
     },
     {
-      "name": "suppressHoverHelp",
-      "tsType": "boolean",
-      "unionMembers": [],
+      "name": "termDefinitions",
+      "tsType": "\"card\" | \"none\"",
+      "unionMembers": [
+        "card",
+        "none"
+      ],
       "required": false,
-      "defaultValue": "false",
-      "description": "When true, the corner stat tooltips and the card's term-definition hover\npanel are suppressed. The card editor uses this to keep hover behavior calm\nacross a dense grid, and the card-preview surfaces\n(`CardHoverPreview` / `BattleCardHoverPreview`) use it on the enlarged card\nbecause they render their own definitions panel alongside the preview."
+      "defaultValue": null,
+      "description": "Keyword-definition reveal behavior. Default `\"card\"` means this card owns\nits keyword InfoCards, positioned beside the card and top-aligned with it.\nUse `\"none\"` only when a parent surface renders those supplemental cards\nbeside a larger main preview of this same card."
     },
     {
       "name": "slots",
       "tsType": "CardViewSlots",
       "unionMembers": [],
       "required": false,
-      "defaultValue": "{}",
+      "defaultValue": null,
       "description": "Optional editor wrappers for individual rendered card slots.",
       "nested": {
         "name": "CardViewSlots",
@@ -1068,7 +1071,7 @@
       "tsType": "boolean",
       "unionMembers": [],
       "required": false,
-      "defaultValue": "false",
+      "defaultValue": null,
       "description": "Measure the rules-text fit immediately instead of deferring until the card\nnears the viewport. The card editor sets this while sorting by font size so\nevery card reports a stable fitted size up front; without it the sort would\nreshuffle endlessly as off-screen cards measured only after being moved."
     },
     {
@@ -1076,7 +1079,7 @@
       "tsType": "boolean",
       "unionMembers": [],
       "required": false,
-      "defaultValue": "false",
+      "defaultValue": null,
       "description": "Grow the rules text box to a taller editing height. The card editor sets\nthis while its rules-text field is open so the inline textarea has room to\nshow and edit several lines at once instead of being clipped to the\nthree-line display cap."
     }
   ],
@@ -1164,6 +1167,14 @@
       "required": false,
       "defaultValue": "false",
       "description": "When true, on a full-bleed mobile overlay whose screen-cutout box is known\n(a device-screenshot mock-up) the close disc floats up beside the device\nisland instead of sitting on the header row, so the header title clears the\nsafe area below it. No effect on desktop or on real hardware (where the\nisland geometry is not exposed). Defaults to `false`."
+    },
+    {
+      "name": "wide",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "On desktop, widen the panel and trade the `85vh` height cap for explicit\nviewport padding so a roomy grid fits in two rows without internal scroll.\nNo effect on the full-bleed mobile overlay. Defaults to `false`. A caller\ngates this on its own roomy-desktop media query."
     },
     {
       "name": "children",
@@ -1347,64 +1358,6 @@
       "required": false,
       "defaultValue": "span",
       "description": "The DOM element type for the trigger wrapper. Defaults to `\"span\"` for\ninline use within text. Pass `\"div\"` for block-level triggers."
-    }
-  ],
-  "HoverZoomCard": [
-    {
-      "name": "children",
-      "tsType": "ReactNode",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "The card to render (e.g. a `<CardView />`)."
-    },
-    {
-      "name": "enabled",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "true",
-      "description": "When false the wrapper is an inert pass-through that renders `children`\nwith no hover behaviour. Used to opt compact / tiny card surfaces out."
-    },
-    {
-      "name": "fill",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "When true the slot fills its container (100% width and height) instead of\nshrinking to the card's own size. Set it when the caller's wrapper gives\nthe card a fixed box to occupy (e.g. a battle-hand cell)."
-    },
-    {
-      "name": "targetWidthPx",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "340",
-      "description": "Width (px) the card grows to. Defaults to {@link TARGET_WIDTH_PX}."
-    },
-    {
-      "name": "logSurface",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional label recorded with the `card_hover_zoom` log event so behaviour\ncan be reconstructed per surface (deck viewer, shop, battle hand, ...)."
-    },
-    {
-      "name": "glossaryText",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "The card's rendered rules text. When provided, the glossary definitions\nfor any gameplay terms in the text are shown in a stack beside the\nenlarged card while it is zoomed. The wrapped card should suppress its own\ninline term\npopover (`suppressHoverHelp`) so the definitions appear only here, aligned\nwith the enlarged card rather than the small original underneath."
-    },
-    {
-      "name": "testId",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "`data-testid` applied to the slot element."
     }
   ],
   "IconButton": [

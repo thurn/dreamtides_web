@@ -311,10 +311,10 @@ export function BattleStartScreen({
                 {signatureCards.map((card) => (
                   <div className="bs-card" key={card.id}>
                     <div className="bs-card-thumb">
-                      <CardView card={card} suppressHoverHelp />
+                      <CardView card={card} />
                     </div>
                     <div className="bs-card-pop">
-                      <CardView card={card} suppressHoverHelp />
+                      <CardView card={card} />
                     </div>
                   </div>
                 ))}

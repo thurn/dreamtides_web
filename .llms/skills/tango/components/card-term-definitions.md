@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/card-term-definitions`
 
-Real consumers: **5** (imports outside `src/tango/docs/` and tests).
+Real consumers: **6** (imports outside `src/tango/docs/` and tests).
 
 A reading-order, de-duped stack of Glossary Definition Cards for every gameplay term in a stretch of rules text, rendered beside or beneath a card so the player reads what every highlighted keyword means without inline tooltips. Each term renders as one GlossaryDefinitionCard, so the definitions read in the same shell, radius, and type scale as every other reveal. It renders nothing when the text references no terms, so callers place it unconditionally.
 

@@ -21,6 +21,7 @@ The glass overlay shell: a modal dialog that frosts the scene behind it — a bo
 | `onClose` | `() => void` | yes | — | Dismisses the dialog; fires when the close disc is activated. |
 | `closeLabel` | `string` | no | `Close` | Accessible name for the close disc. Defaults to `"Close"`. |
 | `cutoutAwareClose` | `boolean` | no | `false` | When true, on a full-bleed mobile overlay whose screen-cutout box is known (a device-screenshot mock-up) the close disc floats up beside the device island instead of sitting on the header row, so the header title clears the safe area below it. No effect on desktop or on real hardware (where the island geometry is not exposed). Defaults to `false`. |
+| `wide` | `boolean` | no | `false` | On desktop, widen the panel and trade the `85vh` height cap for explicit viewport padding so a roomy grid fits in two rows without internal scroll. No effect on the full-bleed mobile overlay. Defaults to `false`. A caller gates this on its own roomy-desktop media query. |
 | `children` | `ReactNode` | yes | — | The scrolling body content. |
 
 ## Usage

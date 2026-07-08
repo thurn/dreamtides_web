@@ -748,7 +748,6 @@ export default function FigmentEditorApp({
               }}
               large
               figment
-              suppressHoverHelp
               onBoxTopFracChange={live.onBoxTopFracChange}
             />
           )}

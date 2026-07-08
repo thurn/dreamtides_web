@@ -1,7 +1,6 @@
 import type { MouseEvent as ReactMouseEvent } from "react";
 
 import { CardDisplay } from "../../components/CardDisplay";
-import { HoverZoomCard } from "../../tango/components/card/HoverZoomCard";
 import type { BattleCommand } from "../debug/commands";
 import type { BattleCardInstance, BattleCommandSourceSurface, BattleMutableState } from "../types";
 import { battleCardAutomationStatus } from "../automation/battle-card-effects-table";
@@ -206,27 +205,14 @@ export function BattleHandCard({
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
     >
-      {/* Cards in a full-size hand grow in place on hover so their rules text
-          is comfortably legible, with the term glossary shown beside the
-          enlarged card. Compact (revealed) hands stay small and opt out. This
-          applies to the enemy hand too when it is rendered full size by the
-          debug "hide player hand" mode. */}
-      <HoverZoomCard
-        enabled={!compact}
-        logSurface="battle_hand"
-        glossaryText={displayCard.renderedText}
-        fill
-      >
-        <div className="h-full w-full">
-          <CardDisplay
-            card={displayCard}
-            selected={selected}
-            selectionColor="#a855f7"
-            suppressHoverHelp
-            hideRulesText={compact}
-          />
-        </div>
-      </HoverZoomCard>
+      <div className="h-full w-full">
+        <CardDisplay
+          card={displayCard}
+          selected={selected}
+          selectionColor="#a855f7"
+          hideRulesText={compact}
+        />
+      </div>
       {showAutomationGear ? (
         <AutomationGearIcon
           style={{

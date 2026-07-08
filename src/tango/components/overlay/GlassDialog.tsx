@@ -41,6 +41,13 @@ import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
 /** Diameter (px) of the `md` IconButton close disc, for cutout-relative placement. */
 const CLOSE_DISC_PX = 48;
 
+/**
+ * Panel width cap (px) for a `wide` desktop dialog — enough for a roomy grid to
+ * lay out in two rows without internal scroll on a 16-inch-MacBook-class
+ * viewport, while `min(…, 90vw)` still leaves margin on narrower desktops.
+ */
+const WIDE_PANEL_MAX_WIDTH_PX = 1120;
+
 /** Props for {@link GlassBackdrop}. */
 export interface GlassBackdropProps {
   /**
@@ -94,6 +101,13 @@ export interface GlassDialogProps {
    * island geometry is not exposed). Defaults to `false`.
    */
   cutoutAwareClose?: boolean;
+  /**
+   * On desktop, widen the panel and trade the `85vh` height cap for explicit
+   * viewport padding so a roomy grid fits in two rows without internal scroll.
+   * No effect on the full-bleed mobile overlay. Defaults to `false`. A caller
+   * gates this on its own roomy-desktop media query.
+   */
+  wide?: boolean;
   /** The scrolling body content. */
   children: ReactNode;
 }
@@ -102,7 +116,10 @@ export interface GlassDialogProps {
  * A `role="dialog" aria-modal="true"` overlay: a fixed full-screen layer over a
  * {@link GlassBackdrop}, holding a glass panel that is bounded and centered on
  * desktop (`maxWidth: min(900px, 90vw)`, `maxHeight: 85vh`) and full-bleed below
- * `DESKTOP_MIN_WIDTH`. The header pairs the title `<h2>` and optional subtitle
+ * `DESKTOP_MIN_WIDTH`. With `wide`, the desktop panel widens to
+ * `min(1120px, 90vw)` and trades the `85vh` cap for explicit viewport padding so
+ * a roomy grid fits in two rows without internal scroll. The header pairs the
+ * title `<h2>` and optional subtitle
  * `<p>` with a trailing `IconButton size="md"` close, closed by a
  * `--border-strong` hairline; on mobile the header pads its top by the safe-area
  * inset so the title clears a device cutout. The body scrolls.
@@ -113,10 +130,12 @@ export function GlassDialog({
   onClose,
   closeLabel = "Close",
   cutoutAwareClose = false,
+  wide = false,
   children,
 }: GlassDialogProps): ReactElement {
   const isDesktop = useIsDesktop();
   const glass = glassSurfaceStyle();
+  const wideDesktop = isDesktop && wide;
 
   // On a full-bleed mobile overlay whose screen-cutout box is known (a
   // device-screenshot mock-up), lift the close disc up beside the island. The
@@ -138,8 +157,12 @@ export function GlassDialog({
         position: "relative",
         zIndex: 1,
         width: "100%",
-        maxWidth: "min(900px, 90vw)",
-        maxHeight: "85vh",
+        maxWidth: wideDesktop
+          ? `min(${String(WIDE_PANEL_MAX_WIDTH_PX)}px, 90vw)`
+          : "min(900px, 90vw)",
+        maxHeight: wideDesktop
+          ? `calc(100vh - ${token("--space-8")} - ${token("--space-8")})`
+          : "85vh",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
@@ -200,7 +223,11 @@ export function GlassDialog({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: isDesktop ? token("--space-7") : 0,
+        padding: isDesktop
+          ? wideDesktop
+            ? token("--space-8")
+            : token("--space-7")
+          : 0,
       }}
     >
       <GlassBackdrop />
@@ -259,7 +286,7 @@ export function GlassDialog({
             minHeight: 0,
             overflowY: "auto",
             WebkitOverflowScrolling: "touch",
-            padding: token("--space-5"),
+            padding: wideDesktop ? token("--space-6") : token("--space-5"),
           }}
         >
           {children}

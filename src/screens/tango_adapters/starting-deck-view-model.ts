@@ -44,7 +44,6 @@ export function buildStartingDeckView(
     cards.push({
       entryId: entry.entryId,
       card,
-      glossaryText: card.renderedText,
       testId: `starting-deck-modal-card-${entry.entryId}`,
     });
   }

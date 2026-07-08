@@ -108,7 +108,7 @@ function FeaturedSource({
     return (
       <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
         <div style={{ width: 200, flex: "0 0 200px" }}>
-          <CardView card={card} large suppressHoverHelp />
+          <CardView card={card} large />
         </div>
         <div>
           <div style={{ fontSize: "0.78rem", color: "rgba(247, 241, 223, 0.5)" }}>
@@ -364,7 +364,7 @@ export default function TidesDetailView({
             containerProps={{ "aria-label": "Tide cards", style: { flex: "0 0 auto", overflow: "visible" } }}
             renderItem={(entry) => (
               <div style={{ position: "relative" }}>
-                <CardView card={entry.card} suppressHoverHelp />
+                <CardView card={entry.card} />
                 {entry.copies > 1 ? (
                   <span
                     style={{

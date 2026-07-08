@@ -1326,7 +1326,6 @@ export default function CardEditorApp({
                 imageNumber: live.imageNumber,
               }}
               large
-              suppressHoverHelp
               onBoxTopFracChange={live.onBoxTopFracChange}
             />
           )}

@@ -279,64 +279,6 @@ function makeStateWithArtSigns(): QuestState {
   };
 }
 
-function makeStateWithFullDeck(): QuestState {
-  return {
-    ...makeState(),
-    deck: [
-      {
-        entryId: "entry-1",
-        cardNumber: 1,
-        transfiguration: null,
-        isBane: false,
-      },
-    ],
-  };
-}
-
-function makeFullCardDatabase(): Map<number, CardData> {
-  return new Map<number, CardData>([
-    [
-      1,
-      {
-        name: asCardName("Archive Sentry"),
-        id: asCardId("archive-sentry"),
-        cardNumber: 1,
-        cardType: "Character",
-        subtype: "",
-        isStarter: false,
-        energyCost: 3,
-        spark: 1,
-        isFast: false,
-        renderedText: "Hold the line.",
-        imageNumber: 1,
-        artOwned: true,
-      },
-    ],
-  ]);
-}
-
-function mountWithFullDeck(initialSize: "small" | "medium" | "large") {
-  vi.mocked(useQuest).mockReturnValue({
-    state: makeStateWithFullDeck(),
-    mutations: makeMutations(),
-    cardDatabase: makeFullCardDatabase(),
-    questContent: {
-      cardDatabase: new Map(),
-      dreamcallers: [],
-
-      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES,      affiliations: [], guides: [],      atlasConfig: MINIMAL_ATLAS_CONFIG,
-    },
-  });
-  return mount(
-    <DeckViewer
-      isOpen
-      onClose={vi.fn()}
-      cardDatabase={makeFullCardDatabase()}
-      initialSize={initialSize}
-    />,
-  );
-}
-
 describe("DeckViewer", () => {
   it("renders dreamsign artwork in the desktop sidebar, replacing the glyph placeholders", () => {
     vi.mocked(useQuest).mockReturnValue({
@@ -424,63 +366,6 @@ describe("DeckViewer", () => {
     expect(container.querySelector('img[alt="tide_alpha"]')).toBeNull();
     expect(container.querySelector('img[alt="tide_beta"]')).toBeNull();
     expect(container.querySelector('img[alt="tide_gamma"]')).toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("renders deck cards inside an in-place hover-zoom slot rather than a separate floating preview", () => {
-    const { container, root } = mountWithFullDeck("small");
-
-    // The card grows in place on hover now: the deck row testid lives on the
-    // HoverZoomCard slot, and hovering must never portal the old separate
-    // `*-hover-card-*` preview into the document body.
-    const row = container.querySelector(
-      "[data-testid='deck-viewer-row-entry-1']",
-    );
-    expect(row).not.toBeNull();
-    expect(row?.getAttribute("data-hover-zoomed")).toBeNull();
-
-    act(() => {
-      row?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
-    });
-    act(() => {
-      vi.advanceTimersByTime(500);
-    });
-
-    expect(
-      document.body.querySelectorAll(
-        "[data-testid='deck-viewer-row-hover-card-entry-1']",
-      ),
-    ).toHaveLength(0);
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("does not grow large-size deck cards, which already read at full legibility", () => {
-    const { container, root } = mountWithFullDeck("large");
-
-    const row = container.querySelector(
-      "[data-testid='deck-viewer-row-entry-1']",
-    );
-    expect(row).not.toBeNull();
-
-    // Large tiles opt out of the zoom wrapper entirely, so hovering can never
-    // flip them into the zoomed state.
-    act(() => {
-      row?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
-    });
-    act(() => {
-      vi.advanceTimersByTime(500);
-    });
-
-    expect(row?.getAttribute("data-hover-zoomed")).toBeNull();
-    expect(
-      document.body.querySelectorAll("[data-hover-zoom-overlay]"),
-    ).toHaveLength(0);
 
     act(() => {
       root.unmount();

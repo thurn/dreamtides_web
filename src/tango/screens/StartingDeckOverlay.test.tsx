@@ -63,13 +63,11 @@ function makeView(): StartingDeckView {
       {
         entryId: "entry-1",
         card: makeCard(1, "Archive Sentry", "Hold the line."),
-        glossaryText: "Hold the line.",
         testId: "starting-deck-modal-card-entry-1",
       },
       {
         entryId: "entry-2",
         card: makeCard(2, "Glimpse of What Was", "Draw a card."),
-        glossaryText: "Draw a card.",
         testId: "starting-deck-modal-card-entry-2",
       },
     ],
@@ -95,9 +93,14 @@ function panelOf(container: HTMLElement): HTMLElement | null {
   return (header?.parentElement as HTMLElement | null) ?? null;
 }
 
-function setDesktopViewport(isDesktop: boolean): void {
+function setDesktopViewport(isDesktop: boolean, roomy = false): void {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-    matches: isDesktop && query.includes("min-width"),
+    // The roomy-desktop query is the only one that carries a `min-height`
+    // clause; a plain desktop matches the `min-width`-only `useIsDesktop` query
+    // but not the roomy one.
+    matches: query.includes("min-height")
+      ? isDesktop && roomy
+      : isDesktop && query.includes("min-width"),
     media: query,
     onchange: null,
     addEventListener: vi.fn(),
@@ -198,6 +201,25 @@ describe("StartingDeckOverlay", () => {
     expect(panel?.style.maxWidth).toContain("min(");
     expect(panel?.style.maxHeight).toBe("85vh");
     expect(panel?.style.height).toBe("");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("widens the panel and drops the 85vh cap on a roomy desktop", () => {
+    // A roomy desktop (wide AND tall) opts the dialog into its wider panel and
+    // trades the 85vh height cap for explicit viewport padding so the enlarged
+    // starter-deck grid fits in two rows without internal scroll.
+    setDesktopViewport(true, true);
+    const { container, root } = mount(
+      <StartingDeckOverlay isOpen view={makeView()} onClose={vi.fn()} />,
+    );
+
+    const panel = panelOf(container);
+    expect(panel?.style.maxWidth).toContain("min(");
+    expect(panel?.style.maxHeight).toContain("100vh");
+    expect(panel?.style.maxHeight).not.toBe("85vh");
 
     act(() => {
       root.unmount();
