@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
 import type {
+  BattleInit,
   BattleMutableState,
   BattleSide,
 } from "../../battle/types";
@@ -133,8 +134,26 @@ function makeBoard(
   } as BattleMutableState;
 }
 
-function makeBattle(board = makeBoard()): BattleFoldState {
-  return { board, effectQueue: [], pendingPrompt: null };
+// A minimal deterministic BattleInit carrying the win / turn-limit thresholds
+// the defeat-reason classification reads. Cast because the full BattleInit shape
+// is irrelevant to these cases (real construction is the Task 26 provider).
+function makeInit(overrides: Partial<BattleInit> = {}): BattleInit {
+  return {
+    battleId: "battle-xyz",
+    siteId: SITE_ID,
+    dreamscapeId: null,
+    scoreToWin: 30,
+    turnLimit: 12,
+    dreamwellDeck: [],
+    ...overrides,
+  } as unknown as BattleInit;
+}
+
+function makeBattle(
+  board = makeBoard(),
+  init = makeInit(),
+): BattleFoldState {
+  return { init, board, effectQueue: [], pendingPrompt: null };
 }
 
 /**
@@ -151,11 +170,14 @@ const fakeProvider: BattleInitProvider = {
       playerScore: Math.floor(roll * 1000),
       enemyScore: 0,
     });
-    // Timestamp threads through so the reducer's ctx.timestamp is honored
-    // rather than a live clock.
-    board.cardInstances = {};
+    // The forwarded timestamp threads through so the reducer's ctx.timestamp is
+    // honored rather than a live clock.
+    const init = makeInit({
+      battleId: `battle-${siteId}`,
+      siteId,
+    });
     void timestamp;
-    return { board, effectQueue: [], pendingPrompt: null };
+    return { init, board, effectQueue: [], pendingPrompt: null };
   },
 };
 
@@ -220,10 +242,13 @@ describe("BEGIN_BATTLE", () => {
     // Same quest state + same seq → hash-identical battle both times (the
     // ensureBattleSession race, eliminated).
     expect(hashBattle(first.state.battle)).toBe(hashBattle(second.state.battle));
-    // A fresh battle starts with an empty effect queue and no open prompt.
+    // A fresh battle carries the immutable init and starts with an empty effect
+    // queue and no open prompt.
     expect(first.state.battle?.effectQueue).toEqual([]);
     expect(first.state.battle?.pendingPrompt).toBeNull();
     expect(first.state.battle?.board).toBeTypeOf("object");
+    expect(first.state.battle?.init).toBeTypeOf("object");
+    expect(first.state.battle?.init.siteId).toBe(SITE_ID);
   });
 
   it("bounces a second BEGIN_BATTLE when a battle is already in progress", () => {
@@ -331,6 +356,36 @@ describe("END_BATTLE defeat", () => {
     const state = inBattleState({}, makeBattle(board));
     const result = reduce(state, "END_BATTLE", { result: "defeat" });
     expect(result.state.quest.failureSummary?.reason).toBe("forced_result");
+  });
+
+  it("records a turn-limit reason when the turn count reached the limit below the score target", () => {
+    const init = makeInit({ turnLimit: 10, scoreToWin: 30 });
+    // Turn count at/over the limit, player score short of the target, no forced
+    // result → turn_limit_reached (not score_target_reached).
+    const board = makeBoard({
+      turnNumber: 10,
+      result: "defeat",
+      forcedResult: null,
+      playerScore: 12,
+      enemyScore: 8,
+    });
+    const state = inBattleState({}, makeBattle(board, init));
+    const result = reduce(state, "END_BATTLE", { result: "defeat" });
+    expect(result.state.quest.failureSummary?.reason).toBe("turn_limit_reached");
+  });
+
+  it("records a score-target reason when the score target was reached before the turn limit", () => {
+    const init = makeInit({ turnLimit: 10, scoreToWin: 30 });
+    const board = makeBoard({
+      turnNumber: 4,
+      result: "defeat",
+      forcedResult: null,
+      playerScore: 5,
+      enemyScore: 30,
+    });
+    const state = inBattleState({}, makeBattle(board, init));
+    const result = reduce(state, "END_BATTLE", { result: "defeat" });
+    expect(result.state.quest.failureSummary?.reason).toBe("score_target_reached");
   });
 });
 

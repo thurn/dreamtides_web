@@ -11,7 +11,11 @@
 // live scripts (code) are re-resolved from the tables at fold time via
 // `resolveScript`; state carries ids and indices, never steps.
 
-import type { BattleMutableState, BattleSide } from "../../battle/types";
+import type {
+  BattleInit,
+  BattleMutableState,
+  BattleSide,
+} from "../../battle/types";
 import { selectBattleCardEffectScript } from "./battle-card-effects-table";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
 import type { ActivePrompt } from "./effect-runner-core";
@@ -68,11 +72,28 @@ export interface PendingPrompt {
 }
 
 /**
- * The in-battle fold slice. `board` is today's `BattleMutableState`, relocated;
- * `effectQueue` is the FIFO of pending automation runs; `pendingPrompt` is the
- * single open prompt (or null). All three are plain data.
+ * The in-battle fold slice.
+ *
+ * - `init` is the IMMUTABLE per-battle metadata (`BattleInit`): `scoreToWin`,
+ *   `turnLimit`, the shared `dreamwellDeck` array, `siteId`, `dreamscapeId`,
+ *   `isFinalBoss`, and the enemy / dreamcaller / dreamsign summaries. The
+ *   mutable `board` carries only INDICES into it (`dreamwellDeckIndex` /
+ *   `dreamwellCardIndex`), so the deck array, the win/turn-limit thresholds,
+ *   and the site/dreamscape identity are unreachable without it. Keeping it on
+ *   the fold slice is what lets the driver key a dreamwell-reveal script by the
+ *   card UUID at `dreamwellDeck[dreamwellDeckIndex]` (Task 20) and lets a
+ *   defeat classify its `QuestFailureReason`. `BattleInit` is pure JSON
+ *   (numbers, strings, frozen definition arrays, a `DreamAtlas`) with no
+ *   closures, so it round-trips through the sync hash byte-for-byte like the
+ *   rest of the slice. It never changes after `BEGIN_BATTLE`.
+ * - `board` is today's `BattleMutableState`, relocated.
+ * - `effectQueue` is the FIFO of pending automation runs.
+ * - `pendingPrompt` is the single open prompt (or null).
+ *
+ * All four are plain data.
  */
 export interface BattleFoldState {
+  init: BattleInit;
   board: BattleMutableState;
   effectQueue: EffectRun[];
   pendingPrompt: PendingPrompt | null;

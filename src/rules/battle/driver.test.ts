@@ -261,8 +261,21 @@ function makeBoard(): BattleMutableState {
   } as BattleMutableState;
 }
 
+// A minimal deterministic BattleInit. The driver never reads init fields — it
+// only carries the value across advance/resolve — so a small pure-JSON fake is
+// enough to prove preservation; it is cast because the full shape is irrelevant
+// here (init construction is BEGIN_BATTLE's concern, tested in battle-events).
+const TEST_INIT = {
+  battleId: "test-battle",
+  siteId: "site-1",
+  dreamscapeId: null,
+  scoreToWin: 30,
+  turnLimit: 12,
+  dreamwellDeck: [],
+} as unknown as BattleFoldState["init"];
+
 function foldState(runs: EffectRun[], board = makeBoard()): BattleFoldState {
-  return { board, effectQueue: runs, pendingPrompt: null };
+  return { init: TEST_INIT, board, effectQueue: runs, pendingPrompt: null };
 }
 
 // Drive an interactive script to completion, auto-answering every prompt the
@@ -383,6 +396,21 @@ describe("resolvePendingPrompt — resume", () => {
     const before = hashState(state);
     const result = resolvePendingPrompt(state, { kind: "foresee" }, ctx({ seq: 2 }));
     expect(hashState(result)).toBe(before);
+  });
+
+  it("preserves the immutable init across advance and resolve", () => {
+    const ref = topLevelPickCardsDreamwellRef();
+    const parked = advanceEffectQueue(foldState([newEffectRun(ref, "player")]), ctx({ seq: 9 }));
+    // advanceEffectQueue carries init through unchanged.
+    expect(parked.init).toBe(TEST_INIT);
+
+    const resumed = resolvePendingPrompt(parked, autoResolve(parked.pendingPrompt!.options), ctx({ seq: 10 }));
+    // resolvePendingPrompt (which threads through runQueue) preserves it too.
+    expect(resumed.init).toBe(TEST_INIT);
+
+    // An edit-only advance that drains without parking also preserves it.
+    const drained = advanceEffectQueue(foldState([newEffectRun(editOnlyDreamwellRef(), "player")]), ctx({ seq: 3 }));
+    expect(drained.init).toBe(TEST_INIT);
   });
 });
 

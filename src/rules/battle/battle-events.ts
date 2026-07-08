@@ -22,17 +22,17 @@
 // Battle init reads TOML-sourced card / deck / dreamcaller data that only loads
 // asynchronously, which the pure reducer cannot statically reach, so its
 // construction is delegated to the injectable {@link BattleInitProvider} seam
-// (mirroring `SiteContentProvider`): the reducer hands the provider a
-// deterministic `(drawIndex) => number` rng derived from `ctx.rng` plus
-// `ctx.timestamp`, so two clients folding the same `BEGIN_BATTLE` build a
-// byte-identical battle. `END_BATTLE` needs no async content — its bookkeeping
-// is pure quest-state math and lives entirely here.
+// (mirroring `SiteContentProvider`): the reducer forwards the provider
+// `ctx.rng` (the deterministic `(drawIndex) => number` per-event stream) and
+// `ctx.timestamp` unchanged, so two clients folding the same `BEGIN_BATTLE`
+// build a byte-identical battle. `END_BATTLE` needs no async content — its
+// bookkeeping is pure quest-state math and lives entirely here.
 //
 // Cards / dreamcallers are keyed by UUID and deck entries by entry-id — never
 // by name (AGENTS.md).
 
 import type { EventContext } from "../../eventlog/types";
-import type { BattleMutableState } from "../../battle/types";
+import type { BattleInit, BattleMutableState } from "../../battle/types";
 import type {
   BattleModifier,
   QuestFailureBattleResult,
@@ -51,10 +51,11 @@ import type { BattleFoldState } from "./fold";
 /**
  * The deterministic construction `BEGIN_BATTLE` needs to turn quest state into
  * a fresh {@link BattleFoldState}. The reducer resolves double-begin itself,
- * then delegates the board / dreamcaller / opponent-deck construction — which
- * reads async-loaded card, dreamcaller, and dreamwell data — to this provider,
- * handing it a deterministic rng derived from `ctx.rng` and `ctx.timestamp` so
- * two clients folding the same event produce byte-identical battles.
+ * then delegates the immutable `init` (`BattleInit`) plus board / dreamcaller /
+ * opponent-deck construction — which reads async-loaded card, dreamcaller, and
+ * dreamwell data — to this provider, forwarding it `ctx.rng` (the per-event
+ * `(drawIndex) => number` stream) and `ctx.timestamp` unchanged so two clients
+ * folding the same event produce byte-identical battles.
  *
  * SEAM (Task 26): real content registration is deferred to the integration task
  * that wires the reducer into src/coop/ and relocates the legacy
@@ -62,13 +63,21 @@ import type { BattleFoldState } from "./fold";
  * drawing every card from the injected `rng` instead of `Math.random` and every
  * timestamp from `timestamp` instead of `new Date()`. Until a provider is
  * registered, `BEGIN_BATTLE` bounces (a recorded no-op, never a throw).
+ *
+ * DETERMINISM INVARIANT (Task 26 must enforce): like `SiteContentProvider`,
+ * this provider must be registered IDENTICALLY on every client before
+ * `BEGIN_BATTLE` is enabled. If one client has a provider and another does not
+ * — or they build different init from the same rng — one client APPLIES the
+ * battle while the other BOUNCES, diverging their folds. Registration is a
+ * global fact of the deployed build, not per-client state.
  */
 export interface BattleInitProvider {
   /**
    * Build the initial {@link BattleFoldState} for `siteId` deterministically
    * from `(quest, rng, timestamp)`, or `null` to bounce (e.g. the site is not a
    * battle, or its content is unavailable). Must not mutate `quest`. The result
-   * must set `effectQueue: []` and `pendingPrompt: null`.
+   * must populate the immutable `init` (`BattleInit`) and set `effectQueue: []`
+   * and `pendingPrompt: null`.
    */
   beginBattle(input: {
     quest: QuestState;
@@ -162,7 +171,7 @@ export function endBattle(
     return applyVictory(state);
   }
   if (result === "defeat") {
-    return applyDefeat(state, state.battle.board);
+    return applyDefeat(state, state.battle);
   }
   return null;
 }
@@ -221,13 +230,13 @@ function applyVictory(state: FoldState): FoldState {
  * {@link QuestFailureSummary} from the battle board + quest slice, route to the
  * `questFailed` screen, and tear down the battle slice.
  */
-function applyDefeat(state: FoldState, board: BattleMutableState): FoldState {
+function applyDefeat(state: FoldState, battle: BattleFoldState): FoldState {
   const quest = state.quest;
   return {
     ...state,
     quest: {
       ...quest,
-      failureSummary: deriveFailureSummary(board, quest),
+      failureSummary: deriveFailureSummary(battle.init, battle.board, quest),
       screen: { type: "questFailed" },
     },
     battle: null,
@@ -235,26 +244,41 @@ function applyDefeat(state: FoldState, board: BattleMutableState): FoldState {
 }
 
 /**
- * Derive the failure summary from the terminal battle board and the quest
- * slice. `battleId`, `turnNumber`, and both scores come from the board; the
- * `siteId` / `dreamscapeIdOrNone` come from the active quest position.
+ * Derive the failure summary from the immutable battle `init`, the terminal
+ * `board`, and the quest slice. `battleId`, `turnNumber`, and both scores come
+ * from the board; `dreamscapeIdOrNone` comes from the active quest position;
+ * the win / turn-limit thresholds come from `init`.
+ *
+ * The failure `reason` mirrors the battle result evaluation:
+ *   - a `forcedResult` (FORCE_RESULT / SKIP_TO_REWARDS) → `forced_result`;
+ *   - otherwise a turn count at/over `init.turnLimit` with the player still
+ *     short of `init.scoreToWin` → `turn_limit_reached`;
+ *   - otherwise `score_target_reached`.
  *
  * SEAM (Task 27, UI): `siteLabel` is a display string that needs async site
- * content the pure reducer cannot reach, so it defaults to the `siteId`; the UI
- * resolves the human-facing label when it renders the `questFailed` screen. The
- * failure `reason` is inferred structurally (`forcedResult` present →
- * `forced_result`, otherwise `score_target_reached`) because the fold board
- * does not carry the battle's turn limit.
+ * content the pure reducer cannot reach (it is not on `BattleInit`), so it
+ * defaults to the `siteId`; the UI resolves the human-facing label when it
+ * renders the `questFailed` screen.
  */
 function deriveFailureSummary(
+  init: BattleInit,
   board: BattleMutableState,
   quest: QuestState,
 ): QuestFailureSummary {
   const result: QuestFailureBattleResult =
     board.result === "draw" ? "draw" : "defeat";
-  const reason: QuestFailureReason =
-    board.forcedResult !== null ? "forced_result" : "score_target_reached";
-  const siteId = quest.activeSiteId ?? "";
+  let reason: QuestFailureReason;
+  if (board.forcedResult !== null) {
+    reason = "forced_result";
+  } else if (
+    board.turnNumber >= init.turnLimit &&
+    board.sides.player.score < init.scoreToWin
+  ) {
+    reason = "turn_limit_reached";
+  } else {
+    reason = "score_target_reached";
+  }
+  const siteId = quest.activeSiteId ?? init.siteId;
   return {
     battleId: board.battleId,
     result,

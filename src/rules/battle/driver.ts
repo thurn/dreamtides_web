@@ -17,7 +17,11 @@
 // is required; a top-level `stepIndex` could not address them.
 
 import type { BattleDebugEdit } from "../../battle/debug/commands";
-import type { BattleEngineEmissionContext, BattleMutableState } from "../../battle/types";
+import type {
+  BattleEngineEmissionContext,
+  BattleInit,
+  BattleMutableState,
+} from "../../battle/types";
 import type { EventContext } from "../../eventlog/types";
 import { applyDebugEdit } from "./apply-debug-edit";
 import { applyPromptResolution, planNextEffectStep } from "./effect-runner-core";
@@ -169,6 +173,7 @@ function applyEdits(
  * its resolution edits). Returns a fresh `BattleFoldState`.
  */
 function runQueue(
+  init: BattleInit,
   board: BattleMutableState,
   queue: EffectRun[],
   seq: number,
@@ -205,6 +210,7 @@ function runQueue(
 
     // plan.type === "prompt" — park with the parked cursor and materialized options.
     return {
+      init,
       board: currentBoard,
       effectQueue: currentQueue,
       pendingPrompt: {
@@ -216,7 +222,12 @@ function runQueue(
     };
   }
 
-  return { board: currentBoard, effectQueue: currentQueue, pendingPrompt: null };
+  return {
+    init,
+    board: currentBoard,
+    effectQueue: currentQueue,
+    pendingPrompt: null,
+  };
 }
 
 /** Adapts `ctx.rng` (keyed by seq + drawIndex) into the `() => number` stream
@@ -238,6 +249,7 @@ export function advanceEffectQueue(
 ): BattleFoldState {
   if (battle.pendingPrompt !== null) return battle;
   return runQueue(
+    battle.init,
     battle.board,
     battle.effectQueue,
     ctx.seq,
@@ -273,7 +285,14 @@ export function resolvePendingPrompt(
   // prompt defensively and resume; the reducer treats an unmatched resolve as a
   // bounce before reaching here in production.
   if (promptStep === undefined || promptStep.kind !== "prompt") {
-    return runQueue(battle.board, battle.effectQueue, ctx.seq, random, nowMs);
+    return runQueue(
+      battle.init,
+      battle.board,
+      battle.effectQueue,
+      ctx.seq,
+      random,
+      nowMs,
+    );
   }
 
   const stepCtx: StepContext =
@@ -297,5 +316,5 @@ export function resolvePendingPrompt(
       ? battle.effectQueue.slice(1)
       : [{ ...run, cursor: nextCursor }, ...battle.effectQueue.slice(1)];
 
-  return runQueue(board, queue, ctx.seq, random, nowMs);
+  return runQueue(battle.init, board, queue, ctx.seq, random, nowMs);
 }
