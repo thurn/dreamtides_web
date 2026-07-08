@@ -18,9 +18,10 @@ import type { QuestState } from "../types/quest";
  * battle fold state in `src/rules/battle/fold.ts` and will replace/extend
  * `BattleFoldState` (and this `PendingPrompt` shape) with the real prompt
  * model. The root reducer only depends on `pendingPrompt.promptId` today, so
- * any richer shape Task 18 introduces must keep a `promptId: string` reachable
- * at `state.battle.pendingPrompt.promptId` (or update the CAS policy's rule 2
- * / rule 4 accessors accordingly).
+ * any richer shape Task 18 introduces must keep a numeric `promptId` (the seq
+ * of the event that opened the prompt) reachable at
+ * `state.battle.pendingPrompt.promptId` — set it to `ctx.seq` when opening the
+ * prompt — or update the CAS policy's rule 2 / rule 4 accessors accordingly.
  */
 export interface PendingPrompt {
   /**
