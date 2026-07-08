@@ -52,6 +52,15 @@ export interface AtlasBuildContext {
 
 export interface AtlasGenerationOptions {
   logEvents?: boolean;
+  /**
+   * Deterministic `[0, 1)` random source for the whole generation. When omitted
+   * the generator draws from `Math.random` (the legacy/UI path). The coop
+   * event-sourcing lifecycle provider passes a rng seeded from the run seed so
+   * every client folding `START_QUEST` builds a byte-identical atlas (the
+   * determinism rail). Set for the duration of a `generateInitialAtlas` call and
+   * restored afterward, so other atlas mutators keep their own default.
+   */
+  rng?: () => number;
 }
 
 /** Horizontal spacing between adjacent layers in atlas-space pixels. */
@@ -61,6 +70,15 @@ const LAYER_Y_SPACING = 140;
 
 let nodeIdCounter = 0;
 let siteIdCounter = 0;
+
+/**
+ * The active random source for the module's generation helpers. Defaults to
+ * `Math.random`; {@link generateInitialAtlas} overrides it with a seeded stream
+ * for the duration of a single call and restores it afterward. All internal
+ * draws (`randomInt`, `weightedPick`, `triangularInt`, dreamsign placement) go
+ * through this so seeding one entry point makes the whole build deterministic.
+ */
+let atlasRandom: () => number = Math.random;
 
 function nextNodeId(): string {
   nodeIdCounter += 1;
@@ -128,7 +146,7 @@ export function resetAtlasGenerator(): void {
 }
 
 function randomInt(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(atlasRandom() * (max - min + 1)) + min;
 }
 
 /** Weighted random selection from an array of [item, weight] pairs. */
@@ -137,7 +155,7 @@ function weightedPick<T>(items: Array<[T, number]>): T {
   if (total <= 0) {
     return items[0][0];
   }
-  let roll = Math.random() * total;
+  let roll = atlasRandom() * total;
   for (const [item, weight] of items) {
     roll -= weight;
     if (roll <= 0) {
@@ -156,7 +174,7 @@ function triangularInt(min: number, max: number, mode: number): number {
     return min;
   }
   const clampedMode = Math.min(Math.max(mode, min), max);
-  const u = Math.random();
+  const u = atlasRandom();
   const range = max - min;
   const split = (clampedMode - min) / range;
   let value: number;
@@ -866,7 +884,7 @@ function placeKnownDreamsigns(
     state.remainingDreamsignIds.length > 0 &&
     remainingCandidates.length > 0
   ) {
-    if (Math.random() > cfg.placementProbability) {
+    if (atlasRandom() > cfg.placementProbability) {
       break;
     }
     const chosen = weightedPick(remainingCandidates);
@@ -907,6 +925,24 @@ function placeKnownDreamsigns(
  * the starter and boss which are assigned eagerly.
  */
 export function generateInitialAtlas(
+  completionLevel: number,
+  context: SiteGenerationContext,
+  build: AtlasBuildContext,
+  options: AtlasGenerationOptions = {},
+): DreamAtlas {
+  // Seed the module's generation helpers for the duration of this call, then
+  // restore, so a caller-supplied `options.rng` makes the whole build
+  // deterministic while other atlas mutators keep their own `Math.random`.
+  const previousAtlasRandom = atlasRandom;
+  atlasRandom = options.rng ?? Math.random;
+  try {
+    return generateInitialAtlasInternal(completionLevel, context, build, options);
+  } finally {
+    atlasRandom = previousAtlasRandom;
+  }
+}
+
+function generateInitialAtlasInternal(
   completionLevel: number,
   context: SiteGenerationContext,
   build: AtlasBuildContext,

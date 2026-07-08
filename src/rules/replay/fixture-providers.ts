@@ -1,10 +1,14 @@
 // Deterministic content providers for the synthetic replay fixtures.
 //
 // The reducer's five content seams (quest lifecycle, deck, draft, site, battle
-// init) BOUNCE every provider-backed event until a provider is registered; the
-// REAL generators are deferred to the Stage D integration task. So this module
-// registers minimal DETERMINISTIC fakes that let the fixture event logs fold to
-// a stable, reproducible state.
+// init) BOUNCE every provider-backed event until a provider is registered. The
+// REAL generators register through `src/coop/providers/registerGameProviders`,
+// but the permanent replay regression net deliberately uses these minimal
+// DETERMINISTIC fakes instead: baking real-content hashes would couple the
+// fixtures to the TOML card/dreamcaller/atlas data, which AGENTS.md forbids
+// (tests must not break on a data edit). The real providers' determinism is
+// covered separately by `src/coop/providers/register-game-providers.test.ts`.
+// These fakes let the fixture event logs fold to a stable, reproducible state.
 //
 // THE SAME module is imported by BOTH the generator script
 // (`scripts/regenerate-replay-fixtures.mjs`) and the replay test

@@ -28,6 +28,12 @@ export interface RewardGenerationOptions {
    * recreated from this list so a Reward Site can still grant a Dreamsign.
    */
   regenerationPoolIds?: readonly string[];
+  /**
+   * Deterministic `[0, 1)` random source. Defaults to `Math.random` (the
+   * legacy/UI path); the coop site provider passes a stream derived from
+   * `ctx.rng` so two clients folding the same `OPEN_SITE` roll the same reward.
+   */
+  rng?: () => number;
 }
 
 export interface RewardGenerationResult {
@@ -40,6 +46,7 @@ export function generateRewardSiteData({
   dreamsignTemplates,
   remainingDreamsignPoolIds,
   regenerationPoolIds,
+  rng = Math.random,
 }: RewardGenerationOptions): RewardGenerationResult {
   let availableIds = readDreamsignPool(
     remainingDreamsignPoolIds,
@@ -59,7 +66,7 @@ export function generateRewardSiteData({
   const dreamsignTemplate =
     candidates.length === 0
       ? null
-      : candidates[Math.floor(Math.random() * candidates.length)];
+      : candidates[Math.floor(rng() * candidates.length)];
 
   if (dreamsignTemplate !== null) {
     return {
@@ -84,13 +91,13 @@ export function generateRewardSiteData({
   return {
     reward: {
       rewardType: "essence",
-      essenceAmount: randomInt(150, 350),
+      essenceAmount: randomInt(rng, 150, 350),
     },
     remainingDreamsignPoolIds: [...availableIds],
     spentDreamsignPoolIds: [],
   };
 }
 
-function randomInt(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+function randomInt(rng: () => number, min: number, max: number): number {
+  return Math.floor(rng() * (max - min + 1)) + min;
 }

@@ -38,10 +38,14 @@ function canonicalizeDreamsignPool(
   };
 }
 
-function shufflePick<T>(items: readonly T[], count: number): T[] {
+function shufflePick<T>(
+  items: readonly T[],
+  count: number,
+  rng: () => number,
+): T[] {
   const pool = [...items];
   for (let index = pool.length - 1; index > 0; index -= 1) {
-    const swapIndex = Math.floor(Math.random() * (index + 1));
+    const swapIndex = Math.floor(rng() * (index + 1));
     [pool[index], pool[swapIndex]] = [pool[swapIndex], pool[index]];
   }
   return pool.slice(0, count);
@@ -67,6 +71,7 @@ export function drawDreamsignOptions(
   templates: readonly DreamsignTemplate[],
   count: number,
   regenerationPoolIds?: readonly string[],
+  rng: () => number = Math.random,
 ): DreamsignPoolDraw {
   const { availableIds, templatesById } = canonicalizeDreamsignPool(
     remainingDreamsignPool,
@@ -87,6 +92,7 @@ export function drawDreamsignOptions(
   const offeredIds = shufflePick(
     workingIds,
     Math.min(count, workingIds.length),
+    rng,
   );
 
   return {

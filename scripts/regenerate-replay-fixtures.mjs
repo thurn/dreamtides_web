@@ -11,11 +11,13 @@
 // Each fixture is a checked-in `{ providerSet, genesis, events, finalHash }`.
 // These are SYNTHETIC seeds: they use the DETERMINISTIC fixture providers
 // (src/rules/replay/fixture-providers.ts, shared with replay.test.ts), NOT the
-// real content generators (deferred to the Stage D integration task). When the
-// real generators are registered — or when an intentional reducer / rules-table
-// change moves the hashes — re-run this script to re-stamp `finalHash`. Per
-// AGENTS.md the fixtures assert on HASHES only, never on TOML card content: the
-// card scripts are selected from the live effects table by STRUCTURE, and card
+// real content generators (which live in src/coop/providers/). The fixtures stay
+// synthetic on purpose: real-content hashes would couple this regression net to
+// the TOML data, which AGENTS.md forbids. When an intentional reducer /
+// rules-table change moves the hashes, re-run this script to re-stamp
+// `finalHash`. Per AGENTS.md the fixtures assert on HASHES only, never on TOML
+// card content: the card scripts are selected from the live effects table by
+// STRUCTURE, and card
 // definitions in the fixtures are synthetic, so a TOML edit does not move them.
 //
 // Determinism check: run twice; the two runs must produce byte-identical files.

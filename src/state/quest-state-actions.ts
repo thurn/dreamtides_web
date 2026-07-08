@@ -427,6 +427,7 @@ export function startQuestFromDreamcaller({
   dreamcaller,
   questContent,
   seedOverride,
+  atlasRng,
 }: {
   prev: QuestState;
   dreamcaller: DreamcallerContent;
@@ -438,6 +439,14 @@ export function startQuestFromDreamcaller({
    * omitted, a fresh seed is generated via {@link generateQuestSeed}.
    */
   seedOverride?: string;
+  /**
+   * Optional deterministic `[0, 1)` random source for atlas generation. The
+   * coop event-sourcing lifecycle provider passes a stream seeded from the run
+   * seed so two clients folding the same `START_QUEST` build a byte-identical
+   * atlas. Omitted by the legacy/UI path, which lets the atlas generator draw
+   * from `Math.random` (the sanctioned interim).
+   */
+  atlasRng?: () => number;
 }): QuestState {
   const seed = seedOverride ?? generateQuestSeed();
   const poolContext = questContent.poolContext;
@@ -471,7 +480,7 @@ export function startQuestFromDreamcaller({
       dreamsignPoolIds: resolvedPackage.dreamsignPoolIds,
       apollyonIncarnations: questContent.apollyonIncarnations,
     },
-    { logEvents: false },
+    { logEvents: false, ...(atlasRng === undefined ? {} : { rng: atlasRng }) },
   );
   const firstNode = atlas.nodes[atlas.startingNodeId];
   // Known dreamsigns placed on the atlas are drawn from (and removed from) the

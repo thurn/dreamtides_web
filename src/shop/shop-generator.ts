@@ -85,6 +85,13 @@ export interface ShopGenerationOptions {
    * the reconstruction log. Absent in a neutral dreamscape.
    */
   affiliationId?: string;
+  /**
+   * Deterministic `[0, 1)` random source for the stock draw, discounts, and the
+   * Dreamsign pull. Defaults to `Math.random` (the legacy/UI path); the coop
+   * site provider passes a stream derived from `ctx.rng` so two clients folding
+   * the same `OPEN_SITE` / `REROLL_SHOP` roll a byte-identical inventory.
+   */
+  rng?: () => number;
 }
 
 export interface ShopInventoryResult {
@@ -280,6 +287,7 @@ export function generateShopInventory(
     dreamsignCount = STANDARD_DREAMSIGN_COUNT,
     affiliationNumberWeights,
     affiliationId,
+    rng = Math.random,
   } = options;
 
   const isSpecialty = starterDecklistCardNumbers.length > 0;
@@ -310,7 +318,7 @@ export function generateShopInventory(
     // without touching the draft multiset. ---
     const shuffled = [...starterDecklistCardNumbers];
     for (let i = shuffled.length - 1; i > 0; i -= 1) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = Math.floor(rng() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
     const drawnCardNumbers = shuffled.slice(0, cardCount);
@@ -342,10 +350,10 @@ export function generateShopInventory(
       cardCount,
       undefined,
       affiliationNumberWeights,
-      // Explicit randomness source: shop stock is rolled outside the pure quest
-      // reducer, so it keeps its non-deterministic `Math.random` draw (rather
-      // than the source being hidden inside the draft engine).
-      Math.random,
+      // Explicit randomness source threaded from the caller: the UI path passes
+      // `Math.random`, while the coop site provider passes a `ctx.rng`-derived
+      // stream so the stock draw is deterministic per event.
+      rng,
     );
     cardSource = "draft_multiset";
     drawnCardCount = drawnCardNumbers.length;
@@ -385,6 +393,7 @@ export function generateShopInventory(
       dreamsignTemplates,
       dreamsignCount,
       dreamsignRegenerationPoolIds,
+      rng,
     );
     for (const dreamsign of draw.offeredDreamsigns) {
       slots.push({
@@ -403,11 +412,11 @@ export function generateShopInventory(
   }
 
   // --- Discounts: 1-2 random slots between 30% and 90% off. ---
-  const discountCount = Math.random() < 0.5 ? 1 : 2;
-  const indices = slots.map((_, index) => index).sort(() => Math.random() - 0.5);
+  const discountCount = rng() < 0.5 ? 1 : 2;
+  const indices = slots.map((_, index) => index).sort(() => rng() - 0.5);
   for (let d = 0; d < discountCount && d < indices.length; d += 1) {
     const idx = indices[d];
-    const discount = 30 + Math.floor(Math.random() * 7) * 10;
+    const discount = 30 + Math.floor(rng() * 7) * 10;
     slots[idx] = { ...slots[idx], discountPercent: discount };
   }
 
