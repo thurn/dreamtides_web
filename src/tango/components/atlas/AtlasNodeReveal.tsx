@@ -6,12 +6,11 @@
 // click, or Enter/Space) enters its dreamscape; a deliberate hold-to-read never
 // navigates.
 //
-// The reveal renders through the design system's InfoCard, cut down for mobile:
-// a full-bleed scene-art hero with the resident guide's name and the home-site
-// bonus as the glass text card laid on top of it. Desktop uses the large
-// InfoCard `atlasReveal` variant plus a companion standard site InfoCard. A
-// node carrying a pre-revealed known dreamsign shows its own companion object
-// card.
+// The reveal renders through the design system's InfoCard. Mobile uses a
+// compact full-bleed scene-art hero plus the same supplemental site and
+// affiliation card column as desktop; desktop uses the large InfoCard
+// `atlasReveal` variant for the main card. A node carrying a pre-revealed known
+// dreamsign shows its own companion object card.
 //
 // It routes through InfoCard's `usePressReveal` + `anchorRect` + `PressPopover`,
 // so timing, placement, and the on-screen clamp match every other Tango reveal;
@@ -228,10 +227,11 @@ function AtlasAffiliationInfoCard({
 /**
  * Renders a node's reveal: the main card, and — when the node carries a
  * pre-revealed known dreamsign — its own companion dreamsign card beside it.
- * `layout` is `"row"` on mobile (the scaled-down companion pair sits side by
- * side) or `"desktop"` on desktop (the standard site InfoCard sits beside the
- * large atlas card, while any known-dreamsign card sits underneath). A pair with
- * variable copy lengths gets natural height with cross-axis centering, per the
+ * `layout` is `"row"` on mobile (the compact main card sits beside the standard
+ * site / affiliation card column) or `"desktop"` on desktop (the large atlas
+ * card sits beside that same supplemental column). A node with only a
+ * known-dreamsign companion keeps the compact row pairing. A pair with variable
+ * copy lengths gets natural height with cross-axis centering, per the
  * variable-content-siblings rule.
  *
  * On desktop a revealed node's main card is the large InfoCard atlas-reveal
@@ -246,9 +246,8 @@ function AtlasRevealCard({
   layout: "row" | "desktop";
 }): React.ReactElement {
   const { dreamsign } = card;
-  const siteCard = layout === "desktop" ? card.siteCard : null;
-  const affiliationCard =
-    layout === "desktop" ? card.affiliationCard : null;
+  const siteCard = card.siteCard;
+  const affiliationCard = card.affiliationCard;
   // Desktop uses the desktop layout; a revealed node there gets the large hover
   // card. Mobile (row) and unrevealed nodes keep the compact fullBleed / text card.
   const hoverContent = layout === "desktop" ? toHoverContent(card) : null;
@@ -288,6 +287,35 @@ function AtlasRevealCard({
               )}
             </div>
           )}
+        </div>
+        {dreamsign !== null && <AtlasDreamsignCard dreamsign={dreamsign} />}
+      </div>
+    );
+  }
+  if (siteCard !== null || affiliationCard !== null) {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: CARD_STACK_GAP }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "flex-start",
+            gap: CARD_STACK_GAP,
+          }}
+        >
+          {main}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: CARD_STACK_GAP,
+            }}
+          >
+            {siteCard !== null && <AtlasSiteInfoCard site={siteCard} />}
+            {affiliationCard !== null && (
+              <AtlasAffiliationInfoCard affiliation={affiliationCard} />
+            )}
+          </div>
         </div>
         {dreamsign !== null && <AtlasDreamsignCard dreamsign={dreamsign} />}
       </div>

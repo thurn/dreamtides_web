@@ -8,6 +8,8 @@ import { LayerName } from "../../types/layer-name";
 import type { DreamscapeNode } from "../../types/quest";
 import type { AtlasMapNode } from "../components/atlas/AtlasMap";
 import type { AtlasNodeCard } from "../components/atlas/AtlasNodeReveal";
+import { artRef } from "../primitives/art";
+import { GLYPHS } from "../primitives/glyph";
 import { AtlasScreen, type AtlasView } from "./AtlasScreen";
 
 /**
@@ -37,12 +39,42 @@ beforeEach(() => {
   (
     globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
   ).IS_REACT_ACT_ENVIRONMENT = true;
+  originalInnerWidth = window.innerWidth;
+  originalClientWidth = Object.getOwnPropertyDescriptor(
+    HTMLElement.prototype,
+    "clientWidth",
+  );
+  originalClientHeight = Object.getOwnPropertyDescriptor(
+    HTMLElement.prototype,
+    "clientHeight",
+  );
   stubViewport(false);
 });
 
 afterEach(() => {
+  Object.defineProperty(window, "innerWidth", {
+    configurable: true,
+    value: originalInnerWidth,
+  });
+  restorePrototypeDescriptor("clientWidth", originalClientWidth);
+  restorePrototypeDescriptor("clientHeight", originalClientHeight);
   document.body.innerHTML = "";
 });
+
+let originalInnerWidth = 0;
+let originalClientWidth: PropertyDescriptor | undefined;
+let originalClientHeight: PropertyDescriptor | undefined;
+
+function restorePrototypeDescriptor(
+  name: "clientWidth" | "clientHeight",
+  descriptor: PropertyDescriptor | undefined,
+): void {
+  if (descriptor === undefined) {
+    Reflect.deleteProperty(HTMLElement.prototype, name);
+    return;
+  }
+  Object.defineProperty(HTMLElement.prototype, name, descriptor);
+}
 
 function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
   const container = document.createElement("div");
@@ -95,11 +127,41 @@ function emptyCard(): AtlasNodeCard {
   };
 }
 
+function residentCard(): AtlasNodeCard {
+  return {
+    isUnrevealed: false,
+    isBoss: false,
+    sceneArt: artRef.dreamscapeScene("wilderveil"),
+    figureArt: artRef.dreamGuide("aldric"),
+    eyebrow: null,
+    title: "Aldric, the Seer",
+    body: "Aldric offers curated visions of the future.",
+    dreamsign: null,
+    placeName: "The Glass Orchard",
+    guideName: "Aldric, the Seer",
+    siteName: "Dream Augury",
+    affiliation: "Abandon",
+    siteCard: {
+      name: "Dream Augury",
+      blurb: "Study a curated vision of what waits ahead.",
+      icon: GLYPHS.water,
+    },
+    affiliationCard: {
+      title: "Affiliation: Abandon",
+      theme: "Abandon",
+    },
+  };
+}
+
 function nodeItem(
   id: string,
   state: DreamscapeNode["state"],
   layer: LayerName,
-  extra: { isStarter?: boolean; isBoss?: boolean } = {},
+  extra: {
+    isStarter?: boolean;
+    isBoss?: boolean;
+    card?: Partial<AtlasNodeCard>;
+  } = {},
 ): AtlasMapNode {
   return {
     view: {
@@ -117,6 +179,7 @@ function nodeItem(
       ...emptyCard(),
       isUnrevealed: !(extra.isBoss ?? false),
       isBoss: extra.isBoss ?? false,
+      ...extra.card,
     },
   };
 }
@@ -166,6 +229,56 @@ describe("Tango AtlasScreen", () => {
       (available as HTMLElement).click();
     });
     expect(onEnterNode).toHaveBeenCalledWith("frontier");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("reveals site and affiliation companion cards on a mobile press", () => {
+    stubViewport(false, false);
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 390,
+    });
+    Object.defineProperty(HTMLElement.prototype, "clientWidth", {
+      configurable: true,
+      get: () => 390,
+    });
+    Object.defineProperty(HTMLElement.prototype, "clientHeight", {
+      configurable: true,
+      get: () => 844,
+    });
+    const view = makeView();
+    view.nodes[1] = nodeItem("frontier", "available", LayerName.Two, {
+      card: residentCard(),
+    });
+    const { container, root } = mount(
+      <AtlasScreen view={view} onEnterNode={vi.fn()} />,
+    );
+
+    const available = container.querySelector('[data-node-state="available"]');
+    expect(available).not.toBeNull();
+    act(() => {
+      (available as HTMLElement).dispatchEvent(
+        new MouseEvent("pointerdown", {
+          bubbles: true,
+          clientX: 195,
+          clientY: 420,
+        }),
+      );
+    });
+
+    expect(document.body.textContent).toContain("Aldric, the Seer");
+    expect(document.body.textContent).toContain("Dream Augury");
+    expect(document.body.textContent).toContain(
+      "Study a curated vision of what waits ahead.",
+    );
+    expect(document.body.textContent).toContain("Affiliation: Abandon");
+    expect(document.body.textContent).toContain(
+      "Abandon cards are more likely here.",
+    );
+    expect(document.body.textContent).not.toContain("The Glass Orchard");
 
     act(() => {
       root.unmount();
