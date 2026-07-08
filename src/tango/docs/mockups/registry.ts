@@ -27,7 +27,6 @@ import { ResourceChipMockup } from "./resource-chip";
 import { RulesTextMockup } from "./rules-text";
 import { SegmentedControlMockup } from "./segmented-control";
 import { SiteNodeMockup } from "./site-node";
-import { TidePillMockup } from "./tide-pill";
 
 /**
  * Route id → full-screen mockup component. The single place new mockups get
@@ -46,7 +45,6 @@ export const MOCKUPS: Record<string, ComponentType> = {
   "resource-chip": ResourceChipMockup,
   button: ButtonMockup,
   "segmented-control": SegmentedControlMockup,
-  "tide-pill": TidePillMockup,
   motes: MotesMockup,
   "group-panel": GroupPanelMockup,
 };

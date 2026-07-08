@@ -38,7 +38,6 @@ import { segmentedControlDemo } from "./demos/segmented-control";
 import { selectDemo } from "./demos/select";
 import { siteNodeDemo } from "./demos/site-node";
 import { tideDiscDemo } from "./demos/tide-disc";
-import { tidePillDemo } from "./demos/tide-pill";
 
 /**
  * A single authored usage snippet shown on a component's doc page. The source
@@ -142,7 +141,6 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   leaveSiteButtonDemo,
   segmentedControlDemo,
   selectDemo,
-  tidePillDemo,
   tideDiscDemo,
   motesDemo,
   infoCardDemo,

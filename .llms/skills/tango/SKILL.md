@@ -55,10 +55,9 @@ The reference files and the index are projections of the component sources
 | Leave Site Button | Components | 5 | [components/leave-site-button.md](components/leave-site-button.md) | The fixed top-right exit control for site screens: a danger-red square X button with consistent placement and accessible labeling. |
 | Segmented Control | Components | 1 | [components/segmented-control.md](components/segmented-control.md) | The compact tab and filter switch used for type filters, sort direction, and small mode toggles. |
 | Select | Components | 2 | [components/select.md](components/select.md) | The compact dropdown control, and Tango's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. |
-| Tide Pill | Components | 0 | [components/tide-pill.md](components/tide-pill.md) | The labelled tag for a Dreamcaller's tides and affiliations. |
 | Tide Disc | Components | 1 | [components/tide-disc.md](components/tide-disc.md) | The single tide mark: a colored disc carrying the tide's glyph, sized 'sm' (desktop select) or 'lg' (mobile select) — the atom both Dreamcaller-select tide rows render from. |
 | Motes | Components | 6 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
-| Info Card | Components | 14 | [components/info-card.md](components/info-card.md) | The one press-to-reveal information card. |
+| Info Card | Components | 13 | [components/info-card.md](components/info-card.md) | The one press-to-reveal information card. |
 | Hover Popover | Components | 13 | [components/hover-popover.md](components/hover-popover.md) | The pointer-and-focus anchored popover primitive for glossary definitions and compact card previews, with viewport-aware placement. |
 | Group Panel | Components | 2 | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |
 | Glow Icon | Components | 8 | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a named glyph, role color, optional soft shadow, and optional emitted-light filter in one square footprint. |

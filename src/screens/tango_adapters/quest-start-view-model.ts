@@ -8,7 +8,7 @@ import { selectedTides4Decks } from "../../data/tides4-preview";
 import type { RunPoolContext } from "../../data/quest-content";
 import type { DreamcallerContent } from "../../types/content";
 import type { Tides4Color, Tides4DeckJson } from "../../draft/pool/tides4-io";
-import type { Tide } from "../../tango/components/hud/TidePill";
+import type { Tide } from "../../tango/components/hud/tide-spec";
 import type {
   DreamcallerOfferView,
   DreamcallerTideView,

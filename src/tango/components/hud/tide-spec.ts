@@ -1,8 +1,8 @@
 // tide-spec — the game's five tides and their fixed marks + colors, the ONE
 // source the whole design system reads a tide's icon and palette from. Kept in
-// its own module (not on TidePill) so both the pill/cluster AND the shared
-// InfoCard can derive a tide's colored disc from the same table without a
-// circular import (TidePill imports InfoCard for its reveal engine).
+// its own leaf module so both TideDisc AND the shared InfoCard can derive a
+// tide's colored disc from the same table without a circular import (InfoCard
+// carries the reveal engine those callers depend on).
 //
 // The names, colors, and glyphs mirror production's single source of truth,
 // `src/components/tide-visuals.ts` (TIDE_COLOR_CHIP / TIDE_ACCENT_COLOR, keyed
@@ -59,8 +59,8 @@ export const TIDES: Record<Tide, TideSpec> = {
 };
 
 /**
- * The fixed icon + tinted colors for a tide, so any component (a TidePill, a
- * TideDisc, or the shared InfoCard's tide variant) can render a tide's disc
+ * The fixed icon + tinted colors for a tide, so any component (a TideDisc or
+ * the shared InfoCard's tide variant) can render a tide's disc
  * pixel-identically — without duplicating the tone table.
  */
 export function tideVisual(tide: Tide): TideSpec {

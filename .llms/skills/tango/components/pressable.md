@@ -10,7 +10,7 @@ Real consumers: **10** (imports outside `src/tango/docs/` and tests).
 
 The one press-feedback primitive. Wrap any element in it and that element follows the single Dreamtides rule — scale up on hover (on a hover-capable pointer), scale down on press — so every interactive surface presses and invites the cursor with the identical feel.
 
-> **Guidance:** Reach for a higher-level component first. Pressable is a low-level building block — before wrapping raw markup in it, look for an existing Tango component (Button, TidePill, SegmentedControl, SiteNode, …) that already bakes in the press feedback. Use Pressable only when you're building a genuinely new interactive surface no component covers.
+> **Guidance:** Reach for a higher-level component first. Pressable is a low-level building block — before wrapping raw markup in it, look for an existing Tango component (Button, TideDisc, SegmentedControl, SiteNode, …) that already bakes in the press feedback. Use Pressable only when you're building a genuinely new interactive surface no component covers.
 
 ## Props
 

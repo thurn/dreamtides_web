@@ -2636,7 +2636,6 @@
       "description": "Enter the site; fired on a tap / click of an interactive node only."
     }
   ],
-  "Tide": [],
   "TideDisc": [
     {
       "name": "tide",
@@ -2686,65 +2685,6 @@
       "required": false,
       "defaultValue": "false",
       "description": "Interactive discs brighten on hover and show a pointer cursor — set this\nwhen the caller wires the disc up as a reveal trigger (the wrapper's\nshared hover-enlarge handles the scale). Default false."
-    }
-  ],
-  "TidePill": [
-    {
-      "name": "label",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "The tide/affiliation name. Resolve any UUID to the display name before\npassing it — the pill renders copy from a plain string, not caller markup,\nso TidePill is a leaf, not a container."
-    },
-    {
-      "name": "description",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "The tide's description, revealed through the shared InfoCard on hover /\npress. Required: a TidePill always carries its description so the reveal\ncan never be forgotten. Plain prose — resolve before display."
-    },
-    {
-      "name": "tide",
-      "tsType": "Tide",
-      "unionMembers": [
-        "ember",
-        "valor",
-        "vision",
-        "wild",
-        "shadow"
-      ],
-      "required": false,
-      "defaultValue": "shadow",
-      "description": "Which of the five tides. Fixes the pill's icon and color. Default 'shadow'."
-    },
-    {
-      "name": "size",
-      "tsType": "TidePillSize",
-      "unionMembers": [
-        "sm",
-        "md"
-      ],
-      "required": false,
-      "defaultValue": "md",
-      "description": "Height/scale. Default 'md'."
-    },
-    {
-      "name": "stageRef",
-      "tsType": "RefObject<HTMLElement | null>",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Screen root the reveal anchors + clamps against. Pass it for the\nmaterial-continuity reveal (preferred); omit it and the card floats\ndirectly above the pill."
-    },
-    {
-      "name": "onPress",
-      "tsType": "(() => void)",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Fires on a tap / click that was not a deliberate hold-to-read."
     }
   ]
 }
