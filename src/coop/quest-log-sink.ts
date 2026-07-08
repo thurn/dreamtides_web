@@ -401,6 +401,93 @@ export function createCoopLogRecorder(options: CoopLogRecorderOptions): CoopLogR
 }
 
 // ---------------------------------------------------------------------------
+// quest-log.jsonl mirror
+// ---------------------------------------------------------------------------
+//
+// The coop shapes must ALSO reach `logs/quest-log.jsonl` (spec §Logging:
+// events reach the room `logs/` sink AND THENCE quest-log.jsonl so existing
+// tooling keeps working; Task 30 greps the file for the session's
+// `coop_event` entries). They are NOT routed through `logEvent` (which would
+// clobber their true fold `seq` with its per-session line counter — see the
+// header comment), so this mirror replicates `logEvent`'s two transports
+// VERBATIM on the fully-shaped record: a single-line `console.log` and a
+// best-effort POST to the dev server's `/api/log` endpoint.
+//
+// IMPORTANT: this delivery is what makes `coop_event`/`fold_divergence`
+// greppable in quest-log.jsonl. A future logEvent refactor must not silently
+// route these through logEvent; `quest-log-sink.test.ts` asserts the mirror
+// delivers the record verbatim (true `seq` intact) to both destinations.
+
+/**
+ * POST one coop record VERBATIM to the dev-server `/api/log` middleware, best
+ * effort. Mirrors `logEvent`'s `postLogEntryToDevServer` guarding exactly:
+ * no-op when `fetch` is absent or under vitest (`import.meta.env.MODE`
+ * === "test"), and a swallowed rejection so logging never wedges the caller.
+ */
+function postCoopRecordToDevServer(record: SinkRecord): void {
+  if (typeof fetch !== "function") {
+    return;
+  }
+  try {
+    const env = (import.meta as { env?: { MODE?: string } }).env;
+    if (env?.MODE === "test") {
+      return;
+    }
+  } catch {
+    // If `import.meta.env` is unavailable, fall through — the `.catch` below
+    // still guards against unhandled rejections.
+  }
+  fetch("/api/log", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(record),
+  }).catch(() => {
+    // Best-effort: dev-server logging never wedges gameplay.
+  });
+}
+
+/** Delivers a fully-shaped coop record to the quest-log.jsonl transports. */
+export type QuestLogMirror = (record: SinkRecord) => void;
+
+export interface QuestLogMirrorDeps {
+  /** Console transport. Defaults to a single-line `console.log`. */
+  log?: (line: string) => void;
+  /** Dev-server transport. Defaults to a best-effort `/api/log` POST. */
+  post?: (record: SinkRecord) => void;
+}
+
+/**
+ * Build the quest-log.jsonl mirror. Transports are injected so the delivery is
+ * unit-testable without a console/dev-server. The record is passed VERBATIM so
+ * its true `seq` survives.
+ */
+export function createQuestLogMirror(deps: QuestLogMirrorDeps = {}): QuestLogMirror {
+  const log = deps.log ?? ((line: string) => console.log(line));
+  const post = deps.post ?? postCoopRecordToDevServer;
+  return (record: SinkRecord) => {
+    log(JSON.stringify(record));
+    post(record);
+  };
+}
+
+/**
+ * Compose the coop `emit` callback: every shaped record is written to BOTH the
+ * RTDB `rooms/{id}/logs` buffer AND the quest-log.jsonl mirror. Single-writer
+ * gating lives upstream in {@link createCoopLogRecorder} (emit is only invoked
+ * for records that pass ownership + high-water), so both destinations inherit
+ * it — no per-destination gating is needed here.
+ */
+export function createCoopEmit(
+  buffered: Pick<BufferedSink, "record">,
+  mirror: QuestLogMirror,
+): (record: SinkRecord) => void {
+  return (record: SinkRecord) => {
+    buffered.record(record);
+    mirror(record);
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Install
 // ---------------------------------------------------------------------------
 
@@ -424,8 +511,8 @@ export interface QuestLogSinkHandle extends CoopLogRecorder {
  * Install the quest-log sink for a ready room:
  *  - stamp `gameId` onto every subsequent `logEvent` (grep isolation),
  *  - mirror every `logEvent` entry into `rooms/{id}/logs`,
- *  - return the coop record helpers, which write their shapes into the same
- *    node with their true `seq`.
+ *  - return the coop record helpers, which write their shapes into BOTH that
+ *    node (true `seq`) and quest-log.jsonl (console + dev server).
  */
 export function installQuestLogSink(
   database: Database,
@@ -443,9 +530,10 @@ export function installQuestLogSink(
   const recorder = createCoopLogRecorder({
     gameId,
     clientId,
-    emit: (record) => {
-      buffered.record(record);
-    },
+    // Every owning-client coop record lands in BOTH rooms/{id}/logs and
+    // quest-log.jsonl (console + dev server), verbatim so its true `seq`
+    // survives. Single-writer gating lives in the recorder.
+    emit: createCoopEmit(buffered, createQuestLogMirror()),
   });
 
   return {

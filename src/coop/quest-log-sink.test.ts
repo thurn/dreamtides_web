@@ -3,7 +3,9 @@ import type { GameEvent } from "../eventlog/types";
 import {
   ROOM_LOG_LIMIT,
   createBufferedSink,
+  createCoopEmit,
   createCoopLogRecorder,
+  createQuestLogMirror,
   pruneLogEntries,
   type SinkRecord,
 } from "./quest-log-sink";
@@ -188,5 +190,59 @@ describe("createCoopLogRecorder single-writer rule", () => {
         gameId: "room-1",
       },
     ]);
+  });
+});
+
+describe("createQuestLogMirror", () => {
+  it("delivers the record verbatim to both console and dev-server transports, seq intact", () => {
+    const logLines: string[] = [];
+    const posted: SinkRecord[] = [];
+    const mirror = createQuestLogMirror({
+      log: (line) => logLines.push(line),
+      post: (record) => posted.push(record),
+    });
+
+    const record: SinkRecord = {
+      event: "coop_event",
+      seq: 42,
+      type: "PICK_DRAFT_CARD",
+      actor: "client-a",
+      outcome: "applied",
+      gameId: "room-1",
+    };
+    mirror(record);
+
+    // The dev-server transport gets the record object verbatim (true seq).
+    expect(posted).toEqual([record]);
+    // The console transport gets the single-line JSON of the same record, so
+    // grepping quest-log.jsonl for the seq/type works.
+    expect(logLines).toHaveLength(1);
+    expect(JSON.parse(logLines[0])).toEqual(record);
+    expect((JSON.parse(logLines[0]) as { seq: number }).seq).toBe(42);
+  });
+});
+
+describe("createCoopEmit two-destination delivery (spec §Logging)", () => {
+  it("delivers each owning-client record to BOTH rooms/logs and quest-log.jsonl, once, obeying the high-water", () => {
+    const roomLogs: SinkRecord[] = [];
+    const questLog: SinkRecord[] = [];
+    const emit = createCoopEmit(
+      { record: (r) => roomLogs.push(r) },
+      (r) => questLog.push(r),
+    );
+    const recorder = createCoopLogRecorder({ gameId: "room-1", clientId: "client-a", emit });
+
+    // Owned event -> both destinations.
+    expect(recorder.recordCoopEvent(makeEvent({ actor: "client-a" }), 5, "applied")).toBe(true);
+    // Peer event -> neither destination (single-writer gate upstream of emit).
+    expect(recorder.recordCoopEvent(makeEvent({ actor: "client-b" }), 6, "applied")).toBe(false);
+    // Refold re-reports seq 5 -> no duplicate in either destination.
+    expect(recorder.recordCoopEvent(makeEvent({ actor: "client-a" }), 5, "applied")).toBe(false);
+
+    // Both destinations received exactly the one owned coop_event, seq intact.
+    expect(roomLogs).toHaveLength(1);
+    expect(questLog).toHaveLength(1);
+    expect(roomLogs[0]).toEqual(questLog[0]);
+    expect(roomLogs[0]).toMatchObject({ event: "coop_event", seq: 5, actor: "client-a" });
   });
 });
