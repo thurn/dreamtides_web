@@ -406,7 +406,6 @@ function buildNodeCard(
       sceneArt: artRef.dreamscapeScene(BOSS_DREAMSCAPE_ID),
       // The boss stands over the Limbo scene as its prominent figure.
       figureArt: artRef.dreamGuide(BOSS_DISPLAY.guideId),
-      eyebrow: null,
       // Title with the run's chosen Apollyon incarnation (its full name, e.g.
       // "Apollyon, the World's End"), falling back to the default epithet when
       // no incarnation was assigned.
@@ -437,7 +436,6 @@ function buildNodeCard(
       isBoss: false,
       sceneArt: null,
       figureArt: null,
-      eyebrow: null,
       title: "An Unseen Dream",
       body: UNSEEN_DREAM_BODY,
       // A still-unseen dream can carry a pre-revealed known dreamsign (its badge
@@ -481,7 +479,6 @@ function buildNodeCard(
     isBoss: false,
     sceneArt: artRef.dreamscapeScene(dreamscape.id),
     figureArt: guide != null ? artRef.dreamGuide(guide.id) : null,
-    eyebrow: null,
     title: guide?.name ?? dreamscape.name,
     body: guide?.homeSpecialty ?? STARTER_BODY,
     dreamsign,

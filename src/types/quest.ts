@@ -60,6 +60,10 @@ export type SiteType =
  * `unrevealed`, becomes `revealedLocked` when shown but not yet reachable,
  * `available` when the player can travel to it, `completed` once cleared, and
  * `forgone` when a sibling branch was taken and this one is unreachable.
+ *
+ * `forgone` is a data-only generator state (a passed-by sibling); its display
+ * fade is delivered by the view-model's `isReachable` computation (the
+ * `node-unreachable` CSS treatment), so no `node-forgone` visual rule is needed.
  */
 export type AtlasNodeState =
   | "unrevealed"

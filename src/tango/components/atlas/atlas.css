@@ -150,15 +150,14 @@
   }
 }
 
-.dream-atlas .node-forgone,
 .dream-atlas .node-unreachable {
-  /* Fade every node the player can no longer reach — the passed-by siblings and
-     any deeper node cut off from the frontier. Dim via filter only (no opacity)
-     so the node stays opaque and keeps occluding the edges that pass under it; a
-     translucent node lets the lines show through and read as if drawn on top. */
+  /* Fade every node the player can no longer reach (the view-model's
+     `isReachable === false`) — the passed-by siblings and any deeper node cut off
+     from the frontier. Dim via filter only (no opacity) so the node stays opaque
+     and keeps occluding the edges that pass under it; a translucent node lets the
+     lines show through and read as if drawn on top. */
   filter: grayscale(0.9) brightness(0.42);
 }
-.dream-atlas .node-forgone .node-glow,
 .dream-atlas .node-unreachable .node-glow {
   display: none;
 }
