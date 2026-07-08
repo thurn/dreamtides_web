@@ -201,6 +201,84 @@ export default tseslint.config(
     },
   },
   {
+    // src/rules/ is the pure reducer package for the coop event-sourcing
+    // rewrite: given an event log, it deterministically computes state. It
+    // must stay free of Firebase (network/persistence), React (view-layer),
+    // and any hidden nondeterminism — every source of randomness or wall-clock
+    // time has to arrive as reducer input, not be read live, or replaying the
+    // event log would not reproduce the original state.
+    files: ["src/rules/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["firebase", "firebase/*"],
+              message:
+                "src/rules/ is a pure reducer and must not talk to Firebase directly. Persistence and network I/O belong in src/coop/ or the eventlog engine, driven by reducer output.",
+            },
+            {
+              group: ["react", "react-dom", "react/*", "react-dom/*"],
+              message:
+                "src/rules/ is a pure, React-free reducer. Rendering and hooks belong in src/coop/.",
+            },
+          ],
+        },
+      ],
+      "no-restricted-properties": [
+        "error",
+        {
+          object: "Math",
+          property: "random",
+          message:
+            "src/rules/ must be deterministic. Randomness has to arrive as reducer input (e.g. a seed on the event), not be read live.",
+        },
+        {
+          object: "Date",
+          property: "now",
+          message:
+            "src/rules/ must be deterministic. Wall-clock time has to arrive as reducer input (e.g. a timestamp on the event), not be read live.",
+        },
+      ],
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "NewExpression[callee.name='Date'][arguments.length=0]",
+          message:
+            "src/rules/ must be deterministic. `new Date()` reads the live clock; pass a timestamp in as reducer input instead.",
+        },
+      ],
+    },
+  },
+  {
+    // src/eventlog/ is the game-agnostic event-sourcing engine (log storage,
+    // sync, replay). It must not know about this game's rules or its React
+    // layer, or the engine stops being reusable/game-agnostic. Both relative
+    // (`../rules/...`) and absolute-from-src forms are covered, since the repo
+    // has no path aliases and intra-src imports are written as relative paths.
+    files: ["src/eventlog/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/rules/**", "**/rules", "src/rules/**", "src/rules"],
+              message:
+                "src/eventlog/ is the game-agnostic engine and must not import from src/rules/ (the game's pure reducer). Depend the other way: rules code drives the engine through its public API.",
+            },
+            {
+              group: ["**/coop/**", "**/coop", "src/coop/**", "src/coop"],
+              message:
+                "src/eventlog/ is the game-agnostic engine and must not import from src/coop/ (the React layer). Depend the other way: the React layer drives the engine through its public API.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     ignores: [
       "node_modules/",
       "dist/",
