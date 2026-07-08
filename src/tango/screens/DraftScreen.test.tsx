@@ -37,9 +37,9 @@ function view(offer: number[]): DraftView {
 }
 
 /** Stub matchMedia (jsdom lacks it; Pressable reads the reduced-motion query). */
-function stubMatchMedia(): void {
+function stubMatchMedia({ desktop = false }: { desktop?: boolean } = {}): void {
   window.matchMedia = ((query: string) => ({
-    matches: false,
+    matches: desktop && query.includes("min-width: 900px"),
     media: query,
     onchange: null,
     addEventListener: () => undefined,
@@ -72,6 +72,35 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
 }
 
 describe("Tango DraftScreen", () => {
+  it("renders the mobile offer as the shipped 2x2 grid", () => {
+    const { container, root } = mount(
+      <DraftScreen view={view([101, 102, 103, 104])} onPick={vi.fn()} />,
+    );
+
+    const grid = container.querySelector<HTMLElement>("[data-draft-offer-grid]");
+    expect(grid?.style.gridTemplateColumns).toBe("repeat(2, auto)");
+    expect(grid?.style.gridTemplateRows).toBe("repeat(2, auto)");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders the desktop offer as one row of four cards", () => {
+    stubMatchMedia({ desktop: true });
+    const { container, root } = mount(
+      <DraftScreen view={view([101, 102, 103, 104])} onPick={vi.fn()} />,
+    );
+
+    const grid = container.querySelector<HTMLElement>("[data-draft-offer-grid]");
+    expect(grid?.style.gridTemplateColumns).toBe("repeat(4, auto)");
+    expect(grid?.style.gridTemplateRows).toBe("repeat(1, auto)");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders one offer cell per card in the pack and nothing else", () => {
     const { container, root } = mount(
       <DraftScreen view={view([101, 102, 103, 104])} onPick={vi.fn()} />,

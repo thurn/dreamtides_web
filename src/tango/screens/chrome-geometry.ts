@@ -17,3 +17,9 @@ export const MENU_BUTTON_PX = 48;
  * top edge.
  */
 export const MENU_EDGE_INSET_MOBILE_PX = 18;
+
+/**
+ * The desktop corner inset for the same menu disc. Desktop has no device cutout
+ * helping the corner breathe, so the trigger sits a little farther in.
+ */
+export const MENU_EDGE_INSET_DESKTOP_PX = 22;

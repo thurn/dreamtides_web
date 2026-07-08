@@ -7,7 +7,11 @@ import type { QuestState } from "../types/quest";
 import { token } from "../tango/primitives/tokens";
 import { GLYPHS } from "../tango/primitives/glyph";
 import { useIsDesktop } from "../tango/screens/use-is-desktop";
-import { MENU_BUTTON_PX, MENU_EDGE_INSET_MOBILE_PX } from "../tango/screens/chrome-geometry";
+import {
+  MENU_BUTTON_PX,
+  MENU_EDGE_INSET_DESKTOP_PX,
+  MENU_EDGE_INSET_MOBILE_PX,
+} from "../tango/screens/chrome-geometry";
 import { IconButton } from "../tango/components/controls/IconButton";
 import { QuestUtilityMenu, type QuestUtilityMenuAction } from "./QuestUtilityMenu";
 
@@ -68,7 +72,9 @@ export function DreamscapeQuestMenu({
   // desktop anchors the gear glyph to the top-right. The edge inset keeps the
   // disc clear of the screen corner (more so on desktop, where there is no
   // safe-area inset doing that job).
-  const menuEdgeInset = isDesktop ? 22 : MENU_EDGE_INSET_MOBILE_PX;
+  const menuEdgeInset = isDesktop
+    ? MENU_EDGE_INSET_DESKTOP_PX
+    : MENU_EDGE_INSET_MOBILE_PX;
   const actions: QuestUtilityMenuAction[] = [
     { id: "deck", icon: "bxf bx-rectangle-vertical", label: "View Deck", onClick: onOpenDeckViewer },
     { id: "glossary", icon: "bxf bx-book-open", label: "Glossary", onClick: onOpenGlossary },

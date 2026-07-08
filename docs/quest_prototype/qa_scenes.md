@@ -75,16 +75,14 @@ depth onward.
 
 `?goto=draft` retypes a starter-dreamscape site to the `Draft` type and parks the
 run on it. The QA foundation seeds a valid `draftState`, so on entry the draft
-screen rolls its first offer and paints a real 2×2 card pack over the starter
-dreamscape, with the floating `Draft (n/total)` pick counter beneath it. Picking a
-card mints and paints the next offer and advances the counter; exhausting the pack
-completes the site and returns to the dreamscape overview.
+screen rolls its first offer and paints a real card pack over the starter
+dreamscape, with the floating `Draft (n/total)` pick counter beneath it. The
+Tango layout is a 2×2 pack on mobile and a four-card row on desktop. Picking a
+card mints and paints the next offer and advances the counter; exhausting the
+pack completes the site and returns to the dreamscape overview.
 
-The Tango draft screen is mobile-gated: the router only swaps in the Tango site
-screen at a mobile viewport, so open this scene with `&ui=tango` at a phone width
-(for example 393×852) to see the Tango pack. A desktop-width viewport falls
-through to the legacy draft screen. Pair with `&deviceFrame=iphone16` to render
-the phone chrome for framed QA, e.g.:
+Open this scene with `&ui=tango` to see the Tango pack. Pair with
+`&deviceFrame=iphone16` to render the phone chrome for framed mobile QA, e.g.:
 
 ```
 http://localhost:5174/?goto=draft&ui=tango&deviceFrame=iphone16

@@ -59,10 +59,8 @@ export function tangoScreenFor(
 
 /**
  * The Tango implementation of a site screen, or null when none exists yet (the
- * caller then renders the legacy site screen). The Tango site screens are
- * mobile-first during the migration; the router gates this resolver to the
- * mobile viewport, so a desktop viewport still falls through to the legacy site
- * screen.
+ * caller then renders the legacy site screen). The migrated site owns its
+ * responsive Tango idioms internally.
  */
 export function tangoSiteScreenFor(
   site: SiteState,

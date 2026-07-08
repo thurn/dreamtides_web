@@ -1,13 +1,14 @@
-// DraftScreen — the Tango rendering of a draft site (the mobile redesign). A
+// DraftScreen — the Tango rendering of a draft site. A
 // draft site offers a pack of cards and the player picks one, five times over.
 // The Tango version strips the screen to the offer itself: the dreamscape scene
 // fills the viewport (never darkened — legibility comes from the cards' own
-// opacity and the HUD's outline dilation), the pack sits as a 2x2 grid of
-// GameCards centered over it, and the persistent QuestStatusBar docks the run's
-// essence, deck, Dreamcaller, and dreamsigns along the bottom. The utility menu
-// lives in the app-shell's top-left hamburger, matching the dreamscape and
-// atlas screens — the screen's only text is a subtle pick counter riding under
-// the pack; it renders no title, progress bar, or drafted-card rail of its own.
+// opacity and the HUD's outline dilation), the pack sits as a 2x2 mobile grid
+// or a four-card desktop row of GameCards centered over it, and the persistent
+// QuestStatusBar docks the run's essence, deck, Dreamcaller, and dreamsigns
+// along the bottom. The utility menu lives in the app-shell corner chrome,
+// matching the dreamscape and atlas screens — the screen's only text is a
+// subtle pick counter riding under the pack; it renders no title, progress bar,
+// or drafted-card rail of its own.
 //
 // PURE: it renders from a view-model and reports the chosen card through
 // `onPick`; the adapter owns the draft state, the pick mutation, and returning
@@ -28,7 +29,11 @@ import {
 } from "../components/hud/QuestStatusBar";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
-import { MENU_BUTTON_PX, MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
+import {
+  MENU_BUTTON_PX,
+  MENU_EDGE_INSET_DESKTOP_PX,
+  MENU_EDGE_INSET_MOBILE_PX,
+} from "./chrome-geometry";
 import { useIsDesktop } from "./use-is-desktop";
 
 /** The bottom-HUD slice of the view-model — what the QuestStatusBar docks. */
@@ -70,15 +75,6 @@ export interface DraftScreenProps {
 
 // The vertical bands reserved down the screen, as raw calc operands so the
 // card-height cap can subtract them from the viewport.
-// Top: the device safe-area / cutout (Dynamic Island, status bar), a floor, or
-// the app-shell hamburger's bottom edge — whichever is largest. The menu disc
-// sits at `top: max(safe-inset-top, MENU_EDGE_INSET_MOBILE_PX)` with height
-// MENU_BUTTON_PX, so its bottom is `max(inset, edge) + MENU_BUTTON_PX`; the band
-// explicitly clears it so the floating pick counter and pack never ride under
-// the disc.
-const TOP_SAFE_OP =
-  `max(var(--safe-area-inset-top), ${token("--safe-top")}, ` +
-  `calc(max(var(--safe-area-inset-top), ${String(MENU_EDGE_INSET_MOBILE_PX)}px) + ${String(MENU_BUTTON_PX)}px))`;
 // Breathing room between the safe zone and the top of the pack.
 const TOP_GAP_OP = token("--space-6");
 // The band under the pack that holds the small pick counter (its gap above the
@@ -87,21 +83,41 @@ const COUNTER_BAND_OP = token("--space-9");
 // Bottom: the docked QuestStatusBar (bar + elevated Dreamcaller bust +
 // home-indicator inset).
 const HUD_CLEARANCE_OP = `${token("--hud-h")} + ${token("--safe-bottom")} + ${token("--space-9")}`;
-const TOP_SAFE = `calc(${TOP_SAFE_OP})`;
 const TOP_GAP = `calc(${TOP_GAP_OP})`;
 const HUD_CLEARANCE = `calc(${HUD_CLEARANCE_OP})`;
+const OFFER_GRID_GAP = token("--space-5");
 
-// The 2x2 offer cell width: the smaller of half the pack's content-width (side
-// gutters and the grid gap are all `--space-5`, so the space between the cards
-// equals the space to the screen edges) and the width that keeps two card rows
-// plus their `--space-5` grid gap within the space left between the top gap and
-// the HUD clearance, with the counter band reserved under the pack. Box
-// measures: content-driven layout, width against `container-type: inline-size`.
-const OFFER_CELL_WIDTH = `min(calc((100cqw - ${token("--space-5")}) / 2), calc((100dvh - (${TOP_SAFE_OP}) - (${TOP_GAP_OP}) - (${COUNTER_BAND_OP}) - (${HUD_CLEARANCE_OP}) - ${token("--space-5")}) * ${String(CARD_ASPECT_W)} / ${String(2 * CARD_ASPECT_H)}))`;
+function topSafeOpFor(isDesktop: boolean): string {
+  const edgeInset = isDesktop
+    ? MENU_EDGE_INSET_DESKTOP_PX
+    : MENU_EDGE_INSET_MOBILE_PX;
+  // The menu disc sits at `top: max(safe-inset-top, edgeInset)` with height
+  // MENU_BUTTON_PX, so this band clears its bottom edge.
+  return (
+    `max(var(--safe-area-inset-top), ${token("--safe-top")}, ` +
+    `calc(max(var(--safe-area-inset-top), ${String(edgeInset)}px) + ${String(MENU_BUTTON_PX)}px))`
+  );
+}
+
+function offerCellWidthFor(params: {
+  columns: number;
+  rows: number;
+  topSafeOp: string;
+}): string {
+  const horizontalGapCount = params.columns - 1;
+  const verticalGapCount = params.rows - 1;
+  // The offer cell width is capped by both the row width and available height.
+  // Box measures: content-driven layout against `container-type: inline-size`.
+  return (
+    `min(calc((100cqw - (${OFFER_GRID_GAP} * ${String(horizontalGapCount)})) / ${String(params.columns)}), ` +
+    `calc((100dvh - (${params.topSafeOp}) - (${TOP_GAP_OP}) - (${COUNTER_BAND_OP}) - (${HUD_CLEARANCE_OP}) - ` +
+    `(${OFFER_GRID_GAP} * ${String(verticalGapCount)})) * ${String(CARD_ASPECT_W)} / ${String(params.rows * CARD_ASPECT_H)}))`
+  );
+}
 
 /**
- * The Tango draft screen. Pure and props-driven: full-bleed scene art, the 2x2
- * pack of {@link GameCard}s over it, drifting {@link Motes}, and the persistent
+ * The Tango draft screen. Pure and props-driven: full-bleed scene art, the pack
+ * of {@link GameCard}s over it, drifting {@link Motes}, and the persistent
  * {@link QuestStatusBar} docked to the bottom.
  */
 export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
@@ -110,6 +126,15 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
   const stageRef = useRef<HTMLDivElement>(null);
   const isDesktop = useIsDesktop();
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
+  const offerColumns = isDesktop ? 4 : 2;
+  const offerRows = isDesktop ? 1 : 2;
+  const topSafeOp = topSafeOpFor(isDesktop);
+  const topSafe = `calc(${topSafeOp})`;
+  const offerCellWidth = offerCellWidthFor({
+    columns: offerColumns,
+    rows: offerRows,
+    topSafeOp,
+  });
 
   // The card being picked, latched so the pick-out animation plays and a second
   // tap can't fire while the pack is resolving. Cleared when a new pack arrives.
@@ -161,7 +186,7 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
       {/* Reserve the top cutout / status-bar zone so nothing rides into the
           notch, plus a short breathing gap above the pack. */}
       <div
-        style={{ flexShrink: 0, height: `calc(${TOP_SAFE} + ${TOP_GAP})` }}
+        style={{ flexShrink: 0, height: `calc(${topSafe} + ${TOP_GAP})` }}
         aria-hidden="true"
       />
 
@@ -184,6 +209,7 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
       >
         <AnimatePresence mode="wait">
           <motion.div
+            data-draft-offer-grid=""
             key={`offer-${view.offerKey}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -191,9 +217,9 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
             transition={{ duration: 0.25 }}
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(2, auto)",
-              gridTemplateRows: "repeat(2, auto)",
-              gap: token("--space-5"),
+              gridTemplateColumns: `repeat(${String(offerColumns)}, auto)`,
+              gridTemplateRows: `repeat(${String(offerRows)}, auto)`,
+              gap: OFFER_GRID_GAP,
               placeItems: "center",
             }}
           >
@@ -213,7 +239,7 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
                         : { opacity: 1, scale: 1 }
                   }
                   transition={{ duration: 0.3 }}
-                  style={{ width: OFFER_CELL_WIDTH }}
+                  style={{ width: offerCellWidth }}
                 >
                   <GameCard
                     card={card}
