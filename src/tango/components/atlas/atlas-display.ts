@@ -38,6 +38,31 @@ export function dreamsignIconUrl(imageName: string): string {
 /** Ornate round frame used as the face of an unrevealed atlas node. */
 export const ROUND_FRAME_URL = assetUrl("/atlas/Round_frame_main.png");
 
+/**
+ * Node diameters (stage pixels) for the atlas layout, in one in-Tango home so
+ * both the layout adapter (`src/screens/tango_adapters/atlas-view-model.ts`) and
+ * the Tango demos read the same production numbers. The layout profiles live in
+ * the adapter, which the Tango boundary may not import, so the sizes live here.
+ *
+ * Desktop draws smaller nodes across a wide landscape stage; mobile draws them
+ * larger so icons and badges stay legible once the narrow portrait viewport
+ * scales the whole stage down. The starter and boss read a touch larger than a
+ * regular node.
+ */
+export const ATLAS_NODE_SIZE_DESKTOP = 132;
+/** Desktop starter / boss anchor-node diameter (stage pixels). */
+export const ATLAS_ANCHOR_NODE_SIZE_DESKTOP = 150;
+/** Mobile regular-node diameter (stage pixels). */
+export const ATLAS_NODE_SIZE_MOBILE = 200;
+/** Mobile starter / boss anchor-node diameter (stage pixels). */
+export const ATLAS_ANCHOR_NODE_SIZE_MOBILE = 224;
+/**
+ * Multiplier applied to the site / dreamsign badge sizes on the mobile atlas, so
+ * they stay legible once the narrow portrait viewport scales the whole stage
+ * down. Desktop keeps its badges at their node-relative size (an implicit 1).
+ */
+export const ATLAS_BADGE_SCALE_MOBILE = 1.5;
+
 /** Boxicons class used for the "Card Affiliation" row in the preview card. */
 export const AFFILIATION_ROW_ICON_CLASS = GLYPHS.affiliationRow;
 

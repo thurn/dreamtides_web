@@ -23,6 +23,11 @@ import {
   siteTypeName,
 } from "../../atlas/atlas-generator";
 import {
+  ATLAS_ANCHOR_NODE_SIZE_DESKTOP,
+  ATLAS_ANCHOR_NODE_SIZE_MOBILE,
+  ATLAS_BADGE_SCALE_MOBILE,
+  ATLAS_NODE_SIZE_DESKTOP,
+  ATLAS_NODE_SIZE_MOBILE,
   BOSS_DISPLAY,
   BOSS_DREAMSCAPE_ID,
 } from "../../tango/components/atlas/atlas-display";
@@ -116,8 +121,8 @@ export const ATLAS_LAYOUT_DESKTOP: AtlasLayoutProfile = {
   stageWidth: ATLAS_STAGE_LANDSCAPE_WIDTH,
   stageHeight: ATLAS_STAGE_LANDSCAPE_HEIGHT,
   contentRect: { top: 150, bottom: 900, left: 160, right: 1760 },
-  nodeSize: 132,
-  anchorNodeSize: 150,
+  nodeSize: ATLAS_NODE_SIZE_DESKTOP,
+  anchorNodeSize: ATLAS_ANCHOR_NODE_SIZE_DESKTOP,
   badgeScale: 1,
 };
 
@@ -130,13 +135,13 @@ export const ATLAS_LAYOUT_MOBILE: AtlasLayoutProfile = {
   stageWidth: ATLAS_STAGE_WIDTH,
   stageHeight: ATLAS_STAGE_HEIGHT,
   contentRect: { top: 250, bottom: 1630, left: 165, right: 915 },
-  nodeSize: 200,
-  anchorNodeSize: 224,
+  nodeSize: ATLAS_NODE_SIZE_MOBILE,
+  anchorNodeSize: ATLAS_ANCHOR_NODE_SIZE_MOBILE,
   edgeAnchorHorizontal: true,
   // Enlarge the site / dreamsign badges by half again so they read clearly on
   // the phone atlas, where the whole stage is scaled down to fit the portrait
   // viewport.
-  badgeScale: 1.5,
+  badgeScale: ATLAS_BADGE_SCALE_MOBILE,
 };
 
 /** Picks the layout profile for the viewport class. */

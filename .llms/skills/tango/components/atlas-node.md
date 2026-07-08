@@ -6,58 +6,44 @@
 
 Components · Live demo & interactive props: `/tango#/atlas-node`
 
-Real consumers: **2** (imports outside `src/tango/docs/` and tests).
+Real consumers: **1** (imports outside `src/tango/docs/` and tests).
 
-One dreamscape node on the Dream Atlas: a framed circular icon whose glow and badges track its state — revealed, known, visited, completed, or a looming boss.
+One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engine: a framed circular icon whose glow and badges track its state — revealed, known, visited, completed, forgone, or a looming boss — and which reveals its scene / detail card on hover or press.
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `view` | `AtlasNodeView` | yes | — |  |
-| `hovered` | `boolean` | yes | — | Draws the node in its revealed/hover glow + scale-up state. |
-| `rootRef` | `Ref<HTMLElement>` | no | — | Ref to the node's root element, so a caller can anchor an input-adaptive press-reveal (InfoCard) to it and measure it against the stage. Typed as the common `HTMLElement` because an available node renders through `Pressable` as a `<button>` while an unreachable one is a plain `<div>` — the caller only measures the element, so it needs neither concrete tag type. |
-| `onEnter` | `((nodeId: string) => void)` | no | — | Mouse/focus reveal driver: fired with the node id when the pointer or keyboard focus enters the node. Optional — a caller driving the reveal through the pointer handlers below omits it. |
-| `onLeave` | `(() => void)` | no | — | Paired with {@link onEnter}: fired on mouse leave / blur. |
-| `onClick` | `((nodeId: string) => void)` | no | — | Activation: fired with the node id on click and on Enter / Space. |
-| `onPointerEnter` | `PointerEventHandler<HTMLElement>` | no | — | Input-adaptive press-reveal handlers, wired to the node's root so the InfoCard engine (`usePressReveal`) can reveal on touch press-down and on fine-pointer hover. A caller either wires these OR the {@link onEnter} / {@link onLeave} mouse pair, never both. |
-| `onPointerDown` | `PointerEventHandler<HTMLElement>` | no | — |  |
-| `onPointerUp` | `PointerEventHandler<HTMLElement>` | no | — |  |
-| `onPointerLeave` | `PointerEventHandler<HTMLElement>` | no | — |  |
-| `onPointerCancel` | `PointerEventHandler<HTMLElement>` | no | — |  |
+| `item` | `AtlasNodeRevealItem` | yes | — | The placed node and its reveal content. |
+| `stageRef` | `RefObject<HTMLElement \| null>` | yes | — | Screen root the reveal anchors + clamps against (for popover placement). |
+| `onEnterNode` | `(nodeId: string) => void` | yes | — | Enter a node's dreamscape; fired on a tap / click of an available node. |
 
-### `view`: the `AtlasNodeView` model
+### `item`: the `AtlasNodeRevealItem` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `node` | `DreamscapeNode` | no |  |
-| `left` | `number` | no | Stage-space centre of the node (1920x1080 coordinate system). |
-| `top` | `number` | no |  |
-| `size` | `number` | no | Rendered node diameter in stage pixels. |
-| `isStarter` | `boolean` | no |  |
-| `isBoss` | `boolean` | no |  |
-| `isReachable` | `boolean` | yes | Whether the player can still reach this node from where they now stand. Only an explicit `false` fades the node (drawing it as a dimmed, unrevealed frame — its builder already blanks the icon and badges); omitting the field renders the node normally, which suits the design-system demos that show a lone node in isolation. |
-| `iconRef` | `ArtRef \| null` | no | The dreamscape icon art as an {@link ArtRef}, or `null` while unrevealed. |
-| `siteBadgeGlyph` | `Glyph \| null` | no | The signature-site badge {@link Glyph}, or `null`. |
-| `knownDreamsignRef` | `ArtRef \| null` | no | The pre-revealed known dreamsign icon as an {@link ArtRef}, or `null`. |
-| `badgeScale` | `number` | yes | Multiplier applied to the site / dreamsign badge sizes (the mobile atlas enlarges them). Defaults to 1 — the desktop size. |
+| `view` | `AtlasNodeView` | no | Presentational data for the {@link AtlasNode} face. |
+| `card` | `AtlasNodeCard` | no | The InfoCard reveal content for this node. |
 
 ## Usage
 
-One node on the Dream Atlas. `view` is a fully-resolved `AtlasNodeView` (node lifecycle + resolved art URLs + placement) built by the atlas layout; the node reports hover / click through the callbacks and positions itself from `view.left` / `view.top` inside a `.dream-atlas .nodes` stage.
+One node on the Dream Atlas, wired to the InfoCard press engine. `item` is a fully-resolved `AtlasNodeRevealItem` (a placed `AtlasNodeView` face + its `AtlasNodeCard` reveal content) built by the atlas view-model; the node positions itself from `view.left` / `view.top` inside a `.dream-atlas .nodes` stage and anchors its press / hover reveal to the stage root via `stageRef`. Selecting an available node enters its dreamscape through `onEnterNode`.
 
 ```tsx
-import { AtlasNode } from "src/tango/components/atlas/AtlasNode";
+import { AtlasNodeReveal } from "src/tango/components/atlas/AtlasNodeReveal";
 
-<div className="dream-atlas">
+const stageRef = useRef<HTMLDivElement>(null);
+
+<div ref={stageRef} className="dream-atlas">
   <div className="nodes">
-    <AtlasNode
-      view={view}
-      hovered={hoveredId === view.node.id}
-      onEnter={() => setHoveredId(view.node.id)}
-      onLeave={() => setHoveredId(null)}
-      onClick={() => enterDreamscape(view.node)}
-    />
+    {items.map((item) => (
+      <AtlasNodeReveal
+        key={item.view.node.id}
+        item={item}
+        stageRef={stageRef}
+        onEnterNode={(id) => enterDreamscape(id)}
+      />
+    ))}
   </div>
 </div>
 ```
