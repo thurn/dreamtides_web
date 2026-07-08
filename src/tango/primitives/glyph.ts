@@ -75,6 +75,8 @@ export const GLYPHS = {
   chevronRight: g("bx bx-chevron-right"),
   /** A downward chevron. */
   chevronDown: g("bx bx-chevron-down"),
+  /** An upward chevron. */
+  chevronUp: g("bx bx-chevron-up"),
   /** The filled downward caret that marks a Select trigger as a dropdown. */
   caretDown: g("bxf bx-caret-down"),
   /** Filled up/down arrows — the leading mark on a sort dropdown button. */

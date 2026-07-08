@@ -67,13 +67,6 @@ export const DECK_TYPE_TOGGLE_OPTIONS: readonly DeckControlOption<DeckTypeToggle
     { value: "Event", label: "Events" },
   ] as const;
 
-/** The sort-direction segments — a compact up/down arrow toggle. */
-export const SORT_DIRECTION_OPTIONS: readonly DeckControlOption<SortDirection>[] =
-  [
-    { value: "asc", label: "↑" },
-    { value: "desc", label: "↓" },
-  ] as const;
-
 /** The card-size segments — the S / M / L display-size control. */
 export const DECK_CARD_SIZE_OPTIONS: readonly DeckControlOption<DeckCardSize>[] =
   [

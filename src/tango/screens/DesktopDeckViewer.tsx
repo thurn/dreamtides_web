@@ -68,7 +68,6 @@ import {
   DECK_SORT_OPTIONS,
   DECK_TYPE_TOGGLE_OPTIONS,
   DEFAULT_DESKTOP_DECK_FILTER_SORT,
-  SORT_DIRECTION_OPTIONS,
   buildSubtypeFilterOptions,
   filterAndSortDesktopDeckCards,
 } from "./desktop-deck-filter";
@@ -561,42 +560,37 @@ function ControlBar({
           onChange={(value) => onChange({ subtype: value })}
         />
       )}
-      {/* Sort key + direction bound with a tighter inner gap than the bar's, so
-          the pair reads as one sort control rather than two loose buttons. */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: token("--space-2"),
-        }}
-      >
-        <Select
-          size="sm"
-          leadingGlyph={GLYPHS.sort}
-          align="start"
-          ariaLabel="Sort order"
-          options={DECK_SORT_OPTIONS.map((option) => ({
-            value: option.value,
-            label: option.label,
-            triggerLabel: option.triggerLabel,
-          }))}
-          value={filterSort.sort}
-          onChange={(value) =>
-            onChange({ sort: value as DesktopDeckFilterSort["sort"] })
-          }
-        />
-        <SegmentedControl
-          size="sm"
-          options={SORT_DIRECTION_OPTIONS.map((option) => ({
-            value: option.value,
-            label: option.label,
-          }))}
-          value={filterSort.direction}
-          onChange={(value) =>
-            onChange({ direction: value as DesktopDeckFilterSort["direction"] })
-          }
-        />
-      </div>
+      <Select
+        size="sm"
+        leadingGlyph={GLYPHS.sort}
+        align="start"
+        ariaLabel="Sort order"
+        options={DECK_SORT_OPTIONS.map((option) => ({
+          value: option.value,
+          label: option.label,
+          triggerLabel: option.triggerLabel,
+        }))}
+        value={filterSort.sort}
+        onChange={(value) =>
+          onChange({ sort: value as DesktopDeckFilterSort["sort"] })
+        }
+      />
+      {/* The sort direction is one toggle affordance, not two segments: a single
+          disc whose chevron reflects the current direction and flips on press. */}
+      <IconButton
+        size="sm"
+        glyph={
+          filterSort.direction === "asc" ? GLYPHS.chevronUp : GLYPHS.chevronDown
+        }
+        label={
+          filterSort.direction === "asc" ? "Sort ascending" : "Sort descending"
+        }
+        onPress={() =>
+          onChange({
+            direction: filterSort.direction === "asc" ? "desc" : "asc",
+          })
+        }
+      />
       {/* View density lives at the trailing edge — the auto margin is the one
           deliberate gap in the bar, separating "what to show" from "how big". */}
       <div style={{ marginLeft: "auto" }}>
