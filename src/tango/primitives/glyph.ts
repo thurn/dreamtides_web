@@ -65,6 +65,8 @@ export const GLYPHS = {
   // Affordance glyphs.
   check: g("bx bx-check"),
   lock: g("bx bx-lock"),
+  /** The filled padlock — the solid variant used on the locked site-node badge. */
+  lockFilled: g("bxf bx-lock"),
   close: g("bx bx-x"),
   closeFilled: g("bxf bx-x"),
   /** The (i) help mark, revealing an explanatory popover on hover / press. */

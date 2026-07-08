@@ -239,7 +239,7 @@ export function SiteNode({
       )}
       {isLocked && !site.isVisited && (
         <span className="ds-node-badge locked" aria-hidden="true">
-          <i className={GLYPHS.lock} />
+          <i className={GLYPHS.lockFilled} />
         </span>
       )}
       {anchor &&
