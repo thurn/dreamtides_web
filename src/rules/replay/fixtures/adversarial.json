@@ -1,0 +1,136 @@
+{
+  "providerSet": "synthetic-deterministic-v1",
+  "genesis": {
+    "seed": "fixture-adversarial",
+    "reducerVersion": "fixture",
+    "createdAt": 0
+  },
+  "events": [
+    {
+      "seq": 1,
+      "event": {
+        "type": "START_QUEST",
+        "payload": {
+          "dreamcallerId": "dc-fixture"
+        },
+        "actor": "alice",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 0
+      }
+    },
+    {
+      "seq": 2,
+      "event": {
+        "type": "ADJUST_ESSENCE",
+        "payload": {
+          "delta": 10
+        },
+        "actor": "bob",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 1
+      }
+    },
+    {
+      "seq": 3,
+      "event": {
+        "type": "ADJUST_ESSENCE",
+        "payload": {
+          "delta": 20
+        },
+        "actor": "alice",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 1
+      }
+    },
+    {
+      "seq": 4,
+      "event": {
+        "type": "OPEN_SITE",
+        "payload": {
+          "siteId": "site-essence"
+        },
+        "actor": "alice",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 1
+      }
+    },
+    {
+      "seq": 5,
+      "event": {
+        "type": "OPEN_SITE",
+        "payload": {
+          "siteId": "site-essence"
+        },
+        "actor": "bob",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 1
+      }
+    },
+    {
+      "seq": 6,
+      "event": {
+        "type": "BEGIN_BATTLE",
+        "payload": {
+          "siteId": "site-battle"
+        },
+        "actor": "alice",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 5
+      }
+    },
+    {
+      "seq": 7,
+      "event": {
+        "type": "BATTLE_COMMAND",
+        "payload": {
+          "command": {
+            "id": "DEBUG_EDIT",
+            "edit": {
+              "kind": "MOVE_CARD_TO_ZONE",
+              "battleCardId": "bc-foresee",
+              "destination": {
+                "side": "player",
+                "zone": "frontRank",
+                "slotId": "F1"
+              }
+            }
+          }
+        },
+        "actor": "alice",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 6
+      }
+    },
+    {
+      "seq": 8,
+      "event": {
+        "type": "RESOLVE_PROMPT",
+        "payload": {
+          "promptId": 7,
+          "resolution": {
+            "kind": "foresee"
+          }
+        },
+        "actor": "alice",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 7
+      }
+    },
+    {
+      "seq": 9,
+      "event": {
+        "type": "RESOLVE_PROMPT",
+        "payload": {
+          "promptId": 7,
+          "resolution": {
+            "kind": "foresee"
+          }
+        },
+        "actor": "bob",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 7
+      }
+    }
+  ],
+  "finalHash": "81e8c6e7979bd21401e9dd672d362fb475c00dc43f62d24043550c60d29915c7"
+}

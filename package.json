@@ -30,6 +30,7 @@
     "regenerate-assets": "bash scripts/regenerate-assets.sh",
     "deploy": "bash scripts/deploy.sh",
     "kill-dev-servers": "bash scripts/kill-dev-servers.sh",
+    "regenerate-replay-fixtures": "npx tsx scripts/regenerate-replay-fixtures.mjs",
     "generate-pool": "node scripts/generate-color-pool.mjs",
     "simulate-pools": "node scripts/simulate-dreamcaller-pools.mjs",
     "pool-metrics": "node scripts/pool-metrics.mjs",

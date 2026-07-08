@@ -1,0 +1,96 @@
+{
+  "providerSet": "synthetic-deterministic-v1",
+  "genesis": {
+    "seed": "fixture-quest-only",
+    "reducerVersion": "fixture",
+    "createdAt": 0
+  },
+  "events": [
+    {
+      "seq": 1,
+      "event": {
+        "type": "START_QUEST",
+        "payload": {
+          "dreamcallerId": "dc-fixture"
+        },
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 0
+      }
+    },
+    {
+      "seq": 2,
+      "event": {
+        "type": "SELECT_DREAMCALLER",
+        "payload": {
+          "dreamcallerId": "dc-fixture"
+        },
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 1
+      }
+    },
+    {
+      "seq": 3,
+      "event": {
+        "type": "TRAVEL_TO_DREAMSCAPE",
+        "payload": {
+          "nodeId": "node-start"
+        },
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 2
+      }
+    },
+    {
+      "seq": 4,
+      "event": {
+        "type": "OPEN_SITE",
+        "payload": {
+          "siteId": "site-essence"
+        },
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 3
+      }
+    },
+    {
+      "seq": 5,
+      "event": {
+        "type": "ACCEPT_ESSENCE",
+        "payload": {
+          "siteId": "site-essence"
+        },
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 4
+      }
+    },
+    {
+      "seq": 6,
+      "event": {
+        "type": "OPEN_SITE",
+        "payload": {
+          "siteId": "site-shop"
+        },
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 5
+      }
+    },
+    {
+      "seq": 7,
+      "event": {
+        "type": "BUY_SHOP_SLOT",
+        "payload": {
+          "siteId": "site-shop",
+          "slotIndex": 0
+        },
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 6
+      }
+    }
+  ],
+  "finalHash": "d48e01db8b26326268fd3598755e08f9549a568fdf177f4dbe114536c7703556"
+}

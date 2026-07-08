@@ -1,0 +1,108 @@
+{
+  "providerSet": "synthetic-deterministic-v1",
+  "genesis": {
+    "seed": "fixture-battle",
+    "reducerVersion": "fixture",
+    "createdAt": 0
+  },
+  "events": [
+    {
+      "seq": 1,
+      "event": {
+        "type": "START_QUEST",
+        "payload": {
+          "dreamcallerId": "dc-fixture"
+        },
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 0
+      }
+    },
+    {
+      "seq": 2,
+      "event": {
+        "type": "BEGIN_BATTLE",
+        "payload": {
+          "siteId": "site-battle"
+        },
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 1
+      }
+    },
+    {
+      "seq": 3,
+      "event": {
+        "type": "BATTLE_COMMAND",
+        "payload": {
+          "command": {
+            "id": "DEBUG_EDIT",
+            "edit": {
+              "kind": "MOVE_CARD_TO_ZONE",
+              "battleCardId": "bc-det",
+              "destination": {
+                "side": "player",
+                "zone": "frontRank",
+                "slotId": "F0"
+              }
+            }
+          }
+        },
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 2
+      }
+    },
+    {
+      "seq": 4,
+      "event": {
+        "type": "BATTLE_COMMAND",
+        "payload": {
+          "command": {
+            "id": "DEBUG_EDIT",
+            "edit": {
+              "kind": "MOVE_CARD_TO_ZONE",
+              "battleCardId": "bc-foresee",
+              "destination": {
+                "side": "player",
+                "zone": "frontRank",
+                "slotId": "F1"
+              }
+            }
+          }
+        },
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 3
+      }
+    },
+    {
+      "seq": 5,
+      "event": {
+        "type": "RESOLVE_PROMPT",
+        "payload": {
+          "promptId": 4,
+          "resolution": {
+            "kind": "foresee"
+          }
+        },
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 4
+      }
+    },
+    {
+      "seq": 6,
+      "event": {
+        "type": "END_BATTLE",
+        "payload": {
+          "result": "victory"
+        },
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 5
+      }
+    }
+  ],
+  "finalHash": "7537ac5647ed0726a924427a3c72f674e0c497119aee00a577fde167b0c39355"
+}
