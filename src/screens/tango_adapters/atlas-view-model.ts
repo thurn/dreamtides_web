@@ -28,6 +28,8 @@ import {
   ATLAS_BADGE_SCALE_MOBILE,
   ATLAS_NODE_SIZE_DESKTOP,
   ATLAS_NODE_SIZE_MOBILE,
+  ATLAS_STAGE_HEIGHT,
+  ATLAS_STAGE_WIDTH,
   BOSS_DISPLAY,
   BOSS_DREAMSCAPE_ID,
 } from "../../tango/components/atlas/atlas-display";
@@ -50,9 +52,12 @@ import type { DreamAtlas, DreamscapeNode, QuestState } from "../../types/quest";
 import { type LayerName, layerOrdinal } from "../../types/layer-name";
 import { toQsbDreamcaller, toQsbDreamsigns } from "./dreamscape-view-model";
 
-/** The portrait design canvas the mobile atlas stage scales to fit (letterboxed). */
-export const ATLAS_STAGE_WIDTH = 1080;
-export const ATLAS_STAGE_HEIGHT = 1920;
+/**
+ * The portrait design canvas the mobile atlas stage scales to fit (letterboxed).
+ * Homed in-Tango (`atlas-display.ts`) so the adapter and the Tango atlas mockup
+ * share one source of truth; re-exported here for the atlas consumers.
+ */
+export { ATLAS_STAGE_HEIGHT, ATLAS_STAGE_WIDTH };
 
 /** The landscape design canvas the desktop atlas stage scales to fit (letterboxed). */
 export const ATLAS_STAGE_LANDSCAPE_WIDTH = 1920;

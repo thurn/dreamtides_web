@@ -63,6 +63,18 @@ export const ATLAS_ANCHOR_NODE_SIZE_MOBILE = 224;
  */
 export const ATLAS_BADGE_SCALE_MOBILE = 1.5;
 
+/**
+ * The portrait design canvas the vertical (mobile) atlas stage scales to fit
+ * (letterboxed). Homed here in-Tango, alongside the node sizes, so both the
+ * layout adapter (`src/screens/tango_adapters/atlas-view-model.ts`) and the
+ * Tango atlas mockup read the same production numbers; the adapter may not be
+ * imported across the Tango boundary, so the shared numbers live here. The
+ * layer axis climbs the height bottom→top (starter at the bottom, boss at the
+ * top).
+ */
+export const ATLAS_STAGE_WIDTH = 1080;
+export const ATLAS_STAGE_HEIGHT = 1920;
+
 /** Boxicons class used for the "Card Affiliation" row in the preview card. */
 export const AFFILIATION_ROW_ICON_CLASS = GLYPHS.affiliationRow;
 

@@ -1,354 +1,116 @@
-// Full-screen mockup for the Dream Atlas — the shared scene behind both the
-// `atlas-node` and `atlas-edge` component pages. It composes multiple AtlasNodes
-// across their lifecycle states (completed / available / revealedLocked /
-// unrevealed, plus the starter and boss) connected by AtlasEdges in all four
-// treatments (traveled / open / dim / locked), over a dark scene wash. Node art
-// resolves from real dreamscape ids via the atlas-display helpers, exactly as
-// the live Atlas screen resolves it; the boss node presents Limbo.
+// Full-screen mockup for the Dream Atlas — the shared scene behind the
+// `atlas-node` and `atlas-edge` component pages. It mounts the real `AtlasMap`
+// surface: the run graph of dreamscape nodes and their connectors, fitted into
+// the production portrait design stage and uniformly scaled to fit the viewport
+// (letterboxed) by AtlasMap itself. The mockup only owns the full-bleed
+// `.dream-atlas` scene, its violet journey wash, and the `stageRef` the node
+// reveals anchor and clamp against — the orientation, scale-to-fit, edge drawing,
+// and press / hover reveals all belong to the real component.
 //
-// The scene lives in a fixed 1280×800 design canvas that is uniformly scaled to
-// fit the viewport (letterboxed), so nodes and edges share one coordinate space
-// and the whole map stays coherent at desktop and mobile. Node centres (left/top)
-// and edge endpoints are authored in that canvas space.
+// The fixtures form a vertical run graph read bottom-up, exactly as the live
+// mobile atlas reads: the Firstlight Meadow starter anchors the bottom, each
+// layer climbs toward the Apollyon boss battle at the top, and the nodes span
+// every lifecycle state (completed / available / revealedLocked / unrevealed /
+// forgone) plus the boss and starter anchors and one `isReachable: false` forgone
+// node. The node faces and their reveal cards come from the shared atlas fixtures
+// (see `__atlas-fixtures__`), drawn at the production mobile node sizes; the
+// forward connectors exercise all four AtlasEdge treatments (traveled / open /
+// dim / locked). Node centres and edge endpoints are authored in the production
+// portrait stage space.
 
-import { useEffect, useState } from "react";
-import type { DreamscapeNode } from "../../../types/quest";
-import { LayerName } from "../../../types/layer-name";
-import { AtlasNode, type AtlasNodeView } from "../../components/atlas/AtlasNode";
-import { AtlasEdge, type AtlasEdgeKind } from "../../components/atlas/AtlasEdge";
-import { artRef } from "../../primitives/art";
-import { glyph } from "../../primitives/glyph";
+import { useRef } from "react";
+import {
+  ATLAS_STAGE_HEIGHT,
+  ATLAS_STAGE_WIDTH,
+} from "../../components/atlas/atlas-display";
+import {
+  AtlasMap,
+  type AtlasMapEdge,
+  type AtlasMapNode,
+} from "../../components/atlas/AtlasMap";
+import type { AtlasEdgeKind } from "../../components/atlas/AtlasEdge";
 import { token } from "../../primitives/tokens";
+import {
+  type AtlasFixtureRole,
+  atlasFixtureNodes,
+  nodeSizing,
+} from "../__atlas-fixtures__";
 import { sceneRoot } from "./scene";
 
-const CANVAS_W = 1280;
-const CANVAS_H = 800;
-
-/** Boxicon class for a signature-site badge (static presentation, not game data). */
-const SHOP_BADGE = glyph("bxf bx-store-alt-2");
-const DRAFT_BADGE = glyph("bxf bx-copy");
-
-/** Builds a DreamscapeNode in the given lifecycle state. */
-function makeNode(
-  id: string,
-  state: DreamscapeNode["state"],
-  overrides: Partial<DreamscapeNode> = {},
-): DreamscapeNode {
-  return {
-    id,
-    layer: LayerName.One,
-    indexInLayer: 0,
-    dreamscapeId: id,
-    biomeName: id,
-    biomeColor: "#2d2040",
-    sites: [],
-    position: { x: 0, y: 0 },
-    state,
-    enhancedSiteType: null,
-    forwardIds: [],
-    backwardIds: [],
-    knownDreamsignId: null,
-    ...overrides,
-  };
-}
-
-interface NodeSpec {
-  key: string;
+/** A node centre in the production portrait stage (1080×1920) space. */
+interface Placement {
   left: number;
   top: number;
-  view: AtlasNodeView;
-  hovered?: boolean;
 }
 
 /**
- * The atlas nodes, authored in 1280×800 canvas space. Real dreamscape ids drive
- * both the id and the resolved circular icon art. `left`/`top` are node centres.
+ * Where each fixture node sits in the portrait stage, authored as a run graph
+ * climbing bottom (the starter) to top (the boss). Same-layer siblings share a
+ * row; the layer axis is the vertical span, matching the live mobile atlas.
  */
-const NODE_SPECS: NodeSpec[] = [
-  {
-    key: "starter",
-    left: 150,
-    top: 400,
-    view: {
-      node: makeNode("firstlight_meadow", "completed", { biomeName: "Firstlight Meadow" }),
-      left: 150,
-      top: 400,
-      size: 150,
-      isStarter: true,
-      isBoss: false,
-      iconRef: artRef.dreamscapeIcon("firstlight_meadow"),
-      siteBadgeGlyph: null,
-      knownDreamsignRef: null,
-    },
-  },
-  {
-    key: "frostforge",
-    left: 400,
-    top: 250,
-    view: {
-      node: makeNode("frostforge", "completed", { biomeName: "Frostforge" }),
-      left: 400,
-      top: 250,
-      size: 132,
-      isStarter: false,
-      isBoss: false,
-      iconRef: artRef.dreamscapeIcon("frostforge"),
-      siteBadgeGlyph: SHOP_BADGE,
-      knownDreamsignRef: null,
-    },
-  },
-  {
-    key: "tumbleleaf",
-    left: 400,
-    top: 560,
-    view: {
-      node: makeNode("tumbleleaf_village", "completed", { biomeName: "Tumbleleaf Village" }),
-      left: 400,
-      top: 560,
-      size: 132,
-      isStarter: false,
-      isBoss: false,
-      iconRef: artRef.dreamscapeIcon("tumbleleaf_village"),
-      siteBadgeGlyph: DRAFT_BADGE,
-      knownDreamsignRef: null,
-    },
-  },
-  {
-    key: "hopes_end",
-    left: 660,
-    top: 190,
-    view: {
-      node: makeNode("hopes_end", "available", { biomeName: "Hope's End" }),
-      left: 660,
-      top: 190,
-      size: 132,
-      isStarter: false,
-      isBoss: false,
-      iconRef: artRef.dreamscapeIcon("hopes_end"),
-      siteBadgeGlyph: SHOP_BADGE,
-      knownDreamsignRef: null,
-    },
-  },
-  {
-    key: "grid_city",
-    left: 660,
-    top: 420,
-    hovered: true,
-    view: {
-      node: makeNode("grid_city", "available", { biomeName: "Grid City" }),
-      left: 660,
-      top: 420,
-      size: 132,
-      isStarter: false,
-      isBoss: false,
-      iconRef: artRef.dreamscapeIcon("grid_city"),
-      siteBadgeGlyph: DRAFT_BADGE,
-      knownDreamsignRef: artRef.dreamsign("acorn_gold.png"),
-    },
-  },
-  {
-    key: "wilderveil",
-    left: 660,
-    top: 650,
-    view: {
-      node: makeNode("wilderveil", "available", { biomeName: "Wilderveil" }),
-      left: 660,
-      top: 650,
-      size: 132,
-      isStarter: false,
-      isBoss: false,
-      iconRef: artRef.dreamscapeIcon("wilderveil"),
-      siteBadgeGlyph: SHOP_BADGE,
-      knownDreamsignRef: null,
-    },
-  },
-  {
-    key: "unrevealed",
-    left: 920,
-    top: 150,
-    view: {
-      node: makeNode("u1", "unrevealed", { biomeName: "", dreamscapeId: null }),
-      left: 920,
-      top: 150,
-      size: 132,
-      isStarter: false,
-      isBoss: false,
-      iconRef: null,
-      siteBadgeGlyph: null,
-      knownDreamsignRef: null,
-    },
-  },
-  {
-    key: "pharaohs_gate",
-    left: 920,
-    top: 350,
-    view: {
-      node: makeNode("pharaohs_gate", "revealedLocked", { biomeName: "Pharaoh's Gate", layer: LayerName.Four }),
-      left: 920,
-      top: 350,
-      size: 132,
-      isStarter: false,
-      isBoss: false,
-      iconRef: artRef.dreamscapeIcon("pharaohs_gate"),
-      siteBadgeGlyph: SHOP_BADGE,
-      knownDreamsignRef: null,
-    },
-  },
-  {
-    key: "rust_expanse",
-    left: 920,
-    top: 590,
-    view: {
-      node: makeNode("rust_expanse", "revealedLocked", { biomeName: "Rust Expanse", layer: LayerName.Four }),
-      left: 920,
-      top: 590,
-      size: 132,
-      isStarter: false,
-      isBoss: false,
-      iconRef: artRef.dreamscapeIcon("rust_expanse"),
-      siteBadgeGlyph: DRAFT_BADGE,
-      knownDreamsignRef: null,
-    },
-  },
-  {
-    key: "boss",
-    left: 1150,
-    top: 400,
-    view: {
-      node: makeNode("boss", "revealedLocked", { biomeName: "", layer: LayerName.Five }),
-      left: 1150,
-      top: 400,
-      size: 150,
-      isStarter: false,
-      isBoss: true,
-      iconRef: null,
-      siteBadgeGlyph: null,
-      knownDreamsignRef: null,
-    },
-  },
+const PLACEMENTS: Record<AtlasFixtureRole, Placement> = {
+  starter: { left: 540, top: 1720 },
+  completed: { left: 540, top: 1380 },
+  available: { left: 360, top: 1040 },
+  forgone: { left: 720, top: 1040 },
+  revealedLocked: { left: 360, top: 700 },
+  unrevealed: { left: 720, top: 700 },
+  boss: { left: 540, top: 340 },
+};
+
+/** Forward connectors between the placed nodes, one per AtlasEdge treatment. */
+const EDGES: { from: AtlasFixtureRole; to: AtlasFixtureRole; kind: AtlasEdgeKind }[] = [
+  { from: "starter", to: "completed", kind: "traveled" },
+  { from: "completed", to: "available", kind: "open" },
+  { from: "completed", to: "forgone", kind: "dim" },
+  { from: "available", to: "revealedLocked", kind: "dim" },
+  { from: "available", to: "unrevealed", kind: "dim" },
+  { from: "forgone", to: "unrevealed", kind: "locked" },
+  { from: "revealedLocked", to: "boss", kind: "locked" },
+  { from: "unrevealed", to: "boss", kind: "locked" },
 ];
-
-interface EdgeSpec {
-  from: string;
-  to: string;
-  kind: AtlasEdgeKind;
-}
-
-// Edge treatments follow the live screen's rules: completed→completed is
-// `traveled`, completed→available is `open`, revealed-but-not-yet-open is `dim`,
-// and routes reaching from a deeper-than-frontier layer are `locked`.
-const EDGE_SPECS: EdgeSpec[] = [
-  { from: "starter", to: "frostforge", kind: "traveled" },
-  { from: "starter", to: "tumbleleaf", kind: "traveled" },
-  { from: "frostforge", to: "hopes_end", kind: "open" },
-  { from: "frostforge", to: "grid_city", kind: "open" },
-  { from: "tumbleleaf", to: "grid_city", kind: "open" },
-  { from: "tumbleleaf", to: "wilderveil", kind: "open" },
-  { from: "hopes_end", to: "pharaohs_gate", kind: "dim" },
-  { from: "grid_city", to: "pharaohs_gate", kind: "dim" },
-  { from: "grid_city", to: "rust_expanse", kind: "dim" },
-  { from: "wilderveil", to: "rust_expanse", kind: "dim" },
-  { from: "hopes_end", to: "unrevealed", kind: "dim" },
-  { from: "pharaohs_gate", to: "boss", kind: "locked" },
-  { from: "rust_expanse", to: "boss", kind: "locked" },
-];
-
-const NODE_BY_KEY = new Map(NODE_SPECS.map((spec) => [spec.key, spec]));
 
 export function AtlasMapMockup() {
-  const [scale, setScale] = useState(1);
+  const stageRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const fit = () => {
-      setScale(
-        Math.min(window.innerWidth / CANVAS_W, window.innerHeight / CANVAS_H),
-      );
+  // The production mobile node sizes suit the vertical portrait stage.
+  const nodes: AtlasMapNode[] = atlasFixtureNodes(nodeSizing(true)).map(
+    (fixture) => {
+      const at = PLACEMENTS[fixture.role];
+      return {
+        ...fixture.item,
+        view: { ...fixture.item.view, left: at.left, top: at.top },
+      };
+    },
+  );
+
+  const edges: AtlasMapEdge[] = EDGES.map((edge) => {
+    const from = PLACEMENTS[edge.from];
+    const to = PLACEMENTS[edge.to];
+    return {
+      key: `${edge.from}-${edge.to}`,
+      x1: from.left,
+      y1: from.top,
+      x2: to.left,
+      y2: to.top,
+      kind: edge.kind,
     };
-    fit();
-    window.addEventListener("resize", fit);
-    return () => {
-      window.removeEventListener("resize", fit);
-    };
-  }, []);
+  });
 
   return (
     <div
+      ref={stageRef}
       className="dream-atlas"
-      style={{
-        ...sceneRoot,
-        background:
-          "radial-gradient(120% 90% at 50% 30%, #241a3c 0%, #140e26 45%, #060410 100%)",
-      }}
+      style={{ ...sceneRoot, background: token("--dt-wash-journey") }}
     >
-      {/* The fixed design canvas, centred and uniformly scaled to fit. */}
-      <div
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-          width: CANVAS_W,
-          height: CANVAS_H,
-          transform: `translate(-50%, -50%) scale(${String(scale)})`,
-          transformOrigin: "center",
-        }}
-      >
-        <svg
-          className="edges"
-          viewBox={`0 0 ${String(CANVAS_W)} ${String(CANVAS_H)}`}
-          width={CANVAS_W}
-          height={CANVAS_H}
-        >
-          {EDGE_SPECS.map((edge) => {
-            const from = NODE_BY_KEY.get(edge.from);
-            const to = NODE_BY_KEY.get(edge.to);
-            if (from === undefined || to === undefined) {
-              return null;
-            }
-            return (
-              <AtlasEdge
-                key={`${edge.from}-${edge.to}`}
-                kind={edge.kind}
-                x1={from.left}
-                y1={from.top}
-                x2={to.left}
-                y2={to.top}
-              />
-            );
-          })}
-        </svg>
-
-        <div className="nodes">
-          {NODE_SPECS.map((spec) => (
-            <AtlasNode
-              key={spec.key}
-              view={spec.view}
-              hovered={spec.hovered ?? false}
-              onEnter={() => undefined}
-              onLeave={() => undefined}
-              onClick={() => undefined}
-            />
-          ))}
-        </div>
-      </div>
-
-      <div
-        style={{
-          position: "absolute",
-          top: token("--space-8"),
-          left: 0,
-          right: 0,
-          textAlign: "center",
-          pointerEvents: "none",
-        }}
-      >
-        <div style={{ font: token("--t-title"), color: token("--text-primary") }}>
-          Dream Atlas
-        </div>
-        <div style={{ font: token("--t-caption"), color: token("--text-muted"), marginTop: token("--space-2") }}>
-          Choose your next dream — seven layers to the final dream.
-        </div>
-      </div>
-
+      <AtlasMap
+        stageWidth={ATLAS_STAGE_WIDTH}
+        stageHeight={ATLAS_STAGE_HEIGHT}
+        nodes={nodes}
+        edges={edges}
+        onEnterNode={() => undefined}
+        stageRef={stageRef}
+      />
     </div>
   );
 }
