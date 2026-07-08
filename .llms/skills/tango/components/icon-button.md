@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/icon-button`
 
-Real consumers: **3** (imports outside `src/tango/docs/` and tests).
+Real consumers: **4** (imports outside `src/tango/docs/` and tests).
 
 The compact glyph-only glass disc — a corner chrome action worn by the deck viewer's close control and the dreamscape menu button. Its surface is the shared liquid-glass control material, made a fully-round disc, so it reads as one family with the filter/sort controls it sits beside.
 
@@ -21,6 +21,8 @@ The compact glyph-only glass disc — a corner chrome action worn by the deck vi
 | `label` | `string` | yes | — | The disc's accessible name (`aria-label`); the disc shows only its glyph. |
 | `onPress` | `() => void` | yes | — | Fires when the disc is activated (no-op while disabled). |
 | `disabled` | `boolean` | no | `false` | Detaches the click / press feedback and marks the disc `aria-disabled`. |
+| `ariaExpanded` | `boolean` | no | — | When the disc is a disclosure trigger, its `aria-expanded` state (whether the surface it controls is open). Omitted for a plain action button. |
+| `testId` | `string` | no | — | A `data-testid` for selecting the disc in tests. |
 
 ## Usage
 

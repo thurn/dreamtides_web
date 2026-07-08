@@ -172,15 +172,13 @@ export default tseslint.config(
     // screen wearing a raw material itself bypasses the component layer
     // entirely and is not. Scoped to all of src/**, ignoring the linted
     // src/tango/** tier itself (which legitimately imports its own materials)
-    // and two pre-existing legacy reach-ins baselined here: StartingDeckModal
-    // and DreamscapeQuestMenu. Both are removed in Phase 3 — StartingDeckModal
-    // migrates onto the Tango tier and the dreamscape gear button moves onto
-    // IconButton — at which point these `ignores` entries shrink to nothing.
+    // and one baselined legacy reach-in: StartingDeckModal, which migrates onto
+    // the Tango tier in Phase 3, at which point this `ignores` entry shrinks to
+    // nothing.
     files: ["src/**/*.{ts,tsx}"],
     ignores: [
       "src/tango/**",
       "src/components/StartingDeckModal.tsx",
-      "src/components/DreamscapeQuestMenu.tsx",
     ],
     rules: {
       "no-restricted-imports": [

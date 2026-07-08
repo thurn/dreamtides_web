@@ -4,10 +4,10 @@
 // here as App-shell corner chrome.
 
 import type { QuestState } from "../types/quest";
-import { Pressable } from "../tango/primitives/Pressable";
 import { token } from "../tango/primitives/tokens";
+import { GLYPHS } from "../tango/primitives/glyph";
 import { useIsDesktop } from "../tango/screens/use-is-desktop";
-import { glassIconButtonChrome } from "../tango/internal/control-treatment";
+import { IconButton } from "../tango/components/controls/IconButton";
 import { QuestUtilityMenu, type QuestUtilityMenuAction } from "./QuestUtilityMenu";
 
 /** The App-shell overlay handlers the menu triggers. */
@@ -38,6 +38,14 @@ interface DreamscapeQuestMenuProps {
 }
 
 /**
+ * The trigger disc's diameter. Both platforms wear the same compact circular
+ * glass IconButton (`md`, a 48px disc that clears the 44px touch floor); only
+ * the corner and glyph differ. Exported so the corner layout can reserve the
+ * disc's footprint.
+ */
+export const menuBtnSize = 48;
+
+/**
  * The dreamscape's top-left utility menu. Renders the screen-appropriate trigger
  * and, while open, the dropdown of quest actions (with a Load-Quest submenu).
  */
@@ -53,14 +61,10 @@ export function DreamscapeQuestMenu({
   elevated = false,
 }: DreamscapeQuestMenuProps) {
   const isDesktop = useIsDesktop();
-  // Trigger sizing. Both platforms wear the same compact circular glass icon
-  // button that clears the 44px touch floor; only the corner and glyph differ.
-  // Mobile anchors the menu glyph to the top-left corner; desktop anchors the
-  // gear glyph to the top-right. The edge inset keeps the disc clear of the
-  // screen corner (more so on desktop, where there is no safe-area inset doing
-  // that job).
-  const menuBtnSize = 48;
-  const menuGlyphSize = 26;
+  // Corner placement. Mobile anchors the menu glyph to the top-left corner;
+  // desktop anchors the gear glyph to the top-right. The edge inset keeps the
+  // disc clear of the screen corner (more so on desktop, where there is no
+  // safe-area inset doing that job).
   const menuEdgeInset = isDesktop ? 22 : 18;
   const actions: QuestUtilityMenuAction[] = [
     { id: "deck", icon: "bxf bx-rectangle-vertical", label: "View Deck", onClick: onOpenDeckViewer },
@@ -124,30 +128,14 @@ export function DreamscapeQuestMenu({
         overlay
         statusAnchor={isDesktop ? "right" : "left"}
         renderTrigger={({ open, toggle }) => (
-          <Pressable
-            as="button"
-            onClick={toggle}
-            aria-label="Open menu"
-            aria-expanded={open}
-            data-testid="dreamscape-menu-button"
-            style={{
-              width: menuBtnSize,
-              height: menuBtnSize,
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: 0,
-              color: token("--text-on-accent"),
-              fontSize: menuGlyphSize,
-              cursor: "pointer",
-              ...glassIconButtonChrome(),
-            }}
-          >
-            <i
-              className={isDesktop ? "bxf bx-cog" : "bxf bx-menu"}
-              aria-hidden="true"
-            />
-          </Pressable>
+          <IconButton
+            size="md"
+            glyph={isDesktop ? GLYPHS.gear : GLYPHS.menu}
+            label="Open menu"
+            ariaExpanded={open}
+            testId="dreamscape-menu-button"
+            onPress={toggle}
+          />
         )}
       />
     </div>

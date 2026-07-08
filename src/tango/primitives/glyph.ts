@@ -83,6 +83,10 @@ export const GLYPHS = {
   filter: g("bxf bx-filter"),
   /** The filled star that heads a curated / signature item. */
   star: g("bxf bx-star"),
+  /** The settings gear — the desktop quest-menu disclosure trigger. */
+  gear: g("bxf bx-cog"),
+  /** The hamburger bars — the mobile quest-menu disclosure trigger. */
+  menu: g("bxf bx-menu"),
 } as const;
 
 /**

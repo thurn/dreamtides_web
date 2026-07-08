@@ -1441,6 +1441,22 @@
       "required": false,
       "defaultValue": "false",
       "description": "Detaches the click / press feedback and marks the disc `aria-disabled`."
+    },
+    {
+      "name": "ariaExpanded",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "When the disc is a disclosure trigger, its `aria-expanded` state (whether\nthe surface it controls is open). Omitted for a plain action button."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "A `data-testid` for selecting the disc in tests."
     }
   ],
   "InfoCard": [

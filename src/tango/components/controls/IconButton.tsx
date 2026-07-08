@@ -51,6 +51,13 @@ export interface IconButtonProps {
   onPress: () => void;
   /** Detaches the click / press feedback and marks the disc `aria-disabled`. */
   disabled?: boolean;
+  /**
+   * When the disc is a disclosure trigger, its `aria-expanded` state (whether
+   * the surface it controls is open). Omitted for a plain action button.
+   */
+  ariaExpanded?: boolean;
+  /** A `data-testid` for selecting the disc in tests. */
+  testId?: string;
 }
 
 /**
@@ -65,12 +72,16 @@ export function IconButton({
   label,
   onPress,
   disabled = false,
+  ariaExpanded,
+  testId,
 }: IconButtonProps): ReactElement {
   const spec = ICON_BUTTON_SIZES[size];
   return (
     <Pressable
       as="button"
       aria-label={label}
+      aria-expanded={ariaExpanded}
+      data-testid={testId}
       disabled={disabled}
       onClick={disabled ? undefined : onPress}
       style={{

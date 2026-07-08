@@ -45,11 +45,11 @@ The reference files and the index are projections of the component sources
 <!-- BEGIN GENERATED COMPONENT INDEX (npm run tango-docs) -->
 | Component | Group | Consumers | Reference | What it is |
 | --- | --- | --- | --- | --- |
-| Pressable | Primitives | 12 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
+| Pressable | Primitives | 11 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
 | Resource Chip | Components | 1 | [components/resource-chip.md](components/resource-chip.md) | The canonical value-and-mark pairing for the game economy. |
 | Essence Value | Components | 10 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
 | Button | Components | 2 | [components/button.md](components/button.md) | Rung 1 of Tango's four-rung button suite — the beveled purple sprite, the primary/commit action, scaled to any label and to a taller commit height. |
-| Icon Button | Components | 3 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — a corner chrome action worn by the deck viewer's close control and the dreamscape menu button. |
+| Icon Button | Components | 4 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — a corner chrome action worn by the deck viewer's close control and the dreamscape menu button. |
 | Glass Button | Components | 0 | [components/glass-button.md](components/glass-button.md) | The labeled glass secondary action — a text label in the control typography on the shared liquid-glass control surface, with an optional leading glyph. |
 | Glass Dialog | Components | 0 | [components/glass-dialog.md](components/glass-dialog.md) | The glass overlay shell: a modal dialog that frosts the scene behind it — a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and a glass close disc) over a scrolling body. |
 | Leave Site Button | Components | 5 | [components/leave-site-button.md](components/leave-site-button.md) | The fixed top-right exit control for site screens: a danger-red square X button with consistent placement and accessible labeling. |
