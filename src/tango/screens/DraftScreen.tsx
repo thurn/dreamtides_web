@@ -28,6 +28,7 @@ import {
 } from "../components/hud/QuestStatusBar";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
+import { MENU_BUTTON_PX, MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
 import { useIsDesktop } from "./use-is-desktop";
 
 /** The bottom-HUD slice of the view-model — what the QuestStatusBar docks. */
@@ -69,9 +70,15 @@ export interface DraftScreenProps {
 
 // The vertical bands reserved down the screen, as raw calc operands so the
 // card-height cap can subtract them from the viewport.
-// Top: the device safe-area / cutout (Dynamic Island, status bar), or a floor —
-// nothing is drawn here, so the notch never covers content.
-const TOP_SAFE_OP = `max(var(--safe-area-inset-top), ${token("--safe-top")})`;
+// Top: the device safe-area / cutout (Dynamic Island, status bar), a floor, or
+// the app-shell hamburger's bottom edge — whichever is largest. The menu disc
+// sits at `top: max(safe-inset-top, MENU_EDGE_INSET_MOBILE_PX)` with height
+// MENU_BUTTON_PX, so its bottom is `max(inset, edge) + MENU_BUTTON_PX`; the band
+// explicitly clears it so the floating pick counter and pack never ride under
+// the disc.
+const TOP_SAFE_OP =
+  `max(var(--safe-area-inset-top), ${token("--safe-top")}, ` +
+  `calc(max(var(--safe-area-inset-top), ${String(MENU_EDGE_INSET_MOBILE_PX)}px) + ${String(MENU_BUTTON_PX)}px))`;
 // Breathing room between the safe zone and the top of the pack.
 const TOP_GAP_OP = token("--space-6");
 // The band under the pack that holds the small pick counter (its gap above the

@@ -7,6 +7,7 @@ import type { QuestState } from "../types/quest";
 import { token } from "../tango/primitives/tokens";
 import { GLYPHS } from "../tango/primitives/glyph";
 import { useIsDesktop } from "../tango/screens/use-is-desktop";
+import { MENU_BUTTON_PX, MENU_EDGE_INSET_MOBILE_PX } from "../tango/screens/chrome-geometry";
 import { IconButton } from "../tango/components/controls/IconButton";
 import { QuestUtilityMenu, type QuestUtilityMenuAction } from "./QuestUtilityMenu";
 
@@ -41,9 +42,11 @@ interface DreamscapeQuestMenuProps {
  * The trigger disc's diameter. Both platforms wear the same compact circular
  * glass IconButton (`md`, a 48px disc that clears the 44px touch floor); only
  * the corner and glyph differ. Exported so the corner layout can reserve the
- * disc's footprint.
+ * disc's footprint. The value flows from the shared chrome geometry
+ * (`chrome-geometry.ts`), the source of truth both this menu and screens that
+ * must clear it read; re-exported here for footprint-reserving consumers.
  */
-export const menuBtnSize = 48;
+export const menuBtnSize = MENU_BUTTON_PX;
 
 /**
  * The dreamscape's top-left utility menu. Renders the screen-appropriate trigger
@@ -65,7 +68,7 @@ export function DreamscapeQuestMenu({
   // desktop anchors the gear glyph to the top-right. The edge inset keeps the
   // disc clear of the screen corner (more so on desktop, where there is no
   // safe-area inset doing that job).
-  const menuEdgeInset = isDesktop ? 22 : 18;
+  const menuEdgeInset = isDesktop ? 22 : MENU_EDGE_INSET_MOBILE_PX;
   const actions: QuestUtilityMenuAction[] = [
     { id: "deck", icon: "bxf bx-rectangle-vertical", label: "View Deck", onClick: onOpenDeckViewer },
     { id: "glossary", icon: "bxf bx-book-open", label: "Glossary", onClick: onOpenGlossary },
