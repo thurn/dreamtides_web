@@ -58,6 +58,21 @@ state (hover, selection, animation phase) lives here.
   infrastructure (`src/data`, `src/types`, `src/logging`, `src/runtime`) —
   the boundary is lint-enforced.
 
+Established idioms:
+
+- **Floating pick counter** — for a "progress-through-a-sequence" screen,
+  copy `DraftScreen.tsx`'s floating `Draft (n/total)` counter: a small,
+  screen-anchored HUD element (`data-draft-pick-counter`) that floats over the
+  pack grid, painted directly on the scene with the on-media text outline
+  (`--text-outline-media`) — no scrim, wash, or container. Its column reserves
+  a top band of `max(var(--safe-area-inset-top), --safe-top, max(var(--safe-area-inset-top), MENU_EDGE_INSET_MOBILE_PX) + MENU_BUTTON_PX)`,
+  so the safe-area floor holds the counter and pack clear of the app-shell
+  hamburger, whose disc is measured from the exported menu-geometry constants
+  `MENU_BUTTON_PX` / `MENU_EDGE_INSET_MOBILE_PX` in
+  [`chrome-geometry.ts`](../../../src/tango/screens/chrome-geometry.ts). QA the
+  screen through its `?goto=draft` scene (registered in `qa-scenes.ts`; see
+  [qa_scenes.md](../../../docs/quest_prototype/qa_scenes.md)).
+
 ## 2. The view-model builder — `src/screens/tango_adapters/foo-view-model.ts`
 
 Pure, exported, React-free functions mapping domain data to the screen's view

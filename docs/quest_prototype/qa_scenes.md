@@ -138,3 +138,28 @@ screen, use the `siteScene(id, label, siteType, isEnhanced?)` helper. The URL
 handling, auto-create, and bootstrap mutation are generic and need no further
 changes — a new scene id becomes reachable at `?goto=<id>` immediately. Add a row
 to the table above so the option is documented.
+
+## Devtool demos (`?demo=`)
+
+`?demo=<name>` is a parallel hook to `?goto=`: instead of bootstrapping a full
+quest room and parking it on a screen, it mounts a standalone demo component in
+place of `<App>`, bypassing the whole quest workflow. The dispatch lives in
+`src/main.tsx` (`demoParam === "<name>"`), so a demo needs no room, no
+`QuestState`, and no multiplayer gate.
+
+`?demo=device-frame` mounts `DeviceFrameDemo`
+(`src/tango/screens/devtools/DeviceFrameDemo.tsx`), the browser-QA page that
+proves the device-frame safe-area injection end to end. It renders a title band
+padded by `var(--safe-area-inset-top)` so the "Your Deck" title clears the
+Dynamic Island, and a control parked to the right of the island from the
+`--display-cutout-*` box, with dashed cyan guides tracing the injected safe-area
+band and the cutout's bounding box — so a single screenshot shows the injected
+metrics line up with the painted island. On a target with no cutout (for example
+iPhone SE) the island guide and the island-relative control are omitted.
+
+Capture it through the device-screenshot tool, which supplies the `deviceFrame`
+metrics the demo reads:
+
+```
+node scripts/device-screenshots.mjs -d iphone-16 --query 'demo=device-frame'
+```
