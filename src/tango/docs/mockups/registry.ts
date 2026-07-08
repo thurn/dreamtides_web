@@ -18,6 +18,7 @@ import { AtlasMapMockup } from "./atlas-map";
 import { ButtonMockup } from "./button";
 import { DreamsignMockup } from "./dreamsign";
 import { GameCardMockup } from "./game-card";
+import { GlassButtonMockup } from "./glass-button";
 import { GroupPanelMockup } from "./group-panel";
 import { InfoCardMockup } from "./info-card";
 import { MotesMockup } from "./motes";
@@ -45,6 +46,7 @@ export const MOCKUPS: Record<string, ComponentType> = {
   pressable: PressableMockup,
   "resource-chip": ResourceChipMockup,
   button: ButtonMockup,
+  "glass-button": GlassButtonMockup,
   "segmented-control": SegmentedControlMockup,
   motes: MotesMockup,
   "group-panel": GroupPanelMockup,
