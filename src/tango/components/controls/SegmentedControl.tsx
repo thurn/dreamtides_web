@@ -129,7 +129,7 @@ function Segment({
  * SegmentedControl — the compact tab/filter switch (a hand filter, sort
  * mode, view toggle). `options` is an array of strings or `{ value, label }`.
  * `value` is the selected value, `onChange(value)` fires on switch. Its surface
- * is the shared glass control material. Sibling of TidePill and StatTile in the
+ * is the shared glass control material. Sibling of Select in the
  * parent design system.
  */
 export function SegmentedControl({

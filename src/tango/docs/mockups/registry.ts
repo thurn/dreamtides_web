@@ -27,7 +27,6 @@ import { ResourceChipMockup } from "./resource-chip";
 import { RulesTextMockup } from "./rules-text";
 import { SegmentedControlMockup } from "./segmented-control";
 import { SiteNodeMockup } from "./site-node";
-import { StatTileMockup } from "./stat-tile";
 import { TidePillMockup } from "./tide-pill";
 
 /**
@@ -47,7 +46,6 @@ export const MOCKUPS: Record<string, ComponentType> = {
   "resource-chip": ResourceChipMockup,
   button: ButtonMockup,
   "segmented-control": SegmentedControlMockup,
-  "stat-tile": StatTileMockup,
   "tide-pill": TidePillMockup,
   motes: MotesMockup,
   "group-panel": GroupPanelMockup,

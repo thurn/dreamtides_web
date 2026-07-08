@@ -2636,45 +2636,6 @@
       "description": "Enter the site; fired on a tap / click of an interactive node only."
     }
   ],
-  "StatTile": [
-    {
-      "name": "label",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Small uppercase caption above the value."
-    },
-    {
-      "name": "value",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "The headline figure, already resolved to display text (e.g. \"240\", \"4 / 6\")."
-    },
-    {
-      "name": "sub",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional secondary line under the value."
-    },
-    {
-      "name": "accent",
-      "tsType": "StatTileAccent",
-      "unionMembers": [
-        "essence",
-        "energy",
-        "spark",
-        "points"
-      ],
-      "required": false,
-      "defaultValue": null,
-      "description": "Tint the value with a resource-role hue. Plain text when omitted."
-    }
-  ],
   "Tide": [],
   "TideDisc": [
     {

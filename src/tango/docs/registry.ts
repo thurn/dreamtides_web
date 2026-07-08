@@ -37,7 +37,6 @@ import { rulesTextDemo } from "./demos/rules-text";
 import { segmentedControlDemo } from "./demos/segmented-control";
 import { selectDemo } from "./demos/select";
 import { siteNodeDemo } from "./demos/site-node";
-import { statTileDemo } from "./demos/stat-tile";
 import { tideDiscDemo } from "./demos/tide-disc";
 import { tidePillDemo } from "./demos/tide-pill";
 
@@ -143,7 +142,6 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   leaveSiteButtonDemo,
   segmentedControlDemo,
   selectDemo,
-  statTileDemo,
   tidePillDemo,
   tideDiscDemo,
   motesDemo,

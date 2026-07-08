@@ -12,7 +12,7 @@
 //     but rejects `"var(--x)"`, `"red"`, `"color-mix(…)"`, or a typo at compile
 //     time — which is what keeps alpha derivation (`withAlpha`) valid.
 //
-// This is the same "role name, not a raw color" pattern `StatTile` already
+// This is the same "role name, not a raw color" pattern `ResourceChip` already
 // uses; it just names the two shapes so every color prop can share them.
 
 import { token, type TokenName } from "./tokens";

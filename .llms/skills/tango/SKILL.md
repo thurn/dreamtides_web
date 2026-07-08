@@ -55,7 +55,6 @@ The reference files and the index are projections of the component sources
 | Leave Site Button | Components | 5 | [components/leave-site-button.md](components/leave-site-button.md) | The fixed top-right exit control for site screens: a danger-red square X button with consistent placement and accessible labeling. |
 | Segmented Control | Components | 1 | [components/segmented-control.md](components/segmented-control.md) | The compact tab and filter switch used for type filters, sort direction, and small mode toggles. |
 | Select | Components | 2 | [components/select.md](components/select.md) | The compact dropdown control, and Tango's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. |
-| Stat Tile | Components | 0 | [components/stat-tile.md](components/stat-tile.md) | A labelled value cell for summary grids — a large value over a small uppercase label — used for deck stats and run-end results. |
 | Tide Pill | Components | 0 | [components/tide-pill.md](components/tide-pill.md) | The labelled tag for a Dreamcaller's tides and affiliations. |
 | Tide Disc | Components | 1 | [components/tide-disc.md](components/tide-disc.md) | The single tide mark: a colored disc carrying the tide's glyph, sized 'sm' (desktop select) or 'lg' (mobile select) — the atom both Dreamcaller-select tide rows render from. |
 | Motes | Components | 6 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |

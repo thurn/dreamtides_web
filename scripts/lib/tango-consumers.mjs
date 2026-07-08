@@ -19,8 +19,8 @@
 //      carries `id`/`title`/`docName`/`status` string props and a `Component`
 //      identifier. The component's SOURCE module is whichever module the demo
 //      imports `Component` from — or, when `Component` is a local wrapper
-//      (e.g. StatTileDemo), whichever module the `docName` identifier
-//      (`StatTile`) is imported from. If neither resolves, we throw: the
+//      (e.g. HoverPopoverDemo), whichever module the `docName` identifier
+//      (`HoverPopover`) is imported from. If neither resolves, we throw: the
 //      registry is malformed and the count would be a silent lie.
 //   3. Every TS/TSX file under src/ (excluding the doc site and tests) is
 //      scanned for a value import whose specifier resolves to that source file.

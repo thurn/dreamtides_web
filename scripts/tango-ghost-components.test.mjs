@@ -15,17 +15,16 @@
 // escape, which shows an Incubating badge), or added to BASELINE below.
 //
 // BASELINE is the known, already-reviewed set of ghosts that predate this
-// test: StatTile and TidePill are documented components with zero real
-// consumers today (TidePill's only importer is a type-only
-// `import type { Tide }`, which is not a runtime consumer). The design-system
-// revisions program's Phase 4 deletes both and removes them from this list; an
-// entry surviving here after gaining a real consumer is caught by the
-// "no stale BASELINE entry" test.
+// test: TidePill is a documented component with zero real consumers today (its
+// only importer is a type-only `import type { Tide }`, which is not a runtime
+// consumer). The design-system revisions program's Phase 4 deletes it and
+// removes it from this list; an entry surviving here after gaining a real
+// consumer is caught by the "no stale BASELINE entry" test.
 
 import { describe, expect, it } from "vitest";
 import { computeConsumerCounts } from "./lib/tango-consumers.mjs";
 
-export const BASELINE = ["StatTile", "TidePill"];
+export const BASELINE = ["TidePill"];
 
 describe("the Tango catalog has no unreviewed ghost components", () => {
   it("every entry has a real consumer, is incubating, or is baselined", () => {
