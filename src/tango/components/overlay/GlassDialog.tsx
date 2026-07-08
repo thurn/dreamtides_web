@@ -14,10 +14,10 @@
 //     surface. An optional `children` slot lets a caller lift content above the
 //     frost; childless, it is `aria-hidden` decoration.
 //
-//   - GlassDialog: a modal overlay built on GlassBackdrop — a bounded, centered
-//     glass panel on desktop and a full-bleed frosted overlay on mobile, with a
-//     hairline-closed header (title + optional subtitle + a trailing glass close
-//     disc) over a scrolling body. It is the shell the StartingDeckOverlay wears.
+//   - GlassDialog: a modal overlay with a bounded, centered glass panel on
+//     desktop and a full-bleed frosted overlay on mobile, with a hairline-closed
+//     header (title + optional subtitle + a trailing glass close disc) over a
+//     scrolling body. It is the shell the StartingDeckOverlay wears.
 //
 // The close disc is the shared `IconButton` at size `md` (48px) so the close
 // matches the IconButton size scale rather than inventing a bespoke disc. The
@@ -113,10 +113,11 @@ export interface GlassDialogProps {
 }
 
 /**
- * A `role="dialog" aria-modal="true"` overlay: a fixed full-screen layer over a
- * {@link GlassBackdrop}, holding a glass panel that is bounded and centered on
- * desktop (`maxWidth: min(900px, 90vw)`, `maxHeight: 85vh`) and full-bleed below
- * `DESKTOP_MIN_WIDTH`. With `wide`, the desktop panel widens to
+ * A `role="dialog" aria-modal="true"` overlay: a fixed full-screen layer holding
+ * a glass panel that is bounded and centered on desktop (`maxWidth: min(900px,
+ * 90vw)`, `maxHeight: 85vh`) and full-bleed below `DESKTOP_MIN_WIDTH`, where the
+ * mobile shell also carries the {@link GlassBackdrop}. With `wide`, the desktop
+ * panel widens to
  * `min(1120px, 90vw)` and trades the `85vh` cap for explicit viewport padding so
  * a roomy grid fits in two rows without internal scroll. The header pairs the
  * title `<h2>` and optional subtitle
@@ -230,7 +231,7 @@ export function GlassDialog({
           : 0,
       }}
     >
-      <GlassBackdrop />
+      {!isDesktop && <GlassBackdrop />}
       <div style={panelStyle}>
         {besideCutout && (
           // The disc floats up beside the device island (vertically centered on

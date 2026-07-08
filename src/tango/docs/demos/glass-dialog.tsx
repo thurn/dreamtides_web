@@ -30,10 +30,10 @@ function GlassDialogDemo() {
           onClose={() => setOpen(false)}
         >
           <p style={{ margin: 0, font: token("--t-body"), color: token("--text-primary") }}>
-            The glass overlay shell holds any body content over a frosted
-            backdrop — a card grid, a form, a summary. On desktop it is a
-            bounded, centered panel; below the desktop breakpoint it goes
-            full-bleed, its header clearing the device cutout.
+            The glass dialog shell holds any body content: a card grid, a form,
+            a summary. On desktop it is a bounded, centered panel over the
+            scene; below the desktop breakpoint it goes full-bleed and frosts
+            the background, with its header clearing the device cutout.
           </p>
         </GlassDialog>
       )}
@@ -45,7 +45,7 @@ export const glassDialogDemo: TangoComponent = {
   id: "glass-dialog",
   title: "Glass Dialog",
   blurb:
-    "The glass overlay shell: a modal dialog that frosts the scene behind it — a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and a glass close disc) over a scrolling body. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.",
+    "The glass overlay shell: a modal dialog with a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and a glass close disc) over a scrolling body. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.",
   callout:
     "The close disc is the shared IconButton at size `md`. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant: on a wide-and-tall desktop (min-width 1400px and min-height 800px) the panel widens and fits a taller viewport so more content lands without internal scroll.",
   group: "Components",
@@ -53,7 +53,7 @@ export const glassDialogDemo: TangoComponent = {
   Component: GlassDialogDemo,
   usage: [
     {
-      note: "A modal dialog over a frosted backdrop. `title`/`subtitle` head a hairline-closed header with a trailing glass close; the body scrolls.",
+      note: "A modal dialog with a bounded desktop panel and a full-bleed frosted mobile overlay. `title`/`subtitle` head a hairline-closed header with a trailing glass close; the body scrolls.",
       code: `import { GlassDialog } from "src/tango/components/overlay/GlassDialog";
 
 <GlassDialog

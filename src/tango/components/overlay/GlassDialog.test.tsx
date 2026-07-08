@@ -24,6 +24,19 @@ function mount(element: ReactElement): {
   return { container, root };
 }
 
+function stubMatchMedia(matches: boolean): void {
+  window.matchMedia = ((query: string) => ({
+    matches,
+    media: query,
+    onchange: null,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    addListener: () => {},
+    removeListener: () => {},
+    dispatchEvent: () => false,
+  })) as typeof window.matchMedia;
+}
+
 beforeEach(() => {
   vi.mocked(hasInjectedDisplayCutout).mockReturnValue(false);
   (
@@ -34,16 +47,7 @@ beforeEach(() => {
   // Stub matchMedia → mobile: every query misses, so `useIsDesktop` is false
   // and the dialog renders its full-bleed idiom. Pressable's reduced-motion
   // probe reads the same API.
-  window.matchMedia = ((query: string) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addEventListener: () => {},
-    removeEventListener: () => {},
-    addListener: () => {},
-    removeListener: () => {},
-    dispatchEvent: () => false,
-  })) as typeof window.matchMedia;
+  stubMatchMedia(false);
 });
 
 afterEach(() => {
@@ -141,6 +145,26 @@ describe("GlassDialog", () => {
     const header = container.querySelector("header");
     expect(header).not.toBeNull();
     expect(header?.querySelector("p")).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders the desktop dialog without a full-screen frosted backdrop", () => {
+    stubMatchMedia(true);
+    const { container, root } = mount(
+      <GlassDialog title="Title" onClose={() => {}}>
+        <div>content</div>
+      </GlassDialog>,
+    );
+
+    const dialog = container.querySelector<HTMLElement>('[role="dialog"]');
+    expect(dialog).not.toBeNull();
+    expect(dialog?.children).toHaveLength(1);
+    const panel = dialog?.firstElementChild as HTMLElement | null;
+    expect(panel?.style.position).toBe("relative");
+    expect(panel?.style.maxWidth).toBe("min(900px, 90vw)");
 
     act(() => {
       root.unmount();
