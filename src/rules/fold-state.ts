@@ -23,8 +23,12 @@ import type { QuestState } from "../types/quest";
  * / rule 4 accessors accordingly).
  */
 export interface PendingPrompt {
-  /** Stable id assigned when the prompt opened; matched by RESOLVE_PROMPT. */
-  readonly promptId: string;
+  /**
+   * The seq of the event that opened this prompt (design spec §Data model).
+   * A `number`, matched by a RESOLVE_PROMPT carrying the same value. Task 18's
+   * real prompt model sets this to `ctx.seq` when opening the prompt.
+   */
+  readonly promptId: number;
 }
 
 /**

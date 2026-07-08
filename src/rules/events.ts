@@ -120,7 +120,7 @@ export interface EventPayloads {
   // --- battle events (no legacy 1:1) ---
   BEGIN_BATTLE: { siteId: string };
   BATTLE_COMMAND: { command: unknown };
-  RESOLVE_PROMPT: { promptId: string; resolution: unknown };
+  RESOLVE_PROMPT: { promptId: number; resolution: unknown };
   SET_CARD_NOTE: { instanceId: string; note: string };
 }
 

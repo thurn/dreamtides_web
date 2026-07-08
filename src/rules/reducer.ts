@@ -44,10 +44,10 @@ export function reduceGameEvent(
   ctx: EventContext,
 ): ReduceResult {
   try {
-    const isExempt = CAS_EXEMPT_EVENT_TYPES.has(event.type); // rule 1
-    const isMatchingResolve = isMatchingPromptResolution(state, event); // rule 2
+    const exempt = isCasExempt(event.type); // rule 1
+    const matchingResolve = isMatchingResolve(state, event); // rule 2
 
-    if (!isExempt && !isMatchingResolve) {
+    if (!exempt && !matchingResolve) {
       // rule 3 — compare-and-swap with the self-chain / decision-neutral carve-out
       if (!isInterveningWindowClear(ctx.intervening, event.actor)) {
         return bounce(state);
@@ -67,11 +67,23 @@ export function reduceGameEvent(
 }
 
 /**
- * True when `event` is a RESOLVE_PROMPT whose `promptId` matches the currently
- * open prompt. Such an event skips rules 3–4 (the prompt's options were fixed
- * when it opened, so nothing intervening can change what the resolution means).
+ * Rule 1 predicate: CAS-exempt types skip rules 2–4. Exported for direct unit
+ * testing (its effect is otherwise only observable once the exempt types gain
+ * domain cases).
  */
-function isMatchingPromptResolution(
+export function isCasExempt(type: string): boolean {
+  return CAS_EXEMPT_EVENT_TYPES.has(type);
+}
+
+/**
+ * Rule 2 predicate: true when `event` is a RESOLVE_PROMPT whose `promptId`
+ * matches the currently open prompt. Such an event skips rules 3–4 (the
+ * prompt's options were fixed when it opened, so nothing intervening can change
+ * what the resolution means). `promptId` is a `number` (the seq of the opening
+ * event); a missing or non-number payload value never matches and never throws.
+ * Exported for direct unit testing independent of the RESOLVE_PROMPT domain case.
+ */
+export function isMatchingResolve(
   state: FoldState,
   event: GameEvent,
 ): boolean {
@@ -83,15 +95,20 @@ function isMatchingPromptResolution(
     return false;
   }
   const promptId = event.payload?.promptId;
-  return typeof promptId === "string" && promptId === pending.promptId;
+  return (
+    typeof promptId === "number" &&
+    Number.isFinite(promptId) &&
+    promptId === pending.promptId
+  );
 }
 
 /**
  * Rule 3: the intervening window is clear when it is enumerable AND holds no
  * applied partner event of a non-decision-neutral type. `"unknown"` (the window
  * was compacted away) is never clear — it cannot be inspected, so we bounce.
+ * Exported for direct unit testing.
  */
-function isInterveningWindowClear(
+export function isInterveningWindowClear(
   intervening: EventContext["intervening"],
   actor: string,
 ): boolean {

@@ -2,7 +2,12 @@ import { describe, expect, it } from "vitest";
 
 import type { GameEvent, EventContext, Genesis } from "../eventlog/types";
 import { genesisFoldState, type FoldState } from "./fold-state";
-import { reduceGameEvent } from "./reducer";
+import {
+  isCasExempt,
+  isInterveningWindowClear,
+  isMatchingResolve,
+  reduceGameEvent,
+} from "./reducer";
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -120,7 +125,7 @@ describe("rule 3 — compare-and-swap window", () => {
 // Rule 4 / Rule 2 — prompt gate
 // ---------------------------------------------------------------------------
 
-function stateWithPendingPrompt(promptId: string): FoldState {
+function stateWithPendingPrompt(promptId: number): FoldState {
   const base = foldStateWithEssence(100);
   return {
     ...base,
@@ -130,14 +135,14 @@ function stateWithPendingPrompt(promptId: string): FoldState {
 
 describe("rule 4 — prompt gate", () => {
   it("bounces a non-RESOLVE intent while a prompt is pending", () => {
-    const state = stateWithPendingPrompt("p1");
+    const state = stateWithPendingPrompt(1);
     const result = reduceGameEvent(state, adjustEssence(10), ctx());
     expect(result.outcome).toBe("bounced");
     expect(result.state.quest.essence).toBe(100);
   });
 
   it("routes a matching-promptId RESOLVE_PROMPT past the gate (reaches rule 5)", () => {
-    const state = stateWithPendingPrompt("p1");
+    const state = stateWithPendingPrompt(1);
     // RESOLVE_PROMPT has no domain case yet, so it bounces at rule 5 — but it
     // must NOT be blocked by rule 4. We observe this by confirming it is not
     // rejected for the same reason a mismatched promptId would be: a matching
@@ -145,7 +150,7 @@ describe("rule 4 — prompt gate", () => {
     // that would otherwise gate is skipped.
     const result = reduceGameEvent(
       state,
-      event("RESOLVE_PROMPT", { promptId: "p1", resolution: {} }),
+      event("RESOLVE_PROMPT", { promptId: 1, resolution: {} }),
       ctx({
         // A partner-intervening event that WOULD bounce at rule 3 — the fast
         // path (rule 2) must skip rule 3, proving the gate was bypassed.
@@ -160,10 +165,10 @@ describe("rule 4 — prompt gate", () => {
   });
 
   it("bounces a RESOLVE_PROMPT whose promptId does not match", () => {
-    const state = stateWithPendingPrompt("p1");
+    const state = stateWithPendingPrompt(1);
     const result = reduceGameEvent(
       state,
-      event("RESOLVE_PROMPT", { promptId: "other", resolution: {} }),
+      event("RESOLVE_PROMPT", { promptId: 999, resolution: {} }),
       ctx(),
     );
     expect(result.outcome).toBe("bounced");
@@ -192,7 +197,7 @@ describe("rule 1 — CAS-exempt types", () => {
   });
 
   it("does not bounce SET_CARD_NOTE through an open prompt (rule 4 skipped)", () => {
-    const state = stateWithPendingPrompt("p1");
+    const state = stateWithPendingPrompt(1);
     const result = reduceGameEvent(
       state,
       event("SET_CARD_NOTE", { instanceId: "i1", note: "hi" }),
@@ -273,6 +278,127 @@ describe("ADJUST_ESSENCE domain case", () => {
 // ---------------------------------------------------------------------------
 // genesisFoldState
 // ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// Direct CAS predicate coverage (rules 1/2/3 independent of domain cases)
+// ---------------------------------------------------------------------------
+
+describe("isCasExempt (rule 1)", () => {
+  it("exempts SET_CARD_NOTE and OPEN_SITE", () => {
+    expect(isCasExempt("SET_CARD_NOTE")).toBe(true);
+    expect(isCasExempt("OPEN_SITE")).toBe(true);
+  });
+
+  it("does not exempt ordinary intents", () => {
+    expect(isCasExempt("ADJUST_ESSENCE")).toBe(false);
+    expect(isCasExempt("RESOLVE_PROMPT")).toBe(false);
+    expect(isCasExempt("NOT_A_REAL_TYPE")).toBe(false);
+  });
+});
+
+describe("isMatchingResolve (rule 2)", () => {
+  it("matches a RESOLVE_PROMPT whose numeric promptId equals the open prompt seq", () => {
+    const state = stateWithPendingPrompt(7);
+    expect(
+      isMatchingResolve(
+        state,
+        event("RESOLVE_PROMPT", { promptId: 7, resolution: {} }),
+      ),
+    ).toBe(true);
+  });
+
+  it("does not match a different promptId", () => {
+    const state = stateWithPendingPrompt(7);
+    expect(
+      isMatchingResolve(
+        state,
+        event("RESOLVE_PROMPT", { promptId: 8, resolution: {} }),
+      ),
+    ).toBe(false);
+  });
+
+  it("does not match when there is no open prompt", () => {
+    const state = foldStateWithEssence(100);
+    expect(
+      isMatchingResolve(
+        state,
+        event("RESOLVE_PROMPT", { promptId: 7, resolution: {} }),
+      ),
+    ).toBe(false);
+  });
+
+  it("does not match a non-RESOLVE_PROMPT event", () => {
+    const state = stateWithPendingPrompt(7);
+    expect(isMatchingResolve(state, adjustEssence(10))).toBe(false);
+  });
+
+  it("does not match (and does not throw) on a missing or non-number promptId", () => {
+    const state = stateWithPendingPrompt(7);
+    for (const bad of [
+      undefined,
+      null,
+      "7",
+      NaN,
+      {},
+    ] as unknown[]) {
+      const ev = event("RESOLVE_PROMPT", {
+        promptId: bad as never,
+        resolution: {},
+      });
+      expect(() => isMatchingResolve(state, ev)).not.toThrow();
+      expect(isMatchingResolve(state, ev)).toBe(false);
+    }
+  });
+});
+
+describe("isInterveningWindowClear (rule 3)", () => {
+  it("is clear for an empty window", () => {
+    expect(isInterveningWindowClear([], "alice")).toBe(true);
+  });
+
+  it("is not clear for an unknown window", () => {
+    expect(isInterveningWindowClear("unknown", "alice")).toBe(false);
+  });
+
+  it("is clear when only own-actor events intervened", () => {
+    expect(
+      isInterveningWindowClear(
+        [
+          { seq: 1, actor: "alice", type: "ADJUST_ESSENCE" },
+          { seq: 2, actor: "alice", type: "SET_SCREEN" },
+        ],
+        "alice",
+      ),
+    ).toBe(true);
+  });
+
+  it("is not clear when a non-neutral partner event intervened", () => {
+    expect(
+      isInterveningWindowClear(
+        [{ seq: 1, actor: "bob", type: "ADJUST_ESSENCE" }],
+        "alice",
+      ),
+    ).toBe(false);
+  });
+
+  it("ignores a decision-neutral partner event", () => {
+    expect(
+      isInterveningWindowClear(
+        [{ seq: 1, actor: "bob", type: "SET_CARD_NOTE" }],
+        "alice",
+      ),
+    ).toBe(true);
+  });
+
+  it("still bounces when a partner OPEN_SITE intervened (exempt from bouncing, not from being intervening)", () => {
+    expect(
+      isInterveningWindowClear(
+        [{ seq: 1, actor: "bob", type: "OPEN_SITE" }],
+        "alice",
+      ),
+    ).toBe(false);
+  });
+});
 
 describe("genesisFoldState", () => {
   it("produces a null battle and a quest state seeded from genesis", () => {
