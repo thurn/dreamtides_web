@@ -477,6 +477,11 @@ button:disabled {
  *     factor so the bar keeps its proportions and clears the bigger orbs. The
  *     bar's anchor position (top/left/inset) holds, so the assembly grows in
  *     place from the top-left corner.
+ *
+ * 899.98 = `DESKTOP_MIN_WIDTH` (900, `use-is-desktop.ts`) − 0.02. CSS can't
+ * import the TS constant, so this literal is kept in sync by hand with
+ * `CardView.MOBILE_CARD_TEXT_QUERY` and `use-is-desktop`'s `DESKTOP_QUERY`;
+ * change one and change all three.
  */
 @media (max-width: 899.98px) {
   .card-view {

@@ -23,6 +23,7 @@ import type { CardTransfigurationDisplay } from "../../../runtime/transfiguratio
 import { renderRulesText } from "./RulesText";
 import { useCardTermPopover } from "./useCardTermPopover";
 import { useFitText } from "../controls/useFitText";
+import { DESKTOP_MIN_WIDTH } from "../../screens/use-is-desktop";
 
 /**
  * Default chrome accent used for the selection ring fallback. The card's type
@@ -582,8 +583,14 @@ const RULES_MIN_FONT_FRACTION = 0.5;
  * the `@media (max-width: 899.98px)` block on `.card-view` in `index.css` that
  * raises the matching box + render-cap CSS vars; the query and that media block
  * must move together so the JS fit ceiling and the CSS cap agree.
+ *
+ * Derived from the shared `DESKTOP_MIN_WIDTH` (900) so the two can't drift:
+ * 900 − 0.02 = 899.98 is the sub-pixel step below the shared desktop/mobile
+ * line, so the JS fit ceiling and the CSS cap land on the same boundary.
+ * `(900 - 0.02).toString() === "899.98"`, so the emitted query is byte-identical
+ * to the literal it replaced.
  */
-const MOBILE_CARD_TEXT_QUERY = "(max-width: 899.98px)";
+const MOBILE_CARD_TEXT_QUERY = `(max-width: ${DESKTOP_MIN_WIDTH - 0.02}px)`;
 
 /**
  * True on mobile-width viewports, where a card renders its larger rules-text
