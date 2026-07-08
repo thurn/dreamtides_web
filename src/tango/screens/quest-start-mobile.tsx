@@ -9,8 +9,7 @@ import { useRef, useState } from "react";
 import { Motes } from "../components/hud/Motes";
 import { GroupPanel } from "../components/controls/GroupPanel";
 import { Button } from "../components/controls/Button";
-import { GlowIcon } from "../components/controls/GlowIcon";
-import { Pressable } from "../primitives/Pressable";
+import { IconButton } from "../components/controls/IconButton";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
@@ -150,36 +149,24 @@ function EdgeChevron({
   onClick: () => void;
 }) {
   return (
-    <Pressable
-      as="button"
-      aria-label={dir === "left" ? "Previous" : "Next"}
+    <div
       onPointerDown={(event: React.PointerEvent) => {
         event.stopPropagation();
       }}
-      onClick={onClick}
       style={{
         position: "absolute",
         top: "46%",
         [dir]: token("--space-3"),
         zIndex: 6,
-        width: 40,
-        height: 40,
-        borderRadius: token("--radius-pill"),
-        border: `1px solid ${token("--border-soft")}`,
-        background: token("--surface-chrome"),
-        color: token("--text-secondary"),
-        display: "grid",
-        placeItems: "center",
-        fontSize: 22,
-        lineHeight: 1,
       }}
     >
-      <GlowIcon
-        iconClass={dir === "left" ? GLYPHS.chevronLeft : GLYPHS.chevronRight}
-        color="text-secondary"
-        size="1em"
+      <IconButton
+        size="sm"
+        glyph={dir === "left" ? GLYPHS.chevronLeft : GLYPHS.chevronRight}
+        label={dir === "left" ? "Previous" : "Next"}
+        onPress={onClick}
       />
-    </Pressable>
+    </div>
   );
 }
 
