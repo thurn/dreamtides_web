@@ -4,11 +4,13 @@
 
 # Glow Icon
 
-Components · Live demo & interactive props: `/tango#/glow-icon`
+Primitives · Live demo & interactive props: `/tango#/glow-icon`
 
 Real consumers: **8** (imports outside `src/tango/docs/` and tests).
 
-The resource-glyph renderer for card marks: a named glyph, role color, optional soft shadow, and optional emitted-light filter in one square footprint.
+The resource-glyph renderer for card marks: a Boxicons glyph that paints in the caller's resource hue, with an optional content-protection shadow and an optional emitted-light glow pinned to its own font-size so both scale with the mark.
+
+> **Guidance:** GlowIcon.tsx is the single source of truth for the resource marks: it exports the spark hue (SPARK_ICON_COLOR), the energy hue (ENERGY_ICON_COLOR, pulled from the shared energy token), the glyph classes (SPARK_ICON_CLASS, ENERGY_ICON_CLASS, BOLT_ICON_CLASS, SPARK_INLINE_ICON_CLASS), and the content-protection shadow (ICON_SHADOW_FILTER). The corner stat orbs and the inline references in rules text read these same constants, so a resource reads identically whether it is a corner orb or an inline `1✦`.
 
 ## Props
 
@@ -23,8 +25,32 @@ The resource-glyph renderer for card marks: a named glyph, role color, optional 
 
 ## Usage
 
+### Corner spark mark
+
+The larger corner-stat glyph: the spark glyph in the spark hue with the content-protection shadow so it reads against card art (as CardStatOrb paints it).
+
 ```tsx
 import { GlowIcon, SPARK_ICON_CLASS, SPARK_ICON_COLOR } from "src/tango/components/controls/GlowIcon";
 
-<GlowIcon iconClass={SPARK_ICON_CLASS} color={SPARK_ICON_COLOR} shadow />
+<GlowIcon iconClass={SPARK_ICON_CLASS} color={SPARK_ICON_COLOR} size="44px" shadow title="Spark" />
+```
+
+### Inline energy mark
+
+An inline glyph that tracks the surrounding text: the default 1em size lets the energy mark sit at the rules-text cap height, painted in the shared energy hue.
+
+```tsx
+import { GlowIcon, ENERGY_ICON_CLASS, ENERGY_ICON_COLOR } from "src/tango/components/controls/GlowIcon";
+
+<GlowIcon iconClass={ENERGY_ICON_CLASS} color={ENERGY_ICON_COLOR} />
+```
+
+### Activated-ability bolt
+
+The lightning-bolt mark for an activated ability, painted in text hue to sit on the card title bar's fast/interrupt chip.
+
+```tsx
+import { GlowIcon, BOLT_ICON_CLASS } from "src/tango/components/controls/GlowIcon";
+
+<GlowIcon iconClass={BOLT_ICON_CLASS} color="text-primary" size="1.1em" title="Fast" />
 ```
