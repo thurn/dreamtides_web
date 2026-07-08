@@ -50,21 +50,37 @@ const DOCS_PREFIX = "src/tango/docs/";
  * 5d28cfa2 ("subtle pick counter under the pack + touch term reveals"),
  * freeing the token to become genuinely orphaned.
  */
+// Every entry below is an orphan with NO static reader (a `var()`/`token()`
+// site outside this source pair) AND no dynamically-constructed reader — the
+// tree builds no token names via template literals, so the only `token()`
+// argument that is not a plain string literal (DesktopDeckViewer.tsx line ~302)
+// resolves to `--text-on-accent`/`--text-secondary`, neither of which is here.
+// Each remaining entry is therefore RETAINED on one of two grounds, stated
+// inline: (a) it is a member of a sanctioned, deliberately-complete design
+// scale (spacing / type / radius / elevation / motion / gradient / surface /
+// device-frame), reserved so UI code can pick a step by role; or (b) it is a
+// PRODUCTION-BRIDGE re-export (--dt-* / --color-* / --cv-*) that pins a shared
+// production token name so an element (above all the game card) resolves
+// identically in the desktop/production system.
 export const BASELINE = [
-  "--accent-tint",
-  "--bg-band",
-  "--card-aspect",
-  "--cat-dreamsign",
-  "--cat-grant",
-  "--cat-improve",
-  "--cat-remove",
+  // Semantic roles — reserved for a specific use, no current Tango reader.
+  "--accent-tint", // reserved low-alpha fill behind accents
+  "--bg-band", // reserved surface: raised background band
+  "--surface-chip", // reserved surface: chip fill
+  "--text-on-card", // reserved text role: card name on card chrome
+  // Production bridge (--color-* global re-exports).
   "--color-essence-glow-strong",
   "--color-primary",
-  "--control-h",
-  "--control-h-sm",
+  // Production bridge (--cv-* card-chrome re-export).
   "--cv-selection-color",
+  // Device-frame layout constants (the iPhone canvas the kit designs against).
   "--device-h",
   "--device-w",
+  "--sheet-grab", // reserved layout constant: bottom-sheet drag-handle width
+  "--touch-min", // reserved layout floor: Apple HIG 44pt minimum touch target
+  "--gutter-tight", // reserved screen gutter for dense grids
+  // Production bridge (--dt-* atlas/shared re-exports). --dt-line additionally
+  // feeds the live canonical --line token inside tango-tokens.css.
   "--dt-bg-0",
   "--dt-bg-1",
   "--dt-bg-2",
@@ -72,41 +88,44 @@ export const BASELINE = [
   "--dt-enemy",
   "--dt-energy",
   "--dt-energy-border",
-  "--dt-line",
+  "--dt-line", // consumed by --line (a live-read canonical token) in the CSS
   "--dt-player",
   "--dt-primary",
   "--dt-primary-light",
   "--dt-spark",
   "--dt-spark-border",
   "--dt-surface-light",
+  // Motion scale members. --ease-dream additionally feeds
+  // --motion-container-transform inside tango-tokens.css.
   "--ease-dream",
+  "--motion-container-transform",
+  "--motion-object-travel",
+  "--stagger-travel",
+  // Font roles / canonical face layer (the sanctioned type-face vocabulary).
   "--font-logo",
-  "--font-mono-canon",
   "--font-numeral",
+  "--font-mono-canon",
   "--font-rules-canon",
   "--font-sans-canon",
   "--font-serif-canon",
-  "--glow-accent",
-  "--glow-accent-strong",
-  "--glow-gold",
-  "--glow-text",
+  // Object-material gradients (energy orb, wordmark, reward gold).
   "--gradient-accent",
   "--gradient-energy",
   "--gradient-gold",
-  "--gutter-tight",
+  // Elevation / inset shadow scale members.
   "--inset-press",
-  "--motion-container-transform",
-  "--motion-object-travel",
-  "--radius-sheet",
-  "--scrim-strong",
   "--shadow-sheet",
   "--shadow-sm",
-  "--sheet-grab",
-  "--space-0",
+  // Radius scale member.
+  "--radius-sheet",
+  // Scrim scale member (full-screen focus darkening).
+  "--scrim-strong",
+  // Spacing scale members — sanctioned complete scale; --space-11/-12 also have
+  // doc-mockup readers under src/tango/docs/ (excluded from this scan).
   "--space-11",
   "--space-12",
-  "--stagger-travel",
-  "--surface-chip",
+  // Type scale (--t-*) members — sanctioned complete scale; each bundles
+  // weight + size + face for a voice UI code applies by role.
   "--t-button",
   "--t-button-sm",
   "--t-display",
@@ -117,10 +136,7 @@ export const BASELINE = [
   "--t-popover-headline",
   "--t-popover-meta",
   "--t-serif-body",
-  "--text-on-card",
-  "--tide-earthy",
-  "--touch-min",
-  "--tracking-wordmark",
+  "--tracking-wordmark", // reserved wordmark letter-spacing token
 ];
 
 /** Whether `fullPath` is walked at all: TS/TSX/CSS source under src/. */

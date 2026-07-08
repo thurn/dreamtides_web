@@ -63,11 +63,6 @@ Accent and game-semantic colors (resources, states, categories). A color prop on
 | `--positive` | `var(--primitive-sap-400)` | player / grant green (parent --dt-player) |
 | `--sale` | `var(--primitive-coral-400)` |  |
 | `--selected` | `var(--primitive-orange-500)` | default card selection ring |
-| `--tide-earthy` | `var(--primitive-rust-500)` | earthy tide / affiliation mark |
-| `--cat-grant` | `var(--primitive-sap-400)` |  |
-| `--cat-improve` | `var(--primitive-violet-300)` |  |
-| `--cat-remove` | `var(--primitive-ember-400)` |  |
-| `--cat-dreamsign` | `var(--primitive-gold-300)` |  |
 | `--gold` | `var(--primitive-gold-600)` | #d4a017 reward / completed / victory |
 | `--gradient-accent` | `linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)` |  |
 | `--gradient-gold` | `linear-gradient(135deg, #ffd34d 0%, #e0a82a 100%)` |  |
@@ -151,7 +146,6 @@ The --space-* scale is the approved spacing system for all layout (margins, padd
 | `--safe-area-inset-right` | `env(safe-area-inset-right, 0px)` |  |
 | `--safe-area-inset-bottom` | `env(safe-area-inset-bottom, 0px)` |  |
 | `--safe-area-inset-left` | `env(safe-area-inset-left, 0px)` |  |
-| `--space-0` | `0` |  |
 | `--space-1` | `2px` |  |
 | `--space-2` | `4px` |  |
 | `--space-3` | `6px` |  |
@@ -167,15 +161,12 @@ The --space-* scale is the approved spacing system for all layout (margins, padd
 | `--gutter` | `18px` | default horizontal page padding |
 | `--gutter-tight` | `12px` | dense grids |
 | `--touch-min` | `44px` | never smaller — Apple HIG floor |
-| `--control-h` | `52px` | default primary button / row height |
-| `--control-h-sm` | `40px` | secondary / inline |
 | `--hud-h` | `64px` | persistent bottom resource bar |
 | `--sheet-grab` | `36px` | drag handle width on bottom sheets |
 | `--device-w` | `390px` | iPhone logical width |
 | `--device-h` | `844px` | iPhone logical height |
 | `--safe-top` | `59px` | status bar + Dynamic Island region |
 | `--safe-bottom` | `34px` | home indicator inset |
-| `--card-aspect` | `5 / 7` |  |
 | `--press-scale` | `0.9` |  |
 
 ## Shadows & glows
@@ -189,12 +180,8 @@ Elevation and glow treatments — always these, never an ad-hoc box-shadow.
 | `--shadow-lg` | `0 16px 40px rgba(3, 1, 8, 0.62)` |  |
 | `--shadow-card` | `0 10px 26px rgba(3, 1, 8, 0.55), 0 2px 6px rgba(3, 1, 8, 0.4)` |  |
 | `--shadow-sheet` | `0 -12px 40px rgba(3, 1, 8, 0.6)` |  |
-| `--glow-accent` | `0 0 0 1px rgba(168, 85, 247, 0.35), 0 6px 22px rgba(147, 51, 234, 0.45)` |  |
 | `--glow-accent-soft` | `0 0 24px rgba(147, 51, 234, 0.35)` |  |
-| `--glow-accent-strong` | `0 0 0 1px rgba(192, 132, 252, 0.6), 0 8px 30px rgba(147, 51, 234, 0.6)` |  |
-| `--glow-gold` | `0 0 18px rgba(250, 204, 21, 0.5)` |  |
 | `--glow-danger` | `0 0 0 1px rgba(239, 68, 68, 0.5), 0 6px 22px rgba(239, 68, 68, 0.4)` |  |
-| `--glow-text` | `0 0 26px rgba(168, 85, 247, 0.7)` | for the wordmark / hero title |
 | `--inset-top` | `inset 0 1px 0 rgba(255, 255, 255, 0.08)` |  |
 | `--inset-press` | `inset 0 2px 8px rgba(3, 1, 8, 0.5)` |  |
 

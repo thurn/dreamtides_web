@@ -175,7 +175,7 @@ re-skin by editing the primitive layer alone.
 **When you use tokens directly.** Mostly in rung-2 layout wrappers (see the
 customization ladder): the wrapper you put around a Tango component to size,
 place, and space it uses `--space-*` for margins/padding/gaps, and layout
-constants like `--gutter`, `--touch-min`, `--control-h`, `--safe-top`. When
+constants like `--gutter`, `--touch-min`, `--hud-h`, `--safe-top`. When
 authoring inside `src/tango/` itself: type is applied one voice at a time
 (`font: token("--t-body")` — a `--t-*` token bundles face, weight, and
 size/line-height; composing those by hand is drift), elevation comes from

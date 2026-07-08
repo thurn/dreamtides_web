@@ -16,6 +16,11 @@
 //   - Shadow (purple #c084fc) — GLYPHS.tideShadow / bx-skull
 // The tinted background/border have no dedicated token, so they derive from the
 // tide's accent via `color-mix()` rather than a hardcoded rgba.
+//
+// PALETTE HOME: this module is the design system's home for the tide palette.
+// The five accent hexes in TIDES are the whole tide vocabulary Tango reads;
+// `tango-tokens.css` carries no `--tide-*` tokens, so a tide's color is read
+// here (or through `tideVisual()`), never from a design token.
 
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 

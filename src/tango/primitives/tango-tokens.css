@@ -206,7 +206,6 @@
   --positive: var(--primitive-sap-400);     /* player / grant green (parent --dt-player) */
   --sale: var(--primitive-coral-400);
   --selected: var(--primitive-orange-500);  /* default card selection ring */
-  --tide-earthy: var(--primitive-rust-500); /* earthy tide / affiliation mark */
 
   /* ---- Lines / borders ---- */
   --border-soft: var(--primitive-line-soft);
@@ -217,12 +216,6 @@
   /* ---- Scrims (full-surface darkening behind a focused element) ---- */
   --scrim: var(--primitive-scrim-700);          /* modal / sheet backdrop */
   --scrim-strong: var(--primitive-scrim-900);   /* full-screen focus (held zoom) */
-
-  /* ---- Status / category colors (offer pills, tags) ---- */
-  --cat-grant: var(--primitive-sap-400);
-  --cat-improve: var(--primitive-violet-300);
-  --cat-remove: var(--primitive-ember-400);
-  --cat-dreamsign: var(--primitive-gold-300);
 
   /* ---- Corner radius, by role. UI code sizes corners by what the
      element IS, not by a scale step. ---- */
@@ -410,7 +403,6 @@
 
 .tango {
   /* ---- Spacing scale (8pt base, with 2/4/6 half-steps) ---- */
-  --space-0: 0;
   --space-1: 2px;
   --space-2: 4px;
   --space-3: 6px;
@@ -430,8 +422,6 @@
 
   /* ---- Touch & control sizing ---- */
   --touch-min: 44px;       /* never smaller — Apple HIG floor */
-  --control-h: 52px;       /* default primary button / row height */
-  --control-h-sm: 40px;    /* secondary / inline */
   --hud-h: 64px;           /* persistent bottom resource bar */
   --sheet-grab: 36px;      /* drag handle width on bottom sheets */
 
@@ -440,9 +430,6 @@
   --device-h: 844px;       /* iPhone logical height */
   --safe-top: 59px;        /* status bar + Dynamic Island region */
   --safe-bottom: 34px;     /* home indicator inset */
-
-  /* ---- Card aspect (the game card) — production CARD_ASPECT_RATIO = 5/7 ---- */
-  --card-aspect: 5 / 7; /* @kind other */
 }
 
 /* ================================================================
@@ -491,12 +478,8 @@
     0 2px 6px rgba(0, 0, 0, 0.7); /* @kind shadow */
 
   /* ---- Violet glow (the signature accent halo) ---- */
-  --glow-accent: 0 0 0 1px rgba(168, 85, 247, 0.35), 0 6px 22px rgba(147, 51, 234, 0.45);
   --glow-accent-soft: 0 0 24px rgba(147, 51, 234, 0.35);
-  --glow-accent-strong: 0 0 0 1px rgba(192, 132, 252, 0.6), 0 8px 30px rgba(147, 51, 234, 0.6);
-  --glow-gold: 0 0 18px rgba(250, 204, 21, 0.5);
   --glow-danger: 0 0 0 1px rgba(239, 68, 68, 0.5), 0 6px 22px rgba(239, 68, 68, 0.4);
-  --glow-text: 0 0 26px rgba(168, 85, 247, 0.7);  /* for the wordmark / hero title */
 
   /* ---- Inset / inner detail (card frame bevel, pressed states) ---- */
   --inset-top: inset 0 1px 0 rgba(255, 255, 255, 0.08);  /* @kind shadow */

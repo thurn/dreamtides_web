@@ -543,8 +543,8 @@ function tokenGroupFor(name) {
     for (const prefix of group.prefixes) {
       // A bare family name matches itself and any hyphenated descendant
       // ("accent" covers --accent and --accent-strong); a prefix written with
-      // a trailing hyphen matches descendants only ("tide-" covers
-      // --tide-earthy but not a bare --tide).
+      // a trailing hyphen matches descendants only ("radius-" covers
+      // --radius-card but not a bare --radius).
       const family = prefix.replace(/-$/, "");
       if (name === prefix || name.startsWith(`${family}-`)) {
         return group.title;
