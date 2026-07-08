@@ -66,8 +66,8 @@ work on fine-pointer hover and touch press.
 Use `HoverPopover` for fine-pointer-only helper previews whose trigger or
 content is screen-owned: deck-hover zooms, dense row previews, and side-mounted
 definition stacks. A `HoverPopover` body should still be a canonical Tango
-surface, usually `InfoCard`, `GlossaryDefinitionCard`, `DreamsignInfoCard`, or
-`HoverZoomCard`, so placement can be screen-specific while visual language stays
+surface, usually `InfoCard`, `GlossaryDefinitionCard`, or `DreamsignInfoCard`,
+so placement can be screen-specific while visual language stays
 shared.
 
 ## Loading And Error States

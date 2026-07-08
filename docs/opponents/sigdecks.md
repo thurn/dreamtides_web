@@ -176,8 +176,8 @@ presence of one never affects the other's result.
 
 The winning deck's `mainboardIds` are resolved to card records through a
 UUID-keyed lookup built from the runtime card catalog and rendered with the shared
-`CardView`. Hovering a card enlarges it in place (the same `HoverZoomCard` the
-`/opponent` deck viewer uses), and hovering a Dreamcaller's portrait or name shows
+`CardView`. Hovering a card enlarges it in place through GameCard/CardView's
+built-in hover-zoom, and hovering a Dreamcaller's portrait or name shows
 a card with its ability (`DreamcallerPopover`). Signature-card chips above each
 deck mark which signatures the chosen deck contains (filled) versus missed
 (faint), and key on UUID.

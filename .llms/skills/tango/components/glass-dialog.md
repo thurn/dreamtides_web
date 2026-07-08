@@ -10,7 +10,7 @@ Real consumers: **3** (imports outside `src/tango/docs/` and tests).
 
 The glass overlay shell: a modal dialog that frosts the scene behind it — a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and a glass close disc) over a scrolling body. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.
 
-> **Guidance:** The close disc is the shared IconButton at size `md`. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up.
+> **Guidance:** The close disc is the shared IconButton at size `md`. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant: on a wide-and-tall desktop (min-width 1400px and min-height 800px) the panel widens and fits a taller viewport so more content lands without internal scroll.
 
 ## Props
 

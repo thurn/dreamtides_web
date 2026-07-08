@@ -70,8 +70,8 @@ const ROOMY_CARD_MIN_WIDTH_PX = 208;
 /**
  * A roomy desktop is wide AND tall enough to lay the ten-card starter deck out
  * as an enlarged 5x2 grid without internal scroll, so the overlay widens its
- * panel and grid there. Mirrors the media query in the shipped starting-deck
- * modal.
+ * panel and grid there. Matches the roomy-desktop query GlassDialog uses to
+ * decide `wide` (min-width 1400px and min-height 800px).
  */
 const ROOMY_DESKTOP_QUERY = "(min-width: 1400px) and (min-height: 800px)";
 
