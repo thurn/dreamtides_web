@@ -1,5 +1,5 @@
 // DreamsignRevelationScreen — the Tango mobile rendering of Sigrun's
-// dreamsign-offer site. The scene stays full-bleed, Sigrun occupies the upper
+// dreamsign-offer site. The scene stays full-bleed, Sigrun occupies the lower
 // left beside her speech bubble, the dreamsign choices sit below her, and the
 // persistent QuestStatusBar remains the bottom HUD.
 
@@ -88,8 +88,9 @@ export interface DreamsignRevelationScreenProps {
   claimedIndex: number | null;
 }
 
-const GUIDE_LAYER_TOP = `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}))`;
-const OFFER_TOP = `max(34dvh, calc(${token("--safe-top")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-7")}))`;
+const CONTENT_VERTICAL_OFFSET = "10dvh";
+const GUIDE_LAYER_TOP = `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${CONTENT_VERTICAL_OFFSET})`;
+const OFFER_TOP = `max(44dvh, calc(${token("--safe-top")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-7")} + ${CONTENT_VERTICAL_OFFSET}))`;
 const HUD_CLEARANCE = `calc(${token("--hud-h")} + ${token("--safe-bottom")})`;
 const CLOSE_TOP = token("--space-5");
 const OFFER_TILE_SIZE = 120;
