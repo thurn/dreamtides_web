@@ -94,15 +94,6 @@ export const BASELINE = [
     "src/tango/components/hud/DreamcallerPortrait.tsx",
     "src/tango/screens/quest-start-desktop.tsx",
   ],
-  // Not part of the design-review's original nine (see the task report):
-  // AtlasHoverCard's hero-image frame and InfoCard's full-bleed hero frame
-  // both borrow InfoCard's "faithfully-copied inset hairline highlight" —
-  // same bespoke ring value layered onto the elevation token.
-  [
-    '${token("--shadow-lg")}, inset 0 0 0 1px rgba(255,255,255,0.08)',
-    "src/tango/components/atlas/AtlasHoverCard.tsx",
-    "src/tango/components/overlay/InfoCard.tsx",
-  ],
 ];
 
 /** Whether `fullPath` is walked at all: TS/TSX/CSS source under src/tango. */
