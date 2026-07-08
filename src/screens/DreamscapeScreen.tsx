@@ -10,9 +10,9 @@ import { draftSitePickCount } from "../draft/draft-site-config";
 import {
   SiteNode,
   type DreamscapeSiteModel,
-} from "../tango/components/atlas/SiteNode";
+} from "../tango/components/dreamscape/SiteNode";
 import { Motes } from "../tango/components/hud/Motes";
-import { scatterSites, seedFromString } from "../tango/components/atlas/dreamscape-scatter";
+import { scatterSites, seedFromString } from "../tango/components/dreamscape/dreamscape-scatter";
 import { glyph } from "../tango/primitives/glyph";
 import { logEvent } from "../logging";
 import "./dreamscape.css";

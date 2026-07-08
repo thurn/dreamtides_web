@@ -4,7 +4,7 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { DreamscapeScreen, type DreamscapeView } from "./DreamscapeScreen";
-import type { DreamscapeSiteModel } from "../components/atlas/SiteNode";
+import type { DreamscapeSiteModel } from "../components/dreamscape/SiteNode";
 import { glyph } from "../primitives/glyph";
 import { artRef } from "../primitives/art";
 import type { SiteState } from "../../types/quest";

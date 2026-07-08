@@ -9,7 +9,7 @@
 // the dreamscape screen builds real ones from its site list + seeded scatter.
 
 import { useRef } from "react";
-import { SiteNode, type DreamscapeSiteModel } from "../../components/atlas/SiteNode";
+import { SiteNode, type DreamscapeSiteModel } from "../../components/dreamscape/SiteNode";
 import { glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import type { TangoComponent } from "../registry";
@@ -119,7 +119,7 @@ export const siteNodeDemo: TangoComponent = {
   usage: [
     {
       note: "A dreamscape site disc that positions itself from `model.pos` inside a `position: relative` stage and reveals its description through InfoCard, anchored to the scene's `stageRef`. Every disc is one system size and accent — the guardian battle reads as special through its pulsing ring and lock badge, not a larger disc; `motion` enables the calm floaty drift.",
-      code: `import { SiteNode } from "src/tango/components/atlas/SiteNode";
+      code: `import { SiteNode } from "src/tango/components/dreamscape/SiteNode";
 
 <div ref={stageRef} style={{ position: "relative" }}>
   {models.map((model) => (

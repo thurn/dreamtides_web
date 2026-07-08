@@ -13,7 +13,7 @@ import { useRef } from "react";
 import {
   SiteNode,
   type DreamscapeSiteModel,
-} from "../components/atlas/SiteNode";
+} from "../components/dreamscape/SiteNode";
 import { Motes } from "../components/hud/Motes";
 import {
   QuestStatusBar,

@@ -13,8 +13,8 @@ import { draftSitePickCount } from "../../draft/draft-site-config";
 import {
   scatterSites,
   seedFromString,
-} from "../../tango/components/atlas/dreamscape-scatter";
-import type { DreamscapeSiteModel } from "../../tango/components/atlas/SiteNode";
+} from "../../tango/components/dreamscape/dreamscape-scatter";
+import type { DreamscapeSiteModel } from "../../tango/components/dreamscape/SiteNode";
 import type {
   QsbDreamcaller,
   QsbDreamsign,

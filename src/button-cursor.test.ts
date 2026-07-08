@@ -28,7 +28,7 @@ const SITE_NODE = path.join(
   SRC_DIR,
   "tango",
   "components",
-  "atlas",
+  "dreamscape",
   "SiteNode.tsx",
 );
 
