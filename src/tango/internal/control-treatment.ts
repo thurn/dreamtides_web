@@ -15,8 +15,8 @@
 // read as one family.
 
 import type { CSSProperties } from "react";
-import type { TangoColor } from "../../primitives/color";
-import { token } from "../../primitives/tokens";
+import type { TangoColor } from "../primitives/color";
+import { token } from "../primitives/tokens";
 
 /** The resolved appearance of the control surface. */
 export interface ControlChrome {

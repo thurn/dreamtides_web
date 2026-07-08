@@ -24,14 +24,16 @@ import { spaceTokenFor } from "./tango-token-index.js";
  *
  * SCOPE. The product-UI tier: files under `src/tango/` outside
  * {@link EXEMPT_PREFIXES}, plus the adapter/builder layer in
- * `src/screens/tango_adapters/`, mirroring `no-hardcoded-values` (the primitive and
- * component tiers legitimately author raw values; the doc site is tooling).
+ * `src/screens/tango_adapters/`, mirroring `no-hardcoded-values` (the primitive,
+ * component, and internal/ material-recipe tiers legitimately author raw
+ * values; the doc site is tooling).
  */
 
 /** Repo-relative POSIX dir prefixes exempt from the check. */
 const EXEMPT_PREFIXES = [
   "src/tango/primitives/",
   "src/tango/components/",
+  "src/tango/internal/",
   "src/tango/docs/",
   "src/tango/screens/devtools/",
 ];

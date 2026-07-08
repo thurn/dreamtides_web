@@ -46,7 +46,7 @@ import {
   CONTROL_INACTIVE_COLOR,
   controlChrome,
   glassTrack,
-} from "./control-treatment";
+} from "../../internal/control-treatment";
 
 /** Height/scale variants, matching SegmentedControl's. */
 type SelectSize = "sm" | "md";

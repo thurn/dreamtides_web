@@ -13,9 +13,11 @@ import path from "node:path";
  *
  * SCOPE. Fires only on the composition / product-UI tier: files under
  * `src/tango/` that are NOT in {@link EXEMPT_PREFIXES}:
- *   - `src/tango/primitives/` and `src/tango/components/` — these are where a
- *     native element is legitimately wrapped (`Button` renders a `<button>`,
- *     `Pressable` renders the element it forwards to). They OWN the native tag.
+ *   - `src/tango/primitives/`, `src/tango/components/`, and `src/tango/internal/`
+ *     — these are where a native element is legitimately wrapped (`Button`
+ *     renders a `<button>`, `Pressable` renders the element it forwards to) or
+ *     where a material recipe returns style objects with no elements of its
+ *     own. They OWN the native tag.
  *   - `src/tango/docs/` — the documentation site is tooling: its control panel
  *     genuinely needs native `<input>`/`<select>`, and its chrome uses plain
  *     `<button>`s.
@@ -37,6 +39,7 @@ import path from "node:path";
 const EXEMPT_PREFIXES = [
   "src/tango/primitives/",
   "src/tango/components/",
+  "src/tango/internal/",
   "src/tango/docs/",
   "src/tango/screens/devtools/",
 ];

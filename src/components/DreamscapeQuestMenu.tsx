@@ -7,7 +7,7 @@ import type { QuestState } from "../types/quest";
 import { Pressable } from "../tango/primitives/Pressable";
 import { token } from "../tango/primitives/tokens";
 import { useIsDesktop } from "../tango/screens/use-is-desktop";
-import { glassIconButtonChrome } from "../tango/components/controls/control-treatment";
+import { glassIconButtonChrome } from "../tango/internal/control-treatment";
 import { QuestUtilityMenu, type QuestUtilityMenuAction } from "./QuestUtilityMenu";
 
 /** The App-shell overlay handlers the menu triggers. */

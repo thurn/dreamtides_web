@@ -14,10 +14,11 @@ import { colorTokenFor } from "./tango-token-index.js";
  *
  * SCOPE. The rule fires only on the composition / product-UI tier: files under
  * `src/tango/` that are NOT in {@link EXEMPT_PREFIXES}. The exempt dirs are:
- *   - `src/tango/primitives/` and `src/tango/components/` — the primitive and
- *     leaf-component layers legitimately author raw values (a leaf occasionally
- *     needs a specific ramp step; the primitives sheet DEFINES the colors). This
- *     mirrors `no-primitive-tokens`.
+ *   - `src/tango/primitives/`, `src/tango/components/`, and `src/tango/internal/`
+ *     — the primitive, leaf-component, and material-recipe layers legitimately
+ *     author raw values (a leaf occasionally needs a specific ramp step; the
+ *     primitives sheet DEFINES the colors; a material recipe like the glass
+ *     surface IS its own bespoke literals). This mirrors `no-primitive-tokens`.
  *   - `src/tango/docs/` — the design-system's own documentation site: demos and
  *     mockups intentionally show components against arbitrary sample colors and
  *     backdrops, and the doc chrome is tooling, not product UI.
@@ -37,6 +38,7 @@ import { colorTokenFor } from "./tango-token-index.js";
 const EXEMPT_PREFIXES = [
   "src/tango/primitives/",
   "src/tango/components/",
+  "src/tango/internal/",
   "src/tango/docs/",
   "src/tango/screens/devtools/",
 ];

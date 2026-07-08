@@ -58,7 +58,7 @@ import {
   resolveMediaFilter,
 } from "../../primitives/media";
 import { renderRichText, type RichText } from "../card/rich-text";
-import { glassSurfaceStyle } from "../controls/glass-surface";
+import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { tideVisual, tideAlignmentLabel, type Tide } from "../hud/tide-spec";
 
 /* ---- faithfully-copied layout literals from the design source (not tokens:

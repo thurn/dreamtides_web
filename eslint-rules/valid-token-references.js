@@ -16,9 +16,9 @@ import { knownTokenNames } from "./tango-token-index.js";
  * SCOPE. The product-UI tier: files under `src/tango/` outside
  * {@link EXEMPT_PREFIXES}, plus the adapter/builder layer in
  * `src/screens/tango_adapters/`. The exempt dirs mirror `no-hardcoded-values`: the
- * primitive layer DEFINES the tokens, leaf components may bridge to
- * production token names, and the doc site's specimens intentionally print
- * token names that may not all resolve.
+ * primitive layer DEFINES the tokens, leaf components and material recipes
+ * (`internal/`) may bridge to production token names, and the doc site's
+ * specimens intentionally print token names that may not all resolve.
  *
  * If the stylesheet cannot be read the known-name set is empty and the rule
  * is a no-op (never flags everything).
@@ -28,6 +28,7 @@ import { knownTokenNames } from "./tango-token-index.js";
 const EXEMPT_PREFIXES = [
   "src/tango/primitives/",
   "src/tango/components/",
+  "src/tango/internal/",
   "src/tango/docs/",
 ];
 

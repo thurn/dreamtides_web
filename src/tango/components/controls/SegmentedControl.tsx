@@ -21,7 +21,7 @@
 import type { ReactElement } from "react";
 import { HOVER_SCALE, PRESS_SCALE, usePress } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
-import { type ControlChrome, controlChrome } from "./control-treatment";
+import { type ControlChrome, controlChrome } from "../../internal/control-treatment";
 
 /** Height/scale variants. */
 type SegmentedControlSize = "sm" | "md";

@@ -18,7 +18,7 @@
 // and does not use this recipe.
 
 import * as React from "react";
-import { token } from "../../primitives/tokens";
+import { token } from "../primitives/tokens";
 
 /**
  * The liquid-glass style object, spread onto the node that should read as

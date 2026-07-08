@@ -130,6 +130,40 @@ export default tseslint.config(
     },
   },
   {
+    // src/tango/internal/ holds material RECIPES (glass-surface,
+    // control-treatment) — bespoke literal-heavy building blocks meant to be
+    // worn by Tango components, not reached into directly. Rendering a public
+    // Tango component (Button, InfoCard, SegmentedControl, …) from a legacy
+    // screen is the sanctioned migration story and stays legal; a legacy
+    // screen wearing a raw material itself bypasses the component layer
+    // entirely and is not. Scoped to all of src/**, ignoring the linted
+    // src/tango/** tier itself (which legitimately imports its own materials)
+    // and two pre-existing legacy reach-ins baselined here: StartingDeckModal
+    // and DreamscapeQuestMenu. Both are removed in Phase 3 — StartingDeckModal
+    // migrates onto the Tango tier and the dreamscape gear button moves onto
+    // IconButton — at which point these `ignores` entries shrink to nothing.
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: [
+      "src/tango/**",
+      "src/components/StartingDeckModal.tsx",
+      "src/components/DreamscapeQuestMenu.tsx",
+    ],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/tango/internal/**", "**/tango/internal"],
+              message:
+                "src/tango/internal/ material recipes are not for external reach-in. Import a public Tango component instead, or migrate this screen onto the Tango tier — see the tango-migrate skill.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     ignores: [
       "node_modules/",
       "dist/",

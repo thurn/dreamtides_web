@@ -20,7 +20,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { artRef } from "../../primitives/art";
 import { richText } from "../card/rich-text";
-import { glassSurfaceStyle } from "../controls/glass-surface";
+import { glassSurfaceStyle } from "../../internal/glass-surface";
 import {
   CLICK_WINDOW,
   computePopoverPosition,
