@@ -238,7 +238,7 @@ export function Dreamsign({
     [
       dreamsign.isBane ? BANE_FILTER : null,
       variant === "hud" ? DS_SHADOW : null,
-      variant === "revelation" && !pressed ? DS_REVELATION_SHADOW : null,
+      variant === "revelation" ? DS_REVELATION_SHADOW : null,
     ]
       .filter((part): part is string => part !== null)
       .join(" ") || "none";

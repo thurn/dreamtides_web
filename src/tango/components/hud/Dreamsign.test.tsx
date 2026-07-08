@@ -203,34 +203,6 @@ describe("Dreamsign", () => {
     });
   });
 
-  it("removes the revelation shadow while pressed but keeps the press scale", () => {
-    const sign = makeDreamsign({
-      name: "Sea Tome",
-      imageName: "book_11.png",
-    });
-
-    const { container, root } = mountInto(
-      <Dreamsign dreamsign={sign} sizePx={120} variant="revelation" />,
-    );
-
-    const tile = container.querySelector<HTMLElement>(
-      '[data-testid="dreamsign-art-tile"]',
-    );
-    expect(tile?.style.filter).toContain("drop-shadow");
-
-    act(() => {
-      tile?.dispatchEvent(new Event("pointerdown", { bubbles: true }));
-    });
-
-    expect(tile?.style.filter).toBe("none");
-    expect(tile?.style.transform).toBe("scale(0.9)");
-
-    act(() => {
-      tile?.dispatchEvent(new Event("pointerup", { bubbles: true }));
-      root.unmount();
-    });
-  });
-
   it("combines the bane desaturation with the hud drop-shadow", () => {
     const sign = makeDreamsign({
       name: "Amanita",
