@@ -1,7 +1,7 @@
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
-import { execFileSync } from "node:child_process";
+import { execFileSync, execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -28,6 +28,7 @@ import { regenerateCardData } from "./scripts/setup-assets.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const buildGitSha = resolveBuildGitSha();
+const buildHash = resolveBuildHash();
 export const generatedCardDataWatchPaths = [
   path.join(__dirname, "data", "tabula", "cards_v2.toml"),
   path.join(__dirname, "public", "card-data.json"),
@@ -43,6 +44,25 @@ function resolveBuildGitSha(): string {
     }).trim();
   } catch {
     return "unknown";
+  }
+}
+
+/**
+ * Resolves the git HEAD short hash used as the coop reducer version. Injected
+ * as the `__BUILD_HASH__` global so `getBuildHash()` (src/coop/build-hash.ts)
+ * can pin a room to the build that created it. Falls back to `"dev"` when git
+ * is unavailable at config-load time.
+ */
+function resolveBuildHash(): string {
+  try {
+    return execSync("git rev-parse --short HEAD", {
+      cwd: __dirname,
+      stdio: ["ignore", "pipe", "ignore"],
+    })
+      .toString()
+      .trim();
+  } catch {
+    return "dev";
   }
 }
 
@@ -728,6 +748,7 @@ function firebaseConfigGuardPlugin(): Plugin {
 export default defineConfig({
   define: {
     "import.meta.env.VITE_BUILD_GIT_SHA": JSON.stringify(buildGitSha),
+    __BUILD_HASH__: JSON.stringify(buildHash),
   },
   plugins: [
     firebaseConfigGuardPlugin(),
