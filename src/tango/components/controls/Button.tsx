@@ -1,11 +1,19 @@
-// Button — the ONE button in Tango.
+// Button — rung 1 of Tango's four-rung button suite: the beveled purple sprite,
+// the primary / commit action.
 //
-// The game uses a single button: the beveled purple sprite
-// (Button_Purple.png) drawn as a scalable CSS 9-patch (border-image). There
-// is no color-coded button language — no flat-gradient primary, no red
-// commit pill, no danger/ghost variants. Low-emphasis and destructive
-// actions (Back, Skip, Choose again, Reset, Leave) are plain pressable TEXT /
-// ICON affordances plus confirmation copy, never a second button color.
+// The suite is four rungs of decreasing weight and emphasis:
+//   1. Button — THIS beveled purple sprite (Button_Purple.png) drawn as a
+//      scalable CSS 9-patch (border-image). The primary / commit action.
+//   2. GlassButton — a labeled glass control-surface, a secondary chrome action
+//      that sits quietly beside the filter/sort controls.
+//   3. IconButton — the glass disc, a compact glyph-only chrome action (a deck
+//      viewer's close control, the dreamscape menu).
+//   4. Plain pressable text — tertiary / inline affordances (Back, Skip, Reset).
+//
+// Button stays the ONE purple sprite. A secondary action steps DOWN a rung —
+// to a GlassButton, an IconButton, or plain pressable text — never to a
+// recolored Button: the suite has one flat-gradient-free primary and expresses
+// lower emphasis by rung, not by a second button color.
 //
 //   - one appearance — the chamfered purple sprite, sliced `56 fill` so it
 //     scales to any label width AND height while the ornate corners stay
@@ -81,14 +89,15 @@ export interface ButtonProps {
 }
 
 /**
- * Button — the ONE button: the beveled purple sprite drawn as a scalable CSS
- * 9-patch. There is no variant / color-coded button language — secondary and
- * destructive actions are plain pressable text/icon affordances. Press
- * feedback routes through the shared --press-scale primitive. The button has no
- * style / className / arbitrary-attribute escape hatch and takes no `children`
- * slot: its one appearance is fixed and only its typed props (size, full,
- * disabled, cost, costKind, label) shape it — the label is a resolved string,
- * not caller markup, so Button is a leaf, not a container.
+ * Button — the commit / primary rung of the button suite: the beveled purple
+ * sprite drawn as a scalable CSS 9-patch. It is the ONE purple sprite; lower
+ * emphasis steps down a rung (GlassButton, IconButton, plain pressable text),
+ * never to a recolored Button. Press feedback routes through the shared
+ * --press-scale primitive. The button has no style / className /
+ * arbitrary-attribute escape hatch and takes no `children` slot: its one
+ * appearance is fixed and only its typed props (size, full, disabled, cost,
+ * costKind, label) shape it — the label is a resolved string, not caller
+ * markup, so Button is a leaf, not a container.
  */
 export function Button({
   size = "md",

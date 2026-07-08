@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/tango#/button`
 
 Real consumers: **2** (imports outside `src/tango/docs/` and tests).
 
-The one button in Tango — the beveled purple sprite, scaled to any label and to a taller commit height. Low-emphasis and destructive actions are plain pressable text or icons, never a second button color.
+Rung 1 of Tango's four-rung button suite — the beveled purple sprite, the primary/commit action, scaled to any label and to a taller commit height. Lower-emphasis actions step down a rung (GlassButton, IconButton, plain pressable text), never to a recolored Button.
 
 ## Props
 
@@ -24,6 +24,24 @@ The one button in Tango — the beveled purple sprite, scaled to any label and t
 | `label` | `string` | no | — | The button's text label. Resolve any UUID/name to a plain string before passing it — the button renders copy, never arbitrary caller markup. Omit only for a price-only button (supply `ariaLabel` instead). |
 
 ## Usage
+
+### When to use which button
+
+The suite has four rungs of decreasing weight. The purple `Button` commits (primary). A labeled `GlassButton` is a secondary chrome action. A glyph-only `IconButton` disc is a compact corner action. Plain pressable text is tertiary/inline (Back, Skip, Reset). A secondary action steps down a rung — never a recolored `Button`.
+
+```tsx
+// 1. Primary / commit — the beveled purple sprite:
+<Button label="Begin Battle" onClick={begin} />
+
+// 2. Secondary chrome — a labeled glass control:
+<GlassButton label="Filter" glyph="filter" onPress={openFilter} />
+
+// 3. Compact chrome — a glyph-only glass disc:
+<IconButton label="Close" glyph="close" onPress={close} />
+
+// 4. Tertiary / inline — plain pressable text:
+<Pressable onPress={goBack}><span>Back</span></Pressable>
+```
 
 ### With cost
 

@@ -10,11 +10,26 @@ export const buttonDemo: TangoComponent = {
   id: "button",
   title: "Button",
   blurb:
-    "The one button in Tango — the beveled purple sprite, scaled to any label and to a taller commit height. Low-emphasis and destructive actions are plain pressable text or icons, never a second button color.",
+    "Rung 1 of Tango's four-rung button suite — the beveled purple sprite, the primary/commit action, scaled to any label and to a taller commit height. Lower-emphasis actions step down a rung (GlassButton, IconButton, plain pressable text), never to a recolored Button.",
   group: "Components",
   docName: "Button",
   Component: Button,
   usage: [
+    {
+      label: "When to use which button",
+      note: "The suite has four rungs of decreasing weight. The purple `Button` commits (primary). A labeled `GlassButton` is a secondary chrome action. A glyph-only `IconButton` disc is a compact corner action. Plain pressable text is tertiary/inline (Back, Skip, Reset). A secondary action steps down a rung — never a recolored `Button`.",
+      code: `// 1. Primary / commit — the beveled purple sprite:
+<Button label="Begin Battle" onClick={begin} />
+
+// 2. Secondary chrome — a labeled glass control:
+<GlassButton label="Filter" glyph="filter" onPress={openFilter} />
+
+// 3. Compact chrome — a glyph-only glass disc:
+<IconButton label="Close" glyph="close" onPress={close} />
+
+// 4. Tertiary / inline — plain pressable text:
+<Pressable onPress={goBack}><span>Back</span></Pressable>`,
+    },
     {
       label: "With cost",
       note: "A `cost` renders after the label, in white, inside the one purple button sprite. It defaults to essence.",
