@@ -16,15 +16,15 @@ One dreamscape node on the Dream Atlas: a framed circular icon whose glow and ba
 | --- | --- | --- | --- | --- |
 | `view` | `AtlasNodeView` | yes | — |  |
 | `hovered` | `boolean` | yes | — | Draws the node in its revealed/hover glow + scale-up state. |
-| `rootRef` | `Ref<HTMLDivElement>` | no | — | Ref to the node's root element, so a caller can anchor an input-adaptive press-reveal (InfoCard) to it and measure it against the stage. |
+| `rootRef` | `Ref<HTMLElement>` | no | — | Ref to the node's root element, so a caller can anchor an input-adaptive press-reveal (InfoCard) to it and measure it against the stage. Typed as the common `HTMLElement` because an available node renders through `Pressable` as a `<button>` while an unreachable one is a plain `<div>` — the caller only measures the element, so it needs neither concrete tag type. |
 | `onEnter` | `((nodeId: string) => void)` | no | — | Mouse/focus reveal driver: fired with the node id when the pointer or keyboard focus enters the node. Optional — a caller driving the reveal through the pointer handlers below omits it. |
 | `onLeave` | `(() => void)` | no | — | Paired with {@link onEnter}: fired on mouse leave / blur. |
 | `onClick` | `((nodeId: string) => void)` | no | — | Activation: fired with the node id on click and on Enter / Space. |
-| `onPointerEnter` | `PointerEventHandler<HTMLDivElement>` | no | — | Input-adaptive press-reveal handlers, wired to the node's root so the InfoCard engine (`usePressReveal`) can reveal on touch press-down and on fine-pointer hover. A caller either wires these OR the {@link onEnter} / {@link onLeave} mouse pair, never both. |
-| `onPointerDown` | `PointerEventHandler<HTMLDivElement>` | no | — |  |
-| `onPointerUp` | `PointerEventHandler<HTMLDivElement>` | no | — |  |
-| `onPointerLeave` | `PointerEventHandler<HTMLDivElement>` | no | — |  |
-| `onPointerCancel` | `PointerEventHandler<HTMLDivElement>` | no | — |  |
+| `onPointerEnter` | `PointerEventHandler<HTMLElement>` | no | — | Input-adaptive press-reveal handlers, wired to the node's root so the InfoCard engine (`usePressReveal`) can reveal on touch press-down and on fine-pointer hover. A caller either wires these OR the {@link onEnter} / {@link onLeave} mouse pair, never both. |
+| `onPointerDown` | `PointerEventHandler<HTMLElement>` | no | — |  |
+| `onPointerUp` | `PointerEventHandler<HTMLElement>` | no | — |  |
+| `onPointerLeave` | `PointerEventHandler<HTMLElement>` | no | — |  |
+| `onPointerCancel` | `PointerEventHandler<HTMLElement>` | no | — |  |
 
 ### `view`: the `AtlasNodeView` model
 

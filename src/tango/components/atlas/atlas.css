@@ -71,10 +71,24 @@
 }
 .dream-atlas .node {
   position: absolute;
-  transform: translate(-50%, -50%);
+  /* Centre the node on its stage-space left/top through negative margins set
+     inline per node (-size/2), NOT `transform: translate(-50%,-50%)`: an
+     available node renders through Pressable, which owns the element transform
+     for its press/hover scale, so the centering must stay off transform to
+     compose cleanly. */
   display: flex;
   align-items: center;
   justify-content: center;
+  /* An available node renders as a native <button> through Pressable; strip the
+     browser's default button chrome so it reads exactly like the plain-div
+     nodes (mirrors the SiteNode reset). Harmless on the non-interactive div. */
+  appearance: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
 }
 .dream-atlas .node-art {
   position: relative;

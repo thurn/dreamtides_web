@@ -8,6 +8,7 @@ import type { DreamscapeNode } from "../../../types/quest";
 import { BOSS_DISPLAY, ROUND_FRAME_URL } from "./atlas-display";
 import { type Glyph } from "../../primitives/glyph";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
+import { Pressable } from "../../primitives/Pressable";
 import "./atlas.css";
 
 /**
@@ -49,9 +50,12 @@ interface AtlasNodeProps {
   hovered: boolean;
   /**
    * Ref to the node's root element, so a caller can anchor an input-adaptive
-   * press-reveal (InfoCard) to it and measure it against the stage.
+   * press-reveal (InfoCard) to it and measure it against the stage. Typed as the
+   * common `HTMLElement` because an available node renders through `Pressable` as
+   * a `<button>` while an unreachable one is a plain `<div>` — the caller only
+   * measures the element, so it needs neither concrete tag type.
    */
-  rootRef?: Ref<HTMLDivElement>;
+  rootRef?: Ref<HTMLElement>;
   /**
    * Mouse/focus reveal driver: fired with the node id when the pointer or
    * keyboard focus enters the node. Optional — a caller driving the reveal
@@ -68,11 +72,11 @@ interface AtlasNodeProps {
    * fine-pointer hover. A caller either wires these OR the {@link onEnter} /
    * {@link onLeave} mouse pair, never both.
    */
-  onPointerEnter?: PointerEventHandler<HTMLDivElement>;
-  onPointerDown?: PointerEventHandler<HTMLDivElement>;
-  onPointerUp?: PointerEventHandler<HTMLDivElement>;
-  onPointerLeave?: PointerEventHandler<HTMLDivElement>;
-  onPointerCancel?: PointerEventHandler<HTMLDivElement>;
+  onPointerEnter?: PointerEventHandler<HTMLElement>;
+  onPointerDown?: PointerEventHandler<HTMLElement>;
+  onPointerUp?: PointerEventHandler<HTMLElement>;
+  onPointerLeave?: PointerEventHandler<HTMLElement>;
+  onPointerCancel?: PointerEventHandler<HTMLElement>;
 }
 
 /**
@@ -141,62 +145,63 @@ export function AtlasNode({
     (isBoss ? " - final boss" : "") +
     (view.knownDreamsignRef !== null ? " - known dreamsign here" : "");
 
-  return (
-    <div
-      ref={rootRef}
-      className={className}
-      style={
-        {
-          left: view.left,
-          top: view.top,
-          width: view.size,
-          height: view.size,
-          // A press-hold to read a node must not be hijacked by the browser as a
-          // scroll / pan gesture, which would cancel the pointer and drop the
-          // reveal.
-          touchAction: "none",
-          WebkitTapHighlightColor: "transparent",
-          // Drives the badge sizing in atlas.css — every badge is a fraction of
-          // this so they scale together with the node's diameter.
-          "--atlas-node-size": `${String(view.size)}px`,
-          // Per-profile badge enlargement (the mobile atlas bumps this up).
-          "--atlas-badge-scale": String(view.badgeScale ?? 1),
-        } as CSSProperties
-      }
-      role={isAvailable ? "button" : "img"}
-      tabIndex={isAvailable ? 0 : undefined}
-      aria-label={ariaLabel}
-      data-node-state={node.state}
-      data-node-boss={isBoss ? "true" : undefined}
-      data-node-starting={isStarter ? "true" : undefined}
-      data-node-known-dreamsign={view.knownDreamsignRef !== null ? "true" : undefined}
-      onMouseEnter={() => {
-        onEnter?.(node.id);
-      }}
-      onMouseLeave={() => {
-        onLeave?.();
-      }}
-      onFocus={() => {
-        onEnter?.(node.id);
-      }}
-      onBlur={() => {
-        onLeave?.();
-      }}
-      onPointerEnter={onPointerEnter}
-      onPointerDown={onPointerDown}
-      onPointerUp={onPointerUp}
-      onPointerLeave={onPointerLeave}
-      onPointerCancel={onPointerCancel}
-      onClick={() => {
-        onClick?.(node.id);
-      }}
-      onKeyDown={(event) => {
-        if (isAvailable && (event.key === "Enter" || event.key === " ")) {
-          event.preventDefault();
-          onClick?.(node.id);
-        }
-      }}
-    >
+  const nodeStyle = {
+    left: view.left,
+    top: view.top,
+    width: view.size,
+    height: view.size,
+    // Centre the node on its stage-space `left` / `top` via negative margins
+    // rather than `transform: translate(-50%,-50%)`. The available node renders
+    // through `Pressable`, which owns the element `transform` (its press / hover
+    // scale); keeping the centering off `transform` lets that scale compose
+    // cleanly. Mirrors the SiteNode centering idiom.
+    marginLeft: -view.size / 2,
+    marginTop: -view.size / 2,
+    // A press-hold to read a node must not be hijacked by the browser as a
+    // scroll / pan gesture, which would cancel the pointer and drop the
+    // reveal.
+    touchAction: "none",
+    WebkitTapHighlightColor: "transparent",
+    // Drives the badge sizing in atlas.css — every badge is a fraction of
+    // this so they scale together with the node's diameter.
+    "--atlas-node-size": `${String(view.size)}px`,
+    // Per-profile badge enlargement (the mobile atlas bumps this up).
+    "--atlas-badge-scale": String(view.badgeScale ?? 1),
+  } as CSSProperties;
+
+  // Reveal drivers (mouse / focus) shared by both the interactive and the
+  // non-interactive node — an unreachable node still reveals its InfoCard on
+  // hover / press; it just can't be activated.
+  const revealHandlers = {
+    onMouseEnter: () => {
+      onEnter?.(node.id);
+    },
+    onMouseLeave: () => {
+      onLeave?.();
+    },
+    onFocus: () => {
+      onEnter?.(node.id);
+    },
+    onBlur: () => {
+      onLeave?.();
+    },
+    onPointerEnter,
+    onPointerDown,
+    onPointerUp,
+    onPointerLeave,
+    onPointerCancel,
+  };
+
+  const dataAttrs = {
+    "data-node-state": node.state,
+    "data-node-boss": isBoss ? "true" : undefined,
+    "data-node-starting": isStarter ? "true" : undefined,
+    "data-node-known-dreamsign":
+      view.knownDreamsignRef !== null ? "true" : undefined,
+  };
+
+  const inner = (
+    <>
       <div className="node-glow" />
       <div className="node-art">{face}</div>
 
@@ -225,6 +230,49 @@ export function AtlasNode({
           <img src={resolveArtRef(view.knownDreamsignRef)} alt="" draggable={false} />
         </div>
       )}
+    </>
+  );
+
+  // An available node is the ONE interactive surface here, so it routes through
+  // `Pressable` as a native `<button>` — that supplies the button role, tab
+  // focus, and Enter / Space activation for free (plus the shared press / hover
+  // scale), replacing the former hand-rolled `role="button"` + `tabIndex` +
+  // `onKeyDown` on a raw `<div>`. A non-available node stays a plain,
+  // non-interactive `<div role="img">` with no activation handler.
+  if (isAvailable) {
+    return (
+      <Pressable
+        as="button"
+        ref={rootRef}
+        className={className}
+        style={nodeStyle}
+        aria-label={ariaLabel}
+        {...dataAttrs}
+        {...revealHandlers}
+        onClick={() => {
+          onClick?.(node.id);
+        }}
+      >
+        {inner}
+      </Pressable>
+    );
+  }
+
+  return (
+    <div
+      // The prop is `Ref<HTMLElement>` (the interactive branch's <button> and
+      // this <div> share only that base); a <div>'s ref slot wants the concrete
+      // `HTMLDivElement`. The caller only measures the node, so narrowing the
+      // element type here is sound.
+      ref={rootRef as Ref<HTMLDivElement>}
+      className={className}
+      style={nodeStyle}
+      role="img"
+      aria-label={ariaLabel}
+      {...dataAttrs}
+      {...revealHandlers}
+    >
+      {inner}
     </div>
   );
 }

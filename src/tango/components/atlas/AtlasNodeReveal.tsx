@@ -332,7 +332,10 @@ export function AtlasNodeReveal({
   const isAvailable = view.node.state === "available";
   const { shown, fine, begin, end, enter, leave, heldPastTap, pointerRef } =
     usePressReveal();
-  const faceRef = React.useRef<HTMLDivElement>(null);
+  // The node root is a `<button>` (available) or a `<div>` (unreachable); the
+  // ref only measures the element for the reveal anchor, so it holds the common
+  // `HTMLElement`.
+  const faceRef = React.useRef<HTMLElement>(null);
   const [anchor, setAnchor] = React.useState<AnchorRect | null>(null);
 
   React.useLayoutEffect(() => {

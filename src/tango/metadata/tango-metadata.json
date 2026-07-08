@@ -307,11 +307,11 @@
     },
     {
       "name": "rootRef",
-      "tsType": "Ref<HTMLDivElement>",
+      "tsType": "Ref<HTMLElement>",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Ref to the node's root element, so a caller can anchor an input-adaptive\npress-reveal (InfoCard) to it and measure it against the stage."
+      "description": "Ref to the node's root element, so a caller can anchor an input-adaptive\npress-reveal (InfoCard) to it and measure it against the stage. Typed as the\ncommon `HTMLElement` because an available node renders through `Pressable` as\na `<button>` while an unreachable one is a plain `<div>` — the caller only\nmeasures the element, so it needs neither concrete tag type."
     },
     {
       "name": "onEnter",
@@ -339,7 +339,7 @@
     },
     {
       "name": "onPointerEnter",
-      "tsType": "PointerEventHandler<HTMLDivElement>",
+      "tsType": "PointerEventHandler<HTMLElement>",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -347,7 +347,7 @@
     },
     {
       "name": "onPointerDown",
-      "tsType": "PointerEventHandler<HTMLDivElement>",
+      "tsType": "PointerEventHandler<HTMLElement>",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -355,7 +355,7 @@
     },
     {
       "name": "onPointerUp",
-      "tsType": "PointerEventHandler<HTMLDivElement>",
+      "tsType": "PointerEventHandler<HTMLElement>",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -363,7 +363,7 @@
     },
     {
       "name": "onPointerLeave",
-      "tsType": "PointerEventHandler<HTMLDivElement>",
+      "tsType": "PointerEventHandler<HTMLElement>",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -371,7 +371,7 @@
     },
     {
       "name": "onPointerCancel",
-      "tsType": "PointerEventHandler<HTMLDivElement>",
+      "tsType": "PointerEventHandler<HTMLElement>",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
