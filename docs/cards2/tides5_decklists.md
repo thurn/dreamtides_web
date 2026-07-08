@@ -403,7 +403,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Soulrender
 - 1× Veil of the Wastes
 - 1× Unbroken
-- 1× Call of Calamity
+- 1× Abyssal Plunge
 - 1× The Ringleader
 - 1× Price of Redemption
 - 1× Oblivion Guide
@@ -420,7 +420,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× The Devourer
 - 1× Verdant Wayfarer
 - 1× Grotto Seer
-- 1× Fleeting Reunion
+- 1× Embrace the Infinite
 - 1× Twice-Lit Portal
 - 1× Duskwall Delver
 - 1× Abandon Constraints
@@ -610,7 +610,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 1× Tidewreck Navigator
 - 1× Immolate and Rise
 - 1× Unbroken
-- 1× Call of Calamity
+- 1× Abyssal Plunge
 - 1× Shaper of Memory
 - 1× Corrupted Host
 - 1× Price of Redemption
@@ -630,7 +630,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 1× Clockwork Salvager
 - 1× The Devourer
 - 1× Apocalypse
-- 1× Fleeting Reunion
+- 1× Embrace the Infinite
 - 1× Pyrestone Avatar
 - 1× Duskwall Delver
 - 1× Abandon Constraints
@@ -881,7 +881,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 2× Impending Fury
 - 2× Signal Resonant
 - 2× Vanishing Inquisitor
-- 2× Sunset Chapel Rest
+- 2× Skysign
 - 2× Dark Lord's Champion
 - 2× Planetgazer
 - 2× Last Beacon
@@ -933,7 +933,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× The Dread Sovereign
 - 1× Entropy Spike
 - 1× Clockwork Prodigy
-- 1× Momentum of the Fallen
+- 1× Dream Sever
 - 1× Pilgrim of Old Stones
 - 1× Shatter the Frail
 - 1× Duskwall Delver
@@ -984,7 +984,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 2× Defiant Parry
 - 2× Impending Fury
 - 2× Vanishing Inquisitor
-- 2× Sunset Chapel Rest
+- 2× Skysign
 - 2× Dark Lord's Champion
 - 2× Planetgazer
 - 2× Last Beacon
@@ -1037,7 +1037,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× The Dread Sovereign
 - 1× Entropy Spike
 - 1× Clockwork Prodigy
-- 1× Momentum of the Fallen
+- 1× Dream Sever
 - 1× Terminus
 - 1× Pilgrim of Old Stones
 - 1× Apocalypse
@@ -1124,7 +1124,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Soulbinder
 - 1× Weblight Waif
 - 1× Unbroken
-- 1× Call of Calamity
+- 1× Abyssal Plunge
 - 1× Shaper of Memory
 - 1× From the Barrow
 - 1× Glimmerwood Scout
@@ -1133,7 +1133,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Dreamscatter
 - 1× Reunion
 - 1× Reset
-- 1× Sunset Chapel Rest
+- 1× Skysign
 - 1× Seeker for the Way
 - 1× Molten Duel
 - 1× Part the Veil
@@ -1143,7 +1143,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× The Devourer
 - 1× Verdant Wayfarer
 - 1× Grotto Seer
-- 1× Fleeting Reunion
+- 1× Embrace the Infinite
 - 1× Pyrestone Avatar
 - 1× Canopy of Stars
 - 1× Collapse Protocol
@@ -1161,7 +1161,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Annihilation from Below
 - 1× Revelation Explorer
 - 1× Silent Gatherer
-- 1× Across the Void
+- 1× Renounce Reality
 - 1× Torchbearer of the Abyss
 - 1× Gateweaver
 - 1× Surge of Fury
@@ -1226,7 +1226,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Soulrender
 - 1× Paradox Enforcer
 - 1× Unbroken
-- 1× Call of Calamity
+- 1× Abyssal Plunge
 - 1× The Ringleader
 - 1× Revenant of the Lost
 - 1× Dreamscatter
@@ -1245,7 +1245,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Verdant Wayfarer
 - 1× Radiants' Captain
 - 1× Shatterpoint Agent
-- 1× Fleeting Reunion
+- 1× Embrace the Infinite
 - 1× Twice-Lit Portal
 - 1× Dark Lord's Champion
 - 1× Abandon Constraints
@@ -1331,7 +1331,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Graywatch
 - 1× Paradox Enforcer
 - 1× Unbroken
-- 1× Call of Calamity
+- 1× Abyssal Plunge
 - 1× Shaper of Memory
 - 1× From the Barrow
 - 1× The Ringleader
@@ -1352,7 +1352,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Shatterpoint Agent
 - 1× Grotto Seer
 - 1× Spirit Field Reclaimer
-- 1× Fleeting Reunion
+- 1× Embrace the Infinite
 - 1× Pyrestone Avatar
 - 1× Twice-Lit Portal
 - 1× Genesis Burst
@@ -1368,7 +1368,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Pattern Seeker
 - 1× Annihilation from Below
 - 1× Spiral Offering
-- 1× Across the Void
+- 1× Renounce Reality
 - 1× Torchbearer of the Abyss
 - 1× Cloudback Courier
 - 1× Gateweaver
@@ -2155,13 +2155,13 @@ Tide-fac-03 is an event-heavy (34 events, 11 characters) tide built around assem
 - 1× Call the Lost
 - 1× Sunken Radiance
 - 1× Weblight Waif
-- 1× Call of Calamity
+- 1× Abyssal Plunge
 - 1× From the Barrow
 - 1× Glimmerwood Scout
 - 1× The Ringleader
 - 1× Reunion
 - 1× Reset
-- 1× Sunset Chapel Rest
+- 1× Skysign
 - 1× Archive of the Forgotten
 - 1× Canopy of Stars
 - 1× Twice-Lit Portal
@@ -2172,7 +2172,7 @@ Tide-fac-03 is an event-heavy (34 events, 11 characters) tide built around assem
 - 1× Eruption
 - 1× Ashlight Caller
 - 1× Spiral Offering
-- 1× Across the Void
+- 1× Renounce Reality
 - 1× Surge of Fury
 - 1× Flash of Power
 - 1× Key Sifter
@@ -2304,10 +2304,10 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Vanishing Inquisitor
 - 1× Ashen Remnant
 - 1× Pathfinder Adrift
-- 1× Sunset Chapel Rest
+- 1× Skysign
 - 1× Sky Collapse
 - 1× The Dread Sovereign
-- 1× Momentum of the Fallen
+- 1× Dream Sever
 - 1× Terminus
 - 1× Pilgrim of Old Stones
 - 1× Resilient Wanderer
@@ -2351,10 +2351,10 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Cosmic Puppeteer
 - 1× Vanishing Inquisitor
 - 1× Pathfinder Adrift
-- 1× Sunset Chapel Rest
+- 1× Skysign
 - 1× Null Sphere
 - 1× Clockwork Prodigy
-- 1× Momentum of the Fallen
+- 1× Dream Sever
 - 1× Collapse Protocol
 - 1× Resilient Wanderer
 - 1× Breach Artist
@@ -2593,7 +2593,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Paradox Enforcer
 - 1× Veil of the Wastes
 - 1× Unbroken
-- 1× Call of Calamity
+- 1× Abyssal Plunge
 - 1× Shaper of Memory
 - 1× Price of Redemption
 - 1× Pathfinder Adrift
@@ -3045,10 +3045,10 @@ Tide-fac-20 is an event-heavy combo tide (34 events, 11 characters) built around
 - 1× The Ringleader
 - 1× Dreamscatter
 - 1× Reset
-- 1× Sunset Chapel Rest
+- 1× Skysign
 - 1× Molten Duel
 - 1× Archive of the Forgotten
-- 1× Fleeting Reunion
+- 1× Embrace the Infinite
 - 1× Canopy of Stars
 - 1× Twice-Lit Portal
 - 1× Abandon Constraints
@@ -3184,10 +3184,10 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 - 1× Vanishing Inquisitor
 - 1× Ashen Remnant
 - 1× Pathfinder Adrift
-- 1× Sunset Chapel Rest
+- 1× Skysign
 - 1× Sky Collapse
 - 1× The Dread Sovereign
-- 1× Momentum of the Fallen
+- 1× Dream Sever
 - 1× Terminus
 - 1× Pilgrim of Old Stones
 - 1× Resilient Wanderer
@@ -3216,7 +3216,7 @@ This tide runs an even split of characters and events, with its mechanical ident
 
 - 2× Impending Fury
 - 2× Vanishing Inquisitor
-- 2× Sunset Chapel Rest
+- 2× Skysign
 - 2× Dark Lord's Champion
 - 2× Planetgazer
 - 2× Last Beacon
@@ -3238,7 +3238,7 @@ This tide runs an even split of characters and events, with its mechanical ident
 - 1× Immolate
 - 1× Pathfinder Adrift
 - 1× Clockwork Prodigy
-- 1× Momentum of the Fallen
+- 1× Dream Sever
 - 1× Pilgrim of Old Stones
 - 1× Resilient Wanderer
 - 1× Cost of Victory
@@ -3416,7 +3416,7 @@ This tide is split between characters and events (22 characters, 23 events), wit
 - 1× Paradox Enforcer
 - 1× Veil of the Wastes
 - 1× Unbroken
-- 1× Call of Calamity
+- 1× Abyssal Plunge
 - 1× Shaper of Memory
 - 1× Price of Redemption
 - 1× Pathfinder Adrift
@@ -3816,7 +3816,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Echoes of the Journey
 - 1× Starcatcher
 - 1× Ashlight Caller
-- 1× Across the Void
+- 1× Renounce Reality
 - 1× Iconoclast
 - 1× Surge of Fury
 - 1× Broadcast Array
@@ -3842,8 +3842,8 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Signal Resonant
 - 1× Immolate
 - 1× Pathfinder Adrift
-- 1× Sunset Chapel Rest
-- 1× Momentum of the Fallen
+- 1× Skysign
+- 1× Dream Sever
 - 1× Pilgrim of Old Stones
 - 1× Resilient Wanderer
 - 1× Breach Artist

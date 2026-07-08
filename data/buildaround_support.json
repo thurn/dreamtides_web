@@ -67,7 +67,7 @@
       ]
     },
     "b1d36337-5668-4f1d-b155-2d07fc00f872": {
-      "name": "Across the Void",
+      "name": "Renounce Reality",
       "needs": [],
       "supports": [
         "events",
@@ -523,7 +523,7 @@
       ]
     },
     "435ed83c-f7a6-4a73-a684-67fcc4e49bc4": {
-      "name": "Call of Calamity",
+      "name": "Abyssal Plunge",
       "supports": [
         "events",
         "discard",
@@ -1604,7 +1604,7 @@
       ]
     },
     "79b37916-c05d-4818-9d67-3b90e340926e": {
-      "name": "Fleeting Reunion",
+      "name": "Embrace the Infinite",
       "needs": [
         {
           "theme": "void",
@@ -2567,7 +2567,7 @@
       ]
     },
     "6e019832-2e0c-4166-81c3-54f7995425df": {
-      "name": "Momentum of the Fallen",
+      "name": "Dream Sever",
       "needs": [],
       "supports": [
         "events"
@@ -4106,7 +4106,7 @@
       ]
     },
     "5ce69085-aa75-4654-8abe-f9e773931e63": {
-      "name": "Sunset Chapel Rest",
+      "name": "Skysign",
       "needs": [],
       "supports": [
         "events"

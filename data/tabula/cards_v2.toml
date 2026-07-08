@@ -1202,10 +1202,10 @@ art-owned = false
 card-number = 64
 
 [[cards]]
-name = "Momentum of the Fallen"
+name = "Dream Sever"
 mtg-name = "Spell Pierce"
 id = "6e019832-2e0c-4166-81c3-54f7995425df"
-rendered-text = "Prevent an event unless the opponent pays 2●."
+rendered-text = "Prevent a played event unless the opponent pays 2●."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -1213,10 +1213,11 @@ rarity = ""
 is-fast = true
 is-interrupt = true
 spark = ""
-tags = ["Counterspell", "Art Rework", "July8"]
-image-number = 454095982
+tags = ["Counterspell", "Art Rework", "July8", "Art OK"]
+image-number = 1694993302
 art-owned = false
 card-number = 65
+art = { x = 0, y = 1, scale = 1.37 }
 
 [[cards]]
 name = "Abomination of Memory"
@@ -1852,10 +1853,10 @@ card-number = 99
 art = { x = 0, y = 0.266, scale = 1.17 }
 
 [[cards]]
-name = "Sunset Chapel Rest"
+name = "Skysign"
 mtg-name = "Impulse"
 id = "5ce69085-aa75-4654-8abe-f9e773931e63"
-rendered-text = "Look at the top 4 cards of your deck. Draw one of them and shuffle the rest into your deck."
+rendered-text = "Look at the top 4 cards of your deck. Draw one of them and shuffle the rest back."
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -1863,10 +1864,11 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July8"]
-image-number = 482055286
+tags = ["Art Rework", "July8", "Art OK"]
+image-number = 2637215373
 art-owned = false
 card-number = 100
+art = { x = 0, y = 0.161, scale = 1.17 }
 
 [[cards]]
 name = "Pyre Caller"
@@ -2123,7 +2125,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Thoughtseize", "Art Rework", "July8"]
+tags = ["Thoughtseize", "Art Rework", "July8", "Art OK"]
 image-number = 2221518875
 art-owned = false
 card-number = 114
@@ -4118,13 +4120,13 @@ rarity = ""
 is-fast = true
 is-interrupt = true
 spark = ""
-tags = ["Counterspell", "Art Rework", "July8"]
+tags = ["Counterspell", "Art Rework", "July8", "Art OK"]
 image-number = 339410639
 art-owned = false
 card-number = 222
 
 [[cards]]
-name = "Call of Calamity"
+name = "Abyssal Plunge"
 mtg-name = "Magmatic Insight"
 id = "435ed83c-f7a6-4a73-a684-67fcc4e49bc4"
 rendered-text = "To play this event, discard X cards. Draw X+1 cards."
@@ -4135,10 +4137,11 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July8"]
-image-number = 465449525
+tags = ["Art Rework", "July8", "Art OK"]
+image-number = 1730836234
 art-owned = false
 card-number = 223
+art = { x = 0, y = 1, scale = 1 }
 
 [[cards]]
 name = "Harrowing Officiant"
@@ -5748,13 +5751,13 @@ card-number = 310
 art = { x = -0.33, y = 0.565, scale = 1.97 }
 
 [[cards]]
-name = "Across the Void"
+name = "Renounce Reality"
 mtg-name = "Echo of Eons"
 id = "b1d36337-5668-4f1d-b155-2d07fc00f872"
-rendered-text = """
-Shuffle your hand and void into your deck, then draw 5 cards.
+rendered-text = '''
+Banish your hand and void. Draw 5 cards.
 
-Reclaim – 2●, Abandon a character."""
+Reclaim 3●'''
 energy-cost = 5
 card-type = "Event"
 subtype = ""
@@ -5762,10 +5765,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July8"]
-image-number = 2251144877
+tags = ["Art Rework", "July8", "Art OK"]
+image-number = 1213574263
 art-owned = false
 card-number = 311
+art = { x = 0, y = 0.043, scale = 1 }
 
 [[cards]]
 name = "Still Dreamer"
@@ -7260,7 +7264,7 @@ card-number = 390
 art = { x = -0.07, y = -0.231, scale = 1.3 }
 
 [[cards]]
-name = "Fleeting Reunion"
+name = "Embrace the Infinite"
 mtg-name = "Conflagrate"
 id = "79b37916-c05d-4818-9d67-3b90e340926e"
 rendered-text = """
@@ -7274,10 +7278,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July8"]
-image-number = 292275560
+tags = ["Art Rework", "July8", "Art OK"]
+image-number = 1053081881
 art-owned = false
 card-number = 391
+art = { x = -0.047, y = 1, scale = 1.1 }
 
 [[cards]]
 name = "Celestial Lookout"
