@@ -1077,6 +1077,40 @@
       "description": "Grow the rules text box to a taller editing height. The card editor sets\nthis while its rules-text field is open so the inline textarea has room to\nshow and edit several lines at once instead of being clipped to the\nthree-line display cap."
     }
   ],
+  "GlassButton": [
+    {
+      "name": "label",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The button's text — a resolved string shown in the control typography."
+    },
+    {
+      "name": "onPress",
+      "tsType": "() => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Fires when the button is activated (no-op while disabled)."
+    },
+    {
+      "name": "glyph",
+      "tsType": "Glyph",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional leading glyph painted as a `GlowIcon` before the label."
+    },
+    {
+      "name": "disabled",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Detaches the click / press feedback and marks the button `aria-disabled`."
+    }
+  ],
   "GlossaryDefinitionCard": [
     {
       "name": "entry",
