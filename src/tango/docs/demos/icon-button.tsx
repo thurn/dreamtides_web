@@ -40,7 +40,6 @@ export const iconButtonDemo: TangoComponent = {
     "The compact glyph-only glass disc — a corner chrome action worn by the deck viewer's close control and the dreamscape menu button. Its surface is the shared liquid-glass control material, made a fully-round disc, so it reads as one family with the filter/sort controls it sits beside.",
   callout:
     "Rung three of the four-rung button suite: the beveled purple Button (commit / primary), a plain pressable text affordance (secondary), THIS glass icon disc (a corner chrome action), and a bare pressable glyph (the lightest inline affordance).",
-  status: "incubating",
   group: "Components",
   docName: "IconButton",
   Component: IconButtonDemo,

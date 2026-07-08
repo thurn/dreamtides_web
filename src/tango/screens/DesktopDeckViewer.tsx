@@ -55,9 +55,8 @@ import { artRef } from "../primitives/art";
 import { Pressable } from "../primitives/Pressable";
 import { Select } from "../components/controls/Select";
 import { SegmentedControl } from "../components/controls/SegmentedControl";
-import { GlowIcon } from "../components/controls/GlowIcon";
+import { IconButton } from "../components/controls/IconButton";
 import { glassSurfaceStyle } from "../internal/glass-surface";
-import { glassIconButtonChrome } from "../internal/control-treatment";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { DeckCardView } from "./MobileDeckViewer";
@@ -123,9 +122,6 @@ const DREAMSIGN_TILE_PX = 92;
  * dreamsigns — read at one consistent scale down the column.
  */
 const DREAMCALLER_PORTRAIT_PX = DREAMSIGN_TILE_PX;
-
-/** Edge length of the corner close disc, matching the glass control height. */
-const CLOSE_BUTTON_PX = 40;
 
 /**
  * Hover target widths (px) for each card-size preset — the width a hovered card
@@ -340,23 +336,12 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
           {count} {count === 1 ? "Card" : "Cards"}
         </Eyebrow>
       </div>
-      <Pressable
-        as="button"
-        aria-label="Close deck"
-        onClick={onClose}
-        style={{
-          width: CLOSE_BUTTON_PX,
-          height: CLOSE_BUTTON_PX,
-          display: "grid",
-          placeItems: "center",
-          fontSize: 22,
-          color: token("--text-primary"),
-          cursor: "pointer",
-          ...glassIconButtonChrome(),
-        }}
-      >
-        <GlowIcon iconClass={GLYPHS.close} color="text-primary" size="1em" />
-      </Pressable>
+      <IconButton
+        glyph={GLYPHS.close}
+        size="sm"
+        label="Close deck"
+        onPress={onClose}
+      />
     </header>
   );
 }
