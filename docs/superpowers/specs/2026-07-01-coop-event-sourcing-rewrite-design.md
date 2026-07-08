@@ -314,6 +314,16 @@ mutation catalogue produced during exploration; representative examples:
   `START_QUEST`, `RESET_QUEST`, `LOAD_STATE { snapshot }` (debug-only, large
   payload is fine — compaction absorbs it)
 
+`SELECT_DREAMCALLER { dreamcallerId }` carries only the chosen Dreamcaller
+UUID. The reducer derives `resolvedPackage` and `remainingDreamsignPool`
+deterministically from that UUID and the immutable folded `quest.seed`
+(= `genesis.seed`) — running the `startQuestFromDreamcaller` pool pipeline
+through the `QuestLifecycleContentProvider` — rather than trusting a
+client-computed package. `quest.seed` is fixed at room genesis and identical on
+every client, so all clients compute a byte-identical package. Resolution is
+seed-keyed and independent of the event's seq, so a `SELECT_DREAMCALLER` at any
+position in the log yields the same package.
+
 The `ensure*SiteRuntime` family (five mutations) simplifies structurally:
 those writes exist because generation used `Math.random()` and had to be
 stored before rendering. In the new model a single `OPEN_SITE { siteId }`

@@ -88,7 +88,7 @@ Every multiplayer mutation in `src/state/multiplayer-quest-context.tsx` maps to 
 | resetQuest | `RESET_QUEST` | `{}`; resets to genesis quest state, clears battle |
 | loadQuestState / bootstrapQaScene *(debug)* | `LOAD_STATE` | `{ snapshot: FoldState["quest"], battle?: BattleFoldState }`; large payload is fine, compaction absorbs it |
 | bootstrapStartInBattle *(debug)* | `LOAD_STATE` then `BEGIN_BATTLE` | client appends both |
-| setDreamcallerSelection | `SELECT_DREAMCALLER` | `{ dreamcallerId }`; reducer derives `resolvedPackage` and `remainingDreamsignPool` deterministically (data + `ctx.rng`) instead of trusting a client-computed package |
+| setDreamcallerSelection | `SELECT_DREAMCALLER` | `{ dreamcallerId }`; reducer derives `resolvedPackage` and `remainingDreamsignPool` deterministically from the UUID and the folded `quest.seed` (= `genesis.seed`, identical on every client) via the `QuestLifecycleContentProvider`, instead of trusting a client-computed package |
 | setScreen | `SET_SCREEN` | `{ screen, activeSiteId }` |
 | setCurrentDreamscape | `TRAVEL_TO_DREAMSCAPE` | `{ nodeId }`; visitedSites + dreamscapeModifiers decrement in-case |
 | markSiteVisited | `MARK_SITE_VISITED` | `{ siteId }` |

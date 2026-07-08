@@ -13,15 +13,11 @@
 // cases that also touch the battle slice (`RESET_QUEST`, `LOAD_STATE`) return a
 // whole `FoldState`.
 
-import type { EventContext } from "../../eventlog/types";
 import { genesisFoldState } from "../fold-state";
 import type { BattleFoldState, FoldState } from "../fold-state";
 import { toQuestDreamcaller } from "../../data/dreamcaller-selection";
 import type { ResolvedDreamcallerPackage } from "../../types/content";
 import type { QuestState, Screen } from "../../types/quest";
-
-/** The subset of `EventContext` the lifecycle cases consume. */
-export type LifecycleContext = Pick<EventContext, "rng" | "seq" | "timestamp">;
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (SELECT_DREAMCALLER / START_QUEST)
