@@ -224,7 +224,7 @@ function DuplicatePair({
         }}
       >
         <div className="block w-full">
-          <CardView card={object.card} suppressHoverHelp />
+          <CardView card={object.card} />
         </div>
       </div>
       <div
@@ -239,7 +239,7 @@ function DuplicatePair({
         }}
       >
         <div className="block w-full">
-          <CardView card={object.card} suppressHoverHelp />
+          <CardView card={object.card} />
         </div>
       </div>
       <TwoBadge />

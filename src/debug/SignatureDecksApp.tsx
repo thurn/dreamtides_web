@@ -12,7 +12,6 @@ import type { DreamcallerContent } from "../types/content";
 import { loadQuestContent, type QuestContent } from "../data/quest-content";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import { CardView } from "../tango/components/card/CardView";
-import { HoverZoomCard } from "../tango/components/card/HoverZoomCard";
 import {
   DreamcallerPortrait,
   dreamcallerImageSrc,
@@ -67,8 +66,7 @@ const FAINT = "#64748b";
 const ACCENT = "#a78bfa";
 
 /** Viewport width (px) at or below which the layout switches to its compact
- * mobile form: a fixed 3-column card grid plus long-press preview instead of
- * the desktop hover-zoom. */
+ * mobile form: a fixed 3-column card grid plus long-press preview. */
 const MOBILE_MAX_WIDTH_PX = 640;
 
 /** Fixed number of card columns in the compact mobile grid. */
@@ -83,8 +81,7 @@ const LONG_PRESS_MOVE_TOLERANCE_PX = 12;
 interface Viewport {
   /** True on a narrow viewport — drives the 3-column compact grid. */
   isMobile: boolean;
-  /** True when the primary pointer is coarse (touch), so hover-zoom is off and
-   * long-press preview is on. */
+  /** True when the primary pointer is coarse (touch), so long-press preview is on. */
   isTouch: boolean;
 }
 
@@ -305,10 +302,9 @@ export function computeSignatureDecks(
 
 /**
  * Wraps a card tile so that a touch long-press fires `onLongPress` (used to
- * open the fullscreen preview). Only touch pointers arm the hold: mouse and pen
- * fall through untouched so the desktop hover-zoom keeps working. The hold is
- * cancelled if the finger travels far enough to read as a scroll, so dragging
- * the page never opens a preview.
+ * open the fullscreen preview). Only touch pointers arm the hold; mouse and pen
+ * fall through untouched. The hold is cancelled if the finger travels far
+ * enough to read as a scroll, so dragging the page never opens a preview.
  */
 function LongPressCard({
   onLongPress,
@@ -425,7 +421,7 @@ function CardLightbox({
       }}
     >
       <div style={{ width: "min(86vw, 360px)", flexShrink: 0 }}>
-        <CardView card={card} large suppressHoverHelp />
+        <CardView card={card} large />
       </div>
       {terms.length > 0 && (
         <div
@@ -460,7 +456,7 @@ function DeckSection({
 }) {
   const dc = deck.dreamcaller;
   const matched = deck.matchedIds;
-  const { isMobile, isTouch } = viewport;
+  const { isMobile } = viewport;
   return (
     <section
       style={{
@@ -588,23 +584,13 @@ function DeckSection({
         }}
       >
         {deck.cards.map((card, index) => (
-          // Desktop (mouse): hovering a tile grows the card in place (portaled
-          // above the grid) until its rules text is legible, with glossary
-          // definitions alongside. Touch: hover-zoom is disabled and a
-          // long-press opens the fullscreen preview instead.
           <LongPressCard
             key={`${card.id}:${String(index)}`}
             onLongPress={() => {
               onPreview(card);
             }}
           >
-            <HoverZoomCard
-              enabled={!isTouch}
-              logSurface="sigdecks"
-              glossaryText={card.renderedText}
-            >
-              <CardView card={card} suppressHoverHelp />
-            </HoverZoomCard>
+            <CardView card={card} />
           </LongPressCard>
         ))}
       </div>

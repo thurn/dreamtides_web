@@ -85,12 +85,12 @@ export function TideSourcePreview({
           maxWidthPx={null}
           content={
             <div style={{ width: HOVER_CARD_WIDTH }}>
-              <CardView card={card} large suppressHoverHelp />
+              <CardView card={card} large />
             </div>
           }
         >
           <div style={{ width: size }}>
-            <CardView card={card} suppressHoverHelp />
+            <CardView card={card} />
           </div>
         </HoverPopover>
       </div>

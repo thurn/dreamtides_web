@@ -18,7 +18,6 @@ import { createBattleRngStreams, deriveBattleSeed } from "../battle/random";
 import { logEvent } from "../logging";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import { CardView } from "../tango/components/card/CardView";
-import { HoverZoomCard } from "../tango/components/card/HoverZoomCard";
 import { DreamcallerPortrait } from "../tango/components/hud/DreamcallerPortrait";
 import { dreamsignIconUrl } from "../tango/components/atlas/atlas-display";
 import {
@@ -705,19 +704,7 @@ export default function OpponentDebugApp() {
                       }}
                     >
                       {deckCards.map((card, index) => (
-                        // Mirror the quest deck viewer: hovering a tile grows the
-                        // card in place (portaled above the grid, escaping the
-                        // scroll clip) until its rules text is legible, with the
-                        // glossary definitions shown alongside. The in-grid card
-                        // suppresses its own term popover so the enlarged read is
-                        // the one carrying hover-help.
-                        <HoverZoomCard
-                          key={`${card.id}:${String(index)}`}
-                          logSurface="opponent_debug"
-                          glossaryText={card.renderedText}
-                        >
-                          <CardView card={card} suppressHoverHelp />
-                        </HoverZoomCard>
+                        <CardView key={`${card.id}:${String(index)}`} card={card} />
                       ))}
                     </div>
                     {view.provenance}

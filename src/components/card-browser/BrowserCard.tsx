@@ -34,7 +34,6 @@ export function BrowserCard({ card, size, onClick }: BrowserCardProps) {
       <CardView
         card={card}
         large={size === "large"}
-        suppressHoverHelp
         onClick={onClick}
       />
       {hovering && mtgName !== "" ? (

@@ -53,7 +53,7 @@ export function CardHoverPreview({
       className="shrink-0"
       style={{ width: widthPx }}
     >
-      <CardDisplay card={card} suppressHoverHelp transfiguration={transfiguration} />
+      <CardDisplay card={card} transfiguration={transfiguration} />
     </div>
   );
 

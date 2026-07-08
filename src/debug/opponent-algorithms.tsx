@@ -30,7 +30,6 @@ import {
 } from "../battle/integration/corpus-opponent-deck";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import { CardView } from "../tango/components/card/CardView";
-import { HoverZoomCard } from "../tango/components/card/HoverZoomCard";
 
 /** One stat tile shown in the left panel's 2-column grid. */
 export interface StatRow {
@@ -226,7 +225,7 @@ export function getAlgorithm(id: string | null): DebugAlgorithm {
 
 // ---------------------------------------------------------------------------
 // Corpus provenance panel. Mirrors the panel styling in OpponentDebugApp and
-// reuses the deck grid's HoverZoomCard > CardView thumbnails for the Stage B
+// reuses the deck grid's CardView thumbnails for the Stage B
 // diff so the source seat, the top-K ranking window, the layer tuning diff, the
 // assigned dreamsign, and the ability state are all inspectable.
 // ---------------------------------------------------------------------------
@@ -257,13 +256,7 @@ function CardThumbGrid({ cards }: { cards: readonly CardData[] }) {
       }}
     >
       {cards.map((card, index) => (
-        <HoverZoomCard
-          key={`${card.id}:${String(index)}`}
-          logSurface="opponent_debug"
-          glossaryText={card.renderedText}
-        >
-          <CardView card={card} suppressHoverHelp />
-        </HoverZoomCard>
+        <CardView key={`${card.id}:${String(index)}`} card={card} />
       ))}
     </div>
   );

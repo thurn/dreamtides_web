@@ -5,7 +5,6 @@ import type { CardData } from "../types/cards";
 import type { DeckEntry } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "./CardDisplay";
-import { HoverZoomCard } from "../tango/components/card/HoverZoomCard";
 import { Pressable } from "../tango/primitives/Pressable";
 import { GlowIcon } from "../tango/components/controls/GlowIcon";
 import { GLYPHS } from "../tango/primitives/glyph";
@@ -38,7 +37,6 @@ const CLOSE_BUTTON_PX = 44;
 const ROOMY_DESKTOP_QUERY = "(min-width: 1400px) and (min-height: 800px)";
 const ROOMY_DESKTOP_PANEL_MAX_WIDTH_PX = 1120;
 const ROOMY_DESKTOP_CARD_MIN_PX = 208;
-const ROOMY_DESKTOP_HOVER_TARGET_PX = 236;
 
 function useRoomyStartingDeckModal(): boolean {
   const [roomy, setRoomy] = useState<boolean>(() =>
@@ -357,18 +355,12 @@ export function StartingDeckModal({
                   data-testid="starting-deck-modal-grid"
                 >
                   {resolvedEntries.map((resolved) => (
-                    <HoverZoomCard
+                    <div
                       key={resolved.entry.entryId}
-                      logSurface="starting_deck"
-                      glossaryText={resolved.card.renderedText}
-                      targetWidthPx={useRoomyLayout
-                        ? ROOMY_DESKTOP_HOVER_TARGET_PX
-                        : undefined}
-                      zoomMotion={useRoomyLayout ? "gentle" : "snap"}
-                      testId={`starting-deck-modal-card-${resolved.entry.entryId}`}
+                      data-testid={`starting-deck-modal-card-${resolved.entry.entryId}`}
                     >
-                      <CardDisplay card={resolved.card} suppressHoverHelp />
-                    </HoverZoomCard>
+                      <CardDisplay card={resolved.card} />
+                    </div>
                   ))}
                 </div>
               )}

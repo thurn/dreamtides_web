@@ -5,7 +5,6 @@ import type { Dreamsign, SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
 import { EssenceValue } from "../tango/components/hud/EssenceValue";
-import { HoverZoomCard } from "../tango/components/card/HoverZoomCard";
 import { HoverPopover } from "../tango/components/overlay/HoverPopover";
 import {
   DREAMSIGN_HOVER_DELAY_MS,
@@ -350,20 +349,17 @@ function ShopSlotCard({
     return (
       <div className={`sh-slot ${slotState}`} style={{ "--i": index } as CSSProperties}>
         <div className="sh-card">
-          <HoverZoomCard logSurface="shop" glossaryText={card.renderedText}>
-            <div
-              data-testid={`shop-offer-row-${String(index)}`}
-              tabIndex={0}
-              aria-label={`Shop offer: ${card.name}`}
-              className="rounded-md outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
-            >
-              <CardDisplay
-                card={card}
-                suppressHoverHelp
-                onClick={() => onCardClick(card)}
-              />
-            </div>
-          </HoverZoomCard>
+          <div
+            data-testid={`shop-offer-row-${String(index)}`}
+            tabIndex={0}
+            aria-label={`Shop offer: ${card.name}`}
+            className="rounded-md outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+          >
+            <CardDisplay
+              card={card}
+              onClick={() => onCardClick(card)}
+            />
+          </div>
         </div>
         <BuyButton
           price={price}

@@ -21,9 +21,9 @@
 // shared liquid-glass surface (SegmentedControl / Select), so the whole bar
 // reads as a set with the header's glass close disc and the surface it sits on.
 //
-// A card grows in place on HOVER (HoverZoomCard) — the desktop analog of the
-// mobile press-zoom — bringing its rules text to a legible size and stacking the
-// glossary definitions beside it, without a separate preview surface.
+// A card grows in place on hover, bringing its rules text to a legible size and
+// stacking the glossary definitions beside it, without a separate preview
+// surface.
 //
 // PURE: renders from a view-model and reports dismissal through `onClose`. The
 // filter/sort/size selection is local presentation state, and the derivation
@@ -42,7 +42,6 @@ import type { CSSProperties, ReactNode, RefObject } from "react";
 import { createPortal } from "react-dom";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
 import { GameCard } from "../components/card/CardView";
-import { HoverZoomCard } from "../components/card/HoverZoomCard";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
 import {
   DreamcallerPortrait,
@@ -126,21 +125,6 @@ const DREAMCALLER_PORTRAIT_PX = DREAMSIGN_TILE_PX;
 
 /** Edge length of the corner close disc, matching the glass control height. */
 const CLOSE_BUTTON_PX = 40;
-
-/**
- * Hover target widths (px) for each card-size preset — the width a hovered card
- * grows toward before HoverZoomCard's MAX_SCALE (1.5x) and the viewport limits
- * cap it. Small and large keep a generous 340 target (small stays pinned at the
- * 1.5x cap, large lands ~1.42x from its larger tile). Medium's target must sit
- * BELOW its tile width x MAX_SCALE (190px x 1.5 = 285px) to actually govern the
- * scale rather than being clamped to the cap: 250px yields ~1.32x, a gentler pop
- * than small/large, which is the intent for the mid preset.
- */
-const HOVER_TARGET_WIDTH_PX: Readonly<Record<DeckCardSize, number>> = {
-  small: 340,
-  medium: 250,
-  large: 340,
-};
 
 /**
  * The desktop deck viewer: a full-screen liquid-glass surface whose frosted
@@ -663,7 +647,7 @@ function DeckGrid({
           }}
         >
           {visible.map((cardView) => (
-            <DeckTile key={cardView.entryId} cardView={cardView} size={size} />
+            <DeckTile key={cardView.entryId} cardView={cardView} />
           ))}
         </div>
       )}
@@ -678,10 +662,8 @@ function DeckGrid({
  */
 function DeckTile({
   cardView,
-  size,
 }: {
   cardView: DeckCardView;
-  size: DeckCardSize;
 }) {
   const tileStyle: CSSProperties = {
     // A fixed aspect box so the filling card resolves a height from the grid's
@@ -693,18 +675,10 @@ function DeckTile({
   };
   return (
     <div style={tileStyle}>
-      <HoverZoomCard
-        fill
-        glossaryText={cardView.card.renderedText}
-        logSurface="desktop-deck-viewer"
-        targetWidthPx={HOVER_TARGET_WIDTH_PX[size]}
-      >
-        <GameCard
-          card={cardView.card}
-          transfiguration={cardView.transfiguration}
-          suppressHoverHelp
-        />
-      </HoverZoomCard>
+      <GameCard
+        card={cardView.card}
+        transfiguration={cardView.transfiguration}
+      />
     </div>
   );
 }

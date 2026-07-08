@@ -79,9 +79,9 @@ interface CardTermPopoverHandlers {
  * The hook attaches its show/hide handlers to the card's own root element
  * (spread the returned `triggerHandlers` onto it) and anchors placement to
  * `anchorRef`, so no extra wrapper element is inserted into the card layout.
- * GameCard wires this up unconditionally — a Tango card cannot be rendered
- * without the reveal unless a surface explicitly opts out because it renders
- * its own definitions panel (`suppressHoverHelp`) or shows no rules text.
+ * GameCard wires this up when it is not showing its built-in hover-zoom
+ * glossary stack. Cards with hidden rules text have no inline terms to explain,
+ * so the hook stays inert there.
  *
  * When `enabled` is false or the card references no glossary terms, the hook
  * is inert: the handlers are no-ops and `popoverPortal` is `null`.

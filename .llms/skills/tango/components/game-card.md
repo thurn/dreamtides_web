@@ -14,19 +14,18 @@ The playable card object — art, cost, stats, and rules text — rendered at an
 | --- | --- | --- | --- | --- |
 | `card` | `CardData \| Readonly<CardData>` | yes | — |  |
 | `onClick` | `(() => void)` | no | — |  |
-| `selected` | `boolean` | no | `false` |  |
-| `selectionColor` | `TangoColor` = `"accent" \| "accent-bright" \| "accent-strong" \| "essence" \| "energy" \| "energy-bright" \| "spark" \| "points" \| "danger" \| "positive" \| "selected" \| "sale" \| "gold" \| "gold-light" \| "text-primary" \| "text-secondary" \| "text-muted" \| "text-faint" \| "text-on-accent" \| "white"` | no | `selected` | The selection-ring {@link TangoColor}. Default the `"selected"` role. |
+| `selected` | `boolean` | no | — |  |
+| `selectionColor` | `TangoColor` = `"accent" \| "accent-bright" \| "accent-strong" \| "essence" \| "energy" \| "energy-bright" \| "spark" \| "points" \| "danger" \| "positive" \| "selected" \| "sale" \| "gold" \| "gold-light" \| "text-primary" \| "text-secondary" \| "text-muted" \| "text-faint" \| "text-on-accent" \| "white"` | no | — | The selection-ring {@link TangoColor}. Default the `"selected"` role. |
 | `transfiguration` | `CardTransfigurationDisplay` | no | — | When set, paints the card as transfigured: a small colored gem follows the name, the changed corner stat(s) take the tint, and only the added/changed rules text is tinted (driven by the descriptor's marked text). The card itself should already carry the transfigured stats and rules text — pass the `card` and `display` from `buildTransfigurationDisplay` together. |
-| `large` | `boolean` | no | `false` | Use larger text sizes for rules text, name, type line, and stats. |
-| `figment` | `boolean` | no | `false` | Render the figment frame (rules §Figments): no energy orb, the spark floats as a large mark in the top-right corner instead of inside a name bar, and the rules box takes a black-on-light frosted treatment. A figment has no name bar by default; pass `figmentTitleBar` to show one (for a named figment like a Legionnaire, or while its name is being edited). |
-| `figmentTitleBar` | `boolean` | no | `false` | In figment mode, render the top title bar holding the card name (left aligned, dark character-card treatment). Ignored when `figment` is false. |
-| `hideRulesText` | `boolean` | no | `false` | Hide rules text for dense card surfaces that show identity and stats. |
-| `suppressHoverHelp` | `boolean` | no | `false` | When true, the corner stat tooltips and the card's term-definition hover panel are suppressed. The card editor uses this to keep hover behavior calm across a dense grid, and the card-preview surfaces (`CardHoverPreview` / `BattleCardHoverPreview`) use it on the enlarged card because they render their own definitions panel alongside the preview. |
-| `slots` | `CardViewSlots` | no | `{}` | Optional editor wrappers for individual rendered card slots. |
+| `large` | `boolean` | no | — | Use larger text sizes for rules text, name, type line, and stats. |
+| `figment` | `boolean` | no | — | Render the figment frame (rules §Figments): no energy orb, the spark floats as a large mark in the top-right corner instead of inside a name bar, and the rules box takes a black-on-light frosted treatment. A figment has no name bar by default; pass `figmentTitleBar` to show one (for a named figment like a Legionnaire, or while its name is being edited). |
+| `figmentTitleBar` | `boolean` | no | — | In figment mode, render the top title bar holding the card name (left aligned, dark character-card treatment). Ignored when `figment` is false. |
+| `hideRulesText` | `boolean` | no | — | Hide rules text for dense card surfaces that show identity and stats. |
+| `slots` | `CardViewSlots` | no | — | Optional editor wrappers for individual rendered card slots. |
 | `onRulesFontSizeChange` | `((fontSizePx: number) => void)` | no | — | Called with the rules-text font size (in px) the auto-shrink fitter computed to fit the rules box, whenever it changes. The card editor uses this to drive its font-size overlay and font-size sort. |
 | `onBoxTopFracChange` | `((boxTopFrac: number \| null) => void)` | no | — | Called with the rules text box's top as a fraction of card height (null when the card has no rules box or it is not yet measured), whenever it changes. The art-crop editor uses this to floor zoom-out and pan against the same box-relative safe area the card renders with. |
-| `eagerRulesFit` | `boolean` | no | `false` | Measure the rules-text fit immediately instead of deferring until the card nears the viewport. The card editor sets this while sorting by font size so every card reports a stable fitted size up front; without it the sort would reshuffle endlessly as off-screen cards measured only after being moved. |
-| `rulesTextboxExpanded` | `boolean` | no | `false` | Grow the rules text box to a taller editing height. The card editor sets this while its rules-text field is open so the inline textarea has room to show and edit several lines at once instead of being clipped to the three-line display cap. |
+| `eagerRulesFit` | `boolean` | no | — | Measure the rules-text fit immediately instead of deferring until the card nears the viewport. The card editor sets this while sorting by font size so every card reports a stable fitted size up front; without it the sort would reshuffle endlessly as off-screen cards measured only after being moved. |
+| `rulesTextboxExpanded` | `boolean` | no | — | Grow the rules text box to a taller editing height. The card editor sets this while its rules-text field is open so the inline textarea has room to show and edit several lines at once instead of being clipped to the three-line display cap. |
 
 ### `transfiguration`: the `CardTransfigurationDisplay` model
 

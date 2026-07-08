@@ -1,11 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, RefObject } from "react";
+import { createPortal } from "react-dom";
 import type { CardData, FrozenCardData, Rarity } from "../../../types/cards";
 import {
   cardIdenticonUri,
   cardImageUrl,
   hasAssignedImage,
 } from "../../../data/card-database";
+import { extractGlossaryTerms } from "../../../data/glossary-terms";
+import { logEventOnce } from "../../../logging";
 import { identiconsForced } from "../../../runtime/identicon-mode";
 import {
   ART_EXTENSION_FRACTION,
@@ -22,7 +25,9 @@ import { TRANSFIGURATION_ICONS } from "../../../runtime/transfiguration-display"
 import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
 import { renderRulesText } from "./RulesText";
 import { useCardTermPopover } from "./useCardTermPopover";
+import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
 import { useFitText } from "../controls/useFitText";
+import { INFO_CARD_WIDTH } from "../overlay/InfoCard";
 
 /**
  * Default chrome accent used for the selection ring fallback. The card's type
@@ -672,6 +677,99 @@ const SPARK_PIP_TOOLTIP =
   "Spark. A character's combat power — higher spark wins combat.";
 
 /**
+ * Hard cap on how much bigger a card may get on hover. The effective scale is
+ * also bounded by the target reading width and by the viewport.
+ */
+export const MAX_HOVER_SCALE = 1.5;
+
+/**
+ * On-screen width a hovered card grows toward before caps. At this width rules
+ * text lands near a comfortable reading size while compact cards do not balloon
+ * past the max scale.
+ */
+export const HOVER_TARGET_WIDTH_PX = 340;
+
+const HOVER_MAX_VIEWPORT_WIDTH_FRACTION = 0.94;
+const HOVER_MAX_VIEWPORT_HEIGHT_FRACTION = 0.92;
+const HOVER_MIN_USEFUL_SCALE = 1.02;
+const HOVER_VIEWPORT_MARGIN_PX = 8;
+const HOVER_GLOSSARY_STACK_WIDTH_PX = INFO_CARD_WIDTH;
+const HOVER_GLOSSARY_STACK_GAP_PX = 10;
+
+interface CardHoverZoomState {
+  rect: DOMRect;
+  scale: number;
+  dx: number;
+  dy: number;
+}
+
+function clampHoverOffset(start: number, size: number, viewport: number): number {
+  const available = viewport - HOVER_VIEWPORT_MARGIN_PX * 2;
+  if (size >= available) {
+    const centered = (viewport - size) / 2;
+    return centered - start;
+  }
+  const min = HOVER_VIEWPORT_MARGIN_PX;
+  const max = viewport - HOVER_VIEWPORT_MARGIN_PX - size;
+  if (start < min) return min - start;
+  if (start > max) return max - start;
+  return 0;
+}
+
+function renderHoverGlossaryStack(
+  zoom: CardHoverZoomState,
+  text: string,
+): ReactNode {
+  if (typeof window === "undefined") {
+    return null;
+  }
+  const terms = extractGlossaryTerms(text);
+  if (terms.length === 0) {
+    return null;
+  }
+  const scaledWidth = zoom.rect.width * zoom.scale;
+  const scaledHeight = zoom.rect.height * zoom.scale;
+  const centerX = zoom.rect.left + zoom.rect.width / 2;
+  const centerY = zoom.rect.top + zoom.rect.height / 2;
+  const finalLeft = centerX - scaledWidth / 2 + zoom.dx;
+  const finalTop = centerY - scaledHeight / 2 + zoom.dy;
+  const finalRight = finalLeft + scaledWidth;
+
+  const fitsRight = finalRight + HOVER_GLOSSARY_STACK_GAP_PX +
+    HOVER_GLOSSARY_STACK_WIDTH_PX + HOVER_VIEWPORT_MARGIN_PX <=
+    window.innerWidth;
+  const rawLeft = fitsRight
+    ? finalRight + HOVER_GLOSSARY_STACK_GAP_PX
+    : finalLeft - HOVER_GLOSSARY_STACK_GAP_PX - HOVER_GLOSSARY_STACK_WIDTH_PX;
+  const left = Math.max(
+    HOVER_VIEWPORT_MARGIN_PX,
+    Math.min(
+      rawLeft,
+      window.innerWidth - HOVER_GLOSSARY_STACK_WIDTH_PX -
+        HOVER_VIEWPORT_MARGIN_PX,
+    ),
+  );
+  const top = Math.max(
+    HOVER_VIEWPORT_MARGIN_PX,
+    Math.min(finalTop, window.innerHeight - 120),
+  );
+  const maxHeight = window.innerHeight - top - HOVER_VIEWPORT_MARGIN_PX;
+
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed z-[1000] flex flex-col gap-1 overflow-hidden"
+      style={{ left, top, width: HOVER_GLOSSARY_STACK_WIDTH_PX, maxHeight }}
+      data-hover-zoom-glossary=""
+    >
+      {terms.map((entry) => (
+        <GlossaryDefinitionCard key={entry.term} entry={entry} />
+      ))}
+    </div>
+  );
+}
+
+/**
  * Tracks the rendered card width. The width drives both the legacy text-scale
  * metadata (`data-card-text-scale`, still asserted by tests and used as the
  * baseline font ceiling) and the pixel sizes of the orbs and frame text.
@@ -694,7 +792,7 @@ function useCardMetrics(large: boolean): {
     function updateWidth(): void {
       // `offsetWidth` is the card's layout width, immune to CSS transforms on
       // ancestors. `getBoundingClientRect().width` would fold in any ancestor
-      // `scale()` — e.g. the HoverZoomCard enlargement, which portals this card
+      // `scale()` — e.g. the built-in hover enlargement, which portals this card
       // and scales it up. Reading the transformed width there would re-derive a
       // larger `textScale` (and rules font px) on top of the uniform visual
       // scale, making the rules text balloon out of proportion with the rest of
@@ -787,14 +885,6 @@ export interface CardViewProps {
   figmentTitleBar?: boolean;
   /** Hide rules text for dense card surfaces that show identity and stats. */
   hideRulesText?: boolean;
-  /**
-   * When true, the corner stat tooltips and the card's term-definition hover
-   * panel are suppressed. The card editor uses this to keep hover behavior calm
-   * across a dense grid, and the card-preview surfaces
-   * (`CardHoverPreview` / `BattleCardHoverPreview`) use it on the enlarged card
-   * because they render their own definitions panel alongside the preview.
-   */
-  suppressHoverHelp?: boolean;
   /** Optional editor wrappers for individual rendered card slots. */
   slots?: CardViewSlots;
   /**
@@ -826,6 +916,11 @@ export interface CardViewProps {
   rulesTextboxExpanded?: boolean;
 }
 
+interface InternalCardViewProps extends CardViewProps {
+  enableTermPopover?: boolean;
+  enableHoverZoom?: boolean;
+}
+
 /**
  * Renders a Dreamtides card: full-bleed art covering the whole 2:3 portrait
  * frame, with all chrome floating over it as translucent, blurred elements.
@@ -835,7 +930,8 @@ export interface CardViewProps {
  * directly on the art at the card's bottom-right, just above a bottom-anchored
  * text box that holds the rules body and auto-sizes to the amount of rules text.
  */
-export function GameCard({
+function GameCardSurface(props: InternalCardViewProps) {
+  const {
   card,
   onClick,
   selected = false,
@@ -845,30 +941,140 @@ export function GameCard({
   figment = false,
   figmentTitleBar = false,
   hideRulesText = false,
-  suppressHoverHelp = false,
   slots = {},
   onRulesFontSizeChange,
   onBoxTopFracChange,
   eagerRulesFit = false,
   rulesTextboxExpanded = false,
-}: CardViewProps) {
+  enableTermPopover = true,
+  enableHoverZoom = false,
+  } = props;
   const [imageError, setImageError] = useState(false);
   const [imageAspect, setImageAspect] = useState<number | null>(null);
+  const [hoverZoom, setHoverZoom] = useState<CardHoverZoomState | null>(null);
   // Top of the rules text box as a fraction of card height, measured live so the
   // art fill band can size itself to the box (null until measured / no box).
   const [boxTopFrac, setBoxTopFrac] = useState<number | null>(null);
   const bandBoxRef = useRef<HTMLDivElement | null>(null);
   const { cardRef, textScale, widthPx } = useCardMetrics(large);
 
-  // Hover help: while the card is hovered, a panel defining every glossary
-  // term on it portals in beside the card (never on top). Suppressed for the
-  // card editor and for the enlarged card inside the hover-preview surfaces,
-  // which render their own definitions panel. Dense surfaces that hide rules
-  // text have no terms to explain, so they opt out too.
+  const collapseHoverZoom = useCallback(() => {
+    setHoverZoom(null);
+  }, []);
+
+  const handleHoverZoomEnter = useCallback(() => {
+    if (!enableHoverZoom || hideRulesText) {
+      return;
+    }
+    const anchor = cardRef.current;
+    if (anchor === null || typeof window === "undefined") {
+      return;
+    }
+    const rect = anchor.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) {
+      return;
+    }
+    const widthLimited = (window.innerWidth * HOVER_MAX_VIEWPORT_WIDTH_FRACTION) /
+      rect.width;
+    const heightLimited =
+      (window.innerHeight * HOVER_MAX_VIEWPORT_HEIGHT_FRACTION) / rect.height;
+    const scale = Math.min(
+      MAX_HOVER_SCALE,
+      HOVER_TARGET_WIDTH_PX / rect.width,
+      widthLimited,
+      heightLimited,
+    );
+    if (scale <= HOVER_MIN_USEFUL_SCALE) {
+      return;
+    }
+    const scaledWidth = rect.width * scale;
+    const scaledHeight = rect.height * scale;
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const scaledLeft = centerX - scaledWidth / 2;
+    const scaledTop = centerY - scaledHeight / 2;
+    const dx = clampHoverOffset(scaledLeft, scaledWidth, window.innerWidth);
+    const dy = clampHoverOffset(scaledTop, scaledHeight, window.innerHeight);
+    setHoverZoom({ rect, scale, dx, dy });
+    logEventOnce("card_hover_zoom:game-card", "card_hover_zoom", {
+      surface: "game-card",
+      originalWidthPx: Math.round(rect.width),
+      scale: Number(scale.toFixed(3)),
+      targetWidthPx: HOVER_TARGET_WIDTH_PX,
+    });
+  }, [cardRef, enableHoverZoom, hideRulesText]);
+
+  useEffect(() => {
+    if (hoverZoom === null) {
+      return undefined;
+    }
+    const { rect } = hoverZoom;
+    function handleMove(event: MouseEvent) {
+      if (
+        event.clientX < rect.left ||
+        event.clientX > rect.right ||
+        event.clientY < rect.top ||
+        event.clientY > rect.bottom
+      ) {
+        collapseHoverZoom();
+      }
+    }
+    function handleDismiss() {
+      collapseHoverZoom();
+    }
+    window.addEventListener("mousemove", handleMove);
+    window.addEventListener("scroll", handleDismiss, true);
+    window.addEventListener("blur", handleDismiss);
+    document.addEventListener("mouseleave", handleDismiss);
+    return () => {
+      window.removeEventListener("mousemove", handleMove);
+      window.removeEventListener("scroll", handleDismiss, true);
+      window.removeEventListener("blur", handleDismiss);
+      document.removeEventListener("mouseleave", handleDismiss);
+    };
+  }, [hoverZoom, collapseHoverZoom]);
+
+  const hoverZoomPortal =
+    hoverZoom !== null && typeof document !== "undefined"
+      ? createPortal(
+          <>
+            <div
+              aria-hidden="true"
+              className="tango pointer-events-none fixed z-[1000]"
+              style={{
+                left: hoverZoom.rect.left,
+                top: hoverZoom.rect.top,
+                width: hoverZoom.rect.width,
+                height: hoverZoom.rect.height,
+                transform:
+                  `translate(${hoverZoom.dx}px, ${hoverZoom.dy}px) ` +
+                  `scale(${hoverZoom.scale})`,
+                transformOrigin: "center center",
+                filter: "drop-shadow(0 18px 40px rgba(0, 0, 0, 0.55))",
+              }}
+              data-hover-zoom-overlay=""
+              data-hover-zoom-motion="snap"
+            >
+              <GameCardSurface
+                {...props}
+                enableTermPopover={false}
+                enableHoverZoom={false}
+              />
+            </div>
+            {renderHoverGlossaryStack(hoverZoom, card.renderedText)}
+          </>,
+          document.body,
+        )
+      : null;
+
+  // Hover help: while a large-enough card is hovered, a panel defining every
+  // glossary term on it portals in beside the card. When the card zooms, the
+  // zoom overlay owns the definition stack instead so the stack aligns to the
+  // enlarged visual copy.
   const termPopover = useCardTermPopover({
     anchorRef: cardRef,
     text: card.renderedText,
-    enabled: !suppressHoverHelp && !hideRulesText,
+    enabled: enableTermPopover && hoverZoom === null && !hideRulesText,
   });
 
   // Auto-shrink the rules body so a card needing more than the reserved three
@@ -964,7 +1170,7 @@ export function GameCard({
       sizeVar="var(--cv-energy-orb-size)"
       numberSizeVar="var(--cv-energy-orb-font-size)"
       numberCapPx={energyOrbCapPx}
-      tooltip={suppressHoverHelp ? undefined : ENERGY_PIP_TOOLTIP}
+      tooltip={ENERGY_PIP_TOOLTIP}
       tintColor={
         transfiguration?.energyChanged === true
           ? ENERGY_CHANGE_TINT
@@ -1191,7 +1397,7 @@ export function GameCard({
         sizeVar={sparkSizeVar}
         numberSizeVar={sparkFontVar}
         numberCapPx={sparkCapPx}
-        tooltip={suppressHoverHelp ? undefined : SPARK_PIP_TOOLTIP}
+        tooltip={SPARK_PIP_TOOLTIP}
         tintColor={
           transfiguration?.sparkChanged === true
             ? SPARK_CHANGE_TINT
@@ -1310,6 +1516,7 @@ export function GameCard({
       data-rarity={rarityAttr}
       data-card-type={card.cardType}
       data-figment={figment ? "true" : undefined}
+      data-hover-zoomed={hoverZoom !== null ? "true" : undefined}
       style={
         {
           aspectRatio: CARD_ASPECT_RATIO,
@@ -1319,6 +1526,8 @@ export function GameCard({
         } as CSSProperties
       }
       onClick={onClick}
+      onMouseEnter={handleHoverZoomEnter}
+      onMouseDown={collapseHoverZoom}
       {...termPopover.triggerHandlers}
       {...(isInteractive
         ? {
@@ -1333,6 +1542,7 @@ export function GameCard({
         : {})}
     >
       {termPopover.popoverPortal}
+      {hoverZoomPortal}
       {/* Full-bleed art covering the entire card. */}
       {identiconUri !== null ? (
         <img
@@ -1586,6 +1796,10 @@ export function GameCard({
       )}
     </div>
   );
+}
+
+export function GameCard(props: CardViewProps) {
+  return <GameCardSurface {...props} enableHoverZoom />;
 }
 
 /**

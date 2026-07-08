@@ -51,8 +51,6 @@ interface GameCardDemoArgs {
   hideRulesText?: boolean;
   /** Render the full-bleed figment frame. */
   figment?: boolean;
-  /** Suppress the term-definition hover popover (kept on for a calm doc page). */
-  suppressHoverHelp?: boolean;
 }
 
 function GameCardDemo({
@@ -61,7 +59,6 @@ function GameCardDemo({
   selectionColor,
   hideRulesText = false,
   figment = false,
-  suppressHoverHelp = true,
 }: GameCardDemoArgs) {
   const [cards, setCards] = useState<CardData[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -124,7 +121,6 @@ function GameCardDemo({
             selectionColor={selectionColor}
             hideRulesText={hideRulesText}
             figment={figment}
-            suppressHoverHelp={suppressHoverHelp}
           />
         </div>
       ))}
@@ -165,7 +161,6 @@ export const gameCardDemo: TangoComponent = {
       selected: false,
       hideRulesText: false,
       figment: false,
-      suppressHoverHelp: true,
     },
   },
 };

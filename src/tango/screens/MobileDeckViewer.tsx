@@ -501,7 +501,6 @@ function DeckTile({
       <GameCard
         card={cardView.card}
         transfiguration={cardView.transfiguration}
-        suppressHoverHelp
       />
     </Pressable>
   );
@@ -539,7 +538,6 @@ function PeekOverlay({ peek }: { peek: PeekState }) {
           card={peek.view.card}
           transfiguration={peek.view.transfiguration}
           large
-          suppressHoverHelp
         />
       </div>
     </div>,

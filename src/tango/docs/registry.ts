@@ -22,7 +22,6 @@ import { glossaryDefinitionCardDemo } from "./demos/glossary-definition-card";
 import { glowIconDemo } from "./demos/glow-icon";
 import { groupPanelDemo } from "./demos/group-panel";
 import { hoverPopoverDemo } from "./demos/hover-popover";
-import { hoverZoomCardDemo } from "./demos/hover-zoom-card";
 import { infoCardDemo } from "./demos/info-card";
 import { leaveSiteButtonDemo } from "./demos/leave-site-button";
 import { motesDemo } from "./demos/motes";
@@ -140,7 +139,6 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   dreamcallerPortraitDemo,
   rulesTextDemo,
   gameCardDemo,
-  hoverZoomCardDemo,
   cardTermDefinitionsDemo,
   glossaryDefinitionCardDemo,
   cardStatOrbDemo,

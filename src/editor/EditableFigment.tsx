@@ -192,7 +192,6 @@ export default function EditableFigment({
           large={size === "large"}
           figment
           figmentTitleBar={showTitleBar}
-          suppressHoverHelp
           onClick={() => onOpenArtEditor(figment)}
         />
       </article>
@@ -211,7 +210,6 @@ export default function EditableFigment({
         large={size === "large"}
         figment
         figmentTitleBar={showTitleBar}
-        suppressHoverHelp
         slots={slots}
         rulesTextboxExpanded={rulesTextEditing}
       />
