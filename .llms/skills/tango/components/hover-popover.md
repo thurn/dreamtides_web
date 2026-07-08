@@ -4,13 +4,13 @@
 
 # Hover Popover
 
-Components · Live demo & interactive props: `/tango#/hover-popover`
+Primitives · Live demo & interactive props: `/tango#/hover-popover`
 
 Real consumers: **13** (imports outside `src/tango/docs/` and tests).
 
-The pointer-and-focus anchored popover primitive for glossary definitions and compact card previews, with viewport-aware placement.
+A lightweight hover/focus tooltip primitive that portals a small content node to document.body, kept on-screen by a viewport-aware placement pass; used for glossary-term definitions on rules text and full-card previews on compact deck rows.
 
-> **Guidance:** Use InfoCard.PressInfo for press-to-reveal screen objects. Use HoverPopover for inline text and compact list previews whose trigger already lives inside flowing content.
+> **Guidance:** Choosing between the two reveals: use InfoCard / InfoCard.PressInfo for an object or entity card (a card, dreamcaller, dreamsign, tide, or site) — it is the input-adaptive press engine (fine-pointer hover OR touch press-down), pointer-anchored and clamped above or beside the trigger, and it is the canonical Popup rule for every game-object reveal. Reach for HoverPopover instead when the reveal is a passive tooltip rather than an object card — a glossary-term definition on rules text, a full-card preview on a compact deck row, or a pip-badge tooltip — on a fine-pointer surface: it is hover/focus only, with no touch-hold contract and simpler placement.
 
 ## Props
 
@@ -25,10 +25,43 @@ The pointer-and-focus anchored popover primitive for glossary definitions and co
 
 ## Usage
 
+### Inline glossary tooltip
+
+The default: an inline `span` trigger inside flowing rules text that reveals a small definition node on hover after `delayMs`.
+
 ```tsx
 import { HoverPopover } from "src/tango/components/overlay/HoverPopover";
 
-<HoverPopover content={<GlossaryDefinitionCard entry={entry} />}>
-  <span>{entry.term}</span>
+<HoverPopover delayMs={300} content={<GlossaryDefinitionCard entry={entry} />}>
+  <span className="glossary-term">{entry.term}</span>
+</HoverPopover>
+```
+
+### Block deck-row preview
+
+A block-level trigger (`triggerAs="div"`) on a compact deck row that reveals a full-card preview beside the row; pass `maxWidthPx={null}` so the self-sizing preview is not capped.
+
+```tsx
+import {
+  CARD_HOVER_PREVIEW_DELAY_MS,
+  CARD_HOVER_PREVIEW_WIDTH_PX,
+  HoverPopover,
+} from "src/tango/components/overlay/HoverPopover";
+
+<HoverPopover
+  triggerAs="div"
+  placement="left"
+  delayMs={CARD_HOVER_PREVIEW_DELAY_MS}
+  maxWidthPx={null}
+  content={({ anchorRect, side }) => (
+    <CardHoverPreview
+      card={card}
+      widthPx={CARD_HOVER_PREVIEW_WIDTH_PX}
+      popoverSide={side}
+      anchorRect={anchorRect}
+    />
+  )}
+>
+  <div className="deck-row">{card.name}</div>
 </HoverPopover>
 ```
