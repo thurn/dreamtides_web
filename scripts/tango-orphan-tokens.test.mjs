@@ -65,7 +65,6 @@ export const BASELINE = [
   "--cv-selection-color",
   "--device-h",
   "--device-w",
-  "--display-cutout-right",
   "--dt-bg-0",
   "--dt-bg-1",
   "--dt-bg-2",
@@ -190,7 +189,7 @@ function escapeForRegExp(name) {
 /**
  * Whether `text` contains a live read of token `name`: `var(--x)` /
  * `var(--x, ...)`, or `token("--x")` / `readLengthToken("--x")`. Writes
- * (e.g. `right: "--display-cutout-right"` assigning a token *name* as a
+ * (e.g. `top: "--display-cutout-top"` assigning a token *name* as a
  * string, as in device-frame.ts) do not match either pattern.
  */
 function isRead(name, text) {

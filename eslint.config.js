@@ -86,16 +86,6 @@ export default tseslint.config(
     },
   },
   {
-    // DraftScreen reads raw `env(safe-area-inset-top)` at its notch clearance
-    // today. Phase 1 rewrites it to `var(--safe-area-inset-top)` (the channel
-    // the device-frame screenshot harness injects) and deletes this override.
-    files: ["src/tango/screens/DraftScreen.tsx"],
-    plugins: { tango: tangoPlugin },
-    rules: {
-      "tango/no-raw-safe-area-env": "off",
-    },
-  },
-  {
     // Screen adapters are wiring only: state acquisition, per-mount minting,
     // callback wiring, one screen render. Mapping logic belongs in the pure
     // *-view-model module; `thin-adapters` enforces the shape and `max-lines`

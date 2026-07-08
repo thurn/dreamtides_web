@@ -71,7 +71,7 @@ export interface DraftScreenProps {
 // card-height cap can subtract them from the viewport.
 // Top: the device safe-area / cutout (Dynamic Island, status bar), or a floor —
 // nothing is drawn here, so the notch never covers content.
-const TOP_SAFE_OP = `max(env(safe-area-inset-top), ${token("--safe-top")})`;
+const TOP_SAFE_OP = `max(var(--safe-area-inset-top), ${token("--safe-top")})`;
 // Breathing room between the safe zone and the top of the pack.
 const TOP_GAP_OP = token("--space-6");
 // The band under the pack that holds the small pick counter (its gap above the

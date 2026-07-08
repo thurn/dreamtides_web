@@ -20,13 +20,15 @@
 //       index.css. App code reads `var(--safe-area-inset-top)` (never `env()`
 //       directly) so both the device and the screenshot resolve correctly.
 //   --display-cutout          `1` when a screen cutout is present (else unset).
-//   --display-cutout-top / -left / -right / -width / -height
+//   --display-cutout-top / -left / -width / -height
 //       The cutout's bounding box, for deliberately placing UI in the unsafe
 //       region beside it (e.g. a control to the right of the Dynamic Island).
 //       Published only when the target has a visible cutout.
 //
 // On real hardware no `deviceFrame` param is present, nothing is published, and
 // the index.css `env()` defaults apply unchanged.
+
+import { TOKENS } from "../tango/primitives/tokens";
 
 /** A rectangle (CSS px) locating the screen cutout within the screen. */
 export interface DisplayCutout {
@@ -52,23 +54,29 @@ export interface DeviceFrame {
   cutout?: DisplayCutout;
 }
 
-const SAFE_AREA_VARS: Record<keyof SafeAreaInsets, `--${string}`> = {
+// The published CSS var names are constrained to `keyof typeof TOKENS`, so
+// renaming a token in tango-tokens.css (which regenerates tokens.ts) turns a
+// stale name here into a compile error instead of a silent no-op injection.
+const SAFE_AREA_VARS = {
   top: "--safe-area-inset-top",
   right: "--safe-area-inset-right",
   bottom: "--safe-area-inset-bottom",
   left: "--safe-area-inset-left",
-};
+} satisfies Record<keyof SafeAreaInsets, keyof typeof TOKENS>;
 
-const CUTOUT_VARS: Record<keyof DisplayCutout, `--${string}`> = {
+// `right` is intentionally not published: no layout places UI relative to the
+// cutout's right edge, so no CSS var backs it. The `DisplayCutout` descriptor
+// still carries `right` (it round-trips through the screenshot metrics) — only
+// the CSS channel drops it.
+const CUTOUT_VARS = {
   top: "--display-cutout-top",
   left: "--display-cutout-left",
-  right: "--display-cutout-right",
   width: "--display-cutout-width",
   height: "--display-cutout-height",
-};
+} satisfies Partial<Record<keyof DisplayCutout, keyof typeof TOKENS>>;
 
 /** Every custom property this module may publish (used to reset a re-apply). */
-const ALL_VARS: `--${string}`[] = [
+const ALL_VARS: string[] = [
   ...Object.values(SAFE_AREA_VARS),
   "--display-cutout",
   ...Object.values(CUTOUT_VARS),
@@ -162,7 +170,7 @@ export function applyDeviceFrame(
 
   if (frame.cutout) {
     root.style.setProperty("--display-cutout", "1");
-    for (const key of Object.keys(CUTOUT_VARS) as (keyof DisplayCutout)[]) {
+    for (const key of Object.keys(CUTOUT_VARS) as (keyof typeof CUTOUT_VARS)[]) {
       root.style.setProperty(CUTOUT_VARS[key], `${frame.cutout[key]}px`);
     }
   }

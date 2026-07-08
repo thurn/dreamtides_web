@@ -273,7 +273,6 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 | --- | --- | --- |
 | `--display-cutout-top` | `0px` |  |
 | `--display-cutout-left` | `0px` |  |
-| `--display-cutout-right` | `0px` |  |
 | `--display-cutout-width` | `0px` |  |
 | `--display-cutout-height` | `0px` |  |
 | `--hover-scale` | `1.03` |  |

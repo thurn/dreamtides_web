@@ -182,6 +182,13 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
       // circle covers the whole tile, so the placement clears it wherever on the
       // card the finger actually landed.
       const tile = e.currentTarget.getBoundingClientRect();
+      // The transient card zoom reserves a conservative chrome zone using the
+      // `--safe-top`/`--safe-bottom` *design floors* — the sanctioned minimum-
+      // reservation channel, read as a concrete JS length. This is deliberately
+      // device-frame-independent: unlike the header band above (which tracks the
+      // real hardware inset), the peek box wants a stable floor, not the notch,
+      // and an `env()`-backed inset would resolve to 0 inside the screenshot
+      // iframe anyway.
       const box = computePeekBox({
         viewport: { width: window.innerWidth, height: window.innerHeight },
         safeTop: readLengthToken("--safe-top"),
@@ -340,6 +347,12 @@ function TopBand({
         // notch on notched hardware, else a small top margin (no dead band on a
         // no-notch phone like the SE). `--safe-area-inset-top` carries the real
         // inset on device and the simulated one in a screenshot mock-up.
+        //
+        // This reads the *hardware inset* channel, not a design floor: it must
+        // reflect the actual notch so a no-notch phone reserves nothing extra
+        // (the `max(…, --gutter)` supplies the minimum). Contrast computePeekBox
+        // below, which deliberately reads the `--safe-top`/`--safe-bottom`
+        // design floors instead.
         paddingTop: `max(var(--safe-area-inset-top), ${token("--gutter")})`,
         paddingLeft: token("--gutter"),
         paddingRight: token("--gutter"),

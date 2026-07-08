@@ -20,7 +20,6 @@ export const TOKENS = {
   "--safe-area-inset-left": { var: "var(--safe-area-inset-left)", value: "env(safe-area-inset-left, 0px)" },
   "--display-cutout-top": { var: "var(--display-cutout-top)", value: "0px" },
   "--display-cutout-left": { var: "var(--display-cutout-left)", value: "0px" },
-  "--display-cutout-right": { var: "var(--display-cutout-right)", value: "0px" },
   "--display-cutout-width": { var: "var(--display-cutout-width)", value: "0px" },
   "--display-cutout-height": { var: "var(--display-cutout-height)", value: "0px" },
   "--primitive-void-900": { var: "var(--primitive-void-900)", value: "#060410" },
