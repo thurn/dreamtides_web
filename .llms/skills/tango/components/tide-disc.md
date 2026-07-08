@@ -8,7 +8,9 @@ Components · Live demo & interactive props: `/tango#/tide-disc`
 
 Real consumers: **1** (imports outside `src/tango/docs/` and tests).
 
-The single tide mark: a colored disc carrying the tide's glyph, sized 'sm' (desktop select) or 'lg' (mobile select) — the atom both Dreamcaller-select tide rows render from.
+The single tide mark: a colored disc carrying the tide's glyph, sized 'sm' (desktop select) or 'lg' (mobile select) — the atom both Dreamcaller-select tide rows render from. In production a disc is never bare: it is always the trigger of an InfoCard.PressInfo reveal that carries the tide's description.
+
+> **Guidance:** The tide palette lives in src/tango/components/hud/tide-spec.ts. Its five tides — Ember #fb923c, Valor #facc15, Vision #60a5fa, Wild #4ade80, Shadow #c084fc — each own a fixed accent and glyph, exposed as TIDES / tideVisual / tideAlignmentLabel. TideDisc, InfoCard's tide variant, and any tide chip all read that one table, so a tide reads identically everywhere. tide-spec has no renderable component of its own, so it is documented here on its canonical renderer.
 
 ## Props
 
@@ -22,12 +24,37 @@ The single tide mark: a colored disc carrying the tide's glyph, sized 'sm' (desk
 
 ## Usage
 
+### Bare disc
+
+The atom on its own — the color and glyph come from the named tide (never a raw value). `interactive` brightens it on hover and shows a pointer cursor. Rarely used alone: production wraps it in a reveal (below).
+
 ```tsx
 import { TideDisc } from "src/tango/components/hud/TideDisc";
 
-// As a reveal trigger (brightens on hover, pointer cursor):
+// The compact 'sm' disc (desktop select) and the larger 'lg' disc (mobile select):
 <TideDisc tide="valor" id={tideDeckId} label="Tide: Valor" interactive />
-
-// The larger, more touch-friendly disc (mobile select):
 <TideDisc tide="valor" id={tideDeckId} label="Tide: Valor" size="lg" interactive />
+```
+
+### Disc-in-reveal (canonical)
+
+How a tide disc is ALWAYS rendered in production (see quest-start-shared's TideDiscReveal): the disc is the trigger of an InfoCard.PressInfo reveal anchored to the screen's `stageRef`, carrying the tide's own description — the general Tides blurb stacked above this tide's colored InfoCard. A tide disc never appears without its reveal.
+
+```tsx
+import { TideDisc } from "src/tango/components/hud/TideDisc";
+import { InfoCard } from "src/tango/components/overlay/InfoCard";
+import { richText } from "src/tango/components/card/rich-text";
+import { GLYPHS } from "src/tango/primitives/glyph";
+
+<InfoCard.PressInfo
+  stageRef={stageRef}
+  card={
+    <div style={{ display: "flex", flexDirection: "column", gap: token("--space-3") }}>
+      <InfoCard variant="icon" glyph={GLYPHS.water} title="Tides" body={richText.plain(tidesBlurb)} />
+      <InfoCard variant="tide" tide="valor" title="Rising Valor" body={richText.plain(tide.description)} />
+    </div>
+  }
+>
+  <TideDisc tide="valor" id={tideDeckId} label="Tide: Valor" size="lg" interactive />
+</InfoCard.PressInfo>
 ```
