@@ -1,7 +1,7 @@
-// DreamsignRevelationScreen — the Tango mobile rendering of Sigrun's
-// dreamsign-offer site. The scene stays full-bleed, Sigrun occupies the lower
-// left beside her speech bubble, the dreamsign choices sit below her, and the
-// persistent QuestStatusBar remains the bottom HUD.
+// DreamsignRevelationScreen — the Tango rendering of Sigrun's dreamsign-offer
+// site. The scene stays full-bleed, the guide and her speech occupy the left
+// side on desktop, the dreamsign choices sit opposite, and the persistent
+// QuestStatusBar remains the bottom HUD.
 
 import { useRef, type RefObject } from "react";
 import { motion } from "framer-motion";
@@ -9,7 +9,6 @@ import { requireDreamsignId } from "../../data/dreamsigns";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
 import { Button } from "../components/controls/Button";
 import { GlassButton } from "../components/controls/GlassButton";
-import { IconButton } from "../components/controls/IconButton";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { Motes } from "../components/hud/Motes";
 import {
@@ -19,8 +18,8 @@ import {
 } from "../components/hud/QuestStatusBar";
 import { SpeechBubble } from "../components/overlay/SpeechBubble";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
-import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
+import { useIsDesktop } from "./use-is-desktop";
 
 /** The guide who speaks over the Revelation offer. */
 export interface DreamsignRevelationGuideView {
@@ -93,8 +92,9 @@ const CONTENT_VERTICAL_OFFSET = "10dvh";
 const GUIDE_LAYER_TOP = `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${CONTENT_VERTICAL_OFFSET})`;
 const OFFER_TOP = `max(44dvh, calc(${token("--safe-top")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-7")} + ${CONTENT_VERTICAL_OFFSET}))`;
 const HUD_CLEARANCE = `calc(${token("--hud-h")} + ${token("--safe-bottom")})`;
-const CLOSE_TOP = token("--space-5");
-const OFFER_TILE_SIZE = 120;
+const MOBILE_OFFER_TILE_SIZE = 120;
+const DESKTOP_OFFER_TILE_SIZE = 154;
+const DESKTOP_ENHANCED_OFFER_TILE_SIZE = 140;
 
 /**
  * The Tango mobile Dreamsign Revelation screen. Pure and props-driven: it owns
@@ -110,6 +110,7 @@ export function DreamsignRevelationScreen({
   claimedIndex,
 }: DreamsignRevelationScreenProps) {
   const stageRef = useRef<HTMLDivElement>(null);
+  const isDesktop = useIsDesktop();
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const guideUrl = resolveArtRef(view.guide.art);
   const disabled = claimedIndex !== null || view.purge !== null;
@@ -147,114 +148,27 @@ export function DreamsignRevelationScreen({
 
       <Motes on tint="violet" />
 
-      <section
-        data-revelation-guide=""
-        data-guide-id={view.guide.id}
-        style={{
-          position: "absolute",
-          top: GUIDE_LAYER_TOP,
-          left: 0,
-          right: 0,
-          height: "34dvh",
-          zIndex: 10,
-          pointerEvents: "none",
-        }}
-      >
-        <img
-          src={guideUrl}
-          alt={view.guide.name}
-          draggable={false}
-          style={{
-            position: "absolute",
-            top: token("--space-4"),
-            left: "calc(-1 * (var(--space-12) + var(--space-4)))",
-            width: "62vw",
-            height: "70dvh",
-            objectFit: "contain",
-            objectPosition: "50% 0%",
-            userSelect: "none",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            top: token("--space-5"),
-            left: "34vw",
-            right: `calc(${token("--space-5")} + ${token("--space-11")} + ${token("--space-3")})`,
-          }}
-        >
-          <SpeechBubble
-            speakerName={view.guide.name}
-            text={view.guide.line}
-            arrowSide="left"
-            testId="revelation-speech-bubble"
-          />
-        </div>
-      </section>
-
-      <main
-        data-revelation-offer=""
-        style={{
-          position: "absolute",
-          top: OFFER_TOP,
-          left: token("--space-4"),
-          right: token("--space-4"),
-          bottom: `calc(${HUD_CLEARANCE} + ${token("--space-9")})`,
-          display: "grid",
-          placeItems: "start center",
-          zIndex: 20,
-        }}
-      >
-        {!view.offerReady ? (
-          <StatusLine text="Revealing Dreamsigns..." />
-        ) : view.offer.length === 0 ? (
-          <StatusLine text="The Dreamsign pool is exhausted." />
-        ) : (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                view.offer.length > 3 ? "repeat(2, 132px)" : "repeat(3, 120px)",
-              gap: token("--space-4"),
-              justifyContent: "center",
-              alignItems: "start",
-            }}
-          >
-            {view.offer.map((dreamsign, index) => (
-              <RevelationOption
-                key={requireDreamsignId(
-                  dreamsign,
-                  "Tango Dreamsign Revelation offer",
-                )}
-                dreamsign={dreamsign}
-                index={index}
-                stageRef={stageRef}
-                disabled={disabled}
-                claimed={claimedIndex === index}
-                dimmed={claimedIndex !== null && claimedIndex !== index}
-                onClaim={onClaim}
-              />
-            ))}
-          </div>
-        )}
-      </main>
-
-      <div
-        style={{
-          position: "absolute",
-          right: token("--space-5"),
-          top: CLOSE_TOP,
-          zIndex: 42,
-        }}
-      >
-        <IconButton
-          glyph={GLYPHS.close}
-          label="Leave site"
-          onPress={onSkip}
+      {isDesktop ? (
+        <DesktopComposition
+          view={view}
+          guideUrl={guideUrl}
+          stageRef={stageRef}
           disabled={disabled}
-          testId="dreamsign-revelation-close"
+          claimedIndex={claimedIndex}
+          onClaim={onClaim}
+          onSkip={onSkip}
         />
-      </div>
+      ) : (
+        <MobileComposition
+          view={view}
+          guideUrl={guideUrl}
+          stageRef={stageRef}
+          disabled={disabled}
+          claimedIndex={claimedIndex}
+          onClaim={onClaim}
+          onSkip={onSkip}
+        />
+      )}
 
       <QuestStatusBar
         stageRef={stageRef}
@@ -273,6 +187,263 @@ export function DreamsignRevelationScreen({
           onCancel={onCancelPurge}
         />
       )}
+    </div>
+  );
+}
+
+function DesktopComposition({
+  view,
+  guideUrl,
+  stageRef,
+  disabled,
+  claimedIndex,
+  onClaim,
+  onSkip,
+}: {
+  readonly view: DreamsignRevelationView;
+  readonly guideUrl: string;
+  readonly stageRef: RefObject<HTMLElement | null>;
+  readonly disabled: boolean;
+  readonly claimedIndex: number | null;
+  readonly onClaim: (index: number) => void;
+  readonly onSkip: () => void;
+}) {
+  return (
+    <section
+      data-revelation-composition=""
+      style={{
+        position: "absolute",
+        top: `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${token("--space-8")})`,
+        left: 0,
+        right: 0,
+        bottom: `calc(${HUD_CLEARANCE} + ${token("--space-8")})`,
+        display: "grid",
+        placeItems: "stretch center",
+        zIndex: 20,
+        pointerEvents: "none",
+      }}
+    >
+      <div
+        style={{
+          width: `calc(100% - ${token("--space-12")} - ${token("--space-12")})`,
+          maxWidth: 1320,
+          display: "grid",
+          gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)",
+          gap: token("--space-12"),
+          alignItems: "center",
+        }}
+      >
+        <GuideScene view={view} guideUrl={guideUrl} desktop />
+        <OfferStack
+          view={view}
+          stageRef={stageRef}
+          disabled={disabled}
+          claimedIndex={claimedIndex}
+          onClaim={onClaim}
+          onSkip={onSkip}
+          desktop
+        />
+      </div>
+    </section>
+  );
+}
+
+function MobileComposition({
+  view,
+  guideUrl,
+  stageRef,
+  disabled,
+  claimedIndex,
+  onClaim,
+  onSkip,
+}: {
+  readonly view: DreamsignRevelationView;
+  readonly guideUrl: string;
+  readonly stageRef: RefObject<HTMLElement | null>;
+  readonly disabled: boolean;
+  readonly claimedIndex: number | null;
+  readonly onClaim: (index: number) => void;
+  readonly onSkip: () => void;
+}) {
+  return (
+    <>
+      <section
+        style={{
+          position: "absolute",
+          top: GUIDE_LAYER_TOP,
+          left: 0,
+          right: 0,
+          height: "34dvh",
+          zIndex: 10,
+          pointerEvents: "none",
+        }}
+      >
+        <GuideScene view={view} guideUrl={guideUrl} />
+      </section>
+
+      <main
+        style={{
+          position: "absolute",
+          top: OFFER_TOP,
+          left: token("--space-4"),
+          right: token("--space-4"),
+          bottom: `calc(${HUD_CLEARANCE} + ${token("--space-9")})`,
+          display: "grid",
+          placeItems: "start center",
+          zIndex: 20,
+        }}
+      >
+        <OfferStack
+          view={view}
+          stageRef={stageRef}
+          disabled={disabled}
+          claimedIndex={claimedIndex}
+          onClaim={onClaim}
+          onSkip={onSkip}
+        />
+      </main>
+    </>
+  );
+}
+
+function GuideScene({
+  view,
+  guideUrl,
+  desktop = false,
+}: {
+  readonly view: DreamsignRevelationView;
+  readonly guideUrl: string;
+  readonly desktop?: boolean;
+}) {
+  return (
+    <div
+      data-revelation-guide=""
+      data-guide-id={view.guide.id}
+      style={{
+        position: "relative",
+        width: "100%",
+        height: desktop ? "min(100%, 640px)" : "100%",
+        minHeight: desktop ? 520 : undefined,
+        pointerEvents: "none",
+      }}
+    >
+      <img
+        src={guideUrl}
+        alt={view.guide.name}
+        draggable={false}
+        style={{
+          position: "absolute",
+          top: desktop ? "auto" : token("--space-4"),
+          bottom: desktop ? `calc(-1 * ${token("--space-8")})` : "auto",
+          left: desktop
+            ? "clamp(-72px, -4vw, -24px)"
+            : "calc(-1 * (var(--space-12) + var(--space-4)))",
+          width: desktop ? "clamp(320px, 29vw, 430px)" : "62vw",
+          height: desktop ? "min(78dvh, 720px)" : "70dvh",
+          objectFit: "contain",
+          objectPosition: desktop ? "50% 100%" : "50% 0%",
+          userSelect: "none",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: desktop ? "14%" : token("--space-5"),
+          left: desktop ? "clamp(202px, 18vw, 276px)" : "34vw",
+          right: desktop
+            ? 0
+            : `calc(${token("--space-5")} + ${token("--space-11")} + ${token("--space-3")})`,
+          maxWidth: desktop ? 380 : undefined,
+        }}
+      >
+        <SpeechBubble
+          speakerName={view.guide.name}
+          text={view.guide.line}
+          arrowSide="left"
+          testId="revelation-speech-bubble"
+        />
+      </div>
+    </div>
+  );
+}
+
+function OfferStack({
+  view,
+  stageRef,
+  disabled,
+  claimedIndex,
+  onClaim,
+  onSkip,
+  desktop = false,
+}: {
+  readonly view: DreamsignRevelationView;
+  readonly stageRef: RefObject<HTMLElement | null>;
+  readonly disabled: boolean;
+  readonly claimedIndex: number | null;
+  readonly onClaim: (index: number) => void;
+  readonly onSkip: () => void;
+  readonly desktop?: boolean;
+}) {
+  if (!view.offerReady) {
+    return <StatusLine text="Revealing Dreamsigns..." />;
+  }
+  if (view.offer.length === 0) {
+    return <StatusLine text="The Dreamsign pool is exhausted." />;
+  }
+
+  const enhanced = view.offer.length > 3;
+  const tileSize = desktop
+    ? enhanced
+      ? DESKTOP_ENHANCED_OFFER_TILE_SIZE
+      : DESKTOP_OFFER_TILE_SIZE
+    : MOBILE_OFFER_TILE_SIZE;
+  const gridTemplateColumns = desktop
+    ? enhanced
+      ? `repeat(2, ${String(DESKTOP_ENHANCED_OFFER_TILE_SIZE)}px)`
+      : `repeat(3, ${String(DESKTOP_OFFER_TILE_SIZE)}px)`
+    : enhanced
+      ? "repeat(2, 132px)"
+      : "repeat(3, 120px)";
+
+  return (
+    <div
+      data-revelation-offer=""
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: desktop ? token("--space-8") : token("--space-6"),
+        pointerEvents: "auto",
+      }}
+    >
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns,
+          gap: desktop ? token("--space-9") : token("--space-4"),
+          justifyContent: "center",
+          alignItems: "start",
+        }}
+      >
+        {view.offer.map((dreamsign, index) => (
+          <RevelationOption
+            key={requireDreamsignId(
+              dreamsign,
+              "Tango Dreamsign Revelation offer",
+            )}
+            dreamsign={dreamsign}
+            index={index}
+            stageRef={stageRef}
+            disabled={disabled}
+            claimed={claimedIndex === index}
+            dimmed={claimedIndex !== null && claimedIndex !== index}
+            tileSize={tileSize}
+            desktop={desktop}
+            onClaim={onClaim}
+          />
+        ))}
+      </div>
+      <GlassButton label="Skip" onPress={onSkip} disabled={disabled} />
     </div>
   );
 }
@@ -299,6 +470,8 @@ function RevelationOption({
   disabled,
   claimed,
   dimmed,
+  tileSize,
+  desktop,
   onClaim,
 }: {
   readonly dreamsign: DreamsignData;
@@ -307,6 +480,8 @@ function RevelationOption({
   readonly disabled: boolean;
   readonly claimed: boolean;
   readonly dimmed: boolean;
+  readonly tileSize: number;
+  readonly desktop: boolean;
   readonly onClaim: (index: number) => void;
 }) {
   return (
@@ -316,7 +491,12 @@ function RevelationOption({
       initial={{ opacity: 0, y: 24 }}
       animate={
         claimed
-          ? { opacity: 0, x: "36vw", y: "38dvh", scale: 0.28 }
+          ? {
+              opacity: 0,
+              x: desktop ? "26vw" : "36vw",
+              y: desktop ? "34dvh" : "38dvh",
+              scale: 0.28,
+            }
           : dimmed
             ? { opacity: 0.16, y: 0, scale: 0.94 }
             : { opacity: 1, y: 0, scale: 1 }
@@ -331,7 +511,7 @@ function RevelationOption({
     >
       <Dreamsign
         dreamsign={dreamsign}
-        sizePx={OFFER_TILE_SIZE}
+        sizePx={tileSize}
         stageRef={stageRef}
         testid={`dreamsign-revelation-art-${String(index)}`}
         revealTestid={`dreamsign-revelation-info-${String(index)}`}
