@@ -13,7 +13,7 @@
 // left-to-right on desktop; this surface only scales the design stage to fit and
 // reveals each node.
 
-import { useEffect, useState } from "react";
+import { useScaleToFit } from "../../primitives/use-scale-to-fit";
 import { type AtlasNodeView } from "./AtlasNode";
 import { AtlasEdge, type AtlasEdgeKind } from "./AtlasEdge";
 import {
@@ -67,20 +67,7 @@ export function AtlasMap({
   onEnterNode,
   stageRef,
 }: AtlasMapProps) {
-  const [scale, setScale] = useState(1);
-
-  useEffect(() => {
-    const fit = () => {
-      setScale(
-        Math.min(window.innerWidth / stageWidth, window.innerHeight / stageHeight),
-      );
-    };
-    fit();
-    window.addEventListener("resize", fit);
-    return () => {
-      window.removeEventListener("resize", fit);
-    };
-  }, [stageWidth, stageHeight]);
+  const scale = useScaleToFit(stageWidth, stageHeight);
 
   return (
     <div
