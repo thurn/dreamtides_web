@@ -3,7 +3,7 @@ import type { MouseEvent as ReactMouseEvent } from "react";
 import { CardDisplay } from "../../components/CardDisplay";
 import type { BattleCommand } from "../debug/commands";
 import type { BattleCardInstance, BattleCommandSourceSurface, BattleMutableState } from "../types";
-import { battleCardAutomationStatus } from "../automation/battle-card-effects-table";
+import { battleCardAutomationStatus } from "../../rules/battle/battle-card-effects-table";
 import { AutomationGearIcon } from "./AutomationGearIcon";
 import { battleCardDisplayFromInstance } from "./BattleCardView";
 

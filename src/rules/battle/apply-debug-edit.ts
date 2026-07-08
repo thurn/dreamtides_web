@@ -1,9 +1,9 @@
-import type { BattleDebugEdit, BattleDebugZoneDestination } from "../debug/commands";
+import type { BattleDebugEdit, BattleDebugZoneDestination } from "../../battle/debug/commands";
 import {
   createBattleResultChangedLogFields,
   createEmptyTransitionData,
   createFlowStep,
-} from "../engine/result";
+} from "../../battle/engine/result";
 import {
   createBattleLogBaseFields,
   createBattleProtoCardCreatedLogEvent,
@@ -26,26 +26,26 @@ import type {
   BattleResult,
   BattleSide,
   BattleTransitionData,
-} from "../types";
+} from "../../battle/types";
 import {
   backRankSlotId,
   ensureContiguousRankSlots,
   rankSlotIds,
-} from "../types";
+} from "../../battle/types";
 import {
   allocateBattleCardInstance,
   allocateBattleStackEntryId,
   cloneBattleDeckCardDefinition,
   cloneBattleMutableState,
-} from "./create-initial-state";
-import { diffMarkerValue } from "./markers-utils";
+} from "../../battle/state/create-initial-state";
+import { diffMarkerValue } from "../../battle/state/markers-utils";
 import {
   isBattleFieldSlotAddressValid,
   selectBattleCardLocation,
   selectBattlefieldSlotOccupant,
   selectDefaultCharacterPlaySlot,
   selectKindleTargetBattleCardId,
-} from "./selectors";
+} from "../../battle/state/selectors";
 import {
   addFigmentsToStackInPlace,
   canMergeFigments,
@@ -55,8 +55,8 @@ import {
   mergeFigmentsIntoStackInPlace,
   selectFigmentCount,
   selectFigmentSparks,
-} from "./figments";
-import { lookupFigmentCatalogEntry, type FigmentKeyword } from "./figment-catalog";
+} from "../../battle/state/figments";
+import { lookupFigmentCatalogEntry, type FigmentKeyword } from "../../battle/state/figment-catalog";
 
 export function applyDebugEdit(
   state: BattleMutableState,

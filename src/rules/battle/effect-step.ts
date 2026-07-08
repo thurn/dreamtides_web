@@ -1,6 +1,6 @@
-import type { BattleDebugEdit } from "../debug/commands";
-import type { BattleMutableState, BattleSide } from "../types";
-import { rankSlotIds } from "../types";
+import type { BattleDebugEdit } from "../../battle/debug/commands";
+import type { BattleMutableState, BattleSide } from "../../battle/types";
+import { rankSlotIds } from "../../battle/types";
 
 // ---------------------------------------------------------------------------
 // Core types

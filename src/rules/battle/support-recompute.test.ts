@@ -5,10 +5,10 @@ import type {
   BattleMutableState,
   BattleSide,
   FrontRankSlotId,
-} from "../types";
-import { backRankSlotIds, createEmptySlotRecord, frontRankSlotIds } from "../types";
+} from "../../battle/types";
+import { backRankSlotIds, createEmptySlotRecord, frontRankSlotIds } from "../../battle/types";
 import { planSupportRecompute } from "./battle-card-effects-table";
-import { supportedDeploySlots } from "../engine/support";
+import { supportedDeploySlots } from "../../battle/engine/support";
 
 // ---------------------------------------------------------------------------
 // Registered support UUIDs (from BATTLE_CARD_EFFECTS).
@@ -117,7 +117,7 @@ describe("planSupportRecompute — geometry", () => {
       },
     });
 
-    const edits = planSupportRecompute(state, true, 0);
+    const edits = planSupportRecompute(state, true, () => 0, 0);
 
     expect(edits).toContainEqual({
       kind: "SET_CARD_STATIC_SPARK_BONUS",
@@ -146,7 +146,7 @@ describe("planSupportRecompute — geometry", () => {
       },
     });
 
-    expect(planSupportRecompute(state, true, 0)).toEqual([]);
+    expect(planSupportRecompute(state, true, () => 0, 0)).toEqual([]);
   });
 });
 
@@ -166,7 +166,7 @@ describe("planSupportRecompute — predicate filter", () => {
       },
     });
 
-    const edits = planSupportRecompute(state, true, 0);
+    const edits = planSupportRecompute(state, true, () => 0, 0);
 
     expect(edits).toEqual([
       { kind: "SET_CARD_STATIC_SPARK_BONUS", battleCardId: "animal", value: 1 },
@@ -195,7 +195,7 @@ describe("planSupportRecompute — stacking", () => {
       },
     });
 
-    const edits = planSupportRecompute(state, true, 0);
+    const edits = planSupportRecompute(state, true, () => 0, 0);
 
     expect(edits).toEqual([
       { kind: "SET_CARD_STATIC_SPARK_BONUS", battleCardId: "shared", value: 4 },
@@ -216,7 +216,7 @@ describe("planSupportRecompute — clearing stale bonuses", () => {
       },
     });
 
-    expect(planSupportRecompute(state, true, 0)).toEqual([
+    expect(planSupportRecompute(state, true, () => 0, 0)).toEqual([
       { kind: "SET_CARD_STATIC_SPARK_BONUS", battleCardId: "stale", value: 0 },
     ]);
   });
@@ -238,7 +238,7 @@ describe("planSupportRecompute — idempotence", () => {
       },
     });
 
-    expect(planSupportRecompute(state, true, 0)).toEqual([]);
+    expect(planSupportRecompute(state, true, () => 0, 0)).toEqual([]);
   });
 });
 
@@ -258,7 +258,7 @@ describe("planSupportRecompute — disabled", () => {
       },
     });
 
-    const edits = planSupportRecompute(state, false, 0);
+    const edits = planSupportRecompute(state, false, () => 0, 0);
 
     expect(edits).toContainEqual({
       kind: "SET_CARD_STATIC_SPARK_BONUS",
@@ -282,6 +282,6 @@ describe("planSupportRecompute — disabled", () => {
       },
     });
 
-    expect(planSupportRecompute(state, false, 0)).toEqual([]);
+    expect(planSupportRecompute(state, false, () => 0, 0)).toEqual([]);
   });
 });

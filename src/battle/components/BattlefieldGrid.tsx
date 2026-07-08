@@ -2,7 +2,7 @@ import type { CSSProperties, MouseEvent as ReactMouseEvent } from "react";
 import type { MouseEvent as ReactPointerMouseEvent } from "react";
 
 import { BattleCardView, battleCardVisualFromInstance } from "./BattleCardView";
-import { battleCardAutomationStatus } from "../automation/battle-card-effects-table";
+import { battleCardAutomationStatus } from "../../rules/battle/battle-card-effects-table";
 import {
   selectBattleCardLocation,
   selectBattlefieldSlotOccupant,

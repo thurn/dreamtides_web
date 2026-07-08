@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { BattleCardInstance, BattleMutableState } from "../types";
+import type { BattleCardInstance, BattleMutableState } from "../../battle/types";
 import { addGainedSparkEdits, discardHandEdits, erodeEdits } from "./effect-step";
 
 // ---------------------------------------------------------------------------

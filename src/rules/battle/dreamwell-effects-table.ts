@@ -1,6 +1,6 @@
-import { selectBattleCardInstance } from "../state/selectors";
-import { selectDefaultCharacterPlaySlot } from "../state/selectors";
-import type { BattleDebugEdit } from "../debug/commands";
+import { selectBattleCardInstance } from "../../battle/state/selectors";
+import { selectDefaultCharacterPlaySlot } from "../../battle/state/selectors";
+import type { BattleDebugEdit } from "../../battle/debug/commands";
 import {
   alliesInPlay,
   charactersInVoid,
@@ -13,7 +13,7 @@ import {
   opponentOf,
   topOfDeck,
 } from "./effect-step";
-import type { DreamwellEffectScript } from "./dreamwell-effects";
+import type { DreamwellEffectScript } from "../../battle/automation/dreamwell-effects";
 
 // ---------------------------------------------------------------------------
 // Deterministic dreamwell effect table

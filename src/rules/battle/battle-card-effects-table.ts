@@ -1,11 +1,11 @@
-import type { BattleDebugEdit } from "../debug/commands";
+import type { BattleDebugEdit } from "../../battle/debug/commands";
 import type {
   BattleCardInstance,
   BattleMutableState,
   BattleSide,
-} from "../types";
-import { rankSlotIds } from "../types";
-import { supportedDeploySlots } from "../engine/support";
+} from "../../battle/types";
+import { rankSlotIds } from "../../battle/types";
+import { supportedDeploySlots } from "../../battle/engine/support";
 import type { EffectStep, StepContext } from "./effect-step";
 import {
   addGainedSparkEdits,
@@ -531,6 +531,7 @@ export function dawnScriptIsInteractive(script: BattleCardEffectScript): boolean
 export function collectDawnTriggerEdits(
   state: BattleMutableState,
   side: BattleSide,
+  random: () => number,
   nowMs: number,
 ): BattleDebugEdit[] {
   const edits: BattleDebugEdit[] = [];
@@ -546,7 +547,7 @@ export function collectDawnTriggerEdits(
     if (dawnScriptIsInteractive(script)) continue;
     // The ctx is built per occupant so `sourceId` is the character whose dawn
     // script is running, enabling self-effects (e.g. self-spark) to target it.
-    const ctx: StepContext = { side, state, random: Math.random, nowMs, sourceId: occupantId };
+    const ctx: StepContext = { side, state, random, nowMs, sourceId: occupantId };
     for (const step of script.steps) {
       if (step.kind === "edits") {
         edits.push(...step.build(ctx));
@@ -589,6 +590,7 @@ export function battleCardAutomationStatus(cardId: string): "auto" | "none" {
 export function planSupportRecompute(
   state: BattleMutableState,
   enabled: boolean,
+  random: () => number,
   nowMs: number,
 ): BattleDebugEdit[] {
   const sides: BattleSide[] = ["player", "enemy"];
@@ -609,7 +611,7 @@ export function planSupportRecompute(
   // 2. Accumulate Support bonuses from back-rank Supporters onto front allies.
   if (enabled) {
     for (const side of sides) {
-      const ctx: StepContext = { side, state, random: Math.random, nowMs };
+      const ctx: StepContext = { side, state, random, nowMs };
       for (const backSlot of rankSlotIds(state.sides[side].backRank)) {
         const supporterId = state.sides[side].backRank[backSlot];
         if (supporterId === null) continue;

@@ -1,20 +1,20 @@
 import { describe, expect, it } from "vitest";
-import { createBattleInit } from "../integration/create-battle-init";
+import { createBattleInit } from "../../battle/integration/create-battle-init";
 import {
   makeBattleTestCardDatabase,
   makeBattleTestDreamcallers,
   makeBattleTestSite,
   makeBattleTestState,
-} from "../test-support";
-import { createDebugEditHistoryMetadata } from "../debug/commands";
-import type { BattleDebugZoneDestination } from "../debug/commands";
-import type { BattleFieldSlotAddress } from "../types";
+} from "../../battle/test-support";
+import { createDebugEditHistoryMetadata } from "../../battle/debug/commands";
+import type { BattleDebugZoneDestination } from "../../battle/debug/commands";
+import type { BattleFieldSlotAddress } from "../../battle/types";
 import {
   battleControllerReducer,
   createBattleControllerState,
-} from "./controller";
-import { createInitialBattleState } from "./create-initial-state";
-import type { BattleReducerState } from "../types";
+} from "../../battle/state/controller";
+import { createInitialBattleState } from "../../battle/state/create-initial-state";
+import type { BattleReducerState } from "../../battle/types";
 
 /**
  * Coverage for the exhausted-can't-advance positional rule (rules §The Play

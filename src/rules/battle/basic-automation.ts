@@ -1,20 +1,20 @@
-import type { BattleCommand, BattleDebugEdit } from "../debug/commands";
+import type { BattleCommand, BattleDebugEdit } from "../../battle/debug/commands";
 import {
   type ChallengeResolution,
   resolveChallenge,
-} from "../engine/challenge";
-import { dreamwellEnergyEdits } from "../engine/energy";
-import { dawnClearEdits, endingBanishEdits } from "../engine/handoff";
+} from "../../battle/engine/challenge";
+import { dreamwellEnergyEdits } from "../../battle/engine/energy";
+import { dawnClearEdits, endingBanishEdits } from "../../battle/engine/handoff";
 import { collectDawnTriggerEdits } from "./battle-card-effects-table";
-import { selectBattleCardLocation } from "../state/selectors";
-import { drawsAtStartOfTurn } from "../state/turn-utils";
+import { selectBattleCardLocation } from "../../battle/state/selectors";
+import { drawsAtStartOfTurn } from "../../battle/state/turn-utils";
 import type {
   BattleMutableState,
   BattlePhase,
   BattleResult,
   BattleSide,
   DreamwellCardDefinition,
-} from "../types";
+} from "../../battle/types";
 
 /** An empty support map: the human/automation path runs over an unmodeled board. */
 const NO_SUPPORT_CONTRIBUTION: ReadonlyMap<string, number> = new Map();
@@ -119,6 +119,8 @@ export function planBasicAutomationCommands(
   state: BattleMutableState,
   command: BattleCommand,
   caps: BasicAutomationCaps,
+  random: () => number,
+  nowMs: number,
 ): BattleCommand[] {
   if (command.id !== "DEBUG_EDIT") {
     return [command];
@@ -136,7 +138,7 @@ export function planBasicAutomationCommands(
         return planChallengeOnly(state, command, caps);
       }
       if (BOOKEND_PHASES.has(command.edit.phase)) {
-        return planBookendAdvance(state, command, command.edit);
+        return planBookendAdvance(state, command, command.edit, random, nowMs);
       }
       return [command];
     default:
@@ -345,6 +347,8 @@ function planBookendAdvance(
   state: BattleMutableState,
   command: BattleCommand,
   edit: Extract<BattleDebugEdit, { kind: "SET_PHASE" }>,
+  random: () => number,
+  nowMs: number,
 ): BattleCommand[] {
   const side = state.activeSide;
   // Keep the original navigation so the bookend entry stays in history.
@@ -356,7 +360,7 @@ function planBookendAdvance(
   // finite `PHASE_SEQUENCE` toward a surfaced phase (`ending` is the last
   // bookend and resolves to `day`).
   while (BOOKEND_PHASES.has(phase)) {
-    for (const effectEdit of bookendEffectEdits(state, side, phase, state.turnNumber)) {
+    for (const effectEdit of bookendEffectEdits(state, side, phase, state.turnNumber, random, nowMs)) {
       commands.push(autoCommand(effectEdit));
     }
     phase = nextSurfaceableTarget(phase);
@@ -400,6 +404,8 @@ function bookendEffectEdits(
   side: BattleSide,
   phase: BattlePhase,
   turnNumber: number,
+  random: () => number,
+  nowMs: number,
 ): BattleDebugEdit[] {
   switch (phase) {
     case "draw":
@@ -409,7 +415,7 @@ function bookendEffectEdits(
     case "dawn":
       return [
         ...dawnClearEdits(state, side),
-        ...collectDawnTriggerEdits(state, side, Date.now()),
+        ...collectDawnTriggerEdits(state, side, random, nowMs),
       ];
     case "ending":
       return [

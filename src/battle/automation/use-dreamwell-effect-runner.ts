@@ -3,13 +3,13 @@ import type { DreamwellCardViewData } from "../../components/DreamwellCardView";
 import type { BattleDebugEdit } from "../debug/commands";
 import type { BattleMutableState, BattleSide, DreamwellCardDefinition } from "../types";
 import { createBattleLogBaseFields, logEvent } from "../../logging";
-import type { EffectPrompt, EffectStep } from "./effect-step";
-import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
+import type { EffectPrompt, EffectStep } from "../../rules/battle/effect-step";
+import { selectDreamwellEffectScript } from "../../rules/battle/dreamwell-effects-table";
 import {
   applyPromptResolution,
   planNextEffectStep,
-} from "./effect-runner-core";
-import type { ActivePrompt, PromptResolution } from "./effect-runner-core";
+} from "../../rules/battle/effect-runner-core";
+import type { ActivePrompt, PromptResolution } from "../../rules/battle/effect-runner-core";
 
 // ---------------------------------------------------------------------------
 // Public types

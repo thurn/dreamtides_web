@@ -3,15 +3,15 @@ import { createBattleLogBaseFields, logEvent } from "../../logging";
 import type { BattleDebugEdit } from "../debug/commands";
 import type { BattleCardInstance, BattleMutableState, BattleSide } from "../types";
 import { rankSlotIds } from "../types";
-import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
-import { alliesInPlay } from "./effect-step";
+import type { EffectPrompt, EffectStep, StepContext } from "../../rules/battle/effect-step";
+import { alliesInPlay } from "../../rules/battle/effect-step";
 import {
   dawnScriptIsInteractive,
   planSupportRecompute,
   selectBattleCardEffectScript,
-} from "./battle-card-effects-table";
-import { applyPromptResolution, planNextEffectStep } from "./effect-runner-core";
-import type { ActivePrompt, PromptResolution } from "./effect-runner-core";
+} from "../../rules/battle/battle-card-effects-table";
+import { applyPromptResolution, planNextEffectStep } from "../../rules/battle/effect-runner-core";
+import type { ActivePrompt, PromptResolution } from "../../rules/battle/effect-runner-core";
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -624,7 +624,10 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
     // regardless of `enabled`: when disabled, planSupportRecompute targets every
     // in-play instance to 0, clearing any prior bonus.)
     if (!isPrimaryClient) return;
-    const edits = planSupportRecompute(state, enabled, Date.now());
+    // Interim (Task 27 cutover): the fold-time driver will inject a seeded RNG
+    // and the event's timestamp. Until then this legacy hook supplies live
+    // nondeterminism explicitly at the call site.
+    const edits = planSupportRecompute(state, enabled, Math.random, Date.now());
     if (edits.length === 0) return;
     for (const edit of edits) {
       dispatchEdit(edit);

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { BackRankSlotId, BattleMutableState, BattleSide, FrontRankSlotId } from "../types";
-import { emptyBackRankSlots, emptyFrontRankSlots } from "../test-support";
+import type { BackRankSlotId, BattleMutableState, BattleSide, FrontRankSlotId } from "../../battle/types";
+import { emptyBackRankSlots, emptyFrontRankSlots } from "../../battle/test-support";
 import {
   alliesInPlay,
   charactersInVoid,
@@ -589,7 +589,7 @@ function makeCtx(
 /** Extract and assert the first edits step's build function; fails test if missing. */
 function getFirstEditsBuild(
   scriptId: string,
-): ((ctx: import("./effect-step").StepContext) => import("../debug/commands").BattleDebugEdit[]) {
+): ((ctx: import("./effect-step").StepContext) => import("../../battle/debug/commands").BattleDebugEdit[]) {
   const script = DREAMWELL_EFFECTS[scriptId];
   if (script === undefined) throw new Error(`no script for ${scriptId}`);
   const step = script.steps[0];

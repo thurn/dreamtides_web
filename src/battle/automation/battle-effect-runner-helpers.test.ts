@@ -7,9 +7,9 @@ import type {
   FrontRankSlotId,
 } from "../types";
 import { backRankSlotIds, createEmptySlotRecord, frontRankSlotIds } from "../types";
-import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
-import { applyPromptResolution, planNextEffectStep } from "./effect-runner-core";
-import { BATTLE_CARD_EFFECTS } from "./battle-card-effects-table";
+import type { EffectPrompt, EffectStep, StepContext } from "../../rules/battle/effect-step";
+import { applyPromptResolution, planNextEffectStep } from "../../rules/battle/effect-runner-core";
+import { BATTLE_CARD_EFFECTS } from "../../rules/battle/battle-card-effects-table";
 import {
   POST_DAWN_PHASES,
   collectInteractiveDawnRuns,

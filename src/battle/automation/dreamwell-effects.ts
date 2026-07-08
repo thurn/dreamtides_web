@@ -1,4 +1,4 @@
-import type { EffectStep } from "./effect-step";
+import type { EffectStep } from "../../rules/battle/effect-step";
 
 // ---------------------------------------------------------------------------
 // Dreamwell effect script

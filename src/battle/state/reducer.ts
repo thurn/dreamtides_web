@@ -14,7 +14,7 @@ import {
   createEmptyBattleHistory,
 } from "./history";
 import { logEvent } from "../../logging";
-import { applyDebugEdit, forceBattleResult } from "./apply-debug-edit";
+import { applyDebugEdit, forceBattleResult } from "../../rules/battle/apply-debug-edit";
 import { createReducerTransition } from "./transition";
 
 export function createBattleReducerState(

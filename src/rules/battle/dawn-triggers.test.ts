@@ -5,8 +5,8 @@ import type {
   BattleMutableState,
   BattleSide,
   FrontRankSlotId,
-} from "../types";
-import { backRankSlotIds, createEmptySlotRecord, frontRankSlotIds } from "../types";
+} from "../../battle/types";
+import { backRankSlotIds, createEmptySlotRecord, frontRankSlotIds } from "../../battle/types";
 import type { BattleCardEffectScript } from "./battle-card-effects-table";
 import {
   BATTLE_CARD_EFFECTS,
@@ -89,7 +89,7 @@ describe("collectDawnTriggerEdits", () => {
       player: { front: { F0: { battleCardId: "drift", cardId: DRIFTCALLER_SOVEREIGN } } },
     });
 
-    expect(collectDawnTriggerEdits(state, "player", 0)).toEqual([
+    expect(collectDawnTriggerEdits(state, "player", () => 0, 0)).toEqual([
       { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: 1 },
     ]);
   });
@@ -102,7 +102,7 @@ describe("collectDawnTriggerEdits", () => {
       },
     });
 
-    expect(collectDawnTriggerEdits(state, "player", 0)).toEqual([]);
+    expect(collectDawnTriggerEdits(state, "player", () => 0, 0)).toEqual([]);
   });
 
   it("ignores a dawn character controlled by the other side", () => {
@@ -111,9 +111,9 @@ describe("collectDawnTriggerEdits", () => {
     });
 
     // Computing for "player" sees nothing on its own ranks.
-    expect(collectDawnTriggerEdits(state, "player", 0)).toEqual([]);
+    expect(collectDawnTriggerEdits(state, "player", () => 0, 0)).toEqual([]);
     // The enemy's own Dawn would gain it energy.
-    expect(collectDawnTriggerEdits(state, "enemy", 0)).toEqual([
+    expect(collectDawnTriggerEdits(state, "enemy", () => 0, 0)).toEqual([
       { kind: "ADJUST_CURRENT_ENERGY", side: "enemy", amount: 1 },
     ]);
   });
@@ -123,7 +123,7 @@ describe("collectDawnTriggerEdits", () => {
       player: { back: { B2: { battleCardId: "drift-back", cardId: DRIFTCALLER_SOVEREIGN } } },
     });
 
-    expect(collectDawnTriggerEdits(state, "player", 0)).toEqual([
+    expect(collectDawnTriggerEdits(state, "player", () => 0, 0)).toEqual([
       { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: 1 },
     ]);
   });
@@ -156,7 +156,7 @@ describe("collectDawnTriggerEdits", () => {
       const state = makeState({
         player: { front: { F0: { battleCardId: "interactive", cardId: INTERACTIVE_DAWN } } },
       });
-      expect(collectDawnTriggerEdits(state, "player", 0)).toEqual([]);
+      expect(collectDawnTriggerEdits(state, "player", () => 0, 0)).toEqual([]);
     });
 
     it("still collects deterministic Dawn cards on the same board", () => {
@@ -168,7 +168,7 @@ describe("collectDawnTriggerEdits", () => {
       });
       // Only Driftcaller's deterministic +1 energy survives; the interactive
       // card contributes nothing.
-      expect(collectDawnTriggerEdits(state, "player", 0)).toEqual([
+      expect(collectDawnTriggerEdits(state, "player", () => 0, 0)).toEqual([
         { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: 1 },
       ]);
     });

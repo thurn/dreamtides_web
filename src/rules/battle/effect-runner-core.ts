@@ -1,4 +1,4 @@
-import type { BattleDebugEdit } from "../debug/commands";
+import type { BattleDebugEdit } from "../../battle/debug/commands";
 import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
 
 // ---------------------------------------------------------------------------

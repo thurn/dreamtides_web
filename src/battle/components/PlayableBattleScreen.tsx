@@ -50,7 +50,7 @@ import type { BattleCommand, BattleDebugEdit } from "../debug/commands";
 import { useBattleAi, type AiProposal } from "../ai/use-battle-ai";
 import { aiMayRunHere } from "../ai/ai-may-run-here";
 import { dreamwellEnergyEdits } from "../engine/energy";
-import { planBasicAutomationCommands } from "../automation/basic-automation";
+import { planBasicAutomationCommands } from "../../rules/battle/basic-automation";
 import { BattleActionBar } from "./BattleActionBar";
 import { BattleCardHoverPreview } from "./BattleCardHoverPreview";
 import { BattleContextMenu } from "./BattleContextMenu";
@@ -74,8 +74,8 @@ import { BattleCardPickerOverlay } from "./BattleCardPickerOverlay";
 import { BattleChoicePromptOverlay } from "./BattleChoicePromptOverlay";
 import { useDreamwellEffectRunner } from "../automation/use-dreamwell-effect-runner";
 import { useBattleEffectRunner } from "../automation/use-battle-effect-runner";
-import { dreamwellAutomationStatus } from "../automation/dreamwell-effects-table";
-import { collectAutomationHashDrift } from "../automation/battle-card-effects-table";
+import { dreamwellAutomationStatus } from "../../rules/battle/dreamwell-effects-table";
+import { collectAutomationHashDrift } from "../../rules/battle/battle-card-effects-table";
 import { BattlefieldGrid } from "./BattlefieldGrid";
 import { BattleZoneBrowser } from "./BattleZoneBrowser";
 import {
@@ -263,11 +263,20 @@ function PlayableBattleScreenInner({
     // Challenge, ramps energy, and draws). The planner reads the live state and
     // returns the ordered command list; with automation off it is a passthrough.
     if (isBasicAutomationEnabled) {
-      const plannedCommands = planBasicAutomationCommands(reducerState.mutable, command, {
-        maxEnergyCap: battleInit.maxEnergyCap,
-        scoreToWin: battleInit.scoreToWin,
-        dreamwellDeck: battleInit.dreamwellDeck,
-      });
+      const plannedCommands = planBasicAutomationCommands(
+        reducerState.mutable,
+        command,
+        {
+          maxEnergyCap: battleInit.maxEnergyCap,
+          scoreToWin: battleInit.scoreToWin,
+          dreamwellDeck: battleInit.dreamwellDeck,
+        },
+        // Interim (Task 27 cutover): the fold-time driver will inject a seeded
+        // RNG and the event's timestamp. Until then the legacy dispatch path
+        // supplies live nondeterminism explicitly at the call site.
+        Math.random,
+        Date.now(),
+      );
       for (const planned of plannedCommands) {
         dispatch({ type: "APPLY_COMMAND", command: planned });
       }

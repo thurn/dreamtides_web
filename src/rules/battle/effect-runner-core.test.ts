@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { BattleMutableState } from "../types";
+import type { BattleMutableState } from "../../battle/types";
 import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
 import {
   applyPromptResolution,
