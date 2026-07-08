@@ -8,7 +8,9 @@ Components · Live demo & interactive props: `/tango#/dreamcaller-portrait`
 
 Real consumers: **19** (imports outside `src/tango/docs/` and tests).
 
-The framed Dreamcaller character-art component: hero, panel, and thumb crops over the shared tinted portrait backdrop with a monogram fallback.
+The one way to render a dreamcaller's character art: the transparent full-body cutout standing on a tinted radial backdrop, in one of five fixed framings. Three are self-framing — a large `hero` showcase, a square `panel` for profile cards and popovers, and a small square `thumb` for HUD rows and resident lists. Two are full-bleed fills that paint edge to edge over a caller's own stage — `standing` for the desktop Dreamcaller-select column and `fullBleed` for the mobile carousel page. The frame chrome and the per-variant crop belong to the design system; a caller supplies only the dreamcaller data, the variant, and an optional pixel `size`. When the art asset 404s the portrait falls back to a tinted monogram disc so a missing image never leaves an empty hole.
+
+> **Guidance:** There is no style or className escape hatch. To size the portrait pass a fixed pixel `size` — a sized portrait then refuses to shrink in a flex row — or omit `size` to fill the container width. The `standing` and `fullBleed` variants ignore `size` and fill the caller's `position: relative` stage. For any other layout (margins, a decorative glow), wrap the portrait in your own element.
 
 ## Props
 
@@ -28,8 +30,46 @@ The framed Dreamcaller character-art component: hero, panel, and thumb crops ove
 
 ## Usage
 
+### Hero showcase
+
+The large framing. Omit `size` to fill the container, or pass a pixel `size` to fix its width.
+
 ```tsx
 import { DreamcallerPortrait } from "src/tango/components/hud/DreamcallerPortrait";
 
-<DreamcallerPortrait dreamcaller={dreamcaller} variant="panel" size={160} />
+<DreamcallerPortrait dreamcaller={dreamcaller} variant="hero" />
+```
+
+### Panel in a profile card
+
+The square framing for profile cards and popovers. A pixel `size` keeps it square and stops it shrinking in a flex row.
+
+```tsx
+<DreamcallerPortrait
+  dreamcaller={dreamcaller}
+  variant="panel"
+  size={160}
+/>
+```
+
+### Thumb in a HUD row
+
+The small square framing for HUD rows and resident lists.
+
+```tsx
+<DreamcallerPortrait
+  dreamcaller={dreamcaller}
+  variant="thumb"
+  size={56}
+/>
+```
+
+### Full-bleed stage fill
+
+`standing` (desktop column) and `fullBleed` (mobile carousel) paint edge to edge over the caller's own relative-positioned stage; they ignore `size`.
+
+```tsx
+<div style={{ position: "relative", width: 320, height: 480 }}>
+  <DreamcallerPortrait dreamcaller={dreamcaller} variant="standing" />
+</div>
 ```
