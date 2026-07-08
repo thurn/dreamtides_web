@@ -1,4 +1,5 @@
 import { assetUrl } from "../../../runtime/asset-url";
+import { GLYPHS } from "../../primitives/glyph";
 
 /**
  * Visual presentation data for the redesigned Dream Atlas screen. The Atlas
@@ -38,7 +39,7 @@ export function dreamsignIconUrl(imageName: string): string {
 export const ROUND_FRAME_URL = assetUrl("/atlas/Round_frame_main.png");
 
 /** Boxicons class used for the "Card Affiliation" row in the preview card. */
-export const AFFILIATION_ROW_ICON_CLASS = "bxf bx-rectangle-vertical";
+export const AFFILIATION_ROW_ICON_CLASS = GLYPHS.affiliationRow;
 
 /** Font Awesome flag glyph the starting dreamscape shows as its site mark. */
 export const STARTER_FLAG_ICON_CLASS = "fa-solid fa-flag";

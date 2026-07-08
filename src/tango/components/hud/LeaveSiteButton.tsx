@@ -9,6 +9,7 @@
 // (`label`), and a test hook (`testId`). There is no style/className escape
 // hatch: the button always looks and sits the same.
 
+import { GLYPHS } from "../../primitives/glyph";
 import "./leave-site-button.css";
 
 /** Props for {@link LeaveSiteButton}. */
@@ -43,7 +44,7 @@ export function LeaveSiteButton({
       disabled={disabled}
       onClick={onLeave}
     >
-      <i className="bx bx-x" aria-hidden="true" />
+      <i className={GLYPHS.close} aria-hidden="true" />
     </button>
   );
 }

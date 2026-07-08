@@ -29,7 +29,7 @@ import { InfoCard } from "../overlay/InfoCard";
 import { richText, type RichText } from "../card/rich-text";
 import { type ScatterPoint } from "./dreamscape-scatter";
 import type { SiteState } from "../../../types/quest";
-import { type Glyph } from "../../primitives/glyph";
+import { type Glyph, GLYPHS } from "../../primitives/glyph";
 import { type TangoColor, withAlpha } from "../../primitives/color";
 import { token } from "../../primitives/tokens";
 import "./site-node.css";
@@ -234,12 +234,12 @@ export function SiteNode({
       )}
       {site.isVisited && (
         <span className="ds-node-badge visited" aria-hidden="true">
-          <i className="bx bx-check" />
+          <i className={GLYPHS.check} />
         </span>
       )}
       {isLocked && !site.isVisited && (
         <span className="ds-node-badge locked" aria-hidden="true">
-          <i className="bxf bx-lock" />
+          <i className={GLYPHS.lock} />
         </span>
       )}
       {anchor &&

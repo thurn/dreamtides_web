@@ -62,7 +62,7 @@ The reference files and the index are projections of the component sources
 | Info Card | Components | 14 | [components/info-card.md](components/info-card.md) | The one press-to-reveal information card. |
 | Hover Popover | Components | 13 | [components/hover-popover.md](components/hover-popover.md) | The pointer-and-focus anchored popover primitive for glossary definitions and compact card previews, with viewport-aware placement. |
 | Group Panel | Components | 2 | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |
-| Glow Icon | Components | 7 | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a named glyph, role color, optional soft shadow, and optional emitted-light filter in one square footprint. |
+| Glow Icon | Components | 8 | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a named glyph, role color, optional soft shadow, and optional emitted-light filter in one square footprint. |
 | Pip Badge | Components | 3 | [components/pip-badge.md](components/pip-badge.md) | The compact circular number badge for inline spark and energy references, with the matching resource fill and optional explanatory tooltip. |
 | Quest Status Bar | Components | 3 | [components/quest-status-bar.md](components/quest-status-bar.md) | The persistent, transparent bottom HUD for quest screens. |
 | Dreamcaller Portrait | Components | 19 | [components/dreamcaller-portrait.md](components/dreamcaller-portrait.md) | The framed Dreamcaller character-art component: hero, panel, and thumb crops over the shared tinted portrait backdrop with a monogram fallback. |

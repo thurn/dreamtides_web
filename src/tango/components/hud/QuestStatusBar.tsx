@@ -46,6 +46,7 @@ import { richText } from "../card/rich-text";
 import { token } from "../../primitives/tokens";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
 import { IconButton } from "../controls/IconButton";
+import { GlowIcon } from "../controls/GlowIcon";
 import { GLYPHS } from "../../primitives/glyph";
 import { Dreamsign, dreamsignArtUrl, DS_SHADOW } from "./Dreamsign";
 import type { Dreamsign as DreamsignData } from "../../../types/quest";
@@ -486,10 +487,10 @@ function QsbEssence({
       }}
     >
       {essence}
-      <i
-        className="bxf bx-crypto"
-        aria-hidden="true"
-        style={{ color: token("--essence"), fontSize: Math.round(20 * scale) }}
+      <GlowIcon
+        iconClass={GLYPHS.essence}
+        color="essence"
+        size={`${String(Math.round(20 * scale))}px`}
       />
       {anchor &&
         stageRef.current &&

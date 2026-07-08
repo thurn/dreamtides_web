@@ -16,6 +16,7 @@ import {
 import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
 import { BOLT_ICON_CLASS } from "../controls/GlowIcon";
+import { glyph } from "../../primitives/glyph";
 import { type TangoColor, resolveColor } from "../../primitives/color";
 import { CardStatOrb } from "./CardStatOrb";
 import { TRANSFIGURATION_ICONS } from "../../../runtime/transfiguration-display";
@@ -1088,7 +1089,7 @@ export function GameCard({
       </span>
       {transfiguration !== undefined ? (
         <i
-          className={`bxf ${TRANSFIGURATION_ICONS[transfiguration.type]}`}
+          className={glyph(`bxf ${TRANSFIGURATION_ICONS[transfiguration.type]}`)}
           aria-label={`${transfiguration.type} transfiguration`}
           title={`${transfiguration.type} Transfiguration`}
           style={{

@@ -14,9 +14,10 @@
 // glyph and its number by hand.
 
 import { token } from "../../primitives/tokens";
+import { GLYPHS } from "../../primitives/glyph";
 
 /** The filled Boxicons crypto glyph — the essence currency mark everywhere. */
-const ESSENCE_ICON_CLASS = "bxf bx-crypto";
+const ESSENCE_ICON_CLASS = GLYPHS.essence;
 
 /**
  * The essence currency glyph on its own, inheriting the surrounding text color

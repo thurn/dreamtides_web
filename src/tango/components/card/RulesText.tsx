@@ -13,6 +13,7 @@ import {
   SPARK_INLINE_ICON_CLASS,
 } from "../controls/GlowIcon";
 import { type TangoColor, resolveColor } from "../../primitives/color";
+import { GLYPHS } from "../../primitives/glyph";
 
 /**
  * Renders rules text with:
@@ -65,7 +66,7 @@ const BOLT_ICON_COLOR = "#ffffff";
  * matches the purple used for glossary headings and the boon-dreamsign accent.
  */
 const ESSENCE_TEXT_COLOR = "#c4b5fd";
-const ESSENCE_ICON_CLASS = "bxf bx-crypto";
+const ESSENCE_ICON_CLASS = GLYPHS.essence;
 
 /**
  * Quest site names ("draft", "shop", "dream journey", …) are tinted this blue
@@ -88,13 +89,13 @@ const SYMBOL_ICON_CLASSES: Readonly<
   Record<string, { className: string; color?: string; label: string }>
 > = {
   trigger: {
-    className: "bxf bx-caret-right",
+    className: GLYPHS.caretRight,
     color: SYMBOL_COLORS.trigger,
     label: "trigger",
   },
-  points: { className: "bxf bx-star-circle", label: "points" },
-  lunar: { className: "bxf bx-moon", label: "lunar" },
-  store: { className: "bxf bx-hourglass", label: "stored time" },
+  points: { className: GLYPHS.points, label: "points" },
+  lunar: { className: GLYPHS.exhaust, label: "lunar" },
+  store: { className: GLYPHS.counter, label: "stored time" },
 };
 
 /**
