@@ -13,13 +13,15 @@
 // left-to-right on desktop; this surface only scales the design stage to fit and
 // reveals each node.
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { type AtlasNodeView } from "./AtlasNode";
 import { AtlasEdge, type AtlasEdgeKind } from "./AtlasEdge";
 import {
   AtlasNodeReveal,
   type AtlasNodeCard,
 } from "./AtlasNodeReveal";
+import { glassSurfaceStyle } from "../controls/glass-surface";
+import { atlasPreflightImageUrls } from "./atlas-preflight";
 import "./atlas.css";
 
 /** One placed node: its face view plus the resolved InfoCard reveal content. */
@@ -54,6 +56,94 @@ interface AtlasMapProps {
   stageRef: React.RefObject<HTMLElement | null>;
 }
 
+function usePreloadImages(urls: string[]): void {
+  useEffect(() => {
+    if (typeof document === "undefined" || typeof Image === "undefined") {
+      return;
+    }
+
+    const links: HTMLLinkElement[] = [];
+    const images: HTMLImageElement[] = [];
+
+    for (const url of urls) {
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "image";
+      link.href = url;
+      document.head.append(link);
+      links.push(link);
+
+      const image = new Image();
+      image.decoding = "async";
+      image.src = url;
+      images.push(image);
+      void image.decode?.().catch(() => undefined);
+    }
+
+    return () => {
+      for (const link of links) {
+        link.remove();
+      }
+      for (const image of images) {
+        image.src = "";
+      }
+    };
+  }, [urls]);
+}
+
+function AtlasPreflight({ nodes }: { nodes: AtlasMapNode[] }) {
+  const urls = useMemo(() => atlasPreflightImageUrls(nodes), [nodes]);
+  usePreloadImages(urls);
+
+  return (
+    <div aria-hidden="true" data-atlas-preflight="" style={preflightStyle}>
+      <div style={glassWarmupStyle} />
+      {urls.map((url) => (
+        <img
+          key={url}
+          src={url}
+          alt=""
+          draggable={false}
+          loading="eager"
+          decoding="async"
+          style={preloadImageStyle}
+        />
+      ))}
+    </div>
+  );
+}
+
+const preflightStyle: React.CSSProperties = {
+  position: "absolute",
+  inset: 0,
+  zIndex: 0,
+  pointerEvents: "none",
+  userSelect: "none",
+  overflow: "hidden",
+};
+
+const glassWarmupStyle: React.CSSProperties = {
+  ...glassSurfaceStyle(),
+  position: "absolute",
+  left: 0,
+  top: 0,
+  width: 1,
+  height: 1,
+  opacity: 0.001,
+  transform: "translateZ(0)",
+  willChange: "backdrop-filter, -webkit-backdrop-filter",
+};
+
+const preloadImageStyle: React.CSSProperties = {
+  position: "absolute",
+  left: 0,
+  top: 0,
+  width: 1,
+  height: 1,
+  opacity: 0.001,
+  objectFit: "cover",
+};
+
 /**
  * The scaled Dream Atlas stage: draws the edges beneath the nodes, reveals each
  * node's detail InfoCard on press / hover, and uniformly scales the fixed design
@@ -87,6 +177,7 @@ export function AtlasMap({
       className="dream-atlas"
       style={{ position: "absolute", inset: 0, zIndex: 2 }}
     >
+      <AtlasPreflight nodes={nodes} />
       <div
         style={{
           position: "absolute",
