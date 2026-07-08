@@ -36,8 +36,9 @@ interface ResolvedEntry {
 /** Diameter of the corner close disc; a comfortable touch target. */
 const CLOSE_BUTTON_PX = 44;
 const ROOMY_DESKTOP_QUERY = "(min-width: 1400px) and (min-height: 800px)";
-const ROOMY_DESKTOP_CARD_MIN_PX = 220;
-const ROOMY_DESKTOP_HOVER_TARGET_PX = 250;
+const ROOMY_DESKTOP_PANEL_MAX_WIDTH_PX = 1120;
+const ROOMY_DESKTOP_CARD_MIN_PX = 208;
+const ROOMY_DESKTOP_HOVER_TARGET_PX = 236;
 
 function useRoomyStartingDeckModal(): boolean {
   const [roomy, setRoomy] = useState<boolean>(() =>
@@ -153,11 +154,14 @@ export function StartingDeckModal({
         ...glass,
         position: "relative",
         width: "100%",
-        // Wide enough to lay the deck out in a couple of rows so the dialog
-        // stays short; capped at 85vh (plus the backdrop's own padding) so it
-        // never runs to the viewport edge.
-        maxWidth: useRoomyLayout ? "min(1280px, 90vw)" : "min(900px, 90vw)",
-        maxHeight: "85vh",
+        // Wide enough to lay the deck out in two rows while leaving explicit
+        // viewport padding so the dialog never runs to the screen edge.
+        maxWidth: useRoomyLayout
+          ? `min(${String(ROOMY_DESKTOP_PANEL_MAX_WIDTH_PX)}px, 90vw)`
+          : "min(900px, 90vw)",
+        maxHeight: useRoomyLayout
+          ? `calc(100vh - ${token("--space-8")} - ${token("--space-8")})`
+          : "85vh",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
@@ -185,7 +189,7 @@ export function StartingDeckModal({
     gap: token("--space-4"),
     borderBottom: `1px solid ${token("--border-strong")}`,
     ...(isDesktop
-      ? { padding: useRoomyLayout ? token("--space-7") : token("--space-6") }
+      ? { padding: token("--space-6") }
       : {
           // Clear the device screen cut-out on a full-bleed overlay.
           // `--safe-area-inset-top` carries the real inset on device and the
@@ -323,7 +327,7 @@ export function StartingDeckModal({
                 flex: scrollFlex,
                 minHeight: 0,
                 WebkitOverflowScrolling: "touch",
-                padding: useRoomyLayout ? token("--space-7") : token("--space-5"),
+                padding: useRoomyLayout ? token("--space-6") : token("--space-5"),
               }}
               data-testid="starting-deck-modal-scroll"
             >
@@ -348,7 +352,7 @@ export function StartingDeckModal({
                             ROOMY_DESKTOP_CARD_MIN_PX,
                           )}px, 1fr))`
                         : "repeat(auto-fill, minmax(140px, 1fr))",
-                    gap: useRoomyLayout ? token("--space-5") : token("--space-4"),
+                    gap: token("--space-4"),
                   }}
                   data-testid="starting-deck-modal-grid"
                 >

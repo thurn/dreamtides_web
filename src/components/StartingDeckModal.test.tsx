@@ -405,10 +405,13 @@ describe("StartingDeckModal", () => {
     );
 
     expect(backdrop?.style.padding).toBe("var(--space-8)");
-    expect(panel?.style.maxWidth).toBe("min(1280px, 90vw)");
-    expect(scroll?.style.padding).toBe("var(--space-7)");
-    expect(grid?.style.gridTemplateColumns).toContain("minmax(220px, 1fr)");
-    expect(grid?.style.gap).toBe("var(--space-5)");
+    expect(panel?.style.maxWidth).toBe("min(1120px, 90vw)");
+    expect(panel?.style.maxHeight).toBe(
+      "calc(100vh - var(--space-8) - var(--space-8))",
+    );
+    expect(scroll?.style.padding).toBe("var(--space-6)");
+    expect(grid?.style.gridTemplateColumns).toContain("minmax(208px, 1fr)");
+    expect(grid?.style.gap).toBe("var(--space-4)");
 
     act(() => {
       root.unmount();
