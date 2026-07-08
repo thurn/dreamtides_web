@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
 import type { GameEvent, EventContext, Genesis } from "../eventlog/types";
+import type {
+  BattleCardInstance,
+  BattleMutableState,
+  BattleSide,
+} from "../battle/types";
+import { emptyBackRankSlots, emptyFrontRankSlots } from "../battle/test-support";
 import { genesisFoldState, type FoldState } from "./fold-state";
 import {
   isCasExempt,
@@ -143,6 +149,119 @@ function stateWithPendingPrompt(promptId: number): FoldState {
   return { ...base, battle };
 }
 
+// A note payload matching the `{ noteId, text, expiry }` shape SET_CARD_NOTE
+// stores (the shape the battle note editor writes).
+const NOTE_PAYLOAD = {
+  noteId: "n1",
+  text: "hi",
+  expiry: { kind: "manual" },
+};
+
+function makeBattleSide(): BattleMutableState["sides"][BattleSide] {
+  return {
+    currentEnergy: 0,
+    maxEnergy: 0,
+    score: 0,
+    visibility: {},
+    deck: [],
+    hand: [],
+    void: [],
+    banished: [],
+    backRank: emptyBackRankSlots(),
+    frontRank: emptyFrontRankSlots(),
+    fatigueCount: 0,
+    dreamwellCardIndex: null,
+    dreamwellDrawnTurn: null,
+  } as BattleMutableState["sides"][BattleSide];
+}
+
+function makeCardInstance(battleCardId: string): BattleCardInstance {
+  return {
+    battleCardId,
+    definition: {
+      sourceDeckEntryId: null,
+      cardId: "card-uuid",
+      cardNumber: 0,
+      name: "Fixture Card",
+      battleCardKind: "character",
+      subtype: "Unit",
+      energyCost: 0,
+      printedEnergyCost: 0,
+      printedSpark: 1,
+      isFast: false,
+      reclaimCost: null,
+      renderedText: "",
+      imageNumber: 0,
+      transfiguration: null,
+      isBane: false,
+    },
+    owner: "player",
+    controller: "player",
+    sparkDelta: 0,
+    staticSparkBonus: 0,
+    isRevealedToPlayer: true,
+    status: {
+      isExhausted: false,
+      counters: 0,
+      reclaimed: false,
+      offering: false,
+      ephemeral: false,
+      veil: false,
+      grantedUnstoppable: false,
+      grantedVengeful: false,
+      grantedPreeminence: false,
+      grantedAwakened: false,
+    },
+    markers: { isPrevented: false, isCopied: false },
+    notes: [],
+    provenance: {
+      kind: "quest-deck",
+      sourceBattleCardId: null,
+      chosenSpark: null,
+      chosenSubtype: null,
+      createdAtTurnNumber: null,
+      createdAtSide: null,
+      createdAtMs: null,
+    },
+  };
+}
+
+/**
+ * A fold state inside a battle with one real card instance (`cardId`), and
+ * optionally an open prompt. SET_CARD_NOTE needs a live card to annotate, so
+ * the CAS-exempt seam tests use this rather than the board-less fixtures above.
+ */
+function stateWithBattleCard(cardId: string, promptId?: number): FoldState {
+  const base = foldStateWithEssence(100);
+  const board: BattleMutableState = {
+    battleId: "b",
+    activeSide: "player",
+    turnNumber: 3,
+    phase: "day",
+    result: null,
+    forcedResult: null,
+    dreamwellDeckIndex: 0,
+    nextBattleCardOrdinal: 100,
+    sides: { player: makeBattleSide(), enemy: makeBattleSide() },
+    cardInstances: { [cardId]: makeCardInstance(cardId) },
+  } as BattleMutableState;
+  const battle = {
+    init: {} as never,
+    board,
+    effectQueue: [],
+    pendingPrompt:
+      promptId === undefined
+        ? null
+        : {
+            promptId,
+            run: { scriptRef: { table: "dreamwell", id: "" }, cursor: [0], side: "player" },
+            kind: "foresee",
+            options: { kind: "foresee", count: 0 },
+          },
+  } as unknown as NonNullable<FoldState["battle"]>;
+  return { ...base, battle };
+}
+
 describe("rule 4 — prompt gate", () => {
   it("bounces a non-RESOLVE intent while a prompt is pending", () => {
     const state = stateWithPendingPrompt(1);
@@ -151,37 +270,33 @@ describe("rule 4 — prompt gate", () => {
     expect(result.state.quest.essence).toBe(100);
   });
 
-  it("routes a matching-promptId RESOLVE_PROMPT past the gate (reaches rule 5)", () => {
+  it("applies a matching-promptId RESOLVE_PROMPT past the CAS gate (rule 2 fast path)", () => {
     const state = stateWithPendingPrompt(1);
-    // RESOLVE_PROMPT has no domain case yet, so it bounces at rule 5 — but it
-    // must NOT be blocked by rule 4. We observe this by confirming it is not
-    // rejected for the same reason a mismatched promptId would be: a matching
-    // resolve reaches routing (still bounced today), while a partner-window
-    // that would otherwise gate is skipped.
     const result = reduceGameEvent(
       state,
-      event("RESOLVE_PROMPT", { promptId: 1, resolution: {} }),
+      event("RESOLVE_PROMPT", { promptId: 1, resolution: { kind: "foresee" } }),
       ctx({
         // A partner-intervening event that WOULD bounce at rule 3 — the fast
-        // path (rule 2) must skip rule 3, proving the gate was bypassed.
+        // path (rule 2) skips rules 3–4, so the matching resolve still applies.
         intervening: [{ seq: 5, actor: "bob", type: "ADJUST_ESSENCE" }],
       }),
     );
-    // Rule 5 has no RESOLVE_PROMPT case yet → bounced, but crucially it was not
-    // bounced by rules 3/4 (which would also bounce). We assert state unchanged
-    // and outcome bounced; the seam note documents that once RESOLVE_PROMPT's
-    // domain case lands this becomes "applied".
-    expect(result.outcome).toBe("bounced");
+    // The domain case resolves the open prompt and clears it.
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.pendingPrompt).toBeNull();
   });
 
-  it("bounces a RESOLVE_PROMPT whose promptId does not match", () => {
+  it("bounces a RESOLVE_PROMPT whose promptId does not match, leaving the prompt open", () => {
     const state = stateWithPendingPrompt(1);
     const result = reduceGameEvent(
       state,
-      event("RESOLVE_PROMPT", { promptId: 999, resolution: {} }),
+      event("RESOLVE_PROMPT", { promptId: 999, resolution: { kind: "foresee" } }),
       ctx(),
     );
+    // A stale/mismatched promptId is gated by rule 4 (a pending prompt bounces
+    // any non-matching intent) and never reaches the domain case.
     expect(result.outcome).toBe("bounced");
+    expect(result.state.battle?.pendingPrompt?.promptId).toBe(1);
   });
 });
 
@@ -190,31 +305,32 @@ describe("rule 4 — prompt gate", () => {
 // ---------------------------------------------------------------------------
 
 describe("rule 1 — CAS-exempt types", () => {
-  it("does not bounce SET_CARD_NOTE through a hostile partner window", () => {
-    const state = foldStateWithEssence(100);
+  it("applies SET_CARD_NOTE through a hostile partner window", () => {
+    const state = stateWithBattleCard("i1");
     const result = reduceGameEvent(
       state,
-      event("SET_CARD_NOTE", { instanceId: "i1", note: "hi" }),
+      event("SET_CARD_NOTE", { instanceId: "i1", note: NOTE_PAYLOAD }),
       ctx({
         intervening: [{ seq: 5, actor: "bob", type: "ADJUST_ESSENCE" }],
       }),
     );
-    // No domain case yet → routes to rule 5 and bounces there, but was NOT
-    // bounced by rule 3. We assert it reached routing by not being blocked by
-    // the window; today rule 5 has no SET_CARD_NOTE effect so outcome is
-    // bounced. The seam note tracks this.
-    expect(result.outcome).toBe("bounced");
+    // CAS-exempt (rule 1): skips rules 2–4, so the hostile partner window never
+    // gates it. The domain case stores the note on the card.
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.board.cardInstances["i1"].notes).toHaveLength(1);
   });
 
-  it("does not bounce SET_CARD_NOTE through an open prompt (rule 4 skipped)", () => {
-    const state = stateWithPendingPrompt(1);
+  it("applies SET_CARD_NOTE through an open prompt (rule 4 skipped)", () => {
+    const state = stateWithBattleCard("i1", 1);
     const result = reduceGameEvent(
       state,
-      event("SET_CARD_NOTE", { instanceId: "i1", note: "hi" }),
+      event("SET_CARD_NOTE", { instanceId: "i1", note: NOTE_PAYLOAD }),
       ctx(),
     );
-    // Same seam: not blocked by rule 4; bounces only because no domain case.
-    expect(result.outcome).toBe("bounced");
+    // CAS-exempt: applies even while a prompt is open, and leaves it intact.
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.board.cardInstances["i1"].notes).toHaveLength(1);
+    expect(result.state.battle?.pendingPrompt?.promptId).toBe(1);
   });
 });
 

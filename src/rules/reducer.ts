@@ -277,6 +277,12 @@ function routeDomain(
     case "BATTLE_COMMAND":
       return foldCase(state, battleEvents.battleCommand(state, payload, ctx));
 
+    // --- in-battle prompt resolution & card notes (touch the battle slice) ---
+    case "RESOLVE_PROMPT":
+      return foldCase(state, battleEvents.resolvePrompt(state, payload, ctx));
+    case "SET_CARD_NOTE":
+      return foldCase(state, battleEvents.setCardNote(state, payload, ctx));
+
     // --- whole-fold cases (touch the battle slice) ---
     case "RESET_QUEST":
       return foldCase(state, lifecycle.resetQuest(state));

@@ -121,7 +121,13 @@ export interface EventPayloads {
   BEGIN_BATTLE: { siteId: string };
   BATTLE_COMMAND: { command: unknown };
   RESOLVE_PROMPT: { promptId: number; resolution: unknown };
-  SET_CARD_NOTE: { instanceId: string; note: string };
+  // `note` is the `{ noteId, text, expiry }` shape the battle note editor
+  // writes; `expiry` is a `BattleCardNoteExpiry`, kept as `unknown` here so this
+  // file stays import-light (the domain case narrows it).
+  SET_CARD_NOTE: {
+    instanceId: string;
+    note: { noteId: string; text: string; expiry: unknown };
+  };
 }
 
 /** Every event `type` string the rules layer recognizes. */

@@ -31,7 +31,7 @@ import type {
 } from "../../types/quest";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent, type ReduceResult } from "../reducer";
-import type { BattleFoldState } from "./fold";
+import type { BattleFoldState, EffectRun } from "./fold";
 import {
   registerBattleInitProvider,
   type BattleInitProvider,
@@ -923,5 +923,325 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     const second = reduce(state, "BATTLE_COMMAND", payload);
     expect(first.outcome).toBe("applied");
     expect(hashBattle(first.state.battle)).toBe(hashBattle(second.state.battle));
+  });
+});
+
+// ---------------------------------------------------------------------------
+// RESOLVE_PROMPT (Task 21)
+// ---------------------------------------------------------------------------
+
+/**
+ * The first registered battle script whose FIRST step is a `foresee` prompt, so
+ * a fresh run parked at `cursor: [0]` stops on the prompt immediately and its
+ * resolution applies no edits of its own. Resolved from the LIVE table (no
+ * hardcoded card ids/names) — data-resilient per AGENTS.md.
+ */
+function firstForeseePromptBattleScript(): BattleCardEffectScript {
+  const script = Object.values(BATTLE_CARD_EFFECTS).find((s) => {
+    const first = (s.steps ?? [])[0];
+    return (
+      first !== undefined &&
+      first.kind === "prompt" &&
+      first.prompt.kind === "foresee"
+    );
+  });
+  if (script === undefined) {
+    throw new Error("no foresee-prompt battle script registered");
+  }
+  return script;
+}
+
+const PARK_SEQ = 77;
+
+/**
+ * Parks a foresee prompt by seeding a foresee run (plus any `extraQueue` runs
+ * behind it) and issuing a benign command that advances the queue until it
+ * stops on the prompt. Returns the parked state, the open `promptId` (= the
+ * command's seq), and the parked board hash.
+ */
+function parkForeseePrompt(extraQueue: EffectRun[] = []): {
+  state: FoldState;
+  promptId: number;
+  parkedBoardHash: string;
+} {
+  const foresee = firstForeseePromptBattleScript();
+  const board = makeRichBoard({ turnNumber: 3, phase: "day" });
+  const battle = battleFrom(board, {
+    effectQueue: [
+      { scriptRef: { table: "battle", id: foresee.id }, cursor: [0], side: "player" },
+      ...extraQueue,
+    ],
+  });
+  const state = { ...baseState(), battle };
+  const parked = reduce(
+    state,
+    "BATTLE_COMMAND",
+    debugEdit({ kind: "SET_SCORE", side: "player", value: 4 }),
+    ctx({ seq: PARK_SEQ }),
+  );
+  const prompt = parked.state.battle?.pendingPrompt;
+  if (prompt == null) {
+    throw new Error("expected a parked foresee prompt");
+  }
+  expect(prompt.kind).toBe("foresee");
+  return {
+    state: parked.state,
+    promptId: prompt.promptId,
+    parkedBoardHash: hashBoard(parked.state.battle!.board),
+  };
+}
+
+describe("RESOLVE_PROMPT", () => {
+  it("applies a matching resolve and clears the open prompt", () => {
+    const { state, promptId } = parkForeseePrompt();
+    const result = reduce(
+      state,
+      "RESOLVE_PROMPT",
+      { promptId, resolution: { kind: "foresee" } },
+      ctx({ seq: PARK_SEQ + 1 }),
+    );
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.pendingPrompt).toBeNull();
+    expect(result.state.battle?.effectQueue).toEqual([]);
+  });
+
+  it("applies a foresee resolution with no edits of its own (foresee no-op contract)", () => {
+    const { state, promptId, parkedBoardHash } = parkForeseePrompt();
+    const result = reduce(
+      state,
+      "RESOLVE_PROMPT",
+      { promptId, resolution: { kind: "foresee" } },
+      ctx({ seq: PARK_SEQ + 1 }),
+    );
+    expect(result.outcome).toBe("applied");
+    // The foresee resolution applies NO edits itself — the board is unchanged
+    // from the parked board (the foresee overlay's edits landed before parking).
+    expect(hashBoard(result.state.battle!.board)).toBe(parkedBoardHash);
+  });
+
+  it("resumes and drains the rest of the queue after a matching resolve", () => {
+    const probe = makeRichBoard();
+    const safe = firstSafeDeterministicDreamwell(probe);
+    const safeRun: EffectRun = {
+      scriptRef: { table: "dreamwell", id: safe.id },
+      cursor: [0],
+      side: "player",
+    };
+    const { state, promptId, parkedBoardHash } = parkForeseePrompt([safeRun]);
+    const result = reduce(
+      state,
+      "RESOLVE_PROMPT",
+      { promptId, resolution: { kind: "foresee" } },
+      ctx({ seq: PARK_SEQ + 1 }),
+    );
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.pendingPrompt).toBeNull();
+    expect(result.state.battle?.effectQueue).toEqual([]);
+    // The queued dreamwell run ran once the foresee resolved — the board moved
+    // past the parked state, proving the driver resumed advancing the queue.
+    expect(hashBoard(result.state.battle!.board)).not.toBe(parkedBoardHash);
+  });
+
+  it("prompt race — the first matching resolve applies and a duplicate bounces", () => {
+    const { state, promptId } = parkForeseePrompt();
+    const first = reduce(
+      state,
+      "RESOLVE_PROMPT",
+      { promptId, resolution: { kind: "foresee" } },
+      ctx({ seq: PARK_SEQ + 1 }),
+    );
+    expect(first.outcome).toBe("applied");
+    expect(first.state.battle?.pendingPrompt).toBeNull();
+    // Both players answered the same prompt; the second (loser) resolve arrives
+    // after the prompt is closed and bounces.
+    const second = reduce(
+      first.state,
+      "RESOLVE_PROMPT",
+      { promptId, resolution: { kind: "foresee" } },
+      ctx({ seq: PARK_SEQ + 2 }),
+    );
+    expect(second.outcome).toBe("bounced");
+  });
+
+  it("bounces a stale/mismatched promptId while the prompt is open, leaving it untouched", () => {
+    const { state, promptId } = parkForeseePrompt();
+    const before = hashBattle(state.battle);
+    const result = reduce(
+      state,
+      "RESOLVE_PROMPT",
+      { promptId: promptId - 1, resolution: { kind: "foresee" } },
+      ctx({ seq: PARK_SEQ + 1 }),
+    );
+    expect(result.outcome).toBe("bounced");
+    expect(hashBattle(result.state.battle)).toBe(before);
+    expect(result.state.battle?.pendingPrompt?.promptId).toBe(promptId);
+  });
+
+  it("bounces when no battle is in progress", () => {
+    const result = reduce(baseState(), "RESOLVE_PROMPT", {
+      promptId: 1,
+      resolution: { kind: "foresee" },
+    });
+    expect(result.outcome).toBe("bounced");
+  });
+
+  it("bounces when no prompt is pending", () => {
+    const state = { ...baseState(), battle: battleFrom(makeRichBoard()) };
+    const result = reduce(state, "RESOLVE_PROMPT", {
+      promptId: 1,
+      resolution: { kind: "foresee" },
+    });
+    expect(result.outcome).toBe("bounced");
+  });
+
+  it("bounces a malformed resolution payload", () => {
+    const { state, promptId } = parkForeseePrompt();
+    const result = reduce(
+      state,
+      "RESOLVE_PROMPT",
+      { promptId, resolution: { kind: "nonsense" } },
+      ctx({ seq: PARK_SEQ + 1 }),
+    );
+    expect(result.outcome).toBe("bounced");
+    // The prompt survives the malformed resolve.
+    expect(result.state.battle?.pendingPrompt?.promptId).toBe(promptId);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// SET_CARD_NOTE (Task 21)
+// ---------------------------------------------------------------------------
+
+const MANUAL_NOTE = {
+  noteId: "note-1",
+  text: "watch this card",
+  expiry: { kind: "manual" },
+};
+
+function noteState(): FoldState {
+  const board = makeRichBoard({
+    turnNumber: 3,
+    phase: "day",
+    instances: [makeInstance("bc-note", "note-card", "player")],
+  });
+  return { ...baseState(), battle: battleFrom(board) };
+}
+
+describe("SET_CARD_NOTE", () => {
+  it("stores a note on the target card using the event timestamp", () => {
+    const state = noteState();
+    const result = reduce(
+      state,
+      "SET_CARD_NOTE",
+      { instanceId: "bc-note", note: MANUAL_NOTE },
+      ctx({ seq: 5, timestamp: "1970-01-01T00:00:02.000Z" }),
+    );
+    expect(result.outcome).toBe("applied");
+    const notes = result.state.battle?.board.cardInstances["bc-note"].notes ?? [];
+    expect(notes).toHaveLength(1);
+    expect(notes[0].noteId).toBe("note-1");
+    expect(notes[0].text).toBe("watch this card");
+    expect(notes[0].expiry).toEqual({ kind: "manual" });
+    // createdAtMs comes from ctx.timestamp (= event.clientTimestamp), never a
+    // live clock — two clients folding the same event stamp the same value.
+    expect(notes[0].createdAtMs).toBe(Date.parse("1970-01-01T00:00:02.000Z"));
+  });
+
+  it("accepts an atStartOfTurn expiry", () => {
+    const state = noteState();
+    const result = reduce(state, "SET_CARD_NOTE", {
+      instanceId: "bc-note",
+      note: {
+        noteId: "note-2",
+        text: "temporary",
+        expiry: { kind: "atStartOfTurn", side: "enemy", turnNumber: 4 },
+      },
+    });
+    expect(result.outcome).toBe("applied");
+    const notes = result.state.battle?.board.cardInstances["bc-note"].notes ?? [];
+    expect(notes[0].expiry).toEqual({
+      kind: "atStartOfTurn",
+      side: "enemy",
+      turnNumber: 4,
+    });
+  });
+
+  it("bounces when the target card does not exist", () => {
+    const state = noteState();
+    const result = reduce(state, "SET_CARD_NOTE", {
+      instanceId: "missing",
+      note: MANUAL_NOTE,
+    });
+    expect(result.outcome).toBe("bounced");
+  });
+
+  it("bounces when there is no battle (no card to annotate)", () => {
+    const result = reduce(baseState(), "SET_CARD_NOTE", {
+      instanceId: "bc-note",
+      note: MANUAL_NOTE,
+    });
+    expect(result.outcome).toBe("bounced");
+  });
+
+  it("bounces a malformed note payload", () => {
+    const state = noteState();
+    expect(
+      reduce(state, "SET_CARD_NOTE", { instanceId: "bc-note", note: "hi" }).outcome,
+    ).toBe("bounced");
+    expect(
+      reduce(state, "SET_CARD_NOTE", {
+        instanceId: "bc-note",
+        note: { text: "no id", expiry: { kind: "manual" } },
+      }).outcome,
+    ).toBe("bounced");
+    expect(
+      reduce(state, "SET_CARD_NOTE", {
+        instanceId: "bc-note",
+        note: { noteId: "n", text: "bad expiry", expiry: { kind: "whenever" } },
+      }).outcome,
+    ).toBe("bounced");
+  });
+
+  it("applies through an open prompt without resolving it (CAS-exempt)", () => {
+    const foresee = firstForeseePromptBattleScript();
+    const board = makeRichBoard({
+      turnNumber: 3,
+      phase: "day",
+      instances: [makeInstance("bc-note", "note-card", "player")],
+    });
+    const battle = battleFrom(board, {
+      effectQueue: [
+        { scriptRef: { table: "battle", id: foresee.id }, cursor: [0], side: "player" },
+      ],
+    });
+    const parked = reduce(
+      { ...baseState(), battle },
+      "BATTLE_COMMAND",
+      debugEdit({ kind: "SET_SCORE", side: "player", value: 1 }),
+      ctx({ seq: 60 }),
+    );
+    expect(parked.state.battle?.pendingPrompt).not.toBeNull();
+
+    const result = reduce(
+      parked.state,
+      "SET_CARD_NOTE",
+      { instanceId: "bc-note", note: MANUAL_NOTE },
+      ctx({ seq: 61 }),
+    );
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.board.cardInstances["bc-note"].notes).toHaveLength(1);
+    // The note left the open prompt intact.
+    expect(result.state.battle?.pendingPrompt).not.toBeNull();
+  });
+
+  it("applies through a hostile partner intervening window (CAS-exempt)", () => {
+    const state = noteState();
+    const result = reduceGameEvent(
+      state,
+      event("SET_CARD_NOTE", { instanceId: "bc-note", note: MANUAL_NOTE }),
+      ctx({ intervening: [{ seq: 5, actor: "bob", type: "ADJUST_ESSENCE" }] }),
+    );
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.board.cardInstances["bc-note"].notes).toHaveLength(1);
   });
 });

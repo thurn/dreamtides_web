@@ -33,6 +33,7 @@
 
 import type { EventContext } from "../../eventlog/types";
 import type {
+  BattleCardNoteExpiry,
   BattleEngineEmissionContext,
   BattleInit,
   BattleMutableState,
@@ -57,7 +58,8 @@ import {
   selectBattleCardEffectScript,
 } from "./battle-card-effects-table";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
-import { advanceEffectQueue } from "./driver";
+import { advanceEffectQueue, resolvePendingPrompt } from "./driver";
+import type { PromptResolution } from "./effect-runner-core";
 import { dawnClearEdits } from "../../battle/engine/handoff";
 import { alliesInPlay } from "./effect-step";
 import {
@@ -556,4 +558,208 @@ function coerceBattleCommand(raw: unknown): BattleCommand | null {
 
 function isBattleResult(value: unknown): value is BattleResult {
   return value === "victory" || value === "defeat" || value === "draw";
+}
+
+// ---------------------------------------------------------------------------
+// RESOLVE_PROMPT
+// ---------------------------------------------------------------------------
+
+/**
+ * `RESOLVE_PROMPT { promptId, resolution }`: answer the single open prompt and
+ * resume the parked automation run.
+ *
+ * This is the APPLY path for a resolve whose `promptId` MATCHES the open
+ * prompt. The root CAS policy routes such an event here via its rule-2 fast
+ * path (a matching resolve skips the intervening-window check and the prompt
+ * gate, because the prompt's options were fixed at open time — nothing
+ * intervening can change what the resolution means). A resolve whose `promptId`
+ * does NOT match never reaches this function: rule 4 bounces it while a prompt
+ * is open (both players answering the same prompt simultaneously — the first
+ * closes it, the loser's stale resolve bounces). The re-check here is
+ * defensive, so a direct/mis-routed call still bounces cleanly rather than
+ * corrupting state.
+ *
+ * Delegates to {@link resolvePendingPrompt}, which applies the resolution's
+ * edits (a `foresee` applies none of its own — the overlay's edits already
+ * landed) and continues advancing the queue until it parks on the next prompt
+ * or empties. Returns the next {@link FoldState}, or `null` to bounce when:
+ *   - there is no battle;
+ *   - no prompt is pending;
+ *   - `promptId` is not a finite number, or does not match the open prompt; or
+ *   - `resolution` is not a recognized {@link PromptResolution}.
+ */
+export function resolvePrompt(
+  state: FoldState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+): FoldState | null {
+  const battle = state.battle;
+  if (battle === null) {
+    return null;
+  }
+  const pending = battle.pendingPrompt;
+  if (pending === null) {
+    return null;
+  }
+  const promptId = payload.promptId;
+  if (
+    typeof promptId !== "number" ||
+    !Number.isFinite(promptId) ||
+    promptId !== pending.promptId
+  ) {
+    return null;
+  }
+  const resolution = coercePromptResolution(payload.resolution);
+  if (resolution === null) {
+    return null;
+  }
+  return { ...state, battle: resolvePendingPrompt(battle, resolution, ctx) };
+}
+
+/**
+ * Validates a raw `payload.resolution` into a {@link PromptResolution}, or
+ * `null` to bounce a malformed answer. `confirm` prompts are answered with a
+ * `choice` resolution (option 0 = Yes, 1 = Skip), so there is no separate
+ * `confirm` resolution variant.
+ */
+function coercePromptResolution(raw: unknown): PromptResolution | null {
+  if (typeof raw !== "object" || raw === null) {
+    return null;
+  }
+  const kind = (raw as { kind?: unknown }).kind;
+  if (kind === "pick-cards") {
+    const chosenIds = (raw as { chosenIds?: unknown }).chosenIds;
+    if (!Array.isArray(chosenIds)) {
+      return null;
+    }
+    const ids: string[] = chosenIds.filter(
+      (id): id is string => typeof id === "string",
+    );
+    // A stray non-string entry means a malformed payload — bounce rather than
+    // silently drop it.
+    if (ids.length !== chosenIds.length) {
+      return null;
+    }
+    return { kind: "pick-cards", chosenIds: ids };
+  }
+  if (kind === "choice") {
+    const optionIndex = (raw as { optionIndex?: unknown }).optionIndex;
+    if (typeof optionIndex !== "number" || !Number.isInteger(optionIndex)) {
+      return null;
+    }
+    return { kind: "choice", optionIndex };
+  }
+  if (kind === "foresee") {
+    return { kind: "foresee" };
+  }
+  return null;
+}
+
+// ---------------------------------------------------------------------------
+// SET_CARD_NOTE
+// ---------------------------------------------------------------------------
+
+/**
+ * `SET_CARD_NOTE { instanceId, note }`: attach a player annotation to an in-play
+ * card, relocating the `ADD_CARD_NOTE` edit the legacy `BattleCardNoteEditor`
+ * dispatched.
+ *
+ * CAS-exempt (root rule 1): a note carries no game-rules meaning, so it applies
+ * even through a partner's intervening window AND while a prompt is open — the
+ * root reducer routes it straight to this case, skipping rules 2–4. It never
+ * touches `pendingPrompt` or the effect queue, so annotating a card mid-prompt
+ * does not resolve or disturb the prompt.
+ *
+ * The note's `createdAtMs` comes from `ctx.timestamp` (the event's
+ * `clientTimestamp`), not a live clock — honoring the src/rules/ lint rails and
+ * keeping two clients' folds byte-identical. `createdAtTurnNumber` /
+ * `createdAtSide` are stamped from the board by `applyDebugEdit`.
+ *
+ * Returns the next {@link FoldState}, or `null` to bounce when:
+ *   - there is no battle (no card to annotate);
+ *   - `instanceId` is missing/blank, or names no live card instance; or
+ *   - `note` is not a well-formed `{ noteId, text, expiry }` object.
+ */
+export function setCardNote(
+  state: FoldState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+): FoldState | null {
+  const battle = state.battle;
+  if (battle === null) {
+    return null;
+  }
+  const instanceId = payload.instanceId;
+  if (typeof instanceId !== "string" || instanceId.length === 0) {
+    return null;
+  }
+  if (battle.board.cardInstances[instanceId] === undefined) {
+    return null;
+  }
+  const note = coerceCardNote(payload.note);
+  if (note === null) {
+    return null;
+  }
+  const board = applyDebugEdit(
+    battle.board,
+    {
+      kind: "ADD_CARD_NOTE",
+      battleCardId: instanceId,
+      noteId: note.noteId,
+      text: note.text,
+      createdAtMs: Date.parse(ctx.timestamp),
+      expiry: note.expiry,
+    },
+    EMISSION,
+  ).state;
+  return { ...state, battle: { ...battle, board } };
+}
+
+/**
+ * Validates a raw `payload.note` into the `{ noteId, text, expiry }` shape the
+ * `BattleCardNoteEditor` writes, or `null` to bounce a malformed note.
+ */
+function coerceCardNote(
+  raw: unknown,
+): { noteId: string; text: string; expiry: BattleCardNoteExpiry } | null {
+  if (typeof raw !== "object" || raw === null) {
+    return null;
+  }
+  const noteId = (raw as { noteId?: unknown }).noteId;
+  const text = (raw as { text?: unknown }).text;
+  if (typeof noteId !== "string" || noteId.length === 0) {
+    return null;
+  }
+  if (typeof text !== "string") {
+    return null;
+  }
+  const expiry = coerceNoteExpiry((raw as { expiry?: unknown }).expiry);
+  if (expiry === null) {
+    return null;
+  }
+  return { noteId, text, expiry };
+}
+
+/** Validates a raw note expiry into a {@link BattleCardNoteExpiry}, else `null`. */
+function coerceNoteExpiry(raw: unknown): BattleCardNoteExpiry | null {
+  if (typeof raw !== "object" || raw === null) {
+    return null;
+  }
+  const kind = (raw as { kind?: unknown }).kind;
+  if (kind === "manual") {
+    return { kind: "manual" };
+  }
+  if (kind === "atStartOfTurn") {
+    const side = (raw as { side?: unknown }).side;
+    const turnNumber = (raw as { turnNumber?: unknown }).turnNumber;
+    if (
+      (side === "player" || side === "enemy") &&
+      typeof turnNumber === "number" &&
+      Number.isFinite(turnNumber)
+    ) {
+      return { kind: "atStartOfTurn", side, turnNumber };
+    }
+    return null;
+  }
+  return null;
 }
