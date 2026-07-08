@@ -86,7 +86,10 @@ export function enterDraftSiteState(
 ): DraftState {
   const cloned = JSON.parse(JSON.stringify(liveDraftState)) as DraftState;
   const offerDeps = offerDepsForDraftState(cloned, deck, fitModel, cardDatabase);
-  enterDraftSite(cloned, siteId, cardDatabase, draftConfig, offerDeps);
+  // Explicit randomness source: this local bootstrap paints a preview offer
+  // outside the pure quest reducer, so it rolls with `Math.random` (the offer
+  // that persists comes from the reducer's `ctx.rng`-driven PICK_DRAFT_CARD).
+  enterDraftSite(cloned, siteId, cardDatabase, draftConfig, offerDeps, Math.random);
   return cloned;
 }
 

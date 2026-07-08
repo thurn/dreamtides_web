@@ -1,0 +1,314 @@
+import { afterEach, describe, expect, it } from "vitest";
+
+import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
+import type { PoolDraftState } from "../../types/draft";
+import type { CardData } from "../../types/cards";
+import { asCardId, asCardName } from "../../types/card-identity";
+import { drawAndSpendUniqueCards } from "../../draft/draft-engine";
+import { makeRng } from "../../draft/pool/rng";
+import { genesisFoldState, type FoldState } from "../fold-state";
+import { reduceGameEvent, type ReduceResult } from "../reducer";
+import {
+  registerDraftContentProvider,
+  type DraftContentProvider,
+} from "./draft";
+
+// ---------------------------------------------------------------------------
+// Fixtures
+// ---------------------------------------------------------------------------
+
+const GENESIS: Genesis = {
+  seed: "draft-seed",
+  reducerVersion: "test",
+  createdAt: 0,
+};
+
+function ctx(overrides: Partial<EventContext> = {}): EventContext {
+  return {
+    seq: 42,
+    rng: () => 0,
+    intervening: [],
+    timestamp: "1970-01-01T00:00:00.000Z",
+    ...overrides,
+  };
+}
+
+function event(
+  type: string,
+  payload: Record<string, unknown>,
+  actor = "alice",
+): GameEvent {
+  return {
+    type,
+    payload,
+    actor,
+    clientTimestamp: "1970-01-01T00:00:00.000Z",
+    basedOnSeq: 0,
+  };
+}
+
+function reduce(
+  state: FoldState,
+  type: string,
+  payload: Record<string, unknown>,
+  context: EventContext = ctx(),
+): ReduceResult {
+  return reduceGameEvent(state, event(type, payload), context);
+}
+
+function makeCard(cardNumber: number): CardData {
+  return {
+    name: asCardName(`TestCard${String(cardNumber)}`),
+    id: asCardId(`card-${String(cardNumber)}`),
+    cardNumber,
+    cardType: "Character",
+    subtype: "",
+    isStarter: false,
+    energyCost: 3,
+    spark: 1,
+    isFast: false,
+    renderedText: "",
+    imageNumber: cardNumber,
+    artOwned: false,
+  };
+}
+
+/**
+ * Eight single-copy cards (1..8). The current offer shows cards 1..4 (already
+ * spent from the multiset and recorded as shown), so a pick advances the draft
+ * to a fresh offer drawn from the remaining {5,6,7,8}.
+ */
+function poolDraftState(overrides: Partial<PoolDraftState> = {}): PoolDraftState {
+  return {
+    mode: "pool",
+    draftPoolCopiesByCard: {
+      "1": 1,
+      "2": 1,
+      "3": 1,
+      "4": 1,
+      "5": 1,
+      "6": 1,
+      "7": 1,
+      "8": 1,
+    },
+    remainingCopiesByCard: { "5": 1, "6": 1, "7": 1, "8": 1 },
+    currentOffer: [1, 2, 3, 4],
+    activeSiteId: "site-a",
+    pickNumber: 1,
+    sitePicksCompleted: 0,
+    siteShownCardNumbers: [1, 2, 3, 4],
+    ...overrides,
+  };
+}
+
+function stateWithDraft(draftState: PoolDraftState): FoldState {
+  const base = genesisFoldState(GENESIS);
+  return { ...base, quest: { ...base.quest, draftState } };
+}
+
+const CARD_DB = new Map<number, CardData>(
+  Array.from({ length: 8 }, (_, index) => {
+    const card = makeCard(index + 1);
+    return [card.cardNumber, card] as const;
+  }),
+);
+
+/** A resolver mapping each card UUID `card-<n>` back to its `cardNumber`. */
+function provider(): DraftContentProvider {
+  return {
+    resolveCardNumber: (cardId) => {
+      const match = /^card-(\d+)$/.exec(cardId);
+      return match ? Number(match[1]) : null;
+    },
+    cardDatabase: () => CARD_DB,
+    offerDepsFor: () => undefined,
+    draftConfigFor: () => undefined,
+  };
+}
+
+afterEach(() => {
+  registerDraftContentProvider(null);
+});
+
+// ---------------------------------------------------------------------------
+// PICK_DRAFT_CARD
+// ---------------------------------------------------------------------------
+
+describe("PICK_DRAFT_CARD", () => {
+  it("applies a pick that matches the pack position, advancing the draft", () => {
+    registerDraftContentProvider(provider());
+    const result = reduce(
+      stateWithDraft(poolDraftState()),
+      "PICK_DRAFT_CARD",
+      { packIndex: 0, cardId: "card-1" },
+    );
+
+    expect(result.outcome).toBe("applied");
+    const draft = result.state.quest.draftState as PoolDraftState;
+    // The picked card joined the deck.
+    expect(result.state.quest.deck.map((e) => e.cardNumber)).toContain(1);
+    // The draft advanced: pick counter incremented and a fresh offer revealed
+    // from the remaining {5,6,7,8}, with none of the already-shown 1..4.
+    expect(draft.pickNumber).toBe(2);
+    expect(draft.sitePicksCompleted).toBe(1);
+    for (const cardNumber of draft.currentOffer) {
+      expect([1, 2, 3, 4]).not.toContain(cardNumber);
+    }
+  });
+
+  it("bounces a pick whose card is not at the given pack position", () => {
+    registerDraftContentProvider(provider());
+    const start = stateWithDraft(poolDraftState());
+    // packIndex 0 holds card 1, not card 3 — the pack membership guard bounces.
+    const result = reduce(start, "PICK_DRAFT_CARD", {
+      packIndex: 0,
+      cardId: "card-3",
+    });
+
+    expect(result.outcome).toBe("bounced");
+    expect(result.state).toEqual(start);
+  });
+
+  it("bounces a pick for a card entirely absent from the offered pack", () => {
+    registerDraftContentProvider(provider());
+    const start = stateWithDraft(poolDraftState());
+    const result = reduce(start, "PICK_DRAFT_CARD", {
+      packIndex: 0,
+      cardId: "card-8",
+    });
+
+    expect(result.outcome).toBe("bounced");
+    expect(result.state).toEqual(start);
+  });
+
+  it("bounces a second pick against the same pack position (double-pick race)", () => {
+    registerDraftContentProvider(provider());
+    const start = stateWithDraft(poolDraftState());
+
+    const first = reduce(start, "PICK_DRAFT_CARD", {
+      packIndex: 0,
+      cardId: "card-1",
+    });
+    expect(first.outcome).toBe("applied");
+
+    // A duplicate click replays the same intent against the post-pick state.
+    // The offer has advanced, so pack position 0 no longer holds card 1: bounce
+    // instead of drafting a second card.
+    const second = reduce(first.state, "PICK_DRAFT_CARD", {
+      packIndex: 0,
+      cardId: "card-1",
+    });
+    expect(second.outcome).toBe("bounced");
+    expect(second.state).toEqual(first.state);
+  });
+
+  it("bounces when no draft state is present", () => {
+    registerDraftContentProvider(provider());
+    const start = genesisFoldState(GENESIS);
+    const result = reduce(start, "PICK_DRAFT_CARD", {
+      packIndex: 0,
+      cardId: "card-1",
+    });
+    expect(result.outcome).toBe("bounced");
+    expect(result.state).toEqual(start);
+  });
+
+  it("bounces when no content provider is registered", () => {
+    const start = stateWithDraft(poolDraftState());
+    const result = reduce(start, "PICK_DRAFT_CARD", {
+      packIndex: 0,
+      cardId: "card-1",
+    });
+    expect(result.outcome).toBe("bounced");
+    expect(result.state).toEqual(start);
+  });
+
+  it("is deterministic: same seed + seq fold to identical state", () => {
+    registerDraftContentProvider(provider());
+    const start = stateWithDraft(poolDraftState());
+    const context = ctx({ seq: 9, rng: makeRng(9) });
+
+    const a = reduce(start, "PICK_DRAFT_CARD", {
+      packIndex: 0,
+      cardId: "card-1",
+    }, context);
+    const b = reduce(start, "PICK_DRAFT_CARD", {
+      packIndex: 0,
+      cardId: "card-1",
+    }, ctx({ seq: 9, rng: makeRng(9) }));
+
+    expect(a.outcome).toBe("applied");
+    expect(b.outcome).toBe("applied");
+    expect(a.state).toEqual(b.state);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// SET_DRAFT_STATE
+// ---------------------------------------------------------------------------
+
+describe("SET_DRAFT_STATE", () => {
+  it("replaces the draft state (debug edit)", () => {
+    const start = stateWithDraft(poolDraftState());
+    const replacement = poolDraftState({
+      activeSiteId: "site-z",
+      pickNumber: 5,
+      currentOffer: [6, 7, 8],
+    });
+    const result = reduce(start, "SET_DRAFT_STATE", {
+      draftState: replacement,
+    });
+    expect(result.outcome).toBe("applied");
+    expect(result.state.quest.draftState).toEqual(replacement);
+  });
+
+  it("clears the draft state when passed null", () => {
+    const start = stateWithDraft(poolDraftState());
+    const result = reduce(start, "SET_DRAFT_STATE", { draftState: null });
+    expect(result.outcome).toBe("applied");
+    expect(result.state.quest.draftState).toBeNull();
+  });
+
+  it("bounces a malformed (non-object) draft state", () => {
+    const start = stateWithDraft(poolDraftState());
+    const result = reduce(start, "SET_DRAFT_STATE", { draftState: 5 });
+    expect(result.outcome).toBe("bounced");
+    expect(result.state).toEqual(start);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// weightedSample injected-rng contract (exercised via drawAndSpendUniqueCards)
+// ---------------------------------------------------------------------------
+
+describe("draft-engine injected rng", () => {
+  function samplePool(): PoolDraftState {
+    return poolDraftState({
+      remainingCopiesByCard: {
+        "1": 2,
+        "2": 2,
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+      },
+    });
+  }
+
+  it("produces the same sample for the same rng stream", () => {
+    const a = structuredClone(samplePool());
+    const b = structuredClone(samplePool());
+    const drawnA = drawAndSpendUniqueCards(a, 4, undefined, undefined, makeRng(7));
+    const drawnB = drawAndSpendUniqueCards(b, 4, undefined, undefined, makeRng(7));
+    expect(drawnA).toEqual(drawnB);
+    expect(drawnA).toHaveLength(4);
+  });
+
+  it("threads the injected rng rather than reading ambient randomness", () => {
+    // A fixed rng of 0 makes weightedSample take the first cumulative entry each
+    // iteration, so the draw is fully determined by the injected source.
+    const state = structuredClone(samplePool());
+    const drawn = drawAndSpendUniqueCards(state, 4, undefined, undefined, () => 0);
+    expect(new Set(drawn).size).toBe(4);
+  });
+});

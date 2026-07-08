@@ -342,6 +342,10 @@ export function generateShopInventory(
       cardCount,
       undefined,
       affiliationNumberWeights,
+      // Explicit randomness source: shop stock is rolled outside the pure quest
+      // reducer, so it keeps its non-deterministic `Math.random` draw (rather
+      // than the source being hidden inside the draft engine).
+      Math.random,
     );
     cardSource = "draft_multiset";
     drawnCardCount = drawnCardNumbers.length;

@@ -20,6 +20,7 @@ import {
 import type { FoldState } from "./fold-state";
 import type { QuestState } from "../types/quest";
 import * as deck from "./quest/deck";
+import * as draft from "./quest/draft";
 import * as lifecycle from "./quest/lifecycle";
 
 /** The reducer's return shape (matches `EngineConfig.reducer`). */
@@ -198,6 +199,12 @@ function routeDomain(
     // site-runtime coupled (they read the site's cardChoice offers, charge
     // essence, and complete the site) and land with Task 14 (sites). Until
     // then they fall through to the default bounce — never a half-apply.
+
+    // --- draft ---
+    case "PICK_DRAFT_CARD":
+      return questCase(state, draft.pickDraftCard(quest, payload, ctx));
+    case "SET_DRAFT_STATE":
+      return questCase(state, draft.setDraftState(quest, payload));
 
     // --- dreamsigns ---
     case "ADD_DREAMSIGN":

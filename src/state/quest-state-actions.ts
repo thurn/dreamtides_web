@@ -135,6 +135,11 @@ export function pickDraftCardInQuestState({
       ? undefined
       : { ...DEFAULT_DRAFT_CONFIG, affiliationWeights },
     offerDeps,
+    // Explicit randomness source: this legacy pick path advances the draft
+    // outside the pure quest reducer, so it keeps its `Math.random` draw. The
+    // event-sourced path (`src/rules/quest/draft.ts`) drives the same engine
+    // from `ctx.rng` for determinism.
+    Math.random,
   );
 
   return { ...withCard, draftState };

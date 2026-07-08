@@ -82,10 +82,17 @@ export function buildReplayOffer(
 /**
  * Sample unique card numbers from weighted entries without replacement.
  * Returns the selected card numbers.
+ *
+ * Randomness is injected: `rng` is a required `() => number` returning a
+ * uniform value in `[0, 1)`. Callers reached from the pure quest reducer pass a
+ * `ctx.rng`-derived stream so two clients folding the same event draw the same
+ * sample; other callers pass an explicit source (e.g. `Math.random`). This
+ * function reads no ambient randomness of its own.
  */
 function weightedSample(
   entries: Array<{ cardNumber: number; weight: number }>,
   count: number,
+  rng: () => number,
 ): number[] {
   const packSize = Math.min(count, entries.length);
   const selected: number[] = [];
@@ -96,7 +103,7 @@ function weightedSample(
       break;
     }
 
-    let roll = Math.random() * totalWeight;
+    let roll = rng() * totalWeight;
     let chosenIndex = entries.length - 1;
     for (let index = 0; index < entries.length; index += 1) {
       roll -= entries[index].weight;
@@ -126,12 +133,18 @@ function weightedSample(
  * its `cardNumber -> multiplier` entry (cards absent use 1) so a draw inside an
  * affiliated dreamscape leans toward that affiliation without ever dropping a card
  * (see `src/affiliations/affiliation-weights.ts`).
+ *
+ * `rng` is the injected randomness source (uniform `[0, 1)`); it defaults to
+ * `Math.random` for callers that have no seed context, while the pure quest
+ * reducer passes a `ctx.rng`-derived stream so a draw is deterministic per
+ * `(seed, seq)`.
  */
 export function drawAndSpendUniqueCards(
   state: DraftState,
   count: number,
   eligibleCardNumbers?: ReadonlySet<number>,
   affiliationWeights?: ReadonlyMap<number, number>,
+  rng: () => number = Math.random,
 ): number[] {
   if (state.mode !== "pool") {
     throw new Error("drawAndSpendUniqueCards requires a pool draft state");
@@ -163,7 +176,7 @@ export function drawAndSpendUniqueCards(
     entries = buildEntries(state.remainingCopiesByCard);
   }
 
-  const drawn = weightedSample(entries, count);
+  const drawn = weightedSample(entries, count, rng);
   spendShownOffer(state.remainingCopiesByCard, drawn);
   return drawn;
 }
@@ -176,6 +189,7 @@ export function drawAndSpendUniqueCards(
  */
 function buildOffer(
   ctx: PackContext,
+  rng: () => number,
   excludeCardNumbers: Set<number> = new Set(),
 ): number[] {
   const entries: Array<{ cardNumber: number; weight: number }> = [];
@@ -200,7 +214,7 @@ function buildOffer(
     return [];
   }
 
-  return weightedSample(entries, ctx.packSize);
+  return weightedSample(entries, ctx.packSize, rng);
 }
 
 /**
@@ -248,6 +262,7 @@ function revealOffer(
   config: DraftConfig,
   options: { logEvents: boolean } = { logEvents: true },
   offerDeps?: OfferDeps,
+  rng: () => number = Math.random,
 ): boolean {
   if (state.mode === "replay") {
     if (offerDeps === undefined) {
@@ -295,6 +310,7 @@ function revealOffer(
       packSize: config.packSize,
       affiliationWeights: config.affiliationWeights,
     },
+    rng,
     shownThisVisit,
   );
 
@@ -321,6 +337,7 @@ function revealOffer(
         packSize: config.packSize,
         affiliationWeights: config.affiliationWeights,
       },
+      rng,
       shownThisVisit,
     );
   }
@@ -474,6 +491,7 @@ export function enterDraftSite(
   _cardDatabase: Map<number, CardData>,
   config: DraftConfig = DEFAULT_DRAFT_CONFIG,
   offerDeps?: OfferDeps,
+  rng: () => number = Math.random,
 ): void {
   if (state.activeSiteId === siteId) {
     logEvent("draft_site_entered", {
@@ -496,7 +514,7 @@ export function enterDraftSite(
   state.activeSiteId = siteId;
   state.sitePicksCompleted = 0;
   state.siteShownCardNumbers = [];
-  const hasOffer = revealOffer(state, config, { logEvents: true }, offerDeps);
+  const hasOffer = revealOffer(state, config, { logEvents: true }, offerDeps, rng);
 
   logEvent("draft_site_entered", {
     siteId,
@@ -527,6 +545,7 @@ function processPlayerPickInternal(
   config: DraftConfig = DEFAULT_DRAFT_CONFIG,
   options: { logEvents: boolean },
   offerDeps?: OfferDeps,
+  rng: () => number = Math.random,
 ): boolean {
   const currentOffer = [...state.currentOffer];
   if (!currentOffer.includes(cardNumber)) {
@@ -569,7 +588,7 @@ function processPlayerPickInternal(
     return true;
   }
 
-  return !revealOffer(state, config, options, offerDeps);
+  return !revealOffer(state, config, options, offerDeps, rng);
 }
 
 export function processPlayerPick(
@@ -578,6 +597,7 @@ export function processPlayerPick(
   cardDatabase: Map<number, CardData>,
   config: DraftConfig = DEFAULT_DRAFT_CONFIG,
   offerDeps?: OfferDeps,
+  rng: () => number = Math.random,
 ): boolean {
   return processPlayerPickInternal(
     cardNumber,
@@ -586,6 +606,7 @@ export function processPlayerPick(
     config,
     { logEvents: true },
     offerDeps,
+    rng,
   );
 }
 
@@ -595,6 +616,7 @@ export function processPlayerPickWithoutLogging(
   cardDatabase: Map<number, CardData>,
   config: DraftConfig = DEFAULT_DRAFT_CONFIG,
   offerDeps?: OfferDeps,
+  rng: () => number = Math.random,
 ): boolean {
   return processPlayerPickInternal(
     cardNumber,
@@ -603,6 +625,7 @@ export function processPlayerPickWithoutLogging(
     config,
     { logEvents: false },
     offerDeps,
+    rng,
   );
 }
 

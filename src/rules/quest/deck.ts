@@ -113,7 +113,7 @@ function findEntry(
  * diverge — that is the legacy determinism bug this fixes). `index`
  * distinguishes multiple entries minted by one event so they never collide.
  */
-function mintEntryId(
+export function mintEntryId(
   deck: readonly DeckEntry[],
   ctx: EventContext,
   index: number,
