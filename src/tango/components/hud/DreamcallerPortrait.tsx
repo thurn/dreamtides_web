@@ -48,6 +48,13 @@ type FramedVariant = "hero" | "panel" | "thumb";
  * legs — stay anchored to the stage floor. */
 const PORTRAIT_STANDING_SCALE = 1.2;
 
+/** Per-variant image crop: each framed variant zooms its render so the
+ * character's face fills the frame consistently. Bespoke framing factors, named
+ * so they read as intentional crops rather than magic numbers in a transform. */
+const HERO_CROP_SCALE = 2;
+const PANEL_CROP_SCALE = 1.18;
+const THUMB_CROP_SCALE = 1.22;
+
 export interface DreamcallerPortraitProps {
   /** The dreamcaller whose art and identity the portrait shows. */
   dreamcaller: DreamcallerVisual;
@@ -109,7 +116,7 @@ function imageStyle(variant: FramedVariant): CSSProperties {
         width: "100%",
         height: "auto",
         display: "block",
-        transform: "scale(2)",
+        transform: `scale(${String(HERO_CROP_SCALE)})`,
         transformOrigin: "50% 15%",
       };
     case "panel":
@@ -119,7 +126,7 @@ function imageStyle(variant: FramedVariant): CSSProperties {
         display: "block",
         objectFit: "cover",
         objectPosition: "50% 24%",
-        transform: "scale(1.18)",
+        transform: `scale(${String(PANEL_CROP_SCALE)})`,
         transformOrigin: "50% 18%",
       };
     case "thumb":
@@ -129,7 +136,7 @@ function imageStyle(variant: FramedVariant): CSSProperties {
         display: "block",
         objectFit: "cover",
         objectPosition: "50% 22%",
-        transform: "scale(1.22)",
+        transform: `scale(${String(THUMB_CROP_SCALE)})`,
         transformOrigin: "50% 18%",
       };
   }

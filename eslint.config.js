@@ -6,6 +6,7 @@ import tangoNoEscapeHatchProps from "./eslint-rules/no-escape-hatch-props.js";
 import tangoNoHardcodedValues from "./eslint-rules/no-hardcoded-values.js";
 import tangoNoRawInteractiveElements from "./eslint-rules/no-raw-interactive-elements.js";
 import tangoNoRawIconClasses from "./eslint-rules/no-raw-icon-classes.js";
+import tangoNoAdhocPressScale from "./eslint-rules/no-adhoc-press-scale.js";
 import tangoThinAdapters from "./eslint-rules/thin-adapters.js";
 import tangoValidTokenReferences from "./eslint-rules/valid-token-references.js";
 import tangoNoComposedTypeVoice from "./eslint-rules/no-composed-type-voice.js";
@@ -28,6 +29,7 @@ const tangoPlugin = {
     "no-hardcoded-values": tangoNoHardcodedValues,
     "no-raw-interactive-elements": tangoNoRawInteractiveElements,
     "no-raw-icon-classes": tangoNoRawIconClasses,
+    "no-adhoc-press-scale": tangoNoAdhocPressScale,
     "thin-adapters": tangoThinAdapters,
     "valid-token-references": tangoValidTokenReferences,
     "no-composed-type-voice": tangoNoComposedTypeVoice,
@@ -80,6 +82,7 @@ export default tseslint.config(
       "tango/no-hardcoded-values": "error",
       "tango/no-raw-interactive-elements": "error",
       "tango/no-raw-icon-classes": "error",
+      "tango/no-adhoc-press-scale": "error",
       "tango/valid-token-references": "error",
       "tango/no-composed-type-voice": "error",
       "tango/no-classname-in-product-ui": "error",
