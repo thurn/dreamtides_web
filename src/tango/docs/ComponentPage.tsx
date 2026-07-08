@@ -122,6 +122,21 @@ export function ComponentPage({ id }: { id: string }) {
         <h1 style={{ font: token("--t-title"), color: token("--text-primary"), margin: 0 }}>
           {entry.title}
         </h1>
+        {entry.status === "incubating" && (
+          <span
+            style={{
+              display: "inline-block",
+              marginTop: token("--space-3"),
+              padding: `${token("--space-1")} ${token("--space-3")}`,
+              borderRadius: token("--radius-pill"),
+              font: token("--t-caption"),
+              color: token("--text-on-accent"),
+              background: token("--accent"),
+            }}
+          >
+            Incubating
+          </span>
+        )}
         <p
           style={{
             font: token("--t-lead"),
