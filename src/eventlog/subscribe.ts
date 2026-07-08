@@ -45,8 +45,12 @@ function malformedEvent(raw: unknown): GameEvent {
  */
 export function decodeLogNode(encoded: EncodedLogNode): LogNode {
   const genesis = JSON.parse(encoded.genesis) as Genesis;
+  // RTDB strips any field whose value is `null` from the stored tree, so a
+  // freshly-created room's `baseSnapshot: null` reads back as `undefined`,
+  // not `null` — both must decode to "no snapshot yet".
+  const rawBaseSnapshot = encoded.baseSnapshot ?? null;
   const baseSnapshot: unknown =
-    encoded.baseSnapshot === null ? null : JSON.parse(encoded.baseSnapshot);
+    rawBaseSnapshot === null ? null : JSON.parse(rawBaseSnapshot);
 
   const events = new Map<number, GameEvent>();
   const rawEvents = encoded.events ?? {};

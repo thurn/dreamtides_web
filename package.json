@@ -18,7 +18,7 @@
     "preview": "vite preview",
     "lint": "eslint src/",
     "test": "vitest run",
-    "test:emulator": "PATH=/opt/homebrew/opt/openjdk@21/bin:/usr/local/opt/openjdk@21/bin:$PATH firebase emulators:exec --only database --project demo-quest-prototype \"vitest run src/multiplayer/firebase-emulator.integration.test.ts\"",
+    "test:emulator": "PATH=/opt/homebrew/opt/openjdk@21/bin:/usr/local/opt/openjdk@21/bin:$PATH firebase emulators:exec --only database --project demo-quest-prototype \"vitest run --no-file-parallelism src/multiplayer/firebase-emulator.integration.test.ts src/eventlog/emulator.integration.test.ts\"",
     "typecheck": "tsc --noEmit",
     "setup-assets": "node scripts/setup-assets.mjs",
     "tango-tokens": "node scripts/generate-tango-tokens.mjs",
