@@ -7,12 +7,19 @@
 // the surface refracts through it as glass. CSS-only (no WebGL refraction), so
 // it is safe on iOS Safari.
 //
-// This is the ONE glass material, shared so it reads identically everywhere it
-// appears: the InfoCard press-reveal popover shell and the MobileDeckViewer's
-// full-bleed frosted backdrop both spread it. The translucent fill, specular
-// sheen gradient, blur/saturate backdrop and layered rim/wash/drop shadow are
-// the material's own bespoke literals — no design-system token maps to them —
-// and are kept verbatim from the Claude Design "Dreamtides Mobile" source.
+// This is the ONE glass recipe, shared so it reads identically everywhere it
+// appears. Its four current consumers:
+//   - the InfoCard press-reveal popover shell (which overrides the fill to the
+//     warmer --glass-fill-popover tint),
+//   - the MobileDeckViewer full-bleed frosted backdrop,
+//   - the DesktopDeckViewer full-bleed frosted backdrop,
+//   - the StartingDeckModal glass panel.
+// (control-treatment.ts's glassTrack() — the controls / glass icon button —
+// routes through this recipe too, via glassSurfaceStyle({ radius: null }).)
+//
+// The material's fill, sheen, blur, rim, and shadow live once as the --glass-*
+// design tokens; this recipe is their ONLY reader. Edit a glass literal in
+// tango-tokens.css and every glass surface follows — no file re-declares them.
 //
 // The flat information-grouping card (GroupPanel) is a DIFFERENT, solid surface
 // and does not use this recipe.
@@ -20,28 +27,38 @@
 import * as React from "react";
 import { token } from "../primitives/tokens";
 
+/** Options for {@link glassSurfaceStyle}. */
+export interface GlassSurfaceOptions {
+  /**
+   * The corner radius (token string) of the glass surface. Defaults to
+   * `token("--radius-popover")`. Pass `null` to omit `borderRadius` entirely so
+   * a caller (a control track, a glass icon button) can supply its own.
+   */
+  radius?: string | null;
+}
+
 /**
  * The liquid-glass style object, spread onto the node that should read as
- * glass. Every value is fixed; there are no customization parameters — the
- * material is one surface everywhere it is used.
+ * glass. Radius-parameterized (all other values are the fixed --glass-* recipe)
+ * so the ONE material serves every surface — the popover shell, the frosted
+ * deck-viewer backdrops, and the radius-less control tracks alike. Only the
+ * `saturate(1.5)` here is a raw literal; the fill/sheen/blur/rim/shadow are all
+ * the --glass-* tokens.
  */
-export function glassSurfaceStyle(): React.CSSProperties {
+export function glassSurfaceStyle(
+  options: GlassSurfaceOptions = {},
+): React.CSSProperties {
+  const { radius = token("--radius-popover") } = options;
+  const blurBackdrop = `blur(${token("--glass-blur")}) saturate(1.5)`;
   return {
     // Deep chrome tint at reduced alpha so the backdrop blur reads as glass —
-    // topped with a faint top-left specular sheen. Bespoke glass literals: no
-    // design-system token maps to the translucent fill or sheen gradient.
-    background:
-      "linear-gradient(150deg, rgba(255,255,255,0.07), rgba(255,255,255,0) 42%), rgba(14,14,16,0.54)",
-    backdropFilter: "blur(22px) saturate(1.5)",
-    WebkitBackdropFilter: "blur(22px) saturate(1.5)",
-    border: "1px solid rgba(255,255,255,0.14)",
-    borderRadius: token("--radius-popover"),
-    // Layered rim / interior wash / drop shadow — bespoke glass literals with
-    // no matching elevation token.
-    boxShadow: [
-      "inset 0 1px 1px rgba(255,255,255,0.22)", // top specular rim
-      "inset 0 -18px 30px rgba(255,255,255,0.04)", // soft interior wash
-      "0 10px 34px rgba(6,2,14,0.5)", // drop
-    ].join(", "),
+    // topped with a faint top-left specular sheen.
+    background: `${token("--glass-sheen")}, ${token("--glass-fill")}`,
+    backdropFilter: blurBackdrop,
+    WebkitBackdropFilter: blurBackdrop,
+    border: `1px solid ${token("--glass-rim")}`,
+    ...(radius === null ? {} : { borderRadius: radius }),
+    // Layered rim / interior wash / drop shadow.
+    boxShadow: token("--glass-shadow"),
   };
 }

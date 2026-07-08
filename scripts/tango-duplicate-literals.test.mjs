@@ -60,36 +60,6 @@ export const BASELINE = [
     "src/tango/components/controls/PipBadge.tsx",
   ],
   [
-    "linear-gradient(150deg, rgba(255,255,255,0.07)",
-    "src/tango/internal/control-treatment.ts",
-    "src/tango/internal/glass-surface.ts",
-  ],
-  [
-    "blur(22px) saturate(1.5)",
-    "src/tango/internal/control-treatment.ts",
-    "src/tango/internal/glass-surface.ts",
-  ],
-  [
-    "1px solid rgba(255,255,255,0.14)",
-    "src/tango/internal/control-treatment.ts",
-    "src/tango/internal/glass-surface.ts",
-  ],
-  [
-    "inset 0 1px 1px rgba(255,255,255,0.22)",
-    "src/tango/internal/control-treatment.ts",
-    "src/tango/internal/glass-surface.ts",
-  ],
-  [
-    "inset 0 -18px 30px rgba(255,255,255,0.04)",
-    "src/tango/internal/control-treatment.ts",
-    "src/tango/internal/glass-surface.ts",
-  ],
-  [
-    "0 10px 34px rgba(6,2,14,0.5)",
-    "src/tango/internal/control-treatment.ts",
-    "src/tango/internal/glass-surface.ts",
-  ],
-  [
     "radial-gradient(circle at 50% 20%, color-mix(in srgb, ${token(\"--gold\")}",
     "src/tango/components/hud/DreamcallerPortrait.tsx",
     "src/tango/screens/quest-start-desktop.tsx",

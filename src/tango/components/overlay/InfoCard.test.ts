@@ -21,6 +21,7 @@ import { describe, expect, it } from "vitest";
 import { artRef } from "../../primitives/art";
 import { richText } from "../card/rich-text";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
+import { TOKENS } from "../../primitives/tokens";
 import {
   CLICK_WINDOW,
   computePopoverPosition,
@@ -76,7 +77,7 @@ describe("InfoCard shell treatment", () => {
     );
     const glass = glassSurfaceStyle();
 
-    expect(html).toContain("rgba(18,14,28,0.5)");
+    expect(html).toContain(TOKENS["--glass-fill-popover"].var);
     expect(html).toContain(
       `-webkit-backdrop-filter:${String(glass.WebkitBackdropFilter)}`,
     );
@@ -113,7 +114,7 @@ describe("InfoCard shell treatment", () => {
 
     expect(html).toContain("Wilderveil");
     expect(html).toContain("Aldric, the Seer");
-    expect(html).toContain("rgba(18,14,28,0.5)");
+    expect(html).toContain(TOKENS["--glass-fill-popover"].var);
     expect(html).toContain("width:360px");
   });
 });

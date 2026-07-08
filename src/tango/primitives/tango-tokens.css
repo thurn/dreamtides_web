@@ -503,6 +503,24 @@
   --inset-top: inset 0 1px 0 rgba(255, 255, 255, 0.08);  /* @kind shadow */
   --inset-press: inset 0 2px 8px rgba(3, 1, 8, 0.5);  /* @kind shadow */
 
+  /* ---- Liquid glass (the ONE translucent "glass" surface recipe) ----
+     The single source of truth for the Apple-style liquid-glass material: a
+     translucent deep-chrome fill over a blur+saturate backdrop, topped with a
+     faint specular sheen, a hairline rim, and a layered rim/wash/drop shadow.
+     src/tango/internal/glass-surface.ts is the ONLY reader of these tokens
+     (control-treatment.ts's glassTrack() and InfoCard's press-reveal shell
+     both route through that one recipe). No other file may re-declare the
+     fill / sheen / blur / rim / shadow — edit them here and every glass surface
+     follows. */
+  --glass-fill: rgba(14, 14, 16, 0.54);  /* @kind color */
+  /* The InfoCard reveal tint: a warmer violet-black so a press-reveal popover
+     reads distinct from the neutral deck-viewer glass. */
+  --glass-fill-popover: rgba(18, 14, 28, 0.5);  /* @kind color */
+  --glass-blur: 22px;  /* @kind other */
+  --glass-sheen: linear-gradient(150deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 42%);  /* @kind other */
+  --glass-rim: rgba(255, 255, 255, 0.14);  /* @kind color */
+  --glass-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.22), inset 0 -18px 30px rgba(255, 255, 255, 0.04), 0 10px 34px rgba(6, 2, 14, 0.5);  /* @kind shadow */
+
   /* ---- Object materials (a thing's OWN surface, never a legibility
      overlay). The energy orb fill, the wordmark gradient, the reward gold. ---- */
   --gradient-accent: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); /* @kind other */

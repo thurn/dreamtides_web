@@ -277,3 +277,9 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 | `--display-cutout-width` | `0px` |  |
 | `--display-cutout-height` | `0px` |  |
 | `--hover-scale` | `1.03` |  |
+| `--glass-fill` | `rgba(14, 14, 16, 0.54)` |  |
+| `--glass-fill-popover` | `rgba(18, 14, 28, 0.5)` |  |
+| `--glass-blur` | `22px` |  |
+| `--glass-sheen` | `linear-gradient(150deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 42%)` |  |
+| `--glass-rim` | `rgba(255, 255, 255, 0.14)` |  |
+| `--glass-shadow` | `inset 0 1px 1px rgba(255, 255, 255, 0.22), inset 0 -18px 30px rgba(255, 255, 255, 0.04), 0 10px 34px rgba(6, 2, 14, 0.5)` |  |

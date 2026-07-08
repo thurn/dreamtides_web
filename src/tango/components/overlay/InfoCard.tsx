@@ -97,8 +97,8 @@ const ATLAS_REVEAL_FIGURE_H = 248;
 const ATLAS_REVEAL_FIGURE_RIGHT = 4;
 /** Fraction of the atlas-reveal glass panel reserved for text. */
 const ATLAS_REVEAL_TEXT_FRACTION = 0.68;
-const INFO_CARD_GLASS_FILL = "rgba(18,14,28,0.5)";
-const INFO_CARD_GLASS_BACKGROUND = `linear-gradient(150deg, rgba(255,255,255,0.07), rgba(255,255,255,0) 42%), ${INFO_CARD_GLASS_FILL}`;
+const INFO_CARD_GLASS_FILL = token("--glass-fill-popover");
+const INFO_CARD_GLASS_BACKGROUND = `${token("--glass-sheen")}, ${INFO_CARD_GLASS_FILL}`;
 const geometryPx = (px: number): string =>
   `calc(${String(px)}px * var(--info-card-geometry-scale, 1))`;
 

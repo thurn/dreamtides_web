@@ -17,6 +17,7 @@
 import type { CSSProperties } from "react";
 import type { TangoColor } from "../primitives/color";
 import { token } from "../primitives/tokens";
+import { glassSurfaceStyle } from "./glass-surface";
 
 /** The resolved appearance of the control surface. */
 export interface ControlChrome {
@@ -53,24 +54,13 @@ export const CONTROL_INACTIVE_COLOR =
 
 /**
  * The liquid-glass surface shared by the controls and the glass icon button:
- * the same recipe as the shared glassSurfaceStyle material (fill + specular
- * sheen + blur/saturate backdrop + layered rim/wash/drop shadow), inlined here
- * so the control surface reads as a member of the one glass-surface family.
- * Returns the material without a border radius; the caller supplies that.
+ * the ONE shared glassSurfaceStyle material (fill + specular sheen +
+ * blur/saturate backdrop + layered rim/wash/drop shadow), so the control
+ * surface reads as a member of the one glass-surface family. Returns the
+ * material without a border radius; the caller supplies that.
  */
 export function glassTrack(): CSSProperties {
-  return {
-    background:
-      "linear-gradient(150deg, rgba(255,255,255,0.07), rgba(255,255,255,0) 42%), rgba(14,14,16,0.54)",
-    backdropFilter: "blur(22px) saturate(1.5)",
-    WebkitBackdropFilter: "blur(22px) saturate(1.5)",
-    border: "1px solid rgba(255,255,255,0.14)",
-    boxShadow: [
-      "inset 0 1px 1px rgba(255,255,255,0.22)",
-      "inset 0 -18px 30px rgba(255,255,255,0.04)",
-      "0 10px 34px rgba(6,2,14,0.5)",
-    ].join(", "),
-  };
+  return glassSurfaceStyle({ radius: null });
 }
 
 /**
