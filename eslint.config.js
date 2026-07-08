@@ -14,6 +14,7 @@ import tangoNoUntokenizedLengths from "./eslint-rules/no-untokenized-lengths.js"
 import tangoNoNameKeyedCards from "./eslint-rules/no-name-keyed-cards.js";
 import tangoNoRawSafeAreaEnv from "./eslint-rules/no-raw-safe-area-env.js";
 import tangoNoInlineGlass from "./eslint-rules/no-inline-glass.js";
+import tangoNoNumericStyleProps from "./eslint-rules/no-numeric-style-props.js";
 
 // One shared plugin object: flat config rejects two config blocks that bind the
 // same plugin name to different objects, and the tango rules apply to more than
@@ -34,6 +35,7 @@ const tangoPlugin = {
     "no-name-keyed-cards": tangoNoNameKeyedCards,
     "no-raw-safe-area-env": tangoNoRawSafeAreaEnv,
     "no-inline-glass": tangoNoInlineGlass,
+    "no-numeric-style-props": tangoNoNumericStyleProps,
   },
 };
 
@@ -83,6 +85,32 @@ export default tseslint.config(
       "tango/no-name-keyed-cards": "error",
       "tango/no-raw-safe-area-env": "error",
       "tango/no-inline-glass": "error",
+    },
+  },
+  {
+    // The styled public component surface. A number-typed visual knob
+    // (`size?: number`, `gap?: number`, `scale?: number`) on an exported
+    // *Props/*View type is an arbitrary-customization escape hatch; the strict
+    // form is an enumerated string variant the component maps to its own
+    // measure. The `allow` list names the production measures that genuinely
+    // have no enumerable form (a computed stage-pixel diameter, a px anchor
+    // offset, a fixed box width) — each is a box/measure/multiplier, not a
+    // style knob, and carries a comment saying why.
+    files: ["src/tango/components/**/*.{ts,tsx}"],
+    plugins: { tango: tangoPlugin },
+    rules: {
+      "tango/no-numeric-style-props": [
+        "error",
+        {
+          allow: [
+            "AtlasNodeView.size", // computed stage-pixel node diameter (1920x1080 space)
+            "AtlasNodeView.badgeScale", // mobile atlas badge-size multiplier
+            "PressPopoverProps.gap", // px offset between the anchor and the popover
+            "PressInfoProps.gap", // px offset between the anchor and the reveal
+            "DreamcallerPortraitProps.size", // fixed pixel width; a box measure, not a style knob
+          ],
+        },
+      ],
     },
   },
   {
