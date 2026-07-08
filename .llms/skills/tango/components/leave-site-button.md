@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/leave-site-button`
 
+Real consumers: **5** (imports outside `src/tango/docs/` and tests).
+
 The fixed top-right exit control for site screens: a danger-red square X button with consistent placement and accessible labeling.
 
 ## Props

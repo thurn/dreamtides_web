@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/essence-value`
 
+Real consumers: **10** (imports outside `src/tango/docs/` and tests).
+
 The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy.
 
 ## Props

@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/tide-pill`
 
+Real consumers: **0** (imports outside `src/tango/docs/` and tests).
+
 The labelled tag for a Dreamcaller's tides and affiliations. Hovering or pressing a pill reveals the tide's description through the shared InfoCard.
 
 ## Props

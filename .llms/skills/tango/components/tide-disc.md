@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/tide-disc`
 
+Real consumers: **1** (imports outside `src/tango/docs/` and tests).
+
 The single tide mark: a colored disc carrying the tide's glyph, sized 'sm' (desktop select) or 'lg' (mobile select) — the atom both Dreamcaller-select tide rows render from.
 
 ## Props

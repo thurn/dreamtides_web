@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/glossary-definition-card`
 
+Real consumers: **6** (imports outside `src/tango/docs/` and tests).
+
 The single keyword-definition tile: one glossary entry rendered through the InfoCard text shell with rules-rich body copy.
 
 ## Props

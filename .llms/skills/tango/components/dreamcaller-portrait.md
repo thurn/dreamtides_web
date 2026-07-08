@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/dreamcaller-portrait`
 
+Real consumers: **19** (imports outside `src/tango/docs/` and tests).
+
 The framed Dreamcaller character-art component: hero, panel, and thumb crops over the shared tinted portrait backdrop with a monogram fallback.
 
 ## Props

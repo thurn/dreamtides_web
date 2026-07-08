@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/info-card`
 
+Real consumers: **14** (imports outside `src/tango/docs/` and tests).
+
 The one press-to-reveal information card. Its media treatment varies by content — object, full-bleed, atlas reveal, icon, tide, or text — over a single fixed liquid-glass shell and reveal contract.
 
 ## Props

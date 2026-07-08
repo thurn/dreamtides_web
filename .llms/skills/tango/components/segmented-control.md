@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/segmented-control`
 
+Real consumers: **1** (imports outside `src/tango/docs/` and tests).
+
 The compact tab and filter switch used for type filters, sort direction, and small mode toggles. Its surface is the shared glass control material — the same one Select renders from — so a filter and a sort dropdown side by side read as one cluster.
 
 > **Guidance:** The track is the shared liquid-glass control surface with a neutral frosted selected segment, so a whole filter/sort cluster reads as one material.

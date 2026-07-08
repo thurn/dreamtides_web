@@ -39,36 +39,36 @@ The reference files and the index are projections of the component sources
 ## Component index
 
 <!-- BEGIN GENERATED COMPONENT INDEX (npm run tango-docs) -->
-| Component | Group | Reference | What it is |
-| --- | --- | --- | --- |
-| Pressable | Primitives | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
-| Resource Chip | Components | [components/resource-chip.md](components/resource-chip.md) | The canonical value-and-mark pairing for the game economy. |
-| Essence Value | Components | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
-| Button | Components | [components/button.md](components/button.md) | The one button in Tango — the beveled purple sprite, scaled to any label and to a taller commit height. |
-| Leave Site Button | Components | [components/leave-site-button.md](components/leave-site-button.md) | The fixed top-right exit control for site screens: a danger-red square X button with consistent placement and accessible labeling. |
-| Segmented Control | Components | [components/segmented-control.md](components/segmented-control.md) | The compact tab and filter switch used for type filters, sort direction, and small mode toggles. |
-| Select | Components | [components/select.md](components/select.md) | The compact dropdown control, and Tango's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. |
-| Stat Tile | Components | [components/stat-tile.md](components/stat-tile.md) | A labelled value cell for summary grids — a large value over a small uppercase label — used for deck stats and run-end results. |
-| Tide Pill | Components | [components/tide-pill.md](components/tide-pill.md) | The labelled tag for a Dreamcaller's tides and affiliations. |
-| Tide Disc | Components | [components/tide-disc.md](components/tide-disc.md) | The single tide mark: a colored disc carrying the tide's glyph, sized 'sm' (desktop select) or 'lg' (mobile select) — the atom both Dreamcaller-select tide rows render from. |
-| Motes | Components | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
-| Info Card | Components | [components/info-card.md](components/info-card.md) | The one press-to-reveal information card. |
-| Hover Popover | Components | [components/hover-popover.md](components/hover-popover.md) | The pointer-and-focus anchored popover primitive for glossary definitions and compact card previews, with viewport-aware placement. |
-| Group Panel | Components | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |
-| Glow Icon | Components | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a named glyph, role color, optional soft shadow, and optional emitted-light filter in one square footprint. |
-| Pip Badge | Components | [components/pip-badge.md](components/pip-badge.md) | The compact circular number badge for inline spark and energy references, with the matching resource fill and optional explanatory tooltip. |
-| Quest Status Bar | Components | [components/quest-status-bar.md](components/quest-status-bar.md) | The persistent, transparent bottom HUD for quest screens. |
-| Dreamcaller Portrait | Components | [components/dreamcaller-portrait.md](components/dreamcaller-portrait.md) | The framed Dreamcaller character-art component: hero, panel, and thumb crops over the shared tinted portrait backdrop with a monogram fallback. |
-| Rules Text | Components | [components/rules-text.md](components/rules-text.md) | Renders Dreamtides rules copy from card data — resource pips, ability carets, and glossary keywords styled in place — so ability text reads the same everywhere it appears. |
-| Game Card | Components | [components/game-card.md](components/game-card.md) | The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name. |
-| Hover Zoom Card | Components | [components/hover-zoom-card.md](components/hover-zoom-card.md) | The in-place card zoom wrapper for compact card slots: hover grows a portaled copy while the original footprint keeps layout stable. |
-| Card Term Definitions | Components | [components/card-term-definitions.md](components/card-term-definitions.md) | A stacked glossary panel for every gameplay term found in rules text, rendered as consistent InfoCard definition tiles. |
-| Glossary Definition Card | Components | [components/glossary-definition-card.md](components/glossary-definition-card.md) | The single keyword-definition tile: one glossary entry rendered through the InfoCard text shell with rules-rich body copy. |
-| Card Stat Orb | Components | [components/card-stat-orb.md](components/card-stat-orb.md) | The card-corner resource stat: a centered number over the energy, spark, or Dreamwell-energy glyph with fitted digits and optional tooltip. |
-| Atlas Node | Components | [components/atlas-node.md](components/atlas-node.md) | One dreamscape node on the Dream Atlas: a framed circular icon whose glow and badges track its state — revealed, known, visited, completed, or a looming boss. |
-| Atlas Edge | Components | [components/atlas-edge.md](components/atlas-edge.md) | The connector between two Atlas nodes, drawn inside the map's SVG. |
-| Dreamsign | Components | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
-| Site Node | Components | [components/site-node.md](components/site-node.md) | The dreamscape site disc: a floating circular node over scene art carrying a glyph and accent ring. |
+| Component | Group | Consumers | Reference | What it is |
+| --- | --- | --- | --- | --- |
+| Pressable | Primitives | 10 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
+| Resource Chip | Components | 1 | [components/resource-chip.md](components/resource-chip.md) | The canonical value-and-mark pairing for the game economy. |
+| Essence Value | Components | 10 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
+| Button | Components | 2 | [components/button.md](components/button.md) | The one button in Tango — the beveled purple sprite, scaled to any label and to a taller commit height. |
+| Leave Site Button | Components | 5 | [components/leave-site-button.md](components/leave-site-button.md) | The fixed top-right exit control for site screens: a danger-red square X button with consistent placement and accessible labeling. |
+| Segmented Control | Components | 1 | [components/segmented-control.md](components/segmented-control.md) | The compact tab and filter switch used for type filters, sort direction, and small mode toggles. |
+| Select | Components | 2 | [components/select.md](components/select.md) | The compact dropdown control, and Tango's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. |
+| Stat Tile | Components | 0 | [components/stat-tile.md](components/stat-tile.md) | A labelled value cell for summary grids — a large value over a small uppercase label — used for deck stats and run-end results. |
+| Tide Pill | Components | 0 | [components/tide-pill.md](components/tide-pill.md) | The labelled tag for a Dreamcaller's tides and affiliations. |
+| Tide Disc | Components | 1 | [components/tide-disc.md](components/tide-disc.md) | The single tide mark: a colored disc carrying the tide's glyph, sized 'sm' (desktop select) or 'lg' (mobile select) — the atom both Dreamcaller-select tide rows render from. |
+| Motes | Components | 5 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
+| Info Card | Components | 14 | [components/info-card.md](components/info-card.md) | The one press-to-reveal information card. |
+| Hover Popover | Components | 13 | [components/hover-popover.md](components/hover-popover.md) | The pointer-and-focus anchored popover primitive for glossary definitions and compact card previews, with viewport-aware placement. |
+| Group Panel | Components | 2 | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |
+| Glow Icon | Components | 9 | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a named glyph, role color, optional soft shadow, and optional emitted-light filter in one square footprint. |
+| Pip Badge | Components | 3 | [components/pip-badge.md](components/pip-badge.md) | The compact circular number badge for inline spark and energy references, with the matching resource fill and optional explanatory tooltip. |
+| Quest Status Bar | Components | 3 | [components/quest-status-bar.md](components/quest-status-bar.md) | The persistent, transparent bottom HUD for quest screens. |
+| Dreamcaller Portrait | Components | 19 | [components/dreamcaller-portrait.md](components/dreamcaller-portrait.md) | The framed Dreamcaller character-art component: hero, panel, and thumb crops over the shared tinted portrait backdrop with a monogram fallback. |
+| Rules Text | Components | 20 | [components/rules-text.md](components/rules-text.md) | Renders Dreamtides rules copy from card data — resource pips, ability carets, and glossary keywords styled in place — so ability text reads the same everywhere it appears. |
+| Game Card | Components | 20 | [components/game-card.md](components/game-card.md) | The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name. |
+| Hover Zoom Card | Components | 8 | [components/hover-zoom-card.md](components/hover-zoom-card.md) | The in-place card zoom wrapper for compact card slots: hover grows a portaled copy while the original footprint keeps layout stable. |
+| Card Term Definitions | Components | 5 | [components/card-term-definitions.md](components/card-term-definitions.md) | A stacked glossary panel for every gameplay term found in rules text, rendered as consistent InfoCard definition tiles. |
+| Glossary Definition Card | Components | 6 | [components/glossary-definition-card.md](components/glossary-definition-card.md) | The single keyword-definition tile: one glossary entry rendered through the InfoCard text shell with rules-rich body copy. |
+| Card Stat Orb | Components | 2 | [components/card-stat-orb.md](components/card-stat-orb.md) | The card-corner resource stat: a centered number over the energy, spark, or Dreamwell-energy glyph with fitted digits and optional tooltip. |
+| Atlas Node | Components | 2 | [components/atlas-node.md](components/atlas-node.md) | One dreamscape node on the Dream Atlas: a framed circular icon whose glow and badges track its state — revealed, known, visited, completed, or a looming boss. |
+| Atlas Edge | Components | 2 | [components/atlas-edge.md](components/atlas-edge.md) | The connector between two Atlas nodes, drawn inside the map's SVG. |
+| Dreamsign | Components | 7 | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
+| Site Node | Components | 2 | [components/site-node.md](components/site-node.md) | The dreamscape site disc: a floating circular node over scene art carrying a glyph and accent ring. |
 <!-- END GENERATED COMPONENT INDEX -->
 
 ## Customization: step back before adding any knob

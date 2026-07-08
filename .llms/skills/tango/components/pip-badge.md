@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/pip-badge`
 
+Real consumers: **3** (imports outside `src/tango/docs/` and tests).
+
 The compact circular number badge for inline spark and energy references, with the matching resource fill and optional explanatory tooltip.
 
 ## Props

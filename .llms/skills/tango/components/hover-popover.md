@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/hover-popover`
 
+Real consumers: **13** (imports outside `src/tango/docs/` and tests).
+
 The pointer-and-focus anchored popover primitive for glossary definitions and compact card previews, with viewport-aware placement.
 
 > **Guidance:** Use InfoCard.PressInfo for press-to-reveal screen objects. Use HoverPopover for inline text and compact list previews whose trigger already lives inside flowing content.

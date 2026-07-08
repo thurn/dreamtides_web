@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/card-term-definitions`
 
+Real consumers: **5** (imports outside `src/tango/docs/` and tests).
+
 A stacked glossary panel for every gameplay term found in rules text, rendered as consistent InfoCard definition tiles.
 
 ## Props

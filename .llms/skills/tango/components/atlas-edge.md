@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/atlas-edge`
 
+Real consumers: **2** (imports outside `src/tango/docs/` and tests).
+
 The connector between two Atlas nodes, drawn inside the map's SVG. Its treatment reflects the endpoints' lifecycle relative to the layer the player is choosing into.
 
 ## Props

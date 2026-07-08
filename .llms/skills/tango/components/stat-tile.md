@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/stat-tile`
 
+Real consumers: **0** (imports outside `src/tango/docs/` and tests).
+
 A labelled value cell for summary grids — a large value over a small uppercase label — used for deck stats and run-end results. Its value can be tinted to a resource role.
 
 ## Props

@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/resource-chip`
 
+Real consumers: **1** (imports outside `src/tango/docs/` and tests).
+
 The canonical value-and-mark pairing for the game economy. Every essence, energy, spark, points, or counter number routes through it, so the mark and its role color read identically wherever a value appears.
 
 ## Props

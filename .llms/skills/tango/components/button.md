@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/button`
 
+Real consumers: **2** (imports outside `src/tango/docs/` and tests).
+
 The one button in Tango — the beveled purple sprite, scaled to any label and to a taller commit height. Low-emphasis and destructive actions are plain pressable text or icons, never a second button color.
 
 ## Props

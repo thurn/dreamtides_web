@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/atlas-node`
 
+Real consumers: **2** (imports outside `src/tango/docs/` and tests).
+
 One dreamscape node on the Dream Atlas: a framed circular icon whose glow and badges track its state — revealed, known, visited, completed, or a looming boss.
 
 ## Props

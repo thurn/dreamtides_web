@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/site-node`
 
+Real consumers: **2** (imports outside `src/tango/docs/` and tests).
+
 The dreamscape site disc: a floating circular node over scene art carrying a glyph and accent ring. It has no text label — pressing or hovering reveals the site's name and detail through the shared InfoCard. The screen positions each node (via `model.pos`); it does not resize or recolor it.
 
 ## Props

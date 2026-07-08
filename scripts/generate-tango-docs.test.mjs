@@ -131,32 +131,37 @@ describe("renderComponentMarkdown", () => {
   const doc = extractDemoDoc(DEMO_FIXTURE, "fixture.tsx", "widgetDemo");
 
   it("renders blurb, callout, props table, and usage snippets", () => {
-    const markdown = renderComponentMarkdown(doc, [
-      {
-        name: "kind",
-        tsType: '"plain" | "fancy"',
-        unionMembers: ["plain", "fancy"],
-        required: true,
-        defaultValue: null,
-        description: "Which widget | treatment to draw.",
-      },
-      {
-        name: "view",
-        tsType: "WidgetView",
-        unionMembers: [],
-        required: false,
-        defaultValue: "undefined",
-        description: "",
-        nested: {
-          name: "WidgetView",
-          fields: [
-            { name: "left", tsType: "number", optional: false, description: "Stage x." },
-          ],
+    const markdown = renderComponentMarkdown(
+      doc,
+      [
+        {
+          name: "kind",
+          tsType: '"plain" | "fancy"',
+          unionMembers: ["plain", "fancy"],
+          required: true,
+          defaultValue: null,
+          description: "Which widget | treatment to draw.",
         },
-      },
-    ]);
+        {
+          name: "view",
+          tsType: "WidgetView",
+          unionMembers: [],
+          required: false,
+          defaultValue: "undefined",
+          description: "",
+          nested: {
+            name: "WidgetView",
+            fields: [
+              { name: "left", tsType: "number", optional: false, description: "Stage x." },
+            ],
+          },
+        },
+      ],
+      3,
+    );
     expect(markdown).toContain("# Widget");
     expect(markdown).toContain("A fixture widget.");
+    expect(markdown).toContain("Real consumers: **3**");
     expect(markdown).toContain("> **Guidance:** Prefer a real component.");
     // Pipes inside type/description cells are escaped so the table row holds.
     expect(markdown).toContain('`"plain" \\| "fancy"`');
@@ -173,50 +178,62 @@ describe("renderComponentMarkdown", () => {
   });
 
   it("spells out union members hidden behind a named type alias", () => {
-    const markdown = renderComponentMarkdown(doc, [
-      {
-        name: "size",
-        tsType: "WidgetSize",
-        unionMembers: ["sm", "md"],
-        required: false,
-        defaultValue: "md",
-        description: "",
-      },
-    ]);
+    const markdown = renderComponentMarkdown(
+      doc,
+      [
+        {
+          name: "size",
+          tsType: "WidgetSize",
+          unionMembers: ["sm", "md"],
+          required: false,
+          defaultValue: "md",
+          description: "",
+        },
+      ],
+      3,
+    );
     expect(markdown).toContain('| `WidgetSize` = `"sm" \\| "md"` |');
   });
 
   it("does not repeat members when the type already spells the literals", () => {
-    const markdown = renderComponentMarkdown(doc, [
-      {
-        name: "kind",
-        tsType: '"plain" | "fancy"',
-        unionMembers: ["plain", "fancy"],
-        required: true,
-        defaultValue: null,
-        description: "",
-      },
-    ]);
+    const markdown = renderComponentMarkdown(
+      doc,
+      [
+        {
+          name: "kind",
+          tsType: '"plain" | "fancy"',
+          unionMembers: ["plain", "fancy"],
+          required: true,
+          defaultValue: null,
+          description: "",
+        },
+      ],
+      3,
+    );
     expect(markdown).toContain('| `"plain" \\| "fancy"` |');
     expect(markdown).not.toContain("= `");
   });
 
   it("says so when a component takes no props", () => {
-    const markdown = renderComponentMarkdown(doc, []);
+    const markdown = renderComponentMarkdown(doc, [], 3);
     expect(markdown).toContain("This component takes no props.");
   });
 
   it("uses a wider code fence for values containing backticks", () => {
-    const markdown = renderComponentMarkdown(doc, [
-      {
-        name: "color",
-        tsType: "ColorRole | `#${string}`",
-        unionMembers: [],
-        required: true,
-        defaultValue: null,
-        description: "",
-      },
-    ]);
+    const markdown = renderComponentMarkdown(
+      doc,
+      [
+        {
+          name: "color",
+          tsType: "ColorRole | `#${string}`",
+          unionMembers: [],
+          required: true,
+          defaultValue: null,
+          description: "",
+        },
+      ],
+      3,
+    );
     expect(markdown).toContain("`` ColorRole \\| `#${string}` ``");
   });
 });
@@ -233,16 +250,18 @@ describe("index rendering and splicing", () => {
   ];
 
   it("renders one index row per component with a first-sentence summary", () => {
-    const index = renderIndexSection(docs);
+    const index = renderIndexSection(docs, new Map(docs.map((d) => [d.title, 0])));
+    expect(index).toContain("| Component | Group | Consumers |");
     expect(index).toContain(
-      "| Widget | Primitives | [components/widget.md](components/widget.md) | A fixture widget. |",
+      "| Widget | Primitives | 0 | [components/widget.md](components/widget.md) | A fixture widget. |",
     );
   });
 
   it("replaces only the text between the markers, repeatably", () => {
+    const countByTitle = new Map(docs.map((d) => [d.title, 0]));
     const skill = `# Skill\n\n${INDEX_BEGIN_MARKER}\nold content\n${INDEX_END_MARKER}\n\nAfter.\n`;
-    const once = spliceGeneratedIndex(skill, renderIndexSection(docs));
-    const twice = spliceGeneratedIndex(once, renderIndexSection(docs));
+    const once = spliceGeneratedIndex(skill, renderIndexSection(docs, countByTitle));
+    const twice = spliceGeneratedIndex(once, renderIndexSection(docs, countByTitle));
     expect(once).toBe(twice);
     expect(once).not.toContain("old content");
     expect(once).toContain("[components/widget.md](components/widget.md)");

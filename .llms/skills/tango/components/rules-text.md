@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/rules-text`
 
+Real consumers: **20** (imports outside `src/tango/docs/` and tests).
+
 Renders Dreamtides rules copy from card data — resource pips, ability carets, and glossary keywords styled in place — so ability text reads the same everywhere it appears.
 
 ## Props

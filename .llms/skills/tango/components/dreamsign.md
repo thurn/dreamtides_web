@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/dreamsign`
 
+Real consumers: **7** (imports outside `src/tango/docs/` and tests).
+
 A dreamsign — a minor passive collectible — shown as its art floating on the scene. Hovering or pressing it reveals the full name and effect through the shared InfoCard.
 
 ## Props

@@ -43,6 +43,7 @@ import { dirname, join, relative, resolve } from "node:path";
 import ts from "typescript";
 import { parseCssTokens } from "./lib/tango-css-tokens.mjs";
 import { dedupeLastWins } from "./generate-tango-tokens.mjs";
+import { computeConsumerCounts } from "./lib/tango-consumers.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const REGISTRY_PATH = resolve(ROOT, "src/tango/docs/registry.ts");
@@ -314,7 +315,7 @@ const GENERATED_HEADER = (id) =>
  * PURE core: render one component's markdown reference from its demo doc and
  * docgen PropMeta[] (the tango-metadata.json entry under doc.docName).
  */
-export function renderComponentMarkdown(doc, props) {
+export function renderComponentMarkdown(doc, props, consumerCount) {
   const lines = [];
   lines.push(GENERATED_HEADER(doc.id));
   lines.push("");
@@ -323,6 +324,12 @@ export function renderComponentMarkdown(doc, props) {
   lines.push(
     `${doc.group} · Live demo & interactive props: \`/tango#/${doc.id}\``,
   );
+  if (typeof consumerCount === "number") {
+    lines.push("");
+    lines.push(
+      `Real consumers: **${consumerCount}** (imports outside \`src/tango/docs/\` and tests).`,
+    );
+  }
   lines.push("");
   lines.push(doc.blurb);
   if (doc.callout) {
@@ -390,13 +397,15 @@ export function renderComponentMarkdown(doc, props) {
  * PURE core: render the component index table (registry order, grouped by
  * first appearance of each group) that gets spliced into SKILL.md.
  */
-export function renderIndexSection(docs) {
+export function renderIndexSection(docs, countByTitle) {
   const lines = [];
-  lines.push("| Component | Group | Reference | What it is |");
-  lines.push("| --- | --- | --- | --- |");
+  lines.push("| Component | Group | Consumers | Reference | What it is |");
+  lines.push("| --- | --- | --- | --- | --- |");
   for (const doc of docs) {
+    const count = countByTitle?.get(doc.title);
+    const consumers = count === undefined ? "—" : count;
     lines.push(
-      `| ${doc.title} | ${doc.group} | [components/${doc.id}.md](components/${doc.id}.md) | ${tableCell(firstSentence(doc.blurb))} |`,
+      `| ${doc.title} | ${doc.group} | ${consumers} | [components/${doc.id}.md](components/${doc.id}.md) | ${tableCell(firstSentence(doc.blurb))} |`,
     );
   }
   return lines.join("\n");
@@ -616,6 +625,9 @@ export function computeDocOutputs() {
     relative(ROOT, REGISTRY_PATH),
   );
   const metadata = JSON.parse(readFileSync(METADATA_PATH, "utf8"));
+  const countByTitle = new Map(
+    computeConsumerCounts().map((c) => [c.title, c.count]),
+  );
 
   const docs = [];
   for (const entry of registryEntries) {
@@ -643,12 +655,15 @@ export function computeDocOutputs() {
   for (const doc of docs) {
     files.set(
       join(COMPONENTS_OUT_DIR, `${doc.id}.md`),
-      renderComponentMarkdown(doc, metadata[doc.docName]),
+      renderComponentMarkdown(doc, metadata[doc.docName], countByTitle.get(doc.title)),
     );
   }
 
   const skillText = readFileSync(SKILL_PATH, "utf8");
-  files.set(SKILL_PATH, spliceGeneratedIndex(skillText, renderIndexSection(docs)));
+  files.set(
+    SKILL_PATH,
+    spliceGeneratedIndex(skillText, renderIndexSection(docs, countByTitle)),
+  );
 
   const cssText = readFileSync(TOKENS_CSS_PATH, "utf8");
   const dedupedTokens = [...dedupeLastWins(parseCssTokens(cssText))].map(

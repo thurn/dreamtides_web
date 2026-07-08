@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/card-stat-orb`
 
+Real consumers: **2** (imports outside `src/tango/docs/` and tests).
+
 The card-corner resource stat: a centered number over the energy, spark, or Dreamwell-energy glyph with fitted digits and optional tooltip.
 
 ## Props

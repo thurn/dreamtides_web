@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/hover-zoom-card`
 
+Real consumers: **8** (imports outside `src/tango/docs/` and tests).
+
 The in-place card zoom wrapper for compact card slots: hover grows a portaled copy while the original footprint keeps layout stable.
 
 ## Props

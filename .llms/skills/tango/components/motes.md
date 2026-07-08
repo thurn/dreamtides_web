@@ -6,6 +6,8 @@
 
 Components · Live demo & interactive props: `/tango#/motes`
 
+Real consumers: **5** (imports outside `src/tango/docs/` and tests).
+
 The atmospheric particle layer — drifting dust that gives a surface its living shimmer. Its tint adapts to whether it sits over scene art or over chrome.
 
 ## Props
