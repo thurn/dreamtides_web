@@ -208,7 +208,12 @@ function RevelationCard({
         delayMs={DREAMSIGN_HOVER_DELAY_MS}
         placement="left"
         maxWidthPx={null}
-        content={<DreamsignInfoCard dreamsign={dreamsign} />}
+        content={({ side }) => (
+          <DreamsignInfoCard
+            dreamsign={dreamsign}
+            definitionSide={side === "left" ? "left" : "right"}
+          />
+        )}
       >
         <div
           className={`dsr-art-wrap${dreamsign.isBane ? " bane" : ""}`}

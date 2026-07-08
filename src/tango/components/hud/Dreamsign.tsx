@@ -75,6 +75,13 @@ export interface DreamsignInfoCardProps {
   dreamsign: DreamsignData;
   /** Optional `data-testid` on the reveal wrapper, for stable selectors. */
   testid?: string;
+  /**
+   * Which side of the primary dreamsign card the keyword definitions occupy.
+   * Defaults to `"right"` so standalone reveals keep the primary card first in
+   * reading order; callers with placement context pass the side that keeps the
+   * primary card closest to the trigger.
+   */
+  definitionSide?: "left" | "right";
 }
 
 /**
@@ -97,40 +104,47 @@ export interface DreamsignInfoCardProps {
 export function DreamsignInfoCard({
   dreamsign,
   testid,
+  definitionSide = "right",
 }: DreamsignInfoCardProps): React.ReactElement {
   const showImage = Boolean(dreamsign.imageName);
   const effect = dreamsign.effectDescription ?? "";
   const body = effect ? richText.rules(effect) : undefined;
+  const primaryCard = showImage ? (
+    <InfoCard
+      variant="object"
+      image={artRef.dreamsign(String(dreamsign.imageName))}
+      imageFilter={
+        dreamsign.isBane ? "dreamsign-portrait-bane" : "dreamsign-portrait"
+      }
+      title={dreamsign.name}
+      body={body}
+    />
+  ) : (
+    <InfoCard variant="text" title={dreamsign.name} body={body} />
+  );
+  const definitions = (
+    <CardTermDefinitions
+      text={effect}
+      side={definitionSide}
+      testId={testid ? `${testid}-definition-stack` : undefined}
+    />
+  );
   return (
     <div
       data-testid={testid}
       style={{
         display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 8,
+        flexDirection: "row",
+        alignItems: "flex-start",
+        gap: token("--space-3"),
       }}
     >
+      {definitionSide === "left" && definitions}
       {/* A dreamsign with art reveals through the media `object` variant; one
           without art falls back to the media-free `text` variant so the reveal
           is always a complete card, never an empty image frame. */}
-      {showImage ? (
-        <InfoCard
-          variant="object"
-          image={artRef.dreamsign(String(dreamsign.imageName))}
-          imageFilter={
-            dreamsign.isBane ? "dreamsign-portrait-bane" : "dreamsign-portrait"
-          }
-          title={dreamsign.name}
-          body={body}
-        />
-      ) : (
-        <InfoCard variant="text" title={dreamsign.name} body={body} />
-      )}
-      <CardTermDefinitions
-        text={effect}
-        testId={testid ? `${testid}-definition-stack` : undefined}
-      />
+      {primaryCard}
+      {definitionSide === "right" && definitions}
     </div>
   );
 }
@@ -240,7 +254,15 @@ export function Dreamsign({
     transition: `transform ${token("--dur-fast")} ${token("--ease-out")}`,
   };
 
-  const card = <DreamsignInfoCard dreamsign={dreamsign} testid={revealTestid} />;
+  const definitionSide: "left" | "right" =
+    anchor !== null && anchor.x > anchor.w / 2 ? "left" : "right";
+  const card = (
+    <DreamsignInfoCard
+      dreamsign={dreamsign}
+      testid={revealTestid}
+      definitionSide={definitionSide}
+    />
+  );
 
   return (
     <span
@@ -287,10 +309,10 @@ export function Dreamsign({
       {shown &&
         useStage &&
         anchor &&
-        stageRef?.current &&
+        typeof document !== "undefined" &&
         createPortal(
           <PressPopover anchor={anchor}>{card}</PressPopover>,
-          stageRef.current,
+          document.body,
         )}
 
       {/* Standalone fallback: the same InfoCard floated directly above. */}

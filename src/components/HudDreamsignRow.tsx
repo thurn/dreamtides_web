@@ -86,12 +86,13 @@ function HudDreamsignIcon({ dreamsign }: { dreamsign: Dreamsign }) {
         triggerAs="span"
         delayMs={250}
         maxWidthPx={null}
-        content={
+        content={({ side }) => (
           <DreamsignInfoCard
             dreamsign={dreamsign}
             testid="hud-dreamsign-popover"
+            definitionSide={side === "left" ? "left" : "right"}
           />
-        }
+        )}
       >
         <span
         data-testid="hud-dreamsign-icon"

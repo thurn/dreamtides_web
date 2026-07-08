@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
 
-import { act } from "react";
+import { act, useRef } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { Dreamsign } from "./Dreamsign";
+import { Dreamsign, DreamsignInfoCard } from "./Dreamsign";
 import type { Dreamsign as DreamsignData } from "../../../types/quest";
 import { GLOSSARY, type GlossaryEntry } from "../../../data/glossary";
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
@@ -293,6 +293,14 @@ describe("Dreamsign", () => {
     expect(
       reveal?.querySelector('[data-testid="dreamsign-reveal-definition-stack"]'),
     ).not.toBeNull();
+    expect(
+      reveal
+        ?.querySelector('[data-testid="dreamsign-reveal-definition-stack"]')
+        ?.getAttribute("data-definition-side"),
+    ).toBe("right");
+    const aggregate = reveal as HTMLElement | null;
+    expect(aggregate?.style.flexDirection).toBe("row");
+    expect(aggregate?.style.alignItems).toBe("flex-start");
     // ...and it exposes the keyword's DEFINITION text, not just the highlight.
     expect(reveal?.textContent).toContain(definitionWord);
 
@@ -305,6 +313,80 @@ describe("Dreamsign", () => {
     ).toBe(0);
 
     act(() => {
+      root.unmount();
+    });
+  });
+
+  it("can place glossary definitions to the left of the primary card", () => {
+    const { effect } = pickGlossaryFixture();
+    const sign = makeDreamsign({
+      name: "Left Keyworded",
+      effectDescription: effect,
+      imageName: "keyworded.png",
+    });
+
+    const { container, root } = mountInto(
+      <DreamsignInfoCard
+        dreamsign={sign}
+        testid="dreamsign-info-card"
+        definitionSide="left"
+      />,
+    );
+
+    const reveal = container.querySelector<HTMLElement>(
+      '[data-testid="dreamsign-info-card"]',
+    );
+    const stack = reveal?.querySelector<HTMLElement>(
+      '[data-testid="dreamsign-info-card-definition-stack"]',
+    );
+    expect(stack).not.toBeNull();
+    expect(stack?.getAttribute("data-definition-side")).toBe("left");
+    expect(reveal?.firstElementChild).toBe(stack);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("portals stage-anchored reveals to the body above app chrome", () => {
+    const { effect } = pickGlossaryFixture();
+    const sign = makeDreamsign({
+      name: "Portaled",
+      effectDescription: effect,
+      imageName: "portaled.png",
+    });
+
+    function StageHarness() {
+      const stageRef = useRef<HTMLDivElement>(null);
+      return (
+        <div ref={stageRef} data-testid="stage">
+          <Dreamsign
+            dreamsign={sign}
+            sizePx={64}
+            stageRef={stageRef}
+            revealTestid="stage-reveal"
+          />
+        </div>
+      );
+    }
+
+    const { container, root } = mountInto(<StageHarness />);
+    const tile = container.querySelector<HTMLElement>(
+      '[data-testid="dreamsign-art-tile"]',
+    );
+
+    act(() => {
+      tile?.dispatchEvent(new Event("pointerdown", { bubbles: true }));
+    });
+
+    const reveal = document.body.querySelector('[data-testid="stage-reveal"]');
+    const portal = reveal?.parentElement;
+    expect(reveal).not.toBeNull();
+    expect(portal?.parentElement).toBe(document.body);
+    expect(portal?.style.zIndex).toBe("1000");
+
+    act(() => {
+      tile?.dispatchEvent(new Event("pointerup", { bubbles: true }));
       root.unmount();
     });
   });

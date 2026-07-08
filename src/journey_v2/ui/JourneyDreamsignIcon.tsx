@@ -157,12 +157,13 @@ export function JourneyDreamsignIcon({
       placement="top"
       delayMs={CARD_HOVER_PREVIEW_DELAY_MS}
       maxWidthPx={null}
-      content={
+      content={({ side }) => (
         <DreamsignInfoCard
           dreamsign={dreamsign}
           testid={`journey-dreamsign-hover-${object.dreamsignId}`}
+          definitionSide={side === "left" ? "left" : "right"}
         />
-      }
+      )}
     >
       {body}
     </HoverPopover>

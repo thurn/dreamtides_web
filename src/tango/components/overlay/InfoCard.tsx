@@ -161,6 +161,8 @@ export const CLICK_WINDOW = CLICK_WINDOW_MS;
 /** Radius (px) of the fingertip disc a touch reveal keeps clear of the card.
  * Exported for the finger-clearance clamp tests. */
 export const FINGER_RADIUS = FINGER_RADIUS_PX;
+/** Root-layer z-index for InfoCard reveals. They must cover app-shell chrome. */
+export const POPOVER_Z_INDEX = 1000;
 
 /**
  * The ONE global reveal delay (ms). Module-scoped (NOT a per-call prop) and read
@@ -1365,7 +1367,7 @@ export function PressPopover({
         position: "absolute",
         // Hug the card so `offsetWidth` is the card's real layout width.
         width: "max-content",
-        zIndex: 90,
+        zIndex: POPOVER_Z_INDEX,
         pointerEvents: "none",
         left: pos ? pos.left : anchor ? anchor.x : 0,
         top: pos ? pos.top : 0,

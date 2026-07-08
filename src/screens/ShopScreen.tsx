@@ -427,7 +427,12 @@ function ShopDreamsignArt({ dreamsign }: { dreamsign: Dreamsign }) {
       triggerAs="div"
       delayMs={DREAMSIGN_HOVER_DELAY_MS}
       maxWidthPx={null}
-      content={<DreamsignInfoCard dreamsign={dreamsign} />}
+      content={({ side }) => (
+        <DreamsignInfoCard
+          dreamsign={dreamsign}
+          definitionSide={side === "left" ? "left" : "right"}
+        />
+      )}
     >
       <div
         className={`sh-sign${dreamsign.isBane ? " is-bane" : ""}`}
