@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/icon-button`
 
-Real consumers: **5** (imports outside `src/tango/docs/` and tests).
+Real consumers: **6** (imports outside `src/tango/docs/` and tests).
 
 The compact glyph-only glass disc — a corner chrome action worn by the deck viewer's close control and the dreamscape menu button. Its surface is the shared liquid-glass control material, made a fully-round disc, so it reads as one family with the filter/sort controls it sits beside.
 

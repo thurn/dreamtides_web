@@ -45,6 +45,8 @@ import type { AnchorRect } from "../overlay/InfoCard";
 import { richText } from "../card/rich-text";
 import { token } from "../../primitives/tokens";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
+import { IconButton } from "../controls/IconButton";
+import { GLYPHS } from "../../primitives/glyph";
 import "./quest-status-bar.css";
 
 const { PressPopover, usePressReveal, anchorRect, PRESS_SCALE, HOVER_SCALE } = InfoCard;
@@ -396,25 +398,7 @@ function QsbDreamsignWindow({
           <h2 style={{ margin: 0, font: `600 21px/1 ${token("--font-title")}`, color: token("--text-primary") }}>
             Dreamsigns
           </h2>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            style={{
-              width: 34,
-              height: 34,
-              borderRadius: token("--radius-control"),
-              display: "grid",
-              placeItems: "center",
-              color: token("--text-secondary"),
-              background: "rgba(255,255,255,0.05)",
-              border: `1px solid ${token("--border-soft")}`,
-              fontSize: 18,
-              cursor: "pointer",
-            }}
-          >
-            <i className="bxf bx-x" aria-hidden="true" />
-          </button>
+          <IconButton glyph={GLYPHS.close} size="sm" label="Close" onPress={onClose} />
         </div>
         <div
           style={{
