@@ -164,7 +164,7 @@
 }
 
 .dream-atlas .node.is-hover .node-art {
-  transform: scale(1.07);
+  transform: scale(var(--node-hover-scale));
 }
 .dream-atlas .node-available.is-hover .node-glow {
   box-shadow: 0 0 42px 10px rgba(168, 85, 247, 0.85);

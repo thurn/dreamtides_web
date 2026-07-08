@@ -232,6 +232,7 @@ export const TOKENS = {
   "--safe-bottom": { var: "var(--safe-bottom)", value: "34px" },
   "--press-scale": { var: "var(--press-scale)", value: "0.9", kind: "other" },
   "--hover-scale": { var: "var(--hover-scale)", value: "1.03", kind: "other" },
+  "--node-hover-scale": { var: "var(--node-hover-scale)", value: "1.08", kind: "other" },
   "--shadow-sm": { var: "var(--shadow-sm)", value: "0 1px 3px rgba(4, 2, 10, 0.5)" },
   "--shadow-md": { var: "var(--shadow-md)", value: "0 6px 18px rgba(4, 2, 10, 0.55)" },
   "--shadow-lg": { var: "var(--shadow-lg)", value: "0 16px 40px rgba(3, 1, 8, 0.62)" },

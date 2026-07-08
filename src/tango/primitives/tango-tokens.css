@@ -470,6 +470,13 @@
      apply. Mirrors HOVER_SCALE in Pressable.tsx. */
   --hover-scale: 1.03; /* @kind other */
 
+  /* ---- The map-node hover pop ----
+     A map node (Dream Atlas node, dreamscape site disc) needs a bigger pop
+     than an inline pressable, so it grows by this on hover — deliberately
+     larger than --hover-scale / Pressable's HOVER_SCALE. AtlasNode's node-art
+     and SiteNode both read this so their hover scale can't diverge. */
+  --node-hover-scale: 1.08; /* @kind other */
+
   /* ---- Elevation shadows (cool, purple-black — never neutral gray) ---- */
   --shadow-sm: 0 1px 3px rgba(4, 2, 10, 0.5);
   --shadow-md: 0 6px 18px rgba(4, 2, 10, 0.55);

@@ -31,6 +31,7 @@ import { type ScatterPoint } from "./dreamscape-scatter";
 import type { SiteState } from "../../../types/quest";
 import { type Glyph } from "../../primitives/glyph";
 import { type TangoColor, withAlpha } from "../../primitives/color";
+import { token } from "../../primitives/tokens";
 import "./site-node.css";
 
 const { usePressReveal, anchorRect, PressPopover } = InfoCard;
@@ -175,7 +176,10 @@ export function SiteNode({
     animationDelay: `${String(index * -1.37)}s`,
     opacity,
     zIndex: shown ? 40 : 10,
-    transform: shown && isInteractive ? "scale(1.08)" : "scale(1)",
+    transform:
+      shown && isInteractive
+        ? `scale(${token("--node-hover-scale")})`
+        : "scale(1)",
     touchAction: "none",
     WebkitTapHighlightColor: "transparent",
   };
