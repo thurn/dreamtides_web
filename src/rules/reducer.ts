@@ -8,8 +8,9 @@
 // bounce, leaving state untouched. Throwing is reserved for programmer errors.
 //
 // Domain cases land per-task by extending the `routeDomain` switch. Until a
-// type has a case it falls through to a bounce. `ADJUST_ESSENCE` is the first
-// real case, implemented here as the CAS-policy probe.
+// type has a case it falls through to a bounce. The quest lifecycle, essence,
+// and navigation cases live in `./quest/lifecycle` as pure `(quest, payload)`
+// functions; `routeDomain` wraps their result over the fold state.
 
 import type { EventContext, EventOutcome, GameEvent } from "../eventlog/types";
 import {
@@ -17,6 +18,8 @@ import {
   DECISION_NEUTRAL_EVENT_TYPES,
 } from "./events";
 import type { FoldState } from "./fold-state";
+import type { QuestState } from "../types/quest";
+import * as lifecycle from "./quest/lifecycle";
 
 /** The reducer's return shape (matches `EngineConfig.reducer`). */
 export interface ReduceResult {
@@ -135,9 +138,45 @@ function routeDomain(
   event: GameEvent,
   _ctx: EventContext,
 ): ReduceResult {
+  const payload = event.payload ?? {};
+  const quest = state.quest;
   switch (event.type) {
+    // --- essence & limits ---
     case "ADJUST_ESSENCE":
-      return applyAdjustEssence(state, event);
+      return questCase(state, lifecycle.adjustEssence(quest, payload));
+    case "SET_ESSENCE":
+      return questCase(state, lifecycle.setEssence(quest, payload));
+    case "ADJUST_ESSENCE_CAP":
+      return questCase(state, lifecycle.adjustEssenceCap(quest, payload));
+    case "SET_ESSENCE_CAP":
+      return questCase(state, lifecycle.setEssenceCap(quest, payload));
+    case "SET_MAX_DREAMSIGNS":
+      return questCase(state, lifecycle.setMaxDreamsigns(quest, payload));
+    case "SET_COMPLETION_LEVEL":
+      return questCase(state, lifecycle.setCompletionLevel(quest, payload));
+
+    // --- navigation ---
+    case "SET_SCREEN":
+      return questCase(state, lifecycle.setScreen(quest, payload));
+    case "TRAVEL_TO_DREAMSCAPE":
+      return questCase(state, lifecycle.travelToDreamscape(quest, payload));
+    case "MARK_SITE_VISITED":
+      return questCase(state, lifecycle.markSiteVisited(quest, payload));
+    case "DISMISS_STARTING_DECK_POPUP":
+      return questCase(state, lifecycle.dismissStartingDeckPopup(quest));
+
+    // --- dreamcaller & run assembly ---
+    case "SELECT_DREAMCALLER":
+      return questCase(state, lifecycle.selectDreamcaller(quest, payload));
+    case "START_QUEST":
+      return questCase(state, lifecycle.startQuest(quest, payload));
+
+    // --- whole-fold cases (touch the battle slice) ---
+    case "RESET_QUEST":
+      return foldCase(state, lifecycle.resetQuest(state));
+    case "LOAD_STATE":
+      return foldCase(state, lifecycle.loadState(state, payload));
+
     default:
       // Not-yet-implemented or unknown type — recorded no-op.
       return bounce(state);
@@ -145,26 +184,24 @@ function routeDomain(
 }
 
 /**
- * `ADJUST_ESSENCE { delta }` — mirrors legacy `changeEssence`: add `delta` to
- * quest essence and clamp the result to `[0, essenceCap]`. A non-finite delta
- * is malformed and bounces.
+ * Wrap a quest-only domain result: `null` bounces (invalid-in-state / malformed
+ * payload), a new `QuestState` is applied over the existing battle slice.
  */
-function applyAdjustEssence(state: FoldState, event: GameEvent): ReduceResult {
-  const delta = event.payload?.delta;
-  if (typeof delta !== "number" || !Number.isFinite(delta)) {
-    return bounce(state);
-  }
-  const { essence, essenceCap } = state.quest;
-  const next = clampEssence(essence + delta, essenceCap);
-  return {
-    state: { ...state, quest: { ...state.quest, essence: next } },
-    outcome: "applied",
-  };
+function questCase(
+  state: FoldState,
+  nextQuest: QuestState | null,
+): ReduceResult {
+  if (nextQuest === null) return bounce(state);
+  return { state: { ...state, quest: nextQuest }, outcome: "applied" };
 }
 
-/** Clamp essence to `[0, cap]` (mirrors `clampEssence` in quest-state-actions). */
-function clampEssence(value: number, cap: number): number {
-  return Math.max(0, Math.min(value, cap));
+/** Wrap a whole-fold domain result: `null` bounces, a new `FoldState` applies. */
+function foldCase(
+  state: FoldState,
+  nextState: FoldState | null,
+): ReduceResult {
+  if (nextState === null) return bounce(state);
+  return { state: nextState, outcome: "applied" };
 }
 
 function bounce(state: FoldState): ReduceResult {

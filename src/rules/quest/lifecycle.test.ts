@@ -1,0 +1,507 @@
+import { afterEach, describe, expect, it } from "vitest";
+
+import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
+import { hashState } from "../../eventlog/hash";
+import type {
+  DreamcallerContent,
+  ResolvedDreamcallerPackage,
+} from "../../types/content";
+import type { DreamscapeModifier, QuestState } from "../../types/quest";
+import { LayerName } from "../../types/layer-name";
+import { genesisFoldState, type FoldState } from "../fold-state";
+import { reduceGameEvent } from "../reducer";
+import {
+  registerQuestLifecycleContentProvider,
+  type QuestLifecycleContentProvider,
+} from "./lifecycle";
+
+// ---------------------------------------------------------------------------
+// Fixtures
+// ---------------------------------------------------------------------------
+
+const GENESIS: Genesis = {
+  seed: "lifecycle-seed",
+  reducerVersion: "test",
+  createdAt: 0,
+};
+
+function ctx(overrides: Partial<EventContext> = {}): EventContext {
+  return {
+    seq: 10,
+    rng: () => 0,
+    intervening: [],
+    timestamp: "1970-01-01T00:00:00.000Z",
+    ...overrides,
+  };
+}
+
+function event(
+  type: string,
+  payload: Record<string, unknown>,
+  actor = "alice",
+): GameEvent {
+  return {
+    type,
+    payload,
+    actor,
+    clientTimestamp: "1970-01-01T00:00:00.000Z",
+    basedOnSeq: 0,
+  };
+}
+
+function apply(
+  state: FoldState,
+  type: string,
+  payload: Record<string, unknown>,
+  context: EventContext = ctx(),
+): FoldState {
+  return reduceGameEvent(state, event(type, payload), context).state;
+}
+
+function genesis(): FoldState {
+  return genesisFoldState(GENESIS);
+}
+
+/**
+ * A tiny deterministic 32-bit xorshift PRNG so the property sweeps are
+ * reproducible without depending on `Math.random`.
+ */
+function makePrng(seed: number): () => number {
+  let state = seed >>> 0 || 1;
+  return () => {
+    state ^= state << 13;
+    state ^= state >>> 17;
+    state ^= state << 5;
+    state >>>= 0;
+    return state / 0x1_0000_0000;
+  };
+}
+
+/**
+ * A deterministic content provider whose package depends ONLY on
+ * `(dreamcallerId, seed)` — never on wall-clock or live randomness — so any
+ * nondeterminism the reducer introduced would surface as a hash mismatch.
+ */
+function deterministicProvider(): QuestLifecycleContentProvider {
+  function packageFor(
+    dreamcallerId: string,
+    seed: string,
+  ): ResolvedDreamcallerPackage {
+    const dreamcaller: DreamcallerContent = {
+      id: dreamcallerId,
+      name: `caller-${dreamcallerId}`,
+      title: "title",
+      renderedText: "text",
+      imageNumber: "1",
+      startingEssence: 150,
+    };
+    // Derive a stable dreamsign pool from (id, seed) so the package varies with
+    // its inputs but is byte-identical across re-applications.
+    const rng = makePrng(hashNumber(`${dreamcallerId}:${seed}`));
+    const dreamsignPoolIds = Array.from({ length: 8 }, () =>
+      `ds-${String(Math.floor(rng() * 1_000_000))}`,
+    );
+    return {
+      dreamcaller,
+      draftPoolCopiesByCard: { "1": 2, "2": 1 },
+      dreamsignPoolIds,
+      mandatoryOnlyPoolSize: 3,
+      draftPoolSize: 3,
+      doubledCardCount: 1,
+      legalSubsetCount: 1,
+      preferredSubsetCount: 1,
+      starterDecklistCardNumbers: [10, 11, 12],
+    };
+  }
+  return {
+    resolveDreamcallerPackage: (dreamcallerId, seed) =>
+      packageFor(dreamcallerId, seed),
+    startQuest: ({ quest, dreamcallerId, seed }) => {
+      const pkg = packageFor(dreamcallerId, seed);
+      return {
+        ...quest,
+        seed: quest.seed,
+        essence: pkg.dreamcaller.startingEssence,
+        dreamcaller: {
+          id: pkg.dreamcaller.id,
+          name: pkg.dreamcaller.name,
+          title: pkg.dreamcaller.title,
+          renderedText: pkg.dreamcaller.renderedText,
+          imageNumber: pkg.dreamcaller.imageNumber,
+          startingEssence: pkg.dreamcaller.startingEssence,
+        },
+        resolvedPackage: pkg,
+        remainingDreamsignPool: [...pkg.dreamsignPoolIds],
+        currentDreamscape: "node-start",
+        screen: { type: "dreamscape" },
+      };
+    },
+  };
+}
+
+function hashNumber(text: string): number {
+  let hash = 2166136261;
+  for (let index = 0; index < text.length; index += 1) {
+    hash ^= text.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+afterEach(() => {
+  registerQuestLifecycleContentProvider(null);
+});
+
+// ---------------------------------------------------------------------------
+// Essence / cap clamp
+// ---------------------------------------------------------------------------
+
+describe("essence and cap clamp", () => {
+  it("ADJUST_ESSENCE clamps to [0, essenceCap]", () => {
+    const start = genesis();
+    const up = apply(start, "ADJUST_ESSENCE", { delta: 10_000 });
+    expect(up.quest.essence).toBe(start.quest.essenceCap);
+    const down = apply(up, "ADJUST_ESSENCE", { delta: -10_000 });
+    expect(down.quest.essence).toBe(0);
+  });
+
+  it("SET_ESSENCE clamps to [0, essenceCap]", () => {
+    const start = genesis();
+    expect(apply(start, "SET_ESSENCE", { value: 10_000 }).quest.essence).toBe(
+      start.quest.essenceCap,
+    );
+    expect(apply(start, "SET_ESSENCE", { value: -5 }).quest.essence).toBe(0);
+  });
+
+  it("ADJUST_ESSENCE_CAP re-clamps essence when the cap drops below it", () => {
+    let state = apply(genesis(), "SET_ESSENCE", { value: 400 });
+    state = apply(state, "ADJUST_ESSENCE_CAP", { delta: -300 });
+    expect(state.quest.essenceCap).toBe(200);
+    expect(state.quest.essence).toBe(200);
+  });
+
+  it("SET_ESSENCE_CAP re-clamps essence to the new cap", () => {
+    let state = apply(genesis(), "SET_ESSENCE", { value: 450 });
+    state = apply(state, "SET_ESSENCE_CAP", { value: 300 });
+    expect(state.quest.essenceCap).toBe(300);
+    expect(state.quest.essence).toBe(300);
+  });
+
+  it("keeps essence within [0, essenceCap] across a random sweep", () => {
+    const rng = makePrng(12345);
+    let state = genesis();
+    for (let iteration = 0; iteration < 800; iteration += 1) {
+      const roll = rng();
+      if (roll < 0.4) {
+        const delta = Math.floor((rng() - 0.5) * 4000);
+        state = apply(state, "ADJUST_ESSENCE", { delta });
+      } else if (roll < 0.7) {
+        const value = Math.floor((rng() - 0.5) * 4000);
+        state = apply(state, "SET_ESSENCE", { value });
+      } else if (roll < 0.9) {
+        const delta = Math.floor((rng() - 0.5) * 2000);
+        state = apply(state, "ADJUST_ESSENCE_CAP", { delta });
+      } else {
+        const value = Math.floor(rng() * 3000);
+        state = apply(state, "SET_ESSENCE_CAP", { value });
+      }
+      expect(state.quest.essence).toBeGreaterThanOrEqual(0);
+      expect(state.quest.essence).toBeLessThanOrEqual(state.quest.essenceCap);
+      expect(state.quest.essenceCap).toBeGreaterThanOrEqual(0);
+    }
+  });
+
+  it("bounces a malformed essence payload", () => {
+    const start = genesis();
+    const out = reduceGameEvent(
+      start,
+      event("ADJUST_ESSENCE", { delta: "nope" }),
+      ctx(),
+    );
+    expect(out.outcome).toBe("bounced");
+    expect(out.state).toBe(start);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Limits & completion
+// ---------------------------------------------------------------------------
+
+describe("limits and completion", () => {
+  it("SET_MAX_DREAMSIGNS sets the value", () => {
+    expect(
+      apply(genesis(), "SET_MAX_DREAMSIGNS", { value: 7 }).quest.maxDreamsigns,
+    ).toBe(7);
+  });
+
+  it("SET_COMPLETION_LEVEL sets the value", () => {
+    expect(
+      apply(genesis(), "SET_COMPLETION_LEVEL", { value: 3 }).quest
+        .completionLevel,
+    ).toBe(3);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Navigation
+// ---------------------------------------------------------------------------
+
+describe("navigation", () => {
+  it("SET_SCREEN sets the screen and derives activeSiteId for site screens", () => {
+    const siteScreen = apply(genesis(), "SET_SCREEN", {
+      screen: { type: "site", siteId: "site-1" },
+    });
+    expect(siteScreen.quest.screen).toEqual({ type: "site", siteId: "site-1" });
+    expect(siteScreen.quest.activeSiteId).toBe("site-1");
+
+    const atlasScreen = apply(siteScreen, "SET_SCREEN", {
+      screen: { type: "atlas" },
+    });
+    expect(atlasScreen.quest.screen).toEqual({ type: "atlas" });
+    expect(atlasScreen.quest.activeSiteId).toBeNull();
+  });
+
+  it("MARK_SITE_VISITED records the visit once and flips the atlas site flag", () => {
+    let state = genesis();
+    state = {
+      ...state,
+      quest: withAtlasSite(state.quest, "node-1", "site-9"),
+    };
+    const visited = apply(state, "MARK_SITE_VISITED", { siteId: "site-9" });
+    expect(visited.quest.visitedSites).toEqual(["site-9"]);
+    expect(
+      visited.quest.atlas.nodes["node-1"]?.sites.find((s) => s.id === "site-9")
+        ?.isVisited,
+    ).toBe(true);
+
+    // Re-visiting is idempotent.
+    const again = apply(visited, "MARK_SITE_VISITED", { siteId: "site-9" });
+    expect(again.quest.visitedSites).toEqual(["site-9"]);
+  });
+
+  it("DISMISS_STARTING_DECK_POPUP flips the flag", () => {
+    const state = apply(genesis(), "DISMISS_STARTING_DECK_POPUP", {});
+    expect(state.quest.hasSeenStartingDeckPopup).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// TRAVEL_TO_DREAMSCAPE — modifier decrement
+// ---------------------------------------------------------------------------
+
+describe("TRAVEL_TO_DREAMSCAPE", () => {
+  function modifier(remaining: number, source: string): DreamscapeModifier {
+    return {
+      kind: "remove_shop_sites",
+      dreamscapesRemaining: remaining,
+      source,
+    };
+  }
+
+  it("decrements dreamscapeModifiers and drops zeroed entries when advancing", () => {
+    const base = genesis();
+    const state: FoldState = {
+      ...base,
+      quest: {
+        ...base.quest,
+        currentDreamscape: "node-a",
+        visitedSites: ["stale-site"],
+        dreamscapeModifiers: [modifier(1, "one"), modifier(2, "two")],
+      },
+    };
+    const next = apply(state, "TRAVEL_TO_DREAMSCAPE", { nodeId: "node-b" });
+    expect(next.quest.currentDreamscape).toBe("node-b");
+    expect(next.quest.visitedSites).toEqual([]);
+    expect(next.quest.dreamscapeModifiers).toEqual([modifier(1, "two")]);
+  });
+
+  it("does not decrement modifiers when the node is unchanged", () => {
+    const base = genesis();
+    const state: FoldState = {
+      ...base,
+      quest: {
+        ...base.quest,
+        currentDreamscape: "node-a",
+        dreamscapeModifiers: [modifier(2, "two")],
+      },
+    };
+    const next = apply(state, "TRAVEL_TO_DREAMSCAPE", { nodeId: "node-a" });
+    expect(next.quest.dreamscapeModifiers).toEqual([modifier(2, "two")]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// SELECT_DREAMCALLER — determinism
+// ---------------------------------------------------------------------------
+
+describe("SELECT_DREAMCALLER", () => {
+  it("bounces when no content provider is registered", () => {
+    const start = genesis();
+    const out = reduceGameEvent(
+      start,
+      event("SELECT_DREAMCALLER", { dreamcallerId: "dc-1" }),
+      ctx(),
+    );
+    expect(out.outcome).toBe("bounced");
+    expect(out.state).toBe(start);
+  });
+
+  it("derives a byte-identical resolvedPackage for the same seed regardless of ctx", () => {
+    registerQuestLifecycleContentProvider(deterministicProvider());
+    const start = genesis();
+    const a = apply(start, "SELECT_DREAMCALLER", { dreamcallerId: "dc-42" }, ctx({
+      seq: 3,
+      timestamp: "2020-01-01T00:00:00.000Z",
+      rng: () => 0.1,
+    }));
+    const b = apply(start, "SELECT_DREAMCALLER", { dreamcallerId: "dc-42" }, ctx({
+      seq: 3,
+      timestamp: "2099-12-31T23:59:59.000Z",
+      rng: () => 0.9,
+    }));
+    expect(hashState(a.quest.resolvedPackage)).toBe(
+      hashState(b.quest.resolvedPackage),
+    );
+    expect(a.quest.dreamcaller?.id).toBe("dc-42");
+    expect(a.quest.remainingDreamsignPool).toEqual(
+      a.quest.resolvedPackage?.dreamsignPoolIds,
+    );
+  });
+
+  it("produces a different package for a different dreamcaller", () => {
+    registerQuestLifecycleContentProvider(deterministicProvider());
+    const start = genesis();
+    const a = apply(start, "SELECT_DREAMCALLER", { dreamcallerId: "dc-1" });
+    const b = apply(start, "SELECT_DREAMCALLER", { dreamcallerId: "dc-2" });
+    expect(hashState(a.quest.resolvedPackage)).not.toBe(
+      hashState(b.quest.resolvedPackage),
+    );
+  });
+});
+
+// ---------------------------------------------------------------------------
+// START_QUEST / RESET_QUEST / LOAD_STATE
+// ---------------------------------------------------------------------------
+
+describe("START_QUEST", () => {
+  it("bounces when no content provider is registered", () => {
+    const start = genesis();
+    const out = reduceGameEvent(
+      start,
+      event("START_QUEST", { dreamcallerId: "dc-1" }),
+      ctx(),
+    );
+    expect(out.outcome).toBe("bounced");
+  });
+
+  it("assembles a run and preserves the room seed", () => {
+    registerQuestLifecycleContentProvider(deterministicProvider());
+    const start = genesis();
+    const started = apply(start, "START_QUEST", { dreamcallerId: "dc-7" });
+    expect(started.quest.seed).toBe(GENESIS.seed);
+    expect(started.quest.dreamcaller?.id).toBe("dc-7");
+    expect(started.quest.screen).toEqual({ type: "dreamscape" });
+  });
+
+  it("bounces START_QUEST once a dreamcaller is already selected", () => {
+    registerQuestLifecycleContentProvider(deterministicProvider());
+    const started = apply(genesis(), "START_QUEST", { dreamcallerId: "dc-7" });
+    const out = reduceGameEvent(
+      started,
+      event("START_QUEST", { dreamcallerId: "dc-9" }),
+      ctx(),
+    );
+    expect(out.outcome).toBe("bounced");
+  });
+});
+
+describe("RESET_QUEST", () => {
+  it("resets quest state to the genesis fold and clears battle", () => {
+    registerQuestLifecycleContentProvider(deterministicProvider());
+    let state = apply(genesis(), "START_QUEST", { dreamcallerId: "dc-7" });
+    state = apply(state, "SET_COMPLETION_LEVEL", { value: 5 });
+    state = apply(state, "ADJUST_ESSENCE", { delta: 50 });
+    // A battle in progress with no open prompt (an open prompt would be gated
+    // by CAS rule 4 before routing — see the seam note in the task report).
+    state = { ...state, battle: { pendingPrompt: null } };
+
+    const reset = apply(state, "RESET_QUEST", {});
+    expect(reset.battle).toBeNull();
+    expect(hashState(reset.quest)).toBe(
+      hashState(genesisFoldState(GENESIS).quest),
+    );
+  });
+});
+
+describe("LOAD_STATE", () => {
+  it("replaces quest state with the snapshot and sets battle when present", () => {
+    const start = genesis();
+    const snapshot: QuestState = {
+      ...start.quest,
+      completionLevel: 9,
+      essence: 123,
+    };
+    const loaded = apply(start, "LOAD_STATE", { snapshot });
+    expect(loaded.quest.completionLevel).toBe(9);
+    expect(loaded.quest.essence).toBe(123);
+    expect(loaded.battle).toBeNull();
+
+    const withBattle = apply(start, "LOAD_STATE", {
+      snapshot,
+      battle: { pendingPrompt: { promptId: 2 } },
+    });
+    expect(withBattle.battle).toEqual({ pendingPrompt: { promptId: 2 } });
+  });
+
+  it("bounces a non-object snapshot", () => {
+    const start = genesis();
+    const out = reduceGameEvent(
+      start,
+      event("LOAD_STATE", { snapshot: null }),
+      ctx(),
+    );
+    expect(out.outcome).toBe("bounced");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// helpers
+// ---------------------------------------------------------------------------
+
+function withAtlasSite(
+  quest: QuestState,
+  nodeId: string,
+  siteId: string,
+): QuestState {
+  return {
+    ...quest,
+    atlas: {
+      ...quest.atlas,
+      nodes: {
+        ...quest.atlas.nodes,
+        [nodeId]: {
+          id: nodeId,
+          layer: LayerName.One,
+          indexInLayer: 0,
+          dreamscapeId: null,
+          biomeName: "",
+          biomeColor: "",
+          sites: [
+            {
+              id: siteId,
+              type: "Shop",
+              isEnhanced: false,
+              isVisited: false,
+            },
+          ],
+          position: { x: 0, y: 0 },
+          state: "available",
+          enhancedSiteType: null,
+          forwardIds: [],
+          backwardIds: [],
+          knownDreamsignId: null,
+        },
+      },
+    },
+  };
+}
