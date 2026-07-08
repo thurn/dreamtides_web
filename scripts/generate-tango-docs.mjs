@@ -515,8 +515,6 @@ export const TOKEN_GROUPS = [
       "control-",
       "hud-",
       "sheet-",
-      "device-",
-      "safe-",
       "card-",
       "press-",
     ],
@@ -530,6 +528,17 @@ export const TOKEN_GROUPS = [
     title: "Motion",
     note: "Durations, easings, and the two material-continuity transitions (object-travel, container-transform). All animation timing comes from here.",
     prefixes: ["ease-", "dur-", "motion-", "stagger-"],
+  },
+  {
+    title: "Safe area & device frame",
+    note: "The hardware-inset channel plus the static design floors that reserve chrome. App code reads var(--safe-area-inset-top/-right/-bottom/-left), NEVER env(safe-area-inset-*) directly — env() resolves to 0 inside the device-screenshot iframe, so a raw env() read silently ignores the simulated inset. These custom properties carry the real hardware insets on device and the injected values in a screenshot; src/runtime/device-frame.ts republishes the deviceFrame URL param as them before first paint. Distinct from that channel, --safe-top / --safe-bottom (59px / 34px) are static DESIGN FLOORS — a minimum chrome reservation a screen may reserve regardless of device; --safe-top's 59px equals the derived iPhone-16 top inset (11+37+11) but the two are independent. The --display-cutout-* box locates a visible Dynamic Island / punch-hole for placing UI beside it, published only in a screenshot mock-up.",
+    prefixes: [
+      "safe-area-inset-",
+      "safe-top",
+      "safe-bottom",
+      "display-cutout-",
+      "device-",
+    ],
   },
   {
     title: "Production bridge",

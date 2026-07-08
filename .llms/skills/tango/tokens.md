@@ -142,10 +142,6 @@ The --space-* scale is the approved spacing system for all layout (margins, padd
 
 | Token | Value | Notes |
 | --- | --- | --- |
-| `--safe-area-inset-top` | `env(safe-area-inset-top, 0px)` |  |
-| `--safe-area-inset-right` | `env(safe-area-inset-right, 0px)` |  |
-| `--safe-area-inset-bottom` | `env(safe-area-inset-bottom, 0px)` |  |
-| `--safe-area-inset-left` | `env(safe-area-inset-left, 0px)` |  |
 | `--space-1` | `2px` |  |
 | `--space-2` | `4px` |  |
 | `--space-3` | `6px` |  |
@@ -163,10 +159,6 @@ The --space-* scale is the approved spacing system for all layout (margins, padd
 | `--touch-min` | `44px` | never smaller — Apple HIG floor |
 | `--hud-h` | `64px` | persistent bottom resource bar |
 | `--sheet-grab` | `36px` | drag handle width on bottom sheets |
-| `--device-w` | `390px` | iPhone logical width |
-| `--device-h` | `844px` | iPhone logical height |
-| `--safe-top` | `59px` | status bar + Dynamic Island region |
-| `--safe-bottom` | `34px` | home indicator inset |
 | `--press-scale` | `0.9` |  |
 
 ## Shadows & glows
@@ -200,6 +192,25 @@ Durations, easings, and the two material-continuity transitions (object-travel, 
 | `--motion-object-travel` | `420ms var(--ease-out)` |  |
 | `--motion-container-transform` | `320ms var(--ease-dream)` |  |
 | `--stagger-travel` | `55ms` |  |
+
+## Safe area & device frame
+
+The hardware-inset channel plus the static design floors that reserve chrome. App code reads var(--safe-area-inset-top/-right/-bottom/-left), NEVER env(safe-area-inset-*) directly — env() resolves to 0 inside the device-screenshot iframe, so a raw env() read silently ignores the simulated inset. These custom properties carry the real hardware insets on device and the injected values in a screenshot; src/runtime/device-frame.ts republishes the deviceFrame URL param as them before first paint. Distinct from that channel, --safe-top / --safe-bottom (59px / 34px) are static DESIGN FLOORS — a minimum chrome reservation a screen may reserve regardless of device; --safe-top's 59px equals the derived iPhone-16 top inset (11+37+11) but the two are independent. The --display-cutout-* box locates a visible Dynamic Island / punch-hole for placing UI beside it, published only in a screenshot mock-up.
+
+| Token | Value | Notes |
+| --- | --- | --- |
+| `--safe-area-inset-top` | `env(safe-area-inset-top, 0px)` |  |
+| `--safe-area-inset-right` | `env(safe-area-inset-right, 0px)` |  |
+| `--safe-area-inset-bottom` | `env(safe-area-inset-bottom, 0px)` |  |
+| `--safe-area-inset-left` | `env(safe-area-inset-left, 0px)` |  |
+| `--display-cutout-top` | `0px` |  |
+| `--display-cutout-left` | `0px` |  |
+| `--display-cutout-width` | `0px` |  |
+| `--display-cutout-height` | `0px` |  |
+| `--device-w` | `390px` | iPhone logical width |
+| `--device-h` | `844px` | iPhone logical height |
+| `--safe-top` | `59px` | design floor: minimum chrome reservation for the status bar + Dynamic Island region. Equals the derived iPhone-16 top inset (11+37+11 in scripts/screenshot-devices.mjs) but is independent of it — this is a static reservation, not the hardware-inset channel (--safe-area-inset-top). |
+| `--safe-bottom` | `34px` | home indicator inset |
 
 ## Production bridge
 
@@ -261,10 +272,6 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 
 | Token | Value | Notes |
 | --- | --- | --- |
-| `--display-cutout-top` | `0px` |  |
-| `--display-cutout-left` | `0px` |  |
-| `--display-cutout-width` | `0px` |  |
-| `--display-cutout-height` | `0px` |  |
 | `--hover-scale` | `1.03` |  |
 | `--glass-fill` | `rgba(14, 14, 16, 0.54)` |  |
 | `--glass-fill-popover` | `rgba(18, 14, 28, 0.5)` |  |

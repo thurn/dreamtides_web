@@ -23,6 +23,10 @@ component past its typed surface is not an available move at all (see
 - **Design tokens** (generated): [tokens.md](tokens.md) — every semantic
   token, grouped by role, with values and notes. Usage rules are in the
   "Tokens" section below.
+- **Materials** (hand-written): [materials.md](materials.md) — the one
+  liquid-glass material (who wears it, its `--glass-*` tokens, the
+  `--glass-fill-popover` reveal tint, and the blur-preservation constraint) and
+  the solid alternatives that are deliberately *not* glass.
 - **Live doc site**: `/tango` on the dev server (e.g.
   `http://localhost:5173/tango`), with `/tango#/<id>` per component —
   interactive demos and the same props tables, useful during browser QA.

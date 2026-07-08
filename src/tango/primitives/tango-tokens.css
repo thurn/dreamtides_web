@@ -443,7 +443,7 @@
   /* ---- Device frame (iPhone canvas the kit designs against) ---- */
   --device-w: 390px;       /* iPhone logical width */
   --device-h: 844px;       /* iPhone logical height */
-  --safe-top: 59px;        /* status bar + Dynamic Island region */
+  --safe-top: 59px;        /* design floor: minimum chrome reservation for the status bar + Dynamic Island region. Equals the derived iPhone-16 top inset (11+37+11 in scripts/screenshot-devices.mjs) but is independent of it — this is a static reservation, not the hardware-inset channel (--safe-area-inset-top). */
   --safe-bottom: 34px;     /* home indicator inset */
 }
 
