@@ -32,7 +32,15 @@
 // by name (AGENTS.md).
 
 import type { EventContext } from "../../eventlog/types";
-import type { BattleInit, BattleMutableState } from "../../battle/types";
+import type {
+  BattleEngineEmissionContext,
+  BattleInit,
+  BattleMutableState,
+  BattleResult,
+  BattleSide,
+} from "../../battle/types";
+import { rankSlotIds } from "../../battle/types";
+import type { BattleCommand, BattleDebugEdit } from "../../battle/debug/commands";
 import type {
   BattleModifier,
   QuestFailureBattleResult,
@@ -42,7 +50,18 @@ import type {
   Screen,
 } from "../../types/quest";
 import type { FoldState } from "../fold-state";
-import type { BattleFoldState } from "./fold";
+import { applyDebugEdit, forceBattleResult } from "./apply-debug-edit";
+import {
+  collectDawnTriggerEdits,
+  dawnScriptIsInteractive,
+  planSupportRecompute,
+  selectBattleCardEffectScript,
+} from "./battle-card-effects-table";
+import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
+import { advanceEffectQueue } from "./driver";
+import { dawnClearEdits } from "../../battle/engine/handoff";
+import { alliesInPlay } from "./effect-step";
+import { newEffectRun, type BattleFoldState, type EffectRun } from "./fold";
 
 // ---------------------------------------------------------------------------
 // Battle-init provider seam (BEGIN_BATTLE construction)
@@ -290,4 +309,288 @@ function deriveFailureSummary(
     playerScore: board.sides.player.score,
     enemyScore: board.sides.enemy.score,
   };
+}
+
+// ---------------------------------------------------------------------------
+// BATTLE_COMMAND
+// ---------------------------------------------------------------------------
+
+// The emission context is a display/log concern only — `applyDebugEdit` and
+// `forceBattleResult` never read it when mutating state (they thread it solely
+// into log-event / transition builders, which the pure fold discards). So a
+// fixed constant keeps the fold's state output independent of it.
+const EMISSION: BattleEngineEmissionContext = {
+  sourceSurface: "auto-system",
+  selectedCardId: null,
+};
+
+/**
+ * `BATTLE_COMMAND { command }`: the single synchronous fold step that replaces
+ * the orchestration of both effect-runner hooks (`use-battle-effect-runner.ts`,
+ * `use-dreamwell-effect-runner.ts`) and the force-result routing of the legacy
+ * `battleReducer` (`src/battle/state/reducer.ts`). It applies ONE command's edit
+ * and, in the SAME step, fires every trigger that edit exposes, so a single
+ * event in yields a fully-triggered state out — two clients folding the same
+ * (seed, seq) converge byte-for-byte.
+ *
+ * In order (design spec §Battle events):
+ *   1. Apply the command (`DEBUG_EDIT` → `applyDebugEdit`; `FORCE_RESULT` /
+ *      `SKIP_TO_REWARDS` → `forceBattleResult`, mirroring legacy
+ *      `applyBattleCommand`/`battleReducer`).
+ *   2. ▸Materialized: diff the in-play instance-id set before/after this single
+ *      edit; each newly-present id with a registered `"materialized"` script
+ *      pushes an `EffectRun` (FIFO in `inPlayInstanceIds` order — back rank then
+ *      front rank, player then enemy).
+ *   3. ▸Dawn: when the edit ADVANCED the phase into Dawn (`phase` was not `dawn`
+ *      and now is), on a turn that has a Dawn (`turnNumber > 1`), apply the
+ *      deterministic Dawn edits (`dawnClearEdits` + `collectDawnTriggerEdits`)
+ *      and queue any interactive Dawn scripts. The "entered dawn" EDGE is the
+ *      once-per-(side, turn) guard: a turn enters Dawn exactly once, and
+ *      re-issuing a Dawn phase edit while already in Dawn is a no-op edge, so no
+ *      stored processed-set is needed (the deleted hook's `processedInteractive
+ *      Dawn` key becomes a pure edge test on committed state).
+ *   4. Dreamwell: when this edit LANDED the active side's Dreamwell reveal
+ *      (`dreamwellDrawnTurn` transitioned to `turnNumber`) during the
+ *      `"dreamwell"` phase on `turnNumber > 1`, queue the revealed card's script
+ *      — the card at `init.dreamwellDeck[dreamwellCardIndex]` (now reachable via
+ *      `init`). The reveal edge is the once-per-turn guard (the deleted runner's
+ *      `lastRunKey`).
+ *   5. Support: run `planSupportRecompute` unconditionally and apply its edits —
+ *      it is diff-based and idempotent, so an immediate re-recompute yields `[]`.
+ *   6. `advanceEffectQueue` until a prompt is pending or the queue empties.
+ *
+ * Returns the next {@link FoldState}, or `null` to bounce when there is no
+ * battle, a prompt is already pending (root rule 4 also gates this; the guard is
+ * defensive), or the command payload is malformed.
+ *
+ * A SINGLE `drawIndex` counter is threaded across the whole step: the Dawn (3)
+ * and Support (5) edits draw from `random`, then `advanceEffectQueue` (6)
+ * continues the SAME logical stream via an offset `ctx.rng` so no two
+ * independent draws collide on the same index. `nowMs` is `ctx.timestamp`
+ * throughout (no live clock), honoring the src/rules/ lint rails.
+ */
+export function battleCommand(
+  state: FoldState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+): FoldState | null {
+  const battle = state.battle;
+  if (battle === null) {
+    return null;
+  }
+  if (battle.pendingPrompt !== null) {
+    return null;
+  }
+  const command = coerceBattleCommand(payload.command);
+  if (command === null) {
+    return null;
+  }
+
+  const nowMs = Date.parse(ctx.timestamp);
+  let drawIndex = 0;
+  const random = (): number => ctx.rng(drawIndex++);
+
+  // Step 1 — apply the command's edit.
+  const boardBefore = battle.board;
+  const boardAfter = applyCommandToBoard(boardBefore, command);
+
+  const queue: EffectRun[] = [...battle.effectQueue];
+
+  // Step 2 — ▸Materialized: newly-present in-play ids with a materialized script.
+  const inPlayBefore = new Set(inPlayInstanceIds(boardBefore));
+  for (const id of inPlayInstanceIds(boardAfter)) {
+    if (inPlayBefore.has(id)) {
+      continue;
+    }
+    const instance = boardAfter.cardInstances[id];
+    if (instance === undefined) {
+      continue;
+    }
+    const script = selectBattleCardEffectScript(instance.definition.cardId);
+    if (
+      script === null ||
+      script.trigger !== "materialized" ||
+      script.steps === undefined ||
+      script.steps.length === 0
+    ) {
+      continue;
+    }
+    queue.push(
+      newEffectRun({ table: "battle", id: instance.definition.cardId }, instance.controller, id),
+    );
+  }
+
+  let board = boardAfter;
+
+  // Step 3 — ▸Dawn bookend + interactive Dawn on the "entered dawn" edge.
+  const enteredDawn = boardBefore.phase !== "dawn" && boardAfter.phase === "dawn";
+  if (enteredDawn && boardAfter.turnNumber > 1 && boardAfter.result === null) {
+    const side = boardAfter.activeSide;
+    board = applyBoardEdits(board, [
+      ...dawnClearEdits(board, side),
+      ...collectDawnTriggerEdits(board, side, random, nowMs),
+    ]);
+    for (const run of collectInteractiveDawnRuns(board, side)) {
+      queue.push(run);
+    }
+  }
+
+  // Step 4 — Dreamwell reveal → queue the revealed card's script.
+  const revealSide = boardAfter.activeSide;
+  const revealLanded =
+    boardBefore.sides[revealSide].dreamwellDrawnTurn !== boardAfter.turnNumber &&
+    boardAfter.sides[revealSide].dreamwellDrawnTurn === boardAfter.turnNumber;
+  if (
+    revealLanded &&
+    boardAfter.phase === "dreamwell" &&
+    boardAfter.turnNumber > 1 &&
+    boardAfter.result === null
+  ) {
+    const index = boardAfter.sides[revealSide].dreamwellCardIndex;
+    if (index !== null) {
+      const card = battle.init.dreamwellDeck[index];
+      if (card !== undefined) {
+        const script = selectDreamwellEffectScript(card.id);
+        if (script !== null && script.steps.length > 0) {
+          queue.push(newEffectRun({ table: "dreamwell", id: card.id }, revealSide));
+        }
+      }
+    }
+  }
+
+  // Step 5 — Support recompute (idempotent; unconditional).
+  board = applyBoardEdits(board, planSupportRecompute(board, true, random, nowMs));
+
+  // Step 6 — advance the queue, continuing the SAME draw counter.
+  const queueCtx: EventContext = { ...ctx, rng: (index) => ctx.rng(drawIndex + index) };
+  const advanced = advanceEffectQueue(
+    { init: battle.init, board, effectQueue: queue, pendingPrompt: null },
+    queueCtx,
+  );
+  return { ...state, battle: advanced };
+}
+
+/**
+ * All non-null front- and back-rank occupant ids, both sides, in a fixed order
+ * (player then enemy; each side's back rank then front rank, left to right).
+ * This is the "in-play" set the ▸Materialized diff tracks — an id that newly
+ * appears here has just entered play and is eligible to fire its trigger once.
+ * Reimplemented as a PURE helper here (the deleted `use-battle-effect-runner`
+ * hook's logic); exported for direct unit testing.
+ */
+export function inPlayInstanceIds(state: BattleMutableState): string[] {
+  const ids: string[] = [];
+  for (const side of ["player", "enemy"] as const) {
+    for (const slotId of rankSlotIds(state.sides[side].backRank)) {
+      const id = state.sides[side].backRank[slotId];
+      if (id !== null) {
+        ids.push(id);
+      }
+    }
+    for (const slotId of rankSlotIds(state.sides[side].frontRank)) {
+      const id = state.sides[side].frontRank[slotId];
+      if (id !== null) {
+        ids.push(id);
+      }
+    }
+  }
+  return ids;
+}
+
+/**
+ * The interactive ▸Dawn runs for `side`'s in-play characters whose registered
+ * `"dawn"` script needs player input (`dawnScriptIsInteractive`). Deterministic
+ * Dawn scripts are NOT returned — their edits already ran in the bookend
+ * (`collectDawnTriggerEdits`). Iteration follows `alliesInPlay` order (back rank
+ * then front rank) for a deterministic queue. Relocates the deleted
+ * `collectInteractiveDawnRuns` from `use-battle-effect-runner.ts`.
+ */
+function collectInteractiveDawnRuns(
+  state: BattleMutableState,
+  side: BattleSide,
+): EffectRun[] {
+  const runs: EffectRun[] = [];
+  for (const id of alliesInPlay(state, side)) {
+    const instance = state.cardInstances[id];
+    if (instance === undefined) {
+      continue;
+    }
+    const script = selectBattleCardEffectScript(instance.definition.cardId);
+    if (script === null || script.trigger !== "dawn" || script.steps === undefined) {
+      continue;
+    }
+    if (!dawnScriptIsInteractive(script)) {
+      continue;
+    }
+    runs.push(newEffectRun({ table: "battle", id: instance.definition.cardId }, side, id));
+  }
+  return runs;
+}
+
+/** Applies the command's board mutation, routing the three command ids the way
+ *  legacy `applyBattleCommand`/`battleReducer` did (SKIP_TO_REWARDS aliases a
+ *  forced victory). */
+function applyCommandToBoard(
+  board: BattleMutableState,
+  command: BattleCommand,
+): BattleMutableState {
+  switch (command.id) {
+    case "DEBUG_EDIT":
+      return applyDebugEdit(board, command.edit, EMISSION).state;
+    case "FORCE_RESULT":
+      return forceBattleResult(board, command.result, EMISSION).state;
+    case "SKIP_TO_REWARDS":
+      return forceBattleResult(board, "victory", EMISSION).state;
+  }
+}
+
+/** Applies each deterministic edit in order via `applyDebugEdit`. */
+function applyBoardEdits(
+  board: BattleMutableState,
+  edits: BattleDebugEdit[],
+): BattleMutableState {
+  let next = board;
+  for (const edit of edits) {
+    next = applyDebugEdit(next, edit, EMISSION).state;
+  }
+  return next;
+}
+
+/**
+ * Validates a raw `payload.command` into a {@link BattleCommand}, or `null` to
+ * bounce a malformed intent. Only the discriminants needed to route safely are
+ * checked; an unknown `edit.kind` still bounces because `applyDebugEdit` returns
+ * no state for it and the root reducer's try/catch converts the resulting throw
+ * into a recorded no-op.
+ */
+function coerceBattleCommand(raw: unknown): BattleCommand | null {
+  if (typeof raw !== "object" || raw === null) {
+    return null;
+  }
+  const id = (raw as { id?: unknown }).id;
+  if (id === "DEBUG_EDIT") {
+    const edit = (raw as { edit?: unknown }).edit;
+    if (typeof edit !== "object" || edit === null) {
+      return null;
+    }
+    if (typeof (edit as { kind?: unknown }).kind !== "string") {
+      return null;
+    }
+    return raw as BattleCommand;
+  }
+  if (id === "FORCE_RESULT") {
+    const result = (raw as { result?: unknown }).result;
+    if (!isBattleResult(result)) {
+      return null;
+    }
+    return raw as BattleCommand;
+  }
+  if (id === "SKIP_TO_REWARDS") {
+    return raw as BattleCommand;
+  }
+  return null;
+}
+
+function isBattleResult(value: unknown): value is BattleResult {
+  return value === "victory" || value === "defeat" || value === "draw";
 }

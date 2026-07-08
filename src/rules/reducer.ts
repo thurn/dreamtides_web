@@ -274,6 +274,8 @@ function routeDomain(
       return foldCase(state, battleEvents.beginBattle(state, payload, ctx));
     case "END_BATTLE":
       return foldCase(state, battleEvents.endBattle(state, payload));
+    case "BATTLE_COMMAND":
+      return foldCase(state, battleEvents.battleCommand(state, payload, ctx));
 
     // --- whole-fold cases (touch the battle slice) ---
     case "RESET_QUEST":
