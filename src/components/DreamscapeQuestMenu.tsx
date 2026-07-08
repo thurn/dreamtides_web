@@ -84,7 +84,7 @@ export function DreamscapeQuestMenu({
     zIndex: 62,
     width: 220,
     padding: 6,
-    background: token("--surface-glass-strong"),
+    background: token("--surface-chrome-strong"),
     border: `1px solid ${token("--border-soft")}`,
     borderRadius: token("--radius-control"),
     boxShadow: token("--shadow-lg"),

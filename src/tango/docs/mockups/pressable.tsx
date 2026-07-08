@@ -41,7 +41,7 @@ function Tile({ icon, label, sub, emphasis = false }: TileSpec) {
         padding: `${token("--space-8")} ${token("--space-5")}`,
         borderRadius: token("--radius-panel"),
         border: `1px solid ${emphasis ? token("--border-accent") : token("--border-soft")}`,
-        background: emphasis ? token("--gradient-accent") : token("--surface-glass"),
+        background: emphasis ? token("--gradient-accent") : token("--surface-chrome"),
         boxShadow: emphasis ? token("--glow-accent-soft") : token("--shadow-md"),
       }}
     >

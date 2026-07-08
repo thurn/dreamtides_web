@@ -95,7 +95,7 @@ export function ResourceChip({
               paddingRight: size * 0.6,
               paddingBottom: size * 0.34,
               paddingLeft: size * 0.6,
-              background: token("--surface-glass"),
+              background: token("--surface-chrome"),
               border: `1px solid ${token("--border-soft")}`,
               borderRadius: token("--radius-pill"),
             }

@@ -379,7 +379,7 @@ function QsbDreamsignWindow({
           position: "relative",
           width: "min(330px, 100%)",
           padding: "20px 20px 24px",
-          background: token("--surface-glass-strong"),
+          background: token("--surface-chrome-strong"),
           border: `1px solid ${token("--border-soft")}`,
           borderRadius: token("--radius-hero"),
           boxShadow: token("--shadow-lg"),

@@ -241,7 +241,7 @@ function EdgeChevron({
         height: 40,
         borderRadius: token("--radius-pill"),
         border: `1px solid ${token("--border-soft")}`,
-        background: token("--surface-glass"),
+        background: token("--surface-chrome"),
         color: token("--text-secondary"),
         display: "grid",
         placeItems: "center",

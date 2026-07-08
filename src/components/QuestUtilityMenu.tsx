@@ -487,7 +487,7 @@ function defaultTangoStatusStyle(anchor: "left" | "right"): CSSProperties {
     zIndex: 62,
     maxWidth: 260,
     padding: "8px 10px",
-    background: token("--surface-glass-strong"),
+    background: token("--surface-chrome-strong"),
     border: `1px solid ${token("--border-soft")}`,
     borderRadius: token("--radius-control"),
     boxShadow: token("--shadow-lg"),

@@ -149,7 +149,7 @@ export function TidePillMockup() {
             key={group.role}
             style={{
               padding: token("--space-6"),
-              background: token("--surface-glass"),
+              background: token("--surface-chrome"),
               border: `1px solid ${token("--border-soft")}`,
               borderRadius: token("--radius-panel"),
             }}

@@ -29,7 +29,7 @@ const labelStyle: React.CSSProperties = {
 const inputStyle: React.CSSProperties = {
   font: token("--t-body-sm"),
   color: token("--text-primary"),
-  background: token("--surface-glass"),
+  background: token("--surface-chrome"),
   border: `1px solid ${token("--border-mid")}`,
   borderRadius: token("--radius-inset"),
   padding: `${token("--space-2")} ${token("--space-4")}`,

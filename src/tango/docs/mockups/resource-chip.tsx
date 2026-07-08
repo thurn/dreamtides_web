@@ -60,7 +60,7 @@ export function ResourceChipMockup() {
             alignItems: "center",
             gap: token("--space-5"),
             padding: `${token("--space-9")} ${token("--space-10")}`,
-            background: token("--surface-glass"),
+            background: token("--surface-chrome"),
             border: `1px solid ${token("--border-soft")}`,
             borderRadius: token("--radius-sheet"),
             boxShadow: token("--shadow-lg"),

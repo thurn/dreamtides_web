@@ -107,7 +107,7 @@ export function ButtonMockup() {
         <div
           style={{
             padding: token("--space-7"),
-            background: token("--surface-glass"),
+            background: token("--surface-chrome"),
             border: `1px solid ${token("--border-soft")}`,
             borderRadius: token("--radius-sheet"),
             boxShadow: token("--shadow-lg"),

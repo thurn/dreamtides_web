@@ -20,8 +20,8 @@ App backdrops, panes, and scrims, by role.
 | `--surface-raised` | `var(--primitive-plum-600)` |  |
 | `--surface-hover` | `var(--primitive-plum-500)` |  |
 | `--surface-chip` | `var(--primitive-plum-400)` |  |
-| `--surface-glass` | `#191423` | solid raised chrome (HUD/popovers/windows) |
-| `--surface-glass-strong` | `#120e1c` | solid, deeper chrome for windows |
+| `--surface-chrome` | `#191423` | solid raised chrome (HUD/popovers/windows) |
+| `--surface-chrome-strong` | `#120e1c` | solid, deeper chrome for windows |
 | `--scrim` | `var(--primitive-scrim-700)` | modal / sheet backdrop |
 | `--scrim-strong` | `var(--primitive-scrim-900)` | full-screen focus (held zoom) |
 | `--surface` | `var(--surface-card)` | #1a1525 plum |

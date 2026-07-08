@@ -36,7 +36,7 @@ function Trigger({ stageRef, label, variant, glyph, card }: TriggerProps) {
           gap: token("--space-3"),
           width: 128,
           padding: `${token("--space-5")} ${token("--space-4")}`,
-          background: token("--surface-glass"),
+          background: token("--surface-chrome"),
           border: `1px solid ${token("--border-soft")}`,
           borderRadius: token("--radius-panel"),
           cursor: "pointer",
