@@ -12,6 +12,7 @@ import tangoNoClassnameInProductUi from "./eslint-rules/no-classname-in-product-
 import tangoScreenFileTaxonomy from "./eslint-rules/screen-file-taxonomy.js";
 import tangoNoUntokenizedLengths from "./eslint-rules/no-untokenized-lengths.js";
 import tangoNoNameKeyedCards from "./eslint-rules/no-name-keyed-cards.js";
+import tangoNoRawSafeAreaEnv from "./eslint-rules/no-raw-safe-area-env.js";
 
 // One shared plugin object: flat config rejects two config blocks that bind the
 // same plugin name to different objects, and the tango rules apply to more than
@@ -30,6 +31,7 @@ const tangoPlugin = {
     "screen-file-taxonomy": tangoScreenFileTaxonomy,
     "no-untokenized-lengths": tangoNoUntokenizedLengths,
     "no-name-keyed-cards": tangoNoNameKeyedCards,
+    "no-raw-safe-area-env": tangoNoRawSafeAreaEnv,
   },
 };
 
@@ -77,6 +79,17 @@ export default tseslint.config(
       "tango/screen-file-taxonomy": "error",
       "tango/no-untokenized-lengths": "error",
       "tango/no-name-keyed-cards": "error",
+      "tango/no-raw-safe-area-env": "error",
+    },
+  },
+  {
+    // DraftScreen reads raw `env(safe-area-inset-top)` at its notch clearance
+    // today. Phase 1 rewrites it to `var(--safe-area-inset-top)` (the channel
+    // the device-frame screenshot harness injects) and deletes this override.
+    files: ["src/tango/screens/DraftScreen.tsx"],
+    plugins: { tango: tangoPlugin },
+    rules: {
+      "tango/no-raw-safe-area-env": "off",
     },
   },
   {
