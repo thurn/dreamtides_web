@@ -29,12 +29,29 @@ import {
   transfigurationEffectDetails,
 } from "../../transfiguration/transfiguration-logic";
 import { transfigurationEssenceCost } from "../../transfiguration/transfiguration-pricing";
+import {
+  resolveMerchantDecline,
+  resolveMerchantOffer,
+} from "../../journey_v2/encounter/resolveMerchantOffer";
+import type { MerchantChoice } from "../../journey_v2/types";
+import type { MerchantArchetypeId } from "../../journey_v2/archetypes/types";
 import type {
   ShopRerollResult,
   SiteContentProvider,
   SiteOpenResult,
 } from "../../rules/quest/sites";
 import { streamFromKeyed } from "./rng-stream";
+
+function asString(value: unknown): string | null {
+  return typeof value === "string" ? value : null;
+}
+
+/** Coerce an optional `{ choiceId }` merchant choice from a raw payload field. */
+function coerceMerchantChoice(value: unknown): MerchantChoice | undefined {
+  if (typeof value !== "object" || value === null) return undefined;
+  const choiceId = (value as { choiceId?: unknown }).choiceId;
+  return typeof choiceId === "string" ? { choiceId } : undefined;
+}
 
 /** Whether the run's draft is a deck-fit mode (replay / fresh20). */
 function isDeckFitDraft(quest: QuestState): boolean {
@@ -267,6 +284,44 @@ export function createSiteContentProvider(
         remainingDreamsignPool: generated.remainingDreamsignPoolIds,
         draftState,
       };
+    },
+
+    // Resolve a Dream Merchant / DreamAugury ACCEPT / DECLINE. The whole
+    // resolution (encounter regeneration, offer lookup, payload application,
+    // site completion) is a PURE function of `(quest, questContent, site,
+    // request)` — no rng, no clock — so the provider `rng` is unused. Both
+    // resolvers regenerate the encounter deterministically from the same quest
+    // state the reducer folds against, so two clients resolve identically.
+    resolveMerchant: ({ quest, site, action, payload }): QuestState | null => {
+      const encounterSignature = asString(payload.encounterSignature);
+      const offerId = asString(payload.offerId);
+      if (encounterSignature === null || offerId === null) return null;
+      const choice = coerceMerchantChoice(payload.choice);
+
+      if (action === "decline") {
+        const result = resolveMerchantDecline({
+          state: quest,
+          questContent: content,
+          site,
+          request: { encounterSignature, offerId, ...(choice ? { choice } : {}) },
+        });
+        return result.ok ? result.state : null;
+      }
+
+      const archetypeId = asString(payload.archetypeId);
+      if (archetypeId === null) return null;
+      const result = resolveMerchantOffer({
+        state: quest,
+        questContent: content,
+        site,
+        request: {
+          encounterSignature,
+          offerId,
+          archetypeId: archetypeId as MerchantArchetypeId,
+          ...(choice ? { choice } : {}),
+        },
+      });
+      return result.ok ? result.state : null;
     },
   };
 }
