@@ -491,9 +491,10 @@ and two findings gained new instances:
 - Spot re-verification confirmed unchanged: the byte-identical
   `glassSurfaceStyle()`/`glassTrack()` pair, the opaque `--surface-glass*`
   tokens (now at `tango-tokens.css:183-184`), both `GlassBackdrop` copies,
-  `StatTile`/`TidePill` at zero consumers, the dead-token set (with one
-  correction: `--glow-danger` is live via `leave-site-button.css:27`; the
-  other five `--glow-*` are orphaned), the four dark-disc gradients, the
+  `StatTile`/`TidePill` at zero consumers, the dead-token set (with a
+  correction: `--glow-danger` is live via `leave-site-button.css:27` and
+  `--glow-accent-soft` via `DesktopDeckViewer.tsx`/`QuestStatusBar.tsx`;
+  the other four `--glow-*` are orphaned), the four dark-disc gradients, the
   1.07/1.08 hand-rolled hover scales, and all §5 convergence debt.
 - One nuance to the §3 catalog claim: the generic `InfoCard.PressInfo`
   engine does have a demo entry (`docs/demos/info-card.tsx:107-120`); the

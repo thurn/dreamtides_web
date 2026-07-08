@@ -85,9 +85,10 @@ toward zero.
   `MobileDeckViewer`'s mixed usage is normalized (floor semantics via
   `--safe-top` where intended, hardware insets via the channel).
 - **Token pruning.** Delete the orphaned semantic tokens verified in the
-  audit (§4 set minus the live `--glow-danger`), including `--card-aspect`,
-  the `--cat-*` family, `--space-0`, `--tide-earthy`, `--control-h`,
-  `--control-h-sm`, and the five dead `--glow-*` members. `tide-spec.ts`
+  audit (§4 set minus the live `--glow-danger` and `--glow-accent-soft`),
+  including `--card-aspect`, the `--cat-*` family, `--space-0`,
+  `--tide-earthy`, `--control-h`, `--control-h-sm`, and the four dead
+  `--glow-*` members. `tide-spec.ts`
   is documented as the tide palette's home. One `--badge-disc-gradient`
   token replaces the four dark-disc gradient variants (`atlas.css` ×2,
   `InfoCard.tsx` `SITE_DISC`, `site-node.css`), and the `SITE_DISC`
