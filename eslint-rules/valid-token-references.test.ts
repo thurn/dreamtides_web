@@ -4,6 +4,7 @@ import { describe, it, expect } from "vitest";
 import rule, {
   toRepoRelativePosix,
   isProductUiFile,
+  isTangoOwnedFile,
 } from "./valid-token-references.js";
 import { knownTokenNames } from "./tango-token-index.js";
 
@@ -31,6 +32,21 @@ describe("isProductUiFile", () => {
     expect(isProductUiFile("src/tango/components/Button.tsx")).toBe(false);
     expect(isProductUiFile("src/tango/docs/TangoApp.tsx")).toBe(false);
     expect(isProductUiFile("src/screens/LegacyScreen.tsx")).toBe(false);
+  });
+});
+
+describe("isTangoOwnedFile", () => {
+  it("governs all of src/tango/ (components included) plus the adapter layer", () => {
+    expect(isTangoOwnedFile("src/tango/components/Button.tsx")).toBe(true);
+    expect(isTangoOwnedFile("src/tango/screens/HomeScreen.tsx")).toBe(true);
+    expect(isTangoOwnedFile("src/screens/tango_adapters/HomeScreenAdapter.tsx")).toBe(
+      true,
+    );
+  });
+  it("exempts the primitive and doc tiers, and non-tango files", () => {
+    expect(isTangoOwnedFile("src/tango/primitives/tokens.ts")).toBe(false);
+    expect(isTangoOwnedFile("src/tango/docs/TangoApp.tsx")).toBe(false);
+    expect(isTangoOwnedFile("src/screens/LegacyScreen.tsx")).toBe(false);
   });
 });
 
@@ -87,9 +103,14 @@ ruleTester.run("valid-token-references", rule, {
       code: `const label = "starts --like-a-token but is prose";`,
     },
     {
-      name: "the exempt components tier may bridge to non-tango names",
+      name: "a declared token referenced from a components file is fine",
       filename: "src/tango/components/GameCard.tsx",
-      code: `const style = { color: "var(${BOGUS_TOKEN})" };`,
+      code: `const style = { color: "var(${REAL_TOKEN})" };`,
+    },
+    {
+      name: "allowlisted component-local runtime vars are fine in a components file",
+      filename: "src/tango/components/GameCard.tsx",
+      code: `const style = { width: "var(--atlas-node-size)", filter: "blur(var(--cv-name-color))" };`,
     },
     {
       name: "files outside the product tier are inert",
@@ -98,6 +119,12 @@ ruleTester.run("valid-token-references", rule, {
     },
   ],
   invalid: [
+    {
+      name: "components are now governed — an unknown token is reported",
+      filename: "src/tango/components/GameCard.tsx",
+      code: `const style = { color: "var(${BOGUS_TOKEN})" };`,
+      errors: [{ messageId: "unknownToken" }],
+    },
     {
       name: "a typo'd token in a string literal",
       filename: SCREEN,
