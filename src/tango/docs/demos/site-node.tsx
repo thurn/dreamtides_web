@@ -3,7 +3,7 @@
 // from `model.pos` inside a `position: relative` stage and anchors its reveal to
 // a `stageRef`, so the demo's `Component` supplies a phone-proportioned scene-like
 // stage, owns the `stageRef`, and lays out one node per state (a plain site, a
-// battle guardian, a locked guardian, a visited site). `docName` still
+// battle guardian, a locked guardian). `docName` still
 // points at the real SiteNode so the props table reports its actual API. The
 // models here are representative demo fixtures (glyphs, labels), not game data —
 // the dreamscape screen builds real ones from its site list + seeded scatter.
@@ -39,17 +39,6 @@ const DEMO_MODELS: DreamscapeSiteModel[] = [
     icon: glyph("bxf bx-treasure-chest"),
   },
   {
-    site: { id: "s-visited", type: "Draft", isEnhanced: false, isVisited: true },
-    pos: { x: 76, y: 42 },
-    index: 2,
-    isBattle: false,
-    isLocked: false,
-    isInteractive: false,
-    label: "Draft 3x",
-    blurb: "Draft new cards into your deck.",
-    icon: glyph("bxf bx-copy"),
-  },
-  {
     site: { id: "s-battle", type: "Battle", isEnhanced: false, isVisited: false },
     pos: { x: 38, y: 74 },
     index: 3,
@@ -68,7 +57,7 @@ const DEMO_MODELS: DreamscapeSiteModel[] = [
     isLocked: true,
     isInteractive: false,
     label: "Final Boss",
-    blurb: "Visit the other sites in this dreamscape first.",
+    blurb: "The dreamscape's final guardian — defeat it to complete the dreamscape.",
     icon: glyph("bxf bx-meteor"),
   },
 ];

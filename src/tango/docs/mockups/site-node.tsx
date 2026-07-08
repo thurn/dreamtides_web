@@ -39,17 +39,6 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     icon: glyph("bxf bx-treasure-chest"),
   },
   {
-    site: { id: "s-draft", type: "Draft", isEnhanced: false, isVisited: true },
-    pos: { x: 62, y: 30 },
-    index: 2,
-    isBattle: false,
-    isLocked: false,
-    isInteractive: false,
-    label: "Draft 3x",
-    blurb: "Draft new cards into your deck.",
-    icon: glyph("bxf bx-copy"),
-  },
-  {
     site: { id: "s-rest", type: "Reward", isEnhanced: true, isVisited: false },
     pos: { x: 78, y: 52 },
     index: 3,

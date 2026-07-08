@@ -1,8 +1,8 @@
 // SiteNode — the dreamscape site disc. A floating circular node over a
 // dreamscape's scene art: a dark radial disc with a white glyph and a soft accent
-// ring. Every site disc is the same size; the guardian battle carries a pulsing
-// ring, and visited and locked nodes dim and show a status badge. The disc
-// carries no text label —
+// ring. The disc shows one of three states: a plain site, the guardian battle
+// (a pulsing ring), and a locked guardian (a desaturated disc with a padlock
+// badge). Every site disc is the same size. The disc carries no text label —
 // pressing / hovering it reveals the site name + detail through the ONE shared
 // popover, InfoCard's `icon` variant, whose disc is styled to read identically to
 // the node it rose from.
@@ -16,7 +16,7 @@
 //
 // Unifies the local `DreamscapeSiteNode` / `DreamscapeSitePopover` pair with the
 // design source `components/quest/SiteNode.jsx`: the LOCAL node treatment + game
-// data (battle sizing, floaty drift, visited / locked badges, the placed-site
+// data (battle sizing, floaty drift, the locked badge, the placed-site
 // model, the deferred-cursor contract) is authoritative; the
 // DESIGN InfoCard-icon reveal + the input-adaptive engine is the Tango vocabulary
 // the preview now speaks. The node measures against `stageRef` (the screen root)
@@ -68,19 +68,16 @@ export interface DreamscapeSiteModel {
   icon: Glyph;
 }
 
-/** The status note (locked / visited) shown under the blurb in the reveal. */
+/** The status note (the lock note) shown under the blurb in the reveal. */
 function siteRevealNote(model: DreamscapeSiteModel): string | null {
-  if (model.isLocked && !model.site.isVisited) {
+  if (model.isLocked) {
     return "You must visit the other sites in this dreamscape first.";
-  }
-  if (model.site.isVisited) {
-    return "Already visited.";
   }
   return null;
 }
 
-/** The InfoCard body for a site reveal: the mechanic blurb plus, when locked or
- * visited, a muted status note under it. */
+/** The InfoCard body for a site reveal: the mechanic blurb plus, when locked, a
+ * muted lock note under it. */
 function siteRevealBody(model: DreamscapeSiteModel): RichText {
   const note = siteRevealNote(model);
   const blurb = richText.plain(model.blurb);
@@ -131,7 +128,6 @@ export function SiteNode({
   // A locked guardian stays at full opacity but its disc is desaturated to a
   // clear, readable "disabled" grey. The dimming lands on the disc alone so the
   // lock badge stays crisp and legible.
-  const opacity = site.isVisited ? 0.42 : 1;
   const lockedFilter = isLocked ? "grayscale(1) brightness(0.62)" : undefined;
 
   // Ring + border derive from the node's fixed accent via color-mix alpha. The
@@ -174,7 +170,6 @@ export function SiteNode({
     marginLeft: -diameter / 2,
     marginTop: -diameter / 2,
     animationDelay: `${String(index * -1.37)}s`,
-    opacity,
     zIndex: shown ? 40 : 10,
     transform:
       shown && isInteractive
@@ -202,7 +197,6 @@ export function SiteNode({
       aria-disabled={!isInteractive}
       data-site-id={site.id}
       data-site-type={site.type}
-      data-site-visited={site.isVisited ? "true" : "false"}
       data-site-locked={isLocked ? "true" : "false"}
       data-interactive={isInteractive ? "true" : "false"}
     >
@@ -229,15 +223,10 @@ export function SiteNode({
           />
         </span>
       </span>
-      {isBattle && !isLocked && !site.isVisited && (
+      {isBattle && !isLocked && (
         <span className="ds-battle-pulse" aria-hidden="true" />
       )}
-      {site.isVisited && (
-        <span className="ds-node-badge visited" aria-hidden="true">
-          <i className={GLYPHS.check} />
-        </span>
-      )}
-      {isLocked && !site.isVisited && (
+      {isLocked && (
         <span className="ds-node-badge locked" aria-hidden="true">
           <i className={GLYPHS.lockFilled} />
         </span>
