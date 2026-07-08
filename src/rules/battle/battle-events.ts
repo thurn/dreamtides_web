@@ -39,7 +39,6 @@ import type {
   BattleResult,
   BattleSide,
 } from "../../battle/types";
-import { rankSlotIds } from "../../battle/types";
 import type { BattleCommand, BattleDebugEdit } from "../../battle/debug/commands";
 import type {
   BattleModifier,
@@ -61,7 +60,13 @@ import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
 import { advanceEffectQueue } from "./driver";
 import { dawnClearEdits } from "../../battle/engine/handoff";
 import { alliesInPlay } from "./effect-step";
-import { newEffectRun, type BattleFoldState, type EffectRun } from "./fold";
+import {
+  collectMaterializedRuns,
+  inPlayInstanceIds,
+  newEffectRun,
+  type BattleFoldState,
+  type EffectRun,
+} from "./fold";
 
 // ---------------------------------------------------------------------------
 // Battle-init provider seam (BEGIN_BATTLE construction)
@@ -397,28 +402,13 @@ export function battleCommand(
   const queue: EffectRun[] = [...battle.effectQueue];
 
   // Step 2 — ▸Materialized: newly-present in-play ids with a materialized script.
+  // Only the COMMAND edit is applied here (the driver applies queued dispatches),
+  // so this detects materialization caused by the command edit itself. Cascades
+  // from queued scripts' edits are detected inside the driver's drain (fold.ts
+  // `collectMaterializedRuns` is called around each dispatch), so a card fires
+  // exactly once regardless of which layer moved it into play.
   const inPlayBefore = new Set(inPlayInstanceIds(boardBefore));
-  for (const id of inPlayInstanceIds(boardAfter)) {
-    if (inPlayBefore.has(id)) {
-      continue;
-    }
-    const instance = boardAfter.cardInstances[id];
-    if (instance === undefined) {
-      continue;
-    }
-    const script = selectBattleCardEffectScript(instance.definition.cardId);
-    if (
-      script === null ||
-      script.trigger !== "materialized" ||
-      script.steps === undefined ||
-      script.steps.length === 0
-    ) {
-      continue;
-    }
-    queue.push(
-      newEffectRun({ table: "battle", id: instance.definition.cardId }, instance.controller, id),
-    );
-  }
+  queue.push(...collectMaterializedRuns(inPlayBefore, boardAfter));
 
   let board = boardAfter;
 
@@ -468,33 +458,6 @@ export function battleCommand(
     queueCtx,
   );
   return { ...state, battle: advanced };
-}
-
-/**
- * All non-null front- and back-rank occupant ids, both sides, in a fixed order
- * (player then enemy; each side's back rank then front rank, left to right).
- * This is the "in-play" set the ▸Materialized diff tracks — an id that newly
- * appears here has just entered play and is eligible to fire its trigger once.
- * Reimplemented as a PURE helper here (the deleted `use-battle-effect-runner`
- * hook's logic); exported for direct unit testing.
- */
-export function inPlayInstanceIds(state: BattleMutableState): string[] {
-  const ids: string[] = [];
-  for (const side of ["player", "enemy"] as const) {
-    for (const slotId of rankSlotIds(state.sides[side].backRank)) {
-      const id = state.sides[side].backRank[slotId];
-      if (id !== null) {
-        ids.push(id);
-      }
-    }
-    for (const slotId of rankSlotIds(state.sides[side].frontRank)) {
-      const id = state.sides[side].frontRank[slotId];
-      if (id !== null) {
-        ids.push(id);
-      }
-    }
-  }
-  return ids;
 }
 
 /**

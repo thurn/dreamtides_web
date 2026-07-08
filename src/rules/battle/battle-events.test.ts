@@ -496,6 +496,7 @@ function makeRichBoard(over: {
   dreamwellDeckIndex?: number;
   instances?: BattleCardInstance[];
   playerHand?: string[];
+  playerVoid?: string[];
   playerFront?: Record<string, string | null>;
   playerBack?: Record<string, string | null>;
   playerDreamwellCardIndex?: number | null;
@@ -503,6 +504,7 @@ function makeRichBoard(over: {
 } = {}): BattleMutableState {
   const player = makeSide();
   player.hand = over.playerHand ?? [];
+  player.void = over.playerVoid ?? [];
   player.frontRank = { ...emptyFrontRankSlots(), ...(over.playerFront ?? {}) };
   player.backRank = { ...emptyBackRankSlots(), ...(over.playerBack ?? {}) };
   player.dreamwellCardIndex = over.playerDreamwellCardIndex ?? null;
@@ -584,6 +586,34 @@ function firstSupportScript(): BattleCardEffectScript {
     (s) => s.trigger === "support" && s.support !== undefined && s.support.applies === undefined,
   );
   if (script === undefined) throw new Error("no unconditional support script registered");
+  return script;
+}
+
+/** A deterministic materialized script whose edits gain score for the
+ *  controller side (so a cascade firing is observable as a score change). */
+function firstMaterializedGainingScore(probe: BattleMutableState): { id: string } {
+  const ctx: StepContext = { side: "player", state: probe, random: () => 0, nowMs: 0 };
+  const script = Object.values(BATTLE_CARD_EFFECTS).find((s) => {
+    if (s.trigger !== "materialized" || s.steps === undefined) return false;
+    if (s.steps.some((step) => step.kind === "prompt")) return false;
+    const edits = s.steps.flatMap((step) => (step.kind === "edits" ? step.build(ctx) : []));
+    return edits.some((e) => e.kind === "ADJUST_SCORE" && e.side === "player");
+  });
+  if (script === undefined) throw new Error("no score-gaining materialized script registered");
+  return script;
+}
+
+/** A deterministic Dreamwell script whose edits move a void character into a
+ *  play (battlefield) slot — the Celestial-Gateway shape. Requires a probe board
+ *  with a player void character and an open play slot. */
+function firstVoidToPlayDreamwell(probe: BattleMutableState): { id: string } {
+  const ctx: StepContext = { side: "player", state: probe, random: () => 0, nowMs: 0 };
+  const script = Object.values(DREAMWELL_EFFECTS).find((s) => {
+    if (s.steps.some((step) => step.kind === "prompt")) return false;
+    const edits = s.steps.flatMap((step) => (step.kind === "edits" ? step.build(ctx) : []));
+    return edits.some((e) => e.kind === "MOVE_CARD_TO_ZONE" && "slotId" in e.destination);
+  });
+  if (script === undefined) throw new Error("no void-to-play dreamwell script registered");
   return script;
 }
 
@@ -818,6 +848,60 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     // Recomputing again immediately produces no further edits (idempotent).
     const again = planSupportRecompute(nextBoard, true, () => 0, 0);
     expect(again).toEqual([]);
+  });
+
+  // --- cascade: a queued script that moves a scripted character into play
+  //     fires THAT character's materialized trigger in the SAME fold step ---
+  it("cascades — a Dreamwell script that moves a scripted character into play fires its materialized trigger", () => {
+    // A materialized script whose deterministic edits gain score for the
+    // controller (so its firing is observable as a score change).
+    const probe = makeRichBoard({ playerVoid: ["probe-void"], instances: [makeInstance("probe-void", "no-script")] });
+    const scoreMat = firstMaterializedGainingScore(probe);
+    // A deterministic Dreamwell script that moves a void character into a play
+    // slot (Celestial-Gateway-shaped): the reducer-applied move is what surfaces
+    // the character, so its ▸Materialized must fire in the driver's drain.
+    const voidToPlay = firstVoidToPlayDreamwell(probe);
+
+    const voidCard = makeInstance("bc-voidchar", scoreMat.id, "player");
+    const dreamwellCard: DreamwellCardDefinition = {
+      id: voidToPlay.id,
+      name: "Fixture Gateway",
+      renderedText: "",
+      energyAdded: 0,
+      order: 0,
+      cardNumber: 0,
+      imageNumber: 0,
+    };
+    const init = makeInit({ dreamwellDeck: [dreamwellCard] });
+    const board = makeRichBoard({
+      turnNumber: 2,
+      phase: "dreamwell",
+      dreamwellDeckIndex: 0,
+      playerVoid: ["bc-voidchar"],
+      instances: [voidCard],
+      playerDreamwellDrawnTurn: null,
+    });
+    const state = { ...baseState(), battle: battleFrom(board, { init }) };
+
+    const result = reduce(state, "BATTLE_COMMAND", debugEdit({ kind: "DRAW_DREAMWELL_CARD", side: "player", turnNumber: 2 }));
+    expect(result.outcome).toBe("applied");
+    const nextBoard = result.state.battle!.board;
+    // The gateway moved the void character into play (a reserve or deploy slot).
+    const inPlay = [
+      ...Object.values(nextBoard.sides.player.backRank),
+      ...Object.values(nextBoard.sides.player.frontRank),
+    ].filter((id) => id !== null);
+    expect(inPlay).toContain("bc-voidchar");
+    expect(nextBoard.sides.player.void).not.toContain("bc-voidchar");
+    // Its materialized trigger fired IN THE SAME fold step — player score rose.
+    expect(nextBoard.sides.player.score).toBeGreaterThan(board.sides.player.score);
+    // The whole cascade drained; no stray queued run or open prompt.
+    expect(result.state.battle?.effectQueue).toEqual([]);
+    expect(result.state.battle?.pendingPrompt).toBeNull();
+
+    // Determinism: folding the same event again is byte-identical.
+    const again = reduce(state, "BATTLE_COMMAND", debugEdit({ kind: "DRAW_DREAMWELL_CARD", side: "player", turnNumber: 2 }));
+    expect(hashBattle(again.state.battle)).toBe(hashBattle(result.state.battle));
   });
 
   // --- determinism: folding the same event twice yields identical state ---

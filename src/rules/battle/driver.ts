@@ -28,7 +28,7 @@ import { applyPromptResolution, planNextEffectStep } from "./effect-runner-core"
 import type { PromptResolution } from "./effect-runner-core";
 import type { EffectStep, StepContext } from "./effect-step";
 import type { BattleFoldState, EffectRun } from "./fold";
-import { resolveScript } from "./fold";
+import { collectMaterializedRuns, inPlayInstanceIds, resolveScript } from "./fold";
 
 const EMISSION: BattleEngineEmissionContext = {
   sourceSurface: "auto-system",
@@ -199,12 +199,21 @@ function runQueue(
     }
 
     if (plan.type === "dispatch") {
+      // ▸Materialized cascade: a dispatch that moves a scripted character into
+      // play must fire that character's own trigger IN THE SAME drain. Diff the
+      // in-play id set around this dispatch's edits and enqueue a run for each
+      // newly-present scripted id. New runs append to the tail (FIFO), and the
+      // loop keeps draining, so multi-level cascades chain to a fixpoint —
+      // reproducing legacy `use-battle-effect-runner`'s per-render board-diff.
+      const inPlayBefore = new Set(inPlayInstanceIds(currentBoard));
       currentBoard = applyEdits(currentBoard, plan.edits);
+      const cascadeRuns = collectMaterializedRuns(inPlayBefore, currentBoard);
       const nextCursor = advanceCursor(steps, run.cursor);
-      currentQueue =
+      const advancedQueue =
         nextCursor === null
           ? currentQueue.slice(1)
           : [{ ...run, cursor: nextCursor }, ...currentQueue.slice(1)];
+      currentQueue = [...advancedQueue, ...cascadeRuns];
       continue;
     }
 
@@ -306,15 +315,20 @@ export function resolvePendingPrompt(
     rest,
     stepCtx,
   );
+  // ▸Materialized cascade: a prompt resolution that moves a scripted character
+  // into play (e.g. the interactive "play a character from your void" dreamwell)
+  // fires that character's trigger. Diff around the resolution edits and enqueue.
+  const inPlayBefore = new Set(inPlayInstanceIds(battle.board));
   const board = applyEdits(battle.board, edits);
+  const cascadeRuns = collectMaterializedRuns(inPlayBefore, board);
 
   const nextCursor = nextCursorAfterPrompt(steps, run.cursor, promptStep, resolution);
   assertCursorMatchesRest(steps, nextCursor, expectedRest);
 
-  const queue =
+  const advancedQueue =
     nextCursor === null
       ? battle.effectQueue.slice(1)
       : [{ ...run, cursor: nextCursor }, ...battle.effectQueue.slice(1)];
 
-  return runQueue(battle.init, board, queue, ctx.seq, random, nowMs);
+  return runQueue(battle.init, board, [...advancedQueue, ...cascadeRuns], ctx.seq, random, nowMs);
 }

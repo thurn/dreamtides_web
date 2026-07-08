@@ -16,6 +16,7 @@ import type {
   BattleMutableState,
   BattleSide,
 } from "../../battle/types";
+import { rankSlotIds } from "../../battle/types";
 import { selectBattleCardEffectScript } from "./battle-card-effects-table";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
 import type { ActivePrompt } from "./effect-runner-core";
@@ -128,4 +129,80 @@ export function newEffectRun(
   return sourceInstanceId === undefined
     ? { scriptRef, cursor: [0], side }
     : { scriptRef, cursor: [0], side, sourceInstanceId };
+}
+
+// ---------------------------------------------------------------------------
+// ▸Materialized trigger detection (shared by BATTLE_COMMAND and the driver)
+// ---------------------------------------------------------------------------
+
+/**
+ * All non-null front- and back-rank occupant ids, both sides, in a FIXED order
+ * (player then enemy; each side's back rank then front rank, left to right).
+ * This is the "in-play" set the ▸Materialized trigger tracks — an id that newly
+ * appears here has just entered play and is eligible to fire its trigger once.
+ * A pure function of the board (relocated from the deleted
+ * `use-battle-effect-runner.ts` hook), reused by both the command-level fold
+ * step and the driver's per-dispatch cascade detection.
+ */
+export function inPlayInstanceIds(state: BattleMutableState): string[] {
+  const ids: string[] = [];
+  for (const side of ["player", "enemy"] as const) {
+    for (const slotId of rankSlotIds(state.sides[side].backRank)) {
+      const id = state.sides[side].backRank[slotId];
+      if (id !== null) {
+        ids.push(id);
+      }
+    }
+    for (const slotId of rankSlotIds(state.sides[side].frontRank)) {
+      const id = state.sides[side].frontRank[slotId];
+      if (id !== null) {
+        ids.push(id);
+      }
+    }
+  }
+  return ids;
+}
+
+/**
+ * The ▸Materialized {@link EffectRun}s for every id that is in play in `state`
+ * but was NOT in `previousInPlay`, and whose card has a registered non-empty
+ * `"materialized"` script. Iteration follows {@link inPlayInstanceIds} order so
+ * the resulting runs are deterministic. Each run's `scriptRef.id` is the card
+ * UUID, `side` is the instance's controller, and `sourceInstanceId` is the
+ * in-play id (for self-targeting scripts).
+ *
+ * This is the reactive board-diff the legacy `use-battle-effect-runner.ts` ran
+ * on every render, made pure and diff-driven. Because only NEWLY-present ids
+ * fire, an id already in play (or already fired) never re-fires, and a run whose
+ * edits move a card already in play enqueues nothing — so a cascade that no
+ * longer surfaces new characters terminates. The driver calls this around each
+ * queued dispatch so a character brought into play by a queued script fires its
+ * own ▸Materialized, chaining multi-level cascades to a fixpoint (matching
+ * legacy's reactive re-render behavior).
+ */
+export function collectMaterializedRuns(
+  previousInPlay: ReadonlySet<string>,
+  state: BattleMutableState,
+): EffectRun[] {
+  const runs: EffectRun[] = [];
+  for (const id of inPlayInstanceIds(state)) {
+    if (previousInPlay.has(id)) {
+      continue;
+    }
+    const instance = state.cardInstances[id];
+    if (instance === undefined) {
+      continue;
+    }
+    const script = selectBattleCardEffectScript(instance.definition.cardId);
+    if (
+      script === null ||
+      script.trigger !== "materialized" ||
+      script.steps === undefined ||
+      script.steps.length === 0
+    ) {
+      continue;
+    }
+    runs.push(newEffectRun({ table: "battle", id: instance.definition.cardId }, instance.controller, id));
+  }
+  return runs;
 }
