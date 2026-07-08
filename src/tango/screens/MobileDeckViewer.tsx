@@ -35,9 +35,8 @@ import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-d
 import { GameCard } from "../components/card/CardView";
 import { Pressable } from "../primitives/Pressable";
 import { glassSurfaceStyle } from "../internal/glass-surface";
-import { GlowIcon } from "../components/controls/GlowIcon";
+import { IconButton } from "../components/controls/IconButton";
 import { Select } from "../components/controls/Select";
-import { glassIconButtonChrome } from "../internal/control-treatment";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
@@ -379,26 +378,14 @@ function TopBand({
         >
           Your Deck
         </div>
-        <Pressable
-          as="button"
-          aria-label="Close deck"
-          onClick={onClose}
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            width: CONTROL_BUTTON_PX,
-            height: CONTROL_BUTTON_PX,
-            color: token("--text-primary"),
-            display: "grid",
-            placeItems: "center",
-            fontSize: 26,
-            cursor: "pointer",
-            ...glassIconButtonChrome(),
-          }}
-        >
-          <GlowIcon iconClass={GLYPHS.close} color="text-primary" size="1em" />
-        </Pressable>
+        <div style={{ position: "absolute", top: 0, right: 0 }}>
+          <IconButton
+            glyph={GLYPHS.close}
+            size="md"
+            label="Close deck"
+            onPress={onClose}
+          />
+        </div>
       </div>
 
       {/* The filter/sort control row. */}

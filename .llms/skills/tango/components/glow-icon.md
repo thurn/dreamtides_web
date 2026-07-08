@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/glow-icon`
 
-Real consumers: **10** (imports outside `src/tango/docs/` and tests).
+Real consumers: **9** (imports outside `src/tango/docs/` and tests).
 
 The resource-glyph renderer for card marks: a named glyph, role color, optional soft shadow, and optional emitted-light filter in one square footprint.
 
