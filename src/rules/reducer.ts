@@ -19,6 +19,7 @@ import {
 } from "./events";
 import type { FoldState } from "./fold-state";
 import type { QuestState } from "../types/quest";
+import * as deck from "./quest/deck";
 import * as lifecycle from "./quest/lifecycle";
 
 /** The reducer's return shape (matches `EngineConfig.reducer`). */
@@ -136,7 +137,7 @@ export function isInterveningWindowClear(
 function routeDomain(
   state: FoldState,
   event: GameEvent,
-  _ctx: EventContext,
+  ctx: EventContext,
 ): ReduceResult {
   const payload = event.payload ?? {};
   const quest = state.quest;
@@ -170,6 +171,43 @@ function routeDomain(
       return questCase(state, lifecycle.selectDreamcaller(quest, payload));
     case "START_QUEST":
       return questCase(state, lifecycle.startQuest(quest, payload));
+
+    // --- deck & transfiguration ---
+    case "ADD_CARD":
+      return questCase(state, deck.addCard(quest, payload, ctx));
+    case "REMOVE_DECK_ENTRY":
+      return questCase(state, deck.removeDeckEntry(quest, payload));
+    case "PURGE_DECK_CARDS":
+      return questCase(state, deck.purgeDeckCards(quest, payload));
+    case "DUPLICATE_DECK_ENTRY":
+      return questCase(state, deck.duplicateDeckEntry(quest, payload, ctx));
+    case "SET_DECK_ENTRY_STAT_OVERRIDE":
+      return questCase(state, deck.setDeckEntryStatOverride(quest, payload));
+    case "SET_DECK_ENTRY_KEYWORDS":
+      return questCase(state, deck.setDeckEntryKeywords(quest, payload));
+    case "SET_DECK_ENTRY_TYPE":
+      return questCase(state, deck.setDeckEntryType(quest, payload));
+    case "TRANSFIGURE_CARD":
+      return questCase(state, deck.transfigureCard(quest, payload));
+    case "PURGE_ALL_BANE_CARDS":
+      return questCase(state, deck.purgeAllBaneCards(quest));
+    case "PURGE_RANDOM_BANE_CARDS":
+      return questCase(state, deck.purgeRandomBaneCards(quest, payload, ctx));
+
+    // ACCEPT_TRANSFIGURATION_CHOICE / ACCEPT_DUPLICATION_CHOICE are
+    // site-runtime coupled (they read the site's cardChoice offers, charge
+    // essence, and complete the site) and land with Task 14 (sites). Until
+    // then they fall through to the default bounce — never a half-apply.
+
+    // --- dreamsigns ---
+    case "ADD_DREAMSIGN":
+      return questCase(state, deck.addDreamsign(quest, payload));
+    case "REMOVE_DREAMSIGN":
+      return questCase(state, deck.removeDreamsign(quest, payload));
+    case "SET_DREAMSIGN_POOL":
+      return questCase(state, deck.setDreamsignPool(quest, payload));
+    case "SET_DREAMSIGN_IS_BANE":
+      return questCase(state, deck.setDreamsignIsBane(quest, payload));
 
     // --- whole-fold cases (touch the battle slice) ---
     case "RESET_QUEST":
