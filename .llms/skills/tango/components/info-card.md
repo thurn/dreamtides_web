@@ -10,6 +10,8 @@ Real consumers: **13** (imports outside `src/tango/docs/` and tests).
 
 The one press-to-reveal information card. Its media treatment varies by content — object, full-bleed, atlas reveal, icon, tide, or text — over a single fixed liquid-glass shell and reveal contract. On a narrow viewport a card lays out at 45% of screen width capped at its native 248px, so below ~551px (248 ÷ 0.45) it begins scaling down — an intentional content-driven cutoff, distinct from the 900px desktop/mobile breakpoint.
 
+> **Guidance:** Placement is ABOVE-only: the reveal is always anchored above the pressed object and never drops below it. `computePopoverPosition` prefers the card centered above at a uniform gap; when it does not fit there it pins the card to the top screen inset at a reduced gap; and when even a top-pinned card would overlap the press it keeps the card at the top and shifts it sideways — to whichever half of the screen is emptier — to clear the press area and, on a touch press, the fingertip disc. So a card too tall to fit above a low trigger pins to the top rather than covering the object under the finger.
+
 ## Props
 
 | Prop | Type | Required | Default | Description |
@@ -154,4 +156,14 @@ In real screens InfoCard is anchored to a trigger through the attached press eng
 >
   <ResourceChip kind="essence" value={200} />
 </InfoCard.PressInfo>
+```
+
+### Mobile scale
+
+Every info card is 248px wide at native. On a narrow viewport it lays out at 45% of the viewport width, capped at that native 248px, so the implicit mobile cutoff is 248 ÷ 0.45 ≈ 551px and desktop keeps the authored geometry. Mobile-sized cards also use a smaller internal type scale of 0.666 so the overlaid glass text block covers less of an image-led reveal. Both are driven by the live viewport — never a caller prop — through the exported `infoCardWidth` / `infoCardTextScale` helpers and the `INFO_CARD_WIDTH` constant.
+
+```tsx
+import { infoCardWidth, infoCardTextScale, INFO_CARD_WIDTH } from "src/tango/components/overlay/InfoCard";
+const w = infoCardWidth(window.innerWidth);         // min(248, 0.45 * vw)
+const scale = infoCardTextScale(window.innerWidth); // 1 on desktop, 0.666 on mobile
 ```
