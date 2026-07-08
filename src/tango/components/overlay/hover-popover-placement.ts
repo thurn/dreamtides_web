@@ -13,10 +13,12 @@
  *   centered. Flip to `"bottom"` when the popover would clip off the top
  *   of the viewport and there is more room below. Shift the popover
  *   horizontally so it stays fully inside the viewport.
- * - `"left"` preferred: place the popover to the left of the anchor,
- *   vertically centered. Flip to `"right"` when the popover would clip off
- *   the left edge and there is more room on the right. Shift the popover
- *   vertically so it stays fully inside the viewport.
+ * - `"left"` / `"right"` preferred: place the popover beside the anchor on
+ *   that side. Flip to the opposite side when the preferred side does not fit
+ *   and there is more room there. Shift the popover vertically so it stays
+ *   fully inside the viewport. Side popovers default to vertical centering;
+ *   callers can request `"start"` alignment to pin the popover's top to the
+ *   anchor top before viewport clamping.
  *
  * "Flip" is preferred over "shift" along the primary axis so the popover
  * keeps a clear visual relationship with the anchor (above / below the
@@ -43,7 +45,8 @@ interface ComputeArgs {
   popoverHeight: number;
   viewportWidth: number;
   viewportHeight: number;
-  preferred: "top" | "left";
+  preferred: "top" | "left" | "right";
+  crossAxisAlign?: "center" | "start";
 }
 
 export interface ComputedPlacement {
@@ -77,6 +80,8 @@ export function computePopoverPlacement(args: ComputeArgs): ComputedPlacement {
     popoverHeight,
     viewportWidth,
     viewportHeight,
+    preferred,
+    crossAxisAlign: args.crossAxisAlign ?? "center",
   });
 }
 
@@ -86,6 +91,11 @@ interface AxisArgs {
   popoverHeight: number;
   viewportWidth: number;
   viewportHeight: number;
+}
+
+interface HorizontalAxisArgs extends AxisArgs {
+  preferred: "left" | "right";
+  crossAxisAlign: "center" | "start";
 }
 
 /**
@@ -129,16 +139,19 @@ function placeVertically(args: AxisArgs): ComputedPlacement {
 }
 
 /**
- * Left-preferred placement: to the left of the anchor, vertically
- * centered. Flips to right when the left side does not have room.
+ * Side-preferred placement: to the left or right of the anchor, vertically
+ * centered by default or top-aligned when requested. Flips horizontally when
+ * the preferred side does not have room.
  */
-function placeHorizontally(args: AxisArgs): ComputedPlacement {
+function placeHorizontally(args: HorizontalAxisArgs): ComputedPlacement {
   const {
     anchor,
     popoverWidth,
     popoverHeight,
     viewportWidth,
     viewportHeight,
+    preferred,
+    crossAxisAlign,
   } = args;
 
   const spaceLeft = anchor.left - POPOVER_GAP_PX;
@@ -147,10 +160,14 @@ function placeHorizontally(args: AxisArgs): ComputedPlacement {
   const fitsRight = spaceRight >= popoverWidth;
 
   let side: PopoverPlacementSide;
-  if (fitsLeft) {
+  if (preferred === "left" && fitsLeft) {
     side = "left";
-  } else if (fitsRight) {
+  } else if (preferred === "right" && fitsRight) {
     side = "right";
+  } else if (preferred === "left" && fitsRight) {
+    side = "right";
+  } else if (preferred === "right" && fitsLeft) {
+    side = "left";
   } else {
     side = spaceLeft >= spaceRight ? "left" : "right";
   }
@@ -160,8 +177,10 @@ function placeHorizontally(args: AxisArgs): ComputedPlacement {
       ? anchor.left - POPOVER_GAP_PX - popoverWidth
       : anchor.right + POPOVER_GAP_PX;
 
-  const anchorCenterY = (anchor.top + anchor.bottom) / 2;
-  const desiredTop = anchorCenterY - popoverHeight / 2;
+  const desiredTop =
+    crossAxisAlign === "start"
+      ? anchor.top
+      : (anchor.top + anchor.bottom) / 2 - popoverHeight / 2;
   const top = clampToViewportY(desiredTop, popoverHeight, viewportHeight);
 
   return { left, top, side };

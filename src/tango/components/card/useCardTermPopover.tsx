@@ -265,7 +265,8 @@ export function useCardTermPopover({
       popoverHeight: rect.height,
       viewportWidth,
       viewportHeight,
-      preferred: "left",
+      preferred: "right",
+      crossAxisAlign: "start",
     });
     setResolved({ left: placement.left, top: placement.top });
   }, [shown]);

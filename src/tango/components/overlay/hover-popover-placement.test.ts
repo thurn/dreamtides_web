@@ -178,6 +178,53 @@ describe("computePopoverPlacement (left-preferred)", () => {
   });
 });
 
+describe("computePopoverPlacement (right-preferred top-aligned)", () => {
+  it("places a card-style side popover to the right with its top pinned to the anchor", () => {
+    const result = computePopoverPlacement({
+      anchor: anchor({ left: 400, top: 240, width: 200, height: 300 }),
+      popoverWidth: 240,
+      popoverHeight: 360,
+      viewportWidth: VIEWPORT.width,
+      viewportHeight: VIEWPORT.height,
+      preferred: "right",
+      crossAxisAlign: "start",
+    });
+    expect(result.side).toBe("right");
+    expect(result.left).toBe(600 + POPOVER_GAP_PX);
+    expect(result.top).toBe(240);
+  });
+
+  it("flips a top-aligned card-style popover left when the right side lacks room", () => {
+    const result = computePopoverPlacement({
+      anchor: anchor({ left: 1040, top: 180, width: 200, height: 300 }),
+      popoverWidth: 240,
+      popoverHeight: 360,
+      viewportWidth: VIEWPORT.width,
+      viewportHeight: VIEWPORT.height,
+      preferred: "right",
+      crossAxisAlign: "start",
+    });
+    expect(result.side).toBe("left");
+    expect(result.left).toBe(1040 - POPOVER_GAP_PX - 240);
+    expect(result.top).toBe(180);
+  });
+
+  it("only moves top-aligned side popovers vertically when the viewport requires it", () => {
+    const result = computePopoverPlacement({
+      anchor: anchor({ left: 400, top: 620, width: 200, height: 160 }),
+      popoverWidth: 240,
+      popoverHeight: 260,
+      viewportWidth: VIEWPORT.width,
+      viewportHeight: VIEWPORT.height,
+      preferred: "right",
+      crossAxisAlign: "start",
+    });
+    expect(result.side).toBe("right");
+    expect(result.top).toBe(800 - 260 - POPOVER_VIEWPORT_PADDING_PX);
+    expect(result.top).toBeLessThan(620);
+  });
+});
+
 describe("computePopoverPlacement (determinism)", () => {
   it("returns the same placement for identical inputs across invocations", () => {
     const args = {
