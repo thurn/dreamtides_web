@@ -423,7 +423,12 @@ describe("RESET_QUEST", () => {
     state = apply(state, "ADJUST_ESSENCE", { delta: 50 });
     // A battle in progress with no open prompt (an open prompt would be gated
     // by CAS rule 4 before routing — see the seam note in the task report).
-    state = { ...state, battle: { pendingPrompt: null } };
+    state = {
+      ...state,
+      battle: { board: {}, effectQueue: [], pendingPrompt: null } as unknown as NonNullable<
+        typeof state.battle
+      >,
+    };
 
     const reset = apply(state, "RESET_QUEST", {});
     expect(reset.battle).toBeNull();

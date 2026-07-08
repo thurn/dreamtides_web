@@ -127,10 +127,20 @@ describe("rule 3 — compare-and-swap window", () => {
 
 function stateWithPendingPrompt(promptId: number): FoldState {
   const base = foldStateWithEssence(100);
-  return {
-    ...base,
-    battle: { pendingPrompt: { promptId } },
-  };
+  // The CAS policy reads only `battle.pendingPrompt.promptId`; the board is
+  // cast because these tests never touch it (battle-fold construction is
+  // exercised by driver.test.ts).
+  const battle = {
+    board: {},
+    effectQueue: [],
+    pendingPrompt: {
+      promptId,
+      run: { scriptRef: { table: "dreamwell", id: "" }, cursor: [0], side: "player" },
+      kind: "foresee",
+      options: { kind: "foresee", count: 0 },
+    },
+  } as unknown as NonNullable<FoldState["battle"]>;
+  return { ...base, battle };
 }
 
 describe("rule 4 — prompt gate", () => {

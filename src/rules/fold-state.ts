@@ -11,40 +11,12 @@
 import type { Genesis } from "../eventlog/types";
 import type { QuestState } from "../types/quest";
 
-/**
- * An open battle prompt awaiting a player's resolution.
- *
- * SEAM (Task 18): this is a minimal placeholder. Task 18 defines the full
- * battle fold state in `src/rules/battle/fold.ts` and will replace/extend
- * `BattleFoldState` (and this `PendingPrompt` shape) with the real prompt
- * model. The root reducer only depends on `pendingPrompt.promptId` today, so
- * any richer shape Task 18 introduces must keep a numeric `promptId` (the seq
- * of the event that opened the prompt) reachable at
- * `state.battle.pendingPrompt.promptId` — set it to `ctx.seq` when opening the
- * prompt — or update the CAS policy's rule 2 / rule 4 accessors accordingly.
- */
-export interface PendingPrompt {
-  /**
-   * The seq of the event that opened this prompt (design spec §Data model).
-   * A `number`, matched by a RESOLVE_PROMPT carrying the same value. Task 18's
-   * real prompt model sets this to `ctx.seq` when opening the prompt.
-   */
-  readonly promptId: number;
-}
-
-/**
- * The in-battle slice of the fold state.
- *
- * SEAM (Task 18): placeholder shape. Only `pendingPrompt` is modelled here
- * because the root CAS policy (rules 2 and 4) is the sole consumer at this
- * layer. Task 18 owns the authoritative `BattleFoldState` and will widen this
- * interface with the battle board, stacks, players, etc. Keep `pendingPrompt`
- * (or a superset that still exposes an open prompt's id) when doing so.
- */
-export interface BattleFoldState {
-  /** The open prompt, or null when the battle is awaiting no resolution. */
-  readonly pendingPrompt: PendingPrompt | null;
-}
+// The authoritative battle fold shape lives in `battle/fold.ts` (Task 18),
+// which owns the cursor model that keeps the state closure-free. `FoldState`
+// re-exports it so the root reducer / CAS policy keep depending on
+// `state.battle.pendingPrompt.promptId` (a number = the opening event's seq).
+export type { BattleFoldState, PendingPrompt } from "./battle/fold";
+import type { BattleFoldState } from "./battle/fold";
 
 /**
  * The complete state folded from a room's event log: the quest slice plus an
