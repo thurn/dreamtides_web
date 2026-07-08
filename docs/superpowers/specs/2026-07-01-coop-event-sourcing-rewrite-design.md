@@ -1,7 +1,8 @@
 # Coop Event-Sourcing Rewrite — Design Spec
 
 Date: 2026-07-01
-Status: approved design, pending implementation plan
+Status: approved design; implementation plan at
+`docs/superpowers/plans/2026-07-01-coop-event-sourcing-rewrite.md`
 Source proposal: `docs/quest_prototype/coop_event_sourcing_proposal.md`
 
 ## Goal
@@ -88,10 +89,13 @@ interface EngineConfig<S> {
 ```
 
 `EventOutcome` is `"applied" | "bounced"`. `EventContext` provides `seq`,
-`rng(drawIndex)`, and `intervening: Array<{ seq: number; actor: string }>`
-(the events between `basedOnSeq` and this event's seq). The engine computes
-`intervening` from the live log; the **policy** — self-chain exemption,
-prompt gating, CAS-exempt event types — lives entirely in the rules reducer.
+`rng(drawIndex)`, and
+`intervening: Array<{ seq: number; actor: string }> | "unknown"`
+(the events between `basedOnSeq` and this event's seq; the literal
+`"unknown"` when `basedOnSeq < baseSeq`, so a reducer can never mistake an
+empty window for an unknowable one). The engine computes `intervening` from
+the live log; the **policy** — self-chain exemption, prompt gating,
+CAS-exempt event types — lives entirely in the rules reducer.
 
 ## Data model
 
@@ -120,11 +124,13 @@ arrays); a dev-mode encode/decode round-trip assertion enforces this.
 
 ```ts
 interface GameEvent {
-  type: string;                       // "PLAY_BATTLE_COMMAND" | "BEGIN_BATTLE" | ...
+  type: string;                       // "BATTLE_COMMAND" | "BEGIN_BATTLE" | ...
   payload: Record<string, unknown>;   // UUIDs, choice indices — never card names
   actor: string;                      // clientId, or "ai:<clientId>" for AI-originated events
   clientTimestamp: string;            // display data only, stamped by appender
   basedOnSeq: number;                 // newest confirmed seq folded into the state the actor saw
+  nonce?: string;                     // client-stamped; matches confirmed events against the
+                                      // pending-intent queue; ignored by reducers
   stateHashAfter?: string;            // appender's local fold hash (see Safety rails)
 }
 ```
@@ -247,7 +253,8 @@ the same multi-path update that creates the log node.
 
 ```
 reduce(state, event, ctx):
-  1. if event.type is CAS-exempt → apply free-running (initial exempt set: card-note events only)
+  1. if event.type is CAS-exempt → skip rules 2-3 (initial exempt set: card-note
+     events and OPEN_SITE — see Quest events); rule 4 validation still applies
   2. if ctx.intervening is unknown, or contains any seq whose actor !== event.actor → bounce
   3. if state.battle?.pendingPrompt is set and event is not RESOLVE_PROMPT
      with matching promptId → bounce
@@ -265,13 +272,12 @@ in dev.
 
 ### Quest events
 
-Every one of the 67 multiplayer mutations in
-`src/state/multiplayer-quest-context.tsx` becomes an event type with a
-reducer case in `src/rules/quest/`, grouped by feature (essence, lifecycle,
-dreamcaller, navigation, deck, transfiguration, dreamsigns, draft, sites,
-merchant, shop, limits, atlas, modifiers, misc). The implementation plan
-carries the full 1:1 table from the mutation catalogue produced during
-exploration; representative examples:
+Every multiplayer mutation in `src/state/multiplayer-quest-context.tsx`
+becomes an event type with a reducer case in `src/rules/quest/`, grouped by
+feature (essence, lifecycle, dreamcaller, navigation, deck, transfiguration,
+dreamsigns, draft, sites, merchant, shop, limits, atlas, modifiers, misc).
+The implementation plan carries the authoritative 1:1 table from the
+mutation catalogue produced during exploration; representative examples:
 
 - `changeEssence` → `ADJUST_ESSENCE { delta }`
 - `pickDraftCard` → `PICK_DRAFT_CARD { packIndex, cardId }`
@@ -280,13 +286,17 @@ exploration; representative examples:
   `START_QUEST`, `RESET_QUEST`, `LOAD_STATE { snapshot }` (debug-only, large
   payload is fine — compaction absorbs it)
 
-The `ensure*SiteRuntime` family (6 mutations) simplifies structurally: those
-writes exist because generation used `Math.random()` and had to be stored
-before rendering. In the new model a single `OPEN_SITE { siteId }` event
-generates the site runtime **deterministically inside the reducer** from
-`ctx.rng`, stores it in `state.quest.siteRuntime`, and both clients compute
-identical offers. Rerolls (`rerollShop`, `rerollDreamAugury`) are events
-whose reducer case redraws from the rng stream at their own seq.
+The `ensure*SiteRuntime` family (five mutations) simplifies structurally:
+those writes exist because generation used `Math.random()` and had to be
+stored before rendering. In the new model a single `OPEN_SITE { siteId }`
+event generates the site runtime **deterministically inside the reducer**
+from `ctx.rng`, stores it in `state.quest.siteRuntime`, and both clients
+compute identical offers. `OPEN_SITE` is CAS-exempt and idempotent: its
+reducer case draws only from `ctx.rng` at its own seq and is a no-change
+**applied** when the runtime already exists, so both players opening the
+same site simultaneously converge without a bounce toast. Rerolls
+(`rerollShop`, `rerollDreamAugury`) are events whose reducer case redraws
+from the rng stream at their own seq.
 
 The `NON_NULLABLE_RUN_FIELDS` invariant guard is deleted rather than ported:
 no code path writes quest state, so there is no bad write to guard against.
@@ -302,10 +312,13 @@ null `draftState`/`resolvedPackage`/`dreamcaller` mid-run.
   the log, so reload always lands on the correct screen. The pre-battle
   reveal screen renders when the site is active but no `BEGIN_BATTLE` has
   folded.
-- **`BATTLE_COMMAND { edit: BattleDebugEdit }`** — the intent for every
-  board interaction the UI performs today. The reducer applies
-  `applyDebugEdit`, then — synchronously, still inside the same fold step —
-  runs the automation that the effect-runner hooks perform reactively today:
+- **`BATTLE_COMMAND { command: BattleCommand }`** — the intent for every
+  board interaction the UI performs today, carrying the existing
+  `BattleCommand` union from `src/battle/debug/commands.ts`
+  (`DEBUG_EDIT` wrapping a `BattleDebugEdit`, `FORCE_RESULT`,
+  `SKIP_TO_REWARDS`). For edits the reducer applies `applyDebugEdit`, then —
+  synchronously, still inside the same fold step — runs the automation that
+  the effect-runner hooks perform reactively today:
   - **Materialized triggers**: if the edit moved a card into play, look up
     its script and either apply its edit steps or park an `EffectRun` /
     `PendingPrompt`. No board diffing: the reducer caused the change, so it
@@ -327,8 +340,9 @@ null `draftState`/`resolvedPackage`/`dreamcaller` mid-run.
 - **`END_BATTLE { result }`** — folds victory/defeat into quest state
   (today's `incrementCompletionLevel` / `setFailureSummary` seam) and clears
   `state.battle`.
-- **Card notes** (`SET_CARD_NOTE`) are the initial CAS-exempt set: no rules
-  meaning, no decision context.
+- **Card notes** (`SET_CARD_NOTE`) are CAS-exempt: no rules meaning, no
+  decision context. (`OPEN_SITE` is the only other exempt type — see Quest
+  events.)
 
 The relocated pure pieces keep their tests and their logic:
 `apply-debug-edit.ts`, `battle-card-effects-table.ts` (including the

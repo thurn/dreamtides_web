@@ -74,7 +74,7 @@ Deleted in Stage E (full inventory in Task 28): all of `src/multiplayer/`, `src/
 
 Every multiplayer mutation in `src/state/multiplayer-quest-context.tsx` maps to exactly one row. Payload fields mirror the legacy mutation's parameters (UUIDs and indices only — never card names) unless a note says the reducer now derives the value. Rows marked *(debug)* are debug/QA-only surface and keep working.
 
-**Consolidations** (approved in spec): the six `ensure*SiteRuntime` writers collapse into `OPEN_SITE` (generation moves in-reducer, drawn from `ctx.rng`); the four add-card variants collapse into `ADD_CARD` with option fields; `setDeckEntryTypeChange`/`changeDeckEntryType` collapse into `SET_DECK_ENTRY_TYPE`; the QA bootstraps compose `LOAD_STATE` (+ `BEGIN_BATTLE` for start-in-battle) on the client.
+**Consolidations** (approved in spec): the five `ensure*SiteRuntime` writers collapse into `OPEN_SITE` (generation moves in-reducer, drawn from `ctx.rng`); the four add-card variants collapse into `ADD_CARD` with option fields; `setDeckEntryTypeChange`/`changeDeckEntryType` collapse into `SET_DECK_ENTRY_TYPE`; the QA bootstraps compose `LOAD_STATE` (+ `BEGIN_BATTLE` for start-in-battle) on the client.
 
 | Legacy mutation | Event type | Payload / reducer notes |
 |---|---|---|
@@ -137,7 +137,7 @@ Every multiplayer mutation in `src/state/multiplayer-quest-context.tsx` maps to 
 | incrementCompletionLevel | `END_BATTLE` | `{ result: "victory" }`; reducer bumps completionLevel, sets screen, decrements battleModifiers, applies deck changes, clears `state.battle` |
 | setFailureSummary | `END_BATTLE` | `{ result: "defeat" }`; reducer derives the failure summary from the battle fold state. If a non-battle caller of setFailureSummary exists, it maps to `QUEST_FAILED { summary }` |
 
-Battle events (new, no legacy 1:1): `BEGIN_BATTLE { siteId }`, `BATTLE_COMMAND { command: BattleCommand }` (the existing command type wrapping `BattleDebugEdit` / force-result), `RESOLVE_PROMPT { promptId, resolution: PromptResolution }`, `SET_CARD_NOTE { instanceId, note }` (the only CAS-exempt type).
+Battle events (new, no legacy 1:1): `BEGIN_BATTLE { siteId }`, `BATTLE_COMMAND { command: BattleCommand }` (the existing command type wrapping `BattleDebugEdit` / force-result), `RESOLVE_PROMPT { promptId, resolution: PromptResolution }`, `SET_CARD_NOTE { instanceId, note }` (CAS-exempt, alongside `OPEN_SITE`).
 
 ---
 
@@ -159,7 +159,7 @@ The lint rails are the architectural enforcement from the spec and must exist be
 
 **Files:** Create: `src/eventlog/types.ts`
 
-- [ ] **Step 1: Write the types.** Transcribe from spec §Architecture and §Data model: `GameEvent`, `Genesis` (`{ seed, reducerVersion, createdAt }`), `LogNode` (decoded: `{ genesis, baseSeq, baseSnapshot, head, events }`), `EncodedLogNode` (the RTDB shape: genesis/baseSnapshot/events values are JSON strings), `EventOutcome = "applied" | "bounced"`, `EventContext` (`{ seq, rng: (drawIndex: number) => number, intervening: Array<{seq, actor}> | "unknown", timestamp: string }`), and `EngineConfig<S>` exactly as the spec defines it. Two decisions the spec leaves open, fixed here: (a) `intervening` is `"unknown"` (string literal) when `basedOnSeq < baseSeq`, so reducers can't accidentally treat an empty array as unknown; (b) `GameEvent` gains an optional `nonce?: string`, stamped by the client on submit and ignored by reducers — Task 7 uses it to match confirmed events against the pending-intent queue.
+- [ ] **Step 1: Write the types.** Transcribe from spec §Architecture and §Data model: `GameEvent`, `Genesis` (`{ seed, reducerVersion, createdAt }`), `LogNode` (decoded: `{ genesis, baseSeq, baseSnapshot, head, events }`), `EncodedLogNode` (the RTDB shape: genesis/baseSnapshot/events values are JSON strings), `EventOutcome = "applied" | "bounced"`, `EventContext` (`{ seq, rng: (drawIndex: number) => number, intervening: Array<{seq, actor}> | "unknown", timestamp: string }`), and `EngineConfig<S>` exactly as the spec defines it, including `intervening: "unknown"` (string literal) when `basedOnSeq < baseSeq` — so reducers can't accidentally treat an empty array as unknown — and the optional `nonce?: string` on `GameEvent`, stamped by the client on submit and ignored by reducers (Task 7 uses it to match confirmed events against the pending-intent queue).
 - [ ] **Step 2: `npm run typecheck` passes. Commit and push.**
 
 ### Task 3: `src/eventlog/rng.ts` — seq-keyed random stream
@@ -260,7 +260,7 @@ Follow the harness pattern of the existing `src/multiplayer/firebase-emulator.in
 
 - `fold-state.ts`: `FoldState` per spec (quest + battle, no undo), `genesisFoldState(genesis)` producing the pre-quest state (the state a fresh room shows before `START_QUEST` — mirror what legacy `createRoom` seeded as the initial `questState`).
 - `events.ts`: the discriminated union. Add every type from the mapping table now, each with its payload interface; domain cases land per-task and until then unknown-to-the-router types **bounce** (never throw).
-- `reducer.ts`: `reduceGameEvent(state, event, ctx): { state, outcome }` implementing spec §Root fold and CAS policy rules 1–5 verbatim: CAS-exempt check (`SET_CARD_NOTE` only) → intervening/unknown bounce → prompt gate → domain routing → invalid-intent bounce. The reducer must never throw on any event content.
+- `reducer.ts`: `reduceGameEvent(state, event, ctx): { state, outcome }` implementing spec §Root fold and CAS policy rules 1–5 verbatim: CAS-exempt check (`SET_CARD_NOTE` and `OPEN_SITE`) → intervening/unknown bounce → prompt gate → domain routing → invalid-intent bounce. The reducer must never throw on any event content.
 
 - [ ] **Step 1: Failing tests for the policy** (use `ADJUST_ESSENCE` as the probe event once its case exists — write these tests against a minimal `ADJUST_ESSENCE` case implemented in this task as the first domain case). Bug classes: **partner-intervening applied** (event with a partner seq in the window must bounce even if it would be valid); **self-chain bounced** (own-actor-only window must apply); **unknown window applied** (`intervening: "unknown"` must bounce); **prompt gate leak** (with `pendingPrompt` set, `ADJUST_ESSENCE` bounces, matching `RESOLVE_PROMPT` is routed); **CAS-exempt discipline** (`SET_CARD_NOTE` applies through both a partner window and an open prompt); **throw on garbage** (an event with `type: "NOT_A_REAL_TYPE"` and payload `null` returns a bounce, does not throw).
 - [ ] **Step 2–4: Red → implement → green. Step 5: Commit and push.**
