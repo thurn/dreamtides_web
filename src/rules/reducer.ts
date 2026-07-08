@@ -22,6 +22,7 @@ import type { QuestState } from "../types/quest";
 import * as deck from "./quest/deck";
 import * as draft from "./quest/draft";
 import * as lifecycle from "./quest/lifecycle";
+import * as sites from "./quest/sites";
 
 /** The reducer's return shape (matches `EngineConfig.reducer`). */
 export interface ReduceResult {
@@ -179,7 +180,7 @@ function routeDomain(
     case "REMOVE_DECK_ENTRY":
       return questCase(state, deck.removeDeckEntry(quest, payload));
     case "PURGE_DECK_CARDS":
-      return questCase(state, deck.purgeDeckCards(quest, payload));
+      return questCase(state, sites.purgeDeckCards(quest, payload));
     case "DUPLICATE_DECK_ENTRY":
       return questCase(state, deck.duplicateDeckEntry(quest, payload, ctx));
     case "SET_DECK_ENTRY_STAT_OVERRIDE":
@@ -195,10 +196,30 @@ function routeDomain(
     case "PURGE_RANDOM_BANE_CARDS":
       return questCase(state, deck.purgeRandomBaneCards(quest, payload, ctx));
 
-    // ACCEPT_TRANSFIGURATION_CHOICE / ACCEPT_DUPLICATION_CHOICE are
-    // site-runtime coupled (they read the site's cardChoice offers, charge
-    // essence, and complete the site) and land with Task 14 (sites). Until
-    // then they fall through to the default bounce — never a half-apply.
+    case "ACCEPT_TRANSFIGURATION_CHOICE":
+      return questCase(state, sites.acceptTransfigurationChoice(quest, payload));
+    case "ACCEPT_DUPLICATION_CHOICE":
+      return questCase(state, sites.acceptDuplicationChoice(quest, payload, ctx));
+
+    // --- sites ---
+    case "OPEN_SITE":
+      return questCase(state, sites.openSite(quest, payload, ctx));
+    case "COMPLETE_DREAM_AUGURY":
+      return questCase(state, sites.completeDreamAugury(quest, payload));
+    case "ACCEPT_REWARD":
+      return questCase(state, sites.acceptReward(quest, payload));
+    case "ACCEPT_DREAMSIGN_OFFER":
+      return questCase(state, sites.acceptDreamsignOffer(quest, payload));
+    case "REJECT_DREAMSIGN_OFFER":
+      return questCase(state, sites.rejectDreamsignOffer(quest, payload));
+    case "ACCEPT_ESSENCE":
+      return questCase(state, sites.acceptEssence(quest, payload));
+    case "REROLL_DREAM_AUGURY":
+      return questCase(state, sites.rerollDreamAugury(quest, payload));
+    case "FORCE_DREAM_AUGURY_ARCHETYPE":
+      return questCase(state, sites.forceDreamAuguryArchetype(quest, payload));
+    case "COMPLETE_SITE":
+      return questCase(state, sites.completeSite(quest, payload));
 
     // --- draft ---
     case "PICK_DRAFT_CARD":

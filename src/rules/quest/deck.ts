@@ -186,34 +186,6 @@ export function removeDeckEntry(
 }
 
 /**
- * `PURGE_DECK_CARDS { entryIds }` — the deck-math half of legacy
- * `purgeDeckCards`. Removes every listed entry. Bounces on a malformed list or
- * when no listed entry is present.
- *
- * SEAM (Task 14): legacy `purgeDeckCards` also charged essence, removed free
- * bane Dreamsigns, and ran `completeSiteAndReturnToDreamscape` — all
- * site-runtime concerns. Those belong to the sites task and are not applied
- * here; the payload carries no `siteId`/`cost`, so this case is purely the deck
- * removal.
- */
-export function purgeDeckCards(
-  quest: QuestState,
-  payload: Record<string, unknown>,
-): QuestState | null {
-  const raw = payload.entryIds;
-  if (!Array.isArray(raw) || !raw.every((id) => typeof id === "string")) {
-    return null;
-  }
-  const targets = new Set<string>(raw);
-  const removed = quest.deck.filter((entry) => targets.has(entry.entryId));
-  if (removed.length === 0) return null;
-  return {
-    ...quest,
-    deck: quest.deck.filter((entry) => !targets.has(entry.entryId)),
-  };
-}
-
-/**
  * `DUPLICATE_DECK_ENTRY { entryId }` — legacy `duplicateDeckEntry`. Appends a
  * copy carrying the source entry's card, transfiguration, and persistent
  * modifications, with a fresh id minted deterministically from `ctx.seq`
@@ -469,23 +441,45 @@ export function purgeRandomBaneCards(
 // ---------------------------------------------------------------------------
 
 /**
- * `ADD_DREAMSIGN { dreamsignId }` — legacy `addDreamsign` (append path). The
+ * `ADD_DREAMSIGN { dreamsignId, purgeIndex? }` — legacy `addDreamsign`. The
  * dreamsign UUID resolves to its record through the registered
- * {@link DeckContentProvider}. Bounces at the `maxDreamsigns` limit, with no
- * provider, or on an unknown id.
+ * {@link DeckContentProvider}.
+ *
+ * Two paths mirror the legacy mutation:
+ *   - Append (no `purgeIndex`): adds the dreamsign; bounces at the
+ *     `maxDreamsigns` limit.
+ *   - Replace-at-slot (`purgeIndex`): overwrites the held dreamsign at that
+ *     index (the bane-dreamsign purge flow, which swaps a bane out for the new
+ *     sign), so the `maxDreamsigns` limit does not apply. Bounces when the slot
+ *     holds no dreamsign.
+ *
+ * Bounces with no provider, an unknown id, or a malformed `purgeIndex`.
  */
 export function addDreamsign(
   quest: QuestState,
   payload: Record<string, unknown>,
 ): QuestState | null {
-  if (quest.dreamsigns.length >= quest.maxDreamsigns) return null;
   const dreamsignId = asString(payload.dreamsignId);
   if (dreamsignId === null) return null;
   const provider = contentProvider;
   if (provider === null) return null;
   const dreamsign = provider.resolveDreamsign(dreamsignId);
   if (dreamsign === null) return null;
-  return { ...quest, dreamsigns: [...quest.dreamsigns, dreamsign] };
+
+  if (payload.purgeIndex === undefined) {
+    if (quest.dreamsigns.length >= quest.maxDreamsigns) return null;
+    return { ...quest, dreamsigns: [...quest.dreamsigns, dreamsign] };
+  }
+  const purgeIndex = finiteNumber(payload.purgeIndex);
+  if (purgeIndex === null || quest.dreamsigns[purgeIndex] === undefined) {
+    return null;
+  }
+  return {
+    ...quest,
+    dreamsigns: quest.dreamsigns.map((existing, index) =>
+      index === purgeIndex ? dreamsign : existing,
+    ),
+  };
 }
 
 /**
