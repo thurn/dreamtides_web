@@ -8,7 +8,9 @@ Components · Live demo & interactive props: `/tango#/pip-badge`
 
 Real consumers: **3** (imports outside `src/tango/docs/` and tests).
 
-The compact circular number badge for inline spark and energy references, with the matching resource fill and optional explanatory tooltip.
+The circled number on a colored disc for card stats: a spark value or an energy cost, and the inline spark reference inside rules text. The value renders in white with a thin outline so it stays legible over the colored fill at small card sizes, and each variant owns its resource fill so a corner pip and an inline reference to the same resource cannot drift apart. An optional tooltip turns a pip into its own hover anchor on a longer delay tuned for card corners.
+
+> **Guidance:** PipBadge.tsx is the single source of truth for the resource fills: it exports the spark fill (SPARK_PIP_COLOR, gold #facc15) and the energy fill (ENERGY_PIP_COLOR, teal #0ea5e9). GlowIcon reads ENERGY_PIP_COLOR for the inline energy glyph, so a corner energy pip and an inline energy reference in rules text paint the same color. Import these constants rather than re-typing the hex value.
 
 ## Props
 
@@ -23,8 +25,27 @@ The compact circular number badge for inline spark and energy references, with t
 
 ## Usage
 
+### Corner spark pip
+
+The spark stat as a corner pip. `value` is a string so a variable value can pass "X"; `scale` lets a card renderer track the surrounding card text scale.
+
 ```tsx
 import { PipBadge } from "src/tango/components/controls/PipBadge";
 
 <PipBadge variant="spark" value="3" size="sm" />
+```
+
+### Energy-cost pip with tooltip
+
+The energy cost as a pip, with a tooltip so a first-time player can learn what the number means. The pip becomes its own hover anchor; the tooltip fires on a full-second hold so brushing past a card corner does not trigger it.
+
+```tsx
+import { PipBadge } from "src/tango/components/controls/PipBadge";
+
+<PipBadge
+  variant="energy"
+  value="2"
+  size="sm"
+  tooltip="Energy is the cost you pay to play this card."
+/>
 ```
