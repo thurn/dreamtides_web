@@ -42,7 +42,7 @@ import type { CSSProperties, ReactNode, RefObject } from "react";
 import { createPortal } from "react-dom";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
 import { GameCard } from "../components/card/CardView";
-import { HoverZoomCard } from "../components/card/HoverZoomCard";
+import { HoverZoomCard, MAX_SCALE } from "../components/card/HoverZoomCard";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
 import {
   DreamcallerPortrait,
@@ -124,17 +124,32 @@ const DREAMSIGN_TILE_PX = 92;
 const DREAMCALLER_PORTRAIT_PX = DREAMSIGN_TILE_PX;
 
 /**
+ * Fraction of `mediumTileWidth x MAX_SCALE` the medium hover target lands at.
+ * Keeping the target strictly below `1` (below the cap) is what lets the target
+ * — not the cap — govern the medium scale, so it stays a gentle ~1.32x pop
+ * (0.877 x 1.5 = ~1.316). Deriving the target from this fraction of the cap
+ * means the "below cap" relationship can't drift if MAX_SCALE or the medium tile
+ * width changes.
+ */
+const MEDIUM_HOVER_CAP_FRACTION = 0.877;
+
+/**
  * Hover target widths (px) for each card-size preset — the width a hovered card
- * grows toward before HoverZoomCard's MAX_SCALE (1.5x) and the viewport limits
- * cap it. Small and large keep a generous 340 target (small stays pinned at the
- * 1.5x cap, large lands ~1.42x from its larger tile). Medium's target must sit
- * BELOW its tile width x MAX_SCALE (190px x 1.5 = 285px) to actually govern the
- * scale rather than being clamped to the cap: 250px yields ~1.32x, a gentler pop
- * than small/large, which is the intent for the mid preset.
+ * grows toward before HoverZoomCard's MAX_SCALE and the viewport limits cap it.
+ * Small and large keep a generous 340 target (small stays pinned at the MAX_SCALE
+ * cap, large lands ~1.42x from its larger tile). Medium's target is derived to
+ * sit BELOW its tile width x MAX_SCALE (190px x 1.5 = 285px) so it actually
+ * GOVERNS the scale rather than being clamped to the cap:
+ * `round(190 x 1.5 x 0.877) = 250px` yields ~1.32x, a gentler pop than
+ * small/large, which is the intent for the mid preset. Because the value
+ * references MAX_SCALE (not a bare 250), the "below cap" relationship holds even
+ * if the cap or the medium tile width is retuned.
  */
 const HOVER_TARGET_WIDTH_PX: Readonly<Record<DeckCardSize, number>> = {
   small: 340,
-  medium: 250,
+  medium: Math.round(
+    DECK_CARD_SIZE_PX.medium * MAX_SCALE * MEDIUM_HOVER_CAP_FRACTION,
+  ),
   large: 340,
 };
 
