@@ -381,7 +381,6 @@ button:disabled {
    * type-only boxes, which keep an automatic height. */
   --cv-textbox-inset: 3.25cqw;
   --cv-textbox-max-height: 74%;
-  --cv-textbox-blur: 11px;
   --cv-textbox-pad-y: 2.35cqw;
   --cv-textbox-pad-x: 2.9cqw;
   --cv-textbox-pad: var(--cv-textbox-pad-y) var(--cv-textbox-pad-x);

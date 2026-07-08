@@ -82,6 +82,19 @@
 }
 
 /* ================================================================
+   CARD-VIEW ELEMENT CHANNEL — declared on .card-view, not .tango.
+   ================================================================
+   The Tango CardView renders in NON-.tango trees too (CardDisplay,
+   card-browser/BrowserCard, editor/*, journey_v2/ui/*, and battle). So
+   this card-chrome token is scoped to the .card-view element the card
+   always wraps in — a .tango-scoped declaration would leave it unresolved
+   in the editor / card browser / battle / journey. It is the static blur
+   radius CardView reads for the frosted floating rules textbox backdrop. */
+.card-view {
+  --cv-textbox-blur: 11px;
+}
+
+/* ================================================================
    PRIMITIVES — raw values. Reference only within primitives/ + components/.
    ================================================================ */
 

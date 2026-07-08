@@ -207,6 +207,7 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 
 | Token | Value | Notes |
 | --- | --- | --- |
+| `--cv-textbox-blur` | `11px` |  |
 | `--dt-bg-0` | `var(--primitive-void-800)` |  |
 | `--dt-bg-1` | `var(--primitive-void-700)` |  |
 | `--dt-bg-2` | `var(--primitive-plum-700)` |  |

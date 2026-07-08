@@ -22,6 +22,7 @@ export const TOKENS = {
   "--display-cutout-left": { var: "var(--display-cutout-left)", value: "0px" },
   "--display-cutout-width": { var: "var(--display-cutout-width)", value: "0px" },
   "--display-cutout-height": { var: "var(--display-cutout-height)", value: "0px" },
+  "--cv-textbox-blur": { var: "var(--cv-textbox-blur)", value: "11px" },
   "--primitive-void-900": { var: "var(--primitive-void-900)", value: "#060410" },
   "--primitive-void-800": { var: "var(--primitive-void-800)", value: "#0a0612" },
   "--primitive-void-700": { var: "var(--primitive-void-700)", value: "#14101f" },
