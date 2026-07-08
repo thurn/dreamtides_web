@@ -1286,6 +1286,17 @@
       "description": "Width (px) the card grows to. Defaults to {@link TARGET_WIDTH_PX}."
     },
     {
+      "name": "zoomMotion",
+      "tsType": "\"snap\" | \"gentle\"",
+      "unionMembers": [
+        "snap",
+        "gentle"
+      ],
+      "required": false,
+      "defaultValue": "snap",
+      "description": "How the enlarged copy appears. `snap` keeps compact-card previews instant;\n`gentle` eases the copy from the original footprint into its final scale."
+    },
+    {
       "name": "logSurface",
       "tsType": "string",
       "unionMembers": [],

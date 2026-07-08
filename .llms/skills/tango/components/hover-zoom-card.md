@@ -16,16 +16,33 @@ The in-place card zoom wrapper for compact card slots: hover grows a portaled co
 | `enabled` | `boolean` | no | `true` | When false the wrapper is an inert pass-through that renders `children` with no hover behaviour. Used to opt compact / tiny card surfaces out. |
 | `fill` | `boolean` | no | `false` | When true the slot fills its container (100% width and height) instead of shrinking to the card's own size. Set it when the caller's wrapper gives the card a fixed box to occupy (e.g. a battle-hand cell). |
 | `targetWidthPx` | `number` | no | `340` | Width (px) the card grows to. Defaults to {@link TARGET_WIDTH_PX}. |
+| `zoomMotion` | `"snap" \| "gentle"` | no | `snap` | How the enlarged copy appears. `snap` keeps compact-card previews instant; `gentle` eases the copy from the original footprint into its final scale. |
 | `logSurface` | `string` | no | — | Optional label recorded with the `card_hover_zoom` log event so behaviour can be reconstructed per surface (deck viewer, shop, battle hand, ...). |
 | `glossaryText` | `string` | no | — | The card's rendered rules text. When provided, the glossary definitions for any gameplay terms in the text are shown in a stack beside the enlarged card while it is zoomed — the same hover-help the old floating preview carried. The wrapped card should suppress its own inline term popover (`suppressHoverHelp`) so the definitions appear only here, aligned with the enlarged card rather than the small original underneath. |
 | `testId` | `string` | no | — | `data-testid` applied to the slot element. |
 
 ## Usage
 
+### Variant 1
+
 ```tsx
 import { HoverZoomCard } from "src/tango/components/card/HoverZoomCard";
 
 <HoverZoomCard glossaryText={card.renderedText}>
+  <GameCard card={card} suppressHoverHelp />
+</HoverZoomCard>
+```
+
+### Variant 2
+
+Use gentle motion on surfaces where the card is already readable and only needs a small hover lift while the glossary stack appears.
+
+```tsx
+<HoverZoomCard
+  targetWidthPx={250}
+  zoomMotion="gentle"
+  glossaryText={card.renderedText}
+>
   <GameCard card={card} suppressHoverHelp />
 </HoverZoomCard>
 ```

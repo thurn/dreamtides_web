@@ -35,6 +35,30 @@ interface ResolvedEntry {
 
 /** Diameter of the corner close disc; a comfortable touch target. */
 const CLOSE_BUTTON_PX = 44;
+const ROOMY_DESKTOP_QUERY = "(min-width: 1400px) and (min-height: 800px)";
+const ROOMY_DESKTOP_CARD_MIN_PX = 220;
+const ROOMY_DESKTOP_HOVER_TARGET_PX = 250;
+
+function useRoomyStartingDeckModal(): boolean {
+  const [roomy, setRoomy] = useState<boolean>(() =>
+    typeof window === "undefined" || typeof window.matchMedia !== "function"
+      ? false
+      : window.matchMedia(ROOMY_DESKTOP_QUERY).matches,
+  );
+
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return;
+    }
+    const query = window.matchMedia(ROOMY_DESKTOP_QUERY);
+    const onChange = (): void => setRoomy(query.matches);
+    onChange();
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
+
+  return roomy;
+}
 
 /**
  * Popup that previews the player's starting deck the first time the player
@@ -55,6 +79,8 @@ export function StartingDeckModal({
 }: StartingDeckModalProps) {
   const { state } = useQuest();
   const isDesktop = useIsDesktop();
+  const isRoomyDesktop = useRoomyStartingDeckModal();
+  const useRoomyLayout = isDesktop && isRoomyDesktop;
   const openTimestampRef = useRef<number>(0);
   const prevOpenRef = useRef(false);
 
@@ -130,7 +156,7 @@ export function StartingDeckModal({
         // Wide enough to lay the deck out in a couple of rows so the dialog
         // stays short; capped at 85vh (plus the backdrop's own padding) so it
         // never runs to the viewport edge.
-        maxWidth: "min(900px, 90vw)",
+        maxWidth: useRoomyLayout ? "min(1280px, 90vw)" : "min(900px, 90vw)",
         maxHeight: "85vh",
         display: "flex",
         flexDirection: "column",
@@ -159,7 +185,7 @@ export function StartingDeckModal({
     gap: token("--space-4"),
     borderBottom: `1px solid ${token("--border-strong")}`,
     ...(isDesktop
-      ? { padding: token("--space-6") }
+      ? { padding: useRoomyLayout ? token("--space-7") : token("--space-6") }
       : {
           // Clear the device screen cut-out on a full-bleed overlay.
           // `--safe-area-inset-top` carries the real inset on device and the
@@ -214,7 +240,9 @@ export function StartingDeckModal({
             alignItems: "center",
             justifyContent: "center",
             // Breathing room around the desktop dialog; edge-to-edge on mobile.
-            padding: isDesktop ? token("--space-7") : 0,
+            padding: isDesktop
+              ? useRoomyLayout ? token("--space-8") : token("--space-7")
+              : 0,
           }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -295,7 +323,7 @@ export function StartingDeckModal({
                 flex: scrollFlex,
                 minHeight: 0,
                 WebkitOverflowScrolling: "touch",
-                padding: token("--space-5"),
+                padding: useRoomyLayout ? token("--space-7") : token("--space-5"),
               }}
               data-testid="starting-deck-modal-scroll"
             >
@@ -315,15 +343,24 @@ export function StartingDeckModal({
                   style={{
                     display: "grid",
                     gridTemplateColumns:
-                      "repeat(auto-fill, minmax(140px, 1fr))",
-                    gap: token("--space-4"),
+                      useRoomyLayout
+                        ? `repeat(auto-fill, minmax(${String(
+                            ROOMY_DESKTOP_CARD_MIN_PX,
+                          )}px, 1fr))`
+                        : "repeat(auto-fill, minmax(140px, 1fr))",
+                    gap: useRoomyLayout ? token("--space-5") : token("--space-4"),
                   }}
+                  data-testid="starting-deck-modal-grid"
                 >
                   {resolvedEntries.map((resolved) => (
                     <HoverZoomCard
                       key={resolved.entry.entryId}
                       logSurface="starting_deck"
                       glossaryText={resolved.card.renderedText}
+                      targetWidthPx={useRoomyLayout
+                        ? ROOMY_DESKTOP_HOVER_TARGET_PX
+                        : undefined}
+                      zoomMotion={useRoomyLayout ? "gentle" : "snap"}
                       testId={`starting-deck-modal-card-${resolved.entry.entryId}`}
                     >
                       <CardDisplay card={resolved.card} suppressHoverHelp />

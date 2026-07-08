@@ -83,6 +83,11 @@ export interface HoverZoomCardProps {
   /** Width (px) the card grows to. Defaults to {@link TARGET_WIDTH_PX}. */
   targetWidthPx?: number;
   /**
+   * How the enlarged copy appears. `snap` keeps compact-card previews instant;
+   * `gentle` eases the copy from the original footprint into its final scale.
+   */
+  zoomMotion?: "snap" | "gentle";
+  /**
    * Optional label recorded with the `card_hover_zoom` log event so behaviour
    * can be reconstructed per surface (deck viewer, shop, battle hand, ...).
    */
@@ -214,6 +219,7 @@ export function HoverZoomCard({
   enabled = true,
   fill = false,
   targetWidthPx = TARGET_WIDTH_PX,
+  zoomMotion = "snap",
   logSurface,
   glossaryText,
   testId,
@@ -329,21 +335,34 @@ export function HoverZoomCard({
       <>
         <div
           aria-hidden="true"
-          className="pointer-events-none fixed z-[1000]"
+          className="tango pointer-events-none fixed z-[1000]"
           style={{
             left: zoom.rect.left,
             top: zoom.rect.top,
             width: zoom.rect.width,
             height: zoom.rect.height,
-            // Snap straight to the target size — no transition.
             transform:
               `translate(${zoom.dx}px, ${zoom.dy}px) scale(${zoom.scale})`,
             transformOrigin: "center center",
             filter: "drop-shadow(0 18px 40px rgba(0, 0, 0, 0.55))",
           }}
           data-hover-zoom-overlay=""
+          data-hover-zoom-motion={zoomMotion}
         >
-          {children}
+          {zoomMotion === "gentle" ? (
+            <div
+              className="hover-zoom-card__gentle-copy"
+              style={{
+                ["--hover-zoom-entry-scale" as string]: String(
+                  1 / zoom.scale,
+                ),
+              }}
+            >
+              {children}
+            </div>
+          ) : (
+            children
+          )}
         </div>
         {renderGlossaryStack(zoom, glossaryText)}
       </>,

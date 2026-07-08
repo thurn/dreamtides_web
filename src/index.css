@@ -505,6 +505,21 @@ button:disabled {
   }
 }
 
+.hover-zoom-card__gentle-copy {
+  animation: hover-zoom-card-gentle-in var(--dur-fast) var(--ease-out);
+  transform-origin: center center;
+}
+
+@keyframes hover-zoom-card-gentle-in {
+  from {
+    transform: scale(var(--hover-zoom-entry-scale));
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
 /*
  * Figment frame (rules §Figments). A figment is a temporary, token-like card.
  * It reuses the full-bleed character frame but is distinguished by a black-on-

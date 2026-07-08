@@ -146,6 +146,31 @@ describe("HoverZoomCard", () => {
     });
   });
 
+  it("eases the portaled copy in when gentle motion is requested", () => {
+    mockRect({ width: 220, height: 308, left: 50, top: 50, right: 270, bottom: 358 });
+    const { container, root } = mount(
+      <HoverZoomCard testId="slot" targetWidthPx={250} zoomMotion="gentle">
+        <div>CARD BODY</div>
+      </HoverZoomCard>,
+    );
+
+    hover(container);
+
+    const node = overlay();
+    const animatedCopy = node?.querySelector<HTMLElement>(
+      ".hover-zoom-card__gentle-copy",
+    );
+    expect(node?.dataset.hoverZoomMotion).toBe("gentle");
+    expect(animatedCopy).not.toBeNull();
+    expect(
+      Number(animatedCopy?.style.getPropertyValue("--hover-zoom-entry-scale")),
+    ).toBeCloseTo(220 / 250, 3);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("keeps the card grown while the pointer stays inside the original footprint", () => {
     mockRect({ width: 100, height: 140, left: 50, top: 50, right: 150, bottom: 190 });
     const { container, root } = mount(

@@ -226,6 +226,25 @@ function mount(element: ReactElement): {
   return { container, root };
 }
 
+function mockViewportMedia({
+  desktop,
+  roomy,
+}: {
+  desktop: boolean;
+  roomy: boolean;
+}): void {
+  window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+    matches: query.includes("1400px") ? roomy : desktop,
+    media: query,
+    onchange: null,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  })) as unknown as typeof window.matchMedia;
+}
+
 beforeEach(() => {
   vi.clearAllMocks();
   (
@@ -237,16 +256,7 @@ beforeEach(() => {
   // reduced-motion media query on mount; jsdom does not implement matchMedia,
   // so provide a minimal stub.
   if (!window.matchMedia) {
-    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    })) as unknown as typeof window.matchMedia;
+    mockViewportMedia({ desktop: false, roomy: false });
   }
   setQuestContext();
 });
@@ -346,17 +356,7 @@ describe("StartingDeckModal", () => {
   });
 
   it("renders a bounded centered dialog on desktop", () => {
-    // Report a wide viewport so useIsDesktop() is true.
-    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-      matches: query.includes("min-width"),
-      media: query,
-      onchange: null,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    })) as unknown as typeof window.matchMedia;
+    mockViewportMedia({ desktop: true, roomy: false });
 
     const { container, root } = mount(
       <StartingDeckModal
@@ -374,6 +374,41 @@ describe("StartingDeckModal", () => {
     expect(panel?.style.maxWidth).toContain("min(");
     expect(panel?.style.maxHeight).toBe("85vh");
     expect(panel?.style.height).toBe("");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("uses larger cards and padding on roomy desktop screens", () => {
+    mockViewportMedia({ desktop: true, roomy: true });
+
+    const { container, root } = mount(
+      <StartingDeckModal
+        isOpen
+        onClose={vi.fn()}
+        cardDatabase={makeCardDatabase()}
+      />,
+    );
+
+    const backdrop = container.querySelector<HTMLElement>(
+      "[data-testid='starting-deck-modal-backdrop']",
+    );
+    const panel = container.querySelector<HTMLElement>(
+      "[data-testid='starting-deck-modal']",
+    );
+    const scroll = container.querySelector<HTMLElement>(
+      "[data-testid='starting-deck-modal-scroll']",
+    );
+    const grid = container.querySelector<HTMLElement>(
+      "[data-testid='starting-deck-modal-grid']",
+    );
+
+    expect(backdrop?.style.padding).toBe("var(--space-8)");
+    expect(panel?.style.maxWidth).toBe("min(1280px, 90vw)");
+    expect(scroll?.style.padding).toBe("var(--space-7)");
+    expect(grid?.style.gridTemplateColumns).toContain("minmax(220px, 1fr)");
+    expect(grid?.style.gap).toBe("var(--space-5)");
 
     act(() => {
       root.unmount();

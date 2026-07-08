@@ -1,0 +1,9 @@
+Running Vitest through the repository's normal Vite config in this worktree fails before tests are collected with:
+
+Error: EMFILE: too many open files, watch
+
+Reproduced with:
+
+npx vitest run src/components/StartingDeckModal.test.tsx src/tango/components/card/HoverZoomCard.test.tsx
+
+The same focused tests pass when run through a minimal Vitest config that avoids the project dev-server plugin/watch setup, so this appears to be a test-runner watcher/config issue rather than a failure in the tests themselves.
