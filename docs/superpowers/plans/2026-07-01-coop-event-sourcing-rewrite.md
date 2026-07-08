@@ -74,7 +74,7 @@ Deleted in Stage E (full inventory in Task 28): all of `src/multiplayer/`, `src/
 
 Every multiplayer mutation in `src/state/multiplayer-quest-context.tsx` maps to exactly one row. Payload fields mirror the legacy mutation's parameters (UUIDs and indices only — never card names) unless a note says the reducer now derives the value. Rows marked *(debug)* are debug/QA-only surface and keep working.
 
-**Consolidations** (approved in spec): the six `ensure*SiteRuntime` writers collapse into `OPEN_SITE` (generation moves in-reducer, drawn from `ctx.rng`); the four add-card variants collapse into `ADD_CARD` with option fields; `setDeckEntryTypeChange`/`changeDeckEntryType` collapse into `SET_DECK_ENTRY_TYPE`; the QA bootstraps compose `LOAD_STATE` (+ `BEGIN_BATTLE` for start-in-battle) on the client.
+**Consolidations** (approved in spec): the five `ensure*SiteRuntime` writers collapse into `OPEN_SITE` (generation moves in-reducer, drawn from `ctx.rng`); the four add-card variants collapse into `ADD_CARD` with option fields; `setDeckEntryTypeChange`/`changeDeckEntryType` collapse into `SET_DECK_ENTRY_TYPE`; the QA bootstraps compose `LOAD_STATE` (+ `BEGIN_BATTLE` for start-in-battle) on the client.
 
 | Legacy mutation | Event type | Payload / reducer notes |
 |---|---|---|
@@ -137,7 +137,7 @@ Every multiplayer mutation in `src/state/multiplayer-quest-context.tsx` maps to 
 | incrementCompletionLevel | `END_BATTLE` | `{ result: "victory" }`; reducer bumps completionLevel, sets screen, decrements battleModifiers, applies deck changes, clears `state.battle` |
 | setFailureSummary | `END_BATTLE` | `{ result: "defeat" }`; reducer derives the failure summary from the battle fold state. If a non-battle caller of setFailureSummary exists, it maps to `QUEST_FAILED { summary }` |
 
-Battle events (new, no legacy 1:1): `BEGIN_BATTLE { siteId }`, `BATTLE_COMMAND { command: BattleCommand }` (the existing command type wrapping `BattleDebugEdit` / force-result), `RESOLVE_PROMPT { promptId, resolution: PromptResolution }`, `SET_CARD_NOTE { instanceId, note }` (the only CAS-exempt type).
+Battle events (new, no legacy 1:1): `BEGIN_BATTLE { siteId }`, `BATTLE_COMMAND { command: BattleCommand }` (the existing command type wrapping `BattleDebugEdit` / force-result), `RESOLVE_PROMPT { promptId, resolution: PromptResolution }`, `SET_CARD_NOTE { instanceId, note }` (CAS-exempt, alongside `OPEN_SITE`).
 
 ---
 
@@ -159,7 +159,7 @@ The lint rails are the architectural enforcement from the spec and must exist be
 
 **Files:** Create: `src/eventlog/types.ts`
 
-- [ ] **Step 1: Write the types.** Transcribe from spec §Architecture and §Data model: `GameEvent`, `Genesis` (`{ seed, reducerVersion, createdAt }`), `LogNode` (decoded: `{ genesis, baseSeq, baseSnapshot, head, events }`), `EncodedLogNode` (the RTDB shape: genesis/baseSnapshot/events values are JSON strings), `EventOutcome = "applied" | "bounced"`, `EventContext` (`{ seq, rng: (drawIndex: number) => number, intervening: Array<{seq, actor}> | "unknown", timestamp: string }`), and `EngineConfig<S>` exactly as the spec defines it. Two decisions the spec leaves open, fixed here: (a) `intervening` is `"unknown"` (string literal) when `basedOnSeq < baseSeq`, so reducers can't accidentally treat an empty array as unknown; (b) `GameEvent` gains an optional `nonce?: string`, stamped by the client on submit and ignored by reducers — Task 7 uses it to match confirmed events against the pending-intent queue.
+- [ ] **Step 1: Write the types.** Transcribe from spec §Architecture and §Data model: `GameEvent`, `Genesis` (`{ seed, reducerVersion, createdAt }`), `LogNode` (decoded: `{ genesis, baseSeq, baseSnapshot, head, events }`), `EncodedLogNode` (the RTDB shape: genesis/baseSnapshot/events values are JSON strings), `EventOutcome = "applied" | "bounced"`, `EventContext` (`{ seq, rng: (drawIndex: number) => number, intervening: Array<{seq, actor, type}> | "unknown", timestamp: string }`), and `EngineConfig<S>` exactly as the spec defines it, including that `intervening` carries only events that themselves **applied** (bounced events never invalidate a later decision) and is `"unknown"` (string literal) when `basedOnSeq < baseSeq` — so reducers can't accidentally treat an empty array as unknown — and the optional `nonce?: string` on `GameEvent`, stamped by the client on submit and ignored by reducers (Task 7 uses it to match confirmed events against the pending-intent queue).
 - [ ] **Step 2: `npm run typecheck` passes. Commit and push.**
 
 ### Task 3: `src/eventlog/rng.ts` — seq-keyed random stream
@@ -187,17 +187,19 @@ The lint rails are the architectural enforcement from the spec and must exist be
 **Files:** Create: `src/eventlog/fold.ts`, `src/eventlog/fold.test.ts`
 
 Exports (pure, no IO):
-- `foldEvents<S>(config, genesis, base: {seq, state}, events: Array<{seq, event}>): { state: S; lastSeq: number; outcomes: Array<{seq, event, outcome}> }` — folds in seq order, computing each event's `intervening` from the events it has already seen this fold **plus** a supplied `actorBySeq` index for earlier live events; when `event.basedOnSeq < baseSeq`, passes `"unknown"`.
-- `buildActorIndex(events): Map<number, string>` — helper the client uses to answer intervening queries across incremental folds.
+- `foldEvents<S>(config, genesis, base: {seq, state}, events: Array<{seq, event}>): { state: S; lastSeq: number; outcomes: Array<{seq, event, outcome}> }` — folds in seq order, computing each event's `intervening` (entries `{seq, actor, type}`) from the **applied** events it has already seen this fold — bounced events are excluded per spec — **plus** a supplied `appliedBySeq` index for earlier live events; when `event.basedOnSeq < baseSeq`, passes `"unknown"`. Outside dev, each reducer call is wrapped: a throw yields outcome `bounced` plus an error report through the outcomes array (spec §Safety rails, poison-event containment); dev rethrows.
+- `buildAppliedIndex(events, outcomes): Map<number, {actor: string, type: string}>` — helper the client uses to answer intervening queries across incremental folds (applied events only).
 
 Test with a **toy reducer** (e.g. counter state `{n, log[]}` where event `ADD {x}` applies unless bounced) — no game imports. Bug classes:
 - **Wrong intervening window:** event with `basedOnSeq = 3` at seq 6 must see exactly seqs 4–5; off-by-one on either end is the bug.
 - **Self-chain miscomputation:** actor A appends seqs 4,5,6 all `basedOnSeq: 3` with no partner events — reducer receives only A-actored intervening entries (the toy reducer applies; the real CAS policy is Stage B, but the *data* must be right here).
+- **Bounced-event echo:** a partner event that itself bounced at seq 4 must not appear in any later event's intervening window.
+- **Poison containment:** a toy reducer that throws on one event type yields outcome bounced for that event, applied for the rest, and one error report — no throw escapes the fold (dev-mode flag off).
 - **Snapshot-horizon leak:** `basedOnSeq < baseSeq` must yield `"unknown"`, not an empty array.
 - **Determinism:** folding the same inputs twice yields identical state and identical `hashState` output.
 - **Incremental ≡ batch:** folding events [1..10] at once equals folding [1..5] then [6..10] on top (pins the incremental-fold contract the client relies on).
 
-- [ ] **Step 1: Write failing tests for the five bug classes above.**
+- [ ] **Step 1: Write failing tests for the bug classes above.**
 - [ ] **Step 2: Red. Step 3: Implement. Step 4: Green (`npx vitest run src/eventlog/fold.test.ts`).**
 - [ ] **Step 5: Commit and push.**
 
@@ -217,7 +219,7 @@ Two layers:
 
 **Files:** Create: `src/eventlog/subscribe.ts`, `src/eventlog/client.ts`, `src/eventlog/client.test.ts`
 
-`subscribe.ts`: thin `onValue` wrapper on `log/` that decodes `EncodedLogNode` → `LogNode` and invokes a callback. No local state.
+`subscribe.ts`: thin `onValue` wrapper on `log/` that decodes `EncodedLogNode` → `LogNode` and invokes a callback. No local state. An event string that fails to decode, or whose `basedOnSeq` is nonsensical (negative, or ≥ its own seq), is surfaced as a pre-bounced no-op per spec §Safety rails — decode never throws.
 
 `client.ts`: `createLogClient<S>(config, io, callbacks)` where `io` abstracts `{ subscribe, append }` (so tests inject fakes — no Firebase in unit tests). Responsibilities, per spec §Optimistic echo and §Read path:
 - Maintain `(lastFoldedSeq, confirmedState)`; fold new events incrementally; full re-fold from `baseSnapshot` when `baseSeq` advances past `lastFoldedSeq` or on resubscribe.
@@ -235,7 +237,7 @@ Two layers:
 
 **Files:** Create: `src/eventlog/room.ts`, `src/eventlog/room.test.ts`
 
-Rewrite (from scratch, same observable behavior as legacy): `generateRoomId`/`isValidRoomId`/`normalizeRoomId` (6-char lowercase alphanumeric, 4–24 valid range); `createRoom(db, roomId, genesis)` writing `log/` (genesis JSON string, `baseSeq: 0`, `baseSnapshot: null`, `head: 0`, no events) in one multi-path update; stale-room eviction (delete rooms with `genesis.createdAt` older than 24h, preserve unparseable) folded into `createRoomEvictingStale`; `writePresence(db, roomId, clientId)` with `onDisconnect` cleanup; `connectedClientCount(presence)`.
+Rewrite (from scratch, same observable behavior as legacy): `generateRoomId`/`isValidRoomId`/`normalizeRoomId` (6-char lowercase alphanumeric, 4–24 valid range); `createRoom(db, roomId, genesis)` writing `log/` (genesis JSON string, `baseSeq: 0`, `baseSnapshot: null`, `head: 0`, no events) in one multi-path update; stale-room eviction (delete rooms with `genesis.createdAt` older than 24h, preserve unparseable) folded into `createRoomEvictingStale`; `writePresence(db, roomId, clientId)` with `onDisconnect` cleanup; `connectedClientCount(presence)`; `mintClientId()` generating a fresh id per tab/connection, never persisted per browser — the self-chain CAS exemption assumes one optimistic view per actor, which two tabs sharing an id would violate.
 
 - [ ] **Step 1: Failing tests** for the pure parts. Bug classes: id alphabet/length violations round-tripping `isValidRoomId(generateRoomId())`; eviction boundary (23h room preserved, 25h room evicted, unparseable preserved — pins the preservation rule so eviction never eats live rooms).
 - [ ] **Step 2–4: Red → implement → green. Step 5: Commit and push.**
@@ -246,7 +248,7 @@ Rewrite (from scratch, same observable behavior as legacy): `generateRoomId`/`is
 
 Follow the harness pattern of the existing `src/multiplayer/firebase-emulator.integration.test.ts` (RTDB emulator connection; see `scripts/dev-with-emulator.mjs` for how the emulator is launched locally) — copy the connection setup before that file is deleted in Stage E.
 
-- [ ] **Step 1: Write the test.** Two `createLogClient` instances on one room, toy reducer. Scenario A (**convergence**): both clients concurrently append 20 interleaved events; assert both settle on identical `hashState(confirmedState)` and identical `lastFoldedSeq`. Scenario B (**compaction under contention**): append past `COMPACT_THRESHOLD` from both clients; assert convergence and that `events` node stayed ≤ threshold. Bug class: transaction retry losing or reordering events — exactly `head` events observed, dense seqs.
+- [ ] **Step 1: Write the test.** Two `createLogClient` instances on one room, toy reducer. Scenario A (**convergence**): both clients concurrently append 20 interleaved events; assert both settle on identical `hashState(confirmedState)` and identical `lastFoldedSeq`. Scenario B (**compaction under contention**): append past `COMPACT_THRESHOLD` from both clients; assert convergence and that `events` node stayed ≤ threshold. Scenario C (**chaos storm**, spec §Testing): with a seeded PRNG, each client fires ~100 random intents (mixing valid, invalid-in-state, and stale-`basedOnSeq` events) at random small delays, concurrently; assert both clients converge to identical `hashState(confirmedState)`, dense seqs, and zero thrown errors. Bug class: transaction retry losing or reordering events — exactly `head` events observed, dense seqs.
 - [ ] **Step 2: Run it against the emulator — expect PASS.** If the emulator harness can't run in this environment, mark the test with the same skip-guard the legacy integration test uses and note it in the commit message.
 - [ ] **Step 3: Commit and push.**
 
@@ -260,9 +262,9 @@ Follow the harness pattern of the existing `src/multiplayer/firebase-emulator.in
 
 - `fold-state.ts`: `FoldState` per spec (quest + battle, no undo), `genesisFoldState(genesis)` producing the pre-quest state (the state a fresh room shows before `START_QUEST` — mirror what legacy `createRoom` seeded as the initial `questState`).
 - `events.ts`: the discriminated union. Add every type from the mapping table now, each with its payload interface; domain cases land per-task and until then unknown-to-the-router types **bounce** (never throw).
-- `reducer.ts`: `reduceGameEvent(state, event, ctx): { state, outcome }` implementing spec §Root fold and CAS policy rules 1–5 verbatim: CAS-exempt check (`SET_CARD_NOTE` only) → intervening/unknown bounce → prompt gate → domain routing → invalid-intent bounce. The reducer must never throw on any event content.
+- `reducer.ts`: `reduceGameEvent(state, event, ctx): { state, outcome }` implementing spec §Root fold and CAS policy rules 1–6 verbatim: CAS-exempt check (`SET_CARD_NOTE` and `OPEN_SITE`) → matching-`RESOLVE_PROMPT` fast path → intervening/unknown bounce (ignoring decision-neutral types: `SET_CARD_NOTE`) → prompt gate → domain routing → invalid-intent bounce. The reducer must never throw on any event content.
 
-- [ ] **Step 1: Failing tests for the policy** (use `ADJUST_ESSENCE` as the probe event once its case exists — write these tests against a minimal `ADJUST_ESSENCE` case implemented in this task as the first domain case). Bug classes: **partner-intervening applied** (event with a partner seq in the window must bounce even if it would be valid); **self-chain bounced** (own-actor-only window must apply); **unknown window applied** (`intervening: "unknown"` must bounce); **prompt gate leak** (with `pendingPrompt` set, `ADJUST_ESSENCE` bounces, matching `RESOLVE_PROMPT` is routed); **CAS-exempt discipline** (`SET_CARD_NOTE` applies through both a partner window and an open prompt); **throw on garbage** (an event with `type: "NOT_A_REAL_TYPE"` and payload `null` returns a bounce, does not throw).
+- [ ] **Step 1: Failing tests for the policy** (use `ADJUST_ESSENCE` as the probe event once its case exists — write these tests against a minimal `ADJUST_ESSENCE` case implemented in this task as the first domain case). Bug classes: **partner-intervening applied** (event with an applied partner seq in the window must bounce even if it would be valid); **note is decision-neutral** (an applied partner `SET_CARD_NOTE` in the window must not bounce an unrelated intent); **self-chain bounced** (own-actor-only window must apply); **unknown window applied** (`intervening: "unknown"` must bounce); **prompt gate leak** (with `pendingPrompt` set, `ADJUST_ESSENCE` bounces, matching `RESOLVE_PROMPT` is routed); **CAS-exempt discipline** (`SET_CARD_NOTE` applies through both a partner window and an open prompt); **throw on garbage** (an event with `type: "NOT_A_REAL_TYPE"` and payload `null` returns a bounce, does not throw).
 - [ ] **Step 2–4: Red → implement → green. Step 5: Commit and push.**
 
 ### Task 11: Quest lifecycle, essence, navigation events
@@ -376,9 +378,9 @@ The reducer case replacing both effect-runner hooks' orchestration:
 
 **Files:** Modify: `src/rules/battle/battle-events.ts`, `src/rules/battle/battle-events.test.ts`, `src/rules/reducer.ts`
 
-`RESOLVE_PROMPT { promptId, resolution }`: matches `state.battle.pendingPrompt.promptId` (else bounce — root rule 3 already gates non-RESOLVE events; this task adds the matching-id apply path), applies via `resolvePendingPrompt`, continues the queue. `SET_CARD_NOTE { instanceId, note }`: CAS-exempt; stores the note with `event.clientTimestamp` (relocate whatever note shape `BattleCardNoteEditor.tsx` writes today).
+`RESOLVE_PROMPT { promptId, resolution }`: matches `state.battle.pendingPrompt.promptId` (else bounce — root rule 4 already gates non-RESOLVE events; this task adds the matching-id apply path, which the root rule-2 fast path routes past the CAS check), applies via `resolvePendingPrompt`, continues the queue. `SET_CARD_NOTE { instanceId, note }`: CAS-exempt; stores the note with `event.clientTimestamp` (relocate whatever note shape `BattleCardNoteEditor.tsx` writes today).
 
-- [ ] **Step 1: Failing tests.** Bug classes: **prompt race** (two RESOLVE_PROMPT events for the same promptId in sequence: first applies, second bounces — both players answering simultaneously); **stale promptId** (RESOLVE_PROMPT with an old promptId after the prompt already resolved bounces); **foresee no-op contract** (a `foresee` resolution applies no edits itself, matching `applyPromptResolution`'s documented behavior — catches regressions in the relocation); **note through prompt** (SET_CARD_NOTE applies while a prompt is open).
+- [ ] **Step 1: Failing tests.** Bug classes: **prompt race** (two RESOLVE_PROMPT events for the same promptId in sequence: first applies, second bounces — both players answering simultaneously); **stale promptId** (RESOLVE_PROMPT with an old promptId after the prompt already resolved bounces); **foresee no-op contract** (a `foresee` resolution applies no edits itself, matching `applyPromptResolution`'s documented behavior — catches regressions in the relocation); **note through prompt** (SET_CARD_NOTE applies while a prompt is open); **resolve through neutral noise** (a matching RESOLVE_PROMPT applies even with an applied partner `SET_CARD_NOTE` or quest-level `OPEN_SITE` in its window — the spec's rule-2 fast path).
 - [ ] **Step 2–4: Red → implement → green. Step 5: Commit and push.**
 
 ### Task 22: Replay harness and fixtures CI
@@ -408,7 +410,7 @@ The reducer case replacing both effect-runner hooks' orchestration:
 
 **Files:** Create: `src/coop/RoomGate.tsx`, `src/coop/quest-log-sink.ts`, `src/coop/EventLogViewer.tsx`, `src/coop/VersionGateScreen.tsx`
 
-`RoomGate.tsx` (fresh code; same observable flow as legacy `MultiplayerRoomGate.tsx`): parse `?game=`, auto-create via `createRoomEvictingStale` + navigate, subscribe with a 15s timeout state, write presence, install the quest-log sink with `{ gameId: roomId }` context, and gate: if `genesis.reducerVersion !== getBuildHash()`, render `VersionGateScreen` (read-only message + "start a new game" button that creates a fresh room). `quest-log-sink.ts`: minimal buffered sink appending JSONL strings to `rooms/{id}/logs` with the legacy limits (2000 entries, flush on visibility change) — fresh minimal code, not a port. Every confirmed event is mirrored to the sink as `{ event: "coop_event", seq, type, actor, outcome, stateHashAfter?, gameId }`; bounces additionally log `{ event: "event_bounced", seq, interveningSeqs }`; hash mismatches log `{ event: "fold_divergence", seq, expected, actual }`. `EventLogViewer.tsx`: `?viewLogs=<roomId>` renders the decoded event log (seq, type, actor, outcome) plus the raw JSONL sink, with download.
+`RoomGate.tsx` (fresh code; same observable flow as legacy `MultiplayerRoomGate.tsx`): parse `?game=`, auto-create via `createRoomEvictingStale` + navigate, subscribe with a 15s timeout state, write presence, install the quest-log sink with `{ gameId: roomId }` context, and gate: if `genesis.reducerVersion !== getBuildHash()`, render `VersionGateScreen` (read-only message + "start a new game" button that creates a fresh room). `quest-log-sink.ts`: minimal buffered sink appending JSONL strings to `rooms/{id}/logs` with the legacy limits (2000 entries, flush on visibility change) — fresh minimal code, not a port. Single-writer rule per spec §Logging: each client mirrors only the events it appended (its own actor plus its `ai:` actor), tracked past a high-water seq so refolds after reconnect or compaction never re-mirror, as `{ event: "coop_event", seq, type, actor, outcome, stateHashAfter?, gameId }`; its own bounces additionally log `{ event: "event_bounced", seq, interveningSeqs }`; hash mismatches are logged by any observing client as `{ event: "fold_divergence", seq, expected, actual, clientId }`. `EventLogViewer.tsx`: `?viewLogs=<roomId>` renders the decoded event log (seq, type, actor, outcome) plus the raw JSONL sink, with download.
 
 - [ ] **Step 1: Implement.** No new unit tests for the React shells themselves (they are wiring; browser QA in Task 30 covers them) — but the sink's prune/flush logic gets a unit test. Bug class: unbounded log growth (append 2,300 entries → prune keeps newest 2,000).
 - [ ] **Step 2: Checks green. Commit and push.**

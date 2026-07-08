@@ -1,7 +1,8 @@
 # Coop Event-Sourcing Rewrite — Design Spec
 
 Date: 2026-07-01
-Status: approved design, pending implementation plan
+Status: approved design; implementation plan at
+`docs/superpowers/plans/2026-07-01-coop-event-sourcing-rewrite.md`
 Source proposal: `docs/quest_prototype/coop_event_sourcing_proposal.md`
 
 ## Goal
@@ -88,10 +89,17 @@ interface EngineConfig<S> {
 ```
 
 `EventOutcome` is `"applied" | "bounced"`. `EventContext` provides `seq`,
-`rng(drawIndex)`, and `intervening: Array<{ seq: number; actor: string }>`
-(the events between `basedOnSeq` and this event's seq). The engine computes
-`intervening` from the live log; the **policy** — self-chain exemption,
-prompt gating, CAS-exempt event types — lives entirely in the rules reducer.
+`rng(drawIndex)`, and
+`intervening: Array<{ seq: number; actor: string; type: string }> | "unknown"`
+— the events between `basedOnSeq` and this event's seq **that themselves
+applied** (a bounced event changed nothing and can never invalidate a later
+decision), or the literal `"unknown"` when `basedOnSeq < baseSeq`, so a
+reducer can never mistake an empty window for an unknowable one. The engine
+computes `intervening` from the live log, applying the applied-only filter
+itself (it folds in seq order, so it knows every prior outcome); the
+**policy** — self-chain exemption, prompt gating, CAS-exempt and
+decision-neutral event types — lives entirely in the rules reducer, which
+is why entries carry `type`.
 
 ## Data model
 
@@ -120,11 +128,13 @@ arrays); a dev-mode encode/decode round-trip assertion enforces this.
 
 ```ts
 interface GameEvent {
-  type: string;                       // "PLAY_BATTLE_COMMAND" | "BEGIN_BATTLE" | ...
+  type: string;                       // "BATTLE_COMMAND" | "BEGIN_BATTLE" | ...
   payload: Record<string, unknown>;   // UUIDs, choice indices — never card names
   actor: string;                      // clientId, or "ai:<clientId>" for AI-originated events
   clientTimestamp: string;            // display data only, stamped by appender
   basedOnSeq: number;                 // newest confirmed seq folded into the state the actor saw
+  nonce?: string;                     // client-stamped; matches confirmed events against the
+                                      // pending-intent queue; ignored by reducers
   stateHashAfter?: string;            // appender's local fold hash (see Safety rails)
 }
 ```
@@ -237,7 +247,10 @@ replaces it with the confirmed fold within one round-trip.
 
 `room.ts` keeps today's behaviors with new code: 6-char room ids, `?game=`
 URL param, create-with-stale-eviction (24h window), presence writes with
-`onDisconnect` cleanup. Room creation writes `genesis` (fresh random seed,
+`onDisconnect` cleanup. `clientId` is minted fresh per tab/connection and
+never persisted per browser: the self-chain CAS exemption assumes one
+optimistic view per actor, which two tabs sharing an id would violate.
+Room creation writes `genesis` (fresh random seed,
 `reducerVersion` = build hash injected at build time via a Vite define) in
 the same multi-path update that creates the log node.
 
@@ -247,31 +260,52 @@ the same multi-path update that creates the log node.
 
 ```
 reduce(state, event, ctx):
-  1. if event.type is CAS-exempt → apply free-running (initial exempt set: card-note events only)
-  2. if ctx.intervening is unknown, or contains any seq whose actor !== event.actor → bounce
-  3. if state.battle?.pendingPrompt is set and event is not RESOLVE_PROMPT
+  1. if event.type is CAS-exempt → skip rules 2-4 (initial exempt set: card-note
+     events and OPEN_SITE — see Quest events); rule 5 validation still applies
+  2. if event is RESOLVE_PROMPT whose promptId matches the open prompt →
+     skip rules 3-4 (see below)
+  3. if ctx.intervening is unknown, or contains any event whose
+     actor !== event.actor and whose type is not decision-neutral
+     (initial decision-neutral set: card-note events) → bounce
+  4. if state.battle?.pendingPrompt is set and event is not RESOLVE_PROMPT
      with matching promptId → bounce
-  4. route to the domain reducer for event.type; invalid-in-current-state
-     intents (buy with insufficient essence, play a card not in hand) → bounce
-  5. return { state', outcome: "applied" } or { state, outcome: "bounced" }
+  5. route to the domain reducer for event.type; invalid-in-current-state
+     intents (buy with insufficient essence, play a card not in hand,
+     RESOLVE_PROMPT with no matching open prompt) → bounce
+  6. return { state', outcome: "applied" } or { state, outcome: "bounced" }
 ```
 
-Rule 2 is the strict compare-and-swap with the self-chain exemption: a
-player's own in-flight events never invalidate their later ones; any partner
-event in the window bounces the intent. Bounced events remain in the log as
-recorded no-ops. The reducer never throws on any event content — malformed
-or stale intents bounce; throwing is reserved for programmer errors caught
-in dev.
+Rule 3 is the strict compare-and-swap with the self-chain exemption: a
+player's own in-flight events never invalidate their later ones; any
+**applied** partner event in the window bounces the intent. `ctx.intervening`
+already excludes events that themselves bounced — a bounced event changed
+nothing, and without that filter two players acting in a rapid overlapping
+burst would bounce each other off events that were already no-ops.
+Decision-neutral types (card notes) are additionally ignored by rule 3:
+they carry no game-rules meaning, so a partner's note must never bounce an
+unrelated intent. `OPEN_SITE`, by contrast, is exempt from *being* bounced
+(rule 1) but **does** count as intervening — it generates site offers, so an
+intent decided before folding a partner's `OPEN_SITE` must bounce.
+
+Rule 2 is sound because a prompt's options are fixed at open: while the
+prompt is open every non-exempt event bounces (rule 4), and no current
+exempt type alters battle state, so nothing an intervening event could have
+done changes what the resolution means. The losing racer still bounces —
+once one resolution applies, the prompt is closed and the other falls
+through to rule 5. Revisit this fast path if the exempt set ever grows a
+battle-relevant type. Bounced events remain in the log as recorded no-ops.
+The reducer never throws on any event content — malformed or stale intents
+bounce; throwing is reserved for programmer errors caught in dev (and
+contained in production, see Safety rails).
 
 ### Quest events
 
-Every one of the 67 multiplayer mutations in
-`src/state/multiplayer-quest-context.tsx` becomes an event type with a
-reducer case in `src/rules/quest/`, grouped by feature (essence, lifecycle,
-dreamcaller, navigation, deck, transfiguration, dreamsigns, draft, sites,
-merchant, shop, limits, atlas, modifiers, misc). The implementation plan
-carries the full 1:1 table from the mutation catalogue produced during
-exploration; representative examples:
+Every multiplayer mutation in `src/state/multiplayer-quest-context.tsx`
+becomes an event type with a reducer case in `src/rules/quest/`, grouped by
+feature (essence, lifecycle, dreamcaller, navigation, deck, transfiguration,
+dreamsigns, draft, sites, merchant, shop, limits, atlas, modifiers, misc).
+The implementation plan carries the authoritative 1:1 table from the
+mutation catalogue produced during exploration; representative examples:
 
 - `changeEssence` → `ADJUST_ESSENCE { delta }`
 - `pickDraftCard` → `PICK_DRAFT_CARD { packIndex, cardId }`
@@ -280,13 +314,17 @@ exploration; representative examples:
   `START_QUEST`, `RESET_QUEST`, `LOAD_STATE { snapshot }` (debug-only, large
   payload is fine — compaction absorbs it)
 
-The `ensure*SiteRuntime` family (6 mutations) simplifies structurally: those
-writes exist because generation used `Math.random()` and had to be stored
-before rendering. In the new model a single `OPEN_SITE { siteId }` event
-generates the site runtime **deterministically inside the reducer** from
-`ctx.rng`, stores it in `state.quest.siteRuntime`, and both clients compute
-identical offers. Rerolls (`rerollShop`, `rerollDreamAugury`) are events
-whose reducer case redraws from the rng stream at their own seq.
+The `ensure*SiteRuntime` family (five mutations) simplifies structurally:
+those writes exist because generation used `Math.random()` and had to be
+stored before rendering. In the new model a single `OPEN_SITE { siteId }`
+event generates the site runtime **deterministically inside the reducer**
+from `ctx.rng`, stores it in `state.quest.siteRuntime`, and both clients
+compute identical offers. `OPEN_SITE` is CAS-exempt and idempotent: its
+reducer case draws only from `ctx.rng` at its own seq and is a no-change
+**applied** when the runtime already exists, so both players opening the
+same site simultaneously converge without a bounce toast. Rerolls
+(`rerollShop`, `rerollDreamAugury`) are events whose reducer case redraws
+from the rng stream at their own seq.
 
 The `NON_NULLABLE_RUN_FIELDS` invariant guard is deleted rather than ported:
 no code path writes quest state, so there is no bad write to guard against.
@@ -302,10 +340,13 @@ null `draftState`/`resolvedPackage`/`dreamcaller` mid-run.
   the log, so reload always lands on the correct screen. The pre-battle
   reveal screen renders when the site is active but no `BEGIN_BATTLE` has
   folded.
-- **`BATTLE_COMMAND { edit: BattleDebugEdit }`** — the intent for every
-  board interaction the UI performs today. The reducer applies
-  `applyDebugEdit`, then — synchronously, still inside the same fold step —
-  runs the automation that the effect-runner hooks perform reactively today:
+- **`BATTLE_COMMAND { command: BattleCommand }`** — the intent for every
+  board interaction the UI performs today, carrying the existing
+  `BattleCommand` union from `src/battle/debug/commands.ts`
+  (`DEBUG_EDIT` wrapping a `BattleDebugEdit`, `FORCE_RESULT`,
+  `SKIP_TO_REWARDS`). For edits the reducer applies `applyDebugEdit`, then —
+  synchronously, still inside the same fold step — runs the automation that
+  the effect-runner hooks perform reactively today:
   - **Materialized triggers**: if the edit moved a card into play, look up
     its script and either apply its edit steps or park an `EffectRun` /
     `PendingPrompt`. No board diffing: the reducer caused the change, so it
@@ -321,14 +362,15 @@ null `draftState`/`resolvedPackage`/`dreamcaller` mid-run.
 - **`RESOLVE_PROMPT { promptId, resolution }`** — applies
   `applyPromptResolution` for the paused run, then continues advancing the
   queue. First matching resolution applies; any other intent bounces while a
-  prompt is open (root rule 3). All prompt-ownership machinery
+  prompt is open (root rule 4). All prompt-ownership machinery
   (`ownsRunRef`, `cancelPromptSignal`, prompt-internal `sourceSurface`
   exemptions) has no equivalent — either player resolves, both fold it.
 - **`END_BATTLE { result }`** — folds victory/defeat into quest state
   (today's `incrementCompletionLevel` / `setFailureSummary` seam) and clears
   `state.battle`.
-- **Card notes** (`SET_CARD_NOTE`) are the initial CAS-exempt set: no rules
-  meaning, no decision context.
+- **Card notes** (`SET_CARD_NOTE`) are CAS-exempt: no rules meaning, no
+  decision context. (`OPEN_SITE` is the only other exempt type — see Quest
+  events.)
 
 The relocated pure pieces keep their tests and their logic:
 `apply-debug-edit.ts`, `battle-card-effects-table.ts` (including the
@@ -357,7 +399,10 @@ reducer commands.
   (confirmed + optimistic); `useAppend()` builds events, stamping `actor`,
   `clientTimestamp`, and `basedOnSeq` = the newest *confirmed* seq folded
   into the displayed state (own pending intents are covered by the
-  self-chain rule).
+  self-chain rule). `RESOLVE_PROMPT` is stamped with the promptId of the
+  **confirmed** prompt: if the event that opened the prompt is still an
+  optimistic echo, the resolve waits for its confirmation — a mispredicted
+  seq would otherwise target a promptId that never comes to exist.
 - **`actions.ts`** — named action creators mirroring today's
   `QuestMutations` call ergonomics (`actions.pickDraftCard(...)` appends
   `PICK_DRAFT_CARD`). Screens keep their call-site shape; only the provider
@@ -374,9 +419,14 @@ reducer commands.
 
 - Every appended event is mirrored into the room's `logs/` sink and thence
   `quest-log.jsonl` (existing tooling keeps working), tagged with `gameId`,
-  `seq`, `type`, `actor`, `outcome`, and `stateHashAfter` when present. The
-  AGENTS.md reconstruction standard is met structurally: the event log *is*
-  the reconstruction.
+  `seq`, `type`, `actor`, `outcome`, and `stateHashAfter` when present.
+  **Single-writer rule**: each client mirrors only the events it appended
+  (its own actor plus its `ai:` actor), tracked past a high-water seq so a
+  refold after reconnect or compaction never re-mirrors. Every event has
+  exactly one appender, so the union is complete with no duplicates.
+  Divergence reports are the exception — any observing client logs those,
+  stamped with its clientId. The AGENTS.md reconstruction standard is met
+  structurally: the event log *is* the reconstruction.
 - `fold_divergence` is logged loudly when a client's local hash disagrees
   with a peer's `stateHashAfter` at the same seq.
 - Bounces are logged (`event_bounced` with intervening seqs) — bounce-rate
@@ -397,6 +447,24 @@ reducer commands.
 - **Bounce on unknown**: stale-beyond-snapshot `basedOnSeq`, malformed
   payloads, and invalid-in-state intents all bounce rather than throw or
   partially apply.
+- **Poison-event containment**: a reducer throw on a committed event would
+  otherwise crash every client on every fold of that room forever — reload
+  re-folds the same log. In production the engine wraps each reducer call:
+  a throw is treated as a bounce and logged loudly (`fold_error` with seq
+  and error); dev mode rethrows so programmer errors stay visible. If a
+  throw is environment-dependent, clients diverge instead of crashing — the
+  divergence tripwire reports it and the next compaction re-converges views.
+  A degraded room beats a deterministic crash loop.
+- **Malformed log entries**: an event string that fails to decode, or an
+  event whose `basedOnSeq` is nonsensical (negative, or ≥ its own seq), is
+  reported by the engine as a bounced no-op and logged; it never reaches
+  the reducer and never throws.
+- **The fold path is synchronous end to end**: reducer, `encode`/`decode`,
+  `hash`, and `rng` must be synchronous functions, because compaction runs
+  the fold inside `runTransaction`'s synchronous update callback (which may
+  also retry — the pure updater makes retries harmless). Hashing uses the
+  synchronous `js-sha256` dependency the `journey_v2` rng already uses;
+  `crypto.subtle` is async and must not appear anywhere in the fold path.
 - **Subscription loss**: on reconnect, full re-fold from `baseSnapshot`;
   pending optimistic intents are re-validated against the fresh confirmed
   state and dropped-with-toast if they bounce.
@@ -406,10 +474,13 @@ reducer commands.
 
 ## Testing
 
-- **Engine tests (toy reducer)**: CAS `intervening` computation,
-  self-chain scenarios, compaction equivalence
+- **Engine tests (toy reducer)**: CAS `intervening` computation (including
+  that bounced events are excluded from later windows), self-chain
+  scenarios, compaction equivalence
   (`fold(genesis, allEvents) === fold(decode(baseSnapshot), liveEvents)`),
   optimistic echo reconciliation and rollback, stale-appender bounce,
+  poison-event containment (a throwing toy reducer yields a bounce and an
+  error report, never an escaped throw), malformed-entry decode handling,
   seq-keyed rng stream stability.
 - **Rules reducer tests**: relocated pure-piece suites continue unchanged
   (`apply-debug-edit`, script tables, step planner, hash-drift CI gate,
@@ -427,7 +498,11 @@ reducer commands.
   checked-in script.
 - **Emulator integration**: two simulated clients appending concurrently
   against the RTDB emulator converge to identical hashes; compaction under
-  concurrent appends.
+  concurrent appends; a seeded **chaos storm** — both clients firing long
+  random bursts of valid, invalid, and stale intents concurrently — must
+  converge to identical hashes with dense seqs and zero thrown errors.
+  This is the direct encoding of the resilience goal: two players taking
+  essentially random overlapping actions always land in one sane state.
 - **Browser QA** per AGENTS.md: two-tab coop session on a non-5173 port —
   simultaneous actions produce one applied + one bounced with visible toast;
   reload mid-battle re-folds to the correct screen (the `begunEntryKey`
