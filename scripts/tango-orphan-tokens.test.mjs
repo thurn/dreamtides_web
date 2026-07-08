@@ -130,7 +130,6 @@ export const BASELINE = [
   "--t-button",
   "--t-button-sm",
   "--t-display",
-  "--t-lead",
   "--t-numeral",
   "--t-popover-body",
   "--t-popover-epithet",

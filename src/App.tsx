@@ -84,14 +84,12 @@ export function QuestApp({
     runtimeConfig.uiVariant === "tango" && state.screen.type === "atlas";
   const dreamscapeUsesTango =
     runtimeConfig.uiVariant === "tango" && state.screen.type === "dreamscape";
-  // The Tango draft site (mobile viewport) re-homes the bottom bar into its own
+  // The Tango draft site re-homes the bottom bar into its own
   // QuestStatusBar and the utility menu into the top-left hamburger, exactly as
   // the atlas / dreamscape screens do, so it joins the same suppression + menu
-  // gate. On a desktop viewport the site renders its legacy screen with the
-  // legacy HUD, so it is deliberately excluded here.
+  // gate.
   const draftSiteUsesTango =
     runtimeConfig.uiVariant === "tango"
-    && !isDesktopViewport
     && activeSiteType(state) === "Draft";
   const tangoScreenUsesQuestMenu =
     dreamscapeUsesTango || atlasUsesTango || draftSiteUsesTango;

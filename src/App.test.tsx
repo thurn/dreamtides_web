@@ -769,4 +769,67 @@ describe("QuestApp", () => {
       root.unmount();
     });
   });
+
+  it("hides the shared HUD on the desktop Tango draft site", () => {
+    setQuestState(
+      makeState({
+        atlas: {
+          nodes: {
+            "dreamscape-1": {
+              id: "dreamscape-1",
+              layer: LayerName.One,
+              indexInLayer: 0,
+              dreamscapeId: "test_dreamscape",
+              biomeName: "Test Dreamscape",
+              biomeColor: "#112233",
+              sites: [
+                {
+                  id: "site-1",
+                  type: "Draft",
+                  isEnhanced: false,
+                  isVisited: false,
+                },
+              ],
+              position: { x: 0, y: 0 },
+              state: "available",
+              enhancedSiteType: null,
+              forwardIds: [],
+              backwardIds: [],
+              knownDreamsignId: null,
+            },
+          },
+          startingNodeId: "dreamscape-1",
+          bossNodeId: "dreamscape-1",
+          currentNodeId: "dreamscape-1",
+          layers: [],
+          knownDreamsignCarrierIds: [],
+        },
+        currentDreamscape: "dreamscape-1",
+        screen: { type: "site", siteId: "site-1" },
+        activeSiteId: "site-1",
+      }),
+    );
+
+    const { container, root } = mount(
+      <QuestApp
+        cardDatabase={new Map()}
+        runtimeConfig={{
+          seedOverride: null,
+          startInBattle: false,
+          aiMode: false,
+          basicAutomation: false,
+          gameId: null,
+          databaseMode: "emulator",
+          journeyVariant: "classic",
+          uiVariant: "tango",
+        }}
+      />,
+    );
+
+    expect(container.querySelector('[data-testid="hud"]')).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
 });

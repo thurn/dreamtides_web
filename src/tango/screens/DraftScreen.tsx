@@ -86,6 +86,10 @@ const HUD_CLEARANCE_OP = `${token("--hud-h")} + ${token("--safe-bottom")} + ${to
 const TOP_GAP = `calc(${TOP_GAP_OP})`;
 const HUD_CLEARANCE = `calc(${HUD_CLEARANCE_OP})`;
 const OFFER_GRID_GAP = token("--space-5");
+// Desktop draft cards follow the roomy starting-deck modal card size. This is a
+// content-driven box measure: the cap keeps the four-card row readable without
+// turning each card into a full-height mobile offer.
+const DESKTOP_OFFER_CARD_WIDTH_PX = 260;
 
 function topSafeOpFor(isDesktop: boolean): string {
   const edgeInset = isDesktop
@@ -103,16 +107,21 @@ function offerCellWidthFor(params: {
   columns: number;
   rows: number;
   topSafeOp: string;
+  maxWidthPx?: number;
 }): string {
   const horizontalGapCount = params.columns - 1;
   const verticalGapCount = params.rows - 1;
   // The offer cell width is capped by both the row width and available height.
   // Box measures: content-driven layout against `container-type: inline-size`.
-  return (
-    `min(calc((100cqw - (${OFFER_GRID_GAP} * ${String(horizontalGapCount)})) / ${String(params.columns)}), ` +
+  const caps = [
+    `calc((100cqw - (${OFFER_GRID_GAP} * ${String(horizontalGapCount)})) / ${String(params.columns)})`,
     `calc((100dvh - (${params.topSafeOp}) - (${TOP_GAP_OP}) - (${COUNTER_BAND_OP}) - (${HUD_CLEARANCE_OP}) - ` +
-    `(${OFFER_GRID_GAP} * ${String(verticalGapCount)})) * ${String(CARD_ASPECT_W)} / ${String(params.rows * CARD_ASPECT_H)}))`
-  );
+      `(${OFFER_GRID_GAP} * ${String(verticalGapCount)})) * ${String(CARD_ASPECT_W)} / ${String(params.rows * CARD_ASPECT_H)})`,
+  ];
+  if (params.maxWidthPx !== undefined) {
+    caps.push(`${String(params.maxWidthPx)}px`);
+  }
+  return `min(${caps.join(", ")})`;
 }
 
 /**
@@ -134,6 +143,7 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
     columns: offerColumns,
     rows: offerRows,
     topSafeOp,
+    maxWidthPx: isDesktop ? DESKTOP_OFFER_CARD_WIDTH_PX : undefined,
   });
 
   // The card being picked, latched so the pick-out animation plays and a second
@@ -190,10 +200,10 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
         aria-hidden="true"
       />
 
-      {/* The pack, top-aligned below the safe zone and centered horizontally,
-          with the small pick counter riding just under the cards. The leftover
-          height falls between the counter and the HUD. */}
+      {/* The pack is centered horizontally. Mobile keeps the shipped top-aligned
+          placement; desktop centers the smaller row vertically in the stage. */}
       <div
+        data-draft-offer-stage=""
         style={{
           position: "relative",
           flex: 1,
@@ -201,7 +211,7 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "flex-start",
+          justifyContent: isDesktop ? "center" : "flex-start",
           paddingLeft: token("--space-5"),
           paddingRight: token("--space-5"),
           containerType: "inline-size",
@@ -243,7 +253,7 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
                 >
                   <GameCard
                     card={card}
-                    large
+                    large={!isDesktop}
                     onClick={
                       pendingPick === null
                         ? () => {
@@ -266,8 +276,8 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
           data-draft-pick-counter=""
           style={{
             marginTop: token("--space-6"),
-            font: token("--t-caption"),
-            color: token("--text-secondary"),
+            font: isDesktop ? token("--t-lead") : token("--t-body"),
+            color: token("--text-primary"),
             textShadow: token("--text-outline-media"),
           }}
         >
