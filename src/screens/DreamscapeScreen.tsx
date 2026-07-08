@@ -8,10 +8,10 @@ import {
 import { dreamscapeSceneUrl } from "../tango/components/atlas/atlas-display";
 import { draftSitePickCount } from "../draft/draft-site-config";
 import {
-  DreamscapeMotes,
   SiteNode,
   type DreamscapeSiteModel,
 } from "../tango/components/atlas/SiteNode";
+import { Motes } from "../tango/components/hud/Motes";
 import { scatterSites, seedFromString } from "../tango/components/atlas/dreamscape-scatter";
 import { glyph } from "../tango/primitives/glyph";
 import { logEvent } from "../logging";
@@ -162,7 +162,7 @@ export function DreamscapeScreen() {
         )}
       </div>
 
-      <DreamscapeMotes on />
+      <Motes on tint="dreamscape" count={22} seed={99} />
       <div className="ds-vignette" />
       <div className="ds-title-scrim" />
 

@@ -58,7 +58,7 @@ The reference files and the index are projections of the component sources
 | Stat Tile | Components | 0 | [components/stat-tile.md](components/stat-tile.md) | A labelled value cell for summary grids — a large value over a small uppercase label — used for deck stats and run-end results. |
 | Tide Pill | Components | 0 | [components/tide-pill.md](components/tide-pill.md) | The labelled tag for a Dreamcaller's tides and affiliations. |
 | Tide Disc | Components | 1 | [components/tide-disc.md](components/tide-disc.md) | The single tide mark: a colored disc carrying the tide's glyph, sized 'sm' (desktop select) or 'lg' (mobile select) — the atom both Dreamcaller-select tide rows render from. |
-| Motes | Components | 5 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
+| Motes | Components | 6 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
 | Info Card | Components | 14 | [components/info-card.md](components/info-card.md) | The one press-to-reveal information card. |
 | Hover Popover | Components | 13 | [components/hover-popover.md](components/hover-popover.md) | The pointer-and-focus anchored popover primitive for glossary definitions and compact card previews, with viewport-aware placement. |
 | Group Panel | Components | 2 | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |

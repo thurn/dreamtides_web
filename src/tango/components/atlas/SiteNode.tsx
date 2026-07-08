@@ -27,7 +27,7 @@ import type { CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { InfoCard } from "../overlay/InfoCard";
 import { richText, type RichText } from "../card/rich-text";
-import { mulberry32, type ScatterPoint } from "./dreamscape-scatter";
+import { type ScatterPoint } from "./dreamscape-scatter";
 import type { SiteState } from "../../../types/quest";
 import { type Glyph } from "../../primitives/glyph";
 import { type TangoColor, withAlpha } from "../../primitives/color";
@@ -252,41 +252,5 @@ export function SiteNode({
           stageRef.current,
         )}
     </button>
-  );
-}
-
-/** Sparse drifting motes that give the dreamscape scene its dream mood. */
-export function DreamscapeMotes({ on }: { on: boolean }): React.ReactElement | null {
-  const motes = React.useMemo(() => {
-    const rng = mulberry32(99);
-    return Array.from({ length: 22 }, () => ({
-      x: rng() * 100,
-      y: rng() * 100,
-      s: 1 + rng() * 2.4,
-      d: 7 + rng() * 9,
-      delay: -rng() * 16,
-      o: 0.12 + rng() * 0.3,
-    }));
-  }, []);
-  if (!on) {
-    return null;
-  }
-  return (
-    <div className="ds-motes" aria-hidden="true">
-      {motes.map((m, i) => (
-        <span
-          key={i}
-          style={{
-            left: `${String(m.x)}%`,
-            top: `${String(m.y)}%`,
-            width: m.s,
-            height: m.s,
-            opacity: m.o,
-            animationDuration: `${String(m.d)}s`,
-            animationDelay: `${String(m.delay)}s`,
-          }}
-        />
-      ))}
-    </div>
   );
 }

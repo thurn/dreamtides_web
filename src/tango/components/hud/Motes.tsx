@@ -57,14 +57,19 @@ interface TintSpec {
   glow: string;
 }
 
-/** The two context tints, sourced from the --mote-* tokens. */
+/** The context tints, sourced from the --mote-* tokens. */
 const TINTS: Record<MoteTint, TintSpec> = {
   warm: { fill: token("--mote-warm"), glow: token("--mote-warm-glow") },
   violet: { fill: token("--mote-violet"), glow: token("--mote-violet-glow") },
+  dreamscape: {
+    fill: token("--mote-dreamscape"),
+    glow: token("--mote-dreamscape-glow"),
+  },
 };
 
-/** Context tint: 'warm' over scene art (default), 'violet' over chrome. */
-export type MoteTint = "warm" | "violet";
+/** Context tint: 'warm' over scene art (default), 'violet' over chrome,
+ * 'dreamscape' for the dreamscape scene field. */
+export type MoteTint = "warm" | "violet" | "dreamscape";
 
 interface Mote {
   left: number;

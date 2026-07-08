@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/motes`
 
-Real consumers: **5** (imports outside `src/tango/docs/` and tests).
+Real consumers: **6** (imports outside `src/tango/docs/` and tests).
 
 The atmospheric particle layer — drifting dust that gives a surface its living shimmer. Its tint adapts to whether it sits over scene art or over chrome.
 
@@ -15,7 +15,7 @@ The atmospheric particle layer — drifting dust that gives a surface its living
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `on` | `boolean` | no | `true` | Toggles the layer on/off. Renders nothing when false. |
-| `tint` | `MoteTint` = `"warm" \| "violet"` | no | `warm` | Context tint: 'warm' over scene art (default), 'violet' over chrome. |
+| `tint` | `MoteTint` = `"warm" \| "violet" \| "dreamscape"` | no | `warm` | Context tint: 'warm' over scene art (default), 'violet' over chrome. |
 | `count` | `number` | no | `14` | Particle density — how many motes to render. |
 | `seed` | `number` | no | `0` | Offset the deterministic layout so two Motes layers differ. |
 | `zIndex` | `number` | no | `2` | Stacking order within the positioned parent. |

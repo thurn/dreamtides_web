@@ -256,6 +256,8 @@ export const TOKENS = {
   "--mote-warm-glow": { var: "var(--mote-warm-glow)", value: "rgba(255, 224, 160, 0.7)", kind: "color" },
   "--mote-violet": { var: "var(--mote-violet)", value: "rgba(216, 180, 254, 0.6)", kind: "color" },
   "--mote-violet-glow": { var: "var(--mote-violet-glow)", value: "rgba(192, 132, 252, 0.7)", kind: "color" },
+  "--mote-dreamscape": { var: "var(--mote-dreamscape)", value: "#d8b4fe", kind: "color" },
+  "--mote-dreamscape-glow": { var: "var(--mote-dreamscape-glow)", value: "rgba(216, 180, 254, 0.8)", kind: "color" },
   "--ease-dream": { var: "var(--ease-dream)", value: "cubic-bezier(0.22, 0.61, 0.36, 1)", kind: "other" },
   "--ease-out": { var: "var(--ease-out)", value: "cubic-bezier(0.16, 1, 0.3, 1)", kind: "other" },
   "--ease-in-out": { var: "var(--ease-in-out)", value: "cubic-bezier(0.65, 0, 0.35, 1)", kind: "other" },

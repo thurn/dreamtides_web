@@ -100,36 +100,9 @@
   color: #fff;
 }
 
-/* ---- Motes ---- */
-.ds-motes {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-.ds-motes span {
-  position: absolute;
-  border-radius: 50%;
-  background: #d8b4fe;
-  box-shadow: 0 0 6px rgba(216, 180, 254, 0.8);
-  animation: ds-drift linear infinite;
-}
-@keyframes ds-drift {
-  0% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(14px, -26px);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .ds-node.floaty,
-  .ds-battle-pulse,
-  .ds-motes span {
+  .ds-battle-pulse {
     animation: none !important;
     transition: none !important;
   }

@@ -672,16 +672,6 @@
       "description": "Fixed pixel width. Panel/thumb stay square, so this also sets their height.\nA sized portrait never shrinks in a flex row. Omit to fill the container\nwidth. Ignored by `standing`/`fullBleed`, which fill the caller's stage."
     }
   ],
-  "DreamscapeMotes": [
-    {
-      "name": "on",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": ""
-    }
-  ],
   "Dreamsign": [
     {
       "name": "dreamsign",
@@ -1664,7 +1654,8 @@
       "tsType": "MoteTint",
       "unionMembers": [
         "warm",
-        "violet"
+        "violet",
+        "dreamscape"
       ],
       "required": false,
       "defaultValue": "warm",

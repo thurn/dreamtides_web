@@ -1,0 +1,29 @@
+Legacy dreamscape screen renders Tango components outside the `.tango` token scope
+==================================================================================
+
+Context surfaced by Phase 3 Task 10 (fold DreamscapeMotes -> Motes dreamscape tint).
+
+`src/tango/primitives/tango-tokens.css` deliberately rescopes every Tango token
+from `:root` to `.tango` (see the header comment: "so these tokens only apply
+within the Tango subtree and never leak onto the rest of the app"). The Tango
+`Motes` component colors its particles with `token("--mote-*")`, i.e.
+`var(--mote-*)`, which only resolves when a `.tango` ancestor is present.
+
+The LEGACY dreamscape screen `src/screens/DreamscapeScreen.tsx` (reached only via
+`?ui=legacy`; the default `ui=tango` renders the Tango screen
+`src/tango/screens/DreamscapeScreen.tsx`) renders outside any `.tango` wrapper.
+Its DOM chain is: dt-mote -> div -> .dreamscape-detail -> ... -> body, with NO
+`.tango` ancestor. It already imports Tango components (SiteNode, and now Motes)
+directly, so any token-driven color on those components is undefined there.
+
+Effect on this task: on `?ui=legacy` the folded dreamscape motes render with an
+empty `var(--mote-dreamscape)` background (transparent) and no glow, so they are
+invisible. The old bespoke `.ds-motes` CSS used a literal `#d8b4fe`, so it was
+visible outside `.tango`. The shipping `ui=tango` path is unaffected (its Motes
+resolve correctly inside `.tango`).
+
+Not fixed here because it is out of Task 10's scope and stems from a pre-existing
+architectural constraint: the legacy screen hosts Tango components outside the
+`.tango` scope. Options for a follow-up: (a) wrap the legacy dreamscape screen (or
+retire it) so it lives under `.tango`, or (b) accept that the legacy `?ui=legacy`
+dreamscape is a dev-only path being dismantled by the Tango migration.
