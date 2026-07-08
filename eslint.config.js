@@ -13,6 +13,7 @@ import tangoScreenFileTaxonomy from "./eslint-rules/screen-file-taxonomy.js";
 import tangoNoUntokenizedLengths from "./eslint-rules/no-untokenized-lengths.js";
 import tangoNoNameKeyedCards from "./eslint-rules/no-name-keyed-cards.js";
 import tangoNoRawSafeAreaEnv from "./eslint-rules/no-raw-safe-area-env.js";
+import tangoNoInlineGlass from "./eslint-rules/no-inline-glass.js";
 
 // One shared plugin object: flat config rejects two config blocks that bind the
 // same plugin name to different objects, and the tango rules apply to more than
@@ -32,6 +33,7 @@ const tangoPlugin = {
     "no-untokenized-lengths": tangoNoUntokenizedLengths,
     "no-name-keyed-cards": tangoNoNameKeyedCards,
     "no-raw-safe-area-env": tangoNoRawSafeAreaEnv,
+    "no-inline-glass": tangoNoInlineGlass,
   },
 };
 
@@ -80,6 +82,7 @@ export default tseslint.config(
       "tango/no-untokenized-lengths": "error",
       "tango/no-name-keyed-cards": "error",
       "tango/no-raw-safe-area-env": "error",
+      "tango/no-inline-glass": "error",
     },
   },
   {
