@@ -84,10 +84,14 @@ export function QuestApp({
     runtimeConfig.uiVariant === "tango" && state.screen.type === "atlas";
   const dreamscapeUsesTango =
     runtimeConfig.uiVariant === "tango" && state.screen.type === "dreamscape";
-  // Tango site screens that own their in-screen QuestStatusBar also own the
-  // top-left utility menu, so they join the same suppression + menu gate as
-  // atlas / dreamscape and avoid a doubled app-shell HUD.
+  // Tango screens that own their in-screen QuestStatusBar suppress the app-shell
+  // HUD so the bottom bar is not doubled. Menu ownership is a separate gate:
+  // some site screens dock the Tango status bar without taking over the
+  // top-left utility menu on every viewport.
   const activeSite = activeSiteType(state);
+  const tangoSiteOwnsQuestStatusBar =
+    runtimeConfig.uiVariant === "tango"
+    && (activeSite === "Draft" || activeSite === "DreamsignRevelation");
   const tangoSiteUsesQuestMenu =
     runtimeConfig.uiVariant === "tango"
     && (activeSite === "Draft"
@@ -97,7 +101,8 @@ export function QuestApp({
   const showHud =
     state.screen.type !== "questStart"
     && !isBattleSiteHudHidden(state)
-    && !tangoScreenUsesQuestMenu;
+    && !tangoScreenUsesQuestMenu
+    && !tangoSiteOwnsQuestStatusBar;
   const [deckViewerOpen, setDeckViewerOpen] = useState(false);
   const [poolViewerOpen, setPoolViewerOpen] = useState(false);
   const [glossaryOpen, setGlossaryOpen] = useState(false);

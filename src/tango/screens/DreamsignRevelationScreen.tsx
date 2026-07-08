@@ -95,6 +95,8 @@ const HUD_CLEARANCE = `calc(${token("--hud-h")} + ${token("--safe-bottom")})`;
 const MOBILE_OFFER_TILE_SIZE = 120;
 const DESKTOP_OFFER_TILE_SIZE = 154;
 const DESKTOP_ENHANCED_OFFER_TILE_SIZE = 140;
+const MOBILE_DECLINE_GAP = token("--space-8");
+const DESKTOP_DECLINE_GAP = token("--space-10");
 
 /**
  * The Tango mobile Dreamsign Revelation screen. Pure and props-driven: it owns
@@ -412,7 +414,7 @@ function OfferStack({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: desktop ? token("--space-8") : token("--space-6"),
+        gap: desktop ? DESKTOP_DECLINE_GAP : MOBILE_DECLINE_GAP,
         pointerEvents: "auto",
       }}
     >
@@ -443,7 +445,7 @@ function OfferStack({
           />
         ))}
       </div>
-      <GlassButton label="Skip" onPress={onSkip} disabled={disabled} />
+      <GlassButton label="Decline Offer" onPress={onSkip} disabled={disabled} />
     </div>
   );
 }
