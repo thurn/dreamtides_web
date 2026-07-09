@@ -55,9 +55,9 @@ function view(): PurgeSiteView {
   };
 }
 
-function stubMatchMedia(): void {
+function stubMatchMedia(matches = false): void {
   window.matchMedia = ((query: string) => ({
-    matches: false,
+    matches,
     media: query,
     onchange: null,
     addEventListener: () => undefined,
@@ -171,6 +171,33 @@ describe("PurgeSiteScreen", () => {
     expect(cardRegion?.dataset.purgeBottomSheet).toBe("true");
     expect(cardRegion?.style.background).toContain("var(--glass-fill-popover)");
     expect(cardRegion?.style.borderTopLeftRadius).toBe("var(--radius-panel)");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders the desktop composition with cards on a square-corner glass panel", () => {
+    stubMatchMedia(true);
+    const { container, root } = mount(
+      <PurgeSiteScreen
+        view={view()}
+        useBottomSheet
+        onClose={vi.fn()}
+        onPurge={vi.fn()}
+      />,
+    );
+
+    expect(container.querySelector("[data-purge-desktop-composition]")).not.toBeNull();
+    expect(container.querySelector("[data-purge-guide]")).not.toBeNull();
+
+    const cardRegion = container.querySelector<HTMLElement>(
+      "[data-purge-card-grid]",
+    );
+    expect(cardRegion?.dataset.purgeLayout).toBe("desktop");
+    expect(cardRegion?.dataset.purgeBottomSheet).toBe("true");
+    expect(cardRegion?.style.borderLeft).toContain("var(--border-soft)");
+    expect(cardRegion?.style.borderTopLeftRadius).toBe("");
 
     act(() => {
       root.unmount();

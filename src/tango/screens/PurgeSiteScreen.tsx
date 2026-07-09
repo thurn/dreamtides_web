@@ -63,7 +63,7 @@ export interface PurgeSiteScreenProps {
 }
 
 const MOBILE_COLUMNS = 4;
-const DESKTOP_COLUMNS = 6;
+const DESKTOP_COLUMNS = 5;
 const GUIDE_TOP_ROWS = "minmax(220px, 34dvh) minmax(0, 1fr)";
 const PURGE_BUTTON_BOTTOM = `calc(${token("--safe-bottom")} + ${token("--space-5")})`;
 
@@ -115,28 +115,6 @@ export function PurgeSiteScreen({
   }, [onPurge, selectedEntryIds, totalCost]);
 
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
-  const cardRegionStyle: CSSProperties = {
-    position: "relative",
-    zIndex: 10,
-    minHeight: 0,
-    overflowY: "auto",
-    WebkitOverflowScrolling: "touch",
-    padding: `${token("--space-4")} ${token("--gutter")} calc(${token(
-      "--safe-bottom",
-    )} + ${selectedCount > 0 ? token("--space-12") : token("--space-6")})`,
-    ...(useBottomSheet
-      ? {
-          ...glassSurfaceStyle({ radius: null }),
-          background: `${token("--glass-sheen")}, ${token(
-            "--glass-fill-popover",
-          )}`,
-          border: 0,
-          borderTop: `1px solid ${token("--border-soft")}`,
-          borderTopLeftRadius: token("--radius-panel"),
-          borderTopRightRadius: token("--radius-panel"),
-        }
-      : {}),
-  };
 
   return (
     <div
@@ -147,8 +125,8 @@ export function PurgeSiteScreen({
         position: "fixed",
         inset: 0,
         minHeight: "100vh",
-        display: "grid",
-        gridTemplateRows: GUIDE_TOP_ROWS,
+        display: isDesktop ? "block" : "grid",
+        gridTemplateRows: isDesktop ? undefined : GUIDE_TOP_ROWS,
         overflow: "hidden",
         background: token("--bg-app"),
       }}
@@ -187,56 +165,29 @@ export function PurgeSiteScreen({
         />
       </div>
 
-      <GuideBand guide={view.guide} />
-
-      <section
-        data-purge-card-grid=""
-        data-purge-bottom-sheet={useBottomSheet ? "true" : "false"}
-        style={cardRegionStyle}
-      >
-        <h2
-          data-testid="tango-purge-title"
-          style={{
-            width: "100%",
-            maxWidth: isDesktop ? 980 : undefined,
-            margin: `0 auto ${token("--space-4")}`,
-            color: token("--text-on-glass"),
-            font: token("--t-title-sm"),
-            textAlign: "center",
-            textShadow: token("--text-outline-media"),
-            letterSpacing: 0,
-          }}
-        >
-          Purge Cards:
-        </h2>
-        <div
-          style={{
-            width: "100%",
-            maxWidth: isDesktop ? 980 : undefined,
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: `repeat(${String(
-              isDesktop ? DESKTOP_COLUMNS : MOBILE_COLUMNS,
-            )}, minmax(0, 1fr))`,
-            gap: token("--space-4"),
-          }}
-        >
-          {view.cards.map((card) => {
-            const selected = selectedEntryIds.includes(card.entryId);
-            const disabled =
-              !selected && card.purgeCostKind === "paid" && !canSelectPaid;
-            return (
-              <PurgeCardTile
-                key={card.entryId}
-                card={card}
-                selected={selected}
-                disabled={disabled}
-                onToggle={toggleSelection}
-              />
-            );
-          })}
-        </div>
-      </section>
+      {isDesktop ? (
+        <DesktopComposition
+          guide={view.guide}
+          cards={view.cards}
+          useBottomSheet={useBottomSheet}
+          selectedEntryIds={selectedEntryIds}
+          selectedCount={selectedCount}
+          canSelectPaid={canSelectPaid}
+          onToggle={toggleSelection}
+        />
+      ) : (
+        <>
+          <GuideBand guide={view.guide} />
+          <CardRegion
+            cards={view.cards}
+            useBottomSheet={useBottomSheet}
+            selectedEntryIds={selectedEntryIds}
+            selectedCount={selectedCount}
+            canSelectPaid={canSelectPaid}
+            onToggle={toggleSelection}
+          />
+        </>
+      )}
 
       {selectedCount > 0 && (
         <div
@@ -263,6 +214,221 @@ export function PurgeSiteScreen({
         </div>
       )}
     </div>
+  );
+}
+
+function DesktopComposition({
+  guide,
+  cards,
+  useBottomSheet,
+  selectedEntryIds,
+  selectedCount,
+  canSelectPaid,
+  onToggle,
+}: {
+  readonly guide: PurgeGuideView;
+  readonly cards: readonly PurgeCardView[];
+  readonly useBottomSheet: boolean;
+  readonly selectedEntryIds: readonly string[];
+  readonly selectedCount: number;
+  readonly canSelectPaid: boolean;
+  readonly onToggle: (card: PurgeCardView) => void;
+}) {
+  return (
+    <section
+      data-purge-desktop-composition=""
+      style={{
+        position: "absolute",
+        top: `calc(${token("--space-8")} + max(var(--safe-area-inset-top), ${token("--safe-top")}))`,
+        left: 0,
+        right: 0,
+        bottom: token("--space-8"),
+        display: "grid",
+        placeItems: "stretch center",
+        zIndex: 20,
+        pointerEvents: "none",
+      }}
+    >
+      <div
+        style={{
+          width: `calc(100% - ${token("--space-12")} - ${token("--space-12")})`,
+          maxWidth: 1500,
+          height: "100%",
+          display: "grid",
+          gridTemplateColumns: "minmax(0, 0.9fr) minmax(0, 1.1fr)",
+          gap: token("--space-12"),
+          alignItems: "center",
+        }}
+      >
+        <DesktopGuideScene guide={guide} />
+        <CardRegion
+          cards={cards}
+          useBottomSheet={useBottomSheet}
+          selectedEntryIds={selectedEntryIds}
+          selectedCount={selectedCount}
+          canSelectPaid={canSelectPaid}
+          onToggle={onToggle}
+          desktop
+        />
+      </div>
+    </section>
+  );
+}
+
+function DesktopGuideScene({ guide }: { readonly guide: PurgeGuideView }) {
+  const guideUrl = resolveArtRef(guide.art);
+  return (
+    <div
+      data-purge-guide=""
+      data-guide-id={guide.id}
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "min(100%, 640px)",
+        minHeight: 520,
+        pointerEvents: "none",
+      }}
+    >
+      <img
+        src={guideUrl}
+        alt={guide.name}
+        draggable={false}
+        style={{
+          position: "absolute",
+          bottom: `calc(-1 * ${token("--space-8")})`,
+          left: `clamp(calc(-1 * ${token("--space-12")}), -4vw, calc(-1 * ${token("--space-8")}))`,
+          width: "clamp(320px, 29vw, 430px)",
+          height: "min(78dvh, 720px)",
+          objectFit: "contain",
+          objectPosition: "50% 100%",
+          userSelect: "none",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: "14%",
+          left: `clamp(calc(${token("--space-12")} + ${token("--space-12")} + ${token("--space-11")} + ${token("--space-7")}), 18vw, calc(${token("--space-12")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-11")} + ${token("--space-7")}))`,
+          right: 0,
+          maxWidth: 380,
+        }}
+      >
+        <SpeechBubble
+          speakerName={guide.name}
+          text={guide.line}
+          arrowSide="left"
+          testId="tango-purge-speech-bubble"
+        />
+      </div>
+    </div>
+  );
+}
+
+function CardRegion({
+  cards,
+  useBottomSheet,
+  selectedEntryIds,
+  selectedCount,
+  canSelectPaid,
+  onToggle,
+  desktop = false,
+}: {
+  readonly cards: readonly PurgeCardView[];
+  readonly useBottomSheet: boolean;
+  readonly selectedEntryIds: readonly string[];
+  readonly selectedCount: number;
+  readonly canSelectPaid: boolean;
+  readonly onToggle: (card: PurgeCardView) => void;
+  readonly desktop?: boolean;
+}) {
+  const glassStyle: CSSProperties = useBottomSheet
+    ? {
+        ...glassSurfaceStyle({ radius: null }),
+        background: `${token("--glass-sheen")}, ${token("--glass-fill-popover")}`,
+        border: 0,
+        ...(desktop
+          ? {
+              borderLeft: `1px solid ${token("--border-soft")}`,
+            }
+          : {
+              borderTop: `1px solid ${token("--border-soft")}`,
+              borderTopLeftRadius: token("--radius-panel"),
+              borderTopRightRadius: token("--radius-panel"),
+            }),
+      }
+    : {};
+  const cardRegionStyle: CSSProperties = {
+    position: "relative",
+    zIndex: 10,
+    minHeight: 0,
+    overflowY: "auto",
+    WebkitOverflowScrolling: "touch",
+    padding: desktop
+      ? `${token("--space-8")} ${token("--space-8")} ${token("--space-8")}`
+      : `${token("--space-4")} ${token("--gutter")} calc(${token(
+          "--safe-bottom",
+        )} + ${selectedCount > 0 ? token("--space-12") : token("--space-6")})`,
+    pointerEvents: "auto",
+    ...(desktop
+      ? {
+          alignSelf: "stretch",
+          height: "100%",
+          boxSizing: "border-box",
+        }
+      : {}),
+    ...glassStyle,
+  };
+
+  return (
+    <section
+      data-purge-card-grid=""
+      data-purge-bottom-sheet={useBottomSheet ? "true" : "false"}
+      data-purge-layout={desktop ? "desktop" : "mobile"}
+      style={cardRegionStyle}
+    >
+      <h2
+        data-testid="tango-purge-title"
+        style={{
+          width: "100%",
+          maxWidth: desktop ? 920 : undefined,
+          margin: `0 auto ${token("--space-4")}`,
+          color: token("--text-on-glass"),
+          font: token("--t-title-sm"),
+          textAlign: "center",
+          textShadow: token("--text-outline-media"),
+          letterSpacing: 0,
+        }}
+      >
+        Purge Cards:
+      </h2>
+      <div
+        style={{
+          width: "100%",
+          maxWidth: desktop ? 920 : undefined,
+          margin: "0 auto",
+          display: "grid",
+          gridTemplateColumns: `repeat(${String(
+            desktop ? DESKTOP_COLUMNS : MOBILE_COLUMNS,
+          )}, minmax(0, 1fr))`,
+          gap: token("--space-4"),
+        }}
+      >
+        {cards.map((card) => {
+          const selected = selectedEntryIds.includes(card.entryId);
+          const disabled =
+            !selected && card.purgeCostKind === "paid" && !canSelectPaid;
+          return (
+            <PurgeCardTile
+              key={card.entryId}
+              card={card}
+              selected={selected}
+              disabled={disabled}
+              onToggle={onToggle}
+            />
+          );
+        })}
+      </div>
+    </section>
   );
 }
 
