@@ -1133,6 +1133,97 @@ describe("JourneyScreen", () => {
     applySpy.mockRestore();
   });
 
+  it("admits only the first of two rapid clicks on a flat option (P2-3 double-click guard)", () => {
+    // A delta-shaped reward (`gain_essence` -> ADJUST_ESSENCE) self-chains
+    // through CAS: two rapid clicks under one `basedOnSeq` would both apply.
+    // `onClose` here does not unmount, so the screen's own re-entry latch — not
+    // an unmount — is the thing under test.
+    const manifest = makeFlatManifest(1);
+    mockedGenerate.mockReturnValue(manifest);
+    const onClose = vi.fn();
+    const mut = createRecordingMutations().mut;
+    const applySpy = vi
+      .spyOn(applyOptionModule, "applyOption")
+      .mockReturnValue({ done: true });
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    const enterButton = queryDreamImageControls(container)[0];
+
+    act(() => {
+      enterButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      enterButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(applySpy).toHaveBeenCalledTimes(1);
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      root.unmount();
+    });
+    applySpy.mockRestore();
+  });
+
+  it("re-arms the double-click guard after a chooser is cancelled", () => {
+    const templateId = "choose_card_then_transfigure";
+    const request = cardChooserRequest("1:choose_card_then_transfigure:0");
+    stubRewards.set(templateId, cardChooserReward(templateId, request));
+    const manifest = manifestSkeleton({
+      options: [
+        makeUnlockedOption({
+          ...baseOptionFields(1),
+          effects: [rewardEnvelope(templateId)],
+        }),
+      ],
+    });
+    mockedGenerate.mockReturnValue(manifest);
+    const applySpy = vi.spyOn(applyOptionModule, "applyOption");
+    const { mut } = createRecordingMutations();
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={contextWithDeck()}
+        onClose={vi.fn()}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    // First click opens the chooser; a rapid second click is swallowed.
+    act(() => {
+      const button = queryDreamImageControls(container)[0];
+      button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(applySpy).toHaveBeenCalledTimes(1);
+
+    // Cancel the chooser: the circle must become choosable again.
+    act(() => {
+      getButtonByText(container, "Cancel").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    act(() => {
+      queryDreamImageControls(container)[0]?.dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    expect(applySpy).toHaveBeenCalledTimes(2);
+
+    act(() => {
+      root.unmount();
+    });
+    applySpy.mockRestore();
+  });
+
   it("mounts a card chooser without mutating when a flat option needs a choice", () => {
     const templateId = "choose_card_then_transfigure";
     const request = cardChooserRequest("1:choose_card_then_transfigure:0");

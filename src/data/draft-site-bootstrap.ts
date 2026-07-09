@@ -1,105 +1,12 @@
-// Shared draft-site entry logic: resolving the per-site draft config (the
-// dreamscape's affiliation reweighting) and rolling the offer for a newly
-// entered site. The reducer's `ENTER_DRAFT_SITE` case (`src/rules/quest/draft.ts`)
-// is the source of truth for a player's draft-site entry — it calls the
-// underlying `enterDraftSite` engine function directly with an
-// `ctx.rng`-backed stream. `enterDraftSiteState` here is this module's preview
-// wrapper: it clones a `DraftState`, rolls the same engine call with an
-// injectable `rng` (defaulting to `Math.random`), and returns the clone
-// without mutating its input — for any caller that wants to preview an offer
-// outside the event log.
-//
-// `enterDraftSite` mints a fresh offer, so these functions are minting
-// operations, not pure view-model mapping — they belong on the impure
-// (data/adapter) side, never in a screen's pure view-model builder.
+// Draft-site progress derivation for the draft screens. The reducer's
+// `ENTER_DRAFT_SITE` case (`src/rules/quest/draft.ts`) is the source of truth
+// for a player's draft-site entry and offer minting — it rolls the offer
+// deterministically from `ctx.rng` so both clients folding the same event see
+// byte-identical packs. This module reads the resulting draft state back into
+// the shape a screen renders.
 
-import {
-  countRemainingCards,
-  DEFAULT_DRAFT_CONFIG,
-  enterDraftSite,
-} from "../draft/draft-engine";
-import { replayDepsFor } from "../draft/replay/replay-deps";
-import { fresh20DepsFor } from "../draft/fresh20/fresh20-deps";
-import type { FitModel } from "../draft/replay/fit-model";
-import type { PoolData } from "../draft/pool/types";
-import { resolveNodeAffiliationWeights } from "../affiliations/affiliation-weights";
-import type { CardData } from "../types/cards";
-import type { AffiliationContent, DreamscapeContent } from "../types/content";
-import type { DraftConfig, DraftState } from "../types/draft";
-import type { DeckEntry, DreamscapeNode } from "../types/quest";
-
-/**
- * The draft config for a draft site sitting in `node`. A neutral dreamscape
- * yields `DEFAULT_DRAFT_CONFIG` (no bias); an affiliated one pulls the offers
- * toward its signature set (via `affiliationWeights`) without removing any card.
- */
-export function resolveDraftConfig(
-  node: DreamscapeNode | null,
-  dreamscapes: readonly DreamscapeContent[],
-  affiliations: readonly AffiliationContent[],
-  poolData: PoolData | null | undefined,
-  cardDatabase: ReadonlyMap<number, CardData>,
-): DraftConfig {
-  const resolved = resolveNodeAffiliationWeights(
-    node,
-    dreamscapes,
-    affiliations,
-    poolData,
-    cardDatabase,
-  );
-  if (resolved === null) {
-    return DEFAULT_DRAFT_CONFIG;
-  }
-  return {
-    ...DEFAULT_DRAFT_CONFIG,
-    affiliationWeights: resolved.weights,
-    affiliationId: resolved.affiliation.id,
-  };
-}
-
-/**
- * Build the per-offer deck-fit deps a draft state needs to reveal an offer:
- * replay and fresh20 each require their own deps; a pool state ignores them
- * (returns `undefined`).
- */
-export function offerDepsForDraftState(
-  draftState: DraftState,
-  deck: readonly DeckEntry[],
-  fitModel: FitModel | undefined,
-  cardDatabase: Map<number, CardData>,
-) {
-  if (draftState.mode === "replay") return replayDepsFor(deck, fitModel);
-  if (draftState.mode === "fresh20") {
-    return fresh20DepsFor(deck, fitModel, cardDatabase);
-  }
-  return undefined;
-}
-
-/**
- * Clone `liveDraftState` and advance it into `siteId`, rolling that site's
- * first offer. The returned state is a fresh object safe to hand to
- * `setDraftState`; the input is never mutated.
- *
- * `rng` defaults to `Math.random` for any preview caller that has no
- * deterministic source; the reducer's `ENTER_DRAFT_SITE` case (the live
- * player path — see `src/rules/quest/draft.ts`) supplies an `ctx.rng`-backed
- * stream instead, so two clients folding the same event roll byte-identical
- * offers.
- */
-export function enterDraftSiteState(
-  liveDraftState: DraftState,
-  siteId: string,
-  cardDatabase: Map<number, CardData>,
-  deck: readonly DeckEntry[],
-  fitModel: FitModel | undefined,
-  draftConfig: DraftConfig = DEFAULT_DRAFT_CONFIG,
-  rng: () => number = Math.random,
-): DraftState {
-  const cloned = JSON.parse(JSON.stringify(liveDraftState)) as DraftState;
-  const offerDeps = offerDepsForDraftState(cloned, deck, fitModel, cardDatabase);
-  enterDraftSite(cloned, siteId, cardDatabase, draftConfig, offerDeps, rng);
-  return cloned;
-}
+import { countRemainingCards } from "../draft/draft-engine";
+import type { DraftState } from "../types/draft";
 
 /** The derived draft progress for a site, read from the effective draft state. */
 export interface DraftSiteProgress {

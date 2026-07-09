@@ -395,10 +395,32 @@ first).
 - **P2-3. Double-click double-applies delta events.** Two rapid clicks are two
   distinct nonces (`client.ts:257`) sharing `basedOnSeq`, and the self-chain
   rule waves the second through. State-guarded intents self-reject, but
-  delta-shaped ones (`ADJUST_ESSENCE`, `ADJUST_MAX_ESSENCE`,
-  `GRANT_FREE_REROLLS`, `PURGE_RANDOM_BANE_CARDS`) apply twice. Fix at the
-  action layer (disable-while-pending on delta buttons, or an idempotency
-  key the reducer checks for reward-style grants).
+  delta-shaped ones (`ADJUST_ESSENCE`, `ADJUST_ESSENCE_CAP`,
+  `GRANT_FREE_REROLLS`, `PURGE_RANDOM_BANE_CARDS`) apply twice.
+  **Status:** the delta-shaped intents are emitted from exactly three trigger
+  classes, each now covered:
+  - **Click-driven — `JourneyScreen`** (`src/journeys/ui/JourneyScreen.tsx`),
+    the only player-reachable double-click surface. A Dream Journey option or
+    branch resolves its reward/cost templates
+    (`journey/shared/rewards.ts`, `costs.ts`) through `applyOption` /
+    `applyBranch`, which fire the delta mutations synchronously as
+    fire-and-forget coop appends. `useSingleFlight`
+    (`src/coop/hooks.ts`) wraps an async `() => Promise<number>` action and so
+    does not fit a synchronous handler that fires several `void` mutations; the
+    screen instead holds a `commitInFlightRef` re-entry latch that admits only
+    the first click into the commit flow and re-arms when the player cancels a
+    chooser or a tree journey advances to a fresh node. Behavioral tests in
+    `JourneyScreen.test.tsx` assert two rapid clicks reach `applyOption` once
+    and that cancel re-arms the latch.
+  - **Programmatic — battle victory bridge**
+    (`src/battle/integration/battle-completion-bridge.ts`). `changeEssence` for
+    the battle reward is applied inside `completeBattleSiteVictory`, guarded by
+    the `completedBattleIds` idempotency set (spec K-3): a repeated dispatch for
+    the same `battleId` logs `battle_proto_completion_skipped_duplicate` and
+    returns without re-emitting. Not a double-clickable button; idempotent by
+    construction.
+  - **Debug HUD deltas** are intentionally unguarded — rapid repeat is the
+    feature there (documented on `useSingleFlight`).
 - **P2-4. `LOAD_STATE` accepts any object.** `lifecycle.ts:366-376` casts
   `snapshot as QuestState` and `asBattleFoldState` is a bare cast; a
   `LOAD_STATE` can null run fields mid-run, inject a `seed` different from

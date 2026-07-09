@@ -47,7 +47,7 @@
  */
 
 import { asCardId } from "../../types/card-identity";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { applyBranch, planBranch } from "../apply/applyBranch";
 import { applyOption } from "../apply/applyOption";
@@ -406,6 +406,21 @@ function JourneyScreenInner({
   const [committedTerminal, setCommittedTerminal] =
     useState<JourneyTreeTerminal | null>(null);
 
+  // Double-click guard for the option/branch circles. `applyOption` /
+  // `applyBranch` fire their reward/cost mutations SYNCHRONOUSLY as
+  // fire-and-forget coop appends (see `src/state/coop-quest-context.tsx`), and
+  // the delta-shaped intents among them (`ADJUST_ESSENCE`, `ADJUST_ESSENCE_CAP`,
+  // `PURGE_RANDOM_BANE_CARDS`, `GRANT_FREE_REROLLS`) self-chain through CAS: two
+  // rapid clicks on the same circle would append the same delta twice under one
+  // `basedOnSeq` and both apply (audit finding P2-3). A ref latch (not state, so
+  // it blocks a second click landing in the same render frame before React
+  // re-renders) admits only the first click into the commit flow. It is released
+  // when the player backs out of a chooser (`handleChooserCancel`) or a tree
+  // journey advances to a fresh node (`continueAfterBranchCommit`), so those
+  // re-offered choices stay clickable; it stays latched through
+  // `finishAndClose`, whose job is to close the screen.
+  const commitInFlightRef = useRef(false);
+
   const explanation = useMemo(
     () => buildJourneyExplanation({ manifest, context, currentNodeId }),
     [context, currentNodeId, manifest],
@@ -541,6 +556,8 @@ function JourneyScreenInner({
 
       setCurrentNodeId(result.nextNode.id);
       clearCommittedApply();
+      // The next node offers fresh branches; re-arm the double-click guard.
+      commitInFlightRef.current = false;
     },
     [clearCommittedApply, commitTerminal, finishAndClose, manifest],
   );
@@ -624,6 +641,8 @@ function JourneyScreenInner({
 
   const handleEnterFlat = useCallback(
     (option: JourneyOption) => {
+      if (commitInFlightRef.current) return;
+      commitInFlightRef.current = true;
       const freshResolutions = new Map<string, ChooserResolution>();
       setResolutions(freshResolutions);
       setPendingChooser(null);
@@ -637,6 +656,8 @@ function JourneyScreenInner({
 
   const handleEnterBranch = useCallback(
     (branch: JourneyTreeBranch) => {
+      if (commitInFlightRef.current) return;
+      commitInFlightRef.current = true;
       const freshResolutions = new Map<string, ChooserResolution>();
       setResolutions(freshResolutions);
       setPendingChooser(null);
@@ -690,6 +711,8 @@ function JourneyScreenInner({
       });
     }
     clearCommittedApply();
+    // The circles become choosable again; re-arm the double-click guard.
+    commitInFlightRef.current = false;
   }, [clearCommittedApply, manifest.journeyId, pendingChooser, siteId]);
 
   const chooser =
