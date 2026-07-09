@@ -136,6 +136,8 @@ export interface CoopActions {
   // --- battle events ---
   beginBattle: (siteId: string) => Promise<number>;
   battleCommand: (command: unknown) => Promise<number>;
+  /** Submit an ordered list of battle commands as one all-or-nothing event. */
+  battleGesture: (commands: readonly unknown[]) => Promise<number>;
   resolvePrompt: (promptId: number, resolution: unknown) => Promise<number>;
   setCardNote: (
     instanceId: string,
@@ -267,6 +269,7 @@ export function makeActions(append: AppendFn): CoopActions {
     // --- battle events ---
     beginBattle: (siteId) => emit("BEGIN_BATTLE", { siteId }),
     battleCommand: (command) => emit("BATTLE_COMMAND", { command }),
+    battleGesture: (commands) => emit("BATTLE_GESTURE", { commands: [...commands] }),
     resolvePrompt: (promptId, resolution) =>
       emit("RESOLVE_PROMPT", { promptId, resolution }),
     setCardNote: (instanceId, note) => emit("SET_CARD_NOTE", { instanceId, note }),

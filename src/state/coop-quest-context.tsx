@@ -118,16 +118,21 @@ export function CoopQuestProvider({
       setDreamcallerSelection: (resolvedPackage) =>
         dispatch(actions.selectDreamcaller(resolvedPackage.dreamcaller.id)),
       resetQuest: () => dispatch(actions.resetQuest()),
-      loadQuestState: (snapshot) => dispatch(actions.loadState(snapshot)),
+      // The room seed is fixed at genesis, so a loaded snapshot must adopt it —
+      // the reducer's LOAD_STATE validator bounces a foreign seed. These debug /
+      // QA snapshots do not depend on their minted seed matching, so stamping the
+      // live room seed keeps every derived generator convergent for both clients.
+      loadQuestState: (snapshot) =>
+        dispatch(actions.loadState({ ...snapshot, seed: stateRef.current.seed })),
       bootstrapStartInBattle: () => {
         const snapshot = createStartInBattleState(questContent);
         if (snapshot === null) return;
-        dispatch(actions.loadState(snapshot));
+        dispatch(actions.loadState({ ...snapshot, seed: stateRef.current.seed }));
       },
       bootstrapQaScene: (sceneId) => {
         const snapshot = buildQaScene(sceneId, questContent);
         if (snapshot === null) return;
-        dispatch(actions.loadState(snapshot));
+        dispatch(actions.loadState({ ...snapshot, seed: stateRef.current.seed }));
       },
       dismissStartingDeckPopup: () =>
         dispatch(actions.dismissStartingDeckPopup()),

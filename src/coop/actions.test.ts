@@ -122,6 +122,7 @@ function captureAllDrafts(): EventDraft[] {
   void actions.endBattle("victory");
   void actions.beginBattle("site-1");
   void actions.battleCommand({});
+  void actions.battleGesture([{}, {}]);
   void actions.resolvePrompt(1, {});
   void actions.setCardNote("instance-1", { noteId: "n1", text: "t", expiry: null });
 

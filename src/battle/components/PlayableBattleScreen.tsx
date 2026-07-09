@@ -292,8 +292,14 @@ function PlayableBattleScreenInner({
           dreamwellDeck: battleInit.dreamwellDeck,
         },
       );
-      for (const planned of plannedCommands) {
-        void actions.battleCommand(planned);
+      // Submit the expansion as ONE all-or-nothing event so an applied partner
+      // event landing mid-gesture cannot bounce the tail (a card in play with
+      // its cost unspent, a handoff with the incoming draw skipped). A single
+      // planned command is a plain BATTLE_COMMAND.
+      if (plannedCommands.length > 1) {
+        void actions.battleGesture(plannedCommands);
+      } else if (plannedCommands.length === 1) {
+        void actions.battleCommand(plannedCommands[0]);
       }
       return;
     }
