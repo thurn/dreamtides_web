@@ -160,10 +160,10 @@ In real screens InfoCard is anchored to a trigger through the attached press eng
 
 ### Mobile scale
 
-Every info card is 248px wide at native. On a narrow viewport it lays out at 45% of the viewport width, capped at that native 248px, so the implicit mobile cutoff is 248 ÷ 0.45 ≈ 551px and desktop keeps the authored geometry. Mobile-sized cards also use a smaller internal type scale of 0.666 so the overlaid glass text block covers less of an image-led reveal. Both are driven by the live viewport — never a caller prop — through the exported `infoCardWidth` / `infoCardTextScale` helpers and the `INFO_CARD_WIDTH` constant.
+Every info card is 248px wide at native. On a narrow viewport it lays out at 45% of the viewport width, capped at that native 248px, so the implicit mobile cutoff is 248 ÷ 0.45 ≈ 551px and desktop keeps the authored geometry. Mobile-sized cards use a 0.86 internal type scale, preserving a 12px body voice; copy wraps into natural height so legibility grows vertically while the 45% width stays fixed. Both dimensions are driven by the live viewport — never a caller prop — through the exported `infoCardWidth` / `infoCardTextScale` helpers and the `INFO_CARD_WIDTH` constant.
 
 ```tsx
 import { infoCardWidth, infoCardTextScale, INFO_CARD_WIDTH } from "src/tango/components/overlay/InfoCard";
 const w = infoCardWidth(window.innerWidth);         // min(248, 0.45 * vw)
-const scale = infoCardTextScale(window.innerWidth); // 1 on desktop, 0.666 on mobile
+const scale = infoCardTextScale(window.innerWidth); // 1 on desktop, 0.86 on mobile
 ```

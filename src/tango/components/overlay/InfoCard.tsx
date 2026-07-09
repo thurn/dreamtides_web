@@ -116,10 +116,12 @@ export const INFO_CARD_WIDTH = CARD_W;
  * keeps the authored popover geometry.
  */
 const MOBILE_WIDTH_FRACTION = 0.45;
-// Mobile InfoCards keep a smaller internal type scale so the overlaid glass
-// text block covers less of image-led reveals. Tune this one constant to adjust
-// title, epithet, meta, and body text proportionally.
-const MOBILE_TEXT_SCALE = 0.666;
+// Mobile InfoCards keep a modestly reduced internal type scale while preserving
+// a 12px floor for the 14px body voice. The larger copy wraps into natural
+// height inside the fixed 45%-viewport width, giving every reveal more readable
+// vertical room without widening it. Tune this one constant to adjust title,
+// epithet, meta, and body text proportionally.
+const MOBILE_TEXT_SCALE = 0.86;
 
 /**
  * The laid-out width (px) for an info card on a `viewportWidth`-px screen:

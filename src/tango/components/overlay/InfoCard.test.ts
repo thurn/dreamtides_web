@@ -64,8 +64,12 @@ describe("infoCardWidth — the viewport-driven mobile width", () => {
 });
 
 describe("infoCardTextScale — the shared mobile typography multiplier", () => {
-  it("uses the mobile text scale only when the card is mobile-sized", () => {
-    expect(infoCardTextScale(390)).toBe(0.666);
+  it("keeps mobile body copy at a legible 12px while preserving the 45% card width", () => {
+    const mobileScale = infoCardTextScale(390);
+
+    expect(mobileScale).toBe(0.86);
+    expect(14 * mobileScale).toBeGreaterThanOrEqual(12);
+    expect(infoCardWidth(390)).toBeCloseTo(0.45 * 390, 5);
     expect(infoCardTextScale(1440)).toBe(1);
   });
 });
