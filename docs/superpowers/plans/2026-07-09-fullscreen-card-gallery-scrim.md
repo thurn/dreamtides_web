@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- `fullBleed` resolves through `--scrim` and emits no backdrop filter.
+- `fullBleed` resolves through `--scrim-gallery` and emits no backdrop filter.
 - `floating` retains the shared liquid-glass recipe.
 - Deck viewer behavior remains unchanged.
 - Starting Deck desktop remains a floating glass panel.
@@ -30,12 +30,12 @@
 - Regenerate: `src/tango/metadata/tango-metadata.json`, `.llms/skills/tango/`
 
 **Interfaces:**
-- Consumes: `CardGalleryFrame = "floating" | "fullBleed"` and `--scrim`.
+- Consumes: `CardGalleryFrame = "floating" | "fullBleed"` and `--scrim-gallery`.
 - Produces: a frame-derived gallery material with `onGlass` accessories for `floating` and `onMedia` accessories for `fullBleed`.
 
 - [ ] **Step 1: Write failing component and responsive screen assertions**
 
-Assert the full-bleed gallery background is `var(--scrim)`, its rendered style contains no `backdrop-filter`, and its accessory reports `data-glass-placement="onMedia"`. Assert the mobile Starting Deck has the same computed inline contract while desktop retains a glass backdrop.
+Assert the full-bleed gallery background is `var(--scrim-gallery)`, its rendered style contains no `backdrop-filter`, and its accessory reports `data-glass-placement="onMedia"`. Assert the mobile Starting Deck has the same computed inline contract while desktop retains a glass backdrop.
 
 - [ ] **Step 2: Run the focused tests and confirm the material assertions fail**
 
@@ -45,7 +45,7 @@ Expected: failures show the full-bleed gallery still uses the glass background/f
 
 - [ ] **Step 3: Implement the frame-derived material**
 
-Keep `glassSurfaceStyle()` and the popover glass fill for `floating`. For `fullBleed`, emit only `background: token("--scrim")` from the material branch and select `onMedia` for the accessory. Remove the redundant mobile `GlassBackdrop` from `StartingDeckOverlay`.
+Keep `glassSurfaceStyle()` and the popover glass fill for `floating`. For `fullBleed`, emit only `background: token("--scrim-gallery")` from the material branch and select `onMedia` for the accessory. Remove the redundant mobile `GlassBackdrop` from `StartingDeckOverlay`.
 
 - [ ] **Step 4: Regenerate Tango metadata/docs and run verification**
 

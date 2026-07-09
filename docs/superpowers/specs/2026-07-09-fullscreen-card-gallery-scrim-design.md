@@ -23,7 +23,7 @@ panel. The purge gallery is also bounded and remains glass.
 
 - `floating` uses the liquid-glass recipe and places header accessories on
   glass.
-- `fullBleed` uses `--scrim` as its background, applies no backdrop filter,
+- `fullBleed` uses `--scrim-gallery` as its background, applies no backdrop filter,
   rim, or glass shadow, and places header accessories on media.
 
 This keeps geometry and material coupled without adding a caller-controlled
@@ -37,7 +37,7 @@ floating frame.
 
 The desktop and mobile deck viewers keep their dedicated full-screen layout and
 their shared `DeckViewerBackdrop`. That backdrop and the full-bleed
-`CardGalleryPanel` both resolve through the same semantic `--scrim` token and
+`CardGalleryPanel` both resolve through the same semantic `--scrim-gallery` token and
 apply no backdrop blur.
 
 ## Alternatives Considered
@@ -59,7 +59,7 @@ appropriate material.
 
 Component tests assert that a floating gallery retains the glass backdrop and
 `onGlass` accessory placement. They also assert that a full-bleed gallery uses
-`var(--scrim)`, emits no `backdrop-filter`, and uses `onMedia` accessory
+`var(--scrim-gallery)`, emits no `backdrop-filter`, and uses `onMedia` accessory
 placement.
 
 Starting Deck tests cover the responsive frame selection: mobile renders the

@@ -437,7 +437,7 @@ export function CardGalleryPanel({
   const panelWidth = `calc((${cardWidth} * ${String(columnCount)}) + (${galleryGap} * ${String(Math.max(0, columnCount - 1))}) + (${galleryPadding} * 2))`;
   const materialStyle: CSSProperties =
     frame === "fullBleed"
-      ? { background: token("--scrim") }
+      ? { background: token("--scrim-gallery") }
       : {
           ...glassSurfaceStyle(),
           background: `${token("--glass-sheen")}, ${token("--glass-fill-popover")}`,

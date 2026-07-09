@@ -150,6 +150,7 @@
   --primitive-line-strong: rgba(255, 255, 255, 0.18);
   --primitive-line-violet: rgba(168, 85, 247, 0.40);
   --primitive-scrim-700: rgba(5, 3, 10, 0.72);   /* modal backdrop */
+  --primitive-scrim-800: rgba(0, 0, 0, 0.80);    /* full-screen gallery backdrop */
   --primitive-scrim-900: rgba(5, 3, 10, 0.90);
 
   /* ---- Font faces (match the parent) ---- */
@@ -229,6 +230,7 @@
 
   /* ---- Scrims (full-surface darkening behind a focused element) ---- */
   --scrim: var(--primitive-scrim-700);          /* modal / sheet backdrop */
+  --scrim-gallery: var(--primitive-scrim-800);  /* full-screen card gallery */
   --scrim-strong: var(--primitive-scrim-900);   /* full-screen focus (held zoom) */
 
   /* ---- Corner radius, by role. UI code sizes corners by what the

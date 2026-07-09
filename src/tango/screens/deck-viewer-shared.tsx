@@ -17,7 +17,7 @@ export function DeckViewerBackdrop(): ReactElement {
         position: "absolute",
         inset: 0,
         zIndex: 0,
-        background: token("--scrim"),
+        background: token("--scrim-gallery"),
       }}
     />
   );

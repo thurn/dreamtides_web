@@ -23,6 +23,7 @@ App backdrops, panes, and scrims, by role.
 | `--surface-chrome` | `#191423` | solid raised chrome (HUD/popovers/windows) |
 | `--surface-chrome-strong` | `#120e1c` | solid, deeper chrome for windows |
 | `--scrim` | `var(--primitive-scrim-700)` | modal / sheet backdrop |
+| `--scrim-gallery` | `var(--primitive-scrim-800)` | full-screen card gallery |
 | `--scrim-strong` | `var(--primitive-scrim-900)` | full-screen focus (held zoom) |
 | `--surface` | `var(--surface-card)` | #1a1525 plum |
 

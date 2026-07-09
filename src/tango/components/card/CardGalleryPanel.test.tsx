@@ -175,7 +175,7 @@ describe("CardGalleryPanel", () => {
     );
     expect(container.querySelector("section")?.style.borderRadius).toBe("0px");
     expect(container.querySelector("section")?.style.background).toBe(
-      "var(--scrim)",
+      "var(--scrim-gallery)",
     );
     expect(
       container.querySelector("section")?.getAttribute("style"),

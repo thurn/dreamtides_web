@@ -82,9 +82,9 @@ collapses the two fills fails the build.
 ## Deck-viewer backdrop
 
 The MobileDeckViewer, DesktopDeckViewer, and full-bleed CardGalleryPanel place
-their content over the standard `--scrim` alpha overlay. The backdrop darkens
-the live scene without applying a blur, keeping the scene's forms recognizable
-while reducing visual competition with the card grid. Floating
+their content over the 80%-black `--scrim-gallery` alpha overlay. The backdrop
+darkens the live scene without applying a blur, keeping the scene's forms
+recognizable while reducing visual competition with the card grid. Floating
 CardGalleryPanels remain liquid glass.
 
 ## The blur-preservation constraint

@@ -201,7 +201,7 @@ describe("StartingDeckOverlay", () => {
     expect(gallery?.dataset.galleryFrame).toBe("fullBleed");
     expect(gallery?.dataset.galleryColumns).toBe("4");
     expect(gallery?.style.borderRadius).toBe("0px");
-    expect(gallery?.style.background).toBe("var(--scrim)");
+    expect(gallery?.style.background).toBe("var(--scrim-gallery)");
     expect(gallery?.getAttribute("style")).not.toContain("backdrop-filter");
     // The body scrolls internally.
     const scroll = container.querySelector("header")
