@@ -97,8 +97,12 @@ function roomLogPath(roomId: string): string {
   return `rooms/${roomId}/log`;
 }
 
-/** Builds the initial `EncodedLogNode` for a brand-new room: no events yet. */
-function genesisLogNode(genesis: Genesis): EncodedLogNode {
+/**
+ * Builds the initial `EncodedLogNode` for a brand-new room: no events yet. The
+ * genesis (including its pinned `contentConfig`) is serialized verbatim, so
+ * this is what `createRoom` / `createRoomEvictingStale` write to RTDB.
+ */
+export function genesisLogNode(genesis: Genesis): EncodedLogNode {
   return {
     genesis: JSON.stringify(genesis),
     baseSeq: 0,

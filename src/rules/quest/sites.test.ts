@@ -26,6 +26,7 @@ const GENESIS: Genesis = {
   seed: "sites-seed",
   reducerVersion: "test",
   createdAt: 0,
+  contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" },
 };
 
 /** A deterministic PRNG bound to a seed so a generation draw is reproducible. */

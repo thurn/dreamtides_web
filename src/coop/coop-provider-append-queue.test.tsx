@@ -35,7 +35,7 @@ const fake = vi.hoisted(() => {
     events: Map<number, FakeEvent>;
     appliedIndex: Map<number, { actor: string; type: string }>;
   }
-  const genesis = { seed: "s", reducerVersion: "v", createdAt: 0 };
+  const genesis = { seed: "s", reducerVersion: "v", createdAt: 0, contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" } };
   const committed: FakeEvent[] = [];
   let subscriber: ((node: unknown) => void) | null = null;
 

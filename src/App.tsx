@@ -817,7 +817,7 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
   }
 
   return (
-    <RoomGate db={database} gameId={runtimeConfig.gameId}>
+    <RoomGate db={database} gameId={runtimeConfig.gameId} runtimeConfig={runtimeConfig}>
       {(context) => (
         <CoopProvider context={context}>
           <CoopQuestProvider questContent={questContent}>

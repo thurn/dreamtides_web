@@ -340,10 +340,14 @@ export function startQuest(
  * hash test.
  */
 export function resetQuest(state: FoldState): FoldState {
+  // `genesisFoldState` derives the fold from `genesis.seed` alone; the other
+  // genesis fields (reducerVersion / createdAt / contentConfig) are pinned at
+  // room creation and are not read here, so placeholders satisfy the type.
   return genesisFoldState({
     seed: state.quest.seed,
     reducerVersion: "",
     createdAt: 0,
+    contentConfig: { poolVariant: "", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" },
   });
 }
 

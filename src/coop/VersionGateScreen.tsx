@@ -1,9 +1,12 @@
 import { useCallback, useState, type ReactNode } from "react";
 import type { Database } from "firebase/database";
+import type { ContentConfig } from "../eventlog/types";
 import { createAndNavigateToRoom } from "./RoomGate";
 
 interface VersionGateScreenProps {
   db: Database;
+  /** Content config pinned into the fresh room this screen creates. */
+  contentConfig: ContentConfig;
 }
 
 /**
@@ -16,14 +19,14 @@ interface VersionGateScreenProps {
  * §"Error handling and safety rails" (Reducer versioning): "mismatch ->
  * read-only + reload prompt. Deploys end in-flight rooms by design."
  */
-export function VersionGateScreen({ db }: VersionGateScreenProps): ReactNode {
+export function VersionGateScreen({ db, contentConfig }: VersionGateScreenProps): ReactNode {
   const [status, setStatus] = useState<"idle" | "creating" | "error">("idle");
   const [message, setMessage] = useState<string | null>(null);
 
   const handleStartNewGame = useCallback(() => {
     setStatus("creating");
     setMessage(null);
-    void createAndNavigateToRoom(db)
+    void createAndNavigateToRoom(db, contentConfig)
       .then(() => {
         // Full reload so the fresh `?game=<id>` boots the gate from scratch on
         // the current build.
@@ -33,7 +36,7 @@ export function VersionGateScreen({ db }: VersionGateScreenProps): ReactNode {
         setStatus("error");
         setMessage(error instanceof Error ? error.message : "Failed to create a new game.");
       });
-  }, [db]);
+  }, [db, contentConfig]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-6 py-12">

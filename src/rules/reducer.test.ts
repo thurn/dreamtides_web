@@ -23,6 +23,7 @@ const GENESIS: Genesis = {
   seed: "test-seed",
   reducerVersion: "test",
   createdAt: 0,
+  contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" },
 };
 
 /** A base fold state with a known, mutable essence value. */

@@ -17,6 +17,7 @@ const GENESIS: Genesis = {
   seed: "deck-seed",
   reducerVersion: "test",
   createdAt: 0,
+  contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" },
 };
 
 function ctx(overrides: Partial<EventContext> = {}): EventContext {

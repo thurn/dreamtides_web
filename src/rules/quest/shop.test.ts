@@ -23,7 +23,7 @@ import {
 // Fixtures
 // ---------------------------------------------------------------------------
 
-const GENESIS = { seed: "shop-seed", reducerVersion: "test", createdAt: 0 };
+const GENESIS = { seed: "shop-seed", reducerVersion: "test", createdAt: 0, contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" } };
 const SITE_ID = "site-1";
 const NODE_ID = "node-1";
 

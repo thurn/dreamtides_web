@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { onValue, ref, type Database } from "firebase/database";
-import type { Genesis, LogNode } from "../eventlog/types";
+import type { ContentConfig, Genesis, LogNode } from "../eventlog/types";
 import {
   connectedClientCount,
   createRoomEvictingStale,
@@ -10,8 +10,14 @@ import {
   type PresenceEntry,
 } from "../eventlog/room";
 import { subscribeToLog } from "../eventlog/subscribe";
+import {
+  contentConfigFromRuntime,
+  contentConfigsEqual,
+  type RuntimeConfig,
+} from "../runtime/runtime-config";
 import { getBuildHash } from "./build-hash";
 import { installQuestLogSink, type QuestLogSinkHandle } from "./quest-log-sink";
+import { ConfigGateScreen } from "./ConfigGateScreen";
 import { VersionGateScreen } from "./VersionGateScreen";
 
 // How long to wait for the first log snapshot before treating the room as
@@ -39,6 +45,8 @@ interface RoomGateProps {
   db: Database;
   /** The `?game=` room id, or `null` to auto-create a fresh room. */
   gameId: string | null;
+  /** This client's runtime config; its content slice is pinned into a new room's genesis. */
+  runtimeConfig: RuntimeConfig;
   children: (context: RoomReadyContext) => ReactNode;
 }
 
@@ -48,6 +56,7 @@ type GateState =
   | { status: "unreachable"; roomId: string }
   | { status: "ready"; roomId: string; genesis: Genesis }
   | { status: "versionGate"; roomId: string; genesis: Genesis }
+  | { status: "configGate"; roomId: string; genesis: Genesis }
   | { status: "error"; message: string };
 
 /** Fresh random seed for a new room's genesis. */
@@ -61,21 +70,53 @@ function freshSeed(): string {
   return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
-/** Build the genesis for a brand-new room: fresh seed, this build's hash, now. */
-export function createFreshGenesis(): Genesis {
+/**
+ * Build the genesis for a brand-new room: fresh seed, this build's hash, now,
+ * and the fold-relevant content parameters pinned from this client's config so
+ * every joiner folds the same content.
+ */
+export function createFreshGenesis(contentConfig: ContentConfig): Genesis {
   return {
     seed: freshSeed(),
     reducerVersion: getBuildHash(),
     createdAt: Date.now(),
+    contentConfig,
   };
 }
 
 /** Create a fresh room and navigate the URL to `?game=<id>`; returns the id. */
-export async function createAndNavigateToRoom(db: Database): Promise<string> {
+export async function createAndNavigateToRoom(
+  db: Database,
+  contentConfig: ContentConfig,
+): Promise<string> {
   const roomId = generateRoomId();
-  await createRoomEvictingStale(db, roomId, createFreshGenesis());
+  await createRoomEvictingStale(db, roomId, createFreshGenesis(contentConfig));
   navigateToRoom(roomId);
   return roomId;
+}
+
+/**
+ * Decides how a delivered genesis gates against this client: a reducer-version
+ * mismatch (fatal, checked first) shows the version gate; a content-config
+ * mismatch — including a genesis with no `contentConfig` at all — shows the
+ * recoverable config gate; otherwise the room is ready. Pure, so it is unit
+ * testable without rendering.
+ */
+export function gateStatusFor(
+  genesis: Genesis,
+  localContentConfig: ContentConfig,
+): "ready" | "versionGate" | "configGate" {
+  if (genesis.reducerVersion !== getBuildHash()) {
+    return "versionGate";
+  }
+  const roomContentConfig = genesis.contentConfig as ContentConfig | undefined;
+  if (
+    roomContentConfig === undefined ||
+    !contentConfigsEqual(roomContentConfig, localContentConfig)
+  ) {
+    return "configGate";
+  }
+  return "ready";
 }
 
 function navigateToRoom(roomId: string): void {
@@ -91,8 +132,12 @@ function navigateToRoom(roomId: string): void {
  * `children` with the ready room context; on a mismatch it renders the
  * read-only `VersionGateScreen`.
  */
-export function RoomGate({ db, gameId, children }: RoomGateProps): ReactNode {
+export function RoomGate({ db, gameId, runtimeConfig, children }: RoomGateProps): ReactNode {
   const clientId = useMemo(mintClientId, []);
+  const localContentConfig = useMemo(
+    () => contentConfigFromRuntime(runtimeConfig),
+    [runtimeConfig],
+  );
   const autoCreateFiredRef = useRef(false);
   const [activeRoomId, setActiveRoomId] = useState<string | null>(gameId);
   const [gateState, setGateState] = useState<GateState>(
@@ -114,7 +159,7 @@ export function RoomGate({ db, gameId, children }: RoomGateProps): ReactNode {
   const handleCreateGame = useCallback(async (): Promise<void> => {
     setGateState({ status: "creating" });
     try {
-      const roomId = await createAndNavigateToRoom(db);
+      const roomId = await createAndNavigateToRoom(db, localContentConfig);
       setActiveRoomId(roomId);
       setGateState({ status: "loading", roomId });
     } catch (error) {
@@ -123,7 +168,7 @@ export function RoomGate({ db, gameId, children }: RoomGateProps): ReactNode {
         message: error instanceof Error ? error.message : "Failed to create game.",
       });
     }
-  }, [db]);
+  }, [db, localContentConfig]);
 
   // Auto-create a room when no `?game=` is present so the coop entry always
   // lands on a room. Fires once per mount; once it navigates to `?game=<id>`
@@ -157,8 +202,12 @@ export function RoomGate({ db, gameId, children }: RoomGateProps): ReactNode {
     const unsubscribe = subscribeToLog(db, activeRoomId, (node: LogNode) => {
       resolved = true;
       clearTimeout(timeoutId);
-      const status =
-        node.genesis.reducerVersion === getBuildHash() ? "ready" : "versionGate";
+      // Gate order: a reducer-version mismatch (a deploy landed) is fatal and
+      // checked first. A content-config mismatch is recoverable — the client
+      // can adopt the room's pinned params — so it gates only when the version
+      // matches. A genesis missing `contentConfig` (never written by this
+      // build) is treated as a mismatch.
+      const status = gateStatusFor(node.genesis, localContentConfig);
       setGateState({ status, roomId: activeRoomId, genesis: node.genesis });
     });
 
@@ -166,7 +215,7 @@ export function RoomGate({ db, gameId, children }: RoomGateProps): ReactNode {
       clearTimeout(timeoutId);
       unsubscribe();
     };
-  }, [activeRoomId, db]);
+  }, [activeRoomId, db, localContentConfig]);
 
   // Track presence for the "connected" pill.
   useEffect(() => {
@@ -220,7 +269,16 @@ export function RoomGate({ db, gameId, children }: RoomGateProps): ReactNode {
   }, [db, readyRoomId, clientId]);
 
   if (gateState.status === "versionGate") {
-    return <VersionGateScreen db={db} />;
+    return <VersionGateScreen db={db} contentConfig={localContentConfig} />;
+  }
+
+  if (gateState.status === "configGate") {
+    return (
+      <ConfigGateScreen
+        roomContentConfig={gateState.genesis.contentConfig as ContentConfig | undefined}
+        localContentConfig={localContentConfig}
+      />
+    );
   }
 
   if (gateState.status === "ready") {

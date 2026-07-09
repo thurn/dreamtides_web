@@ -8,14 +8,27 @@ import {
   ROOM_PRESERVATION_WINDOW_MS,
   connectedClientCount,
   generateRoomId,
+  genesisLogNode,
   isValidRoomId,
   normalizeRoomId,
   shouldEvict,
 } from "./room";
-import type { Genesis } from "./types";
+import type { ContentConfig, Genesis } from "./types";
+
+const CONTENT_CONFIG: ContentConfig = {
+  poolVariant: "tides4",
+  draftMode: "pool",
+  fresh20PackSize: null,
+  journeyVariant: "v2",
+};
 
 function genesisAt(createdAt: number): string {
-  const genesis: Genesis = { seed: "s", reducerVersion: "v1", createdAt };
+  const genesis: Genesis = {
+    seed: "s",
+    reducerVersion: "v1",
+    createdAt,
+    contentConfig: CONTENT_CONFIG,
+  };
   return JSON.stringify(genesis);
 }
 
@@ -101,6 +114,28 @@ describe("shouldEvict (stale-room eviction boundary)", () => {
         now,
       ),
     ).toBe(false);
+  });
+});
+
+describe("genesisLogNode (createRoom's written node)", () => {
+  it("writes genesis.contentConfig verbatim", () => {
+    const contentConfig: ContentConfig = {
+      poolVariant: "idf3",
+      draftMode: "fresh20",
+      fresh20PackSize: 20,
+      journeyVariant: "classic",
+    };
+    const genesis: Genesis = {
+      seed: "room-seed",
+      reducerVersion: "build-abc",
+      createdAt: 1_700_000_000_000,
+      contentConfig,
+    };
+    // createRoom / createRoomEvictingStale both `set` this node, so the decoded
+    // genesis is exactly what lands in RTDB.
+    const decoded = JSON.parse(genesisLogNode(genesis).genesis) as Genesis;
+    expect(decoded).toEqual(genesis);
+    expect(decoded.contentConfig).toEqual(contentConfig);
   });
 });
 

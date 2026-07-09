@@ -17,7 +17,7 @@ interface ToyState {
   seqs: number[];
 }
 
-const GENESIS: Genesis = { seed: "s", reducerVersion: "v1", createdAt: 0 };
+const GENESIS: Genesis = { seed: "s", reducerVersion: "v1", createdAt: 0, contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" } };
 
 const config: EngineConfig<ToyState> = {
   genesisState: () => ({ seqs: [] }),

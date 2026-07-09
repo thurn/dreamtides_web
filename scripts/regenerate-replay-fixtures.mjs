@@ -81,7 +81,15 @@ function moveToFront(battleCardId, slotId) {
 }
 
 function genesis(seed) {
-  return { seed, reducerVersion: "fixture", createdAt: 0 };
+  // `contentConfig` is pinned into every genesis at room creation; the fold
+  // never reads it, so a fixed placeholder keeps fixtures a valid Genesis shape
+  // without affecting the replayed hash.
+  return {
+    seed,
+    reducerVersion: "fixture",
+    createdAt: 0,
+    contentConfig: { poolVariant: "fixture", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" },
+  };
 }
 
 /** Fold `events`, asserting the outcome at each 1-indexed position matches. */

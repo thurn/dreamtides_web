@@ -71,7 +71,12 @@ const toyConfig: EngineConfig<ToyState> = {
 };
 
 function toyGenesis(seed: string): Genesis {
-  return { seed, reducerVersion: "toy-v1", createdAt: Date.now() };
+  return {
+    seed,
+    reducerVersion: "toy-v1",
+    createdAt: Date.now(),
+    contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" },
+  };
 }
 
 // ---------------------------------------------------------------------------

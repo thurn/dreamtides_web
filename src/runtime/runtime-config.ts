@@ -1,6 +1,7 @@
 import { DEFAULT_POOL_VARIANT, resolvePoolVariant } from "../draft/pool";
 import type { PoolVariant } from "../draft/pool";
 import { normalizeRoomId } from "../eventlog/room";
+import type { ContentConfig } from "../eventlog/types";
 
 export interface RuntimeConfig {
   seedOverride: number | null;
@@ -88,6 +89,63 @@ export interface RuntimeConfig {
 export type DatabaseMode = "emulator" | "realtime";
 export type JourneyVariant = "classic" | "v2";
 export type UiVariant = "tango" | "legacy";
+
+/**
+ * Extracts the fold-relevant content slice a room pins into its genesis. Only
+ * parameters that change how the log folds belong here (draft pool/mode, pack
+ * size, journey shape); presentation-only config (`uiVariant`, `aiMode`, debug
+ * flags) is excluded so two clients differing purely in presentation still
+ * fold — and join — the same room. Absent optional fields fall back to the
+ * same defaults `parseRuntimeConfig` applies.
+ */
+export function contentConfigFromRuntime(config: RuntimeConfig): ContentConfig {
+  return {
+    poolVariant: config.poolVariant ?? DEFAULT_POOL_VARIANT,
+    draftMode: config.draftMode ?? "pool",
+    fresh20PackSize: config.fresh20PackSize ?? null,
+    journeyVariant: config.journeyVariant,
+  };
+}
+
+/** Field-wise equality of two content configs (used by RoomGate's config gate). */
+export function contentConfigsEqual(a: ContentConfig, b: ContentConfig): boolean {
+  return (
+    a.poolVariant === b.poolVariant &&
+    a.draftMode === b.draftMode &&
+    a.fresh20PackSize === b.fresh20PackSize &&
+    a.journeyVariant === b.journeyVariant
+  );
+}
+
+/**
+ * Overlays a content config onto an existing query string, producing the search
+ * the config gate reloads to so this client adopts a room's pinned params. The
+ * content-bearing params (`algo`, `packsize`, `journey`) are rewritten to match
+ * `config`; every other param — notably `game` (keep us in the room) and `ui` —
+ * is preserved. It is the inverse of the content slice of `parseRuntimeConfig`:
+ * feeding the result back through `parseRuntimeConfig` yields a config whose
+ * content slice equals `config`.
+ */
+export function applyContentConfigToSearch(currentSearch: string, config: ContentConfig): string {
+  const params = new URLSearchParams(currentSearch);
+  if (config.draftMode === "replay") {
+    params.set("algo", "replay");
+    params.delete("packsize");
+  } else if (config.draftMode === "fresh20") {
+    params.set("algo", "fresh20");
+    if (config.fresh20PackSize === null) {
+      params.delete("packsize");
+    } else {
+      params.set("packsize", String(config.fresh20PackSize));
+    }
+  } else {
+    params.set("algo", config.poolVariant);
+    params.delete("packsize");
+  }
+  params.set("journey", config.journeyVariant);
+  const query = params.toString();
+  return query === "" ? "" : `?${query}`;
+}
 
 export function parseRuntimeConfig(search: string): RuntimeConfig {
   const params = new URLSearchParams(search);
