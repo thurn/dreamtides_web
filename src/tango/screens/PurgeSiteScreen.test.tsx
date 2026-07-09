@@ -123,6 +123,11 @@ describe("PurgeSiteScreen", () => {
         ?.textContent,
     ).toContain("Decline");
     expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="tango-purge-header-action"]',
+      )?.style.borderColor,
+    ).toBe("");
+    expect(
       container.querySelector('[data-testid="tango-purge-commit-bar"]'),
     ).toBeNull();
     expect(
@@ -160,6 +165,11 @@ describe("PurgeSiteScreen", () => {
       container.querySelector('[data-testid="tango-purge-header-action"]')
         ?.textContent,
     ).toContain("40");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="tango-purge-header-action"]',
+      )?.style.borderColor,
+    ).not.toBe("");
     expect(
       container.querySelector('[data-testid="tango-purge-commit-bar"]'),
     ).toBeNull();
@@ -238,6 +248,8 @@ describe("PurgeSiteScreen", () => {
     expect(cardRegion?.dataset.purgeLayout).toBe("desktop");
     expect(cardRegion?.style.height).toBe("100%");
     expect(cardRegion?.style.minHeight).toBe("0px");
+    expect(cardRegion?.style.display).toBe("grid");
+    expect(cardRegion?.style.alignItems).toBe("center");
     expect(gallery?.style.background).toContain("var(--glass-fill-popover)");
     expect(gallery?.style.borderRadius).toBe("var(--radius-popover)");
     expect(gallery?.dataset.galleryFrame).toBe("floating");

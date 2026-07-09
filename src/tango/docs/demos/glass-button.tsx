@@ -74,15 +74,14 @@ import { GLYPHS } from "src/tango/primitives/glyph";
     },
     {
       label: "Danger variant",
-      note: "Use `variant=\"danger\"` for destructive or rejecting secondary actions that should stay glassy while carrying a red warning rim and glow.",
+      note: "Use `variant=\"danger\"` for destructive secondary actions that should stay glassy while carrying a red warning rim and glow.",
       code: `import { GlassButton } from "src/tango/components/controls/GlassButton";
 import { GLYPHS } from "src/tango/primitives/glyph";
 
 <GlassButton
-  glyph={GLYPHS.close}
-  label="Decline Offer"
+  label="Purge 1"
   variant="danger"
-  onPress={declineOffer}
+  onPress={purgeCard}
 />`,
     },
   ],

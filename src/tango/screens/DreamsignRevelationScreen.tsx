@@ -96,7 +96,7 @@ const MOBILE_OFFER_TILE_SIZE = 120;
 const DESKTOP_OFFER_TILE_SIZE = 154;
 const DESKTOP_ENHANCED_OFFER_TILE_SIZE = 140;
 const MOBILE_DECLINE_GAP = token("--space-8");
-const DESKTOP_DECLINE_GAP = token("--space-10");
+const DESKTOP_DECLINE_GAP = token("--space-12");
 
 /**
  * The Tango mobile Dreamsign Revelation screen. Pure and props-driven: it owns
@@ -447,7 +447,6 @@ function OfferStack({
       </div>
       <GlassButton
         label="Decline Offer"
-        variant="danger"
         onPress={onSkip}
         disabled={disabled}
       />

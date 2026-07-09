@@ -56,6 +56,7 @@ import { CardGalleryPanel } from "src/tango/components/card/CardGalleryPanel";
     kind: "glassButton",
     label: selectedCount === 0 ? "Decline" : `Purge ${selectedCount}: `,
     cost: selectedCount === 0 ? null : totalCost,
+    variant: selectedCount === 0 ? "default" : "danger",
     onPress: selectedCount === 0 ? decline : purge,
   }}
   cards={cards}

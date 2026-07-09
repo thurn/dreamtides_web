@@ -356,6 +356,8 @@ function CardRegion({
         ...(desktop
           ? {
               alignSelf: "stretch",
+              display: "grid",
+              alignItems: "center",
             }
           : {
               alignSelf: "start",
@@ -373,6 +375,7 @@ function CardRegion({
               ? "Decline"
               : `Purge ${String(selectedCount)}: `,
           cost: selectedCount === 0 ? null : totalCost,
+          variant: selectedCount === 0 ? "default" : "danger",
           onPress: selectedCount === 0 ? onClose : onPurge,
           testId: "tango-purge-header-action",
         }}

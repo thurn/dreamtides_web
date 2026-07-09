@@ -107,6 +107,16 @@ beforeEach(() => {
   (
     globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
   ).IS_REACT_ACT_ENVIRONMENT = true;
+  window.matchMedia = ((query: string) => ({
+    matches: query.includes("pointer: fine"),
+    media: query,
+    onchange: null,
+    addEventListener: () => undefined,
+    removeEventListener: () => undefined,
+    addListener: () => undefined,
+    removeListener: () => undefined,
+    dispatchEvent: () => false,
+  })) as unknown as typeof window.matchMedia;
 });
 
 afterEach(() => {
@@ -162,6 +172,16 @@ describe("GameCard hover zoom", () => {
   });
 
   it("top-aligns touch keyword definitions beside the card instead of above it", () => {
+    window.matchMedia = ((query: string) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addEventListener: () => undefined,
+      removeEventListener: () => undefined,
+      addListener: () => undefined,
+      removeListener: () => undefined,
+      dispatchEvent: () => false,
+    })) as unknown as typeof window.matchMedia;
     mockCardAndTooltipRects(
       domRect({ width: 100, height: 140, left: 40, top: 80, right: 140, bottom: 220 }),
       domRect({ width: 180, height: 96 }),
@@ -255,6 +275,32 @@ describe("GameCard hover zoom", () => {
     hoverCard(container);
 
     expect(overlay()).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("reveals keyword definitions immediately for large readable cards", () => {
+    mockCardAndTooltipRects(
+      domRect({ width: 170, height: 238, left: 20, top: 30, right: 190, bottom: 268 }),
+      domRect({ width: 180, height: 96 }),
+    );
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => {
+      root.render(<GameCard card={makeCard()} large />);
+    });
+
+    const card = container.querySelector(".card-view");
+    act(() => {
+      card?.dispatchEvent(new MouseEvent("pointerover", { bubbles: true }));
+    });
+
+    expect(document.body.querySelector("[role='tooltip']")?.textContent).toContain(
+      "Bane",
+    );
 
     act(() => {
       root.unmount();

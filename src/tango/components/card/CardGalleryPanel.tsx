@@ -22,7 +22,10 @@ import type { TangoColor } from "../../primitives/color";
 import type { Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
-import { GlassButton } from "../controls/GlassButton";
+import {
+  GlassButton,
+  type GlassButtonVariant,
+} from "../controls/GlassButton";
 import { IconButton, type IconButtonSize } from "../controls/IconButton";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import { GameCard } from "./CardView";
@@ -61,6 +64,8 @@ export type CardGalleryAccessory =
       disabled?: boolean;
       /** Optional inline essence cost rendered after the label. */
       cost?: number | null;
+      /** Semantic surface treatment for the action. */
+      variant?: GlassButtonVariant;
       /** A `data-testid` for selecting the button in tests. */
       testId?: string;
     }
@@ -146,6 +151,7 @@ function accessoryNode(accessory: CardGalleryAccessory): ReactElement {
         glyph={accessory.glyph}
         disabled={accessory.disabled}
         cost={accessory.cost}
+        variant={accessory.variant}
         testId={accessory.testId}
         onPress={accessory.onPress}
       />
@@ -555,7 +561,7 @@ export function CardGalleryPanel({
                     selected={card.selected}
                     selectionColor={card.selectionColor}
                     large={largeCards}
-                    termDefinitions={interactive || peekable ? "none" : "card"}
+                    termDefinitions={peekable ? "none" : "card"}
                   />
                 );
                 const tileStyle: CSSProperties = {

@@ -172,6 +172,11 @@ describe("CardGalleryPanel", () => {
     expect(container.querySelector("header")?.style.padding).toBe(
       "var(--space-5)",
     );
+    expect(
+      container
+        .querySelector("[data-game-card-terms]")
+        ?.getAttribute("data-game-card-terms"),
+    ).toBe("card");
 
     act(() => {
       container

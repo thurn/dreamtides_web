@@ -32,9 +32,9 @@ const GLASS_BUTTON_HEIGHT = 42;
 export type GlassButtonVariant = "default" | "danger";
 
 /**
- * Danger treatment for destructive or rejecting secondary actions: the same
- * glass body with a red rim, light red wash, and red outer glow so the media
- * still reads through the control.
+ * Danger treatment for destructive secondary actions: the same glass body
+ * with a red rim, light red wash, and red outer glow so the media still reads
+ * through the control.
  */
 const dangerChrome: React.CSSProperties = {
   background:

@@ -22,15 +22,6 @@ import {
 import { CardTermDefinitions } from "./CardTermDefinitions";
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
 
-/**
- * Delay (ms) before the term-definitions panel portals in beside a hovered
- * card on a fine pointer. Tuned so the panel reads as a deliberate "what does
- * this mean?" reveal rather than firing on a quick pass of the cursor. Touch
- * reveals immediately on press-down (the InfoCard reveal contract — never a
- * long-press).
- */
-const CARD_TERM_POPOVER_DELAY_MS = 350;
-
 interface ShownState {
   /** Anchor (card) rect captured when the panel became visible. */
   anchorRect: DOMRect;
@@ -66,8 +57,8 @@ interface CardTermPopoverHandlers {
  * card. The panel is purely informational and never intercepts pointer events.
  *
  * Input-adaptive, matching the InfoCard reveal contract:
- *   - fine pointer (mouse / desktop): HOVER reveals after a short deliberate
- *     delay; leaving hides. A click is always a click.
+ *   - fine pointer (mouse / desktop): HOVER reveals immediately; leaving
+ *     hides. A click is always a click.
  *   - coarse pointer (touch): press-DOWN reveals immediately and release
  *     dismisses. The InfoCard click window separates a TAP (the card's own
  *     onClick still fires — picking, selecting) from a HOLD-to-read (the
@@ -106,7 +97,6 @@ export function useCardTermPopover({
 } {
   const fine = useFinePointer();
   const popoverRef = useRef<HTMLDivElement | null>(null);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const downAtRef = useRef(0);
   // Whether the current press actually revealed the panel. A hold only
   // swallows the card's click when there was something being read — a card
@@ -120,13 +110,6 @@ export function useCardTermPopover({
     [text],
   );
   const active = enabled && hasTerms;
-
-  const clearTimer = useCallback(() => {
-    if (timerRef.current !== null) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
-  }, []);
 
   const reveal = useCallback(
     (pointer: { clientX: number; clientY: number } | null) => {
@@ -142,22 +125,19 @@ export function useCardTermPopover({
     [anchorRef],
   );
 
-  // Fine pointer: hover reveals after the deliberate-read delay.
+  // Fine pointer: hover uses the same immediate reveal contract on every card
+  // surface, whether the card is large in place or rendered as a hover zoom.
   const showFromHover = useCallback(() => {
     if (!active || !fine) {
       return;
     }
-    clearTimer();
-    timerRef.current = setTimeout(() => {
-      reveal(null);
-    }, CARD_TERM_POPOVER_DELAY_MS);
-  }, [active, fine, clearTimer, reveal]);
+    reveal(null);
+  }, [active, fine, reveal]);
 
   const hide = useCallback(() => {
-    clearTimer();
     setShown(null);
     setResolved(null);
-  }, [clearTimer]);
+  }, []);
 
   // Coarse pointer: press-down reveals immediately (never a long-press),
   // release dismisses. The press time feeds the tap-vs-hold discriminator.
@@ -200,16 +180,6 @@ export function useCardTermPopover({
       }
     },
     [shouldSwallowClick],
-  );
-
-  useEffect(
-    () => () => {
-      if (timerRef.current !== null) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
-      }
-    },
-    [],
   );
 
   // Drop any open panel if the card stops being eligible (e.g. its text

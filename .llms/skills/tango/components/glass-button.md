@@ -20,7 +20,7 @@ The labeled glass secondary action — a text label in the control typography on
 | `onPress` | `() => void` | yes | — | Fires when the button is activated (no-op while disabled). |
 | `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `GlowIcon` before the label. |
 | `cost` | `number \| null` | no | `null` | Optional inline essence cost rendered after the label. |
-| `variant` | `GlassButtonVariant` = `"danger" \| "default"` | no | `default` | Surface treatment: neutral glass (`default`) or red danger glass. |
+| `variant` | `GlassButtonVariant` = `"default" \| "danger"` | no | `default` | Surface treatment: neutral glass (`default`) or red danger glass. |
 | `disabled` | `boolean` | no | `false` | Detaches the click / press feedback and marks the button `aria-disabled`. |
 | `testId` | `string` | no | — | A `data-testid` for selecting the button in tests. |
 
@@ -53,16 +53,15 @@ import { GLYPHS } from "src/tango/primitives/glyph";
 
 ### Danger variant
 
-Use `variant="danger"` for destructive or rejecting secondary actions that should stay glassy while carrying a red warning rim and glow.
+Use `variant="danger"` for destructive secondary actions that should stay glassy while carrying a red warning rim and glow.
 
 ```tsx
 import { GlassButton } from "src/tango/components/controls/GlassButton";
 import { GLYPHS } from "src/tango/primitives/glyph";
 
 <GlassButton
-  glyph={GLYPHS.close}
-  label="Decline Offer"
+  label="Purge 1"
   variant="danger"
-  onPress={declineOffer}
+  onPress={purgeCard}
 />
 ```

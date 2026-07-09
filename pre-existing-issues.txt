@@ -100,3 +100,12 @@ Promotion cleanup — fixed inherited lint issue
   `src/tango/components/card/CardGalleryPanel.tsx` because the rebased base
   carried an unused `scrollable` local. The promotion commit removes that unused
   local so the rebased branch can pass the required checks.
+
+Tango Desktop Dreamsign Revelation QA — missing utility menu
+
+- Desktop Dreamsign Revelation renders its Tango Quest Status Bar but no gear
+  utility control. `src/App.tsx` includes `DreamsignRevelation` in
+  `tangoSiteSuppressesLegacyHud`, while `tangoSiteUsesQuestMenu` includes that
+  site only below the desktop breakpoint, leaving the desktop screen without
+  either chrome owner. Route the desktop site through the shared quest menu so
+  it satisfies Tango's required screen chrome contract.

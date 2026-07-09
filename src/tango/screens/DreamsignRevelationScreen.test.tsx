@@ -46,9 +46,9 @@ function view(): DreamsignRevelationView {
   };
 }
 
-function stubMatchMedia(): void {
+function stubMatchMedia(matches = false): void {
   window.matchMedia = ((query: string) => ({
-    matches: false,
+    matches,
     media: query,
     onchange: null,
     addEventListener: () => undefined,
@@ -88,6 +88,33 @@ afterEach(() => {
 });
 
 describe("DreamsignRevelationScreen", () => {
+  it("uses a neutral decline action with the desktop spacing step", () => {
+    stubMatchMedia(true);
+    const { container, root } = mount(
+      <DreamsignRevelationScreen
+        view={view()}
+        claimedIndex={null}
+        onClaim={vi.fn()}
+        onSkip={vi.fn()}
+        onPurge={vi.fn()}
+        onCancelPurge={vi.fn()}
+      />,
+    );
+
+    const offer = container.querySelector<HTMLElement>(
+      "[data-revelation-offer]",
+    );
+    const decline = Array.from(container.querySelectorAll("button")).find(
+      (button) => button.textContent?.includes("Decline Offer"),
+    );
+    expect(offer?.style.gap).toBe("var(--space-12)");
+    expect(decline?.style.borderColor).toBe("");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders offer dreamsigns without the revelation shadow", () => {
     const { container, root } = mount(
       <DreamsignRevelationScreen

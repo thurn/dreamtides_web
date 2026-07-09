@@ -17,7 +17,7 @@ The resource-glyph renderer for card marks: a Boxicons glyph that paints in the 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `iconClass` | `Glyph` | yes | — | The {@link Glyph} to render (e.g. `SPARK_ICON_CLASS` / `GLYPHS.spark`). |
-| `color` | `TangoColor` = `"accent" \| "accent-bright" \| "accent-strong" \| "essence" \| "energy" \| "energy-bright" \| "spark" \| "points" \| "danger" \| "positive" \| "selected" \| "sale" \| "gold" \| "gold-light" \| "text-primary" \| "text-secondary" \| "text-muted" \| "text-faint" \| "text-on-accent" \| "white"` | yes | — | Fill {@link TangoColor} — Boxicons paints via the element's text color. |
+| `color` | `TangoColor` = `"danger" \| "accent" \| "accent-bright" \| "accent-strong" \| "essence" \| "energy" \| "energy-bright" \| "spark" \| "points" \| "positive" \| "selected" \| "sale" \| "gold" \| "gold-light" \| "text-primary" \| "text-secondary" \| "text-muted" \| "text-faint" \| "text-on-accent" \| "white"` | yes | — | Fill {@link TangoColor} — Boxicons paints via the element's text color. |
 | `size` | `string` | no | `1em` | Rendered width/height as any CSS length. Defaults to `1em` so an inline glyph tracks the surrounding text size. The icon's own `font-size` is pinned to this value so the `em`-based glow and outline scale with it. |
 | `glowFilter` | `MediaFilter` = `"dreamsign-portrait" \| "dreamsign-portrait-bane" \| "spark-glow" \| "energy-glow"` | no | — | Emitted-light bloom {@link MediaFilter}. Omit for no glow. |
 | `shadow` | `boolean` | no | `false` | When true, adds the soft content-protection shadow beneath the glow. |
