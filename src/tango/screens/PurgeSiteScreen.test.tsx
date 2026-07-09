@@ -194,13 +194,16 @@ describe("PurgeSiteScreen", () => {
       '[data-testid="tango-purge-card-gallery"]',
     );
     expect(cardRegion?.dataset.purgeLayout).toBe("mobile");
-    expect(cardRegion?.style.height).toBe("");
+    expect(cardRegion?.style.height).toBe("100%");
     expect(cardRegion?.style.width).toBe("calc(100vw - 8px)");
     expect(cardRegion?.style.minHeight).toBe("0px");
     expect(gallery?.style.background).toContain("var(--glass-fill-popover)");
     expect(gallery?.style.borderRadius).toBe("var(--radius-popover)");
     expect(gallery?.dataset.galleryFrame).toBe("floating");
     expect(gallery?.dataset.galleryColumns).toBe("4");
+    expect(
+      gallery?.querySelector<HTMLElement>("header")?.style.padding,
+    ).toBe("var(--space-5)");
     expect(gallery?.style.borderLeft).not.toContain("var(--border-soft)");
 
     act(() => {

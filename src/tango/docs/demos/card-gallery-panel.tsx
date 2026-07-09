@@ -76,6 +76,7 @@ function CardGalleryPanelDemo() {
         cards={cards}
         columns="five"
         frame="floating"
+        spacing="regular"
         onCardPress={(entryId) => setSelected(entryId)}
       />
     </div>
@@ -109,6 +110,7 @@ export const cardGalleryPanelDemo: TangoComponent = {
   cards={cards}
   columns="five"
   frame="floating"
+  spacing="regular"
   onCardPress={toggleCard}
 />`,
     },

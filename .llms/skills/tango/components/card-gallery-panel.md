@@ -24,6 +24,7 @@ The shared glass card-browser surface: a left-aligned title and subtitle, a trai
 | `columns` | `CardGalleryColumns` = `"auto" \| "two" \| "four" \| "five"` | no | `auto` | Card grid mode. Defaults to `auto`. |
 | `cardSize` | `CardGalleryCardSize` = `"standard" \| "roomy"` | no | `standard` | Card size preset. Defaults to `standard`. |
 | `frame` | `CardGalleryFrame` = `"floating" \| "fullBleed"` | no | `floating` | Panel frame geometry. Defaults to `floating`. |
+| `spacing` | `CardGallerySpacing` = `"regular" \| "compact"` | no | `regular` | Internal padding and grid gap scale. Defaults to `regular`. |
 | `testId` | `string` | no | — | Test id for the panel root. |
 | `cutoutAwareAccessory` | `boolean` | no | `false` | When a screen-cutout box is known, float the accessory beside the device island instead of sharing the header row. |
 | `onCardPress` | `((entryId: string) => void)` | no | — | Fires when an enabled card tile is activated. |
@@ -58,6 +59,7 @@ import { CardGalleryPanel } from "src/tango/components/card/CardGalleryPanel";
   cards={cards}
   columns="five"
   frame="floating"
+  spacing="regular"
   onCardPress={toggleCard}
 />
 ```

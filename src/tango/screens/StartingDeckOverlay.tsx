@@ -136,6 +136,7 @@ export function StartingDeckOverlay({
               columns={isDesktop ? "five" : "two"}
               cardSize={isDesktop ? "roomy" : "standard"}
               frame={isDesktop ? "floating" : "fullBleed"}
+              spacing={isDesktop ? "regular" : "compact"}
               cutoutAwareAccessory
             />
           </div>

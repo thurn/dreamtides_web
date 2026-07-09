@@ -142,6 +142,7 @@ describe("CardGalleryPanel", () => {
         ]}
         columns="two"
         frame="fullBleed"
+        spacing="compact"
         onCardPress={onCardPress}
       />,
     );
@@ -151,6 +152,9 @@ describe("CardGalleryPanel", () => {
     );
     expect(container.querySelector("section")?.dataset.galleryColumns).toBe(
       "2",
+    );
+    expect(container.querySelector("header")?.style.padding).toBe(
+      "var(--space-5)",
     );
 
     act(() => {

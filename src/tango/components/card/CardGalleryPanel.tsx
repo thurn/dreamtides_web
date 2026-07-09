@@ -80,6 +80,9 @@ export type CardGalleryCardSize = "standard" | "roomy";
 /** The panel frame geometry. */
 export type CardGalleryFrame = "floating" | "fullBleed";
 
+/** The gallery's internal spacing scale. */
+export type CardGallerySpacing = "regular" | "compact";
+
 export interface CardGalleryPanelProps {
   /** Header title, rendered as an `<h2>`. */
   title: string;
@@ -97,6 +100,8 @@ export interface CardGalleryPanelProps {
   cardSize?: CardGalleryCardSize;
   /** Panel frame geometry. Defaults to `floating`. */
   frame?: CardGalleryFrame;
+  /** Internal padding and grid gap scale. Defaults to `regular`. */
+  spacing?: CardGallerySpacing;
   /** Test id for the panel root. */
   testId?: string;
   /**
@@ -109,7 +114,7 @@ export interface CardGalleryPanelProps {
 }
 
 const STANDARD_CARD_MIN_WIDTH_PX = 96;
-const STANDARD_CARD_MAX_WIDTH_PX = 148;
+const STANDARD_CARD_MAX_WIDTH_PX = 176;
 const ROOMY_CARD_MIN_WIDTH_PX = 126;
 const ROOMY_CARD_MAX_WIDTH_PX = 188;
 const FLOATING_ACCESSORY_PX = 48;
@@ -188,12 +193,20 @@ function fallbackCardWidth(
   frame: CardGalleryFrame,
   cardSize: CardGalleryCardSize,
   columnCount: number,
+  spacing: CardGallerySpacing,
 ): string {
   const minWidth = minCardWidth(cardSize);
   const maxWidth = maxCardWidth(cardSize);
-  const edgeReserve = frame === "floating" ? token("--space-8") : "0px";
+  const edgeReserve =
+    frame === "floating"
+      ? spacing === "compact"
+        ? token("--space-1")
+        : token("--space-8")
+      : "0px";
   const gapSlots = Math.max(0, columnCount - 1);
-  return `clamp(${String(minWidth)}px, calc((100vw - ${edgeReserve} - ${edgeReserve} - (${token("--space-8")} * 2) - (${token("--space-4")} * ${String(gapSlots)})) / ${String(columnCount)}), ${String(maxWidth)}px)`;
+  const padding = bodyPaddingFor(spacing);
+  const gap = gridGapFor(spacing);
+  return `clamp(${String(minWidth)}px, calc((100vw - ${edgeReserve} - ${edgeReserve} - (${padding} * 2) - (${gap} * ${String(gapSlots)})) / ${String(columnCount)}), ${String(maxWidth)}px)`;
 }
 
 function gridTemplate(columns: number, cardWidth: string): string {
@@ -209,17 +222,29 @@ function parsePixel(value: string): number {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
+function bodyPaddingFor(spacing: CardGallerySpacing): string {
+  return spacing === "compact" ? token("--space-4") : token("--space-8");
+}
+
+function headerPaddingFor(spacing: CardGallerySpacing): string {
+  return spacing === "compact" ? token("--space-5") : token("--space-8");
+}
+
+function gridGapFor(spacing: CardGallerySpacing): string {
+  return spacing === "compact" ? token("--space-3") : token("--space-4");
+}
+
 function useGalleryMeasure({
   frame,
   columnCount,
-  cardCount,
   cardSize,
+  spacing,
   fallbackVisibleRows,
 }: {
   readonly frame: CardGalleryFrame;
   readonly columnCount: number;
-  readonly cardCount: number;
   readonly cardSize: CardGalleryCardSize;
+  readonly spacing: CardGallerySpacing;
   readonly fallbackVisibleRows: number;
 }): {
   readonly rootRef: React.RefObject<HTMLElement | null>;
@@ -272,25 +297,6 @@ function useGalleryMeasure({
         Math.min(maxCardWidth(cardSize), maxWidthByInline),
       );
       const minWidth = Math.min(minCardWidth(cardSize), widthCap);
-      const rowCount = rowCountFor(cardCount, columnCount);
-
-      if (frame === "fullBleed" && rowCount > 1) {
-        for (let wholeRows = 1; wholeRows < rowCount; wholeRows += 1) {
-          const visibleRows = wholeRows + 0.5;
-          const candidate =
-            ((availableBodyHeight - blockPadding - gap * wholeRows) *
-              CARD_ASPECT_RATIO_VALUE) /
-            visibleRows;
-          if (candidate > 0 && candidate <= widthCap) {
-            return {
-              cardWidthPx: Math.max(CARD_WIDTH_FLOOR_PX, candidate),
-              visibleRows,
-              visibleGapSlots: wholeRows,
-            };
-          }
-        }
-      }
-
       const visibleRows = fallbackVisibleRows;
       const visibleGapSlots = gapSlotsFor(visibleRows);
       const maxWidthByBlock =
@@ -341,7 +347,13 @@ function useGalleryMeasure({
       resizeObserver?.disconnect();
       window.removeEventListener("resize", update);
     };
-  }, [cardCount, cardSize, columnCount, fallbackVisibleRows, frame]);
+  }, [
+    cardSize,
+    columnCount,
+    fallbackVisibleRows,
+    frame,
+    spacing,
+  ]);
 
   return { rootRef, headerRef, bodyRef, gridRef, measure };
 }
@@ -356,6 +368,7 @@ export function CardGalleryPanel({
   columns = "auto",
   cardSize = "standard",
   frame = "floating",
+  spacing = "regular",
   testId,
   cutoutAwareAccessory = false,
   onCardPress,
@@ -374,8 +387,8 @@ export function CardGalleryPanel({
   const { rootRef, headerRef, bodyRef, gridRef, measure } = useGalleryMeasure({
     frame,
     columnCount,
-    cardCount: cards.length,
     cardSize,
+    spacing,
     fallbackVisibleRows,
   });
   const visibleRows = measure?.visibleRows ?? fallbackVisibleRows;
@@ -383,10 +396,11 @@ export function CardGalleryPanel({
     measure?.visibleGapSlots ?? fallbackVisibleGapSlots;
   const cardWidth =
     measure === null
-      ? fallbackCardWidth(frame, cardSize, columnCount)
+      ? fallbackCardWidth(frame, cardSize, columnCount, spacing)
       : `${String(Math.max(1, Math.floor(measure.cardWidthPx)))}px`;
-  const galleryGap = token("--space-4");
-  const galleryPadding = token("--space-8");
+  const galleryGap = gridGapFor(spacing);
+  const galleryPadding = bodyPaddingFor(spacing);
+  const headerPadding = headerPaddingFor(spacing);
   const cardHeight = `calc(${cardWidth} / ${String(CARD_ASPECT_RATIO_VALUE)})`;
   const bodyHeight = `calc((${cardHeight} * ${String(visibleRows)}) + (${galleryGap} * ${String(visibleGapSlots)}) + (${galleryPadding} * 2))`;
   const panelWidth = `calc((${cardWidth} * ${String(columnCount)}) + (${galleryGap} * ${String(Math.max(0, columnCount - 1))}) + (${galleryPadding} * 2))`;
@@ -436,7 +450,7 @@ export function CardGalleryPanel({
           justifyContent: "space-between",
           gap: token("--space-4"),
           borderBottom: `1px solid ${token("--border-strong")}`,
-          padding: token("--space-8"),
+          padding: headerPadding,
         }}
       >
         <div
@@ -475,12 +489,9 @@ export function CardGalleryPanel({
       <div
         ref={bodyRef}
         style={{
-          flex:
-            frame === "fullBleed"
-              ? "1 1 auto"
-              : `0 1 ${bodyHeight}`,
+          flex: `0 1 ${bodyHeight}`,
           minHeight: 0,
-          height: frame === "fullBleed" ? undefined : bodyHeight,
+          height: bodyHeight,
           overflowY: "auto",
           WebkitOverflowScrolling: "touch",
           padding: galleryPadding,

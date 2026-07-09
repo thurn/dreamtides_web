@@ -615,6 +615,17 @@
       "description": "Panel frame geometry. Defaults to `floating`."
     },
     {
+      "name": "spacing",
+      "tsType": "CardGallerySpacing",
+      "unionMembers": [
+        "regular",
+        "compact"
+      ],
+      "required": false,
+      "defaultValue": "regular",
+      "description": "Internal padding and grid gap scale. Defaults to `regular`."
+    },
+    {
       "name": "testId",
       "tsType": "string",
       "unionMembers": [],
