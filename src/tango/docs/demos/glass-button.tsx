@@ -78,7 +78,7 @@ import { GLYPHS } from "src/tango/primitives/glyph";
     },
     {
       label: "On glass",
-      note: "Use `placement=\"onGlass\"` when the control rests inside a glass panel. Its lighter tonal lens preserves the panel's inherited scene color instead of compounding the full media-level tint.",
+      note: 'Use `placement="onGlass"` when the control rests inside a glass panel. Its lighter tonal lens preserves the panel\'s inherited scene color instead of compounding the full media-level tint.',
       code: `<GlassButton
   label="Decline"
   placement="onGlass"
@@ -87,7 +87,7 @@ import { GLYPHS } from "src/tango/primitives/glyph";
     },
     {
       label: "Danger variant",
-      note: "Use `variant=\"danger\"` for destructive secondary actions that should stay glassy while carrying a red warning rim and glow.",
+      note: 'Use `variant="danger"` for destructive secondary actions that should stay glassy while carrying a red warning rim and glow.',
       code: `import { GlassButton } from "src/tango/components/controls/GlassButton";
 import { GLYPHS } from "src/tango/primitives/glyph";
 
@@ -95,6 +95,16 @@ import { GLYPHS } from "src/tango/primitives/glyph";
   label="Purge 1"
   variant="danger"
   onPress={purgeCard}
+/>`,
+    },
+    {
+      label: "Stable dynamic width",
+      note: "Pass every reachable label/cost state through `widthReservations` when one action changes copy. The hidden sizing grid holds the widest intrinsic footprint while only the current state remains visible.",
+      code: `<GlassButton
+  label={selectedCount === 0 ? "Decline" : \`Purge \${selectedCount}: \`}
+  cost={selectedCount === 0 ? null : totalCost}
+  widthReservations={possibleActions}
+  onPress={commit}
 />`,
     },
   ],

@@ -32,6 +32,12 @@ const GLASS_BUTTON_HEIGHT = 42;
 /** Visual treatment for the glass button surface. */
 export type GlassButtonVariant = "default" | "danger";
 
+/** One possible label/cost state whose intrinsic width the button reserves. */
+export interface GlassButtonWidthReservation {
+  label: string;
+  cost?: number | null;
+}
+
 /**
  * Danger treatment for destructive secondary actions: the same glass body
  * with a red rim, light red wash, and red outer glow so the media still reads
@@ -69,6 +75,11 @@ export interface GlassButtonProps {
   glyph?: Glyph;
   /** Optional inline essence cost rendered after the label. */
   cost?: number | null;
+  /**
+   * Possible dynamic label/cost states. The button reserves the widest state
+   * while rendering only the current one, preventing surrounding layout shift.
+   */
+  widthReservations?: readonly GlassButtonWidthReservation[];
   /** Surface treatment: neutral glass (`default`) or red danger glass. */
   variant?: GlassButtonVariant;
   /**
@@ -94,6 +105,7 @@ export function GlassButton({
   onPress,
   glyph,
   cost = null,
+  widthReservations = [],
   variant = "default",
   placement = "onMedia",
   disabled = false,
@@ -134,8 +146,56 @@ export function GlassButton({
           size="1.1em"
         />
       )}
+      <span
+        style={
+          widthReservations.length === 0
+            ? { display: "contents" }
+            : { display: "grid" }
+        }
+      >
+        <GlassButtonContent label={label} cost={cost} />
+        {widthReservations.map((reservation, index) => (
+          <span
+            key={`${reservation.label}-${String(reservation.cost)}-${String(index)}`}
+            aria-hidden="true"
+            data-glass-button-width-reservation=""
+            style={{
+              gridArea: "1 / 1",
+              visibility: "hidden",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+            }}
+          >
+            <GlassButtonContent
+              label={reservation.label}
+              cost={reservation.cost ?? null}
+            />
+          </span>
+        ))}
+      </span>
+    </Pressable>
+  );
+}
+
+function GlassButtonContent({
+  label,
+  cost,
+}: {
+  readonly label: string;
+  readonly cost: number | null;
+}): ReactElement {
+  return (
+    <span
+      style={{
+        gridArea: "1 / 1",
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 8,
+      }}
+    >
       <span>{label}</span>
       {cost !== null && <EssenceValue amount={cost} tone="inherit" />}
-    </Pressable>
+    </span>
   );
 }

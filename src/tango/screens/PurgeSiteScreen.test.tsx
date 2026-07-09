@@ -8,7 +8,11 @@ import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { artRef } from "../primitives/art";
 import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
-import { PurgeSiteScreen, type PurgeSiteView } from "./PurgeSiteScreen";
+import {
+  PurgeSiteScreen,
+  purgeActionWidthReservations,
+  type PurgeSiteView,
+} from "./PurgeSiteScreen";
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
@@ -107,6 +111,15 @@ afterEach(() => {
 });
 
 describe("PurgeSiteScreen", () => {
+  it("derives every reachable action-label footprint from selection limits", () => {
+    expect(purgeActionWidthReservations(1, 2, [0, 40, 100])).toEqual([
+      { label: "Decline", cost: null },
+      { label: "Purge 1: ", cost: 100 },
+      { label: "Purge 2: ", cost: 100 },
+      { label: "Purge 3: ", cost: 100 },
+    ]);
+  });
+
   it("starts with a Decline header action, no close disc, and no sprite purge button", () => {
     const { container, root } = mount(
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
@@ -154,6 +167,10 @@ describe("PurgeSiteScreen", () => {
     );
     expect(first).not.toBeNull();
     expect(second).not.toBeNull();
+    const initialReservations = Array.from(
+      container.querySelectorAll("[data-glass-button-width-reservation]"),
+      (candidate) => candidate.textContent,
+    );
 
     act(() => {
       first?.click();
@@ -174,6 +191,12 @@ describe("PurgeSiteScreen", () => {
     expect(
       container.querySelector('[data-testid="tango-purge-commit-bar"]'),
     ).toBeNull();
+    expect(
+      Array.from(
+        container.querySelectorAll("[data-glass-button-width-reservation]"),
+        (candidate) => candidate.textContent,
+      ),
+    ).toEqual(initialReservations);
 
     act(() => {
       second?.click();

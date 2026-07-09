@@ -1315,6 +1315,14 @@
       "description": "Optional inline essence cost rendered after the label."
     },
     {
+      "name": "widthReservations",
+      "tsType": "readonly GlassButtonWidthReservation[]",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "[]",
+      "description": "Possible dynamic label/cost states. The button reserves the widest state\nwhile rendering only the current one, preventing surrounding layout shift."
+    },
+    {
       "name": "variant",
       "tsType": "GlassButtonVariant",
       "unionMembers": [

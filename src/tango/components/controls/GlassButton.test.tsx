@@ -92,6 +92,52 @@ describe("GlassButton", () => {
     });
   });
 
+  it("keeps every dynamic width reservation in one hidden sizing grid", () => {
+    const reservations = [
+      { label: "Decline", cost: null },
+      { label: "Purge 1: ", cost: 40 },
+      { label: "Purge 2: ", cost: 100 },
+    ] as const;
+    const { container, root } = mount(
+      <GlassButton
+        label="Decline"
+        widthReservations={reservations}
+        onPress={() => {}}
+      />,
+    );
+    const button = container.querySelector("button");
+    const initialReservations = Array.from(
+      button?.querySelectorAll("[data-glass-button-width-reservation]") ?? [],
+      (candidate) => candidate.textContent,
+    );
+    expect(initialReservations).toEqual([
+      "Decline",
+      "Purge 1: 40",
+      "Purge 2: 100",
+    ]);
+
+    act(() => {
+      root.render(
+        <GlassButton
+          label="Purge 2: "
+          cost={100}
+          widthReservations={reservations}
+          onPress={() => {}}
+        />,
+      );
+    });
+    expect(
+      Array.from(
+        button?.querySelectorAll("[data-glass-button-width-reservation]") ?? [],
+        (candidate) => candidate.textContent,
+      ),
+    ).toEqual(initialReservations);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("omits the `<i>` when no glyph is given", () => {
     const { container, root } = mount(
       <GlassButton label="Filter" onPress={() => {}} />,
@@ -192,11 +238,7 @@ describe("GlassButton", () => {
 
   it("restores the neutral on-glass border after leaving the danger state", () => {
     const { container, root } = mount(
-      <GlassButton
-        label="Decline"
-        placement="onGlass"
-        onPress={() => {}}
-      />,
+      <GlassButton label="Decline" placement="onGlass" onPress={() => {}} />,
     );
     const button = container.querySelector<HTMLButtonElement>("button");
     const neutralBorder = button?.style.border;
@@ -216,11 +258,7 @@ describe("GlassButton", () => {
 
     act(() => {
       root.render(
-        <GlassButton
-          label="Decline"
-          placement="onGlass"
-          onPress={() => {}}
-        />,
+        <GlassButton label="Decline" placement="onGlass" onPress={() => {}} />,
       );
     });
     expect(button?.style.border).toBe(neutralBorder);

@@ -20,6 +20,7 @@ The labeled glass secondary action — a text label in the control typography on
 | `onPress` | `() => void` | yes | — | Fires when the button is activated (no-op while disabled). |
 | `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `GlowIcon` before the label. |
 | `cost` | `number \| null` | no | `null` | Optional inline essence cost rendered after the label. |
+| `widthReservations` | `readonly GlassButtonWidthReservation[]` | no | `[]` | Possible dynamic label/cost states. The button reserves the widest state while rendering only the current one, preventing surrounding layout shift. |
 | `variant` | `GlassButtonVariant` = `"default" \| "danger"` | no | `default` | Surface treatment: neutral glass (`default`) or red danger glass. |
 | `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the control. `onMedia` uses the full liquid-glass recipe; `onGlass` uses a lighter tonal lens so an existing glass tint is not compounded. Defaults to `onMedia`. |
 | `disabled` | `boolean` | no | `false` | Detaches the click / press feedback and marks the button `aria-disabled`. |
@@ -76,5 +77,18 @@ import { GLYPHS } from "src/tango/primitives/glyph";
   label="Purge 1"
   variant="danger"
   onPress={purgeCard}
+/>
+```
+
+### Stable dynamic width
+
+Pass every reachable label/cost state through `widthReservations` when one action changes copy. The hidden sizing grid holds the widest intrinsic footprint while only the current state remains visible.
+
+```tsx
+<GlassButton
+  label={selectedCount === 0 ? "Decline" : `Purge ${selectedCount}: `}
+  cost={selectedCount === 0 ? null : totalCost}
+  widthReservations={possibleActions}
+  onPress={commit}
 />
 ```

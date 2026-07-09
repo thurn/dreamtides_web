@@ -70,6 +70,10 @@ function CardGalleryPanelDemo() {
           kind: "glassButton",
           label: selected === null ? "Decline" : "Purge 1: ",
           cost: selected === null ? null : 40,
+          widthReservations: [
+            { label: "Decline", cost: null },
+            { label: "Purge 1: ", cost: 40 },
+          ],
           variant: selected === null ? "default" : "danger",
           glyph: selected === null ? GLYPHS.close : undefined,
           onPress: () => setSelected(null),
@@ -106,6 +110,7 @@ export const cardGalleryPanelDemo: TangoComponent = {
     kind: "glassButton",
     label: selectedCount === 0 ? "Decline" : \`Purge \${selectedCount}: \`,
     cost: selectedCount === 0 ? null : totalCost,
+    widthReservations: possibleActions,
     variant: selectedCount === 0 ? "default" : "danger",
     onPress: selectedCount === 0 ? decline : purge,
   }}

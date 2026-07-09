@@ -24,7 +24,11 @@ import type { GlassControlPlacement } from "../../primitives/control-placement";
 import type { Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
-import { GlassButton, type GlassButtonVariant } from "../controls/GlassButton";
+import {
+  GlassButton,
+  type GlassButtonVariant,
+  type GlassButtonWidthReservation,
+} from "../controls/GlassButton";
 import { IconButton, type IconButtonSize } from "../controls/IconButton";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import { GameCard } from "./CardView";
@@ -63,6 +67,8 @@ export type CardGalleryAccessory =
       disabled?: boolean;
       /** Optional inline essence cost rendered after the label. */
       cost?: number | null;
+      /** Dynamic label/cost states whose widest footprint is reserved. */
+      widthReservations?: readonly GlassButtonWidthReservation[];
       /** Semantic surface treatment for the action. */
       variant?: GlassButtonVariant;
       /** A `data-testid` for selecting the button in tests. */
@@ -158,6 +164,7 @@ function accessoryNode(
         glyph={accessory.glyph}
         disabled={accessory.disabled}
         cost={accessory.cost}
+        widthReservations={accessory.widthReservations}
         variant={accessory.variant}
         testId={accessory.testId}
         onPress={accessory.onPress}

@@ -5,6 +5,7 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import type { DeckCardView } from "./MobileDeckViewer";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
+import type { GlassButtonWidthReservation } from "../components/controls/GlassButton";
 import { Motes } from "../components/hud/Motes";
 import {
   QuestStatusBar,
@@ -103,6 +104,15 @@ export function PurgeSiteScreen({
   const totalCost = view.visitCosts[selectedPaidCount] ?? 0;
   const canSelectPaid = selectedPaidCount < view.maxPaidSelections;
   const selectedCount = selectedEntryIds.length;
+  const actionWidthReservations = useMemo(
+    () =>
+      purgeActionWidthReservations(
+        freeEntryIds.size,
+        view.maxPaidSelections,
+        view.visitCosts,
+      ),
+    [freeEntryIds, view.maxPaidSelections, view.visitCosts],
+  );
 
   const toggleSelection = useCallback(
     (entryId: string) => {
@@ -171,6 +181,7 @@ export function PurgeSiteScreen({
           selectedCount={selectedCount}
           canSelectPaid={canSelectPaid}
           totalCost={totalCost}
+          actionWidthReservations={actionWidthReservations}
           onClose={onClose}
           onPurge={commitPurge}
           onToggle={toggleSelection}
@@ -184,6 +195,7 @@ export function PurgeSiteScreen({
             selectedCount={selectedCount}
             canSelectPaid={canSelectPaid}
             totalCost={totalCost}
+            actionWidthReservations={actionWidthReservations}
             onClose={onClose}
             onPurge={commitPurge}
             onToggle={toggleSelection}
@@ -211,6 +223,7 @@ function DesktopComposition({
   selectedCount,
   canSelectPaid,
   totalCost,
+  actionWidthReservations,
   onClose,
   onPurge,
   onToggle,
@@ -221,6 +234,7 @@ function DesktopComposition({
   readonly selectedCount: number;
   readonly canSelectPaid: boolean;
   readonly totalCost: number;
+  readonly actionWidthReservations: readonly GlassButtonWidthReservation[];
   readonly onClose: () => void;
   readonly onPurge: () => void;
   readonly onToggle: (entryId: string) => void;
@@ -261,6 +275,7 @@ function DesktopComposition({
           selectedCount={selectedCount}
           canSelectPaid={canSelectPaid}
           totalCost={totalCost}
+          actionWidthReservations={actionWidthReservations}
           onClose={onClose}
           onPurge={onPurge}
           onToggle={onToggle}
@@ -326,6 +341,7 @@ function CardRegion({
   selectedCount,
   canSelectPaid,
   totalCost,
+  actionWidthReservations,
   onClose,
   onPurge,
   onToggle,
@@ -336,6 +352,7 @@ function CardRegion({
   readonly selectedCount: number;
   readonly canSelectPaid: boolean;
   readonly totalCost: number;
+  readonly actionWidthReservations: readonly GlassButtonWidthReservation[];
   readonly onClose: () => void;
   readonly onPurge: () => void;
   readonly onToggle: (entryId: string) => void;
@@ -376,6 +393,7 @@ function CardRegion({
               ? "Decline"
               : `Purge ${String(selectedCount)}: `,
           cost: selectedCount === 0 ? null : totalCost,
+          widthReservations: actionWidthReservations,
           variant: selectedCount === 0 ? "default" : "danger",
           onPress: selectedCount === 0 ? onClose : onPurge,
           testId: "tango-purge-header-action",
@@ -404,6 +422,23 @@ function CardRegion({
       />
     </section>
   );
+}
+
+/** Every reachable action label, paired with the widest reachable cost. */
+export function purgeActionWidthReservations(
+  freeCardCount: number,
+  maxPaidSelections: number,
+  visitCosts: readonly number[],
+): readonly GlassButtonWidthReservation[] {
+  const maxSelectionCount = freeCardCount + maxPaidSelections;
+  const maxCost = Math.max(0, ...visitCosts.slice(0, maxPaidSelections + 1));
+  return [
+    { label: "Decline", cost: null },
+    ...Array.from({ length: maxSelectionCount }, (_, index) => ({
+      label: `Purge ${String(index + 1)}: `,
+      cost: maxCost,
+    })),
+  ];
 }
 
 function GuideBand({ guide }: { readonly guide: PurgeGuideView }) {
