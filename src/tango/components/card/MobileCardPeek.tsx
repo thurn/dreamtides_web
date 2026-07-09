@@ -11,6 +11,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent, ReactElement } from "react";
 import { createPortal } from "react-dom";
 import type { CardData } from "../../../types/cards";
+import { extractGlossaryTerms } from "../../../data/glossary-terms";
 import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
 import { infoCardWidth } from "../overlay/InfoCard";
 import { token } from "../../primitives/tokens";
@@ -19,6 +20,7 @@ import { CardTermDefinitions } from "./CardTermDefinitions";
 import { GameCard } from "./CardView";
 import {
   computePeekBox,
+  computeSupplementalPeekLayout,
   peekWidthForViewport,
   type PeekRect,
 } from "./mobile-card-peek-geometry";
@@ -196,22 +198,26 @@ export function useMobileCardPeek({
 }
 
 /**
- * The held zoom: just the enlarged card, portaled above the grid and shown at
- * its placed box. Keyword definition InfoCards sit beside it as supplemental
- * reading aids, matching the Deck Viewer behavior.
+ * The held zoom: the enlarged card and any keyword definition InfoCards are
+ * portaled above the grid as one packed reading unit. Pair packing may shift a
+ * centered low-row card just enough to keep the definition column beside it;
+ * their boxes never overlap.
  */
 export function renderMobileCardPeekOverlay(
   peek: MobileCardPeekState,
 ): ReactElement | null {
   if (typeof document === "undefined") return null;
-  const supplemental =
-    typeof window === "undefined"
-      ? null
-      : computeSupplementalInfoPlacement(
-          peek.box,
-          { width: window.innerWidth, height: window.innerHeight },
-          infoCardWidth(window.innerWidth),
-        );
+  const hasDefinitions =
+    extractGlossaryTerms(peek.view.card.renderedText).length > 0;
+  const layout = hasDefinitions
+    ? computeSupplementalPeekLayout({
+        box: peek.box,
+        viewportWidth: window.innerWidth,
+        supplementalWidth: infoCardWidth(window.innerWidth),
+        gap: SUPPLEMENTAL_INFO_GAP_PX,
+        edge: SUPPLEMENTAL_INFO_EDGE_PX,
+      })
+    : null;
   return createPortal(
     <div
       className="tango"
@@ -225,9 +231,10 @@ export function renderMobileCardPeekOverlay(
       }}
     >
       <div
+        data-mobile-card-peek-card=""
         style={{
           position: "absolute",
-          left: peek.box.left,
+          left: layout?.primaryLeft ?? peek.box.left,
           top: peek.box.top,
           width: peek.box.width,
           filter: `drop-shadow(${token("--shadow-card")})`,
@@ -240,106 +247,24 @@ export function renderMobileCardPeekOverlay(
           termDefinitions="none"
         />
       </div>
-      {supplemental !== null && (
+      {layout !== null && (
         <div
           style={{
             position: "absolute",
-            left: supplemental.left,
-            ...(supplemental.top === undefined
-              ? { bottom: supplemental.bottom }
-              : { top: supplemental.top }),
-            width: supplemental.width,
-            maxHeight: supplemental.maxHeight,
-            overflowY:
-              supplemental.maxHeight === undefined ? "visible" : "auto",
+            left: layout.supplemental.left,
+            top: layout.supplemental.top,
+            width: layout.supplemental.width,
           }}
           data-mobile-card-peek-definitions=""
-          data-mobile-card-peek-definitions-placement={supplemental.placement}
+          data-mobile-card-peek-definitions-placement={layout.supplemental.side}
         >
           <CardTermDefinitions
             text={peek.view.card.renderedText}
-            side={supplemental.side}
+            side={layout.supplemental.side}
           />
         </div>
       )}
     </div>,
     document.body,
   );
-}
-
-export function computeSupplementalInfoPlacement(
-  box: PeekRect,
-  viewport: { width: number; height: number },
-  requestedWidth: number,
-): {
-  left: number;
-  top?: number;
-  bottom?: number;
-  width: number;
-  side: "left" | "right";
-  maxHeight?: number;
-  placement: "left" | "right" | "above" | "below";
-} {
-  const width = Math.min(
-    requestedWidth,
-    viewport.width - SUPPLEMENTAL_INFO_EDGE_PX * 2,
-  );
-  const rightLeft = box.left + box.width + SUPPLEMENTAL_INFO_GAP_PX;
-  const fitsRight =
-    rightLeft + width <= viewport.width - SUPPLEMENTAL_INFO_EDGE_PX;
-  if (fitsRight) {
-    return {
-      left: rightLeft,
-      top: box.top,
-      width,
-      side: "right",
-      placement: "right",
-    };
-  }
-  const leftLeft = box.left - SUPPLEMENTAL_INFO_GAP_PX - width;
-  if (leftLeft >= SUPPLEMENTAL_INFO_EDGE_PX) {
-    return {
-      left: leftLeft,
-      top: box.top,
-      width,
-      side: "left",
-      placement: "left",
-    };
-  }
-
-  // A center-column card may leave insufficient horizontal room for the fixed
-  // InfoCard reading width. In that case the definition stack moves wholly
-  // above or below the enlarged card; it must never cover the card being read.
-  const left = Math.min(
-    Math.max(SUPPLEMENTAL_INFO_EDGE_PX, box.left + box.width / 2 - width / 2),
-    viewport.width - SUPPLEMENTAL_INFO_EDGE_PX - width,
-  );
-  const belowTop = box.top + box.height + SUPPLEMENTAL_INFO_GAP_PX;
-  const belowRoom = Math.max(
-    0,
-    viewport.height - SUPPLEMENTAL_INFO_EDGE_PX - belowTop,
-  );
-  const aboveRoom = Math.max(
-    0,
-    box.top - SUPPLEMENTAL_INFO_GAP_PX - SUPPLEMENTAL_INFO_EDGE_PX,
-  );
-  const side = left + width / 2 < box.left + box.width / 2 ? "left" : "right";
-  if (belowRoom >= aboveRoom) {
-    return {
-      left,
-      top: belowTop,
-      width,
-      side,
-      maxHeight: belowRoom,
-      placement: "below",
-    };
-  }
-  return {
-    left,
-    bottom: viewport.height - box.top + SUPPLEMENTAL_INFO_GAP_PX,
-    width,
-    side,
-    maxHeight: aboveRoom,
-    placement: "above",
-  };
 }

@@ -34,6 +34,19 @@ export interface PeekRect {
   height: number;
 }
 
+/** The jointly packed primary card and supplemental definition column. */
+export interface SupplementalPeekLayout {
+  /** Horizontal position for the enlarged card after pair packing. */
+  primaryLeft: number;
+  /** Position and reading-order side for the definition column. */
+  supplemental: {
+    left: number;
+    top: number;
+    width: number;
+    side: "left" | "right";
+  };
+}
+
 /**
  * Radius (px) of the circle the finger is assumed to occlude, centered on the
  * pressed card. Sized to a thumb's contact and to cover the width of a grid
@@ -190,6 +203,94 @@ export function computePeekBox(input: PeekLayoutInput): PeekRect {
   }
 
   return { left, top, width, height };
+}
+
+/**
+ * Packs the enlarged card and its glossary column as one non-overlapping unit.
+ *
+ * The preferred result preserves the enlarged card and puts the definitions on
+ * whichever side already fits. A centered card near the bottom can leave too
+ * little room on either side even though the pair fits in the viewport; in that
+ * case the whole pair shifts by the smaller possible distance. This preserves
+ * the finger-clearing placement whenever it already has a usable side and fixes
+ * the low-row case without allowing the definition cards to intrude over the
+ * primary card.
+ *
+ * Extremely narrow unsupported viewports that cannot hold the pair horizontally
+ * use a below-card fallback, which still preserves the non-overlap invariant.
+ */
+export function computeSupplementalPeekLayout(input: {
+  box: PeekRect;
+  viewportWidth: number;
+  supplementalWidth: number;
+  gap: number;
+  edge: number;
+}): SupplementalPeekLayout {
+  const { box, viewportWidth, supplementalWidth, gap, edge } = input;
+  const rightLeft = box.left + box.width + gap;
+  if (rightLeft + supplementalWidth <= viewportWidth - edge) {
+    return {
+      primaryLeft: box.left,
+      supplemental: {
+        left: rightLeft,
+        top: box.top,
+        width: supplementalWidth,
+        side: "right",
+      },
+    };
+  }
+
+  const leftLeft = box.left - gap - supplementalWidth;
+  if (leftLeft >= edge) {
+    return {
+      primaryLeft: box.left,
+      supplemental: {
+        left: leftLeft,
+        top: box.top,
+        width: supplementalWidth,
+        side: "left",
+      },
+    };
+  }
+
+  const pairWidth = box.width + gap + supplementalWidth;
+  if (pairWidth <= viewportWidth - edge * 2) {
+    const primaryWithDefinitionsLeft = edge + supplementalWidth + gap;
+    const primaryWithDefinitionsRight = viewportWidth - edge - pairWidth;
+    const leftShift = Math.abs(primaryWithDefinitionsLeft - box.left);
+    const rightShift = Math.abs(primaryWithDefinitionsRight - box.left);
+
+    if (leftShift <= rightShift) {
+      return {
+        primaryLeft: primaryWithDefinitionsLeft,
+        supplemental: {
+          left: edge,
+          top: box.top,
+          width: supplementalWidth,
+          side: "left",
+        },
+      };
+    }
+    return {
+      primaryLeft: primaryWithDefinitionsRight,
+      supplemental: {
+        left: primaryWithDefinitionsRight + box.width + gap,
+        top: box.top,
+        width: supplementalWidth,
+        side: "right",
+      },
+    };
+  }
+
+  return {
+    primaryLeft: box.left,
+    supplemental: {
+      left: clamp(box.left, edge, viewportWidth - edge - supplementalWidth),
+      top: box.top + box.height + gap,
+      width: supplementalWidth,
+      side: "right",
+    },
+  };
 }
 
 /**

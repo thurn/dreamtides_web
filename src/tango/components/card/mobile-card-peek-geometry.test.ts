@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   computePeekBox,
+  computeSupplementalPeekLayout,
   peekWidthForViewport,
   rulesRegionOfPeek,
   circleRectGap,
@@ -8,6 +9,8 @@ import {
   PEEK_MAX_WIDTH_PX,
   type PeekLayoutInput,
 } from "./mobile-card-peek-geometry";
+
+const THREE_TERM_CARD_ID = "15b63630-d9f8-473b-9717-15ad91ff2f16";
 
 /** iPhone-class safe insets, side margin, and card shape shared by the cases. */
 const ENV = {
@@ -144,6 +147,99 @@ describe("computePeekBox", () => {
         expect(box.left + box.width).toBeLessThanOrEqual(
           393 - ENV.sideMargin + 0.5,
         );
+      }
+    }
+  });
+});
+
+describe("computeSupplementalPeekLayout", () => {
+  it(`keeps the three definition cards for UUID ${THREE_TERM_CARD_ID} beside the enlarged card near the bottom`, () => {
+    // Fourth-row, second-inner-column geometry on an iPhone 16 viewport: the
+    // enlarged card is centered over a low press. A 45vw definition column
+    // cannot fit on either side unless the pair is packed as one unit.
+    const viewportWidth = 393;
+    const box = {
+      left: 169,
+      top: 440,
+      width: widthFor(viewportWidth),
+      height: widthFor(viewportWidth) / ENV.aspect,
+    };
+    const supplementalWidth = viewportWidth * 0.45;
+    const layout = computeSupplementalPeekLayout({
+      box,
+      viewportWidth,
+      supplementalWidth,
+      gap: 10,
+      edge: 6,
+    });
+
+    expect(layout.primaryLeft).toBeGreaterThan(box.left);
+    expect(layout.supplemental.side).toBe("left");
+    expect(
+      layout.supplemental.left + supplementalWidth + 10,
+    ).toBeLessThanOrEqual(layout.primaryLeft);
+    expect(layout.supplemental.left).toBeGreaterThanOrEqual(6);
+    expect(layout.primaryLeft + box.width).toBeLessThanOrEqual(
+      viewportWidth - 6,
+    );
+  });
+
+  it("preserves the enlarged card position when a definition column already fits", () => {
+    const box = { left: 18, top: 59, width: 146, height: 204.4 };
+    const layout = computeSupplementalPeekLayout({
+      box,
+      viewportWidth: 393,
+      supplementalWidth: 176.85,
+      gap: 10,
+      edge: 6,
+    });
+
+    expect(layout.primaryLeft).toBe(box.left);
+    expect(layout.supplemental.side).toBe("right");
+    expect(layout.supplemental.left).toBe(box.left + box.width + 10);
+  });
+
+  it("keeps the primary and definition column disjoint across mobile widths and horizontal positions", () => {
+    for (const viewportWidth of [360, 375, 393, 430]) {
+      const width = widthFor(viewportWidth);
+      const supplementalWidth = viewportWidth * 0.45;
+      for (
+        let left = ENV.sideMargin;
+        left <= viewportWidth - ENV.sideMargin - width;
+        left += 7
+      ) {
+        const box = {
+          left,
+          top: 400,
+          width,
+          height: width / ENV.aspect,
+        };
+        const layout = computeSupplementalPeekLayout({
+          box,
+          viewportWidth,
+          supplementalWidth,
+          gap: 10,
+          edge: 6,
+        });
+        const primaryRight = layout.primaryLeft + box.width;
+        const supplementalRight =
+          layout.supplemental.left + supplementalWidth;
+
+        expect(layout.primaryLeft).toBeGreaterThanOrEqual(6);
+        expect(primaryRight).toBeLessThanOrEqual(viewportWidth - 6);
+        expect(layout.supplemental.left).toBeGreaterThanOrEqual(6);
+        expect(supplementalRight).toBeLessThanOrEqual(viewportWidth - 6);
+        if (layout.supplemental.top === box.top) {
+          const horizontalGap = Math.max(
+            layout.supplemental.left - primaryRight,
+            layout.primaryLeft - supplementalRight,
+          );
+          expect(horizontalGap).toBeGreaterThanOrEqual(10);
+        } else {
+          expect(layout.supplemental.top).toBeGreaterThanOrEqual(
+            box.top + box.height + 10,
+          );
+        }
       }
     }
   });

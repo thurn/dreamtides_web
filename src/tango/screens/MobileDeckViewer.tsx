@@ -379,6 +379,8 @@ function DeckTile({
     <Pressable
       as="button"
       aria-label={cardView.card.name}
+      data-card-id={cardView.card.id}
+      data-deck-entry-id={cardView.entryId}
       onPointerDown={(e: React.PointerEvent<HTMLElement>) => {
         onPointerDown(e, cardView);
       }}
