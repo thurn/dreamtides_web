@@ -198,6 +198,7 @@ describe("StartingDeckOverlay", () => {
     const gallery = galleryOf(container);
     expect(gallery?.dataset.galleryFrame).toBe("fullBleed");
     expect(gallery?.dataset.galleryColumns).toBe("2");
+    expect(gallery?.style.borderRadius).toBe("0px");
     // The body scrolls internally.
     const scroll = container.querySelector("header")
       ?.nextElementSibling as HTMLElement | null;
@@ -239,7 +240,7 @@ describe("StartingDeckOverlay", () => {
     expect(gallery?.dataset.galleryVisibleRows).toBe("2.5");
     const scroll = container.querySelector("header")
       ?.nextElementSibling as HTMLElement | null;
-    expect(scroll?.style.overflowY).toBe("auto");
+    expect(scroll?.style.overflowY).toBe("scroll");
     expect(
       container.querySelectorAll("[data-testid^='starting-deck-modal-card-']"),
     ).toHaveLength(20);

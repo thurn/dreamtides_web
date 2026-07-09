@@ -153,6 +153,7 @@ describe("CardGalleryPanel", () => {
     expect(container.querySelector("section")?.dataset.galleryColumns).toBe(
       "2",
     );
+    expect(container.querySelector("section")?.style.borderRadius).toBe("0px");
     expect(container.querySelector("header")?.style.padding).toBe(
       "var(--space-5)",
     );

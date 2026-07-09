@@ -26,6 +26,7 @@ import { GlassButton } from "../controls/GlassButton";
 import { IconButton, type IconButtonSize } from "../controls/IconButton";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import { GameCard } from "./CardView";
+import "./card-gallery-panel.css";
 
 /** One resolved card in a {@link CardGalleryPanel}. */
 export interface CardGalleryCardView {
@@ -383,6 +384,7 @@ export function CardGalleryPanel({
   const columnCount = renderedColumnCount(columns);
   const rowCount = rowCountFor(cards.length, columnCount);
   const fallbackVisibleRows = plannedVisibleRows(rowCount);
+  const scrollable = rowCount > fallbackVisibleRows;
   const fallbackVisibleGapSlots = gapSlotsFor(fallbackVisibleRows);
   const { rootRef, headerRef, bodyRef, gridRef, measure } = useGalleryMeasure({
     frame,
@@ -413,13 +415,15 @@ export function CardGalleryPanel({
       data-gallery-columns={columnCount}
       data-gallery-visible-rows={visibleRows}
       style={{
-        ...glassSurfaceStyle(),
+        ...glassSurfaceStyle({ radius: frame === "fullBleed" ? null : undefined }),
         background: `${token("--glass-sheen")}, ${token("--glass-fill-popover")}`,
         position: "relative",
+        boxSizing: "border-box",
         width: frame === "fullBleed" ? "100%" : panelWidth,
         maxWidth: "100%",
         height: frame === "fullBleed" ? "100%" : undefined,
         maxHeight: "100%",
+        borderRadius: frame === "fullBleed" ? 0 : token("--radius-popover"),
         minHeight: 0,
         display: "flex",
         flexDirection: "column",
@@ -488,11 +492,16 @@ export function CardGalleryPanel({
       </header>
       <div
         ref={bodyRef}
+        className={
+          scrollable
+            ? "tango-card-gallery-scroll tango-card-gallery-scroll--active"
+            : "tango-card-gallery-scroll"
+        }
         style={{
           flex: frame === "fullBleed" ? "1 1 auto" : `0 1 ${bodyHeight}`,
           minHeight: 0,
           height: frame === "fullBleed" ? undefined : bodyHeight,
-          overflowY: "auto",
+          overflowY: scrollable ? "scroll" : "auto",
           WebkitOverflowScrolling: "touch",
           padding: galleryPadding,
         }}
