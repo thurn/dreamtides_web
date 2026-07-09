@@ -270,6 +270,10 @@ describe("registerGameProviders (real content providers)", () => {
 // ---------------------------------------------------------------------------
 
 const MERCHANT_SEED = "merchant-real-provider-seed";
+// The merchant fixture quest is seeded with MERCHANT_SEED, and the LOAD_STATE
+// validator requires the loaded snapshot's seed to equal the room seed, so these
+// merchant replays run against a genesis pinned to the same seed.
+const MERCHANT_GENESIS: Genesis = { ...GENESIS, seed: MERCHANT_SEED };
 const MERCHANT_SITE_ID = "site-merchant-resolve";
 const MERCHANT_NODE_ID = "dreamscape-a";
 
@@ -386,7 +390,7 @@ describe("registerGameProviders — merchant resolution", () => {
         archetypeId: offer.archetypeId,
       }),
     ];
-    const first = replayLog({ genesis: GENESIS, events });
+    const first = replayLog({ genesis: MERCHANT_GENESIS, events });
     expect(
       first.outcomes.find((o) => o.seq === 2)?.outcome,
       first.outcomes.find((o) => o.seq === 2)?.error?.message,
@@ -394,7 +398,7 @@ describe("registerGameProviders — merchant resolution", () => {
     // The merchant site completed and returned to the dreamscape.
     expect(first.finalState.quest.screen).toEqual({ type: "dreamscape" });
 
-    const second = replayLog({ genesis: GENESIS, events });
+    const second = replayLog({ genesis: MERCHANT_GENESIS, events });
     expect(second.finalHash).toBe(first.finalHash);
   });
 
@@ -409,14 +413,14 @@ describe("registerGameProviders — merchant resolution", () => {
         offerId: offer.offerId,
       }),
     ];
-    const first = replayLog({ genesis: GENESIS, events });
+    const first = replayLog({ genesis: MERCHANT_GENESIS, events });
     expect(
       first.outcomes.find((o) => o.seq === 2)?.outcome,
       first.outcomes.find((o) => o.seq === 2)?.error?.message,
     ).toBe("applied");
     expect(first.finalState.quest.screen).toEqual({ type: "dreamscape" });
 
-    const second = replayLog({ genesis: GENESIS, events });
+    const second = replayLog({ genesis: MERCHANT_GENESIS, events });
     expect(second.finalHash).toBe(first.finalHash);
   });
 });

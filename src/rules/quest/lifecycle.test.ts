@@ -440,7 +440,16 @@ describe("RESET_QUEST", () => {
 });
 
 describe("LOAD_STATE", () => {
-  it("replaces quest state with the snapshot and sets battle when present", () => {
+  /** A structurally-valid battle slice with nothing parked (no scriptRefs). */
+  const emptyBattle = {
+    init: {},
+    board: {},
+    effectQueue: [],
+    pendingPrompt: null,
+    dawnFired: {},
+  };
+
+  it("replaces quest state with a valid snapshot and sets a well-formed battle", () => {
     const start = genesis();
     const snapshot: QuestState = {
       ...start.quest,
@@ -454,9 +463,9 @@ describe("LOAD_STATE", () => {
 
     const withBattle = apply(start, "LOAD_STATE", {
       snapshot,
-      battle: { pendingPrompt: { promptId: 2 } },
+      battle: emptyBattle,
     });
-    expect(withBattle.battle).toEqual({ pendingPrompt: { promptId: 2 } });
+    expect(withBattle.battle).toEqual(emptyBattle);
   });
 
   it("bounces a non-object snapshot", () => {
@@ -464,6 +473,60 @@ describe("LOAD_STATE", () => {
     const out = reduceGameEvent(
       start,
       event("LOAD_STATE", { snapshot: null }),
+      ctx(),
+    );
+    expect(out.outcome).toBe("bounced");
+  });
+
+  it("bounces a snapshot whose seed differs from the room seed", () => {
+    const start = genesis();
+    const snapshot: QuestState = { ...start.quest, seed: "some-other-seed" };
+    const out = reduceGameEvent(start, event("LOAD_STATE", { snapshot }), ctx());
+    expect(out.outcome).toBe("bounced");
+  });
+
+  it("bounces a snapshot missing a required primitive field", () => {
+    const start = genesis();
+    const snapshot = { ...start.quest } as Record<string, unknown>;
+    delete snapshot.essence;
+    const out = reduceGameEvent(start, event("LOAD_STATE", { snapshot }), ctx());
+    expect(out.outcome).toBe("bounced");
+  });
+
+  it("bounces a snapshot that nulls a currently non-null run field", () => {
+    registerQuestLifecycleContentProvider(deterministicProvider());
+    const started = apply(genesis(), "START_QUEST", { dreamcallerId: "dc-7" });
+    expect(started.quest.dreamcaller).not.toBeNull();
+    const snapshot: QuestState = { ...started.quest, dreamcaller: null };
+    const out = reduceGameEvent(started, event("LOAD_STATE", { snapshot }), ctx());
+    expect(out.outcome).toBe("bounced");
+  });
+
+  it("bounces when a battle run's scriptRef cannot resolve in the live tables", () => {
+    const start = genesis();
+    const snapshot: QuestState = { ...start.quest };
+    const out = reduceGameEvent(
+      start,
+      event("LOAD_STATE", {
+        snapshot,
+        battle: {
+          ...emptyBattle,
+          effectQueue: [
+            { scriptRef: { table: "battle", id: "not-a-real-uuid" }, cursor: [0], side: "player" },
+          ],
+        },
+      }),
+      ctx(),
+    );
+    expect(out.outcome).toBe("bounced");
+  });
+
+  it("bounces a malformed battle slice (missing structural fields)", () => {
+    const start = genesis();
+    const snapshot: QuestState = { ...start.quest };
+    const out = reduceGameEvent(
+      start,
+      event("LOAD_STATE", { snapshot, battle: { pendingPrompt: { promptId: 2 } } }),
       ctx(),
     );
     expect(out.outcome).toBe("bounced");

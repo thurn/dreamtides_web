@@ -18,6 +18,9 @@ import type { BattleFoldState, FoldState } from "../fold-state";
 import { toQuestDreamcaller } from "../../data/dreamcaller-selection";
 import type { ResolvedDreamcallerPackage } from "../../types/content";
 import type { QuestState, Screen } from "../../types/quest";
+import type { EffectStep } from "../battle/effect-step";
+import { resolveScript } from "../battle/fold";
+import type { EffectRun, ScriptRef } from "../battle/fold";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (SELECT_DREAMCALLER / START_QUEST)
@@ -351,30 +354,168 @@ export function resetQuest(state: FoldState): FoldState {
   });
 }
 
-function asBattleFoldState(value: unknown): BattleFoldState | null {
-  if (typeof value !== "object" || value === null) return null;
-  return value as BattleFoldState;
-}
-
 /**
  * `LOAD_STATE { snapshot, battle? }` — legacy `loadQuestState` /
  * `bootstrapQaScene`. Replaces the quest slice with the provided snapshot
- * (debug / QA bootstrap; a large payload is fine) and sets the battle slice
- * from `payload.battle` when present, else clears it. Bounces on a non-object
- * snapshot.
+ * (debug / QA bootstrap; a large payload is fine) and sets the battle slice from
+ * `payload.battle` when present, else clears it.
  *
- * SEAM: the battle payload is passed through as-is; the authoritative
- * `BattleFoldState` shape and its validation are owned by the battle tasks
- * (18/19), which will narrow this once the real battle fold exists.
+ * Because a `LOAD_STATE` folds identically on every client, an unvalidated one
+ * would converge the whole room to a possibly-insane state (a foreign `seed`, a
+ * nulled run field mid-run, a planted `pendingPrompt` whose parked cursor points
+ * past its script). {@link validateLoadedState} enforces the structural and
+ * fold-consistency invariants and this case bounces on any violation.
  */
 export function loadState(
-  _state: FoldState,
+  state: FoldState,
+  payload: Record<string, unknown>,
+): FoldState | null {
+  return validateLoadedState(state, payload);
+}
+
+/**
+ * Validates a `LOAD_STATE` payload against the fold's invariants, returning the
+ * next {@link FoldState} to apply or `null` to bounce. Checks:
+ *   - `snapshot` is an object carrying the required `QuestState` fields with the
+ *     correct primitive/container types;
+ *   - `snapshot.seed === state.quest.seed` (the room seed, pinned equal to
+ *     `genesis.seed` at creation) — a foreign seed would desync every derived
+ *     generator;
+ *   - no run field (`dreamcaller` / `resolvedPackage` / `draftState`) that is
+ *     currently non-null is nulled by the snapshot (the run-field nullability
+ *     invariant the property sweep protects);
+ *   - if a battle slice is supplied, it is a well-formed {@link BattleFoldState}
+ *     whose every `effectQueue`/`pendingPrompt` `scriptRef` resolves in the live
+ *     effect tables and whose cursors address real positions in that script.
+ *
+ * Content values (card ids, costs, pool contents) are NOT asserted — only shape
+ * and the fold invariants — so the check is resilient to TOML data edits.
+ */
+export function validateLoadedState(
+  state: FoldState,
   payload: Record<string, unknown>,
 ): FoldState | null {
   const snapshot = payload.snapshot;
-  if (typeof snapshot !== "object" || snapshot === null) return null;
-  return {
-    quest: snapshot as QuestState,
-    battle: "battle" in payload ? asBattleFoldState(payload.battle) : null,
-  };
+  if (!isQuestStateShape(snapshot)) return null;
+  if (snapshot.seed !== state.quest.seed) return null;
+
+  const before = state.quest;
+  if (before.dreamcaller != null && snapshot.dreamcaller == null) return null;
+  if (before.resolvedPackage != null && snapshot.resolvedPackage == null) return null;
+  if (before.draftState != null && snapshot.draftState == null) return null;
+
+  let battle: BattleFoldState | null = null;
+  if ("battle" in payload && payload.battle != null) {
+    battle = asValidBattleFoldState(payload.battle);
+    if (battle === null) return null;
+  }
+
+  return { quest: snapshot, battle };
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+/**
+ * Structural guard: `value` carries every `QuestState` field this validator
+ * relies on, each with the correct primitive/container type. Nullable fields are
+ * checked as `null`-or-of-type; content is never inspected.
+ */
+function isQuestStateShape(value: unknown): value is QuestState {
+  if (!isRecord(value)) return false;
+  const numberKeys = ["essence", "essenceCap", "maxDreamsigns", "completionLevel"];
+  for (const key of numberKeys) {
+    if (typeof value[key] !== "number" || !Number.isFinite(value[key])) return false;
+  }
+  const arrayKeys = [
+    "deck",
+    "remainingDreamsignPool",
+    "dreamsigns",
+    "visitedSites",
+  ];
+  for (const key of arrayKeys) {
+    if (!Array.isArray(value[key])) return false;
+  }
+  if (typeof value.seed !== "string") return false;
+  if (typeof value.hasSeenStartingDeckPopup !== "boolean") return false;
+  if (!isRecord(value.atlas)) return false;
+  if (!isRecord(value.screen)) return false;
+  if (!isRecord(value.siteRuntime)) return false;
+  if (!Array.isArray(value.battleModifiers)) return false;
+  // Nullable structural fields: null or an object.
+  for (const key of ["dreamcaller", "resolvedPackage", "draftState"]) {
+    const field = value[key];
+    if (field !== null && !isRecord(field)) return false;
+  }
+  if (value.currentDreamscape !== null && typeof value.currentDreamscape !== "string") {
+    return false;
+  }
+  if (value.activeSiteId !== null && typeof value.activeSiteId !== "string") {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Validates a raw battle payload into a {@link BattleFoldState}, or `null` when
+ * it is malformed or references a script the live tables cannot resolve. The
+ * board / init shapes are checked structurally; the fold-critical invariant is
+ * that every parked run's `scriptRef` resolves and its `cursor` addresses a real
+ * step, so the driver never drives a cursor off the end of an unknown script.
+ */
+function asValidBattleFoldState(value: unknown): BattleFoldState | null {
+  if (!isRecord(value)) return null;
+  if (!isRecord(value.init) || !isRecord(value.board)) return null;
+  if (!isRecord(value.dawnFired)) return null;
+  if (!Array.isArray(value.effectQueue)) return null;
+  for (const run of value.effectQueue) {
+    if (!isResolvableRun(run)) return null;
+  }
+  const pendingPrompt = value.pendingPrompt;
+  if (pendingPrompt !== null) {
+    if (!isRecord(pendingPrompt)) return null;
+    if (!isResolvableRun((pendingPrompt as { run?: unknown }).run)) return null;
+  }
+  return value as unknown as BattleFoldState;
+}
+
+/** A parked run whose `scriptRef` resolves and whose `cursor` is in range. */
+function isResolvableRun(value: unknown): value is EffectRun {
+  if (!isRecord(value)) return false;
+  const ref = value.scriptRef;
+  if (!isScriptRef(ref)) return false;
+  const cursor = value.cursor;
+  if (!Array.isArray(cursor) || !cursor.every((n) => Number.isInteger(n))) return false;
+  const steps = resolveScript(ref);
+  if (steps.length === 0) return false;
+  return cursorInRange(steps, cursor as number[]);
+}
+
+function isScriptRef(value: unknown): value is ScriptRef {
+  return (
+    isRecord(value) &&
+    (value.table === "battle" || value.table === "dreamwell") &&
+    typeof value.id === "string"
+  );
+}
+
+/**
+ * A non-throwing counterpart to the driver's cursor navigation: `cursor`
+ * addresses a real position when each non-terminal index selects a `confirm`
+ * prompt (whose `onYes` the next index descends into) and the terminal index is
+ * a valid slot in its branch. An empty cursor never addresses a step.
+ */
+function cursorInRange(steps: EffectStep[], cursor: number[]): boolean {
+  if (cursor.length === 0) return false;
+  let list = steps;
+  for (let depth = 0; depth < cursor.length; depth += 1) {
+    const index = cursor[depth];
+    if (index < 0 || index >= list.length) return false;
+    if (depth === cursor.length - 1) return true;
+    const step = list[index];
+    if (step.kind !== "prompt" || step.prompt.kind !== "confirm") return false;
+    list = step.prompt.onYes;
+  }
+  return true;
 }
