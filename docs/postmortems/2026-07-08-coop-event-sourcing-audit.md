@@ -364,6 +364,17 @@ ubuntu-latest); add a real-config two-client convergence scenario to the
 emulator suite; record at least one real-session fixture once the system is
 exercised, per the spec's own testing plan.
 
+**Status:** `.github/workflows/checks.yml` runs `lint` + `typecheck` + `npm
+test` and a `firebase emulators:exec`-backed `test:emulator` job on every push
+to master and pull request. `emulator.integration.test.ts`'s scenario D drives
+two clients through the REAL `GAME_ENGINE_CONFIG` (not the toy reducer) via
+`registerReplayFixtureProviders()`, exercising `START_QUEST`,
+`SELECT_DREAMCALLER`, `ADJUST_ESSENCE`, `OPEN_SITE`, `ENTER_DRAFT_SITE`, and
+`PICK_DRAFT_CARD` under concurrent storm conditions, converging including a
+post-compaction joiner. Recording a real-session replay fixture remains
+deferred (it requires the deployed system to be exercised by real players
+first).
+
 ### P2 — converge-but-wrong game correctness
 
 - **P2-1. Support recompute runs before the effect queue drains.**
@@ -414,6 +425,11 @@ exercised, per the spec's own testing plan.
   `createRoomEvictingStale` write the genesis node with no existence check
   (`room.ts:120,192-208`); a 6-char id collision or double-create obliterates
   a live game. Guard creation on absence (transaction).
+  **Status:** `createRoom` writes the genesis node via a transaction that
+  aborts (rejecting with `RoomExistsError`) when a node already exists at that
+  id; `createRoomEvictingStale` uses the same guard for the new room's write
+  before evicting stale siblings separately. `RoomGate.createAndNavigateToRoom`
+  retries with a fresh `generateRoomId()` up to 3 times on a collision.
 - **P2-8. AI gate trusts optimistic presence.** `ai-may-run-here.ts:40-45`
   treats unknown presence as "may run", so both tabs can run the planner
   during startup or a presence flap. CAS keeps the log convergent (distinct
@@ -421,6 +437,11 @@ exercised, per the spec's own testing plan.
   than corruption — but flip the default to "may not run until presence is
   observed", and note presence has no heartbeat (`room.ts:228-252`): a
   crashed partner tab suppresses the AI until RTDB notices.
+  **Status:** `aiMayRunHere` returns `false` (never runs) while presence is
+  unknown (`connectedCount` `null`/`undefined`); it runs only once presence is
+  known and this client is the sole connected one. A presence heartbeat
+  remains out of scope — the current onDisconnect-only behavior matches the
+  design spec.
 
 ### P3 — hygiene and latent traps
 
@@ -428,17 +449,30 @@ exercised, per the spec's own testing plan.
   instead of returning the node unchanged to force a server-value retry; safe
   today only because the subscription warms the cache before `submit` is
   reachable. Harden or document the coupling.
+  **Status:** documented in place — the comment at the abort names the
+  invariant it leans on (the live subscription warms the RTDB cache before
+  `submit` is reachable).
 - **P3-2.** The client fold base bypasses `config.decode`
   (`client.ts:110-112` casts the subscribe-parsed snapshot) while compaction
   uses `config.decode` — identical only while decode is bare `JSON.parse`. A
   future migrating/reviving decode silently splits the two paths. Route the
   client base through `config.decode` (of the raw string) or delete the
   config hook so the trap can't arm.
+  **Status:** `LogNode.baseSnapshot` is now the raw encoded string (subscribe.ts
+  validates it parses, for the same corrupt-node contract, but no longer hands
+  the parsed value to callers); `client.ts`'s `baseState` calls
+  `config.decode(node.baseSnapshot)` directly — the exact same path
+  compaction (`append.ts`) uses.
 - **P3-3.** `Date.parse(ctx.timestamp)` in `src/rules`
   (`battle-events.ts:386,717`) is implementation-defined for non-ISO input
   and unlinted; nothing in rules enforces the ISO contract `client.ts:263`
   happens to satisfy. Validate/parse strictly (or lint `Date.parse` alongside
   `Date.now`).
+  **Status:** `src/rules/battle/timestamp.ts`'s `isoTimestampToMs` is a
+  strict, hand-rolled ISO-8601 UTC parser (regex + `Date.UTC` + round-trip
+  validation) replacing every `Date.parse(ctx.timestamp)` call site in
+  `battle-events.ts`/`driver.ts`; `eslint.config.js` bans `Date.parse` in
+  `src/rules/**` alongside the existing `Date.now` ban.
 - **P3-4.** The per-event rng namespace is flat (`fold.ts:122` hands one
   closure to the whole reducer call; `rng-stream.ts:17` and `draft.ts:106`
   both start at index 0). Discipline currently holds by convention (verified:
@@ -447,33 +481,61 @@ exercised, per the spec's own testing plan.
   draws. Centralize allocation (a draw *cursor* on ctx rather than an
   indexed getter) or document the one-consumer-per-event rule where cases
   are added.
+  **Status:** documented in place — `EventContext.rng`'s doc comment states
+  the one-rng-consumer-per-event convention and what two correlated consumers
+  would break.
 - **P3-5.** Three hand-maintained event-type registries (`EventPayloads`,
   the `routeDomain` switch, `KNOWN_EVENT_TYPES`) with no exhaustiveness tie;
   drift fails safe (bounce) but silently. A type-level check
   (`satisfies`-based exhaustive map) closes it.
+  **Status:** `KNOWN_EVENT_TYPES` derives from a
+  `KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true>` literal
+  compile-time-tied to `EventPayloads`; `routeDomain`'s switch narrows to
+  `GameEventType` and its `default` arm assigns to `never`, so an
+  `EventPayloads` key without a case fails to typecheck. `events.test.ts`
+  drives every `KNOWN_EVENT_TYPES` member through `routeDomain` as a runtime
+  companion.
 - **P3-6.** The rule-2 soundness comment ("no exempt type alters battle
   state") is already false: `SET_CARD_NOTE` writes
   `board.cardInstances[id].notes` (`battle-events.ts:710-722`). Correct
   today because notes are decision-irrelevant — restate the invariant as
   "no exempt type alters *decision-relevant* battle state" where the fast
   path is documented, so the tripwire guards the real condition.
+  **Status:** `reducer.ts`'s `isCasExempt` doc comment states the narrower,
+  correct invariant ("no CAS-exempt type alters decision-relevant battle
+  state — notes mutate `cardInstances[id].notes` only").
 - **P3-7.** `hashState` maps `NaN`/`Infinity` to `"null"` (`hash.ts:35`),
   colliding with actual null — a nondeterminism bug producing `NaN` slips the
   tripwire. Emit a distinct sentinel.
 - **P3-8.** Merchant deck entries mint via the legacy `deriveEntryIdCounter`
   (`resolveMerchantOffer.ts:83`) instead of `mintEntryId`'s seq-keyed scheme —
   deterministic, but one id scheme should win.
+  **Status:** `resolveMerchantOffer.ts`'s entry-id allocator accepts an
+  optional `mintEntryId(deck, index)` callback; `site-provider.ts`'s real
+  `resolveMerchant` implementation passes one backed by
+  `mintEntryId(deck, seq, index)` (deck.ts's single seq-keyed scheme, now
+  taking `seq` directly rather than a whole `EventContext`), threaded from
+  `SiteContentProvider.resolveMerchant`'s new `seq` field.
 - **P3-9.** `bounce` records pass empty `interveningSeqs` (`hooks.ts:203`),
   so `event_bounced` log lines cannot answer *which* partner event caused a
   bounce — the exact question the AGENTS.md logging standard asks. Thread the
   seqs through `onEventOutcome`.
+  **Status:** `FoldOutcome` gains `interveningSeqs?: number[]`, attached to
+  every bounced outcome whenever the intervening window was enumerable;
+  `client.ts` threads it through `onEventOutcome`'s new optional 4th arg;
+  `hooks.ts` passes `detail?.interveningSeqs` to `recordBounce` instead of a
+  hardcoded `[]`.
 - **P3-10.** `package.json`'s `test:emulator` filter still names
   `src/multiplayer/firebase-emulator.integration.test.ts`; vitest treats it
   as a non-matching filter and runs the eventlog suite anyway (verified), so
   this is cosmetic — trim it.
+  **Status:** trimmed; `test:emulator` now names only
+  `src/eventlog/emulator.integration.test.ts`.
 - **P3-11.** `setMaxDreamsigns`/`setCompletionLevel` accept any finite number
   (`lifecycle.ts:150-167`); a negative max silently blocks all dreamsign
   adds. Debug-only surface; clamp anyway.
+  **Status:** both clamp to a non-negative integer
+  (`Math.max(0, Math.trunc(value))`); a non-finite payload still bounces.
 
 ---
 
