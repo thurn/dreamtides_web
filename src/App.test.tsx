@@ -12,7 +12,6 @@ import type { CardData } from "./types/cards";
 import type { QuestMutations } from "./state/quest-context";
 import type { QuestState } from "./types/quest";
 import { LayerName } from "./types/layer-name";
-import type { RoomSession } from "./multiplayer/room-types";
 import App, { QuestApp } from "./App";
 import { useQuest } from "./state/quest-context";
 
@@ -24,42 +23,45 @@ vi.mock("./firebase/app-config", () => ({
   getFirebaseDatabase: vi.fn(),
 }));
 
-vi.mock("./multiplayer/MultiplayerRoomGate", () => ({
-  MultiplayerRoomGate: ({
+vi.mock("./coop/RoomGate", () => ({
+  RoomGate: ({
     gameId,
     children,
   }: {
     gameId: string | null;
-    children: (session: RoomSession) => ReactNode;
+    children: (context: unknown) => ReactNode;
   }) => {
-    const session: RoomSession = {
+    const context = {
+      db: {},
       roomId: gameId ?? "created-room",
       clientId: "client-test",
-      room: {
-        metadata: {
-          schemaVersion: 2,
-          createdAt: "2026-05-08T00:00:00.000Z",
-          updatedAt: "2026-05-08T00:00:00.000Z",
-        },
-        questState: null,
-        battleState: null,
-        presence: {
-          "client-test": {
-            connected: true,
-            lastSeenAt: "2026-05-08T00:00:00.000Z",
-          },
-        },
-        actionLog: {},
-      },
+      genesis: { seed: "test-seed", reducerVersion: "test", createdAt: 0 },
+      logSink: {},
     };
-
-    return <div data-room-gate={gameId ?? "create"}>{children(session)}</div>;
+    return <div data-room-gate={gameId ?? "create"}>{children(context)}</div>;
   },
 }));
 
-vi.mock("./state/multiplayer-quest-context", () => ({
-  MultiplayerQuestProvider: ({ children }: { children: ReactNode }) => (
-    <div data-multiplayer-provider>{children}</div>
+vi.mock("./coop/hooks", () => ({
+  CoopProvider: ({ children }: { children: ReactNode }) => (
+    <div data-coop-provider>{children}</div>
+  ),
+  useConnectedCount: () => 1,
+}));
+
+vi.mock("./coop/providers/register-game-providers", () => ({
+  registerGameProviders: vi.fn(),
+}));
+
+vi.mock("./state/coop-quest-context", () => ({
+  CoopQuestProvider: ({ children }: { children: ReactNode }) => (
+    <div data-coop-quest-provider>{children}</div>
+  ),
+}));
+
+vi.mock("./state/multiplayer-battle-context", () => ({
+  MultiplayerBattleProvider: ({ children }: { children: ReactNode }) => (
+    <div data-battle-provider>{children}</div>
   ),
 }));
 
@@ -323,7 +325,7 @@ afterEach(() => {
 });
 
 describe("App", () => {
-  it("routes loaded quest content through the multiplayer room gate", async () => {
+  it("routes loaded quest content through the coop room gate", async () => {
     setQuestState(makeState());
 
     const { container, root } = mount(
@@ -345,7 +347,8 @@ describe("App", () => {
 
     expect(getFirebaseDatabase).toHaveBeenCalledWith("emulator");
     expect(container.querySelector("[data-room-gate='ab12cd']")).not.toBeNull();
-    expect(container.querySelector("[data-multiplayer-provider]")).not.toBeNull();
+    expect(container.querySelector("[data-coop-provider]")).not.toBeNull();
+    expect(container.querySelector("[data-coop-quest-provider]")).not.toBeNull();
 
     act(() => {
       root.unmount();
