@@ -123,8 +123,8 @@ describe("GlassButton", () => {
     );
 
     const button = container.querySelector("button");
-    expect(button?.style.borderColor).toBe("rgba(255, 92, 112, 0.82)");
-    expect(button?.style.background).toContain("rgba(244, 63, 94, 0.28)");
+    expect(button?.style.borderColor).toBe("rgba(255, 111, 130, 0.92)");
+    expect(button?.style.background).toContain("rgba(244, 43, 72, 0.12)");
 
     act(() => {
       root.unmount();
