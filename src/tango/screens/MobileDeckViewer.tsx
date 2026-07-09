@@ -239,9 +239,8 @@ function TopBand({
         //
         // This reads the *hardware inset* channel, not a design floor: it must
         // reflect the actual notch so a no-notch phone reserves nothing extra
-        // (the `max(…, --gutter)` supplies the minimum). The shared mobile card
-        // peek deliberately reads the `--safe-top`/`--safe-bottom` design floors
-        // instead.
+        // (the `max(…, --gutter)` supplies the minimum). Row-one card previews
+        // occupy this title region and preserve only this hardware inset.
         paddingTop: `max(var(--safe-area-inset-top), ${token("--gutter")})`,
         paddingLeft: token("--gutter"),
         paddingRight: token("--gutter"),

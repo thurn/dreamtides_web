@@ -82,6 +82,7 @@ beforeEach(() => {
     value: 852,
   });
   document.documentElement.style.setProperty("--safe-top", "24px");
+  document.documentElement.style.setProperty("--safe-area-inset-top", "0px");
   document.documentElement.style.setProperty("--safe-bottom", "20px");
   document.documentElement.style.setProperty("--gutter", "16px");
   document.documentElement.style.setProperty("--space-3", "12px");
@@ -288,7 +289,7 @@ describe("CardGalleryPanel", () => {
     });
   });
 
-  it("pins a UUID-identified first-row card preview to the top safe boundary", () => {
+  it("pins a UUID-identified first-row card preview to the viewport edge", () => {
     vi.useFakeTimers();
     const cards = Array.from({ length: 5 }, (_, index) => ({
       entryId: `entry-${String(index)}`,
@@ -345,8 +346,8 @@ describe("CardGalleryPanel", () => {
     const definitions = document.body.querySelector<HTMLElement>(
       "[data-mobile-card-peek-definitions]",
     );
-    expect(preview?.style.top).toBe("24px");
-    expect(definitions?.style.top).toBe("24px");
+    expect(preview?.style.top).toBe("0px");
+    expect(definitions?.style.top).toBe("0px");
     const previewLeft = Number.parseFloat(preview?.style.left ?? "NaN");
     const previewRight =
       previewLeft + Number.parseFloat(preview?.style.width ?? "NaN");

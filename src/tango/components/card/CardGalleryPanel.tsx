@@ -136,7 +136,8 @@ export interface CardGalleryPanelProps {
    * hold a tile and a large readable card is placed clear of the finger;
    * quick taps still activate selectable tiles, while held previews suppress
    * their trailing click. First-row sources pin the card and its definitions
-   * to the top safe edge.
+   * to the visual viewport's top edge, preserving only a physical safe-area
+   * inset.
    */
   mobilePressPreview?: boolean;
 }

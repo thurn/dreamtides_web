@@ -664,7 +664,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "false",
-      "description": "Enables the shared mobile Deck Viewer press preview for compact galleries:\nhold a tile and a large readable card is placed clear of the finger;\nquick taps still activate selectable tiles, while held previews suppress\ntheir trailing click. First-row sources pin the card and its definitions\nto the top safe edge."
+      "description": "Enables the shared mobile Deck Viewer press preview for compact galleries:\nhold a tile and a large readable card is placed clear of the finger;\nquick taps still activate selectable tiles, while held previews suppress\ntheir trailing click. First-row sources pin the card and its definitions\nto the visual viewport's top edge, preserving only a physical safe-area\ninset."
     }
   ],
   "CardStatOrb": [

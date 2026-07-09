@@ -15,10 +15,11 @@
 //     the top of the finger circle — the lowest (closest to the pressed card)
 //     position that keeps the text readable — centered on the finger's column.
 //   - When the finger is so high that the card cannot fit above it, or the
-//     source belongs to the compact grid's top row, the card pins to the top of
-//     the safe area and clears the circle sideways, thrown flush to the screen
-//     edge away from the finger. For that to actually clear the circle the card
-//     must be narrow enough to sit entirely beside the finger, which is what
+//     source belongs to the compact grid's top row, the card pins to the visible
+//     viewport edge (plus any physical safe-area inset supplied by the caller)
+//     and clears the circle sideways, thrown flush to the screen edge away from
+//     the finger. For that to actually clear the circle the card must be narrow
+//     enough to sit entirely beside the finger, which is what
 //     `peekWidthForViewport` guarantees: it caps the card width to what fits
 //     beside the most central column a finger can press.
 //
@@ -89,7 +90,10 @@ function clamp(value: number, min: number, max: number): number {
 export interface PeekLayoutInput {
   /** The visible viewport size. */
   viewport: { width: number; height: number };
-  /** Top safe-area inset to keep the card clear of (status bar / notch). */
+  /**
+   * Top inset to preserve. Row-one callers pass only the physical browser safe
+   * area; ordinary placement may pass the app chrome's design reservation.
+   */
   safeTop: number;
   /** Bottom safe-area inset to keep the card clear of (home indicator). */
   safeBottom: number;
@@ -101,7 +105,7 @@ export interface PeekLayoutInput {
   width: number;
   /** The finger's touch point (its `pointerdown` client coordinates). */
   finger: { x: number; y: number };
-  /** Pin the enlarged card to the top safe boundary for a top-row source. */
+  /** Pin the enlarged card to the supplied top inset for a top-row source. */
   pinToTop?: boolean;
 }
 
@@ -157,8 +161,9 @@ export function peekWidthForViewport(input: {
 
 /**
  * Places the enlarged card as close to the pressed card as clearing the finger
- * allows. A top-row source opts into the safe-top position directly so its
- * supplemental definitions rise as one reading unit above the held finger.
+ * allows. A top-row source opts into the supplied top-inset position directly
+ * so its supplemental definitions rise as one reading unit above the held
+ * finger.
  *
  * The card's rules-text band sits at its bottom, so the card is placed just high
  * enough that the band's bottom edge clears the top of the finger circle (by the

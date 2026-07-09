@@ -117,11 +117,12 @@ afterEach(() => {
 });
 
 describe("MobileDeckViewer mobile card gesture", () => {
-  it("pins the first UUID row to the safe top while later rows keep upward proximity", () => {
+  it("pins the first UUID row to the viewport edge while later rows keep upward proximity", () => {
     vi.useFakeTimers();
     const { container, root } = mount();
     const tango = container.querySelector<HTMLElement>(".tango");
     tango?.style.setProperty("--safe-top", "24px");
+    tango?.style.setProperty("--safe-area-inset-top", "0px");
     tango?.style.setProperty("--safe-bottom", "20px");
     tango?.style.setProperty("--gutter", "16px");
     tango?.style.setProperty("--space-4", "16px");
@@ -143,8 +144,8 @@ describe("MobileDeckViewer mobile card gesture", () => {
     const definitions = document.body.querySelector<HTMLElement>(
       "[data-mobile-card-peek-definitions]",
     );
-    expect(firstPreview?.style.top).toBe("24px");
-    expect(definitions?.style.top).toBe("24px");
+    expect(firstPreview?.style.top).toBe("0px");
+    expect(definitions?.style.top).toBe("0px");
 
     act(() => {
       window.dispatchEvent(new Event("pointerup"));

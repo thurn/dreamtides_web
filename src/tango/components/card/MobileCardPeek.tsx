@@ -55,7 +55,10 @@ export interface MobileCardPeekOptions {
 
 /** Per-press placement metadata supplied by the compact grid. */
 export interface MobileCardPeekPlacement {
-  /** Pin the preview to the top safe boundary when its source is in row one. */
+  /**
+   * Pin a row-one preview to the visual viewport's top edge, preserving only a
+   * physical safe-area inset reported by the browser.
+   */
   pinToTop?: boolean;
 }
 
@@ -246,9 +249,15 @@ export function useMobileCardPeek({
         // Read layout and mount the large card only after the gesture has
         // remained stationary through the hold boundary. This keeps ordinary
         // Safari pan classification free of forced style reads and portal work.
+        // Row-one previews replace the screen's header/title region, so they
+        // belong at the visual viewport edge. Only an actual hardware cutout
+        // remains reserved. Lower rows keep the app chrome's design floor.
+        const topInset = gesture.pinToTop
+          ? readLengthToken("--safe-area-inset-top")
+          : readLengthToken("--safe-top");
         const box = computePeekBox({
           viewport: { width: window.innerWidth, height: window.innerHeight },
-          safeTop: readLengthToken("--safe-top"),
+          safeTop: topInset,
           safeBottom: readLengthToken("--safe-bottom"),
           sideMargin,
           aspect: CARD_ASPECT_RATIO_VALUE,

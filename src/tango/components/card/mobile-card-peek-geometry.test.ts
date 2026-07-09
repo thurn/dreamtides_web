@@ -95,15 +95,36 @@ describe("computePeekBox", () => {
     expect(box.top).toBeCloseTo(ENV.safeTop, 5);
   });
 
-  it("pins a top-row source to the safe top even when it could fit lower", () => {
-    const width = widthFor(393);
+  it.each([
+    { viewport: { width: 393, height: 852 }, finger: { x: 150, y: 400 } },
+    { viewport: { width: 360, height: 800 }, finger: { x: 136, y: 360 } },
+  ])(
+    "pins a top-row source to the actual viewport edge at $viewport.width×$viewport.height",
+    ({ viewport, finger }) => {
+      const box = computePeekBox({
+        ...layout(viewport, finger, widthFor(viewport.width)),
+        safeTop: 0,
+        pinToTop: true,
+      });
+
+      expect(box.top).toBe(0);
+      expect(box.top).not.toBe(ENV.safeTop);
+      expect(box.top).toBeLessThan(finger.y);
+    },
+  );
+
+  it("preserves a physical browser safe-area inset for a top-row source", () => {
     const box = computePeekBox({
-      ...layout({ width: 393, height: 852 }, { x: 150, y: 400 }, width),
+      ...layout(
+        { width: 393, height: 852 },
+        { x: 150, y: 400 },
+        widthFor(393),
+      ),
+      safeTop: 47,
       pinToTop: true,
     });
 
-    expect(box.top).toBeCloseTo(ENV.safeTop, 5);
-    expect(box.top).toBeLessThan(400);
+    expect(box.top).toBe(47);
   });
 
   it("never places the card below the finger — pressing only pops it up", () => {
@@ -168,7 +189,7 @@ describe("computeSupplementalPeekLayout", () => {
   it("uses pair slack to keep top-row definitions beyond the finger interval", () => {
     const fingerX = 150;
     const layout = computeSupplementalPeekLayout({
-      box: { left: 203.125, top: 59, width: 171.875, height: 240.625 },
+      box: { left: 203.125, top: 0, width: 171.875, height: 240.625 },
       viewportWidth: 393,
       supplementalWidth: 176.85,
       gap: 10,
