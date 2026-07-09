@@ -16,6 +16,7 @@ import {
   get,
   onDisconnect,
   ref,
+  runTransaction,
   set,
   update,
 } from "firebase/database";
@@ -113,15 +114,45 @@ export function genesisLogNode(genesis: Genesis): EncodedLogNode {
 }
 
 /**
- * Creates a room by writing its `log/` node in one update: `genesis`
- * (encoded), `baseSeq: 0`, `baseSnapshot: null`, `head: 0`, no events.
+ * Thrown by {@link createRoom} / {@link createRoomEvictingStale} when
+ * `roomId`'s `log/` node already exists. `generateRoomId()` collisions are
+ * astronomically unlikely but not impossible (6 characters from a 34-symbol
+ * alphabet), and silently overwriting an existing node would clobber another
+ * game already in progress (audit finding P2-7) — the caller is expected to
+ * retry with a fresh id (see `RoomGate.createAndNavigateToRoom`).
+ */
+export class RoomExistsError extends Error {
+  constructor(roomId: string) {
+    super(`Room ${roomId} already exists`);
+    this.name = "RoomExistsError";
+  }
+}
+
+/**
+ * Creates a room by writing its `log/` node — `genesis` (encoded), `baseSeq:
+ * 0`, `baseSnapshot: null`, `head: 0`, no events — via a transaction that
+ * only commits when no node is present yet at that path. Rejects with
+ * {@link RoomExistsError} (never silently overwrites) when `roomId` is
+ * already taken.
  */
 export async function createRoom(
   database: Database,
   roomId: string,
   genesis: Genesis,
 ): Promise<void> {
-  await set(ref(database, roomLogPath(roomId)), genesisLogNode(genesis));
+  const result = await runTransaction(
+    ref(database, roomLogPath(roomId)),
+    (current: EncodedLogNode | null) => {
+      if (current !== null) {
+        // Abort: a log node already exists at this id.
+        return undefined;
+      }
+      return genesisLogNode(genesis);
+    },
+  );
+  if (!result.committed) {
+    throw new RoomExistsError(roomId);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -177,9 +208,15 @@ export function shouldEvict(
 
 /**
  * Creates a new room while preserving every sibling room created within the
- * last 24 hours (or whose genesis cannot be parsed). Reads the current
- * `rooms/` snapshot, then writes a single multi-path `update()` that creates
- * the new room's `log/` node and `null`s out only the stale siblings.
+ * last 24 hours (or whose genesis cannot be parsed). The new room's `log/`
+ * node is written first, via the same non-overwriting transaction
+ * {@link createRoom} uses — rejecting with {@link RoomExistsError} on an id
+ * collision rather than clobbering an existing room — and ONLY once that
+ * commits does this read the `rooms/` snapshot and `null` out the stale
+ * siblings in a second `update()`. The two writes are not atomic with each
+ * other, but that is fine: eviction only ever removes rooms other than
+ * `roomId`, so a partial failure between them can at worst leave a stale
+ * sibling un-evicted, never lose the room just created.
  */
 export async function createRoomEvictingStale(
   database: Database,
@@ -187,29 +224,31 @@ export async function createRoomEvictingStale(
   genesis: Genesis,
   nowMs: number = Date.now(),
 ): Promise<void> {
+  await createRoom(database, roomId, genesis);
+
   const roomsRef = ref(database, "rooms");
   const snapshot = await get(roomsRef);
   const existingRooms = snapshot.exists()
     ? (snapshot.val() as Record<string, { log?: { genesis?: unknown } }> | null)
     : null;
+  if (existingRooms === null) {
+    return;
+  }
 
-  const updateMap: Record<string, unknown> = {
-    [`${roomId}/log`]: genesisLogNode(genesis),
-  };
-
-  if (existingRooms !== null) {
-    for (const [existingId, existingRoom] of Object.entries(existingRooms)) {
-      if (existingId === roomId) {
-        continue;
-      }
-      const rawGenesis = existingRoom?.log?.genesis;
-      if (shouldEvict(rawGenesis, nowMs)) {
-        updateMap[existingId] = null;
-      }
+  const updateMap: Record<string, unknown> = {};
+  for (const [existingId, existingRoom] of Object.entries(existingRooms)) {
+    if (existingId === roomId) {
+      continue;
+    }
+    const rawGenesis = existingRoom?.log?.genesis;
+    if (shouldEvict(rawGenesis, nowMs)) {
+      updateMap[existingId] = null;
     }
   }
 
-  await update(roomsRef, updateMap);
+  if (Object.keys(updateMap).length > 0) {
+    await update(roomsRef, updateMap);
+  }
 }
 
 // ---------------------------------------------------------------------------

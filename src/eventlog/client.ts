@@ -39,8 +39,18 @@ export interface LogClientIo {
 export interface LogClientCallbacks<S> {
   /** The displayed fold (confirmed + optimistic) after every change. */
   onDisplayState: (state: S) => void;
-  /** Every confirmed event's resolved outcome, reported once per seq. */
-  onEventOutcome: (event: GameEvent, seq: number, outcome: EventOutcome) => void;
+  /**
+   * Every confirmed event's resolved outcome, reported once per seq. `detail`
+   * carries a bounce's diagnostic `interveningSeqs` (see
+   * `FoldOutcome.interveningSeqs`) when the fold's intervening window was
+   * enumerable; absent on an applied outcome or an unenumerable window.
+   */
+  onEventOutcome: (
+    event: GameEvent,
+    seq: number,
+    outcome: EventOutcome,
+    detail?: { interveningSeqs?: number[] },
+  ) => void;
   /** A confirmed event's `stateHashAfter` disagreed with this client's fold. */
   onDivergence: (info: { seq: number; expected: string; actual: string }) => void;
   /** A contained reducer throw or malformed entry (poison-event containment). */
@@ -118,13 +128,19 @@ export function createLogClient<S>(
     return genesis;
   }
 
-  /** Base state a full fold starts from: the snapshot, or genesis when null. */
+  /**
+   * Base state a full fold starts from: the snapshot decoded through
+   * `config.decode`, or genesis state when there is no snapshot yet.
+   * `node.baseSnapshot` is the RAW encoded string (subscribe.ts no longer
+   * pre-parses it) — this is the SAME decode path compaction uses
+   * (`append.ts`'s `config.decode(baseSnapshot)`), so a game whose `decode`
+   * does more than a bare `JSON.parse` still gets a byte-identical base state
+   * whether it was just compacted or read back fresh.
+   */
   function baseState(node: LogNode): S {
-    // `baseSnapshot` was JSON-decoded by subscribe; for the engine's JSON-based
-    // encode/decode this is exactly `config.decode(encodedSnapshot)`.
     return node.baseSnapshot === null
       ? config.genesisState(requireGenesis())
-      : (node.baseSnapshot as S);
+      : config.decode(node.baseSnapshot);
   }
 
   /**
@@ -171,7 +187,12 @@ export function createLogClient<S>(
       }
 
       if (seq > lastEmittedSeq) {
-        callbacks.onEventOutcome(event, seq, outcome.outcome);
+        callbacks.onEventOutcome(
+          event,
+          seq,
+          outcome.outcome,
+          outcome.outcome === "bounced" ? { interveningSeqs: outcome.interveningSeqs } : undefined,
+        );
 
         // Report a contained fold error under the SAME per-seq guard as the
         // outcome, so a full refold that re-reports an event (a rewind reset)

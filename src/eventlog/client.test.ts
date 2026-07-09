@@ -71,7 +71,13 @@ function makeNode(opts: {
   return {
     genesis: GENESIS,
     baseSeq,
-    baseSnapshot: opts.baseSnapshot ?? null,
+    // The engine-level `LogNode.baseSnapshot` field is the RAW encoded
+    // string (subscribe.ts no longer pre-parses it — see client.ts's
+    // `baseState`), so this helper encodes the caller's convenience object
+    // the same way `config.encode` would.
+    baseSnapshot: opts.baseSnapshot === undefined || opts.baseSnapshot === null
+      ? null
+      : JSON.stringify(opts.baseSnapshot),
     head,
     events: new Map(seqs.map((s) => [s, opts.events[s]])),
     appliedIndex: opts.appliedIndex ?? new Map<number, AppliedEntry>(),
@@ -83,7 +89,12 @@ interface Harness {
   deliver: (node: LogNode) => void;
   appended: GameEvent[];
   displayed: () => ToyState | undefined;
-  outcomes: Array<{ event: GameEvent; seq: number; outcome: EventOutcome }>;
+  outcomes: Array<{
+    event: GameEvent;
+    seq: number;
+    outcome: EventOutcome;
+    interveningSeqs?: number[];
+  }>;
   divergences: Array<{ seq: number; expected: string; actual: string }>;
   foldErrors: Array<{ seq: number; message: string }>;
   appendFailures: Array<{ event: GameEvent; error: unknown }>;
@@ -131,7 +142,8 @@ function makeHarness(
 
   const client = createLogClient<ToyState>(cfg, io, {
     onDisplayState: (s) => displayedStates.push(s),
-    onEventOutcome: (event, seq, outcome) => outcomes.push({ event, seq, outcome }),
+    onEventOutcome: (event, seq, outcome, detail) =>
+      outcomes.push({ event, seq, outcome, interveningSeqs: detail?.interveningSeqs }),
     onDivergence: (info) => divergences.push(info),
     onFoldError: (error) => foldErrors.push({ seq: error.seq, message: error.message }),
     onAppendFailed: (event, error) => appendFailures.push({ event, error }),
@@ -238,6 +250,28 @@ describe("LogClient refold after compaction", () => {
   });
 });
 
+describe("LogClient decode-path symmetry (P3-2)", () => {
+  it("decodes a compacted snapshot through config.decode, not a bare JSON.parse", () => {
+    // A non-identity decode: wraps the parsed value in a `decoded` marker so a
+    // client that (incorrectly) treated `node.baseSnapshot` as already-parsed
+    // JSON — casting it straight to `S` instead of calling `config.decode` —
+    // would produce a state missing that marker, failing this assertion.
+    const markingConfig: EngineConfig<ToyState & { decoded: true }> = {
+      ...config,
+      genesisState: () => ({ applied: [], decoded: true }),
+      decode: (raw: string) => ({ ...(JSON.parse(raw) as ToyState), decoded: true }),
+    } as unknown as EngineConfig<ToyState & { decoded: true }>;
+
+    const { harness } = makeHarness(markingConfig as unknown as EngineConfig<ToyState>);
+    const snapshot: ToyState = { applied: ["a", "b"] };
+    // No live events above baseSeq: the displayed state is exactly the
+    // decoded base state, with no reducer fold in between to obscure it.
+    harness.deliver(makeNode({ baseSeq: 5, baseSnapshot: snapshot, events: {} }));
+
+    expect(harness.displayed()).toEqual({ applied: ["a", "b"], decoded: true });
+  });
+});
+
 describe("LogClient joiner seeds the applied index from the snapshot", () => {
   it("enumerates a below-horizon window from node.appliedIndex, matching a live client", () => {
     // A joiner's first node is already compacted: baseSeq 5 with a snapshot and
@@ -259,7 +293,14 @@ describe("LogClient joiner seeds the applied index from the snapshot", () => {
     // seq 6 sees applied partner "them" at seq 4 -> bounced, so the snapshot is
     // unchanged (z not appended).
     expect(harness.displayed()?.applied).toEqual(["a", "b", "c", "d"]);
-    expect(harness.outcomes.find((o) => o.seq === 6)?.outcome).toBe("bounced");
+    const outcome = harness.outcomes.find((o) => o.seq === 6);
+    expect(outcome?.outcome).toBe("bounced");
+    // onEventOutcome's detail arg (P3-9) surfaces the diagnostic seqs the
+    // fold's intervening window saw — here, seqs 4 (the below-horizon
+    // partner, reconstructed from the joiner's persisted appliedIndex) and 5
+    // (this client's own earlier applied event); interveningSeqs is
+    // diagnostic and unfiltered by actor, unlike the CAS rule-3 check.
+    expect(outcome?.interveningSeqs).toEqual([4, 5]);
   });
 });
 

@@ -97,6 +97,23 @@ describe("decodeLogNode", () => {
     expect(node?.appliedIndex.get(2)).toEqual({ actor: "b", type: "T" });
   });
 
+  it("carries a non-null baseSnapshot as the RAW encoded string, not pre-parsed (P3-2)", () => {
+    const encoded: EncodedLogNode = {
+      genesis: JSON.stringify(GENESIS),
+      baseSeq: 2,
+      baseSnapshot: JSON.stringify({ seqs: [1, 2] }),
+      head: 2,
+      events: {},
+    };
+    const node = decodeLogNode(encoded);
+    expect(node).not.toBeNull();
+    // Raw string, still valid JSON — decoding it is config.decode's job, not
+    // this game-agnostic module's.
+    expect(node?.baseSnapshot).toBe(encoded.baseSnapshot);
+    expect(typeof node?.baseSnapshot).toBe("string");
+    expect(config.decode(node?.baseSnapshot as string)).toEqual({ seqs: [1, 2] });
+  });
+
   it("handles a sparse-array events node (RTDB integer-keyed form)", () => {
     // RTDB may hand back a sparse JS array with holes for missing low indices.
     const sparse: string[] = [];

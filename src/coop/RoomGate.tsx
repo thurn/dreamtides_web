@@ -6,6 +6,7 @@ import {
   createRoomEvictingStale,
   generateRoomId,
   mintClientId,
+  RoomExistsError,
   writePresence,
   type PresenceEntry,
 } from "../eventlog/room";
@@ -86,15 +87,41 @@ export function createFreshGenesis(contentConfig: ContentConfig): Genesis {
   };
 }
 
-/** Create a fresh room and navigate the URL to `?game=<id>`; returns the id. */
+/**
+ * Number of fresh-id attempts before giving up on a room-id collision. A
+ * `generateRoomId()` collision at the default 6-character length is
+ * astronomically unlikely; this bounds the retry loop rather than looping
+ * forever against a persistently misbehaving database.
+ */
+const CREATE_ROOM_MAX_ATTEMPTS = 3;
+
+/**
+ * Create a fresh room and navigate the URL to `?game=<id>`; returns the id.
+ * `createRoomEvictingStale` now rejects with {@link RoomExistsError} instead
+ * of overwriting an existing room on an id collision (audit finding P2-7);
+ * this retries with a FRESH `generateRoomId()` up to
+ * {@link CREATE_ROOM_MAX_ATTEMPTS} times before giving up. Any other failure
+ * (e.g. a network error) propagates immediately without retrying.
+ */
 export async function createAndNavigateToRoom(
   db: Database,
   contentConfig: ContentConfig,
 ): Promise<string> {
-  const roomId = generateRoomId();
-  await createRoomEvictingStale(db, roomId, createFreshGenesis(contentConfig));
-  navigateToRoom(roomId);
-  return roomId;
+  for (let attempt = 0; attempt < CREATE_ROOM_MAX_ATTEMPTS; attempt++) {
+    const roomId = generateRoomId();
+    try {
+      await createRoomEvictingStale(db, roomId, createFreshGenesis(contentConfig));
+      navigateToRoom(roomId);
+      return roomId;
+    } catch (error) {
+      const isLastAttempt = attempt === CREATE_ROOM_MAX_ATTEMPTS - 1;
+      if (!(error instanceof RoomExistsError) || isLastAttempt) {
+        throw error;
+      }
+    }
+  }
+  // Unreachable: the loop above always either returns or throws.
+  throw new Error("createAndNavigateToRoom: exhausted retry attempts");
 }
 
 /**

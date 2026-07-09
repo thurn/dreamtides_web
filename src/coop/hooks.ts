@@ -198,7 +198,7 @@ export function CoopProvider({
             flushPendingAppends();
           }
         },
-        onEventOutcome: (event, seq, outcome) => {
+        onEventOutcome: (event, seq, outcome, detail) => {
           if (seq > confirmedSeqRef.current) {
             confirmedSeqRef.current = seq;
           }
@@ -206,10 +206,11 @@ export function CoopProvider({
           // (returns true), deduped past a high-water seq.
           const owned = logSinkRef.current.recordCoopEvent(event, seq, outcome);
           if (owned && outcome === "bounced") {
-            // Own intent bounced (a partner committed first). The intervening
-            // seqs are not surfaced by this callback; [] is acceptable per the
-            // Task 24 recorder contract.
-            logSinkRef.current.recordBounce(seq, []);
+            // Own intent bounced (a partner committed first). `detail`
+            // carries the diagnostic seqs the fold's intervening window saw
+            // for this bounce (absent/empty when the window was unenumerable
+            // or genuinely empty — see FoldOutcome.interveningSeqs).
+            logSinkRef.current.recordBounce(seq, detail?.interveningSeqs ?? []);
             // Surface the toast; a token bump re-shows it even on repeats.
             bounceMessageRef.current = BOUNCE_MESSAGE;
             setBounceToken((token) => token + 1);

@@ -89,8 +89,16 @@ export interface LogNode {
   genesis: Genesis;
   /** Events with seq <= baseSeq are compacted into baseSnapshot. */
   baseSeq: number;
-  /** Decoded compacted snapshot, or null if no compaction has happened yet. */
-  baseSnapshot: unknown;
+  /**
+   * The RAW encoded compacted snapshot string, or `null` if no compaction has
+   * happened yet. Kept as the raw string (not pre-decoded) so every consumer
+   * — the client's confirmed-fold base state and compaction's own fold base
+   * (`append.ts`) — decodes it through the SAME path, `config.decode(raw)`.
+   * `decodeLogNode` still validates it parses (a corrupt snapshot makes the
+   * whole node unreadable, same as a corrupt genesis), it just no longer
+   * hands the parsed value to callers.
+   */
+  baseSnapshot: string | null;
   /** Seq of the newest event in the log. */
   head: number;
   /** Decoded events, keyed by seq, dense in (baseSeq, head]. */
@@ -143,7 +151,19 @@ export type EventOutcome = "applied" | "bounced";
 export interface EventContext {
   /** The seq being assigned to this event. */
   seq: number;
-  /** Deterministic per-event random stream, keyed by (seed, seq, drawIndex). */
+  /**
+   * Deterministic per-event random stream, keyed by (seed, seq, drawIndex).
+   * CONVENTION: exactly ONE consumer per event draws from this stream (a
+   * single `let drawIndex = 0; const random = () => ctx.rng(drawIndex++);`
+   * counter threaded through everything that event's fold step does — see
+   * `battleCommand`/`battleGesture` in battle-events.ts, which continue the
+   * SAME counter across every command a `BATTLE_GESTURE` expands into). Two
+   * independent consumers each starting their own counter at 0 would draw
+   * the SAME `(seed, seq, 0)`, `(seed, seq, 1)`, ... values and so correlate
+   * — e.g. two "random" choices within one event landing suspiciously
+   * identical — silently breaking the independence a reducer's randomness is
+   * assumed to have (audit finding P3-4).
+   */
   rng: (drawIndex: number) => number;
   /**
    * Events between this event's `basedOnSeq` and its `seq` that themselves

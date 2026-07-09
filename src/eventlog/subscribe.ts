@@ -48,17 +48,30 @@ function malformedEvent(raw: unknown): GameEvent {
  * sparse JS array (integer keys with holes) or as a plain object — both are
  * handled via `Object.entries`, which skips array holes and yields string keys
  * either way.
+ *
+ * `baseSnapshot` is validated here (a corrupt snapshot makes the room
+ * unreadable, same as a corrupt genesis) but the RAW string — not the parsed
+ * value — is what lands on the returned `LogNode`: decoding it into game
+ * state is `config.decode`'s job, so every consumer (the client's confirmed
+ * fold, compaction) decodes through that one path rather than this
+ * game-agnostic module pre-parsing it with a bare `JSON.parse` that may not
+ * even match a game's actual `decode`.
  */
 export function decodeLogNode(encoded: EncodedLogNode): LogNode | null {
   let genesis: Genesis;
-  let baseSnapshot: unknown;
+  let baseSnapshot: string | null;
   try {
     genesis = JSON.parse(encoded.genesis) as Genesis;
     // RTDB strips any field whose value is `null` from the stored tree, so a
     // freshly-created room's `baseSnapshot: null` reads back as `undefined`,
     // not `null` — both must decode to "no snapshot yet".
     const rawBaseSnapshot = encoded.baseSnapshot ?? null;
-    baseSnapshot = rawBaseSnapshot === null ? null : JSON.parse(rawBaseSnapshot);
+    if (rawBaseSnapshot !== null) {
+      // Validity check only: the parsed value is discarded. See the doc
+      // comment above for why the raw string is what's kept.
+      JSON.parse(rawBaseSnapshot);
+    }
+    baseSnapshot = rawBaseSnapshot;
   } catch {
     // Corrupt genesis or snapshot — the fold has no foundation. Signal an
     // unreadable room rather than fabricate one.

@@ -168,7 +168,14 @@ export async function appendEvent<S>(
   const result = await runTransaction(logRef, (current: EncodedLogNode | null) => {
     if (current === null) {
       // No log node to append to — abort the transaction rather than
-      // fabricate one; room creation is responsible for writing genesis.
+      // fabricate one; room creation is responsible for writing genesis. This
+      // relies on the live subscription (subscribeToLog, wired before a
+      // caller can reach `submit`/`appendEvent` — see LogClient's
+      // `initialized` gate) having already warmed the RTDB client-side cache
+      // with the room's `log/` node: `runTransaction` reads through that
+      // cache, so by the time this callback runs, `current` is null ONLY
+      // when the room genuinely has no log node yet, not merely because this
+      // transaction is the first read to touch the path.
       return undefined;
     }
     return applyAppend(config, current, event);

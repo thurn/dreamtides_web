@@ -27,6 +27,20 @@ export interface FoldOutcome {
    * without the fold ever throwing.
    */
   error?: FoldError;
+  /**
+   * Present on a BOUNCED outcome whenever this event's intervening window was
+   * enumerable: the seqs of the applied events in `(basedOnSeq, seq)` — i.e.
+   * `ctx.intervening.map(e => e.seq)`, diagnostic context only (the
+   * partner/non-neutral filtering CAS rule 3 applies is NOT re-applied here,
+   * so this can include decision-neutral or self-chain entries too). Answers
+   * "which partner event caused this bounce" for `event_bounced` log lines
+   * (audit finding P3-9). Absent when the window predates the compaction
+   * horizon (`ctx.intervening === "unknown"`) or the event never reached
+   * `computeIntervening` at all (e.g. a malformed `basedOnSeq`) — an empty
+   * array is a precise "nothing intervened, the reducer bounced it for its
+   * own domain reasons" claim, distinct from "unknown"/absent.
+   */
+  interveningSeqs?: number[];
 }
 
 /** A contained failure attached to a bounced outcome. */
@@ -139,6 +153,9 @@ export function foldEvents<S>(
       intervening,
       timestamp: event.clientTimestamp,
     };
+    // The window was enumerable (not "unknown") — diagnostic seqs a bounced
+    // outcome below can attach. See FoldOutcome.interveningSeqs.
+    const interveningSeqs = intervening === "unknown" ? undefined : intervening.map((e) => e.seq);
 
     let result: { state: S; outcome: EventOutcome };
     try {
@@ -155,6 +172,7 @@ export function foldEvents<S>(
         event,
         outcome: "bounced",
         error: { seq, message: err.message, stack: err.stack },
+        interveningSeqs,
       });
       continue;
     }
@@ -163,7 +181,12 @@ export function foldEvents<S>(
       state = result.state;
       applied.set(seq, { actor: event.actor, type: event.type });
     }
-    outcomes.push({ seq, event, outcome: result.outcome });
+    outcomes.push({
+      seq,
+      event,
+      outcome: result.outcome,
+      ...(result.outcome === "bounced" ? { interveningSeqs } : {}),
+    });
   }
 
   return { state, lastSeq, outcomes };

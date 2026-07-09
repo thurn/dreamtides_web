@@ -141,6 +141,56 @@ describe("foldEvents intervening window", () => {
   });
 });
 
+describe("foldEvents interveningSeqs on a bounced outcome (P3-9)", () => {
+  it("attaches the intervening window's seqs to a rule-3-style bounce", () => {
+    const events = [
+      ev(1, "A", 0),
+      ev(2, "A", 1),
+      ev(3, "A", 2),
+      ev(4, "B", 3), // applied partner ADD
+      ev(6, "A", 3), // sees seq 4 (partner) -> bounces
+    ];
+    const result = foldEvents(CONFIG, GENESIS, GENESIS_BASE(), events);
+    const bySeq = new Map(result.outcomes.map((o) => [o.seq, o]));
+    expect(bySeq.get(6)?.outcome).toBe("bounced");
+    expect(bySeq.get(6)?.interveningSeqs).toEqual([4]);
+    // An applied outcome carries no interveningSeqs.
+    expect(bySeq.get(4)?.interveningSeqs).toBeUndefined();
+  });
+
+  it("attaches an EMPTY array when the window is enumerable but nothing intervened", () => {
+    // BOUNCE_ME always bounces regardless of window contents; with a
+    // basedOnSeq of the immediately preceding seq the window is empty.
+    const events = [ev(1, "A", 0, "BOUNCE_ME")];
+    const result = foldEvents(CONFIG, GENESIS, GENESIS_BASE(), events);
+    expect(result.outcomes[0].outcome).toBe("bounced");
+    expect(result.outcomes[0].interveningSeqs).toEqual([]);
+  });
+
+  it("omits interveningSeqs when the window is 'unknown' (compacted away)", () => {
+    const events = [ev(6, "A", 1)]; // basedOnSeq 1 < base.seq 5 -> "unknown"
+    const result = foldEvents(CONFIG, GENESIS, { seq: 5, state: CONFIG.genesisState(GENESIS) }, events);
+    expect(result.outcomes[0].outcome).toBe("bounced");
+    expect(result.outcomes[0].interveningSeqs).toBeUndefined();
+  });
+
+  it("omits interveningSeqs for a malformed basedOnSeq (never reaches computeIntervening)", () => {
+    const events = [ev(1, "A", -1)];
+    const result = foldEvents(CONFIG, GENESIS, GENESIS_BASE(), events);
+    expect(result.outcomes[0].outcome).toBe("bounced");
+    expect(result.outcomes[0].interveningSeqs).toBeUndefined();
+  });
+
+  it("attaches interveningSeqs to a contained reducer-throw bounce when the window was enumerable", () => {
+    const events = [ev(1, "A", 0), ev(2, "B", 1), ev(3, "A", 1, "POISON")];
+    const result = foldEvents(CONFIG, GENESIS, GENESIS_BASE(), events, { devMode: false });
+    const poisoned = result.outcomes.find((o) => o.seq === 3);
+    expect(poisoned?.outcome).toBe("bounced");
+    expect(poisoned?.error).toBeDefined();
+    expect(poisoned?.interveningSeqs).toEqual([2]);
+  });
+});
+
 describe("foldEvents snapshot horizon", () => {
   it("reports 'unknown' (not []) when basedOnSeq < base.seq", () => {
     let captured: EventContext["intervening"] | undefined;
