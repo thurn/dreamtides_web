@@ -103,6 +103,36 @@ describe("rule 3 — compare-and-swap window", () => {
     expect(result.state.quest.essence).toBe(110);
   });
 
+  it("applies when a partner MARK_SITE_VISITED (decision-neutral) intervened", () => {
+    // An already-visited MARK_SITE_VISITED applies as an idempotent no-op, so it
+    // must not bounce an unrelated partner's concurrent ADJUST_ESSENCE.
+    const state = foldStateWithEssence(100);
+    const result = reduceGameEvent(
+      state,
+      adjustEssence(10, "alice"),
+      ctx({
+        intervening: [{ seq: 5, actor: "bob", type: "MARK_SITE_VISITED" }],
+      }),
+    );
+    expect(result.outcome).toBe("applied");
+    expect(result.state.quest.essence).toBe(110);
+  });
+
+  it("applies when a partner DISMISS_STARTING_DECK_POPUP (decision-neutral) intervened", () => {
+    const state = foldStateWithEssence(100);
+    const result = reduceGameEvent(
+      state,
+      adjustEssence(10, "alice"),
+      ctx({
+        intervening: [
+          { seq: 5, actor: "bob", type: "DISMISS_STARTING_DECK_POPUP" },
+        ],
+      }),
+    );
+    expect(result.outcome).toBe("applied");
+    expect(result.state.quest.essence).toBe(110);
+  });
+
   it("applies a self-chain window (only own-actor events intervened)", () => {
     const state = foldStateWithEssence(100);
     const result = reduceGameEvent(
@@ -516,6 +546,18 @@ describe("isInterveningWindowClear (rule 3)", () => {
     expect(
       isInterveningWindowClear(
         [{ seq: 1, actor: "bob", type: "SET_CARD_NOTE" }],
+        "alice",
+      ),
+    ).toBe(true);
+  });
+
+  it("ignores decision-neutral idempotent no-op events (MARK_SITE_VISITED / DISMISS_STARTING_DECK_POPUP)", () => {
+    expect(
+      isInterveningWindowClear(
+        [
+          { seq: 1, actor: "bob", type: "MARK_SITE_VISITED" },
+          { seq: 2, actor: "bob", type: "DISMISS_STARTING_DECK_POPUP" },
+        ],
         "alice",
       ),
     ).toBe(true);

@@ -1307,3 +1307,205 @@ describe("SET_CARD_NOTE", () => {
     expect(result.state.battle?.board.cardInstances["bc-note"].notes).toHaveLength(1);
   });
 });
+
+// ---------------------------------------------------------------------------
+// BATTLE_GESTURE — all-or-nothing multi-command atomicity (P1-8)
+// ---------------------------------------------------------------------------
+
+describe("BATTLE_GESTURE", () => {
+  const gainFive = { id: "DEBUG_EDIT", edit: { kind: "ADJUST_SCORE", side: "player", amount: 5 } };
+  const gainThree = { id: "DEBUG_EDIT", edit: { kind: "ADJUST_SCORE", side: "player", amount: 3 } };
+  // Missing `edit.kind` → coerceBattleCommand returns null (invalid command).
+  const invalid = { id: "DEBUG_EDIT", edit: {} };
+
+  function gestureState(): FoldState {
+    return { ...baseState(), battle: battleFrom(makeRichBoard({ turnNumber: 3, phase: "day" })) };
+  }
+
+  it("applies every command when all are valid (both effects present)", () => {
+    const state = gestureState();
+    const base = state.battle!.board.sides.player.score;
+    const result = reduce(state, "BATTLE_GESTURE", { commands: [gainFive, gainThree] });
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.board.sides.player.score).toBe(base + 5 + 3);
+  });
+
+  it("bounces the WHOLE gesture when any command is invalid — no partial application", () => {
+    const state = gestureState();
+    const before = hashBattle(state.battle);
+    const result = reduce(state, "BATTLE_GESTURE", { commands: [gainFive, invalid] });
+    expect(result.outcome).toBe("bounced");
+    // The valid leading command left no trace: the battle is byte-identical.
+    expect(hashBattle(result.state.battle)).toBe(before);
+  });
+
+  it("bounces an empty or non-array commands payload", () => {
+    const state = gestureState();
+    expect(reduce(state, "BATTLE_GESTURE", { commands: [] }).outcome).toBe("bounced");
+    expect(reduce(state, "BATTLE_GESTURE", { commands: "nope" }).outcome).toBe("bounced");
+    expect(reduce(state, "BATTLE_GESTURE", {}).outcome).toBe("bounced");
+  });
+
+  it("bounces with no battle in progress", () => {
+    expect(reduce(baseState(), "BATTLE_GESTURE", { commands: [gainFive] }).outcome).toBe("bounced");
+  });
+
+  it("folds a valid gesture deterministically (two folds are byte-identical)", () => {
+    const state = gestureState();
+    const a = reduce(state, "BATTLE_GESTURE", { commands: [gainFive, gainThree] });
+    const b = reduce(state, "BATTLE_GESTURE", { commands: [gainFive, gainThree] });
+    expect(hashBattle(a.state.battle)).toBe(hashBattle(b.state.battle));
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Dreamwell reveal side — non-active-side reveal fires its script (P2-2)
+// ---------------------------------------------------------------------------
+
+describe("dreamwell reveal side", () => {
+  it("queues the revealed script for a NON-active-side reveal (Lily Lake case)", () => {
+    const probe = makeRichBoard();
+    const dw = firstSafeDeterministicDreamwell(probe);
+    const dreamwellCard: DreamwellCardDefinition = {
+      id: dw.id,
+      name: "Fixture Dreamwell",
+      renderedText: "",
+      energyAdded: 0,
+      order: 0,
+      cardNumber: 0,
+      imageNumber: 0,
+    };
+    const init = makeInit({ dreamwellDeck: [dreamwellCard] });
+    // Active side is `player`; the enemy takes a manual extra dreamwell draw.
+    const board = makeRichBoard({ turnNumber: 2, phase: "dreamwell", dreamwellDeckIndex: 0 });
+    const state = { ...baseState(), battle: battleFrom(board, { init }) };
+
+    const revealEdit = { kind: "DRAW_DREAMWELL_CARD", side: "enemy", turnNumber: 2 };
+    const result = reduce(state, "BATTLE_COMMAND", debugEdit(revealEdit));
+    expect(result.outcome).toBe("applied");
+    // The enemy's revealed script ran: the board changed beyond the bare reveal.
+    const revealOnly = applyDebugEdit(board, revealEdit as never, EMISSION).state;
+    expect(hashBoard(result.state.battle!.board)).not.toBe(hashBoard(revealOnly));
+    expect(result.state.battle?.board.sides.enemy.dreamwellDrawnTurn).toBe(2);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Support recompute ordering — recomputed on the DRAINED board (P2-1)
+// ---------------------------------------------------------------------------
+
+describe("support recompute ordering", () => {
+  it("keeps staticSparkBonus correct after a queued effect changes the board", () => {
+    // Celestial-Gateway shape: a dreamwell reveal queues a script that moves a
+    // scripted supporter out of the void and into play DURING the drain. Support
+    // must be recomputed AFTER the drain, so the final board is self-consistent.
+    const support = firstSupportScript();
+    const probe = makeRichBoard({
+      playerVoid: ["bc-support"],
+      playerFront: { [frontRankSlotId(0)]: "bc-ally" },
+      instances: [makeInstance("bc-support", support.id, "player"), makeInstance("bc-ally", "ally-card", "player")],
+    });
+    const voidToPlay = firstVoidToPlayDreamwell(probe);
+    const dreamwellCard: DreamwellCardDefinition = {
+      id: voidToPlay.id,
+      name: "Fixture Gateway",
+      renderedText: "",
+      energyAdded: 0,
+      order: 0,
+      cardNumber: 0,
+      imageNumber: 0,
+    };
+    const init = makeInit({ dreamwellDeck: [dreamwellCard] });
+    const board = makeRichBoard({
+      turnNumber: 2,
+      phase: "dreamwell",
+      dreamwellDeckIndex: 0,
+      playerVoid: ["bc-support"],
+      playerFront: { [frontRankSlotId(0)]: "bc-ally" },
+      instances: [makeInstance("bc-support", support.id, "player"), makeInstance("bc-ally", "ally-card", "player")],
+    });
+    const state = { ...baseState(), battle: battleFrom(board, { init }) };
+
+    const result = reduce(
+      state,
+      "BATTLE_COMMAND",
+      debugEdit({ kind: "DRAW_DREAMWELL_CARD", side: "player", turnNumber: 2 }),
+    );
+    expect(result.outcome).toBe("applied");
+    // Whatever the queued move did to the board, Support is fully consistent with
+    // the DRAINED board: an immediate re-recompute yields no further edits. Under
+    // the pre-fix ordering (recompute before the drain) a queued board change
+    // would leave a non-empty delta here.
+    const finalBoard = result.state.battle!.board;
+    expect(planSupportRecompute(finalBoard, true, () => 0, 0)).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// RESOLVE_PROMPT pick-cards candidate validation (P2-6)
+// ---------------------------------------------------------------------------
+
+describe("RESOLVE_PROMPT pick-cards candidate validation", () => {
+  const PROMPT_SEQ = 90;
+
+  function pickCardsState(): FoldState {
+    const board = makeRichBoard({ turnNumber: 3, phase: "day" });
+    const battle = battleFrom(board, {
+      pendingPrompt: {
+        promptId: PROMPT_SEQ,
+        // The run's script is irrelevant to the candidate check, which reads the
+        // recorded `options`; a bounce never reaches the driver.
+        run: { scriptRef: { table: "battle", id: "unresolved" }, cursor: [0], side: "player" },
+        kind: "pick-cards",
+        options: {
+          kind: "pick-cards",
+          label: "pick one",
+          candidateIds: ["card-a", "card-b"],
+          count: 1,
+          optional: false,
+          highlightCardIds: [],
+        },
+      },
+    });
+    return { ...baseState(), battle };
+  }
+
+  it("bounces when a chosen id is outside the recorded candidate set, leaving the prompt open", () => {
+    const state = pickCardsState();
+    const before = hashBattle(state.battle);
+    const result = reduce(
+      state,
+      "RESOLVE_PROMPT",
+      { promptId: PROMPT_SEQ, resolution: { kind: "pick-cards", chosenIds: ["card-z"] } },
+      ctx({ seq: PROMPT_SEQ + 1 }),
+    );
+    expect(result.outcome).toBe("bounced");
+    // A candidate violation does NOT clear the prompt (rule 5 bounce).
+    expect(hashBattle(result.state.battle)).toBe(before);
+    expect(result.state.battle?.pendingPrompt?.promptId).toBe(PROMPT_SEQ);
+  });
+
+  it("bounces when the chosen count exceeds the prompt max", () => {
+    const state = pickCardsState();
+    const result = reduce(
+      state,
+      "RESOLVE_PROMPT",
+      { promptId: PROMPT_SEQ, resolution: { kind: "pick-cards", chosenIds: ["card-a", "card-b"] } },
+      ctx({ seq: PROMPT_SEQ + 1 }),
+    );
+    expect(result.outcome).toBe("bounced");
+    expect(result.state.battle?.pendingPrompt?.promptId).toBe(PROMPT_SEQ);
+  });
+
+  it("does not bounce a resolution whose id is a member of the candidate set", () => {
+    const state = pickCardsState();
+    const result = reduce(
+      state,
+      "RESOLVE_PROMPT",
+      { promptId: PROMPT_SEQ, resolution: { kind: "pick-cards", chosenIds: ["card-a"] } },
+      ctx({ seq: PROMPT_SEQ + 1 }),
+    );
+    // In-candidate + in-count → passes validation (the driver then resolves it).
+    expect(result.outcome).toBe("applied");
+  });
+});

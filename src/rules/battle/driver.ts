@@ -258,14 +258,35 @@ export function advanceEffectQueue(
   battle: BattleFoldState,
   ctx: EventContext,
 ): BattleFoldState {
+  return advanceEffectQueueWithStream(
+    battle,
+    ctx.seq,
+    makeRandomStream(ctx),
+    Date.parse(ctx.timestamp),
+  );
+}
+
+/**
+ * The stream-driven form of {@link advanceEffectQueue}: the caller supplies the
+ * `random`/`nowMs` directly rather than an `EventContext`, so a SINGLE mutable
+ * draw counter can thread across several commands folded in one event (a
+ * `BATTLE_GESTURE`) without two commands colliding on the same rng index. A
+ * no-op when a prompt is already pending. Immutable-return.
+ */
+export function advanceEffectQueueWithStream(
+  battle: BattleFoldState,
+  seq: number,
+  random: () => number,
+  nowMs: number,
+): BattleFoldState {
   if (battle.pendingPrompt !== null) return battle;
   return runQueue(
     battle.init,
     battle.board,
     battle.effectQueue,
-    ctx.seq,
-    makeRandomStream(ctx),
-    Date.parse(ctx.timestamp),
+    seq,
+    random,
+    nowMs,
     battle.dawnFired,
   );
 }
@@ -282,11 +303,30 @@ export function resolvePendingPrompt(
   resolution: PromptResolution,
   ctx: EventContext,
 ): BattleFoldState {
+  return resolvePendingPromptWithStream(
+    battle,
+    resolution,
+    ctx.seq,
+    makeRandomStream(ctx),
+    Date.parse(ctx.timestamp),
+  );
+}
+
+/**
+ * The stream-driven form of {@link resolvePendingPrompt}: the caller supplies
+ * the `seq`/`random`/`nowMs` directly so the resolution's draws continue the
+ * same counter a caller may use for a follow-on step (e.g. the post-drain
+ * support recompute). Immutable-return.
+ */
+export function resolvePendingPromptWithStream(
+  battle: BattleFoldState,
+  resolution: PromptResolution,
+  seq: number,
+  random: () => number,
+  nowMs: number,
+): BattleFoldState {
   const pending = battle.pendingPrompt;
   if (pending === null) return battle;
-
-  const random = makeRandomStream(ctx);
-  const nowMs = Date.parse(ctx.timestamp);
 
   const run = pending.run;
   const steps = resolveScript(run.scriptRef);
@@ -301,7 +341,7 @@ export function resolvePendingPrompt(
       battle.init,
       battle.board,
       battle.effectQueue,
-      ctx.seq,
+      seq,
       random,
       nowMs,
       battle.dawnFired,
@@ -338,7 +378,7 @@ export function resolvePendingPrompt(
     battle.init,
     board,
     [...advancedQueue, ...cascadeRuns],
-    ctx.seq,
+    seq,
     random,
     nowMs,
     battle.dawnFired,

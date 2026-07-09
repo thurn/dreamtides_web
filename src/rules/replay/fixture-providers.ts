@@ -415,7 +415,7 @@ function makeInit(siteId: string): BattleInit {
   } as unknown as BattleInit;
 }
 
-function battleInitProvider(): BattleInitProvider {
+export function fixtureBattleInitProvider(): BattleInitProvider {
   return {
     beginBattle: ({ siteId }) => {
       const detId = firstDeterministicMaterialized().id;
@@ -468,7 +468,7 @@ export function registerReplayFixtureProviders(): void {
   registerDeckContentProvider(deckProvider());
   registerDraftContentProvider(draftProvider());
   registerSiteContentProvider(siteProvider());
-  registerBattleInitProvider(battleInitProvider());
+  registerBattleInitProvider(fixtureBattleInitProvider());
 }
 
 /** Clear every fixture-provider registration so no other suite is affected. */

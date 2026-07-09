@@ -301,6 +301,8 @@ function routeDomain(
       return foldCase(state, battleEvents.endBattle(state, payload));
     case "BATTLE_COMMAND":
       return foldCase(state, battleEvents.battleCommand(state, payload, ctx));
+    case "BATTLE_GESTURE":
+      return foldCase(state, battleEvents.battleGesture(state, payload, ctx));
 
     // --- in-battle prompt resolution & card notes (touch the battle slice) ---
     case "RESOLVE_PROMPT":

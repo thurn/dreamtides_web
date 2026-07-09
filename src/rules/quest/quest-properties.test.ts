@@ -84,6 +84,8 @@ import {
   registerSiteContentProvider,
   type SiteContentProvider,
 } from "./sites";
+import { registerBattleInitProvider } from "../battle/battle-events";
+import { fixtureBattleInitProvider } from "../replay/fixture-providers";
 
 // ---------------------------------------------------------------------------
 // Fixtures & engine config
@@ -326,6 +328,12 @@ beforeAll(() => {
   registerDeckContentProvider(deckProvider());
   registerDraftContentProvider(draftProvider());
   registerSiteContentProvider(siteProvider());
+  // Register the deterministic fixture battle-init provider so BEGIN_BATTLE
+  // applies and the battle slice (the most `undefined`-prone part of FoldState)
+  // participates in the determinism / JSON-purity / hash properties below —
+  // closing the audit's G2 coverage gap where the battle slice was never
+  // round-trip- or hash-checked.
+  registerBattleInitProvider(fixtureBattleInitProvider());
 });
 
 afterAll(() => {
@@ -334,6 +342,7 @@ afterAll(() => {
   registerDeckContentProvider(null);
   registerDraftContentProvider(null);
   registerSiteContentProvider(null);
+  registerBattleInitProvider(null);
 });
 
 // ---------------------------------------------------------------------------
@@ -570,6 +579,26 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent>
   // stress total-fold safety with types outside the quest domain switch)
   (rng) => ({ type: "END_BATTLE", payload: { result: pick(rng, ["victory", "defeat"]) } }),
   (rng) => ({ type: "BEGIN_BATTLE", payload: { siteId: pick(rng, SITE_IDS) } }),
+  // Battle-slice mutation (applies once a BEGIN_BATTLE has created the slice), so
+  // the determinism / JSON-purity / hash properties exercise a live battle fold.
+  (rng) => ({
+    type: "BATTLE_COMMAND",
+    payload: {
+      command: {
+        id: "DEBUG_EDIT",
+        edit: { kind: "ADJUST_SCORE", side: pick(rng, ["player", "enemy"]), amount: smallInt(rng, 5) },
+      },
+    },
+  }),
+  (rng) => ({
+    type: "BATTLE_GESTURE",
+    payload: {
+      commands: [
+        { id: "DEBUG_EDIT", edit: { kind: "ADJUST_SCORE", side: "player", amount: smallInt(rng, 5) } },
+        { id: "DEBUG_EDIT", edit: { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: smallInt(rng, 3) } },
+      ],
+    },
+  }),
   () => ({ type: "SET_CARD_NOTE", payload: { instanceId: "i1", note: "hi" } }),
   (rng) => ({ type: "RESOLVE_PROMPT", payload: { promptId: Math.floor(rng() * 5), resolution: {} } }),
 

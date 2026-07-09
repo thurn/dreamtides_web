@@ -53,7 +53,10 @@ import {
   selectBattleCardEffectScript,
 } from "./battle-card-effects-table";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
-import { advanceEffectQueue, resolvePendingPrompt } from "./driver";
+import {
+  advanceEffectQueueWithStream,
+  resolvePendingPromptWithStream,
+} from "./driver";
 import type { PromptResolution } from "./effect-runner-core";
 import { dawnClearEdits } from "../../battle/engine/handoff";
 import { alliesInPlay } from "./effect-step";
@@ -63,6 +66,7 @@ import {
   newEffectRun,
   type BattleFoldState,
   type EffectRun,
+  type PendingPrompt,
 } from "./fold";
 
 // ---------------------------------------------------------------------------
@@ -324,13 +328,16 @@ const EMISSION: BattleEngineEmissionContext = {
   selectedCardId: null,
 };
 
+/** Both battle sides, in the fixed order the per-side reveal check iterates. */
+const BATTLE_SIDES: readonly BattleSide[] = ["player", "enemy"];
+
 /**
- * `BATTLE_COMMAND { command }`: the single synchronous fold step for a battle
- * command. It applies ONE command's edit and, in the SAME step, fires every
- * trigger that edit exposes — the ▸Materialized/▸Dawn/Dreamwell/Support triggers
- * and force-result routing all resolve here — so a single event in yields a
- * fully-triggered state out, and two clients folding the same (seed, seq)
- * converge byte-for-byte.
+ * Folds ONE battle command through the full per-command trigger pipeline against
+ * `battle`, returning the next {@link BattleFoldState} or `null` to bounce when a
+ * prompt is already pending (root rule 4 also gates this; the guard is
+ * defensive). The `seq`/`random`/`nowMs` are supplied by the caller so a SINGLE
+ * continuing draw counter can span several commands folded in one event (a
+ * `BATTLE_GESTURE`) without two commands colliding on an rng index.
  *
  * In order (design spec §Battle events):
  *   1. Apply the command (`DEBUG_EDIT` → `applyDebugEdit`; `FORCE_RESULT` /
@@ -342,50 +349,36 @@ const EMISSION: BattleEngineEmissionContext = {
  *   3. ▸Dawn: when the edit ADVANCED the phase into Dawn (`phase` was not `dawn`
  *      and now is), on a turn that has a Dawn (`turnNumber > 1`), apply the
  *      deterministic Dawn edits (`dawnClearEdits` + `collectDawnTriggerEdits`)
- *      and queue any interactive Dawn scripts. The "entered dawn" EDGE is the
- *      once-per-(side, turn) guard: a turn enters Dawn exactly once, and
- *      re-issuing a Dawn phase edit while already in Dawn is a no-op edge, so no
- *      stored processed-set is needed — the once-per-(side, turn) guard is a
- *      pure edge test on committed state).
- *   4. Dreamwell: when this edit LANDED the active side's Dreamwell reveal
- *      (`dreamwellDrawnTurn` transitioned to `turnNumber`) during the
+ *      and queue any interactive Dawn scripts, fired at most once per (side,
+ *      turn) via the `dawnFired` marker.
+ *   4. Dreamwell: for EACH side, when this edit LANDED that side's Dreamwell
+ *      reveal (`dreamwellDrawnTurn` transitioned to `turnNumber`) during the
  *      `"dreamwell"` phase on `turnNumber > 1`, queue the revealed card's script
- *      — the card at `init.dreamwellDeck[dreamwellCardIndex]` (now reachable via
- *      `init`). The reveal edge is itself the once-per-turn guard.
- *   5. Support: run `planSupportRecompute` unconditionally and apply its edits —
- *      it is diff-based and idempotent, so an immediate re-recompute yields `[]`.
- *   6. `advanceEffectQueue` until a prompt is pending or the queue empties.
+ *      — the card at `init.dreamwellDeck[dreamwellCardIndex]`. Checking both
+ *      sides (not just the active one) fires a non-active-side extra draw's
+ *      reveal (the Lily Lake case). The reveal edge is itself the once-per-turn
+ *      guard.
+ *   5. `advanceEffectQueue` until a prompt is pending or the queue empties.
+ *   6. Support recompute AFTER the drain: run `planSupportRecompute` on the
+ *      drained board and apply its edits, preserving the drain's
+ *      `pendingPrompt`/`effectQueue`. A queued effect can move a supporter or
+ *      supported card, so recomputing after the drain keeps `staticSparkBonus`
+ *      correct; the recompute is diff-based and idempotent, so running it while a
+ *      prompt is parked is safe.
  *
- * Returns the next {@link FoldState}, or `null` to bounce when there is no
- * battle, a prompt is already pending (root rule 4 also gates this; the guard is
- * defensive), or the command payload is malformed.
- *
- * A SINGLE `drawIndex` counter is threaded across the whole step: the Dawn (3)
- * and Support (5) edits draw from `random`, then `advanceEffectQueue` (6)
- * continues the SAME logical stream via an offset `ctx.rng` so no two
- * independent draws collide on the same index. `nowMs` is `ctx.timestamp`
- * throughout (no live clock), honoring the src/rules/ lint rails.
+ * `nowMs` is `ctx.timestamp` throughout (no live clock), honoring the src/rules/
+ * lint rails.
  */
-export function battleCommand(
-  state: FoldState,
-  payload: Record<string, unknown>,
-  ctx: EventContext,
-): FoldState | null {
-  const battle = state.battle;
-  if (battle === null) {
-    return null;
-  }
+function applyBattleCommandStep(
+  battle: BattleFoldState,
+  command: BattleCommand,
+  seq: number,
+  random: () => number,
+  nowMs: number,
+): BattleFoldState | null {
   if (battle.pendingPrompt !== null) {
     return null;
   }
-  const command = coerceBattleCommand(payload.command);
-  if (command === null) {
-    return null;
-  }
-
-  const nowMs = Date.parse(ctx.timestamp);
-  let drawIndex = 0;
-  const random = (): number => ctx.rng(drawIndex++);
 
   // Step 1 — apply the command's edit.
   const boardBefore = battle.board;
@@ -437,39 +430,143 @@ export function battleCommand(
     dawnFired = { ...dawnFired, [side]: boardAfter.turnNumber };
   }
 
-  // Step 4 — Dreamwell reveal → queue the revealed card's script.
-  const revealSide = boardAfter.activeSide;
-  const revealLanded =
-    boardBefore.sides[revealSide].dreamwellDrawnTurn !== boardAfter.turnNumber &&
-    boardAfter.sides[revealSide].dreamwellDrawnTurn === boardAfter.turnNumber;
-  if (
-    revealLanded &&
-    boardAfter.phase === "dreamwell" &&
-    boardAfter.turnNumber > 1 &&
-    boardAfter.result === null
-  ) {
-    const index = boardAfter.sides[revealSide].dreamwellCardIndex;
-    if (index !== null) {
-      const card = battle.init.dreamwellDeck[index];
-      if (card !== undefined) {
-        const script = selectDreamwellEffectScript(card.id);
-        if (script !== null && script.steps.length > 0) {
-          queue.push(newEffectRun({ table: "dreamwell", id: card.id }, revealSide));
-        }
-      }
+  // Step 4 — Dreamwell reveal → queue the revealed card's script. Checked
+  // per-side (not just the active side) so a manual extra draw for the
+  // non-active side (Lily Lake) queues that side's revealed script too.
+  for (const side of BATTLE_SIDES) {
+    const revealLanded =
+      boardBefore.sides[side].dreamwellDrawnTurn !== boardAfter.turnNumber &&
+      boardAfter.sides[side].dreamwellDrawnTurn === boardAfter.turnNumber;
+    if (
+      !revealLanded ||
+      boardAfter.phase !== "dreamwell" ||
+      boardAfter.turnNumber <= 1 ||
+      boardAfter.result !== null
+    ) {
+      continue;
+    }
+    const index = boardAfter.sides[side].dreamwellCardIndex;
+    if (index === null) {
+      continue;
+    }
+    const card = battle.init.dreamwellDeck[index];
+    if (card === undefined) {
+      continue;
+    }
+    const script = selectDreamwellEffectScript(card.id);
+    if (script !== null && script.steps.length > 0) {
+      queue.push(newEffectRun({ table: "dreamwell", id: card.id }, side));
     }
   }
 
-  // Step 5 — Support recompute (idempotent; unconditional).
-  board = applyBoardEdits(board, planSupportRecompute(board, true, random, nowMs));
-
-  // Step 6 — advance the queue, continuing the SAME draw counter.
-  const queueCtx: EventContext = { ...ctx, rng: (index) => ctx.rng(drawIndex + index) };
-  const advanced = advanceEffectQueue(
+  // Step 5 — advance the queue, continuing the SAME draw counter.
+  const advanced = advanceEffectQueueWithStream(
     { init: battle.init, board, effectQueue: queue, pendingPrompt: null, dawnFired },
-    queueCtx,
+    seq,
+    random,
+    nowMs,
   );
-  return { ...state, battle: advanced };
+
+  // Step 6 — Support recompute AFTER the drain (a queued effect may have moved a
+  // supporter/supported card). Idempotent, so applying it to the drained board
+  // while a prompt is parked is safe; preserve the drain's queue and prompt.
+  return {
+    ...advanced,
+    board: applyBoardEdits(
+      advanced.board,
+      planSupportRecompute(advanced.board, true, random, nowMs),
+    ),
+  };
+}
+
+/**
+ * `BATTLE_COMMAND { command }`: the single synchronous fold step for one battle
+ * command. Applies the command through {@link applyBattleCommandStep} — its edit
+ * plus every trigger it exposes (▸Materialized / ▸Dawn / Dreamwell / Support and
+ * force-result routing) — so a single event in yields a fully-triggered state
+ * out and two clients folding the same (seed, seq) converge byte-for-byte.
+ *
+ * Returns the next {@link FoldState}, or `null` to bounce when there is no
+ * battle, a prompt is already pending, or the command payload is malformed.
+ */
+export function battleCommand(
+  state: FoldState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+): FoldState | null {
+  const battle = state.battle;
+  if (battle === null) {
+    return null;
+  }
+  const command = coerceBattleCommand(payload.command);
+  if (command === null) {
+    return null;
+  }
+
+  let drawIndex = 0;
+  const random = (): number => ctx.rng(drawIndex++);
+  const next = applyBattleCommandStep(
+    battle,
+    command,
+    ctx.seq,
+    random,
+    Date.parse(ctx.timestamp),
+  );
+  if (next === null) {
+    return null;
+  }
+  return { ...state, battle: next };
+}
+
+/**
+ * `BATTLE_GESTURE { commands }`: one player gesture the automation planner
+ * expanded into an ordered list of battle commands (a play that also spends
+ * energy, a turn handoff that resolves the Challenge, ramps energy, and draws).
+ * Folds each command through {@link applyBattleCommandStep} SEQUENTIALLY within
+ * this one fold step, threading a SINGLE continuing draw counter so no two
+ * commands collide on an rng index.
+ *
+ * ALL-OR-NOTHING: if the payload is not a non-empty command array, any element
+ * fails validation, or a command's battle/prompt gate rejects mid-sequence, the
+ * WHOLE event bounces (returns `null`) — no partial gesture can exist in the
+ * log. Because every command's outcome is a pure function of the prefix, both
+ * clients bounce or apply the identical whole gesture.
+ */
+export function battleGesture(
+  state: FoldState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+): FoldState | null {
+  const battle = state.battle;
+  if (battle === null) {
+    return null;
+  }
+  const rawCommands = payload.commands;
+  if (!Array.isArray(rawCommands) || rawCommands.length === 0) {
+    return null;
+  }
+  const commands: BattleCommand[] = [];
+  for (const raw of rawCommands) {
+    const command = coerceBattleCommand(raw);
+    if (command === null) {
+      return null;
+    }
+    commands.push(command);
+  }
+
+  let drawIndex = 0;
+  const random = (): number => ctx.rng(drawIndex++);
+  const nowMs = Date.parse(ctx.timestamp);
+
+  let current = battle;
+  for (const command of commands) {
+    const next = applyBattleCommandStep(current, command, ctx.seq, random, nowMs);
+    if (next === null) {
+      return null;
+    }
+    current = next;
+  }
+  return { ...state, battle: current };
 }
 
 /**
@@ -596,8 +693,17 @@ function isBattleResult(value: unknown): value is BattleResult {
  * or empties. Returns the next {@link FoldState}, or `null` to bounce when:
  *   - there is no battle;
  *   - no prompt is pending;
- *   - `promptId` is not a finite number, or does not match the open prompt; or
- *   - `resolution` is not a recognized {@link PromptResolution}.
+ *   - `promptId` is not a finite number, or does not match the open prompt;
+ *   - `resolution` is not a recognized {@link PromptResolution}; or
+ *   - a `pick-cards` resolution names an id outside the candidate set the prompt
+ *     recorded at open time, or a count outside its min/max.
+ *
+ * A candidate/count violation BOUNCES (rule 5); it does not clear the prompt, so
+ * the prompt stays open for a valid retry.
+ *
+ * On success the queue is drained, then Support is recomputed on the drained
+ * board (a resolution can move a supporter/supported card), continuing the same
+ * draw counter — mirroring the `BATTLE_COMMAND` post-drain recompute.
  */
 export function resolvePrompt(
   state: FoldState,
@@ -624,7 +730,61 @@ export function resolvePrompt(
   if (resolution === null) {
     return null;
   }
-  return { ...state, battle: resolvePendingPrompt(battle, resolution, ctx) };
+  if (!pickCardsResolutionIsValid(pending.options, resolution)) {
+    return null;
+  }
+
+  let drawIndex = 0;
+  const random = (): number => ctx.rng(drawIndex++);
+  const nowMs = Date.parse(ctx.timestamp);
+  const resolved = resolvePendingPromptWithStream(
+    battle,
+    resolution,
+    ctx.seq,
+    random,
+    nowMs,
+  );
+  const board = applyBoardEdits(
+    resolved.board,
+    planSupportRecompute(resolved.board, true, random, nowMs),
+  );
+  return { ...state, battle: { ...resolved, board } };
+}
+
+/**
+ * Guards a `pick-cards` resolution against the candidate set the prompt fixed at
+ * open time: every chosen id must be one of `options.candidateIds`, the chosen
+ * ids must be distinct, and the count must fall within the prompt's min/max (max
+ * is `options.count`; min is `0` when the prompt is optional, else `count`
+ * capped at the number of candidates). Non-`pick-cards` prompts and matching
+ * resolution kinds pass through unchanged. A `pick-cards` prompt answered with a
+ * non-`pick-cards` resolution fails (the kinds must agree).
+ */
+function pickCardsResolutionIsValid(
+  options: PendingPrompt["options"],
+  resolution: PromptResolution,
+): boolean {
+  if (options.kind !== "pick-cards") {
+    return true;
+  }
+  if (resolution.kind !== "pick-cards") {
+    return false;
+  }
+  const candidates = new Set(options.candidateIds);
+  const chosen = resolution.chosenIds;
+  for (const id of chosen) {
+    if (!candidates.has(id)) {
+      return false;
+    }
+  }
+  if (new Set(chosen).size !== chosen.length) {
+    return false;
+  }
+  const max = options.count;
+  const min = options.optional
+    ? 0
+    : Math.min(options.count, options.candidateIds.length);
+  return chosen.length >= min && chosen.length <= max;
 }
 
 /**

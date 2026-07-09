@@ -120,6 +120,12 @@ export interface EventPayloads {
   // --- battle events (no legacy 1:1) ---
   BEGIN_BATTLE: { siteId: string };
   BATTLE_COMMAND: { command: unknown };
+  // A single player gesture that the automation planner expanded into an ordered
+  // list of battle commands (e.g. a play that also spends energy, or a turn
+  // handoff that resolves the Challenge, ramps energy, and draws). Each element
+  // is a `BattleCommand`, validated in the domain case; the whole list applies
+  // all-or-nothing so no half-applied gesture can exist in the log.
+  BATTLE_GESTURE: { commands: unknown[] };
   RESOLVE_PROMPT: { promptId: number; resolution: unknown };
   // `note` is the `{ noteId, text, expiry }` shape the battle note editor
   // writes; `expiry` is a `BattleCardNoteExpiry`, kept as `unknown` here so this
@@ -162,10 +168,14 @@ export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
 /**
  * Decision-neutral types are additionally ignored by CAS rule 3: a partner's
  * decision-neutral event in the intervening window must never bounce an
- * unrelated intent. Card notes carry no game-rules meaning.
+ * unrelated intent. Card notes carry no game-rules meaning. `MARK_SITE_VISITED`
+ * and `DISMISS_STARTING_DECK_POPUP` reach a domain case that, on the common
+ * already-visited / already-seen path, returns the state unchanged as an applied
+ * no-op; treating them as decision-neutral keeps those no-op applies from
+ * invalidating a concurrent partner's window.
  */
 export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<string> = new Set<string>(
-  ["SET_CARD_NOTE"],
+  ["SET_CARD_NOTE", "MARK_SITE_VISITED", "DISMISS_STARTING_DECK_POPUP"],
 );
 
 /** The set of all recognized event types (for routing / validation). */
@@ -229,6 +239,7 @@ export const KNOWN_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
   "END_BATTLE",
   "BEGIN_BATTLE",
   "BATTLE_COMMAND",
+  "BATTLE_GESTURE",
   "RESOLVE_PROMPT",
   "SET_CARD_NOTE",
 ]);
