@@ -24,10 +24,7 @@ import type { GlassControlPlacement } from "../../primitives/control-placement";
 import type { Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
-import {
-  GlassButton,
-  type GlassButtonVariant,
-} from "../controls/GlassButton";
+import { GlassButton, type GlassButtonVariant } from "../controls/GlassButton";
 import { IconButton, type IconButtonSize } from "../controls/IconButton";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import { GameCard } from "./CardView";
@@ -129,7 +126,8 @@ export interface CardGalleryPanelProps {
   onCardPress?: (entryId: string) => void;
   /**
    * Enables the shared mobile Deck Viewer press preview for compact galleries:
-   * press a tile and a large readable card is placed clear of the finger.
+   * press a tile and a large readable card is placed clear of the finger. A
+   * quick tap still activates selectable tiles; a held preview does not.
    */
   mobilePressPreview?: boolean;
 }
@@ -650,7 +648,10 @@ export function CardGalleryPanel({
                           }
                         : undefined
                     }
-                    onClick={() => onCardPress(card.entryId)}
+                    onClick={() => {
+                      if (mobilePeek.consumeHeldPress()) return;
+                      onCardPress(card.entryId);
+                    }}
                     onContextMenu={(event) => {
                       event.preventDefault();
                     }}

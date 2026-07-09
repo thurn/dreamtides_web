@@ -7,7 +7,7 @@
 // independently; this module owns the React state, pointer dismissal, portal,
 // and supplemental keyword definitions.
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent, ReactElement } from "react";
 import { createPortal } from "react-dom";
 import type { CardData } from "../../../types/cards";
@@ -28,6 +28,9 @@ const DEFAULT_SIDE_MARGIN_TOKEN = "--gutter";
 const MOVE_SLOP_PX = 10;
 const SUPPLEMENTAL_INFO_GAP_PX = 10;
 const SUPPLEMENTAL_INFO_EDGE_PX = 6;
+
+/** A held card press reads as inspection rather than activating the tile. */
+export const MOBILE_CARD_PEEK_HOLD_MS = 300;
 
 /** One card that can be shown in the shared mobile press preview. */
 export interface MobileCardPeekCardView {
@@ -74,9 +77,16 @@ export function useMobileCardPeek({
     view: MobileCardPeekCardView,
   ) => void;
   handlePointerMove: (event: ReactPointerEvent<HTMLElement>) => void;
+  /** Consume the held-press marker before a selectable tile handles click. */
+  consumeHeldPress: () => boolean;
   dismissPeek: () => void;
 } {
   const [peek, setPeek] = useState<MobileCardPeekState | null>(null);
+  const activePressRef = useRef<{
+    pointerId: number;
+    startedAt: number;
+  } | null>(null);
+  const heldPressRef = useRef(false);
 
   const dismissPeek = useCallback(() => {
     setPeek(null);
@@ -84,14 +94,27 @@ export function useMobileCardPeek({
 
   // Release anywhere dismisses the zoom and ends the press.
   useEffect(() => {
-    function onUp(): void {
+    function onUp(event: PointerEvent): void {
+      const activePress = activePressRef.current;
+      if (
+        activePress !== null &&
+        activePress.pointerId === event.pointerId &&
+        Date.now() - activePress.startedAt >= MOBILE_CARD_PEEK_HOLD_MS
+      ) {
+        heldPressRef.current = true;
+      }
+      activePressRef.current = null;
+      dismissPeek();
+    }
+    function onCancel(): void {
+      activePressRef.current = null;
       dismissPeek();
     }
     window.addEventListener("pointerup", onUp);
-    window.addEventListener("pointercancel", onUp);
+    window.addEventListener("pointercancel", onCancel);
     return () => {
       window.removeEventListener("pointerup", onUp);
-      window.removeEventListener("pointercancel", onUp);
+      window.removeEventListener("pointercancel", onCancel);
     };
   }, [dismissPeek]);
 
@@ -135,6 +158,10 @@ export function useMobileCardPeek({
         startX: event.clientX,
         startY: event.clientY,
       });
+      activePressRef.current = {
+        pointerId: event.pointerId,
+        startedAt: Date.now(),
+      };
     },
     [columnGapToken, columns, peek, sideMarginToken],
   );
@@ -145,12 +172,27 @@ export function useMobileCardPeek({
       if (peek === null || peek.pointerId !== event.pointerId) return;
       const dx = event.clientX - peek.startX;
       const dy = event.clientY - peek.startY;
-      if (Math.hypot(dx, dy) > MOVE_SLOP_PX) dismissPeek();
+      if (Math.hypot(dx, dy) > MOVE_SLOP_PX) {
+        activePressRef.current = null;
+        dismissPeek();
+      }
     },
     [peek, dismissPeek],
   );
 
-  return { peek, openPeek, handlePointerMove, dismissPeek };
+  const consumeHeldPress = useCallback((): boolean => {
+    const held = heldPressRef.current;
+    heldPressRef.current = false;
+    return held;
+  }, []);
+
+  return {
+    peek,
+    openPeek,
+    handlePointerMove,
+    consumeHeldPress,
+    dismissPeek,
+  };
 }
 
 /**
@@ -162,11 +204,19 @@ export function renderMobileCardPeekOverlay(
   peek: MobileCardPeekState,
 ): ReactElement | null {
   if (typeof document === "undefined") return null;
-  const supplemental = computeSupplementalInfoPlacement(peek.box);
+  const supplemental =
+    typeof window === "undefined"
+      ? null
+      : computeSupplementalInfoPlacement(
+          peek.box,
+          { width: window.innerWidth, height: window.innerHeight },
+          infoCardWidth(window.innerWidth),
+        );
   return createPortal(
     <div
       className="tango"
       aria-hidden="true"
+      data-mobile-card-peek=""
       style={{
         position: "fixed",
         inset: 0,
@@ -195,10 +245,16 @@ export function renderMobileCardPeekOverlay(
           style={{
             position: "absolute",
             left: supplemental.left,
-            top: supplemental.top,
+            ...(supplemental.top === undefined
+              ? { bottom: supplemental.bottom }
+              : { top: supplemental.top }),
             width: supplemental.width,
+            maxHeight: supplemental.maxHeight,
+            overflowY:
+              supplemental.maxHeight === undefined ? "visible" : "auto",
           }}
           data-mobile-card-peek-definitions=""
+          data-mobile-card-peek-definitions-placement={supplemental.placement}
         >
           <CardTermDefinitions
             text={peek.view.card.renderedText}
@@ -211,29 +267,79 @@ export function renderMobileCardPeekOverlay(
   );
 }
 
-function computeSupplementalInfoPlacement(box: PeekRect): {
+export function computeSupplementalInfoPlacement(
+  box: PeekRect,
+  viewport: { width: number; height: number },
+  requestedWidth: number,
+): {
   left: number;
-  top: number;
+  top?: number;
+  bottom?: number;
   width: number;
   side: "left" | "right";
-} | null {
-  if (typeof window === "undefined") {
-    return null;
-  }
-  const width = infoCardWidth(window.innerWidth);
+  maxHeight?: number;
+  placement: "left" | "right" | "above" | "below";
+} {
+  const width = Math.min(
+    requestedWidth,
+    viewport.width - SUPPLEMENTAL_INFO_EDGE_PX * 2,
+  );
   const rightLeft = box.left + box.width + SUPPLEMENTAL_INFO_GAP_PX;
   const fitsRight =
-    rightLeft + width <= window.innerWidth - SUPPLEMENTAL_INFO_EDGE_PX;
+    rightLeft + width <= viewport.width - SUPPLEMENTAL_INFO_EDGE_PX;
   if (fitsRight) {
-    return { left: rightLeft, top: box.top, width, side: "right" };
+    return {
+      left: rightLeft,
+      top: box.top,
+      width,
+      side: "right",
+      placement: "right",
+    };
+  }
+  const leftLeft = box.left - SUPPLEMENTAL_INFO_GAP_PX - width;
+  if (leftLeft >= SUPPLEMENTAL_INFO_EDGE_PX) {
+    return {
+      left: leftLeft,
+      top: box.top,
+      width,
+      side: "left",
+      placement: "left",
+    };
+  }
+
+  // A center-column card may leave insufficient horizontal room for the fixed
+  // InfoCard reading width. In that case the definition stack moves wholly
+  // above or below the enlarged card; it must never cover the card being read.
+  const left = Math.min(
+    Math.max(SUPPLEMENTAL_INFO_EDGE_PX, box.left + box.width / 2 - width / 2),
+    viewport.width - SUPPLEMENTAL_INFO_EDGE_PX - width,
+  );
+  const belowTop = box.top + box.height + SUPPLEMENTAL_INFO_GAP_PX;
+  const belowRoom = Math.max(
+    0,
+    viewport.height - SUPPLEMENTAL_INFO_EDGE_PX - belowTop,
+  );
+  const aboveRoom = Math.max(
+    0,
+    box.top - SUPPLEMENTAL_INFO_GAP_PX - SUPPLEMENTAL_INFO_EDGE_PX,
+  );
+  const side = left + width / 2 < box.left + box.width / 2 ? "left" : "right";
+  if (belowRoom >= aboveRoom) {
+    return {
+      left,
+      top: belowTop,
+      width,
+      side,
+      maxHeight: belowRoom,
+      placement: "below",
+    };
   }
   return {
-    left: Math.max(
-      SUPPLEMENTAL_INFO_EDGE_PX,
-      box.left - SUPPLEMENTAL_INFO_GAP_PX - width,
-    ),
-    top: box.top,
+    left,
+    bottom: viewport.height - box.top + SUPPLEMENTAL_INFO_GAP_PX,
     width,
-    side: "left",
+    side,
+    maxHeight: aboveRoom,
+    placement: "above",
   };
 }

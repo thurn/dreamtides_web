@@ -193,6 +193,52 @@ describe("PurgeSiteScreen", () => {
     });
   });
 
+  it("uses a tap to select but a held mobile preview only inspects the card", () => {
+    let now = 1_000;
+    const nowSpy = vi.spyOn(Date, "now").mockImplementation(() => now);
+    const { container, root } = mount(
+      <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
+    );
+    const first = container.querySelector<HTMLButtonElement>(
+      '[data-testid="tango-purge-card-entry-a"]',
+    );
+
+    act(() => {
+      first?.click();
+    });
+    expect(first?.getAttribute("aria-pressed")).toBe("true");
+    act(() => {
+      first?.click();
+    });
+    expect(first?.getAttribute("aria-pressed")).toBe("false");
+
+    act(() => {
+      first?.dispatchEvent(
+        new MouseEvent("pointerdown", {
+          bubbles: true,
+          button: 0,
+          clientX: 40,
+          clientY: 360,
+        }),
+      );
+    });
+    expect(document.querySelector("[data-mobile-card-peek]")).not.toBeNull();
+
+    now += 400;
+    act(() => {
+      window.dispatchEvent(new MouseEvent("pointerup", { bubbles: true }));
+      first?.click();
+    });
+
+    expect(document.querySelector("[data-mobile-card-peek]")).toBeNull();
+    expect(first?.getAttribute("aria-pressed")).toBe("false");
+
+    nowSpy.mockRestore();
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders the mobile card grid on the shared rounded glass panel", () => {
     const { container, root } = mount(
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
@@ -206,18 +252,16 @@ describe("PurgeSiteScreen", () => {
     );
     expect(cardRegion?.dataset.purgeLayout).toBe("mobile");
     expect(cardRegion?.style.height).toBe("100%");
-    expect(cardRegion?.style.width).toBe(
-      "calc(100vw - (var(--space-4) * 2))",
-    );
+    expect(cardRegion?.style.width).toBe("calc(100vw - (var(--space-4) * 2))");
     expect(cardRegion?.style.minHeight).toBe("0px");
     expect(gallery?.style.background).toContain("var(--glass-fill-popover)");
     expect(gallery?.style.borderRadius).toBe("var(--radius-popover)");
     expect(gallery?.dataset.galleryFrame).toBe("floating");
     expect(gallery?.dataset.galleryColumns).toBe("4");
     expect(gallery?.dataset.gallerySpacing).toBe("medium");
-    expect(
-      gallery?.querySelector<HTMLElement>("header")?.style.padding,
-    ).toBe("var(--space-6)");
+    expect(gallery?.querySelector<HTMLElement>("header")?.style.padding).toBe(
+      "var(--space-6)",
+    );
     const galleryBody = gallery?.querySelector<HTMLElement>("header")
       ?.nextElementSibling as HTMLElement | null;
     expect(galleryBody?.style.padding).toBe("var(--space-5)");

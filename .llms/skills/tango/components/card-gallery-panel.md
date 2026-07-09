@@ -29,7 +29,7 @@ The shared card-browser surface: a left-aligned title and subtitle, a trailing h
 | `testId` | `string` | no | — | Test id for the panel root. |
 | `cutoutAwareAccessory` | `boolean` | no | `false` | When a screen-cutout box is known, float the accessory beside the device island instead of sharing the header row. |
 | `onCardPress` | `((entryId: string) => void)` | no | — | Fires when an enabled card tile is activated. |
-| `mobilePressPreview` | `boolean` | no | `false` | Enables the shared mobile Deck Viewer press preview for compact galleries: press a tile and a large readable card is placed clear of the finger. |
+| `mobilePressPreview` | `boolean` | no | `false` | Enables the shared mobile Deck Viewer press preview for compact galleries: press a tile and a large readable card is placed clear of the finger. A quick tap still activates selectable tiles; a held preview does not. |
 
 ### `rightAccessory`: the `CardGalleryAccessory` model
 
