@@ -199,9 +199,9 @@ export function buildCorpusOpponentDeck(args: {
    * Logging hand-off. The builder constructs the
    * `corpus_opponent_deck_constructed` record into an `emit` thunk and passes it
    * here. The default emits immediately (the debug tool and tests log inline);
-   * the multiplayer battle path passes a callback that captures the thunk and
-   * fires it only once its init wins the `ensureBattleSession` transaction, so
-   * the room records exactly one opponent deck per battle.
+   * the battle-fold provider passes a callback that captures the thunk and
+   * fires it only once the deterministic init is committed to the log, so the
+   * log records exactly one opponent deck per battle.
    */
   deferLog?: (emit: () => void) => void;
 }): CorpusOpponentDeckBuild | null {

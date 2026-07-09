@@ -1,6 +1,6 @@
 import { DEFAULT_POOL_VARIANT, resolvePoolVariant } from "../draft/pool";
 import type { PoolVariant } from "../draft/pool";
-import { normalizeRoomId } from "../multiplayer/room-id";
+import { normalizeRoomId } from "../eventlog/room";
 
 export interface RuntimeConfig {
   seedOverride: number | null;

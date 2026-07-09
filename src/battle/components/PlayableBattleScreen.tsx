@@ -87,9 +87,8 @@ import {
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
 
 const DESKTOP_INSPECTOR_WIDTH = 1280;
-// The coop fold carries no undo/redo history — `BattleLogDrawer` still
-// requires a `BattleHistory` shape, so it is fed a permanently-empty one (see
-// `handleResetBattle`'s note; a live history is a Task 28 cleanup).
+// `BattleLogDrawer` renders from the append-only coop fold, so its
+// `history` prop is supplied an empty undo/redo envelope.
 const EMPTY_BATTLE_HISTORY: BattleHistory = { past: [], future: [] };
 // Fires the automated-card hash-drift warning at most once per page session.
 let automationHashDriftWarned = false;
@@ -658,11 +657,9 @@ function PlayableBattleScreenInner({
     void actions.endBattle("defeat");
   }
 
-  // Debug-only "Reset battle" control. There is no coop equivalent of the
-  // legacy room-level `dispatchBattleReset` (rewinding the shared battle slot
-  // back to its opening state) — the fold is append-only. Closing the local
-  // overlays and logging keeps the control harmless rather than removing it
-  // from `BattleInspector`, whose prop stays optional.
+  // Debug-only "Reset battle" control. The coop battle fold is append-only, so
+  // this dismisses the transient local overlays and selection state. It is a
+  // pure client-side reset with no effect on the shared battle log.
   function handleResetBattle(): void {
     setPendingDrag(null);
     setHoverPreview(null);
@@ -679,10 +676,6 @@ function PlayableBattleScreenInner({
     setIsOpponentHandRevealed(false);
     setIsResultOverlayDismissed(false);
     setIsBattleLogOpen(false);
-
-    console.warn(
-      "Reset battle is not supported against the coop event-sourced battle fold; closing local overlays only.",
-    );
   }
 
   // The reducer's `applyVictory` (END_BATTLE "victory") already performs the

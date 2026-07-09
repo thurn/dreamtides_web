@@ -5,7 +5,6 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useBattleAi, type AiProposal } from "./use-battle-ai";
 import { aiMayRunHere } from "./ai-may-run-here";
-import { createBattleReducerState } from "../state/reducer";
 import { allocateBattleCardInstance } from "../state/create-initial-state";
 import type { BattleCommand, BattleDebugEdit } from "../debug/commands";
 import type {
@@ -95,6 +94,18 @@ function direwolfDefinition(): BattleDeckCardDefinition {
   };
 }
 
+/** Wraps a mutable board in the reducer-state envelope the hook harness reads. */
+function createReducerState(mutable: BattleMutableState): BattleReducerState {
+  return {
+    mutable,
+    history: { past: [], future: [] },
+    lastTransition: null,
+    transitionId: 0,
+    lastActivity: null,
+    activityId: 0,
+  };
+}
+
 /**
  * Builds a reducer state whose active side is the AI (`enemy`) with a ready
  * reserve character and an empty deploy slot, so the planner's best line is to
@@ -113,7 +124,7 @@ function makeEnemyTurnState(
   });
   mutable.sides.enemy.backRank.B0 = cardId;
   mutate?.(mutable);
-  return createBattleReducerState(mutable);
+  return createReducerState(mutable);
 }
 
 /**
@@ -127,7 +138,7 @@ function makeEnemyNoActionState(
   const mutable = makeBareState();
   mutable.sides.enemy.currentEnergy = 0;
   mutate?.(mutable);
-  return createBattleReducerState(mutable);
+  return createReducerState(mutable);
 }
 
 /** A character with the given printed spark and rendered keyword text. */

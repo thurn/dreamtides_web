@@ -164,10 +164,10 @@ export interface CreateBattleInitInput {
    * (`corpus_opponent_dreamcaller_selected` + `corpus_opponent_deck_constructed`,
    * or the coherent / fallback `opponent_deck_constructed`). When omitted,
    * {@link createBattleInit} emits the events inline at construction time. The
-   * multiplayer ensure path passes a callback that captures the emit thunk and
-   * fires it only once its init wins the `ensureBattleSession` transaction, so
-   * the room records exactly one opponent deck per battle rather than one per
-   * client that speculatively computed an init.
+   * battle-fold provider passes a callback that captures the emit thunk and
+   * fires it only once the deterministic init is committed to the log, so the
+   * log records exactly one opponent deck per battle rather than one per client
+   * that speculatively computed an init.
    */
   deferOpponentLog?: (emit: () => void) => void;
 }

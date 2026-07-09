@@ -5,8 +5,7 @@
 // post-`START_QUEST` fold state and assert four invariants that no single
 // per-case unit test can express:
 //
-//   (a) Run-field nullability — the successor to the deleted
-//       `NON_NULLABLE_RUN_FIELDS` guard: no NORMAL gameplay event ever
+//   (a) Run-field nullability — no NORMAL gameplay event ever
 //       transitions `draftState` / `resolvedPackage` / `dreamcaller` from
 //       non-null to null. Only `RESET_QUEST`, `LOAD_STATE`, and the debug
 //       `SET_DRAFT_STATE` may null a run field, so we draw the random

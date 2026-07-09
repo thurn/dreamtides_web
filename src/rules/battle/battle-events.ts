@@ -1,22 +1,17 @@
 // The `BEGIN_BATTLE` and `END_BATTLE` battle-lifecycle reducer cases.
 //
 // These are the two events that create and tear down the in-battle fold slice
-// (`FoldState.battle`). They relocate the DOMAIN LOGIC of the legacy battle
-// bridges into pure functions of `(state, payload[, ctx])`; the legacy
-// transaction / actionLog / React wrappers are engine concerns handled by the
-// eventlog engine and the root reducer, so they are dropped here.
+// (`FoldState.battle`). They express the battle-lifecycle DOMAIN LOGIC as pure
+// functions of `(state, payload[, ctx])`; transaction / log-append / React
+// concerns are handled by the eventlog engine and the root reducer.
 //
-//   - `BEGIN_BATTLE { siteId }` relocates `ensureBattleSession`'s init
-//     construction (src/multiplayer/battle-service.ts) and its
-//     `use-ensure-battle-session.ts` caller. "Battle has begun" becomes a
-//     derivable fact of the log: the state carries the battle, so a reload
-//     lands on the right screen with no client-local `begunEntryKey` latch and
-//     no ensure-race. It bounces when a battle is already in progress.
-//   - `END_BATTLE { result }` relocates `incrementCompletionLevel` (victory)
-//     and the `setFailureSummary` battle-defeat path
-//     (src/state/multiplayer-quest-context.tsx), plus the
-//     `setCurrentDreamscape(null)` battle-completion bridge. It bounces when no
-//     battle exists.
+//   - `BEGIN_BATTLE { siteId }` builds the deterministic in-battle init.
+//     "Battle has begun" is a derivable fact of the log: the state carries the
+//     battle, so a reload lands on the right screen from fold state alone. It
+//     bounces when a battle is already in progress.
+//   - `END_BATTLE { result }` performs the completion-level bump (victory), the
+//     failure-summary defeat path, and the `setCurrentDreamscape(null)`
+//     battle-completion bookkeeping. It bounces when no battle exists.
 //
 // The src/rules/ lint rails forbid Firebase, React, and any live clock/rng.
 // Battle init reads TOML-sourced card / deck / dreamcaller data that only loads
@@ -139,8 +134,8 @@ export function getBattleInitProvider(): BattleInitProvider | null {
  * `BEGIN_BATTLE { siteId }`: construct the in-battle fold slice deterministically
  * from quest state. Returns the next {@link FoldState} on success, or `null` to
  * bounce when:
- *   - a battle is already in progress (`state.battle !== null`) — the
- *     ensure-race / `begunEntryKey` guard, now a pure derivable check;
+ *   - a battle is already in progress (`state.battle !== null`) — a pure
+ *     derivable check on fold state;
  *   - the payload is malformed (missing/blank `siteId`);
  *   - no provider is registered (the Task 26 seam is not yet wired); or
  *   - the provider declines (non-battle site / unavailable content).

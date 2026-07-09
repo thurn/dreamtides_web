@@ -173,7 +173,7 @@ function makeBattle(
 /**
  * A deterministic fake {@link BattleInitProvider} that embeds an rng-derived
  * value into the board so re-folding the SAME event yields a byte-identical
- * battle fold state (the determinism the ensureBattleSession race lacked).
+ * battle fold state.
  */
 const fakeProvider: BattleInitProvider = {
   beginBattle({ siteId, rng, timestamp }) {
@@ -253,8 +253,7 @@ describe("BEGIN_BATTLE", () => {
     expect(first.outcome).toBe("applied");
     expect(second.outcome).toBe("applied");
     expect(first.state.battle).not.toBeNull();
-    // Same quest state + same seq → hash-identical battle both times (the
-    // ensureBattleSession race, eliminated).
+    // Same quest state + same seq → hash-identical battle both times.
     expect(hashBattle(first.state.battle)).toBe(hashBattle(second.state.battle));
     // A fresh battle carries the immutable init and starts with an empty effect
     // queue and no open prompt.
