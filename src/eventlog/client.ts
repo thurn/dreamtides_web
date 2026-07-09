@@ -135,7 +135,10 @@ export function createLogClient<S>(
         g,
         { seq: baseSeq, state: confirmedState as S },
         [{ seq, event }],
-        { appliedBySeq },
+        // The applied index is seeded from the node's persisted index on a full
+        // refold and extended as live events apply, so it is complete from
+        // genesis: coveredFromSeq 0 keeps below-horizon windows enumerable.
+        { appliedBySeq, coveredFromSeq: 0 },
       );
       confirmedState = result.state;
       lastFoldedSeq = seq;
@@ -189,13 +192,10 @@ export function createLogClient<S>(
     if (node.head > lastEmittedSeq) {
       lastEmittedSeq = node.head;
     }
-    // Drop applied entries now below the horizon; their window can never be
-    // enumerated again (basedOnSeq < baseSeq folds to "unknown").
-    for (const key of appliedBySeq.keys()) {
-      if (key <= baseSeq) {
-        appliedBySeq.delete(key);
-      }
-    }
+    // Applied entries at or below the compaction horizon are retained: an event
+    // with `basedOnSeq` below the horizon legitimately consults them to
+    // enumerate its intervening window (coveredFromSeq 0), so pruning them would
+    // reintroduce the "unknown"-below-horizon bounce that flips outcomes.
   }
 
   /**
@@ -218,7 +218,7 @@ export function createLogClient<S>(
       requireGenesis(),
       { seq: baseSeq, state: confirmedState },
       events,
-      { appliedBySeq },
+      { appliedBySeq, coveredFromSeq: 0 },
     );
     callbacks.onDisplayState(result.state);
   }
@@ -236,7 +236,14 @@ export function createLogClient<S>(
     if (needFullFold) {
       confirmedState = baseState(node);
       lastFoldedSeq = node.baseSeq;
+      // Seed the applied index from the node's persisted index (applied events
+      // with seq <= baseSeq) so a fold starting at the snapshot can enumerate
+      // intervening windows below the horizon, exactly as an always-connected
+      // client that folded those events live would.
       appliedBySeq.clear();
+      for (const [seq, entry] of node.appliedIndex) {
+        appliedBySeq.set(seq, entry);
+      }
       foldConfirmedRange(node, node.baseSeq);
     } else {
       foldConfirmedRange(node, lastFoldedSeq);
@@ -276,7 +283,7 @@ export function createLogClient<S>(
         g,
         { seq: baseSeq, state: confirmedState },
         [{ seq: lastFoldedSeq + 1, event }],
-        { appliedBySeq },
+        { appliedBySeq, coveredFromSeq: 0 },
       );
       event.stateHashAfter = config.hash(folded.state);
     }

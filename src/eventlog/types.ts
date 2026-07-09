@@ -73,6 +73,19 @@ export interface LogNode {
   head: number;
   /** Decoded events, keyed by seq, dense in (baseSeq, head]. */
   events: Map<number, GameEvent>;
+  /**
+   * Decoded applied index: seq -> {actor, type} for every APPLIED event with
+   * seq <= baseSeq. Written by compaction so a fold from the snapshot can still
+   * enumerate intervening windows below the horizon; an empty map before any
+   * compaction has run.
+   */
+  appliedIndex: Map<number, AppliedIndexEntry>;
+}
+
+/** Minimal identity of an applied event, as stored in the persisted applied index. */
+export interface AppliedIndexEntry {
+  actor: string;
+  type: string;
 }
 
 /**
@@ -90,6 +103,12 @@ export interface EncodedLogNode {
   head: number;
   /** JSON string per seq, dense integer keys in (baseSeq, head]. */
   events: { [seq: number]: string };
+  /**
+   * JSON string encoding `Record<seq, {actor, type}>` for every APPLIED event
+   * with seq <= baseSeq. Written by compaction; absent (RTDB strips it) on a
+   * node that has not compacted yet.
+   */
+  appliedIndex?: string;
 }
 
 /** Whether a reducer applied an event's effects or bounced it as invalid/stale. */

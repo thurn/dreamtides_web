@@ -11,7 +11,7 @@
 import { describe, expect, it } from "vitest";
 import { createLogClient } from "./client";
 import type { LogClientIo } from "./client";
-import { foldEvents } from "./fold";
+import { type AppliedEntry, foldEvents } from "./fold";
 import { hashState } from "./hash";
 import type { EngineConfig, EventOutcome, GameEvent, Genesis, LogNode } from "./types";
 
@@ -63,6 +63,7 @@ function makeNode(opts: {
   baseSeq?: number;
   baseSnapshot?: ToyState | null;
   events: Record<number, GameEvent>;
+  appliedIndex?: Map<number, AppliedEntry>;
 }): LogNode {
   const seqs = Object.keys(opts.events).map(Number);
   const baseSeq = opts.baseSeq ?? 0;
@@ -73,6 +74,7 @@ function makeNode(opts: {
     baseSnapshot: opts.baseSnapshot ?? null,
     head,
     events: new Map(seqs.map((s) => [s, opts.events[s]])),
+    appliedIndex: opts.appliedIndex ?? new Map<number, AppliedEntry>(),
   };
 }
 
@@ -204,6 +206,31 @@ describe("LogClient refold after compaction", () => {
     ).state;
     expect(harness.displayed()).toEqual(batch);
     expect(harness.displayed()?.applied).toEqual(["a", "b", "c", "d", "e", "f", "g"]);
+  });
+});
+
+describe("LogClient joiner seeds the applied index from the snapshot", () => {
+  it("enumerates a below-horizon window from node.appliedIndex, matching a live client", () => {
+    // A joiner's first node is already compacted: baseSeq 5 with a snapshot and
+    // a persisted applied index recording that partner "them" applied at seq 4.
+    // A live event at seq 6 with basedOnSeq 3 (below the horizon) must see that
+    // partner in its intervening window and bounce — not fold to "unknown" and
+    // apply spuriously.
+    const { harness } = makeHarness();
+    const snapshot: ToyState = { applied: ["a", "b", "c", "d"] };
+    const appliedIndex = new Map<number, AppliedEntry>([
+      [4, { actor: "them", type: "T" }],
+      [5, { actor: "me", type: "T" }],
+    ]);
+    const e6 = confirmedEvent({ tag: "z", actor: "me", basedOnSeq: 3 });
+    harness.deliver(
+      makeNode({ baseSeq: 5, baseSnapshot: snapshot, appliedIndex, events: { 6: e6 } }),
+    );
+
+    // seq 6 sees applied partner "them" at seq 4 -> bounced, so the snapshot is
+    // unchanged (z not appended).
+    expect(harness.displayed()?.applied).toEqual(["a", "b", "c", "d"]);
+    expect(harness.outcomes.find((o) => o.seq === 6)?.outcome).toBe("bounced");
   });
 });
 

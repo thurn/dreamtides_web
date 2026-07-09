@@ -23,7 +23,7 @@
 // Firebase IS allowed here (the firebase ban applies only to src/rules/).
 
 import { type Database, ref, runTransaction } from "firebase/database";
-import { foldEvents } from "./fold";
+import { buildAppliedIndex, decodeAppliedIndex, encodeAppliedIndex, foldEvents } from "./fold";
 import type { EncodedLogNode, EngineConfig, GameEvent, Genesis } from "./types";
 
 /**
@@ -63,6 +63,13 @@ export function decodeEvent(raw: string): GameEvent {
  * `foldEvents`. The folded state is re-encoded as the new `baseSnapshot`,
  * `baseSeq` advances to the new horizon, and the folded events are deleted, so
  * `events` retains exactly the dense integer keys `(newBaseSeq, head]`.
+ *
+ * Compaction also persists an `appliedIndex` (seq -> {actor, type} for every
+ * applied event with seq <= newBaseSeq) so a later fold — this compaction's,
+ * a joiner's full refold, or the incremental client — can still enumerate the
+ * intervening window of an event whose `basedOnSeq` predates the horizon. That
+ * makes an event's outcome a pure function of the log prefix, identical whether
+ * or not compaction has run over it.
  */
 export function applyAppend<S>(
   config: EngineConfig<S>,
@@ -76,6 +83,10 @@ export function applyAppend<S>(
 
   let baseSeq = encoded.baseSeq;
   let baseSnapshot = encoded.baseSnapshot ?? null;
+  // The persisted applied index is carried through untouched on a non-compacting
+  // append and rewritten (extended with the batch's newly-applied events) when
+  // compaction folds events below the new horizon.
+  let appliedIndex = encoded.appliedIndex;
 
   if (head - baseSeq > COMPACT_THRESHOLD) {
     const genesis = JSON.parse(encoded.genesis) as Genesis;
@@ -90,8 +101,25 @@ export function applyAppend<S>(
       toFold.push({ seq, event: decodeEvent(raw) });
     }
 
+    // Seed the fold with the applied index accumulated by prior compactions so
+    // events below the OLD horizon stay enumerable (coveredFromSeq 0). Without
+    // this seed an event whose `basedOnSeq` predates the horizon would fold to
+    // "unknown" here, silently flipping a live-applied event to a bounce in the
+    // snapshot (audit finding P0-1).
+    const priorApplied = decodeAppliedIndex(appliedIndex);
     const baseState = baseSnapshot === null ? config.genesisState(genesis) : config.decode(baseSnapshot);
-    const folded = foldEvents(config, genesis, { seq: baseSeq, state: baseState }, toFold);
+    const folded = foldEvents(config, genesis, { seq: baseSeq, state: baseState }, toFold, {
+      appliedBySeq: priorApplied,
+      coveredFromSeq: 0,
+    });
+
+    // Extend the index with the events this compaction applied, so it remains a
+    // complete record of applied events with seq <= newBaseSeq.
+    const merged = new Map(priorApplied);
+    for (const [seq, entry] of buildAppliedIndex(toFold, folded.outcomes)) {
+      merged.set(seq, entry);
+    }
+    appliedIndex = encodeAppliedIndex(merged);
 
     baseSnapshot = config.encode(folded.state);
     for (let seq = baseSeq + 1; seq <= newBaseSeq; seq++) {
@@ -100,7 +128,14 @@ export function applyAppend<S>(
     baseSeq = newBaseSeq;
   }
 
-  return { genesis: encoded.genesis, baseSeq, baseSnapshot, head, events };
+  const next: EncodedLogNode = { genesis: encoded.genesis, baseSeq, baseSnapshot, head, events };
+  // Only attach `appliedIndex` when it exists (compaction has run at least
+  // once): RTDB's transaction commit rejects any object carrying an `undefined`
+  // property, so a pre-compaction node must omit the field entirely.
+  if (appliedIndex !== undefined) {
+    next.appliedIndex = appliedIndex;
+  }
+  return next;
 }
 
 /**

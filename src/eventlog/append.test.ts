@@ -15,7 +15,7 @@ import {
 } from "./append";
 import { foldEvents } from "./fold";
 import { hashState } from "./hash";
-import type { EncodedLogNode, EngineConfig, GameEvent, Genesis } from "./types";
+import type { EncodedLogNode, EngineConfig, EventContext, EventOutcome, GameEvent, Genesis } from "./types";
 
 interface ToyState {
   acc: number;
@@ -142,3 +142,147 @@ describe("compaction-equivalence invariant", () => {
     expect(hashState(liveState)).toBe(hashState(fullState));
   });
 });
+
+// ---------------------------------------------------------------------------
+// Outcome-immutability across compaction (audit finding P0-1).
+//
+// A CAS-sensitive toy reducer whose outcome depends on `intervening`: an ADD
+// bounces if any APPLIED partner event (a different actor) intervened, or if
+// the intervening window is "unknown". A pure self-chain (one actor, all
+// basedOnSeq 0) must therefore apply EVERY event — and must keep doing so
+// after the events fall below the compaction horizon, because compaction now
+// persists the applied index that lets the window stay enumerable.
+// ---------------------------------------------------------------------------
+
+interface CasState {
+  applied: number[];
+}
+
+const CAS_GENESIS: Genesis = { seed: "cas-seed", reducerVersion: "v1", createdAt: 0 };
+
+const casConfig: EngineConfig<CasState> = {
+  genesisState: () => ({ applied: [] }),
+  reducer: (state: CasState, event: GameEvent, ctx: EventContext): { state: CasState; outcome: EventOutcome } => {
+    if (ctx.intervening === "unknown") {
+      return { state, outcome: "bounced" };
+    }
+    if (ctx.intervening.some((entry) => entry.actor !== event.actor)) {
+      return { state, outcome: "bounced" };
+    }
+    return { state: { applied: [...state.applied, ctx.seq] }, outcome: "applied" };
+  },
+  encode: (s) => JSON.stringify(s),
+  decode: (raw) => JSON.parse(raw) as CasState,
+  hash: (s) => hashState(s),
+};
+
+function casEvent(): GameEvent {
+  // Pure self-chain: same actor, always based on genesis (seq 0).
+  return { type: "ADD", payload: {}, actor: "A", clientTimestamp: "0", basedOnSeq: 0 };
+}
+
+/** Appends `count` pure-self-chain CAS events one at a time via applyAppend. */
+function appendCasChain(count: number): { log: EncodedLogNode; events: GameEvent[] } {
+  let log: EncodedLogNode = {
+    genesis: JSON.stringify(CAS_GENESIS),
+    baseSeq: 0,
+    baseSnapshot: null,
+    head: 0,
+    events: {},
+  };
+  const events: GameEvent[] = [];
+  for (let i = 1; i <= count; i++) {
+    const ev = casEvent();
+    events.push(ev);
+    log = applyAppend(casConfig, log, ev);
+  }
+  return { log, events };
+}
+
+describe("applyAppend outcome-immutability across compaction", () => {
+  it("a stale-basedOnSeq self-chain keeps its applied outcome across two compactions", () => {
+    // Enough events (> 2 * COMPACT_THRESHOLD) that compaction runs at least
+    // twice, pushing the earliest events well below the second horizon.
+    const count = 2 * COMPACT_THRESHOLD + 10;
+    const { log, events } = appendCasChain(count);
+    expect(log.baseSeq).toBeGreaterThan(COMPACT_THRESHOLD);
+    expect(log.baseSnapshot).not.toBeNull();
+
+    // Fold every original event from genesis (base.seq 0 — full enumeration).
+    const fullEvents = events.map((event, i) => ({ seq: i + 1, event }));
+    const fullResult = foldEvents(
+      casConfig,
+      CAS_GENESIS,
+      { seq: 0, state: casConfig.genesisState(CAS_GENESIS) },
+      fullEvents,
+    );
+
+    // Fold the compacted snapshot + the remaining live events, seeding the
+    // persisted applied index so the below-horizon window stays enumerable.
+    const liveEvents = numericEventKeys(log).map((seq) => ({
+      seq,
+      event: decodeEvent(log.events[seq]),
+    }));
+    const liveResult = foldEvents(
+      casConfig,
+      CAS_GENESIS,
+      { seq: log.baseSeq, state: casConfig.decode(log.baseSnapshot as string) },
+      liveEvents,
+      { appliedBySeq: decodeIndexForTest(log.appliedIndex), coveredFromSeq: 0 },
+    );
+
+    // Same final state AND hash: every event applied on both paths.
+    expect(hashState(liveResult.state)).toBe(hashState(fullResult.state));
+
+    // The whole self-chain applied on the from-genesis path (nothing bounced).
+    expect(fullResult.outcomes.every((o) => o.outcome === "applied")).toBe(true);
+
+    // Per-seq outcomes agree for every live seq (applied on both paths).
+    const fullBySeq = new Map(fullResult.outcomes.map((o) => [o.seq, o.outcome]));
+    for (const outcome of liveResult.outcomes) {
+      expect(outcome.outcome).toBe(fullBySeq.get(outcome.seq));
+      expect(outcome.outcome).toBe("applied");
+    }
+  });
+
+  it("compaction writes an appliedIndex covering exactly the applied seqs <= baseSeq", () => {
+    const count = 2 * COMPACT_THRESHOLD + 10;
+    const { log } = appendCasChain(count);
+
+    const index = decodeIndexForTest(log.appliedIndex);
+    // Every applied event with seq in (0, baseSeq] is present — the whole
+    // self-chain applies, so that is exactly seqs 1..baseSeq.
+    const keys = [...index.keys()].sort((a, b) => a - b);
+    const expected: number[] = [];
+    for (let seq = 1; seq <= log.baseSeq; seq++) {
+      expected.push(seq);
+    }
+    expect(keys).toEqual(expected);
+    // No entry above the horizon leaks into the persisted index.
+    for (const seq of keys) {
+      expect(seq).toBeLessThanOrEqual(log.baseSeq);
+    }
+    expect(index.get(1)).toEqual({ actor: "A", type: "ADD" });
+  });
+});
+
+/**
+ * Test-only decode of the persisted appliedIndex JSON into a seq -> entry map.
+ * Kept inline so the RED phase does not depend on a production export.
+ */
+function decodeIndexForTest(raw: string | undefined): Map<number, AppliedEntryShape> {
+  const map = new Map<number, AppliedEntryShape>();
+  if (raw === undefined) {
+    return map;
+  }
+  const record = JSON.parse(raw) as Record<string, AppliedEntryShape>;
+  for (const [key, value] of Object.entries(record)) {
+    map.set(Number(key), value);
+  }
+  return map;
+}
+
+interface AppliedEntryShape {
+  actor: string;
+  type: string;
+}

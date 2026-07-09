@@ -44,9 +44,11 @@ export interface AppliedEntry {
 
 export interface FoldBase<S> {
   /**
-   * The snapshot horizon (compaction baseSeq) that `state` corresponds to.
-   * An event whose `basedOnSeq` is strictly below this can no longer have its
-   * intervening window enumerated, so it is reported as "unknown". For an
+   * The snapshot horizon (compaction baseSeq) that `state` corresponds to. It
+   * is the default coverage horizon: absent an explicit `coveredFromSeq`, an
+   * event whose `basedOnSeq` is strictly below this has its intervening window
+   * reported as "unknown". A fold that seeds a full applied index passes
+   * `coveredFromSeq: 0` to enumerate windows below this horizon too. For an
    * uncompacted incremental fold this stays 0 even as `state` advances.
    */
   seq: number;
@@ -60,6 +62,16 @@ export interface FoldOptions {
    * events belong here; bounced events changed nothing and must be excluded.
    */
   appliedBySeq?: Map<number, AppliedEntry>;
+  /**
+   * The lowest seq from which `appliedBySeq` is a COMPLETE record of applied
+   * events. An event whose `basedOnSeq` is strictly below this can not have its
+   * intervening window enumerated, so it folds to "unknown". When a full applied
+   * index (dense from genesis) is supplied — as compaction and every client fold
+   * now do — this is 0, and no window is ever "unknown". Defaults to `base.seq`
+   * (the snapshot horizon), the coverage a fold gets when it seeds no index and
+   * only accumulates applied events above its base.
+   */
+  coveredFromSeq?: number;
   /**
    * When true, a reducer throw propagates so programmer errors stay visible.
    * When false, it is contained as a bounce plus an error report. Defaults to
@@ -91,6 +103,10 @@ export function foldEvents<S>(
   options: FoldOptions = {},
 ): FoldResult<S> {
   const devMode = options.devMode ?? ENV_DEV;
+  // The horizon below which intervening windows can not be enumerated. With a
+  // full applied index seeded (coveredFromSeq 0) no window is ever "unknown";
+  // absent an explicit value it falls back to the snapshot horizon `base.seq`.
+  const coveredFromSeq = options.coveredFromSeq ?? base.seq;
   // Running index of applied events (seq -> {actor,type}), seeded from prior
   // folds and extended as events in this batch apply. Bounced events are
   // never recorded, so they can never appear in a later intervening window.
@@ -116,7 +132,7 @@ export function foldEvents<S>(
       continue;
     }
 
-    const intervening = computeIntervening(applied, event.basedOnSeq, seq, base.seq);
+    const intervening = computeIntervening(applied, event.basedOnSeq, seq, coveredFromSeq);
     const ctx: EventContext = {
       seq,
       rng: eventRng(genesis.seed, seq),
@@ -156,15 +172,18 @@ export function foldEvents<S>(
 /**
  * Computes the `intervening` value for an event: the applied events in the
  * open interval `(basedOnSeq, seq)`, in seq order, or the literal "unknown"
- * when the window predates the snapshot horizon.
+ * when the window predates the coverage horizon (the lowest seq from which the
+ * applied index is complete). With a full applied index (`coveredFromSeq` 0)
+ * every window enumerates; "unknown" then signals only a genuinely missing
+ * index, which does not arise in normal operation.
  */
 function computeIntervening(
   applied: Map<number, AppliedEntry>,
   basedOnSeq: number,
   seq: number,
-  baseSeq: number,
+  coveredFromSeq: number,
 ): EventContext["intervening"] {
-  if (basedOnSeq < baseSeq) {
+  if (basedOnSeq < coveredFromSeq) {
     return "unknown";
   }
   const entries: Array<{ seq: number; actor: string; type: string }> = [];
@@ -197,4 +216,39 @@ export function buildAppliedIndex(
     index.set(outcome.seq, { actor: event.actor, type: event.type });
   }
   return index;
+}
+
+/**
+ * Serializes an applied index (seq -> {actor, type}) to the compact JSON string
+ * compaction persists next to `baseSnapshot`. The stored object keys are the
+ * decimal seqs; each value is the minimal `{actor, type}` an intervening query
+ * needs (~40 bytes/entry). Growth is bounded only by the room's applied-event
+ * count, which is acceptable at prototype room lifetimes.
+ */
+export function encodeAppliedIndex(index: Map<number, AppliedEntry>): string {
+  const record: Record<number, AppliedEntry> = {};
+  for (const [seq, entry] of index) {
+    record[seq] = { actor: entry.actor, type: entry.type };
+  }
+  return JSON.stringify(record);
+}
+
+/**
+ * Parses a persisted applied-index JSON string back into a seq -> {actor, type}
+ * map. Total and tolerant: a missing string (a pre-compaction node has none)
+ * decodes to an empty map, and non-integer keys are skipped.
+ */
+export function decodeAppliedIndex(raw: string | null | undefined): Map<number, AppliedEntry> {
+  const map = new Map<number, AppliedEntry>();
+  if (raw === null || raw === undefined) {
+    return map;
+  }
+  const record = JSON.parse(raw) as Record<string, AppliedEntry>;
+  for (const [key, value] of Object.entries(record)) {
+    const seq = Number(key);
+    if (Number.isInteger(seq)) {
+      map.set(seq, { actor: value.actor, type: value.type });
+    }
+  }
+  return map;
 }

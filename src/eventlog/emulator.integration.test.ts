@@ -2,11 +2,15 @@
 // against the real Firebase RTDB emulator (not a fake). Two independent
 // `createLogClient` instances on ONE room simulate two browser tabs folding
 // the same live log; the property under test is that they CONVERGE — both
-// fold from the same baseSnapshot/baseSeq horizon, so they resolve every
-// "unknown"-intervening decision identically. This is NOT a
-// fold-from-genesis-equals-fold-from-snapshot check (that equivalence only
-// holds above the compaction horizon by design); it is client-vs-client
-// agreement on the live log.
+// fold to identical confirmed state and resolve every intervening decision the
+// same way.
+//
+// Because compaction now persists an `appliedIndex`, the equivalence holds
+// below the compaction horizon too: a client that joins fresh AFTER compaction
+// and folds from the snapshot enumerates the same intervening windows an
+// always-connected client saw live, so an event's outcome is a pure function of
+// the log prefix regardless of when a client joined. Scenario B asserts exactly
+// that with a post-compaction joiner.
 //
 // Uses a game-agnostic TOY reducer (no src/rules/ or src/coop/ imports), kept
 // local to this file, matching the CAS-in-miniature toy from client.test.ts.
@@ -258,8 +262,20 @@ runWithEmulator("eventlog emulator integration", () => {
         : Object.keys((rawEvents ?? {}) as Record<string, unknown>).length;
       expect(liveCount).toBeLessThanOrEqual(COMPACT_THRESHOLD);
 
+      // Outcome-immutability below the horizon: a THIRD client joins fresh now,
+      // after compaction, and folds from the persisted snapshot + appliedIndex.
+      // It must converge on the SAME confirmed hash as the always-connected
+      // client, proving the below-horizon intervening windows resolve identically
+      // whether folded live or reconstructed from the index.
+      const clientC = makeClientHarness(database, roomId, "client-c");
+      await waitFor(() => clientC.lastFoldedSeq === head, 30_000);
+      expect(clientC.errors).toEqual([]);
+      expect(clientC.lastFoldedSeq).toBe(head);
+      expect(hashState(clientC.displayed)).toBe(hashState(clientA.displayed));
+
       clientA.client.close();
       clientB.client.close();
+      clientC.client.close();
     },
     60_000,
   );

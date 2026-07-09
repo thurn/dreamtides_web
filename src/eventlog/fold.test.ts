@@ -172,6 +172,78 @@ describe("foldEvents snapshot horizon", () => {
   });
 });
 
+describe("foldEvents applied-index horizon coverage", () => {
+  it("a joiner folding from the snapshot computes the same intervening window a live client saw", () => {
+    // Live client: folds seqs 1..6 from genesis. Actors 1-3,5,6 = A; seq 4 = B.
+    // Event at seq 6 (basedOnSeq 3) sees applied partner seq 4 and bounces.
+    const liveEvents = [
+      ev(1, "A", 0),
+      ev(2, "A", 1),
+      ev(3, "A", 2),
+      ev(4, "B", 3),
+      ev(5, "A", 4),
+      ev(6, "A", 3),
+    ];
+    let liveWindow: EventContext["intervening"] | undefined;
+    const spyConfig: EngineConfig<ToyState> = {
+      ...CONFIG,
+      reducer: (state, event, ctx) => {
+        if (ctx.seq === 6) {
+          liveWindow = ctx.intervening;
+        }
+        return toyReducer(state, event, ctx);
+      },
+    };
+    const live = foldEvents(spyConfig, GENESIS, GENESIS_BASE(), liveEvents);
+    expect(new Map(live.outcomes.map((o) => [o.seq, o.outcome])).get(6)).toBe("bounced");
+    expect(liveWindow).toEqual([
+      { seq: 4, actor: "B", type: "ADD" },
+      { seq: 5, actor: "A", type: "ADD" },
+    ]);
+
+    // Joiner: starts from a snapshot at the compaction horizon base.seq = 5,
+    // seeded with the applied index the live client accumulated (covering
+    // seqs 1..5) and coveredFromSeq 0. Folding only the live event at seq 6
+    // (whose basedOnSeq 3 predates the horizon) must reproduce the SAME
+    // enumerated window — not "unknown".
+    const appliedBySeq = buildAppliedIndex(liveEvents.slice(0, 5), live.outcomes);
+    let joinerWindow: EventContext["intervening"] | undefined;
+    const joinerConfig: EngineConfig<ToyState> = {
+      ...CONFIG,
+      reducer: (state, event, ctx) => {
+        joinerWindow = ctx.intervening;
+        return toyReducer(state, event, ctx);
+      },
+    };
+    const joiner = foldEvents(
+      joinerConfig,
+      GENESIS,
+      { seq: 5, state: { n: 5, log: [] } },
+      [ev(6, "A", 3)],
+      { appliedBySeq, coveredFromSeq: 0 },
+    );
+    expect(joinerWindow).toEqual(liveWindow);
+    expect(joiner.outcomes[0].outcome).toBe("bounced");
+  });
+
+  it("still reports 'unknown' below coveredFromSeq when the index does not reach that far", () => {
+    // coveredFromSeq defaults to base.seq; an event based below it is unknown.
+    let captured: EventContext["intervening"] | undefined;
+    const spyConfig: EngineConfig<ToyState> = {
+      ...CONFIG,
+      reducer: (state, event, ctx) => {
+        captured = ctx.intervening;
+        return toyReducer(state, event, ctx);
+      },
+    };
+    foldEvents(spyConfig, GENESIS, { seq: 5, state: { n: 5, log: [] } }, [ev(6, "A", 3)], {
+      appliedBySeq: new Map(),
+      coveredFromSeq: 4,
+    });
+    expect(captured).toBe("unknown");
+  });
+});
+
 describe("foldEvents poison containment", () => {
   it("(devMode off) a throwing reducer bounces that event, applies the rest, reports one error", () => {
     const events = [

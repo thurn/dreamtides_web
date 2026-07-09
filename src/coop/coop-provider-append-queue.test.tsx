@@ -33,6 +33,7 @@ const fake = vi.hoisted(() => {
     baseSnapshot: unknown;
     head: number;
     events: Map<number, FakeEvent>;
+    appliedIndex: Map<number, { actor: string; type: string }>;
   }
   const genesis = { seed: "s", reducerVersion: "v", createdAt: 0 };
   const committed: FakeEvent[] = [];
@@ -41,7 +42,16 @@ const fake = vi.hoisted(() => {
   function buildNode(): FakeNode {
     const events = new Map<number, FakeEvent>();
     committed.forEach((event, index) => events.set(index + 1, event));
-    return { genesis, baseSeq: 0, baseSnapshot: null, head: committed.length, events };
+    // Pre-compaction node: no compacted history, so an empty applied index —
+    // the LogClient seeds `appliedBySeq` from this on the initial full refold.
+    return {
+      genesis,
+      baseSeq: 0,
+      baseSnapshot: null,
+      head: committed.length,
+      events,
+      appliedIndex: new Map(),
+    };
   }
   function deliver(): void {
     const node = buildNode();

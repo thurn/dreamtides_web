@@ -52,6 +52,23 @@ describe("decodeLogNode", () => {
     expect(node.head).toBe(2);
     expect(node.baseSnapshot).toBeNull();
     expect([...node.events.keys()].sort((a, b) => a - b)).toEqual([1, 2]);
+    // A pre-compaction node has no persisted index -> an empty map.
+    expect(node.appliedIndex.size).toBe(0);
+  });
+
+  it("decodes a persisted appliedIndex into a seq -> {actor, type} map", () => {
+    const encoded: EncodedLogNode = {
+      genesis: JSON.stringify(GENESIS),
+      baseSeq: 2,
+      baseSnapshot: JSON.stringify({ seqs: [1, 2] }),
+      head: 3,
+      events: { 3: encodeEvent(goodEvent(2)) },
+      appliedIndex: JSON.stringify({ 1: { actor: "a", type: "T" }, 2: { actor: "b", type: "T" } }),
+    };
+    const node = decodeLogNode(encoded);
+    expect([...node.appliedIndex.keys()].sort((a, b) => a - b)).toEqual([1, 2]);
+    expect(node.appliedIndex.get(1)).toEqual({ actor: "a", type: "T" });
+    expect(node.appliedIndex.get(2)).toEqual({ actor: "b", type: "T" });
   });
 
   it("handles a sparse-array events node (RTDB integer-keyed form)", () => {

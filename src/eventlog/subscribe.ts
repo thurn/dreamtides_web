@@ -11,6 +11,7 @@
 
 import { type Database, onValue, ref } from "firebase/database";
 import { decodeEvent } from "./append";
+import { decodeAppliedIndex } from "./fold";
 import type { EncodedLogNode, GameEvent, Genesis, LogNode } from "./types";
 
 /**
@@ -74,6 +75,9 @@ export function decodeLogNode(encoded: EncodedLogNode): LogNode {
     baseSnapshot,
     head: encoded.head,
     events,
+    // A pre-compaction node has no stored index; `decodeAppliedIndex` maps that
+    // (and any malformed JSON keys) to an empty map without throwing.
+    appliedIndex: decodeAppliedIndex(encoded.appliedIndex),
   };
 }
 
