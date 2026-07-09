@@ -75,7 +75,7 @@ function TideDiscDemo() {
               />
               <InfoCard
                 variant="text"
-                title="What Are Tides?"
+                title="Tides"
                 body={richText.plain(TIDES_BLURB)}
               />
             </div>
@@ -126,7 +126,7 @@ import { richText } from "src/tango/components/card/rich-text";
   card={
     <div style={{ display: "flex", alignItems: "flex-start", gap: token("--space-3") }}>
       <InfoCard variant="tide" tide="valor" title="Rising Valor" body={richText.plain(tide.description)} />
-      <InfoCard variant="text" title="What Are Tides?" body={richText.plain(tidesBlurb)} />
+      <InfoCard variant="text" title="Tides" body={richText.plain(tidesBlurb)} />
     </div>
   }
 >

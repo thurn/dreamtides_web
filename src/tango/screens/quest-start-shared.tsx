@@ -13,7 +13,6 @@ import { InfoCard } from "../components/overlay/InfoCard";
 import { richText } from "../components/card/rich-text";
 import {
   TideDisc,
-  TIDE_DISC_LG_PX,
   type TideDiscSize,
 } from "../components/hud/TideDisc";
 import { type Tide } from "../components/hud/tide-spec";
@@ -97,7 +96,7 @@ export function TideDiscReveal({
           />
           <InfoCard
             variant="text"
-            title="What Are Tides?"
+            title="Tides"
             body={richText.plain(TIDES_BLURB)}
           />
         </div>
@@ -131,11 +130,12 @@ export function TidesLabel() {
   );
 }
 
-/** The tides cluster shared by BOTH Dreamcaller-select layouts: two aligned
- * columns, each with an eyebrow and a value row beneath it. Tides occupy the
- * left column (capped at {@link MAX_TIDE_DISCS}); starting essence occupies the
- * right, with its amount centered on the tide discs' row. The desktop triptych
- * and mobile carousel both render this arrangement identically.
+/** The tides cluster shared by BOTH Dreamcaller-select layouts: a top row with
+ * the "Tides:" caption on the left and the starting-essence on the right, and —
+ * below it, left-aligned under the caption — the tide discs at the larger 'lg'
+ * size (capped at {@link MAX_TIDE_DISCS}). The desktop triptych and the mobile
+ * carousel both render this so the arrangement (discs stacked beneath the
+ * caption, essence held top-right) reads identically on each.
  *
  * `hitSlop`, when set, pads each disc's touch target (the mobile carousel) and
  * the disc row reabsorbs that padding with negative margins so the visual layout
@@ -153,79 +153,50 @@ export function TidesEssenceBlock({
 }) {
   const hasTides = dreamcaller.tides.length > 0;
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "flex-start",
-        justifyContent: "space-between",
-        gap: token("--space-5"),
-      }}
-    >
-      {hasTides && (
-        <div style={{ minWidth: 0 }}>
-          <TidesLabel />
-          <div
-            data-dreamcaller-tides={dreamcaller.id}
-            style={{
-              display: "flex",
-              flexWrap: "nowrap",
-              alignItems: "center",
-              gap: hitSlop != null ? undefined : token("--space-4"),
-              marginTop:
-                hitSlop != null
-                  ? `calc(${token("--space-3")} - ${hitSlop})`
-                  : token("--space-3"),
-              marginLeft:
-                hitSlop != null ? `calc(-1 * ${hitSlop})` : undefined,
-              marginRight:
-                hitSlop != null ? `calc(-1 * ${hitSlop})` : undefined,
-              marginBottom:
-                hitSlop != null ? `calc(-1 * ${hitSlop})` : undefined,
-            }}
-          >
-            {dreamcaller.tides.slice(0, MAX_TIDE_DISCS).map((tide) => (
-              <TideDiscReveal
-                key={tide.id}
-                tide={tide}
-                stageRef={stageRef}
-                size="lg"
-                hitSlop={hitSlop}
-              />
-            ))}
-          </div>
-        </div>
-      )}
-
+    <div>
+      {/* Top row: the "Tides:" caption on the left and the starting essence on
+          the right. The essence stays TOP-aligned, level with the caption, as
+          the disc row stacks below it. */}
       <div
         style={{
-          flex: "none",
-          display: "grid",
-          justifyItems: "center",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: token("--space-5"),
         }}
       >
-        <span
-          data-starting-essence-label={dreamcaller.id}
-          style={{
-            font: token("--t-eyebrow"),
-            letterSpacing: token("--tracking-eyebrow"),
-            textTransform: "uppercase",
-            color: token("--text-secondary"),
-            lineHeight: 1,
-          }}
-        >
-          Essence:
-        </span>
+        {hasTides ? <TidesLabel /> : <span />}
+        <EssenceReveal dreamcaller={dreamcaller} stageRef={stageRef} />
+      </div>
+
+      {hasTides && (
         <div
+          data-dreamcaller-tides={dreamcaller.id}
           style={{
             display: "flex",
+            flexWrap: "wrap",
             alignItems: "center",
-            minHeight: TIDE_DISC_LG_PX,
-            marginTop: token("--space-3"),
+            gap: hitSlop != null ? undefined : token("--space-4"),
+            marginTop:
+              hitSlop != null
+                ? `calc(${token("--space-3")} - ${hitSlop})`
+                : token("--space-3"),
+            marginLeft: hitSlop != null ? `calc(-1 * ${hitSlop})` : undefined,
+            marginRight: hitSlop != null ? `calc(-1 * ${hitSlop})` : undefined,
+            marginBottom: hitSlop != null ? `calc(-1 * ${hitSlop})` : undefined,
           }}
         >
-          <EssenceReveal dreamcaller={dreamcaller} stageRef={stageRef} />
+          {dreamcaller.tides.slice(0, MAX_TIDE_DISCS).map((tide) => (
+            <TideDiscReveal
+              key={tide.id}
+              tide={tide}
+              stageRef={stageRef}
+              size="lg"
+              hitSlop={hitSlop}
+            />
+          ))}
         </div>
-      </div>
+      )}
     </div>
   );
 }
