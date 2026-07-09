@@ -63,4 +63,23 @@ describe("toQuestDreamcaller", () => {
       startingEssence: 250,
     });
   });
+
+  it("omits optional portrait focus when the source record has none", () => {
+    const dreamcaller = makeDreamcaller("a");
+    delete dreamcaller.portraitFocus;
+
+    const result = toQuestDreamcaller(dreamcaller);
+
+    expect(result).toEqual({
+      id: "a",
+      name: "Dreamcaller a",
+      title: "Title a",
+      renderedText: "Rules text for a.",
+      imageNumber: "00a",
+      startingEssence: 250,
+    });
+    expect(Object.prototype.hasOwnProperty.call(result, "portraitFocus")).toBe(
+      false,
+    );
+  });
 });

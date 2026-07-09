@@ -28,6 +28,7 @@ jobs:
         with:
           node-version: 24.16.0
       - run: npm ci
+      - run: npm run setup-assets
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
@@ -40,6 +41,7 @@ jobs:
         with:
           node-version: 24.16.0
       - run: npm ci
+      - run: npm run setup-assets
       # firebase-tools shells out to `java` to run the Firebase RTDB emulator.
       - uses: actions/setup-java@v4
         with:

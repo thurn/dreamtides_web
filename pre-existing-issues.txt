@@ -117,3 +117,11 @@ Tango Desktop Dreamcaller Select QA — 1280px triptych wraps
   third column wraps to a second row below the viewport. The desktop layout in
   `src/tango/screens/quest-start-desktop.tsx` should either use a wider desktop
   breakpoint or scale its fixed column geometry before the triptych wraps.
+
+Checks emulator verification — fixed JSON-unsafe optional Dreamcaller metadata
+
+- Once the Checks workflow generated its gitignored runtime catalogs, the
+  emulator integration suite reached the real reducer and rejected synthetic
+  Dreamcaller state whose optional `portraitFocus` field was materialized with
+  the value `undefined`. `toQuestDreamcaller` now omits absent optional focus
+  metadata, with a focused regression test covering the JSON-safe shape.

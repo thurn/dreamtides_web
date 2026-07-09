@@ -36,7 +36,9 @@ export function toQuestDreamcaller(
     title: dreamcaller.title,
     renderedText: dreamcaller.renderedText,
     imageNumber: dreamcaller.imageNumber,
-    portraitFocus: dreamcaller.portraitFocus,
+    ...(dreamcaller.portraitFocus === undefined
+      ? {}
+      : { portraitFocus: dreamcaller.portraitFocus }),
     startingEssence: dreamcaller.startingEssence,
   };
 }
