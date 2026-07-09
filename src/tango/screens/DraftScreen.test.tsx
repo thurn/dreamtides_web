@@ -82,6 +82,13 @@ describe("Tango DraftScreen", () => {
     expect(grid?.style.gridTemplateRows).toBe("repeat(2, auto)");
     const stage = container.querySelector<HTMLElement>("[data-draft-offer-stage]");
     expect(stage?.style.justifyContent).toBe("flex-start");
+    expect(stage?.style.paddingLeft).toBe("var(--space-2)");
+    expect(stage?.style.paddingRight).toBe("var(--space-2)");
+    expect(grid?.style.gap).toBe("var(--space-2)");
+    const firstCard = container.querySelector<HTMLElement>(
+      '[data-draft-offer-card="101"]',
+    );
+    expect(firstCard?.style.width).toContain("var(--space-2)");
 
     act(() => {
       root.unmount();
@@ -103,6 +110,8 @@ describe("Tango DraftScreen", () => {
     expect(firstCard?.style.width).toContain("260px");
     const stage = container.querySelector<HTMLElement>("[data-draft-offer-stage]");
     expect(stage?.style.justifyContent).toBe("center");
+    expect(stage?.style.paddingLeft).toBe("var(--space-5)");
+    expect(grid?.style.gap).toBe("var(--space-5)");
 
     act(() => {
       root.unmount();

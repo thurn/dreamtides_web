@@ -85,7 +85,8 @@ const COUNTER_BAND_OP = token("--space-9");
 const HUD_CLEARANCE_OP = `${token("--hud-h")} + ${token("--safe-bottom")} + ${token("--space-9")}`;
 const TOP_GAP = `calc(${TOP_GAP_OP})`;
 const HUD_CLEARANCE = `calc(${HUD_CLEARANCE_OP})`;
-const OFFER_GRID_GAP = token("--space-5");
+const MOBILE_OFFER_GRID_GAP = token("--space-2");
+const DESKTOP_OFFER_GRID_GAP = token("--space-5");
 // Desktop draft cards follow the roomy starting-deck modal card size. This is a
 // content-driven box measure: the cap keeps the four-card row readable without
 // turning each card into a full-height mobile offer.
@@ -107,6 +108,7 @@ function offerCellWidthFor(params: {
   columns: number;
   rows: number;
   topSafeOp: string;
+  gap: string;
   maxWidthPx?: number;
 }): string {
   const horizontalGapCount = params.columns - 1;
@@ -114,9 +116,9 @@ function offerCellWidthFor(params: {
   // The offer cell width is capped by both the row width and available height.
   // Box measures: content-driven layout against `container-type: inline-size`.
   const caps = [
-    `calc((100cqw - (${OFFER_GRID_GAP} * ${String(horizontalGapCount)})) / ${String(params.columns)})`,
+    `calc((100cqw - (${params.gap} * ${String(horizontalGapCount)})) / ${String(params.columns)})`,
     `calc((100dvh - (${params.topSafeOp}) - (${TOP_GAP_OP}) - (${COUNTER_BAND_OP}) - (${HUD_CLEARANCE_OP}) - ` +
-      `(${OFFER_GRID_GAP} * ${String(verticalGapCount)})) * ${String(CARD_ASPECT_W)} / ${String(params.rows * CARD_ASPECT_H)})`,
+      `(${params.gap} * ${String(verticalGapCount)})) * ${String(CARD_ASPECT_W)} / ${String(params.rows * CARD_ASPECT_H)})`,
   ];
   if (params.maxWidthPx !== undefined) {
     caps.push(`${String(params.maxWidthPx)}px`);
@@ -137,12 +139,16 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const offerColumns = isDesktop ? 4 : 2;
   const offerRows = isDesktop ? 1 : 2;
+  const offerGridGap = isDesktop
+    ? DESKTOP_OFFER_GRID_GAP
+    : MOBILE_OFFER_GRID_GAP;
   const topSafeOp = topSafeOpFor(isDesktop);
   const topSafe = `calc(${topSafeOp})`;
   const offerCellWidth = offerCellWidthFor({
     columns: offerColumns,
     rows: offerRows,
     topSafeOp,
+    gap: offerGridGap,
     maxWidthPx: isDesktop ? DESKTOP_OFFER_CARD_WIDTH_PX : undefined,
   });
 
@@ -212,8 +218,8 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: isDesktop ? "center" : "flex-start",
-          paddingLeft: token("--space-5"),
-          paddingRight: token("--space-5"),
+          paddingLeft: offerGridGap,
+          paddingRight: offerGridGap,
           containerType: "inline-size",
         }}
       >
@@ -229,7 +235,7 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
               display: "grid",
               gridTemplateColumns: `repeat(${String(offerColumns)}, auto)`,
               gridTemplateRows: `repeat(${String(offerRows)}, auto)`,
-              gap: OFFER_GRID_GAP,
+              gap: offerGridGap,
               placeItems: "center",
             }}
           >
