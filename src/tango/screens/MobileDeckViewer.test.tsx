@@ -5,6 +5,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
+import { MOBILE_CARD_PEEK_HOLD_MS } from "../components/card/MobileCardPeek";
 import { MobileDeckViewer, type MobileDeckView } from "./MobileDeckViewer";
 
 vi.mock("../components/card/CardView", () => ({
@@ -69,7 +70,18 @@ function press(tile: HTMLElement, pointerId: number, y: number): void {
   const event = new Event("pointerdown", { bubbles: true });
   Object.defineProperties(event, {
     pointerId: { value: pointerId },
+    button: { value: 0 },
     clientX: { value: 150 },
+    clientY: { value: y },
+  });
+  tile.dispatchEvent(event);
+}
+
+function move(tile: HTMLElement, pointerId: number, x: number, y: number): void {
+  const event = new Event("pointermove", { bubbles: true });
+  Object.defineProperties(event, {
+    pointerId: { value: pointerId },
+    clientX: { value: x },
     clientY: { value: y },
   });
   tile.dispatchEvent(event);
@@ -100,11 +112,13 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  vi.useRealTimers();
   document.body.innerHTML = "";
 });
 
-describe("MobileDeckViewer top-row card peek", () => {
+describe("MobileDeckViewer mobile card gesture", () => {
   it("pins the first UUID row to the safe top while later rows keep upward proximity", () => {
+    vi.useFakeTimers();
     const { container, root } = mount();
     const tango = container.querySelector<HTMLElement>(".tango");
     tango?.style.setProperty("--safe-top", "24px");
@@ -118,7 +132,10 @@ describe("MobileDeckViewer top-row card peek", () => {
     );
     if (first === null) throw new Error("Missing first-row UUID fixture");
     first.getBoundingClientRect = () => rectAt(360);
-    act(() => press(first, 1, 400));
+    act(() => {
+      press(first, 1, 400);
+      vi.advanceTimersByTime(MOBILE_CARD_PEEK_HOLD_MS);
+    });
 
     const firstPreview = document.body.querySelector<HTMLElement>(
       "[data-mobile-card-peek-card]",
@@ -139,7 +156,10 @@ describe("MobileDeckViewer top-row card peek", () => {
     );
     if (later === null) throw new Error("Missing later-row UUID fixture");
     later.getBoundingClientRect = () => rectAt(600);
-    act(() => press(later, 2, 640));
+    act(() => {
+      press(later, 2, 640);
+      vi.advanceTimersByTime(MOBILE_CARD_PEEK_HOLD_MS);
+    });
 
     const laterPreview = document.body.querySelector<HTMLElement>(
       "[data-mobile-card-peek-card]",
@@ -155,5 +175,78 @@ describe("MobileDeckViewer top-row card peek", () => {
       window.dispatchEvent(new Event("pointerup"));
       root.unmount();
     });
+  });
+
+  it("keeps a threshold-crossing scroll gesture from mounting a preview", () => {
+    vi.useFakeTimers();
+    const { container, root } = mount();
+    const first = container.querySelector<HTMLElement>("[data-card-id]");
+    if (first === null) throw new Error("Missing UUID fixture");
+    first.getBoundingClientRect = () => rectAt(360);
+
+    act(() => {
+      press(first, 11, 400);
+      move(first, 11, 150, 411);
+      vi.advanceTimersByTime(MOBILE_CARD_PEEK_HOLD_MS);
+    });
+
+    expect(
+      document.body.querySelector("[data-mobile-card-peek-card]"),
+    ).toBeNull();
+
+    act(() => root.unmount());
+  });
+
+  it("cancels a pending preview on pointer cancellation", () => {
+    vi.useFakeTimers();
+    const { container, root } = mount();
+    const first = container.querySelector<HTMLElement>("[data-card-id]");
+    if (first === null) throw new Error("Missing UUID fixture");
+    first.getBoundingClientRect = () => rectAt(360);
+
+    act(() => {
+      press(first, 12, 400);
+      window.dispatchEvent(new Event("pointercancel"));
+      vi.advanceTimersByTime(MOBILE_CARD_PEEK_HOLD_MS);
+    });
+
+    expect(
+      document.body.querySelector("[data-mobile-card-peek-card]"),
+    ).toBeNull();
+
+    act(() => root.unmount());
+  });
+
+  it("dismisses a held preview when the deck container scrolls", () => {
+    vi.useFakeTimers();
+    const { container, root } = mount();
+    const first = container.querySelector<HTMLElement>("[data-card-id]");
+    const scrollRegion = Array.from(
+      container.querySelectorAll<HTMLElement>("div"),
+    ).find((element) => element.style.overflowY === "auto");
+    if (first === null || scrollRegion === undefined) {
+      throw new Error("Missing deck gesture fixtures");
+    }
+    first.getBoundingClientRect = () => rectAt(360);
+
+    act(() => {
+      press(first, 13, 400);
+      vi.advanceTimersByTime(MOBILE_CARD_PEEK_HOLD_MS);
+    });
+    expect(
+      document.body.querySelector("[data-mobile-card-peek-card]"),
+    ).not.toBeNull();
+
+    act(() => {
+      scrollRegion.dispatchEvent(new Event("scroll", { bubbles: true }));
+    });
+
+    expect(
+      document.body.querySelector("[data-mobile-card-peek-card]"),
+    ).toBeNull();
+    expect(scrollRegion.style.touchAction).toBe("pan-y");
+    expect(scrollRegion.style.overscrollBehaviorY).toBe("contain");
+
+    act(() => root.unmount());
   });
 });

@@ -1,19 +1,24 @@
 // MobileCardPeek — shared press-to-read card preview for compact mobile grids.
 //
 // The mobile deck viewer and any deck-like gallery that renders cards four
-// across use this one interaction: press a compact card and a large, readable
-// copy appears near the pressed card while keeping the rules text clear of the
-// finger. The geometry lives in mobile-card-peek-geometry.ts and is unit-tested
-// independently; this module owns the React state, pointer dismissal, portal,
-// and supplemental keyword definitions.
+// across use this one interaction: hold a compact card stationary and a large,
+// readable copy appears near it while keeping the rules text clear of the
+// finger. Moving into a scroll cancels before the preview does rendering work.
+// The geometry lives in mobile-card-peek-geometry.ts and is unit-tested
+// independently; this module owns the gesture, React state, portal, and
+// supplemental keyword definitions.
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { PointerEvent as ReactPointerEvent, ReactElement } from "react";
+import type {
+  MouseEvent as ReactMouseEvent,
+  PointerEvent as ReactPointerEvent,
+  ReactElement,
+} from "react";
 import { createPortal } from "react-dom";
 import type { CardData } from "../../../types/cards";
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
 import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
-import { infoCardWidth } from "../overlay/InfoCard";
+import { CLICK_WINDOW, infoCardWidth } from "../overlay/InfoCard";
 import { token } from "../../primitives/tokens";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import { CardTermDefinitions } from "./CardTermDefinitions";
@@ -30,11 +35,10 @@ import {
 const DEFAULT_COLUMN_GAP_TOKEN = "--space-4";
 const DEFAULT_SIDE_MARGIN_TOKEN = "--gutter";
 const MOVE_SLOP_PX = 10;
+/** Match Tango's shared tap-versus-hold boundary. */
+export const MOBILE_CARD_PEEK_HOLD_MS = CLICK_WINDOW;
 const SUPPLEMENTAL_INFO_GAP_PX = 10;
 const SUPPLEMENTAL_INFO_EDGE_PX = 6;
-
-/** A held card press reads as inspection rather than activating the tile. */
-export const MOBILE_CARD_PEEK_HOLD_MS = 300;
 
 /** One card that can be shown in the shared mobile press preview. */
 export interface MobileCardPeekCardView {
@@ -67,6 +71,17 @@ interface MobileCardPeekState {
   pinToTop: boolean;
 }
 
+interface MobileCardPeekGesture {
+  pointerId: number;
+  startX: number;
+  startY: number;
+  target: HTMLElement;
+  view: MobileCardPeekCardView;
+  pinToTop: boolean;
+  timer: ReturnType<typeof setTimeout> | null;
+  previewShown: boolean;
+}
+
 /**
  * Reads a length token's resolved pixel value off the `.tango` root, for the
  * finger-avoidance math (which needs real numbers, not `var()` strings).
@@ -91,38 +106,81 @@ export function useMobileCardPeek({
     placement?: MobileCardPeekPlacement,
   ) => void;
   handlePointerMove: (event: ReactPointerEvent<HTMLElement>) => void;
-  /** Consume the held-press marker before a selectable tile handles click. */
-  consumeHeldPress: () => boolean;
+  handleScroll: () => void;
+  handleClickCapture: (event: ReactMouseEvent<HTMLElement>) => void;
   dismissPeek: () => void;
 } {
   const [peek, setPeek] = useState<MobileCardPeekState | null>(null);
-  const activePressRef = useRef<{
-    pointerId: number;
-    startedAt: number;
-  } | null>(null);
-  const heldPressRef = useRef(false);
+  const gestureRef = useRef<MobileCardPeekGesture | null>(null);
+  const suppressedClickTargetRef = useRef<HTMLElement | null>(null);
+  const suppressedClickExpiryRef = useRef<ReturnType<
+    typeof setTimeout
+  > | null>(null);
 
-  const dismissPeek = useCallback(() => {
-    setPeek(null);
+  const clearSuppressedClick = useCallback(() => {
+    if (suppressedClickExpiryRef.current !== null) {
+      clearTimeout(suppressedClickExpiryRef.current);
+      suppressedClickExpiryRef.current = null;
+    }
+    suppressedClickTargetRef.current = null;
   }, []);
 
-  // Release anywhere dismisses the zoom and ends the press.
+  const suppressClickFor = useCallback(
+    (target: HTMLElement) => {
+      clearSuppressedClick();
+      suppressedClickTargetRef.current = target;
+      // A compatibility guard for engines that synthesize a click at the end
+      // of a canceled pointer sequence. Keep it beyond the hold boundary so a
+      // slow drag cannot outlive it; a fresh pointerdown clears it first.
+      suppressedClickExpiryRef.current = setTimeout(
+        clearSuppressedClick,
+        MOBILE_CARD_PEEK_HOLD_MS * 4,
+      );
+    },
+    [clearSuppressedClick],
+  );
+
+  const cancelGesture = useCallback(
+    (suppressClick: boolean) => {
+      const gesture = gestureRef.current;
+      if (gesture?.timer !== null && gesture?.timer !== undefined) {
+        clearTimeout(gesture.timer);
+      }
+      if (gesture !== null && suppressClick) {
+        suppressClickFor(gesture.target);
+      }
+      gestureRef.current = null;
+      setPeek(null);
+    },
+    [suppressClickFor],
+  );
+
+  const dismissPeek = useCallback(() => {
+    cancelGesture(false);
+  }, [cancelGesture]);
+
+  // Release anywhere dismisses the zoom and ends the press. Pointer capture is
+  // intentionally absent: pan-y remains owned by the nearest scroll container.
   useEffect(() => {
     function onUp(event: PointerEvent): void {
-      const activePress = activePressRef.current;
+      const gesture = gestureRef.current;
       if (
-        activePress !== null &&
-        activePress.pointerId === event.pointerId &&
-        Date.now() - activePress.startedAt >= MOBILE_CARD_PEEK_HOLD_MS
+        gesture === null ||
+        (event.pointerId !== undefined && event.pointerId !== gesture.pointerId)
       ) {
-        heldPressRef.current = true;
+        return;
       }
-      activePressRef.current = null;
-      dismissPeek();
+      cancelGesture(gesture.previewShown);
     }
-    function onCancel(): void {
-      activePressRef.current = null;
-      dismissPeek();
+    function onCancel(event: PointerEvent): void {
+      const gesture = gestureRef.current;
+      if (
+        gesture === null ||
+        (event.pointerId !== undefined && event.pointerId !== gesture.pointerId)
+      ) {
+        return;
+      }
+      cancelGesture(true);
     }
     window.addEventListener("pointerup", onUp);
     window.addEventListener("pointercancel", onCancel);
@@ -130,7 +188,18 @@ export function useMobileCardPeek({
       window.removeEventListener("pointerup", onUp);
       window.removeEventListener("pointercancel", onCancel);
     };
-  }, [dismissPeek]);
+  }, [cancelGesture]);
+
+  useEffect(
+    () => () => {
+      const timer = gestureRef.current?.timer;
+      if (timer !== null && timer !== undefined) clearTimeout(timer);
+      if (suppressedClickExpiryRef.current !== null) {
+        clearTimeout(suppressedClickExpiryRef.current);
+      }
+    },
+    [],
+  );
 
   const openPeek = useCallback(
     (
@@ -138,78 +207,103 @@ export function useMobileCardPeek({
       view: MobileCardPeekCardView,
       placement: MobileCardPeekPlacement = {},
     ): void => {
-      if (peek !== null || typeof window === "undefined") return;
-      const sideMargin = readLengthToken(sideMarginToken);
-      const width = peekWidthForViewport({
-        viewportWidth: window.innerWidth,
-        sideMargin,
-        columns,
-        columnGap: readLengthToken(columnGapToken),
-      });
-      // Anchor the finger to the pressed card's center: the modelled occlusion
-      // circle covers the whole tile, so the placement clears it wherever on the
-      // card the finger actually landed.
-      const tile = event.currentTarget.getBoundingClientRect();
-      const finger = {
-        x: tile.left + tile.width / 2,
-        y: tile.top + tile.height / 2,
-      };
-      // The transient card zoom reserves a conservative chrome zone using the
-      // `--safe-top`/`--safe-bottom` design floors. This is deliberately
-      // device-frame-independent: unlike fixed chrome that tracks the real
-      // hardware inset, the peek box wants a stable floor.
-      const box = computePeekBox({
-        viewport: { width: window.innerWidth, height: window.innerHeight },
-        safeTop: readLengthToken("--safe-top"),
-        safeBottom: readLengthToken("--safe-bottom"),
-        sideMargin,
-        aspect: CARD_ASPECT_RATIO_VALUE,
-        width,
-        finger,
-        pinToTop: placement.pinToTop,
-      });
-      setPeek({
-        view,
-        box,
+      if (
+        event.button !== 0 ||
+        gestureRef.current !== null ||
+        typeof window === "undefined"
+      ) {
+        return;
+      }
+      clearSuppressedClick();
+      const gesture: MobileCardPeekGesture = {
         pointerId: event.pointerId,
         startX: event.clientX,
         startY: event.clientY,
-        fingerX: finger.x,
+        target: event.currentTarget,
+        view,
         pinToTop: placement.pinToTop === true,
-      });
-      activePressRef.current = {
-        pointerId: event.pointerId,
-        startedAt: Date.now(),
+        timer: null,
+        previewShown: false,
       };
+      gesture.timer = setTimeout(() => {
+        if (gestureRef.current !== gesture) return;
+        gesture.timer = null;
+        gesture.previewShown = true;
+        const sideMargin = readLengthToken(sideMarginToken);
+        const width = peekWidthForViewport({
+          viewportWidth: window.innerWidth,
+          sideMargin,
+          columns,
+          columnGap: readLengthToken(columnGapToken),
+        });
+        // Anchor the finger to the pressed card's center: the modelled
+        // occlusion circle covers the whole tile wherever the finger landed.
+        const tile = gesture.target.getBoundingClientRect();
+        const finger = {
+          x: tile.left + tile.width / 2,
+          y: tile.top + tile.height / 2,
+        };
+        // Read layout and mount the large card only after the gesture has
+        // remained stationary through the hold boundary. This keeps ordinary
+        // Safari pan classification free of forced style reads and portal work.
+        const box = computePeekBox({
+          viewport: { width: window.innerWidth, height: window.innerHeight },
+          safeTop: readLengthToken("--safe-top"),
+          safeBottom: readLengthToken("--safe-bottom"),
+          sideMargin,
+          aspect: CARD_ASPECT_RATIO_VALUE,
+          width,
+          finger,
+          pinToTop: gesture.pinToTop,
+        });
+        setPeek({
+          view: gesture.view,
+          box,
+          pointerId: gesture.pointerId,
+          startX: gesture.startX,
+          startY: gesture.startY,
+          fingerX: finger.x,
+          pinToTop: gesture.pinToTop,
+        });
+      }, MOBILE_CARD_PEEK_HOLD_MS);
+      gestureRef.current = gesture;
     },
-    [columnGapToken, columns, peek, sideMarginToken],
+    [clearSuppressedClick, columnGapToken, columns, sideMarginToken],
   );
 
-  // A drift past the slop means the finger is scrolling, not inspecting.
+  // A drift past the slop means the finger is scrolling, not inspecting. The
+  // pending phase lives entirely in refs, so moves inside the slop do not render.
   const handlePointerMove = useCallback(
     (event: ReactPointerEvent<HTMLElement>): void => {
-      if (peek === null || peek.pointerId !== event.pointerId) return;
-      const dx = event.clientX - peek.startX;
-      const dy = event.clientY - peek.startY;
-      if (Math.hypot(dx, dy) > MOVE_SLOP_PX) {
-        activePressRef.current = null;
-        dismissPeek();
-      }
+      const gesture = gestureRef.current;
+      if (gesture === null || gesture.pointerId !== event.pointerId) return;
+      const dx = event.clientX - gesture.startX;
+      const dy = event.clientY - gesture.startY;
+      if (Math.hypot(dx, dy) > MOVE_SLOP_PX) cancelGesture(true);
     },
-    [peek, dismissPeek],
+    [cancelGesture],
   );
 
-  const consumeHeldPress = useCallback((): boolean => {
-    const held = heldPressRef.current;
-    heldPressRef.current = false;
-    return held;
-  }, []);
+  const handleScroll = useCallback(() => {
+    if (gestureRef.current !== null) cancelGesture(true);
+  }, [cancelGesture]);
+
+  const handleClickCapture = useCallback(
+    (event: ReactMouseEvent<HTMLElement>) => {
+      if (suppressedClickTargetRef.current !== event.currentTarget) return;
+      event.preventDefault();
+      event.stopPropagation();
+      clearSuppressedClick();
+    },
+    [clearSuppressedClick],
+  );
 
   return {
     peek,
     openPeek,
     handlePointerMove,
-    consumeHeldPress,
+    handleScroll,
+    handleClickCapture,
     dismissPeek,
   };
 }
@@ -270,7 +364,6 @@ export function renderMobileCardPeekOverlay(
             width: layout.supplemental.width,
           }}
           data-mobile-card-peek-definitions=""
-          data-mobile-card-peek-definitions-placement={layout.supplemental.side}
         >
           <CardTermDefinitions
             text={peek.view.card.renderedText}

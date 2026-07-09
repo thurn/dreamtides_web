@@ -2,12 +2,11 @@
 //
 // The deck is shown as a scrolling grid of full cards, four across. At that
 // size the cards' rules text is present but small, so the screen's whole job is
-// the press zoom: press a card and a fully legible copy appears instantly at
+// the press zoom: hold a card stationary and a fully legible copy appears at
 // the top of the screen, shifted off the finger so its rules text is readable
 // while the finger is still down; it snaps away on release. The rest of the
 // screen is left untouched (no scrim, no dimming). Dragging past a small slop
-// dismisses the zoom so the grid scrolls, so browsing and inspecting never
-// fight.
+// cancels before the zoom mounts so the grid scrolls without preview work.
 //
 // The top of the screen holds a lean control band: a centered "Your Deck" title,
 // the corner close control, and two dropdown buttons on one line — a filter
@@ -92,6 +91,7 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
     peek,
     openPeek,
     handlePointerMove: handleGridPointerMove,
+    handleScroll: handleGridScroll,
   } = useMobileCardPeek({ columns: COLUMNS, columnGapToken: "--space-4" });
   const [filterSort, setFilterSort] = useState<DeckFilterSort>(
     DEFAULT_DECK_FILTER_SORT,
@@ -157,6 +157,7 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
 
       <div
         onPointerMove={handleGridPointerMove}
+        onScroll={handleGridScroll}
         style={{
           position: "relative",
           zIndex: 1,
@@ -164,6 +165,8 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
           minHeight: 0,
           overflowY: "auto",
           WebkitOverflowScrolling: "touch",
+          touchAction: "pan-y",
+          overscrollBehaviorY: "contain",
           padding: `${token("--space-5")} ${token("--gutter")} calc(${token(
             "--safe-bottom",
           )} + ${token("--space-6")})`,
@@ -368,8 +371,7 @@ function DeckControls({
   );
 }
 
-/** One grid tile: the full card (rules text and all) that pops the zoom the
- *  instant it is pressed, enlarged to a comfortably legible size. */
+/** One grid tile: a stationary hold reveals a comfortably legible zoom. */
 function DeckTile({
   cardView,
   pinToTop,

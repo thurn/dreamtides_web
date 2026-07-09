@@ -133,9 +133,10 @@ export interface CardGalleryPanelProps {
   onCardPress?: (entryId: string) => void;
   /**
    * Enables the shared mobile Deck Viewer press preview for compact galleries:
-   * press a tile and a large readable card is placed clear of the finger. A
-   * quick tap still activates selectable tiles; a held preview does not.
-   * First-row sources pin the card and its definitions to the top safe edge.
+   * hold a tile and a large readable card is placed clear of the finger;
+   * quick taps still activate selectable tiles, while held previews suppress
+   * their trailing click. First-row sources pin the card and its definitions
+   * to the top safe edge.
    */
   mobilePressPreview?: boolean;
 }
@@ -550,12 +551,15 @@ export function CardGalleryPanel({
           onPointerMove={
             mobilePeekEnabled ? mobilePeek.handlePointerMove : undefined
           }
+          onScroll={mobilePeekEnabled ? mobilePeek.handleScroll : undefined}
           style={{
             flex: frame === "fullBleed" ? "1 1 auto" : `0 1 ${bodyHeight}`,
             minHeight: 0,
             height: frame === "fullBleed" ? undefined : bodyHeight,
             overflowY: "auto",
             WebkitOverflowScrolling: "touch",
+            touchAction: "pan-y",
+            overscrollBehaviorY: "contain",
             padding: galleryPadding,
           }}
         >
@@ -666,10 +670,10 @@ export function CardGalleryPanel({
                           }
                         : undefined
                     }
-                    onClick={() => {
-                      if (mobilePeek.consumeHeldPress()) return;
-                      onCardPress(card.entryId);
-                    }}
+                    onClick={() => onCardPress(card.entryId)}
+                    onClickCapture={
+                      peekable ? mobilePeek.handleClickCapture : undefined
+                    }
                     onContextMenu={(event) => {
                       event.preventDefault();
                     }}

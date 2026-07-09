@@ -8,6 +8,7 @@ import type { CardData } from "../../../types/cards";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import { GLYPHS } from "../../primitives/glyph";
 import { CardGalleryPanel } from "./CardGalleryPanel";
+import { MOBILE_CARD_PEEK_HOLD_MS } from "./MobileCardPeek";
 
 vi.mock("./CardView", () => ({
   GameCard: ({
@@ -87,6 +88,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  vi.useRealTimers();
   document.body.innerHTML = "";
   document.documentElement.removeAttribute("style");
 });
@@ -287,6 +289,7 @@ describe("CardGalleryPanel", () => {
   });
 
   it("pins a UUID-identified first-row card preview to the top safe boundary", () => {
+    vi.useFakeTimers();
     const cards = Array.from({ length: 5 }, (_, index) => ({
       entryId: `entry-${String(index)}`,
       card: {
@@ -326,12 +329,14 @@ describe("CardGalleryPanel", () => {
     const pointerDown = new Event("pointerdown", { bubbles: true });
     Object.defineProperties(pointerDown, {
       pointerId: { value: 7 },
+      button: { value: 0 },
       clientX: { value: 150 },
       clientY: { value: 400 },
     });
 
     act(() => {
       firstTile.dispatchEvent(pointerDown);
+      vi.advanceTimersByTime(MOBILE_CARD_PEEK_HOLD_MS);
     });
 
     const preview = document.body.querySelector<HTMLElement>(
@@ -359,5 +364,164 @@ describe("CardGalleryPanel", () => {
       window.dispatchEvent(new Event("pointerup"));
       root.unmount();
     });
+  });
+
+  it("cancels preview and card activation when movement becomes a scroll gesture", () => {
+    vi.useFakeTimers();
+    const onCardPress = vi.fn();
+    const { container, root } = mount(
+      <CardGalleryPanel
+        title="Purge Cards"
+        cards={[
+          {
+            entryId: "entry-a",
+            card: makeCard("Archive Sentry"),
+            testId: "gallery-card-a",
+          },
+        ]}
+        columns="four"
+        mobilePressPreview
+        onCardPress={onCardPress}
+      />,
+    );
+    const tile = container.querySelector<HTMLElement>(
+      '[data-testid="gallery-card-a"]',
+    );
+    if (tile === null) throw new Error("Missing gallery card fixture");
+    tile.getBoundingClientRect = () =>
+      ({
+        left: 110,
+        top: 360,
+        width: 80,
+        height: 80,
+        right: 190,
+        bottom: 440,
+        x: 110,
+        y: 360,
+        toJSON: () => ({}),
+      }) as DOMRect;
+    const pointerDown = new Event("pointerdown", { bubbles: true });
+    Object.defineProperties(pointerDown, {
+      pointerId: { value: 21 },
+      button: { value: 0 },
+      clientX: { value: 150 },
+      clientY: { value: 400 },
+    });
+    const pointerMove = new Event("pointermove", { bubbles: true });
+    Object.defineProperties(pointerMove, {
+      pointerId: { value: 21 },
+      clientX: { value: 150 },
+      clientY: { value: 411 },
+    });
+
+    act(() => {
+      tile.dispatchEvent(pointerDown);
+      tile.dispatchEvent(pointerMove);
+      vi.advanceTimersByTime(MOBILE_CARD_PEEK_HOLD_MS);
+      tile.click();
+    });
+
+    expect(
+      document.body.querySelector("[data-mobile-card-peek-card]"),
+    ).toBeNull();
+    expect(onCardPress).not.toHaveBeenCalled();
+
+    act(() => root.unmount());
+  });
+
+  it("keeps a short stationary tap selectable without opening the hold preview", () => {
+    vi.useFakeTimers();
+    const onCardPress = vi.fn();
+    const { container, root } = mount(
+      <CardGalleryPanel
+        title="Purge Cards"
+        cards={[
+          {
+            entryId: "entry-a",
+            card: makeCard("Archive Sentry"),
+            testId: "gallery-card-a",
+          },
+        ]}
+        columns="four"
+        mobilePressPreview
+        onCardPress={onCardPress}
+      />,
+    );
+    const tile = container.querySelector<HTMLElement>(
+      '[data-testid="gallery-card-a"]',
+    );
+    if (tile === null) throw new Error("Missing gallery card fixture");
+    const pointerDown = new Event("pointerdown", { bubbles: true });
+    Object.defineProperties(pointerDown, {
+      pointerId: { value: 22 },
+      button: { value: 0 },
+      clientX: { value: 150 },
+      clientY: { value: 400 },
+    });
+
+    act(() => {
+      tile.dispatchEvent(pointerDown);
+      vi.advanceTimersByTime(MOBILE_CARD_PEEK_HOLD_MS - 1);
+      window.dispatchEvent(new Event("pointerup"));
+      tile.click();
+    });
+
+    expect(
+      document.body.querySelector("[data-mobile-card-peek-card]"),
+    ).toBeNull();
+    expect(onCardPress).toHaveBeenCalledWith("entry-a");
+
+    act(() => root.unmount());
+  });
+
+  it("previews a true hold without activating the card on release", () => {
+    vi.useFakeTimers();
+    const onCardPress = vi.fn();
+    const { container, root } = mount(
+      <CardGalleryPanel
+        title="Purge Cards"
+        cards={[
+          {
+            entryId: "entry-a",
+            card: makeCard("Archive Sentry"),
+            testId: "gallery-card-a",
+          },
+        ]}
+        columns="four"
+        mobilePressPreview
+        onCardPress={onCardPress}
+      />,
+    );
+    const tile = container.querySelector<HTMLElement>(
+      '[data-testid="gallery-card-a"]',
+    );
+    if (tile === null) throw new Error("Missing gallery card fixture");
+    const pointerDown = new Event("pointerdown", { bubbles: true });
+    Object.defineProperties(pointerDown, {
+      pointerId: { value: 23 },
+      button: { value: 0 },
+      clientX: { value: 150 },
+      clientY: { value: 400 },
+    });
+
+    act(() => {
+      tile.dispatchEvent(pointerDown);
+      vi.advanceTimersByTime(MOBILE_CARD_PEEK_HOLD_MS);
+    });
+    expect(
+      document.body.querySelector("[data-mobile-card-peek-card]"),
+    ).not.toBeNull();
+
+    act(() => {
+      window.dispatchEvent(new Event("pointerup"));
+      tile.click();
+    });
+
+    expect(
+      document.body.querySelector("[data-mobile-card-peek-card]"),
+    ).toBeNull();
+    expect(onCardPress).not.toHaveBeenCalled();
+
+    act(() => root.unmount());
   });
 });
