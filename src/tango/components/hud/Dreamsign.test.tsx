@@ -357,6 +357,46 @@ describe("Dreamsign", () => {
     });
   });
 
+  it("uses the shared mobile InfoCard scale for both the dreamsign and its definitions", () => {
+    const previousWidth = window.innerWidth;
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 390,
+    });
+    const { effect } = pickGlossaryFixture();
+    const sign = makeDreamsign({
+      name: "Unified Mobile Scale",
+      effectDescription: effect,
+      imageName: "unified.png",
+    });
+
+    const { container, root } = mountInto(
+      <DreamsignInfoCard dreamsign={sign} testid="dreamsign-info-card" />,
+    );
+
+    const cards = Array.from(container.querySelectorAll<HTMLElement>("[style]")).filter(
+      (element) =>
+        element.style.getPropertyValue("--info-card-text-scale") !== "",
+    );
+    expect(cards.length).toBeGreaterThanOrEqual(2);
+    for (const card of cards) {
+      expect(card.style.getPropertyValue("--info-card-text-scale")).toBe(
+        "0.86",
+      );
+      expect(card.style.getPropertyValue("--info-card-width")).toBe(
+        "175.5px",
+      );
+    }
+
+    act(() => {
+      root.unmount();
+    });
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: previousWidth,
+    });
+  });
+
   it("portals stage-anchored reveals to the body above app chrome", () => {
     const { effect } = pickGlossaryFixture();
     const sign = makeDreamsign({

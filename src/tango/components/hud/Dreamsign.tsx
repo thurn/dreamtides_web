@@ -106,7 +106,9 @@ export interface DreamsignInfoCardProps {
  * highlighted keyword MEANS with no extra interaction; they are pure display
  * (the InfoCard reveal is `pointerEvents: none` and transient), never a nested
  * interactive popover. `CardTermDefinitions` returns `null` for effect text
- * with no glossary terms, so plain dreamsigns show the card alone.
+ * with no glossary terms, so plain dreamsigns show the card alone. Both the
+ * primary reveal and its definitions inherit InfoCard's shared viewport width
+ * and typography treatment; this component carries no local scale override.
  */
 export function DreamsignInfoCard({
   dreamsign,
