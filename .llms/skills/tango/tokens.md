@@ -284,7 +284,7 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 | `--glass-rim` | `rgba(255, 255, 255, 0.14)` |  |
 | `--glass-shadow` | `inset 0 1px 1px rgba(255, 255, 255, 0.22), inset 0 -18px 30px rgba(255, 255, 255, 0.04), 0 10px 34px rgba(6, 2, 14, 0.5)` |  |
 | `--glass-on-glass-fill` | `rgba(4, 4, 6, 0.13)` |  |
-| `--glass-on-glass-sheen` | `linear-gradient(150deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0) 46%)` |  |
-| `--glass-on-glass-rim` | `rgba(255, 255, 255, 0.23)` |  |
-| `--glass-on-glass-shadow` | `inset 0 1px 1px rgba(255, 255, 255, 0.3), inset 0 -14px 24px rgba(0, 0, 0, 0.08), 0 8px 22px rgba(6, 2, 14, 0.26)` |  |
+| `--glass-on-glass-sheen` | `linear-gradient(150deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0) 46%)` |  |
+| `--glass-on-glass-rim` | `rgba(255, 255, 255, 0.18)` |  |
+| `--glass-on-glass-shadow` | `inset 0 1px 1px rgba(255, 255, 255, 0.22), inset 0 -14px 24px rgba(0, 0, 0, 0.08), 0 8px 22px rgba(6, 2, 14, 0.22)` |  |
 | `--badge-disc-gradient` | `radial-gradient(closest-side, #2a2040, #14101f)` |  |
