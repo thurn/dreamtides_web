@@ -383,7 +383,6 @@ export function CardGalleryPanel({
   const columnCount = renderedColumnCount(columns);
   const rowCount = rowCountFor(cards.length, columnCount);
   const fallbackVisibleRows = plannedVisibleRows(rowCount);
-  const scrollable = rowCount > fallbackVisibleRows;
   const fallbackVisibleGapSlots = gapSlotsFor(fallbackVisibleRows);
   const { rootRef, headerRef, bodyRef, gridRef, measure } = useGalleryMeasure({
     frame,

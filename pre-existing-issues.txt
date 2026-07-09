@@ -93,3 +93,10 @@ Task group 5 assessment — classic Journey event migration remains deprecated-p
   reducer-side cost and reward application, seeded RNG for random costs/rewards,
   and replacement of the Journey bane-card name lookup in
   `src/journeys/journey/shared/costs.ts` with UUID-based resolution.
+
+Promotion cleanup — fixed inherited lint issue
+
+- After rebasing this branch onto `master`, `npm run lint` failed in
+  `src/tango/components/card/CardGalleryPanel.tsx` because the rebased base
+  carried an unused `scrollable` local. The promotion commit removes that unused
+  local so the rebased branch can pass the required checks.
