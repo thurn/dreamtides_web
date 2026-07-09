@@ -7,10 +7,12 @@
 //
 //   (a) Run-field nullability — no NORMAL gameplay event ever
 //       transitions `draftState` / `resolvedPackage` / `dreamcaller` from
-//       non-null to null. Only `RESET_QUEST`, `LOAD_STATE`, and the debug
-//       `SET_DRAFT_STATE` may null a run field, so we draw the random
-//       sequences from the NON-DEBUG quest event union (those three, plus the
-//       other debug/QA edits, are excluded — see `DEBUG_EVENT_TYPES` below).
+//       non-null to null. Only `RESET_QUEST` and the debug `SET_DRAFT_STATE`
+//       may null a run field, so we draw the random sequences from the
+//       NON-DEBUG quest event union (those two, plus the other debug/QA edits,
+//       are excluded — see `DEBUG_EVENT_TYPES` below). `LOAD_STATE` is IN the
+//       generator: `validateLoadedState` bounces any snapshot that would null
+//       a run field, so the sweep asserts the invariant holds for it too.
 //       With the carve-out events excluded the invariant is crisp: the fields
 //       must NEVER go non-null → null.
 //   (b) Total fold safety — the sequences never throw and every outcome is
@@ -351,12 +353,15 @@ afterAll(() => {
 
 /**
  * Debug / QA / carve-out event types EXCLUDED from the random generator for
- * suite (a). The three carve-out events (`RESET_QUEST`, `LOAD_STATE`,
- * `SET_DRAFT_STATE`) are allowed to null a run field; the remaining debug edits
- * (`SET_*` overrides, atlas/augury/source debug) are QA escape hatches with no
- * bearing on the normal-gameplay invariant. Excluding all of them makes (a)
- * crisp: with the generator drawing only from non-debug events, the run fields
- * must NEVER go non-null → null.
+ * suite (a). The two carve-out events (`RESET_QUEST`, `SET_DRAFT_STATE`) may
+ * legitimately null a run field; the remaining debug edits (`SET_*` overrides,
+ * atlas/augury/source debug) are QA escape hatches with no bearing on the
+ * normal-gameplay invariant. Excluding them makes (a) crisp: with the generator
+ * drawing only from the remaining events, the run fields must NEVER go non-null
+ * → null. `LOAD_STATE` is IN the generator: `validateLoadedState` bounces any
+ * snapshot that would null a currently non-null run field (or carries a foreign
+ * seed / malformed shape), so the invariant holds for it in-reducer and the
+ * property sweep asserts it rather than carving it out.
  */
 const DEBUG_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
   "SET_DRAFT_STATE",
@@ -371,7 +376,6 @@ const DEBUG_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
   "SET_CARD_SOURCE_DEBUG",
   "REROLL_DREAM_AUGURY",
   "FORCE_DREAM_AUGURY_ARCHETYPE",
-  "LOAD_STATE",
   "RESET_QUEST",
 ]);
 
@@ -601,6 +605,25 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent>
   }),
   () => ({ type: "SET_CARD_NOTE", payload: { instanceId: "i1", note: "hi" } }),
   (rng) => ({ type: "RESOLVE_PROMPT", payload: { promptId: Math.floor(rng() * 5), resolution: {} } }),
+
+  // LOAD_STATE — adversarial snapshots the validator must bounce, preserving
+  // the nullability invariant IN-REDUCER rather than via a generator carve-out:
+  //   - a structurally valid snapshot with the correct room seed but null run
+  //     fields (the genesis quest) — bounced for nulling a non-null run field;
+  //   - a snapshot with a foreign seed — bounced by the seed check;
+  //   - a malformed snapshot — bounced by the shape check.
+  () => ({
+    type: "LOAD_STATE",
+    payload: { snapshot: genesisFoldState(GENESIS).quest },
+  }),
+  () => ({
+    type: "LOAD_STATE",
+    payload: { snapshot: { ...genesisFoldState(GENESIS).quest, seed: "foreign-seed" } },
+  }),
+  (rng) => ({
+    type: "LOAD_STATE",
+    payload: { snapshot: pick(rng, [null, "nope", { essence: "not-a-number" }]) },
+  }),
 
   // pure garbage: unknown type (must bounce, never throw)
   () => ({ type: "NOT_A_REAL_EVENT", payload: { anything: 1 } }),

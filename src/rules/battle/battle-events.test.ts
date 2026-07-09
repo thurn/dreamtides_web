@@ -1356,6 +1356,42 @@ describe("BATTLE_GESTURE", () => {
     const b = reduce(state, "BATTLE_GESTURE", { commands: [gainFive, gainThree] });
     expect(hashBattle(a.state.battle)).toBe(hashBattle(b.state.battle));
   });
+
+  it("bounces the WHOLE gesture when a mid-gesture command's automation opens a prompt", () => {
+    // The first command materializes an interactive-scripted character, so its
+    // drain PARKS a prompt; the second command's prompt gate then rejects, and
+    // the all-or-nothing rule bounces the ENTIRE gesture: no prompt is left
+    // open, and the first command's play leaves no trace.
+    const script = firstInteractiveMaterialized();
+    const board = makeRichBoard({
+      turnNumber: 3,
+      phase: "day",
+      playerHand: ["bc-gesture-int"],
+      instances: [makeInstance("bc-gesture-int", script.id, "player")],
+    });
+    const state = { ...baseState(), battle: battleFrom(board) };
+    const before = hashBattle(state.battle);
+
+    const playInteractive = {
+      id: "DEBUG_EDIT",
+      edit: {
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: "bc-gesture-int",
+        destination: { side: "player", zone: "frontRank", slotId: frontRankSlotId(0) },
+      },
+    };
+    // Sanity: the same command as a lone BATTLE_COMMAND parks a prompt.
+    const lone = reduce(state, "BATTLE_COMMAND", { command: playInteractive });
+    expect(lone.state.battle?.pendingPrompt).not.toBeNull();
+
+    const result = reduce(state, "BATTLE_GESTURE", {
+      commands: [playInteractive, gainThree],
+    });
+    expect(result.outcome).toBe("bounced");
+    expect(result.state.battle?.pendingPrompt).toBeNull();
+    // Byte-identical: the interactive play left no partial application behind.
+    expect(hashBattle(result.state.battle)).toBe(before);
+  });
 });
 
 // ---------------------------------------------------------------------------
