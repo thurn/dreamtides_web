@@ -438,11 +438,14 @@ function GuideBand({ guide }: { readonly guide: PurgeGuideView }) {
         }}
       />
       <div
+        data-testid="tango-purge-speech-anchor"
         style={{
           position: "absolute",
-          left: "32vw",
+          // Keep the bubble body beyond Takeshi's face while its left tail
+          // reaches back to his head at both narrow and tall phone widths.
+          left: "40vw",
           right: `calc(${token("--gutter")} + ${token("--space-11")})`,
-          bottom: token("--space-5"),
+          top: token("--space-2"),
         }}
       >
         <SpeechBubble

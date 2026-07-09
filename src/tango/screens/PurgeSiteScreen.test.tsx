@@ -240,6 +240,23 @@ describe("PurgeSiteScreen", () => {
     });
   });
 
+  it("anchors the mobile speech tail beside the guide's head", () => {
+    const { container, root } = mount(
+      <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
+    );
+
+    const speechAnchor = container.querySelector<HTMLElement>(
+      '[data-testid="tango-purge-speech-anchor"]',
+    );
+    expect(speechAnchor?.style.left).toBe("40vw");
+    expect(speechAnchor?.style.top).toBe("var(--space-2)");
+    expect(speechAnchor?.style.bottom).toBe("");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders the desktop composition with cards on the shared rounded glass panel", () => {
     stubMatchMedia(true);
     const { container, root } = mount(
