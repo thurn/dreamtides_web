@@ -20,6 +20,7 @@ import { SpeechBubble } from "../components/overlay/SpeechBubble";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "./use-is-desktop";
+import { QUEST_STATUS_BAR_CLEARANCE_OP } from "./chrome-geometry";
 
 /** The guide who speaks over the Revelation offer. */
 export interface DreamsignRevelationGuideView {
@@ -91,7 +92,7 @@ export interface DreamsignRevelationScreenProps {
 const CONTENT_VERTICAL_OFFSET = "10dvh";
 const GUIDE_LAYER_TOP = `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${CONTENT_VERTICAL_OFFSET})`;
 const OFFER_TOP = `max(44dvh, calc(${token("--safe-top")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-7")} + ${CONTENT_VERTICAL_OFFSET}))`;
-const HUD_CLEARANCE = `calc(${token("--hud-h")} + ${token("--safe-bottom")})`;
+const HUD_CLEARANCE = `calc(${QUEST_STATUS_BAR_CLEARANCE_OP})`;
 const MOBILE_OFFER_TILE_SIZE = 120;
 const DESKTOP_OFFER_TILE_SIZE = 154;
 const DESKTOP_ENHANCED_OFFER_TILE_SIZE = 140;

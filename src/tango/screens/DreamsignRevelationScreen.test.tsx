@@ -10,6 +10,7 @@ import {
   DreamsignRevelationScreen,
   type DreamsignRevelationView,
 } from "./DreamsignRevelationScreen";
+import { QUEST_STATUS_BAR_CLEARANCE_OP } from "./chrome-geometry";
 
 function dreamsign(id: string, imageName: string): Dreamsign {
   return {
@@ -111,7 +112,7 @@ describe("DreamsignRevelationScreen", () => {
     );
 
     expect(region?.style.bottom).toBe(
-      "calc(var(--hud-h) + var(--safe-bottom))",
+      `calc(${QUEST_STATUS_BAR_CLEARANCE_OP})`,
     );
     expect(offer?.style.gridTemplateRows).toBe("auto minmax(0, 1fr)");
     expect(offer?.style.height).toBe("100%");

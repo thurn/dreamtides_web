@@ -15,7 +15,10 @@ import {
 import { SpeechBubble } from "../components/overlay/SpeechBubble";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
-import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
+import {
+  MENU_EDGE_INSET_MOBILE_PX,
+  QUEST_STATUS_BAR_CLEARANCE_OP,
+} from "./chrome-geometry";
 import { useIsDesktop } from "./use-is-desktop";
 
 export interface PurgeGuideView {
@@ -73,7 +76,7 @@ export interface PurgeSiteScreenProps {
 }
 
 const GUIDE_TOP_ROWS = "minmax(220px, 34dvh) minmax(0, 1fr)";
-const HUD_CLEARANCE = `calc(${token("--hud-h")} + ${token("--safe-bottom")} + ${token("--space-8")})`;
+const HUD_CLEARANCE = `calc(${QUEST_STATUS_BAR_CLEARANCE_OP} + ${token("--space-8")})`;
 // Desktop Purge uses the grand QuestStatusBar, which outgrows the root hud
 // token. Keep the card window above that larger transparent HUD.
 const DESKTOP_HUD_CLEARANCE = `calc(${HUD_CLEARANCE} + ${token("--space-9")})`;

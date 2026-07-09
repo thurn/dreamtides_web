@@ -33,6 +33,7 @@ import {
   MENU_BUTTON_PX,
   MENU_EDGE_INSET_DESKTOP_PX,
   MENU_EDGE_INSET_MOBILE_PX,
+  QUEST_STATUS_BAR_CLEARANCE_OP,
 } from "./chrome-geometry";
 import { useIsDesktop } from "./use-is-desktop";
 
@@ -82,7 +83,7 @@ const TOP_GAP_OP = token("--space-6");
 const COUNTER_BAND_OP = token("--space-9");
 // Bottom: the docked QuestStatusBar (bar + elevated Dreamcaller bust +
 // home-indicator inset).
-const HUD_CLEARANCE_OP = `${token("--hud-h")} + ${token("--safe-bottom")} + ${token("--space-9")}`;
+const HUD_CLEARANCE_OP = `${QUEST_STATUS_BAR_CLEARANCE_OP} + ${token("--space-9")}`;
 const TOP_GAP = `calc(${TOP_GAP_OP})`;
 const HUD_CLEARANCE = `calc(${HUD_CLEARANCE_OP})`;
 const MOBILE_OFFER_GRID_GAP = token("--space-2");
@@ -291,7 +292,10 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
         </div>
       </div>
 
-      <div style={{ flexShrink: 0, height: HUD_CLEARANCE }} aria-hidden="true" />
+      <div
+        style={{ flexShrink: 0, height: HUD_CLEARANCE }}
+        aria-hidden="true"
+      />
 
       <QuestStatusBar
         stageRef={stageRef}

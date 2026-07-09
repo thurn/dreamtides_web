@@ -54,7 +54,7 @@ export const questStatusBarDemo: TangoComponent = {
   Component: QuestStatusBarDemo,
   usage: [
     {
-      note: "A transparent HUD that positions itself against the screen root and reveals the Dreamcaller / dreamsign popups anchored to it, so pass the screen's `stageRef`. Render it inside a `position: relative` scene root.",
+      note: "A transparent HUD that positions itself against the screen root and reveals the Dreamcaller / dreamsign popups anchored to it, so pass the screen's `stageRef`. Render it inside a `position: relative` scene root. Its shared bottom anchor adds one small visible gap after the real device safe area; screens should not reposition it.",
       code: `import { useRef } from "react";
 import { QuestStatusBar } from "src/tango/components/hud/QuestStatusBar";
 

@@ -7,7 +7,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { artRef } from "../primitives/art";
-import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
+import {
+  MENU_EDGE_INSET_MOBILE_PX,
+  QUEST_STATUS_BAR_BOTTOM_INSET,
+} from "./chrome-geometry";
 import {
   PurgeSiteScreen,
   purgeActionWidthReservations,
@@ -292,6 +295,24 @@ describe("PurgeSiteScreen", () => {
       "gap: var(--space-4)",
     );
     expect(gallery?.style.borderLeft).not.toContain("var(--border-soft)");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("anchors the mobile status bar to the shared safe-area bottom inset", () => {
+    const { container, root } = mount(
+      <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
+    );
+    const anchor = container.querySelector<HTMLElement>(
+      "[data-quest-status-bar-anchor]",
+    );
+    const row = anchor?.firstElementChild as HTMLElement | null;
+
+    expect(anchor?.style.bottom).toBe("0px");
+    expect(row?.style.height).toBe("var(--hud-h)");
+    expect(row?.style.paddingBottom).toBe(QUEST_STATUS_BAR_BOTTOM_INSET);
 
     act(() => {
       root.unmount();

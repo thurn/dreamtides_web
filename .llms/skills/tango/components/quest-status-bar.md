@@ -45,7 +45,7 @@ The persistent, transparent bottom HUD for quest screens. The essence total, dec
 
 ## Usage
 
-A transparent HUD that positions itself against the screen root and reveals the Dreamcaller / dreamsign popups anchored to it, so pass the screen's `stageRef`. Render it inside a `position: relative` scene root.
+A transparent HUD that positions itself against the screen root and reveals the Dreamcaller / dreamsign popups anchored to it, so pass the screen's `stageRef`. Render it inside a `position: relative` scene root. Its shared bottom anchor adds one small visible gap after the real device safe area; screens should not reposition it.
 
 ```tsx
 import { useRef } from "react";
