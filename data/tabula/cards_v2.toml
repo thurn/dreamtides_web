@@ -33,7 +33,7 @@ art-owned = false
 card-number = 2
 
 [[cards]]
-name = "Miraculous Arrival"
+name = "Light of Emergence"
 mtg-name = "Gush"
 id = "b56ef7e8-c634-4d40-ac08-fab591dfbc4a"
 rendered-text = """
@@ -47,10 +47,11 @@ rarity = ""
 is-fast = true
 is-interrupt = true
 spark = ""
-tags = ["Art Rework", "July8"]
-image-number = 644603710
+tags = ["Art Rework", "July8", "Art OK"]
+image-number = 618071684
 art-owned = false
 card-number = 3
+art = { x = 0, y = 1, scale = 1.1 }
 
 [[cards]]
 name = "Kindlehorn"
@@ -3295,7 +3296,7 @@ card-number = 176
 art = { x = 0, y = 1, scale = 1.27 }
 
 [[cards]]
-name = "Reunion"
+name = "Rebirth"
 mtg-name = "Time Spiral"
 id = "50267984-eaa3-415e-a23f-581c54b0ad2d"
 rendered-text = "Shuffle your hand and void into your deck. Draw 5 cards. Gain 5●."
@@ -3306,10 +3307,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July10"]
-image-number = 2278837661
+tags = ["Art Rework", "July10", "Art OK"]
+image-number = 793083757
 art-owned = true
 card-number = 177
+art = { x = 0.452, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Glimmerwood Scout"
@@ -3762,7 +3764,7 @@ card-number = 202
 art = { x = 0, y = -0.345, scale = 1.81 }
 
 [[cards]]
-name = "Broadcast Array"
+name = "Illumination of Glory"
 mtg-name = "Tendrils of Agony"
 id = "d217303e-b115-484a-b22c-0e44d5701389"
 rendered-text = "This event cannot be prevented. Gain 2⍟ for each card you have played this turn."
@@ -3773,10 +3775,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July8"]
-image-number = 1258823158
+tags = ["Art Rework", "July8", "Art OK"]
+image-number = 2430444889
 art-owned = false
 card-number = 203
+art = { x = 0.138, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Ruin Scavenger"
@@ -5494,7 +5497,7 @@ art-owned = false
 card-number = 296
 
 [[cards]]
-name = "Paradox Enforcer"
+name = "Abomination of Memory"
 mtg-name = "Hogaak, Arisen Necropolis"
 id = "3e802ecd-a83b-491b-9528-a4672d0e986f"
 rendered-text = '''
@@ -5503,15 +5506,16 @@ To play this character, banish 7 cards from your void. You may play this charact
 Unstoppable'''
 energy-cost = 1
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Ancient"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 7
-tags = ["Art Rework", "July10"]
-image-number = 1726923523
+tags = ["Art Rework", "July10", "Art OK"]
+image-number = 1577968036
 art-owned = false
 card-number = 297
+art = { x = 0, y = 1, scale = 1.07 }
 
 [[cards]]
 name = "Wistful Angler"
@@ -9384,7 +9388,7 @@ card-number = 503
 art = { x = 0.126, y = 1, scale = 1.37 }
 
 [[cards]]
-name = "Secrets of the Deep"
+name = "Mind's Door"
 mtg-name = "Dread Fugue"
 id = "eae700c9-5005-4627-b8d6-a5c2c273e61a"
 rendered-text = "Look at the opponent's hand. Put a card from it into your hand."
@@ -9395,8 +9399,8 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July8"]
-image-number = 2131591273
+tags = ["Art Rework", "July8", "Art OK"]
+image-number = 2033123273
 art-owned = false
 card-number = 504
 
@@ -9422,7 +9426,7 @@ card-number = 505
 art = { x = -0.21, y = 0.242, scale = 1.17 }
 
 [[cards]]
-name = "Rootspring Summons"
+name = "Profane Summons"
 mtg-name = "Hard Evidence"
 id = "56f019a8-6b77-4bcb-bfa6-37b94e188ead"
 rendered-text = """
@@ -9436,10 +9440,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July10"]
-image-number = 717263296
+tags = ["Art Rework", "July10", "Art OK"]
+image-number = 2123360843
 art-owned = false
 card-number = 506
+art = { x = 0.084, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Cloaked Sentinel"
