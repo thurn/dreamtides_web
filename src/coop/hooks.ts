@@ -389,36 +389,6 @@ export function useConnectedCount(): number {
   return useCoop().connectedCount;
 }
 
-/**
- * Wraps an async action so that while one invocation is in flight, further
- * invocations resolve to `null` immediately and do NOT re-fire the action. This
- * closes the delta-event double-click hole: two rapid clicks on a delta-shaped
- * intent (`ADJUST_ESSENCE`, `GRANT_FREE_REROLLS`, `PURGE_RANDOM_BANE_CARDS`)
- * mint two nonces sharing one `basedOnSeq`, and the self-chain rule waves the
- * second through — applying the delta twice. Single-flighting the button handler
- * lets only the first click reach the log until its append settles.
- *
- * The returned function is stable across renders and always calls the latest
- * `fn`. Debug-panel deltas intentionally do NOT use this — rapid repeat is a
- * feature there.
- */
-export function useSingleFlight<A extends unknown[]>(
-  fn: (...args: A) => Promise<number>,
-): (...args: A) => Promise<number | null> {
-  const fnRef = useRef(fn);
-  fnRef.current = fn;
-  const inFlightRef = useRef(false);
-  return useCallback((...args: A): Promise<number | null> => {
-    if (inFlightRef.current) {
-      return Promise.resolve(null);
-    }
-    inFlightRef.current = true;
-    return fnRef.current(...args).finally(() => {
-      inFlightRef.current = false;
-    });
-  }, []);
-}
-
 /** Subscribe to confirmed event outcomes for the lifetime of the caller. */
 export function useEventOutcomes(listener: OutcomeListener): void {
   const { registerOutcomeListener } = useCoop();

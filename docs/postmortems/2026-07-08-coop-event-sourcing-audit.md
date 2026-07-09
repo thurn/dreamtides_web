@@ -404,12 +404,12 @@ first).
     branch resolves its reward/cost templates
     (`journey/shared/rewards.ts`, `costs.ts`) through `applyOption` /
     `applyBranch`, which fire the delta mutations synchronously as
-    fire-and-forget coop appends. `useSingleFlight`
-    (`src/coop/hooks.ts`) wraps an async `() => Promise<number>` action and so
-    does not fit a synchronous handler that fires several `void` mutations; the
-    screen instead holds a `commitInFlightRef` re-entry latch that admits only
-    the first click into the commit flow and re-arms when the player cancels a
-    chooser or a tree journey advances to a fresh node. Behavioral tests in
+    fire-and-forget coop appends. A synchronous handler that fires several
+    `void` mutations does not fit an async single-flight wrapper built around
+    one `() => Promise<number>` action, so the screen instead holds a
+    `commitInFlightRef` re-entry latch that admits only the first click into
+    the commit flow and re-arms when the player cancels a chooser or a tree
+    journey advances to a fresh node. Behavioral tests in
     `JourneyScreen.test.tsx` assert two rapid clicks reach `applyOption` once
     and that cancel re-arms the latch.
   - **Programmatic — battle victory bridge**
@@ -420,7 +420,7 @@ first).
     returns without re-emitting. Not a double-clickable button; idempotent by
     construction.
   - **Debug HUD deltas** are intentionally unguarded — rapid repeat is the
-    feature there (documented on `useSingleFlight`).
+    feature there.
 - **P2-4. `LOAD_STATE` accepts any object.** `lifecycle.ts:366-376` casts
   `snapshot as QuestState` and `asBattleFoldState` is a bare cast; a
   `LOAD_STATE` can null run fields mid-run, inject a `seed` different from
