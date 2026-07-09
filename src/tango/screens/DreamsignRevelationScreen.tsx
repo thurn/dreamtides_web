@@ -95,7 +95,6 @@ const HUD_CLEARANCE = `calc(${token("--hud-h")} + ${token("--safe-bottom")})`;
 const MOBILE_OFFER_TILE_SIZE = 120;
 const DESKTOP_OFFER_TILE_SIZE = 154;
 const DESKTOP_ENHANCED_OFFER_TILE_SIZE = 140;
-const MOBILE_DECLINE_GAP = token("--space-8");
 const DESKTOP_DECLINE_GAP = token("--space-12");
 
 /**
@@ -284,14 +283,16 @@ function MobileComposition({
       </section>
 
       <main
+        data-revelation-mobile-offer-region=""
         style={{
           position: "absolute",
           top: OFFER_TOP,
           left: token("--space-4"),
           right: token("--space-4"),
-          bottom: `calc(${HUD_CLEARANCE} + ${token("--space-9")})`,
-          display: "grid",
-          placeItems: "start center",
+          bottom: HUD_CLEARANCE,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
           zIndex: 20,
         }}
       >
@@ -411,10 +412,14 @@ function OfferStack({
     <div
       data-revelation-offer=""
       style={{
-        display: "flex",
-        flexDirection: "column",
+        display: desktop ? "flex" : "grid",
+        flexDirection: desktop ? "column" : undefined,
+        gridTemplateRows: desktop ? undefined : "auto minmax(0, 1fr)",
         alignItems: "center",
-        gap: desktop ? DESKTOP_DECLINE_GAP : MOBILE_DECLINE_GAP,
+        justifyItems: desktop ? undefined : "center",
+        width: desktop ? undefined : "100%",
+        height: desktop ? undefined : "100%",
+        gap: desktop ? DESKTOP_DECLINE_GAP : 0,
         pointerEvents: "auto",
       }}
     >
@@ -445,11 +450,24 @@ function OfferStack({
           />
         ))}
       </div>
-      <GlassButton
-        label="Decline Offer"
-        onPress={onSkip}
-        disabled={disabled}
-      />
+      <div
+        data-revelation-decline-slot=""
+        style={
+          desktop
+            ? undefined
+            : {
+                minHeight: 0,
+                display: "grid",
+                placeItems: "center",
+              }
+        }
+      >
+        <GlassButton
+          label="Decline Offer"
+          onPress={onSkip}
+          disabled={disabled}
+        />
+      </div>
     </div>
   );
 }

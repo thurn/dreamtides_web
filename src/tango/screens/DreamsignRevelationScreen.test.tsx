@@ -88,6 +88,40 @@ afterEach(() => {
 });
 
 describe("DreamsignRevelationScreen", () => {
+  it("centers the mobile decline action between the offer and status bar", () => {
+    const { container, root } = mount(
+      <DreamsignRevelationScreen
+        view={view()}
+        claimedIndex={null}
+        onClaim={vi.fn()}
+        onSkip={vi.fn()}
+        onPurge={vi.fn()}
+        onCancelPurge={vi.fn()}
+      />,
+    );
+
+    const region = container.querySelector<HTMLElement>(
+      "[data-revelation-mobile-offer-region]",
+    );
+    const offer = container.querySelector<HTMLElement>(
+      "[data-revelation-offer]",
+    );
+    const declineSlot = container.querySelector<HTMLElement>(
+      "[data-revelation-decline-slot]",
+    );
+
+    expect(region?.style.bottom).toBe(
+      "calc(var(--hud-h) + var(--safe-bottom))",
+    );
+    expect(offer?.style.gridTemplateRows).toBe("auto minmax(0, 1fr)");
+    expect(offer?.style.height).toBe("100%");
+    expect(declineSlot?.style.placeItems).toBe("center");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("uses a neutral decline action with the desktop spacing step", () => {
     stubMatchMedia(true);
     const { container, root } = mount(
