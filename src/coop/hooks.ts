@@ -117,13 +117,25 @@ export function CoopProvider({
 
   const confirmedSeqRef = useRef(0);
   const clientRef = useRef<LogClient | null>(null);
-  // Appends requested before the LogClient exists. On initial mount React
-  // flushes child effects before parent effects, so a child's mount-time
-  // dispatch (the `?startInBattle=1` / `?goto=` bootstrap, which auto-appends
-  // a LOAD_STATE) runs before this provider's client-creating effect. Rather
-  // than reject and strand that one-shot bootstrap forever, `append` queues the
-  // draft here and the client-creating effect flushes the queue the instant the
-  // client exists.
+  // True once the client has folded its first log node and therefore has a
+  // confirmed baseline (`confirmedState`/`lastFoldedSeq` defined). The real
+  // `LogClient.submit` REJECTS before that baseline exists — it needs it to
+  // stamp `basedOnSeq` — so a draft must not be submitted until this flips.
+  // Set on the client's first `onDisplayState` (the first fold's signal) and
+  // reset on teardown so a new room starts unready.
+  const baselineReadyRef = useRef(false);
+  // Appends requested before the LogClient has a confirmed baseline. Two races
+  // feed this queue:
+  //   1. Client does not yet EXIST. On initial mount React flushes child
+  //      effects before parent effects, so a child's mount-time dispatch (the
+  //      `?startInBattle=1` / `?goto=` bootstrap, which auto-appends a
+  //      LOAD_STATE) runs before this provider's client-creating effect.
+  //   2. Client exists but its FIRST NODE has not arrived. The log subscription
+  //      delivers its genesis/first node asynchronously (Firebase `onValue`),
+  //      so `submit` would reject with "called before the first log node
+  //      arrived" until the baseline folds.
+  // Rather than reject and strand these drafts, `append` queues them here and
+  // the queue is flushed — in FIFO order — the instant the baseline is ready.
   const pendingAppendsRef = useRef<
     Array<{
       draft: EventDraft;
@@ -145,12 +157,37 @@ export function CoopProvider({
       append: (event) => appendEvent(db, roomId, GAME_ENGINE_CONFIG, event),
     };
 
+    // Drain the pending-append queue once a client exists AND has a confirmed
+    // baseline. Captures-then-clears before iterating (no draft can be
+    // double-submitted) and preserves FIFO order. `submit` stamps
+    // basedOnSeq/nonce itself at this point, so nothing is captured early.
+    const flushPendingAppends = (): void => {
+      const client = clientRef.current;
+      if (client === null || !baselineReadyRef.current) {
+        return;
+      }
+      const pending = pendingAppendsRef.current;
+      if (pending.length === 0) {
+        return;
+      }
+      pendingAppendsRef.current = [];
+      for (const { draft, resolve, reject } of pending) {
+        client.submit(draft).then(resolve, reject);
+      }
+    };
+
     const client = createLogClient<FoldState>(
       GAME_ENGINE_CONFIG,
       io,
       {
         onDisplayState: (state) => {
           setGameState(state);
+          // The first fold delivers the confirmed baseline. Flip the gate and
+          // flush any drafts queued while the baseline was still pending.
+          if (!baselineReadyRef.current) {
+            baselineReadyRef.current = true;
+            flushPendingAppends();
+          }
         },
         onEventOutcome: (event, seq, outcome) => {
           if (seq > confirmedSeqRef.current) {
@@ -182,17 +219,18 @@ export function CoopProvider({
     );
     clientRef.current = client;
 
-    // Flush any appends queued before the client existed (the mount-time
-    // bootstrap race described on `pendingAppendsRef`), preserving order.
-    const pending = pendingAppendsRef.current;
-    pendingAppendsRef.current = [];
-    for (const { draft, resolve, reject } of pending) {
-      client.submit(draft).then(resolve, reject);
-    }
+    // Cover the case where the subscription delivered its first node
+    // synchronously during `createLogClient`: `baselineReadyRef` is already
+    // true but the flush inside `onDisplayState` saw a null `clientRef`. Now
+    // that the client is installed, drain whatever is queued. On the ordinary
+    // async-delivery path the baseline is not ready yet, so this is a no-op and
+    // the flush happens later, from the first `onDisplayState`.
+    flushPendingAppends();
 
     return () => {
       client.close();
       clientRef.current = null;
+      baselineReadyRef.current = false;
       // Reject anything still queued when the room tears down so callers are
       // not left with a promise that never settles.
       const stranded = pendingAppendsRef.current;
@@ -225,13 +263,17 @@ export function CoopProvider({
 
   const append = useCallback<AppendFn>((draft: EventDraft) => {
     const client = clientRef.current;
-    if (client === null) {
-      // Queue until the client-creating effect runs and flushes (see
-      // `pendingAppendsRef`). Resolves with the committed seq once submitted.
+    if (client === null || !baselineReadyRef.current) {
+      // The client does not exist yet, or exists but has no confirmed baseline
+      // (its first node has not folded). Either way `submit` cannot stamp
+      // `basedOnSeq`, so queue until the baseline arrives (see
+      // `pendingAppendsRef`); the first `onDisplayState` flushes in FIFO order.
+      // Resolves with the committed seq once submitted.
       return new Promise<number>((resolve, reject) => {
         pendingAppendsRef.current.push({ draft, resolve, reject });
       });
     }
+    // Baseline is ready: submit immediately, adding no queuing latency.
     return client.submit(draft);
   }, []);
 
