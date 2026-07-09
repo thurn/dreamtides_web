@@ -204,6 +204,7 @@ export function GlassDialog({
 
   const closeButton = (
     <IconButton
+      placement="onGlass"
       glyph={GLYPHS.close}
       size="md"
       label={closeLabel}

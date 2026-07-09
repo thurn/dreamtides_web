@@ -106,6 +106,12 @@ describe("GlassDialog", () => {
     expect(paragraphs.some((p) => p.textContent === "An intro line")).toBe(true);
     expect(container.querySelector('[data-testid="body"]')).not.toBeNull();
 
+    expect(
+      container
+        .querySelector('button[aria-label="Close"]')
+        ?.getAttribute("data-glass-placement"),
+    ).toBe("onGlass");
+
     act(() => {
       (
         container.querySelector('button[aria-label="Close"]') as HTMLButtonElement

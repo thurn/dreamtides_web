@@ -288,6 +288,7 @@ function TopBand({
         </div>
         <div style={{ position: "absolute", top: 0, right: 0 }}>
           <IconButton
+            placement="onGlass"
             glyph={GLYPHS.close}
             size="md"
             label="Close deck"

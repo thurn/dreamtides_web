@@ -297,6 +297,7 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
         </Eyebrow>
       </div>
       <IconButton
+        placement="onGlass"
         glyph={GLYPHS.close}
         size="sm"
         label="Close deck"
@@ -539,6 +540,7 @@ function ControlBar({
       {/* The sort direction is one toggle affordance, not two segments: a single
           disc whose chevron reflects the current direction and flips on press. */}
       <IconButton
+        placement="onGlass"
         size="sm"
         glyph={
           filterSort.direction === "asc" ? GLYPHS.chevronUp : GLYPHS.chevronDown
