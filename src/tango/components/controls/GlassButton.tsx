@@ -53,7 +53,9 @@ const dangerChromeOnMedia: React.CSSProperties = {
 const dangerChromeOnGlass: React.CSSProperties = {
   background:
     "linear-gradient(180deg, rgba(244, 43, 72, 0.13), rgba(150, 12, 35, 0.08)), var(--glass-on-glass-sheen), var(--glass-on-glass-fill)",
-  borderColor: "rgba(255, 111, 130, 0.82)",
+  // Match the base material's shorthand so React can atomically replace and
+  // restore the rim when a Purge action transitions danger → default.
+  border: "1px solid rgba(255, 111, 130, 0.82)",
   boxShadow:
     "inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -12px 24px rgba(150, 12, 35, 0.08), 0 0 0 1px rgba(244, 43, 72, 0.16), 0 10px 28px rgba(244, 43, 72, 0.28)",
 };
