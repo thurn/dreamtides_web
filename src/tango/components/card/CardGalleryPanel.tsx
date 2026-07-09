@@ -489,9 +489,9 @@ export function CardGalleryPanel({
       <div
         ref={bodyRef}
         style={{
-          flex: `0 1 ${bodyHeight}`,
+          flex: frame === "fullBleed" ? "1 1 auto" : `0 1 ${bodyHeight}`,
           minHeight: 0,
-          height: bodyHeight,
+          height: frame === "fullBleed" ? undefined : bodyHeight,
           overflowY: "auto",
           WebkitOverflowScrolling: "touch",
           padding: galleryPadding,
