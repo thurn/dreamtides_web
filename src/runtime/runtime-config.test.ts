@@ -13,6 +13,7 @@ describe("parseRuntimeConfig", () => {
       databaseMode: "emulator",
       journeyVariant: "v2",
       uiVariant: "tango",
+      purgeBottomSheet: false,
       poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "pool",
       fresh20PackSize: undefined,
@@ -64,6 +65,23 @@ describe("parseRuntimeConfig", () => {
       expect(parseRuntimeConfig("?ui=legacy").uiVariant).toBe("legacy");
       expect(parseRuntimeConfig("?ui=tango").uiVariant).toBe("tango");
       expect(parseRuntimeConfig("?ui=Legacy").uiVariant).toBe("tango");
+    });
+  });
+
+  describe("purgeBottomSheet", () => {
+    it("defaults to false unless explicitly enabled", () => {
+      expect(parseRuntimeConfig("").purgeBottomSheet).toBe(false);
+      expect(parseRuntimeConfig("?purgeBottomSheet=").purgeBottomSheet).toBe(false);
+      expect(parseRuntimeConfig("?purgeBottomSheet=0").purgeBottomSheet).toBe(false);
+      expect(parseRuntimeConfig("?purgeBottomSheet=true").purgeBottomSheet).toBe(
+        false,
+      );
+    });
+
+    it("returns true only when purgeBottomSheet=1", () => {
+      expect(parseRuntimeConfig("?purgeBottomSheet=1").purgeBottomSheet).toBe(
+        true,
+      );
     });
   });
 

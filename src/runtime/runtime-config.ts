@@ -25,6 +25,12 @@ export interface RuntimeConfig {
    */
   uiVariant: UiVariant;
   /**
+   * Enables the Tango Purge card grid's glass bottom-sheet treatment for
+   * comparison captures, from `?purgeBottomSheet=1`. `parseRuntimeConfig`
+   * always sets it; it is optional only so test config literals can omit it.
+   */
+  purgeBottomSheet?: boolean;
+  /**
    * Draft-pool construction strategy from `?algo=`, resolved to a registered
    * `PoolVariant`. An absent `?algo=` uses `DEFAULT_POOL_VARIANT`; a draft-mode
    * value (`replay`/`fresh20`) also uses the default; any other value must name
@@ -108,6 +114,7 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     databaseMode: parseDatabaseMode(params.get("realtime")),
     journeyVariant: parseJourneyVariant(params.get("journey")),
     uiVariant: parseUiVariant(params.get("ui")),
+    purgeBottomSheet: params.get("purgeBottomSheet") === "1",
     poolVariant,
     draftMode,
     fresh20PackSize: parsePackSize(params.get("packsize")),

@@ -7,7 +7,13 @@ import { useQuest } from "../../state/quest-context";
 import { PurgeSiteScreen } from "../../tango/screens/PurgeSiteScreen";
 import { buildPurgeSiteView, resolvePurgeGuide } from "./purge-view-model";
 
-export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
+export function PurgeSiteScreenAdapter({
+  siteId,
+  useBottomSheet = false,
+}: {
+  siteId: string;
+  useBottomSheet?: boolean;
+}) {
   const { state, mutations, questContent } = useQuest();
   const node =
     state.currentDreamscape !== null
@@ -99,6 +105,7 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
   return (
     <PurgeSiteScreen
       view={view}
+      useBottomSheet={useBottomSheet}
       onClose={handleClose}
       onPurge={handlePurge}
     />

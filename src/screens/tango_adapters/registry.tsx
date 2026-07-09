@@ -84,7 +84,12 @@ export function tangoSiteScreenFor(
         />
       );
     case "Purge":
-      return <PurgeSiteScreenAdapter siteId={site.id} />;
+      return (
+        <PurgeSiteScreenAdapter
+          siteId={site.id}
+          useBottomSheet={handlers.runtimeConfig?.purgeBottomSheet === true}
+        />
+      );
     default:
       return null;
   }

@@ -2,13 +2,20 @@
 // The top third is character-led dialog; the rest is a deck-viewer-derived card
 // grid with one contextual commit button after selection.
 
-import { useCallback, useMemo, useState, type MouseEvent } from "react";
+import {
+  useCallback,
+  useMemo,
+  useState,
+  type CSSProperties,
+  type MouseEvent,
+} from "react";
 import type { DeckCardView } from "./MobileDeckViewer";
 import { GameCard } from "../components/card/CardView";
 import { Button } from "../components/controls/Button";
 import { IconButton } from "../components/controls/IconButton";
 import { Motes } from "../components/hud/Motes";
 import { SpeechBubble } from "../components/overlay/SpeechBubble";
+import { glassSurfaceStyle } from "../internal/glass-surface";
 import { Pressable } from "../primitives/Pressable";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
@@ -47,6 +54,8 @@ export interface PurgeSiteView {
 export interface PurgeSiteScreenProps {
   /** View-model rendered by the pure screen. */
   view: PurgeSiteView;
+  /** Render the card grid on a full-width glass bottom sheet. */
+  useBottomSheet?: boolean;
   /** Leave the site without purging. */
   onClose: () => void;
   /** Commit selected deck entries at the displayed total cost. */
@@ -60,6 +69,7 @@ const PURGE_BUTTON_BOTTOM = `calc(${token("--safe-bottom")} + ${token("--space-5
 
 export function PurgeSiteScreen({
   view,
+  useBottomSheet = false,
   onClose,
   onPurge,
 }: PurgeSiteScreenProps) {
@@ -105,6 +115,28 @@ export function PurgeSiteScreen({
   }, [onPurge, selectedEntryIds, totalCost]);
 
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
+  const cardRegionStyle: CSSProperties = {
+    position: "relative",
+    zIndex: 10,
+    minHeight: 0,
+    overflowY: "auto",
+    WebkitOverflowScrolling: "touch",
+    padding: `${token("--space-4")} ${token("--gutter")} calc(${token(
+      "--safe-bottom",
+    )} + ${selectedCount > 0 ? token("--space-12") : token("--space-6")})`,
+    ...(useBottomSheet
+      ? {
+          ...glassSurfaceStyle({ radius: null }),
+          background: `${token("--glass-sheen")}, ${token(
+            "--glass-fill-popover",
+          )}`,
+          border: 0,
+          borderTop: `1px solid ${token("--border-soft")}`,
+          borderTopLeftRadius: token("--radius-panel"),
+          borderTopRightRadius: token("--radius-panel"),
+        }
+      : {}),
+  };
 
   return (
     <div
@@ -159,17 +191,24 @@ export function PurgeSiteScreen({
 
       <section
         data-purge-card-grid=""
-        style={{
-          position: "relative",
-          zIndex: 10,
-          minHeight: 0,
-          overflowY: "auto",
-          WebkitOverflowScrolling: "touch",
-          padding: `${token("--space-4")} ${token("--gutter")} calc(${token(
-            "--safe-bottom",
-          )} + ${selectedCount > 0 ? token("--space-12") : token("--space-6")})`,
-        }}
+        data-purge-bottom-sheet={useBottomSheet ? "true" : "false"}
+        style={cardRegionStyle}
       >
+        <h2
+          data-testid="tango-purge-title"
+          style={{
+            width: "100%",
+            maxWidth: isDesktop ? 980 : undefined,
+            margin: `0 auto ${token("--space-4")}`,
+            color: token("--text-on-glass"),
+            font: token("--t-title-sm"),
+            textAlign: "center",
+            textShadow: token("--text-outline-media"),
+            letterSpacing: 0,
+          }}
+        >
+          Purge Cards:
+        </h2>
         <div
           style={{
             width: "100%",

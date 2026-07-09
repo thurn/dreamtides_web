@@ -104,6 +104,9 @@ describe("PurgeSiteScreen", () => {
 
     expect(container.querySelector('[data-testid="tango-purge-close"]')).not.toBeNull();
     expect(
+      container.querySelector('[data-testid="tango-purge-title"]')?.textContent,
+    ).toBe("Purge Cards:");
+    expect(
       container.querySelector('[data-testid="tango-purge-commit-bar"]'),
     ).toBeNull();
 
@@ -146,6 +149,28 @@ describe("PurgeSiteScreen", () => {
     });
 
     expect(onPurge).toHaveBeenCalledWith(["entry-a", "entry-b"], 75);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("can render the card grid on a bottom sheet for comparison captures", () => {
+    const { container, root } = mount(
+      <PurgeSiteScreen
+        view={view()}
+        useBottomSheet
+        onClose={vi.fn()}
+        onPurge={vi.fn()}
+      />,
+    );
+
+    const cardRegion = container.querySelector<HTMLElement>(
+      "[data-purge-card-grid]",
+    );
+    expect(cardRegion?.dataset.purgeBottomSheet).toBe("true");
+    expect(cardRegion?.style.background).toContain("var(--glass-fill-popover)");
+    expect(cardRegion?.style.borderTopLeftRadius).toBe("var(--radius-panel)");
 
     act(() => {
       root.unmount();
