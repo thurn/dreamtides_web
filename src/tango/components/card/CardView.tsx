@@ -1576,6 +1576,7 @@ function GameCardSurface(props: InternalCardViewProps) {
     <div
       ref={cardRef}
       className={`card-view relative overflow-hidden rounded-lg transition-transform duration-200${large ? " card-view--large" : ""}${pointerFeedbackClass}${rarityClass}`}
+      data-card-id={card.id}
       data-card-text-scale={textScale.toFixed(2)}
       data-rarity={rarityAttr}
       data-card-type={card.cardType}
@@ -1849,6 +1850,7 @@ function GameCardSurface(props: InternalCardViewProps) {
               stays card-proportional. */}
           <div
             className="absolute"
+            data-card-energy-anchor=""
             style={{
               top: "var(--cv-energy-orb-top)",
               left: "var(--cv-energy-orb-left)",

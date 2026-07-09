@@ -217,6 +217,49 @@ describe("CardDisplay", () => {
     });
   });
 
+  it("keeps compact and enlarged energy glyphs inside the UUID-identified title-bar anchor", () => {
+    const cardId = asCardId("6df006f9-c1bf-4645-ac6e-4f7241db0104");
+    const card = makeCard({ id: cardId, energyCost: 4 });
+    const { container, root } = mount(
+      <>
+        <div data-size="compact">
+          <CardView card={card} />
+        </div>
+        <div data-size="enlarged">
+          <CardView card={card} large />
+        </div>
+      </>,
+    );
+
+    for (const size of ["compact", "enlarged"] as const) {
+      const surface = container.querySelector<HTMLElement>(
+        `[data-size="${size}"] [data-card-id="${cardId}"]`,
+      );
+      const anchor = surface?.querySelector<HTMLElement>(
+        "[data-card-energy-anchor]",
+      );
+      const orb = anchor?.querySelector<HTMLElement>(
+        '[data-card-stat="energy"]',
+      );
+      const digit = orb?.querySelector<HTMLElement>("div");
+
+      expect(surface).not.toBeNull();
+      expect(anchor?.classList.contains("absolute")).toBe(true);
+      expect(anchor?.style.display).toBe("flex");
+      expect(anchor?.style.top).toBe("var(--cv-energy-orb-top)");
+      expect(anchor?.style.left).toBe("var(--cv-energy-orb-left)");
+      expect(orb?.style.width).toBe("var(--cv-energy-orb-size)");
+      expect(orb?.style.height).toBe("var(--cv-energy-orb-size)");
+      expect(orb?.querySelector("i.bxf.bx-fire-alt")).not.toBeNull();
+      expect(digit?.textContent).toBe("4");
+      expect(digit?.style.position).toBe("relative");
+    }
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders the energy cost as 'X' for variable-cost (null) cards", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ energyCost: null })} />,
