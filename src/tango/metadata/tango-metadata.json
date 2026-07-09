@@ -612,7 +612,7 @@
       ],
       "required": false,
       "defaultValue": "floating",
-      "description": "Panel frame geometry. Defaults to `floating`."
+      "description": "Panel frame geometry and material. `floating` uses liquid glass;\n`fullBleed` uses the standard alpha scrim. Defaults to `floating`."
     },
     {
       "name": "spacing",

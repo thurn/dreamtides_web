@@ -9,9 +9,9 @@
 // The body is a scrolling grid of the starting cards in acquisition order. Each
 // GameCard grows in place on hover (desktop), while mobile uses the same
 // press-to-read large preview as the Deck Viewer. The gallery sizes itself to
-// the screen: desktop uses a roomy floating five-column panel, while mobile uses
-// a full-bleed four-column panel with the gallery body's scroll affordance
-// handled by CardGalleryPanel. The content is
+// the screen: desktop uses a roomy floating five-column glass panel, while
+// mobile uses a full-bleed four-column alpha scrim with the gallery body's
+// scroll affordance handled by CardGalleryPanel. The content is
 // intentionally minimal — the title, one line of intro copy, and the cards;
 // there are no filter, sort, or "Continue" controls. Dismissal is the close disc
 // or Escape.
@@ -24,7 +24,6 @@ import type { ReactElement } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { CardData } from "../../types/cards";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
-import { GlassBackdrop } from "../components/overlay/GlassDialog";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "./use-is-desktop";
@@ -107,7 +106,6 @@ export function StartingDeckOverlay({
             padding: isDesktop ? token("--space-8") : 0,
           }}
         >
-          {!isDesktop && <GlassBackdrop />}
           <div
             style={{
               position: "relative",

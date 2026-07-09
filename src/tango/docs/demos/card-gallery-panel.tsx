@@ -1,5 +1,5 @@
-// Registry demo entry for CardGalleryPanel — the shared glass card-browser
-// surface used by the starting-deck reveal and card-selection sites.
+// Registry demo entry for CardGalleryPanel — the shared card-browser surface
+// used by the starting-deck reveal and card-selection sites.
 
 import { useEffect, useState } from "react";
 import type { CardData } from "../../../types/cards";
@@ -88,9 +88,9 @@ export const cardGalleryPanelDemo: TangoComponent = {
   id: "card-gallery-panel",
   title: "Card Gallery Panel",
   blurb:
-    "The shared glass card-browser surface: a left-aligned title and subtitle, a trailing header accessory, and a scrolling GameCard grid.",
+    "The shared card-browser surface: a left-aligned title and subtitle, a trailing header accessory, and a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim.",
   callout:
-    "Use this when a screen presents a bounded card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component owns one rounded glass frame, the header, accessory slot, internal scroll, fixed grid modes, and row-peek sizing; callers provide resolved card models keyed by entry id or UUID and choose a floating or full-bleed frame.",
+    "Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component derives material from frame geometry: floating is rounded glass and full-bleed is the standard alpha scrim. It also owns the header, accessory slot, internal scroll, fixed grid modes, and row-peek sizing; callers provide resolved card models keyed by entry id or UUID.",
   group: "Components",
   docName: "CardGalleryPanel",
   Component: CardGalleryPanelDemo,

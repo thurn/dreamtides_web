@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/glass-dialog`
 
-Real consumers: **1** (imports outside `src/tango/docs/` and tests).
+Real consumers: **0** (imports outside `src/tango/docs/` and tests).
 
 The glass overlay shell: a modal dialog with a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and a glass close disc) over a scrolling body. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.
 

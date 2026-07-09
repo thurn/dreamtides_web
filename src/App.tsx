@@ -68,9 +68,9 @@ export function QuestApp({
   // (`dreamcaller` set + `hasSeenStartingDeckPopup` false) so a reload of the
   // same `?game=` URL does not re-open the popup. The flag round-trips
   // through `normalizeQuestState` so a fresh client joining the same room
-  // also sees the correct state. The popup uses a full-bleed frosted overlay on
-  // mobile and a centered bounded glass dialog on desktop, layered on top of
-  // the live dreamscape; the HUD and screen return once it is dismissed.
+  // also sees the correct state. The popup uses a full-bleed alpha scrim on
+  // mobile and a centered bounded glass panel on desktop, layered on top of the
+  // live dreamscape; the HUD and screen return once it is dismissed.
   const showStarterDeckIntro =
     state.dreamcaller !== null && !state.hasSeenStartingDeckPopup;
   // The Tango quest map screens (dreamscape, atlas) re-home the persistent

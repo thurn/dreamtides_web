@@ -1,11 +1,12 @@
-// CardGalleryPanel — the shared glass card-browser surface.
+// CardGalleryPanel — the shared card-browser surface.
 //
 // A card-gallery surface is the recurring "title + subtitle, trailing action,
 // scrolling GameCard grid" pattern used by the starting-deck reveal and card
-// selection sites. The component owns one rounded glass frame, the header row,
-// body scroll, screen-aware row peeking, and fixed card grid modes; callers
-// choose the frame and column contract and provide resolved card models keyed by
-// deck entry id / UUID.
+// selection sites. The component owns the frame material, header row, body
+// scroll, screen-aware row peeking, and fixed card grid modes. A floating frame
+// is glass; a full-bleed frame is the standard alpha scrim. Callers choose the
+// frame and column contract and provide resolved card models keyed by deck entry
+// id / UUID.
 
 import {
   useEffect,
@@ -19,6 +20,7 @@ import type { CardTransfigurationDisplay } from "../../../runtime/transfiguratio
 import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import type { TangoColor } from "../../primitives/color";
+import type { GlassControlPlacement } from "../../primitives/control-placement";
 import type { Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
@@ -107,7 +109,10 @@ export interface CardGalleryPanelProps {
   columns?: CardGalleryColumns;
   /** Card size preset. Defaults to `standard`. */
   cardSize?: CardGalleryCardSize;
-  /** Panel frame geometry. Defaults to `floating`. */
+  /**
+   * Panel frame geometry and material. `floating` uses liquid glass;
+   * `fullBleed` uses the standard alpha scrim. Defaults to `floating`.
+   */
   frame?: CardGalleryFrame;
   /** Internal padding and grid gap scale. Defaults to `regular`. */
   spacing?: CardGallerySpacing;
@@ -143,11 +148,14 @@ interface GalleryMeasure {
   visibleGapSlots: number;
 }
 
-function accessoryNode(accessory: CardGalleryAccessory): ReactElement {
+function accessoryNode(
+  accessory: CardGalleryAccessory,
+  placement: GlassControlPlacement,
+): ReactElement {
   if (accessory.kind === "glassButton") {
     return (
       <GlassButton
-        placement="onGlass"
+        placement={placement}
         label={accessory.label}
         glyph={accessory.glyph}
         disabled={accessory.disabled}
@@ -160,7 +168,7 @@ function accessoryNode(accessory: CardGalleryAccessory): ReactElement {
   }
   return (
     <IconButton
-      placement="onGlass"
+      placement={placement}
       glyph={accessory.glyph}
       size={accessory.size}
       label={accessory.label}
@@ -371,7 +379,7 @@ function useGalleryMeasure({
   return { rootRef, headerRef, bodyRef, gridRef, measure };
 }
 
-/** Shared glass card-gallery surface with a header accessory and scrolling grid. */
+/** Shared card-gallery surface with a header accessory and scrolling grid. */
 export function CardGalleryPanel({
   title,
   subtitle,
@@ -393,8 +401,12 @@ export function CardGalleryPanel({
     setBesideCutout(cutoutAwareAccessory && hasInjectedDisplayCutout());
   }, [cutoutAwareAccessory]);
 
+  const accessoryPlacement: GlassControlPlacement =
+    frame === "fullBleed" ? "onMedia" : "onGlass";
   const accessory =
-    rightAccessory !== undefined ? accessoryNode(rightAccessory) : null;
+    rightAccessory !== undefined
+      ? accessoryNode(rightAccessory, accessoryPlacement)
+      : null;
   const columnCount = renderedColumnCount(columns);
   const rowCount = rowCountFor(cards.length, columnCount);
   const fallbackVisibleRows = plannedVisibleRows(rowCount);
@@ -423,6 +435,13 @@ export function CardGalleryPanel({
   const cardHeight = `calc(${cardWidth} / ${String(CARD_ASPECT_RATIO_VALUE)})`;
   const bodyHeight = `calc((${cardHeight} * ${String(visibleRows)}) + (${galleryGap} * ${String(visibleGapSlots)}) + (${galleryPadding} * 2))`;
   const panelWidth = `calc((${cardWidth} * ${String(columnCount)}) + (${galleryGap} * ${String(Math.max(0, columnCount - 1))}) + (${galleryPadding} * 2))`;
+  const materialStyle: CSSProperties =
+    frame === "fullBleed"
+      ? { background: token("--scrim") }
+      : {
+          ...glassSurfaceStyle(),
+          background: `${token("--glass-sheen")}, ${token("--glass-fill-popover")}`,
+        };
 
   return (
     <>
@@ -433,10 +452,7 @@ export function CardGalleryPanel({
         data-gallery-columns={columnCount}
         data-gallery-visible-rows={visibleRows}
         style={{
-          ...glassSurfaceStyle({
-            radius: frame === "fullBleed" ? null : undefined,
-          }),
-          background: `${token("--glass-sheen")}, ${token("--glass-fill-popover")}`,
+          ...materialStyle,
           position: "relative",
           boxSizing: "border-box",
           width: frame === "fullBleed" ? "100%" : panelWidth,

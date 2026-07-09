@@ -12,9 +12,8 @@
 //   - the InfoCard press-reveal shell (which overrides the fill to the warmer
 //     --glass-fill-popover tint; its fullBleed / atlasReveal text cards wear the
 //     same recipe),
-//   - GlassDialog — both its GlassBackdrop (the full-bleed frosted layer used by
-//     the StartingDeckOverlay on mobile, reduced to fill + blur for an
-//     edge-to-edge surface) and its centered glass panel,
+//   - GlassDialog — both its GlassBackdrop (a full-bleed frosted layer reduced
+//     to fill + blur for an edge-to-edge surface) and its centered glass panel,
 //   - control-treatment.ts's glassTrack() (via glassSurfaceStyle({ radius: null
 //     })), which flows on to glassIconButtonChrome() → IconButton and
 //     controlChrome() → the Select / SegmentedControl track+trigger and

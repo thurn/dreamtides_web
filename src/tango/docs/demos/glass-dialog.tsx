@@ -44,6 +44,7 @@ function GlassDialogDemo() {
 export const glassDialogDemo: TangoComponent = {
   id: "glass-dialog",
   title: "Glass Dialog",
+  status: "incubating",
   blurb:
     "The glass overlay shell: a modal dialog with a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and a glass close disc) over a scrolling body. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.",
   callout:

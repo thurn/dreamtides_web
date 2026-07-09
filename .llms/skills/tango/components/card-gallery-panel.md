@@ -8,9 +8,9 @@ Components · Live demo & interactive props: `/tango#/card-gallery-panel`
 
 Real consumers: **2** (imports outside `src/tango/docs/` and tests).
 
-The shared glass card-browser surface: a left-aligned title and subtitle, a trailing header accessory, and a scrolling GameCard grid.
+The shared card-browser surface: a left-aligned title and subtitle, a trailing header accessory, and a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim.
 
-> **Guidance:** Use this when a screen presents a bounded card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component owns one rounded glass frame, the header, accessory slot, internal scroll, fixed grid modes, and row-peek sizing; callers provide resolved card models keyed by entry id or UUID and choose a floating or full-bleed frame.
+> **Guidance:** Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component derives material from frame geometry: floating is rounded glass and full-bleed is the standard alpha scrim. It also owns the header, accessory slot, internal scroll, fixed grid modes, and row-peek sizing; callers provide resolved card models keyed by entry id or UUID.
 
 ## Props
 
@@ -23,7 +23,7 @@ The shared glass card-browser surface: a left-aligned title and subtitle, a trai
 | `emptyLabel` | `string` | no | `No cards.` | Empty-state copy shown when `cards` is empty. |
 | `columns` | `CardGalleryColumns` = `"auto" \| "two" \| "four" \| "five"` | no | `auto` | Card grid mode. Defaults to `auto`. |
 | `cardSize` | `CardGalleryCardSize` = `"standard" \| "roomy"` | no | `standard` | Card size preset. Defaults to `standard`. |
-| `frame` | `CardGalleryFrame` = `"floating" \| "fullBleed"` | no | `floating` | Panel frame geometry. Defaults to `floating`. |
+| `frame` | `CardGalleryFrame` = `"floating" \| "fullBleed"` | no | `floating` | Panel frame geometry and material. `floating` uses liquid glass; `fullBleed` uses the standard alpha scrim. Defaults to `floating`. |
 | `spacing` | `CardGallerySpacing` = `"regular" \| "compact"` | no | `regular` | Internal padding and grid gap scale. Defaults to `regular`. |
 | `largeCards` | `boolean` | no | `false` | Draw each tile with GameCard's larger readable type scale. |
 | `testId` | `string` | no | — | Test id for the panel root. |

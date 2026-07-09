@@ -62,8 +62,9 @@ and blur, while the control adds a low-alpha neutral fill, a brighter rim and
 specular edge, and a tighter shadow. This keeps the inherited scene color
 visible through the control and makes the nested object boundary clear.
 
-CardGalleryPanel owns this relationship for its header accessory and renders
-both labeled and icon accessories with `placement="onGlass"`.
+CardGalleryPanel derives this relationship from its frame. A floating gallery
+renders labeled and icon accessories with `placement="onGlass"`; a full-bleed
+gallery uses the standard scrim and renders them with `placement="onMedia"`.
 
 ## `--glass-fill-popover`: the warmer reveal tint
 
@@ -80,10 +81,11 @@ collapses the two fills fails the build.
 
 ## Deck-viewer backdrop
 
-The MobileDeckViewer and DesktopDeckViewer place their content over the standard
-`--scrim` alpha overlay. The backdrop darkens the live scene without applying a
-blur, keeping the scene's forms recognizable while reducing visual competition
-with the card grid.
+The MobileDeckViewer, DesktopDeckViewer, and full-bleed CardGalleryPanel place
+their content over the standard `--scrim` alpha overlay. The backdrop darkens
+the live scene without applying a blur, keeping the scene's forms recognizable
+while reducing visual competition with the card grid. Floating
+CardGalleryPanels remain liquid glass.
 
 ## The blur-preservation constraint
 

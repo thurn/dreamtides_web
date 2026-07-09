@@ -174,6 +174,12 @@ describe("CardGalleryPanel", () => {
       "2",
     );
     expect(container.querySelector("section")?.style.borderRadius).toBe("0px");
+    expect(container.querySelector("section")?.style.background).toBe(
+      "var(--scrim)",
+    );
+    expect(
+      container.querySelector("section")?.getAttribute("style"),
+    ).not.toContain("backdrop-filter");
     expect(container.querySelector("header")?.style.padding).toBe(
       "var(--space-5)",
     );
@@ -186,7 +192,7 @@ describe("CardGalleryPanel", () => {
       container.querySelector('[data-testid="gallery-close"]')?.getAttribute(
         "data-glass-placement",
       ),
-    ).toBe("onGlass");
+    ).toBe("onMedia");
 
     act(() => {
       container

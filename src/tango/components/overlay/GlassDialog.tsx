@@ -1,8 +1,7 @@
 // GlassDialog + GlassBackdrop — the glass overlay shell.
 //
-// Two pieces of the frosted-overlay idiom used by GlassDialog and the
-// StartingDeckOverlay, lifted here so a screen assembles an overlay instead of
-// re-declaring the glass geometry:
+// Two pieces of the frosted-overlay idiom, lifted here so a screen assembles a
+// glass dialog instead of re-declaring the material and geometry:
 //
 //   - GlassBackdrop: the full-bleed frosted-glass layer. It takes only the fill
 //     and blur/saturate backdrop from the shared liquid-glass recipe — the rim,
@@ -17,7 +16,7 @@
 //   - GlassDialog: a modal overlay with a bounded, centered glass panel on
 //     desktop and a full-bleed frosted overlay on mobile, with a hairline-closed
 //     header (title + optional subtitle + a trailing glass close disc) over a
-//     scrolling body. It is the shell the StartingDeckOverlay wears.
+//     scrolling body.
 //
 // The close disc is the shared `IconButton` at size `md` (48px) so the close
 // matches the IconButton size scale rather than inventing a bespoke disc. The

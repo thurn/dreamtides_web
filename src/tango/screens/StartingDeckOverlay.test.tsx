@@ -201,6 +201,8 @@ describe("StartingDeckOverlay", () => {
     expect(gallery?.dataset.galleryFrame).toBe("fullBleed");
     expect(gallery?.dataset.galleryColumns).toBe("4");
     expect(gallery?.style.borderRadius).toBe("0px");
+    expect(gallery?.style.background).toBe("var(--scrim)");
+    expect(gallery?.getAttribute("style")).not.toContain("backdrop-filter");
     // The body scrolls internally.
     const scroll = container.querySelector("header")
       ?.nextElementSibling as HTMLElement | null;
@@ -222,6 +224,7 @@ describe("StartingDeckOverlay", () => {
     const gallery = galleryOf(container);
     expect(gallery?.dataset.galleryFrame).toBe("floating");
     expect(gallery?.dataset.galleryColumns).toBe("5");
+    expect(gallery?.style.backdropFilter).toContain("blur(");
     expect(
       container
         .querySelector("[data-game-card-large]")
