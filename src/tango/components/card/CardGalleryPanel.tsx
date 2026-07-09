@@ -26,7 +26,6 @@ import { GlassButton } from "../controls/GlassButton";
 import { IconButton, type IconButtonSize } from "../controls/IconButton";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import { GameCard } from "./CardView";
-import "./card-gallery-panel.css";
 
 /** One resolved card in a {@link CardGalleryPanel}. */
 export interface CardGalleryCardView {
@@ -492,16 +491,11 @@ export function CardGalleryPanel({
       </header>
       <div
         ref={bodyRef}
-        className={
-          scrollable
-            ? "tango-card-gallery-scroll tango-card-gallery-scroll--active"
-            : "tango-card-gallery-scroll"
-        }
         style={{
           flex: frame === "fullBleed" ? "1 1 auto" : `0 1 ${bodyHeight}`,
           minHeight: 0,
           height: frame === "fullBleed" ? undefined : bodyHeight,
-          overflowY: scrollable ? "scroll" : "auto",
+          overflowY: "auto",
           WebkitOverflowScrolling: "touch",
           padding: galleryPadding,
         }}

@@ -240,7 +240,7 @@ describe("StartingDeckOverlay", () => {
     expect(gallery?.dataset.galleryVisibleRows).toBe("2.5");
     const scroll = container.querySelector("header")
       ?.nextElementSibling as HTMLElement | null;
-    expect(scroll?.style.overflowY).toBe("scroll");
+    expect(scroll?.style.overflowY).toBe("auto");
     expect(
       container.querySelectorAll("[data-testid^='starting-deck-modal-card-']"),
     ).toHaveLength(20);

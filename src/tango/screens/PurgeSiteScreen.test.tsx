@@ -267,7 +267,7 @@ describe("PurgeSiteScreen", () => {
     expect(cardRegion?.dataset.purgeLayout).toBe("desktop");
     expect(cardRegion?.style.height).toBe("100%");
     expect(gallery?.dataset.galleryVisibleRows).toBe("2.5");
-    expect(scroll?.style.overflowY).toBe("scroll");
+    expect(scroll?.style.overflowY).toBe("auto");
     expect(
       container.querySelectorAll("[data-testid^='tango-purge-card-entry-']"),
     ).toHaveLength(20);
