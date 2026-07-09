@@ -26,6 +26,10 @@ import { GlassButton } from "../controls/GlassButton";
 import { IconButton, type IconButtonSize } from "../controls/IconButton";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import { GameCard } from "./CardView";
+import {
+  renderMobileCardPeekOverlay,
+  useMobileCardPeek,
+} from "./MobileCardPeek";
 
 /** One resolved card in a {@link CardGalleryPanel}. */
 export interface CardGalleryCardView {
@@ -102,6 +106,8 @@ export interface CardGalleryPanelProps {
   frame?: CardGalleryFrame;
   /** Internal padding and grid gap scale. Defaults to `regular`. */
   spacing?: CardGallerySpacing;
+  /** Draw each tile with GameCard's larger readable type scale. */
+  largeCards?: boolean;
   /** Test id for the panel root. */
   testId?: string;
   /**
@@ -111,6 +117,11 @@ export interface CardGalleryPanelProps {
   cutoutAwareAccessory?: boolean;
   /** Fires when an enabled card tile is activated. */
   onCardPress?: (entryId: string) => void;
+  /**
+   * Enables the shared mobile Deck Viewer press preview for compact galleries:
+   * press a tile and a large readable card is placed clear of the finger.
+   */
+  mobilePressPreview?: boolean;
 }
 
 const STANDARD_CARD_MIN_WIDTH_PX = 96;
@@ -347,13 +358,7 @@ function useGalleryMeasure({
       resizeObserver?.disconnect();
       window.removeEventListener("resize", update);
     };
-  }, [
-    cardSize,
-    columnCount,
-    fallbackVisibleRows,
-    frame,
-    spacing,
-  ]);
+  }, [cardSize, columnCount, fallbackVisibleRows, frame, spacing]);
 
   return { rootRef, headerRef, bodyRef, gridRef, measure };
 }
@@ -369,9 +374,11 @@ export function CardGalleryPanel({
   cardSize = "standard",
   frame = "floating",
   spacing = "regular",
+  largeCards = false,
   testId,
   cutoutAwareAccessory = false,
   onCardPress,
+  mobilePressPreview = false,
 }: CardGalleryPanelProps): ReactElement {
   const [besideCutout, setBesideCutout] = useState(false);
   useEffect(() => {
@@ -392,13 +399,17 @@ export function CardGalleryPanel({
     fallbackVisibleRows,
   });
   const visibleRows = measure?.visibleRows ?? fallbackVisibleRows;
-  const visibleGapSlots =
-    measure?.visibleGapSlots ?? fallbackVisibleGapSlots;
+  const visibleGapSlots = measure?.visibleGapSlots ?? fallbackVisibleGapSlots;
   const cardWidth =
     measure === null
       ? fallbackCardWidth(frame, cardSize, columnCount, spacing)
       : `${String(Math.max(1, Math.floor(measure.cardWidthPx)))}px`;
   const galleryGap = gridGapFor(spacing);
+  const mobilePeek = useMobileCardPeek({
+    columns: columnCount,
+    columnGapToken: spacing === "compact" ? "--space-3" : "--space-4",
+  });
+  const mobilePeekEnabled = mobilePressPreview && cards.length > 0;
   const galleryPadding = bodyPaddingFor(spacing);
   const headerPadding = headerPaddingFor(spacing);
   const cardHeight = `calc(${cardWidth} / ${String(CARD_ASPECT_RATIO_VALUE)})`;
@@ -406,188 +417,223 @@ export function CardGalleryPanel({
   const panelWidth = `calc((${cardWidth} * ${String(columnCount)}) + (${galleryGap} * ${String(Math.max(0, columnCount - 1))}) + (${galleryPadding} * 2))`;
 
   return (
-    <section
-      ref={rootRef}
-      data-testid={testId}
-      data-gallery-frame={frame}
-      data-gallery-columns={columnCount}
-      data-gallery-visible-rows={visibleRows}
-      style={{
-        ...glassSurfaceStyle({ radius: frame === "fullBleed" ? null : undefined }),
-        background: `${token("--glass-sheen")}, ${token("--glass-fill-popover")}`,
-        position: "relative",
-        boxSizing: "border-box",
-        width: frame === "fullBleed" ? "100%" : panelWidth,
-        maxWidth: "100%",
-        height: frame === "fullBleed" ? "100%" : undefined,
-        maxHeight: "100%",
-        borderRadius: frame === "fullBleed" ? 0 : token("--radius-popover"),
-        minHeight: 0,
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-        pointerEvents: "auto",
-      }}
-    >
-      {besideCutout && accessory !== null && (
-        <div
-          style={{
-            position: "absolute",
-            top: `calc(var(--display-cutout-top) + (var(--display-cutout-height) - ${String(
-              FLOATING_ACCESSORY_PX,
-            )}px) / 2)`,
-            right: token("--gutter"),
-            zIndex: 1,
-          }}
-        >
-          {accessory}
-        </div>
-      )}
-      <header
-        ref={headerRef}
+    <>
+      <section
+        ref={rootRef}
+        data-testid={testId}
+        data-gallery-frame={frame}
+        data-gallery-columns={columnCount}
+        data-gallery-visible-rows={visibleRows}
         style={{
-          flexShrink: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: token("--space-4"),
-          borderBottom: `1px solid ${token("--border-strong")}`,
-          padding: headerPadding,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: token("--space-1"),
-            minWidth: 0,
-          }}
-        >
-          <h2
-            style={{
-              margin: 0,
-              font: token("--t-title-sm"),
-              color: token("--text-on-glass"),
-              textAlign: "left",
-              letterSpacing: 0,
-            }}
-          >
-            {title}
-          </h2>
-          {subtitle !== undefined && (
-            <p
-              style={{
-                margin: 0,
-                font: token("--t-body"),
-                color: token("--text-on-glass-muted"),
-              }}
-            >
-              {subtitle}
-            </p>
-          )}
-        </div>
-        {!besideCutout && accessory}
-      </header>
-      <div
-        ref={bodyRef}
-        style={{
-          flex: frame === "fullBleed" ? "1 1 auto" : `0 1 ${bodyHeight}`,
+          ...glassSurfaceStyle({
+            radius: frame === "fullBleed" ? null : undefined,
+          }),
+          background: `${token("--glass-sheen")}, ${token("--glass-fill-popover")}`,
+          position: "relative",
+          boxSizing: "border-box",
+          width: frame === "fullBleed" ? "100%" : panelWidth,
+          maxWidth: "100%",
+          height: frame === "fullBleed" ? "100%" : undefined,
+          maxHeight: "100%",
+          borderRadius: frame === "fullBleed" ? 0 : token("--radius-popover"),
           minHeight: 0,
-          height: frame === "fullBleed" ? undefined : bodyHeight,
-          overflowY: "auto",
-          WebkitOverflowScrolling: "touch",
-          padding: galleryPadding,
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+          pointerEvents: "auto",
         }}
       >
-        {cards.length === 0 ? (
+        {besideCutout && accessory !== null && (
           <div
             style={{
-              display: "grid",
-              minHeight: "100%",
-              placeItems: "center",
+              position: "absolute",
+              top: `calc(var(--display-cutout-top) + (var(--display-cutout-height) - ${String(
+                FLOATING_ACCESSORY_PX,
+              )}px) / 2)`,
+              right: token("--gutter"),
+              zIndex: 1,
             }}
           >
-            <p
+            {accessory}
+          </div>
+        )}
+        <header
+          ref={headerRef}
+          style={{
+            flexShrink: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: token("--space-4"),
+            borderBottom: `1px solid ${token("--border-strong")}`,
+            padding: headerPadding,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: token("--space-1"),
+              minWidth: 0,
+            }}
+          >
+            <h2
               style={{
                 margin: 0,
-                font: token("--t-body"),
+                font: token("--t-title-sm"),
                 color: token("--text-on-glass"),
+                textAlign: "left",
+                letterSpacing: 0,
               }}
             >
-              {emptyLabel}
-            </p>
+              {title}
+            </h2>
+            {subtitle !== undefined && (
+              <p
+                style={{
+                  margin: 0,
+                  font: token("--t-body"),
+                  color: token("--text-on-glass-muted"),
+                }}
+              >
+                {subtitle}
+              </p>
+            )}
           </div>
-        ) : (
-          <div
-            ref={gridRef}
-            style={{
-              display: "grid",
-              gridTemplateColumns: gridTemplate(columnCount, cardWidth),
-              gap: galleryGap,
-              justifyContent: "center",
-            }}
-          >
-            {cards.map((card) => {
-              const disabled = card.disabled === true;
-              const interactive = onCardPress !== undefined;
-              const tile = (
-                <GameCard
-                  card={card.card}
-                  transfiguration={card.transfiguration}
-                  selected={card.selected}
-                  selectionColor={card.selectionColor}
-                  termDefinitions={interactive ? "none" : "card"}
-                />
-              );
-              const tileStyle: CSSProperties = {
-                position: "relative",
-                display: "block",
-                width: "100%",
-                borderRadius: token("--radius-card"),
-                opacity: disabled ? 0.42 : 1,
-                boxShadow:
-                  card.emphasis === "danger"
-                    ? `0 0 0 2px ${token("--danger")}`
-                    : "none",
-                WebkitTouchCallout: "none",
-                WebkitUserSelect: "none",
-                userSelect: "none",
-                touchAction: "manipulation",
-              };
+          {!besideCutout && accessory}
+        </header>
+        <div
+          ref={bodyRef}
+          onPointerMove={
+            mobilePeekEnabled ? mobilePeek.handlePointerMove : undefined
+          }
+          style={{
+            flex: frame === "fullBleed" ? "1 1 auto" : `0 1 ${bodyHeight}`,
+            minHeight: 0,
+            height: frame === "fullBleed" ? undefined : bodyHeight,
+            overflowY: "auto",
+            WebkitOverflowScrolling: "touch",
+            padding: galleryPadding,
+          }}
+        >
+          {cards.length === 0 ? (
+            <div
+              style={{
+                display: "grid",
+                minHeight: "100%",
+                placeItems: "center",
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  font: token("--t-body"),
+                  color: token("--text-on-glass"),
+                }}
+              >
+                {emptyLabel}
+              </p>
+            </div>
+          ) : (
+            <div
+              ref={gridRef}
+              style={{
+                display: "grid",
+                gridTemplateColumns: gridTemplate(columnCount, cardWidth),
+                gap: galleryGap,
+                justifyContent: "center",
+              }}
+            >
+              {cards.map((card) => {
+                const disabled = card.disabled === true;
+                const interactive = onCardPress !== undefined;
+                const peekable = mobilePeekEnabled && !disabled;
+                const tile = (
+                  <GameCard
+                    card={card.card}
+                    transfiguration={card.transfiguration}
+                    selected={card.selected}
+                    selectionColor={card.selectionColor}
+                    large={largeCards}
+                    termDefinitions={interactive || peekable ? "none" : "card"}
+                  />
+                );
+                const tileStyle: CSSProperties = {
+                  position: "relative",
+                  display: "block",
+                  width: "100%",
+                  borderRadius: token("--radius-card"),
+                  opacity: disabled ? 0.42 : 1,
+                  boxShadow:
+                    card.emphasis === "danger"
+                      ? `0 0 0 2px ${token("--danger")}`
+                      : "none",
+                  WebkitTouchCallout: "none",
+                  WebkitUserSelect: "none",
+                  userSelect: "none",
+                  touchAction: peekable ? "pan-y" : "manipulation",
+                };
 
-              if (!interactive) {
+                if (!interactive) {
+                  if (peekable) {
+                    return (
+                      <Pressable
+                        key={card.entryId}
+                        as="div"
+                        data-testid={card.testId}
+                        onPointerDown={(event) => {
+                          mobilePeek.openPeek(event, card);
+                        }}
+                        onContextMenu={(event) => {
+                          event.preventDefault();
+                        }}
+                        style={tileStyle}
+                      >
+                        {tile}
+                      </Pressable>
+                    );
+                  }
+                  return (
+                    <div
+                      key={card.entryId}
+                      data-testid={card.testId}
+                      style={tileStyle}
+                    >
+                      {tile}
+                    </div>
+                  );
+                }
+
                 return (
-                  <div
+                  <Pressable
                     key={card.entryId}
+                    as="button"
+                    aria-label={card.card.name}
+                    aria-pressed={card.selected}
+                    disabled={disabled}
                     data-testid={card.testId}
+                    onPointerDown={
+                      peekable
+                        ? (event) => {
+                            mobilePeek.openPeek(event, card);
+                          }
+                        : undefined
+                    }
+                    onClick={() => onCardPress(card.entryId)}
+                    onContextMenu={(event) => {
+                      event.preventDefault();
+                    }}
                     style={tileStyle}
                   >
                     {tile}
-                  </div>
+                  </Pressable>
                 );
-              }
-
-              return (
-                <Pressable
-                  key={card.entryId}
-                  as="button"
-                  aria-label={card.card.name}
-                  aria-pressed={card.selected}
-                  disabled={disabled}
-                  data-testid={card.testId}
-                  onClick={() => onCardPress(card.entryId)}
-                  onContextMenu={(event) => {
-                    event.preventDefault();
-                  }}
-                  style={tileStyle}
-                >
-                  {tile}
-                </Pressable>
-              );
-            })}
-          </div>
-        )}
-      </div>
-    </section>
+              })}
+            </div>
+          )}
+        </div>
+      </section>
+      {mobilePeek.peek !== null && renderMobileCardPeekOverlay(mobilePeek.peek)}
+    </>
   );
 }

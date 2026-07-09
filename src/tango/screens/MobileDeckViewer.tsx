@@ -24,29 +24,24 @@
 // PURE: renders from a view-model and reports dismissal through `onClose`. All
 // state here is local presentation state (which card is being peeked, the
 // filter/sort selection). The
-// finger-clearing placement math lives in the unit-tested `mobile-deck-peek`
+// finger-clearing placement math lives in the unit-tested shared card peek
 // module, whose guarantee is proven over a full touch-point sweep by
 // scripts/deck-peek-clearance-analysis.mjs.
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { createPortal } from "react-dom";
 import type { CardData } from "../../types/cards";
 import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
 import { GameCard } from "../components/card/CardView";
+import {
+  renderMobileCardPeekOverlay,
+  useMobileCardPeek,
+} from "../components/card/MobileCardPeek";
 import { Pressable } from "../primitives/Pressable";
 import { GlassBackdrop } from "../components/overlay/GlassDialog";
 import { IconButton } from "../components/controls/IconButton";
 import { Select } from "../components/controls/Select";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
-import { CardTermDefinitions } from "../components/card/CardTermDefinitions";
-import { infoCardWidth } from "../components/overlay/InfoCard";
-import {
-  computePeekBox,
-  peekWidthForViewport,
-  type PeekRect,
-} from "./mobile-deck-peek";
 import {
   type DeckControlOption,
   type DeckFilterSort,
@@ -90,43 +85,15 @@ export interface MobileDeckViewerProps {
 const COLUMNS = 4;
 
 /**
- * How far (px) the pointer may drift from the touch point before the press is
- * reclassified as a scroll and the zoom is dismissed, letting the grid scroll.
- * The zoom itself appears immediately on press-down; this only tears it back
- * down once a drag is clearly underway.
- */
-const MOVE_SLOP_PX = 10;
-const SUPPLEMENTAL_INFO_GAP_PX = 10;
-const SUPPLEMENTAL_INFO_EDGE_PX = 6;
-
-/**
- * Reads a length token's resolved pixel value off the `.tango` root, for the
- * finger-avoidance math (which needs real numbers, not `var()` strings). The
- * safe-area and spacing tokens used here all resolve to plain `px`.
- */
-function readLengthToken(name: `--${string}`): number {
-  if (typeof window === "undefined") return 0;
-  const host = document.querySelector(".tango") ?? document.documentElement;
-  const raw = getComputedStyle(host).getPropertyValue(name);
-  return Number.parseFloat(raw) || 0;
-}
-
-/** The card currently being pressed, with the geometry to render its zoom. */
-interface PeekState {
-  view: DeckCardView;
-  box: PeekRect;
-  /** The touch point that summoned it, tracked so a drag can dismiss it. */
-  pointerId: number;
-  startX: number;
-  startY: number;
-}
-
-/**
  * The narrow-viewport deck viewer: a control band (title, count, close, and the
  * filter/sort controls), then a press-to-zoom grid of the deck's cards.
  */
 export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
-  const [peek, setPeek] = useState<PeekState | null>(null);
+  const {
+    peek,
+    openPeek,
+    handlePointerMove: handleGridPointerMove,
+  } = useMobileCardPeek({ columns: COLUMNS, columnGapToken: "--space-4" });
   const [filterSort, setFilterSort] = useState<DeckFilterSort>(
     DEFAULT_DECK_FILTER_SORT,
   );
@@ -143,23 +110,6 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
     [view.cards, filterSort],
   );
 
-  const dismissPeek = useCallback(() => {
-    setPeek(null);
-  }, []);
-
-  // Release anywhere dismisses the zoom and ends the press.
-  useEffect(() => {
-    function onUp(): void {
-      dismissPeek();
-    }
-    window.addEventListener("pointerup", onUp);
-    window.addEventListener("pointercancel", onUp);
-    return () => {
-      window.removeEventListener("pointerup", onUp);
-      window.removeEventListener("pointercancel", onUp);
-    };
-  }, [dismissPeek]);
-
   // Escape closes the whole viewer (a zoom, if held, is released by pointerup).
   useEffect(() => {
     function onKey(e: KeyboardEvent): void {
@@ -169,60 +119,11 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  // Show the enlarged card the instant a card is pressed — no hold, no grow.
-  // The card jumps to the top of the screen and shifts off the finger so the
-  // rules text is readable while the finger is still down.
   const handleTilePointerDown = useCallback(
     (e: React.PointerEvent<HTMLElement>, cardView: DeckCardView) => {
-      if (peek !== null || typeof window === "undefined") return;
-      const sideMargin = readLengthToken("--gutter");
-      const width = peekWidthForViewport({
-        viewportWidth: window.innerWidth,
-        sideMargin,
-        columns: COLUMNS,
-        columnGap: readLengthToken("--space-4"),
-      });
-      // Anchor the finger to the pressed card's center: the modelled occlusion
-      // circle covers the whole tile, so the placement clears it wherever on the
-      // card the finger actually landed.
-      const tile = e.currentTarget.getBoundingClientRect();
-      // The transient card zoom reserves a conservative chrome zone using the
-      // `--safe-top`/`--safe-bottom` *design floors* — the sanctioned minimum-
-      // reservation channel, read as a concrete JS length. This is deliberately
-      // device-frame-independent: unlike the header band above (which tracks the
-      // real hardware inset), the peek box wants a stable floor, not the notch,
-      // and an `env()`-backed inset would resolve to 0 inside the screenshot
-      // iframe anyway.
-      const box = computePeekBox({
-        viewport: { width: window.innerWidth, height: window.innerHeight },
-        safeTop: readLengthToken("--safe-top"),
-        safeBottom: readLengthToken("--safe-bottom"),
-        sideMargin,
-        aspect: CARD_ASPECT_RATIO_VALUE,
-        width,
-        finger: { x: tile.left + tile.width / 2, y: tile.top + tile.height / 2 },
-      });
-      setPeek({
-        view: cardView,
-        box,
-        pointerId: e.pointerId,
-        startX: e.clientX,
-        startY: e.clientY,
-      });
+      openPeek(e, cardView);
     },
-    [peek],
-  );
-
-  // A drift past the slop means the finger is scrolling, not inspecting — drop
-  // the zoom and let the grid scroll.
-  const handleGridPointerMove = useCallback(
-    (e: React.PointerEvent<HTMLElement>) => {
-      if (peek === null || peek.pointerId !== e.pointerId) return;
-      const dx = e.clientX - peek.startX;
-      const dy = e.clientY - peek.startY;
-      if (Math.hypot(dx, dy) > MOVE_SLOP_PX) dismissPeek();
-    },
-    [peek, dismissPeek],
+    [openPeek],
   );
 
   return (
@@ -292,7 +193,7 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
         )}
       </div>
 
-      {peek !== null && <PeekOverlay peek={peek} />}
+      {peek !== null && renderMobileCardPeekOverlay(peek)}
     </div>
   );
 }
@@ -335,9 +236,9 @@ function TopBand({
         //
         // This reads the *hardware inset* channel, not a design floor: it must
         // reflect the actual notch so a no-notch phone reserves nothing extra
-        // (the `max(…, --gutter)` supplies the minimum). Contrast computePeekBox
-        // below, which deliberately reads the `--safe-top`/`--safe-bottom`
-        // design floors instead.
+        // (the `max(…, --gutter)` supplies the minimum). The shared mobile card
+        // peek deliberately reads the `--safe-top`/`--safe-bottom` design floors
+        // instead.
         paddingTop: `max(var(--safe-area-inset-top), ${token("--gutter")})`,
         paddingLeft: token("--gutter"),
         paddingRight: token("--gutter"),
@@ -496,9 +397,7 @@ function DeckTile({
         borderRadius: token("--radius-card"),
         // A bane card wears a danger ring so a corrupted card is legible even at
         // tile size, without inventing a new glyph.
-        boxShadow: cardView.isBane
-          ? `0 0 0 2px ${token("--danger")}`
-          : "none",
+        boxShadow: cardView.isBane ? `0 0 0 2px ${token("--danger")}` : "none",
         WebkitTouchCallout: "none",
         WebkitUserSelect: "none",
         userSelect: "none",
@@ -512,97 +411,6 @@ function DeckTile({
       />
     </Pressable>
   );
-}
-
-/**
- * The held zoom: just the enlarged card, portaled above the grid and shown
- * instantly at its placed box — no grow, no fade. Nothing else on screen is
- * touched (no scrim, no dimming), so the deck stays fully visible behind it.
- * Purely visual (`pointer-events: none`) so the finger that summoned it is never
- * intercepted; the press is tracked entirely on the grid underneath.
- *
- * The enlarged card is the main card for the interaction, so it keeps the
- * existing finger-avoidance geometry from `computePeekBox`. Keyword definition
- * InfoCards are supplemental: they do not avoid the finger independently, and
- * they never appear above the main card. They sit to the left or right of the
- * enlarged card, top-aligned with it, matching the Dream Atlas supplemental
- * card pattern.
- */
-function PeekOverlay({ peek }: { peek: PeekState }) {
-  const supplemental = computeSupplementalInfoPlacement(peek.box);
-  return createPortal(
-    <div
-      className="tango"
-      aria-hidden="true"
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 80,
-        pointerEvents: "none",
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          left: peek.box.left,
-          top: peek.box.top,
-          width: peek.box.width,
-          filter: `drop-shadow(${token("--shadow-card")})`,
-        }}
-      >
-        <GameCard
-          card={peek.view.card}
-          transfiguration={peek.view.transfiguration}
-          large
-          termDefinitions="none"
-        />
-      </div>
-      {supplemental !== null && (
-        <div
-          style={{
-            position: "absolute",
-            left: supplemental.left,
-            top: supplemental.top,
-            width: supplemental.width,
-          }}
-          data-mobile-deck-peek-definitions=""
-        >
-          <CardTermDefinitions
-            text={peek.view.card.renderedText}
-            side={supplemental.side}
-          />
-        </div>
-      )}
-    </div>,
-    document.body,
-  );
-}
-
-function computeSupplementalInfoPlacement(box: PeekRect): {
-  left: number;
-  top: number;
-  width: number;
-  side: "left" | "right";
-} | null {
-  if (typeof window === "undefined") {
-    return null;
-  }
-  const width = infoCardWidth(window.innerWidth);
-  const rightLeft = box.left + box.width + SUPPLEMENTAL_INFO_GAP_PX;
-  const fitsRight =
-    rightLeft + width <= window.innerWidth - SUPPLEMENTAL_INFO_EDGE_PX;
-  if (fitsRight) {
-    return { left: rightLeft, top: box.top, width, side: "right" };
-  }
-  return {
-    left: Math.max(
-      SUPPLEMENTAL_INFO_EDGE_PX,
-      box.left - SUPPLEMENTAL_INFO_GAP_PX - width,
-    ),
-    top: box.top,
-    width,
-    side: "left",
-  };
 }
 
 /** Shown when the deck has no cards. */

@@ -7,11 +7,11 @@
 // accessory, and internal card-grid scroll used by card-selection sites.
 //
 // The body is a scrolling grid of the starting cards in acquisition order. Each
-// GameCard grows in place on hover (desktop) or press (mobile) for a legible
-// read — that hover-zoom and its glossary stack live inside GameCard itself.
-// The gallery sizes itself to the screen: desktop uses a roomy floating five
-// column panel, while mobile uses a full-bleed two-column panel with the gallery
-// body's scroll affordance handled by CardGalleryPanel. The content is
+// GameCard grows in place on hover (desktop), while mobile uses the same
+// press-to-read large preview as the Deck Viewer. The gallery sizes itself to
+// the screen: desktop uses a roomy floating five-column panel, while mobile uses
+// a full-bleed four-column panel with the gallery body's scroll affordance
+// handled by CardGalleryPanel. The content is
 // intentionally minimal — the title, one line of intro copy, and the cards;
 // there are no filter, sort, or "Continue" controls. Dismissal is the close disc
 // or Escape.
@@ -133,8 +133,10 @@ export function StartingDeckOverlay({
               }}
               cards={view.cards}
               emptyLabel="No cards in starting deck."
-              columns={isDesktop ? "five" : "two"}
+              columns={isDesktop ? "five" : "four"}
               cardSize={isDesktop ? "roomy" : "standard"}
+              largeCards={isDesktop}
+              mobilePressPreview={!isDesktop}
               frame={isDesktop ? "floating" : "fullBleed"}
               spacing={isDesktop ? "regular" : "compact"}
               cutoutAwareAccessory

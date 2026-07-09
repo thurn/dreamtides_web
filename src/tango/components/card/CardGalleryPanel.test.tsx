@@ -10,7 +10,22 @@ import { GLYPHS } from "../../primitives/glyph";
 import { CardGalleryPanel } from "./CardGalleryPanel";
 
 vi.mock("./CardView", () => ({
-  GameCard: ({ card }: { card: CardData }) => <div>{card.name}</div>,
+  GameCard: ({
+    card,
+    large,
+    termDefinitions,
+  }: {
+    card: CardData;
+    large?: boolean;
+    termDefinitions?: "card" | "none";
+  }) => (
+    <div
+      data-game-card-large={large ? "true" : "false"}
+      data-game-card-terms={termDefinitions ?? "card"}
+    >
+      {card.name}
+    </div>
+  ),
 }));
 
 function makeCard(name: string): CardData {
@@ -171,6 +186,35 @@ describe("CardGalleryPanel", () => {
         ?.click();
     });
     expect(onClose).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("can render readable large cards and delegate terms to the mobile press preview", () => {
+    const { container, root } = mount(
+      <CardGalleryPanel
+        title="Starting Deck"
+        cards={[
+          {
+            entryId: "entry-a",
+            card: makeCard("Archive Sentry"),
+            testId: "gallery-card-a",
+          },
+        ]}
+        columns="four"
+        largeCards
+        mobilePressPreview
+      />,
+    );
+
+    const card = container.querySelector("[data-game-card-large]");
+    expect(card?.getAttribute("data-game-card-large")).toBe("true");
+    expect(card?.getAttribute("data-game-card-terms")).toBe("none");
+    expect(container.querySelector("section")?.dataset.galleryColumns).toBe(
+      "4",
+    );
 
     act(() => {
       root.unmount();

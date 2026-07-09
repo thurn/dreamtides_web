@@ -7,7 +7,7 @@ import {
   FINGER_RADIUS_PX,
   PEEK_MAX_WIDTH_PX,
   type PeekLayoutInput,
-} from "./mobile-deck-peek";
+} from "./mobile-card-peek-geometry";
 
 /** iPhone-class safe insets, side margin, and card shape shared by the cases. */
 const ENV = {
@@ -47,7 +47,8 @@ function widthFor(viewportWidth: number): number {
 /** The 4-across grid's column-center x coordinates (the finger's x is one). */
 function columnCenters(viewportWidth: number): number[] {
   const gridWidth = viewportWidth - ENV.sideMargin * 2;
-  const tileWidth = (gridWidth - ENV.columnGap * (ENV.columns - 1)) / ENV.columns;
+  const tileWidth =
+    (gridWidth - ENV.columnGap * (ENV.columns - 1)) / ENV.columns;
   return Array.from(
     { length: ENV.columns },
     (_, i) => ENV.sideMargin + i * (tileWidth + ENV.columnGap) + tileWidth / 2,
@@ -71,30 +72,40 @@ describe("peekWidthForViewport", () => {
 describe("computePeekBox", () => {
   it("sits just above the finger for a low press, not up at the top", () => {
     const width = widthFor(393);
-    const box = computePeekBox(layout({ width: 393, height: 852 }, { x: 150, y: 700 }, width));
+    const box = computePeekBox(
+      layout({ width: 393, height: 852 }, { x: 150, y: 700 }, width),
+    );
     // The card is placed just above the finger (well below the safe-area top),
     // so a bottom-of-deck card pops up near the thumb rather than at the top.
     expect(box.top).toBeGreaterThan(ENV.safeTop + 100);
     // Its bottom edge (the rules text) clears the top of the finger circle.
-    expect(box.top + box.height).toBeLessThanOrEqual(700 - FINGER_RADIUS_PX + 0.5);
+    expect(box.top + box.height).toBeLessThanOrEqual(
+      700 - FINGER_RADIUS_PX + 0.5,
+    );
   });
 
   it("pins the card to the top when the finger is too high to fit above it", () => {
-    const box = computePeekBox(layout({ width: 393, height: 852 }, { x: 60, y: 215 }, widthFor(393)));
+    const box = computePeekBox(
+      layout({ width: 393, height: 852 }, { x: 60, y: 215 }, widthFor(393)),
+    );
     expect(box.top).toBeCloseTo(ENV.safeTop, 5);
   });
 
   it("never places the card below the finger — pressing only pops it up", () => {
     const width = widthFor(393);
     for (let y = 200; y <= 800; y += 20) {
-      const box = computePeekBox(layout({ width: 393, height: 852 }, { x: 150, y }, width));
+      const box = computePeekBox(
+        layout({ width: 393, height: 852 }, { x: 150, y }, width),
+      );
       expect(box.top).toBeLessThanOrEqual(y);
     }
   });
 
   it("draws the card at the requested width, in the card's aspect ratio", () => {
     const width = widthFor(393);
-    const box = computePeekBox(layout({ width: 393, height: 852 }, { x: 242, y: 300 }, width));
+    const box = computePeekBox(
+      layout({ width: 393, height: 852 }, { x: 242, y: 300 }, width),
+    );
     expect(box.width).toBeCloseTo(width, 5);
     expect(box.width / box.height).toBeCloseTo(ENV.aspect, 5);
   });
@@ -102,8 +113,12 @@ describe("computePeekBox", () => {
   it("shifts a top-of-screen finger's card to the opposite side", () => {
     const width = widthFor(393);
     // A finger high on the left throws the card to the right edge, and vice versa.
-    const left = computePeekBox(layout({ width: 393, height: 852 }, { x: 60, y: 215 }, width));
-    const right = computePeekBox(layout({ width: 393, height: 852 }, { x: 333, y: 215 }, width));
+    const left = computePeekBox(
+      layout({ width: 393, height: 852 }, { x: 60, y: 215 }, width),
+    );
+    const right = computePeekBox(
+      layout({ width: 393, height: 852 }, { x: 333, y: 215 }, width),
+    );
     expect(left.left).toBeGreaterThan(right.left);
     expect(right.left).toBeCloseTo(ENV.sideMargin, 5);
     expect(left.left).toBeCloseTo(393 - ENV.sideMargin - width, 5);
@@ -111,7 +126,9 @@ describe("computePeekBox", () => {
 
   it("keeps a low finger's card over its own column", () => {
     const width = widthFor(393);
-    const box = computePeekBox(layout({ width: 393, height: 852 }, { x: 60, y: 760 }, width));
+    const box = computePeekBox(
+      layout({ width: 393, height: 852 }, { x: 60, y: 760 }, width),
+    );
     // The finger is well below the rules band, so the card centers on it.
     expect(box.left).toBeCloseTo(ENV.sideMargin, 5); // clamped to the left margin
   });
@@ -120,9 +137,13 @@ describe("computePeekBox", () => {
     const width = widthFor(393);
     for (const x of columnCenters(393)) {
       for (let y = 200; y <= 800; y += 40) {
-        const box = computePeekBox(layout({ width: 393, height: 852 }, { x, y }, width));
+        const box = computePeekBox(
+          layout({ width: 393, height: 852 }, { x, y }, width),
+        );
         expect(box.left).toBeGreaterThanOrEqual(ENV.sideMargin - 0.5);
-        expect(box.left + box.width).toBeLessThanOrEqual(393 - ENV.sideMargin + 0.5);
+        expect(box.left + box.width).toBeLessThanOrEqual(
+          393 - ENV.sideMargin + 0.5,
+        );
       }
     }
   });
@@ -140,9 +161,18 @@ describe("rules-text clears the finger circle (the guarantee)", () => {
     for (const viewport of VIEWPORTS) {
       const width = widthFor(viewport.width);
       for (const x of columnCenters(viewport.width)) {
-        for (let y = ENV.safeTop; y <= viewport.height - ENV.safeBottom; y += 2) {
+        for (
+          let y = ENV.safeTop;
+          y <= viewport.height - ENV.safeBottom;
+          y += 2
+        ) {
           const box = computePeekBox(layout(viewport, { x, y }, width));
-          const gap = circleRectGap(x, y, FINGER_RADIUS_PX, rulesRegionOfPeek(box));
+          const gap = circleRectGap(
+            x,
+            y,
+            FINGER_RADIUS_PX,
+            rulesRegionOfPeek(box),
+          );
           expect(gap).toBeGreaterThanOrEqual(0);
         }
       }

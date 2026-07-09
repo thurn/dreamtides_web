@@ -430,7 +430,10 @@ function ArtLayers({
     ART_BAND_MAX_TOP_PCT,
   );
   const seamPct = Math.min(100, bandTop + ART_SAFE_AREA_OVERLAP * 100);
-  const featherStartPct = Math.max(0, seamPct - ART_EXTENSION_FEATHER_ABOVE_PCT);
+  const featherStartPct = Math.max(
+    0,
+    seamPct - ART_EXTENSION_FEATHER_ABOVE_PCT,
+  );
   const featherMask = `linear-gradient(to bottom, rgba(0,0,0,0) ${featherStartPct.toFixed(2)}%, rgba(0,0,0,1) ${seamPct.toFixed(2)}%, rgba(0,0,0,1) 100%)`;
   const tintStartPct = Math.max(0, seamPct - ART_EXTENSION_TINT_ABOVE_PCT);
   const tintGradient = `linear-gradient(to bottom, rgba(${tintRgb}, 0) ${tintStartPct.toFixed(2)}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_SEAM_ALPHA}) ${seamPct.toFixed(2)}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_EDGE_ALPHA}) 100%)`;
@@ -440,7 +443,11 @@ function ArtLayers({
           extended art does not reach matches the band rather than going neutral. */}
       <div
         aria-hidden="true"
-        style={{ position: "absolute", inset: 0, background: ART_BAND_COLOR_CSS }}
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: ART_BAND_COLOR_CSS,
+        }}
       />
 
       {/* Crisp artwork, drawn full-card (watermark-clipped) so the blurred band
@@ -482,7 +489,12 @@ function ArtLayers({
               filter: `blur(${blurPx.toFixed(2)}px) brightness(${ART_EXTENSION_BLUR_BRIGHTNESS})`,
             }}
           >
-            <img src={imageUrl} alt="" style={extendedStyle} draggable={false} />
+            <img
+              src={imageUrl}
+              alt=""
+              style={extendedStyle}
+              draggable={false}
+            />
           </div>
         </div>
       )}
@@ -721,7 +733,11 @@ interface CardHoverZoomState {
   dy: number;
 }
 
-function clampHoverOffset(start: number, size: number, viewport: number): number {
+function clampHoverOffset(
+  start: number,
+  size: number,
+  viewport: number,
+): number {
   const available = viewport - HOVER_VIEWPORT_MARGIN_PX * 2;
   if (size >= available) {
     const centered = (viewport - size) / 2;
@@ -754,8 +770,11 @@ function renderHoverGlossaryStack(
   const finalTop = centerY - scaledHeight / 2 + zoom.dy;
   const finalRight = finalLeft + scaledWidth;
 
-  const fitsRight = finalRight + HOVER_GLOSSARY_STACK_GAP_PX +
-    stackWidth + HOVER_VIEWPORT_MARGIN_PX <=
+  const fitsRight =
+    finalRight +
+      HOVER_GLOSSARY_STACK_GAP_PX +
+      stackWidth +
+      HOVER_VIEWPORT_MARGIN_PX <=
     window.innerWidth;
   const rawLeft = fitsRight
     ? finalRight + HOVER_GLOSSARY_STACK_GAP_PX
@@ -817,7 +836,8 @@ function useCardMetrics(large: boolean): {
       // the card. Layout width keeps the auto-scale stable so the whole card
       // grows uniformly. jsdom reports `offsetWidth` as 0, so fall back to the
       // measured rect there (test environments stub `getBoundingClientRect`).
-      const nextWidth = measuredElement.offsetWidth ||
+      const nextWidth =
+        measuredElement.offsetWidth ||
         measuredElement.getBoundingClientRect().width;
       if (Number.isFinite(nextWidth) && nextWidth > 0) {
         setWidthPx(nextWidth);
@@ -957,23 +977,23 @@ interface InternalCardViewProps extends CardViewProps {
  */
 function GameCardSurface(props: InternalCardViewProps) {
   const {
-  card,
-  onClick,
-  selected = false,
-  selectionColor = SELECTION_DEFAULT_COLOR,
-  transfiguration,
-  large = false,
-  figment = false,
-  figmentTitleBar = false,
-  hideRulesText = false,
-  termDefinitions = "card",
-  slots = {},
-  onRulesFontSizeChange,
-  onBoxTopFracChange,
-  eagerRulesFit = false,
-  rulesTextboxExpanded = false,
-  enableTermPopover = true,
-  enableHoverZoom = false,
+    card,
+    onClick,
+    selected = false,
+    selectionColor = SELECTION_DEFAULT_COLOR,
+    transfiguration,
+    large = false,
+    figment = false,
+    figmentTitleBar = false,
+    hideRulesText = false,
+    termDefinitions = "card",
+    slots = {},
+    onRulesFontSizeChange,
+    onBoxTopFracChange,
+    eagerRulesFit = false,
+    rulesTextboxExpanded = false,
+    enableTermPopover = true,
+    enableHoverZoom = false,
   } = props;
   const [imageError, setImageError] = useState(false);
   const [imageAspect, setImageAspect] = useState<number | null>(null);
@@ -1004,8 +1024,8 @@ function GameCardSurface(props: InternalCardViewProps) {
     if (rect.width <= 0 || rect.height <= 0) {
       return;
     }
-    const widthLimited = (window.innerWidth * HOVER_MAX_VIEWPORT_WIDTH_FRACTION) /
-      rect.width;
+    const widthLimited =
+      (window.innerWidth * HOVER_MAX_VIEWPORT_WIDTH_FRACTION) / rect.width;
     const heightLimited =
       (window.innerHeight * HOVER_MAX_VIEWPORT_HEIGHT_FRACTION) / rect.height;
     const scale = Math.min(
@@ -1179,9 +1199,12 @@ function GameCardSurface(props: InternalCardViewProps) {
   const isInteractive = onClick !== undefined;
   const respondsToPointer =
     isInteractive || (termDefinitions === "card" && !hideRulesText);
+  // Heuristic: if the rules text is already readable without zoom, use only a
+  // minor in-place hover zoom for emphasis, about 5%, instead of opening the
+  // larger reading preview.
   const pointerFeedbackClass = respondsToPointer
     ? large
-      ? " cursor-pointer hover:scale-[1.02] active:scale-[1.025]"
+      ? " cursor-pointer hover:scale-[1.05] active:scale-[1.03]"
       : " cursor-pointer hover:scale-[1.02] active:scale-[0.97]"
     : "";
   const rarityClass =
@@ -1215,9 +1238,7 @@ function GameCardSurface(props: InternalCardViewProps) {
       numberCapPx={energyOrbCapPx}
       tooltip={ENERGY_PIP_TOOLTIP}
       tintColor={
-        transfiguration?.energyChanged === true
-          ? ENERGY_CHANGE_TINT
-          : undefined
+        transfiguration?.energyChanged === true ? ENERGY_CHANGE_TINT : undefined
       }
     />
   );
@@ -1330,7 +1351,9 @@ function GameCardSurface(props: InternalCardViewProps) {
       </span>
       {transfiguration !== undefined ? (
         <i
-          className={glyph(`bxf ${TRANSFIGURATION_ICONS[transfiguration.type]}`)}
+          className={glyph(
+            `bxf ${TRANSFIGURATION_ICONS[transfiguration.type]}`,
+          )}
           aria-label={`${transfiguration.type} transfiguration`}
           title={`${transfiguration.type} Transfiguration`}
           style={{
@@ -1442,9 +1465,7 @@ function GameCardSurface(props: InternalCardViewProps) {
         numberCapPx={sparkCapPx}
         tooltip={SPARK_PIP_TOOLTIP}
         tintColor={
-          transfiguration?.sparkChanged === true
-            ? SPARK_CHANGE_TINT
-            : undefined
+          transfiguration?.sparkChanged === true ? SPARK_CHANGE_TINT : undefined
         }
       />
     ) : null;
@@ -1748,7 +1769,8 @@ function GameCardSurface(props: InternalCardViewProps) {
                   borderRadius: "var(--cv-namebar-radius)",
                   background: "var(--cv-textbox-bg)",
                   backdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
-                  WebkitBackdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
+                  WebkitBackdropFilter:
+                    "blur(var(--cv-textbox-blur)) saturate(1)",
                   border: "1px solid var(--cv-textbox-border)",
                   boxShadow:
                     "0 1px 0 rgba(255,255,255,0.5) inset, 0 4px 12px rgba(18,28,58,0.22)",
@@ -1804,7 +1826,8 @@ function GameCardSurface(props: InternalCardViewProps) {
                 borderRadius: "var(--cv-namebar-radius)",
                 background: "var(--cv-namebar-bg)",
                 backdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
-                WebkitBackdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
+                WebkitBackdropFilter:
+                  "blur(var(--cv-textbox-blur)) saturate(1)",
                 border: "1px solid var(--cv-namebar-border)",
                 boxShadow:
                   "0 1px 0 rgba(255,255,255,0.16) inset, 0 -6px 14px rgba(0,0,0,0.30) inset, 0 6px 16px rgba(0,0,0,0.34)",

@@ -128,10 +128,16 @@ export function peekWidthForViewport(input: {
     const cx = sideMargin + i * (tileWidth + columnGap) + tileWidth / 2;
     const roomRight = viewportWidth - sideMargin - (cx + fingerRadius);
     const roomLeft = cx - fingerRadius - sideMargin;
-    smallestClearance = Math.min(smallestClearance, Math.max(roomLeft, roomRight));
+    smallestClearance = Math.min(
+      smallestClearance,
+      Math.max(roomLeft, roomRight),
+    );
   }
 
-  return Math.max(0, Math.min(maxWidth, smallestClearance - CLEARANCE_MARGIN_PX));
+  return Math.max(
+    0,
+    Math.min(maxWidth, smallestClearance - CLEARANCE_MARGIN_PX),
+  );
 }
 
 /**
@@ -176,7 +182,8 @@ export function computePeekBox(input: PeekLayoutInput): PeekRect {
     // safe area and clear the circle sideways, thrown to the roomier side so the
     // rules text ends up entirely beside the finger.
     top = clamp(minTop, minTop, maxTop);
-    const roomRight = viewport.width - sideMargin - (finger.x + FINGER_RADIUS_PX);
+    const roomRight =
+      viewport.width - sideMargin - (finger.x + FINGER_RADIUS_PX);
     const roomLeft = finger.x - FINGER_RADIUS_PX - sideMargin;
     left = roomRight >= roomLeft ? maxLeft : minLeft;
     left = clamp(left, minLeft, maxLeft);

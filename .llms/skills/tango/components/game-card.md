@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/game-card`
 
-Real consumers: **21** (imports outside `src/tango/docs/` and tests).
+Real consumers: **22** (imports outside `src/tango/docs/` and tests).
 
 The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name.
 

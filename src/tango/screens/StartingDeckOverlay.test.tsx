@@ -37,7 +37,9 @@ vi.mock("../../logging", () => ({
 // GameCard pulls in the card-database art pipeline; the overlay's behavior does
 // not depend on the card's pixels, so stub it to its name for the tests.
 vi.mock("../components/card/CardView", () => ({
-  GameCard: ({ card }: { card: CardData }) => <div>{card.name}</div>,
+  GameCard: ({ card, large }: { card: CardData; large?: boolean }) => (
+    <div data-game-card-large={large ? "true" : "false"}>{card.name}</div>
+  ),
 }));
 
 function makeCard(cardNumber: number, name: string, text: string): CardData {
@@ -197,7 +199,7 @@ describe("StartingDeckOverlay", () => {
     expect(panel?.style.maxWidth).toBe("");
     const gallery = galleryOf(container);
     expect(gallery?.dataset.galleryFrame).toBe("fullBleed");
-    expect(gallery?.dataset.galleryColumns).toBe("2");
+    expect(gallery?.dataset.galleryColumns).toBe("4");
     expect(gallery?.style.borderRadius).toBe("0px");
     // The body scrolls internally.
     const scroll = container.querySelector("header")
@@ -220,6 +222,11 @@ describe("StartingDeckOverlay", () => {
     const gallery = galleryOf(container);
     expect(gallery?.dataset.galleryFrame).toBe("floating");
     expect(gallery?.dataset.galleryColumns).toBe("5");
+    expect(
+      container
+        .querySelector("[data-game-card-large]")
+        ?.getAttribute("data-game-card-large"),
+    ).toBe("true");
 
     act(() => {
       root.unmount();

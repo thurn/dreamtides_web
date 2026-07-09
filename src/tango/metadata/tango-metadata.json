@@ -626,6 +626,14 @@
       "description": "Internal padding and grid gap scale. Defaults to `regular`."
     },
     {
+      "name": "largeCards",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Draw each tile with GameCard's larger readable type scale."
+    },
+    {
       "name": "testId",
       "tsType": "string",
       "unionMembers": [],
@@ -648,6 +656,14 @@
       "required": false,
       "defaultValue": null,
       "description": "Fires when an enabled card tile is activated."
+    },
+    {
+      "name": "mobilePressPreview",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Enables the shared mobile Deck Viewer press preview for compact galleries:\npress a tile and a large readable card is placed clear of the finger."
     }
   ],
   "CardStatOrb": [

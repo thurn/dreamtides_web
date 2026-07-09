@@ -25,7 +25,7 @@ import {
   circleRectGap,
   FINGER_RADIUS_PX,
   CLEARANCE_MARGIN_PX,
-} from "../src/tango/screens/mobile-deck-peek.ts";
+} from "../src/tango/components/card/mobile-card-peek-geometry.ts";
 
 const GUTTER = 18; // --gutter (also the card's side margin)
 const COLUMN_GAP = 8; // --space-4 (grid gap)
@@ -102,7 +102,9 @@ for (const viewport of VIEWPORTS) {
 }
 
 console.log("Deck peek — rules-text vs finger-circle clearance");
-console.log(`finger radius = ${FINGER_RADIUS_PX}px, clearance margin = ${CLEARANCE_MARGIN_PX}px\n`);
+console.log(
+  `finger radius = ${FINGER_RADIUS_PX}px, clearance margin = ${CLEARANCE_MARGIN_PX}px\n`,
+);
 for (const { viewport, width, vpWorst } of perViewport) {
   const ok = vpWorst.gap >= 0;
   console.log(
@@ -200,9 +202,7 @@ function buildSvg() {
       parts.push(
         `<circle cx="${X(fx)}" cy="${Y(fy)}" r="${FINGER_RADIUS_PX * scale}" fill="#e0484822" stroke="#ff6b6b" stroke-width="1.4"/>`,
       );
-      parts.push(
-        `<circle cx="${X(fx)}" cy="${Y(fy)}" r="2" fill="#ff6b6b"/>`,
-      );
+      parts.push(`<circle cx="${X(fx)}" cy="${Y(fy)}" r="2" fill="#ff6b6b"/>`);
       // gap label
       parts.push(
         `<text x="${ox + pw / 2}" y="${oy + ph + 18}" text-anchor="middle" fill="${ok ? "#7fe0b0" : "#ff8a8a"}" font-size="12" font-weight="600">gap ${gap.toFixed(0)}px</text>`,
