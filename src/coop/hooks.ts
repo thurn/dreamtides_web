@@ -117,6 +117,20 @@ export function CoopProvider({
 
   const confirmedSeqRef = useRef(0);
   const clientRef = useRef<LogClient | null>(null);
+  // Appends requested before the LogClient exists. On initial mount React
+  // flushes child effects before parent effects, so a child's mount-time
+  // dispatch (the `?startInBattle=1` / `?goto=` bootstrap, which auto-appends
+  // a LOAD_STATE) runs before this provider's client-creating effect. Rather
+  // than reject and strand that one-shot bootstrap forever, `append` queues the
+  // draft here and the client-creating effect flushes the queue the instant the
+  // client exists.
+  const pendingAppendsRef = useRef<
+    Array<{
+      draft: EventDraft;
+      resolve: (seq: number) => void;
+      reject: (error: unknown) => void;
+    }>
+  >([]);
   const outcomeListenersRef = useRef<Set<OutcomeListener>>(new Set());
   // Keep the latest sink handle reachable from the (stable) client callbacks so
   // a sink swap does not force the client to be torn down and re-subscribed.
@@ -168,9 +182,24 @@ export function CoopProvider({
     );
     clientRef.current = client;
 
+    // Flush any appends queued before the client existed (the mount-time
+    // bootstrap race described on `pendingAppendsRef`), preserving order.
+    const pending = pendingAppendsRef.current;
+    pendingAppendsRef.current = [];
+    for (const { draft, resolve, reject } of pending) {
+      client.submit(draft).then(resolve, reject);
+    }
+
     return () => {
       client.close();
       clientRef.current = null;
+      // Reject anything still queued when the room tears down so callers are
+      // not left with a promise that never settles.
+      const stranded = pendingAppendsRef.current;
+      pendingAppendsRef.current = [];
+      for (const { reject } of stranded) {
+        reject(new Error("CoopProvider: room closed before LogClient was ready"));
+      }
     };
   }, [db, roomId, clientId]);
 
@@ -197,7 +226,11 @@ export function CoopProvider({
   const append = useCallback<AppendFn>((draft: EventDraft) => {
     const client = clientRef.current;
     if (client === null) {
-      return Promise.reject(new Error("CoopProvider: LogClient not ready"));
+      // Queue until the client-creating effect runs and flushes (see
+      // `pendingAppendsRef`). Resolves with the committed seq once submitted.
+      return new Promise<number>((resolve, reject) => {
+        pendingAppendsRef.current.push({ draft, resolve, reject });
+      });
     }
     return client.submit(draft);
   }, []);
