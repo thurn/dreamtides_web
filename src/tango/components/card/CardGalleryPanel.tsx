@@ -92,7 +92,7 @@ export type CardGalleryCardSize = "standard" | "roomy";
 export type CardGalleryFrame = "floating" | "fullBleed";
 
 /** The gallery's internal spacing scale. */
-export type CardGallerySpacing = "regular" | "compact";
+export type CardGallerySpacing = "regular" | "medium" | "compact";
 
 export interface CardGalleryPanelProps {
   /** Header title, rendered as an `<h2>`. */
@@ -228,7 +228,9 @@ function fallbackCardWidth(
     frame === "floating"
       ? spacing === "compact"
         ? token("--space-1")
-        : token("--space-8")
+        : spacing === "medium"
+          ? token("--space-4")
+          : token("--space-8")
       : "0px";
   const gapSlots = Math.max(0, columnCount - 1);
   const padding = bodyPaddingFor(spacing);
@@ -250,11 +252,15 @@ function parsePixel(value: string): number {
 }
 
 function bodyPaddingFor(spacing: CardGallerySpacing): string {
-  return spacing === "compact" ? token("--space-4") : token("--space-8");
+  if (spacing === "compact") return token("--space-4");
+  if (spacing === "medium") return token("--space-5");
+  return token("--space-8");
 }
 
 function headerPaddingFor(spacing: CardGallerySpacing): string {
-  return spacing === "compact" ? token("--space-5") : token("--space-8");
+  if (spacing === "compact") return token("--space-5");
+  if (spacing === "medium") return token("--space-6");
+  return token("--space-8");
 }
 
 function gridGapFor(spacing: CardGallerySpacing): string {
@@ -451,6 +457,7 @@ export function CardGalleryPanel({
         data-gallery-frame={frame}
         data-gallery-columns={columnCount}
         data-gallery-visible-rows={visibleRows}
+        data-gallery-spacing={spacing}
         style={{
           ...materialStyle,
           position: "relative",

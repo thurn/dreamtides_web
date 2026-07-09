@@ -206,15 +206,24 @@ describe("PurgeSiteScreen", () => {
     );
     expect(cardRegion?.dataset.purgeLayout).toBe("mobile");
     expect(cardRegion?.style.height).toBe("100%");
-    expect(cardRegion?.style.width).toBe("calc(100vw - 8px)");
+    expect(cardRegion?.style.width).toBe(
+      "calc(100vw - (var(--space-4) * 2))",
+    );
     expect(cardRegion?.style.minHeight).toBe("0px");
     expect(gallery?.style.background).toContain("var(--glass-fill-popover)");
     expect(gallery?.style.borderRadius).toBe("var(--radius-popover)");
     expect(gallery?.dataset.galleryFrame).toBe("floating");
     expect(gallery?.dataset.galleryColumns).toBe("4");
+    expect(gallery?.dataset.gallerySpacing).toBe("medium");
     expect(
       gallery?.querySelector<HTMLElement>("header")?.style.padding,
-    ).toBe("var(--space-5)");
+    ).toBe("var(--space-6)");
+    const galleryBody = gallery?.querySelector<HTMLElement>("header")
+      ?.nextElementSibling as HTMLElement | null;
+    expect(galleryBody?.style.padding).toBe("var(--space-5)");
+    expect(galleryBody?.firstElementChild?.getAttribute("style")).toContain(
+      "gap: var(--space-4)",
+    );
     expect(gallery?.style.borderLeft).not.toContain("var(--border-soft)");
 
     act(() => {

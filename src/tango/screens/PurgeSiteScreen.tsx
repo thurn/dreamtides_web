@@ -351,7 +351,9 @@ function CardRegion({
         minHeight: 0,
         height: "100%",
         maxHeight: "100%",
-        width: desktop ? "100%" : "calc(100vw - 8px)",
+        width: desktop
+          ? "100%"
+          : `calc(100vw - (${token("--space-4")} * 2))`,
         boxSizing: "border-box",
         pointerEvents: "auto",
         ...(desktop
@@ -397,7 +399,7 @@ function CardRegion({
         })}
         columns={desktop ? "five" : "four"}
         frame="floating"
-        spacing={desktop ? "regular" : "compact"}
+        spacing={desktop ? "regular" : "medium"}
         testId="tango-purge-card-gallery"
         onCardPress={onToggle}
       />

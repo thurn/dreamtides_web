@@ -24,7 +24,7 @@ The shared card-browser surface: a left-aligned title and subtitle, a trailing h
 | `columns` | `CardGalleryColumns` = `"auto" \| "two" \| "four" \| "five"` | no | `auto` | Card grid mode. Defaults to `auto`. |
 | `cardSize` | `CardGalleryCardSize` = `"standard" \| "roomy"` | no | `standard` | Card size preset. Defaults to `standard`. |
 | `frame` | `CardGalleryFrame` = `"floating" \| "fullBleed"` | no | `floating` | Panel frame geometry and material. `floating` uses liquid glass; `fullBleed` uses the standard alpha scrim. Defaults to `floating`. |
-| `spacing` | `CardGallerySpacing` = `"regular" \| "compact"` | no | `regular` | Internal padding and grid gap scale. Defaults to `regular`. |
+| `spacing` | `CardGallerySpacing` = `"regular" \| "medium" \| "compact"` | no | `regular` | Internal padding and grid gap scale. Defaults to `regular`. |
 | `largeCards` | `boolean` | no | `false` | Draw each tile with GameCard's larger readable type scale. |
 | `testId` | `string` | no | — | Test id for the panel root. |
 | `cutoutAwareAccessory` | `boolean` | no | `false` | When a screen-cutout box is known, float the accessory beside the device island instead of sharing the header row. |
@@ -62,7 +62,7 @@ import { CardGalleryPanel } from "src/tango/components/card/CardGalleryPanel";
   cards={cards}
   columns="five"
   frame="floating"
-  spacing="regular"
+  spacing="medium"
   onCardPress={toggleCard}
 />
 ```

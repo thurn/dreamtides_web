@@ -112,7 +112,7 @@ export const cardGalleryPanelDemo: TangoComponent = {
   cards={cards}
   columns="five"
   frame="floating"
-  spacing="regular"
+  spacing="medium"
   onCardPress={toggleCard}
 />`,
     },

@@ -619,6 +619,7 @@
       "tsType": "CardGallerySpacing",
       "unionMembers": [
         "regular",
+        "medium",
         "compact"
       ],
       "required": false,

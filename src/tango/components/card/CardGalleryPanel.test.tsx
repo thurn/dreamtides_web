@@ -241,4 +241,34 @@ describe("CardGalleryPanel", () => {
       root.unmount();
     });
   });
+
+  it("provides an intermediate spacing scale for narrow four-column galleries", () => {
+    const { container, root } = mount(
+      <CardGalleryPanel
+        title="Purge Cards"
+        cards={[
+          {
+            entryId: "entry-a",
+            card: makeCard("Archive Sentry"),
+          },
+        ]}
+        columns="four"
+        spacing="medium"
+      />,
+    );
+
+    const gallery = container.querySelector<HTMLElement>("section");
+    const header = gallery?.querySelector<HTMLElement>("header");
+    const body = header?.nextElementSibling as HTMLElement | null;
+    expect(gallery?.dataset.gallerySpacing).toBe("medium");
+    expect(header?.style.padding).toBe("var(--space-6)");
+    expect(body?.style.padding).toBe("var(--space-5)");
+    expect(body?.firstElementChild?.getAttribute("style")).toContain(
+      "gap: var(--space-4)",
+    );
+
+    act(() => {
+      root.unmount();
+    });
+  });
 });
