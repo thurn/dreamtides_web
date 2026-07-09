@@ -19,6 +19,8 @@ import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import { CardTermDefinitions } from "./CardTermDefinitions";
 import { GameCard } from "./CardView";
 import {
+  CLEARANCE_MARGIN_PX,
+  FINGER_RADIUS_PX,
   computePeekBox,
   computeSupplementalPeekLayout,
   peekWidthForViewport,
@@ -60,6 +62,9 @@ interface MobileCardPeekState {
   pointerId: number;
   startX: number;
   startY: number;
+  /** Modeled source center used to keep top-row definitions off the finger. */
+  fingerX: number;
+  pinToTop: boolean;
 }
 
 /**
@@ -145,6 +150,10 @@ export function useMobileCardPeek({
       // circle covers the whole tile, so the placement clears it wherever on the
       // card the finger actually landed.
       const tile = event.currentTarget.getBoundingClientRect();
+      const finger = {
+        x: tile.left + tile.width / 2,
+        y: tile.top + tile.height / 2,
+      };
       // The transient card zoom reserves a conservative chrome zone using the
       // `--safe-top`/`--safe-bottom` design floors. This is deliberately
       // device-frame-independent: unlike fixed chrome that tracks the real
@@ -156,10 +165,7 @@ export function useMobileCardPeek({
         sideMargin,
         aspect: CARD_ASPECT_RATIO_VALUE,
         width,
-        finger: {
-          x: tile.left + tile.width / 2,
-          y: tile.top + tile.height / 2,
-        },
+        finger,
         pinToTop: placement.pinToTop,
       });
       setPeek({
@@ -168,6 +174,8 @@ export function useMobileCardPeek({
         pointerId: event.pointerId,
         startX: event.clientX,
         startY: event.clientY,
+        fingerX: finger.x,
+        pinToTop: placement.pinToTop === true,
       });
       activePressRef.current = {
         pointerId: event.pointerId,
@@ -219,13 +227,10 @@ export function renderMobileCardPeekOverlay(
   const hasDefinitions =
     extractGlossaryTerms(peek.view.card.renderedText).length > 0;
   const layout = hasDefinitions
-    ? computeSupplementalPeekLayout({
-        box: peek.box,
-        viewportWidth: window.innerWidth,
-        supplementalWidth: infoCardWidth(window.innerWidth),
-        gap: SUPPLEMENTAL_INFO_GAP_PX,
-        edge: SUPPLEMENTAL_INFO_EDGE_PX,
-      })
+    ? computeSupplementalInfoPlacement(
+        peek.box,
+        peek.pinToTop ? peek.fingerX : undefined,
+      )
     : null;
   return createPortal(
     <div
@@ -276,4 +281,37 @@ export function renderMobileCardPeekOverlay(
     </div>,
     document.body,
   );
+}
+
+function computeSupplementalInfoPlacement(
+  box: PeekRect,
+  fingerX?: number,
+): {
+  primaryLeft: number;
+  supplemental: {
+    left: number;
+    top: number;
+    width: number;
+    side: "left" | "right";
+  };
+} | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+  const width = infoCardWidth(window.innerWidth);
+  return computeSupplementalPeekLayout({
+    box,
+    viewportWidth: window.innerWidth,
+    supplementalWidth: width,
+    gap: SUPPLEMENTAL_INFO_GAP_PX,
+    edge: SUPPLEMENTAL_INFO_EDGE_PX,
+    avoidX:
+      fingerX === undefined
+        ? undefined
+        : {
+            center: fingerX,
+            radius: FINGER_RADIUS_PX,
+            clearance: CLEARANCE_MARGIN_PX,
+          },
+  });
 }

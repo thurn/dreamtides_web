@@ -71,6 +71,8 @@ describe("renderMobileCardPeekOverlay", () => {
           pointerId: 1,
           startX: 242,
           startY: 700,
+          fingerX: 242,
+          pinToTop: false,
         }),
       );
     });

@@ -353,6 +353,7 @@ describe("CardGalleryPanel", () => {
     expect(
       definitionsRight <= previewLeft || definitionsLeft >= previewRight,
     ).toBe(true);
+    expect(definitionsLeft).toBeGreaterThanOrEqual(150 + 44 + 8);
 
     act(() => {
       window.dispatchEvent(new Event("pointerup"));

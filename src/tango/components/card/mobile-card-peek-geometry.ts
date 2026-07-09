@@ -236,8 +236,73 @@ export function computeSupplementalPeekLayout(input: {
   supplementalWidth: number;
   gap: number;
   edge: number;
+  /** Horizontal finger interval the definition column should avoid. */
+  avoidX?: { center: number; radius: number; clearance: number };
 }): SupplementalPeekLayout {
-  const { box, viewportWidth, supplementalWidth, gap, edge } = input;
+  const {
+    box,
+    viewportWidth,
+    supplementalWidth,
+    gap,
+    edge,
+    avoidX,
+  } = input;
+  const pairWidth = box.width + gap + supplementalWidth;
+
+  // A top-row press pins the pair vertically, so use the remaining horizontal
+  // slack to put the definition column wholly beyond the held finger. The
+  // primary card may shift within the pair, but its safe-top position and the
+  // card/definition gap stay fixed. Prefer the viable orientation requiring
+  // the smaller primary-card shift.
+  if (avoidX !== undefined && pairWidth <= viewportWidth - edge * 2) {
+    const candidates: SupplementalPeekLayout[] = [];
+    const maxRightPrimary = viewportWidth - edge - pairWidth;
+    const requiredRightPrimary =
+      avoidX.center +
+      avoidX.radius +
+      avoidX.clearance -
+      box.width -
+      gap;
+    const rightPrimary = Math.max(edge, requiredRightPrimary);
+    if (rightPrimary <= maxRightPrimary) {
+      candidates.push({
+        primaryLeft: rightPrimary,
+        supplemental: {
+          left: rightPrimary + box.width + gap,
+          top: box.top,
+          width: supplementalWidth,
+          side: "right",
+        },
+      });
+    }
+
+    const minLeftPrimary = edge + supplementalWidth + gap;
+    const maxLeftPrimary = Math.min(
+      viewportWidth - edge - box.width,
+      avoidX.center - avoidX.radius - avoidX.clearance + gap,
+    );
+    if (minLeftPrimary <= maxLeftPrimary) {
+      candidates.push({
+        primaryLeft: maxLeftPrimary,
+        supplemental: {
+          left: maxLeftPrimary - gap - supplementalWidth,
+          top: box.top,
+          width: supplementalWidth,
+          side: "left",
+        },
+      });
+    }
+
+    if (candidates.length > 0) {
+      return candidates.reduce((best, candidate) =>
+        Math.abs(candidate.primaryLeft - box.left) <
+        Math.abs(best.primaryLeft - box.left)
+          ? candidate
+          : best,
+      );
+    }
+  }
+
   const rightLeft = box.left + box.width + gap;
   if (rightLeft + supplementalWidth <= viewportWidth - edge) {
     return {
@@ -264,7 +329,6 @@ export function computeSupplementalPeekLayout(input: {
     };
   }
 
-  const pairWidth = box.width + gap + supplementalWidth;
   if (pairWidth <= viewportWidth - edge * 2) {
     const primaryWithDefinitionsLeft = edge + supplementalWidth + gap;
     const primaryWithDefinitionsRight = viewportWidth - edge - pairWidth;

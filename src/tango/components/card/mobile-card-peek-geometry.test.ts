@@ -5,6 +5,7 @@ import {
   peekWidthForViewport,
   rulesRegionOfPeek,
   circleRectGap,
+  CLEARANCE_MARGIN_PX,
   FINGER_RADIUS_PX,
   PEEK_MAX_WIDTH_PX,
   type PeekLayoutInput,
@@ -164,6 +165,30 @@ describe("computePeekBox", () => {
 });
 
 describe("computeSupplementalPeekLayout", () => {
+  it("uses pair slack to keep top-row definitions beyond the finger interval", () => {
+    const fingerX = 150;
+    const layout = computeSupplementalPeekLayout({
+      box: { left: 203.125, top: 59, width: 171.875, height: 240.625 },
+      viewportWidth: 393,
+      supplementalWidth: 176.85,
+      gap: 10,
+      edge: 6,
+      avoidX: {
+        center: fingerX,
+        radius: FINGER_RADIUS_PX,
+        clearance: CLEARANCE_MARGIN_PX,
+      },
+    });
+
+    expect(layout.supplemental.side).toBe("right");
+    expect(layout.supplemental.left).toBeGreaterThanOrEqual(
+      fingerX + FINGER_RADIUS_PX + CLEARANCE_MARGIN_PX,
+    );
+    expect(layout.supplemental.left).toBeGreaterThanOrEqual(
+      layout.primaryLeft + 171.875 + 10,
+    );
+  });
+
   it(`keeps the three definition cards for UUID ${THREE_TERM_CARD_ID} beside the enlarged card near the bottom`, () => {
     // Fourth-row, second-inner-column geometry on an iPhone 16 viewport: the
     // enlarged card is centered over a low press. A 45vw definition column
