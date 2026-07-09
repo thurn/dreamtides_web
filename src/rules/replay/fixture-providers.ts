@@ -83,6 +83,15 @@ export const NODE_ID = "node-start";
 export const ESSENCE_SITE_ID = "site-essence";
 export const SHOP_SITE_ID = "site-shop";
 export const BATTLE_SITE_ID = "site-battle";
+export const DRAFT_SITE_ID = "site-draft";
+
+/** The fixed run draft pool: 4 unique card numbers (matching DEFAULT_DRAFT_CONFIG's packSize), 4 copies each. */
+const DRAFT_POOL_COPIES_BY_CARD: Record<string, number> = {
+  "100": 4,
+  "101": 4,
+  "102": 4,
+  "103": 4,
+};
 
 /** Battle-card instance ids the battle-fixture BATTLE_COMMANDs move. */
 export const BATTLE_CARD_DETERMINISTIC = "bc-det";
@@ -176,7 +185,7 @@ function fixturePackage(
       imageNumber: "1",
       startingEssence: 300,
     },
-    draftPoolCopiesByCard: { "100": 4, "101": 4, "102": 4 },
+    draftPoolCopiesByCard: DRAFT_POOL_COPIES_BY_CARD,
     dreamsignPoolIds,
     mandatoryOnlyPoolSize: 3,
     draftPoolSize: 3,
@@ -187,13 +196,14 @@ function fixturePackage(
   };
 }
 
-/** The atlas node the fixtures travel to: an Essence site, a Shop site, and a
- *  Battle site (visited last), so OPEN_SITE / BUY_SHOP_SLOT / BEGIN_BATTLE have
- *  live targets. */
+/** The atlas node the fixtures travel to: an Essence site, a Shop site, a
+ *  Draft site, and a Battle site (visited last), so OPEN_SITE /
+ *  ENTER_DRAFT_SITE / BUY_SHOP_SLOT / BEGIN_BATTLE have live targets. */
 function fixtureNode(): DreamscapeNode {
   const sites: SiteState[] = [
     { id: ESSENCE_SITE_ID, type: "Essence", isEnhanced: false, isVisited: false },
     { id: SHOP_SITE_ID, type: "Shop", isEnhanced: false, isVisited: false },
+    { id: DRAFT_SITE_ID, type: "Draft", isEnhanced: false, isVisited: false },
     { id: BATTLE_SITE_ID, type: "Battle", isEnhanced: false, isVisited: false },
   ];
   return {
@@ -213,16 +223,22 @@ function fixtureNode(): DreamscapeNode {
   };
 }
 
-/** A non-null pool draft, so the started run's `draftState` is populated. */
+/**
+ * A non-null pool draft, so the started run's `draftState` is populated.
+ * `activeSiteId: null` / `currentOffer: []`: the draft has not been entered
+ * yet — `ENTER_DRAFT_SITE` (targeting {@link DRAFT_SITE_ID}, the atlas Draft
+ * site `fixtureNode` seeds) reveals the first offer for real, rather than
+ * this fixture pre-seeding an already-active site.
+ */
 function fixtureDraftState(): PoolDraftState {
   return {
     mode: "pool",
-    currentOffer: [100, 101, 102],
-    activeSiteId: "draft-site",
+    currentOffer: [],
+    activeSiteId: null,
     pickNumber: 1,
     sitePicksCompleted: 0,
-    draftPoolCopiesByCard: { "100": 4, "101": 4, "102": 4 },
-    remainingCopiesByCard: { "100": 4, "101": 4, "102": 4 },
+    draftPoolCopiesByCard: DRAFT_POOL_COPIES_BY_CARD,
+    remainingCopiesByCard: { ...DRAFT_POOL_COPIES_BY_CARD },
   };
 }
 

@@ -20,7 +20,7 @@
 // which is deleted in a later migration stage.
 
 import { type Database, get, ref, remove } from "firebase/database";
-import { afterAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { appendEvent, COMPACT_THRESHOLD } from "./append";
 import { getFirebaseDatabase } from "../firebase/app-config";
 import { type EventDraft, type LogClient, type LogClientIo, createLogClient } from "./client";
@@ -28,6 +28,16 @@ import { hashState } from "./hash";
 import { createRoom } from "./room";
 import { decodeLogNode, subscribeToLog } from "./subscribe";
 import type { EncodedLogNode, EngineConfig, Genesis } from "./types";
+import type { FoldState } from "../rules/fold-state";
+import { GAME_ENGINE_CONFIG } from "../rules/replay/replay";
+import {
+  clearReplayFixtureProviders,
+  DRAFT_SITE_ID,
+  DREAMCALLER_ID,
+  ESSENCE_SITE_ID,
+  registerReplayFixtureProviders,
+  SHOP_SITE_ID,
+} from "../rules/replay/fixture-providers";
 
 const runWithEmulator =
   process.env.FIREBASE_DATABASE_EMULATOR_HOST === undefined ? describe.skip : describe;
@@ -77,6 +87,113 @@ function toyGenesis(seed: string): Genesis {
     createdAt: Date.now(),
     contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" },
   };
+}
+
+function realGenesis(seed: string): Genesis {
+  return {
+    seed,
+    reducerVersion: "real-v1",
+    createdAt: Date.now(),
+    contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" },
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Real-reducer client harness: identical shape to the toy harness above, but
+// wired to the ACTUAL game (`GAME_ENGINE_CONFIG` — the real root reducer,
+// genesis-state builder, codec, and hash) instead of the toy CAS-in-miniature
+// reducer. Used by scenario D's real-quest-event storm.
+// ---------------------------------------------------------------------------
+
+interface RealClientHarness {
+  client: LogClient;
+  displayed: FoldState | undefined;
+  lastFoldedSeq: number;
+  errors: unknown[];
+}
+
+function makeRealIo(db: Database, roomId: string): LogClientIo {
+  return {
+    subscribe: (onNode) => subscribeToLog(db, roomId, onNode),
+    append: (event) => appendEvent(db, roomId, GAME_ENGINE_CONFIG, event),
+  };
+}
+
+function makeRealClientHarness(db: Database, roomId: string, clientId: string): RealClientHarness {
+  const harness: RealClientHarness = {
+    client: undefined as unknown as LogClient,
+    displayed: undefined,
+    lastFoldedSeq: 0,
+    errors: [],
+  };
+  harness.client = createLogClient<FoldState>(
+    GAME_ENGINE_CONFIG,
+    makeRealIo(db, roomId),
+    {
+      onDisplayState: (s) => {
+        harness.displayed = s;
+      },
+      onEventOutcome: (_event, seq) => {
+        if (seq > harness.lastFoldedSeq) {
+          harness.lastFoldedSeq = seq;
+        }
+      },
+      onDivergence: (info) => {
+        harness.errors.push(
+          new Error(`divergence at seq ${info.seq}: expected ${info.expected}, actual ${info.actual}`),
+        );
+      },
+      onFoldError: (error) => {
+        harness.errors.push(error);
+      },
+    },
+    { clientId },
+  );
+  return harness;
+}
+
+/**
+ * Builds one storm submission from `harness`'s CURRENT locally-displayed
+ * state (exactly how a real player's client decides what to submit next) —
+ * a mix of real quest events, some of which are structurally valid (may
+ * still bounce on ordinary CAS staleness under concurrency) and some
+ * deliberately invalid/stale (a malformed payload, an unknown site, a
+ * post-completion re-pick), so the storm exercises both bounce paths.
+ */
+function stormDraft(harness: RealClientHarness, rng: () => number): EventDraft {
+  const roll = rng();
+  const draftState = harness.displayed?.quest.draftState;
+
+  if (roll < 0.25) {
+    if (rng() < 0.15) {
+      // Malformed payload — bounces before the reducer's CAS window even matters.
+      return { type: "ADJUST_ESSENCE", payload: { delta: "not-a-number" } };
+    }
+    const delta = Math.floor(rng() * 21) - 10;
+    return { type: "ADJUST_ESSENCE", payload: { delta } };
+  }
+  if (roll < 0.4) {
+    const siteId = rng() < 0.5 ? ESSENCE_SITE_ID : SHOP_SITE_ID;
+    return { type: "OPEN_SITE", payload: { siteId } };
+  }
+  if (roll < 0.45) {
+    // Unknown site — domain-invalid bounce.
+    return { type: "OPEN_SITE", payload: { siteId: "no-such-site" } };
+  }
+  if (roll < 0.55) {
+    // Idempotent re-entry once already active — a no-change applied outcome.
+    return { type: "ENTER_DRAFT_SITE", payload: { siteId: DRAFT_SITE_ID } };
+  }
+  if (roll < 0.85) {
+    const offer = draftState?.currentOffer ?? [];
+    if (offer.length > 0) {
+      return { type: "PICK_DRAFT_CARD", payload: { packIndex: 0, cardId: `card-${String(offer[0])}` } };
+    }
+    // Stale: no live offer to pick from right now — a guaranteed domain bounce.
+    return { type: "PICK_DRAFT_CARD", payload: { packIndex: 99, cardId: "card-9999" } };
+  }
+  // Already selected by the setup phase's START_QUEST — a guaranteed domain bounce.
+  return { type: "SELECT_DREAMCALLER", payload: { dreamcallerId: DREAMCALLER_ID } };
 }
 
 // ---------------------------------------------------------------------------
@@ -376,4 +493,127 @@ runWithEmulator("eventlog emulator integration", () => {
     },
     60_000,
   );
+
+  describe("scenario D: real-reducer quest-event storm convergence", () => {
+    beforeAll(() => {
+      registerReplayFixtureProviders();
+    });
+    afterAll(() => {
+      clearReplayFixtureProviders();
+    });
+
+    it(
+      "two clients storm real quest events (START_QUEST/SELECT_DREAMCALLER/ADJUST_ESSENCE/OPEN_SITE/ENTER_DRAFT_SITE/PICK_DRAFT_CARD) with interleaved invalid/stale intents, converging including a post-compaction joiner",
+      async () => {
+        const roomId = "eventlog-real-storm";
+        await createRoom(database, roomId, realGenesis("scenario-d"));
+
+        const clientA = makeRealClientHarness(database, roomId, "client-a");
+        const clientB = makeRealClientHarness(database, roomId, "client-b");
+        await waitFor(() => clientA.displayed !== undefined && clientB.displayed !== undefined);
+
+        // Sequential setup: start the run and enter the draft site, so the
+        // concurrent storm below always has a live quest + draft offer to
+        // operate against on both clients.
+        await clientA.client.submit({
+          type: "START_QUEST",
+          payload: { dreamcallerId: DREAMCALLER_ID },
+        });
+        await waitFor(
+          () =>
+            clientA.displayed?.quest.dreamcaller !== null &&
+            clientB.displayed?.quest.dreamcaller !== null,
+        );
+        await clientA.client.submit({
+          type: "ENTER_DRAFT_SITE",
+          payload: { siteId: DRAFT_SITE_ID },
+        });
+        await waitFor(
+          () =>
+            (clientA.displayed?.quest.draftState?.currentOffer.length ?? 0) > 0 &&
+            (clientB.displayed?.quest.draftState?.currentOffer.length ?? 0) > 0,
+        );
+
+        const perClient = 110;
+        const rngA = mulberry32(0xfeed1);
+        const rngB = mulberry32(0xfeed2);
+
+        function fireRealStorm(
+          harness: RealClientHarness,
+          rng: () => number,
+          count: number,
+        ): Promise<void[]> {
+          const tasks: Array<Promise<void>> = [];
+          for (let i = 0; i < count; i++) {
+            const delayMs = Math.floor(rng() * 15);
+            tasks.push(
+              new Promise<void>((resolve) => {
+                setTimeout(() => {
+                  const draft = stormDraft(harness, rng);
+                  harness.client
+                    .submit(draft)
+                    .then(() => resolve())
+                    .catch((error: unknown) => {
+                      harness.errors.push(error);
+                      resolve();
+                    });
+                }, delayMs);
+              }),
+            );
+          }
+          return Promise.all(tasks);
+        }
+
+        await Promise.all([
+          fireRealStorm(clientA, rngA, perClient),
+          fireRealStorm(clientB, rngB, perClient),
+        ]);
+
+        const head = await readHead(roomId);
+        await waitFor(
+          () => clientA.lastFoldedSeq === head && clientB.lastFoldedSeq === head,
+          60_000,
+        );
+
+        // Zero thrown errors across the entire storm (both clients).
+        expect(clientA.errors).toEqual([]);
+        expect(clientB.errors).toEqual([]);
+
+        // Both clients converge on an identical confirmed fold.
+        expect(clientA.lastFoldedSeq).toBe(clientB.lastFoldedSeq);
+        expect(GAME_ENGINE_CONFIG.hash(clientA.displayed as FoldState)).toBe(
+          GAME_ENGINE_CONFIG.hash(clientB.displayed as FoldState),
+        );
+
+        // Dense seqs — no gaps, no duplicates.
+        const node = await readLogNode(roomId);
+        const liveCount = node.head - node.baseSeq;
+        expect(node.events.size).toBe(liveCount);
+        for (let seq = node.baseSeq + 1; seq <= node.head; seq++) {
+          expect(node.events.has(seq)).toBe(true);
+        }
+
+        // This volume (2 setup + 220 storm events) exceeds COMPACT_THRESHOLD
+        // (200), so compaction fired under real contention.
+        expect(node.baseSeq).toBeGreaterThan(0);
+
+        // A THIRD client joins fresh now, after compaction, and folds from the
+        // persisted snapshot + appliedIndex. It must converge on the SAME
+        // confirmed hash as the always-connected clients, proving the
+        // below-horizon intervening windows resolve identically for the REAL
+        // reducer, not just the toy one in scenario B.
+        const clientC = makeRealClientHarness(database, roomId, "client-c");
+        await waitFor(() => clientC.lastFoldedSeq === head, 60_000);
+        expect(clientC.errors).toEqual([]);
+        expect(GAME_ENGINE_CONFIG.hash(clientC.displayed as FoldState)).toBe(
+          GAME_ENGINE_CONFIG.hash(clientA.displayed as FoldState),
+        );
+
+        clientA.client.close();
+        clientB.client.close();
+        clientC.client.close();
+      },
+      120_000,
+    );
+  });
 });

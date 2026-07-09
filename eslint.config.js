@@ -263,7 +263,12 @@ export default tseslint.config(
     // layer, or the engine stops being reusable/game-agnostic. Both relative
     // (`../rules/...`) and absolute-from-src forms are covered, since the repo
     // has no path aliases and intra-src imports are written as relative paths.
+    // `emulator.integration.test.ts` is exempted: its real-reducer convergence
+    // scenario deliberately drives the actual game (GAME_ENGINE_CONFIG) against
+    // a live emulator, which is a TEST verifying the engine works correctly
+    // with a real game on top — not the engine itself depending on the game.
     files: ["src/eventlog/**/*.{ts,tsx}"],
+    ignores: ["src/eventlog/emulator.integration.test.ts"],
     rules: {
       "no-restricted-imports": [
         "error",
