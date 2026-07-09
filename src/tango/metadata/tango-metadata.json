@@ -1292,6 +1292,17 @@
       "description": "Optional inline essence cost rendered after the label."
     },
     {
+      "name": "variant",
+      "tsType": "GlassButtonVariant",
+      "unionMembers": [
+        "danger",
+        "default"
+      ],
+      "required": false,
+      "defaultValue": "default",
+      "description": "Surface treatment: neutral glass (`default`) or red danger glass."
+    },
+    {
       "name": "disabled",
       "tsType": "boolean",
       "unionMembers": [],

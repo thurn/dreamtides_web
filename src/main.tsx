@@ -108,11 +108,6 @@ if (pathname === "/editor" || pathname === "/cards") {
 } else if (pathname === "/tango") {
   const { default: TangoApp } = await import("./tango/docs/TangoApp");
   renderStrict(<TangoApp />);
-} else if (pathname === "/playground") {
-  const { default: ButtonTintPlayground } = await import(
-    "./tango/screens/devtools/ButtonTintPlayground"
-  );
-  renderStrict(<ButtonTintPlayground />);
 } else {
   // The dev card/figment/config data hot-reload plugins (see vite.config.ts)
   // emit targeted custom HMR events instead of a full reload, so that saving in

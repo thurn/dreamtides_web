@@ -104,6 +104,33 @@ describe("GlassButton", () => {
     });
   });
 
+  it("defaults to the neutral glass treatment", () => {
+    const { container, root } = mount(
+      <GlassButton label="Cancel" onPress={() => {}} />,
+    );
+
+    const button = container.querySelector("button");
+    expect(button?.style.borderColor).toBe("");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("can render the danger glass treatment", () => {
+    const { container, root } = mount(
+      <GlassButton label="Cancel" variant="danger" onPress={() => {}} />,
+    );
+
+    const button = container.querySelector("button");
+    expect(button?.style.borderColor).toBe("rgba(255, 92, 112, 0.82)");
+    expect(button?.style.background).toContain("rgba(244, 63, 94, 0.28)");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("fires `onPress` on click", () => {
     const onPress = vi.fn();
     const { container, root } = mount(

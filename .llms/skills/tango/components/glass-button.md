@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/tango#/glass-button`
 
 Real consumers: **2** (imports outside `src/tango/docs/` and tests).
 
-The labeled glass secondary action — a text label in the control typography on the shared liquid-glass control surface, with an optional leading glyph. It wears the same material as the Select / SegmentedControl trigger, so a secondary action reads as one family with the filter/sort controls it sits beside.
+The labeled glass secondary action — a text label in the control typography on the shared liquid-glass control surface, with an optional leading glyph and a danger treatment for destructive secondary actions. It wears the same material as the Select / SegmentedControl trigger, so a secondary action reads as one family with the filter/sort controls it sits beside.
 
 > **Guidance:** Rung two of the four-rung button suite: the beveled purple Button (commit / primary), THIS labeled glass control (a secondary chrome action), the glyph-only glass IconButton (a corner chrome action), and a bare pressable glyph (the lightest inline affordance). It stays quietly below the purple commit Button it defers to.
 
@@ -20,6 +20,7 @@ The labeled glass secondary action — a text label in the control typography on
 | `onPress` | `() => void` | yes | — | Fires when the button is activated (no-op while disabled). |
 | `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `GlowIcon` before the label. |
 | `cost` | `number \| null` | no | `null` | Optional inline essence cost rendered after the label. |
+| `variant` | `GlassButtonVariant` = `"danger" \| "default"` | no | `default` | Surface treatment: neutral glass (`default`) or red danger glass. |
 | `disabled` | `boolean` | no | `false` | Detaches the click / press feedback and marks the button `aria-disabled`. |
 | `testId` | `string` | no | — | A `data-testid` for selecting the button in tests. |
 
@@ -47,5 +48,21 @@ import { GLYPHS } from "src/tango/primitives/glyph";
   glyph={GLYPHS.filter}
   label="Filter"
   onPress={openFilters}
+/>
+```
+
+### Danger variant
+
+Use `variant="danger"` for destructive or rejecting secondary actions that should stay glassy while carrying a red warning rim and glow.
+
+```tsx
+import { GlassButton } from "src/tango/components/controls/GlassButton";
+import { GLYPHS } from "src/tango/primitives/glyph";
+
+<GlassButton
+  glyph={GLYPHS.close}
+  label="Decline Offer"
+  variant="danger"
+  onPress={declineOffer}
 />
 ```

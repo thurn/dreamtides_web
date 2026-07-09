@@ -28,6 +28,22 @@ import { controlChrome } from "../../internal/control-treatment";
 /** The md control height (px) — matches the Select / SegmentedControl cluster. */
 const GLASS_BUTTON_HEIGHT = 42;
 
+/** Visual treatment for the glass button surface. */
+export type GlassButtonVariant = "default" | "danger";
+
+/**
+ * Danger treatment for destructive or rejecting secondary actions: the same
+ * glass body with a red rim, light red wash, and red outer glow so the media
+ * still reads through the control.
+ */
+const dangerChrome: React.CSSProperties = {
+  background:
+    "linear-gradient(180deg, rgba(244, 43, 72, 0.12), rgba(150, 12, 35, 0.10)), var(--glass-sheen), rgba(22, 14, 32, 0.38)",
+  borderColor: "rgba(255, 111, 130, 0.92)",
+  boxShadow:
+    "inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -14px 30px rgba(150, 12, 35, 0.10), 0 0 0 1px rgba(244, 43, 72, 0.20), 0 14px 36px rgba(244, 43, 72, 0.44)",
+};
+
 export interface GlassButtonProps {
   /** The button's text — a resolved string shown in the control typography. */
   label: string;
@@ -37,6 +53,8 @@ export interface GlassButtonProps {
   glyph?: Glyph;
   /** Optional inline essence cost rendered after the label. */
   cost?: number | null;
+  /** Surface treatment: neutral glass (`default`) or red danger glass. */
+  variant?: GlassButtonVariant;
   /** Detaches the click / press feedback and marks the button `aria-disabled`. */
   disabled?: boolean;
   /** A `data-testid` for selecting the button in tests. */
@@ -54,10 +72,12 @@ export function GlassButton({
   onPress,
   glyph,
   cost = null,
+  variant = "default",
   disabled = false,
   testId,
 }: GlassButtonProps): ReactElement {
   const chrome = controlChrome();
+  const variantChrome = variant === "danger" ? dangerChrome : {};
   return (
     <Pressable
       as="button"
@@ -75,6 +95,7 @@ export function GlassButton({
         color: token("--text-primary"),
         whiteSpace: "nowrap",
         ...chrome.trigger,
+        ...variantChrome,
       }}
     >
       {glyph !== undefined && (

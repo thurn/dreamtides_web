@@ -6,13 +6,17 @@
 // + `disabled` controls to the real component. `docName` still points at
 // GlassButton so the props table stays accurate to its actual API.
 
-import { GlassButton } from "../../components/controls/GlassButton";
+import {
+  GlassButton,
+  type GlassButtonVariant,
+} from "../../components/controls/GlassButton";
 import { GLYPHS } from "../../primitives/glyph";
 import type { TangoComponent } from "../registry";
 
 interface GlassButtonDemoArgs {
   label?: string;
   withGlyph?: boolean;
+  variant?: GlassButtonVariant;
   disabled?: boolean;
 }
 
@@ -25,12 +29,14 @@ interface GlassButtonDemoArgs {
 function GlassButtonDemo({
   label = "Sort",
   withGlyph = false,
+  variant = "default",
   disabled = false,
 }: GlassButtonDemoArgs) {
   return (
     <GlassButton
       label={label}
       glyph={withGlyph ? GLYPHS.sort : undefined}
+      variant={variant}
       disabled={disabled}
       onPress={() => {}}
     />
@@ -41,7 +47,7 @@ export const glassButtonDemo: TangoComponent = {
   id: "glass-button",
   title: "Glass Button",
   blurb:
-    "The labeled glass secondary action — a text label in the control typography on the shared liquid-glass control surface, with an optional leading glyph. It wears the same material as the Select / SegmentedControl trigger, so a secondary action reads as one family with the filter/sort controls it sits beside.",
+    "The labeled glass secondary action — a text label in the control typography on the shared liquid-glass control surface, with an optional leading glyph and a danger treatment for destructive secondary actions. It wears the same material as the Select / SegmentedControl trigger, so a secondary action reads as one family with the filter/sort controls it sits beside.",
   callout:
     "Rung two of the four-rung button suite: the beveled purple Button (commit / primary), THIS labeled glass control (a secondary chrome action), the glyph-only glass IconButton (a corner chrome action), and a bare pressable glyph (the lightest inline affordance). It stays quietly below the purple commit Button it defers to.",
   group: "Components",
@@ -66,11 +72,25 @@ import { GLYPHS } from "src/tango/primitives/glyph";
   onPress={openFilters}
 />`,
     },
+    {
+      label: "Danger variant",
+      note: "Use `variant=\"danger\"` for destructive or rejecting secondary actions that should stay glassy while carrying a red warning rim and glow.",
+      code: `import { GlassButton } from "src/tango/components/controls/GlassButton";
+import { GLYPHS } from "src/tango/primitives/glyph";
+
+<GlassButton
+  glyph={GLYPHS.close}
+  label="Decline Offer"
+  variant="danger"
+  onPress={declineOffer}
+/>`,
+    },
   ],
   demo: {
     defaultArgs: {
       label: "Sort",
       withGlyph: false,
+      variant: "default",
       disabled: false,
     },
   },

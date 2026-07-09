@@ -445,7 +445,12 @@ function OfferStack({
           />
         ))}
       </div>
-      <GlassButton label="Decline Offer" onPress={onSkip} disabled={disabled} />
+      <GlassButton
+        label="Decline Offer"
+        variant="danger"
+        onPress={onSkip}
+        disabled={disabled}
+      />
     </div>
   );
 }
