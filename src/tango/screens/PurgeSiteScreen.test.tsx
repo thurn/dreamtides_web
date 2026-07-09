@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { artRef } from "../primitives/art";
+import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
 import { PurgeSiteScreen, type PurgeSiteView } from "./PurgeSiteScreen";
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
@@ -215,6 +216,24 @@ describe("PurgeSiteScreen", () => {
       gallery?.querySelector<HTMLElement>("header")?.style.padding,
     ).toBe("var(--space-5)");
     expect(gallery?.style.borderLeft).not.toContain("var(--border-soft)");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("anchors the mobile guide art beyond the shared menu corner inset", () => {
+    const { container, root } = mount(
+      <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
+    );
+
+    const guideArt = container.querySelector<HTMLElement>(
+      '[data-testid="tango-purge-guide-art"]',
+    );
+    expect(guideArt?.style.left).toBe(
+      `max(var(--safe-area-inset-left), ${String(MENU_EDGE_INSET_MOBILE_PX)}px)`,
+    );
+    expect(guideArt?.style.width).toBe("58vw");
 
     act(() => {
       root.unmount();

@@ -14,6 +14,7 @@ import {
 import { SpeechBubble } from "../components/overlay/SpeechBubble";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
+import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
 import { useIsDesktop } from "./use-is-desktop";
 
 export interface PurgeGuideView {
@@ -421,9 +422,13 @@ function GuideBand({ guide }: { readonly guide: PurgeGuideView }) {
         src={guideUrl}
         alt={guide.name}
         draggable={false}
+        data-testid="tango-purge-guide-art"
         style={{
           position: "absolute",
-          left: "calc(-1 * (var(--space-10) + var(--space-4)))",
+          // Takeshi's cutout carries transparent room around his head. Anchoring
+          // that canvas at the menu inset keeps the opaque head beyond the
+          // shared mobile menu disc while preserving the intended art scale.
+          left: `max(var(--safe-area-inset-left), ${String(MENU_EDGE_INSET_MOBILE_PX)}px)`,
           bottom: "calc(-1 * var(--space-8))",
           width: "58vw",
           height: "100%",
