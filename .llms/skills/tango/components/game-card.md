@@ -10,7 +10,7 @@ Real consumers: **22** (imports outside `src/tango/docs/` and tests).
 
 The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name.
 
-> **Guidance:** Hover-zoom is built in: hover a medium card and it grows in place — a portaled, pointer-events-none copy is drawn over the card's original footprint and scaled up (capped at 1.5x and toward a legible reading width), with the glossary term stack portaled beside it. It is automatic; there is nothing to opt into. `large` and `hideRulesText` cards already read legibly, so they skip the portal and use the slight in-place press/hover scale instead.
+> **Guidance:** Hover-zoom is built in: hover a card below the shared reading width and a portaled, pointer-events-none copy grows over its original footprint (capped at 1.5x and toward that legible width), with the glossary term stack portaled beside it. It is automatic and based on the rendered footprint, so `large` changes the text scale without opting a compact card out. `hideRulesText` cards skip the reading preview.
 
 ## Props
 

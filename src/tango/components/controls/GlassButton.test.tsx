@@ -131,6 +131,31 @@ describe("GlassButton", () => {
     });
   });
 
+  it("restores the neutral glass border after leaving the danger state", () => {
+    const { container, root } = mount(
+      <GlassButton label="Decline" onPress={() => {}} />,
+    );
+    const button = container.querySelector<HTMLButtonElement>("button");
+    const neutralBorder = button?.style.border;
+    expect(neutralBorder).not.toBe("");
+
+    act(() => {
+      root.render(
+        <GlassButton label="Purge 1" variant="danger" onPress={() => {}} />,
+      );
+    });
+    expect(button?.style.border).not.toBe(neutralBorder);
+
+    act(() => {
+      root.render(<GlassButton label="Decline" onPress={() => {}} />);
+    });
+    expect(button?.style.border).toBe(neutralBorder);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("fires `onPress` on click", () => {
     const onPress = vi.fn();
     const { container, root } = mount(

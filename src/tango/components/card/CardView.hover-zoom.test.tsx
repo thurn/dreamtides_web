@@ -263,7 +263,7 @@ describe("GameCard hover zoom", () => {
     });
   });
 
-  it("does not portal-zoom large readable cards", () => {
+  it("portal-zooms large cards that remain below the reading target", () => {
     mockRect({ width: 170, height: 238, left: 20, top: 30, right: 190, bottom: 268 });
     const container = document.createElement("div");
     document.body.append(container);
@@ -274,7 +274,9 @@ describe("GameCard hover zoom", () => {
 
     hoverCard(container);
 
-    expect(overlay()).toBeNull();
+    const node = overlay();
+    expect(node).not.toBeNull();
+    expect(readScale(node?.style.transform)).toBeGreaterThan(1);
 
     act(() => {
       root.unmount();

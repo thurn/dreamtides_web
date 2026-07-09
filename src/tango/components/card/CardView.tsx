@@ -721,8 +721,9 @@ const HOVER_GLOSSARY_STACK_GAP_PX = 10;
  * - Keyword definition InfoCards sit beside the main card and top-align to it.
  *   They can flip left/right for viewport fit, but they never appear above the
  *   card.
- * - Readable main cards (1x/2x layouts such as draft offers and starting-deck
- *   cards) grow slightly on press/hover through their surface treatment.
+ * - Every card with visible rules text grows toward the shared reading width
+ *   when its rendered footprint is smaller than that target. The `large` prop
+ *   raises the text scale but does not opt a physically small card out of zoom.
  * - Dense previews (such as the 4x mobile deck grid) may delegate keyword
  *   definitions to a parent-owned larger main preview via `termDefinitions`.
  */
@@ -1009,11 +1010,10 @@ function GameCardSurface(props: InternalCardViewProps) {
   }, []);
 
   const handleHoverZoomEnter = useCallback(() => {
-    // Large/readable card surfaces (draft offers, starting deck) already show
-    // legible text. They use the slight in-place scale feedback on press/hover;
-    // the side keyword stack anchors to the card itself instead of to a larger
-    // portaled copy.
-    if (!enableHoverZoom || hideRulesText || large) {
+    // Physical size, not the text-scale preset, decides whether a card needs a
+    // reading preview. This keeps a `large` card in a compact gallery eligible
+    // while naturally skipping cards already at or above the target width.
+    if (!enableHoverZoom || hideRulesText) {
       return;
     }
     const anchor = cardRef.current;
@@ -1052,7 +1052,7 @@ function GameCardSurface(props: InternalCardViewProps) {
       scale: Number(scale.toFixed(3)),
       targetWidthPx: HOVER_TARGET_WIDTH_PX,
     });
-  }, [cardRef, enableHoverZoom, hideRulesText, large]);
+  }, [cardRef, enableHoverZoom, hideRulesText]);
 
   useEffect(() => {
     if (hoverZoom === null) {

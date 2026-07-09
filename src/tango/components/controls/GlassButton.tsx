@@ -39,7 +39,11 @@ export type GlassButtonVariant = "default" | "danger";
 const dangerChrome: React.CSSProperties = {
   background:
     "linear-gradient(180deg, rgba(244, 43, 72, 0.12), rgba(150, 12, 35, 0.10)), var(--glass-sheen), rgba(22, 14, 32, 0.38)",
-  borderColor: "rgba(255, 111, 130, 0.92)",
+  // Keep the same shorthand property as the base control material. Mixing its
+  // `border` shorthand with a danger-only `borderColor` longhand makes React
+  // clear the shorthand during danger → default rerenders, exposing the
+  // inherited white text color as an unintended full-strength border.
+  border: "1px solid rgba(255, 111, 130, 0.92)",
   boxShadow:
     "inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -14px 30px rgba(150, 12, 35, 0.10), 0 0 0 1px rgba(244, 43, 72, 0.20), 0 14px 36px rgba(244, 43, 72, 0.44)",
 };
