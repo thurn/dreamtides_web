@@ -2,10 +2,9 @@
 //
 // A card-gallery surface is the recurring "title + subtitle, trailing action,
 // scrolling GameCard grid" pattern used by the starting-deck reveal and card
-// selection sites. The component owns the glass frame, header row, body scroll,
-// and fixed card grid modes; callers provide resolved card models keyed by deck
-// entry id / UUID and, when the cards are interactive, a single card-press
-// callback.
+// selection sites. The component owns one rounded glass frame, the header row,
+// body scroll, and fixed card grid modes; callers wrap it for placement and
+// provide resolved card models keyed by deck entry id / UUID.
 
 import {
   useEffect,
@@ -69,10 +68,6 @@ export type CardGalleryAccessory =
       testId?: string;
     };
 
-/** The panel's glass frame geometry. */
-export type CardGalleryFrame =
-  "floating" | "fullBleed" | "rightEdge" | "bottomSheet";
-
 /** The grid algorithm for the card body. */
 export type CardGalleryColumns = "auto" | "four" | "five";
 
@@ -90,19 +85,15 @@ export interface CardGalleryPanelProps {
   cards: readonly CardGalleryCardView[];
   /** Empty-state copy shown when `cards` is empty. */
   emptyLabel?: string;
-  /** Glass frame geometry. Defaults to `floating`. */
-  frame?: CardGalleryFrame;
   /** Card grid mode. Defaults to `auto`. */
   columns?: CardGalleryColumns;
   /** Minimum auto-grid card width. Defaults to `standard`. */
   cardSize?: CardGalleryCardSize;
-  /** Extra body clearance for a docked QuestStatusBar. */
-  bottomClearance?: "none" | "hud";
   /** Test id for the panel root. */
   testId?: string;
   /**
-   * On a full-bleed mobile panel whose screen-cutout box is known, float the
-   * accessory beside the device island instead of sharing the header row.
+   * When a screen-cutout box is known, float the accessory beside the device
+   * island instead of sharing the header row.
    */
   cutoutAwareAccessory?: boolean;
   /** Fires when an enabled card tile is activated. */
@@ -138,83 +129,6 @@ function accessoryNode(accessory: CardGalleryAccessory): ReactElement {
   );
 }
 
-function frameStyle(frame: CardGalleryFrame): CSSProperties {
-  const base = {
-    ...glassSurfaceStyle({ radius: frame === "rightEdge" ? null : undefined }),
-    background: `${token("--glass-sheen")}, ${token("--glass-fill-popover")}`,
-    position: "relative",
-    width: "100%",
-    height: "100%",
-    minHeight: 0,
-    display: "flex",
-    flexDirection: "column",
-    overflow: "hidden",
-    pointerEvents: "auto",
-  } satisfies CSSProperties;
-
-  switch (frame) {
-    case "fullBleed":
-      return {
-        ...base,
-        border: "none",
-        borderRadius: 0,
-        boxShadow: "none",
-      };
-    case "rightEdge":
-      return {
-        ...base,
-        border: 0,
-        borderLeft: `1px solid ${token("--border-soft")}`,
-      };
-    case "bottomSheet":
-      return {
-        ...base,
-        border: 0,
-        borderTop: `1px solid ${token("--border-soft")}`,
-        borderTopLeftRadius: token("--radius-panel"),
-        borderTopRightRadius: token("--radius-panel"),
-      };
-    case "floating":
-      return base;
-  }
-}
-
-function headerPadding(frame: CardGalleryFrame): CSSProperties {
-  if (frame === "fullBleed") {
-    return {
-      paddingTop: `max(${token("--gutter")}, var(--safe-area-inset-top))`,
-      paddingRight: token("--gutter"),
-      paddingLeft: token("--gutter"),
-      paddingBottom: token("--space-4"),
-    };
-  }
-  if (frame === "bottomSheet") {
-    return {
-      padding: `${token("--space-4")} ${token("--gutter")}`,
-    };
-  }
-  return {
-    padding: token("--space-6"),
-  };
-}
-
-function bodyPadding(
-  frame: CardGalleryFrame,
-  bottomClearance: "none" | "hud",
-): string {
-  const bottom =
-    bottomClearance === "hud"
-      ? `calc(${token("--hud-h")} + ${token("--safe-bottom")} + ${token("--space-8")})`
-      : `calc(${token("--safe-bottom")} + ${token("--space-6")})`;
-  if (frame === "bottomSheet") {
-    return `${token("--space-4")} ${token("--gutter")} ${bottom}`;
-  }
-  if (bottomClearance === "hud") {
-    return `${token("--space-8")} ${token("--space-8")} ${bottom}`;
-  }
-  return frame === "rightEdge" ? token("--space-8") : token("--space-5");
-}
-
 function gridTemplate(
   columns: CardGalleryColumns,
   cardSize: CardGalleryCardSize,
@@ -237,28 +151,36 @@ export function CardGalleryPanel({
   rightAccessory,
   cards,
   emptyLabel = "No cards.",
-  frame = "floating",
   columns = "auto",
   cardSize = "standard",
-  bottomClearance = "none",
   testId,
   cutoutAwareAccessory = false,
   onCardPress,
 }: CardGalleryPanelProps): ReactElement {
   const [besideCutout, setBesideCutout] = useState(false);
   useEffect(() => {
-    setBesideCutout(
-      frame === "fullBleed" &&
-        cutoutAwareAccessory &&
-        hasInjectedDisplayCutout(),
-    );
-  }, [cutoutAwareAccessory, frame]);
+    setBesideCutout(cutoutAwareAccessory && hasInjectedDisplayCutout());
+  }, [cutoutAwareAccessory]);
 
   const accessory =
     rightAccessory !== undefined ? accessoryNode(rightAccessory) : null;
 
   return (
-    <section data-testid={testId} style={frameStyle(frame)}>
+    <section
+      data-testid={testId}
+      style={{
+        ...glassSurfaceStyle(),
+        background: `${token("--glass-sheen")}, ${token("--glass-fill-popover")}`,
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        minHeight: 0,
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        pointerEvents: "auto",
+      }}
+    >
       {besideCutout && accessory !== null && (
         <div
           style={{
@@ -277,11 +199,11 @@ export function CardGalleryPanel({
         style={{
           flexShrink: 0,
           display: "flex",
-          alignItems: "flex-start",
+          alignItems: "center",
           justifyContent: "space-between",
           gap: token("--space-4"),
           borderBottom: `1px solid ${token("--border-strong")}`,
-          ...headerPadding(frame),
+          padding: token("--space-6"),
         }}
       >
         <div
@@ -298,7 +220,6 @@ export function CardGalleryPanel({
               font: token("--t-title-sm"),
               color: token("--text-on-glass"),
               textAlign: "left",
-              textShadow: token("--text-outline-media"),
               letterSpacing: 0,
             }}
           >
@@ -310,7 +231,6 @@ export function CardGalleryPanel({
                 margin: 0,
                 font: token("--t-body"),
                 color: token("--text-on-glass-muted"),
-                textShadow: token("--text-outline-media"),
               }}
             >
               {subtitle}
@@ -325,7 +245,7 @@ export function CardGalleryPanel({
           minHeight: 0,
           overflowY: "auto",
           WebkitOverflowScrolling: "touch",
-          padding: bodyPadding(frame, bottomClearance),
+          padding: token("--space-5"),
         }}
       >
         {cards.length === 0 ? (

@@ -181,7 +181,7 @@ describe("PurgeSiteScreen", () => {
     });
   });
 
-  it("renders the mobile card grid on the glass bottom sheet", () => {
+  it("renders the mobile card grid on the shared rounded glass panel", () => {
     const { container, root } = mount(
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
     );
@@ -194,14 +194,15 @@ describe("PurgeSiteScreen", () => {
     );
     expect(cardRegion?.dataset.purgeLayout).toBe("mobile");
     expect(gallery?.style.background).toContain("var(--glass-fill-popover)");
-    expect(gallery?.style.borderTopLeftRadius).toBe("var(--radius-panel)");
+    expect(gallery?.style.borderRadius).toBe("var(--radius-popover)");
+    expect(gallery?.style.borderLeft).not.toContain("var(--border-soft)");
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("renders the desktop composition with cards on a square-corner glass panel", () => {
+  it("renders the desktop composition with cards on the shared rounded glass panel", () => {
     stubMatchMedia(true);
     const { container, root } = mount(
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
@@ -220,8 +221,8 @@ describe("PurgeSiteScreen", () => {
     );
     expect(cardRegion?.dataset.purgeLayout).toBe("desktop");
     expect(gallery?.style.background).toContain("var(--glass-fill-popover)");
-    expect(gallery?.style.borderLeft).toContain("var(--border-soft)");
-    expect(gallery?.style.borderTopLeftRadius).toBe("");
+    expect(gallery?.style.borderRadius).toBe("var(--radius-popover)");
+    expect(gallery?.style.borderLeft).not.toContain("var(--border-soft)");
 
     act(() => {
       root.unmount();

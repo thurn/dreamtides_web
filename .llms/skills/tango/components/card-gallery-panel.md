@@ -10,7 +10,7 @@ Real consumers: **2** (imports outside `src/tango/docs/` and tests).
 
 The shared glass card-browser surface: a left-aligned title and subtitle, a trailing header accessory, and a scrolling GameCard grid.
 
-> **Guidance:** Use this when a screen presents a bounded card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component owns the header, accessory slot, glass frame, internal scroll, and grid modes; callers provide resolved card models keyed by entry id or UUID.
+> **Guidance:** Use this when a screen presents a bounded card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component owns one fixed rounded glass frame, the header, accessory slot, internal scroll, and grid modes; callers provide resolved card models keyed by entry id or UUID and wrap it for placement.
 
 ## Props
 
@@ -21,12 +21,10 @@ The shared glass card-browser surface: a left-aligned title and subtitle, a trai
 | `rightAccessory` | `CardGalleryAccessory` | no | — | Optional trailing header action. |
 | `cards` | `readonly CardGalleryCardView[]` | yes | — | Resolved cards rendered in order. |
 | `emptyLabel` | `string` | no | `No cards.` | Empty-state copy shown when `cards` is empty. |
-| `frame` | `CardGalleryFrame` = `"floating" \| "fullBleed" \| "rightEdge" \| "bottomSheet"` | no | `floating` | Glass frame geometry. Defaults to `floating`. |
 | `columns` | `CardGalleryColumns` = `"auto" \| "four" \| "five"` | no | `auto` | Card grid mode. Defaults to `auto`. |
 | `cardSize` | `CardGalleryCardSize` = `"standard" \| "roomy"` | no | `standard` | Minimum auto-grid card width. Defaults to `standard`. |
-| `bottomClearance` | `"none" \| "hud"` | no | `none` | Extra body clearance for a docked QuestStatusBar. |
 | `testId` | `string` | no | — | Test id for the panel root. |
-| `cutoutAwareAccessory` | `boolean` | no | `false` | On a full-bleed mobile panel whose screen-cutout box is known, float the accessory beside the device island instead of sharing the header row. |
+| `cutoutAwareAccessory` | `boolean` | no | `false` | When a screen-cutout box is known, float the accessory beside the device island instead of sharing the header row. |
 | `onCardPress` | `((entryId: string) => void)` | no | — | Fires when an enabled card tile is activated. |
 
 ### `rightAccessory`: the `CardGalleryAccessory` model

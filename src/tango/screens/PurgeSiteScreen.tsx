@@ -137,6 +137,8 @@ export function PurgeSiteScreen({
         gridTemplateRows: isDesktop ? undefined : GUIDE_TOP_ROWS,
         overflow: "hidden",
         background: token("--bg-app"),
+        boxSizing: "border-box",
+        paddingBottom: isDesktop ? undefined : HUD_CLEARANCE,
       }}
     >
       {sceneUrl !== null && (
@@ -356,7 +358,9 @@ function CardRegion({
         rightAccessory={{
           kind: "glassButton",
           label:
-            selectedCount === 0 ? "Decline" : `Purge ${String(selectedCount)}:`,
+            selectedCount === 0
+              ? "Decline"
+              : `Purge ${String(selectedCount)}: `,
           cost: selectedCount === 0 ? null : totalCost,
           onPress: selectedCount === 0 ? onClose : onPurge,
           testId: "tango-purge-header-action",
@@ -376,9 +380,7 @@ function CardRegion({
             emphasis: card.purgeCostKind === "free" ? "danger" : undefined,
           };
         })}
-        frame={desktop ? "rightEdge" : "bottomSheet"}
         columns={desktop ? "five" : "four"}
-        bottomClearance="hud"
         testId="tango-purge-card-gallery"
         onCardPress={onToggle}
       />

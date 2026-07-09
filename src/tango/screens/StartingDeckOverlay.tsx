@@ -2,10 +2,9 @@
 // reveal.
 //
 // The first time a run has a Dreamcaller and has not yet seen its deck, the app
-// shows the player the cards they begin the quest with. This is that popup:
-// a bounded CardGalleryPanel on desktop and a full-bleed frosted panel on
-// mobile, with the same left-aligned title/subtitle, trailing close accessory,
-// and internal card-grid scroll used by card-selection sites.
+// shows the player the cards they begin the quest with. This is that popup: a
+// CardGalleryPanel with the same left-aligned title/subtitle, trailing close
+// accessory, and internal card-grid scroll used by card-selection sites.
 //
 // The body is a scrolling grid of the starting cards in acquisition order. Each
 // GameCard grows in place on hover (desktop) or press (mobile) for a legible
@@ -179,7 +178,6 @@ export function StartingDeckOverlay({
               }}
               cards={view.cards}
               emptyLabel="No cards in starting deck."
-              frame={isDesktop ? "floating" : "fullBleed"}
               columns="auto"
               cardSize={roomyDesktop ? "roomy" : "standard"}
               cutoutAwareAccessory

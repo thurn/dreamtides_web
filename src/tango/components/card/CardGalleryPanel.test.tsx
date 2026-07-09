@@ -87,6 +87,12 @@ describe("CardGalleryPanel", () => {
     );
 
     expect(container.querySelector("h2")?.textContent).toBe("Purge Cards");
+    expect(container.querySelector("h2")?.style.textShadow).toBe("");
+    expect(container.querySelector("p")?.style.textShadow).toBe("");
+    expect(container.querySelector("header")?.style.alignItems).toBe("center");
+    expect(container.querySelector("section")?.style.borderRadius).toBe(
+      "var(--radius-popover)",
+    );
     expect(container.textContent).toContain(
       "Choose cards to remove from your deck",
     );

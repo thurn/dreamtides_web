@@ -580,19 +580,6 @@
       "description": "Empty-state copy shown when `cards` is empty."
     },
     {
-      "name": "frame",
-      "tsType": "CardGalleryFrame",
-      "unionMembers": [
-        "floating",
-        "fullBleed",
-        "rightEdge",
-        "bottomSheet"
-      ],
-      "required": false,
-      "defaultValue": "floating",
-      "description": "Glass frame geometry. Defaults to `floating`."
-    },
-    {
       "name": "columns",
       "tsType": "CardGalleryColumns",
       "unionMembers": [
@@ -616,17 +603,6 @@
       "description": "Minimum auto-grid card width. Defaults to `standard`."
     },
     {
-      "name": "bottomClearance",
-      "tsType": "\"none\" | \"hud\"",
-      "unionMembers": [
-        "none",
-        "hud"
-      ],
-      "required": false,
-      "defaultValue": "none",
-      "description": "Extra body clearance for a docked QuestStatusBar."
-    },
-    {
       "name": "testId",
       "tsType": "string",
       "unionMembers": [],
@@ -640,7 +616,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "false",
-      "description": "On a full-bleed mobile panel whose screen-cutout box is known, float the\naccessory beside the device island instead of sharing the header row."
+      "description": "When a screen-cutout box is known, float the accessory beside the device\nisland instead of sharing the header row."
     },
     {
       "name": "onCardPress",
@@ -807,11 +783,11 @@
       "name": "variant",
       "tsType": "DreamcallerPortraitVariant",
       "unionMembers": [
-        "fullBleed",
         "hero",
         "panel",
         "thumb",
-        "standing"
+        "standing",
+        "fullBleed"
       ],
       "required": false,
       "defaultValue": "panel",
@@ -918,10 +894,10 @@
     },
     {
       "name": "variant",
-      "tsType": "\"hud\" | \"flat\" | \"revelation\"",
+      "tsType": "\"flat\" | \"hud\" | \"revelation\"",
       "unionMembers": [
-        "hud",
         "flat",
+        "hud",
         "revelation"
       ],
       "required": false,
@@ -1158,10 +1134,10 @@
     },
     {
       "name": "termDefinitions",
-      "tsType": "\"none\" | \"card\"",
+      "tsType": "\"card\" | \"none\"",
       "unionMembers": [
-        "none",
-        "card"
+        "card",
+        "none"
       ],
       "required": false,
       "defaultValue": null,
