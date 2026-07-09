@@ -10,7 +10,7 @@ Real consumers: **2** (imports outside `src/tango/docs/` and tests).
 
 The shared glass card-browser surface: a left-aligned title and subtitle, a trailing header accessory, and a scrolling GameCard grid.
 
-> **Guidance:** Use this when a screen presents a bounded card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component owns one fixed rounded glass frame, the header, accessory slot, internal scroll, and grid modes; callers provide resolved card models keyed by entry id or UUID and wrap it for placement.
+> **Guidance:** Use this when a screen presents a bounded card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component owns one fixed rounded glass frame, the header, accessory slot, internal scroll, and grid modes; callers provide resolved card models keyed by entry id or UUID and wrap it in a fixed-height placement box so extra cards scroll inside the gallery body.
 
 ## Props
 
@@ -50,7 +50,7 @@ import { CardGalleryPanel } from "src/tango/components/card/CardGalleryPanel";
   subtitle="Choose cards to remove from your deck"
   rightAccessory={{
     kind: "glassButton",
-    label: selectedCount === 0 ? "Decline" : `Purge ${selectedCount}:`,
+    label: selectedCount === 0 ? "Decline" : `Purge ${selectedCount}: `,
     cost: selectedCount === 0 ? null : totalCost,
     onPress: selectedCount === 0 ? decline : purge,
   }}

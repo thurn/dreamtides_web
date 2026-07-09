@@ -27,7 +27,7 @@ function makeCard(overrides: Partial<CardData> = {}): CardData {
   };
 }
 
-function view(): PurgeSiteView {
+function view(cardCount = 2): PurgeSiteView {
   return {
     scene: null,
     guide: {
@@ -36,20 +36,21 @@ function view(): PurgeSiteView {
       line: "Cut only what the dream can spare.",
       art: artRef.dreamGuide("takeshi"),
     },
-    cards: [
-      {
-        entryId: "entry-a",
-        card: makeCard({ id: asCardId("card-a"), cardNumber: 1 }),
+    cards: Array.from({ length: cardCount }, (_, index) => {
+      const cardNumber = index + 1;
+      const suffix =
+        cardNumber === 1 ? "a" : cardNumber === 2 ? "b" : String(cardNumber);
+      return {
+        entryId: `entry-${suffix}`,
+        card: makeCard({
+          name: asCardName(`Test Card ${String(cardNumber)}`),
+          id: asCardId(`card-${suffix}`),
+          cardNumber,
+        }),
         isBane: false,
         purgeCostKind: "paid",
-      },
-      {
-        entryId: "entry-b",
-        card: makeCard({ id: asCardId("card-b"), cardNumber: 2 }),
-        isBane: false,
-        purgeCostKind: "paid",
-      },
-    ],
+      };
+    }),
     visitCosts: [0, 40, 100],
     maxPaidSelections: 2,
     hud: {
@@ -193,6 +194,8 @@ describe("PurgeSiteScreen", () => {
       '[data-testid="tango-purge-card-gallery"]',
     );
     expect(cardRegion?.dataset.purgeLayout).toBe("mobile");
+    expect(cardRegion?.style.height).toBe("100%");
+    expect(cardRegion?.style.minHeight).toBe("0px");
     expect(gallery?.style.background).toContain("var(--glass-fill-popover)");
     expect(gallery?.style.borderRadius).toBe("var(--radius-popover)");
     expect(gallery?.style.borderLeft).not.toContain("var(--border-soft)");
@@ -208,9 +211,16 @@ describe("PurgeSiteScreen", () => {
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
     );
 
-    expect(
-      container.querySelector("[data-purge-desktop-composition]"),
-    ).not.toBeNull();
+    const desktopComposition = container.querySelector<HTMLElement>(
+      "[data-purge-desktop-composition]",
+    );
+    expect(desktopComposition).not.toBeNull();
+    expect(desktopComposition?.style.bottom).toContain("var(--space-9)");
+    const desktopLayout = container.querySelector<HTMLElement>(
+      "[data-purge-desktop-layout]",
+    );
+    expect(desktopLayout?.style.minHeight).toBe("0px");
+    expect(desktopLayout?.style.gridTemplateRows).toBe("minmax(0, 1fr)");
     expect(container.querySelector("[data-purge-guide]")).not.toBeNull();
 
     const cardRegion = container.querySelector<HTMLElement>(
@@ -220,9 +230,35 @@ describe("PurgeSiteScreen", () => {
       '[data-testid="tango-purge-card-gallery"]',
     );
     expect(cardRegion?.dataset.purgeLayout).toBe("desktop");
+    expect(cardRegion?.style.height).toBe("100%");
+    expect(cardRegion?.style.minHeight).toBe("0px");
     expect(gallery?.style.background).toContain("var(--glass-fill-popover)");
     expect(gallery?.style.borderRadius).toBe("var(--radius-popover)");
     expect(gallery?.style.borderLeft).not.toContain("var(--border-soft)");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("keeps the desktop purge card window fixed-height with a 20-card deck", () => {
+    stubMatchMedia(true);
+    const { container, root } = mount(
+      <PurgeSiteScreen view={view(20)} onClose={vi.fn()} onPurge={vi.fn()} />,
+    );
+
+    const cardRegion = container.querySelector<HTMLElement>(
+      "[data-purge-card-grid]",
+    );
+    const scroll = container.querySelector(
+      '[data-testid="tango-purge-card-gallery"] header',
+    )?.nextElementSibling as HTMLElement | null;
+    expect(cardRegion?.dataset.purgeLayout).toBe("desktop");
+    expect(cardRegion?.style.height).toBe("100%");
+    expect(scroll?.style.overflowY).toBe("auto");
+    expect(
+      container.querySelectorAll("[data-testid^='tango-purge-card-entry-']"),
+    ).toHaveLength(20);
 
     act(() => {
       root.unmount();

@@ -152,7 +152,11 @@ export function StartingDeckOverlay({
               position: "relative",
               zIndex: 1,
               width: "100%",
-              height: isDesktop ? undefined : "100%",
+              height: isDesktop
+                ? wideDesktop
+                  ? `calc(100vh - ${token("--space-8")} - ${token("--space-8")})`
+                  : "85vh"
+                : "100%",
               maxWidth: isDesktop
                 ? wideDesktop
                   ? "min(1120px, 90vw)"

@@ -72,6 +72,9 @@ export interface PurgeSiteScreenProps {
 
 const GUIDE_TOP_ROWS = "minmax(220px, 34dvh) minmax(0, 1fr)";
 const HUD_CLEARANCE = `calc(${token("--hud-h")} + ${token("--safe-bottom")} + ${token("--space-8")})`;
+// Desktop Purge uses the grand QuestStatusBar, which outgrows the root hud
+// token. Keep the card window above that larger transparent HUD.
+const DESKTOP_HUD_CLEARANCE = `calc(${HUD_CLEARANCE} + ${token("--space-9")})`;
 
 export function PurgeSiteScreen({
   view,
@@ -229,7 +232,7 @@ function DesktopComposition({
         top: `calc(${token("--space-8")} + max(var(--safe-area-inset-top), ${token("--safe-top")}))`,
         left: 0,
         right: 0,
-        bottom: HUD_CLEARANCE,
+        bottom: DESKTOP_HUD_CLEARANCE,
         display: "grid",
         placeItems: "stretch center",
         zIndex: 20,
@@ -237,12 +240,15 @@ function DesktopComposition({
       }}
     >
       <div
+        data-purge-desktop-layout=""
         style={{
           width: `calc(100% - ${token("--space-12")} - ${token("--space-12")})`,
           maxWidth: 1500,
           height: "100%",
+          minHeight: 0,
           display: "grid",
           gridTemplateColumns: "minmax(0, 0.9fr) minmax(0, 1.1fr)",
+          gridTemplateRows: "minmax(0, 1fr)",
           gap: token("--space-12"),
           alignItems: "center",
         }}
@@ -342,12 +348,12 @@ function CardRegion({
         position: "relative",
         zIndex: 10,
         minHeight: 0,
+        height: "100%",
+        boxSizing: "border-box",
         pointerEvents: "auto",
         ...(desktop
           ? {
               alignSelf: "stretch",
-              height: "100%",
-              boxSizing: "border-box",
             }
           : {}),
       }}

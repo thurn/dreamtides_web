@@ -57,20 +57,28 @@ function makeCard(cardNumber: number, name: string, text: string): CardData {
   };
 }
 
-function makeView(): StartingDeckView {
+function makeView(cardCount = 2): StartingDeckView {
   return {
-    cards: [
-      {
-        entryId: "entry-1",
-        card: makeCard(1, "Archive Sentry", "Hold the line."),
-        testId: "starting-deck-modal-card-entry-1",
-      },
-      {
-        entryId: "entry-2",
-        card: makeCard(2, "Glimpse of What Was", "Draw a card."),
-        testId: "starting-deck-modal-card-entry-2",
-      },
-    ],
+    cards: Array.from({ length: cardCount }, (_, index) => {
+      const cardNumber = index + 1;
+      return {
+        entryId: `entry-${String(cardNumber)}`,
+        card: makeCard(
+          cardNumber,
+          cardNumber === 1
+            ? "Archive Sentry"
+            : cardNumber === 2
+              ? "Glimpse of What Was"
+              : `Starter ${String(cardNumber)}`,
+          cardNumber === 1
+            ? "Hold the line."
+            : cardNumber === 2
+              ? "Draw a card."
+              : "Begin again.",
+        ),
+        testId: `starting-deck-modal-card-entry-${String(cardNumber)}`,
+      };
+    }),
   };
 }
 
@@ -201,18 +209,39 @@ describe("StartingDeckOverlay", () => {
 
     const panel = panelOf(container);
     expect(panel?.style.maxWidth).toContain("min(");
+    expect(panel?.style.height).toBe("85vh");
     expect(panel?.style.maxHeight).toBe("85vh");
-    expect(panel?.style.height).toBe("");
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("widens the panel and drops the 85vh cap on a roomy desktop", () => {
+  it("keeps the desktop panel fixed-height when the deck has more cards than fit", () => {
+    setDesktopViewport(true);
+    const { container, root } = mount(
+      <StartingDeckOverlay isOpen view={makeView(20)} onClose={vi.fn()} />,
+    );
+
+    const panel = panelOf(container);
+    expect(panel?.style.height).toBe("85vh");
+    expect(panel?.style.maxHeight).toBe("85vh");
+    const scroll = container.querySelector("header")
+      ?.nextElementSibling as HTMLElement | null;
+    expect(scroll?.style.overflowY).toBe("auto");
+    expect(
+      container.querySelectorAll("[data-testid^='starting-deck-modal-card-']"),
+    ).toHaveLength(20);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("widens the panel and uses viewport padding as a fixed roomy desktop height", () => {
     // A roomy desktop (wide AND tall) opts the dialog into its wider panel and
-    // trades the 85vh height cap for explicit viewport padding so the enlarged
-    // starter-deck grid fits in two rows without internal scroll.
+    // uses explicit viewport padding for a stable panel height while overflow
+    // stays inside the shared card gallery body.
     setDesktopViewport(true, true);
     const { container, root } = mount(
       <StartingDeckOverlay isOpen view={makeView()} onClose={vi.fn()} />,
@@ -220,6 +249,7 @@ describe("StartingDeckOverlay", () => {
 
     const panel = panelOf(container);
     expect(panel?.style.maxWidth).toContain("min(");
+    expect(panel?.style.height).toContain("100vh");
     expect(panel?.style.maxHeight).toContain("100vh");
     expect(panel?.style.maxHeight).not.toBe("85vh");
 
