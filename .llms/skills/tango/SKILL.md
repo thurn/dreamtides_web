@@ -40,6 +40,16 @@ The reference files and the index are projections of the component sources
 `src/tango/docs/demos/`). Regenerate with `npm run tango-docs` (included in
 `npm run regenerate-assets`); edit the sources, never the generated files.
 
+## Required screen chrome
+
+Every Tango product screen includes the shared quest chrome unless the user
+explicitly says the screen should omit it:
+
+- a top-right gear icon on desktop;
+- a top-left hamburger menu icon on mobile;
+- the `QuestStatusBar` bottom HUD, replacing any legacy status bar on the
+  screen.
+
 ## Component index
 
 <!-- BEGIN GENERATED COMPONENT INDEX (npm run tango-docs) -->
