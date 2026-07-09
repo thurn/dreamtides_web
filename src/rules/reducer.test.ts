@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { GameEvent, EventContext, Genesis } from "../eventlog/types";
+import { foldEvents } from "../eventlog/fold";
 import type {
   BattleCardInstance,
   BattleMutableState,
@@ -8,6 +9,8 @@ import type {
 } from "../battle/types";
 import { emptyBackRankSlots, emptyFrontRankSlots } from "../battle/test-support";
 import { genesisFoldState, type FoldState } from "./fold-state";
+import { GAME_ENGINE_CONFIG } from "./replay/replay";
+import { registerQuestLifecycleContentProvider } from "./quest/lifecycle";
 import {
   isCasExempt,
   isInterveningWindowClear,
@@ -534,5 +537,104 @@ describe("genesisFoldState", () => {
     expect(fold.quest.seed).toBe(GENESIS.seed);
     expect(typeof fold.quest.essence).toBe("number");
     expect(typeof fold.quest.essenceCap).toBe("number");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Reducer containment (P1-1) — a programmer-error throw from a domain case is
+// NOT swallowed by the reducer; it propagates to the engine's fold containment.
+// ---------------------------------------------------------------------------
+
+describe("reducer containment at the foldEvents layer", () => {
+  it("a throwing domain case propagates in dev fold mode and becomes fold_error in prod fold mode", () => {
+    // A lifecycle provider whose START_QUEST assembly THROWS — a stand-in for a
+    // programmer error deep inside a domain case (the reducer never swallows it).
+    registerQuestLifecycleContentProvider({
+      resolveDreamcallerPackage: () => {
+        throw new Error("resolveDreamcallerPackage exploded");
+      },
+      startQuest: () => {
+        throw new Error("startQuest exploded");
+      },
+    });
+    try {
+      const state = genesisFoldState(GENESIS);
+      const batch = [
+        { seq: 1, event: event("START_QUEST", { dreamcallerId: "dc-x" }) },
+      ];
+      const base = { seq: 0, state };
+
+      // Dev fold mode: the programmer error surfaces at its origin.
+      expect(() =>
+        foldEvents(GAME_ENGINE_CONFIG, GENESIS, base, batch, { devMode: true }),
+      ).toThrow(/startQuest exploded/);
+
+      // Prod fold mode: contained as a bounce plus a loud error report; the
+      // pre-event state is untouched (no partial application).
+      const result = foldEvents(GAME_ENGINE_CONFIG, GENESIS, base, batch, {
+        devMode: false,
+      });
+      expect(result.outcomes[0].outcome).toBe("bounced");
+      expect(result.outcomes[0].error).toBeDefined();
+      expect(result.state).toBe(state);
+    } finally {
+      registerQuestLifecycleContentProvider(null);
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// RESOLVE_PROMPT single sanctioned catch (P1-2) — a throw while resolving the
+// open prompt clears it (applied) instead of wedging the room forever.
+// ---------------------------------------------------------------------------
+
+/**
+ * A battle fold state parked on an open prompt whose run cursor descends
+ * through a non-existent branch (`[0, 0]` into an empty script), so
+ * `resolvePendingPrompt` THROWS when the matching resolve reaches it.
+ */
+function stateWithPoisonedPrompt(promptId: number): FoldState {
+  const base = foldStateWithEssence(100);
+  const board: BattleMutableState = {
+    battleId: "b",
+    activeSide: "player",
+    turnNumber: 3,
+    phase: "day",
+    result: null,
+    forcedResult: null,
+    dreamwellDeckIndex: 0,
+    nextBattleCardOrdinal: 100,
+    sides: { player: makeBattleSide(), enemy: makeBattleSide() },
+    cardInstances: {},
+  } as BattleMutableState;
+  const run = { scriptRef: { table: "dreamwell", id: "" }, cursor: [0, 0], side: "player" };
+  const battle = {
+    init: {} as never,
+    board,
+    // A queued run present so the fallback's queue-clear is observable.
+    effectQueue: [run],
+    pendingPrompt: {
+      promptId,
+      run,
+      kind: "foresee",
+      options: { kind: "foresee", count: 0 },
+    },
+  } as unknown as NonNullable<FoldState["battle"]>;
+  return { ...base, battle };
+}
+
+describe("RESOLVE_PROMPT throw containment", () => {
+  it("a throw while resolving the open prompt clears the prompt instead of wedging", () => {
+    const state = stateWithPoisonedPrompt(1);
+    const result = reduceGameEvent(
+      state,
+      event("RESOLVE_PROMPT", { promptId: 1, resolution: { kind: "foresee" } }),
+      ctx(),
+    );
+    // The resolve applied its containment fallback: the prompt is cleared and
+    // the queued automation dropped, so the room is never wedged open.
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.pendingPrompt).toBeNull();
+    expect(result.state.battle?.effectQueue).toEqual([]);
   });
 });

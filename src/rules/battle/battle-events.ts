@@ -532,9 +532,12 @@ function applyBoardEdits(
 /**
  * Validates a raw `payload.command` into a {@link BattleCommand}, or `null` to
  * bounce a malformed intent. Only the discriminants needed to route safely are
- * checked; an unknown `edit.kind` still bounces because `applyDebugEdit` returns
- * no state for it and the root reducer's try/catch converts the resulting throw
- * into a recorded no-op.
+ * checked; an unknown `edit.kind` survives coercion (its `kind` is a string) but
+ * `applyDebugEdit` produces no result for it, so `applyCommandToBoard` throws
+ * reading `.state` of `undefined`. That throw propagates to the engine's fold
+ * containment (`fold.ts`): a recorded bounce plus a `fold_error` report in
+ * production, a rethrow in dev. A bounced BATTLE_COMMAND opened no prompt, so
+ * the whole event bounces cleanly to the pre-event state with no wedge.
  */
 function coerceBattleCommand(raw: unknown): BattleCommand | null {
   if (typeof raw !== "object" || raw === null) {

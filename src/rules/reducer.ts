@@ -4,8 +4,12 @@
 // `reduceGameEvent` is the single reducer the engine folds a room's log with
 // (it matches `EngineConfig.reducer`). It applies the design spec's §Root fold
 // and CAS policy rules 1–6 verbatim, then routes surviving events to a domain
-// case. It NEVER throws on event content — malformed, stale, or unknown intents
-// bounce, leaving state untouched. Throwing is reserved for programmer errors.
+// case. It BOUNCES on any invalid event content — malformed, stale, or unknown
+// intents leave state untouched — but a *throw* from a domain case is a
+// programmer error and PROPAGATES to the engine's fold containment
+// (`fold.ts`: dev rethrow, prod `FoldError` → `fold_error`). The single
+// exception is a matching `RESOLVE_PROMPT`, whose domain throw is contained here
+// (see `reduceGameEvent`) because rule 4 would otherwise wedge the room.
 //
 // Domain cases land per-task by extending the `routeDomain` switch. Until a
 // type has a case it falls through to a bounce. The quest lifecycle, essence,
@@ -44,34 +48,52 @@ export interface ReduceResult {
  *   5. Route to the domain case; invalid-in-state or unimplemented → bounce.
  *   6. Return the new state (applied) or the untouched state (bounced).
  *
- * Guaranteed not to throw for any event content.
+ * Bounces on any invalid event content; a throw from a domain case is a
+ * programmer error and propagates to the engine's containment. The one
+ * sanctioned catch (a matching `RESOLVE_PROMPT`) is documented at its site.
  */
 export function reduceGameEvent(
   state: FoldState,
   event: GameEvent,
   ctx: EventContext,
 ): ReduceResult {
-  try {
-    const exempt = isCasExempt(event.type); // rule 1
-    const matchingResolve = isMatchingResolve(state, event); // rule 2
+  const exempt = isCasExempt(event.type); // rule 1
+  const matchingResolve = isMatchingResolve(state, event); // rule 2
 
-    if (!exempt && !matchingResolve) {
-      // rule 3 — compare-and-swap with the self-chain / decision-neutral carve-out
-      if (!isInterveningWindowClear(ctx.intervening, event.actor)) {
-        return bounce(state);
-      }
-      // rule 4 — prompt gate
-      if (state.battle?.pendingPrompt != null) {
-        return bounce(state);
-      }
+  if (!exempt && !matchingResolve) {
+    // rule 3 — compare-and-swap with the self-chain / decision-neutral carve-out
+    if (!isInterveningWindowClear(ctx.intervening, event.actor)) {
+      return bounce(state);
     }
-
-    // rule 5 — domain routing
-    return routeDomain(state, event, ctx);
-  } catch {
-    // rule 5/6 safety: no event content may throw — treat as a bounce.
-    return bounce(state);
+    // rule 4 — prompt gate
+    if (state.battle?.pendingPrompt != null) {
+      return bounce(state);
+    }
   }
+
+  // rule 5 — domain routing.
+  if (matchingResolve) {
+    // THE SINGLE SANCTIONED CATCH IN THE RULES LAYER. A matching RESOLVE_PROMPT
+    // (rule 2 passed, so `state.battle.pendingPrompt` is non-null) must never
+    // leave the prompt open on a throw: rule 4 makes a stuck-open prompt
+    // PERMANENT — every retry re-throws and every other event bounces, wedging
+    // the room forever. So a throwing resolve deterministically clears the
+    // prompt and drops queued automation, keeping the board at its last good
+    // value. The result is identical on both clients, so the fold stays
+    // convergent. Every OTHER domain throw propagates to `fold.ts` containment.
+    try {
+      return routeDomain(state, event, ctx);
+    } catch {
+      return {
+        state: {
+          ...state,
+          battle: { ...state.battle!, pendingPrompt: null, effectQueue: [] },
+        },
+        outcome: "applied",
+      };
+    }
+  }
+  return routeDomain(state, event, ctx);
 }
 
 /**
