@@ -84,7 +84,12 @@ export function tangoSiteScreenFor(
         />
       );
     case "Purge":
-      return <PurgeSiteScreenAdapter siteId={site.id} />;
+      return (
+        <PurgeSiteScreenAdapter
+          siteId={site.id}
+          onViewDeck={handlers.onViewDeck}
+        />
+      );
     default:
       return null;
   }

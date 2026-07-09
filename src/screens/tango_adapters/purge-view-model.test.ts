@@ -116,11 +116,18 @@ describe("buildPurgeSiteView", () => {
     });
 
     expect(view.maxPaidSelections).toBe(0);
-    expect(view.cards.map((card) => [card.entryId, card.purgeCostKind])).toEqual([
+    expect(
+      view.cards.map((card) => [card.entryId, card.purgeCostKind]),
+    ).toEqual([
       ["paid-a", "paid"],
       ["paid-b", "paid"],
       ["bane", "free"],
     ]);
+    expect(view.hud).toMatchObject({
+      essence: 0,
+      deck: 3,
+      dreamsigns: [],
+    });
   });
 
   it("builds a cost ladder from zero through the visit cap", () => {

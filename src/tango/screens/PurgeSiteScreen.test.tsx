@@ -50,8 +50,13 @@ function view(): PurgeSiteView {
         purgeCostKind: "paid",
       },
     ],
-    visitCosts: [0, 30, 75],
+    visitCosts: [0, 40, 100],
     maxPaidSelections: 2,
+    hud: {
+      essence: 200,
+      deck: 2,
+      dreamsigns: [],
+    },
   };
 }
 
@@ -74,7 +79,10 @@ class ResizeObserverStub {
   disconnect(): void {}
 }
 
-function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
+function mount(element: ReactElement): {
+  container: HTMLDivElement;
+  root: Root;
+} {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -97,25 +105,35 @@ afterEach(() => {
 });
 
 describe("PurgeSiteScreen", () => {
-  it("starts with only the close control and no purge button", () => {
+  it("starts with a Decline header action, no close disc, and no sprite purge button", () => {
     const { container, root } = mount(
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
     );
 
-    expect(container.querySelector('[data-testid="tango-purge-close"]')).not.toBeNull();
     expect(
-      container.querySelector('[data-testid="tango-purge-title"]')?.textContent,
-    ).toBe("Purge Cards:");
+      container.querySelector('[data-testid="tango-purge-close"]'),
+    ).toBeNull();
+    expect(container.querySelector("h2")?.textContent).toBe("Purge Cards");
+    expect(container.textContent).toContain(
+      "Choose cards to remove from your deck",
+    );
+    expect(
+      container.querySelector('[data-testid="tango-purge-header-action"]')
+        ?.textContent,
+    ).toContain("Decline");
     expect(
       container.querySelector('[data-testid="tango-purge-commit-bar"]'),
     ).toBeNull();
+    expect(
+      container.querySelector('button[aria-label="View deck — 2 cards"]'),
+    ).not.toBeNull();
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("shows one commit button after selection and sends the updated total cost", () => {
+  it("changes the header action after selection and sends the updated total cost", () => {
     const onPurge = vi.fn();
     const { container, root } = mount(
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={onPurge} />,
@@ -134,21 +152,29 @@ describe("PurgeSiteScreen", () => {
       first?.click();
     });
     expect(
-      container.querySelectorAll('[data-testid="tango-purge-commit-bar"]'),
-    ).toHaveLength(1);
+      container.querySelector('[data-testid="tango-purge-header-action"]')
+        ?.textContent,
+    ).toContain("Purge 1:");
+    expect(
+      container.querySelector('[data-testid="tango-purge-header-action"]')
+        ?.textContent,
+    ).toContain("40");
+    expect(
+      container.querySelector('[data-testid="tango-purge-commit-bar"]'),
+    ).toBeNull();
 
     act(() => {
       second?.click();
     });
 
     const button = container.querySelector<HTMLElement>(
-      '[data-testid="tango-purge-commit-bar"] button',
+      '[data-testid="tango-purge-header-action"]',
     );
     act(() => {
       button?.click();
     });
 
-    expect(onPurge).toHaveBeenCalledWith(["entry-a", "entry-b"], 75);
+    expect(onPurge).toHaveBeenCalledWith(["entry-a", "entry-b"], 100);
 
     act(() => {
       root.unmount();
@@ -163,9 +189,12 @@ describe("PurgeSiteScreen", () => {
     const cardRegion = container.querySelector<HTMLElement>(
       "[data-purge-card-grid]",
     );
+    const gallery = container.querySelector<HTMLElement>(
+      '[data-testid="tango-purge-card-gallery"]',
+    );
     expect(cardRegion?.dataset.purgeLayout).toBe("mobile");
-    expect(cardRegion?.style.background).toContain("var(--glass-fill-popover)");
-    expect(cardRegion?.style.borderTopLeftRadius).toBe("var(--radius-panel)");
+    expect(gallery?.style.background).toContain("var(--glass-fill-popover)");
+    expect(gallery?.style.borderTopLeftRadius).toBe("var(--radius-panel)");
 
     act(() => {
       root.unmount();
@@ -178,16 +207,21 @@ describe("PurgeSiteScreen", () => {
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
     );
 
-    expect(container.querySelector("[data-purge-desktop-composition]")).not.toBeNull();
+    expect(
+      container.querySelector("[data-purge-desktop-composition]"),
+    ).not.toBeNull();
     expect(container.querySelector("[data-purge-guide]")).not.toBeNull();
 
     const cardRegion = container.querySelector<HTMLElement>(
       "[data-purge-card-grid]",
     );
+    const gallery = container.querySelector<HTMLElement>(
+      '[data-testid="tango-purge-card-gallery"]',
+    );
     expect(cardRegion?.dataset.purgeLayout).toBe("desktop");
-    expect(cardRegion?.style.background).toContain("var(--glass-fill-popover)");
-    expect(cardRegion?.style.borderLeft).toContain("var(--border-soft)");
-    expect(cardRegion?.style.borderTopLeftRadius).toBe("");
+    expect(gallery?.style.background).toContain("var(--glass-fill-popover)");
+    expect(gallery?.style.borderLeft).toContain("var(--border-soft)");
+    expect(gallery?.style.borderTopLeftRadius).toBe("");
 
     act(() => {
       root.unmount();

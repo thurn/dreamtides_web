@@ -13,6 +13,7 @@ import { atlasEdgeDemo } from "./demos/atlas-edge";
 import { atlasMapDemo } from "./demos/atlas-map";
 import { atlasNodeDemo } from "./demos/atlas-node";
 import { buttonDemo } from "./demos/button";
+import { cardGalleryPanelDemo } from "./demos/card-gallery-panel";
 import { cardStatOrbDemo } from "./demos/card-stat-orb";
 import { cardTermDefinitionsDemo } from "./demos/card-term-definitions";
 import { dreamcallerPortraitDemo } from "./demos/dreamcaller-portrait";
@@ -154,6 +155,7 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   richTextDemo,
   rulesTextDemo,
   gameCardDemo,
+  cardGalleryPanelDemo,
   cardTermDefinitionsDemo,
   glossaryDefinitionCardDemo,
   cardStatOrbDemo,

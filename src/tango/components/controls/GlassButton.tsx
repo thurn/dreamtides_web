@@ -19,6 +19,7 @@
 
 import type { ReactElement } from "react";
 import { GlowIcon } from "./GlowIcon";
+import { EssenceValue } from "../hud/EssenceValue";
 import { Pressable } from "../../primitives/Pressable";
 import type { Glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
@@ -34,8 +35,12 @@ export interface GlassButtonProps {
   onPress: () => void;
   /** Optional leading glyph painted as a `GlowIcon` before the label. */
   glyph?: Glyph;
+  /** Optional inline essence cost rendered after the label. */
+  cost?: number | null;
   /** Detaches the click / press feedback and marks the button `aria-disabled`. */
   disabled?: boolean;
+  /** A `data-testid` for selecting the button in tests. */
+  testId?: string;
 }
 
 /**
@@ -48,12 +53,15 @@ export function GlassButton({
   label,
   onPress,
   glyph,
+  cost = null,
   disabled = false,
+  testId,
 }: GlassButtonProps): ReactElement {
   const chrome = controlChrome();
   return (
     <Pressable
       as="button"
+      data-testid={testId}
       disabled={disabled}
       onClick={disabled ? undefined : onPress}
       style={{
@@ -76,7 +84,8 @@ export function GlassButton({
           size="1.1em"
         />
       )}
-      {label}
+      <span>{label}</span>
+      {cost !== null && <EssenceValue amount={cost} tone="inherit" />}
     </Pressable>
   );
 }

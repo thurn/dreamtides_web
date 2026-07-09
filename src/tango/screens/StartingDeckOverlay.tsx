@@ -2,14 +2,10 @@
 // reveal.
 //
 // The first time a run has a Dreamcaller and has not yet seen its deck, the app
-// shows the player the cards they begin the quest with. This is that popup,
-// rebuilt on the Tango tier: it renders through the shared GlassDialog shell
-// (bounded, centered glass panel on desktop; full-bleed frosted overlay on
-// mobile, its header clearing the device cutout), so all of the frosted-glass
-// chrome — the panel geometry, the safe-area padding, the close disc — is owned
-// by GlassDialog rather than re-declared here. `cutoutAwareClose` opts the close
-// disc into floating up beside a simulated Dynamic Island on a full-bleed mobile
-// mock-up.
+// shows the player the cards they begin the quest with. This is that popup:
+// a bounded CardGalleryPanel on desktop and a full-bleed frosted panel on
+// mobile, with the same left-aligned title/subtitle, trailing close accessory,
+// and internal card-grid scroll used by card-selection sites.
 //
 // The body is a scrolling grid of the starting cards in acquisition order. Each
 // GameCard grows in place on hover (desktop) or press (mobile) for a legible
@@ -27,9 +23,11 @@ import { useEffect, useState } from "react";
 import type { ReactElement } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { CardData } from "../../types/cards";
-import { GlassDialog } from "../components/overlay/GlassDialog";
-import { GameCard } from "../components/card/CardView";
+import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
+import { GlassBackdrop } from "../components/overlay/GlassDialog";
+import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
+import { useIsDesktop } from "./use-is-desktop";
 
 /**
  * One starting-deck card, resolved to the card the player actually holds
@@ -61,17 +59,10 @@ export interface StartingDeckOverlayProps {
   onClose: () => void;
 }
 
-/** Grid tile min width (px); columns auto-fill to fill the row from there. */
-const CARD_MIN_WIDTH_PX = 140;
-
-/** Grid tile min width (px) on a roomy desktop, where cards read larger. */
-const ROOMY_CARD_MIN_WIDTH_PX = 208;
-
 /**
  * A roomy desktop is wide AND tall enough to lay the ten-card starter deck out
  * as an enlarged 5x2 grid without internal scroll, so the overlay widens its
- * panel and grid there. Matches the roomy-desktop query GlassDialog uses to
- * decide `wide` (min-width 1400px and min-height 800px).
+ * panel and grid there.
  */
 const ROOMY_DESKTOP_QUERY = "(min-width: 1400px) and (min-height: 800px)";
 
@@ -103,19 +94,19 @@ function useRoomyDesktop(): boolean {
 }
 
 /**
- * The starting-deck reveal overlay. Renders through {@link GlassDialog} (which
- * owns the glass chrome, the desktop/mobile geometry, and the close disc) with a
- * scrolling grid of the starting cards. Closed by the disc or Escape.
+ * The starting-deck reveal overlay: a modal CardGalleryPanel with a scrolling
+ * grid of the starting cards. Closed by the trailing disc or Escape.
  */
 export function StartingDeckOverlay({
   isOpen,
   view,
   onClose,
 }: StartingDeckOverlayProps): ReactElement {
+  const isDesktop = useIsDesktop();
   const roomyDesktop = useRoomyDesktop();
+  const wideDesktop = isDesktop && roomyDesktop;
 
-  // GlassDialog does not bind Escape, so the overlay carries the shipped
-  // Escape-to-close behavior. Active only while open.
+  // The overlay carries Escape-to-close behavior. Active only while open.
   useEffect(() => {
     if (!isOpen) return undefined;
     function handleKeyDown(event: KeyboardEvent) {
@@ -134,56 +125,66 @@ export function StartingDeckOverlay({
       {isOpen && (
         <motion.div
           key="starting-deck-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Starting Deck"
+          className="tango"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 60,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: isDesktop
+              ? wideDesktop
+                ? token("--space-8")
+                : token("--space-7")
+              : 0,
+          }}
         >
-          <GlassDialog
-            title="Starting Deck"
-            subtitle="These are the cards you begin the quest with."
-            onClose={onClose}
-            closeLabel="Close starting deck"
-            cutoutAwareClose
-            wide={roomyDesktop}
+          {!isDesktop && <GlassBackdrop />}
+          <div
+            style={{
+              position: "relative",
+              zIndex: 1,
+              width: "100%",
+              height: isDesktop ? undefined : "100%",
+              maxWidth: isDesktop
+                ? wideDesktop
+                  ? "min(1120px, 90vw)"
+                  : "min(900px, 90vw)"
+                : undefined,
+              maxHeight: isDesktop
+                ? wideDesktop
+                  ? `calc(100vh - ${token("--space-8")} - ${token("--space-8")})`
+                  : "85vh"
+                : undefined,
+              minHeight: 0,
+              display: "flex",
+            }}
           >
-            {view.cards.length === 0 ? (
-              <div
-                style={{
-                  display: "flex",
-                  height: "100%",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <p
-                  style={{
-                    margin: 0,
-                    font: token("--t-body"),
-                    color: token("--text-primary"),
-                  }}
-                >
-                  No cards in starting deck.
-                </p>
-              </div>
-            ) : (
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: `repeat(auto-fill, minmax(${String(
-                    roomyDesktop ? ROOMY_CARD_MIN_WIDTH_PX : CARD_MIN_WIDTH_PX,
-                  )}px, 1fr))`,
-                  gap: token("--space-4"),
-                }}
-              >
-                {view.cards.map((cardView) => (
-                  <div key={cardView.entryId} data-testid={cardView.testId}>
-                    <GameCard card={cardView.card} />
-                  </div>
-                ))}
-              </div>
-            )}
-          </GlassDialog>
+            <CardGalleryPanel
+              title="Starting Deck"
+              subtitle="These are the cards you begin the quest with."
+              rightAccessory={{
+                kind: "iconButton",
+                glyph: GLYPHS.close,
+                label: "Close starting deck",
+                onPress: onClose,
+              }}
+              cards={view.cards}
+              emptyLabel="No cards in starting deck."
+              frame={isDesktop ? "floating" : "fullBleed"}
+              columns="auto"
+              cardSize={roomyDesktop ? "roomy" : "standard"}
+              cutoutAwareAccessory
+            />
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

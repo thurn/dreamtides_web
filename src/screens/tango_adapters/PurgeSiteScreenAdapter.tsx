@@ -7,11 +7,17 @@ import { useQuest } from "../../state/quest-context";
 import { PurgeSiteScreen } from "../../tango/screens/PurgeSiteScreen";
 import { buildPurgeSiteView, resolvePurgeGuide } from "./purge-view-model";
 
-export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
+export function PurgeSiteScreenAdapter({
+  siteId,
+  onViewDeck,
+}: {
+  siteId: string;
+  onViewDeck?: () => void;
+}) {
   const { state, mutations, questContent } = useQuest();
   const node =
     state.currentDreamscape !== null
-      ? state.atlas.nodes[state.currentDreamscape] ?? null
+      ? (state.atlas.nodes[state.currentDreamscape] ?? null)
       : null;
   const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
   const guide = resolvePurgeGuide(questContent.guides);
@@ -47,12 +53,16 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
 
   useEffect(() => {
     if (guide === null || site === null) return;
-    logEventOnce(`purge:${site.id}:guide:${guide.id}`, "dream_guide_presented", {
-      guideId: guide.id,
-      siteType: site.type,
-      isEnhanced: site.isEnhanced,
-      ui: "tango",
-    });
+    logEventOnce(
+      `purge:${site.id}:guide:${guide.id}`,
+      "dream_guide_presented",
+      {
+        guideId: guide.id,
+        siteType: site.type,
+        isEnhanced: site.isEnhanced,
+        ui: "tango",
+      },
+    );
   }, [guide?.id, site?.id, site?.type, site?.isEnhanced]);
 
   const handleClose = useCallback(() => {
@@ -101,6 +111,7 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
       view={view}
       onClose={handleClose}
       onPurge={handlePurge}
+      onViewDeck={onViewDeck}
     />
   );
 }

@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/glass-button`
 
-Real consumers: **1** (imports outside `src/tango/docs/` and tests).
+Real consumers: **2** (imports outside `src/tango/docs/` and tests).
 
 The labeled glass secondary action — a text label in the control typography on the shared liquid-glass control surface, with an optional leading glyph. It wears the same material as the Select / SegmentedControl trigger, so a secondary action reads as one family with the filter/sort controls it sits beside.
 
@@ -19,7 +19,9 @@ The labeled glass secondary action — a text label in the control typography on
 | `label` | `string` | yes | — | The button's text — a resolved string shown in the control typography. |
 | `onPress` | `() => void` | yes | — | Fires when the button is activated (no-op while disabled). |
 | `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `GlowIcon` before the label. |
+| `cost` | `number \| null` | no | `null` | Optional inline essence cost rendered after the label. |
 | `disabled` | `boolean` | no | `false` | Detaches the click / press feedback and marks the button `aria-disabled`. |
+| `testId` | `string` | no | — | A `data-testid` for selecting the button in tests. |
 
 ## Usage
 

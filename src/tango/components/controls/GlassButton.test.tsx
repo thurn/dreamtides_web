@@ -48,10 +48,14 @@ afterEach(() => {
 describe("GlassButton", () => {
   it("renders its text label inside a button", () => {
     const { container, root } = mount(
-      <GlassButton label="Apply Filters" onPress={() => {}} />,
+      <GlassButton
+        label="Apply Filters"
+        testId="glass-apply"
+        onPress={() => {}}
+      />,
     );
 
-    const button = container.querySelector("button");
+    const button = container.querySelector('[data-testid="glass-apply"]');
     expect(button).not.toBeNull();
     expect(button?.textContent).toContain("Apply Filters");
 
@@ -62,15 +66,26 @@ describe("GlassButton", () => {
 
   it("renders an optional leading glyph before the label", () => {
     const { container, root } = mount(
-      <GlassButton
-        label="Filter"
-        glyph={GLYPHS.filter}
-        onPress={() => {}}
-      />,
+      <GlassButton label="Filter" glyph={GLYPHS.filter} onPress={() => {}} />,
     );
 
     // The leading glyph is a GlowIcon <i> carrying the glyph class.
     expect(container.querySelector("i")?.className).toBe(String(GLYPHS.filter));
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders an optional inline essence cost", () => {
+    const { container, root } = mount(
+      <GlassButton label="Purge 1:" cost={40} onPress={() => {}} />,
+    );
+
+    const button = container.querySelector("button");
+    expect(button?.textContent).toContain("Purge 1:");
+    expect(button?.textContent).toContain("40");
+    expect(button?.querySelector("i")?.className).toContain("bx-crypto");
 
     act(() => {
       root.unmount();
@@ -105,7 +120,7 @@ describe("GlassButton", () => {
     });
   });
 
-  it("while disabled sets aria-disabled=\"true\" and does not fire onPress", () => {
+  it('while disabled sets aria-disabled="true" and does not fire onPress', () => {
     const onPress = vi.fn();
     const { container, root } = mount(
       <GlassButton label="Apply" onPress={onPress} disabled />,

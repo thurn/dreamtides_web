@@ -497,6 +497,160 @@
       "description": "The button's text label. Resolve any UUID/name to a plain string before\npassing it — the button renders copy, never arbitrary caller markup. Omit\nonly for a price-only button (supply `ariaLabel` instead)."
     }
   ],
+  "CardGalleryPanel": [
+    {
+      "name": "title",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Header title, rendered as an `<h2>`."
+    },
+    {
+      "name": "subtitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional intro line under the title."
+    },
+    {
+      "name": "rightAccessory",
+      "tsType": "CardGalleryAccessory",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional trailing header action.",
+      "nested": {
+        "name": "CardGalleryAccessory",
+        "fields": [
+          {
+            "name": "kind",
+            "tsType": "\"glassButton\" | \"iconButton\"",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "onPress",
+            "tsType": "(() => void) | (() => void)",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "glyph",
+            "tsType": "Glyph",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "tsType": "boolean",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "testId",
+            "tsType": "string",
+            "optional": true,
+            "description": "A `data-testid` for selecting the button in tests.\nA `data-testid` for selecting the disc in tests."
+          }
+        ]
+      }
+    },
+    {
+      "name": "cards",
+      "tsType": "readonly CardGalleryCardView[]",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Resolved cards rendered in order."
+    },
+    {
+      "name": "emptyLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "No cards.",
+      "description": "Empty-state copy shown when `cards` is empty."
+    },
+    {
+      "name": "frame",
+      "tsType": "CardGalleryFrame",
+      "unionMembers": [
+        "floating",
+        "fullBleed",
+        "rightEdge",
+        "bottomSheet"
+      ],
+      "required": false,
+      "defaultValue": "floating",
+      "description": "Glass frame geometry. Defaults to `floating`."
+    },
+    {
+      "name": "columns",
+      "tsType": "CardGalleryColumns",
+      "unionMembers": [
+        "auto",
+        "four",
+        "five"
+      ],
+      "required": false,
+      "defaultValue": "auto",
+      "description": "Card grid mode. Defaults to `auto`."
+    },
+    {
+      "name": "cardSize",
+      "tsType": "CardGalleryCardSize",
+      "unionMembers": [
+        "standard",
+        "roomy"
+      ],
+      "required": false,
+      "defaultValue": "standard",
+      "description": "Minimum auto-grid card width. Defaults to `standard`."
+    },
+    {
+      "name": "bottomClearance",
+      "tsType": "\"none\" | \"hud\"",
+      "unionMembers": [
+        "none",
+        "hud"
+      ],
+      "required": false,
+      "defaultValue": "none",
+      "description": "Extra body clearance for a docked QuestStatusBar."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Test id for the panel root."
+    },
+    {
+      "name": "cutoutAwareAccessory",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "On a full-bleed mobile panel whose screen-cutout box is known, float the\naccessory beside the device island instead of sharing the header row."
+    },
+    {
+      "name": "onCardPress",
+      "tsType": "((entryId: string) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires when an enabled card tile is activated."
+    }
+  ],
   "CardStatOrb": [
     {
       "name": "variant",
@@ -653,11 +807,11 @@
       "name": "variant",
       "tsType": "DreamcallerPortraitVariant",
       "unionMembers": [
+        "fullBleed",
         "hero",
         "panel",
         "thumb",
-        "standing",
-        "fullBleed"
+        "standing"
       ],
       "required": false,
       "defaultValue": "panel",
@@ -764,10 +918,10 @@
     },
     {
       "name": "variant",
-      "tsType": "\"flat\" | \"hud\" | \"revelation\"",
+      "tsType": "\"hud\" | \"flat\" | \"revelation\"",
       "unionMembers": [
-        "flat",
         "hud",
+        "flat",
         "revelation"
       ],
       "required": false,
@@ -1004,10 +1158,10 @@
     },
     {
       "name": "termDefinitions",
-      "tsType": "\"card\" | \"none\"",
+      "tsType": "\"none\" | \"card\"",
       "unionMembers": [
-        "card",
-        "none"
+        "none",
+        "card"
       ],
       "required": false,
       "defaultValue": null,
@@ -1131,12 +1285,28 @@
       "description": "Optional leading glyph painted as a `GlowIcon` before the label."
     },
     {
+      "name": "cost",
+      "tsType": "number | null",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "null",
+      "description": "Optional inline essence cost rendered after the label."
+    },
+    {
       "name": "disabled",
       "tsType": "boolean",
       "unionMembers": [],
       "required": false,
       "defaultValue": "false",
       "description": "Detaches the click / press feedback and marks the button `aria-disabled`."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "A `data-testid` for selecting the button in tests."
     }
   ],
   "GlassDialog": [

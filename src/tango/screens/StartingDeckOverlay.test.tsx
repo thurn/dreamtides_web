@@ -87,10 +87,10 @@ function mount(element: ReactElement): {
   return { container, root };
 }
 
-/** The glass panel is the header's parent; the scroll body is its next sibling. */
+/** The panel wrapper bounds the shared CardGalleryPanel. */
 function panelOf(container: HTMLElement): HTMLElement | null {
   const header = container.querySelector("header");
-  return (header?.parentElement as HTMLElement | null) ?? null;
+  return (header?.parentElement?.parentElement as HTMLElement | null) ?? null;
 }
 
 function setDesktopViewport(isDesktop: boolean, roomy = false): void {
@@ -127,7 +127,11 @@ afterEach(() => {
 describe("StartingDeckOverlay", () => {
   it("renders nothing when closed", () => {
     const { container, root } = mount(
-      <StartingDeckOverlay isOpen={false} view={makeView()} onClose={vi.fn()} />,
+      <StartingDeckOverlay
+        isOpen={false}
+        view={makeView()}
+        onClose={vi.fn()}
+      />,
     );
 
     expect(container.querySelector('[role="dialog"]')).toBeNull();
@@ -158,9 +162,7 @@ describe("StartingDeckOverlay", () => {
     const cards = Array.from(
       container.querySelectorAll("[data-testid^='starting-deck-modal-card-']"),
     );
-    expect(
-      cards.map((c) => c.getAttribute("data-testid")),
-    ).toEqual([
+    expect(cards.map((c) => c.getAttribute("data-testid"))).toEqual([
       "starting-deck-modal-card-entry-1",
       "starting-deck-modal-card-entry-2",
     ]);

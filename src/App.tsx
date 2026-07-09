@@ -98,6 +98,7 @@ export function QuestApp({
   const tangoSiteUsesQuestMenu =
     runtimeConfig.uiVariant === "tango"
     && (activeSite === "Draft"
+      || activeSite === "Purge"
       || (!isDesktopViewport && activeSite === "DreamsignRevelation"));
   const tangoScreenUsesQuestMenu =
     dreamscapeUsesTango || atlasUsesTango || tangoSiteUsesQuestMenu;

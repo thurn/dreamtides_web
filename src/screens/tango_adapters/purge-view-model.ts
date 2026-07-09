@@ -22,7 +22,10 @@ import type {
 } from "../../tango/screens/PurgeSiteScreen";
 import type { DreamGuideContent } from "../../types/content";
 import { toDeckCardView } from "./mobile-deck-view-model";
-import { dreamscapeSceneRef } from "./dreamscape-view-model";
+import {
+  buildDreamscapeHudView,
+  dreamscapeSceneRef,
+} from "./dreamscape-view-model";
 
 const FALLBACK_GUIDE_ID = "takeshi";
 const FALLBACK_GUIDE_NAME = "Master Takeshi";
@@ -67,9 +70,7 @@ export function buildPurgeCardViews(
 }
 
 /** Build the visit-cost ladder for selected paid-card counts. */
-export function buildPurgeVisitCosts(
-  modifiers: PurgePriceModifiers,
-): number[] {
+export function buildPurgeVisitCosts(modifiers: PurgePriceModifiers): number[] {
   const costs: number[] = [];
   for (let count = 0; count <= MAX_PURGE_PER_VISIT; count += 1) {
     costs.push(purgeVisitCost(count, modifiers));
@@ -90,7 +91,9 @@ export function buildPurgeSiteView(params: {
     isEnhanced: params.site.isEnhanced,
     essenceDiscountPercent: params.state.shopModifiers.essenceDiscountPercent,
   };
-  const paidCardCount = params.state.deck.filter((entry) => !entry.isBane).length;
+  const paidCardCount = params.state.deck.filter(
+    (entry) => !entry.isBane,
+  ).length;
   const maxPaidSelections = Math.min(
     maxAffordablePurgeCount(
       params.state.essence,
@@ -108,5 +111,6 @@ export function buildPurgeSiteView(params: {
     cards: buildPurgeCardViews(params.state.deck, params.cardDatabase),
     visitCosts: buildPurgeVisitCosts(modifiers),
     maxPaidSelections,
+    hud: buildDreamscapeHudView(params.state),
   };
 }

@@ -2,23 +2,17 @@
 // Mobile keeps the guide in the top third; desktop places the guide and speech
 // beside the glass card purge surface.
 
-import {
-  useCallback,
-  useMemo,
-  useState,
-  type CSSProperties,
-  type MouseEvent,
-} from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import type { DeckCardView } from "./MobileDeckViewer";
-import { GameCard } from "../components/card/CardView";
-import { Button } from "../components/controls/Button";
-import { IconButton } from "../components/controls/IconButton";
+import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
 import { Motes } from "../components/hud/Motes";
+import {
+  QuestStatusBar,
+  type QsbDreamcaller,
+  type QsbDreamsign,
+} from "../components/hud/QuestStatusBar";
 import { SpeechBubble } from "../components/overlay/SpeechBubble";
-import { glassSurfaceStyle } from "../internal/glass-surface";
-import { Pressable } from "../primitives/Pressable";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
-import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "./use-is-desktop";
 
@@ -49,6 +43,20 @@ export interface PurgeSiteView {
   visitCosts: readonly number[];
   /** Maximum paid cards selectable with current essence and visit cap. */
   maxPaidSelections: number;
+  /** The persistent bottom-HUD data. */
+  hud: PurgeHudView;
+}
+
+/** The bottom-HUD slice of the view-model — what the QuestStatusBar docks. */
+export interface PurgeHudView {
+  /** Essence total shown in the HUD. */
+  essence: number;
+  /** Deck size shown on the deck sprite. */
+  deck: number;
+  /** The active Dreamcaller bust, or undefined before one is chosen. */
+  dreamcaller?: QsbDreamcaller;
+  /** The run's owned dreamsigns, docked to the left of the deck sprite. */
+  dreamsigns: QsbDreamsign[];
 }
 
 export interface PurgeSiteScreenProps {
@@ -58,18 +66,20 @@ export interface PurgeSiteScreenProps {
   onClose: () => void;
   /** Commit selected deck entries at the displayed total cost. */
   onPurge: (entryIds: readonly string[], cost: number) => void;
+  /** Open the deck viewer from the QuestStatusBar deck sprite. */
+  onViewDeck?: () => void;
 }
 
-const MOBILE_COLUMNS = 4;
-const DESKTOP_COLUMNS = 5;
 const GUIDE_TOP_ROWS = "minmax(220px, 34dvh) minmax(0, 1fr)";
-const PURGE_BUTTON_BOTTOM = `calc(${token("--safe-bottom")} + ${token("--space-5")})`;
+const HUD_CLEARANCE = `calc(${token("--hud-h")} + ${token("--safe-bottom")} + ${token("--space-8")})`;
 
 export function PurgeSiteScreen({
   view,
   onClose,
   onPurge,
+  onViewDeck,
 }: PurgeSiteScreenProps) {
+  const stageRef = useRef<HTMLDivElement>(null);
   const isDesktop = useIsDesktop();
   const [selectedEntryIds, setSelectedEntryIds] = useState<readonly string[]>(
     [],
@@ -91,19 +101,19 @@ export function PurgeSiteScreen({
   const selectedCount = selectedEntryIds.length;
 
   const toggleSelection = useCallback(
-    (card: PurgeCardView) => {
+    (entryId: string) => {
       setSelectedEntryIds((prev) => {
-        const selected = prev.includes(card.entryId);
+        const selected = prev.includes(entryId);
         if (selected) {
-          return prev.filter((entryId) => entryId !== card.entryId);
+          return prev.filter((candidate) => candidate !== entryId);
         }
-        if (card.purgeCostKind === "paid" && !canSelectPaid) {
+        if (!freeEntryIds.has(entryId) && !canSelectPaid) {
           return prev;
         }
-        return [...prev, card.entryId];
+        return [...prev, entryId];
       });
     },
-    [canSelectPaid],
+    [canSelectPaid, freeEntryIds],
   );
 
   const commitPurge = useCallback(() => {
@@ -115,6 +125,7 @@ export function PurgeSiteScreen({
 
   return (
     <div
+      ref={stageRef}
       className="tango"
       data-testid="tango-purge-site-screen"
       data-tango-purge-site=""
@@ -146,22 +157,6 @@ export function PurgeSiteScreen({
       )}
       <Motes on tint="warm" />
 
-      <div
-        style={{
-          position: "absolute",
-          zIndex: 40,
-          top: `max(${token("--gutter")}, var(--safe-area-inset-top))`,
-          right: token("--gutter"),
-        }}
-      >
-        <IconButton
-          glyph={GLYPHS.close}
-          label="Leave purge"
-          onPress={onClose}
-          testId="tango-purge-close"
-        />
-      </div>
-
       {isDesktop ? (
         <DesktopComposition
           guide={view.guide}
@@ -169,6 +164,9 @@ export function PurgeSiteScreen({
           selectedEntryIds={selectedEntryIds}
           selectedCount={selectedCount}
           canSelectPaid={canSelectPaid}
+          totalCost={totalCost}
+          onClose={onClose}
+          onPurge={commitPurge}
           onToggle={toggleSelection}
         />
       ) : (
@@ -179,35 +177,23 @@ export function PurgeSiteScreen({
             selectedEntryIds={selectedEntryIds}
             selectedCount={selectedCount}
             canSelectPaid={canSelectPaid}
+            totalCost={totalCost}
+            onClose={onClose}
+            onPurge={commitPurge}
             onToggle={toggleSelection}
           />
         </>
       )}
 
-      {selectedCount > 0 && (
-        <div
-          data-testid="tango-purge-commit-bar"
-          style={{
-            position: "fixed",
-            zIndex: 50,
-            left: token("--gutter"),
-            right: token("--gutter"),
-            bottom: PURGE_BUTTON_BOTTOM,
-            maxWidth: 520,
-            margin: "0 auto",
-          }}
-        >
-          <Button
-            size="lg"
-            full
-            label={`Purge ${String(selectedCount)} ${
-              selectedCount === 1 ? "Card" : "Cards"
-            }`}
-            cost={totalCost}
-            onClick={commitPurge}
-          />
-        </div>
-      )}
+      <QuestStatusBar
+        stageRef={stageRef}
+        essence={view.hud.essence}
+        deck={view.hud.deck}
+        onViewDeck={onViewDeck}
+        dreamcaller={view.hud.dreamcaller}
+        dreamsigns={view.hud.dreamsigns}
+        size={isDesktop ? "grand" : "compact"}
+      />
     </div>
   );
 }
@@ -218,6 +204,9 @@ function DesktopComposition({
   selectedEntryIds,
   selectedCount,
   canSelectPaid,
+  totalCost,
+  onClose,
+  onPurge,
   onToggle,
 }: {
   readonly guide: PurgeGuideView;
@@ -225,7 +214,10 @@ function DesktopComposition({
   readonly selectedEntryIds: readonly string[];
   readonly selectedCount: number;
   readonly canSelectPaid: boolean;
-  readonly onToggle: (card: PurgeCardView) => void;
+  readonly totalCost: number;
+  readonly onClose: () => void;
+  readonly onPurge: () => void;
+  readonly onToggle: (entryId: string) => void;
 }) {
   return (
     <section
@@ -235,7 +227,7 @@ function DesktopComposition({
         top: `calc(${token("--space-8")} + max(var(--safe-area-inset-top), ${token("--safe-top")}))`,
         left: 0,
         right: 0,
-        bottom: token("--space-8"),
+        bottom: HUD_CLEARANCE,
         display: "grid",
         placeItems: "stretch center",
         zIndex: 20,
@@ -259,6 +251,9 @@ function DesktopComposition({
           selectedEntryIds={selectedEntryIds}
           selectedCount={selectedCount}
           canSelectPaid={canSelectPaid}
+          totalCost={totalCost}
+          onClose={onClose}
+          onPurge={onPurge}
           onToggle={onToggle}
           desktop
         />
@@ -321,6 +316,9 @@ function CardRegion({
   selectedEntryIds,
   selectedCount,
   canSelectPaid,
+  totalCost,
+  onClose,
+  onPurge,
   onToggle,
   desktop = false,
 }: {
@@ -328,93 +326,62 @@ function CardRegion({
   readonly selectedEntryIds: readonly string[];
   readonly selectedCount: number;
   readonly canSelectPaid: boolean;
-  readonly onToggle: (card: PurgeCardView) => void;
+  readonly totalCost: number;
+  readonly onClose: () => void;
+  readonly onPurge: () => void;
+  readonly onToggle: (entryId: string) => void;
   readonly desktop?: boolean;
 }) {
-  const glassStyle: CSSProperties = {
-    ...glassSurfaceStyle({ radius: null }),
-    background: `${token("--glass-sheen")}, ${token("--glass-fill-popover")}`,
-    border: 0,
-    ...(desktop
-      ? {
-          borderLeft: `1px solid ${token("--border-soft")}`,
-        }
-      : {
-          borderTop: `1px solid ${token("--border-soft")}`,
-          borderTopLeftRadius: token("--radius-panel"),
-          borderTopRightRadius: token("--radius-panel"),
-        }),
-  };
-  const cardRegionStyle: CSSProperties = {
-    position: "relative",
-    zIndex: 10,
-    minHeight: 0,
-    overflowY: "auto",
-    WebkitOverflowScrolling: "touch",
-    padding: desktop
-      ? `${token("--space-8")} ${token("--space-8")} ${token("--space-8")}`
-      : `${token("--space-4")} ${token("--gutter")} calc(${token(
-          "--safe-bottom",
-        )} + ${selectedCount > 0 ? token("--space-12") : token("--space-6")})`,
-    pointerEvents: "auto",
-    ...(desktop
-      ? {
-          alignSelf: "stretch",
-          height: "100%",
-          boxSizing: "border-box",
-        }
-      : {}),
-    ...glassStyle,
-  };
-
   return (
     <section
       data-purge-card-grid=""
       data-purge-layout={desktop ? "desktop" : "mobile"}
-      style={cardRegionStyle}
+      style={{
+        position: "relative",
+        zIndex: 10,
+        minHeight: 0,
+        pointerEvents: "auto",
+        ...(desktop
+          ? {
+              alignSelf: "stretch",
+              height: "100%",
+              boxSizing: "border-box",
+            }
+          : {}),
+      }}
     >
-      <h2
-        data-testid="tango-purge-title"
-        style={{
-          width: "100%",
-          maxWidth: desktop ? 920 : undefined,
-          margin: `0 auto ${token("--space-4")}`,
-          color: token("--text-on-glass"),
-          font: token("--t-title-sm"),
-          textAlign: "center",
-          textShadow: token("--text-outline-media"),
-          letterSpacing: 0,
+      <CardGalleryPanel
+        title="Purge Cards"
+        subtitle="Choose cards to remove from your deck"
+        rightAccessory={{
+          kind: "glassButton",
+          label:
+            selectedCount === 0 ? "Decline" : `Purge ${String(selectedCount)}:`,
+          cost: selectedCount === 0 ? null : totalCost,
+          onPress: selectedCount === 0 ? onClose : onPurge,
+          testId: "tango-purge-header-action",
         }}
-      >
-        Purge Cards:
-      </h2>
-      <div
-        style={{
-          width: "100%",
-          maxWidth: desktop ? 920 : undefined,
-          margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: `repeat(${String(
-            desktop ? DESKTOP_COLUMNS : MOBILE_COLUMNS,
-          )}, minmax(0, 1fr))`,
-          gap: token("--space-4"),
-        }}
-      >
-        {cards.map((card) => {
+        cards={cards.map((card) => {
           const selected = selectedEntryIds.includes(card.entryId);
           const disabled =
             !selected && card.purgeCostKind === "paid" && !canSelectPaid;
-          return (
-            <PurgeCardTile
-              key={card.entryId}
-              card={card}
-              selected={selected}
-              disabled={disabled}
-              onToggle={onToggle}
-            />
-          );
+          return {
+            entryId: card.entryId,
+            card: card.card,
+            transfiguration: card.transfiguration,
+            testId: `tango-purge-card-${card.entryId}`,
+            selected,
+            disabled,
+            selectionColor: "danger",
+            emphasis: card.purgeCostKind === "free" ? "danger" : undefined,
+          };
         })}
-      </div>
+        frame={desktop ? "rightEdge" : "bottomSheet"}
+        columns={desktop ? "five" : "four"}
+        bottomClearance="hud"
+        testId="tango-purge-card-gallery"
+        onCardPress={onToggle}
+      />
     </section>
   );
 }
@@ -463,54 +430,5 @@ function GuideBand({ guide }: { readonly guide: PurgeGuideView }) {
         />
       </div>
     </header>
-  );
-}
-
-function PurgeCardTile({
-  card,
-  selected,
-  disabled,
-  onToggle,
-}: {
-  readonly card: PurgeCardView;
-  readonly selected: boolean;
-  readonly disabled: boolean;
-  readonly onToggle: (card: PurgeCardView) => void;
-}) {
-  return (
-    <Pressable
-      as="button"
-      aria-label={card.card.name}
-      aria-pressed={selected}
-      disabled={disabled}
-      data-testid={`tango-purge-card-${card.entryId}`}
-      onClick={() => onToggle(card)}
-      onContextMenu={(event: MouseEvent<HTMLElement>) => {
-        event.preventDefault();
-      }}
-      style={{
-        position: "relative",
-        display: "block",
-        width: "100%",
-        borderRadius: token("--radius-card"),
-        opacity: disabled ? 0.42 : 1,
-        boxShadow:
-          card.purgeCostKind === "free"
-            ? `0 0 0 2px ${token("--danger")}`
-            : "none",
-        WebkitTouchCallout: "none",
-        WebkitUserSelect: "none",
-        userSelect: "none",
-        touchAction: "manipulation",
-      }}
-    >
-      <GameCard
-        card={card.card}
-        transfiguration={card.transfiguration}
-        selected={selected}
-        selectionColor="danger"
-        termDefinitions="none"
-      />
-    </Pressable>
   );
 }
