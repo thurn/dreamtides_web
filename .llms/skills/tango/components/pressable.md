@@ -8,7 +8,7 @@ Primitives · Live demo & interactive props: `/tango#/pressable`
 
 Real consumers: **11** (imports outside `src/tango/docs/` and tests).
 
-The one press-feedback primitive. Wrap any element in it and that element follows the single Dreamtides rule — scale up on hover (on a hover-capable pointer), scale down on press — so every interactive surface presses and invites the cursor with the identical feel.
+The one press-feedback primitive. Interactive surfaces scale up on hover and down on press; readable rules-copy reveals use the strict stationary variant so text stays legible under a held finger.
 
 > **Guidance:** Reach for a higher-level component first. Pressable is a low-level building block — before wrapping raw markup in it, look for an existing Tango component (Button, TideDisc, SegmentedControl, SiteNode, …) that already bakes in the press feedback. Use Pressable only when you're building a genuinely new interactive surface no component covers.
 
@@ -18,6 +18,7 @@ The one press-feedback primitive. Wrap any element in it and that element follow
 | --- | --- | --- | --- | --- |
 | `as` | `ElementType<any, keyof IntrinsicElements>` = `"symbol" \| "object" \| "map" \| "filter" \| "span" \| "div" \| "a" \| "abbr" \| "address" \| "area" \| "article" \| "aside" \| "audio" \| "b" \| "base" \| "bdi" \| "bdo" \| "big" \| "blockquote" \| "body" \| "br" \| "button" \| "canvas" \| "caption" \| "center" \| "cite" \| "code" \| "col" \| "colgroup" \| "data" \| "datalist" \| "dd" \| "del" \| "details" \| "dfn" \| "dialog" \| "dl" \| "dt" \| "em" \| "embed" \| "fieldset" \| "figcaption" \| "figure" \| "footer" \| "form" \| "h1" \| "h2" \| "h3" \| "h4" \| "h5" \| "h6" \| "head" \| "header" \| "hgroup" \| "hr" \| "html" \| "i" \| "iframe" \| "img" \| "input" \| "ins" \| "kbd" \| "keygen" \| "label" \| "legend" \| "li" \| "link" \| "main" \| "mark" \| "menu" \| "menuitem" \| "meta" \| "meter" \| "nav" \| "noindex" \| "noscript" \| "ol" \| "optgroup" \| "option" \| "output" \| "p" \| "param" \| "picture" \| "pre" \| "progress" \| "q" \| "rp" \| "rt" \| "ruby" \| "s" \| "samp" \| "search" \| "slot" \| "script" \| "section" \| "select" \| "small" \| "source" \| "strong" \| "style" \| "sub" \| "summary" \| "sup" \| "table" \| "template" \| "tbody" \| "td" \| "textarea" \| "tfoot" \| "th" \| "thead" \| "time" \| "title" \| "tr" \| "track" \| "u" \| "ul" \| "var" \| "video" \| "wbr" \| "webview" \| "svg" \| "animate" \| "animateMotion" \| "animateTransform" \| "circle" \| "clipPath" \| "defs" \| "desc" \| "ellipse" \| "feBlend" \| "feColorMatrix" \| "feComponentTransfer" \| "feComposite" \| "feConvolveMatrix" \| "feDiffuseLighting" \| "feDisplacementMap" \| "feDistantLight" \| "feDropShadow" \| "feFlood" \| "feFuncA" \| "feFuncB" \| "feFuncG" \| "feFuncR" \| "feGaussianBlur" \| "feImage" \| "feMerge" \| "feMergeNode" \| "feMorphology" \| "feOffset" \| "fePointLight" \| "feSpecularLighting" \| "feSpotLight" \| "feTile" \| "feTurbulence" \| "foreignObject" \| "g" \| "image" \| "line" \| "linearGradient" \| "marker" \| "mask" \| "metadata" \| "mpath" \| "path" \| "pattern" \| "polygon" \| "polyline" \| "radialGradient" \| "rect" \| "set" \| "stop" \| "switch" \| "text" \| "textPath" \| "tspan" \| "use" \| "view"` | no | `button` | Element or component to render. Default 'button'. |
 | `disabled` | `boolean` | no | `false` | Disables press feedback and pointer handlers, and shows the default cursor. |
+| `pressFeedback` | `"scale" \| "stationary"` | no | `scale` | Press motion. `scale` is the global control treatment; `stationary` is reserved for readable rules-copy reveal surfaces. Default `scale`. |
 | `children` | `ReactNode` | no | — | Content rendered inside the pressable element. |
 
 ## Usage
@@ -46,10 +47,20 @@ A disabled Pressable detaches its press feedback and shows the default cursor.
 
 ### Info-only reveal surface
 
-Wrap a surface you press to reveal information but cannot act on (a tide disc, an essence value) in the same Pressable — it follows the one rule (up on hover, down on press), so a press is always acknowledged, on touch too. There is no opt-out: an un-animated press is not expressible.
+Wrap a surface you press to reveal information but cannot act on (a tide disc, an essence value) in the same Pressable — it follows the standard treatment (up on hover, down on press), so a press is acknowledged on touch too.
 
 ```tsx
 <Pressable as="span">
   <span className="my-target">Reveal on press</span>
+</Pressable>
+```
+
+### Readable rules-copy reveal
+
+Ability text is the strict exception: use `stationary` so holding it to read keyword definitions never shrinks the copy beneath the finger.
+
+```tsx
+<Pressable as="span" pressFeedback="stationary">
+  <RulesText text={abilityText} />
 </Pressable>
 ```

@@ -118,7 +118,7 @@ import { GLYPHS } from "src/tango/primitives/glyph";
     },
     {
       label: "Reveal on interaction",
-      note: "In real screens InfoCard is anchored to a trigger through the attached press engine (`InfoCard.PressInfo`): hover / touch-down reveals the `card` beside the wrapped trigger, measured against `stageRef`. Use it to wrap a trigger that has no reveal of its own (an essence value, a menu button).",
+      note: "In real screens InfoCard is anchored to a trigger through the attached press engine (`InfoCard.PressInfo`): hover / touch-down reveals the `card` beside the wrapped trigger, measured against `stageRef`. Use it to wrap a trigger that has no reveal of its own (an essence value, a menu button). Readable rules copy passes `pressFeedback=\"stationary\"` so a held definition reveal does not shrink the text.",
       code: `<InfoCard.PressInfo
   stageRef={stageRef}
   card={

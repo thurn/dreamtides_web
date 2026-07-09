@@ -97,6 +97,7 @@ export function toQsbDreamcaller(
     name: dreamcaller.name,
     epithet: dreamcaller.title,
     portrait: artRef.dreamcaller(dreamcaller.imageNumber),
+    portraitFocus: dreamcaller.portraitFocus,
     ability: dreamcaller.renderedText,
   };
 }

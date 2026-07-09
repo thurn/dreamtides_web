@@ -109,3 +109,11 @@ Tango Desktop Dreamsign Revelation QA — missing utility menu
   site only below the desktop breakpoint, leaving the desktop screen without
   either chrome owner. Route the desktop site through the shared quest menu so
   it satisfies Tango's required screen chrome contract.
+
+Tango Desktop Dreamcaller Select QA — 1280px triptych wraps
+
+- At a 1280×800 viewport, the three fixed 400px Dreamcaller columns plus two
+  24px gaps and the outer gutters exceed the available content width, so the
+  third column wraps to a second row below the viewport. The desktop layout in
+  `src/tango/screens/quest-start-desktop.tsx` should either use a wider desktop
+  breakpoint or scale its fixed column geometry before the triptych wraps.

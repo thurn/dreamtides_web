@@ -82,6 +82,7 @@ export function toDreamcallerOfferView(
     name: dreamcaller.name,
     title: dreamcaller.title,
     imageNumber: dreamcaller.imageNumber,
+    portraitFocus: dreamcaller.portraitFocus,
     renderedText: dreamcaller.renderedText,
     startingEssence: dreamcaller.startingEssence,
     signatureCards,

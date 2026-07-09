@@ -2,10 +2,9 @@
 //
 // Every interactive Tango control routes its feedback through this one
 // primitive, so the gesture feels identical everywhere. The Dreamtides
-// philosophy is one rule with no exceptions: SCALE UP ON HOVER, SCALE DOWN ON
-// PRESS. Every pressable follows it — an actionable button and an info-only
-// reveal trigger (a tide disc, an essence value) alike — so a press is always
-// acknowledged, including on touch where there is no hover to fall back on.
+// standard is SCALE UP ON HOVER, SCALE DOWN ON PRESS. The one strict exception
+// is selectable rules copy: holding ability text still lets the player read it
+// at its authored size while definition cards are visible.
 //   - a single scale-DOWN factor (PRESS_SCALE = 0.9, the --press-scale token)
 //     — every control compresses by this on press; it never balloons outward
 //     while pressed.
@@ -166,6 +165,9 @@ export interface PressableProps extends React.HTMLAttributes<HTMLElement> {
   as?: React.ElementType;
   /** Disables press feedback and pointer handlers, and shows the default cursor. */
   disabled?: boolean;
+  /** Press motion. `scale` is the global control treatment; `stationary` is
+   * reserved for readable rules-copy reveal surfaces. Default `scale`. */
+  pressFeedback?: "scale" | "stationary";
   /** Content rendered inside the pressable element. */
   children?: React.ReactNode;
 }
@@ -187,6 +189,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
     {
       as = "button",
       disabled = false,
+      pressFeedback = "scale",
       style,
       onPointerEnter,
       onPointerDown,
@@ -257,7 +260,11 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
           transform: disabled
             ? "none"
             : pressed
-              ? `scale(${PRESS_SCALE})`
+              ? pressFeedback === "stationary"
+                ? hovered
+                  ? `scale(${HOVER_SCALE})`
+                  : "none"
+                : `scale(${PRESS_SCALE})`
               : hovered
                 ? `scale(${HOVER_SCALE})`
                 : "none",

@@ -62,6 +62,7 @@ function makeDreamcaller(): DreamcallerContent {
     title: "State Witness",
     renderedText: "Test ability.",
     imageNumber: "0006",
+    portraitFocus: { x: 0.42, y: 0.18 },
     startingEssence: 275,
     signatureCards: ["Alpha Card 1"],
   };
@@ -415,6 +416,7 @@ describe("quest state actions", () => {
     );
 
     expect(next.dreamcaller).toEqual(toQuestDreamcaller(dreamcaller));
+    expect(next.dreamcaller?.portraitFocus).toEqual({ x: 0.42, y: 0.18 });
     expect(next.dreamcaller?.startingEssence).toBe(275);
     expect(next.essence).toBe(dreamcaller.startingEssence);
     expect(prev.essence).toBe(createDefaultState().essence);

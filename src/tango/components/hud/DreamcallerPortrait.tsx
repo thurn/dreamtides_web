@@ -21,6 +21,7 @@
 
 import { useState, type CSSProperties } from "react";
 import { assetUrl } from "../../../runtime/asset-url";
+import type { DreamcallerPortraitFocus } from "../../../types/content";
 import { token } from "../../primitives/tokens";
 
 /** The minimal dreamcaller shape a portrait needs: which art to load and the
@@ -29,6 +30,25 @@ export interface DreamcallerVisual {
   imageNumber: string;
   name: string;
   title: string;
+  /** Normalized head position used to center subject-aware crops. */
+  portraitFocus?: DreamcallerPortraitFocus;
+}
+
+/** Neutral fallback for older room snapshots that predate authored focus data. */
+export const DEFAULT_DREAMCALLER_PORTRAIT_FOCUS: DreamcallerPortraitFocus = {
+  x: 0.5,
+  y: 0.2,
+};
+
+/** Clamp authored focus data before it reaches CSS geometry. */
+export function dreamcallerPortraitFocus(
+  dreamcaller: DreamcallerVisual,
+): DreamcallerPortraitFocus {
+  const focus = dreamcaller.portraitFocus ?? DEFAULT_DREAMCALLER_PORTRAIT_FOCUS;
+  return {
+    x: Math.max(0, Math.min(1, focus.x)),
+    y: Math.max(0, Math.min(1, focus.y)),
+  };
 }
 
 /** Which framing the portrait renders. */
@@ -54,6 +74,9 @@ const PORTRAIT_STANDING_SCALE = 1.2;
 const HERO_CROP_SCALE = 2;
 const PANEL_CROP_SCALE = 1.18;
 const THUMB_CROP_SCALE = 1.22;
+
+/** Vertical target for the authored head point in the mobile showcase. */
+const FULL_BLEED_HEAD_Y = "27%";
 
 export interface DreamcallerPortraitProps {
   /** The dreamcaller whose art and identity the portrait shows. */
@@ -176,6 +199,9 @@ export function DreamcallerPortrait({
 }: DreamcallerPortraitProps) {
   const [broken, setBroken] = useState(false);
   const alt = `${dreamcaller.name}, ${dreamcaller.title}`;
+  const focus = dreamcallerPortraitFocus(dreamcaller);
+  const focusPercentX = Math.round(focus.x * 1000) / 10;
+  const focusPercentY = Math.round(focus.y * 1000) / 10;
 
   // The full-bleed stage fills — `standing` (desktop column) and `fullBleed`
   // (mobile carousel) — return a BARE FRAGMENT (no `.tango` wrapper) so a
@@ -316,15 +342,16 @@ export function DreamcallerPortrait({
           }}
           style={{
             position: "absolute",
-            // Slightly wider than the page so the width-limited `contain` fit
-            // renders the figure large: on a phone the head rises to just below
-            // the title instead of leaving a dead band of backdrop between them.
-            left: "-6%",
-            bottom: 0,
-            width: "112%",
-            height: "96%",
-            objectFit: "contain",
-            objectPosition: "50% 100%",
+            // Fit by height so the head rises directly beneath the name instead
+            // of leaving the figure small and low in the page. Translate by the
+            // authored head coordinate, not the canvas midpoint, so asymmetric
+            // poses and held props do not pull the subject off center.
+            left: "50%",
+            top: FULL_BLEED_HEAD_Y,
+            width: "auto",
+            maxWidth: "none",
+            height: "100%",
+            transform: `translate(-${String(focusPercentX)}%, -${String(focusPercentY)}%)`,
             userSelect: "none",
           }}
         />

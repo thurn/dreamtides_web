@@ -5,16 +5,13 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { Pressable, PRESS_SCALE, type PressableProps } from "./Pressable";
 
-// The guarantee, asserted at COMPILE time (`tsc --noEmit` checks this file):
-// every pressable scales down on press with no opt-out, so a reveal trigger
-// with no press animation is inexpressible. There is no feedback prop to turn
-// the animation off — both of these are type errors. If the API ever regresses
-// to add an opt-out, an `@ts-expect-error` below goes unused and typecheck
-// fails. Never executed — the types are the whole test.
+// The named press-feedback vocabulary is asserted at compile time: arbitrary
+// per-call motion remains inexpressible while the rules-copy exception is a
+// strict variant.
 function _pressFeedbackTypeGuards(): PressableProps[] {
   // @ts-expect-error there is no `compress` boolean escape hatch.
   const legacyBoolean: PressableProps = { compress: false };
-  // @ts-expect-error there is no `pressFeedback` opt-out; every press scales down.
+  // @ts-expect-error arbitrary feedback modes are not part of the strict API.
   const optOut: PressableProps = { pressFeedback: "enlarge" };
   return [legacyBoolean, optOut];
 }
@@ -88,6 +85,18 @@ describe("Pressable press feedback", () => {
     if (!el) throw new Error("no span");
     pressDown(el);
     expect(el.style.transform).toBe(`scale(${String(PRESS_SCALE)})`);
+  });
+
+  it("keeps readable rules-copy reveal surfaces stationary while pressed", () => {
+    const { container } = mountInto(
+      <Pressable as="span" pressFeedback="stationary">
+        Read this ability
+      </Pressable>,
+    );
+    const el = container.querySelector("span");
+    if (!el) throw new Error("no span");
+    pressDown(el);
+    expect(el.style.transform).toBe("none");
   });
 
   it("disabled suppresses the press animation entirely", () => {

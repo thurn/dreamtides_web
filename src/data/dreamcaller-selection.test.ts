@@ -12,6 +12,7 @@ function makeDreamcaller(id: string): DreamcallerContent {
     title: `Title ${id}`,
     renderedText: `Rules text for ${id}.`,
     imageNumber: `00${id}`,
+    portraitFocus: { x: 0.42, y: 0.18 },
     startingEssence: 250,
   };
 }
@@ -58,6 +59,7 @@ describe("toQuestDreamcaller", () => {
       title: "Title a",
       renderedText: "Rules text for a.",
       imageNumber: "00a",
+      portraitFocus: { x: 0.42, y: 0.18 },
       startingEssence: 250,
     });
   });

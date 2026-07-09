@@ -4,6 +4,8 @@
  * the public directory at `/dreamcallers-v2-data.json`.
  */
 
+import type { DreamcallerPortraitFocus } from "../types/content";
+
 /** A v2 Dreamcaller as consumed by the draft test harness. */
 export interface DraftDreamcaller {
   id: string;
@@ -11,6 +13,8 @@ export interface DraftDreamcaller {
   title: string;
   renderedText: string;
   imageNumber: string;
+  /** Authored head position shared by full-body and square portrait crops. */
+  portraitFocus?: DreamcallerPortraitFocus;
   startingEssence: number;
   /**
    * Draft archetypes this Dreamcaller is suited to, sourced from

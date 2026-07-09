@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/dreamcaller-portrait`
 
-Real consumers: **19** (imports outside `src/tango/docs/` and tests).
+Real consumers: **20** (imports outside `src/tango/docs/` and tests).
 
 The one way to render a dreamcaller's character art: the transparent full-body cutout standing on a tinted radial backdrop, in one of five fixed framings. Three are self-framing — a large `hero` showcase, a square `panel` for profile cards and popovers, and a small square `thumb` for HUD rows and resident lists. Two are full-bleed fills that paint edge to edge over a caller's own stage — `standing` for the desktop Dreamcaller-select column and `fullBleed` for the mobile carousel page. The frame chrome and the per-variant crop belong to the design system; a caller supplies only the dreamcaller data, the variant, and an optional pixel `size`. When the art asset 404s the portrait falls back to a tinted monogram disc so a missing image never leaves an empty hole.
 
@@ -27,6 +27,7 @@ The one way to render a dreamcaller's character art: the transparent full-body c
 | `imageNumber` | `string` | no |  |
 | `name` | `string` | no |  |
 | `title` | `string` | no |  |
+| `portraitFocus` | `DreamcallerPortraitFocus` | yes | Normalized head position used to center subject-aware crops. |
 
 ## Usage
 

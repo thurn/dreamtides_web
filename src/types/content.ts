@@ -8,12 +8,22 @@ import type { SiteType } from "./quest.ts";
 
 export const DEFAULT_STARTING_ESSENCE = 200;
 
+/** Normalized point locating a Dreamcaller's head in its portrait artwork. */
+export interface DreamcallerPortraitFocus {
+  /** Horizontal position from the artwork's left edge, in the range 0..1. */
+  x: number;
+  /** Vertical position from the artwork's top edge, in the range 0..1. */
+  y: number;
+}
+
 export interface DreamcallerContent {
   id: string;
   name: string;
   title: string;
   renderedText: string;
   imageNumber: string;
+  /** Authored head position shared by full-body and square portrait crops. */
+  portraitFocus?: DreamcallerPortraitFocus;
   /**
    * Per-Dreamcaller starting essence, compensating for differences in opening
    * power and engine ramp speed. Defaults to `DEFAULT_STARTING_ESSENCE` when

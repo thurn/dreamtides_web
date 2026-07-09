@@ -814,6 +814,12 @@
             "tsType": "string",
             "optional": false,
             "description": ""
+          },
+          {
+            "name": "portraitFocus",
+            "tsType": "DreamcallerPortraitFocus",
+            "optional": true,
+            "description": "Normalized head position used to center subject-aware crops."
           }
         ]
       }
@@ -2110,6 +2116,17 @@
       "required": false,
       "defaultValue": "false",
       "description": "true = a touch hold still fires the child's click (menu / UI toggle)."
+    },
+    {
+      "name": "pressFeedback",
+      "tsType": "\"scale\" | \"stationary\"",
+      "unionMembers": [
+        "scale",
+        "stationary"
+      ],
+      "required": false,
+      "defaultValue": "scale",
+      "description": "Press motion for the trigger. `stationary` is reserved for readable rules\ncopy that must hold its authored size while definitions are visible."
     }
   ],
   "PressPopover": [
@@ -2327,6 +2344,17 @@
       "description": "Disables press feedback and pointer handlers, and shows the default cursor."
     },
     {
+      "name": "pressFeedback",
+      "tsType": "\"scale\" | \"stationary\"",
+      "unionMembers": [
+        "scale",
+        "stationary"
+      ],
+      "required": false,
+      "defaultValue": "scale",
+      "description": "Press motion. `scale` is the global control treatment; `stationary` is\nreserved for readable rules-copy reveal surfaces. Default `scale`."
+    },
+    {
       "name": "children",
       "tsType": "ReactNode",
       "unionMembers": [],
@@ -2444,6 +2472,12 @@
             "tsType": "ArtRef",
             "optional": false,
             "description": "The portrait art as an {@link ArtRef}. Required — a docked Dreamcaller always has art."
+          },
+          {
+            "name": "portraitFocus",
+            "tsType": "DreamcallerPortraitFocus",
+            "optional": true,
+            "description": "Normalized head position used to center the square HUD crop."
           },
           {
             "name": "ability",

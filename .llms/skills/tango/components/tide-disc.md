@@ -38,20 +38,19 @@ import { TideDisc } from "src/tango/components/hud/TideDisc";
 
 ### Disc-in-reveal (canonical)
 
-How a tide disc is ALWAYS rendered in production (see quest-start-shared's TideDiscReveal): the disc is the trigger of an InfoCard.PressInfo reveal anchored to the screen's `stageRef`, carrying the tide's own description — the general Tides blurb stacked above this tide's colored InfoCard. A tide disc never appears without its reveal.
+How a tide disc is ALWAYS rendered in production (see quest-start-shared's TideDiscReveal): the disc is the trigger of an InfoCard.PressInfo reveal anchored to the screen's `stageRef`, carrying the tide's own colored card first and a secondary text definition beside it. A tide disc never appears without its reveal.
 
 ```tsx
 import { TideDisc } from "src/tango/components/hud/TideDisc";
 import { InfoCard } from "src/tango/components/overlay/InfoCard";
 import { richText } from "src/tango/components/card/rich-text";
-import { GLYPHS } from "src/tango/primitives/glyph";
 
 <InfoCard.PressInfo
   stageRef={stageRef}
   card={
-    <div style={{ display: "flex", flexDirection: "column", gap: token("--space-3") }}>
-      <InfoCard variant="icon" glyph={GLYPHS.water} title="Tides" body={richText.plain(tidesBlurb)} />
+    <div style={{ display: "flex", alignItems: "flex-start", gap: token("--space-3") }}>
       <InfoCard variant="tide" tide="valor" title="Rising Valor" body={richText.plain(tide.description)} />
+      <InfoCard variant="text" title="What Are Tides?" body={richText.plain(tidesBlurb)} />
     </div>
   }
 >

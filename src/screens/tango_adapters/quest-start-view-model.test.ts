@@ -26,6 +26,7 @@ function dreamcaller(
     title: "Mapper of Sleep",
     renderedText: "Whenever you map a dream, draw a card.",
     imageNumber: "42",
+    portraitFocus: { x: 0.42, y: 0.18 },
     startingEssence: 3,
     ...overrides,
   };
@@ -108,6 +109,7 @@ describe("toDreamcallerOfferView", () => {
       title: "Mapper of Sleep",
       renderedText: "Whenever you map a dream, draw a card.",
       imageNumber: "42",
+      portraitFocus: { x: 0.42, y: 0.18 },
       startingEssence: 3,
     });
   });

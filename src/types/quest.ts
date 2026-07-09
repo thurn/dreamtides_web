@@ -1,4 +1,7 @@
-import type { ResolvedDreamcallerPackage } from "./content";
+import type {
+  DreamcallerPortraitFocus,
+  ResolvedDreamcallerPackage,
+} from "./content";
 import type { CardData, CardType } from "./cards";
 import type { DraftState } from "./draft";
 import type { LayerName } from "./layer-name";
@@ -114,6 +117,8 @@ export interface Dreamcaller {
   title: string;
   renderedText: string;
   imageNumber: string;
+  /** Authored head position shared by full-body and square portrait crops. */
+  portraitFocus?: DreamcallerPortraitFocus;
   /**
    * Starting essence the player begins the quest with. Captured on the
    * Dreamcaller record so the HUD inspector and persisted state always know

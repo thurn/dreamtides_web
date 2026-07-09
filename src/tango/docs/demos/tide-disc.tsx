@@ -10,15 +10,13 @@ import { useRef } from "react";
 import { TideDisc } from "../../components/hud/TideDisc";
 import { InfoCard } from "../../components/overlay/InfoCard";
 import { richText } from "../../components/card/rich-text";
-import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import type { Tide } from "../../components/hud/tide-spec";
 import type { TangoComponent } from "../registry";
 
 const ALL_TIDES: Tide[] = ["ember", "valor", "vision", "wild", "shadow"];
 
-/** What a tide-disc reveal explains above the specific tide's own card — the
- * general blurb quest-start-shared stacks over every tide reveal. */
+/** The secondary definition shown beside the specific tide's own card. */
 const TIDES_BLURB =
   "Pools of cards you will see during the quest. Different tides are used every time you play.";
 
@@ -63,16 +61,10 @@ function TideDiscDemo() {
             <div
               style={{
                 display: "flex",
-                flexDirection: "column",
+                alignItems: "flex-start",
                 gap: token("--space-3"),
               }}
             >
-              <InfoCard
-                variant="icon"
-                glyph={GLYPHS.water}
-                title="Tides"
-                body={richText.plain(TIDES_BLURB)}
-              />
               <InfoCard
                 variant="tide"
                 tide="valor"
@@ -80,6 +72,11 @@ function TideDiscDemo() {
                 body={richText.plain(
                   "A tide of steadfast courage that rewards holding the line.",
                 )}
+              />
+              <InfoCard
+                variant="text"
+                title="What Are Tides?"
+                body={richText.plain(TIDES_BLURB)}
               />
             </div>
           }
@@ -119,18 +116,17 @@ export const tideDiscDemo: TangoComponent = {
     },
     {
       label: "Disc-in-reveal (canonical)",
-      note: "How a tide disc is ALWAYS rendered in production (see quest-start-shared's TideDiscReveal): the disc is the trigger of an InfoCard.PressInfo reveal anchored to the screen's `stageRef`, carrying the tide's own description — the general Tides blurb stacked above this tide's colored InfoCard. A tide disc never appears without its reveal.",
+      note: "How a tide disc is ALWAYS rendered in production (see quest-start-shared's TideDiscReveal): the disc is the trigger of an InfoCard.PressInfo reveal anchored to the screen's `stageRef`, carrying the tide's own colored card first and a secondary text definition beside it. A tide disc never appears without its reveal.",
       code: `import { TideDisc } from "src/tango/components/hud/TideDisc";
 import { InfoCard } from "src/tango/components/overlay/InfoCard";
 import { richText } from "src/tango/components/card/rich-text";
-import { GLYPHS } from "src/tango/primitives/glyph";
 
 <InfoCard.PressInfo
   stageRef={stageRef}
   card={
-    <div style={{ display: "flex", flexDirection: "column", gap: token("--space-3") }}>
-      <InfoCard variant="icon" glyph={GLYPHS.water} title="Tides" body={richText.plain(tidesBlurb)} />
+    <div style={{ display: "flex", alignItems: "flex-start", gap: token("--space-3") }}>
       <InfoCard variant="tide" tide="valor" title="Rising Valor" body={richText.plain(tide.description)} />
+      <InfoCard variant="text" title="What Are Tides?" body={richText.plain(tidesBlurb)} />
     </div>
   }
 >

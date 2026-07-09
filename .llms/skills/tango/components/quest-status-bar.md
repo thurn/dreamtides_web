@@ -40,6 +40,7 @@ The persistent, transparent bottom HUD for quest screens. The essence total, dec
 | `name` | `string` | no |  |
 | `epithet` | `string` | yes |  |
 | `portrait` | `ArtRef` | no | The portrait art as an {@link ArtRef}. Required — a docked Dreamcaller always has art. |
+| `portraitFocus` | `DreamcallerPortraitFocus` | yes | Normalized head position used to center the square HUD crop. |
 | `ability` | `string` | yes |  |
 
 ## Usage

@@ -1409,6 +1409,9 @@ export interface PressInfoProps {
   as?: React.ElementType;
   /** true = a touch hold still fires the child's click (menu / UI toggle). */
   holdStillClicks?: boolean;
+  /** Press motion for the trigger. `stationary` is reserved for readable rules
+   * copy that must hold its authored size while definitions are visible. */
+  pressFeedback?: "scale" | "stationary";
 }
 
 export function PressInfo({
@@ -1418,6 +1421,7 @@ export function PressInfo({
   children,
   as = "span",
   holdStillClicks = false,
+  pressFeedback = "scale",
 }: PressInfoProps): React.ReactElement {
   const { shown, fine, begin, end, enter, leave, heldPastTap, pointerRef } =
     usePressReveal();
@@ -1452,6 +1456,7 @@ export function PressInfo({
       onPointerLeave={leave}
       onPointerCancel={end}
       onClickCapture={onClickCapture}
+      pressFeedback={pressFeedback}
       style={{ display: "inline-flex" }}
     >
       {children}

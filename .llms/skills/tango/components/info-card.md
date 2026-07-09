@@ -140,7 +140,7 @@ A named `tide` on its OWN colored disc, with the tide's alignment name (Valor, S
 
 ### Reveal on interaction
 
-In real screens InfoCard is anchored to a trigger through the attached press engine (`InfoCard.PressInfo`): hover / touch-down reveals the `card` beside the wrapped trigger, measured against `stageRef`. Use it to wrap a trigger that has no reveal of its own (an essence value, a menu button).
+In real screens InfoCard is anchored to a trigger through the attached press engine (`InfoCard.PressInfo`): hover / touch-down reveals the `card` beside the wrapped trigger, measured against `stageRef`. Use it to wrap a trigger that has no reveal of its own (an essence value, a menu button). Readable rules copy passes `pressFeedback="stationary"` so a held definition reveal does not shrink the text.
 
 ```tsx
 <InfoCard.PressInfo

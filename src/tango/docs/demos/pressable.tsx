@@ -30,7 +30,7 @@ export const pressableDemo: TangoComponent = {
   id: "pressable",
   title: "Pressable",
   blurb:
-    "The one press-feedback primitive. Wrap any element in it and that element follows the single Dreamtides rule — scale up on hover (on a hover-capable pointer), scale down on press — so every interactive surface presses and invites the cursor with the identical feel.",
+    "The one press-feedback primitive. Interactive surfaces scale up on hover and down on press; readable rules-copy reveals use the strict stationary variant so text stays legible under a held finger.",
   callout:
     "Reach for a higher-level component first. Pressable is a low-level building block — before wrapping raw markup in it, look for an existing Tango component (Button, TideDisc, SegmentedControl, SiteNode, …) that already bakes in the press feedback. Use Pressable only when you're building a genuinely new interactive surface no component covers.",
   group: "Primitives",
@@ -55,9 +55,16 @@ export const pressableDemo: TangoComponent = {
     },
     {
       label: "Info-only reveal surface",
-      note: "Wrap a surface you press to reveal information but cannot act on (a tide disc, an essence value) in the same Pressable — it follows the one rule (up on hover, down on press), so a press is always acknowledged, on touch too. There is no opt-out: an un-animated press is not expressible.",
+      note: "Wrap a surface you press to reveal information but cannot act on (a tide disc, an essence value) in the same Pressable — it follows the standard treatment (up on hover, down on press), so a press is acknowledged on touch too.",
       code: `<Pressable as="span">
   <span className="my-target">Reveal on press</span>
+</Pressable>`,
+    },
+    {
+      label: "Readable rules-copy reveal",
+      note: "Ability text is the strict exception: use `stationary` so holding it to read keyword definitions never shrinks the copy beneath the finger.",
+      code: `<Pressable as="span" pressFeedback="stationary">
+  <RulesText text={abilityText} />
 </Pressable>`,
     },
   ],
@@ -65,6 +72,7 @@ export const pressableDemo: TangoComponent = {
     defaultArgs: {
       as: "button",
       disabled: false,
+      pressFeedback: "scale",
     },
     sampleContent: {
       children: <span style={targetStyle}>Press me</span>,

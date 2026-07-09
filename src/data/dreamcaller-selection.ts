@@ -36,6 +36,7 @@ export function toQuestDreamcaller(
     title: dreamcaller.title,
     renderedText: dreamcaller.renderedText,
     imageNumber: dreamcaller.imageNumber,
+    portraitFocus: dreamcaller.portraitFocus,
     startingEssence: dreamcaller.startingEssence,
   };
 }

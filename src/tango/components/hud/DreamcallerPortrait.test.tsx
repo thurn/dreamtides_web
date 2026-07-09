@@ -67,6 +67,20 @@ describe("DreamcallerPortrait standing/fullBleed variants", () => {
     expect(img?.getAttribute("alt")).toBe("Astra, The Dawnbound");
   });
 
+  it("fullBleed centers the authored head coordinate instead of the canvas", () => {
+    const { container } = mountInto(
+      <DreamcallerPortrait
+        dreamcaller={{ ...DC, portraitFocus: { x: 0.58, y: 0.23 } }}
+        variant="fullBleed"
+      />,
+    );
+
+    const img = container.querySelector("img");
+    expect(img?.style.left).toBe("50%");
+    expect(img?.style.transform).toBe("translate(-58%, -23%)");
+    expect(img?.style.height).toBe("100%");
+  });
+
   it("standing falls back to the name's first letter when the art 404s", () => {
     const { container } = mountInto(
       <DreamcallerPortrait dreamcaller={DC} variant="standing" />,

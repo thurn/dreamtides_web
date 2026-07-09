@@ -850,6 +850,7 @@ export async function loadQuestContent(
     title: dc.title,
     renderedText: dc.renderedText,
     imageNumber: dc.imageNumber,
+    portraitFocus: dc.portraitFocus,
     startingEssence: dc.startingEssence || DEFAULT_STARTING_ESSENCE,
     signatureCards: [...(dc.signatureCards ?? [])],
     signatureCardIds: [...(dc.signatureCardIds ?? [])],

@@ -103,12 +103,14 @@ describe("toQsbDreamcaller", () => {
       title: "Triumphator",
       renderedText: "Gain 1 essence.",
       imageNumber: "0007",
+      portraitFocus: { x: 0.42, y: 0.18 },
       startingEssence: 200,
     };
     const qsb = toQsbDreamcaller(dreamcaller);
     expect(qsb?.name).toBe("Drusus Calvus");
     expect(qsb?.epithet).toBe("Triumphator");
     expect(qsb?.ability).toBe("Gain 1 essence.");
+    expect(qsb?.portraitFocus).toEqual({ x: 0.42, y: 0.18 });
     expect(resolveArtRef(qsb!.portrait)).toContain("0007");
   });
 });

@@ -21,6 +21,11 @@
 # five signatures (when an associated MTG card has no Dreamtides equivalent) or more
 # than five (when one MTG card maps to several Dreamtides cards).
 #
+# `portrait-focus` is the normalized head center in the 1024×1536 portrait
+# canvas. The values come from a Vision body-pose / face pass over every cutout,
+# with the non-human and fully masked misses authored from the alpha cutouts.
+# Full-body showcases and compact square crops share this focal point.
+#
 # Read `docs/cards2/card_associations.md` for the full archetype-to-card
 # associations and the lift-based method used to derive them. Entries whose
 # signatures were authored by hand instead of derived this way carry an inline note
@@ -31,6 +36,7 @@ name = "Drusus Calvus"
 title = "Triumphator"
 id = "BDD3A3A7-242C-4D2B-8071-EBE56891A340"
 image-number = "0083"
+portrait-focus = { x = 0.500, y = 0.140 }
 rendered-text = "At the start of your first turn, gain 1●."
 
 [[dreamcaller]]
@@ -38,6 +44,7 @@ name = "Threxan"
 title = "the Resounding Wrath"
 id = "B99936CA-97F9-4930-AF5A-FA9EF92557EF"
 image-number = "0025"
+portrait-focus = { x = 0.500, y = 0.200 }
 rendered-text = "At the start of your first turn, draw a card."
 
 [[dreamcaller]]
@@ -45,6 +52,7 @@ name = "Vethran"
 title = "Whisperer of Wraiths"
 id = "F0F5449E-01C2-4635-BCE1-76B179FC2108"
 image-number = "0073"
+portrait-focus = { x = 0.500, y = 0.170 }
 rendered-text = "3●, X●, ☪: Discover a card with cost X●."
 
 [[dreamcaller]]
@@ -52,6 +60,7 @@ name = "Seld Rakor"
 title = "Standing Orders"
 id = "C72CFD7B-408B-47F6-ADF1-1E486A7E20D3"
 image-number = "0071"
+portrait-focus = { x = 0.500, y = 0.183 }
 rendered-text = "At the start of your turn, if there are 3 or more cards in your void, foresee 1."
 
 [[dreamcaller]]
@@ -59,6 +68,7 @@ name = "Ossian"
 title = "the Reckoning Blade"
 id = "B9BF6D4B-907C-4750-B51C-811AFF29DE59"
 image-number = "0022"
+portrait-focus = { x = 0.540, y = 0.281 }
 rendered-text = "2●, ☪, Abandon a character with 1✦: Draw a card."
 
 [[dreamcaller]]
@@ -66,6 +76,7 @@ name = "Kaleth"
 title = "The Dreaming"
 id = "3C4773E4-F8E1-4686-86CB-B407A42489D4"
 image-number = "0026"
+portrait-focus = { x = 0.500, y = 0.206 }
 rendered-text = "2●, ☪: Awaken a character you control."
 
 [[dreamcaller]]
@@ -73,6 +84,7 @@ name = "Calloway Flint"
 title = "Cutthroat Admiral"
 id = "8A2FCD65-BBA7-459C-A6B0-F0391B9293FD"
 image-number = "0052"
+portrait-focus = { x = 0.500, y = 0.256 }
 rendered-text = "❖❖ – 4●, ☪: Draw a card."
 
 [[dreamcaller]]
@@ -80,6 +92,7 @@ name = "Senemhet"
 title = "Lord of the Radiant Court"
 id = "1CC5A88A-134F-42F7-A0AE-95ACE44B3745"
 image-number = "0035"
+portrait-focus = { x = 0.500, y = 0.237 }
 rendered-text = "▸Dawn: If you have 5●, gain 1●."
 
 [[dreamcaller]]
@@ -87,6 +100,7 @@ name = "Karev Soltis"
 title = "Breach Respondent"
 id = "9E4862FD-E18C-463E-9D5F-E5D73C29A66F"
 image-number = "0037"
+portrait-focus = { x = 0.500, y = 0.198 }
 rendered-text = "Once per turn, when the opponent scores ⍟, draw a card unless the opponent pays 1●."
 
 [[dreamcaller]]
@@ -94,6 +108,7 @@ name = "Tessa"
 title = "Gleaner of Dust"
 id = "BA973428-6D90-4847-B779-CB7E25A5AC84"
 image-number = "0051"
+portrait-focus = { x = 0.491, y = 0.196 }
 rendered-text = "When you play your second card in a turn, draw a card, then discard a card."
 
 [[dreamcaller]]
@@ -101,6 +116,7 @@ name = "Serenath Veyl"
 title = "Cantor of the Unreal"
 id = "9E19B3D1-12F2-43C1-9CB1-08DE7CD32E32"
 image-number = "0098"
+portrait-focus = { x = 0.530, y = 0.177 }
 rendered-text = "1●, ☪: If you materialized a figment this turn, draw a card."
 
 [[dreamcaller]]
@@ -108,6 +124,7 @@ name = "Korrax"
 title = "Iron Sovereign"
 id = "6029BE40-75B9-4C07-912F-9718B6C5C747"
 image-number = "0003"
+portrait-focus = { x = 0.500, y = 0.200 }
 rendered-text = "▸Night: Give a character you control +1✦."
 
 [[dreamcaller]]
@@ -115,6 +132,7 @@ name = "Kell Tarn"
 title = "Wreckoner"
 id = "133E22DD-F81B-406D-B4E3-98C346D7FD4E"
 image-number = "0013"
+portrait-focus = { x = 0.500, y = 0.209 }
 rendered-text = "Once per turn, if there are 7 or more cards in your void, you may play a character from your void."
 mtg-name = "Lurrus of the Dream-Den"
 signature-cards = [
@@ -131,6 +149,7 @@ name = "Caedryn"
 title = "Shrouded Inquisitor"
 id = "9D64A4A2-3DC7-456E-9EB2-5FE3A48883C4"
 image-number = "0112"
+portrait-focus = { x = 0.550, y = 0.200 }
 rendered-text = "2●, ☪, Abandon a character: Materialize a random character with cost 1● higher from your deck."
 mtg-name = "Viscera Seer"
 signature-cards = [
@@ -146,6 +165,7 @@ name = "Kragg"
 title = "Spent-Blood Chieftain"
 id = "16B579FE-C15B-4DF6-8262-D45CE44732AE"
 image-number = "0064"
+portrait-focus = { x = 0.510, y = 0.200 }
 rendered-text = "Once per turn, when you abandon a character, the next character you play this turn costs 2● less."
 mtg-name = "Phyrexian Altar"
 signature-cards = [
@@ -162,6 +182,7 @@ name = "Vrakmoth"
 title = "Ashbroker"
 id = "86026206-1B11-4F38-A24E-FD3C697F5353"
 image-number = "0087"
+portrait-focus = { x = 0.490, y = 0.180 }
 rendered-text = "Once per turn, when you discard a card, draw a card with ephemeral."
 mtg-name = "Inti, Seneschal of the Sun"
 signature-cards = [
@@ -180,6 +201,7 @@ name = "Seraveth"
 title = "Twice-Mourned"
 id = "6488452D-4E9E-466C-96DF-716D4EC646B1"
 image-number = "0017"
+portrait-focus = { x = 0.479, y = 0.239 }
 rendered-text = "When you play your second character in a turn, a character in your void gains reclaim 2● until end of turn."
 mtg-name = "Vengevine"
 signature-cards = [
@@ -196,6 +218,7 @@ name = "Corvath"
 title = "the Salvage-Born"
 id = "B8C1B0AB-0FE6-47D6-B576-0C2231AEB81E"
 image-number = "0044"
+portrait-focus = { x = 0.500, y = 0.179 }
 rendered-text = "Once per turn, when you discard a card, it gains reclaim until end of turn."
 mtg-name = "Containment Construct"
 signature-cards = [
@@ -212,6 +235,7 @@ name = "Kael Voss"
 title = "Recon Commander"
 id = "81954CA0-DA36-49DD-915C-1CCB1B2D7B05"
 image-number = "0007"
+portrait-focus = { x = 0.500, y = 0.164 }
 rendered-text = "2●, ☪, Discard a card: Materialize a 1✦ survivor figment."
 mtg-name = "Zombie Infestation"
 signature-cards = [
@@ -228,6 +252,7 @@ name = "Vaela"
 title = "Ember Among Remnants"
 id = "60BD584B-5BC8-4EE7-8A98-CBB304EB71AB"
 image-number = "0028"
+portrait-focus = { x = 0.508, y = 0.193 }
 rendered-text = "When a card leaves your void, a random card in your void gains reclaim."
 mtg-name = "Cryptbreaker"
 signature-cards = [
@@ -244,6 +269,7 @@ name = "Edran"
 title = "the Invocant"
 id = "5E28154D-770A-4B84-8AAC-9DE44F5D7D02"
 image-number = "0080"
+portrait-focus = { x = 0.550, y = 0.276 }
 rendered-text = "❖ – 4●, ☪: Materialize a 1✦ outsider figment."
 # Signatures authored by hand around three evasive outsiders (see commit a98fbb67);
 # not derived from the card_associations.md archetype mapping.
@@ -258,6 +284,7 @@ name = "Zeva"
 title = "the Dredger"
 id = "4D5E3933-7DD6-406B-922D-DD78ACFA044A"
 image-number = "0005"
+portrait-focus = { x = 0.487, y = 0.193 }
 rendered-text = "❖❖ – 2●, ☪, Discard a card: An event in your void gains reclaim until end of turn."
 mtg-name = "Snapcaster Mage"
 signature-cards = [
@@ -274,6 +301,7 @@ name = "Kasane"
 title = "Wearer of the Stolen Face"
 id = "2B7E921D-0CD7-4C20-A415-9E7EEDE7B477"
 image-number = "0060"
+portrait-focus = { x = 0.513, y = 0.223 }
 rendered-text = "4●, ☪: Copy the next event you play this turn."
 mtg-name = "Bonus Round"
 signature-cards = [
@@ -289,6 +317,7 @@ name = "Rael"
 title = "Chain Accelerant"
 id = "84E7020C-7384-4CC3-A20F-AB05F03CC375"
 image-number = "0106"
+portrait-focus = { x = 0.515, y = 0.201 }
 rendered-text = "When you play your second event in a turn, foresee 2."
 mtg-name = "Dragon's Rage Channeler"
 signature-cards = [
@@ -304,6 +333,7 @@ name = "Ovanel"
 title = "Lector of the Receding Rite"
 id = "F6208407-C4E9-42AC-B533-346704F5E39E"
 image-number = "0078"
+portrait-focus = { x = 0.500, y = 0.162 }
 rendered-text = "2●, ☪: If you played an event this turn, draw an event."
 mtg-name = "Young Pyromancer"
 signature-cards = [
@@ -318,6 +348,7 @@ name = "Yveth Coravel"
 title = "Scion of the Returning Tide"
 id = "FE2510D9-BFEE-4C35-97F9-30E0CD2E2851"
 image-number = "0084"
+portrait-focus = { x = 0.503, y = 0.201 }
 rendered-text = "2●, ☪: Return a character you control to hand. Its cost is reduced by 1●."
 # Original hand-picked signature set; not derived from the card_associations.md
 # archetype mapping.
@@ -334,6 +365,7 @@ name = "Grath"
 title = "Packmaster"
 id = "94E7C651-25E9-4A62-9DE4-EAF5BA20542C"
 image-number = "0095"
+portrait-focus = { x = 0.510, y = 0.169 }
 rendered-text = "4●, ☪: Gain 1● for each spirit animal you control."
 mtg-name = "Priest of Titania"
 signature-cards = [
@@ -350,6 +382,7 @@ name = "Radulf"
 title = "Hegemon of Shattered Thrones"
 id = "3EBABA62-9000-429D-B203-2A5A9724389A"
 image-number = "0045"
+portrait-focus = { x = 0.500, y = 0.173 }
 rendered-text = "If you control 3 or more characters, the first character you play each turn costs 1● less."
 mtg-name = "Aluren"
 signature-cards = [
@@ -365,6 +398,7 @@ name = "Demetrios"
 title = "Strategos of the Phalanx"
 id = "2C53B1B9-9291-4BBA-8D3A-F40B545C8F3C"
 image-number = "0100"
+portrait-focus = { x = 0.539, y = 0.211 }
 rendered-text = "When you play your second character in a turn, draw a card with ephemeral."
 mtg-name = "Glimpse of Nature"
 signature-cards = [
@@ -380,6 +414,7 @@ name = "Gunnar Deepforge"
 title = "The Hammer's Echo"
 id = "BF72ADFF-7D74-4BE8-9B93-1DB7BA13A1DB"
 image-number = "0108"
+portrait-focus = { x = 0.580, y = 0.233 }
 rendered-text = "2●, ☪: Materialize a 0✦ figment copy of the last warrior you played this turn."
 mtg-name = "Urza, Lord High Artificer"
 signature-cards = [
@@ -396,6 +431,7 @@ name = "Tensho"
 title = "Daimyo of Lacquered Fury"
 id = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5"
 image-number = "0029"
+portrait-focus = { x = 0.500, y = 0.220 }
 rendered-text = "When the first card you draw in a turn is a warrior, reduce its cost by 1●."
 mtg-name = "Mishra's Workshop"
 signature-cards = [
@@ -411,6 +447,7 @@ name = "Valdren"
 title = "Warhost Exemplar"
 id = "91D4C3B5-FD63-480B-9ED5-979109A227BB"
 image-number = "0056"
+portrait-focus = { x = 0.500, y = 0.228 }
 rendered-text = "2●, ☪: A warrior in your void gains reclaim until end of turn."
 mtg-name = "Emry, Lurker of the Loch"
 signature-cards = [
