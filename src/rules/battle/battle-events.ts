@@ -74,22 +74,23 @@ import {
  * a fresh {@link BattleFoldState}. The reducer resolves double-begin itself,
  * then delegates the immutable `init` (`BattleInit`) plus board / dreamcaller /
  * opponent-deck construction — which reads async-loaded card, dreamcaller, and
- * dreamwell data — to this provider, forwarding it `ctx.rng` (the per-event
- * `(drawIndex) => number` stream) and `ctx.timestamp` unchanged so two clients
- * folding the same event produce byte-identical battles.
+ * dreamwell data — to this provider.
  *
- * The registered provider performs the `createBattleInit` /
- * `createInitialBattleState` construction behind this seam, drawing every card
- * from the injected `rng` instead of `Math.random` and every timestamp from
- * `timestamp` instead of `new Date()`. Until a provider is registered,
- * `BEGIN_BATTLE` bounces (a recorded no-op, never a throw).
+ * The registered provider (`createBattleInitProvider`) constructs the battle
+ * deterministically from folded quest state: `createBattleInit` derives all of
+ * its randomness from a `BattleRng` stream keyed by
+ * `deriveBattleSeed(quest.seed:battleEntryKey)`, and `createInitialBattleState`
+ * is pure. That seed comes straight from the folded quest, so every client on
+ * the room builds a byte-identical battle from the same quest seed and site.
+ * Until a provider is registered, `BEGIN_BATTLE` bounces (a recorded no-op,
+ * never a throw).
  *
- * DETERMINISM INVARIANT (Task 26 must enforce): like `SiteContentProvider`,
- * this provider must be registered IDENTICALLY on every client before
- * `BEGIN_BATTLE` is enabled. If one client has a provider and another does not
- * — or they build different init from the same rng — one client APPLIES the
- * battle while the other BOUNCES, diverging their folds. Registration is a
- * global fact of the deployed build, not per-client state.
+ * DETERMINISM INVARIANT: like `SiteContentProvider`, this provider must be
+ * registered IDENTICALLY on every client before `BEGIN_BATTLE`, which the app
+ * does at bootstrap via `registerGameProviders`. If one client has a provider
+ * and another does not, one client APPLIES the battle while the other BOUNCES,
+ * diverging their folds. Registration is a global fact of the deployed build,
+ * not per-client state.
  */
 export interface BattleInitProvider {
   /**
@@ -136,7 +137,7 @@ export function getBattleInitProvider(): BattleInitProvider | null {
  *   - a battle is already in progress (`state.battle !== null`) — a pure
  *     derivable check on fold state;
  *   - the payload is malformed (missing/blank `siteId`);
- *   - no provider is registered (the Task 26 seam is not yet wired); or
+ *   - no provider is registered; or
  *   - the provider declines (non-battle site / unavailable content).
  */
 export function beginBattle(
