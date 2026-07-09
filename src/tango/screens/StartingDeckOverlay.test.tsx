@@ -191,9 +191,13 @@ describe("StartingDeckOverlay", () => {
       <StartingDeckOverlay isOpen view={makeView()} onClose={vi.fn()} />,
     );
 
+    const dialog = container.querySelector<HTMLElement>('[role="dialog"]');
     const panel = panelOf(container);
     expect(panel).not.toBeNull();
-    // Full-bleed: the panel fills the overlay rather than being capped.
+    // The dynamic viewport and its child wrapper are both edge-to-edge.
+    expect(dialog?.style.inset).toBe("0px");
+    expect(dialog?.style.width).toBe("100dvw");
+    expect(dialog?.style.height).toBe("100dvh");
     expect(panel?.style.width).toBe("100%");
     expect(panel?.style.height).toBe("100%");
     expect(panel?.style.maxWidth).toBe("");
@@ -203,6 +207,8 @@ describe("StartingDeckOverlay", () => {
     expect(gallery?.style.borderRadius).toBe("0px");
     expect(gallery?.style.background).toBe("var(--scrim-gallery)");
     expect(gallery?.getAttribute("style")).not.toContain("backdrop-filter");
+    expect(gallery?.style.borderStyle).toBe("none");
+    expect(gallery?.style.boxShadow).toBe("none");
     // The body scrolls internally.
     const scroll = container.querySelector("header")
       ?.nextElementSibling as HTMLElement | null;

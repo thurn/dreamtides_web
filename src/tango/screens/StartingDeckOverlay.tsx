@@ -99,6 +99,8 @@ export function StartingDeckOverlay({
           style={{
             position: "fixed",
             inset: 0,
+            width: isDesktop ? undefined : "100dvw",
+            height: isDesktop ? undefined : "100dvh",
             zIndex: 60,
             display: "flex",
             alignItems: "center",

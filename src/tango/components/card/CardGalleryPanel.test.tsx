@@ -180,6 +180,8 @@ describe("CardGalleryPanel", () => {
     expect(
       container.querySelector("section")?.getAttribute("style"),
     ).not.toContain("backdrop-filter");
+    expect(container.querySelector("section")?.style.borderStyle).toBe("none");
+    expect(container.querySelector("section")?.style.boxShadow).toBe("none");
     expect(container.querySelector("header")?.style.padding).toBe(
       "var(--space-5)",
     );
