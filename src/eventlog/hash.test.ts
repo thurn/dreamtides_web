@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { hashState } from "./hash";
+import { assertJsonSafe, hashState } from "./hash";
 
 describe("hashState", () => {
   it("is insensitive to top-level key order", () => {
@@ -54,5 +54,51 @@ describe("hashState", () => {
   it("is deterministic across repeated calls", () => {
     const value = { a: 1, b: [1, 2, { c: 3 }] };
     expect(hashState(value)).toBe(hashState(value));
+  });
+
+  it("hash equals hash after a JSON encode/decode round-trip for a state with an undefined-valued key", () => {
+    // `JSON.stringify` drops the `b: undefined` entry; the canonical hash mirrors
+    // that, so the live state and its decoded snapshot hash identically. This is
+    // the invariant that prevents a false fold_divergence after compaction.
+    const live = { a: 1, b: undefined, c: 3 };
+    const roundTripped = JSON.parse(JSON.stringify(live)) as Record<string, unknown>;
+    expect(hashState(live)).toBe(hashState(roundTripped));
+    // And it collapses to the same hash as the object without the key at all.
+    expect(hashState(live)).toBe(hashState({ a: 1, c: 3 }));
+  });
+
+  it("emits null for an undefined/function array slot, matching JSON.stringify", () => {
+    const withUndefined = { items: [1, undefined, 3] };
+    const withNull = { items: [1, null, 3] };
+    expect(hashState(withUndefined)).toBe(hashState(withNull));
+  });
+});
+
+describe("assertJsonSafe", () => {
+  it("passes a fully JSON-safe value", () => {
+    expect(() =>
+      assertJsonSafe({ a: 1, b: [true, "x", null, { c: 2 }] }, "state"),
+    ).not.toThrow();
+  });
+
+  it("names the dotted path of an undefined value", () => {
+    expect(() => assertJsonSafe({ a: { b: undefined } }, "state")).toThrow(
+      /state\.a\.b holds undefined/,
+    );
+  });
+
+  it("names the path of a NaN and an Infinity", () => {
+    expect(() => assertJsonSafe({ score: NaN }, "state")).toThrow(
+      /state\.score holds NaN/,
+    );
+    expect(() => assertJsonSafe({ n: Infinity }, "state")).toThrow(
+      /state\.n holds a non-finite number/,
+    );
+  });
+
+  it("names the index of an offending array element and rejects functions", () => {
+    expect(() => assertJsonSafe({ xs: [1, () => 0] }, "state")).toThrow(
+      /state\.xs\[1\] holds a function/,
+    );
   });
 });

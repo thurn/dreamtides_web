@@ -14,7 +14,18 @@
 // handling and safety rails".
 
 import { type AppliedEntry, type FoldError, foldEvents } from "./fold";
+import { assertJsonSafe } from "./hash";
 import type { EngineConfig, EventOutcome, GameEvent, Genesis, LogNode } from "./types";
+
+/**
+ * Build-time dev flag mirroring `fold.ts`'s `ENV_DEV`. In dev the client runs a
+ * JSON-safety walk over the folded state after each applied event so a smuggled
+ * `undefined`/function/`NaN` is caught at its source (the reducer output) rather
+ * than surfacing later as a false divergence or a structurally different
+ * snapshot. Never gates game flow — a production build skips the walk entirely.
+ */
+const CLIENT_DEV_MODE: boolean =
+  typeof import.meta !== "undefined" && Boolean(import.meta.env?.DEV);
 
 /** The IO surface the client folds against. Fakeable in tests; Firebase-backed in prod. */
 export interface LogClientIo {
@@ -152,6 +163,11 @@ export function createLogClient<S>(
       const outcome = result.outcomes[0];
       if (outcome.outcome === "applied") {
         appliedBySeq.set(seq, { actor: event.actor, type: event.type });
+        if (CLIENT_DEV_MODE) {
+          // Catch a reducer that smuggled undefined/function/NaN into the fold at
+          // its source — before it can hash-diverge or corrupt a snapshot.
+          assertJsonSafe(confirmedState, `confirmedState@seq${seq}`);
+        }
       }
 
       if (seq > lastEmittedSeq) {
