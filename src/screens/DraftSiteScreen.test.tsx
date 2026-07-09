@@ -129,6 +129,7 @@ function makeMutations(): QuestMutations {
     acceptDreamMerchantOffer: vi.fn(),
     declineDreamMerchant: vi.fn(),
     pickDraftCard: vi.fn(),
+    enterDraftSite: vi.fn(),
     addCard: vi.fn(),
     addBaneCard: vi.fn(),
     removeCard: vi.fn(),
@@ -1116,23 +1117,22 @@ describe("DraftSiteScreen", () => {
   });
 
   // Regression for the visible "fade out / fade in" flicker on draft entry.
-  // Before the fix, the screen mounted with `state.draftState.activeSiteId`
-  // still pointing somewhere else (or null), painted an empty grid, then
-  // re-rendered once the RTDB write round-tripped — AnimatePresence saw the
-  // grid key change and animated the empty pack out / new pack in.
+  // Entering a site is a single `ENTER_DRAFT_SITE` intent (folded through the
+  // reducer, whose optimistic echo is what paints the first offer instantly
+  // in the live app — this unit test drives the mocked `useQuest()` fold
+  // directly, so it observes the intent firing and the subsequent display
+  // update as two separate steps).
   //
-  // Pin the invariant directly: when entered with un-entered draft state,
-  // the first render already shows the freshly-bootstrapped offer cards,
-  // and the subsequent live-state catch-up does not change which cards
-  // are on screen.
+  // Pin the invariant: mounting against an un-entered draft state fires
+  // `enterDraftSite` exactly once and shows no offer yet; once the confirmed
+  // fold arrives as the live `state.draftState`, the offer appears and the
+  // effect does not re-fire.
   it(
-    "shows the bootstrapped offer on first render and does not swap offers"
-      + " when the live draft state catches up",
+    "fires enterDraftSite once on entry and shows the offer once the fold"
+      + " catches up",
     () => {
       const mutations = makeMutations();
       const cardDatabase = makeCardDatabase();
-      // Draft pool seeded with cards 101..104 only — bootstrap must select
-      // exactly these four numbers in some order.
       const unEnteredDraftState: DraftState = {
         mode: "pool",
         draftPoolCopiesByCard: {
@@ -1160,8 +1160,10 @@ describe("DraftSiteScreen", () => {
 
       const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
 
-      // First render must already display the four offer cards. Before the
-      // fix this saw zero offer cards (the empty / fading-out grid).
+      // The entry effect fires the intent exactly once for this site.
+      expect(mutations.enterDraftSite).toHaveBeenCalledTimes(1);
+      expect(mutations.enterDraftSite).toHaveBeenCalledWith("site-1");
+
       const expectedNames = [
         "Arc Runner",
         "Alpha Warden",
@@ -1172,58 +1174,36 @@ describe("DraftSiteScreen", () => {
         "[data-testid='draft-site-screen']",
       );
       expect(draftRoot).not.toBeNull();
-      const text = draftRoot?.textContent ?? "";
+
+      // Nothing is offered yet — the fold has not caught up to this site.
+      const textBefore = draftRoot?.textContent ?? "";
       for (const name of expectedNames) {
-        expect(text).toContain(name);
+        expect(textBefore).not.toContain(name);
       }
 
-      // The bootstrap effect must have written the new draft state once.
-      expect(mutations.setDraftState).toHaveBeenCalledTimes(1);
-      const writtenDraftState = (
-        mutations.setDraftState as ReturnType<typeof vi.fn>
-      ).mock.calls[0]?.[0] as DraftState;
-      expect(writtenDraftState.activeSiteId).toBe("site-1");
-      expect([...writtenDraftState.currentOffer].sort()).toEqual([
-        101, 102, 103, 104,
-      ]);
-
-      // Capture the offer-grid wrapper (motion.div with key `offer-...`)
-      // identity before catch-up — if AnimatePresence remounts on the live
-      // snapshot, the DOM node identity changes and so does the textContent
-      // ordering.
-      const offerGridBefore = draftRoot?.querySelector(".order-2");
-      expect(offerGridBefore).not.toBeNull();
-      const offerTextBefore = offerGridBefore?.textContent ?? "";
-
-      // Simulate the RTDB round-trip: the locally-bootstrapped draft state
-      // arrives back as the live `state.draftState`.
+      // Simulate the confirmed fold arriving as the live `state.draftState`.
+      // Rendering a freshly-created element (rather than reusing the stored
+      // one) forces React to reconcile against the updated mocked state.
+      currentState = {
+        ...currentState,
+        draftState: {
+          ...unEnteredDraftState,
+          activeSiteId: "site-1",
+          currentOffer: [101, 102, 103, 104],
+        },
+      };
       act(() => {
-        currentState = {
-          ...currentState,
-          draftState: writtenDraftState,
-        };
-        rerenderCurrent();
+        root.render(<DraftSiteScreen siteId="site-1" />);
       });
 
-      const offerGridAfter = draftRoot?.querySelector(".order-2");
-      expect(offerGridAfter).not.toBeNull();
-
-      // Offer must be unchanged — the same four cards in the same display
-      // order. Any swap here would manifest in the browser as the original
-      // fade-out / fade-in flicker.
-      expect(offerGridAfter?.textContent).toBe(offerTextBefore);
+      const textAfter = draftRoot?.textContent ?? "";
       for (const name of expectedNames) {
-        expect(offerGridAfter?.textContent ?? "").toContain(name);
+        expect(textAfter).toContain(name);
       }
 
-      // Same DOM node identity: React preserves the motion.div across the
-      // catch-up because the AnimatePresence `key` (derived from the offer
-      // numbers) does not change. A different node here would mean the
-      // grid was unmounted and remounted — i.e. the original flicker.
-      expect(offerGridAfter).toBe(offerGridBefore);
-
-      // No follow-up bootstrap write once the live state matches.
-      expect(mutations.setDraftState).toHaveBeenCalledTimes(1);
+      // The effect does not re-fire once the displayed state targets this
+      // site — a second call here would mean a stray re-roll of the offer.
+      expect(mutations.enterDraftSite).toHaveBeenCalledTimes(1);
 
       act(() => {
         root.unmount();

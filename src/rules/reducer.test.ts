@@ -414,9 +414,10 @@ describe("ADJUST_ESSENCE domain case", () => {
 // ---------------------------------------------------------------------------
 
 describe("isCasExempt (rule 1)", () => {
-  it("exempts SET_CARD_NOTE and OPEN_SITE", () => {
+  it("exempts SET_CARD_NOTE, OPEN_SITE, and ENTER_DRAFT_SITE", () => {
     expect(isCasExempt("SET_CARD_NOTE")).toBe(true);
     expect(isCasExempt("OPEN_SITE")).toBe(true);
+    expect(isCasExempt("ENTER_DRAFT_SITE")).toBe(true);
   });
 
   it("does not exempt ordinary intents", () => {
@@ -524,6 +525,15 @@ describe("isInterveningWindowClear (rule 3)", () => {
     expect(
       isInterveningWindowClear(
         [{ seq: 1, actor: "bob", type: "OPEN_SITE" }],
+        "alice",
+      ),
+    ).toBe(false);
+  });
+
+  it("still bounces when a partner ENTER_DRAFT_SITE intervened (exempt from bouncing, not from being intervening)", () => {
+    expect(
+      isInterveningWindowClear(
+        [{ seq: 1, actor: "bob", type: "ENTER_DRAFT_SITE" }],
         "alice",
       ),
     ).toBe(false);

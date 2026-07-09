@@ -21,12 +21,7 @@ import {
   countRemainingCards,
   SITE_PICKS,
 } from "../draft/draft-engine";
-import {
-  bootstrapLocalDraftState,
-  enterDraftSiteState,
-  resolveDraftConfig,
-} from "../data/draft-site-bootstrap";
-import type { DraftConfig, DraftState } from "../types/draft";
+import type { DraftState } from "../types/draft";
 import type { CardData } from "../types/cards";
 import { cardImageUrl } from "../data/card-database";
 import { CARD_ASPECT_RATIO } from "../tango/components/card/card-aspect";
@@ -389,66 +384,22 @@ function DeckSidebarToggle({
 
 /** The draft site screen: 4-card pack display, card picking, and summary. */
 export function DraftSiteScreen({ siteId }: { siteId: string }) {
-  const { state, mutations, cardDatabase, questContent } = useQuest();
-  // Affiliation reweighting for the dreamscape this draft site sits in. A neutral
-  // dreamscape yields `DEFAULT_DRAFT_CONFIG` (no bias); an affiliated one pulls the
-  // offers toward its signature set without removing any card.
-  const draftConfig = useMemo<DraftConfig>(() => {
-    const nodeId = state.currentDreamscape;
-    const node = nodeId === null ? null : state.atlas.nodes[nodeId] ?? null;
-    return resolveDraftConfig(
-      node,
-      questContent.dreamscapes,
-      questContent.affiliations,
-      questContent.poolContext?.poolData,
-      cardDatabase,
-    );
-  }, [
-    state.currentDreamscape,
-    state.atlas,
-    questContent.dreamscapes,
-    questContent.affiliations,
-    questContent.poolContext,
-    cardDatabase,
-  ]);
+  const { state, mutations, cardDatabase } = useQuest();
   const [pickPhase, setPickPhase] = useState<PickPhase>("idle");
   const [pickedCardNumber, setPickedCardNumber] = useState<number | null>(null);
   const [overlayCard, setOverlayCard] = useState<CardData | null>(null);
   const [showDeckSidebar, setShowDeckSidebar] = useState(true);
   const [highlightedDeckEntryId, setHighlightedDeckEntryId] = useState<string | null>(null);
   const [flyingCard, setFlyingCard] = useState<FlyingCardAnimation | null>(null);
-  // Locally-bootstrapped draft state for this site. Populated lazily on the
-  // first render when the live `state.draftState` has not yet caught up to
-  // this site, so the screen has a real offer to show before the RTDB write
-  // round-trips. Cleared once the live state matches.
-  const [localDraftState, setLocalDraftState] = useState<DraftState | null>(
-    () =>
-      bootstrapLocalDraftState(
-        state.draftState,
-        siteId,
-        cardDatabase,
-        state.deck,
-        questContent.fitModel,
-        draftConfig,
-      ),
-  );
-  const draftStateRef = useRef<DraftState | null>(null);
-  // Latches the local draft state we have already pushed to RTDB so the
-  // bootstrap effect does not re-write the same value on every snapshot
-  // received before the live state catches up.
-  const writtenLocalDraftStateRef = useRef<DraftState | null>(null);
   const pendingPickedCardNumberRef = useRef<number | null>(null);
   const offerCardRefs = useRef<Record<number, HTMLDivElement | null>>({});
   const deckFlightTargetRef = useRef<HTMLDivElement | null>(null);
   const previousDeckEntryIdsRef = useRef(state.deck.map((entry) => entry.entryId));
 
-  // Prefer the live state when it has caught up to this site (so picks /
-  // resumed visits reflect the source of truth); otherwise fall back to the
-  // local bootstrap so the first render shows the real offer.
-  const liveTargetsThisSite = state.draftState?.activeSiteId === siteId;
-  const effectiveDraftState: DraftState | null = liveTargetsThisSite
-    ? state.draftState
-    : (localDraftState ?? state.draftState);
+  // The displayed draft state is the live fold's — the reducer's optimistic
+  // echo paints the first offer immediately on entry (see the entry effect
+  // below), so there is no local bootstrap slice to fall back to.
+  const effectiveDraftState: DraftState | null = state.draftState;
 
   // Multiplayer snapshots create a fresh state.draftState reference on every
   // RTDB update (the normalizer in room-service rebuilds objects via spread).
@@ -510,69 +461,14 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
     [currentOfferCards, isComplete, state.resolvedPackage],
   );
 
-  // Initialize or resume draft state for this site. The body only writes when
-  // we need to enter a different site — content-stable derivations above
-  // handle the steady-state display, so this effect must not call setState
-  // on the live draft slice. It DOES set `localDraftState` so the first
-  // paint already shows the new offer (the synchronous useState initializer
-  // covers the very first render; this effect covers later siteId / draft
-  // state changes).
+  // Enter this site once per visit: fire the intent whenever the displayed
+  // draft state has not (yet) advanced to `siteId`. Idempotent on the
+  // reducer side (ENTER_DRAFT_SITE), so a re-render before the fold catches
+  // up simply re-fires a no-op intent rather than re-rolling the offer.
   useEffect(() => {
-    if (cardDatabase.size === 0) return;
-    if (state.draftState === null) return;
-
-    if (state.draftState.activeSiteId === siteId) {
-      draftStateRef.current = state.draftState;
-      // Live state has caught up; drop the local override so the live
-      // snapshot is the single source of truth for subsequent picks. Also
-      // release the write latch so a future re-entry can issue its own
-      // bootstrap write.
-      if (localDraftState !== null) {
-        setLocalDraftState(null);
-      }
-      writtenLocalDraftStateRef.current = null;
-      return;
-    }
-
-    // The local state initializer already bootstrapped and held a reference
-    // for this exact (siteId, liveDraftState). Avoid re-bootstrapping on
-    // every render — a fresh enterDraftSite() call rolls a new offer via
-    // Math.random() and would itself create a flicker. Issue the RTDB
-    // bootstrap write exactly once per local-state value.
-    if (
-      localDraftState !== null
-      && localDraftState.activeSiteId === siteId
-    ) {
-      draftStateRef.current = localDraftState;
-      if (writtenLocalDraftStateRef.current !== localDraftState) {
-        writtenLocalDraftStateRef.current = localDraftState;
-        mutations.setDraftState(localDraftState, "draft_site_enter");
-      }
-      return;
-    }
-
-    const cloned = enterDraftSiteState(
-      state.draftState,
-      siteId,
-      cardDatabase,
-      state.deck,
-      questContent.fitModel,
-      draftConfig,
-    );
-    draftStateRef.current = cloned;
-    setLocalDraftState(cloned);
-    writtenLocalDraftStateRef.current = cloned;
-    mutations.setDraftState(cloned, "draft_site_enter");
-  }, [
-    siteId,
-    state.draftState,
-    state.deck,
-    cardDatabase,
-    mutations,
-    localDraftState,
-    questContent.fitModel,
-    draftConfig,
-  ]);
+    if (state.draftState?.activeSiteId === siteId) return;
+    mutations.enterDraftSite(siteId);
+  }, [siteId, state.draftState?.activeSiteId, mutations]);
 
   useEffect(() => {
     mutations.setCardSourceDebug(cardSourceDebugState, "draft_site_cards_shown");
@@ -650,8 +546,7 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
   const handleCardPick = useCallback(
     (cardNumber: number) => {
       if (pickPhase !== "idle") return;
-      const ds = draftStateRef.current;
-      if (!ds) return;
+      if (state.draftState === null) return;
       const sourceElement = offerCardRefs.current[cardNumber];
       const targetElement = deckFlightTargetRef.current;
       const sourceRect =
@@ -694,7 +589,7 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
         }, NEXT_PACK_DELAY);
       }, 300);
     },
-    [pickPhase, cardDatabase, mutations, siteId],
+    [pickPhase, cardDatabase, mutations, siteId, state.draftState],
   );
 
   const handleCardInspect = useCallback(
@@ -744,7 +639,7 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
     );
   }
 
-  if (state.draftState === null && draftStateRef.current === null) {
+  if (state.draftState === null) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 px-4">
         <p className="text-lg opacity-60">

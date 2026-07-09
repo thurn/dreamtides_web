@@ -1,13 +1,17 @@
 // Shared draft-site entry logic: resolving the per-site draft config (the
-// dreamscape's affiliation reweighting), rolling the offer for a newly entered
-// site, and the synchronous local bootstrap that lets a screen paint the real
-// first offer before the RTDB write round-trips. Both the legacy draft screen
-// and the Tango draft adapter consume these, so the single-source-of-truth for
-// "how a draft site is entered" lives here rather than duplicated per screen.
+// dreamscape's affiliation reweighting) and rolling the offer for a newly
+// entered site. The reducer's `ENTER_DRAFT_SITE` case (`src/rules/quest/draft.ts`)
+// is the source of truth for a player's draft-site entry — it calls the
+// underlying `enterDraftSite` engine function directly with an
+// `ctx.rng`-backed stream. `enterDraftSiteState` here is this module's preview
+// wrapper: it clones a `DraftState`, rolls the same engine call with an
+// injectable `rng` (defaulting to `Math.random`), and returns the clone
+// without mutating its input — for any caller that wants to preview an offer
+// outside the event log.
 //
-// `enterDraftSite` rolls a fresh offer via `Math.random`, so these functions
-// are minting operations, not pure view-model mapping — they belong on the
-// impure (data/adapter) side, never in a screen's pure view-model builder.
+// `enterDraftSite` mints a fresh offer, so these functions are minting
+// operations, not pure view-model mapping — they belong on the impure
+// (data/adapter) side, never in a screen's pure view-model builder.
 
 import {
   countRemainingCards,
@@ -75,6 +79,12 @@ export function offerDepsForDraftState(
  * Clone `liveDraftState` and advance it into `siteId`, rolling that site's
  * first offer. The returned state is a fresh object safe to hand to
  * `setDraftState`; the input is never mutated.
+ *
+ * `rng` defaults to `Math.random` for any preview caller that has no
+ * deterministic source; the reducer's `ENTER_DRAFT_SITE` case (the live
+ * player path — see `src/rules/quest/draft.ts`) supplies an `ctx.rng`-backed
+ * stream instead, so two clients folding the same event roll byte-identical
+ * offers.
  */
 export function enterDraftSiteState(
   liveDraftState: DraftState,
@@ -83,13 +93,11 @@ export function enterDraftSiteState(
   deck: readonly DeckEntry[],
   fitModel: FitModel | undefined,
   draftConfig: DraftConfig = DEFAULT_DRAFT_CONFIG,
+  rng: () => number = Math.random,
 ): DraftState {
   const cloned = JSON.parse(JSON.stringify(liveDraftState)) as DraftState;
   const offerDeps = offerDepsForDraftState(cloned, deck, fitModel, cardDatabase);
-  // Explicit randomness source: this local bootstrap paints a preview offer
-  // outside the pure quest reducer, so it rolls with `Math.random` (the offer
-  // that persists comes from the reducer's `ctx.rng`-driven PICK_DRAFT_CARD).
-  enterDraftSite(cloned, siteId, cardDatabase, draftConfig, offerDeps, Math.random);
+  enterDraftSite(cloned, siteId, cardDatabase, draftConfig, offerDeps, rng);
   return cloned;
 }
 
@@ -130,32 +138,4 @@ export function readDraftSiteProgress(
     && offerKey === ""
     && (sitePicksCompleted > 0 || remainingTotal < 4);
   return { isActive, offerCardNumbers, offerKey, sitePicksCompleted, isComplete };
-}
-
-/**
- * A locally-bootstrapped draft state for `siteId` when the live `draftState`
- * has not yet advanced to it, so the screen paints the real first offer on the
- * initial render rather than an empty offer that flickers once the RTDB write
- * round-trips. Returns null when the live state already targets this site (no
- * override needed) or the inputs are not ready (empty card database / no pool).
- */
-export function bootstrapLocalDraftState(
-  liveDraftState: DraftState | null,
-  siteId: string,
-  cardDatabase: Map<number, CardData>,
-  deck: readonly DeckEntry[],
-  fitModel: FitModel | undefined,
-  draftConfig: DraftConfig = DEFAULT_DRAFT_CONFIG,
-): DraftState | null {
-  if (cardDatabase.size === 0) return null;
-  if (liveDraftState === null) return null;
-  if (liveDraftState.activeSiteId === siteId) return null;
-  return enterDraftSiteState(
-    liveDraftState,
-    siteId,
-    cardDatabase,
-    deck,
-    fitModel,
-    draftConfig,
-  );
 }

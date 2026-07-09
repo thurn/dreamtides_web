@@ -91,6 +91,7 @@ export interface CoopActions {
   // --- draft ---
   setDraftState: (draftState: unknown) => Promise<number>;
   pickDraftCard: (packIndex: number, cardId: string) => Promise<number>;
+  enterDraftSite: (siteId: string) => Promise<number>;
 
   // --- sites ---
   openSite: (siteId: string) => Promise<number>;
@@ -218,6 +219,7 @@ export function makeActions(append: AppendFn): CoopActions {
     // --- draft ---
     setDraftState: (draftState) => emit("SET_DRAFT_STATE", { draftState }),
     pickDraftCard: (packIndex, cardId) => emit("PICK_DRAFT_CARD", { packIndex, cardId }),
+    enterDraftSite: (siteId) => emit("ENTER_DRAFT_SITE", { siteId }),
 
     // --- sites ---
     openSite: (siteId) => emit("OPEN_SITE", { siteId }),

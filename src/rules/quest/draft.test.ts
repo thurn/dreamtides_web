@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
 import type { PoolDraftState } from "../../types/draft";
@@ -6,6 +6,8 @@ import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { drawAndSpendUniqueCards } from "../../draft/draft-engine";
 import { makeRng } from "../../draft/pool/rng";
+import { LayerName } from "../../types/layer-name";
+import type { DreamscapeNode, QuestState, SiteState } from "../../types/quest";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent, type ReduceResult } from "../reducer";
 import {
@@ -105,6 +107,62 @@ function poolDraftState(overrides: Partial<PoolDraftState> = {}): PoolDraftState
 function stateWithDraft(draftState: PoolDraftState): FoldState {
   const base = genesisFoldState(GENESIS);
   return { ...base, quest: { ...base.quest, draftState } };
+}
+
+const NODE_ID = "node-1";
+
+function makeSite(id: string, type: SiteState["type"]): SiteState {
+  return { id, type, isEnhanced: false, isVisited: false, data: {} };
+}
+
+function makeNode(sites: SiteState[]): DreamscapeNode {
+  return {
+    id: NODE_ID,
+    layer: LayerName.Two,
+    indexInLayer: 0,
+    dreamscapeId: "d1",
+    biomeName: "Biome",
+    biomeColor: "#fff",
+    sites,
+    position: { x: 0, y: 0 },
+    state: "available",
+    enhancedSiteType: null,
+    forwardIds: [],
+    backwardIds: [],
+    knownDreamsignId: null,
+  };
+}
+
+/**
+ * `stateWithDraft` plus an atlas node holding `"site-a"` (a `Draft` site
+ * matching `poolDraftState()`'s `activeSiteId`), `"site-b"` (a second `Draft`
+ * site not yet active), and `"site-battle"` (a non-Draft site) — the fixture
+ * `ENTER_DRAFT_SITE` needs to validate `findSite`/site-type bouncing.
+ */
+function stateWithDraftSites(
+  draftState: PoolDraftState,
+  overrides: Partial<QuestState> = {},
+): FoldState {
+  const base = stateWithDraft(draftState);
+  return {
+    ...base,
+    quest: {
+      ...base.quest,
+      atlas: {
+        ...base.quest.atlas,
+        nodes: {
+          [NODE_ID]: makeNode([
+            makeSite("site-a", "Draft"),
+            makeSite("site-b", "Draft"),
+            makeSite("site-battle", "Battle"),
+          ]),
+        },
+        startingNodeId: NODE_ID,
+        currentNodeId: NODE_ID,
+      },
+      ...overrides,
+    },
+  };
 }
 
 const CARD_DB = new Map<number, CardData>(
@@ -241,6 +299,116 @@ describe("PICK_DRAFT_CARD", () => {
     expect(a.outcome).toBe("applied");
     expect(b.outcome).toBe("applied");
     expect(a.state).toEqual(b.state);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// ENTER_DRAFT_SITE
+// ---------------------------------------------------------------------------
+
+describe("ENTER_DRAFT_SITE", () => {
+  it("activates the site and reveals a non-empty offer from ctx.rng", () => {
+    registerDraftContentProvider(provider());
+    const draftState = poolDraftState({
+      activeSiteId: null,
+      currentOffer: [],
+      siteShownCardNumbers: [],
+    });
+    const start = stateWithDraftSites(draftState);
+
+    const result = reduce(start, "ENTER_DRAFT_SITE", { siteId: "site-a" }, ctx({ rng: makeRng(3) }));
+
+    expect(result.outcome).toBe("applied");
+    const next = result.state.quest.draftState as PoolDraftState;
+    expect(next.activeSiteId).toBe("site-a");
+    expect(next.currentOffer.length).toBeGreaterThan(0);
+  });
+
+  it("is an applied no-change with zero rng draws when the site is already active", () => {
+    registerDraftContentProvider(provider());
+    const start = stateWithDraftSites(poolDraftState());
+    const rngSpy = vi.fn(() => 0);
+
+    const result = reduce(start, "ENTER_DRAFT_SITE", { siteId: "site-a" }, ctx({ rng: rngSpy }));
+
+    expect(result.outcome).toBe("applied");
+    expect(result.state.quest).toBe(start.quest);
+    expect(rngSpy).not.toHaveBeenCalled();
+  });
+
+  it("two clients entering simultaneously converge: the second entry is a no-change applied, final offers identical to folding the first alone", () => {
+    registerDraftContentProvider(provider());
+    const draftState = poolDraftState({
+      activeSiteId: null,
+      currentOffer: [],
+      siteShownCardNumbers: [],
+    });
+    const start = stateWithDraftSites(draftState);
+
+    const soloResult = reduce(
+      start,
+      "ENTER_DRAFT_SITE",
+      { siteId: "site-a" },
+      ctx({ seq: 1, rng: makeRng(1) }),
+    );
+    expect(soloResult.outcome).toBe("applied");
+
+    const firstResult = reduce(
+      start,
+      "ENTER_DRAFT_SITE",
+      { siteId: "site-a" },
+      ctx({ seq: 1, rng: makeRng(1) }),
+    );
+    const secondResult = reduce(
+      firstResult.state,
+      "ENTER_DRAFT_SITE",
+      { siteId: "site-a" },
+      ctx({ seq: 2, rng: makeRng(2) }),
+    );
+
+    expect(firstResult.outcome).toBe("applied");
+    expect(secondResult.outcome).toBe("applied");
+    expect(secondResult.state.quest).toBe(firstResult.state.quest);
+    expect(secondResult.state).toEqual(soloResult.state);
+  });
+
+  it("bounces without a provider", () => {
+    const start = stateWithDraftSites(poolDraftState({ activeSiteId: null }));
+    const result = reduce(start, "ENTER_DRAFT_SITE", { siteId: "site-b" });
+    expect(result.outcome).toBe("bounced");
+    expect(result.state).toEqual(start);
+  });
+
+  it("bounces with a null draftState", () => {
+    registerDraftContentProvider(provider());
+    const start = genesisFoldState(GENESIS);
+    const result = reduce(start, "ENTER_DRAFT_SITE", { siteId: "site-a" });
+    expect(result.outcome).toBe("bounced");
+    expect(result.state).toEqual(start);
+  });
+
+  it("bounces for a non-draft site", () => {
+    registerDraftContentProvider(provider());
+    const start = stateWithDraftSites(poolDraftState({ activeSiteId: null }));
+    const result = reduce(start, "ENTER_DRAFT_SITE", { siteId: "site-battle" });
+    expect(result.outcome).toBe("bounced");
+    expect(result.state).toEqual(start);
+  });
+
+  it("bounces for an unknown site id", () => {
+    registerDraftContentProvider(provider());
+    const start = stateWithDraftSites(poolDraftState({ activeSiteId: null }));
+    const result = reduce(start, "ENTER_DRAFT_SITE", { siteId: "site-nowhere" });
+    expect(result.outcome).toBe("bounced");
+    expect(result.state).toEqual(start);
+  });
+
+  it("bounces a malformed payload", () => {
+    registerDraftContentProvider(provider());
+    const start = stateWithDraftSites(poolDraftState({ activeSiteId: null }));
+    const result = reduce(start, "ENTER_DRAFT_SITE", {});
+    expect(result.outcome).toBe("bounced");
+    expect(result.state).toEqual(start);
   });
 });
 

@@ -1,21 +1,17 @@
 // Adapter bridging live quest state to the pure Tango draft screen
 // (`src/tango/screens/DraftScreen`). Wiring only: it owns `useQuest()`, the
-// draft-state bootstrap for the site (minting and persisting the first offer),
-// the pick mutation, and returning to the dreamscape once the pack is
-// exhausted. Domain mapping lives in the builder (`draft-view-model.ts`); the
-// draft-entry logic lives in `data/draft-site-bootstrap` so the legacy screen
-// and this adapter enter a site the same way.
+// draft-site entry intent, the pick mutation, and returning to the dreamscape
+// once the pack is exhausted. Domain mapping lives in the builder
+// (`draft-view-model.ts`); entering a site is a single `ENTER_DRAFT_SITE`
+// intent (`src/coop/actions.ts`) folded by the reducer
+// (`src/rules/quest/draft.ts`) — the reducer's optimistic echo paints the
+// first offer immediately, so the adapter itself carries no local draft-state
+// bootstrap.
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useQuest } from "../../state/quest-context";
 import { logEvent } from "../../logging";
-import {
-  bootstrapLocalDraftState,
-  enterDraftSiteState,
-  readDraftSiteProgress,
-  resolveDraftConfig,
-} from "../../data/draft-site-bootstrap";
-import type { DraftState } from "../../types/draft";
+import { readDraftSiteProgress } from "../../data/draft-site-bootstrap";
 import { buildDraftView } from "./draft-view-model";
 import { DraftScreen } from "../../tango/screens/DraftScreen";
 
@@ -28,76 +24,19 @@ export function DraftSiteScreenAdapter({
   siteId: string;
   onViewDeck?: () => void;
 }) {
-  const { state, mutations, cardDatabase, questContent } = useQuest();
-
-  // A neutral dreamscape yields no bias; an affiliated one pulls the offers
-  // toward its signature set.
-  const draftConfig = useMemo(() => {
-    const nodeId = state.currentDreamscape;
-    const node = nodeId === null ? null : state.atlas.nodes[nodeId] ?? null;
-    return resolveDraftConfig(
-      node,
-      questContent.dreamscapes,
-      questContent.affiliations,
-      questContent.poolContext?.poolData,
-      cardDatabase,
-    );
-  }, [state.currentDreamscape, state.atlas, questContent.dreamscapes, questContent.affiliations, questContent.poolContext, cardDatabase]);
-
-  // Locally-bootstrapped draft state so the first paint shows the real offer
-  // before the RTDB write round-trips; cleared once the live state catches up.
-  const [localDraftState, setLocalDraftState] = useState<DraftState | null>(() =>
-    bootstrapLocalDraftState(
-      state.draftState,
-      siteId,
-      cardDatabase,
-      state.deck,
-      questContent.fitModel,
-      draftConfig,
-    ),
-  );
-  const draftStateRef = useRef<DraftState | null>(null);
-  const writtenLocalDraftStateRef = useRef<DraftState | null>(null);
+  const { state, mutations, cardDatabase } = useQuest();
   const completedRef = useRef(false);
 
-  // Enter or resume the draft for this site, issuing the RTDB bootstrap write
-  // exactly once per local-state value (a fresh entry rolls a random offer).
+  // Enter this site once per visit: fire the intent whenever the displayed
+  // draft state has not (yet) advanced to `siteId`. Idempotent on the
+  // reducer side (ENTER_DRAFT_SITE), so a re-render before the fold catches
+  // up simply re-fires a no-op intent rather than re-rolling the offer.
   useEffect(() => {
-    if (cardDatabase.size === 0 || state.draftState === null) return;
-    if (state.draftState.activeSiteId === siteId) {
-      draftStateRef.current = state.draftState;
-      if (localDraftState !== null) setLocalDraftState(null);
-      writtenLocalDraftStateRef.current = null;
-      return;
-    }
-    if (localDraftState !== null && localDraftState.activeSiteId === siteId) {
-      draftStateRef.current = localDraftState;
-      if (writtenLocalDraftStateRef.current !== localDraftState) {
-        writtenLocalDraftStateRef.current = localDraftState;
-        mutations.setDraftState(localDraftState, "draft_site_enter");
-      }
-      return;
-    }
-    const cloned = enterDraftSiteState(
-      state.draftState,
-      siteId,
-      cardDatabase,
-      state.deck,
-      questContent.fitModel,
-      draftConfig,
-    );
-    draftStateRef.current = cloned;
-    setLocalDraftState(cloned);
-    writtenLocalDraftStateRef.current = cloned;
-    mutations.setDraftState(cloned, "draft_site_enter");
-  }, [siteId, state.draftState, state.deck, cardDatabase, mutations, localDraftState, questContent.fitModel, draftConfig]);
+    if (state.draftState?.activeSiteId === siteId) return;
+    mutations.enterDraftSite(siteId);
+  }, [siteId, state.draftState?.activeSiteId, mutations]);
 
-  // Prefer the live state when it targets this site; otherwise the local bootstrap.
-  const liveTargetsThisSite = state.draftState?.activeSiteId === siteId;
-  const effectiveDraftState: DraftState | null = liveTargetsThisSite
-    ? state.draftState
-    : (localDraftState ?? state.draftState);
-  const progress = readDraftSiteProgress(effectiveDraftState, siteId);
+  const progress = readDraftSiteProgress(state.draftState, siteId);
   const node =
     state.currentDreamscape !== null
       ? state.atlas.nodes[state.currentDreamscape] ?? null
@@ -138,7 +77,7 @@ export function DraftSiteScreenAdapter({
   }, [progress.isComplete, progress.sitePicksCompleted, mutations, siteId]);
 
   if (cardDatabase.size === 0) return null;
-  if (state.draftState === null && draftStateRef.current === null) return null;
+  if (state.draftState === null) return null;
   if (progress.isComplete) return null;
 
   return <DraftScreen view={view} onPick={handlePick} onViewDeck={onViewDeck} />;

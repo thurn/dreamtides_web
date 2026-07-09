@@ -157,6 +157,7 @@ function makeMutations(): QuestMutations {
     acceptDreamMerchantOffer: vi.fn(),
     declineDreamMerchant: vi.fn(),
     pickDraftCard: vi.fn(),
+    enterDraftSite: vi.fn(),
     addCard: vi.fn(),
     addBaneCard: vi.fn(),
     removeCard: vi.fn(),

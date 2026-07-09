@@ -239,6 +239,7 @@ export function CoopQuestProvider({
         if (cardId === null) return;
         dispatch(actions.pickDraftCard(packIndex, cardId));
       },
+      enterDraftSite: (siteId) => dispatch(actions.enterDraftSite(siteId)),
 
       // ---- sites: runtime reveal collapses to OPEN_SITE ----
       ensureRewardSiteRuntime: (siteId) => dispatch(actions.openSite(siteId)),

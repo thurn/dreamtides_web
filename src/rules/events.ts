@@ -75,6 +75,7 @@ export interface EventPayloads {
   // --- draft ---
   SET_DRAFT_STATE: { draftState: unknown };
   PICK_DRAFT_CARD: { packIndex: number; cardId: string };
+  ENTER_DRAFT_SITE: { siteId: string };
 
   // --- sites ---
   OPEN_SITE: { siteId: string };
@@ -146,13 +147,16 @@ export type TypedGameEvent<T extends GameEventType = GameEventType> = {
 
 /**
  * CAS-exempt types skip CAS-policy rules 2–4 (rule 5 validation still runs).
- * `OPEN_SITE` is exempt from *being* bounced but still counts as intervening
- * for other events (it generates site offers); that asymmetry lives in the
- * reducer, not here. `SET_CARD_NOTE` carries no game-rules meaning.
+ * `OPEN_SITE` and `ENTER_DRAFT_SITE` are exempt from *being* bounced (both are
+ * idempotent site-entry intents: a concurrent double-entry must converge
+ * without a bounce toast) but still count as intervening for other events
+ * (each generates an offer); that asymmetry lives in the reducer, not here.
+ * `SET_CARD_NOTE` carries no game-rules meaning.
  */
 export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
   "SET_CARD_NOTE",
   "OPEN_SITE",
+  "ENTER_DRAFT_SITE",
 ]);
 
 /**
@@ -198,6 +202,7 @@ export const KNOWN_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
   "SET_DREAMSIGN_IS_BANE",
   "SET_DRAFT_STATE",
   "PICK_DRAFT_CARD",
+  "ENTER_DRAFT_SITE",
   "OPEN_SITE",
   "COMPLETE_DREAM_AUGURY",
   "ACCEPT_REWARD",

@@ -40,7 +40,8 @@ export interface ReduceResult {
  * Folds a single event over the room's state per the CAS policy.
  *
  * Rules 1–6 (design spec §Root fold and CAS policy):
- *   1. CAS-exempt types (`SET_CARD_NOTE`, `OPEN_SITE`) skip rules 2–4.
+ *   1. CAS-exempt types (`SET_CARD_NOTE`, `OPEN_SITE`, `ENTER_DRAFT_SITE`)
+ *      skip rules 2–4.
  *   2. A RESOLVE_PROMPT matching the open prompt skips rules 3–4.
  *   3. An unknown intervening window, or one holding an applied partner event
  *      that is not decision-neutral, bounces.
@@ -278,6 +279,8 @@ function routeDomain(
     // --- draft ---
     case "PICK_DRAFT_CARD":
       return questCase(state, draft.pickDraftCard(quest, payload, ctx));
+    case "ENTER_DRAFT_SITE":
+      return questCase(state, draft.enterDraftSite(quest, payload, ctx));
     case "SET_DRAFT_STATE":
       return questCase(state, draft.setDraftState(quest, payload));
 

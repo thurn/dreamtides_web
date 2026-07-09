@@ -17,10 +17,12 @@ import type { DraftConfig, DraftState } from "../../types/draft";
 import type { DeckEntry, QuestState } from "../../types/quest";
 import {
   DEFAULT_DRAFT_CONFIG,
+  enterDraftSite as engineEnterDraftSite,
   processPlayerPickWithoutLogging,
   type OfferDeps,
 } from "../../draft/draft-engine";
 import { mintEntryId } from "./deck";
+import { findSite } from "./sites";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (PICK_DRAFT_CARD)
@@ -181,6 +183,60 @@ export function pickDraftCard(
   );
 
   return { ...quest, deck, draftState: nextDraftState };
+}
+
+/**
+ * `ENTER_DRAFT_SITE { siteId }` — the site-entry bootstrap that reveals a
+ * draft site's first offer, mirroring `OPEN_SITE`'s idempotent pattern
+ * (`sites.ts`'s `openSite`). Bounces (never half-applies) when: the payload is
+ * malformed; no provider is wired; there is no active draft (`draftState ===
+ * null`); or `siteId` does not name a `"Draft"` site in this run's atlas.
+ *
+ * Idempotent: if the draft is already active at `siteId`, the SAME state is
+ * returned (a no-change APPLIED outcome, so two players entering the same
+ * site converge without a bounce toast) — and zero rng draws happen on this
+ * path, so a replay at a later seq never rerolls the offer. Otherwise the
+ * draft state is cloned and advanced via the engine's `enterDraftSite`,
+ * drawing the first offer from `ctx.rng` (through the same `rngStream`
+ * adapter `PICK_DRAFT_CARD` uses), so the roll is deterministic per
+ * `(seed, seq)`.
+ */
+export function enterDraftSite(
+  quest: QuestState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+): QuestState | null {
+  const siteId = asString(payload.siteId);
+  if (siteId === null) return null;
+
+  const provider = contentProvider;
+  if (provider === null) return null;
+
+  const draftState = quest.draftState;
+  if (draftState === null) return null;
+
+  const site = findSite(quest, siteId);
+  if (site === null || site.type !== "Draft") return null;
+
+  // Idempotence: an already-active site is authoritative and must not be
+  // regenerated. Return the SAME state so the fold applies a no-change event
+  // — zero rng draws on this path.
+  if (draftState.activeSiteId === siteId) return quest;
+
+  const nextDraftState = structuredClone(draftState);
+  const deckCardNumbers = quest.deck.map((entry) => entry.cardNumber);
+  const offerDeps = provider.offerDepsFor(nextDraftState, deckCardNumbers);
+  const config = provider.draftConfigFor(nextDraftState) ?? DEFAULT_DRAFT_CONFIG;
+  engineEnterDraftSite(
+    nextDraftState,
+    siteId,
+    provider.cardDatabase(),
+    config,
+    offerDeps,
+    rngStream(ctx),
+  );
+
+  return { ...quest, draftState: nextDraftState };
 }
 
 /**

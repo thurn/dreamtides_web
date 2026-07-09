@@ -119,6 +119,13 @@ export interface QuestMutations {
     archetypeId: MerchantArchetypeId | null,
   ) => void;
   pickDraftCard: (siteId: string, cardNumber: number) => void;
+  /**
+   * Enters a draft site, revealing its first offer. Idempotent (the
+   * `ENTER_DRAFT_SITE` reducer case): a re-fire while the site is already
+   * active is a no-op, so a screen may call this on every render where the
+   * displayed draft state has not yet caught up to `siteId`.
+   */
+  enterDraftSite: (siteId: string) => void;
   addCard: (cardNumber: number, source: string) => void;
   addBaneCard: (cardNumber: number, source: string) => void;
   removeCard: (entryId: string, source: string) => void;
