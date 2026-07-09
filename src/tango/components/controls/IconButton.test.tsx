@@ -116,6 +116,26 @@ describe("IconButton", () => {
     });
   });
 
+  it("uses the lighter tonal-lens treatment when placed on glass", () => {
+    const { container, root } = mount(
+      <IconButton
+        glyph={GLYPHS.close}
+        label="Close"
+        placement="onGlass"
+        onPress={() => {}}
+      />,
+    );
+
+    const button = container.querySelector("button");
+    expect(button?.dataset.glassPlacement).toBe("onGlass");
+    expect(button?.style.background).toContain("--glass-on-glass-fill");
+    expect(button?.style.backdropFilter).toBe("");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("fires `onPress` on click", () => {
     const onPress = vi.fn();
     const { container, root } = mount(

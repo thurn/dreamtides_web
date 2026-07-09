@@ -54,6 +54,19 @@ purple accent family fails that contrast case. Purple may still frame a button,
 glow an object, or color an economy mark on solid chrome, but glass text stays
 white or warm near-white.
 
+## Controls on glass
+
+GlassButton and IconButton name the surface beneath them with their strict
+`placement` prop. `onMedia` uses the complete liquid-glass recipe because the
+control itself is responsible for tinting and blurring the live scene.
+`onGlass` is a nested tonal lens: the parent surface supplies the scene tint
+and blur, while the control adds a low-alpha neutral fill, a brighter rim and
+specular edge, and a tighter shadow. This keeps the inherited scene color
+visible through the control and makes the nested object boundary clear.
+
+CardGalleryPanel owns this relationship for its header accessory and renders
+both labeled and icon accessories with `placement="onGlass"`.
+
 ## `--glass-fill-popover`: the warmer reveal tint
 
 There are two glass fills, and the difference is deliberate:

@@ -117,6 +117,21 @@ describe("GlassButton", () => {
     });
   });
 
+  it("uses the lighter tonal-lens treatment when placed on glass", () => {
+    const { container, root } = mount(
+      <GlassButton label="Cancel" placement="onGlass" onPress={() => {}} />,
+    );
+
+    const button = container.querySelector("button");
+    expect(button?.dataset.glassPlacement).toBe("onGlass");
+    expect(button?.style.background).toContain("--glass-on-glass-fill");
+    expect(button?.style.backdropFilter).toBe("");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("can render the danger glass treatment", () => {
     const { container, root } = mount(
       <GlassButton label="Cancel" variant="danger" onPress={() => {}} />,
@@ -150,6 +165,25 @@ describe("GlassButton", () => {
       root.render(<GlassButton label="Decline" onPress={() => {}} />);
     });
     expect(button?.style.border).toBe(neutralBorder);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("balances the danger treatment for placement on glass", () => {
+    const { container, root } = mount(
+      <GlassButton
+        label="Cancel"
+        variant="danger"
+        placement="onGlass"
+        onPress={() => {}}
+      />,
+    );
+
+    const button = container.querySelector("button");
+    expect(button?.style.borderColor).toBe("rgba(255, 111, 130, 0.82)");
+    expect(button?.style.background).toContain("--glass-on-glass-fill");
 
     act(() => {
       root.unmount();

@@ -7,11 +7,13 @@
 // accurate to its actual API.
 
 import { IconButton, type IconButtonSize } from "../../components/controls/IconButton";
+import type { GlassControlPlacement } from "../../primitives/control-placement";
 import { GLYPHS } from "../../primitives/glyph";
 import type { TangoComponent } from "../registry";
 
 interface IconButtonDemoArgs {
   size?: IconButtonSize;
+  placement?: GlassControlPlacement;
   disabled?: boolean;
 }
 
@@ -21,11 +23,16 @@ interface IconButtonDemoArgs {
  * hover) while the `size` and `disabled` controls flow through from the
  * generated control panel.
  */
-function IconButtonDemo({ size = "md", disabled = false }: IconButtonDemoArgs) {
+function IconButtonDemo({
+  size = "md",
+  placement = "onMedia",
+  disabled = false,
+}: IconButtonDemoArgs) {
   return (
     <IconButton
       glyph={GLYPHS.close}
       size={size}
+      placement={placement}
       disabled={disabled}
       label="Close"
       onPress={() => {}}
@@ -37,7 +44,7 @@ export const iconButtonDemo: TangoComponent = {
   id: "icon-button",
   title: "Icon Button",
   blurb:
-    "The compact glyph-only glass disc — a corner chrome action worn by the deck viewer's close control and the dreamscape menu button. Its surface is the shared liquid-glass control material, made a fully-round disc, so it reads as one family with the filter/sort controls it sits beside.",
+    "The compact glyph-only glass disc — a corner chrome action with placement-aware recipes for scene media or an existing glass surface, made fully round so it reads as one family with the filter/sort controls.",
   callout:
     "Rung three of the four-rung button suite: the beveled purple Button (commit / primary), a plain pressable text affordance (secondary), THIS glass icon disc (a corner chrome action), and a bare pressable glyph (the lightest inline affordance).",
   group: "Components",
@@ -50,6 +57,16 @@ export const iconButtonDemo: TangoComponent = {
 import { GLYPHS } from "src/tango/primitives/glyph";
 
 <IconButton glyph={GLYPHS.close} label="Close deck" onPress={closeViewer} />`,
+    },
+    {
+      label: "On glass",
+      note: "Use `placement=\"onGlass\"` for a disc nested inside a glass panel.",
+      code: `<IconButton
+  glyph={GLYPHS.close}
+  label="Close deck"
+  placement="onGlass"
+  onPress={closeViewer}
+/>`,
     },
     {
       label: "Small",
@@ -65,6 +82,7 @@ import { GLYPHS } from "src/tango/primitives/glyph";
   demo: {
     defaultArgs: {
       size: "md",
+      placement: "onMedia",
       disabled: false,
     },
   },

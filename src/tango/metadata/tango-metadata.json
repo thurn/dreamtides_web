@@ -1319,6 +1319,17 @@
       "description": "Surface treatment: neutral glass (`default`) or red danger glass."
     },
     {
+      "name": "placement",
+      "tsType": "GlassControlPlacement",
+      "unionMembers": [
+        "onMedia",
+        "onGlass"
+      ],
+      "required": false,
+      "defaultValue": "onMedia",
+      "description": "Surface beneath the control. `onMedia` uses the full liquid-glass recipe;\n`onGlass` uses a lighter tonal lens so an existing glass tint is not\ncompounded. Defaults to `onMedia`."
+    },
+    {
       "name": "disabled",
       "tsType": "boolean",
       "unionMembers": [],
@@ -1611,6 +1622,17 @@
       "required": false,
       "defaultValue": "false",
       "description": "Detaches the click / press feedback and marks the disc `aria-disabled`."
+    },
+    {
+      "name": "placement",
+      "tsType": "GlassControlPlacement",
+      "unionMembers": [
+        "onMedia",
+        "onGlass"
+      ],
+      "required": false,
+      "defaultValue": "onMedia",
+      "description": "Surface beneath the control. `onMedia` uses the full liquid-glass recipe;\n`onGlass` uses a lighter tonal lens so an existing glass tint is not\ncompounded. Defaults to `onMedia`."
     },
     {
       "name": "ariaExpanded",

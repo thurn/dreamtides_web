@@ -17,6 +17,7 @@
 import type { ReactElement } from "react";
 import { GlowIcon } from "./GlowIcon";
 import { Pressable } from "../../primitives/Pressable";
+import type { GlassControlPlacement } from "../../primitives/control-placement";
 import type { Glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { glassIconButtonChrome } from "../../internal/control-treatment";
@@ -52,6 +53,12 @@ export interface IconButtonProps {
   /** Detaches the click / press feedback and marks the disc `aria-disabled`. */
   disabled?: boolean;
   /**
+   * Surface beneath the control. `onMedia` uses the full liquid-glass recipe;
+   * `onGlass` uses a lighter tonal lens so an existing glass tint is not
+   * compounded. Defaults to `onMedia`.
+   */
+  placement?: GlassControlPlacement;
+  /**
    * When the disc is a disclosure trigger, its `aria-expanded` state (whether
    * the surface it controls is open). Omitted for a plain action button.
    */
@@ -72,6 +79,7 @@ export function IconButton({
   label,
   onPress,
   disabled = false,
+  placement = "onMedia",
   ariaExpanded,
   testId,
 }: IconButtonProps): ReactElement {
@@ -81,6 +89,7 @@ export function IconButton({
       as="button"
       aria-label={label}
       aria-expanded={ariaExpanded}
+      data-glass-placement={placement}
       data-testid={testId}
       disabled={disabled}
       onClick={disabled ? undefined : onPress}
@@ -93,7 +102,7 @@ export function IconButton({
         // the call sites' rendered look.
         fontSize: spec.glyph,
         color: token("--text-primary"),
-        ...glassIconButtonChrome(),
+        ...glassIconButtonChrome(placement),
       }}
     >
       <GlowIcon iconClass={glyph} color="text-primary" size="1em" />

@@ -513,9 +513,9 @@
      The single source of truth for the Apple-style liquid-glass material: a
      translucent deep-chrome fill over a blur+saturate backdrop, topped with a
      faint specular sheen, a hairline rim, and a layered rim/wash/drop shadow.
-     src/tango/internal/glass-surface.ts is the ONLY reader of these tokens
-     (control-treatment.ts's glassTrack() and InfoCard's press-reveal shell
-     both route through that one recipe). No other file may re-declare the
+     src/tango/internal/glass-surface.ts is the reader of the scene-level
+     tokens (control-treatment.ts's media glassTrack() and InfoCard's
+     press-reveal shell both route through that one recipe). No other file may re-declare the
      fill / sheen / blur / rim / shadow — edit them here and every glass surface
      follows.
 
@@ -531,6 +531,15 @@
   --glass-sheen: linear-gradient(150deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 42%);  /* @kind other */
   --glass-rim: rgba(255, 255, 255, 0.14);  /* @kind color */
   --glass-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.22), inset 0 -18px 30px rgba(255, 255, 255, 0.04), 0 10px 34px rgba(6, 2, 14, 0.5);  /* @kind shadow */
+
+  /* ---- Controls resting on an existing glass surface ----
+     The parent glass has already tinted and blurred the scene. This lighter
+     tonal lens preserves that inherited scene color while its brighter rim
+     and tighter shadow keep the nested control legible as a distinct object. */
+  --glass-on-glass-fill: rgba(4, 4, 6, 0.13);  /* @kind color */
+  --glass-on-glass-sheen: linear-gradient(150deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0) 46%);  /* @kind other */
+  --glass-on-glass-rim: rgba(255, 255, 255, 0.23);  /* @kind color */
+  --glass-on-glass-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3), inset 0 -14px 24px rgba(0, 0, 0, 0.08), 0 8px 22px rgba(6, 2, 14, 0.26);  /* @kind shadow */
 
   /* ---- Object materials (a thing's OWN surface, never a legibility
      overlay). The energy orb fill, the wordmark gradient, the reward gold. ---- */

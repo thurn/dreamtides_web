@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/tango#/icon-button`
 
 Real consumers: **12** (imports outside `src/tango/docs/` and tests).
 
-The compact glyph-only glass disc — a corner chrome action worn by the deck viewer's close control and the dreamscape menu button. Its surface is the shared liquid-glass control material, made a fully-round disc, so it reads as one family with the filter/sort controls it sits beside.
+The compact glyph-only glass disc — a corner chrome action with placement-aware recipes for scene media or an existing glass surface, made fully round so it reads as one family with the filter/sort controls.
 
 > **Guidance:** Rung three of the four-rung button suite: the beveled purple Button (commit / primary), a plain pressable text affordance (secondary), THIS glass icon disc (a corner chrome action), and a bare pressable glyph (the lightest inline affordance).
 
@@ -21,6 +21,7 @@ The compact glyph-only glass disc — a corner chrome action worn by the deck vi
 | `label` | `string` | yes | — | The disc's accessible name (`aria-label`); the disc shows only its glyph. |
 | `onPress` | `() => void` | yes | — | Fires when the disc is activated (no-op while disabled). |
 | `disabled` | `boolean` | no | `false` | Detaches the click / press feedback and marks the disc `aria-disabled`. |
+| `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the control. `onMedia` uses the full liquid-glass recipe; `onGlass` uses a lighter tonal lens so an existing glass tint is not compounded. Defaults to `onMedia`. |
 | `ariaExpanded` | `boolean` | no | — | When the disc is a disclosure trigger, its `aria-expanded` state (whether the surface it controls is open). Omitted for a plain action button. |
 | `testId` | `string` | no | — | A `data-testid` for selecting the disc in tests. |
 
@@ -35,6 +36,19 @@ import { IconButton } from "src/tango/components/controls/IconButton";
 import { GLYPHS } from "src/tango/primitives/glyph";
 
 <IconButton glyph={GLYPHS.close} label="Close deck" onPress={closeViewer} />
+```
+
+### On glass
+
+Use `placement="onGlass"` for a disc nested inside a glass panel.
+
+```tsx
+<IconButton
+  glyph={GLYPHS.close}
+  label="Close deck"
+  placement="onGlass"
+  onPress={closeViewer}
+/>
 ```
 
 ### Small

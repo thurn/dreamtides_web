@@ -21,6 +21,7 @@ import type { ReactElement } from "react";
 import { GlowIcon } from "./GlowIcon";
 import { EssenceValue } from "../hud/EssenceValue";
 import { Pressable } from "../../primitives/Pressable";
+import type { GlassControlPlacement } from "../../primitives/control-placement";
 import type { Glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { controlChrome } from "../../internal/control-treatment";
@@ -36,7 +37,7 @@ export type GlassButtonVariant = "default" | "danger";
  * with a red rim, light red wash, and red outer glow so the media still reads
  * through the control.
  */
-const dangerChrome: React.CSSProperties = {
+const dangerChromeOnMedia: React.CSSProperties = {
   background:
     "linear-gradient(180deg, rgba(244, 43, 72, 0.12), rgba(150, 12, 35, 0.10)), var(--glass-sheen), rgba(22, 14, 32, 0.38)",
   // Keep the same shorthand property as the base control material. Mixing its
@@ -46,6 +47,15 @@ const dangerChrome: React.CSSProperties = {
   border: "1px solid rgba(255, 111, 130, 0.92)",
   boxShadow:
     "inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -14px 30px rgba(150, 12, 35, 0.10), 0 0 0 1px rgba(244, 43, 72, 0.20), 0 14px 36px rgba(244, 43, 72, 0.44)",
+};
+
+/** Danger accent balanced for a control nested on an existing glass surface. */
+const dangerChromeOnGlass: React.CSSProperties = {
+  background:
+    "linear-gradient(180deg, rgba(244, 43, 72, 0.13), rgba(150, 12, 35, 0.08)), var(--glass-on-glass-sheen), var(--glass-on-glass-fill)",
+  borderColor: "rgba(255, 111, 130, 0.82)",
+  boxShadow:
+    "inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -12px 24px rgba(150, 12, 35, 0.08), 0 0 0 1px rgba(244, 43, 72, 0.16), 0 10px 28px rgba(244, 43, 72, 0.28)",
 };
 
 export interface GlassButtonProps {
@@ -59,6 +69,12 @@ export interface GlassButtonProps {
   cost?: number | null;
   /** Surface treatment: neutral glass (`default`) or red danger glass. */
   variant?: GlassButtonVariant;
+  /**
+   * Surface beneath the control. `onMedia` uses the full liquid-glass recipe;
+   * `onGlass` uses a lighter tonal lens so an existing glass tint is not
+   * compounded. Defaults to `onMedia`.
+   */
+  placement?: GlassControlPlacement;
   /** Detaches the click / press feedback and marks the button `aria-disabled`. */
   disabled?: boolean;
   /** A `data-testid` for selecting the button in tests. */
@@ -77,14 +93,21 @@ export function GlassButton({
   glyph,
   cost = null,
   variant = "default",
+  placement = "onMedia",
   disabled = false,
   testId,
 }: GlassButtonProps): ReactElement {
-  const chrome = controlChrome();
-  const variantChrome = variant === "danger" ? dangerChrome : {};
+  const chrome = controlChrome(placement);
+  const variantChrome =
+    variant === "danger"
+      ? placement === "onGlass"
+        ? dangerChromeOnGlass
+        : dangerChromeOnMedia
+      : {};
   return (
     <Pressable
       as="button"
+      data-glass-placement={placement}
       data-testid={testId}
       disabled={disabled}
       onClick={disabled ? undefined : onPress}

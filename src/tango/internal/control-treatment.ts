@@ -16,6 +16,7 @@
 
 import type { CSSProperties } from "react";
 import type { TangoColor } from "../primitives/color";
+import type { GlassControlPlacement } from "../primitives/control-placement";
 import { token } from "../primitives/tokens";
 import { glassSurfaceStyle } from "./glass-surface";
 
@@ -59,7 +60,16 @@ export const CONTROL_INACTIVE_COLOR =
  * surface reads as a member of the one glass-surface family. Returns the
  * material without a border radius; the caller supplies that.
  */
-export function glassTrack(): CSSProperties {
+export function glassTrack(
+  placement: GlassControlPlacement = "onMedia",
+): CSSProperties {
+  if (placement === "onGlass") {
+    return {
+      background: `${token("--glass-on-glass-sheen")}, ${token("--glass-on-glass-fill")}`,
+      border: `1px solid ${token("--glass-on-glass-rim")}`,
+      boxShadow: token("--glass-on-glass-shadow"),
+    };
+  }
   return glassSurfaceStyle({ radius: null });
 }
 
@@ -69,9 +79,11 @@ export function glassTrack(): CSSProperties {
  * result so a control cluster reads as one liquid-glass surface, with a neutral
  * frosted selected segment (no brand violet).
  */
-export function controlChrome(): ControlChrome {
+export function controlChrome(
+  placement: GlassControlPlacement = "onMedia",
+): ControlChrome {
   const track: CSSProperties = {
-    ...glassTrack(),
+    ...glassTrack(placement),
     borderRadius: token("--radius-control"),
   };
   return {
@@ -109,6 +121,8 @@ export function controlChrome(): ControlChrome {
  * specifies the surface (fill, border, radius, elevation); the caller supplies
  * only layout (size, centering, glyph color).
  */
-export function glassIconButtonChrome(): CSSProperties {
-  return { ...glassTrack(), borderRadius: token("--radius-pill") };
+export function glassIconButtonChrome(
+  placement: GlassControlPlacement = "onMedia",
+): CSSProperties {
+  return { ...glassTrack(placement), borderRadius: token("--radius-pill") };
 }

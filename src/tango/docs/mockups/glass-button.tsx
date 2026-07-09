@@ -1,11 +1,15 @@
-// Full-screen mockup for GlassButton — the official default and danger glass
-// treatments over real scene media, so the backdrop blur and red rim/glow can
-// be judged against warm, cold, and saturated backgrounds.
+// Full-screen A/B playground for the glass-control placement recipes. Each
+// sample puts the same labeled and icon controls directly on scene media and
+// inside a real glass panel so the effective tint can be judged side by side.
 
 import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
 import { GlassButton } from "../../components/controls/GlassButton";
+import { IconButton } from "../../components/controls/IconButton";
+import { glassSurfaceStyle } from "../../internal/glass-surface";
+import type { GlassControlPlacement } from "../../primitives/control-placement";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
+import { useIsDesktop } from "../../screens/use-is-desktop";
 import { sceneRoot } from "./scene";
 
 interface MediaSample {
@@ -17,9 +21,9 @@ interface MediaSample {
 
 const mediaSamples: MediaSample[] = [
   {
-    id: "warm",
-    title: "Rust Expanse",
-    scene: "rust_expanse",
+    id: "bright",
+    title: "Firstlight Meadow",
+    scene: "firstlight_meadow",
     position: "center",
   },
   {
@@ -29,65 +33,150 @@ const mediaSamples: MediaSample[] = [
     position: "center",
   },
   {
-    id: "neon",
+    id: "saturated",
     title: "Grid City",
     scene: "grid_city",
     position: "center",
   },
 ];
 
-function MediaSamplePanel({ sample }: { sample: MediaSample }) {
+function ControlPair({ placement }: { placement: GlassControlPlacement }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: token("--space-4"),
+      }}
+    >
+      <GlassButton
+        label="Decline"
+        placement={placement}
+        onPress={() => {}}
+      />
+      <IconButton
+        glyph={GLYPHS.gear}
+        label="Settings"
+        placement={placement}
+        onPress={() => {}}
+      />
+    </div>
+  );
+}
+
+function SampleColumn({
+  label,
+  placement,
+  glass,
+  sample,
+}: {
+  label: string;
+  placement: GlassControlPlacement;
+  glass: boolean;
+  sample: MediaSample;
+}) {
+  return (
+    <div
+      data-sample-placement={placement}
+      style={{
+        overflow: "hidden",
+        borderRadius: token("--radius-panel"),
+        backgroundImage: `url(${dreamscapeSceneUrl(sample.scene)})`,
+        backgroundSize: "cover",
+        backgroundPosition: sample.position,
+        border: `1px solid ${token("--border-strong")}`,
+      }}
+    >
+      <div
+        style={{
+          ...(glass
+            ? {
+                ...glassSurfaceStyle({ radius: token("--radius-panel") }),
+                background: `${token("--glass-sheen")}, ${token("--glass-fill-popover")}`,
+              }
+            : {}),
+          minHeight: 156,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          gap: token("--space-6"),
+          padding: token("--space-6"),
+          boxSizing: "border-box",
+        }}
+      >
+        <p
+          style={{
+            margin: 0,
+            color: token("--text-on-glass"),
+            font: token("--t-eyebrow"),
+            letterSpacing: token("--tracking-eyebrow"),
+            textTransform: "uppercase",
+            textAlign: "center",
+            textShadow: token("--text-outline-media"),
+          }}
+        >
+          {label}
+        </p>
+        <ControlPair placement={placement} />
+      </div>
+    </div>
+  );
+}
+
+function MediaSamplePanel({
+  sample,
+  desktop,
+}: {
+  sample: MediaSample;
+  desktop: boolean;
+}) {
   return (
     <section
       data-media-sample={sample.id}
       style={{
-        minHeight: 236,
+        minHeight: 250,
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
-        gap: token("--space-7"),
+        gap: token("--space-5"),
         padding: token("--space-6"),
         boxSizing: "border-box",
         borderRadius: token("--radius-panel"),
         overflow: "hidden",
-        backgroundImage: `url(${dreamscapeSceneUrl(sample.scene)})`,
-        backgroundSize: "cover",
-        backgroundPosition: sample.position,
-        border: "1px solid rgba(255,255,255,0.16)",
-        boxShadow: "0 18px 46px rgba(0,0,0,0.3)",
+        background: token("--surface-chrome-strong"),
+        border: `1px solid ${token("--border-strong")}`,
+        boxShadow: token("--shadow-lg"),
       }}
     >
       <h2
         style={{
-          alignSelf: "flex-start",
+          alignSelf: "center",
           margin: 0,
-          padding: `${token("--space-2")} ${token("--space-4")}`,
-          borderRadius: token("--radius-pill"),
-          background: "rgba(8, 5, 17, 0.48)",
-          border: "1px solid rgba(255,255,255,0.14)",
-          color: token("--text-primary"),
-          font: token("--t-eyebrow"),
-          letterSpacing: token("--tracking-eyebrow"),
-          textTransform: "uppercase",
+          color: token("--text-on-glass"),
+          font: token("--t-title-sm"),
+          textShadow: token("--text-outline-media"),
         }}
       >
         {sample.title}
       </h2>
       <div
         style={{
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: token("--space-4"),
+          display: "grid",
+          gridTemplateColumns: desktop ? "repeat(2, minmax(0, 1fr))" : "1fr",
+          gap: token("--space-5"),
         }}
       >
-        <GlassButton label="Sort" glyph={GLYPHS.sort} onPress={() => {}} />
-        <GlassButton
-          label="Decline Offer"
-          glyph={GLYPHS.close}
-          variant="danger"
-          onPress={() => {}}
+        <SampleColumn
+          label="Directly On Media"
+          placement="onMedia"
+          glass={false}
+          sample={sample}
+        />
+        <SampleColumn
+          label="Nested On Glass"
+          placement="onGlass"
+          glass
+          sample={sample}
         />
       </div>
     </section>
@@ -95,6 +184,7 @@ function MediaSamplePanel({ sample }: { sample: MediaSample }) {
 }
 
 export function GlassButtonMockup() {
+  const desktop = useIsDesktop();
   return (
     <div
       style={{
@@ -103,15 +193,15 @@ export function GlassButtonMockup() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        padding: token("--space-8"),
+        padding: desktop ? token("--space-8") : token("--space-4"),
         boxSizing: "border-box",
         overflow: "auto",
       }}
     >
       <header
         style={{
-          width: "min(100%, 980px)",
-          marginTop: token("--space-5"),
+          width: "min(100%, 1080px)",
+          marginTop: desktop ? token("--space-5") : token("--space-12"),
           marginBottom: token("--space-7"),
         }}
       >
@@ -124,7 +214,7 @@ export function GlassButtonMockup() {
             margin: 0,
           }}
         >
-          Glass Button
+          Glass Control Playground
         </p>
         <h1
           style={{
@@ -133,21 +223,22 @@ export function GlassButtonMockup() {
             margin: `${token("--space-3")} 0 0`,
           }}
         >
-          Default And Danger Variants
+          Media And Glass Placement
         </h1>
       </header>
 
       <main
-        data-glass-button-media-lab
+        data-glass-control-placement-lab
         style={{
-          width: "min(100%, 980px)",
+          width: "min(100%, 1080px)",
           display: "flex",
           flexDirection: "column",
           gap: token("--space-5"),
+          paddingBottom: token("--space-8"),
         }}
       >
         {mediaSamples.map((sample) => (
-          <MediaSamplePanel key={sample.id} sample={sample} />
+          <MediaSamplePanel key={sample.id} sample={sample} desktop={desktop} />
         ))}
       </main>
     </div>

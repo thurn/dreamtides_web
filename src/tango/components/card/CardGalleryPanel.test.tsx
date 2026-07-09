@@ -127,6 +127,11 @@ describe("CardGalleryPanel", () => {
       container.querySelector('[data-testid="gallery-action"]')?.textContent,
     ).toContain("40");
     expect(
+      container.querySelector('[data-testid="gallery-action"]')?.getAttribute(
+        "data-glass-placement",
+      ),
+    ).toBe("onGlass");
+    expect(
       container.querySelector('[data-testid="gallery-card-a"]')?.textContent,
     ).toContain("Archive Sentry");
 
@@ -177,6 +182,11 @@ describe("CardGalleryPanel", () => {
         .querySelector("[data-game-card-terms]")
         ?.getAttribute("data-game-card-terms"),
     ).toBe("card");
+    expect(
+      container.querySelector('[data-testid="gallery-close"]')?.getAttribute(
+        "data-glass-placement",
+      ),
+    ).toBe("onGlass");
 
     act(() => {
       container

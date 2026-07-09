@@ -147,6 +147,7 @@ function accessoryNode(accessory: CardGalleryAccessory): ReactElement {
   if (accessory.kind === "glassButton") {
     return (
       <GlassButton
+        placement="onGlass"
         label={accessory.label}
         glyph={accessory.glyph}
         disabled={accessory.disabled}
@@ -159,6 +160,7 @@ function accessoryNode(accessory: CardGalleryAccessory): ReactElement {
   }
   return (
     <IconButton
+      placement="onGlass"
       glyph={accessory.glyph}
       size={accessory.size}
       label={accessory.label}
