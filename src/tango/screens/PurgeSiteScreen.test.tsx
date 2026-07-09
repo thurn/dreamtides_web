@@ -155,20 +155,15 @@ describe("PurgeSiteScreen", () => {
     });
   });
 
-  it("can render the card grid on a bottom sheet for comparison captures", () => {
+  it("renders the mobile card grid on the glass bottom sheet", () => {
     const { container, root } = mount(
-      <PurgeSiteScreen
-        view={view()}
-        useBottomSheet
-        onClose={vi.fn()}
-        onPurge={vi.fn()}
-      />,
+      <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
     );
 
     const cardRegion = container.querySelector<HTMLElement>(
       "[data-purge-card-grid]",
     );
-    expect(cardRegion?.dataset.purgeBottomSheet).toBe("true");
+    expect(cardRegion?.dataset.purgeLayout).toBe("mobile");
     expect(cardRegion?.style.background).toContain("var(--glass-fill-popover)");
     expect(cardRegion?.style.borderTopLeftRadius).toBe("var(--radius-panel)");
 
@@ -180,12 +175,7 @@ describe("PurgeSiteScreen", () => {
   it("renders the desktop composition with cards on a square-corner glass panel", () => {
     stubMatchMedia(true);
     const { container, root } = mount(
-      <PurgeSiteScreen
-        view={view()}
-        useBottomSheet
-        onClose={vi.fn()}
-        onPurge={vi.fn()}
-      />,
+      <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
     );
 
     expect(container.querySelector("[data-purge-desktop-composition]")).not.toBeNull();
@@ -195,7 +185,7 @@ describe("PurgeSiteScreen", () => {
       "[data-purge-card-grid]",
     );
     expect(cardRegion?.dataset.purgeLayout).toBe("desktop");
-    expect(cardRegion?.dataset.purgeBottomSheet).toBe("true");
+    expect(cardRegion?.style.background).toContain("var(--glass-fill-popover)");
     expect(cardRegion?.style.borderLeft).toContain("var(--border-soft)");
     expect(cardRegion?.style.borderTopLeftRadius).toBe("");
 

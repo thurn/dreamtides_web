@@ -1,4 +1,3 @@
-import { isValidElement, type ReactElement } from "react";
 import { describe, expect, it } from "vitest";
 import type { SiteState } from "../../types/quest";
 import { parseRuntimeConfig } from "../../runtime/runtime-config";
@@ -35,17 +34,6 @@ describe("tangoSiteScreenFor", () => {
     expect(
       tangoSiteScreenFor({ type: "Purge", id: "site-1" } as SiteState),
     ).not.toBeNull();
-  });
-
-  it("threads the purge bottom-sheet comparison flag to the Purge adapter", () => {
-    const node = tangoSiteScreenFor(
-      { type: "Purge", id: "site-1" } as SiteState,
-      { runtimeConfig: parseRuntimeConfig("?purgeBottomSheet=1") },
-    );
-    expect(isValidElement(node)).toBe(true);
-    expect((node as ReactElement<{ useBottomSheet?: boolean }>).props.useBottomSheet).toBe(
-      true,
-    );
   });
 
   it("accepts router-owned site context needed by future site migrations", () => {

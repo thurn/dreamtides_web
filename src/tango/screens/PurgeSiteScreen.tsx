@@ -1,6 +1,6 @@
-// PurgeSiteScreen — the Tango mobile rendering of Master Takeshi's purge site.
-// The top third is character-led dialog; the rest is a deck-viewer-derived card
-// grid with one contextual commit button after selection.
+// PurgeSiteScreen — the Tango rendering of Master Takeshi's purge site.
+// Mobile keeps the guide in the top third; desktop places the guide and speech
+// beside the glass card purge surface.
 
 import {
   useCallback,
@@ -54,8 +54,6 @@ export interface PurgeSiteView {
 export interface PurgeSiteScreenProps {
   /** View-model rendered by the pure screen. */
   view: PurgeSiteView;
-  /** Render the card grid on a full-width glass bottom sheet. */
-  useBottomSheet?: boolean;
   /** Leave the site without purging. */
   onClose: () => void;
   /** Commit selected deck entries at the displayed total cost. */
@@ -69,7 +67,6 @@ const PURGE_BUTTON_BOTTOM = `calc(${token("--safe-bottom")} + ${token("--space-5
 
 export function PurgeSiteScreen({
   view,
-  useBottomSheet = false,
   onClose,
   onPurge,
 }: PurgeSiteScreenProps) {
@@ -169,7 +166,6 @@ export function PurgeSiteScreen({
         <DesktopComposition
           guide={view.guide}
           cards={view.cards}
-          useBottomSheet={useBottomSheet}
           selectedEntryIds={selectedEntryIds}
           selectedCount={selectedCount}
           canSelectPaid={canSelectPaid}
@@ -180,7 +176,6 @@ export function PurgeSiteScreen({
           <GuideBand guide={view.guide} />
           <CardRegion
             cards={view.cards}
-            useBottomSheet={useBottomSheet}
             selectedEntryIds={selectedEntryIds}
             selectedCount={selectedCount}
             canSelectPaid={canSelectPaid}
@@ -220,7 +215,6 @@ export function PurgeSiteScreen({
 function DesktopComposition({
   guide,
   cards,
-  useBottomSheet,
   selectedEntryIds,
   selectedCount,
   canSelectPaid,
@@ -228,7 +222,6 @@ function DesktopComposition({
 }: {
   readonly guide: PurgeGuideView;
   readonly cards: readonly PurgeCardView[];
-  readonly useBottomSheet: boolean;
   readonly selectedEntryIds: readonly string[];
   readonly selectedCount: number;
   readonly canSelectPaid: boolean;
@@ -263,7 +256,6 @@ function DesktopComposition({
         <DesktopGuideScene guide={guide} />
         <CardRegion
           cards={cards}
-          useBottomSheet={useBottomSheet}
           selectedEntryIds={selectedEntryIds}
           selectedCount={selectedCount}
           canSelectPaid={canSelectPaid}
@@ -326,7 +318,6 @@ function DesktopGuideScene({ guide }: { readonly guide: PurgeGuideView }) {
 
 function CardRegion({
   cards,
-  useBottomSheet,
   selectedEntryIds,
   selectedCount,
   canSelectPaid,
@@ -334,29 +325,26 @@ function CardRegion({
   desktop = false,
 }: {
   readonly cards: readonly PurgeCardView[];
-  readonly useBottomSheet: boolean;
   readonly selectedEntryIds: readonly string[];
   readonly selectedCount: number;
   readonly canSelectPaid: boolean;
   readonly onToggle: (card: PurgeCardView) => void;
   readonly desktop?: boolean;
 }) {
-  const glassStyle: CSSProperties = useBottomSheet
-    ? {
-        ...glassSurfaceStyle({ radius: null }),
-        background: `${token("--glass-sheen")}, ${token("--glass-fill-popover")}`,
-        border: 0,
-        ...(desktop
-          ? {
-              borderLeft: `1px solid ${token("--border-soft")}`,
-            }
-          : {
-              borderTop: `1px solid ${token("--border-soft")}`,
-              borderTopLeftRadius: token("--radius-panel"),
-              borderTopRightRadius: token("--radius-panel"),
-            }),
-      }
-    : {};
+  const glassStyle: CSSProperties = {
+    ...glassSurfaceStyle({ radius: null }),
+    background: `${token("--glass-sheen")}, ${token("--glass-fill-popover")}`,
+    border: 0,
+    ...(desktop
+      ? {
+          borderLeft: `1px solid ${token("--border-soft")}`,
+        }
+      : {
+          borderTop: `1px solid ${token("--border-soft")}`,
+          borderTopLeftRadius: token("--radius-panel"),
+          borderTopRightRadius: token("--radius-panel"),
+        }),
+  };
   const cardRegionStyle: CSSProperties = {
     position: "relative",
     zIndex: 10,
@@ -382,7 +370,6 @@ function CardRegion({
   return (
     <section
       data-purge-card-grid=""
-      data-purge-bottom-sheet={useBottomSheet ? "true" : "false"}
       data-purge-layout={desktop ? "desktop" : "mobile"}
       style={cardRegionStyle}
     >
