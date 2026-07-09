@@ -191,6 +191,40 @@ describe("createCoopLogRecorder single-writer rule", () => {
       },
     ]);
   });
+
+  it("emits the event_append_failed shape with type, nonce, and error message", () => {
+    const { emitted, recorder } = setup();
+    recorder.recordAppendFailed(
+      makeEvent({ type: "ADD_CARD", nonce: "client-a:3" }),
+      new Error("append rejected"),
+    );
+    expect(emitted).toEqual([
+      {
+        event: "event_append_failed",
+        type: "ADD_CARD",
+        nonce: "client-a:3",
+        error: "append rejected",
+        gameId: "room-1",
+      },
+    ]);
+  });
+
+  it("emits one pending_dropped record per discarded intent", () => {
+    const { emitted, recorder } = setup();
+    recorder.recordPendingDropped([
+      makeEvent({ type: "ADD_CARD", nonce: "client-a:1" }),
+      makeEvent({ type: "REMOVE_DECK_ENTRY", nonce: "client-a:2" }),
+    ]);
+    expect(emitted).toEqual([
+      { event: "pending_dropped", type: "ADD_CARD", nonce: "client-a:1", gameId: "room-1" },
+      {
+        event: "pending_dropped",
+        type: "REMOVE_DECK_ENTRY",
+        nonce: "client-a:2",
+        gameId: "room-1",
+      },
+    ]);
+  });
 });
 
 describe("createQuestLogMirror", () => {

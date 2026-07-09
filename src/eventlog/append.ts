@@ -89,43 +89,55 @@ export function applyAppend<S>(
   let appliedIndex = encoded.appliedIndex;
 
   if (head - baseSeq > COMPACT_THRESHOLD) {
-    const genesis = JSON.parse(encoded.genesis) as Genesis;
-    const newBaseSeq = head - COMPACT_TARGET;
+    // The whole compaction block is contained: any throw (a seq gap in the
+    // fold range, corrupt genesis JSON, an undecodable snapshot) SKIPS
+    // compaction for this append. The event still commits, the live events
+    // accumulate, and the next append retries compaction. The updater never
+    // throws — RTDB would otherwise abort the whole append transaction.
+    // `foldEvents` runs with `devMode: false` so a reducer throw over committed
+    // history is contained (a bounce plus a `fold_error`), never rethrown.
+    try {
+      const genesis = JSON.parse(encoded.genesis) as Genesis;
+      const newBaseSeq = head - COMPACT_TARGET;
 
-    const toFold: Array<{ seq: number; event: GameEvent }> = [];
-    for (let seq = baseSeq + 1; seq <= newBaseSeq; seq++) {
-      const raw = events[seq];
-      if (raw === undefined) {
-        throw new Error(`compaction gap: missing event at seq ${seq} in (${baseSeq}, ${newBaseSeq}]`);
+      const toFold: Array<{ seq: number; event: GameEvent }> = [];
+      for (let seq = baseSeq + 1; seq <= newBaseSeq; seq++) {
+        const raw = events[seq];
+        if (raw === undefined) {
+          throw new Error(`compaction gap: missing event at seq ${seq} in (${baseSeq}, ${newBaseSeq}]`);
+        }
+        toFold.push({ seq, event: decodeEvent(raw) });
       }
-      toFold.push({ seq, event: decodeEvent(raw) });
-    }
 
-    // Seed the fold with the applied index accumulated by prior compactions so
-    // events below the OLD horizon stay enumerable (coveredFromSeq 0). Without
-    // this seed an event whose `basedOnSeq` predates the horizon would fold to
-    // "unknown" here, silently flipping a live-applied event to a bounce in the
-    // snapshot (audit finding P0-1).
-    const priorApplied = decodeAppliedIndex(appliedIndex);
-    const baseState = baseSnapshot === null ? config.genesisState(genesis) : config.decode(baseSnapshot);
-    const folded = foldEvents(config, genesis, { seq: baseSeq, state: baseState }, toFold, {
-      appliedBySeq: priorApplied,
-      coveredFromSeq: 0,
-    });
+      // Seed the fold with the applied index accumulated by prior compactions so
+      // events below the OLD horizon stay enumerable (coveredFromSeq 0). Without
+      // this seed an event whose `basedOnSeq` predates the horizon would fold to
+      // "unknown" here, silently flipping a live-applied event to a bounce in the
+      // snapshot (audit finding P0-1).
+      const priorApplied = decodeAppliedIndex(appliedIndex);
+      const baseState = baseSnapshot === null ? config.genesisState(genesis) : config.decode(baseSnapshot);
+      const folded = foldEvents(config, genesis, { seq: baseSeq, state: baseState }, toFold, {
+        appliedBySeq: priorApplied,
+        coveredFromSeq: 0,
+        devMode: false,
+      });
 
-    // Extend the index with the events this compaction applied, so it remains a
-    // complete record of applied events with seq <= newBaseSeq.
-    const merged = new Map(priorApplied);
-    for (const [seq, entry] of buildAppliedIndex(toFold, folded.outcomes)) {
-      merged.set(seq, entry);
-    }
-    appliedIndex = encodeAppliedIndex(merged);
+      // Extend the index with the events this compaction applied, so it remains a
+      // complete record of applied events with seq <= newBaseSeq.
+      const merged = new Map(priorApplied);
+      for (const [seq, entry] of buildAppliedIndex(toFold, folded.outcomes)) {
+        merged.set(seq, entry);
+      }
+      appliedIndex = encodeAppliedIndex(merged);
 
-    baseSnapshot = config.encode(folded.state);
-    for (let seq = baseSeq + 1; seq <= newBaseSeq; seq++) {
-      delete events[seq];
+      baseSnapshot = config.encode(folded.state);
+      for (let seq = baseSeq + 1; seq <= newBaseSeq; seq++) {
+        delete events[seq];
+      }
+      baseSeq = newBaseSeq;
+    } catch {
+      // Compaction skipped this pass; the append below still commits the event.
     }
-    baseSeq = newBaseSeq;
   }
 
   const next: EncodedLogNode = { genesis: encoded.genesis, baseSeq, baseSnapshot, head, events };

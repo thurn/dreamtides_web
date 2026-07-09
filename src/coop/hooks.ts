@@ -51,7 +51,12 @@ import { GAME_ENGINE_CONFIG } from "../rules/replay/replay";
 import type { FoldState } from "../rules/fold-state";
 import type { RoomReadyContext } from "./RoomGate";
 import { makeActions, type AppendFn, type CoopActions } from "./actions";
-import { BounceToast } from "./BounceToast";
+import {
+  APPEND_FAILED_MESSAGE,
+  BOUNCE_MESSAGE,
+  BounceToast,
+  PENDING_DROPPED_MESSAGE,
+} from "./BounceToast";
 
 /** A confirmed event's outcome, delivered to `useEventOutcomes` subscribers. */
 export type OutcomeListener = (
@@ -114,6 +119,10 @@ export function CoopProvider({
   );
   const [connectedCount, setConnectedCount] = useState(0);
   const [bounceToken, setBounceToken] = useState(0);
+  // The copy for the toast the next `bounceToken` bump shows. Set by whichever
+  // callback triggers it (own bounce / append failure / pending drop); read at
+  // render time. A ref (not state) because the token bump already re-renders.
+  const bounceMessageRef = useRef<string>(BOUNCE_MESSAGE);
 
   const confirmedSeqRef = useRef(0);
   const clientRef = useRef<LogClient | null>(null);
@@ -202,6 +211,7 @@ export function CoopProvider({
             // Task 24 recorder contract.
             logSinkRef.current.recordBounce(seq, []);
             // Surface the toast; a token bump re-shows it even on repeats.
+            bounceMessageRef.current = BOUNCE_MESSAGE;
             setBounceToken((token) => token + 1);
           }
           for (const listener of outcomeListenersRef.current) {
@@ -213,6 +223,20 @@ export function CoopProvider({
         },
         onFoldError: (error) => {
           console.error("Coop fold error", error);
+        },
+        onAppendFailed: (event, error) => {
+          // The intent never reached the log; the echo already rolled back.
+          // Log it for reconstruction and tell the player to retry.
+          logSinkRef.current.recordAppendFailed(event, error);
+          bounceMessageRef.current = APPEND_FAILED_MESSAGE;
+          setBounceToken((token) => token + 1);
+        },
+        onPendingDropped: (events) => {
+          // A reconnect/compaction full refold discarded these unconfirmed
+          // intents. Log each and tell the player they were dropped.
+          logSinkRef.current.recordPendingDropped(events);
+          bounceMessageRef.current = PENDING_DROPPED_MESSAGE;
+          setBounceToken((token) => token + 1);
         },
       },
       { clientId },
@@ -326,6 +350,7 @@ export function CoopProvider({
     showBounce
       ? createElement(BounceToast, {
           key: "coop-bounce-toast",
+          message: bounceMessageRef.current,
           onDismiss: () => setShowBounce(false),
         })
       : null,

@@ -1,16 +1,31 @@
 import type { ReactNode } from "react";
 
+/** Default copy: THIS client's own optimistic intent bounced (a partner acted first). */
+export const BOUNCE_MESSAGE = "Your partner acted first — the board has changed.";
+/** Copy for an intent whose append never reached the log. */
+export const APPEND_FAILED_MESSAGE = "Action failed to send — try again.";
+/** Copy for a reconnect that discarded unconfirmed intents on a full refold. */
+export const PENDING_DROPPED_MESSAGE =
+  "Connection recovered — unconfirmed actions were discarded.";
+
 /**
- * Transient notice shown when THIS client's own optimistic intent bounced: a
- * partner's event committed first, so the board the player acted against has
- * changed and their action was discarded. The optimistic echo has already
- * rolled back (rollback IS recomputation in the LogClient); this toast makes
- * the rollback legible instead of silent (spec §Client layer, Bounce UX).
+ * Transient notice shown for a client-local coop hiccup: THIS client's own
+ * optimistic intent bounced (a partner committed first), an append failed to
+ * send, or a reconnect discarded unconfirmed intents. The optimistic echo has
+ * already rolled back (rollback IS recomputation in the LogClient); this toast
+ * makes the rollback legible instead of silent (spec §Client layer, Bounce UX).
+ * The `message` selects the copy for the specific event.
  *
  * Plain styling; the CoopProvider owns the show/auto-dismiss lifecycle and
  * renders this alongside `children`.
  */
-export function BounceToast({ onDismiss }: { onDismiss?: () => void }): ReactNode {
+export function BounceToast({
+  onDismiss,
+  message = BOUNCE_MESSAGE,
+}: {
+  onDismiss?: () => void;
+  message?: string;
+}): ReactNode {
   return (
     <div
       data-coop-bounce-toast
@@ -36,7 +51,7 @@ export function BounceToast({ onDismiss }: { onDismiss?: () => void }): ReactNod
         cursor: onDismiss ? "pointer" : "default",
       }}
     >
-      Your partner acted first &mdash; the board has changed.
+      {message}
     </div>
   );
 }

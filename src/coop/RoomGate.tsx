@@ -18,6 +18,7 @@ import {
 import { getBuildHash } from "./build-hash";
 import { installQuestLogSink, type QuestLogSinkHandle } from "./quest-log-sink";
 import { ConfigGateScreen } from "./ConfigGateScreen";
+import { UnreadableRoomScreen } from "./UnreadableRoomScreen";
 import { VersionGateScreen } from "./VersionGateScreen";
 
 // How long to wait for the first log snapshot before treating the room as
@@ -57,6 +58,7 @@ type GateState =
   | { status: "ready"; roomId: string; genesis: Genesis }
   | { status: "versionGate"; roomId: string; genesis: Genesis }
   | { status: "configGate"; roomId: string; genesis: Genesis }
+  | { status: "unreadable"; roomId: string }
   | { status: "error"; message: string };
 
 /** Fresh random seed for a new room's genesis. */
@@ -199,17 +201,28 @@ export function RoomGate({ db, gameId, runtimeConfig, children }: RoomGateProps)
       }
     }, ROOM_LOAD_TIMEOUT_MS);
 
-    const unsubscribe = subscribeToLog(db, activeRoomId, (node: LogNode) => {
-      resolved = true;
-      clearTimeout(timeoutId);
-      // Gate order: a reducer-version mismatch (a deploy landed) is fatal and
-      // checked first. A content-config mismatch is recoverable — the client
-      // can adopt the room's pinned params — so it gates only when the version
-      // matches. A genesis missing `contentConfig` (never written by this
-      // build) is treated as a mismatch.
-      const status = gateStatusFor(node.genesis, localContentConfig);
-      setGateState({ status, roomId: activeRoomId, genesis: node.genesis });
-    });
+    const unsubscribe = subscribeToLog(
+      db,
+      activeRoomId,
+      (node: LogNode) => {
+        resolved = true;
+        clearTimeout(timeoutId);
+        // Gate order: a reducer-version mismatch (a deploy landed) is fatal and
+        // checked first. A content-config mismatch is recoverable — the client
+        // can adopt the room's pinned params — so it gates only when the version
+        // matches. A genesis missing `contentConfig` (never written by this
+        // build) is treated as a mismatch.
+        const status = gateStatusFor(node.genesis, localContentConfig);
+        setGateState({ status, roomId: activeRoomId, genesis: node.genesis });
+      },
+      () => {
+        // The room exists but its log node is unreadable (corrupt genesis /
+        // snapshot). There is no safe fold, so surface a terminal state.
+        resolved = true;
+        clearTimeout(timeoutId);
+        setGateState({ status: "unreadable", roomId: activeRoomId });
+      },
+    );
 
     return () => {
       clearTimeout(timeoutId);
@@ -270,6 +283,10 @@ export function RoomGate({ db, gameId, runtimeConfig, children }: RoomGateProps)
 
   if (gateState.status === "versionGate") {
     return <VersionGateScreen db={db} contentConfig={localContentConfig} />;
+  }
+
+  if (gateState.status === "unreadable") {
+    return <UnreadableRoomScreen db={db} contentConfig={localContentConfig} />;
   }
 
   if (gateState.status === "configGate") {

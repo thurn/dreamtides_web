@@ -159,9 +159,13 @@ async function readHead(roomId: string): Promise<number> {
 }
 
 /** Reads and decodes the full log node directly from RTDB (bypasses the client fold). */
-async function readLogNode(roomId: string): Promise<ReturnType<typeof decodeLogNode>> {
+async function readLogNode(roomId: string): Promise<NonNullable<ReturnType<typeof decodeLogNode>>> {
   const snapshot = await get(ref(database, `rooms/${roomId}/log`));
-  return decodeLogNode(snapshot.val() as EncodedLogNode);
+  const node = decodeLogNode(snapshot.val() as EncodedLogNode);
+  if (node === null) {
+    throw new Error(`readLogNode: room ${roomId} decoded to null (corrupt genesis/snapshot)`);
+  }
+  return node;
 }
 
 // ---------------------------------------------------------------------------

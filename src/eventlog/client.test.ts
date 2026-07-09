@@ -85,9 +85,20 @@ interface Harness {
   displayed: () => ToyState | undefined;
   outcomes: Array<{ event: GameEvent; seq: number; outcome: EventOutcome }>;
   divergences: Array<{ seq: number; expected: string; actual: string }>;
+  foldErrors: Array<{ seq: number; message: string }>;
+  appendFailures: Array<{ event: GameEvent; error: unknown }>;
+  pendingDropped: GameEvent[][];
 }
 
-function makeHarness(cfg: EngineConfig<ToyState> = config): {
+interface HarnessOptions {
+  /** When set, every `io.append` rejects with this error (append-failure path). */
+  rejectAppendWith?: Error;
+}
+
+function makeHarness(
+  cfg: EngineConfig<ToyState> = config,
+  opts: HarnessOptions = {},
+): {
   harness: Harness;
   client: ReturnType<typeof createLogClient<ToyState>>;
 } {
@@ -97,6 +108,9 @@ function makeHarness(cfg: EngineConfig<ToyState> = config): {
   const displayedStates: ToyState[] = [];
   const outcomes: Harness["outcomes"] = [];
   const divergences: Harness["divergences"] = [];
+  const foldErrors: Harness["foldErrors"] = [];
+  const appendFailures: Harness["appendFailures"] = [];
+  const pendingDropped: Harness["pendingDropped"] = [];
 
   const io: LogClientIo = {
     subscribe: (cb) => {
@@ -107,6 +121,9 @@ function makeHarness(cfg: EngineConfig<ToyState> = config): {
     },
     append: (event) => {
       appended.push(event);
+      if (opts.rejectAppendWith !== undefined) {
+        return Promise.reject(opts.rejectAppendWith);
+      }
       seqCounter += 1;
       return Promise.resolve(seqCounter);
     },
@@ -116,6 +133,9 @@ function makeHarness(cfg: EngineConfig<ToyState> = config): {
     onDisplayState: (s) => displayedStates.push(s),
     onEventOutcome: (event, seq, outcome) => outcomes.push({ event, seq, outcome }),
     onDivergence: (info) => divergences.push(info),
+    onFoldError: (error) => foldErrors.push({ seq: error.seq, message: error.message }),
+    onAppendFailed: (event, error) => appendFailures.push({ event, error }),
+    onPendingDropped: (events) => pendingDropped.push(events),
   });
 
   const harness: Harness = {
@@ -128,8 +148,17 @@ function makeHarness(cfg: EngineConfig<ToyState> = config): {
     displayed: () => displayedStates[displayedStates.length - 1],
     outcomes,
     divergences,
+    foldErrors,
+    appendFailures,
+    pendingDropped,
   };
   return { harness, client };
+}
+
+/** A confirmed event whose `basedOnSeq` is nonsensical, so the fold's malformed
+ *  guard reports a bounced no-op carrying a `FoldError` without reaching the reducer. */
+function malformedConfirmed(tag: string): GameEvent {
+  return { ...confirmedEvent({ tag, actor: "me", basedOnSeq: 0 }), basedOnSeq: -1 };
 }
 
 describe("LogClient double-apply of own intent", () => {
@@ -344,5 +373,97 @@ describe("LogClient divergence tripwire", () => {
     const eOutcome = harness.outcomes.find((o) => o.event.nonce === ownE.nonce);
     expect(eOutcome?.outcome).toBe("applied");
     expect(harness.divergences).toHaveLength(0);
+  });
+});
+
+describe("LogClient append rejection (P1-3)", () => {
+  it("removes the pending intent and reports onAppendFailed when append rejects", async () => {
+    const boom = new Error("append rejected");
+    const { harness, client } = makeHarness(config, { rejectAppendWith: boom });
+    harness.deliver(makeNode({ events: {} }));
+
+    // The echo shows optimistically, then the append rejects and the intent is
+    // swept out — `submit` rethrows the rejection.
+    await expect(
+      client.submit({ type: "T", payload: { tag: "A" }, actor: "me" }),
+    ).rejects.toBe(boom);
+
+    // The stranded echo was rolled back: displayed reverts to the confirmed
+    // (empty) state, not the optimistic ["A"].
+    expect(harness.displayed()?.applied).toEqual([]);
+    // The failure was reported with the event and the rejection error.
+    expect(harness.appendFailures).toHaveLength(1);
+    expect(harness.appendFailures[0].event.payload.tag).toBe("A");
+    expect(harness.appendFailures[0].error).toBe(boom);
+
+    // A later confirmed node folds cleanly — nothing stale left in the queue.
+    const other = confirmedEvent({ tag: "Z", actor: "partner", basedOnSeq: 0 });
+    harness.deliver(makeNode({ events: { 1: other } }));
+    expect(harness.displayed()?.applied).toEqual(["Z"]);
+  });
+});
+
+describe("LogClient full-refold pending sweep (P1-3)", () => {
+  it("drops all pending intents with onPendingDropped on a full refold", async () => {
+    const { harness, client } = makeHarness();
+    harness.deliver(makeNode({ events: {} }));
+
+    await client.submit({ type: "T", payload: { tag: "A" }, actor: "me" });
+    await client.submit({ type: "T", payload: { tag: "B" }, actor: "me" });
+    expect(harness.displayed()?.applied).toEqual(["A", "B"]);
+
+    // A compacted node advances baseSeq past our fold -> a full refold. The
+    // confirmation window is now untrustworthy, so the unconfirmed queue drops.
+    const snapshot: ToyState = { applied: ["x"] };
+    harness.deliver(makeNode({ baseSeq: 5, baseSnapshot: snapshot, events: {} }));
+
+    expect(harness.pendingDropped).toHaveLength(1);
+    expect(harness.pendingDropped[0].map((e) => e.payload.tag)).toEqual(["A", "B"]);
+    // Displayed is the pure snapshot — no dropped echoes re-applied on top.
+    expect(harness.displayed()?.applied).toEqual(["x"]);
+  });
+});
+
+describe("LogClient seq-gap handling (P1-7)", () => {
+  it("stops folding at a seq gap and resumes when a complete node arrives", () => {
+    const { harness } = makeHarness();
+    const e1 = confirmedEvent({ tag: "a", actor: "me", basedOnSeq: 0 });
+    const e2 = confirmedEvent({ tag: "b", actor: "me", basedOnSeq: 1 });
+    const e3 = confirmedEvent({ tag: "c", actor: "me", basedOnSeq: 2 });
+
+    // A node with a hole at seq 2: head 3 but only 1 and 3 are present.
+    harness.deliver(makeNode({ events: { 1: e1, 3: e3 } }));
+    // Nothing past the hole folds: only seq 1 applied and was reported.
+    expect(harness.displayed()?.applied).toEqual(["a"]);
+    expect(harness.outcomes.map((o) => o.seq)).toEqual([1]);
+
+    // The complete node arrives; folding resumes exactly at the hole.
+    harness.deliver(makeNode({ events: { 1: e1, 2: e2, 3: e3 } }));
+    expect(harness.displayed()?.applied).toEqual(["a", "b", "c"]);
+    // Outcomes for 2 and 3 each emitted exactly once (1 was already emitted).
+    expect(harness.outcomes.map((o) => o.seq)).toEqual([1, 2, 3]);
+  });
+});
+
+describe("LogClient rewind refold hygiene (P1-4)", () => {
+  it("re-reports outcomes and fold errors once per seq across a rewind refold", () => {
+    const { harness } = makeHarness();
+    const good1 = confirmedEvent({ tag: "a", actor: "me", basedOnSeq: 0 });
+    const malformed = malformedConfirmed("x");
+    const good3 = confirmedEvent({ tag: "c", actor: "me", basedOnSeq: 0 });
+
+    harness.deliver(makeNode({ events: { 1: good1, 2: malformed, 3: good3 } }));
+    // The malformed seq 2 folded to a bounce carrying a FoldError, reported once.
+    expect(harness.foldErrors.filter((e) => e.seq === 2)).toHaveLength(1);
+    expect(harness.outcomes.filter((o) => o.seq === 2)).toHaveLength(1);
+
+    // A rewind: the log is rewritten shorter (head 2 < our lastFoldedSeq 3). The
+    // rewritten log is authoritative, so its outcomes and fold errors re-report.
+    harness.deliver(makeNode({ events: { 1: good1, 2: malformed } }));
+    expect(harness.outcomes.filter((o) => o.seq === 1)).toHaveLength(2);
+    expect(harness.outcomes.filter((o) => o.seq === 2)).toHaveLength(2);
+    // The fold error for seq 2 was reported once per full-refold pass (gated with
+    // the outcome, not spammed) — twice total across the two authoritative folds.
+    expect(harness.foldErrors.filter((e) => e.seq === 2)).toHaveLength(2);
   });
 });

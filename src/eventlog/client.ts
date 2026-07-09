@@ -34,6 +34,10 @@ export interface LogClientCallbacks<S> {
   onDivergence: (info: { seq: number; expected: string; actual: string }) => void;
   /** A contained reducer throw or malformed entry (poison-event containment). */
   onFoldError?: (error: FoldError) => void;
+  /** io.append rejected; the intent was removed from the pending queue. */
+  onAppendFailed?: (event: GameEvent, error: unknown) => void;
+  /** A full refold discarded these unconfirmed intents. */
+  onPendingDropped?: (events: GameEvent[]) => void;
 }
 
 /** A draft the caller submits; the client stamps the envelope fields. */
@@ -126,9 +130,12 @@ export function createLogClient<S>(
     for (let seq = fromExclusive + 1; seq <= node.head; seq++) {
       const event = node.events.get(seq);
       if (event === undefined) {
-        // Gap in a supposedly-dense window: skip rather than fold a hole. The
-        // next node with the event present will fold it.
-        continue;
+        // Gap in a supposedly-dense window: STOP rather than fold a hole and
+        // then fold events that come after it. `lastFoldedSeq` stays below the
+        // hole, so a later complete node resumes folding exactly there. Folding
+        // past a hole would apply later events at the wrong basedOnSeq relative
+        // to the missing one and could never be corrected.
+        break;
       }
       const result = foldEvents(
         config,
@@ -146,12 +153,16 @@ export function createLogClient<S>(
       if (outcome.outcome === "applied") {
         appliedBySeq.set(seq, { actor: event.actor, type: event.type });
       }
-      if (outcome.error !== undefined) {
-        callbacks.onFoldError?.(outcome.error);
-      }
 
       if (seq > lastEmittedSeq) {
         callbacks.onEventOutcome(event, seq, outcome.outcome);
+
+        // Report a contained fold error under the SAME per-seq guard as the
+        // outcome, so a full refold that re-reports an event (a rewind reset)
+        // fires it exactly once alongside the outcome, never as spam.
+        if (outcome.error !== undefined) {
+          callbacks.onFoldError?.(outcome.error);
+        }
 
         // Divergence tripwire. The stamped `stateHashAfter` is the appender's
         // fold hash for a prediction of THIS event committing at
@@ -189,9 +200,12 @@ export function createLogClient<S>(
         }
       }
     }
-    if (node.head > lastEmittedSeq) {
-      lastEmittedSeq = node.head;
+    if (lastFoldedSeq > lastEmittedSeq) {
+      lastEmittedSeq = lastFoldedSeq;
     }
+    // The high-water tracks `lastFoldedSeq`, not `node.head`: when a gap stopped
+    // the fold short, the seqs past the hole were never emitted, so the water
+    // must stay below them for the resuming node to emit them exactly once.
     // Applied entries at or below the compaction horizon are retained: an event
     // with `basedOnSeq` below the horizon legitimately consults them to
     // enumerate its intervening window (coveredFromSeq 0), so pruning them would
@@ -226,14 +240,34 @@ export function createLogClient<S>(
   function onNode(node: LogNode): void {
     genesis = node.genesis;
 
+    const rewound = initialized && node.head < lastFoldedSeq; // log rewritten
     const needFullFold =
       !initialized ||
       node.baseSeq > lastFoldedSeq || // compaction advanced past our fold
-      node.head < lastFoldedSeq; // log rewound (reconnect/rewrite)
+      rewound;
 
     baseSeq = node.baseSeq;
 
     if (needFullFold) {
+      // A full refold means the confirmation window is untrustworthy: any
+      // unconfirmed intent may have committed into the compacted range (and so
+      // is already in the snapshot) or may never have committed at all.
+      // Re-echoing either would corrupt the displayed fold, so the whole queue
+      // is dropped and reported for UX.
+      if (pending.length > 0) {
+        const dropped = pending.splice(0);
+        callbacks.onPendingDropped?.(dropped);
+      }
+      // On a rewind the log below our fold was REWRITTEN, so the previously
+      // emitted outcomes no longer describe the authoritative log. Reset the
+      // emission high-water to this node's horizon (and clear the divergence
+      // dedup) so the rewritten range's outcomes/fold-errors re-report exactly
+      // once. A compaction-advance full refold, by contrast, only folds live
+      // events above the old high-water, so its high-water is left intact.
+      if (rewound) {
+        lastEmittedSeq = node.baseSeq;
+        divergenceReported.clear();
+      }
       confirmedState = baseState(node);
       lastFoldedSeq = node.baseSeq;
       // Seed the applied index from the node's persisted index (applied events
@@ -292,7 +326,20 @@ export function createLogClient<S>(
     // Optimistic echo: render immediately, before the append round-trips.
     recomputeDisplayed();
 
-    return io.append(event);
+    try {
+      return await io.append(event);
+    } catch (error) {
+      // The append never committed, so the optimistic echo is stranded. Sweep
+      // the intent out by nonce, recompute (rollback IS recomputation), report
+      // the failure for UX, and rethrow so the caller sees the rejection.
+      const idx = pending.findIndex((entry) => entry.nonce === nonce);
+      if (idx >= 0) {
+        pending.splice(idx, 1);
+      }
+      recomputeDisplayed();
+      callbacks.onAppendFailed?.(event, error);
+      throw error;
+    }
   }
 
   return {

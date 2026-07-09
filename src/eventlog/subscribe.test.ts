@@ -48,12 +48,37 @@ describe("decodeLogNode", () => {
       events: { 1: encodeEvent(goodEvent(0)), 2: encodeEvent(goodEvent(1)) },
     };
     const node = decodeLogNode(encoded);
-    expect(node.genesis).toEqual(GENESIS);
-    expect(node.head).toBe(2);
-    expect(node.baseSnapshot).toBeNull();
-    expect([...node.events.keys()].sort((a, b) => a - b)).toEqual([1, 2]);
+    expect(node).not.toBeNull();
+    expect(node?.genesis).toEqual(GENESIS);
+    expect(node?.head).toBe(2);
+    expect(node?.baseSnapshot).toBeNull();
+    expect([...(node?.events.keys() ?? [])].sort((a, b) => a - b)).toEqual([1, 2]);
     // A pre-compaction node has no persisted index -> an empty map.
-    expect(node.appliedIndex.size).toBe(0);
+    expect(node?.appliedIndex.size).toBe(0);
+  });
+
+  it("returns null (never throws) for a corrupt genesis string", () => {
+    const encoded: EncodedLogNode = {
+      genesis: "{ not valid json",
+      baseSeq: 0,
+      baseSnapshot: null,
+      head: 0,
+      events: {},
+    };
+    expect(() => decodeLogNode(encoded)).not.toThrow();
+    expect(decodeLogNode(encoded)).toBeNull();
+  });
+
+  it("returns null (never throws) for a corrupt baseSnapshot string", () => {
+    const encoded: EncodedLogNode = {
+      genesis: JSON.stringify(GENESIS),
+      baseSeq: 2,
+      baseSnapshot: "{ not valid json",
+      head: 2,
+      events: {},
+    };
+    expect(() => decodeLogNode(encoded)).not.toThrow();
+    expect(decodeLogNode(encoded)).toBeNull();
   });
 
   it("decodes a persisted appliedIndex into a seq -> {actor, type} map", () => {
@@ -66,9 +91,10 @@ describe("decodeLogNode", () => {
       appliedIndex: JSON.stringify({ 1: { actor: "a", type: "T" }, 2: { actor: "b", type: "T" } }),
     };
     const node = decodeLogNode(encoded);
-    expect([...node.appliedIndex.keys()].sort((a, b) => a - b)).toEqual([1, 2]);
-    expect(node.appliedIndex.get(1)).toEqual({ actor: "a", type: "T" });
-    expect(node.appliedIndex.get(2)).toEqual({ actor: "b", type: "T" });
+    expect(node).not.toBeNull();
+    expect([...(node?.appliedIndex.keys() ?? [])].sort((a, b) => a - b)).toEqual([1, 2]);
+    expect(node?.appliedIndex.get(1)).toEqual({ actor: "a", type: "T" });
+    expect(node?.appliedIndex.get(2)).toEqual({ actor: "b", type: "T" });
   });
 
   it("handles a sparse-array events node (RTDB integer-keyed form)", () => {
@@ -84,7 +110,8 @@ describe("decodeLogNode", () => {
       events: sparse as unknown as { [seq: number]: string },
     } satisfies EncodedLogNode;
     const node = decodeLogNode(encoded);
-    expect([...node.events.keys()].sort((a, b) => a - b)).toEqual([1, 2]);
+    expect(node).not.toBeNull();
+    expect([...(node?.events.keys() ?? [])].sort((a, b) => a - b)).toEqual([1, 2]);
   });
 
   it("never throws on a malformed event string and folds it to a bounce", () => {
@@ -96,7 +123,8 @@ describe("decodeLogNode", () => {
       events: { 1: "{not valid json", 2: encodeEvent(goodEvent(1)) },
     };
     const node = decodeLogNode(encoded);
-    const events = [...node.events.entries()]
+    expect(node).not.toBeNull();
+    const events = [...(node?.events.entries() ?? [])]
       .sort((a, b) => a[0] - b[0])
       .map(([seq, event]) => ({ seq, event }));
 

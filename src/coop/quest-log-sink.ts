@@ -312,6 +312,24 @@ export interface FoldDivergenceRecord {
   gameId: string;
 }
 
+/** The `event_append_failed` log shape: an intent whose `io.append` rejected. */
+export interface EventAppendFailedRecord {
+  event: "event_append_failed";
+  type: string;
+  nonce: string | null;
+  error: string;
+  gameId: string;
+}
+
+/** The `pending_dropped` log shape: one unconfirmed intent discarded by a full
+ *  refold (one record is emitted per dropped intent). */
+export interface PendingDroppedRecord {
+  event: "pending_dropped";
+  type: string;
+  nonce: string | null;
+  gameId: string;
+}
+
 export interface CoopLogRecorderOptions {
   gameId: string;
   /** This client's actor id. Owns its own actor plus `ai:<clientId>`. */
@@ -336,6 +354,10 @@ export interface CoopLogRecorder {
   recordBounce(seq: number, interveningSeqs: readonly number[]): void;
   /** Mirror a fold divergence observed at `seq` (any client, stamped with clientId). */
   recordDivergence(info: { seq: number; expected: string; actual: string }): void;
+  /** Mirror an intent whose `io.append` rejected (always this client's own). */
+  recordAppendFailed(event: GameEvent, error: unknown): void;
+  /** Mirror the unconfirmed intents a full refold discarded (this client's own). */
+  recordPendingDropped(events: readonly GameEvent[]): void;
 }
 
 export function createCoopLogRecorder(options: CoopLogRecorderOptions): CoopLogRecorder {
@@ -396,6 +418,27 @@ export function createCoopLogRecorder(options: CoopLogRecorderOptions): CoopLogR
         gameId,
       };
       emit({ ...record });
+    },
+    recordAppendFailed(event: GameEvent, error: unknown): void {
+      const record: EventAppendFailedRecord = {
+        event: "event_append_failed",
+        type: event.type,
+        nonce: event.nonce ?? null,
+        error: error instanceof Error ? error.message : String(error),
+        gameId,
+      };
+      emit({ ...record });
+    },
+    recordPendingDropped(events: readonly GameEvent[]): void {
+      for (const event of events) {
+        const record: PendingDroppedRecord = {
+          event: "pending_dropped",
+          type: event.type,
+          nonce: event.nonce ?? null,
+          gameId,
+        };
+        emit({ ...record });
+      }
     },
   };
 }

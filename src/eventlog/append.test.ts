@@ -87,6 +87,38 @@ describe("applyAppend compaction thresholds", () => {
   });
 });
 
+describe("applyAppend containment (P1-5)", () => {
+  it("commits the append and skips compaction when the compaction fold throws", () => {
+    // A node already AT the threshold whose genesis JSON is corrupt: appending
+    // one more event crosses the threshold, and the compaction block's
+    // `JSON.parse(genesis)` throws. The append must still commit (the event is
+    // added, compaction is skipped) rather than throw out of the updater.
+    const events: { [seq: number]: string } = {};
+    for (let seq = 1; seq <= COMPACT_THRESHOLD; seq++) {
+      events[seq] = JSON.stringify(makeEvent(seq));
+    }
+    const node: EncodedLogNode = {
+      genesis: "{ not valid json",
+      baseSeq: 0,
+      baseSnapshot: null,
+      head: COMPACT_THRESHOLD,
+      events,
+    };
+
+    let next: EncodedLogNode | undefined;
+    expect(() => {
+      next = applyAppend(config, node, makeEvent(999));
+    }).not.toThrow();
+
+    // The event committed at head + 1; compaction was skipped this pass
+    // (baseSeq unmoved, no snapshot), leaving the live events to accumulate.
+    expect(next?.head).toBe(COMPACT_THRESHOLD + 1);
+    expect(next?.baseSeq).toBe(0);
+    expect(next?.baseSnapshot).toBeNull();
+    expect(numericEventKeys(next as EncodedLogNode)).toHaveLength(COMPACT_THRESHOLD + 1);
+  });
+});
+
 describe("applyAppend keeps events dense", () => {
   it("leaves exactly the dense integer keys (baseSeq, head] after compaction", () => {
     const { log } = appendN(COMPACT_THRESHOLD + 1);

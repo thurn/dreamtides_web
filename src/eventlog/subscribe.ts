@@ -37,21 +37,33 @@ function malformedEvent(raw: unknown): GameEvent {
 
 /**
  * Decodes an RTDB-native `EncodedLogNode` into a `LogNode`. Pure and total: it
- * NEVER throws. A malformed event string (bad JSON) becomes a pre-bounced
- * placeholder that the fold guard turns into a recorded no-op; an event whose
- * `basedOnSeq` is already nonsensical is left as-is for the same guard to
- * catch. The `events` field may arrive as a sparse JS array (integer keys with
- * holes) or as a plain object — both are handled via `Object.entries`, which
- * skips array holes and yields string keys either way.
+ * NEVER throws. It returns `null` when the room is UNREADABLE — a genesis or
+ * `baseSnapshot` string that fails to `JSON.parse` — because those are the
+ * fold's foundation and there is no safe way to proceed without them; the
+ * caller surfaces a terminal "start a new game" state. A malformed EVENT string
+ * (bad JSON), by contrast, is recoverable: it becomes a pre-bounced placeholder
+ * that the fold guard turns into a recorded no-op, so a single bad event never
+ * strands the whole room. An event whose `basedOnSeq` is already nonsensical is
+ * left as-is for the same guard to catch. The `events` field may arrive as a
+ * sparse JS array (integer keys with holes) or as a plain object — both are
+ * handled via `Object.entries`, which skips array holes and yields string keys
+ * either way.
  */
-export function decodeLogNode(encoded: EncodedLogNode): LogNode {
-  const genesis = JSON.parse(encoded.genesis) as Genesis;
-  // RTDB strips any field whose value is `null` from the stored tree, so a
-  // freshly-created room's `baseSnapshot: null` reads back as `undefined`,
-  // not `null` — both must decode to "no snapshot yet".
-  const rawBaseSnapshot = encoded.baseSnapshot ?? null;
-  const baseSnapshot: unknown =
-    rawBaseSnapshot === null ? null : JSON.parse(rawBaseSnapshot);
+export function decodeLogNode(encoded: EncodedLogNode): LogNode | null {
+  let genesis: Genesis;
+  let baseSnapshot: unknown;
+  try {
+    genesis = JSON.parse(encoded.genesis) as Genesis;
+    // RTDB strips any field whose value is `null` from the stored tree, so a
+    // freshly-created room's `baseSnapshot: null` reads back as `undefined`,
+    // not `null` — both must decode to "no snapshot yet".
+    const rawBaseSnapshot = encoded.baseSnapshot ?? null;
+    baseSnapshot = rawBaseSnapshot === null ? null : JSON.parse(rawBaseSnapshot);
+  } catch {
+    // Corrupt genesis or snapshot — the fold has no foundation. Signal an
+    // unreadable room rather than fabricate one.
+    return null;
+  }
 
   const events = new Map<number, GameEvent>();
   const rawEvents = encoded.events ?? {};
@@ -85,12 +97,16 @@ export function decodeLogNode(encoded: EncodedLogNode): LogNode {
  * Subscribes to `rooms/{roomId}/log`, decoding each RTDB update into a
  * `LogNode` and invoking `onNode`. Returns an unsubscribe function. When the
  * node does not yet exist (null value) nothing is emitted — the caller waits
- * for room creation to write genesis.
+ * for room creation to write genesis. When the node exists but is UNREADABLE
+ * (`decodeLogNode` returns null — corrupt genesis/snapshot), `onCorrupt` is
+ * invoked instead of `onNode` so the caller can surface a terminal
+ * unreadable-room state rather than folding on a broken foundation.
  */
 export function subscribeToLog(
   db: Database,
   roomId: string,
   onNode: (node: LogNode) => void,
+  onCorrupt?: () => void,
 ): () => void {
   const logRef = ref(db, `rooms/${roomId}/log`);
   return onValue(logRef, (snapshot) => {
@@ -98,6 +114,11 @@ export function subscribeToLog(
     if (encoded === null) {
       return;
     }
-    onNode(decodeLogNode(encoded));
+    const node = decodeLogNode(encoded);
+    if (node === null) {
+      onCorrupt?.();
+      return;
+    }
+    onNode(node);
   });
 }
