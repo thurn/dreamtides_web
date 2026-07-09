@@ -14,24 +14,28 @@
  *
  * v1 decision (`battle_ai.md` §"Multiplayer"): the AI is DISABLED in shared
  * rooms. The safe, conservative rule is therefore to run the AI only when this
- * client is the SOLE connected client. A missing/zero count is treated as a
- * single local client (the AI's own client is always present in practice, and a
- * count that has not yet been observed should not corrupt anything because it
- * means no OTHER client is known to be connected).
+ * client is the SOLE connected client AND that fact is actually known. A
+ * missing/not-yet-observed count does NOT default to "treat as local": every
+ * battle lives in a room (single-player included), presence resolves within a
+ * moment of RoomGate writing it, and two clients whose presence has not yet
+ * loaded could otherwise both default to "I'm alone" and both drive the enemy
+ * — corrupting the shared battle. Gating off (never running) until presence is
+ * confirmed connected is the safe default; single-player briefly withholds the
+ * AI for the same window before presence resolves, then proceeds normally.
  */
 export interface AiMayRunHereInput {
   /**
    * Number of clients currently connected to the shared room (connected
-   * presence entries). `undefined`/`null` means presence is unknown; that is
-   * treated as a single local client.
+   * presence entries). `undefined`/`null` means presence is unknown.
    */
   connectedCount: number | null | undefined;
 }
 
 /**
- * Returns whether the battle AI may run on THIS client. True only when this is
- * the sole connected client in the room (count <= 1, or unknown). Two or more
- * connected clients → a shared multiplayer room → the AI must NOT run here.
+ * Returns whether the battle AI may run on THIS client. True only when
+ * presence is KNOWN and this is the sole connected client (count <= 1).
+ * Unknown presence (`null`/`undefined`) and two-or-more connected clients (a
+ * shared multiplayer room) both mean the AI must NOT run here.
  *
  * This is the ADDITIONAL gate layered on top of `aiMode`: `aiMode` still has to
  * be enabled for the AI to do anything; this function only decides whether the
@@ -39,7 +43,7 @@ export interface AiMayRunHereInput {
  */
 export function aiMayRunHere({ connectedCount }: AiMayRunHereInput): boolean {
   if (connectedCount === null || connectedCount === undefined) {
-    return true;
+    return false;
   }
   return connectedCount <= 1;
 }

@@ -6,9 +6,9 @@ describe("aiMayRunHere", () => {
     expect(aiMayRunHere({ connectedCount: 1 })).toBe(true);
   });
 
-  it("runs when presence is unknown (count undefined → treated as local)", () => {
-    expect(aiMayRunHere({ connectedCount: undefined })).toBe(true);
-    expect(aiMayRunHere({ connectedCount: null })).toBe(true);
+  it("does NOT run while presence is unknown (count undefined/null)", () => {
+    expect(aiMayRunHere({ connectedCount: undefined })).toBe(false);
+    expect(aiMayRunHere({ connectedCount: null })).toBe(false);
   });
 
   it("runs when no client is observed connected yet (count 0)", () => {

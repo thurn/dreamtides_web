@@ -8,6 +8,7 @@ import type {
 import { emptyBackRankSlots, emptyFrontRankSlots } from "../../battle/test-support";
 import { applyDebugEdit } from "./apply-debug-edit";
 import type { ActivePrompt, PromptResolution } from "./effect-runner-core";
+import { isoTimestampToMs } from "./timestamp";
 import type { EffectStep } from "./effect-step";
 import { BATTLE_CARD_EFFECTS } from "./battle-card-effects-table";
 import { DREAMWELL_EFFECTS } from "./dreamwell-effects-table";
@@ -70,7 +71,7 @@ function applyEditsOracle(
   let b = board;
   let drawIndex = 0;
   const random = (): number => context.rng(drawIndex++);
-  const nowMs = Date.parse(context.timestamp);
+  const nowMs = isoTimestampToMs(context.timestamp) ?? 0;
   for (const steps of runs) {
     for (const step of steps) {
       if (step.kind !== "edits") throw new Error("oracle: only edit-only scripts");

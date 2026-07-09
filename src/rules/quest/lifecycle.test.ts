@@ -235,11 +235,65 @@ describe("limits and completion", () => {
     ).toBe(7);
   });
 
+  it("SET_MAX_DREAMSIGNS clamps a negative value to 0", () => {
+    expect(
+      apply(genesis(), "SET_MAX_DREAMSIGNS", { value: -5 }).quest.maxDreamsigns,
+    ).toBe(0);
+  });
+
+  it("SET_MAX_DREAMSIGNS truncates a fractional value to an integer", () => {
+    expect(
+      apply(genesis(), "SET_MAX_DREAMSIGNS", { value: 4.7 }).quest.maxDreamsigns,
+    ).toBe(4);
+  });
+
+  it("SET_MAX_DREAMSIGNS bounces a non-finite value (NaN/Infinity)", () => {
+    expect(
+      reduceGameEvent(genesis(), event("SET_MAX_DREAMSIGNS", { value: Number.NaN }), ctx())
+        .outcome,
+    ).toBe("bounced");
+    expect(
+      reduceGameEvent(
+        genesis(),
+        event("SET_MAX_DREAMSIGNS", { value: Number.POSITIVE_INFINITY }),
+        ctx(),
+      ).outcome,
+    ).toBe("bounced");
+  });
+
   it("SET_COMPLETION_LEVEL sets the value", () => {
     expect(
       apply(genesis(), "SET_COMPLETION_LEVEL", { value: 3 }).quest
         .completionLevel,
     ).toBe(3);
+  });
+
+  it("SET_COMPLETION_LEVEL clamps a negative value to 0", () => {
+    expect(
+      apply(genesis(), "SET_COMPLETION_LEVEL", { value: -2 }).quest
+        .completionLevel,
+    ).toBe(0);
+  });
+
+  it("SET_COMPLETION_LEVEL truncates a fractional value to an integer", () => {
+    expect(
+      apply(genesis(), "SET_COMPLETION_LEVEL", { value: 2.9 }).quest
+        .completionLevel,
+    ).toBe(2);
+  });
+
+  it("SET_COMPLETION_LEVEL bounces a non-finite value (NaN/Infinity)", () => {
+    expect(
+      reduceGameEvent(genesis(), event("SET_COMPLETION_LEVEL", { value: Number.NaN }), ctx())
+        .outcome,
+    ).toBe("bounced");
+    expect(
+      reduceGameEvent(
+        genesis(),
+        event("SET_COMPLETION_LEVEL", { value: Number.POSITIVE_INFINITY }),
+        ctx(),
+      ).outcome,
+    ).toBe("bounced");
   });
 });
 

@@ -178,71 +178,98 @@ export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<string> = new Set<string>
   ["SET_CARD_NOTE", "MARK_SITE_VISITED", "DISMISS_STARTING_DECK_POPUP"],
 );
 
+/**
+ * The set of all recognized event types, keyed as a `Record<GameEventType,
+ * true>` so it is a compile-time-tied enumeration of `EventPayloads`' keys —
+ * TypeScript rejects this literal if it is missing a key `EventPayloads`
+ * declares, or names one `EventPayloads` does not. `_exhaustive` below is a
+ * second, explicit assignment-based check of the same tie (belt-and-braces:
+ * it fails to compile independently of how this literal's own type
+ * annotation is written), so the registry and the payload map can never drift
+ * apart silently (audit finding P3-5).
+ */
+const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
+  ADJUST_ESSENCE: true,
+  SET_ESSENCE: true,
+  ADJUST_ESSENCE_CAP: true,
+  SET_ESSENCE_CAP: true,
+  SET_MAX_DREAMSIGNS: true,
+  SET_COMPLETION_LEVEL: true,
+  START_QUEST: true,
+  RESET_QUEST: true,
+  LOAD_STATE: true,
+  SELECT_DREAMCALLER: true,
+  SET_SCREEN: true,
+  TRAVEL_TO_DREAMSCAPE: true,
+  MARK_SITE_VISITED: true,
+  DISMISS_STARTING_DECK_POPUP: true,
+  ADD_CARD: true,
+  REMOVE_DECK_ENTRY: true,
+  PURGE_DECK_CARDS: true,
+  DUPLICATE_DECK_ENTRY: true,
+  SET_DECK_ENTRY_STAT_OVERRIDE: true,
+  SET_DECK_ENTRY_KEYWORDS: true,
+  SET_DECK_ENTRY_TYPE: true,
+  TRANSFIGURE_CARD: true,
+  ACCEPT_TRANSFIGURATION_CHOICE: true,
+  ACCEPT_DUPLICATION_CHOICE: true,
+  PURGE_ALL_BANE_CARDS: true,
+  PURGE_RANDOM_BANE_CARDS: true,
+  ADD_DREAMSIGN: true,
+  REMOVE_DREAMSIGN: true,
+  SET_DREAMSIGN_POOL: true,
+  SET_DREAMSIGN_IS_BANE: true,
+  SET_DRAFT_STATE: true,
+  PICK_DRAFT_CARD: true,
+  ENTER_DRAFT_SITE: true,
+  OPEN_SITE: true,
+  COMPLETE_DREAM_AUGURY: true,
+  ACCEPT_REWARD: true,
+  ACCEPT_DREAMSIGN_OFFER: true,
+  REJECT_DREAMSIGN_OFFER: true,
+  ACCEPT_ESSENCE: true,
+  REROLL_DREAM_AUGURY: true,
+  FORCE_DREAM_AUGURY_ARCHETYPE: true,
+  COMPLETE_SITE: true,
+  ACCEPT_MERCHANT_OFFER: true,
+  DECLINE_MERCHANT: true,
+  BUY_SHOP_SLOT: true,
+  REROLL_SHOP: true,
+  GRANT_FREE_REROLLS: true,
+  APPLY_SHOP_DISCOUNT: true,
+  PUSH_BATTLE_MODIFIER: true,
+  PUSH_TEMPORARY_BANE_GRANT: true,
+  BAN_SITE_TYPE: true,
+  BOOST_SITE_APPEARANCE: true,
+  REPLACE_SITE_TYPE: true,
+  ADD_SITE_TO_DREAMSCAPE: true,
+  UPDATE_ATLAS: true,
+  SET_CARD_SOURCE_DEBUG: true,
+  END_BATTLE: true,
+  BEGIN_BATTLE: true,
+  BATTLE_COMMAND: true,
+  BATTLE_GESTURE: true,
+  RESOLVE_PROMPT: true,
+  SET_CARD_NOTE: true,
+};
+
+// Fails to compile on drift between EventPayloads and KNOWN_EVENT_TYPES_AS_OBJECT.
+const _exhaustive: Record<keyof EventPayloads, true> = KNOWN_EVENT_TYPES_AS_OBJECT;
+void _exhaustive;
+
 /** The set of all recognized event types (for routing / validation). */
-export const KNOWN_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
-  "ADJUST_ESSENCE",
-  "SET_ESSENCE",
-  "ADJUST_ESSENCE_CAP",
-  "SET_ESSENCE_CAP",
-  "SET_MAX_DREAMSIGNS",
-  "SET_COMPLETION_LEVEL",
-  "START_QUEST",
-  "RESET_QUEST",
-  "LOAD_STATE",
-  "SELECT_DREAMCALLER",
-  "SET_SCREEN",
-  "TRAVEL_TO_DREAMSCAPE",
-  "MARK_SITE_VISITED",
-  "DISMISS_STARTING_DECK_POPUP",
-  "ADD_CARD",
-  "REMOVE_DECK_ENTRY",
-  "PURGE_DECK_CARDS",
-  "DUPLICATE_DECK_ENTRY",
-  "SET_DECK_ENTRY_STAT_OVERRIDE",
-  "SET_DECK_ENTRY_KEYWORDS",
-  "SET_DECK_ENTRY_TYPE",
-  "TRANSFIGURE_CARD",
-  "ACCEPT_TRANSFIGURATION_CHOICE",
-  "ACCEPT_DUPLICATION_CHOICE",
-  "PURGE_ALL_BANE_CARDS",
-  "PURGE_RANDOM_BANE_CARDS",
-  "ADD_DREAMSIGN",
-  "REMOVE_DREAMSIGN",
-  "SET_DREAMSIGN_POOL",
-  "SET_DREAMSIGN_IS_BANE",
-  "SET_DRAFT_STATE",
-  "PICK_DRAFT_CARD",
-  "ENTER_DRAFT_SITE",
-  "OPEN_SITE",
-  "COMPLETE_DREAM_AUGURY",
-  "ACCEPT_REWARD",
-  "ACCEPT_DREAMSIGN_OFFER",
-  "REJECT_DREAMSIGN_OFFER",
-  "ACCEPT_ESSENCE",
-  "REROLL_DREAM_AUGURY",
-  "FORCE_DREAM_AUGURY_ARCHETYPE",
-  "COMPLETE_SITE",
-  "ACCEPT_MERCHANT_OFFER",
-  "DECLINE_MERCHANT",
-  "BUY_SHOP_SLOT",
-  "REROLL_SHOP",
-  "GRANT_FREE_REROLLS",
-  "APPLY_SHOP_DISCOUNT",
-  "PUSH_BATTLE_MODIFIER",
-  "PUSH_TEMPORARY_BANE_GRANT",
-  "BAN_SITE_TYPE",
-  "BOOST_SITE_APPEARANCE",
-  "REPLACE_SITE_TYPE",
-  "ADD_SITE_TO_DREAMSCAPE",
-  "UPDATE_ATLAS",
-  "SET_CARD_SOURCE_DEBUG",
-  "END_BATTLE",
-  "BEGIN_BATTLE",
-  "BATTLE_COMMAND",
-  "BATTLE_GESTURE",
-  "RESOLVE_PROMPT",
-  "SET_CARD_NOTE",
-]);
+export const KNOWN_EVENT_TYPES: ReadonlySet<string> = new Set<string>(
+  Object.keys(KNOWN_EVENT_TYPES_AS_OBJECT),
+);
+
+/**
+ * `KNOWN_EVENT_TYPES` members that deliberately have no `routeDomain` case —
+ * e.g. a type reserved for a future task. `reducer.test.ts`'s registry-tie
+ * test requires every OTHER member to route to a real (non-`default`) case;
+ * this set is the escape hatch for a type that is intentionally exempt from
+ * that check. Empty today — every declared event type is routed.
+ */
+export const INTENTIONALLY_UNROUTED_EVENT_TYPES: ReadonlySet<string> = new Set<string>();
 
 /** Narrows a raw event `type` string to a known `GameEventType`. */
 export function isKnownEventType(type: string): type is GameEventType {

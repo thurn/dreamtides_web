@@ -149,24 +149,36 @@ export function setEssenceCap(
   };
 }
 
-/** `SET_MAX_DREAMSIGNS { value }` — legacy `setMaxDreamsigns` (debug edit). */
+/** Clamp a debug-setter value to a non-negative integer (floor at 0, truncate toward 0). */
+function clampToNonNegativeInteger(value: number): number {
+  return Math.max(0, Math.trunc(value));
+}
+
+/**
+ * `SET_MAX_DREAMSIGNS { value }` — legacy `setMaxDreamsigns` (debug edit).
+ * Clamped to a non-negative integer; a non-finite payload still bounces (a
+ * debug tool typo should never poison the fold with `NaN`/`Infinity`).
+ */
 export function setMaxDreamsigns(
   quest: QuestState,
   payload: Record<string, unknown>,
 ): QuestState | null {
   const value = finiteNumber(payload.value);
   if (value === null) return null;
-  return { ...quest, maxDreamsigns: value };
+  return { ...quest, maxDreamsigns: clampToNonNegativeInteger(value) };
 }
 
-/** `SET_COMPLETION_LEVEL { value }` — legacy `setCompletionLevel` (debug edit). */
+/**
+ * `SET_COMPLETION_LEVEL { value }` — legacy `setCompletionLevel` (debug edit).
+ * Clamped to a non-negative integer; a non-finite payload still bounces.
+ */
 export function setCompletionLevel(
   quest: QuestState,
   payload: Record<string, unknown>,
 ): QuestState | null {
   const value = finiteNumber(payload.value);
   if (value === null) return null;
-  return { ...quest, completionLevel: value };
+  return { ...quest, completionLevel: clampToNonNegativeInteger(value) };
 }
 
 // ---------------------------------------------------------------------------

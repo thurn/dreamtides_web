@@ -27,6 +27,7 @@
 // by name (AGENTS.md).
 
 import type { EventContext } from "../../eventlog/types";
+import { isoTimestampToMs } from "./timestamp";
 import type {
   BattleCardNoteExpiry,
   BattleEngineEmissionContext,
@@ -366,7 +367,7 @@ const BATTLE_SIDES: readonly BattleSide[] = ["player", "enemy"];
  *      correct; the recompute is diff-based and idempotent, so running it while a
  *      prompt is parked is safe.
  *
- * `nowMs` is `ctx.timestamp` throughout (no live clock), honoring the src/rules/
+ * `nowMs` is `isoTimestampToMs(ctx.timestamp) ?? 0` throughout (no live clock), honoring the src/rules/
  * lint rails.
  */
 function applyBattleCommandStep(
@@ -510,7 +511,7 @@ export function battleCommand(
     command,
     ctx.seq,
     random,
-    Date.parse(ctx.timestamp),
+    isoTimestampToMs(ctx.timestamp) ?? 0,
   );
   if (next === null) {
     return null;
@@ -556,7 +557,7 @@ export function battleGesture(
 
   let drawIndex = 0;
   const random = (): number => ctx.rng(drawIndex++);
-  const nowMs = Date.parse(ctx.timestamp);
+  const nowMs = isoTimestampToMs(ctx.timestamp) ?? 0;
 
   let current = battle;
   for (const command of commands) {
@@ -736,7 +737,7 @@ export function resolvePrompt(
 
   let drawIndex = 0;
   const random = (): number => ctx.rng(drawIndex++);
-  const nowMs = Date.parse(ctx.timestamp);
+  const nowMs = isoTimestampToMs(ctx.timestamp) ?? 0;
   const resolved = resolvePendingPromptWithStream(
     battle,
     resolution,
@@ -877,7 +878,7 @@ export function setCardNote(
       battleCardId: instanceId,
       noteId: note.noteId,
       text: note.text,
-      createdAtMs: Date.parse(ctx.timestamp),
+      createdAtMs: isoTimestampToMs(ctx.timestamp) ?? 0,
       expiry: note.expiry,
     },
     EMISSION,

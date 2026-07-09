@@ -20,6 +20,8 @@ import type { EventContext, EventOutcome, GameEvent } from "../eventlog/types";
 import {
   CAS_EXEMPT_EVENT_TYPES,
   DECISION_NEUTRAL_EVENT_TYPES,
+  isKnownEventType,
+  type GameEventType,
 } from "./events";
 import type { FoldState } from "./fold-state";
 import type { QuestState } from "../types/quest";
@@ -101,6 +103,15 @@ export function reduceGameEvent(
  * Rule 1 predicate: CAS-exempt types skip rules 2–4. Exported for direct unit
  * testing (its effect is otherwise only observable once the exempt types gain
  * domain cases).
+ *
+ * The invariant this exemption leans on is NOT "no exempt type alters battle
+ * state" — `SET_CARD_NOTE` does write `board.cardInstances[id].notes`. The
+ * real invariant is narrower: no CAS-exempt type alters DECISION-RELEVANT
+ * battle state. A note carries no game-rules meaning (it never gates or
+ * changes what any other event does), so it is safe for it to apply through a
+ * partner's intervening window and even while a prompt is open. Any future
+ * CAS-exempt type must uphold this same narrower invariant, not the broader
+ * (and already false) one.
  */
 export function isCasExempt(type: string): boolean {
   return CAS_EXEMPT_EVENT_TYPES.has(type);
@@ -158,17 +169,28 @@ export function isInterveningWindowClear(
 }
 
 /**
- * Rule 5: dispatch to the domain reducer for `event.type`. Later tasks extend
- * this switch. Unknown or unimplemented types bounce (never throw).
+ * Rule 5: dispatch to the domain reducer for `event.type`. An unrecognized
+ * type string bounces immediately. Once narrowed to {@link GameEventType} the
+ * switch below is a COMPILE-TIME-EXHAUSTIVE match over every key of
+ * `EventPayloads` (see events.ts) — its `default` arm assigns `type` to
+ * `never`, so adding a payload-map key without adding a case here fails to
+ * typecheck, tying the registry directly to the routing (audit finding P3-5;
+ * `events.test.ts` also asserts this at the type level with a runtime probe
+ * over every `KNOWN_EVENT_TYPES` member).
  */
-function routeDomain(
+export function routeDomain(
   state: FoldState,
   event: GameEvent,
   ctx: EventContext,
 ): ReduceResult {
+  if (!isKnownEventType(event.type)) {
+    // Unrecognized type string — recorded no-op, never a throw.
+    return bounce(state);
+  }
   const payload = event.payload ?? {};
   const quest = state.quest;
-  switch (event.type) {
+  const type: GameEventType = event.type;
+  switch (type) {
     // --- essence & limits ---
     case "ADJUST_ESSENCE":
       return questCase(state, lifecycle.adjustEssence(quest, payload));
@@ -316,9 +338,13 @@ function routeDomain(
     case "LOAD_STATE":
       return foldCase(state, lifecycle.loadState(state, payload));
 
-    default:
-      // Not-yet-implemented or unknown type — recorded no-op.
+    default: {
+      // Compile-time exhaustiveness: if this still typechecks, `type` is
+      // `never` here — every `GameEventType` has a case above.
+      const _exhaustive: never = type;
+      void _exhaustive;
       return bounce(state);
+    }
   }
 }
 

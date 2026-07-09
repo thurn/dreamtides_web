@@ -23,6 +23,7 @@ import type {
   BattleMutableState,
 } from "../../battle/types";
 import type { EventContext } from "../../eventlog/types";
+import { isoTimestampToMs } from "./timestamp";
 import { applyDebugEdit } from "./apply-debug-edit";
 import { applyPromptResolution, planNextEffectStep } from "./effect-runner-core";
 import type { PromptResolution } from "./effect-runner-core";
@@ -262,7 +263,7 @@ export function advanceEffectQueue(
     battle,
     ctx.seq,
     makeRandomStream(ctx),
-    Date.parse(ctx.timestamp),
+    isoTimestampToMs(ctx.timestamp) ?? 0,
   );
 }
 
@@ -308,7 +309,7 @@ export function resolvePendingPrompt(
     resolution,
     ctx.seq,
     makeRandomStream(ctx),
-    Date.parse(ctx.timestamp),
+    isoTimestampToMs(ctx.timestamp) ?? 0,
   );
 }
 

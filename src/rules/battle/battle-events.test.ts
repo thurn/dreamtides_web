@@ -11,6 +11,7 @@ import type {
   DreamwellCardDefinition,
 } from "../../battle/types";
 import { backRankSlotId, frontRankSlotId } from "../../battle/types";
+import { isoTimestampToMs } from "./timestamp";
 import {
   emptyBackRankSlots,
   emptyFrontRankSlots,
@@ -1206,7 +1207,7 @@ describe("SET_CARD_NOTE", () => {
     expect(notes[0].expiry).toEqual({ kind: "manual" });
     // createdAtMs comes from ctx.timestamp (= event.clientTimestamp), never a
     // live clock — two clients folding the same event stamp the same value.
-    expect(notes[0].createdAtMs).toBe(Date.parse("1970-01-01T00:00:02.000Z"));
+    expect(notes[0].createdAtMs).toBe(isoTimestampToMs("1970-01-01T00:00:02.000Z"));
   });
 
   it("accepts an atStartOfTurn expiry", () => {

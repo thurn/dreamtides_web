@@ -240,6 +240,12 @@ export default tseslint.config(
           message:
             "src/rules/ must be deterministic. Wall-clock time has to arrive as reducer input (e.g. a timestamp on the event), not be read live.",
         },
+        {
+          object: "Date",
+          property: "parse",
+          message:
+            "Date.parse is implementation/locale-dependent and returns NaN (not a bounce) on bad input. Use isoTimestampToMs from src/rules/battle/timestamp.ts instead.",
+        },
       ],
       "no-restricted-syntax": [
         "error",
