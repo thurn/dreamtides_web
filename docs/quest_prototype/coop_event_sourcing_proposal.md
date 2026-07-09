@@ -1,7 +1,9 @@
 # Proposal: Event-Sourced Coop Sync ("Shared Log, Local Fold")
 
-Status: proposal (2026-07-01). Motivated by the coop failures in demo room
-`?game=7kwpat` and the broader class of double-simulation / primary-client bugs.
+Status: implemented. The design is specified and delivered in
+`docs/superpowers/specs/2026-07-01-coop-event-sourcing-rewrite-design.md`.
+Motivated by the coop failures in demo room `?game=7kwpat` and the broader class
+of double-simulation / primary-client bugs.
 
 ## The structural problem with the current architecture
 

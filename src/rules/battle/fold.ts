@@ -108,8 +108,8 @@ export interface BattleFoldState {
    * that flips the active side into a new turn (the automation flow lands the
    * incoming side on `dreamwell`, never crossing the dawn phase) — applying it
    * only when `dawnFired[side] !== turnNumber`, then stamping the turn here. This
-   * is the pure-data replacement for the deleted runner's per-(side,turn)
-   * processed set (`use-battle-effect-runner.ts`'s `processedInteractiveDawn`).
+   * per-(side,turn) processed marker is pure data on committed state, so the fold
+   * fires each side's Dawn at most once per turn.
    * `null` means that side's Dawn has not fired yet this battle.
    */
   dawnFired: DawnFiredMarker;
@@ -166,9 +166,8 @@ export function newEffectRun(
  * (player then enemy; each side's back rank then front rank, left to right).
  * This is the "in-play" set the ▸Materialized trigger tracks — an id that newly
  * appears here has just entered play and is eligible to fire its trigger once.
- * A pure function of the board (relocated from the deleted
- * `use-battle-effect-runner.ts` hook), reused by both the command-level fold
- * step and the driver's per-dispatch cascade detection.
+ * A pure function of the board, reused by both the command-level fold step and
+ * the driver's per-dispatch cascade detection.
  */
 export function inPlayInstanceIds(state: BattleMutableState): string[] {
   const ids: string[] = [];
@@ -197,14 +196,12 @@ export function inPlayInstanceIds(state: BattleMutableState): string[] {
  * UUID, `side` is the instance's controller, and `sourceInstanceId` is the
  * in-play id (for self-targeting scripts).
  *
- * This is the reactive board-diff the legacy `use-battle-effect-runner.ts` ran
- * on every render, made pure and diff-driven. Because only NEWLY-present ids
- * fire, an id already in play (or already fired) never re-fires, and a run whose
- * edits move a card already in play enqueues nothing — so a cascade that no
- * longer surfaces new characters terminates. The driver calls this around each
- * queued dispatch so a character brought into play by a queued script fires its
- * own ▸Materialized, chaining multi-level cascades to a fixpoint (matching
- * legacy's reactive re-render behavior).
+ * A pure, diff-driven board-diff. Because only NEWLY-present ids fire, an id
+ * already in play (or already fired) never re-fires, and a run whose edits move a
+ * card already in play enqueues nothing — so a cascade that stops surfacing new
+ * characters terminates. The driver calls this around each queued dispatch so a
+ * character brought into play by a queued script fires its own ▸Materialized,
+ * chaining multi-level cascades to a fixpoint.
  */
 export function collectMaterializedRuns(
   previousInPlay: ReadonlySet<string>,

@@ -204,8 +204,7 @@ function runQueue(
       // play must fire that character's own trigger IN THE SAME drain. Diff the
       // in-play id set around this dispatch's edits and enqueue a run for each
       // newly-present scripted id. New runs append to the tail (FIFO), and the
-      // loop keeps draining, so multi-level cascades chain to a fixpoint —
-      // reproducing legacy `use-battle-effect-runner`'s per-render board-diff.
+      // loop keeps draining, so multi-level cascades chain to a fixpoint.
       const inPlayBefore = new Set(inPlayInstanceIds(currentBoard));
       currentBoard = applyEdits(currentBoard, plan.edits);
       const cascadeRuns = collectMaterializedRuns(inPlayBefore, currentBoard);
@@ -294,7 +293,7 @@ export function resolvePendingPrompt(
   const remaining = remainingFromCursor(steps, run.cursor);
   const [promptStep, ...rest] = remaining;
 
-  // The cursor no longer addresses a prompt (stale/mismatched) — clear the
+  // The cursor addresses a stale or mismatched prompt — clear the
   // prompt defensively and resume; the reducer treats an unmatched resolve as a
   // bounce before reaching here in production.
   if (promptStep === undefined || promptStep.kind !== "prompt") {

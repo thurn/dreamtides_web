@@ -22,6 +22,12 @@ and include this as part of your commit.
 When analyzing images, assume your perception of color is incorrect, prefer to
 directly measure it.
 
+# Coop architecture
+
+Coop game state is a fold of the room event log. React `useState`/`useRef` never
+gates game flow; anything both players must agree on is an event in the log.
+Clients write intent events only, via `src/coop/actions.ts`.
+
 # Logging
 
 Quest logs live in logs/quest-log.jsonl
