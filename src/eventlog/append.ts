@@ -76,6 +76,10 @@ export function applyAppend<S>(
   encoded: EncodedLogNode,
   event: GameEvent,
 ): EncodedLogNode {
+  if (event.nonce !== undefined && liveWindowHasNonce(encoded, event.nonce)) {
+    return encoded;
+  }
+
   const head = encoded.head + 1;
   // Shallow copy so the input node stays untouched across transaction retries.
   const events: { [seq: number]: string } = { ...(encoded.events ?? {}) };
@@ -87,6 +91,7 @@ export function applyAppend<S>(
   // append and rewritten (extended with the batch's newly-applied events) when
   // compaction folds events below the new horizon.
   let appliedIndex = encoded.appliedIndex;
+  let compactionError = encoded.compactionError;
 
   if (head - baseSeq > COMPACT_THRESHOLD) {
     // The whole compaction block is contained: any throw (a seq gap in the
@@ -135,8 +140,16 @@ export function applyAppend<S>(
         delete events[seq];
       }
       baseSeq = newBaseSeq;
-    } catch {
+      compactionError = undefined;
+    } catch (caught) {
       // Compaction skipped this pass; the append below still commits the event.
+      const error = caught instanceof Error ? caught : new Error(String(caught));
+      compactionError = {
+        head,
+        baseSeq,
+        attemptedBaseSeq: head - COMPACT_TARGET,
+        message: error.message,
+      };
     }
   }
 
@@ -147,7 +160,25 @@ export function applyAppend<S>(
   if (appliedIndex !== undefined) {
     next.appliedIndex = appliedIndex;
   }
+  if (compactionError !== undefined) {
+    next.compactionError = compactionError;
+  }
   return next;
+}
+
+function liveWindowHasNonce(encoded: EncodedLogNode, nonce: string): boolean {
+  for (let seq = encoded.baseSeq + 1; seq <= encoded.head; seq += 1) {
+    const raw = encoded.events?.[seq];
+    if (raw === undefined) continue;
+    try {
+      if (decodeEvent(raw).nonce === nonce) {
+        return true;
+      }
+    } catch {
+      continue;
+    }
+  }
+  return false;
 }
 
 /**

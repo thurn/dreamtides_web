@@ -13,6 +13,7 @@ import type {
   BattleMutableState,
   BattleReducerState,
   BattleSide,
+  FrontRankSlotId,
 } from "../types";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
 
@@ -172,9 +173,10 @@ function keywordCharacterDefinition(
  * endTurn proposal resolves the Challenge through the keyword-aware unified
  * resolver.
  */
-function placeFrontRankCharacter(
+function placeFrontRankCharacterInSlot(
   state: BattleMutableState,
   side: BattleSide,
+  slot: FrontRankSlotId,
   name: string,
   printedSpark: number,
   renderedText: string,
@@ -186,7 +188,35 @@ function placeFrontRankCharacter(
     isRevealedToPlayer: side === "enemy" ? false : true,
     provenance: questDeckProvenance(),
   });
-  state.sides[side].frontRank.F0 = id;
+  state.sides[side].frontRank[slot] = id;
+  return id;
+}
+
+function placeFrontRankCharacter(
+  state: BattleMutableState,
+  side: BattleSide,
+  name: string,
+  printedSpark: number,
+  renderedText: string,
+): string {
+  return placeFrontRankCharacterInSlot(state, side, "F0", name, printedSpark, renderedText);
+}
+
+function placeBackRankCharacter(
+  state: BattleMutableState,
+  side: BattleSide,
+  slot: "B0" | "B1",
+  name: string,
+  printedSpark: number,
+): string {
+  const id = allocateBattleCardInstance(state, {
+    definition: keywordCharacterDefinition(name, printedSpark, ""),
+    owner: side,
+    controller: side,
+    isRevealedToPlayer: side === "enemy" ? false : true,
+    provenance: questDeckProvenance(),
+  });
+  state.sides[side].backRank[slot] = id;
   return id;
 }
 
@@ -234,12 +264,14 @@ async function settleProposal(): Promise<void> {
 function HookHarness({
   initialState,
   submit,
+  submitGesture = () => {},
   enabled = true,
   aiSide = "enemy",
   basicAutomation = true,
 }: {
   initialState: BattleReducerState;
   submit: (command: BattleCommand) => void;
+  submitGesture?: (commands: readonly BattleCommand[]) => void;
   enabled?: boolean;
   aiSide?: BattleSide;
   basicAutomation?: boolean;
@@ -253,9 +285,14 @@ function HookHarness({
     // on.
     setBoard((prev) => prev);
   };
+  const wrappedSubmitGesture = (commands: readonly BattleCommand[]): void => {
+    submitGesture(commands);
+    setBoard((prev) => prev);
+  };
   const handle = useBattleAi({
     board,
-    submit: wrappedSubmit,
+    submitCommand: wrappedSubmit,
+    submitGesture: wrappedSubmitGesture,
     enabled,
     aiSide,
     basicAutomation,
@@ -415,6 +452,64 @@ describe("useBattleAi", () => {
 
     expect(dispatch).not.toHaveBeenCalled();
     expect(latest?.proposal?.kind).toBe("endTurn");
+  });
+
+  it("approve() submits a multi-command endTurn proposal as one gesture", async () => {
+    const dispatch = vi.fn();
+    const gestureDispatch = vi.fn();
+    mount(
+      <HookHarness
+        initialState={makeEnemyNoActionState()}
+        submit={dispatch}
+        submitGesture={gestureDispatch}
+        basicAutomation={false}
+      />,
+    );
+    await settleProposal();
+
+    const commands = latest?.proposal?.commands ?? [];
+    expect(latest?.proposal?.kind).toBe("endTurn");
+    expect(commands.length).toBeGreaterThan(1);
+
+    act(() => {
+      latest?.approve();
+    });
+
+    expect(dispatch).not.toHaveBeenCalled();
+    expect(gestureDispatch).toHaveBeenCalledTimes(1);
+    expect(gestureDispatch).toHaveBeenCalledWith(commands);
+  });
+
+  it("submits multi-move auto-defense as one gesture", async () => {
+    const dispatch = vi.fn();
+    const gestureDispatch = vi.fn();
+    const state = makeEnemyTurnState((mutable) => {
+      mutable.activeSide = "player";
+      mutable.phase = "dusk";
+      mutable.turnNumber = 3;
+      mutable.sides.enemy.backRank = emptyBackRankSlots();
+      placeFrontRankCharacterInSlot(mutable, "player", "F0", "challengerA", 2, "");
+      placeFrontRankCharacterInSlot(mutable, "player", "F1", "challengerB", 3, "");
+      placeBackRankCharacter(mutable, "enemy", "B0", "blockerA", 4);
+      placeBackRankCharacter(mutable, "enemy", "B1", "blockerB", 5);
+    });
+
+    mount(
+      <HookHarness
+        initialState={state}
+        submit={dispatch}
+        submitGesture={gestureDispatch}
+      />,
+    );
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    expect(dispatch).not.toHaveBeenCalled();
+    expect(gestureDispatch).toHaveBeenCalledTimes(1);
+    const commands = gestureDispatch.mock.calls[0]?.[0] as readonly BattleCommand[];
+    expect(commands).toHaveLength(2);
+    expect(commands.every((command) => command.id === "DEBUG_EDIT")).toBe(true);
   });
 
   it("produces no proposal and dispatches nothing when disabled", async () => {

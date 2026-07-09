@@ -56,7 +56,8 @@ interface BattleCapsInput {
 
 export interface UseBattleAiArgs {
   board: BattleMutableState;
-  submit: (command: BattleCommand) => void;
+  submitCommand: (command: BattleCommand) => void;
+  submitGesture: (commands: readonly BattleCommand[]) => void;
   enabled: boolean;
   /** The side the AI controls (e.g. "enemy"). */
   aiSide: BattleSide;
@@ -126,7 +127,15 @@ function yieldToEventLoop(): Promise<void> {
  * proposal — that is the entire loop.
  */
 export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
-  const { board, submit, enabled, aiSide, caps, basicAutomation } = args;
+  const {
+    board,
+    submitCommand,
+    submitGesture,
+    enabled,
+    aiSide,
+    caps,
+    basicAutomation,
+  } = args;
   const mutable = board;
   // A stable replan key: the driver owns nondeterministic triggers, so there is
   // no `transitionId` to key off of here. Turn/side/phase/score capture every
@@ -220,6 +229,18 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
     basicAutomation,
   ]);
 
+  const submitCommands = useCallback((commands: readonly BattleCommand[]): void => {
+    const [firstCommand] = commands;
+    if (firstCommand === undefined) {
+      return;
+    }
+    if (commands.length === 1) {
+      submitCommand(firstCommand);
+      return;
+    }
+    submitGesture(commands);
+  }, [submitCommand, submitGesture]);
+
   // Defensive auto-block: on the OPPONENT's Dusk the AI is the defender and
   // positions front-rank blockers opposite the opponent's challengers. Unlike
   // the offensive turn (gated behind human approval), defense is applied
@@ -246,6 +267,7 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
     const moves = planDefense(model, {
       scoreToWin: caps?.scoreToWin ?? DEFAULT_SCORE_TO_WIN,
     });
+    const defenseCommands: BattleCommand[] = [];
     for (const move of moves) {
       const commands = actionToCommands(move, aiSide);
       const [firstCommand, ...restCommands] = commands;
@@ -253,11 +275,10 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
       const tracedCommands = firstCommand === undefined
         ? commands
         : [{ ...firstCommand, aiChoices: [trace] }, ...restCommands];
-      for (const command of tracedCommands) {
-        submit(command);
-      }
+      defenseCommands.push(...tracedCommands);
     }
-  }, [enabled, aiSide, mutable, caps, submit]);
+    submitCommands(defenseCommands);
+  }, [enabled, aiSide, mutable, caps, submitCommands]);
 
   // ONLY this path dispatches. It applies the held proposal's commands in order;
   // the resulting state change re-runs the planning effect to produce the next
@@ -266,10 +287,8 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
     if (proposal === null) {
       return;
     }
-    for (const command of proposal.commands) {
-      submit(command);
-    }
-  }, [proposal, submit]);
+    submitCommands(proposal.commands);
+  }, [proposal, submitCommands]);
 
   // Excludes the proposed action and recomputes — dispatches NOTHING. Only a
   // card-play `action` can be rejected; phase/turn-ending proposals cannot.

@@ -31,6 +31,7 @@ interface EventRow {
  */
 export function EventLogViewer({ db, gameId }: EventLogViewerProps): ReactNode {
   const [node, setNode] = useState<LogNode | null>(null);
+  const [logStatus, setLogStatus] = useState<"loading" | "ready" | "corrupt">("loading");
   const [lines, setLines] = useState<string[]>([]);
   const [linesStatus, setLinesStatus] = useState<"loading" | "ready" | "error">(
     "loading",
@@ -41,9 +42,20 @@ export function EventLogViewer({ db, gameId }: EventLogViewerProps): ReactNode {
 
   // Live-decoded event log.
   useEffect(() => {
-    return subscribeToLog(db, gameId, (next) => {
-      setNode(next);
-    });
+    setLogStatus("loading");
+    setNode(null);
+    return subscribeToLog(
+      db,
+      gameId,
+      (next) => {
+        setNode(next);
+        setLogStatus("ready");
+      },
+      () => {
+        setNode(null);
+        setLogStatus("corrupt");
+      },
+    );
   }, [db, gameId]);
 
   // Raw JSONL sink (read on demand / reload).
@@ -141,9 +153,11 @@ export function EventLogViewer({ db, gameId }: EventLogViewerProps): ReactNode {
           Event log: <span className="font-mono">{gameId}</span>
         </h1>
         <span className="text-sm" style={{ color: "#94a3b8" }}>
-          {node === null
-            ? "waiting for log..."
-            : `head ${node.head} · base ${node.baseSeq} · ${eventRows.length} events`}
+          {logStatus === "corrupt"
+            ? "decoded log unreadable"
+            : node === null
+              ? "waiting for log..."
+              : `head ${node.head} · base ${node.baseSeq} · ${eventRows.length} events`}
         </span>
         <div className="ml-auto flex items-center gap-2">
           <input
@@ -174,7 +188,19 @@ export function EventLogViewer({ db, gameId }: EventLogViewerProps): ReactNode {
         <h2 className="text-sm font-semibold uppercase tracking-wider" style={{ color: "#94a3b8" }}>
           Decoded event log
         </h2>
-        {eventRows.length === 0 ? (
+        {logStatus === "corrupt" ? (
+          <div
+            role="alert"
+            className="rounded-lg p-4"
+            style={{
+              background: "rgba(127, 29, 29, 0.3)",
+              border: "1px solid rgba(248, 113, 113, 0.5)",
+              color: "#fca5a5",
+            }}
+          >
+            The room&apos;s event log node is corrupted and cannot be decoded.
+          </div>
+        ) : eventRows.length === 0 ? (
           <p style={{ color: "#94a3b8" }}>No events folded yet.</p>
         ) : (
           <div

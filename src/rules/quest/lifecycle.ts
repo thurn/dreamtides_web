@@ -486,10 +486,62 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
   }
   const pendingPrompt = value.pendingPrompt;
   if (pendingPrompt !== null) {
-    if (!isRecord(pendingPrompt)) return null;
-    if (!isResolvableRun((pendingPrompt as { run?: unknown }).run)) return null;
+    if (!isValidPendingPrompt(pendingPrompt)) return null;
   }
   return value as unknown as BattleFoldState;
+}
+
+function isValidPendingPrompt(value: unknown): boolean {
+  if (!isRecord(value)) return false;
+  if (typeof value.promptId !== "number" || !Number.isFinite(value.promptId)) {
+    return false;
+  }
+  if (
+    value.kind !== "pick-cards" &&
+    value.kind !== "choice" &&
+    value.kind !== "confirm" &&
+    value.kind !== "foresee"
+  ) {
+    return false;
+  }
+  if (!isResolvableRun(value.run)) return false;
+  return isActivePromptShape(value.options, value.kind);
+}
+
+function isActivePromptShape(
+  value: unknown,
+  pendingKind: "pick-cards" | "choice" | "confirm" | "foresee",
+): boolean {
+  if (!isRecord(value)) return false;
+  if (pendingKind === "confirm") {
+    if (value.kind !== "choice") return false;
+  } else if (value.kind !== pendingKind) {
+    return false;
+  }
+  if (typeof value.label !== "string" && value.kind !== "foresee") return false;
+  switch (value.kind) {
+    case "pick-cards":
+      return (
+        Array.isArray(value.candidateIds) &&
+        value.candidateIds.every((id) => typeof id === "string") &&
+        typeof value.count === "number" &&
+        Number.isInteger(value.count) &&
+        typeof value.optional === "boolean" &&
+        Array.isArray(value.highlightCardIds) &&
+        value.highlightCardIds.every((id) => typeof id === "string")
+      );
+    case "choice":
+      return (
+        Array.isArray(value.options) &&
+        value.options.every(
+          (option) => isRecord(option) && typeof option.label === "string",
+        )
+      );
+    case "foresee":
+      return typeof value.count === "number" && Number.isInteger(value.count);
+    default:
+      return false;
+  }
 }
 
 /** A parked run whose `scriptRef` resolves and whose `cursor` is in range. */

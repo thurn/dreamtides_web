@@ -246,16 +246,15 @@ function parseStatOverride(
   value: unknown,
 ): { drop: true } | { drop: false; value: DeckEntry["statOverride"] } | null {
   if (value === null || value === undefined) return { drop: true };
-  if (typeof value !== "object") return null;
-  const raw = value as Record<string, unknown>;
+  if (!isPlainRecord(value)) return null;
   const override: { energyCost?: number; spark?: number } = {};
-  if ("energyCost" in raw) {
-    const energyCost = finiteNumber(raw.energyCost);
+  if ("energyCost" in value) {
+    const energyCost = finiteNumber(value.energyCost);
     if (energyCost === null) return null;
     override.energyCost = energyCost;
   }
-  if ("spark" in raw) {
-    const spark = finiteNumber(raw.spark);
+  if ("spark" in value) {
+    const spark = finiteNumber(value.spark);
     if (spark === null) return null;
     override.spark = spark;
   }
@@ -266,20 +265,19 @@ function parseKeywordModification(
   value: unknown,
 ): { drop: true } | { drop: false; value: CardKeywordModification } | null {
   if (value === null || value === undefined) return { drop: true };
-  if (typeof value !== "object") return null;
-  const raw = value as Record<string, unknown>;
+  if (!isPlainRecord(value)) return null;
   const keywords: CardKeywordModification = {};
-  if ("fast" in raw) {
-    if (typeof raw.fast !== "boolean") return null;
-    keywords.fast = raw.fast;
+  if ("fast" in value) {
+    if (typeof value.fast !== "boolean") return null;
+    keywords.fast = value.fast;
   }
-  if ("reclaim" in raw) {
-    const reclaim = finiteNumber(raw.reclaim);
+  if ("reclaim" in value) {
+    const reclaim = finiteNumber(value.reclaim);
     if (reclaim === null) return null;
     keywords.reclaim = reclaim;
   }
-  if ("setReclaim" in raw) {
-    const setReclaim = finiteNumber(raw.setReclaim);
+  if ("setReclaim" in value) {
+    const setReclaim = finiteNumber(value.setReclaim);
     if (setReclaim === null) return null;
     keywords.setReclaim = setReclaim;
   }
@@ -290,25 +288,30 @@ function parseTypeChange(
   value: unknown,
 ): { drop: true } | { drop: false; value: CardTypeChange } | null {
   if (value === null || value === undefined) return { drop: true };
-  if (typeof value !== "object") return null;
-  const raw = value as Record<string, unknown>;
+  if (!isPlainRecord(value)) return null;
   if (
-    typeof raw.predicateId !== "string" ||
-    typeof raw.cardType !== "string" ||
-    typeof raw.subtype !== "string" ||
-    typeof raw.label !== "string"
+    typeof value.predicateId !== "string" ||
+    typeof value.cardType !== "string" ||
+    typeof value.subtype !== "string" ||
+    typeof value.label !== "string"
   ) {
     return null;
   }
   return {
     drop: false,
     value: {
-      predicateId: raw.predicateId,
-      cardType: raw.cardType as CardType,
-      subtype: raw.subtype,
-      label: raw.label,
+      predicateId: value.predicateId,
+      cardType: value.cardType as CardType,
+      subtype: value.subtype,
+      label: value.label,
     },
   };
+}
+
+function isPlainRecord(value: unknown): value is Record<string, unknown> {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const prototype: unknown = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
 }
 
 /**

@@ -80,3 +80,14 @@ Task 30 QA — observations
    visible trade-off on the dev flag. A future reload-safe guard would gate the
    bootstrap effects on the room's confirmed log being empty (head === 0) rather
    than on the pre-fold `state.dreamcaller`.
+
+Task group 5 assessment — Journey events migration remains a dedicated patch
+
+- R-P2-1 is not small enough for the grouped integrity hardening patch. The
+  Dream Journey surface needs new event types for option commitment, reducer-side
+  cost and reward application, seeded RNG for random costs/rewards, and UI changes
+  so both players agree on commitment through the room event log. The same pass
+  should replace the Journey bane-card name lookup in
+  src/journeys/journey/shared/costs.ts with UUID-based resolution. Mixing this
+  into the validation patch would touch Journey UI, Journey apply code, reducer
+  contracts, and likely replay fixtures.

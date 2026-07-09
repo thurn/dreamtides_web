@@ -185,11 +185,10 @@ function planCardPlay(
     }
     : command;
 
-  const commands: BattleCommand[] = [primary];
-
   // Reduce current ● by the card's cost, clamped so energy never goes negative.
   const cost = Math.max(0, instance.definition.energyCost);
   const spend = Math.min(cost, state.sides[side].currentEnergy);
+  const commands: BattleCommand[] = [];
   if (spend > 0) {
     commands.push(autoCommand({
       kind: "ADJUST_CURRENT_ENERGY",
@@ -197,6 +196,7 @@ function planCardPlay(
       amount: -spend,
     }));
   }
+  commands.push(primary);
 
   return commands;
 }
@@ -205,9 +205,10 @@ function planCardPlay(
  * A `DRAW_DREAMWELL_CARD` reveal (rules §The Dreamwell and Energy) also raises
  * the drawing side's maximum ● by the drawn card's `energyAdded` and refills
  * current ● to the new maximum. The card about to be drawn sits at the shared
- * `dreamwellDeckIndex`; automation reads its `energyAdded` from `caps.dreamwellDeck`
- * and appends the energy edits after the reveal. A missing card (deck somehow
- * exhausted) or one that adds 0 leaves the maximum unchanged.
+ * `dreamwellDeckIndex`; automation reads its `energyAdded` from
+ * `caps.dreamwellDeck` and emits the energy edits before the reveal, so a
+ * prompt-bearing reveal can park its prompt as the final command. A missing card
+ * (deck somehow exhausted) or one that adds 0 leaves the maximum unchanged.
  */
 function planDreamwellReveal(
   state: BattleMutableState,
@@ -217,7 +218,7 @@ function planDreamwellReveal(
 ): BattleCommand[] {
   const card = caps.dreamwellDeck[state.dreamwellDeckIndex];
   const energyAdded = card?.energyAdded ?? 0;
-  const commands: BattleCommand[] = [command];
+  const commands: BattleCommand[] = [];
   for (const energyEdit of dreamwellEnergyEdits(
     edit.side,
     state.sides[edit.side].maxEnergy,
@@ -225,6 +226,7 @@ function planDreamwellReveal(
   )) {
     commands.push(autoCommand(energyEdit));
   }
+  commands.push(command);
   return commands;
 }
 

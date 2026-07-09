@@ -60,12 +60,15 @@ export async function loadDecklists(): Promise<string[][]> {
  * UUIDs, lowercased, written to `/decklist-ids-data.json` by
  * `scripts/setup-assets.mjs`). The IDF-cosine pool engine (`idf`/`idf2`/`idf3`/
  * `idf4`) and the affiliation reweighting score on this corpus so two distinct
- * cards that share a display name stay distinct. Returns an empty array if the
- * bundle is missing so the harness still loads.
+ * cards that share a display name stay distinct.
  */
 export async function loadDecklistIds(): Promise<string[][]> {
   const response = await fetch("/decklist-ids-data.json");
-  if (!response.ok) return [];
+  if (!response.ok) {
+    throw new Error(
+      `Failed to load decklist ids: ${String(response.status)} ${response.statusText}`,
+    );
+  }
   return (await response.json()) as string[][];
 }
 
@@ -93,12 +96,15 @@ export interface DraftRecord {
 /**
  * Fetch the bundled adapted draft records (`docs/draft_records_adapted`,
  * written to `/draft-records-data.json` by `scripts/setup-assets.mjs`) used
- * by the record-replay draft mode. Returns an empty array if the bundle is
- * missing so the harness still loads.
+ * by the record-replay draft mode and opponent deck construction.
  */
 export async function loadDraftRecords(): Promise<DraftRecord[]> {
   const response = await fetch("/draft-records-data.json");
-  if (!response.ok) return [];
+  if (!response.ok) {
+    throw new Error(
+      `Failed to load draft records: ${String(response.status)} ${response.statusText}`,
+    );
+  }
   return (await response.json()) as DraftRecord[];
 }
 
@@ -121,12 +127,15 @@ export interface KnownGoodDecklist {
  * Fetch the bundled known-good decklists corpus (`docs/known_good_decklists.json`
  * projected through the adapted draft records, written to
  * `/known-good-decklists-data.json` by `scripts/setup-assets.mjs`) used by the
- * corpus opponent-deck algorithm. Returns an empty array if the bundle is missing
- * so the harness still loads.
+ * corpus opponent-deck algorithm.
  */
 export async function loadKnownGoodDecklists(): Promise<KnownGoodDecklist[]> {
   const response = await fetch("/known-good-decklists-data.json");
-  if (!response.ok) return [];
+  if (!response.ok) {
+    throw new Error(
+      `Failed to load known-good decklists: ${String(response.status)} ${response.statusText}`,
+    );
+  }
   return (await response.json()) as KnownGoodDecklist[];
 }
 

@@ -630,6 +630,17 @@ describe("ACCEPT_TRANSFIGURATION_CHOICE", () => {
       }).outcome,
     ).toBe("bounced");
   });
+
+  it("bounces an unrecognized requested type instead of accepting the first offer", () => {
+    const state = opened(1000);
+    const out = reduce(state, "ACCEPT_TRANSFIGURATION_CHOICE", {
+      siteId: SITE_ID,
+      entryId: "deck-1",
+      type: "bogus",
+    });
+    expect(out.outcome).toBe("bounced");
+    expect(out.state.quest.deck[0].transfiguration).toBeNull();
+  });
 });
 
 describe("ACCEPT_DUPLICATION_CHOICE", () => {
@@ -739,6 +750,37 @@ describe("PURGE_DECK_CARDS full behavior", () => {
     expect(out.state.quest.dreamsigns.map((d) => d.id)).toEqual(["keep"]);
     expect(out.state.quest.visitedSites).toContain(SITE_ID);
     expect(out.state.quest.screen.type).toBe("dreamscape");
+  });
+
+  it("bounces a site purge whose cost exceeds current essence", () => {
+    const state = purgeState();
+    const out = reduce(
+      { ...state, quest: { ...state.quest, essence: 3 } },
+      "PURGE_DECK_CARDS",
+      {
+        entryIds: ["deck-1"],
+        siteId: SITE_ID,
+        cost: 4,
+      },
+    );
+    expect(out.outcome).toBe("bounced");
+    expect(out.state.quest.essence).toBe(3);
+    expect(out.state.quest.visitedSites).not.toContain(SITE_ID);
+  });
+
+  it("treats a negative site purge cost as zero", () => {
+    const state = purgeState();
+    const out = reduce(
+      { ...state, quest: { ...state.quest, essence: 3 } },
+      "PURGE_DECK_CARDS",
+      {
+        entryIds: ["deck-1"],
+        siteId: SITE_ID,
+        cost: -100,
+      },
+    );
+    expect(out.outcome).toBe("applied");
+    expect(out.state.quest.essence).toBe(3);
   });
 
   it("does not remove a non-bane dreamsign even if its index is listed", () => {

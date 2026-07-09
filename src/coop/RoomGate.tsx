@@ -271,14 +271,25 @@ export function RoomGate({ db, gameId, runtimeConfig, children }: RoomGateProps)
   // Write this client's presence once the room is ready.
   useEffect(() => {
     if (readyRoomId === null) {
-      return;
+      return undefined;
     }
-    void writePresence(db, readyRoomId, clientId).catch((error: unknown) => {
+    const handleError = (error: unknown): void => {
       setGateState({
         status: "error",
         message: error instanceof Error ? error.message : "Failed to write presence.",
       });
-    });
+    };
+    try {
+      const maybeCleanup: unknown = writePresence(db, readyRoomId, clientId, undefined, handleError);
+      if (typeof maybeCleanup !== "function") {
+        return undefined;
+      }
+      const cleanup = maybeCleanup as () => void;
+      return cleanup;
+    } catch (error) {
+      handleError(error);
+      return undefined;
+    }
   }, [db, readyRoomId, clientId]);
 
   // Install the quest-log sink for the ready room: stamps `gameId` onto every
@@ -372,7 +383,7 @@ export function RoomGate({ db, gameId, runtimeConfig, children }: RoomGateProps)
   );
 }
 
-function ConnectedPill({ count }: { count: number }): ReactNode {
+function ConnectedPill({ count }: { count: number | null }): ReactNode {
   return (
     <div
       data-connected-count
@@ -383,7 +394,7 @@ function ConnectedPill({ count }: { count: number }): ReactNode {
         border: "1px solid rgba(124, 58, 237, 0.25)",
       }}
     >
-      {count} connected
+      {count === null ? "connecting..." : `${count} connected`}
     </div>
   );
 }

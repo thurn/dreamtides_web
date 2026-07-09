@@ -16,6 +16,7 @@ import {
 } from "../testing/fixtures";
 import { buildMerchantContext } from "../context/buildMerchantContext";
 import {
+  compareCodeUnits,
   generateMerchantEncounter,
   generateMerchantEncounterWithDebug,
 } from "./generateMerchantEncounter";
@@ -79,6 +80,11 @@ function contextFor(content: QuestContent, state: QuestState) {
 }
 
 describe("generateMerchantEncounter", () => {
+  it("uses locale-free code-unit ordering for signature inputs", () => {
+    expect(compareCodeUnits("B", "a")).toBeLessThan(0);
+    expect(["a", "B"].sort(compareCodeUnits)).toEqual(["B", "a"]);
+  });
+
   it("produces exactly two offers from different families across seeds", () => {
     const content = fixtureContent({});
     for (let s = 0; s < 30; s += 1) {

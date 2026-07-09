@@ -5,7 +5,7 @@ import {
   loadQuestContent,
 } from "./quest-content";
 import type { CardData } from "../types/cards";
-import type { DraftRecord } from "./cards-v2-database";
+import type { DraftRecord, KnownGoodDecklist } from "./cards-v2-database";
 import type { DreamcallerContent } from "../types/content";
 import { DEFAULT_STARTING_ESSENCE } from "../types/content";
 import type { FitModel } from "../draft/replay/fit-model";
@@ -70,20 +70,48 @@ describe("loadQuestContent", () => {
     dreamcallers,
     dreamsigns,
     decklists,
+    decklistIds,
     draftRecords = [],
+    knownGoodDecklists = [],
+    merchantCorpus = {
+      version: 1,
+      source: "test",
+      cards: {},
+      clusters: [],
+    },
     affinityCorpus = tinyCorpus,
+    failingPaths = [],
   }: {
     cards: CardData[];
     dreamcallers: unknown[];
     dreamsigns: unknown[];
     decklists: string[][];
+    decklistIds?: string[][];
     draftRecords?: DraftRecord[];
+    knownGoodDecklists?: KnownGoodDecklist[];
+    merchantCorpus?: unknown;
     affinityCorpus?: unknown;
+    failingPaths?: string[];
   }): void {
+    const idByName = new Map(cards.map((card) => [String(card.name), card.id]));
+    const resolvedDecklistIds =
+      decklistIds ??
+      decklists.map((deck) =>
+        deck.map((name) => idByName.get(name) ?? name.toLowerCase()),
+      );
+    const failingPathSet = new Set(failingPaths);
     vi.stubGlobal(
       "fetch",
       vi.fn((input: string | URL) => {
         const path = String(input);
+        if (failingPathSet.has(path)) {
+          return Promise.resolve({
+            ok: false,
+            status: 503,
+            statusText: "Test Failure",
+            json: () => Promise.resolve(null),
+          });
+        }
         if (path === "/cards_v2-data.json") {
           return Promise.resolve({ ok: true, json: () => Promise.resolve(cards) });
         }
@@ -111,10 +139,28 @@ describe("loadQuestContent", () => {
             json: () => Promise.resolve(decklists),
           });
         }
+        if (path === "/decklist-ids-data.json") {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(resolvedDecklistIds),
+          });
+        }
         if (path === "/draft-records-data.json") {
           return Promise.resolve({
             ok: true,
             json: () => Promise.resolve(draftRecords),
+          });
+        }
+        if (path === "/known-good-decklists-data.json") {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(knownGoodDecklists),
+          });
+        }
+        if (path === "/merchant-corpus-data.json") {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(merchantCorpus),
           });
         }
         if (path === "/affinity-corpus-data.json") {
@@ -154,11 +200,8 @@ describe("loadQuestContent", () => {
           });
         }
         // Any other asset the loader requests is an optional, variant-specific
-        // artifact (a tides bundle, the merchant corpus, dreamsign profiles,
-        // etc.). The loaders all treat a non-ok response as "absent" and fall
-        // back gracefully, so returning a 404 here keeps these tests green no
-        // matter which pool variant is the default — they exercise the load
-        // path itself, not any one variant's pool construction.
+        // artifact (a tides bundle, dreamsign profiles, etc.). Returning a 404
+        // here keeps these tests focused on the shared load path.
         return Promise.resolve({
           ok: false,
           status: 404,
@@ -204,6 +247,35 @@ describe("loadQuestContent", () => {
       );
     }
     expect(poolContext.poolData.decklists).not.toHaveLength(0);
+  });
+
+  it.each([
+    ["/decklist-ids-data.json", "Failed to load decklist ids"],
+    ["/draft-records-data.json", "Failed to load draft records"],
+    ["/known-good-decklists-data.json", "Failed to load known-good decklists"],
+    ["/merchant-corpus-data.json", "Failed to load merchant corpus"],
+  ])("rejects when fold-relevant content fetch %s fails", async (path, message) => {
+    const cards = [makeCard(1), makeCard(2), makeCard(3)];
+    const dreamcallers = [
+      {
+        id: "dc-a",
+        name: "Alpha",
+        title: "A",
+        renderedText: "",
+        imageNumber: "0001",
+        startingEssence: 250,
+        signatureCards: ["Card 1"],
+      },
+    ];
+    stubFetch({
+      cards,
+      dreamcallers,
+      dreamsigns: [],
+      decklists: [["Card 1", "Card 2"]],
+      failingPaths: [path],
+    });
+
+    await expect(loadQuestContent()).rejects.toThrow(message);
   });
 
   it("fetches the draft-record corpus for pick-data pool variants", async () => {

@@ -267,6 +267,30 @@ describe("SET_DECK_ENTRY_* apply", () => {
   });
 });
 
+describe("SET_DECK_ENTRY_* plain object guards", () => {
+  it("bounces array-shaped stat overrides, keyword modifications, and type changes", () => {
+    const state = stateWithDeck();
+    expect(
+      reduce(state, "SET_DECK_ENTRY_STAT_OVERRIDE", {
+        entryId: "deck-1",
+        override: [],
+      }).outcome,
+    ).toBe("bounced");
+    expect(
+      reduce(state, "SET_DECK_ENTRY_KEYWORDS", {
+        entryId: "deck-1",
+        keywords: [],
+      }).outcome,
+    ).toBe("bounced");
+    expect(
+      reduce(state, "SET_DECK_ENTRY_TYPE", {
+        entryId: "deck-1",
+        typeChange: [],
+      }).outcome,
+    ).toBe("bounced");
+  });
+});
+
 // ---------------------------------------------------------------------------
 // Purge determinism / bane purges
 // ---------------------------------------------------------------------------

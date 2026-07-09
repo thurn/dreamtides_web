@@ -14,6 +14,7 @@
 import {
   type Database,
   get,
+  onValue,
   onDisconnect,
   ref,
   runTransaction,
@@ -229,7 +230,10 @@ export async function createRoomEvictingStale(
   const roomsRef = ref(database, "rooms");
   const snapshot = await get(roomsRef);
   const existingRooms = snapshot.exists()
-    ? (snapshot.val() as Record<string, { log?: { genesis?: unknown } }> | null)
+    ? (snapshot.val() as Record<
+        string,
+        { log?: { genesis?: unknown }; presence?: Record<string, PresenceEntry> | null }
+      > | null)
     : null;
   if (existingRooms === null) {
     return;
@@ -238,6 +242,9 @@ export async function createRoomEvictingStale(
   const updateMap: Record<string, unknown> = {};
   for (const [existingId, existingRoom] of Object.entries(existingRooms)) {
     if (existingId === roomId) {
+      continue;
+    }
+    if (hasConnectedPresence(existingRoom?.presence)) {
       continue;
     }
     const rawGenesis = existingRoom?.log?.genesis;
@@ -260,25 +267,57 @@ export interface PresenceEntry {
   lastSeenAt: string;
 }
 
+function hasConnectedPresence(
+  presence: Record<string, PresenceEntry> | null | undefined,
+): boolean {
+  return Object.values(presence ?? {}).some((entry) => entry.connected === true);
+}
+
 function presencePath(roomId: string, clientId: string): string {
   return `rooms/${roomId}/presence/${clientId}`;
 }
 
 /**
- * Writes this client's presence entry and registers an `onDisconnect`
- * cleanup that removes it when the connection drops.
+ * Starts this client's presence writer. Each time Firebase reports
+ * `.info/connected === true`, it rearms `onDisconnect().remove()` and then
+ * writes this client as connected. Returns a cleanup function that stops the
+ * connection listener and removes the current entry.
  */
-export async function writePresence(
+export function writePresence(
   database: Database,
   roomId: string,
   clientId: string,
-  nowIso: string = new Date().toISOString(),
-): Promise<void> {
+  nowIso: () => string = () => new Date().toISOString(),
+  onError?: (error: unknown) => void,
+): () => void {
   const entryRef = ref(database, presencePath(roomId, clientId));
-  const entry: PresenceEntry = { connected: true, lastSeenAt: nowIso };
+  const connectedRef = ref(database, ".info/connected");
+  let disposed = false;
 
-  await onDisconnect(entryRef).remove();
-  await set(entryRef, entry);
+  const reportError = (error: unknown): void => {
+    if (!disposed) {
+      onError?.(error);
+    }
+  };
+
+  const unsubscribe = onValue(connectedRef, (snapshot) => {
+    if (snapshot.val() !== true || disposed) {
+      return;
+    }
+    const entry: PresenceEntry = { connected: true, lastSeenAt: nowIso() };
+    void onDisconnect(entryRef)
+      .remove()
+      .then(() => set(entryRef, entry))
+      .catch(reportError);
+  });
+
+  return () => {
+    disposed = true;
+    unsubscribe();
+    void set(entryRef, null).catch(() => {
+      // Cleanup is best-effort; this tab is leaving the room.
+    });
+  };
 }
 
 /**
@@ -287,9 +326,9 @@ export async function writePresence(
  */
 export function connectedClientCount(
   presence: Record<string, PresenceEntry> | null | undefined,
-): number {
+): number | null {
   if (presence === null || presence === undefined) {
-    return 0;
+    return null;
   }
   return Object.values(presence).filter((entry) => entry.connected).length;
 }

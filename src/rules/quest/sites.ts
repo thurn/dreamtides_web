@@ -566,10 +566,13 @@ export function acceptTransfigurationChoice(
   const entry = quest.deck.find((candidate) => candidate.entryId === entryId);
   if (entry === undefined || entry.transfiguration !== null) return null;
 
-  const wantType =
-    payload.type !== undefined && TRANSFIGURATION_TYPES.has(payload.type as TransfigurationType)
-      ? (payload.type as TransfigurationType)
-      : null;
+  let wantType: TransfigurationType | null = null;
+  if (payload.type !== undefined) {
+    if (!TRANSFIGURATION_TYPES.has(payload.type as TransfigurationType)) {
+      return null;
+    }
+    wantType = payload.type as TransfigurationType;
+  }
   const offered = runtime.transfigurationOffers.find(
     (offer) =>
       offer.entryId === entryId && (wantType === null || offer.type === wantType),
@@ -788,7 +791,9 @@ export function purgeDeckCards(
   // removal, and site completion.
   if (quest.visitedSites.includes(siteId)) return null;
 
-  const cost = finiteNumber(payload.cost) ?? 0;
+  const rawCost = finiteNumber(payload.cost) ?? 0;
+  const cost = Math.max(0, rawCost);
+  if (quest.essence < cost) return null;
   const baneIndicesRaw = Array.isArray(payload.baneDreamsignIndices)
     ? payload.baneDreamsignIndices
     : [];

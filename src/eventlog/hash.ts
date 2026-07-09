@@ -49,6 +49,9 @@ function canonicalize(value: unknown): string {
     );
     return `[${items.join(",")}]`;
   }
+  if (!isPlainObject(value)) {
+    throw new Error("hashState: non-plain object cannot be canonicalized safely");
+  }
   const record = value as Record<string, unknown>;
   const keys = Object.keys(record).sort();
   const entries: string[] = [];
@@ -117,6 +120,10 @@ function firstUnsafePath(
     seen.delete(value);
     return null;
   }
+  if (!isPlainObject(value)) {
+    seen.delete(value);
+    return { path, reason: "a non-plain object" };
+  }
   const record = value as Record<string, unknown>;
   for (const key of Object.keys(record)) {
     const found = firstUnsafePath(record[key], `${path}.${key}`, seen);
@@ -124,4 +131,9 @@ function firstUnsafePath(
   }
   seen.delete(value);
   return null;
+}
+
+function isPlainObject(value: object): boolean {
+  const prototype: unknown = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
 }

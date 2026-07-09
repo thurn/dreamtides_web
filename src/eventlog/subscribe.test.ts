@@ -7,11 +7,24 @@
 // LogNode that folds cleanly — a malformed entry folding to a bounce, never a
 // crash.
 
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { foldEvents } from "./fold";
 import { hashState } from "./hash";
-import { decodeLogNode } from "./subscribe";
+import { decodeLogNode, subscribeToLog } from "./subscribe";
 import type { EncodedLogNode, EngineConfig, GameEvent, Genesis } from "./types";
+
+const firebase = vi.hoisted(() => ({
+  callbacks: [] as Array<(snapshot: { val: () => unknown }) => void>,
+  unsubscribe: vi.fn(),
+}));
+
+vi.mock("firebase/database", () => ({
+  ref: (_db: unknown, path: string) => ({ path }),
+  onValue: (_ref: unknown, callback: (snapshot: { val: () => unknown }) => void) => {
+    firebase.callbacks.push(callback);
+    return firebase.unsubscribe;
+  },
+}));
 
 interface ToyState {
   seqs: number[];
@@ -97,6 +110,21 @@ describe("decodeLogNode", () => {
     expect(node?.appliedIndex.get(2)).toEqual({ actor: "b", type: "T" });
   });
 
+  it("does not throw when the persisted appliedIndex is corrupt", () => {
+    const encoded: EncodedLogNode = {
+      genesis: JSON.stringify(GENESIS),
+      baseSeq: 2,
+      baseSnapshot: JSON.stringify({ seqs: [1, 2] }),
+      head: 2,
+      events: {},
+      appliedIndex: "{ not valid json",
+    };
+    expect(() => decodeLogNode(encoded)).not.toThrow();
+    const node = decodeLogNode(encoded);
+    expect(node).not.toBeNull();
+    expect(node?.appliedIndex.size).toBe(0);
+  });
+
   it("carries a non-null baseSnapshot as the RAW encoded string, not pre-parsed (P3-2)", () => {
     const encoded: EncodedLogNode = {
       genesis: JSON.stringify(GENESIS),
@@ -157,5 +185,60 @@ describe("decodeLogNode", () => {
     expect(result.outcomes[0].error).toBeDefined();
     expect(result.outcomes[1].outcome).toBe("applied");
     expect(result.state.seqs).toEqual([2]);
+  });
+});
+
+describe("subscribeToLog", () => {
+  beforeEach(() => {
+    firebase.callbacks.length = 0;
+    firebase.unsubscribe.mockClear();
+  });
+
+  function emit(value: EncodedLogNode | null): void {
+    const callback = firebase.callbacks[firebase.callbacks.length - 1];
+    if (callback === undefined) {
+      throw new Error("subscribeToLog callback was not registered");
+    }
+    callback({ val: () => value });
+  }
+
+  it("waits on an initial null log node but reports corruption if a live node becomes null", () => {
+    const onNode = vi.fn();
+    const onCorrupt = vi.fn();
+    subscribeToLog({} as never, "room1", onNode, onCorrupt);
+
+    emit(null);
+    expect(onNode).not.toHaveBeenCalled();
+    expect(onCorrupt).not.toHaveBeenCalled();
+
+    emit({
+      genesis: JSON.stringify(GENESIS),
+      baseSeq: 0,
+      baseSnapshot: null,
+      head: 0,
+      events: {},
+    });
+    expect(onNode).toHaveBeenCalledTimes(1);
+    expect(onCorrupt).not.toHaveBeenCalled();
+
+    emit(null);
+    expect(onCorrupt).toHaveBeenCalledTimes(1);
+  });
+
+  it("reports unreadable live log nodes through onCorrupt", () => {
+    const onNode = vi.fn();
+    const onCorrupt = vi.fn();
+    subscribeToLog({} as never, "room1", onNode, onCorrupt);
+
+    emit({
+      genesis: "{ not valid json",
+      baseSeq: 0,
+      baseSnapshot: null,
+      head: 0,
+      events: {},
+    });
+
+    expect(onNode).not.toHaveBeenCalled();
+    expect(onCorrupt).toHaveBeenCalledTimes(1);
   });
 });

@@ -201,6 +201,22 @@ export default tseslint.config(
     },
   },
   {
+    files: [
+      "src/battle/integration/corpus-opponent-deck.ts",
+      "src/journey_v2/encounter/generateMerchantEncounter.ts",
+    ],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "CallExpression[callee.property.name='localeCompare']",
+          message:
+            "Fold-reachable generation code must use explicit code-unit comparison, not default-locale localeCompare.",
+        },
+      ],
+    },
+  },
+  {
     // src/rules/ is the pure reducer package for the coop event-sourcing
     // rewrite: given an event log, it deterministically computes state. It
     // must stay free of Firebase (network/persistence), React (view-layer),

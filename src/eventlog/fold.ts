@@ -258,19 +258,37 @@ export function encodeAppliedIndex(index: Map<number, AppliedEntry>): string {
 
 /**
  * Parses a persisted applied-index JSON string back into a seq -> {actor, type}
- * map. Total and tolerant: a missing string (a pre-compaction node has none)
- * decodes to an empty map, and non-integer keys are skipped.
+ * map. Total and tolerant: a missing or corrupt string (a pre-compaction node
+ * has none) decodes to an empty map, malformed entries are skipped, and
+ * non-integer keys are skipped.
  */
 export function decodeAppliedIndex(raw: string | null | undefined): Map<number, AppliedEntry> {
   const map = new Map<number, AppliedEntry>();
   if (raw === null || raw === undefined) {
     return map;
   }
-  const record = JSON.parse(raw) as Record<string, AppliedEntry>;
+  let record: unknown;
+  try {
+    record = JSON.parse(raw);
+  } catch {
+    return map;
+  }
+  if (record === null || typeof record !== "object" || Array.isArray(record)) {
+    return map;
+  }
   for (const [key, value] of Object.entries(record)) {
     const seq = Number(key);
-    if (Number.isInteger(seq)) {
-      map.set(seq, { actor: value.actor, type: value.type });
+    if (
+      Number.isInteger(seq) &&
+      value !== null &&
+      typeof value === "object" &&
+      typeof (value as Partial<AppliedEntry>).actor === "string" &&
+      typeof (value as Partial<AppliedEntry>).type === "string"
+    ) {
+      map.set(seq, {
+        actor: (value as AppliedEntry).actor,
+        type: (value as AppliedEntry).type,
+      });
     }
   }
   return map;

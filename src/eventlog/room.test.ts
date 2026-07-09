@@ -149,9 +149,12 @@ describe("connectedClientCount", () => {
     expect(connectedClientCount(presence)).toBe(2);
   });
 
-  it("returns 0 for an empty or missing presence snapshot", () => {
+  it("returns 0 for an empty known presence snapshot", () => {
     expect(connectedClientCount({})).toBe(0);
-    expect(connectedClientCount(null)).toBe(0);
-    expect(connectedClientCount(undefined)).toBe(0);
+  });
+
+  it("returns null while the presence snapshot is unknown", () => {
+    expect(connectedClientCount(null)).toBeNull();
+    expect(connectedClientCount(undefined)).toBeNull();
   });
 });

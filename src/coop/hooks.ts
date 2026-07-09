@@ -57,6 +57,7 @@ import {
   BounceToast,
   PENDING_DROPPED_MESSAGE,
 } from "./BounceToast";
+import { UnreadableRoomScreen } from "./UnreadableRoomScreen";
 
 /** A confirmed event's outcome, delivered to `useEventOutcomes` subscribers. */
 export type OutcomeListener = (
@@ -75,7 +76,7 @@ interface CoopContextValue {
   /** Named action creators bound to `append` (RESOLVE_PROMPT guard applied). */
   actions: CoopActions;
   /** Connected clients, from the room's presence node. */
-  connectedCount: number;
+  connectedCount: number | null;
   /**
    * Newest CONFIRMED seq (the max seq `onEventOutcome` has reported). A prompt
    * whose `promptId` (= its opening event's seq) exceeds this is still an
@@ -117,7 +118,8 @@ export function CoopProvider({
   const [gameState, setGameState] = useState<FoldState>(() =>
     GAME_ENGINE_CONFIG.genesisState(genesis),
   );
-  const [connectedCount, setConnectedCount] = useState(0);
+  const [connectedCount, setConnectedCount] = useState<number | null>(null);
+  const [corruptLog, setCorruptLog] = useState(false);
   const [bounceToken, setBounceToken] = useState(0);
   // The copy for the toast the next `bounceToken` bump shows. Set by whichever
   // callback triggers it (own bounce / append failure / pending drop); read at
@@ -161,8 +163,12 @@ export function CoopProvider({
   // One LogClient per (db, roomId, clientId). Its callbacks are stable across
   // renders (they read mutable refs), so the client is created once per room.
   useEffect(() => {
+    setCorruptLog(false);
     const io: LogClientIo = {
-      subscribe: (onNode) => subscribeToLog(db, roomId, onNode),
+      subscribe: (onNode) =>
+        subscribeToLog(db, roomId, onNode, () => {
+          setCorruptLog(true);
+        }),
       append: (event) => appendEvent(db, roomId, GAME_ENGINE_CONFIG, event),
     };
 
@@ -344,6 +350,13 @@ export function CoopProvider({
     [clientId, gameState, append, actions, connectedCount, registerOutcomeListener],
   );
 
+  if (corruptLog) {
+    return createElement(UnreadableRoomScreen, {
+      db,
+      contentConfig: genesis.contentConfig,
+    });
+  }
+
   return createElement(
     CoopContext.Provider,
     { value },
@@ -385,7 +398,7 @@ export function useActions(): CoopActions {
 }
 
 /** The number of clients currently connected to the room. */
-export function useConnectedCount(): number {
+export function useConnectedCount(): number | null {
   return useCoop().connectedCount;
 }
 

@@ -16,6 +16,7 @@ import { STARTER_CARD_NUMBERS } from "../../data/starter-cards";
 import {
   STAGE_B_LAYER_SPEC,
   buildCorpusOpponentDeck,
+  compareCodeUnits,
 } from "./corpus-opponent-deck";
 
 // ---------------------------------------------------------------------------
@@ -294,6 +295,26 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
     expect(result).not.toBeNull();
     expect(result!.candidateCount).toBe(2);
     expect(result!.signatureFit).toBe(0);
+  });
+
+  it("uses locale-free code-unit ordering for tied deck ids", () => {
+    expect(compareCodeUnits("B", "a")).toBeLessThan(0);
+
+    const decks = [
+      makeDecklist("a", [C.a.id, C.b.id]),
+      makeDecklist("B", [C.c.id, C.d.id]),
+    ];
+    const result = buildCorpusOpponentDeck({
+      ...baseArgs,
+      opponentDreamcaller: null,
+      knownGoodDecklists: decks,
+      affiliation: null,
+      cardDatabase: cardDb(ALL_CARDS),
+      poolSeed: 0,
+    });
+
+    expect(result).not.toBeNull();
+    expect(result!.topK.map((member) => member.id)).toEqual(["a", "B"]);
   });
 
   it("produces 0 affiliationFit and no NaN/Infinity when affiliation is null (neutral dreamscape)", () => {

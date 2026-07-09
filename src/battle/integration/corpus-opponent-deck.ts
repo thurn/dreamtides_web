@@ -149,6 +149,13 @@ function lc(value: string): string {
   return value.toLowerCase();
 }
 
+/** Locale-free string comparison using JavaScript code-unit order. */
+export function compareCodeUnits(a: string, b: string): number {
+  if (a < b) return -1;
+  if (a > b) return 1;
+  return 0;
+}
+
 /** Finite-or-zero guard so empty probes never leak NaN/Infinity downstream. */
 function finiteOrZero(value: number): number {
   return Number.isFinite(value) ? value : 0;
@@ -287,7 +294,7 @@ export function buildCorpusOpponentDeck(args: {
   // ties resolve identically across runs for reproducibility.
   const ranked = [...candidates].sort((a, b) => {
     if (b.combined !== a.combined) return b.combined - a.combined;
-    return b.id.localeCompare(a.id);
+    return compareCodeUnits(b.id, a.id);
   });
 
   const window = ranked.slice(0, Math.min(TOP_K, ranked.length));
@@ -537,7 +544,7 @@ export function buildCorpusOpponentDeck(args: {
         }
       }
       if (neutralIds.length > 0) {
-        const sorted = [...neutralIds].sort((a, b) => a.localeCompare(b));
+        const sorted = [...neutralIds].sort(compareCodeUnits);
         const chosen = sorted[stageBRng.nextInt(sorted.length)];
         dreamsign = { id: chosen, name: nameFor(chosen), fit: 0 };
       }
@@ -656,7 +663,7 @@ function pickTopN<T>(
     const sa = scoreOf(a);
     const sb = scoreOf(b);
     if (sb !== sa) return sb - sa;
-    return keyOf(a).localeCompare(keyOf(b));
+    return compareCodeUnits(keyOf(a), keyOf(b));
   });
   // Seeded shuffle WITHIN equal-score runs so ties resolve deterministically
   // for a fixed seed but vary across seeds.

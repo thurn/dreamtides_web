@@ -36,6 +36,8 @@ const EMISSION: BattleEngineEmissionContext = {
   selectedCardId: null,
 };
 
+const RUN_QUEUE_STEP_CAP = 10_000;
+
 // ---------------------------------------------------------------------------
 // Cursor navigation over the (possibly nested) static step tree
 // ---------------------------------------------------------------------------
@@ -184,8 +186,13 @@ function runQueue(
 ): BattleFoldState {
   let currentBoard = board;
   let currentQueue = queue;
+  let stepsRun = 0;
 
   while (currentQueue.length > 0) {
+    stepsRun += 1;
+    if (stepsRun > RUN_QUEUE_STEP_CAP) {
+      throw new Error(`runQueue step cap exceeded (${RUN_QUEUE_STEP_CAP})`);
+    }
     const run = currentQueue[0];
     const steps = resolveScript(run.scriptRef);
     const remaining = remainingFromCursor(steps, run.cursor);

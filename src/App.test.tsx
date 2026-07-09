@@ -14,6 +14,7 @@ import type { QuestState } from "./types/quest";
 import { LayerName } from "./types/layer-name";
 import App, { QuestApp } from "./App";
 import { useQuest } from "./state/quest-context";
+import { registerGameProviders } from "./coop/providers/register-game-providers";
 
 vi.mock("./data/quest-content", () => ({
   loadQuestContent: vi.fn(),
@@ -344,6 +345,39 @@ describe("App", () => {
     expect(container.querySelector("[data-room-gate='ab12cd']")).not.toBeNull();
     expect(container.querySelector("[data-coop-provider]")).not.toBeNull();
     expect(container.querySelector("[data-coop-quest-provider]")).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("blocks room entry and provider registration when quest content loading fails", async () => {
+    vi.mocked(loadQuestContent).mockRejectedValueOnce(
+      new Error("Failed to load draft records: 503 Test Failure"),
+    );
+
+    const { container, root } = mount(
+      <App
+        runtimeConfig={{
+          seedOverride: null,
+          startInBattle: false,
+          aiMode: false,
+          basicAutomation: false,
+          gameId: "ab12cd",
+          databaseMode: "emulator",
+          journeyVariant: "classic",
+          uiVariant: "legacy",
+        }}
+      />,
+    );
+
+    await flushAppEffects();
+
+    expect(container.textContent).toContain("Quest content failed to load");
+    expect(container.textContent).toContain("Failed to load draft records");
+    expect(container.querySelector("[data-room-gate]")).toBeNull();
+    expect(container.querySelector("[data-coop-provider]")).toBeNull();
+    expect(registerGameProviders).not.toHaveBeenCalled();
 
     act(() => {
       root.unmount();

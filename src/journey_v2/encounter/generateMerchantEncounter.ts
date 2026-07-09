@@ -50,6 +50,12 @@ type StableJsonValue =
 
 const OFFER_IDS = ["A", "B"] as const;
 
+export function compareCodeUnits(a: string, b: string): number {
+  if (a < b) return -1;
+  if (a > b) return 1;
+  return 0;
+}
+
 function stableJson(value: unknown): string {
   return JSON.stringify(toStableJsonValue(value));
 }
@@ -69,7 +75,7 @@ function toStableJsonValue(value: unknown): StableJsonValue {
   if (typeof value === "object" && value !== undefined) {
     const source = value as Record<string, unknown>;
     const stable: Record<string, StableJsonValue> = {};
-    for (const key of Object.keys(source).sort()) {
+    for (const key of Object.keys(source).sort(compareCodeUnits)) {
       const child = source[key];
       if (child !== undefined && typeof child !== "function") {
         stable[key] = toStableJsonValue(child);
@@ -172,8 +178,8 @@ function inputSignature(context: MerchantContext): unknown {
         typeChange: deckCard.deckEntry.typeChange ?? null,
         isBane: deckCard.deckEntry.isBane,
       }))
-      .sort((a, b) => a.entryId.localeCompare(b.entryId)),
-    heldDreamsignIds: [...context.heldDreamsignIds].sort(),
+      .sort((a, b) => compareCodeUnits(a.entryId, b.entryId)),
+    heldDreamsignIds: [...context.heldDreamsignIds].sort(compareCodeUnits),
   };
 }
 

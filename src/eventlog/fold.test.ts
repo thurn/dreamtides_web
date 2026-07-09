@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildAppliedIndex, foldEvents } from "./fold";
+import { buildAppliedIndex, decodeAppliedIndex, foldEvents } from "./fold";
 import { hashState } from "./hash";
 import type { EngineConfig, EventContext, EventOutcome, Genesis, GameEvent } from "./types";
 
@@ -291,6 +291,30 @@ describe("foldEvents applied-index horizon coverage", () => {
       coveredFromSeq: 4,
     });
     expect(captured).toBe("unknown");
+  });
+});
+
+describe("decodeAppliedIndex", () => {
+  it("is total for corrupt persisted appliedIndex strings", () => {
+    expect(() => decodeAppliedIndex("{ not valid json")).not.toThrow();
+    expect(decodeAppliedIndex("{ not valid json").size).toBe(0);
+  });
+
+  it("skips malformed appliedIndex entries and keeps valid integer-keyed entries", () => {
+    const decoded = decodeAppliedIndex(
+      JSON.stringify({
+        1: { actor: "a", type: "T" },
+        nope: { actor: "b", type: "T" },
+        2: { actor: "missing-type" },
+        3: null,
+        4: { actor: "c", type: "U" },
+      }),
+    );
+
+    expect([...decoded.entries()]).toEqual([
+      [1, { actor: "a", type: "T" }],
+      [4, { actor: "c", type: "U" }],
+    ]);
   });
 });
 

@@ -72,6 +72,12 @@ describe("hashState", () => {
     const withNull = { items: [1, null, 3] };
     expect(hashState(withUndefined)).toBe(hashState(withNull));
   });
+
+  it("does not canonicalize non-plain object containers as empty records", () => {
+    expect(() => hashState({ cache: new Map([["x", 1]]) })).toThrow(
+      /non-plain object/,
+    );
+  });
 });
 
 describe("assertJsonSafe", () => {
@@ -99,6 +105,15 @@ describe("assertJsonSafe", () => {
   it("names the index of an offending array element and rejects functions", () => {
     expect(() => assertJsonSafe({ xs: [1, () => 0] }, "state")).toThrow(
       /state\.xs\[1\] holds a function/,
+    );
+  });
+
+  it("rejects non-plain object containers before they can survive as empty JSON", () => {
+    expect(() => assertJsonSafe({ cache: new Map([["x", 1]]) }, "state")).toThrow(
+      /state\.cache holds a non-plain object/,
+    );
+    expect(() => assertJsonSafe({ date: new Date(0) }, "state")).toThrow(
+      /state\.date holds a non-plain object/,
     );
   });
 });

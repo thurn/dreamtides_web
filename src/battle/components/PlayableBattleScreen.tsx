@@ -220,8 +220,9 @@ function PlayableBattleScreenInner({
 
   // The AI approval loop. Inert unless `aiMode` is true AND this client may run
   // the AI: when disabled the hook holds no proposal and submits nothing. It
-  // receives the SAME live `board`/`submit` the rest of the screen uses, so
-  // approved commands flow back as a new `board` and the hook re-plans.
+  // receives the SAME live `board` and append-backed submitters the rest of the
+  // screen uses, so approved commands flow back as a new `board` and the hook
+  // re-plans.
   const submitAiCommand = useCallback(
     (command: BattleCommand): void => {
       void append({
@@ -232,9 +233,20 @@ function PlayableBattleScreenInner({
     },
     [append, clientId],
   );
+  const submitAiGesture = useCallback(
+    (commands: readonly BattleCommand[]): void => {
+      void append({
+        type: "BATTLE_GESTURE",
+        payload: { commands: [...commands] },
+        actor: `ai:${clientId}`,
+      });
+    },
+    [append, clientId],
+  );
   const { proposal, thinking: aiThinking, approve, reject } = useBattleAi({
     board,
-    submit: submitAiCommand,
+    submitCommand: submitAiCommand,
+    submitGesture: submitAiGesture,
     enabled: aiMode && aiMayRun,
     aiSide: "enemy",
     caps: aiCaps,

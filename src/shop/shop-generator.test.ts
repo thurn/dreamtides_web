@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { getLogEntries, resetLog } from "../logging";
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate, ResolvedDreamcallerPackage } from "../types/content";
 import type { PoolDraftState, ReplayDraftState } from "../types/draft";
@@ -322,6 +323,69 @@ describe("generateShopInventory", () => {
         expect(slot.discountPercent).toBeLessThanOrEqual(90);
       }
     }
+  });
+
+  it("uses a deterministic Fisher-Yates pass for discount slot selection", () => {
+    const draws = [
+      // Specialty stock shuffle.
+      0, 0, 0, 0,
+      // One discounted slot, then discount-index Fisher-Yates.
+      0, 0, 0, 0, 0,
+      // 30% discount.
+      0,
+    ];
+    let calls = 0;
+    const rng = () => {
+      const value = draws[calls];
+      if (value === undefined) {
+        throw new Error(`unexpected rng call ${String(calls)}`);
+      }
+      calls += 1;
+      return value;
+    };
+
+    const result = generateShopInventory({
+      cardDatabase: db,
+      draftState: makeDraftState({ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 }),
+      remainingDreamsignPoolIds: [],
+      dreamsignTemplates: DREAMSIGN_TEMPLATES,
+      starterDecklistCardNumbers: [1, 2, 3, 4, 5],
+      cardCount: 5,
+      rng,
+    });
+
+    expect(calls).toBe(draws.length);
+    expect(
+      result.slots.map((slot) => ({
+        cardNumber: slot.card?.cardNumber ?? null,
+        discountPercent: slot.discountPercent,
+      })),
+    ).toEqual([
+      { cardNumber: 2, discountPercent: 0 },
+      { cardNumber: 3, discountPercent: 30 },
+      { cardNumber: 4, discountPercent: 0 },
+      { cardNumber: 5, discountPercent: 0 },
+      { cardNumber: 1, discountPercent: 0 },
+    ]);
+  });
+
+  it("returns shop reconstruction data without emitting the inventory log during generation", () => {
+    resetLog();
+
+    const result = generateShopInventory({
+      cardDatabase: db,
+      draftState: makeDraftState({ 1: 1, 2: 1, 3: 1 }),
+      remainingDreamsignPoolIds: [],
+      dreamsignTemplates: DREAMSIGN_TEMPLATES,
+      cardCount: 3,
+      rng: () => 0,
+    });
+
+    expect(result.reconstructionLog.event).toBe("shop_inventory_generated");
+    expect(result.reconstructionLog.cardSlotCount).toBe(result.slots.length);
+    expect(
+      getLogEntries().some((entry) => entry.event === "shop_inventory_generated"),
+    ).toBe(false);
   });
 
   it("draws Specialty Shop card slots from the starter decklist", () => {

@@ -31,6 +31,8 @@ import { isoTimestampToMs } from "./timestamp";
 import type {
   BattleCardNoteExpiry,
   BattleEngineEmissionContext,
+  BattleFieldSlotAddress,
+  BattlePhase,
   BattleInit,
   BattleMutableState,
   BattleResult,
@@ -638,35 +640,184 @@ function applyBoardEdits(
  * the whole event bounces cleanly to the pre-event state with no wedge.
  */
 function coerceBattleCommand(raw: unknown): BattleCommand | null {
-  if (typeof raw !== "object" || raw === null) {
+  if (!isPlainRecord(raw)) {
     return null;
   }
-  const id = (raw as { id?: unknown }).id;
+  const id = raw.id;
   if (id === "DEBUG_EDIT") {
-    const edit = (raw as { edit?: unknown }).edit;
-    if (typeof edit !== "object" || edit === null) {
-      return null;
-    }
-    if (typeof (edit as { kind?: unknown }).kind !== "string") {
-      return null;
-    }
-    return raw as BattleCommand;
+    const edit = coerceBattleDebugEdit(raw.edit);
+    return edit === null ? null : { ...(raw as object), id, edit } as BattleCommand;
   }
   if (id === "FORCE_RESULT") {
-    const result = (raw as { result?: unknown }).result;
+    const result = raw.result;
     if (!isBattleResult(result)) {
       return null;
     }
-    return raw as BattleCommand;
+    return { ...(raw as object), id, result } as BattleCommand;
   }
   if (id === "SKIP_TO_REWARDS") {
-    return raw as BattleCommand;
+    return { ...(raw as object), id } as BattleCommand;
   }
   return null;
 }
 
+function coerceBattleDebugEdit(raw: unknown): BattleDebugEdit | null {
+  if (!isPlainRecord(raw) || typeof raw.kind !== "string") return null;
+  switch (raw.kind) {
+    case "SET_SCORE":
+    case "SET_CURRENT_ENERGY":
+    case "SET_MAX_ENERGY":
+      return isBattleSide(raw.side) && isFiniteNumber(raw.value) ? raw as unknown as BattleDebugEdit : null;
+    case "INCREASE_MAX_ENERGY_AND_FILL":
+    case "DRAW_CARD":
+      return isBattleSide(raw.side) ? raw as unknown as BattleDebugEdit : null;
+    case "ADJUST_SCORE":
+    case "ADJUST_CURRENT_ENERGY":
+    case "ADJUST_MAX_ENERGY":
+    case "KINDLE":
+      return isBattleSide(raw.side) && isFiniteNumber(raw.amount) ? raw as unknown as BattleDebugEdit : null;
+    case "SET_CARD_SPARK":
+    case "SET_CARD_SPARK_DELTA":
+    case "SET_CARD_STATIC_SPARK_BONUS":
+    case "SET_COUNTERS":
+      return isNonEmptyString(raw.battleCardId) && isFiniteNumber(raw.value) ? raw as unknown as BattleDebugEdit : null;
+    case "MOVE_CARD_TO_ZONE":
+      return isNonEmptyString(raw.battleCardId) && isDebugZoneDestination(raw.destination)
+        ? raw as unknown as BattleDebugEdit
+        : null;
+    case "SWAP_BATTLEFIELD_SLOTS":
+      return isBattleFieldSlotAddress(raw.source) && isBattleFieldSlotAddress(raw.target)
+        ? raw as unknown as BattleDebugEdit
+        : null;
+    case "DRAW_DREAMWELL_CARD":
+      return isBattleSide(raw.side) && Number.isInteger(raw.turnNumber) && (raw.additional === undefined || typeof raw.additional === "boolean")
+        ? raw as unknown as BattleDebugEdit
+        : null;
+    case "ERODE":
+    case "REVEAL_DECK_TOP":
+    case "HIDE_DECK_TOP":
+      return isBattleSide(raw.side) && Number.isInteger(raw.count) ? raw as unknown as BattleDebugEdit : null;
+    case "DISCARD_CARD":
+    case "ABANDON":
+    case "REMATERIALIZE":
+    case "CLEAR_CARD_NOTES":
+      return isNonEmptyString(raw.battleCardId) ? raw as unknown as BattleDebugEdit : null;
+    case "SET_CARD_VISIBILITY":
+      return isNonEmptyString(raw.battleCardId) && typeof raw.isRevealedToPlayer === "boolean" ? raw as unknown as BattleDebugEdit : null;
+    case "SET_SIDE_HAND_VISIBILITY":
+      return isBattleSide(raw.side) && typeof raw.isRevealedToPlayer === "boolean" ? raw as unknown as BattleDebugEdit : null;
+    case "ADD_CARD_NOTE":
+      return isNonEmptyString(raw.battleCardId) &&
+        isNonEmptyString(raw.noteId) &&
+        typeof raw.text === "string" &&
+        isFiniteNumber(raw.createdAtMs) &&
+        isBattleCardNoteExpiry(raw.expiry)
+        ? raw as unknown as BattleDebugEdit
+        : null;
+    case "DISMISS_CARD_NOTE":
+      return isNonEmptyString(raw.battleCardId) && isNonEmptyString(raw.noteId) ? raw as unknown as BattleDebugEdit : null;
+    case "SET_CARD_MARKERS":
+      return isNonEmptyString(raw.battleCardId) && isPlainRecord(raw.markers) ? raw as unknown as BattleDebugEdit : null;
+    case "SET_CARD_STATUS":
+      return isNonEmptyString(raw.battleCardId) && isPlainRecord(raw.status) ? raw as unknown as BattleDebugEdit : null;
+    case "CREATE_CARD_COPY":
+      return isNonEmptyString(raw.sourceBattleCardId) && isDebugZoneDestination(raw.destination) && isFiniteNumber(raw.createdAtMs)
+        ? raw as unknown as BattleDebugEdit
+        : null;
+    case "ADD_FIGMENTS":
+      return isNonEmptyString(raw.battleCardId) && Number.isInteger(raw.count) ? raw as unknown as BattleDebugEdit : null;
+    case "CREATE_FIGMENT":
+      return isBattleSide(raw.side) &&
+        typeof raw.chosenSubtype === "string" &&
+        isFiniteNumber(raw.chosenSpark) &&
+        typeof raw.name === "string" &&
+        isDebugZoneDestination(raw.destination) &&
+        isFiniteNumber(raw.createdAtMs)
+        ? raw as unknown as BattleDebugEdit
+        : null;
+    case "CREATE_CARD_FROM_DEFINITION":
+      return isPlainRecord(raw.definition) && isDebugZoneDestination(raw.destination) && isFiniteNumber(raw.createdAtMs)
+        ? raw as unknown as BattleDebugEdit
+        : null;
+    case "REORDER_DECK":
+      return isBattleSide(raw.side) && Array.isArray(raw.order) && raw.order.every((id) => typeof id === "string")
+        ? raw as unknown as BattleDebugEdit
+        : null;
+    case "PLAY_FROM_DECK_TOP":
+      return isBattleSide(raw.side) && (raw.target === undefined || isBattleFieldSlotAddress(raw.target))
+        ? raw as unknown as BattleDebugEdit
+        : null;
+    case "SET_PHASE":
+      return isBattlePhase(raw.phase) ? raw as unknown as BattleDebugEdit : null;
+    case "SET_BATTLE_FLOW":
+      return isBattlePhase(raw.phase) && isBattleSide(raw.activeSide) && Number.isInteger(raw.turnNumber)
+        ? raw as unknown as BattleDebugEdit
+        : null;
+    default:
+      return null;
+  }
+}
+
 function isBattleResult(value: unknown): value is BattleResult {
   return value === "victory" || value === "defeat" || value === "draw";
+}
+
+function isBattleSide(value: unknown): value is BattleSide {
+  return value === "player" || value === "enemy";
+}
+
+function isBattlePhase(value: unknown): value is BattlePhase {
+  return (
+    value === "dreamwell" ||
+    value === "draw" ||
+    value === "dawn" ||
+    value === "day" ||
+    value === "dusk" ||
+    value === "night" ||
+    value === "challenge" ||
+    value === "ending"
+  );
+}
+
+function isFiniteNumber(value: unknown): value is number {
+  return typeof value === "number" && Number.isFinite(value);
+}
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === "string" && value.length > 0;
+}
+
+function isPlainRecord(value: unknown): value is Record<string, unknown> {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const prototype: unknown = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
+}
+
+function isBattleFieldSlotAddress(value: unknown): value is BattleFieldSlotAddress {
+  return (
+    isPlainRecord(value) &&
+    isBattleSide(value.side) &&
+    (value.zone === "frontRank" || value.zone === "backRank") &&
+    typeof value.slotId === "string" &&
+    /^[FB]\d+$/.test(value.slotId)
+  );
+}
+
+function isDebugZoneDestination(value: unknown): boolean {
+  if (!isPlainRecord(value) || !isBattleSide(value.side)) return false;
+  if (value.zone === "frontRank" || value.zone === "backRank") {
+    return isBattleFieldSlotAddress(value);
+  }
+  if (value.zone === "hand" || value.zone === "void" || value.zone === "banished" || value.zone === "stack") {
+    return true;
+  }
+  return value.zone === "deck" && (value.position === "top" || value.position === "bottom");
+}
+
+function isBattleCardNoteExpiry(value: unknown): value is BattleCardNoteExpiry {
+  if (!isPlainRecord(value)) return false;
+  if (value.kind === "manual") return true;
+  return value.kind === "atStartOfTurn" && isBattleSide(value.side) && Number.isInteger(value.turnNumber);
 }
 
 // ---------------------------------------------------------------------------
@@ -731,7 +882,7 @@ export function resolvePrompt(
   if (resolution === null) {
     return null;
   }
-  if (!pickCardsResolutionIsValid(pending.options, resolution)) {
+  if (!promptResolutionIsValid(pending, resolution)) {
     return null;
   }
 
@@ -761,12 +912,20 @@ export function resolvePrompt(
  * resolution kinds pass through unchanged. A `pick-cards` prompt answered with a
  * non-`pick-cards` resolution fails (the kinds must agree).
  */
-function pickCardsResolutionIsValid(
-  options: PendingPrompt["options"],
+function promptResolutionIsValid(
+  pending: PendingPrompt,
   resolution: PromptResolution,
 ): boolean {
+  const options = pending.options;
   if (options.kind !== "pick-cards") {
-    return true;
+    if (options.kind === "choice") {
+      return (
+        resolution.kind === "choice" &&
+        resolution.optionIndex >= 0 &&
+        resolution.optionIndex < options.options.length
+      );
+    }
+    return resolution.kind === options.kind;
   }
   if (resolution.kind !== "pick-cards") {
     return false;

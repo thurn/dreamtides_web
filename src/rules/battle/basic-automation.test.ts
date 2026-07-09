@@ -12,6 +12,7 @@ import type {
 import { createDefaultBattleCardStatus } from "../../battle/state/create-initial-state";
 import { emptyBackRankSlots, emptyFrontRankSlots } from "../../battle/test-support";
 import { planBasicAutomationCommands } from "./basic-automation";
+import { DREAMWELL_EFFECTS } from "./dreamwell-effects-table";
 
 const CAPS = { maxEnergyCap: 10, scoreToWin: 25, dreamwellDeck: [] };
 
@@ -129,6 +130,16 @@ function frontRankSlots(slot: FrontRankSlotId, battleCardId: string | null): Rec
   };
 }
 
+function firstPromptDreamwellEffectId(): string {
+  const id = Object.values(DREAMWELL_EFFECTS).find((script) =>
+    script.steps.some((step) => step.kind === "prompt"),
+  )?.id;
+  if (id === undefined) {
+    throw new Error("no prompt-bearing Dreamwell effect registered");
+  }
+  return id;
+}
+
 describe("planBasicAutomationCommands — playing cards", () => {
   it("spends energy equal to the cost when a character is played to a slot", () => {
     const state = makeState({
@@ -151,12 +162,46 @@ describe("planBasicAutomationCommands — playing cards", () => {
     const result = planBasicAutomationCommands(state, play, CAPS);
 
     expect(edits(result)).toEqual([
+      { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: -3 },
       {
         kind: "MOVE_CARD_TO_ZONE",
         battleCardId: "c1",
         destination: { side: "player", zone: "backRank", slotId: "B0" },
       },
+    ]);
+  });
+
+  it("orders the deterministic cost spend before a cost-bearing interactive play", () => {
+    const state = makeState({
+      player: {
+        currentEnergy: 5,
+        hand: ["interactive-c1"],
+      },
+      instances: [makeInstance("interactive-c1", {
+        owner: "player",
+        kind: "character",
+        cardId: "interactive-fixture",
+        energyCost: 3,
+        renderedText: "Materialized: choose one.",
+      })],
+    });
+    const play: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: {
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: "interactive-c1",
+        destination: { side: "player", zone: "backRank", slotId: "B0" },
+      },
+      sourceSurface: "hand-tray",
+    };
+
+    expect(edits(planBasicAutomationCommands(state, play, CAPS))).toEqual([
       { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: -3 },
+      {
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: "interactive-c1",
+        destination: { side: "player", zone: "backRank", slotId: "B0" },
+      },
     ]);
   });
 
@@ -176,12 +221,12 @@ describe("planBasicAutomationCommands — playing cards", () => {
     };
 
     expect(edits(planBasicAutomationCommands(state, play, CAPS))).toEqual([
+      { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: -2 },
       {
         kind: "MOVE_CARD_TO_ZONE",
         battleCardId: "e1",
         destination: { side: "player", zone: "void" },
       },
-      { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: -2 },
     ]);
   });
 
@@ -540,7 +585,7 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
   // that the player clicks through). Revealing a Dreamwell card raises the
   // drawing side's maximum ● by the drawn card's `energyAdded`, uncapped.
   const DREAMWELL_DECK = [
-    { id: "dw-0", name: "Opening", renderedText: "", energyAdded: 2, order: 0, cardNumber: 1, imageNumber: 0 },
+    { id: firstPromptDreamwellEffectId(), name: "Opening", renderedText: "", energyAdded: 2, order: 0, cardNumber: 1, imageNumber: 0 },
     { id: "dw-1", name: "Bonus", renderedText: "", energyAdded: 1, order: 1, cardNumber: 2, imageNumber: 0 },
   ];
 
@@ -571,16 +616,18 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
 
     const result = edits(planBasicAutomationCommands(state, gesture, caps));
 
-    // The reveal itself is preserved as the first command.
-    expect(result[0]).toEqual({
-      kind: "DRAW_DREAMWELL_CARD",
-      side: "player",
-      turnNumber: 3,
-    });
     // Uncapped: previous max (9) + the order-0 card's energyAdded (2) = 11,
-    // above the cap of 10; current ● refills to the new maximum.
-    expect(result).toContainEqual({ kind: "SET_MAX_ENERGY", side: "player", value: 11 });
-    expect(result).toContainEqual({ kind: "SET_CURRENT_ENERGY", side: "player", value: 11 });
+    // above the cap of 10; current ● refills to the new maximum before the
+    // reveal command, which may park a prompt.
+    expect(result).toEqual([
+      { kind: "SET_MAX_ENERGY", side: "player", value: 11 },
+      { kind: "SET_CURRENT_ENERGY", side: "player", value: 11 },
+      {
+        kind: "DRAW_DREAMWELL_CARD",
+        side: "player",
+        turnNumber: 3,
+      },
+    ]);
   });
 
   it("expands a draw gesture into draw + dawn landing in day", () => {

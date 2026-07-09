@@ -585,6 +585,42 @@ describe("LOAD_STATE", () => {
     );
     expect(out.outcome).toBe("bounced");
   });
+
+  it("bounces a battle slice whose pendingPrompt promptId is not numeric", () => {
+    const start = genesis();
+    const snapshot: QuestState = { ...start.quest };
+    const out = reduceGameEvent(
+      start,
+      event("LOAD_STATE", {
+        snapshot,
+        battle: { ...emptyBattle, pendingPrompt: { promptId: "stuck" } },
+      }),
+      ctx(),
+    );
+    expect(out.outcome).toBe("bounced");
+  });
+
+  it("bounces a battle slice whose pendingPrompt options are malformed", () => {
+    const start = genesis();
+    const snapshot: QuestState = { ...start.quest };
+    const out = reduceGameEvent(
+      start,
+      event("LOAD_STATE", {
+        snapshot,
+        battle: {
+          ...emptyBattle,
+          pendingPrompt: {
+            promptId: 2,
+            run: { scriptRef: { table: "battle", id: "not-a-real-uuid" }, cursor: [0], side: "player" },
+            kind: "choice",
+            options: { kind: "choice", label: "bad", options: [{ wrong: "shape" }] },
+          },
+        },
+      }),
+      ctx(),
+    );
+    expect(out.outcome).toBe("bounced");
+  });
 });
 
 // ---------------------------------------------------------------------------

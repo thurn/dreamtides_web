@@ -109,8 +109,9 @@ export function decodeLogNode(encoded: EncodedLogNode): LogNode | null {
 /**
  * Subscribes to `rooms/{roomId}/log`, decoding each RTDB update into a
  * `LogNode` and invoking `onNode`. Returns an unsubscribe function. When the
- * node does not yet exist (null value) nothing is emitted — the caller waits
- * for room creation to write genesis. When the node exists but is UNREADABLE
+ * node does not yet exist (null value) before any node has been seen, nothing
+ * is emitted — the caller waits for room creation to write genesis. When a
+ * previously live node becomes null, or when the node exists but is UNREADABLE
  * (`decodeLogNode` returns null — corrupt genesis/snapshot), `onCorrupt` is
  * invoked instead of `onNode` so the caller can surface a terminal
  * unreadable-room state rather than folding on a broken foundation.
@@ -122,9 +123,13 @@ export function subscribeToLog(
   onCorrupt?: () => void,
 ): () => void {
   const logRef = ref(db, `rooms/${roomId}/log`);
+  let initialized = false;
   return onValue(logRef, (snapshot) => {
     const encoded = snapshot.val() as EncodedLogNode | null;
     if (encoded === null) {
+      if (initialized) {
+        onCorrupt?.();
+      }
       return;
     }
     const node = decodeLogNode(encoded);
@@ -132,6 +137,7 @@ export function subscribeToLog(
       onCorrupt?.();
       return;
     }
+    initialized = true;
     onNode(node);
   });
 }

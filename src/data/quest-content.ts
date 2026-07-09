@@ -118,8 +118,8 @@ export interface QuestContent {
   /**
    * The curated known-good decklists corpus loaded from
    * `public/known-good-decklists-data.json`, used by the corpus opponent-deck
-   * algorithm to select and tune decks for AI opponents. Always fetched; degrades
-   * to an empty array if the artifact is absent.
+   * algorithm to select and tune decks for AI opponents. Always fetched before
+   * the provider-backed room flow is allowed to mount.
    */
   knownGoodDecklists?: readonly KnownGoodDecklist[];
   /**
@@ -131,9 +131,8 @@ export interface QuestContent {
   fresh20PackSize?: number;
   /**
    * Baked merchant corpus artifact (quality, multiplicity, clusters) loaded
-   * from `public/merchant-corpus-data.json`.  Populated unconditionally when
-   * the v2 journey can be reached; absent before `npm run bake-merchant-corpus`
-   * has been run.
+   * from `public/merchant-corpus-data.json`. Populated unconditionally before
+   * the provider-backed room flow is allowed to mount.
    */
   merchantCorpus?: MerchantCorpus;
   /**
@@ -793,20 +792,20 @@ export async function loadQuestContent(
     loadDreamsignTemplates(),
     loadDecklists(),
     // The id-keyed decklist corpus the IDF-cosine pool engine and affiliation
-    // reweighting score on. A failed fetch degrades to an empty array, which
-    // makes those variants fall back to the name corpus (or the `default`
-    // algorithm when neither is present).
-    loadDecklistIds().catch(() => [] as string[][]),
+    // reweighting score on. It is fold-relevant provider input, so a missing or
+    // malformed artifact blocks app entry before room events can be folded.
+    loadDecklistIds(),
     // The draft-record corpus is always fetched: beyond the deck-fit modes and
     // the pick-data pool variants, every run needs it to build coherent opponent
     // decks (the corpus supplies both the fit model and the draft's pack
-    // structures). A failed fetch degrades to an empty corpus, which makes
-    // opponent construction fall back to a sampled deck rather than erroring.
-    loadDraftRecords().catch(() => [] as DraftRecord[]),
+    // structures). It is fold-relevant provider input, so a missing or malformed
+    // artifact blocks app entry before room events can be folded.
+    loadDraftRecords(),
     // The known-good decklists corpus is always fetched so the corpus opponent-deck
-    // algorithm has curated decks available on every path. A failed fetch degrades
-    // to an empty array, which makes opponent construction fall back gracefully.
-    loadKnownGoodDecklists().catch(() => [] as KnownGoodDecklist[]),
+    // algorithm has curated decks available on every path. It is fold-relevant
+    // provider input, so a missing or malformed artifact blocks app entry before
+    // room events can be folded.
+    loadKnownGoodDecklists(),
     // Fetch the committed corpus only for the variants that grow from it.
     poolNeedsCorpus
       ? loadAffinityCorpus()
@@ -823,7 +822,7 @@ export async function loadQuestContent(
     poolNeedsTides5 ? loadTides5Decks() : Promise.resolve(null),
     // The merchant corpus and dreamsign profiles are small and always loaded
     // unconditionally so the v2 journey's merchant has signals on every path.
-    loadMerchantCorpus().catch(() => undefined as MerchantCorpus | undefined),
+    loadMerchantCorpus(),
     loadDreamsignProfiles().catch(
       () => undefined as ReadonlyMap<string, DreamsignProfile> | undefined,
     ),

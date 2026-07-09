@@ -674,6 +674,31 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     expect(reduce(state, "BATTLE_COMMAND", {}).outcome).toBe("bounced");
   });
 
+  it("bounces a DEBUG_EDIT whose side is not a battle side", () => {
+    const state = inBattleState();
+    const before = hashBattle(state.battle);
+    const result = reduce(
+      state,
+      "BATTLE_COMMAND",
+      debugEdit({ kind: "SET_SCORE", side: "__proto__", value: 5 }),
+    );
+    expect(result.outcome).toBe("bounced");
+    expect(hashBattle(result.state.battle)).toBe(before);
+  });
+
+  it("bounces a DEBUG_EDIT whose numeric field is not finite", () => {
+    const state = inBattleState();
+    const result = reduce(
+      state,
+      "BATTLE_COMMAND",
+      debugEdit({ kind: "ADJUST_SCORE", side: "player", amount: "5" }),
+    );
+    expect(result.outcome).toBe("bounced");
+    expect(result.state.battle?.board.sides.player.score).toBe(
+      state.battle?.board.sides.player.score,
+    );
+  });
+
   it("applies a plain command edit with no triggers and drains to an empty queue", () => {
     const state = { ...baseState(), battle: battleFrom(makeRichBoard()) };
     const result = reduce(state, "BATTLE_COMMAND", debugEdit({ kind: "SET_SCORE", side: "player", value: 9 }));
@@ -1358,11 +1383,10 @@ describe("BATTLE_GESTURE", () => {
     expect(hashBattle(a.state.battle)).toBe(hashBattle(b.state.battle));
   });
 
-  it("bounces the WHOLE gesture when a mid-gesture command's automation opens a prompt", () => {
-    // The first command materializes an interactive-scripted character, so its
-    // drain PARKS a prompt; the second command's prompt gate then rejects, and
-    // the all-or-nothing rule bounces the ENTIRE gesture: no prompt is left
-    // open, and the first command's play leaves no trace.
+  it("applies a gesture whose deterministic tail runs before its prompt-opening command", () => {
+    // Prompt-opening commands must be the last command in an expanded gesture:
+    // the deterministic tail can apply first, then the final command parks the
+    // prompt without forcing a later command through the prompt gate.
     const script = firstInteractiveMaterialized();
     const board = makeRichBoard({
       turnNumber: 3,
@@ -1371,7 +1395,6 @@ describe("BATTLE_GESTURE", () => {
       instances: [makeInstance("bc-gesture-int", script.id, "player")],
     });
     const state = { ...baseState(), battle: battleFrom(board) };
-    const before = hashBattle(state.battle);
 
     const playInteractive = {
       id: "DEBUG_EDIT",
@@ -1386,12 +1409,13 @@ describe("BATTLE_GESTURE", () => {
     expect(lone.state.battle?.pendingPrompt).not.toBeNull();
 
     const result = reduce(state, "BATTLE_GESTURE", {
-      commands: [playInteractive, gainThree],
+      commands: [gainThree, playInteractive],
     });
-    expect(result.outcome).toBe("bounced");
-    expect(result.state.battle?.pendingPrompt).toBeNull();
-    // Byte-identical: the interactive play left no partial application behind.
-    expect(hashBattle(result.state.battle)).toBe(before);
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.pendingPrompt).not.toBeNull();
+    expect(result.state.battle?.board.sides.player.score).toBe(board.sides.player.score + 3);
+    expect(result.state.battle?.board.sides.player.hand).not.toContain("bc-gesture-int");
+    expect(result.state.battle?.board.sides.player.frontRank[frontRankSlotId(0)]).toBe("bc-gesture-int");
   });
 });
 
@@ -1544,5 +1568,77 @@ describe("RESOLVE_PROMPT pick-cards candidate validation", () => {
     );
     // In-candidate + in-count → passes validation (the driver then resolves it).
     expect(result.outcome).toBe("applied");
+  });
+});
+
+describe("RESOLVE_PROMPT choice validation", () => {
+  const PROMPT_SEQ = 91;
+
+  function choiceState(): FoldState {
+    const board = makeRichBoard({ turnNumber: 3, phase: "day" });
+    return {
+      ...baseState(),
+      battle: battleFrom(board, {
+        pendingPrompt: {
+          promptId: PROMPT_SEQ,
+          run: { scriptRef: { table: "battle", id: "unresolved" }, cursor: [0], side: "player" },
+          kind: "choice",
+          options: {
+            kind: "choice",
+            label: "choose",
+            options: [{ label: "A" }, { label: "B" }],
+          },
+        },
+      }),
+    };
+  }
+
+  it("bounces an out-of-range choice index and leaves the prompt open", () => {
+    const state = choiceState();
+    const before = hashBattle(state.battle);
+    const result = reduce(
+      state,
+      "RESOLVE_PROMPT",
+      { promptId: PROMPT_SEQ, resolution: { kind: "choice", optionIndex: 2 } },
+      ctx({ seq: PROMPT_SEQ + 1 }),
+    );
+    expect(result.outcome).toBe("bounced");
+    expect(hashBattle(result.state.battle)).toBe(before);
+    expect(result.state.battle?.pendingPrompt?.promptId).toBe(PROMPT_SEQ);
+  });
+});
+
+describe("RESOLVE_PROMPT confirm validation", () => {
+  const PROMPT_SEQ = 92;
+
+  function confirmState(): FoldState {
+    const board = makeRichBoard({ turnNumber: 3, phase: "day" });
+    return {
+      ...baseState(),
+      battle: battleFrom(board, {
+        pendingPrompt: {
+          promptId: PROMPT_SEQ,
+          run: { scriptRef: { table: "battle", id: "unresolved" }, cursor: [0], side: "player" },
+          kind: "confirm",
+          options: {
+            kind: "choice",
+            label: "confirm",
+            options: [{ label: "Yes" }, { label: "Skip" }],
+          },
+        },
+      }),
+    };
+  }
+
+  it("bounces a confirm resolution outside the Yes/Skip range", () => {
+    const state = confirmState();
+    const result = reduce(
+      state,
+      "RESOLVE_PROMPT",
+      { promptId: PROMPT_SEQ, resolution: { kind: "choice", optionIndex: 3 } },
+      ctx({ seq: PROMPT_SEQ + 1 }),
+    );
+    expect(result.outcome).toBe("bounced");
+    expect(result.state.battle?.pendingPrompt?.promptId).toBe(PROMPT_SEQ);
   });
 });

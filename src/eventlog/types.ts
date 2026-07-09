@@ -139,6 +139,18 @@ export interface EncodedLogNode {
    * node that has not compacted yet.
    */
   appliedIndex?: string;
+  /**
+   * Last compaction attempt that failed inside `applyAppend`. The append still
+   * commits, but this structural marker makes the skipped compaction visible to
+   * later readers without doing IO from the pure updater. Cleared on the next
+   * successful compaction.
+   */
+  compactionError?: {
+    head: number;
+    baseSeq: number;
+    attemptedBaseSeq: number;
+    message: string;
+  };
 }
 
 /** Whether a reducer applied an event's effects or bounced it as invalid/stale. */

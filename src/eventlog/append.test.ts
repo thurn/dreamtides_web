@@ -115,7 +115,47 @@ describe("applyAppend containment (P1-5)", () => {
     expect(next?.head).toBe(COMPACT_THRESHOLD + 1);
     expect(next?.baseSeq).toBe(0);
     expect(next?.baseSnapshot).toBeNull();
+    expect(next?.compactionError).toMatchObject({
+      head: COMPACT_THRESHOLD + 1,
+      baseSeq: 0,
+      attemptedBaseSeq: COMPACT_THRESHOLD + 1 - COMPACT_TARGET,
+    });
+    expect(next?.compactionError?.message).toMatch(/json/i);
     expect(numericEventKeys(next as EncodedLogNode)).toHaveLength(COMPACT_THRESHOLD + 1);
+  });
+
+  it("clears a previous compaction error after a later compaction succeeds", () => {
+    const before = appendN(COMPACT_THRESHOLD).log;
+    const node: EncodedLogNode = {
+      ...before,
+      compactionError: {
+        head: before.head,
+        baseSeq: before.baseSeq,
+        attemptedBaseSeq: 99,
+        message: "previous failure",
+      },
+    };
+
+    const next = applyAppend(config, node, makeEvent(999));
+
+    expect(next.baseSeq).toBe(COMPACT_THRESHOLD + 1 - COMPACT_TARGET);
+    expect(next.baseSnapshot).not.toBeNull();
+    expect(next.compactionError).toBeUndefined();
+  });
+});
+
+describe("applyAppend nonce dedup", () => {
+  it("no-ops a duplicate nonce already present in the live event window", () => {
+    const first = { ...makeEvent(1), nonce: "client-a:1" };
+    const retry = { ...makeEvent(999), nonce: "client-a:1" };
+    const afterFirst = applyAppend(config, emptyLog(), first);
+
+    const afterRetry = applyAppend(config, afterFirst, retry);
+
+    expect(afterRetry).toBe(afterFirst);
+    expect(afterRetry.head).toBe(1);
+    expect(numericEventKeys(afterRetry)).toEqual([1]);
+    expect(decodeEvent(afterRetry.events[1])).toEqual(first);
   });
 });
 

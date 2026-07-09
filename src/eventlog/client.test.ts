@@ -104,6 +104,8 @@ interface Harness {
 interface HarnessOptions {
   /** When set, every `io.append` rejects with this error (append-failure path). */
   rejectAppendWith?: Error;
+  /** Optional append implementation for race-shaping tests. */
+  append?: (event: GameEvent) => Promise<number>;
 }
 
 function makeHarness(
@@ -132,6 +134,9 @@ function makeHarness(
     },
     append: (event) => {
       appended.push(event);
+      if (opts.append !== undefined) {
+        return opts.append(event);
+      }
       if (opts.rejectAppendWith !== undefined) {
         return Promise.reject(opts.rejectAppendWith);
       }
@@ -441,6 +446,28 @@ describe("LogClient append rejection (P1-3)", () => {
     const other = confirmedEvent({ tag: "Z", actor: "partner", basedOnSeq: 0 });
     harness.deliver(makeNode({ events: { 1: other } }));
     expect(harness.displayed()?.applied).toEqual(["Z"]);
+  });
+
+  it("does not report append failure when the rejected append was already confirmed", async () => {
+    const boom = new Error("ack lost after commit");
+    let rejectAppend: ((error: Error) => void) | undefined;
+    const { harness, client } = makeHarness(config, {
+      append: () =>
+        new Promise<number>((_resolve, reject) => {
+          rejectAppend = reject;
+        }),
+    });
+    harness.deliver(makeNode({ events: {} }));
+
+    const submit = client.submit({ type: "T", payload: { tag: "A" }, actor: "me" });
+    const committed = harness.appended[0];
+    harness.deliver(makeNode({ events: { 1: committed } }));
+
+    rejectAppend?.(boom);
+    await expect(submit).rejects.toBe(boom);
+
+    expect(harness.displayed()?.applied).toEqual(["A"]);
+    expect(harness.appendFailures).toHaveLength(0);
   });
 });
 

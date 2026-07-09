@@ -366,13 +366,18 @@ export function createLogClient<S>(
     try {
       return await io.append(event);
     } catch (error) {
+      // The append may have reached the server before the ack failed. If the
+      // subscription already confirmed this nonce, reconciliation removed the
+      // pending echo and there is no stranded intent to report as failed.
+      const idx = pending.findIndex((entry) => entry.nonce === nonce);
+      if (idx < 0) {
+        throw error;
+      }
+
       // The append never committed, so the optimistic echo is stranded. Sweep
       // the intent out by nonce, recompute (rollback IS recomputation), report
       // the failure for UX, and rethrow so the caller sees the rejection.
-      const idx = pending.findIndex((entry) => entry.nonce === nonce);
-      if (idx >= 0) {
-        pending.splice(idx, 1);
-      }
+      pending.splice(idx, 1);
       recomputeDisplayed();
       callbacks.onAppendFailed?.(event, error);
       throw error;

@@ -339,6 +339,19 @@ describe("advanceEffectQueue — edit-only run", () => {
   });
 });
 
+describe("advanceEffectQueue — step cap", () => {
+  it("throws instead of draining an unbounded queue forever", () => {
+    const ref = editOnlyDreamwellRef();
+    const oversizedQueue = Array.from({ length: 11_000 }, () =>
+      newEffectRun(ref, "player"),
+    );
+
+    expect(() => advanceEffectQueue(foldState(oversizedQueue), ctx({ seq: 99 }))).toThrow(
+      /step cap/,
+    );
+  });
+});
+
 // ---------------------------------------------------------------------------
 // prompt parking — interactive run stops with pendingPrompt set
 // ---------------------------------------------------------------------------
