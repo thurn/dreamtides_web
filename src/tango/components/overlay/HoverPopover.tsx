@@ -84,6 +84,12 @@ interface HoverPopoverProps {
    * inline use within text. Pass `"div"` for block-level triggers.
    */
   triggerAs?: "span" | "div";
+  /**
+   * Trigger wrapper layout. `inline` preserves flowing text; `inlineFlex`
+   * shrink-wraps icon/orb triggers without adding a baseline line box.
+   * Defaults to `inline`.
+   */
+  triggerLayout?: "inline" | "inlineFlex";
 }
 
 const DEFAULT_DELAY_MS = 500;
@@ -124,6 +130,7 @@ export function HoverPopover({
   placement = "top",
   maxWidthPx,
   triggerAs = "span",
+  triggerLayout = "inline",
 }: HoverPopoverProps) {
   const triggerRef = useRef<HTMLElement | null>(null);
   const popoverRef = useRef<HTMLDivElement | null>(null);
@@ -241,6 +248,10 @@ export function HoverPopover({
     onMouseLeave: hide,
     onFocus: show,
     onBlur: hide,
+    style:
+      triggerLayout === "inlineFlex"
+        ? ({ display: "inline-flex" } satisfies CSSProperties)
+        : undefined,
   } as const;
 
   return (

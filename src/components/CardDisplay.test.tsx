@@ -241,6 +241,7 @@ describe("CardDisplay", () => {
       const orb = anchor?.querySelector<HTMLElement>(
         '[data-card-stat="energy"]',
       );
+      const tooltipTrigger = anchor?.firstElementChild as HTMLElement | null;
       const digit = orb?.querySelector<HTMLElement>("div");
 
       expect(surface).not.toBeNull();
@@ -248,6 +249,7 @@ describe("CardDisplay", () => {
       expect(anchor?.style.display).toBe("flex");
       expect(anchor?.style.top).toBe("var(--cv-energy-orb-top)");
       expect(anchor?.style.left).toBe("var(--cv-energy-orb-left)");
+      expect(tooltipTrigger?.style.display).toBe("inline-flex");
       expect(orb?.style.width).toBe("var(--cv-energy-orb-size)");
       expect(orb?.style.height).toBe("var(--cv-energy-orb-size)");
       expect(orb?.querySelector("i.bxf.bx-fire-alt")).not.toBeNull();

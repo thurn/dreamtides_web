@@ -1592,6 +1592,17 @@
       "required": false,
       "defaultValue": "span",
       "description": "The DOM element type for the trigger wrapper. Defaults to `\"span\"` for\ninline use within text. Pass `\"div\"` for block-level triggers."
+    },
+    {
+      "name": "triggerLayout",
+      "tsType": "\"inline\" | \"inlineFlex\"",
+      "unionMembers": [
+        "inline",
+        "inlineFlex"
+      ],
+      "required": false,
+      "defaultValue": "inline",
+      "description": "Trigger wrapper layout. `inline` preserves flowing text; `inlineFlex`\nshrink-wraps icon/orb triggers without adding a baseline line box.\nDefaults to `inline`."
     }
   ],
   "IconButton": [

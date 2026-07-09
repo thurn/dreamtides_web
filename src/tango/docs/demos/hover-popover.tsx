@@ -1,7 +1,8 @@
 // Registry demo entry for HoverPopover — the lightweight hover/focus tooltip
-// primitive. `delayMs`, `placement`, `maxWidthPx` and `triggerAs` are seeded
-// from defaultArgs; `content` is a ReactNode with no generated control, so it
-// is seeded via sampleContent and spread into the demo wrapper.
+// primitive. `delayMs`, `placement`, `maxWidthPx`, `triggerAs`, and
+// `triggerLayout` are seeded from defaultArgs; `content` is a ReactNode with no
+// generated control, so it is seeded via sampleContent and spread into the demo
+// wrapper.
 //
 // The `callout` carries the load-bearing InfoCard-vs-HoverPopover decision
 // rule (see the SKILL.md "Popup rule"): InfoCard / InfoCard.PressInfo is the
@@ -34,6 +35,7 @@ function HoverPopoverDemo(args: Record<string, unknown>) {
         typeof args.maxWidthPx === "number" ? args.maxWidthPx : undefined
       }
       triggerAs={args.triggerAs === "div" ? "div" : "span"}
+      triggerLayout={args.triggerLayout === "inlineFlex" ? "inlineFlex" : "inline"}
       content={content}
     >
       <span style={{ cursor: "help", textDecoration: "underline dotted" }}>
@@ -96,6 +98,7 @@ export const hoverPopoverDemo: TangoComponent = {
       placement: "top",
       maxWidthPx: 260,
       triggerAs: "span",
+      triggerLayout: "inline",
     },
     sampleContent: {
       content: (

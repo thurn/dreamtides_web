@@ -22,6 +22,7 @@ A lightweight hover/focus tooltip primitive that portals a small content node to
 | `placement` | `Placement` = `"left" \| "top"` | no | `top` | Preferred side to anchor the popover relative to the trigger. - `"top"` (default) centers the popover above the trigger and flips to the bottom when the trigger sits near the top edge of the viewport. - `"left"` anchors the popover to the left of the trigger and flips to the right when the trigger sits near the left edge of the viewport. Useful for triggers on the right edge of the viewport (e.g. the right-side deck sidebar) where the popover would otherwise appear detached above or below the row. In both cases the popover is shifted along the perpendicular axis as needed so it stays fully inside the viewport. |
 | `maxWidthPx` | `number \| null` | no | — | Override the popover's max-width cap (px). Defaults to 260px, which suits short glossary blurbs. Pass `null` to disable the cap entirely when `content` is a self-sizing element such as a card preview. |
 | `triggerAs` | `"span" \| "div"` | no | `span` | The DOM element type for the trigger wrapper. Defaults to `"span"` for inline use within text. Pass `"div"` for block-level triggers. |
+| `triggerLayout` | `"inline" \| "inlineFlex"` | no | `inline` | Trigger wrapper layout. `inline` preserves flowing text; `inlineFlex` shrink-wraps icon/orb triggers without adding a baseline line box. Defaults to `inline`. |
 
 ## Usage
 

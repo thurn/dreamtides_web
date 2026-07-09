@@ -225,6 +225,7 @@ export function CardStatOrb({
   return (
     <HoverPopover
       delayMs={ORB_TOOLTIP_DELAY_MS}
+      triggerLayout="inlineFlex"
       content={
         <div
           className="rounded-md px-3 py-2 text-xs leading-snug shadow-lg"
