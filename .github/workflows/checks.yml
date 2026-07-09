@@ -1,0 +1,51 @@
+# Runs the project's core checks (lint, typecheck, unit tests) plus the
+# Firebase-RTDB-emulator-backed eventlog integration suite on every push to
+# master and every pull request (audit finding P1-10: before this workflow
+# existed, CI ran zero tests — a regression could land on master unnoticed).
+#
+# `workflow_dispatch` is included so this workflow can be triggered manually
+# on a non-master branch (its `push`/`pull_request` triggers alone would never
+# fire on a feature branch pushed without an open PR).
+
+name: Checks
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Pin Node to 24.16.0: Node 24.17.0 regressed node-fetch keep-alive socket
+      # reuse, breaking firebase-tools' OAuth token fetch with "Premature
+      # close" (see firebase-hosting-merge.yml). The `emulator` job below also
+      # runs firebase-tools, so the same pin applies here too.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.16.0
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+
+  emulator:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.16.0
+      - run: npm ci
+      # firebase-tools shells out to `java` to run the Firebase RTDB emulator.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - run: npm install -g firebase-tools
+      - run: >-
+          firebase emulators:exec --only database --project demo-quest-prototype
+          "npx vitest run --no-file-parallelism src/eventlog/emulator.integration.test.ts"
