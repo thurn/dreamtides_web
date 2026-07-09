@@ -30,6 +30,8 @@ type SegmentedControlSize = "sm" | "md";
 export interface SegmentedOption {
   value: string;
   label: string;
+  /** Accessible name when the visible label is symbolic, such as an arrow. */
+  ariaLabel?: string;
 }
 
 export interface SegmentedControlProps {
@@ -92,6 +94,7 @@ function Segment({
     <button
       type="button"
       role="tab"
+      aria-label={option.ariaLabel}
       aria-selected={active}
       onClick={() => onSelect(option.value)}
       {...bind}

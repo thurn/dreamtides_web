@@ -17,7 +17,7 @@
 // The desktop control bar spends the room the mobile band lacks on granular,
 // separate controls (rather than a bigger copy of the mobile two-dropdown row):
 // a card-type segmented switch, a subtype dropdown, a sort-key dropdown, a sort
-// DIRECTION toggle, and an S/M/L card-size toggle. Every control wears the one
+// DIRECTION switch, and an S/M/L card-size toggle. Every control wears the one
 // shared liquid-glass surface (SegmentedControl / Select), so the whole bar
 // reads as a set with the header's glass close disc and the surface it sits on.
 //
@@ -537,21 +537,15 @@ function ControlBar({
           onChange({ sort: value as DesktopDeckFilterSort["sort"] })
         }
       />
-      {/* The sort direction is one toggle affordance, not two segments: a single
-          disc whose chevron reflects the current direction and flips on press. */}
-      <IconButton
-        placement="onGlass"
+      <SegmentedControl
         size="sm"
-        glyph={
-          filterSort.direction === "asc" ? GLYPHS.chevronUp : GLYPHS.chevronDown
-        }
-        label={
-          filterSort.direction === "asc" ? "Sort ascending" : "Sort descending"
-        }
-        onPress={() =>
-          onChange({
-            direction: filterSort.direction === "asc" ? "desc" : "asc",
-          })
+        options={[
+          { value: "asc", label: "↑", ariaLabel: "Sort ascending" },
+          { value: "desc", label: "↓", ariaLabel: "Sort descending" },
+        ]}
+        value={filterSort.direction}
+        onChange={(value) =>
+          onChange({ direction: value as DesktopDeckFilterSort["direction"] })
         }
       />
       {/* View density lives at the trailing edge — the auto margin is the one
