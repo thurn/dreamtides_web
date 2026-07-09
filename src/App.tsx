@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 // Tango base interaction reset — disables native mobile long-press behaviour
 // (selection magnifier, iOS callout, Android context menu) across the `.tango`
 // subtree so it never fights Tango's own long-press-to-reveal gesture. Loaded
@@ -17,13 +17,12 @@ import {
   poolVariantNeedsTides4,
 } from "./data/quest-content";
 import { getFirebaseDatabase } from "./firebase/app-config";
-import { RoomGate, type RoomReadyContext } from "./coop/RoomGate";
-import { CoopProvider, useConnectedCount } from "./coop/hooks";
+import { RoomGate } from "./coop/RoomGate";
+import { CoopProvider } from "./coop/hooks";
 import { EventLogViewer } from "./coop/EventLogViewer";
 import { registerGameProviders } from "./coop/providers/register-game-providers";
 import { useQuest } from "./state/quest-context";
 import { CoopQuestProvider } from "./state/coop-quest-context";
-import { MultiplayerBattleProvider } from "./state/multiplayer-battle-context";
 import { ScreenRouter } from "./components/ScreenRouter";
 import { HUD } from "./components/HUD";
 import { DesktopDeckViewerAdapter } from "./screens/tango_adapters/DesktopDeckViewerAdapter";
@@ -817,48 +816,14 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
       {(context) => (
         <CoopProvider context={context}>
           <CoopQuestProvider questContent={questContent}>
-            <CoopBattleBridge context={context}>
-              <QuestApp
-                cardDatabase={questContent.cardDatabase}
-                runtimeConfig={runtimeConfig}
-              />
-            </CoopBattleBridge>
+            <QuestApp
+              cardDatabase={questContent.cardDatabase}
+              runtimeConfig={runtimeConfig}
+            />
           </CoopQuestProvider>
         </CoopProvider>
       )}
     </RoomGate>
-  );
-}
-
-/**
- * Mid-cutover battle wiring (Task 27 replaces this). The playable battle
- * screens still consume the legacy `MultiplayerBattleProvider`, so it is kept
- * mounted inside the coop tree — fed the coop room's `db` / `roomId` /
- * `clientId` and the coop presence count — with no active battle
- * (`battleState={null}`). Quest screens never dispatch battle commands, so the
- * provider stays dormant; entering a battle site is wired to the event-sourced
- * battle fold in Task 27. `isPrimaryClient` defaults to `true` until Task 27
- * derives coop battle authority.
- */
-function CoopBattleBridge({
-  context,
-  children,
-}: {
-  context: RoomReadyContext;
-  children: ReactNode;
-}) {
-  const connectedCount = useConnectedCount();
-  return (
-    <MultiplayerBattleProvider
-      database={context.db}
-      roomId={context.roomId}
-      clientId={context.clientId}
-      connectedCount={connectedCount}
-      isPrimaryClient={true}
-      battleState={null}
-    >
-      {children}
-    </MultiplayerBattleProvider>
   );
 }
 

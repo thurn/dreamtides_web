@@ -222,31 +222,29 @@ async function settleProposal(): Promise<void> {
 
 function HookHarness({
   initialState,
-  dispatch,
+  submit,
   enabled = true,
   aiSide = "enemy",
   basicAutomation = true,
 }: {
   initialState: BattleReducerState;
-  dispatch: (action: { type: "APPLY_COMMAND"; command: BattleCommand }) => void;
+  submit: (command: BattleCommand) => void;
   enabled?: boolean;
   aiSide?: BattleSide;
   basicAutomation?: boolean;
 }): ReactElement {
-  const [reducerState, setReducerState] = useState(initialState);
-  const wrappedDispatch = (action: {
-    type: "APPLY_COMMAND";
-    command: BattleCommand;
-  }): void => {
-    dispatch(action);
-    // Mirror the screen: a dispatched command advances reducer state. The test
-    // dispatch is a spy, so we re-derive a successor here only to keep the hook
-    // re-rendering; the spy call count is what the contract test asserts on.
-    setReducerState((prev) => prev);
+  const [board, setBoard] = useState(initialState.mutable);
+  const wrappedSubmit = (command: BattleCommand): void => {
+    submit(command);
+    // Mirror the screen: a submitted command advances the board. The test
+    // submit fn is a spy, so we re-derive a successor here only to keep the
+    // hook re-rendering; the spy call count is what the contract test asserts
+    // on.
+    setBoard((prev) => prev);
   };
   const handle = useBattleAi({
-    reducerState,
-    dispatch: wrappedDispatch,
+    board,
+    submit: wrappedSubmit,
     enabled,
     aiSide,
     basicAutomation,
@@ -285,7 +283,7 @@ afterEach(() => {
 describe("useBattleAi", () => {
   it("computes a proposal WITHOUT dispatching anything (safety contract)", async () => {
     const dispatch = vi.fn();
-    mount(<HookHarness initialState={makeEnemyTurnState()} dispatch={dispatch} />);
+    mount(<HookHarness initialState={makeEnemyTurnState()} submit={dispatch} />);
     await settleProposal();
 
     expect(latest?.proposal).not.toBeNull();
@@ -294,7 +292,7 @@ describe("useBattleAi", () => {
 
   it("approve() dispatches each of the proposal's commands in order", async () => {
     const dispatch = vi.fn();
-    mount(<HookHarness initialState={makeEnemyTurnState()} dispatch={dispatch} />);
+    mount(<HookHarness initialState={makeEnemyTurnState()} submit={dispatch} />);
     await settleProposal();
 
     const proposal = latest?.proposal;
@@ -308,16 +306,13 @@ describe("useBattleAi", () => {
 
     expect(dispatch).toHaveBeenCalledTimes(commands.length);
     commands.forEach((command, index) => {
-      expect(dispatch).toHaveBeenNthCalledWith(index + 1, {
-        type: "APPLY_COMMAND",
-        command,
-      });
+      expect(dispatch).toHaveBeenNthCalledWith(index + 1, command);
     });
   });
 
   it("attaches the action proposal's trace to the first dispatched command's aiChoices", async () => {
     const dispatch = vi.fn();
-    mount(<HookHarness initialState={makeEnemyTurnState()} dispatch={dispatch} />);
+    mount(<HookHarness initialState={makeEnemyTurnState()} submit={dispatch} />);
     await settleProposal();
 
     const proposal = latest?.proposal;
@@ -330,17 +325,14 @@ describe("useBattleAi", () => {
       latest?.approve();
     });
 
-    const firstCall = dispatch.mock.calls[0]?.[0] as {
-      type: "APPLY_COMMAND";
-      command: BattleCommand;
-    };
-    expect(firstCall.command.aiChoices).toEqual([trace]);
-    expect(firstCall.command.aiChoices?.[0]?.rationale).toBeTruthy();
+    const firstCommand = dispatch.mock.calls[0]?.[0] as BattleCommand;
+    expect(firstCommand.aiChoices).toEqual([trace]);
+    expect(firstCommand.aiChoices?.[0]?.rationale).toBeTruthy();
   });
 
   it("reject() dispatches nothing and changes the proposal", async () => {
     const dispatch = vi.fn();
-    mount(<HookHarness initialState={makeEnemyTurnState()} dispatch={dispatch} />);
+    mount(<HookHarness initialState={makeEnemyTurnState()} submit={dispatch} />);
     await settleProposal();
 
     const before = latest?.proposal;
@@ -367,7 +359,7 @@ describe("useBattleAi", () => {
     mount(
       <HookHarness
         initialState={makeEnemyNoActionState()}
-        dispatch={dispatch}
+        submit={dispatch}
         basicAutomation={true}
       />,
     );
@@ -389,7 +381,7 @@ describe("useBattleAi", () => {
         initialState={makeEnemyNoActionState((mutable) => {
           mutable.phase = "dusk";
         })}
-        dispatch={dispatch}
+        submit={dispatch}
         basicAutomation={true}
       />,
     );
@@ -404,7 +396,7 @@ describe("useBattleAi", () => {
     mount(
       <HookHarness
         initialState={makeEnemyNoActionState()}
-        dispatch={dispatch}
+        submit={dispatch}
         basicAutomation={false}
       />,
     );
@@ -419,7 +411,7 @@ describe("useBattleAi", () => {
     mount(
       <HookHarness
         initialState={makeEnemyTurnState()}
-        dispatch={dispatch}
+        submit={dispatch}
         enabled={false}
       />,
     );
@@ -441,7 +433,7 @@ describe("useBattleAi", () => {
     mount(
       <HookHarness
         initialState={makeEnemyTurnState()}
-        dispatch={dispatch}
+        submit={dispatch}
         enabled={enabled}
       />,
     );
@@ -462,7 +454,7 @@ describe("useBattleAi", () => {
     mount(
       <HookHarness
         initialState={makeEnemyTurnState()}
-        dispatch={dispatch}
+        submit={dispatch}
         enabled={enabled}
       />,
     );
@@ -477,7 +469,7 @@ describe("useBattleAi", () => {
     const state = makeEnemyTurnState((mutable) => {
       mutable.activeSide = "player";
     });
-    mount(<HookHarness initialState={state} dispatch={dispatch} />);
+    mount(<HookHarness initialState={state} submit={dispatch} />);
     await settleProposal();
 
     expect(latest?.proposal).toBeNull();
@@ -489,7 +481,7 @@ describe("useBattleAi", () => {
     const state = makeEnemyTurnState((mutable) => {
       mutable.result = "victory";
     });
-    mount(<HookHarness initialState={state} dispatch={dispatch} />);
+    mount(<HookHarness initialState={state} submit={dispatch} />);
     await settleProposal();
 
     expect(latest?.proposal).toBeNull();
@@ -513,7 +505,7 @@ describe("useBattleAi", () => {
       mount(
         <HookHarness
           initialState={state}
-          dispatch={dispatch}
+          submit={dispatch}
           basicAutomation={false}
         />,
       );

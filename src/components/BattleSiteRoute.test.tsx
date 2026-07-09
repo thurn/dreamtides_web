@@ -1,44 +1,39 @@
 // @vitest-environment jsdom
 
-import { act, type ReactElement, type ReactNode } from "react";
+import { act, type ReactElement } from "react";
 import { MINIMAL_ATLAS_CONFIG, MINIMAL_DREAMSCAPES } from "../__test-helpers__/atlas-fixtures";
 import { createRoot, type Root } from "react-dom/client";
-import type { Database } from "firebase/database";
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import {
   BattleSiteRoute,
   createBattleEntryKey,
 } from "./BattleSiteRoute";
-import { MultiplayerBattleProvider } from "../state/multiplayer-battle-context";
-import * as ensureSessionModule from "../state/use-ensure-battle-session";
-import * as battleService from "../multiplayer/battle-service";
+import type { CoopActions } from "../coop/actions";
 import { useQuest } from "../state/quest-context";
+import type { FoldState } from "../rules/fold-state";
 import type { CardSourceDebugState, Screen, SiteState } from "../types/quest";
-import type { SharedBattleState } from "../multiplayer/battle-types";
-import { createBattleInit } from "../battle/integration/create-battle-init";
-import { createInitialBattleState } from "../battle/state/create-initial-state";
 import {
   makeBattleTestCardDatabase,
   makeBattleTestDreamcallers,
   makeBattleTestSite,
   makeBattleTestState,
 } from "../battle/test-support";
+import { createBattleInit } from "../battle/integration/create-battle-init";
+import { createInitialBattleState } from "../battle/state/create-initial-state";
+import { emptyDawnFired } from "../rules/battle/fold";
 
 vi.mock("../state/quest-context", () => ({
   useQuest: vi.fn(),
 }));
 
-vi.mock("../multiplayer/battle-service", async () => {
-  const actual = await vi.importActual<typeof import("../multiplayer/battle-service")>(
-    "../multiplayer/battle-service",
-  );
-  return {
-    ...actual,
-    ensureBattleSession: vi.fn(() => Promise.resolve(undefined)),
-    dispatchBattleCommandToRoom: vi.fn(() => Promise.resolve(undefined)),
-    dispatchBattleHistoryNav: vi.fn(() => Promise.resolve(undefined)),
-  };
-});
+let mockGameState: FoldState;
+const mockActions: CoopActions = {} as CoopActions;
+const beginBattleSpy = vi.fn(() => Promise.resolve(0));
+
+vi.mock("../coop/hooks", () => ({
+  useGameState: () => mockGameState,
+  useActions: () => mockActions,
+}));
 
 vi.mock("../battle/components/BattleStartScreen", () => ({
   BattleStartScreen: ({
@@ -57,22 +52,20 @@ vi.mock("../battle/components/BattleStartScreen", () => ({
 }));
 
 vi.mock("../battle/components/PlayableBattleScreen", async () => {
-  const { useMultiplayerBattle } = await import(
-    "../state/multiplayer-battle-context"
-  );
+  const { useGameState } = await import("../coop/hooks");
   return {
     PlayableBattleScreen: () => {
-      const { battleState } = useMultiplayerBattle();
-      if (battleState === null) {
+      const gameState = useGameState();
+      const battle = gameState.battle;
+      if (battle === null) {
         return null;
       }
       return (
         <div
           data-screen="playable"
-          data-seed={String(battleState.init.seed)}
-          data-battle-id={battleState.reducer.mutable.battleId}
+          data-battle-id={battle.board.battleId}
         >
-          {battleState.init.battleEntryKey}
+          {battle.init.battleEntryKey}
         </div>
       );
     },
@@ -90,172 +83,103 @@ function makeSite(): SiteState {
   };
 }
 
-function makeFakeBattleState(): SharedBattleState {
+function makeFoldStateWithBattle(): FoldState {
   const init = createBattleInit({
     battleEntryKey: "site-7::3::dreamscape-2",
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
     cardDatabase: makeBattleTestCardDatabase(),
     dreamcallers: makeBattleTestDreamcallers(),
-
-    dreamwellCards: [],    seedOverride: 1234,
+    dreamwellCards: [],
+    seedOverride: 1234,
   });
-  const initial = createInitialBattleState(init);
+  const board = createInitialBattleState(init);
   return {
-    init,
-    reducer: {
-      mutable: initial,
-      history: { past: [], future: [] },
-      lastTransition: null,
-      commandSerial: 0,
-      lastActivityKind: null,
+    quest: makeQuestState(),
+    battle: {
+      init,
+      board,
+      effectQueue: [],
+      pendingPrompt: null,
+      dawnFired: emptyDawnFired(),
     },
   };
 }
 
-function setQuestState({
-  atlasStartingNodeId = "",
-  cardSourceDebug = null,
-  completionLevel = 3,
-  currentDreamscape = "dreamscape-2",
-  screen = { type: "site", siteId: "site-7" } as Screen,
-  visitedSites = [] as string[],
-}: {
+function makeQuestState(overrides: {
   atlasStartingNodeId?: string;
   cardSourceDebug?: CardSourceDebugState | null;
   completionLevel?: number;
   currentDreamscape?: string | null;
   screen?: Screen;
   visitedSites?: string[];
-} = {}): void {
+} = {}) {
+  const {
+    atlasStartingNodeId = "",
+    cardSourceDebug = null,
+    completionLevel = 3,
+    currentDreamscape = "dreamscape-2",
+    screen = { type: "site", siteId: "site-7" } as Screen,
+    visitedSites = [] as string[],
+  } = overrides;
+  return {
+    seed: "test-seed",
+    essence: 250,
+    essenceCap: 500,
+    maxDreamsigns: 12,
+    deck: [],
+    dreamcaller: null,
+    resolvedPackage: null,
+    cardSourceDebug,
+    remainingDreamsignPool: [],
+    dreamsigns: [],
+    completionLevel,
+    atlas: {
+      nodes: {},
+      startingNodeId: atlasStartingNodeId,
+      bossNodeId: atlasStartingNodeId,
+      currentNodeId: atlasStartingNodeId,
+      layers: [],
+      knownDreamsignCarrierIds: [],
+    },
+    currentDreamscape,
+    visitedSites,
+    siteRuntime: {},
+    draftState: null,
+    screen,
+    activeSiteId: "site-7",
+    failureSummary: null,
+    hasSeenStartingDeckPopup: false,
+    battleModifiers: [],
+    shopModifiers: {
+      freeRerolls: 0,
+      essenceDiscountPercent: 0,
+    },
+    dreamscapeModifiers: [],
+  };
+}
+
+function setQuestState(
+  overrides: Parameters<typeof makeQuestState>[0] = {},
+): void {
   vi.mocked(useQuest).mockReturnValue({
-    state: {
-      seed: "test-seed",
-      essence: 250,
-      essenceCap: 500,
-      maxDreamsigns: 12,
-      deck: [],
-      dreamcaller: null,
-      resolvedPackage: null,
-      cardSourceDebug,
-      remainingDreamsignPool: [],
-      dreamsigns: [],
-      completionLevel,
-      atlas: {
-        nodes: {},
-        startingNodeId: atlasStartingNodeId,
-        bossNodeId: atlasStartingNodeId,
-        currentNodeId: atlasStartingNodeId,
-        layers: [],
-        knownDreamsignCarrierIds: [],
-      },
-      currentDreamscape,
-      visitedSites,
-      siteRuntime: {},
-      draftState: null,
-      screen,
-      activeSiteId: "site-7",
-      failureSummary: null,
-      hasSeenStartingDeckPopup: false,
-      battleModifiers: [],
-      shopModifiers: {
-        freeRerolls: 0,
-        essenceDiscountPercent: 0,
-      },
-      dreamscapeModifiers: [],
-    },
-    mutations: {
-      changeEssence: vi.fn(),
-      startQuest: vi.fn(),
-      completeSite: vi.fn(),
-      ensureRewardSiteRuntime: vi.fn(),
-      acceptRewardSite: vi.fn(),
-      ensureDreamsignOfferRuntime: vi.fn(),
-      acceptDreamsignOffer: vi.fn(),
-      rejectDreamsignOffer: vi.fn(),
-      ensureEssenceSiteRuntime: vi.fn(),
-      acceptEssenceSite: vi.fn(),
-      ensureShopRuntime: vi.fn(),
-      buyShopSlot: vi.fn(),
-      rerollShop: vi.fn(),
-      ensureCardChoiceRuntime: vi.fn(),
-      acceptTransfigurationChoice: vi.fn(),
-      acceptDuplicationChoice: vi.fn(),
-      completeDreamAugurySite: vi.fn(),
-    acceptDreamMerchantOffer: vi.fn(),
-    declineDreamMerchant: vi.fn(),
-      pickDraftCard: vi.fn(),
-      addCard: vi.fn(),
-      addBaneCard: vi.fn(),
-      removeCard: vi.fn(),
-      transfigureCard: vi.fn(),
-      changeDeckEntryType: vi.fn(),
-      changeDeckEntryKeywords: vi.fn(),
-      setDreamcallerSelection: vi.fn(),
-      setCardSourceDebug: vi.fn(),
-      addDreamsign: vi.fn(),
-      removeDreamsign: vi.fn(),
-      setRemainingDreamsignPool: vi.fn(),
-      incrementCompletionLevel: vi.fn(),
-      setScreen: vi.fn(),
-      markSiteVisited: vi.fn(),
-      setCurrentDreamscape: vi.fn(),
-      updateAtlas: vi.fn(),
-      setDraftState: vi.fn(),
-      setFailureSummary: vi.fn(),
-      dismissStartingDeckPopup: vi.fn(),
-      bootstrapStartInBattle: vi.fn(),
-      resetQuest: vi.fn(),
-      setEssence: vi.fn(),
-      changeMaxEssence: vi.fn(),
-      addCardById: vi.fn(),
-      addCardByIdWithTransfiguration: vi.fn(),
-      addBaneCardById: vi.fn(),
-      removeDeckEntry: vi.fn(),
-      purgeDeckCards: vi.fn(),
-      duplicateDeckEntry: vi.fn(),
-      purgeRandomBaneCards: vi.fn(),
-      purgeAllBaneCards: vi.fn(),
-      pushBattleRewardModifier: vi.fn(),
-      pushTemporaryBaneGrant: vi.fn(),
-      addSiteToDreamscape: vi.fn(),
-      replaceSiteType: vi.fn(),
-      removeSiteTypeFromNextDreamscapes: vi.fn(),
-      grantFreeShopRerolls: vi.fn(),
-      applyShopEssenceDiscount: vi.fn(),
-      boostSiteAppearance: vi.fn(),
-    },
+    state: makeQuestState(overrides),
+    mutations: {} as ReturnType<typeof useQuest>["mutations"],
     cardDatabase: new Map(),
     questContent: {
       cardDatabase: new Map(),
       dreamcallers: [],
-
-      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES,      affiliations: [], guides: [],      atlasConfig: MINIMAL_ATLAS_CONFIG,
+      dreamwellCards: [],
+      dreamsignTemplates: [],
+      dreamscapes: MINIMAL_DREAMSCAPES,
+      affiliations: [],
+      guides: [],
+      atlasConfig: MINIMAL_ATLAS_CONFIG,
     },
-  });
+  } as unknown as ReturnType<typeof useQuest>);
 }
 
-function wrap(
-  element: ReactElement,
-  battleState: SharedBattleState | null,
-): ReactNode {
-  return (
-    <MultiplayerBattleProvider
-      database={{} as Database}
-      roomId="room-1"
-      clientId="client-a"
-      connectedCount={1}
-      battleState={battleState}
-    >
-      {element}
-    </MultiplayerBattleProvider>
-  );
-}
-
-function mount(
-  element: ReactElement,
-  battleState: SharedBattleState | null,
-): {
+function mount(element: ReactElement): {
   container: HTMLDivElement;
   root: Root;
 } {
@@ -264,7 +188,7 @@ function mount(
   const root = createRoot(container);
   roots.push(root);
   act(() => {
-    root.render(wrap(element, battleState));
+    root.render(element);
   });
   return { container, root };
 }
@@ -272,6 +196,8 @@ function mount(
 beforeEach(() => {
   vi.clearAllMocks();
   setQuestState();
+  mockGameState = { quest: makeQuestState(), battle: null };
+  (mockActions as unknown as { beginBattle: typeof beginBattleSpy }).beginBattle = beginBattleSpy;
   (
     globalThis as typeof globalThis & {
       IS_REACT_ACT_ENVIRONMENT?: boolean;
@@ -299,7 +225,7 @@ describe("createBattleEntryKey", () => {
 });
 
 describe("BattleSiteRoute", () => {
-  it("renders a loading placeholder while battleState is null", () => {
+  it("renders a loading placeholder and appends BEGIN_BATTLE while battle is null", () => {
     const { container } = mount(
       <BattleSiteRoute
         site={makeSite()}
@@ -315,48 +241,16 @@ describe("BattleSiteRoute", () => {
           uiVariant: "legacy",
         }}
       />,
-      null,
     );
 
     expect(container.querySelector('[data-screen="playable"]')).toBeNull();
+    expect(container.querySelector('[data-screen="battle-start"]')).toBeNull();
     expect(container.textContent).toContain("Preparing battle");
+    expect(beginBattleSpy).toHaveBeenCalledWith("site-7");
   });
 
-  it("invokes ensureBattleSession via the hook when battleState is null", () => {
-    const ensureSpy = vi.spyOn(ensureSessionModule, "useEnsureBattleSession");
-
-    mount(
-      <BattleSiteRoute
-        site={makeSite()}
-        cardDatabase={makeBattleTestCardDatabase()}
-        runtimeConfig={{
-          seedOverride: null,
-          startInBattle: false,
-          aiMode: false,
-          basicAutomation: false,
-          gameId: null,
-          databaseMode: "emulator",
-          journeyVariant: "classic",
-          uiVariant: "legacy",
-        }}
-      />,
-      null,
-    );
-
-    expect(ensureSpy).toHaveBeenCalled();
-    const lastCall = ensureSpy.mock.calls[ensureSpy.mock.calls.length - 1];
-    if (lastCall === undefined) {
-      throw new Error("Expected ensureBattleSession to be called");
-    }
-    expect(lastCall[0].battleEntryKey).toBe("site-7::3::dreamscape-2");
-    expect(lastCall[0].roomId).toBe("room-1");
-    expect(lastCall[0].battleState).toBeNull();
-
-    expect(battleService.ensureBattleSession).toHaveBeenCalled();
-  });
-
-  it("reveals the Battle Start screen first, then PlayableBattleScreen once Begin Battle is clicked", () => {
-    const fakeBattleState = makeFakeBattleState();
+  it("reveals the Battle Start screen once the fold's battle exists, then PlayableBattleScreen once Begin Battle is clicked", () => {
+    mockGameState = makeFoldStateWithBattle();
     const { container } = mount(
       <BattleSiteRoute
         site={makeSite()}
@@ -372,16 +266,17 @@ describe("BattleSiteRoute", () => {
           uiVariant: "legacy",
         }}
       />,
-      fakeBattleState,
     );
 
     // The opposing Dreamcaller is revealed before the playable surface mounts.
     const startScreen = container.querySelector('[data-screen="battle-start"]');
     expect(startScreen).not.toBeNull();
     expect(startScreen?.getAttribute("data-battle-id")).toBe(
-      fakeBattleState.init.battleId,
+      mockGameState.battle?.init.battleId,
     );
     expect(container.querySelector('[data-screen="playable"]')).toBeNull();
+    // BEGIN_BATTLE is not re-appended once the fold's battle already exists.
+    expect(beginBattleSpy).not.toHaveBeenCalled();
 
     act(() => {
       container
@@ -392,17 +287,14 @@ describe("BattleSiteRoute", () => {
     const screen = container.querySelector('[data-screen="playable"]');
     expect(screen).not.toBeNull();
     expect(screen?.textContent).toBe("site-7::3::dreamscape-2");
-    expect(screen?.getAttribute("data-seed")).toBe(String(fakeBattleState.init.seed));
     expect(screen?.getAttribute("data-battle-id")).toBe(
-      fakeBattleState.reducer.mutable.battleId,
+      mockGameState.battle?.board.battleId,
     );
-
-    // ensureBattleSession should NOT fire when battleState is already populated.
-    expect(battleService.ensureBattleSession).not.toHaveBeenCalled();
   });
 
-  it("rerenders the screen with the updated battleEntryKey when quest state changes", () => {
-    const fakeBattleState = makeFakeBattleState();
+  it("resets the Battle Start reveal gate when the battleEntryKey changes", () => {
+    mockGameState = makeFoldStateWithBattle();
+    setQuestState({ completionLevel: 3 });
     const { container, root } = mount(
       <BattleSiteRoute
         site={makeSite()}
@@ -418,7 +310,6 @@ describe("BattleSiteRoute", () => {
           uiVariant: "legacy",
         }}
       />,
-      fakeBattleState,
     );
 
     // Reach the playable surface through the Battle Start reveal.
@@ -428,37 +319,31 @@ describe("BattleSiteRoute", () => {
         ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
     expect(
-      container
-        .querySelector('[data-screen="playable"]')
-        ?.textContent,
+      container.querySelector('[data-screen="playable"]')?.textContent,
     ).toBe("site-7::3::dreamscape-2");
 
     setQuestState({ completionLevel: 4 });
     act(() => {
       root.render(
-        wrap(
-          <BattleSiteRoute
-            site={makeSite()}
-            cardDatabase={makeBattleTestCardDatabase()}
-            runtimeConfig={{
-              seedOverride: null,
-              startInBattle: false,
-              aiMode: false,
-              basicAutomation: false,
-              gameId: null,
-              databaseMode: "emulator",
-              journeyVariant: "classic",
-              uiVariant: "legacy",
-            }}
-          />,
-          fakeBattleState,
-        ),
+        <BattleSiteRoute
+          site={makeSite()}
+          cardDatabase={makeBattleTestCardDatabase()}
+          runtimeConfig={{
+            seedOverride: null,
+            startInBattle: false,
+            aiMode: false,
+            basicAutomation: false,
+            gameId: null,
+            databaseMode: "emulator",
+            journeyVariant: "classic",
+            uiVariant: "legacy",
+          }}
+        />,
       );
     });
 
     // The battleEntryKey changed (completionLevel 3 → 4), so the per-battle
-    // begin gate resets and the Battle Start reveal returns; we just confirm the
-    // route stays up and reflects the loaded shared state.
+    // begin gate resets and the Battle Start reveal returns.
     expect(
       container.querySelector('[data-screen="battle-start"]'),
     ).not.toBeNull();

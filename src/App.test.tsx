@@ -59,12 +59,6 @@ vi.mock("./state/coop-quest-context", () => ({
   ),
 }));
 
-vi.mock("./state/multiplayer-battle-context", () => ({
-  MultiplayerBattleProvider: ({ children }: { children: ReactNode }) => (
-    <div data-battle-provider>{children}</div>
-  ),
-}));
-
 vi.mock("./state/quest-context", () => ({
   useQuest: vi.fn(),
 }));

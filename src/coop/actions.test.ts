@@ -118,7 +118,6 @@ function captureAllDrafts(): EventDraft[] {
   void actions.updateAtlas({});
   void actions.setCardSourceDebug(null);
   void actions.endBattle("victory");
-  void actions.questFailed({});
   void actions.beginBattle("site-1");
   void actions.battleCommand({});
   void actions.resolvePrompt(1, {});

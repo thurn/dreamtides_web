@@ -17,8 +17,6 @@ export function BattleInspector({
   aiProposal = null,
   battleInit,
   canPlayerAct: _canPlayerAct,
-  futureCount,
-  historyCount,
   isDesktopLayout: _isDesktopLayout,
   isOpponentHandRevealed,
   isPlayerHandHidden,
@@ -35,10 +33,8 @@ export function BattleInspector({
   onOpenForesee,
   onOpenZone,
   onResetBattle,
-  onRedo,
   onToggleOpponentHand,
   onTogglePlayerHand,
-  onUndo,
 }: {
   /** When true, render the debug-only "AI Reasoning" section. */
   aiMode?: boolean;
@@ -46,8 +42,6 @@ export function BattleInspector({
   aiProposal?: AiProposal | null;
   battleInit: BattleInit;
   canPlayerAct: boolean;
-  futureCount: number;
-  historyCount: number;
   isDesktopLayout: boolean;
   isOpponentHandRevealed: boolean;
   isPlayerHandHidden: boolean;
@@ -64,10 +58,8 @@ export function BattleInspector({
   onOpenForesee: (side: BattleSide, count: number) => void;
   onOpenZone: (side: BattleSide, zone: BrowseableZone) => void;
   onResetBattle?: () => void;
-  onRedo?: () => void;
   onToggleOpponentHand: () => void;
   onTogglePlayerHand: () => void;
-  onUndo?: () => void;
 }) {
   const playerDiscardCommand = useMemo(
     () => createDiscardMostRecentHandCardCommand(state, "player", "inspector"),
@@ -196,28 +188,6 @@ export function BattleInspector({
               onCommand={onCommand}
               discardCommand={enemyDiscardCommand}
             />
-
-            <div className="insp-section">
-              <h4>History</h4>
-              <div className="chip-row">
-                <button
-                  type="button"
-                  className="chip"
-                  disabled={historyCount === 0}
-                  onClick={() => onUndo?.()}
-                >
-                  ↶ Undo
-                </button>
-                <button
-                  type="button"
-                  className="chip"
-                  disabled={futureCount === 0}
-                  onClick={() => onRedo?.()}
-                >
-                  ↷ Redo
-                </button>
-              </div>
-            </div>
           </div>
         </>
       ) : null}

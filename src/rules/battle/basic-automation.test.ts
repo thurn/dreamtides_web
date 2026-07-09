@@ -148,7 +148,7 @@ describe("planBasicAutomationCommands — playing cards", () => {
       sourceSurface: "hand-tray",
     };
 
-    const result = planBasicAutomationCommands(state, play, CAPS, () => 0, 0);
+    const result = planBasicAutomationCommands(state, play, CAPS);
 
     expect(edits(result)).toEqual([
       {
@@ -175,7 +175,7 @@ describe("planBasicAutomationCommands — playing cards", () => {
       sourceSurface: "hand-tray",
     };
 
-    expect(edits(planBasicAutomationCommands(state, play, CAPS, () => 0, 0))).toEqual([
+    expect(edits(planBasicAutomationCommands(state, play, CAPS))).toEqual([
       {
         kind: "MOVE_CARD_TO_ZONE",
         battleCardId: "e1",
@@ -200,7 +200,7 @@ describe("planBasicAutomationCommands — playing cards", () => {
       sourceSurface: "hand-tray",
     };
 
-    const energyEdit = edits(planBasicAutomationCommands(state, play, CAPS, () => 0, 0)).find(
+    const energyEdit = edits(planBasicAutomationCommands(state, play, CAPS)).find(
       (edit) => edit.kind === "ADJUST_CURRENT_ENERGY",
     );
     expect(energyEdit).toEqual({ kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: -1 });
@@ -221,7 +221,7 @@ describe("planBasicAutomationCommands — playing cards", () => {
       sourceSurface: "hand-tray",
     };
 
-    expect(planBasicAutomationCommands(state, discardToVoid, CAPS, () => 0, 0)).toEqual([discardToVoid]);
+    expect(planBasicAutomationCommands(state, discardToVoid, CAPS)).toEqual([discardToVoid]);
   });
 
   it("does not spend energy when moving a card already on the battlefield", () => {
@@ -239,7 +239,7 @@ describe("planBasicAutomationCommands — playing cards", () => {
       sourceSurface: "battlefield",
     };
 
-    expect(planBasicAutomationCommands(state, reposition, CAPS, () => 0, 0)).toEqual([reposition]);
+    expect(planBasicAutomationCommands(state, reposition, CAPS)).toEqual([reposition]);
   });
 });
 
@@ -264,7 +264,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
       sourceSurface: "phase-controls",
     };
 
-    const result = edits(planBasicAutomationCommands(state, handoff, CAPS, () => 0, 0));
+    const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
 
     // Challenge scoring for the outgoing player.
     expect(result).toContainEqual({ kind: "ADJUST_SCORE", side: "player", amount: 4 });
@@ -293,7 +293,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
       sourceSurface: "phase-controls",
     };
 
-    const result = edits(planBasicAutomationCommands(state, handoff, CAPS, () => 0, 0));
+    const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
 
     // No second scoring of the outgoing player's surviving challenger.
     expect(result.some((edit) => edit.kind === "ADJUST_SCORE")).toBe(false);
@@ -316,7 +316,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
       sourceSurface: "phase-controls",
     };
 
-    const result = edits(planBasicAutomationCommands(state, handoff, CAPS, () => 0, 0));
+    const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
     expect(result).toContainEqual({ kind: "DRAW_CARD", side: "enemy" });
   });
 
@@ -334,7 +334,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
       sourceSurface: "phase-controls",
     };
 
-    const discards = edits(planBasicAutomationCommands(state, handoff, CAPS, () => 0, 0)).filter(
+    const discards = edits(planBasicAutomationCommands(state, handoff, CAPS)).filter(
       (edit) => edit.kind === "DISCARD_CARD",
     );
     expect(discards).toEqual([
@@ -357,11 +357,16 @@ describe("planBasicAutomationCommands — turn handoff", () => {
       sourceSurface: "phase-controls",
     };
 
-    const result = planBasicAutomationCommands(state, handoff, CAPS, () => 0, 0);
+    const result = planBasicAutomationCommands(state, handoff, CAPS);
     expect(result).toContainEqual({ id: "FORCE_RESULT", result: "victory", sourceSurface: "auto-system" });
   });
 
-  it("clears exhaustion for every in-play character of the incoming side", () => {
+  it("delegates the incoming side's Dawn exhaustion-clear to the reducer (emits no status clear)", () => {
+    // The reducer's `BATTLE_COMMAND` is the sole ▸Dawn owner: it fires the
+    // incoming side's exhaustion clear + Dawn triggers when it folds the handoff
+    // flip edit (see `BattleFoldState.dawnFired`). The client expansion therefore
+    // emits NO status-clear edits — doing so would double-clear (harmless) but,
+    // more importantly, the non-idempotent Dawn triggers must fire exactly once.
     const incomingFront = makeInstance("e-front", { owner: "enemy", printedSpark: 2 });
     const incomingBack = makeInstance("e-back", { owner: "enemy", printedSpark: 1 });
     const outgoingFront = makeInstance("p-front", { owner: "player", printedSpark: 3 });
@@ -386,54 +391,13 @@ describe("planBasicAutomationCommands — turn handoff", () => {
       sourceSurface: "phase-controls",
     };
 
-    const result = edits(planBasicAutomationCommands(state, handoff, CAPS, () => 0, 0));
+    const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
 
-    // Both the incoming side's front- and back-rank characters are cleared.
-    expect(result).toContainEqual({
-      kind: "SET_CARD_STATUS",
-      battleCardId: "e-front",
-      status: { isExhausted: false },
-    });
-    expect(result).toContainEqual({
-      kind: "SET_CARD_STATUS",
-      battleCardId: "e-back",
-      status: { isExhausted: false },
-    });
-    // The outgoing side's exhaustion is untouched.
-    expect(
-      result.some(
-        (edit) => edit.kind === "SET_CARD_STATUS" && edit.battleCardId === "p-front",
-      ),
-    ).toBe(false);
-  });
-
-  it("clears exhaustion before the incoming side's draw and energy ramp", () => {
-    const incoming = makeInstance("e-front", { owner: "enemy", printedSpark: 2 });
-    incoming.status.isExhausted = true;
-    const state = makeState({
-      activeSide: "player",
-      turnNumber: 4,
-      enemy: {
-        deck: ["d-enemy"],
-        frontRank: frontRankSlots("F0", "e-front"),
-      },
-      instances: [incoming],
-    });
-    const handoff: BattleCommand = {
-      id: "DEBUG_EDIT",
-      edit: { kind: "SET_BATTLE_FLOW", phase: "day", activeSide: "enemy", turnNumber: 4 },
-      sourceSurface: "phase-controls",
-    };
-
-    const result = edits(planBasicAutomationCommands(state, handoff, CAPS, () => 0, 0));
-    const clearIndex = result.findIndex(
-      (edit) => edit.kind === "SET_CARD_STATUS" && edit.battleCardId === "e-front",
-    );
-    const flowIndex = result.findIndex((edit) => edit.kind === "SET_BATTLE_FLOW");
-    expect(clearIndex).toBeGreaterThanOrEqual(0);
-    // The exhaust-clear is part of the incoming side's turn, so it follows the
-    // side flip just like the ramp and draw.
-    expect(clearIndex).toBeGreaterThan(flowIndex);
+    // No exhaustion-clear for either side — Dawn is the reducer's job now.
+    expect(result.some((edit) => edit.kind === "SET_CARD_STATUS")).toBe(false);
+    // The flip and the incoming draw are still expanded.
+    expect(result).toContainEqual({ kind: "SET_BATTLE_FLOW", phase: "day", activeSide: "enemy", turnNumber: 5 });
+    expect(result).toContainEqual({ kind: "DRAW_CARD", side: "enemy" });
   });
 
   it("emits no status clear when the incoming side has no characters in play", () => {
@@ -448,7 +412,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
       sourceSurface: "phase-controls",
     };
 
-    const result = edits(planBasicAutomationCommands(state, handoff, CAPS, () => 0, 0));
+    const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
     expect(result.some((edit) => edit.kind === "SET_CARD_STATUS")).toBe(false);
   });
 
@@ -477,7 +441,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
       sourceSurface: "phase-controls",
     };
 
-    const result = edits(planBasicAutomationCommands(state, handoff, CAPS, () => 0, 0));
+    const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
 
     // The ephemeral hand card and the offering in-play card are banished.
     expect(result).toContainEqual({
@@ -517,7 +481,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
       sourceSurface: "phase-controls",
     };
 
-    const result = edits(planBasicAutomationCommands(state, handoff, CAPS, () => 0, 0));
+    const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
     const banishIndex = result.findIndex(
       (edit) =>
         edit.kind === "MOVE_CARD_TO_ZONE" && edit.battleCardId === "p-eph",
@@ -550,7 +514,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
       sourceSurface: "phase-controls",
     };
 
-    const result = edits(planBasicAutomationCommands(state, handoff, CAPS, () => 0, 0));
+    const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
     expect(
       result.some(
         (edit) => edit.kind === "MOVE_CARD_TO_ZONE" && edit.destination.zone === "banished",
@@ -566,7 +530,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
       sourceSurface: "phase-controls",
     };
 
-    expect(planBasicAutomationCommands(state, sameSideFlow, CAPS, () => 0, 0)).toEqual([sameSideFlow]);
+    expect(planBasicAutomationCommands(state, sameSideFlow, CAPS)).toEqual([sameSideFlow]);
   });
 });
 
@@ -588,7 +552,7 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
       sourceSurface: "phase-controls",
     };
 
-    const result = edits(planBasicAutomationCommands(state, gesture, CAPS, () => 0, 0));
+    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
     expect(result).toEqual([{ kind: "SET_PHASE", phase: "dreamwell" }]);
   });
 
@@ -605,7 +569,7 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
       sourceSurface: "phase-controls",
     };
 
-    const result = edits(planBasicAutomationCommands(state, gesture, caps, () => 0, 0));
+    const result = edits(planBasicAutomationCommands(state, gesture, caps));
 
     // The reveal itself is preserved as the first command.
     expect(result[0]).toEqual({
@@ -631,7 +595,7 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
       sourceSurface: "phase-controls",
     };
 
-    const result = edits(planBasicAutomationCommands(state, gesture, CAPS, () => 0, 0));
+    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
     expect(result[0]).toEqual({ kind: "SET_PHASE", phase: "draw" });
     expect(result).toContainEqual({ kind: "DRAW_CARD", side: "enemy" });
     // A draw gesture does not re-apply the dreamwell ramp.
@@ -651,12 +615,16 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
       sourceSurface: "phase-controls",
     };
 
-    const result = edits(planBasicAutomationCommands(state, gesture, CAPS, () => 0, 0));
+    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
     expect(result[0]).toEqual({ kind: "SET_PHASE", phase: "draw" });
     expect(result.some((edit) => edit.kind === "DRAW_CARD")).toBe(false);
   });
 
-  it("expands a dawn gesture into the exhaust-clear landing in day", () => {
+  it("expands a dawn gesture into a bare crossing into day (Dawn is the reducer's job)", () => {
+    // A `SET_PHASE dawn` navigation just steps dawn → day; the reducer fires the
+    // exhaustion clear + Dawn triggers when it folds the committed `SET_PHASE
+    // dawn` edit (the entered-dawn edge — see `BattleFoldState.dawnFired`), so the
+    // client expansion contributes no dawn edits.
     const exhausted = makeInstance("p0", { owner: "player", printedSpark: 2 });
     exhausted.status.isExhausted = true;
     const state = makeState({
@@ -671,21 +639,19 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
       sourceSurface: "phase-controls",
     };
 
-    const result = edits(planBasicAutomationCommands(state, gesture, CAPS, () => 0, 0));
-    expect(result[0]).toEqual({ kind: "SET_PHASE", phase: "dawn" });
-    expect(result).toContainEqual({
-      kind: "SET_CARD_STATUS",
-      battleCardId: "p0",
-      status: { isExhausted: false },
-    });
-    // A dawn gesture does not re-draw or re-ramp.
-    expect(result.some((edit) => edit.kind === "DRAW_CARD")).toBe(false);
-    expect(result.some((edit) => edit.kind === "SET_MAX_ENERGY")).toBe(false);
-    expect(result[result.length - 1]).toEqual({ kind: "SET_PHASE", phase: "day" });
+    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
+    // The expansion is just the dawn entry followed by the crossing into day.
+    expect(result).toEqual([
+      { kind: "SET_PHASE", phase: "dawn" },
+      { kind: "SET_PHASE", phase: "day" },
+    ]);
   });
 
-  it("folds an in-play Driftcaller Sovereign's Dawn energy gain into the bookend", () => {
-    // Driftcaller Sovereign — ▸Dawn: Gain 1●.
+  it("does not fold an in-play Driftcaller Sovereign's Dawn energy gain into the expansion", () => {
+    // Driftcaller Sovereign — ▸Dawn: Gain 1●. The reducer (the sole Dawn owner)
+    // applies this on the committed dawn edge; the client expansion emits neither
+    // the exhaustion clear nor the energy gain, so the non-idempotent trigger
+    // fires exactly once.
     const driftcaller = makeInstance("p0", {
       owner: "player",
       cardId: "9b9c2743-75b3-499d-b5fb-c3429c92d420",
@@ -704,19 +670,9 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
       sourceSurface: "phase-controls",
     };
 
-    const result = edits(planBasicAutomationCommands(state, gesture, CAPS, () => 0, 0));
-    // The exhaust-clear still fires.
-    expect(result).toContainEqual({
-      kind: "SET_CARD_STATUS",
-      battleCardId: "p0",
-      status: { isExhausted: false },
-    });
-    // The Dawn trigger energy gain is folded into the same bookend expansion.
-    expect(result).toContainEqual({
-      kind: "ADJUST_CURRENT_ENERGY",
-      side: "player",
-      amount: 1,
-    });
+    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
+    expect(result.some((edit) => edit.kind === "SET_CARD_STATUS")).toBe(false);
+    expect(result.some((edit) => edit.kind === "ADJUST_CURRENT_ENERGY")).toBe(false);
   });
 
   it("expands an ending gesture into the hand-limit discard and banish", () => {
@@ -740,7 +696,7 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
       sourceSurface: "phase-controls",
     };
 
-    const result = edits(planBasicAutomationCommands(state, gesture, CAPS, () => 0, 0));
+    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
     expect(result[0]).toEqual({ kind: "SET_PHASE", phase: "ending" });
     // Hand-limit discard for the active side.
     expect(result).toContainEqual({ kind: "DISCARD_CARD", battleCardId: "h11" });
@@ -764,7 +720,7 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
         sourceSurface: "phase-controls",
       };
       // Surfaced phases pass through untouched — the player drives them.
-      expect(planBasicAutomationCommands(state, gesture, CAPS, () => 0, 0)).toEqual([gesture]);
+      expect(planBasicAutomationCommands(state, gesture, CAPS)).toEqual([gesture]);
     }
   });
 
@@ -781,7 +737,7 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
       sourceSurface: "phase-controls",
     };
 
-    const result = edits(planBasicAutomationCommands(state, gesture, CAPS, () => 0, 0));
+    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
     expect(result[0]).toEqual({ kind: "SET_PHASE", phase: "challenge" });
     expect(result).toContainEqual({ kind: "ADJUST_SCORE", side: "player", amount: 4 });
     // The challenge navigation does not advance past challenge.
@@ -802,7 +758,7 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
       sourceSurface: "phase-controls",
     };
 
-    const result = edits(planBasicAutomationCommands(state, gesture, CAPS, () => 0, 0));
+    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
     // Entering challenge resolves the outgoing side's Challenge exactly here.
     expect(result).toContainEqual({ kind: "ADJUST_SCORE", side: "player", amount: 4 });
     // The flow edit itself is preserved and there is no side flip.
@@ -814,13 +770,13 @@ describe("planBasicAutomationCommands — passthrough", () => {
   it("returns non-automated commands unchanged", () => {
     const state = makeState({});
     const forceResult: BattleCommand = { id: "FORCE_RESULT", result: "defeat", sourceSurface: "inspector" };
-    expect(planBasicAutomationCommands(state, forceResult, CAPS, () => 0, 0)).toEqual([forceResult]);
+    expect(planBasicAutomationCommands(state, forceResult, CAPS)).toEqual([forceResult]);
 
     const setEnergy: BattleCommand = {
       id: "DEBUG_EDIT",
       edit: { kind: "SET_CURRENT_ENERGY", side: "player", value: 3 },
       sourceSurface: "status-strip",
     };
-    expect(planBasicAutomationCommands(state, setEnergy, CAPS, () => 0, 0)).toEqual([setEnergy]);
+    expect(planBasicAutomationCommands(state, setEnergy, CAPS)).toEqual([setEnergy]);
   });
 });

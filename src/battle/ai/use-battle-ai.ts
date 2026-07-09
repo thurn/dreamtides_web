@@ -12,7 +12,6 @@ import type { BattleCommand, BattleDebugEdit } from "../debug/commands";
 import {
   type BattleAiChoiceTrace,
   type BattleMutableState,
-  type BattleReducerState,
   type BattleSide,
 } from "../types";
 
@@ -56,8 +55,8 @@ interface BattleCapsInput {
 }
 
 export interface UseBattleAiArgs {
-  reducerState: BattleReducerState;
-  dispatch: (action: { type: "APPLY_COMMAND"; command: BattleCommand }) => void;
+  board: BattleMutableState;
+  submit: (command: BattleCommand) => void;
   enabled: boolean;
   /** The side the AI controls (e.g. "enemy"). */
   aiSide: BattleSide;
@@ -119,15 +118,22 @@ function yieldToEventLoop(): Promise<void> {
  *
  * The proposal is recomputed by an effect — ASYNCHRONOUSLY, off the render path,
  * with the beam search yielding the main thread between rounds — whenever the
- * live mutable state changes (keyed by `reducerState.transitionId`) and whenever
+ * live mutable state changes (keyed by a turn/side/phase/score transition key)
+ * and whenever
  * an action is rejected (the exclusion set grows). While a plan is in flight the
  * hook reports {@link UseBattleAiResult.thinking}. When `approve()` dispatches,
  * the resulting state change re-runs the effect, which produces the next
  * proposal — that is the entire loop.
  */
 export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
-  const { reducerState, dispatch, enabled, aiSide, caps, basicAutomation } = args;
-  const mutable = reducerState.mutable;
+  const { board, submit, enabled, aiSide, caps, basicAutomation } = args;
+  const mutable = board;
+  // A stable replan key: the driver owns nondeterministic triggers, so there is
+  // no `transitionId` to key off of here. Turn/side/phase/score capture every
+  // meaningfully distinct board the planner cares about; the `mutable`
+  // reference itself is also a dependency below so an in-place edit under the
+  // same key (e.g. a mid-turn energy tweak) still re-triggers the effect.
+  const transitionKey = `${mutable.turnNumber}:${mutable.activeSide}:${mutable.phase}:${String(mutable.sides.player.score)}:${String(mutable.sides.enemy.score)}`;
 
   // Actions the human rejected this turn, by stable key. Cleared when the turn
   // actually passes (a new transition with a different turn/active-side).
@@ -161,7 +167,7 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
   // The proposal is computed ASYNCHRONOUSLY off the render path: the planner's
   // beam search is heavy enough that running it synchronously during render
   // freezes the whole tab for the AI's turn. The effect (re)plans whenever the
-  // live state changes — keyed by `reducerState.transitionId` plus the `mutable`
+  // live state changes — keyed by `transitionKey` plus the `mutable`
   // reference and the exclusion set — and stores the result in state.
   const [proposal, setProposal] = useState<AiProposal | null>(null);
   const [thinking, setThinking] = useState(false);
@@ -206,7 +212,7 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
     };
   }, [
     isAiTurn,
-    reducerState.transitionId,
+    transitionKey,
     mutable,
     aiSide,
     excludedKeys,
@@ -248,10 +254,10 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
         ? commands
         : [{ ...firstCommand, aiChoices: [trace] }, ...restCommands];
       for (const command of tracedCommands) {
-        dispatch({ type: "APPLY_COMMAND", command });
+        submit(command);
       }
     }
-  }, [enabled, aiSide, mutable, caps, dispatch]);
+  }, [enabled, aiSide, mutable, caps, submit]);
 
   // ONLY this path dispatches. It applies the held proposal's commands in order;
   // the resulting state change re-runs the planning effect to produce the next
@@ -261,9 +267,9 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
       return;
     }
     for (const command of proposal.commands) {
-      dispatch({ type: "APPLY_COMMAND", command });
+      submit(command);
     }
-  }, [proposal, dispatch]);
+  }, [proposal, submit]);
 
   // Excludes the proposed action and recomputes — dispatches NOTHING. Only a
   // card-play `action` can be rejected; phase/turn-ending proposals cannot.

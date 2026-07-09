@@ -48,8 +48,6 @@ function mount(): {
       <BattleInspector
         battleInit={battleInit}
         canPlayerAct
-        futureCount={1}
-        historyCount={2}
         isDesktopLayout
         isOpponentHandRevealed={false}
         isPlayerHandHidden={false}
@@ -66,10 +64,8 @@ function mount(): {
         onOpenForesee={() => undefined}
         onOpenZone={() => undefined}
         onResetBattle={() => undefined}
-        onRedo={() => undefined}
         onToggleOpponentHand={onToggleOpponentHand}
         onTogglePlayerHand={() => undefined}
-        onUndo={() => undefined}
       />,
     );
   });
@@ -92,7 +88,6 @@ describe("BattleInspector", () => {
     expect(container.textContent).toContain("Show enemy hand");
     expect(container.textContent).toContain("Result");
     expect(container.textContent).toContain("Skip to rewards");
-    expect(container.textContent).toContain("History");
     expect(container.textContent).not.toContain("Card State");
     expect(container.textContent).not.toContain("Right-click this card");
     const stateRow = [...container.querySelectorAll(".row-ctl .val")].find((node) =>
@@ -135,8 +130,6 @@ describe("BattleInspector", () => {
         <BattleInspector
           battleInit={battleInit}
           canPlayerAct
-          futureCount={1}
-          historyCount={2}
           isDesktopLayout
           isOpponentHandRevealed={false}
           isPlayerHandHidden={false}
@@ -153,10 +146,8 @@ describe("BattleInspector", () => {
           onOpenForesee={() => undefined}
           onOpenZone={() => undefined}
           onResetBattle={() => undefined}
-          onRedo={() => undefined}
           onToggleOpponentHand={() => undefined}
           onTogglePlayerHand={() => undefined}
-          onUndo={() => undefined}
         />,
       );
     });

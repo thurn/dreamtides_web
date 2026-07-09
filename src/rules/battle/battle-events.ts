@@ -413,10 +413,29 @@ export function battleCommand(
   queue.push(...collectMaterializedRuns(inPlayBefore, boardAfter));
 
   let board = boardAfter;
+  let dawnFired = battle.dawnFired;
 
-  // Step 3 — ▸Dawn bookend + interactive Dawn on the "entered dawn" edge.
+  // Step 3 — ▸Dawn bookend + interactive Dawn, fired EXACTLY ONCE per (side,
+  // turn) by the reducer (the sole Dawn owner — see `BattleFoldState.dawnFired`).
+  // The incoming side's Dawn is due when this edit either:
+  //   - crossed into the committed `dawn` phase (an explicit `SET_PHASE dawn`,
+  //     e.g. from the inspector) — the legacy "entered dawn" edge; or
+  //   - handed the turn off by flipping the active side. The automation turn
+  //     handoff (`SET_BATTLE_FLOW`) lands the incoming side on `dreamwell` and
+  //     never crosses the dawn phase, so without this the incoming side's Dawn
+  //     would be dropped (legacy fired it via the runner's post-dawn scan).
+  // Turn 1 has no Dawn (rules), and Dawn never fires once the battle has a
+  // result. The `dawnFired` marker makes it at-most-once per (side, turn), so a
+  // handoff followed by a same-turn `SET_PHASE dawn` — or a rewind that replays a
+  // handoff — cannot re-fire the non-idempotent Dawn triggers.
   const enteredDawn = boardBefore.phase !== "dawn" && boardAfter.phase === "dawn";
-  if (enteredDawn && boardAfter.turnNumber > 1 && boardAfter.result === null) {
+  const handedOff = boardBefore.activeSide !== boardAfter.activeSide;
+  if (
+    (enteredDawn || handedOff) &&
+    boardAfter.turnNumber > 1 &&
+    boardAfter.result === null &&
+    dawnFired[boardAfter.activeSide] !== boardAfter.turnNumber
+  ) {
     const side = boardAfter.activeSide;
     board = applyBoardEdits(board, [
       ...dawnClearEdits(board, side),
@@ -425,6 +444,7 @@ export function battleCommand(
     for (const run of collectInteractiveDawnRuns(board, side)) {
       queue.push(run);
     }
+    dawnFired = { ...dawnFired, [side]: boardAfter.turnNumber };
   }
 
   // Step 4 — Dreamwell reveal → queue the revealed card's script.
@@ -456,7 +476,7 @@ export function battleCommand(
   // Step 6 — advance the queue, continuing the SAME draw counter.
   const queueCtx: EventContext = { ...ctx, rng: (index) => ctx.rng(drawIndex + index) };
   const advanced = advanceEffectQueue(
-    { init: battle.init, board, effectQueue: queue, pendingPrompt: null },
+    { init: battle.init, board, effectQueue: queue, pendingPrompt: null, dawnFired },
     queueCtx,
   );
   return { ...state, battle: advanced };

@@ -98,6 +98,32 @@ export interface BattleFoldState {
   board: BattleMutableState;
   effectQueue: EffectRun[];
   pendingPrompt: PendingPrompt | null;
+  /**
+   * Per-side once-per-turn ▸Dawn guard: the last turn number for which each
+   * side's Dawn bookend + triggers fired. The reducer is the SOLE Dawn owner
+   * (design decision: Dawn triggers draw from the seq-keyed `ctx.rng` and can be
+   * interactive prompts, so a client cannot bake them into logged edits and have
+   * the fold reproduce them deterministically). It fires a side's Dawn exactly
+   * once per turn — on the committed-`dawn`-phase edge OR on the turn handoff
+   * that flips the active side into a new turn (the automation flow lands the
+   * incoming side on `dreamwell`, never crossing the dawn phase) — applying it
+   * only when `dawnFired[side] !== turnNumber`, then stamping the turn here. This
+   * is the pure-data replacement for the deleted runner's per-(side,turn)
+   * processed set (`use-battle-effect-runner.ts`'s `processedInteractiveDawn`).
+   * `null` means that side's Dawn has not fired yet this battle.
+   */
+  dawnFired: DawnFiredMarker;
+}
+
+/** Per-side last-turn-Dawn-fired marker (see {@link BattleFoldState.dawnFired}). */
+export interface DawnFiredMarker {
+  player: number | null;
+  enemy: number | null;
+}
+
+/** The initial {@link DawnFiredMarker} for a fresh battle: no Dawn has fired. */
+export function emptyDawnFired(): DawnFiredMarker {
+  return { player: null, enemy: null };
 }
 
 // ---------------------------------------------------------------------------

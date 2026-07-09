@@ -4,8 +4,7 @@ import {
   resolveChallenge,
 } from "../../battle/engine/challenge";
 import { dreamwellEnergyEdits } from "../../battle/engine/energy";
-import { dawnClearEdits, endingBanishEdits } from "../../battle/engine/handoff";
-import { collectDawnTriggerEdits } from "./battle-card-effects-table";
+import { endingBanishEdits } from "../../battle/engine/handoff";
 import { selectBattleCardLocation } from "../../battle/state/selectors";
 import { drawsAtStartOfTurn } from "../../battle/state/turn-utils";
 import type {
@@ -84,8 +83,9 @@ const BOOKEND_PHASES: ReadonlySet<BattlePhase> = new Set<BattlePhase>([
  *  - **Start of turn draws.** The incoming player draws a card on the handoff
  *    (skipped on the very first turn of the battle) (rules §Turn Structure —
  *    Draw).
- *  - **Dawn clears exhaustion.** When a side begins its turn, every in-play
- *    character it controls loses the exhausted status (rules §Dawn).
+ *  - **Dawn is the reducer's job.** The exhaustion clear and Dawn triggers a
+ *    side gets when it begins its turn (rules §Dawn) are fired by the reducer's
+ *    `BATTLE_COMMAND` (the sole Dawn owner), not by this expansion.
  *  - **End-of-turn hand limit.** The outgoing player discards down to ten cards
  *    (rules §Turn Structure — Ending).
  *  - **Ending banishes end-of-turn statuses.** After the hand-limit discard, the
@@ -119,8 +119,6 @@ export function planBasicAutomationCommands(
   state: BattleMutableState,
   command: BattleCommand,
   caps: BasicAutomationCaps,
-  random: () => number,
-  nowMs: number,
 ): BattleCommand[] {
   if (command.id !== "DEBUG_EDIT") {
     return [command];
@@ -138,7 +136,7 @@ export function planBasicAutomationCommands(
         return planChallengeOnly(state, command, caps);
       }
       if (BOOKEND_PHASES.has(command.edit.phase)) {
-        return planBookendAdvance(state, command, command.edit, random, nowMs);
+        return planBookendAdvance(state, command, command.edit);
       }
       return [command];
     default:
@@ -292,17 +290,15 @@ function planTurnHandoff(
     commands.push(autoCommand(banishEdit));
   }
 
-  // The user's own flow edit performs the side flip.
+  // The user's own flow edit performs the side flip. The incoming side's ▸Dawn
+  // (exhaustion clear + Dawn triggers) is fired by the reducer's `BATTLE_COMMAND`
+  // when it folds THIS flip edit (the handoff edge — see
+  // `BattleFoldState.dawnFired`), so the client expansion does not emit it: Dawn
+  // triggers draw from the seq-keyed rng and can be interactive prompts, which a
+  // client cannot bake into logged edits deterministically. The incoming side's
+  // energy is raised separately when its Dreamwell card is revealed on the
+  // Dreamwell phase the handoff lands on (see `planDreamwellReveal`).
   commands.push(command);
-
-  // Dawn: the incoming side's exhausted characters lose the exhausted status
-  // (rules §Dawn). Clearing follows the side flip because it belongs to the
-  // incoming player's turn, alongside the draw. The incoming side's energy is
-  // raised separately when its Dreamwell card is revealed on the Dreamwell phase
-  // the handoff lands on (see `planDreamwellReveal`).
-  for (const clearEdit of dawnClearEdits(state, incomingSide)) {
-    commands.push(autoCommand(clearEdit));
-  }
 
   // Draw for the incoming side, skipping only the first player's first turn
   // (see `drawsAtStartOfTurn`).
@@ -347,8 +343,6 @@ function planBookendAdvance(
   state: BattleMutableState,
   command: BattleCommand,
   edit: Extract<BattleDebugEdit, { kind: "SET_PHASE" }>,
-  random: () => number,
-  nowMs: number,
 ): BattleCommand[] {
   const side = state.activeSide;
   // Keep the original navigation so the bookend entry stays in history.
@@ -360,7 +354,7 @@ function planBookendAdvance(
   // finite `PHASE_SEQUENCE` toward a surfaced phase (`ending` is the last
   // bookend and resolves to `day`).
   while (BOOKEND_PHASES.has(phase)) {
-    for (const effectEdit of bookendEffectEdits(state, side, phase, state.turnNumber, random, nowMs)) {
+    for (const effectEdit of bookendEffectEdits(state, side, phase, state.turnNumber)) {
       commands.push(autoCommand(effectEdit));
     }
     phase = nextSurfaceableTarget(phase);
@@ -390,12 +384,9 @@ function nextSurfaceableTarget(phase: BattlePhase): BattlePhase {
  *
  *  - **Draw:** draw one card for the active side, skipping only the first
  *    player's first turn (see `drawsAtStartOfTurn`).
- *  - **Dawn:** clear the active side's exhausted characters, then fold in the
- *    edits from its in-play ▸Dawn characters (e.g. Driftcaller Sovereign's
- *    energy gain). Dawn triggers are computed here, inside the bookend
- *    expansion, because automation steps straight through the transient Dawn
- *    phase in one synchronous dispatch loop — a React effect would never observe
- *    a committed `phase === "dawn"` to fire them.
+ *  - **Dawn:** no edits — the reducer's `BATTLE_COMMAND` is the sole Dawn owner
+ *    and fires the exhaustion clear + Dawn triggers when it folds the committed
+ *    `SET_PHASE dawn` edit this expansion emits (see `BattleFoldState.dawnFired`).
  *  - **Ending:** discard the active side down to the hand limit, then banish its
  *    end-of-turn statuses (ephemeral in hand, offering in play).
  */
@@ -404,8 +395,6 @@ function bookendEffectEdits(
   side: BattleSide,
   phase: BattlePhase,
   turnNumber: number,
-  random: () => number,
-  nowMs: number,
 ): BattleDebugEdit[] {
   switch (phase) {
     case "draw":
@@ -413,10 +402,12 @@ function bookendEffectEdits(
         ? [{ kind: "DRAW_CARD", side }]
         : [];
     case "dawn":
-      return [
-        ...dawnClearEdits(state, side),
-        ...collectDawnTriggerEdits(state, side, random, nowMs),
-      ];
+      // Dawn (exhaustion clear + Dawn triggers) is fired by the reducer's
+      // `BATTLE_COMMAND` on the committed-`dawn`-phase edge, which the SET_PHASE
+      // dawn navigation this expansion emits crosses. The reducer is the sole
+      // Dawn owner (Dawn triggers use the seq-keyed rng and may be interactive
+      // prompts), so the client expansion contributes no dawn edits here.
+      return [];
     case "ending":
       return [
         ...handLimitDiscardEdits(state, side),

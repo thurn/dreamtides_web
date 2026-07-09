@@ -45,7 +45,7 @@ import type {
   SiteState,
 } from "../../types/quest";
 import { LayerName } from "../../types/layer-name";
-import type { BattleFoldState } from "../battle/fold";
+import { emptyDawnFired, type BattleFoldState } from "../battle/fold";
 import {
   BATTLE_CARD_EFFECTS,
   type BattleCardEffectScript,
@@ -451,6 +451,7 @@ function battleInitProvider(): BattleInitProvider {
         board,
         effectQueue: [],
         pendingPrompt: null,
+        dawnFired: emptyDawnFired(),
       };
       return battle;
     },

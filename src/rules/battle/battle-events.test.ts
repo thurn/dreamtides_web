@@ -31,7 +31,7 @@ import type {
 } from "../../types/quest";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent, type ReduceResult } from "../reducer";
-import type { BattleFoldState, EffectRun } from "./fold";
+import { emptyDawnFired, type BattleFoldState, type EffectRun } from "./fold";
 import {
   registerBattleInitProvider,
   type BattleInitProvider,
@@ -167,7 +167,7 @@ function makeBattle(
   board = makeBoard(),
   init = makeInit(),
 ): BattleFoldState {
-  return { init, board, effectQueue: [], pendingPrompt: null };
+  return { init, board, effectQueue: [], pendingPrompt: null, dawnFired: emptyDawnFired() };
 }
 
 /**
@@ -191,7 +191,7 @@ const fakeProvider: BattleInitProvider = {
       siteId,
     });
     void timestamp;
-    return { init, board, effectQueue: [], pendingPrompt: null };
+    return { init, board, effectQueue: [], pendingPrompt: null, dawnFired: emptyDawnFired() };
   },
 };
 
@@ -539,6 +539,7 @@ function battleFrom(
     board,
     effectQueue: [],
     pendingPrompt: null,
+    dawnFired: emptyDawnFired(),
     ...overrides,
   };
 }
@@ -790,6 +791,67 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     const phaseOnly = applyDebugEdit(board, setDawn as never, EMISSION).state;
     // No dawn on turn 1 (rules): the board matches the bare phase edit.
     expect(hashBoard(result.state.battle!.board)).toBe(hashBoard(phaseOnly));
+  });
+
+  // --- dawn on a turn handoff: the incoming side's Dawn fires even though the
+  //     handoff lands the phase on `dreamwell` and never crosses the committed
+  //     `dawn` phase (the drop the reducer-sole-owner model closes) ---
+  function enemyDawnHandoffState(dawnCardId: string): FoldState {
+    const dawn = firstDeterministicDawn();
+    const enemyDawn = makeInstance(dawnCardId, dawn.id, "enemy");
+    const board = makeRichBoard({ turnNumber: 3, phase: "challenge", instances: [enemyDawn] });
+    board.sides.enemy.frontRank[frontRankSlotId(0)] = dawnCardId;
+    return { ...baseState(), battle: battleFrom(board) };
+  }
+
+  const HANDOFF_TO_ENEMY = {
+    kind: "SET_BATTLE_FLOW",
+    phase: "dreamwell",
+    activeSide: "enemy",
+    turnNumber: 3,
+  };
+
+  it("fires the incoming side's deterministic Dawn on a turn handoff", () => {
+    const state = enemyDawnHandoffState("bc-edawn");
+    const boardBefore = state.battle!.board;
+    const result = reduce(state, "BATTLE_COMMAND", debugEdit(HANDOFF_TO_ENEMY));
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.board.activeSide).toBe("enemy");
+
+    // The handoff never crosses the committed dawn phase, yet the enemy's Dawn
+    // trigger changed the board beyond the bare flow edit, and the once-guard is
+    // stamped for (enemy, turn 3).
+    const flowOnly = applyDebugEdit(boardBefore, HANDOFF_TO_ENEMY as never, EMISSION).state;
+    expect(hashBoard(result.state.battle!.board)).not.toBe(hashBoard(flowOnly));
+    expect(result.state.battle?.dawnFired.enemy).toBe(3);
+  });
+
+  it("does not re-fire the incoming side's Dawn when a same-turn SET_PHASE dawn follows the handoff", () => {
+    const afterHandoff = reduce(
+      enemyDawnHandoffState("bc-edawn2"),
+      "BATTLE_COMMAND",
+      debugEdit(HANDOFF_TO_ENEMY),
+    );
+    expect(afterHandoff.state.battle?.dawnFired.enemy).toBe(3);
+
+    // A same-turn SET_PHASE dawn crosses the committed dawn edge, but the
+    // once-per-(side,turn) guard blocks a second, non-idempotent Dawn firing.
+    const setDawn = { kind: "SET_PHASE", phase: "dawn" };
+    const afterDawn = reduce(afterHandoff.state, "BATTLE_COMMAND", debugEdit(setDawn));
+    const phaseOnly = applyDebugEdit(
+      afterHandoff.state.battle!.board,
+      setDawn as never,
+      EMISSION,
+    ).state;
+    expect(hashBoard(afterDawn.state.battle!.board)).toBe(hashBoard(phaseOnly));
+  });
+
+  it("folds a handoff Dawn deterministically: two folds of the same event are byte-identical", () => {
+    const state = enemyDawnHandoffState("bc-edawn3");
+    const a = reduce(state, "BATTLE_COMMAND", debugEdit(HANDOFF_TO_ENEMY));
+    const b = reduce(state, "BATTLE_COMMAND", debugEdit(HANDOFF_TO_ENEMY));
+    expect(hashBoard(a.state.battle!.board)).toBe(hashBoard(b.state.battle!.board));
+    expect(a.state.battle!.dawnFired).toEqual(b.state.battle!.dawnFired);
   });
 
   // --- dreamwell reveal queues the revealed card's script ---

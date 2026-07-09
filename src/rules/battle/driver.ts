@@ -179,6 +179,7 @@ function runQueue(
   seq: number,
   random: () => number,
   nowMs: number,
+  dawnFired: BattleFoldState["dawnFired"],
 ): BattleFoldState {
   let currentBoard = board;
   let currentQueue = queue;
@@ -228,6 +229,7 @@ function runQueue(
         kind: plan.prompt.kind,
         options: plan.active,
       },
+      dawnFired,
     };
   }
 
@@ -236,6 +238,7 @@ function runQueue(
     board: currentBoard,
     effectQueue: currentQueue,
     pendingPrompt: null,
+    dawnFired,
   };
 }
 
@@ -264,6 +267,7 @@ export function advanceEffectQueue(
     ctx.seq,
     makeRandomStream(ctx),
     Date.parse(ctx.timestamp),
+    battle.dawnFired,
   );
 }
 
@@ -301,6 +305,7 @@ export function resolvePendingPrompt(
       ctx.seq,
       random,
       nowMs,
+      battle.dawnFired,
     );
   }
 
@@ -330,5 +335,13 @@ export function resolvePendingPrompt(
       ? battle.effectQueue.slice(1)
       : [{ ...run, cursor: nextCursor }, ...battle.effectQueue.slice(1)];
 
-  return runQueue(battle.init, board, [...advancedQueue, ...cascadeRuns], ctx.seq, random, nowMs);
+  return runQueue(
+    battle.init,
+    board,
+    [...advancedQueue, ...cascadeRuns],
+    ctx.seq,
+    random,
+    nowMs,
+    battle.dawnFired,
+  );
 }

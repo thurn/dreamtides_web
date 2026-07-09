@@ -12,6 +12,7 @@ import { createBattleInit } from "../../battle/integration/create-battle-init";
 import { createInitialBattleState } from "../../battle/state/create-initial-state";
 import { findSite } from "../../rules/quest/sites";
 import type { BattleFoldState } from "../../rules/fold-state";
+import { emptyDawnFired } from "../../rules/battle/fold";
 import type { BattleInitProvider } from "../../rules/battle/battle-events";
 
 /**
@@ -62,7 +63,13 @@ export function createBattleInitProvider(
         deferOpponentLog: () => {},
       });
       const board = createInitialBattleState(init);
-      return { init, board, effectQueue: [], pendingPrompt: null };
+      return {
+        init,
+        board,
+        effectQueue: [],
+        pendingPrompt: null,
+        dawnFired: emptyDawnFired(),
+      };
     },
   };
 }

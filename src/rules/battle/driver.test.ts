@@ -12,7 +12,7 @@ import type { EffectStep } from "./effect-step";
 import { BATTLE_CARD_EFFECTS } from "./battle-card-effects-table";
 import { DREAMWELL_EFFECTS } from "./dreamwell-effects-table";
 import type { BattleFoldState, EffectRun, ScriptRef } from "./fold";
-import { newEffectRun, resolveScript } from "./fold";
+import { emptyDawnFired, newEffectRun, resolveScript } from "./fold";
 import { advanceEffectQueue, resolvePendingPrompt } from "./driver";
 
 // ---------------------------------------------------------------------------
@@ -275,7 +275,13 @@ const TEST_INIT = {
 } as unknown as BattleFoldState["init"];
 
 function foldState(runs: EffectRun[], board = makeBoard()): BattleFoldState {
-  return { init: TEST_INIT, board, effectQueue: runs, pendingPrompt: null };
+  return {
+    init: TEST_INIT,
+    board,
+    effectQueue: runs,
+    pendingPrompt: null,
+    dawnFired: emptyDawnFired(),
+  };
 }
 
 // Drive an interactive script to completion, auto-answering every prompt the

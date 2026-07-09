@@ -115,7 +115,6 @@ export interface EventPayloads {
 
   // --- battle lifecycle bridges ---
   END_BATTLE: { result: "victory" | "defeat" };
-  QUEST_FAILED: { summary: unknown };
 
   // --- battle events (no legacy 1:1) ---
   BEGIN_BATTLE: { siteId: string };
@@ -223,7 +222,6 @@ export const KNOWN_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
   "UPDATE_ATLAS",
   "SET_CARD_SOURCE_DEBUG",
   "END_BATTLE",
-  "QUEST_FAILED",
   "BEGIN_BATTLE",
   "BATTLE_COMMAND",
   "RESOLVE_PROMPT",

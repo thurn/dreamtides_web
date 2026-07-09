@@ -10,22 +10,23 @@ import type { SiteState } from "../../types/quest";
 import type { CardData } from "../../types/cards";
 import {
   createBattleLogBaseFields,
-  logBattleCommandApplied,
   logEvent,
   logEventOnce,
 } from "../../logging";
 import { useQuest } from "../../state/quest-context";
 import { PoolViewer } from "../../components/PoolViewer";
-import { useMultiplayerBattle } from "../../state/multiplayer-battle-context";
-import { dispatchBattleReset, dispatchClearBattleState } from "../../multiplayer/battle-service";
-import type { SharedBattleState } from "../../multiplayer/battle-types";
-import { completeBattleSiteVictory } from "../integration/battle-completion-bridge";
-import { beginQuestFailureRoute } from "../integration/failure-route";
+import {
+  useActions,
+  useAppend,
+  useClientId,
+  useConfirmedPromptId,
+  useConnectedCount,
+  useGameState,
+} from "../../coop/hooks";
 import {
   opponentCarriesDreamsign,
   resolveRunLayerCount,
 } from "../integration/opponent-deck";
-import { emitBattleTransitionLogEvents } from "../state/reducer";
 import {
   selectBattleCardLocation,
   selectBattlefieldSlotOccupant,
@@ -39,14 +40,15 @@ import type {
   BattleDreamcallerSummary,
   BattleEnemyDescriptor,
   BattleFieldSlotAddress,
+  BattleHistory,
   BattleMutableState,
   BattlePhase,
-  BattleReducerState,
   BattleSide,
   BrowseableZone,
 } from "../types";
 import type { QuestContent } from "../../data/quest-content";
-import type { BattleCommand, BattleDebugEdit } from "../debug/commands";
+import type { BattleCommand } from "../debug/commands";
+import type { PromptResolution } from "../../rules/battle/effect-runner-core";
 import { useBattleAi, type AiProposal } from "../ai/use-battle-ai";
 import { aiMayRunHere } from "../ai/ai-may-run-here";
 import { dreamwellEnergyEdits } from "../engine/energy";
@@ -72,8 +74,6 @@ import { BattleCardView, battleCardVisualFromInstance } from "./BattleCardView";
 import { BattleDreamwellDisplay } from "./BattleDreamwellDisplay";
 import { BattleCardPickerOverlay } from "./BattleCardPickerOverlay";
 import { BattleChoicePromptOverlay } from "./BattleChoicePromptOverlay";
-import { useDreamwellEffectRunner } from "../automation/use-dreamwell-effect-runner";
-import { useBattleEffectRunner } from "../automation/use-battle-effect-runner";
 import { dreamwellAutomationStatus } from "../../rules/battle/dreamwell-effects-table";
 import { collectAutomationHashDrift } from "../../rules/battle/battle-card-effects-table";
 import { BattlefieldGrid } from "./BattlefieldGrid";
@@ -87,6 +87,10 @@ import {
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
 
 const DESKTOP_INSPECTOR_WIDTH = 1280;
+// The coop fold carries no undo/redo history — `BattleLogDrawer` still
+// requires a `BattleHistory` shape, so it is fed a permanently-empty one (see
+// `handleResetBattle`'s note; a live history is a Task 28 cleanup).
+const EMPTY_BATTLE_HISTORY: BattleHistory = { past: [], future: [] };
 // Fires the automated-card hash-drift warning at most once per page session.
 let automationHashDriftWarned = false;
 const PHASE_CONTROL_SEQUENCE = ["dreamwell", "day", "dusk", "night", "challenge"] as const satisfies readonly BattlePhase[];
@@ -129,9 +133,9 @@ export function PlayableBattleScreen({
   aiMode?: boolean;
   basicAutomation?: boolean;
 }) {
-  const { battleState, reducerState } = useMultiplayerBattle();
-  if (battleState === null || reducerState === null) {
-    return null; // BattleSiteRoute already shows the loading state.
+  const battle = useGameState().battle;
+  if (battle === null) {
+    return null; // BattleSiteRoute already shows the loading/reveal state.
   }
   return (
     <PlayableBattleScreenInner site={site} aiMode={aiMode} basicAutomation={basicAutomation} />
@@ -147,33 +151,29 @@ function PlayableBattleScreenInner({
   aiMode: boolean;
   basicAutomation: boolean;
 }) {
-  const {
-    battleState: maybeBattleState,
-    reducerState: maybeReducerState,
-    dispatch,
-    database,
-    roomId,
-    clientId,
-    connectedCount,
-    isPrimaryClient,
-    remoteCommandEpoch,
-  } = useMultiplayerBattle();
-  if (maybeBattleState === null || maybeReducerState === null) {
+  const gameState = useGameState();
+  const battle = gameState.battle;
+  if (battle === null) {
     throw new Error(
-      "PlayableBattleScreenInner reached without a non-null battleState. The wrapper component should have short-circuited.",
+      "PlayableBattleScreenInner reached without a non-null battle fold state. The wrapper component should have short-circuited.",
     );
   }
-  const battleState: SharedBattleState = maybeBattleState;
-  const reducerState: BattleReducerState = maybeReducerState;
-  const battleInit = battleState.init;
-  const initialState = battleState.reducer.mutable;
-  if (battleInit.battleId !== initialState.battleId) {
+  const board = battle.board;
+  const battleInit = battle.init;
+  const pendingPrompt = battle.pendingPrompt;
+  if (battleInit.battleId !== board.battleId) {
     throw new Error(
-      `PlayableBattleScreen battleInit/initialState battleId mismatch: ${battleInit.battleId} vs ${initialState.battleId}`,
+      `PlayableBattleScreen battleInit/board battleId mismatch: ${battleInit.battleId} vs ${board.battleId}`,
     );
   }
 
-  const { state: questState, mutations, cardDatabase, questContent } = useQuest();
+  const actions = useActions();
+  const connectedCount = useConnectedCount();
+  const append = useAppend();
+  const clientId = useClientId();
+  const confirmedPromptId = useConfirmedPromptId();
+
+  const { state: questState, cardDatabase, questContent } = useQuest();
   const isDesktopInspectorLayout = useIsDesktopInspectorLayout();
   const [isInspectorDrawerOpen, setIsInspectorDrawerOpen] = useState(readIsDesktopInspectorLayout());
   const [isBattleLogOpen, setIsBattleLogOpen] = useState(false);
@@ -199,7 +199,6 @@ function PlayableBattleScreenInner({
   const [isBasicAutomationEnabled, setIsBasicAutomationEnabled] = useState(basicAutomation);
   const [rewardOverlay, setRewardOverlay] = useState<RewardOverlayState>(null);
   const [isResultOverlayDismissed, setIsResultOverlayDismissed] = useState(false);
-  const loggedCommandSerialRef = useRef(0);
 
   // Win/turn/energy caps for the AI planner, sourced from the battle init.
   // Wrapped in `useMemo` so the object is referentially stable across renders;
@@ -221,13 +220,22 @@ function PlayableBattleScreenInner({
   const aiMayRun = aiMayRunHere({ connectedCount });
 
   // The AI approval loop. Inert unless `aiMode` is true AND this client may run
-  // the AI: when disabled the hook holds no proposal and dispatches nothing. It
-  // receives the SAME live `reducerState`/`dispatch` the rest of the screen
-  // uses, so approved commands flow back as a new `reducerState` and the hook
-  // re-plans.
+  // the AI: when disabled the hook holds no proposal and submits nothing. It
+  // receives the SAME live `board`/`submit` the rest of the screen uses, so
+  // approved commands flow back as a new `board` and the hook re-plans.
+  const submitAiCommand = useCallback(
+    (command: BattleCommand): void => {
+      void append({
+        type: "BATTLE_COMMAND",
+        payload: { command },
+        actor: `ai:${clientId}`,
+      });
+    },
+    [append, clientId],
+  );
   const { proposal, thinking: aiThinking, approve, reject } = useBattleAi({
-    reducerState,
-    dispatch,
+    board,
+    submit: submitAiCommand,
     enabled: aiMode && aiMayRun,
     aiSide: "enemy",
     caps: aiCaps,
@@ -242,18 +250,31 @@ function PlayableBattleScreenInner({
   // no proposal is held and the AI is idle — on the human's own turn, and during
   // the AI's Dusk/Night/Challenge after its plays are done.
   const canPlayerAct = !(aiMode && (proposal !== null || aiThinking));
-  const historyCount = reducerState.history.past.length;
-  const futureCount = reducerState.history.future.length;
-  const failureResult = selectFailureOverlayResult(reducerState.mutable.result);
-  const showResultOverlay = reducerState.mutable.result !== null &&
+  const failureResult = selectFailureOverlayResult(board.result);
+  const showResultOverlay = board.result !== null &&
     !isResultOverlayDismissed;
-  const showReopenPill = reducerState.mutable.result !== null &&
+  const showReopenPill = board.result !== null &&
     isResultOverlayDismissed;
   const pendingDragCardId = pendingDrag === null
     ? null
     : pendingDrag.kind === "battle-card"
       ? pendingDrag.battleCardId
       : "__pool_viewer_card__";
+
+  // Resolves the single open prompt from the fold. Gated on
+  // `useConfirmedPromptId()` so a resolve never targets a promptId that only
+  // exists as an optimistic echo — the RESOLVE_PROMPT action refuses this
+  // server-side too (see `useActions`'s guard), but disabling the control here
+  // avoids a round-trip rejection.
+  const resolvePendingPrompt = useCallback(
+    (resolution: PromptResolution): void => {
+      if (pendingPrompt === null || confirmedPromptId !== pendingPrompt.promptId) {
+        return;
+      }
+      void actions.resolvePrompt(pendingPrompt.promptId, resolution);
+    },
+    [actions, pendingPrompt, confirmedPromptId],
+  );
 
   const handleCommand = useCallback((command: BattleCommand): void => {
     setPendingDrag(null);
@@ -264,60 +285,28 @@ function PlayableBattleScreenInner({
     // returns the ordered command list; with automation off it is a passthrough.
     if (isBasicAutomationEnabled) {
       const plannedCommands = planBasicAutomationCommands(
-        reducerState.mutable,
+        board,
         command,
         {
           maxEnergyCap: battleInit.maxEnergyCap,
           scoreToWin: battleInit.scoreToWin,
           dreamwellDeck: battleInit.dreamwellDeck,
         },
-        // Interim (Task 27 cutover): the fold-time driver will inject a seeded
-        // RNG and the event's timestamp. Until then the legacy dispatch path
-        // supplies live nondeterminism explicitly at the call site.
-        Math.random,
-        Date.now(),
       );
       for (const planned of plannedCommands) {
-        dispatch({ type: "APPLY_COMMAND", command: planned });
+        void actions.battleCommand(planned);
       }
       return;
     }
-    dispatch({ type: "APPLY_COMMAND", command });
+    void actions.battleCommand(command);
   }, [
-    dispatch,
+    actions,
     isBasicAutomationEnabled,
-    reducerState.mutable,
+    board,
     battleInit.maxEnergyCap,
     battleInit.scoreToWin,
     battleInit.dreamwellDeck,
   ]);
-
-  const dispatchAutomationEdit = useCallback((edit: BattleDebugEdit): void => {
-    dispatch({
-      type: "APPLY_COMMAND",
-      command: { id: "DEBUG_EDIT", edit, sourceSurface: "auto-system" },
-    });
-  }, [dispatch]);
-
-  const dreamwellRunner = useDreamwellEffectRunner({
-    enabled: isBasicAutomationEnabled,
-    state: reducerState.mutable,
-    dreamwellDeck: battleInit.dreamwellDeck,
-    dispatchEdit: dispatchAutomationEdit,
-    isPrimaryClient,
-    cancelPromptSignal: remoteCommandEpoch,
-  });
-
-  // Resolves the persistent-board battle triggers: ▸Materialized (walked through
-  // the shared step queue, pausing on prompts surfaced via overlays) once per
-  // newly-entered instance, plus the idempotent Support spark recompute.
-  const battleRunner = useBattleEffectRunner({
-    enabled: isBasicAutomationEnabled,
-    state: reducerState.mutable,
-    dispatchEdit: dispatchAutomationEdit,
-    isPrimaryClient,
-    cancelPromptSignal: remoteCommandEpoch,
-  });
 
   // Deck-aware companion to the reducer's `battle_proto_dreamwell_card_drawn`:
   // logs which card a reveal is about to draw, with the detail the reducer cannot
@@ -329,10 +318,10 @@ function PlayableBattleScreenInner({
   // index, exposing any over-advance of the shared deck index.
   const logDreamwellReveal = useCallback(
     (side: BattleSide, turnNumber: number, sourceSurface: BattleCommandSourceSurface): void => {
-      const drawIndex = reducerState.mutable.dreamwellDeckIndex;
+      const drawIndex = board.dreamwellDeckIndex;
       const card = battleInit.dreamwellDeck[drawIndex];
       logEvent("battle_proto_dreamwell_card_revealed", {
-        ...createBattleLogBaseFields(reducerState.mutable, {
+        ...createBattleLogBaseFields(board, {
           sourceSurface,
           selectedCardId: null,
         }),
@@ -345,7 +334,7 @@ function PlayableBattleScreenInner({
         energyAdded: card?.energyAdded ?? null,
       });
     },
-    [reducerState.mutable, battleInit.dreamwellDeck],
+    [board, battleInit.dreamwellDeck],
   );
 
   // Dreamwell-draw rail tool: on demand, reveal an additional Dreamwell card for
@@ -355,18 +344,18 @@ function PlayableBattleScreenInner({
   // reveal's idempotency guard so a deliberate extra draw always consumes the
   // next card even though the side already drew its mandatory card this turn.
   const runDreamwellDraw = useCallback((side: BattleSide): void => {
-    logDreamwellReveal(side, reducerState.mutable.turnNumber, "status-strip");
+    logDreamwellReveal(side, board.turnNumber, "status-strip");
     handleCommand({
       id: "DEBUG_EDIT",
       edit: {
         kind: "DRAW_DREAMWELL_CARD",
         side,
-        turnNumber: reducerState.mutable.turnNumber,
+        turnNumber: board.turnNumber,
         additional: true,
       },
       sourceSurface: "status-strip",
     });
-  }, [handleCommand, logDreamwellReveal, reducerState.mutable.turnNumber]);
+  }, [handleCommand, logDreamwellReveal, board.turnNumber]);
 
   // Dreamwell reveal: whenever the active side rests on its Dreamwell phase
   // without having drawn this turn's Dreamwell card yet, reveal it (rules §The
@@ -374,26 +363,19 @@ function PlayableBattleScreenInner({
   // automation so the card is always shown — while the energy it grants is
   // folded in by the automation expansion of `DRAW_DREAMWELL_CARD`.
   //
-  // The reveal is a once-per-turn AUTHORITY action, not a player gesture: it must
-  // be dispatched by exactly one client. Both sides draw from one shared
-  // `dreamwellDeckIndex`, so in a shared room every connected client running this
-  // effect would dispatch its own `DRAW_DREAMWELL_CARD` and the index would
-  // advance once per client (e.g. +2 with two clients), galloping through the
-  // `order` bands. Gate on `isPrimaryClient` — the same single-authority signal
-  // that owns battle init — so only one client reveals and the others receive it
-  // via the synced state. (Single-player has one primary client, so it is
-  // unaffected.) The per-(side, turn) ref still guards that one client against
-  // re-dispatching within the phase.
-  const activeSide = reducerState.mutable.activeSide;
-  const activePhase = reducerState.mutable.phase;
-  const activeTurnNumber = reducerState.mutable.turnNumber;
-  const battleResult = reducerState.mutable.result;
+  // The reveal is a once-per-turn gesture, but no longer gated on a client
+  // "primary" flag: the coop CAS policy (single-writer commit per event) makes
+  // a duplicate `DRAW_DREAMWELL_CARD` from a second client a harmless bounce
+  // rather than a double-advance, so every connected client may attempt the
+  // reveal and only the first one lands. The per-(side, turn) ref still guards
+  // this client against re-dispatching within the phase.
+  const activeSide = board.activeSide;
+  const activePhase = board.phase;
+  const activeTurnNumber = board.turnNumber;
+  const battleResult = board.result;
   const lastDreamwellRevealKeyRef = useRef<string | null>(null);
   useEffect(() => {
     if (battleResult !== null || activePhase !== "dreamwell") {
-      return;
-    }
-    if (!isPrimaryClient) {
       return;
     }
     const revealKey = `${activeSide}:${String(activeTurnNumber)}`;
@@ -413,7 +395,6 @@ function PlayableBattleScreenInner({
     });
   }, [
     handleCommand,
-    isPrimaryClient,
     logDreamwellReveal,
     activeSide,
     activePhase,
@@ -429,7 +410,7 @@ function PlayableBattleScreenInner({
   // itself) and when automation is off (the operator is stepping manually).
   // Ref-guarded to fire once per (side, turn).
   const activeDreamwellDrawnTurn =
-    reducerState.mutable.sides[activeSide].dreamwellDrawnTurn;
+    board.sides[activeSide].dreamwellDrawnTurn;
   const lastDreamwellAutoAdvanceKeyRef = useRef<string | null>(null);
   useEffect(() => {
     if (battleResult !== null || activePhase !== "dreamwell") {
@@ -471,7 +452,7 @@ function PlayableBattleScreenInner({
   // recorded draw index), rendered centered above the battlefield while the
   // Dreamwell phase is active.
   const activeDreamwellCardIndex =
-    reducerState.mutable.sides[activeSide].dreamwellCardIndex;
+    board.sides[activeSide].dreamwellCardIndex;
   const dreamwellDisplayCard = useMemo(() => {
     if (activeDreamwellCardIndex === null) {
       return null;
@@ -507,27 +488,7 @@ function PlayableBattleScreenInner({
     activeDreamwellDrawnTurn === activeTurnNumber;
 
   useEffect(() => {
-    if (reducerState.mutable !== battleState.reducer.mutable) {
-      return;
-    }
-
-    const serial = battleState.reducer.commandSerial;
-    if (serial === loggedCommandSerialRef.current) {
-      return;
-    }
-    loggedCommandSerialRef.current = serial;
-
-    if (reducerState.lastTransition !== null) {
-      emitBattleTransitionLogEvents(reducerState.lastTransition);
-    }
-    const lastEntry = reducerState.history.past[reducerState.history.past.length - 1];
-    if (lastEntry !== undefined) {
-      logBattleCommandApplied(lastEntry.metadata, reducerState.mutable);
-    }
-  }, [battleState.reducer.commandSerial, battleState.reducer.mutable, reducerState]);
-
-  useEffect(() => {
-    const baseFields = createBattleLogBaseFields(reducerState.mutable, {
+    const baseFields = createBattleLogBaseFields(board, {
       sourceSurface: "auto-system",
       selectedCardId: null,
     });
@@ -543,28 +504,31 @@ function PlayableBattleScreenInner({
       "battle_proto_opening_hands",
       {
         ...baseFields,
-        enemyHand: initialState.sides.enemy.hand.map(
-          (battleCardId) => initialState.cardInstances[battleCardId]?.definition.name ?? "Card",
+        enemyHand: board.sides.enemy.hand.map(
+          (battleCardId) => board.cardInstances[battleCardId]?.definition.name ?? "Card",
         ),
-        enemyHandSize: initialState.sides.enemy.hand.length,
+        enemyHandSize: board.sides.enemy.hand.length,
         openingHandSize: battleInit.openingHandSize,
-        playerHand: initialState.sides.player.hand.map(
-          (battleCardId) => initialState.cardInstances[battleCardId]?.definition.name ?? "Card",
+        playerHand: board.sides.player.hand.map(
+          (battleCardId) => board.cardInstances[battleCardId]?.definition.name ?? "Card",
         ),
       },
     );
-  }, [battleInit.battleId, battleInit.battleEntryKey, battleInit.enemyDescriptor.name, battleInit.openingHandSize, battleInit.seed, battleInit.siteId, initialState.cardInstances, initialState.sides.enemy.hand, initialState.sides.player.hand, reducerState.mutable]);
+    // This effect is keyed by `battleId` (via `logEventOnce`), so it fires once
+    // per battle — intentionally reading `board` only at that first commit
+    // rather than tracking it as a reactive dependency.
+  }, [battleInit.battleId, battleInit.battleEntryKey, battleInit.enemyDescriptor.name, battleInit.openingHandSize, battleInit.seed, battleInit.siteId]);
 
   useEffect(() => {
-    if (reducerState.mutable.result === null) {
+    if (board.result === null) {
       setRewardOverlay(null);
       setIsResultOverlayDismissed(false);
       return;
     }
 
-    if (reducerState.mutable.result === "victory" && rewardOverlay === null) {
+    if (board.result === "victory" && rewardOverlay === null) {
       setRewardOverlay({
-        rewardSource: reducerState.lastTransition?.metadata.commandId ?? "battle_result",
+        rewardSource: "battle_result",
         locked: false,
       });
       setOpenZoneBrowser(null);
@@ -590,7 +554,7 @@ function PlayableBattleScreenInner({
     setOpenNoteEditor(null);
     setOpenSideSummary(null);
     setIsDreamcallerPanelOpen(false);
-  }, [reducerState.lastTransition, reducerState.mutable.result, rewardOverlay]);
+  }, [board.result, rewardOverlay]);
 
   useEffect(() => {
     setIsOpponentHandRevealed(false);
@@ -656,9 +620,9 @@ function PlayableBattleScreenInner({
     if (!canPlayerAct) {
       return;
     }
-    const side = selectBattleCardLocation(reducerState.mutable, battleCardId)?.side ?? "player";
+    const side = selectBattleCardLocation(board, battleCardId)?.side ?? "player";
     const command = createMoveCardToBattlefieldCommand(
-      reducerState.mutable,
+      board,
       battleCardId,
       side,
       "hand-tray",
@@ -682,35 +646,23 @@ function PlayableBattleScreenInner({
     setOpenSideSummary(null);
   }
 
+  // The reducer's `applyDefeat` (END_BATTLE "defeat") already freezes the
+  // `failureSummary` from the terminal board and routes the quest slice to the
+  // `questFailed` screen — the whole legacy `beginQuestFailureRoute` bridge
+  // (building the summary client-side, dispatching `setFailureSummary`,
+  // clearing the shared battle slot) collapses to a single event.
   function handleFailureReset(): void {
     if (failureResult === null) {
       return;
     }
-    beginQuestFailureRoute({
-      battleInit: {
-        battleId: battleInit.battleId,
-        siteId: battleInit.siteId,
-        dreamscapeId: battleInit.dreamscapeId,
-      },
-      mutableState: {
-        turnNumber: reducerState.mutable.turnNumber,
-        sides: reducerState.mutable.sides,
-      },
-      result: failureResult,
-      reason: "forced_result",
-      siteLabel: site.type,
-      mutations,
-      clearBattleStateForRoom: () => {
-        void dispatchClearBattleState({
-          database,
-          roomId,
-        }).catch((error: unknown) => {
-          console.error("Failed to clear battle slot", error);
-        });
-      },
-    });
+    void actions.endBattle("defeat");
   }
 
+  // Debug-only "Reset battle" control. There is no coop equivalent of the
+  // legacy room-level `dispatchBattleReset` (rewinding the shared battle slot
+  // back to its opening state) — the fold is append-only. Closing the local
+  // overlays and logging keeps the control harmless rather than removing it
+  // from `BattleInspector`, whose prop stays optional.
   function handleResetBattle(): void {
     setPendingDrag(null);
     setHoverPreview(null);
@@ -728,15 +680,15 @@ function PlayableBattleScreenInner({
     setIsResultOverlayDismissed(false);
     setIsBattleLogOpen(false);
 
-    void dispatchBattleReset({
-      database,
-      roomId,
-      actorId: clientId,
-    }).catch((error: unknown) => {
-      console.error("Failed to reset battle", error);
-    });
+    console.warn(
+      "Reset battle is not supported against the coop event-sourced battle fold; closing local overlays only.",
+    );
   }
 
+  // The reducer's `applyVictory` (END_BATTLE "victory") already performs the
+  // completion-level bump, screen route, modifier decrement, and dreamscape
+  // clear — the legacy `completeBattleSiteVictory` bridge collapses to one
+  // event.
   function handleContinueReward(): void {
     if (rewardOverlay === null || rewardOverlay.locked) {
       return;
@@ -744,31 +696,7 @@ function PlayableBattleScreenInner({
     setRewardOverlay((current) => current === null
       ? null
       : { ...current, locked: true });
-    completeBattleSiteVictory({
-      battleId: battleInit.battleId,
-      siteId: battleInit.siteId,
-      dreamscapeId: battleInit.dreamscapeId,
-      completionLevelAtBattleStart: battleInit.completionLevelAtStart,
-      atlasSnapshot: battleInit.atlasSnapshot,
-      essenceReward: battleInit.essenceReward,
-      isFinalBoss: battleInit.isFinalBoss,
-      dreamscapeModifiers: questState.dreamscapeModifiers,
-      atlasBuildContext: {
-        dreamscapes: questContent.dreamscapes,
-        atlasConfig: questContent.atlasConfig,
-        dreamsignPoolIds: questState.remainingDreamsignPool,
-      },
-      mutations,
-      clearBattleStateForRoom: () => {
-        void dispatchClearBattleState({
-          database,
-          roomId,
-        }).catch((error: unknown) => {
-          console.error("Failed to clear battle slot", error);
-        });
-      },
-      postVictoryHandoffDelayMs: 800,
-    });
+    void actions.endBattle("victory");
   }
 
   function handleOpenSummary(side: BattleSide): void {
@@ -803,8 +731,8 @@ function PlayableBattleScreenInner({
       return;
     }
     setHoverPreview(null);
-    const location = selectBattleCardLocation(reducerState.mutable, battleCardId);
-    const instance = reducerState.mutable.cardInstances[battleCardId];
+    const location = selectBattleCardLocation(board, battleCardId);
+    const instance = board.cardInstances[battleCardId];
     if (instance !== undefined) {
       setPendingDrag({
         kind: "battle-card",
@@ -856,9 +784,9 @@ function PlayableBattleScreenInner({
     }
 
     const draggedLocation = pendingDrag.kind === "battle-card"
-      ? selectBattleCardLocation(reducerState.mutable, pendingDrag.battleCardId)
+      ? selectBattleCardLocation(board, pendingDrag.battleCardId)
       : null;
-    const targetOccupant = selectBattlefieldSlotOccupant(reducerState.mutable, target);
+    const targetOccupant = selectBattlefieldSlotOccupant(board, target);
 
     if (targetOccupant !== null) {
       const sourceIsBattlefield =
@@ -972,7 +900,7 @@ function PlayableBattleScreenInner({
       return;
     }
 
-    const side = selectBattleCardLocation(reducerState.mutable, pendingDrag.battleCardId)?.side ?? "player";
+    const side = selectBattleCardLocation(board, pendingDrag.battleCardId)?.side ?? "player";
     handleCommand(
       createMoveCardToStackCommand(pendingDrag.battleCardId, side, pendingDrag.sourceSurface),
     );
@@ -1039,7 +967,7 @@ function PlayableBattleScreenInner({
         <BattleZoneBrowser
           browser={openZoneBrowser}
           isOpponentHandRevealed={isOpponentHandRevealed}
-          state={reducerState.mutable}
+          state={board}
           onClose={() => setOpenZoneBrowser(null)}
           onCommand={handleCommand}
           onOpenForesee={(side, count) => setOpenForeseeOverlay({ side, count })}
@@ -1062,86 +990,52 @@ function PlayableBattleScreenInner({
         <BattleForeseeOverlay
           initialCount={openForeseeOverlay.count}
           side={openForeseeOverlay.side}
-          state={reducerState.mutable}
+          state={board}
           onClose={() => setOpenForeseeOverlay(null)}
           onDispatch={handleCommand}
         />
       ) : null}
-      {dreamwellRunner.activePrompt?.kind === "pick-cards" ? (
+      {/* The single open prompt from the fold — ▸Materialized, Dreamwell script,
+          and Support runs alike all park at `battle.pendingPrompt`; the driver
+          (not the client) owns which one is open. The resolve controls are
+          disabled until `useConfirmedPromptId()` confirms the opening event, so
+          a resolve never targets a promptId that only exists optimistically. */}
+      {pendingPrompt !== null && pendingPrompt.options.kind === "pick-cards" ? (
         <BattleCardPickerOverlay
-          title={dreamwellRunner.activePrompt.label}
-          sourceName={dreamwellRunner.activePromptSourceName}
-          sourceCard={dreamwellRunner.activePromptSourceCard}
-          candidateIds={dreamwellRunner.activePrompt.candidateIds}
-          count={dreamwellRunner.activePrompt.count}
-          optional={dreamwellRunner.activePrompt.optional}
-          highlightCardIds={dreamwellRunner.activePrompt.highlightCardIds}
-          state={reducerState.mutable}
-          onConfirm={(ids) => dreamwellRunner.resolvePrompt({ kind: "pick-cards", chosenIds: ids })}
-          onSkip={() => dreamwellRunner.resolvePrompt({ kind: "pick-cards", chosenIds: [] })}
+          title={pendingPrompt.options.label}
+          candidateIds={pendingPrompt.options.candidateIds}
+          count={pendingPrompt.options.count}
+          optional={pendingPrompt.options.optional}
+          highlightCardIds={pendingPrompt.options.highlightCardIds}
+          state={board}
+          onConfirm={(ids) => resolvePendingPrompt({ kind: "pick-cards", chosenIds: ids })}
+          onSkip={() => resolvePendingPrompt({ kind: "pick-cards", chosenIds: [] })}
         />
       ) : null}
-      {dreamwellRunner.activePrompt?.kind === "choice" ? (
+      {pendingPrompt !== null && pendingPrompt.options.kind === "choice" ? (
         <BattleChoicePromptOverlay
-          title={dreamwellRunner.activePrompt.label}
-          sourceCard={dreamwellRunner.activePromptSourceCard}
-          options={dreamwellRunner.activePrompt.options}
-          onChoose={(i) => dreamwellRunner.resolvePrompt({ kind: "choice", optionIndex: i })}
+          title={pendingPrompt.options.label}
+          options={pendingPrompt.options.options}
+          onChoose={(i) => resolvePendingPrompt({ kind: "choice", optionIndex: i })}
         />
       ) : null}
-      {dreamwellRunner.activePrompt?.kind === "foresee" &&
+      {pendingPrompt !== null &&
+      pendingPrompt.options.kind === "foresee" &&
       openForeseeOverlay === null ? (
         <BattleForeseeOverlay
-          initialCount={dreamwellRunner.activePrompt.count}
-          side={dreamwellRunner.activePromptSide ?? activeSide}
-          sourceCard={dreamwellRunner.activePromptSourceCard}
-          state={reducerState.mutable}
-          onDispatch={(command) => dispatch({ type: "APPLY_COMMAND", command })}
-          onClose={() => dreamwellRunner.resolvePrompt({ kind: "foresee" })}
-        />
-      ) : null}
-      {/* Battle-runner (▸Materialized) prompts share the same three overlays.
-          Precedence: only one runner's overlay is open at a time, and dreamwell
-          prompts win ties — render these only when the dreamwell runner has no
-          active prompt. */}
-      {dreamwellRunner.activePrompt === null &&
-      battleRunner.activePrompt?.kind === "pick-cards" ? (
-        <BattleCardPickerOverlay
-          title={battleRunner.activePrompt.label}
-          candidateIds={battleRunner.activePrompt.candidateIds}
-          count={battleRunner.activePrompt.count}
-          optional={battleRunner.activePrompt.optional}
-          highlightCardIds={battleRunner.activePrompt.highlightCardIds}
-          state={reducerState.mutable}
-          onConfirm={(ids) => battleRunner.resolvePrompt({ kind: "pick-cards", chosenIds: ids })}
-          onSkip={() => battleRunner.resolvePrompt({ kind: "pick-cards", chosenIds: [] })}
-        />
-      ) : null}
-      {dreamwellRunner.activePrompt === null &&
-      battleRunner.activePrompt?.kind === "choice" ? (
-        <BattleChoicePromptOverlay
-          title={battleRunner.activePrompt.label}
-          options={battleRunner.activePrompt.options}
-          onChoose={(i) => battleRunner.resolvePrompt({ kind: "choice", optionIndex: i })}
-        />
-      ) : null}
-      {dreamwellRunner.activePrompt === null &&
-      battleRunner.activePrompt?.kind === "foresee" &&
-      openForeseeOverlay === null ? (
-        <BattleForeseeOverlay
-          initialCount={battleRunner.activePrompt.count}
-          side={battleRunner.activePromptSide ?? activeSide}
-          state={reducerState.mutable}
-          onDispatch={(command) => dispatch({ type: "APPLY_COMMAND", command })}
-          onClose={() => battleRunner.resolvePrompt({ kind: "foresee" })}
+          initialCount={pendingPrompt.options.count}
+          side={pendingPrompt.run.side}
+          state={board}
+          onDispatch={handleCommand}
+          onClose={() => resolvePendingPrompt({ kind: "foresee" })}
         />
       ) : null}
       {openDeckOrderPicker !== null ? (
         <BattleDeckOrderPicker
-          initialOrder={reducerState.mutable.sides[openDeckOrderPicker].deck}
+          initialOrder={board.sides[openDeckOrderPicker].deck}
           scopeLabel="full"
           side={openDeckOrderPicker}
-          state={reducerState.mutable}
+          state={board}
           onCancel={() => setOpenDeckOrderPicker(null)}
           onConfirm={(order) => {
             handleCommand({
@@ -1160,7 +1054,7 @@ function PlayableBattleScreenInner({
       {openFigmentCreator !== null ? (
         <BattleFigmentCreator
           initialSide={openFigmentCreator}
-          state={reducerState.mutable}
+          state={board}
           onClose={() => setOpenFigmentCreator(null)}
           onSubmit={(edit) => handleCommand({
             id: "DEBUG_EDIT",
@@ -1183,7 +1077,7 @@ function PlayableBattleScreenInner({
       {openNoteEditor !== null ? (
         <BattleCardNoteEditor
           battleCardId={openNoteEditor}
-          state={reducerState.mutable}
+          state={board}
           onClose={() => setOpenNoteEditor(null)}
           onSubmit={(edit) => handleCommand({
             id: "DEBUG_EDIT",
@@ -1195,7 +1089,7 @@ function PlayableBattleScreenInner({
       {openSideSummary !== null ? (
         <BattleSideSummaryPopover
           side={openSideSummary}
-          state={reducerState.mutable}
+          state={board}
           title={openSideSummary === "player"
             ? battleInit.dreamcallerSummary?.name ?? "Player"
             : battleInit.enemyDescriptor.name}
@@ -1209,7 +1103,7 @@ function PlayableBattleScreenInner({
           dreamcallerAbilityInactive={
             openSideSummary === "enemy" && !enemyDreamcallerAbilityActive
           }
-          isActive={reducerState.mutable.activeSide === openSideSummary}
+          isActive={board.activeSide === openSideSummary}
           isSelected={false}
           onClose={() => {
             setOpenSideSummary(null);
@@ -1226,17 +1120,17 @@ function PlayableBattleScreenInner({
       <div className="battle-app-shell">
         <div className="battle-main">
           <BattleStatusBar
-            activeSide={reducerState.mutable.activeSide}
+            activeSide={board.activeSide}
             battleId={battleInit.battleId}
             enemyName={battleInit.enemyDescriptor.name}
-            enemyScore={reducerState.mutable.sides.enemy.score}
-            futureCount={futureCount}
+            enemyScore={board.sides.enemy.score}
+            futureCount={0}
             hasAiOpponent={aiMode}
-            historyCount={historyCount}
-            phase={reducerState.mutable.phase}
-            playerScore={reducerState.mutable.sides.player.score}
-            result={reducerState.mutable.result}
-            roundNumber={reducerState.mutable.turnNumber}
+            historyCount={0}
+            phase={board.phase}
+            playerScore={board.sides.player.score}
+            result={board.result}
+            roundNumber={board.turnNumber}
             siteType={site.type}
             onSetPhase={(phase) => {
               handleCommand({
@@ -1247,10 +1141,10 @@ function PlayableBattleScreenInner({
             }}
           />
           <BattleLiveRegion
-            activeSide={reducerState.mutable.activeSide}
-            phase={reducerState.mutable.phase}
-            result={reducerState.mutable.result}
-            turnNumber={reducerState.mutable.turnNumber}
+            activeSide={board.activeSide}
+            phase={board.phase}
+            result={board.result}
+            turnNumber={board.turnNumber}
           />
           <BattleAiProposalBanner
             proposal={aiMode ? proposal : null}
@@ -1263,13 +1157,13 @@ function PlayableBattleScreenInner({
                 side="opponent"
                 compact={!isPlayerHandHidden}
                 isBasicAutomationEnabled={isBasicAutomationEnabled}
-                currentEnergy={reducerState.mutable.sides.enemy.currentEnergy}
-                hand={reducerState.mutable.sides.enemy.hand}
+                currentEnergy={board.sides.enemy.currentEnergy}
+                hand={board.sides.enemy.hand}
                 onHandCardAction={handleCommand}
                 openingHandSize={battleInit.openingHandSize}
                 playerDrawSkipsTurnOne={battleInit.playerDrawSkipsTurnOne}
                 selectedCardId={null}
-                state={reducerState.mutable}
+                state={board}
                 onCardClick={handleHandCardClick}
                 onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "opponent-hand-tray")}
                 onCardDoubleClick={handleHandCardDoubleClick}
@@ -1292,7 +1186,7 @@ function PlayableBattleScreenInner({
             />
             <div className="battlefield-zone-layout">
               <BattleStackZone
-                state={reducerState.mutable}
+                state={board}
                 pendingDragCardId={pendingDragCardId}
                 onDrop={handleStackDrop}
                 onCardClick={handleBattlefieldCardClick}
@@ -1315,7 +1209,7 @@ function PlayableBattleScreenInner({
                     label="Banished"
                     side="player"
                     zone="banished"
-                    count={reducerState.mutable.sides.player.banished.length}
+                    count={board.sides.player.banished.length}
                     pendingDrag={pendingDrag}
                     onDrop={(sourceSurface) => handleZoneDrop("player", "banished", sourceSurface)}
                     onOpen={() => handleOpenZoneBrowser("player", "banished")}
@@ -1324,7 +1218,7 @@ function PlayableBattleScreenInner({
                     label="Void"
                     side="player"
                     zone="void"
-                    count={reducerState.mutable.sides.player.void.length}
+                    count={board.sides.player.void.length}
                     pendingDrag={pendingDrag}
                     onDrop={(sourceSurface) => handleZoneDrop("player", "void", sourceSurface)}
                     onOpen={() => handleOpenZoneBrowser("player", "void")}
@@ -1333,10 +1227,10 @@ function PlayableBattleScreenInner({
                 <BattleStatusStrip
                   dreamcaller={battleInit.dreamcallerSummary}
                   side="player"
-                  sideState={reducerState.mutable.sides.player}
+                  sideState={board.sides.player}
                   subtitle={battleInit.dreamcallerSummary?.title ?? ""}
                   title={battleInit.dreamcallerSummary?.name ?? "Player"}
-                  isActive={reducerState.mutable.activeSide === "player"}
+                  isActive={board.activeSide === "player"}
                   isSummarySelected={openSideSummary === "player"}
                   onSetEnergy={(value) => handleCommand({
                     id: "DEBUG_EDIT",
@@ -1367,7 +1261,7 @@ function PlayableBattleScreenInner({
                   <BattlefieldGrid
                     side="enemy"
                     zone="backRank"
-                    state={reducerState.mutable}
+                    state={board}
                     canInteract={canPlayerAct}
                     isBasicAutomationEnabled={isBasicAutomationEnabled}
                     selectedCardId={null}
@@ -1388,7 +1282,7 @@ function PlayableBattleScreenInner({
                   <BattlefieldGrid
                     side="enemy"
                     zone="frontRank"
-                    state={reducerState.mutable}
+                    state={board}
                     canInteract={canPlayerAct}
                     isBasicAutomationEnabled={isBasicAutomationEnabled}
                     selectedCardId={null}
@@ -1408,12 +1302,12 @@ function PlayableBattleScreenInner({
                   />
                   <div
                     data-battle-region="judgment-divider"
-                    className={`judgment-divider ${reducerState.mutable.phase === "challenge" ? "active" : ""}`}
+                    className={`judgment-divider ${board.phase === "challenge" ? "active" : ""}`}
                   />
                   <BattlefieldGrid
                     side="player"
                     zone="frontRank"
-                    state={reducerState.mutable}
+                    state={board}
                     canInteract={canPlayerAct}
                     isBasicAutomationEnabled={isBasicAutomationEnabled}
                     selectedCardId={null}
@@ -1434,7 +1328,7 @@ function PlayableBattleScreenInner({
                   <BattlefieldGrid
                     side="player"
                     zone="backRank"
-                    state={reducerState.mutable}
+                    state={board}
                     canInteract={canPlayerAct}
                     isBasicAutomationEnabled={isBasicAutomationEnabled}
                     selectedCardId={null}
@@ -1458,10 +1352,10 @@ function PlayableBattleScreenInner({
                 <BattleStatusStrip
                   side="enemy"
                   dreamcaller={enemyDreamcallerSummary}
-                  sideState={reducerState.mutable.sides.enemy}
+                  sideState={board.sides.enemy}
                   subtitle={battleInit.enemyDescriptor.subtitle}
                   title={battleInit.enemyDescriptor.name}
-                  isActive={reducerState.mutable.activeSide === "enemy"}
+                  isActive={board.activeSide === "enemy"}
                   isSummarySelected={openSideSummary === "enemy"}
                   onSetEnergy={(value) => handleCommand({
                     id: "DEBUG_EDIT",
@@ -1491,7 +1385,7 @@ function PlayableBattleScreenInner({
                     label="Void"
                     side="enemy"
                     zone="void"
-                    count={reducerState.mutable.sides.enemy.void.length}
+                    count={board.sides.enemy.void.length}
                     pendingDrag={pendingDrag}
                     onDrop={(sourceSurface) => handleZoneDrop("enemy", "void", sourceSurface)}
                     onOpen={() => handleOpenZoneBrowser("enemy", "void")}
@@ -1500,14 +1394,14 @@ function PlayableBattleScreenInner({
                     label="Banished"
                     side="enemy"
                     zone="banished"
-                    count={reducerState.mutable.sides.enemy.banished.length}
+                    count={board.sides.enemy.banished.length}
                     pendingDrag={pendingDrag}
                     onDrop={(sourceSurface) => handleZoneDrop("enemy", "banished", sourceSurface)}
                     onOpen={() => handleOpenZoneBrowser("enemy", "banished")}
                   />
                 </div>
                 <BattlePhaseFloatControls
-                  state={reducerState.mutable}
+                  state={board}
                   proposal={aiMode ? proposal : null}
                   onApprove={approve}
                   onReject={reject}
@@ -1537,15 +1431,15 @@ function PlayableBattleScreenInner({
                     const isAiEnemyHandoff =
                       aiMode &&
                       !isBasicAutomationEnabled &&
-                      reducerState.mutable.activeSide === "player" &&
+                      board.activeSide === "player" &&
                       target.activeSide === "enemy" &&
-                      target.turnNumber === reducerState.mutable.turnNumber;
+                      target.turnNumber === board.turnNumber;
                     if (isAiEnemyHandoff) {
                       // Read the card about to be drawn (the deck index has not
                       // advanced yet) so its energy can be applied alongside the
                       // reveal even though automation is off.
                       const dreamwellCard =
-                        battleInit.dreamwellDeck[reducerState.mutable.dreamwellDeckIndex];
+                        battleInit.dreamwellDeck[board.dreamwellDeckIndex];
                       logDreamwellReveal("enemy", target.turnNumber, "phase-controls");
                       handleCommand({
                         id: "DEBUG_EDIT",
@@ -1558,7 +1452,7 @@ function PlayableBattleScreenInner({
                       });
                       for (const edit of dreamwellEnergyEdits(
                         "enemy",
-                        reducerState.mutable.sides.enemy.maxEnergy,
+                        board.sides.enemy.maxEnergy,
                         dreamwellCard?.energyAdded ?? 0,
                       )) {
                         handleCommand({
@@ -1590,13 +1484,13 @@ function PlayableBattleScreenInner({
                 canInteract={canPlayerAct}
                 compact={isOpponentHandRevealed}
                 isBasicAutomationEnabled={isBasicAutomationEnabled}
-                currentEnergy={reducerState.mutable.sides.player.currentEnergy}
-                hand={reducerState.mutable.sides.player.hand}
+                currentEnergy={board.sides.player.currentEnergy}
+                hand={board.sides.player.hand}
                 onHandCardAction={handleCommand}
                 openingHandSize={battleInit.openingHandSize}
                 playerDrawSkipsTurnOne={battleInit.playerDrawSkipsTurnOne}
                 selectedCardId={null}
-                state={reducerState.mutable}
+                state={board}
                 onCardClick={handleHandCardClick}
                 onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "hand-tray")}
                 onCardDoubleClick={handleHandCardDoubleClick}
@@ -1611,14 +1505,11 @@ function PlayableBattleScreenInner({
           )}
           <BattleActionBar
             dreamsigns={battleInit.dreamsignSummaries}
-            futureCount={futureCount}
-            historyCount={historyCount}
             isBasicAutomationEnabled={isBasicAutomationEnabled}
             isBattleLogOpen={isBattleLogOpen}
             isDesktopInspectorLayout={isDesktopInspectorLayout}
             isInspectorDrawerOpen={isInspectorDrawerOpen}
             onOpenForesee={(_side, _count) => undefined}
-            onRedo={() => dispatch({ type: "REDO" })}
             onToggleBasicAutomation={() => setIsBasicAutomationEnabled((value) => !value)}
             onToggleBattleLog={() => {
               setIsBattleLogOpen((value) => !value);
@@ -1629,7 +1520,6 @@ function PlayableBattleScreenInner({
               setIsBattleLogOpen(false);
             }}
             onToggleInspector={() => setIsInspectorDrawerOpen((value) => !value)}
-            onUndo={() => dispatch({ type: "UNDO" })}
           />
         </div>
         <BattleInspector
@@ -1637,14 +1527,12 @@ function PlayableBattleScreenInner({
           aiProposal={proposal}
           battleInit={battleInit}
           canPlayerAct={canPlayerAct}
-          futureCount={futureCount}
-          historyCount={historyCount}
           isDesktopLayout={isDesktopInspectorLayout}
           isOpponentHandRevealed={isOpponentHandRevealed}
           isPlayerHandHidden={isPlayerHandHidden}
           isOpen={isInspectorDrawerOpen}
-          lastTransition={reducerState.lastTransition}
-          state={reducerState.mutable}
+          lastTransition={null}
+          state={board}
           onClose={() => setIsInspectorDrawerOpen(false)}
           onOpen={() => setIsInspectorDrawerOpen(true)}
           onCommand={handleCommand}
@@ -1659,10 +1547,8 @@ function PlayableBattleScreenInner({
           onOpenForesee={(side, count) => setOpenForeseeOverlay({ side, count })}
           onOpenZone={handleOpenZoneBrowser}
           onResetBattle={handleResetBattle}
-          onRedo={() => dispatch({ type: "REDO" })}
           onToggleOpponentHand={() => setIsOpponentHandRevealed((value) => !value)}
           onTogglePlayerHand={() => setIsPlayerHandHidden((value) => !value)}
-          onUndo={() => dispatch({ type: "UNDO" })}
         />
       </div>
       {contextMenu !== null ? (
@@ -1671,7 +1557,7 @@ function PlayableBattleScreenInner({
           battleCardId={contextMenu.battleCardId}
           onOpenNoteEditor={(battleCardId) => setOpenNoteEditor(battleCardId)}
           sourceSurface={contextMenu.sourceSurface}
-          state={reducerState.mutable}
+          state={board}
           x={contextMenu.x}
           y={contextMenu.y}
           onClose={() => setContextMenu(null)}
@@ -1680,7 +1566,7 @@ function PlayableBattleScreenInner({
       ) : null}
       {hoverPreview !== null && pendingDrag === null
         ? (() => {
-          const hoverCard = reducerState.mutable.cardInstances[hoverPreview.battleCardId];
+          const hoverCard = board.cardInstances[hoverPreview.battleCardId];
           return hoverCard === undefined
             ? null
             : (
@@ -1693,36 +1579,36 @@ function PlayableBattleScreenInner({
         : null}
       <BattleLogDrawer
         battleInit={battleInit}
-        futureCount={futureCount}
-        history={reducerState.history}
+        futureCount={0}
+        history={EMPTY_BATTLE_HISTORY}
         isOpen={isBattleLogOpen}
-        lastTransition={reducerState.lastTransition}
+        lastTransition={null}
         onClose={() => setIsBattleLogOpen(false)}
       />
       <BattleDreamwellHistoryDrawer
         dreamwellDeck={battleInit.dreamwellDeck}
-        dreamwellDeckIndex={reducerState.mutable.dreamwellDeckIndex}
+        dreamwellDeckIndex={board.dreamwellDeckIndex}
         isOpen={isDreamwellHistoryOpen}
         onClose={() => setIsDreamwellHistoryOpen(false)}
       />
       {showResultOverlay ? (
-        reducerState.mutable.result === "victory" && rewardOverlay !== null ? (
+        board.result === "victory" && rewardOverlay !== null ? (
           <BattleRewardSurface
             battleId={battleInit.battleId}
             canCancel={!rewardOverlay.locked}
             enemyName={battleInit.enemyDescriptor.name}
             essenceReward={battleInit.essenceReward}
-            enemyScore={reducerState.mutable.sides.enemy.score}
-            playerScore={reducerState.mutable.sides.player.score}
+            enemyScore={board.sides.enemy.score}
+            playerScore={board.sides.player.score}
             rewardSource={rewardOverlay.rewardSource}
-            turnNumber={reducerState.mutable.turnNumber}
+            turnNumber={board.turnNumber}
             isLocked={rewardOverlay.locked}
             onCancel={() => setIsResultOverlayDismissed(true)}
             onContinue={handleContinueReward}
           />
         ) : (
           <BattleResultOverlay
-            result={reducerState.mutable.result!}
+            result={board.result!}
             onDismissInspect={() => setIsResultOverlayDismissed(true)}
             onReset={handleFailureReset}
           />
@@ -1735,7 +1621,7 @@ function PlayableBattleScreenInner({
           className="result-reopen-pill"
           onClick={() => setIsResultOverlayDismissed(false)}
         >
-          {reducerState.mutable.result} — reopen
+          {board.result} — reopen
         </button>
       ) : null}
     </div>

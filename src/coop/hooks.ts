@@ -61,6 +61,8 @@ export type OutcomeListener = (
 ) => void;
 
 interface CoopContextValue {
+  /** This client's id, as minted by `RoomGate` (`mintClientId`). */
+  clientId: string;
   /** The displayed fold (confirmed + optimistic); seeded from genesis pre-fold. */
   gameState: FoldState;
   /** Stamp + append one event; `draft.actor` overrides this client's id. */
@@ -231,6 +233,7 @@ export function CoopProvider({
 
   const value = useMemo<CoopContextValue>(
     () => ({
+      clientId,
       gameState,
       append,
       actions,
@@ -238,7 +241,7 @@ export function CoopProvider({
       confirmedSeqRef,
       registerOutcomeListener,
     }),
-    [gameState, append, actions, connectedCount, registerOutcomeListener],
+    [clientId, gameState, append, actions, connectedCount, registerOutcomeListener],
   );
 
   return createElement(
@@ -257,6 +260,13 @@ export function CoopProvider({
 /** The displayed fold state (confirmed + optimistic). */
 export function useGameState(): FoldState {
   return useCoop().gameState;
+}
+
+/** This client's id, as minted by `RoomGate` (`mintClientId`). Stable for the
+ *  lifetime of the room mount; used to stamp AI-originated events
+ *  (`actor: "ai:<clientId>"`). */
+export function useClientId(): string {
+  return useCoop().clientId;
 }
 
 /**

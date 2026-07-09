@@ -131,7 +131,6 @@ export interface CoopActions {
 
   // --- battle lifecycle bridges ---
   endBattle: (result: "victory" | "defeat") => Promise<number>;
-  questFailed: (summary: unknown) => Promise<number>;
 
   // --- battle events ---
   beginBattle: (siteId: string) => Promise<number>;
@@ -262,7 +261,6 @@ export function makeActions(append: AppendFn): CoopActions {
 
     // --- battle lifecycle bridges ---
     endBattle: (result) => emit("END_BATTLE", { result }),
-    questFailed: (summary) => emit("QUEST_FAILED", { summary }),
 
     // --- battle events ---
     beginBattle: (siteId) => emit("BEGIN_BATTLE", { siteId }),

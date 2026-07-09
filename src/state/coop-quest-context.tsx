@@ -364,10 +364,16 @@ export function CoopQuestProvider({
         dispatch(actions.setCardSourceDebug(cardSourceDebug)),
 
       // ---- completion & failure (battle-completion bridges; Task 27) ----
+      // Battle victory/defeat fold through `END_BATTLE`: the reducer's
+      // `applyVictory` bumps the completion level and `applyDefeat` freezes the
+      // failure summary from the terminal board and routes to the `questFailed`
+      // screen. The battle screen appends `END_BATTLE` directly; these facade
+      // methods keep the legacy `QuestMutations` shape mapping onto the same
+      // events. `setFailureSummary` bounces when no battle is in progress.
       incrementCompletionLevel: () => dispatch(actions.endBattle("victory")),
       setFailureSummary: (failureSummary) => {
         if (failureSummary === null) return;
-        dispatch(actions.questFailed(failureSummary));
+        dispatch(actions.endBattle("defeat"));
       },
     };
   }, [actions, append, questContent, cardDatabase]);

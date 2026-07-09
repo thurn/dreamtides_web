@@ -569,7 +569,6 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent>
   // battle bridges & CAS-exempt (no quest case → routed to a bounce; here to
   // stress total-fold safety with types outside the quest domain switch)
   (rng) => ({ type: "END_BATTLE", payload: { result: pick(rng, ["victory", "defeat"]) } }),
-  () => ({ type: "QUEST_FAILED", payload: { summary: { reason: "x" } } }),
   (rng) => ({ type: "BEGIN_BATTLE", payload: { siteId: pick(rng, SITE_IDS) } }),
   () => ({ type: "SET_CARD_NOTE", payload: { instanceId: "i1", note: "hi" } }),
   (rng) => ({ type: "RESOLVE_PROMPT", payload: { promptId: Math.floor(rng() * 5), resolution: {} } }),
