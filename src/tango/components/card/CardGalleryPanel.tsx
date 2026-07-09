@@ -114,7 +114,8 @@ export interface CardGalleryPanelProps {
   cardSize?: CardGalleryCardSize;
   /**
    * Panel frame geometry and material. `floating` uses liquid glass;
-   * `fullBleed` uses the standard alpha scrim. Defaults to `floating`.
+   * `fullBleed` fills its parent edge-to-edge with the standard alpha scrim
+   * and no floating rim or shadow. Defaults to `floating`.
    */
   frame?: CardGalleryFrame;
   /** Internal padding and grid gap scale. Defaults to `regular`. */
@@ -134,6 +135,7 @@ export interface CardGalleryPanelProps {
    * Enables the shared mobile Deck Viewer press preview for compact galleries:
    * press a tile and a large readable card is placed clear of the finger. A
    * quick tap still activates selectable tiles; a held preview does not.
+   * First-row sources pin the card and its definitions to the top safe edge.
    */
   mobilePressPreview?: boolean;
 }
@@ -585,7 +587,7 @@ export function CardGalleryPanel({
                 justifyContent: "center",
               }}
             >
-              {cards.map((card) => {
+              {cards.map((card, index) => {
                 const disabled = card.disabled === true;
                 const interactive = onCardPress !== undefined;
                 const peekable = mobilePeekEnabled && !disabled;
@@ -623,7 +625,9 @@ export function CardGalleryPanel({
                         as="div"
                         data-testid={card.testId}
                         onPointerDown={(event) => {
-                          mobilePeek.openPeek(event, card);
+                          mobilePeek.openPeek(event, card, {
+                            pinToTop: index < columnCount,
+                          });
                         }}
                         onContextMenu={(event) => {
                           event.preventDefault();
@@ -656,7 +660,9 @@ export function CardGalleryPanel({
                     onPointerDown={
                       peekable
                         ? (event) => {
-                            mobilePeek.openPeek(event, card);
+                            mobilePeek.openPeek(event, card, {
+                              pinToTop: index < columnCount,
+                            });
                           }
                         : undefined
                     }

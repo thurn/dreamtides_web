@@ -94,7 +94,7 @@ export const cardGalleryPanelDemo: TangoComponent = {
   blurb:
     "The shared card-browser surface: a left-aligned title and subtitle, a trailing header accessory, and a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim.",
   callout:
-    "Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component derives material from frame geometry: floating is rounded glass and full-bleed is the standard alpha scrim. It also owns the header, accessory slot, internal scroll, fixed grid modes, and row-peek sizing; callers provide resolved card models keyed by entry id or UUID.",
+    "Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component derives material from frame geometry: floating is rounded glass and full-bleed is the edge-to-edge standard alpha scrim. It owns the header, accessory slot, internal scroll, fixed grid modes, and mobile press-preview sizing, including top-row pinning. Callers provide resolved card models keyed by entry id or UUID.",
   group: "Components",
   docName: "CardGalleryPanel",
   Component: CardGalleryPanelDemo,

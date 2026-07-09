@@ -94,6 +94,17 @@ describe("computePeekBox", () => {
     expect(box.top).toBeCloseTo(ENV.safeTop, 5);
   });
 
+  it("pins a top-row source to the safe top even when it could fit lower", () => {
+    const width = widthFor(393);
+    const box = computePeekBox({
+      ...layout({ width: 393, height: 852 }, { x: 150, y: 400 }, width),
+      pinToTop: true,
+    });
+
+    expect(box.top).toBeCloseTo(ENV.safeTop, 5);
+    expect(box.top).toBeLessThan(400);
+  });
+
   it("never places the card below the finger — pressing only pops it up", () => {
     const width = widthFor(393);
     for (let y = 200; y <= 800; y += 20) {

@@ -14,13 +14,13 @@
 //   - By default the card sits just high enough that its rules-text band clears
 //     the top of the finger circle — the lowest (closest to the pressed card)
 //     position that keeps the text readable — centered on the finger's column.
-//   - Only when the finger is so high that the card cannot fit above it does the
-//     card pin to the top of the safe area and instead clear the circle
-//     sideways, thrown flush to the screen edge away from the finger. For that
-//     to actually clear the circle the card must be narrow enough to sit
-//     entirely beside the finger, which is what `peekWidthForViewport`
-//     guarantees: it caps the card width to what fits beside the most central
-//     column a finger can press.
+//   - When the finger is so high that the card cannot fit above it, or the
+//     source belongs to the compact grid's top row, the card pins to the top of
+//     the safe area and clears the circle sideways, thrown flush to the screen
+//     edge away from the finger. For that to actually clear the circle the card
+//     must be narrow enough to sit entirely beside the finger, which is what
+//     `peekWidthForViewport` guarantees: it caps the card width to what fits
+//     beside the most central column a finger can press.
 //
 // Kept side-effect-free and framework-free so the clearance rule — the hard
 // part of this screen — is unit-tested, and independently proven over a full
@@ -101,6 +101,8 @@ export interface PeekLayoutInput {
   width: number;
   /** The finger's touch point (its `pointerdown` client coordinates). */
   finger: { x: number; y: number };
+  /** Pin the enlarged card to the top safe boundary for a top-row source. */
+  pinToTop?: boolean;
 }
 
 /**
@@ -155,7 +157,8 @@ export function peekWidthForViewport(input: {
 
 /**
  * Places the enlarged card as close to the pressed card as clearing the finger
- * allows.
+ * allows. A top-row source opts into the safe-top position directly so its
+ * supplemental definitions rise as one reading unit above the held finger.
  *
  * The card's rules-text band sits at its bottom, so the card is placed just high
  * enough that the band's bottom edge clears the top of the finger circle (by the
@@ -167,7 +170,15 @@ export function peekWidthForViewport(input: {
  * wide enough to leave the finger circle clear of the rules text.
  */
 export function computePeekBox(input: PeekLayoutInput): PeekRect {
-  const { viewport, safeTop, safeBottom, sideMargin, aspect, finger } = input;
+  const {
+    viewport,
+    safeTop,
+    safeBottom,
+    sideMargin,
+    aspect,
+    finger,
+    pinToTop = false,
+  } = input;
 
   const availableWidth = Math.max(0, viewport.width - sideMargin * 2);
   const width = Math.min(input.width, availableWidth);
@@ -185,7 +196,7 @@ export function computePeekBox(input: PeekLayoutInput): PeekRect {
 
   let top: number;
   let left: number;
-  if (topClearingFinger >= minTop) {
+  if (!pinToTop && topClearingFinger >= minTop) {
     // Sit just above the finger, centered on its column — the closest the card
     // can be while its rules text stays above the thumb.
     top = clamp(topClearingFinger, minTop, maxTop);

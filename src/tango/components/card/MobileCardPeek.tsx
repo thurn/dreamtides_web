@@ -47,6 +47,12 @@ export interface MobileCardPeekOptions {
   sideMarginToken?: `--${string}`;
 }
 
+/** Per-press placement metadata supplied by the compact grid. */
+export interface MobileCardPeekPlacement {
+  /** Pin the preview to the top safe boundary when its source is in row one. */
+  pinToTop?: boolean;
+}
+
 interface MobileCardPeekState {
   view: MobileCardPeekCardView;
   box: PeekRect;
@@ -77,6 +83,7 @@ export function useMobileCardPeek({
   openPeek: (
     event: ReactPointerEvent<HTMLElement>,
     view: MobileCardPeekCardView,
+    placement?: MobileCardPeekPlacement,
   ) => void;
   handlePointerMove: (event: ReactPointerEvent<HTMLElement>) => void;
   /** Consume the held-press marker before a selectable tile handles click. */
@@ -124,6 +131,7 @@ export function useMobileCardPeek({
     (
       event: ReactPointerEvent<HTMLElement>,
       view: MobileCardPeekCardView,
+      placement: MobileCardPeekPlacement = {},
     ): void => {
       if (peek !== null || typeof window === "undefined") return;
       const sideMargin = readLengthToken(sideMarginToken);
@@ -152,6 +160,7 @@ export function useMobileCardPeek({
           x: tile.left + tile.width / 2,
           y: tile.top + tile.height / 2,
         },
+        pinToTop: placement.pinToTop,
       });
       setPeek({
         view,

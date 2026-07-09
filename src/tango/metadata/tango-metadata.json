@@ -612,7 +612,7 @@
       ],
       "required": false,
       "defaultValue": "floating",
-      "description": "Panel frame geometry and material. `floating` uses liquid glass;\n`fullBleed` uses the standard alpha scrim. Defaults to `floating`."
+      "description": "Panel frame geometry and material. `floating` uses liquid glass;\n`fullBleed` fills its parent edge-to-edge with the standard alpha scrim\nand no floating rim or shadow. Defaults to `floating`."
     },
     {
       "name": "spacing",
@@ -664,7 +664,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "false",
-      "description": "Enables the shared mobile Deck Viewer press preview for compact galleries:\npress a tile and a large readable card is placed clear of the finger. A\nquick tap still activates selectable tiles; a held preview does not."
+      "description": "Enables the shared mobile Deck Viewer press preview for compact galleries:\npress a tile and a large readable card is placed clear of the finger. A\nquick tap still activates selectable tiles; a held preview does not.\nFirst-row sources pin the card and its definitions to the top safe edge."
     }
   ],
   "CardStatOrb": [

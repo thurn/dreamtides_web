@@ -72,10 +72,23 @@ beforeEach(() => {
     removeListener: () => undefined,
     dispatchEvent: () => false,
   })) as unknown as typeof window.matchMedia;
+  Object.defineProperty(window, "innerWidth", {
+    configurable: true,
+    value: 393,
+  });
+  Object.defineProperty(window, "innerHeight", {
+    configurable: true,
+    value: 852,
+  });
+  document.documentElement.style.setProperty("--safe-top", "24px");
+  document.documentElement.style.setProperty("--safe-bottom", "20px");
+  document.documentElement.style.setProperty("--gutter", "16px");
+  document.documentElement.style.setProperty("--space-3", "12px");
 });
 
 afterEach(() => {
   document.body.innerHTML = "";
+  document.documentElement.removeAttribute("style");
 });
 
 describe("CardGalleryPanel", () => {
@@ -243,7 +256,6 @@ describe("CardGalleryPanel", () => {
       root.unmount();
     });
   });
-
   it("provides an intermediate spacing scale for narrow four-column galleries", () => {
     const { container, root } = mount(
       <CardGalleryPanel
@@ -270,6 +282,80 @@ describe("CardGalleryPanel", () => {
     );
 
     act(() => {
+      root.unmount();
+    });
+  });
+
+  it("pins a UUID-identified first-row card preview to the top safe boundary", () => {
+    const cards = Array.from({ length: 5 }, (_, index) => ({
+      entryId: `entry-${String(index)}`,
+      card: {
+        ...makeCard(`Fixture ${String(index)}`),
+        id: asCardId(
+          `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
+        ),
+        renderedText: index === 0 ? "Foresee 1." : "Draw a card.",
+      },
+      testId: `gallery-card-${String(index)}`,
+    }));
+    const { container, root } = mount(
+      <CardGalleryPanel
+        title="Starting Deck"
+        cards={cards}
+        columns="four"
+        spacing="compact"
+        mobilePressPreview
+      />,
+    );
+    const firstTile = container.querySelector<HTMLElement>(
+      '[data-testid="gallery-card-0"]',
+    );
+    if (firstTile === null) throw new Error("Missing first-row UUID fixture");
+    firstTile.getBoundingClientRect = () =>
+      ({
+        left: 110,
+        top: 360,
+        width: 80,
+        height: 80,
+        right: 190,
+        bottom: 440,
+        x: 110,
+        y: 360,
+        toJSON: () => ({}),
+      }) as DOMRect;
+    const pointerDown = new Event("pointerdown", { bubbles: true });
+    Object.defineProperties(pointerDown, {
+      pointerId: { value: 7 },
+      clientX: { value: 150 },
+      clientY: { value: 400 },
+    });
+
+    act(() => {
+      firstTile.dispatchEvent(pointerDown);
+    });
+
+    const preview = document.body.querySelector<HTMLElement>(
+      "[data-mobile-card-peek-card]",
+    );
+    const definitions = document.body.querySelector<HTMLElement>(
+      "[data-mobile-card-peek-definitions]",
+    );
+    expect(preview?.style.top).toBe("24px");
+    expect(definitions?.style.top).toBe("24px");
+    const previewLeft = Number.parseFloat(preview?.style.left ?? "NaN");
+    const previewRight =
+      previewLeft + Number.parseFloat(preview?.style.width ?? "NaN");
+    const definitionsLeft = Number.parseFloat(
+      definitions?.style.left ?? "NaN",
+    );
+    const definitionsRight =
+      definitionsLeft + Number.parseFloat(definitions?.style.width ?? "NaN");
+    expect(
+      definitionsRight <= previewLeft || definitionsLeft >= previewRight,
+    ).toBe(true);
+
+    act(() => {
+      window.dispatchEvent(new Event("pointerup"));
       root.unmount();
     });
   });

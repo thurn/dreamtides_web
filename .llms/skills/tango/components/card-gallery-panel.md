@@ -10,7 +10,7 @@ Real consumers: **2** (imports outside `src/tango/docs/` and tests).
 
 The shared card-browser surface: a left-aligned title and subtitle, a trailing header accessory, and a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim.
 
-> **Guidance:** Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component derives material from frame geometry: floating is rounded glass and full-bleed is the standard alpha scrim. It also owns the header, accessory slot, internal scroll, fixed grid modes, and row-peek sizing; callers provide resolved card models keyed by entry id or UUID.
+> **Guidance:** Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component derives material from frame geometry: floating is rounded glass and full-bleed is the edge-to-edge standard alpha scrim. It owns the header, accessory slot, internal scroll, fixed grid modes, and mobile press-preview sizing, including top-row pinning. Callers provide resolved card models keyed by entry id or UUID.
 
 ## Props
 
@@ -23,13 +23,13 @@ The shared card-browser surface: a left-aligned title and subtitle, a trailing h
 | `emptyLabel` | `string` | no | `No cards.` | Empty-state copy shown when `cards` is empty. |
 | `columns` | `CardGalleryColumns` = `"auto" \| "two" \| "four" \| "five"` | no | `auto` | Card grid mode. Defaults to `auto`. |
 | `cardSize` | `CardGalleryCardSize` = `"standard" \| "roomy"` | no | `standard` | Card size preset. Defaults to `standard`. |
-| `frame` | `CardGalleryFrame` = `"floating" \| "fullBleed"` | no | `floating` | Panel frame geometry and material. `floating` uses liquid glass; `fullBleed` uses the standard alpha scrim. Defaults to `floating`. |
+| `frame` | `CardGalleryFrame` = `"floating" \| "fullBleed"` | no | `floating` | Panel frame geometry and material. `floating` uses liquid glass; `fullBleed` fills its parent edge-to-edge with the standard alpha scrim and no floating rim or shadow. Defaults to `floating`. |
 | `spacing` | `CardGallerySpacing` = `"regular" \| "medium" \| "compact"` | no | `regular` | Internal padding and grid gap scale. Defaults to `regular`. |
 | `largeCards` | `boolean` | no | `false` | Draw each tile with GameCard's larger readable type scale. |
 | `testId` | `string` | no | — | Test id for the panel root. |
 | `cutoutAwareAccessory` | `boolean` | no | `false` | When a screen-cutout box is known, float the accessory beside the device island instead of sharing the header row. |
 | `onCardPress` | `((entryId: string) => void)` | no | — | Fires when an enabled card tile is activated. |
-| `mobilePressPreview` | `boolean` | no | `false` | Enables the shared mobile Deck Viewer press preview for compact galleries: press a tile and a large readable card is placed clear of the finger. A quick tap still activates selectable tiles; a held preview does not. |
+| `mobilePressPreview` | `boolean` | no | `false` | Enables the shared mobile Deck Viewer press preview for compact galleries: press a tile and a large readable card is placed clear of the finger. A quick tap still activates selectable tiles; a held preview does not. First-row sources pin the card and its definitions to the top safe edge. |
 
 ### `rightAccessory`: the `CardGalleryAccessory` model
 
