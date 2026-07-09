@@ -12,17 +12,16 @@
 //   - the InfoCard press-reveal shell (which overrides the fill to the warmer
 //     --glass-fill-popover tint; its fullBleed / atlasReveal text cards wear the
 //     same recipe),
-//   - GlassDialog — both its GlassBackdrop (the full-bleed frosted layer the
-//     MobileDeckViewer and DesktopDeckViewer render, reduced to fill + blur for
-//     an edge-to-edge surface) and its centered glass panel (the shell the
-//     StartingDeckOverlay wears),
+//   - GlassDialog — both its GlassBackdrop (the full-bleed frosted layer used by
+//     the StartingDeckOverlay on mobile, reduced to fill + blur for an
+//     edge-to-edge surface) and its centered glass panel,
 //   - control-treatment.ts's glassTrack() (via glassSurfaceStyle({ radius: null
 //     })), which flows on to glassIconButtonChrome() → IconButton and
 //     controlChrome() → the Select / SegmentedControl track+trigger and
 //     GlassButton.
 // So the one material reaches the InfoCard reveal shell, GlassDialog (and the
-// shared backdrop the deck viewers frost through), IconButton, GlassButton, and
-// the Select / SegmentedControl control cluster.
+// shared full-bleed backdrop), IconButton, GlassButton, and the Select /
+// SegmentedControl control cluster.
 //
 // The material's fill, sheen, blur, rim, and shadow live once as the --glass-*
 // design tokens; this recipe is their ONLY reader. Edit a glass literal in
@@ -47,8 +46,8 @@ export interface GlassSurfaceOptions {
 /**
  * The liquid-glass style object, spread onto the node that should read as
  * glass. Radius-parameterized (all other values are the fixed --glass-* recipe)
- * so the ONE material serves every surface — the popover shell, the frosted
- * deck-viewer backdrops, and the radius-less control tracks alike. Only the
+ * so the ONE material serves every surface — the popover shell, frosted
+ * dialog backdrops, and radius-less control tracks alike. Only the
  * `saturate(1.5)` here is a raw literal; the fill/sheen/blur/rim/shadow are all
  * the --glass-* tokens.
  */

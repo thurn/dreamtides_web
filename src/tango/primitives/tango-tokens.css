@@ -524,8 +524,8 @@
      colors on blurred glass: the blurred backdrop makes that purple treatment
      fail legibility on bright scene art. */
   --glass-fill: rgba(14, 14, 16, 0.54);  /* @kind color */
-  /* The InfoCard reveal tint: a warmer violet-black so a press-reveal popover
-     reads distinct from the neutral deck-viewer glass. */
+  /* The InfoCard reveal tint: a warmer violet-black reserved for press-reveal
+     popovers. */
   --glass-fill-popover: rgba(18, 14, 28, 0.5);  /* @kind color */
   --glass-blur: 22px;  /* @kind other */
   --glass-sheen: linear-gradient(150deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 42%);  /* @kind other */

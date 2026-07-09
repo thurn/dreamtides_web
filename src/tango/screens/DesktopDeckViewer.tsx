@@ -1,10 +1,10 @@
 // DesktopDeckViewer — the wide-viewport Tango rendering of the player's deck.
 //
-// On desktop the deck is a FULL-SCREEN viewer: one liquid-glass surface fills
-// the whole viewport, so its frosted blur covers everything behind it. The
+// On desktop the deck is a FULL-SCREEN viewer: one black alpha scrim fills the
+// whole viewport while leaving the unblurred scene visible beneath it. The
 // deck's content is grouped and centered inside a width cap so it stays readable
 // rather than stretching edge-to-edge on an ultrawide display. Clicking the
-// blurred margin around the content, or pressing Escape, dismisses it.
+// dark margin around the content, or pressing Escape, dismisses it.
 //
 // The viewer is three regions:
 //   - a header naming the screen and carrying the corner close disc;
@@ -56,11 +56,10 @@ import { Pressable } from "../primitives/Pressable";
 import { Select } from "../components/controls/Select";
 import { SegmentedControl } from "../components/controls/SegmentedControl";
 import { IconButton } from "../components/controls/IconButton";
-import { GlassBackdrop } from "../components/overlay/GlassDialog";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { DeckCardView } from "./MobileDeckViewer";
-import { GridPlaceholder } from "./deck-viewer-shared";
+import { DeckViewerBackdrop, GridPlaceholder } from "./deck-viewer-shared";
 import {
   type DesktopDeckFilterSort,
   type DeckCardSize,
@@ -124,10 +123,10 @@ const DREAMSIGN_TILE_PX = 92;
 const DREAMCALLER_PORTRAIT_PX = DREAMSIGN_TILE_PX;
 
 /**
- * The desktop deck viewer: a full-screen liquid-glass surface whose frosted
- * blur covers the whole viewport, with the run's deck — a header, a profile
- * sidebar, and a filtered, sortable, resizable grid — grouped and centered
- * inside a width cap. An outside press (the blurred margin) or Escape closes it.
+ * The desktop deck viewer: a full-screen alpha scrim over the unblurred scene,
+ * with the run's deck — a header, a profile sidebar, and a filtered, sortable,
+ * resizable grid — grouped and centered inside a width cap. An outside press
+ * (the dark margin) or Escape closes it.
  */
 export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
   const stageRef = useRef<HTMLDivElement | null>(null);
@@ -162,14 +161,10 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
     <div
       ref={stageRef}
       className="tango"
-      // A transparent host: the frosted glass is a separate sibling backdrop
-      // layer (GlassBackdrop) so the filter/sort controls, which are its
-      // siblings, sample the raw scene through their own backdrop-filter and
-      // frost it once — matching the mobile viewer. An ancestor glass surface
-      // would double-frost the controls (its plum tint stacked twice), reading
-      // as a deep-plum fill instead of the warm scene-tinted glass. An outside
-      // press — on the blurred margin around the centered content — dismisses
-      // the viewer.
+      // A transparent host: the black alpha scrim is a separate sibling layer,
+      // leaving the scene unblurred while the controls retain their own glass
+      // treatment. An outside press on the dark margin around the centered
+      // content dismisses the viewer.
       onPointerDown={onClose}
       style={{
         position: "fixed",
@@ -180,7 +175,7 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
         padding: token("--space-7"),
       }}
     >
-      <GlassBackdrop />
+      <DeckViewerBackdrop />
       <div
         role="dialog"
         aria-modal="true"
@@ -191,8 +186,7 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
           e.stopPropagation();
         }}
         style={{
-          // Lift the content above the z0 backdrop layer so it is not itself
-          // frosted by the backdrop.
+          // Lift the content above the z0 backdrop layer.
           position: "relative",
           zIndex: 1,
           // Group the content toward the center inside a width cap so it stays

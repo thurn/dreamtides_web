@@ -37,7 +37,6 @@ import {
   useMobileCardPeek,
 } from "../components/card/MobileCardPeek";
 import { Pressable } from "../primitives/Pressable";
-import { GlassBackdrop } from "../components/overlay/GlassDialog";
 import { IconButton } from "../components/controls/IconButton";
 import { Select } from "../components/controls/Select";
 import { GLYPHS } from "../primitives/glyph";
@@ -54,7 +53,7 @@ import {
   deckTypeFilterLabel,
   filterAndSortDeckCards,
 } from "./mobile-deck-filter";
-import { GridPlaceholder } from "./deck-viewer-shared";
+import { DeckViewerBackdrop, GridPlaceholder } from "./deck-viewer-shared";
 
 /** One deck card, resolved for display (transfiguration/type/stat applied). */
 export interface DeckCardView {
@@ -137,12 +136,8 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
         flexDirection: "column",
       }}
     >
-      {/* Frosted-glass backdrop: the dreamscape behind blurs through, the same
-          liquid-glass recipe GroupPanel uses (fill + blur/saturate only — the
-          card's rim/radius/shadow are dropped for a full-bleed surface). Kept a
-          separate, un-faded layer so an ancestor opacity never flattens the
-          subtree and starves the backdrop-filter of a scene to sample. */}
-      <GlassBackdrop />
+      {/* Standard alpha scrim: the dreamscape remains visible without blur. */}
+      <DeckViewerBackdrop />
 
       <TopBand
         onClose={onClose}

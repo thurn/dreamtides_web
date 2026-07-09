@@ -28,8 +28,6 @@ Who wears it:
 - **the InfoCard press-reveal popover shell** — the reveal-on-interaction card
   that every press/hover popup renders through (it overrides the fill to the
   warmer `--glass-fill-popover` tint; see below);
-- **the MobileDeckViewer and DesktopDeckViewer full-bleed backdrops** — the
-  frosted scrim the deck viewer floats over;
 - **the StartingDeckModal panel**;
 - **the glass controls and glass icon buttons** — `glassTrack()` and
   `glassIconButtonChrome()` in `control-treatment.ts`, which route through the
@@ -72,15 +70,20 @@ both labeled and icon accessories with `placement="onGlass"`.
 There are two glass fills, and the difference is deliberate:
 
 - `--glass-fill` — `rgba(14, 14, 16, 0.54)`, a neutral near-black — is the
-  deck-viewer glass.
+  default glass fill.
 - `--glass-fill-popover` — `rgba(18, 14, 28, 0.5)`, a warmer violet-black — is
   the InfoCard reveal fill.
 
-A press-reveal popover often opens on the same screen as the deck-viewer glass,
-and the warmer tint makes the reveal read as its own distinct surface rather
-than blending into the neutral glass behind it. The tint is a design decision,
-not an accident — it is asserted by test, so a refactor that collapses the two
-fills fails the build.
+The warmer tint makes a reveal read as its own distinct surface. The tint is a
+design decision, not an accident — it is asserted by test, so a refactor that
+collapses the two fills fails the build.
+
+## Deck-viewer backdrop
+
+The MobileDeckViewer and DesktopDeckViewer place their content over the standard
+`--scrim` alpha overlay. The backdrop darkens the live scene without applying a
+blur, keeping the scene's forms recognizable while reducing visual competition
+with the card grid.
 
 ## The blur-preservation constraint
 

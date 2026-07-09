@@ -30,6 +30,26 @@ afterEach(() => {
 });
 
 describe("DesktopDeckViewer", () => {
+  it("uses the standard alpha scrim without blurring the scene", () => {
+    const { container, root } = mount(
+      <DesktopDeckViewer
+        view={{ cards: [], dreamcaller: null, dreamsigns: [] }}
+        onClose={vi.fn()}
+      />,
+    );
+
+    const backdrop = container.querySelector<HTMLElement>(
+      '[data-testid="deck-viewer-backdrop"]',
+    );
+
+    expect(backdrop?.style.background).toBe("var(--scrim)");
+    expect(backdrop?.getAttribute("style")).not.toContain("backdrop-filter");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("selects sort direction from a two-arrow segmented control", () => {
     const { container, root } = mount(
       <DesktopDeckViewer

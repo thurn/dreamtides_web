@@ -7,6 +7,22 @@
 import type { ReactElement } from "react";
 import { token } from "../primitives/tokens";
 
+/** The standard alpha scrim shared by both deck-viewer layouts. */
+export function DeckViewerBackdrop(): ReactElement {
+  return (
+    <div
+      aria-hidden="true"
+      data-testid="deck-viewer-backdrop"
+      style={{
+        position: "absolute",
+        inset: 0,
+        zIndex: 0,
+        background: token("--scrim"),
+      }}
+    />
+  );
+}
+
 /** The centered muted message shared by the empty / no-match grid states. */
 export function GridPlaceholder({ message }: { message: string }): ReactElement {
   return (

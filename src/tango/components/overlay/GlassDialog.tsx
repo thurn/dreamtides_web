@@ -1,8 +1,8 @@
 // GlassDialog + GlassBackdrop — the glass overlay shell.
 //
-// Two pieces of the frosted-overlay idiom that both deck viewers and the
-// StartingDeckOverlay share, lifted here so a screen assembles an overlay
-// instead of re-declaring the glass geometry:
+// Two pieces of the frosted-overlay idiom used by GlassDialog and the
+// StartingDeckOverlay, lifted here so a screen assembles an overlay instead of
+// re-declaring the glass geometry:
 //
 //   - GlassBackdrop: the full-bleed frosted-glass layer. It takes only the fill
 //     and blur/saturate backdrop from the shared liquid-glass recipe — the rim,
