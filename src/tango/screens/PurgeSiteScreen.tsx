@@ -348,14 +348,19 @@ function CardRegion({
         position: "relative",
         zIndex: 10,
         minHeight: 0,
-        height: "100%",
+        height: desktop ? "100%" : undefined,
+        maxHeight: "100%",
+        width: desktop ? "100%" : "calc(100vw - 8px)",
         boxSizing: "border-box",
         pointerEvents: "auto",
         ...(desktop
           ? {
               alignSelf: "stretch",
             }
-          : {}),
+          : {
+              alignSelf: "start",
+              justifySelf: "center",
+            }),
       }}
     >
       <CardGalleryPanel
@@ -387,6 +392,7 @@ function CardRegion({
           };
         })}
         columns={desktop ? "five" : "four"}
+        frame="floating"
         testId="tango-purge-card-gallery"
         onCardPress={onToggle}
       />

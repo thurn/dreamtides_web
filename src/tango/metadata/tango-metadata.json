@@ -584,6 +584,7 @@
       "tsType": "CardGalleryColumns",
       "unionMembers": [
         "auto",
+        "two",
         "four",
         "five"
       ],
@@ -600,7 +601,18 @@
       ],
       "required": false,
       "defaultValue": "standard",
-      "description": "Minimum auto-grid card width. Defaults to `standard`."
+      "description": "Card size preset. Defaults to `standard`."
+    },
+    {
+      "name": "frame",
+      "tsType": "CardGalleryFrame",
+      "unionMembers": [
+        "floating",
+        "fullBleed"
+      ],
+      "required": false,
+      "defaultValue": "floating",
+      "description": "Panel frame geometry. Defaults to `floating`."
     },
     {
       "name": "testId",
@@ -783,11 +795,11 @@
       "name": "variant",
       "tsType": "DreamcallerPortraitVariant",
       "unionMembers": [
+        "fullBleed",
         "hero",
         "panel",
         "thumb",
-        "standing",
-        "fullBleed"
+        "standing"
       ],
       "required": false,
       "defaultValue": "panel",

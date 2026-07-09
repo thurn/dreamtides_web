@@ -10,7 +10,7 @@ Real consumers: **2** (imports outside `src/tango/docs/` and tests).
 
 The shared glass card-browser surface: a left-aligned title and subtitle, a trailing header accessory, and a scrolling GameCard grid.
 
-> **Guidance:** Use this when a screen presents a bounded card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component owns one fixed rounded glass frame, the header, accessory slot, internal scroll, and grid modes; callers provide resolved card models keyed by entry id or UUID and wrap it in a fixed-height placement box so extra cards scroll inside the gallery body.
+> **Guidance:** Use this when a screen presents a bounded card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component owns one rounded glass frame, the header, accessory slot, internal scroll, fixed grid modes, and row-peek sizing; callers provide resolved card models keyed by entry id or UUID and choose a floating or full-bleed frame.
 
 ## Props
 
@@ -21,8 +21,9 @@ The shared glass card-browser surface: a left-aligned title and subtitle, a trai
 | `rightAccessory` | `CardGalleryAccessory` | no | — | Optional trailing header action. |
 | `cards` | `readonly CardGalleryCardView[]` | yes | — | Resolved cards rendered in order. |
 | `emptyLabel` | `string` | no | `No cards.` | Empty-state copy shown when `cards` is empty. |
-| `columns` | `CardGalleryColumns` = `"auto" \| "four" \| "five"` | no | `auto` | Card grid mode. Defaults to `auto`. |
-| `cardSize` | `CardGalleryCardSize` = `"standard" \| "roomy"` | no | `standard` | Minimum auto-grid card width. Defaults to `standard`. |
+| `columns` | `CardGalleryColumns` = `"auto" \| "two" \| "four" \| "five"` | no | `auto` | Card grid mode. Defaults to `auto`. |
+| `cardSize` | `CardGalleryCardSize` = `"standard" \| "roomy"` | no | `standard` | Card size preset. Defaults to `standard`. |
+| `frame` | `CardGalleryFrame` = `"floating" \| "fullBleed"` | no | `floating` | Panel frame geometry. Defaults to `floating`. |
 | `testId` | `string` | no | — | Test id for the panel root. |
 | `cutoutAwareAccessory` | `boolean` | no | `false` | When a screen-cutout box is known, float the accessory beside the device island instead of sharing the header row. |
 | `onCardPress` | `((entryId: string) => void)` | no | — | Fires when an enabled card tile is activated. |
@@ -56,6 +57,7 @@ import { CardGalleryPanel } from "src/tango/components/card/CardGalleryPanel";
   }}
   cards={cards}
   columns="five"
+  frame="floating"
   onCardPress={toggleCard}
 />
 ```

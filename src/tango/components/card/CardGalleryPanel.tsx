@@ -3,11 +3,13 @@
 // A card-gallery surface is the recurring "title + subtitle, trailing action,
 // scrolling GameCard grid" pattern used by the starting-deck reveal and card
 // selection sites. The component owns one rounded glass frame, the header row,
-// body scroll, and fixed card grid modes; callers wrap it for placement and
-// provide resolved card models keyed by deck entry id / UUID.
+// body scroll, screen-aware row peeking, and fixed card grid modes; callers
+// choose the frame and column contract and provide resolved card models keyed by
+// deck entry id / UUID.
 
 import {
   useEffect,
+  useRef,
   useState,
   type CSSProperties,
   type ReactElement,
@@ -22,6 +24,7 @@ import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { GlassButton } from "../controls/GlassButton";
 import { IconButton, type IconButtonSize } from "../controls/IconButton";
+import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import { GameCard } from "./CardView";
 
 /** One resolved card in a {@link CardGalleryPanel}. */
@@ -68,11 +71,14 @@ export type CardGalleryAccessory =
       testId?: string;
     };
 
-/** The grid algorithm for the card body. */
-export type CardGalleryColumns = "auto" | "four" | "five";
+/** The grid column count for the card body. */
+export type CardGalleryColumns = "auto" | "two" | "four" | "five";
 
 /** The `auto` grid's minimum card column width. */
 export type CardGalleryCardSize = "standard" | "roomy";
+
+/** The panel frame geometry. */
+export type CardGalleryFrame = "floating" | "fullBleed";
 
 export interface CardGalleryPanelProps {
   /** Header title, rendered as an `<h2>`. */
@@ -87,8 +93,10 @@ export interface CardGalleryPanelProps {
   emptyLabel?: string;
   /** Card grid mode. Defaults to `auto`. */
   columns?: CardGalleryColumns;
-  /** Minimum auto-grid card width. Defaults to `standard`. */
+  /** Card size preset. Defaults to `standard`. */
   cardSize?: CardGalleryCardSize;
+  /** Panel frame geometry. Defaults to `floating`. */
+  frame?: CardGalleryFrame;
   /** Test id for the panel root. */
   testId?: string;
   /**
@@ -100,9 +108,19 @@ export interface CardGalleryPanelProps {
   onCardPress?: (entryId: string) => void;
 }
 
-const STANDARD_CARD_MIN_WIDTH_PX = 140;
-const ROOMY_CARD_MIN_WIDTH_PX = 208;
+const STANDARD_CARD_MIN_WIDTH_PX = 96;
+const STANDARD_CARD_MAX_WIDTH_PX = 148;
+const ROOMY_CARD_MIN_WIDTH_PX = 126;
+const ROOMY_CARD_MAX_WIDTH_PX = 188;
 const FLOATING_ACCESSORY_PX = 48;
+const DEFAULT_COLUMN_COUNT = 5;
+const CARD_WIDTH_FLOOR_PX = 64;
+
+interface GalleryMeasure {
+  cardWidthPx: number;
+  visibleRows: number;
+  visibleGapSlots: number;
+}
 
 function accessoryNode(accessory: CardGalleryAccessory): ReactElement {
   if (accessory.kind === "glassButton") {
@@ -129,19 +147,203 @@ function accessoryNode(accessory: CardGalleryAccessory): ReactElement {
   );
 }
 
-function gridTemplate(
-  columns: CardGalleryColumns,
+function configuredColumnCount(columns: CardGalleryColumns): number {
+  if (columns === "two") return 2;
+  if (columns === "four") return 4;
+  return DEFAULT_COLUMN_COUNT;
+}
+
+function renderedColumnCount(columns: CardGalleryColumns): number {
+  return configuredColumnCount(columns);
+}
+
+function rowCountFor(cardCount: number, columnCount: number): number {
+  if (cardCount === 0) return 1;
+  return Math.max(1, Math.ceil(cardCount / columnCount));
+}
+
+function plannedVisibleRows(rowCount: number): number {
+  return rowCount > 2 ? 2.5 : rowCount;
+}
+
+function gapSlotsFor(visibleRows: number): number {
+  return Number.isInteger(visibleRows)
+    ? Math.max(0, visibleRows - 1)
+    : Math.max(0, Math.floor(visibleRows));
+}
+
+function maxCardWidth(cardSize: CardGalleryCardSize): number {
+  return cardSize === "roomy"
+    ? ROOMY_CARD_MAX_WIDTH_PX
+    : STANDARD_CARD_MAX_WIDTH_PX;
+}
+
+function minCardWidth(cardSize: CardGalleryCardSize): number {
+  return cardSize === "roomy"
+    ? ROOMY_CARD_MIN_WIDTH_PX
+    : STANDARD_CARD_MIN_WIDTH_PX;
+}
+
+function fallbackCardWidth(
+  frame: CardGalleryFrame,
   cardSize: CardGalleryCardSize,
+  columnCount: number,
 ): string {
-  if (columns === "four") {
-    return "repeat(4, minmax(0, 1fr))";
-  }
-  if (columns === "five") {
-    return "repeat(5, minmax(0, 1fr))";
-  }
-  const minWidth =
-    cardSize === "roomy" ? ROOMY_CARD_MIN_WIDTH_PX : STANDARD_CARD_MIN_WIDTH_PX;
-  return `repeat(auto-fill, minmax(${String(minWidth)}px, 1fr))`;
+  const minWidth = minCardWidth(cardSize);
+  const maxWidth = maxCardWidth(cardSize);
+  const edgeReserve = frame === "floating" ? token("--space-8") : "0px";
+  const gapSlots = Math.max(0, columnCount - 1);
+  return `clamp(${String(minWidth)}px, calc((100vw - ${edgeReserve} - ${edgeReserve} - (${token("--space-8")} * 2) - (${token("--space-4")} * ${String(gapSlots)})) / ${String(columnCount)}), ${String(maxWidth)}px)`;
+}
+
+function gridTemplate(columns: number, cardWidth: string): string {
+  return `repeat(${String(columns)}, ${cardWidth})`;
+}
+
+function finitePositive(value: number): number | null {
+  return Number.isFinite(value) && value > 0 ? value : null;
+}
+
+function parsePixel(value: string): number {
+  const parsed = Number.parseFloat(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function useGalleryMeasure({
+  frame,
+  columnCount,
+  cardCount,
+  cardSize,
+  fallbackVisibleRows,
+}: {
+  readonly frame: CardGalleryFrame;
+  readonly columnCount: number;
+  readonly cardCount: number;
+  readonly cardSize: CardGalleryCardSize;
+  readonly fallbackVisibleRows: number;
+}): {
+  readonly rootRef: React.RefObject<HTMLElement | null>;
+  readonly headerRef: React.RefObject<HTMLElement | null>;
+  readonly bodyRef: React.RefObject<HTMLDivElement | null>;
+  readonly gridRef: React.RefObject<HTMLDivElement | null>;
+  readonly measure: GalleryMeasure | null;
+} {
+  const rootRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [measure, setMeasure] = useState<GalleryMeasure | null>(null);
+
+  useEffect(() => {
+    function nextMeasure(): GalleryMeasure | null {
+      const root = rootRef.current;
+      const body = bodyRef.current;
+      const header = headerRef.current;
+      if (root === null || body === null || header === null) return null;
+
+      const bodyStyle = window.getComputedStyle(body);
+      const gridStyle =
+        gridRef.current !== null
+          ? window.getComputedStyle(gridRef.current)
+          : bodyStyle;
+      const inlinePadding =
+        parsePixel(bodyStyle.paddingLeft) + parsePixel(bodyStyle.paddingRight);
+      const blockPadding =
+        parsePixel(bodyStyle.paddingTop) + parsePixel(bodyStyle.paddingBottom);
+      const gap = parsePixel(gridStyle.rowGap);
+      const availableWidth =
+        (frame === "fullBleed"
+          ? finitePositive(root.clientWidth)
+          : finitePositive(root.parentElement?.clientWidth ?? 0)) ??
+        finitePositive(window.innerWidth) ??
+        0;
+      const bodyHeight =
+        frame === "fullBleed"
+          ? finitePositive(body.clientHeight)
+          : finitePositive(root.parentElement?.clientHeight ?? 0);
+      const availableBodyHeight =
+        bodyHeight ??
+        Math.max(0, window.innerHeight - header.getBoundingClientRect().height);
+      const maxWidthByInline =
+        (availableWidth - inlinePadding - gap * (columnCount - 1)) /
+        columnCount;
+      const widthCap = Math.max(
+        CARD_WIDTH_FLOOR_PX,
+        Math.min(maxCardWidth(cardSize), maxWidthByInline),
+      );
+      const minWidth = Math.min(minCardWidth(cardSize), widthCap);
+      const rowCount = rowCountFor(cardCount, columnCount);
+
+      if (frame === "fullBleed" && rowCount > 1) {
+        for (let wholeRows = 1; wholeRows < rowCount; wholeRows += 1) {
+          const visibleRows = wholeRows + 0.5;
+          const candidate =
+            ((availableBodyHeight - blockPadding - gap * wholeRows) *
+              CARD_ASPECT_RATIO_VALUE) /
+            visibleRows;
+          if (candidate > 0 && candidate <= widthCap) {
+            return {
+              cardWidthPx: Math.max(CARD_WIDTH_FLOOR_PX, candidate),
+              visibleRows,
+              visibleGapSlots: wholeRows,
+            };
+          }
+        }
+      }
+
+      const visibleRows = fallbackVisibleRows;
+      const visibleGapSlots = gapSlotsFor(visibleRows);
+      const maxWidthByBlock =
+        ((availableBodyHeight - blockPadding - gap * visibleGapSlots) *
+          CARD_ASPECT_RATIO_VALUE) /
+        visibleRows;
+      const cardWidthPx = Math.max(
+        minWidth,
+        Math.min(widthCap, maxWidthByBlock),
+      );
+
+      return {
+        cardWidthPx,
+        visibleRows,
+        visibleGapSlots,
+      };
+    }
+
+    function update(): void {
+      const next = nextMeasure();
+      if (next === null) return;
+      setMeasure((current) =>
+        current !== null &&
+        Math.abs(current.cardWidthPx - next.cardWidthPx) < 0.5 &&
+        current.visibleRows === next.visibleRows &&
+        current.visibleGapSlots === next.visibleGapSlots
+          ? current
+          : next,
+      );
+    }
+
+    update();
+
+    const resizeObserver =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(() => update());
+    const root = rootRef.current;
+    const parent = root?.parentElement ?? null;
+    if (resizeObserver !== null) {
+      if (root !== null) resizeObserver.observe(root);
+      if (parent !== null) resizeObserver.observe(parent);
+      if (bodyRef.current !== null) resizeObserver.observe(bodyRef.current);
+      if (headerRef.current !== null) resizeObserver.observe(headerRef.current);
+    }
+    window.addEventListener("resize", update);
+    return () => {
+      resizeObserver?.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, [cardCount, cardSize, columnCount, fallbackVisibleRows, frame]);
+
+  return { rootRef, headerRef, bodyRef, gridRef, measure };
 }
 
 /** Shared glass card-gallery surface with a header accessory and scrolling grid. */
@@ -153,6 +355,7 @@ export function CardGalleryPanel({
   emptyLabel = "No cards.",
   columns = "auto",
   cardSize = "standard",
+  frame = "floating",
   testId,
   cutoutAwareAccessory = false,
   onCardPress,
@@ -164,16 +367,45 @@ export function CardGalleryPanel({
 
   const accessory =
     rightAccessory !== undefined ? accessoryNode(rightAccessory) : null;
+  const columnCount = renderedColumnCount(columns);
+  const rowCount = rowCountFor(cards.length, columnCount);
+  const fallbackVisibleRows = plannedVisibleRows(rowCount);
+  const fallbackVisibleGapSlots = gapSlotsFor(fallbackVisibleRows);
+  const { rootRef, headerRef, bodyRef, gridRef, measure } = useGalleryMeasure({
+    frame,
+    columnCount,
+    cardCount: cards.length,
+    cardSize,
+    fallbackVisibleRows,
+  });
+  const visibleRows = measure?.visibleRows ?? fallbackVisibleRows;
+  const visibleGapSlots =
+    measure?.visibleGapSlots ?? fallbackVisibleGapSlots;
+  const cardWidth =
+    measure === null
+      ? fallbackCardWidth(frame, cardSize, columnCount)
+      : `${String(Math.max(1, Math.floor(measure.cardWidthPx)))}px`;
+  const galleryGap = token("--space-4");
+  const galleryPadding = token("--space-8");
+  const cardHeight = `calc(${cardWidth} / ${String(CARD_ASPECT_RATIO_VALUE)})`;
+  const bodyHeight = `calc((${cardHeight} * ${String(visibleRows)}) + (${galleryGap} * ${String(visibleGapSlots)}) + (${galleryPadding} * 2))`;
+  const panelWidth = `calc((${cardWidth} * ${String(columnCount)}) + (${galleryGap} * ${String(Math.max(0, columnCount - 1))}) + (${galleryPadding} * 2))`;
 
   return (
     <section
+      ref={rootRef}
       data-testid={testId}
+      data-gallery-frame={frame}
+      data-gallery-columns={columnCount}
+      data-gallery-visible-rows={visibleRows}
       style={{
         ...glassSurfaceStyle(),
         background: `${token("--glass-sheen")}, ${token("--glass-fill-popover")}`,
         position: "relative",
-        width: "100%",
-        height: "100%",
+        width: frame === "fullBleed" ? "100%" : panelWidth,
+        maxWidth: "100%",
+        height: frame === "fullBleed" ? "100%" : undefined,
+        maxHeight: "100%",
         minHeight: 0,
         display: "flex",
         flexDirection: "column",
@@ -196,6 +428,7 @@ export function CardGalleryPanel({
         </div>
       )}
       <header
+        ref={headerRef}
         style={{
           flexShrink: 0,
           display: "flex",
@@ -203,7 +436,7 @@ export function CardGalleryPanel({
           justifyContent: "space-between",
           gap: token("--space-4"),
           borderBottom: `1px solid ${token("--border-strong")}`,
-          padding: token("--space-6"),
+          padding: token("--space-8"),
         }}
       >
         <div
@@ -240,12 +473,17 @@ export function CardGalleryPanel({
         {!besideCutout && accessory}
       </header>
       <div
+        ref={bodyRef}
         style={{
-          flex: "1 1 auto",
+          flex:
+            frame === "fullBleed"
+              ? "1 1 auto"
+              : `0 1 ${bodyHeight}`,
           minHeight: 0,
+          height: frame === "fullBleed" ? undefined : bodyHeight,
           overflowY: "auto",
           WebkitOverflowScrolling: "touch",
-          padding: token("--space-5"),
+          padding: galleryPadding,
         }}
       >
         {cards.length === 0 ? (
@@ -268,10 +506,12 @@ export function CardGalleryPanel({
           </div>
         ) : (
           <div
+            ref={gridRef}
             style={{
               display: "grid",
-              gridTemplateColumns: gridTemplate(columns, cardSize),
-              gap: token("--space-4"),
+              gridTemplateColumns: gridTemplate(columnCount, cardWidth),
+              gap: galleryGap,
+              justifyContent: "center",
             }}
           >
             {cards.map((card) => {

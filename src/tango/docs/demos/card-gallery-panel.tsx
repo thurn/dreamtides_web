@@ -62,7 +62,7 @@ function CardGalleryPanelDemo() {
   }
 
   return (
-    <div style={{ width: "min(760px, 100%)", height: 560 }}>
+    <div style={{ width: "min(940px, 100%)", maxHeight: 720 }}>
       <CardGalleryPanel
         title="Purge Cards"
         subtitle="Choose cards to remove from your deck"
@@ -74,7 +74,8 @@ function CardGalleryPanelDemo() {
           onPress: () => setSelected(null),
         }}
         cards={cards}
-        columns="auto"
+        columns="five"
+        frame="floating"
         onCardPress={(entryId) => setSelected(entryId)}
       />
     </div>
@@ -87,7 +88,7 @@ export const cardGalleryPanelDemo: TangoComponent = {
   blurb:
     "The shared glass card-browser surface: a left-aligned title and subtitle, a trailing header accessory, and a scrolling GameCard grid.",
   callout:
-    "Use this when a screen presents a bounded card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component owns one fixed rounded glass frame, the header, accessory slot, internal scroll, and grid modes; callers provide resolved card models keyed by entry id or UUID and wrap it in a fixed-height placement box so extra cards scroll inside the gallery body.",
+    "Use this when a screen presents a bounded card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component owns one rounded glass frame, the header, accessory slot, internal scroll, fixed grid modes, and row-peek sizing; callers provide resolved card models keyed by entry id or UUID and choose a floating or full-bleed frame.",
   group: "Components",
   docName: "CardGalleryPanel",
   Component: CardGalleryPanelDemo,
@@ -107,6 +108,7 @@ export const cardGalleryPanelDemo: TangoComponent = {
   }}
   cards={cards}
   columns="five"
+  frame="floating"
   onCardPress={toggleCard}
 />`,
     },

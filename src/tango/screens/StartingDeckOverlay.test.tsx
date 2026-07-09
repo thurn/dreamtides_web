@@ -101,6 +101,10 @@ function panelOf(container: HTMLElement): HTMLElement | null {
   return (header?.parentElement?.parentElement as HTMLElement | null) ?? null;
 }
 
+function galleryOf(container: HTMLElement): HTMLElement | null {
+  return container.querySelector("[data-gallery-frame]");
+}
+
 function setDesktopViewport(isDesktop: boolean, roomy = false): void {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
     // The roomy-desktop query is the only one that carries a `min-height`
@@ -191,6 +195,9 @@ describe("StartingDeckOverlay", () => {
     expect(panel?.style.width).toBe("100%");
     expect(panel?.style.height).toBe("100%");
     expect(panel?.style.maxWidth).toBe("");
+    const gallery = galleryOf(container);
+    expect(gallery?.dataset.galleryFrame).toBe("fullBleed");
+    expect(gallery?.dataset.galleryColumns).toBe("2");
     // The body scrolls internally.
     const scroll = container.querySelector("header")
       ?.nextElementSibling as HTMLElement | null;
@@ -201,31 +208,35 @@ describe("StartingDeckOverlay", () => {
     });
   });
 
-  it("renders a bounded, centered panel on desktop", () => {
+  it("renders a bounded, centered floating panel on desktop", () => {
     setDesktopViewport(true);
     const { container, root } = mount(
       <StartingDeckOverlay isOpen view={makeView()} onClose={vi.fn()} />,
     );
 
     const panel = panelOf(container);
-    expect(panel?.style.maxWidth).toContain("min(");
-    expect(panel?.style.height).toBe("85vh");
-    expect(panel?.style.maxHeight).toBe("85vh");
+    expect(panel?.style.maxHeight).toContain("100vh");
+    const gallery = galleryOf(container);
+    expect(gallery?.dataset.galleryFrame).toBe("floating");
+    expect(gallery?.dataset.galleryColumns).toBe("5");
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("keeps the desktop panel fixed-height when the deck has more cards than fit", () => {
+  it("uses the desktop peek sizing when the deck has more cards than fit", () => {
     setDesktopViewport(true);
     const { container, root } = mount(
       <StartingDeckOverlay isOpen view={makeView(20)} onClose={vi.fn()} />,
     );
 
     const panel = panelOf(container);
-    expect(panel?.style.height).toBe("85vh");
-    expect(panel?.style.maxHeight).toBe("85vh");
+    expect(panel?.style.maxHeight).toContain("100vh");
+    const gallery = galleryOf(container);
+    expect(gallery?.dataset.galleryFrame).toBe("floating");
+    expect(gallery?.dataset.galleryColumns).toBe("5");
+    expect(gallery?.dataset.galleryVisibleRows).toBe("2.5");
     const scroll = container.querySelector("header")
       ?.nextElementSibling as HTMLElement | null;
     expect(scroll?.style.overflowY).toBe("auto");
@@ -238,20 +249,16 @@ describe("StartingDeckOverlay", () => {
     });
   });
 
-  it("widens the panel and uses viewport padding as a fixed roomy desktop height", () => {
-    // A roomy desktop (wide AND tall) opts the dialog into its wider panel and
-    // uses explicit viewport padding for a stable panel height while overflow
-    // stays inside the shared card gallery body.
+  it("keeps the same measured desktop contract on roomy viewports", () => {
     setDesktopViewport(true, true);
     const { container, root } = mount(
       <StartingDeckOverlay isOpen view={makeView()} onClose={vi.fn()} />,
     );
 
     const panel = panelOf(container);
-    expect(panel?.style.maxWidth).toContain("min(");
-    expect(panel?.style.height).toContain("100vh");
     expect(panel?.style.maxHeight).toContain("100vh");
-    expect(panel?.style.maxHeight).not.toBe("85vh");
+    const gallery = galleryOf(container);
+    expect(gallery?.dataset.galleryFrame).toBe("floating");
 
     act(() => {
       root.unmount();

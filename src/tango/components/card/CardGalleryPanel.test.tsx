@@ -93,6 +93,15 @@ describe("CardGalleryPanel", () => {
     expect(container.querySelector("section")?.style.borderRadius).toBe(
       "var(--radius-popover)",
     );
+    expect(container.querySelector("section")?.dataset.galleryFrame).toBe(
+      "floating",
+    );
+    expect(container.querySelector("section")?.dataset.galleryColumns).toBe(
+      "5",
+    );
+    expect(container.querySelector("header")?.style.padding).toBe(
+      "var(--space-8)",
+    );
     expect(container.textContent).toContain(
       "Choose cards to remove from your deck",
     );
@@ -131,8 +140,17 @@ describe("CardGalleryPanel", () => {
             testId: "gallery-card-a",
           },
         ]}
+        columns="two"
+        frame="fullBleed"
         onCardPress={onCardPress}
       />,
+    );
+
+    expect(container.querySelector("section")?.dataset.galleryFrame).toBe(
+      "fullBleed",
+    );
+    expect(container.querySelector("section")?.dataset.galleryColumns).toBe(
+      "2",
     );
 
     act(() => {

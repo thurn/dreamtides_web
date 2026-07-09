@@ -8,17 +8,18 @@
 //
 // The body is a scrolling grid of the starting cards in acquisition order. Each
 // GameCard grows in place on hover (desktop) or press (mobile) for a legible
-// read — that hover-zoom and its glossary stack live inside GameCard itself. On
-// a roomy desktop the dialog widens (`wide`) and the grid columns enlarge so the
-// ten-card starter deck fits as two rows without internal scrolling. The content
-// is intentionally minimal — the title, one line of intro copy, and the cards;
+// read — that hover-zoom and its glossary stack live inside GameCard itself.
+// The gallery sizes itself to the screen: desktop uses a roomy floating five
+// column panel, while mobile uses a full-bleed two-column panel with the gallery
+// body's scroll affordance handled by CardGalleryPanel. The content is
+// intentionally minimal — the title, one line of intro copy, and the cards;
 // there are no filter, sort, or "Continue" controls. Dismissal is the close disc
 // or Escape.
 //
 // PURE: renders from a view-model (`starting-deck-view-model.ts` builds it from
 // live quest state in the adapter) and reports dismissal through `onClose`.
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import type { ReactElement } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { CardData } from "../../types/cards";
@@ -59,40 +60,6 @@ export interface StartingDeckOverlayProps {
 }
 
 /**
- * A roomy desktop is wide AND tall enough to lay the ten-card starter deck out
- * as an enlarged 5x2 grid without internal scroll, so the overlay widens its
- * panel and grid there.
- */
-const ROOMY_DESKTOP_QUERY = "(min-width: 1400px) and (min-height: 800px)";
-
-/** Tracks whether the viewport matches {@link ROOMY_DESKTOP_QUERY}. */
-function useRoomyDesktop(): boolean {
-  const [roomy, setRoomy] = useState<boolean>(() =>
-    typeof window === "undefined" || typeof window.matchMedia !== "function"
-      ? false
-      : window.matchMedia(ROOMY_DESKTOP_QUERY).matches,
-  );
-
-  useEffect(() => {
-    if (
-      typeof window === "undefined" ||
-      typeof window.matchMedia !== "function"
-    ) {
-      return undefined;
-    }
-    const query = window.matchMedia(ROOMY_DESKTOP_QUERY);
-    const onChange = (): void => setRoomy(query.matches);
-    onChange();
-    query.addEventListener("change", onChange);
-    return () => {
-      query.removeEventListener("change", onChange);
-    };
-  }, []);
-
-  return roomy;
-}
-
-/**
  * The starting-deck reveal overlay: a modal CardGalleryPanel with a scrolling
  * grid of the starting cards. Closed by the trailing disc or Escape.
  */
@@ -102,8 +69,6 @@ export function StartingDeckOverlay({
   onClose,
 }: StartingDeckOverlayProps): ReactElement {
   const isDesktop = useIsDesktop();
-  const roomyDesktop = useRoomyDesktop();
-  const wideDesktop = isDesktop && roomyDesktop;
 
   // The overlay carries Escape-to-close behavior. Active only while open.
   useEffect(() => {
@@ -139,11 +104,7 @@ export function StartingDeckOverlay({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            padding: isDesktop
-              ? wideDesktop
-                ? token("--space-8")
-                : token("--space-7")
-              : 0,
+            padding: isDesktop ? token("--space-8") : 0,
           }}
         >
           {!isDesktop && <GlassBackdrop />}
@@ -151,24 +112,14 @@ export function StartingDeckOverlay({
             style={{
               position: "relative",
               zIndex: 1,
-              width: "100%",
-              height: isDesktop
-                ? wideDesktop
-                  ? `calc(100vh - ${token("--space-8")} - ${token("--space-8")})`
-                  : "85vh"
-                : "100%",
-              maxWidth: isDesktop
-                ? wideDesktop
-                  ? "min(1120px, 90vw)"
-                  : "min(900px, 90vw)"
-                : undefined,
+              width: isDesktop ? "min(100%, 1180px)" : "100%",
+              height: isDesktop ? undefined : "100%",
               maxHeight: isDesktop
-                ? wideDesktop
-                  ? `calc(100vh - ${token("--space-8")} - ${token("--space-8")})`
-                  : "85vh"
+                ? `calc(100vh - ${token("--space-8")} - ${token("--space-8")})`
                 : undefined,
               minHeight: 0,
               display: "flex",
+              justifyContent: "center",
             }}
           >
             <CardGalleryPanel
@@ -182,8 +133,9 @@ export function StartingDeckOverlay({
               }}
               cards={view.cards}
               emptyLabel="No cards in starting deck."
-              columns="auto"
-              cardSize={roomyDesktop ? "roomy" : "standard"}
+              columns={isDesktop ? "five" : "two"}
+              cardSize={isDesktop ? "roomy" : "standard"}
+              frame={isDesktop ? "floating" : "fullBleed"}
               cutoutAwareAccessory
             />
           </div>
