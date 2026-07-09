@@ -175,7 +175,7 @@ export function buyShopSlot(
 
   if (slot.itemType === "card") {
     const entry: DeckEntry = {
-      entryId: mintEntryId(quest.deck, ctx, 0),
+      entryId: mintEntryId(quest.deck, ctx.seq, 0),
       cardNumber: slot.cardNumber,
       transfiguration: null,
       isBane: false,
@@ -378,6 +378,7 @@ function resolveMerchant(
     action,
     payload,
     rng: ctx.rng,
+    seq: ctx.seq,
   });
   return result ?? null;
 }
@@ -460,7 +461,7 @@ export function pushTemporaryBaneGrant(
   const addedEntryIds: string[] = [];
   for (let i = 0; i < count; i += 1) {
     const entry: DeckEntry = {
-      entryId: mintEntryId(deck, ctx, i),
+      entryId: mintEntryId(deck, ctx.seq, i),
       cardNumber,
       transfiguration: null,
       isBane: true,

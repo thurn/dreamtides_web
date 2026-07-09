@@ -111,7 +111,10 @@ export interface SiteContentProvider {
    *
    * SEAM (Task 26): real registration relocates the legacy
    * `resolveMerchantOffer` / `resolveMerchantDecline` (src/journey_v2) behind
-   * this method, sourcing randomness from the injected `rng`. Absent (or
+   * this method, sourcing randomness from the injected `rng` and minting any
+   * new deck entry through `seq` (via `mintEntryId(deck, seq, index)` in
+   * ./deck — the SAME scheme every other minting case uses, not a second
+   * independently-evolving one; audit finding P3-8). Absent (or
    * `null`-returning) → the merchant events bounce.
    */
   resolveMerchant?(input: {
@@ -120,6 +123,8 @@ export interface SiteContentProvider {
     action: "accept" | "decline";
     payload: Record<string, unknown>;
     rng: (drawIndex: number) => number;
+    /** This event's seq — the same value `mintEntryId` keys new ids off of. */
+    seq: number;
   }): QuestState | null;
 }
 
@@ -620,7 +625,7 @@ export function acceptDuplicationChoice(
   if (entry === undefined) return null;
 
   const copy: DeckEntry = {
-    entryId: mintEntryId(quest.deck, ctx, 0),
+    entryId: mintEntryId(quest.deck, ctx.seq, 0),
     cardNumber: entry.cardNumber,
     transfiguration: null,
     isBane: false,

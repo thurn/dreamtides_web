@@ -107,23 +107,33 @@ function findEntry(
 }
 
 /**
- * Mint a fresh deck-entry id that is deterministic in `(ctx.seq, index)` and
+ * Mint a fresh deck-entry id that is deterministic in `(seq, index)` and
  * guaranteed unique within `deck`. Two clients folding the same event at the
  * same seq derive the same id (replaying `Math.random`/`crypto.randomUUID` would
  * diverge — that is the legacy determinism bug this fixes). `index`
  * distinguishes multiple entries minted by one event so they never collide.
+ *
+ * THE single entry-id minting scheme: every case that mints a deck entry —
+ * `ADD_CARD`/`ADD_DREAMSIGN`-adjacent cases here, `BUY_SHOP_SLOT`/merchant
+ * resolution in shop.ts, `PURGE_...`-adjacent grants in sites.ts, and
+ * `PICK_DRAFT_CARD` in draft.ts — mints through this function with its own
+ * event's `seq`, so no second, independently-evolving id scheme exists in
+ * the reducer (audit finding P3-8). Takes the seq directly (not a whole
+ * `EventContext`) so a caller that only has a seq in hand (e.g. a
+ * content-provider seam threading it through from `ctx.seq`) needs no
+ * `EventContext` of its own to call it.
  */
 export function mintEntryId(
   deck: readonly DeckEntry[],
-  ctx: EventContext,
+  seq: number,
   index: number,
 ): string {
   const existing = new Set(deck.map((entry) => entry.entryId));
   let suffix = index;
-  let candidate = `deck-${String(ctx.seq)}-${String(suffix)}`;
+  let candidate = `deck-${String(seq)}-${String(suffix)}`;
   while (existing.has(candidate)) {
     suffix += 1;
-    candidate = `deck-${String(ctx.seq)}-${String(suffix)}`;
+    candidate = `deck-${String(seq)}-${String(suffix)}`;
   }
   return candidate;
 }
@@ -163,7 +173,7 @@ export function addCard(
   }
 
   const entry: DeckEntry = {
-    entryId: mintEntryId(quest.deck, ctx, 0),
+    entryId: mintEntryId(quest.deck, ctx.seq, 0),
     cardNumber,
     transfiguration,
     isBane: payload.isBane === true,
@@ -202,7 +212,7 @@ export function duplicateDeckEntry(
   const entry = findEntry(quest, entryId);
   if (entry === undefined) return null;
   const copy: DeckEntry = {
-    entryId: mintEntryId(quest.deck, ctx, 0),
+    entryId: mintEntryId(quest.deck, ctx.seq, 0),
     cardNumber: entry.cardNumber,
     transfiguration: entry.transfiguration,
     ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),

@@ -79,7 +79,31 @@ interface EntryIdAllocator {
   next(): string;
 }
 
-function createEntryIdAllocator(deck: readonly DeckEntry[]): EntryIdAllocator {
+/**
+ * Builds the allocator a merchant resolution mints fresh deck entries
+ * through. When the caller supplies `mintEntryId` (the reducer path, backed
+ * by `mintEntryId(deck, ctx.seq, index)` from src/rules/quest/deck.ts — see
+ * `site-provider.ts`'s `resolveMerchant`), every minted id follows that SAME
+ * seq-keyed scheme every other minting case in the game uses, rather than
+ * this module's own independently-evolving `deriveEntryIdCounter` counter
+ * (audit finding P3-8). Falls back to the legacy counter scheme when no
+ * `mintEntryId` is supplied, for callers outside the reducer seam that have
+ * no event seq to key off of.
+ */
+function createEntryIdAllocator(
+  deck: readonly DeckEntry[],
+  mintEntryId?: (deck: readonly DeckEntry[], index: number) => string,
+): EntryIdAllocator {
+  if (mintEntryId !== undefined) {
+    let index = 0;
+    return {
+      next() {
+        const id = mintEntryId(deck, index);
+        index += 1;
+        return id;
+      },
+    };
+  }
   let highWater = deriveEntryIdCounter(deck);
   return {
     next() {
@@ -263,16 +287,18 @@ export function applyMerchantPayloadToState({
   state,
   questContent,
   payload,
+  mintEntryId,
 }: {
   state: QuestState;
   questContent: QuestContent;
   payload: MerchantApplyPayload;
+  mintEntryId?: (deck: readonly DeckEntry[], index: number) => string;
 }): QuestState | null {
   return applyMerchantPayload(
     state,
     questContent,
     payload,
-    createEntryIdAllocator(state.deck),
+    createEntryIdAllocator(state.deck, mintEntryId),
   );
 }
 
@@ -328,7 +354,10 @@ export function resolveMerchantOffer({
   questContent,
   site,
   request,
-}: ResolveMerchantOfferInput): ResolveMerchantOfferResult {
+  mintEntryId,
+}: ResolveMerchantOfferInput & {
+  mintEntryId?: (deck: readonly DeckEntry[], index: number) => string;
+}): ResolveMerchantOfferResult {
   const offer = findCurrentOffer({ state, questContent, site, request });
   if (typeof offer === "string") return fail(state, offer);
 
@@ -339,7 +368,7 @@ export function resolveMerchantOffer({
     state,
     questContent,
     payload,
-    createEntryIdAllocator(state.deck),
+    createEntryIdAllocator(state.deck, mintEntryId),
   );
   if (rewardedState === null) return fail(state, "target_unavailable");
 

@@ -160,7 +160,7 @@ export function pickDraftCard(
   // reflects the deck including the just-picked card (pool mode never reads the
   // deck, so this ordering is observationally identical there).
   const entry: DeckEntry = {
-    entryId: mintEntryId(quest.deck, ctx, 0),
+    entryId: mintEntryId(quest.deck, ctx.seq, 0),
     cardNumber,
     transfiguration: null,
     isBane: false,

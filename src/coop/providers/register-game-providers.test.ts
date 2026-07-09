@@ -402,6 +402,53 @@ describe("registerGameProviders — merchant resolution", () => {
     expect(second.finalHash).toBe(first.finalHash);
   });
 
+  it("mints a new deck entry through the shared mintEntryId(deck, seq, index) scheme (P3-8)", () => {
+    // An offer whose payload actually mints a fresh deck entry (a card
+    // grant), so this exercises the id the resolution path stamps — not
+    // just that the resolution applies.
+    // This corpus's deterministic encounter offers a "duplicate_deck_entry"
+    // choice (no direct-payload offer mints a fresh entry here) — resolving
+    // one of its candidates exercises the id the resolution path stamps.
+    const offer = encounter.offers.find((o) =>
+      o.choiceRequest?.candidates.some(
+        (candidate) => candidate.applyPayload.kind === "duplicate_deck_entry",
+      ),
+    );
+    expect(offer).toBeDefined();
+    if (offer === undefined || offer.choiceRequest === undefined) return;
+    const candidate = offer.choiceRequest.candidates.find(
+      (c) => c.applyPayload.kind === "duplicate_deck_entry",
+    );
+    expect(candidate).toBeDefined();
+    if (candidate === undefined) return;
+
+    const events: SeqEvent[] = [
+      loadState(),
+      ev(2, "ACCEPT_MERCHANT_OFFER", {
+        siteId: MERCHANT_SITE_ID,
+        encounterSignature: offer.encounterSignature,
+        offerId: offer.offerId,
+        archetypeId: offer.archetypeId,
+        choice: { choiceId: candidate.choiceId },
+      }),
+    ];
+    const result = replayLog({ genesis: MERCHANT_GENESIS, events });
+    expect(
+      result.outcomes.find((o) => o.seq === 2)?.outcome,
+      result.outcomes.find((o) => o.seq === 2)?.error?.message,
+    ).toBe("applied");
+
+    const beforeIds = new Set(fixture.quest.deck.map((entry) => entry.entryId));
+    const newEntries = result.finalState.quest.deck.filter(
+      (entry) => !beforeIds.has(entry.entryId),
+    );
+    expect(newEntries).toHaveLength(1);
+    // Minted through mintEntryId(deck, ctx.seq, 0) at the ACCEPT_MERCHANT_OFFER
+    // event's own seq (2) — the SAME scheme every other minting case uses, not
+    // a second, independently-evolving `deck-<counter>` scheme.
+    expect(newEntries[0].entryId).toBe("deck-2-0");
+  });
+
   it("folds LOAD_STATE -> DECLINE_MERCHANT: applies + deterministic", () => {
     const offer = encounter.offers[0];
     expect(offer).toBeDefined();

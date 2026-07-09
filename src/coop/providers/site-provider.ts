@@ -35,6 +35,7 @@ import {
 } from "../../journey_v2/encounter/resolveMerchantOffer";
 import type { MerchantChoice } from "../../journey_v2/types";
 import type { MerchantArchetypeId } from "../../journey_v2/archetypes/types";
+import { mintEntryId } from "../../rules/quest/deck";
 import type {
   ShopRerollResult,
   SiteContentProvider,
@@ -292,7 +293,7 @@ export function createSiteContentProvider(
     // request)` — no rng, no clock — so the provider `rng` is unused. Both
     // resolvers regenerate the encounter deterministically from the same quest
     // state the reducer folds against, so two clients resolve identically.
-    resolveMerchant: ({ quest, site, action, payload }): QuestState | null => {
+    resolveMerchant: ({ quest, site, action, payload, seq }): QuestState | null => {
       const encounterSignature = asString(payload.encounterSignature);
       const offerId = asString(payload.offerId);
       if (encounterSignature === null || offerId === null) return null;
@@ -320,6 +321,10 @@ export function createSiteContentProvider(
           archetypeId: archetypeId as MerchantArchetypeId,
           ...(choice ? { choice } : {}),
         },
+        // Mint any new deck entry through the SAME seq-keyed scheme every
+        // other minting reducer case uses (audit finding P3-8), instead of
+        // this module's legacy standalone counter.
+        mintEntryId: (deck, index) => mintEntryId(deck, seq, index),
       });
       return result.ok ? result.state : null;
     },

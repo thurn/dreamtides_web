@@ -5,6 +5,7 @@ import type { DeckEntry, Dreamsign, QuestState } from "../../types/quest";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent, type ReduceResult } from "../reducer";
 import {
+  mintEntryId,
   registerDeckContentProvider,
   type DeckContentProvider,
 } from "./deck";
@@ -498,5 +499,26 @@ describe("site-coupled acceptance (deferred to Task 14)", () => {
     });
     expect(out.outcome).toBe("bounced");
     expect(out.state).toBe(state);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// mintEntryId (P3-8: the single seq-keyed entry-id scheme)
+// ---------------------------------------------------------------------------
+
+describe("mintEntryId", () => {
+  it("mints a deterministic id from (seq, index)", () => {
+    expect(mintEntryId([], 42, 0)).toBe("deck-42-0");
+    expect(mintEntryId([], 42, 1)).toBe("deck-42-1");
+  });
+
+  it("two clients minting for the same (seq, index) derive the same id", () => {
+    const deck = [makeEntry({ entryId: "deck-1", cardNumber: 10 })];
+    expect(mintEntryId(deck, 7, 0)).toBe(mintEntryId(deck, 7, 0));
+  });
+
+  it("bumps past a collision with an existing entry id", () => {
+    const deck = [makeEntry({ entryId: "deck-7-0", cardNumber: 10 })];
+    expect(mintEntryId(deck, 7, 0)).toBe("deck-7-1");
   });
 });
