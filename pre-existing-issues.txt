@@ -81,13 +81,15 @@ Task 30 QA — observations
    bootstrap effects on the room's confirmed log being empty (head === 0) rather
    than on the pre-fold `state.dreamcaller`.
 
-Task group 5 assessment — Journey events migration remains a dedicated patch
+Task group 5 assessment — classic Journey event migration remains deprecated-path debt
 
-- R-P2-1 is not small enough for the grouped integrity hardening patch. The
-  Dream Journey surface needs new event types for option commitment, reducer-side
-  cost and reward application, seeded RNG for random costs/rewards, and UI changes
-  so both players agree on commitment through the room event log. The same pass
-  should replace the Journey bane-card name lookup in
-  src/journeys/journey/shared/costs.ts with UUID-based resolution. Mixing this
-  into the validation patch would touch Journey UI, Journey apply code, reducer
-  contracts, and likely replay fixtures.
+- R-P2-1 applies to the deprecated classic Dream Augury route:
+  `?journey=classic` renders `src/journeys/ui/JourneyScreen.tsx` through
+  `DreamAugurySiteScreen`. The active default route is `journeyVariant: "v2"`,
+  which renders the Dream Merchant v2 surface from `src/journey_v2/` and resolves
+  accept/decline through coop events and reducer providers. Treat the classic
+  route as deprecated-path debt unless `?journey=classic` needs continued support.
+  If that route is kept, it needs event-log commitment for option choices,
+  reducer-side cost and reward application, seeded RNG for random costs/rewards,
+  and replacement of the Journey bane-card name lookup in
+  `src/journeys/journey/shared/costs.ts` with UUID-based resolution.
