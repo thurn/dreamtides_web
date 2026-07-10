@@ -1,12 +1,12 @@
 // Empirical proof for the mobile deck viewer's press-zoom placement.
 //
-// The claim under test: when a card is pressed, the enlarged copy's rules-text
-// band never overlaps the circle the finger occludes around the pressed card.
+// The claim under test: when a card is pressed, the enlarged copy never
+// overlaps the 36px-radius circle around the actual touch point.
 // This script sweeps every touch a finger can make — each grid column, at every
 // height the scrolling grid can bring a tile to — across a range of phone
 // widths, runs the real `computePeekBox`, and measures the gap between the
-// finger circle and the rules band. It fails loudly if any gap goes negative,
-// and writes an SVG that draws the circle and the rules band for a sample of
+// touch circle and the whole card. It fails loudly if any gap goes negative,
+// and writes an SVG that draws the circle and card for a sample of
 // presses so the clearance can be seen, not just asserted.
 //
 //   node scripts/deck-peek-clearance-analysis.mjs [out.svg]
@@ -70,7 +70,7 @@ function evaluatePress(viewport, fx, fy, width) {
     finger: { x: fx, y: fy },
   });
   const rules = rulesRegionOfPeek(box);
-  const gap = circleRectGap(fx, fy, FINGER_RADIUS_PX, rules);
+  const gap = circleRectGap(fx, fy, FINGER_RADIUS_PX, box);
   return { box, rules, gap };
 }
 
@@ -101,7 +101,7 @@ for (const viewport of VIEWPORTS) {
   if (vpWorst.gap < worst.gap) worst = { ...vpWorst, viewport: viewport.name };
 }
 
-console.log("Deck peek — rules-text vs finger-circle clearance");
+console.log("Deck peek — enlarged card vs touch-circle clearance");
 console.log(
   `finger radius = ${FINGER_RADIUS_PX}px, clearance margin = ${CLEARANCE_MARGIN_PX}px\n`,
 );
@@ -158,10 +158,10 @@ function buildSvg() {
   );
   parts.push(`<rect width="${svgW}" height="${svgH}" fill="#0e1016"/>`);
   parts.push(
-    `<text x="${marginL}" y="30" fill="#e8e6f0" font-size="20" font-weight="700">Deck press-zoom: rules text never overlaps the finger circle</text>`,
+    `<text x="${marginL}" y="30" fill="#e8e6f0" font-size="20" font-weight="700">Deck press-zoom: enlarged card never overlaps the touch circle</text>`,
   );
   parts.push(
-    `<text x="${marginL}" y="52" fill="#9aa0b4" font-size="13">iPhone 16 (393×852). Columns left→right, press height top→bottom. Card width ${width.toFixed(0)}px, finger radius ${FINGER_RADIUS_PX}px. Green = rules text, red = finger, label = gap.</text>`,
+    `<text x="${marginL}" y="52" fill="#9aa0b4" font-size="13">iPhone 16 (393×852). Columns left→right, press height top→bottom. Preferred card width ${width.toFixed(0)}px, touch radius ${FINGER_RADIUS_PX}px. Red = touch circle, label = whole-card gap.</text>`,
   );
 
   for (let r = 0; r < rows; r++) {

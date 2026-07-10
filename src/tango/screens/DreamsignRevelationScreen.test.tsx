@@ -10,7 +10,7 @@ import {
   DreamsignRevelationScreen,
   type DreamsignRevelationView,
 } from "./DreamsignRevelationScreen";
-import { QUEST_STATUS_BAR_CLEARANCE_OP } from "./chrome-geometry";
+import { QUEST_STATUS_BAR_CLEARANCE_OP } from "../components/hud/QuestStatusBar";
 
 function dreamsign(id: string, imageName: string): Dreamsign {
   return {

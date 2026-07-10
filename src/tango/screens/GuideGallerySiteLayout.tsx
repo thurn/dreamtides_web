@@ -5,6 +5,7 @@
 import { useRef, type ReactElement } from "react";
 import {
   QuestStatusBar,
+  QUEST_STATUS_BAR_CLEARANCE_OP,
   type QsbDreamcaller,
   type QsbDreamsign,
 } from "../components/hud/QuestStatusBar";
@@ -12,10 +13,7 @@ import { Motes } from "../components/hud/Motes";
 import { SpeechBubble } from "../components/overlay/SpeechBubble";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
-import {
-  MENU_EDGE_INSET_MOBILE_PX,
-  QUEST_STATUS_BAR_CLEARANCE_OP,
-} from "./chrome-geometry";
+import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
 import { useIsDesktop } from "./use-is-desktop";
 
 /** The resident guide displayed by a character-led site. */
@@ -65,7 +63,7 @@ export interface GuideGallerySiteLayoutProps {
   speechBubbleTestId?: string;
 }
 
-const GUIDE_TOP_ROWS = "minmax(220px, 34dvh) minmax(0, 1fr)";
+const GUIDE_TOP_ROWS = "clamp(170px, 28dvh, 240px) minmax(0, 1fr)";
 const HUD_CLEARANCE = `calc(${QUEST_STATUS_BAR_CLEARANCE_OP} + ${token("--space-8")})`;
 // The grand desktop HUD is taller than the root HUD token.
 const DESKTOP_HUD_CLEARANCE = `calc(${HUD_CLEARANCE} + ${token("--space-9")})`;
@@ -96,7 +94,7 @@ export function GuideGallerySiteLayout({
       style={{
         position: "fixed",
         inset: 0,
-        minHeight: "100vh",
+        minHeight: "100dvh",
         display: isDesktop ? "block" : "grid",
         gridTemplateRows: isDesktop ? undefined : GUIDE_TOP_ROWS,
         overflow: "hidden",

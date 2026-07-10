@@ -71,8 +71,6 @@ describe("renderMobileCardPeekOverlay", () => {
           pointerId: 1,
           startX: 242,
           startY: 700,
-          fingerX: 242,
-          pinToTop: false,
         }),
       );
     });
@@ -98,10 +96,12 @@ describe("renderMobileCardPeekOverlay", () => {
     const definitionsWidth = Number.parseFloat(
       definitions?.style.width ?? "NaN",
     );
-    expect(definitionsLeft + definitionsWidth + 10).toBeLessThanOrEqual(
-      primaryLeft,
-    );
+    expect(primaryLeft).toBe(169);
     expect(primaryLeft + primaryWidth).toBeLessThanOrEqual(393 - 6);
+    expect(Number.parseFloat(definitions?.style.top ?? "NaN")).toBeGreaterThanOrEqual(
+      440 + 204.4 + 10,
+    );
+    expect(definitionsLeft + definitionsWidth).toBeLessThanOrEqual(393 - 6);
 
     act(() => {
       root.unmount();

@@ -8,10 +8,11 @@ import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { MOBILE_CARD_PEEK_HOLD_MS } from "../components/card/MobileCardPeek";
 import { artRef } from "../primitives/art";
+import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
 import {
-  MENU_EDGE_INSET_MOBILE_PX,
   QUEST_STATUS_BAR_BOTTOM_INSET,
-} from "./chrome-geometry";
+  QUEST_STATUS_BAR_TOTAL_HEIGHT,
+} from "../components/hud/QuestStatusBar";
 import {
   PurgeSiteScreen,
   purgeActionWidthReservations,
@@ -312,7 +313,9 @@ describe("PurgeSiteScreen", () => {
     const row = anchor?.firstElementChild as HTMLElement | null;
 
     expect(anchor?.style.bottom).toBe("0px");
-    expect(row?.style.height).toBe("var(--hud-h)");
+    expect(anchor?.style.position).toBe("fixed");
+    expect(anchor?.style.height).toBe(QUEST_STATUS_BAR_TOTAL_HEIGHT);
+    expect(row?.style.height).toBe("100%");
     expect(row?.style.paddingBottom).toBe(QUEST_STATUS_BAR_BOTTOM_INSET);
 
     act(() => {

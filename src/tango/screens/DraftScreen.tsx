@@ -24,6 +24,7 @@ import { GameCard } from "../components/card/CardView";
 import { Motes } from "../components/hud/Motes";
 import {
   QuestStatusBar,
+  QUEST_STATUS_BAR_CLEARANCE_OP,
   type QsbDreamcaller,
   type QsbDreamsign,
 } from "../components/hud/QuestStatusBar";
@@ -33,7 +34,6 @@ import {
   MENU_BUTTON_PX,
   MENU_EDGE_INSET_DESKTOP_PX,
   MENU_EDGE_INSET_MOBILE_PX,
-  QUEST_STATUS_BAR_CLEARANCE_OP,
 } from "./chrome-geometry";
 import { useIsDesktop } from "./use-is-desktop";
 

@@ -23,14 +23,3 @@ export const MENU_EDGE_INSET_MOBILE_PX = 18;
  * helping the corner breathe, so the trigger sits a little farther in.
  */
 export const MENU_EDGE_INSET_DESKTOP_PX = 22;
-
-/**
- * The persistent HUD's visible bottom gap, added after the real device safe
- * area. `--space-2` is the small scene-art sliver shared by every Tango screen.
- */
-export const QUEST_STATUS_BAR_BOTTOM_INSET =
-  "calc(var(--safe-area-inset-bottom) + var(--space-2))";
-
-/** The operation screens add inside their own `calc()` content clearances. */
-export const QUEST_STATUS_BAR_CLEARANCE_OP =
-  "var(--hud-h) + var(--safe-area-inset-bottom) + var(--space-2)";

@@ -1,27 +1,18 @@
 // Pure geometry for the mobile deck viewer's press-and-hold zoom.
 //
 // When a player presses a card in the 4-across grid, a large, fully legible
-// copy appears instantly. Its one job is to stay clear of the finger so the
-// rules text — which sits at the bottom of the card — is readable while the
-// finger is still down, while staying as CLOSE to the pressed card as that
-// allows (a card near the bottom pops up just above the thumb, not all the way
-// at the top of the screen).
+// copy appears instantly. Its whole box stays clear of a 36px-radius circle at
+// the actual touch point. Placement first moves upward; only when the full card
+// cannot fit above the circle does it move left or right. It never moves down.
 //
 // The finger is modelled as a circle of radius `FINGER_RADIUS_PX` around the
-// touch point. `computePeekBox` guarantees the card's rules-text region never
+// touch point. `computePeekBox` guarantees the whole enlarged card never
 // intersects that circle, by construction:
 //
-//   - By default the card sits just high enough that its rules-text band clears
-//     the top of the finger circle — the lowest (closest to the pressed card)
-//     position that keeps the text readable — centered on the finger's column.
-//   - When the finger is so high that the card cannot fit above it, or the
-//     source belongs to the compact grid's top row, the card pins to the visible
-//     viewport edge (plus any physical safe-area inset supplied by the caller)
-//     and clears the circle sideways, thrown flush to the screen edge away from
-//     the finger. For that to actually clear the circle the card must be narrow
-//     enough to sit entirely beside the finger, which is what
-//     `peekWidthForViewport` guarantees: it caps the card width to what fits
-//     beside the most central column a finger can press.
+//   - First the card sits just high enough that its bottom edge clears the top
+//     of the circle, centered on the actual touch x-coordinate.
+//   - When it cannot fit above the circle, it stays at the physical safe top
+//     and clears sideways, shrinking only if the roomier side requires it.
 //
 // Kept side-effect-free and framework-free so the clearance rule — the hard
 // part of this screen — is unit-tested, and independently proven over a full
@@ -49,14 +40,11 @@ export interface SupplementalPeekLayout {
 }
 
 /**
- * Radius (px) of the circle the finger is assumed to occlude, centered on the
- * pressed card. Sized to a thumb's contact and to cover the width of a grid
- * tile, so that wherever on the card the finger landed it stays inside this
- * circle; the placement keeps the enlarged card's rules text entirely outside
- * it. Raising it makes the guarantee more conservative (and the enlarged card
- * smaller, via `peekWidthForViewport`).
+ * Radius (px) of the protected circle centered on the actual touch point.
+ * The enlarged card never intersects this circle; supplemental definition
+ * cards are allowed to cross it.
  */
-export const FINGER_RADIUS_PX = 44;
+export const FINGER_RADIUS_PX = 36;
 
 /**
  * Widest the enlarged card is ever drawn (px). At this width a `large` card's
@@ -70,15 +58,14 @@ export const PEEK_MAX_WIDTH_PX = 220;
  * band begins. The band runs from here to the card's bottom edge. Set
  * conservatively so it covers the reserved three-line text box (which starts
  * around 0.8 of the height even before its padding), not just the rendered
- * glyphs, so the clearance guarantee holds for the wordiest card.
+ * glyphs. This remains useful for diagnostics of the rules region even though
+ * placement now protects the whole card.
  */
 export const RULES_REGION_TOP_FRACTION = 0.75;
 
 /**
- * Extra clearance (px) kept between the rules-text band and the finger circle,
- * so the two are visibly apart rather than merely tangent. Applied both when
- * capping the card width and when deciding whether a finger is clear of the
- * rules band vertically, so the guaranteed gap is at least this everywhere.
+ * Extra clearance (px) kept between the whole card and the touch circle, so
+ * the two are visibly apart rather than merely tangent.
  */
 export const CLEARANCE_MARGIN_PX = 8;
 
@@ -90,10 +77,7 @@ function clamp(value: number, min: number, max: number): number {
 export interface PeekLayoutInput {
   /** The visible viewport size. */
   viewport: { width: number; height: number };
-  /**
-   * Top inset to preserve. Row-one callers pass only the physical browser safe
-   * area; ordinary placement may pass the app chrome's design reservation.
-   */
+  /** Physical top safe-area inset to preserve. */
   safeTop: number;
   /** Bottom safe-area inset to keep the card clear of (home indicator). */
   safeBottom: number;
@@ -105,8 +89,6 @@ export interface PeekLayoutInput {
   width: number;
   /** The finger's touch point (its `pointerdown` client coordinates). */
   finger: { x: number; y: number };
-  /** Pin the enlarged card to the supplied top inset for a top-row source. */
-  pinToTop?: boolean;
 }
 
 /**
@@ -160,19 +142,11 @@ export function peekWidthForViewport(input: {
 }
 
 /**
- * Places the enlarged card as close to the pressed card as clearing the finger
- * allows. A top-row source opts into the supplied top-inset position directly
- * so its supplemental definitions rise as one reading unit above the held
- * finger.
- *
- * The card's rules-text band sits at its bottom, so the card is placed just high
- * enough that the band's bottom edge clears the top of the finger circle (by the
- * clearance margin) — the lowest position that keeps the text readable — and
- * centered on the finger's column. When the finger is so high that this would
- * push the card above the safe area, the card instead pins to the top and clears
- * the circle sideways, thrown flush to the screen edge away from the finger.
- * With a width from {@link peekWidthForViewport} that flush placement is always
- * wide enough to leave the finger circle clear of the rules text.
+ * Places the enlarged card outside the protected touch circle. The full-size
+ * card first moves straight up, centered on the touch. If it cannot fit above
+ * the circle without crossing the top safe area, it stays at the safe top and
+ * moves wholly to the roomier horizontal side. The horizontal fallback may
+ * shrink just enough to fit; no branch places the card below the touch.
  */
 export function computePeekBox(input: PeekLayoutInput): PeekRect {
   const {
@@ -182,17 +156,16 @@ export function computePeekBox(input: PeekLayoutInput): PeekRect {
     sideMargin,
     aspect,
     finger,
-    pinToTop = false,
   } = input;
 
   const availableWidth = Math.max(0, viewport.width - sideMargin * 2);
-  const width = Math.min(input.width, availableWidth);
-  const height = width / aspect;
+  let width = Math.min(input.width, availableWidth);
+  let height = width / aspect;
 
   const minLeft = sideMargin;
-  const maxLeft = viewport.width - sideMargin - width;
   const minTop = safeTop;
-  const maxTop = viewport.height - safeBottom - height;
+  let maxLeft = viewport.width - sideMargin - width;
+  let maxTop = viewport.height - safeBottom - height;
 
   // The lowest top at which the whole card (its bottom-anchored rules band, so
   // `top + height`) still clears the top of the finger circle by the margin.
@@ -201,20 +174,24 @@ export function computePeekBox(input: PeekLayoutInput): PeekRect {
 
   let top: number;
   let left: number;
-  if (!pinToTop && topClearingFinger >= minTop) {
-    // Sit just above the finger, centered on its column — the closest the card
-    // can be while its rules text stays above the thumb.
+  if (topClearingFinger >= minTop) {
+    // First choice: move the whole card up until its bottom clears the circle.
     top = clamp(topClearingFinger, minTop, maxTop);
     left = clamp(finger.x - width / 2, minLeft, maxLeft);
   } else {
-    // The finger is too high to fit the card above it: pin to the top of the
-    // safe area and clear the circle sideways, thrown to the roomier side so the
-    // rules text ends up entirely beside the finger.
-    top = clamp(minTop, minTop, maxTop);
+    // Second choice: keep the card at the top safe area, then move it wholly to
+    // the roomier side. Shrink only when the preferred width cannot fit there.
     const roomRight =
       viewport.width - sideMargin - (finger.x + FINGER_RADIUS_PX);
     const roomLeft = finger.x - FINGER_RADIUS_PX - sideMargin;
-    left = roomRight >= roomLeft ? maxLeft : minLeft;
+    const useRight = roomRight >= roomLeft;
+    const horizontalRoom = Math.max(roomLeft, roomRight);
+    width = Math.min(width, Math.max(0, horizontalRoom - CLEARANCE_MARGIN_PX));
+    height = width / aspect;
+    maxLeft = viewport.width - sideMargin - width;
+    maxTop = viewport.height - safeBottom - height;
+    top = clamp(minTop, minTop, maxTop);
+    left = useRight ? maxLeft : minLeft;
     left = clamp(left, minLeft, maxLeft);
   }
 
@@ -224,16 +201,12 @@ export function computePeekBox(input: PeekLayoutInput): PeekRect {
 /**
  * Packs the enlarged card and its glossary column as one non-overlapping unit.
  *
- * The preferred result preserves the enlarged card and puts the definitions on
- * whichever side already fits. A centered card near the bottom can leave too
- * little room on either side even though the pair fits in the viewport; in that
- * case the whole pair shifts by the smaller possible distance. This preserves
- * the finger-clearing placement whenever it already has a usable side and fixes
- * the low-row case without allowing the definition cards to intrude over the
- * primary card.
+ * The enlarged card's placement is never changed here: its touch-circle
+ * clearance is authoritative. Definitions use whichever side already fits and
+ * otherwise fall below the card, where they may cross the protected circle.
  *
- * Extremely narrow unsupported viewports that cannot hold the pair horizontally
- * use a below-card fallback, which still preserves the non-overlap invariant.
+ * When neither side fits, definitions use a below-card fallback while the
+ * primary card keeps its touch-circle clearance.
  */
 export function computeSupplementalPeekLayout(input: {
   box: PeekRect;
@@ -241,72 +214,8 @@ export function computeSupplementalPeekLayout(input: {
   supplementalWidth: number;
   gap: number;
   edge: number;
-  /** Horizontal finger interval the definition column should avoid. */
-  avoidX?: { center: number; radius: number; clearance: number };
 }): SupplementalPeekLayout {
-  const {
-    box,
-    viewportWidth,
-    supplementalWidth,
-    gap,
-    edge,
-    avoidX,
-  } = input;
-  const pairWidth = box.width + gap + supplementalWidth;
-
-  // A top-row press pins the pair vertically, so use the remaining horizontal
-  // slack to put the definition column wholly beyond the held finger. The
-  // primary card may shift within the pair, but its safe-top position and the
-  // card/definition gap stay fixed. Prefer the viable orientation requiring
-  // the smaller primary-card shift.
-  if (avoidX !== undefined && pairWidth <= viewportWidth - edge * 2) {
-    const candidates: SupplementalPeekLayout[] = [];
-    const maxRightPrimary = viewportWidth - edge - pairWidth;
-    const requiredRightPrimary =
-      avoidX.center +
-      avoidX.radius +
-      avoidX.clearance -
-      box.width -
-      gap;
-    const rightPrimary = Math.max(edge, requiredRightPrimary);
-    if (rightPrimary <= maxRightPrimary) {
-      candidates.push({
-        primaryLeft: rightPrimary,
-        supplemental: {
-          left: rightPrimary + box.width + gap,
-          top: box.top,
-          width: supplementalWidth,
-          side: "right",
-        },
-      });
-    }
-
-    const minLeftPrimary = edge + supplementalWidth + gap;
-    const maxLeftPrimary = Math.min(
-      viewportWidth - edge - box.width,
-      avoidX.center - avoidX.radius - avoidX.clearance + gap,
-    );
-    if (minLeftPrimary <= maxLeftPrimary) {
-      candidates.push({
-        primaryLeft: maxLeftPrimary,
-        supplemental: {
-          left: maxLeftPrimary - gap - supplementalWidth,
-          top: box.top,
-          width: supplementalWidth,
-          side: "left",
-        },
-      });
-    }
-
-    if (candidates.length > 0) {
-      return candidates.reduce((best, candidate) =>
-        Math.abs(candidate.primaryLeft - box.left) <
-        Math.abs(best.primaryLeft - box.left)
-          ? candidate
-          : best,
-      );
-    }
-  }
+  const { box, viewportWidth, supplementalWidth, gap, edge } = input;
 
   const rightLeft = box.left + box.width + gap;
   if (rightLeft + supplementalWidth <= viewportWidth - edge) {
@@ -330,34 +239,6 @@ export function computeSupplementalPeekLayout(input: {
         top: box.top,
         width: supplementalWidth,
         side: "left",
-      },
-    };
-  }
-
-  if (pairWidth <= viewportWidth - edge * 2) {
-    const primaryWithDefinitionsLeft = edge + supplementalWidth + gap;
-    const primaryWithDefinitionsRight = viewportWidth - edge - pairWidth;
-    const leftShift = Math.abs(primaryWithDefinitionsLeft - box.left);
-    const rightShift = Math.abs(primaryWithDefinitionsRight - box.left);
-
-    if (leftShift <= rightShift) {
-      return {
-        primaryLeft: primaryWithDefinitionsLeft,
-        supplemental: {
-          left: edge,
-          top: box.top,
-          width: supplementalWidth,
-          side: "left",
-        },
-      };
-    }
-    return {
-      primaryLeft: primaryWithDefinitionsRight,
-      supplemental: {
-        left: primaryWithDefinitionsRight + box.width + gap,
-        top: box.top,
-        width: supplementalWidth,
-        side: "right",
       },
     };
   }

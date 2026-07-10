@@ -597,6 +597,7 @@
       "name": "cardSize",
       "tsType": "CardGalleryCardSize",
       "unionMembers": [
+        "compact",
         "standard",
         "roomy"
       ],
@@ -619,13 +620,24 @@
       "name": "spacing",
       "tsType": "CardGallerySpacing",
       "unionMembers": [
+        "compact",
         "regular",
-        "medium",
-        "compact"
+        "medium"
       ],
       "required": false,
       "defaultValue": "regular",
       "description": "Internal padding and grid gap scale. Defaults to `regular`."
+    },
+    {
+      "name": "widthMode",
+      "tsType": "CardGalleryWidthMode",
+      "unionMembers": [
+        "content",
+        "fill"
+      ],
+      "required": false,
+      "defaultValue": "content",
+      "description": "Floating-frame width behavior. Defaults to `content`."
     },
     {
       "name": "largeCards",
@@ -722,7 +734,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "false",
-      "description": "Enables the shared mobile Deck Viewer press preview for compact galleries:\nhold a tile and a large readable card is placed clear of the finger;\nquick taps still activate selectable tiles, while held previews suppress\ntheir trailing click. First-row sources pin the card and its definitions\nto the visual viewport's top edge, preserving only a physical safe-area\ninset."
+      "description": "Enables the shared mobile Deck Viewer press preview for compact galleries:\nhold a tile and a large readable card is placed clear of the finger;\nquick taps still activate selectable tiles, while held previews suppress\ntheir trailing click. The large card moves up first, then sideways only\nwhen needed, and never intersects the protected touch circle."
     }
   ],
   "CardStatOrb": [
@@ -1854,11 +1866,11 @@
       "name": "tide",
       "tsType": "Tide",
       "unionMembers": [
+        "shadow",
         "ember",
         "valor",
         "vision",
-        "wild",
-        "shadow"
+        "wild"
       ],
       "required": true,
       "defaultValue": null,
@@ -2939,11 +2951,11 @@
       "name": "tide",
       "tsType": "Tide",
       "unionMembers": [
+        "shadow",
         "ember",
         "valor",
         "vision",
-        "wild",
-        "shadow"
+        "wild"
       ],
       "required": true,
       "defaultValue": null,

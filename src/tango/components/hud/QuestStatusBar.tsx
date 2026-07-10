@@ -54,7 +54,6 @@ import { requireDreamsignId } from "../../../data/dreamsigns";
 import type { DreamcallerPortraitFocus } from "../../../types/content";
 import { DEFAULT_DREAMCALLER_PORTRAIT_FOCUS } from "./DreamcallerPortrait";
 import "./quest-status-bar.css";
-import { QUEST_STATUS_BAR_BOTTOM_INSET } from "../../screens/chrome-geometry";
 
 const { PressPopover, usePressReveal, anchorRect, PRESS_SCALE, HOVER_SCALE } =
   InfoCard;
@@ -81,6 +80,18 @@ const SIGN_GAP = 8;
 /** How many dreamsigns dock inline before the strip collapses into the overflow
  * stack + centered viewer. A fixed system value, not a caller knob. */
 const STACK_THRESHOLD = 4;
+
+/** Physical home-indicator inset plus the small scene-art breathing gap. */
+export const QUEST_STATUS_BAR_BOTTOM_INSET =
+  "calc(var(--safe-area-inset-bottom) + var(--space-2))";
+
+/** Total fixed viewport height occupied by the component. */
+export const QUEST_STATUS_BAR_TOTAL_HEIGHT =
+  `calc(max(${token("--hud-h")}, var(--qsb-dc-size, 66px)) + ${QUEST_STATUS_BAR_BOTTOM_INSET})`;
+
+/** Operation screens use when reserving content above the fixed component. */
+export const QUEST_STATUS_BAR_CLEARANCE_OP =
+  "var(--hud-h) + var(--safe-area-inset-bottom) + var(--space-2)";
 
 /** One docked dreamsign, as the domain dreamsign shape the shared
  * {@link Dreamsign} object consumes (art resolved from `imageName`, never by
@@ -246,7 +257,7 @@ function QsbDreamsignStrip({
 
   const SIGN = Math.round(36 * scale);
   const wrap: CSSProperties = {
-    position: "absolute",
+    position: "fixed",
     right: box.right,
     top: box.centerY - SIGN / 2,
     display: "flex",
@@ -559,7 +570,6 @@ function QsbHudBar({
   dreamcaller,
   stageRef,
   scale = 1,
-  style = {},
 }: {
   essence?: number;
   deck?: number | string;
@@ -567,7 +577,6 @@ function QsbHudBar({
   dreamcaller?: QsbDreamcaller;
   stageRef: React.RefObject<HTMLElement | null>;
   scale?: number;
-  style?: CSSProperties;
 }): ReactElement {
   return (
     <div
@@ -575,12 +584,12 @@ function QsbHudBar({
         display: "flex",
         alignItems: "center",
         gap: Math.round(10 * scale),
-        height: token("--hud-h"),
+        height: "100%",
+        boxSizing: "border-box",
         paddingTop: 0,
         paddingRight: Math.round(12 * scale),
-        paddingBottom: "var(--safe-area-inset-bottom)",
+        paddingBottom: QUEST_STATUS_BAR_BOTTOM_INSET,
         paddingLeft: Math.round(12 * scale),
-        ...style,
       }}
     >
       <QsbDreamcallerBust dreamcaller={dreamcaller} stageRef={stageRef} />
@@ -669,10 +678,11 @@ export function QuestStatusBar({
         className="qsbHud hud-outline"
         data-quest-status-bar-anchor=""
         style={{
-          position: "absolute",
+          position: "fixed",
           left: 0,
           right: 0,
           bottom: 0,
+          height: QUEST_STATUS_BAR_TOTAL_HEIGHT,
           zIndex: 40,
         }}
       >
@@ -683,10 +693,6 @@ export function QuestStatusBar({
           dreamcaller={dreamcaller}
           stageRef={stageRef}
           scale={scale}
-          style={{
-            height: token("--hud-h"),
-            paddingBottom: QUEST_STATUS_BAR_BOTTOM_INSET,
-          }}
         />
       </div>
 

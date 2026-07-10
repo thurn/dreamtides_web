@@ -1,9 +1,9 @@
 // MobileCardPeek — shared press-to-read card preview for compact mobile grids.
 //
-// The mobile deck viewer and any deck-like gallery that renders cards four
-// across use this one interaction: hold a compact card stationary and a large,
-// readable copy appears near it while keeping the rules text clear of the
-// finger. Moving into a scroll cancels before the preview does rendering work.
+// The mobile deck viewer and compact card galleries use this one interaction:
+// hold a compact card stationary and a large, readable copy appears near it
+// while keeping the whole card clear of a 36px touch circle. Moving into a
+// scroll cancels before the preview does rendering work.
 // The geometry lives in mobile-card-peek-geometry.ts and is unit-tested
 // independently; this module owns the gesture, React state, portal, and
 // supplemental keyword definitions.
@@ -24,8 +24,6 @@ import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import { CardTermDefinitions } from "./CardTermDefinitions";
 import { GameCard } from "./CardView";
 import {
-  CLEARANCE_MARGIN_PX,
-  FINGER_RADIUS_PX,
   computePeekBox,
   computeSupplementalPeekLayout,
   peekWidthForViewport,
@@ -53,15 +51,6 @@ export interface MobileCardPeekOptions {
   sideMarginToken?: `--${string}`;
 }
 
-/** Per-press placement metadata supplied by the compact grid. */
-export interface MobileCardPeekPlacement {
-  /**
-   * Pin a row-one preview to the visual viewport's top edge, preserving only a
-   * physical safe-area inset reported by the browser.
-   */
-  pinToTop?: boolean;
-}
-
 interface MobileCardPeekState {
   view: MobileCardPeekCardView;
   box: PeekRect;
@@ -69,9 +58,6 @@ interface MobileCardPeekState {
   pointerId: number;
   startX: number;
   startY: number;
-  /** Modeled source center used to keep top-row definitions off the finger. */
-  fingerX: number;
-  pinToTop: boolean;
 }
 
 interface MobileCardPeekGesture {
@@ -80,7 +66,6 @@ interface MobileCardPeekGesture {
   startY: number;
   target: HTMLElement;
   view: MobileCardPeekCardView;
-  pinToTop: boolean;
   timer: ReturnType<typeof setTimeout> | null;
   previewShown: boolean;
 }
@@ -106,7 +91,6 @@ export function useMobileCardPeek({
   openPeek: (
     event: ReactPointerEvent<HTMLElement>,
     view: MobileCardPeekCardView,
-    placement?: MobileCardPeekPlacement,
   ) => void;
   handlePointerMove: (event: ReactPointerEvent<HTMLElement>) => void;
   handleScroll: () => void;
@@ -208,7 +192,6 @@ export function useMobileCardPeek({
     (
       event: ReactPointerEvent<HTMLElement>,
       view: MobileCardPeekCardView,
-      placement: MobileCardPeekPlacement = {},
     ): void => {
       if (
         event.button !== 0 ||
@@ -224,7 +207,6 @@ export function useMobileCardPeek({
         startY: event.clientY,
         target: event.currentTarget,
         view,
-        pinToTop: placement.pinToTop === true,
         timer: null,
         previewShown: false,
       };
@@ -239,31 +221,24 @@ export function useMobileCardPeek({
           columns,
           columnGap: readLengthToken(columnGapToken),
         });
-        // Anchor the finger to the pressed card's center: the modelled
-        // occlusion circle covers the whole tile wherever the finger landed.
-        const tile = gesture.target.getBoundingClientRect();
+        // The protected circle is centered on the actual touch point. This is
+        // stricter and more predictable than substituting the source tile's
+        // center when the player presses near an edge.
         const finger = {
-          x: tile.left + tile.width / 2,
-          y: tile.top + tile.height / 2,
+          x: gesture.startX,
+          y: gesture.startY,
         };
         // Read layout and mount the large card only after the gesture has
         // remained stationary through the hold boundary. This keeps ordinary
         // Safari pan classification free of forced style reads and portal work.
-        // Row-one previews replace the screen's header/title region, so they
-        // belong at the visual viewport edge. Only an actual hardware cutout
-        // remains reserved. Lower rows keep the app chrome's design floor.
-        const topInset = gesture.pinToTop
-          ? readLengthToken("--safe-area-inset-top")
-          : readLengthToken("--safe-top");
         const box = computePeekBox({
           viewport: { width: window.innerWidth, height: window.innerHeight },
-          safeTop: topInset,
+          safeTop: readLengthToken("--safe-area-inset-top"),
           safeBottom: readLengthToken("--safe-bottom"),
           sideMargin,
           aspect: CARD_ASPECT_RATIO_VALUE,
           width,
           finger,
-          pinToTop: gesture.pinToTop,
         });
         setPeek({
           view: gesture.view,
@@ -271,8 +246,6 @@ export function useMobileCardPeek({
           pointerId: gesture.pointerId,
           startX: gesture.startX,
           startY: gesture.startY,
-          fingerX: finger.x,
-          pinToTop: gesture.pinToTop,
         });
       }, MOBILE_CARD_PEEK_HOLD_MS);
       gestureRef.current = gesture;
@@ -330,10 +303,7 @@ export function renderMobileCardPeekOverlay(
   const hasDefinitions =
     extractGlossaryTerms(peek.view.card.renderedText).length > 0;
   const layout = hasDefinitions
-    ? computeSupplementalInfoPlacement(
-        peek.box,
-        peek.pinToTop ? peek.fingerX : undefined,
-      )
+    ? computeSupplementalInfoPlacement(peek.box)
     : null;
   return createPortal(
     <div
@@ -387,7 +357,6 @@ export function renderMobileCardPeekOverlay(
 
 function computeSupplementalInfoPlacement(
   box: PeekRect,
-  fingerX?: number,
 ): {
   primaryLeft: number;
   supplemental: {
@@ -407,13 +376,5 @@ function computeSupplementalInfoPlacement(
     supplementalWidth: width,
     gap: SUPPLEMENTAL_INFO_GAP_PX,
     edge: SUPPLEMENTAL_INFO_EDGE_PX,
-    avoidX:
-      fingerX === undefined
-        ? undefined
-        : {
-            center: fingerX,
-            radius: FINGER_RADIUS_PX,
-            clearance: CLEARANCE_MARGIN_PX,
-          },
   });
 }

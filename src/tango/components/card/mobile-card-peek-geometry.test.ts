@@ -95,38 +95,6 @@ describe("computePeekBox", () => {
     expect(box.top).toBeCloseTo(ENV.safeTop, 5);
   });
 
-  it.each([
-    { viewport: { width: 393, height: 852 }, finger: { x: 150, y: 400 } },
-    { viewport: { width: 360, height: 800 }, finger: { x: 136, y: 360 } },
-  ])(
-    "pins a top-row source to the actual viewport edge at $viewport.width×$viewport.height",
-    ({ viewport, finger }) => {
-      const box = computePeekBox({
-        ...layout(viewport, finger, widthFor(viewport.width)),
-        safeTop: 0,
-        pinToTop: true,
-      });
-
-      expect(box.top).toBe(0);
-      expect(box.top).not.toBe(ENV.safeTop);
-      expect(box.top).toBeLessThan(finger.y);
-    },
-  );
-
-  it("preserves a physical browser safe-area inset for a top-row source", () => {
-    const box = computePeekBox({
-      ...layout(
-        { width: 393, height: 852 },
-        { x: 150, y: 400 },
-        widthFor(393),
-      ),
-      safeTop: 47,
-      pinToTop: true,
-    });
-
-    expect(box.top).toBe(47);
-  });
-
   it("never places the card below the finger — pressing only pops it up", () => {
     const width = widthFor(393);
     for (let y = 200; y <= 800; y += 20) {
@@ -140,7 +108,7 @@ describe("computePeekBox", () => {
   it("draws the card at the requested width, in the card's aspect ratio", () => {
     const width = widthFor(393);
     const box = computePeekBox(
-      layout({ width: 393, height: 852 }, { x: 242, y: 300 }, width),
+      layout({ width: 393, height: 852 }, { x: 242, y: 600 }, width),
     );
     expect(box.width).toBeCloseTo(width, 5);
     expect(box.width / box.height).toBeCloseTo(ENV.aspect, 5);
@@ -183,33 +151,24 @@ describe("computePeekBox", () => {
       }
     }
   });
+
+  it("keeps the entire enlarged card outside the 36px touch circle", () => {
+    expect(FINGER_RADIUS_PX).toBe(36);
+    const viewport = { width: 393, height: 852 };
+    const width = widthFor(viewport.width);
+    for (let x = ENV.sideMargin; x <= viewport.width - ENV.sideMargin; x += 7) {
+      for (let y = 100; y <= 810; y += 7) {
+        const box = computePeekBox(layout(viewport, { x, y }, width));
+        expect(circleRectGap(x, y, FINGER_RADIUS_PX, box)).toBeGreaterThanOrEqual(
+          CLEARANCE_MARGIN_PX - 0.5,
+        );
+        expect(box.top).toBeLessThan(y);
+      }
+    }
+  });
 });
 
 describe("computeSupplementalPeekLayout", () => {
-  it("uses pair slack to keep top-row definitions beyond the finger interval", () => {
-    const fingerX = 150;
-    const layout = computeSupplementalPeekLayout({
-      box: { left: 203.125, top: 0, width: 171.875, height: 240.625 },
-      viewportWidth: 393,
-      supplementalWidth: 176.85,
-      gap: 10,
-      edge: 6,
-      avoidX: {
-        center: fingerX,
-        radius: FINGER_RADIUS_PX,
-        clearance: CLEARANCE_MARGIN_PX,
-      },
-    });
-
-    expect(layout.supplemental.side).toBe("right");
-    expect(layout.supplemental.left).toBeGreaterThanOrEqual(
-      fingerX + FINGER_RADIUS_PX + CLEARANCE_MARGIN_PX,
-    );
-    expect(layout.supplemental.left).toBeGreaterThanOrEqual(
-      layout.primaryLeft + 171.875 + 10,
-    );
-  });
-
   it(`keeps the three definition cards for UUID ${THREE_TERM_CARD_ID} beside the enlarged card near the bottom`, () => {
     // Fourth-row, second-inner-column geometry on an iPhone 16 viewport: the
     // enlarged card is centered over a low press. A 45vw definition column
@@ -230,15 +189,13 @@ describe("computeSupplementalPeekLayout", () => {
       edge: 6,
     });
 
-    expect(layout.primaryLeft).toBeGreaterThan(box.left);
-    expect(layout.supplemental.side).toBe("left");
-    expect(
-      layout.supplemental.left + supplementalWidth + 10,
-    ).toBeLessThanOrEqual(layout.primaryLeft);
-    expect(layout.supplemental.left).toBeGreaterThanOrEqual(6);
-    expect(layout.primaryLeft + box.width).toBeLessThanOrEqual(
-      viewportWidth - 6,
+    expect(layout.primaryLeft).toBe(box.left);
+    expect(layout.supplemental.side).toBe("right");
+    expect(layout.supplemental.top).toBeGreaterThanOrEqual(
+      box.top + box.height + 10,
     );
+    expect(layout.supplemental.left).toBeGreaterThanOrEqual(6);
+    expect(layout.primaryLeft + box.width).toBeLessThanOrEqual(viewportWidth - 6);
   });
 
   it("preserves the enlarged card position when a definition column already fits", () => {

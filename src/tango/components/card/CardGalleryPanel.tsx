@@ -115,13 +115,16 @@ export type CardGalleryAccessory =
 export type CardGalleryColumns = "auto" | "two" | "three" | "four" | "five";
 
 /** The `auto` grid's minimum card column width. */
-export type CardGalleryCardSize = "standard" | "roomy";
+export type CardGalleryCardSize = "compact" | "standard" | "roomy";
 
 /** The panel frame geometry. */
 export type CardGalleryFrame = "floating" | "fullBleed";
 
 /** The gallery's internal spacing scale. */
 export type CardGallerySpacing = "regular" | "medium" | "compact";
+
+/** Whether a floating gallery hugs its grid or fills the caller's width. */
+export type CardGalleryWidthMode = "content" | "fill";
 
 export interface CardGalleryPanelProps {
   /** Header title, rendered as an `<h2>`. */
@@ -146,6 +149,8 @@ export interface CardGalleryPanelProps {
   frame?: CardGalleryFrame;
   /** Internal padding and grid gap scale. Defaults to `regular`. */
   spacing?: CardGallerySpacing;
+  /** Floating-frame width behavior. Defaults to `content`. */
+  widthMode?: CardGalleryWidthMode;
   /** Draw each tile with GameCard's larger readable type scale. */
   largeCards?: boolean;
   /** Test id for the panel root. */
@@ -165,15 +170,18 @@ export interface CardGalleryPanelProps {
    * Enables the shared mobile Deck Viewer press preview for compact galleries:
    * hold a tile and a large readable card is placed clear of the finger;
    * quick taps still activate selectable tiles, while held previews suppress
-   * their trailing click. First-row sources pin the card and its definitions
-   * to the visual viewport's top edge, preserving only a physical safe-area
-   * inset.
+   * their trailing click. The large card moves up first, then sideways only
+   * when needed, and never intersects the protected touch circle.
    */
   mobilePressPreview?: boolean;
 }
 
 const STANDARD_CARD_MIN_WIDTH_PX = 96;
 const STANDARD_CARD_MAX_WIDTH_PX = 176;
+// Short phone screens may need a much smaller card to keep a fixed two-row
+// choice surface wholly visible; this is a fit floor, not a caller size knob.
+const COMPACT_CARD_MIN_WIDTH_PX = 44;
+const COMPACT_CARD_MAX_WIDTH_PX = 176;
 const ROOMY_CARD_MIN_WIDTH_PX = 126;
 const ROOMY_CARD_MAX_WIDTH_PX = 188;
 const FLOATING_ACCESSORY_PX = 48;
@@ -181,6 +189,7 @@ const DEFAULT_COLUMN_COUNT = 5;
 const CARD_WIDTH_FLOOR_PX = 64;
 // One caption voice plus its gap below each card/action. This is a content box
 // measure used by the gallery fitter so two captioned rows remain fully visible.
+const CAPTION_LINE_PX = 18;
 const CAPTION_BLOCK_PX = 22;
 
 interface GalleryMeasure {
@@ -248,12 +257,14 @@ function gapSlotsFor(visibleRows: number): number {
 }
 
 function maxCardWidth(cardSize: CardGalleryCardSize): number {
+  if (cardSize === "compact") return COMPACT_CARD_MAX_WIDTH_PX;
   return cardSize === "roomy"
     ? ROOMY_CARD_MAX_WIDTH_PX
     : STANDARD_CARD_MAX_WIDTH_PX;
 }
 
 function minCardWidth(cardSize: CardGalleryCardSize): number {
+  if (cardSize === "compact") return COMPACT_CARD_MIN_WIDTH_PX;
   return cardSize === "roomy"
     ? ROOMY_CARD_MIN_WIDTH_PX
     : STANDARD_CARD_MIN_WIDTH_PX;
@@ -290,7 +301,7 @@ function captionNode(caption: CardGalleryCaption): ReactElement {
     <p
       data-gallery-caption={caption.kind}
       style={{
-        minHeight: CAPTION_BLOCK_PX,
+        minHeight: CAPTION_LINE_PX,
         margin: 0,
         display: "grid",
         placeItems: "center",
@@ -383,13 +394,17 @@ function useGalleryMeasure({
           : finitePositive(root.parentElement?.clientWidth ?? 0)) ??
         finitePositive(window.innerWidth) ??
         0;
-      const bodyHeight =
-        frame === "fullBleed"
-          ? finitePositive(body.clientHeight)
-          : finitePositive(root.parentElement?.clientHeight ?? 0);
+      const parentHeight = finitePositive(
+        root.parentElement?.clientHeight ?? 0,
+      );
+      const headerHeight = header.getBoundingClientRect().height;
       const availableBodyHeight =
-        bodyHeight ??
-        Math.max(0, window.innerHeight - header.getBoundingClientRect().height);
+        frame === "fullBleed"
+          ? (finitePositive(body.clientHeight) ??
+            Math.max(0, window.innerHeight - headerHeight))
+          : parentHeight !== null
+            ? Math.max(0, parentHeight - headerHeight)
+            : Math.max(0, window.innerHeight - headerHeight);
       const maxWidthByInline =
         (availableWidth - inlinePadding - gap * (columnCount - 1)) /
         columnCount;
@@ -474,6 +489,7 @@ export function CardGalleryPanel({
   cardSize = "standard",
   frame = "floating",
   spacing = "regular",
+  widthMode = "content",
   largeCards = false,
   testId,
   cutoutAwareAccessory = false,
@@ -548,11 +564,16 @@ export function CardGalleryPanel({
         data-gallery-columns={columnCount}
         data-gallery-visible-rows={visibleRows}
         data-gallery-spacing={spacing}
+        data-gallery-card-size={cardSize}
+        data-gallery-width-mode={widthMode}
         style={{
           ...materialStyle,
           position: "relative",
           boxSizing: "border-box",
-          width: frame === "fullBleed" ? "100%" : panelWidth,
+          width:
+            frame === "fullBleed" || widthMode === "fill"
+              ? "100%"
+              : panelWidth,
           maxWidth: "100%",
           height: frame === "fullBleed" ? "100%" : undefined,
           maxHeight: "100%",
@@ -668,7 +689,7 @@ export function CardGalleryPanel({
                 justifyContent: "center",
               }}
             >
-              {cards.map((card, index) => {
+              {cards.map((card) => {
                 const disabled = card.disabled === true;
                 const interactive = onCardPress !== undefined;
                 const peekable = mobilePeekEnabled && !disabled;
@@ -706,9 +727,7 @@ export function CardGalleryPanel({
                         as="div"
                         data-testid={card.testId}
                         onPointerDown={(event) => {
-                          mobilePeek.openPeek(event, card, {
-                            pinToTop: index < columnCount,
-                          });
+                          mobilePeek.openPeek(event, card);
                         }}
                         onContextMenu={(event) => {
                           event.preventDefault();
@@ -736,9 +755,7 @@ export function CardGalleryPanel({
                       onPointerDown={
                         peekable
                           ? (event) => {
-                              mobilePeek.openPeek(event, card, {
-                                pinToTop: index < columnCount,
-                              });
+                              mobilePeek.openPeek(event, card);
                             }
                           : undefined
                       }

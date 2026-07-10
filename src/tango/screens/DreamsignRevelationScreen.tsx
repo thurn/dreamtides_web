@@ -13,6 +13,7 @@ import { Dreamsign } from "../components/hud/Dreamsign";
 import { Motes } from "../components/hud/Motes";
 import {
   QuestStatusBar,
+  QUEST_STATUS_BAR_CLEARANCE_OP,
   type QsbDreamcaller,
   type QsbDreamsign,
 } from "../components/hud/QuestStatusBar";
@@ -20,7 +21,6 @@ import { SpeechBubble } from "../components/overlay/SpeechBubble";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "./use-is-desktop";
-import { QUEST_STATUS_BAR_CLEARANCE_OP } from "./chrome-geometry";
 
 /** The guide who speaks over the Revelation offer. */
 export interface DreamsignRevelationGuideView {

@@ -118,6 +118,8 @@ describe("CardShopSiteScreen", () => {
     );
     expect(gallery?.dataset.galleryColumns).toBe("3");
     expect(gallery?.dataset.galleryVisibleRows).toBe("2");
+    expect(gallery?.dataset.galleryCardSize).toBe("compact");
+    expect(gallery?.dataset.galleryWidthMode).toBe("fill");
     expect(
       container.querySelectorAll('[data-testid^="tango-card-shop-offer-"]'),
     ).toHaveLength(5);

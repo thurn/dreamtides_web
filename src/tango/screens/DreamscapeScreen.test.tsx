@@ -8,7 +8,10 @@ import type { DreamscapeSiteModel } from "../components/dreamscape/SiteNode";
 import { glyph } from "../primitives/glyph";
 import { artRef } from "../primitives/art";
 import type { SiteState } from "../../types/quest";
-import { QUEST_STATUS_BAR_BOTTOM_INSET } from "./chrome-geometry";
+import {
+  QUEST_STATUS_BAR_BOTTOM_INSET,
+  QUEST_STATUS_BAR_TOTAL_HEIGHT,
+} from "../components/hud/QuestStatusBar";
 
 function siteModel(
   site: SiteState,
@@ -123,6 +126,9 @@ describe("DreamscapeScreen", () => {
     );
     const row = anchor?.firstElementChild as HTMLElement | null;
     expect(anchor?.style.bottom).toBe("0px");
+    expect(anchor?.style.position).toBe("fixed");
+    expect(anchor?.style.height).toBe(QUEST_STATUS_BAR_TOTAL_HEIGHT);
+    expect(row?.style.height).toBe("100%");
     expect(row?.style.paddingBottom).toBe(QUEST_STATUS_BAR_BOTTOM_INSET);
   });
 });

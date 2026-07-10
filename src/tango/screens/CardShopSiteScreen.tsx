@@ -150,7 +150,9 @@ function CardShopGallery({
           muted: offer.state !== "available",
         }))}
         columns="three"
+        cardSize={desktop ? "standard" : "compact"}
         frame="floating"
+        widthMode={desktop ? "content" : "fill"}
         spacing={desktop ? "regular" : "compact"}
         mobilePressPreview={!desktop}
         testId="tango-card-shop-gallery"

@@ -16,7 +16,7 @@ The single tide mark: a colored disc carrying the tide's glyph, sized 'sm' (desk
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `tide` | `Tide` = `"ember" \| "valor" \| "vision" \| "wild" \| "shadow"` | yes | — | Which of the five tides. Fixes the disc's color and glyph. |
+| `tide` | `Tide` = `"shadow" \| "ember" \| "valor" \| "vision" \| "wild"` | yes | — | Which of the five tides. Fixes the disc's color and glyph. |
 | `id` | `string` | yes | — | Stable id (a tide deck id) for the `data-tide-disc` QA hook. |
 | `label` | `string` | no | — | Accessible label (e.g. "Tide: Valor"). When unset the disc is decorative and hidden from assistive tech. |
 | `size` | `TideDiscSize` = `"sm" \| "lg"` | no | `sm` | Which enumerated {@link TideDiscSize} to render. Default 'sm'. |

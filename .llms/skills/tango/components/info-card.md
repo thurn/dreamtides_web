@@ -27,7 +27,7 @@ The one press-to-reveal information card. Its media treatment varies by content 
 | `meta` | `string` | no | — | Small mono/uppercase overline above the title, on the glass card. Small mono/uppercase overline above the title. |
 | `subtitle` | `string` | no | — | An epithet under the name — a smaller serif line in white, mirroring the Dreamcaller-select name/epithet pairing. Plain text; resolve before display. The resident guide / boss title under the place headline. An epithet under the name — a smaller serif subtitle in white, mirroring the Dreamcaller-select name/epithet pairing. Plain text; resolve before display. |
 | `glyph` | `Glyph` | yes | — | The {@link Glyph} the disc renders. Required. |
-| `tide` | `Tide` = `"ember" \| "valor" \| "vision" \| "wild" \| "shadow"` | yes | — | Which of the five tides. Fixes the disc color/mark and the alignment label. |
+| `tide` | `Tide` = `"shadow" \| "ember" \| "valor" \| "vision" \| "wild"` | yes | — | Which of the five tides. Fixes the disc color/mark and the alignment label. |
 | `leadGlyph` | `Glyph` | no | — | A small leading {@link Glyph}. |
 
 ### `body`: the `RichText` model

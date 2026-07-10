@@ -119,12 +119,8 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
   }, [onClose]);
 
   const handleTilePointerDown = useCallback(
-    (
-      e: React.PointerEvent<HTMLElement>,
-      cardView: DeckCardView,
-      pinToTop: boolean,
-    ) => {
-      openPeek(e, cardView, { pinToTop });
+    (e: React.PointerEvent<HTMLElement>, cardView: DeckCardView) => {
+      openPeek(e, cardView);
     },
     [openPeek],
   );
@@ -184,11 +180,10 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
               gap: token("--space-4"),
             }}
           >
-            {visibleCards.map((cardView, index) => (
+            {visibleCards.map((cardView) => (
               <DeckTile
                 key={cardView.entryId}
                 cardView={cardView}
-                pinToTop={index < COLUMNS}
                 onPointerDown={handleTilePointerDown}
               />
             ))}
@@ -373,15 +368,12 @@ function DeckControls({
 /** One grid tile: a stationary hold reveals a comfortably legible zoom. */
 function DeckTile({
   cardView,
-  pinToTop,
   onPointerDown,
 }: {
   cardView: DeckCardView;
-  pinToTop: boolean;
   onPointerDown: (
     e: React.PointerEvent<HTMLElement>,
     cardView: DeckCardView,
-    pinToTop: boolean,
   ) => void;
 }) {
   return (
@@ -391,7 +383,7 @@ function DeckTile({
       data-card-id={cardView.card.id}
       data-deck-entry-id={cardView.entryId}
       onPointerDown={(e: React.PointerEvent<HTMLElement>) => {
-        onPointerDown(e, cardView, pinToTop);
+        onPointerDown(e, cardView);
       }}
       onContextMenu={(e: React.MouseEvent) => {
         // Suppress the OS long-press callout so a held press reads as a zoom.

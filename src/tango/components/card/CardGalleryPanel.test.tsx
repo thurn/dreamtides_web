@@ -333,7 +333,7 @@ describe("CardGalleryPanel", () => {
     });
   });
 
-  it("pins a UUID-identified first-row card preview to the viewport edge", () => {
+  it("moves a first-row UUID card upward without pinning it to the viewport edge", () => {
     vi.useFakeTimers();
     const cards = Array.from({ length: 5 }, (_, index) => ({
       entryId: `entry-${String(index)}`,
@@ -390,20 +390,15 @@ describe("CardGalleryPanel", () => {
     const definitions = document.body.querySelector<HTMLElement>(
       "[data-mobile-card-peek-definitions]",
     );
-    expect(preview?.style.top).toBe("0px");
-    expect(definitions?.style.top).toBe("0px");
-    const previewLeft = Number.parseFloat(preview?.style.left ?? "NaN");
-    const previewRight =
-      previewLeft + Number.parseFloat(preview?.style.width ?? "NaN");
-    const definitionsLeft = Number.parseFloat(
-      definitions?.style.left ?? "NaN",
+    const previewTop = Number.parseFloat(preview?.style.top ?? "NaN");
+    const previewHeight =
+      Number.parseFloat(preview?.style.width ?? "NaN") / (5 / 7);
+    const definitionsTop = Number.parseFloat(
+      definitions?.style.top ?? "NaN",
     );
-    const definitionsRight =
-      definitionsLeft + Number.parseFloat(definitions?.style.width ?? "NaN");
-    expect(
-      definitionsRight <= previewLeft || definitionsLeft >= previewRight,
-    ).toBe(true);
-    expect(definitionsLeft).toBeGreaterThanOrEqual(150 + 44 + 8);
+    expect(previewTop).toBeGreaterThan(0);
+    expect(previewTop + previewHeight).toBeLessThanOrEqual(400 - 36 - 8 + 0.5);
+    expect(definitionsTop).toBeGreaterThanOrEqual(previewTop + previewHeight);
 
     act(() => {
       window.dispatchEvent(new Event("pointerup"));

@@ -117,7 +117,7 @@ afterEach(() => {
 });
 
 describe("MobileDeckViewer mobile card gesture", () => {
-  it("pins the first UUID row to the viewport edge while later rows keep upward proximity", () => {
+  it("moves every UUID card upward by touch geometry without a first-row pin", () => {
     vi.useFakeTimers();
     const { container, root } = mount();
     const tango = container.querySelector<HTMLElement>(".tango");
@@ -144,8 +144,12 @@ describe("MobileDeckViewer mobile card gesture", () => {
     const definitions = document.body.querySelector<HTMLElement>(
       "[data-mobile-card-peek-definitions]",
     );
-    expect(firstPreview?.style.top).toBe("0px");
-    expect(definitions?.style.top).toBe("0px");
+    const firstTop = Number.parseFloat(firstPreview?.style.top ?? "NaN");
+    expect(firstTop).toBeGreaterThan(0);
+    expect(firstTop).toBeLessThan(400);
+    expect(Number.parseFloat(definitions?.style.top ?? "NaN")).toBeGreaterThan(
+      firstTop,
+    );
 
     act(() => {
       window.dispatchEvent(new Event("pointerup"));
