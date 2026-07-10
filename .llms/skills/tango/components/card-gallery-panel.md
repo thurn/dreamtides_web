@@ -25,7 +25,6 @@ The shared card-browser surface: a left-aligned title and subtitle, a trailing h
 | `cardSize` | `CardGalleryCardSize` = `"compact" \| "standard" \| "roomy"` | no | `standard` | Card size preset. Defaults to `standard`. |
 | `frame` | `CardGalleryFrame` = `"floating" \| "fullBleed"` | no | `floating` | Panel frame geometry and material. `floating` uses liquid glass; `fullBleed` fills its parent edge-to-edge with the standard alpha scrim and no floating rim or shadow. Defaults to `floating`. |
 | `spacing` | `CardGallerySpacing` = `"compact" \| "regular" \| "medium"` | no | `regular` | Internal padding and grid gap scale. Defaults to `regular`. |
-| `columnSpacing` | `CardGalleryColumnSpacing` = `"regular" \| "wide"` | no | `regular` | Horizontal card-column spacing. `wide` gives sparse desktop galleries a broader silhouette without adding vertical slack. Defaults to `regular`. |
 | `widthMode` | `CardGalleryWidthMode` = `"content" \| "fill"` | no | `content` | Floating-frame width behavior. Defaults to `content`. |
 | `largeCards` | `boolean` | no | `false` | Draw each tile with GameCard's larger readable type scale. |
 | `testId` | `string` | no | — | Test id for the panel root. |
@@ -79,7 +78,6 @@ import { CardGalleryPanel } from "src/tango/components/card/CardGalleryPanel";
   columns="five"
   frame="floating"
   spacing="medium"
-  columnSpacing="wide"
   onCardPress={toggleCard}
   endAction={{
     entryId: "restock",
