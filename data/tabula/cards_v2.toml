@@ -1111,21 +1111,22 @@ card-number = 59
 art = { x = -0.458, y = 1, scale = 1.47 }
 
 [[cards]]
-name = "Stargazer Adrift"
+name = "Fallen Angel"
 mtg-name = "Viscera Seer"
 id = "16d2e85d-f940-43dd-9867-784b3a5ec5d7"
 rendered-text = "Abandon another character: Foresee 1."
 energy-cost = 1
 card-type = "Character"
-subtype = "Explorer"
+subtype = "Ancient"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July10"]
-image-number = 439817398
+tags = ["Art Rework", "July10", "Art OK"]
+image-number = 1419437210
 art-owned = false
 card-number = 60
+art = { x = 0.642, y = 1, scale = 1.87 }
 
 [[cards]]
 name = "Nightprowler Panther"
@@ -1443,7 +1444,7 @@ card-number = 77
 art = { x = 0.336, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Saltless Mariner"
+name = "Headtaker"
 mtg-name = "Goblin Bombardment"
 id = "7ffb1179-6c94-4f80-9613-ece2b799f19d"
 rendered-text = """
@@ -1457,10 +1458,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July10"]
-image-number = 586115630
+tags = ["Art Rework", "July10", "Art OK"]
+image-number = 515170831
 art-owned = false
 card-number = 78
+art = { x = 0, y = 1, scale = 1.37 }
 
 [[cards]]
 name = "Obliterator of Worlds"
@@ -2848,7 +2850,7 @@ card-number = 152
 art = { x = 0.042, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Nightmare Manifest"
+name = "Iron Pharaoh"
 mtg-name = "Phyrexian Tower"
 id = "0458658d-7e02-4286-9249-93674d16620b"
 rendered-text = """
@@ -2862,10 +2864,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July10"]
-image-number = 1026869440
+tags = ["Art Rework", "July10", "Art OK"]
+image-number = 393588445
 art-owned = false
 card-number = 153
+art = { x = 0, y = 1, scale = 1 }
 
 [[cards]]
 name = "Wreckborn"
@@ -8872,7 +8875,7 @@ is-fast = true
 is-interrupt = false
 spark = 4
 tags = ["Removal", "Art Rework", "July21"]
-image-number = 2221822099
+image-number = 443761822
 art-owned = false
 card-number = 476
 art = { x = 0, y = 0.4, scale = 1.17 }

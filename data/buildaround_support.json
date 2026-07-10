@@ -2678,7 +2678,7 @@
       ]
     },
     "0458658d-7e02-4286-9249-93674d16620b": {
-      "name": "Nightmare Manifest",
+      "name": "Iron Pharaoh",
       "needs": [],
       "supports": [
         "abandon",
@@ -3271,7 +3271,7 @@
       ]
     },
     "7ffb1179-6c94-4f80-9613-ece2b799f19d": {
-      "name": "Saltless Mariner",
+      "name": "Headtaker",
       "needs": [
         {
           "theme": "abandon",
@@ -3969,7 +3969,7 @@
       ]
     },
     "16d2e85d-f940-43dd-9867-784b3a5ec5d7": {
-      "name": "Stargazer Adrift",
+      "name": "Fallen Angel",
       "needs": [
         {
           "theme": "abandon",
