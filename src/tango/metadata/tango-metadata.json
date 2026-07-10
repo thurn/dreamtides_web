@@ -585,6 +585,7 @@
       "unionMembers": [
         "auto",
         "two",
+        "three",
         "four",
         "five"
       ],
@@ -657,6 +658,63 @@
       "required": false,
       "defaultValue": null,
       "description": "Fires when an enabled card tile is activated."
+    },
+    {
+      "name": "endAction",
+      "tsType": "CardGalleryActionView",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional card-sized action appended after the cards.",
+      "nested": {
+        "name": "CardGalleryActionView",
+        "fields": [
+          {
+            "name": "entryId",
+            "tsType": "string",
+            "optional": false,
+            "description": "Stable action id reported through `onEndActionPress`."
+          },
+          {
+            "name": "glyph",
+            "tsType": "Glyph",
+            "optional": false,
+            "description": "Large glyph that carries the action's visual identity."
+          },
+          {
+            "name": "label",
+            "tsType": "string",
+            "optional": false,
+            "description": "Accessible action label."
+          },
+          {
+            "name": "caption",
+            "tsType": "CardGalleryCaption",
+            "optional": false,
+            "description": "Small uncontained line rendered directly below the glyph."
+          },
+          {
+            "name": "disabled",
+            "tsType": "boolean",
+            "optional": true,
+            "description": "Detach interaction and visually recede the action."
+          },
+          {
+            "name": "testId",
+            "tsType": "string",
+            "optional": true,
+            "description": "Optional stable test id on the action button."
+          }
+        ]
+      }
+    },
+    {
+      "name": "onEndActionPress",
+      "tsType": "((entryId: string) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires with the appended action's stable id when it is activated."
     },
     {
       "name": "mobilePressPreview",

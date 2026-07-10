@@ -106,6 +106,7 @@ export function buildPurgeSiteView(params: {
     params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
 
   return {
+    siteId: params.site.id,
     scene,
     guide: buildPurgeGuideView(params.guide, params.guideLine),
     cards: buildPurgeCardViews(params.state.deck, params.cardDatabase),

@@ -24,6 +24,7 @@ import type { GlassControlPlacement } from "../../primitives/control-placement";
 import type { Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
+import { EssenceValue } from "../hud/EssenceValue";
 import {
   GlassButton,
   type GlassButtonVariant,
@@ -55,6 +56,31 @@ export interface CardGalleryCardView {
   selectionColor?: TangoColor;
   /** Optional danger outline for always-free purge targets such as Banes. */
   emphasis?: "danger";
+  /** Small uncontained line rendered directly below the card. */
+  caption?: CardGalleryCaption;
+  /** Visually recede this card while preserving press-preview behavior. */
+  muted?: boolean;
+}
+
+/** The small white line shown beneath a gallery item. */
+export type CardGalleryCaption =
+  | { kind: "essence"; amount: number }
+  | { kind: "text"; text: string };
+
+/** A card-sized action appended to the gallery grid. */
+export interface CardGalleryActionView {
+  /** Stable action id reported through `onEndActionPress`. */
+  entryId: string;
+  /** Large glyph that carries the action's visual identity. */
+  glyph: Glyph;
+  /** Accessible action label. */
+  label: string;
+  /** Small uncontained line rendered directly below the glyph. */
+  caption: CardGalleryCaption;
+  /** Detach interaction and visually recede the action. */
+  disabled?: boolean;
+  /** Optional stable test id on the action button. */
+  testId?: string;
 }
 
 /** The trailing header action rendered by a {@link CardGalleryPanel}. */
@@ -86,7 +112,7 @@ export type CardGalleryAccessory =
     };
 
 /** The grid column count for the card body. */
-export type CardGalleryColumns = "auto" | "two" | "four" | "five";
+export type CardGalleryColumns = "auto" | "two" | "three" | "four" | "five";
 
 /** The `auto` grid's minimum card column width. */
 export type CardGalleryCardSize = "standard" | "roomy";
@@ -131,6 +157,10 @@ export interface CardGalleryPanelProps {
   cutoutAwareAccessory?: boolean;
   /** Fires when an enabled card tile is activated. */
   onCardPress?: (entryId: string) => void;
+  /** Optional card-sized action appended after the cards. */
+  endAction?: CardGalleryActionView;
+  /** Fires with the appended action's stable id when it is activated. */
+  onEndActionPress?: (entryId: string) => void;
   /**
    * Enables the shared mobile Deck Viewer press preview for compact galleries:
    * hold a tile and a large readable card is placed clear of the finger;
@@ -149,6 +179,9 @@ const ROOMY_CARD_MAX_WIDTH_PX = 188;
 const FLOATING_ACCESSORY_PX = 48;
 const DEFAULT_COLUMN_COUNT = 5;
 const CARD_WIDTH_FLOOR_PX = 64;
+// One caption voice plus its gap below each card/action. This is a content box
+// measure used by the gallery fitter so two captioned rows remain fully visible.
+const CAPTION_BLOCK_PX = 22;
 
 interface GalleryMeasure {
   cardWidthPx: number;
@@ -190,6 +223,7 @@ function accessoryNode(
 
 function configuredColumnCount(columns: CardGalleryColumns): number {
   if (columns === "two") return 2;
+  if (columns === "three") return 3;
   if (columns === "four") return 4;
   return DEFAULT_COLUMN_COUNT;
 }
@@ -251,6 +285,29 @@ function gridTemplate(columns: number, cardWidth: string): string {
   return `repeat(${String(columns)}, ${cardWidth})`;
 }
 
+function captionNode(caption: CardGalleryCaption): ReactElement {
+  return (
+    <p
+      data-gallery-caption={caption.kind}
+      style={{
+        minHeight: CAPTION_BLOCK_PX,
+        margin: 0,
+        display: "grid",
+        placeItems: "center",
+        font: token("--t-caption"),
+        color: token("--text-on-glass"),
+        textAlign: "center",
+      }}
+    >
+      {caption.kind === "essence" ? (
+        <EssenceValue amount={caption.amount} tone="inherit" />
+      ) : (
+        caption.text
+      )}
+    </p>
+  );
+}
+
 function finitePositive(value: number): number | null {
   return Number.isFinite(value) && value > 0 ? value : null;
 }
@@ -282,12 +339,14 @@ function useGalleryMeasure({
   cardSize,
   spacing,
   fallbackVisibleRows,
+  rowSupplementPx,
 }: {
   readonly frame: CardGalleryFrame;
   readonly columnCount: number;
   readonly cardSize: CardGalleryCardSize;
   readonly spacing: CardGallerySpacing;
   readonly fallbackVisibleRows: number;
+  readonly rowSupplementPx: number;
 }): {
   readonly rootRef: React.RefObject<HTMLElement | null>;
   readonly headerRef: React.RefObject<HTMLElement | null>;
@@ -342,7 +401,10 @@ function useGalleryMeasure({
       const visibleRows = fallbackVisibleRows;
       const visibleGapSlots = gapSlotsFor(visibleRows);
       const maxWidthByBlock =
-        ((availableBodyHeight - blockPadding - gap * visibleGapSlots) *
+        ((availableBodyHeight -
+          blockPadding -
+          gap * visibleGapSlots -
+          rowSupplementPx * visibleRows) *
           CARD_ASPECT_RATIO_VALUE) /
         visibleRows;
       const cardWidthPx = Math.max(
@@ -389,7 +451,14 @@ function useGalleryMeasure({
       resizeObserver?.disconnect();
       window.removeEventListener("resize", update);
     };
-  }, [cardSize, columnCount, fallbackVisibleRows, frame, spacing]);
+  }, [
+    cardSize,
+    columnCount,
+    fallbackVisibleRows,
+    frame,
+    rowSupplementPx,
+    spacing,
+  ]);
 
   return { rootRef, headerRef, bodyRef, gridRef, measure };
 }
@@ -409,6 +478,8 @@ export function CardGalleryPanel({
   testId,
   cutoutAwareAccessory = false,
   onCardPress,
+  endAction,
+  onEndActionPress,
   mobilePressPreview = false,
 }: CardGalleryPanelProps): ReactElement {
   const [besideCutout, setBesideCutout] = useState(false);
@@ -423,15 +494,20 @@ export function CardGalleryPanel({
       ? accessoryNode(rightAccessory, accessoryPlacement)
       : null;
   const columnCount = renderedColumnCount(columns);
-  const rowCount = rowCountFor(cards.length, columnCount);
+  const itemCount = cards.length + (endAction === undefined ? 0 : 1);
+  const rowCount = rowCountFor(itemCount, columnCount);
   const fallbackVisibleRows = plannedVisibleRows(rowCount);
   const fallbackVisibleGapSlots = gapSlotsFor(fallbackVisibleRows);
+  const hasCaptions =
+    endAction !== undefined || cards.some((card) => card.caption !== undefined);
+  const rowSupplementPx = hasCaptions ? CAPTION_BLOCK_PX : 0;
   const { rootRef, headerRef, bodyRef, gridRef, measure } = useGalleryMeasure({
     frame,
     columnCount,
     cardSize,
     spacing,
     fallbackVisibleRows,
+    rowSupplementPx,
   });
   const visibleRows = measure?.visibleRows ?? fallbackVisibleRows;
   const visibleGapSlots = measure?.visibleGapSlots ?? fallbackVisibleGapSlots;
@@ -448,7 +524,7 @@ export function CardGalleryPanel({
   const galleryPadding = bodyPaddingFor(spacing);
   const headerPadding = headerPaddingFor(spacing);
   const cardHeight = `calc(${cardWidth} / ${String(CARD_ASPECT_RATIO_VALUE)})`;
-  const bodyHeight = `calc((${cardHeight} * ${String(visibleRows)}) + (${galleryGap} * ${String(visibleGapSlots)}) + (${galleryPadding} * 2))`;
+  const bodyHeight = `calc(((${cardHeight} + ${String(rowSupplementPx)}px) * ${String(visibleRows)}) + (${galleryGap} * ${String(visibleGapSlots)}) + (${galleryPadding} * 2))`;
   const panelWidth = `calc((${cardWidth} * ${String(columnCount)}) + (${galleryGap} * ${String(Math.max(0, columnCount - 1))}) + (${galleryPadding} * 2))`;
   const materialStyle: CSSProperties =
     frame === "fullBleed"
@@ -564,7 +640,7 @@ export function CardGalleryPanel({
             padding: galleryPadding,
           }}
         >
-          {cards.length === 0 ? (
+          {itemCount === 0 ? (
             <div
               style={{
                 display: "grid",
@@ -622,11 +698,11 @@ export function CardGalleryPanel({
                   touchAction: peekable ? "pan-y" : "manipulation",
                 };
 
+                let cardNode: ReactElement;
                 if (!interactive) {
                   if (peekable) {
-                    return (
+                    cardNode = (
                       <Pressable
-                        key={card.entryId}
                         as="div"
                         data-testid={card.testId}
                         onPointerDown={(event) => {
@@ -642,48 +718,102 @@ export function CardGalleryPanel({
                         {tile}
                       </Pressable>
                     );
+                  } else {
+                    cardNode = (
+                      <div data-testid={card.testId} style={tileStyle}>
+                        {tile}
+                      </div>
+                    );
                   }
-                  return (
-                    <div
-                      key={card.entryId}
+                } else {
+                  cardNode = (
+                    <Pressable
+                      as="button"
+                      aria-label={card.card.name}
+                      aria-pressed={card.selected}
+                      disabled={disabled}
                       data-testid={card.testId}
+                      onPointerDown={
+                        peekable
+                          ? (event) => {
+                              mobilePeek.openPeek(event, card, {
+                                pinToTop: index < columnCount,
+                              });
+                            }
+                          : undefined
+                      }
+                      onClick={() => onCardPress(card.entryId)}
+                      onClickCapture={
+                        peekable ? mobilePeek.handleClickCapture : undefined
+                      }
+                      onContextMenu={(event) => {
+                        event.preventDefault();
+                      }}
                       style={tileStyle}
                     >
                       {tile}
-                    </div>
+                    </Pressable>
                   );
                 }
 
                 return (
-                  <Pressable
+                  <div
                     key={card.entryId}
-                    as="button"
-                    aria-label={card.card.name}
-                    aria-pressed={card.selected}
-                    disabled={disabled}
-                    data-testid={card.testId}
-                    onPointerDown={
-                      peekable
-                        ? (event) => {
-                            mobilePeek.openPeek(event, card, {
-                              pinToTop: index < columnCount,
-                            });
-                          }
-                        : undefined
-                    }
-                    onClick={() => onCardPress(card.entryId)}
-                    onClickCapture={
-                      peekable ? mobilePeek.handleClickCapture : undefined
-                    }
-                    onContextMenu={(event) => {
-                      event.preventDefault();
+                    style={{
+                      minWidth: 0,
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: card.caption === undefined ? 0 : token("--space-1"),
+                      opacity: card.muted === true ? 0.52 : 1,
                     }}
-                    style={tileStyle}
                   >
-                    {tile}
-                  </Pressable>
+                    {cardNode}
+                    {card.caption !== undefined && captionNode(card.caption)}
+                  </div>
                 );
               })}
+              {endAction !== undefined && (
+                <div
+                  key={endAction.entryId}
+                  style={{
+                    minWidth: 0,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: token("--space-1"),
+                    opacity: endAction.disabled === true ? 0.42 : 1,
+                  }}
+                >
+                  <Pressable
+                    as="button"
+                    aria-label={endAction.label}
+                    disabled={endAction.disabled}
+                    data-testid={endAction.testId}
+                    onClick={() => onEndActionPress?.(endAction.entryId)}
+                    style={{
+                      width: "100%",
+                      aspectRatio: String(CARD_ASPECT_RATIO_VALUE),
+                      display: "grid",
+                      placeItems: "center",
+                      appearance: "none",
+                      padding: 0,
+                      border: "none",
+                      background: "transparent",
+                    }}
+                  >
+                    <i
+                      className={endAction.glyph}
+                      aria-hidden="true"
+                      data-gallery-action-glyph=""
+                      style={{
+                        fontSize: `calc(${cardWidth} * 0.58)`,
+                        color: token("--text-on-glass"),
+                        textShadow: token("--text-outline-media"),
+                      }}
+                    />
+                  </Pressable>
+                  {captionNode(endAction.caption)}
+                </div>
+              )}
             </div>
           )}
         </div>

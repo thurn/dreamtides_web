@@ -17,8 +17,8 @@
  */
 
 /**
- * Container components that live in `src/tango/components/` — the styled public
- * surface. Listed by their react-docgen display name; the escape-hatch rule
+ * Container components on the styled public surface or in the product-screen
+ * layout tier. Listed by their react-docgen display name; the escape-hatch rule
  * appends `Props` to match the type declaration.
  */
 export const CONTAINER_COMPONENTS = [
@@ -29,6 +29,7 @@ export const CONTAINER_COMPONENTS = [
   "PressInfo",
   "GlassDialog", // the glass overlay shell — holds caller-supplied body content
   "GlassBackdrop", // the frosted layer — hosts optional lifted-above-the-frost content
+  "GuideGallerySiteLayout", // responsive site stage — hosts each site's typed gallery
 ];
 
 /**

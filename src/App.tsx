@@ -90,13 +90,16 @@ export function QuestApp({
     runtimeConfig.uiVariant === "tango"
     && (activeSite === "Draft"
       || activeSite === "DreamsignRevelation"
-      || activeSite === "Purge");
+      || activeSite === "Purge"
+      || activeSite === "Shop");
   const hidePresencePill =
-    runtimeConfig.uiVariant === "tango" && activeSite === "Purge";
+    runtimeConfig.uiVariant === "tango"
+    && (activeSite === "Purge" || activeSite === "Shop");
   const tangoSiteUsesQuestMenu =
     runtimeConfig.uiVariant === "tango"
     && (activeSite === "Draft"
       || activeSite === "Purge"
+      || activeSite === "Shop"
       || (!isDesktopViewport && activeSite === "DreamsignRevelation"));
   const tangoScreenUsesQuestMenu =
     dreamscapeUsesTango || atlasUsesTango || tangoSiteUsesQuestMenu;

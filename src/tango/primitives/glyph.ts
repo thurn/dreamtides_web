@@ -91,6 +91,8 @@ export const GLYPHS = {
   gear: g("bxf bx-cog"),
   /** The hamburger bars — the mobile quest-menu disclosure trigger. */
   menu: g("bxf bx-menu"),
+  /** The circular refresh arrows used by shop restock actions. */
+  refresh: g("bxf bx-refresh-cw"),
 } as const;
 
 /**

@@ -231,6 +231,50 @@ describe("CardGalleryPanel", () => {
     });
   });
 
+  it("renders captioned three-column wares with a card-sized restock action", () => {
+    const onRestock = vi.fn();
+    const { container, root } = mount(
+      <CardGalleryPanel
+        title="Card Shop"
+        cards={[
+          {
+            entryId: "card-id-a",
+            card: makeCard("Archive Sentry"),
+            caption: { kind: "essence", amount: 100 },
+          },
+        ]}
+        columns="three"
+        endAction={{
+          entryId: "restock",
+          glyph: GLYPHS.refresh,
+          label: "Restock",
+          caption: { kind: "essence", amount: 50 },
+          testId: "gallery-restock",
+        }}
+        onEndActionPress={onRestock}
+      />,
+    );
+
+    const gallery = container.querySelector<HTMLElement>("section");
+    const captions = container.querySelectorAll('[data-gallery-caption="essence"]');
+    const glyph = container.querySelector<HTMLElement>(
+      "[data-gallery-action-glyph]",
+    );
+    expect(gallery?.dataset.galleryColumns).toBe("3");
+    expect(captions).toHaveLength(2);
+    expect(glyph?.style.color).toBe("var(--text-on-glass)");
+    expect(glyph?.style.textShadow).toBe("var(--text-outline-media)");
+
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>('[data-testid="gallery-restock"]')
+        ?.click();
+    });
+    expect(onRestock).toHaveBeenCalledWith("restock");
+
+    act(() => root.unmount());
+  });
+
   it("can render readable large cards and delegate terms to the mobile press preview", () => {
     const { container, root } = mount(
       <CardGalleryPanel

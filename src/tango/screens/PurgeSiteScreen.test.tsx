@@ -38,6 +38,7 @@ function makeCard(overrides: Partial<CardData> = {}): CardData {
 
 function view(cardCount = 2): PurgeSiteView {
   return {
+    siteId: "purge-site",
     scene: null,
     guide: {
       id: "takeshi",
@@ -361,16 +362,16 @@ describe("PurgeSiteScreen", () => {
     );
 
     const desktopComposition = container.querySelector<HTMLElement>(
-      "[data-purge-desktop-composition]",
+      "[data-guide-gallery-desktop-composition]",
     );
     expect(desktopComposition).not.toBeNull();
     expect(desktopComposition?.style.bottom).toContain("var(--space-9)");
     const desktopLayout = container.querySelector<HTMLElement>(
-      "[data-purge-desktop-layout]",
+      "[data-guide-gallery-desktop-layout]",
     );
     expect(desktopLayout?.style.minHeight).toBe("0px");
     expect(desktopLayout?.style.gridTemplateRows).toBe("minmax(0, 1fr)");
-    expect(container.querySelector("[data-purge-guide]")).not.toBeNull();
+    expect(container.querySelector("[data-guide-gallery-guide]")).not.toBeNull();
 
     const cardRegion = container.querySelector<HTMLElement>(
       "[data-purge-card-grid]",
