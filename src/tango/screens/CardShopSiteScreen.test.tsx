@@ -141,6 +141,47 @@ describe("CardShopSiteScreen", () => {
     act(() => root.unmount());
   });
 
+  it("uses the shared desktop guide-and-gallery composition with a full-width panel", () => {
+    stubMatchMedia(true);
+    const { container, root } = mount(
+      <CardShopSiteScreen
+        view={view()}
+        onBuy={vi.fn()}
+        onRestock={vi.fn()}
+        onClose={vi.fn()}
+      />,
+    );
+
+    expect(
+      container.querySelector("[data-guide-gallery-desktop-composition]"),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-testid="tango-card-shop-guide-art"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-testid="tango-card-shop-speech-bubble"]')
+        ?.textContent,
+    ).toContain("Tobias Tanglefur");
+
+    const region = container.querySelector<HTMLElement>(
+      "[data-card-shop-gallery-region]",
+    );
+    const gallery = container.querySelector<HTMLElement>(
+      '[data-testid="tango-card-shop-gallery"]',
+    );
+    expect(region?.dataset.cardShopLayout).toBe("desktop");
+    expect(region?.style.display).toBe("grid");
+    expect(region?.style.alignItems).toBe("center");
+    expect(gallery?.dataset.galleryColumns).toBe("3");
+    expect(gallery?.dataset.galleryVisibleRows).toBe("2");
+    expect(gallery?.dataset.galleryCardSize).toBe("standard");
+    expect(gallery?.dataset.gallerySpacing).toBe("regular");
+    expect(gallery?.dataset.galleryWidthMode).toBe("fill");
+    expect(gallery?.style.width).toBe("100%");
+
+    act(() => root.unmount());
+  });
+
   it("purchases an affordable card immediately and refreshes from the restock icon", () => {
     const onBuy = vi.fn();
     const onRestock = vi.fn();

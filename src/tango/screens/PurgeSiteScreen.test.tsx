@@ -374,7 +374,12 @@ describe("PurgeSiteScreen", () => {
     );
     expect(desktopLayout?.style.minHeight).toBe("0px");
     expect(desktopLayout?.style.gridTemplateRows).toBe("minmax(0, 1fr)");
-    expect(container.querySelector("[data-guide-gallery-guide]")).not.toBeNull();
+    expect(
+      container.querySelector('[data-testid="tango-purge-guide-art"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-testid="tango-purge-speech-bubble"]'),
+    ).not.toBeNull();
 
     const cardRegion = container.querySelector<HTMLElement>(
       "[data-purge-card-grid]",

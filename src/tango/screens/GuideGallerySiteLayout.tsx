@@ -122,7 +122,13 @@ export function GuideGallerySiteLayout({
       <Motes on tint="warm" />
 
       {isDesktop ? (
-        <DesktopComposition guide={guide} renderGallery={renderGallery} />
+        <DesktopComposition
+          guide={guide}
+          renderGallery={renderGallery}
+          guideArtTestId={guideArtTestId}
+          speechAnchorTestId={speechAnchorTestId}
+          speechBubbleTestId={speechBubbleTestId}
+        />
       ) : (
         <>
           <MobileGuideBand
@@ -151,9 +157,15 @@ export function GuideGallerySiteLayout({
 function DesktopComposition({
   guide,
   renderGallery,
+  guideArtTestId,
+  speechAnchorTestId,
+  speechBubbleTestId,
 }: {
   readonly guide: GuideGalleryGuideView;
   readonly renderGallery: (layout: "mobile" | "desktop") => ReactElement;
+  readonly guideArtTestId?: string;
+  readonly speechAnchorTestId?: string;
+  readonly speechBubbleTestId?: string;
 }) {
   return (
     <section
@@ -184,7 +196,12 @@ function DesktopComposition({
           alignItems: "center",
         }}
       >
-        <DesktopGuideScene guide={guide} />
+        <DesktopGuideScene
+          guide={guide}
+          guideArtTestId={guideArtTestId}
+          speechAnchorTestId={speechAnchorTestId}
+          speechBubbleTestId={speechBubbleTestId}
+        />
         {renderGallery("desktop")}
       </div>
     </section>
@@ -193,8 +210,14 @@ function DesktopComposition({
 
 function DesktopGuideScene({
   guide,
+  guideArtTestId,
+  speechAnchorTestId,
+  speechBubbleTestId,
 }: {
   readonly guide: GuideGalleryGuideView;
+  readonly guideArtTestId?: string;
+  readonly speechAnchorTestId?: string;
+  readonly speechBubbleTestId?: string;
 }) {
   const guideUrl = resolveArtRef(guide.art);
   return (
@@ -213,6 +236,7 @@ function DesktopGuideScene({
         src={guideUrl}
         alt={guide.name}
         draggable={false}
+        data-testid={guideArtTestId}
         style={{
           position: "absolute",
           bottom: `calc(-1 * ${token("--space-8")})`,
@@ -225,6 +249,7 @@ function DesktopGuideScene({
         }}
       />
       <div
+        data-testid={speechAnchorTestId}
         style={{
           position: "absolute",
           top: "14%",
@@ -237,6 +262,7 @@ function DesktopGuideScene({
           speakerName={guide.name}
           text={guide.line}
           arrowSide="left"
+          testId={speechBubbleTestId}
         />
       </div>
     </div>
