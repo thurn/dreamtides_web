@@ -83,6 +83,7 @@ function CardGalleryPanelDemo() {
         columns="three"
         frame="floating"
         spacing="regular"
+        columnSpacing="wide"
         onCardPress={(entryId) => setSelected(entryId)}
         endAction={{
           entryId: "restock",
@@ -125,6 +126,7 @@ export const cardGalleryPanelDemo: TangoComponent = {
   columns="five"
   frame="floating"
   spacing="medium"
+  columnSpacing="wide"
   onCardPress={toggleCard}
   endAction={{
     entryId: "restock",

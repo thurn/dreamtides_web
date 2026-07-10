@@ -293,9 +293,9 @@ describe("PurgeSiteScreen", () => {
     const galleryBody = gallery?.querySelector<HTMLElement>("header")
       ?.nextElementSibling as HTMLElement | null;
     expect(galleryBody?.style.padding).toBe("var(--space-5)");
-    expect(galleryBody?.firstElementChild?.getAttribute("style")).toContain(
-      "gap: var(--space-4)",
-    );
+    const galleryGrid = galleryBody?.firstElementChild as HTMLElement | null;
+    expect(galleryGrid?.style.columnGap).toBe("var(--space-4)");
+    expect(galleryGrid?.style.rowGap).toBe("var(--space-4)");
     expect(gallery?.style.borderLeft).not.toContain("var(--border-soft)");
 
     act(() => {

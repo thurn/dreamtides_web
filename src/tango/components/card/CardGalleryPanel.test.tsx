@@ -244,6 +244,7 @@ describe("CardGalleryPanel", () => {
           },
         ]}
         columns="three"
+        columnSpacing="wide"
         endAction={{
           entryId: "restock",
           glyph: GLYPHS.refresh,
@@ -261,6 +262,11 @@ describe("CardGalleryPanel", () => {
       "[data-gallery-action-glyph]",
     );
     expect(gallery?.dataset.galleryColumns).toBe("3");
+    expect(gallery?.dataset.galleryColumnSpacing).toBe("wide");
+    const grid = gallery?.querySelector("header")?.nextElementSibling
+      ?.firstElementChild as HTMLElement | null;
+    expect(grid?.style.columnGap).toBe("var(--space-12)");
+    expect(grid?.style.rowGap).toBe("var(--space-4)");
     expect(captions).toHaveLength(2);
     expect(glyph?.style.color).toBe("var(--text-on-glass)");
     expect(glyph?.style.textShadow).toBe("var(--text-outline-media)");
@@ -324,9 +330,9 @@ describe("CardGalleryPanel", () => {
     expect(gallery?.dataset.gallerySpacing).toBe("medium");
     expect(header?.style.padding).toBe("var(--space-6)");
     expect(body?.style.padding).toBe("var(--space-5)");
-    expect(body?.firstElementChild?.getAttribute("style")).toContain(
-      "gap: var(--space-4)",
-    );
+    const grid = body?.firstElementChild as HTMLElement | null;
+    expect(grid?.style.columnGap).toBe("var(--space-4)");
+    expect(grid?.style.rowGap).toBe("var(--space-4)");
 
     act(() => {
       root.unmount();

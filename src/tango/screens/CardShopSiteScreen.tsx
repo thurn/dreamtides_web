@@ -154,6 +154,7 @@ function CardShopGallery({
         frame="floating"
         widthMode={desktop ? "content" : "fill"}
         spacing={desktop ? "regular" : "compact"}
+        columnSpacing={desktop ? "wide" : "regular"}
         mobilePressPreview={!desktop}
         testId="tango-card-shop-gallery"
         onCardPress={(entryId) => {

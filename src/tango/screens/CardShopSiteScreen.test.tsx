@@ -176,6 +176,7 @@ describe("CardShopSiteScreen", () => {
     expect(gallery?.dataset.galleryVisibleRows).toBe("2");
     expect(gallery?.dataset.galleryCardSize).toBe("standard");
     expect(gallery?.dataset.gallerySpacing).toBe("regular");
+    expect(gallery?.dataset.galleryColumnSpacing).toBe("wide");
     expect(gallery?.dataset.galleryWidthMode).toBe("content");
     expect(gallery?.style.width).toContain("calc(");
 

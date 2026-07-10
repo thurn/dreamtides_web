@@ -629,6 +629,17 @@
       "description": "Internal padding and grid gap scale. Defaults to `regular`."
     },
     {
+      "name": "columnSpacing",
+      "tsType": "CardGalleryColumnSpacing",
+      "unionMembers": [
+        "regular",
+        "wide"
+      ],
+      "required": false,
+      "defaultValue": "regular",
+      "description": "Horizontal card-column spacing. `wide` gives sparse desktop galleries a broader silhouette without adding vertical slack. Defaults to `regular`."
+    },
+    {
       "name": "widthMode",
       "tsType": "CardGalleryWidthMode",
       "unionMembers": [
