@@ -141,7 +141,7 @@ describe("CardShopSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("uses the shared desktop guide-and-gallery composition with a full-width panel", () => {
+  it("uses the shared desktop composition with a panel that hugs its grid", () => {
     stubMatchMedia(true);
     const { container, root } = mount(
       <CardShopSiteScreen
@@ -176,8 +176,8 @@ describe("CardShopSiteScreen", () => {
     expect(gallery?.dataset.galleryVisibleRows).toBe("2");
     expect(gallery?.dataset.galleryCardSize).toBe("standard");
     expect(gallery?.dataset.gallerySpacing).toBe("regular");
-    expect(gallery?.dataset.galleryWidthMode).toBe("fill");
-    expect(gallery?.style.width).toBe("100%");
+    expect(gallery?.dataset.galleryWidthMode).toBe("content");
+    expect(gallery?.style.width).toContain("calc(");
 
     act(() => root.unmount());
   });
