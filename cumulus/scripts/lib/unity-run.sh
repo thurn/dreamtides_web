@@ -189,7 +189,7 @@ validate_unity_result() {
     return 1
   }
 
-  failure_pattern='error CS[0-9]+|Shader error|Compilation failed|Scripts have compiler errors|Unhandled[[:space:]]+(Exception|exception)|NullReferenceException|MissingReferenceException|Assertion failed|AssertionException|Unity Editor[^[:cntrl:]]*(crash|Crashed)|Crash!!!|Fatal Error|Received signal|Segmentation fault|Aborting batchmode due to failure'
+  failure_pattern='error CS[0-9]+|Shader error|Compilation failed|Scripts have compiler errors|Unhandled[[:space:]]+(Exception|exception)|NullReferenceException|MissingReferenceException|Assertion failed|AssertionException|Unity Editor[^[:cntrl:]]*(crash|Crashed)|Crash!!!|Fatal Error|Received signal|Segmentation fault|Aborting batchmode due to failure|^[[:space:]]*([A-Za-z_][A-Za-z0-9_+]*\.)*[A-Za-z_][A-Za-z0-9_+]*Exception([[:space:]]*:|[[:space:]]*$)'
   if LC_ALL=C grep -Eiq "$failure_pattern" "$log_path"; then
     _unity_run_error "$stage_name: Unity log contains a strict failure signature"
     return 1
@@ -253,6 +253,24 @@ with open(launcher_log, "w", encoding="utf-8") as output:
 PY
 }
 
+_path_is_within_directory() {
+  local candidate_path="$1"
+  local directory_path="$2"
+
+  python3 - "$candidate_path" "$directory_path" <<'PY'
+import os
+import sys
+
+candidate = os.path.realpath(os.path.abspath(sys.argv[1]))
+directory = os.path.realpath(os.path.abspath(sys.argv[2]))
+try:
+    common = os.path.commonpath((candidate, directory))
+except ValueError:
+    raise SystemExit(1)
+raise SystemExit(0 if common == directory and candidate != directory else 1)
+PY
+}
+
 run_unity_stage() {
   local stage_name="${1:-}"
   local graphics_mode="${2:-}"
@@ -297,8 +315,22 @@ run_unity_stage() {
   local process_exit
   local -a unity_arguments
 
+  mkdir -p "$stage_dir" || {
+    _unity_run_error "$stage_name: could not create stage directory: $stage_dir"
+    return 1
+  }
+  if [[ -n "$nunit_xml_path" ]]; then
+    _path_is_within_directory "$nunit_xml_path" "$stage_dir" || {
+      _unity_run_error "$stage_name: NUnit XML must be inside its named stage directory: $nunit_xml_path"
+      return 2
+    }
+    rm -f -- "$nunit_xml_path" || {
+      _unity_run_error "$stage_name: could not remove previous NUnit XML: $nunit_xml_path"
+      return 1
+    }
+  fi
+
   unity_executable="$(_resolve_unity_editor)" || return 1
-  mkdir -p "$stage_dir"
   rm -f "$stage_dir/exit-code" "$log_path" "$launcher_log"
 
   unity_arguments=(

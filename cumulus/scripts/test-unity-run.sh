@@ -74,12 +74,30 @@ printf '17\n' > "$nonzero_dir/exit-code"
 expect_reject "nonzero process exit" \
   validate_unity_result nonzero-exit "$nonzero_dir/unity.log"
 
+missing_exit_dir="$(make_stage missing-exit)"
+rm "$missing_exit_dir/exit-code"
+expect_reject "missing process exit evidence" \
+  validate_unity_result missing-exit "$missing_exit_dir/unity.log"
+
+malformed_exit_dir="$(make_stage malformed-exit)"
+printf 'not-a-number\n' > "$malformed_exit_dir/exit-code"
+expect_reject "malformed process exit evidence" \
+  validate_unity_result malformed-exit "$malformed_exit_dir/unity.log"
+
+missing_log_dir="$(make_stage missing-log)"
+rm "$missing_log_dir/unity.log"
+expect_reject "missing Unity log" \
+  validate_unity_result missing-log "$missing_log_dir/unity.log"
+
 fake_unity="$TEST_ROOT/fake-unity"
 cat > "$fake_unity" <<'SH'
 #!/usr/bin/env bash
 if [[ "${1:-}" == "-version" ]]; then
   echo "${FAKE_UNITY_VERSION:?}"
   exit 0
+fi
+if [[ -n "${FAKE_UNITY_LAUNCH_MARKER:-}" ]]; then
+  printf 'launched\n' > "$FAKE_UNITY_LAUNCH_MARKER"
 fi
 while (( $# > 0 )); do
   if [[ "$1" == "-logFile" ]]; then
@@ -89,7 +107,7 @@ while (( $# > 0 )); do
     shift
   fi
 done
-exit 9
+exit "${FAKE_UNITY_EXIT:-9}"
 SH
 chmod +x "$fake_unity"
 errexit_stage_dir="$UNITY_RUN_ARTIFACT_ROOT/self-test-errexit"
@@ -106,12 +124,43 @@ else
 fi
 rm -rf "$errexit_stage_dir"
 
+stale_stage_dir="$UNITY_RUN_ARTIFACT_ROOT/self-test-stale-nunit"
+rm -rf "$stale_stage_dir"
+mkdir -p "$stale_stage_dir"
+stale_xml="$stale_stage_dir/results.xml"
+write_passing_nunit "$stale_xml"
+expect_reject "stale NUnit XML not rewritten by Unity" \
+  env FAKE_UNITY_VERSION="$(_unity_committed_version)" FAKE_UNITY_EXIT=0 UNITY="$fake_unity" \
+  bash -c "source '$HARNESS'; run_unity_stage self-test-stale-nunit nographics -runTests -testResults '$stale_xml'"
+rm -rf "$stale_stage_dir"
+
+outside_stage_dir="$UNITY_RUN_ARTIFACT_ROOT/self-test-outside-nunit"
+outside_xml="$TEST_ROOT/outside-results.xml"
+outside_launch_marker="$TEST_ROOT/outside-launched"
+rm -rf "$outside_stage_dir" "$outside_launch_marker"
+if env \
+  FAKE_UNITY_VERSION="$(_unity_committed_version)" \
+  FAKE_UNITY_EXIT=0 \
+  FAKE_UNITY_LAUNCH_MARKER="$outside_launch_marker" \
+  UNITY="$fake_unity" \
+  bash -c "source '$HARNESS'; run_unity_stage self-test-outside-nunit nographics -runTests -testResults '$outside_xml'" \
+  >/dev/null 2>&1 || [[ -e "$outside_launch_marker" ]]; then
+  echo "FAIL: outside-stage NUnit path was not rejected before Unity launch" >&2
+  FAIL_COUNT=$((FAIL_COUNT + 1))
+else
+  echo "PASS: rejected outside-stage NUnit path before Unity launch"
+  PASS_COUNT=$((PASS_COUNT + 1))
+fi
+rm -rf "$outside_stage_dir"
+
 for fixture in \
   "compiler-error|error CS0246: The type or namespace name 'Missing' could not be found" \
   "shader-error|Shader error in 'TangoMvp/SceneGlass': syntax error" \
   "compilation-failed|Compilation failed: 1 error(s), 0 warnings" \
   "scripts-compiler-errors|Scripts have compiler errors." \
   "unhandled-exception|Unhandled Exception: System.InvalidOperationException" \
+  "invalid-operation-exception|System.InvalidOperationException: Operation is not valid" \
+  "target-invocation-exception|System.Reflection.TargetInvocationException: Exception has been thrown by the target" \
   "null-reference|NullReferenceException: Object reference not set" \
   "missing-reference|MissingReferenceException: The object has been destroyed" \
   "assertion-failure|Assertion failed on expression: 'm_Valid'" \
