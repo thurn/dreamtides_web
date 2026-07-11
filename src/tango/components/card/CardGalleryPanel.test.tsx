@@ -71,7 +71,10 @@ describe("CardGalleryPanel", () => {
     expect(actionSurface?.style.background).toContain("var(--gallery-action-fill)");
     expect(actionSurface?.style.border).toBe("1px solid var(--gallery-action-rim)");
     expect(action?.dataset.revealPrimaryVariant).toBe("galleryAction");
-    expect(container.querySelector('[data-gallery-action-label]')?.textContent).toBe("Restock");
+    const label = container.querySelector<HTMLElement>('[data-gallery-action-label]');
+    expect(label?.textContent).toBe("Restock");
+    expect(label?.style.textShadow).toBe("");
+    expect(label?.style.filter).toBe("");
     const glyph = container.querySelector<HTMLElement>('[data-gallery-action-glyph]');
     expect(glyph?.style.color).toBe("var(--gallery-action-foreground)");
     expect(glyph?.style.textShadow).toBe("var(--shadow-sm)");

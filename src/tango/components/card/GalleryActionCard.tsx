@@ -51,8 +51,6 @@ export function GalleryActionCard({
           font: token("--t-body"),
           color: token("--gallery-action-foreground"),
           textAlign: "center",
-          textShadow: token("--shadow-sm"),
-          filter: token("--gallery-action-soften"),
         }}
       >
         {action.label}
