@@ -93,6 +93,16 @@ namespace TangoMvp.Tests
                 GameObject prefabRoot = PrefabUtility.LoadPrefabContents(PrefabPath);
                 try
                 {
+                    foreach (Behaviour behaviour in prefabRoot.GetComponentsInChildren<Behaviour>(true))
+                    {
+                        behaviour.enabled = false;
+                    }
+
+                    foreach (Renderer renderer in prefabRoot.GetComponentsInChildren<Renderer>(true))
+                    {
+                        renderer.enabled = false;
+                    }
+
                     Transform primaryLabel = prefabRoot.transform.Find("Primary Label");
                     Assert.That(primaryLabel, Is.Not.Null);
                     UnityEngine.Object.DestroyImmediate(primaryLabel.gameObject);
@@ -108,6 +118,23 @@ namespace TangoMvp.Tests
                 Scene driftedScene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
                 GameObject[] roots = driftedScene.GetRootGameObjects();
                 roots.Single(root => root.name == "Independent Glass Pane").transform.position = Vector3.one * 19f;
+                GameObject lightRoot = roots.Single(root => root.name == "Directional Light");
+                lightRoot.transform.position = Vector3.one * 7f;
+                lightRoot.transform.rotation = Quaternion.Euler(17f, 23f, 31f);
+                lightRoot.transform.localScale = Vector3.one * 4f;
+                foreach (Behaviour behaviour in SceneObjects(driftedScene)
+                    .SelectMany(item => item.GetComponents<Behaviour>()))
+                {
+                    behaviour.enabled = false;
+                }
+
+                foreach (Renderer renderer in SceneObjects(driftedScene)
+                    .Select(item => item.GetComponent<Renderer>())
+                    .Where(renderer => renderer != null))
+                {
+                    renderer.enabled = false;
+                }
+
                 UnityEngine.Object.DestroyImmediate(roots.Single(root => root.name == "Ground Shadow Receiver"));
                 new GameObject("Unexpected Builder Drift");
                 EditorSceneManager.SaveScene(driftedScene, ScenePath);
@@ -129,6 +156,10 @@ namespace TangoMvp.Tests
                 Assert.That(repairedPrefab.transform.Find("Unexpected Builder Drift"), Is.Null);
                 Assert.That(repairedPrefab.transform.Find("On Glass Button").GetComponent<BoxCollider>().size,
                     Is.EqualTo(new Vector3(1.48f, 0.54f, 0.22f)));
+                Assert.That(repairedPrefab.GetComponentsInChildren<Behaviour>(true),
+                    Has.All.Matches<Behaviour>(behaviour => behaviour.enabled));
+                Assert.That(repairedPrefab.GetComponentsInChildren<Renderer>(true),
+                    Has.All.Matches<Renderer>(renderer => renderer.enabled));
 
                 Scene repairedScene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
                 GameObject[] repairedRoots = repairedScene.GetRootGameObjects();
@@ -136,6 +167,32 @@ namespace TangoMvp.Tests
                 Assert.That(repairedRoots.Any(root => root.name == "Unexpected Builder Drift"), Is.False);
                 Assert.That(repairedRoots.Single(root => root.name == "Independent Glass Pane").transform.position,
                     Is.EqualTo(new Vector3(3.25f, 1.35f, 0.35f)));
+                GameObject repairedLight = repairedRoots.Single(root => root.name == "Directional Light");
+                Assert.That(repairedLight.transform.position, Is.EqualTo(Vector3.zero));
+                Assert.That(repairedLight.transform.localScale, Is.EqualTo(Vector3.one));
+                Assert.That(Quaternion.Angle(
+                    repairedLight.transform.rotation,
+                    Quaternion.Euler(52f, 0f, 0f)),
+                    Is.LessThan(0.001f));
+                Assert.That(repairedLight.GetComponent<Light>().enabled, Is.True);
+                Assert.That(repairedLight.GetComponent<TangoLightOrbit>().enabled, Is.True);
+                Assert.That(repairedRoots.Single(root => root.name == "Main Camera").GetComponent<Camera>().enabled,
+                    Is.True);
+                Assert.That(repairedRoots.Single(root => root.name == "Main Camera")
+                    .GetComponent<TangoPointerInteractor>().enabled, Is.True);
+                Assert.That(repairedRoots.Single(root => root.name == "Moving Striped Object")
+                    .GetComponent<TangoSpinner>().enabled, Is.True);
+                Assert.That(repairedRoots.Single(root => root.name == "Tango Verification Markers")
+                    .GetComponent<TangoVerificationMarkers>().enabled, Is.True);
+                Assert.That(SceneObjects(repairedScene),
+                    Has.All.Matches<GameObject>(item => item.activeInHierarchy));
+                Assert.That(SceneObjects(repairedScene)
+                    .SelectMany(item => item.GetComponents<Behaviour>()),
+                    Has.All.Matches<Behaviour>(behaviour => behaviour.enabled));
+                Assert.That(SceneObjects(repairedScene)
+                    .Select(item => item.GetComponent<Renderer>())
+                    .Where(renderer => renderer != null),
+                    Has.All.Matches<Renderer>(renderer => renderer.enabled));
 
                 Dictionary<string, byte[]> once = repairedPaths.ToDictionary(path => path, File.ReadAllBytes);
                 InvokeRebuild();

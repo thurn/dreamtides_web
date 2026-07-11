@@ -429,6 +429,7 @@ namespace TangoMvp.Editor
             GameObject lightObject = EnsureSceneRoot(scene, "Directional Light");
             RemoveUnexpectedComponents(lightObject, typeof(Transform), typeof(Light), typeof(TangoLightOrbit));
             RemoveUnexpectedChildren(lightObject.transform);
+            SetWorldTransform(lightObject.transform, Vector3.zero, Quaternion.identity, Vector3.one);
             Light light = EnsureComponent<Light>(lightObject);
             light.type = LightType.Directional;
             light.color = new Color(1f, 0.82f, 0.6f, 1f);
@@ -619,6 +620,11 @@ namespace TangoMvp.Editor
                 UnityEngine.Object.DestroyImmediate(duplicate);
             }
 
+            if (retained is Behaviour behaviour)
+            {
+                behaviour.enabled = true;
+            }
+
             return retained;
         }
 
@@ -756,6 +762,7 @@ namespace TangoMvp.Editor
             ShadowCastingMode shadowCastingMode,
             bool receiveShadows)
         {
+            renderer.enabled = true;
             renderer.shadowCastingMode = shadowCastingMode;
             renderer.receiveShadows = receiveShadows;
             renderer.lightProbeUsage = LightProbeUsage.Off;
