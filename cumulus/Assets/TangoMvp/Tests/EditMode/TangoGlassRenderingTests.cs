@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using TangoMvp.Diagnostics;
+using TangoMvp.Materials;
 using TangoMvp.Rendering;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
@@ -14,6 +18,12 @@ namespace TangoMvp.Tests
 {
     public sealed class TangoGlassRenderingTests
     {
+        private const string SceneGlassMaterialPath = "Assets/TangoMvp/Materials/TangoSceneGlass.mat";
+        private const string OnGlassMaterialPath = "Assets/TangoMvp/Materials/TangoOnGlass.mat";
+        private const string SolidChromeMaterialPath = "Assets/TangoMvp/Materials/TangoSolidChrome.mat";
+        private const string BlurMaterialPath = "Assets/TangoMvp/Materials/TangoBlur.mat";
+        private const string MaterialLibraryPath = "Assets/TangoMvp/Materials/TangoMaterialLibrary.asset";
+
         [SetUp]
         public void SetUp()
         {
@@ -236,6 +246,152 @@ namespace TangoMvp.Tests
             {
                 UnityEngine.Object.DestroyImmediate(material);
             }
+        }
+
+        [Test]
+        public void GlassShaders_ExposeOnlyHiddenFixedRoleProperties()
+        {
+            Shader sceneGlass = Shader.Find("TangoMvp/SceneGlass");
+            Shader onGlass = Shader.Find("TangoMvp/OnGlass");
+
+            Assert.That(sceneGlass, Is.Not.Null);
+            Assert.That(onGlass, Is.Not.Null);
+
+            AssertHiddenProperty(sceneGlass, "_TangoFillColor");
+            AssertHiddenProperty(sceneGlass, "_TangoSaturation");
+            AssertHiddenProperty(sceneGlass, "_TangoSheenAlpha");
+            AssertHiddenProperty(sceneGlass, "_TangoRimAlpha");
+            AssertHiddenProperty(sceneGlass, "_TangoFallbackAlpha");
+            AssertHiddenProperty(onGlass, "_TangoLensColor");
+            AssertHiddenProperty(onGlass, "_TangoRimAlpha");
+            AssertHiddenProperty(onGlass, "_TangoHighlightAlpha");
+        }
+
+        [Test]
+        public void SceneGlass_ConsumesSharedBlurOnceAndKeepsTransmissionOutOfDiffuseLighting()
+        {
+            Shader shader = Shader.Find("TangoMvp/SceneGlass");
+            Assert.That(shader, Is.Not.Null);
+
+            string source = ReadShaderSource(shader);
+            Assert.That(source, Does.Contain("TEXTURE2D_X(_TangoGlassBlurTexture)"));
+            Assert.That(source, Does.Contain("_TangoGlassBlurTexelSize"));
+            Assert.That(source, Does.Contain("_TangoGlassAvailable"));
+            Assert.That(
+                Regex.Matches(source, @"SAMPLE_TEXTURE2D_X\s*\(\s*_TangoGlassBlurTexture").Count,
+                Is.EqualTo(1));
+            Assert.That(source, Does.Contain("half3 transmission"));
+            Assert.That(source, Does.Contain("half3 shellLighting"));
+            Assert.That(source, Does.Contain("1.0h - input.paneUv.y"));
+            Assert.That(source, Does.Not.Contain("transmission * mainLight"));
+            Assert.That(source, Does.Contain("0.72"));
+            Assert.That(source, Does.Contain("ZWrite Off"));
+            Assert.That(source, Does.Contain("ZTest LEqual"));
+        }
+
+        [Test]
+        public void OnGlass_NeverDeclaresOrSamplesSharedBlur()
+        {
+            Shader shader = Shader.Find("TangoMvp/OnGlass");
+            Assert.That(shader, Is.Not.Null);
+
+            string source = ReadShaderSource(shader);
+            Assert.That(source, Does.Not.Contain("_TangoGlassBlurTexture"));
+            Assert.That(source, Does.Not.Contain("_TangoGlassBlurTexelSize"));
+            Assert.That(source, Does.Not.Contain("_TangoGlassAvailable"));
+        }
+
+        [Test]
+        public void RebuildMaterials_CreatesStableSharedMaterialVocabulary()
+        {
+            InvokeRebuildMaterials();
+
+            string[] paths =
+            {
+                SceneGlassMaterialPath,
+                OnGlassMaterialPath,
+                SolidChromeMaterialPath,
+                BlurMaterialPath,
+                MaterialLibraryPath,
+            };
+            string[] initialGuids = paths.Select(AssetDatabase.AssetPathToGUID).ToArray();
+            Assert.That(initialGuids, Has.All.Not.Empty);
+
+            InvokeRebuildMaterials();
+
+            Assert.That(paths.Select(AssetDatabase.AssetPathToGUID), Is.EqualTo(initialGuids));
+
+            Material sceneGlass = AssetDatabase.LoadAssetAtPath<Material>(SceneGlassMaterialPath);
+            Material onGlass = AssetDatabase.LoadAssetAtPath<Material>(OnGlassMaterialPath);
+            Material solidChrome = AssetDatabase.LoadAssetAtPath<Material>(SolidChromeMaterialPath);
+            Material blur = AssetDatabase.LoadAssetAtPath<Material>(BlurMaterialPath);
+            TangoMaterialLibrary library = AssetDatabase.LoadAssetAtPath<TangoMaterialLibrary>(MaterialLibraryPath);
+
+            Assert.That(sceneGlass, Is.Not.Null);
+            Assert.That(onGlass, Is.Not.Null);
+            Assert.That(solidChrome, Is.Not.Null);
+            Assert.That(blur, Is.Not.Null);
+            Assert.That(library, Is.Not.Null);
+            Assert.That(sceneGlass.renderQueue, Is.EqualTo((int)RenderQueue.Transparent));
+            Color fill = sceneGlass.GetColor("_TangoFillColor");
+            Assert.That(fill.r, Is.EqualTo(0.055f).Within(0.0001f));
+            Assert.That(fill.g, Is.EqualTo(0.055f).Within(0.0001f));
+            Assert.That(fill.b, Is.EqualTo(0.063f).Within(0.0001f));
+            Assert.That(fill.a, Is.EqualTo(0.54f).Within(0.0001f));
+            Assert.That(sceneGlass.GetFloat("_TangoSaturation"), Is.EqualTo(1.5f));
+            Assert.That(sceneGlass.GetFloat("_TangoSheenAlpha"), Is.EqualTo(0.07f));
+            Assert.That(sceneGlass.GetFloat("_TangoRimAlpha"), Is.EqualTo(0.14f));
+            Assert.That(sceneGlass.GetFloat("_TangoFallbackAlpha"), Is.EqualTo(0.72f));
+            Assert.That(solidChrome.shader.name, Is.EqualTo("Universal Render Pipeline/Lit"));
+            Assert.That(solidChrome.renderQueue, Is.EqualTo((int)RenderQueue.Geometry));
+            Assert.That(solidChrome.GetShaderPassEnabled("ShadowCaster"), Is.True);
+
+            Material[] resolved =
+            {
+                library.Resolve(TangoMaterialRole.SceneGlass),
+                library.Resolve(TangoMaterialRole.OnGlass),
+                library.Resolve(TangoMaterialRole.SolidChrome),
+            };
+            Assert.That(resolved, Has.All.Not.Null);
+            Assert.That(resolved.Distinct().Count(), Is.EqualTo(3));
+            Assert.That(AssetDatabase.GetAssetPath(resolved[0]), Is.EqualTo(SceneGlassMaterialPath));
+            Assert.That(AssetDatabase.GetAssetPath(resolved[1]), Is.EqualTo(OnGlassMaterialPath));
+            Assert.That(AssetDatabase.GetAssetPath(resolved[2]), Is.EqualTo(SolidChromeMaterialPath));
+            Assert.DoesNotThrow(library.Validate);
+        }
+
+        private static void AssertHiddenProperty(Shader shader, string propertyName)
+        {
+            var material = new Material(shader);
+            try
+            {
+                Assert.That(material.HasProperty(propertyName), Is.True, $"{shader.name} must declare {propertyName}.");
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(material);
+            }
+
+            string source = ReadShaderSource(shader);
+            Assert.That(source, Does.Contain($"[HideInInspector] {propertyName}"));
+        }
+
+        private static string ReadShaderSource(Shader shader)
+        {
+            string assetPath = AssetDatabase.GetAssetPath(shader);
+            Assert.That(assetPath, Is.Not.Empty);
+            return File.ReadAllText(assetPath);
+        }
+
+        private static void InvokeRebuildMaterials()
+        {
+            Type builderType = Type.GetType("TangoMvp.Editor.TangoGlassLabBuilder, TangoMvp.Editor");
+            Assert.That(builderType, Is.Not.Null);
+            MethodInfo method = builderType.GetMethod(
+                "RebuildMaterials",
+                BindingFlags.Static | BindingFlags.Public);
+            Assert.That(method, Is.Not.Null);
+            method.Invoke(null, null);
         }
     }
 }

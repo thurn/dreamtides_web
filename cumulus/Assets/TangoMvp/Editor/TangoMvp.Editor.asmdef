@@ -1,0 +1,10 @@
+{
+  "name": "TangoMvp.Editor",
+  "rootNamespace": "TangoMvp.Editor",
+  "references": [
+    "TangoMvp.Runtime"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ]
+}
