@@ -5,12 +5,7 @@ import type { Dreamsign, SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
 import { EssenceValue } from "../tango/components/hud/EssenceValue";
-import { HoverPopover } from "../tango/components/overlay/HoverPopover";
-import {
-  DREAMSIGN_HOVER_DELAY_MS,
-  DreamsignInfoCard,
-} from "../tango/components/hud/Dreamsign";
-import { dreamsignIconUrl } from "../tango/components/atlas/atlas-display";
+import { Dreamsign as TangoDreamsign } from "../tango/components/hud/Dreamsign";
 import { IconButton } from "../tango/components/controls/IconButton";
 import { GLYPHS } from "../tango/primitives/glyph";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
@@ -419,21 +414,8 @@ function ShopSaleText({ discountPercent }: { discountPercent: number }) {
  * shared {@link DreamsignHoverCard} popover.
  */
 function ShopDreamsignArt({ dreamsign }: { dreamsign: Dreamsign }) {
-  const [imageBroken, setImageBroken] = useState(false);
-  const showImage = Boolean(dreamsign.imageName) && !imageBroken;
   return (
     <div className="sh-sign-hover">
-    <HoverPopover
-      triggerAs="div"
-      delayMs={DREAMSIGN_HOVER_DELAY_MS}
-      maxWidthPx={null}
-      content={({ side }) => (
-        <DreamsignInfoCard
-          dreamsign={dreamsign}
-          definitionSide={side === "left" ? "left" : "right"}
-        />
-      )}
-    >
       <div
         className={`sh-sign${dreamsign.isBane ? " is-bane" : ""}`}
         aria-label={
@@ -442,20 +424,8 @@ function ShopDreamsignArt({ dreamsign }: { dreamsign: Dreamsign }) {
             : `Dreamsign: ${dreamsign.name}`
         }
       >
-        {showImage ? (
-          <img
-            className="sh-sign-art"
-            src={dreamsignIconUrl(String(dreamsign.imageName))}
-            alt={dreamsign.imageAlt ?? dreamsign.name}
-            onError={() => setImageBroken(true)}
-          />
-        ) : (
-          <div className="sh-sign-fallback" aria-hidden="true">
-            {dreamsign.isBane ? "☠" : "✦"}
-          </div>
-        )}
+        <TangoDreamsign dreamsign={dreamsign} sizePx={160} />
       </div>
-    </HoverPopover>
     </div>
   );
 }

@@ -94,6 +94,7 @@ export function toQsbDreamcaller(
     return undefined;
   }
   return {
+    id: dreamcaller.id,
     name: dreamcaller.name,
     epithet: dreamcaller.title,
     portrait: artRef.dreamcaller(dreamcaller.imageNumber),

@@ -2,9 +2,10 @@
 
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { HudDreamsignRow } from "./HudDreamsignRow";
 import type { Dreamsign } from "../types/quest";
+import { TangoRoot } from "../tango/TangoRoot";
 
 /**
  * Tests for the HUD dreamsign row: one art tile per owned dreamsign,
@@ -31,7 +32,7 @@ function mountInto(node: React.ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(node);
+    root.render(<TangoRoot>{node}</TangoRoot>);
   });
   return { container, root };
 }
@@ -52,7 +53,7 @@ describe("HudDreamsignRow", () => {
   it("renders nothing when the dreamsign list is empty", () => {
     const { container, root } = mountInto(<HudDreamsignRow dreamsigns={[]} />);
 
-    expect(container.firstChild).toBeNull();
+    expect(container.querySelector('[data-testid="hud-dreamsign-row"]')).toBeNull();
 
     act(() => {
       root.unmount();
@@ -81,9 +82,7 @@ describe("HudDreamsignRow", () => {
     });
   });
 
-  it("shows the hover popover with name and effect when the tile is hovered", () => {
-    vi.useFakeTimers();
-    try {
+  it("registers the name and effect as the tile's reveal description", () => {
       const sign = makeDreamsign({
         name: "Skull Codex",
         effectDescription: "When you draw a card, gain 1 gold.",
@@ -94,58 +93,19 @@ describe("HudDreamsignRow", () => {
         <HudDreamsignRow dreamsigns={[sign]} />,
       );
 
-      // Before hover, the popover is not portaled into the body.
-      expect(
-        document.body.querySelectorAll(
-          '[data-testid="hud-dreamsign-popover"]',
-        ),
-      ).toHaveLength(0);
-
-      const tile = container.querySelector(
+      const tile = container.querySelector<HTMLElement>(
         '[data-testid="hud-dreamsign-icon"]',
       );
       expect(tile).not.toBeNull();
-      // HoverPopover wraps the child in a <span>; dispatch mouseover on the
-      // wrapper because React attaches its listeners there.
-      const triggerWrapper = tile?.parentElement;
-      expect(triggerWrapper).not.toBeNull();
-
-      act(() => {
-        triggerWrapper?.dispatchEvent(
-          new MouseEvent("mouseover", { bubbles: true }),
-        );
-      });
-      act(() => {
-        vi.advanceTimersByTime(400);
-      });
-
-      const popover = document.body.querySelector(
-        '[data-testid="hud-dreamsign-popover"]',
-      );
-      expect(popover).not.toBeNull();
-      expect(popover?.textContent).toContain("Skull Codex");
-      expect(popover?.textContent).toContain(
+      const description = document.getElementById(tile?.getAttribute("aria-describedby") ?? "");
+      expect(description?.textContent).toContain("Skull Codex");
+      expect(description?.textContent).toContain(
         "When you draw a card, gain 1 gold.",
       );
-
-      // Mouse leave hides the popover.
-      act(() => {
-        triggerWrapper?.dispatchEvent(
-          new MouseEvent("mouseout", { bubbles: true }),
-        );
-      });
-      expect(
-        document.body.querySelectorAll(
-          '[data-testid="hud-dreamsign-popover"]',
-        ),
-      ).toHaveLength(0);
 
       act(() => {
         root.unmount();
       });
-    } finally {
-      vi.useRealTimers();
-    }
   });
 
   it("distinguishes bane dreamsigns visually (red ring + grayscale)", () => {
@@ -164,11 +124,7 @@ describe("HudDreamsignRow", () => {
 
     expect(tiles[0].getAttribute("data-is-bane")).toBe("false");
     expect(tiles[1].getAttribute("data-is-bane")).toBe("true");
-    // Boon tile uses the purple border accent; bane tile uses red.
-    expect(boonStyle).toContain("168, 85, 247");
-    expect(baneStyle).toContain("239, 68, 68");
-    // Bane tile is desaturated so the red border reads as a warning. The
-    // boon tile keeps full color.
+    // Bane art is desaturated while boon art keeps full color.
     expect(baneStyle).toContain("grayscale");
     expect(boonStyle).not.toContain("grayscale(0.7)");
     // Aria label reflects bane status for assistive tech.

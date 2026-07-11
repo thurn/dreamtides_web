@@ -10,17 +10,21 @@
 // The glyph scales with the disc, so both sizes read as the same mark.
 //
 // The disc is a mark, not a control: reveal/toggle behaviour belongs to the
-// caller (the select screens' `InfoCard.PressInfo`). The one interaction the
+// caller. The one interaction the
 // disc owns is its hover brightening, enabled via `interactive` when the caller
 // wires the disc up as a reveal trigger; the shared hover-enlarge comes from
 // that pressable wrapper, so the disc itself never scales (scaling here too
 // would compound with the wrapper's transform into a double enlargement).
 
-import * as React from "react";
 import { GlowIcon } from "../controls/GlowIcon";
-import { token } from "../../primitives/tokens";
 import type { TangoColor } from "../../primitives/color";
 import { tideVisual, type Tide } from "./tide-spec";
+import { useRevealSource } from "../../internal/reveal/context";
+import { revealEntityId } from "../../internal/reveal/identity";
+import { Pressable } from "../../primitives/Pressable";
+import { richText } from "../card/rich-text";
+
+const TIDES_DEFINITION = "Pools of cards you will see during the quest. Different tides are used every time you play.";
 
 /** The `sm` tide disc's diameter, in px. The desktop select's tide-row sizing
  * reads this constant, so the compact disc is one size everywhere. */
@@ -45,15 +49,12 @@ export interface TideDiscProps {
   tide: Tide;
   /** Stable id (a tide deck id) for the `data-tide-disc` QA hook. */
   id: string;
-  /** Accessible label (e.g. "Tide: Valor"). When unset the disc is decorative
-   * and hidden from assistive tech. */
-  label?: string;
+  /** Display name used by the source and its tide card. */
+  label: string;
+  /** Semantic description revealed by this tide source. */
+  description: string;
   /** Which enumerated {@link TideDiscSize} to render. Default 'sm'. */
   size?: TideDiscSize;
-  /** Interactive discs brighten on hover and show a pointer cursor — set this
-   * when the caller wires the disc up as a reveal trigger (the wrapper's
-   * shared hover-enlarge handles the scale). Default false. */
-  interactive?: boolean;
 }
 
 /**
@@ -66,30 +67,28 @@ export function TideDisc({
   tide,
   id,
   label,
+  description,
   size = "sm",
-  interactive = false,
 }: TideDiscProps) {
   const v = tideVisual(tide);
   const diameter = TIDE_DISC_SIZE_PX[size];
-  const [hovered, setHovered] = React.useState(false);
+  const binding = useRevealSource({
+    identity: { entityType: "tide", entityId: revealEntityId("tide", id) },
+    spec: {
+      primary: { kind: "infoCard", card: { variant: "tide", tide, title: label, body: richText.plain(description) } },
+      secondaries: [{ variant: "text", title: "Tides", body: richText.plain(TIDES_DEFINITION) }],
+    },
+  });
   return (
-    <span
+    <Pressable
+      as="span"
+      ref={binding.ref}
+      {...binding.sourceProps}
       data-tide-disc={id}
-      aria-label={label}
-      aria-hidden={label === undefined ? true : undefined}
-      onPointerEnter={
-        interactive
-          ? // Touch never hovers: on a tap, pointerenter fires with no
-            // matching un-hover, which would leave the disc stuck enlarged.
-            (event) => {
-              if (event.pointerType !== "touch") {
-                setHovered(true);
-              }
-            }
-          : undefined
-      }
-      onPointerLeave={interactive ? () => setHovered(false) : undefined}
+      aria-label={`Tide: ${label}`}
+      tabIndex={0}
       style={{
+        ...binding.sourceProps.style,
         width: diameter,
         height: diameter,
         borderRadius: "50%",
@@ -98,11 +97,6 @@ export function TideDisc({
         placeItems: "center",
         background: v.bg,
         border: `1px solid ${v.bd}`,
-        cursor: interactive ? "pointer" : undefined,
-        filter: interactive && hovered ? "brightness(1.25)" : "none",
-        transition: interactive
-          ? `filter ${token("--dur-fast")} ${token("--ease-out")}`
-          : undefined,
       }}
     >
       <GlowIcon
@@ -110,6 +104,6 @@ export function TideDisc({
         color={v.fg as TangoColor}
         size={`${String(Math.round(diameter * 0.5))}px`}
       />
-    </span>
+    </Pressable>
   );
 }

@@ -49,16 +49,6 @@ const VISUAL =
  * `literalPrefix`.
  */
 export const BASELINE = [
-  [
-    "1px solid rgba(168, 85, 247, 0.55)",
-    "src/tango/components/card/CardStatOrb.tsx",
-    "src/tango/components/controls/PipBadge.tsx",
-  ],
-  [
-    "0 8px 22px rgba(0, 0, 0, 0.55)",
-    "src/tango/components/card/CardStatOrb.tsx",
-    "src/tango/components/controls/PipBadge.tsx",
-  ],
   // The full-bleed overlay's safe-area top padding, so a mobile header clears
   // the device cutout. GlassDialog is the shell the deck viewers migrate onto
   // in Phase 3; that migration deletes MobileDeckViewer's own copy and this

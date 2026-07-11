@@ -99,6 +99,17 @@ interface RevealCoordinatorValue {
 
 const RevealCoordinatorContext = createContext<RevealCoordinatorValue | null>(null);
 
+const STANDALONE_COORDINATOR: RevealCoordinatorValue = {
+  state: initialRevealCoordinatorState,
+  dispatch: () => undefined,
+  registerSource: () => () => undefined,
+  updateSourceElement: () => undefined,
+  unregisterSource: () => undefined,
+  beginGameCardReturn: () => false,
+  cancelGameCardReturn: () => false,
+  beginInteraction: () => undefined,
+};
+
 export function RevealCoordinatorProvider({ children }: { readonly children: ReactNode }) {
   const parent = useContext(RevealCoordinatorContext);
   if (parent !== null) throw new Error("TangoRoot cannot be nested; mount exactly one TangoRoot per application entry.");
@@ -297,6 +308,8 @@ export interface RevealSourceRegistration {
   readonly identity: RevealSourceIdentity;
   readonly spec: RevealSpec;
   readonly onActivate?: () => void;
+  /** Source feedback policy. Readable inline copy stays stationary. */
+  readonly feedback?: RevealFeedback;
 }
 
 export interface RevealSourceBinding {
@@ -305,18 +318,19 @@ export interface RevealSourceBinding {
     "aria-describedby" | "onPointerEnter" | "onPointerLeave" | "onPointerDown" |
     "onPointerMove" | "onPointerUp" | "onPointerCancel" | "onFocus" | "onBlur"> & {
       readonly "data-reveal-active": "true" | "false";
-      readonly "data-reveal-feedback": "measured";
+      readonly "data-reveal-feedback": "measured" | "stationary";
       readonly style: CSSProperties;
     };
 }
 
 /** Private binding for named Tango entity components. */
 export function useRevealSource(registration: RevealSourceRegistration): RevealSourceBinding {
-  const coordinator = useContext(RevealCoordinatorContext);
-  if (coordinator === null) throw new Error("useRevealSource requires the application TangoRoot.");
+  const mountedCoordinator = useContext(RevealCoordinatorContext);
+  const coordinator = mountedCoordinator ?? STANDALONE_COORDINATOR;
+  const hasMountedCoordinator = mountedCoordinator !== null;
   const reactId = useId();
   const descriptionId = `tango-reveal-description-${reactId.replace(/:/g, "")}`;
-  const valid = isValidRegistration(registration.identity, registration.spec);
+  const valid = hasMountedCoordinator && isValidRegistration(registration.identity, registration.spec);
   const identity = registration.identity;
   const registrationKey = `tango-reveal-source-${reactId.replace(/:/g, "")}`;
   const mountedSource: RevealCoordinatorSource = { identity, registrationId: registrationKey };
@@ -324,13 +338,15 @@ export function useRevealSource(registration: RevealSourceRegistration): RevealS
   const specFingerprint = JSON.stringify(spec);
   const descriptionText = revealDescription(spec);
   const activate = registration.onActivate;
-  const [feedback, setFeedback] = useState(() => feedbackForRect({ width: 1, height: 1 }, "scale"));
+  const feedbackVariant = registration.feedback ?? "scale";
+  const [feedback, setFeedback] = useState(() => feedbackForRect({ width: 1, height: 1 }, feedbackVariant));
   const nodeRef = useRef<HTMLElement | null>(null);
   const intentTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const registerSource = coordinator.registerSource;
   const unregisterSource = coordinator.unregisterSource;
 
   useEffect(() => {
+    if (!hasMountedCoordinator) return;
     if (!valid) {
       logEvent("tango_entity_reveal_invalid_source", { sourceEntityType: identity.entityType, sourceEntityId: identity.entityId, reason: "malformed-semantic-data" });
       return;
@@ -340,23 +356,23 @@ export function useRevealSource(registration: RevealSourceRegistration): RevealS
       element: nodeRef.current,
     });
     return () => { if (intentTimer.current !== null) clearTimeout(intentTimer.current); unregisterRegistration(); unregisterSource(mountedSource); };
-  }, [registerSource, unregisterSource, descriptionId, descriptionText, identity.entityId, identity.entityType, registrationKey, specFingerprint, valid]);
+  }, [hasMountedCoordinator, registerSource, unregisterSource, descriptionId, descriptionText, identity.entityId, identity.entityType, registrationKey, specFingerprint, valid]);
 
   const ref = useCallback<RefCallback<HTMLElement>>((node) => {
     nodeRef.current = node;
     coordinator.updateSourceElement(registrationKey, node);
   }, [coordinator.updateSourceElement, registrationKey]);
   const active = valid && sameSource(coordinator.state, mountedSource);
-  const measureFeedback = (element: HTMLElement, variant: RevealFeedback = "scale"): void => {
+  const measureFeedback = (element: HTMLElement): void => {
     const measured = element.getBoundingClientRect();
-    setFeedback(feedbackForRect({ width: measured.width, height: measured.height }, variant));
+    setFeedback(feedbackForRect({ width: measured.width, height: measured.height }, feedbackVariant));
   };
   return {
     ref,
     sourceProps: {
       "aria-describedby": valid ? descriptionId : undefined,
       "data-reveal-active": active ? "true" : "false",
-      "data-reveal-feedback": "measured",
+      "data-reveal-feedback": feedbackVariant === "stationary" ? "stationary" : "measured",
       style: { "--reveal-press-scale": String(feedback.pressScale), "--reveal-hover-scale": String(feedback.hoverScale) } as CSSProperties,
       onPointerEnter: (event) => { if (valid) { coordinator.cancelGameCardReturn("replaced"); coordinator.beginInteraction(); measureFeedback(event.currentTarget); coordinator.dispatch({ type: "pointer-enter", source: mountedSource, pointerType: event.pointerType, hoverCapable: event.pointerType === "mouse" || (event.pointerType === "pen" && event.buttons === 0 && event.pressure === 0), timestamp: event.timeStamp }); } },
       onPointerLeave: (event) => {

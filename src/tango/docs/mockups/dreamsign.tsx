@@ -118,7 +118,6 @@ export function DreamsignMockup() {
             key={dreamsign.id}
             dreamsign={dreamsign}
             sizePx={92}
-            stageRef={stageRef}
           />
         ))}
       </div>

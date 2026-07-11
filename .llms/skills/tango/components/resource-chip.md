@@ -19,6 +19,15 @@ The sized, self-contained value-and-mark chip for the game economy. It owns the 
 | `size` | `ResourceChipSize` = `"sm" \| "md" \| "lg"` | no | `md` | Inline scale — sm (13px) / md (16px, default) / lg (20px). |
 | `chip` | `boolean` | no | `false` | Render as a solid pill badge (for HUD/over-art) instead of inline text. |
 | `spacing` | `ResourceChipSpacing` = `"tight" \| "loose"` | no | `tight` | Gap between value and mark — tight (0px, default) or loose (4px). |
+| `entity` | `ResourceEntity` | no | — | Semantic resource represented by this chip; makes the named chip self-revealing. |
+
+### `entity`: the `ResourceEntity` model
+
+| Field | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `id` | `string` | no | Stable domain identity of this resource source. |
+| `label` | `string` | no | Display title for its reveal. |
+| `description` | `string` | no | Player-facing explanation. |
 
 ## Usage
 

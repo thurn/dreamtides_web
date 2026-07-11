@@ -19,10 +19,16 @@
 // omit it to fill the caller's container width. For any other layout
 // (margins, decorative glow), wrap the portrait in your own element.
 
-import { useState, type CSSProperties } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 import { assetUrl } from "../../../runtime/asset-url";
 import type { DreamcallerPortraitFocus } from "../../../types/content";
 import { token } from "../../primitives/tokens";
+import { useRevealSource } from "../../internal/reveal/context";
+import { revealEntityId } from "../../internal/reveal/identity";
+import { Pressable } from "../../primitives/Pressable";
+import { artRef } from "../../primitives/art";
+import { richText } from "../card/rich-text";
+import { extractGlossaryTerms } from "../../../data/glossary-terms";
 
 /** The minimal dreamcaller shape a portrait needs: which art to load and the
  * name/title that back the alt text and the fallback monogram. */
@@ -93,6 +99,12 @@ export interface DreamcallerPortraitProps {
    * width. Ignored by `standing`/`fullBleed`, which fill the caller's stage.
    */
   size?: number;
+  /** Semantic Dreamcaller profile represented by this portrait. Omit for decorative art. */
+  profile?: { id: string; ability: string };
+  /** Optional activation for selectable profile portraits. */
+  onActivate?: () => void;
+  /** Keeps the profile readable while suppressing activation. */
+  unavailable?: boolean;
 }
 
 /** The tinted radial scene the transparent cutout stands on. Shared with the
@@ -192,11 +204,11 @@ export function dreamcallerCutoutSrc(imageNumber: string): string {
   return assetUrl(`/dreamcallers/cutout/${imageNumber}.png`);
 }
 
-export function DreamcallerPortrait({
+function DreamcallerPortraitSurface({
   dreamcaller,
   variant = "panel",
   size,
-}: DreamcallerPortraitProps) {
+}: Omit<DreamcallerPortraitProps, "profile" | "onActivate" | "unavailable">) {
   const [broken, setBroken] = useState(false);
   const alt = `${dreamcaller.name}, ${dreamcaller.title}`;
   const focus = dreamcallerPortraitFocus(dreamcaller);
@@ -389,5 +401,35 @@ export function DreamcallerPortrait({
         />
       )}
     </div>
+  );
+}
+
+/** Dreamcaller art, optionally promoted to a self-revealing semantic profile. */
+export function DreamcallerPortrait({ profile, onActivate, unavailable = false, ...visual }: DreamcallerPortraitProps) {
+  if (profile === undefined) return <DreamcallerPortraitSurface {...visual} />;
+  return <DreamcallerProfilePortrait visual={visual} profile={profile} onActivate={onActivate} unavailable={unavailable} />;
+}
+
+function DreamcallerProfilePortrait({ visual, profile, onActivate, unavailable }: {
+  visual: Omit<DreamcallerPortraitProps, "profile" | "onActivate" | "unavailable">;
+  profile: NonNullable<DreamcallerPortraitProps["profile"]>;
+  onActivate?: () => void;
+  unavailable: boolean;
+}) {
+  const ability = profile.ability.trim();
+  const binding = useRevealSource({
+    identity: { entityType: "dreamcaller", entityId: revealEntityId("dreamcaller", profile.id) },
+    spec: {
+      primary: { kind: "infoCard", card: { variant: "fullBleed", image: artRef.dreamcaller(visual.dreamcaller.imageNumber), imageCrop: "top", title: visual.dreamcaller.name, subtitle: visual.dreamcaller.title, body: ability ? richText.rules(ability) : undefined } },
+      secondaries: extractGlossaryTerms(ability).map((entry) => ({ variant: "text" as const, title: entry.term, body: richText.rules(entry.definition) })),
+    },
+    onActivate: unavailable ? undefined : onActivate,
+  });
+  const lastPointerType = useRef<string | null>(null);
+  const pointerDown = binding.sourceProps.onPointerDown;
+  return (
+    <Pressable as="span" ref={binding.ref} {...binding.sourceProps} role={onActivate === undefined ? undefined : "button"} tabIndex={0} aria-disabled={unavailable || undefined} data-dreamcaller-source={profile.id} onPointerDown={(event) => { lastPointerType.current = event.pointerType; pointerDown?.(event); }} onClick={() => { if (!unavailable && lastPointerType.current !== "touch") onActivate?.(); }} onKeyDown={(event) => { if (!unavailable && onActivate !== undefined && (event.key === "Enter" || event.key === " ")) { event.preventDefault(); onActivate(); } }} style={{ ...binding.sourceProps.style, display: "inline-flex" }}>
+      <DreamcallerPortraitSurface {...visual} />
+    </Pressable>
   );
 }

@@ -8,17 +8,12 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { ResourceChip } from "../components/hud/ResourceChip";
 import { RulesText } from "../components/card/RulesText";
-import { CardTermDefinitions } from "../components/card/CardTermDefinitions";
-import { InfoCard } from "../components/overlay/InfoCard";
-import { richText } from "../components/card/rich-text";
 import {
   TideDisc,
   type TideDiscSize,
 } from "../components/hud/TideDisc";
 import { type Tide } from "../components/hud/tide-spec";
-import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import { extractGlossaryTerms } from "../../data/glossary-terms";
 import type { DreamcallerPortraitFocus } from "../../types/content";
 
 /** One tide shown on a Dreamcaller, already resolved to display copy. Both the
@@ -41,9 +36,6 @@ export interface DreamcallerTideView {
 export const MAX_TIDE_DISCS = 4;
 
 /** What the secondary tide-definition card explains. */
-const TIDES_BLURB =
-  "Pools of cards you will see during the quest. Different tides are used every time you play.";
-
 /** One tide mark wired up as a reveal trigger: the shared {@link TideDisc}, at
  * the given {@link TideDiscSize}, that reveals — through the shared InfoCard —
  * this specific tide's colored card as the primary information, with the
@@ -58,12 +50,10 @@ const TIDES_BLURB =
  * margins so the visual layout is unchanged. */
 export function TideDiscReveal({
   tide,
-  stageRef,
   size = "sm",
   hitSlop,
 }: {
   tide: DreamcallerTideView;
-  stageRef: React.RefObject<HTMLElement | null>;
   size?: TideDiscSize;
   hitSlop?: string;
 }) {
@@ -71,44 +61,14 @@ export function TideDiscReveal({
     <TideDisc
       tide={tide.tide}
       id={tide.id}
-      label={`Tide: ${tide.label}`}
+      label={tide.label}
+      description={tide.description}
       size={size}
-      interactive
     />
   );
-  return (
-    <InfoCard.PressInfo
-      stageRef={stageRef}
-      card={
-        <div
-          data-tide-info-cards={tide.id}
-          style={{
-            display: "flex",
-            alignItems: "flex-start",
-            gap: token("--space-3"),
-          }}
-        >
-          <InfoCard
-            variant="tide"
-            tide={tide.tide}
-            title={tide.label}
-            body={richText.plain(tide.description)}
-          />
-          <InfoCard
-            variant="text"
-            title="Tides"
-            body={richText.plain(TIDES_BLURB)}
-          />
-        </div>
-      }
-    >
-      {hitSlop != null ? (
-        <span style={{ display: "inline-flex", padding: hitSlop }}>{disc}</span>
-      ) : (
-        disc
-      )}
-    </InfoCard.PressInfo>
-  );
+  return hitSlop != null ? (
+    <span style={{ display: "inline-flex", padding: hitSlop }}>{disc}</span>
+  ) : disc;
 }
 
 /** The plain "Tides:" caption above/beside a tide-disc row — the uppercase
@@ -144,11 +104,9 @@ export function TidesLabel() {
  * with an explicit gap that matches the mobile inter-disc distance. */
 export function TidesEssenceBlock({
   dreamcaller,
-  stageRef,
   hitSlop,
 }: {
   dreamcaller: DreamcallerOfferView;
-  stageRef: React.RefObject<HTMLElement | null>;
   hitSlop?: string;
 }) {
   const hasTides = dreamcaller.tides.length > 0;
@@ -166,7 +124,7 @@ export function TidesEssenceBlock({
         }}
       >
         {hasTides ? <TidesLabel /> : <span />}
-        <EssenceReveal dreamcaller={dreamcaller} stageRef={stageRef} />
+        <EssenceReveal dreamcaller={dreamcaller} />
       </div>
 
       {hasTides && (
@@ -190,7 +148,6 @@ export function TidesEssenceBlock({
             <TideDiscReveal
               key={tide.id}
               tide={tide}
-              stageRef={stageRef}
               size="lg"
               hitSlop={hitSlop}
             />
@@ -319,11 +276,9 @@ function AutoShrinkText({
  * without it the text takes its natural height (the mobile console). */
 export function AbilityReveal({
   text,
-  stageRef,
   minHeight,
 }: {
   text: string;
-  stageRef: React.RefObject<HTMLElement | null>;
   minHeight?: number;
 }) {
   const body = (
@@ -337,19 +292,7 @@ export function AbilityReveal({
       <RulesText text={text} />
     </div>
   );
-  const content =
-    extractGlossaryTerms(text).length === 0 ? (
-      body
-    ) : (
-      <InfoCard.PressInfo
-        stageRef={stageRef}
-        as="div"
-        pressFeedback="stationary"
-        card={<CardTermDefinitions text={text} />}
-      >
-        {body}
-      </InfoCard.PressInfo>
-    );
+  const content = body;
   if (minHeight == null) {
     return content;
   }
@@ -361,41 +304,12 @@ export function AbilityReveal({
  * hover and down on press, so a touch press is acknowledged. */
 export function EssenceReveal({
   dreamcaller,
-  stageRef,
 }: {
   dreamcaller: DreamcallerOfferView;
-  stageRef: React.RefObject<HTMLElement | null>;
 }) {
-  const [hovered, setHovered] = useState(false);
   return (
-    <InfoCard.PressInfo
-      stageRef={stageRef}
-      card={
-        <InfoCard
-          variant="icon"
-          glyph={GLYPHS.essence}
-          title="Starting Essence"
-          body={richText.plain(
-            "The essence this Dreamcaller begins the quest with, spent at sites this run.",
-          )}
-        />
-      }
-    >
-      <span
-        data-starting-essence-value={dreamcaller.id}
-        onPointerEnter={() => setHovered(true)}
-        onPointerLeave={() => setHovered(false)}
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          font: token("--t-body"),
-          color: token("--text-primary"),
-          filter: hovered ? "brightness(1.18)" : "none",
-          transition: `filter ${token("--dur-fast")} ${token("--ease-out")}`,
-        }}
-      >
-        <ResourceChip kind="essence" value={dreamcaller.startingEssence} />
-      </span>
-    </InfoCard.PressInfo>
+    <span data-starting-essence-value={dreamcaller.id} style={{ display: "inline-flex", alignItems: "center", font: token("--t-body"), color: token("--text-primary") }}>
+      <ResourceChip kind="essence" value={dreamcaller.startingEssence} entity={{ id: dreamcaller.id, label: "Starting Essence", description: "The essence this Dreamcaller begins the quest with, spent at sites this run." }} />
+    </span>
   );
 }

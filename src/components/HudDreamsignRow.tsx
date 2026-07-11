@@ -1,9 +1,7 @@
-import { useState, type CSSProperties } from "react";
-import { DreamsignInfoCard } from "../tango/components/hud/Dreamsign";
+import { Dreamsign as TangoDreamsign } from "../tango/components/hud/Dreamsign";
 import { HoverPopover } from "../tango/components/overlay/HoverPopover";
 import { RulesText } from "../tango/components/card/RulesText";
 import type { Dreamsign } from "../types/quest";
-import { assetUrl } from "../runtime/asset-url";
 import { requireDreamsignId } from "../data/dreamsigns";
 
 /**
@@ -62,73 +60,9 @@ export function HudDreamsignRow({ dreamsigns }: HudDreamsignRowProps) {
 
 /** A single dreamsign artwork tile with a hover popover for the full card. */
 function HudDreamsignIcon({ dreamsign }: { dreamsign: Dreamsign }) {
-  const [imageBroken, setImageBroken] = useState(false);
-  const accent = dreamsign.isBane
-    ? { ring: "rgba(239, 68, 68, 0.85)", glow: "rgba(239, 68, 68, 0.45)" }
-    : { ring: "rgba(168, 85, 247, 0.65)", glow: "rgba(168, 85, 247, 0.35)" };
-  const showImage = Boolean(dreamsign.imageName) && !imageBroken;
-
-  const tileStyle: CSSProperties = {
-    height: ICON_SIZE_PX,
-    width: ICON_SIZE_PX,
-    background: "rgba(10, 6, 18, 0.65)",
-    border: `1px solid ${accent.ring}`,
-    boxShadow: `0 0 6px ${accent.glow}`,
-    // Bane dreamsigns are desaturated so the red ring reads as a warning
-    // and the bane art does not compete with the boons for attention.
-    filter: dreamsign.isBane ? "grayscale(0.7)" : "none",
-  };
-
-  const imgAlt = dreamsign.imageAlt ?? dreamsign.name;
-  const dreamsignId = requireDreamsignId(dreamsign, "HUD dreamsign icon");
-
   return (
-    <span className="inline-block">
-      <HoverPopover
-        triggerAs="span"
-        delayMs={250}
-        maxWidthPx={null}
-        content={({ side }) => (
-          <DreamsignInfoCard
-            dreamsign={dreamsign}
-            testid="hud-dreamsign-popover"
-            definitionSide={side === "left" ? "left" : "right"}
-          />
-        )}
-      >
-        <span
-        data-testid="hud-dreamsign-icon"
-        data-dreamsign-id={dreamsignId}
-        data-is-bane={String(dreamsign.isBane)}
-        aria-label={
-          dreamsign.isBane
-            ? `Bane dreamsign: ${dreamsign.name}`
-            : `Dreamsign: ${dreamsign.name}`
-        }
-        role="listitem"
-        className="flex items-center justify-center overflow-hidden rounded-md"
-        style={tileStyle}
-      >
-        {showImage ? (
-          <img
-            src={assetUrl(`/dreamsigns/${String(dreamsign.imageName)}`)}
-            alt={imgAlt}
-            className="h-full w-full object-cover"
-            onError={() => {
-              setImageBroken(true);
-            }}
-          />
-        ) : (
-          <span
-            aria-hidden="true"
-            className="text-[14px]"
-            style={{ color: dreamsign.isBane ? "#fca5a5" : "#e9d5ff" }}
-          >
-            {dreamsign.isBane ? "☠" : "✨"}
-          </span>
-        )}
-      </span>
-      </HoverPopover>
+    <span className="inline-block" role="listitem">
+      <TangoDreamsign dreamsign={dreamsign} sizePx={ICON_SIZE_PX} testid="hud-dreamsign-icon" />
     </span>
   );
 }

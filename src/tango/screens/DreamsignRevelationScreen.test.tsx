@@ -168,15 +168,10 @@ describe("DreamsignRevelationScreen", () => {
     expect(center).not.toBeNull();
     expect(center?.style.filter).toBe("none");
 
-    act(() => {
-      center?.dispatchEvent(new Event("pointerdown", { bubbles: true }));
-    });
-
     expect(center?.style.filter).toBe("none");
-    expect(center?.style.transform).toBe("scale(0.9)");
+    expect(center?.dataset.revealFeedback).toBe("measured");
 
     act(() => {
-      center?.dispatchEvent(new Event("pointerup", { bubbles: true }));
       root.unmount();
     });
   });

@@ -1,7 +1,5 @@
 import type { CSSProperties } from "react";
-import { DreamcallerPopover } from "../components/DreamcallerPopover";
 import { DreamcallerPortrait } from "../tango/components/hud/DreamcallerPortrait";
-import { HoverPopover } from "../tango/components/overlay/HoverPopover";
 import type {
   DreamcallerAssignmentAction,
   DreamcallerOption,
@@ -129,18 +127,15 @@ export default function DreamscapeResidents({
           >
             {resident.option !== null ? (
               <div style={{ flex: "0 0 auto", cursor: "help" }}>
-                <HoverPopover
-                  placement="left"
-                  delayMs={150}
-                  maxWidthPx={null}
-                  content={<DreamcallerPopover dreamcaller={resident.option} />}
-                >
-                  <DreamcallerPortrait
-                    dreamcaller={resident.option}
-                    variant="thumb"
-                    size={thumb}
-                  />
-                </HoverPopover>
+                <DreamcallerPortrait
+                  dreamcaller={resident.option}
+                  variant="thumb"
+                  size={thumb}
+                  profile={{
+                    id: resident.option.id,
+                    ability: resident.option.renderedText,
+                  }}
+                />
               </div>
             ) : (
               <span

@@ -16,8 +16,6 @@ import {
   DreamcallerPortrait,
   dreamcallerImageSrc,
 } from "../tango/components/hud/DreamcallerPortrait";
-import { HoverPopover } from "../tango/components/overlay/HoverPopover";
-import { DreamcallerPopover } from "../components/DreamcallerPopover";
 import { extractGlossaryTerms } from "../data/glossary-terms";
 import { GlossaryDefinitionCard } from "../tango/components/card/GlossaryDefinitionCard";
 import { INFO_CARD_WIDTH } from "../tango/components/overlay/InfoCard";
@@ -476,18 +474,7 @@ function DeckSection({
           marginBottom: 14,
         }}
       >
-        {/* Hovering the portrait or the name/title reveals a card showing the
-            Dreamcaller's ability. The popover self-sizes (280px), so the
-            max-width cap is disabled; it portals to the body and is
-            viewport-aware. */}
         <div style={{ flex: 1, minWidth: 0 }}>
-        <HoverPopover
-          triggerAs="div"
-          placement="top"
-          delayMs={200}
-          maxWidthPx={null}
-          content={<DreamcallerPopover dreamcaller={dc} />}
-        >
           <div
             style={{
               display: "flex",
@@ -505,6 +492,7 @@ function DeckSection({
                 title: dc.title,
               }}
               variant="thumb"
+              profile={{ id: dc.id, ability: dc.renderedText }}
             />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
@@ -522,7 +510,6 @@ function DeckSection({
             </div>
           </div>
           </div>
-        </HoverPopover>
         </div>
         <div
           style={{

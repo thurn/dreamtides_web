@@ -3,7 +3,7 @@
 // side on desktop, the dreamsign choices sit opposite, and the persistent
 // QuestStatusBar remains the bottom HUD.
 
-import { useRef, type RefObject } from "react";
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
@@ -154,7 +154,6 @@ export function DreamsignRevelationScreen({
         <DesktopComposition
           view={view}
           guideUrl={guideUrl}
-          stageRef={stageRef}
           disabled={disabled}
           claimedIndex={claimedIndex}
           onClaim={onClaim}
@@ -164,7 +163,6 @@ export function DreamsignRevelationScreen({
         <MobileComposition
           view={view}
           guideUrl={guideUrl}
-          stageRef={stageRef}
           disabled={disabled}
           claimedIndex={claimedIndex}
           onClaim={onClaim}
@@ -184,7 +182,6 @@ export function DreamsignRevelationScreen({
       {view.purge !== null && (
         <PurgeDialog
           purge={view.purge}
-          stageRef={stageRef}
           onPurge={onPurge}
           onCancel={onCancelPurge}
         />
@@ -196,7 +193,6 @@ export function DreamsignRevelationScreen({
 function DesktopComposition({
   view,
   guideUrl,
-  stageRef,
   disabled,
   claimedIndex,
   onClaim,
@@ -204,7 +200,6 @@ function DesktopComposition({
 }: {
   readonly view: DreamsignRevelationView;
   readonly guideUrl: string;
-  readonly stageRef: RefObject<HTMLElement | null>;
   readonly disabled: boolean;
   readonly claimedIndex: number | null;
   readonly onClaim: (index: number) => void;
@@ -238,7 +233,6 @@ function DesktopComposition({
         <GuideScene view={view} guideUrl={guideUrl} desktop />
         <OfferStack
           view={view}
-          stageRef={stageRef}
           disabled={disabled}
           claimedIndex={claimedIndex}
           onClaim={onClaim}
@@ -253,7 +247,6 @@ function DesktopComposition({
 function MobileComposition({
   view,
   guideUrl,
-  stageRef,
   disabled,
   claimedIndex,
   onClaim,
@@ -261,7 +254,6 @@ function MobileComposition({
 }: {
   readonly view: DreamsignRevelationView;
   readonly guideUrl: string;
-  readonly stageRef: RefObject<HTMLElement | null>;
   readonly disabled: boolean;
   readonly claimedIndex: number | null;
   readonly onClaim: (index: number) => void;
@@ -299,7 +291,6 @@ function MobileComposition({
       >
         <OfferStack
           view={view}
-          stageRef={stageRef}
           disabled={disabled}
           claimedIndex={claimedIndex}
           onClaim={onClaim}
@@ -373,7 +364,6 @@ function GuideScene({
 
 function OfferStack({
   view,
-  stageRef,
   disabled,
   claimedIndex,
   onClaim,
@@ -381,7 +371,6 @@ function OfferStack({
   desktop = false,
 }: {
   readonly view: DreamsignRevelationView;
-  readonly stageRef: RefObject<HTMLElement | null>;
   readonly disabled: boolean;
   readonly claimedIndex: number | null;
   readonly onClaim: (index: number) => void;
@@ -441,7 +430,6 @@ function OfferStack({
             )}
             dreamsign={dreamsign}
             index={index}
-            stageRef={stageRef}
             disabled={disabled}
             claimed={claimedIndex === index}
             dimmed={claimedIndex !== null && claimedIndex !== index}
@@ -491,7 +479,6 @@ function StatusLine({ text }: { readonly text: string }) {
 function RevelationOption({
   dreamsign,
   index,
-  stageRef,
   disabled,
   claimed,
   dimmed,
@@ -501,7 +488,6 @@ function RevelationOption({
 }: {
   readonly dreamsign: DreamsignData;
   readonly index: number;
-  readonly stageRef: RefObject<HTMLElement | null>;
   readonly disabled: boolean;
   readonly claimed: boolean;
   readonly dimmed: boolean;
@@ -537,9 +523,7 @@ function RevelationOption({
       <Dreamsign
         dreamsign={dreamsign}
         sizePx={tileSize}
-        stageRef={stageRef}
         testid={`dreamsign-revelation-art-${String(index)}`}
-        revealTestid={`dreamsign-revelation-info-${String(index)}`}
         onPress={() => onClaim(index)}
       />
     </motion.div>
@@ -548,12 +532,10 @@ function RevelationOption({
 
 function PurgeDialog({
   purge,
-  stageRef,
   onPurge,
   onCancel,
 }: {
   readonly purge: DreamsignRevelationPurgeView;
-  readonly stageRef: RefObject<HTMLElement | null>;
   readonly onPurge: (index: number) => void;
   readonly onCancel: () => void;
 }) {
@@ -628,9 +610,7 @@ function PurgeDialog({
               <Dreamsign
                 dreamsign={dreamsign}
                 sizePx={72}
-                stageRef={stageRef}
                 testid={`dreamsign-revelation-purge-art-${String(index)}`}
-                revealTestid={`dreamsign-revelation-purge-info-${String(index)}`}
                 variant="hud"
               />
               <Button

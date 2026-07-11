@@ -28,6 +28,20 @@
 
 import { ECONOMY_MARKS, type EconomyKind } from "./economy-spec";
 import { token } from "../../primitives/tokens";
+import { useRevealSource } from "../../internal/reveal/context";
+import { revealEntityId } from "../../internal/reveal/identity";
+import { Pressable } from "../../primitives/Pressable";
+import { richText } from "../card/rich-text";
+import type { ReactElement } from "react";
+
+export interface ResourceEntity {
+  /** Stable domain identity of this resource source. */
+  id: string;
+  /** Display title for its reveal. */
+  label: string;
+  /** Player-facing explanation. */
+  description: string;
+}
 
 /** Inline scale of a ResourceChip. `md` (16px) is the default HUD size. */
 export type ResourceChipSize = "sm" | "md" | "lg";
@@ -60,6 +74,8 @@ export interface ResourceChipProps {
   chip?: boolean;
   /** Gap between value and mark — tight (0px, default) or loose (4px). */
   spacing?: ResourceChipSpacing;
+  /** Semantic resource represented by this chip; makes the named chip self-revealing. */
+  entity?: ResourceEntity;
 }
 
 /**
@@ -74,7 +90,13 @@ export function ResourceChip({
   size = "md",
   chip = false,
   spacing = "tight",
+  entity,
 }: ResourceChipProps) {
+  const visual = <ResourceChipVisual kind={kind} value={value} size={size} chip={chip} spacing={spacing} />;
+  return entity === undefined ? visual : <ResourceChipReveal kind={kind} entity={entity}>{visual}</ResourceChipReveal>;
+}
+
+function ResourceChipVisual({ kind, value, size, chip, spacing }: Required<Pick<ResourceChipProps, "kind" | "size" | "chip" | "spacing">> & Pick<ResourceChipProps, "value">) {
   const mark = ECONOMY_MARKS[kind] ?? ECONOMY_MARKS.essence;
   const fontSize = SIZE_PX[size];
   const glyph = (
@@ -113,4 +135,13 @@ export function ResourceChip({
       {glyph}
     </span>
   );
+}
+
+function ResourceChipReveal({ kind, entity, children }: { kind: EconomyKind; entity: ResourceEntity; children: ReactElement }) {
+  const mark = ECONOMY_MARKS[kind];
+  const binding = useRevealSource({
+    identity: { entityType: `resource-${kind}`, entityId: revealEntityId(`resource-${kind}`, entity.id) },
+    spec: { primary: { kind: "infoCard", card: { variant: "icon", glyph: mark.glyph, title: entity.label, body: richText.plain(entity.description) } }, secondaries: [] },
+  });
+  return <Pressable as="span" ref={binding.ref} {...binding.sourceProps} tabIndex={0} data-resource-source={entity.id} style={{ ...binding.sourceProps.style, display: "inline-flex" }}>{children}</Pressable>;
 }

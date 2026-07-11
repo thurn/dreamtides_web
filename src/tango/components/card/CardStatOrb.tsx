@@ -1,5 +1,4 @@
-import { type CSSProperties } from "react";
-import { HoverPopover } from "../overlay/HoverPopover";
+import { type CSSProperties, type ReactElement } from "react";
 import {
   ENERGY_ICON_CLASS,
   ENERGY_ICON_COLOR,
@@ -10,6 +9,9 @@ import {
 import { useFitText } from "../controls/useFitText";
 import { type Glyph } from "../../primitives/glyph";
 import { type TangoColor, resolveColor } from "../../primitives/color";
+import { useRevealSource } from "../../internal/reveal/context";
+import { revealEntityId } from "../../internal/reveal/identity";
+import { Pressable } from "../../primitives/Pressable";
 
 export type CardStatOrbVariant = "energy" | "spark" | "dreamwellEnergy";
 
@@ -70,9 +72,6 @@ const ICON_BY_VARIANT: Readonly<
     numberShiftEm: 0.06,
   },
 };
-
-/** Tooltip delay tuned for corner stat targets (matches the old pip badges). */
-const ORB_TOOLTIP_DELAY_MS = 1000;
 
 interface CardStatOrbProps {
   variant: CardStatOrbVariant;
@@ -222,26 +221,13 @@ export function CardStatOrb({
     return orb;
   }
 
-  return (
-    <HoverPopover
-      delayMs={ORB_TOOLTIP_DELAY_MS}
-      triggerLayout="inlineFlex"
-      content={
-        <div
-          className="rounded-md px-3 py-2 text-xs leading-snug shadow-lg"
-          style={{
-            background: "rgba(15, 10, 24, 0.96)",
-            border: "1px solid rgba(168, 85, 247, 0.55)",
-            color: "#f8fafc",
-            boxShadow: "0 8px 22px rgba(0, 0, 0, 0.55)",
-            maxWidth: 220,
-          }}
-        >
-          {tooltip}
-        </div>
-      }
-    >
-      {orb}
-    </HoverPopover>
-  );
+  return <CardStatOrbReveal variant={variant} label={label} tooltip={tooltip}>{orb}</CardStatOrbReveal>;
+}
+
+function CardStatOrbReveal({ variant, label, tooltip, children }: { variant: CardStatOrbVariant; label: string; tooltip: string; children: ReactElement }) {
+  const binding = useRevealSource({
+    identity: { entityType: `card-${variant}-stat`, entityId: revealEntityId(`card-${variant}-stat`, `${label}:${tooltip}`) },
+    spec: { primary: { kind: "infoCard", card: { variant: "text", title: label, body: { kind: "plain", text: tooltip } } }, secondaries: [] },
+  });
+  return <Pressable as="span" ref={binding.ref} {...binding.sourceProps} tabIndex={0} style={{ ...binding.sourceProps.style, display: "inline-flex" }}>{children}</Pressable>;
 }

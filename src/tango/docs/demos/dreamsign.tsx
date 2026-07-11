@@ -79,7 +79,6 @@ function DreamsignDemo({ sizePx = 72, variant = "hud" }: DreamsignDemoArgs) {
           dreamsign={dreamsign}
           sizePx={sizePx}
           variant={variant}
-          stageRef={stageRef}
         />
       ))}
     </div>

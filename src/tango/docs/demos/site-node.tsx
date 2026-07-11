@@ -89,7 +89,6 @@ function SiteNodeDemo({ motion = true }: SiteNodeDemoArgs) {
           key={model.site.id}
           model={model}
           motion={motion}
-          stageRef={stageRef}
           onSelect={() => undefined}
         />
       ))}

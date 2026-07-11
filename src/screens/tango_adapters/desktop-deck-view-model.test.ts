@@ -70,6 +70,7 @@ describe("buildDesktopDeckView", () => {
     const view = buildDesktopDeckView([], database(), dreamcaller, []);
 
     expect(view.dreamcaller).toEqual({
+      id: "dc-1",
       imageNumber: "12",
       name: "Sable",
       title: "The Unmaker",

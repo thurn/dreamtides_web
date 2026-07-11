@@ -8,6 +8,7 @@ import {
   QuestStartScreen,
   type DreamcallerOfferView,
 } from "./QuestStartScreen";
+import { TangoRoot } from "../TangoRoot";
 
 const OFFERED: DreamcallerOfferView[] = [
   {
@@ -67,7 +68,7 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(element);
+    root.render(<TangoRoot>{element}</TangoRoot>);
   });
   return { container, root };
 }

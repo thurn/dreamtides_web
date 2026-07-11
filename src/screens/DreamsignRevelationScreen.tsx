@@ -4,15 +4,10 @@ import type { Dreamsign, SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { requireDreamsignId } from "../data/dreamsigns";
-import { dreamsignIconUrl } from "../tango/components/atlas/atlas-display";
 import { SiteGuide } from "../components/SiteGuide";
 import { IconButton } from "../tango/components/controls/IconButton";
 import { GLYPHS } from "../tango/primitives/glyph";
-import {
-  DREAMSIGN_HOVER_DELAY_MS,
-  DreamsignInfoCard,
-} from "../tango/components/hud/Dreamsign";
-import { HoverPopover } from "../tango/components/overlay/HoverPopover";
+import { Dreamsign as TangoDreamsign } from "../tango/components/hud/Dreamsign";
 import { DreamsignPurgeOverlay } from "./DreamsignPurgeOverlay";
 import "./dreamsign-revelation.css";
 import "./site-leave-control.css";
@@ -202,9 +197,6 @@ function RevelationCard({
   readonly state: CardAnimState;
   readonly onTake: (dreamsign: Dreamsign, index: number) => void;
 }) {
-  const [imageBroken, setImageBroken] = useState(false);
-  const showImage = Boolean(dreamsign.imageName) && !imageBroken;
-
   return (
     <div
       className={`dsr-col state-${state}`}
@@ -212,36 +204,12 @@ function RevelationCard({
       data-testid={`dreamsign-revelation-option-${dreamsignId}`}
     >
       <div className="flex">
-      <HoverPopover
-        triggerAs="div"
-        delayMs={DREAMSIGN_HOVER_DELAY_MS}
-        placement="left"
-        maxWidthPx={null}
-        content={({ side }) => (
-          <DreamsignInfoCard
-            dreamsign={dreamsign}
-            definitionSide={side === "left" ? "left" : "right"}
-          />
-        )}
-      >
         <div
           className={`dsr-art-wrap${dreamsign.isBane ? " bane" : ""}`}
           aria-label={`Dreamsign: ${dreamsign.name}`}
         >
-          {showImage ? (
-            <img
-              className="dsr-art"
-              src={dreamsignIconUrl(String(dreamsign.imageName))}
-              alt={dreamsign.imageAlt ?? dreamsign.name}
-              onError={() => setImageBroken(true)}
-            />
-          ) : (
-            <div className="dsr-art-fallback" aria-hidden="true">
-              ✦
-            </div>
-          )}
+          <TangoDreamsign dreamsign={dreamsign} sizePx={200} />
         </div>
-      </HoverPopover>
       </div>
 
       <button

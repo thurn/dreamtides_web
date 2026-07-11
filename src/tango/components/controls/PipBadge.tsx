@@ -1,6 +1,9 @@
-import { type CSSProperties } from "react";
-import { HoverPopover } from "../overlay/HoverPopover";
-import { type HexColor } from "../../primitives/color";
+import { type CSSProperties, type ReactElement } from "react";
+import { ENERGY_PIP_COLOR, SPARK_PIP_COLOR } from "./pip-colors";
+export { ENERGY_PIP_COLOR, SPARK_PIP_COLOR } from "./pip-colors";
+import { useRevealSource } from "../../internal/reveal/context";
+import { revealEntityId } from "../../internal/reveal/identity";
+import { Pressable } from "../../primitives/Pressable";
 
 /**
  * A circular numeric badge ("pip") used on card corners for stats like
@@ -11,7 +14,7 @@ import { type HexColor } from "../../primitives/color";
  * the colored fill at small card sizes.
  *
  * The badge supports an optional `tooltip` node — when set, the badge wraps
- * itself in a `HoverPopover` so first-time players can learn what the
+ * itself as a semantic reveal source so first-time players can learn what the
  * number represents on long hover. The longer 1000ms delay (vs the 500ms
  * default used for inline glossary terms in `RulesText`) is intentional:
  * pip badges sit at the corners of cards and are easy to brush past with
@@ -59,9 +62,6 @@ interface PipBadgeProps {
  * - `ENERGY_PIP_COLOR`: teal/cyan, distinct from gold so the two badges
  *   read as different stats at a glance.
  */
-export const SPARK_PIP_COLOR: HexColor = "#facc15";
-export const ENERGY_PIP_COLOR: HexColor = "#0ea5e9";
-
 /**
  * Background fill per variant. Read from the shared resource color tokens
  * so the inline rules-text glyph (rendered by `RulesText`) and this pip
@@ -81,9 +81,6 @@ const VARIANT_DEFAULT_LABEL: Readonly<Record<PipBadgeVariant, string>> = {
   spark: "spark",
   energy: "energy cost",
 };
-
-/** Tooltip delay tuned for pip-corner targets (1s, vs 500ms for inline terms). */
-const PIP_TOOLTIP_DELAY_MS = 1000;
 
 /**
  * White text with a thin black outline. Implemented with four 1px text
@@ -158,25 +155,20 @@ export function PipBadge({
     return badge;
   }
 
+  return <PipBadgeReveal variant={variant} label={label} tooltip={tooltip}>{badge}</PipBadgeReveal>;
+}
+
+function PipBadgeReveal({ variant, label, tooltip, children }: { variant: PipBadgeVariant; label: string; tooltip: string; children: ReactElement }) {
+  const binding = useRevealSource({
+    identity: { entityType: `card-${variant}-pip`, entityId: revealEntityId(`card-${variant}-pip`, `${label}:${tooltip}`) },
+    spec: {
+      primary: { kind: "infoCard", card: { variant: "text", title: label, body: { kind: "plain", text: tooltip } } },
+      secondaries: [],
+    },
+  });
   return (
-    <HoverPopover
-      delayMs={PIP_TOOLTIP_DELAY_MS}
-      content={
-        <div
-          className="rounded-md px-3 py-2 text-xs leading-snug shadow-lg"
-          style={{
-            background: "rgba(15, 10, 24, 0.96)",
-            border: "1px solid rgba(168, 85, 247, 0.55)",
-            color: "#f8fafc",
-            boxShadow: "0 8px 22px rgba(0, 0, 0, 0.55)",
-            maxWidth: 220,
-          }}
-        >
-          {tooltip}
-        </div>
-      }
-    >
-      {badge}
-    </HoverPopover>
+    <Pressable as="span" ref={binding.ref} {...binding.sourceProps} tabIndex={0} style={{ ...binding.sourceProps.style, display: "inline-flex" }}>
+      {children}
+    </Pressable>
   );
 }

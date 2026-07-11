@@ -49,6 +49,7 @@ export function QuestStatusBarMockup() {
         essence={240}
         deck={23}
         dreamcaller={{
+          id: "00000000-0000-4000-8000-000000000051",
           name: "Threxan",
           epithet: "the Resounding Wrath",
           portrait: artRef.dreamcaller("0025"),

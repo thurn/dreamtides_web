@@ -1,12 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
-import {
-  CARD_HOVER_PREVIEW_DELAY_MS,
-  HoverPopover,
-} from "../../tango/components/overlay/HoverPopover";
-import { DreamsignInfoCard } from "../../tango/components/hud/Dreamsign";
+import { Dreamsign as TangoDreamsign } from "../../tango/components/hud/Dreamsign";
 import type { Dreamsign } from "../../types/quest";
 import type { JourneyDreamsignObject } from "./offerPresentation";
-import { assetUrl } from "../../runtime/asset-url";
 
 interface JourneyDreamsignIconProps {
   object: JourneyDreamsignObject;
@@ -79,8 +74,6 @@ export function JourneyDreamsignIcon({
     <div
       className="dj-anim-card"
       style={wrapperStyle}
-      onClick={onClick}
-      role={onClick ? "button" : undefined}
       aria-pressed={onClick ? selected : undefined}
       aria-label={`${object.displayName} dreamsign`}
       data-testid={testId}
@@ -106,66 +99,13 @@ export function JourneyDreamsignIcon({
             zIndex: 0,
           }}
         />
-        {object.dreamsignTemplate.imageName ? (
-          <img
-            src={assetUrl(`/dreamsigns/${String(object.dreamsignTemplate.imageName)}`)}
-            alt={object.dreamsignTemplate.imageAlt ?? object.displayName}
-            style={{
-              position: "relative",
-              zIndex: 1,
-              width: sizePx,
-              height: sizePx,
-              objectFit: "contain",
-              display: "block",
-              filter: ringColor
-                ? `drop-shadow(0 0 10px ${ringColor})`
-                : "drop-shadow(0 6px 16px rgba(0,0,0,.45))",
-            }}
-          />
-        ) : (
-          <div
-            style={{
-              position: "relative",
-              zIndex: 1,
-              width: sizePx,
-              height: sizePx,
-              borderRadius: "50%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: sizePx * 0.4,
-              fontWeight: 800,
-              color: "#efeaff",
-              background:
-                "radial-gradient(circle at 38% 32%, #5a4a86, #221a40)",
-              border: ringColor
-                ? `2px solid ${ringColor}`
-                : "1px solid rgba(160,140,230,.4)",
-            }}
-          >
-            {object.displayName.slice(0, 1).toUpperCase()}
-          </div>
-        )}
+        <div style={{ position: "relative", zIndex: 1, filter: ringColor ? `drop-shadow(0 0 10px ${ringColor})` : undefined }}>
+          <TangoDreamsign dreamsign={dreamsign} sizePx={sizePx} onPress={onClick} testid={testId == null ? undefined : `${testId}-entity`} />
+        </div>
       </div>
       {caption}
     </div>
   );
 
-  return (
-    <HoverPopover
-      triggerAs="div"
-      placement="top"
-      delayMs={CARD_HOVER_PREVIEW_DELAY_MS}
-      maxWidthPx={null}
-      content={({ side }) => (
-        <DreamsignInfoCard
-          dreamsign={dreamsign}
-          testid={`journey-dreamsign-hover-${object.dreamsignId}`}
-          definitionSide={side === "left" ? "left" : "right"}
-        />
-      )}
-    >
-      {body}
-    </HoverPopover>
-  );
+  return body;
 }

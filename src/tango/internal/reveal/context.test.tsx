@@ -15,10 +15,11 @@ import { asCardId, asCardName } from "../../../types/card-identity";
 const UUID_A = "00000000-0000-4000-8000-000000000001";
 const UUID_B = "00000000-0000-4000-8000-000000000002";
 
-function Source({ id, label = "Source", onActivate, spec }: { id: string; label?: string; onActivate?: () => void; spec?: RevealSpec }) {
+function Source({ id, label = "Source", onActivate, spec, feedback }: { id: string; label?: string; onActivate?: () => void; spec?: RevealSpec; feedback?: "scale" | "stationary" }) {
   const binding = useRevealSource({
     identity: { entityType: "test", entityId: id },
     spec: spec ?? makeTextRevealSpec(label, "Primary body", ["Secondary body"]),
+    feedback,
     onActivate,
   });
   return <button ref={binding.ref} {...binding.sourceProps}>{label}</button>;
@@ -224,6 +225,14 @@ describe("Tango reveal coordinator root", () => {
     expect(button.getAttribute("data-reveal-feedback")).toBe("measured");
     expect(button.style.getPropertyValue("--reveal-press-scale")).toBe("0.9");
     expect(document.body.querySelectorAll(":scope > [data-tango-reveal-portal]")).toHaveLength(1);
+  });
+
+  it("keeps stationary readable sources unscaled", () => {
+    const { container } = mount(<TangoRoot><Source id={UUID_A} feedback="stationary" /></TangoRoot>);
+    const button = container.querySelector("button")!;
+    expect(button.getAttribute("data-reveal-feedback")).toBe("stationary");
+    expect(button.style.getPropertyValue("--reveal-press-scale")).toBe("1");
+    expect(button.style.getPropertyValue("--reveal-hover-scale")).toBe("1");
   });
 
   it("logs one placed open decision and one terminal close decision", () => {

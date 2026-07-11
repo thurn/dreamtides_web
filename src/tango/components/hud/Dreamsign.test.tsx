@@ -1,12 +1,13 @@
 // @vitest-environment jsdom
 
-import { act, useRef } from "react";
+import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { Dreamsign, DreamsignInfoCard } from "./Dreamsign";
+import { Dreamsign } from "./Dreamsign";
 import type { Dreamsign as DreamsignData } from "../../../types/quest";
 import { GLOSSARY, type GlossaryEntry } from "../../../data/glossary";
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
+import { TangoRoot } from "../../TangoRoot";
 
 /**
  * The unified dreamsign entity (formerly `DreamsignArtTile` +
@@ -30,7 +31,7 @@ function makeDreamsign(
     isBane: overrides.isBane ?? false,
     imageName: overrides.imageName,
     imageAlt: overrides.imageAlt,
-    id: overrides.id ?? "test-dreamsign-id",
+    id: overrides.id ?? "00000000-0000-4000-8000-000000000031",
   };
 }
 
@@ -42,7 +43,7 @@ function mountInto(node: React.ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(node);
+    root.render(<TangoRoot>{node}</TangoRoot>);
   });
   return { container, root };
 }
@@ -60,6 +61,19 @@ afterEach(() => {
 });
 
 describe("Dreamsign", () => {
+  it("owns its UUID reveal model and ordered glossary definitions", () => {
+    const { entry, effect } = pickGlossaryFixture();
+    const sign = makeDreamsign({ name: "Semantic sign", effectDescription: effect, imageName: "semantic.png" });
+    const { container } = mountInto(<Dreamsign dreamsign={sign} sizePx={64} />);
+    const tile = container.querySelector<HTMLElement>('[data-testid="dreamsign-art-tile"]');
+    expect(tile?.dataset.dreamsignId).toBe(sign.id);
+    expect(tile?.dataset.revealFeedback).toBe("measured");
+    expect(tile?.tabIndex).toBe(0);
+    const description = document.getElementById(tile?.getAttribute("aria-describedby") ?? "");
+    expect(description?.textContent).toContain(sign.name);
+    expect(description?.textContent).toContain(effect);
+    expect(description?.textContent).toContain(entry.definition);
+  });
   it("requires a stable dreamsign id for render data attributes", () => {
     const sign = makeDreamsign({ name: "Nameless Id", id: undefined });
     delete sign.id;
@@ -274,7 +288,7 @@ describe("Dreamsign", () => {
     throw new Error("No glossary entry yielded a usable definition fixture");
   }
 
-  it("shows glossary term definitions in the reveal when the effect uses a keyword", () => {
+  it("includes glossary definitions in its accessible reveal description", () => {
     const { effect, definitionWord } = pickGlossaryFixture();
     const sign = makeDreamsign({
       name: "Keyworded",
@@ -282,165 +296,20 @@ describe("Dreamsign", () => {
       imageName: "keyworded.png",
     });
 
-    const { container, root } = mountInto(
-      <Dreamsign dreamsign={sign} sizePx={64} revealTestid="dreamsign-reveal" />,
-    );
+    const { container, root } = mountInto(<Dreamsign dreamsign={sign} sizePx={64} />);
 
     const tile = container.querySelector<HTMLElement>(
       '[data-testid="dreamsign-art-tile"]',
     );
-    // Coarse pointer (jsdom has no matchMedia): press-down reveals.
-    act(() => {
-      tile?.dispatchEvent(new Event("pointerdown", { bubbles: true }));
-    });
-
-    const reveal = document.body.querySelector(
-      '[data-testid="dreamsign-reveal"]',
-    );
-    expect(reveal).not.toBeNull();
-    // The definition stack is rendered as part of the reveal...
-    expect(
-      reveal?.querySelector('[data-testid="dreamsign-reveal-definition-stack"]'),
-    ).not.toBeNull();
-    expect(
-      reveal
-        ?.querySelector('[data-testid="dreamsign-reveal-definition-stack"]')
-        ?.getAttribute("data-definition-side"),
-    ).toBe("right");
-    const aggregate = reveal as HTMLElement | null;
-    expect(aggregate?.style.flexDirection).toBe("row");
-    expect(aggregate?.style.alignItems).toBe("flex-start");
-    // ...and it exposes the keyword's DEFINITION text, not just the highlight.
-    expect(reveal?.textContent).toContain(definitionWord);
-
-    act(() => {
-      tile?.dispatchEvent(new Event("pointerup", { bubbles: true }));
-    });
-    // Dismissing the reveal takes the definitions with it.
-    expect(
-      document.body.querySelectorAll('[data-testid="dreamsign-reveal"]').length,
-    ).toBe(0);
+    const description = document.getElementById(tile?.getAttribute("aria-describedby") ?? "");
+    expect(description?.textContent).toContain(definitionWord);
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("can place glossary definitions to the left of the primary card", () => {
-    const { effect } = pickGlossaryFixture();
-    const sign = makeDreamsign({
-      name: "Left Keyworded",
-      effectDescription: effect,
-      imageName: "keyworded.png",
-    });
-
-    const { container, root } = mountInto(
-      <DreamsignInfoCard
-        dreamsign={sign}
-        testid="dreamsign-info-card"
-        definitionSide="left"
-      />,
-    );
-
-    const reveal = container.querySelector<HTMLElement>(
-      '[data-testid="dreamsign-info-card"]',
-    );
-    const stack = reveal?.querySelector<HTMLElement>(
-      '[data-testid="dreamsign-info-card-definition-stack"]',
-    );
-    expect(stack).not.toBeNull();
-    expect(stack?.getAttribute("data-definition-side")).toBe("left");
-    expect(reveal?.firstElementChild).toBe(stack);
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("uses the shared mobile InfoCard scale for both the dreamsign and its definitions", () => {
-    const previousWidth = window.innerWidth;
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 390,
-    });
-    const { effect } = pickGlossaryFixture();
-    const sign = makeDreamsign({
-      name: "Unified Mobile Scale",
-      effectDescription: effect,
-      imageName: "unified.png",
-    });
-
-    const { container, root } = mountInto(
-      <DreamsignInfoCard dreamsign={sign} testid="dreamsign-info-card" />,
-    );
-
-    const cards = Array.from(container.querySelectorAll<HTMLElement>("[style]")).filter(
-      (element) =>
-        element.style.getPropertyValue("--info-card-text-scale") !== "",
-    );
-    expect(cards.length).toBeGreaterThanOrEqual(2);
-    for (const card of cards) {
-      expect(card.style.getPropertyValue("--info-card-text-scale")).toBe(
-        "0.86",
-      );
-      expect(card.style.getPropertyValue("--info-card-width")).toBe(
-        "175.5px",
-      );
-    }
-
-    act(() => {
-      root.unmount();
-    });
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: previousWidth,
-    });
-  });
-
-  it("portals stage-anchored reveals to the body above app chrome", () => {
-    const { effect } = pickGlossaryFixture();
-    const sign = makeDreamsign({
-      name: "Portaled",
-      effectDescription: effect,
-      imageName: "portaled.png",
-    });
-
-    function StageHarness() {
-      const stageRef = useRef<HTMLDivElement>(null);
-      return (
-        <div ref={stageRef} data-testid="stage">
-          <Dreamsign
-            dreamsign={sign}
-            sizePx={64}
-            stageRef={stageRef}
-            revealTestid="stage-reveal"
-          />
-        </div>
-      );
-    }
-
-    const { container, root } = mountInto(<StageHarness />);
-    const tile = container.querySelector<HTMLElement>(
-      '[data-testid="dreamsign-art-tile"]',
-    );
-
-    act(() => {
-      tile?.dispatchEvent(new Event("pointerdown", { bubbles: true }));
-    });
-
-    const reveal = document.body.querySelector('[data-testid="stage-reveal"]');
-    const portal = reveal?.parentElement;
-    expect(reveal).not.toBeNull();
-    expect(portal?.parentElement).toBe(document.body);
-    expect(portal?.style.zIndex).toBe("1000");
-
-    act(() => {
-      tile?.dispatchEvent(new Event("pointerup", { bubbles: true }));
-      root.unmount();
-    });
-  });
-
-  it("reveals the dreamsign name and effect text through InfoCard on press", () => {
+  it("retains name and effect text for focus users", () => {
     const sign = makeDreamsign({
       name: "Black Horn",
       effectDescription:
@@ -448,41 +317,20 @@ describe("Dreamsign", () => {
       imageName: "black_horn.png",
     });
 
-    const { container, root } = mountInto(
-      <Dreamsign dreamsign={sign} sizePx={64} revealTestid="dreamsign-reveal" />,
-    );
-
-    // The reveal is not in the DOM before the press.
-    expect(
-      document.body.querySelectorAll('[data-testid="dreamsign-reveal"]').length,
-    ).toBe(0);
+    const { container, root } = mountInto(<Dreamsign dreamsign={sign} sizePx={64} />);
 
     const tile = container.querySelector<HTMLElement>(
       '[data-testid="dreamsign-art-tile"]',
     );
     expect(tile).not.toBeNull();
 
-    // Coarse pointer (jsdom has no matchMedia): press-down reveals.
-    act(() => {
-      tile?.dispatchEvent(new Event("pointerdown", { bubbles: true }));
-    });
-
-    const reveal = document.body.querySelector(
-      '[data-testid="dreamsign-reveal"]',
-    );
-    expect(reveal).not.toBeNull();
-    expect(reveal?.textContent).toContain("Black Horn");
-    expect(reveal?.textContent).toContain(
+    act(() => tile?.focus());
+    expect(tile?.dataset.revealActive).toBe("true");
+    const description = document.getElementById(tile?.getAttribute("aria-describedby") ?? "");
+    expect(description?.textContent).toContain("Black Horn");
+    expect(description?.textContent).toContain(
       "When you dissolve or banish an enemy",
     );
-
-    // Release dismisses the reveal on a coarse pointer.
-    act(() => {
-      tile?.dispatchEvent(new Event("pointerup", { bubbles: true }));
-    });
-    expect(
-      document.body.querySelectorAll('[data-testid="dreamsign-reveal"]').length,
-    ).toBe(0);
 
     act(() => {
       root.unmount();

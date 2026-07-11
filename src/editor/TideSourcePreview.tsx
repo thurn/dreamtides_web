@@ -2,7 +2,6 @@ import type { CardData } from "../types/cards";
 import { CardView } from "../tango/components/card/CardView";
 import { DreamcallerPortrait } from "../tango/components/hud/DreamcallerPortrait";
 import { HoverPopover } from "../tango/components/overlay/HoverPopover";
-import { RulesText } from "../tango/components/card/RulesText";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";
 import type { EditorDreamcaller } from "./tides-types";
 
@@ -15,30 +14,6 @@ interface TideSourcePreviewProps {
   cardById: ReadonlyMap<string, CardData>;
   /** Pixel size of the rendered thumbnail (square for a portrait, width for a card). */
   size: number;
-}
-
-function dreamcallerHoverContent(dreamcaller: EditorDreamcaller) {
-  return (
-    <div
-      style={{
-        maxWidth: 260,
-        color: "#f7f1df",
-        background: "#0e1215",
-        border: "1px solid rgba(255, 255, 255, 0.16)",
-        borderRadius: 10,
-        padding: "10px 12px",
-        boxShadow: "0 18px 34px rgba(0, 0, 0, 0.5)",
-      }}
-    >
-      <div style={{ fontWeight: 800, fontSize: "0.9rem" }}>{dreamcaller.name}</div>
-      <div style={{ color: "#8edbd1", fontSize: "0.74rem", marginBottom: 6 }}>
-        {dreamcaller.title}
-      </div>
-      <div style={{ fontSize: "0.82rem", lineHeight: 1.35 }}>
-        <RulesText text={dreamcaller.renderedText} />
-      </div>
-    </div>
-  );
 }
 
 /**
@@ -58,18 +33,7 @@ export function TideSourcePreview({
     if (dreamcaller === undefined) return null;
     return (
       <div style={{ width: size, height: size, flex: `0 0 ${size}px` }}>
-        <HoverPopover
-          triggerAs="div"
-          delayMs={150}
-          maxWidthPx={null}
-          content={dreamcallerHoverContent(dreamcaller)}
-        >
-          <DreamcallerPortrait
-            dreamcaller={dreamcaller}
-            variant="thumb"
-            size={size}
-          />
-        </HoverPopover>
+        <DreamcallerPortrait dreamcaller={dreamcaller} variant="thumb" size={size} profile={{ id: dreamcaller.id, ability: dreamcaller.renderedText }} />
       </div>
     );
   }

@@ -89,21 +89,6 @@ describe("InfoCard shell treatment", () => {
     expect(html).toContain(`box-shadow:${String(glass.boxShadow)}`);
   });
 
-  it("keeps the portal wrapper out of opacity and transform animation layers", () => {
-    const html = renderToStaticMarkup(
-      React.createElement(
-        InfoCard.PressPopover,
-        { anchor: { x: 100, top: 100, bottom: 140, w: 390, h: 844 } },
-        React.createElement(InfoCard, { title: "Essence" }),
-      ),
-    );
-
-    expect(html).toContain("visibility:hidden");
-    expect(html).not.toContain("opacity:");
-    expect(html).not.toContain("animation:");
-    expect(html).not.toContain("transform:");
-  });
-
   it("renders the atlas reveal as an InfoCard variant with the shared glass fill", () => {
     const html = renderToStaticMarkup(
       React.createElement(InfoCard, {

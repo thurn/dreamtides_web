@@ -16,7 +16,6 @@ The dreamscape site disc: a floating circular node over scene art carrying a gly
 | --- | --- | --- | --- | --- |
 | `model` | `DreamscapeSiteModel` | yes | — | The placed-site model — position, label, glyph, and state. |
 | `motion` | `boolean` | yes | — | Enable the calm floaty drift (disabled under reduced-motion via CSS). |
-| `stageRef` | `RefObject<HTMLElement \| null>` | yes | — | Screen root the reveal anchors + clamps against (for popover placement). |
 | `onSelect` | `(siteId: string) => void` | yes | — | Enter the site; fired on a tap / click of an interactive node only. |
 
 ### `model`: the `DreamscapeSiteModel` model

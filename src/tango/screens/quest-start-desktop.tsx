@@ -8,7 +8,6 @@
 // carousel via `quest-start-shared`; `QuestStartScreen` picks by viewport.
 // PURE: renders from a view-model and reports the chosen Dreamcaller via `onPick`.
 
-import { useRef } from "react";
 import { Motes } from "../components/hud/Motes";
 import { GroupPanel } from "../components/controls/GroupPanel";
 import { Button } from "../components/controls/Button";
@@ -107,11 +106,9 @@ function PortraitName({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
 function DreamcallerCard({
   dreamcaller,
   onChoose,
-  stageRef,
 }: {
   dreamcaller: DreamcallerOfferView;
   onChoose: () => void;
-  stageRef: React.RefObject<HTMLElement | null>;
 }) {
   return (
     <div
@@ -139,7 +136,6 @@ function DreamcallerCard({
     >
       <AbilityReveal
         text={dreamcaller.renderedText}
-        stageRef={stageRef}
         minHeight={ABILITY_BOX_MIN_H}
       />
 
@@ -151,7 +147,7 @@ function DreamcallerCard({
           tide discs stacked below the caption at the larger 'lg' size — the same
           shared arrangement the mobile carousel renders. */}
       <div style={{ marginTop: token("--space-6") }}>
-        <TidesEssenceBlock dreamcaller={dreamcaller} stageRef={stageRef} />
+        <TidesEssenceBlock dreamcaller={dreamcaller} />
       </div>
 
       <div
@@ -173,11 +169,9 @@ function DreamcallerCard({
 function DreamcallerColumn({
   dreamcaller,
   onChoose,
-  stageRef,
 }: {
   dreamcaller: DreamcallerOfferView;
   onChoose: () => void;
-  stageRef: React.RefObject<HTMLElement | null>;
 }) {
   return (
     <div
@@ -201,7 +195,6 @@ function DreamcallerColumn({
       <DreamcallerCard
         dreamcaller={dreamcaller}
         onChoose={onChoose}
-        stageRef={stageRef}
       />
     </div>
   );
@@ -211,11 +204,8 @@ function DreamcallerColumn({
  * the top of a shared background, then the offered Dreamcallers side by side as
  * fixed-width portrait columns. */
 export function DesktopSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
-  const stageRef = useRef<HTMLDivElement>(null);
-
   return (
     <div
-      ref={stageRef}
       className="tango"
       style={{
         position: "relative",
@@ -284,7 +274,6 @@ export function DesktopSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
               onChoose={() => {
                 onPick(dreamcaller.id);
               }}
-              stageRef={stageRef}
             />
           ))}
         </div>

@@ -6,9 +6,9 @@
 
 Components · Live demo & interactive props: `/tango#/tide-disc`
 
-Real consumers: **1** (imports outside `src/tango/docs/` and tests).
+Real consumers: **2** (imports outside `src/tango/docs/` and tests).
 
-The single tide mark: a colored disc carrying the tide's glyph, sized 'sm' (desktop select) or 'lg' (mobile select) — the atom both Dreamcaller-select tide rows render from. In production a disc is never bare: it is always the trigger of an InfoCard.PressInfo reveal that carries the tide's description.
+The single semantic tide mark: a colored disc carrying the tide's glyph and its own strict tide reveal, sized 'sm' or 'lg'.
 
 > **Guidance:** The tide palette lives in src/tango/components/hud/tide-spec.ts. Its five tides — Ember #fb923c, Valor #facc15, Vision #60a5fa, Wild #4ade80, Shadow #c084fc — each own a fixed accent and glyph, exposed as TIDES / tideVisual / tideAlignmentLabel. TideDisc, InfoCard's tide variant, and any tide chip all read that one table, so a tide reads identically everywhere. tide-spec has no renderable component of its own, so it is documented here on its canonical renderer.
 
@@ -18,9 +18,9 @@ The single tide mark: a colored disc carrying the tide's glyph, sized 'sm' (desk
 | --- | --- | --- | --- | --- |
 | `tide` | `Tide` = `"shadow" \| "ember" \| "valor" \| "vision" \| "wild"` | yes | — | Which of the five tides. Fixes the disc's color and glyph. |
 | `id` | `string` | yes | — | Stable id (a tide deck id) for the `data-tide-disc` QA hook. |
-| `label` | `string` | no | — | Accessible label (e.g. "Tide: Valor"). When unset the disc is decorative and hidden from assistive tech. |
+| `label` | `string` | yes | — | Display name used by the source and its tide card. |
+| `description` | `string` | yes | — | Semantic description revealed by this tide source. |
 | `size` | `TideDiscSize` = `"sm" \| "lg"` | no | `sm` | Which enumerated {@link TideDiscSize} to render. Default 'sm'. |
-| `interactive` | `boolean` | no | `false` | Interactive discs brighten on hover and show a pointer cursor — set this when the caller wires the disc up as a reveal trigger (the wrapper's shared hover-enlarge handles the scale). Default false. |
 
 ## Usage
 
@@ -32,28 +32,16 @@ The atom on its own — the color and glyph come from the named tide (never a ra
 import { TideDisc } from "src/tango/components/hud/TideDisc";
 
 // The compact 'sm' disc (desktop select) and the larger 'lg' disc (mobile select):
-<TideDisc tide="valor" id={tideDeckId} label="Tide: Valor" interactive />
-<TideDisc tide="valor" id={tideDeckId} label="Tide: Valor" size="lg" interactive />
+<TideDisc tide="valor" id={tideDeckId} label="Rising Valor" description={tide.description} />
+<TideDisc tide="valor" id={tideDeckId} label="Rising Valor" description={tide.description} size="lg" />
 ```
 
-### Disc-in-reveal (canonical)
+### Self-revealing tide
 
-How a tide disc is ALWAYS rendered in production (see quest-start-shared's TideDiscReveal): the disc is the trigger of an InfoCard.PressInfo reveal anchored to the screen's `stageRef`, carrying the tide's own colored card first and a secondary text definition beside it. A tide disc never appears without its reveal.
+The named component derives its tide primary and general Tides secondary internally from semantic data.
 
 ```tsx
 import { TideDisc } from "src/tango/components/hud/TideDisc";
-import { InfoCard } from "src/tango/components/overlay/InfoCard";
-import { richText } from "src/tango/components/card/rich-text";
 
-<InfoCard.PressInfo
-  stageRef={stageRef}
-  card={
-    <div style={{ display: "flex", alignItems: "flex-start", gap: token("--space-3") }}>
-      <InfoCard variant="tide" tide="valor" title="Rising Valor" body={richText.plain(tide.description)} />
-      <InfoCard variant="text" title="Tides" body={richText.plain(tidesBlurb)} />
-    </div>
-  }
->
-  <TideDisc tide="valor" id={tideDeckId} label="Tide: Valor" size="lg" interactive />
-</InfoCard.PressInfo>
+<TideDisc tide="valor" id={tideDeckId} label="Rising Valor" description={tide.description} size="lg" />
 ```

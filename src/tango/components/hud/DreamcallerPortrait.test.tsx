@@ -7,6 +7,7 @@ import {
   DreamcallerPortrait,
   type DreamcallerVisual,
 } from "./DreamcallerPortrait";
+import { TangoRoot } from "../../TangoRoot";
 
 /**
  * The full-bleed `standing` (desktop column) and `fullBleed` (mobile carousel)
@@ -46,6 +47,19 @@ afterEach(() => {
 });
 
 describe("DreamcallerPortrait standing/fullBleed variants", () => {
+  it("registers a strict profile reveal only when semantic profile data is supplied", () => {
+    const { container } = mountInto(
+      <TangoRoot>
+        <DreamcallerPortrait dreamcaller={DC} variant="panel" profile={{ id: "00000000-0000-4000-8000-000000000061", ability: "Gain 1 essence." }} />
+      </TangoRoot>,
+    );
+    const source = container.querySelector<HTMLElement>("[data-dreamcaller-source]")!;
+    expect(source.dataset.revealFeedback).toBe("measured");
+    expect(source.tabIndex).toBe(0);
+    const description = document.getElementById(source.getAttribute("aria-describedby") ?? "");
+    expect(description?.textContent).toContain("Astra");
+    expect(description?.textContent).toContain("Gain 1 essence.");
+  });
   it("standing renders the cutout <img> with alt and image-number src", () => {
     const { container } = mountInto(
       <DreamcallerPortrait dreamcaller={DC} variant="standing" />,

@@ -1115,7 +1115,7 @@
         "standing"
       ],
       "required": false,
-      "defaultValue": "panel",
+      "defaultValue": null,
       "description": "Framing: self-framing `hero` / `panel` / `thumb`, or the full-bleed stage\nfills `standing` (desktop column) and `fullBleed` (mobile carousel).\nDefault `panel`."
     },
     {
@@ -1125,6 +1125,30 @@
       "required": false,
       "defaultValue": null,
       "description": "Fixed pixel width. Panel/thumb stay square, so this also sets their height.\nA sized portrait never shrinks in a flex row. Omit to fill the container\nwidth. Ignored by `standing`/`fullBleed`, which fill the caller's stage."
+    },
+    {
+      "name": "profile",
+      "tsType": "{ id: string; ability: string; }",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Semantic Dreamcaller profile represented by this portrait. Omit for decorative art."
+    },
+    {
+      "name": "onActivate",
+      "tsType": "(() => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional activation for selectable profile portraits."
+    },
+    {
+      "name": "unavailable",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Keeps the profile readable while suppressing activation."
     }
   ],
   "Dreamsign": [
@@ -1186,28 +1210,12 @@
       "description": "Square tile edge length in pixels."
     },
     {
-      "name": "stageRef",
-      "tsType": "RefObject<HTMLElement | null>",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Screen root the reveal anchors + clamps against. Pass it for the\nmaterial-continuity reveal (preferred); omit it and the reveal floats\ndirectly above the tile."
-    },
-    {
       "name": "testid",
       "tsType": "string",
       "unionMembers": [],
       "required": false,
       "defaultValue": "dreamsign-art-tile",
       "description": "Override the tile's `data-testid`. Defaults to `\"dreamsign-art-tile\"` so the\nshipped shop / reward / deck-viewer selectors keep working."
-    },
-    {
-      "name": "revealTestid",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Testid for the portalled reveal content (for stable selectors)."
     },
     {
       "name": "onPress",
@@ -1228,76 +1236,6 @@
       "required": false,
       "defaultValue": "flat",
       "description": "The tile's material. `\"flat\"` (default) is the chrome-free collectible tile\nused in lists over a solid surface; `\"hud\"` composes {@link DS_SHADOW} — a\ndrop-shadow + violet glow — into the tile filter so the object lifts off busy\nscene art in the transparent quest HUD. `\"revelation\"` uses a stronger\npath-following shadow for large choices over bright Revelation site art."
-    }
-  ],
-  "DreamsignInfoCard": [
-    {
-      "name": "dreamsign",
-      "tsType": "Dreamsign",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "The dreamsign to render as the shared InfoCard `object` reveal.",
-      "nested": {
-        "name": "Dreamsign",
-        "fields": [
-          {
-            "name": "id",
-            "tsType": "string",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "name",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "effectDescription",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "imageName",
-            "tsType": "string",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "imageAlt",
-            "tsType": "string",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "isBane",
-            "tsType": "boolean",
-            "optional": false,
-            "description": ""
-          }
-        ]
-      }
-    },
-    {
-      "name": "testid",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional `data-testid` on the reveal wrapper, for stable selectors."
-    },
-    {
-      "name": "definitionSide",
-      "tsType": "\"left\" | \"right\"",
-      "unionMembers": [
-        "left",
-        "right"
-      ],
-      "required": false,
-      "defaultValue": "right",
-      "description": "Which side of the primary dreamsign card the keyword definitions occupy.\nDefaults to `\"right\"` so standalone reveals keep the primary card first in\nreading order; callers with placement context pass the side that keeps the\nprimary card closest to the trigger."
     }
   ],
   "EssenceGlyph": [],
@@ -1627,6 +1565,55 @@
           }
         ]
       }
+    }
+  ],
+  "GlossaryTerm": [
+    {
+      "name": "entry",
+      "tsType": "GlossaryEntry",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Canonical glossary meaning owned by this inline source.",
+      "nested": {
+        "name": "GlossaryEntry",
+        "fields": [
+          {
+            "name": "term",
+            "tsType": "string",
+            "optional": false,
+            "description": "Canonical term shown as the popover heading. The term itself is matched\ndirectly (case-insensitively), so it does not need to be repeated in\n`variants`."
+          },
+          {
+            "name": "definition",
+            "tsType": "string",
+            "optional": false,
+            "description": "Short, plain-language definition."
+          },
+          {
+            "name": "variants",
+            "tsType": "readonly string[]",
+            "optional": true,
+            "description": "Extra word forms that should match this entry beyond the term itself, such\nas plurals and past-tense forms (e.g. `banes`, `transfigured`). Omit when\nthe term is the only form. Matching is case-insensitive."
+          }
+        ]
+      }
+    },
+    {
+      "name": "text",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Authored word form preserved in the surrounding sentence."
+    },
+    {
+      "name": "emphasized",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Optional emphasis inherited from the rules-text renderer."
     }
   ],
   "GlowIcon": [
@@ -2653,6 +2640,12 @@
         "name": "QsbDreamcaller",
         "fields": [
           {
+            "name": "id",
+            "tsType": "string",
+            "optional": false,
+            "description": "Stable Dreamcaller UUID."
+          },
+          {
             "name": "name",
             "tsType": "string",
             "optional": false,
@@ -2750,6 +2743,37 @@
       "required": false,
       "defaultValue": "tight",
       "description": "Gap between value and mark — tight (0px, default) or loose (4px)."
+    },
+    {
+      "name": "entity",
+      "tsType": "ResourceEntity",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Semantic resource represented by this chip; makes the named chip self-revealing.",
+      "nested": {
+        "name": "ResourceEntity",
+        "fields": [
+          {
+            "name": "id",
+            "tsType": "string",
+            "optional": false,
+            "description": "Stable domain identity of this resource source."
+          },
+          {
+            "name": "label",
+            "tsType": "string",
+            "optional": false,
+            "description": "Display title for its reveal."
+          },
+          {
+            "name": "description",
+            "tsType": "string",
+            "optional": false,
+            "description": "Player-facing explanation."
+          }
+        ]
+      }
     }
   ],
   "RichTextView": [
@@ -3000,14 +3024,6 @@
       "description": "Enable the calm floaty drift (disabled under reduced-motion via CSS)."
     },
     {
-      "name": "stageRef",
-      "tsType": "RefObject<HTMLElement | null>",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Screen root the reveal anchors + clamps against (for popover placement)."
-    },
-    {
       "name": "onSelect",
       "tsType": "(siteId: string) => void",
       "unionMembers": [],
@@ -3080,9 +3096,17 @@
       "name": "label",
       "tsType": "string",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
-      "description": "Accessible label (e.g. \"Tide: Valor\"). When unset the disc is decorative\nand hidden from assistive tech."
+      "description": "Display name used by the source and its tide card."
+    },
+    {
+      "name": "description",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Semantic description revealed by this tide source."
     },
     {
       "name": "size",
@@ -3094,14 +3118,6 @@
       "required": false,
       "defaultValue": "sm",
       "description": "Which enumerated {@link TideDiscSize} to render. Default 'sm'."
-    },
-    {
-      "name": "interactive",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "Interactive discs brighten on hover and show a pointer cursor — set this\nwhen the caller wires the disc up as a reveal trigger (the wrapper's\nshared hover-enlarge handles the scale). Default false."
     }
   ]
 }

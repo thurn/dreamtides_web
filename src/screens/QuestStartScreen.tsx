@@ -7,9 +7,9 @@ import { generateQuestSeed } from "../state/quest-state-actions";
 import { DreamcallerPortrait } from "../tango/components/hud/DreamcallerPortrait";
 import { EssenceValue } from "../tango/components/hud/EssenceValue";
 import { HoverPopover } from "../tango/components/overlay/HoverPopover";
-import { CardTermDefinitions } from "../tango/components/card/CardTermDefinitions";
 import { RulesText } from "../tango/components/card/RulesText";
-import { TIDE_COLOR_CHIP } from "../components/tide-visuals";
+import { TideDisc } from "../tango/components/hud/TideDisc";
+import type { Tide } from "../tango/components/hud/tide-spec";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";
 import type { DreamcallerContent } from "../types/content";
 
@@ -23,6 +23,7 @@ const TIDES_LABEL_HOVER_BLURB =
   "Pools of cards you will see during the quest. Different tides are used every time you play.";
 /** The select screen shows at most this many tides per Dreamcaller. */
 const MAX_TIDES_SHOWN = 4;
+const TIDE_BY_COLOR: Record<Tides4DeckJson["color"], Tide> = { purple: "shadow", green: "wild", yellow: "valor", blue: "vision", orange: "ember" };
 
 /** The total number of cards (counting copies) in a tide's decklist. */
 function tideCardCount(tide: Tides4DeckJson): number {
@@ -211,21 +212,12 @@ export function QuestStartScreen() {
                     glossary terms it uses (e.g. "ephemeral"), matching the
                     term-definition panel shown beside cards. */}
                 <div className="flex flex-col justify-center">
-                  <HoverPopover
-                    triggerAs="div"
-                    placement="top"
-                    maxWidthPx={null}
-                    content={
-                      <CardTermDefinitions text={dreamcaller.renderedText} />
-                    }
-                  >
                     <div
                       className="px-2 text-center text-sm leading-relaxed opacity-80"
                       style={{ color: "#e2e8f0" }}
                     >
                       <RulesText text={dreamcaller.renderedText} />
                     </div>
-                  </HoverPopover>
                 </div>
                 <div
                   className="mt-3 flex items-baseline justify-center gap-1.5 text-sm font-semibold"
@@ -359,47 +351,10 @@ export function QuestStartScreen() {
                   </span>
                   <div className="flex w-full flex-col items-start gap-1.5">
                     {tides.map((tide) => {
-                      const chip = TIDE_COLOR_CHIP[tide.color];
                       return (
-                        <HoverPopover
-                          key={`${dreamcaller.id}-${tide.id}`}
-                          content={
-                            <span
-                              className="block rounded-lg border px-3 py-2 text-left text-xs leading-relaxed shadow-2xl"
-                              style={{
-                                background: "#000000",
-                                borderColor: "rgba(255, 255, 255, 0.16)",
-                                color: "#ffffff",
-                              }}
-                              data-dreamcaller-tide-tooltip={`${dreamcaller.id}:${tide.id}`}
-                            >
-                              {tide.displayDescription ??
-                                tide.summary ??
-                                tide.description ??
-                                tide.name}
-                            </span>
-                          }
-                        >
-                          <span
-                            className="inline-flex max-w-full items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium"
-                            data-dreamcaller-tide={`${dreamcaller.id}:${tide.id}`}
-                            style={{
-                              background: chip.background,
-                              borderColor: chip.border,
-                              color: "#ffffff",
-                              cursor: "help",
-                            }}
-                          >
-                            <i
-                              aria-hidden="true"
-                              className={`bx ${chip.icon} text-sm leading-none`}
-                              style={{ color: "#ffffff" }}
-                            />
-                            <span className="truncate">
-                              {tide.displayName ?? tide.shortName ?? tide.name}
-                            </span>
-                          </span>
-                        </HoverPopover>
+                        <span key={`${dreamcaller.id}-${tide.id}`} data-dreamcaller-tide={`${dreamcaller.id}:${tide.id}`}>
+                          <TideDisc tide={TIDE_BY_COLOR[tide.color]} id={tide.id} label={tide.displayName ?? tide.shortName ?? tide.name} description={tide.displayDescription ?? tide.summary ?? tide.description ?? tide.name} />
+                        </span>
                       );
                     })}
                   </div>

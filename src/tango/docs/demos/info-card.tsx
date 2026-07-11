@@ -117,23 +117,6 @@ import { GLYPHS } from "src/tango/primitives/glyph";
 />`,
     },
     {
-      label: "Reveal on interaction",
-      note: "In real screens InfoCard is anchored to a trigger through the attached press engine (`InfoCard.PressInfo`): hover / touch-down reveals the `card` beside the wrapped trigger, measured against `stageRef`. Use it to wrap a trigger that has no reveal of its own (an essence value, a menu button). Readable rules copy passes `pressFeedback=\"stationary\"` so a held definition reveal does not shrink the text.",
-      code: `<InfoCard.PressInfo
-  stageRef={stageRef}
-  card={
-    <InfoCard
-      variant="icon"
-      glyph={GLYPHS.essence}
-      title="Essence"
-      body={richText.plain("Spend it on cards, dreamsigns, and services.")}
-    />
-  }
->
-  <ResourceChip kind="essence" value={200} />
-</InfoCard.PressInfo>`,
-    },
-    {
       label: "Mobile scale",
       note: "Every info card is 248px wide at native. On a narrow viewport it lays out at 45% of the viewport width, capped at that native 248px, so the implicit mobile cutoff is 248 ÷ 0.45 ≈ 551px and desktop keeps the authored geometry. Mobile-sized cards use a 0.86 internal type scale, preserving a 12px body voice; copy wraps into natural height so legibility grows vertically while the 45% width stays fixed. Both dimensions are driven by the live viewport — never a caller prop — through the exported `infoCardWidth` / `infoCardTextScale` helpers and the `INFO_CARD_WIDTH` constant.",
       code: `import { infoCardWidth, infoCardTextScale, INFO_CARD_WIDTH } from "src/tango/components/overlay/InfoCard";

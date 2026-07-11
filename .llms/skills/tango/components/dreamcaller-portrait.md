@@ -17,8 +17,11 @@ The one way to render a dreamcaller's character art: the transparent full-body c
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `dreamcaller` | `DreamcallerVisual` | yes | — | The dreamcaller whose art and identity the portrait shows. |
-| `variant` | `DreamcallerPortraitVariant` = `"fullBleed" \| "hero" \| "panel" \| "thumb" \| "standing"` | no | `panel` | Framing: self-framing `hero` / `panel` / `thumb`, or the full-bleed stage fills `standing` (desktop column) and `fullBleed` (mobile carousel). Default `panel`. |
+| `variant` | `DreamcallerPortraitVariant` = `"fullBleed" \| "hero" \| "panel" \| "thumb" \| "standing"` | no | — | Framing: self-framing `hero` / `panel` / `thumb`, or the full-bleed stage fills `standing` (desktop column) and `fullBleed` (mobile carousel). Default `panel`. |
 | `size` | `number` | no | — | Fixed pixel width. Panel/thumb stay square, so this also sets their height. A sized portrait never shrinks in a flex row. Omit to fill the container width. Ignored by `standing`/`fullBleed`, which fill the caller's stage. |
+| `profile` | `{ id: string; ability: string; }` | no | — | Semantic Dreamcaller profile represented by this portrait. Omit for decorative art. |
+| `onActivate` | `(() => void)` | no | — | Optional activation for selectable profile portraits. |
+| `unavailable` | `boolean` | no | `false` | Keeps the profile readable while suppressing activation. |
 
 ### `dreamcaller`: the `DreamcallerVisual` model
 

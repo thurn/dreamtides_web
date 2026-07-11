@@ -33,13 +33,10 @@
 import {
   useCallback,
   useEffect,
-  useLayoutEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
-import type { CSSProperties, ReactNode, RefObject } from "react";
-import { createPortal } from "react-dom";
+import type { CSSProperties, ReactNode } from "react";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
 import { GameCard } from "../components/card/CardView";
@@ -49,7 +46,6 @@ import {
   type DreamcallerVisual,
 } from "../components/hud/DreamcallerPortrait";
 import { Dreamsign } from "../components/hud/Dreamsign";
-import { InfoCard, type AnchorRect } from "../components/overlay/InfoCard";
 import { richText } from "../components/card/rich-text";
 import { artRef } from "../primitives/art";
 import { Pressable } from "../primitives/Pressable";
@@ -60,6 +56,8 @@ import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { DeckCardView } from "./MobileDeckViewer";
 import { DeckViewerBackdrop, GridPlaceholder } from "./deck-viewer-shared";
+import { useRevealSource } from "../internal/reveal/context";
+import { revealEntityId } from "../internal/reveal/identity";
 import {
   type DesktopDeckFilterSort,
   type DeckCardSize,
@@ -72,10 +70,10 @@ import {
   filterAndSortDesktopDeckCards,
 } from "./desktop-deck-filter";
 
-const { PressPopover, usePressReveal, anchorRect } = InfoCard;
-
 /** The Dreamcaller shown in the sidebar: the portrait's visual plus rules text. */
 export interface DeckDreamcallerView extends DreamcallerVisual {
+  /** Stable Dreamcaller UUID. */
+  id: string;
   /** The Dreamcaller's ability text, revealed through the shared InfoCard. */
   renderedText: string;
 }
@@ -129,7 +127,6 @@ const DREAMCALLER_PORTRAIT_PX = DREAMSIGN_TILE_PX;
  * (the dark margin) or Escape closes it.
  */
 export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
-  const stageRef = useRef<HTMLDivElement | null>(null);
   const [filterSort, setFilterSort] = useState<DesktopDeckFilterSort>(
     DEFAULT_DESKTOP_DECK_FILTER_SORT,
   );
@@ -159,7 +156,6 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
 
   return (
     <div
-      ref={stageRef}
       className="tango"
       // A transparent host: the black alpha scrim is a separate sibling layer,
       // leaving the scene unblurred while the controls retain their own glass
@@ -208,7 +204,6 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
           <Sidebar
             dreamcaller={view.dreamcaller}
             dreamsigns={view.dreamsigns}
-            stageRef={stageRef}
           />
           <main
             style={{
@@ -308,11 +303,9 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
 function Sidebar({
   dreamcaller,
   dreamsigns,
-  stageRef,
 }: {
   dreamcaller: DeckDreamcallerView | null;
   dreamsigns: DreamsignData[];
-  stageRef: RefObject<HTMLDivElement | null>;
 }) {
   return (
     <aside
@@ -327,9 +320,9 @@ function Sidebar({
       }}
     >
       {dreamcaller !== null && (
-        <DreamcallerBlock dreamcaller={dreamcaller} stageRef={stageRef} />
+        <DreamcallerBlock dreamcaller={dreamcaller} />
       )}
-      <DreamsignsBlock dreamsigns={dreamsigns} stageRef={stageRef} />
+      <DreamsignsBlock dreamsigns={dreamsigns} />
     </aside>
   );
 }
@@ -344,23 +337,14 @@ function Sidebar({
  */
 function DreamcallerBlock({
   dreamcaller,
-  stageRef,
 }: {
   dreamcaller: DeckDreamcallerView;
-  stageRef: RefObject<HTMLDivElement | null>;
 }) {
-  const ref = useRef<HTMLElement>(null);
-  const { shown, begin, end, enter, leave } = usePressReveal();
-  const [anchor, setAnchor] = useState<AnchorRect | null>(null);
-  useLayoutEffect(() => {
-    if (shown && stageRef.current && ref.current) {
-      setAnchor(anchorRect(stageRef.current, ref.current));
-    } else {
-      setAnchor(null);
-    }
-  }, [shown, stageRef]);
-
   const ability = dreamcaller.renderedText.trim();
+  const binding = useRevealSource({
+    identity: { entityType: "dreamcaller", entityId: revealEntityId("dreamcaller", dreamcaller.id) },
+    spec: { primary: { kind: "infoCard", card: { variant: "fullBleed", image: artRef.dreamcaller(dreamcaller.imageNumber), imageCrop: "top", title: dreamcaller.name, subtitle: dreamcaller.title, body: ability !== "" ? richText.rules(ability) : undefined } }, secondaries: [] },
+  });
   return (
     <section
       style={{ display: "flex", flexDirection: "column", gap: token("--space-6") }}
@@ -368,7 +352,7 @@ function DreamcallerBlock({
       <SidebarSectionHeader label="Dreamcaller" />
       <div style={{ display: "flex", justifyContent: "flex-start" }}>
         {/* The portrait itself is the reveal trigger: Pressable owns the one
-            shared press/hover scale, while usePressReveal (its pointer handlers
+            shared press/hover scale, while the reveal coordinator (its pointer handlers
             chained through) owns the show/hide of the portalled InfoCard. The
             button carries the accent frame — the same 2px violet border, glow,
             and control radius the quest status bar's Dreamcaller bust wears — so
@@ -376,14 +360,12 @@ function DreamcallerBlock({
             the art to that rounded frame. */}
         <Pressable
           as="button"
-          ref={ref}
+          ref={binding.ref}
+          {...binding.sourceProps}
           aria-label={`${dreamcaller.name}, ${dreamcaller.title}`}
-          onPointerEnter={enter}
-          onPointerDown={begin}
-          onPointerUp={end}
-          onPointerLeave={leave}
-          onPointerCancel={end}
+          tabIndex={0}
           style={{
+            ...binding.sourceProps.style,
             padding: 0,
             background: "none",
             borderRadius: token("--radius-control"),
@@ -400,22 +382,6 @@ function DreamcallerBlock({
           />
         </Pressable>
       </div>
-      {shown &&
-        anchor &&
-        stageRef.current &&
-        createPortal(
-          <PressPopover anchor={anchor}>
-            <InfoCard
-              variant="fullBleed"
-              image={artRef.dreamcaller(dreamcaller.imageNumber)}
-              imageCrop="top"
-              title={dreamcaller.name}
-              subtitle={dreamcaller.title}
-              body={ability !== "" ? richText.rules(ability) : undefined}
-            />
-          </PressPopover>,
-          stageRef.current,
-        )}
     </section>
   );
 }
@@ -423,10 +389,8 @@ function DreamcallerBlock({
 /** The collected dreamsigns as hoverable art tiles. */
 function DreamsignsBlock({
   dreamsigns,
-  stageRef,
 }: {
   dreamsigns: DreamsignData[];
-  stageRef: RefObject<HTMLDivElement | null>;
 }) {
   return (
     <section
@@ -452,7 +416,6 @@ function DreamsignsBlock({
               key={requireDreamsignId(sign, "Desktop deck viewer dreamsign")}
               dreamsign={sign}
               sizePx={DREAMSIGN_TILE_PX}
-              stageRef={stageRef}
             />
           ))}
         </div>

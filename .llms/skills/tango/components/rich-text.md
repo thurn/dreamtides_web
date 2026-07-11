@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/rich-text`
 
-Real consumers: **10** (imports outside `src/tango/docs/` and tests).
+Real consumers: **12** (imports outside `src/tango/docs/` and tests).
 
 The design system's model for a run of formatted copy. The caller describes what the text is — plain prose, Dreamtides rules text with glossary-keyword emphasis and inline resource glyphs, a muted note, or a vertical stack of parts — and the renderer owns how it looks. Copy slots take a RichText, never an arbitrary node.
 

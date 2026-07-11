@@ -116,7 +116,6 @@ export function DreamscapeScreen({
             key={model.site.id}
             model={model}
             motion
-            stageRef={stageRef}
             onSelect={onSelectSite}
           />
         ))}

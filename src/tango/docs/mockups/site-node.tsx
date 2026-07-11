@@ -91,7 +91,6 @@ export function SiteNodeMockup() {
           key={model.site.id}
           model={model}
           motion
-          stageRef={stageRef}
           onSelect={() => undefined}
         />
       ))}

@@ -1,4 +1,4 @@
-import { ENERGY_PIP_COLOR } from "./PipBadge";
+import { ENERGY_PIP_COLOR } from "./pip-colors";
 import { type Glyph, GLYPHS } from "../../primitives/glyph";
 import { type TangoColor, resolveColor } from "../../primitives/color";
 import { type MediaFilter, resolveMediaFilter } from "../../primitives/media";

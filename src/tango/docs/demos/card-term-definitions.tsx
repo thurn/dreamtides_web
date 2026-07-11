@@ -45,6 +45,7 @@ function CardTermDefinitionsDemo(args: Record<string, unknown>) {
 }
 
 export const cardTermDefinitionsDemo: TangoComponent = {
+  status: "incubating",
   id: "card-term-definitions",
   title: "Card Term Definitions",
   blurb:

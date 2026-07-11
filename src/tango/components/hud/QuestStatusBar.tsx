@@ -9,7 +9,7 @@
 // the screen.
 //
 // Everything press-reveals through the one shared engine (Tango's InfoCard /
-// usePressReveal / PressPopover), so timing can't diverge:
+// reveal coordinator, so timing can't diverge:
 //   - the essence value           → InfoCard 'text'
 //   - the Dreamcaller bust (pops ABOVE the bar) → InfoCard 'hero'
 //   - each docked dreamsign        → InfoCard 'object'
@@ -29,8 +29,8 @@
 //     so glossary keywords highlight in place; UI copy (the essence blurb) uses
 //     `richText.plain`.
 //   - Each bespoke press target wires `onPointerEnter`/`onPointerLeave` to
-//     Tango's input-adaptive usePressReveal (hover reveals on a fine pointer,
-//     press reveals on touch), exactly as InfoCard.PressInfo does, so the HUD
+//     Tango's input-adaptive reveal source (hover reveals on a fine pointer,
+//     press reveals on touch), so the HUD
 //     reveals on desktop as well as touch.
 //
 // The deck sprite — the tentacled card-back with its orange slit eye — is
@@ -39,9 +39,6 @@
 
 import * as React from "react";
 import type { CSSProperties, ReactElement } from "react";
-import { createPortal } from "react-dom";
-import { InfoCard } from "../overlay/InfoCard";
-import type { AnchorRect } from "../overlay/InfoCard";
 import { richText } from "../card/rich-text";
 import { token } from "../../primitives/tokens";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
@@ -53,10 +50,10 @@ import type { Dreamsign as DreamsignData } from "../../../types/quest";
 import { requireDreamsignId } from "../../../data/dreamsigns";
 import type { DreamcallerPortraitFocus } from "../../../types/content";
 import { DEFAULT_DREAMCALLER_PORTRAIT_FOCUS } from "./DreamcallerPortrait";
+import { useRevealSource } from "../../internal/reveal/context";
+import { revealEntityId } from "../../internal/reveal/identity";
+import { Pressable } from "../../primitives/Pressable";
 import "./quest-status-bar.css";
-
-const { PressPopover, usePressReveal, anchorRect, PRESS_SCALE, HOVER_SCALE } =
-  InfoCard;
 
 /** Zooms the dreamcaller bust render so the face fills the circular frame. A
  * bespoke crop factor, named so it reads as an intentional framing crop rather
@@ -100,6 +97,8 @@ export type QsbDreamsign = DreamsignData;
 
 /** The active Dreamcaller shown as a bust in the HUD. */
 export interface QsbDreamcaller {
+  /** Stable Dreamcaller UUID. */
+  id: string;
   name: string;
   epithet?: string;
   /** The portrait art as an {@link ArtRef}. Required — a docked Dreamcaller always has art. */
@@ -137,19 +136,10 @@ function QsbOverflowStack({
   onOpenWindow: () => void;
 }): ReactElement {
   const size = 36;
-  const { pressed, hovered, begin, end, enter, leave } = usePressReveal();
-  const onUp = (): void => {
-    end();
-    onOpenWindow();
-  };
   return (
-    <button
-      type="button"
-      onPointerEnter={enter}
-      onPointerDown={begin}
-      onPointerUp={onUp}
-      onPointerLeave={leave}
-      onPointerCancel={end}
+    <Pressable
+      as="button"
+      onClick={onOpenWindow}
       aria-label={`View ${String(signs.length)} dreamsigns`}
       style={{
         display: "flex",
@@ -160,12 +150,6 @@ function QsbOverflowStack({
         cursor: "pointer",
         touchAction: "none",
         WebkitTapHighlightColor: "transparent",
-        transform: pressed
-          ? `scale(${String(PRESS_SCALE)})`
-          : hovered
-            ? `scale(${String(HOVER_SCALE)})`
-            : "scale(1)",
-        transition: `transform ${token("--dur-fast")} ${token("--ease-out")}`,
       }}
     >
       {signs.map((s, i) => (
@@ -185,7 +169,7 @@ function QsbOverflowStack({
           }}
         />
       ))}
-    </button>
+    </Pressable>
   );
 }
 
@@ -275,7 +259,6 @@ function QsbDreamsignStrip({
             variant="hud"
             dreamsign={s}
             sizePx={SIGN}
-            stageRef={stageRef}
           />
         ))}
       </div>
@@ -293,11 +276,9 @@ function QsbDreamsignStrip({
    the one centered solid window (not a bottom sheet). */
 function QsbDreamsignWindow({
   signs,
-  stageRef,
   onClose,
 }: {
   signs: QsbDreamsign[];
-  stageRef: React.RefObject<HTMLElement | null>;
   onClose: () => void;
 }): ReactElement {
   return (
@@ -364,7 +345,6 @@ function QsbDreamsignWindow({
               variant="hud"
               dreamsign={s}
               sizePx={60}
-              stageRef={stageRef}
             />
           ))}
         </div>
@@ -378,16 +358,19 @@ function QsbDreamsignWindow({
    pointer, press reveals on touch, and it portals its own 'hero' InfoCard. */
 function QsbDreamcallerBust({
   dreamcaller,
-  stageRef,
 }: {
   /** The docked Dreamcaller, or undefined for the empty placeholder frame. */
   dreamcaller?: QsbDreamcaller;
-  stageRef: React.RefObject<HTMLElement | null>;
 }): ReactElement {
-  const ref = React.useRef<HTMLButtonElement>(null);
-  const { pressed, hovered, shown, begin, end, enter, leave } =
-    usePressReveal();
-  const [anchor, setAnchor] = React.useState<AnchorRect | null>(null);
+  const binding = useRevealSource({
+    identity: { entityType: "dreamcaller", entityId: revealEntityId("dreamcaller", dreamcaller?.id ?? "empty") },
+    spec: {
+      primary: { kind: "infoCard", card: dreamcaller === undefined
+        ? { variant: "text", title: "Dreamcaller", body: richText.plain("No Dreamcaller is active.") }
+        : { variant: "fullBleed", image: dreamcaller.portrait, imageCrop: "top", title: dreamcaller.name, subtitle: dreamcaller.epithet, body: dreamcaller.ability ? richText.rules(dreamcaller.ability) : undefined } },
+      secondaries: [],
+    },
+  });
   const focus =
     dreamcaller?.portraitFocus ?? DEFAULT_DREAMCALLER_PORTRAIT_FOCUS;
   const focusX = Math.max(0, Math.min(1, focus.x));
@@ -396,23 +379,13 @@ function QsbDreamcallerBust({
     0,
     Math.min(1, 3 * focusY - 1 / DREAMCALLER_BUST_CROP_SCALE),
   );
-  React.useLayoutEffect(() => {
-    if (shown && stageRef.current && ref.current) {
-      setAnchor(anchorRect(stageRef.current, ref.current));
-    } else {
-      setAnchor(null);
-    }
-  }, [shown, stageRef]);
   return (
-    <button
-      ref={ref}
-      type="button"
+    <Pressable
+      as="button"
+      ref={binding.ref}
+      {...binding.sourceProps}
       aria-label="Dreamcaller"
-      onPointerEnter={enter}
-      onPointerDown={begin}
-      onPointerUp={end}
-      onPointerLeave={leave}
-      onPointerCancel={end}
+      tabIndex={0}
       style={{
         // width/height are fixed by quest-status-bar.css (var(--qsb-dc-size),
         // !important, default 66px); kept here as a same-value fallback for when
@@ -432,12 +405,7 @@ function QsbDreamcallerBust({
         cursor: "pointer",
         touchAction: "none",
         WebkitTapHighlightColor: "transparent",
-        transform: pressed
-          ? `scale(${String(PRESS_SCALE)})`
-          : hovered
-            ? `scale(${String(HOVER_SCALE)})`
-            : "scale(1)",
-        transition: `transform ${token("--dur-fast")} ${token("--ease-out")}`,
+        ...binding.sourceProps.style,
       }}
     >
       {dreamcaller && (
@@ -456,27 +424,7 @@ function QsbDreamcallerBust({
           }}
         />
       )}
-      {dreamcaller &&
-        anchor &&
-        stageRef.current &&
-        createPortal(
-          <PressPopover anchor={anchor}>
-            <InfoCard
-              variant="fullBleed"
-              image={dreamcaller.portrait}
-              imageCrop="top"
-              title={dreamcaller.name}
-              subtitle={dreamcaller.epithet}
-              body={
-                dreamcaller.ability
-                  ? richText.rules(dreamcaller.ability)
-                  : undefined
-              }
-            />
-          </PressPopover>,
-          stageRef.current,
-        )}
-    </button>
+    </Pressable>
   );
 }
 
@@ -486,35 +434,25 @@ function QsbDreamcallerBust({
    HUD's column div, matching the DOM shape quest-status-bar.css targets. */
 function QsbEssence({
   essence = 0,
-  stageRef,
   scale = 1,
 }: {
   essence?: number;
-  stageRef: React.RefObject<HTMLElement | null>;
   scale?: number;
 }): ReactElement {
-  const ref = React.useRef<HTMLSpanElement>(null);
-  const { pressed, hovered, shown, begin, end, enter, leave } =
-    usePressReveal();
-  const [anchor, setAnchor] = React.useState<AnchorRect | null>(null);
-  React.useLayoutEffect(() => {
-    if (shown && stageRef.current && ref.current) {
-      setAnchor(anchorRect(stageRef.current, ref.current));
-    } else {
-      setAnchor(null);
-    }
-  }, [shown, stageRef]);
+  const binding = useRevealSource({
+    identity: { entityType: "resource-essence", entityId: revealEntityId("resource-essence", "quest-total") },
+    spec: { primary: { kind: "infoCard", card: { variant: "icon", glyph: GLYPHS.essence, title: "Essence Total", body: richText.plain("A currency you use during quests to modify your deck.") } }, secondaries: [] },
+  });
   return (
-    <span
-      ref={ref}
+    <Pressable
+      as="span"
+      ref={binding.ref}
+      {...binding.sourceProps}
       role="button"
+      tabIndex={0}
       aria-label="Essence Total"
-      onPointerEnter={enter}
-      onPointerDown={begin}
-      onPointerUp={end}
-      onPointerLeave={leave}
-      onPointerCancel={end}
       style={{
+        ...binding.sourceProps.style,
         display: "inline-flex",
         alignItems: "center",
         gap: 0,
@@ -528,12 +466,6 @@ function QsbEssence({
         touchAction: "none",
         WebkitTapHighlightColor: "transparent",
         transformOrigin: "left center",
-        transform: pressed
-          ? `scale(${String(PRESS_SCALE)})`
-          : hovered
-            ? `scale(${String(HOVER_SCALE)})`
-            : "scale(1)",
-        transition: `transform ${token("--dur-fast")} ${token("--ease-out")}`,
       }}
     >
       {essence}
@@ -542,21 +474,7 @@ function QsbEssence({
         color="essence"
         size={`${String(Math.round(20 * scale))}px`}
       />
-      {anchor &&
-        stageRef.current &&
-        createPortal(
-          <PressPopover anchor={anchor}>
-            <InfoCard
-              variant="text"
-              title="Essence Total"
-              body={richText.plain(
-                "A currency you use during quests to modify your deck.",
-              )}
-            />
-          </PressPopover>,
-          stageRef.current,
-        )}
-    </span>
+    </Pressable>
   );
 }
 
@@ -568,14 +486,12 @@ function QsbHudBar({
   deck = 0,
   onViewDeck,
   dreamcaller,
-  stageRef,
   scale = 1,
 }: {
   essence?: number;
   deck?: number | string;
   onViewDeck?: () => void;
   dreamcaller?: QsbDreamcaller;
-  stageRef: React.RefObject<HTMLElement | null>;
   scale?: number;
 }): ReactElement {
   return (
@@ -592,7 +508,7 @@ function QsbHudBar({
         paddingLeft: Math.round(12 * scale),
       }}
     >
-      <QsbDreamcallerBust dreamcaller={dreamcaller} stageRef={stageRef} />
+      <QsbDreamcallerBust dreamcaller={dreamcaller} />
       <div
         style={{
           display: "flex",
@@ -601,7 +517,7 @@ function QsbHudBar({
           marginRight: "auto",
         }}
       >
-        <QsbEssence essence={essence} stageRef={stageRef} scale={scale} />
+        <QsbEssence essence={essence} scale={scale} />
       </div>
       <button
         type="button"
@@ -691,7 +607,6 @@ export function QuestStatusBar({
           deck={deck}
           onViewDeck={onViewDeck}
           dreamcaller={dreamcaller}
-          stageRef={stageRef}
           scale={scale}
         />
       </div>
@@ -705,7 +620,6 @@ export function QuestStatusBar({
       {signWindow && (
         <QsbDreamsignWindow
           signs={dreamsigns}
-          stageRef={stageRef}
           onClose={() => setSignWindow(false)}
         />
       )}

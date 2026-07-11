@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/pip-badge`
 
-Real consumers: **3** (imports outside `src/tango/docs/` and tests).
+Real consumers: **2** (imports outside `src/tango/docs/` and tests).
 
 The circled number on a colored disc for card stats: a spark value or an energy cost, and the inline spark reference inside rules text. The value renders in white with a thin outline so it stays legible over the colored fill at small card sizes, and each variant owns its resource fill so a corner pip and an inline reference to the same resource cannot drift apart. An optional tooltip turns a pip into its own hover anchor on a longer delay tuned for card corners.
 

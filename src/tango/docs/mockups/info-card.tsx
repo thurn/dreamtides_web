@@ -1,6 +1,6 @@
 // Full-screen mockup for InfoCard — a mock HUD where several pressable objects
 // each reveal one of InfoCard's media variants through the shared press /
-// hover reveal engine (InfoCard.PressInfo + the variants on one shell).
+// reveal engine and the variants on one shell.
 // Each trigger anchors its card to the full-viewport stageRef so the cards clamp
 // against the real screen edges. The full-bleed and object media resolve from a
 // real asset in `public/` (a Dreamcaller portrait); the icon and text variants
@@ -16,7 +16,6 @@ import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 
 interface TriggerProps {
-  stageRef: React.RefObject<HTMLDivElement | null>;
   label: string;
   variant: string;
   glyph: string;
@@ -24,10 +23,9 @@ interface TriggerProps {
 }
 
 /** One pressable HUD object that reveals its InfoCard on hover / press. */
-function Trigger({ stageRef, label, variant, glyph, card }: TriggerProps) {
-  const { PressInfo } = InfoCard;
+function Trigger({ label, variant, glyph, card }: TriggerProps) {
   return (
-    <PressInfo stageRef={stageRef} card={card} holdStillClicks>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: token("--space-4") }}>
       <span
         style={{
           display: "inline-flex",
@@ -72,7 +70,8 @@ function Trigger({ stageRef, label, variant, glyph, card }: TriggerProps) {
           {variant}
         </span>
       </span>
-    </PressInfo>
+      {card}
+    </div>
   );
 }
 
@@ -121,7 +120,6 @@ export function InfoCardMockup() {
         }}
       >
         <Trigger
-          stageRef={stageRef}
           label="Dreamcaller"
           variant="fullBleed"
           glyph="bxf bx-user-circle"
@@ -136,7 +134,6 @@ export function InfoCardMockup() {
           }
         />
         <Trigger
-          stageRef={stageRef}
           label="Reward"
           variant="object"
           glyph="bxf bx-gift"
@@ -151,7 +148,6 @@ export function InfoCardMockup() {
           }
         />
         <Trigger
-          stageRef={stageRef}
           label="Epithet"
           variant="text"
           glyph="bxf bx-user-circle"
@@ -167,7 +163,6 @@ export function InfoCardMockup() {
           }
         />
         <Trigger
-          stageRef={stageRef}
           label="Merchant"
           variant="icon"
           glyph="bxf bx-store-alt-2"
@@ -183,7 +178,6 @@ export function InfoCardMockup() {
           }
         />
         <Trigger
-          stageRef={stageRef}
           label="Essence"
           variant="text"
           glyph="bxf bx-water"

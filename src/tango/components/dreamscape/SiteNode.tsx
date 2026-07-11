@@ -11,7 +11,7 @@
 // design source): on a fine pointer (mouse / desktop) HOVER reveals and a click
 // enters the site; on a coarse pointer (touch) press-down reveals, and a quick
 // tap enters while a deliberate hold-to-read is just a read. It routes through
-// InfoCard's `usePressReveal` + `anchorRect` + `PressPopover`, so timing,
+// the shared reveal coordinator, so timing,
 // placement, and the on-screen clamp match every other Tango reveal.
 //
 // Unifies the local `DreamscapeSiteNode` / `DreamscapeSitePopover` pair with the
@@ -24,17 +24,15 @@
 
 import * as React from "react";
 import type { CSSProperties } from "react";
-import { createPortal } from "react-dom";
-import { InfoCard } from "../overlay/InfoCard";
 import { richText, type RichText } from "../card/rich-text";
 import { type ScatterPoint } from "./dreamscape-scatter";
 import type { SiteState } from "../../../types/quest";
 import { type Glyph, GLYPHS } from "../../primitives/glyph";
 import { type TangoColor, withAlpha } from "../../primitives/color";
-import { token } from "../../primitives/tokens";
+import { useRevealSource } from "../../internal/reveal/context";
+import { revealEntityId } from "../../internal/reveal/identity";
+import { Pressable } from "../../primitives/Pressable";
 import "./site-node.css";
-
-const { usePressReveal, anchorRect, PressPopover } = InfoCard;
 
 /** Disc diameter in px. Guardian battles use pulse/badge treatment while the
  * disc diameter stays fixed. The disc's size is the design system's, not a
@@ -90,8 +88,6 @@ export interface SiteNodeProps {
   model: DreamscapeSiteModel;
   /** Enable the calm floaty drift (disabled under reduced-motion via CSS). */
   motion: boolean;
-  /** Screen root the reveal anchors + clamps against (for popover placement). */
-  stageRef: React.RefObject<HTMLElement | null>;
   /** Enter the site; fired on a tap / click of an interactive node only. */
   onSelect: (siteId: string) => void;
 }
@@ -103,25 +99,20 @@ export interface SiteNodeProps {
 export function SiteNode({
   model,
   motion,
-  stageRef,
   onSelect,
 }: SiteNodeProps): React.ReactElement {
   const { site, pos, index, isBattle, isLocked, isInteractive } = model;
 
-  const btnRef = React.useRef<HTMLButtonElement>(null);
-  const { shown, fine, begin, end, enter, leave, heldPastTap, pointerRef } =
-    usePressReveal();
-  const [anchor, setAnchor] = React.useState<ReturnType<
-    typeof anchorRect
-  > | null>(null);
-
-  React.useLayoutEffect(() => {
-    if (shown && stageRef.current && btnRef.current) {
-      setAnchor(anchorRect(stageRef.current, btnRef.current, pointerRef.current));
-    } else {
-      setAnchor(null);
-    }
-  }, [shown, stageRef, pointerRef]);
+  const binding = useRevealSource({
+    identity: { entityType: "site", entityId: revealEntityId("site", site.id) },
+    spec: {
+      primary: { kind: "infoCard", card: { variant: "icon", glyph: model.icon, title: model.label, body: siteRevealBody(model) } },
+      secondaries: [],
+    },
+    onActivate: isInteractive ? () => onSelect(site.id) : undefined,
+  });
+  const lastPointerType = React.useRef<string | null>(null);
+  const pointerDown = binding.sourceProps.onPointerDown;
 
   // Every site disc is the same size — the guardian battle reads as special
   // through its pulsing ring and lock badge, not a larger disc.
@@ -134,34 +125,9 @@ export function SiteNode({
   // Ring + border derive from the node's fixed accent via color-mix alpha. The
   // bright ring shows while the reveal is up (hover on a fine pointer, press on
   // touch).
-  const ring = shown
+  const ring = binding.sourceProps["data-reveal-active"] === "true"
     ? `0 0 0 2px ${withAlpha(NODE_ACCENT, 0.9)}, 0 0 30px ${withAlpha(NODE_ACCENT, 0.55)}, 0 14px 26px rgba(0,0,0,.55)`
     : `0 0 0 1px ${withAlpha(NODE_ACCENT, 0.35)}, 0 0 18px ${withAlpha(NODE_ACCENT, 0.26)}, 0 8px 18px rgba(0,0,0,.5)`;
-
-  const doSelect = (): void => {
-    if (isInteractive) {
-      onSelect(site.id);
-    }
-  };
-
-  const onUp = (): void => {
-    // On touch, a deliberate hold-to-read must not enter the site; a quick tap
-    // does. On a fine pointer the click event drives selection instead.
-    const wasHold = !fine && heldPastTap();
-    end();
-    if (!fine && !wasHold) {
-      doSelect();
-    }
-  };
-
-  const onClick = (): void => {
-    // Fine pointer: a click enters the site. (On touch, selection already
-    // happened in onUp; the synthesized click after a tap would double-fire, so
-    // it is guarded by the fine check.)
-    if (fine) {
-      doSelect();
-    }
-  };
 
   const nodeStyle: CSSProperties = {
     left: `${String(pos.x)}%`,
@@ -171,29 +137,26 @@ export function SiteNode({
     marginLeft: -diameter / 2,
     marginTop: -diameter / 2,
     animationDelay: `${String(index * -1.37)}s`,
-    zIndex: shown ? 40 : 10,
-    transform:
-      shown && isInteractive
-        ? `scale(${token("--node-hover-scale")})`
-        : "scale(1)",
+    zIndex: binding.sourceProps["data-reveal-active"] === "true" ? 40 : 10,
+    ...binding.sourceProps.style,
     touchAction: "none",
     WebkitTapHighlightColor: "transparent",
   };
 
   return (
-    <button
-      ref={btnRef}
-      type="button"
+    <Pressable
+      as="button"
+      ref={binding.ref}
+      {...binding.sourceProps}
       className={"ds-node" + (motion ? " floaty" : "")}
       style={nodeStyle}
-      onPointerEnter={enter}
-      onPointerDown={begin}
-      onPointerUp={onUp}
-      onPointerLeave={leave}
-      onPointerCancel={end}
-      onFocus={enter}
-      onBlur={leave}
-      onClick={onClick}
+      onPointerDown={(event) => { lastPointerType.current = event.pointerType; pointerDown?.(event); }}
+      onClick={() => { if (isInteractive && lastPointerType.current !== "touch") onSelect(site.id); }}
+      onKeyDown={(event) => {
+        if (isInteractive && (event.key === "Enter" || event.key === " ")) {
+          event.preventDefault(); onSelect(site.id);
+        }
+      }}
       aria-label={model.label}
       aria-disabled={!isInteractive}
       data-site-id={site.id}
@@ -232,19 +195,6 @@ export function SiteNode({
           <i className={GLYPHS.lockFilled} />
         </span>
       )}
-      {anchor &&
-        stageRef.current &&
-        createPortal(
-          <PressPopover anchor={anchor}>
-            <InfoCard
-              variant="icon"
-              glyph={model.icon}
-              title={model.label}
-              body={siteRevealBody(model)}
-            />
-          </PressPopover>,
-          stageRef.current,
-        )}
-    </button>
+    </Pressable>
   );
 }

@@ -30,16 +30,14 @@ const TIDE_HIT_SLOP = token("--space-2");
  * hairline, the tides cluster + starting essence, and the Choose action. */
 function DreamcallerConsole({
   dreamcaller,
-  stageRef,
   onChoose,
 }: {
   dreamcaller: DreamcallerOfferView;
-  stageRef: React.RefObject<HTMLElement | null>;
   onChoose: () => void;
 }) {
   return (
     <GroupPanel>
-      <AbilityReveal text={dreamcaller.renderedText} stageRef={stageRef} />
+      <AbilityReveal text={dreamcaller.renderedText} />
 
       {/* An even --space-6 rhythm around the divider, matching the desktop card:
           one step above (equal to the GroupPanel's own --space-6 top padding, so
@@ -55,7 +53,6 @@ function DreamcallerConsole({
       <div style={{ marginTop: token("--space-6") }}>
         <TidesEssenceBlock
           dreamcaller={dreamcaller}
-          stageRef={stageRef}
           hitSlop={TIDE_HIT_SLOP}
         />
       </div>
@@ -177,13 +174,11 @@ function DreamcallerPage({
   active,
   count,
   onChoose,
-  stageRef,
 }: {
   dreamcaller: DreamcallerOfferView;
   active: boolean;
   count: number;
   onChoose: () => void;
-  stageRef: React.RefObject<HTMLElement | null>;
 }) {
   return (
     <div
@@ -218,7 +213,6 @@ function DreamcallerPage({
       >
         <DreamcallerConsole
           dreamcaller={dreamcaller}
-          stageRef={stageRef}
           onChoose={onChoose}
         />
       </div>
@@ -229,7 +223,6 @@ function DreamcallerPage({
 /** The mobile Dreamcaller-selection carousel: a full-bleed swipe carousel of
  * the offered Dreamcallers, one per page. */
 export function CarouselSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
-  const stageRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const [dx, setDx] = useState(0);
   const drag = useRef<{ active: boolean; x0: number }>({ active: false, x0: 0 });
@@ -258,7 +251,6 @@ export function CarouselSelect({ dreamcallers, onPick }: QuestStartScreenProps) 
 
   return (
     <div
-      ref={stageRef}
       className="tango"
       style={{
         position: "relative",
@@ -297,7 +289,6 @@ export function CarouselSelect({ dreamcallers, onPick }: QuestStartScreenProps) 
             onChoose={() => {
               onPick(dreamcaller.id);
             }}
-            stageRef={stageRef}
           />
         ))}
       </div>

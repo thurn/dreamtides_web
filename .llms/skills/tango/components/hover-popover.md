@@ -6,7 +6,7 @@
 
 Primitives · Live demo & interactive props: `/tango#/hover-popover`
 
-Real consumers: **13** (imports outside `src/tango/docs/` and tests).
+Real consumers: **6** (imports outside `src/tango/docs/` and tests).
 
 A lightweight hover/focus tooltip primitive that portals a small content node to document.body, kept on-screen by a viewport-aware placement pass; used for glossary-term definitions on rules text and full-card previews on compact deck rows.
 

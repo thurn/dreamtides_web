@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/info-card`
 
-Real consumers: **12** (imports outside `src/tango/docs/` and tests).
+Real consumers: **7** (imports outside `src/tango/docs/` and tests).
 
 The one press-to-reveal information card. Its media treatment varies by content — object, full-bleed, atlas reveal, icon, tide, or text — over a single fixed liquid-glass shell and reveal contract. On a narrow viewport a card lays out at 45% of screen width capped at its native 248px, so below ~551px (248 ÷ 0.45) it begins scaling down — an intentional content-driven cutoff, distinct from the 900px desktop/mobile breakpoint.
 
@@ -136,26 +136,6 @@ A named `tide` on its OWN colored disc, with the tide's alignment name (Valor, S
   title="Rising Valor"
   body={richText.plain("A tide of steadfast courage that rewards holding the line.")}
 />
-```
-
-### Reveal on interaction
-
-In real screens InfoCard is anchored to a trigger through the attached press engine (`InfoCard.PressInfo`): hover / touch-down reveals the `card` beside the wrapped trigger, measured against `stageRef`. Use it to wrap a trigger that has no reveal of its own (an essence value, a menu button). Readable rules copy passes `pressFeedback="stationary"` so a held definition reveal does not shrink the text.
-
-```tsx
-<InfoCard.PressInfo
-  stageRef={stageRef}
-  card={
-    <InfoCard
-      variant="icon"
-      glyph={GLYPHS.essence}
-      title="Essence"
-      body={richText.plain("Spend it on cards, dreamsigns, and services.")}
-    />
-  }
->
-  <ResourceChip kind="essence" value={200} />
-</InfoCard.PressInfo>
 ```
 
 ### Mobile scale

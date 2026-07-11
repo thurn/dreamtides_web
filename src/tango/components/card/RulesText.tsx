@@ -14,6 +14,7 @@ import {
 } from "../controls/GlowIcon";
 import { type TangoColor, resolveColor } from "../../primitives/color";
 import { GLYPHS } from "../../primitives/glyph";
+import { GlossaryTerm } from "./GlossaryTerm";
 
 /**
  * Renders rules text with:
@@ -153,16 +154,16 @@ const HIGHLIGHTED_TERMS: ReadonlySet<string> = new Set([
   "transfigures",
 ]);
 
+const HIGHLIGHTED_TERM_STYLE: CSSProperties = {
+  color: `var(--cv-rules-highlight-color, ${SPARK_ICON_COLOR})`,
+};
+
 /**
  * Spark-amber emphasis layered onto a highlighted term. The color is a CSS var
  * so a surface with a different rules-box background can retune it — the figment
  * frame's black-on-light box overrides it to a high-contrast deep gold — while
  * every other surface inherits the default spark amber via the fallback.
  */
-const HIGHLIGHTED_TERM_STYLE: CSSProperties = {
-  color: `var(--cv-rules-highlight-color, ${SPARK_ICON_COLOR})`,
-};
-
 /**
  * True when a glossary term, by its word form as written (case-insensitive),
  * is emphasized in rules text. Exported for the highlighter tests.
@@ -178,6 +179,8 @@ interface RulesTextProps {
 
 interface RenderRulesTextOptions {
   pipScale?: number;
+  /** Inline terms own reveal semantics on readable source copy. */
+  interactiveTerms?: boolean;
   /**
    * When set, runs of text wrapped in transfigure markers (see
    * `TRANSFIGURE_MARK_START` / `TRANSFIGURE_MARK_END`) are painted in this color
@@ -276,13 +279,15 @@ function renderSegment(
     // card in its hover-help panel rather than as per-word tooltips. A curated
     // set of keyword effects and action verbs carries a spark-amber emphasis so
     // the eye still catches them.
-    const emphasis = isHighlightedRulesTextTerm(segment.word)
-      ? HIGHLIGHTED_TERM_STYLE
-      : undefined;
-    return (
-      <span key={key} style={emphasis}>
-        {segment.word}
-      </span>
+    return options.interactiveTerms !== true ? (
+      <span key={key} style={isHighlightedRulesTextTerm(segment.word) ? HIGHLIGHTED_TERM_STYLE : undefined}>{segment.word}</span>
+    ) : (
+      <GlossaryTerm
+        key={key}
+        entry={segment.entry}
+        emphasized={isHighlightedRulesTextTerm(segment.word)}
+        text={segment.word}
+      />
     );
   }
   if (segment.kind === "sparkPip") {
@@ -500,5 +505,5 @@ function renderParagraph(
  * tokenizer handles the symbol substitution and glossary-term emphasis.
  */
 export function RulesText({ text }: RulesTextProps) {
-  return <>{renderRulesText(text)}</>;
+  return <>{renderRulesText(text, { interactiveTerms: true })}</>;
 }

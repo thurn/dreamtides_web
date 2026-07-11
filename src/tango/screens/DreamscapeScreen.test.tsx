@@ -12,6 +12,7 @@ import {
   QUEST_STATUS_BAR_BOTTOM_INSET,
   QUEST_STATUS_BAR_TOTAL_HEIGHT,
 } from "../components/hud/QuestStatusBar";
+import { TangoRoot } from "../TangoRoot";
 
 function siteModel(
   site: SiteState,
@@ -53,6 +54,7 @@ const VIEW: DreamscapeView = {
     essence: 240,
     deck: 12,
     dreamcaller: {
+      id: "00000000-0000-4000-8000-000000000052",
       name: "Drusus Calvus",
       epithet: "Triumphator",
       portrait: artRef.dreamcaller("0007"),
@@ -102,7 +104,7 @@ describe("DreamscapeScreen", () => {
   it("renders the scene, one node per unvisited site, and drops visited sites", () => {
     act(() => {
       root.render(
-        <DreamscapeScreen view={VIEW} onSelectSite={() => undefined} />,
+        <TangoRoot><DreamscapeScreen view={VIEW} onSelectSite={() => undefined} /></TangoRoot>,
       );
     });
     expect(container.querySelector("[data-tango-dreamscape]")).not.toBeNull();
@@ -117,7 +119,7 @@ describe("DreamscapeScreen", () => {
   it("docks the essence total in the QuestStatusBar", () => {
     act(() => {
       root.render(
-        <DreamscapeScreen view={VIEW} onSelectSite={() => undefined} />,
+        <TangoRoot><DreamscapeScreen view={VIEW} onSelectSite={() => undefined} /></TangoRoot>,
       );
     });
     expect(container.textContent).toContain("240");

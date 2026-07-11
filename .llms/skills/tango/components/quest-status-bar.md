@@ -37,6 +37,7 @@ The persistent, transparent bottom HUD for quest screens. The essence total, dec
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
+| `id` | `string` | no | Stable Dreamcaller UUID. |
 | `name` | `string` | no |  |
 | `epithet` | `string` | yes |  |
 | `portrait` | `ArtRef` | no | The portrait art as an {@link ArtRef}. Required — a docked Dreamcaller always has art. |

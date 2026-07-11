@@ -19,6 +19,7 @@ function toDreamcallerView(
 ): DeckDreamcallerView | null {
   if (dreamcaller === null) return null;
   return {
+    id: dreamcaller.id,
     imageNumber: dreamcaller.imageNumber,
     name: dreamcaller.name,
     title: dreamcaller.title,
