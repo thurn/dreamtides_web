@@ -22,6 +22,8 @@ and include this as part of your commit.
 When analyzing images, assume your perception of color is incorrect, prefer to
 directly measure it.
 
+Never generate UI mockups as images; write code instead.
+
 # Coop architecture
 
 Coop game state is a fold of the room event log. React `useState`/`useRef` never
