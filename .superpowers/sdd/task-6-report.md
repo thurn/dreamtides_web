@@ -278,3 +278,26 @@ Stable path: `screenshots/entity-reveals/`
 - Remediation 4 commit subject: `fix(tango): require reveal props provenance`.
 - Branch: `wt/entity-reveal-rewrite-plan`.
 - Each completed remediation commit is pushed immediately.
+
+## Review remediation 5
+
+- Added RED nested-scope cases proving that a typed inner `GameCardProps`
+  parameter cannot make an opaque outer parameter safe, and an opaque inner
+  parameter cannot erase an approved outer parameter. Line-specific assertions
+  identify the rejected lexical binding. A generic type parameter shadow named
+  `GameCardProps` also remains opaque.
+- Approved prop provenance and spread safety are keyed by the TypeScript ESLint
+  scope variable identity rather than identifier text. Imported prop types,
+  generic type parameters, nested parameters, and local bindings therefore
+  resolve according to their lexical declarations.
+- Named reveal imports preserve canonical component identity through import
+  aliases and straightforward local `const` aliases. Opaque spreads on those
+  aliases are rejected, while unrelated local aliases remain outside the named
+  reveal boundary and approved typed spreads remain legal.
+- Static zero-expression template literals in dynamic imports use the same
+  normalized internal-boundary resolution as string literals. Interpolated
+  templates and static external-package templates remain legal.
+- The focused lint-rule suite passes 54 cases. `npm run lint`, `npm run
+  typecheck`, the full 4,263-test suite, and `git diff --check` pass. The
+  rule/test-only patch changes no production or generated files, so regeneration
+  and browser QA were not rerun.

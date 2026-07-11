@@ -63,6 +63,11 @@ function propertyName(node) {
   if (node.computed && node.property?.type === "TemplateLiteral" && node.property.expressions.length === 0) return node.property.quasis[0]?.value.cooked ?? "";
   return "";
 }
+function staticString(node) {
+  if (node?.type === "Literal" && typeof node.value === "string") return node.value;
+  if (node?.type === "TemplateLiteral" && node.expressions.length === 0) return node.quasis[0]?.value.cooked ?? "";
+  return "";
+}
 function typeName(node) { return !node ? "" : node.type === "Identifier" ? node.name : node.type === "TSQualifiedName" ? typeName(node.right) : ""; }
 function isReactNodeType(node) {
   if (!node) return false;
@@ -95,6 +100,7 @@ export default {
   create(context) {
     const filename = repoPath(context.filename, context.cwd);
     if (isInternalTest(filename)) return {};
+    const sourceCode = context.sourceCode;
     const portalFunctions = new Set();
     const portalNamespaces = new Set();
     const infoCardBindings = new Set(["InfoCard"]);
@@ -102,6 +108,21 @@ export default {
     const staticObjectBindings = new Map();
     const typedSpreadBindings = new Map();
     const approvedPropTypeBindings = new Map();
+    const namedComponentBindings = new Map();
+
+    function variableFor(node, name) {
+      let scope = sourceCode.getScope(node);
+      while (scope !== null) {
+        const variable = scope.set.get(name);
+        if (variable !== undefined) return variable;
+        scope = scope.upper;
+      }
+      return undefined;
+    }
+
+    function declaredVariable(node) {
+      return sourceCode.getDeclaredVariables(node)[0];
+    }
 
     function objectProperties(node) {
       if (node?.type !== "ObjectExpression") return [];
@@ -124,24 +145,30 @@ export default {
       if (node?.type === "TSParenthesizedType") return approvedComponentForPropsType(node.typeAnnotation);
       if (node?.type !== "TSTypeReference") return "";
       const name = typeName(node.typeName);
-      const direct = approvedPropTypeBindings.get(name);
+      const direct = approvedPropTypeBindings.get(variableFor(node, name));
       if (direct !== undefined && typeParameters(node).length === 0) return direct;
       if (name !== "Omit" && name !== "Pick") return "";
       const parameters = typeParameters(node);
       if (parameters.length !== 2 || !isLiteralKeyType(parameters[1])) return "";
       const base = parameters[0];
       if (base?.type !== "TSTypeReference" || typeParameters(base).length !== 0) return "";
-      return approvedPropTypeBindings.get(typeName(base.typeName)) ?? "";
+      return approvedPropTypeBindings.get(variableFor(base, typeName(base.typeName))) ?? "";
     }
 
     function registerTypedParameters(parameters) {
       for (const parameter of parameters) {
         if (parameter.type !== "Identifier") continue;
-        staticObjectBindings.delete(parameter.name);
-        typedSpreadBindings.delete(parameter.name);
         const component = approvedComponentForPropsType(parameter.typeAnnotation?.typeAnnotation);
-        if (component !== "") typedSpreadBindings.set(parameter.name, new Set([component]));
+        const variable = variableFor(parameter, parameter.name);
+        if (component !== "" && variable !== undefined) typedSpreadBindings.set(variable, new Set([component]));
       }
+    }
+
+    function componentIdentity(node) {
+      const name = jsxName(node);
+      if (NAMED_REVEAL_COMPONENTS.has(name)) return name;
+      if (node?.type !== "JSXIdentifier") return "";
+      return namedComponentBindings.get(variableFor(node, node.name)) ?? "";
     }
 
     function checkInternalImport(node, source) {
@@ -183,11 +210,15 @@ export default {
         const resolved = resolvedImport(filename, source);
         for (const specifier of node.specifiers) {
           if (specifier.type !== "ImportSpecifier") continue;
-          const typeOnly = node.importKind === "type" || specifier.importKind === "type";
-          if (!typeOnly) continue;
           const imported = String(specifier.imported.name ?? specifier.imported.value);
+          const binding = declaredVariable(specifier);
+          const typeOnly = node.importKind === "type" || specifier.importKind === "type";
+          if (!typeOnly && binding !== undefined && NAMED_REVEAL_COMPONENTS.has(imported)) {
+            namedComponentBindings.set(binding, imported);
+          }
+          if (!typeOnly) continue;
           const component = APPROVED_PROP_TYPE_IMPORTS.get(`${resolved}|${imported}`);
-          if (component !== undefined) approvedPropTypeBindings.set(specifier.local.name, component);
+          if (component !== undefined && binding !== undefined) approvedPropTypeBindings.set(binding, component);
         }
         if (/HoverPopover/.test(source)) context.report({ node, messageId: "genericWrapper" });
         if (source === "react-dom") {
@@ -202,19 +233,21 @@ export default {
       },
       VariableDeclarator(node) {
         if (node.id.type === "Identifier") {
-          staticObjectBindings.delete(node.id.name);
-          typedSpreadBindings.delete(node.id.name);
+          const binding = declaredVariable(node);
           if (node.init?.type === "Identifier" && portalFunctions.has(node.init.name)) portalFunctions.add(node.id.name);
           if (node.init?.type === "Identifier" && infoCardBindings.has(node.init.name)) infoCardBindings.add(node.id.name);
+          if (node.init?.type === "Identifier" && binding !== undefined) {
+            const component = namedComponentBindings.get(variableFor(node.init, node.init.name));
+            if (component !== undefined) namedComponentBindings.set(binding, component);
+          }
           if (node.init?.type === "MemberExpression" && portalNamespaces.has(node.init.object?.name) && propertyName(node.init) === "createPortal") portalFunctions.add(node.id.name);
-          if (node.parent?.kind === "const" && node.init?.type === "ObjectExpression") {
-            staticObjectBindings.set(node.id.name, objectProperties(node.init));
+          if (node.parent?.kind === "const" && node.init?.type === "ObjectExpression" && binding !== undefined) {
+            staticObjectBindings.set(binding, objectProperties(node.init));
           }
           if (node.init?.type === "ArrowFunctionExpression" && /^[A-Z]/.test(node.id.name) && node.init.params[0]?.type === "ObjectPattern") {
             const names = new Set(node.init.params[0].properties.map(keyName));
             if (revealLikeProps(names, node.id.name)) context.report({ node: node.id, messageId: "genericWrapper" });
           }
-          if (node.init?.type === "ArrowFunctionExpression") registerTypedParameters(node.init.params);
         }
         if (node.id.type === "ObjectPattern" && node.init?.type === "Identifier" && infoCardBindings.has(node.init.name)) {
           for (const property of node.id.properties) if (INFO_CARD_STATICS.has(keyName(property))) context.report({ node: property, messageId: "infoCardStatic" });
@@ -227,9 +260,8 @@ export default {
         checkInternalBoundary(node, String(node.source.value));
       },
       ImportExpression(node) {
-        if (node.source.type === "Literal" && typeof node.source.value === "string") {
-          checkInternalBoundary(node, node.source.value);
-        }
+        const source = staticString(node.source);
+        if (source !== "") checkInternalBoundary(node, source);
       },
       MemberExpression(node) {
         if (node.object?.type === "Identifier" && infoCardBindings.has(node.object.name) && INFO_CARD_STATICS.has(propertyName(node))) context.report({ node, messageId: "infoCardStatic" });
@@ -240,18 +272,22 @@ export default {
         if ((direct || member) && !PORTAL_OWNER_ALLOWLIST.has(filename)) context.report({ node, messageId: "directPortal" });
       },
       JSXOpeningElement(node) {
-        const name = jsxName(node.name);
+        const sourceName = jsxName(node.name);
+        const name = componentIdentity(node.name) || sourceName;
         const attributes = node.attributes.filter((attribute) => attribute.type === "JSXAttribute");
         const opaqueSpreads = node.attributes.filter((attribute) => {
           if (attribute.type !== "JSXSpreadAttribute") return false;
           if (attribute.argument.type === "ObjectExpression") return false;
           if (attribute.argument.type !== "Identifier") return true;
-          return !staticObjectBindings.has(attribute.argument.name)
-            && !typedSpreadBindings.get(attribute.argument.name)?.has(name);
+          const binding = variableFor(attribute.argument, attribute.argument.name);
+          return !staticObjectBindings.has(binding)
+            && !typedSpreadBindings.get(binding)?.has(name);
         });
         const spreadProperties = node.attributes.flatMap((attribute) => {
           if (attribute.type !== "JSXSpreadAttribute") return [];
-          if (attribute.argument.type === "Identifier") return staticObjectBindings.get(attribute.argument.name) ?? [];
+          if (attribute.argument.type === "Identifier") {
+            return staticObjectBindings.get(variableFor(attribute.argument, attribute.argument.name)) ?? [];
+          }
           return objectProperties(attribute.argument);
         });
         const names = new Set([...attributes.map((attribute) => jsxName(attribute.name)), ...spreadProperties.map(keyName)]);
@@ -282,6 +318,7 @@ export default {
         if (node.id && GENERIC_REVEAL_WRAPPERS.has(node.id.name)) context.report({ node: node.id, messageId: "genericWrapper" });
       },
       FunctionExpression(node) { registerTypedParameters(node.params); },
+      ArrowFunctionExpression(node) { registerTypedParameters(node.params); },
     };
   },
 };

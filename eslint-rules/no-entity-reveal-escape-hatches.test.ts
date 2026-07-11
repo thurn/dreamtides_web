@@ -85,6 +85,24 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
         }`,
     },
     {
+      name: "named component import aliases preserve approved typed spreads",
+      filename: "src/tango/docs/demos/game-card.tsx",
+      code: `import { GameCard as GC } from "../../components/card/CardView";
+        import type { GameCardProps } from "../../components/card/CardView";
+        const Alias = GC;
+        function Demo(props: GameCardProps) { return <Alias {...props} />; }`,
+    },
+    {
+      name: "unrelated local component aliases remain outside the reveal boundary",
+      filename: "src/editor/Article.tsx",
+      code: `const GC = Article; const props = getProps(); <GC {...props} />;`,
+    },
+    {
+      name: "non-static and external template dynamic imports stay legal",
+      filename: "src/editor/Article.tsx",
+      code: "void import(`./article-${kind}`); void import(`react-dom`);",
+    },
+    {
       name: "computed non-portal namespace members stay legal",
       filename: "src/editor/LegacyRoot.tsx",
       code: `import * as DOM from "react-dom"; DOM["flushSync"](() => render());`,
@@ -252,6 +270,53 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
       errors: [{ messageId: "opaqueSpread" }],
     },
     {
+      name: "approved nested parameters do not make opaque outer parameters safe",
+      filename: "src/tango/docs/demos/game-card.tsx",
+      code: `import { GameCard } from "../../components/card/CardView";
+        import type { GameCardProps } from "../../components/card/CardView";
+        function Outer(props: any) {
+          function Inner(props: GameCardProps) { return <GameCard {...props} />; }
+          return <><Inner /><GameCard {...props} /></>;
+        }`,
+      errors: [{ messageId: "opaqueSpread", line: 5 }],
+    },
+    {
+      name: "opaque nested parameters do not erase approved outer parameters",
+      filename: "src/tango/docs/demos/game-card.tsx",
+      code: `import { GameCard } from "../../components/card/CardView";
+        import type { GameCardProps } from "../../components/card/CardView";
+        function Outer(props: GameCardProps) {
+          function Inner(props: any) { return <GameCard {...props} />; }
+          return <><Inner /><GameCard {...props} /></>;
+        }`,
+      errors: [{ messageId: "opaqueSpread", line: 4 }],
+    },
+    {
+      name: "generic type parameters cannot impersonate approved prop imports",
+      filename: "src/tango/docs/demos/game-card.tsx",
+      code: `import { GameCard } from "../../components/card/CardView";
+        import type { GameCardProps } from "../../components/card/CardView";
+        function Demo<GameCardProps>(props: GameCardProps) {
+          return <GameCard {...props} />;
+        }`,
+      errors: [{ messageId: "opaqueSpread" }],
+    },
+    {
+      name: "opaque spreads through named component import aliases are forbidden",
+      filename: "src/tango/docs/demos/game-card.tsx",
+      code: `import { GameCard as GC } from "../../components/card/CardView";
+        function Demo(props: any) { return <GC {...props} />; }`,
+      errors: [{ messageId: "opaqueSpread" }],
+    },
+    {
+      name: "opaque spreads through local named component aliases are forbidden",
+      filename: "src/tango/docs/demos/game-card.tsx",
+      code: `import { GameCard as GC } from "../../components/card/CardView";
+        const Alias = GC;
+        function Demo(props: any) { return <Alias {...props} />; }`,
+      errors: [{ messageId: "opaqueSpread" }],
+    },
+    {
       name: "intersections cannot extend approved component props",
       filename: "src/tango/docs/demos/game-card.tsx",
       code: `import type { GameCardProps } from "../../components/card/CardView";
@@ -307,6 +372,12 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
       name: "product code cannot dynamically import reveal internals",
       filename: "src/components/reveal.ts",
       code: `void import("../tango/internal/reveal/model");`,
+      errors: [{ messageId: "internalImport" }],
+    },
+    {
+      name: "product code cannot dynamically import reveal internals with a static template",
+      filename: "src/components/reveal.ts",
+      code: "void import(`../tango/internal/reveal/model`);",
       errors: [{ messageId: "internalImport" }],
     },
     {
