@@ -280,6 +280,45 @@ describe("Tango reveal coordinator root", () => {
     expect(getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_closed")).toHaveLength(1);
   });
 
+  it("does not reopen a touch reveal as focus after release", () => {
+    vi.useFakeTimers();
+    const { container } = mount(<TangoRoot><Source id={UUID_A} /></TangoRoot>);
+    const button = container.querySelector("button")!;
+    button.getBoundingClientRect = () => DOMRect.fromRect({ x: 20, y: 220, width: 120, height: 60 });
+
+    act(() => { button.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, pointerType: "touch", pointerId: 31, clientX: 40, clientY: 240 })); });
+    act(() => { vi.advanceTimersByTime(30); });
+    expect(document.querySelector("[data-tango-reveal-card=primary]")).not.toBeNull();
+
+    act(() => {
+      button.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, pointerType: "touch", pointerId: 31, clientX: 40, clientY: 240 }));
+      button.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+    });
+
+    expect(button.dataset.revealActive).toBe("false");
+    expect(document.querySelector("[data-tango-reveal-card=primary]")).toBeNull();
+    expect(getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_opened")).toHaveLength(1);
+    expect(getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_closed")).toHaveLength(1);
+  });
+
+  it("does not restore a pointer-focused desktop source after hover leaves", () => {
+    const { container } = mount(<TangoRoot><Source id={UUID_A} /></TangoRoot>);
+    const button = container.querySelector("button")!;
+    button.getBoundingClientRect = () => DOMRect.fromRect({ x: 20, y: 220, width: 120, height: 60 });
+
+    act(() => {
+      button.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, pointerType: "mouse", pointerId: 32 }));
+      button.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+      button.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse", pointerId: 32 }));
+      button.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, pointerType: "mouse", pointerId: 32 }));
+    });
+    expect(button.dataset.revealActive).toBe("true");
+
+    act(() => { button.dispatchEvent(new PointerEvent("pointerout", { bubbles: true, pointerType: "mouse", pointerId: 32 })); });
+
+    expect(button.dataset.revealActive).toBe("false");
+  });
+
   it("uses the untransformed source rect captured at interaction start", () => {
     const { container } = mount(<TangoRoot><Source id={UUID_A} /></TangoRoot>);
     const button = container.querySelector("button")!;

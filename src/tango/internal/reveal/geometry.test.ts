@@ -33,6 +33,32 @@ describe("selectRevealPlacement", () => {
     expect(supported.primaryRect).toEqual(alone.primaryRect);
   });
 
+  it("evenly distributes mobile popup columns between both edges and the internal gap", () => {
+    const result = selectRevealPlacement({
+      ...base,
+      secondarySizes: [{ width: 248, height: 120 }],
+    });
+    const secondary = result.secondaryRects[0];
+    const leftGap = result.primaryRect.x;
+    const internalGap = secondary.x - (result.primaryRect.x + result.primaryRect.width);
+    const rightGap = viewport.width - (secondary.x + secondary.width);
+
+    expect(leftGap).toBeCloseTo(13);
+    expect(internalGap).toBeCloseTo(leftGap);
+    expect(rightGap).toBeCloseTo(leftGap);
+  });
+
+  it("places touch popups above the complete source area with the standard source gap", () => {
+    const sourceRect = { x: 165, y: 600, width: 60, height: 60 };
+    const result = selectRevealPlacement({
+      ...base,
+      sourceRect,
+      touchPoint: { x: 195, y: 630 },
+    });
+
+    expect(result.primaryRect.y + result.primaryRect.height).toBeLessThanOrEqual(sourceRect.y - 14);
+  });
+
   it("keeps the desktop GameCard reading rectangle fixed while fitting secondaries around it", () => {
     const game = { ...base, viewport: { ...viewport, layout: "desktop" as const, width: 1200 }, reason: "hover" as const, touchPoint: undefined, primaryKind: "gameCard" as const };
     const alone = selectRevealPlacement(game);

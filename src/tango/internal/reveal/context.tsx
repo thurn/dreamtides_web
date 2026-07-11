@@ -95,6 +95,7 @@ interface RevealCoordinatorValue {
   readonly beginGameCardReturn: (source: RevealCoordinatorSource) => boolean;
   readonly cancelGameCardReturn: (reason: RevealDismissalReason) => boolean;
   readonly beginInteraction: (source: RevealCoordinatorSource, reason: NonNullable<ReturnType<typeof reduceRevealState>["reason"]>, sourceRect: InteractionSnapshot["sourceRect"], modality: "mouse" | "pen" | "touch" | "keyboard") => void;
+  readonly isKeyboardFocusEligible: () => boolean;
 }
 
 interface InteractionSnapshot {
@@ -122,6 +123,7 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
   const [state, dispatch] = useReducer(reduceRevealState, initialRevealCoordinatorState);
   const stateRef = useRef(state); stateRef.current = state;
   const sourcesRef = useRef(new Map<string, SourceRegistration>());
+  const keyboardFocusEligibleRef = useRef(true);
   const [, renderDescriptions] = useState(0);
   const registerSource = useCallback((key: string, value: SourceRegistration) => {
     sourcesRef.current.set(key, value); renderDescriptions((version) => version + 1);
@@ -212,8 +214,10 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
   useEffect(() => {
     const now = () => performance.now();
     const handleKeyDown = (event: KeyboardEvent) => {
+      keyboardFocusEligibleRef.current = true;
       if (event.key === "Escape") dispatch({ type: "escape", timestamp: event.timeStamp });
     };
+    const handlePointerDown = () => { keyboardFocusEligibleRef.current = false; };
     const events = [
       [window, "resize", () => { cancelGameCardReturn("resize"); dispatch({ type: "resize", timestamp: now() }); }],
       [window, "orientationchange", () => { cancelGameCardReturn("orientation-change"); dispatch({ type: "orientation-change", timestamp: now() }); }],
@@ -241,13 +245,15 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
     window.history.pushState = pushState;
     window.history.replaceState = replaceState;
     for (const [target, name, handler] of events) target.addEventListener(name, handler);
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown, true);
+    window.addEventListener("pointerdown", handlePointerDown, true);
     window.addEventListener("scroll", handleScroll, true);
     window.addEventListener("dragstart", handleDragStart, true);
     window.visualViewport?.addEventListener?.("resize", handleVisualViewportResize);
     return () => {
       for (const [target, name, handler] of events) target.removeEventListener(name, handler);
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown, true);
+      window.removeEventListener("pointerdown", handlePointerDown, true);
       window.removeEventListener("scroll", handleScroll, true);
       window.removeEventListener("dragstart", handleDragStart, true);
       window.visualViewport?.removeEventListener?.("resize", handleVisualViewportResize);
@@ -262,7 +268,8 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
     };
   }, [cancelGameCardReturn]);
 
-  const value = useMemo(() => ({ state, dispatch, registerSource, updateSourceElement, unregisterSource, beginGameCardReturn, cancelGameCardReturn, beginInteraction }), [state, registerSource, updateSourceElement, unregisterSource, beginGameCardReturn, cancelGameCardReturn, beginInteraction]);
+  const isKeyboardFocusEligible = useCallback(() => keyboardFocusEligibleRef.current, []);
+  const value = useMemo(() => ({ state, dispatch, registerSource, updateSourceElement, unregisterSource, beginGameCardReturn, cancelGameCardReturn, beginInteraction, isKeyboardFocusEligible }), [state, registerSource, updateSourceElement, unregisterSource, beginGameCardReturn, cancelGameCardReturn, beginInteraction, isKeyboardFocusEligible]);
   const activeRegistration = state.activeRegistrationId === null ? undefined : sourcesRef.current.get(state.activeRegistrationId);
   useLayoutEffect(() => {
     if (state.reason !== "focus" || activeRegistration?.element == null) return;
@@ -438,7 +445,7 @@ export function useRevealSource(registration: RevealSourceRegistration): RevealS
         if (intentTimer.current !== null) { clearTimeout(intentTimer.current); intentTimer.current = null; }
         if (valid) coordinator.dispatch({ type: "pointer-cancel", pointerId: event.pointerId, timestamp: event.timeStamp });
       },
-      onFocus: (event) => { if (valid) { coordinator.cancelGameCardReturn("replaced"); const sourceRect = captureSourceRect(event.currentTarget); coordinator.beginInteraction(mountedSource, "focus", sourceRect, "keyboard"); measureFeedback(sourceRect); coordinator.dispatch({ type: "focus", source: mountedSource, timestamp: event.timeStamp }); } },
+      onFocus: (event) => { if (valid && coordinator.isKeyboardFocusEligible()) { coordinator.cancelGameCardReturn("replaced"); const sourceRect = captureSourceRect(event.currentTarget); coordinator.beginInteraction(mountedSource, "focus", sourceRect, "keyboard"); measureFeedback(sourceRect); coordinator.dispatch({ type: "focus", source: mountedSource, timestamp: event.timeStamp }); } },
       onBlur: (event) => { if (valid) coordinator.dispatch({ type: "blur", source: mountedSource, timestamp: event.timeStamp }); },
     },
   };

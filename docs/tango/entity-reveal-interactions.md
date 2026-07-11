@@ -56,10 +56,13 @@ copy.
     or travel animation. The desktop GameCard return animation is the single
     reveal-motion exception.
 
-The gap between a reveal group and its source is 14px on desktop. The horizontal
-gap between the primary and secondary column is 10px, as is the vertical gap
-between secondary cards. Mobile touch-circle clearance replaces the 14px source
-gap; the 48px protected circle already includes the desired comfort margin.
+The gap between a reveal group and its source is 14px. On desktop, the
+horizontal gap between the primary and secondary column is 10px, as is the
+vertical gap between secondary cards. On mobile, two 45vw columns share the
+remaining safe width evenly between the left edge, the columns, and the right
+edge. This gives the primary and secondary cards equal outer gutters and one
+consistent internal gap instead of placing either card directly against a
+screen edge.
 
 ## Library architecture: make correct behavior automatic
 
@@ -323,8 +326,10 @@ the pointer in a way that blocks native vertical scrolling.
 ### Protected touch area
 
 Placement protects a 48px-diameter circle centered on the actual pointer-down
-coordinate. The 48px circle is the complete clearance allowance; there is no
-additional gap around it.
+coordinate. A popup also seeks the standard 14px gap above the complete source
+rectangle. The farther-up of those two clearances controls its vertical
+position, so a large source such as a site node remains visibly separated from
+the reveal.
 
 The primary popup seeks a placement outside this circle. Secondary cards may
 cross the circle when necessary. Press-in-place GameCards are the explicit
@@ -364,9 +369,11 @@ to the top and moves toward the side opposite the touch.
 
 An `InfoCard` with secondaries uses the two-column algorithm:
 
-1. Prefer primary on the left and the secondary column on the right.
-2. Move the whole top-aligned pair upward until the primary clears the protected
-   circle.
+1. Prefer primary on the left and the secondary column on the right. Distribute
+   the horizontal remainder equally across the two outer gutters and the gap
+   between columns.
+2. Move the whole top-aligned pair upward until the primary clears both the
+   protected circle and the source rectangle's 14px gap.
 3. If the top edge prevents clearance, pin the pair to the top and choose the
    orientation that puts the primary opposite the touch. A top-left touch yields
    `[secondaries][primary]`; a top-right touch yields
@@ -383,7 +390,9 @@ position.
 1. Reserve a left primary column and a right secondary column, even when the
    secondary column is empty.
 2. Prefer the 45vw primary in the left column and move it upward until it clears
-   the protected circle.
+   both the protected circle and the source rectangle's 14px gap. The two
+   notional columns use the same evenly distributed horizontal gutters as an
+   InfoCard pair.
 3. If the top edge prevents clearance, pin to the top and put the primary in the
    column opposite the touch.
 4. Use the same best-effort corner rule when no fully clear placement exists.
@@ -409,11 +418,13 @@ under the standard height rule. Draft cards are the representative use case.
 
 ### InfoCard groups
 
-Hover and eligible keyboard focus reveal immediately. The preferred desktop
-placement is above the source, with the primary on the left and secondaries on
-the right. The complete group is horizontally centered over the source and
-sits 14px above its top edge. The group may shift horizontally to remain within
-the visual viewport while preserving that placement.
+Hover and keyboard-originated focus reveal immediately. Pointer-originated DOM
+focus is activation bookkeeping, not a second reveal reason; it neither opens a
+reveal after touch release nor keeps a reveal alive after mouse hover ends. The
+preferred desktop placement is above the source, with the primary on the left
+and secondaries on the right. The complete group is horizontally centered over
+the source and sits 14px above its top edge. The group may shift horizontally
+to remain within the visual viewport while preserving that placement.
 
 When the group cannot fit above, it moves beside the source:
 
@@ -488,10 +499,11 @@ visually attached to the source. Ambient motion resumes on dismissal.
 
 ## Keyboard and accessibility
 
-Keyboard focus reveals the same primary and secondary information and uses the
-same placement rules as pointer hover. Non-GameCard sources keep their standard
-visible focus ring without hover enlargement. Focused GameCards use the 340px
-reading state because that state is the information surface itself.
+Keyboard-originated focus reveals the same primary and secondary information
+and uses the same placement rules as pointer hover. A pointer press that focuses
+an element does not qualify as keyboard focus. Non-GameCard sources keep their
+standard visible focus ring without hover enlargement. Focused GameCards use
+the 340px reading state because that state is the information surface itself.
 
 Below 900px, keyboard focus uses 45vw cards but has no protected touch circle.
 Placement anchors to the focused entity's rectangle, preferring the top-aligned

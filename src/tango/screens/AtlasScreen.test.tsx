@@ -318,7 +318,7 @@ describe("Tango AtlasScreen", () => {
       ).not.toBeNull();
     });
     expect(placedPrimary()).toEqual({
-      x: 214.5,
+      x: 201.5,
       y: 0,
       width: 175.5,
       height: 141.53225806451613,
@@ -341,9 +341,9 @@ describe("Tango AtlasScreen", () => {
       );
       await new Promise((resolve) => setTimeout(resolve, 40));
     });
-    await vi.waitFor(() => expect(placedPrimary().x).toBe(0));
+    await vi.waitFor(() => expect(placedPrimary().x).toBe(13));
     expect(placedPrimary()).toEqual({
-      x: 0,
+      x: 13,
       y: 0,
       width: 175.5,
       height: 141.53225806451613,

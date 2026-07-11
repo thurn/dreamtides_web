@@ -4,6 +4,7 @@ import type { VisualViewportSnapshot } from "./viewport";
 const MOBILE_WIDTH_FRACTION = 0.45;
 const CARD_GAP = 10;
 const DESKTOP_SOURCE_GAP = 14;
+const MOBILE_SOURCE_GAP = DESKTOP_SOURCE_GAP;
 const TOUCH_RADIUS = 24;
 const DESKTOP_GAME_CARD_WIDTH = 340;
 
@@ -115,6 +116,11 @@ function mobilePlacement(input: RevealPlacementInput): RevealPlacementDecision {
   const safeBottom = viewport.offsetTop + viewport.height - viewport.safeArea.bottom;
   const safeLeft = viewport.offsetLeft + viewport.safeArea.left;
   const safeRight = viewport.offsetLeft + viewport.width - viewport.safeArea.right;
+  const safeWidth = safeRight - safeLeft;
+  const horizontalPairFits = safeWidth >= cardWidth * 2;
+  const distributedColumnGap = horizontalPairFits ? (safeWidth - cardWidth * 2) / 3 : 0;
+  const leftColumnX = horizontalPairFits ? safeLeft + distributedColumnGap : safeLeft;
+  const rightColumnX = horizontalPairFits ? leftColumnX + cardWidth + distributedColumnGap : safeRight - cardWidth;
   const pressInPlace = input.reason === "press" && input.primaryKind === "gameCard"
     && input.sourceShowsCompleteGameCard && sourceRect.width >= cardWidth * 0.9 - Number.EPSILON * viewport.width;
 
@@ -133,7 +139,6 @@ function mobilePlacement(input: RevealPlacementInput): RevealPlacementDecision {
   }
 
 
-  const horizontalPairFits = safeRight - safeLeft >= cardWidth * 2 + CARD_GAP;
   const anchorX = sourceRect.x + sourceRect.width / 2;
   if (input.reason === "focus") {
     const canPair = secondarySizes.length > 0 && horizontalPairFits;
@@ -143,10 +148,12 @@ function mobilePlacement(input: RevealPlacementInput): RevealPlacementDecision {
       readonly secondaryX: number;
     } => {
       const showsSecondaryColumn = secondaryCount > 0;
-      const groupWidth = showsSecondaryColumn ? cardWidth * 2 + CARD_GAP : cardWidth;
-      const groupLeft = clamp(anchorX - groupWidth / 2, safeLeft, safeRight - groupWidth);
+      const groupWidth = showsSecondaryColumn ? cardWidth * 2 + distributedColumnGap : cardWidth;
+      const groupLeft = showsSecondaryColumn
+        ? leftColumnX
+        : clamp(anchorX - groupWidth / 2, safeLeft, safeRight - groupWidth);
       const leftPrimaryX = groupLeft;
-      const rightPrimaryX = groupLeft + (showsSecondaryColumn ? cardWidth + CARD_GAP : 0);
+      const rightPrimaryX = groupLeft + (showsSecondaryColumn ? cardWidth + distributedColumnGap : 0);
       const useRightPrimary = showsSecondaryColumn
         && Math.abs(rightPrimaryX + cardWidth / 2 - anchorX) < Math.abs(leftPrimaryX + cardWidth / 2 - anchorX);
       return {
@@ -174,11 +181,13 @@ function mobilePlacement(input: RevealPlacementInput): RevealPlacementDecision {
   }
 
   const hasNotionalPair = input.primaryKind === "gameCard" || secondarySizes.length > 0;
-  const preferredPrimaryX = safeLeft;
-  const oppositePrimaryX = safeRight - cardWidth;
+  const preferredPrimaryX = leftColumnX;
+  const oppositePrimaryX = rightColumnX;
   let orientation: "primary-left" | "primary-right" = "primary-left";
   let primaryX = hasNotionalPair ? preferredPrimaryX : clamp(anchorX - cardWidth / 2, safeLeft, safeRight - cardWidth);
-  const targetBottom = input.reason === "press" && touchPoint !== undefined ? touchPoint.y - TOUCH_RADIUS : sourceRect.y - CARD_GAP;
+  const targetBottom = input.reason === "press" && touchPoint !== undefined
+    ? Math.min(touchPoint.y - TOUCH_RADIUS, sourceRect.y - MOBILE_SOURCE_GAP)
+    : sourceRect.y - CARD_GAP;
   const desiredTop = targetBottom - primarySize.height;
   let primaryY = Math.max(safeTop, desiredTop);
   let family = "mobile-touch-up";
@@ -215,7 +224,7 @@ function mobilePlacement(input: RevealPlacementInput): RevealPlacementDecision {
     bestEffortPrimaryOverlap = feasible.length === 0;
   }
   const finalPrimary = rect(primaryX, primaryY, primarySize);
-  const secondaryX = orientation === "primary-left" ? safeRight - cardWidth : safeLeft;
+  const secondaryX = orientation === "primary-left" ? rightColumnX : leftColumnX;
   const secondaryCount = horizontalPairFits ? fitSecondaryPrefix(secondarySizes, safeBottom - primaryY) : 0;
   return result(input, {
     family, orientation, primaryRect: finalPrimary,
