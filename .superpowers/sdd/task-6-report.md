@@ -65,7 +65,7 @@ The end-to-end diagnostic assertion validates the actual source rectangle, rende
 - Tango docs: 30 component references, stale HoverPopover reference swept.
 - `npm run lint`: pass.
 - `npm run typecheck`: pass.
-- `npm test`: 392 files passed, 1 skipped; 4,248 tests passed, 4 skipped.
+- `npm test`: 392 files passed, 1 skipped; 4,254 tests passed, 4 skipped.
 - `git diff --check`: pass.
 
 ## Browser matrix
@@ -247,11 +247,34 @@ Stable path: `screenshots/entity-reveals/`
   `q6-remediation3-5177` and the task-owned server were closed; port 5177 has no
   listener.
 
+## Review remediation 4
+
+- Added RED adversarial cases for an approved `GameCardProps` intersection that
+  adds `anchorRect`, an approved-props union that adds `shown`, unrelated and
+  local lookalike `GameCardProps`, and an alias with unknown composition.
+- Typed-spread safety is provenance-based. The rule records only type-only
+  imports of the exact props symbol from the approved component module
+  (`GameCardProps` from `CardView`, and `QuestStatusBarProps` from
+  `QuestStatusBar`). A parameter is safe only as that direct imported reference
+  or one conservative `Omit`/`Pick` whose key argument is a string literal or a
+  union of string literals. Intersections, unions, nested/unknown aliases,
+  lookalike names, non-type imports, and unrelated modules remain opaque and are
+  rejected on named reveal components.
+- The real QuestStatusBar demo retains its safe
+  `Omit<QuestStatusBarProps, "stageRef">` spread because both module provenance
+  and literal omission are proven. Direct `GameCardProps` and literal-key
+  `Pick<GameCardProps, ...>` have explicit negative-control coverage.
+- The focused lint-rule suite passes 45 cases. Lint, typecheck, the full
+  4,254-test suite, and `git diff --check` pass. The rule/test-only change does
+  not affect generated Tango metadata or references, so regeneration was not
+  required. No production/demo code changed, so browser QA was not rerun.
+
 ## Commit and push
 
 - `f02a2d8e` — `refactor(tango): enforce unified entity reveal system`.
 - `76bb98be` — `fix(tango): close entity reveal enforcement gaps`.
 - `6748ef4c` — `fix(tango): harden entity reveal conformance`.
-- Remediation 3 commit subject: `fix(tango): close remaining reveal boundary gaps`.
+- `39ba1b40` — `fix(tango): close remaining reveal boundary gaps`.
+- Remediation 4 commit subject: `fix(tango): require reveal props provenance`.
 - Branch: `wt/entity-reveal-rewrite-plan`.
 - Each completed remediation commit is pushed immediately.

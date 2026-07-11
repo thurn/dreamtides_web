@@ -70,9 +70,19 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
     {
       name: "component-owned prop types prove a named spread safe",
       filename: "src/tango/docs/demos/game-card.tsx",
-      code: `function Demo(props: Omit<GameCardProps, "testId">) {
+      code: `import type { GameCardProps } from "../../components/card/CardView";
+        function Demo(props: Omit<GameCardProps, "testId">) {
         return <GameCard {...props} testId="demo" />;
       }`,
+    },
+    {
+      name: "direct and literal Pick component-owned prop types prove spreads safe",
+      filename: "src/tango/docs/demos/game-card.tsx",
+      code: `import type { GameCardProps } from "../../components/card/CardView";
+        function Direct(props: GameCardProps) { return <GameCard {...props} />; }
+        function Picked(props: Pick<GameCardProps, "model" | "selected">) {
+          return <GameCard {...props} />;
+        }`,
     },
     {
       name: "computed non-portal namespace members stay legal",
@@ -239,6 +249,46 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
       filename: "src/tango/screens/ShopScreen.tsx",
       code: `const props = { selected: true };
         function Wrapper(props: any) { return <GameCard {...props} model={model} />; }`,
+      errors: [{ messageId: "opaqueSpread" }],
+    },
+    {
+      name: "intersections cannot extend approved component props",
+      filename: "src/tango/docs/demos/game-card.tsx",
+      code: `import type { GameCardProps } from "../../components/card/CardView";
+        function Demo(props: GameCardProps & { anchorRect: DOMRect }) {
+          return <GameCard {...props} />;
+        }`,
+      errors: [{ messageId: "opaqueSpread" }],
+    },
+    {
+      name: "unions cannot extend approved component props",
+      filename: "src/tango/docs/demos/game-card.tsx",
+      code: `import type { GameCardProps } from "../../components/card/CardView";
+        function Demo(props: GameCardProps | { shown: boolean }) {
+          return <GameCard {...props} />;
+        }`,
+      errors: [{ messageId: "opaqueSpread" }],
+    },
+    {
+      name: "unrelated imported lookalike prop types do not prove safety",
+      filename: "src/tango/docs/demos/game-card.tsx",
+      code: `import type { GameCardProps } from "../../unrelated/CardTypes";
+        function Demo(props: GameCardProps) { return <GameCard {...props} />; }`,
+      errors: [{ messageId: "opaqueSpread" }],
+    },
+    {
+      name: "local lookalike prop types do not prove safety",
+      filename: "src/tango/docs/demos/game-card.tsx",
+      code: `interface GameCardProps { model: unknown; anchorRect: DOMRect }
+        function Demo(props: GameCardProps) { return <GameCard {...props} />; }`,
+      errors: [{ messageId: "mechanicalProp" }, { messageId: "opaqueSpread" }],
+    },
+    {
+      name: "unknown aliases of approved prop types do not prove safety",
+      filename: "src/tango/docs/demos/game-card.tsx",
+      code: `import type { GameCardProps } from "../../components/card/CardView";
+        type WrappedProps = GameCardProps;
+        function Demo(props: WrappedProps) { return <GameCard {...props} />; }`,
       errors: [{ messageId: "opaqueSpread" }],
     },
     {

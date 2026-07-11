@@ -37,6 +37,10 @@ const PORTAL_OWNER_ALLOWLIST = new Set([
   "src/battle/components/BattleContextMenu.tsx",
   "src/debug/SignatureDecksApp.tsx",
 ]);
+const APPROVED_PROP_TYPE_IMPORTS = new Map([
+  ["src/tango/components/card/CardView|GameCardProps", "GameCard"],
+  ["src/tango/components/hud/QuestStatusBar|QuestStatusBarProps", "QuestStatusBar"],
+]);
 
 function repoPath(filename, cwd) { return path.relative(cwd, filename).split(path.sep).join("/"); }
 function stripExtension(value) { return value.replace(/\.(?:ts|tsx|js|jsx)$/, ""); }
@@ -60,19 +64,6 @@ function propertyName(node) {
   return "";
 }
 function typeName(node) { return !node ? "" : node.type === "Identifier" ? node.name : node.type === "TSQualifiedName" ? typeName(node.right) : ""; }
-function referencedTypeNames(node, names = new Set()) {
-  if (!node) return names;
-  if (node.type === "TSTypeReference") {
-    names.add(typeName(node.typeName));
-    const parameters = node.typeArguments?.params ?? node.typeParameters?.params ?? [];
-    for (const parameter of parameters) referencedTypeNames(parameter, names);
-  } else if (node.type === "TSUnionType" || node.type === "TSIntersectionType") {
-    for (const member of node.types) referencedTypeNames(member, names);
-  } else if (node.type === "TSParenthesizedType") {
-    referencedTypeNames(node.typeAnnotation, names);
-  }
-  return names;
-}
 function isReactNodeType(node) {
   if (!node) return false;
   if (node.type === "TSTypeReference") return /^(?:ReactNode|ReactElement|ReactPortal)$/.test(typeName(node.typeName));
@@ -110,10 +101,37 @@ export default {
     const allowedRevealTypeNames = new Set();
     const staticObjectBindings = new Map();
     const typedSpreadBindings = new Map();
+    const approvedPropTypeBindings = new Map();
 
     function objectProperties(node) {
       if (node?.type !== "ObjectExpression") return [];
       return node.properties.filter((property) => property.type === "Property" && property.kind === "init" && keyName(property) !== "");
+    }
+
+    function typeParameters(node) {
+      return node?.typeArguments?.params ?? node?.typeParameters?.params ?? [];
+    }
+
+    function isLiteralKeyType(node) {
+      if (node?.type === "TSLiteralType") {
+        return node.literal?.type === "Literal" && typeof node.literal.value === "string";
+      }
+      return node?.type === "TSUnionType" && node.types.length > 0
+        && node.types.every(isLiteralKeyType);
+    }
+
+    function approvedComponentForPropsType(node) {
+      if (node?.type === "TSParenthesizedType") return approvedComponentForPropsType(node.typeAnnotation);
+      if (node?.type !== "TSTypeReference") return "";
+      const name = typeName(node.typeName);
+      const direct = approvedPropTypeBindings.get(name);
+      if (direct !== undefined && typeParameters(node).length === 0) return direct;
+      if (name !== "Omit" && name !== "Pick") return "";
+      const parameters = typeParameters(node);
+      if (parameters.length !== 2 || !isLiteralKeyType(parameters[1])) return "";
+      const base = parameters[0];
+      if (base?.type !== "TSTypeReference" || typeParameters(base).length !== 0) return "";
+      return approvedPropTypeBindings.get(typeName(base.typeName)) ?? "";
     }
 
     function registerTypedParameters(parameters) {
@@ -121,12 +139,8 @@ export default {
         if (parameter.type !== "Identifier") continue;
         staticObjectBindings.delete(parameter.name);
         typedSpreadBindings.delete(parameter.name);
-        const types = referencedTypeNames(parameter.typeAnnotation?.typeAnnotation);
-        const components = new Set([...types]
-          .filter((name) => name.endsWith("Props"))
-          .map((name) => name.slice(0, -"Props".length))
-          .filter((name) => NAMED_REVEAL_COMPONENTS.has(name)));
-        if (components.size > 0) typedSpreadBindings.set(parameter.name, components);
+        const component = approvedComponentForPropsType(parameter.typeAnnotation?.typeAnnotation);
+        if (component !== "") typedSpreadBindings.set(parameter.name, new Set([component]));
       }
     }
 
@@ -166,6 +180,15 @@ export default {
       ImportDeclaration(node) {
         const source = String(node.source.value);
         checkInternalImport(node, source);
+        const resolved = resolvedImport(filename, source);
+        for (const specifier of node.specifiers) {
+          if (specifier.type !== "ImportSpecifier") continue;
+          const typeOnly = node.importKind === "type" || specifier.importKind === "type";
+          if (!typeOnly) continue;
+          const imported = String(specifier.imported.name ?? specifier.imported.value);
+          const component = APPROVED_PROP_TYPE_IMPORTS.get(`${resolved}|${imported}`);
+          if (component !== undefined) approvedPropTypeBindings.set(specifier.local.name, component);
+        }
         if (/HoverPopover/.test(source)) context.report({ node, messageId: "genericWrapper" });
         if (source === "react-dom") {
           for (const specifier of node.specifiers) {
