@@ -286,10 +286,19 @@ namespace TangoMvp.Tests
                 Assert.That(sceneGlassRenderers[0].sharedMaterial, Is.SameAs(sceneGlassRenderers[1].sharedMaterial));
                 Assert.That(sceneGlassRenderers[0].sharedMaterial,
                     Is.SameAs(AssetDatabase.LoadAssetAtPath<Material>(SceneGlassPath)));
+                foreach (MeshRenderer renderer in sceneGlassRenderers)
+                {
+                    Assert.That(renderer.sharedMaterials, Has.Length.EqualTo(3));
+                    Assert.That(renderer.sharedMaterials,
+                        Has.All.SameAs(AssetDatabase.LoadAssetAtPath<Material>(SceneGlassPath)));
+                }
 
                 MeshRenderer onGlass = objects.Single(item => item.name == "On Glass Button Visual")
                     .GetComponent<MeshRenderer>();
                 Assert.That(onGlass.sharedMaterial, Is.SameAs(AssetDatabase.LoadAssetAtPath<Material>(OnGlassPath)));
+                Assert.That(onGlass.sharedMaterials, Has.Length.EqualTo(3));
+                Assert.That(onGlass.sharedMaterials,
+                    Has.All.SameAs(AssetDatabase.LoadAssetAtPath<Material>(OnGlassPath)));
 
                 MeshRenderer frame = objects.Single(item => item.name == "Solid Frame").GetComponent<MeshRenderer>();
                 Assert.That(frame.sharedMaterial, Is.SameAs(AssetDatabase.LoadAssetAtPath<Material>(SolidChromePath)));

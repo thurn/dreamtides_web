@@ -31,6 +31,7 @@ namespace TangoMvp.Tests.Support
     public static class TangoGpuAcceptance
     {
         public const string LiveBackdropDelta = "liveBackdropDelta";
+        public const string SurfaceContribution = "surfaceContribution";
         public const string BlurEdgeEnergyRatioMaximum = "blurEdgeEnergyRatioMaximum";
         public const string BlurEdgeEnergyRatioMinimum = "blurEdgeEnergyRatioMinimum";
         public const string SharedGraphRecords = "sharedGraphRecords";

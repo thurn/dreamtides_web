@@ -303,7 +303,11 @@ namespace TangoMvp.Editor
             MeshFilter filter = EnsureComponent<MeshFilter>(target);
             filter.sharedMesh = mesh;
             MeshRenderer renderer = EnsureComponent<MeshRenderer>(target);
-            renderer.sharedMaterial = material;
+            // The authored panel separates its camera-facing back, opposite
+            // face, and bevel into submeshes. Bind the closed semantic role to
+            // every submesh so the camera-facing face cannot silently render
+            // without a material slot.
+            renderer.sharedMaterials = Enumerable.Repeat(material, mesh.subMeshCount).ToArray();
             ConfigureRenderer(renderer, shadowCastingMode, receiveShadows);
             SetLocalTransform(target.transform, localPosition, Quaternion.identity, localScale);
         }
@@ -859,7 +863,7 @@ namespace TangoMvp.Editor
 
         private static void ConfigureSceneGlass(Material material)
         {
-            material.SetColor("_TangoFillColor", new Color(0.055f, 0.055f, 0.063f, 0.54f));
+            material.SetColor("_TangoFillColor", SrgbTokenColor(14, 14, 16, 0.54f));
             material.SetFloat("_TangoSaturation", 1.5f);
             material.SetFloat("_TangoSheenAlpha", 0.07f);
             material.SetFloat("_TangoRimAlpha", 0.14f);
@@ -871,9 +875,9 @@ namespace TangoMvp.Editor
 
         private static void ConfigureOnGlass(Material material)
         {
-            material.SetColor("_TangoLensColor", new Color(0.10f, 0.09f, 0.12f, 0.20f));
-            material.SetFloat("_TangoRimAlpha", 0.22f);
-            material.SetFloat("_TangoHighlightAlpha", 0.28f);
+            material.SetColor("_TangoLensColor", SrgbTokenColor(4, 4, 6, 0.13f));
+            material.SetFloat("_TangoRimAlpha", 0.18f);
+            material.SetFloat("_TangoHighlightAlpha", 0.10f);
             material.SetOverrideTag("RenderType", "Transparent");
             material.renderQueue = (int)RenderQueue.Transparent + 10;
             EditorUtility.SetDirty(material);
@@ -895,6 +899,13 @@ namespace TangoMvp.Editor
             material.SetShaderPassEnabled("ShadowCaster", true);
             material.renderQueue = (int)RenderQueue.Geometry;
             EditorUtility.SetDirty(material);
+        }
+
+        private static Color SrgbTokenColor(byte red, byte green, byte blue, float alpha)
+        {
+            Color color = ((Color)new Color32(red, green, blue, 255)).linear;
+            color.a = alpha;
+            return color;
         }
 
         private static void ConfigureBlur(Material material)

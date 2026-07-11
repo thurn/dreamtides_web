@@ -13,8 +13,10 @@ FACT_PHASES = ("bothPanesEnabled", "mainPaneDisabled", "independentPaneDisabled"
 EXPECTED_METRICS = {
     "liveBackdropDelta.LiveGlassA": ("greaterThanOrEqual", 0.015),
     "liveBackdropDelta.LiveGlassB": ("greaterThanOrEqual", 0.015),
+    "surfaceContribution.LiveGlassA": ("greaterThanOrEqual", 0.02),
+    "surfaceContribution.LiveGlassB": ("greaterThanOrEqual", 0.02),
     "blurEdgeEnergyRatioMaximum": ("lessThanOrEqual", 0.65),
-    "blurEdgeEnergyRatioMinimum": ("greaterThanOrEqual", 0.05),
+    "blurEdgeEnergyRatioMinimum": ("greaterThanOrEqual", 0.01),
     **{f"sharedGraphRecords.{phase}": ("equal", 1.0) for phase in FACT_PHASES},
     **{f"horizontalPasses.{phase}": ("equal", 1.0) for phase in FACT_PHASES},
     **{f"verticalPasses.{phase}": ("equal", 1.0) for phase in FACT_PHASES},

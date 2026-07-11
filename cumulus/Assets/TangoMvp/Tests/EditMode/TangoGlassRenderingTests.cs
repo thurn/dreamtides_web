@@ -310,7 +310,8 @@ namespace TangoMvp.Tests
                 Does.Contain("return half4(interior + shellLighting / outputAlpha, outputAlpha);"));
 
             const float fallbackAlpha = 0.72f;
-            var interior = new Vector3(0.055f, 0.055f, 0.063f);
+            Color linearFill = ((Color)new Color32(14, 14, 16, 255)).linear;
+            var interior = new Vector3(linearFill.r, linearFill.g, linearFill.b);
             var shell = new Vector3(0.12f, 0.07f, 0.03f);
             var destination = new Vector3(0.2f, 0.4f, 0.8f);
             Vector3 encodedFallback = interior + shell / fallbackAlpha;
@@ -397,14 +398,23 @@ namespace TangoMvp.Tests
             Assert.That(library, Is.Not.Null);
             Assert.That(sceneGlass.renderQueue, Is.EqualTo((int)RenderQueue.Transparent));
             Color fill = sceneGlass.GetColor("_TangoFillColor");
-            Assert.That(fill.r, Is.EqualTo(0.055f).Within(0.0001f));
-            Assert.That(fill.g, Is.EqualTo(0.055f).Within(0.0001f));
-            Assert.That(fill.b, Is.EqualTo(0.063f).Within(0.0001f));
+            Color expectedFill = ((Color)new Color32(14, 14, 16, 255)).linear;
+            Assert.That(fill.r, Is.EqualTo(expectedFill.r).Within(0.0001f));
+            Assert.That(fill.g, Is.EqualTo(expectedFill.g).Within(0.0001f));
+            Assert.That(fill.b, Is.EqualTo(expectedFill.b).Within(0.0001f));
             Assert.That(fill.a, Is.EqualTo(0.54f).Within(0.0001f));
             Assert.That(sceneGlass.GetFloat("_TangoSaturation"), Is.EqualTo(1.5f));
             Assert.That(sceneGlass.GetFloat("_TangoSheenAlpha"), Is.EqualTo(0.07f));
             Assert.That(sceneGlass.GetFloat("_TangoRimAlpha"), Is.EqualTo(0.14f));
             Assert.That(sceneGlass.GetFloat("_TangoFallbackAlpha"), Is.EqualTo(0.72f));
+            Color lens = onGlass.GetColor("_TangoLensColor");
+            Color expectedLens = ((Color)new Color32(4, 4, 6, 255)).linear;
+            Assert.That(lens.r, Is.EqualTo(expectedLens.r).Within(0.0001f));
+            Assert.That(lens.g, Is.EqualTo(expectedLens.g).Within(0.0001f));
+            Assert.That(lens.b, Is.EqualTo(expectedLens.b).Within(0.0001f));
+            Assert.That(lens.a, Is.EqualTo(0.13f).Within(0.0001f));
+            Assert.That(onGlass.GetFloat("_TangoRimAlpha"), Is.EqualTo(0.18f));
+            Assert.That(onGlass.GetFloat("_TangoHighlightAlpha"), Is.EqualTo(0.10f));
             Assert.That(solidChrome.shader.name, Is.EqualTo("Universal Render Pipeline/Lit"));
             Assert.That(solidChrome.renderQueue, Is.EqualTo((int)RenderQueue.Geometry));
             Assert.That(solidChrome.GetShaderPassEnabled("ShadowCaster"), Is.True);

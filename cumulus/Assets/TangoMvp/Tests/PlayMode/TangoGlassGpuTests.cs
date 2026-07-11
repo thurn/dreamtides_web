@@ -285,29 +285,45 @@ namespace TangoMvp.Tests.PlayMode
                     TangoImageMetrics.MeanAbsoluteRgbDifference(spinnerA, spinnerC, CaptureWidth, CaptureHeight, liveB),
                     TangoComparison.GreaterThanOrEqual, 0.015f, "spinner=0.04", "spinner=0.70", graphicsApi, deviceName);
 
-                float uncoveredEnergy = TangoImageMetrics.LuminanceEdgeEnergy(spinnerB, CaptureWidth, CaptureHeight, uncovered);
-                if (uncoveredEnergy <= 0f)
-                {
-                    throw new InvalidOperationException("Uncovered pattern produced zero edge energy.");
-                }
-
-                float blurRatio = TangoImageMetrics.LuminanceEdgeEnergy(spinnerB, CaptureWidth, CaptureHeight, liveB) / uncoveredEnergy;
-                Record(results, TangoGpuAcceptance.BlurEdgeEnergyRatioMaximum, blurRatio,
-                    TangoComparison.LessThanOrEqual, 0.65f, "spinner=0.29", "spinner=0.29", graphicsApi, deviceName);
-                Record(results, TangoGpuAcceptance.BlurEdgeEnergyRatioMinimum, blurRatio,
-                    TangoComparison.GreaterThanOrEqual, 0.05f, "spinner=0.29", "spinner=0.29", graphicsApi, deviceName);
-
                 RecordFacts(results, baselineFacts, "bothPanesEnabled", graphicsApi, deviceName);
 
+                spinner.SetPhase(0.29f);
                 mainGlass.SetActive(false);
-                Capture(camera, target, "main-pane-disabled");
+                Color32[] mainPaneDisabled = Capture(camera, target, "main-pane-disabled");
                 RecordFacts(results, RequireFacts(camera), "mainPaneDisabled", graphicsApi, deviceName);
                 mainGlass.SetActive(true);
+                Record(results, TangoGpuAcceptance.SurfaceContribution + ".LiveGlassA",
+                    TangoImageMetrics.MeanAbsoluteRgbDifference(spinnerB, mainPaneDisabled, CaptureWidth, CaptureHeight, liveA),
+                    TangoComparison.GreaterThanOrEqual, 0.02f, "glass=enabled", "glass=disabled", graphicsApi, deviceName);
 
+                spinner.SetPhase(0.29f);
                 independentGlass.SetActive(false);
-                Capture(camera, target, "independent-pane-disabled");
+                Color32[] independentPaneDisabled = Capture(camera, target, "independent-pane-disabled");
                 RecordFacts(results, RequireFacts(camera), "independentPaneDisabled", graphicsApi, deviceName);
                 independentGlass.SetActive(true);
+                Record(results, TangoGpuAcceptance.SurfaceContribution + ".LiveGlassB",
+                    TangoImageMetrics.MeanAbsoluteRgbDifference(spinnerB, independentPaneDisabled, CaptureWidth, CaptureHeight, liveB),
+                    TangoComparison.GreaterThanOrEqual, 0.02f, "glass=enabled", "glass=disabled", graphicsApi, deviceName);
+
+                float uncoveredEnergy = TangoImageMetrics.LuminanceGradientPeak(
+                    independentPaneDisabled,
+                    CaptureWidth,
+                    CaptureHeight,
+                    liveB);
+                if (uncoveredEnergy <= 0f)
+                {
+                    throw new InvalidOperationException("Glass-disabled reference produced zero edge energy.");
+                }
+
+                float blurRatio = TangoImageMetrics.LuminanceGradientPeak(
+                    spinnerB,
+                    CaptureWidth,
+                    CaptureHeight,
+                    liveB) / uncoveredEnergy;
+                Record(results, TangoGpuAcceptance.BlurEdgeEnergyRatioMaximum, blurRatio,
+                    TangoComparison.LessThanOrEqual, 0.65f, "glass=enabled", "glass=disabled", graphicsApi, deviceName);
+                Record(results, TangoGpuAcceptance.BlurEdgeEnergyRatioMinimum, blurRatio,
+                    TangoComparison.GreaterThanOrEqual, 0.01f, "glass=enabled", "glass=disabled", graphicsApi, deviceName);
 
                 onGlassButton.SetActive(false);
                 spinner.SetPhase(0.04f);

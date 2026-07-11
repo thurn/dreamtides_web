@@ -84,6 +84,36 @@ namespace TangoMvp.Tests.Support
             return CheckedResult(sum / derivativeCount, nameof(LuminanceEdgeEnergy));
         }
 
+        public static float LuminanceGradientPeak(Color32[] pixels, int width, int height, RectInt region)
+        {
+            ValidateBuffer(pixels, width, height, nameof(pixels));
+            ValidateRegion(region, width, height);
+            if (region.width < 2 && region.height < 2)
+            {
+                throw new ArgumentException("Gradient region must contain at least one adjacent pixel pair.", nameof(region));
+            }
+
+            float peak = 0f;
+            for (int y = region.yMin; y < region.yMax; y++)
+            {
+                for (int x = region.xMin; x < region.xMax; x++)
+                {
+                    float current = LinearLuminance(pixels[y * width + x]);
+                    if (x + 1 < region.xMax)
+                    {
+                        peak = Math.Max(peak, Math.Abs(current - LinearLuminance(pixels[y * width + x + 1])));
+                    }
+
+                    if (y + 1 < region.yMax)
+                    {
+                        peak = Math.Max(peak, Math.Abs(current - LinearLuminance(pixels[(y + 1) * width + x])));
+                    }
+                }
+            }
+
+            return CheckedResult(peak, nameof(LuminanceGradientPeak));
+        }
+
         public static float PercentileContrast(Color32[] pixels, int width, int height, RectInt glyphRegion)
         {
             ValidateBuffer(pixels, width, height, nameof(pixels));

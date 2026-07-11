@@ -2,9 +2,9 @@ Shader "TangoMvp/OnGlass"
 {
     Properties
     {
-        [HideInInspector] _TangoLensColor("Tango Lens", Color) = (0.10, 0.09, 0.12, 0.20)
-        [HideInInspector] _TangoRimAlpha("Tango Rim Alpha", Float) = 0.22
-        [HideInInspector] _TangoHighlightAlpha("Tango Highlight Alpha", Float) = 0.28
+        [HideInInspector] _TangoLensColor("Tango Lens", Color) = (0.001214, 0.001214, 0.001821, 0.13)
+        [HideInInspector] _TangoRimAlpha("Tango Rim Alpha", Float) = 0.18
+        [HideInInspector] _TangoHighlightAlpha("Tango Highlight Alpha", Float) = 0.10
     }
 
     SubShader

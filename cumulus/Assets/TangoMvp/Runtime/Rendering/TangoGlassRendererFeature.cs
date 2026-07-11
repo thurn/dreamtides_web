@@ -108,7 +108,9 @@ namespace TangoMvp.Rendering
 
             public TangoGlassBlurPass()
             {
-                blurProperties.SetFloat(RadiusId, BlurRadiusOutputPixels);
+                // The blur resource is half-resolution. Convert the fixed
+                // output-space token to blur-texture texels before sampling.
+                blurProperties.SetFloat(RadiusId, BlurRadiusOutputPixels * 0.5f);
             }
 
             public void Setup(Material blurMaterial)

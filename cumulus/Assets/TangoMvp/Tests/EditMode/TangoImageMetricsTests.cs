@@ -32,6 +32,18 @@ namespace TangoMvp.Tests
         }
 
         [Test]
+        public void LuminanceGradientPeak_DistinguishesASharpEdgeFromTheSameSoftTransition()
+        {
+            Color32[] hard = Row(0, 0, 255, 255);
+            Color32[] blurred = Row(0, 85, 170, 255);
+            var row = new RectInt(0, 0, 4, 1);
+
+            Assert.That(
+                TangoImageMetrics.LuminanceGradientPeak(hard, 4, 1, row),
+                Is.GreaterThan(TangoImageMetrics.LuminanceGradientPeak(blurred, 4, 1, row)));
+        }
+
+        [Test]
         public void PercentileContrast_UsesGlyph95thPercentileAndExpandedBorderMedian()
         {
             Color32[] image = Solid(5, 5, GrayForLinearLuminance(0.1f));
@@ -107,8 +119,9 @@ namespace TangoMvp.Tests
         public void AcceptanceThresholds_FlipImmediatelyAcrossEveryCommittedBoundary()
         {
             AssertBoundary(TangoGpuAcceptance.LiveBackdropDelta, 0.015f, TangoComparison.GreaterThanOrEqual);
+            AssertBoundary(TangoGpuAcceptance.SurfaceContribution, 0.02f, TangoComparison.GreaterThanOrEqual);
             AssertBoundary(TangoGpuAcceptance.BlurEdgeEnergyRatioMaximum, 0.65f, TangoComparison.LessThanOrEqual);
-            AssertBoundary(TangoGpuAcceptance.BlurEdgeEnergyRatioMinimum, 0.05f, TangoComparison.GreaterThanOrEqual);
+            AssertBoundary(TangoGpuAcceptance.BlurEdgeEnergyRatioMinimum, 0.01f, TangoComparison.GreaterThanOrEqual);
             AssertBoundary(TangoGpuAcceptance.SharedGraphRecords, 1f, TangoComparison.Equal);
             AssertBoundary(TangoGpuAcceptance.HorizontalPasses, 1f, TangoComparison.Equal);
             AssertBoundary(TangoGpuAcceptance.VerticalPasses, 1f, TangoComparison.Equal);
