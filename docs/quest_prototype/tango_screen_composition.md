@@ -47,28 +47,28 @@ Keep screen layers in broad bands:
 - Backdrop art and motes: base layer.
 - Stage objects: map nodes, site nodes, cards, dreamsigns.
 - Screen chrome: headers, filters, local panels, `QuestStatusBar`.
-- Reveals and previews: `InfoCard.PressInfo`, `HoverPopover`, hover-zoom card
-  copies, and other portaled read surfaces.
+- Entity reveals: the single root coordinator portal used by named semantic
+  Tango components.
 - App overlays: deck viewer, starting-deck popup, error boundary fallback.
 
-When a reveal is portaled to `document.body`, it carries its own `.tango` token
-scope and uses viewport-aware placement. Do not rely on a parent screen's
-stacking context for portaled content.
+`TangoRoot` mounts one coordinator portal at `document.body`. It carries its
+own `.tango` token scope and uses visual-viewport and physical-safe-area
+placement. Parent screen stacking contexts do not participate in reveal layout.
 
 ## Reveal Surfaces
 
-Use `InfoCard` for canonical game-object explanations: tide definitions,
-Dreamcaller summaries, dreamsign details, card glossary terms, site previews,
-and HUD press reveals. `InfoCard.PressInfo`, `InfoCard.PressPopover`, and
-`usePressReveal` are the default interaction engine when the same reveal must
-work on fine-pointer hover and touch press.
+Screens render named semantic sources such as `GameCard`, `AtlasNode`,
+`Dreamsign`, `DreamcallerPortrait`, `TideDisc`, `ResourceChip`, `SiteNode`, and
+`GlossaryTerm`. Each component derives one strict primary plus ordered
+`InfoCard` secondaries from UUID-backed domain data. `InfoCard` itself is a
+visual content component with strict variants.
 
-Use `HoverPopover` for fine-pointer-only helper previews whose trigger or
-content is screen-owned: deck-hover zooms, dense row previews, and side-mounted
-definition stacks. A `HoverPopover` body should still be a canonical Tango
-surface, usually `InfoCard`, `GlossaryDefinitionCard`, or `DreamsignInfoCard`,
-so placement can be screen-specific while visual language stays
-shared.
+`TangoRoot` owns hover, focus, touch intent, activation, one-active-group
+competition, measurement, safe-area placement, truncation, portal rendering,
+accessibility descriptions, and diagnostics. Screens do not construct reveal
+specifications, anchors, portals, delays, placement sides, or controlled
+open/shown state. Passive decorative help is static; game entities use their
+named semantic component.
 
 ## Loading And Error States
 

@@ -9,6 +9,18 @@ import { EntityRevealConformanceDemo } from "./EntityRevealConformanceDemo";
 
 let resizeCallbacks: ResizeObserverCallback[] = [];
 
+interface OpenLog extends Record<string, unknown> {
+  viewport: { layout: "mobile" | "desktop"; width: number; height: number; offsetLeft: number; offsetTop: number; safeArea: { top: number; right: number; bottom: number; left: number } };
+  sourceRect: { x: number; y: number; width: number; height: number };
+  touchPoint?: { x: number; y: number };
+  placement: { family: string; orientation: string };
+  finalRects: { primary: { x: number; y: number; width: number; height: number }; secondaries: Array<{ x: number; y: number; width: number; height: number }> };
+  circleClearance?: number;
+  shownSecondaryCount: number;
+  droppedSecondaryCount: number;
+  fallbacks: { pressInPlace: boolean; sideFallback: boolean; secondaryTruncation: boolean; bestEffortPrimaryOverlap: boolean };
+}
+
 beforeEach(() => {
   (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
@@ -18,6 +30,7 @@ beforeEach(() => {
   Object.defineProperty(window, "innerWidth", { configurable: true, value: 1200 });
   Object.defineProperty(window, "innerHeight", { configurable: true, value: 800 });
   Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 800, offsetLeft: 0, offsetTop: 0 } });
+  for (const [name, value] of [["--safe-area-inset-top", "11px"], ["--safe-area-inset-right", "12px"], ["--safe-area-inset-bottom", "13px"], ["--safe-area-inset-left", "14px"]] as const) document.documentElement.style.setProperty(name, value);
   resizeCallbacks = [];
   globalThis.ResizeObserver = class {
     constructor(callback: ResizeObserverCallback) { resizeCallbacks.push(callback); }
@@ -37,6 +50,7 @@ beforeEach(() => {
 afterEach(() => {
   vi.restoreAllMocks();
   document.body.innerHTML = "";
+  document.documentElement.removeAttribute("style");
   delete (globalThis as Partial<typeof globalThis>).ResizeObserver;
 });
 
@@ -48,12 +62,30 @@ describe("EntityRevealConformanceDemo", () => {
     expect(container.querySelector("[data-atlas-node-id]" )).not.toBeNull();
     expect(container.querySelector("[data-battle-card-id]" )).not.toBeNull();
     expect(container.querySelectorAll("[data-conformance-scenario]").length).toBeGreaterThanOrEqual(6);
+    const infoSource = container.querySelector<HTMLElement>("[data-conformance-info-secondaries] [data-reveal-entity-type=dreamcaller]")!;
+    expect(infoSource.dataset.revealSecondaryTitles?.split("\u001f")).toEqual(["Bane", "Discover", "Ephemeral"]);
+    for (const scenario of ["above", "side-fallback", "top-edge", "truncation", "best-effort", "safe-area", "reduced-motion"]) {
+      act(() => container.querySelector<HTMLButtonElement>(`[data-conformance-scenario="${scenario}"]`)?.click());
+      const source = container.querySelector<HTMLElement>(`[data-conformance-scenario-source="${scenario}"]`)!;
+      expect(source.querySelector("[data-reveal-entity-type]")).not.toBeNull();
+      expect(source.style.position).toBe(
+        ["top-edge", "best-effort", "safe-area"].includes(scenario)
+          ? "fixed"
+          : "absolute",
+      );
+      if (scenario === "best-effort") {
+        expect(source.style.left).toBe("calc(50% - 60px)");
+        expect(source.style.top).toBe("0px");
+      }
+    }
     expect(container.innerHTML).not.toContain("anchorRect");
     expect(container.innerHTML).not.toContain("portalTarget");
     act(() => root.unmount());
   });
 
   it("logs rendered rectangles, placement flags, counts, dismissal, and activation outcome end to end", async () => {
+    Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 800, offsetLeft: 7, offsetTop: 13 } });
+    const baseline = getLogEntries().length;
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container); act(() => root.render(<TangoRoot><EntityRevealConformanceDemo /></TangoRoot>));
     const source = container.querySelector<HTMLElement>('[data-conformance-card-id="11111111-1111-4111-8111-111111111111"] [data-game-card-source]')!;
@@ -61,29 +93,68 @@ describe("EntityRevealConformanceDemo", () => {
     await act(async () => { await Promise.resolve(); });
     act(() => resizeCallbacks.forEach((callback) => callback([], {} as ResizeObserver)));
     await vi.waitFor(() => expect(document.querySelector("[data-tango-reveal-card]" )).not.toBeNull());
-    const opened = [...getLogEntries()].reverse().find((entry) => entry.event === "tango_entity_reveal_opened") as unknown as (Record<string, unknown> & {
-      sourceRect: unknown;
-      finalRects: unknown;
-      circleClearance?: unknown;
-      shownSecondaryCount: number;
-      droppedSecondaryCount: number;
-      fallbacks: { pressInPlace: boolean; sideFallback: boolean; secondaryTruncation: boolean; bestEffortPrimaryOverlap: boolean };
-    });
+    const opens = getLogEntries().slice(baseline).filter((entry) => entry.event === "tango_entity_reveal_opened");
+    expect(opens).toHaveLength(1);
+    const opened = opens[0] as unknown as OpenLog;
     const rendered = [...document.querySelectorAll<HTMLElement>("[data-tango-reveal-card]")].map((node) => {
       const rect = node.getBoundingClientRect();
       return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
     });
     expect(opened.sourceRect).toEqual({ x: 80, y: 300, width: 160, height: 224 });
+    expect(opened.viewport).toEqual({ layout: "desktop", width: 1200, height: 800, offsetLeft: 7, offsetTop: 13, safeArea: { top: 11, right: 12, bottom: 13, left: 14 } });
+    expect(opened.placement).toEqual({ family: "desktop-game-card-reading", orientation: "primary-left" });
     expect(opened.finalRects).toEqual({ primary: rendered[0], secondaries: rendered.slice(1) });
+    expect(opened.finalRects).toEqual({ primary: { x: 21, y: 174, width: 340, height: 476 }, secondaries: [{ x: 371, y: 174, width: 248, height: 120 }, { x: 371, y: 304, width: 248, height: 120 }, { x: 371, y: 434, width: 248, height: 120 }] });
     expect(opened.circleClearance).toBeUndefined();
     expect(opened.shownSecondaryCount).toBe(rendered.length - 1);
-    expect(typeof opened.droppedSecondaryCount).toBe("number");
+    expect(opened.droppedSecondaryCount).toBe(0);
     expect(opened.fallbacks.pressInPlace).toBe(false);
-    expect(typeof opened.fallbacks.sideFallback).toBe("boolean");
-    expect(typeof opened.fallbacks.secondaryTruncation).toBe("boolean");
-    expect(typeof opened.fallbacks.bestEffortPrimaryOverlap).toBe("boolean");
+    expect(opened.fallbacks).toEqual({ pressInPlace: false, sideFallback: false, secondaryTruncation: false, bestEffortPrimaryOverlap: false });
     void act(() => { window.dispatchEvent(new Event("resize")); });
-    expect([...getLogEntries()].reverse().find((entry) => entry.event === "tango_entity_reveal_closed")).toMatchObject({ dismissalReason: "resize", activationOutcome: "none" });
+    const closes = getLogEntries().slice(baseline).filter((entry) => entry.event === "tango_entity_reveal_closed");
+    expect(closes).toHaveLength(1);
+    expect(closes[0]).toMatchObject({ dismissalReason: "resize", activationOutcome: "none" });
+    act(() => root.unmount());
+  });
+
+  it("logs exact mobile touch clearance and a real fired activation once", async () => {
+    Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 390, height: 844, offsetLeft: 3, offsetTop: 5 } });
+    for (const [name, value] of [["--safe-area-inset-top", "52px"], ["--safe-area-inset-right", "6px"], ["--safe-area-inset-bottom", "7px"], ["--safe-area-inset-left", "8px"]] as const) document.documentElement.style.setProperty(name, value);
+    const baseline = getLogEntries().length;
+    const container = document.createElement("div"); document.body.append(container);
+    const root = createRoot(container); act(() => root.render(<TangoRoot><EntityRevealConformanceDemo /></TangoRoot>));
+    act(() => container.querySelector<HTMLButtonElement>('[data-conformance-scenario="best-effort"]')?.click());
+    const source = container.querySelector<HTMLElement>('[data-conformance-scenario-source="best-effort"] [data-game-card-source]')!;
+    source.getBoundingClientRect = () => DOMRect.fromRect({ x: 80, y: 50, width: 120, height: 168 });
+    const point = { x: 195, y: 100 };
+    void act(() => source.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, pointerType: "touch", pointerId: 9, clientX: point.x, clientY: point.y })));
+    await act(async () => { await new Promise((resolve) => setTimeout(resolve, 40)); });
+    act(() => resizeCallbacks.forEach((callback) => callback([], {} as ResizeObserver)));
+    await vi.waitFor(() => expect(document.querySelector("[data-tango-reveal-card=primary]")).not.toBeNull());
+    const opened = getLogEntries().slice(baseline).find((entry) => entry.event === "tango_entity_reveal_opened") as unknown as OpenLog;
+    expect(opened.viewport).toEqual({ layout: "mobile", width: 390, height: 844, offsetLeft: 3, offsetTop: 5, safeArea: { top: 52, right: 6, bottom: 7, left: 8 } });
+    expect(opened.touchPoint).toEqual(point);
+    expect(opened.placement).toEqual({ family: "mobile-touch-corner", orientation: "primary-right" });
+    expect(opened.shownSecondaryCount).toBe(8);
+    expect(opened.droppedSecondaryCount).toBe(21);
+    expect(opened.fallbacks).toEqual({ pressInPlace: false, sideFallback: true, secondaryTruncation: true, bestEffortPrimaryOverlap: true });
+    const primary = document.querySelector<HTMLElement>("[data-tango-reveal-card=primary]")!.getBoundingClientRect();
+    const renderedSecondaries = [...document.querySelectorAll<HTMLElement>("[data-tango-reveal-card=secondary]")].map((node) => {
+      const rect = node.getBoundingClientRect();
+      return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+    });
+    expect(opened.finalRects).toEqual({ primary: { x: primary.x, y: primary.y, width: primary.width, height: primary.height }, secondaries: renderedSecondaries });
+    const dx = Math.max(primary.left - point.x, 0, point.x - primary.right);
+    const dy = Math.max(primary.top - point.y, 0, point.y - primary.bottom);
+    expect(opened.circleClearance).toBeCloseTo(Math.hypot(dx, dy) - 24, 8);
+    void act(() => source.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, pointerType: "touch", pointerId: 9, clientX: point.x, clientY: point.y })));
+    await act(async () => { await Promise.resolve(); });
+    expect(container.querySelector("[data-conformance-card-id]")?.getAttribute("data-activation-count")).toBe("1");
+    const opens = getLogEntries().slice(baseline).filter((entry) => entry.event === "tango_entity_reveal_opened");
+    const closes = getLogEntries().slice(baseline).filter((entry) => entry.event === "tango_entity_reveal_closed");
+    expect(opens).toHaveLength(1);
+    expect(closes).toHaveLength(1);
+    expect(closes[0]).toMatchObject({ dismissalReason: "release", activationOutcome: "fired" });
     act(() => root.unmount());
   });
 });

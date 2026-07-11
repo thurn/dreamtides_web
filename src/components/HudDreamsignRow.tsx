@@ -43,7 +43,7 @@ export function HudDreamsignRow({ dreamsigns }: HudDreamsignRowProps) {
   );
 }
 
-/** A single dreamsign artwork tile with a hover popover for the full card. */
+/** A single named Dreamsign source with coordinator-owned reading detail. */
 function HudDreamsignIcon({ dreamsign }: { dreamsign: Dreamsign }) {
   return (
     <span className="inline-block" role="listitem">

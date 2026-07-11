@@ -277,7 +277,6 @@ function BeforeAfterPair({
           widthPx={nowWidth}
           cardOverride={original}
           dim
-          hoverPreview
         />
         <CaptionLabel text="Now" color="#7d7799" />
       </div>
@@ -526,7 +525,6 @@ function CardGrid({
               ) : undefined
             }
             testId={`journey-choice-${candidate.choiceId}`}
-            ariaLabel={candidate.title}
           />
         );
       })}
@@ -692,7 +690,6 @@ export function OfferObjects({
                 onClick={() => onSelectCandidate(candidate)}
                 selected={false}
                 testId={`journey-choice-${candidate.choiceId}`}
-                ariaLabel={candidate.title}
               />
             );
           })}

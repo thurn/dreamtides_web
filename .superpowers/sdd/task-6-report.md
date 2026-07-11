@@ -7,9 +7,9 @@ Complete. The compatibility APIs and independent reveal engine are deleted, the 
 ## RED / GREEN record
 
 - RED: `npx vitest run eslint-rules/no-entity-reveal-escape-hatches.test.ts` failed because `no-entity-reveal-escape-hatches.js` did not exist.
-- GREEN: the lint-rule suite passes 12 cases covering internal imports, InfoCard interaction statics, generic wrappers, arbitrary ReactNode/spec APIs, direct reveal portals, mechanical props, controlled state, named components, and internal implementation/tests.
+- GREEN: the lint-rule suite passes 22 cases covering exact internal-import ownership, aliased InfoCard statics, structural generic wrappers, arbitrary ReactNode/spec APIs, aliased and namespace reveal portals, mechanical props, controlled state, named components, and internal implementation/tests.
 - RED: `npx vitest run src/tango/screens/devtools/EntityRevealConformanceDemo.test.tsx` failed because `EntityRevealConformanceDemo.tsx` did not exist.
-- GREEN: both demo tests pass. The end-to-end test opens a real named GameCard source, compares logged source/final rectangles with rendered DOM rectangles, verifies shown/dropped counts and all fallback flags, verifies desktop circle-clearance absence, then verifies resize dismissal and `activationOutcome: "none"`.
+- GREEN: all three demo tests pass. The end-to-end tests compare exact logged viewport/source/final rectangles, shown/dropped counts, fallback flags, circle clearance, one open/close lifecycle, dismissal reason, and activation outcome on desktop and mobile touch paths.
 - Existing Draft preview tests failed after the retired wrapper was deleted. They drove the strict named `CompactGameCardRow`, which preserves the compact row while deriving the canonical GameCard primary and glossary secondaries from UUID-backed card data.
 
 ## Boundary and deletion inventory
@@ -63,7 +63,7 @@ The end-to-end diagnostic assertion validates the actual source rectangle, rende
 - Tango docs: 30 component references, stale HoverPopover reference swept.
 - `npm run lint`: pass.
 - `npm run typecheck`: pass.
-- `npm test`: 391 files passed, 1 skipped; 4,217 tests passed, 4 skipped.
+- `npm test`: 392 files passed, 1 skipped; 4,229 tests passed, 4 skipped.
 - `git diff --check`: pass.
 
 ## Browser matrix
@@ -119,7 +119,57 @@ Stable path: `screenshots/entity-reveals/`
 - Documentation wording scan found none of the prohibited historical-contrast phrases in the normative reveal or QA-scene docs.
 - Card semantics use UUIDs. The Draft fixture was corrected to a valid UUID so fail-closed semantics are exercised in its screen test.
 - The conformance battle representative uses the canonical GameCard source with a battle instance data hook; the normal playable-battle workflow separately verifies the full `BattleGameCard` adapter.
-- No pre-existing unrelated issue was encountered.
+- Normal Dream Merchant v2 QA exposed a pre-existing `SET_CARD_SOURCE_DEBUG`
+  update loop that reaches React's maximum update depth. It is recorded in
+  `pre-existing-issues.txt`; the loop can leave an otherwise valid JourneyCard
+  reveal measurement pending.
+
+## Review remediation
+
+- Migrated `src/journey_v2/ui/JourneyCard.tsx` from its independent
+  `createPortal` / local zoom state / `CardView` path to the named `GameCard`
+  semantic source. Its stable test id now sits on the same activation and
+  reveal boundary. A focused test proves UUID identity, reveal activation, one
+  click callback, and absence of the retired zoom node.
+- Reworked `tango/no-entity-reveal-escape-hatches` around exact file/symbol
+  allowlists. The rule follows aliased and namespace `react-dom` imports,
+  variable indirection, aliased/destructured InfoCard statics, and structural
+  wrapper contracts expressed through interfaces, type literals, JSX props,
+  and destructured arrow parameters. Ordinary dialogs, stacks, ReactNode
+  content, and local functions named `createPortal` remain valid.
+- The conformance demo now uses a real `DreamcallerPortrait` group source with
+  ordered Bane, Discover, and Ephemeral secondaries, and a 29-term card fixture
+  that deterministically exercises truncation. Scenario controls materially
+  position their named sources; top-edge, best-effort, and safe-area sources
+  are viewport-fixed, and the centered best-effort source naturally records
+  `bestEffortPrimaryOverlap: true` under a center touch.
+- Diagnostics now assert exact desktop and mobile viewport snapshots, source
+  and final rectangles, placement families/orientations, counts, fallback
+  flags, circle clearance, and exactly one open/close lifecycle. The touch
+  activation path records `activationOutcome: "fired"` for one quick tap.
+- Updated `tango_screen_composition.md` and `tango_design_system.md` to describe
+  the current single-coordinator architecture, named semantic source roster,
+  visual-only InfoCard contract, gesture timing, lifecycle diagnostics, and
+  one-active-group rule. Retired-symbol and historical-contrast scans are empty
+  in both documents.
+- Removed the stale DreamMerchant `CardHoverPreview` mock and updated its card
+  module mock to preserve the named `GameCard` export. Updated the HUD
+  Dreamsign comment to describe coordinator-owned reading detail.
+- Review-remediation browser QA used `http://localhost:5175` and isolated
+  session `q6-remediation-5175`, always at device scale 2. Desktop side fallback
+  recorded five shown / 24 dropped secondaries and `sideFallback: true`; the
+  real Dreamcaller source rendered one primary plus the three ordered glossary
+  cards. Mobile best-effort recorded eight shown / 21 dropped,
+  `bestEffortPrimaryOverlap: true`, and `circleClearance: -4.5`. Safe-area
+  placement started exactly at y=52, reduced-motion transition was `none`, and
+  quick touch activation produced one open, one close, and `fired`.
+- The normal Dream Merchant route confirmed eight migrated JourneyCard sources,
+  matching `data-card-id` / `data-card-uuid` values, and zero retired journey
+  zoom nodes before the pre-existing debug-state loop prevented reveal
+  measurement completion.
+- Stable remediation captures live under
+  `screenshots/entity-reveals-remediation/`. Session and server were closed;
+  port 5175 has no listener.
 
 ## Commit and push
 

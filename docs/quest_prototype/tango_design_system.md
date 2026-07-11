@@ -356,9 +356,10 @@ Table of contents, then:
    it), *the legibility ladder* (render on the media with `.hud-outline`; group
    related info in a `GroupPanel`; never a scrim/wash/vignette), *always in
    motion* (tangible entities float; readout chrome may rest), the *popup rule*
-   (one InfoCard contract — hover-to-reveal on a fine pointer, hold-to-reveal on
-   touch — no close button, no scrim, anchored to the pointer or trigger), and
-   the content voice (second-person, literary;
+   (named semantic sources register strict content with the one
+   `TangoRoot` coordinator; hover/focus reveal on desktop and touch intent
+   reveals on mobile; the group is pointer-transparent), and the content voice
+   (second-person, literary;
    Title Case titles, uppercase-mono eyebrows; no emoji). The verbose README
    framing is cut.
 2. **Primitives** — color, typography, corner radius, spacing, iconography,
@@ -379,27 +380,33 @@ radius) but stays deliberately restrained so the components are the focus.
 | **Pressable** / `usePress` | `primitives/` | Import from Claude Design (the one press-feedback primitive; scale-down `--press-scale` 0.9) |
 | **Button** | `components/` | Import from Claude Design; beveled purple 9-patch (`Button_Purple.png`), `border-image` 9-slice; sizes `sm/md/lg` (`lg` = taller commit); props `full`, `icon`, `cost`, `frameScale` |
 | **ResourceChip** | `components/` | Import from Claude Design (value + filled-Boxicon mark, tight pairing) |
-| **InfoCard** (+ press-reveal engine) | `components/` | Import from Claude Design; variants `object/card/icon/text`; statics `PressPopover`, `PressInfo`, `usePressReveal`, `anchorRect` |
+| **InfoCard** | `components/` | Strict visual content variants (`object`, `fullBleed`, `atlasReveal`, `icon`, `tide`, `text`) rendered by named sources through the root coordinator |
 | **SegmentedControl** | `components/` | Import from Claude Design |
 | **Motes** | `components/` | Import from Claude Design (atmospheric particle layer; `warm`/`violet`/`dreamscape` tint; sanctioned particle opacity animation) |
 | **QuestStatusBar** | `components/` | Import from Claude Design (the transparent bottom HUD) |
 | **GroupPanel** | `components/` | A flat, solid deep-plum card (`--surface-card` fill, no border, `--shadow-card` drop shadow) — a distinct surface from InfoCard's glass. The liquid-glass recipe (`backdrop-filter` blur/saturate + specular gradient + inset rim/wash + drop shadow) lives in `glassSurfaceStyle` (`src/tango/internal/glass-surface.ts`), shared by InfoCard, GlassDialog, IconButton, GlassButton, and SpeechBubble. The deck viewer and full-bleed CardGalleryPanel use the 80%-black `--scrim-gallery` alpha overlay; floating CardGalleryPanels use glass. |
-| **GameCard** | `components/` | Move production `CardView` + its closure into Tango, clean up for reuse (the design's `GameCard` is itself a port of `CardView`) |
-| **RulesText** | `components/` | Move production `RulesText` + `card-text` + `PipBadge` into Tango |
-| **Dreamsign** | `components/` | Unify local (`DreamsignHoverCard` / `DreamsignArtTile`) with the design's `Dreamsign`; route its touch-down preview through `InfoCard` (`object` variant) |
-| **SiteNode** | `components/` | Unify local `DreamscapeSiteNode` with the design's `SiteNode`; route its press-reveal through `InfoCard` |
-| **Atlas Node / Edge / Defs** | `components/` | Port local `AtlasNode` + `atlas-display` (+ the edge connectors and their shared SVG `<defs>`: gradients / markers / flow). Clean up for reuse. Local atlas is authoritative, not the design's reconstruction |
+| **GameCard** | `components/` | UUID-backed card source deriving its reading copy and ordered glossary secondaries; activation remains available independently of reading |
+| **RulesText** | `components/` | Canonical rules renderer with inline named `GlossaryTerm` sources and `PipBadge` marks |
+| **Dreamsign** | `components/` | UUID-backed collectible source deriving object/text primary content and glossary secondaries |
+| **SiteNode** | `components/` | UUID-backed site source deriving its icon InfoCard and activation availability |
+| **Atlas Node / Edge / Defs** | `components/` | AtlasNode owns its placed source, strict scene primary, Dreamsign/site/affiliation secondaries, and activation; edges and shared SVG definitions compose the map |
 
 ### Interaction model (input-adaptive reveal)
 
-One reveal contract, expressed through whichever gesture is native to the
-device. Neither input is the primary one:
+One coordinator contract is expressed through whichever gesture is native to
+the device. Named components supply semantic content; screens supply no reveal
+mechanics:
 
-- **Desktop / fine pointer:** hover reveals the `InfoCard`; mouse-down applies
-  the `Pressable` scale-down (0.9). Nothing reveals on press.
-- **Touch / coarse pointer:** touch-down reveals the `InfoCard` (and scales);
-  release dismisses. No long-press, no close button, no scrim, anchored to the
-  touch.
+- **Desktop / fine pointer:** hover and keyboard focus reveal immediately;
+  mouse-down applies measured press feedback. `Escape` suppresses the current
+  focus visit.
+- **Touch / coarse pointer:** a 30ms intent filter reveals while the 300ms
+  activation boundary distinguishes tap from hold. Scroll, drag, movement,
+  release, route, resize, and orientation changes dismiss centrally.
+- **All inputs:** one pointer-transparent group contains exactly one primary and
+  a priority prefix of ordered secondaries. Visual-viewport, safe-area,
+  truncation, press-in-place, accessibility, portal ownership, and diagnostics
+  belong to `TangoRoot`.
 
 ### Demo & mockup content
 
@@ -493,8 +500,8 @@ reference, not by a from-scratch subagent rewrite.
 - **Phase 1 — Simple primitives/components.** Pressable, ResourceChip, Button,
   SegmentedControl, Motes, TideDisc, and the economy/spec helpers — one subagent
   each; interactive demos + auto props tables live.
-- **Phase 2 — Press engine & surfaces.** InfoCard + `usePressReveal` (with the
-  input-adaptive hover/press model), GroupPanel (CSS port), QuestStatusBar.
+- **Phase 2 — Surfaces and coordinator.** Strict InfoCard variants, GroupPanel,
+  QuestStatusBar, and the application-root entity-reveal coordinator.
 - **Phase 3 — Move production in.** RulesText (+ `card-text`, `PipBadge`) then
   GameCard (+ closure) into Tango; re-point external call sites; move their
   tests; typecheck between moves.

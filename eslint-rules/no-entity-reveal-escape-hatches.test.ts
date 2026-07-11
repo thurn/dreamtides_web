@@ -42,6 +42,25 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
       filename: "src/editor/CardTagEditor.tsx",
       code: `const [open, setOpen] = useState(false); <Dialog open={open} />;`,
     },
+    {
+      name: "ordinary layout and content props are not reveal APIs",
+      filename: "src/editor/Article.tsx",
+      code: `interface ArticleProps { content: ReactNode; open: boolean }
+        const createPortal = (value: unknown) => value;
+        <><Stack gap={8} /><Article content={body} open={open} /></>; createPortal(body);`,
+    },
+    {
+      name: "approved named component imports the exact coordinator relationship",
+      filename: "src/tango/components/card/CardView.tsx",
+      code: `import { useRevealSource } from "../../internal/reveal/context";
+        const binding = useRevealSource(registration);`,
+    },
+    {
+      name: "explicitly approved non-reveal portal owner stays legal",
+      filename: "src/tango/components/controls/Select.tsx",
+      code: `import { createPortal as mountPortal } from "react-dom";
+        mountPortal(<div />, document.body);`,
+    },
   ],
   invalid: [
     {
@@ -57,6 +76,12 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
       errors: [{ messageId: "internalImport" }],
     },
     {
+      name: "an arbitrary Tango component cannot reach into reveal internals",
+      filename: "src/tango/components/card/Widget.tsx",
+      code: `import { useRevealSource } from "../../internal/reveal/context";`,
+      errors: [{ messageId: "internalImport" }],
+    },
+    {
       name: "InfoCard interaction statics are forbidden",
       filename: "src/components/Legacy.tsx",
       code: `InfoCard.PressInfo; InfoCard.PressPopover; InfoCard.usePressReveal; InfoCard.anchorRect;`,
@@ -68,11 +93,18 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
       ],
     },
     {
+      name: "aliased InfoCard interaction statics are forbidden",
+      filename: "src/components/Legacy.tsx",
+      code: `import { InfoCard as IC } from "../tango/components/overlay/InfoCard";
+        IC.PressInfo; const { usePressReveal } = IC;`,
+      errors: [{ messageId: "infoCardStatic" }, { messageId: "infoCardStatic" }],
+    },
+    {
       name: "the retired generic popover is forbidden",
       filename: "src/debug/Tool.tsx",
       code: `import { HoverPopover } from "../tango/components/overlay/HoverPopover";
         <HoverPopover content={content}>{child}</HoverPopover>;`,
-      errors: [{ messageId: "genericWrapper" }, { messageId: "genericWrapper" }],
+      errors: [{ messageId: "genericWrapper" }, { messageId: "genericWrapper" }, { messageId: "arbitraryContent" }],
     },
     {
       name: "generic reveal wrappers and arbitrary ReactNode reveal content are forbidden",
@@ -89,7 +121,22 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
     {
       name: "product code cannot create a reveal portal directly",
       filename: "src/screens/CardSourceOverlay.tsx",
-      code: `createPortal(<InfoCard variant="text" title="Help" />, document.body);`,
+      code: `import { createPortal } from "react-dom";
+        createPortal(<InfoCard variant="text" title="Help" />, document.body);`,
+      errors: [{ messageId: "directPortal" }],
+    },
+    {
+      name: "aliased react-dom portals are forbidden regardless of content",
+      filename: "src/journey_v2/ui/Thing.tsx",
+      code: `import { createPortal as mountLayer } from "react-dom";
+        const indirect = mountLayer; indirect(<div>{content}</div>, document.body);`,
+      errors: [{ messageId: "directPortal" }],
+    },
+    {
+      name: "ReactDOM member-expression portals are forbidden",
+      filename: "src/screens/Thing.tsx",
+      code: `import * as DOM from "react-dom";
+        DOM.createPortal(<InfoCard variant="text" title="Help" />, document.body);`,
       errors: [{ messageId: "directPortal" }],
     },
     {
@@ -111,6 +158,40 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
       filename: "src/editor/TideSourcePreview.tsx",
       code: `interface EntityProps { revealSpec: RevealSpec; }`,
       errors: [{ messageId: "publicSpec" }, { messageId: "publicSpec" }],
+    },
+    {
+      name: "renamed wrapper API is rejected structurally",
+      filename: "src/debug/Thing.tsx",
+      code: `interface FloatingDetailsProps { content: ReactNode; anchorRect: DOMRect; gap: number; shown: boolean; open: boolean; delayMs: number }
+        const FloatingDetails = (props: FloatingDetailsProps) => <div>{props.content}</div>;`,
+      errors: [
+        { messageId: "genericWrapper" },
+        { messageId: "arbitraryContent" },
+        { messageId: "mechanicalProp" },
+        { messageId: "mechanicalProp" },
+        { messageId: "controlledState" },
+        { messageId: "controlledState" },
+        { messageId: "mechanicalProp" },
+      ],
+    },
+    {
+      name: "renamed JSX wrapper props are rejected structurally",
+      filename: "src/screens/Thing.tsx",
+      code: `<FloatingDetails content={node} anchorRect={rect} gap={10} shown={shown} open={open} delayMs={30} />;`,
+      errors: [
+        { messageId: "arbitraryContent" },
+        { messageId: "mechanicalProp" },
+        { messageId: "mechanicalProp" },
+        { messageId: "controlledState" },
+        { messageId: "controlledState" },
+        { messageId: "mechanicalProp" },
+      ],
+    },
+    {
+      name: "arrow wrapper destructuring mechanical props is rejected",
+      filename: "src/editor/Thing.tsx",
+      code: `const FloatingDetails = ({ content, anchorRect, shown, delayMs }) => <div>{content}</div>;`,
+      errors: [{ messageId: "genericWrapper" }],
     },
   ],
 });

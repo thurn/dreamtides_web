@@ -122,4 +122,16 @@ Checks emulator verification — fixed JSON-unsafe optional Dreamcaller metadata
   emulator integration suite reached the real reducer and rejected synthetic
   Dreamcaller state whose optional `portraitFocus` field was materialized with
   the value `undefined`. `toQuestDreamcaller` now omits absent optional focus
-  metadata, with a focused regression test covering the JSON-safe shape.
+metadata, with a focused regression test covering the JSON-safe shape.
+
+Dream Merchant v2 browser QA — card-source debug update loop
+
+- Opening `?goto=dreamaugury&journey=v2` reaches the normal Dream Merchant
+  screen, then repeatedly emits `SET_CARD_SOURCE_DEBUG` coop events until React
+  reports "Maximum update depth exceeded." During the loop, a coordinator-owned
+  card reveal can remain in `data-reveal-render-pending` instead of completing
+  measurement. The loop is independent of the JourneyCard renderer migration:
+  the migrated source registers with matching `data-card-id` / `data-card-uuid`
+  values and the old journey zoom portal is absent before the repeated debug
+  events begin. Investigate the Dream Merchant debug-state synchronization so
+  it writes only when the projected card-source debug value changes.

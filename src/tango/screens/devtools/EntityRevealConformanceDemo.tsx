@@ -6,6 +6,7 @@ import { GameCard } from "../../components/card/CardView";
 import { GlossaryTerm } from "../../components/card/GlossaryTerm";
 import { InfoCard } from "../../components/overlay/InfoCard";
 import { AtlasNode, type AtlasNodeModel } from "../../components/atlas/AtlasNode";
+import { DreamcallerPortrait } from "../../components/hud/DreamcallerPortrait";
 import { artRef } from "../../primitives/art";
 import { GLYPHS } from "../../primitives/glyph";
 import { richText } from "../../components/card/rich-text";
@@ -41,6 +42,14 @@ const BATTLE_CARD: CardData = {
   ...CARD, id: BATTLE_CARD_ID, name: asCardName("Battle Conformance"), cardNumber: 2,
   energyCost: 1, spark: 2, isFast: true, renderedText: "Bane.", imageNumber: 2,
 };
+const TRUNCATION_CARD: CardData = {
+  ...CARD,
+  id: asCardId("88888888-8888-4888-8888-888888888888"),
+  name: asCardName("Conformance Lexicon"),
+  cardNumber: 8,
+  renderedText: "Figment. Materialize. Rematerialize. Dissolve. Banish. Abandon. Score. Reclaim. Foresee. Discover. Erode. Fast. Awakened. Unstoppable. Preeminence. Veil. Vengeful. Support. Challenger. Prevent. Offering. Phasing. Ephemeral. Transfigure. Purge. Duplicate. Bane. Essence. Enhanced.",
+};
+const DREAMCALLER = { id: "99999999-9999-4999-8999-999999999999", name: "Conformance Guide", title: "Keeper of Context", imageNumber: "0000" };
 
 const SCENARIOS = ["above", "side-fallback", "top-edge", "truncation", "best-effort", "safe-area", "reduced-motion"] as const;
 type Scenario = (typeof SCENARIOS)[number];
@@ -48,12 +57,14 @@ type Scenario = (typeof SCENARIOS)[number];
 /** Deterministic browser-QA surface for the public named entity vocabulary. */
 export function EntityRevealConformanceDemo() {
   const [scenario, setScenario] = useState<Scenario>("above");
+  const [activationCount, setActivationCount] = useState(0);
   const topEdge = scenario === "top-edge" || scenario === "safe-area";
+  const viewportEdge = topEdge || scenario === "best-effort";
   useEffect(() => {
+    if (scenario !== "safe-area") return undefined;
     const root = document.documentElement;
     const previous = root.style.getPropertyValue("--safe-area-inset-top");
-    if (scenario === "safe-area") root.style.setProperty("--safe-area-inset-top", "52px");
-    else root.style.removeProperty("--safe-area-inset-top");
+    root.style.setProperty("--safe-area-inset-top", "52px");
     return () => {
       if (previous === "") root.style.removeProperty("--safe-area-inset-top");
       else root.style.setProperty("--safe-area-inset-top", previous);
@@ -72,12 +83,33 @@ export function EntityRevealConformanceDemo() {
           <button key={value} type="button" data-conformance-scenario={value} aria-pressed={scenario === value} onClick={() => setScenario(value)}>{value}</button>
         ))}
       </div>
+      <section data-conformance-scenario-stage="" style={{ position: "relative", height: 560, marginBottom: 24, border: "1px dashed var(--border-soft)", overflow: "hidden" }}>
+        <h2 style={{ margin: 8 }}>Deterministic scenario: {scenario}</h2>
+        <div
+          data-conformance-scenario-source={scenario}
+          data-conformance-expects-reduced-motion={scenario === "reduced-motion" ? "true" : undefined}
+          style={{
+            position: viewportEdge ? "fixed" : "absolute",
+            zIndex: viewportEdge ? 1 : undefined,
+            width: scenario === "above" || scenario === "best-effort" || scenario === "safe-area" ? 120 : 160,
+            left: scenario === "side-fallback" || scenario === "truncation" ? undefined : scenario === "best-effort" || scenario === "safe-area" ? "calc(50% - 60px)" : 96,
+            right: scenario === "side-fallback" || scenario === "truncation" ? 0 : undefined,
+            top: scenario === "safe-area" ? "var(--safe-area-inset-top)" : viewportEdge ? 0 : scenario === "above" ? 390 : 180,
+          }}
+        >
+          {scenario === "above" ? (
+            <DreamcallerPortrait dreamcaller={DREAMCALLER} variant="thumb" size={120} profile={{ id: DREAMCALLER.id, ability: "Bane. Discover. Ephemeral." }} />
+          ) : (
+            <GameCard model={{ cardId: TRUNCATION_CARD.id, displaySnapshot: TRUNCATION_CARD }} onActivate={() => setActivationCount((count) => count + 1)} />
+          )}
+        </div>
+      </section>
       <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 24, alignItems: "start" }}>
-        <article data-conformance-card-id={CARD_ID} style={{ width: 160 }}><h2>GameCard popup</h2><GameCard model={{ cardId: CARD_ID, displaySnapshot: CARD }} /></article>
+        <article data-conformance-card-id={CARD_ID} data-activation-count={activationCount} style={{ width: 160 }}><h2>GameCard popup</h2><GameCard model={{ cardId: CARD_ID, displaySnapshot: CARD }} onActivate={() => setActivationCount((count) => count + 1)} /></article>
         <article data-conformance-press-in-place="" style={{ width: 360 }}><h2>GameCard press in place</h2><GameCard model={{ cardId: CARD_ID, displaySnapshot: CARD }} /></article>
         <article data-conformance-unavailable="" style={{ width: 160 }}><h2>Unavailable</h2><GameCard model={{ cardId: CARD_ID, displaySnapshot: CARD }} unavailable /></article>
         <article><h2>InfoCard</h2><InfoCard variant="text" title="Primary only" body={richText.plain("Strict visual content.")} /></article>
-        <article data-conformance-info-secondaries=""><h2>InfoCard group</h2><InfoCard variant="text" title="Primary" body={richText.plain("With ordered context.")} /><InfoCard variant="text" title="Secondary" body={richText.plain("Second strict card.")} /></article>
+        <article data-conformance-info-secondaries=""><h2>InfoCard group source</h2><DreamcallerPortrait dreamcaller={DREAMCALLER} variant="thumb" size={120} profile={{ id: DREAMCALLER.id, ability: "Bane. Discover. Ephemeral." }} /></article>
         <article><h2>Inline</h2><p>Resolve <GlossaryTerm entry={{ term: "Bane", definition: "A penalty card forced into your deck." }} text="Bane" /> here.</p></article>
         <article style={{ position: "relative", width: 184, height: 184 }}><h2>Atlas</h2><AtlasNode model={ATLAS_MODEL} onActivate={() => undefined} /></article>
         <article data-battle-card-id="conformance-battle-instance" style={{ width: 160 }}><h2>Battle</h2><GameCard model={{ cardId: BATTLE_CARD_ID, displaySnapshot: BATTLE_CARD }} /></article>
