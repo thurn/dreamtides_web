@@ -80,11 +80,37 @@ write_source "$per_pane" "cumulus/Assets/TangoMvp/Runtime/BadPane.cs" \
 expect_reject_with "per-pane camera field" "per-pane camera/render-texture field" \
   python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$per_pane"
 
+default_private="$TEST_ROOT/default-private"
+write_source "$default_private" "cumulus/Assets/TangoMvp/Runtime/DefaultPrivatePane.cs" \
+  'using UnityEngine; public sealed class DefaultPrivatePane : MonoBehaviour { Camera paneCamera; }'
+expect_reject_with "default-private per-pane camera field" "per-pane camera/render-texture field" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$default_private"
+
+fully_qualified_collection="$TEST_ROOT/fully-qualified-collection"
+write_source "$fully_qualified_collection" "cumulus/Assets/TangoMvp/Runtime/FullyQualifiedCollection.cs" \
+  'public sealed class FullyQualifiedCollection { private System.Collections.Generic.List<UnityEngine.Camera> paneCameras; }'
+expect_reject_with "fully qualified generic per-pane camera field" "per-pane camera/render-texture field" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$fully_qualified_collection"
+
 collections="$TEST_ROOT/collections"
 write_source "$collections" "cumulus/Assets/TangoMvp/Runtime/BadCollections.cs" \
   'using System.Collections.Generic; using UnityEngine; using UnityEngine.Rendering; public sealed class BadCollections { [SerializeField] Camera?[,] cameras; protected List<RenderTexture?> targets; internal IReadOnlyCollection<RTHandle> handles; }'
 expect_reject_with "array and generic camera/render target fields" "per-pane camera/render-texture field" \
   python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$collections"
+
+production_root_allocation="$TEST_ROOT/production-root-allocation"
+write_source "$production_root_allocation" "cumulus/Assets/TangoMvp/Bypass.cs" \
+  'public sealed class Bypass { object Create(UnityEngine.Shader shader) { return new UnityEngine.Material(shader); } }'
+expect_reject_with "production Material allocation outside Runtime directory" "runtime material allocation" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$production_root_allocation"
+
+nonproduction_allocations="$TEST_ROOT/nonproduction-allocations"
+write_source "$nonproduction_allocations" "cumulus/Assets/TangoMvp/Editor/EditorFactory.cs" \
+  'public sealed class EditorFactory { object Create(UnityEngine.Shader shader) { return new UnityEngine.Material(shader); } }'
+write_source "$nonproduction_allocations" "cumulus/Assets/TangoMvp/Tests/EditMode/TestFactory.cs" \
+  'public sealed class TestFactory { object Create(UnityEngine.Shader shader) { return new UnityEngine.Material(shader); } }'
+expect_accept "Editor and test Material allocations" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$nonproduction_allocations"
 
 ui_import="$TEST_ROOT/ui-import"
 write_source "$ui_import" "cumulus/Assets/TangoMvp/Runtime/BadUi.cs" \

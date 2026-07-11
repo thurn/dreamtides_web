@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import json
 from pathlib import Path
 import re
 import subprocess
@@ -32,16 +33,76 @@ def source_fields() -> re.Pattern[str]:
     target = qualified + r"(?:Camera|RenderTexture|RTHandle)\s*\??"
     array = target + r"(?:\s*\[\s*(?:,\s*)*\])?"
     collection = (
-        r"(?:[A-Za-z_]\w*\s*\.\s*)?"
+        r"(?:(?:global\s*::\s*)?(?:[A-Za-z_]\w*\s*\.\s*)*)"
         r"(?:List|IList|IEnumerable|IReadOnlyList|ICollection|IReadOnlyCollection|Collection)"
         rf"\s*<\s*{array}\s*>\s*\??"
     )
     modifier = r"(?:public|private|protected|internal|static|readonly|volatile|new)"
-    field_prefix = rf"(?:(?:\[[^\]]+\]\s*)+(?:{modifier}\s+)*|(?:{modifier}\s+)+)"
+    field_prefix = rf"(?:(?:\[[^\]]+\]\s*)*(?:{modifier}\s+)*)"
     return re.compile(
         rf"{field_prefix}(?:{array}|{collection})\s+(\w+)\s*(?:=|;)",
         re.MULTILINE,
     )
+
+
+def source_without_comments_or_strings(content: str) -> str:
+    pattern = re.compile(
+        r'//[^\n]*|/\*.*?\*/|@"(?:""|[^"])*"|"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'',
+        re.DOTALL,
+    )
+    return pattern.sub(lambda match: "".join("\n" if c == "\n" else " " for c in match.group()), content)
+
+
+def type_member_positions(content: str) -> set[int]:
+    scrubbed = source_without_comments_or_strings(content)
+    stack: list[str] = []
+    member_positions: set[int] = set()
+    boundary = 0
+    fields = source_fields()
+    matches = {match.start(): match for match in fields.finditer(scrubbed)}
+    for index, character in enumerate(scrubbed):
+        if index in matches and stack and stack[-1] == "type":
+            member_positions.add(index)
+        if character == "{":
+            header = scrubbed[boundary:index]
+            kind = "type" if re.search(r"\b(?:class|struct|record|interface)\b[^;{}]*$", header) else "block"
+            stack.append(kind)
+            boundary = index + 1
+        elif character == "}":
+            if stack:
+                stack.pop()
+            boundary = index + 1
+        elif character == ";":
+            boundary = index + 1
+    return member_positions
+
+
+def is_production_source(source: Path, source_root: Path) -> bool:
+    relative_parts = source.relative_to(source_root).parts
+    if any(part in {"Editor", "Tests"} for part in relative_parts[:-1]):
+        return False
+    for parent in (source.parent, *source.parents):
+        if parent == source_root.parent:
+            break
+        asmdefs = sorted(parent.glob("*.asmdef"))
+        if not asmdefs:
+            continue
+        try:
+            assembly = json.loads(asmdefs[0].read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return True
+        name = str(assembly.get("name", ""))
+        include_platforms = assembly.get("includePlatforms", [])
+        optional_references = assembly.get("optionalUnityReferences", [])
+        constraints = assembly.get("defineConstraints", [])
+        return not (
+            "Editor" in include_platforms
+            or "TestAssemblies" in optional_references
+            or "UNITY_INCLUDE_TESTS" in constraints
+            or name.endswith(".Editor")
+            or "Tests" in name
+        )
+    return True
 
 
 def main() -> int:
@@ -107,10 +168,14 @@ def main() -> int:
     for source in sources:
         relative = source.relative_to(root).as_posix()
         content = source.read_text(encoding="utf-8")
-        if "/Runtime/" in relative and allocation.search(content):
+        production = is_production_source(source, source_root)
+        if production and allocation.search(content):
             errors.append(f"runtime material allocation: {relative}")
-        if "/Runtime/" in relative:
+        if production:
+            member_positions = type_member_positions(content)
             for match in field.finditer(content):
+                if match.start() not in member_positions:
+                    continue
                 allowed_interactor_camera = (
                     relative.endswith("TangoPointerInteractor.cs")
                     and match.group(1) == "interactionCamera"

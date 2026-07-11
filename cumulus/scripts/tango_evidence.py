@@ -136,6 +136,8 @@ def validate_gpu(metrics_path: Path, artifact_root: Path) -> None:
             raise ValueError(f"render metric failed: {name}")
         if not isinstance(metric["graphicsApi"], str) or not metric["graphicsApi"] or not isinstance(metric["deviceName"], str) or not metric["deviceName"]:
             raise ValueError(f"missing GPU identity for {name}")
+        if not isinstance(metric["phaseA"], str) or not metric["phaseA"] or not isinstance(metric["phaseB"], str) or not metric["phaseB"]:
+            raise ValueError(f"missing render phase identity for {name}")
         by_name[name] = metric
     if set(by_name) != set(EXPECTED_METRICS):
         raise ValueError("render metric names do not exactly match the contract")

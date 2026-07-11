@@ -78,4 +78,10 @@ rejects("altered comparison", lambda root, payload: (payload["metrics"][0].__set
 def forge(root, payload):
     m=payload["metrics"][0]; m["measuredValue"]=-1; m["measuredValueText"]="-1"; m["passed"]=True; rewrite(root,payload)
 rejects("forged passed verdict", forge)
-print("11 evidence checks passed; 0 failed")
+for field in ("phaseA", "phaseB"):
+    for label, invalid in (("null", None), ("empty", ""), ("non-string", 7)):
+        def invalidate_phase(root, payload, field=field, invalid=invalid):
+            payload["metrics"][0][field] = invalid
+            rewrite(root, payload)
+        rejects(f"{label} {field}", invalidate_phase)
+print("17 evidence checks passed; 0 failed")
