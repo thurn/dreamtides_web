@@ -305,4 +305,47 @@ describe("Tango reveal coordinator root", () => {
     leave(); act(() => { vi.advanceTimersByTime(160); });
     expect(getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_closed")).toHaveLength(2);
   });
+
+  it("cancels a GameCard return immediately when its source unmounts", () => {
+    vi.useFakeTimers();
+    Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 800, offsetLeft: 0, offsetTop: 0 } });
+    const cardId = asCardId(UUID_A);
+    const spec: RevealSpec = { primary: { kind: "gameCard", cardId, displaySnapshot: {
+      id: cardId, name: asCardName("Unmount Return"), cardNumber: 10, cardType: "Event", subtype: "", isStarter: false,
+      rarity: "Special", energyCost: 1, spark: null, isFast: false, renderedText: "Vanish.", imageNumber: 10, artOwned: false,
+    } }, secondaries: [] };
+    const { root, container } = mount(<TangoRoot><Source id={UUID_A} spec={spec} /></TangoRoot>);
+    const button = container.querySelector("button")!;
+    button.getBoundingClientRect = () => ({ x: 400, y: 250, left: 400, top: 250, right: 500, bottom: 300, width: 100, height: 50, toJSON: () => ({}) });
+    act(() => { button.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" })); });
+    act(() => { button.dispatchEvent(new PointerEvent("pointerout", { bubbles: true, pointerType: "mouse" })); });
+    expect(document.querySelector("[data-tango-reveal-portal]")).not.toBeNull();
+    act(() => root.render(<TangoRoot><div /></TangoRoot>));
+    expect(document.querySelector("[data-tango-reveal-portal]")).toBeNull();
+    const closes = getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_closed");
+    expect(closes).toHaveLength(1);
+    expect(closes[0]).toMatchObject({ dismissalReason: "source-unmount" });
+    act(() => { vi.advanceTimersByTime(160); });
+    expect(getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_closed")).toHaveLength(1);
+  });
+
+  it("cleans a pending return on provider unmount without stale timer logging", () => {
+    vi.useFakeTimers();
+    Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 800, offsetLeft: 0, offsetTop: 0 } });
+    const cardId = asCardId(UUID_A);
+    const spec: RevealSpec = { primary: { kind: "gameCard", cardId, displaySnapshot: {
+      id: cardId, name: asCardName("Root Return"), cardNumber: 11, cardType: "Event", subtype: "", isStarter: false,
+      rarity: "Special", energyCost: 1, spark: null, isFast: false, renderedText: "End.", imageNumber: 11, artOwned: false,
+    } }, secondaries: [] };
+    const { root, container } = mount(<TangoRoot><Source id={UUID_A} spec={spec} /></TangoRoot>);
+    const button = container.querySelector("button")!;
+    act(() => { button.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" })); });
+    act(() => { button.dispatchEvent(new PointerEvent("pointerout", { bubbles: true, pointerType: "mouse" })); });
+    act(() => root.unmount());
+    mountedRoots.delete(root);
+    const closeCount = getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_closed").length;
+    act(() => { vi.advanceTimersByTime(200); });
+    expect(document.querySelector("[data-tango-reveal-portal]")).toBeNull();
+    expect(getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_closed")).toHaveLength(closeCount);
+  });
 });

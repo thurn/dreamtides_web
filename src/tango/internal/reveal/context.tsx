@@ -114,10 +114,6 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
     const source = sourcesRef.current.get(key);
     if (source !== undefined) sourcesRef.current.set(key, { ...source, element });
   }, []);
-  const unregisterSource = useCallback((source: RevealCoordinatorSource) => {
-    dispatch({ type: "source-unmount", source, timestamp: performance.now() });
-  }, []);
-
   const loggedOpenKeyRef = useRef<string | null>(null);
   const [interactionEpoch, setInteractionEpoch] = useState(0);
   const interactionEpochRef = useRef(0);
@@ -142,6 +138,10 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
     logRevealClosed({ source: returning.source.identity, dismissalReason: reason, activationOutcome: returningOutcomeRef.current });
     return true;
   }, []);
+  const unregisterSource = useCallback((source: RevealCoordinatorSource) => {
+    if (returningRef.current?.source.registrationId === source.registrationId) cancelGameCardReturn("source-unmount");
+    dispatch({ type: "source-unmount", source, timestamp: performance.now() });
+  }, [cancelGameCardReturn]);
   const beginGameCardReturn = useCallback((source: RevealCoordinatorSource): boolean => {
     const current = stateRef.current;
     const registration = sourcesRef.current.get(source.registrationId);
