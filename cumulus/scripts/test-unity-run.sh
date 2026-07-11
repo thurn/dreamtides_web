@@ -124,6 +124,62 @@ fi
 exit "${FAKE_UNITY_EXIT:-9}"
 SH
 chmod +x "$fake_unity"
+
+wrong_version_launch_marker="$TEST_ROOT/wrong-version-launched"
+expect_reject "UNITY override reporting the wrong editor version" \
+  env \
+  FAKE_UNITY_VERSION="0.0.0f0" \
+  FAKE_UNITY_LAUNCH_MARKER="$wrong_version_launch_marker" \
+  UNITY="$fake_unity" \
+  bash -c "source '$HARNESS'; run_unity_stage self-test-wrong-version nographics -quit"
+if [[ -e "$wrong_version_launch_marker" ]]; then
+  echo "FAIL: wrong-version UNITY override reached batch launch" >&2
+  FAIL_COUNT=$((FAIL_COUNT + 1))
+else
+  echo "PASS: wrong-version UNITY override was rejected before batch launch"
+  PASS_COUNT=$((PASS_COUNT + 1))
+fi
+rm -rf "$UNITY_RUN_ARTIFACT_ROOT/self-test-wrong-version"
+
+timeout_tree="$TEST_ROOT/timeout-tree"
+cat > "$timeout_tree" <<'SH'
+#!/usr/bin/env bash
+child_pid_path="$1"
+term_marker_path="$2"
+(
+  trap 'printf "terminated\n" > "$term_marker_path"; exit 0' TERM
+  while :; do sleep 0.05; done
+) &
+child_pid=$!
+printf '%s\n' "$child_pid" > "$child_pid_path"
+wait "$child_pid"
+SH
+chmod +x "$timeout_tree"
+timeout_child_pid_path="$TEST_ROOT/timeout-child.pid"
+timeout_term_marker="$TEST_ROOT/timeout-child-terminated"
+timeout_launcher_log="$TEST_ROOT/timeout-launcher.log"
+_run_with_process_group_timeout \
+  1 "$timeout_launcher_log" "$timeout_tree" "$timeout_child_pid_path" "$timeout_term_marker"
+timeout_exit=$?
+timeout_child_pid="$(< "$timeout_child_pid_path")"
+for _ in {1..40}; do
+  if [[ -e "$timeout_term_marker" ]] && ! kill -0 "$timeout_child_pid" 2>/dev/null; then
+    break
+  fi
+  sleep 0.05
+done
+if (( timeout_exit == 124 )) \
+  && grep -Fq "terminating process group" "$timeout_launcher_log" \
+  && [[ -e "$timeout_term_marker" ]] \
+  && ! kill -0 "$timeout_child_pid" 2>/dev/null; then
+  echo "PASS: timeout rejects the stage and terminates its spawned child process group"
+  PASS_COUNT=$((PASS_COUNT + 1))
+else
+  echo "FAIL: timeout did not reject cleanly or terminate its spawned child (exit=$timeout_exit child=$timeout_child_pid)" >&2
+  FAIL_COUNT=$((FAIL_COUNT + 1))
+  kill "$timeout_child_pid" 2>/dev/null || true
+fi
+
 errexit_stage_dir="$UNITY_RUN_ARTIFACT_ROOT/self-test-errexit"
 rm -rf "$errexit_stage_dir"
 
@@ -226,7 +282,11 @@ for fixture in \
   "missing-reference|MissingReferenceException: The object has been destroyed" \
   "build-failed-exception|UnityEditor.Build.BuildFailedException: Player build failed" \
   "assertion-failure|Assertion failed on expression: 'm_Valid'" \
-  "crash-marker|Unity Editor crashed!"; do
+  "crash-marker|Unity Editor crashed!" \
+  "fatal-error|Fatal Error: synthetic crash" \
+  "received-signal|Received signal SIGSEGV" \
+  "segmentation-fault|Segmentation fault: 11" \
+  "aborting-batchmode|Aborting batchmode due to failure: synthetic fixture"; do
   fixture_name="${fixture%%|*}"
   signature="${fixture#*|}"
   fixture_dir="$(make_stage "$fixture_name")"

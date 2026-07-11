@@ -55,6 +55,12 @@ write_source "$allowed" "cumulus/Assets/TangoMvp/Runtime/Allowed.cs" \
 expect_accept "allowed runtime source with meta" \
   python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$allowed"
 
+allowed_interactor="$TEST_ROOT/allowed-interactor"
+write_source "$allowed_interactor" "cumulus/Assets/TangoMvp/Runtime/Interaction/TangoPointerInteractor.cs" \
+  'using UnityEngine; public sealed class TangoPointerInteractor : MonoBehaviour { private Camera interactionCamera; void Inspect(Camera input) { Camera localCamera = input; } }'
+expect_accept "intentional interactor camera field plus camera parameter and local" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$allowed_interactor"
+
 forbidden_path="$TEST_ROOT/forbidden-path"
 mkdir -p "$forbidden_path/cumulus/Assets/Settings"
 printf 'fixture\n' > "$forbidden_path/cumulus/Assets/Settings/Mobile_Renderer.asset"
@@ -91,6 +97,18 @@ write_source "$fully_qualified_collection" "cumulus/Assets/TangoMvp/Runtime/Full
   'public sealed class FullyQualifiedCollection { private System.Collections.Generic.List<UnityEngine.Camera> paneCameras; }'
 expect_reject_with "fully qualified generic per-pane camera field" "per-pane camera/render-texture field" \
   python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$fully_qualified_collection"
+
+dictionary_field="$TEST_ROOT/dictionary-field"
+write_source "$dictionary_field" "cumulus/Assets/TangoMvp/Runtime/DictionaryField.cs" \
+  'using System.Collections.Generic; using UnityEngine; public sealed class DictionaryField { private Dictionary<string, RenderTexture> paneTargets; }'
+expect_reject_with "dictionary containing a render-texture field" "per-pane camera/render-texture field" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$dictionary_field"
+
+nested_custom_fields="$TEST_ROOT/nested-custom-fields"
+write_source "$nested_custom_fields" "cumulus/Assets/TangoMvp/Runtime/NestedCustomFields.cs" \
+  'using UnityEngine; using UnityEngine.Rendering; public sealed class NestedCustomFields { private PaneCache<Bucket<Camera>> cameras; private PaneCache<Bucket<RTHandle>> handles; }'
+expect_reject_with "custom nested generic camera and RTHandle fields" "per-pane camera/render-texture field" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$nested_custom_fields"
 
 collections="$TEST_ROOT/collections"
 write_source "$collections" "cumulus/Assets/TangoMvp/Runtime/BadCollections.cs" \
@@ -207,7 +225,10 @@ expect_reject_with "UI Toolkit import" "forbidden UI namespace import" \
 
 for import_case in \
   "ugui|using UnityEngine.UI; public sealed class BadUi { }" \
-  "tmp|using TMPro; public sealed class BadTmp { }"; do
+  "tmp|using TMPro; public sealed class BadTmp { }" \
+  "aliased-ugui|using UI = UnityEngine.UI; public sealed class BadAliasedUi { }" \
+  "global-elements|using Elements = global::UnityEngine.UIElements; public sealed class BadGlobalElements { }" \
+  "aliased-tmp|using Text = TMPro; public sealed class BadAliasedTmp { }"; do
   import_name="${import_case%%|*}"; import_body="${import_case#*|}"; fixture="$TEST_ROOT/$import_name"
   write_source "$fixture" "cumulus/Assets/TangoMvp/Runtime/Bad${import_name}.cs" "$import_body"
   expect_reject_with "$import_name import" "forbidden UI namespace import" python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$fixture"

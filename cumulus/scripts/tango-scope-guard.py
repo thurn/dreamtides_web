@@ -29,18 +29,14 @@ def git_changes(root: Path, base: str) -> list[tuple[str, str]]:
 
 
 def source_fields() -> re.Pattern[str]:
-    qualified = r"(?:(?:global\s*::\s*)?(?:UnityEngine(?:\s*\.\s*Rendering)?\s*\.\s*)?)?"
-    target = qualified + r"(?:Camera|RenderTexture|RTHandle)\s*\??"
-    array = target + r"(?:\s*\[\s*(?:,\s*)*\])?"
-    collection = (
-        r"(?:(?:global\s*::\s*)?(?:[A-Za-z_]\w*\s*\.\s*)*)"
-        r"(?:List|IList|IEnumerable|IReadOnlyList|ICollection|IReadOnlyCollection|Collection)"
-        rf"\s*<\s*{array}\s*>\s*\??"
-    )
     modifier = r"(?:public|private|protected|internal|static|readonly|volatile|new)"
     field_prefix = rf"(?:(?:\[[^\]]+\]\s*)*(?:{modifier}\s+)*)"
     return re.compile(
-        rf"{field_prefix}(?:{array}|{collection})\s+(\w+)\s*(?:=|;)",
+        rf"{field_prefix}"
+        r"(?P<type>(?:[A-Za-z_@][A-Za-z0-9_@\s.:?<>,\[\]]*?)?"
+        r"\b(?:Camera|RenderTexture|RTHandle)\b"
+        r"[\s?>,\[\]]*?)"
+        r"\s+(?P<name>[A-Za-z_]\w*)\s*(?:=[^;]*)?;",
         re.MULTILINE,
     )
 
@@ -179,10 +175,10 @@ def main() -> int:
         re.IGNORECASE,
     )
     field = source_fields()
-    forbidden_imports = (
-        "using UnityEngine.UI;",
-        "using UnityEngine.UIElements;",
-        "using TMPro;",
+    forbidden_import = re.compile(
+        r"\busing\s+(?:(?:[A-Za-z_]\w*)\s*=\s*)?"
+        r"(?:(?:global\s*::\s*)?UnityEngine\s*\.\s*(?:UI|UIElements)|"
+        r"(?:global\s*::\s*)?TMPro)\s*;"
     )
     source_root = root / "cumulus/Assets/TangoMvp"
     sources = source_root.rglob("*.cs") if source_root.exists() else []
@@ -206,17 +202,16 @@ def main() -> int:
                     continue
                 allowed_interactor_camera = (
                     relative.endswith("TangoPointerInteractor.cs")
-                    and match.group(1) == "interactionCamera"
+                    and match.group("name") == "interactionCamera"
                 )
                 if not allowed_interactor_camera:
                     errors.append(
-                        f"per-pane camera/render-texture field: {relative}:{match.group(1)}"
+                        f"per-pane camera/render-texture field: {relative}:{match.group('name')}"
                     )
-        for forbidden_import in forbidden_imports:
-            if forbidden_import in content:
-                errors.append(
-                    f"forbidden UI namespace import ({forbidden_import}): {relative}"
-                )
+        for match in forbidden_import.finditer(scrubbed):
+            errors.append(
+                f"forbidden UI namespace import ({match.group(0).strip()}): {relative}"
+            )
 
     shader_root = root / "cumulus/Assets/TangoMvp"
     refraction = re.compile(
