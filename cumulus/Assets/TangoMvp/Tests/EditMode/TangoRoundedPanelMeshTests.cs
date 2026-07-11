@@ -4,6 +4,7 @@ using TangoMvp.Geometry;
 using TangoMvp.Materials;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace TangoMvp.Tests
 {
@@ -51,6 +52,26 @@ namespace TangoMvp.Tests
         }
 
         [Test]
+        public void Create_SelectsIndexFormatForVertexCount()
+        {
+            Mesh ordinaryMesh = TangoRoundedPanelMesh.Create(4f, 2f, 0.12f, 0.24f, 4);
+            Mesh largeMesh = TangoRoundedPanelMesh.Create(4f, 2f, 0.12f, 0.24f, 2047);
+
+            try
+            {
+                Assert.That(ordinaryMesh.indexFormat, Is.EqualTo(IndexFormat.UInt16));
+                Assert.That(largeMesh.vertexCount, Is.EqualTo(65538));
+                Assert.That(largeMesh.indexFormat, Is.EqualTo(IndexFormat.UInt32));
+                Assert.That(largeMesh.triangles, Has.All.InRange(0, largeMesh.vertexCount - 1));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(ordinaryMesh);
+                UnityEngine.Object.DestroyImmediate(largeMesh);
+            }
+        }
+
+        [Test]
         public void MaterialLibrary_ResolvesEachRoleAndValidatesAssignments()
         {
             TangoMaterialLibrary library = ScriptableObject.CreateInstance<TangoMaterialLibrary>();
@@ -93,6 +114,14 @@ namespace TangoMvp.Tests
         [TestCase(4f, 2f, 0.12f, 1f, 4, "cornerRadius")]
         [TestCase(4f, 2f, 0.25f, 0.24f, 4, "depth")]
         [TestCase(4f, 2f, 0.12f, 0.24f, 1, "cornerSegments")]
+        [TestCase(float.PositiveInfinity, 2f, 0.12f, 0.24f, 4, "width")]
+        [TestCase(4f, float.PositiveInfinity, 0.12f, 0.24f, 4, "height")]
+        [TestCase(4f, 2f, float.PositiveInfinity, 0.24f, 4, "depth")]
+        [TestCase(4f, 2f, 0.12f, float.PositiveInfinity, 4, "cornerRadius")]
+        [TestCase(float.NaN, 2f, 0.12f, 0.24f, 4, "width")]
+        [TestCase(4f, float.NaN, 0.12f, 0.24f, 4, "height")]
+        [TestCase(4f, 2f, float.NaN, 0.24f, 4, "depth")]
+        [TestCase(4f, 2f, 0.12f, float.NaN, 4, "cornerRadius")]
         public void Create_RejectsInvalidAuthoringInputs(
             float width,
             float height,

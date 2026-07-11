@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace TangoMvp.Geometry
 {
@@ -61,7 +62,8 @@ namespace TangoMvp.Geometry
 
             var mesh = new Mesh
             {
-                name = $"Tango Rounded Panel {width:0.###}x{height:0.###}x{depth:0.###}"
+                name = $"Tango Rounded Panel {width:0.###}x{height:0.###}x{depth:0.###}",
+                indexFormat = vertices.Count > ushort.MaxValue ? IndexFormat.UInt32 : IndexFormat.UInt16
             };
             mesh.SetVertices(vertices);
             mesh.SetNormals(normals);
@@ -76,23 +78,23 @@ namespace TangoMvp.Geometry
 
         private static void ValidateDimensions(float width, float height, float depth, float cornerRadius, int cornerSegments)
         {
-            if (!(width > 0f))
+            if (!IsFinite(width) || !(width > 0f))
             {
                 throw new ArgumentOutOfRangeException(nameof(width));
             }
 
-            if (!(height > 0f))
+            if (!IsFinite(height) || !(height > 0f))
             {
                 throw new ArgumentOutOfRangeException(nameof(height));
             }
 
-            if (!(depth > 0f))
+            if (!IsFinite(depth) || !(depth > 0f))
             {
                 throw new ArgumentOutOfRangeException(nameof(depth));
             }
 
             float maximumRadius = Mathf.Min(width, height) * 0.5f;
-            if (!(cornerRadius > 0f) || !(cornerRadius < maximumRadius))
+            if (!IsFinite(cornerRadius) || !(cornerRadius > 0f) || !(cornerRadius < maximumRadius))
             {
                 throw new ArgumentOutOfRangeException(nameof(cornerRadius));
             }
@@ -106,6 +108,11 @@ namespace TangoMvp.Geometry
             {
                 throw new ArgumentOutOfRangeException(nameof(cornerSegments));
             }
+        }
+
+        private static bool IsFinite(float value)
+        {
+            return !float.IsNaN(value) && !float.IsInfinity(value);
         }
 
         private static List<OutlineVertex> CreateOutline(float halfWidth, float halfHeight, float radius, int cornerSegments)
