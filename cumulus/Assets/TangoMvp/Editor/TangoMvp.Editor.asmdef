@@ -2,7 +2,8 @@
   "name": "TangoMvp.Editor",
   "rootNamespace": "TangoMvp.Editor",
   "references": [
-    "TangoMvp.Runtime"
+    "TangoMvp.Runtime",
+    "Unity.RenderPipelines.Universal.Runtime"
   ],
   "includePlatforms": [
     "Editor"
