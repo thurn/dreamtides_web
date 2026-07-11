@@ -162,7 +162,7 @@ function CardShopGallery({
         endAction={{
           entryId: restock.entryId,
           glyph: GLYPHS.refresh,
-          label: restock.state === "used" ? "Restocked" : "Restock shop",
+          label: restock.state === "used" ? "Restocked" : "Restock Offers",
           caption:
             restock.state === "used"
               ? { kind: "text", text: "Restocked" }

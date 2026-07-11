@@ -62,6 +62,11 @@ describe("CardGalleryPanel", () => {
     act(() => (container.querySelector('[data-testid="close"]') as HTMLButtonElement).click());
     act(() => (container.querySelector('[data-testid="restock"]') as HTMLButtonElement).click());
     expect(close).toHaveBeenCalledOnce(); expect(restock).toHaveBeenCalledWith("restock");
+    const action = container.querySelector<HTMLButtonElement>('[data-testid="restock"]');
+    expect(action?.style.boxSizing).toBe("border-box");
+    expect(action?.style.aspectRatio).toBe("5 / 7");
+    expect(action?.style.borderRadius).toBe("3.6% / 2.57%");
+    expect(container.querySelector('[data-gallery-action-label]')?.textContent).toBe("Restock");
     act(() => root.unmount()); container.remove();
   });
 });

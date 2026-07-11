@@ -16,6 +16,7 @@ import {
   type ReactElement,
 } from "react";
 import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
+import { glassTrack } from "../../internal/control-treatment";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import type { TangoColor } from "../../primitives/color";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
@@ -29,7 +30,11 @@ import {
   type GlassButtonWidthReservation,
 } from "../controls/GlassButton";
 import { IconButton, type IconButtonSize } from "../controls/IconButton";
-import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
+import {
+  CARD_ASPECT_RATIO,
+  CARD_ASPECT_RATIO_VALUE,
+  CARD_CORNER_RADIUS,
+} from "./card-aspect";
 import { GameCard, type GameCardModel } from "./CardView";
 
 /** One resolved card in a {@link CardGalleryPanel}. */
@@ -730,13 +735,18 @@ export function CardGalleryPanel({
                     onClick={() => onEndActionPress?.(endAction.entryId)}
                     style={{
                       width: "100%",
-                      aspectRatio: String(CARD_ASPECT_RATIO_VALUE),
-                      display: "grid",
-                      placeItems: "center",
+                      aspectRatio: CARD_ASPECT_RATIO,
+                      boxSizing: "border-box",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: token("--space-3"),
                       appearance: "none",
                       padding: 0,
-                      border: "none",
-                      background: "transparent",
+                      borderRadius: CARD_CORNER_RADIUS,
+                      overflow: "hidden",
+                      ...glassTrack("onGlass"),
                     }}
                   >
                     <i
@@ -744,11 +754,22 @@ export function CardGalleryPanel({
                       aria-hidden="true"
                       data-gallery-action-glyph=""
                       style={{
-                        fontSize: `calc(${cardWidth} * 0.58)`,
+                        fontSize: `calc(${cardWidth} * 0.38)`,
                         color: token("--text-on-glass"),
                         textShadow: token("--text-outline-media"),
                       }}
                     />
+                    <span
+                      data-gallery-action-label=""
+                      style={{
+                        font: token("--t-body"),
+                        color: token("--text-on-glass"),
+                        textAlign: "center",
+                        textShadow: token("--text-outline-media"),
+                      }}
+                    >
+                      {endAction.label}
+                    </span>
                   </Pressable>
                   {captionNode(endAction.caption)}
                 </div>
