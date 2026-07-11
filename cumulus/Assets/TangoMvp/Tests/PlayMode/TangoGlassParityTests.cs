@@ -28,6 +28,7 @@ namespace TangoMvp.Tests.PlayMode
             }
             SceneManager.LoadScene("TangoGlassLab", LoadSceneMode.Single);
             yield return null;
+            Scene labScene = SceneManager.GetActiveScene();
 
             Camera camera = UnityEngine.Object.FindFirstObjectByType<Camera>();
             TangoGlassRendererFeature feature = Resources.FindObjectsOfTypeAll<TangoGlassRendererFeature>()
@@ -119,6 +120,14 @@ namespace TangoMvp.Tests.PlayMode
                 {
                     if (state.Key != null) state.Key.enabled = state.Value;
                 }
+            }
+
+            Scene cleanupScene = SceneManager.CreateScene("Tango Glass Parity Cleanup");
+            SceneManager.SetActiveScene(cleanupScene);
+            AsyncOperation unload = SceneManager.UnloadSceneAsync(labScene);
+            if (unload != null)
+            {
+                yield return unload;
             }
         }
 
