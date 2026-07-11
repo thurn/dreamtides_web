@@ -107,7 +107,7 @@ Measured closures (small enough to move incrementally, typechecking between
 moves):
 
 - `CardView` → `card-text`, `card-display-scale`, `GlowIcon`, `CardStatOrb`,
-  `RulesText`, `PipBadge`, `useCardTermPopover`, `useFitText`.
+  `RulesText`, `PipBadge`, `useFitText`.
 - `RulesText` → `card-text`, `PipBadge`.
 - `AtlasNode` → `atlas-display`.
 - `DreamscapeSiteNode` → `dreamscape-scatter`.

@@ -1,5 +1,4 @@
 import type { CSSProperties, MouseEvent as ReactMouseEvent } from "react";
-import type { MouseEvent as ReactPointerMouseEvent } from "react";
 
 import { BattleGameCard } from "./BattleGameCard";
 import { battleCardAutomationStatus } from "../../rules/battle/battle-card-effects-table";
@@ -28,9 +27,6 @@ export function BattlefieldGrid({
   onCardContextMenu,
   onCardDragEnd,
   onCardDragStart,
-  onCardHoverEnd,
-  onCardHoverMove,
-  onCardHoverStart,
   onSlotClick,
   onSlotDrop,
   pendingDragCardId = null,
@@ -48,9 +44,6 @@ export function BattlefieldGrid({
   onCardContextMenu?: (battleCardId: string, event: ReactMouseEvent<HTMLElement>) => void;
   onCardDragEnd?: () => void;
   onCardDragStart?: (battleCardId: string) => void;
-  onCardHoverEnd?: () => void;
-  onCardHoverMove?: (battleCardId: string, event: ReactPointerMouseEvent<HTMLDivElement>) => void;
-  onCardHoverStart?: (battleCardId: string, event: ReactPointerMouseEvent<HTMLDivElement>) => void;
   onSlotClick: (target: BattleFieldSlotAddress, isOccupied: boolean) => void;
   onSlotDrop?: (target: BattleFieldSlotAddress) => void;
   pendingDragCardId?: string | null;
@@ -137,9 +130,6 @@ export function BattlefieldGrid({
                   }}
                   onDragStart={canInteract ? () => onCardDragStart?.(instance.battleCardId) : undefined}
                   onDragEnd={canInteract ? () => onCardDragEnd?.() : undefined}
-                  onMouseEnter={(event) => onCardHoverStart?.(instance.battleCardId, event)}
-                  onMouseLeave={() => onCardHoverEnd?.()}
-                  onMouseMove={(event) => onCardHoverMove?.(instance.battleCardId, event)}
                 />
               </div>
             );

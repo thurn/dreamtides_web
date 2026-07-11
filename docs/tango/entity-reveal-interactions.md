@@ -144,7 +144,6 @@ named Tango component already has the semantic data needed to describe itself:
   state, mobile popup, and automatic press-in-place eligibility.
 - `AtlasNode` owns its face, source element, primary Atlas card, related
   Dreamsign/site/affiliation secondaries, activation, and reveal registration.
-  The current public `AtlasNodeReveal` wrapper role belongs inside `AtlasNode`.
 - Dreamsign, Dreamcaller, tide, site, resource, and stat components derive their
   standard `InfoCard` models from their semantic model.
 - A named glossary-term or rules-text Tango component derives definition cards

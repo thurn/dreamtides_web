@@ -8,17 +8,14 @@
 // There is no menu-dots button — the menu lives in a top-left menu button on
 // the screen.
 //
-// Everything press-reveals through the one shared engine (Tango's InfoCard /
-// reveal coordinator, so timing can't diverge:
+// Every semantic HUD entity reveals through the shared coordinator:
 //   - the essence value           → InfoCard 'text'
 //   - the Dreamcaller bust (pops ABOVE the bar) → InfoCard 'hero'
 //   - each docked dreamsign        → InfoCard 'object'
 //   - beyond a fixed count, docked dreamsigns collapse into an overflow stack →
 //     a centered viewer window (not a bottom sheet)
 //
-// Pass `stageRef` — the screen root (position:absolute inset:0 in the scaled
-// frame); the press-reveal popovers portal into it so placement/clamping use
-// stage coordinates.
+// `stageRef` aligns the docked dreamsign strip with the HUD.
 //
 // Ported from the Claude Design "Dreamtides Mobile" project
 // (components/quest/QuestStatusBar.jsx / .d.ts). Two deliberate adaptations to
@@ -148,7 +145,7 @@ function QsbOverflowStack({
         border: "none",
         background: "none",
         cursor: "pointer",
-        touchAction: "none",
+        touchAction: "pan-x pan-y",
         WebkitTapHighlightColor: "transparent",
       }}
     >
@@ -247,7 +244,7 @@ function QsbDreamsignStrip({
     display: "flex",
     alignItems: "center",
     zIndex: 41,
-    touchAction: "none",
+    touchAction: "pan-x pan-y",
   };
 
   if (signs.length <= STACK_THRESHOLD) {
@@ -353,9 +350,7 @@ function QsbDreamsignWindow({
   );
 }
 
-/* QsbDreamcallerBust — the Dreamcaller portrait button. Owns its own
-   press-reveal (like the docked Dreamsign objects): hover reveals on a fine
-   pointer, press reveals on touch, and it portals its own 'hero' InfoCard. */
+/* QsbDreamcallerBust — the Dreamcaller portrait button and semantic source. */
 function QsbDreamcallerBust({
   dreamcaller,
 }: {
@@ -400,7 +395,7 @@ function QsbDreamcallerBust({
         background: `radial-gradient(circle at 50% 30%, #2a2140, ${token("--primitive-void-700")})`,
         padding: 0,
         cursor: "pointer",
-        touchAction: "none",
+        touchAction: "pan-x pan-y",
         WebkitTapHighlightColor: "transparent",
         ...binding.sourceProps.style,
       }}
@@ -425,9 +420,7 @@ function QsbDreamcallerBust({
   );
 }
 
-/* QsbEssence — the essence total. Owns its own press-reveal (like the docked
-   Dreamsign objects) and portals its own 'text' InfoCard, so hover reveals on
-   desktop and press reveals on touch. Rendered as the sole <span> child of the
+/* QsbEssence — the essence total and semantic source. Rendered as the sole <span> child of the
    HUD's column div, matching the DOM shape quest-status-bar.css targets. */
 function QsbEssence({
   essence = 0,
@@ -460,7 +453,7 @@ function QsbEssence({
         fontVariantNumeric: "tabular-nums",
         color: token("--text-primary"),
         cursor: "pointer",
-        touchAction: "none",
+        touchAction: "pan-x pan-y",
         WebkitTapHighlightColor: "transparent",
         transformOrigin: "left center",
       }}
@@ -554,7 +547,7 @@ function QsbHudBar({
  * QuestStatusBar — the persistent, TRANSPARENT bottom HUD for quest screens.
  * Essence total, deck sprite, Dreamcaller bust, and a
  * docked dreamsign strip sit directly on scene art (legible via `.hud-outline`),
- * all press-revealing through the shared InfoCard engine. No menu-dots button.
+ * all revealing through the shared coordinator. No menu-dots button.
  */
 export function QuestStatusBar({
   stageRef,

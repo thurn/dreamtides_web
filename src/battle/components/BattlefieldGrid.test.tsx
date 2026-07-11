@@ -50,7 +50,7 @@ function mount(zone: "backRank" | "frontRank"): {
 
   act(() => {
     root.render(
-      <BattlefieldGrid
+      <TangoRoot><BattlefieldGrid
         side="player"
         zone={zone}
         state={state}
@@ -63,7 +63,7 @@ function mount(zone: "backRank" | "frontRank"): {
         onCardClick={cardClicks}
         onCardContextMenu={() => undefined}
         onSlotClick={slotClicks as (target: BattleFieldSlotAddress, isOccupied: boolean) => void}
-      />,
+      /></TangoRoot>,
     );
   });
 
@@ -127,7 +127,7 @@ describe("BattlefieldGrid", () => {
 
     act(() => {
       root.render(
-        <BattlefieldGrid
+        <TangoRoot><BattlefieldGrid
           side="player"
           zone="backRank"
           state={state}
@@ -141,7 +141,7 @@ describe("BattlefieldGrid", () => {
           onCardDragStart={cardDragStart}
           onSlotClick={() => undefined}
           onSlotDrop={slotDrop}
-        />,
+        /></TangoRoot>,
       );
     });
 
@@ -196,14 +196,15 @@ describe("BattlefieldGrid", () => {
     const occupied = container.querySelector<HTMLElement>(
       '[data-slot-id="player-backRank-B1"] [data-battle-card-id]',
     );
+    const activationSource = occupied?.querySelector<HTMLElement>("[data-game-card-source]");
     const empty = container.querySelector<HTMLElement>('[data-slot-id="player-backRank-B2"]');
 
-    if (occupied === null || empty === null) {
+    if (occupied === null || activationSource === undefined || activationSource === null || empty === null) {
       throw new Error("expected reserve slots");
     }
 
     act(() => {
-      occupied.click();
+      activationSource.click();
       empty.click();
     });
 

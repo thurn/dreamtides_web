@@ -24,7 +24,8 @@ function active(overrides: Partial<RevealOverlayActive> = {}): RevealOverlayActi
   return {
     source: { identity: { entityType: "test", entityId: UUID }, registrationId: "one" },
     spec: makeTextRevealSpec("Primary", "Body", ["First", "Second"]), element: source,
-    reason: "hover", sourceShowsCompleteGameCard: false,
+    reason: "hover", sourceShowsCompleteGameCard: false, interactionId: 1,
+    sourceRect: { x: 400, y: 250, width: 100, height: 50 }, modality: "mouse",
     ...overrides,
   };
 }
@@ -70,8 +71,9 @@ describe("RevealOverlay", () => {
     const group = document.querySelector<HTMLElement>("[data-tango-reveal-group]")!;
     const cards = [...group.querySelectorAll<HTMLElement>("[data-tango-reveal-card]")];
     expect(group.style.visibility).toBe("visible");
-    expect(cards).toHaveLength(2);
+    expect(cards).toHaveLength(3);
     expect(cards[0].style.top).toBe(cards[1].style.top);
+    expect(Number.parseFloat(cards[2].style.top) + Number.parseFloat(cards[2].style.height)).toBeLessThanOrEqual(236);
     expect(document.querySelector<HTMLElement>("[data-reveal-measurement-layer]")?.style.visibility).toBe("hidden");
   });
 

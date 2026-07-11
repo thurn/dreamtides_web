@@ -21,6 +21,7 @@ describe("reveal diagnostic logging", () => {
     } as const;
     logRevealOpened({
       source: { entityType: "card", entityId: "00000000-0000-4000-8000-000000000001" },
+      interactionId: 7,
       primary: { kind: "gameCard", variant: "complete" },
       secondaryVariants: ["text", "icon"], modality: "touch", reason: "press",
       geometry, shownSecondaryCount: 1, droppedSecondaryCount: 1,
@@ -28,6 +29,7 @@ describe("reveal diagnostic logging", () => {
     });
     expect(getLogEntries()[getLogEntries().length - 1]).toMatchObject({
       event: "tango_entity_reveal_opened", sourceEntityType: "card",
+      interactionId: 7,
       sourceEntityId: "00000000-0000-4000-8000-000000000001",
       primaryKind: "gameCard", primaryVariant: "complete",
       secondaryVariants: ["text", "icon"], viewport: geometry.viewport,
@@ -45,10 +47,12 @@ describe("reveal diagnostic logging", () => {
   it("logs dismissal and activation outcome on close", () => {
     logRevealClosed({
       source: { entityType: "site", entityId: "00000000-0000-4000-8000-000000000002" },
+      interactionId: 8, reason: "focus",
       dismissalReason: "scroll", activationOutcome: "suppressed-cancelled",
     });
     expect(getLogEntries()[getLogEntries().length - 1]).toMatchObject({
       event: "tango_entity_reveal_closed", dismissalReason: "scroll",
+      interactionId: 8, reason: "focus",
       activationOutcome: "suppressed-cancelled",
     });
   });

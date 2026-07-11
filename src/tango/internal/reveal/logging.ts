@@ -7,6 +7,7 @@ import type { InfoCardVariant } from "../../components/overlay/InfoCard";
 
 export interface RevealOpenedDiagnostic {
   readonly source: RevealSourceIdentity;
+  readonly interactionId: number;
   readonly primary: { readonly kind: "gameCard" | "infoCard"; readonly variant: string };
   readonly secondaryVariants: readonly InfoCardVariant[];
   readonly modality: "mouse" | "pen" | "touch" | "keyboard";
@@ -27,6 +28,7 @@ export function logRevealOpened(value: RevealOpenedDiagnostic): void {
   logEvent("tango_entity_reveal_opened", {
     sourceEntityType: value.source.entityType,
     sourceEntityId: value.source.entityId,
+    interactionId: value.interactionId,
     primaryKind: value.primary.kind,
     primaryVariant: value.primary.variant,
     secondaryVariants: [...value.secondaryVariants],
@@ -46,12 +48,16 @@ export function logRevealOpened(value: RevealOpenedDiagnostic): void {
 
 export function logRevealClosed(value: {
   readonly source: RevealSourceIdentity;
+  readonly interactionId: number;
+  readonly reason: RevealReason;
   readonly dismissalReason: RevealDismissalReason;
   readonly activationOutcome: RevealActivationOutcome;
 }): void {
   logEvent("tango_entity_reveal_closed", {
     sourceEntityType: value.source.entityType,
     sourceEntityId: value.source.entityId,
+    interactionId: value.interactionId,
+    reason: value.reason,
     dismissalReason: value.dismissalReason,
     activationOutcome: value.activationOutcome,
   });

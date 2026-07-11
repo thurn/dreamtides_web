@@ -3,8 +3,8 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { getLogEntries } from "../../../logging";
-import { TangoRoot } from "../../TangoRoot";
+import { getLogEntries } from "../../logging";
+import { TangoRoot } from "../../tango/TangoRoot";
 import { EntityRevealConformanceDemo } from "./EntityRevealConformanceDemo";
 
 let resizeCallbacks: ResizeObserverCallback[] = [];
@@ -61,6 +61,8 @@ describe("EntityRevealConformanceDemo", () => {
     expect(container.querySelector('[data-conformance-card-id="11111111-1111-4111-8111-111111111111"]')).not.toBeNull();
     expect(container.querySelector("[data-atlas-node-id]" )).not.toBeNull();
     expect(container.querySelector("[data-battle-card-id]" )).not.toBeNull();
+    expect(container.querySelector("[data-conformance-battle-fixture] [data-battle-card-semantic-kind=catalog]" )).not.toBeNull();
+    expect(container.querySelector("[data-conformance-generated-battle-fixture] [data-battle-card-semantic-kind=generated] [data-game-card-source]" )).not.toBeNull();
     expect(container.querySelectorAll("[data-conformance-scenario]").length).toBeGreaterThanOrEqual(6);
     const infoSource = container.querySelector<HTMLElement>("[data-conformance-info-secondaries] [data-reveal-entity-type=dreamcaller]")!;
     expect(infoSource.dataset.revealSecondaryTitles?.split("\u001f")).toEqual(["Bane", "Discover", "Ephemeral"]);
@@ -93,6 +95,8 @@ describe("EntityRevealConformanceDemo", () => {
     }
     expect(container.innerHTML).not.toContain("anchorRect");
     expect(container.innerHTML).not.toContain("portalTarget");
+    expect(container.innerHTML).not.toContain("data-conformance-expects-reduced-motion");
+    expect(document.documentElement.dataset.tangoReducedMotion).toBe("reduce");
     act(() => root.unmount());
   });
 

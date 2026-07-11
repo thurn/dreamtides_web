@@ -13,7 +13,9 @@ export interface RevealOverlayActive {
   readonly touchPoint?: RevealPoint;
   readonly sourceShowsCompleteGameCard: boolean;
   readonly returningGameCard?: boolean;
-  readonly interactionId?: number;
+  readonly interactionId: number;
+  readonly sourceRect: RevealRect;
+  readonly modality: "mouse" | "pen" | "touch" | "keyboard";
 }
 
 export interface RevealOverlayProps {
@@ -26,22 +28,25 @@ interface MeasuredDecision { readonly key: string; readonly decision: RevealPlac
 const transparent: CSSProperties = { pointerEvents: "none" };
 
 function prefersReducedMotion(): boolean {
-  return typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  return document.documentElement.dataset.tangoReducedMotion === "reduce"
+    || (typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 }
 
 export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
-  const key = active === null ? "" : `${active.source.registrationId}:${active.reason}:${String(active.interactionId ?? 0)}`;
+  const key = active === null ? "" : `${active.source.registrationId}:${active.reason}:${String(active.interactionId)}`;
   const [measured, setMeasured] = useState<MeasuredDecision | null>(null);
   const viewport = useMemo(() => active === null ? null : captureVisualViewport(), [key]);
 
   useLayoutEffect(() => {
     if (active === null || viewport === null) return;
+    let disposed = false;
     const layer = document.querySelector<HTMLElement>("[data-reveal-measurement-layer]");
     if (layer?.dataset.revealMeasurementKey !== key) return;
     const primary = layer.querySelector<HTMLElement>("[data-reveal-measure=\"primary\"]");
     const secondaries = [...layer.querySelectorAll<HTMLElement>("[data-reveal-measure=\"secondary\"]")];
     if (primary === null) return;
     const measure = (): void => {
+      if (disposed) return;
       if (primary.querySelector("[data-reveal-render-pending]") !== null) return;
       const primaryRect = primary.getBoundingClientRect();
       const secondarySizes: RevealSize[] = secondaries.map((node) => {
@@ -49,21 +54,20 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
         return { width: value.width, height: value.height };
       });
       if (!(primaryRect.width > 0) || !(primaryRect.height > 0)) return;
-      const sourceRect = active.element.getBoundingClientRect();
       const decision = selectRevealPlacement({
         viewport,
         reason: active.reason,
         primaryKind: active.spec.primary.kind,
-        sourceRect: { x: sourceRect.x, y: sourceRect.y, width: sourceRect.width, height: sourceRect.height },
+        sourceRect: active.sourceRect,
         ...(active.touchPoint === undefined ? {} : { touchPoint: active.touchPoint }),
         primarySize: { width: primaryRect.width, height: primaryRect.height },
         secondarySizes,
         sourceShowsCompleteGameCard: active.sourceShowsCompleteGameCard,
       });
-      setMeasured({ key, decision, sourceRect: { x: sourceRect.x, y: sourceRect.y, width: sourceRect.width, height: sourceRect.height } });
+      setMeasured({ key, decision, sourceRect: active.sourceRect });
       onPlaced?.(decision, {
         viewport: { layout: viewport.layout, width: viewport.width, height: viewport.height, offsetLeft: viewport.offsetLeft, offsetTop: viewport.offsetTop, safeArea: viewport.safeArea },
-        sourceRect: { x: sourceRect.x, y: sourceRect.y, width: sourceRect.width, height: sourceRect.height },
+        sourceRect: active.sourceRect,
         ...(active.touchPoint === undefined ? {} : { touchPoint: active.touchPoint }),
         placement: { family: decision.family, orientation: decision.orientation },
         finalRects: { primary: decision.primaryRect, secondaries: decision.secondaryRects },
@@ -71,11 +75,11 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
       });
     };
     measure();
-    if (typeof ResizeObserver === "undefined") return;
+    if (typeof ResizeObserver === "undefined") return () => { disposed = true; };
     const observer = new ResizeObserver(measure);
     observer.observe(primary);
     for (const secondary of secondaries) observer.observe(secondary);
-    return () => observer.disconnect();
+    return () => { disposed = true; observer.disconnect(); };
   }, [active, key, onPlaced, viewport]);
 
   const decision = measured?.key === key ? measured.decision : null;
@@ -83,7 +87,7 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
   const sourcePrimaryInPlace = active !== null && decision !== null
     && active.spec.primary.kind === "gameCard"
     && (decision.pressInPlace || (viewport?.layout === "desktop" && active.sourceShowsCompleteGameCard
-      && active.element.getBoundingClientRect().width >= 340));
+      && active.sourceRect.width >= 340));
   useLayoutEffect(() => {
     if (active === null || viewport?.layout !== "desktop" || active.spec.primary.kind !== "gameCard" || decision === null || sourcePrimaryInPlace) return;
     const previousOpacity = active.element.style.opacity;
@@ -95,7 +99,7 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
   const mobileWidth = viewport.width * 0.45;
   const measurePrimaryWidth = viewport.layout === "mobile"
     ? mobileWidth
-    : active.spec.primary.kind === "gameCard" ? Math.max(340, active.element.getBoundingClientRect().width) : 248;
+    : active.spec.primary.kind === "gameCard" ? Math.max(340, active.sourceRect.width) : 248;
   const measureSecondaryWidth = viewport.layout === "mobile" ? mobileWidth : 248;
 
   return createPortal(

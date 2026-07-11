@@ -1,18 +1,17 @@
 import { useRef, type CSSProperties, type DragEventHandler, type MouseEventHandler } from "react";
 import { asCardId, asCardName, isCardId } from "../../types/card-identity";
-import { CardView, GameCard, type GameCardModel } from "../../tango/components/card/CardView";
+import { GameCard, type GameCardModel } from "../../tango/components/card/CardView";
+import { semanticEntityId } from "../../types/semantic-identity";
 import type { BattleCardInstance } from "../types";
 import { selectEffectiveSparkForInstance, selectFigmentCount } from "../state/figments";
 import { AutomationGearIcon } from "./AutomationGearIcon";
-import { BattleCardView, battleCardDisplayFromInstance, battleCardVisualFromInstance } from "./BattleCardView";
 
 /** Resolve canonical battle display state without changing battle-instance identity. */
 export function battleGameCardModel(instance: BattleCardInstance): GameCardModel {
   const definition = instance.definition;
-  if (!isCardId(definition.cardId)) {
-    throw new Error(`BattleGameCard requires a canonical card UUID; ${instance.battleCardId} has none.`);
-  }
-  const cardId = asCardId(definition.cardId);
+  const cardId = asCardId(isCardId(definition.cardId)
+    ? definition.cardId
+    : semanticEntityId("generated-battle-card", instance.battleCardId));
   return {
     cardId,
     transfiguration: definition.transfigurationDisplay,
@@ -57,9 +56,6 @@ export interface BattleGameCardProps {
   readonly onContextMenu?: MouseEventHandler<HTMLDivElement>;
   readonly onDragStart?: DragEventHandler<HTMLDivElement>;
   readonly onDragEnd?: DragEventHandler<HTMLDivElement>;
-  readonly onMouseEnter?: MouseEventHandler<HTMLDivElement>;
-  readonly onMouseLeave?: MouseEventHandler<HTMLDivElement>;
-  readonly onMouseMove?: MouseEventHandler<HTMLDivElement>;
 }
 
 /** Battle adapter for the canonical Tango GameCard reveal path. */
@@ -69,7 +65,6 @@ export function BattleGameCard({
   unaffordable = false, reserved = false, showAutomationGear = false,
   dataBattleHandCard = false, style, className = "", draggable = false,
   onActivate, onDoubleClick, onContextMenu, onDragStart, onDragEnd,
-  onMouseEnter, onMouseLeave, onMouseMove,
 }: BattleGameCardProps) {
   const canonical = isCardId(instance.definition.cardId);
   const dragSuppressedRef = useRef(false);
@@ -85,28 +80,12 @@ export function BattleGameCard({
     onDragStart?.(event);
   };
   const figmentCount = selectFigmentCount(instance);
+  const generatedFigment = instance.provenance.kind === "generated-figment";
   if (hidden) {
     return <div data-battle-card-id={instance.battleCardId} data-battle-card-variant={variant}
       data-battle-hand-card={dataBattleHandCard ? "" : undefined} data-battle-card-hidden="true"
       data-selected="false" className={["battle-card", variant === "hand" ? "hand-card" : "", "hidden-enemy", className].filter(Boolean).join(" ")}
       style={style} aria-label="Hidden enemy card"><div className="battle-card-hidden-face">?</div></div>;
-  }
-  if (!canonical) {
-    if (variant === "hand") {
-      return <div data-battle-card-id={instance.battleCardId} data-battle-card-variant={variant}
-        data-selected={String(selected)} className={["battle-card", "hand-card", className].filter(Boolean).join(" ")}
-        style={style} draggable={draggable} onDoubleClick={onDoubleClick} onContextMenu={onContextMenu}
-        onClick={handleActivate} onPointerDownCapture={() => { dragSuppressedRef.current = false; }}
-        onDragStart={handleDragStart} onDragEnd={onDragEnd} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onMouseMove={onMouseMove}>
-        <CardView card={battleCardDisplayFromInstance(instance)} selected={selected} hideRulesText={compact} />
-      </div>;
-    }
-    return <BattleCardView battleCardId={instance.battleCardId} variant={variant} dataBattleHandCard={dataBattleHandCard}
-      data={battleCardVisualFromInstance(instance)} hidden={hidden} exhausted={exhausted} playable={playable}
-      selected={selected} unaffordable={unaffordable} reserved={reserved} showAutomationGear={showAutomationGear}
-      style={style} className={className} draggable={draggable} onClick={onActivate}
-      onDoubleClick={onDoubleClick} onContextMenu={onContextMenu} onDragStart={onDragStart} onDragEnd={onDragEnd}
-      onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onMouseMove={onMouseMove} />;
   }
   const classes = ["battle-card", "battle-game-card", variant === "hand" ? "hand-card" : "",
     selected ? "selected" : "", playable ? "playable" : "", unaffordable ? "unaffordable" : "",
@@ -114,6 +93,7 @@ export function BattleGameCard({
     .filter(Boolean).join(" ");
   return (
     <div data-battle-card-id={instance.battleCardId} data-battle-card-variant={variant}
+      data-battle-card-semantic-kind={canonical ? "catalog" : "generated"}
       data-battle-hand-card={dataBattleHandCard ? "" : undefined} data-battle-card-playable={String(playable)}
       data-selected={String(selected)} data-battle-card-hidden={String(hidden)}
       data-battle-card-counters={String(instance.status.counters)} data-battle-card-exhausted={String(exhausted)}
@@ -123,12 +103,12 @@ export function BattleGameCard({
       onKeyDownCapture={(event) => {
         if (event.key === "Enter" || event.key === " ") dragSuppressedRef.current = false;
       }}
-      onDragStart={handleDragStart} onDragEnd={onDragEnd}
-      onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onMouseMove={onMouseMove}>
+      onDragStart={handleDragStart} onDragEnd={onDragEnd}>
       <div className="battle-game-card-surface"
         style={exhausted ? { filter: "grayscale(0.5) brightness(0.62)" } : undefined}>
         <GameCard model={battleGameCardModel(instance)} selected={selected} selectionColor="selected"
-          hideRulesText={compact} unavailable={unaffordable} onActivate={handleActivate} />
+          hideRulesText={compact} unavailable={unaffordable} onActivate={handleActivate}
+          figment={generatedFigment} figmentTitleBar={generatedFigment && instance.definition.name.trim() !== ""} />
       </div>
       {figmentCount > 1 ? <div className="c-figment-count" aria-label="figment count">{String(figmentCount)}</div> : null}
       {instance.status.counters > 0 ? <div className="c-counters" aria-label={`${String(instance.status.counters)} counters`}>

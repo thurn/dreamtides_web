@@ -22,6 +22,7 @@ describe("SiteNode", () => {
     act(() => root.render(<TangoRoot><SiteNode model={MODEL} motion={false} onSelect={activate} /></TangoRoot>));
     const source = container.querySelector<HTMLButtonElement>("[data-site-id]")!;
     expect(source.tabIndex).toBe(0);
+    expect(source.style.touchAction).toBe("pan-x pan-y");
     expect(source.dataset.revealFeedback).toBe("measured");
     expect(source.dataset.revealEntityType).toBe("site");
     expect(source.dataset.revealEntityId).toBe(MODEL.site.id);

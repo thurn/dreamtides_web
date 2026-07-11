@@ -73,6 +73,7 @@ describe("Dreamsign", () => {
     expect(tile?.dataset.revealPrimaryVariant).toBe("object");
     expect(tile?.dataset.revealSecondaryTitles?.split("\u001f")).toEqual([entry.term]);
     expect(tile?.tabIndex).toBe(0);
+    expect(tile?.style.touchAction).toBe("pan-x pan-y");
     const description = document.getElementById(tile?.getAttribute("aria-describedby") ?? "");
     expect(description?.textContent).toContain(sign.name);
     expect(description?.textContent).toContain(effect);

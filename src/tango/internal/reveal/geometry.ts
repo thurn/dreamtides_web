@@ -116,7 +116,7 @@ function mobilePlacement(input: RevealPlacementInput): RevealPlacementDecision {
   const safeLeft = viewport.offsetLeft + viewport.safeArea.left;
   const safeRight = viewport.offsetLeft + viewport.width - viewport.safeArea.right;
   const pressInPlace = input.reason === "press" && input.primaryKind === "gameCard"
-    && input.sourceShowsCompleteGameCard && sourceRect.width >= cardWidth * 0.9;
+    && input.sourceShowsCompleteGameCard && sourceRect.width >= cardWidth * 0.9 - Number.EPSILON * viewport.width;
 
   if (pressInPlace) {
     const rightX = sourceRect.x + sourceRect.width + CARD_GAP;
@@ -247,10 +247,12 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
   const pairFitsSafeWidth = secondarySizes.length > 0 && primaryWidth + CARD_GAP + secondaryWidth <= safeRight - safeLeft;
   const usableSecondaries = pairFitsSafeWidth ? secondarySizes : [];
   const groupWidth = primaryWidth + (usableSecondaries.length > 0 ? CARD_GAP + secondaryWidth : 0);
-  const aboveY = sourceRect.y - DESKTOP_SOURCE_GAP - primarySize.height;
-  if (aboveY >= safeTop) {
+  const aboveAvailableHeight = sourceRect.y - DESKTOP_SOURCE_GAP - safeTop;
+  if (primarySize.height <= aboveAvailableHeight) {
+    const count = fitGroupPrefix(usableSecondaries, aboveAvailableHeight, primarySize.height);
+    const groupHeight = Math.max(primarySize.height, stackHeight(usableSecondaries, count));
+    const aboveY = sourceRect.y - DESKTOP_SOURCE_GAP - groupHeight;
     const x = clamp(sourceRect.x + sourceRect.width / 2 - groupWidth / 2, safeLeft, safeRight - groupWidth);
-    const count = fitSecondaryPrefix(usableSecondaries, safeBottom - aboveY);
     return result(input, { family: "desktop-above", orientation: "primary-left", primaryRect: rect(x, aboveY, primarySize),
       secondaryRects: secondaryRectsAt(usableSecondaries, count, x + primaryWidth + CARD_GAP, aboveY), pressInPlace: false,
       sideFallback: false, bestEffortPrimaryOverlap: false });

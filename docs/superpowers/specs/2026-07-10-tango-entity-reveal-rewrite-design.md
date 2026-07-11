@@ -7,11 +7,8 @@ Interactions](../../tango/entity-reveal-interactions.md). That document defines
 the reveal vocabulary, interaction rules, placement behavior, accessibility,
 diagnostics, and convergence requirements for Tango entities.
 
-The current implementation distributes reveal behavior across InfoCard's
-public press engine, GameCard hover behavior, MobileCardPeek, AtlasNodeReveal,
-Pressable, HoverPopover, named entity components, and screen-owned wrappers.
-This rewrite gives the Tango library one implementation of that policy and
-makes named semantic components the only public way to participate in it.
+The Tango library implements reveal policy through one root coordinator, and
+named semantic components are the public way to participate in it.
 
 The scope includes every consumer of Tango entity components: player-facing
 quest screens, battle, Atlas, HUD, draft, deck and shop surfaces, component

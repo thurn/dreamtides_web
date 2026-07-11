@@ -137,7 +137,7 @@ if (pathname === "/editor" || pathname === "/cards") {
     import("./journeys/ui/JourneyHoverCardDemo"),
     import("./components/TransfigurationCardDemo"),
     import("./tango/screens/devtools/DeviceFrameDemo"),
-    import("./tango/screens/devtools/EntityRevealConformanceDemo"),
+    import("./screens/devtools/EntityRevealConformanceDemo"),
     import("./runtime/runtime-config"),
   ]);
 

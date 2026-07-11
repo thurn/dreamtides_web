@@ -158,7 +158,7 @@ export function AtlasNode({ model, onActivate }: AtlasNodeProps): React.ReactEle
     height: model.size,
     marginLeft: -model.size / 2,
     marginTop: -model.size / 2,
-    touchAction: "none",
+    touchAction: "pan-x pan-y",
     WebkitTapHighlightColor: "transparent",
     "--atlas-node-size": `${String(model.size)}px`,
     "--atlas-badge-scale": String(model.badgeScale ?? 1),

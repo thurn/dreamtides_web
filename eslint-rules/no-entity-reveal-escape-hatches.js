@@ -4,6 +4,7 @@ const INFO_CARD_STATICS = new Set(["PressInfo", "PressPopover", "usePressReveal"
 const MECHANICAL_PROPS = new Set(["anchorRect", "portalTarget", "revealSide", "revealPlacement", "revealDelayMs", "hoverDelayMs", "pressDelayMs", "delayMs", "gap", "maxWidthPx", "triggerAs"]);
 const STRONG_MECHANICAL_PROPS = new Set(["anchorRect", "portalTarget", "revealSide", "revealPlacement", "revealDelayMs", "hoverDelayMs", "pressDelayMs"]);
 const CONTROLLED_PROPS = new Set(["open", "shown", "isOpen", "isShown", "revealOpen", "revealShown"]);
+const INTERACTION_ESCAPE_PROPS = new Set(["onMouseEnter", "onMouseMove", "onMouseLeave", "onPointerEnter", "onPointerMove", "onPointerLeave", "onPointerDown", "onPointerUp", "onPointerCancel", "onMouseDown", "onMouseUp", "onTouchStart", "onTouchMove", "onTouchEnd"]);
 const CONTENT_PROPS = new Set(["content", "children", "card", "reveal", "renderedContent"]);
 const NAMED_REVEAL_COMPONENTS = new Set(["GameCard", "CompactGameCardRow", "InfoCard", "AtlasNode", "GlossaryTerm", "BattleGameCard", "Dreamsign", "DreamcallerPortrait", "TideDisc", "ResourceChip", "PipBadge", "CardStatOrb", "QuestStatusBar", "SiteNode"]);
 const GENERIC_REVEAL_WRAPPERS = new Set(["HoverPopover", "RevealPopover", "EntityReveal", "GenericReveal", "RevealWrapper", "EntityRevealWrapper"]);
@@ -95,6 +96,7 @@ export default {
       controlledState: "Reveal open/shown state is coordinator-owned and uncontrolled from product code.",
       publicSpec: "RevealSpec is an internal protocol and cannot appear in a product API.",
       opaqueSpread: "Named reveal components accept only statically enumerable safe props; opaque JSX spreads are forbidden.",
+      interactionEscape: "Named reveal components own hover and press reveal handlers. Supply semantic activation through the component API.",
     },
   },
   create(context) {
@@ -200,6 +202,7 @@ export default {
         if (CONTENT_PROPS.has(name) && isReactNodeType(annotation)) context.report({ node: member, messageId: "arbitraryContent" });
         if (MECHANICAL_PROPS.has(name)) context.report({ node: member, messageId: "mechanicalProp" });
         if (CONTROLLED_PROPS.has(name)) context.report({ node: member, messageId: "controlledState" });
+        if (NAMED_REVEAL_COMPONENTS.has(componentName) && INTERACTION_ESCAPE_PROPS.has(name)) context.report({ node: member, messageId: "interactionEscape" });
       }
     }
 
@@ -301,12 +304,14 @@ export default {
           if (!NAMED_REVEAL_COMPONENTS.has(name) && CONTENT_PROPS.has(prop)) context.report({ node: attribute, messageId: "arbitraryContent" });
           if (MECHANICAL_PROPS.has(prop)) context.report({ node: attribute, messageId: "mechanicalProp" });
           if (CONTROLLED_PROPS.has(prop)) context.report({ node: attribute, messageId: "controlledState" });
+          if (NAMED_REVEAL_COMPONENTS.has(name) && INTERACTION_ESCAPE_PROPS.has(prop)) context.report({ node: attribute, messageId: "interactionEscape" });
         }
         for (const property of spreadProperties) {
           const prop = keyName(property);
           if (!NAMED_REVEAL_COMPONENTS.has(name) && CONTENT_PROPS.has(prop)) context.report({ node: property, messageId: "arbitraryContent" });
           if (MECHANICAL_PROPS.has(prop)) context.report({ node: property, messageId: "mechanicalProp" });
           if (CONTROLLED_PROPS.has(prop)) context.report({ node: property, messageId: "controlledState" });
+          if (NAMED_REVEAL_COMPONENTS.has(name) && INTERACTION_ESCAPE_PROPS.has(prop)) context.report({ node: property, messageId: "interactionEscape" });
         }
       },
       TSInterfaceDeclaration(node) { processMembers(node.id, node.id.name.replace(/Props$/, ""), node.body.body); },

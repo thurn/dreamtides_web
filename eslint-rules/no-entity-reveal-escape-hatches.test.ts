@@ -25,6 +25,12 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
         <><GameCard model={model} /><GlossaryTerm term="Bane" definition="Discard it." /></>;`,
     },
     {
+      name: "named components keep semantic activation handlers",
+      filename: "src/tango/screens/DraftScreen.tsx",
+      code: `import { GameCard } from "../components/card/CardView";
+        <GameCard model={model} onActivate={() => select(model.cardId)} />;`,
+    },
+    {
       name: "the coordinator implementation may use its internal protocol and portal",
       filename: "src/tango/internal/reveal/context.tsx",
       code: `import type { RevealSpec } from "./models";
@@ -127,6 +133,20 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
     },
   ],
   invalid: [
+    {
+      name: "named components reject arbitrary hover and press reveal handlers",
+      filename: "src/battle/components/BattlefieldGrid.tsx",
+      code: `import { BattleGameCard } from "./BattleGameCard";
+        <BattleGameCard instance={card} onMouseEnter={openPreview} onMouseMove={movePreview}
+          onMouseLeave={closePreview} onPointerDown={showDetails} onPointerUp={hideDetails} />;`,
+      errors: [
+        { messageId: "interactionEscape" },
+        { messageId: "interactionEscape" },
+        { messageId: "interactionEscape" },
+        { messageId: "interactionEscape" },
+        { messageId: "interactionEscape" },
+      ],
+    },
     {
       name: "product code cannot import the internal reveal protocol",
       filename: "src/tango/screens/DraftScreen.tsx",

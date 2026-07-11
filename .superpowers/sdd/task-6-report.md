@@ -301,3 +301,17 @@ Stable path: `screenshots/entity-reveals/`
   typecheck`, the full 4,263-test suite, and `git diff --check` pass. The
   rule/test-only patch changes no production or generated files, so regeneration
   and browser QA were not rerun.
+
+## Final whole-branch review remediation
+
+- Touch pending provides immediate source feedback while withholding the overlay and open diagnostic until 30ms. Quick taps emit no reveal lifecycle; elapsed interactions emit one paired lifecycle.
+- Each hover, focus, or touch interaction captures one immutable source rectangle before feedback transforms. Placement, thresholds, return motion, and logging consume that snapshot. Tests cover 340px and 40.5vw exactly.
+- Desktop above placement fits the longest complete leading secondary prefix against full group height and preserves the captured-source gap.
+- Lifecycle tracking keys registration, reason, and interaction epoch. Paired open/close diagnostics carry the same interaction id/reason; focus-hover-focus and pre-measure dismissal cases prove exact pairing.
+- Hover-capable pen interactions retain pen modality. `visualViewport.resize` dismisses with cleanup.
+- Generated battle figments derive a deterministic UUID from `battleCardId`, independent of display name, and use `BattleGameCard`. Battle hover-preview callback APIs are deleted and lint rejects arbitrary hover/press handlers while preserving semantic activation.
+- Dreamsign, SiteNode, AtlasNode, and QuestStatusBar sources allow pan scrolling; coordinator scroll cancellation remains authoritative.
+- Atlas preview/clamp components, obsolete CSS, and orphaned Tango tokens are deleted. Current documentation describes coordinator ownership.
+- The conformance integration renders canonical and generated `BattleGameCard` fixtures and actively installs deterministic reduced motion.
+- Regeneration completed 12/12. Final verification: lint passed; typecheck passed; 392 files passed and 1 skipped; 4,273 tests passed and 4 skipped; `git diff --check` passed.
+- Browser QA used `http://localhost:5188` and session `q7-whole-5188`: desktop group fit, reduced-motion immediate exit, mobile 0/20/40ms timing and scroll dismissal, canonical/generated battle cards, normal Atlas, and normal battle. Error buffers were empty. Session closed; port 5188 is free.

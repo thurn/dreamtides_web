@@ -85,6 +85,23 @@ describe("selectRevealPlacement", () => {
     expect(selectRevealPlacement({ ...desktop, sourceRect: { x: 400, y: 20, width: 100, height: 80 } }).family).toBe("desktop-side-right");
   });
 
+  it("places only a complete leading secondary prefix inside the full desktop group above the source", () => {
+    const result = selectRevealPlacement({
+      ...base,
+      viewport: { ...viewport, layout: "desktop", width: 1200, height: 900 },
+      reason: "hover",
+      touchPoint: undefined,
+      sourceRect: { x: 500, y: 600, width: 80, height: 60 },
+      primarySize: { width: 248, height: 180 },
+      secondarySizes: [{ width: 248, height: 400 }, { width: 248, height: 200 }],
+    });
+    expect(result.family).toBe("desktop-above");
+    expect(result.secondaryRects).toHaveLength(1);
+    expect(result.primaryRect.y).toBe(186);
+    expect(result.secondaryRects[0].y).toBe(186);
+    expect(result.secondaryRects[0].y + result.secondaryRects[0].height).toBe(586);
+  });
+
   it.each([500, 480])("truncates a desktop InfoCard pair that cannot fit the %ipx safe width", (width) => {
     const desktop = { ...base, viewport: { ...viewport, layout: "desktop" as const, width }, reason: "hover" as const, touchPoint: undefined, sourceRect: { x: 190, y: 500, width: 80, height: 60 }, primarySize: { width: 248, height: 180 }, secondarySizes: [{ width: 248, height: 100 }] };
     for (const input of [desktop, { ...desktop, sourceRect: { ...desktop.sourceRect, y: 20 } }]) {
@@ -116,8 +133,8 @@ describe("selectRevealPlacement", () => {
   });
 
   it("qualifies press-in-place only at 90% of popup width with complete rules", () => {
-    expect(selectRevealPlacement({ ...base, primaryKind: "gameCard", sourceRect: { x: 10, y: 200, width: 158, height: 240 }, sourceShowsCompleteGameCard: true }).pressInPlace).toBe(true);
-    expect(selectRevealPlacement({ ...base, primaryKind: "gameCard", sourceRect: { x: 10, y: 200, width: 157, height: 240 }, sourceShowsCompleteGameCard: true }).pressInPlace).toBe(false);
+    expect(selectRevealPlacement({ ...base, primaryKind: "gameCard", sourceRect: { x: 10, y: 200, width: 157.95, height: 240 }, sourceShowsCompleteGameCard: true }).pressInPlace).toBe(true);
+    expect(selectRevealPlacement({ ...base, primaryKind: "gameCard", sourceRect: { x: 10, y: 200, width: 157.94, height: 240 }, sourceShowsCompleteGameCard: true }).pressInPlace).toBe(false);
   });
 
   it("places press-in-place secondaries only on a horizontally safe side", () => {

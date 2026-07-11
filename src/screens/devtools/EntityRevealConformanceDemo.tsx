@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
-import { asCardId, asCardName } from "../../../types/card-identity";
-import type { CardData } from "../../../types/cards";
-import { LayerName } from "../../../types/layer-name";
-import { GameCard } from "../../components/card/CardView";
-import { GlossaryTerm } from "../../components/card/GlossaryTerm";
-import { InfoCard } from "../../components/overlay/InfoCard";
-import { AtlasNode, type AtlasNodeModel } from "../../components/atlas/AtlasNode";
-import { DreamcallerPortrait } from "../../components/hud/DreamcallerPortrait";
-import { artRef } from "../../primitives/art";
-import { GLYPHS } from "../../primitives/glyph";
-import { richText } from "../../components/card/rich-text";
+import { asCardId, asCardName } from "../../types/card-identity";
+import type { CardData } from "../../types/cards";
+import { LayerName } from "../../types/layer-name";
+import { GameCard } from "../../tango/components/card/CardView";
+import { GlossaryTerm } from "../../tango/components/card/GlossaryTerm";
+import { InfoCard } from "../../tango/components/overlay/InfoCard";
+import { AtlasNode, type AtlasNodeModel } from "../../tango/components/atlas/AtlasNode";
+import { DreamcallerPortrait } from "../../tango/components/hud/DreamcallerPortrait";
+import { artRef } from "../../tango/primitives/art";
+import { GLYPHS } from "../../tango/primitives/glyph";
+import { richText } from "../../tango/components/card/rich-text";
+import { BattleGameCard } from "../../battle/components/BattleGameCard";
+import type { BattleCardInstance } from "../../battle/types";
+import { createDefaultBattleCardStatus } from "../../battle/state/create-initial-state";
 
 const CARD_ID = asCardId("11111111-1111-4111-8111-111111111111");
 const BATTLE_CARD_ID = asCardId("22222222-2222-4222-8222-222222222222");
@@ -39,9 +42,26 @@ const ATLAS_MODEL: AtlasNodeModel = {
   affiliation: { id: "66666666-6666-4666-8666-666666666666", name: "Guides", cardTheme: "Guide" },
 };
 
-const BATTLE_CARD: CardData = {
-  ...CARD, id: BATTLE_CARD_ID, name: asCardName("Battle Conformance"), cardNumber: 2,
-  energyCost: 1, spark: 2, isFast: true, renderedText: "Bane.", imageNumber: CONFORMANCE_CARD_IMAGE,
+const BATTLE_CARD: BattleCardInstance = {
+  battleCardId: "conformance-battle-instance",
+  definition: {
+    sourceDeckEntryId: "conformance-deck-entry", cardId: BATTLE_CARD_ID, cardNumber: 2,
+    name: "Battle Conformance", battleCardKind: "character", subtype: "Guide",
+    energyCost: 1, printedEnergyCost: 1, printedSpark: 2, isFast: true,
+    reclaimCost: null, renderedText: "Bane.", imageNumber: CONFORMANCE_CARD_IMAGE,
+    transfiguration: null, isBane: false,
+  },
+  owner: "player", controller: "player", sparkDelta: 0, staticSparkBonus: 0,
+  isRevealedToPlayer: true, status: createDefaultBattleCardStatus(),
+  markers: { isPrevented: false, isCopied: false }, notes: [],
+  provenance: { kind: "quest-deck", sourceBattleCardId: null, chosenSpark: null, chosenSubtype: null, createdAtTurnNumber: null, createdAtSide: null, createdAtMs: null },
+};
+const GENERATED_BATTLE_CARD: BattleCardInstance = {
+  ...BATTLE_CARD,
+  battleCardId: "conformance-generated-figment",
+  definition: { ...BATTLE_CARD.definition, sourceDeckEntryId: null, cardId: "", name: "Generated Conformance Figment" },
+  figments: [2],
+  provenance: { ...BATTLE_CARD.provenance, kind: "generated-figment" },
 };
 const TRUNCATION_CARD: CardData = {
   ...CARD,
@@ -71,6 +91,16 @@ export function EntityRevealConformanceDemo() {
       else root.style.setProperty("--safe-area-inset-top", previous);
     };
   }, [scenario]);
+  useEffect(() => {
+    const root = document.documentElement;
+    const previous = root.dataset.tangoReducedMotion;
+    if (scenario === "reduced-motion") root.dataset.tangoReducedMotion = "reduce";
+    else delete root.dataset.tangoReducedMotion;
+    return () => {
+      if (previous === undefined) delete root.dataset.tangoReducedMotion;
+      else root.dataset.tangoReducedMotion = previous;
+    };
+  }, [scenario]);
   return (
     <main
       className="tango"
@@ -88,7 +118,6 @@ export function EntityRevealConformanceDemo() {
         <h2 style={{ margin: 8 }}>Deterministic scenario: {scenario}</h2>
         <div
           data-conformance-scenario-source={scenario}
-          data-conformance-expects-reduced-motion={scenario === "reduced-motion" ? "true" : undefined}
           style={{
             position: viewportEdge ? "fixed" : "absolute",
             zIndex: viewportEdge ? 1 : undefined,
@@ -113,7 +142,8 @@ export function EntityRevealConformanceDemo() {
         <article data-conformance-info-secondaries=""><h2>InfoCard group source</h2><DreamcallerPortrait dreamcaller={DREAMCALLER} variant="thumb" size={120} profile={{ id: DREAMCALLER.id, ability: "Bane. Discover. Ephemeral." }} /></article>
         <article><h2>Inline</h2><p>Resolve <GlossaryTerm entry={{ term: "Bane", definition: "A penalty card forced into your deck." }} text="Bane" /> here.</p></article>
         <article style={{ position: "relative", width: 184, height: 184 }}><h2>Atlas</h2><AtlasNode model={ATLAS_MODEL} onActivate={() => undefined} /></article>
-        <article data-battle-card-id="conformance-battle-instance" style={{ width: 160 }}><h2>Battle</h2><GameCard model={{ cardId: BATTLE_CARD_ID, displaySnapshot: BATTLE_CARD }} /></article>
+        <article data-conformance-battle-fixture="" style={{ width: 160 }}><h2>Battle</h2><BattleGameCard instance={BATTLE_CARD} /></article>
+        <article data-conformance-generated-battle-fixture="" style={{ width: 160 }}><h2>Generated battle figment</h2><BattleGameCard instance={GENERATED_BATTLE_CARD} /></article>
       </section>
     </main>
   );

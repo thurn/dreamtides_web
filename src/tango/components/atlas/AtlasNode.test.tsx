@@ -190,6 +190,7 @@ describe("AtlasNode semantic reveal contract", () => {
       const { source } = renderNode(value);
 
       expect(source.tabIndex).toBe(0);
+      expect(source.style.touchAction).toBe("pan-x pan-y");
       expect(source.getAttribute("aria-describedby")).toMatch(
         /^tango-reveal-description-/,
       );

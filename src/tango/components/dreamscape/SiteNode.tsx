@@ -3,8 +3,8 @@
 // ring. The disc shows one of three states: a plain site, the guardian battle
 // (a pulsing ring), and a locked guardian (a desaturated disc with a padlock
 // badge). Every site disc is the same size. The disc carries no text label —
-// pressing / hovering it reveals the site name + detail through the ONE shared
-// popover, InfoCard's `icon` variant, whose disc is styled to read identically to
+// pressing / hovering it reveals the site name + detail through the coordinator
+// as InfoCard's `icon` variant, whose disc is styled to read identically to
 // the node it rose from.
 //
 // The reveal is INPUT-ADAPTIVE (the Tango generalization of the touch-first
@@ -14,13 +14,8 @@
 // the shared reveal coordinator, so timing,
 // placement, and the on-screen clamp match every other Tango reveal.
 //
-// Unifies the local `DreamscapeSiteNode` / `DreamscapeSitePopover` pair with the
-// design source `components/quest/SiteNode.jsx`: the LOCAL node treatment + game
-// data (battle sizing, floaty drift, the locked badge, the placed-site
-// model, the deferred-cursor contract) is authoritative; the
-// DESIGN InfoCard-icon reveal + the input-adaptive engine is the Tango vocabulary
-// the preview now speaks. The node measures against `stageRef` (the screen root)
-// to anchor its reveal.
+// The component owns the node treatment, placed-site semantics, activation, and
+// reveal registration; the coordinator owns viewport measurement and placement.
 
 import * as React from "react";
 import type { CSSProperties } from "react";
@@ -93,7 +88,7 @@ export interface SiteNodeProps {
 }
 
 /**
- * A single floating site node whose press-reveal routes through InfoCard's
+ * A single floating site node whose semantic reveal uses InfoCard's
  * `icon` variant. The node positions itself from `model.pos` inside the stage.
  */
 export function SiteNode({
@@ -139,7 +134,7 @@ export function SiteNode({
     animationDelay: `${String(index * -1.37)}s`,
     zIndex: binding.sourceProps["data-reveal-active"] === "true" ? 40 : 10,
     ...binding.sourceProps.style,
-    touchAction: "none",
+    touchAction: "pan-x pan-y",
     WebkitTapHighlightColor: "transparent",
   };
 

@@ -4,32 +4,9 @@
 // an object in the world rather than a card in a slot. Bane dreamsigns carry a
 // desaturation so the warning reads before the art does, and their reveal is
 // tagged with a Bane badge. Pressing / hovering the art reveals its full detail
-// — name, optional Bane badge, and rules text — through the ONE shared popover,
-// InfoCard's `object` variant, so a dreamsign preview is literally the same
-// component the tides, sites, and Dreamcaller use.
-//
-// The reveal is INPUT-ADAPTIVE (the Tango generalization of the touch-first
-// design source): on a fine pointer (mouse / desktop) HOVER reveals and the
-// press only compresses; on a coarse pointer (touch) press-down reveals and
-// release dismisses. It routes through the shared reveal coordinator, exactly
-// like the HUD's docked dreamsign strip — so timing,
-// placement, and the on-screen clamp cannot diverge.
-//
-// Placement:
-//   - pass `stageRef` (the screen root) and the reveal anchors to the tile,
-//     clamped fully on-screen — the material-continuity reveal (preferred).
-//   - omit it and the reveal floats directly above the tile (standalone use, and
-//     the default in list contexts that have no positioned stage).
-//
-// `DreamsignInfoCard` is the same reveal content on its own, for surfaces that
-// own a bespoke trigger + placement engine (the Shop ware, the Revelation card,
-// the Dream-journey icon) and only need the shared InfoCard body.
-//
-// Unifies the local `DreamsignArtTile` / `DreamsignHoverCard` pair with the
-// design source `components/entities/Dreamsign.jsx`: the LOCAL bordered-tile
-// treatment + game data (bane vs boon, glyph fallback, data hooks the screens
-// and tests rely on) is authoritative; the DESIGN InfoCard-object reveal + the
-// input-adaptive engine is the Tango vocabulary the preview now speaks.
+// — name and rules text — through the shared coordinator as an InfoCard
+// `object` variant. Mouse and hover-capable pen reveal on hover; touch uses the
+// shared intent/hold state machine while preserving native scrolling.
 
 import * as React from "react";
 import type { CSSProperties } from "react";
@@ -150,7 +127,7 @@ export function Dreamsign({
     filter: tileFilter,
     position: "relative",
     cursor: "pointer",
-    touchAction: "none",
+    touchAction: "pan-x pan-y",
     WebkitTapHighlightColor: "transparent",
     userSelect: "none",
     ...binding.sourceProps.style,

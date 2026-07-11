@@ -212,14 +212,15 @@ describe("BattleHandTray", () => {
   it("forwards click, double-click, and context-menu events with the battle card id", () => {
     const { clickCard, container, contextMenu, doubleClickCard, root } = mount();
     const firstCard = container.querySelector<HTMLElement>("[data-battle-card-id]");
+    const activationSource = firstCard?.querySelector<HTMLElement>("[data-game-card-source]");
     const battleCardId = firstCard?.getAttribute("data-battle-card-id");
 
-    if (firstCard === null || battleCardId === null) {
+    if (firstCard === null || activationSource === undefined || activationSource === null || battleCardId === null) {
       throw new Error("expected first hand card");
     }
 
     act(() => {
-      firstCard.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      activationSource.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       firstCard.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
       firstCard.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, cancelable: true }));
     });

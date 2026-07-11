@@ -4,6 +4,7 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { TangoRoot } from "../../tango/TangoRoot";
+import { getLogEntries, resetLog } from "../../logging";
 import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
 import { TRANSFIGURE_MARK_END, TRANSFIGURE_MARK_START } from "../../runtime/transfigure-markers";
 import { createDefaultBattleCardStatus } from "../state/create-initial-state";
@@ -50,6 +51,7 @@ beforeEach(() => {
   window.matchMedia = ((query: string) => ({ matches: query.includes("pointer: fine"), media: query,
     onchange: null, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, dispatchEvent: () => false })) as unknown as typeof window.matchMedia;
   resizeCallbacks = [];
+  resetLog();
   globalThis.ResizeObserver = class {
     constructor(callback: ResizeObserverCallback) { resizeCallbacks.push(callback); }
     observe() {} unobserve() {} disconnect() {}
@@ -133,6 +135,29 @@ describe("BattleGameCard", () => {
     expect(marker).not.toBeNull();
     expect(marker?.style.color).toBe("rgb(252, 165, 165)");
     expect(container.querySelector<HTMLElement>('[data-card-stat="spark"] div')?.style.color).not.toBe("rgb(255, 255, 255)");
+    act(() => root.unmount()); container.remove();
+  });
+
+  it("gives a generated figment a stable UUID semantic reveal without using its name as identity", async () => {
+    const generated = instance({
+      battleCardId: "generated-figment-17",
+      definition: { ...instance().definition, cardId: "", name: "Duplicate Display Name" },
+      provenance: { ...instance().provenance, kind: "generated-figment" },
+    });
+    const model = battleGameCardModel(generated);
+    expect(model.cardId).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
+    expect(model.cardId).not.toContain(generated.definition.name);
+    expect(battleGameCardModel({ ...generated, definition: { ...generated.definition, name: "Renamed" } }).cardId).toBe(model.cardId);
+
+    const { container, root } = mount(<BattleGameCard instance={generated} />);
+    const source = container.querySelector<HTMLElement>("[data-game-card-source]")!;
+    expect(source).not.toBeNull();
+    expect(container.querySelector("[data-battle-card-semantic-kind=generated]")).not.toBeNull();
+    expect(container.querySelector('[data-testid="figment-title-bar"]')).not.toBeNull();
+    act(() => { source.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse", pointerId: 1 })); });
+    await act(async () => { await Promise.resolve(); });
+    act(() => resizeCallbacks.forEach((callback) => callback([], {} as ResizeObserver)));
+    await vi.waitFor(() => expect(getLogEntries().some((entry) => entry.event === "tango_entity_reveal_opened" && entry.sourceEntityId === model.cardId)).toBe(true));
     act(() => root.unmount()); container.remove();
   });
 

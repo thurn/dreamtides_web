@@ -36,7 +36,7 @@ Text color roles and letter-spacing. Pick by role (primary/secondary/muted), nev
 | `--text-primary` | `var(--primitive-ink-100)` |  |
 | `--text-secondary` | `var(--primitive-ink-300)` |  |
 | `--text-muted` | `var(--primitive-ink-400)` |  |
-| `--text-faint` | `var(--dt-text-faint)` | #bba994 warm muted |
+| `--text-faint` | `var(--primitive-ink-500)` | #bba994 warm muted |
 | `--text-on-accent` | `#ffffff` |  |
 | `--text-on-card` | `#f6f6f5` | card name on dark card chrome (parent value) |
 | `--text-on-glass` | `var(--primitive-ink-100)` | high-contrast text on blurred glass; never violet/accent |
@@ -226,29 +226,24 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 | `--dt-bg-0` | `var(--primitive-void-800)` |  |
 | `--dt-bg-1` | `var(--primitive-void-700)` |  |
 | `--dt-bg-2` | `var(--primitive-plum-700)` |  |
-| `--dt-surface` | `var(--primitive-plum-700)` | atlas #1a1525 |
 | `--dt-surface-light` | `var(--primitive-plum-500)` |  |
 | `--dt-border` | `rgba(168, 85, 247, 0.22)` |  |
 | `--dt-line` | `rgba(168, 85, 247, 0.18)` |  |
 | `--dt-line-strong` | `rgba(168, 85, 247, 0.42)` |  |
-| `--dt-accent-soft` | `rgba(168, 85, 247, 0.12)` | atlas low-alpha accent fill |
 | `--dt-accent-glow` | `rgba(168, 85, 247, 0.6)` |  |
 | `--dt-gold-glow` | `rgba(250, 204, 21, 0.5)` |  |
 | `--dt-primary` | `var(--primitive-violet-600)` | #7c3aed |
 | `--dt-primary-light` | `var(--primitive-violet-400)` |  |
 | `--dt-accent-strong` | `var(--primitive-violet-400)` | atlas #a855f7 |
-| `--dt-essence` | `var(--primitive-violet-300)` | atlas #c084fc |
 | `--dt-energy` | `var(--primitive-violet-300)` | atlas reuses #c084fc here |
 | `--dt-energy-border` | `var(--primitive-energy-600)` |  |
 | `--dt-gold` | `var(--primitive-gold-600)` | #d4a017 — completed/traveled |
-| `--dt-gold-light` | `var(--primitive-gold-400)` | #fbbf24 |
 | `--dt-spark` | `var(--primitive-spark-500)` | #f3c33f |
 | `--dt-spark-border` | `var(--primitive-spark-600)` |  |
 | `--dt-enemy` | `var(--primitive-ember-500)` |  |
 | `--dt-player` | `var(--primitive-sap-400)` |  |
 | `--dt-text` | `#fff8ec` |  |
 | `--dt-text-dim` | `#d8ccba` |  |
-| `--dt-text-faint` | `#bba994` |  |
 | `--dt-wash-journey` | `radial-gradient(120% 95% at 50% 30%, #241a3a, #140e22 55%, #0a0612)` |  |
 | `--dt-gradient-title` | `linear-gradient(90deg, #f3eefb, #c084fc)` |  |
 | `--color-bg` | `#0a0612` |  |

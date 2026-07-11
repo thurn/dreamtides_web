@@ -199,7 +199,7 @@
   --text-primary: var(--primitive-ink-100);
   --text-secondary: var(--primitive-ink-300);
   --text-muted: var(--primitive-ink-400);
-  --text-faint: var(--dt-text-faint);
+  --text-faint: var(--primitive-ink-500);
   --text-on-accent: #ffffff;
   --text-on-card: #f6f6f5;   /* card name on dark card chrome (parent value) */
   --text-on-glass: var(--primitive-ink-100); /* high-contrast text on blurred glass; never violet/accent */
@@ -275,30 +275,25 @@
   --dt-bg-0: var(--primitive-void-800);
   --dt-bg-1: var(--primitive-void-700);
   --dt-bg-2: var(--primitive-plum-700);
-  --dt-surface: var(--primitive-plum-700);          /* atlas #1a1525 */
   --dt-surface-light: var(--primitive-plum-500);
   /* purple-tinted hairline (a plum-lifted line, not a neutral slate). */
   --dt-border: rgba(168, 85, 247, 0.22);
   --dt-line: rgba(168, 85, 247, 0.18);
   --dt-line-strong: rgba(168, 85, 247, 0.42);
-  --dt-accent-soft: rgba(168, 85, 247, 0.12); /* atlas low-alpha accent fill */
   --dt-accent-glow: rgba(168, 85, 247, 0.6);  /* @kind color — atlas violet node/edge glow */
   --dt-gold-glow: rgba(250, 204, 21, 0.5);    /* @kind color — atlas gold known-badge pulse */
   --dt-primary: var(--primitive-violet-600);        /* #7c3aed */
   --dt-primary-light: var(--primitive-violet-400);
   --dt-accent-strong: var(--primitive-violet-400);  /* atlas #a855f7 */
-  --dt-essence: var(--primitive-violet-300);        /* atlas #c084fc */
   --dt-energy: var(--primitive-violet-300);         /* atlas reuses #c084fc here */
   --dt-energy-border: var(--primitive-energy-600);
   --dt-gold: var(--primitive-gold-600);             /* #d4a017 — completed/traveled */
-  --dt-gold-light: var(--primitive-gold-400);       /* #fbbf24 */
   --dt-spark: var(--primitive-spark-500);           /* #f3c33f */
   --dt-spark-border: var(--primitive-spark-600);
   --dt-enemy: var(--primitive-ember-500);
   --dt-player: var(--primitive-sap-400);
   --dt-text: #fff8ec;
   --dt-text-dim: #d8ccba;
-  --dt-text-faint: #bba994;
 
   /* Atlas-specific gradients & washes (atlas.css `.dream-atlas`) */
   --dt-wash-journey: radial-gradient(120% 95% at 50% 30%, #241a3a, #140e22 55%, #0a0612); /* @kind other */
@@ -342,7 +337,7 @@
      here as the canonical contract.) */
   --text: var(--dt-text);             /* #fff8ec warm near-white */
   --text-dim: var(--dt-text-dim);     /* #d8ccba warm */
-  --text-faint: var(--dt-text-faint); /* #bba994 warm muted */
+  --text-faint: var(--primitive-ink-500); /* #bba994 warm muted */
   --surface: var(--surface-card);     /* #1a1525 plum */
   --line: var(--dt-line);             /* rgba(168,85,247,.18) — purple hairline */
   --line-strong: var(--dt-line-strong);/* rgba(168,85,247,.42) */

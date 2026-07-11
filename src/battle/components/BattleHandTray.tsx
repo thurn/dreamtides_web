@@ -21,9 +21,6 @@ export function BattleHandTray({
   onCardDragEnd,
   onCardDragStart,
   onCardDropToHand,
-  onCardHoverEnd,
-  onCardHoverMove,
-  onCardHoverStart,
   pendingDragCardId = null,
   pendingDragSourceSurface = null,
   compact = false,
@@ -54,9 +51,6 @@ export function BattleHandTray({
   onCardDragEnd?: () => void;
   onCardDragStart?: (battleCardId: string) => void;
   onCardDropToHand?: (sourceSurface: BattleCommandSourceSurface) => void;
-  onCardHoverEnd?: () => void;
-  onCardHoverMove?: (battleCardId: string, event: ReactMouseEvent<HTMLDivElement>) => void;
-  onCardHoverStart?: (battleCardId: string, event: ReactMouseEvent<HTMLDivElement>) => void;
   pendingDragCardId?: string | null;
   pendingDragSourceSurface?: BattleCommandSourceSurface | null;
 }) {
@@ -124,9 +118,6 @@ export function BattleHandTray({
               }}
               onDragStart={canInteract ? () => onCardDragStart?.(battleCardId) : undefined}
               onDragEnd={canInteract ? () => onCardDragEnd?.() : undefined}
-              onMouseEnter={(event) => onCardHoverStart?.(battleCardId, event)}
-              onMouseMove={(event) => onCardHoverMove?.(battleCardId, event)}
-              onMouseLeave={() => onCardHoverEnd?.()}
             />
           );
         })}
@@ -147,9 +138,6 @@ export function BattleHandCard({
   onDoubleClick,
   onDragEnd,
   onDragStart,
-  onMouseEnter,
-  onMouseLeave,
-  onMouseMove,
 }: {
   compact?: boolean;
   draggable?: boolean;
@@ -162,9 +150,6 @@ export function BattleHandCard({
   onDoubleClick?: (event: ReactMouseEvent<HTMLDivElement>) => void;
   onDragEnd?: () => void;
   onDragStart?: () => void;
-  onMouseEnter?: (event: ReactMouseEvent<HTMLDivElement>) => void;
-  onMouseLeave?: (event: ReactMouseEvent<HTMLDivElement>) => void;
-  onMouseMove?: (event: ReactMouseEvent<HTMLDivElement>) => void;
 }) {
   const wrapperClass = [
     "quest-card",
@@ -189,9 +174,6 @@ export function BattleHandCard({
       onContextMenu={onContextMenu}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
-      onMouseEnter={onMouseEnter}
-      onMouseMove={onMouseMove}
-      onMouseLeave={onMouseLeave}
       showAutomationGear={showAutomationGear}
     />
   );
