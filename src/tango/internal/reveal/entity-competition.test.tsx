@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { act } from "react";
-import { createRoot } from "react-dom/client";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { createRoot, type Root } from "react-dom/client";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
 import type { Dreamsign as DreamsignData } from "../../../types/quest";
@@ -17,17 +17,52 @@ const CARD: CardData = { id: CARD_ID, name: asCardName("Fixture Card"), cardNumb
 const SIGN: DreamsignData = { id: "22222222-2222-4222-8222-222222222222", name: "Fixture Sign", effectDescription: "Fixed effect.", isBane: false };
 const SITE: DreamscapeSiteModel = { site: { id: "33333333-3333-4333-8333-333333333333", type: "Battle", isEnhanced: false, isVisited: false }, pos: { x: 50, y: 50 }, index: 0, isBattle: true, isLocked: true, isInteractive: false, label: "Locked Fixture", blurb: "Fixed site detail.", icon: glyph("bxf bx-lock") };
 
+let root: Root;
+let container: HTMLDivElement;
+let resizeCallbacks: ResizeObserverCallback[];
+
+function rect(width: number, height: number): DOMRect {
+  return { x: 40, y: 40, left: 40, top: 40, right: 40 + width, bottom: 40 + height, width, height, toJSON: () => ({}) } as DOMRect;
+}
+
+function activeSources(): HTMLElement[] {
+  return [...container.querySelectorAll<HTMLElement>('[data-reveal-active="true"]')];
+}
+
+function pointer(target: HTMLElement, type: "pointerover" | "pointerout", pointerId: number): void {
+  target.dispatchEvent(new PointerEvent(type, { bubbles: true, pointerType: "mouse", pointerId }));
+}
+
 beforeEach(() => {
   (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
-  window.matchMedia = (() => ({ matches: true, media: "", onchange: null, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, dispatchEvent: () => false })) as unknown as typeof window.matchMedia;
-  globalThis.ResizeObserver = class { constructor(private callback: ResizeObserverCallback) {} observe() { this.callback([], this as unknown as ResizeObserver); } unobserve() {} disconnect() {} } as unknown as typeof ResizeObserver;
-  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ x: 40, y: 40, left: 40, top: 40, right: 140, bottom: 140, width: 100, height: 100, toJSON: () => ({}) } as DOMRect);
+  Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 420, offsetLeft: 0, offsetTop: 0 } });
+  window.matchMedia = ((query: string) => ({ matches: query.includes("pointer: fine"), media: query, onchange: null, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, dispatchEvent: () => false })) as unknown as typeof window.matchMedia;
+  resizeCallbacks = [];
+  globalThis.ResizeObserver = class {
+    constructor(callback: ResizeObserverCallback) { resizeCallbacks.push(callback); }
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  } as unknown as typeof ResizeObserver;
+  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
+    if (this.dataset.revealMeasure === "primary") return rect(340, 360);
+    if (this.dataset.revealMeasure === "secondary") return rect(248, 180);
+    if (this.hasAttribute("data-game-card-source")) return rect(160, 240);
+    return rect(100, 100);
+  });
+  container = document.createElement("div"); document.body.append(container); root = createRoot(container);
+});
+
+afterEach(() => {
+  act(() => root.unmount());
+  document.body.innerHTML = "";
+  vi.restoreAllMocks();
+  delete (globalThis as { ResizeObserver?: typeof ResizeObserver }).ResizeObserver;
 });
 
 describe("cross-family reveal competition", () => {
-  it("keeps one global winner, restores hover after focus, suppresses Escape and unavailable activation, and retains the complete description", async () => {
+  it("enforces replacement, Escape suppression, unavailable activation, and accessible truncation", async () => {
     const unavailableActivation = vi.fn();
-    const container = document.createElement("div"); document.body.append(container); const root = createRoot(container);
     act(() => root.render(<TangoRoot>
       <GameCard model={{ cardId: CARD_ID, displaySnapshot: CARD }} />
       <GlossaryTerm entry={{ term: "Fixture", definition: "Fixed local definition." }} text="Fixture" />
@@ -36,24 +71,48 @@ describe("cross-family reveal competition", () => {
     </TangoRoot>));
     const card = container.querySelector<HTMLElement>("[data-game-card-source]")!;
     const glossary = container.querySelector<HTMLElement>("[data-glossary-term]")!;
+    const dreamsign = container.querySelector<HTMLElement>("[data-dreamsign-id]")!;
     const site = container.querySelector<HTMLElement>("[data-site-id]")!;
+
     act(() => glossary.focus());
-    expect(glossary.dataset.revealActive).toBe("true");
-    act(() => { card.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse", pointerId: 1 })); });
-    await act(async () => { await Promise.resolve(); });
-    expect(card.dataset.revealActive).toBe("true"); expect(glossary.dataset.revealActive).toBe("false");
-    expect(document.querySelectorAll("[data-tango-reveal-group]")).toHaveLength(1);
-    act(() => { card.dispatchEvent(new PointerEvent("pointerout", { bubbles: true, pointerType: "mouse", pointerId: 1 })); });
-    expect(glossary.dataset.revealActive).toBe("true");
+    expect(activeSources()).toEqual([glossary]);
+    act(() => { pointer(dreamsign, "pointerover", 1); });
+    expect(activeSources()).toEqual([dreamsign]);
+    act(() => { pointer(dreamsign, "pointerout", 1); });
+    expect(activeSources()).toEqual([glossary]);
+
     act(() => { window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true })); });
-    expect(document.querySelectorAll("[data-tango-reveal-group]").length).toBeLessThanOrEqual(1);
-    act(() => site.focus());
-    expect(site.dataset.revealActive).toBe("true");
-    act(() => { site.click(); site.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true })); });
+    expect(activeSources()).toHaveLength(0);
+    expect(document.querySelectorAll("[data-tango-reveal-group]")).toHaveLength(0);
+    act(() => { pointer(dreamsign, "pointerover", 2); pointer(dreamsign, "pointerout", 2); });
+    expect(activeSources()).toHaveLength(0);
+    expect(document.querySelectorAll("[data-tango-reveal-group]")).toHaveLength(0);
+    act(() => { glossary.blur(); glossary.focus(); });
+    expect(activeSources()).toEqual([glossary]);
+
+    act(() => {
+      site.click();
+      site.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    });
     expect(unavailableActivation).not.toHaveBeenCalled();
-    const cardDescription = document.getElementById(card.getAttribute("aria-describedby") ?? "")?.textContent ?? "";
-    expect(cardDescription).toContain("Bane"); expect(cardDescription).toContain("Discover"); expect(cardDescription).toContain("Ephemeral");
-    expect(document.querySelectorAll("[data-tango-reveal-group]").length).toBeLessThanOrEqual(1);
-    act(() => root.unmount()); container.remove();
+
+    act(() => { glossary.blur(); pointer(card, "pointerover", 3); });
+    await act(async () => { await Promise.resolve(); });
+    act(() => { for (const callback of resizeCallbacks) callback([], {} as ResizeObserver); });
+    await vi.waitFor(() => expect(document.querySelector("[data-tango-reveal-group]")).not.toBeNull());
+    expect(activeSources()).toEqual([card]);
+    expect(document.querySelectorAll("[data-tango-reveal-group]")).toHaveLength(1);
+    const orderedSecondaries = card.dataset.revealSecondaryTitles?.split("\u001f") ?? [];
+    expect(orderedSecondaries).toEqual(["Bane", "Discover", "Ephemeral"]);
+    const shownSecondaries = document.querySelectorAll('[data-tango-reveal-card="secondary"]');
+    expect(shownSecondaries.length).toBeGreaterThan(0);
+    expect(shownSecondaries.length).toBeLessThan(orderedSecondaries.length);
+    const description = document.getElementById(card.getAttribute("aria-describedby") ?? "")?.textContent ?? "";
+    let previousIndex = -1;
+    for (const title of orderedSecondaries) {
+      const index = description.indexOf(title);
+      expect(index).toBeGreaterThan(previousIndex);
+      previousIndex = index;
+    }
   });
 });

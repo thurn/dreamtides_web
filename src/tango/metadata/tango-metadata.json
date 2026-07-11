@@ -3154,37 +3154,13 @@
       "description": ""
     },
     {
-      "name": "tag",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
-      "name": "accent",
-      "tsType": "TangoColor",
+      "name": "selectionRole",
+      "tsType": "TideSelectionRole",
       "unionMembers": [
-        "danger",
-        "accent",
-        "accent-bright",
-        "accent-strong",
-        "essence",
-        "energy",
-        "energy-bright",
-        "spark",
-        "points",
-        "positive",
-        "selected",
-        "sale",
-        "gold",
-        "gold-light",
-        "text-primary",
-        "text-secondary",
-        "text-muted",
-        "text-faint",
-        "text-on-accent",
-        "white"
+        "starter",
+        "facet-drawn",
+        "facet-fill",
+        "neutral-fill"
       ],
       "required": true,
       "defaultValue": null,

@@ -3,17 +3,26 @@ import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import { richText } from "../card/rich-text";
-import type { TangoColor } from "../../primitives/color";
 
 const TIDES_DEFINITION = "Pools of cards you will see during the quest. Different tides are used every time you play.";
 
+export type TideSelectionRole = "starter" | "facet-drawn" | "facet-fill" | "neutral-fill";
+
+const SELECTION_PRESENTATION: Record<TideSelectionRole, { readonly tag: string; readonly accent: string }> = {
+  starter: { tag: "Signature", accent: "#34c759" },
+  "facet-drawn": { tag: "Theme · drawn", accent: "#2d8a80" },
+  "facet-fill": { tag: "Theme · fill", accent: "#7c8a86" },
+  "neutral-fill": { tag: "Broad", accent: "#5b6b78" },
+};
+
 export interface TideSelectionButtonProps {
-  id: string; label: string; description: string; tag: string; accent: TangoColor;
+  id: string; label: string; description: string; selectionRole: TideSelectionRole;
   active: boolean; joined: boolean; onActivate: () => void;
 }
 
 /** Selectable provenance tide with one owner for reveal and activation. */
-export function TideSelectionButton({ id, label, description, tag, accent, active, joined, onActivate }: TideSelectionButtonProps) {
+export function TideSelectionButton({ id, label, description, selectionRole, active, joined, onActivate }: TideSelectionButtonProps) {
+  const { tag, accent } = SELECTION_PRESENTATION[selectionRole];
   const binding = useRevealSource({
     identity: { entityType: "tide", entityId: revealEntityId("tide", id) },
     spec: {
@@ -35,7 +44,7 @@ export function TideSelectionButton({ id, label, description, tag, accent, activ
       onPointerDown={(event) => { lastPointerType.current = event.pointerType; pointerDown?.(event); }}
       onClick={() => { if (lastPointerType.current !== "touch") onActivate(); }}
       onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onActivate(); } }} style={style}>
-      <span aria-hidden="true" style={{ width: 8, height: 8, borderRadius: 999, background: accent, opacity: joined ? 1 : 0.4 }} />
+      <span aria-hidden="true" data-tide-selection-mark={selectionRole} style={{ width: 8, height: 8, borderRadius: 999, background: accent, opacity: joined ? 1 : 0.4 }} />
       {label}
       <span style={{ fontSize: "0.64rem", fontWeight: 600, opacity: 0.7, letterSpacing: "0.02em" }}>{tag}</span>
     </Pressable>

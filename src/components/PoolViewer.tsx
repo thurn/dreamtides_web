@@ -6,7 +6,6 @@ import type {
   ResolvedDreamcallerPackage,
   SeedProvenanceSummary,
   Tides4ProvenanceSummary,
-  Tides4TideSelection,
   Tides4TideSummary,
 } from "../types/content";
 import type { DraftState } from "../types/draft";
@@ -27,7 +26,6 @@ import {
 } from "./card-browser/card-browser-filter";
 import { CardOverlay } from "./CardOverlay";
 import { TideSelectionButton } from "../tango/components/hud/TideSelectionButton";
-import type { TangoColor } from "../tango/primitives/color";
 
 type PoolViewerSource =
   | "run"
@@ -59,20 +57,6 @@ const EMPTY_BASE_MESSAGES: Record<PoolViewerSource, string> = {
   history: "The replay record has no pick history.",
 };
 
-/**
- * Per-selection display metadata for the run's tides: a short tag and an accent
- * colour distinguishing the always-joined signature tide, the random theme draw
- * (the variety engine), the on-theme fill, and the broad neutral tail.
- */
-const TIDE_SELECTION_META: Record<
-  Tides4TideSelection,
-  { tag: string; accent: TangoColor }
-> = {
-  starter: { tag: "Signature", accent: "#34c759" },
-  "facet-drawn": { tag: "Theme · drawn", accent: "#2d8a80" },
-  "facet-fill": { tag: "Theme · fill", accent: "#7c8a86" },
-  "neutral-fill": { tag: "Broad", accent: "#5b6b78" },
-};
 type FloatingPosition = { x: number; y: number };
 type FloatingDragState = { offsetX: number; offsetY: number } | null;
 
@@ -1059,7 +1043,6 @@ function TideDeckNav({
       style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}
     >
       {tides.map((tide) => {
-        const meta = TIDE_SELECTION_META[tide.selection];
         const active = tide.id === selectedTideId;
         return (
           <TideSelectionButton
@@ -1067,8 +1050,7 @@ function TideDeckNav({
             id={tide.id}
             label={tide.displayName ?? tide.name}
             description={tide.displayDescription ?? tide.name}
-            tag={meta.tag}
-            accent={meta.accent}
+            selectionRole={tide.selection}
             active={active}
             joined={tide.joined}
             onActivate={() => onSelect(tide.id)}

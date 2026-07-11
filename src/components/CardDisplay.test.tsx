@@ -422,7 +422,7 @@ describe("CardDisplay", () => {
     });
   });
 
-  it("wraps the energy orb in a HoverPopover tooltip anchor", () => {
+  it("registers the energy orb as a coordinator-backed semantic reveal source", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ energyCost: 4 })} />,
     );
@@ -431,17 +431,17 @@ describe("CardDisplay", () => {
       "[data-card-stat=\"energy\"]",
     );
     expect(energyOrb).not.toBeNull();
-    // CardStatOrb wraps the orb in a HoverPopover span when a tooltip is set;
-    // without a tooltip the orb would be the direct child of the positioning div.
+    // CardStatOrb promotes the visual orb into its named semantic reveal source.
     const wrapper = energyOrb?.parentElement;
     expect(wrapper?.tagName.toLowerCase()).toBe("span");
+    expect(wrapper?.dataset.revealEntityType).toBe("card-energy-stat");
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("wraps the spark orb in a HoverPopover tooltip anchor", () => {
+  it("registers the spark orb as a coordinator-backed semantic reveal source", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ cardType: "Character", spark: 3 })} />,
     );
@@ -452,6 +452,7 @@ describe("CardDisplay", () => {
     expect(sparkOrb).not.toBeNull();
     const wrapper = sparkOrb?.parentElement;
     expect(wrapper?.tagName.toLowerCase()).toBe("span");
+    expect(wrapper?.dataset.revealEntityType).toBe("card-spark-stat");
 
     act(() => {
       root.unmount();
