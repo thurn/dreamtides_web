@@ -24,6 +24,7 @@ import "./tango/primitives/legibility.css";
 import CardEditorApp from "./editor/CardEditorApp";
 import { verifyFonts } from "./runtime/verify-fonts";
 import { applyDeviceFrameFromSearch } from "./runtime/device-frame";
+import { TangoRoot } from "./tango/TangoRoot";
 
 // Screenshot mock-ups load the app in an iframe with no physical display
 // cutout, so `env(safe-area-inset-*)` reads 0. When the device-screenshot tool
@@ -40,7 +41,11 @@ void verifyFonts();
 const root = createRoot(document.getElementById("root")!);
 
 function renderStrict(children: ReactNode) {
-  root.render(<StrictMode>{children}</StrictMode>);
+  root.render(
+    <StrictMode>
+      <TangoRoot>{children}</TangoRoot>
+    </StrictMode>,
+  );
 }
 
 const pathname = window.location.pathname.replace(/\/+$/, "");
