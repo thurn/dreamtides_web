@@ -1,0 +1,12 @@
+{
+  "name": "TangoMvp.PlayModeTests",
+  "rootNamespace": "TangoMvp.Tests.PlayMode",
+  "references": [
+    "TangoMvp.Runtime",
+    "Unity.InputSystem",
+    "Unity.InputSystem.TestFramework"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}
