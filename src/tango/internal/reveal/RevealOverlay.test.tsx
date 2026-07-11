@@ -1,0 +1,109 @@
+// @vitest-environment jsdom
+
+import { act } from "react";
+import { createRoot, type Root } from "react-dom/client";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { RevealOverlay, type RevealOverlayActive } from "./RevealOverlay";
+import { makeTextRevealSpec } from "./test-utils";
+import { asCardId, asCardName } from "../../../types/card-identity";
+import type { RevealSpec } from "./model";
+
+const UUID = "00000000-0000-4000-8000-000000000001";
+let root: Root;
+let container: HTMLDivElement;
+
+function active(overrides: Partial<RevealOverlayActive> = {}): RevealOverlayActive {
+  const source = document.createElement("button");
+  source.getBoundingClientRect = () => ({ x: 400, y: 250, left: 400, top: 250, right: 500, bottom: 300, width: 100, height: 50, toJSON: () => ({}) });
+  return {
+    source: { identity: { entityType: "test", entityId: UUID }, registrationId: "one" },
+    spec: makeTextRevealSpec("Primary", "Body", ["First", "Second"]), element: source,
+    reason: "hover", sourceShowsCompleteGameCard: false,
+    ...overrides,
+  };
+}
+
+beforeEach(() => {
+  (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
+  Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 300, offsetLeft: 0, offsetTop: 0 } });
+  window.matchMedia = vi.fn().mockReturnValue({ matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() });
+  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
+    if (this.dataset.revealMeasure === "primary") return { x: 0, y: 0, left: 0, top: 0, right: 100, bottom: 100, width: 100, height: 100, toJSON: () => ({}) };
+    if (this.dataset.revealMeasure === "secondary") {
+      const height = this.dataset.revealIndex === "0" ? 80 : 90;
+      return { x: 0, y: 0, left: 0, top: 0, right: 80, bottom: height, width: 80, height, toJSON: () => ({}) };
+    }
+    return { x: 0, y: 0, left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0, toJSON: () => ({}) };
+  });
+  container = document.createElement("div"); document.body.append(container); root = createRoot(container);
+});
+
+afterEach(() => { act(() => root.unmount()); document.body.innerHTML = ""; vi.restoreAllMocks(); });
+
+describe("RevealOverlay", () => {
+  it("uses one highest-layer body portal that is pointer-transparent throughout", () => {
+    act(() => root.render(<RevealOverlay active={active()} />));
+    const portal = document.body.querySelector<HTMLElement>(":scope > [data-tango-reveal-portal]")!;
+    expect(portal).not.toBeNull();
+    expect(portal.style.zIndex).toBe("var(--layer-reveal)");
+    expect(portal.style.pointerEvents).toBe("none");
+    expect([...portal.querySelectorAll<HTMLElement>("*")].every((node) => getComputedStyle(node).pointerEvents === "none")).toBe(true);
+    expect(document.querySelectorAll("[data-tango-reveal-portal]")).toHaveLength(1);
+  });
+
+  it("measures invisibly, top-aligns the chosen complete prefix, and omits overflow", () => {
+    act(() => root.render(<RevealOverlay active={active()} />));
+    const group = document.querySelector<HTMLElement>("[data-tango-reveal-group]")!;
+    const cards = [...group.querySelectorAll<HTMLElement>("[data-tango-reveal-card]")];
+    expect(group.style.visibility).toBe("visible");
+    expect(cards).toHaveLength(2);
+    expect(cards[0].style.top).toBe(cards[1].style.top);
+    expect(document.querySelector("[data-reveal-measurement-layer]")).toBeNull();
+  });
+
+  it("has no opacity, scale, or travel animation and disappears in one render frame", () => {
+    act(() => root.render(<RevealOverlay active={active()} />));
+    const group = document.querySelector<HTMLElement>("[data-tango-reveal-group]")!;
+    expect(group.style.opacity).toBe("");
+    expect(group.style.transform).toBe("");
+    expect(group.style.transition).toBe("none");
+    act(() => root.render(<RevealOverlay active={null} />));
+    expect(document.querySelector("[data-tango-reveal-portal]")).toBeNull();
+  });
+
+  it("keeps accessible descriptions on the focus source rather than announcing the visual copy", () => {
+    act(() => root.render(<RevealOverlay active={active()} />));
+    const portal = document.querySelector<HTMLElement>("[data-tango-reveal-portal]")!;
+    expect(portal.getAttribute("aria-hidden")).toBe("true");
+    expect(portal.querySelector("[tabindex]")).toBeNull();
+  });
+
+  it("uses the sole 160ms GameCard return transition, skipped under reduced motion", () => {
+    const returning = active({ returningGameCard: true });
+    act(() => root.render(<RevealOverlay active={returning} />));
+    expect(document.querySelector<HTMLElement>("[data-tango-reveal-group]")!.style.transition).toContain("160ms");
+    window.matchMedia = vi.fn().mockReturnValue({ matches: true, addEventListener: vi.fn(), removeEventListener: vi.fn() });
+    act(() => root.render(<RevealOverlay active={{ ...returning, source: { ...returning.source, registrationId: "two" } }} />));
+    expect(document.querySelector<HTMLElement>("[data-tango-reveal-group]")!.style.transition).toBe("none");
+  });
+
+  it("keeps a desktop GameCard source and reading copy visually unique", () => {
+    const cardId = asCardId(UUID);
+    const spec: RevealSpec = { primary: { kind: "gameCard", cardId, displaySnapshot: {
+      id: cardId, name: asCardName("Reading Card"), cardNumber: 1, cardType: "Event", subtype: "",
+      isStarter: false, rarity: "Special", energyCost: 1, spark: null, isFast: false, renderedText: "Draw a card.",
+      imageNumber: 1, artOwned: false,
+    } }, secondaries: [] };
+    const value = active({ spec });
+    act(() => root.render(<RevealOverlay active={value} />));
+    expect(value.element.style.visibility).toBe("hidden");
+    act(() => root.render(<RevealOverlay active={{ ...value, returningGameCard: true }} />));
+    const returningCard = document.querySelector<HTMLElement>("[data-tango-reveal-card=\"primary\"]")!;
+    expect(returningCard.style.left).toBe("400px");
+    expect(returningCard.style.top).toBe("250px");
+    expect(returningCard.style.width).toBe("100px");
+    expect(returningCard.style.transition).toContain("160ms");
+    act(() => root.render(<RevealOverlay active={null} />));
+    expect(value.element.style.visibility).toBe("");
+  });
+});

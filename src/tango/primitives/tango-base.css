@@ -45,3 +45,11 @@
   -webkit-user-select: text;
   user-select: text;
 }
+
+/* The shared reveal portal is mounted under body, outside the Tango subtree.
+   Pointer transparency is structural: descendants cannot become hover bridges
+   or consume a release/click even if a rendered card adds local interaction. */
+[data-tango-reveal-portal],
+[data-tango-reveal-portal] * {
+  pointer-events: none !important;
+}

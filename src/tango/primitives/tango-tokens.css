@@ -460,6 +460,9 @@
    motion (no harsh bounces). */
 
 .tango {
+  /* Shared entity reveals sit above every application-owned overlay. */
+  --layer-reveal: 2147483647; /* @kind other */
+
   /* ---- The one press-down factor ----
      Every control — JS <Pressable>/usePress AND CSS-only controls via :active —
      compresses by EXACTLY this on press. Always < 1 (compress, never enlarge):

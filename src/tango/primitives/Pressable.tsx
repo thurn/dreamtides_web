@@ -209,6 +209,9 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
       onPointerCancel,
     });
     const reducedMotion = usePrefersReducedMotion();
+    const measuredRevealFeedback = (rest as Record<string, unknown>)["data-reveal-feedback"] === "measured";
+    const pressScale = measuredRevealFeedback ? "var(--reveal-press-scale)" : String(PRESS_SCALE);
+    const hoverScale = measuredRevealFeedback ? "var(--reveal-hover-scale)" : String(HOVER_SCALE);
 
     // `as` is a runtime-chosen element type (intrinsic tag or component), so
     // its exact prop shape isn't known statically — resolving it against
@@ -259,14 +262,12 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
           // control compresses); disabled suppresses both.
           transform: disabled
             ? "none"
-            : pressed
-              ? pressFeedback === "stationary"
-                ? hovered
-                  ? `scale(${HOVER_SCALE})`
-                  : "none"
-                : `scale(${PRESS_SCALE})`
+            : pressFeedback === "stationary"
+              ? "none"
+              : pressed
+                ? `scale(${pressScale})`
               : hovered
-                ? `scale(${HOVER_SCALE})`
+                ? `scale(${hoverScale})`
                 : "none",
           ...style,
           ...(disabled ? { pointerEvents: "none" } : {}),

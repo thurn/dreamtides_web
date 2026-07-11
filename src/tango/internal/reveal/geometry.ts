@@ -1,0 +1,211 @@
+import type { RevealPoint, RevealReason, RevealRect } from "./model";
+import type { VisualViewportSnapshot } from "./viewport";
+
+const MOBILE_WIDTH_FRACTION = 0.45;
+const CARD_GAP = 10;
+const DESKTOP_SOURCE_GAP = 14;
+const TOUCH_RADIUS = 24;
+const DESKTOP_GAME_CARD_WIDTH = 340;
+
+export interface RevealSize { readonly width: number; readonly height: number }
+export interface RevealPlacementInput {
+  readonly viewport: VisualViewportSnapshot;
+  readonly reason: RevealReason;
+  readonly primaryKind: "gameCard" | "infoCard";
+  readonly sourceRect: RevealRect;
+  readonly touchPoint?: RevealPoint;
+  readonly primarySize: RevealSize;
+  readonly secondarySizes: readonly RevealSize[];
+  readonly sourceShowsCompleteGameCard: boolean;
+}
+
+export interface RevealPlacementDecision {
+  readonly family: string;
+  readonly orientation: "primary-left" | "primary-right";
+  readonly primaryRect: RevealRect;
+  readonly secondaryRects: readonly RevealRect[];
+  readonly shownSecondaryCount: number;
+  readonly droppedSecondaryCount: number;
+  readonly pressInPlace: boolean;
+  readonly sideFallback: boolean;
+  readonly secondaryTruncation: boolean;
+  readonly bestEffortPrimaryOverlap: boolean;
+  readonly circleClearance?: number;
+}
+
+export function fitSecondaryPrefix(sizes: readonly RevealSize[], availableHeight: number, gap = CARD_GAP): number {
+  let used = 0;
+  let count = 0;
+  for (const size of sizes) {
+    const next = used + (count === 0 ? 0 : gap) + size.height;
+    if (next > availableHeight) break;
+    used = next;
+    count += 1;
+  }
+  return count;
+}
+
+function scaled(size: RevealSize, width: number): RevealSize {
+  return { width, height: size.height * width / Math.max(1, size.width) };
+}
+
+function rect(x: number, y: number, size: RevealSize): RevealRect {
+  return { x, y, width: size.width, height: size.height };
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, value));
+}
+
+function distanceFromCircle(card: RevealRect, point: RevealPoint): number {
+  const nearestX = clamp(point.x, card.x, card.x + card.width);
+  const nearestY = clamp(point.y, card.y, card.y + card.height);
+  return Math.hypot(point.x - nearestX, point.y - nearestY) - TOUCH_RADIUS;
+}
+
+function secondaryRectsAt(sizes: readonly RevealSize[], count: number, x: number, y: number): readonly RevealRect[] {
+  let top = y;
+  return sizes.slice(0, count).map((size) => {
+    const value = rect(x, top, size);
+    top += size.height + CARD_GAP;
+    return value;
+  });
+}
+
+function result(input: RevealPlacementInput, values: Omit<RevealPlacementDecision, "shownSecondaryCount" | "droppedSecondaryCount" | "secondaryTruncation">): RevealPlacementDecision {
+  const shownSecondaryCount = values.secondaryRects.length;
+  return Object.freeze({
+    ...values,
+    primaryRect: Object.freeze(values.primaryRect),
+    secondaryRects: Object.freeze(values.secondaryRects.map((cardRect) => Object.freeze(cardRect))),
+    shownSecondaryCount,
+    droppedSecondaryCount: input.secondarySizes.length - shownSecondaryCount,
+    secondaryTruncation: shownSecondaryCount < input.secondarySizes.length,
+  });
+}
+
+function mobilePlacement(input: RevealPlacementInput): RevealPlacementDecision {
+  const { viewport, touchPoint, sourceRect } = input;
+  const cardWidth = viewport.width * MOBILE_WIDTH_FRACTION;
+  const primarySize = scaled(input.primarySize, cardWidth);
+  const secondarySizes = input.secondarySizes.map((size) => scaled(size, cardWidth));
+  const safeTop = viewport.offsetTop + viewport.safeArea.top;
+  const safeBottom = viewport.offsetTop + viewport.height - viewport.safeArea.bottom;
+  const safeLeft = viewport.offsetLeft + viewport.safeArea.left;
+  const safeRight = viewport.offsetLeft + viewport.width - viewport.safeArea.right;
+  const pressInPlace = input.reason === "press" && input.primaryKind === "gameCard"
+    && input.sourceShowsCompleteGameCard && sourceRect.width >= cardWidth * 0.9;
+
+  if (pressInPlace) {
+    const rightX = sourceRect.x + sourceRect.width + CARD_GAP;
+    const orientation = rightX + cardWidth <= safeRight ? "primary-left" : "primary-right";
+    const secondaryX = orientation === "primary-left" ? rightX : sourceRect.x - CARD_GAP - cardWidth;
+    const count = fitSecondaryPrefix(secondarySizes, safeBottom - sourceRect.y);
+    return result(input, { family: "mobile-press-in-place", orientation, primaryRect: sourceRect,
+      secondaryRects: secondaryRectsAt(secondarySizes, count, secondaryX, sourceRect.y), pressInPlace: true,
+      sideFallback: orientation === "primary-right", bestEffortPrimaryOverlap: false });
+  }
+
+  const hasNotionalPair = input.primaryKind === "gameCard" || secondarySizes.length > 0;
+  const preferredPrimaryX = safeLeft;
+  const oppositePrimaryX = safeRight - cardWidth;
+  const anchorX = sourceRect.x + sourceRect.width / 2;
+  let orientation: "primary-left" | "primary-right" = "primary-left";
+  let primaryX = hasNotionalPair ? preferredPrimaryX : clamp(anchorX - cardWidth / 2, safeLeft, safeRight - cardWidth);
+  const targetBottom = input.reason === "press" && touchPoint !== undefined ? touchPoint.y - TOUCH_RADIUS : sourceRect.y - CARD_GAP;
+  const desiredTop = targetBottom - primarySize.height;
+  let primaryY = Math.max(safeTop, desiredTop);
+  let family = input.reason === "focus" ? "mobile-focus-above" : "mobile-touch-up";
+  let bestEffortPrimaryOverlap = false;
+
+  if (desiredTop < safeTop) {
+    primaryY = safeTop;
+    family = input.reason === "focus" ? "mobile-focus-top" : "mobile-touch-top";
+    const pointX = touchPoint?.x ?? anchorX;
+    if (hasNotionalPair) {
+      orientation = pointX < viewport.offsetLeft + viewport.width / 2 ? "primary-right" : "primary-left";
+      primaryX = orientation === "primary-left" ? preferredPrimaryX : oppositePrimaryX;
+    } else {
+      primaryX = pointX < viewport.offsetLeft + viewport.width / 2 ? oppositePrimaryX : preferredPrimaryX;
+      orientation = primaryX === preferredPrimaryX ? "primary-left" : "primary-right";
+    }
+  }
+
+  const primaryRect = rect(primaryX, primaryY, primarySize);
+  const circleClearance = input.reason === "press" && touchPoint !== undefined ? distanceFromCircle(primaryRect, touchPoint) : undefined;
+  if (circleClearance !== undefined && circleClearance < 0 && touchPoint !== undefined) {
+    bestEffortPrimaryOverlap = true;
+    family = "mobile-touch-corner";
+    orientation = touchPoint.x < viewport.offsetLeft + viewport.width / 2 ? "primary-right" : "primary-left";
+    primaryX = orientation === "primary-left" ? preferredPrimaryX : oppositePrimaryX;
+  }
+  const finalPrimary = rect(primaryX, primaryY, primarySize);
+  const secondaryX = orientation === "primary-left" ? safeRight - cardWidth : safeLeft;
+  const horizontalPairFits = safeRight - safeLeft >= cardWidth * 2 + CARD_GAP;
+  const secondaryCount = horizontalPairFits ? fitSecondaryPrefix(secondarySizes, safeBottom - primaryY) : 0;
+  return result(input, {
+    family, orientation, primaryRect: finalPrimary,
+    secondaryRects: secondaryRectsAt(secondarySizes, secondaryCount, secondaryX, primaryY),
+    pressInPlace: false, sideFallback: family.includes("top") || family.includes("corner"),
+    bestEffortPrimaryOverlap,
+    ...(touchPoint === undefined ? {} : { circleClearance: distanceFromCircle(finalPrimary, touchPoint) }),
+  });
+}
+
+function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision {
+  const { viewport, sourceRect } = input;
+  const safeTop = viewport.offsetTop + viewport.safeArea.top;
+  const safeBottom = viewport.offsetTop + viewport.height - viewport.safeArea.bottom;
+  const safeLeft = viewport.offsetLeft + viewport.safeArea.left;
+  const safeRight = viewport.offsetLeft + viewport.width - viewport.safeArea.right;
+  const primaryWidth = input.primaryKind === "gameCard" ? Math.max(DESKTOP_GAME_CARD_WIDTH, sourceRect.width) : input.primarySize.width;
+  const primarySize = scaled(input.primarySize, primaryWidth);
+  const secondarySizes = input.secondarySizes;
+  const secondaryWidth = secondarySizes[0]?.width ?? 0;
+  if (input.primaryKind === "gameCard") {
+    const primaryX = clamp(sourceRect.x + sourceRect.width / 2 - primaryWidth / 2, safeLeft, safeRight - primaryWidth);
+    const primaryY = clamp(sourceRect.y + sourceRect.height / 2 - primarySize.height / 2, safeTop, Math.max(safeTop, safeBottom - primarySize.height));
+    const rightX = primaryX + primaryWidth + CARD_GAP;
+    const leftX = primaryX - CARD_GAP - secondaryWidth;
+    const canUseRight = secondarySizes.length > 0 && rightX + secondaryWidth <= safeRight;
+    const canUseLeft = secondarySizes.length > 0 && leftX >= safeLeft;
+    const secondaryX = canUseRight ? rightX : leftX;
+    const count = canUseRight || canUseLeft ? fitSecondaryPrefix(secondarySizes, safeBottom - primaryY) : 0;
+    return result(input, {
+      family: "desktop-game-card-reading",
+      orientation: canUseRight || !canUseLeft ? "primary-left" : "primary-right",
+      primaryRect: rect(primaryX, primaryY, primarySize),
+      secondaryRects: secondaryRectsAt(secondarySizes, count, secondaryX, primaryY),
+      pressInPlace: false,
+      sideFallback: !canUseRight && canUseLeft,
+      bestEffortPrimaryOverlap: false,
+    });
+  }
+  const groupWidth = primaryWidth + (secondarySizes.length > 0 ? CARD_GAP + secondaryWidth : 0);
+  const aboveY = sourceRect.y - DESKTOP_SOURCE_GAP - primarySize.height;
+  if (aboveY >= safeTop) {
+    const x = clamp(sourceRect.x + sourceRect.width / 2 - groupWidth / 2, safeLeft, safeRight - groupWidth);
+    const count = fitSecondaryPrefix(secondarySizes, safeBottom - aboveY);
+    return result(input, { family: "desktop-above", orientation: "primary-left", primaryRect: rect(x, aboveY, primarySize),
+      secondaryRects: secondaryRectsAt(secondarySizes, count, x + primaryWidth + CARD_GAP, aboveY), pressInPlace: false,
+      sideFallback: false, bestEffortPrimaryOverlap: false });
+  }
+  const rightSpace = safeRight - (sourceRect.x + sourceRect.width + DESKTOP_SOURCE_GAP);
+  const leftSpace = sourceRect.x - DESKTOP_SOURCE_GAP - safeLeft;
+  const useRight = rightSpace >= groupWidth || rightSpace >= leftSpace;
+  const orientation = useRight ? "primary-left" : "primary-right";
+  const x = useRight
+    ? clamp(sourceRect.x + sourceRect.width + DESKTOP_SOURCE_GAP, safeLeft, Math.max(safeLeft, safeRight - groupWidth))
+    : clamp(sourceRect.x - DESKTOP_SOURCE_GAP - groupWidth, safeLeft, Math.max(safeLeft, safeRight - groupWidth));
+  const y = clamp(sourceRect.y, safeTop, Math.max(safeTop, safeBottom - primarySize.height));
+  const primaryX = orientation === "primary-left" ? x : x + (secondarySizes.length > 0 ? secondaryWidth + CARD_GAP : 0);
+  const secondaryX = orientation === "primary-left" ? primaryX + primaryWidth + CARD_GAP : x;
+  const count = fitSecondaryPrefix(secondarySizes, safeBottom - y);
+  return result(input, { family: useRight ? "desktop-side-right" : "desktop-side-left", orientation,
+    primaryRect: rect(primaryX, y, primarySize), secondaryRects: secondaryRectsAt(secondarySizes, count, secondaryX, y),
+    pressInPlace: false, sideFallback: true, bestEffortPrimaryOverlap: groupWidth > Math.max(rightSpace, leftSpace) });
+}
+
+export function selectRevealPlacement(input: RevealPlacementInput): RevealPlacementDecision {
+  return input.viewport.layout === "mobile" ? mobilePlacement(input) : desktopPlacement(input);
+}

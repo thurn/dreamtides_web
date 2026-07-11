@@ -276,6 +276,7 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 
 | Token | Value | Notes |
 | --- | --- | --- |
+| `--layer-reveal` | `2147483647` |  |
 | `--hover-scale` | `1.03` |  |
 | `--node-hover-scale` | `1.08` |  |
 | `--glass-fill` | `rgba(14, 14, 16, 0.54)` |  |

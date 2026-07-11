@@ -18,6 +18,7 @@
 
 import { useEffect, useState } from "react";
 import { parseDeviceFrame } from "../../../runtime/device-frame";
+import { SAFE_AREA_INSET_PROPERTIES } from "../../primitives/safe-area";
 
 const GUIDE = "rgba(103, 232, 249, 0.9)";
 
@@ -144,7 +145,7 @@ export function DeviceFrameDemo() {
         </p>
         <dl style={{ fontSize: 13, lineHeight: 1.7, marginTop: 16 }}>
           <FrameRow label="safe-area top" cssVar="--safe-area-inset-top" />
-          <FrameRow label="safe-area bottom" cssVar="--safe-area-inset-bottom" />
+          <FrameRow label="safe-area bottom" cssVar={SAFE_AREA_INSET_PROPERTIES.bottom} />
           {hasCutout ? (
             <>
               <FrameRow label="cutout top" cssVar="--display-cutout-top" />

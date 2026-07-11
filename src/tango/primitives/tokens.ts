@@ -234,6 +234,7 @@ export const TOKENS = {
   "--device-h": { var: "var(--device-h)", value: "844px" },
   "--safe-top": { var: "var(--safe-top)", value: "59px" },
   "--safe-bottom": { var: "var(--safe-bottom)", value: "34px" },
+  "--layer-reveal": { var: "var(--layer-reveal)", value: "2147483647", kind: "other" },
   "--press-scale": { var: "var(--press-scale)", value: "0.9", kind: "other" },
   "--hover-scale": { var: "var(--hover-scale)", value: "1.03", kind: "other" },
   "--node-hover-scale": { var: "var(--node-hover-scale)", value: "1.08", kind: "other" },

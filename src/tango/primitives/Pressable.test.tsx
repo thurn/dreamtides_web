@@ -99,6 +99,13 @@ describe("Pressable press feedback", () => {
     expect(el.style.transform).toBe("none");
   });
 
+  it("keeps readable rules-copy reveal surfaces stationary on pointer hover", () => {
+    const { container } = mountInto(<Pressable as="span" pressFeedback="stationary">Read</Pressable>);
+    const el = container.querySelector("span")!;
+    act(() => { el.dispatchEvent(new MouseEvent("pointerover", { bubbles: true })); });
+    expect(el.style.transform).toBe("none");
+  });
+
   it("disabled suppresses the press animation entirely", () => {
     const { container } = mountInto(
       <Pressable as="span" disabled>
@@ -115,5 +122,18 @@ describe("Pressable press feedback", () => {
     // Anchors _pressFeedbackTypeGuards so it is not dead code; its value is the
     // type-level assertions above, verified by `tsc`, not this runtime check.
     expect(typeof _pressFeedbackTypeGuards).toBe("function");
+  });
+
+  it("consumes the interaction-stable measured scale supplied by a reveal source", () => {
+    const { container } = mountInto(
+      <Pressable
+        as="button"
+        data-reveal-feedback="measured"
+        style={{ "--reveal-press-scale": "0.94", "--reveal-hover-scale": "1.018" } as React.CSSProperties}
+      >x</Pressable>,
+    );
+    const el = container.querySelector("button")!;
+    pressDown(el);
+    expect(el.style.transform).toBe("scale(var(--reveal-press-scale))");
   });
 });
