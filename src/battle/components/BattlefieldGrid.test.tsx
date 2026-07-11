@@ -13,6 +13,7 @@ import {
   makeBattleTestState,
 } from "../test-support";
 import { BattlefieldGrid } from "./BattlefieldGrid";
+import { TangoRoot } from "../../tango/TangoRoot";
 
 function createState() {
   const battleInit = createBattleInit({
@@ -82,6 +83,37 @@ afterEach(() => {
 });
 
 describe("BattlefieldGrid", () => {
+  it("gives an occupied slot one activation owner for mouse, keyboard, and touch", () => {
+    const state = createState();
+    const battleCardId = state.sides.player.frontRank.F0;
+    if (battleCardId === null) throw new Error("expected occupied fixture slot");
+    const original = state.cardInstances[battleCardId];
+    state.cardInstances[battleCardId] = { ...original, definition: { ...original.definition,
+      cardId: "11111111-1111-4111-8111-111111111111" } };
+    const cardClicks = vi.fn();
+    const slotClicks = vi.fn();
+    const container = document.createElement("div"); document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<TangoRoot><BattlefieldGrid side="player" zone="frontRank" state={state}
+      canInteract handSelectionSide={null} pendingDragCardId={null} selectedCardId={null}
+      selectedSlot={null} selectionAnchor={null} onCardClick={cardClicks} onSlotClick={slotClicks} /></TangoRoot>));
+    const source = container.querySelector<HTMLElement>(`[data-battle-card-id="${battleCardId}"] [data-game-card-source]`);
+    expect(source).not.toBeNull();
+    expect(source?.closest("button")).toBeNull();
+
+    act(() => { source?.click(); });
+    expect(cardClicks).toHaveBeenCalledTimes(1);
+    cardClicks.mockClear();
+    act(() => { source?.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true })); });
+    expect(cardClicks).toHaveBeenCalledTimes(1);
+    cardClicks.mockClear();
+    act(() => { source?.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, pointerType: "touch", pointerId: 4 })); });
+    act(() => { source?.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, pointerType: "touch", pointerId: 4 })); });
+    expect(cardClicks).toHaveBeenCalledTimes(1);
+    expect(slotClicks).not.toHaveBeenCalled();
+    act(() => root.unmount()); container.remove();
+  });
+
   it("makes battlefield card tiles non-draggable and slots inert when canInteract is false", () => {
     // canInteract is false while the AI holds an un-approved action proposal: the
     // human must not free-edit the board, only drive the turn via the proposal
@@ -161,7 +193,9 @@ describe("BattlefieldGrid", () => {
     const { cardClicks, container, root, slotClicks } = mount("backRank");
     // With B1 occupied the back rank renders its 3-slot minimum (B0, B1, B2);
     // B2 is an empty rendered slot.
-    const occupied = container.querySelector<HTMLElement>('[data-slot-id="player-backRank-B1"]');
+    const occupied = container.querySelector<HTMLElement>(
+      '[data-slot-id="player-backRank-B1"] [data-battle-card-id]',
+    );
     const empty = container.querySelector<HTMLElement>('[data-slot-id="player-backRank-B2"]');
 
     if (occupied === null || empty === null) {

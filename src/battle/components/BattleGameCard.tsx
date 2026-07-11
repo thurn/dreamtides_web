@@ -1,10 +1,29 @@
-import type { CSSProperties, DragEventHandler, MouseEventHandler } from "react";
+import { useRef, type CSSProperties, type DragEventHandler, type MouseEventHandler } from "react";
 import { asCardId, asCardName, isCardId } from "../../types/card-identity";
 import { CardView, GameCard, type GameCardModel } from "../../tango/components/card/CardView";
+import { TRANSFIGURATION_TINT_COLORS, type CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
+import { TRANSFIGURE_MARK_END, TRANSFIGURE_MARK_START } from "../../runtime/transfigure-markers";
 import type { BattleCardInstance } from "../types";
-import { selectEffectiveSparkForInstance } from "../state/figments";
+import { selectEffectiveSparkForInstance, selectFigmentCount } from "../state/figments";
 import { AutomationGearIcon } from "./AutomationGearIcon";
 import { BattleCardView, battleCardDisplayFromInstance, battleCardVisualFromInstance } from "./BattleCardView";
+
+function battleTransfigurationDisplay(instance: BattleCardInstance): CardTransfigurationDisplay | undefined {
+  const type = instance.definition.transfiguration;
+  if (type === null) return undefined;
+  const marksRules = type === "Amplified" || type === "Inspired" || type === "Enduring"
+    || type === "Resonant" || type === "Attuned" || type === "Perfected";
+  return {
+    type,
+    color: TRANSFIGURATION_TINT_COLORS[type],
+    markedText: marksRules && instance.definition.renderedText !== ""
+      ? `${TRANSFIGURE_MARK_START}${instance.definition.renderedText}${TRANSFIGURE_MARK_END}`
+      : instance.definition.renderedText,
+    energyChanged: type === "Empowered" || type === "Perfected",
+    sparkChanged: type === "Kindled" || type === "Perfected",
+    fastChanged: type === "Hastened" || type === "Perfected",
+  };
+}
 
 /** Resolve canonical battle display state without changing battle-instance identity. */
 export function battleGameCardModel(instance: BattleCardInstance): GameCardModel {
@@ -15,6 +34,7 @@ export function battleGameCardModel(instance: BattleCardInstance): GameCardModel
   const cardId = asCardId(definition.cardId);
   return {
     cardId,
+    transfiguration: battleTransfigurationDisplay(instance),
     displaySnapshot: {
       id: cardId,
       name: asCardName(definition.name),
@@ -71,13 +91,32 @@ export function BattleGameCard({
   onMouseEnter, onMouseLeave, onMouseMove,
 }: BattleGameCardProps) {
   const canonical = isCardId(instance.definition.cardId);
+  const dragSuppressedRef = useRef(false);
+  const handleActivate = (): void => {
+    if (dragSuppressedRef.current) {
+      dragSuppressedRef.current = false;
+      return;
+    }
+    onActivate?.();
+  };
+  const handleDragStart: DragEventHandler<HTMLDivElement> = (event) => {
+    dragSuppressedRef.current = true;
+    onDragStart?.(event);
+  };
+  const figmentCount = selectFigmentCount(instance);
+  if (hidden) {
+    return <div data-battle-card-id={instance.battleCardId} data-battle-card-variant={variant}
+      data-battle-hand-card={dataBattleHandCard ? "" : undefined} data-battle-card-hidden="true"
+      data-selected="false" className={["battle-card", variant === "hand" ? "hand-card" : "", "hidden-enemy", className].filter(Boolean).join(" ")}
+      style={style} aria-label="Hidden enemy card"><div className="battle-card-hidden-face">?</div></div>;
+  }
   if (!canonical) {
     if (variant === "hand") {
       return <div data-battle-card-id={instance.battleCardId} data-battle-card-variant={variant}
         data-selected={String(selected)} className={["battle-card", "hand-card", className].filter(Boolean).join(" ")}
         style={style} draggable={draggable} onDoubleClick={onDoubleClick} onContextMenu={onContextMenu}
-        onClick={onActivate}
-        onDragStart={onDragStart} onDragEnd={onDragEnd} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onMouseMove={onMouseMove}>
+        onClick={handleActivate} onPointerDownCapture={() => { dragSuppressedRef.current = false; }}
+        onDragStart={handleDragStart} onDragEnd={onDragEnd} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onMouseMove={onMouseMove}>
         <CardView card={battleCardDisplayFromInstance(instance)} selected={selected} hideRulesText={compact} />
       </div>;
     }
@@ -99,12 +138,15 @@ export function BattleGameCard({
       data-battle-card-counters={String(instance.status.counters)} data-battle-card-exhausted={String(exhausted)}
       data-battle-card-transfiguration={instance.definition.transfiguration ?? undefined}
       className={classes} style={style} draggable={draggable} onDoubleClick={onDoubleClick}
-      onContextMenu={onContextMenu} onDragStart={onDragStart} onDragEnd={onDragEnd}
+      onContextMenu={onContextMenu} onPointerDownCapture={() => { dragSuppressedRef.current = false; }}
+      onDragStart={handleDragStart} onDragEnd={onDragEnd}
       onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onMouseMove={onMouseMove}>
-      {hidden ? <div aria-label="Hidden enemy card" className="battle-card-hidden-face">?</div> : (
-        <GameCard model={battleGameCardModel(instance)} selected={selected} selectionColor="selected"
-          hideRulesText={compact} unavailable={unaffordable} onActivate={onActivate} />
-      )}
+      <GameCard model={battleGameCardModel(instance)} selected={selected} selectionColor="selected"
+        hideRulesText={compact} unavailable={unaffordable} onActivate={handleActivate} />
+      {figmentCount > 1 ? <div className="c-figment-count" aria-label="figment count">{String(figmentCount)}</div> : null}
+      {instance.status.counters > 0 ? <div className="c-counters" aria-label={`${String(instance.status.counters)} counters`}>
+        <span className="c-counters-glyph" aria-hidden="true">⧗</span>{String(instance.status.counters)}
+      </div> : null}
       {showAutomationGear ? <AutomationGearIcon className="c-automation-gear" /> : null}
     </div>
   );

@@ -96,52 +96,26 @@ export function BattlefieldGrid({
             pendingDragCardId !== null ||
             (handSelectionSide === side && battleCardId === null && canInteract);
 
-          return (
-            <button
-              key={slotId}
-              type="button"
-              aria-label={`${side} ${zone} ${slotId}`}
-              data-battle-slot-id={side === "player" ? slotId : undefined}
-              data-slot-id={`${side}-${zone}-${slotId}`}
-              data-slot-card-id={battleCardId ?? undefined}
-              data-selected={String(isSelectedSlot)}
-              data-battle-drop-target={isDropTarget ? "true" : undefined}
-              data-battle-support-highlighted={isSupportHighlighted ? "true" : undefined}
-              className={[
-                "slot",
-                battleCardId === null ? "empty-hover" : "",
-                isDropTarget ? "drop-target" : "",
-                isSelectedSlot && battleCardId === null ? "selected-slot" : "",
-                isSupportHighlighted ? "supports-highlight" : "",
-              ].filter((value) => value !== "").join(" ")}
-              onClick={() => {
-                if (battleCardId !== null && (selectedCardId === null || selectedCardId === battleCardId)) {
-                  onCardClick(battleCardId);
-                  return;
-                }
-                onSlotClick(target, battleCardId !== null);
-              }}
-              onContextMenu={(event) => {
-                if (battleCardId === null) {
-                  return;
-                }
-                event.preventDefault();
-                onCardContextMenu?.(battleCardId, event);
-              }}
-              onDragOver={(event) => {
-                if (canInteract && pendingDragCardId !== null) {
-                  event.preventDefault();
-                }
-              }}
-              onDrop={(event) => {
-                if (!canInteract) {
-                  return;
-                }
-                event.preventDefault();
-                onSlotDrop?.(target);
-              }}
-            >
-              {instance === null ? null : (
+          const slotClassName = [
+            "slot", battleCardId === null ? "empty-hover" : "",
+            isDropTarget ? "drop-target" : "",
+            isSelectedSlot && battleCardId === null ? "selected-slot" : "",
+            isSupportHighlighted ? "supports-highlight" : "",
+          ].filter((value) => value !== "").join(" ");
+          const commonData = {
+            "data-battle-slot-id": side === "player" ? slotId : undefined,
+            "data-slot-id": `${side}-${zone}-${slotId}`,
+            "data-selected": String(isSelectedSlot),
+            "data-battle-drop-target": isDropTarget ? "true" : undefined,
+            "data-battle-support-highlighted": isSupportHighlighted ? "true" : undefined,
+          };
+          if (instance !== null) {
+            return (
+              <div key={slotId} aria-label={`${side} ${zone} ${slotId}`} {...commonData}
+                data-slot-card-id={battleCardId ?? undefined} className={slotClassName}
+                onContextMenu={(event) => { event.preventDefault(); onCardContextMenu?.(instance.battleCardId, event); }}
+                onDragOver={(event) => { if (canInteract && pendingDragCardId !== null) event.preventDefault(); }}
+                onDrop={(event) => { if (canInteract) { event.preventDefault(); onSlotDrop?.(target); } }}>
                 <BattleGameCard
                   instance={instance}
                   exhausted={instance.status.isExhausted}
@@ -152,7 +126,10 @@ export function BattlefieldGrid({
                   }
                   selected={isSelectedCard}
                   draggable={canInteract}
-                  onActivate={() => onCardClick(instance.battleCardId)}
+                  onActivate={() => {
+                    if (selectedCardId === null || selectedCardId === instance.battleCardId) onCardClick(instance.battleCardId);
+                    else onSlotClick(target, true);
+                  }}
                   onContextMenu={(event) => {
                     event.preventDefault();
                     event.stopPropagation();
@@ -164,8 +141,14 @@ export function BattlefieldGrid({
                   onMouseLeave={() => onCardHoverEnd?.()}
                   onMouseMove={(event) => onCardHoverMove?.(instance.battleCardId, event)}
                 />
-              )}
-            </button>
+              </div>
+            );
+          }
+          return (
+            <button key={slotId} type="button" aria-label={`${side} ${zone} ${slotId}`}
+              {...commonData} className={slotClassName} onClick={() => onSlotClick(target, false)}
+              onDragOver={(event) => { if (canInteract && pendingDragCardId !== null) event.preventDefault(); }}
+              onDrop={(event) => { if (canInteract) { event.preventDefault(); onSlotDrop?.(target); } }} />
           );
         })}
       </div>
