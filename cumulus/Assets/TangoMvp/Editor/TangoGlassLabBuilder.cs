@@ -167,6 +167,7 @@ namespace TangoMvp.Editor
                     Quaternion.identity,
                     Vector3.one);
                 BoxCollider collider = EnsureComponent<BoxCollider>(buttonRoot);
+                collider.enabled = true;
                 collider.center = Vector3.zero;
                 collider.size = new Vector3(1.48f, 0.54f, 0.22f);
                 collider.isTrigger = false;

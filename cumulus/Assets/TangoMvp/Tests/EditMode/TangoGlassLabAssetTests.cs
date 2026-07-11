@@ -106,7 +106,12 @@ namespace TangoMvp.Tests
                     Transform primaryLabel = prefabRoot.transform.Find("Primary Label");
                     Assert.That(primaryLabel, Is.Not.Null);
                     UnityEngine.Object.DestroyImmediate(primaryLabel.gameObject);
-                    prefabRoot.transform.Find("On Glass Button").GetComponent<BoxCollider>().size = Vector3.one * 9f;
+                    BoxCollider driftedCollider = prefabRoot.transform.Find("On Glass Button")
+                        .GetComponent<BoxCollider>();
+                    driftedCollider.enabled = false;
+                    driftedCollider.center = Vector3.one * 3f;
+                    driftedCollider.size = Vector3.one * 9f;
+                    driftedCollider.isTrigger = true;
                     new GameObject("Unexpected Builder Drift").transform.SetParent(prefabRoot.transform, false);
                     PrefabUtility.SaveAsPrefabAsset(prefabRoot, PrefabPath);
                 }
@@ -154,8 +159,12 @@ namespace TangoMvp.Tests
                 GameObject repairedPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
                 Assert.That(repairedPrefab.transform.Find("Primary Label"), Is.Not.Null);
                 Assert.That(repairedPrefab.transform.Find("Unexpected Builder Drift"), Is.Null);
-                Assert.That(repairedPrefab.transform.Find("On Glass Button").GetComponent<BoxCollider>().size,
-                    Is.EqualTo(new Vector3(1.48f, 0.54f, 0.22f)));
+                BoxCollider repairedCollider = repairedPrefab.transform.Find("On Glass Button")
+                    .GetComponent<BoxCollider>();
+                Assert.That(repairedCollider.enabled, Is.True);
+                Assert.That(repairedCollider.center, Is.EqualTo(Vector3.zero));
+                Assert.That(repairedCollider.size, Is.EqualTo(new Vector3(1.48f, 0.54f, 0.22f)));
+                Assert.That(repairedCollider.isTrigger, Is.False);
                 Assert.That(repairedPrefab.GetComponentsInChildren<Behaviour>(true),
                     Has.All.Matches<Behaviour>(behaviour => behaviour.enabled));
                 Assert.That(repairedPrefab.GetComponentsInChildren<Renderer>(true),
