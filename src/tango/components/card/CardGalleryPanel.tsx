@@ -746,6 +746,9 @@ export function CardGalleryPanel({
                       borderRadius: CARD_CORNER_RADIUS,
                       overflow: "hidden",
                       ...glassSurfaceStyle({ radius: CARD_CORNER_RADIUS }),
+                      background: `${token("--glass-sheen")}, ${token("--gallery-action-fill")}`,
+                      border: `1px solid ${token("--gallery-action-rim")}`,
+                      boxShadow: token("--glass-on-glass-shadow"),
                     }}
                   >
                     <i
@@ -754,15 +757,19 @@ export function CardGalleryPanel({
                       data-gallery-action-glyph=""
                       style={{
                         fontSize: `calc(${cardWidth} * 0.38)`,
-                        color: token("--text-on-glass"),
+                        color: token("--gallery-action-foreground"),
+                        textShadow: token("--shadow-sm"),
+                        filter: token("--gallery-action-soften"),
                       }}
                     />
                     <span
                       data-gallery-action-label=""
                       style={{
                         font: token("--t-body"),
-                        color: token("--text-on-glass"),
+                        color: token("--gallery-action-foreground"),
                         textAlign: "center",
+                        textShadow: token("--shadow-sm"),
+                        filter: token("--gallery-action-soften"),
                       }}
                     >
                       {endAction.label}

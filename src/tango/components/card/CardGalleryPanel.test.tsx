@@ -66,10 +66,13 @@ describe("CardGalleryPanel", () => {
     expect(action?.style.boxSizing).toBe("border-box");
     expect(action?.style.aspectRatio).toBe("5 / 7");
     expect(action?.style.borderRadius).toBe("3.6% / 2.57%");
-    expect(action?.style.background).toContain("var(--glass-fill)");
-    expect(action?.style.border).toBe("1px solid var(--glass-rim)");
+    expect(action?.style.background).toContain("var(--gallery-action-fill)");
+    expect(action?.style.border).toBe("1px solid var(--gallery-action-rim)");
     expect(container.querySelector('[data-gallery-action-label]')?.textContent).toBe("Restock");
-    expect(container.querySelector<HTMLElement>('[data-gallery-action-glyph]')?.style.textShadow).toBe("");
+    const glyph = container.querySelector<HTMLElement>('[data-gallery-action-glyph]');
+    expect(glyph?.style.color).toBe("var(--gallery-action-foreground)");
+    expect(glyph?.style.textShadow).toBe("var(--shadow-sm)");
+    expect(glyph?.style.filter).toBe("var(--gallery-action-soften)");
     act(() => root.unmount()); container.remove();
   });
 });

@@ -283,4 +283,8 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 | `--glass-on-glass-sheen` | `linear-gradient(150deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0) 46%)` |  |
 | `--glass-on-glass-rim` | `rgba(255, 255, 255, 0.18)` |  |
 | `--glass-on-glass-shadow` | `inset 0 1px 1px rgba(255, 255, 255, 0.22), inset 0 -14px 24px rgba(0, 0, 0, 0.08), 0 8px 22px rgba(6, 2, 14, 0.22)` |  |
+| `--gallery-action-fill` | `rgba(24, 41, 10, 0.35)` |  |
+| `--gallery-action-rim` | `rgba(255, 255, 255, 0.20)` |  |
+| `--gallery-action-foreground` | `#d7d1c4` |  |
+| `--gallery-action-soften` | `blur(0.35px)` |  |
 | `--badge-disc-gradient` | `radial-gradient(closest-side, #2a2040, #14101f)` |  |

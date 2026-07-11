@@ -534,6 +534,14 @@
   --glass-on-glass-rim: rgba(255, 255, 255, 0.18);  /* @kind color */
   --glass-on-glass-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.22), inset 0 -14px 24px rgba(0, 0, 0, 0.08), 0 8px 22px rgba(6, 2, 14, 0.22);  /* @kind shadow */
 
+  /* Card-sized gallery actions are a darker, olive-tinted lens over their
+     parent glass. The foreground is softened to match the muted physical
+     print treatment of the action tile rather than crisp header chrome. */
+  --gallery-action-fill: rgba(24, 41, 10, 0.35);  /* @kind color */
+  --gallery-action-rim: rgba(255, 255, 255, 0.20);  /* @kind color */
+  --gallery-action-foreground: #d7d1c4;  /* @kind color */
+  --gallery-action-soften: blur(0.35px);  /* @kind other */
+
   /* ---- Object materials (a thing's OWN surface, never a legibility
      overlay). The energy orb fill, the wordmark gradient, the reward gold. ---- */
   --gradient-accent: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); /* @kind other */

@@ -109,7 +109,6 @@ export const BASELINE = [
   // Elevation / inset shadow scale members.
   "--inset-press",
   "--shadow-sheet",
-  "--shadow-sm",
   // Radius scale member.
   "--radius-sheet",
   // Scrim scale member (full-screen focus darkening).

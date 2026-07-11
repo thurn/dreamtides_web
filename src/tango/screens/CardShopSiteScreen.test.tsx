@@ -130,8 +130,10 @@ describe("CardShopSiteScreen", () => {
       "[data-gallery-action-glyph]",
     );
     expect(restockGlyph?.className).toContain("bx-refresh-cw");
-    expect(restockGlyph?.style.color).toBe("var(--text-on-glass)");
-    expect(restockGlyph?.style.textShadow).toBe("");
+    expect(restockGlyph?.style.color).toBe(
+      "var(--gallery-action-foreground)",
+    );
+    expect(restockGlyph?.style.textShadow).toBe("var(--shadow-sm)");
     expect(
       container.querySelector("[data-gallery-action-label]")?.textContent,
     ).toBe("Restock Offers");
