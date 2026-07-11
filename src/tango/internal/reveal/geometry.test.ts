@@ -15,6 +15,11 @@ describe("fitSecondaryPrefix", () => {
 });
 
 describe("selectRevealPlacement", () => {
+  const circleClearance = (card: { x: number; y: number; width: number; height: number }, point: { x: number; y: number }) => {
+    const x = Math.max(card.x, Math.min(point.x, card.x + card.width));
+    const y = Math.max(card.y, Math.min(point.y, card.y + card.height));
+    return Math.hypot(point.x - x, point.y - y) - 24;
+  };
   it("uses exact 45vw mobile card widths and never places a touch popup below the touch", () => {
     const result = selectRevealPlacement(base);
     expect(result.primaryRect.width).toBe(175.5);
@@ -53,10 +58,41 @@ describe("selectRevealPlacement", () => {
     expect(["primary-left", "primary-right"]).toContain(result.orientation);
   });
 
+  it("hard-clears the primary touch circle while allowing a top-aligned secondary to cross it", () => {
+    const touchPoint = { x: 20, y: 80 };
+    const result = selectRevealPlacement({ ...base, touchPoint, primarySize: { width: 248, height: 260 }, secondarySizes: [{ width: 248, height: 180 }] });
+    expect(circleClearance(result.primaryRect, touchPoint)).toBeGreaterThanOrEqual(0);
+    expect(result.primaryRect.y).toBeLessThanOrEqual(touchPoint.y);
+    expect(result.secondaryRects).toHaveLength(1);
+    expect(result.secondaryRects[0].y).toBe(result.primaryRect.y);
+    expect(circleClearance(result.secondaryRects[0], touchPoint)).toBeLessThan(0);
+  });
+
+  it("scores impossible corners instead of choosing only from the touch half", () => {
+    const result = selectRevealPlacement({
+      ...base,
+      viewport: { ...viewport, safeArea: { ...viewport.safeArea, left: 100 } },
+      touchPoint: { x: 210, y: 30 },
+      primarySize: { width: 248, height: 700 },
+    });
+    expect(result.bestEffortPrimaryOverlap).toBe(true);
+    expect(result.orientation).toBe("primary-right");
+  });
+
   it("uses desktop above-first and right-side fallback families", () => {
     const desktop = { ...base, viewport: { ...viewport, layout: "desktop" as const, width: 1200 }, reason: "hover" as const, touchPoint: undefined, sourceRect: { x: 400, y: 500, width: 100, height: 80 } };
     expect(selectRevealPlacement(desktop).family).toBe("desktop-above");
     expect(selectRevealPlacement({ ...desktop, sourceRect: { x: 400, y: 20, width: 100, height: 80 } }).family).toBe("desktop-side-right");
+  });
+
+  it.each([500, 480])("truncates a desktop InfoCard pair that cannot fit the %ipx safe width", (width) => {
+    const desktop = { ...base, viewport: { ...viewport, layout: "desktop" as const, width }, reason: "hover" as const, touchPoint: undefined, sourceRect: { x: 190, y: 500, width: 80, height: 60 }, primarySize: { width: 248, height: 180 }, secondarySizes: [{ width: 248, height: 100 }] };
+    for (const input of [desktop, { ...desktop, sourceRect: { ...desktop.sourceRect, y: 20 } }]) {
+      const result = selectRevealPlacement(input);
+      expect(result.secondaryRects).toEqual([]);
+      expect(result.primaryRect.x).toBeGreaterThanOrEqual(0);
+      expect(result.primaryRect.x + result.primaryRect.width).toBeLessThanOrEqual(width);
+    }
   });
 
   it("uses mobile keyboard placement without a protected circle", () => {
@@ -65,9 +101,31 @@ describe("selectRevealPlacement", () => {
     expect(result.circleClearance).toBeUndefined();
   });
 
+  it("keeps the mobile keyboard primary closest to a right-edge focused source", () => {
+    const result = selectRevealPlacement({ ...base, reason: "focus", touchPoint: undefined, sourceRect: { x: 340, y: 650, width: 40, height: 40 }, secondarySizes: [{ width: 248, height: 100 }] });
+    expect(result.family).toBe("mobile-focus-above");
+    expect(result.orientation).toBe("primary-right");
+    expect(result.primaryRect.y + result.primaryRect.height).toBeLessThanOrEqual(650 - 10);
+  });
+
+  it("fits the longest complete keyboard prefix above instead of pinning for an over-tall full stack", () => {
+    const result = selectRevealPlacement({ ...base, reason: "focus", touchPoint: undefined, sourceRect: { x: 150, y: 300, width: 90, height: 50 }, secondarySizes: [{ width: 248, height: 100 }, { width: 248, height: 400 }] });
+    expect(result.family).toBe("mobile-focus-above");
+    expect(result.secondaryRects).toHaveLength(1);
+    expect(result.primaryRect.y + result.primaryRect.height).toBeLessThanOrEqual(290);
+  });
+
   it("qualifies press-in-place only at 90% of popup width with complete rules", () => {
     expect(selectRevealPlacement({ ...base, primaryKind: "gameCard", sourceRect: { x: 10, y: 200, width: 158, height: 240 }, sourceShowsCompleteGameCard: true }).pressInPlace).toBe(true);
     expect(selectRevealPlacement({ ...base, primaryKind: "gameCard", sourceRect: { x: 10, y: 200, width: 157, height: 240 }, sourceShowsCompleteGameCard: true }).pressInPlace).toBe(false);
+  });
+
+  it("places press-in-place secondaries only on a horizontally safe side", () => {
+    const game = { ...base, primaryKind: "gameCard" as const, sourceShowsCompleteGameCard: true, secondarySizes: [{ width: 248, height: 80 }] };
+    expect(selectRevealPlacement({ ...game, sourceRect: { x: 10, y: 200, width: 158, height: 240 } }).orientation).toBe("primary-left");
+    expect(selectRevealPlacement({ ...game, sourceRect: { x: 220, y: 200, width: 158, height: 240 } }).orientation).toBe("primary-right");
+    const neither = selectRevealPlacement({ ...game, viewport: { ...viewport, width: 320, safeArea: { top: 12, right: 20, bottom: 20, left: 20 } }, sourceRect: { x: 81, y: 200, width: 158, height: 240 } });
+    expect(neither.secondaryRects).toEqual([]);
   });
 
   it("maintains geometry invariants across deterministic mobile grids", () => {

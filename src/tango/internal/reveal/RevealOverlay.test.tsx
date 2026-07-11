@@ -6,11 +6,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { RevealOverlay, type RevealOverlayActive } from "./RevealOverlay";
 import { makeTextRevealSpec } from "./test-utils";
 import { asCardId, asCardName } from "../../../types/card-identity";
-import type { RevealSpec } from "./model";
+import type { RevealGeometrySnapshot, RevealSpec } from "./model";
+import type { RevealPlacementDecision } from "./geometry";
 
 const UUID = "00000000-0000-4000-8000-000000000001";
 let root: Root;
 let container: HTMLDivElement;
+let resizeCallbacks: ResizeObserverCallback[];
+let measuredPrimaryHeight: number;
 
 function active(overrides: Partial<RevealOverlayActive> = {}): RevealOverlayActive {
   const source = document.createElement("button");
@@ -27,8 +30,16 @@ beforeEach(() => {
   (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
   Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 300, offsetLeft: 0, offsetTop: 0 } });
   window.matchMedia = vi.fn().mockReturnValue({ matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() });
+  resizeCallbacks = [];
+  measuredPrimaryHeight = 100;
+  globalThis.ResizeObserver = class {
+    constructor(callback: ResizeObserverCallback) { resizeCallbacks.push(callback); }
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  } as unknown as typeof ResizeObserver;
   vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
-    if (this.dataset.revealMeasure === "primary") return { x: 0, y: 0, left: 0, top: 0, right: 100, bottom: 100, width: 100, height: 100, toJSON: () => ({}) };
+    if (this.dataset.revealMeasure === "primary") return { x: 0, y: 0, left: 0, top: 0, right: 100, bottom: measuredPrimaryHeight, width: 100, height: measuredPrimaryHeight, toJSON: () => ({}) };
     if (this.dataset.revealMeasure === "secondary") {
       const height = this.dataset.revealIndex === "0" ? 80 : 90;
       return { x: 0, y: 0, left: 0, top: 0, right: 80, bottom: height, width: 80, height, toJSON: () => ({}) };
@@ -38,7 +49,7 @@ beforeEach(() => {
   container = document.createElement("div"); document.body.append(container); root = createRoot(container);
 });
 
-afterEach(() => { act(() => root.unmount()); document.body.innerHTML = ""; vi.restoreAllMocks(); });
+afterEach(() => { act(() => root.unmount()); document.body.innerHTML = ""; vi.restoreAllMocks(); delete (globalThis as Partial<typeof globalThis>).ResizeObserver; });
 
 describe("RevealOverlay", () => {
   it("uses one highest-layer body portal that is pointer-transparent throughout", () => {
@@ -58,7 +69,7 @@ describe("RevealOverlay", () => {
     expect(group.style.visibility).toBe("visible");
     expect(cards).toHaveLength(2);
     expect(cards[0].style.top).toBe(cards[1].style.top);
-    expect(document.querySelector("[data-reveal-measurement-layer]")).toBeNull();
+    expect(document.querySelector<HTMLElement>("[data-reveal-measurement-layer]")?.style.visibility).toBe("hidden");
   });
 
   it("has no opacity, scale, or travel animation and disappears in one render frame", () => {
@@ -66,7 +77,7 @@ describe("RevealOverlay", () => {
     const group = document.querySelector<HTMLElement>("[data-tango-reveal-group]")!;
     expect(group.style.opacity).toBe("");
     expect(group.style.transform).toBe("");
-    expect(group.style.transition).toBe("none");
+    expect(group.style.transition).toBe("");
     act(() => root.render(<RevealOverlay active={null} />));
     expect(document.querySelector("[data-tango-reveal-portal]")).toBeNull();
   });
@@ -78,13 +89,41 @@ describe("RevealOverlay", () => {
     expect(portal.querySelector("[tabindex]")).toBeNull();
   });
 
+  it("reports the captured visual viewport offsets used for placement", () => {
+    Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 300, offsetLeft: 7, offsetTop: 13 } });
+    let placedGeometry: RevealGeometrySnapshot | undefined;
+    const onPlaced = vi.fn((_decision: RevealPlacementDecision, geometry: RevealGeometrySnapshot) => { placedGeometry = geometry; });
+    act(() => root.render(<RevealOverlay active={active()} onPlaced={onPlaced} />));
+    expect(onPlaced).toHaveBeenCalled();
+    expect(placedGeometry?.viewport).toMatchObject({ offsetLeft: 7, offsetTop: 13 });
+  });
+
   it("uses the sole 160ms GameCard return transition, skipped under reduced motion", () => {
     const returning = active({ returningGameCard: true });
     act(() => root.render(<RevealOverlay active={returning} />));
-    expect(document.querySelector<HTMLElement>("[data-tango-reveal-group]")!.style.transition).toContain("160ms");
+    expect(document.querySelector<HTMLElement>("[data-tango-reveal-group]")!.style.transition).toBe("");
     window.matchMedia = vi.fn().mockReturnValue({ matches: true, addEventListener: vi.fn(), removeEventListener: vi.fn() });
     act(() => root.render(<RevealOverlay active={{ ...returning, source: { ...returning.source, registrationId: "two" } }} />));
-    expect(document.querySelector<HTMLElement>("[data-tango-reveal-group]")!.style.transition).toBe("none");
+    expect(document.querySelector<HTMLElement>("[data-tango-reveal-group]")!.style.transition).toBe("");
+  });
+
+  it("waits for the genuinely asynchronous GameCard renderer and remeasures its resolved size", async () => {
+    const cardId = asCardId(UUID);
+    const spec: RevealSpec = { primary: { kind: "gameCard", cardId, displaySnapshot: {
+      id: cardId, name: asCardName("Async Card"), cardNumber: 2, cardType: "Event", subtype: "",
+      isStarter: false, rarity: "Special", energyCost: 1, spark: null, isFast: false, renderedText: "Resolve.", imageNumber: 2, artOwned: false,
+    } }, secondaries: [] };
+    let placedDecision: RevealPlacementDecision | undefined;
+    const onPlaced = vi.fn((decision: RevealPlacementDecision) => { placedDecision = decision; });
+    act(() => root.render(<RevealOverlay active={active({ spec })} onPlaced={onPlaced} />));
+    expect(document.querySelector("[data-reveal-render-pending]")).not.toBeNull();
+    expect(onPlaced).not.toHaveBeenCalled();
+    await act(async () => { await import("../../components/card/CardView"); });
+    expect(document.querySelector("[data-reveal-render-pending]")).toBeNull();
+    measuredPrimaryHeight = 240;
+    act(() => { for (const callback of resizeCallbacks) callback([], {} as ResizeObserver); });
+    expect(onPlaced).toHaveBeenCalledTimes(1);
+    expect(placedDecision?.primaryRect.height).toBeCloseTo(816);
   });
 
   it("keeps a desktop GameCard source and reading copy visually unique", () => {

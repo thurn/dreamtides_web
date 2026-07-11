@@ -13,8 +13,8 @@ const RevealGameCard = lazy(async () => {
 export function renderRevealCard(card: RevealCard, width: number): ReactElement {
   if (card.kind === "infoCard") return <div style={{ width, "--info-card-width": `${String(width)}px` } as CSSProperties}><InfoCard {...card.card} /></div>;
   return (
-    <Suspense fallback={<div style={{ width, aspectRatio: "2 / 3" }} />}>
-      <div style={{ width }}>
+    <Suspense fallback={<div data-reveal-render-pending="" style={{ width, aspectRatio: "2 / 3" }} />}>
+      <div data-reveal-render="game-card" style={{ width }}>
         <RevealGameCard card={card.displaySnapshot} termDefinitions="none" eagerRulesFit />
       </div>
     </Suspense>

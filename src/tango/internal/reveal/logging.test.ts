@@ -12,7 +12,7 @@ beforeEach(() => {
 describe("reveal diagnostic logging", () => {
   it("logs the complete immutable open decision snapshot", () => {
     const geometry = {
-      viewport: { layout: "mobile", width: 390, height: 844, safeArea: { top: 12, right: 0, bottom: 20, left: 0 } },
+      viewport: { layout: "mobile", width: 390, height: 844, offsetLeft: 7, offsetTop: 13, safeArea: { top: 12, right: 0, bottom: 20, left: 0 } },
       sourceRect: rectangle,
       touchPoint: { x: 30, y: 40 },
       placement: { family: "touch-corner", orientation: "primary-right" },

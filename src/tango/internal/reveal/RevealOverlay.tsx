@@ -13,6 +13,7 @@ export interface RevealOverlayActive {
   readonly touchPoint?: RevealPoint;
   readonly sourceShowsCompleteGameCard: boolean;
   readonly returningGameCard?: boolean;
+  readonly interactionId?: number;
 }
 
 export interface RevealOverlayProps {
@@ -29,7 +30,7 @@ function prefersReducedMotion(): boolean {
 }
 
 export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
-  const key = active === null ? "" : `${active.source.registrationId}:${active.reason}`;
+  const key = active === null ? "" : `${active.source.registrationId}:${active.reason}:${String(active.interactionId ?? 0)}`;
   const [measured, setMeasured] = useState<MeasuredDecision | null>(null);
   const viewport = useMemo(() => active === null ? null : captureVisualViewport(), [key]);
 
@@ -40,31 +41,41 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
     const primary = layer.querySelector<HTMLElement>("[data-reveal-measure=\"primary\"]");
     const secondaries = [...layer.querySelectorAll<HTMLElement>("[data-reveal-measure=\"secondary\"]")];
     if (primary === null) return;
-    const primaryRect = primary.getBoundingClientRect();
-    const secondarySizes: RevealSize[] = secondaries.map((node) => {
-      const value = node.getBoundingClientRect();
-      return { width: value.width, height: value.height };
-    });
-    const sourceRect = active.element.getBoundingClientRect();
-    const decision = selectRevealPlacement({
-      viewport,
-      reason: active.reason,
-      primaryKind: active.spec.primary.kind,
-      sourceRect: { x: sourceRect.x, y: sourceRect.y, width: sourceRect.width, height: sourceRect.height },
-      ...(active.touchPoint === undefined ? {} : { touchPoint: active.touchPoint }),
-      primarySize: { width: primaryRect.width, height: primaryRect.height },
-      secondarySizes,
-      sourceShowsCompleteGameCard: active.sourceShowsCompleteGameCard,
-    });
-    setMeasured({ key, decision, sourceRect: { x: sourceRect.x, y: sourceRect.y, width: sourceRect.width, height: sourceRect.height } });
-    onPlaced?.(decision, {
-      viewport: { layout: viewport.layout, width: viewport.width, height: viewport.height, safeArea: viewport.safeArea },
-      sourceRect: { x: sourceRect.x, y: sourceRect.y, width: sourceRect.width, height: sourceRect.height },
-      ...(active.touchPoint === undefined ? {} : { touchPoint: active.touchPoint }),
-      placement: { family: decision.family, orientation: decision.orientation },
-      finalRects: { primary: decision.primaryRect, secondaries: decision.secondaryRects },
-      ...(decision.circleClearance === undefined ? {} : { circleClearance: decision.circleClearance }),
-    });
+    const measure = (): void => {
+      if (primary.querySelector("[data-reveal-render-pending]") !== null) return;
+      const primaryRect = primary.getBoundingClientRect();
+      const secondarySizes: RevealSize[] = secondaries.map((node) => {
+        const value = node.getBoundingClientRect();
+        return { width: value.width, height: value.height };
+      });
+      if (!(primaryRect.width > 0) || !(primaryRect.height > 0)) return;
+      const sourceRect = active.element.getBoundingClientRect();
+      const decision = selectRevealPlacement({
+        viewport,
+        reason: active.reason,
+        primaryKind: active.spec.primary.kind,
+        sourceRect: { x: sourceRect.x, y: sourceRect.y, width: sourceRect.width, height: sourceRect.height },
+        ...(active.touchPoint === undefined ? {} : { touchPoint: active.touchPoint }),
+        primarySize: { width: primaryRect.width, height: primaryRect.height },
+        secondarySizes,
+        sourceShowsCompleteGameCard: active.sourceShowsCompleteGameCard,
+      });
+      setMeasured({ key, decision, sourceRect: { x: sourceRect.x, y: sourceRect.y, width: sourceRect.width, height: sourceRect.height } });
+      onPlaced?.(decision, {
+        viewport: { layout: viewport.layout, width: viewport.width, height: viewport.height, offsetLeft: viewport.offsetLeft, offsetTop: viewport.offsetTop, safeArea: viewport.safeArea },
+        sourceRect: { x: sourceRect.x, y: sourceRect.y, width: sourceRect.width, height: sourceRect.height },
+        ...(active.touchPoint === undefined ? {} : { touchPoint: active.touchPoint }),
+        placement: { family: decision.family, orientation: decision.orientation },
+        finalRects: { primary: decision.primaryRect, secondaries: decision.secondaryRects },
+        ...(decision.circleClearance === undefined ? {} : { circleClearance: decision.circleClearance }),
+      });
+    };
+    measure();
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(primary);
+    for (const secondary of secondaries) observer.observe(secondary);
+    return () => observer.disconnect();
   }, [active, key, onPlaced, viewport]);
 
   const decision = measured?.key === key ? measured.decision : null;
@@ -85,15 +96,14 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
 
   return createPortal(
     <div className="tango" data-tango-reveal-portal="" aria-hidden="true" style={{ position: "fixed", inset: 0, zIndex: "var(--layer-reveal)", pointerEvents: "none" }}>
-      {decision === null ? (
-        <div data-reveal-measurement-layer="" data-reveal-measurement-key={key} style={{ position: "fixed", inset: 0, visibility: "hidden", pointerEvents: "none" }}>
+      <div data-reveal-measurement-layer="" data-reveal-measurement-key={key} style={{ position: "fixed", inset: 0, visibility: "hidden", pointerEvents: "none" }}>
           <div data-reveal-measure="primary" style={transparent}>{renderRevealCard(active.spec.primary, measurePrimaryWidth)}</div>
           {active.spec.secondaries.map((card, index) => (
             <div data-reveal-measure="secondary" data-reveal-index={index} key={index} style={transparent}>{renderRevealInfoCard(card, measureSecondaryWidth)}</div>
           ))}
-        </div>
-      ) : (
-        <div data-tango-reveal-group="" style={{ position: "fixed", inset: 0, visibility: "visible", pointerEvents: "none", transition: active.returningGameCard === true && !prefersReducedMotion() ? "transform 160ms var(--ease-out)" : "none" }}>
+      </div>
+      {decision !== null && (
+        <div data-tango-reveal-group="" style={{ position: "fixed", inset: 0, visibility: "visible", pointerEvents: "none" }}>
           <div data-tango-reveal-card="primary" style={{ position: "fixed", left: active.returningGameCard === true && returnRect !== null ? returnRect.x : decision.primaryRect.x, top: active.returningGameCard === true && returnRect !== null ? returnRect.y : decision.primaryRect.y, width: active.returningGameCard === true && returnRect !== null ? returnRect.width : decision.primaryRect.width, height: active.returningGameCard === true && returnRect !== null ? returnRect.height : decision.primaryRect.height, pointerEvents: "none", transition: active.returningGameCard === true && !prefersReducedMotion() ? "left 160ms var(--ease-out), top 160ms var(--ease-out), width 160ms var(--ease-out), height 160ms var(--ease-out)" : "none" }}>
             {renderRevealCard(active.spec.primary, active.returningGameCard === true && returnRect !== null ? returnRect.width : decision.primaryRect.width)}
           </div>

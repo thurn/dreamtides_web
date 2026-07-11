@@ -30,14 +30,28 @@ function mount(node: React.ReactNode): { root: Root; container: HTMLDivElement }
 }
 
 const mountedRoots = new Set<Root>();
+let resizeCallbacks: ResizeObserverCallback[];
 
 beforeEach(() => {
   (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
   vi.spyOn(console, "log").mockImplementation(() => {}); resetLog();
+  resizeCallbacks = [];
+  globalThis.ResizeObserver = class {
+    constructor(callback: ResizeObserverCallback) { resizeCallbacks.push(callback); }
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  } as unknown as typeof ResizeObserver;
+  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
+    if (this.dataset.revealMeasure !== undefined) return { x: 0, y: 0, left: 0, top: 0, right: 100, bottom: 100, width: 100, height: 100, toJSON: () => ({}) };
+    return { x: 0, y: 0, left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0, toJSON: () => ({}) };
+  });
 });
 afterEach(() => {
   for (const root of mountedRoots) act(() => root.unmount());
   mountedRoots.clear(); document.body.innerHTML = ""; vi.restoreAllMocks();
+  vi.useRealTimers();
+  delete (globalThis as { ResizeObserver?: typeof ResizeObserver }).ResizeObserver;
 });
 
 describe("Tango reveal coordinator root", () => {
@@ -238,11 +252,57 @@ describe("Tango reveal coordinator root", () => {
     button.getBoundingClientRect = () => ({ x: 400, y: 250, left: 400, top: 250, right: 500, bottom: 300, width: 100, height: 50, toJSON: () => ({}) });
     act(() => { button.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" })); });
     act(() => { button.dispatchEvent(new PointerEvent("pointerout", { bubbles: true, pointerType: "mouse" })); });
-    expect(document.querySelector<HTMLElement>("[data-tango-reveal-group]")?.style.transition).toContain("160ms");
+    expect(document.querySelector("[data-tango-reveal-portal]")).not.toBeNull();
     expect(getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_closed")).toHaveLength(0);
     act(() => { vi.advanceTimersByTime(160); });
     expect(document.querySelector("[data-tango-reveal-portal]")).toBeNull();
     expect(getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_closed")).toHaveLength(1);
     vi.useRealTimers();
+  });
+
+  it.each(["resize", "orientationchange"])("cancels an in-progress GameCard return immediately on %s", (eventName) => {
+    vi.useFakeTimers();
+    Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 800, offsetLeft: 0, offsetTop: 0 } });
+    const cardId = asCardId(UUID_A);
+    const spec: RevealSpec = { primary: { kind: "gameCard", cardId, displaySnapshot: {
+      id: cardId, name: asCardName("Cancel Return"), cardNumber: 8, cardType: "Event", subtype: "", isStarter: false,
+      rarity: "Special", energyCost: 1, spark: null, isFast: false, renderedText: "Cancel.", imageNumber: 8, artOwned: false,
+    } }, secondaries: [] };
+    const { container } = mount(<TangoRoot><Source id={UUID_A} spec={spec} /></TangoRoot>);
+    const button = container.querySelector("button")!;
+    button.getBoundingClientRect = () => ({ x: 400, y: 250, left: 400, top: 250, right: 500, bottom: 300, width: 100, height: 50, toJSON: () => ({}) });
+    act(() => { button.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" })); });
+    act(() => { button.dispatchEvent(new PointerEvent("pointerout", { bubbles: true, pointerType: "mouse" })); });
+    expect(document.querySelector("[data-tango-reveal-portal]")).not.toBeNull();
+    act(() => { window.dispatchEvent(new Event(eventName)); });
+    expect(document.querySelector("[data-tango-reveal-portal]")).toBeNull();
+    act(() => { vi.advanceTimersByTime(200); });
+    const closes = getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_closed");
+    expect(closes).toHaveLength(1);
+    expect(closes[0]).toMatchObject({ dismissalReason: eventName === "resize" ? "resize" : "orientation-change" });
+  });
+
+  it("closes a returning interaction exactly once before rapid pointer re-entry opens a fresh one", async () => {
+    vi.useFakeTimers();
+    Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 800, offsetLeft: 0, offsetTop: 0 } });
+    const cardId = asCardId(UUID_A);
+    const spec: RevealSpec = { primary: { kind: "gameCard", cardId, displaySnapshot: {
+      id: cardId, name: asCardName("Re-enter"), cardNumber: 9, cardType: "Event", subtype: "", isStarter: false,
+      rarity: "Special", energyCost: 1, spark: null, isFast: false, renderedText: "Again.", imageNumber: 9, artOwned: false,
+    } }, secondaries: [] };
+    const { container } = mount(<TangoRoot><Source id={UUID_A} spec={spec} /></TangoRoot>);
+    const button = container.querySelector("button")!;
+    button.getBoundingClientRect = () => ({ x: 400, y: 250, left: 400, top: 250, right: 500, bottom: 300, width: 100, height: 50, toJSON: () => ({}) });
+    await import("../../components/card/CardView");
+    const enter = async () => { await act(async () => { button.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" })); await Promise.resolve(); }); act(() => { for (const callback of resizeCallbacks) callback([], {} as ResizeObserver); }); };
+    const leave = () => act(() => { button.dispatchEvent(new PointerEvent("pointerout", { bubbles: true, pointerType: "mouse" })); });
+    await enter(); leave(); await enter();
+    expect(getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_opened")).toHaveLength(2);
+    expect(getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_closed")).toHaveLength(1);
+    act(() => { vi.advanceTimersByTime(200); });
+    expect(document.querySelector("[data-tango-reveal-portal]")).not.toBeNull();
+    expect(getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_closed")).toHaveLength(1);
+    leave(); act(() => { vi.advanceTimersByTime(160); });
+    expect(getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_closed")).toHaveLength(2);
   });
 });

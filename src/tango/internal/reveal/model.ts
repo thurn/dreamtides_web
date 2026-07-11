@@ -81,7 +81,7 @@ export type RevealCoordinatorEvent =
 export interface RevealRect { readonly x: number; readonly y: number; readonly width: number; readonly height: number }
 export interface RevealSafeArea { readonly top: number; readonly right: number; readonly bottom: number; readonly left: number }
 export interface RevealGeometrySnapshot {
-  readonly viewport: { readonly layout: "mobile" | "desktop"; readonly width: number; readonly height: number; readonly safeArea: RevealSafeArea };
+  readonly viewport: { readonly layout: "mobile" | "desktop"; readonly width: number; readonly height: number; readonly offsetLeft: number; readonly offsetTop: number; readonly safeArea: RevealSafeArea };
   readonly sourceRect: RevealRect;
   readonly touchPoint?: RevealPoint;
   readonly placement: { readonly family: string; readonly orientation: string };

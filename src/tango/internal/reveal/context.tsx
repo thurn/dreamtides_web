@@ -6,7 +6,7 @@ import {
 import { logEvent } from "../../../logging";
 import type { RichText } from "../../components/card/rich-text";
 import { tideAlignmentLabel } from "../../components/hud/tide-spec";
-import { infoCardVariant, type RevealCoordinatorSource, type RevealInfoCardModel, type RevealSourceIdentity, type RevealSpec } from "./model";
+import { infoCardVariant, type RevealCoordinatorSource, type RevealDismissalReason, type RevealInfoCardModel, type RevealSourceIdentity, type RevealSpec } from "./model";
 import {
   activationOutcomeForTouch, initialRevealCoordinatorState, reduceRevealState,
   REVEAL_INTENT_MS,
@@ -93,6 +93,8 @@ interface RevealCoordinatorValue {
   readonly updateSourceElement: (key: string, element: HTMLElement | null) => void;
   readonly unregisterSource: (source: RevealCoordinatorSource) => void;
   readonly beginGameCardReturn: (source: RevealCoordinatorSource) => boolean;
+  readonly cancelGameCardReturn: (reason: RevealDismissalReason) => boolean;
+  readonly beginInteraction: () => void;
 }
 
 const RevealCoordinatorContext = createContext<RevealCoordinatorValue | null>(null);
@@ -116,8 +118,30 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
     dispatch({ type: "source-unmount", source, timestamp: performance.now() });
   }, []);
 
+  const loggedOpenKeyRef = useRef<string | null>(null);
+  const [interactionEpoch, setInteractionEpoch] = useState(0);
+  const interactionEpochRef = useRef(0);
+  const beginInteraction = useCallback(() => {
+    interactionEpochRef.current += 1;
+    setInteractionEpoch(interactionEpochRef.current);
+  }, []);
   const [returningActive, setReturningActive] = useState<RevealOverlayActive | null>(null);
+  const returningRef = useRef<RevealOverlayActive | null>(null);
+  const returningOutcomeRef = useRef<typeof state.activationOutcome>("none");
+  const returnGenerationRef = useRef(0);
   const returnTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cancelGameCardReturn = useCallback((reason: RevealDismissalReason): boolean => {
+    const returning = returningRef.current;
+    if (returning === null) return false;
+    returnGenerationRef.current += 1;
+    if (returnTimerRef.current !== null) clearTimeout(returnTimerRef.current);
+    returnTimerRef.current = null;
+    returningRef.current = null;
+    setReturningActive(null);
+    loggedOpenKeyRef.current = null;
+    logRevealClosed({ source: returning.source.identity, dismissalReason: reason, activationOutcome: returningOutcomeRef.current });
+    return true;
+  }, []);
   const beginGameCardReturn = useCallback((source: RevealCoordinatorSource): boolean => {
     const current = stateRef.current;
     const registration = sourcesRef.current.get(source.registrationId);
@@ -129,18 +153,25 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
       spec: registration.spec,
       element: registration.element,
       reason: "hover",
+      interactionId: interactionEpochRef.current,
       sourceShowsCompleteGameCard: registration.element.dataset.revealCompleteGameCard === "true",
       returningGameCard: true,
     };
+    cancelGameCardReturn("replaced");
+    returningRef.current = returning;
+    returningOutcomeRef.current = current.activationOutcome;
     setReturningActive(returning);
     if (returnTimerRef.current !== null) clearTimeout(returnTimerRef.current);
+    const generation = ++returnGenerationRef.current;
     returnTimerRef.current = setTimeout(() => {
+      if (returnGenerationRef.current !== generation || returningRef.current !== returning) return;
+      returningRef.current = null;
       setReturningActive(null);
       returnTimerRef.current = null;
       logRevealClosed({ source: source.identity, dismissalReason: "pointer-leave", activationOutcome: current.activationOutcome });
     }, 160);
     return true;
-  }, []);
+  }, [cancelGameCardReturn]);
   useEffect(() => () => { if (returnTimerRef.current !== null) clearTimeout(returnTimerRef.current); }, []);
 
   const previousActiveRef = useRef<{ readonly source: RevealCoordinatorSource; readonly activationOutcome: typeof state.activationOutcome } | null>(null);
@@ -166,24 +197,26 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
       if (event.key === "Escape") dispatch({ type: "escape", timestamp: event.timeStamp });
     };
     const events = [
-      [window, "resize", () => dispatch({ type: "resize", timestamp: now() })],
-      [window, "orientationchange", () => dispatch({ type: "orientation-change", timestamp: now() })],
-      [window, "blur", () => dispatch({ type: "window-blur", timestamp: now() })],
-      [window, "popstate", () => dispatch({ type: "route-change", timestamp: now() })],
-      [window, "hashchange", () => dispatch({ type: "route-change", timestamp: now() })],
+      [window, "resize", () => { cancelGameCardReturn("resize"); dispatch({ type: "resize", timestamp: now() }); }],
+      [window, "orientationchange", () => { cancelGameCardReturn("orientation-change"); dispatch({ type: "orientation-change", timestamp: now() }); }],
+      [window, "blur", () => { cancelGameCardReturn("window-blur"); dispatch({ type: "window-blur", timestamp: now() }); }],
+      [window, "popstate", () => { cancelGameCardReturn("route-change"); dispatch({ type: "route-change", timestamp: now() }); }],
+      [window, "hashchange", () => { cancelGameCardReturn("route-change"); dispatch({ type: "route-change", timestamp: now() }); }],
     ] as const;
-    const handleScroll = () => dispatch({ type: "scroll", timestamp: now() });
-    const handleDragStart = () => dispatch({ type: "drag", timestamp: now() });
+    const handleScroll = () => { cancelGameCardReturn("scroll"); dispatch({ type: "scroll", timestamp: now() }); };
+    const handleDragStart = () => { cancelGameCardReturn("drag"); dispatch({ type: "drag", timestamp: now() }); };
     const pushStateDescriptor = Object.getOwnPropertyDescriptor(window.history, "pushState");
     const replaceStateDescriptor = Object.getOwnPropertyDescriptor(window.history, "replaceState");
     const originalPushState = window.history.pushState.bind(window.history);
     const originalReplaceState = window.history.replaceState.bind(window.history);
     const pushState: History["pushState"] = (...args) => {
       originalPushState(...args);
+      cancelGameCardReturn("route-change");
       dispatch({ type: "route-change", timestamp: now() });
     };
     const replaceState: History["replaceState"] = (...args) => {
       originalReplaceState(...args);
+      cancelGameCardReturn("route-change");
       dispatch({ type: "route-change", timestamp: now() });
     };
     window.history.pushState = pushState;
@@ -206,9 +239,9 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
         else Object.defineProperty(window.history, "replaceState", replaceStateDescriptor);
       }
     };
-  }, []);
+  }, [cancelGameCardReturn]);
 
-  const value = useMemo(() => ({ state, dispatch, registerSource, updateSourceElement, unregisterSource, beginGameCardReturn }), [state, registerSource, updateSourceElement, unregisterSource, beginGameCardReturn]);
+  const value = useMemo(() => ({ state, dispatch, registerSource, updateSourceElement, unregisterSource, beginGameCardReturn, cancelGameCardReturn, beginInteraction }), [state, registerSource, updateSourceElement, unregisterSource, beginGameCardReturn, cancelGameCardReturn, beginInteraction]);
   const activeRegistration = state.activeRegistrationId === null ? undefined : sourcesRef.current.get(state.activeRegistrationId);
   const liveOverlayActive: RevealOverlayActive | null = activeRegistration?.element !== null
     && activeRegistration?.element !== undefined && state.reason !== null
@@ -217,12 +250,12 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
         spec: activeRegistration.spec,
         element: activeRegistration.element,
         reason: state.reason,
+        interactionId: interactionEpoch,
         ...(state.touch?.startPoint === undefined ? {} : { touchPoint: state.touch.startPoint }),
         sourceShowsCompleteGameCard: activeRegistration.element.dataset.revealCompleteGameCard === "true",
       }
     : null;
   const overlayActive = liveOverlayActive ?? returningActive;
-  const loggedOpenKeyRef = useRef<string | null>(null);
   const handlePlaced = useCallback<NonNullable<ComponentProps<typeof RevealOverlay>["onPlaced"]>>((decision, geometry) => {
     if (overlayActive === null || overlayActive.returningGameCard === true) return;
     const openKey = `${overlayActive.source.registrationId}:${overlayActive.reason}`;
@@ -325,13 +358,14 @@ export function useRevealSource(registration: RevealSourceRegistration): RevealS
       "data-reveal-active": active ? "true" : "false",
       "data-reveal-feedback": "measured",
       style: { "--reveal-press-scale": String(feedback.pressScale), "--reveal-hover-scale": String(feedback.hoverScale) } as CSSProperties,
-      onPointerEnter: (event) => { if (valid) { measureFeedback(event.currentTarget); coordinator.dispatch({ type: "pointer-enter", source: mountedSource, pointerType: event.pointerType, hoverCapable: event.pointerType === "mouse" || (event.pointerType === "pen" && event.buttons === 0 && event.pressure === 0), timestamp: event.timeStamp }); } },
+      onPointerEnter: (event) => { if (valid) { coordinator.cancelGameCardReturn("replaced"); coordinator.beginInteraction(); measureFeedback(event.currentTarget); coordinator.dispatch({ type: "pointer-enter", source: mountedSource, pointerType: event.pointerType, hoverCapable: event.pointerType === "mouse" || (event.pointerType === "pen" && event.buttons === 0 && event.pressure === 0), timestamp: event.timeStamp }); } },
       onPointerLeave: (event) => {
         if (intentTimer.current !== null) { clearTimeout(intentTimer.current); intentTimer.current = null; }
         if (valid) { coordinator.beginGameCardReturn(mountedSource); coordinator.dispatch({ type: "pointer-leave", source: mountedSource, pointerId: event.pointerId, timestamp: event.timeStamp }); }
       },
       onPointerDown: (event) => {
         if (!valid) return;
+        if (event.pointerType === "touch") coordinator.beginInteraction();
         measureFeedback(event.currentTarget);
         coordinator.dispatch({ type: "pointer-down", source: mountedSource, pointerType: event.pointerType, pointerId: event.pointerId, point: { x: event.clientX, y: event.clientY }, hasAction: activate !== undefined, timestamp: event.timeStamp });
         if (event.pointerType === "touch") {
@@ -351,7 +385,7 @@ export function useRevealSource(registration: RevealSourceRegistration): RevealS
         if (intentTimer.current !== null) { clearTimeout(intentTimer.current); intentTimer.current = null; }
         if (valid) coordinator.dispatch({ type: "pointer-cancel", pointerId: event.pointerId, timestamp: event.timeStamp });
       },
-      onFocus: (event) => { if (valid) coordinator.dispatch({ type: "focus", source: mountedSource, timestamp: event.timeStamp }); },
+      onFocus: (event) => { if (valid) { coordinator.cancelGameCardReturn("replaced"); coordinator.beginInteraction(); coordinator.dispatch({ type: "focus", source: mountedSource, timestamp: event.timeStamp }); } },
       onBlur: (event) => { if (valid) coordinator.dispatch({ type: "blur", source: mountedSource, timestamp: event.timeStamp }); },
     },
   };

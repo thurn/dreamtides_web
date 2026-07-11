@@ -72,6 +72,28 @@ function secondaryRectsAt(sizes: readonly RevealSize[], count: number, x: number
   });
 }
 
+function stackHeight(sizes: readonly RevealSize[], count: number): number {
+  return sizes.slice(0, count).reduce((height, size, index) => height + size.height + (index === 0 ? 0 : CARD_GAP), 0);
+}
+
+function fitGroupPrefix(sizes: readonly RevealSize[], availableHeight: number, primaryHeight: number): number {
+  if (primaryHeight > availableHeight) return 0;
+  let count = 0;
+  for (let next = 1; next <= sizes.length; next += 1) {
+    if (Math.max(primaryHeight, stackHeight(sizes, next)) > availableHeight) break;
+    count = next;
+  }
+  return count;
+}
+
+function cornerScore(card: RevealRect, point: RevealPoint): number {
+  const textRect = { ...card, y: card.y + card.height * 0.6, height: card.height * 0.4 };
+  const primaryClearance = distanceFromCircle(card, point);
+  const textClearance = distanceFromCircle(textRect, point);
+  const centerDistance = Math.hypot(point.x - (card.x + card.width / 2), point.y - (card.y + card.height / 2));
+  return primaryClearance * 100 + textClearance * 200 + centerDistance;
+}
+
 function result(input: RevealPlacementInput, values: Omit<RevealPlacementDecision, "shownSecondaryCount" | "droppedSecondaryCount" | "secondaryTruncation">): RevealPlacementDecision {
   const shownSecondaryCount = values.secondaryRects.length;
   return Object.freeze({
@@ -98,29 +120,62 @@ function mobilePlacement(input: RevealPlacementInput): RevealPlacementDecision {
 
   if (pressInPlace) {
     const rightX = sourceRect.x + sourceRect.width + CARD_GAP;
-    const orientation = rightX + cardWidth <= safeRight ? "primary-left" : "primary-right";
-    const secondaryX = orientation === "primary-left" ? rightX : sourceRect.x - CARD_GAP - cardWidth;
-    const count = fitSecondaryPrefix(secondarySizes, safeBottom - sourceRect.y);
+    const leftX = sourceRect.x - CARD_GAP - cardWidth;
+    const rightFits = rightX + cardWidth <= safeRight && rightX >= safeLeft;
+    const leftFits = leftX >= safeLeft && leftX + cardWidth <= safeRight;
+    const orientation = rightFits || !leftFits ? "primary-left" : "primary-right";
+    const secondaryX = orientation === "primary-left" ? rightX : leftX;
+    const verticallySafe = sourceRect.y >= safeTop;
+    const count = (rightFits || leftFits) && verticallySafe ? fitSecondaryPrefix(secondarySizes, safeBottom - sourceRect.y) : 0;
     return result(input, { family: "mobile-press-in-place", orientation, primaryRect: sourceRect,
       secondaryRects: secondaryRectsAt(secondarySizes, count, secondaryX, sourceRect.y), pressInPlace: true,
       sideFallback: orientation === "primary-right", bestEffortPrimaryOverlap: false });
   }
 
+
+  const horizontalPairFits = safeRight - safeLeft >= cardWidth * 2 + CARD_GAP;
+  const anchorX = sourceRect.x + sourceRect.width / 2;
+  if (input.reason === "focus") {
+    const canPair = secondarySizes.length > 0 && horizontalPairFits;
+    const groupWidth = canPair ? cardWidth * 2 + CARD_GAP : cardWidth;
+    const groupLeft = clamp(anchorX - groupWidth / 2, safeLeft, safeRight - groupWidth);
+    const leftPrimaryX = groupLeft;
+    const rightPrimaryX = groupLeft + (canPair ? cardWidth + CARD_GAP : 0);
+    const useRightPrimary = canPair
+      && Math.abs(rightPrimaryX + cardWidth / 2 - anchorX) < Math.abs(leftPrimaryX + cardWidth / 2 - anchorX);
+    const orientation: "primary-left" | "primary-right" = useRightPrimary ? "primary-right" : "primary-left";
+    const primaryX = useRightPrimary ? rightPrimaryX : leftPrimaryX;
+    const secondaryX = useRightPrimary ? groupLeft : groupLeft + cardWidth + CARD_GAP;
+    const aboveHeight = sourceRect.y - CARD_GAP - safeTop;
+    const aboveCount = canPair ? fitGroupPrefix(secondarySizes, aboveHeight, primarySize.height) : 0;
+    const canFitPrimaryAbove = primarySize.height <= aboveHeight;
+    if (canFitPrimaryAbove) {
+      const groupHeight = Math.max(primarySize.height, stackHeight(secondarySizes, aboveCount));
+      const y = sourceRect.y - CARD_GAP - groupHeight;
+      return result(input, { family: "mobile-focus-above", orientation, primaryRect: rect(primaryX, y, primarySize),
+        secondaryRects: secondaryRectsAt(secondarySizes, aboveCount, secondaryX, y), pressInPlace: false,
+        sideFallback: false, bestEffortPrimaryOverlap: false });
+    }
+    const topCount = canPair ? fitGroupPrefix(secondarySizes, safeBottom - safeTop, primarySize.height) : 0;
+    return result(input, { family: "mobile-focus-top", orientation, primaryRect: rect(primaryX, safeTop, primarySize),
+      secondaryRects: secondaryRectsAt(secondarySizes, topCount, secondaryX, safeTop), pressInPlace: false,
+      sideFallback: true, bestEffortPrimaryOverlap: false });
+  }
+
   const hasNotionalPair = input.primaryKind === "gameCard" || secondarySizes.length > 0;
   const preferredPrimaryX = safeLeft;
   const oppositePrimaryX = safeRight - cardWidth;
-  const anchorX = sourceRect.x + sourceRect.width / 2;
   let orientation: "primary-left" | "primary-right" = "primary-left";
   let primaryX = hasNotionalPair ? preferredPrimaryX : clamp(anchorX - cardWidth / 2, safeLeft, safeRight - cardWidth);
   const targetBottom = input.reason === "press" && touchPoint !== undefined ? touchPoint.y - TOUCH_RADIUS : sourceRect.y - CARD_GAP;
   const desiredTop = targetBottom - primarySize.height;
   let primaryY = Math.max(safeTop, desiredTop);
-  let family = input.reason === "focus" ? "mobile-focus-above" : "mobile-touch-up";
+  let family = "mobile-touch-up";
   let bestEffortPrimaryOverlap = false;
 
   if (desiredTop < safeTop) {
     primaryY = safeTop;
-    family = input.reason === "focus" ? "mobile-focus-top" : "mobile-touch-top";
+    family = "mobile-touch-top";
     const pointX = touchPoint?.x ?? anchorX;
     if (hasNotionalPair) {
       orientation = pointX < viewport.offsetLeft + viewport.width / 2 ? "primary-right" : "primary-left";
@@ -132,16 +187,24 @@ function mobilePlacement(input: RevealPlacementInput): RevealPlacementDecision {
   }
 
   const primaryRect = rect(primaryX, primaryY, primarySize);
-  const circleClearance = input.reason === "press" && touchPoint !== undefined ? distanceFromCircle(primaryRect, touchPoint) : undefined;
+  const circleClearance = touchPoint === undefined ? undefined : distanceFromCircle(primaryRect, touchPoint);
   if (circleClearance !== undefined && circleClearance < 0 && touchPoint !== undefined) {
-    bestEffortPrimaryOverlap = true;
-    family = "mobile-touch-corner";
-    orientation = touchPoint.x < viewport.offsetLeft + viewport.width / 2 ? "primary-right" : "primary-left";
-    primaryX = orientation === "primary-left" ? preferredPrimaryX : oppositePrimaryX;
+    const candidates = [
+      { orientation: "primary-left" as const, card: rect(preferredPrimaryX, safeTop, primarySize), preferred: touchPoint.x >= viewport.offsetLeft + viewport.width / 2 },
+      { orientation: "primary-right" as const, card: rect(oppositePrimaryX, safeTop, primarySize), preferred: touchPoint.x < viewport.offsetLeft + viewport.width / 2 },
+    ];
+    const feasible = candidates.filter((candidate) => distanceFromCircle(candidate.card, touchPoint) >= 0 && candidate.card.y <= touchPoint.y);
+    const pool = feasible.length > 0 ? feasible : candidates;
+    pool.sort((a, b) => cornerScore(b.card, touchPoint) - cornerScore(a.card, touchPoint) || Number(b.preferred) - Number(a.preferred));
+    const chosen = pool[0];
+    orientation = chosen.orientation;
+    primaryX = chosen.card.x;
+    primaryY = chosen.card.y;
+    family = feasible.length > 0 ? "mobile-touch-top" : "mobile-touch-corner";
+    bestEffortPrimaryOverlap = feasible.length === 0;
   }
   const finalPrimary = rect(primaryX, primaryY, primarySize);
   const secondaryX = orientation === "primary-left" ? safeRight - cardWidth : safeLeft;
-  const horizontalPairFits = safeRight - safeLeft >= cardWidth * 2 + CARD_GAP;
   const secondaryCount = horizontalPairFits ? fitSecondaryPrefix(secondarySizes, safeBottom - primaryY) : 0;
   return result(input, {
     family, orientation, primaryRect: finalPrimary,
@@ -161,7 +224,7 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
   const primaryWidth = input.primaryKind === "gameCard" ? Math.max(DESKTOP_GAME_CARD_WIDTH, sourceRect.width) : input.primarySize.width;
   const primarySize = scaled(input.primarySize, primaryWidth);
   const secondarySizes = input.secondarySizes;
-  const secondaryWidth = secondarySizes[0]?.width ?? 0;
+  const secondaryWidth = secondarySizes.reduce((width, size) => Math.max(width, size.width), 0);
   if (input.primaryKind === "gameCard") {
     const primaryX = clamp(sourceRect.x + sourceRect.width / 2 - primaryWidth / 2, safeLeft, safeRight - primaryWidth);
     const primaryY = clamp(sourceRect.y + sourceRect.height / 2 - primarySize.height / 2, safeTop, Math.max(safeTop, safeBottom - primarySize.height));
@@ -181,13 +244,15 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
       bestEffortPrimaryOverlap: false,
     });
   }
-  const groupWidth = primaryWidth + (secondarySizes.length > 0 ? CARD_GAP + secondaryWidth : 0);
+  const pairFitsSafeWidth = secondarySizes.length > 0 && primaryWidth + CARD_GAP + secondaryWidth <= safeRight - safeLeft;
+  const usableSecondaries = pairFitsSafeWidth ? secondarySizes : [];
+  const groupWidth = primaryWidth + (usableSecondaries.length > 0 ? CARD_GAP + secondaryWidth : 0);
   const aboveY = sourceRect.y - DESKTOP_SOURCE_GAP - primarySize.height;
   if (aboveY >= safeTop) {
     const x = clamp(sourceRect.x + sourceRect.width / 2 - groupWidth / 2, safeLeft, safeRight - groupWidth);
-    const count = fitSecondaryPrefix(secondarySizes, safeBottom - aboveY);
+    const count = fitSecondaryPrefix(usableSecondaries, safeBottom - aboveY);
     return result(input, { family: "desktop-above", orientation: "primary-left", primaryRect: rect(x, aboveY, primarySize),
-      secondaryRects: secondaryRectsAt(secondarySizes, count, x + primaryWidth + CARD_GAP, aboveY), pressInPlace: false,
+      secondaryRects: secondaryRectsAt(usableSecondaries, count, x + primaryWidth + CARD_GAP, aboveY), pressInPlace: false,
       sideFallback: false, bestEffortPrimaryOverlap: false });
   }
   const rightSpace = safeRight - (sourceRect.x + sourceRect.width + DESKTOP_SOURCE_GAP);
@@ -198,11 +263,12 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
     ? clamp(sourceRect.x + sourceRect.width + DESKTOP_SOURCE_GAP, safeLeft, Math.max(safeLeft, safeRight - groupWidth))
     : clamp(sourceRect.x - DESKTOP_SOURCE_GAP - groupWidth, safeLeft, Math.max(safeLeft, safeRight - groupWidth));
   const y = clamp(sourceRect.y, safeTop, Math.max(safeTop, safeBottom - primarySize.height));
-  const primaryX = orientation === "primary-left" ? x : x + (secondarySizes.length > 0 ? secondaryWidth + CARD_GAP : 0);
+  const primaryX = orientation === "primary-left" ? x : x + (usableSecondaries.length > 0 ? secondaryWidth + CARD_GAP : 0);
   const secondaryX = orientation === "primary-left" ? primaryX + primaryWidth + CARD_GAP : x;
-  const count = fitSecondaryPrefix(secondarySizes, safeBottom - y);
+  const sideCanFitPair = usableSecondaries.length > 0 && (useRight ? rightSpace : leftSpace) >= groupWidth;
+  const count = sideCanFitPair ? fitSecondaryPrefix(usableSecondaries, safeBottom - y) : 0;
   return result(input, { family: useRight ? "desktop-side-right" : "desktop-side-left", orientation,
-    primaryRect: rect(primaryX, y, primarySize), secondaryRects: secondaryRectsAt(secondarySizes, count, secondaryX, y),
+    primaryRect: rect(count === 0 ? clamp(useRight ? sourceRect.x + sourceRect.width + DESKTOP_SOURCE_GAP : sourceRect.x - DESKTOP_SOURCE_GAP - primaryWidth, safeLeft, safeRight - primaryWidth) : primaryX, y, primarySize), secondaryRects: secondaryRectsAt(usableSecondaries, count, secondaryX, y),
     pressInPlace: false, sideFallback: true, bestEffortPrimaryOverlap: groupWidth > Math.max(rightSpace, leftSpace) });
 }
 
