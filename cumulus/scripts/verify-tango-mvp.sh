@@ -10,10 +10,14 @@ STAGE_ROOT="$ARTIFACT_ROOT/stages"
 SUMMARY_PATH="$ARTIFACT_ROOT/summary.json"
 STAGE_RECORDS="$ARTIFACT_ROOT/stage-records.jsonl"
 SCOPE_GUARD="$SCRIPT_DIR/tango-scope-guard.py"
+EVIDENCE_VALIDATOR="$SCRIPT_DIR/tango_evidence.py"
+PROVENANCE_CHECK="$SCRIPT_DIR/tango-provenance.py"
 
 if [[ "${1:-}" == "--self-test" ]]; then
   bash "$SCRIPT_DIR/test-unity-run.sh"
   bash "$SCRIPT_DIR/test-tango-scope-guard.sh"
+  python3 "$SCRIPT_DIR/test-tango-evidence.py"
+  python3 "$SCRIPT_DIR/test-tango-provenance.py"
   exit 0
 elif (( $# != 0 )); then
   echo "usage: $0" >&2
@@ -27,6 +31,48 @@ UNITY_RUN_TIMEOUT_SECONDS=1800
 CURRENT_STAGE="bootstrap"
 OVERALL="failed"
 SUMMARY_WRITTEN=0
+VERIFIED_HEAD=""
+SETTINGS_RESTORED=0
+INCIDENTAL_PATHS=(
+  "cumulus/Assets/Settings/DefaultVolumeProfile.asset"
+  "cumulus/Assets/Settings/PC_RPAsset.asset"
+  "cumulus/Assets/Settings/UniversalRenderPipelineGlobalSettings.asset"
+  "cumulus/ProjectSettings/ProjectSettings.asset"
+  "cumulus/ProjectSettings/ShaderGraphSettings.asset"
+  "cumulus/ProjectSettings/UnityConnectSettings.asset"
+  "cumulus/ProjectSettings/SceneTemplateSettings.json"
+)
+
+snapshot_incidental_settings() {
+  local snapshot="$ARTIFACT_ROOT/incidental-settings-snapshot"
+  mkdir -p "$snapshot"
+  : > "$snapshot/status"
+  local path
+  for path in "${INCIDENTAL_PATHS[@]}"; do
+    if [[ -f "$REPO_ROOT/$path" ]]; then
+      mkdir -p "$snapshot/$(dirname "$path")"
+      cp "$REPO_ROOT/$path" "$snapshot/$path"
+      printf 'present\t%s\n' "$path" >> "$snapshot/status"
+    else
+      printf 'absent\t%s\n' "$path" >> "$snapshot/status"
+    fi
+  done
+}
+
+restore_incidental_settings() {
+  (( SETTINGS_RESTORED == 0 )) || return 0
+  local snapshot="$ARTIFACT_ROOT/incidental-settings-snapshot"
+  [[ -f "$snapshot/status" ]] || return 0
+  local state path
+  while IFS=$'\t' read -r state path; do
+    if [[ "$state" == "present" ]]; then
+      cp "$snapshot/$path" "$REPO_ROOT/$path"
+    else
+      rm -f "$REPO_ROOT/$path"
+    fi
+  done < "$snapshot/status"
+  SETTINGS_RESTORED=1
+}
 
 record_stage() {
   local name="$1"
@@ -117,6 +163,7 @@ PY
 on_exit() {
   local exit_code=$?
   trap - EXIT
+  restore_incidental_settings || exit_code=1
   if (( SUMMARY_WRITTEN == 0 )); then
     write_failure_summary "$CURRENT_STAGE" "$exit_code" || true
   fi
@@ -135,9 +182,18 @@ rm -rf "$ARTIFACT_ROOT"
 mkdir -p "$STAGE_ROOT"
 : > "$STAGE_RECORDS"
 
+CURRENT_STAGE="clean-head-provenance"
+if ! VERIFIED_HEAD="$(python3 "$PROVENANCE_CHECK" --repo-root "$REPO_ROOT" --summary "$SUMMARY_PATH")"; then
+  SUMMARY_WRITTEN=1
+  exit 1
+fi
+snapshot_incidental_settings
+
 shell_self_tests() {
   bash "$SCRIPT_DIR/test-unity-run.sh" > "$STAGE_ROOT/shell-harness.log" 2>&1 || return
   bash "$SCRIPT_DIR/test-tango-scope-guard.sh" > "$STAGE_ROOT/scope-guard-self-test.log" 2>&1 || return
+  python3 "$SCRIPT_DIR/test-tango-evidence.py" > "$STAGE_ROOT/evidence-self-test.log" 2>&1 || return
+  python3 "$SCRIPT_DIR/test-tango-provenance.py" > "$STAGE_ROOT/provenance-self-test.log" 2>&1 || return
 }
 
 clean_unity_import() {
@@ -188,78 +244,7 @@ run_editmode_tests() {
 }
 
 validate_gpu_evidence() {
-  python3 - "$ARTIFACT_ROOT/render-metrics.json" "$ARTIFACT_ROOT" <<'PY'
-import json
-import math
-from pathlib import Path
-import sys
-
-metrics_path = Path(sys.argv[1])
-artifact_root = Path(sys.argv[2])
-try:
-    payload = json.loads(metrics_path.read_text(encoding="utf-8"))
-except (OSError, json.JSONDecodeError) as error:
-    raise SystemExit(f"invalid render metrics: {error}")
-if payload.get("schemaVersion") != 1 or not isinstance(payload.get("metrics"), list):
-    raise SystemExit("render metrics schema is missing or malformed")
-metrics = payload["metrics"]
-if not metrics:
-    raise SystemExit("render metrics are empty")
-for index, metric in enumerate(metrics):
-    required = (
-        "metricName", "measuredValue", "measuredValueText", "measuredValueFinite",
-        "comparison", "threshold", "passed", "phaseA", "phaseB", "graphicsApi", "deviceName",
-    )
-    if any(field not in metric for field in required):
-        raise SystemExit(f"render metric {index} is missing required evidence")
-    if metric["measuredValueFinite"] is not True or not isinstance(metric["measuredValue"], (int, float)):
-        raise SystemExit(f"render metric {index} has a non-finite measurement")
-    if not math.isfinite(float(metric["measuredValue"])) or not math.isfinite(float(metric["threshold"])):
-        raise SystemExit(f"render metric {index} contains a non-finite number")
-    if metric["passed"] is not True:
-        raise SystemExit(f"render metric failed: {metric['metricName']}")
-    if not metric["graphicsApi"] or not metric["deviceName"]:
-        raise SystemExit(f"render metric {index} is missing GPU identity")
-
-names = [metric["metricName"] for metric in metrics]
-requirements = {
-    "liveBackdropDelta.": 2,
-    "blurEdgeEnergyRatioMaximum": 1,
-    "blurEdgeEnergyRatioMinimum": 1,
-    "sharedGraphRecords.": 4,
-    "horizontalPasses.": 4,
-    "verticalPasses.": 4,
-    "onGlassAdditionalPasses": 1,
-    "onGlassBackdropDelta": 1,
-    "onGlassBackdropCorrelation": 1,
-    "bevelLightDelta": 1,
-    "transmissionLightDeltaRatio": 1,
-    "frameShadowDelta": 1,
-    "labelContrast.": 3,
-    "fallbackInteriorLuminanceMinimum": 1,
-    "fallbackInteriorLuminanceMaximum": 1,
-}
-for prefix, minimum in requirements.items():
-    count = sum(name == prefix or name.startswith(prefix) for name in names)
-    if count < minimum:
-        raise SystemExit(f"render metrics missing {prefix}: expected {minimum}, found {count}")
-
-required_pngs = (
-    "spinner-a.png", "spinner-b.png", "spinner-c.png",
-    "main-pane-disabled.png", "independent-pane-disabled.png",
-    "button-parent-a.png", "button-parent-b.png", "button-a.png", "button-b.png",
-    "light-a.png", "light-b.png", "shadow-on.png", "shadow-off.png",
-    "label-bright.png", "label-gold.png", "label-dark.png", "fallback.png",
-)
-for name in required_pngs:
-    path = artifact_root / name
-    try:
-        data = path.read_bytes()
-    except OSError as error:
-        raise SystemExit(f"missing GPU capture {name}: {error}")
-    if len(data) < 100 or not data.startswith(b"\x89PNG\r\n\x1a\n"):
-        raise SystemExit(f"GPU capture is malformed: {name}")
-PY
+  python3 "$EVIDENCE_VALIDATOR" "$ARTIFACT_ROOT/render-metrics.json" "$ARTIFACT_ROOT"
 }
 
 run_playmode_tests() {
@@ -339,7 +324,8 @@ write_success_summary() {
     "$STAGE_RECORDS" \
     "$REPO_ROOT" \
     "$CUMULUS_ROOT" \
-    "$ARTIFACT_ROOT" <<'PY'
+    "$ARTIFACT_ROOT" \
+    "$VERIFIED_HEAD" <<'PY'
 import json
 from pathlib import Path
 import re
@@ -352,6 +338,7 @@ records_path = Path(sys.argv[2])
 repo_root = Path(sys.argv[3])
 cumulus_root = Path(sys.argv[4])
 artifact_root = Path(sys.argv[5])
+verified_head = sys.argv[6]
 
 stages = [json.loads(line) for line in records_path.read_text(encoding="utf-8").splitlines() if line.strip()]
 if len(stages) != 8 or any(stage.get("status") != "passed" for stage in stages):
@@ -400,7 +387,7 @@ payload = {
     "urpVersion": urp_version,
     "graphicsApi": first_metric["graphicsApi"],
     "graphicsDevice": first_metric["deviceName"],
-    "gitCommit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo_root, text=True).strip(),
+    "gitCommit": verified_head,
     "stages": stages,
     "tests": {
         "editMode": test_counts(artifact_root / "stages/full-editmode/results.xml"),
@@ -441,6 +428,11 @@ run_stage repository-checks run_web_checks
 run_stage static-scope-guard run_scope_guard
 
 CURRENT_STAGE="summary"
+restore_incidental_settings
+if ! python3 "$PROVENANCE_CHECK" --repo-root "$REPO_ROOT" --summary "$SUMMARY_PATH" --expect-head "$VERIFIED_HEAD" >/dev/null; then
+  SUMMARY_WRITTEN=1
+  exit 1
+fi
 write_success_summary
 OVERALL="passed"
 SUMMARY_WRITTEN=1

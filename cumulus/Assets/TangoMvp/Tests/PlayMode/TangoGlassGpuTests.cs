@@ -21,6 +21,7 @@ namespace TangoMvp.Tests.PlayMode
         private const int CaptureHeight = 288;
         private static readonly string EvidenceDirectory = Path.GetFullPath("Artifacts/TangoMvpVerification");
         private readonly List<TangoGpuAcceptanceResult> latestResults = new List<TangoGpuAcceptanceResult>();
+        private static bool forceFailureAfterSetup;
 
         [UnityTearDown]
         public IEnumerator RemoveLabSceneObjects()
@@ -43,82 +44,114 @@ namespace TangoMvp.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator EarlyFailure_RestoresEverySeededNonDefaultState()
+        {
+            var priorActive = new RenderTexture(8, 8, 0);
+            priorActive.Create();
+            RenderTexture.active = priorActive;
+            var priorTarget = new RenderTexture(16, 16, 0); priorTarget.Create();
+            try
+            {
+                IEnumerator routine = GlassLab_RendersLiveSharedBlurAndFailClosedFallbackEvidence();
+                Assert.That(routine.MoveNext(), Is.True);
+                yield return routine.Current;
+                Camera seededCamera = UnityEngine.Object.FindFirstObjectByType<Camera>();
+                TangoSpinner seededSpinner = UnityEngine.Object.FindFirstObjectByType<TangoSpinner>();
+                TangoLightOrbit seededLight = UnityEngine.Object.FindFirstObjectByType<TangoLightOrbit>();
+                TangoGlassRendererFeature seededFeature = Resources.FindObjectsOfTypeAll<TangoGlassRendererFeature>()
+                    .First(candidate => candidate.name == "TangoGlassRendererFeature");
+                GameObject seededMain = GameObject.Find("Tango Glass Panel/Glass Face");
+                seededCamera.aspect = 1.2345f;
+                seededCamera.targetTexture = priorTarget;
+                seededSpinner.enabled = false;
+                seededLight.enabled = false;
+                seededFeature.SetActive(false);
+                seededMain.SetActive(false);
+                Quaternion spinnerPose = seededSpinner.transform.localRotation;
+                Quaternion lightPose = seededLight.transform.localRotation;
+                forceFailureAfterSetup = true;
+                InvalidOperationException failure = null;
+                try
+                {
+                    routine.MoveNext();
+                }
+                catch (InvalidOperationException error)
+                {
+                    failure = error;
+                }
+                finally
+                {
+                    forceFailureAfterSetup = false;
+                }
+
+                Assert.That(failure?.Message, Is.EqualTo("Forced GPU setup failure."));
+                Assert.That(seededCamera.aspect, Is.EqualTo(1.2345f));
+                Assert.That(seededCamera.targetTexture, Is.SameAs(priorTarget));
+                Assert.That(RenderTexture.active, Is.SameAs(priorActive));
+                Assert.That(seededSpinner.enabled, Is.False);
+                Assert.That(seededLight.enabled, Is.False);
+                Assert.That(seededFeature.isActive, Is.False);
+                Assert.That(seededMain.activeSelf, Is.False);
+                Assert.That(seededSpinner.transform.localRotation, Is.EqualTo(spinnerPose));
+                Assert.That(seededLight.transform.localRotation, Is.EqualTo(lightPose));
+                Assert.That(File.Exists(Path.Combine(EvidenceDirectory, "render-metrics.json")), Is.True);
+            }
+            finally
+            {
+                forceFailureAfterSetup = false;
+                RenderTexture.active = null;
+                priorTarget.Release();
+                priorActive.Release();
+                UnityEngine.Object.Destroy(priorTarget);
+                UnityEngine.Object.Destroy(priorActive);
+            }
+        }
+
+        [UnityTest]
         public IEnumerator GlassLab_RendersLiveSharedBlurAndFailClosedFallbackEvidence()
         {
             Directory.CreateDirectory(EvidenceDirectory);
             string metricsPath = Path.Combine(EvidenceDirectory, "render-metrics.json");
             File.Delete(metricsPath);
-            SceneManager.LoadScene("TangoGlassLab", LoadSceneMode.Single);
-            yield return null;
-
             latestResults.Clear();
             List<TangoGpuAcceptanceResult> results = latestResults;
-            Camera camera = UnityEngine.Object.FindFirstObjectByType<Camera>();
-            TangoVerificationMarkers markers = UnityEngine.Object.FindFirstObjectByType<TangoVerificationMarkers>();
-            TangoSpinner spinner = UnityEngine.Object.FindFirstObjectByType<TangoSpinner>();
-            TangoLightOrbit lightOrbit = UnityEngine.Object.FindFirstObjectByType<TangoLightOrbit>();
-            Assert.That(camera, Is.Not.Null);
-            Assert.That(markers, Is.Not.Null);
-            Assert.That(spinner, Is.Not.Null);
-            Assert.That(lightOrbit, Is.Not.Null);
-
-            TangoGlassRendererFeature feature = Resources.FindObjectsOfTypeAll<TangoGlassRendererFeature>()
-                .FirstOrDefault(candidate => candidate != null && candidate.name == "TangoGlassRendererFeature");
-            Assert.That(feature, Is.Not.Null, "The PC renderer must contain the active Tango feature.");
-
-            GameObject panelRoot = GameObject.Find("Tango Glass Panel");
-            GameObject mainGlass = GameObject.Find("Tango Glass Panel/Glass Face");
-            GameObject independentGlass = GameObject.Find("Independent Glass Pane");
-            GameObject onGlassButton = GameObject.Find("Tango Glass Panel/On Glass Button");
-            GameObject solidFrame = GameObject.Find("Tango Glass Panel/Solid Frame");
-            GameObject frameShadowCaster = GameObject.Find("Tango Glass Panel/Frame Bottom Rail");
-            GameObject primaryLabel = GameObject.Find("Tango Glass Panel/Primary Label");
-            Assert.That(panelRoot, Is.Not.Null);
-            Assert.That(mainGlass, Is.Not.Null);
-            Assert.That(independentGlass, Is.Not.Null);
-            Assert.That(onGlassButton, Is.Not.Null);
-            Assert.That(solidFrame, Is.Not.Null);
-            Assert.That(frameShadowCaster, Is.Not.Null);
-            Assert.That(primaryLabel, Is.Not.Null);
-
-            var target = new RenderTexture(
-                CaptureWidth,
-                CaptureHeight,
-                24,
-                RenderTextureFormat.ARGB32,
-                RenderTextureReadWrite.sRGB)
-            {
-                name = "Tango MVP GPU Acceptance",
-                antiAliasing = 1,
-                useMipMap = false,
-                autoGenerateMips = false,
-            };
-            RenderTexture previousTarget = camera.targetTexture;
-            bool featureWasActive = feature.isActive;
-            ShadowCastingMode originalShadowMode = frameShadowCaster.GetComponent<Renderer>().shadowCastingMode;
-            bool mainGlassEnabled = mainGlass.activeSelf;
-            bool independentGlassEnabled = independentGlass.activeSelf;
-            bool buttonEnabled = onGlassButton.activeSelf;
-            Renderer labelRenderer = primaryLabel.GetComponent<Renderer>();
-            bool labelRendererEnabled = labelRenderer.enabled;
-            spinner.enabled = false;
-            lightOrbit.enabled = false;
-            camera.targetTexture = target;
-            camera.aspect = (float)CaptureWidth / CaptureHeight;
-            target.Create();
-
-            string graphicsApi = SystemInfo.graphicsDeviceType.ToString();
-            string deviceName = SystemInfo.graphicsDeviceName;
-            RectInt liveA = Region(markers, camera, TangoVerificationRegion.LiveGlassA);
-            RectInt liveB = Region(markers, camera, TangoVerificationRegion.LiveGlassB);
-            RectInt uncovered = Region(markers, camera, TangoVerificationRegion.UncoveredPattern);
-            RectInt button = Region(markers, camera, TangoVerificationRegion.OnGlassButton);
-            RectInt bevel = Region(markers, camera, TangoVerificationRegion.SolidBevel);
-            RectInt receiver = Region(markers, camera, TangoVerificationRegion.FrameShadowReceiver);
-            RectInt label = Region(markers, camera, TangoVerificationRegion.PrimaryLabel);
+            Camera camera = null; TangoSpinner spinner = null; TangoLightOrbit lightOrbit = null;
+            TangoGlassRendererFeature feature = null; GameObject mainGlass = null; GameObject independentGlass = null;
+            GameObject onGlassButton = null; GameObject frameShadowCaster = null; Renderer labelRenderer = null;
+            RenderTexture target = null; RenderTexture previousTarget = null; RenderTexture previousActive = RenderTexture.active;
+            float previousAspect = 0f; bool featureWasActive = false; ShadowCastingMode originalShadowMode = default;
+            bool mainGlassEnabled = false, independentGlassEnabled = false, buttonEnabled = false, labelRendererEnabled = false;
+            bool spinnerEnabled = false, lightOrbitEnabled = false; Quaternion spinnerRotation = default, lightRotation = default;
 
             try
             {
+                SceneManager.LoadScene("TangoGlassLab", LoadSceneMode.Single);
+                yield return null;
+                camera = UnityEngine.Object.FindFirstObjectByType<Camera>();
+                TangoVerificationMarkers markers = UnityEngine.Object.FindFirstObjectByType<TangoVerificationMarkers>();
+                spinner = UnityEngine.Object.FindFirstObjectByType<TangoSpinner>();
+                lightOrbit = UnityEngine.Object.FindFirstObjectByType<TangoLightOrbit>();
+                feature = Resources.FindObjectsOfTypeAll<TangoGlassRendererFeature>().FirstOrDefault(candidate => candidate != null && candidate.name == "TangoGlassRendererFeature");
+                mainGlass = FindSceneObject("Glass Face"); independentGlass = FindSceneObject("Independent Glass Pane");
+                onGlassButton = FindSceneObject("On Glass Button"); frameShadowCaster = FindSceneObject("Frame Bottom Rail");
+                GameObject primaryLabel = FindSceneObject("Primary Label");
+                Assert.That(camera, Is.Not.Null); Assert.That(markers, Is.Not.Null); Assert.That(spinner, Is.Not.Null); Assert.That(lightOrbit, Is.Not.Null);
+                Assert.That(feature, Is.Not.Null); Assert.That(mainGlass, Is.Not.Null); Assert.That(independentGlass, Is.Not.Null);
+                Assert.That(onGlassButton, Is.Not.Null); Assert.That(frameShadowCaster, Is.Not.Null); Assert.That(primaryLabel, Is.Not.Null);
+                previousTarget = camera.targetTexture; previousAspect = camera.aspect; featureWasActive = feature.isActive;
+                originalShadowMode = frameShadowCaster.GetComponent<Renderer>().shadowCastingMode;
+                mainGlassEnabled = mainGlass.activeSelf; independentGlassEnabled = independentGlass.activeSelf; buttonEnabled = onGlassButton.activeSelf;
+                labelRenderer = primaryLabel.GetComponent<Renderer>(); labelRendererEnabled = labelRenderer.enabled;
+                spinnerEnabled = spinner.enabled; lightOrbitEnabled = lightOrbit.enabled; spinnerRotation = spinner.transform.localRotation; lightRotation = lightOrbit.transform.localRotation;
+                target = new RenderTexture(CaptureWidth, CaptureHeight, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB)
+                { name = "Tango MVP GPU Acceptance", antiAliasing = 1, useMipMap = false, autoGenerateMips = false };
+                spinner.enabled = false; lightOrbit.enabled = false; camera.targetTexture = target; camera.aspect = (float)CaptureWidth / CaptureHeight; target.Create();
+                if (forceFailureAfterSetup) throw new InvalidOperationException("Forced GPU setup failure.");
+                string graphicsApi = SystemInfo.graphicsDeviceType.ToString(); string deviceName = SystemInfo.graphicsDeviceName;
+                RectInt liveA = Region(markers, camera, TangoVerificationRegion.LiveGlassA); RectInt liveB = Region(markers, camera, TangoVerificationRegion.LiveGlassB);
+                RectInt uncovered = Region(markers, camera, TangoVerificationRegion.UncoveredPattern); RectInt button = Region(markers, camera, TangoVerificationRegion.OnGlassButton);
+                RectInt bevel = Region(markers, camera, TangoVerificationRegion.SolidBevel); RectInt receiver = Region(markers, camera, TangoVerificationRegion.FrameShadowReceiver);
+                RectInt label = Region(markers, camera, TangoVerificationRegion.PrimaryLabel);
                 feature.SetActive(true);
                 lightOrbit.SetPhase(0f);
                 spinner.SetPhase(0.04f);
@@ -239,16 +272,15 @@ namespace TangoMvp.Tests.PlayMode
             }
             finally
             {
-                feature.SetActive(featureWasActive);
-                frameShadowCaster.GetComponent<Renderer>().shadowCastingMode = originalShadowMode;
-                mainGlass.SetActive(mainGlassEnabled);
-                independentGlass.SetActive(independentGlassEnabled);
-                onGlassButton.SetActive(buttonEnabled);
-                labelRenderer.enabled = labelRendererEnabled;
-                camera.targetTexture = previousTarget;
-                RenderTexture.active = null;
-                target.Release();
-                UnityEngine.Object.Destroy(target);
+                if (feature != null) feature.SetActive(featureWasActive);
+                if (frameShadowCaster != null) frameShadowCaster.GetComponent<Renderer>().shadowCastingMode = originalShadowMode;
+                if (mainGlass != null) mainGlass.SetActive(mainGlassEnabled); if (independentGlass != null) independentGlass.SetActive(independentGlassEnabled);
+                if (onGlassButton != null) onGlassButton.SetActive(buttonEnabled); if (labelRenderer != null) labelRenderer.enabled = labelRendererEnabled;
+                if (spinner != null) { spinner.enabled = spinnerEnabled; spinner.transform.localRotation = spinnerRotation; }
+                if (lightOrbit != null) { lightOrbit.enabled = lightOrbitEnabled; lightOrbit.transform.localRotation = lightRotation; }
+                if (camera != null) { camera.targetTexture = previousTarget; camera.aspect = previousAspect; }
+                RenderTexture.active = previousActive;
+                if (target != null) { target.Release(); UnityEngine.Object.Destroy(target); }
                 File.WriteAllText(metricsPath, TangoGpuAcceptance.Serialize(results));
             }
 
@@ -263,6 +295,12 @@ namespace TangoMvp.Tests.PlayMode
         private static RectInt Region(TangoVerificationMarkers markers, Camera camera, TangoVerificationRegion region)
         {
             return TangoImageMetrics.ViewportToPixelRegion(markers.GetViewportRegion(region, camera), CaptureWidth, CaptureHeight);
+        }
+
+        private static GameObject FindSceneObject(string name)
+        {
+            return Resources.FindObjectsOfTypeAll<GameObject>()
+                .FirstOrDefault(candidate => candidate.scene.IsValid() && candidate.name == name);
         }
 
         private static Color32[] Capture(Camera camera, RenderTexture target, string name)

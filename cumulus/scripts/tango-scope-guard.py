@@ -1,44 +1,46 @@
 #!/usr/bin/env python3
 
 import argparse
-import os
 from pathlib import Path
 import re
 import subprocess
 import sys
 
 
-def git_paths(repo_root: Path, base: str) -> list[str]:
-    changed = subprocess.run(
-        ["git", "diff", "--name-only", "--diff-filter=ACMRT", base, "--"],
-        cwd=repo_root,
-        check=True,
+def git_changes(root: Path, base: str) -> list[tuple[str, str]]:
+    output = subprocess.check_output(
+        ["git", "diff", "--name-status", "--find-renames", base, "--"],
+        cwd=root,
         text=True,
-        stdout=subprocess.PIPE,
-    ).stdout.splitlines()
-    untracked = subprocess.run(
-        ["git", "ls-files", "--others", "--exclude-standard"],
-        cwd=repo_root,
-        check=True,
-        text=True,
-        stdout=subprocess.PIPE,
-    ).stdout.splitlines()
-    return sorted(set(changed + untracked))
-
-
-def fixture_paths(fixture_root: Path) -> list[str]:
-    return sorted(
-        path.relative_to(fixture_root).as_posix()
-        for path in fixture_root.rglob("*")
-        if path.is_file()
     )
+    changes: list[tuple[str, str]] = []
+    for line in output.splitlines():
+        parts = line.split("\t")
+        status = parts[0][0]
+        changes.extend((status, path) for path in parts[1:])
+    untracked = subprocess.check_output(
+        ["git", "ls-files", "--others", "--exclude-standard"],
+        cwd=root,
+        text=True,
+    )
+    changes.extend(("A", path) for path in untracked.splitlines())
+    return changes
 
 
-def source_files(root: Path, fixture: bool) -> list[Path]:
-    source_root = root / "cumulus" / "Assets" / "TangoMvp"
-    if not source_root.exists():
-        return []
-    return sorted(source_root.rglob("*.cs"))
+def source_fields() -> re.Pattern[str]:
+    qualified = r"(?:(?:global\s*::\s*)?(?:UnityEngine(?:\s*\.\s*Rendering)?\s*\.\s*)?)?"
+    target = qualified + r"(?:Camera|RenderTexture|RTHandle)\s*\??"
+    array = target + r"(?:\s*\[\s*(?:,\s*)*\])?"
+    collection = (
+        r"(?:[A-Za-z_]\w*\s*\.\s*)?"
+        r"(?:List|IList|IEnumerable|IReadOnlyList|ICollection|IReadOnlyCollection|Collection)"
+        rf"\s*<\s*{array}\s*>\s*\??"
+    )
+    modifiers = r"(?:(?:public|private|protected|internal|static|readonly|volatile|new)\s+)*"
+    return re.compile(
+        rf"(?:\[[^\]]+\]\s*)*{modifiers}(?:{array}|{collection})\s+(\w+)\s*(?:=|;)",
+        re.MULTILINE,
+    )
 
 
 def main() -> int:
@@ -46,56 +48,81 @@ def main() -> int:
     parser.add_argument("--repo-root", required=True)
     parser.add_argument("--base")
     parser.add_argument("--fixture-root")
+    parser.add_argument("--fixture-deleted", action="append", default=[])
     args = parser.parse_args()
 
-    repo_root = Path(args.repo_root).resolve()
+    repo = Path(args.repo_root).resolve()
     fixture = args.fixture_root is not None
-    scan_root = Path(args.fixture_root).resolve() if fixture else repo_root
+    root = Path(args.fixture_root).resolve() if fixture else repo
     if fixture:
-        paths = fixture_paths(scan_root)
+        changes = [("A", path.relative_to(root).as_posix()) for path in root.rglob("*") if path.is_file()]
     else:
         if not args.base:
             parser.error("--base is required without --fixture-root")
-        paths = git_paths(repo_root, args.base)
+        changes = git_changes(repo, args.base)
+    changes.extend(("D", path) for path in args.fixture_deleted)
 
     errors: list[str] = []
-    forbidden_renderer = "cumulus/Assets/Settings/Mobile_Renderer.asset"
-    for path in paths:
+    deleted = {path for status, path in changes if status == "D"}
+    for status, path in changes:
         normalized = path.replace("\\", "/")
-        if normalized == forbidden_renderer:
-            errors.append(f"forbidden renderer mutation: {normalized}")
-        if normalized.startswith("cumulus/Assets/TextMesh Pro/"):
-            errors.append(f"forbidden TextMesh Pro asset mutation: {normalized}")
-        lower = normalized.lower()
-        if lower.endswith((".uxml", ".uss")) or "uidocument" in lower:
-            errors.append(f"forbidden UI document asset mutation: {normalized}")
+        asset_path = normalized[:-5] if normalized.endswith(".meta") else normalized
+        lowered = asset_path.lower()
+        protected = (
+            asset_path == "cumulus/Assets/Settings/Mobile_Renderer.asset"
+            or asset_path.startswith("cumulus/Assets/TextMesh Pro/")
+            or lowered.endswith((".uxml", ".uss"))
+            or "uidocument" in lowered
+        )
+        if protected:
+            errors.append(f"protected asset {status.lower()}: {normalized}")
 
-        candidate = scan_root / normalized
-        if normalized.startswith("cumulus/Assets/") and not normalized.endswith(".meta") and candidate.is_file():
-            meta = Path(str(candidate) + ".meta")
-            if not meta.is_file():
-                errors.append(f"missing Unity meta partner: {normalized}.meta")
+        if not normalized.startswith("cumulus/Assets/"):
+            continue
+        if normalized.endswith(".meta"):
+            asset = normalized[:-5]
+            if status == "D" and (root / asset).exists() and asset not in deleted:
+                errors.append(f"missing Unity meta partner: {normalized}")
+            continue
+        asset_exists = (root / normalized).exists() and normalized not in deleted
+        meta = normalized + ".meta"
+        meta_exists = (root / meta).exists() and meta not in deleted
+        if asset_exists and not meta_exists:
+            errors.append(f"missing Unity meta partner: {meta}")
+        elif meta_exists and not asset_exists:
+            errors.append(f"orphaned Unity meta partner: {meta}")
 
-    material_pattern = re.compile(r"\bnew\s+Material\s*\(")
-    per_pane_pattern = re.compile(
-        r"\b(?:Camera|RenderTexture)\s+(?:pane|glass)\w*|"
-        r"\b(?:Camera|RenderTexture)\s+\w*(?:Pane|Glass)(?:Camera|Texture)\w*"
+    allocation = re.compile(
+        r"\bnew\s+(?:(?:global\s*::\s*)?UnityEngine\s*\.\s*)?Material\s*\("
     )
+    field = source_fields()
     forbidden_imports = (
         "using UnityEngine.UI;",
         "using UnityEngine.UIElements;",
         "using TMPro;",
     )
-    for source in source_files(scan_root, fixture):
-        relative = source.relative_to(scan_root).as_posix()
-        text = source.read_text(encoding="utf-8")
-        if "/Runtime/" in relative and material_pattern.search(text):
+    source_root = root / "cumulus/Assets/TangoMvp"
+    sources = source_root.rglob("*.cs") if source_root.exists() else []
+    for source in sources:
+        relative = source.relative_to(root).as_posix()
+        content = source.read_text(encoding="utf-8")
+        if "/Runtime/" in relative and allocation.search(content):
             errors.append(f"runtime material allocation: {relative}")
-        if "/Runtime/" in relative and per_pane_pattern.search(text):
-            errors.append(f"per-pane camera/render-texture field: {relative}")
+        if "/Runtime/" in relative:
+            for match in field.finditer(content):
+                allowed_interactor_camera = (
+                    relative.endswith("TangoPointerInteractor.cs")
+                    and match.group(1) == "interactionCamera"
+                )
+                if not allowed_interactor_camera:
+                    errors.append(
+                        f"per-pane camera/render-texture field: {relative}:{match.group(1)}"
+                    )
         for forbidden_import in forbidden_imports:
-            if forbidden_import in text:
-                errors.append(f"forbidden UI namespace import ({forbidden_import}): {relative}")
+            if forbidden_import in content:
+                errors.append(
+                    f"forbidden UI namespace import ({forbidden_import}): {relative}"
+                )
 
     for error in sorted(set(errors)):
         print(f"scope-guard: {error}", file=sys.stderr)

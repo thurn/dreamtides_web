@@ -59,7 +59,7 @@ forbidden_path="$TEST_ROOT/forbidden-path"
 mkdir -p "$forbidden_path/cumulus/Assets/Settings"
 printf 'fixture\n' > "$forbidden_path/cumulus/Assets/Settings/Mobile_Renderer.asset"
 printf 'fileFormatVersion: 2\n' > "$forbidden_path/cumulus/Assets/Settings/Mobile_Renderer.asset.meta"
-expect_reject_with "Mobile renderer mutation" "forbidden renderer mutation" \
+expect_reject_with "Mobile renderer mutation" "protected asset a" \
   python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$forbidden_path"
 
 allocation="$TEST_ROOT/allocation"
@@ -68,11 +68,23 @@ write_source "$allocation" "cumulus/Assets/TangoMvp/Runtime/BadAllocation.cs" \
 expect_reject_with "runtime Material allocation" "runtime material allocation" \
   python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$allocation"
 
+qualified_allocation="$TEST_ROOT/qualified-allocation"
+write_source "$qualified_allocation" "cumulus/Assets/TangoMvp/Runtime/QualifiedAllocation.cs" \
+  'public sealed class QualifiedAllocation { object Create(UnityEngine.Shader shader) { return new UnityEngine.Material ( shader ); } }'
+expect_reject_with "qualified runtime Material allocation with whitespace" "runtime material allocation" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$qualified_allocation"
+
 per_pane="$TEST_ROOT/per-pane"
 write_source "$per_pane" "cumulus/Assets/TangoMvp/Runtime/BadPane.cs" \
   'using UnityEngine; public sealed class BadPane : MonoBehaviour { [SerializeField] private Camera paneCamera; }'
 expect_reject_with "per-pane camera field" "per-pane camera/render-texture field" \
   python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$per_pane"
+
+collections="$TEST_ROOT/collections"
+write_source "$collections" "cumulus/Assets/TangoMvp/Runtime/BadCollections.cs" \
+  'using System.Collections.Generic; using UnityEngine; using UnityEngine.Rendering; public sealed class BadCollections { [SerializeField] Camera?[,] cameras; protected List<RenderTexture?> targets; internal IReadOnlyCollection<RTHandle> handles; }'
+expect_reject_with "array and generic camera/render target fields" "per-pane camera/render-texture field" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$collections"
 
 ui_import="$TEST_ROOT/ui-import"
 write_source "$ui_import" "cumulus/Assets/TangoMvp/Runtime/BadUi.cs" \
@@ -80,11 +92,30 @@ write_source "$ui_import" "cumulus/Assets/TangoMvp/Runtime/BadUi.cs" \
 expect_reject_with "UI Toolkit import" "forbidden UI namespace import" \
   python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$ui_import"
 
+for import_case in \
+  "ugui|using UnityEngine.UI; public sealed class BadUi { }" \
+  "tmp|using TMPro; public sealed class BadTmp { }"; do
+  import_name="${import_case%%|*}"; import_body="${import_case#*|}"; fixture="$TEST_ROOT/$import_name"
+  write_source "$fixture" "cumulus/Assets/TangoMvp/Runtime/Bad${import_name}.cs" "$import_body"
+  expect_reject_with "$import_name import" "forbidden UI namespace import" python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$fixture"
+done
+
 missing_meta="$TEST_ROOT/missing-meta"
 mkdir -p "$missing_meta/cumulus/Assets/TangoMvp"
 printf 'fixture\n' > "$missing_meta/cumulus/Assets/TangoMvp/NoMeta.asset"
 expect_reject_with "missing Unity meta partner" "missing Unity meta partner" \
   python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$missing_meta"
+
+deletion="$TEST_ROOT/deletion"
+mkdir -p "$deletion/cumulus/Assets/Settings"
+expect_reject_with "protected Mobile renderer deletion" "protected asset d" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$deletion" --fixture-deleted "cumulus/Assets/Settings/Mobile_Renderer.asset"
+
+meta_delete="$TEST_ROOT/meta-delete"
+mkdir -p "$meta_delete/cumulus/Assets/TangoMvp"
+printf 'fixture\n' > "$meta_delete/cumulus/Assets/TangoMvp/Kept.asset"
+expect_reject_with "meta deletion while asset remains" "missing Unity meta partner" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$meta_delete" --fixture-deleted "cumulus/Assets/TangoMvp/Kept.asset.meta"
 
 echo "$PASS_COUNT scope-guard checks passed; $FAIL_COUNT failed"
 (( FAIL_COUNT == 0 ))
