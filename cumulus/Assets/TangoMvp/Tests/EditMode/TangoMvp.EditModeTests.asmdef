@@ -2,7 +2,8 @@
   "name": "TangoMvp.EditModeTests",
   "rootNamespace": "TangoMvp.Tests",
   "references": [
-    "TangoMvp.Runtime"
+    "TangoMvp.Runtime",
+    "Unity.RenderPipelines.Universal.Runtime"
   ],
   "includePlatforms": [
     "Editor"
