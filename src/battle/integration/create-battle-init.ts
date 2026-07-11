@@ -15,7 +15,11 @@ import type { RunPoolContext } from "../../data/quest-content";
 import type { DraftRecord } from "../../data/cards-v2-database";
 import type { FitModel } from "../../draft/replay/fit-model";
 import { DEFAULT_POOL_VARIANT } from "../../draft/pool/types";
-import { resolveDeckEntryCard } from "../../card-type-change";
+import {
+  applyCardStatOverride,
+  applyDeckEntryCardModification,
+  resolveDeckEntryCard,
+} from "../../card-type-change";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
 import type { BattleRng } from "../random";
@@ -765,9 +769,18 @@ function normalizePlayerDeckCard(
   // and rules text (transfiguration, type/keyword changes, then debug stat
   // overrides) rather than the printed base values.
   const effectiveCard = resolveDeckEntryCard(card, entry);
-  const transfigurationDisplay = entry.transfiguration === null
-    ? undefined
-    : buildTransfigurationDisplay(card, entry.transfiguration).display;
+  const transfigurationDisplay = (() => {
+    if (entry.transfiguration === null) return undefined;
+    const transfigured = buildTransfigurationDisplay(card, entry.transfiguration);
+    const markedCard = applyCardStatOverride(
+      applyDeckEntryCardModification(
+        { ...transfigured.card, renderedText: transfigured.display.markedText },
+        { typeChange: entry.typeChange, keywords: entry.keywordModification },
+      ),
+      entry.statOverride,
+    );
+    return { ...transfigured.display, markedText: markedCard.renderedText };
+  })();
   return {
     sourceDeckEntryId: entry.entryId,
     // The stable base-catalog UUID, kept even when the entry is transfigured or

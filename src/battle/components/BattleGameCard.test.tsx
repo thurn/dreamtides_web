@@ -79,7 +79,7 @@ describe("BattleGameCard", () => {
   it("uses the exact persisted text-changing and applicability-sensitive displays", () => {
     const inspired: CardTransfigurationDisplay = {
       type: "Inspired", color: "#93c5fd",
-      markedText: `Foresee. ${TRANSFIGURE_MARK_START}Draw a card.${TRANSFIGURE_MARK_END}`,
+      markedText: `Foresee. ${TRANSFIGURE_MARK_START}Draw a card.${TRANSFIGURE_MARK_END}\n\nReclaim 2●`,
       energyChanged: false, sparkChanged: false, fastChanged: false,
     };
     const perfected: CardTransfigurationDisplay = {
@@ -98,17 +98,18 @@ describe("BattleGameCard", () => {
       } as BattleDeckCardDefinition & { transfigurationDisplay: CardTransfigurationDisplay },
     });
 
-    expect(battleGameCardModel(withDisplay(inspired, "Foresee. Draw a card.")).transfiguration)
+    expect(battleGameCardModel(withDisplay(inspired, "Foresee. Draw a card.\n\nReclaim 2●")).transfiguration)
       .toEqual(inspired);
     expect(battleGameCardModel(withDisplay(perfected, "A wall of thorns.")).transfiguration)
       .toEqual(perfected);
 
     const { container, root } = mount(
-      <BattleGameCard instance={withDisplay(inspired, "Foresee. Draw a card.")} />,
+      <BattleGameCard instance={withDisplay(inspired, "Foresee. Draw a card.\n\nReclaim 2●")} />,
     );
     const highlighted = [...container.querySelectorAll<HTMLElement>("span")]
       .find((span) => span.textContent === "Draw a card.");
     expect(highlighted?.style.color).toBe("rgb(147, 197, 253)");
+    expect(container.textContent).toContain("Reclaim 2●");
     act(() => root.unmount()); container.remove();
   });
 
@@ -180,6 +181,11 @@ describe("BattleGameCard", () => {
     act(() => {
       wrapper.dispatchEvent(new Event("dragstart", { bubbles: true }));
       wrapper.dispatchEvent(new Event("dragend", { bubbles: true }));
+      source.dispatchEvent(new KeyboardEvent("keydown", { key: "a", bubbles: true }));
+      source.click();
+    });
+    expect(activate).not.toHaveBeenCalled();
+    act(() => {
       source.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
     });
     expect(activate).toHaveBeenCalledOnce();

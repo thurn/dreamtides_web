@@ -120,7 +120,9 @@ export function BattleGameCard({
       data-battle-card-transfiguration={instance.definition.transfiguration ?? undefined}
       className={classes} style={style} draggable={draggable} onDoubleClick={onDoubleClick}
       onContextMenu={onContextMenu} onPointerDownCapture={() => { dragSuppressedRef.current = false; }}
-      onKeyDownCapture={() => { dragSuppressedRef.current = false; }}
+      onKeyDownCapture={(event) => {
+        if (event.key === "Enter" || event.key === " ") dragSuppressedRef.current = false;
+      }}
       onDragStart={handleDragStart} onDragEnd={onDragEnd}
       onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onMouseMove={onMouseMove}>
       <div className="battle-game-card-surface"

@@ -13,6 +13,7 @@ import type { PoolCard } from "../../draft/pool/types";
 import type { CardKeywordModification, CardTypeChange } from "../../types/quest";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
+import { TRANSFIGURE_MARK_END, TRANSFIGURE_MARK_START } from "../../runtime/transfigure-markers";
 
 // The padded minimum battle deck size; the enemy deck is padded up to this.
 const MIN_BATTLE_DECK_SIZE = 25;
@@ -25,6 +26,10 @@ function makeBaseInput(): CreateBattleInitInput {
     cardDatabase: makeBattleTestCardDatabase(),
     dreamcallers: makeBattleTestDreamcallers(),
   };
+}
+
+function stripTransfigurationMarkers(text: string): string {
+  return text.split(TRANSFIGURE_MARK_START).join("").split(TRANSFIGURE_MARK_END).join("");
 }
 
 function makePackageCard(
@@ -516,6 +521,49 @@ describe("createBattleInit", () => {
         transfigurationDisplay?: CardTransfigurationDisplay;
       })?.transfigurationDisplay;
       expect(display).toEqual(buildTransfigurationDisplay(card, type).display);
+    });
+
+    it("keeps later type and keyword changes visible but outside transfiguration markers", () => {
+      const baseInput = makeBaseInput();
+      const sourceEntry = baseInput.state.deck[0];
+      const original = baseInput.cardDatabase.get(sourceEntry.cardNumber);
+      if (original === undefined) throw new Error("expected source card");
+      const card: CardData = {
+        ...original,
+        id: asCardId("11111111-1111-4111-8111-111111111111"),
+        cardType: "Event", subtype: "Vision", energyCost: 2, spark: null,
+        isFast: false, renderedText: "Foresee.",
+      };
+      const keywordModification: CardKeywordModification = { reclaim: 2 };
+      const typeChange: CardTypeChange = {
+        predicateId: "visions", cardType: "Character", subtype: "Seer", label: "Seer",
+      };
+      const input: CreateBattleInitInput = {
+        ...baseInput,
+        cardDatabase: new Map(baseInput.cardDatabase).set(card.cardNumber, card),
+        state: {
+          ...baseInput.state,
+          deck: baseInput.state.deck.map((entry, index) => index === 0
+            ? { ...entry, transfiguration: "Inspired", keywordModification, typeChange }
+            : entry),
+        },
+      };
+      const definition = createBattleInit(input).playerDeckOrder.find(
+        (entry) => entry.sourceDeckEntryId === sourceEntry.entryId,
+      );
+      if (definition?.transfigurationDisplay === undefined) {
+        throw new Error("expected transfiguration display");
+      }
+
+      expect(definition.cardId).toBe(card.id);
+      expect(definition.battleCardKind).toBe("character");
+      expect(stripTransfigurationMarkers(definition.transfigurationDisplay.markedText))
+        .toBe(definition.renderedText);
+      expect(definition.transfigurationDisplay.markedText).toBe(
+        `Foresee. ${TRANSFIGURE_MARK_START}Draw a card.${TRANSFIGURE_MARK_END}\n\nReclaim 2●`,
+      );
+      expect(definition.transfigurationDisplay.markedText)
+        .not.toContain(`${TRANSFIGURE_MARK_START}Reclaim`);
     });
 
     it("applies quest deck entry type changes to player battle card definitions", () => {
