@@ -70,7 +70,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 2× Ashborn Necromancer
 - 2× Watcher in the Ruins
 - 2× Tidewreck Navigator
-- 2× Silent Avenger
+- 2× Guide of Lost Souls
 - 2× Corrupted Host
 - 2× Entropy Spike
 - 2× Stolen Genesis
@@ -139,7 +139,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Scrapyard Custodian
 - 1× The Calling Night
 - 1× Flagbearer of Decay
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Soul Channeling
 - 1× Carrion Shepherd
 - 1× Ossuary Offering
@@ -164,7 +164,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 2× Ashborn Necromancer
 - 2× Watcher in the Ruins
 - 2× Tidewreck Navigator
-- 2× Silent Avenger
+- 2× Guide of Lost Souls
 - 2× Veil of the Wastes
 - 2× Hope's Vanguard
 - 2× Corrupted Host
@@ -228,7 +228,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 1× Ruin Scavenger
 - 1× The Calling Night
 - 1× Flagbearer of Decay
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Soul Channeling
 - 1× Sunset Chronicler
 - 1× Infernal Ascendant
@@ -242,7 +242,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 This tide is overwhelmingly character-heavy (94 of 110 copies) and built around the act of abandoning allies as a repeatable resource. The six densest cards each reward when characters leave play: Skull Weaver and Silent Avenger convert any ally's exit into ⍟, Avatar of Cosmic Reckoning drains ⍟ on every dissolve while also producing a figment on entry, and Cinderheart accumulates +1✦ for each abandon then cashes that growth as ⍟ when it is itself dissolved. Harvester of Despair and Exiles of the Last Light close a loop where cheap characters are sacrificed for ✦ and energy, which feeds back into deploying more characters. A secondary spirit animal package — including energy-generating one-drops and lords like Ghostlight Wolves (gain ● per allied spirit animal, +2✦ support) and Spiritbound Alpha (mass +3✦ and vengeful for a turn) — provides both the ● to keep abandoning and the wide board that makes the finisher Spirit Bond ("allied characters gain unstoppable and +X✦ where X is allied count") lethal. The nearest sibling tides (tide-sig-02 and tide-sig-01) share the abandonment shell but are oriented around the survivor subtype specifically, doubling up Sorrow Watcher (survivor figment generation), Soulreaver (draw on non-figment dissolves), Tidewreck Navigator (survivor void recursion), and Kindred Sparks (cheap survivor payoff) to build a dense recursive survivor flood; tide-sig-03 instead spreads across spirit animals and broader character types, trades the draw-heavy survivor loops for ⍟ drain and ✦ scaling, and closes games with a board-wide pump rather than iterative survivor recursion.
 
 - 2× Dustborn Veteran
-- 2× Silent Avenger
+- 2× Guide of Lost Souls
 - 2× Cinderheart
 - 2× Exiles of the Last Light
 - 2× Avatar of Cosmic Reckoning
@@ -338,7 +338,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Quiet Reflection
 - 1× Dawnprowler Panther
 - 1× Flagbearer of Decay
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Vigil Keeper
 - 1× Carrion Shepherd
 - 1× Sunset Chronicler
@@ -491,7 +491,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Fallen One
 - 1× Tidewreck Navigator
 - 1× Shardwoven Tyrant
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Immolate and Rise
 - 1× Shaper of Memory
 - 1× Depthwalker
@@ -548,7 +548,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Pinnacle Ascendant
 - 1× Scrapyard Custodian
 - 1× Flagbearer of Decay
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Vigil Keeper
 - 1× Carrion Shepherd
 - 1× Forgotten Sleeper
@@ -602,7 +602,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 1× Dreadcall Warden
 - 1× Ashborn Necromancer
 - 1× Tidewreck Navigator
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Immolate and Rise
 - 1× Graywatch
 - 1× Unbroken
@@ -698,7 +698,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
 - 1× Fallen One
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Immolate and Rise
 - 1× Shaper of Memory
 - 1× Hope's Vanguard
@@ -775,7 +775,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 2× Searcher in the Mists
 - 2× Volcanic Channeler
 - 2× Tidewreck Navigator
-- 2× Silent Avenger
+- 2× Guide of Lost Souls
 - 2× Graywatch
 - 2× Abomination of Memory
 - 2× Enginespeaker
@@ -848,7 +848,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Mind's Door
 - 1× Scrapyard Custodian
 - 1× The Calling Night
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Soul Channeling
 - 1× Forgotten Sleeper
 - 1× Shared Ruin
@@ -1264,7 +1264,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Oracle of Shifting Skies
 - 1× Pinnacle Ascendant
 - 1× Sundown Surfer
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Forgotten Sleeper
 - 1× Wandering Archivist
 - 1× Cascade of Reflections
@@ -1990,7 +1990,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 
 Tide-fac-01 is an almost entirely character-based (40 of 45 copies) midrange engine that treats abandoning its own allies as a resource rather than a cost. The dominant sink for that resource runs along three parallel tracks: generating ⍟ income through characters that watch allies leave play, growing individual characters' ✦ through repeated abandons (Herald of the Last Light gains +1✦ per abandon and converts that investment into card draw; Harvester of Despair and Cinderheart follow the same pattern), and charging ⧗ counters on Kindlehorn and Obliterator of Worlds to dissolve enemies sized to match those counters. The Dread Sovereign adds a fourth angle — exhausting plus abandoning to discover and immediately materialize a character of chosen cost — giving the deck a tutorlike way to find expensive threats without committing hard mana upfront. Two copies of the cheap survivor Kindred Sparks let the deck replay threats from the void for a single ●, and Stolen Genesis converts an abandon directly into a free higher-cost character from the deck. Compared to its nearest sibling (fac-14), which shares the core abandon shell but includes The Rising God as an eight-cost Unstoppable finisher reclaimed via abandoning two characters, this tide forgoes the top-end power spike in favor of a more distributed, board-controlling plan: growing wide threats through ✦ accumulation and keeping the enemy board in check via the ⧗ removal engine.
 
-- 2× Silent Avenger
+- 2× Guide of Lost Souls
 - 2× Kindred Sparks
 - 2× Exiles of the Last Light
 - 1× Iron Pharaoh
@@ -2027,7 +2027,7 @@ Tide-fac-01 is an almost entirely character-based (40 of 45 copies) midrange eng
 - 1× Shadowcaller
 - 1× Avatar of Cosmic Reckoning
 - 1× Scrapyard Custodian
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Vigil Keeper
 - 1× Carrion Shepherd
 - 1× Skull Weaver
@@ -2042,7 +2042,7 @@ Tide-fac-02 is built almost entirely of characters (41 of 45 cards) and operates
 
 - 2× Fallen Angel
 - 2× Rusted Monolith
-- 2× Silent Avenger
+- 2× Guide of Lost Souls
 - 2× Enginespeaker
 - 2× Corrupted Host
 - 2× Exiles of the Last Light
@@ -2578,7 +2578,7 @@ Tide-fac-12 is built almost entirely of warriors (42 of 45 copies) and organizes
 
 Tide-fac-13 is a character-heavy spirit animal tribal deck (35 of 45 copies are characters) built around flooding the board with cheap spirit animals and then dramatically elevating their spark values. The central pump engine runs on two Support creatures: Eternal Stag, which gives all supported spirit animals +1✦ while also drawing more spirit animals on activation, and Ghostlight Wolves, which grants supported spirit animals +2✦ and generates 1● per allied spirit animal on activation. On top of those stacking auras, Mystic Runefish provides a decisive activated ability that sets every allied spirit animal's ✦ to 7 for 5●, effectively erasing the individual deficiencies of small or low-spark creatures. The draw suite — Celestial Reverie triggering a card draw per character played, Dreamvale Monarch drawing on materialization, Dreamcatcher's Call discovering and directly materializing a character of chosen cost, and Shatterpoint Agent chaining discoveries upward by discarding — refills the hand while deploying the board. Spirit Bond serves as the mass finisher, granting every allied character unstoppable and +X✦ where X equals the number of allied characters, turning a full board into a lethal one-turn swing. The nearest sibling tide shares the same spirit animal shell and Spirit Bond closer, but is oriented around harvesting energy from a wide board of cheap creatures through Dawn triggers and stored charge tokens; tide-fac-13 is distinguished by its investment in ✦ amplification infrastructure — the Support aura pair and Mystic Runefish — that converts board presence into raw spark rather than fuel for further plays.
 
-- 2× Silent Avenger
+- 2× Guide of Lost Souls
 - 2× Reclaimer of Lost Paths
 - 2× Exiles of the Last Light
 - 1× Iron Pharaoh
@@ -2618,7 +2618,7 @@ Tide-fac-13 is a character-heavy spirit animal tribal deck (35 of 45 copies are 
 - 1× Shadowcaller
 - 1× Avatar of Cosmic Reckoning
 - 1× The Rising God
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Vigil Keeper
 - 1× Carrion Shepherd
 - 1× Skull Weaver
@@ -2852,7 +2852,7 @@ Tide-fac-18 is built around two interlocking halves: an energy ramp package and 
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
 - 1× Tidewreck Navigator
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Immolate and Rise
 - 1× Veil of the Wastes
 - 1× Hope's Vanguard
@@ -3134,7 +3134,7 @@ This tide is built around a dense curve of inexpensive survivors whose arrival a
 
 - 2× Dustborn Veteran
 - 2× Volcanic Channeler
-- 2× Silent Avenger
+- 2× Guide of Lost Souls
 - 2× Reclaimer of Lost Paths
 - 2× Kindred Sparks
 - 2× Exiles of the Last Light
@@ -3169,7 +3169,7 @@ This tide is built around a dense curve of inexpensive survivors whose arrival a
 - 1× Dreadweaver
 - 1× Shadowcaller
 - 1× Avatar of Cosmic Reckoning
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Vigil Keeper
 - 1× Carrion Shepherd
 - 1× Skull Weaver
@@ -3197,7 +3197,7 @@ Tide-fac-26 is a character-heavy survivor tide built around the abandon trigger 
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
 - 1× Tidewreck Navigator
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Graywatch
 - 1× Abomination of Memory
 - 1× Veil of the Wastes
@@ -3250,7 +3250,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
 - 1× Tidewreck Navigator
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Graywatch
 - 1× Abomination of Memory
 - 1× Enginespeaker
@@ -3325,7 +3325,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 1× Pinnacle Ascendant
 - 1× Sundown Surfer
 - 1× Chaos Crasher
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Forgotten Sleeper
 - 1× Wandering Archivist
 
@@ -3504,7 +3504,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
 - 1× Tidewreck Navigator
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Graywatch
 - 1× Veil of the Wastes
 - 1× Hope's Vanguard
@@ -3676,7 +3676,7 @@ Tide-neu-03 is a character-heavy (24 of 30 cards) deck built around two interloc
 - 1× Volcanic Channeler
 - 1× Ashborn Necromancer
 - 1× Tidewreck Navigator
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Veil of the Wastes
 - 1× Corrupted Host
 - 1× Price of Redemption
@@ -3734,7 +3734,7 @@ Tide-neu-04 is built almost entirely of warriors (28 of 30 cards are characters,
 - 1× Tethered Hollow
 - 1× Ethereal Trailblazer
 
-## Broad: Silent Avenger / Corrupted Host — Abandon Spark Removal
+## Broad: Guide of Lost Souls / Corrupted Host — Abandon Spark Removal
 
 `tide-neu-05` — neutral tide, 23 distinct cards, 28 copies
 
@@ -3742,11 +3742,11 @@ Tide-neu-04 is built almost entirely of warriors (28 of 30 cards are characters,
 
 tide-neu-05 is an almost entirely character-based deck (27 of 30 cards) built around the act of abandoning allies to grow the power of specific threats while simultaneously dismantling the enemy board. The central engine runs through two doubled characters: Harvester of Despair (abandon another → this gains +1✦) and Cinderheart (gains +1✦ per abandon, then on its own dissolution converts that ✦ total directly into ⍟ income). Saltless Mariner and Obliterator of Worlds extend the loop — the former yields 1⍟ per abandon activation, while Obliterator banks ⧗ from each abandonment and spends accumulated ⧗ to dissolve any enemy whose ✦ does not exceed the stored count, providing scalable board control. Silent Avenger (doubled) collects 1⍟ whenever any character is dissolved, meaning both the self-abandons and the targeted removals feed its income. The two events — Collateral Damage (dissolve all ≤X✦ characters) and fast Molten Duel (dissolve a ≤3✦ character) — function as clean-up tools that can also trigger Silent Avenger's ⍟ payoff. Against its nearest sibling tide-neu-07, which also runs Silent Avenger but centers on Skull Weaver and broad dissolution-triggered ⍟ with no ✦-stacking pieces, tide-neu-05 is distinguished by its active ✦-growth loop: the deck must deliberately sequence abandons onto Harvester and Cinderheart to reach both its removal threshold (Obliterator, Kindlehorn) and its ⍟ burst, making it a more deliberate and higher-ceiling sacrifice engine rather than a passive dissolution collector.
 
-- 2× Silent Avenger
+- 2× Guide of Lost Souls
 - 2× Corrupted Host
 - 2× Headtaker
 - 2× Cinderheart
-- 2× Obliterator of Worlds
+- 2× Eviscerator of Hope
 - 1× Fallen Angel
 - 1× Volcanic Channeler
 - 1× Ashborn Necromancer
@@ -3802,7 +3802,7 @@ Tide-neu-06 is a character-dense discard engine built around accumulating a larg
 - 1× Forgotten Sleeper
 - 1× Wandering Archivist
 
-## Broad: Silent Avenger / Enginespeaker — Abandon into Removal
+## Broad: Guide of Lost Souls / Enginespeaker — Abandon into Removal
 
 `tide-neu-07` — neutral tide, 27 distinct cards, 30 copies
 
@@ -3810,7 +3810,7 @@ Tide-neu-06 is a character-dense discard engine built around accumulating a larg
 
 Tide-neu-07 is built almost entirely on characters (28 of 30 cards), organized around a two-step sacrifice loop: abandon a character to stockpile ⧗ counters, then spend those counters to dissolve an enemy of matching ✦. The repeatable ⧗-fueled removal pieces — characters that read "Abandon a character: Store 1⧗" and "X⧗: Dissolve an enemy with X✦" — form the central engine, with a second character that scales its own ✦ each time you abandon and converts that growth into ⍟ on dissolution. Dissolution events trigger a cluster of ⍟-reward characters (including the double-copy anchor that gains 1⍟ whenever any character is dissolved, and a second anchor that gains 1⍟ whenever any ally leaves play), turning the removal engine into an income stream. Supporting pieces include a fast event that draws a card for each ally dissolved in a turn, and a reclaim-enabled event that abandons a character to materialize a higher-cost one from your deck, providing an escalation path when ⧗ removal thins the board. Where the closest sibling tide (tide-neu-11) uses dissolution as a trigger to materialize figment tokens — building board width through Defiant Holdout, Shadowcaller, and Dustborn Veteran — tide-neu-07 uses dissolution as a payoff and abandonment as the active resource to generate targeted removal, playing as a controlling sacrifice deck that accumulates ⍟ and card advantage through careful enemy dissolution rather than converting deaths into replacement bodies.
 
-- 2× Silent Avenger
+- 2× Guide of Lost Souls
 - 2× Enginespeaker
 - 2× Skull Weaver
 - 1× Fathomless Maw
@@ -3836,7 +3836,7 @@ Tide-neu-07 is built almost entirely on characters (28 of 30 cards), organized a
 - 1× Blight Weaver
 - 1× Exiles of the Last Light
 - 1× Avatar of Cosmic Reckoning
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 
 ## Broad: Soulkindler / Abomination of Memory — Void Cycling Recursion
 
@@ -3892,7 +3892,7 @@ Tide-neu-09 is a character-heavy neutral tide (25 characters, 5 events, all at 1
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
 - 1× Tidewreck Navigator
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Veil of the Wastes
 - 1× Corrupted Host
 - 1× Price of Redemption
@@ -3968,7 +3968,7 @@ Tide-neu-11 is an almost entirely character-based (28 of 30 cards) abandon-and-d
 - 1× Scuttled Fortune
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Corrupted Host
 - 1× Twilight Suppressor
 - 1× Entropy Spike
@@ -3980,7 +3980,7 @@ Tide-neu-11 is an almost entirely character-based (28 of 30 cards) abandon-and-d
 - 1× Defiant Holdout
 - 1× Exiles of the Last Light
 - 1× Shadowcaller
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Carrion Shepherd
 - 1× Infernal Ascendant
 - 1× Skull Weaver

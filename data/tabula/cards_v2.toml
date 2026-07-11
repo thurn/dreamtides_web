@@ -1453,7 +1453,7 @@ Veil
 Abandon a character: Gain 1⍟."""
 energy-cost = 2
 card-type = "Character"
-subtype = "Explorer"
+subtype = "Ancient"
 rarity = ""
 is-fast = false
 is-interrupt = false
@@ -1465,7 +1465,7 @@ card-number = 78
 art = { x = 0, y = 1, scale = 1.37 }
 
 [[cards]]
-name = "Obliterator of Worlds"
+name = "Eviscerator of Hope"
 mtg-name = "Goblin Bombardment"
 id = "f3f97e2c-3bb6-4a20-9880-f59c50e5af93"
 rendered-text = """
@@ -1479,10 +1479,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Removal", "Storage Removal", "Art Rework", "July10"]
-image-number = 443761822
+tags = ["Removal", "Storage Removal", "Art Rework", "July10", "Art OK"]
+image-number = 1026869440
 art-owned = false
 card-number = 79
+art = { x = 0.462, y = 1, scale = 1.1 }
 
 [[cards]]
 name = "Vault Infiltrator"
@@ -3788,15 +3789,15 @@ art = { x = 0.138, y = 1, scale = 1.11 }
 name = "Ruin Scavenger"
 mtg-name = "Deathrite Shaman"
 id = "cfa78375-85b7-47e9-95f5-b31e6d112c52"
-rendered-text = "☪, Banish a card from the opponent's void: This character gains +1✦."
-energy-cost = 1
+rendered-text = "1●, Banish a card from the opponent's void: This character gains +1✦."
+energy-cost = 2
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Survivor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July10"]
+tags = ["Art Rework", "July10", "Art OK"]
 image-number = 1902130345
 art-owned = false
 card-number = 204
@@ -7055,7 +7056,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = "X"
-tags = ["Art Rework", "July10"]
+tags = ["Art Rework", "July10", "Art OK"]
 image-number = 289214153
 art-owned = false
 card-number = 379
@@ -8587,21 +8588,22 @@ card-number = 460
 art = { x = -0.252, y = 0.869, scale = 1.17 }
 
 [[cards]]
-name = "Silent Avenger"
+name = "Guide of Lost Souls"
 mtg-name = "Blood Artist"
 id = "37d9165f-2b3a-44a2-848b-401cf4466a7c"
 rendered-text = "When a character is dissolved, gain 1⍟."
 energy-cost = 3
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Visionary"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Score Trigger", "Art Rework", "July10"]
-image-number = 2025883229
+tags = ["Score Trigger", "Art Rework", "July10", "Art OK"]
+image-number = 649133680
 art-owned = false
 card-number = 461
+art = { x = 0, y = 0.869, scale = 1.17 }
 
 [[cards]]
 name = "Wandering Archivist"

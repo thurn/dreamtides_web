@@ -71,7 +71,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 2× Volcanic Channeler
 - 2× Rusted Monolith
 - 2× Watcher in the Ruins
-- 2× Silent Avenger
+- 2× Guide of Lost Souls
 - 2× Hope's Vanguard
 - 2× Corrupted Host
 - 2× Twilight Reclaimer
@@ -148,7 +148,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Scrapyard Custodian
 - 1× The Calling Night
 - 1× Flagbearer of Decay
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Soul Channeling
 - 1× Carrion Shepherd
 - 1× Ossuary Offering
@@ -170,7 +170,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 2× Volcanic Channeler
 - 2× Rusted Monolith
 - 2× Watcher in the Ruins
-- 2× Silent Avenger
+- 2× Guide of Lost Souls
 - 2× Graywatch
 - 2× Abomination of Memory
 - 2× Veil of the Wastes
@@ -241,7 +241,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 1× The Rising God
 - 1× Scrapyard Custodian
 - 1× The Calling Night
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Soul Channeling
 - 1× Carrion Shepherd
 - 1× Ossuary Offering
@@ -288,7 +288,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Ethereal Call
 - 1× Lumin-Gate Seer
 - 1× Shardwoven Tyrant
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Sky Voyager
 - 1× Soulflame Predator
 - 1× Soulcleft Spinner
@@ -450,7 +450,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Sundown Surfer
 - 1× Chaos Crasher
 - 1× Flagbearer of Decay
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Vigil Keeper
 - 1× Carrion Shepherd
 - 1× Entropy Cascade
@@ -495,7 +495,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Beacon of Tomorrow
 - 1× Tidewreck Navigator
 - 1× Shardwoven Tyrant
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Immolate and Rise
 - 1× Graywatch
 - 1× Spirit Bond
@@ -558,7 +558,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Sunshadow Eagle
 - 1× Turquoise Aurelia
 - 1× Flagbearer of Decay
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Carrion Shepherd
 - 1× Forgotten Sleeper
 - 1× Sunset Chronicler
@@ -711,7 +711,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
 - 1× Tidewreck Navigator
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Immolate and Rise
 - 1× Signal Resonant
 - 1× Shaper of Memory
@@ -791,7 +791,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 2× Volcanic Channeler
 - 2× Rusted Monolith
 - 2× Watcher in the Ruins
-- 2× Silent Avenger
+- 2× Guide of Lost Souls
 - 2× Hope's Vanguard
 - 2× Corrupted Host
 - 2× Twilight Reclaimer
@@ -861,7 +861,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Ordained Collapse
 - 1× Scrapyard Custodian
 - 1× The Calling Night
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Soul Channeling
 - 1× Carrion Shepherd
 - 1× Ossuary Offering
@@ -911,7 +911,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Headtaker Wurm
 - 1× Tidewreck Navigator
 - 1× Fragments of Vision
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Immolate and Rise
 - 1× Graywatch
 - 1× Ancient Descent
@@ -1016,7 +1016,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Headtaker Wurm
 - 1× Soulbinder
 - 1× Fragments of Vision
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Graywatch
 - 1× Ancient Descent
 - 1× Abomination of Memory
@@ -1175,7 +1175,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Blood Moon Ronin
 - 1× Oracle of Shifting Skies
 - 1× Pinnacle Ascendant
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× A New Adventure
 - 1× Forgotten Sleeper
 - 1× Ossuary Offering
@@ -1282,7 +1282,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Blood Moon Ronin
 - 1× Oracle of Shifting Skies
 - 1× Chaos Crasher
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Forgotten Sleeper
 - 1× Entropy Cascade
 
@@ -2044,7 +2044,7 @@ Tide-fac-01 is an almost entirely character-based (40 of 45 copies) midrange eng
 - 2× Fallen Angel
 - 2× Searcher in the Mists
 - 2× Volcanic Channeler
-- 2× Silent Avenger
+- 2× Guide of Lost Souls
 - 2× Corrupted Host
 - 1× Iron Pharaoh
 - 1× Dustborn Veteran
@@ -2075,7 +2075,7 @@ Tide-fac-01 is an almost entirely character-based (40 of 45 copies) midrange eng
 - 1× Shadowcaller
 - 1× Avatar of Cosmic Reckoning
 - 1× Scrapyard Custodian
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Soul Channeling
 - 1× Vigil Keeper
 - 1× Carrion Shepherd
@@ -2103,7 +2103,7 @@ Tide-fac-02 is built almost entirely of characters (41 of 45 cards) and operates
 - 1× Scuttled Fortune
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Abomination of Memory
 - 1× Enginespeaker
 - 1× Veil of the Wastes
@@ -2127,7 +2127,7 @@ Tide-fac-02 is built almost entirely of characters (41 of 45 cards) and operates
 - 1× Dreadweaver
 - 1× Wasteland Arbitrator
 - 1× Avatar of Cosmic Reckoning
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Vigil Keeper
 - 1× Carrion Shepherd
 
@@ -2394,7 +2394,7 @@ This tide is built around a dense curve of inexpensive survivors whose arrival a
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
 - 1× Tidewreck Navigator
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Graywatch
 - 1× Abomination of Memory
 - 1× Enginespeaker
@@ -2414,7 +2414,7 @@ This tide is built around a dense curve of inexpensive survivors whose arrival a
 - 1× Shadowcaller
 - 1× Avatar of Cosmic Reckoning
 - 1× The Rising God
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Vigil Keeper
 - 1× Ossuary Offering
 - 1× Shared Ruin
@@ -2567,7 +2567,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 1× Shoreline Penitent
 - 1× Oracle of Shifting Skies
 - 1× Chaos Crasher
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Forgotten Sleeper
 - 1× Wandering Archivist
 
@@ -2619,7 +2619,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Shoreline Penitent
 - 1× Pinnacle Ascendant
 - 1× Chaos Crasher
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Forgotten Sleeper
 - 1× Wandering Archivist
 - 1× Immortal Reaper
@@ -2745,7 +2745,7 @@ Tide-fac-13 is a character-heavy spirit animal tribal deck (35 of 45 copies are 
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
 - 1× Tidewreck Navigator
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Veil of the Wastes
 - 1× Duskreaper
 - 1× Hope's Vanguard
@@ -2767,7 +2767,7 @@ Tide-fac-13 is a character-heavy spirit animal tribal deck (35 of 45 copies are 
 - 1× Wasteland Arbitrator
 - 1× Shadowcaller
 - 1× Avatar of Cosmic Reckoning
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Vigil Keeper
 - 1× Carrion Shepherd
 
@@ -2990,7 +2990,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Rusted Monolith
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Abomination of Memory
 - 1× Duskreaper
 - 1× Hope's Vanguard
@@ -3274,7 +3274,7 @@ Tide-fac-26 is a character-heavy survivor tide built around the abandon trigger 
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
 - 1× Tidewreck Navigator
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Graywatch
 - 1× Abomination of Memory
 - 1× Veil of the Wastes
@@ -3324,7 +3324,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
 - 1× Tidewreck Navigator
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Graywatch
 - 1× Signal Resonant
 - 1× Hope's Vanguard
@@ -3391,7 +3391,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Shoreline Penitent
 - 1× Oracle of Shifting Skies
 - 1× Chaos Crasher
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Forgotten Sleeper
 - 1× Wandering Archivist
 
@@ -3443,7 +3443,7 @@ This tide is split between characters and events (22 characters, 23 events), wit
 - 1× Oracle of Shifting Skies
 - 1× Pinnacle Ascendant
 - 1× Chaos Crasher
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Forgotten Sleeper
 - 1× Wandering Archivist
 - 1× Immortal Reaper
@@ -3562,7 +3562,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Angel of the Eclipse
 - 1× Watcher in the Ruins
 - 1× Tidewreck Navigator
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Graywatch
 - 1× Hope's Vanguard
 - 1× Twilight Reclaimer
@@ -3582,7 +3582,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Shadowcaller
 - 1× Avatar of Cosmic Reckoning
 - 1× The Rising God
-- 1× Obliterator of Worlds
+- 1× Eviscerator of Hope
 - 1× Carrion Shepherd
 - 1× Skull Weaver
 
@@ -3667,7 +3667,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Scuttled Fortune
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
-- 1× Silent Avenger
+- 1× Guide of Lost Souls
 - 1× Hope's Vanguard
 - 1× Corrupted Host
 - 1× Collateral Damage
