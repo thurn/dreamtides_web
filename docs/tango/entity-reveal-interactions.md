@@ -63,11 +63,205 @@ gap between the primary and secondary column is 10px, as is the vertical gap
 between secondary cards. Mobile touch-circle clearance replaces the 14px source
 gap; the 48px protected circle already includes the desired comfort margin.
 
+## Library architecture: make correct behavior automatic
+
+The interaction policy in this document is library behavior, not call-site
+knowledge. A screen should not need to understand pointer modality, hold timing,
+viewport measurement, card width, protected-circle geometry, primary/secondary
+orientation, secondary truncation, focus restoration, accessibility, portal
+layers, or logging in order to show an entity.
+
+This is a hard API boundary. Repeating the rules in examples, helper comments,
+or screen tests is not sufficient: a call site that can assemble a reveal
+incorrectly eventually will. The public component surface must make the complete
+behavior the easiest path and make divergent behavior inexpressible.
+
+### One owner for the state machine and overlay
+
+Tango should have one reveal coordinator mounted once at the application root.
+It owns:
+
+- the single active reveal group;
+- active-pointer classification and the 30ms/300ms gesture state machine;
+- source measurement and source press/hover feedback;
+- visual-viewport and safe-area measurement;
+- primary and secondary measurement;
+- mobile and desktop candidate generation and placement selection;
+- secondary-prefix fitting;
+- press-in-place eligibility;
+- the one top-layer portal and all reveal rendering;
+- hover/focus precedence, `Escape` suppression, and focus restoration;
+- lifecycle dismissal and drag/scroll cancellation;
+- accessible-description generation; and
+- open, placement, activation, and dismissal logging.
+
+Source components register intent with this coordinator. They do not each own a
+popover, portal, timer, media query, or placement effect. One overlay host also
+guarantees global exclusivity and layer order without z-index negotiations among
+screens.
+
+### Public APIs carry meaning, not mechanics
+
+Reveal content crosses the public boundary as structured data. The conceptual
+shape is small:
+
+```ts
+type RevealCard =
+  | { kind: "gameCard"; cardId: CardId }
+  | { kind: "infoCard"; card: InfoCardModel };
+
+interface RevealSpec {
+  primary: RevealCard;
+  secondaries: readonly InfoCardModel[]; // descending priority
+}
+```
+
+The exact names may change, but these properties are essential:
+
+- `GameCard` references resolve by UUID.
+- `InfoCardModel` is a discriminated union of strict InfoCard variants.
+- Secondary order is the only placement-relevant information a caller supplies.
+- Content is data rather than arbitrary JSX, so the coordinator can measure,
+  render, describe, truncate, and log every card uniformly.
+- A reveal specification contains no pixels, sides, delays, portal targets,
+  pointer modes, or breakpoint choices.
+
+At the generic-trigger boundary, consumers supply only semantic intent: the
+reveal specification, whether the source can activate, its activation callback,
+whether it is unavailable, and a strict source category when the category
+changes behavior (for example, inline readable text is stationary). Draggable
+surfaces report that a drag has won; they do not implement reveal cancellation
+themselves.
+
+The API is uncontrolled from the caller's perspective. Screens do not receive
+or set `shown`, `pressed`, `hovered`, `side`, `anchor`, or `placement`. They do
+not imperatively open a reveal. The coordinator derives transient state from
+real input and focus events.
+
+### High-level entity components own their standard reveal
+
+A consumer rendering a standard entity should not construct a reveal
+specification at all. The component already has the data needed to describe
+itself:
+
+- `GameCard` derives its full-card primary, glossary secondaries, desktop reading
+  state, mobile popup, and automatic press-in-place eligibility.
+- Dreamsign, Dreamcaller, tide, site, Atlas-node, resource, and stat components
+  derive their standard `InfoCard` models from their semantic model.
+- Rules text derives definition cards from its glossary terms.
+- Battle cards adapt their battle instance to the canonical UUID-based GameCard
+  model, then use the same reveal path as every other GameCard.
+
+Callers may supply additional domain-specific secondary `InfoCardModel` values
+in priority order when a surface genuinely knows extra context, such as an Atlas
+node's related Dreamsign. Those values extend the component's standard
+secondaries; they do not replace its interaction engine or choose their layout.
+
+The normal GameCard call site should therefore look like “render this UUID and
+activate this callback,” not “disable the card's definitions, wrap it in a
+mobile peek handler, build another GameCard portal, and place definitions beside
+that copy.” Likewise, a tide consumer supplies tide data; it does not build a
+flex row of InfoCards and hand it to a generic popover.
+
+### One generic trigger, kept deliberately narrow
+
+Some sources are not standard entity components: a prose term, a bespoke Atlas
+mark, or a compact representation may need to reveal an existing specification.
+Tango may expose one generic `EntityRevealTrigger` for these cases. It still
+owns the DOM event wiring and accepts structured reveal data. Its strict source
+category selects standard feedback such as `entity`, `inlineText`, or
+`draggable`; it does not accept arbitrary press scales or event handlers for
+reimplementing the gesture.
+
+Prefer a high-level entity component whenever one exists. The generic trigger
+is an adapter for a source shape, not an escape hatch from the reveal policy.
+
+### Internal hooks are implementation details
+
+Components that must own their root DOM element may need a coordinator adapter
+internally. That adapter belongs under a Tango-internal import boundary and is
+used only to attach the shared controller to the component's element. Product
+screens and adapters must not import a headless `usePressReveal`, calculate an
+anchor rectangle, render `PressPopover`, or create a reveal portal.
+
+This distinction matters: a public headless hook hands every consumer the pieces
+required to fork the behavior. A private hook can support component composition
+while keeping policy centralized.
+
+### Mechanical decisions absent from call sites
+
+| Concern | Call site supplies | Reveal library owns |
+| --- | --- | --- |
+| Content | Primary semantic model and optional ordered contextual secondaries | Rendering, default definitions, accessible text |
+| Activation | `onActivate` and unavailable state | Tap/hold discrimination and click suppression |
+| Input | Nothing | Mouse, pen, touch, focus, and hybrid-device behavior |
+| Timing | Nothing | 30ms intent filter, 300ms hold boundary, exit motion |
+| Sizing | Nothing | 45vw mobile cards, 340px desktop GameCards, source-size feedback |
+| Placement | Nothing | Viewport measurement, circle clearance, orientation, fallbacks |
+| Overflow | Priority order only | Measured leading-prefix fit and omission |
+| Layering | Nothing | The single root portal and highest application layer |
+| Accessibility | Semantic labels in entity data | Description association, focus lifecycle, `Escape` behavior |
+| Diagnostics | Entity UUID/type | Geometry, decision, truncation, activation, dismissal logs |
+
+The following public inputs are design smells and should not exist:
+
+- `stageRef`, portal targets, or caller-provided anchor rectangles;
+- `gap`, `side`, `placement`, `align`, or viewport-edge padding;
+- reveal delays, hold windows, movement slop, or touch-circle sizes;
+- `enableHoverZoom`, `enableTermPopover`, or parent-owned definition modes;
+- `holdStillClicks` or other per-call tap/hold semantics;
+- arbitrary scale factors, press handlers, or hover handlers;
+- arbitrary `ReactNode` reveal content; and
+- controlled `open`/`shown` state for ordinary entity reveals.
+
+When a real new behavior appears, add a strict semantic source or content
+variant to the library. Do not expose the underlying mechanical knob.
+
+### Derived decisions use rendered facts
+
+The coordinator decides from facts it can measure or infer itself:
+
+- viewport layout comes from the visual viewport and the shared 900px boundary;
+- input modality comes from the initiating pointer or focus event;
+- size-aware feedback comes from the source's rendered rectangle;
+- press in place comes from the rendered GameCard width and visible-rules state;
+- popup and secondary sizes come from rendered card models;
+- available secondaries come from measured height after placement; and
+- placement comes from the source rectangle or captured touch point.
+
+A caller should never precompute these decisions from assumptions about its own
+layout. Measuring centrally is what keeps the behavior correct inside scaled
+stages, dialogs, grids, HUDs, and future screen compositions.
+
+### Enforcement and testing
+
+Centralization should be enforced by the repository, not maintained by memory:
+
+- Export public reveal models and triggers from one module; keep coordinator
+  hooks, geometry, and overlay rendering internal.
+- Add lint/import-boundary rules that reject internal reveal imports, direct
+  reveal portals, and `HoverPopover` in product UI.
+- Add API-contract tests proving mechanical props and arbitrary reveal nodes are
+  not expressible.
+- Unit-test the coordinator state machine and pure geometry over viewport,
+  pointer, source-size, primary-size, and secondary-count sweeps.
+- Test high-level components by asserting the semantic reveal they register,
+  not by reproducing placement math in every consumer test.
+- Maintain a small set of end-to-end conformance scenarios for hover, focus,
+  touch tap, touch hold, scroll cancellation, drag cancellation, top-edge
+  fallback, best-effort overlap, secondary truncation, and reduced motion.
+- Make diagnostic logs part of those conformance assertions.
+
+A screen-specific reveal implementation is a component fork. It must be moved
+into the shared coordinator or expressed as a strict semantic variant before the
+screen is considered converged.
+
 ## Secondary priority and constrained height
 
-Callers provide secondary cards in descending importance. The layout engine
-preserves that order and shows the longest leading prefix that fits as complete
-cards between the group top and the bottom safe-area boundary.
+The resolved reveal specification carries secondary cards in descending
+importance. The layout engine preserves that order and shows the longest leading
+prefix that fits as complete cards between the group top and the bottom
+safe-area boundary.
 
 - A secondary is either fully shown or omitted.
 - Secondary cards are never clipped, shrunk, internally scrolled, or moved into
@@ -378,6 +572,13 @@ The target state requires the following convergence work:
 - Introduce one reveal-group coordinator for global exclusivity, focus
   restoration, active-pointer modality, top-layer rendering, and lifecycle
   dismissal.
+- Replace the public `InfoCard.PressInfo`, `InfoCard.usePressReveal`,
+  `InfoCard.PressPopover`, and anchor/portal assembly surface with structured
+  reveal models, high-level self-revealing entities, and one narrow generic
+  trigger. Keep DOM attachment hooks and geometry internal to Tango.
+- Remove parent-owned `termDefinitions`, `enableHoverZoom`,
+  `enableTermPopover`, and equivalent interaction switches from GameCard
+  consumers; GameCard derives its standard primary and glossary secondaries.
 - Centralize primary/secondary layout, priority truncation, two-column mobile
   orientation, best-effort corner placement, and desktop side fallback.
 - Replace GameCard's maximum 1.5x hover scaling with convergence on a fixed
