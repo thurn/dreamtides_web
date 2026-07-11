@@ -18,26 +18,15 @@ namespace TangoMvp.Interaction
 
         private void OnDisable()
         {
-            if (hovered != null)
-            {
-                hovered.SetHovered(false);
-            }
-
-            if (pressed != null)
-            {
-                pressed.EndPress(false);
-            }
-
-            hovered = null;
-            pressed = null;
+            CancelInteraction();
         }
 
         private void Update()
         {
             Mouse mouse = Mouse.current;
-            if (mouse == null || interactionCamera == null)
+            if (mouse == null || interactionCamera == null || !interactionCamera.isActiveAndEnabled)
             {
-                SetHovered(null);
+                CancelInteraction();
                 return;
             }
 
@@ -85,6 +74,19 @@ namespace TangoMvp.Interaction
             {
                 hovered.SetHovered(true);
             }
+        }
+
+        private void CancelInteraction()
+        {
+            SetHovered(null);
+            if (pressed == null)
+            {
+                return;
+            }
+
+            TangoPressable canceled = pressed;
+            pressed = null;
+            canceled.EndPress(false);
         }
     }
 }

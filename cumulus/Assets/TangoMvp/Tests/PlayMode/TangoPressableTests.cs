@@ -114,6 +114,112 @@ namespace TangoMvp.Tests.PlayMode
             Assert.That(activations, Is.Zero);
         }
 
+        [UnityTest]
+        public IEnumerator VirtualMouse_DisabledCameraCancelsPressAndAllowsLaterActivation()
+        {
+            Mouse mouse = InputSystem.AddDevice<Mouse>();
+            Camera camera = CreateCamera();
+            TangoPressable pressable = CreatePressable("disabled-camera-control", out Transform visual, out _);
+            CreateInteractor(camera);
+            int activations = 0;
+            pressable.Activated.AddListener(() => activations++);
+            Physics.SyncTransforms();
+            yield return null;
+
+            Move(mouse.position, camera.WorldToScreenPoint(pressable.transform.position));
+            yield return null;
+            Press(mouse.leftButton);
+            yield return null;
+            AssertVector(visual.localScale, new Vector3(1.2f, 0.8f, 1f) * 0.9f);
+
+            camera.enabled = false;
+            Release(mouse.leftButton);
+            yield return null;
+            AssertVector(visual.localScale, new Vector3(1.2f, 0.8f, 1f));
+            Assert.That(activations, Is.Zero);
+
+            camera.enabled = true;
+            yield return null;
+            Press(mouse.leftButton);
+            yield return null;
+            AssertVector(visual.localScale, new Vector3(1.2f, 0.8f, 1f) * 0.9f);
+            LogAssert.Expect(LogType.Log, "TangoPressable activated: disabled-camera-control");
+            Release(mouse.leftButton);
+            yield return null;
+            Assert.That(activations, Is.EqualTo(1));
+        }
+
+        [UnityTest]
+        public IEnumerator VirtualMouse_RemovedDeviceCancelsPressAndAllowsLaterActivation()
+        {
+            Mouse mouse = InputSystem.AddDevice<Mouse>();
+            Camera camera = CreateCamera();
+            TangoPressable pressable = CreatePressable("removed-mouse-control", out Transform visual, out _);
+            CreateInteractor(camera);
+            int activations = 0;
+            pressable.Activated.AddListener(() => activations++);
+            Physics.SyncTransforms();
+            yield return null;
+
+            Vector2 controlPosition = camera.WorldToScreenPoint(pressable.transform.position);
+            Move(mouse.position, controlPosition);
+            yield return null;
+            Press(mouse.leftButton);
+            yield return null;
+            AssertVector(visual.localScale, new Vector3(1.2f, 0.8f, 1f) * 0.9f);
+
+            InputSystem.RemoveDevice(mouse);
+            yield return null;
+            AssertVector(visual.localScale, new Vector3(1.2f, 0.8f, 1f));
+            Assert.That(activations, Is.Zero);
+
+            Mouse replacement = InputSystem.AddDevice<Mouse>();
+            Move(replacement.position, controlPosition);
+            yield return null;
+            Press(replacement.leftButton);
+            yield return null;
+            AssertVector(visual.localScale, new Vector3(1.2f, 0.8f, 1f) * 0.9f);
+            LogAssert.Expect(LogType.Log, "TangoPressable activated: removed-mouse-control");
+            Release(replacement.leftButton);
+            yield return null;
+            Assert.That(activations, Is.EqualTo(1));
+        }
+
+        [UnityTest]
+        public IEnumerator VirtualMouse_DisabledInteractorCancelsPressAndAllowsLaterActivation()
+        {
+            Mouse mouse = InputSystem.AddDevice<Mouse>();
+            Camera camera = CreateCamera();
+            TangoPressable pressable = CreatePressable("disabled-interactor-control", out Transform visual, out _);
+            TangoPointerInteractor interactor = CreateInteractor(camera);
+            int activations = 0;
+            pressable.Activated.AddListener(() => activations++);
+            Physics.SyncTransforms();
+            yield return null;
+
+            Move(mouse.position, camera.WorldToScreenPoint(pressable.transform.position));
+            yield return null;
+            Press(mouse.leftButton);
+            yield return null;
+            AssertVector(visual.localScale, new Vector3(1.2f, 0.8f, 1f) * 0.9f);
+
+            interactor.enabled = false;
+            AssertVector(visual.localScale, new Vector3(1.2f, 0.8f, 1f));
+            Assert.That(activations, Is.Zero);
+            Release(mouse.leftButton);
+            yield return null;
+
+            interactor.enabled = true;
+            yield return null;
+            Press(mouse.leftButton);
+            yield return null;
+            AssertVector(visual.localScale, new Vector3(1.2f, 0.8f, 1f) * 0.9f);
+            LogAssert.Expect(LogType.Log, "TangoPressable activated: disabled-interactor-control");
+            Release(mouse.leftButton);
+            yield return null;
+            Assert.That(activations, Is.EqualTo(1));
+        }
+
         private TangoPressable CreatePressable(string semanticId, out Transform visual, out Collider collider)
         {
             GameObject root = Track(new GameObject($"Pressable {semanticId}"));
@@ -146,10 +252,11 @@ namespace TangoMvp.Tests.PlayMode
             return camera;
         }
 
-        private void CreateInteractor(Camera camera)
+        private TangoPointerInteractor CreateInteractor(Camera camera)
         {
             TangoPointerInteractor interactor = camera.gameObject.AddComponent<TangoPointerInteractor>();
             SetField(interactor, "interactionCamera", camera);
+            return interactor;
         }
 
         private GameObject Track(GameObject gameObject)
