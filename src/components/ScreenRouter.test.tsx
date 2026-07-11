@@ -260,17 +260,37 @@ function renderWithQuest({
   children: ReactElement;
   strict?: boolean;
 }) {
+  return mountWithQuest({ state, questContent, mutations, children, strict })
+    .container;
+}
+
+function mountWithQuest({
+  state,
+  questContent,
+  mutations = makeMutations(),
+  children,
+  strict = false,
+}: {
+  state: QuestState;
+  questContent: QuestContent;
+  mutations?: QuestMutations;
+  children: ReactElement;
+  strict?: boolean;
+}) {
   const container = document.createElement("div");
   document.body.appendChild(container);
   const root = createRoot(container);
   roots.push(root);
 
-  act(() => {
+  const renderState = (
+    nextState: QuestState,
+    nextMutations: QuestMutations = mutations,
+  ) => act(() => {
     const tree = (
       <QuestContextProvider
         value={{
-          state,
-          mutations,
+          state: nextState,
+          mutations: nextMutations,
           cardDatabase: questContent.cardDatabase,
           questContent,
         }}
@@ -281,8 +301,9 @@ function renderWithQuest({
     const tangoTree = <TangoRoot>{tree}</TangoRoot>;
     root.render(strict ? <StrictMode>{tangoTree}</StrictMode> : tangoTree);
   });
+  renderState(state);
 
-  return container;
+  return { container, renderState };
 }
 
 afterEach(() => {
@@ -451,6 +472,30 @@ describe("ScreenRouter DreamAugury routing", () => {
     expect(cardSourceDebug?.entries.some((entry) =>
       typeof entry.cardNumber === "number",
     )).toBe(true);
+  });
+
+  it("publishes card source debug once when the coop fold applies that debug state", () => {
+    const site = makeSite("DreamAugury");
+    const state = { ...makeStateFor(site), deck: [] };
+    const mutations = makeMutations();
+    const foldedMutations = makeMutations();
+    const content = merchantContent();
+    const mounted = mountWithQuest({
+      state,
+      mutations,
+      questContent: content,
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />,
+    });
+    const published = vi.mocked(mutations.setCardSourceDebug).mock.calls[0]?.[0];
+    expect(published).toBeDefined();
+
+    mounted.renderState(
+      { ...state, cardSourceDebug: published ?? null },
+      foldedMutations,
+    );
+
+    expect(mutations.setCardSourceDebug).toHaveBeenCalledTimes(1);
+    expect(foldedMutations.setCardSourceDebug).not.toHaveBeenCalled();
   });
 
   it("does not route a non-DreamAugury site to the v2 screen in v2 config", () => {

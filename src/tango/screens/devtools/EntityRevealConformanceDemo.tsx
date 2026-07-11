@@ -49,7 +49,7 @@ const TRUNCATION_CARD: CardData = {
   cardNumber: 8,
   renderedText: "Figment. Materialize. Rematerialize. Dissolve. Banish. Abandon. Score. Reclaim. Foresee. Discover. Erode. Fast. Awakened. Unstoppable. Preeminence. Veil. Vengeful. Support. Challenger. Prevent. Offering. Phasing. Ephemeral. Transfigure. Purge. Duplicate. Bane. Essence. Enhanced.",
 };
-const DREAMCALLER = { id: "99999999-9999-4999-8999-999999999999", name: "Conformance Guide", title: "Keeper of Context", imageNumber: "0000" };
+const DREAMCALLER = { id: "99999999-9999-4999-8999-999999999999", name: "Conformance Guide", title: "Keeper of Context", imageNumber: "0071" };
 
 const SCENARIOS = ["above", "side-fallback", "top-edge", "truncation", "best-effort", "safe-area", "reduced-motion"] as const;
 type Scenario = (typeof SCENARIOS)[number];

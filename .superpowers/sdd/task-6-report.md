@@ -47,7 +47,9 @@ Internal coordinator files/tests and the named Tango component layer are the exp
 
 - popup and press-in-place GameCard;
 - unavailable GameCard;
-- strict InfoCard with and without a second card;
+- strict standalone InfoCard visual content;
+- DreamcallerPortrait full-bleed primary with ordered Bane, Discover, and
+  Ephemeral text secondaries;
 - inline GlossaryTerm;
 - AtlasNode;
 - battle-labelled canonical GameCard.
@@ -63,7 +65,7 @@ The end-to-end diagnostic assertion validates the actual source rectangle, rende
 - Tango docs: 30 component references, stale HoverPopover reference swept.
 - `npm run lint`: pass.
 - `npm run typecheck`: pass.
-- `npm test`: 392 files passed, 1 skipped; 4,229 tests passed, 4 skipped.
+- `npm test`: 392 files passed, 1 skipped; 4,238 tests passed, 4 skipped.
 - `git diff --check`: pass.
 
 ## Browser matrix
@@ -119,10 +121,9 @@ Stable path: `screenshots/entity-reveals/`
 - Documentation wording scan found none of the prohibited historical-contrast phrases in the normative reveal or QA-scene docs.
 - Card semantics use UUIDs. The Draft fixture was corrected to a valid UUID so fail-closed semantics are exercised in its screen test.
 - The conformance battle representative uses the canonical GameCard source with a battle instance data hook; the normal playable-battle workflow separately verifies the full `BattleGameCard` adapter.
-- Normal Dream Merchant v2 QA exposed a pre-existing `SET_CARD_SOURCE_DEBUG`
-  update loop that reaches React's maximum update depth. It is recorded in
-  `pre-existing-issues.txt`; the loop can leave an otherwise valid JourneyCard
-  reveal measurement pending.
+- Dream Merchant card-source debug publication is encounter-keyed, so applying
+  the debug event through the coop fold does not retrigger publication or
+  cleanup. The normal JourneyCard reveal route completes cleanly.
 
 ## Review remediation
 
@@ -163,16 +164,58 @@ Stable path: `screenshots/entity-reveals/`
   `bestEffortPrimaryOverlap: true`, and `circleClearance: -4.5`. Safe-area
   placement started exactly at y=52, reduced-motion transition was `none`, and
   quick touch activation produced one open, one close, and `fired`.
-- The normal Dream Merchant route confirmed eight migrated JourneyCard sources,
-  matching `data-card-id` / `data-card-uuid` values, and zero retired journey
-  zoom nodes before the pre-existing debug-state loop prevented reveal
-  measurement completion.
+- The normal Dream Merchant route confirms migrated JourneyCard sources with
+  matching `data-card-id` / `data-card-uuid` values and zero retired journey
+  zoom nodes. Remediation 2 records the completed open/close lifecycle.
 - Stable remediation captures live under
   `screenshots/entity-reveals-remediation/`. Session and server were closed;
   port 5175 has no listener.
 
+## Review remediation 2
+
+- Added RED adversarial lint cases for repository-absolute internal imports,
+  inline and `const` JSX object spreads, computed namespace portal access, and
+  transitive InfoCard binding aliases. The rule now resolves `src/` imports,
+  extracts literal computed properties, propagates InfoCard aliases, and
+  enumerates statically knowable object-spread properties. Benign named-source
+  spreads, opaque visual aliases, and non-portal computed ReactDOM members stay
+  legal. The focused rule suite passes 30 cases.
+- The conformance Dreamcaller fixture uses fixed verified art key `0071`. Browser
+  QA measured the loaded cutout at 1024×1536; no image fell back or failed.
+- Replacement side-fallback evidence used
+  `http://localhost:5176/?demo=entity-reveals` at 1200×800, device scale 2, in
+  isolated session `q6-remediation2-5176`. Before capture, DOM and diagnostics
+  reported one active group, one 340×476 primary, five rendered secondaries,
+  5 shown / 24 dropped, and `sideFallback: true`. Direct inspection of
+  `side-fallback-desktop-active.png` confirms the large reading card is visibly
+  painted over the right edge of the scenario stage. Page and console error
+  buffers were empty.
+- `JourneyCard` has one normal product surface, so the Dream Merchant route's
+  card-source debug loop received a narrow fix rather than substituting a
+  component harness. A RED ScreenRouter regression reproduced the coop fold
+  with a replacement mutation object; encounter-keyed publication plus a
+  latest-callback ref now keeps publication at one event.
+- Clean normal-flow evidence used
+  `http://localhost:5176/dreamscape/0-firstlight-meadow/dream-augury?goto=dreamaugury&journey=v2&seed=task6-remediation-2b&game=ayafqt`
+  at 1200×800, device scale 2, in isolated session
+  `q6-remediation2b-5176`. The route rendered five JourneyCard sources with
+  matching UUID attributes, zero retired zoom nodes, zero pending reveal nodes,
+  and zero broken images. Keyboard focus produced one measured primary and one
+  active group; focus transfer to the ordinary offer action produced exactly
+  one open and one close (`dismissalReason: "blur"`, activation `none`), then
+  zero groups and portals. Error buffers were empty and a final DOM query proved
+  the page remained responsive. Direct inspection of
+  `journey-card-normal-open-close.png` confirms the reading card is visibly
+  open over the merchant scene.
+- Stable second-remediation captures live under
+  `screenshots/entity-reveals-remediation-2/`.
+- Closed the isolated browser sessions and cleanly stopped the task-owned Vite
+  / Firebase process tree. Port 5176 has no listener.
+
 ## Commit and push
 
-- Commit message: `refactor(tango): enforce unified entity reveal system`.
+- `f02a2d8e` — `refactor(tango): enforce unified entity reveal system`.
+- `76bb98be` — `fix(tango): close entity reveal enforcement gaps`.
+- Remediation 2 commit subject: `fix(tango): harden entity reveal conformance`.
 - Branch: `wt/entity-reveal-rewrite-plan`.
-- Push: completed immediately after the final amended commit.
+- Each completed remediation commit is pushed immediately.

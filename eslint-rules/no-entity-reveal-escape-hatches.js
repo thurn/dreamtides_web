@@ -40,7 +40,10 @@ const PORTAL_OWNER_ALLOWLIST = new Set([
 
 function repoPath(filename, cwd) { return path.relative(cwd, filename).split(path.sep).join("/"); }
 function stripExtension(value) { return value.replace(/\.(?:ts|tsx|js|jsx)$/, ""); }
-function resolvedImport(filename, source) { return stripExtension(path.posix.normalize(path.posix.join(path.posix.dirname(filename), source))); }
+function resolvedImport(filename, source) {
+  if (source.startsWith("src/")) return stripExtension(path.posix.normalize(source));
+  return stripExtension(path.posix.normalize(path.posix.join(path.posix.dirname(filename), source)));
+}
 function isInternalTest(filename) { return filename.startsWith("src/tango/internal/reveal/") || /\.test\.[cm]?[jt]sx?$/.test(filename); }
 function jsxName(node) { return node?.type === "JSXIdentifier" ? node.name : node?.type === "JSXMemberExpression" ? jsxName(node.property) : ""; }
 function keyName(node) {
@@ -49,7 +52,13 @@ function keyName(node) {
   if (node.type === "Property" && (node.key.type === "Identifier" || node.key.type === "Literal")) return String(node.key.name ?? node.key.value ?? "");
   return "";
 }
-function propertyName(node) { return node && !node.computed && node.property?.type === "Identifier" ? node.property.name : ""; }
+function propertyName(node) {
+  if (!node) return "";
+  if (!node.computed && node.property?.type === "Identifier") return node.property.name;
+  if (node.computed && node.property?.type === "Literal" && typeof node.property.value === "string") return node.property.value;
+  if (node.computed && node.property?.type === "TemplateLiteral" && node.property.expressions.length === 0) return node.property.quasis[0]?.value.cooked ?? "";
+  return "";
+}
 function typeName(node) { return !node ? "" : node.type === "Identifier" ? node.name : node.type === "TSQualifiedName" ? typeName(node.right) : ""; }
 function isReactNodeType(node) {
   if (!node) return false;
@@ -85,6 +94,12 @@ export default {
     const portalNamespaces = new Set();
     const infoCardBindings = new Set(["InfoCard"]);
     const allowedRevealTypeNames = new Set();
+    const staticObjectBindings = new Map();
+
+    function objectProperties(node) {
+      if (node?.type !== "ObjectExpression") return [];
+      return node.properties.filter((property) => property.type === "Property" && property.kind === "init" && keyName(property) !== "");
+    }
 
     function checkInternalImport(node, source) {
       const resolved = resolvedImport(filename, source);
@@ -129,7 +144,12 @@ export default {
       VariableDeclarator(node) {
         if (node.id.type === "Identifier") {
           if (node.init?.type === "Identifier" && portalFunctions.has(node.init.name)) portalFunctions.add(node.id.name);
+          if (node.init?.type === "Identifier" && infoCardBindings.has(node.init.name)) infoCardBindings.add(node.id.name);
           if (node.init?.type === "MemberExpression" && portalNamespaces.has(node.init.object?.name) && propertyName(node.init) === "createPortal") portalFunctions.add(node.id.name);
+          if (node.parent?.kind === "const") {
+            const properties = objectProperties(node.init);
+            if (properties.length > 0) staticObjectBindings.set(node.id.name, properties);
+          }
           if (node.init?.type === "ArrowFunctionExpression" && /^[A-Z]/.test(node.id.name) && node.init.params[0]?.type === "ObjectPattern") {
             const names = new Set(node.init.params[0].properties.map(keyName));
             if (revealLikeProps(names, node.id.name)) context.report({ node: node.id, messageId: "genericWrapper" });
@@ -150,7 +170,12 @@ export default {
       JSXOpeningElement(node) {
         const name = jsxName(node.name);
         const attributes = node.attributes.filter((attribute) => attribute.type === "JSXAttribute");
-        const names = new Set(attributes.map((attribute) => jsxName(attribute.name)));
+        const spreadProperties = node.attributes.flatMap((attribute) => {
+          if (attribute.type !== "JSXSpreadAttribute") return [];
+          if (attribute.argument.type === "Identifier") return staticObjectBindings.get(attribute.argument.name) ?? [];
+          return objectProperties(attribute.argument);
+        });
+        const names = new Set([...attributes.map((attribute) => jsxName(attribute.name)), ...spreadProperties.map(keyName)]);
         if (!revealLikeProps(names, name)) return;
         if (!NAMED_REVEAL_COMPONENTS.has(name) && GENERIC_REVEAL_WRAPPERS.has(name)) context.report({ node, messageId: "genericWrapper" });
         for (const attribute of attributes) {
@@ -158,6 +183,12 @@ export default {
           if (!NAMED_REVEAL_COMPONENTS.has(name) && CONTENT_PROPS.has(prop)) context.report({ node: attribute, messageId: "arbitraryContent" });
           if (MECHANICAL_PROPS.has(prop)) context.report({ node: attribute, messageId: "mechanicalProp" });
           if (CONTROLLED_PROPS.has(prop)) context.report({ node: attribute, messageId: "controlledState" });
+        }
+        for (const property of spreadProperties) {
+          const prop = keyName(property);
+          if (!NAMED_REVEAL_COMPONENTS.has(name) && CONTENT_PROPS.has(prop)) context.report({ node: property, messageId: "arbitraryContent" });
+          if (MECHANICAL_PROPS.has(prop)) context.report({ node: property, messageId: "mechanicalProp" });
+          if (CONTROLLED_PROPS.has(prop)) context.report({ node: property, messageId: "controlledState" });
         }
       },
       TSInterfaceDeclaration(node) { processMembers(node.id, node.id.name.replace(/Props$/, ""), node.body.body); },

@@ -61,6 +61,23 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
       code: `import { createPortal as mountPortal } from "react-dom";
         mountPortal(<div />, document.body);`,
     },
+    {
+      name: "benign named-component object spreads stay legal",
+      filename: "src/tango/screens/DraftScreen.tsx",
+      code: `const selectedProps = { selected: true };
+        <><GameCard {...{ selected: true, unavailable: false }} /><GameCard {...selectedProps} /></>;`,
+    },
+    {
+      name: "computed non-portal namespace members stay legal",
+      filename: "src/editor/LegacyRoot.tsx",
+      code: `import * as DOM from "react-dom"; DOM["flushSync"](() => render());`,
+    },
+    {
+      name: "InfoCard aliases may use ordinary visual statics",
+      filename: "src/editor/InfoPreview.tsx",
+      code: `import { InfoCard } from "../tango/components/overlay/InfoCard";
+        const IC = InfoCard; IC.displayName;`,
+    },
   ],
   invalid: [
     {
@@ -82,6 +99,12 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
       errors: [{ messageId: "internalImport" }],
     },
     {
+      name: "repo-absolute internal imports are forbidden",
+      filename: "src/tango/screens/DraftScreen.tsx",
+      code: `import { useRevealSource } from "src/tango/internal/reveal/context";`,
+      errors: [{ messageId: "internalImport" }],
+    },
+    {
       name: "InfoCard interaction statics are forbidden",
       filename: "src/components/Legacy.tsx",
       code: `InfoCard.PressInfo; InfoCard.PressPopover; InfoCard.usePressReveal; InfoCard.anchorRect;`,
@@ -98,6 +121,13 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
       code: `import { InfoCard as IC } from "../tango/components/overlay/InfoCard";
         IC.PressInfo; const { usePressReveal } = IC;`,
       errors: [{ messageId: "infoCardStatic" }, { messageId: "infoCardStatic" }],
+    },
+    {
+      name: "indirect InfoCard binding aliases preserve the visual-only boundary",
+      filename: "src/components/Legacy.tsx",
+      code: `import { InfoCard } from "../tango/components/overlay/InfoCard";
+        const IC = InfoCard; const IC2 = IC; IC2.PressInfo;`,
+      errors: [{ messageId: "infoCardStatic" }],
     },
     {
       name: "the retired generic popover is forbidden",
@@ -140,6 +170,13 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
       errors: [{ messageId: "directPortal" }],
     },
     {
+      name: "computed ReactDOM portal members are forbidden",
+      filename: "src/screens/Thing.tsx",
+      code: `import * as DOM from "react-dom";
+        DOM["createPortal"](<GameCard model={model} />, document.body);`,
+      errors: [{ messageId: "directPortal" }],
+    },
+    {
       name: "mechanical and controlled reveal props are forbidden",
       filename: "src/tango/screens/ShopScreen.tsx",
       code: `<GameCard revealSide="left" revealDelayMs={300} portalTarget={root} anchorRect={rect}
@@ -152,6 +189,19 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
         { messageId: "controlledState" },
         { messageId: "controlledState" },
       ],
+    },
+    {
+      name: "statically knowable JSX object spreads cannot hide reveal mechanics",
+      filename: "src/tango/screens/ShopScreen.tsx",
+      code: `<GameCard {...{ anchorRect, shown: true }} model={model} />;`,
+      errors: [{ messageId: "mechanicalProp" }, { messageId: "controlledState" }],
+    },
+    {
+      name: "const object JSX spreads cannot hide reveal mechanics",
+      filename: "src/tango/screens/ShopScreen.tsx",
+      code: `const escaped = { anchorRect, shown: true };
+        <GameCard {...escaped} model={model} />;`,
+      errors: [{ messageId: "mechanicalProp" }, { messageId: "controlledState" }],
     },
     {
       name: "public reveal specs are forbidden",

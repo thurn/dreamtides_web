@@ -64,6 +64,9 @@ describe("EntityRevealConformanceDemo", () => {
     expect(container.querySelectorAll("[data-conformance-scenario]").length).toBeGreaterThanOrEqual(6);
     const infoSource = container.querySelector<HTMLElement>("[data-conformance-info-secondaries] [data-reveal-entity-type=dreamcaller]")!;
     expect(infoSource.dataset.revealSecondaryTitles?.split("\u001f")).toEqual(["Bane", "Discover", "Ephemeral"]);
+    expect(infoSource.querySelector<HTMLImageElement>("img")?.src).toContain(
+      "/dreamcallers/cutout/0071.png",
+    );
     for (const scenario of ["above", "side-fallback", "top-edge", "truncation", "best-effort", "safe-area", "reduced-motion"]) {
       act(() => container.querySelector<HTMLButtonElement>(`[data-conformance-scenario="${scenario}"]`)?.click());
       const source = container.querySelector<HTMLElement>(`[data-conformance-scenario-source="${scenario}"]`)!;

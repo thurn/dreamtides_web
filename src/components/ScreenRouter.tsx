@@ -333,6 +333,12 @@ function DreamAugurySiteScreen({
 function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
   const { state, mutations, questContent } = useQuest();
   const loggedOfferSignatureRef = useRef<string | null>(null);
+  const publishedCardSourceSignatureRef = useRef<string | null>(null);
+  const setCardSourceDebugRef = useRef(mutations.setCardSourceDebug);
+
+  useEffect(() => {
+    setCardSourceDebugRef.current = mutations.setCardSourceDebug;
+  }, [mutations.setCardSourceDebug]);
 
   useEffect(() => {
     logEvent("site_entered", {
@@ -455,17 +461,27 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
   );
 
   useEffect(() => {
-    mutations.setCardSourceDebug(
+    if (!encounterResult.ok) return;
+    if (
+      publishedCardSourceSignatureRef.current ===
+      encounterResult.encounter.encounterSignature
+    ) {
+      return;
+    }
+    publishedCardSourceSignatureRef.current =
+      encounterResult.encounter.encounterSignature;
+    setCardSourceDebugRef.current(
       cardSourceDebugState,
       "merchant_grant_cards_shown",
     );
-  }, [cardSourceDebugState, mutations]);
+  }, [cardSourceDebugState, encounterResult]);
 
   useEffect(
     () => () => {
-      mutations.setCardSourceDebug(null, "merchant_grant_cards_hidden");
+      publishedCardSourceSignatureRef.current = null;
+      setCardSourceDebugRef.current(null, "merchant_grant_cards_hidden");
     },
-    [mutations],
+    [site.id],
   );
 
   const handleAcceptOffer = useCallback(
