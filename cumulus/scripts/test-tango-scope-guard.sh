@@ -112,6 +112,68 @@ write_source "$nonproduction_allocations" "cumulus/Assets/TangoMvp/Tests/EditMod
 expect_accept "Editor and test Material allocations" \
   python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$nonproduction_allocations"
 
+material_access="$TEST_ROOT/material-access"
+write_source "$material_access" "cumulus/Assets/TangoMvp/Runtime/BadMaterialAccess.cs" \
+  'using UnityEngine; public sealed class BadMaterialAccess : MonoBehaviour { void Start() { Material clone = GetComponent<Renderer>().material; } }'
+expect_reject_with "production per-instance Renderer.material access" "runtime per-instance material access" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$material_access"
+
+materials_access="$TEST_ROOT/materials-access"
+write_source "$materials_access" "cumulus/Assets/TangoMvp/Runtime/BadMaterialsAccess.cs" \
+  'using UnityEngine; public sealed class BadMaterialsAccess : MonoBehaviour { Material[] Read(Renderer renderer) { return renderer.materials; } }'
+expect_reject_with "production per-instance Renderer.materials access" "runtime per-instance material access" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$materials_access"
+
+allowed_shared_material="$TEST_ROOT/allowed-shared-material"
+write_source "$allowed_shared_material" "cumulus/Assets/TangoMvp/Runtime/AllowedSharedMaterial.cs" \
+  'using UnityEngine; public sealed class AllowedSharedMaterial : MonoBehaviour { Material Read(Renderer renderer) { return renderer.sharedMaterial; } }'
+expect_accept "production sharedMaterial access" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$allowed_shared_material"
+
+controller="$TEST_ROOT/controller"
+write_source "$controller" "cumulus/Assets/TangoMvp/Runtime/BadController.cs" \
+  'using UnityEngine.InputSystem; public sealed class BadController { bool Read() { return Gamepad.current != null; } }'
+expect_reject_with "production controller API" "deferred controller/touch API" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$controller"
+
+touch="$TEST_ROOT/touch"
+write_source "$touch" "cumulus/Assets/TangoMvp/Runtime/BadTouch.cs" \
+  'using UnityEngine.InputSystem; public sealed class BadTouch { bool Read() { return Touchscreen.current != null; } }'
+expect_reject_with "production touch API" "deferred controller/touch API" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$touch"
+
+token_generator="$TEST_ROOT/token-generator"
+write_source "$token_generator" "cumulus/Assets/TangoMvp/Runtime/ProductionTokenGenerator.cs" \
+  'public sealed class ProductionTokenGenerator { public string Mint() { return "token"; } }'
+expect_reject_with "production token generator path" "deferred production token generator" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$token_generator"
+
+token_generator_type="$TEST_ROOT/token-generator-type"
+write_source "$token_generator_type" "cumulus/Assets/TangoMvp/Runtime/Tokens.cs" \
+  'public sealed class ProductionTokenGenerator { public string Mint() { return "token"; } }'
+expect_reject_with "production token generator type" "deferred production token generator source" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$token_generator_type"
+
+editor_token_generator="$TEST_ROOT/editor-token-generator"
+write_source "$editor_token_generator" "cumulus/Assets/TangoMvp/Editor/TokenGeneratorFixture.cs" \
+  'public sealed class TokenGeneratorFixture { public string Mint() { return "fixture"; } }'
+expect_accept "Editor token generator fixture" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$editor_token_generator"
+
+refraction="$TEST_ROOT/refraction"
+mkdir -p "$refraction/cumulus/Assets/TangoMvp/Shaders"
+printf 'Shader "TangoMvp/BadRefraction" { SubShader { GrabPass { } } }\n' > "$refraction/cumulus/Assets/TangoMvp/Shaders/BadRefraction.shader"
+printf 'fileFormatVersion: 2\nguid: 22222222222222222222222222222222\n' > "$refraction/cumulus/Assets/TangoMvp/Shaders/BadRefraction.shader.meta"
+expect_reject_with "production refraction shader source" "deferred refraction source" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$refraction"
+
+opaque_refraction="$TEST_ROOT/opaque-refraction"
+mkdir -p "$opaque_refraction/cumulus/Assets/TangoMvp/Shaders"
+printf 'Shader "TangoMvp/BadOpaqueRefraction" { SubShader { HLSLPROGRAM TEXTURE2D_X(_CameraOpaqueTexture); ENDHLSL } }\n' > "$opaque_refraction/cumulus/Assets/TangoMvp/Shaders/BadOpaqueRefraction.shader"
+printf 'fileFormatVersion: 2\nguid: 33333333333333333333333333333333\n' > "$opaque_refraction/cumulus/Assets/TangoMvp/Shaders/BadOpaqueRefraction.shader.meta"
+expect_reject_with "camera-texture refraction shader source" "deferred refraction source" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$opaque_refraction"
+
 ui_import="$TEST_ROOT/ui-import"
 write_source "$ui_import" "cumulus/Assets/TangoMvp/Runtime/BadUi.cs" \
   'using UnityEngine.UIElements; public sealed class BadUi { }'

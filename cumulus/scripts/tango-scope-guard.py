@@ -135,9 +135,19 @@ def main() -> int:
             or asset_path.startswith("cumulus/Assets/TextMesh Pro/")
             or lowered.endswith((".uxml", ".uss"))
             or "uidocument" in lowered
+            or (
+                asset_path.startswith("cumulus/Assets/TangoMvp/")
+                and lowered.endswith(".cs")
+                and "/editor/" not in lowered
+                and "/tests/" not in lowered
+                and re.search(r"token[^/]*generator|generator[^/]*token", lowered.rsplit("/", 1)[-1])
+            )
         )
         if protected:
-            errors.append(f"protected asset {status.lower()}: {normalized}")
+            if "token" in lowered and "generator" in lowered:
+                errors.append(f"deferred production token generator {status.lower()}: {normalized}")
+            else:
+                errors.append(f"protected asset {status.lower()}: {normalized}")
 
         if not normalized.startswith("cumulus/Assets/"):
             continue
@@ -157,6 +167,16 @@ def main() -> int:
     allocation = re.compile(
         r"\bnew\s+(?:(?:global\s*::\s*)?UnityEngine\s*\.\s*)?Material\s*\("
     )
+    per_instance_material = re.compile(r"\.\s*materials?\b")
+    controller_or_touch = re.compile(
+        r"\b(?:Gamepad|Joystick|Touchscreen|Pen)\s*\.\s*(?:current|all)\b"
+        r"|\bInput\s*\.\s*(?:touchCount|GetTouch)\b"
+        r"|\bEnhancedTouchSupport\b|\bUnityEngine\s*\.\s*InputSystem\s*\.\s*EnhancedTouch\b"
+    )
+    token_generator_type = re.compile(
+        r"\b(?:class|struct|record)\s+[A-Za-z_]\w*TokenGenerator\w*\b",
+        re.IGNORECASE,
+    )
     field = source_fields()
     forbidden_imports = (
         "using UnityEngine.UI;",
@@ -168,9 +188,16 @@ def main() -> int:
     for source in sources:
         relative = source.relative_to(root).as_posix()
         content = source.read_text(encoding="utf-8")
+        scrubbed = source_without_comments_or_strings(content)
         production = is_production_source(source, source_root)
-        if production and allocation.search(content):
+        if production and allocation.search(scrubbed):
             errors.append(f"runtime material allocation: {relative}")
+        if production and per_instance_material.search(scrubbed):
+            errors.append(f"runtime per-instance material access: {relative}")
+        if production and controller_or_touch.search(scrubbed):
+            errors.append(f"deferred controller/touch API: {relative}")
+        if production and token_generator_type.search(scrubbed):
+            errors.append(f"deferred production token generator source: {relative}")
         if production:
             member_positions = type_member_positions(content)
             for match in field.finditer(content):
@@ -189,6 +216,19 @@ def main() -> int:
                 errors.append(
                     f"forbidden UI namespace import ({forbidden_import}): {relative}"
                 )
+
+    shader_root = root / "cumulus/Assets/TangoMvp"
+    refraction = re.compile(
+        r"\bGrabPass\b|\b_refract(?:ion)?\w*\b|\brefract\s*\(|\b_Camera(?:Opaque|Depth)Texture\b",
+        re.IGNORECASE,
+    )
+    shaders = shader_root.rglob("*.shader") if shader_root.exists() else []
+    for shader in shaders:
+        content = source_without_comments_or_strings(shader.read_text(encoding="utf-8"))
+        if refraction.search(content):
+            errors.append(
+                f"deferred refraction source: {shader.relative_to(root).as_posix()}"
+            )
 
     for error in sorted(set(errors)):
         print(f"scope-guard: {error}", file=sys.stderr)

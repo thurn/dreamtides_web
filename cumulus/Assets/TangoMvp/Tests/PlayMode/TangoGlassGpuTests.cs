@@ -6,22 +6,138 @@ using System.Linq;
 using NUnit.Framework;
 using TangoMvp.Demo;
 using TangoMvp.Diagnostics;
+using TangoMvp.Interaction;
+using TangoMvp.Motion;
 using TangoMvp.Rendering;
 using TangoMvp.Tests.Support;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
 namespace TangoMvp.Tests.PlayMode
 {
-    public sealed class TangoGlassGpuTests
+    public sealed class TangoGlassGpuTests : InputTestFixture
     {
         private const int CaptureWidth = 512;
         private const int CaptureHeight = 288;
         private static readonly string EvidenceDirectory = Path.GetFullPath("Artifacts/TangoMvpVerification");
         private readonly List<TangoGpuAcceptanceResult> latestResults = new List<TangoGpuAcceptanceResult>();
         private static bool forceFailureAfterSetup;
+
+        [UnityTest]
+        public IEnumerator Fallback_RealSceneButtonSupportsHoverPressCancelAndTravelActivation()
+        {
+            Mouse mouse = null;
+            TangoGlassRendererFeature feature = null;
+            TangoPointerInteractor interactor = null;
+            TangoPressable pressable = null;
+            TangoPanelTravel travel = null;
+            Transform panel = null;
+            Transform visual = null;
+            bool featureWasActive = false;
+            bool interactorWasEnabled = false;
+            bool travelWasEnabled = false;
+            Vector3 panelPosition = default;
+            Quaternion panelRotation = default;
+            Vector3 restingVisualScale = default;
+            bool stateCaptured = false;
+
+            try
+            {
+                SceneManager.LoadScene("TangoGlassLab", LoadSceneMode.Single);
+                yield return null;
+
+                Camera camera = UnityEngine.Object.FindFirstObjectByType<Camera>();
+                Assert.That(camera, Is.Not.Null);
+                feature = Resources.FindObjectsOfTypeAll<TangoGlassRendererFeature>()
+                    .FirstOrDefault(candidate => candidate != null && candidate.name == "TangoGlassRendererFeature");
+                interactor = camera.GetComponent<TangoPointerInteractor>();
+                pressable = UnityEngine.Object.FindFirstObjectByType<TangoPressable>();
+                travel = UnityEngine.Object.FindFirstObjectByType<TangoPanelTravel>();
+                Assert.That(feature, Is.Not.Null);
+                Assert.That(interactor, Is.Not.Null);
+                Assert.That(pressable, Is.Not.Null);
+                Assert.That(travel, Is.Not.Null);
+                panel = travel.transform;
+                visual = pressable.transform.Find("On Glass Button Visual");
+                Assert.That(visual, Is.Not.Null);
+
+                featureWasActive = feature.isActive;
+                interactorWasEnabled = interactor.enabled;
+                travelWasEnabled = travel.enabled;
+                panelPosition = panel.position;
+                panelRotation = panel.rotation;
+                restingVisualScale = visual.localScale;
+                stateCaptured = true;
+                feature.SetActive(false);
+                Assert.That(feature.isActive, Is.False);
+
+                mouse = InputSystem.AddDevice<Mouse>();
+                Physics.SyncTransforms();
+                Vector2 buttonPosition = camera.WorldToScreenPoint(pressable.transform.position);
+                Move(mouse.position, buttonPosition);
+                yield return null;
+                AssertVector(visual.localScale, restingVisualScale * TangoPressable.HoverScaleFactor);
+
+                Press(mouse.leftButton);
+                yield return null;
+                AssertVector(visual.localScale, restingVisualScale * TangoPressable.PressScaleFactor);
+                Move(mouse.position, new Vector2(1f, 1f));
+                yield return null;
+                Release(mouse.leftButton);
+                yield return null;
+                Assert.That(travel.IsTravelling, Is.False);
+                AssertVector(visual.localScale, restingVisualScale);
+
+                Move(mouse.position, buttonPosition);
+                yield return null;
+                Press(mouse.leftButton);
+                yield return null;
+                LogAssert.Expect(LogType.Log, "TangoPressable activated: glass-panel-travel");
+                Release(mouse.leftButton);
+                yield return null;
+                Assert.That(travel.IsTravelling, Is.True);
+                yield return null;
+                Assert.That(Vector3.Distance(panel.position, panelPosition), Is.GreaterThan(0f));
+            }
+            finally
+            {
+                if (stateCaptured && interactor != null)
+                {
+                    interactor.enabled = false;
+                }
+                if (mouse != null && mouse.added)
+                {
+                    InputSystem.RemoveDevice(mouse);
+                }
+                if (stateCaptured && travel != null)
+                {
+                    travel.enabled = false;
+                }
+                if (stateCaptured && panel != null)
+                {
+                    panel.SetPositionAndRotation(panelPosition, panelRotation);
+                }
+                if (stateCaptured && visual != null)
+                {
+                    visual.localScale = restingVisualScale;
+                }
+                if (stateCaptured && travel != null)
+                {
+                    travel.enabled = travelWasEnabled;
+                }
+                if (stateCaptured && interactor != null)
+                {
+                    interactor.enabled = interactorWasEnabled;
+                }
+                if (stateCaptured && feature != null)
+                {
+                    feature.SetActive(featureWasActive);
+                }
+            }
+        }
 
         [UnityTearDown]
         public IEnumerator RemoveLabSceneObjects()
@@ -372,6 +488,13 @@ namespace TangoMvp.Tests.PlayMode
                 phaseB,
                 graphicsApi,
                 deviceName));
+        }
+
+        private static void AssertVector(Vector3 actual, Vector3 expected)
+        {
+            Assert.That(actual.x, Is.EqualTo(expected.x).Within(0.0001f));
+            Assert.That(actual.y, Is.EqualTo(expected.y).Within(0.0001f));
+            Assert.That(actual.z, Is.EqualTo(expected.z).Within(0.0001f));
         }
     }
 }

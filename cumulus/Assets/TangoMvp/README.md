@@ -10,7 +10,7 @@ Exit `0` is the only passing result. It means every stage below passed and `cumu
 
 ## Prerequisites
 
-- Run on macOS from any directory inside a clean checkout of this repository. The gate resolves the repository root itself.
+- Run on macOS from the root of a clean checkout of this repository. The README command is the supported invocation contract.
 - Install the exact Unity editor in `cumulus/ProjectSettings/ProjectVersion.txt` at the Unity Hub path `/Applications/Unity/Hub/Editor/<version>/Unity.app/Contents/MacOS/Unity`. A `UNITY` executable override is accepted only when `UNITY -version` reports that exact version.
 - Provide a graphics-capable Metal device for the PlayMode render tests and standalone macOS build. A null graphics device fails the GPU test.
 - Install Node dependencies at the repository root with `npm install` when `node_modules` is absent.
@@ -36,6 +36,8 @@ The eight required stages appear in `summary.json.stages` in this exact order:
 8. `static-scope-guard` compares against `TANGO_SCOPE_BASE` or `merge-base HEAD master`, verifies Unity `.meta` pairing, and rejects mechanically detectable deferred systems.
 
 After all stages, provenance is checked again. A commit change or any tracked/untracked change prevents a passing summary.
+
+The Unity harness writes to these exact stage directories: `stages/clean-import/` for clean import; `stages/builder-first/` and `stages/builder-second/` for deterministic rebuilds; `stages/full-editmode/` for EditMode tests; `stages/full-playmode/` for graphics-enabled PlayMode tests; and `stages/shader-build/` for shader inspection and the player build. Each contains `unity.log`, `launcher.log`, and `exit-code`; the two test directories also contain `results.xml`.
 
 ## Evidence and schemas
 
@@ -97,7 +99,7 @@ Other fail-closed messages identify the contract directly:
 - `tango-provenance:`: dirty tree or changed `HEAD`; inspect `summary.json.reason` and `dirtyPaths`.
 - `unity-run:`: wrong/missing Unity version, invalid harness argument, stale/missing log, nonzero/malformed exit evidence, rejected NUnit XML, timeout, or missing completion marker.
 - `tango-evidence:`: malformed/extraneous/duplicate/missing metric, threshold/operator mismatch, nonfinite value, forged verdict, GPU identity/phase omission, capture-set mismatch, or invalid PNG.
-- `scope-guard:`: protected mobile/UI asset change, missing/orphaned `.meta`, runtime material allocation, per-pane camera/render-texture field, or forbidden uGUI/UI Toolkit/TextMesh Pro import.
+- `scope-guard:`: protected mobile/UI asset change, missing/orphaned `.meta`, runtime material allocation or per-instance `.material` access, per-pane camera/render-texture field, forbidden uGUI/UI Toolkit/TextMesh Pro import, named controller/touch API, production token-generator source/path, or refraction-source signature.
 - `summary stage evidence is incomplete`, `invalid passing NUnit root`, `invalid NUnit counts`, `missing exact Unity version`, `missing exact URP version`, `summary found failed or missing render metrics`, or `asset hash manifest is malformed/empty`: aggregate evidence is incomplete.
 - `shader report has an invalid count or nonzero errors`, `shader report does not contain the exact required shaders`, or `shader report has missing or malformed shader records`: shader inspection failed.
 - `standalone build did not succeed for macOS`, `standalone build output path is not exact`, `standalone build summary is malformed`, or `standalone player output is missing or empty`: player build evidence failed.
@@ -123,10 +125,10 @@ This is the complete automated completion contract. Optional inspection is not p
 | Stable root collider handles hover, press, cancel, activation | `TangoPressableTests.StateMachine_ScalesOnlyVisualAndPressWinsHover`, `StateMachine_CancelsAwayAndActivatesOnceOver`, `VirtualMouse_ActivatesThroughPointerInteractor`, and `VirtualMouse_DragOffCancelsOriginalPress`; `TangoGlassLabAssetTests.Scene_ReopensWithExactProofObjectsAndSharedMaterialRoles` proves one root collider and its serialized binding. |
 | Travel is 420 ms, follows `(0.16, 1, 0.3, 1)`, and is interruptible | `TangoPanelTravelTests.ToggleDestination_ReachesBothExactAnchorsInReferenceDuration`, `ToggleDestination_InterruptsFromCurrentPoseWithoutSnap`, and all three `TangoCubicBezierTests` using those exact control points. |
 | Panel, button, labels, collider, and sheen stay aligned | The scene/prefab hierarchy and bindings are asserted by `TangoGlassLabAssetTests.Scene_ReopensWithExactProofObjectsAndSharedMaterialRoles`; `ToggleDestination_ReachesBothExactAnchorsInReferenceDuration` moves the common panel root and `StateMachine_ScalesOnlyVisualAndPressWinsHover` proves interaction scaling leaves the root/collider unchanged. |
-| Fallback is finite, visible, and interactive | `fallbackInteriorLuminanceMinimum` and `fallbackInteriorLuminanceMaximum`; `TangoGlassRenderingTests.SceneGlass_FallbackStraightAlphaPreservesShellAndLiveReplacesBackdrop`, `SceneGlass_AvailabilityBranchReturnsBeforeBlurSampling`, and the virtual-mouse PlayMode tests. |
+| Fallback is finite, visible, and interactive | `fallbackInteriorLuminanceMinimum` and `fallbackInteriorLuminanceMaximum`; `TangoGlassRenderingTests.SceneGlass_FallbackStraightAlphaPreservesShellAndLiveReplacesBackdrop`, `SceneGlass_AvailabilityBranchReturnsBeforeBlurSampling`, and `TangoGlassGpuTests.Fallback_RealSceneButtonSupportsHoverPressCancelAndTravelActivation`, which exercises the real scene button with the renderer feature inactive. |
 | Unity and repository suites pass | `tests.editMode`, `tests.playMode`, `editmode-tests`, `gpu-playmode-tests`, and `repository-checks`; inspect the two XML files and three npm logs. |
 | Negative controls reject known-bad evidence | `shell-harness-self-tests.status == "passed"`; its four logs cover shell harness, scope, evidence, and provenance fixtures. `TangoImageMetricsTests.AcceptanceThresholds_FlipImmediatelyAcrossEveryCommittedBoundary` checks every metric boundary. |
-| Scope remains the bounded PC proof | `static-scope-guard.status == "passed"` and `stages/scope-guard.log`; the guard includes deletions and new/untracked files. |
+| Scope remains the bounded PC proof | `static-scope-guard.status == "passed"` and `stages/scope-guard.log`; the guard includes deletions and new/untracked files. It checks the exact static subset described below. Recursive glass is constrained by the exact one-record/two-pass metrics plus `OnGlass_NeverDeclaresOrSamplesSharedBlur`; refraction is rejected by the guard's shader-source signatures. |
 | Builder is deterministic and authoritative | `deterministic-builder.status == "passed"`, identical hash manifests, `TangoGlassLabAssetTests.Rebuild_IsByteStableAndRetainsEveryAuthoredGuid`, and `Rebuild_RepairsMeshPrefabAndSceneDriftWithoutChangingGuids`. |
 | GPU setup failure restores state and still emits evidence | `TangoGlassGpuTests.EarlyFailure_RestoresEverySeededNonDefaultState`. |
 
@@ -138,4 +140,6 @@ An agent may inspect the 20 generated PNGs for unintended aesthetic artifacts. I
 
 ## Bounded MVP scope
 
-This is a PC-only proof scene for shared screen-space frost, fixed material roles, world-space mesh text, one pointer-driven pressable, and one interruptible panel motion. Production work outside this contract includes mobile renderer changes, Canvas/uGUI, UI Toolkit, TextMesh Pro resources, per-pane cameras or render textures, runtime material clones, per-instance material tuning, refraction, recursive glass, controller/touch input, and a production token generator. The scope guard rejects mechanically detectable instances of these systems in the MVP diff.
+This is a PC-only proof scene for shared screen-space frost, fixed material roles, world-space mesh text, one pointer-driven pressable, and one interruptible panel motion. Production work outside this contract includes mobile renderer changes, Canvas/uGUI, UI Toolkit, TextMesh Pro resources, per-pane cameras or render textures, runtime material clones, per-instance material tuning, refraction, recursive glass, controller/touch input, and a production token generator.
+
+The static guard's exact mechanically detectable subset is: any mutation/deletion of the mobile renderer, TextMesh Pro tree, `.uxml`/`.uss`/`UIDocument` asset; any unpaired Unity asset or `.meta`; production `new Material(...)` or `Renderer.material`-style access while allowing `sharedMaterial` and Editor/test code; production `Camera`, `RenderTexture`, or `RTHandle` fields except the one declared pointer-interaction camera; uGUI, UI Toolkit, or TMPro imports; `Gamepad.current/all`, `Joystick.current/all`, `Touchscreen.current/all`, `Pen.current/all`, legacy `Input.touchCount/GetTouch`, or Enhanced Touch references; a production Tango MVP source path/type named as a token generator; and shader references to `GrabPass`, `refract(...)`, refraction-named identifiers, `_CameraOpaqueTexture`, or `_CameraDepthTexture`. Recursive glass is bounded dynamically by one shared graph record and exactly two camera passes across pane/button configurations, and statically by the on-glass shader's prohibition on shared-blur sampling. These checks define the automated scope claim; other architecture or aesthetic judgments remain optional review observations.
