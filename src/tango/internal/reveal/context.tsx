@@ -5,14 +5,21 @@ import {
 } from "react";
 import { logEvent } from "../../../logging";
 import type { RichText } from "../../components/card/rich-text";
-import type { RevealInfoCardModel, RevealSourceIdentity, RevealSpec } from "./model";
-import { initialRevealCoordinatorState, reduceRevealState } from "./state-machine";
+import { tideAlignmentLabel } from "../../components/hud/tide-spec";
+import type { RevealCoordinatorSource, RevealInfoCardModel, RevealSourceIdentity, RevealSpec } from "./model";
+import {
+  activationOutcomeForTouch, initialRevealCoordinatorState, reduceRevealState,
+  REVEAL_INTENT_MS,
+} from "./state-machine";
 import { logRevealClosed } from "./logging";
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-function sameSource(a: RevealSourceIdentity | null, b: RevealSourceIdentity): boolean {
-  return a !== null && a.entityType === b.entityType && a.entityId === b.entityId;
+function sameSource(state: ReturnType<typeof reduceRevealState>, source: RevealCoordinatorSource): boolean {
+  return state.activeSource !== null
+    && state.activeSource.entityType === source.identity.entityType
+    && state.activeSource.entityId === source.identity.entityId
+    && state.activeRegistrationId === source.registrationId;
 }
 
 function richTextDescription(value: RichText | undefined): string {
@@ -23,9 +30,31 @@ function richTextDescription(value: RichText | undefined): string {
 }
 
 function infoCardDescription(card: RevealInfoCardModel): string {
-  return [card.title, "subtitle" in card ? card.subtitle : undefined, richTextDescription(card.body)]
+  return [
+    "meta" in card ? card.meta : undefined,
+    card.title,
+    "subtitle" in card ? card.subtitle : undefined,
+    card.variant === "tide" ? `${tideAlignmentLabel(card.tide)} tide alignment` : undefined,
+    richTextDescription(card.body),
+  ]
     .filter((part): part is string => typeof part === "string" && part.trim().length > 0)
     .join(". ");
+}
+
+function gameCardDescription(card: NonNullable<Extract<RevealSpec["primary"], { kind: "gameCard" }>["displaySnapshot"]>): string {
+  const energy = card.energyCosts !== undefined && card.energyCosts.length > 0
+    ? `Energy ${card.energyCosts.join(" and ")}`
+    : `Energy ${card.energyCost === null ? "X" : String(card.energyCost)}`;
+  const spark = card.sparkVariable === true
+    ? "Spark X"
+    : card.spark === null ? undefined : `Spark ${String(card.spark)}`;
+  return [
+    card.name, card.rarity, card.cardType, card.subtype || undefined, energy, spark,
+    card.isFast ? "Fast" : undefined,
+    card.isInterrupt === true ? "Interrupt" : undefined,
+    card.reclaimCost == null ? undefined : `Reclaim ${String(card.reclaimCost)}`,
+    card.renderedText,
+  ].filter((part): part is string => typeof part === "string" && part.trim().length > 0).join(". ");
 }
 
 function revealDescription(spec: RevealSpec): string {
@@ -33,7 +62,7 @@ function revealDescription(spec: RevealSpec): string {
     ? infoCardDescription(spec.primary.card)
     : spec.primary.displaySnapshot === undefined
       ? `Game card ${spec.primary.cardId}`
-      : [spec.primary.displaySnapshot.name, spec.primary.displaySnapshot.renderedText].filter(Boolean).join(". ");
+      : gameCardDescription(spec.primary.displaySnapshot);
   return [primary, ...spec.secondaries.map(infoCardDescription)].filter(Boolean).join(". ");
 }
 
@@ -41,7 +70,7 @@ function isValidRegistration(identity: RevealSourceIdentity, spec: RevealSpec): 
   if (identity.entityType.trim() === "" || !UUID_PATTERN.test(identity.entityId)) return false;
   if (spec.primary.kind === "gameCard") {
     if (!UUID_PATTERN.test(spec.primary.cardId)) return false;
-    if (spec.primary.displaySnapshot !== undefined && spec.primary.displaySnapshot.id !== spec.primary.cardId) return false;
+    if (spec.primary.displaySnapshot !== undefined && spec.primary.displaySnapshot.id.toLowerCase() !== spec.primary.cardId.toLowerCase()) return false;
   }
   return revealDescription(spec).trim().length > 0;
 }
@@ -49,7 +78,7 @@ function isValidRegistration(identity: RevealSourceIdentity, spec: RevealSpec): 
 interface SourceRegistration {
   readonly descriptionId: string;
   readonly description: string;
-  readonly identity: RevealSourceIdentity;
+  readonly source: RevealCoordinatorSource;
   readonly spec: RevealSpec;
   readonly element: HTMLElement | null;
 }
@@ -58,7 +87,7 @@ interface RevealCoordinatorValue {
   readonly dispatch: Dispatch<Parameters<typeof reduceRevealState>[1]>;
   readonly registerSource: (key: string, value: SourceRegistration) => () => void;
   readonly updateSourceElement: (key: string, element: HTMLElement | null) => void;
-  readonly unregisterSource: (source: RevealSourceIdentity) => void;
+  readonly unregisterSource: (source: RevealCoordinatorSource) => void;
 }
 
 const RevealCoordinatorContext = createContext<RevealCoordinatorValue | null>(null);
@@ -78,10 +107,10 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
     const source = sourcesRef.current.get(key);
     if (source !== undefined) sourcesRef.current.set(key, { ...source, element });
   }, []);
-  const unregisterSource = useCallback((source: RevealSourceIdentity) => {
+  const unregisterSource = useCallback((source: RevealCoordinatorSource) => {
     const current = stateRef.current;
-    if (sameSource(current.activeSource, source)) {
-      logRevealClosed({ source, dismissalReason: "source-unmount", activationOutcome: current.touch === null ? current.activationOutcome : "suppressed-cancelled" });
+    if (sameSource(current, source)) {
+      logRevealClosed({ source: source.identity, dismissalReason: "source-unmount", activationOutcome: current.touch === null ? current.activationOutcome : "suppressed-cancelled" });
     }
     dispatch({ type: "source-unmount", source, timestamp: performance.now() });
   }, []);
@@ -92,17 +121,45 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
       if (event.key === "Escape") dispatch({ type: "escape", timestamp: event.timeStamp });
     };
     const events = [
-      [window, "scroll", () => dispatch({ type: "scroll", timestamp: now() })],
       [window, "resize", () => dispatch({ type: "resize", timestamp: now() })],
       [window, "orientationchange", () => dispatch({ type: "orientation-change", timestamp: now() })],
       [window, "blur", () => dispatch({ type: "window-blur", timestamp: now() })],
       [window, "popstate", () => dispatch({ type: "route-change", timestamp: now() })],
+      [window, "hashchange", () => dispatch({ type: "route-change", timestamp: now() })],
     ] as const;
+    const handleScroll = () => dispatch({ type: "scroll", timestamp: now() });
+    const handleDragStart = () => dispatch({ type: "drag", timestamp: now() });
+    const pushStateDescriptor = Object.getOwnPropertyDescriptor(window.history, "pushState");
+    const replaceStateDescriptor = Object.getOwnPropertyDescriptor(window.history, "replaceState");
+    const originalPushState = window.history.pushState.bind(window.history);
+    const originalReplaceState = window.history.replaceState.bind(window.history);
+    const pushState: History["pushState"] = (...args) => {
+      originalPushState(...args);
+      dispatch({ type: "route-change", timestamp: now() });
+    };
+    const replaceState: History["replaceState"] = (...args) => {
+      originalReplaceState(...args);
+      dispatch({ type: "route-change", timestamp: now() });
+    };
+    window.history.pushState = pushState;
+    window.history.replaceState = replaceState;
     for (const [target, name, handler] of events) target.addEventListener(name, handler);
     window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("scroll", handleScroll, true);
+    window.addEventListener("dragstart", handleDragStart, true);
     return () => {
       for (const [target, name, handler] of events) target.removeEventListener(name, handler);
       window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("scroll", handleScroll, true);
+      window.removeEventListener("dragstart", handleDragStart, true);
+      if (window.history.pushState === pushState) {
+        if (pushStateDescriptor === undefined) delete (window.history as Partial<History>).pushState;
+        else Object.defineProperty(window.history, "pushState", pushStateDescriptor);
+      }
+      if (window.history.replaceState === replaceState) {
+        if (replaceStateDescriptor === undefined) delete (window.history as Partial<History>).replaceState;
+        else Object.defineProperty(window.history, "replaceState", replaceStateDescriptor);
+      }
     };
   }, []);
 
@@ -142,13 +199,13 @@ export function useRevealSource(registration: RevealSourceRegistration): RevealS
   const descriptionId = `tango-reveal-description-${reactId.replace(/:/g, "")}`;
   const valid = isValidRegistration(registration.identity, registration.spec);
   const identity = registration.identity;
+  const registrationKey = `tango-reveal-source-${reactId.replace(/:/g, "")}`;
+  const mountedSource: RevealCoordinatorSource = { identity, registrationId: registrationKey };
   const spec = registration.spec;
   const specFingerprint = JSON.stringify(spec);
-  const identityKey = `${identity.entityType}:${identity.entityId}`;
   const descriptionText = revealDescription(spec);
   const activate = registration.onActivate;
   const nodeRef = useRef<HTMLElement | null>(null);
-  const touchStartedAt = useRef<number | null>(null);
   const intentTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const registerSource = coordinator.registerSource;
   const unregisterSource = coordinator.unregisterSource;
@@ -158,44 +215,50 @@ export function useRevealSource(registration: RevealSourceRegistration): RevealS
       logEvent("tango_entity_reveal_invalid_source", { sourceEntityType: identity.entityType, sourceEntityId: identity.entityId, reason: "malformed-semantic-data" });
       return;
     }
-    const unregisterRegistration = registerSource(identityKey, {
-      descriptionId, description: descriptionText, identity, spec,
+    const unregisterRegistration = registerSource(registrationKey, {
+      descriptionId, description: descriptionText, source: mountedSource, spec,
       element: nodeRef.current,
     });
-    return () => { if (intentTimer.current !== null) clearTimeout(intentTimer.current); unregisterRegistration(); unregisterSource(identity); };
-  }, [registerSource, unregisterSource, descriptionId, descriptionText, identity.entityId, identity.entityType, identityKey, specFingerprint, valid]);
+    return () => { if (intentTimer.current !== null) clearTimeout(intentTimer.current); unregisterRegistration(); unregisterSource(mountedSource); };
+  }, [registerSource, unregisterSource, descriptionId, descriptionText, identity.entityId, identity.entityType, registrationKey, specFingerprint, valid]);
 
   const ref = useCallback<RefCallback<HTMLElement>>((node) => {
     nodeRef.current = node;
-    coordinator.updateSourceElement(identityKey, node);
-  }, [coordinator.updateSourceElement, identityKey]);
-  const active = valid && sameSource(coordinator.state.activeSource, identity);
+    coordinator.updateSourceElement(registrationKey, node);
+  }, [coordinator.updateSourceElement, registrationKey]);
+  const active = valid && sameSource(coordinator.state, mountedSource);
   return {
     ref,
     sourceProps: {
       "aria-describedby": valid ? descriptionId : undefined,
       "data-reveal-active": active ? "true" : "false",
-      onPointerEnter: (event) => { if (valid) coordinator.dispatch({ type: "pointer-enter", source: identity, pointerType: event.pointerType, hoverCapable: event.pointerType === "mouse" || event.pointerType === "pen", timestamp: event.timeStamp }); },
-      onPointerLeave: (event) => { if (valid) coordinator.dispatch({ type: "pointer-leave", source: identity, pointerId: event.pointerId, timestamp: event.timeStamp }); },
+      onPointerEnter: (event) => { if (valid) coordinator.dispatch({ type: "pointer-enter", source: mountedSource, pointerType: event.pointerType, hoverCapable: event.pointerType === "mouse" || (event.pointerType === "pen" && event.buttons === 0 && event.pressure === 0), timestamp: event.timeStamp }); },
+      onPointerLeave: (event) => {
+        if (intentTimer.current !== null) { clearTimeout(intentTimer.current); intentTimer.current = null; }
+        if (valid) coordinator.dispatch({ type: "pointer-leave", source: mountedSource, pointerId: event.pointerId, timestamp: event.timeStamp });
+      },
       onPointerDown: (event) => {
         if (!valid) return;
-        coordinator.dispatch({ type: "pointer-down", source: identity, pointerType: event.pointerType, pointerId: event.pointerId, point: { x: event.clientX, y: event.clientY }, hasAction: activate !== undefined, timestamp: event.timeStamp });
+        coordinator.dispatch({ type: "pointer-down", source: mountedSource, pointerType: event.pointerType, pointerId: event.pointerId, point: { x: event.clientX, y: event.clientY }, hasAction: activate !== undefined, timestamp: event.timeStamp });
         if (event.pointerType === "touch") {
-          touchStartedAt.current = event.timeStamp;
-          intentTimer.current = setTimeout(() => coordinator.dispatch({ type: "intent-elapsed", pointerId: event.pointerId, timestamp: event.timeStamp + 30 }), 30);
+          intentTimer.current = setTimeout(() => coordinator.dispatch({ type: "intent-elapsed", pointerId: event.pointerId, timestamp: event.timeStamp + REVEAL_INTENT_MS }), REVEAL_INTENT_MS);
         }
       },
       onPointerMove: (event) => { if (valid) coordinator.dispatch({ type: "pointer-move", pointerId: event.pointerId, point: { x: event.clientX, y: event.clientY }, timestamp: event.timeStamp }); },
       onPointerUp: (event) => {
         if (!valid) return;
         if (intentTimer.current !== null) { clearTimeout(intentTimer.current); intentTimer.current = null; }
-        const shouldActivate = coordinator.state.touch?.pointerId === event.pointerId && touchStartedAt.current !== null && event.timeStamp - touchStartedAt.current < 300 && activate !== undefined;
+        const touch = coordinator.state.touch;
+        const shouldActivate = touch?.pointerId === event.pointerId && activationOutcomeForTouch(touch, event.timeStamp) === "fired" && activate !== undefined;
         coordinator.dispatch({ type: "pointer-up", pointerId: event.pointerId, timestamp: event.timeStamp });
-        touchStartedAt.current = null; if (shouldActivate) activate();
+        if (shouldActivate) activate();
       },
-      onPointerCancel: (event) => { if (valid) coordinator.dispatch({ type: "pointer-cancel", pointerId: event.pointerId, timestamp: event.timeStamp }); },
-      onFocus: (event) => { if (valid) coordinator.dispatch({ type: "focus", source: identity, timestamp: event.timeStamp }); },
-      onBlur: (event) => { if (valid) coordinator.dispatch({ type: "blur", source: identity, timestamp: event.timeStamp }); },
+      onPointerCancel: (event) => {
+        if (intentTimer.current !== null) { clearTimeout(intentTimer.current); intentTimer.current = null; }
+        if (valid) coordinator.dispatch({ type: "pointer-cancel", pointerId: event.pointerId, timestamp: event.timeStamp });
+      },
+      onFocus: (event) => { if (valid) coordinator.dispatch({ type: "focus", source: mountedSource, timestamp: event.timeStamp }); },
+      onBlur: (event) => { if (valid) coordinator.dispatch({ type: "blur", source: mountedSource, timestamp: event.timeStamp }); },
     },
   };
 }

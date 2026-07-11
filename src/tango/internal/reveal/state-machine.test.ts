@@ -3,7 +3,7 @@ import {
   initialRevealCoordinatorState,
   reduceRevealState,
 } from "./state-machine";
-import type { RevealCoordinatorEvent, RevealSourceIdentity } from "./model";
+import type { RevealCoordinatorEvent, RevealCoordinatorSource, RevealSourceIdentity } from "./model";
 
 const A: RevealSourceIdentity = {
   entityType: "card",
@@ -13,6 +13,8 @@ const B: RevealSourceIdentity = {
   entityType: "site",
   entityId: "00000000-0000-4000-8000-000000000002",
 };
+const SA: RevealCoordinatorSource = { identity: A, registrationId: "a" };
+const SB: RevealCoordinatorSource = { identity: B, registrationId: "b" };
 
 function run(...events: RevealCoordinatorEvent[]) {
   return events.reduce(reduceRevealState, initialRevealCoordinatorState);
@@ -25,21 +27,25 @@ describe("reveal interaction state machine", () => {
 
   it("opens immediately for mouse and a hover-capable pen, replacing the active source", () => {
     const state = run(
-      { type: "pointer-enter", source: A, pointerType: "mouse", hoverCapable: true, timestamp: 1 },
-      { type: "pointer-enter", source: B, pointerType: "pen", hoverCapable: true, timestamp: 2 },
+      { type: "pointer-enter", source: SA, pointerType: "mouse", hoverCapable: true, timestamp: 1 },
+      { type: "pointer-enter", source: SB, pointerType: "pen", hoverCapable: true, timestamp: 2 },
     );
     expect(state).toMatchObject({ phase: "hover", activeSource: B, reason: "hover" });
   });
 
+  it("does not treat a contact pen as hovering", () => {
+    expect(run({ type: "pointer-enter", source: SA, pointerType: "pen", hoverCapable: false, timestamp: 1 })).toEqual(initialRevealCoordinatorState);
+  });
+
   it("opens on keyboard focus", () => {
-    expect(run({ type: "focus", source: A, timestamp: 1 })).toMatchObject({
+    expect(run({ type: "focus", source: SA, timestamp: 1 })).toMatchObject({
       phase: "focus", activeSource: A, reason: "focus",
     });
   });
 
   it("keeps touch pending for 30ms and then reveals", () => {
     const down: RevealCoordinatorEvent = {
-      type: "pointer-down", source: A, pointerType: "touch", pointerId: 1,
+      type: "pointer-down", source: SA, pointerType: "touch", pointerId: 1,
       point: { x: 20, y: 30 }, hasAction: true, timestamp: 100,
     };
     expect(run(down, { type: "intent-elapsed", pointerId: 1, timestamp: 129 }).phase).toBe("touch-pending");
@@ -50,7 +56,7 @@ describe("reveal interaction state machine", () => {
 
   it("fires an available action on quick release and suppresses one at the inclusive hold boundary", () => {
     const down: RevealCoordinatorEvent = {
-      type: "pointer-down", source: A, pointerType: "touch", pointerId: 1,
+      type: "pointer-down", source: SA, pointerType: "touch", pointerId: 1,
       point: { x: 0, y: 0 }, hasAction: true, timestamp: 100,
     };
     expect(run(down, { type: "pointer-up", pointerId: 1, timestamp: 399 }).activationOutcome).toBe("fired");
@@ -60,7 +66,7 @@ describe("reveal interaction state machine", () => {
 
   it("suppresses activation for a source with no action", () => {
     const down: RevealCoordinatorEvent = {
-      type: "pointer-down", source: A, pointerType: "touch", pointerId: 1,
+      type: "pointer-down", source: SA, pointerType: "touch", pointerId: 1,
       point: { x: 0, y: 0 }, hasAction: false, timestamp: 0,
     };
     expect(run(down, { type: "intent-elapsed", pointerId: 1, timestamp: 30 }).phase).toBe("touch-reveal");
@@ -70,7 +76,7 @@ describe("reveal interaction state machine", () => {
 
   it("allows movement at 10px and cancels beyond 10px", () => {
     const down: RevealCoordinatorEvent = {
-      type: "pointer-down", source: A, pointerType: "touch", pointerId: 7,
+      type: "pointer-down", source: SA, pointerType: "touch", pointerId: 7,
       point: { x: 10, y: 10 }, hasAction: true, timestamp: 0,
     };
     expect(run(down, { type: "pointer-move", pointerId: 7, point: { x: 16, y: 18 }, timestamp: 5 }).phase).toBe("touch-pending");
@@ -86,7 +92,7 @@ describe("reveal interaction state machine", () => {
     ["route-change", "route-change"],
   ] as const)("dismisses and cancels touch on %s", (type, reason) => {
     const down: RevealCoordinatorEvent = {
-      type: "pointer-down", source: A, pointerType: "touch", pointerId: 1,
+      type: "pointer-down", source: SA, pointerType: "touch", pointerId: 1,
       point: { x: 0, y: 0 }, hasAction: true, timestamp: 0,
     };
     const event = type === "pointer-cancel" || type === "pointer-leave"
@@ -99,45 +105,64 @@ describe("reveal interaction state machine", () => {
 
   it("dismisses when the active source unmounts", () => {
     expect(run(
-      { type: "focus", source: A, timestamp: 0 },
-      { type: "source-unmount", source: A, timestamp: 1 },
+      { type: "focus", source: SA, timestamp: 0 },
+      { type: "source-unmount", source: SA, timestamp: 1 },
     )).toMatchObject({ phase: "idle", dismissalReason: "source-unmount" });
   });
 
   it("gives the first touch ownership and never requests pointer capture", () => {
     const state = run(
-      { type: "pointer-down", source: A, pointerType: "touch", pointerId: 1, point: { x: 0, y: 0 }, hasAction: true, timestamp: 0 },
-      { type: "pointer-down", source: B, pointerType: "touch", pointerId: 2, point: { x: 1, y: 1 }, hasAction: true, timestamp: 1 },
+      { type: "pointer-down", source: SA, pointerType: "touch", pointerId: 1, point: { x: 0, y: 0 }, hasAction: true, timestamp: 0 },
+      { type: "pointer-down", source: SB, pointerType: "touch", pointerId: 2, point: { x: 1, y: 1 }, hasAction: true, timestamp: 1 },
     );
     expect(state.activeSource).toEqual(A);
     expect(state.touch?.pointerId).toBe(1);
     expect(state.capturePointer).toBe(false);
   });
 
+  it("ignores pointer-up and cancellation from a non-owner", () => {
+    const owned = run({
+      type: "pointer-down", source: SA, pointerType: "touch", pointerId: 1,
+      point: { x: 0, y: 0 }, hasAction: true, timestamp: 0,
+    });
+    expect(reduceRevealState(owned, { type: "pointer-up", pointerId: 2, timestamp: 10 })).toEqual(owned);
+    expect(reduceRevealState(owned, { type: "pointer-cancel", pointerId: 2, timestamp: 10 })).toEqual(owned);
+  });
+
   it("keeps hover while mouse press feedback takes precedence", () => {
     const state = run(
-      { type: "pointer-enter", source: A, pointerType: "mouse", hoverCapable: true, timestamp: 0 },
-      { type: "pointer-down", source: A, pointerType: "mouse", pointerId: 1, point: { x: 0, y: 0 }, hasAction: true, timestamp: 1 },
+      { type: "pointer-enter", source: SA, pointerType: "mouse", hoverCapable: true, timestamp: 0 },
+      { type: "pointer-down", source: SA, pointerType: "mouse", pointerId: 1, point: { x: 0, y: 0 }, hasAction: true, timestamp: 1 },
     );
     expect(state).toMatchObject({ phase: "hover", pressed: true, activeSource: A });
   });
 
+  it("clears fine-pointer press on owner release and dismisses on owner cancellation", () => {
+    const pressed = run(
+      { type: "pointer-enter", source: SA, pointerType: "mouse", hoverCapable: true, timestamp: 0 },
+      { type: "pointer-down", source: SA, pointerType: "mouse", pointerId: 9, point: { x: 0, y: 0 }, hasAction: true, timestamp: 1 },
+    );
+    expect(reduceRevealState(pressed, { type: "pointer-up", pointerId: 8, timestamp: 2 })).toEqual(pressed);
+    expect(reduceRevealState(pressed, { type: "pointer-up", pointerId: 9, timestamp: 2 })).toMatchObject({ phase: "hover", pressed: false });
+    expect(reduceRevealState(pressed, { type: "pointer-cancel", pointerId: 9, timestamp: 2 })).toMatchObject({ phase: "idle", pressed: false, dismissalReason: "pointer-cancel" });
+  });
+
   it("lets hover replace focus and restores focus when hover ends", () => {
     const state = run(
-      { type: "focus", source: A, timestamp: 0 },
-      { type: "pointer-enter", source: B, pointerType: "mouse", hoverCapable: true, timestamp: 1 },
-      { type: "pointer-leave", pointerId: 2, source: B, timestamp: 2 },
+      { type: "focus", source: SA, timestamp: 0 },
+      { type: "pointer-enter", source: SB, pointerType: "mouse", hoverCapable: true, timestamp: 1 },
+      { type: "pointer-leave", pointerId: 2, source: SB, timestamp: 2 },
     );
     expect(state).toMatchObject({ phase: "focus", activeSource: A });
   });
 
   it("suppresses Escape until focus leaves and visits again", () => {
     const state = run(
-      { type: "focus", source: A, timestamp: 0 },
+      { type: "focus", source: SA, timestamp: 0 },
       { type: "escape", timestamp: 1 },
-      { type: "focus", source: A, timestamp: 2 },
-      { type: "blur", source: A, timestamp: 3 },
-      { type: "focus", source: A, timestamp: 4 },
+      { type: "focus", source: SA, timestamp: 2 },
+      { type: "blur", source: SA, timestamp: 3 },
+      { type: "focus", source: SA, timestamp: 4 },
     );
     expect(state).toMatchObject({ phase: "focus", activeSource: A, escapeSuppressedSource: null });
   });

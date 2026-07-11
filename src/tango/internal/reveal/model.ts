@@ -7,6 +7,12 @@ export interface RevealSourceIdentity {
   readonly entityId: string;
 }
 
+/** Private mounted-instance key paired with a source's stable semantic UUID identity. */
+export interface RevealCoordinatorSource {
+  readonly identity: RevealSourceIdentity;
+  readonly registrationId: string;
+}
+
 export type RevealInfoCardModel = Readonly<InfoCardProps>;
 
 export type RevealCard =
@@ -37,7 +43,7 @@ export type RevealActivationOutcome =
 export interface RevealPoint { readonly x: number; readonly y: number }
 
 export interface RevealTouchState {
-  readonly source: RevealSourceIdentity;
+  readonly source: RevealCoordinatorSource;
   readonly pointerId: number;
   readonly startPoint: RevealPoint;
   readonly startedAt: number;
@@ -47,12 +53,14 @@ export interface RevealTouchState {
 export interface RevealCoordinatorState {
   readonly phase: "idle" | "hover" | "focus" | "touch-pending" | "touch-reveal";
   readonly activeSource: RevealSourceIdentity | null;
+  readonly activeRegistrationId: string | null;
   readonly reason: RevealReason | null;
-  readonly focusedSource: RevealSourceIdentity | null;
-  readonly hoveredSource: RevealSourceIdentity | null;
-  readonly escapeSuppressedSource: RevealSourceIdentity | null;
+  readonly focusedSource: RevealCoordinatorSource | null;
+  readonly hoveredSource: RevealCoordinatorSource | null;
+  readonly escapeSuppressedSource: RevealCoordinatorSource | null;
   readonly touch: RevealTouchState | null;
   readonly pressed: boolean;
+  readonly pressPointerId: number | null;
   /** The engine deliberately never captures a pointer, preserving native scroll. */
   readonly capturePointer: false;
   readonly dismissalReason: RevealDismissalReason | null;
@@ -61,13 +69,13 @@ export interface RevealCoordinatorState {
 
 type Timestamped = { readonly timestamp: number };
 export type RevealCoordinatorEvent =
-  | (Timestamped & { readonly type: "pointer-enter"; readonly source: RevealSourceIdentity; readonly pointerType: RevealPointerType; readonly hoverCapable: boolean })
-  | (Timestamped & { readonly type: "pointer-down"; readonly source: RevealSourceIdentity; readonly pointerType: RevealPointerType; readonly pointerId: number; readonly point: RevealPoint; readonly hasAction: boolean })
+  | (Timestamped & { readonly type: "pointer-enter"; readonly source: RevealCoordinatorSource; readonly pointerType: RevealPointerType; readonly hoverCapable: boolean })
+  | (Timestamped & { readonly type: "pointer-down"; readonly source: RevealCoordinatorSource; readonly pointerType: RevealPointerType; readonly pointerId: number; readonly point: RevealPoint; readonly hasAction: boolean })
   | (Timestamped & { readonly type: "pointer-move"; readonly pointerId: number; readonly point: RevealPoint })
   | (Timestamped & { readonly type: "pointer-up" | "pointer-cancel"; readonly pointerId: number })
-  | (Timestamped & { readonly type: "pointer-leave"; readonly pointerId: number; readonly source?: RevealSourceIdentity })
+  | (Timestamped & { readonly type: "pointer-leave"; readonly pointerId: number; readonly source?: RevealCoordinatorSource })
   | (Timestamped & { readonly type: "intent-elapsed"; readonly pointerId: number })
-  | (Timestamped & { readonly type: "focus" | "blur" | "source-unmount"; readonly source: RevealSourceIdentity })
+  | (Timestamped & { readonly type: "focus" | "blur" | "source-unmount"; readonly source: RevealCoordinatorSource })
   | (Timestamped & { readonly type: "escape" | "scroll" | "drag" | "resize" | "orientation-change" | "window-blur" | "route-change" });
 
 export interface RevealRect { readonly x: number; readonly y: number; readonly width: number; readonly height: number }
