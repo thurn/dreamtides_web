@@ -19,6 +19,7 @@ trap 'rm -rf "$TEST_ROOT"' EXIT
 PASS_COUNT=0
 FAIL_COUNT=0
 COMPLETION_MARKER="Exiting batchmode successfully now!"
+TEST_COMPLETION_MARKER="Test run completed. Exiting with code 0 (Ok). Run completed."
 
 make_stage() {
   local stage_name="$1"
@@ -99,19 +100,45 @@ fi
 if [[ -n "${FAKE_UNITY_LAUNCH_MARKER:-}" ]]; then
   printf 'launched\n' > "$FAKE_UNITY_LAUNCH_MARKER"
 fi
+log_path=""
+results_path=""
 while (( $# > 0 )); do
-  if [[ "$1" == "-logFile" ]]; then
-    printf '%s\n' 'Exiting batchmode successfully now!' > "$2"
-    shift 2
-  else
-    shift
-  fi
+  case "$1" in
+    -logFile)
+      log_path="$2"
+      shift 2
+      ;;
+    -testResults)
+      results_path="$2"
+      shift 2
+      ;;
+    *)
+      shift
+      ;;
+  esac
 done
+printf '%s\n' "${FAKE_UNITY_COMPLETION:-Exiting batchmode successfully now!}" > "$log_path"
+if [[ "${FAKE_UNITY_WRITE_NUNIT:-0}" == "1" ]]; then
+  printf '%s\n' '<test-run result="Passed" total="1" passed="1" failed="0" errors="0" />' > "$results_path"
+fi
 exit "${FAKE_UNITY_EXIT:-9}"
 SH
 chmod +x "$fake_unity"
 errexit_stage_dir="$UNITY_RUN_ARTIFACT_ROOT/self-test-errexit"
 rm -rf "$errexit_stage_dir"
+
+fresh_test_stage_dir="$UNITY_RUN_ARTIFACT_ROOT/self-test-fresh-nunit"
+rm -rf "$fresh_test_stage_dir"
+fresh_test_xml="$fresh_test_stage_dir/results.xml"
+expect_accept "fresh passing NUnit XML with Unity test-run completion evidence" \
+  env \
+  FAKE_UNITY_VERSION="$(_unity_committed_version)" \
+  FAKE_UNITY_EXIT=0 \
+  FAKE_UNITY_COMPLETION="$TEST_COMPLETION_MARKER" \
+  FAKE_UNITY_WRITE_NUNIT=1 \
+  UNITY="$fake_unity" \
+  bash -c "source '$HARNESS'; run_unity_stage self-test-fresh-nunit nographics -runTests -testResults '$fresh_test_xml'"
+rm -rf "$fresh_test_stage_dir"
 FAKE_UNITY_VERSION="$(_unity_committed_version)" UNITY="$fake_unity" bash -e -c \
   "source '$HARNESS'; run_unity_stage self-test-errexit nographics -quit" \
   >/dev/null 2>&1 || true
@@ -177,6 +204,13 @@ missing_completion_dir="$(make_stage missing-completion)"
 printf 'Batch mode stopped without a success marker.\n' > "$missing_completion_dir/unity.log"
 expect_reject "missing completion marker" \
   validate_unity_result missing-completion "$missing_completion_dir/unity.log"
+
+arbitrary_xml_dir="$(make_stage arbitrary-nunit-without-completion)"
+arbitrary_xml="$arbitrary_xml_dir/results.xml"
+write_passing_nunit "$arbitrary_xml"
+printf 'A caller supplied XML without Unity completion evidence.\n' > "$arbitrary_xml_dir/unity.log"
+expect_reject "optional NUnit XML without Unity test-run completion evidence" \
+  validate_unity_result arbitrary-nunit-without-completion "$arbitrary_xml_dir/unity.log" "$arbitrary_xml"
 
 absent_xml_dir="$(make_stage absent-nunit)"
 expect_reject "absent NUnit XML" \

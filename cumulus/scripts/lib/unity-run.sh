@@ -18,6 +18,7 @@ UNITY_RUN_PROJECT_ROOT="$(cd "$UNITY_RUN_SCRIPT_DIR/../.." && pwd)"
 UNITY_RUN_ARTIFACT_ROOT="$UNITY_RUN_PROJECT_ROOT/Artifacts/TangoMvpVerification/stages"
 UNITY_RUN_TIMEOUT_SECONDS=900
 UNITY_RUN_COMPLETION_MARKER='Exiting batchmode successfully now!'
+UNITY_RUN_TEST_COMPLETION_MARKER='Test run completed. Exiting with code 0 (Ok). Run completed.'
 
 _unity_run_error() {
   printf 'unity-run: %s\n' "$*" >&2
@@ -159,6 +160,7 @@ validate_unity_result() {
   local exit_code_path
   local process_exit
   local failure_pattern
+  local completion_evidence=0
 
   [[ "$stage_name" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]] || {
     _unity_run_error "invalid stage name: $stage_name"
@@ -194,9 +196,8 @@ validate_unity_result() {
     _unity_run_error "$stage_name: Unity log contains a strict failure signature"
     return 1
   fi
-  if ! LC_ALL=C grep -Fq "$UNITY_RUN_COMPLETION_MARKER" "$log_path"; then
-    _unity_run_error "$stage_name: Unity log is missing the successful batch shutdown marker"
-    return 1
+  if LC_ALL=C grep -Fq "$UNITY_RUN_COMPLETION_MARKER" "$log_path"; then
+    completion_evidence=1
   fi
 
   if [[ -n "$nunit_xml_path" ]]; then
@@ -208,6 +209,14 @@ validate_unity_result() {
       _unity_run_error "$stage_name: NUnit evidence was rejected"
       return 1
     }
+    if LC_ALL=C grep -Fq "$UNITY_RUN_TEST_COMPLETION_MARKER" "$log_path"; then
+      completion_evidence=1
+    fi
+  fi
+
+  if (( completion_evidence == 0 )); then
+    _unity_run_error "$stage_name: Unity log is missing successful batch or validated test-run completion evidence"
+    return 1
   fi
 }
 
