@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using TangoMvp.Demo;
 using TangoMvp.Geometry;
 using TangoMvp.Interaction;
@@ -41,14 +44,15 @@ namespace TangoMvp.Editor
             EnsureFolder(PrefabsFolder);
             EnsureFolder(ScenesFolder);
 
-            Mesh panelMesh = GetOrCreatePanelMesh();
+            Mesh panelMesh = ReconcilePanelMesh();
             TangoMaterialLibrary library = AssetDatabase.LoadAssetAtPath<TangoMaterialLibrary>(LibraryPath);
             library.Validate();
-            GameObject panelPrefab = GetOrCreatePanelPrefab(panelMesh, library);
-            GetOrCreateScene(panelMesh, panelPrefab, library);
+            GameObject panelPrefab = ReconcilePanelPrefab(panelMesh, library);
+            ReconcileScene(panelMesh, panelPrefab, library);
             InstallRendererFeature();
             InstallBuildSettings();
             AssetDatabase.SaveAssets();
+            NormalizeSerializedWhitespace(MeshPath, PrefabPath, ScenePath);
         }
 
         [MenuItem("Tango MVP/Rebuild Shared Materials")]
@@ -88,216 +92,299 @@ namespace TangoMvp.Editor
             AssetDatabase.SaveAssets();
         }
 
-        private static Mesh GetOrCreatePanelMesh()
+        private static Mesh ReconcilePanelMesh()
         {
             Mesh mesh = AssetDatabase.LoadAssetAtPath<Mesh>(MeshPath);
-            if (mesh != null)
+            Mesh canonical = TangoRoundedPanelMesh.Create(4f, 2.4f, 0.12f, 0.28f, 6);
+            canonical.name = "TangoPanel";
+            if (mesh == null)
             {
-                return mesh;
+                AssetDatabase.CreateAsset(canonical, MeshPath);
+                return canonical;
             }
 
-            mesh = TangoRoundedPanelMesh.Create(4f, 2.4f, 0.12f, 0.28f, 6);
+            EditorUtility.CopySerialized(canonical, mesh);
             mesh.name = "TangoPanel";
-            AssetDatabase.CreateAsset(mesh, MeshPath);
+            EditorUtility.SetDirty(mesh);
+            UnityEngine.Object.DestroyImmediate(canonical);
             return mesh;
         }
 
-        private static GameObject GetOrCreatePanelPrefab(
+        private static GameObject ReconcilePanelPrefab(
             Mesh panelMesh,
             TangoMaterialLibrary library)
         {
             GameObject existing = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
-            if (existing != null)
-            {
-                return existing;
-            }
-
-            GameObject root = new GameObject("Tango Glass Panel");
+            bool loadedContents = existing != null;
+            GameObject root = loadedContents
+                ? PrefabUtility.LoadPrefabContents(PrefabPath)
+                : new GameObject("Tango Glass Panel");
             try
             {
-                TangoPanelTravel travel = root.AddComponent<TangoPanelTravel>();
-
-                GameObject glassFace = CreateMeshObject(
+                root.name = "Tango Glass Panel";
+                root.SetActive(true);
+                RemoveUnexpectedComponents(root, typeof(Transform), typeof(TangoPanelTravel));
+                TangoPanelTravel travel = EnsureComponent<TangoPanelTravel>(root);
+                RemoveUnexpectedChildren(
+                    root.transform,
                     "Glass Face",
-                    root.transform,
-                    panelMesh,
-                    library.Resolve(TangoMaterialRole.SceneGlass));
-                glassFace.transform.localPosition = Vector3.zero;
-                ConfigureRenderer(glassFace.GetComponent<MeshRenderer>(), ShadowCastingMode.Off, true);
-
-                CreateFrame(root.transform, library.Resolve(TangoMaterialRole.SolidChrome));
-                CreateText(
+                    "Solid Frame",
+                    "Frame Bottom Rail",
+                    "Frame Left Rail",
+                    "Frame Right Rail",
                     "Primary Label",
-                    root.transform,
+                    "On Glass Button");
+
+                GameObject glassFace = EnsureChild(root.transform, "Glass Face");
+                ConfigureMeshObject(
+                    glassFace,
+                    panelMesh,
+                    library.Resolve(TangoMaterialRole.SceneGlass),
+                    Vector3.zero,
+                    Vector3.one,
+                    ShadowCastingMode.Off,
+                    true);
+                RemoveUnexpectedChildren(glassFace.transform);
+                ConfigureFrame(root.transform, library.Resolve(TangoMaterialRole.SolidChrome));
+                ConfigureText(
+                    EnsureChild(root.transform, "Primary Label"),
                     "TANGO GLASS",
                     new Vector3(0f, 0.48f, -0.16f),
+                    Vector3.one,
                     0.032f);
 
-                GameObject buttonRoot = new GameObject("On Glass Button");
-                buttonRoot.transform.SetParent(root.transform, false);
-                buttonRoot.transform.localPosition = new Vector3(0f, -0.56f, -0.22f);
-                var collider = buttonRoot.AddComponent<BoxCollider>();
-                collider.size = new Vector3(1.48f, 0.54f, 0.22f);
-
-                GameObject buttonVisual = CreateMeshObject(
-                    "On Glass Button Visual",
+                GameObject buttonRoot = EnsureChild(root.transform, "On Glass Button");
+                RemoveUnexpectedComponents(
+                    buttonRoot,
+                    typeof(Transform),
+                    typeof(BoxCollider),
+                    typeof(TangoPressable));
+                buttonRoot.SetActive(true);
+                RemoveUnexpectedChildren(buttonRoot.transform, "On Glass Button Visual");
+                SetLocalTransform(
                     buttonRoot.transform,
+                    new Vector3(0f, -0.56f, -0.22f),
+                    Quaternion.identity,
+                    Vector3.one);
+                BoxCollider collider = EnsureComponent<BoxCollider>(buttonRoot);
+                collider.center = Vector3.zero;
+                collider.size = new Vector3(1.48f, 0.54f, 0.22f);
+                collider.isTrigger = false;
+
+                GameObject buttonVisual = EnsureChild(buttonRoot.transform, "On Glass Button Visual");
+                ConfigureMeshObject(
+                    buttonVisual,
                     panelMesh,
-                    library.Resolve(TangoMaterialRole.OnGlass));
-                buttonVisual.transform.localScale = new Vector3(0.37f, 0.23f, 0.72f);
-                ConfigureRenderer(buttonVisual.GetComponent<MeshRenderer>(), ShadowCastingMode.Off, true);
-                CreateText(
-                    "Button Label",
-                    buttonVisual.transform,
+                    library.Resolve(TangoMaterialRole.OnGlass),
+                    Vector3.zero,
+                    new Vector3(0.37f, 0.23f, 0.72f),
+                    ShadowCastingMode.Off,
+                    true);
+                RemoveUnexpectedChildren(buttonVisual.transform, "Button Label");
+                ConfigureText(
+                    EnsureChild(buttonVisual.transform, "Button Label"),
                     "TRAVEL",
                     new Vector3(0f, 0f, -0.12f),
+                    Vector3.one,
                     0.025f);
 
-                TangoPressable pressable = buttonRoot.AddComponent<TangoPressable>();
+                TangoPressable pressable = EnsureComponent<TangoPressable>(buttonRoot);
                 SetObjectReference(pressable, "hitCollider", collider);
                 SetObjectReference(pressable, "visual", buttonVisual.transform);
                 SetString(pressable, "semanticId", "glass-panel-travel");
+                while (pressable.Activated.GetPersistentEventCount() > 0)
+                {
+                    UnityEventTools.RemovePersistentListener(pressable.Activated, 0);
+                }
+
                 UnityEventTools.AddPersistentListener(pressable.Activated, travel.ToggleDestination);
                 pressable.Activated.SetPersistentListenerState(
                     0,
                     UnityEngine.Events.UnityEventCallState.RuntimeOnly);
+                pressable.enabled = true;
+                SetObjectReference(travel, "sourceAnchor", null);
+                SetObjectReference(travel, "destinationAnchor", null);
+                SetLocalTransform(root.transform, Vector3.zero, Quaternion.identity, Vector3.one);
 
                 PrefabUtility.SaveAsPrefabAsset(root, PrefabPath);
             }
             finally
             {
-                UnityEngine.Object.DestroyImmediate(root);
+                if (loadedContents)
+                {
+                    PrefabUtility.UnloadPrefabContents(root);
+                }
+                else
+                {
+                    UnityEngine.Object.DestroyImmediate(root);
+                }
             }
 
             return AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
         }
 
-        private static void CreateFrame(Transform parent, Material material)
+        private static void ConfigureFrame(Transform parent, Material material)
         {
-            CreateCube(
-                "Solid Frame",
-                parent,
+            ConfigureCube(
+                EnsureChild(parent, "Solid Frame"),
                 new Vector3(0f, 1.16f, -0.1f),
                 new Vector3(3.66f, 0.12f, 0.16f),
                 material);
-            CreateCube(
-                "Frame Bottom Rail",
-                parent,
+            ConfigureCube(
+                EnsureChild(parent, "Frame Bottom Rail"),
                 new Vector3(0f, -1.16f, -0.1f),
                 new Vector3(3.66f, 0.12f, 0.16f),
                 material);
-            CreateCube(
-                "Frame Left Rail",
-                parent,
+            ConfigureCube(
+                EnsureChild(parent, "Frame Left Rail"),
                 new Vector3(-1.94f, 0f, -0.1f),
                 new Vector3(0.12f, 2.2f, 0.16f),
                 material);
-            CreateCube(
-                "Frame Right Rail",
-                parent,
+            ConfigureCube(
+                EnsureChild(parent, "Frame Right Rail"),
                 new Vector3(1.94f, 0f, -0.1f),
                 new Vector3(0.12f, 2.2f, 0.16f),
                 material);
         }
 
-        private static GameObject CreateCube(
-            string name,
-            Transform parent,
+        private static void ConfigureCube(
+            GameObject cube,
             Vector3 localPosition,
             Vector3 localScale,
             Material material)
         {
-            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cube.name = name;
-            cube.transform.SetParent(parent, false);
-            cube.transform.localPosition = localPosition;
-            cube.transform.localScale = localScale;
-            UnityEngine.Object.DestroyImmediate(cube.GetComponent<Collider>());
-            MeshRenderer renderer = cube.GetComponent<MeshRenderer>();
+            cube.SetActive(true);
+            RemoveUnexpectedComponents(cube, typeof(Transform), typeof(MeshFilter), typeof(MeshRenderer));
+            RemoveUnexpectedChildren(cube.transform);
+            MeshFilter meshFilter = EnsureComponent<MeshFilter>(cube);
+            if (meshFilter.sharedMesh == null || meshFilter.sharedMesh.name != "Cube")
+            {
+                GameObject primitive = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                meshFilter.sharedMesh = primitive.GetComponent<MeshFilter>().sharedMesh;
+                UnityEngine.Object.DestroyImmediate(primitive);
+            }
+
+            MeshRenderer renderer = EnsureComponent<MeshRenderer>(cube);
             renderer.sharedMaterial = material;
             ConfigureRenderer(renderer, ShadowCastingMode.On, true);
-            return cube;
+            SetLocalTransform(cube.transform, localPosition, Quaternion.identity, localScale);
         }
 
-        private static GameObject CreateMeshObject(
-            string name,
-            Transform parent,
+        private static void ConfigureMeshObject(
+            GameObject target,
             Mesh mesh,
-            Material material)
+            Material material,
+            Vector3 localPosition,
+            Vector3 localScale,
+            ShadowCastingMode shadowCastingMode,
+            bool receiveShadows)
         {
-            var result = new GameObject(name);
-            result.transform.SetParent(parent, false);
-            result.AddComponent<MeshFilter>().sharedMesh = mesh;
-            result.AddComponent<MeshRenderer>().sharedMaterial = material;
-            return result;
+            target.SetActive(true);
+            RemoveUnexpectedComponents(target, typeof(Transform), typeof(MeshFilter), typeof(MeshRenderer));
+            MeshFilter filter = EnsureComponent<MeshFilter>(target);
+            filter.sharedMesh = mesh;
+            MeshRenderer renderer = EnsureComponent<MeshRenderer>(target);
+            renderer.sharedMaterial = material;
+            ConfigureRenderer(renderer, shadowCastingMode, receiveShadows);
+            SetLocalTransform(target.transform, localPosition, Quaternion.identity, localScale);
         }
 
-        private static TextMesh CreateText(
-            string name,
-            Transform parent,
+        private static void ConfigureText(
+            GameObject target,
             string text,
             Vector3 localPosition,
+            Vector3 localScale,
             float characterSize)
         {
-            var textObject = new GameObject(name);
-            textObject.transform.SetParent(parent, false);
-            textObject.transform.localPosition = localPosition;
-            var textMesh = textObject.AddComponent<TextMesh>();
+            target.SetActive(true);
+            RemoveUnexpectedComponents(target, typeof(Transform), typeof(TextMesh), typeof(MeshRenderer));
+            RemoveUnexpectedChildren(target.transform);
+            TextMesh textMesh = EnsureComponent<TextMesh>(target);
             textMesh.text = text;
             textMesh.anchor = TextAnchor.MiddleCenter;
             textMesh.alignment = TextAlignment.Center;
             textMesh.fontSize = 64;
             textMesh.characterSize = characterSize;
+            textMesh.fontStyle = FontStyle.Normal;
+            textMesh.offsetZ = 0f;
+            textMesh.lineSpacing = 1f;
+            textMesh.tabSize = 4f;
             textMesh.color = new Color(1f, 0.94f, 0.82f, 1f);
             textMesh.richText = false;
-            MeshRenderer renderer = textMesh.GetComponent<MeshRenderer>();
-            ConfigureRenderer(renderer, ShadowCastingMode.Off, false);
-            return textMesh;
+            Font font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            textMesh.font = font;
+            textMesh.GetComponent<Renderer>().sharedMaterial = font.material;
+            ConfigureRenderer(textMesh.GetComponent<Renderer>(), ShadowCastingMode.Off, false);
+            SetLocalTransform(target.transform, localPosition, Quaternion.identity, localScale);
         }
 
-        private static void GetOrCreateScene(
+        private static void ReconcileScene(
             Mesh panelMesh,
             GameObject panelPrefab,
             TangoMaterialLibrary library)
         {
-            if (AssetDatabase.LoadAssetAtPath<SceneAsset>(ScenePath) != null)
+            Scene scene = AssetDatabase.LoadAssetAtPath<SceneAsset>(ScenePath) == null
+                ? EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single)
+                : EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
             {
-                return;
-            }
-
-            Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-            {
-                Camera camera = CreateCamera();
-                CreateLight();
-                CreateBackground(library.Resolve(TangoMaterialRole.SolidChrome));
-                CreateCube(
+                RemoveUnexpectedSceneRoots(
+                    scene,
+                    "Main Camera",
+                    "Directional Light",
+                    "Moving Striped Object",
                     "Ground Shadow Receiver",
-                    null,
+                    "Panel Source Anchor",
+                    "Panel Destination Anchor",
+                    "Tango Glass Panel",
+                    "Independent Glass Pane",
+                    "Tango Verification Markers");
+
+                Camera camera = ReconcileCamera(scene);
+                ReconcileLight(scene);
+                ReconcileBackground(scene, library.Resolve(TangoMaterialRole.SolidChrome));
+                ConfigureCube(
+                    EnsureSceneRoot(scene, "Ground Shadow Receiver"),
                     new Vector3(0f, -3.65f, 2.8f),
                     new Vector3(16f, 1.5f, 0.2f),
                     library.Resolve(TangoMaterialRole.SolidChrome));
 
-                Transform sourceAnchor = CreateAnchor("Panel Source Anchor", new Vector3(-3f, 1f, 0f));
-                Transform destinationAnchor = CreateAnchor("Panel Destination Anchor", new Vector3(-1.4f, 2.7f, 0f));
-                GameObject panel = (GameObject)PrefabUtility.InstantiatePrefab(panelPrefab, scene);
+                Transform sourceAnchor = ReconcileAnchor(scene, "Panel Source Anchor", new Vector3(-3f, 1f, 0f));
+                Transform destinationAnchor = ReconcileAnchor(scene, "Panel Destination Anchor", new Vector3(-1.4f, 2.7f, 0f));
+                GameObject panel = FindUniqueSceneRoot(scene, "Tango Glass Panel");
+                if (panel == null || PrefabUtility.GetCorrespondingObjectFromSource(panel) != panelPrefab)
+                {
+                    if (panel != null)
+                    {
+                        UnityEngine.Object.DestroyImmediate(panel);
+                    }
+
+                    panel = (GameObject)PrefabUtility.InstantiatePrefab(panelPrefab, scene);
+                }
+                else
+                {
+                    PrefabUtility.RevertPrefabInstance(panel, InteractionMode.AutomatedAction);
+                }
+
                 panel.name = "Tango Glass Panel";
+                panel.SetActive(true);
                 panel.transform.SetPositionAndRotation(sourceAnchor.position, sourceAnchor.rotation);
+                panel.transform.localScale = Vector3.one;
                 TangoPanelTravel travel = panel.GetComponent<TangoPanelTravel>();
                 SetObjectReference(travel, "sourceAnchor", sourceAnchor);
                 SetObjectReference(travel, "destinationAnchor", destinationAnchor);
 
-                GameObject independentPane = CreateMeshObject(
-                    "Independent Glass Pane",
-                    null,
+                GameObject independentPane = EnsureSceneRoot(scene, "Independent Glass Pane");
+                ConfigureMeshObject(
+                    independentPane,
                     panelMesh,
-                    library.Resolve(TangoMaterialRole.SceneGlass));
-                independentPane.transform.position = new Vector3(3.25f, 1.35f, 0.35f);
-                independentPane.transform.localScale = new Vector3(0.8f, 0.75f, 1f);
-                ConfigureRenderer(independentPane.GetComponent<MeshRenderer>(), ShadowCastingMode.Off, true);
+                    library.Resolve(TangoMaterialRole.SceneGlass),
+                    new Vector3(3.25f, 1.35f, 0.35f),
+                    new Vector3(0.8f, 0.75f, 1f),
+                    ShadowCastingMode.Off,
+                    true);
+                RemoveUnexpectedChildren(independentPane.transform);
 
-                TangoPointerInteractor interactor = camera.gameObject.AddComponent<TangoPointerInteractor>();
-                SetObjectReference(interactor, "interactionCamera", camera);
-                CreateVerificationMarkers(camera);
+                ReconcileVerificationMarkers(scene, camera);
 
                 RenderSettings.skybox = null;
                 RenderSettings.fog = false;
@@ -309,12 +396,19 @@ namespace TangoMvp.Editor
             }
         }
 
-        private static Camera CreateCamera()
+        private static Camera ReconcileCamera(Scene scene)
         {
-            var cameraObject = new GameObject("Main Camera");
+            GameObject cameraObject = EnsureSceneRoot(scene, "Main Camera");
+            RemoveUnexpectedComponents(
+                cameraObject,
+                typeof(Transform),
+                typeof(Camera),
+                typeof(UniversalAdditionalCameraData),
+                typeof(TangoPointerInteractor));
+            RemoveUnexpectedChildren(cameraObject.transform);
             cameraObject.tag = "MainCamera";
-            cameraObject.transform.position = new Vector3(0f, 0f, -10f);
-            var camera = cameraObject.AddComponent<Camera>();
+            SetWorldTransform(cameraObject.transform, new Vector3(0f, 0f, -10f), Quaternion.identity, Vector3.one);
+            Camera camera = EnsureComponent<Camera>(cameraObject);
             camera.orthographic = true;
             camera.orthographicSize = 5f;
             camera.aspect = 16f / 9f;
@@ -324,27 +418,32 @@ namespace TangoMvp.Editor
             camera.backgroundColor = new Color(0.045f, 0.025f, 0.07f, 1f);
             camera.allowHDR = true;
             camera.allowMSAA = false;
-            cameraObject.AddComponent<UniversalAdditionalCameraData>().renderPostProcessing = false;
+            EnsureComponent<UniversalAdditionalCameraData>(cameraObject).renderPostProcessing = false;
+            TangoPointerInteractor interactor = EnsureComponent<TangoPointerInteractor>(cameraObject);
+            SetObjectReference(interactor, "interactionCamera", camera);
             return camera;
         }
 
-        private static void CreateLight()
+        private static void ReconcileLight(Scene scene)
         {
-            var lightObject = new GameObject("Directional Light");
-            var light = lightObject.AddComponent<Light>();
+            GameObject lightObject = EnsureSceneRoot(scene, "Directional Light");
+            RemoveUnexpectedComponents(lightObject, typeof(Transform), typeof(Light), typeof(TangoLightOrbit));
+            RemoveUnexpectedChildren(lightObject.transform);
+            Light light = EnsureComponent<Light>(lightObject);
             light.type = LightType.Directional;
             light.color = new Color(1f, 0.82f, 0.6f, 1f);
             light.intensity = 2.2f;
             light.shadows = LightShadows.Soft;
             light.shadowStrength = 0.9f;
-            lightObject.AddComponent<TangoLightOrbit>().SetPhase(0f);
+            EnsureComponent<TangoLightOrbit>(lightObject).SetPhase(0f);
         }
 
-        private static void CreateBackground(Material material)
+        private static void ReconcileBackground(Scene scene, Material material)
         {
-            var root = new GameObject("Moving Striped Object");
-            root.transform.position = new Vector3(0f, 0f, 4f);
-            TangoSpinner spinner = root.AddComponent<TangoSpinner>();
+            GameObject root = EnsureSceneRoot(scene, "Moving Striped Object");
+            RemoveUnexpectedComponents(root, typeof(Transform), typeof(TangoSpinner));
+            SetWorldTransform(root.transform, new Vector3(0f, 0f, 4f), Quaternion.identity, Vector3.one);
+            TangoSpinner spinner = EnsureComponent<TangoSpinner>(root);
             var renderers = new List<Renderer>();
             var colors = new List<Color>();
             Color[] palette =
@@ -353,6 +452,7 @@ namespace TangoMvp.Editor
                 new Color(0.025f, 0.012f, 0.045f, 1f),
                 new Color(0.95f, 0.53f, 0.12f, 1f),
             };
+            var stripeNames = new string[11];
             for (int index = 0; index < 11; index++)
             {
                 string name = index == 0
@@ -362,9 +462,10 @@ namespace TangoMvp.Editor
                         : index == 2
                             ? "Background Gold"
                             : $"Pattern Stripe {index:00}";
-                GameObject stripe = CreateCube(
-                    name,
-                    root.transform,
+                stripeNames[index] = name;
+                GameObject stripe = EnsureChild(root.transform, name);
+                ConfigureCube(
+                    stripe,
                     new Vector3((index - 5) * 1.7f, 0f, 0f),
                     new Vector3(1.72f, 13f, 0.2f),
                     material);
@@ -372,29 +473,43 @@ namespace TangoMvp.Editor
                 colors.Add(palette[index % palette.Length]);
             }
 
+            RemoveUnexpectedChildren(root.transform, stripeNames);
             SetObjectReferenceArray(spinner, "coloredRenderers", renderers.Cast<UnityEngine.Object>().ToArray());
             SetColorArray(spinner, "colors", colors.ToArray());
             spinner.SetPhase(0.04f);
         }
 
-        private static Transform CreateAnchor(string name, Vector3 position)
+        private static Transform ReconcileAnchor(Scene scene, string name, Vector3 position)
         {
-            var anchor = new GameObject(name);
-            anchor.transform.position = position;
+            GameObject anchor = EnsureSceneRoot(scene, name);
+            RemoveUnexpectedComponents(anchor, typeof(Transform));
+            RemoveUnexpectedChildren(anchor.transform);
+            SetWorldTransform(anchor.transform, position, Quaternion.identity, Vector3.one);
             return anchor.transform;
         }
 
-        private static void CreateVerificationMarkers(Camera camera)
+        private static void ReconcileVerificationMarkers(Scene scene, Camera camera)
         {
-            var root = new GameObject("Tango Verification Markers");
-            TangoVerificationMarkers markers = root.AddComponent<TangoVerificationMarkers>();
-            AddMarker(markers, root.transform, "LiveGlassA", new Vector3(-3.85f, 0.98f, -0.5f), new Vector2(0.5f, 0.42f));
-            AddMarker(markers, root.transform, "LiveGlassB", new Vector3(3.25f, 1.35f, -0.5f), new Vector2(0.72f, 0.58f));
-            AddMarker(markers, root.transform, "UncoveredPattern", new Vector3(0.35f, -0.55f, 3.5f), new Vector2(0.62f, 0.54f));
-            AddMarker(markers, root.transform, "OnGlassButton", new Vector3(-3f, 0.44f, -0.5f), new Vector2(0.86f, 0.3f));
-            AddMarker(markers, root.transform, "SolidBevel", new Vector3(-4.93f, 1.72f, -0.5f), new Vector2(0.12f, 0.52f));
-            AddMarker(markers, root.transform, "FrameShadowReceiver", new Vector3(-3f, -3.4f, 2.5f), new Vector2(0.7f, 0.42f));
-            AddMarker(markers, root.transform, "PrimaryLabel", new Vector3(-3f, 1.48f, -0.5f), new Vector2(1.25f, 0.28f));
+            GameObject root = EnsureSceneRoot(scene, "Tango Verification Markers");
+            RemoveUnexpectedComponents(root, typeof(Transform), typeof(TangoVerificationMarkers));
+            SetWorldTransform(root.transform, Vector3.zero, Quaternion.identity, Vector3.one);
+            TangoVerificationMarkers markers = EnsureComponent<TangoVerificationMarkers>(root);
+            AddOrReconcileMarker(markers, root.transform, "LiveGlassA", new Vector3(-3.85f, 0.98f, -0.5f), new Vector2(0.5f, 0.42f));
+            AddOrReconcileMarker(markers, root.transform, "LiveGlassB", new Vector3(3.25f, 1.35f, -0.5f), new Vector2(0.72f, 0.58f));
+            AddOrReconcileMarker(markers, root.transform, "UncoveredPattern", new Vector3(0.35f, -0.55f, 3.5f), new Vector2(0.62f, 0.54f));
+            AddOrReconcileMarker(markers, root.transform, "OnGlassButton", new Vector3(-3f, 0.44f, -0.5f), new Vector2(0.86f, 0.3f));
+            AddOrReconcileMarker(markers, root.transform, "SolidBevel", new Vector3(-4.93f, 1.72f, -0.5f), new Vector2(0.12f, 0.52f));
+            AddOrReconcileMarker(markers, root.transform, "FrameShadowReceiver", new Vector3(-3f, -3.73f, 2.7f), new Vector2(0.7f, 0.06f));
+            AddOrReconcileMarker(markers, root.transform, "PrimaryLabel", new Vector3(-3f, 1.48f, -0.5f), new Vector2(1.25f, 0.28f));
+            RemoveUnexpectedChildren(
+                root.transform,
+                "Region LiveGlassA",
+                "Region LiveGlassB",
+                "Region UncoveredPattern",
+                "Region OnGlassButton",
+                "Region SolidBevel",
+                "Region FrameShadowReceiver",
+                "Region PrimaryLabel");
 
             foreach (TangoVerificationRegion region in Enum.GetValues(typeof(TangoVerificationRegion)))
             {
@@ -406,17 +521,17 @@ namespace TangoMvp.Editor
             }
         }
 
-        private static void AddMarker(
+        private static void AddOrReconcileMarker(
             TangoVerificationMarkers markers,
             Transform parent,
             string regionName,
             Vector3 position,
             Vector2 size)
         {
-            var marker = new GameObject("Region " + regionName);
-            marker.transform.SetParent(parent, false);
-            marker.transform.position = position;
-            marker.transform.localScale = new Vector3(size.x, size.y, 1f);
+            GameObject marker = EnsureChild(parent, "Region " + regionName);
+            RemoveUnexpectedComponents(marker, typeof(Transform));
+            RemoveUnexpectedChildren(marker.transform);
+            SetWorldTransform(marker.transform, position, Quaternion.identity, new Vector3(size.x, size.y, 1f));
             string fieldName = char.ToLowerInvariant(regionName[0]) + regionName.Substring(1);
             SetObjectReference(markers, fieldName, marker.transform);
         }
@@ -489,6 +604,153 @@ namespace TangoMvp.Editor
             EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(ScenePath, true) };
         }
 
+        private static T EnsureComponent<T>(GameObject target)
+            where T : Component
+        {
+            T[] components = target.GetComponents<T>();
+            T retained = components.FirstOrDefault();
+            if (retained == null)
+            {
+                retained = target.AddComponent<T>();
+            }
+
+            foreach (T duplicate in components.Skip(1))
+            {
+                UnityEngine.Object.DestroyImmediate(duplicate);
+            }
+
+            return retained;
+        }
+
+        private static GameObject EnsureChild(Transform parent, string name)
+        {
+            Transform retained = null;
+            for (int index = parent.childCount - 1; index >= 0; index--)
+            {
+                Transform child = parent.GetChild(index);
+                if (child.name != name)
+                {
+                    continue;
+                }
+
+                if (retained == null)
+                {
+                    retained = child;
+                }
+                else
+                {
+                    UnityEngine.Object.DestroyImmediate(child.gameObject);
+                }
+            }
+
+            if (retained != null)
+            {
+                retained.gameObject.SetActive(true);
+                return retained.gameObject;
+            }
+
+            var created = new GameObject(name);
+            created.transform.SetParent(parent, false);
+            return created;
+        }
+
+        private static void RemoveUnexpectedChildren(Transform parent, params string[] expectedNames)
+        {
+            var expected = new HashSet<string>(expectedNames, StringComparer.Ordinal);
+            for (int index = parent.childCount - 1; index >= 0; index--)
+            {
+                Transform child = parent.GetChild(index);
+                if (!expected.Contains(child.name))
+                {
+                    UnityEngine.Object.DestroyImmediate(child.gameObject);
+                }
+            }
+        }
+
+        private static void RemoveUnexpectedComponents(GameObject target, params Type[] expectedTypes)
+        {
+            var expected = new HashSet<Type>(expectedTypes);
+            Component[] components = target.GetComponents<Component>();
+            for (int index = components.Length - 1; index >= 0; index--)
+            {
+                Component component = components[index];
+                if (component != null && !expected.Contains(component.GetType()))
+                {
+                    UnityEngine.Object.DestroyImmediate(component);
+                }
+            }
+        }
+
+        private static GameObject EnsureSceneRoot(Scene scene, string name)
+        {
+            GameObject existing = FindUniqueSceneRoot(scene, name);
+            if (existing != null)
+            {
+                existing.SetActive(true);
+                return existing;
+            }
+
+            var created = new GameObject(name);
+            SceneManager.MoveGameObjectToScene(created, scene);
+            return created;
+        }
+
+        private static GameObject FindUniqueSceneRoot(Scene scene, string name)
+        {
+            GameObject retained = null;
+            foreach (GameObject root in scene.GetRootGameObjects())
+            {
+                if (root.name != name)
+                {
+                    continue;
+                }
+
+                if (retained == null)
+                {
+                    retained = root;
+                }
+                else
+                {
+                    UnityEngine.Object.DestroyImmediate(root);
+                }
+            }
+
+            return retained;
+        }
+
+        private static void RemoveUnexpectedSceneRoots(Scene scene, params string[] expectedNames)
+        {
+            var expected = new HashSet<string>(expectedNames, StringComparer.Ordinal);
+            foreach (GameObject root in scene.GetRootGameObjects())
+            {
+                if (!expected.Contains(root.name))
+                {
+                    UnityEngine.Object.DestroyImmediate(root);
+                }
+            }
+        }
+
+        private static void SetLocalTransform(
+            Transform target,
+            Vector3 position,
+            Quaternion rotation,
+            Vector3 scale)
+        {
+            target.localPosition = position;
+            target.localRotation = rotation;
+            target.localScale = scale;
+        }
+
+        private static void SetWorldTransform(
+            Transform target,
+            Vector3 position,
+            Quaternion rotation,
+            Vector3 scale)
+        {
+            target.SetPositionAndRotation(position, rotation);
+            target.localScale = scale;
+        }
+
         private static void ConfigureRenderer(
             Renderer renderer,
             ShadowCastingMode shadowCastingMode,
@@ -550,6 +812,22 @@ namespace TangoMvp.Editor
             }
 
             serialized.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void NormalizeSerializedWhitespace(params string[] assetPaths)
+        {
+            foreach (string assetPath in assetPaths)
+            {
+                string source = File.ReadAllText(assetPath);
+                string normalized = Regex.Replace(source, @"[ \t]+(?=\r?$)", string.Empty, RegexOptions.Multiline);
+                if (source == normalized)
+                {
+                    continue;
+                }
+
+                File.WriteAllText(assetPath, normalized, new UTF8Encoding(false));
+                AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceSynchronousImport);
+            }
         }
 
         private static void ConfigureSceneGlass(Material material)

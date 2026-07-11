@@ -75,6 +75,86 @@ namespace TangoMvp.Tests
         }
 
         [Test]
+        public void Rebuild_RepairsMeshPrefabAndSceneDriftWithoutChangingGuids()
+        {
+            InvokeRebuild();
+            string[] repairedPaths = { MeshPath, PrefabPath, ScenePath };
+            Dictionary<string, byte[]> backups = repairedPaths.ToDictionary(path => path, File.ReadAllBytes);
+            Dictionary<string, string> guids = repairedPaths.ToDictionary(path => path, AssetDatabase.AssetPathToGUID);
+
+            try
+            {
+                Mesh mesh = AssetDatabase.LoadAssetAtPath<Mesh>(MeshPath);
+                mesh.Clear();
+                mesh.name = "Drifted Panel";
+                EditorUtility.SetDirty(mesh);
+                AssetDatabase.SaveAssets();
+
+                GameObject prefabRoot = PrefabUtility.LoadPrefabContents(PrefabPath);
+                try
+                {
+                    Transform primaryLabel = prefabRoot.transform.Find("Primary Label");
+                    Assert.That(primaryLabel, Is.Not.Null);
+                    UnityEngine.Object.DestroyImmediate(primaryLabel.gameObject);
+                    prefabRoot.transform.Find("On Glass Button").GetComponent<BoxCollider>().size = Vector3.one * 9f;
+                    new GameObject("Unexpected Builder Drift").transform.SetParent(prefabRoot.transform, false);
+                    PrefabUtility.SaveAsPrefabAsset(prefabRoot, PrefabPath);
+                }
+                finally
+                {
+                    PrefabUtility.UnloadPrefabContents(prefabRoot);
+                }
+
+                Scene driftedScene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+                GameObject[] roots = driftedScene.GetRootGameObjects();
+                roots.Single(root => root.name == "Independent Glass Pane").transform.position = Vector3.one * 19f;
+                UnityEngine.Object.DestroyImmediate(roots.Single(root => root.name == "Ground Shadow Receiver"));
+                new GameObject("Unexpected Builder Drift");
+                EditorSceneManager.SaveScene(driftedScene, ScenePath);
+
+                InvokeRebuild();
+
+                foreach (string path in repairedPaths)
+                {
+                    Assert.That(AssetDatabase.AssetPathToGUID(path), Is.EqualTo(guids[path]), path);
+                }
+
+                Mesh repairedMesh = AssetDatabase.LoadAssetAtPath<Mesh>(MeshPath);
+                Assert.That(repairedMesh.name, Is.EqualTo("TangoPanel"));
+                Assert.That(repairedMesh.vertexCount, Is.GreaterThan(0));
+                Assert.That(repairedMesh.bounds.size.x, Is.EqualTo(4f).Within(0.001f));
+
+                GameObject repairedPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
+                Assert.That(repairedPrefab.transform.Find("Primary Label"), Is.Not.Null);
+                Assert.That(repairedPrefab.transform.Find("Unexpected Builder Drift"), Is.Null);
+                Assert.That(repairedPrefab.transform.Find("On Glass Button").GetComponent<BoxCollider>().size,
+                    Is.EqualTo(new Vector3(1.48f, 0.54f, 0.22f)));
+
+                Scene repairedScene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+                GameObject[] repairedRoots = repairedScene.GetRootGameObjects();
+                Assert.That(repairedRoots.Any(root => root.name == "Ground Shadow Receiver"), Is.True);
+                Assert.That(repairedRoots.Any(root => root.name == "Unexpected Builder Drift"), Is.False);
+                Assert.That(repairedRoots.Single(root => root.name == "Independent Glass Pane").transform.position,
+                    Is.EqualTo(new Vector3(3.25f, 1.35f, 0.35f)));
+
+                Dictionary<string, byte[]> once = repairedPaths.ToDictionary(path => path, File.ReadAllBytes);
+                InvokeRebuild();
+                foreach (string path in repairedPaths)
+                {
+                    Assert.That(File.ReadAllBytes(path), Is.EqualTo(once[path]), path);
+                }
+            }
+            finally
+            {
+                foreach (string path in repairedPaths)
+                {
+                    File.WriteAllBytes(path, backups[path]);
+                    AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceSynchronousImport);
+                }
+            }
+        }
+
+        [Test]
         public void RendererAndBuildSettings_AreInstalledOnceWithoutRemovingSsao()
         {
             InvokeRebuild();
@@ -240,6 +320,55 @@ namespace TangoMvp.Tests
         }
 
         [Test]
+        public void FrameShadowReceiver_SitsInsideProjectedBottomRailShadowWithMargin()
+        {
+            InvokeRebuild();
+            Scene scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+            GameObject[] objects = SceneObjects(scene);
+            Renderer rail = objects.Single(item => item.name == "Frame Bottom Rail").GetComponent<Renderer>();
+            Renderer receiver = objects.Single(item => item.name == "Ground Shadow Receiver").GetComponent<Renderer>();
+            Light light = objects.Single(item => item.name == "Directional Light").GetComponent<Light>();
+            TangoVerificationMarkers markers = objects
+                .Single(item => item.name == "Tango Verification Markers")
+                .GetComponent<TangoVerificationMarkers>();
+            Transform marker = GetSerializedReference<Transform>(markers, "frameShadowReceiver");
+
+            const float margin = 0.015f;
+            float receiverPlaneZ = receiver.bounds.min.z;
+            Vector3 direction = light.transform.forward;
+            Assert.That(direction.z, Is.GreaterThan(0f));
+            Bounds railBounds = rail.bounds;
+            float projectedMinX = float.PositiveInfinity;
+            float projectedMinY = float.PositiveInfinity;
+            float projectedMaxX = float.NegativeInfinity;
+            float projectedMaxY = float.NegativeInfinity;
+            for (int x = -1; x <= 1; x += 2)
+            {
+                for (int y = -1; y <= 1; y += 2)
+                {
+                    for (int z = -1; z <= 1; z += 2)
+                    {
+                        Vector3 corner = railBounds.center + Vector3.Scale(
+                            railBounds.extents,
+                            new Vector3(x, y, z));
+                        Vector3 projected = corner + direction * ((receiverPlaneZ - corner.z) / direction.z);
+                        projectedMinX = Mathf.Min(projectedMinX, projected.x);
+                        projectedMinY = Mathf.Min(projectedMinY, projected.y);
+                        projectedMaxX = Mathf.Max(projectedMaxX, projected.x);
+                        projectedMaxY = Mathf.Max(projectedMaxY, projected.y);
+                    }
+                }
+            }
+
+            Vector3 markerHalfSize = marker.lossyScale * 0.5f;
+            Assert.That(marker.position.x - markerHalfSize.x, Is.GreaterThan(projectedMinX + margin));
+            Assert.That(marker.position.x + markerHalfSize.x, Is.LessThan(projectedMaxX - margin));
+            Assert.That(marker.position.y - markerHalfSize.y, Is.GreaterThan(projectedMinY + margin));
+            Assert.That(marker.position.y + markerHalfSize.y, Is.LessThan(projectedMaxY - margin));
+            Assert.That(marker.position.z, Is.EqualTo(receiverPlaneZ).Within(0.001f));
+        }
+
+        [Test]
         public void DemoMotion_SetPhaseIsDeterministicAndNormalized()
         {
             var spinnerObject = new GameObject("Spinner");
@@ -264,6 +393,26 @@ namespace TangoMvp.Tests
                 UnityEngine.Object.DestroyImmediate(spinnerObject);
                 UnityEngine.Object.DestroyImmediate(lightObject);
             }
+        }
+
+        [Test]
+        public void Spinner_ReopenAndEnablePreserveAuthoredPhaseAndRotation()
+        {
+            InvokeRebuild();
+            Scene scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+            TangoSpinner spinner = SceneObjects(scene)
+                .Single(item => item.name == "Moving Striped Object")
+                .GetComponent<TangoSpinner>();
+            var serialized = new SerializedObject(spinner);
+            SerializedProperty phase = serialized.FindProperty("phase");
+            Assert.That(phase, Is.Not.Null);
+            Assert.That(phase.floatValue, Is.EqualTo(0.04f).Within(0.0001f));
+
+            Quaternion expected = Quaternion.Euler(0f, 0f, 0.04f * 360f);
+            Assert.That(Quaternion.Angle(expected, spinner.transform.localRotation), Is.LessThan(0.001f));
+            spinner.gameObject.SetActive(false);
+            spinner.gameObject.SetActive(true);
+            Assert.That(Quaternion.Angle(expected, spinner.transform.localRotation), Is.LessThan(0.001f));
         }
 
         private static IEnumerable<string> StableSerializedPaths()

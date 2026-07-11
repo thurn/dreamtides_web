@@ -9,9 +9,9 @@ namespace TangoMvp.Demo
 
         [SerializeField] private Renderer[] coloredRenderers = new Renderer[0];
         [SerializeField] private Color[] colors = new Color[0];
+        [SerializeField] private float phase;
 
         private MaterialPropertyBlock colorProperties;
-        private float phase;
 
         private void OnEnable()
         {
