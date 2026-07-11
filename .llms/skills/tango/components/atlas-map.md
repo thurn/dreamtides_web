@@ -16,17 +16,29 @@ The Dream Atlas map surface — the run graph of dreamscape nodes and their conn
 | --- | --- | --- | --- | --- |
 | `stageWidth` | `number` | yes | — | The fixed design canvas the stage scales to fit (letterboxed). |
 | `stageHeight` | `number` | yes | — |  |
-| `nodes` | `AtlasMapNode[]` | yes | — | Placed nodes, laid out by the view model along its layer axis (starter to boss). |
+| `nodes` | `AtlasNodeModel[]` | yes | — | Placed nodes, laid out by the view model along its layer axis (starter to boss). |
 | `edges` | `AtlasMapEdge[]` | yes | — | Forward connectors between nodes. |
 | `onEnterNode` | `(nodeId: string) => void` | yes | — | Enter a node's dreamscape; fired on a tap / click of an available node. |
-| `stageRef` | `RefObject<HTMLElement \| null>` | yes | — | Screen root the node reveals anchor + clamp against (viewport coordinates). |
 
-### `nodes`: the `AtlasMapNode` model
+### `nodes`: the `AtlasNodeModel` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `view` | `AtlasNodeView` | no | Presentational data for the {@link AtlasNode } face. |
-| `card` | `AtlasNodeCard` | no | The InfoCard reveal content shown while this node is pressed / hovered. |
+| `node` | `DreamscapeNode` | no |  |
+| `left` | `number` | no | Stage-space centre in the fixed Atlas design canvas. |
+| `top` | `number` | no |  |
+| `size` | `number` | no | Rendered node diameter in stage pixels. |
+| `isStarter` | `boolean` | no |  |
+| `isBoss` | `boolean` | no |  |
+| `isReachable` | `boolean` | yes |  |
+| `iconRef` | `ArtRef \| null` | no |  |
+| `siteBadgeGlyph` | `Glyph \| null` | no |  |
+| `knownDreamsignRef` | `ArtRef \| null` | no |  |
+| `badgeScale` | `number` | yes |  |
+| `primary` | `AtlasNodePrimary` | no |  |
+| `dreamsign` | `AtlasNodeDreamsign \| null` | no |  |
+| `site` | `AtlasNodeSite \| null` | no |  |
+| `affiliation` | `AtlasNodeAffiliation \| null` | no |  |
 
 ### `edges`: the `AtlasMapEdge` model
 
@@ -41,7 +53,7 @@ The Dream Atlas map surface — the run graph of dreamscape nodes and their conn
 
 ## Usage
 
-The Dream Atlas map surface, scaling the fixed design stage to fit its container. `nodes` and `edges` are the placed view models from the atlas view-model builder (node centres and edge endpoints in stage coordinates); `stageRef` is the screen root the node reveals anchor and clamp against; selecting an available node enters its dreamscape through `onEnterNode`. The atlas screen composes AtlasMap with the surrounding atmosphere and HUD.
+The Dream Atlas map surface scales the fixed design stage to fit its container. Nodes are strict AtlasNode models; each node measures itself in the visual viewport and activation reports its UUID.
 
 ```tsx
 import { AtlasMap } from "src/tango/components/atlas/AtlasMap";
@@ -50,16 +62,13 @@ import {
   ATLAS_STAGE_WIDTH,
 } from "src/tango/components/atlas/atlas-display";
 
-const stageRef = useRef<HTMLDivElement>(null);
-
-<div ref={stageRef} className="dream-atlas">
+<div className="dream-atlas">
   <AtlasMap
     stageWidth={ATLAS_STAGE_WIDTH}
     stageHeight={ATLAS_STAGE_HEIGHT}
     nodes={nodes}
     edges={edges}
     onEnterNode={enterDreamscape}
-    stageRef={stageRef}
   />
 </div>
 ```

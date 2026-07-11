@@ -8,7 +8,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { LayerName } from "../../types/layer-name";
 import type { DreamscapeNode } from "../../types/quest";
 import type { AtlasMapNode } from "../components/atlas/AtlasMap";
-import type { AtlasNodeCard } from "../components/atlas/AtlasNodeReveal";
+import type { AtlasNodeModel, AtlasNodePrimary } from "../components/atlas/AtlasNode";
 import { artRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { AtlasScreen, type AtlasView } from "./AtlasScreen";
@@ -109,45 +109,38 @@ function makeNode(
   };
 }
 
-function emptyCard(): AtlasNodeCard {
+function emptyPrimary(): AtlasNodePrimary {
   return {
-    isUnrevealed: true,
-    isBoss: false,
     sceneArt: null,
     figureArt: null,
     title: "An Unseen Dream",
     body: "An unseen dream.",
-    dreamsign: null,
     placeName: null,
     guideName: null,
-    siteName: null,
-    affiliation: null,
-    siteCard: null,
-    affiliationCard: null,
   };
 }
 
-function residentCard(): AtlasNodeCard {
+function residentModel(): Pick<AtlasNodeModel, "primary" | "dreamsign" | "site" | "affiliation"> {
   return {
-    isUnrevealed: false,
-    isBoss: false,
-    sceneArt: artRef.dreamscapeScene("wilderveil"),
-    figureArt: artRef.dreamGuide("aldric"),
-    title: "Aldric, the Seer",
-    body: "Aldric offers curated visions of the future.",
+    primary: {
+      sceneArt: artRef.dreamscapeScene("wilderveil"),
+      figureArt: artRef.dreamGuide("aldric"),
+      title: "Aldric, the Seer",
+      body: "Aldric offers curated visions of the future.",
+      placeName: "The Glass Orchard",
+      guideName: "Aldric, the Seer",
+    },
     dreamsign: null,
-    placeName: "The Glass Orchard",
-    guideName: "Aldric, the Seer",
-    siteName: "Dream Augury",
-    affiliation: "Abandon",
-    siteCard: {
+    site: {
+      id: "00000000-0000-4000-8000-000000000072",
       name: "Dream Augury",
       blurb: "Study a curated vision of what waits ahead.",
       icon: GLYPHS.water,
     },
-    affiliationCard: {
-      title: "Affiliation: Abandon",
-      theme: "Abandon",
+    affiliation: {
+      id: "00000000-0000-4000-8000-000000000073",
+      name: "Abandon",
+      cardTheme: "Abandon",
     },
   };
 }
@@ -159,11 +152,10 @@ function nodeItem(
   extra: {
     isStarter?: boolean;
     isBoss?: boolean;
-    card?: Partial<AtlasNodeCard>;
+    semantic?: Partial<Pick<AtlasNodeModel, "primary" | "dreamsign" | "site" | "affiliation">>;
   } = {},
 ): AtlasMapNode {
   return {
-    view: {
       node: makeNode(id, state, layer),
       left: 500,
       top: 400,
@@ -173,13 +165,10 @@ function nodeItem(
       iconRef: null,
       siteBadgeGlyph: null,
       knownDreamsignRef: null,
-    },
-    card: {
-      ...emptyCard(),
-      isUnrevealed: !(extra.isBoss ?? false),
-      isBoss: extra.isBoss ?? false,
-      ...extra.card,
-    },
+    primary: extra.semantic?.primary ?? emptyPrimary(),
+    dreamsign: extra.semantic?.dreamsign ?? null,
+    site: extra.semantic?.site ?? null,
+    affiliation: extra.semantic?.affiliation ?? null,
   };
 }
 
@@ -234,6 +223,45 @@ describe("Tango AtlasScreen", () => {
     });
   });
 
+  it("measures the scaled node in visual-viewport coordinates and portals beyond stage clipping", async () => {
+    stubViewport(true, true);
+    Object.defineProperty(window, "visualViewport", {
+      configurable: true,
+      value: { width: 1200, height: 800, offsetLeft: 7, offsetTop: 13 },
+    });
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
+      const width = this.dataset.revealMeasure === "primary" ? 248 : this.dataset.revealMeasure === "secondary" ? 180 : 0;
+      const height = this.dataset.revealMeasure === "primary" ? 260 : this.dataset.revealMeasure === "secondary" ? 120 : 0;
+      return { x: 0, y: 0, left: 0, top: 0, right: width, bottom: height, width, height, toJSON: () => ({}) };
+    });
+    const { container, root } = mount(
+      <AtlasScreen view={makeView()} onEnterNode={vi.fn()} />,
+    );
+    const source = container.querySelector<HTMLElement>('[data-node-state="available"]')!;
+    const measuredRect = {
+      x: 96, y: 240, left: 96, top: 240, right: 156, bottom: 300,
+      width: 60, height: 60, toJSON: () => ({}),
+    };
+    const measure = vi.fn(() => measuredRect);
+    source.getBoundingClientRect = measure;
+
+    await act(async () => {
+      source.focus();
+      await Promise.resolve();
+    });
+
+    await vi.waitFor(() => {
+      expect(document.body.querySelector("[data-tango-reveal-portal]")).not.toBeNull();
+    });
+    expect(measure).toHaveBeenCalled();
+    const portal = document.body.querySelector<HTMLElement>(":scope > [data-tango-reveal-portal]");
+    expect(portal).not.toBeNull();
+    expect(container.querySelector("[data-tango-reveal-portal]")).toBeNull();
+    expect(portal?.closest(".dream-atlas")).toBeNull();
+
+    act(() => root.unmount());
+  });
+
   it("reveals site and affiliation companion cards on a mobile press", () => {
     stubViewport(false, false);
     Object.defineProperty(window, "innerWidth", {
@@ -250,7 +278,7 @@ describe("Tango AtlasScreen", () => {
     });
     const view = makeView();
     view.nodes[1] = nodeItem("frontier", "available", LayerName.Two, {
-      card: residentCard(),
+      semantic: residentModel(),
     });
     const { container, root } = mount(
       <AtlasScreen view={view} onEnterNode={vi.fn()} />,
@@ -277,7 +305,7 @@ describe("Tango AtlasScreen", () => {
     expect(document.body.textContent).toContain(
       "Abandon cards are more likely here.",
     );
-    expect(document.body.textContent).not.toContain("The Glass Orchard");
+    expect(document.body.textContent).toContain("The Glass Orchard");
 
     act(() => {
       root.unmount();

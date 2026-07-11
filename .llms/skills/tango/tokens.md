@@ -278,7 +278,6 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 | --- | --- | --- |
 | `--layer-reveal` | `2147483647` |  |
 | `--hover-scale` | `1.03` |  |
-| `--node-hover-scale` | `1.08` |  |
 | `--glass-fill` | `rgba(14, 14, 16, 0.54)` |  |
 | `--glass-fill-popover` | `rgba(18, 14, 28, 0.5)` |  |
 | `--glass-blur` | `22px` |  |

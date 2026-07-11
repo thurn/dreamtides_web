@@ -14,12 +14,12 @@ function addArtRef(target: ArtRef[], ref: ArtRef | null | undefined): void {
  */
 export function atlasPreflightImageUrls(nodes: AtlasMapNode[]): string[] {
   const refs: ArtRef[] = [];
-  for (const item of nodes) {
-    addArtRef(refs, item.view.iconRef);
-    addArtRef(refs, item.view.knownDreamsignRef);
-    addArtRef(refs, item.card.sceneArt);
-    addArtRef(refs, item.card.figureArt);
-    addArtRef(refs, item.card.dreamsign?.art);
+  for (const model of nodes) {
+    addArtRef(refs, model.iconRef);
+    addArtRef(refs, model.knownDreamsignRef);
+    addArtRef(refs, model.primary.sceneArt);
+    addArtRef(refs, model.primary.figureArt);
+    addArtRef(refs, model.dreamsign?.art);
   }
 
   const seen = new Set<string>();

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  atlasPrimaryInfoCard,
   resolveFieldStack,
   type AtlasHoverContent,
 } from "./AtlasHoverCard";
@@ -37,5 +38,23 @@ describe("resolveFieldStack", () => {
     const stack = resolveFieldStack(starter);
     expect(stack.display).toBe("Wilderveil");
     expect(stack.accent).toBeNull();
+  });
+});
+
+describe("atlasPrimaryInfoCard", () => {
+  it("selects the strict Atlas reveal variant for a known place", () => {
+    expect(atlasPrimaryInfoCard({
+      sceneArt: artRef.dreamscapeScene("wilderveil"),
+      figureArt: artRef.dreamGuide("aldric"),
+      placeName: "Wilderveil",
+      guideName: "Aldric, the Seer",
+      title: "Aldric, the Seer",
+      body: "A curated vision.",
+    })).toMatchObject({ variant: "atlasReveal", title: "Wilderveil", subtitle: "Aldric, the Seer" });
+  });
+
+  it("selects text for an unseen dream", () => {
+    expect(atlasPrimaryInfoCard({ sceneArt: null, figureArt: null, placeName: null, guideName: null, title: "An Unseen Dream", body: "Travel onward." }))
+      .toMatchObject({ variant: "text", title: "An Unseen Dream" });
   });
 });

@@ -128,25 +128,103 @@
     },
     {
       "name": "nodes",
-      "tsType": "AtlasMapNode[]",
+      "tsType": "AtlasNodeModel[]",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
       "description": "Placed nodes, laid out by the view model along its layer axis (starter to boss).",
       "nested": {
-        "name": "AtlasMapNode",
+        "name": "AtlasNodeModel",
         "fields": [
           {
-            "name": "view",
-            "tsType": "AtlasNodeView",
+            "name": "node",
+            "tsType": "DreamscapeNode",
             "optional": false,
-            "description": "Presentational data for the {@link AtlasNode } face."
+            "description": ""
           },
           {
-            "name": "card",
-            "tsType": "AtlasNodeCard",
+            "name": "left",
+            "tsType": "number",
             "optional": false,
-            "description": "The InfoCard reveal content shown while this node is pressed / hovered."
+            "description": "Stage-space centre in the fixed Atlas design canvas."
+          },
+          {
+            "name": "top",
+            "tsType": "number",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "size",
+            "tsType": "number",
+            "optional": false,
+            "description": "Rendered node diameter in stage pixels."
+          },
+          {
+            "name": "isStarter",
+            "tsType": "boolean",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "isBoss",
+            "tsType": "boolean",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "isReachable",
+            "tsType": "boolean",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "iconRef",
+            "tsType": "ArtRef | null",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "siteBadgeGlyph",
+            "tsType": "Glyph | null",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "knownDreamsignRef",
+            "tsType": "ArtRef | null",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "badgeScale",
+            "tsType": "number",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "primary",
+            "tsType": "AtlasNodePrimary",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "dreamsign",
+            "tsType": "AtlasNodeDreamsign | null",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "site",
+            "tsType": "AtlasNodeSite | null",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "affiliation",
+            "tsType": "AtlasNodeAffiliation | null",
+            "optional": false,
+            "description": ""
           }
         ]
       }
@@ -207,26 +285,18 @@
       "required": true,
       "defaultValue": null,
       "description": "Enter a node's dreamscape; fired on a tap / click of an available node."
-    },
-    {
-      "name": "stageRef",
-      "tsType": "RefObject<HTMLElement | null>",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Screen root the node reveals anchor + clamp against (viewport coordinates)."
     }
   ],
   "AtlasNode": [
     {
-      "name": "view",
-      "tsType": "AtlasNodeView",
+      "name": "model",
+      "tsType": "AtlasNodeModel",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "",
+      "description": "Placed face plus UUID-backed semantic Atlas reveal data.",
       "nested": {
-        "name": "AtlasNodeView",
+        "name": "AtlasNodeModel",
         "fields": [
           {
             "name": "node",
@@ -238,7 +308,7 @@
             "name": "left",
             "tsType": "number",
             "optional": false,
-            "description": "Stage-space centre of the node (1920x1080 coordinate system)."
+            "description": "Stage-space centre in the fixed Atlas design canvas."
           },
           {
             "name": "top",
@@ -268,157 +338,66 @@
             "name": "isReachable",
             "tsType": "boolean",
             "optional": true,
-            "description": "Whether the player can still reach this node from where they now stand.\nOnly an explicit `false` fades the node (drawing it as a dimmed, unrevealed\nframe — its builder already blanks the icon and badges); omitting the field\nrenders the node normally, which suits the design-system demos that show a\nlone node in isolation."
+            "description": ""
           },
           {
             "name": "iconRef",
             "tsType": "ArtRef | null",
             "optional": false,
-            "description": "The dreamscape icon art as an {@link ArtRef}, or `null` while unrevealed."
+            "description": ""
           },
           {
             "name": "siteBadgeGlyph",
             "tsType": "Glyph | null",
             "optional": false,
-            "description": "The signature-site badge {@link Glyph}, or `null`."
+            "description": ""
           },
           {
             "name": "knownDreamsignRef",
             "tsType": "ArtRef | null",
             "optional": false,
-            "description": "The pre-revealed known dreamsign icon as an {@link ArtRef}, or `null`."
+            "description": ""
           },
           {
             "name": "badgeScale",
             "tsType": "number",
             "optional": true,
-            "description": "Multiplier applied to the site / dreamsign badge sizes (the mobile atlas\nenlarges them). Defaults to 1 — the desktop size."
-          }
-        ]
-      }
-    },
-    {
-      "name": "hovered",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Draws the node in its revealed/hover glow + scale-up state."
-    },
-    {
-      "name": "rootRef",
-      "tsType": "Ref<HTMLElement>",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Ref to the node's root element, so a caller can anchor an input-adaptive\npress-reveal (InfoCard) to it and measure it against the stage. Typed as the\ncommon `HTMLElement` because an available node renders through `Pressable` as\na `<button>` while an unreachable one is a plain `<div>` — the caller only\nmeasures the element, so it needs neither concrete tag type."
-    },
-    {
-      "name": "onEnter",
-      "tsType": "((nodeId: string) => void)",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Mouse/focus reveal driver: fired with the node id when the pointer or\nkeyboard focus enters the node. Optional — a caller driving the reveal\nthrough the pointer handlers below omits it."
-    },
-    {
-      "name": "onLeave",
-      "tsType": "(() => void)",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Paired with {@link onEnter}: fired on mouse leave / blur."
-    },
-    {
-      "name": "onClick",
-      "tsType": "((nodeId: string) => void)",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Activation: fired with the node id on click and on Enter / Space."
-    },
-    {
-      "name": "onPointerEnter",
-      "tsType": "PointerEventHandler<HTMLElement>",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Input-adaptive press-reveal handlers, wired to the node's root so the\nInfoCard engine (`usePressReveal`) can reveal on touch press-down and on\nfine-pointer hover. A caller either wires these OR the {@link onEnter} /\n{@link onLeave} mouse pair, never both."
-    },
-    {
-      "name": "onPointerDown",
-      "tsType": "PointerEventHandler<HTMLElement>",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
-      "name": "onPointerUp",
-      "tsType": "PointerEventHandler<HTMLElement>",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
-      "name": "onPointerLeave",
-      "tsType": "PointerEventHandler<HTMLElement>",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
-      "name": "onPointerCancel",
-      "tsType": "PointerEventHandler<HTMLElement>",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
-    }
-  ],
-  "AtlasNodeReveal": [
-    {
-      "name": "item",
-      "tsType": "AtlasNodeRevealItem",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "The placed node and its reveal content.",
-      "nested": {
-        "name": "AtlasNodeRevealItem",
-        "fields": [
-          {
-            "name": "view",
-            "tsType": "AtlasNodeView",
-            "optional": false,
-            "description": "Presentational data for the {@link AtlasNode} face."
+            "description": ""
           },
           {
-            "name": "card",
-            "tsType": "AtlasNodeCard",
+            "name": "primary",
+            "tsType": "AtlasNodePrimary",
             "optional": false,
-            "description": "The InfoCard reveal content for this node."
+            "description": ""
+          },
+          {
+            "name": "dreamsign",
+            "tsType": "AtlasNodeDreamsign | null",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "site",
+            "tsType": "AtlasNodeSite | null",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "affiliation",
+            "tsType": "AtlasNodeAffiliation | null",
+            "optional": false,
+            "description": ""
           }
         ]
       }
     },
     {
-      "name": "stageRef",
-      "tsType": "RefObject<HTMLElement | null>",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Screen root the reveal anchors + clamps against (for popover placement)."
-    },
-    {
-      "name": "onEnterNode",
+      "name": "onActivate",
       "tsType": "(nodeId: string) => void",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Enter a node's dreamscape; fired on a tap / click of an available node."
+      "description": "Enter the node's dreamscape. Available nodes invoke this with their UUID."
     }
   ],
   "Button": [

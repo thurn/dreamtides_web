@@ -2,7 +2,7 @@
 // fitted into a fixed design stage that scales to fit its container
 // (letterboxed). It owns the `.dream-atlas` scope the node / edge CSS is written
 // under and the uniform scale-to-fit. Each node reveals its detail through the
-// shared InfoCard press engine (see {@link AtlasNodeReveal}) — hover on desktop,
+// shared reveal coordinator through AtlasNode — hover on desktop,
 // press-down on touch. Callers (the atlas screen) compose it with the atmosphere
 // and HUD around it and hand it the placed view models plus the stage root the
 // reveals anchor against.
@@ -15,23 +15,14 @@
 
 import { useEffect, useMemo } from "react";
 import { useScaleToFit } from "../../primitives/use-scale-to-fit";
-import { type AtlasNodeView } from "./AtlasNode";
+import { AtlasNode, type AtlasNodeModel } from "./AtlasNode";
 import { AtlasEdge, type AtlasEdgeKind } from "./AtlasEdge";
-import {
-  AtlasNodeReveal,
-  type AtlasNodeCard,
-} from "./AtlasNodeReveal";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { atlasPreflightImageUrls } from "./atlas-preflight";
 import "./atlas.css";
 
 /** One placed node: its face view plus the resolved InfoCard reveal content. */
-export interface AtlasMapNode {
-  /** Presentational data for the {@link AtlasNode} face. */
-  view: AtlasNodeView;
-  /** The InfoCard reveal content shown while this node is pressed / hovered. */
-  card: AtlasNodeCard;
-}
+export type AtlasMapNode = AtlasNodeModel;
 
 /** One connector between two nodes, in stage coordinates. */
 export interface AtlasMapEdge {
@@ -53,8 +44,6 @@ interface AtlasMapProps {
   edges: AtlasMapEdge[];
   /** Enter a node's dreamscape; fired on a tap / click of an available node. */
   onEnterNode: (nodeId: string) => void;
-  /** Screen root the node reveals anchor + clamp against (viewport coordinates). */
-  stageRef: React.RefObject<HTMLElement | null>;
 }
 
 function usePreloadImages(urls: string[]): void {
@@ -156,7 +145,6 @@ export function AtlasMap({
   nodes,
   edges,
   onEnterNode,
-  stageRef,
 }: AtlasMapProps) {
   const scale = useScaleToFit(stageWidth, stageHeight);
 
@@ -196,12 +184,11 @@ export function AtlasMap({
         </svg>
 
         <div className="nodes">
-          {nodes.map((item) => (
-            <AtlasNodeReveal
-              key={item.view.node.id}
-              item={item}
-              stageRef={stageRef}
-              onEnterNode={onEnterNode}
+          {nodes.map((model) => (
+            <AtlasNode
+              key={model.node.id}
+              model={model}
+              onActivate={onEnterNode}
             />
           ))}
         </div>

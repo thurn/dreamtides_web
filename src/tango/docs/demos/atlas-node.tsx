@@ -1,23 +1,18 @@
-// Registry demo for AtlasNodeReveal — one Dream Atlas node wired to the shared
-// InfoCard press engine. Each node presents its face (AtlasNode) and, on
-// hover / press, reveals its detail through the ONE Tango popover, exactly as the
-// live atlas does. AtlasNodeReveal's `item` is a fully-resolved
-// `AtlasNodeRevealItem` (a placed `AtlasNodeView` face + its `AtlasNodeCard`
-// reveal content), which the registry's generic control panel cannot synthesize.
+// Registry demo for AtlasNode — one semantic Dream Atlas node wired privately
+// to the shared reveal coordinator. Each node presents its face and derives its
+// strict primary and ordered related cards from one AtlasNodeModel.
 // So this demo draws the shared atlas fixtures — one node per lifecycle state
 // (unrevealed / revealedLocked / available / completed / forgone) plus the boss
 // and starter anchors and the known-dreamsign badge — at the production node
-// sizes, laid out in a compact grid inside a `.dream-atlas .nodes` stage whose
-// `stageRef` the reveal anchors and clamps against. Art resolves from real
+// sizes, laid out in a compact grid inside a `.dream-atlas .nodes` stage. Art resolves from real
 // dreamscape ids through `artRef`; the forgone node carries the forced-blank
 // unreachable shape the view-model produces (a dimmed, badge-free empty frame).
 
-import { useRef } from "react";
 import {
   atlasFixtureNodes,
   nodeSizing,
 } from "../__atlas-fixtures__";
-import { AtlasNodeReveal } from "../../components/atlas/AtlasNodeReveal";
+import { AtlasNode } from "../../components/atlas/AtlasNode";
 import type { TangoComponent } from "../registry";
 
 interface AtlasNodeDemoArgs {
@@ -26,7 +21,6 @@ interface AtlasNodeDemoArgs {
 }
 
 function AtlasNodeDemo({ mobileSizing = false }: AtlasNodeDemoArgs) {
-  const stageRef = useRef<HTMLDivElement>(null);
   const sizing = nodeSizing(mobileSizing);
   const items = atlasFixtureNodes(sizing).map((fixture) => fixture.item);
 
@@ -43,17 +37,13 @@ function AtlasNodeDemo({ mobileSizing = false }: AtlasNodeDemoArgs) {
     const row = Math.floor(i / perRow);
     return {
       ...item,
-      view: {
-        ...item.view,
-        left: startX + col * colGap,
-        top: startY + row * rowGap,
-      },
+      left: startX + col * colGap,
+      top: startY + row * rowGap,
     };
   });
 
   return (
     <div
-      ref={stageRef}
       className="dream-atlas"
       style={{
         position: "relative",
@@ -68,11 +58,10 @@ function AtlasNodeDemo({ mobileSizing = false }: AtlasNodeDemoArgs) {
     >
       <div className="nodes">
         {placed.map((item) => (
-          <AtlasNodeReveal
-            key={item.view.node.id}
-            item={item}
-            stageRef={stageRef}
-            onEnterNode={() => undefined}
+          <AtlasNode
+            key={item.node.id}
+            model={item}
+            onActivate={() => undefined}
           />
         ))}
       </div>
@@ -86,23 +75,20 @@ export const atlasNodeDemo: TangoComponent = {
   blurb:
     "One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engine: a framed circular icon whose glow and badges track its state — revealed, known, visited, completed, forgone, or a looming boss — and which reveals its scene / detail card on hover or press.",
   group: "Components",
-  docName: "AtlasNodeReveal",
+  docName: "AtlasNode",
   Component: AtlasNodeDemo,
   usage: [
     {
-      note: "One node on the Dream Atlas, wired to the InfoCard press engine. `item` is a fully-resolved `AtlasNodeRevealItem` (a placed `AtlasNodeView` face + its `AtlasNodeCard` reveal content) built by the atlas view-model; the node positions itself from `view.left` / `view.top` inside a `.dream-atlas .nodes` stage and anchors its press / hover reveal to the stage root via `stageRef`. Selecting an available node enters its dreamscape through `onEnterNode`.",
-      code: `import { AtlasNodeReveal } from "src/tango/components/atlas/AtlasNodeReveal";
+      note: "One semantic Atlas node. The model carries UUID-backed face, primary, Dreamsign, site, and affiliation data; AtlasNode owns reveal interaction and activation.",
+      code: `import { AtlasNode } from "src/tango/components/atlas/AtlasNode";
 
-const stageRef = useRef<HTMLDivElement>(null);
-
-<div ref={stageRef} className="dream-atlas">
+<div className="dream-atlas">
   <div className="nodes">
-    {items.map((item) => (
-      <AtlasNodeReveal
-        key={item.view.node.id}
-        item={item}
-        stageRef={stageRef}
-        onEnterNode={(id) => enterDreamscape(id)}
+    {models.map((model) => (
+      <AtlasNode
+        key={model.node.id}
+        model={model}
+        onActivate={(id) => enterDreamscape(id)}
       />
     ))}
   </div>

@@ -162,11 +162,14 @@
   display: none;
 }
 
-.dream-atlas .node.is-hover .node-art {
-  transform: scale(var(--node-hover-scale));
+.dream-atlas .node[data-reveal-active="true"] .node-art {
+  transform: scale(var(--reveal-hover-scale));
 }
-.dream-atlas .node-available.is-hover .node-glow {
+.dream-atlas .node-available[data-reveal-active="true"] .node-glow {
   box-shadow: 0 0 42px 10px rgba(168, 85, 247, 0.85);
+}
+.dream-atlas .node-glow[data-ambient-paused="true"] {
+  animation-play-state: paused;
 }
 
 .dream-atlas .unrevealed-face {

@@ -22,11 +22,11 @@ export interface NestedField {
 
 /**
  * The one-level shape of a prop whose type is a named project model object
- * (e.g. `view: AtlasNodeView`), so the props table can document the fields the
+ * (e.g. `model: AtlasNodeModel`), so the props table can document the fields the
  * caller must supply rather than only the opaque type name.
  */
 export interface NestedTypeDoc {
-  /** The model type's name, e.g. "AtlasNodeView". */
+  /** The model type's name, e.g. "AtlasNodeModel". */
   name: string;
   fields: NestedField[];
 }

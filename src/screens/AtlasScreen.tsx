@@ -7,13 +7,14 @@ import {
   useState,
 } from "react";
 import { useQuest } from "../state/quest-context";
-import { AtlasNode, type AtlasNodeView } from "../tango/components/atlas/AtlasNode";
+import { AtlasNode, type AtlasNodeModel } from "../tango/components/atlas/AtlasNode";
 import { AtlasEdge, type AtlasEdgeKind } from "../tango/components/atlas/AtlasEdge";
 import { RulesText } from "../tango/components/card/RulesText";
 import {
   reachableAtlasNodeIds,
   regenerateAtlasForProgress,
   revealedAtlasSite,
+  siteTypeDescription,
   siteTypeIcon,
   siteTypeName,
   type SiteGenerationContext,
@@ -102,7 +103,7 @@ const CONTENT_RECT = { left: 180, right: 1748, top: 256, bottom: 838 };
  * the resolved content drives the preview/dreamsign cards.
  */
 interface ResolvedAtlasNode {
-  view: AtlasNodeView;
+  view: AtlasNodeModel;
   dreamscape: DreamscapeContent | null;
   guide: DreamGuideContent | null;
   affiliation: AffiliationContent | null;
@@ -222,6 +223,55 @@ function resolveAtlasNodes(
         iconRef,
         siteBadgeGlyph,
         knownDreamsignRef,
+        primary: isBoss
+          ? {
+              sceneArt: artRef.dreamscapeScene("limbo"),
+              figureArt: artRef.dreamGuide(BOSS_DISPLAY.guideId),
+              placeName: BOSS_DISPLAY.place,
+              guideName: bossIncarnation?.title ?? BOSS_DISPLAY.title,
+              title: bossIncarnation?.title ?? BOSS_DISPLAY.title,
+              body: bossIncarnation?.description ?? BOSS_DISPLAY.intro,
+            }
+          : dreamscape === null
+            ? {
+                sceneArt: null,
+                figureArt: null,
+                placeName: null,
+                guideName: null,
+                title: "An Unseen Dream",
+                body: "Travel onward to learn what waits here.",
+              }
+            : {
+                sceneArt: artRef.dreamscapeScene(dreamscape.id),
+                figureArt: guide === null ? null : artRef.dreamGuide(guide.id),
+                placeName: dreamscape.name,
+                guideName: guide?.name ?? null,
+                title: guide?.name ?? dreamscape.name,
+                body: guide?.homeSpecialty ?? "A quiet place where every dream quest begins.",
+              },
+        dreamsign: dreamsign === null
+          ? null
+          : {
+              id: dreamsign.id,
+              name: dreamsign.name,
+              art: dreamsign.imageName == null ? null : artRef.dreamsign(dreamsign.imageName),
+              rulesText: dreamsign.effectDescription,
+            },
+        site: guide === null || dreamscape === null || revealedSite === null
+          ? null
+          : {
+              id: revealedSite.id,
+              name: siteTypeName(dreamscape.signatureSite),
+              blurb: siteTypeDescription(dreamscape.signatureSite),
+              icon: glyph(siteTypeIcon(dreamscape.signatureSite)),
+            },
+        affiliation: affiliation === null
+          ? null
+          : {
+              id: affiliation.id,
+              name: affiliation.name,
+              cardTheme: affiliation.name,
+            },
       },
       dreamscape,
       guide,
@@ -560,6 +610,10 @@ function DreamsignCard({ resolved }: DreamsignCardProps) {
   );
 }
 
+// Retained by the legacy atlas module for its standalone preview styling.
+void Preview;
+void DreamsignCard;
+
 /* -------------------------------- Motes ----------------------------------- */
 
 interface Mote {
@@ -599,7 +653,6 @@ function buildMotes(): Mote[] {
 export function AtlasScreen() {
   const { state, mutations, questContent } = useQuest();
   const { atlas } = state;
-  const [hover, setHover] = useState<string | null>(null);
   const [scale, setScale] = useState(1);
   const motes = useMemo(() => buildMotes(), []);
 
@@ -736,7 +789,6 @@ export function AtlasScreen() {
     mutations.setCurrentDreamscape(
       state.completionLevel > 0 ? null : regenerated.startingNodeId,
     );
-    setHover(null);
   }, [
     state.dreamscapeModifiers,
     state.completionLevel,
@@ -745,7 +797,6 @@ export function AtlasScreen() {
     mutations,
   ]);
 
-  const hovered = hover !== null ? (resolved.get(hover) ?? null) : null;
 
   return (
     <div className="dream-atlas">
@@ -808,21 +859,12 @@ export function AtlasScreen() {
             {Array.from(resolved.values()).map((entry) => (
               <AtlasNode
                 key={entry.view.node.id}
-                view={entry.view}
-                hovered={hover === entry.view.node.id}
-                onEnter={setHover}
-                onLeave={() => {
-                  setHover(null);
-                }}
-                onClick={handleNodeClick}
+                model={entry.view}
+                onActivate={handleNodeClick}
               />
             ))}
           </div>
 
-          {hovered && <Preview resolved={hovered} />}
-          {hovered && hovered.dreamsign !== null && (
-            <DreamsignCard resolved={hovered} />
-          )}
 
           <div className="hud-top">
             <div className="atlas-title">Dream Atlas</div>

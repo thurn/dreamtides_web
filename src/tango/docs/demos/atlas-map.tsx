@@ -17,7 +17,6 @@
 // composes AtlasMap with the atmosphere and HUD around it and supplies the
 // placed view models from the atlas view-model builder.
 
-import { useRef } from "react";
 import {
   ATLAS_STAGE_HEIGHT,
   ATLAS_STAGE_WIDTH,
@@ -75,7 +74,8 @@ const NODES: AtlasMapNode[] = atlasFixtureNodes(nodeSizing(true)).map(
     const at = PLACEMENTS[fixture.role];
     return {
       ...fixture.item,
-      view: { ...fixture.item.view, left: at.left, top: at.top },
+      left: at.left,
+      top: at.top,
     };
   },
 );
@@ -106,11 +106,8 @@ function AtlasMapDemo({
   nodes = NODES,
   edges = MAP_EDGES,
 }: AtlasMapDemoProps) {
-  const stageRef = useRef<HTMLDivElement>(null);
-
   return (
     <div
-      ref={stageRef}
       className="dream-atlas"
       style={{
         position: "relative",
@@ -128,7 +125,6 @@ function AtlasMapDemo({
         nodes={nodes}
         edges={edges}
         onEnterNode={() => undefined}
-        stageRef={stageRef}
       />
     </div>
   );
@@ -144,23 +140,20 @@ export const atlasMapDemo: TangoComponent = {
   Component: AtlasMapDemo,
   usage: [
     {
-      note: "The Dream Atlas map surface, scaling the fixed design stage to fit its container. `nodes` and `edges` are the placed view models from the atlas view-model builder (node centres and edge endpoints in stage coordinates); `stageRef` is the screen root the node reveals anchor and clamp against; selecting an available node enters its dreamscape through `onEnterNode`. The atlas screen composes AtlasMap with the surrounding atmosphere and HUD.",
+      note: "The Dream Atlas map surface scales the fixed design stage to fit its container. Nodes are strict AtlasNode models; each node measures itself in the visual viewport and activation reports its UUID.",
       code: `import { AtlasMap } from "src/tango/components/atlas/AtlasMap";
 import {
   ATLAS_STAGE_HEIGHT,
   ATLAS_STAGE_WIDTH,
 } from "src/tango/components/atlas/atlas-display";
 
-const stageRef = useRef<HTMLDivElement>(null);
-
-<div ref={stageRef} className="dream-atlas">
+<div className="dream-atlas">
   <AtlasMap
     stageWidth={ATLAS_STAGE_WIDTH}
     stageHeight={ATLAS_STAGE_HEIGHT}
     nodes={nodes}
     edges={edges}
     onEnterNode={enterDreamscape}
-    stageRef={stageRef}
   />
 </div>`,
     },

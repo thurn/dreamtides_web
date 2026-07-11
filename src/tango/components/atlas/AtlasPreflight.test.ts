@@ -25,7 +25,6 @@ function node(id: string): DreamscapeNode {
 
 function item(id: string, overrides: Partial<AtlasMapNode>): AtlasMapNode {
   return {
-    view: {
       node: node(id),
       left: 0,
       top: 0,
@@ -35,22 +34,17 @@ function item(id: string, overrides: Partial<AtlasMapNode>): AtlasMapNode {
       iconRef: null,
       siteBadgeGlyph: null,
       knownDreamsignRef: null,
-    },
-    card: {
-      isUnrevealed: false,
-      isBoss: false,
+    primary: {
       sceneArt: null,
       figureArt: null,
       title: "Guide",
       body: "A dreamscape.",
-      dreamsign: null,
       placeName: "Place",
       guideName: "Guide",
-      siteName: null,
-      affiliation: null,
-      siteCard: null,
-      affiliationCard: null,
     },
+    dreamsign: null,
+    site: null,
+    affiliation: null,
     ...overrides,
   };
 }
@@ -64,29 +58,24 @@ describe("atlasPreflightImageUrls", () => {
 
     const urls = atlasPreflightImageUrls([
       item("first", {
-        view: {
-          ...item("first", {}).view,
-          iconRef: icon,
-          knownDreamsignRef: dreamsign,
-        },
-        card: {
-          ...item("first", {}).card,
+        iconRef: icon,
+        knownDreamsignRef: dreamsign,
+        primary: {
+          ...item("first", {}).primary,
           sceneArt: scene,
           figureArt: guide,
-          dreamsign: {
+        },
+        dreamsign: {
+            id: "00000000-0000-4000-8000-000000000061",
             name: "The Held Star",
             art: dreamsign,
             rulesText: "Gain 1 essence.",
-          },
         },
       }),
       item("duplicate", {
-        view: {
-          ...item("duplicate", {}).view,
-          iconRef: icon,
-        },
-        card: {
-          ...item("duplicate", {}).card,
+        iconRef: icon,
+        primary: {
+          ...item("duplicate", {}).primary,
           sceneArt: scene,
           figureArt: guide,
         },

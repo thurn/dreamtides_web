@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/atlas-node`
 
-Real consumers: **1** (imports outside `src/tango/docs/` and tests).
+Real consumers: **2** (imports outside `src/tango/docs/` and tests).
 
 One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engine: a framed circular icon whose glow and badges track its state — revealed, known, visited, completed, forgone, or a looming boss — and which reveals its scene / detail card on hover or press.
 
@@ -14,34 +14,43 @@ One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engin
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `item` | `AtlasNodeRevealItem` | yes | — | The placed node and its reveal content. |
-| `stageRef` | `RefObject<HTMLElement \| null>` | yes | — | Screen root the reveal anchors + clamps against (for popover placement). |
-| `onEnterNode` | `(nodeId: string) => void` | yes | — | Enter a node's dreamscape; fired on a tap / click of an available node. |
+| `model` | `AtlasNodeModel` | yes | — | Placed face plus UUID-backed semantic Atlas reveal data. |
+| `onActivate` | `(nodeId: string) => void` | yes | — | Enter the node's dreamscape. Available nodes invoke this with their UUID. |
 
-### `item`: the `AtlasNodeRevealItem` model
+### `model`: the `AtlasNodeModel` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `view` | `AtlasNodeView` | no | Presentational data for the {@link AtlasNode} face. |
-| `card` | `AtlasNodeCard` | no | The InfoCard reveal content for this node. |
+| `node` | `DreamscapeNode` | no |  |
+| `left` | `number` | no | Stage-space centre in the fixed Atlas design canvas. |
+| `top` | `number` | no |  |
+| `size` | `number` | no | Rendered node diameter in stage pixels. |
+| `isStarter` | `boolean` | no |  |
+| `isBoss` | `boolean` | no |  |
+| `isReachable` | `boolean` | yes |  |
+| `iconRef` | `ArtRef \| null` | no |  |
+| `siteBadgeGlyph` | `Glyph \| null` | no |  |
+| `knownDreamsignRef` | `ArtRef \| null` | no |  |
+| `badgeScale` | `number` | yes |  |
+| `primary` | `AtlasNodePrimary` | no |  |
+| `dreamsign` | `AtlasNodeDreamsign \| null` | no |  |
+| `site` | `AtlasNodeSite \| null` | no |  |
+| `affiliation` | `AtlasNodeAffiliation \| null` | no |  |
 
 ## Usage
 
-One node on the Dream Atlas, wired to the InfoCard press engine. `item` is a fully-resolved `AtlasNodeRevealItem` (a placed `AtlasNodeView` face + its `AtlasNodeCard` reveal content) built by the atlas view-model; the node positions itself from `view.left` / `view.top` inside a `.dream-atlas .nodes` stage and anchors its press / hover reveal to the stage root via `stageRef`. Selecting an available node enters its dreamscape through `onEnterNode`.
+One semantic Atlas node. The model carries UUID-backed face, primary, Dreamsign, site, and affiliation data; AtlasNode owns reveal interaction and activation.
 
 ```tsx
-import { AtlasNodeReveal } from "src/tango/components/atlas/AtlasNodeReveal";
+import { AtlasNode } from "src/tango/components/atlas/AtlasNode";
 
-const stageRef = useRef<HTMLDivElement>(null);
-
-<div ref={stageRef} className="dream-atlas">
+<div className="dream-atlas">
   <div className="nodes">
-    {items.map((item) => (
-      <AtlasNodeReveal
-        key={item.view.node.id}
-        item={item}
-        stageRef={stageRef}
-        onEnterNode={(id) => enterDreamscape(id)}
+    {models.map((model) => (
+      <AtlasNode
+        key={model.node.id}
+        model={model}
+        onActivate={(id) => enterDreamscape(id)}
       />
     ))}
   </div>

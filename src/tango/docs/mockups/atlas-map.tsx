@@ -18,7 +18,6 @@
 // dim / locked). Node centres and edge endpoints are authored in the production
 // portrait stage space.
 
-import { useRef } from "react";
 import {
   ATLAS_STAGE_HEIGHT,
   ATLAS_STAGE_WIDTH,
@@ -71,15 +70,14 @@ const EDGES: { from: AtlasFixtureRole; to: AtlasFixtureRole; kind: AtlasEdgeKind
 ];
 
 export function AtlasMapMockup() {
-  const stageRef = useRef<HTMLDivElement>(null);
-
   // The production mobile node sizes suit the vertical portrait stage.
   const nodes: AtlasMapNode[] = atlasFixtureNodes(nodeSizing(true)).map(
     (fixture) => {
       const at = PLACEMENTS[fixture.role];
       return {
         ...fixture.item,
-        view: { ...fixture.item.view, left: at.left, top: at.top },
+        left: at.left,
+        top: at.top,
       };
     },
   );
@@ -99,7 +97,6 @@ export function AtlasMapMockup() {
 
   return (
     <div
-      ref={stageRef}
       className="dream-atlas"
       style={{ ...sceneRoot, background: token("--dt-wash-journey") }}
     >
@@ -109,7 +106,6 @@ export function AtlasMapMockup() {
         nodes={nodes}
         edges={edges}
         onEnterNode={() => undefined}
-        stageRef={stageRef}
       />
     </div>
   );

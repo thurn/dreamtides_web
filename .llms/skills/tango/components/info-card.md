@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/info-card`
 
-Real consumers: **7** (imports outside `src/tango/docs/` and tests).
+Real consumers: **6** (imports outside `src/tango/docs/` and tests).
 
 The one press-to-reveal information card. Its media treatment varies by content — object, full-bleed, atlas reveal, icon, tide, or text — over a single fixed liquid-glass shell and reveal contract. On a narrow viewport a card lays out at 45% of screen width capped at its native 248px, so below ~551px (248 ÷ 0.45) it begins scaling down — an intentional content-driven cutoff, distinct from the 900px desktop/mobile breakpoint.
 

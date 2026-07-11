@@ -45,7 +45,7 @@ import { tideDiscDemo } from "./demos/tide-disc";
  * A single authored usage snippet shown on a component's doc page. The source
  * is hand-written (not generated from `defaultArgs`) so it can show the real
  * prop shapes exactly as a caller would type them — including complex object
- * props (a full `card`, an `AtlasNodeView`, a `stageRef`) that the interactive
+ * props (a full `card` or an `AtlasNodeModel`) that the interactive
  * control panel cannot model. Provide more than one entry only when a component
  * has genuinely distinct usage variants (e.g. Button with vs. without a cost,
  * InfoCard's four media variants); a component with one obvious call site

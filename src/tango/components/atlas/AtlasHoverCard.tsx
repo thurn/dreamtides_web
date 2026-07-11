@@ -13,6 +13,8 @@ import * as React from "react";
 import { type ArtRef } from "../../primitives/art";
 import { richText } from "../card/rich-text";
 import { InfoCard } from "../overlay/InfoCard";
+import type { InfoCardProps } from "../overlay/InfoCard";
+import type { AtlasNodePrimary } from "./AtlasNode";
 
 /**
  * The resolved copy + art the hover card renders. Plain display data (strings
@@ -56,6 +58,22 @@ export function resolveFieldStack(content: AtlasHoverContent): FieldStack {
   return {
     display: content.placeName,
     accent: content.guideName,
+  };
+}
+
+/** Selects the strict Atlas primary variant from semantic node content. */
+export function atlasPrimaryInfoCard(content: AtlasNodePrimary): InfoCardProps {
+  if (content.sceneArt === null || content.placeName === null) {
+    return { variant: "text", title: content.title, body: richText.plain(content.body) };
+  }
+  return {
+    variant: "atlasReveal",
+    image: content.sceneArt,
+    imageCrop: "center",
+    figure: content.figureArt ?? undefined,
+    title: content.placeName,
+    subtitle: content.guideName ?? undefined,
+    body: richText.plain(content.body),
   };
 }
 
