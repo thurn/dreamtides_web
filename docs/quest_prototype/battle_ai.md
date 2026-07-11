@@ -695,9 +695,9 @@ and every entry in it was something you clicked to allow.
 **1. URL parameter and runtime config.** `RuntimeConfig` in
 `src/runtime/runtime-config.ts` carries `aiMode: boolean`, parsed as
 `params.get("ai") !== "0"` so the AI opponent is on by default and `?ai=0`
-disables it. It is threaded the way `startInBattle` is: `App.tsx` → quest
-context/screen router → `BattleSiteRoute` → `PlayableBattleScreen`. The fast QA
-path is `http://localhost:5173/?startInBattle=1` (add `&ai=0` for a manual
+disables it. It is threaded through `App.tsx` → quest context/screen router →
+`BattleSiteRoute` → `PlayableBattleScreen`. The fast QA path is
+`http://localhost:5173/?goto=battle` (add `&ai=0` for a manual
 battle).
 
 **2. The AI deck.** `ai/deck.ts` builds the enemy deck from Starter cards:
@@ -804,7 +804,7 @@ channel that already exists end to end.
   time-budget guard returning a valid best-so-far plan under an artificially
   tiny deadline; deterministic planning under a fixed seed.
 - **Browser QA** (`agent-browser` against a non-5173 port per repo QA rules) on
-  `?startInBattle=1` (the AI opponent is on by default): confirm the enemy takes
+  `?goto=battle` (the AI opponent is on by default): confirm the enemy takes
   a visible, paced turn, the
   player is gated from acting during it, the log shows the AI's choices, scores
   move on Challenge resolution, and the reward flow fires on a real win. Capture
@@ -864,7 +864,7 @@ entirely through the headless harness.
 | File | Change |
 | --- | --- |
 | `src/runtime/runtime-config.ts` | `aiMode` parsed from `?ai` (on unless `?ai=0`). |
-| `src/App.tsx` / screen router / `BattleSiteRoute` | Thread `aiMode` to the battle screen (mirror `startInBattle`). |
+| `src/App.tsx` / screen router / `BattleSiteRoute` | Thread `aiMode` to the battle screen. |
 | `src/battle/integration/create-battle-init.ts` | When `aiMode`, build `enemyDeckDefinition` from the Starter deck. |
 | `src/battle/ai/deck.ts` | NEW — Starter-deck builder. |
 | `src/battle/ai/forward-model.ts` | NEW — planning projection + support-adjacency spark. |

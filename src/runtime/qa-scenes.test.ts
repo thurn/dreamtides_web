@@ -200,6 +200,59 @@ describe("the atlas layer QA scenes", () => {
   });
 });
 
+describe("the battle layer QA scenes", () => {
+  const displayLayers = [1, 2, 3, 4, 5, 6, 7];
+
+  for (const displayLayer of displayLayers) {
+    it(`battle${String(displayLayer)} parks on the Layer ${String(displayLayer)} Battle start screen`, () => {
+      const state = buildQaScene(
+        `battle${String(displayLayer)}`,
+        makeQuestContent(),
+      );
+
+      expect(state).not.toBeNull();
+      expect(state?.completionLevel).toBe(displayLayer - 1);
+      expect(state?.screen.type).toBe("site");
+      expect(state?.currentDreamscape).not.toBeNull();
+      expect(state?.activeSiteId).toBe(
+        state?.screen.type === "site" ? state.screen.siteId : null,
+      );
+
+      const node = state?.currentDreamscape == null
+        ? undefined
+        : state.atlas.nodes[state.currentDreamscape];
+      expect(node).toBeDefined();
+      expect(node === undefined ? undefined : layerOrdinal(node.layer)).toBe(
+        displayLayer - 1,
+      );
+      const battleSite = node?.sites.find(
+        (site) => site.id === state?.activeSiteId,
+      );
+      expect(battleSite?.type).toBe("Battle");
+      expect(
+        node?.sites
+          .filter((site) => site.type !== "Battle")
+          .every((site) => site.isVisited),
+      ).toBe(true);
+    });
+  }
+
+  it('aliases plain "battle" to the Layer 1 battle scene', () => {
+    const state = buildQaScene("battle", makeQuestContent());
+
+    expect(state).not.toBeNull();
+    expect(state?.completionLevel).toBe(0);
+    expect(state?.screen.type).toBe("site");
+    const node = state?.currentDreamscape == null
+      ? undefined
+      : state.atlas.nodes[state.currentDreamscape];
+    expect(node === undefined ? undefined : layerOrdinal(node.layer)).toBe(0);
+    expect(
+      node?.sites.find((site) => site.id === state?.activeSiteId)?.type,
+    ).toBe("Battle");
+  });
+});
+
 describe("site QA scenes", () => {
   it("registers direct QA jumps for migration-critical site screens", () => {
     const expectedSites = [

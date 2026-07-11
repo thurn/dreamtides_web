@@ -118,7 +118,6 @@ export function QuestApp({
   const [journeyExplanation, setJourneyExplanation] =
     useState<JourneyExplanation | null>(null);
   const previousScreenTypeRef = useRef(state.screen.type);
-  const startInBattleFiredRef = useRef(false);
   const gotoSceneFiredRef = useRef(false);
   const openDeckFiredRef = useRef(false);
   const loadQuestFiredRef = useRef(false);
@@ -131,28 +130,11 @@ export function QuestApp({
   >(loadQuestName === null ? "idle" : "pending");
   const [loadQuestError, setLoadQuestError] = useState<string | null>(null);
 
-  // `?startInBattle=1`: replace the freshly created room's empty quest state
-  // with a battle-ready state in a single atomic write. Firing once per mount
-  // is enough — the multiplayer mutation guards on `dreamcaller === null`, so
-  // a reload of the same room (state already initialized) is a no-op.
-  useEffect(() => {
-    if (
-      !runtimeConfig.startInBattle ||
-      startInBattleFiredRef.current ||
-      state.dreamcaller !== null
-    ) {
-      return;
-    }
-
-    startInBattleFiredRef.current = true;
-    mutations.bootstrapStartInBattle();
-  }, [runtimeConfig.startInBattle, state.dreamcaller, mutations]);
-
   // `?goto=<scene>`: replace the freshly created room's empty quest state with
   // one parked on a developer QA scene (e.g. `?goto=atlas`), letting browser QA
   // open screens that are otherwise reachable only by playing battles forward.
-  // Mirrors `?startInBattle=1`: fires once per mount, and the multiplayer
-  // mutation guards on `dreamcaller === null` so a reload is a no-op.
+  // Fires once per mount, and the multiplayer mutation guards on
+  // `dreamcaller === null` so a reload is a no-op.
   useEffect(() => {
     const gotoScene = runtimeConfig.gotoScene ?? null;
     if (
@@ -420,19 +402,6 @@ export function QuestApp({
   const handleCloseJourneyExplanation = useCallback(() => {
     setJourneyExplanationOpen(false);
   }, []);
-
-  // `?startInBattle=1`: a freshly created room starts with the default
-  // `questStart` state. Hold a loading screen — rather than rendering the
-  // Dreamcaller selection screen — until `bootstrapStartInBattle` round-trips
-  // through Firebase, so the player drops straight into the battle.
-  if (runtimeConfig.startInBattle && state.dreamcaller === null) {
-    return (
-      <div className="flex h-screen flex-col items-center justify-center gap-3 p-8">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
-        <p className="text-lg opacity-80">Entering battle...</p>
-      </div>
-    );
-  }
 
   // `?goto=<scene>`: hold a loading screen — rather than the Dreamcaller
   // selection screen — until `bootstrapQaScene` round-trips through Firebase,

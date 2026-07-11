@@ -5,7 +5,6 @@ import type { ContentConfig } from "../eventlog/types";
 
 export interface RuntimeConfig {
   seedOverride: number | null;
-  startInBattle: boolean;
   aiMode: boolean;
   /**
    * Gates Basic Automation (the bookend-phase auto-advance and the Dawn/Ending
@@ -159,7 +158,6 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     draftMode === "pool" ? resolvePoolVariant(rawAlgo) : DEFAULT_POOL_VARIANT;
   return {
     seedOverride: parseSeedOverride(params.get("seed")),
-    startInBattle: params.get("startInBattle") === "1",
     aiMode: params.get("ai") !== "0",
     basicAutomation: params.get("automation") !== "0",
     gameId: normalizeRoomId(params.get("game")),

@@ -115,7 +115,6 @@ const mutations: QuestMutations = {
   setDraftState: noop,
   setFailureSummary: noop,
   dismissStartingDeckPopup: noop,
-  bootstrapStartInBattle: noop,
   resetQuest: noop,
   setEssence: noop,
   changeMaxEssence: noop,

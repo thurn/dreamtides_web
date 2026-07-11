@@ -20,9 +20,8 @@ The scene id is trimmed and matched case-insensitively. An empty value
    (`src/runtime/runtime-config.ts`).
 2. When `gotoScene` is set and no `?game=` room id is present,
    `MultiplayerRoomGate` auto-creates and joins a fresh room, skipping the manual
-   "Create Game" gate — the same auto-create path `?startInBattle=` and
-   `?loadQuest=` use (`src/multiplayer/MultiplayerRoomGate.tsx`,
-   `src/App.tsx`).
+   "Create Game" gate — the same auto-create path `?loadQuest=` uses
+   (`src/multiplayer/MultiplayerRoomGate.tsx`, `src/App.tsx`).
 3. On the freshly created (empty) room, `bootstrapQaScene` builds a complete,
    valid `QuestState` for the scene from live quest content — the same generators
    the real quest uses, never hand-faked fixtures — and parks the run on the
@@ -71,6 +70,26 @@ completing the starter dreamscape) — the same screen as `atlas2` — and is th
 natural entry point for boss-preview QA, since the boss node is revealed from that
 depth onward.
 
+## Battle layers
+
+`?goto=battleN` opens the Battle site inside the dreamscape on atlas **Layer N**,
+for **`battle1` … `battle7`**. Like the `atlasN` scenes, the URL uses the UI's
+one-indexed layer number while quest state stores the zero-indexed run depth:
+`battle5` therefore enters a Layer V battle at `completionLevel: 4`.
+
+Each scene builds its atlas by replaying the preceding real dreamscape
+completions, enters an available dreamscape on the requested layer, marks its
+non-Battle sites visited, and opens the Battle site. The route constructs the
+opponent with the normal battle generator for that completion level, including
+the layer-based deck tuning, Dreamcaller ability, Legendary access, and
+Dreamsign schedule. This makes later scenes materially stronger; for example,
+the Layer V opponent has an active ability and an active Dreamsign.
+
+Every battle scene stops on the **Battle Start** screen that previews the
+opposing Dreamcaller, ability, Dreamsigns, and signature cards. Select **Begin
+Battle** to enter the playable board. Plain `?goto=battle` is the same Layer I
+entry point as `battle1`.
+
 ## Draft site
 
 `?goto=draft` retypes a starter-dreamscape site to the `Draft` type and parks the
@@ -97,6 +116,8 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `dreamcaller-select`     | Choose-your-Dreamcaller screen a run opens on (`questStart`), without the lobby |
 | `atlas`                  | Dream Atlas resting screen at the first frontier the UI labels "Layer II" (one dreamscape completed), with a generated boss node and Apollyon incarnation (atlas UI + boss-preview QA); same screen as `atlas2` |
 | `atlas2` … `atlas7`      | Dream Atlas resting screen the UI labels "Layer N", with the available frontier on column N (see "Atlas layers" below) |
+| `battle`                 | Layer I Battle Start opponent preview; same scene depth as `battle1` |
+| `battle1` … `battle7`    | Battle Start opponent preview for the keeper battle on atlas Layer N, with layer-tuned opponent strength (see "Battle layers") |
 | `dreamscape`             | Starter dreamscape overview with site nodes and the QuestStatusBar |
 | `deckviewer`             | Deck viewer overlay opened over the starter dreamscape (deck grid + press-and-hold zoom) |
 | `startingdeck`           | Starting-deck reveal popup over the starter dreamscape (frosted-glass chrome QA) |

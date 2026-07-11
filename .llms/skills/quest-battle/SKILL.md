@@ -1,6 +1,6 @@
 ---
 name: quest-battle
-description: Use when editing or testing battle mode in the quest prototype, including playable battle UI, battle debug tools, battle overlays, reward flow, and battle-specific browser QA. Triggers on quest battle, playable battle, battle prototype, battle UI, startInBattle, battle log, reward surface, side summary, battle inspector, or battle QA.
+description: Use when editing or testing battle mode in the quest prototype, including playable battle UI, battle debug tools, battle overlays, reward flow, and battle-specific browser QA. Triggers on quest battle, playable battle, battle prototype, battle UI, goto=battle, battle log, reward surface, side summary, battle inspector, or battle QA.
 ---
 
 # Quest Battle
@@ -126,19 +126,14 @@ agent-browser errors
 Primary playable-battle URL:
 
 ```bash
-http://localhost:5173/?startInBattle=1
+http://localhost:5173/?goto=battle
 ```
 
 This is the fastest path for battle-only QA.
 
-Important lesson from this session:
-
-- Even with `startInBattle=1`, a cold-start session may still land on the
-  Dreamcaller picker instead of the battle. Treat that as a possible routing or
-  bootstrap bug, not as expected behavior.
-- If this happens during battle QA, note it explicitly, pick a Dreamcaller to
-  initialize the run, and retry the battle URL or continue only if you can
-  reach the intended battle state quickly.
+Use `?goto=battle1` through `?goto=battle7` to exercise layer-tuned opponents.
+Every scene opens on the Battle Start opponent preview; click **Begin Battle**
+before measuring the playable board.
 
 ### Baseline Battle Checks
 
@@ -236,7 +231,8 @@ For battle changes:
 - Do not patch a leaf component when the bug is owned by
   `PlayableBattleScreen`.
 - Do not rely on `snapshot -i` alone for QA.
-- Do not assume `startInBattle=1` worked without checking the actual screen.
+- Do not assume a `goto=battleN` scene worked without checking the preview's
+  displayed layer and opponent details.
 - Do not stop at automated tests for battle UI; browser QA is mandatory.
 - Do not commit unrelated dirty battle files that were already modified before
   your change.

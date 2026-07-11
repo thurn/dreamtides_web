@@ -119,7 +119,7 @@ dimensions match the target id exactly unless `--scale` is supplied.
   need the dev server's Firebase emulator running (a plain `vite` is not
   enough); prefer `npm run dev` / `--start`.
 - `--query <str>` - append a raw query string (without a leading `?`/`&`),
-  e.g. `--query "seed=42&startInBattle=1"`.
+  e.g. `--query "seed=42&goto=battle"`.
 
 ## Appearance options
 

@@ -4,7 +4,7 @@ import type { SiteGenerationContext } from "../atlas/atlas-generator";
 import { regenerateAtlasForProgress } from "../atlas/atlas-generator";
 import { createDefaultState } from "../state/quest-context";
 import { createDreamsign } from "../data/dreamsigns";
-import { createQaQuestFoundation } from "./start-in-battle-state";
+import { createQaQuestFoundation } from "./qa-quest-foundation";
 
 /**
  * Developer-only "QA scenes": named jump points to screens that are otherwise
@@ -35,7 +35,7 @@ export interface QaScene {
   landsOnQuestStart?: boolean;
   /**
    * Builds the parked quest state from current quest content, or returns null
-   * when required content is missing (mirrors `createStartInBattleState`).
+   * when required content is missing.
    */
   build: (questContent: QuestContent) => QuestState | null;
 }
@@ -146,6 +146,93 @@ function atlasLayerScene(displayLayer: number): QaScene {
     build: atlasLayerSceneState(displayLayer - 1),
   };
 }
+
+/**
+ * Builds the Battle site inside the UI's one-indexed atlas Layer N. The quest's
+ * `completionLevel` is zero-indexed, so Layer N uses completion level N - 1 —
+ * the same mapping as `atlasN`. Replaying N - 1 real completions produces the
+ * reachable frontier for that layer; the scene enters its topmost available
+ * dreamscape, marks every non-Battle site visited, and parks on the keeper
+ * battle exactly before the opposing-Dreamcaller preview.
+ */
+function battleLayerSceneState(displayLayer: number): QaScene["build"] {
+  return (questContent) => {
+    const foundation = createQaQuestFoundation(questContent);
+    if (foundation === null) {
+      return null;
+    }
+
+    const completionLevel = displayLayer - 1;
+    const atlas = completionLevel === 0
+      ? foundation.atlas
+      : regenerateAtlasForProgress(
+          completionLevel,
+          {},
+          {
+            dreamscapes: questContent.dreamscapes,
+            atlasConfig: questContent.atlasConfig,
+            dreamsignPoolIds: foundation.state.remainingDreamsignPool,
+            apollyonIncarnations: questContent.apollyonIncarnations,
+          },
+          { logEvents: true },
+        );
+    const layerNodeIds = atlas.layers[completionLevel] ?? [];
+    const node = layerNodeIds
+      .map((nodeId) => atlas.nodes[nodeId])
+      .find((candidate) => candidate?.state === "available");
+    if (node === undefined) {
+      return null;
+    }
+    const battleSite = node.sites.find((site) => site.type === "Battle");
+    if (battleSite === undefined) {
+      return null;
+    }
+
+    const visitedSites = node.sites
+      .filter((site) => site.type !== "Battle")
+      .map((site) => site.id);
+    const battleReadyNode = {
+      ...node,
+      sites: node.sites.map((site) =>
+        site.type === "Battle" ? site : { ...site, isVisited: true },
+      ),
+    };
+
+    return {
+      ...foundation.state,
+      atlas: {
+        ...atlas,
+        nodes: { ...atlas.nodes, [node.id]: battleReadyNode },
+      },
+      completionLevel,
+      currentDreamscape: node.id,
+      visitedSites,
+      screen: { type: "site", siteId: battleSite.id },
+      activeSiteId: battleSite.id,
+    };
+  };
+}
+
+/** Registers a `?goto=battleN` scene for the battle in UI Layer N. */
+function battleLayerScene(displayLayer: number): QaScene {
+  return {
+    id: `battle${String(displayLayer)}`,
+    label: `Battle (Layer ${String(displayLayer)})`,
+    description:
+      `The Layer ${String(displayLayer)} keeper battle, parked on the opposing ` +
+      `Dreamcaller preview with opponent strength tuned for that run depth.`,
+    build: battleLayerSceneState(displayLayer),
+  };
+}
+
+/** The first keeper battle, retained as the concise default battle scene id. */
+const BATTLE_SCENE: QaScene = {
+  id: "battle",
+  label: "Battle (Layer 1)",
+  description:
+    "The Layer 1 keeper battle, parked on the opposing Dreamcaller preview.",
+  build: battleLayerSceneState(1),
+};
 
 /**
  * Builds the inside-a-dreamscape overview parked on the starter dreamscape,
@@ -372,6 +459,14 @@ export const QA_SCENES: readonly QaScene[] = [
   atlasLayerScene(5),
   atlasLayerScene(6),
   atlasLayerScene(7),
+  BATTLE_SCENE,
+  battleLayerScene(1),
+  battleLayerScene(2),
+  battleLayerScene(3),
+  battleLayerScene(4),
+  battleLayerScene(5),
+  battleLayerScene(6),
+  battleLayerScene(7),
   DREAMSCAPE_SCENE,
   DECK_VIEWER_SCENE,
   STARTING_DECK_SCENE,

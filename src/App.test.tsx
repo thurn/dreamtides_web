@@ -178,7 +178,6 @@ function makeMutations(): QuestMutations {
     setDraftState: vi.fn(),
     setFailureSummary: vi.fn(),
     dismissStartingDeckPopup: vi.fn(),
-    bootstrapStartInBattle: vi.fn(),
     resetQuest: vi.fn(),
     setEssence: vi.fn(),
     changeMaxEssence: vi.fn(),
@@ -328,7 +327,6 @@ describe("App", () => {
       <App
         runtimeConfig={{
           seedOverride: null,
-          startInBattle: false,
           aiMode: false,
           basicAutomation: false,
           gameId: "ab12cd",
@@ -360,7 +358,6 @@ describe("App", () => {
       <App
         runtimeConfig={{
           seedOverride: null,
-          startInBattle: false,
           aiMode: false,
           basicAutomation: false,
           gameId: "ab12cd",
@@ -393,7 +390,6 @@ describe("App", () => {
       <App
         runtimeConfig={{
           seedOverride: null,
-          startInBattle: false,
           aiMode: false,
           basicAutomation: false,
           gameId: null,
@@ -426,7 +422,6 @@ describe("App", () => {
       <App
         runtimeConfig={{
           seedOverride: null,
-          startInBattle: false,
           aiMode: false,
           basicAutomation: false,
           gameId: null,
@@ -481,7 +476,6 @@ describe("QuestApp", () => {
         cardDatabase={new Map()}
         runtimeConfig={{
           seedOverride: null,
-          startInBattle: false,
           aiMode: false,
           basicAutomation: false,
           gameId: null,
@@ -515,7 +509,6 @@ describe("QuestApp", () => {
         cardDatabase={new Map()}
         runtimeConfig={{
           seedOverride: null,
-          startInBattle: false,
           aiMode: false,
           basicAutomation: false,
           gameId: null,
@@ -562,7 +555,6 @@ describe("QuestApp", () => {
         cardDatabase={new Map()}
         runtimeConfig={{
           seedOverride: null,
-          startInBattle: false,
           aiMode: false,
           basicAutomation: false,
           gameId: null,
@@ -599,7 +591,6 @@ describe("QuestApp", () => {
         cardDatabase={new Map()}
         runtimeConfig={{
           seedOverride: null,
-          startInBattle: false,
           aiMode: false,
           basicAutomation: false,
           gameId: null,
@@ -630,7 +621,6 @@ describe("QuestApp", () => {
         cardDatabase={new Map()}
         runtimeConfig={{
           seedOverride: null,
-          startInBattle: false,
           aiMode: false,
           basicAutomation: false,
           gameId: null,
@@ -658,81 +648,6 @@ describe("QuestApp", () => {
     expect(poolViewerMock).toHaveBeenLastCalledWith(
       expect.objectContaining({ isOpen: false }),
     );
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("invokes the start-in-battle bootstrap when startInBattle is set", () => {
-    const mutations = makeMutations();
-    vi.mocked(useQuest).mockReturnValue({
-      state: makeState(),
-      mutations,
-      cardDatabase: new Map<number, CardData>(),
-      questContent: {
-        cardDatabase: new Map(),
-        dreamcallers: [],
-
-        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES, affiliations: [], guides: [],        atlasConfig: MINIMAL_ATLAS_CONFIG,
-      },
-    });
-
-    const { root } = mount(
-      <QuestApp
-        cardDatabase={new Map()}
-        runtimeConfig={{
-          seedOverride: null,
-          startInBattle: true,
-          aiMode: false,
-          basicAutomation: false,
-          gameId: null,
-          databaseMode: "emulator",
-          journeyVariant: "classic",
-          uiVariant: "legacy",
-        }}
-      />,
-    );
-
-    expect(mutations.bootstrapStartInBattle).toHaveBeenCalledOnce();
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("does not invoke the playable-battle bootstrap when startInBattle is false", () => {
-    const mutations = makeMutations();
-    vi.mocked(useQuest).mockReturnValue({
-      state: makeState(),
-      mutations,
-      cardDatabase: new Map<number, CardData>(),
-      questContent: {
-        cardDatabase: new Map(),
-        dreamcallers: [],
-
-        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES, affiliations: [], guides: [],        atlasConfig: MINIMAL_ATLAS_CONFIG,
-      },
-    });
-
-    const { root } = mount(
-      <QuestApp
-        cardDatabase={new Map()}
-        runtimeConfig={{
-          seedOverride: null,
-          startInBattle: false,
-          aiMode: false,
-          basicAutomation: false,
-          gameId: null,
-          databaseMode: "emulator",
-          journeyVariant: "classic",
-          uiVariant: "legacy",
-        }}
-      />,
-    );
-
-    expect(mutations.bootstrapStartInBattle).not.toHaveBeenCalled();
-    expect(mutations.setScreen).not.toHaveBeenCalled();
 
     act(() => {
       root.unmount();
@@ -784,7 +699,6 @@ describe("QuestApp", () => {
         cardDatabase={new Map()}
         runtimeConfig={{
           seedOverride: null,
-          startInBattle: false,
           aiMode: false,
           basicAutomation: false,
           gameId: null,
@@ -847,7 +761,6 @@ describe("QuestApp", () => {
         cardDatabase={new Map()}
         runtimeConfig={{
           seedOverride: null,
-          startInBattle: false,
           aiMode: false,
           basicAutomation: false,
           gameId: null,

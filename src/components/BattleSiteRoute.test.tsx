@@ -232,7 +232,6 @@ describe("BattleSiteRoute", () => {
         cardDatabase={makeBattleTestCardDatabase()}
         runtimeConfig={{
           seedOverride: null,
-          startInBattle: false,
           aiMode: false,
           basicAutomation: false,
           gameId: null,
@@ -257,7 +256,6 @@ describe("BattleSiteRoute", () => {
         cardDatabase={makeBattleTestCardDatabase()}
         runtimeConfig={{
           seedOverride: null,
-          startInBattle: false,
           aiMode: false,
           basicAutomation: false,
           gameId: null,
@@ -301,7 +299,6 @@ describe("BattleSiteRoute", () => {
         cardDatabase={makeBattleTestCardDatabase()}
         runtimeConfig={{
           seedOverride: null,
-          startInBattle: false,
           aiMode: false,
           basicAutomation: false,
           gameId: null,
@@ -330,7 +327,6 @@ describe("BattleSiteRoute", () => {
           cardDatabase={makeBattleTestCardDatabase()}
           runtimeConfig={{
             seedOverride: null,
-            startInBattle: false,
             aiMode: false,
             basicAutomation: false,
             gameId: null,

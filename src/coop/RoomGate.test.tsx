@@ -60,7 +60,6 @@ const { RoomGate } = await import("./RoomGate");
 function runtimeConfig(overrides: Partial<RuntimeConfig> = {}): RuntimeConfig {
   return {
     seedOverride: null,
-    startInBattle: false,
     aiMode: true,
     basicAutomation: true,
     gameId: "abc123",

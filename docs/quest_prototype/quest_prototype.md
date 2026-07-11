@@ -182,7 +182,7 @@ The enemy is driven by a local AI opponent on by default; `?ai=0` switches the
 battle into a fully manual sandbox where both sides are driven by hand.
 `?automation=0` disables Basic Automation, leaving the player to advance phases
 and resolve the Challenge by hand. The battle is the default entry; pair
-`startInBattle=1` with these flags as needed (see
+`?goto=battle` with these flags as needed (see
 `docs/quest_prototype/url_parameters.md`).
 
 The full battle design lives in `docs/battle_rules/battle_rules.md`, and the AI

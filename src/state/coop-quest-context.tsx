@@ -31,7 +31,6 @@ import {
 } from "./quest-context";
 import { mergeCardKeywordModification } from "../card-type-change";
 import { rerollCost } from "../shop/shop-generator";
-import { createStartInBattleState } from "../runtime/start-in-battle-state";
 import { buildQaScene } from "../runtime/qa-scenes";
 import type { CardData } from "../types/cards";
 import type { DreamAtlas, QuestState } from "../types/quest";
@@ -124,11 +123,6 @@ export function CoopQuestProvider({
       // live room seed keeps every derived generator convergent for both clients.
       loadQuestState: (snapshot) =>
         dispatch(actions.loadState({ ...snapshot, seed: stateRef.current.seed })),
-      bootstrapStartInBattle: () => {
-        const snapshot = createStartInBattleState(questContent);
-        if (snapshot === null) return;
-        dispatch(actions.loadState({ ...snapshot, seed: stateRef.current.seed }));
-      },
       bootstrapQaScene: (sceneId) => {
         const snapshot = buildQaScene(sceneId, questContent);
         if (snapshot === null) return;

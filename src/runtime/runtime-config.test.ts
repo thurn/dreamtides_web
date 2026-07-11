@@ -12,7 +12,6 @@ describe("parseRuntimeConfig", () => {
   it("returns the default config when no params are present", () => {
     expect(parseRuntimeConfig("")).toEqual({
       seedOverride: null,
-      startInBattle: false,
       aiMode: true,
       basicAutomation: true,
       gameId: null,
@@ -154,20 +153,6 @@ describe("parseRuntimeConfig", () => {
       expect(parseRuntimeConfig("?seed=").seedOverride).toBeNull();
       expect(parseRuntimeConfig("?seed=1.5").seedOverride).toBeNull();
       expect(parseRuntimeConfig("?seed=1e3").seedOverride).toBeNull();
-    });
-  });
-
-  describe("startInBattle", () => {
-    it("returns true when startInBattle=1", () => {
-      expect(parseRuntimeConfig("?startInBattle=1").startInBattle).toBe(true);
-    });
-
-    it("returns false for non-1 values of startInBattle", () => {
-      expect(parseRuntimeConfig("?startInBattle=0").startInBattle).toBe(false);
-      expect(parseRuntimeConfig("?startInBattle=true").startInBattle).toBe(
-        false,
-      );
-      expect(parseRuntimeConfig("?startInBattle=").startInBattle).toBe(false);
     });
   });
 

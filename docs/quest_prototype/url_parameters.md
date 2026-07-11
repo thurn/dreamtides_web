@@ -21,12 +21,6 @@ Rejected (treated as no override):
 - Non-integer (`seed=foo`, `seed=1.5`, `seed=1e3`)
 - Negative (`seed=-5`)
 
-## `startInBattle`
-
-When set to exactly `1`, the prototype boots directly into a battle instead of
-the normal Dreamcaller selection flow. Any other value (including `0`, `true`,
-empty, or absent) leaves the normal start flow in place.
-
 ## `ai`
 
 The playable battle runs a local AI opponent on the enemy side by default. The
@@ -43,9 +37,9 @@ both sides are driven by hand. Any other value (including `1`, `true`, empty, or
 absent) keeps the AI opponent on.
 
 The AI is a local actor that runs on a single client, so it stays off in a
-shared multiplayer room (when two or more clients are connected). The battle is
-the default, so `startInBattle=1` enters straight into an AI battle; pair it
-with `ai=0` for a manual battle (`?startInBattle=1&ai=0`).
+shared multiplayer room (when two or more clients are connected). `goto=battle`
+opens the first opposing-Dreamcaller preview; pair it with `ai=0` for a manual
+battle (`?goto=battle&ai=0`).
 
 ## `automation`
 
@@ -67,7 +61,7 @@ driven manually. Any other value (including `1`, `true`, empty, or absent) keeps
 Basic Automation on.
 
 `automation` is independent of `ai`: each defaults on and is disabled by its own
-`=0`. Pair them as needed, for example `?startInBattle=1&ai=0&automation=0` for
+`=0`. Pair them as needed, for example `?goto=battle&ai=0&automation=0` for
 a fully manual sandbox with both off.
 
 ## `realtime`
@@ -329,7 +323,6 @@ http://localhost:5173/editor?q=moon&type=event&sort=name&dir=desc&size=large
 ```
 http://localhost:5173/                          # default
 http://localhost:5173/?seed=42                  # fixed seed
-http://localhost:5173/?startInBattle=1          # boot straight into battle
 http://localhost:5173/?game=quest42             # parsed multiplayer room id
 http://localhost:5173/?viewLogs=quest42         # read-only quest-log viewer for a room
 http://localhost:5173/?goto=atlas               # jump straight to a QA scene
@@ -340,10 +333,11 @@ http://localhost:5173/?debugJourneyShape=single_offer
 http://localhost:5173/?debugJourneyReward=gain_essence
 http://localhost:5173/?debugJourneyCost=pay_essence
 http://localhost:5173/?journey=v2
-http://localhost:5173/?seed=7&startInBattle=1
-http://localhost:5173/?startInBattle=1          # battle vs the local AI opponent (default)
-http://localhost:5173/?startInBattle=1&ai=0     # manual battle, no AI opponent
-http://localhost:5173/?startInBattle=1&automation=0          # battle with Basic Automation off
-http://localhost:5173/?startInBattle=1&ai=0&automation=0     # fully manual sandbox (both off)
+http://localhost:5173/?goto=battle&seed=7
+http://localhost:5173/?goto=battle              # Layer I battle preview vs the local AI opponent
+http://localhost:5173/?goto=battle5             # Layer V battle preview with a stronger opponent
+http://localhost:5173/?goto=battle&ai=0         # manual battle, no AI opponent
+http://localhost:5173/?goto=battle&automation=0          # battle with Basic Automation off
+http://localhost:5173/?goto=battle&ai=0&automation=0     # fully manual sandbox (both off)
 http://localhost:5173/editor?q=moon&type=event
 ```

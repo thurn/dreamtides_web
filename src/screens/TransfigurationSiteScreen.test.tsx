@@ -106,7 +106,6 @@ function makeMutations(): QuestMutations {
     setDraftState: vi.fn(),
     setFailureSummary: vi.fn(),
     dismissStartingDeckPopup: vi.fn(),
-    bootstrapStartInBattle: vi.fn(),
     resetQuest: vi.fn(),
     setEssence: vi.fn(),
     changeMaxEssence: vi.fn(),

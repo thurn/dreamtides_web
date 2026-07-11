@@ -128,8 +128,8 @@ function makeContext(): RoomReadyContext {
 /**
  * Appends drafts in its OWN mount effect. React flushes child effects before
  * the parent CoopProvider's client-creating effect, so at these calls the
- * LogClient does not yet exist (or has no baseline) — the `?startInBattle=1` /
- * `?goto=` bootstrap race. Each draft's resolved seq is reported via `onSeq`.
+ * LogClient does not yet exist (or has no baseline) — the `?goto=` bootstrap
+ * race. Each draft's resolved seq is reported via `onSeq`.
  */
 function BootstrapChild({
   types,

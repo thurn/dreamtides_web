@@ -13,7 +13,7 @@ import { generateQuestSeed } from "../state/quest-state-actions";
  * screen" entry point. The base {@link QuestState} is the between-dreamscapes
  * resting state (atlas screen, no dreamscape entered); callers that need a
  * different screen override `screen`/`currentDreamscape`/`activeSiteId` on top
- * of it (see {@link createStartInBattleState}).
+ * of it (see `qa-scenes.ts`).
  */
 export interface QaQuestFoundation {
   state: QuestState;
@@ -22,12 +22,11 @@ export interface QaQuestFoundation {
 }
 
 /**
- * Builds the common foundation for developer jump-to-screen flows
- * (`?startInBattle=1`, `?goto=<scene>`): the first Dreamcaller, its resolved
- * draft package, the starter deck, and a freshly generated atlas with its boss
- * node and Apollyon incarnation. Returns null when required quest content is
- * missing. The returned `state` is the resting atlas state; nothing here is
- * specific to any one target screen.
+ * Builds the common foundation for `?goto=<scene>` developer flows: the first
+ * Dreamcaller, its resolved draft package, the starter deck, and a freshly
+ * generated atlas with its boss node and Apollyon incarnation. Returns null
+ * when required quest content is missing. The returned `state` is the resting
+ * atlas state; nothing here is specific to any one target screen.
  */
 export function createQaQuestFoundation(
   questContent: QuestContent,
@@ -101,29 +100,4 @@ export function createQaQuestFoundation(
   };
 
   return { state, atlas, starterNode };
-}
-
-export function createStartInBattleState(
-  questContent: QuestContent,
-): QuestState | null {
-  const foundation = createQaQuestFoundation(questContent);
-
-  if (foundation === null) {
-    return null;
-  }
-
-  const battleSite = foundation.starterNode.sites.find(
-    (site) => site.type === "Battle",
-  );
-
-  if (battleSite === undefined) {
-    return null;
-  }
-
-  return {
-    ...foundation.state,
-    currentDreamscape: foundation.starterNode.id,
-    screen: { type: "site", siteId: battleSite.id },
-    activeSiteId: battleSite.id,
-  };
 }

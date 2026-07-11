@@ -139,7 +139,7 @@ export function CoopProvider({
   // feed this queue:
   //   1. Client does not yet EXIST. On initial mount React flushes child
   //      effects before parent effects, so a child's mount-time dispatch (the
-  //      `?startInBattle=1` / `?goto=` bootstrap, which auto-appends a
+  //      `?goto=` bootstrap, which auto-appends a
   //      LOAD_STATE) runs before this provider's client-creating effect.
   //   2. Client exists but its FIRST NODE has not arrived. The log subscription
   //      delivers its genesis/first node asynchronously (Firebase `onValue`),

@@ -55,9 +55,8 @@ Tango sweep findings filed July 8, 2026
 
 Task 30 QA — observations
 
-1. Dev-flag reload nuance: `?startInBattle=1` (and, by the same mechanism,
-   `?goto=<scene>`) re-derives a fresh scene on every full page reload rather
-   than resuming the existing one.
+1. Dev-scene reload nuance: `?goto=<scene>` re-derives a fresh scene on every
+   full page reload rather than resuming the existing one.
 
    Cause: the bootstrap effects in src/App.tsx fire on mount while the coop fold
    still holds the seeded genesis state (dreamcaller === null), so their
@@ -67,16 +66,15 @@ Task 30 QA — observations
    the later-sequenced bootstrap wins and the battle/scene is re-rolled (e.g.
    the opponent changes between reloads).
 
-   Scope: this only affects the developer QA bootstrap flags. Real play never
-   carries `?startInBattle`/`?goto`, so reloading mid-battle (reached via a
-   battle site) re-folds the SAME battle cleanly — verified in Task 30 QA
-   scenario 3 on a plain `?game=` tab (opponent unchanged across reload).
+   Scope: this only affects the developer QA bootstrap flag. Real play does not
+   carry `?goto`, so reloading mid-battle (reached via a battle site) re-folds
+   the SAME battle cleanly — verified in Task 30 QA scenario 3 on a plain
+   `?game=` tab (opponent unchanged across reload).
 
    Note: before Task 30's append-readiness fix (src/coop/hooks.ts) this
    mount-time bootstrap dispatch silently rejected ("LogClient not ready"), so a
    reload happened to preserve the prior battle by accident. The fix makes the
-   intended one-shot bootstrap actually apply (it previously left the QA path
-   permanently stuck on "Entering battle..."); the reload re-derivation is the
+   intended one-shot bootstrap actually apply; the reload re-derivation is the
    visible trade-off on the dev flag. A future reload-safe guard would gate the
    bootstrap effects on the room's confirmed log being empty (head === 0) rather
    than on the pre-fold `state.dreamcaller`.
