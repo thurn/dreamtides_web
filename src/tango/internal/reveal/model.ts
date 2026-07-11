@@ -19,8 +19,8 @@ export type RevealCard =
   | {
       readonly kind: "gameCard";
       readonly cardId: CardId;
-      /** A strict display snapshot may be supplied by the internal GameCard adapter. */
-      readonly displaySnapshot?: FrozenCardData;
+      /** Strict resolved display semantics; its id must equal the canonical cardId. */
+      readonly displaySnapshot: FrozenCardData;
     }
   | { readonly kind: "infoCard"; readonly card: RevealInfoCardModel };
 

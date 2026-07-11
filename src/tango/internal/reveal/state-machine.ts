@@ -108,7 +108,16 @@ export function reduceRevealState(state: RevealCoordinatorState, event: RevealCo
     case "source-unmount": {
       const wasActive = isActiveSource(state, event.source);
       const next = { ...state, focusedSource: sameMountedSource(state.focusedSource, event.source) ? null : state.focusedSource, hoveredSource: sameMountedSource(state.hoveredSource, event.source) ? null : state.hoveredSource };
-      return wasActive ? { ...next, phase: "idle", activeSource: null, activeRegistrationId: null, reason: null, touch: null, pressed: false, pressPointerId: null, dismissalReason: "source-unmount", activationOutcome: state.touch === null ? state.activationOutcome : "suppressed-cancelled" } : next;
+      if (!wasActive) return next;
+      if (state.phase === "hover") {
+        return {
+          ...restoreFocus(next, "source-unmount"),
+          activationOutcome: state.touch === null
+            ? state.activationOutcome
+            : "suppressed-cancelled",
+        };
+      }
+      return { ...next, phase: "idle", activeSource: null, activeRegistrationId: null, reason: null, touch: null, pressed: false, pressPointerId: null, dismissalReason: "source-unmount", activationOutcome: state.touch === null ? state.activationOutcome : "suppressed-cancelled" };
     }
     case "scroll": case "drag": case "resize": case "orientation-change": case "window-blur": case "route-change":
       return state.activeSource === null ? state : dismissLifecycle(state, event.type);

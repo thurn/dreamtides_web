@@ -188,4 +188,17 @@ describe("Tango reveal coordinator root", () => {
     for (const expected of ["Moon Twin", "Legendary", "Character", "Guide", "Energy 2 and X", "Spark X", "Fast", "Interrupt", "Reclaim 3", "Challenge: Awaken."]) expect(text).toContain(expected);
     expect(text.indexOf("First Definition")).toBeLessThan(text.indexOf("Second Definition"));
   });
+
+  it("rejects an incomplete GameCard registration instead of describing only its UUID", () => {
+    const incomplete = {
+      primary: { kind: "gameCard", cardId: asCardId(UUID_A) },
+      secondaries: [],
+    } as unknown as RevealSpec;
+    const { container } = mount(<TangoRoot><Source id={UUID_A} spec={incomplete} /></TangoRoot>);
+    const button = container.querySelector("button")!;
+    expect(button.getAttribute("aria-describedby")).toBeNull();
+    act(() => { button.dispatchEvent(new FocusEvent("focusin", { bubbles: true })); });
+    expect(button.dataset.revealActive).toBe("false");
+    expect(getLogEntries().some((entry) => entry.event === "tango_entity_reveal_invalid_source")).toBe(true);
+  });
 });

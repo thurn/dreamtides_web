@@ -61,7 +61,7 @@ function revealDescription(spec: RevealSpec): string {
   const primary = spec.primary.kind === "infoCard"
     ? infoCardDescription(spec.primary.card)
     : spec.primary.displaySnapshot === undefined
-      ? `Game card ${spec.primary.cardId}`
+      ? ""
       : gameCardDescription(spec.primary.displaySnapshot);
   return [primary, ...spec.secondaries.map(infoCardDescription)].filter(Boolean).join(". ");
 }
@@ -70,7 +70,8 @@ function isValidRegistration(identity: RevealSourceIdentity, spec: RevealSpec): 
   if (identity.entityType.trim() === "" || !UUID_PATTERN.test(identity.entityId)) return false;
   if (spec.primary.kind === "gameCard") {
     if (!UUID_PATTERN.test(spec.primary.cardId)) return false;
-    if (spec.primary.displaySnapshot !== undefined && spec.primary.displaySnapshot.id.toLowerCase() !== spec.primary.cardId.toLowerCase()) return false;
+    if (spec.primary.displaySnapshot === undefined) return false;
+    if (spec.primary.displaySnapshot.id.toLowerCase() !== spec.primary.cardId.toLowerCase()) return false;
   }
   return revealDescription(spec).trim().length > 0;
 }

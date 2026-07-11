@@ -156,6 +156,25 @@ describe("reveal interaction state machine", () => {
     expect(state).toMatchObject({ phase: "focus", activeSource: A });
   });
 
+  it("restores an eligible focused reveal when the active hover source unmounts", () => {
+    const state = run(
+      { type: "focus", source: SA, timestamp: 0 },
+      { type: "pointer-enter", source: SB, pointerType: "mouse", hoverCapable: true, timestamp: 1 },
+      { type: "source-unmount", source: SB, timestamp: 2 },
+    );
+    expect(state).toMatchObject({ phase: "focus", activeSource: A, activeRegistrationId: "a", focusedSource: SA });
+  });
+
+  it("does not restore an Escape-suppressed focus when the hover source unmounts", () => {
+    const state = run(
+      { type: "focus", source: SA, timestamp: 0 },
+      { type: "escape", timestamp: 1 },
+      { type: "pointer-enter", source: SB, pointerType: "mouse", hoverCapable: true, timestamp: 2 },
+      { type: "source-unmount", source: SB, timestamp: 3 },
+    );
+    expect(state).toMatchObject({ phase: "idle", activeSource: null, focusedSource: SA, escapeSuppressedSource: SA });
+  });
+
   it("suppresses Escape until focus leaves and visits again", () => {
     const state = run(
       { type: "focus", source: SA, timestamp: 0 },
