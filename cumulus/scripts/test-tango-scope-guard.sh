@@ -142,6 +142,18 @@ write_source "$touch" "cumulus/Assets/TangoMvp/Runtime/BadTouch.cs" \
 expect_reject_with "production touch API" "deferred controller/touch API" \
   python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$touch"
 
+enhanced_touch="$TEST_ROOT/enhanced-touch"
+write_source "$enhanced_touch" "cumulus/Assets/TangoMvp/Runtime/BadEnhancedTouch.cs" \
+  'using UnityEngine.InputSystem.EnhancedTouch; public sealed class BadEnhancedTouch { int Read() { return Touch.activeTouches.Count; } }'
+expect_reject_with "production EnhancedTouch activeTouches API" "deferred controller/touch API" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$enhanced_touch"
+
+legacy_touches="$TEST_ROOT/legacy-touches"
+write_source "$legacy_touches" "cumulus/Assets/TangoMvp/Runtime/BadLegacyTouches.cs" \
+  'using UnityEngine; public sealed class BadLegacyTouches { Touch[] Read() { return Input.touches; } }'
+expect_reject_with "production legacy Input.touches API" "deferred controller/touch API" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$legacy_touches"
+
 token_generator="$TEST_ROOT/token-generator"
 write_source "$token_generator" "cumulus/Assets/TangoMvp/Runtime/ProductionTokenGenerator.cs" \
   'public sealed class ProductionTokenGenerator { public string Mint() { return "token"; } }'
@@ -153,6 +165,12 @@ write_source "$token_generator_type" "cumulus/Assets/TangoMvp/Runtime/Tokens.cs"
   'public sealed class ProductionTokenGenerator { public string Mint() { return "token"; } }'
 expect_reject_with "production token generator type" "deferred production token generator source" \
   python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$token_generator_type"
+
+bare_token_generator_type="$TEST_ROOT/bare-token-generator-type"
+write_source "$bare_token_generator_type" "cumulus/Assets/TangoMvp/Runtime/Tokens.cs" \
+  'public sealed class TokenGenerator { public string Mint() { return "token"; } }'
+expect_reject_with "bare production TokenGenerator type" "deferred production token generator source" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$bare_token_generator_type"
 
 editor_token_generator="$TEST_ROOT/editor-token-generator"
 write_source "$editor_token_generator" "cumulus/Assets/TangoMvp/Editor/TokenGeneratorFixture.cs" \
@@ -173,6 +191,13 @@ printf 'Shader "TangoMvp/BadOpaqueRefraction" { SubShader { HLSLPROGRAM TEXTURE2
 printf 'fileFormatVersion: 2\nguid: 33333333333333333333333333333333\n' > "$opaque_refraction/cumulus/Assets/TangoMvp/Shaders/BadOpaqueRefraction.shader.meta"
 expect_reject_with "camera-texture refraction shader source" "deferred refraction source" \
   python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$opaque_refraction"
+
+named_refraction="$TEST_ROOT/named-refraction"
+mkdir -p "$named_refraction/cumulus/Assets/TangoMvp/Shaders"
+printf 'Shader "TangoMvp/NamedRefraction" { SubShader { HLSLPROGRAM float refractionStrength; float RefractionOffset; ENDHLSL } }\n' > "$named_refraction/cumulus/Assets/TangoMvp/Shaders/NamedRefraction.shader"
+printf 'fileFormatVersion: 2\nguid: 44444444444444444444444444444444\n' > "$named_refraction/cumulus/Assets/TangoMvp/Shaders/NamedRefraction.shader.meta"
+expect_reject_with "refraction-named shader identifiers" "deferred refraction source" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$named_refraction"
 
 ui_import="$TEST_ROOT/ui-import"
 write_source "$ui_import" "cumulus/Assets/TangoMvp/Runtime/BadUi.cs" \

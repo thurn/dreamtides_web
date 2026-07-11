@@ -170,11 +170,12 @@ def main() -> int:
     per_instance_material = re.compile(r"\.\s*materials?\b")
     controller_or_touch = re.compile(
         r"\b(?:Gamepad|Joystick|Touchscreen|Pen)\s*\.\s*(?:current|all)\b"
-        r"|\bInput\s*\.\s*(?:touchCount|GetTouch)\b"
+        r"|\bInput\s*\.\s*(?:touchCount|touches|GetTouch)\b"
+        r"|\bTouch\s*\.\s*activeTouches\b"
         r"|\bEnhancedTouchSupport\b|\bUnityEngine\s*\.\s*InputSystem\s*\.\s*EnhancedTouch\b"
     )
     token_generator_type = re.compile(
-        r"\b(?:class|struct|record)\s+[A-Za-z_]\w*TokenGenerator\w*\b",
+        r"\b(?:class|struct|record)\s+(?:[A-Za-z_]\w*)?TokenGenerator\w*\b",
         re.IGNORECASE,
     )
     field = source_fields()
@@ -219,7 +220,7 @@ def main() -> int:
 
     shader_root = root / "cumulus/Assets/TangoMvp"
     refraction = re.compile(
-        r"\bGrabPass\b|\b_refract(?:ion)?\w*\b|\brefract\s*\(|\b_Camera(?:Opaque|Depth)Texture\b",
+        r"\bGrabPass\b|\b\w*refraction\w*\b|\brefract\s*\(|\b_Camera(?:Opaque|Depth)Texture\b",
         re.IGNORECASE,
     )
     shaders = shader_root.rglob("*.shader") if shader_root.exists() else []
