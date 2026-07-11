@@ -8,7 +8,7 @@ import type { InfoCardVariant } from "../../components/overlay/InfoCard";
 export interface RevealOpenedDiagnostic {
   readonly source: RevealSourceIdentity;
   readonly interactionId: number;
-  readonly primary: { readonly kind: "gameCard" | "infoCard"; readonly variant: string };
+  readonly primary: { readonly kind: "gameCard" | "galleryAction" | "infoCard"; readonly variant: string };
   readonly secondaryVariants: readonly InfoCardVariant[];
   readonly modality: "mouse" | "pen" | "touch" | "keyboard";
   readonly reason: RevealReason;

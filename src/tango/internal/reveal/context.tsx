@@ -63,6 +63,8 @@ function gameCardDescription(card: NonNullable<Extract<RevealSpec["primary"], { 
 function revealDescription(spec: RevealSpec): string {
   const primary = spec.primary.kind === "infoCard"
     ? infoCardDescription(spec.primary.card)
+    : spec.primary.kind === "galleryAction"
+      ? spec.primary.action.label
     : spec.primary.displaySnapshot === undefined
       ? ""
       : gameCardDescription(spec.primary.displaySnapshot);
@@ -182,7 +184,7 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
     const reduced = document.documentElement.dataset.tangoReducedMotion === "reduce"
       || (typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
     if (!sameSource(current, source) || current.reason !== "hover" || registration?.element == null
-      || registration.spec.primary.kind !== "gameCard" || captureVisualViewport().layout !== "desktop" || reduced) return false;
+      || registration.spec.primary.kind === "infoCard" || captureVisualViewport().layout !== "desktop" || reduced) return false;
     const returning: RevealOverlayActive = {
       source: registration.source,
       spec: registration.spec,
@@ -313,7 +315,14 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
     logRevealOpened({
       source: overlayActive.source.identity,
       interactionId: overlayActive.interactionId,
-      primary: { kind: primary.kind, variant: primary.kind === "gameCard" ? "complete" : infoCardVariant(primary.card) },
+      primary: {
+        kind: primary.kind,
+        variant: primary.kind === "gameCard"
+          ? "complete"
+          : primary.kind === "galleryAction"
+            ? "card-shaped"
+            : infoCardVariant(primary.card),
+      },
       secondaryVariants: overlayActive.spec.secondaries.map(infoCardVariant),
       modality: overlayActive.modality,
       reason: overlayActive.reason,
@@ -414,7 +423,11 @@ export function useRevealSource(registration: RevealSourceRegistration): RevealS
       "data-reveal-feedback": feedbackVariant === "stationary" ? "stationary" : "measured",
       "data-reveal-entity-type": identity.entityType,
       "data-reveal-entity-id": identity.entityId,
-      "data-reveal-primary-variant": spec.primary.kind === "gameCard" ? "gameCard" : (spec.primary.card.variant ?? "text"),
+      "data-reveal-primary-variant": spec.primary.kind === "gameCard"
+        ? "gameCard"
+        : spec.primary.kind === "galleryAction"
+          ? "galleryAction"
+          : (spec.primary.card.variant ?? "text"),
       "data-reveal-secondary-titles": spec.secondaries.map((card) => card.title).join("\u001f"),
       style: { "--reveal-press-scale": String(feedback.pressScale), "--reveal-hover-scale": String(feedback.hoverScale) } as CSSProperties,
       onPointerEnter: (event) => { if (valid) { const hoverCapable = event.pointerType === "mouse" || (event.pointerType === "pen" && event.buttons === 0 && event.pressure === 0); if (hoverCapable && coordinator.state.touch === null) { coordinator.cancelGameCardReturn("replaced"); const sourceRect = captureSourceRect(event.currentTarget); coordinator.beginInteraction(mountedSource, "hover", sourceRect, event.pointerType === "pen" ? "pen" : "mouse"); measureFeedback(sourceRect); } coordinator.dispatch({ type: "pointer-enter", source: mountedSource, pointerType: event.pointerType, hoverCapable, timestamp: event.timeStamp }); } },

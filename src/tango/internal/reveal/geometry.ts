@@ -12,7 +12,7 @@ export interface RevealSize { readonly width: number; readonly height: number }
 export interface RevealPlacementInput {
   readonly viewport: VisualViewportSnapshot;
   readonly reason: RevealReason;
-  readonly primaryKind: "gameCard" | "infoCard";
+  readonly primaryKind: "gameCard" | "galleryAction" | "infoCard";
   readonly sourceRect: RevealRect;
   readonly touchPoint?: RevealPoint;
   readonly primarySize: RevealSize;
@@ -180,7 +180,7 @@ function mobilePlacement(input: RevealPlacementInput): RevealPlacementDecision {
       sideFallback: true, bestEffortPrimaryOverlap: false });
   }
 
-  const hasNotionalPair = input.primaryKind === "gameCard" || secondarySizes.length > 0;
+  const hasNotionalPair = input.primaryKind !== "infoCard" || secondarySizes.length > 0;
   const preferredPrimaryX = leftColumnX;
   const oppositePrimaryX = rightColumnX;
   let orientation: "primary-left" | "primary-right" = "primary-left";
@@ -241,11 +241,12 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
   const safeBottom = viewport.offsetTop + viewport.height - viewport.safeArea.bottom;
   const safeLeft = viewport.offsetLeft + viewport.safeArea.left;
   const safeRight = viewport.offsetLeft + viewport.width - viewport.safeArea.right;
-  const primaryWidth = input.primaryKind === "gameCard" ? Math.max(DESKTOP_GAME_CARD_WIDTH, sourceRect.width) : input.primarySize.width;
+  const cardShaped = input.primaryKind !== "infoCard";
+  const primaryWidth = cardShaped ? Math.max(DESKTOP_GAME_CARD_WIDTH, sourceRect.width) : input.primarySize.width;
   const primarySize = scaled(input.primarySize, primaryWidth);
   const secondarySizes = input.secondarySizes;
   const secondaryWidth = secondarySizes.reduce((width, size) => Math.max(width, size.width), 0);
-  if (input.primaryKind === "gameCard") {
+  if (cardShaped) {
     const primaryX = clamp(sourceRect.x + sourceRect.width / 2 - primaryWidth / 2, safeLeft, safeRight - primaryWidth);
     const primaryY = clamp(sourceRect.y + sourceRect.height / 2 - primarySize.height / 2, safeTop, Math.max(safeTop, safeBottom - primarySize.height));
     const rightX = primaryX + primaryWidth + CARD_GAP;

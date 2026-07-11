@@ -1,6 +1,7 @@
 import type { FrozenCardData } from "../../../types/cards";
 import type { CardId } from "../../../types/card-identity";
 import type { InfoCardProps, InfoCardVariant } from "../../components/overlay/InfoCard";
+import type { Glyph } from "../../primitives/glyph";
 
 export interface RevealSourceIdentity {
   readonly entityType: string;
@@ -15,6 +16,11 @@ export interface RevealCoordinatorSource {
 
 export type RevealInfoCardModel = Readonly<InfoCardProps>;
 
+export interface RevealGalleryActionModel {
+  readonly glyph: Glyph;
+  readonly label: string;
+}
+
 export type RevealCard =
   | {
       readonly kind: "gameCard";
@@ -22,6 +28,7 @@ export type RevealCard =
       /** Strict resolved display semantics; its id must equal the canonical cardId. */
       readonly displaySnapshot: FrozenCardData;
     }
+  | { readonly kind: "galleryAction"; readonly action: RevealGalleryActionModel }
   | { readonly kind: "infoCard"; readonly card: RevealInfoCardModel };
 
 export interface RevealSpec {

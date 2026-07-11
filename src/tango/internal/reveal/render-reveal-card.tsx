@@ -1,5 +1,6 @@
 import { lazy, Suspense, type CSSProperties, type ReactElement } from "react";
 import { InfoCard } from "../../components/overlay/InfoCard";
+import { GalleryActionCard } from "../../components/card/GalleryActionCard";
 import type { RevealCard, RevealInfoCardModel } from "./model";
 
 // The reading renderer is loaded across an asynchronous module boundary. This
@@ -12,6 +13,13 @@ const RevealGameCard = lazy(async () => {
 
 export function renderRevealCard(card: RevealCard, width: number): ReactElement {
   if (card.kind === "infoCard") return <div style={{ width, "--info-card-width": `${String(width)}px` } as CSSProperties}><InfoCard {...card.card} /></div>;
+  if (card.kind === "galleryAction") {
+    return (
+      <div data-reveal-render="gallery-action" style={{ width }}>
+        <GalleryActionCard action={card.action} width={width} />
+      </div>
+    );
+  }
   return (
     <Suspense fallback={<div data-reveal-render-pending="" style={{ width, aspectRatio: "2 / 3" }} />}>
       <div data-reveal-render="game-card" style={{ width }}>

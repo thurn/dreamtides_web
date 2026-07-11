@@ -66,6 +66,22 @@ describe("selectRevealPlacement", () => {
     expect(supported.primaryRect).toEqual(alone.primaryRect);
   });
 
+  it("gives card-shaped gallery actions the exact GameCard hover rectangle", () => {
+    const input = {
+      ...base,
+      viewport: { ...viewport, layout: "desktop" as const, width: 1200 },
+      reason: "hover" as const,
+      touchPoint: undefined,
+      sourceRect: { x: 400, y: 200, width: 151, height: 211.4 },
+      primarySize: { width: 151, height: 211.4 },
+    };
+    const gameCard = selectRevealPlacement({ ...input, primaryKind: "gameCard" });
+    const galleryAction = selectRevealPlacement({ ...input, primaryKind: "galleryAction" });
+
+    expect(galleryAction.primaryRect).toEqual(gameCard.primaryRect);
+    expect(galleryAction.family).toBe(gameCard.family);
+  });
+
   it("omits secondaries when safe-area width cannot hold non-overlapping columns", () => {
     const constrained = selectRevealPlacement({
       ...base,

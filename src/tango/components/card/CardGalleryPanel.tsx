@@ -17,6 +17,8 @@ import {
 } from "react";
 import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
+import { useRevealSource } from "../../internal/reveal/context";
+import { revealEntityId } from "../../internal/reveal/identity";
 import type { TangoColor } from "../../primitives/color";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
 import type { Glyph } from "../../primitives/glyph";
@@ -30,11 +32,10 @@ import {
 } from "../controls/GlassButton";
 import { IconButton, type IconButtonSize } from "../controls/IconButton";
 import {
-  CARD_ASPECT_RATIO,
   CARD_ASPECT_RATIO_VALUE,
-  CARD_CORNER_RADIUS,
 } from "./card-aspect";
 import { GameCard, type GameCardModel } from "./CardView";
+import { GalleryActionCard } from "./GalleryActionCard";
 
 /** One resolved card in a {@link CardGalleryPanel}. */
 export interface CardGalleryCardView {
@@ -77,6 +78,68 @@ export interface CardGalleryActionView {
   disabled?: boolean;
   /** Optional stable test id on the action button. */
   testId?: string;
+}
+
+function CardGalleryAction({
+  action,
+  cardWidth,
+  onActivate,
+}: {
+  readonly action: CardGalleryActionView;
+  readonly cardWidth: string;
+  readonly onActivate?: () => void;
+}): ReactElement {
+  const lastPointerType = useRef<string | null>(null);
+  const binding = useRevealSource({
+    identity: {
+      entityType: "gallery-action",
+      entityId: revealEntityId("gallery-action", action.entryId),
+    },
+    spec: {
+      primary: {
+        kind: "galleryAction",
+        action: { glyph: action.glyph, label: action.label },
+      },
+      secondaries: [],
+    },
+    onActivate: action.disabled === true ? undefined : onActivate,
+  });
+  const pointerDown = binding.sourceProps.onPointerDown;
+  return (
+    <Pressable
+      as="button"
+      ref={binding.ref}
+      {...binding.sourceProps}
+      aria-label={action.label}
+      aria-disabled={action.disabled || undefined}
+      disabled={action.disabled}
+      data-testid={action.testId}
+      data-reveal-complete-game-card="false"
+      onPointerDown={(event) => {
+        lastPointerType.current = event.pointerType;
+        pointerDown?.(event);
+      }}
+      onClick={() => {
+        if (action.disabled !== true && lastPointerType.current !== "touch") {
+          onActivate?.();
+        }
+      }}
+      style={{
+        ...binding.sourceProps.style,
+        width: "100%",
+        display: "block",
+        appearance: "none",
+        padding: 0,
+        border: 0,
+        background: "transparent",
+      }}
+    >
+      <GalleryActionCard
+        action={{ glyph: action.glyph, label: action.label }}
+        width={cardWidth}
+      />
+    </Pressable>
+  );
 }
 
 /** The trailing header action rendered by a {@link CardGalleryPanel}. */
@@ -726,55 +789,11 @@ export function CardGalleryPanel({
                     opacity: endAction.disabled === true ? 0.42 : 1,
                   }}
                 >
-                  <Pressable
-                    as="button"
-                    aria-label={endAction.label}
-                    disabled={endAction.disabled}
-                    data-testid={endAction.testId}
-                    onClick={() => onEndActionPress?.(endAction.entryId)}
-                    style={{
-                      width: "100%",
-                      aspectRatio: CARD_ASPECT_RATIO,
-                      boxSizing: "border-box",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: token("--space-3"),
-                      appearance: "none",
-                      padding: 0,
-                      borderRadius: CARD_CORNER_RADIUS,
-                      overflow: "hidden",
-                      ...glassSurfaceStyle({ radius: CARD_CORNER_RADIUS }),
-                      background: `${token("--glass-sheen")}, ${token("--gallery-action-fill")}`,
-                      border: `1px solid ${token("--gallery-action-rim")}`,
-                      boxShadow: token("--glass-on-glass-shadow"),
-                    }}
-                  >
-                    <i
-                      className={endAction.glyph}
-                      aria-hidden="true"
-                      data-gallery-action-glyph=""
-                      style={{
-                        fontSize: `calc(${cardWidth} * 0.38)`,
-                        color: token("--gallery-action-foreground"),
-                        textShadow: token("--shadow-sm"),
-                        filter: token("--gallery-action-soften"),
-                      }}
-                    />
-                    <span
-                      data-gallery-action-label=""
-                      style={{
-                        font: token("--t-body"),
-                        color: token("--gallery-action-foreground"),
-                        textAlign: "center",
-                        textShadow: token("--shadow-sm"),
-                        filter: token("--gallery-action-soften"),
-                      }}
-                    >
-                      {endAction.label}
-                    </span>
-                  </Pressable>
+                  <CardGalleryAction
+                    action={endAction}
+                    cardWidth={cardWidth}
+                    onActivate={() => onEndActionPress?.(endAction.entryId)}
+                  />
                   {captionNode(endAction.caption)}
                 </div>
               )}

@@ -5,6 +5,7 @@ import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import { GLYPHS } from "../../primitives/glyph";
+import { TangoRoot } from "../../TangoRoot";
 import { CardGalleryPanel } from "./CardGalleryPanel";
 
 vi.mock("./CardView", () => ({
@@ -58,16 +59,18 @@ describe("CardGalleryPanel", () => {
     const close = vi.fn(); const restock = vi.fn();
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CardGalleryPanel title="Card Shop" cards={[]} rightAccessory={{ kind: "iconButton", glyph: GLYPHS.close, label: "Close", onPress: close, testId: "close" }} endAction={{ entryId: "restock", glyph: GLYPHS.refresh, label: "Restock", caption: { kind: "essence", amount: 50 }, testId: "restock" }} onEndActionPress={restock} />));
+    act(() => root.render(<TangoRoot><CardGalleryPanel title="Card Shop" cards={[]} rightAccessory={{ kind: "iconButton", glyph: GLYPHS.close, label: "Close", onPress: close, testId: "close" }} endAction={{ entryId: "restock", glyph: GLYPHS.refresh, label: "Restock", caption: { kind: "essence", amount: 50 }, testId: "restock" }} onEndActionPress={restock} /></TangoRoot>));
     act(() => (container.querySelector('[data-testid="close"]') as HTMLButtonElement).click());
     act(() => (container.querySelector('[data-testid="restock"]') as HTMLButtonElement).click());
     expect(close).toHaveBeenCalledOnce(); expect(restock).toHaveBeenCalledWith("restock");
     const action = container.querySelector<HTMLButtonElement>('[data-testid="restock"]');
-    expect(action?.style.boxSizing).toBe("border-box");
-    expect(action?.style.aspectRatio).toBe("5 / 7");
-    expect(action?.style.borderRadius).toBe("3.6% / 2.57%");
-    expect(action?.style.background).toContain("var(--gallery-action-fill)");
-    expect(action?.style.border).toBe("1px solid var(--gallery-action-rim)");
+    const actionSurface = container.querySelector<HTMLElement>('[data-gallery-action-surface]');
+    expect(actionSurface?.style.boxSizing).toBe("border-box");
+    expect(actionSurface?.style.aspectRatio).toBe("5 / 7");
+    expect(actionSurface?.style.borderRadius).toBe("3.6% / 2.57%");
+    expect(actionSurface?.style.background).toContain("var(--gallery-action-fill)");
+    expect(actionSurface?.style.border).toBe("1px solid var(--gallery-action-rim)");
+    expect(action?.dataset.revealPrimaryVariant).toBe("galleryAction");
     expect(container.querySelector('[data-gallery-action-label]')?.textContent).toBe("Restock");
     const glyph = container.querySelector<HTMLElement>('[data-gallery-action-glyph]');
     expect(glyph?.style.color).toBe("var(--gallery-action-foreground)");

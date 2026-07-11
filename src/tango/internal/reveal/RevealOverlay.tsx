@@ -84,22 +84,23 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
 
   const decision = measured?.key === key ? measured.decision : null;
   const returnRect = measured?.key === key ? measured.sourceRect : null;
+  const primaryIsCardShaped = active !== null && active.spec.primary.kind !== "infoCard";
   const sourcePrimaryInPlace = active !== null && decision !== null
     && active.spec.primary.kind === "gameCard"
     && (decision.pressInPlace || (viewport?.layout === "desktop" && active.sourceShowsCompleteGameCard
       && active.sourceRect.width >= 340));
   useLayoutEffect(() => {
-    if (active === null || viewport?.layout !== "desktop" || active.spec.primary.kind !== "gameCard" || decision === null || sourcePrimaryInPlace) return;
+    if (active === null || viewport?.layout !== "desktop" || !primaryIsCardShaped || decision === null || sourcePrimaryInPlace) return;
     const previousOpacity = active.element.style.opacity;
     active.element.style.opacity = "0";
     return () => { active.element.style.opacity = previousOpacity; };
-  }, [active, decision, sourcePrimaryInPlace, viewport?.layout]);
+  }, [active, decision, primaryIsCardShaped, sourcePrimaryInPlace, viewport?.layout]);
 
   if (active === null || viewport === null) return null;
   const mobileWidth = viewport.width * 0.45;
   const measurePrimaryWidth = viewport.layout === "mobile"
     ? mobileWidth
-    : active.spec.primary.kind === "gameCard" ? Math.max(340, active.sourceRect.width) : 248;
+    : primaryIsCardShaped ? Math.max(340, active.sourceRect.width) : 248;
   const measureSecondaryWidth = viewport.layout === "mobile" ? mobileWidth : 248;
 
   return createPortal(

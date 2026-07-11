@@ -1426,6 +1426,24 @@
       "description": "Color role. `value` (default) paints the amount and glyph in the essence\nviolet; `inherit` takes the surrounding text color, for a value that sits\ninside a button or other control whose label color already reads."
     }
   ],
+  "GalleryActionCard": [
+    {
+      "name": "action",
+      "tsType": "{ readonly glyph: Glyph; readonly label: string; }",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "width",
+      "tsType": "string | number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    }
+  ],
   "GameCard": [
     {
       "name": "model",
