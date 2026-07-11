@@ -41,8 +41,6 @@ export const COMPONENTS_TSX = [
   "BattleSiteRoute.tsx",
   "CardDisplay.test.tsx",
   "CardDisplay.tsx",
-  "CardHoverPreview.test.tsx",
-  "CardHoverPreview.tsx",
   "CardOverlay.tsx",
   "DeckViewer.test.tsx",
   "DeckViewer.tsx",

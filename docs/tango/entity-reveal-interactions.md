@@ -13,9 +13,7 @@ The entity being described determines whether the primary reveal is a
 `GameCard` or an `InfoCard`; the trigger may be a full entity, a compact tile,
 an icon, or inline text.
 
-Tango has one reveal mechanism. `HoverPopover` is outside the final component
-vocabulary. Every informational hover, focus, or press reveal is expressed as
-the reveal group defined here.
+Tango has one reveal mechanism. Every informational hover, focus, or press reveal is expressed as the reveal group defined here.
 
 ## Vocabulary
 
@@ -181,11 +179,11 @@ call-site ownership problem under a better engine.
 
 ### Internal hooks are implementation details
 
-Tango components need a private coordinator adapter to attach the shared
+Tango components use a private coordinator adapter to attach the shared
 controller to their root element. That adapter belongs under a Tango-internal
-import boundary. Product screens and screen adapters must not import a headless
-`usePressReveal`, calculate an anchor rectangle, render `PressPopover`, create a
-reveal portal, or construct the coordinator's internal `RevealSpec`.
+import boundary. Product screens and screen adapters render named semantic
+components; attachment hooks, geometry, portals, and the internal content
+protocol stay inside the Tango component layer.
 
 This distinction matters: a public headless hook hands every consumer the pieces
 required to fork the behavior. A private hook can support component composition
@@ -244,7 +242,7 @@ Centralization should be enforced by the repository, not maintained by memory:
 - Export named Tango entity components. Keep reveal models, coordinator hooks,
   geometry, and overlay rendering internal.
 - Add lint/import-boundary rules that reject internal reveal imports, direct
-  reveal portals, generic reveal wrappers, and `HoverPopover` in product UI.
+  reveal portals and generic reveal wrappers in product UI.
 - Add API-contract tests proving mechanical props and arbitrary reveal nodes are
   not expressible.
 - Unit-test the coordinator state machine and pure geometry over viewport,
@@ -441,7 +439,7 @@ the primary merely to preserve their preferred side.
 
 Hover entry is instantaneous. Hover exit keeps the reading copy alive while it
 returns to the exact source rectangle over the standard fast motion duration
-(approximately 160ms), then removes it. The source and reading copy must not
+(approximately 160ms), then unmounts it. The source and reading copy must not
 produce a visible duplicate during either state. Under reduced motion, entry
 and exit are both instantaneous.
 
@@ -555,62 +553,5 @@ placement in a production game. At minimum, log:
 High-frequency pointer movement is not logged. One open decision and one close
 decision per reveal group are sufficient.
 
-## Convergence requirements from the current implementation
 
-The existing components already establish useful pieces of this contract:
-InfoCard has viewport-aware measured placement, immediate coarse-pointer reveal,
-a 300ms hold discriminator, pointer-transparent portals, and above-first
-placement; GameCard has a 340px reading target and top-aligned glossary cards;
-mobile card peek has scroll cancellation and independently tested circle/box
-geometry; Pressable centralizes transform feedback.
-
-The target state requires the following convergence work:
-
-- Replace the fixed 18px-radius InfoCard touch obstacle and the 36px-radius
-  mobile-card-peek obstacle with the shared 48px-diameter circle.
-- Apply the 30ms intent filter to all mobile reveals while retaining the 300ms
-  activation boundary.
-- Make every mobile popup card exactly 45vw below the 900px breakpoint.
-- Replace stage-relative placement with visual-viewport placement and safe-area
-  bounds.
-- Introduce one reveal-group coordinator for global exclusivity, focus
-  restoration, active-pointer modality, top-layer rendering, and lifecycle
-  dismissal.
-- Replace the public `InfoCard.PressInfo`, `InfoCard.usePressReveal`,
-  `InfoCard.PressPopover`, and anchor/portal assembly surface with structured
-  internal reveal models and named self-revealing Tango components. Keep DOM
-  attachment hooks and geometry internal to Tango; expose no generic reveal
-  trigger.
-- Fold `AtlasNodeReveal` into `AtlasNode`, so the public Atlas component owns
-  its source element, complete reveal content, activation, and coordinator
-  registration from one semantic model.
-- Remove parent-owned `termDefinitions`, `enableHoverZoom`,
-  `enableTermPopover`, and equivalent interaction switches from GameCard
-  consumers; GameCard derives its standard primary and glossary secondaries.
-- Centralize primary/secondary layout, priority truncation, two-column mobile
-  orientation, best-effort corner placement, and desktop side fallback.
-- Replace GameCard's maximum 1.5x hover scaling with convergence on a fixed
-  340px desktop width.
-- Keep the desktop GameCard reading copy alive on pointer-down and implement its
-  return-to-source exit transition.
-- Replace fixed `Pressable` factors with measured size-aware hover and press
-  feedback while preserving the stationary inline-text variant.
-- Make press in place an automatic rendered-width decision and require a popup
-  for `hideRulesText` cards.
-- Fit secondaries as a priority prefix rather than overflowing, scrolling, or
-  placing definitions below the primary.
-- Route Atlas, Dreamsign, tide, ability, HUD, deck, Draft, and battle reveal
-  compositions through the shared reveal-group layout without restricting the
-  `InfoCard` variants allowed in the secondary column.
-- Provide immediate focus reveals, `Escape` suppression, accessible
-  descriptions, and useful focus behavior for unavailable entities.
-- Pause source ambient motion while a reveal is active.
-- Replace every `HoverPopover` consumer with the shared InfoCard/GameCard reveal
-  system, then remove `HoverPopover` and its independent placement engine.
-- Expand placement logging to record the diagnostics specified above.
-
-The result is one predictable language: hover or focus reveals immediately on
-desktop, touch reveals after a 30ms intent filter on mobile, every popup card is
-45vw on mobile, GameCards converge on a 340px desktop reading state, and all
-supporting information forms one top-aligned, non-overlapping column beside its
-primary.
+The public vocabulary is `TangoRoot`, visual `InfoCard` variants, `GameCard`, `AtlasNode`, and named semantic entity components. Screens supply UUID-backed domain meaning and activation callbacks; the component layer derives complete ordered reveal content.

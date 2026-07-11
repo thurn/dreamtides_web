@@ -6,7 +6,6 @@ import { selectedTides4Decks } from "../data/tides4-preview";
 import { generateQuestSeed } from "../state/quest-state-actions";
 import { DreamcallerPortrait } from "../tango/components/hud/DreamcallerPortrait";
 import { ResourceChip } from "../tango/components/hud/ResourceChip";
-import { HoverPopover } from "../tango/components/overlay/HoverPopover";
 import { RulesText } from "../tango/components/card/RulesText";
 import { TideDisc } from "../tango/components/hud/TideDisc";
 import type { Tide } from "../tango/components/hud/tide-spec";
@@ -261,36 +260,13 @@ export function QuestStartScreen() {
                     >
                       Signature Cards:
                     </span>
-                    <HoverPopover
-                      content={
-                        <span
-                          className="block rounded-lg border px-3 py-2 text-left text-xs leading-relaxed shadow-2xl"
-                          style={{
-                            background: "#000000",
-                            borderColor: "rgba(255, 255, 255, 0.16)",
-                            color: "#ffffff",
-                          }}
-                          data-signature-cards-label-tooltip={dreamcaller.id}
-                        >
-                          {SIGNATURE_CARDS_LABEL_HOVER_BLURB}
-                        </span>
-                      }
+                    <span
+                      className="text-[10px] leading-snug"
+                      data-signature-cards-label-tooltip={dreamcaller.id}
+                      style={{ color: "#94a3b8" }}
                     >
-                      <i
-                        aria-label="About signature cards"
-                        className="bx bx-info-circle text-sm leading-none align-middle"
-                        data-signature-cards-info-icon={dreamcaller.id}
-                        style={{
-                          color: "#94a3b8",
-                          cursor: "help",
-                          pointerEvents: "auto",
-                          // The Boxicons glyph sits high in its em box; a small
-                          // downward nudge centers it on the adjacent label.
-                          position: "relative",
-                          top: "1px",
-                        }}
-                      />
-                    </HoverPopover>
+                      {SIGNATURE_CARDS_LABEL_HOVER_BLURB}
+                    </span>
                   </span>
                   <div className="flex w-full flex-col gap-2">
                     {signatureCards.map((signatureCard) => (
@@ -329,36 +305,13 @@ export function QuestStartScreen() {
                     >
                       Tides:
                     </span>
-                    <HoverPopover
-                      content={
-                        <span
-                          className="block rounded-lg border px-3 py-2 text-left text-xs leading-relaxed shadow-2xl"
-                          style={{
-                            background: "#000000",
-                            borderColor: "rgba(255, 255, 255, 0.16)",
-                            color: "#ffffff",
-                          }}
-                          data-dreamcaller-tides-tooltip={dreamcaller.id}
-                        >
-                          {TIDES_LABEL_HOVER_BLURB}
-                        </span>
-                      }
+                    <span
+                      className="text-[10px] leading-snug"
+                      data-dreamcaller-tides-tooltip={dreamcaller.id}
+                      style={{ color: "#94a3b8" }}
                     >
-                      <i
-                        aria-label="About draft tides"
-                        className="bx bx-info-circle text-sm leading-none align-middle"
-                        data-dreamcaller-tides-info-icon={dreamcaller.id}
-                        style={{
-                          color: "#94a3b8",
-                          cursor: "help",
-                          pointerEvents: "auto",
-                          // The Boxicons glyph sits high in its em box; a small
-                          // downward nudge centers it on the adjacent label.
-                          position: "relative",
-                          top: "1px",
-                        }}
-                      />
-                    </HoverPopover>
+                      {TIDES_LABEL_HOVER_BLURB}
+                    </span>
                   </span>
                   <div className="flex w-full flex-col items-start gap-1.5">
                     {tides.map((tide) => {

@@ -182,3 +182,11 @@ metrics the demo reads:
 ```
 node scripts/device-screenshots.mjs -d iphone-16 --query 'demo=device-frame'
 ```
+
+`?demo=entity-reveals` mounts the deterministic entity-reveal conformance page.
+It uses fixed UUID-backed fixtures and the public named Tango components for a
+popup GameCard, press-in-place GameCard, strict InfoCard content, glossary term,
+unavailable card, Atlas node, and battle card. Its semantic scenario controls
+arrange top-edge, side-fallback, truncation, best-effort, reduced-motion, and
+simulated-safe-area cases for browser QA while the coordinator continues to own
+all placement and gesture mechanics.

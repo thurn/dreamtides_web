@@ -1045,6 +1045,185 @@
       "description": "Grow the rules text box to a taller editing height. The card editor sets\nthis while its rules-text field is open so the inline textarea has room to\nshow and edit several lines at once instead of being clipped to the\nthree-line display cap."
     }
   ],
+  "CompactGameCardRow": [
+    {
+      "name": "card",
+      "tsType": "CardData",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Canonical UUID-backed card semantics.",
+      "nested": {
+        "name": "CardData",
+        "fields": [
+          {
+            "name": "name",
+            "tsType": "CardName",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "id",
+            "tsType": "CardId",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "cardNumber",
+            "tsType": "number",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "cardType",
+            "tsType": "CardType",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "subtype",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "isStarter",
+            "tsType": "boolean",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "rarity",
+            "tsType": "Rarity",
+            "optional": true,
+            "description": "Rarity bucket sourced from the TOML. Present only on `Legendary` and\n`Starter` cards; most cards have no rarity."
+          },
+          {
+            "name": "energyCost",
+            "tsType": "number | null",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "energyCosts",
+            "tsType": "string[]",
+            "optional": true,
+            "description": "Ordered orb labels for a card that has more than one energy cost, sourced\nfrom a comma-separated TOML `energy-cost` such as `\"2,X\"` (which yields\n`[\"2\", \"X\"]`). `CardView` renders one energy orb per label in a vertical\ncolumn. Absent on the common single-cost card, where the single orb is\nderived from `energyCost` (or `X` when it is `null`)."
+          },
+          {
+            "name": "spark",
+            "tsType": "number | null",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "sparkVariable",
+            "tsType": "boolean",
+            "optional": true,
+            "description": "Whether this card's spark is variable (printed as an `X` orb), sourced from\na TOML `spark` of `X`/`x`/`*`. When `true`, `spark` is `null` and `CardView`\nrenders a single `X` spark orb. This distinguishes a variable-spark card\nfrom a card with no spark at all (the common case for Events), which also\nhas `spark: null` but leaves this `false`/absent and renders no spark orb.\nMirrors how a `null` `energyCost` falls back to an `X` energy orb."
+          },
+          {
+            "name": "isFast",
+            "tsType": "boolean",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "isInterrupt",
+            "tsType": "boolean",
+            "optional": true,
+            "description": "Whether this card is an interrupt, sourced from a TOML `is-interrupt`.\nInterrupt cards are always also `isFast`; card surfaces mark an interrupt\nwith a double-bolt glyph (versus the single bolt for a plain fast card)."
+          },
+          {
+            "name": "reclaimCost",
+            "tsType": "number | null",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "renderedText",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "mtgName",
+            "tsType": "string",
+            "optional": true,
+            "description": "Name of the Magic: The Gathering card this card is derived from, sourced\nfrom a TOML `mtg-name` and carried through the setup-assets transform.\nSurfaced as a reference hover tooltip in card-browsing surfaces (the card\neditor and the Pool Viewer). Present on sources that record it (e.g.\n`cards_v2.toml`); absent on cards whose source TOML omits `mtg-name`."
+          },
+          {
+            "name": "imageNumber",
+            "tsType": "number",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "artOwned",
+            "tsType": "boolean",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "art",
+            "tsType": "ArtCrop",
+            "optional": true,
+            "description": "Art crop applied to the card's image; absent cards use the default crop."
+          },
+          {
+            "name": "core",
+            "tsType": "boolean",
+            "optional": true,
+            "description": "Draft-pool membership metadata for the experimental cards_v2 pool, defined\nin TypeScript (`src/data/cards-v2-metadata.ts`) and merged into\n`cards_v2-data.json` by `scripts/setup-assets.mjs`. Present on the cards_v2\nrecords the non-`idf3` pool variants consume; absent on runtime catalog\ncards. `core` flags an always-included staple, `colors` lists the bare\ncolor-combo pools the card belongs to (e.g. `\"b\"`, `\"br\"`), and\n`draftArchetypes` lists the color+archetype slices (e.g. `\"br-aristocrats\"`).\nSee `docs/cards2/draft_pool_algorithms.md`."
+          },
+          {
+            "name": "colors",
+            "tsType": "string[]",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "draftArchetypes",
+            "tsType": "string[]",
+            "optional": true,
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "count",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Display copy count, already formatted for the surface."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Stable row test id."
+    },
+    {
+      "name": "revealTestId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Stable reading-copy test id."
+    },
+    {
+      "name": "entryIds",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Comma-separated stable deck entry UUIDs represented by the row."
+    }
+  ],
   "DreamcallerPortrait": [
     {
       "name": "dreamcaller",
@@ -1689,73 +1868,6 @@
       "description": "The grouped content laid out inside the pane."
     }
   ],
-  "HoverPopover": [
-    {
-      "name": "children",
-      "tsType": "ReactNode",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "The element that triggers the popover on hover."
-    },
-    {
-      "name": "content",
-      "tsType": "ReactNode | ((context: HoverPopoverContentContext) => ReactNode)",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "The popover body. Rendered into a portal when visible."
-    },
-    {
-      "name": "delayMs",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "500",
-      "description": "Delay before showing the popover (ms). Defaults to 500ms."
-    },
-    {
-      "name": "placement",
-      "tsType": "Placement",
-      "unionMembers": [
-        "left",
-        "top"
-      ],
-      "required": false,
-      "defaultValue": "top",
-      "description": "Preferred side to anchor the popover relative to the trigger.\n- `\"top\"` (default) centers the popover above the trigger and flips to\n  the bottom when the trigger sits near the top edge of the viewport.\n- `\"left\"` anchors the popover to the left of the trigger and flips to\n  the right when the trigger sits near the left edge of the viewport.\n  Useful for triggers on the right edge of the viewport (e.g. the\n  right-side deck sidebar) where the popover would otherwise appear\n  detached above or below the row.\n\nIn both cases the popover is shifted along the perpendicular axis as\nneeded so it stays fully inside the viewport."
-    },
-    {
-      "name": "maxWidthPx",
-      "tsType": "number | null",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Override the popover's max-width cap (px). Defaults to 260px, which\nsuits short explanatory blurbs. Pass `null` to disable the cap entirely\nwhen `content` is a self-sizing element such as a card preview."
-    },
-    {
-      "name": "triggerAs",
-      "tsType": "\"span\" | \"div\"",
-      "unionMembers": [
-        "span",
-        "div"
-      ],
-      "required": false,
-      "defaultValue": "span",
-      "description": "The DOM element type for the trigger wrapper. Defaults to `\"span\"` for\ninline use within text. Pass `\"div\"` for block-level triggers."
-    },
-    {
-      "name": "triggerLayout",
-      "tsType": "\"inline\" | \"inlineFlex\"",
-      "unionMembers": [
-        "inline",
-        "inlineFlex"
-      ],
-      "required": false,
-      "defaultValue": "inline",
-      "description": "Trigger wrapper layout. `inline` preserves flowing text; `inlineFlex`\nshrink-wraps icon/orb triggers without adding a baseline line box.\nDefaults to `inline`."
-    }
-  ],
   "IconButton": [
     {
       "name": "glyph",
@@ -1831,14 +1943,14 @@
   "InfoCard": [
     {
       "name": "variant",
-      "tsType": "\"object\" | \"fullBleed\" | \"text\" | \"icon\" | \"atlasReveal\" | \"tide\"",
+      "tsType": "\"object\" | \"fullBleed\" | \"atlasReveal\" | \"icon\" | \"tide\" | \"text\"",
       "unionMembers": [
         "object",
         "fullBleed",
-        "text",
-        "icon",
         "atlasReveal",
-        "tide"
+        "icon",
+        "tide",
+        "text"
       ],
       "required": false,
       "defaultValue": null,
@@ -2068,256 +2180,6 @@
       "description": "Optional hover/focus tooltip. When provided, the badge becomes its own\nhover anchor. A short plain-language description string."
     }
   ],
-  "PressInfo": [
-    {
-      "name": "stageRef",
-      "tsType": "RefObject<HTMLElement | null>",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
-      "name": "gap",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "14",
-      "description": ""
-    },
-    {
-      "name": "card",
-      "tsType": "ReactNode",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "The InfoCard (or any node) to reveal while pressed/hovered."
-    },
-    {
-      "name": "as",
-      "tsType": "ElementType<any, keyof IntrinsicElements>",
-      "unionMembers": [
-        "symbol",
-        "object",
-        "map",
-        "filter",
-        "span",
-        "div",
-        "a",
-        "abbr",
-        "address",
-        "area",
-        "article",
-        "aside",
-        "audio",
-        "b",
-        "base",
-        "bdi",
-        "bdo",
-        "big",
-        "blockquote",
-        "body",
-        "br",
-        "button",
-        "canvas",
-        "caption",
-        "center",
-        "cite",
-        "code",
-        "col",
-        "colgroup",
-        "data",
-        "datalist",
-        "dd",
-        "del",
-        "details",
-        "dfn",
-        "dialog",
-        "dl",
-        "dt",
-        "em",
-        "embed",
-        "fieldset",
-        "figcaption",
-        "figure",
-        "footer",
-        "form",
-        "h1",
-        "h2",
-        "h3",
-        "h4",
-        "h5",
-        "h6",
-        "head",
-        "header",
-        "hgroup",
-        "hr",
-        "html",
-        "i",
-        "iframe",
-        "img",
-        "input",
-        "ins",
-        "kbd",
-        "keygen",
-        "label",
-        "legend",
-        "li",
-        "link",
-        "main",
-        "mark",
-        "menu",
-        "menuitem",
-        "meta",
-        "meter",
-        "nav",
-        "noindex",
-        "noscript",
-        "ol",
-        "optgroup",
-        "option",
-        "output",
-        "p",
-        "param",
-        "picture",
-        "pre",
-        "progress",
-        "q",
-        "rp",
-        "rt",
-        "ruby",
-        "s",
-        "samp",
-        "search",
-        "slot",
-        "script",
-        "section",
-        "select",
-        "small",
-        "source",
-        "strong",
-        "style",
-        "sub",
-        "summary",
-        "sup",
-        "table",
-        "template",
-        "tbody",
-        "td",
-        "textarea",
-        "tfoot",
-        "th",
-        "thead",
-        "time",
-        "title",
-        "tr",
-        "track",
-        "u",
-        "ul",
-        "var",
-        "video",
-        "wbr",
-        "webview",
-        "svg",
-        "animate",
-        "animateMotion",
-        "animateTransform",
-        "circle",
-        "clipPath",
-        "defs",
-        "desc",
-        "ellipse",
-        "feBlend",
-        "feColorMatrix",
-        "feComponentTransfer",
-        "feComposite",
-        "feConvolveMatrix",
-        "feDiffuseLighting",
-        "feDisplacementMap",
-        "feDistantLight",
-        "feDropShadow",
-        "feFlood",
-        "feFuncA",
-        "feFuncB",
-        "feFuncG",
-        "feFuncR",
-        "feGaussianBlur",
-        "feImage",
-        "feMerge",
-        "feMergeNode",
-        "feMorphology",
-        "feOffset",
-        "fePointLight",
-        "feSpecularLighting",
-        "feSpotLight",
-        "feTile",
-        "feTurbulence",
-        "foreignObject",
-        "g",
-        "image",
-        "line",
-        "linearGradient",
-        "marker",
-        "mask",
-        "metadata",
-        "mpath",
-        "path",
-        "pattern",
-        "polygon",
-        "polyline",
-        "radialGradient",
-        "rect",
-        "set",
-        "stop",
-        "switch",
-        "text",
-        "textPath",
-        "tspan",
-        "use",
-        "view"
-      ],
-      "required": false,
-      "defaultValue": "span",
-      "description": ""
-    },
-    {
-      "name": "holdStillClicks",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "true = a touch hold still fires the child's click (menu / UI toggle)."
-    },
-    {
-      "name": "pressFeedback",
-      "tsType": "\"scale\" | \"stationary\"",
-      "unionMembers": [
-        "scale",
-        "stationary"
-      ],
-      "required": false,
-      "defaultValue": "scale",
-      "description": "Press motion for the trigger. `stationary` is reserved for readable rules\ncopy that must hold its authored size while definitions are visible."
-    }
-  ],
-  "PressPopover": [
-    {
-      "name": "anchor",
-      "tsType": "AnchorRect | null",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
-      "name": "gap",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "14",
-      "description": ""
-    }
-  ],
   "Pressable": [
     {
       "name": "as",
@@ -2327,8 +2189,14 @@
         "object",
         "map",
         "filter",
-        "span",
-        "div",
+        "text",
+        "image",
+        "center",
+        "figure",
+        "meta",
+        "slot",
+        "style",
+        "title",
         "a",
         "abbr",
         "address",
@@ -2347,7 +2215,6 @@
         "button",
         "canvas",
         "caption",
-        "center",
         "cite",
         "code",
         "col",
@@ -2359,13 +2226,13 @@
         "details",
         "dfn",
         "dialog",
+        "div",
         "dl",
         "dt",
         "em",
         "embed",
         "fieldset",
         "figcaption",
-        "figure",
         "footer",
         "form",
         "h1",
@@ -2394,7 +2261,6 @@
         "mark",
         "menu",
         "menuitem",
-        "meta",
         "meter",
         "nav",
         "noindex",
@@ -2415,14 +2281,13 @@
         "s",
         "samp",
         "search",
-        "slot",
         "script",
         "section",
         "select",
         "small",
         "source",
+        "span",
         "strong",
-        "style",
         "sub",
         "summary",
         "sup",
@@ -2435,7 +2300,6 @@
         "th",
         "thead",
         "time",
-        "title",
         "tr",
         "track",
         "u",
@@ -2480,7 +2344,6 @@
         "feTurbulence",
         "foreignObject",
         "g",
-        "image",
         "line",
         "linearGradient",
         "marker",
@@ -2496,7 +2359,6 @@
         "set",
         "stop",
         "switch",
-        "text",
         "textPath",
         "tspan",
         "use",

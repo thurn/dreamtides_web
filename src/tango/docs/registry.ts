@@ -25,7 +25,6 @@ import { glassDialogDemo } from "./demos/glass-dialog";
 import { glossaryDefinitionCardDemo } from "./demos/glossary-definition-card";
 import { glowIconDemo } from "./demos/glow-icon";
 import { groupPanelDemo } from "./demos/group-panel";
-import { hoverPopoverDemo } from "./demos/hover-popover";
 import { iconButtonDemo } from "./demos/icon-button";
 import { infoCardDemo } from "./demos/info-card";
 import { motesDemo } from "./demos/motes";
@@ -146,7 +145,6 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   tideDiscDemo,
   motesDemo,
   infoCardDemo,
-  hoverPopoverDemo,
   groupPanelDemo,
   glowIconDemo,
   pipBadgeDemo,

@@ -9,16 +9,8 @@ import "./vendor/boxicons/boxicons-filled.css";
 // no matching glyph. Self-hosted via the bundled package, not a CDN.
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "./index.css";
-// Tango design tokens. The Tango redesign is adopted incrementally across the
-// app (SiteNode, Dreamsign reveals, InfoCard popovers, …), so its semantic
-// token sheet must ship on every entry, not only the /tango doc app that
-// imports it locally. Every rule inside is scoped to `.tango { … }` and
-// declares only custom properties, so loading it globally defines the tokens
-// without applying a single style until an element opts in via that class —
-// which is exactly what the portaled reveals do (see PressPopover /
-// HoverPopover). This is what lets a reveal that portals OUT of a `.tango`
-// subtree (to a screen root or `document.body`) still resolve its surface,
-// radius, shadow, and text tokens.
+// Tango design tokens ship on every entry so named components and the root
+// entity-reveal coordinator resolve the same semantic surface vocabulary.
 import "./tango/primitives/tango-tokens.css";
 import "./tango/primitives/legibility.css";
 import CardEditorApp from "./editor/CardEditorApp";
@@ -137,6 +129,7 @@ if (pathname === "/editor" || pathname === "/cards") {
     { JourneyHoverCardDemo },
     { TransfigurationCardDemo },
     { DeviceFrameDemo },
+    { EntityRevealConformanceDemo },
     { parseRuntimeConfig },
   ] = await Promise.all([
     import("./App.tsx"),
@@ -144,6 +137,7 @@ if (pathname === "/editor" || pathname === "/cards") {
     import("./journeys/ui/JourneyHoverCardDemo"),
     import("./components/TransfigurationCardDemo"),
     import("./tango/screens/devtools/DeviceFrameDemo"),
+    import("./tango/screens/devtools/EntityRevealConformanceDemo"),
     import("./runtime/runtime-config"),
   ]);
 
@@ -164,6 +158,8 @@ if (pathname === "/editor" || pathname === "/cards") {
         <TransfigurationCardDemo />
       ) : demoParam === "device-frame" ? (
         <DeviceFrameDemo />
+      ) : demoParam === "entity-reveals" ? (
+        <EntityRevealConformanceDemo />
       ) : (
         <App runtimeConfig={runtimeConfig} />
       )}

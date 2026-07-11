@@ -3,19 +3,13 @@ import type { CSSProperties } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "../components/CardDisplay";
-import { CardHoverPreview } from "../components/CardHoverPreview";
 import { CardOverlay } from "../components/CardOverlay";
-import {
-  CARD_HOVER_PREVIEW_DELAY_MS,
-  CARD_HOVER_PREVIEW_WIDTH_PX,
-  HoverPopover,
-} from "../tango/components/overlay/HoverPopover";
+import { CompactGameCardRow } from "../tango/components/card/CompactGameCardRow";
 import {
   OFFERING_ACCENT,
   OfferingAcceptButton,
   OfferingScreenHeader,
 } from "../components/OfferingScreen";
-import { PipBadge } from "../tango/components/controls/PipBadge";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import {
   countRemainingCards,
@@ -23,7 +17,6 @@ import {
 } from "../draft/draft-engine";
 import type { DraftState } from "../types/draft";
 import type { CardData } from "../types/cards";
-import { cardImageUrl } from "../data/card-database";
 import { CARD_ASPECT_RATIO } from "../tango/components/card/card-aspect";
 import { DRAFT_OFFER_CARD_WIDTH } from "../components/card-size";
 import { logEvent } from "../logging";
@@ -141,16 +134,6 @@ function DraftSummary({
  * Designed to be scanned by art rather than read by name — a player who
  * recognizes the art can identify the card without parsing the text.
  */
-const DECK_ROW_HEIGHT_PX = 36;
-/**
- * Background-position-y in % for `background-size: cover`. 25% biases the
- * crop band toward the upper third of the art, which is where character
- * faces and focal points usually live on the 3:4 portraits. Tunable as a
- * per-card override later if specific cards need it; for now a single value
- * works because the art was rendered consistently.
- */
-const DECK_ROW_ART_FOCAL_Y = "25%";
-
 /** Stable identifier for a deck row — one row per unique card. */
 interface DeckRow {
   cardNumber: number;
@@ -226,8 +209,6 @@ function DeckSidebar({
       className="draft-deck-rail-scroll flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto p-2"
     >
       {deckRows.map(({ cardNumber, card, count, entryIds }) => {
-        const accentColor =
-          card.cardType === "Event" ? "#c084fc" : "#facc15";
         const isHighlighted = entryIds.includes(highlightedEntryId ?? "");
         // Stable row identity: card number is unique per row. The hover
         // popover is also keyed off the cardNumber so prior tests that
@@ -258,74 +239,7 @@ function DeckSidebar({
             }
             transition={{ duration: 0.35 }}
           >
-            <HoverPopover
-              triggerAs="div"
-              placement="left"
-              delayMs={CARD_HOVER_PREVIEW_DELAY_MS}
-              maxWidthPx={null}
-              content={({ anchorRect, side }) =>
-                <CardHoverPreview
-                  card={card}
-                  testId={hoverTestId}
-                  widthPx={CARD_HOVER_PREVIEW_WIDTH_PX}
-                  popoverSide={side}
-                  anchorRect={anchorRect}
-                />
-              }
-            >
-              <div
-                data-testid={rowTestId}
-                data-card-number={String(cardNumber)}
-                data-entry-ids={entryIds.join(",")}
-                tabIndex={0}
-                aria-label={`Deck card: ${card.name}${count > 1 ? ` (${String(count)} copies)` : ""}`}
-                className="relative flex items-center gap-2 overflow-hidden rounded-md px-2 outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
-                style={{
-                  height: `${String(DECK_ROW_HEIGHT_PX)}px`,
-                  // Two-layer background: a darkening gradient on top of the
-                  // card art. The gradient fades a strong dim near the left
-                  // (where the pip + start of the name live) into a much
-                  // lighter veil over the right so the art reads as the row's
-                  // identifier. A faint dim at the far right brings the
-                  // duplicate count back into legibility.
-                  backgroundImage: `linear-gradient(90deg, rgba(10, 6, 18, 0.85) 0%, rgba(10, 6, 18, 0.35) 35%, rgba(10, 6, 18, 0.05) 65%, rgba(10, 6, 18, 0.45) 100%), url("${cardImageUrl(card.imageNumber)}")`,
-                  backgroundSize: "cover",
-                  backgroundPosition: `center ${DECK_ROW_ART_FOCAL_Y}`,
-                  backgroundRepeat: "no-repeat",
-                  border: `1px solid ${accentColor}55`,
-                }}
-              >
-                <PipBadge
-                  variant="energy"
-                  value={card.energyCost !== null ? String(card.energyCost) : "X"}
-                  size="sm"
-                />
-                <span
-                  className="relative z-10 min-w-0 flex-1 truncate text-sm font-bold"
-                  style={{
-                    color: "#ffffff",
-                    textShadow:
-                      "0 1px 2px rgba(0, 0, 0, 0.95), 0 0 4px rgba(0, 0, 0, 0.85), 1px 1px 0 rgba(0, 0, 0, 0.9)",
-                    letterSpacing: "0.01em",
-                  }}
-                >
-                  {card.name}
-                </span>
-                {count > 1 && (
-                  <span
-                    data-testid={`draft-deck-row-count-${String(cardNumber)}`}
-                    className="relative z-10 shrink-0 text-sm font-bold tabular-nums"
-                    style={{
-                      color: "#fbbf24",
-                      textShadow:
-                        "0 1px 2px rgba(0, 0, 0, 0.95), 0 0 4px rgba(0, 0, 0, 0.85)",
-                    }}
-                  >
-                    {String(count)}x
-                  </span>
-                )}
-              </div>
-            </HoverPopover>
+              <CompactGameCardRow card={card} count={String(count)} testId={rowTestId} revealTestId={hoverTestId} entryIds={entryIds.join(",")} />
           </motion.div>
         );
       })}

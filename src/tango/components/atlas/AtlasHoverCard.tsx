@@ -83,8 +83,7 @@ interface AtlasHoverCardProps {
 
 /**
  * The large desktop Dream Atlas hover card. Pure and props-driven; positioned
- * by the shared InfoCard press engine (`InfoCard.PressPopover`) exactly like
- * every other Tango reveal.
+ * by the shared root reveal coordinator exactly like every other Tango reveal.
  */
 export function AtlasHoverCard({
   content,

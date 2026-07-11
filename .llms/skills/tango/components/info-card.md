@@ -10,13 +10,13 @@ Real consumers: **6** (imports outside `src/tango/docs/` and tests).
 
 The one press-to-reveal information card. Its media treatment varies by content — object, full-bleed, atlas reveal, icon, tide, or text — over a single fixed liquid-glass shell and reveal contract. On a narrow viewport a card lays out at 45% of screen width capped at its native 248px, so below ~551px (248 ÷ 0.45) it begins scaling down — an intentional content-driven cutoff, distinct from the 900px desktop/mobile breakpoint.
 
-> **Guidance:** Placement is ABOVE-only: the reveal is always anchored above the pressed object and never drops below it. `computePopoverPosition` prefers the card centered above at a uniform gap; when it does not fit there it pins the card to the top screen inset at a reduced gap; and when even a top-pinned card would overlap the press it keeps the card at the top and shifts it sideways — to whichever side of the press area has room — to clear the press area and, on a touch press, the fingertip disc. When neither side has room, a touch reveal moves to whichever screen edge puts its center farthest from the finger while a fine-pointer hover (no finger to avoid) stays centered at the top. So a card too tall to fit above a low trigger pins to the top rather than covering the object under the finger.
+> **Guidance:** InfoCard supplies strict visual content variants. Named semantic components register that content with the root coordinator, which owns viewport placement, safe-area bounds, and touch clearance.
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `variant` | `"object" \| "fullBleed" \| "text" \| "icon" \| "atlasReveal" \| "tide"` | no | — | Which media treatment. Omit — or pass 'text' — for the text variant. |
+| `variant` | `"object" \| "fullBleed" \| "atlasReveal" \| "icon" \| "tide" \| "text"` | no | — | Which media treatment. Omit — or pass 'text' — for the text variant. |
 | `image` | `ArtRef` | yes | — | The media the card is built around, as an {@link ArtRef}. Required. The square hero image the card is built on, as an {@link ArtRef}. Required. The scene hero image the card is built on, as an {@link ArtRef}. Required. |
 | `imageCrop` | `ImageCrop` = `"top" \| "center"` | no | — | How the media is cropped. Default `"top"`. How the hero image is cropped. Default `"center"`. |
 | `imageFilter` | `MediaFilter` = `"dreamsign-portrait" \| "dreamsign-portrait-bane" \| "spark-glow" \| "energy-glow"` | no | — | A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). A named media {@link MediaFilter} (e.g. a spark glow). A named media {@link MediaFilter} for the scene image. |

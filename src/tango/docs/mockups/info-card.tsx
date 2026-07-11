@@ -47,7 +47,8 @@ function Trigger({ label, variant, glyph, card }: TriggerProps) {
             borderRadius: "50%",
             display: "grid",
             placeItems: "center",
-            ...InfoCard.SITE_DISC,
+            background: token("--badge-disc-gradient"),
+            boxShadow: `inset 0 0 0 2.5px ${token("--accent")}, 0 0 14px 1px rgba(168,85,247,0.45)`,
           }}
         >
           <i

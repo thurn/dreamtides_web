@@ -138,7 +138,7 @@ describe("HudDreamsignRow", () => {
     });
   });
 
-  it("clips beyond ten dreamsigns and shows a +N overflow pill", () => {
+  it("keeps every dreamsign available as a named semantic source", () => {
     const signs: Dreamsign[] = Array.from({ length: 13 }, (_unused, i) =>
       makeDreamsign({
         name: `Sign ${String(i + 1)}`,
@@ -149,14 +149,12 @@ describe("HudDreamsignRow", () => {
     const { container, root } = mountInto(<HudDreamsignRow dreamsigns={signs} />);
 
     const tiles = container.querySelectorAll('[data-testid="hud-dreamsign-icon"]');
-    expect(tiles.length).toBe(10);
+    expect(tiles.length).toBe(13);
 
     const overflow = container.querySelector(
       '[data-testid="hud-dreamsign-overflow"]',
     );
-    expect(overflow).not.toBeNull();
-    expect(overflow?.textContent).toBe("+3");
-    expect(overflow?.getAttribute("aria-label")).toBe("3 more dreamsigns");
+    expect(overflow).toBeNull();
 
     act(() => {
       root.unmount();

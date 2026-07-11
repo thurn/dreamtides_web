@@ -12,6 +12,7 @@ import type { DraftState } from "../types/draft";
 import type { QuestState } from "../types/quest";
 import { DraftSiteScreen } from "./DraftSiteScreen";
 import { useQuest } from "../state/quest-context";
+import { TangoRoot } from "../tango/TangoRoot";
 
 vi.mock("framer-motion", async () => {
   const React = await import("react");
@@ -177,7 +178,7 @@ function makeCardDatabase(): Map<number, CardData> {
       1,
       {
         name: asCardName("Starter Lantern"),
-        id: asCardId("starter-lantern"),
+        id: asCardId("11111111-1111-4111-8111-111111111111"),
         cardNumber: 1,
         cardType: "Character",
         subtype: "",
@@ -443,10 +444,10 @@ function mount(element: ReactElement): {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
-  mountedElement = element;
+  mountedElement = <TangoRoot>{element}</TangoRoot>;
   mountedRoot = root;
   act(() => {
-    root.render(element);
+    root.render(mountedElement);
   });
   return { container, root };
 }
@@ -941,29 +942,10 @@ describe("DraftSiteScreen", () => {
       "[data-testid='draft-deck-row-entry-1']",
     );
     expect(row).not.toBeNull();
-    const trigger = row?.parentElement;
-    expect(trigger).not.toBeNull();
-
     act(() => {
-      trigger?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+      row?.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" }));
     });
-
-    // Popover only appears after the configured 300ms delay.
-    expect(
-      document.body.querySelectorAll(
-        "[data-testid='draft-deck-row-hover-card-entry-1']",
-      ),
-    ).toHaveLength(0);
-
-    act(() => {
-      vi.advanceTimersByTime(350);
-    });
-
-    expect(
-      document.body.querySelector(
-        "[data-testid='draft-deck-row-hover-card-entry-1']",
-      ),
-    ).not.toBeNull();
+    expect(document.body.querySelector("[data-tango-reveal-portal]")).not.toBeNull();
 
     act(() => {
       root.unmount();
@@ -988,11 +970,10 @@ describe("DraftSiteScreen", () => {
     const row = container.querySelector(
       "[data-testid='draft-deck-row-entry-1']",
     );
-    const trigger = row?.parentElement;
-    if (!(trigger instanceof HTMLElement)) {
+    if (!(row instanceof HTMLElement)) {
       throw new Error("Expected deck row trigger to be an HTMLElement");
     }
-    vi.spyOn(trigger, "getBoundingClientRect").mockReturnValue({
+    vi.spyOn(row, "getBoundingClientRect").mockReturnValue({
       left: 1000,
       right: 1200,
       top: 400,
@@ -1005,23 +986,11 @@ describe("DraftSiteScreen", () => {
     });
 
     act(() => {
-      trigger.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+      row.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" }));
     });
-    act(() => {
-      vi.advanceTimersByTime(350);
-    });
-
-    const stack = document.body.querySelector(
-      "[data-testid='draft-deck-row-hover-card-entry-1-definition-stack']",
-    );
-    expect(stack).not.toBeNull();
-    expect(stack?.getAttribute("data-definition-side")).toBe("left");
-    // Each definition tile carries its canonical keyword on
-    // `data-glossary-term`, decoupled from the InfoCard's internal markup.
-    const terms = Array.from(
-      stack?.querySelectorAll("[data-glossary-term]") ?? [],
-    ).map((tile) => tile.getAttribute("data-glossary-term"));
-    expect(terms).toEqual(["Bane", "Reclaim"]);
+    const description = document.getElementById(row.getAttribute("aria-describedby") ?? "")?.textContent ?? "";
+    expect(description).toContain("Bane");
+    expect(description).toContain("Reclaim");
 
     act(() => {
       root.unmount();
@@ -1038,29 +1007,18 @@ describe("DraftSiteScreen", () => {
     const row = container.querySelector(
       "[data-testid='draft-deck-row-entry-1']",
     );
-    const trigger = row?.parentElement;
-
     act(() => {
-      trigger?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+      row?.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" }));
     });
-    act(() => {
-      vi.advanceTimersByTime(350);
-    });
-
-    expect(
-      document.body.querySelector(
-        "[data-testid='draft-deck-row-hover-card-entry-1']",
-      ),
-    ).not.toBeNull();
+    expect(document.body.querySelector("[data-tango-reveal-portal]")).not.toBeNull();
 
     act(() => {
-      trigger?.dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
+      row?.dispatchEvent(new PointerEvent("pointerout", { bubbles: true, pointerType: "mouse" }));
+      vi.advanceTimersByTime(160);
     });
 
     expect(
-      document.body.querySelectorAll(
-        "[data-testid='draft-deck-row-hover-card-entry-1']",
-      ),
+      document.body.querySelectorAll("[data-tango-reveal-portal]"),
     ).toHaveLength(0);
 
     act(() => {
@@ -1090,24 +1048,15 @@ describe("DraftSiteScreen", () => {
     act(() => {
       row.focus();
     });
-    act(() => {
-      vi.advanceTimersByTime(350);
-    });
-
-    expect(
-      document.body.querySelector(
-        "[data-testid='draft-deck-row-hover-card-entry-1']",
-      ),
-    ).not.toBeNull();
+    expect(document.body.querySelector("[data-tango-reveal-portal]")).not.toBeNull();
 
     act(() => {
       row.blur();
+      vi.advanceTimersByTime(160);
     });
 
     expect(
-      document.body.querySelectorAll(
-        "[data-testid='draft-deck-row-hover-card-entry-1']",
-      ),
+      document.body.querySelectorAll("[data-tango-reveal-portal]"),
     ).toHaveLength(0);
 
     act(() => {
@@ -1192,7 +1141,7 @@ describe("DraftSiteScreen", () => {
         },
       };
       act(() => {
-        root.render(<DraftSiteScreen siteId="site-1" />);
+        root.render(<TangoRoot><DraftSiteScreen siteId="site-1" /></TangoRoot>);
       });
 
       const textAfter = draftRoot?.textContent ?? "";

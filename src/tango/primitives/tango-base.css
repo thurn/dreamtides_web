@@ -1,7 +1,7 @@
 /* Tango base — subtree-wide interaction defaults.
    ================================================================
    Tango treats a long press as its OWN gesture: the single reveal engine
-   (InfoCard's usePressReveal) shows a card while a finger is held down, and
+   shows a card while a finger is held down, and
    several components lean on that hold. Mobile browsers, left to themselves,
    attach their native long-press behaviour to the same gesture — iOS pops the
    selection magnifier / callout sheet, Android raises the text-selection

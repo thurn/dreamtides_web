@@ -113,11 +113,6 @@ ruleTester.run("no-escape-hatch-props", rule, {
       code: `interface GroupPanelProps { size?: "sm" | "md"; children?: React.ReactNode; }`,
     },
     {
-      name: "a container in the allowlist may take a raw node slot",
-      filename: "src/tango/components/InfoCard.tsx",
-      code: `interface PressInfoProps { card?: ReactNode; children?: ReactNode; }`,
-    },
-    {
       name: "a single named data value (accent color) is fine",
       filename: COMPONENT,
       code: `interface WidgetProps { discAccent?: string; }`,

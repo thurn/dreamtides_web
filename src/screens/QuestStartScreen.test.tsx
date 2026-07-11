@@ -15,8 +15,6 @@ import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";
 import { TangoRoot } from "../tango/TangoRoot";
 
-const SIGNATURE_CARDS_LABEL_HOVER_BLURB =
-  "These signature cards define this Dreamcaller's strategy and steer the draft pool toward them.";
 
 vi.mock("framer-motion", () => ({
   motion: {
@@ -301,19 +299,12 @@ describe("QuestStartScreen", () => {
     expect(
       container.querySelectorAll("[data-signature-cards-label]"),
     ).toHaveLength(3);
-    expect(
-      container.querySelectorAll("[data-signature-cards-info-icon]"),
-    ).toHaveLength(3);
+    expect(container.querySelectorAll("[data-signature-cards-label-tooltip]")).toHaveLength(3);
     for (const dreamcaller of OFFERED_DREAMCALLERS) {
-      const icon = container.querySelector(
-        `[data-signature-cards-info-icon="${dreamcaller.id}"]`,
+      const explanation = container.querySelector(
+        `[data-signature-cards-label-tooltip="${dreamcaller.id}"]`,
       );
-      expect(icon).not.toBeNull();
-      expect(icon?.className).toContain("bx-info-circle");
-      expect(icon?.getAttribute("aria-label")).toBe("About signature cards");
-      expect((icon as HTMLElement | null)?.style.color).toBe(
-        "rgb(148, 163, 184)",
-      );
+      expect(explanation?.textContent).toContain("define this Dreamcaller's strategy");
     }
     expect(
       container.querySelectorAll("[data-dreamcaller-signature-card]"),
@@ -334,13 +325,11 @@ describe("QuestStartScreen", () => {
       expect((label as HTMLElement | null)?.style.color).toBe(
         "rgb(148, 163, 184)",
       );
-      // The HoverPopover content is portaled to document.body only while
-      // the trigger is hovered, so it is not in the static DOM.
       expect(
         container.querySelector(
           `[data-signature-cards-label-tooltip="${dreamcaller.id}"]`,
         ),
-      ).toBeNull();
+      ).not.toBeNull();
     }
 
     for (const card of SIGNATURE_CARDS) {
@@ -429,56 +418,11 @@ describe("QuestStartScreen", () => {
     act(() => root.unmount());
   });
 
-  it("portals the signature-cards explanation popover into the body when the (i) icon is hovered", () => {
-    vi.useFakeTimers();
-    try {
+  it("renders signature-card help as static explanatory copy", () => {
       const { container, root } = mount(<QuestStartScreen />);
-
-      const firstIcon = container.querySelector(
-        `[data-signature-cards-info-icon="${OFFERED_DREAMCALLERS[0].id}"]`,
-      );
-      expect(firstIcon).not.toBeNull();
-      // The HoverPopover wraps its child in a <span>; dispatch mouse events
-      // on that wrapper because that is where React attaches the listeners.
-      const triggerWrapper = firstIcon?.parentElement;
-      expect(triggerWrapper).not.toBeNull();
-
-      // No popover content is in the DOM before hover.
-      expect(
-        document.body.querySelectorAll("[data-signature-cards-label-tooltip]"),
-      ).toHaveLength(0);
-
-      act(() => {
-        triggerWrapper?.dispatchEvent(
-          new MouseEvent("mouseover", { bubbles: true }),
-        );
-      });
-      act(() => {
-        vi.advanceTimersByTime(600);
-      });
-
-      const tooltip = document.body.querySelector(
-        `[data-signature-cards-label-tooltip="${OFFERED_DREAMCALLERS[0].id}"]`,
-      );
-      expect(tooltip).not.toBeNull();
-      expect(tooltip?.textContent).toBe(SIGNATURE_CARDS_LABEL_HOVER_BLURB);
-
-      // Mouse leave hides the popover.
-      act(() => {
-        triggerWrapper?.dispatchEvent(
-          new MouseEvent("mouseout", { bubbles: true }),
-        );
-      });
-      expect(
-        document.body.querySelectorAll("[data-signature-cards-label-tooltip]"),
-      ).toHaveLength(0);
-
-      act(() => {
-        root.unmount();
-      });
-    } finally {
-      vi.useRealTimers();
-    }
+      expect(container.querySelectorAll("[data-signature-cards-label-tooltip]")).toHaveLength(3);
+      expect(document.querySelector("[data-tango-reveal-portal]")).toBeNull();
+      act(() => root.unmount());
   });
 
   it("does not embed signature-card rows inside the Dreamcaller card button", () => {
@@ -510,10 +454,8 @@ describe("QuestStartScreen", () => {
         }
       }
 
-      // Hovering a Dreamcaller card button must not portal any popover content
-      // into document.body. The only popover on this screen that portals to
-      // body is the (i) info icon's signature-cards blurb, which is triggered
-      // by the icon, not the card.
+      // Hovering the choice leaves the static help in place and creates no
+      // transient reveal portal.
       act(() => {
         dreamcallerButtons[0]?.dispatchEvent(
           new MouseEvent("mouseover", { bubbles: true }),
@@ -523,9 +465,8 @@ describe("QuestStartScreen", () => {
         vi.advanceTimersByTime(1000);
       });
 
-      expect(
-        document.body.querySelectorAll("[data-signature-cards-label-tooltip]"),
-      ).toHaveLength(0);
+      expect(container.querySelectorAll("[data-signature-cards-label-tooltip]")).toHaveLength(3);
+      expect(document.querySelector("[data-tango-reveal-portal]")).toBeNull();
 
       act(() => {
         root.unmount();

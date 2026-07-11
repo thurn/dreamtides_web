@@ -64,7 +64,7 @@ vi.mock("../logging", () => ({
 
 vi.mock("./CardDisplay", () => ({
   // CardDisplay in production renders a focusable button when `onClick` is
-  // wired. The mock mirrors that so HoverPopover's `onFocus` / `onBlur`
+  // wired. The mock mirrors that so the semantic source's focus handlers
   // handlers can fire via the usual React event-bubbling path.
   CardDisplay: ({
     card,

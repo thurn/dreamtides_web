@@ -18,6 +18,7 @@ import tangoNoRawSafeAreaEnv from "./eslint-rules/no-raw-safe-area-env.js";
 import tangoNoInlineGlass from "./eslint-rules/no-inline-glass.js";
 import tangoNoNumericStyleProps from "./eslint-rules/no-numeric-style-props.js";
 import tangoNoPurpleTextOnGlass from "./eslint-rules/no-purple-text-on-glass.js";
+import tangoNoEntityRevealEscapeHatches from "./eslint-rules/no-entity-reveal-escape-hatches.js";
 
 // One shared plugin object: flat config rejects two config blocks that bind the
 // same plugin name to different objects, and the tango rules apply to more than
@@ -42,6 +43,7 @@ const tangoPlugin = {
     "no-inline-glass": tangoNoInlineGlass,
     "no-numeric-style-props": tangoNoNumericStyleProps,
     "no-purple-text-on-glass": tangoNoPurpleTextOnGlass,
+    "no-entity-reveal-escape-hatches": tangoNoEntityRevealEscapeHatches,
   },
 };
 
@@ -68,6 +70,16 @@ export default tseslint.config(
           varsIgnorePattern: "^_",
         },
       ],
+    },
+  },
+  {
+    // Entity reveal mechanics are private across every current and transitional
+    // product surface. The rule itself exempts the coordinator implementation
+    // and its focused tests; named semantic components are the public boundary.
+    files: ["src/**/*.{ts,tsx}", "docs/**/*.{ts,tsx}"],
+    plugins: { tango: tangoPlugin },
+    rules: {
+      "tango/no-entity-reveal-escape-hatches": "error",
     },
   },
   {
@@ -114,8 +126,6 @@ export default tseslint.config(
           allow: [
             "AtlasNodeView.size", // computed stage-pixel node diameter (1920x1080 space)
             "AtlasNodeView.badgeScale", // mobile atlas badge-size multiplier
-            "PressPopoverProps.gap", // px offset between the anchor and the popover
-            "PressInfoProps.gap", // px offset between the anchor and the reveal
             "DreamcallerPortraitProps.size", // fixed pixel width; a box measure, not a style knob
           ],
         },

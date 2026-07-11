@@ -1,12 +1,8 @@
 import type { CardData } from "../types/cards";
-import { CardView } from "../tango/components/card/CardView";
+import { GameCard } from "../tango/components/card/CardView";
 import { DreamcallerPortrait } from "../tango/components/hud/DreamcallerPortrait";
-import { HoverPopover } from "../tango/components/overlay/HoverPopover";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";
 import type { EditorDreamcaller } from "./tides-types";
-
-/** Width (px) of the enlarged card shown when hovering a card thumbnail. */
-const HOVER_CARD_WIDTH = 240;
 
 interface TideSourcePreviewProps {
   tide: Tides4DeckJson;
@@ -19,8 +15,9 @@ interface TideSourcePreviewProps {
 /**
  * The small source token shown for a tide: its Dreamcaller's portrait (signature
  * tides) or the themed card it is grown from (facet / neutral tides). Hovering a
- * portrait reveals the Dreamcaller ability; hovering a card reveals an enlarged
- * card. Cards and Dreamcallers are resolved by stable UUID, never by name.
+ * portrait and card are named semantic sources whose complete reading copy is
+ * supplied by the root reveal coordinator. Cards and Dreamcallers are resolved
+ * by stable UUID, never by name.
  */
 export function TideSourcePreview({
   tide,
@@ -43,20 +40,7 @@ export function TideSourcePreview({
     if (card === undefined) return null;
     return (
       <div style={{ width: size, flex: `0 0 ${size}px` }}>
-        <HoverPopover
-          triggerAs="div"
-          delayMs={150}
-          maxWidthPx={null}
-          content={
-            <div style={{ width: HOVER_CARD_WIDTH }}>
-              <CardView card={card} large />
-            </div>
-          }
-        >
-          <div style={{ width: size }}>
-            <CardView card={card} />
-          </div>
-        </HoverPopover>
+        <GameCard model={{ cardId: card.id, displaySnapshot: card }} />
       </div>
     );
   }

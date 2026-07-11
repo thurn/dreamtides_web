@@ -17,7 +17,7 @@ import { TangoRoot } from "../../TangoRoot";
  * `/dreamsigns/<imageName>`) inside a sized square with no chrome — the art
  * floats on the media — conveys a bane via a desaturation filter, and reveals
  * its full name + effect text through the shared InfoCard `object` variant.
- * jsdom exposes no `matchMedia`, so `usePressReveal` treats it as a coarse
+ * jsdom exposes no `matchMedia`, so the reveal coordinator treats it as a coarse
  * pointer: a press-down reveals the card.
  */
 

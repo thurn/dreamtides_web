@@ -14,7 +14,6 @@ import type {
   Tides4TideSummary,
 } from "../types/content";
 import { seedProvenanceVariantCopy } from "../draft/pool/seed-provenance-copy";
-import { HoverPopover } from "../tango/components/overlay/HoverPopover";
 
 interface CardSourceOverlayProps {
   cardSourceDebug: CardSourceDebugState | null;
@@ -130,8 +129,8 @@ function CardChips({ names }: { names: readonly string[] }) {
 }
 
 /**
- * Chips naming the tides that built the pool, by their thematic `displayName`.
- * Each chip hovers to a popover with the tide's one-line player-facing blurb.
+ * Static tide summaries naming the tides that built the pool and their
+ * player-facing blurbs.
  */
 function TideChips({ tides }: { tides: readonly Tides4TideSummary[] }) {
   if (tides.length === 0) {
@@ -139,8 +138,8 @@ function TideChips({ tides }: { tides: readonly Tides4TideSummary[] }) {
   }
   return (
     <div className="flex flex-wrap gap-1.5">
-      {tides.map((tide) => {
-        const chip = (
+      {tides.map((tide) => (
+        <span key={tide.id} className="inline-flex flex-col gap-0.5">
           <span
             className="rounded-md px-2 py-0.5 text-[11px]"
             data-why-tide-chip={tide.id}
@@ -148,46 +147,22 @@ function TideChips({ tides }: { tides: readonly Tides4TideSummary[] }) {
               background: "rgba(30, 41, 59, 0.62)",
               border: "1px solid rgba(148, 163, 184, 0.16)",
               color: "#e2e8f0",
-              cursor: tide.displayDescription != null ? "help" : "default",
             }}
           >
             {tide.displayName ?? tide.name}
           </span>
-        );
-        if (tide.displayDescription == null) {
-          return <span key={tide.id}>{chip}</span>;
-        }
-        return (
-          <HoverPopover
-            key={tide.id}
-            content={<TideChipTooltip tide={tide} />}
-          >
-            {chip}
-          </HoverPopover>
-        );
-      })}
+          {tide.displayDescription != null ? (
+            <span
+              data-why-tide-tooltip={tide.id}
+              className="max-w-[260px] text-[10px] leading-snug opacity-80"
+              style={{ color: "#e2e8f0" }}
+            >
+              {tide.displayDescription}
+            </span>
+          ) : null}
+        </span>
+      ))}
     </div>
-  );
-}
-
-/** Hover tooltip body for a tide chip: thematic name plus its blurb. */
-function TideChipTooltip({ tide }: { tide: Tides4TideSummary }) {
-  return (
-    <span
-      data-why-tide-tooltip={tide.id}
-      className="block rounded-lg border px-3 py-2 text-left text-xs leading-relaxed shadow-2xl"
-      style={{
-        background: "#000000",
-        borderColor: "rgba(255, 255, 255, 0.16)",
-        color: "#ffffff",
-        maxWidth: "260px",
-      }}
-    >
-      <span className="font-semibold">{tide.displayName ?? tide.name}</span>
-      {tide.displayDescription != null ? (
-        <span className="mt-1 block opacity-90">{tide.displayDescription}</span>
-      ) : null}
-    </span>
   );
 }
 
