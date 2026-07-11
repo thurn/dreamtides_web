@@ -65,7 +65,7 @@ The end-to-end diagnostic assertion validates the actual source rectangle, rende
 - Tango docs: 30 component references, stale HoverPopover reference swept.
 - `npm run lint`: pass.
 - `npm run typecheck`: pass.
-- `npm test`: 392 files passed, 1 skipped; 4,238 tests passed, 4 skipped.
+- `npm test`: 392 files passed, 1 skipped; 4,248 tests passed, 4 skipped.
 - `git diff --check`: pass.
 
 ## Browser matrix
@@ -182,14 +182,15 @@ Stable path: `screenshots/entity-reveals/`
   legal. The focused rule suite passes 30 cases.
 - The conformance Dreamcaller fixture uses fixed verified art key `0071`. Browser
   QA measured the loaded cutout at 1024×1536; no image fell back or failed.
-- Replacement side-fallback evidence used
-  `http://localhost:5176/?demo=entity-reveals` at 1200×800, device scale 2, in
-  isolated session `q6-remediation2-5176`. Before capture, DOM and diagnostics
-  reported one active group, one 340×476 primary, five rendered secondaries,
-  5 shown / 24 dropped, and `sideFallback: true`. Direct inspection of
-  `side-fallback-desktop-active.png` confirms the large reading card is visibly
-  painted over the right edge of the scenario stage. Page and console error
-  buffers were empty.
+- Authoritative side-fallback evidence uses stable keyboard focus at
+  `http://localhost:5177/?demo=entity-reveals`, 1200×800, device scale 2, in
+  isolated session `q6-remediation3-5177`. Immediately before capture, DOM and
+  diagnostics reported one active group, one 340×476 primary, five visibly
+  painted secondaries, 5 shown / 24 dropped, and `sideFallback: true`. Logged
+  source, primary, and all five secondary rectangles matched the live DOM within
+  0.05px. Direct pixel inspection of `side-fallback-desktop-active.png` confirms
+  the reading card and five-card glossary stack are visibly painted. Every image
+  had nonzero natural dimensions; page and console error buffers were empty.
 - `JourneyCard` has one normal product surface, so the Dream Merchant route's
   card-source debug loop received a narrow fix rather than substituting a
   component harness. A RED ScreenRouter regression reproduced the coop fold
@@ -212,10 +213,45 @@ Stable path: `screenshots/entity-reveals/`
 - Closed the isolated browser sessions and cleanly stopped the task-owned Vite
   / Firebase process tree. Port 5176 has no listener.
 
+## Review remediation 3
+
+- Added RED adversarial lint cases for call-result and untyped-parameter JSX
+  spreads on named reveal components, internal named/wildcard re-exports, and
+  dynamic internal imports. Named reveal spreads now fail closed unless their
+  properties are statically enumerable or the binding has the matching
+  component-owned `FooProps` type (including `Omit<FooProps, ...>`). Opaque
+  spreads on ordinary components, non-internal exports/imports, inline and
+  `const` safe objects, and typed component-owned spreads remain valid. The
+  focused rule suite passes 39 cases, including an opaque parameter that
+  shadows an earlier safe binding.
+- `ExportNamedDeclaration`, `ExportAllDeclaration`, and `ImportExpression` use
+  the same normalized internal-boundary resolution as static imports, including
+  repository-absolute `src/` paths.
+- ScreenRouter tests set `IS_REACT_ACT_ENVIRONMENT`, provide an async fold
+  re-render that flushes effects, and emit no act warnings. Actual StrictMode
+  coverage verifies the Dream Merchant debug effect records exactly one initial
+  publication with no hidden-state null write or republish. Cleanup uses a
+  generation-guarded microtask: StrictMode's immediate setup replay cancels the
+  pending cleanup, while a real unmount still clears the debug surface.
+- Conformance fixtures use verified immutable art keys: card `485518048.webp`
+  (390×280), Dreamsign `runes.png` (256×256), and Dreamcaller cutout `0071.png`
+  (1024×1536). The demo test pins all three URLs. Browser QA found zero broken
+  images before the authoritative capture.
+- The authoritative side-fallback capture overwrites the misleading artifact at
+  `screenshots/entity-reveals-remediation-2/side-fallback-desktop-active.png`.
+  Stable focus kept the source active through the screenshot; direct visual
+  inspection confirmed the large primary at the right edge and all five glossary
+  cards stacked to its left.
+- Remediation 3 ran regeneration 12/12, 54 focused tests, lint, typecheck, the
+  full 4,248-test suite, and `git diff --check`. Session
+  `q6-remediation3-5177` and the task-owned server were closed; port 5177 has no
+  listener.
+
 ## Commit and push
 
 - `f02a2d8e` — `refactor(tango): enforce unified entity reveal system`.
 - `76bb98be` — `fix(tango): close entity reveal enforcement gaps`.
-- Remediation 2 commit subject: `fix(tango): harden entity reveal conformance`.
+- `6748ef4c` — `fix(tango): harden entity reveal conformance`.
+- Remediation 3 commit subject: `fix(tango): close remaining reveal boundary gaps`.
 - Branch: `wt/entity-reveal-rewrite-plan`.
 - Each completed remediation commit is pushed immediately.

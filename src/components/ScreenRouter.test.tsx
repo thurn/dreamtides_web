@@ -2,7 +2,7 @@
 
 import { StrictMode, act, type ReactElement, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ScreenRouter } from "./ScreenRouter";
 import {
   QuestContextProvider,
@@ -48,6 +48,14 @@ vi.mock("../screens/RewardSiteScreen", () => ({
 }));
 
 const roots: Root[] = [];
+
+beforeEach(() => {
+  (
+    globalThis as typeof globalThis & {
+      IS_REACT_ACT_ENVIRONMENT?: boolean;
+    }
+  ).IS_REACT_ACT_ENVIRONMENT = true;
+});
 
 const UUIDS = {
   deckHighEvent: "71000000-0000-4000-8000-000000000001",
@@ -282,10 +290,10 @@ function mountWithQuest({
   const root = createRoot(container);
   roots.push(root);
 
-  const renderState = (
+  const renderTree = (
     nextState: QuestState,
     nextMutations: QuestMutations = mutations,
-  ) => act(() => {
+  ) => {
     const tree = (
       <QuestContextProvider
         value={{
@@ -300,10 +308,25 @@ function mountWithQuest({
     );
     const tangoTree = <TangoRoot>{tree}</TangoRoot>;
     root.render(strict ? <StrictMode>{tangoTree}</StrictMode> : tangoTree);
+  };
+  const renderState = (
+    nextState: QuestState,
+    nextMutations: QuestMutations = mutations,
+  ) => act(() => {
+    renderTree(nextState, nextMutations);
   });
+  const renderStateAndFlush = async (
+    nextState: QuestState,
+    nextMutations: QuestMutations = mutations,
+  ) => {
+    await act(async () => {
+      renderTree(nextState, nextMutations);
+      await Promise.resolve();
+    });
+  };
   renderState(state);
 
-  return { container, renderState };
+  return { container, renderState, renderStateAndFlush };
 }
 
 afterEach(() => {
@@ -474,7 +497,7 @@ describe("ScreenRouter DreamAugury routing", () => {
     )).toBe(true);
   });
 
-  it("publishes card source debug once when the coop fold applies that debug state", () => {
+  it("publishes card source debug once when the coop fold applies that debug state", async () => {
     const site = makeSite("DreamAugury");
     const state = { ...makeStateFor(site), deck: [] };
     const mutations = makeMutations();
@@ -489,13 +512,31 @@ describe("ScreenRouter DreamAugury routing", () => {
     const published = vi.mocked(mutations.setCardSourceDebug).mock.calls[0]?.[0];
     expect(published).toBeDefined();
 
-    mounted.renderState(
+    await mounted.renderStateAndFlush(
       { ...state, cardSourceDebug: published ?? null },
       foldedMutations,
     );
 
     expect(mutations.setCardSourceDebug).toHaveBeenCalledTimes(1);
     expect(foldedMutations.setCardSourceDebug).not.toHaveBeenCalled();
+  });
+
+  it("does not clear or republish card source debug during StrictMode effect replay", () => {
+    const site = makeSite("DreamAugury");
+    const mutations = makeMutations();
+    renderWithQuest({
+      state: { ...makeStateFor(site), deck: [] },
+      mutations,
+      questContent: merchantContent(),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />,
+      strict: true,
+    });
+
+    expect(mutations.setCardSourceDebug).toHaveBeenCalledTimes(1);
+    expect(mutations.setCardSourceDebug).not.toHaveBeenCalledWith(
+      null,
+      "merchant_grant_cards_hidden",
+    );
   });
 
   it("does not route a non-DreamAugury site to the v2 screen in v2 config", () => {

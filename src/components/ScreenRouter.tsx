@@ -334,6 +334,7 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
   const { state, mutations, questContent } = useQuest();
   const loggedOfferSignatureRef = useRef<string | null>(null);
   const publishedCardSourceSignatureRef = useRef<string | null>(null);
+  const cardSourceLifetimeGenerationRef = useRef(0);
   const setCardSourceDebugRef = useRef(mutations.setCardSourceDebug);
 
   useEffect(() => {
@@ -476,13 +477,17 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
     );
   }, [cardSourceDebugState, encounterResult]);
 
-  useEffect(
-    () => () => {
-      publishedCardSourceSignatureRef.current = null;
-      setCardSourceDebugRef.current(null, "merchant_grant_cards_hidden");
-    },
-    [site.id],
-  );
+  useEffect(() => {
+    const generation = cardSourceLifetimeGenerationRef.current + 1;
+    cardSourceLifetimeGenerationRef.current = generation;
+    return () => {
+      queueMicrotask(() => {
+        if (cardSourceLifetimeGenerationRef.current !== generation) return;
+        publishedCardSourceSignatureRef.current = null;
+        setCardSourceDebugRef.current(null, "merchant_grant_cards_hidden");
+      });
+    };
+  }, [site.id]);
 
   const handleAcceptOffer = useCallback(
     (request: MerchantAcceptRequest) => {

@@ -13,13 +13,14 @@ import { richText } from "../../components/card/rich-text";
 
 const CARD_ID = asCardId("11111111-1111-4111-8111-111111111111");
 const BATTLE_CARD_ID = asCardId("22222222-2222-4222-8222-222222222222");
+const CONFORMANCE_CARD_IMAGE = 485518048;
 const ATLAS_NODE_ID = "33333333-3333-4333-8333-333333333333";
 
 const CARD: CardData = {
   id: CARD_ID, name: asCardName("Conformance Sentry"), cardNumber: 1,
   cardType: "Character", subtype: "Guide", isStarter: false, rarity: "Special",
   energyCost: 2, spark: 3, isFast: false,
-  renderedText: "Bane. Discover. Ephemeral.", imageNumber: 1, artOwned: false,
+  renderedText: "Bane. Discover. Ephemeral.", imageNumber: CONFORMANCE_CARD_IMAGE, artOwned: false,
 };
 
 const ATLAS_MODEL: AtlasNodeModel = {
@@ -31,7 +32,7 @@ const ATLAS_MODEL: AtlasNodeModel = {
   },
   left: 92, top: 92, size: 112, isStarter: false, isBoss: false, isReachable: true,
   iconRef: artRef.dreamscapeIcon("wilderveil"), siteBadgeGlyph: GLYPHS.water,
-  knownDreamsignRef: artRef.dreamsign("known.png"),
+  knownDreamsignRef: artRef.dreamsign("runes.png"),
   primary: { sceneArt: artRef.dreamscapeScene("wilderveil"), figureArt: null, placeName: "Conformance Veil", guideName: null, title: "Conformance Veil", body: "A fixed Atlas fixture." },
   dreamsign: { id: "44444444-4444-4444-8444-444444444444", name: "Measured Sign", art: null, rulesText: "The first vision is fixed." },
   site: { id: "55555555-5555-4555-8555-555555555555", name: "Measured Site", blurb: "A fixed semantic site.", icon: GLYPHS.water },
@@ -40,7 +41,7 @@ const ATLAS_MODEL: AtlasNodeModel = {
 
 const BATTLE_CARD: CardData = {
   ...CARD, id: BATTLE_CARD_ID, name: asCardName("Battle Conformance"), cardNumber: 2,
-  energyCost: 1, spark: 2, isFast: true, renderedText: "Bane.", imageNumber: 2,
+  energyCost: 1, spark: 2, isFast: true, renderedText: "Bane.", imageNumber: CONFORMANCE_CARD_IMAGE,
 };
 const TRUNCATION_CARD: CardData = {
   ...CARD,

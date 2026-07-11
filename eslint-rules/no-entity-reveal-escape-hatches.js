@@ -60,6 +60,19 @@ function propertyName(node) {
   return "";
 }
 function typeName(node) { return !node ? "" : node.type === "Identifier" ? node.name : node.type === "TSQualifiedName" ? typeName(node.right) : ""; }
+function referencedTypeNames(node, names = new Set()) {
+  if (!node) return names;
+  if (node.type === "TSTypeReference") {
+    names.add(typeName(node.typeName));
+    const parameters = node.typeArguments?.params ?? node.typeParameters?.params ?? [];
+    for (const parameter of parameters) referencedTypeNames(parameter, names);
+  } else if (node.type === "TSUnionType" || node.type === "TSIntersectionType") {
+    for (const member of node.types) referencedTypeNames(member, names);
+  } else if (node.type === "TSParenthesizedType") {
+    referencedTypeNames(node.typeAnnotation, names);
+  }
+  return names;
+}
 function isReactNodeType(node) {
   if (!node) return false;
   if (node.type === "TSTypeReference") return /^(?:ReactNode|ReactElement|ReactPortal)$/.test(typeName(node.typeName));
@@ -85,6 +98,7 @@ export default {
       mechanicalProp: "Reveal placement, timing, anchor, and portal mechanics are coordinator-owned.",
       controlledState: "Reveal open/shown state is coordinator-owned and uncontrolled from product code.",
       publicSpec: "RevealSpec is an internal protocol and cannot appear in a product API.",
+      opaqueSpread: "Named reveal components accept only statically enumerable safe props; opaque JSX spreads are forbidden.",
     },
   },
   create(context) {
@@ -95,10 +109,25 @@ export default {
     const infoCardBindings = new Set(["InfoCard"]);
     const allowedRevealTypeNames = new Set();
     const staticObjectBindings = new Map();
+    const typedSpreadBindings = new Map();
 
     function objectProperties(node) {
       if (node?.type !== "ObjectExpression") return [];
       return node.properties.filter((property) => property.type === "Property" && property.kind === "init" && keyName(property) !== "");
+    }
+
+    function registerTypedParameters(parameters) {
+      for (const parameter of parameters) {
+        if (parameter.type !== "Identifier") continue;
+        staticObjectBindings.delete(parameter.name);
+        typedSpreadBindings.delete(parameter.name);
+        const types = referencedTypeNames(parameter.typeAnnotation?.typeAnnotation);
+        const components = new Set([...types]
+          .filter((name) => name.endsWith("Props"))
+          .map((name) => name.slice(0, -"Props".length))
+          .filter((name) => NAMED_REVEAL_COMPONENTS.has(name)));
+        if (components.size > 0) typedSpreadBindings.set(parameter.name, components);
+      }
     }
 
     function checkInternalImport(node, source) {
@@ -108,6 +137,13 @@ export default {
       const imported = node.specifiers.map((specifier) => specifier.type === "ImportSpecifier" ? String(specifier.imported.name ?? specifier.imported.value) : "*");
       if (!approved || imported.some((name) => !approved.has(name))) context.report({ node, messageId: "internalImport" });
       else for (const name of imported) allowedRevealTypeNames.add(name);
+    }
+
+    function checkInternalBoundary(node, source) {
+      const resolved = resolvedImport(filename, source);
+      if (resolved.startsWith("src/tango/internal/reveal/")) {
+        context.report({ node, messageId: "internalImport" });
+      }
     }
 
     function processMembers(node, componentName, members) {
@@ -143,20 +179,33 @@ export default {
       },
       VariableDeclarator(node) {
         if (node.id.type === "Identifier") {
+          staticObjectBindings.delete(node.id.name);
+          typedSpreadBindings.delete(node.id.name);
           if (node.init?.type === "Identifier" && portalFunctions.has(node.init.name)) portalFunctions.add(node.id.name);
           if (node.init?.type === "Identifier" && infoCardBindings.has(node.init.name)) infoCardBindings.add(node.id.name);
           if (node.init?.type === "MemberExpression" && portalNamespaces.has(node.init.object?.name) && propertyName(node.init) === "createPortal") portalFunctions.add(node.id.name);
-          if (node.parent?.kind === "const") {
-            const properties = objectProperties(node.init);
-            if (properties.length > 0) staticObjectBindings.set(node.id.name, properties);
+          if (node.parent?.kind === "const" && node.init?.type === "ObjectExpression") {
+            staticObjectBindings.set(node.id.name, objectProperties(node.init));
           }
           if (node.init?.type === "ArrowFunctionExpression" && /^[A-Z]/.test(node.id.name) && node.init.params[0]?.type === "ObjectPattern") {
             const names = new Set(node.init.params[0].properties.map(keyName));
             if (revealLikeProps(names, node.id.name)) context.report({ node: node.id, messageId: "genericWrapper" });
           }
+          if (node.init?.type === "ArrowFunctionExpression") registerTypedParameters(node.init.params);
         }
         if (node.id.type === "ObjectPattern" && node.init?.type === "Identifier" && infoCardBindings.has(node.init.name)) {
           for (const property of node.id.properties) if (INFO_CARD_STATICS.has(keyName(property))) context.report({ node: property, messageId: "infoCardStatic" });
+        }
+      },
+      ExportNamedDeclaration(node) {
+        if (node.source !== null) checkInternalBoundary(node, String(node.source.value));
+      },
+      ExportAllDeclaration(node) {
+        checkInternalBoundary(node, String(node.source.value));
+      },
+      ImportExpression(node) {
+        if (node.source.type === "Literal" && typeof node.source.value === "string") {
+          checkInternalBoundary(node, node.source.value);
         }
       },
       MemberExpression(node) {
@@ -170,6 +219,13 @@ export default {
       JSXOpeningElement(node) {
         const name = jsxName(node.name);
         const attributes = node.attributes.filter((attribute) => attribute.type === "JSXAttribute");
+        const opaqueSpreads = node.attributes.filter((attribute) => {
+          if (attribute.type !== "JSXSpreadAttribute") return false;
+          if (attribute.argument.type === "ObjectExpression") return false;
+          if (attribute.argument.type !== "Identifier") return true;
+          return !staticObjectBindings.has(attribute.argument.name)
+            && !typedSpreadBindings.get(attribute.argument.name)?.has(name);
+        });
         const spreadProperties = node.attributes.flatMap((attribute) => {
           if (attribute.type !== "JSXSpreadAttribute") return [];
           if (attribute.argument.type === "Identifier") return staticObjectBindings.get(attribute.argument.name) ?? [];
@@ -177,6 +233,9 @@ export default {
         });
         const names = new Set([...attributes.map((attribute) => jsxName(attribute.name)), ...spreadProperties.map(keyName)]);
         if (!revealLikeProps(names, name)) return;
+        if (NAMED_REVEAL_COMPONENTS.has(name)) {
+          for (const spread of opaqueSpreads) context.report({ node: spread, messageId: "opaqueSpread" });
+        }
         if (!NAMED_REVEAL_COMPONENTS.has(name) && GENERIC_REVEAL_WRAPPERS.has(name)) context.report({ node, messageId: "genericWrapper" });
         for (const attribute of attributes) {
           const prop = jsxName(attribute.name);
@@ -195,7 +254,11 @@ export default {
       TSTypeAliasDeclaration(node) { if (node.typeAnnotation.type === "TSTypeLiteral") processMembers(node.id, node.id.name.replace(/Props$/, ""), node.typeAnnotation.members); },
       TSPropertySignature(node) { if (/^revealSpec$/i.test(keyName(node))) context.report({ node: node.key, messageId: "publicSpec" }); },
       TSTypeReference(node) { if (typeName(node.typeName) === "RevealSpec" && !allowedRevealTypeNames.has("RevealSpec")) context.report({ node, messageId: "publicSpec" }); },
-      FunctionDeclaration(node) { if (node.id && GENERIC_REVEAL_WRAPPERS.has(node.id.name)) context.report({ node: node.id, messageId: "genericWrapper" }); },
+      FunctionDeclaration(node) {
+        registerTypedParameters(node.params);
+        if (node.id && GENERIC_REVEAL_WRAPPERS.has(node.id.name)) context.report({ node: node.id, messageId: "genericWrapper" });
+      },
+      FunctionExpression(node) { registerTypedParameters(node.params); },
     };
   },
 };

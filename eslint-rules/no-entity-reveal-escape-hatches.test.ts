@@ -68,6 +68,13 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
         <><GameCard {...{ selected: true, unavailable: false }} /><GameCard {...selectedProps} /></>;`,
     },
     {
+      name: "component-owned prop types prove a named spread safe",
+      filename: "src/tango/docs/demos/game-card.tsx",
+      code: `function Demo(props: Omit<GameCardProps, "testId">) {
+        return <GameCard {...props} testId="demo" />;
+      }`,
+    },
+    {
       name: "computed non-portal namespace members stay legal",
       filename: "src/editor/LegacyRoot.tsx",
       code: `import * as DOM from "react-dom"; DOM["flushSync"](() => render());`,
@@ -77,6 +84,18 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
       filename: "src/editor/InfoPreview.tsx",
       code: `import { InfoCard } from "../tango/components/overlay/InfoCard";
         const IC = InfoCard; IC.displayName;`,
+    },
+    {
+      name: "opaque spreads stay legal on ordinary components",
+      filename: "src/editor/Article.tsx",
+      code: `const props = getProps(); <Article {...props} />;`,
+    },
+    {
+      name: "non-internal re-exports and dynamic imports stay legal",
+      filename: "src/editor/Article.tsx",
+      code: `export { renderArticle } from "./renderArticle";
+        export * from "./article-types";
+        void import("./article-preview");`,
     },
   ],
   invalid: [
@@ -202,6 +221,43 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
       code: `const escaped = { anchorRect, shown: true };
         <GameCard {...escaped} model={model} />;`,
       errors: [{ messageId: "mechanicalProp" }, { messageId: "controlledState" }],
+    },
+    {
+      name: "opaque call-result spreads are forbidden on named reveal components",
+      filename: "src/tango/screens/ShopScreen.tsx",
+      code: `const escaped = getProps(); <GameCard {...escaped} model={model} />;`,
+      errors: [{ messageId: "opaqueSpread" }],
+    },
+    {
+      name: "opaque parameter spreads are forbidden on named reveal components",
+      filename: "src/tango/screens/ShopScreen.tsx",
+      code: `function Wrapper(props: any) { return <GameCard {...props} model={model} />; }`,
+      errors: [{ messageId: "opaqueSpread" }],
+    },
+    {
+      name: "opaque parameters shadow earlier statically safe bindings",
+      filename: "src/tango/screens/ShopScreen.tsx",
+      code: `const props = { selected: true };
+        function Wrapper(props: any) { return <GameCard {...props} model={model} />; }`,
+      errors: [{ messageId: "opaqueSpread" }],
+    },
+    {
+      name: "product code cannot re-export internal reveal symbols",
+      filename: "src/components/reveal.ts",
+      code: `export { useRevealSource } from "../tango/internal/reveal/context";`,
+      errors: [{ messageId: "internalImport" }],
+    },
+    {
+      name: "product code cannot wildcard re-export reveal internals",
+      filename: "src/components/reveal.ts",
+      code: `export * from "../tango/internal/reveal/model";`,
+      errors: [{ messageId: "internalImport" }],
+    },
+    {
+      name: "product code cannot dynamically import reveal internals",
+      filename: "src/components/reveal.ts",
+      code: `void import("../tango/internal/reveal/model");`,
+      errors: [{ messageId: "internalImport" }],
     },
     {
       name: "public reveal specs are forbidden",

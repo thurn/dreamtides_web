@@ -67,6 +67,16 @@ describe("EntityRevealConformanceDemo", () => {
     expect(infoSource.querySelector<HTMLImageElement>("img")?.src).toContain(
       "/dreamcallers/cutout/0071.png",
     );
+    expect(
+      container.querySelector<HTMLImageElement>(
+        'img[src*="/cards/485518048.webp"]',
+      ),
+    ).not.toBeNull();
+    expect(
+      container.querySelector<HTMLImageElement>(
+        'img[src*="/dreamsigns/runes.png"]',
+      ),
+    ).not.toBeNull();
     for (const scenario of ["above", "side-fallback", "top-edge", "truncation", "best-effort", "safe-area", "reduced-motion"]) {
       act(() => container.querySelector<HTMLButtonElement>(`[data-conformance-scenario="${scenario}"]`)?.click());
       const source = container.querySelector<HTMLElement>(`[data-conformance-scenario-source="${scenario}"]`)!;
