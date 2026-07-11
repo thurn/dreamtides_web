@@ -7,6 +7,7 @@ import type {
   TransfigurationType,
 } from "../types/quest";
 import type { ArtCrop } from "../types/cards";
+import type { CardTransfigurationDisplay } from "../runtime/transfiguration-display";
 import type { BattleDebugEdit } from "./debug/commands";
 
 export type BattleSide = "player" | "enemy";
@@ -265,6 +266,8 @@ export interface BattleDeckCardDefinition {
    *  copies); those fall back to the default crop. */
   art?: ArtCrop;
   transfiguration: TransfigurationType | null;
+  /** Exact shared-builder presentation for the applied transfiguration. */
+  transfigurationDisplay?: CardTransfigurationDisplay;
   typeChange?: CardTypeChange | null;
   keywordModification?: CardKeywordModification | null;
   isBane: boolean;

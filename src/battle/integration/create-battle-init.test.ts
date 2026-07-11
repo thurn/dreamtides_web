@@ -11,6 +11,8 @@ import { asCardId, asCardName } from "../../types/card-identity";
 import type { DreamcallerContent } from "../../types/content";
 import type { PoolCard } from "../../draft/pool/types";
 import type { CardKeywordModification, CardTypeChange } from "../../types/quest";
+import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
+import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
 
 // The padded minimum battle deck size; the enemy deck is padded up to this.
 const MIN_BATTLE_DECK_SIZE = 25;
@@ -478,6 +480,42 @@ describe("createBattleInit", () => {
           isBane: card.isBane,
         });
       }
+    });
+
+    it.each([
+      {
+        type: "Inspired" as const,
+        card: { cardType: "Event" as const, energyCost: 2, spark: null, isFast: false,
+          renderedText: "Foresee." },
+      },
+      {
+        type: "Perfected" as const,
+        card: { cardType: "Character" as const, energyCost: 0, spark: 3, isFast: false,
+          renderedText: "A wall of thorns." },
+      },
+    ])("persists the exact shared $type display descriptor", ({ type, card: overrides }) => {
+      const baseInput = makeBaseInput();
+      const sourceEntry = baseInput.state.deck[0];
+      const original = baseInput.cardDatabase.get(sourceEntry.cardNumber);
+      if (original === undefined) throw new Error("expected source card");
+      const card = { ...original, ...overrides };
+      const input = {
+        ...baseInput,
+        cardDatabase: new Map(baseInput.cardDatabase).set(card.cardNumber, card),
+        state: {
+          ...baseInput.state,
+          deck: baseInput.state.deck.map((entry, index) => index === 0
+            ? { ...entry, transfiguration: type }
+            : entry),
+        },
+      };
+      const definition = createBattleInit(input).playerDeckOrder.find(
+        (entry) => entry.sourceDeckEntryId === sourceEntry.entryId,
+      );
+      const display = (definition as typeof definition & {
+        transfigurationDisplay?: CardTransfigurationDisplay;
+      })?.transfigurationDisplay;
+      expect(display).toEqual(buildTransfigurationDisplay(card, type).display);
     });
 
     it("applies quest deck entry type changes to player battle card definitions", () => {

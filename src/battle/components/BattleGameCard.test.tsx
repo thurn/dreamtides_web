@@ -4,9 +4,12 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { TangoRoot } from "../../tango/TangoRoot";
+import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
+import { TRANSFIGURE_MARK_END, TRANSFIGURE_MARK_START } from "../../runtime/transfigure-markers";
 import { createDefaultBattleCardStatus } from "../state/create-initial-state";
-import type { BattleCardInstance } from "../types";
+import type { BattleCardInstance, BattleDeckCardDefinition } from "../types";
 import { BattleGameCard, battleGameCardModel } from "./BattleGameCard";
+import "../battle.css";
 
 const UUID = "11111111-1111-4111-8111-111111111111";
 let resizeCallbacks: ResizeObserverCallback[] = [];
@@ -19,7 +22,12 @@ function instance(overrides: Partial<BattleCardInstance> = {}): BattleCardInstan
       name: "Archive Sentry", battleCardKind: "character", subtype: "Synth",
       energyCost: 1, printedEnergyCost: 3, printedSpark: 2, isFast: true,
       reclaimCost: 1, renderedText: "Discard a bane.", imageNumber: 2,
-      transfiguration: "Kindled", isBane: false,
+      transfiguration: "Kindled",
+      transfigurationDisplay: {
+        type: "Kindled", color: "#fca5a5", markedText: "Discard a bane.",
+        energyChanged: false, sparkChanged: true, fastChanged: false,
+      },
+      isBane: false,
     },
     owner: "player", controller: "player", figments: [2, 3, 4], sparkDelta: 2,
     staticSparkBonus: 1, isRevealedToPlayer: true,
@@ -66,6 +74,50 @@ describe("BattleGameCard", () => {
     expect(model.displaySnapshot.spark).toBe(5);
     expect(model.displaySnapshot.energyCost).toBe(1);
     expect(model.transfiguration).toMatchObject({ type: "Kindled", color: "#fca5a5", sparkChanged: true });
+  });
+
+  it("uses the exact persisted text-changing and applicability-sensitive displays", () => {
+    const inspired: CardTransfigurationDisplay = {
+      type: "Inspired", color: "#93c5fd",
+      markedText: `Foresee. ${TRANSFIGURE_MARK_START}Draw a card.${TRANSFIGURE_MARK_END}`,
+      energyChanged: false, sparkChanged: false, fastChanged: false,
+    };
+    const perfected: CardTransfigurationDisplay = {
+      type: "Perfected", color: "#d8b4fe", markedText: "A wall of thorns.",
+      energyChanged: false, sparkChanged: true, fastChanged: true,
+    };
+    const withDisplay = (
+      display: CardTransfigurationDisplay,
+      renderedText: string,
+    ): BattleCardInstance => instance({
+      definition: {
+        ...instance().definition,
+        renderedText,
+        transfiguration: display.type,
+        transfigurationDisplay: display,
+      } as BattleDeckCardDefinition & { transfigurationDisplay: CardTransfigurationDisplay },
+    });
+
+    expect(battleGameCardModel(withDisplay(inspired, "Foresee. Draw a card.")).transfiguration)
+      .toEqual(inspired);
+    expect(battleGameCardModel(withDisplay(perfected, "A wall of thorns.")).transfiguration)
+      .toEqual(perfected);
+
+    const { container, root } = mount(
+      <BattleGameCard instance={withDisplay(inspired, "Foresee. Draw a card.")} />,
+    );
+    const highlighted = [...container.querySelectorAll<HTMLElement>("span")]
+      .find((span) => span.textContent === "Draw a card.");
+    expect(highlighted?.style.color).toBe("rgb(147, 197, 253)");
+    act(() => root.unmount()); container.remove();
+  });
+
+  it("applies the battle exhausted treatment to the canonical GameCard surface", () => {
+    const { container, root } = mount(<BattleGameCard instance={instance()} exhausted />);
+    const surface = container.querySelector<HTMLElement>(".battle-game-card-surface");
+    expect(surface).not.toBeNull();
+    expect(getComputedStyle(surface!).filter).toBe("grayscale(0.5) brightness(0.62)");
+    act(() => root.unmount()); container.remove();
   });
 
   it("visibly renders counters, figment count, and the transfiguration marker/tint", () => {
@@ -115,6 +167,22 @@ describe("BattleGameCard", () => {
     });
     expect(activate).not.toHaveBeenCalled();
     expect(dragStart).toHaveBeenCalledOnce(); expect(dragEnd).toHaveBeenCalledOnce();
+    act(() => root.unmount()); container.remove();
+  });
+
+  it("allows keyboard activation after a drag without a compatibility click", () => {
+    const activate = vi.fn();
+    const { container, root } = mount(
+      <BattleGameCard instance={instance()} draggable onActivate={activate} />,
+    );
+    const source = container.querySelector<HTMLElement>("[data-game-card-source]")!;
+    const wrapper = container.querySelector<HTMLElement>("[data-battle-card-id]")!;
+    act(() => {
+      wrapper.dispatchEvent(new Event("dragstart", { bubbles: true }));
+      wrapper.dispatchEvent(new Event("dragend", { bubbles: true }));
+      source.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    });
+    expect(activate).toHaveBeenCalledOnce();
     act(() => root.unmount()); container.remove();
   });
 });

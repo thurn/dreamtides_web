@@ -16,6 +16,7 @@ import type { DraftRecord } from "../../data/cards-v2-database";
 import type { FitModel } from "../../draft/replay/fit-model";
 import { DEFAULT_POOL_VARIANT } from "../../draft/pool/types";
 import { resolveDeckEntryCard } from "../../card-type-change";
+import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
 import type { BattleRng } from "../random";
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
@@ -764,6 +765,9 @@ function normalizePlayerDeckCard(
   // and rules text (transfiguration, type/keyword changes, then debug stat
   // overrides) rather than the printed base values.
   const effectiveCard = resolveDeckEntryCard(card, entry);
+  const transfigurationDisplay = entry.transfiguration === null
+    ? undefined
+    : buildTransfigurationDisplay(card, entry.transfiguration).display;
   return {
     sourceDeckEntryId: entry.entryId,
     // The stable base-catalog UUID, kept even when the entry is transfigured or
@@ -794,6 +798,7 @@ function normalizePlayerDeckCard(
     // into the shared battle state, and Firebase rejects an explicit `undefined`.
     ...(card.art ? { art: card.art } : {}),
     transfiguration: entry.transfiguration,
+    ...(transfigurationDisplay === undefined ? {} : { transfigurationDisplay }),
     ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),
     ...(entry.keywordModification == null
       ? {}
@@ -807,6 +812,9 @@ function freezeBattleDeckCardDefinition(
 ): BattleDeckCardDefinition {
   return Object.freeze({
     ...definition,
+    ...(definition.transfigurationDisplay === undefined
+      ? {}
+      : { transfigurationDisplay: Object.freeze({ ...definition.transfigurationDisplay }) }),
   });
 }
 

@@ -1,29 +1,10 @@
 import { useRef, type CSSProperties, type DragEventHandler, type MouseEventHandler } from "react";
 import { asCardId, asCardName, isCardId } from "../../types/card-identity";
 import { CardView, GameCard, type GameCardModel } from "../../tango/components/card/CardView";
-import { TRANSFIGURATION_TINT_COLORS, type CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
-import { TRANSFIGURE_MARK_END, TRANSFIGURE_MARK_START } from "../../runtime/transfigure-markers";
 import type { BattleCardInstance } from "../types";
 import { selectEffectiveSparkForInstance, selectFigmentCount } from "../state/figments";
 import { AutomationGearIcon } from "./AutomationGearIcon";
 import { BattleCardView, battleCardDisplayFromInstance, battleCardVisualFromInstance } from "./BattleCardView";
-
-function battleTransfigurationDisplay(instance: BattleCardInstance): CardTransfigurationDisplay | undefined {
-  const type = instance.definition.transfiguration;
-  if (type === null) return undefined;
-  const marksRules = type === "Amplified" || type === "Inspired" || type === "Enduring"
-    || type === "Resonant" || type === "Attuned" || type === "Perfected";
-  return {
-    type,
-    color: TRANSFIGURATION_TINT_COLORS[type],
-    markedText: marksRules && instance.definition.renderedText !== ""
-      ? `${TRANSFIGURE_MARK_START}${instance.definition.renderedText}${TRANSFIGURE_MARK_END}`
-      : instance.definition.renderedText,
-    energyChanged: type === "Empowered" || type === "Perfected",
-    sparkChanged: type === "Kindled" || type === "Perfected",
-    fastChanged: type === "Hastened" || type === "Perfected",
-  };
-}
 
 /** Resolve canonical battle display state without changing battle-instance identity. */
 export function battleGameCardModel(instance: BattleCardInstance): GameCardModel {
@@ -34,7 +15,7 @@ export function battleGameCardModel(instance: BattleCardInstance): GameCardModel
   const cardId = asCardId(definition.cardId);
   return {
     cardId,
-    transfiguration: battleTransfigurationDisplay(instance),
+    transfiguration: definition.transfigurationDisplay,
     displaySnapshot: {
       id: cardId,
       name: asCardName(definition.name),
@@ -139,10 +120,14 @@ export function BattleGameCard({
       data-battle-card-transfiguration={instance.definition.transfiguration ?? undefined}
       className={classes} style={style} draggable={draggable} onDoubleClick={onDoubleClick}
       onContextMenu={onContextMenu} onPointerDownCapture={() => { dragSuppressedRef.current = false; }}
+      onKeyDownCapture={() => { dragSuppressedRef.current = false; }}
       onDragStart={handleDragStart} onDragEnd={onDragEnd}
       onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onMouseMove={onMouseMove}>
-      <GameCard model={battleGameCardModel(instance)} selected={selected} selectionColor="selected"
-        hideRulesText={compact} unavailable={unaffordable} onActivate={handleActivate} />
+      <div className="battle-game-card-surface"
+        style={exhausted ? { filter: "grayscale(0.5) brightness(0.62)" } : undefined}>
+        <GameCard model={battleGameCardModel(instance)} selected={selected} selectionColor="selected"
+          hideRulesText={compact} unavailable={unaffordable} onActivate={handleActivate} />
+      </div>
       {figmentCount > 1 ? <div className="c-figment-count" aria-label="figment count">{String(figmentCount)}</div> : null}
       {instance.status.counters > 0 ? <div className="c-counters" aria-label={`${String(instance.status.counters)} counters`}>
         <span className="c-counters-glyph" aria-hidden="true">⧗</span>{String(instance.status.counters)}

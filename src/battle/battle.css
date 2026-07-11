@@ -1099,7 +1099,8 @@
   z-index: 3;
 }
 
-.battle-card.exhausted .c-art {
+.battle-card.exhausted .c-art,
+.battle-card.exhausted .battle-game-card-surface {
   filter: grayscale(0.5) brightness(0.62);
 }
 
