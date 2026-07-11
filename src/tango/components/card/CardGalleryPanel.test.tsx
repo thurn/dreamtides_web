@@ -66,7 +66,10 @@ describe("CardGalleryPanel", () => {
     expect(action?.style.boxSizing).toBe("border-box");
     expect(action?.style.aspectRatio).toBe("5 / 7");
     expect(action?.style.borderRadius).toBe("3.6% / 2.57%");
+    expect(action?.style.background).toContain("var(--glass-fill)");
+    expect(action?.style.border).toBe("1px solid var(--glass-rim)");
     expect(container.querySelector('[data-gallery-action-label]')?.textContent).toBe("Restock");
+    expect(container.querySelector<HTMLElement>('[data-gallery-action-glyph]')?.style.textShadow).toBe("");
     act(() => root.unmount()); container.remove();
   });
 });

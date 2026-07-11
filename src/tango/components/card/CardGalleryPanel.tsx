@@ -16,7 +16,6 @@ import {
   type ReactElement,
 } from "react";
 import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
-import { glassTrack } from "../../internal/control-treatment";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import type { TangoColor } from "../../primitives/color";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
@@ -746,7 +745,7 @@ export function CardGalleryPanel({
                       padding: 0,
                       borderRadius: CARD_CORNER_RADIUS,
                       overflow: "hidden",
-                      ...glassTrack("onGlass"),
+                      ...glassSurfaceStyle({ radius: CARD_CORNER_RADIUS }),
                     }}
                   >
                     <i
@@ -756,7 +755,6 @@ export function CardGalleryPanel({
                       style={{
                         fontSize: `calc(${cardWidth} * 0.38)`,
                         color: token("--text-on-glass"),
-                        textShadow: token("--text-outline-media"),
                       }}
                     />
                     <span
@@ -765,7 +763,6 @@ export function CardGalleryPanel({
                         font: token("--t-body"),
                         color: token("--text-on-glass"),
                         textAlign: "center",
-                        textShadow: token("--text-outline-media"),
                       }}
                     >
                       {endAction.label}
