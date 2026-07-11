@@ -3,8 +3,10 @@
   "rootNamespace": "TangoMvp.Tests.PlayMode",
   "references": [
     "TangoMvp.Runtime",
+    "TangoMvp.TestSupport",
     "Unity.InputSystem",
-    "Unity.InputSystem.TestFramework"
+    "Unity.InputSystem.TestFramework",
+    "Unity.RenderPipelines.Universal.Runtime"
   ],
   "optionalUnityReferences": [
     "TestAssemblies"

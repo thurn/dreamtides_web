@@ -3,6 +3,7 @@
   "rootNamespace": "TangoMvp.Tests",
   "references": [
     "TangoMvp.Runtime",
+    "TangoMvp.TestSupport",
     "Unity.RenderPipelines.Universal.Runtime"
   ],
   "includePlatforms": [

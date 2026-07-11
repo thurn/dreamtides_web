@@ -1,4 +1,4 @@
-Shader "TangoMvp/SeparableBlur"
+Shader "Hidden/TangoMvp/SeparableBlur"
 {
     SubShader
     {

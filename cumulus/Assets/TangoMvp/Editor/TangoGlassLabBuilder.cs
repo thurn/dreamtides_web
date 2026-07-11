@@ -26,6 +26,9 @@ namespace TangoMvp.Editor
         private const string SceneGlassPath = MaterialsFolder + "/TangoSceneGlass.mat";
         private const string OnGlassPath = MaterialsFolder + "/TangoOnGlass.mat";
         private const string SolidChromePath = MaterialsFolder + "/TangoSolidChrome.mat";
+        private const string BackdropPath = MaterialsFolder + "/TangoBackdropUnlit.mat";
+        private const string ShadowReceiverPath = MaterialsFolder + "/TangoShadowReceiver.mat";
+        private const string TextOutlinePath = MaterialsFolder + "/TangoTextOutline.mat";
         private const string BlurPath = MaterialsFolder + "/TangoBlur.mat";
         private const string LibraryPath = MaterialsFolder + "/TangoMaterialLibrary.asset";
         private const string MeshesFolder = "Assets/TangoMvp/Meshes";
@@ -71,7 +74,22 @@ namespace TangoMvp.Editor
                 RequireShader("Universal Render Pipeline/Lit"));
             ConfigureSolidChrome(solidChrome);
 
-            Material blur = GetOrCreateMaterial(BlurPath, RequireShader("TangoMvp/SeparableBlur"));
+            Material backdrop = GetOrCreateMaterial(
+                BackdropPath,
+                RequireShader("Universal Render Pipeline/Unlit"));
+            ConfigureBackdrop(backdrop);
+
+            Material shadowReceiver = GetOrCreateMaterial(
+                ShadowReceiverPath,
+                RequireShader("Universal Render Pipeline/Lit"));
+            ConfigureShadowReceiver(shadowReceiver);
+
+            Material textOutline = GetOrCreateMaterial(
+                TextOutlinePath,
+                RequireShader("TangoMvp/TextOutline"));
+            ConfigureTextOutline(textOutline);
+
+            Material blur = GetOrCreateMaterial(BlurPath, RequireShader("Hidden/TangoMvp/SeparableBlur"));
             ConfigureBlur(blur);
 
             TangoMaterialLibrary library = GetOrCreateLibrary();
@@ -314,7 +332,8 @@ namespace TangoMvp.Editor
             textMesh.richText = false;
             Font font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             textMesh.font = font;
-            textMesh.GetComponent<Renderer>().sharedMaterial = font.material;
+            textMesh.GetComponent<Renderer>().sharedMaterial =
+                AssetDatabase.LoadAssetAtPath<Material>(TextOutlinePath);
             ConfigureRenderer(textMesh.GetComponent<Renderer>(), ShadowCastingMode.Off, false);
             SetLocalTransform(target.transform, localPosition, Quaternion.identity, localScale);
         }
@@ -342,12 +361,12 @@ namespace TangoMvp.Editor
 
                 Camera camera = ReconcileCamera(scene);
                 ReconcileLight(scene);
-                ReconcileBackground(scene, library.Resolve(TangoMaterialRole.SolidChrome));
+                ReconcileBackground(scene, AssetDatabase.LoadAssetAtPath<Material>(BackdropPath));
                 ConfigureCube(
                     EnsureSceneRoot(scene, "Ground Shadow Receiver"),
                     new Vector3(0f, -3.65f, 2.8f),
                     new Vector3(16f, 1.5f, 0.2f),
-                    library.Resolve(TangoMaterialRole.SolidChrome));
+                    AssetDatabase.LoadAssetAtPath<Material>(ShadowReceiverPath));
 
                 Transform sourceAnchor = ReconcileAnchor(scene, "Panel Source Anchor", new Vector3(-3f, 1f, 0f));
                 Transform destinationAnchor = ReconcileAnchor(scene, "Panel Destination Anchor", new Vector3(-1.4f, 2.7f, 0f));
@@ -862,7 +881,7 @@ namespace TangoMvp.Editor
 
         private static void ConfigureSolidChrome(Material material)
         {
-            material.SetColor("_BaseColor", new Color(0.025f, 0.014f, 0.040f, 1f));
+            material.SetColor("_BaseColor", new Color(0.42f, 0.24f, 0.62f, 1f));
             material.SetFloat("_Surface", 0f);
             material.SetFloat("_Blend", 0f);
             material.SetFloat("_AlphaClip", 0f);
@@ -881,6 +900,49 @@ namespace TangoMvp.Editor
         private static void ConfigureBlur(Material material)
         {
             material.renderQueue = -1;
+            EditorUtility.SetDirty(material);
+        }
+
+        private static void ConfigureBackdrop(Material material)
+        {
+            material.SetColor("_BaseColor", Color.white);
+            material.SetFloat("_Surface", 0f);
+            material.SetFloat("_Blend", 0f);
+            material.SetFloat("_AlphaClip", 0f);
+            material.SetFloat("_Cull", (float)CullMode.Back);
+            material.SetFloat("_ZWrite", 1f);
+            material.SetOverrideTag("RenderType", "Opaque");
+            material.DisableKeyword("_SURFACE_TYPE_TRANSPARENT");
+            material.DisableKeyword("_ALPHATEST_ON");
+            material.renderQueue = (int)RenderQueue.Geometry;
+            EditorUtility.SetDirty(material);
+        }
+
+        private static void ConfigureTextOutline(Material material)
+        {
+            Font font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            material.mainTexture = font.material.mainTexture;
+            material.SetColor("_OutlineColor", new Color(0.006f, 0.004f, 0.01f, 1f));
+            material.SetFloat("_OutlineWidth", 10f);
+            material.renderQueue = (int)RenderQueue.Transparent + 20;
+            EditorUtility.SetDirty(material);
+        }
+
+        private static void ConfigureShadowReceiver(Material material)
+        {
+            material.SetColor("_BaseColor", new Color(0.28f, 0.22f, 0.34f, 1f));
+            material.SetFloat("_Surface", 0f);
+            material.SetFloat("_Blend", 0f);
+            material.SetFloat("_AlphaClip", 0f);
+            material.SetFloat("_Smoothness", 0.18f);
+            material.SetFloat("_Metallic", 0f);
+            material.SetFloat("_Cull", (float)CullMode.Back);
+            material.SetFloat("_ZWrite", 1f);
+            material.SetOverrideTag("RenderType", "Opaque");
+            material.DisableKeyword("_SURFACE_TYPE_TRANSPARENT");
+            material.DisableKeyword("_ALPHATEST_ON");
+            material.SetShaderPassEnabled("ShadowCaster", true);
+            material.renderQueue = (int)RenderQueue.Geometry;
             EditorUtility.SetDirty(material);
         }
 

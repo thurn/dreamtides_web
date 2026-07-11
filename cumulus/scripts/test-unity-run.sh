@@ -224,6 +224,7 @@ for fixture in \
   "target-invocation-exception|System.Reflection.TargetInvocationException: Exception has been thrown by the target" \
   "null-reference|NullReferenceException: Object reference not set" \
   "missing-reference|MissingReferenceException: The object has been destroyed" \
+  "build-failed-exception|UnityEditor.Build.BuildFailedException: Player build failed" \
   "assertion-failure|Assertion failed on expression: 'm_Valid'" \
   "crash-marker|Unity Editor crashed!"; do
   fixture_name="${fixture%%|*}"

@@ -232,7 +232,7 @@ namespace TangoMvp.Tests
         [Test]
         public void BlurShader_HasExactlyHorizontalAndVerticalPasses()
         {
-            Shader shader = Shader.Find("TangoMvp/SeparableBlur");
+            Shader shader = Shader.Find("Hidden/TangoMvp/SeparableBlur");
 
             Assert.That(shader, Is.Not.Null);
             Assert.That(shader.passCount, Is.EqualTo(2));
