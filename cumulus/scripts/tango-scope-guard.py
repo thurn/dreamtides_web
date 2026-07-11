@@ -36,9 +36,10 @@ def source_fields() -> re.Pattern[str]:
         r"(?:List|IList|IEnumerable|IReadOnlyList|ICollection|IReadOnlyCollection|Collection)"
         rf"\s*<\s*{array}\s*>\s*\??"
     )
-    modifiers = r"(?:(?:public|private|protected|internal|static|readonly|volatile|new)\s+)*"
+    modifier = r"(?:public|private|protected|internal|static|readonly|volatile|new)"
+    field_prefix = rf"(?:(?:\[[^\]]+\]\s*)+(?:{modifier}\s+)*|(?:{modifier}\s+)+)"
     return re.compile(
-        rf"(?:\[[^\]]+\]\s*)*{modifiers}(?:{array}|{collection})\s+(\w+)\s*(?:=|;)",
+        rf"{field_prefix}(?:{array}|{collection})\s+(\w+)\s*(?:=|;)",
         re.MULTILINE,
     )
 

@@ -51,7 +51,7 @@ expect_reject_with() {
 
 allowed="$TEST_ROOT/allowed"
 write_source "$allowed" "cumulus/Assets/TangoMvp/Runtime/Allowed.cs" \
-  'using UnityEngine; public sealed class Allowed : MonoBehaviour { }'
+  'using UnityEngine; public sealed class Allowed : MonoBehaviour { void Inspect(Camera input) { Camera camera = input; } }'
 expect_accept "allowed runtime source with meta" \
   python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$allowed"
 
