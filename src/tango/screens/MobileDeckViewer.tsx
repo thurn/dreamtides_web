@@ -21,21 +21,12 @@
 // visible grid from the full deck and that state.
 //
 // PURE: renders from a view-model and reports dismissal through `onClose`. All
-// state here is local presentation state (which card is being peeked, the
-// filter/sort selection). The
-// finger-clearing placement math lives in the unit-tested shared card peek
-// module, whose guarantee is proven over a full touch-point sweep by
-// scripts/deck-peek-clearance-analysis.mjs.
+// state here is local presentation state (the filter/sort selection). GameCard
+// delegates finger-clearing placement and press recognition to the shared
+// reveal coordinator.
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import type { CardData } from "../../types/cards";
-import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
-import { GameCard } from "../components/card/CardView";
-import {
-  renderMobileCardPeekOverlay,
-  useMobileCardPeek,
-} from "../components/card/MobileCardPeek";
-import { Pressable } from "../primitives/Pressable";
+import { useEffect, useMemo, useState } from "react";
+import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { IconButton } from "../components/controls/IconButton";
 import { Select } from "../components/controls/Select";
 import { GLYPHS } from "../primitives/glyph";
@@ -58,10 +49,8 @@ import { DeckViewerBackdrop, GridPlaceholder } from "./deck-viewer-shared";
 export interface DeckCardView {
   /** Stable key for the deck entry — unique even across duplicate names. */
   entryId: string;
-  /** The fully resolved card data, rendered by `GameCard` (resolved by UUID). */
-  card: CardData;
-  /** Display descriptor painting the card as transfigured, when it is one. */
-  transfiguration?: CardTransfigurationDisplay;
+  /** Canonical UUID-backed semantic model rendered by GameCard. */
+  model: GameCardModel;
   /** True when the entry is a bane, marked with a corner glyph. */
   isBane: boolean;
 }
@@ -87,12 +76,6 @@ const COLUMNS = 4;
  * filter/sort controls), then a press-to-zoom grid of the deck's cards.
  */
 export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
-  const {
-    peek,
-    openPeek,
-    handlePointerMove: handleGridPointerMove,
-    handleScroll: handleGridScroll,
-  } = useMobileCardPeek({ columns: COLUMNS, columnGapToken: "--space-4" });
   const [filterSort, setFilterSort] = useState<DeckFilterSort>(
     DEFAULT_DECK_FILTER_SORT,
   );
@@ -117,13 +100,6 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
-
-  const handleTilePointerDown = useCallback(
-    (e: React.PointerEvent<HTMLElement>, cardView: DeckCardView) => {
-      openPeek(e, cardView);
-    },
-    [openPeek],
-  );
 
   return (
     <div
@@ -152,8 +128,6 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
       />
 
       <div
-        onPointerMove={handleGridPointerMove}
-        onScroll={handleGridScroll}
         style={{
           position: "relative",
           zIndex: 1,
@@ -181,17 +155,12 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
             }}
           >
             {visibleCards.map((cardView) => (
-              <DeckTile
-                key={cardView.entryId}
-                cardView={cardView}
-                onPointerDown={handleTilePointerDown}
-              />
+              <DeckTile key={cardView.entryId} cardView={cardView} />
             ))}
           </div>
         )}
       </div>
 
-      {peek !== null && renderMobileCardPeekOverlay(peek)}
     </div>
   );
 }
@@ -368,27 +337,14 @@ function DeckControls({
 /** One grid tile: a stationary hold reveals a comfortably legible zoom. */
 function DeckTile({
   cardView,
-  onPointerDown,
 }: {
   cardView: DeckCardView;
-  onPointerDown: (
-    e: React.PointerEvent<HTMLElement>,
-    cardView: DeckCardView,
-  ) => void;
 }) {
   return (
-    <Pressable
-      as="button"
-      aria-label={cardView.card.name}
-      data-card-id={cardView.card.id}
+    <div
+      aria-label={cardView.model.displaySnapshot.name}
+      data-card-id={cardView.model.cardId}
       data-deck-entry-id={cardView.entryId}
-      onPointerDown={(e: React.PointerEvent<HTMLElement>) => {
-        onPointerDown(e, cardView);
-      }}
-      onContextMenu={(e: React.MouseEvent) => {
-        // Suppress the OS long-press callout so a held press reads as a zoom.
-        e.preventDefault();
-      }}
       style={{
         position: "relative",
         display: "block",
@@ -403,12 +359,8 @@ function DeckTile({
         touchAction: "pan-y",
       }}
     >
-      <GameCard
-        card={cardView.card}
-        transfiguration={cardView.transfiguration}
-        termDefinitions="none"
-      />
-    </Pressable>
+      <GameCard model={cardView.model} />
+    </div>
   );
 }
 

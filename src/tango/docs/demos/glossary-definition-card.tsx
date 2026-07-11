@@ -51,7 +51,7 @@ import { lookupGlossaryTerm } from "src/data/glossary";
 const entry = lookupGlossaryTerm("reclaim");
 
 <div style={{ display: "flex", gap: 12 }}>
-  <GameCard card={card} />
+  <GameCard model={{ cardId: card.id, displaySnapshot: card }} />
   {entry && <GlossaryDefinitionCard entry={entry} />}
 </div>`,
     },

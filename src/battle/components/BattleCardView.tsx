@@ -81,7 +81,7 @@ export function battleCardDisplayFromInstance(
 ): CardData {
   return {
     name: asCardName(instance.definition.name),
-    id: asCardId(`battle-card-${instance.battleCardId}`),
+    id: asCardId(instance.definition.cardId),
     cardNumber: instance.definition.cardNumber,
     cardType: instance.definition.battleCardKind === "character" ? "Character" : "Event",
     subtype: instance.definition.subtype,

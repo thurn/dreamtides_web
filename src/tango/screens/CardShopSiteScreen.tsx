@@ -1,7 +1,7 @@
 // CardShopSiteScreen — Tobias Tanglefur's Tango card shop. Five direct-buy
 // cards and one restock action share a two-row glass gallery.
 
-import type { CardData } from "../../types/cards";
+import type { GameCardModel } from "../components/card/CardView";
 import type { ArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
@@ -18,7 +18,7 @@ export interface CardShopOfferView {
   /** Persistent runtime slot index used to purchase the ware. */
   slotIndex: number;
   /** Fully resolved card rendered by GameCard. */
-  card: CardData;
+  model: GameCardModel;
   /** Effective essence price after discounts. */
   price: number;
   /** Whether a tap purchases, is unaffordable, or was already acquired. */
@@ -141,7 +141,7 @@ function CardShopGallery({
         }}
         cards={offers.map((offer) => ({
           entryId: offer.entryId,
-          card: offer.card,
+          model: offer.model,
           testId: `tango-card-shop-offer-${offer.entryId}`,
           caption:
             offer.state === "purchased"
@@ -154,7 +154,6 @@ function CardShopGallery({
         frame="floating"
         widthMode="fill"
         spacing={desktop ? "regular" : "compact"}
-        mobilePressPreview={!desktop}
         testId="tango-card-shop-gallery"
         onCardPress={(entryId) => {
           const offer = offers.find((candidate) => candidate.entryId === entryId);

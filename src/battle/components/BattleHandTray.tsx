@@ -1,11 +1,9 @@
 import type { MouseEvent as ReactMouseEvent } from "react";
 
-import { CardDisplay } from "../../components/CardDisplay";
 import type { BattleCommand } from "../debug/commands";
 import type { BattleCardInstance, BattleCommandSourceSurface, BattleMutableState } from "../types";
 import { battleCardAutomationStatus } from "../../rules/battle/battle-card-effects-table";
-import { AutomationGearIcon } from "./AutomationGearIcon";
-import { battleCardDisplayFromInstance } from "./BattleCardView";
+import { BattleGameCard } from "./BattleGameCard";
 
 export function BattleHandTray({
   canInteract,
@@ -101,7 +99,6 @@ export function BattleHandTray({
           return (
             <BattleHandCard
               key={battleCardId}
-              battleCardId={battleCardId}
               instance={instance}
               selected={isSelected}
               side={side}
@@ -112,10 +109,7 @@ export function BattleHandTray({
                 battleCardAutomationStatus(instance.definition.cardId) === "auto"
               }
               onClick={canInteract
-                ? (event) => {
-                  event.stopPropagation();
-                  onCardClick(battleCardId);
-                }
+                ? () => onCardClick(battleCardId)
                 : undefined}
               onDoubleClick={canInteract
                 ? (event) => {
@@ -142,7 +136,6 @@ export function BattleHandTray({
 }
 
 export function BattleHandCard({
-  battleCardId,
   compact = false,
   draggable = true,
   instance,
@@ -158,14 +151,13 @@ export function BattleHandCard({
   onMouseLeave,
   onMouseMove,
 }: {
-  battleCardId: string;
   compact?: boolean;
   draggable?: boolean;
   instance: BattleCardInstance;
   selected: boolean;
   showAutomationGear?: boolean;
   side: "player" | "opponent";
-  onClick?: (event: ReactMouseEvent<HTMLDivElement>) => void;
+  onClick?: () => void;
   onContextMenu?: (event: ReactMouseEvent<HTMLDivElement>) => void;
   onDoubleClick?: (event: ReactMouseEvent<HTMLDivElement>) => void;
   onDragEnd?: () => void;
@@ -175,8 +167,6 @@ export function BattleHandCard({
   onMouseMove?: (event: ReactMouseEvent<HTMLDivElement>) => void;
 }) {
   const wrapperClass = [
-    "battle-card",
-    "hand-card",
     "quest-card",
     compact ? "revealed-hand-card" : "",
     side === "opponent" ? "opponent-card opponent" : "player",
@@ -185,18 +175,16 @@ export function BattleHandCard({
     .filter((value) => value !== "")
     .join(" ");
 
-  const displayCard = battleCardDisplayFromInstance(instance);
-
   return (
-    <div
-      data-battle-card-id={battleCardId}
-      data-battle-card-variant="hand"
-      data-battle-hand-card=""
-      data-battle-card-playable="false"
-      data-selected={String(selected)}
+    <BattleGameCard
+      instance={instance}
+      variant="hand"
+      dataBattleHandCard
+      compact={compact}
+      selected={selected}
       className={wrapperClass}
       draggable={draggable}
-      onClick={onClick}
+      onActivate={onClick}
       onDoubleClick={onDoubleClick}
       onContextMenu={onContextMenu}
       onDragStart={onDragStart}
@@ -204,29 +192,7 @@ export function BattleHandCard({
       onMouseEnter={onMouseEnter}
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
-    >
-      <div className="h-full w-full">
-        <CardDisplay
-          card={displayCard}
-          selected={selected}
-          selectionColor="#a855f7"
-          hideRulesText={compact}
-        />
-      </div>
-      {showAutomationGear ? (
-        <AutomationGearIcon
-          style={{
-            position: "absolute",
-            top: "13%",
-            left: "9%",
-            width: "11%",
-            height: "auto",
-            filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55))",
-            pointerEvents: "none",
-            zIndex: 3,
-          }}
-        />
-      ) : null}
-    </div>
+      showAutomationGear={showAutomationGear}
+    />
   );
 }

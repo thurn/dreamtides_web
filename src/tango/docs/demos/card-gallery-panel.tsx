@@ -41,7 +41,7 @@ function CardGalleryPanelDemo() {
             .filter((card): card is CardData => card !== undefined)
             .map((card, index) => ({
               entryId: `demo-${String(index)}`,
-              card,
+              model: { cardId: card.id, displaySnapshot: card },
               caption: { kind: "essence" as const, amount: 100 },
               selected: selected === `demo-${String(index)}`,
               selectionColor: "danger",

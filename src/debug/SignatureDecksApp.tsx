@@ -11,7 +11,7 @@ import type { CardData } from "../types/cards";
 import type { DreamcallerContent } from "../types/content";
 import { loadQuestContent, type QuestContent } from "../data/quest-content";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
-import { CardView } from "../tango/components/card/CardView";
+import { GameCard } from "../tango/components/card/CardView";
 import {
   DreamcallerPortrait,
   dreamcallerImageSrc,
@@ -421,7 +421,7 @@ function CardLightbox({
       }}
     >
       <div style={{ width: "min(86vw, 360px)", flexShrink: 0 }}>
-        <CardView card={card} large />
+        <GameCard model={{ cardId: card.id, displaySnapshot: card }} large />
       </div>
       {terms.length > 0 && (
         <div
@@ -590,7 +590,7 @@ function DeckSection({
               onPreview(card);
             }}
           >
-            <CardView card={card} />
+            <GameCard model={{ cardId: card.id, displaySnapshot: card }} />
           </LongPressCard>
         ))}
       </div>

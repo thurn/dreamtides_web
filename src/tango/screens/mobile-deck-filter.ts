@@ -95,7 +95,7 @@ export function buildDeckTypeFilterOptions(
 ): DeckControlOption<DeckTypeFilter>[] {
   const counts = new Map<string, number>();
   for (const view of cards) {
-    const subtype = view.card.subtype.trim();
+    const subtype = view.model.displaySnapshot.subtype.trim();
     if (subtype === "") continue;
     counts.set(subtype, (counts.get(subtype) ?? 0) + 1);
   }
@@ -140,7 +140,7 @@ export function deckTypeFilterLabel(
  * A card's energy cost as a sortable number. A `null` cost is a variable-`X`
  * card; it sorts to the expensive end so an ascending list runs cheap → X.
  */
-function costKey(card: DeckCardView["card"]): number {
+function costKey(card: DeckCardView["model"]["displaySnapshot"]): number {
   return card.energyCost ?? Number.POSITIVE_INFINITY;
 }
 
@@ -148,7 +148,7 @@ function costKey(card: DeckCardView["card"]): number {
  * A card's spark as a sortable number. A `null` spark (most Events have none)
  * sorts to the low end so a low-to-high list runs no spark → high spark.
  */
-function sparkKey(card: DeckCardView["card"]): number {
+function sparkKey(card: DeckCardView["model"]["displaySnapshot"]): number {
   return card.spark ?? Number.NEGATIVE_INFINITY;
 }
 
@@ -165,13 +165,13 @@ export function compareBySort(
     case "drafted":
       return 0;
     case "name":
-      return a.card.name.localeCompare(b.card.name);
+      return a.model.displaySnapshot.name.localeCompare(b.model.displaySnapshot.name);
     case "cost":
-      return costKey(a.card) - costKey(b.card);
+      return costKey(a.model.displaySnapshot) - costKey(b.model.displaySnapshot);
     case "spark":
-      return sparkKey(a.card) - sparkKey(b.card);
+      return sparkKey(a.model.displaySnapshot) - sparkKey(b.model.displaySnapshot);
     case "subtype":
-      return a.card.subtype.localeCompare(b.card.subtype);
+      return a.model.displaySnapshot.subtype.localeCompare(b.model.displaySnapshot.subtype);
   }
 }
 
@@ -179,10 +179,10 @@ export function compareBySort(
 function matchesTypeFilter(view: DeckCardView, filter: DeckTypeFilter): boolean {
   if (filter === "all") return true;
   if (filter.startsWith("type:")) {
-    return view.card.cardType === filter.slice("type:".length);
+    return view.model.displaySnapshot.cardType === filter.slice("type:".length);
   }
   if (filter.startsWith("subtype:")) {
-    return view.card.subtype === filter.slice("subtype:".length);
+    return view.model.displaySnapshot.subtype === filter.slice("subtype:".length);
   }
   return true;
 }

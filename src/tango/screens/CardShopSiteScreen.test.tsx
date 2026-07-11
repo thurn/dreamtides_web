@@ -6,11 +6,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { artRef } from "../primitives/art";
-import { MOBILE_CARD_PEEK_HOLD_MS } from "../components/card/MobileCardPeek";
 import {
   CardShopSiteScreen,
   type CardShopSiteView,
 } from "./CardShopSiteScreen";
+import { TangoRoot } from "../TangoRoot";
 
 function makeCard(index: number): CardData {
   return {
@@ -42,7 +42,7 @@ function view(): CardShopSiteView {
     offers: Array.from({ length: 5 }, (_, index) => ({
       entryId: `shop-offer-${String(index)}`,
       slotIndex: index,
-      card: makeCard(index + 1),
+      model: (() => { const displaySnapshot = makeCard(index + 1); return { cardId: displaySnapshot.id, displaySnapshot }; })(),
       price: 100 + index * 10,
       state: index === 4 ? ("unaffordable" as const) : ("available" as const),
     })),
@@ -81,7 +81,7 @@ function mount(element: ReactElement): {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
-  act(() => root.render(element));
+  act(() => root.render(<TangoRoot>{element}</TangoRoot>));
   return { container, root };
 }
 
@@ -221,43 +221,4 @@ describe("CardShopSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("uses a hold for the shared large card-and-definition preview without buying", () => {
-    vi.useFakeTimers();
-    const onBuy = vi.fn();
-    const { container, root } = mount(
-      <CardShopSiteScreen
-        view={view()}
-        onBuy={onBuy}
-        onRestock={vi.fn()}
-        onClose={vi.fn()}
-      />,
-    );
-    const first = container.querySelector<HTMLElement>(
-      '[data-testid="tango-card-shop-offer-shop-offer-0"]',
-    );
-
-    act(() => {
-      first?.dispatchEvent(
-        new MouseEvent("pointerdown", {
-          bubbles: true,
-          button: 0,
-          clientX: 50,
-          clientY: 420,
-        }),
-      );
-      vi.advanceTimersByTime(MOBILE_CARD_PEEK_HOLD_MS);
-    });
-    expect(document.querySelector("[data-mobile-card-peek]")).not.toBeNull();
-    expect(
-      document.querySelector("[data-mobile-card-peek-definitions]"),
-    ).not.toBeNull();
-
-    act(() => {
-      window.dispatchEvent(new MouseEvent("pointerup", { bubbles: true }));
-      first?.click();
-    });
-    expect(onBuy).not.toHaveBeenCalled();
-
-    act(() => root.unmount());
-  });
 });

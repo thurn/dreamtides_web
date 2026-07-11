@@ -7,7 +7,7 @@ import type { RevealCard, RevealInfoCardModel } from "./model";
 // creating context -> overlay -> CardView -> context initialization cycles.
 const RevealGameCard = lazy(async () => {
   const module = await import("../../components/card/CardView");
-  return { default: module.GameCard };
+  return { default: module.CardView };
 });
 
 export function renderRevealCard(card: RevealCard, width: number): ReactElement {
@@ -15,7 +15,7 @@ export function renderRevealCard(card: RevealCard, width: number): ReactElement 
   return (
     <Suspense fallback={<div data-reveal-render-pending="" style={{ width, aspectRatio: "2 / 3" }} />}>
       <div data-reveal-render="game-card" style={{ width }}>
-        <RevealGameCard card={card.displaySnapshot} termDefinitions="none" eagerRulesFit />
+        <RevealGameCard card={card.displaySnapshot} eagerRulesFit />
       </div>
     </Suspense>
   );

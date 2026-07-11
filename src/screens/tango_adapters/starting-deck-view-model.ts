@@ -43,7 +43,7 @@ export function buildStartingDeckView(
     );
     cards.push({
       entryId: entry.entryId,
-      card,
+      model: { cardId: card.id, displaySnapshot: card },
       testId: `starting-deck-modal-card-${entry.entryId}`,
     });
   }

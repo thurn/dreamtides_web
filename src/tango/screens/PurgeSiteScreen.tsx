@@ -197,8 +197,7 @@ function PurgeGallery({
             !selected && card.purgeCostKind === "paid" && !canSelectPaid;
           return {
             entryId: card.entryId,
-            card: card.card,
-            transfiguration: card.transfiguration,
+            model: card.model,
             testId: `tango-purge-card-${card.entryId}`,
             selected,
             disabled,
@@ -209,7 +208,6 @@ function PurgeGallery({
         columns={desktop ? "five" : "four"}
         frame="floating"
         spacing={desktop ? "regular" : "medium"}
-        mobilePressPreview={!desktop}
         testId="tango-purge-card-gallery"
         onCardPress={onToggle}
       />

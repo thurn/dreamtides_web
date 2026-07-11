@@ -1,14 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, RefObject } from "react";
-import { createPortal } from "react-dom";
 import type { CardData, FrozenCardData, Rarity } from "../../../types/cards";
+import type { CardId } from "../../../types/card-identity";
 import {
   cardIdenticonUri,
   cardImageUrl,
   hasAssignedImage,
 } from "../../../data/card-database";
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
-import { logEventOnce } from "../../../logging";
 import { identiconsForced } from "../../../runtime/identicon-mode";
 import {
   ART_EXTENSION_FRACTION,
@@ -25,11 +24,11 @@ import { CardStatOrb } from "./CardStatOrb";
 import { TRANSFIGURATION_ICONS } from "../../../runtime/transfiguration-display";
 import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
 import { renderRulesText } from "./RulesText";
-import { useCardTermPopover } from "./useCardTermPopover";
-import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
 import { useFitText } from "../controls/useFitText";
 import { DESKTOP_MIN_WIDTH } from "../../screens/use-is-desktop";
-import { infoCardWidth } from "../overlay/InfoCard";
+import { richText } from "./rich-text";
+import { Pressable } from "../../primitives/Pressable";
+import { useRevealSource } from "../../internal/reveal/context";
 
 /**
  * Default chrome accent used for the selection ring fallback. The card's type
@@ -697,117 +696,6 @@ const SPARK_PIP_TOOLTIP =
   "Spark. A character's combat power — higher spark wins combat.";
 
 /**
- * Hard cap on how much bigger a card may get on hover. The effective scale is
- * also bounded by the target reading width and by the viewport.
- */
-export const MAX_HOVER_SCALE = 1.5;
-
-/**
- * On-screen width a hovered card grows toward before caps. At this width rules
- * text lands near a comfortable reading size while compact cards do not balloon
- * past the max scale.
- */
-export const HOVER_TARGET_WIDTH_PX = 340;
-
-const HOVER_MAX_VIEWPORT_WIDTH_FRACTION = 0.94;
-const HOVER_MAX_VIEWPORT_HEIGHT_FRACTION = 0.92;
-const HOVER_MIN_USEFUL_SCALE = 1.02;
-const HOVER_VIEWPORT_MARGIN_PX = 8;
-const HOVER_GLOSSARY_STACK_GAP_PX = 10;
-
-/**
- * Card supplemental-info rules, kept here because every rendered GameCard is
- * expected to obey them:
- * - Keyword definition InfoCards sit beside the main card and top-align to it.
- *   They can flip left/right for viewport fit, but they never appear above the
- *   card.
- * - Every card with visible rules text grows toward the shared reading width
- *   when its rendered footprint is smaller than that target. The `large` prop
- *   raises the text scale but does not opt a physically small card out of zoom.
- * - Dense previews (such as the 4x mobile deck grid) may delegate keyword
- *   definitions to a parent-owned larger main preview via `termDefinitions`.
- */
-interface CardHoverZoomState {
-  rect: DOMRect;
-  scale: number;
-  dx: number;
-  dy: number;
-}
-
-function clampHoverOffset(
-  start: number,
-  size: number,
-  viewport: number,
-): number {
-  const available = viewport - HOVER_VIEWPORT_MARGIN_PX * 2;
-  if (size >= available) {
-    const centered = (viewport - size) / 2;
-    return centered - start;
-  }
-  const min = HOVER_VIEWPORT_MARGIN_PX;
-  const max = viewport - HOVER_VIEWPORT_MARGIN_PX - size;
-  if (start < min) return min - start;
-  if (start > max) return max - start;
-  return 0;
-}
-
-function renderHoverGlossaryStack(
-  zoom: CardHoverZoomState,
-  text: string,
-): ReactNode {
-  if (typeof window === "undefined") {
-    return null;
-  }
-  const terms = extractGlossaryTerms(text);
-  if (terms.length === 0) {
-    return null;
-  }
-  const scaledWidth = zoom.rect.width * zoom.scale;
-  const scaledHeight = zoom.rect.height * zoom.scale;
-  const stackWidth = infoCardWidth(window.innerWidth);
-  const centerX = zoom.rect.left + zoom.rect.width / 2;
-  const centerY = zoom.rect.top + zoom.rect.height / 2;
-  const finalLeft = centerX - scaledWidth / 2 + zoom.dx;
-  const finalTop = centerY - scaledHeight / 2 + zoom.dy;
-  const finalRight = finalLeft + scaledWidth;
-
-  const fitsRight =
-    finalRight +
-      HOVER_GLOSSARY_STACK_GAP_PX +
-      stackWidth +
-      HOVER_VIEWPORT_MARGIN_PX <=
-    window.innerWidth;
-  const rawLeft = fitsRight
-    ? finalRight + HOVER_GLOSSARY_STACK_GAP_PX
-    : finalLeft - HOVER_GLOSSARY_STACK_GAP_PX - stackWidth;
-  const left = Math.max(
-    HOVER_VIEWPORT_MARGIN_PX,
-    Math.min(
-      rawLeft,
-      window.innerWidth - stackWidth - HOVER_VIEWPORT_MARGIN_PX,
-    ),
-  );
-  const top = Math.max(
-    HOVER_VIEWPORT_MARGIN_PX,
-    Math.min(finalTop, window.innerHeight - 120),
-  );
-  const maxHeight = window.innerHeight - top - HOVER_VIEWPORT_MARGIN_PX;
-
-  return (
-    <div
-      aria-hidden="true"
-      className="pointer-events-none fixed z-[1000] flex flex-col gap-1"
-      style={{ left, top, width: stackWidth, maxHeight, overflow: "visible" }}
-      data-hover-zoom-glossary=""
-    >
-      {terms.map((entry) => (
-        <GlossaryDefinitionCard key={entry.term} entry={entry} />
-      ))}
-    </div>
-  );
-}
-
-/**
  * Tracks the rendered card width. The width drives both the legacy text-scale
  * metadata (`data-card-text-scale`, still asserted by tests and used as the
  * baseline font ceiling) and the pixel sizes of the orbs and frame text.
@@ -924,13 +812,6 @@ export interface CardViewProps {
   figmentTitleBar?: boolean;
   /** Hide rules text for dense card surfaces that show identity and stats. */
   hideRulesText?: boolean;
-  /**
-   * Keyword-definition reveal behavior. Default `"card"` means this card owns
-   * its keyword InfoCards, positioned beside the card and top-aligned with it.
-   * Use `"none"` only when a parent surface renders those supplemental cards
-   * beside a larger main preview of this same card.
-   */
-  termDefinitions?: "card" | "none";
   /** Optional editor wrappers for individual rendered card slots. */
   slots?: CardViewSlots;
   /**
@@ -962,11 +843,6 @@ export interface CardViewProps {
   rulesTextboxExpanded?: boolean;
 }
 
-interface InternalCardViewProps extends CardViewProps {
-  enableTermPopover?: boolean;
-  enableHoverZoom?: boolean;
-}
-
 /**
  * Renders a Dreamtides card: full-bleed art covering the whole 2:3 portrait
  * frame, with all chrome floating over it as translucent, blurred elements.
@@ -976,7 +852,7 @@ interface InternalCardViewProps extends CardViewProps {
  * directly on the art at the card's bottom-right, just above a bottom-anchored
  * text box that holds the rules body and auto-sizes to the amount of rules text.
  */
-function GameCardSurface(props: InternalCardViewProps) {
+function GameCardSurface(props: CardViewProps) {
   const {
     card,
     onClick,
@@ -987,151 +863,19 @@ function GameCardSurface(props: InternalCardViewProps) {
     figment = false,
     figmentTitleBar = false,
     hideRulesText = false,
-    termDefinitions = "card",
     slots = {},
     onRulesFontSizeChange,
     onBoxTopFracChange,
     eagerRulesFit = false,
     rulesTextboxExpanded = false,
-    enableTermPopover = true,
-    enableHoverZoom = false,
   } = props;
   const [imageError, setImageError] = useState(false);
   const [imageAspect, setImageAspect] = useState<number | null>(null);
-  const [hoverZoom, setHoverZoom] = useState<CardHoverZoomState | null>(null);
   // Top of the rules text box as a fraction of card height, measured live so the
   // art fill band can size itself to the box (null until measured / no box).
   const [boxTopFrac, setBoxTopFrac] = useState<number | null>(null);
   const bandBoxRef = useRef<HTMLDivElement | null>(null);
   const { cardRef, textScale, widthPx } = useCardMetrics(large);
-
-  const collapseHoverZoom = useCallback(() => {
-    setHoverZoom(null);
-  }, []);
-
-  const handleHoverZoomEnter = useCallback(() => {
-    // Physical size, not the text-scale preset, decides whether a card needs a
-    // reading preview. This keeps a `large` card in a compact gallery eligible
-    // while naturally skipping cards already at or above the target width.
-    if (!enableHoverZoom || hideRulesText) {
-      return;
-    }
-    const anchor = cardRef.current;
-    if (anchor === null || typeof window === "undefined") {
-      return;
-    }
-    const rect = anchor.getBoundingClientRect();
-    if (rect.width <= 0 || rect.height <= 0) {
-      return;
-    }
-    const widthLimited =
-      (window.innerWidth * HOVER_MAX_VIEWPORT_WIDTH_FRACTION) / rect.width;
-    const heightLimited =
-      (window.innerHeight * HOVER_MAX_VIEWPORT_HEIGHT_FRACTION) / rect.height;
-    const scale = Math.min(
-      MAX_HOVER_SCALE,
-      HOVER_TARGET_WIDTH_PX / rect.width,
-      widthLimited,
-      heightLimited,
-    );
-    if (scale <= HOVER_MIN_USEFUL_SCALE) {
-      return;
-    }
-    const scaledWidth = rect.width * scale;
-    const scaledHeight = rect.height * scale;
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const scaledLeft = centerX - scaledWidth / 2;
-    const scaledTop = centerY - scaledHeight / 2;
-    const dx = clampHoverOffset(scaledLeft, scaledWidth, window.innerWidth);
-    const dy = clampHoverOffset(scaledTop, scaledHeight, window.innerHeight);
-    setHoverZoom({ rect, scale, dx, dy });
-    logEventOnce("card_hover_zoom:game-card", "card_hover_zoom", {
-      surface: "game-card",
-      originalWidthPx: Math.round(rect.width),
-      scale: Number(scale.toFixed(3)),
-      targetWidthPx: HOVER_TARGET_WIDTH_PX,
-    });
-  }, [cardRef, enableHoverZoom, hideRulesText]);
-
-  useEffect(() => {
-    if (hoverZoom === null) {
-      return undefined;
-    }
-    const { rect } = hoverZoom;
-    function handleMove(event: MouseEvent) {
-      if (
-        event.clientX < rect.left ||
-        event.clientX > rect.right ||
-        event.clientY < rect.top ||
-        event.clientY > rect.bottom
-      ) {
-        collapseHoverZoom();
-      }
-    }
-    function handleDismiss() {
-      collapseHoverZoom();
-    }
-    window.addEventListener("mousemove", handleMove);
-    window.addEventListener("scroll", handleDismiss, true);
-    window.addEventListener("blur", handleDismiss);
-    document.addEventListener("mouseleave", handleDismiss);
-    return () => {
-      window.removeEventListener("mousemove", handleMove);
-      window.removeEventListener("scroll", handleDismiss, true);
-      window.removeEventListener("blur", handleDismiss);
-      document.removeEventListener("mouseleave", handleDismiss);
-    };
-  }, [hoverZoom, collapseHoverZoom]);
-
-  const hoverZoomPortal =
-    hoverZoom !== null && typeof document !== "undefined"
-      ? createPortal(
-          <>
-            <div
-              aria-hidden="true"
-              className="tango pointer-events-none fixed z-[1000]"
-              style={{
-                left: hoverZoom.rect.left,
-                top: hoverZoom.rect.top,
-                width: hoverZoom.rect.width,
-                height: hoverZoom.rect.height,
-                transform:
-                  `translate(${hoverZoom.dx}px, ${hoverZoom.dy}px) ` +
-                  `scale(${hoverZoom.scale})`,
-                transformOrigin: "center center",
-                filter: "drop-shadow(0 18px 40px rgba(0, 0, 0, 0.55))",
-              }}
-              data-hover-zoom-overlay=""
-              data-hover-zoom-motion="snap"
-            >
-              <GameCardSurface
-                {...props}
-                enableTermPopover={false}
-                enableHoverZoom={false}
-              />
-            </div>
-            {termDefinitions === "card"
-              ? renderHoverGlossaryStack(hoverZoom, card.renderedText)
-              : null}
-          </>,
-          document.body,
-        )
-      : null;
-
-  // Hover help: while a large-enough card is hovered, a panel defining every
-  // glossary term on it portals in beside the card. When the card zooms, the
-  // zoom overlay owns the definition stack instead so the stack aligns to the
-  // enlarged visual copy.
-  const termPopover = useCardTermPopover({
-    anchorRef: cardRef,
-    text: card.renderedText,
-    enabled:
-      termDefinitions === "card" &&
-      enableTermPopover &&
-      hoverZoom === null &&
-      !hideRulesText,
-  });
 
   // Auto-shrink the rules body so a card needing more than the reserved three
   // lines still fits the fixed text box. The ceiling sits just above the
@@ -1197,8 +941,7 @@ function GameCardSurface(props: InternalCardViewProps) {
   }
 
   const isInteractive = onClick !== undefined;
-  const respondsToPointer =
-    isInteractive || (termDefinitions === "card" && !hideRulesText);
+  const respondsToPointer = isInteractive;
   // Heuristic: if the rules text is already readable without zoom, use only a
   // minor in-place hover zoom for emphasis, about 5%, instead of opening the
   // larger reading preview.
@@ -1581,7 +1324,6 @@ function GameCardSurface(props: InternalCardViewProps) {
       data-rarity={rarityAttr}
       data-card-type={card.cardType}
       data-figment={figment ? "true" : undefined}
-      data-hover-zoomed={hoverZoom !== null ? "true" : undefined}
       style={
         {
           aspectRatio: CARD_ASPECT_RATIO,
@@ -1591,9 +1333,6 @@ function GameCardSurface(props: InternalCardViewProps) {
         } as CSSProperties
       }
       onClick={onClick}
-      onMouseEnter={handleHoverZoomEnter}
-      onMouseDown={collapseHoverZoom}
-      {...termPopover.triggerHandlers}
       {...(isInteractive
         ? {
             role: "button" as const,
@@ -1606,8 +1345,6 @@ function GameCardSurface(props: InternalCardViewProps) {
           }
         : {})}
     >
-      {termPopover.popoverPortal}
-      {hoverZoomPortal}
       {/* Full-bleed art covering the entire card. */}
       {identiconUri !== null ? (
         <img
@@ -1866,13 +1603,128 @@ function GameCardSurface(props: InternalCardViewProps) {
   );
 }
 
-export function GameCard(props: CardViewProps) {
-  return <GameCardSurface {...props} enableHoverZoom />;
+/** Canonical semantic data consumed by the player-facing {@link GameCard}. */
+export interface GameCardModel {
+  /** Stable catalog UUID used for reveal identity and diagnostics. */
+  readonly cardId: CardId;
+  /** Complete resolved display data whose `id` matches `cardId`. */
+  readonly displaySnapshot: FrozenCardData;
+  /** Optional presentation of a transfigured card. */
+  readonly transfiguration?: CardTransfigurationDisplay;
+}
+
+/** Strict player-facing GameCard props. Reveal mechanics are library-owned. */
+export interface GameCardProps {
+  /** Canonical card semantics and resolved display snapshot. */
+  readonly model: GameCardModel;
+  /** Player action invoked by a quick activation. */
+  readonly onActivate?: () => void;
+  /** Whether the action is unavailable while the card remains informative. */
+  readonly unavailable?: boolean;
+  /** Draw the semantic selection state. */
+  readonly selected?: boolean;
+  /** Selection-ring color. Defaults to the shared selected role. */
+  readonly selectionColor?: TangoColor;
+  /** Use the larger card typography preset. */
+  readonly large?: boolean;
+  /** Hide source rules on dense surfaces; the reveal stays complete. */
+  readonly hideRulesText?: boolean;
+  /** Render the figment frame. */
+  readonly figment?: boolean;
+  /** Render a title bar on a named figment. */
+  readonly figmentTitleBar?: boolean;
+  /** Optional stable test id for the semantic source. */
+  readonly testId?: string;
 }
 
 /**
- * Legacy export name. The component is documented and consumed within Tango as
- * {@link GameCard}; this alias keeps the many existing call sites that import
- * `CardView` working without churning every usage.
+ * Player-facing card entity. It derives its complete reading copy and glossary
+ * secondaries from semantic card data and registers them with the root reveal
+ * coordinator. Callers provide meaning and activation only.
  */
-export { GameCard as CardView };
+export function GameCard({
+  model,
+  onActivate,
+  unavailable = false,
+  selected = false,
+  selectionColor,
+  large = false,
+  hideRulesText = false,
+  figment = false,
+  figmentTitleBar = false,
+  testId,
+}: GameCardProps) {
+  const lastPointerType = useRef<string | null>(null);
+  const glossaryCards = extractGlossaryTerms(model.displaySnapshot.renderedText).map((entry) => ({
+    variant: "text" as const,
+    title: entry.term,
+    body: richText.rules(entry.definition),
+  }));
+  const binding = useRevealSource({
+    identity: { entityType: "game-card", entityId: model.cardId },
+    spec: {
+      primary: {
+        kind: "gameCard",
+        cardId: model.cardId,
+        displaySnapshot: model.displaySnapshot,
+      },
+      secondaries: glossaryCards,
+    },
+    onActivate: unavailable ? undefined : onActivate,
+  });
+  const pointerDown = binding.sourceProps.onPointerDown;
+  const interactive = onActivate !== undefined;
+  return (
+    <Pressable
+      as="div"
+      ref={binding.ref}
+      {...binding.sourceProps}
+      role={interactive ? "button" : undefined}
+      tabIndex={0}
+      aria-disabled={unavailable || undefined}
+      aria-label={model.displaySnapshot.name}
+      data-testid={testId}
+      data-game-card-source=""
+      data-card-id={model.cardId}
+      data-reveal-complete-game-card={hideRulesText ? "false" : "true"}
+      onPointerDown={(event) => {
+        lastPointerType.current = event.pointerType;
+        pointerDown?.(event);
+      }}
+      onClick={() => {
+        if (!unavailable && lastPointerType.current !== "touch") onActivate?.();
+      }}
+      onKeyDown={(event) => {
+        if (!unavailable && (event.key === "Enter" || event.key === " ")) {
+          event.preventDefault();
+          onActivate?.();
+        }
+      }}
+      style={{
+        ...binding.sourceProps.style,
+        display: "block",
+        width: "100%",
+        appearance: "none",
+        padding: 0,
+        border: 0,
+        background: "transparent",
+      }}
+    >
+      <GameCardSurface
+        card={model.displaySnapshot}
+        transfiguration={model.transfiguration}
+        selected={selected}
+        selectionColor={selectionColor}
+        large={large}
+        hideRulesText={hideRulesText}
+        figment={figment}
+        figmentTitleBar={figmentTitleBar}
+      />
+    </Pressable>
+  );
+}
+
+/** Visual-only editor surface. Player UI uses {@link GameCard}. */
+export function CardView(props: CardViewProps) {
+  return <GameCardSurface {...props} />;
+}

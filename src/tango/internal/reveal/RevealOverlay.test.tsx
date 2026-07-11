@@ -135,7 +135,7 @@ describe("RevealOverlay", () => {
     } }, secondaries: [] };
     const value = active({ spec });
     act(() => root.render(<RevealOverlay active={value} />));
-    expect(value.element.style.visibility).toBe("hidden");
+    expect(value.element.style.opacity).toBe("0");
     act(() => root.render(<RevealOverlay active={{ ...value, returningGameCard: true }} />));
     const returningCard = document.querySelector<HTMLElement>("[data-tango-reveal-card=\"primary\"]")!;
     expect(returningCard.style.left).toBe("400px");
@@ -143,6 +143,6 @@ describe("RevealOverlay", () => {
     expect(returningCard.style.width).toBe("100px");
     expect(returningCard.style.transition).toContain("160ms");
     act(() => root.render(<RevealOverlay active={null} />));
-    expect(value.element.style.visibility).toBe("");
+    expect(value.element.style.opacity).toBe("");
   });
 });

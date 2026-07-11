@@ -727,14 +727,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Fires with the appended action's stable id when it is activated."
-    },
-    {
-      "name": "mobilePressPreview",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "Enables the shared mobile Deck Viewer press preview for compact galleries:\nhold a tile and a large readable card is placed clear of the finger;\nquick taps still activate selectable tiles, while held previews suppress\ntheir trailing click. The large card moves up first, then sideways only\nwhen needed, and never intersects the protected touch circle."
     }
   ],
   "CardStatOrb": [
@@ -855,6 +847,223 @@
       "required": false,
       "defaultValue": null,
       "description": "Which side of the card the panel sits on, exposed for layout/tests."
+    }
+  ],
+  "CardView": [
+    {
+      "name": "card",
+      "tsType": "CardData | Readonly<CardData>",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "onClick",
+      "tsType": "(() => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "selected",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "selectionColor",
+      "tsType": "TangoColor",
+      "unionMembers": [
+        "danger",
+        "accent",
+        "accent-bright",
+        "accent-strong",
+        "essence",
+        "energy",
+        "energy-bright",
+        "spark",
+        "points",
+        "positive",
+        "selected",
+        "sale",
+        "gold",
+        "gold-light",
+        "text-primary",
+        "text-secondary",
+        "text-muted",
+        "text-faint",
+        "text-on-accent",
+        "white"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "The selection-ring {@link TangoColor}. Default the `\"selected\"` role."
+    },
+    {
+      "name": "transfiguration",
+      "tsType": "CardTransfigurationDisplay",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "When set, paints the card as transfigured: a small colored gem follows the\nname, the changed corner stat(s) take the tint, and only the added/changed\nrules text is tinted (driven by the descriptor's marked text). The card\nitself should already carry the transfigured stats and rules text — pass the\n`card` and `display` from `buildTransfigurationDisplay` together.",
+      "nested": {
+        "name": "CardTransfigurationDisplay",
+        "fields": [
+          {
+            "name": "type",
+            "tsType": "TransfigurationType",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "color",
+            "tsType": "`#${string}`",
+            "optional": false,
+            "description": "Light tint for the name gem, changed stat orb(s), and changed text. A\n`#${string}` hex, matching Tango's `HexColor`."
+          },
+          {
+            "name": "markedText",
+            "tsType": "string",
+            "optional": false,
+            "description": "Rules text with the changed/added spans wrapped in transfigure markers."
+          },
+          {
+            "name": "energyChanged",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "True when the energy cost changed (Empowered); tints the energy orb."
+          },
+          {
+            "name": "sparkChanged",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "True when the spark changed (Kindled); tints the spark orb."
+          },
+          {
+            "name": "fastChanged",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "True when the card gained Fast (Hastened); tints the speed bolt."
+          }
+        ]
+      }
+    },
+    {
+      "name": "large",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Use larger text sizes for rules text, name, type line, and stats."
+    },
+    {
+      "name": "figment",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Render the figment frame (rules §Figments): no energy orb, the spark floats\nas a large mark in the top-right corner instead of inside a name bar, and\nthe rules box takes a black-on-light frosted treatment. A figment has no\nname bar by default; pass `figmentTitleBar` to show one (for a named figment\nlike a Legionnaire, or while its name is being edited)."
+    },
+    {
+      "name": "figmentTitleBar",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "In figment mode, render the top title bar holding the card name (left\naligned, dark character-card treatment). Ignored when `figment` is false."
+    },
+    {
+      "name": "hideRulesText",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Hide rules text for dense card surfaces that show identity and stats."
+    },
+    {
+      "name": "slots",
+      "tsType": "CardViewSlots",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional editor wrappers for individual rendered card slots.",
+      "nested": {
+        "name": "CardViewSlots",
+        "fields": [
+          {
+            "name": "energy",
+            "tsType": "((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "name",
+            "tsType": "((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "typeLineContent",
+            "tsType": "((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "typeLine",
+            "tsType": "((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "rulesText",
+            "tsType": "((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "spark",
+            "tsType": "((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)",
+            "optional": true,
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "onRulesFontSizeChange",
+      "tsType": "((fontSizePx: number) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Called with the rules-text font size (in px) the auto-shrink fitter\ncomputed to fit the rules box, whenever it changes. The card editor uses\nthis to drive its font-size overlay and font-size sort."
+    },
+    {
+      "name": "onBoxTopFracChange",
+      "tsType": "((boxTopFrac: number | null) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Called with the rules text box's top as a fraction of card height (null when\nthe card has no rules box or it is not yet measured), whenever it changes.\nThe art-crop editor uses this to floor zoom-out and pan against the same\nbox-relative safe area the card renders with."
+    },
+    {
+      "name": "eagerRulesFit",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Measure the rules-text fit immediately instead of deferring until the card\nnears the viewport. The card editor sets this while sorting by font size so\nevery card reports a stable fitted size up front; without it the sort would\nreshuffle endlessly as off-screen cards measured only after being moved."
+    },
+    {
+      "name": "rulesTextboxExpanded",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Grow the rules text box to a taller editing height. The card editor sets\nthis while its rules-text field is open so the inline textarea has room to\nshow and edit several lines at once instead of being clipped to the\nthree-line display cap."
     }
   ],
   "DreamcallerPortrait": [
@@ -1115,28 +1324,59 @@
   ],
   "GameCard": [
     {
-      "name": "card",
-      "tsType": "CardData | Readonly<CardData>",
+      "name": "model",
+      "tsType": "GameCardModel",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": ""
+      "description": "Canonical card semantics and resolved display snapshot.",
+      "nested": {
+        "name": "GameCardModel",
+        "fields": [
+          {
+            "name": "cardId",
+            "tsType": "CardId",
+            "optional": false,
+            "description": "Stable catalog UUID used for reveal identity and diagnostics."
+          },
+          {
+            "name": "displaySnapshot",
+            "tsType": "Readonly<CardData>",
+            "optional": false,
+            "description": "Complete resolved display data whose `id` matches `cardId`."
+          },
+          {
+            "name": "transfiguration",
+            "tsType": "CardTransfigurationDisplay",
+            "optional": true,
+            "description": "Optional presentation of a transfigured card."
+          }
+        ]
+      }
     },
     {
-      "name": "onClick",
+      "name": "onActivate",
       "tsType": "(() => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": ""
+      "description": "Player action invoked by a quick activation."
+    },
+    {
+      "name": "unavailable",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Whether the action is unavailable while the card remains informative."
     },
     {
       "name": "selected",
       "tsType": "boolean",
       "unionMembers": [],
       "required": false,
-      "defaultValue": null,
-      "description": ""
+      "defaultValue": "false",
+      "description": "Draw the semantic selection state."
     },
     {
       "name": "selectionColor",
@@ -1165,180 +1405,47 @@
       ],
       "required": false,
       "defaultValue": null,
-      "description": "The selection-ring {@link TangoColor}. Default the `\"selected\"` role."
-    },
-    {
-      "name": "transfiguration",
-      "tsType": "CardTransfigurationDisplay",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "When set, paints the card as transfigured: a small colored gem follows the\nname, the changed corner stat(s) take the tint, and only the added/changed\nrules text is tinted (driven by the descriptor's marked text). The card\nitself should already carry the transfigured stats and rules text — pass the\n`card` and `display` from `buildTransfigurationDisplay` together.",
-      "nested": {
-        "name": "CardTransfigurationDisplay",
-        "fields": [
-          {
-            "name": "type",
-            "tsType": "TransfigurationType",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "color",
-            "tsType": "`#${string}`",
-            "optional": false,
-            "description": "Light tint for the name gem, changed stat orb(s), and changed text. A\n`#${string}` hex, matching Tango's `HexColor`."
-          },
-          {
-            "name": "markedText",
-            "tsType": "string",
-            "optional": false,
-            "description": "Rules text with the changed/added spans wrapped in transfigure markers."
-          },
-          {
-            "name": "energyChanged",
-            "tsType": "boolean",
-            "optional": false,
-            "description": "True when the energy cost changed (Empowered); tints the energy orb."
-          },
-          {
-            "name": "sparkChanged",
-            "tsType": "boolean",
-            "optional": false,
-            "description": "True when the spark changed (Kindled); tints the spark orb."
-          },
-          {
-            "name": "fastChanged",
-            "tsType": "boolean",
-            "optional": false,
-            "description": "True when the card gained Fast (Hastened); tints the speed bolt."
-          }
-        ]
-      }
+      "description": "Selection-ring color. Defaults to the shared selected role."
     },
     {
       "name": "large",
       "tsType": "boolean",
       "unionMembers": [],
       "required": false,
-      "defaultValue": null,
-      "description": "Use larger text sizes for rules text, name, type line, and stats."
-    },
-    {
-      "name": "figment",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Render the figment frame (rules §Figments): no energy orb, the spark floats\nas a large mark in the top-right corner instead of inside a name bar, and\nthe rules box takes a black-on-light frosted treatment. A figment has no\nname bar by default; pass `figmentTitleBar` to show one (for a named figment\nlike a Legionnaire, or while its name is being edited)."
-    },
-    {
-      "name": "figmentTitleBar",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "In figment mode, render the top title bar holding the card name (left\naligned, dark character-card treatment). Ignored when `figment` is false."
+      "defaultValue": "false",
+      "description": "Use the larger card typography preset."
     },
     {
       "name": "hideRulesText",
       "tsType": "boolean",
       "unionMembers": [],
       "required": false,
-      "defaultValue": null,
-      "description": "Hide rules text for dense card surfaces that show identity and stats."
+      "defaultValue": "false",
+      "description": "Hide source rules on dense surfaces; the reveal stays complete."
     },
     {
-      "name": "termDefinitions",
-      "tsType": "\"card\" | \"none\"",
-      "unionMembers": [
-        "card",
-        "none"
-      ],
-      "required": false,
-      "defaultValue": null,
-      "description": "Keyword-definition reveal behavior. Default `\"card\"` means this card owns\nits keyword InfoCards, positioned beside the card and top-aligned with it.\nUse `\"none\"` only when a parent surface renders those supplemental cards\nbeside a larger main preview of this same card."
-    },
-    {
-      "name": "slots",
-      "tsType": "CardViewSlots",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional editor wrappers for individual rendered card slots.",
-      "nested": {
-        "name": "CardViewSlots",
-        "fields": [
-          {
-            "name": "energy",
-            "tsType": "((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "name",
-            "tsType": "((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "typeLineContent",
-            "tsType": "((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "typeLine",
-            "tsType": "((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "rulesText",
-            "tsType": "((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "spark",
-            "tsType": "((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)",
-            "optional": true,
-            "description": ""
-          }
-        ]
-      }
-    },
-    {
-      "name": "onRulesFontSizeChange",
-      "tsType": "((fontSizePx: number) => void)",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Called with the rules-text font size (in px) the auto-shrink fitter\ncomputed to fit the rules box, whenever it changes. The card editor uses\nthis to drive its font-size overlay and font-size sort."
-    },
-    {
-      "name": "onBoxTopFracChange",
-      "tsType": "((boxTopFrac: number | null) => void)",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Called with the rules text box's top as a fraction of card height (null when\nthe card has no rules box or it is not yet measured), whenever it changes.\nThe art-crop editor uses this to floor zoom-out and pan against the same\nbox-relative safe area the card renders with."
-    },
-    {
-      "name": "eagerRulesFit",
+      "name": "figment",
       "tsType": "boolean",
       "unionMembers": [],
       "required": false,
-      "defaultValue": null,
-      "description": "Measure the rules-text fit immediately instead of deferring until the card\nnears the viewport. The card editor sets this while sorting by font size so\nevery card reports a stable fitted size up front; without it the sort would\nreshuffle endlessly as off-screen cards measured only after being moved."
+      "defaultValue": "false",
+      "description": "Render the figment frame."
     },
     {
-      "name": "rulesTextboxExpanded",
+      "name": "figmentTitleBar",
       "tsType": "boolean",
       "unionMembers": [],
       "required": false,
+      "defaultValue": "false",
+      "description": "Render a title bar on a named figment."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
       "defaultValue": null,
-      "description": "Grow the rules text box to a taller editing height. The card editor sets\nthis while its rules-text field is open so the inline textarea has room to\nshow and edit several lines at once instead of being clipped to the\nthree-line display cap."
+      "description": "Optional stable test id for the semantic source."
     }
   ],
   "GlassBackdrop": [

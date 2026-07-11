@@ -63,9 +63,9 @@ describe("buildStartingDeckView", () => {
     expect(second?.entryId).toBe("entry-2");
     // The resolved card is carried through with its rules text (GameCard reads
     // that text directly for its folded-in hover glossary help).
-    expect(first?.card.cardNumber).toBe(1);
-    expect(first?.card.renderedText).toBe("Hold the line.");
-    expect(second?.card.renderedText).toBe("Draw a card.");
+    expect(first?.model.displaySnapshot.cardNumber).toBe(1);
+    expect(first?.model.displaySnapshot.renderedText).toBe("Hold the line.");
+    expect(second?.model.displaySnapshot.renderedText).toBe("Draw a card.");
     // The test hook is derived from the entry id.
     expect(first?.testId).toContain("entry-1");
   });
@@ -109,6 +109,6 @@ describe("buildStartingDeckView", () => {
 
     const view = buildStartingDeckView(deck, makeCardDatabase());
 
-    expect(view.cards[0]?.card.energyCost).toBe(7);
+    expect(view.cards[0]?.model.displaySnapshot.energyCost).toBe(7);
   });
 });

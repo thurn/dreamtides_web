@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { DraftScreen, type DraftView } from "./DraftScreen";
+import { TangoRoot } from "../TangoRoot";
 
 function card(cardNumber: number): CardData {
   return {
@@ -28,7 +29,10 @@ function card(cardNumber: number): CardData {
 function view(offer: number[]): DraftView {
   return {
     scene: null,
-    offer: offer.map(card),
+    offer: offer.map((cardNumber) => {
+      const displaySnapshot = card(cardNumber);
+      return { cardId: displaySnapshot.id, displaySnapshot };
+    }),
     offerKey: offer.join(","),
     pickNumber: 1,
     pickTotal: 5,
@@ -66,7 +70,7 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(element);
+    root.render(<TangoRoot>{element}</TangoRoot>);
   });
   return { container, root };
 }

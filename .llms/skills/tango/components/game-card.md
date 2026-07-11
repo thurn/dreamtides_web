@@ -10,49 +10,30 @@ Real consumers: **22** (imports outside `src/tango/docs/` and tests).
 
 The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name.
 
-> **Guidance:** Hover-zoom is built in: hover a card below the shared reading width and a portaled, pointer-events-none copy grows over its original footprint (capped at 1.5x and toward that legible width), with the glossary term stack portaled beside it. It is automatic and based on the rendered footprint, so `large` changes the text scale without opting a compact card out. `hideRulesText` cards skip the reading preview.
+> **Guidance:** GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. Compact cards read at 340px on desktop and 45vw on mobile; glossary definitions, focus, press, activation, and drag dismissal are automatic.
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `card` | `CardData \| Readonly<CardData>` | yes | — |  |
-| `onClick` | `(() => void)` | no | — |  |
-| `selected` | `boolean` | no | — |  |
-| `selectionColor` | `TangoColor` = `"danger" \| "accent" \| "accent-bright" \| "accent-strong" \| "essence" \| "energy" \| "energy-bright" \| "spark" \| "points" \| "positive" \| "selected" \| "sale" \| "gold" \| "gold-light" \| "text-primary" \| "text-secondary" \| "text-muted" \| "text-faint" \| "text-on-accent" \| "white"` | no | — | The selection-ring {@link TangoColor}. Default the `"selected"` role. |
-| `transfiguration` | `CardTransfigurationDisplay` | no | — | When set, paints the card as transfigured: a small colored gem follows the name, the changed corner stat(s) take the tint, and only the added/changed rules text is tinted (driven by the descriptor's marked text). The card itself should already carry the transfigured stats and rules text — pass the `card` and `display` from `buildTransfigurationDisplay` together. |
-| `large` | `boolean` | no | — | Use larger text sizes for rules text, name, type line, and stats. |
-| `figment` | `boolean` | no | — | Render the figment frame (rules §Figments): no energy orb, the spark floats as a large mark in the top-right corner instead of inside a name bar, and the rules box takes a black-on-light frosted treatment. A figment has no name bar by default; pass `figmentTitleBar` to show one (for a named figment like a Legionnaire, or while its name is being edited). |
-| `figmentTitleBar` | `boolean` | no | — | In figment mode, render the top title bar holding the card name (left aligned, dark character-card treatment). Ignored when `figment` is false. |
-| `hideRulesText` | `boolean` | no | — | Hide rules text for dense card surfaces that show identity and stats. |
-| `termDefinitions` | `"card" \| "none"` | no | — | Keyword-definition reveal behavior. Default `"card"` means this card owns its keyword InfoCards, positioned beside the card and top-aligned with it. Use `"none"` only when a parent surface renders those supplemental cards beside a larger main preview of this same card. |
-| `slots` | `CardViewSlots` | no | — | Optional editor wrappers for individual rendered card slots. |
-| `onRulesFontSizeChange` | `((fontSizePx: number) => void)` | no | — | Called with the rules-text font size (in px) the auto-shrink fitter computed to fit the rules box, whenever it changes. The card editor uses this to drive its font-size overlay and font-size sort. |
-| `onBoxTopFracChange` | `((boxTopFrac: number \| null) => void)` | no | — | Called with the rules text box's top as a fraction of card height (null when the card has no rules box or it is not yet measured), whenever it changes. The art-crop editor uses this to floor zoom-out and pan against the same box-relative safe area the card renders with. |
-| `eagerRulesFit` | `boolean` | no | — | Measure the rules-text fit immediately instead of deferring until the card nears the viewport. The card editor sets this while sorting by font size so every card reports a stable fitted size up front; without it the sort would reshuffle endlessly as off-screen cards measured only after being moved. |
-| `rulesTextboxExpanded` | `boolean` | no | — | Grow the rules text box to a taller editing height. The card editor sets this while its rules-text field is open so the inline textarea has room to show and edit several lines at once instead of being clipped to the three-line display cap. |
+| `model` | `GameCardModel` | yes | — | Canonical card semantics and resolved display snapshot. |
+| `onActivate` | `(() => void)` | no | — | Player action invoked by a quick activation. |
+| `unavailable` | `boolean` | no | `false` | Whether the action is unavailable while the card remains informative. |
+| `selected` | `boolean` | no | `false` | Draw the semantic selection state. |
+| `selectionColor` | `TangoColor` = `"danger" \| "accent" \| "accent-bright" \| "accent-strong" \| "essence" \| "energy" \| "energy-bright" \| "spark" \| "points" \| "positive" \| "selected" \| "sale" \| "gold" \| "gold-light" \| "text-primary" \| "text-secondary" \| "text-muted" \| "text-faint" \| "text-on-accent" \| "white"` | no | — | Selection-ring color. Defaults to the shared selected role. |
+| `large` | `boolean` | no | `false` | Use the larger card typography preset. |
+| `hideRulesText` | `boolean` | no | `false` | Hide source rules on dense surfaces; the reveal stays complete. |
+| `figment` | `boolean` | no | `false` | Render the figment frame. |
+| `figmentTitleBar` | `boolean` | no | `false` | Render a title bar on a named figment. |
+| `testId` | `string` | no | — | Optional stable test id for the semantic source. |
 
-### `transfiguration`: the `CardTransfigurationDisplay` model
+### `model`: the `GameCardModel` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `type` | `TransfigurationType` | no |  |
-| `color` | `` `#${string}` `` | no | Light tint for the name gem, changed stat orb(s), and changed text. A `#${string}` hex, matching Tango's `HexColor`. |
-| `markedText` | `string` | no | Rules text with the changed/added spans wrapped in transfigure markers. |
-| `energyChanged` | `boolean` | no | True when the energy cost changed (Empowered); tints the energy orb. |
-| `sparkChanged` | `boolean` | no | True when the spark changed (Kindled); tints the spark orb. |
-| `fastChanged` | `boolean` | no | True when the card gained Fast (Hastened); tints the speed bolt. |
-
-### `slots`: the `CardViewSlots` model
-
-| Field | Type | Optional | Description |
-| --- | --- | --- | --- |
-| `energy` | `((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)` | yes |  |
-| `name` | `((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)` | yes |  |
-| `typeLineContent` | `((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)` | yes |  |
-| `typeLine` | `((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)` | yes |  |
-| `rulesText` | `((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)` | yes |  |
-| `spark` | `((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)` | yes |  |
+| `cardId` | `CardId` | no | Stable catalog UUID used for reveal identity and diagnostics. |
+| `displaySnapshot` | `Readonly<CardData>` | no | Complete resolved display data whose `id` matches `cardId`. |
+| `transfiguration` | `CardTransfigurationDisplay` | yes | Optional presentation of a transfigured card. |
 
 ## Usage
 
@@ -63,7 +44,7 @@ Give it a resolved `CardData` (loaded by UUID from the card database — never b
 ```tsx
 import { GameCard } from "src/tango/components/card/CardView";
 
-<GameCard card={card} large />
+<GameCard model={{ cardId: card.id, displaySnapshot: card }} large />
 ```
 
 ### Selected in a picker
@@ -72,7 +53,7 @@ Draw the selection ring with `selected`; `hideRulesText` gives the dense identit
 
 ```tsx
 <GameCard
-  card={card}
+  model={{ cardId: card.id, displaySnapshot: card }}
   selected
   selectionColor="#f97316"
   hideRulesText

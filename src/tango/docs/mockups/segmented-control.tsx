@@ -121,7 +121,7 @@ export function SegmentedControlMockup() {
         ) : (
           cards.map((card, index) => (
             <div key={`${card.id}-${String(index)}`} style={{ width: "clamp(120px, 16vw, 168px)" }}>
-              <GameCard card={card} />
+              <GameCard model={{ cardId: card.id, displaySnapshot: card }} />
             </div>
           ))
         )}

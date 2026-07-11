@@ -45,8 +45,8 @@ describe("toDeckCardView", () => {
 
     expect(view).not.toBeNull();
     expect(view?.entryId).toBe("e7");
-    expect(view?.card.id).toBe(card.id);
-    expect(view?.transfiguration).toBeUndefined();
+    expect(view?.model.cardId).toBe(card.id);
+    expect(view?.model.transfiguration).toBeUndefined();
     expect(view?.isBane).toBe(false);
   });
 
@@ -60,7 +60,7 @@ describe("toDeckCardView", () => {
 
     const view = toDeckCardView(entry, database(card));
 
-    expect(view?.card.energyCost).toBe(0);
+    expect(view?.model.displaySnapshot.energyCost).toBe(0);
   });
 
   it("carries a transfiguration display descriptor for a transfigured entry", () => {
@@ -69,9 +69,9 @@ describe("toDeckCardView", () => {
 
     const view = toDeckCardView(entry, database(card));
 
-    expect(view?.transfiguration).toBeDefined();
+    expect(view?.model.transfiguration).toBeDefined();
     // Kindled changes spark, so the display marks the spark as changed.
-    expect(view?.transfiguration?.sparkChanged).toBe(true);
+    expect(view?.model.transfiguration?.sparkChanged).toBe(true);
   });
 
   it("preserves the bane flag", () => {

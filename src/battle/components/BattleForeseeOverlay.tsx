@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { CardDisplay } from "../../components/CardDisplay";
 import type { DreamwellCardViewData } from "../../components/DreamwellCardView";
 import { logEvent } from "../../logging";
 import type { BattleCommand } from "../debug/commands";
 import type { BattleMutableState, BattleSide } from "../types";
 import { formatSideLabel } from "../ui/format";
 import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
-import { battleCardDisplayFromInstance } from "./BattleCardView";
+import { BattleGameCard } from "./BattleGameCard";
 import { DreamwellPromptCard } from "./DreamwellPromptCard";
 
 const MIN_FORESEE_COUNT = 1;
@@ -234,9 +233,7 @@ export function BattleForeseeOverlay({
                   </p>
                   <div data-battle-foresee-card-scroll="">
                     <div className="w-full">
-                      <CardDisplay
-                        card={battleCardDisplayFromInstance(instance)}
-                      />
+                      <BattleGameCard instance={instance} variant="hand" />
                     </div>
                   </div>
                   <div className="mt-1 flex flex-wrap gap-2">

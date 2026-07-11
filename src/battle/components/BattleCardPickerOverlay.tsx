@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { CardDisplay } from "../../components/CardDisplay";
 import type { DreamwellCardViewData } from "../../components/DreamwellCardView";
 import type { BattleMutableState } from "../types";
-import { battleCardDisplayFromInstance } from "./BattleCardView";
+import { BattleGameCard } from "./BattleGameCard";
 import { DreamwellPromptCard } from "./DreamwellPromptCard";
 
 export function togglePick(
@@ -237,9 +236,7 @@ export function BattleCardPickerOverlay({
                   </span>
                 ) : null}
                 <div className="w-full">
-                  <CardDisplay
-                    card={battleCardDisplayFromInstance(instance)}
-                  />
+                  <BattleGameCard instance={instance} variant="hand" selected={isSelected} />
                 </div>
               </article>
             );

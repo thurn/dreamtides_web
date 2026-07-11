@@ -22,7 +22,7 @@
 import { useEffect } from "react";
 import type { ReactElement } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import type { CardData } from "../../types/cards";
+import type { GameCardModel } from "../components/card/CardView";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
@@ -37,8 +37,8 @@ import { useIsDesktop } from "./use-is-desktop";
 export interface StartingDeckCardView {
   /** Stable deck-entry id; the grid key and the basis of `testId`. */
   entryId: string;
-  /** The resolved card to paint. */
-  card: CardData;
+  /** Canonical UUID-backed card model. */
+  model: GameCardModel;
   /** `data-testid` for the card's grid tile. */
   testId: string;
 }
@@ -136,7 +136,6 @@ export function StartingDeckOverlay({
               columns={isDesktop ? "five" : "four"}
               cardSize={isDesktop ? "roomy" : "standard"}
               largeCards={isDesktop}
-              mobilePressPreview={!isDesktop}
               frame={isDesktop ? "floating" : "fullBleed"}
               spacing={isDesktop ? "regular" : "compact"}
               cutoutAwareAccessory

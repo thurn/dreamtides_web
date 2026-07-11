@@ -15,8 +15,6 @@ import {
   type CSSProperties,
   type ReactElement,
 } from "react";
-import type { CardData } from "../../../types/cards";
-import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
 import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import type { TangoColor } from "../../primitives/color";
@@ -32,22 +30,16 @@ import {
 } from "../controls/GlassButton";
 import { IconButton, type IconButtonSize } from "../controls/IconButton";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
-import { GameCard } from "./CardView";
-import {
-  renderMobileCardPeekOverlay,
-  useMobileCardPeek,
-} from "./MobileCardPeek";
+import { GameCard, type GameCardModel } from "./CardView";
 
 /** One resolved card in a {@link CardGalleryPanel}. */
 export interface CardGalleryCardView {
   /** Stable id for the card tile; deck surfaces use the deck-entry id. */
   entryId: string;
-  /** The fully resolved card data to paint. */
-  card: CardData;
+  /** Canonical semantic model rendered by GameCard. */
+  model: GameCardModel;
   /** Optional test id on the tile wrapper. */
   testId?: string;
-  /** Display descriptor painting the card as transfigured, when it is one. */
-  transfiguration?: CardTransfigurationDisplay;
   /** Draw the card's selection ring. */
   selected?: boolean;
   /** Detach card interaction and dim the tile. */
@@ -166,14 +158,6 @@ export interface CardGalleryPanelProps {
   endAction?: CardGalleryActionView;
   /** Fires with the appended action's stable id when it is activated. */
   onEndActionPress?: (entryId: string) => void;
-  /**
-   * Enables the shared mobile Deck Viewer press preview for compact galleries:
-   * hold a tile and a large readable card is placed clear of the finger;
-   * quick taps still activate selectable tiles, while held previews suppress
-   * their trailing click. The large card moves up first, then sideways only
-   * when needed, and never intersects the protected touch circle.
-   */
-  mobilePressPreview?: boolean;
 }
 
 const STANDARD_CARD_MIN_WIDTH_PX = 96;
@@ -496,7 +480,6 @@ export function CardGalleryPanel({
   onCardPress,
   endAction,
   onEndActionPress,
-  mobilePressPreview = false,
 }: CardGalleryPanelProps): ReactElement {
   const [besideCutout, setBesideCutout] = useState(false);
   useEffect(() => {
@@ -532,11 +515,6 @@ export function CardGalleryPanel({
       ? fallbackCardWidth(frame, cardSize, columnCount, spacing)
       : `${String(Math.max(1, Math.floor(measure.cardWidthPx)))}px`;
   const galleryGap = gridGapFor(spacing);
-  const mobilePeek = useMobileCardPeek({
-    columns: columnCount,
-    columnGapToken: spacing === "compact" ? "--space-3" : "--space-4",
-  });
-  const mobilePeekEnabled = mobilePressPreview && cards.length > 0;
   const galleryPadding = bodyPaddingFor(spacing);
   const headerPadding = headerPaddingFor(spacing);
   const cardHeight = `calc(${cardWidth} / ${String(CARD_ASPECT_RATIO_VALUE)})`;
@@ -646,10 +624,6 @@ export function CardGalleryPanel({
         </header>
         <div
           ref={bodyRef}
-          onPointerMove={
-            mobilePeekEnabled ? mobilePeek.handlePointerMove : undefined
-          }
-          onScroll={mobilePeekEnabled ? mobilePeek.handleScroll : undefined}
           style={{
             flex: frame === "fullBleed" ? "1 1 auto" : `0 1 ${bodyHeight}`,
             minHeight: 0,
@@ -692,17 +666,6 @@ export function CardGalleryPanel({
               {cards.map((card) => {
                 const disabled = card.disabled === true;
                 const interactive = onCardPress !== undefined;
-                const peekable = mobilePeekEnabled && !disabled;
-                const tile = (
-                  <GameCard
-                    card={card.card}
-                    transfiguration={card.transfiguration}
-                    selected={card.selected}
-                    selectionColor={card.selectionColor}
-                    large={largeCards}
-                    termDefinitions={peekable ? "none" : "card"}
-                  />
-                );
                 const tileStyle: CSSProperties = {
                   position: "relative",
                   display: "block",
@@ -716,62 +679,21 @@ export function CardGalleryPanel({
                   WebkitTouchCallout: "none",
                   WebkitUserSelect: "none",
                   userSelect: "none",
-                  touchAction: peekable ? "pan-y" : "manipulation",
+                  touchAction: "pan-y",
                 };
-
-                let cardNode: ReactElement;
-                if (!interactive) {
-                  if (peekable) {
-                    cardNode = (
-                      <Pressable
-                        as="div"
-                        data-testid={card.testId}
-                        onPointerDown={(event) => {
-                          mobilePeek.openPeek(event, card);
-                        }}
-                        onContextMenu={(event) => {
-                          event.preventDefault();
-                        }}
-                        style={tileStyle}
-                      >
-                        {tile}
-                      </Pressable>
-                    );
-                  } else {
-                    cardNode = (
-                      <div data-testid={card.testId} style={tileStyle}>
-                        {tile}
-                      </div>
-                    );
-                  }
-                } else {
-                  cardNode = (
-                    <Pressable
-                      as="button"
-                      aria-label={card.card.name}
-                      aria-pressed={card.selected}
-                      disabled={disabled}
-                      data-testid={card.testId}
-                      onPointerDown={
-                        peekable
-                          ? (event) => {
-                              mobilePeek.openPeek(event, card);
-                            }
-                          : undefined
-                      }
-                      onClick={() => onCardPress(card.entryId)}
-                      onClickCapture={
-                        peekable ? mobilePeek.handleClickCapture : undefined
-                      }
-                      onContextMenu={(event) => {
-                        event.preventDefault();
-                      }}
-                      style={tileStyle}
-                    >
-                      {tile}
-                    </Pressable>
-                  );
-                }
+                const cardNode = (
+                  <div style={tileStyle}>
+                    <GameCard
+                      model={card.model}
+                      selected={card.selected}
+                      selectionColor={card.selectionColor}
+                      large={largeCards}
+                      unavailable={disabled}
+                      testId={card.testId}
+                      onActivate={interactive ? () => onCardPress(card.entryId) : undefined}
+                    />
+                  </div>
+                );
 
                 return (
                   <div
@@ -835,7 +757,6 @@ export function CardGalleryPanel({
           )}
         </div>
       </section>
-      {mobilePeek.peek !== null && renderMobileCardPeekOverlay(mobilePeek.peek)}
     </>
   );
 }

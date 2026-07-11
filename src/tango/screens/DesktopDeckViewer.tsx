@@ -621,10 +621,7 @@ function DeckTile({
   };
   return (
     <div style={tileStyle}>
-      <GameCard
-        card={cardView.card}
-        transfiguration={cardView.transfiguration}
-      />
+      <GameCard model={cardView.model} />
     </div>
   );
 }

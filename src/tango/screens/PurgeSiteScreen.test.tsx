@@ -6,7 +6,6 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
-import { MOBILE_CARD_PEEK_HOLD_MS } from "../components/card/MobileCardPeek";
 import { artRef } from "../primitives/art";
 import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
 import {
@@ -18,6 +17,7 @@ import {
   purgeActionWidthReservations,
   type PurgeSiteView,
 } from "./PurgeSiteScreen";
+import { TangoRoot } from "../TangoRoot";
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
@@ -53,11 +53,11 @@ function view(cardCount = 2): PurgeSiteView {
         cardNumber === 1 ? "a" : cardNumber === 2 ? "b" : String(cardNumber);
       return {
         entryId: `entry-${suffix}`,
-        card: makeCard({
+        model: (() => { const displaySnapshot = makeCard({
           name: asCardName(`Test Card ${String(cardNumber)}`),
           id: asCardId(`card-${suffix}`),
           cardNumber,
-        }),
+        }); return { cardId: displaySnapshot.id, displaySnapshot }; })(),
         isBane: false,
         purgeCostKind: "paid",
       };
@@ -99,7 +99,7 @@ function mount(element: ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(element);
+    root.render(<TangoRoot>{element}</TangoRoot>);
   });
   return { container, root };
 }
@@ -217,50 +217,6 @@ describe("PurgeSiteScreen", () => {
     });
 
     expect(onPurge).toHaveBeenCalledWith(["entry-a", "entry-b"], 100);
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("uses a tap to select but a held mobile preview only inspects the card", () => {
-    vi.useFakeTimers();
-    const { container, root } = mount(
-      <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
-    );
-    const first = container.querySelector<HTMLButtonElement>(
-      '[data-testid="tango-purge-card-entry-a"]',
-    );
-
-    act(() => {
-      first?.click();
-    });
-    expect(first?.getAttribute("aria-pressed")).toBe("true");
-    act(() => {
-      first?.click();
-    });
-    expect(first?.getAttribute("aria-pressed")).toBe("false");
-
-    act(() => {
-      first?.dispatchEvent(
-        new MouseEvent("pointerdown", {
-          bubbles: true,
-          button: 0,
-          clientX: 40,
-          clientY: 360,
-        }),
-      );
-      vi.advanceTimersByTime(MOBILE_CARD_PEEK_HOLD_MS);
-    });
-    expect(document.querySelector("[data-mobile-card-peek]")).not.toBeNull();
-
-    act(() => {
-      window.dispatchEvent(new MouseEvent("pointerup", { bubbles: true }));
-      first?.click();
-    });
-
-    expect(document.querySelector("[data-mobile-card-peek]")).toBeNull();
-    expect(first?.getAttribute("aria-pressed")).toBe("false");
 
     act(() => {
       root.unmount();

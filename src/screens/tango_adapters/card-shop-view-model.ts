@@ -71,7 +71,7 @@ export function buildCardShopOffers(
     offers.push({
       entryId: `shop-slot-${String(slotIndex)}-${card.id}`,
       slotIndex,
-      card,
+      model: { cardId: card.id, displaySnapshot: card },
       price,
       state: slot.purchased
         ? "purchased"
@@ -112,7 +112,7 @@ export function buildCardShopDebugState(
     "Shop",
     offers
       .filter((offer) => offer.state !== "purchased")
-      .map((offer) => offer.card),
+      .map((offer) => offer.model.displaySnapshot),
     resolvedPackage,
   );
 }

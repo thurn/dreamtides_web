@@ -2,7 +2,6 @@ import "../battle.css";
 
 import type {
   MouseEvent as ReactMouseEvent,
-  MouseEvent as ReactPointerMouseEvent,
   ReactNode,
 } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -54,7 +53,6 @@ import { aiMayRunHere } from "../ai/ai-may-run-here";
 import { dreamwellEnergyEdits } from "../engine/energy";
 import { planBasicAutomationCommands } from "../../rules/battle/basic-automation";
 import { BattleActionBar } from "./BattleActionBar";
-import { BattleCardHoverPreview } from "./BattleCardHoverPreview";
 import { BattleContextMenu } from "./BattleContextMenu";
 import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
 import { BattleDreamcallerPanel } from "./BattleDreamcallerPanel";
@@ -70,7 +68,7 @@ import { BattleRewardSurface } from "./BattleRewardSurface";
 import { BattleSideSummaryPopover } from "./BattleSideSummaryPopover";
 import { BattleStatusBar } from "./BattleStatusBar";
 import { BattleStatusStrip } from "./BattleStatusStrip";
-import { BattleCardView, battleCardVisualFromInstance } from "./BattleCardView";
+import { BattleGameCard } from "./BattleGameCard";
 import { BattleDreamwellDisplay } from "./BattleDreamwellDisplay";
 import { BattleCardPickerOverlay } from "./BattleCardPickerOverlay";
 import { BattleChoicePromptOverlay } from "./BattleChoicePromptOverlay";
@@ -117,12 +115,6 @@ type PendingDragState = {
   definition: BattleDeckCardDefinition;
   sourceSurface: "pool-viewer";
 } | null;
-type HoverPreviewState = {
-  battleCardId: string;
-  x: number;
-  y: number;
-} | null;
-
 export function PlayableBattleScreen({
   site,
   aiMode = false,
@@ -184,7 +176,6 @@ function PlayableBattleScreenInner({
   const [isPlayerHandHidden, setIsPlayerHandHidden] = useState(false);
   const [openZoneBrowser, setOpenZoneBrowser] = useState<ZoneBrowserState>(null);
   const [pendingDrag, setPendingDrag] = useState<PendingDragState>(null);
-  const [hoverPreview, setHoverPreview] = useState<HoverPreviewState>(null);
   const [contextMenu, setContextMenu] = useState<ContextMenuState>(null);
   const [openForeseeOverlay, setOpenForeseeOverlay] = useState<ForeseeOverlayState>(null);
   const [openDeckOrderPicker, setOpenDeckOrderPicker] = useState<BattleSide | null>(null);
@@ -289,7 +280,6 @@ function PlayableBattleScreenInner({
 
   const handleCommand = useCallback((command: BattleCommand): void => {
     setPendingDrag(null);
-    setHoverPreview(null);
     // With basic automation on, a single gesture can expand into several
     // commands (e.g. a play also spends energy; ending a turn resolves the
     // Challenge, ramps energy, and draws). The planner reads the live state and
@@ -680,7 +670,6 @@ function PlayableBattleScreenInner({
   // pure client-side reset with no effect on the shared battle log.
   function handleResetBattle(): void {
     setPendingDrag(null);
-    setHoverPreview(null);
     setOpenZoneBrowser(null);
     setContextMenu(null);
     setOpenForeseeOverlay(null);
@@ -741,7 +730,6 @@ function PlayableBattleScreenInner({
     if (!canPlayerAct) {
       return;
     }
-    setHoverPreview(null);
     const location = selectBattleCardLocation(board, battleCardId);
     const instance = board.cardInstances[battleCardId];
     if (instance !== undefined) {
@@ -768,7 +756,6 @@ function PlayableBattleScreenInner({
       sourceSurface: "pool-viewer",
     });
     setContextMenu(null);
-    setHoverPreview(null);
   }
 
   // Every card-movement gesture funnels through the single unrestricted move
@@ -918,42 +905,6 @@ function PlayableBattleScreenInner({
     setPendingDrag(null);
   }
 
-  function handleBattlefieldCardHoverStart(
-    battleCardId: string,
-    event: ReactPointerMouseEvent<HTMLElement>,
-  ): void {
-    if (pendingDrag !== null) {
-      setHoverPreview(null);
-      return;
-    }
-    setHoverPreview({
-      battleCardId,
-      x: event.clientX,
-      y: event.clientY,
-    });
-  }
-
-  function handleBattlefieldCardHoverMove(
-    battleCardId: string,
-    event: ReactPointerMouseEvent<HTMLElement>,
-  ): void {
-    if (pendingDrag !== null) {
-      setHoverPreview(null);
-      return;
-    }
-    setHoverPreview((current) => current?.battleCardId === battleCardId
-      ? {
-        battleCardId,
-        x: event.clientX,
-        y: event.clientY,
-      }
-      : current);
-  }
-
-  function handleBattlefieldCardHoverEnd(): void {
-    setHoverPreview(null);
-  }
-
   const enemyDreamcallerSummary = resolveEnemyDreamcallerSummary(
     battleInit.enemyDescriptor,
     questContent,
@@ -986,9 +937,6 @@ function PlayableBattleScreenInner({
           onCardContextMenu={handleCardContextMenu}
           onCardDragStart={handleCardDragStart}
           onCardDragEnd={handleCardDragEnd}
-          onCardHoverStart={handleBattlefieldCardHoverStart}
-          onCardHoverMove={handleBattlefieldCardHoverMove}
-          onCardHoverEnd={handleBattlefieldCardHoverEnd}
           onCardDropToBrowser={(sourceSurface) => handleZoneDrop(
             openZoneBrowser.side,
             openZoneBrowser.zone,
@@ -1204,9 +1152,6 @@ function PlayableBattleScreenInner({
                 onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                 onCardDragStart={handleCardDragStart}
                 onCardDragEnd={handleCardDragEnd}
-                onCardHoverStart={handleBattlefieldCardHoverStart}
-                onCardHoverMove={handleBattlefieldCardHoverMove}
-                onCardHoverEnd={handleBattlefieldCardHoverEnd}
                 onResolveToBanished={(battleCardId, side) => handleCommand(
                   createMoveCardToZoneCommand(battleCardId, side, "banished", "battlefield"),
                 )}
@@ -1284,9 +1229,6 @@ function PlayableBattleScreenInner({
                     onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                     onCardDragStart={handleCardDragStart}
                     onCardDragEnd={handleCardDragEnd}
-                    onCardHoverStart={handleBattlefieldCardHoverStart}
-                    onCardHoverMove={handleBattlefieldCardHoverMove}
-                    onCardHoverEnd={handleBattlefieldCardHoverEnd}
                     onSlotClick={handleBattlefieldSlotClick}
                     onSlotDrop={handleSlotDrop}
                   />
@@ -1305,9 +1247,6 @@ function PlayableBattleScreenInner({
                     onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                     onCardDragStart={handleCardDragStart}
                     onCardDragEnd={handleCardDragEnd}
-                    onCardHoverStart={handleBattlefieldCardHoverStart}
-                    onCardHoverMove={handleBattlefieldCardHoverMove}
-                    onCardHoverEnd={handleBattlefieldCardHoverEnd}
                     onSlotClick={handleBattlefieldSlotClick}
                     onSlotDrop={handleSlotDrop}
                   />
@@ -1330,9 +1269,6 @@ function PlayableBattleScreenInner({
                     onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                     onCardDragStart={handleCardDragStart}
                     onCardDragEnd={handleCardDragEnd}
-                    onCardHoverStart={handleBattlefieldCardHoverStart}
-                    onCardHoverMove={handleBattlefieldCardHoverMove}
-                    onCardHoverEnd={handleBattlefieldCardHoverEnd}
                     onSlotClick={handleBattlefieldSlotClick}
                     onSlotDrop={handleSlotDrop}
                   />
@@ -1351,9 +1287,6 @@ function PlayableBattleScreenInner({
                     onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                     onCardDragStart={handleCardDragStart}
                     onCardDragEnd={handleCardDragEnd}
-                    onCardHoverStart={handleBattlefieldCardHoverStart}
-                    onCardHoverMove={handleBattlefieldCardHoverMove}
-                    onCardHoverEnd={handleBattlefieldCardHoverEnd}
                     onSlotClick={handleBattlefieldSlotClick}
                     onSlotDrop={handleSlotDrop}
                   />
@@ -1575,19 +1508,6 @@ function PlayableBattleScreenInner({
           onCommand={handleCommand}
         />
       ) : null}
-      {hoverPreview !== null && pendingDrag === null
-        ? (() => {
-          const hoverCard = board.cardInstances[hoverPreview.battleCardId];
-          return hoverCard === undefined
-            ? null
-            : (
-              <BattleCardHoverPreview
-                card={hoverCard}
-                pointer={{ x: hoverPreview.x, y: hoverPreview.y }}
-              />
-            );
-        })()
-        : null}
       <BattleLogDrawer
         battleInit={battleInit}
         futureCount={0}
@@ -1695,9 +1615,6 @@ function BattleStackZone({
   onCardContextMenu,
   onCardDragStart,
   onCardDragEnd,
-  onCardHoverStart,
-  onCardHoverMove,
-  onCardHoverEnd,
   onResolveToBanished,
   onResolveToVoid,
 }: {
@@ -1708,9 +1625,6 @@ function BattleStackZone({
   onCardContextMenu: (battleCardId: string, event: ReactMouseEvent<HTMLDivElement>) => void;
   onCardDragStart: (battleCardId: string) => void;
   onCardDragEnd: () => void;
-  onCardHoverStart: (battleCardId: string, event: ReactPointerMouseEvent<HTMLDivElement>) => void;
-  onCardHoverMove: (battleCardId: string, event: ReactPointerMouseEvent<HTMLDivElement>) => void;
-  onCardHoverEnd: () => void;
   onResolveToBanished: (battleCardId: string, side: BattleSide) => void;
   onResolveToVoid: (battleCardId: string, side: BattleSide) => void;
 }) {
@@ -1739,16 +1653,12 @@ function BattleStackZone({
           }
           return (
             <div key={entry.stackEntryId} className="battle-stack-entry">
-              <BattleCardView
-                battleCardId={entry.battleCardId}
-                data={battleCardVisualFromInstance(instance)}
+              <BattleGameCard
+                instance={instance}
                 reserved={false}
                 selected={false}
                 draggable
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onCardClick(entry.battleCardId);
-                }}
+                onActivate={() => onCardClick(entry.battleCardId)}
                 onContextMenu={(event) => {
                   event.preventDefault();
                   event.stopPropagation();
@@ -1756,9 +1666,6 @@ function BattleStackZone({
                 }}
                 onDragStart={() => onCardDragStart(entry.battleCardId)}
                 onDragEnd={onCardDragEnd}
-                onMouseEnter={(event) => onCardHoverStart(entry.battleCardId, event)}
-                onMouseMove={(event) => onCardHoverMove(entry.battleCardId, event)}
-                onMouseLeave={onCardHoverEnd}
               />
               <div className="battle-stack-entry-actions">
                 <button

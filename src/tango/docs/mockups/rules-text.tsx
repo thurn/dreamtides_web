@@ -107,7 +107,7 @@ export function RulesTextMockup() {
           <>
             {resolved.featured !== null && (
               <div style={{ width: "clamp(180px, 30vw, 260px)", flex: "0 0 auto" }}>
-                <GameCard card={resolved.featured} large />
+                <GameCard model={{ cardId: resolved.featured.id, displaySnapshot: resolved.featured }} large />
               </div>
             )}
 

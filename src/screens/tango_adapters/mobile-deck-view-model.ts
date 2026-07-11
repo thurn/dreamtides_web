@@ -39,7 +39,10 @@ export function toDeckCardView(
   if (entry.transfiguration === null) {
     return {
       entryId: entry.entryId,
-      card: applyCardStatOverride(modified, entry.statOverride),
+      model: {
+        cardId: modified.id,
+        displaySnapshot: applyCardStatOverride(modified, entry.statOverride),
+      },
       isBane: entry.isBane,
     };
   }
@@ -50,8 +53,11 @@ export function toDeckCardView(
   );
   return {
     entryId: entry.entryId,
-    card: applyCardStatOverride(transfigured.card, entry.statOverride),
-    transfiguration: transfigured.display,
+    model: {
+      cardId: transfigured.card.id,
+      displaySnapshot: applyCardStatOverride(transfigured.card, entry.statOverride),
+      transfiguration: transfigured.display,
+    },
     isBane: entry.isBane,
   };
 }

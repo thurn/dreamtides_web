@@ -115,7 +115,7 @@ function GameCardDemo({
       {cards.map((card) => (
         <div key={card.id} style={{ width: large ? 240 : 168, flex: "0 0 auto" }}>
           <GameCard
-            card={card}
+            model={{ cardId: card.id, displaySnapshot: card }}
             large={large}
             selected={selected}
             selectionColor={selectionColor}
@@ -134,7 +134,7 @@ export const gameCardDemo: TangoComponent = {
   blurb:
     "The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name.",
   callout:
-    "Hover-zoom is built in: hover a card below the shared reading width and a portaled, pointer-events-none copy grows over its original footprint (capped at 1.5x and toward that legible width), with the glossary term stack portaled beside it. It is automatic and based on the rendered footprint, so `large` changes the text scale without opting a compact card out. `hideRulesText` cards skip the reading preview.",
+    "GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. Compact cards read at 340px on desktop and 45vw on mobile; glossary definitions, focus, press, activation, and drag dismissal are automatic.",
   group: "Components",
   docName: "GameCard",
   Component: GameCardDemo,
@@ -144,13 +144,13 @@ export const gameCardDemo: TangoComponent = {
       note: "Give it a resolved `CardData` (loaded by UUID from the card database — never by name). `large` switches to the bigger card + text sizing.",
       code: `import { GameCard } from "src/tango/components/card/CardView";
 
-<GameCard card={card} large />`,
+<GameCard model={{ cardId: card.id, displaySnapshot: card }} large />`,
     },
     {
       label: "Selected in a picker",
       note: "Draw the selection ring with `selected`; `hideRulesText` gives the dense identity-only surface used in tight lists.",
       code: `<GameCard
-  card={card}
+  model={{ cardId: card.id, displaySnapshot: card }}
   selected
   selectionColor="#f97316"
   hideRulesText

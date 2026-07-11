@@ -14,7 +14,6 @@ import {
 import type { ArtCrop } from "../types/cards";
 import { CardStatOrb } from "../tango/components/card/CardStatOrb";
 import { renderRulesText } from "../tango/components/card/RulesText";
-import { useCardTermPopover } from "../tango/components/card/useCardTermPopover";
 
 /**
  * Optional render overrides for the Dreamwell card's editable regions. Each slot
@@ -208,8 +207,7 @@ const ART_RISE_DEFAULT_CQW = 14.5;
  * number) floats in the top-right corner the way a regular card's energy cost orb
  * does; the `energy-added` value is the orb's number. A bottom-anchored frosted
  * box carries the card name at its head (a larger serif heading) followed by the
- * rules text, sharing the regular card's symbol highlighting and on-hover
- * glossary panel (see {@link useCardTermPopover}). With the box pinned to the
+ * rules text, sharing the regular card's symbol highlighting. With the box pinned to the
  * bottom edge, the upper band of art reads clearly above it.
  *
  * Sizing is driven by container queries (`container-type: inline-size`), so the
@@ -237,11 +235,6 @@ export function DreamwellCardView({
   // stale data) would otherwise take down the whole route with an uncaught
   // throw. Normalize the field once so every consumer below sees a string.
   const renderedText = card.renderedText ?? "";
-  const { triggerHandlers, popoverPortal } = useCardTermPopover({
-    anchorRef: rootRef,
-    text: renderedText,
-    enabled: true,
-  });
 
   // Measure the rendered card width so the energy digit's auto-shrink cap is
   // `widthPx * ENERGY_ORB_RATIO`, exactly as CardView computes it — the digit
@@ -456,7 +449,6 @@ export function DreamwellCardView({
           ...style,
         } as CSSProperties
       }
-      {...triggerHandlers}
     >
       {/* Dark base behind the band, so any sliver the extended art does not
           reach matches the band rather than going neutral. */}
@@ -621,7 +613,6 @@ export function DreamwellCardView({
             })()
           : null}
       </div>
-      {popoverPortal}
     </div>
   );
 }

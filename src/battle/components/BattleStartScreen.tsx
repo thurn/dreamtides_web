@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import "./battle-start.css";
 import type { BattleInit } from "../types";
 import type { CardData } from "../../types/cards";
-import { CardView } from "../../tango/components/card/CardView";
+import { GameCard } from "../../tango/components/card/CardView";
 import { RulesText } from "../../tango/components/card/RulesText";
 import { EssenceValue } from "../../tango/components/hud/EssenceValue";
 import { dreamcallerCutoutSrc } from "../../tango/components/hud/DreamcallerPortrait";
@@ -311,10 +311,7 @@ export function BattleStartScreen({
                 {signatureCards.map((card) => (
                   <div className="bs-card" key={card.id}>
                     <div className="bs-card-thumb">
-                      <CardView card={card} />
-                    </div>
-                    <div className="bs-card-pop">
-                      <CardView card={card} />
+                      <GameCard model={{ cardId: card.id, displaySnapshot: card }} />
                     </div>
                   </div>
                 ))}

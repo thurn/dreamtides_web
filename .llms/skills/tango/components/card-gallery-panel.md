@@ -32,7 +32,6 @@ The shared card-browser surface: a left-aligned title and subtitle, a trailing h
 | `onCardPress` | `((entryId: string) => void)` | no | — | Fires when an enabled card tile is activated. |
 | `endAction` | `CardGalleryActionView` | no | — | Optional card-sized action appended after the cards. |
 | `onEndActionPress` | `((entryId: string) => void)` | no | — | Fires with the appended action's stable id when it is activated. |
-| `mobilePressPreview` | `boolean` | no | `false` | Enables the shared mobile Deck Viewer press preview for compact galleries: hold a tile and a large readable card is placed clear of the finger; quick taps still activate selectable tiles, while held previews suppress their trailing click. The large card moves up first, then sideways only when needed, and never intersects the protected touch circle. |
 
 ### `rightAccessory`: the `CardGalleryAccessory` model
 

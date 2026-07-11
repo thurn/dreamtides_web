@@ -31,7 +31,8 @@ function makeCard(overrides: Partial<CardData> = {}): CardData {
 
 /** A minimal deck-card view around a card, keyed by its entryId. */
 function view(entryId: string, card: Partial<CardData>): DeckCardView {
-  return { entryId, card: makeCard(card), isBane: false };
+  const displaySnapshot = makeCard(card);
+  return { entryId, model: { cardId: displaySnapshot.id, displaySnapshot }, isBane: false };
 }
 
 /** N Character views of one subtype, keyed `<subtype>-0`, `<subtype>-1`, … */

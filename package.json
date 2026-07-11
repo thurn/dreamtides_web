@@ -51,7 +51,6 @@
     "check-tides5": "node scripts/check-tides5.mjs",
     "check-tide-annotations": "node scripts/check-tide-annotations.mjs",
     "tides-similarity": "node scripts/tides-similarity-experiment.mjs",
-    "deck-peek-clearance": "node scripts/deck-peek-clearance-analysis.mjs",
     "bake-draft-records": "node scripts/rebuild-adapted-draft-records.mjs",
     "pool-collision-audit": "node scripts/pool-collision-audit.mjs"
   },

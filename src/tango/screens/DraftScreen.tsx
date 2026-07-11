@@ -18,9 +18,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import type { CardData } from "../../types/cards";
+import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { CARD_ASPECT_H, CARD_ASPECT_W } from "../components/card/card-aspect";
-import { GameCard } from "../components/card/CardView";
 import { Motes } from "../components/hud/Motes";
 import {
   QuestStatusBar,
@@ -54,7 +53,7 @@ export interface DraftView {
   /** The dreamscape's scene art, or null while the dreamscape is unrevealed. */
   scene: ArtRef | null;
   /** The offered pack, resolved to cards (by UUID) and sorted for display. */
-  offer: readonly CardData[];
+  offer: readonly GameCardModel[];
   /** Stable key for the current pack, so a new offer cross-fades the grid. */
   offerKey: string;
   /** The 1-indexed pick the player is on (for the floating "Draft (n/total)"). */
@@ -240,7 +239,8 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
               placeItems: "center",
             }}
           >
-            {view.offer.map((card) => {
+            {view.offer.map((model) => {
+              const card = model.displaySnapshot;
               const picked = pendingPick === card.cardNumber;
               const dimmed = pendingPick !== null && !picked;
               return (
@@ -259,9 +259,9 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
                   style={{ width: offerCellWidth }}
                 >
                   <GameCard
-                    card={card}
+                    model={model}
                     large={!isDesktop}
-                    onClick={
+                    onActivate={
                       pendingPick === null
                         ? () => {
                             handlePick(card.cardNumber);

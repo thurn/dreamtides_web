@@ -13,7 +13,7 @@ import { token } from "../../primitives/tokens";
  *
  * Rendered beside a card / dreamsign / ability so the player can read what
  * every highlighted keyword means without inline tooltips. Shared by the card
- * hover-help panel (`useCardTermPopover` → `CardView`/`GameCard`), the dreamsign
+ * shared entity reveal coordinator, the dreamsign
  * reveal (`DreamsignInfoCard`), and the Dreamcaller ability reveal.
  *
  * Returns `null` when the text references no glossary terms, so callers place it

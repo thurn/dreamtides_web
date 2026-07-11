@@ -12,7 +12,7 @@ import type {
   BattleSide,
   BrowseableZone,
 } from "../types";
-import { BattleCardView, battleCardVisualFromInstance } from "./BattleCardView";
+import { BattleGameCard } from "./BattleGameCard";
 
 type BattleZoneBrowserSortMode = "current" | "cost" | "spark" | "name";
 type BattleZoneBrowserTypeFilter = "all" | "character" | "event";
@@ -295,9 +295,8 @@ export function BattleZoneBrowser({
                   }}
                   onMouseLeave={() => onCardHoverEnd?.()}
                 >
-                  <BattleCardView
-                    battleCardId={battleCardId}
-                    data={battleCardVisualFromInstance(instance)}
+                  <BattleGameCard
+                    instance={instance}
                     hidden={isHidden}
                     draggable={!isHidden}
                     onDragStart={() => {

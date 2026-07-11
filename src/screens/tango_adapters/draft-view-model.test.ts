@@ -121,7 +121,7 @@ describe("buildDraftView", () => {
       sitePicksCompleted: 0,
       state: questState({ essence: 40 }),
     });
-    expect(view.offer.map((c) => c.cardNumber)).toEqual([6, 5]);
+    expect(view.offer.map((c) => c.displaySnapshot.cardNumber)).toEqual([6, 5]);
     // The key is the offered card numbers (identity), not names.
     expect(view.offerKey).toBe("5,6");
     expect(view.scene).toBeNull();

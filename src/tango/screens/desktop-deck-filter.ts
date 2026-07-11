@@ -99,7 +99,7 @@ export function buildSubtypeFilterOptions(
 ): DeckControlOption<SubtypeFilter>[] {
   const subtypes = new Set<string>();
   for (const view of cards) {
-    const subtype = view.card.subtype.trim();
+    const subtype = view.model.displaySnapshot.subtype.trim();
     if (subtype !== "") subtypes.add(subtype);
   }
   const options = [...subtypes]
@@ -115,12 +115,12 @@ export function buildSubtypeFilterOptions(
 
 /** Whether a card passes the active card-type toggle. */
 function matchesType(view: DeckCardView, type: DeckTypeToggle): boolean {
-  return type === "all" || view.card.cardType === type;
+  return type === "all" || view.model.displaySnapshot.cardType === type;
 }
 
 /** Whether a card passes the active subtype filter. */
 function matchesSubtype(view: DeckCardView, subtype: SubtypeFilter): boolean {
-  return subtype === "all" || view.card.subtype === subtype;
+  return subtype === "all" || view.model.displaySnapshot.subtype === subtype;
 }
 
 /**

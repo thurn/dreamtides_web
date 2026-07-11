@@ -1,7 +1,7 @@
 import type { CSSProperties, MouseEvent as ReactMouseEvent } from "react";
 import type { MouseEvent as ReactPointerMouseEvent } from "react";
 
-import { BattleCardView, battleCardVisualFromInstance } from "./BattleCardView";
+import { BattleGameCard } from "./BattleGameCard";
 import { battleCardAutomationStatus } from "../../rules/battle/battle-card-effects-table";
 import {
   selectBattleCardLocation,
@@ -142,9 +142,8 @@ export function BattlefieldGrid({
               }}
             >
               {instance === null ? null : (
-                <BattleCardView
-                  battleCardId={instance.battleCardId}
-                  data={battleCardVisualFromInstance(instance)}
+                <BattleGameCard
+                  instance={instance}
                   exhausted={instance.status.isExhausted}
                   reserved={false}
                   showAutomationGear={
@@ -153,10 +152,7 @@ export function BattlefieldGrid({
                   }
                   selected={isSelectedCard}
                   draggable={canInteract}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    onCardClick(instance.battleCardId);
-                  }}
+                  onActivate={() => onCardClick(instance.battleCardId)}
                   onContextMenu={(event) => {
                     event.preventDefault();
                     event.stopPropagation();

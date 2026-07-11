@@ -37,8 +37,8 @@ vi.mock("../../logging", () => ({
 // GameCard pulls in the card-database art pipeline; the overlay's behavior does
 // not depend on the card's pixels, so stub it to its name for the tests.
 vi.mock("../components/card/CardView", () => ({
-  GameCard: ({ card, large }: { card: CardData; large?: boolean }) => (
-    <div data-game-card-large={large ? "true" : "false"}>{card.name}</div>
+  GameCard: ({ model, large, testId }: { model: { displaySnapshot: CardData }; large?: boolean; testId?: string }) => (
+    <div data-testid={testId} data-game-card-large={large ? "true" : "false"}>{model.displaySnapshot.name}</div>
   ),
 }));
 
@@ -65,7 +65,7 @@ function makeView(cardCount = 2): StartingDeckView {
       const cardNumber = index + 1;
       return {
         entryId: `entry-${String(cardNumber)}`,
-        card: makeCard(
+        model: (() => { const displaySnapshot = makeCard(
           cardNumber,
           cardNumber === 1
             ? "Archive Sentry"
@@ -77,7 +77,7 @@ function makeView(cardCount = 2): StartingDeckView {
             : cardNumber === 2
               ? "Draw a card."
               : "Begin again.",
-        ),
+        ); return { cardId: displaySnapshot.id, displaySnapshot }; })(),
         testId: `starting-deck-modal-card-entry-${String(cardNumber)}`,
       };
     }),
