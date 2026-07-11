@@ -49,6 +49,7 @@ beforeEach(() => {
     HTMLElement.prototype,
     "clientHeight",
   );
+  originalVisualViewport = Object.getOwnPropertyDescriptor(window, "visualViewport");
   stubViewport(false);
 });
 
@@ -59,12 +60,19 @@ afterEach(() => {
   });
   restorePrototypeDescriptor("clientWidth", originalClientWidth);
   restorePrototypeDescriptor("clientHeight", originalClientHeight);
+  if (originalVisualViewport === undefined) {
+    Reflect.deleteProperty(window, "visualViewport");
+  } else {
+    Object.defineProperty(window, "visualViewport", originalVisualViewport);
+  }
+  vi.restoreAllMocks();
   document.body.innerHTML = "";
 });
 
 let originalInnerWidth = 0;
 let originalClientWidth: PropertyDescriptor | undefined;
 let originalClientHeight: PropertyDescriptor | undefined;
+let originalVisualViewport: PropertyDescriptor | undefined;
 
 function restorePrototypeDescriptor(
   name: "clientWidth" | "clientHeight",
@@ -85,6 +93,65 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
     root.render(<TangoRoot>{element}</TangoRoot>);
   });
   return { container, root };
+}
+
+function revealPointer(
+  type: "pointerover" | "pointerout" | "pointerdown" | "pointercancel",
+  pointerType: "mouse" | "touch",
+  pointerId: number,
+  point: { x: number; y: number },
+): Event {
+  const event = new MouseEvent(type, {
+    bubbles: true,
+    button: 0,
+    clientX: point.x,
+    clientY: point.y,
+  });
+  Object.defineProperties(event, {
+    pointerType: { value: pointerType },
+    pointerId: { value: pointerId },
+  });
+  return event;
+}
+
+function domRect(x: number, y: number, width: number, height: number): DOMRect {
+  return {
+    x,
+    y,
+    left: x,
+    top: y,
+    right: x + width,
+    bottom: y + height,
+    width,
+    height,
+    toJSON: () => ({}),
+  } as DOMRect;
+}
+
+function mockRevealCardMeasurements(primary: { width: number; height: number }): void {
+  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+    function (this: HTMLElement) {
+      if (this.dataset.revealMeasure === "primary") {
+        return domRect(0, 0, primary.width, primary.height);
+      }
+      if (this.dataset.revealMeasure === "secondary") {
+        return domRect(0, 0, 180, 120);
+      }
+      return domRect(0, 0, 0, 0);
+    },
+  );
+}
+
+function placedPrimary(): { x: number; y: number; width: number; height: number } {
+  const primary = document.querySelector<HTMLElement>(
+    '[data-tango-reveal-card="primary"]',
+  )!;
+  return {
+    x: Number.parseFloat(primary.style.left),
+    y: Number.parseFloat(primary.style.top),
+    width: Number.parseFloat(primary.style.width),
+    height: Number.parseFloat(primary.style.height),
+  };
 }
 
 function makeNode(
@@ -223,41 +290,119 @@ describe("Tango AtlasScreen", () => {
     });
   });
 
-  it("measures the scaled node in visual-viewport coordinates and portals beyond stage clipping", async () => {
-    stubViewport(true, true);
+  it("places mobile top-left and top-right touches from transformed source rectangles outside stage clipping", async () => {
+    stubViewport(false, false);
     Object.defineProperty(window, "visualViewport", {
       configurable: true,
-      value: { width: 1200, height: 800, offsetLeft: 7, offsetTop: 13 },
+      value: { width: 390, height: 844, offsetLeft: 0, offsetTop: 0 },
     });
-    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
-      const width = this.dataset.revealMeasure === "primary" ? 248 : this.dataset.revealMeasure === "secondary" ? 180 : 0;
-      const height = this.dataset.revealMeasure === "primary" ? 260 : this.dataset.revealMeasure === "secondary" ? 120 : 0;
-      return { x: 0, y: 0, left: 0, top: 0, right: width, bottom: height, width, height, toJSON: () => ({}) };
-    });
+    mockRevealCardMeasurements({ width: 248, height: 200 });
     const { container, root } = mount(
       <AtlasScreen view={makeView()} onEnterNode={vi.fn()} />,
     );
-    const source = container.querySelector<HTMLElement>('[data-node-state="available"]')!;
-    const measuredRect = {
-      x: 96, y: 240, left: 96, top: 240, right: 156, bottom: 300,
-      width: 60, height: 60, toJSON: () => ({}),
-    };
-    const measure = vi.fn(() => measuredRect);
-    source.getBoundingClientRect = measure;
+    const source = container.querySelector<HTMLElement>(
+      '[data-node-state="available"]',
+    )!;
+    const sourceRect = vi.fn(() => domRect(20, 40, 60, 60));
+    source.getBoundingClientRect = sourceRect;
 
     await act(async () => {
-      source.focus();
-      await Promise.resolve();
+      source.dispatchEvent(
+        revealPointer("pointerdown", "touch", 31, { x: 30, y: 70 }),
+      );
+      await new Promise((resolve) => setTimeout(resolve, 40));
     });
-
     await vi.waitFor(() => {
-      expect(document.body.querySelector("[data-tango-reveal-portal]")).not.toBeNull();
+      expect(
+        document.querySelector('[data-tango-reveal-card="primary"]'),
+      ).not.toBeNull();
     });
-    expect(measure).toHaveBeenCalled();
-    const portal = document.body.querySelector<HTMLElement>(":scope > [data-tango-reveal-portal]");
-    expect(portal).not.toBeNull();
+    expect(placedPrimary()).toEqual({
+      x: 214.5,
+      y: 0,
+      width: 175.5,
+      height: 141.53225806451613,
+    });
+    expect(sourceRect).toHaveBeenCalled();
+    expect(
+      document.body.querySelector(":scope > [data-tango-reveal-portal]"),
+    ).not.toBeNull();
     expect(container.querySelector("[data-tango-reveal-portal]")).toBeNull();
-    expect(portal?.closest(".dream-atlas")).toBeNull();
+
+    act(() => {
+      source.dispatchEvent(
+        revealPointer("pointercancel", "touch", 31, { x: 30, y: 70 }),
+      );
+    });
+    sourceRect.mockImplementation(() => domRect(310, 40, 60, 60));
+    await act(async () => {
+      source.dispatchEvent(
+        revealPointer("pointerdown", "touch", 32, { x: 360, y: 70 }),
+      );
+      await new Promise((resolve) => setTimeout(resolve, 40));
+    });
+    await vi.waitFor(() => expect(placedPrimary().x).toBe(0));
+    expect(placedPrimary()).toEqual({
+      x: 0,
+      y: 0,
+      width: 175.5,
+      height: 141.53225806451613,
+    });
+    expect(
+      document.body.querySelector(":scope > [data-tango-reveal-portal]"),
+    ).not.toBeNull();
+
+    act(() => root.unmount());
+  });
+
+  it("uses desktop side fallback and follows actual source rect changes instead of stage-space coordinates", async () => {
+    stubViewport(true, true);
+    Object.defineProperty(window, "visualViewport", {
+      configurable: true,
+      value: { width: 1200, height: 800, offsetLeft: 0, offsetTop: 0 },
+    });
+    mockRevealCardMeasurements({ width: 248, height: 260 });
+    const view = makeView();
+    expect(view.nodes[1].left).toBe(500);
+    const { container, root } = mount(
+      <AtlasScreen view={view} onEnterNode={vi.fn()} />,
+    );
+    const source = container.querySelector<HTMLElement>(
+      '[data-node-state="available"]',
+    )!;
+    const sourceRect = vi.fn(() => domRect(100, 20, 60, 60));
+    source.getBoundingClientRect = sourceRect;
+
+    act(() => {
+      source.dispatchEvent(
+        revealPointer("pointerover", "mouse", 41, { x: 130, y: 50 }),
+      );
+    });
+    await vi.waitFor(() => {
+      expect(
+        document.querySelector('[data-tango-reveal-card="primary"]'),
+      ).not.toBeNull();
+    });
+    expect(placedPrimary()).toEqual({ x: 174, y: 20, width: 248, height: 260 });
+    expect(
+      document.body.querySelector(":scope > [data-tango-reveal-portal]"),
+    ).not.toBeNull();
+    expect(container.querySelector("[data-tango-reveal-portal]")).toBeNull();
+
+    act(() => {
+      source.dispatchEvent(
+        revealPointer("pointerout", "mouse", 41, { x: 130, y: 50 }),
+      );
+    });
+    sourceRect.mockImplementation(() => domRect(300, 20, 60, 60));
+    act(() => {
+      source.dispatchEvent(
+        revealPointer("pointerover", "mouse", 42, { x: 330, y: 50 }),
+      );
+    });
+    await vi.waitFor(() => expect(placedPrimary().x).toBe(374));
+    expect(placedPrimary()).toEqual({ x: 374, y: 20, width: 248, height: 260 });
+    expect(view.nodes[1].left).toBe(500);
 
     act(() => root.unmount());
   });

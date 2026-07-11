@@ -162,9 +162,6 @@
   display: none;
 }
 
-.dream-atlas .node[data-reveal-active="true"] .node-art {
-  transform: scale(var(--reveal-hover-scale));
-}
 .dream-atlas .node-available[data-reveal-active="true"] .node-glow {
   box-shadow: 0 0 42px 10px rgba(168, 85, 247, 0.85);
 }

@@ -83,7 +83,7 @@ function dreamsignCard(dreamsign: AtlasNodeDreamsign): RevealInfoCardModel {
 }
 
 /** Derives the private reveal protocol from Atlas semantics. */
-export function atlasNodeRevealSpec(model: AtlasNodeModel): RevealSpec {
+function atlasNodeRevealSpec(model: AtlasNodeModel): RevealSpec {
   const secondaries: RevealInfoCardModel[] = [];
   if (model.dreamsign !== null) secondaries.push(dreamsignCard(model.dreamsign));
   if (model.site !== null) {
@@ -126,7 +126,7 @@ export function AtlasNode({ model, onActivate }: AtlasNodeProps): React.ReactEle
     spec: atlasNodeRevealSpec(model),
     onActivate: isAvailable ? () => onActivate(node.id) : undefined,
   });
-  const lastPointerType = React.useRef<string | null>(null);
+  const suppressCompatibilityClick = React.useRef(false);
   const pointerDown = binding.sourceProps.onPointerDown;
   const active = binding.sourceProps["data-reveal-active"] === "true";
   const isCompleted = node.state === "completed";
@@ -180,11 +180,21 @@ export function AtlasNode({ model, onActivate }: AtlasNodeProps): React.ReactEle
       data-node-starting={isStarter ? "true" : undefined}
       data-node-known-dreamsign={model.knownDreamsignRef !== null ? "true" : undefined}
       onPointerDown={(event) => {
-        lastPointerType.current = event.pointerType;
+        suppressCompatibilityClick.current = event.pointerType === "touch";
         pointerDown?.(event);
       }}
-      onClick={() => {
-        if (isAvailable && lastPointerType.current !== "touch") onActivate(node.id);
+      onClick={(event) => {
+        if (!isAvailable) return;
+        if (event.detail === 0) {
+          suppressCompatibilityClick.current = false;
+          onActivate(node.id);
+          return;
+        }
+        if (suppressCompatibilityClick.current) {
+          suppressCompatibilityClick.current = false;
+          return;
+        }
+        onActivate(node.id);
       }}
     >
       <div className="node-glow" data-ambient-paused={active ? "true" : "false"} />

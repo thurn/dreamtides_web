@@ -116,6 +116,24 @@ function renderNode(value: AtlasNodeModel, onActivate = vi.fn()) {
   };
 }
 
+function pointer(
+  type: "pointerover" | "pointerdown" | "pointerup" | "pointercancel",
+  options: { pointerType: "mouse" | "touch"; pointerId?: number; clientX?: number; clientY?: number; timeStamp?: number },
+): Event {
+  const event = new MouseEvent(type, {
+    bubbles: true,
+    button: 0,
+    clientX: options.clientX ?? 100,
+    clientY: options.clientY ?? 100,
+  });
+  Object.defineProperties(event, {
+    pointerType: { value: options.pointerType },
+    pointerId: { value: options.pointerId ?? 1 },
+    ...(options.timeStamp === undefined ? {} : { timeStamp: { value: options.timeStamp } }),
+  });
+  return event;
+}
+
 describe("AtlasNode semantic reveal contract", () => {
   it("derives the Atlas primary and Dreamsign, site, affiliation secondaries in priority order", () => {
     const { source } = renderNode(model("available"));
@@ -130,6 +148,18 @@ describe("AtlasNode semantic reveal contract", () => {
       "Affiliation: Figments",
     ]);
     expect(source.dataset.revealFeedback).toBe("measured");
+    const description = document.getElementById(
+      source.getAttribute("aria-describedby") ?? "",
+    );
+    expect(description?.textContent).toContain("Wilderveil");
+    expect(description?.textContent).toContain("Known Sign");
+    expect(description?.textContent).toContain("Dream Augury");
+    expect(description?.textContent).toContain("Affiliation: Figments");
+  });
+
+  it("keeps reveal protocol derivation private to the named component", async () => {
+    const atlasNodeModule: Record<string, unknown> = await import("./AtlasNode");
+    expect(atlasNodeModule).not.toHaveProperty("atlasNodeRevealSpec");
   });
 
   it.each([
@@ -182,6 +212,41 @@ describe("AtlasNode semantic reveal contract", () => {
     expect(unavailable.source.getAttribute("aria-disabled")).toBe("true");
   });
 
+  it("keeps an unreachable node focusable and suppresses activation", () => {
+    const unreachable = renderNode(model("revealedLocked", { isReachable: false }));
+    expect(unreachable.source.tabIndex).toBe(0);
+    expect(unreachable.source.classList.contains("node-unreachable")).toBe(true);
+    expect(unreachable.source.getAttribute("aria-disabled")).toBe("true");
+    act(() => unreachable.source.focus());
+    expect(document.activeElement).toBe(unreachable.source);
+    act(() => unreachable.source.click());
+    expect(unreachable.onActivate).not.toHaveBeenCalled();
+  });
+
+  it("activates a quick touch once, suppresses its compatibility click, then accepts keyboard activation", () => {
+    const available = renderNode(model("available"));
+    act(() => { available.source.dispatchEvent(pointer("pointerdown", { pointerType: "touch", pointerId: 7 })); });
+    act(() => { available.source.dispatchEvent(pointer("pointerup", { pointerType: "touch", pointerId: 7 })); });
+    expect(available.onActivate).toHaveBeenCalledTimes(1);
+
+    act(() => { available.source.dispatchEvent(new MouseEvent("click", { bubbles: true, detail: 1 })); });
+    expect(available.onActivate).toHaveBeenCalledTimes(1);
+
+    act(() => { available.source.dispatchEvent(new MouseEvent("click", { bubbles: true, detail: 0 })); });
+    expect(available.onActivate).toHaveBeenCalledTimes(2);
+  });
+
+  it("suppresses touch-hold activation and only its compatibility click", () => {
+    vi.useFakeTimers();
+    const available = renderNode(model("available"));
+    act(() => { available.source.dispatchEvent(pointer("pointerdown", { pointerType: "touch", pointerId: 8, timeStamp: 100 })); });
+    act(() => { vi.advanceTimersByTime(35); });
+    act(() => { available.source.dispatchEvent(pointer("pointerup", { pointerType: "touch", pointerId: 8, timeStamp: 401 })); });
+    act(() => { available.source.dispatchEvent(new MouseEvent("click", { bubbles: true, detail: 1 })); });
+    expect(available.onActivate).not.toHaveBeenCalled();
+    vi.useRealTimers();
+  });
+
   it("measures source feedback and pauses ambient glow while revealed", () => {
     const { source } = renderNode(model("available"));
     source.getBoundingClientRect = () => ({
@@ -195,15 +260,29 @@ describe("AtlasNode semantic reveal contract", () => {
       height: 132,
       toJSON: () => ({}),
     });
-    const event = new MouseEvent("pointerover", { bubbles: true });
-    Object.defineProperty(event, "pointerType", { value: "mouse" });
     act(() => {
-      source.dispatchEvent(event);
+      source.dispatchEvent(pointer("pointerover", { pointerType: "mouse" }));
     });
 
     expect(source.dataset.revealActive).toBe("true");
     expect(source.style.getPropertyValue("--reveal-hover-scale")).not.toBe("");
+    expect(source.style.transform.startsWith("scale(var(")).toBe(true);
+    expect(source.style.transform).toContain("reveal-hover-scale");
+    expect(source.querySelector<HTMLElement>(".node-art")?.style.transform).toBe("");
+    expect(getComputedStyle(source.querySelector<HTMLElement>(".node-art")!).transform).toBe("none");
     expect(source.querySelector(".node-glow")?.getAttribute("data-ambient-paused"))
       .toBe("true");
+  });
+
+  it("applies touch press feedback once on the root without scaling node art", () => {
+    const { source } = renderNode(model("available"));
+    source.getBoundingClientRect = () => ({ x: 80, y: 90, left: 80, top: 90, right: 212, bottom: 222, width: 132, height: 132, toJSON: () => ({}) });
+    act(() => { source.dispatchEvent(pointer("pointerdown", { pointerType: "touch", pointerId: 9 })); });
+    expect(source.style.transform.startsWith("scale(var(")).toBe(true);
+    expect(source.style.transform).toContain("reveal-press-scale");
+    expect(source.querySelector<HTMLElement>(".node-art")?.style.transform).toBe("");
+    expect(getComputedStyle(source.querySelector<HTMLElement>(".node-art")!).transform).toBe("none");
+    act(() => { source.dispatchEvent(pointer("pointerup", { pointerType: "touch", pointerId: 9 })); });
+    expect(source.style.transform).toBe("none");
   });
 });
