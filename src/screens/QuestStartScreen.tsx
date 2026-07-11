@@ -5,7 +5,7 @@ import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
 import { selectedTides4Decks } from "../data/tides4-preview";
 import { generateQuestSeed } from "../state/quest-state-actions";
 import { DreamcallerPortrait } from "../tango/components/hud/DreamcallerPortrait";
-import { EssenceValue } from "../tango/components/hud/EssenceValue";
+import { ResourceChip } from "../tango/components/hud/ResourceChip";
 import { HoverPopover } from "../tango/components/overlay/HoverPopover";
 import { RulesText } from "../tango/components/card/RulesText";
 import { TideDisc } from "../tango/components/hud/TideDisc";
@@ -149,8 +149,8 @@ export function QuestStartScreen() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
             >
-              <motion.button
-                className="flex min-h-[472px] w-full cursor-pointer flex-col rounded-[22px] px-4 pt-4 pb-5 text-left md:px-5"
+              <motion.div
+                className="flex min-h-[472px] w-full flex-col rounded-[22px] px-4 pt-4 pb-5 text-left md:px-5"
                 style={{
                   background:
                     "linear-gradient(145deg, #1a1025 0%, #0f0a18 60%, #0d0814 100%)",
@@ -163,14 +163,14 @@ export function QuestStartScreen() {
                   y: -4,
                   transition: DREAMCALLER_HOVER_TRANSITION,
                 }}
-                whileTap={{
-                  scale: 0.985,
-                  transition: DREAMCALLER_TAP_TRANSITION,
-                }}
-                onClick={() => {
-                  handlePickDreamcaller(dreamcaller);
-                }}
               >
+                <motion.button
+                  type="button"
+                  className="flex min-h-0 flex-1 cursor-pointer flex-col border-0 bg-transparent p-0 text-left"
+                  aria-label={`Choose ${dreamcaller.name}, ${dreamcaller.title}`}
+                  whileTap={{ scale: 0.985, transition: DREAMCALLER_TAP_TRANSITION }}
+                  onClick={() => handlePickDreamcaller(dreamcaller)}
+                >
                 <div className="mb-3 flex min-h-[78px] items-start gap-3">
                   <div className="min-w-0">
                     <h3
@@ -208,6 +208,7 @@ export function QuestStartScreen() {
                     variant="panel"
                   />
                 </div>
+                </motion.button>
                 {/* Hovering the description reveals the definitions for any
                     glossary terms it uses (e.g. "ephemeral"), matching the
                     term-definition panel shown beside cards. */}
@@ -215,6 +216,7 @@ export function QuestStartScreen() {
                     <div
                       className="px-2 text-center text-sm leading-relaxed opacity-80"
                       style={{ color: "#e2e8f0" }}
+                      onClick={(event) => event.stopPropagation()}
                     >
                       <RulesText text={dreamcaller.renderedText} />
                     </div>
@@ -233,10 +235,19 @@ export function QuestStartScreen() {
                     className="text-base font-bold md:text-lg"
                     data-starting-essence-value={dreamcaller.id}
                   >
-                    <EssenceValue amount={dreamcaller.startingEssence} />
+                    <ResourceChip
+                      kind="essence"
+                      value={dreamcaller.startingEssence}
+                      size="lg"
+                      entity={{
+                        id: `${dreamcaller.id}:starting-essence`,
+                        label: "Starting Essence",
+                        description: "The essence this Dreamcaller begins the quest with.",
+                      }}
+                    />
                   </span>
                 </div>
-              </motion.button>
+              </motion.div>
               {signatureCards.length > 0 && (
                 <div className="flex w-full flex-col gap-2 px-1">
                   <span

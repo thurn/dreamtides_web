@@ -56,8 +56,8 @@ explicitly says the screen should omit it:
 | Component | Group | Consumers | Reference | What it is |
 | --- | --- | --- | --- | --- |
 | Pressable | Primitives | 20 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
-| Resource Chip | Components | 1 | [components/resource-chip.md](components/resource-chip.md) | The sized, self-contained value-and-mark chip for the game economy. |
-| Essence Value | Components | 12 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
+| Resource Chip | Components | 2 | [components/resource-chip.md](components/resource-chip.md) | The sized, self-contained value-and-mark chip for the game economy. |
+| Essence Value | Components | 11 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
 | Button | Components | 3 | [components/button.md](components/button.md) | Rung 1 of Tango's four-rung button suite — the beveled purple sprite, the primary/commit action, scaled to any label and to a taller commit height. |
 | Icon Button | Components | 12 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — a corner chrome action with placement-aware recipes for scene media or an existing glass surface, made fully round so it reads as one family with the filter/sort controls. |
 | Glass Button | Components | 2 | [components/glass-button.md](components/glass-button.md) | The labeled glass secondary action — a text label in the control typography on the shared liquid-glass control surface, with an optional leading glyph, a danger treatment, and placement-aware recipes for media or an existing glass surface. |
@@ -68,7 +68,7 @@ explicitly says the screen should omit it:
 | Tide Disc | Components | 2 | [components/tide-disc.md](components/tide-disc.md) | The single semantic tide mark: a colored disc carrying the tide's glyph and its own strict tide reveal, sized 'sm' or 'lg'. |
 | Motes | Components | 8 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
 | Info Card | Components | 7 | [components/info-card.md](components/info-card.md) | The one press-to-reveal information card. |
-| Hover Popover | Primitives | 6 | [components/hover-popover.md](components/hover-popover.md) | A lightweight hover/focus tooltip primitive that portals a small content node to document.body, kept on-screen by a viewport-aware placement pass; used for glossary-term definitions on rules text and full-card previews on compact deck rows. |
+| Hover Popover | Primitives | 5 | [components/hover-popover.md](components/hover-popover.md) | A lightweight hover/focus tooltip primitive that portals passive explanatory content or a full-card preview to document.body and keeps it on-screen. |
 | Group Panel | Components | 2 | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |
 | Glow Icon | Primitives | 8 | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a Boxicons glyph that paints in the caller's resource hue, with an optional content-protection shadow and an optional emitted-light glow pinned to its own font-size so both scale with the mark. |
 | Pip Badge | Components | 2 | [components/pip-badge.md](components/pip-badge.md) | The circled number on a colored disc for card stats: a spark value or an energy cost, and the inline spark reference inside rules text. |

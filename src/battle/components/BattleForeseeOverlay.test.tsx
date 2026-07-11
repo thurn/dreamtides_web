@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
-import { act } from "react";
-import { createRoot } from "react-dom/client";
+import { act, type ReactElement } from "react";
+import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { BattleCommand } from "../debug/commands";
 import { createBattleInit } from "../integration/create-battle-init";
@@ -14,6 +14,11 @@ import {
 } from "../test-support";
 import type { BattleMutableState } from "../types";
 import { BattleForeseeOverlay } from "./BattleForeseeOverlay";
+import { TangoRoot } from "../../tango/TangoRoot";
+
+function renderWithTango(root: Root, element: ReactElement): void {
+  root.render(<TangoRoot>{element}</TangoRoot>);
+}
 
 beforeEach(() => {
   (
@@ -47,7 +52,7 @@ describe("BattleForeseeOverlay", () => {
     const root = createRoot(container);
 
     act(() => {
-      root.render(
+      renderWithTango(root,
         <BattleForeseeOverlay
           initialCount={2}
           onClose={() => {}}
@@ -96,7 +101,7 @@ describe("BattleForeseeOverlay", () => {
     const root = createRoot(container);
 
     act(() => {
-      root.render(
+      renderWithTango(root,
         <BattleForeseeOverlay
           initialCount={5}
           onClose={() => {}}
@@ -125,7 +130,7 @@ describe("BattleForeseeOverlay", () => {
     const root = createRoot(container);
 
     act(() => {
-      root.render(
+      renderWithTango(root,
         <BattleForeseeOverlay
           initialCount={2}
           onClose={() => {}}
@@ -177,7 +182,7 @@ describe("BattleForeseeOverlay", () => {
     const nextCard = state.sides.player.deck[1];
 
     act(() => {
-      root.render(
+      renderWithTango(root,
         <BattleForeseeOverlay
           initialCount={1}
           onClose={() => {}}
@@ -221,7 +226,7 @@ describe("BattleForeseeOverlay", () => {
     const topCard = state.cardInstances[topCardId];
 
     act(() => {
-      root.render(
+      renderWithTango(root,
         <BattleForeseeOverlay
           initialCount={1}
           onClose={() => {}}
@@ -252,7 +257,7 @@ describe("BattleForeseeOverlay", () => {
     const root = createRoot(container);
 
     act(() => {
-      root.render(
+      renderWithTango(root,
         <BattleForeseeOverlay
           initialCount={2}
           onClose={() => {}}
@@ -284,7 +289,7 @@ describe("BattleForeseeOverlay", () => {
     const root = createRoot(container);
 
     act(() => {
-      root.render(
+      renderWithTango(root,
         <BattleForeseeOverlay
           initialCount={1}
           onClose={() => {}}

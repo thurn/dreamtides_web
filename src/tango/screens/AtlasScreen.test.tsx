@@ -3,6 +3,7 @@
 import { act } from "react";
 import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { TangoRoot } from "../TangoRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { LayerName } from "../../types/layer-name";
 import type { DreamscapeNode } from "../../types/quest";
@@ -81,7 +82,7 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(element);
+    root.render(<TangoRoot>{element}</TangoRoot>);
   });
   return { container, root };
 }

@@ -23,6 +23,10 @@ describe("SiteNode", () => {
     const source = container.querySelector<HTMLButtonElement>("[data-site-id]")!;
     expect(source.tabIndex).toBe(0);
     expect(source.dataset.revealFeedback).toBe("measured");
+    expect(source.dataset.revealEntityType).toBe("site");
+    expect(source.dataset.revealEntityId).toBe(MODEL.site.id);
+    expect(source.dataset.revealPrimaryVariant).toBe("icon");
+    expect(source.dataset.revealSecondaryTitles).toBe("");
     expect(source.getAttribute("aria-disabled")).toBe("true");
     const description = document.getElementById(source.getAttribute("aria-describedby") ?? "");
     expect(description?.textContent).toContain("Guardian Battle");

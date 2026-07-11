@@ -56,6 +56,10 @@ afterEach(() => {
 });
 
 describe("Tango reveal coordinator root", () => {
+  it("fails fast when a semantic source is mounted without TangoRoot", () => {
+    expect(() => mount(<Source id={UUID_A} />)).toThrow(/TangoRoot/);
+  });
+
   it("provides one coordinator and renders a complete accessible description", () => {
     const { container } = mount(<TangoRoot><Source id={UUID_A} /></TangoRoot>);
     const button = container.querySelector("button")!;

@@ -3,6 +3,7 @@
 import { act } from "react";
 import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { TangoRoot } from "../../tango/TangoRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import type {
@@ -59,7 +60,7 @@ function mount(element: ReactElement): HTMLDivElement {
   const root = createRoot(container);
   roots.push(root);
   act(() => {
-    root.render(element);
+    root.render(<TangoRoot>{element}</TangoRoot>);
   });
   return container;
 }

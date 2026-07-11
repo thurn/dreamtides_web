@@ -111,6 +111,10 @@ describe("PipBadge", () => {
     expect(badge?.textContent).toBe("2");
     const source = badge?.parentElement;
     expect(source?.dataset.revealFeedback).toBe("measured");
+    expect(source?.dataset.revealEntityType).toBe("card-spark-pip");
+    expect(source?.dataset.revealEntityId).toMatch(/^[0-9a-f-]{36}$/);
+    expect(source?.dataset.revealPrimaryVariant).toBe("text");
+    expect(source?.dataset.revealSecondaryTitles).toBe("");
     expect(source?.tabIndex).toBe(0);
     const description = document.getElementById(source?.getAttribute("aria-describedby") ?? "");
     expect(description?.textContent).toContain("Spark: damage this character deals.");

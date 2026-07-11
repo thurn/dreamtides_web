@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { act } from "react";
+import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { RevealOverlay, type RevealOverlayActive } from "./RevealOverlay";
@@ -8,12 +8,15 @@ import { makeTextRevealSpec } from "./test-utils";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import type { RevealGeometrySnapshot, RevealSpec } from "./model";
 import type { RevealPlacementDecision } from "./geometry";
+import { TangoRoot } from "../../TangoRoot";
 
 const UUID = "00000000-0000-4000-8000-000000000001";
 let root: Root;
 let container: HTMLDivElement;
 let resizeCallbacks: ResizeObserverCallback[];
 let measuredPrimaryHeight: number;
+
+function renderOverlay(element: ReactElement): void { root.render(<TangoRoot>{element}</TangoRoot>); }
 
 function active(overrides: Partial<RevealOverlayActive> = {}): RevealOverlayActive {
   const source = document.createElement("button");
@@ -53,7 +56,7 @@ afterEach(() => { act(() => root.unmount()); document.body.innerHTML = ""; vi.re
 
 describe("RevealOverlay", () => {
   it("uses one highest-layer body portal that is pointer-transparent throughout", () => {
-    act(() => root.render(<RevealOverlay active={active()} />));
+    act(() => renderOverlay(<RevealOverlay active={active()} />));
     const portal = document.body.querySelector<HTMLElement>(":scope > [data-tango-reveal-portal]")!;
     expect(portal).not.toBeNull();
     expect(portal.style.zIndex).toBe("var(--layer-reveal)");
@@ -63,7 +66,7 @@ describe("RevealOverlay", () => {
   });
 
   it("measures invisibly, top-aligns the chosen complete prefix, and omits overflow", () => {
-    act(() => root.render(<RevealOverlay active={active()} />));
+    act(() => renderOverlay(<RevealOverlay active={active()} />));
     const group = document.querySelector<HTMLElement>("[data-tango-reveal-group]")!;
     const cards = [...group.querySelectorAll<HTMLElement>("[data-tango-reveal-card]")];
     expect(group.style.visibility).toBe("visible");
@@ -73,17 +76,17 @@ describe("RevealOverlay", () => {
   });
 
   it("has no opacity, scale, or travel animation and disappears in one render frame", () => {
-    act(() => root.render(<RevealOverlay active={active()} />));
+    act(() => renderOverlay(<RevealOverlay active={active()} />));
     const group = document.querySelector<HTMLElement>("[data-tango-reveal-group]")!;
     expect(group.style.opacity).toBe("");
     expect(group.style.transform).toBe("");
     expect(group.style.transition).toBe("");
-    act(() => root.render(<RevealOverlay active={null} />));
+    act(() => renderOverlay(<RevealOverlay active={null} />));
     expect(document.querySelector("[data-tango-reveal-portal]")).toBeNull();
   });
 
   it("keeps accessible descriptions on the focus source rather than announcing the visual copy", () => {
-    act(() => root.render(<RevealOverlay active={active()} />));
+    act(() => renderOverlay(<RevealOverlay active={active()} />));
     const portal = document.querySelector<HTMLElement>("[data-tango-reveal-portal]")!;
     expect(portal.getAttribute("aria-hidden")).toBe("true");
     expect(portal.querySelector("[tabindex]")).toBeNull();
@@ -93,17 +96,17 @@ describe("RevealOverlay", () => {
     Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 300, offsetLeft: 7, offsetTop: 13 } });
     let placedGeometry: RevealGeometrySnapshot | undefined;
     const onPlaced = vi.fn((_decision: RevealPlacementDecision, geometry: RevealGeometrySnapshot) => { placedGeometry = geometry; });
-    act(() => root.render(<RevealOverlay active={active()} onPlaced={onPlaced} />));
+    act(() => renderOverlay(<RevealOverlay active={active()} onPlaced={onPlaced} />));
     expect(onPlaced).toHaveBeenCalled();
     expect(placedGeometry?.viewport).toMatchObject({ offsetLeft: 7, offsetTop: 13 });
   });
 
   it("uses the sole 160ms GameCard return transition, skipped under reduced motion", () => {
     const returning = active({ returningGameCard: true });
-    act(() => root.render(<RevealOverlay active={returning} />));
+    act(() => renderOverlay(<RevealOverlay active={returning} />));
     expect(document.querySelector<HTMLElement>("[data-tango-reveal-group]")!.style.transition).toBe("");
     window.matchMedia = vi.fn().mockReturnValue({ matches: true, addEventListener: vi.fn(), removeEventListener: vi.fn() });
-    act(() => root.render(<RevealOverlay active={{ ...returning, source: { ...returning.source, registrationId: "two" } }} />));
+    act(() => renderOverlay(<RevealOverlay active={{ ...returning, source: { ...returning.source, registrationId: "two" } }} />));
     expect(document.querySelector<HTMLElement>("[data-tango-reveal-group]")!.style.transition).toBe("");
   });
 
@@ -115,7 +118,7 @@ describe("RevealOverlay", () => {
     } }, secondaries: [] };
     let placedDecision: RevealPlacementDecision | undefined;
     const onPlaced = vi.fn((decision: RevealPlacementDecision) => { placedDecision = decision; });
-    act(() => root.render(<RevealOverlay active={active({ spec })} onPlaced={onPlaced} />));
+    act(() => renderOverlay(<RevealOverlay active={active({ spec })} onPlaced={onPlaced} />));
     expect(document.querySelector("[data-reveal-render-pending]")).not.toBeNull();
     expect(onPlaced).not.toHaveBeenCalled();
     await act(async () => { await import("../../components/card/CardView"); });
@@ -134,15 +137,15 @@ describe("RevealOverlay", () => {
       imageNumber: 1, artOwned: false,
     } }, secondaries: [] };
     const value = active({ spec });
-    act(() => root.render(<RevealOverlay active={value} />));
+    act(() => renderOverlay(<RevealOverlay active={value} />));
     expect(value.element.style.opacity).toBe("0");
-    act(() => root.render(<RevealOverlay active={{ ...value, returningGameCard: true }} />));
+    act(() => renderOverlay(<RevealOverlay active={{ ...value, returningGameCard: true }} />));
     const returningCard = document.querySelector<HTMLElement>("[data-tango-reveal-card=\"primary\"]")!;
     expect(returningCard.style.left).toBe("400px");
     expect(returningCard.style.top).toBe("250px");
     expect(returningCard.style.width).toBe("100px");
     expect(returningCard.style.transition).toContain("160ms");
-    act(() => root.render(<RevealOverlay active={null} />));
+    act(() => renderOverlay(<RevealOverlay active={null} />));
     expect(value.element.style.opacity).toBe("");
   });
 });

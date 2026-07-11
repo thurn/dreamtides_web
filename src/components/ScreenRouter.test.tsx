@@ -13,6 +13,7 @@ import { parseRuntimeConfig } from "../runtime/runtime-config";
 import type { QuestContent } from "../data/quest-content";
 import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
+import { TangoRoot } from "../tango/TangoRoot";
 import type { CardSourceDebugState, QuestState, SiteState } from "../types/quest";
 import { LayerName } from "../types/layer-name";
 import {
@@ -277,7 +278,8 @@ function renderWithQuest({
         {children}
       </QuestContextProvider>
     );
-    root.render(strict ? <StrictMode>{tree}</StrictMode> : tree);
+    const tangoTree = <TangoRoot>{tree}</TangoRoot>;
+    root.render(strict ? <StrictMode>{tangoTree}</StrictMode> : tangoTree);
   });
 
   return container;

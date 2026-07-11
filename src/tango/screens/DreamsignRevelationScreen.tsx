@@ -517,7 +517,6 @@ function RevelationOption({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        pointerEvents: disabled ? "none" : "auto",
       }}
     >
       <Dreamsign
@@ -525,6 +524,7 @@ function RevelationOption({
         sizePx={tileSize}
         testid={`dreamsign-revelation-art-${String(index)}`}
         onPress={() => onClaim(index)}
+        unavailable={disabled}
       />
     </motion.div>
   );

@@ -6,11 +6,11 @@
 
 Primitives · Live demo & interactive props: `/tango#/hover-popover`
 
-Real consumers: **6** (imports outside `src/tango/docs/` and tests).
+Real consumers: **5** (imports outside `src/tango/docs/` and tests).
 
-A lightweight hover/focus tooltip primitive that portals a small content node to document.body, kept on-screen by a viewport-aware placement pass; used for glossary-term definitions on rules text and full-card previews on compact deck rows.
+A lightweight hover/focus tooltip primitive that portals passive explanatory content or a full-card preview to document.body and keeps it on-screen.
 
-> **Guidance:** Choosing between the two reveals: use InfoCard / InfoCard.PressInfo for an object or entity card (a card, dreamcaller, dreamsign, tide, or site) — it is the input-adaptive press engine (fine-pointer hover OR touch press-down), pointer-anchored and clamped above or beside the trigger, and it is the canonical Popup rule for every game-object reveal. Reach for HoverPopover instead when the reveal is a passive tooltip rather than an object card — a glossary-term definition on rules text, a full-card preview on a compact deck row, or a pip-badge tooltip — on a fine-pointer surface: it is hover/focus only, with no touch-hold contract and simpler placement.
+> **Guidance:** Use a named semantic component for every game entity. Reach for HoverPopover only for passive explanatory UI, aggregate summaries, or legacy compact-row card previews on fine-pointer surfaces; it has no touch-hold contract.
 
 ## Props
 
@@ -20,21 +20,21 @@ A lightweight hover/focus tooltip primitive that portals a small content node to
 | `content` | `ReactNode \| ((context: HoverPopoverContentContext) => ReactNode)` | yes | — | The popover body. Rendered into a portal when visible. |
 | `delayMs` | `number` | no | `500` | Delay before showing the popover (ms). Defaults to 500ms. |
 | `placement` | `Placement` = `"left" \| "top"` | no | `top` | Preferred side to anchor the popover relative to the trigger. - `"top"` (default) centers the popover above the trigger and flips to the bottom when the trigger sits near the top edge of the viewport. - `"left"` anchors the popover to the left of the trigger and flips to the right when the trigger sits near the left edge of the viewport. Useful for triggers on the right edge of the viewport (e.g. the right-side deck sidebar) where the popover would otherwise appear detached above or below the row. In both cases the popover is shifted along the perpendicular axis as needed so it stays fully inside the viewport. |
-| `maxWidthPx` | `number \| null` | no | — | Override the popover's max-width cap (px). Defaults to 260px, which suits short glossary blurbs. Pass `null` to disable the cap entirely when `content` is a self-sizing element such as a card preview. |
+| `maxWidthPx` | `number \| null` | no | — | Override the popover's max-width cap (px). Defaults to 260px, which suits short explanatory blurbs. Pass `null` to disable the cap entirely when `content` is a self-sizing element such as a card preview. |
 | `triggerAs` | `"span" \| "div"` | no | `span` | The DOM element type for the trigger wrapper. Defaults to `"span"` for inline use within text. Pass `"div"` for block-level triggers. |
 | `triggerLayout` | `"inline" \| "inlineFlex"` | no | `inline` | Trigger wrapper layout. `inline` preserves flowing text; `inlineFlex` shrink-wraps icon/orb triggers without adding a baseline line box. Defaults to `inline`. |
 
 ## Usage
 
-### Inline glossary tooltip
+### Passive explanatory tooltip
 
-The default: an inline `span` trigger inside flowing rules text that reveals a small definition node on hover after `delayMs`.
+An informational icon can reveal brief explanatory copy on hover or keyboard focus after `delayMs`.
 
 ```tsx
 import { HoverPopover } from "src/tango/components/overlay/HoverPopover";
 
-<HoverPopover delayMs={300} content={<GlossaryDefinitionCard entry={entry} />}>
-  <span className="glossary-term">{entry.term}</span>
+<HoverPopover delayMs={300} content={<span>{explanation}</span>}>
+  <span aria-label="About this section">ⓘ</span>
 </HoverPopover>
 ```
 

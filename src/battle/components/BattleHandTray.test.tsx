@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { act } from "react";
+import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createBattleInit } from "../integration/create-battle-init";
@@ -12,6 +12,9 @@ import {
   makeBattleTestState,
 } from "../test-support";
 import { BattleHandTray } from "./BattleHandTray";
+import { TangoRoot } from "../../tango/TangoRoot";
+
+function renderWithTango(root: Root, element: ReactElement): void { root.render(<TangoRoot>{element}</TangoRoot>); }
 
 function createState() {
   const battleInit = createBattleInit({
@@ -43,7 +46,7 @@ function mount(): {
   const root = createRoot(container);
 
   act(() => {
-    root.render(
+    renderWithTango(root,
       <BattleHandTray
         canInteract
         currentEnergy={state.sides.player.currentEnergy}
@@ -112,7 +115,7 @@ describe("BattleHandTray", () => {
 
     // Re-render with the mutated state so the overpriced card is in the tray.
     act(() => {
-      root.render(
+      renderWithTango(root,
         <BattleHandTray
           canInteract
           currentEnergy={0}
@@ -153,7 +156,7 @@ describe("BattleHandTray", () => {
     const root = createRoot(container);
 
     act(() => {
-      root.render(
+      renderWithTango(root,
         <BattleHandTray
           canInteract={false}
           currentEnergy={state.sides.player.currentEnergy}

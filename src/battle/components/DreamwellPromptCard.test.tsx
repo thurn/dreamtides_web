@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { act } from "react";
+import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { DreamwellCardViewData } from "../../components/DreamwellCardView";
@@ -14,6 +14,11 @@ import {
 } from "../test-support";
 import { BattleCardPickerOverlay } from "./BattleCardPickerOverlay";
 import { BattleChoicePromptOverlay } from "./BattleChoicePromptOverlay";
+import { TangoRoot } from "../../tango/TangoRoot";
+
+function renderWithTango(root: Root, element: ReactElement): void {
+  root.render(<TangoRoot>{element}</TangoRoot>);
+}
 
 // A self-constructed Dreamwell card so the test does not depend on production
 // Dreamwell TOML data (which is subject to change). The fields are the structural
@@ -60,7 +65,7 @@ describe("Dreamwell prompt overlays surface the source card", () => {
     expect(candidateIds.length).toBeGreaterThan(0);
 
     act(() => {
-      root.render(
+      renderWithTango(root,
         <BattleCardPickerOverlay
           title="Discard a card"
           sourceCard={SAMPLE_DREAMWELL_CARD}
@@ -87,7 +92,7 @@ describe("Dreamwell prompt overlays surface the source card", () => {
 
   it("renders the driving Dreamwell card inside the choice prompt", () => {
     act(() => {
-      root.render(
+      renderWithTango(root,
         <BattleChoicePromptOverlay
           title="Choose one"
           sourceCard={SAMPLE_DREAMWELL_CARD}
@@ -107,7 +112,7 @@ describe("Dreamwell prompt overlays surface the source card", () => {
 
   it("omits the source-card header when no Dreamwell card is provided", () => {
     act(() => {
-      root.render(
+      renderWithTango(root,
         <BattleChoicePromptOverlay
           title="Choose one"
           options={[{ label: "Draw a card" }]}

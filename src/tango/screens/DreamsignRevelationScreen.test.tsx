@@ -11,6 +11,7 @@ import {
   type DreamsignRevelationView,
 } from "./DreamsignRevelationScreen";
 import { QUEST_STATUS_BAR_CLEARANCE_OP } from "../components/hud/QuestStatusBar";
+import { TangoRoot } from "../TangoRoot";
 
 function dreamsign(id: string, imageName: string): Dreamsign {
   return {
@@ -71,7 +72,7 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(element);
+    root.render(<TangoRoot>{element}</TangoRoot>);
   });
   return { container, root };
 }
@@ -89,6 +90,21 @@ afterEach(() => {
 });
 
 describe("DreamsignRevelationScreen", () => {
+  it("keeps unavailable choices focusable and revealable while suppressing keyboard activation", () => {
+    const onClaim = vi.fn();
+    const { container, root } = mount(
+      <DreamsignRevelationScreen view={view()} claimedIndex={0} onClaim={onClaim} onSkip={vi.fn()} onPurge={vi.fn()} onCancelPurge={vi.fn()} />,
+    );
+    const source = container.querySelector<HTMLElement>('[data-testid="dreamsign-revelation-art-1"]')!;
+    expect(source.tabIndex).toBe(0);
+    expect(source.getAttribute("aria-disabled")).toBe("true");
+    act(() => source.focus());
+    expect(source.dataset.revealActive).toBe("true");
+    act(() => { source.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true })); });
+    expect(onClaim).not.toHaveBeenCalled();
+    act(() => root.unmount());
+  });
+
   it("centers the mobile decline action between the offer and status bar", () => {
     const { container, root } = mount(
       <DreamsignRevelationScreen

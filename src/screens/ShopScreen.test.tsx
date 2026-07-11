@@ -3,6 +3,7 @@
 import { act, type HTMLAttributes, type ReactElement, type ReactNode } from "react";
 import { MINIMAL_ATLAS_CONFIG, MINIMAL_DREAMSCAPES } from "../__test-helpers__/atlas-fixtures";
 import { createRoot, type Root } from "react-dom/client";
+import { TangoRoot } from "../tango/TangoRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { QuestMutations } from "../state/quest-context";
 import type { QuestState, RuntimeShopSlot } from "../types/quest";
@@ -210,7 +211,7 @@ function mount(element: ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(element);
+    root.render(<TangoRoot>{element}</TangoRoot>);
   });
   return { container, root };
 }

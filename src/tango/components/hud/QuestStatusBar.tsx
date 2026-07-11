@@ -49,7 +49,7 @@ import { Dreamsign, dreamsignArtUrl, DS_SHADOW } from "./Dreamsign";
 import type { Dreamsign as DreamsignData } from "../../../types/quest";
 import { requireDreamsignId } from "../../../data/dreamsigns";
 import type { DreamcallerPortraitFocus } from "../../../types/content";
-import { DEFAULT_DREAMCALLER_PORTRAIT_FOCUS } from "./DreamcallerPortrait";
+import { DEFAULT_DREAMCALLER_PORTRAIT_FOCUS, dreamcallerRevealSpec } from "./DreamcallerPortrait";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
@@ -364,12 +364,9 @@ function QsbDreamcallerBust({
 }): ReactElement {
   const binding = useRevealSource({
     identity: { entityType: "dreamcaller", entityId: revealEntityId("dreamcaller", dreamcaller?.id ?? "empty") },
-    spec: {
-      primary: { kind: "infoCard", card: dreamcaller === undefined
-        ? { variant: "text", title: "Dreamcaller", body: richText.plain("No Dreamcaller is active.") }
-        : { variant: "fullBleed", image: dreamcaller.portrait, imageCrop: "top", title: dreamcaller.name, subtitle: dreamcaller.epithet, body: dreamcaller.ability ? richText.rules(dreamcaller.ability) : undefined } },
-      secondaries: [],
-    },
+    spec: dreamcaller === undefined
+      ? { primary: { kind: "infoCard", card: { variant: "text", title: "Dreamcaller", body: richText.plain("No Dreamcaller is active.") } }, secondaries: [] }
+      : dreamcallerRevealSpec({ imageNumber: "", name: dreamcaller.name, title: dreamcaller.epithet ?? "" }, dreamcaller.ability ?? "", dreamcaller.portrait),
   });
   const focus =
     dreamcaller?.portraitFocus ?? DEFAULT_DREAMCALLER_PORTRAIT_FOCUS;

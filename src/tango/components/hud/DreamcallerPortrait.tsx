@@ -26,9 +26,10 @@ import { token } from "../../primitives/tokens";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
-import { artRef } from "../../primitives/art";
+import { artRef, type ArtRef } from "../../primitives/art";
 import { richText } from "../card/rich-text";
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
+import type { RevealSpec } from "../../internal/reveal/model";
 
 /** The minimal dreamcaller shape a portrait needs: which art to load and the
  * name/title that back the alt text and the fallback monogram. */
@@ -105,6 +106,15 @@ export interface DreamcallerPortraitProps {
   onActivate?: () => void;
   /** Keeps the profile readable while suppressing activation. */
   unavailable?: boolean;
+}
+
+/** One reveal contract shared by every Dreamcaller surface. */
+export function dreamcallerRevealSpec(dreamcaller: DreamcallerVisual, abilityText: string, image: ArtRef = artRef.dreamcaller(dreamcaller.imageNumber)): RevealSpec {
+  const ability = abilityText.trim();
+  return {
+    primary: { kind: "infoCard", card: { variant: "fullBleed", image, imageCrop: "top", title: dreamcaller.name, subtitle: dreamcaller.title, body: ability ? richText.rules(ability) : undefined } },
+    secondaries: extractGlossaryTerms(ability).map((entry) => ({ variant: "text" as const, title: entry.term, body: richText.rules(entry.definition) })),
+  };
 }
 
 /** The tinted radial scene the transparent cutout stands on. Shared with the
@@ -416,13 +426,9 @@ function DreamcallerProfilePortrait({ visual, profile, onActivate, unavailable }
   onActivate?: () => void;
   unavailable: boolean;
 }) {
-  const ability = profile.ability.trim();
   const binding = useRevealSource({
     identity: { entityType: "dreamcaller", entityId: revealEntityId("dreamcaller", profile.id) },
-    spec: {
-      primary: { kind: "infoCard", card: { variant: "fullBleed", image: artRef.dreamcaller(visual.dreamcaller.imageNumber), imageCrop: "top", title: visual.dreamcaller.name, subtitle: visual.dreamcaller.title, body: ability ? richText.rules(ability) : undefined } },
-      secondaries: extractGlossaryTerms(ability).map((entry) => ({ variant: "text" as const, title: entry.term, body: richText.rules(entry.definition) })),
-    },
+    spec: dreamcallerRevealSpec(visual.dreamcaller, profile.ability),
     onActivate: unavailable ? undefined : onActivate,
   });
   const lastPointerType = useRef<string | null>(null);

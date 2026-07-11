@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/resource-chip`
 
-Real consumers: **1** (imports outside `src/tango/docs/` and tests).
+Real consumers: **2** (imports outside `src/tango/docs/` and tests).
 
 The sized, self-contained value-and-mark chip for the game economy. It owns the economy mark, role color, and enumerated size/spacing variants (sm/md/lg, tight/loose) for HUD-like readouts. For a bare essence amount inside flowing text, reach for EssenceValue instead; for a standalone essence mark, use EssenceGlyph; Button owns its inline cost mark through the shared economy spec.
 

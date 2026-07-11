@@ -16,6 +16,7 @@
 
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { TangoRoot } from "../../tango/TangoRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { HTMLAttributes, ReactNode } from "react";
 
@@ -55,7 +56,7 @@ function mount(node: ReactNode): MountResult {
   document.body.appendChild(container);
   const root = createRoot(container);
   act(() => {
-    root.render(node);
+    root.render(<TangoRoot>{node}</TangoRoot>);
   });
   return { container, root };
 }

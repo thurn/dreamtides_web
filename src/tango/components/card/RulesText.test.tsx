@@ -3,6 +3,7 @@
 import { act } from "react";
 import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { TangoRoot } from "../../TangoRoot";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { ENERGY_PIP_COLOR } from "../controls/PipBadge";
 import { RulesText } from "./RulesText";
@@ -15,7 +16,7 @@ function mount(element: ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(element);
+    root.render(<TangoRoot>{element}</TangoRoot>);
   });
   return { container, root };
 }

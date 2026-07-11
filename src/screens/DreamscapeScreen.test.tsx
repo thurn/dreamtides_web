@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { renderToStaticMarkup } from "react-dom/server";
+import { TangoRoot } from "../tango/TangoRoot";
 import { describe, expect, it, vi } from "vitest";
 import { DreamscapeScreen } from "./DreamscapeScreen";
 import { useQuest } from "../state/quest-context";
@@ -53,7 +54,7 @@ function renderScreen(sites: SiteState[]): string {
     state: makeState(sites),
     mutations: { setScreen: vi.fn() },
   } as unknown as ReturnType<typeof useQuest>);
-  return renderToStaticMarkup(<DreamscapeScreen />);
+  return renderToStaticMarkup(<TangoRoot><DreamscapeScreen /></TangoRoot>);
 }
 
 const DRAFT: SiteState = { id: "site-1", type: "Draft", isEnhanced: false, isVisited: false };

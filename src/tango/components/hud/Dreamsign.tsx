@@ -78,6 +78,8 @@ export interface DreamsignProps {
   testid?: string;
   /** Fired on a tap / click that was not a deliberate hold-to-read. */
   onPress?: () => void;
+  /** Keeps details readable while suppressing selection. */
+  unavailable?: boolean;
   /**
    * The tile's material. `"flat"` (default) is the chrome-free collectible tile
    * used in lists over a solid surface; `"hud"` composes {@link DS_SHADOW} — a
@@ -99,6 +101,7 @@ export function Dreamsign({
   sizePx,
   testid = "dreamsign-art-tile",
   onPress,
+  unavailable = false,
   variant = "flat",
 }: DreamsignProps): React.ReactElement {
   const [imageBroken, setImageBroken] = React.useState(false);
@@ -121,7 +124,7 @@ export function Dreamsign({
         body: richText.rules(entry.definition),
       })),
     },
-    onActivate: onPress,
+    onActivate: unavailable ? undefined : onPress,
   });
   const lastPointerType = React.useRef<string | null>(null);
   const pointerDown = binding.sourceProps.onPointerDown;
@@ -160,6 +163,7 @@ export function Dreamsign({
       {...binding.sourceProps}
       role="button"
       tabIndex={0}
+      aria-disabled={unavailable || undefined}
       data-testid={testid}
       data-dreamsign-id={dreamsignId}
       data-is-bane={String(dreamsign.isBane)}
@@ -169,9 +173,9 @@ export function Dreamsign({
           : `Dreamsign: ${dreamsign.name}`
       }
       onPointerDown={(event) => { lastPointerType.current = event.pointerType; pointerDown?.(event); }}
-      onClick={() => { if (lastPointerType.current !== "touch") onPress?.(); }}
+      onClick={() => { if (!unavailable && lastPointerType.current !== "touch") onPress?.(); }}
       onKeyDown={(event) => {
-        if (onPress !== undefined && (event.key === "Enter" || event.key === " ")) {
+        if (!unavailable && onPress !== undefined && (event.key === "Enter" || event.key === " ")) {
           event.preventDefault();
           onPress();
         }

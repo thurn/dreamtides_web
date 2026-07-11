@@ -13,6 +13,10 @@ describe("ResourceChip semantic source", () => {
     act(() => root.render(<TangoRoot><ResourceChip kind="essence" value={120} entity={{ id: "quest-start-caller", label: "Starting Essence", description: "Spend it during this run." }} /></TangoRoot>));
     const source = container.querySelector<HTMLElement>("[data-resource-source]")!;
     expect(source.dataset.revealFeedback).toBe("measured");
+    expect(source.dataset.revealEntityType).toBe("resource-essence");
+    expect(source.dataset.revealEntityId).toMatch(/^[0-9a-f-]{36}$/);
+    expect(source.dataset.revealPrimaryVariant).toBe("icon");
+    expect(source.dataset.revealSecondaryTitles).toBe("");
     const description = document.getElementById(source.getAttribute("aria-describedby") ?? "");
     expect(description?.textContent).toContain("Starting Essence");
     expect(description?.textContent).toContain("Spend it during this run.");

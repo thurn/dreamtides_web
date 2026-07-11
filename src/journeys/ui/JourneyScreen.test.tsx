@@ -33,6 +33,7 @@
 
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { TangoRoot } from "../../tango/TangoRoot";
 import {
   afterEach,
   beforeEach,
@@ -480,7 +481,7 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(element);
+    root.render(<TangoRoot>{element}</TangoRoot>);
   });
   return { container, root };
 }

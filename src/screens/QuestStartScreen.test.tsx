@@ -13,6 +13,7 @@ import { QuestStartScreen, largestTides } from "./QuestStartScreen";
 import { useQuest } from "../state/quest-context";
 import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";
+import { TangoRoot } from "../tango/TangoRoot";
 
 const SIGNATURE_CARDS_LABEL_HOVER_BLURB =
   "These signature cards define this Dreamcaller's strategy and steer the draft pool toward them.";
@@ -24,14 +25,18 @@ vi.mock("framer-motion", () => ({
       children,
       initial: _initial,
       transition: _transition,
+      whileHover,
+      whileTap,
       ...props
     }: {
       animate?: unknown;
       children: ReactNode;
       initial?: unknown;
       transition?: unknown;
+      whileHover?: unknown;
+      whileTap?: unknown;
     } & HTMLAttributes<HTMLDivElement>) => (
-      <div data-transition={JSON.stringify(_transition)} {...props}>
+      <div data-transition={JSON.stringify(_transition)} data-while-hover={JSON.stringify(whileHover)} data-while-tap={JSON.stringify(whileTap)} {...props}>
         {children}
       </div>
     ),
@@ -100,7 +105,7 @@ const OFFERED_DREAMCALLERS: readonly DreamcallerContent[] = [
     id: "caller-1",
     name: "Mira of Lanterns",
     title: "Keeper of the Threshold Flame",
-    renderedText: "First dreamcaller.",
+    renderedText: "Discover a card.",
     imageNumber: "0009",
     startingEssence: 230,
     signatureCards: ["Lantern Seer", "Banner Captain", "Verdant Sprout"],
@@ -263,7 +268,7 @@ function mount(element: ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(element);
+    root.render(<TangoRoot>{element}</TangoRoot>);
   });
   return { container, root };
 }
@@ -388,13 +393,12 @@ describe("QuestStartScreen", () => {
       );
       expect(valueNode).not.toBeNull();
       expect(valueNode?.textContent).toBe(String(dreamcaller.startingEssence));
-      // The value reads in the shared purple essence colour, carried by the
-      // EssenceValue span the crypto glyph sits inside.
       const glyph = valueNode?.querySelector("i.bx-crypto");
       expect(glyph).not.toBeNull();
-      expect((glyph?.parentElement as HTMLElement | null)?.style.color).toBe(
-        "var(--essence)",
-      );
+      expect((glyph as HTMLElement | null)?.style.color).toBe("var(--essence)");
+      const source = valueNode?.querySelector<HTMLElement>("[data-resource-source]");
+      expect(source?.getAttribute("aria-describedby")).toMatch(/^tango-reveal-description-/);
+      expect(document.getElementById(source?.getAttribute("aria-describedby") ?? "")?.textContent).toContain("Starting Essence");
       const row = container.querySelector(
         `[data-starting-essence="${dreamcaller.id}"]`,
       );
@@ -404,6 +408,25 @@ describe("QuestStartScreen", () => {
     act(() => {
       root.unmount();
     });
+  });
+
+  it("keeps glossary interaction outside the single Dreamcaller selection owner", () => {
+    const { container, root } = mount(<QuestStartScreen />);
+    const glossary = container.querySelector<HTMLElement>('[data-glossary-term="Discover"]');
+    const choice = container.querySelector<HTMLButtonElement>('button[aria-label^="Choose Mira of Lanterns"]');
+    expect(glossary).not.toBeNull();
+    expect(choice).not.toBeNull();
+    expect(choice?.contains(glossary ?? null)).toBe(false);
+
+    act(() => { glossary?.dispatchEvent(new MouseEvent("click", { bubbles: true })); });
+    expect(currentMutations.startQuest).not.toHaveBeenCalled();
+
+    act(() => {
+      choice?.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+      choice?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(currentMutations.startQuest).toHaveBeenCalledTimes(1);
+    act(() => root.unmount());
   });
 
   it("portals the signature-cards explanation popover into the body when the (i) icon is hovered", () => {
@@ -515,12 +538,13 @@ describe("QuestStartScreen", () => {
   it("applies instant hover and tap transitions even with staggered entrance animation", () => {
     const { container, root } = mount(<QuestStartScreen />);
 
-    const firstDreamcallerButton = container.querySelector("button");
+    const firstDreamcallerButton = container.querySelector('button[aria-label^="Choose "]');
     if (!firstDreamcallerButton) {
       throw new Error("Missing dreamcaller selection button");
     }
-    const firstDreamcallerWrapper = firstDreamcallerButton.parentElement;
-    if (!firstDreamcallerWrapper) {
+    const firstDreamcallerSurface = firstDreamcallerButton.parentElement;
+    const firstDreamcallerWrapper = firstDreamcallerSurface?.parentElement;
+    if (!firstDreamcallerWrapper || !firstDreamcallerSurface) {
       throw new Error("Missing dreamcaller wrapper");
     }
 
@@ -528,7 +552,7 @@ describe("QuestStartScreen", () => {
       firstDreamcallerWrapper.getAttribute("data-transition") ?? "null",
     ) as { delay?: number } | null;
     const whileHover = JSON.parse(
-      firstDreamcallerButton.getAttribute("data-while-hover") ?? "null",
+      firstDreamcallerSurface.getAttribute("data-while-hover") ?? "null",
     ) as { transition?: { delay?: number; duration?: number } } | null;
     const whileTap = JSON.parse(
       firstDreamcallerButton.getAttribute("data-while-tap") ?? "null",

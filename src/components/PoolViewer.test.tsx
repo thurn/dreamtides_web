@@ -15,6 +15,7 @@ import type { DraftRecord } from "../data/cards-v2-database";
 import type { PoolVariant } from "../draft/pool/types";
 import { logEvent } from "../logging";
 import { PoolViewer } from "./PoolViewer";
+import { TangoRoot } from "../tango/TangoRoot";
 
 vi.mock("../logging", () => ({
   logEvent: vi.fn(),
@@ -141,7 +142,7 @@ function mount(element: ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(element);
+    root.render(<TangoRoot>{element}</TangoRoot>);
   });
   return { container, root };
 }
@@ -335,6 +336,10 @@ describe("PoolViewer", () => {
       '[data-pool-tide-button="tide-fac-1"]',
     );
     expect(facetButton).not.toBeNull();
+    expect(facetButton?.dataset.revealFeedback).toBe("measured");
+    const tideDescription = document.getElementById(facetButton?.getAttribute("aria-describedby") ?? "");
+    expect(tideDescription?.textContent).toContain("Stormcaller");
+    expect(tideDescription?.textContent).toContain("Tides");
     act(() => {
       facetButton?.click();
     });

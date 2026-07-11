@@ -2,6 +2,7 @@
 
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { TangoRoot } from "../../../tango/TangoRoot";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ReactElement } from "react";
 
@@ -24,7 +25,7 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(element);
+    root.render(<TangoRoot>{element}</TangoRoot>);
   });
   return { container, root };
 }
@@ -49,7 +50,7 @@ function confirmButton(container: HTMLElement): HTMLButtonElement {
 
 function renderAgain(root: Root, element: ReactElement): void {
   act(() => {
-    root.render(element);
+    root.render(<TangoRoot>{element}</TangoRoot>);
   });
 }
 

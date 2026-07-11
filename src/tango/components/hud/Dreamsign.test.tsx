@@ -68,6 +68,10 @@ describe("Dreamsign", () => {
     const tile = container.querySelector<HTMLElement>('[data-testid="dreamsign-art-tile"]');
     expect(tile?.dataset.dreamsignId).toBe(sign.id);
     expect(tile?.dataset.revealFeedback).toBe("measured");
+    expect(tile?.dataset.revealEntityType).toBe("dreamsign");
+    expect(tile?.dataset.revealEntityId).toBe(sign.id);
+    expect(tile?.dataset.revealPrimaryVariant).toBe("object");
+    expect(tile?.dataset.revealSecondaryTitles?.split("\u001f")).toEqual([entry.term]);
     expect(tile?.tabIndex).toBe(0);
     const description = document.getElementById(tile?.getAttribute("aria-describedby") ?? "");
     expect(description?.textContent).toContain(sign.name);

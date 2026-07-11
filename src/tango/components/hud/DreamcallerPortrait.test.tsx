@@ -55,6 +55,9 @@ describe("DreamcallerPortrait standing/fullBleed variants", () => {
     );
     const source = container.querySelector<HTMLElement>("[data-dreamcaller-source]")!;
     expect(source.dataset.revealFeedback).toBe("measured");
+    expect(source.dataset.revealEntityType).toBe("dreamcaller");
+    expect(source.dataset.revealEntityId).toBe("00000000-0000-4000-8000-000000000061");
+    expect(source.dataset.revealPrimaryVariant).toBe("fullBleed");
     expect(source.tabIndex).toBe(0);
     const description = document.getElementById(source.getAttribute("aria-describedby") ?? "");
     expect(description?.textContent).toContain("Astra");

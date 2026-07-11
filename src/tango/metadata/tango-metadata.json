@@ -1226,6 +1226,14 @@
       "description": "Fired on a tap / click that was not a deliberate hold-to-read."
     },
     {
+      "name": "unavailable",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Keeps details readable while suppressing selection."
+    },
+    {
       "name": "variant",
       "tsType": "\"flat\" | \"hud\" | \"revelation\"",
       "unionMembers": [
@@ -1744,7 +1752,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Override the popover's max-width cap (px). Defaults to 260px, which\nsuits short glossary blurbs. Pass `null` to disable the cap entirely\nwhen `content` is a self-sizing element such as a card preview."
+      "description": "Override the popover's max-width cap (px). Defaults to 260px, which\nsuits short explanatory blurbs. Pass `null` to disable the cap entirely\nwhen `content` is a self-sizing element such as a card preview."
     },
     {
       "name": "triggerAs",
@@ -3118,6 +3126,93 @@
       "required": false,
       "defaultValue": "sm",
       "description": "Which enumerated {@link TideDiscSize} to render. Default 'sm'."
+    }
+  ],
+  "TideSelectionButton": [
+    {
+      "name": "id",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "label",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "description",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "tag",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "accent",
+      "tsType": "TangoColor",
+      "unionMembers": [
+        "danger",
+        "accent",
+        "accent-bright",
+        "accent-strong",
+        "essence",
+        "energy",
+        "energy-bright",
+        "spark",
+        "points",
+        "positive",
+        "selected",
+        "sale",
+        "gold",
+        "gold-light",
+        "text-primary",
+        "text-secondary",
+        "text-muted",
+        "text-faint",
+        "text-on-accent",
+        "white"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "active",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "joined",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "onActivate",
+      "tsType": "() => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
     }
   ]
 }

@@ -46,9 +46,6 @@ import {
   type DreamcallerVisual,
 } from "../components/hud/DreamcallerPortrait";
 import { Dreamsign } from "../components/hud/Dreamsign";
-import { richText } from "../components/card/rich-text";
-import { artRef } from "../primitives/art";
-import { Pressable } from "../primitives/Pressable";
 import { Select } from "../components/controls/Select";
 import { SegmentedControl } from "../components/controls/SegmentedControl";
 import { IconButton } from "../components/controls/IconButton";
@@ -56,8 +53,6 @@ import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { DeckCardView } from "./MobileDeckViewer";
 import { DeckViewerBackdrop, GridPlaceholder } from "./deck-viewer-shared";
-import { useRevealSource } from "../internal/reveal/context";
-import { revealEntityId } from "../internal/reveal/identity";
 import {
   type DesktopDeckFilterSort,
   type DeckCardSize,
@@ -340,11 +335,6 @@ function DreamcallerBlock({
 }: {
   dreamcaller: DeckDreamcallerView;
 }) {
-  const ability = dreamcaller.renderedText.trim();
-  const binding = useRevealSource({
-    identity: { entityType: "dreamcaller", entityId: revealEntityId("dreamcaller", dreamcaller.id) },
-    spec: { primary: { kind: "infoCard", card: { variant: "fullBleed", image: artRef.dreamcaller(dreamcaller.imageNumber), imageCrop: "top", title: dreamcaller.name, subtitle: dreamcaller.title, body: ability !== "" ? richText.rules(ability) : undefined } }, secondaries: [] },
-  });
   return (
     <section
       style={{ display: "flex", flexDirection: "column", gap: token("--space-6") }}
@@ -358,14 +348,8 @@ function DreamcallerBlock({
             and control radius the quest status bar's Dreamcaller bust wears — so
             the two portraits read as the same object; `overflow: hidden` clips
             the art to that rounded frame. */}
-        <Pressable
-          as="button"
-          ref={binding.ref}
-          {...binding.sourceProps}
-          aria-label={`${dreamcaller.name}, ${dreamcaller.title}`}
-          tabIndex={0}
+        <div
           style={{
-            ...binding.sourceProps.style,
             padding: 0,
             background: "none",
             borderRadius: token("--radius-control"),
@@ -379,8 +363,9 @@ function DreamcallerBlock({
             dreamcaller={dreamcaller}
             variant="panel"
             size={DREAMCALLER_PORTRAIT_PX}
+            profile={{ id: dreamcaller.id, ability: dreamcaller.renderedText }}
           />
-        </Pressable>
+        </div>
       </div>
     </section>
   );

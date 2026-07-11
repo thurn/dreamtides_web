@@ -39,8 +39,8 @@ import {
  * not fit and shifts along the perpendicular axis to stay inside the
  * viewport. See `hover-popover-placement.ts` for the math.
  *
- * Used for glossary term definitions on card / Dreamcaller / Dreamsign
- * rules text, and for full-card previews on compact deck rows.
+ * Used for passive explanatory UI, aggregate summaries, and full-card previews
+ * on compact legacy rows. Named game entities use the reveal coordinator.
  */
 
 type Placement = "top" | "left";
@@ -75,7 +75,7 @@ interface HoverPopoverProps {
   placement?: Placement;
   /**
    * Override the popover's max-width cap (px). Defaults to 260px, which
-   * suits short glossary blurbs. Pass `null` to disable the cap entirely
+   * suits short explanatory blurbs. Pass `null` to disable the cap entirely
    * when `content` is a self-sizing element such as a card preview.
    */
   maxWidthPx?: number | null;
@@ -100,7 +100,7 @@ const POPOVER_DEFAULT_MAX_WIDTH_PX = 260;
  * card row. Used by the draft deck panel, shop offers, dreamsign offerings,
  * and the deck viewer so the hand-feel is identical across screens.
  *
- * Tighter than the glossary-tooltip default (500ms) because players are
+ * Tighter than the explanatory-tooltip default (500ms) because players are
  * scanning a compact list and want quick previews while moving down a rail.
  */
 export const CARD_HOVER_PREVIEW_DELAY_MS = 300;

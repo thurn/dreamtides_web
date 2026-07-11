@@ -26,7 +26,8 @@ import {
   subtypeOptionsFromCards,
 } from "./card-browser/card-browser-filter";
 import { CardOverlay } from "./CardOverlay";
-import { HoverPopover } from "../tango/components/overlay/HoverPopover";
+import { TideSelectionButton } from "../tango/components/hud/TideSelectionButton";
+import type { TangoColor } from "../tango/primitives/color";
 
 type PoolViewerSource =
   | "run"
@@ -65,7 +66,7 @@ const EMPTY_BASE_MESSAGES: Record<PoolViewerSource, string> = {
  */
 const TIDE_SELECTION_META: Record<
   Tides4TideSelection,
-  { tag: string; accent: string }
+  { tag: string; accent: TangoColor }
 > = {
   starter: { tag: "Signature", accent: "#34c759" },
   "facet-drawn": { tag: "Theme · drawn", accent: "#2d8a80" },
@@ -1060,92 +1061,21 @@ function TideDeckNav({
       {tides.map((tide) => {
         const meta = TIDE_SELECTION_META[tide.selection];
         const active = tide.id === selectedTideId;
-        const button = (
-          <button
-            key={tide.id}
-            type="button"
-            data-pool-tide-button={tide.id}
-            aria-pressed={active}
-            onClick={() => onSelect(tide.id)}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "6px",
-              borderRadius: "6px",
-              border: active
-                ? `1px solid ${meta.accent}`
-                : "1px solid rgba(247, 241, 223, 0.16)",
-              background: active ? "rgba(45, 138, 128, 0.22)" : "#16242a",
-              color: tide.joined ? "#f7f1df" : "#8a9590",
-              padding: "4px 9px",
-              font: "inherit",
-              fontSize: "0.74rem",
-              fontWeight: 700,
-              cursor: "pointer",
-            }}
-          >
-            <span
-              aria-hidden="true"
-              style={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "999px",
-                background: meta.accent,
-                opacity: tide.joined ? 1 : 0.4,
-              }}
-            />
-            {tide.displayName ?? tide.name}
-            <span
-              style={{
-                fontSize: "0.64rem",
-                fontWeight: 600,
-                opacity: 0.7,
-                letterSpacing: "0.02em",
-              }}
-            >
-              {meta.tag}
-            </span>
-          </button>
-        );
-        if (tide.displayDescription == null) return button;
         return (
-          <span key={tide.id} style={{ display: "inline-flex" }}>
-            <HoverPopover content={<TideTooltipContent tide={tide} />}>
-              {button}
-            </HoverPopover>
-          </span>
+          <TideSelectionButton
+            key={tide.id}
+            id={tide.id}
+            label={tide.displayName ?? tide.name}
+            description={tide.displayDescription ?? tide.name}
+            tag={meta.tag}
+            accent={meta.accent}
+            active={active}
+            joined={tide.joined}
+            onActivate={() => onSelect(tide.id)}
+          />
         );
       })}
     </div>
-  );
-}
-
-/** Hover tooltip: the tide's thematic name and one-line player-facing blurb. */
-function TideTooltipContent({ tide }: { tide: Tides4TideSummary }) {
-  return (
-    <span
-      data-pool-tide-tooltip={tide.id}
-      style={{
-        display: "block",
-        maxWidth: "260px",
-        borderRadius: "8px",
-        border: "1px solid rgba(255, 255, 255, 0.16)",
-        background: "#000000",
-        color: "#ffffff",
-        padding: "8px 12px",
-        fontSize: "0.74rem",
-        lineHeight: 1.5,
-        textAlign: "left",
-        boxShadow: "0 12px 32px rgba(0, 0, 0, 0.55)",
-      }}
-    >
-      <span style={{ fontWeight: 700 }}>{tide.displayName ?? tide.name}</span>
-      {tide.displayDescription != null ? (
-        <span style={{ display: "block", marginTop: "3px", opacity: 0.88 }}>
-          {tide.displayDescription}
-        </span>
-      ) : null}
-    </span>
   );
 }
 
