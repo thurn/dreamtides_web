@@ -24,6 +24,17 @@ _unity_run_error() {
   printf 'unity-run: %s\n' "$*" >&2
 }
 
+_log_has_exact_line() {
+  local log_path="$1"
+  local expected_line="$2"
+
+  LC_ALL=C awk -v expected="$expected_line" '
+    { sub(/\r$/, "") }
+    $0 == expected { found = 1; exit }
+    END { exit(found ? 0 : 1) }
+  ' "$log_path"
+}
+
 _unity_committed_version() {
   local version_file="$UNITY_RUN_PROJECT_ROOT/ProjectSettings/ProjectVersion.txt"
   local version
@@ -196,7 +207,7 @@ validate_unity_result() {
     _unity_run_error "$stage_name: Unity log contains a strict failure signature"
     return 1
   fi
-  if LC_ALL=C grep -Fq "$UNITY_RUN_COMPLETION_MARKER" "$log_path"; then
+  if _log_has_exact_line "$log_path" "$UNITY_RUN_COMPLETION_MARKER"; then
     completion_evidence=1
   fi
 
@@ -209,7 +220,7 @@ validate_unity_result() {
       _unity_run_error "$stage_name: NUnit evidence was rejected"
       return 1
     }
-    if LC_ALL=C grep -Fq "$UNITY_RUN_TEST_COMPLETION_MARKER" "$log_path"; then
+    if _log_has_exact_line "$log_path" "$UNITY_RUN_TEST_COMPLETION_MARKER"; then
       completion_evidence=1
     fi
   fi

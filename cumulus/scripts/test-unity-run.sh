@@ -139,6 +139,40 @@ expect_accept "fresh passing NUnit XML with Unity test-run completion evidence" 
   UNITY="$fake_unity" \
   bash -c "source '$HARNESS'; run_unity_stage self-test-fresh-nunit nographics -runTests -testResults '$fresh_test_xml'"
 rm -rf "$fresh_test_stage_dir"
+
+crlf_test_stage_dir="$UNITY_RUN_ARTIFACT_ROOT/self-test-crlf-nunit"
+rm -rf "$crlf_test_stage_dir"
+crlf_test_xml="$crlf_test_stage_dir/results.xml"
+expect_accept "exact Unity test-run completion evidence with CRLF" \
+  env \
+  FAKE_UNITY_VERSION="$(_unity_committed_version)" \
+  FAKE_UNITY_EXIT=0 \
+  FAKE_UNITY_COMPLETION="$TEST_COMPLETION_MARKER"$'\r' \
+  FAKE_UNITY_WRITE_NUNIT=1 \
+  UNITY="$fake_unity" \
+  bash -c "source '$HARNESS'; run_unity_stage self-test-crlf-nunit nographics -runTests -testResults '$crlf_test_xml'"
+rm -rf "$crlf_test_stage_dir"
+
+for near_match in \
+  "prefixed|prefix $TEST_COMPLETION_MARKER" \
+  "suffixed|$TEST_COMPLETION_MARKER suffix"; do
+  near_match_name="${near_match%%|*}"
+  near_match_completion="${near_match#*|}"
+  near_match_stage="self-test-$near_match_name-nunit"
+  near_match_stage_dir="$UNITY_RUN_ARTIFACT_ROOT/$near_match_stage"
+  near_match_xml="$near_match_stage_dir/results.xml"
+  rm -rf "$near_match_stage_dir"
+  expect_reject "$near_match_name Unity test-run completion near-match" \
+    env \
+    FAKE_UNITY_VERSION="$(_unity_committed_version)" \
+    FAKE_UNITY_EXIT=0 \
+    FAKE_UNITY_COMPLETION="$near_match_completion" \
+    FAKE_UNITY_WRITE_NUNIT=1 \
+    UNITY="$fake_unity" \
+    bash -c "source '$HARNESS'; run_unity_stage '$near_match_stage' nographics -runTests -testResults '$near_match_xml'"
+  rm -rf "$near_match_stage_dir"
+done
+
 FAKE_UNITY_VERSION="$(_unity_committed_version)" UNITY="$fake_unity" bash -e -c \
   "source '$HARNESS'; run_unity_stage self-test-errexit nographics -quit" \
   >/dev/null 2>&1 || true
