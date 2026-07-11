@@ -1,0 +1,13 @@
+{
+  "name": "TangoMvp.EditModeTests",
+  "rootNamespace": "TangoMvp.Tests",
+  "references": [
+    "TangoMvp.Runtime"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}
