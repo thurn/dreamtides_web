@@ -102,6 +102,23 @@ describe("selectRevealPlacement", () => {
     expect(result.secondaryRects[0].y + result.secondaryRects[0].height).toBe(586);
   });
 
+  it("centers a lone desktop primary when the first secondary cannot fit above", () => {
+    const sourceRect = { x: 500, y: 250, width: 100, height: 60 };
+    const result = selectRevealPlacement({
+      ...base,
+      viewport: { ...viewport, layout: "desktop", width: 1200, height: 900 },
+      reason: "hover",
+      touchPoint: undefined,
+      sourceRect,
+      primarySize: { width: 248, height: 180 },
+      secondarySizes: [{ width: 248, height: 300 }],
+    });
+    expect(result.family).toBe("desktop-above");
+    expect(result.orientation).toBe("primary-left");
+    expect(result.secondaryRects).toEqual([]);
+    expect(result.primaryRect.x).toBe(sourceRect.x + sourceRect.width / 2 - 124);
+  });
+
   it.each([500, 480])("truncates a desktop InfoCard pair that cannot fit the %ipx safe width", (width) => {
     const desktop = { ...base, viewport: { ...viewport, layout: "desktop" as const, width }, reason: "hover" as const, touchPoint: undefined, sourceRect: { x: 190, y: 500, width: 80, height: 60 }, primarySize: { width: 248, height: 180 }, secondarySizes: [{ width: 248, height: 100 }] };
     for (const input of [desktop, { ...desktop, sourceRect: { ...desktop.sourceRect, y: 20 } }]) {
@@ -116,6 +133,37 @@ describe("selectRevealPlacement", () => {
     const result = selectRevealPlacement({ ...base, reason: "focus", touchPoint: undefined, sourceRect: { x: 150, y: 400, width: 90, height: 50 }, secondarySizes: [{ width: 248, height: 100 }] });
     expect(result.family).toBe("mobile-focus-above");
     expect(result.circleClearance).toBeUndefined();
+  });
+
+  it("centers a lone mobile-focus primary when the first secondary cannot fit", () => {
+    const sourceRect = { x: 150, y: 220, width: 90, height: 50 };
+    const result = selectRevealPlacement({
+      ...base,
+      reason: "focus",
+      touchPoint: undefined,
+      sourceRect,
+      secondarySizes: [{ width: 248, height: 400 }],
+    });
+    expect(result.family).toBe("mobile-focus-above");
+    expect(result.orientation).toBe("primary-left");
+    expect(result.secondaryRects).toEqual([]);
+    expect(result.primaryRect.x).toBeCloseTo(sourceRect.x + sourceRect.width / 2 - result.primaryRect.width / 2);
+  });
+
+  it("does not mark primary overlap when a dropped desktop pair leaves a clear lone primary", () => {
+    const result = selectRevealPlacement({
+      ...base,
+      viewport: { ...viewport, layout: "desktop", width: 800, height: 700 },
+      reason: "hover",
+      touchPoint: undefined,
+      sourceRect: { x: 300, y: 20, width: 100, height: 60 },
+      primarySize: { width: 248, height: 180 },
+      secondarySizes: [{ width: 248, height: 100 }],
+    });
+    expect(result.family).toBe("desktop-side-right");
+    expect(result.secondaryRects).toEqual([]);
+    expect(result.primaryRect.x).toBe(414);
+    expect(result.bestEffortPrimaryOverlap).toBe(false);
   });
 
   it("keeps the mobile keyboard primary closest to a right-edge focused source", () => {

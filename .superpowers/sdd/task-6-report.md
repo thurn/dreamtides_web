@@ -315,3 +315,12 @@ Stable path: `screenshots/entity-reveals/`
 - The conformance integration renders canonical and generated `BattleGameCard` fixtures and actively installs deterministic reduced motion.
 - Regeneration completed 12/12. Final verification: lint passed; typecheck passed; 392 files passed and 1 skipped; 4,273 tests passed and 4 skipped; `git diff --check` passed.
 - Browser QA used `http://localhost:5188` and session `q7-whole-5188`: desktop group fit, reduced-motion immediate exit, mobile 0/20/40ms timing and scroll dismissal, canonical/generated battle cards, normal Atlas, and normal battle. Error buffers were empty. Session closed; port 5188 is free.
+
+## Final re-review remediation
+
+- Focus restoration is source-scoped. When hover temporarily takes precedence over a focused source, restoration recaptures the focused element's current rectangle, starts a fresh keyboard/focus lifecycle, and preserves exact open/close pairing. The integration test covers two independently positioned sources and the unmount-safe coordinator path.
+- Desktop-above and mobile-focus placement derive horizontal group width from the visible secondary prefix. If no secondary fits, the primary is centered as a single card and placement metadata reports zero secondaries consistently.
+- Desktop side fallback derives `bestEffortPrimaryOverlap` from the final primary rectangle and its source gap. Dropping an unfit secondary column therefore leaves a clear primary marked as non-overlapping.
+- Deleted token aliases are absent from primitive token comments. Regeneration completed all 12 stages with no generated tracked-file drift.
+- Focused verification passed 62 tests. `npm run lint`, `npm run typecheck`, and the full suite passed: 392 files passed and 1 skipped; 4,277 tests passed and 4 skipped. `git diff --check` passed.
+- Browser QA used `http://localhost:5189/?demo=entity-reveals` and session `q8-focus-5189`. A focused GameCard survived temporary Dreamcaller hover precedence, reopened with keyboard/focus metadata and a fresh interaction id, and emitted paired lifecycle logs. The browser error buffer was empty. The session and task-owned server were closed; port 5189 is free.

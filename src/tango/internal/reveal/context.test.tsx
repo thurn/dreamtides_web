@@ -323,6 +323,37 @@ describe("Tango reveal coordinator root", () => {
     expect(getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_closed")).toHaveLength(0);
   });
 
+  it("recaptures the focused source when another source yields hover precedence", () => {
+    const { container } = mount(<TangoRoot><Source id={UUID_A} label="A" /><Source id={UUID_B} label="B" /></TangoRoot>);
+    const [a, b] = [...container.querySelectorAll("button")];
+    let aRect = DOMRect.fromRect({ x: 20, y: 300, width: 120, height: 60 });
+    a.getBoundingClientRect = () => aRect;
+    b.getBoundingClientRect = () => DOMRect.fromRect({ x: 500, y: 140, width: 80, height: 40 });
+
+    act(() => { a.dispatchEvent(new FocusEvent("focusin", { bubbles: true })); });
+    act(() => { b.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse", pointerId: 7 })); });
+    aRect = DOMRect.fromRect({ x: 40, y: 320, width: 140, height: 70 });
+    act(() => { b.dispatchEvent(new PointerEvent("pointerout", { bubbles: true, pointerType: "mouse", pointerId: 7 })); });
+
+    const opens = getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_opened");
+    const closes = getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_closed");
+    expect(opens).toHaveLength(3);
+    expect(closes).toHaveLength(2);
+    expect(opens.map((entry) => entry.sourceEntityId)).toEqual([UUID_A, UUID_B, UUID_A]);
+    expect(opens[2]).toMatchObject({
+      modality: "keyboard",
+      reason: "focus",
+      sourceRect: { x: 40, y: 320, width: 140, height: 70 },
+    });
+    expect(new Set(opens.map((entry) => entry.interactionId)).size).toBe(3);
+    expect(closes.map((entry) => entry.interactionId)).toEqual(opens.slice(0, 2).map((entry) => entry.interactionId));
+
+    act(() => { a.dispatchEvent(new FocusEvent("focusout", { bubbles: true })); });
+    const finalCloses = getLogEntries().filter((entry) => entry.event === "tango_entity_reveal_closed");
+    const finalClose = finalCloses[finalCloses.length - 1];
+    expect(finalClose?.interactionId === opens[2].interactionId).toBe(true);
+  });
+
   it("dismisses on visualViewport resize and removes the listener on unmount", () => {
     const listeners = new Set<EventListener>();
     const visualViewport = {

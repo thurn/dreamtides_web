@@ -115,12 +115,12 @@
   --primitive-violet-500: #9333ea;
   --primitive-violet-400: #a855f7;  /* primary accent (parent --dt-primary-light) */
   --primitive-violet-300: #c084fc;  /* bright glow / highlight (parent --dt-accent-strong) */
-  --primitive-violet-200: #d8b4fe;  /* parent --dt-essence */
+  --primitive-violet-200: #d8b4fe;  /* pale violet highlight */
 
   /* ---- Color: gold (omens, reward, victory) — matches parent ---- */
   --primitive-gold-600: #d4a017;    /* parent --dt-gold */
   --primitive-gold-500: #e0a82a;
-  --primitive-gold-400: #fbbf24;    /* parent --dt-gold-light (omens value) */
+  --primitive-gold-400: #fbbf24;    /* omens value */
   --primitive-gold-300: #ffd34d;
 
   /* ---- Color: card resources — matches parent ---- */

@@ -137,19 +137,29 @@ function mobilePlacement(input: RevealPlacementInput): RevealPlacementDecision {
   const anchorX = sourceRect.x + sourceRect.width / 2;
   if (input.reason === "focus") {
     const canPair = secondarySizes.length > 0 && horizontalPairFits;
-    const groupWidth = canPair ? cardWidth * 2 + CARD_GAP : cardWidth;
-    const groupLeft = clamp(anchorX - groupWidth / 2, safeLeft, safeRight - groupWidth);
-    const leftPrimaryX = groupLeft;
-    const rightPrimaryX = groupLeft + (canPair ? cardWidth + CARD_GAP : 0);
-    const useRightPrimary = canPair
-      && Math.abs(rightPrimaryX + cardWidth / 2 - anchorX) < Math.abs(leftPrimaryX + cardWidth / 2 - anchorX);
-    const orientation: "primary-left" | "primary-right" = useRightPrimary ? "primary-right" : "primary-left";
-    const primaryX = useRightPrimary ? rightPrimaryX : leftPrimaryX;
-    const secondaryX = useRightPrimary ? groupLeft : groupLeft + cardWidth + CARD_GAP;
+    const horizontalLayout = (secondaryCount: number): {
+      readonly orientation: "primary-left" | "primary-right";
+      readonly primaryX: number;
+      readonly secondaryX: number;
+    } => {
+      const showsSecondaryColumn = secondaryCount > 0;
+      const groupWidth = showsSecondaryColumn ? cardWidth * 2 + CARD_GAP : cardWidth;
+      const groupLeft = clamp(anchorX - groupWidth / 2, safeLeft, safeRight - groupWidth);
+      const leftPrimaryX = groupLeft;
+      const rightPrimaryX = groupLeft + (showsSecondaryColumn ? cardWidth + CARD_GAP : 0);
+      const useRightPrimary = showsSecondaryColumn
+        && Math.abs(rightPrimaryX + cardWidth / 2 - anchorX) < Math.abs(leftPrimaryX + cardWidth / 2 - anchorX);
+      return {
+        orientation: useRightPrimary ? "primary-right" : "primary-left",
+        primaryX: useRightPrimary ? rightPrimaryX : leftPrimaryX,
+        secondaryX: useRightPrimary ? groupLeft : groupLeft + cardWidth + CARD_GAP,
+      };
+    };
     const aboveHeight = sourceRect.y - CARD_GAP - safeTop;
     const aboveCount = canPair ? fitGroupPrefix(secondarySizes, aboveHeight, primarySize.height) : 0;
     const canFitPrimaryAbove = primarySize.height <= aboveHeight;
     if (canFitPrimaryAbove) {
+      const { orientation, primaryX, secondaryX } = horizontalLayout(aboveCount);
       const groupHeight = Math.max(primarySize.height, stackHeight(secondarySizes, aboveCount));
       const y = sourceRect.y - CARD_GAP - groupHeight;
       return result(input, { family: "mobile-focus-above", orientation, primaryRect: rect(primaryX, y, primarySize),
@@ -157,6 +167,7 @@ function mobilePlacement(input: RevealPlacementInput): RevealPlacementDecision {
         sideFallback: false, bestEffortPrimaryOverlap: false });
     }
     const topCount = canPair ? fitGroupPrefix(secondarySizes, safeBottom - safeTop, primarySize.height) : 0;
+    const { orientation, primaryX, secondaryX } = horizontalLayout(topCount);
     return result(input, { family: "mobile-focus-top", orientation, primaryRect: rect(primaryX, safeTop, primarySize),
       secondaryRects: secondaryRectsAt(secondarySizes, topCount, secondaryX, safeTop), pressInPlace: false,
       sideFallback: true, bestEffortPrimaryOverlap: false });
@@ -252,7 +263,8 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
     const count = fitGroupPrefix(usableSecondaries, aboveAvailableHeight, primarySize.height);
     const groupHeight = Math.max(primarySize.height, stackHeight(usableSecondaries, count));
     const aboveY = sourceRect.y - DESKTOP_SOURCE_GAP - groupHeight;
-    const x = clamp(sourceRect.x + sourceRect.width / 2 - groupWidth / 2, safeLeft, safeRight - groupWidth);
+    const visibleGroupWidth = primaryWidth + (count > 0 ? CARD_GAP + secondaryWidth : 0);
+    const x = clamp(sourceRect.x + sourceRect.width / 2 - visibleGroupWidth / 2, safeLeft, safeRight - visibleGroupWidth);
     return result(input, { family: "desktop-above", orientation: "primary-left", primaryRect: rect(x, aboveY, primarySize),
       secondaryRects: secondaryRectsAt(usableSecondaries, count, x + primaryWidth + CARD_GAP, aboveY), pressInPlace: false,
       sideFallback: false, bestEffortPrimaryOverlap: false });
@@ -269,9 +281,12 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
   const secondaryX = orientation === "primary-left" ? primaryX + primaryWidth + CARD_GAP : x;
   const sideCanFitPair = usableSecondaries.length > 0 && (useRight ? rightSpace : leftSpace) >= groupWidth;
   const count = sideCanFitPair ? fitSecondaryPrefix(usableSecondaries, safeBottom - y) : 0;
+  const finalPrimaryRect = rect(count === 0 ? clamp(useRight ? sourceRect.x + sourceRect.width + DESKTOP_SOURCE_GAP : sourceRect.x - DESKTOP_SOURCE_GAP - primaryWidth, safeLeft, safeRight - primaryWidth) : primaryX, y, primarySize);
+  const clearsSourceGap = finalPrimaryRect.x >= sourceRect.x + sourceRect.width + DESKTOP_SOURCE_GAP
+    || finalPrimaryRect.x + finalPrimaryRect.width <= sourceRect.x - DESKTOP_SOURCE_GAP;
   return result(input, { family: useRight ? "desktop-side-right" : "desktop-side-left", orientation,
-    primaryRect: rect(count === 0 ? clamp(useRight ? sourceRect.x + sourceRect.width + DESKTOP_SOURCE_GAP : sourceRect.x - DESKTOP_SOURCE_GAP - primaryWidth, safeLeft, safeRight - primaryWidth) : primaryX, y, primarySize), secondaryRects: secondaryRectsAt(usableSecondaries, count, secondaryX, y),
-    pressInPlace: false, sideFallback: true, bestEffortPrimaryOverlap: groupWidth > Math.max(rightSpace, leftSpace) });
+    primaryRect: finalPrimaryRect, secondaryRects: secondaryRectsAt(usableSecondaries, count, secondaryX, y),
+    pressInPlace: false, sideFallback: true, bestEffortPrimaryOverlap: !clearsSourceGap });
 }
 
 export function selectRevealPlacement(input: RevealPlacementInput): RevealPlacementDecision {
