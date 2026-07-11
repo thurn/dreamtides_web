@@ -280,13 +280,76 @@ namespace TangoMvp.Tests
             Assert.That(
                 Regex.Matches(source, @"SAMPLE_TEXTURE2D_X\s*\(\s*_TangoGlassBlurTexture").Count,
                 Is.EqualTo(1));
-            Assert.That(source, Does.Contain("half3 transmission"));
-            Assert.That(source, Does.Contain("half3 shellLighting"));
+            string shellBody = ExtractFunctionBody(source, "half3 ComputeShellLighting(Varyings input)");
+            Assert.That(shellBody, Does.Not.Contain("transmission"));
+            Assert.That(shellBody, Does.Not.Contain("_TangoGlassBlurTexture"));
+            Assert.That(shellBody, Does.Contain("GetMainLight"));
+            Assert.That(source, Does.Contain("half3 shellLighting = ComputeShellLighting(input);"));
+            Assert.That(Regex.Matches(source, @"\btransmission\b").Count, Is.EqualTo(2));
+            Assert.That(source, Does.Contain("half3 transmission = SampleTransmission(input.positionCS);"));
+            Assert.That(source, Does.Contain("return half4(transmission + shellLighting, 1.0h);"));
             Assert.That(source, Does.Contain("1.0h - input.paneUv.y"));
-            Assert.That(source, Does.Not.Contain("transmission * mainLight"));
             Assert.That(source, Does.Contain("0.72"));
             Assert.That(source, Does.Contain("ZWrite Off"));
             Assert.That(source, Does.Contain("ZTest LEqual"));
+        }
+
+        [Test]
+        public void SceneGlass_FallbackStraightAlphaPreservesShellAndLiveReplacesBackdrop()
+        {
+            Shader shader = Shader.Find("TangoMvp/SceneGlass");
+            Assert.That(shader, Is.Not.Null);
+
+            string source = ReadShaderSource(shader);
+            string fallbackBody = ExtractFunctionBody(
+                source,
+                "half4 ComposeFallback(half3 interior, half3 shellLighting)");
+            Assert.That(fallbackBody, Does.Contain("max(_TangoFallbackAlpha, 0.0001h)"));
+            Assert.That(
+                fallbackBody,
+                Does.Contain("return half4(interior + shellLighting / outputAlpha, outputAlpha);"));
+
+            const float fallbackAlpha = 0.72f;
+            var interior = new Vector3(0.055f, 0.055f, 0.063f);
+            var shell = new Vector3(0.12f, 0.07f, 0.03f);
+            var destination = new Vector3(0.2f, 0.4f, 0.8f);
+            Vector3 encodedFallback = interior + shell / fallbackAlpha;
+            Vector3 blendedFallback = fallbackAlpha * encodedFallback + (1f - fallbackAlpha) * destination;
+            Vector3 expectedFallback = fallbackAlpha * interior + shell + 0.28f * destination;
+            Assert.That(Vector3.Distance(blendedFallback, expectedFallback), Is.LessThan(0.000001f));
+
+            var transmission = new Vector3(0.3f, 0.5f, 0.7f);
+            Vector3 blendedLive = transmission + shell;
+            Vector3 expectedLive = transmission + shell;
+            Assert.That(Vector3.Distance(blendedLive, expectedLive), Is.LessThan(0.000001f));
+        }
+
+        [Test]
+        public void SceneGlass_AvailabilityBranchReturnsBeforeBlurSampling()
+        {
+            Shader shader = Shader.Find("TangoMvp/SceneGlass");
+            Assert.That(shader, Is.Not.Null);
+
+            string source = ReadShaderSource(shader);
+            string fragmentBody = ExtractFunctionBody(source, "half4 Frag(Varyings input)");
+            Assert.That(
+                fragmentBody,
+                Does.Match(@"UNITY_BRANCH\s+if\s*\(_TangoGlassAvailable\s*<\s*0\.5h\)"));
+
+            int branchIndex = fragmentBody.IndexOf("if (_TangoGlassAvailable < 0.5h)", StringComparison.Ordinal);
+            Assert.That(branchIndex, Is.GreaterThanOrEqualTo(0));
+            int fallbackReturnIndex = fragmentBody.IndexOf("return ComposeFallback", branchIndex, StringComparison.Ordinal);
+            int sampleIndex = fragmentBody.IndexOf("SampleTransmission", branchIndex, StringComparison.Ordinal);
+            Assert.That(fallbackReturnIndex, Is.GreaterThan(branchIndex));
+            Assert.That(sampleIndex, Is.GreaterThan(fallbackReturnIndex));
+            Assert.That(
+                fragmentBody.Substring(branchIndex, sampleIndex - branchIndex),
+                Does.Not.Contain("_TangoGlassBlurTexture"));
+
+            string sampleBody = ExtractFunctionBody(source, "half3 SampleTransmission(float4 positionCS)");
+            Assert.That(
+                Regex.Matches(sampleBody, @"SAMPLE_TEXTURE2D_X\s*\(\s*_TangoGlassBlurTexture").Count,
+                Is.EqualTo(1));
         }
 
         [Test]
@@ -381,6 +444,36 @@ namespace TangoMvp.Tests
             string assetPath = AssetDatabase.GetAssetPath(shader);
             Assert.That(assetPath, Is.Not.Empty);
             return File.ReadAllText(assetPath);
+        }
+
+        private static string ExtractFunctionBody(string source, string signature)
+        {
+            int signatureIndex = source.IndexOf(signature, StringComparison.Ordinal);
+            Assert.That(signatureIndex, Is.GreaterThanOrEqualTo(0), $"Missing shader function: {signature}");
+            int openingBrace = source.IndexOf('{', signatureIndex);
+            Assert.That(openingBrace, Is.GreaterThan(signatureIndex));
+
+            int depth = 0;
+            for (int index = openingBrace; index < source.Length; index++)
+            {
+                switch (source[index])
+                {
+                    case '{':
+                        depth++;
+                        break;
+                    case '}':
+                        depth--;
+                        if (depth == 0)
+                        {
+                            return source.Substring(openingBrace + 1, index - openingBrace - 1);
+                        }
+
+                        break;
+                }
+            }
+
+            Assert.Fail($"Unterminated shader function: {signature}");
+            return string.Empty;
         }
 
         private static void InvokeRebuildMaterials()

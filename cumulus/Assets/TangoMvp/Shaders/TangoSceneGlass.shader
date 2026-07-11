@@ -80,22 +80,21 @@ Shader "TangoMvp/SceneGlass"
                 return lerp(luminance.xxx, color, _TangoSaturation);
             }
 
-            half4 Frag(Varyings input) : SV_Target
+            half3 SampleTransmission(float4 positionCS)
             {
-                float2 screenUv = GetNormalizedScreenSpaceUV(input.positionCS);
+                float2 screenUv = GetNormalizedScreenSpaceUV(positionCS);
                 float2 halfTexel = 0.5 * _TangoGlassBlurTexelSize.xy;
                 screenUv = clamp(screenUv, halfTexel, 1.0 - halfTexel);
                 half3 blurredSource = SAMPLE_TEXTURE2D_X(
                     _TangoGlassBlurTexture,
                     sampler_TangoGlassBlurTexture,
                     screenUv).rgb;
-
-                half available = step(0.5h, _TangoGlassAvailable);
                 half3 saturatedSource = SaturateAroundLuminance(blurredSource);
-                half3 composedBackdrop = lerp(saturatedSource, _TangoFillColor.rgb, _TangoFillColor.a);
-                half3 fallbackInterior = _TangoFillColor.rgb;
-                half3 transmission = lerp(fallbackInterior, composedBackdrop, available);
+                return lerp(saturatedSource, _TangoFillColor.rgb, _TangoFillColor.a);
+            }
 
+            half3 ComputeShellLighting(Varyings input)
+            {
                 half3 normalWS = normalize(input.normalWS);
                 half3 viewDirectionWS = GetWorldSpaceNormalizeViewDir(input.positionWS);
                 Light mainLight = GetMainLight(TransformWorldToShadowCoord(input.positionWS));
@@ -115,9 +114,26 @@ Shader "TangoMvp/SceneGlass"
                 shellLighting += topInset;
                 shellLighting += sheen;
                 shellLighting += fresnel * 0.10h;
+                return shellLighting;
+            }
 
-                half interiorAlpha = lerp(_TangoFallbackAlpha, 1.0h, available);
-                return half4(transmission + shellLighting, interiorAlpha);
+            half4 ComposeFallback(half3 interior, half3 shellLighting)
+            {
+                half outputAlpha = max(_TangoFallbackAlpha, 0.0001h);
+                return half4(interior + shellLighting / outputAlpha, outputAlpha);
+            }
+
+            half4 Frag(Varyings input) : SV_Target
+            {
+                half3 shellLighting = ComputeShellLighting(input);
+                UNITY_BRANCH
+                if (_TangoGlassAvailable < 0.5h)
+                {
+                    return ComposeFallback(_TangoFillColor.rgb, shellLighting);
+                }
+
+                half3 transmission = SampleTransmission(input.positionCS);
+                return half4(transmission + shellLighting, 1.0h);
             }
             ENDHLSL
         }
