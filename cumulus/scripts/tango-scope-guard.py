@@ -36,7 +36,9 @@ def source_fields() -> re.Pattern[str]:
         r"(?P<type>(?:[A-Za-z_@][A-Za-z0-9_@\s.:?<>,\[\]]*?)?"
         r"\b(?:Camera|RenderTexture|RTHandle)\b"
         r"[\s?>,\[\]]*?)"
-        r"\s+(?P<name>[A-Za-z_]\w*)\s*(?:=[^;]*)?;",
+        r"\s+(?P<name>[A-Za-z_]\w*)"
+        r"(?P<additional>(?:\s*(?:=[^,;]*)?\s*,\s*[A-Za-z_]\w*)*)"
+        r"\s*(?:=[^;]*)?;",
         re.MULTILINE,
     )
 
@@ -177,8 +179,9 @@ def main() -> int:
     field = source_fields()
     forbidden_import = re.compile(
         r"\busing\s+(?:(?:[A-Za-z_]\w*)\s*=\s*)?"
-        r"(?:(?:global\s*::\s*)?UnityEngine\s*\.\s*(?:UI|UIElements)|"
-        r"(?:global\s*::\s*)?TMPro)\s*;"
+        r"(?:(?:global\s*::\s*)?UnityEngine\s*\.\s*(?:UIElements|UI)|"
+        r"(?:global\s*::\s*)?TMPro)"
+        r"(?:\s*\.\s*[A-Za-z_]\w*)*\s*;"
     )
     source_root = root / "cumulus/Assets/TangoMvp"
     sources = source_root.rglob("*.cs") if source_root.exists() else []
@@ -203,6 +206,7 @@ def main() -> int:
                 allowed_interactor_camera = (
                     relative.endswith("TangoPointerInteractor.cs")
                     and match.group("name") == "interactionCamera"
+                    and not match.group("additional").strip()
                 )
                 if not allowed_interactor_camera:
                     errors.append(

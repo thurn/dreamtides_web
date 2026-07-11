@@ -110,6 +110,18 @@ write_source "$nested_custom_fields" "cumulus/Assets/TangoMvp/Runtime/NestedCust
 expect_reject_with "custom nested generic camera and RTHandle fields" "per-pane camera/render-texture field" \
   python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$nested_custom_fields"
 
+comma_fields="$TEST_ROOT/comma-fields"
+write_source "$comma_fields" "cumulus/Assets/TangoMvp/Runtime/CommaFields.cs" \
+  'using UnityEngine; public sealed class CommaFields { private Camera primary, secondary; }'
+expect_reject_with "comma-separated camera fields" "per-pane camera/render-texture field" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$comma_fields"
+
+generic_comma_fields="$TEST_ROOT/generic-comma-fields"
+write_source "$generic_comma_fields" "cumulus/Assets/TangoMvp/Runtime/GenericCommaFields.cs" \
+  'using System.Collections.Generic; using UnityEngine; public sealed class GenericCommaFields { private Dictionary<string, RenderTexture> primary, secondary; }'
+expect_reject_with "comma-separated generic render-texture fields" "per-pane camera/render-texture field" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$generic_comma_fields"
+
 collections="$TEST_ROOT/collections"
 write_source "$collections" "cumulus/Assets/TangoMvp/Runtime/BadCollections.cs" \
   'using System.Collections.Generic; using UnityEngine; using UnityEngine.Rendering; public sealed class BadCollections { [SerializeField] Camera?[,] cameras; protected List<RenderTexture?> targets; internal IReadOnlyCollection<RTHandle> handles; }'
@@ -228,7 +240,10 @@ for import_case in \
   "tmp|using TMPro; public sealed class BadTmp { }" \
   "aliased-ugui|using UI = UnityEngine.UI; public sealed class BadAliasedUi { }" \
   "global-elements|using Elements = global::UnityEngine.UIElements; public sealed class BadGlobalElements { }" \
-  "aliased-tmp|using Text = TMPro; public sealed class BadAliasedTmp { }"; do
+  "aliased-tmp|using Text = TMPro; public sealed class BadAliasedTmp { }" \
+  "aliased-ugui-descendant|using Button = UnityEngine.UI.Button; public sealed class BadAliasedButton { }" \
+  "global-elements-descendant|using Visual = global::UnityEngine.UIElements.VisualElement; public sealed class BadAliasedVisual { }" \
+  "aliased-tmp-descendant|using Label = TMPro.TextMeshPro; public sealed class BadAliasedLabel { }"; do
   import_name="${import_case%%|*}"; import_body="${import_case#*|}"; fixture="$TEST_ROOT/$import_name"
   write_source "$fixture" "cumulus/Assets/TangoMvp/Runtime/Bad${import_name}.cs" "$import_body"
   expect_reject_with "$import_name import" "forbidden UI namespace import" python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$fixture"
