@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace TangoMvp.Diagnostics
 {
@@ -39,8 +41,34 @@ namespace TangoMvp.Diagnostics
 
     public static class TangoGlassDiagnostics
     {
+        private static readonly Dictionary<EntityId, int> CameraKeys =
+            new Dictionary<EntityId, int>(8);
         private static readonly Dictionary<int, TangoGlassFrameFacts> FactsByCamera =
             new Dictionary<int, TangoGlassFrameFacts>(8);
+        private static int nextCameraKey = 1;
+
+        public static int GetCameraKey(Camera camera)
+        {
+            if (camera == null)
+            {
+                throw new ArgumentNullException(nameof(camera));
+            }
+
+            EntityId entityId = camera.GetEntityId();
+            if (CameraKeys.TryGetValue(entityId, out int cameraKey))
+            {
+                return cameraKey;
+            }
+
+            if (nextCameraKey == int.MaxValue)
+            {
+                throw new InvalidOperationException("Tango glass diagnostics exhausted its camera key space.");
+            }
+
+            cameraKey = nextCameraKey++;
+            CameraKeys.Add(entityId, cameraKey);
+            return cameraKey;
+        }
 
         public static bool TryGetFrameFacts(
             int cameraInstanceId,
@@ -82,7 +110,9 @@ namespace TangoMvp.Diagnostics
 
         public static void Reset()
         {
+            CameraKeys.Clear();
             FactsByCamera.Clear();
+            nextCameraKey = 1;
         }
     }
 }

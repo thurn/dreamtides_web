@@ -9,16 +9,22 @@ namespace TangoMvp.Rendering
 {
     public sealed class TangoGlassRendererFeature : ScriptableRendererFeature
     {
+        private const float BlurRadiusOutputPixels = 22f;
+
         [SerializeField]
         private Material blurMaterial;
 
-        [SerializeField, Min(0f)]
-        private float blurRadius = 22f;
-
         private TangoGlassBlurPass blurPass;
+        private bool cameraCallbackSubscribed;
 
         public override void Create()
         {
+            SubscribeCameraCallback();
+            if (!isActive)
+            {
+                ResetAvailability();
+            }
+
             blurPass = new TangoGlassBlurPass
             {
                 renderPassEvent = RenderPassEvent.BeforeRenderingTransparents,
@@ -34,28 +40,51 @@ namespace TangoMvp.Rendering
                 return;
             }
 
-            blurPass.Setup(blurMaterial, blurRadius);
+            blurPass.Setup(blurMaterial);
             renderer.EnqueuePass(blurPass);
-        }
-
-        public new void SetActive(bool active)
-        {
-            base.SetActive(active);
-            if (!active)
-            {
-                ResetAvailability();
-            }
         }
 
         protected override void Dispose(bool disposing)
         {
+            UnsubscribeCameraCallback();
             ResetAvailability();
             blurPass = null;
         }
 
         private void OnDisable()
         {
+            UnsubscribeCameraCallback();
             ResetAvailability();
+        }
+
+        private void SubscribeCameraCallback()
+        {
+            if (cameraCallbackSubscribed)
+            {
+                return;
+            }
+
+            RenderPipelineManager.beginCameraRendering += OnBeginCameraRendering;
+            cameraCallbackSubscribed = true;
+        }
+
+        private void UnsubscribeCameraCallback()
+        {
+            if (!cameraCallbackSubscribed)
+            {
+                return;
+            }
+
+            RenderPipelineManager.beginCameraRendering -= OnBeginCameraRendering;
+            cameraCallbackSubscribed = false;
+        }
+
+        private void OnBeginCameraRendering(ScriptableRenderContext context, Camera camera)
+        {
+            if (!isActive)
+            {
+                ResetAvailability();
+            }
         }
 
         private static void ResetAvailability()
@@ -75,13 +104,16 @@ namespace TangoMvp.Rendering
 
             private readonly MaterialPropertyBlock blurProperties = new MaterialPropertyBlock();
             private Material material;
-            private float radius;
             private bool initializationLogged;
 
-            public void Setup(Material blurMaterial, float blurRadius)
+            public TangoGlassBlurPass()
+            {
+                blurProperties.SetFloat(RadiusId, BlurRadiusOutputPixels);
+            }
+
+            public void Setup(Material blurMaterial)
             {
                 material = blurMaterial;
-                radius = blurRadius;
             }
 
             public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
@@ -130,7 +162,6 @@ namespace TangoMvp.Rendering
                     outputDescriptor.width,
                     outputDescriptor.height);
                 blurProperties.SetVector(OutputTexelSizeId, outputTexelSize);
-                blurProperties.SetFloat(RadiusId, radius);
 
                 var horizontalParameters = new RenderGraphUtils.BlitMaterialParameters(
                     source,
@@ -182,7 +213,7 @@ namespace TangoMvp.Rendering
                 bool available)
             {
                 TangoGlassDiagnostics.Publish(
-                    camera.GetEntityId().GetHashCode(),
+                    TangoGlassDiagnostics.GetCameraKey(camera),
                     Time.frameCount,
                     inputDescriptor.width,
                     inputDescriptor.height,

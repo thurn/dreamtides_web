@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
@@ -5,6 +7,7 @@ using TangoMvp.Diagnostics;
 using TangoMvp.Rendering;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 namespace TangoMvp.Tests
@@ -89,6 +92,64 @@ namespace TangoMvp.Tests
         }
 
         [Test]
+        public void RendererFeature_RadiusIsFixedAndNotAuthorAdjustable()
+        {
+            FieldInfo[] instanceFields = typeof(TangoGlassRendererFeature).GetFields(
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            FieldInfo radiusConstant = typeof(TangoGlassRendererFeature).GetField(
+                "BlurRadiusOutputPixels",
+                BindingFlags.Static | BindingFlags.NonPublic);
+            MethodInfo declaredSetActive = typeof(TangoGlassRendererFeature).GetMethod(
+                "SetActive",
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+
+            Assert.That(instanceFields.Any(field => field.FieldType == typeof(float)), Is.False);
+            Assert.That(instanceFields.Any(field =>
+                field.FieldType == typeof(float) && field.GetCustomAttribute<SerializeField>() != null), Is.False);
+            Assert.That(radiusConstant, Is.Not.Null);
+            Assert.That(radiusConstant.IsLiteral, Is.True);
+            Assert.That(radiusConstant.GetRawConstantValue(), Is.EqualTo(22f));
+            Assert.That(declaredSetActive, Is.Null);
+        }
+
+        [Test]
+        public void RendererFeature_BaseTypedDeactivationResetsBeforeNextCameraAndSubscriptionIsIdempotent()
+        {
+            var feature = ScriptableObject.CreateInstance<TangoGlassRendererFeature>();
+            FieldInfo subscribedField = typeof(TangoGlassRendererFeature).GetField(
+                "cameraCallbackSubscribed",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo cameraBeginCallback = typeof(TangoGlassRendererFeature).GetMethod(
+                "OnBeginCameraRendering",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+
+            try
+            {
+                Assert.That(subscribedField, Is.Not.Null);
+                Assert.That(cameraBeginCallback, Is.Not.Null);
+
+                feature.Create();
+                feature.Create();
+                Assert.That(subscribedField.GetValue(feature), Is.True);
+
+                Shader.SetGlobalFloat(TangoGlassShaderIds.Available, 1f);
+                ScriptableRendererFeature baseTypedFeature = feature;
+                baseTypedFeature.SetActive(false);
+
+                cameraBeginCallback.Invoke(feature, new object[] { default(ScriptableRenderContext), null });
+
+                Assert.That(Shader.GetGlobalFloat(TangoGlassShaderIds.Available), Is.Zero);
+
+                ((IDisposable)feature).Dispose();
+                Assert.That(subscribedField.GetValue(feature), Is.False);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(feature);
+            }
+        }
+
+        [Test]
         public void Diagnostics_RejectStaleFramesOverwriteSameFrameAndReset()
         {
             const int cameraId = 17;
@@ -115,6 +176,47 @@ namespace TangoMvp.Tests
 
             TangoGlassDiagnostics.Reset();
             Assert.That(TangoGlassDiagnostics.TryGetFrameFacts(cameraId, 40, out _), Is.False);
+        }
+
+        [Test]
+        public void Diagnostics_CameraKeysAreStableUniqueRegistrationsAndResetWithState()
+        {
+            var firstObject = new GameObject("Tango diagnostics camera A");
+            var secondObject = new GameObject("Tango diagnostics camera B");
+            try
+            {
+                Camera firstCamera = firstObject.AddComponent<Camera>();
+                Camera secondCamera = secondObject.AddComponent<Camera>();
+
+                int firstKey = TangoGlassDiagnostics.GetCameraKey(firstCamera);
+                int repeatedFirstKey = TangoGlassDiagnostics.GetCameraKey(firstCamera);
+                int secondKey = TangoGlassDiagnostics.GetCameraKey(secondCamera);
+
+                Assert.That(firstKey, Is.GreaterThan(0));
+                Assert.That(repeatedFirstKey, Is.EqualTo(firstKey));
+                Assert.That(secondKey, Is.Not.EqualTo(firstKey));
+
+                TangoGlassDiagnostics.Publish(firstKey, 8, 32, 16, 16, 8, 1, 1, 1, true);
+                TangoGlassDiagnostics.Reset();
+
+                Assert.That(TangoGlassDiagnostics.TryGetFrameFacts(firstKey, 8, out _), Is.False);
+                Assert.That(TangoGlassDiagnostics.GetCameraKey(secondCamera), Is.EqualTo(1));
+                Assert.That(TangoGlassDiagnostics.GetCameraKey(firstCamera), Is.EqualTo(2));
+
+                FieldInfo entityKeyMap = typeof(TangoGlassDiagnostics).GetFields(
+                        BindingFlags.Static | BindingFlags.NonPublic)
+                    .SingleOrDefault(field =>
+                        field.FieldType.IsGenericType &&
+                        field.FieldType.GetGenericTypeDefinition() == typeof(Dictionary<,>) &&
+                        field.FieldType.GetGenericArguments()[0] == typeof(EntityId) &&
+                        field.FieldType.GetGenericArguments()[1] == typeof(int));
+                Assert.That(entityKeyMap, Is.Not.Null);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(firstObject);
+                UnityEngine.Object.DestroyImmediate(secondObject);
+            }
         }
 
         [Test]
