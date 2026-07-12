@@ -310,19 +310,20 @@ namespace TangoMvp.Editor
                 typeof(MeshFilter),
                 typeof(MeshRenderer),
                 typeof(TangoPanelShadowToggle));
-            RemoveChildren(root.transform);
             EnsureComponent<MeshFilter>(root).sharedMesh = mesh;
             MeshRenderer renderer = EnsureComponent<MeshRenderer>(root);
             renderer.sharedMaterials = new[] { glassMaterial, glassMaterial, glassMaterial };
             ConfigureRenderer(renderer, ShadowCastingMode.Off, true);
 
-            var caster = new GameObject("Rounded Shadow Caster");
-            caster.transform.SetParent(root.transform, false);
+            GameObject caster = EnsureChild(root.transform, "Rounded Shadow Caster");
+            RemoveUnexpectedChildren(root.transform, caster.transform);
+            KeepOnlyComponents(caster, typeof(Transform), typeof(MeshFilter), typeof(MeshRenderer));
+            RemoveChildren(caster.transform);
             caster.transform.localPosition = Vector3.zero;
             caster.transform.localRotation = Quaternion.identity;
             caster.transform.localScale = Vector3.one;
-            caster.AddComponent<MeshFilter>().sharedMesh = mesh;
-            MeshRenderer casterRenderer = caster.AddComponent<MeshRenderer>();
+            EnsureComponent<MeshFilter>(caster).sharedMesh = mesh;
+            MeshRenderer casterRenderer = EnsureComponent<MeshRenderer>(caster);
             casterRenderer.sharedMaterials = new[] { casterMaterial, casterMaterial, casterMaterial };
             ConfigureRenderer(casterRenderer, ShadowCastingMode.ShadowsOnly, false);
 
@@ -377,6 +378,49 @@ namespace TangoMvp.Editor
             retained = new GameObject(name);
             SceneManager.MoveGameObjectToScene(retained, scene);
             return retained;
+        }
+
+        private static GameObject EnsureChild(Transform parent, string name)
+        {
+            GameObject retained = null;
+            for (int index = parent.childCount - 1; index >= 0; index--)
+            {
+                GameObject child = parent.GetChild(index).gameObject;
+                if (child.name != name)
+                {
+                    continue;
+                }
+
+                if (retained == null)
+                {
+                    retained = child;
+                }
+                else
+                {
+                    UnityEngine.Object.DestroyImmediate(child);
+                }
+            }
+
+            if (retained == null)
+            {
+                retained = new GameObject(name);
+                retained.transform.SetParent(parent, false);
+            }
+
+            retained.SetActive(true);
+            return retained;
+        }
+
+        private static void RemoveUnexpectedChildren(Transform parent, Transform retained)
+        {
+            for (int index = parent.childCount - 1; index >= 0; index--)
+            {
+                Transform child = parent.GetChild(index);
+                if (child != retained)
+                {
+                    UnityEngine.Object.DestroyImmediate(child.gameObject);
+                }
+            }
         }
 
         private static void RemoveUnexpectedRoots(Scene scene, params string[] expectedNames)

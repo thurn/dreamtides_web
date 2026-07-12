@@ -159,6 +159,19 @@ namespace TangoMvp.Tests
             }
         }
 
+        [Test]
+        public void ShopGlassDemo_RebuildIsByteStable()
+        {
+            TangoShopGlassDemoBuilder.Rebuild();
+            byte[] first = File.ReadAllBytes(TangoShopGlassDemoBuilder.ScenePath);
+
+            TangoShopGlassDemoBuilder.Rebuild();
+
+            Assert.That(
+                File.ReadAllBytes(TangoShopGlassDemoBuilder.ScenePath),
+                Is.EqualTo(first));
+        }
+
         private static readonly string[] StableAssetPaths =
         {
             MeshPath,
