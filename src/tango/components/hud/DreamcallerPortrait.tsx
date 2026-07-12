@@ -1,11 +1,12 @@
 // DreamcallerPortrait — the ONE way to render a dreamcaller's character art.
 // Five framings (`variant`). Three are self-framing squares/showcases: a large
 // `hero`, a square `panel` for profile cards / popovers, and a small square
-// `thumb` for HUD rows and resident lists. Two are full-bleed fills for a
+// `thumb` for HUD rows and resident lists. Three are full-bleed fills for a
 // caller's own `position:relative` stage: `standing` (an unframed cutout over a
 // soft ambient glow, feet anchored to the stage floor — the desktop
-// Dreamcaller-select column) and `fullBleed` (an edge-to-edge cinematic cutout
-// over a tinted backdrop — the mobile carousel page). The art is the
+// Dreamcaller-select column), `cutout` (the unframed art alone, for scenes that
+// must remain completely untouched), and `fullBleed` (an edge-to-edge cinematic
+// cutout over a tinted backdrop — the mobile carousel page). The art is the
 // transparent full-body cutout standing on a tinted radial backdrop. The frame
 // (radius, border, backdrop, shadow) and the per-variant image crop ARE the
 // design system's; a caller supplies only the dreamcaller data, the variant,
@@ -64,6 +65,7 @@ export type DreamcallerPortraitVariant =
   | "panel"
   | "thumb"
   | "standing"
+  | "cutout"
   | "fullBleed";
 
 /** The self-framing variants: each renders its own square/showcase frame chrome
@@ -90,14 +92,15 @@ export interface DreamcallerPortraitProps {
   dreamcaller: DreamcallerVisual;
   /**
    * Framing: self-framing `hero` / `panel` / `thumb`, or the full-bleed stage
-   * fills `standing` (desktop column) and `fullBleed` (mobile carousel).
+   * fills `standing` (desktop column), `cutout` (art only), and `fullBleed`
+   * (mobile carousel).
    * Default `panel`.
    */
   variant?: DreamcallerPortraitVariant;
   /**
    * Fixed pixel width. Panel/thumb stay square, so this also sets their height.
    * A sized portrait never shrinks in a flex row. Omit to fill the container
-   * width. Ignored by `standing`/`fullBleed`, which fill the caller's stage.
+   * width. Ignored by `standing`/`cutout`/`fullBleed`, which fill the caller's stage.
    */
   size?: number;
   /** Semantic Dreamcaller profile represented by this portrait. Omit for decorative art. */
@@ -225,8 +228,7 @@ function DreamcallerPortraitSurface({
   const focusPercentX = Math.round(focus.x * 1000) / 10;
   const focusPercentY = Math.round(focus.y * 1000) / 10;
 
-  // The full-bleed stage fills — `standing` (desktop column) and `fullBleed`
-  // (mobile carousel) — return a BARE FRAGMENT (no `.tango` wrapper) so a
+  // The full-bleed stage fills return a BARE FRAGMENT (no `.tango` wrapper) so a
   // caller's `PortraitName`/`Motes` overlay siblings still stack in the same
   // `position:relative` stage. `size` is ignored: they fill the stage.
   if (variant === "standing") {
@@ -309,6 +311,47 @@ function DreamcallerPortraitSurface({
           }}
         />
       </>
+    );
+  }
+
+  if (variant === "cutout") {
+    if (broken) {
+      return (
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "grid",
+            placeItems: "center",
+            color: token("--text-primary"),
+            font: token("--t-display"),
+          }}
+        >
+          {dreamcaller.name.charAt(0)}
+        </div>
+      );
+    }
+    return (
+      <img
+        src={dreamcallerCutoutSrc(dreamcaller.imageNumber)}
+        alt={alt}
+        draggable={false}
+        fetchPriority="high"
+        loading="eager"
+        decoding="async"
+        onError={() => {
+          setBroken(true);
+        }}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
+          objectPosition: "50% 100%",
+          userSelect: "none",
+        }}
+      />
     );
   }
 

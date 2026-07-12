@@ -51,6 +51,22 @@ vi.mock("../battle/components/BattleStartScreen", () => ({
   ),
 }));
 
+vi.mock("../screens/tango_adapters/BattleStartScreenAdapter", () => ({
+  BattleStartScreenAdapter: ({
+    init,
+    onBegin,
+  }: {
+    init: { battleId: string };
+    onBegin: () => void;
+  }) => (
+    <div data-screen="tango-battle-start" data-battle-id={init.battleId}>
+      <button type="button" data-tango-begin="" onClick={onBegin}>
+        Begin Battle
+      </button>
+    </div>
+  ),
+}));
+
 vi.mock("../battle/components/PlayableBattleScreen", async () => {
   const { useGameState } = await import("../coop/hooks");
   return {
@@ -225,6 +241,32 @@ describe("createBattleEntryKey", () => {
 });
 
 describe("BattleSiteRoute", () => {
+  it("serves the Tango Battle Start preview for the default UI variant", () => {
+    mockGameState = makeFoldStateWithBattle();
+    const { container } = mount(
+      <BattleSiteRoute
+        site={makeSite()}
+        cardDatabase={makeBattleTestCardDatabase()}
+        runtimeConfig={{
+          seedOverride: null,
+          aiMode: false,
+          basicAutomation: false,
+          gameId: null,
+          databaseMode: "emulator",
+          journeyVariant: "classic",
+          uiVariant: "tango",
+        }}
+      />,
+    );
+
+    expect(container.querySelector('[data-screen="tango-battle-start"]')).not.toBeNull();
+    expect(container.querySelector('[data-screen="battle-start"]')).toBeNull();
+    act(() => {
+      container.querySelector<HTMLButtonElement>("[data-tango-begin]")?.click();
+    });
+    expect(container.querySelector('[data-screen="playable"]')).not.toBeNull();
+  });
+
   it("renders a loading placeholder and appends BEGIN_BATTLE while battle is null", () => {
     const { container } = mount(
       <BattleSiteRoute

@@ -117,7 +117,6 @@ export const BASELINE = [
   // weight + size + face for a voice UI code applies by role.
   "--t-button",
   "--t-button-sm",
-  "--t-display",
   "--t-numeral",
   "--t-popover-body",
   "--t-popover-epithet",

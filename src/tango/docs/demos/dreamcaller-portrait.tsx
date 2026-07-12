@@ -74,7 +74,7 @@ function Stage({
 }
 
 /**
- * Renders all five DreamcallerPortrait framings against one real dreamcaller:
+ * Renders all six DreamcallerPortrait framings against one real dreamcaller:
  * the self-framing `hero` / `panel` / `thumb`, and the two full-bleed stage
  * fills `standing` / `fullBleed` each mounted in a `position: relative` stage.
  */
@@ -106,6 +106,11 @@ function DreamcallerPortraitDemo(args: Record<string, unknown>) {
           <DreamcallerPortrait dreamcaller={dreamcaller} variant="standing" />
         </Stage>
       </Cell>
+      <Cell label="cutout">
+        <Stage width={150} height={230}>
+          <DreamcallerPortrait dreamcaller={dreamcaller} variant="cutout" />
+        </Stage>
+      </Cell>
       <Cell label="fullBleed">
         <Stage width={150} height={230}>
           <DreamcallerPortrait dreamcaller={dreamcaller} variant="fullBleed" />
@@ -119,9 +124,9 @@ export const dreamcallerPortraitDemo: TangoComponent = {
   id: "dreamcaller-portrait",
   title: "Dreamcaller Portrait",
   blurb:
-    "The one way to render a dreamcaller's character art: the transparent full-body cutout standing on a tinted radial backdrop, in one of five fixed framings. Three are self-framing — a large `hero` showcase, a square `panel` for profile cards and popovers, and a small square `thumb` for HUD rows and resident lists. Two are full-bleed fills that paint edge to edge over a caller's own stage — `standing` for the desktop Dreamcaller-select column and `fullBleed` for the mobile carousel page. The frame chrome and the per-variant crop belong to the design system; a caller supplies only the dreamcaller data, the variant, and an optional pixel `size`. When the art asset 404s the portrait falls back to a tinted monogram disc so a missing image never leaves an empty hole.",
+    "The one way to render a dreamcaller's character art: the transparent full-body cutout in one of six fixed framings. Three are self-framing — a large `hero` showcase, a square `panel` for profile cards and popovers, and a small square `thumb` for HUD rows and resident lists. Three fill a caller's own stage — `standing` adds the desktop Dreamcaller-select glow, `cutout` leaves the scene beneath it untouched, and `fullBleed` creates the mobile carousel showcase. The frame chrome and the per-variant crop belong to the design system; a caller supplies only the dreamcaller data, the variant, and an optional pixel `size`. When the art asset 404s the portrait falls back to a monogram so a missing image never leaves an empty hole.",
   callout:
-    "There is no style or className escape hatch. To size the portrait pass a fixed pixel `size` — a sized portrait then refuses to shrink in a flex row — or omit `size` to fill the container width. The `standing` and `fullBleed` variants ignore `size` and fill the caller's `position: relative` stage. For any other layout (margins, a decorative glow), wrap the portrait in your own element.",
+    "There is no style or className escape hatch. To size the portrait pass a fixed pixel `size` — a sized portrait then refuses to shrink in a flex row — or omit `size` to fill the container width. The `standing`, `cutout`, and `fullBleed` variants ignore `size` and fill the caller's `position: relative` stage. Choose `cutout` when scene art must remain visually unchanged. For any other layout, wrap the portrait in your own element.",
   group: "Components",
   docName: "DreamcallerPortrait",
   Component: DreamcallerPortraitDemo,
@@ -153,7 +158,7 @@ export const dreamcallerPortraitDemo: TangoComponent = {
     },
     {
       label: "Full-bleed stage fill",
-      note: "`standing` (desktop column) and `fullBleed` (mobile carousel) paint edge to edge over the caller's own relative-positioned stage; they ignore `size`.",
+      note: "`standing`, `cutout`, and `fullBleed` paint edge to edge over the caller's own relative-positioned stage; `cutout` adds no backdrop treatment.",
       code: `<div style={{ position: "relative", width: 320, height: 480 }}>
   <DreamcallerPortrait dreamcaller={dreamcaller} variant="standing" />
 </div>`,

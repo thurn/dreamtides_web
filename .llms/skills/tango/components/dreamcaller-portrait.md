@@ -6,19 +6,19 @@
 
 Components · Live demo & interactive props: `/tango#/dreamcaller-portrait`
 
-Real consumers: **21** (imports outside `src/tango/docs/` and tests).
+Real consumers: **22** (imports outside `src/tango/docs/` and tests).
 
-The one way to render a dreamcaller's character art: the transparent full-body cutout standing on a tinted radial backdrop, in one of five fixed framings. Three are self-framing — a large `hero` showcase, a square `panel` for profile cards and popovers, and a small square `thumb` for HUD rows and resident lists. Two are full-bleed fills that paint edge to edge over a caller's own stage — `standing` for the desktop Dreamcaller-select column and `fullBleed` for the mobile carousel page. The frame chrome and the per-variant crop belong to the design system; a caller supplies only the dreamcaller data, the variant, and an optional pixel `size`. When the art asset 404s the portrait falls back to a tinted monogram disc so a missing image never leaves an empty hole.
+The one way to render a dreamcaller's character art: the transparent full-body cutout in one of six fixed framings. Three are self-framing — a large `hero` showcase, a square `panel` for profile cards and popovers, and a small square `thumb` for HUD rows and resident lists. Three fill a caller's own stage — `standing` adds the desktop Dreamcaller-select glow, `cutout` leaves the scene beneath it untouched, and `fullBleed` creates the mobile carousel showcase. The frame chrome and the per-variant crop belong to the design system; a caller supplies only the dreamcaller data, the variant, and an optional pixel `size`. When the art asset 404s the portrait falls back to a monogram so a missing image never leaves an empty hole.
 
-> **Guidance:** There is no style or className escape hatch. To size the portrait pass a fixed pixel `size` — a sized portrait then refuses to shrink in a flex row — or omit `size` to fill the container width. The `standing` and `fullBleed` variants ignore `size` and fill the caller's `position: relative` stage. For any other layout (margins, a decorative glow), wrap the portrait in your own element.
+> **Guidance:** There is no style or className escape hatch. To size the portrait pass a fixed pixel `size` — a sized portrait then refuses to shrink in a flex row — or omit `size` to fill the container width. The `standing`, `cutout`, and `fullBleed` variants ignore `size` and fill the caller's `position: relative` stage. Choose `cutout` when scene art must remain visually unchanged. For any other layout, wrap the portrait in your own element.
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `dreamcaller` | `DreamcallerVisual` | yes | — | The dreamcaller whose art and identity the portrait shows. |
-| `variant` | `DreamcallerPortraitVariant` = `"fullBleed" \| "hero" \| "panel" \| "thumb" \| "standing"` | no | — | Framing: self-framing `hero` / `panel` / `thumb`, or the full-bleed stage fills `standing` (desktop column) and `fullBleed` (mobile carousel). Default `panel`. |
-| `size` | `number` | no | — | Fixed pixel width. Panel/thumb stay square, so this also sets their height. A sized portrait never shrinks in a flex row. Omit to fill the container width. Ignored by `standing`/`fullBleed`, which fill the caller's stage. |
+| `variant` | `DreamcallerPortraitVariant` = `"fullBleed" \| "hero" \| "panel" \| "thumb" \| "standing" \| "cutout"` | no | — | Framing: self-framing `hero` / `panel` / `thumb`, or the full-bleed stage fills `standing` (desktop column), `cutout` (art only), and `fullBleed` (mobile carousel). Default `panel`. |
+| `size` | `number` | no | — | Fixed pixel width. Panel/thumb stay square, so this also sets their height. A sized portrait never shrinks in a flex row. Omit to fill the container width. Ignored by `standing`/`cutout`/`fullBleed`, which fill the caller's stage. |
 | `profile` | `{ id: string; ability: string; }` | no | — | Semantic Dreamcaller profile represented by this portrait. Omit for decorative art. |
 | `onActivate` | `(() => void)` | no | — | Optional activation for selectable profile portraits. |
 | `unavailable` | `boolean` | no | `false` | Keeps the profile readable while suppressing activation. |
@@ -70,7 +70,7 @@ The small square framing for HUD rows and resident lists.
 
 ### Full-bleed stage fill
 
-`standing` (desktop column) and `fullBleed` (mobile carousel) paint edge to edge over the caller's own relative-positioned stage; they ignore `size`.
+`standing`, `cutout`, and `fullBleed` paint edge to edge over the caller's own relative-positioned stage; `cutout` adds no backdrop treatment.
 
 ```tsx
 <div style={{ position: "relative", width: 320, height: 480 }}>

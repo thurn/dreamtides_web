@@ -6,6 +6,7 @@ import { useGameState, useActions } from "../coop/hooks";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { PlayableBattleScreen } from "../battle/components/PlayableBattleScreen";
 import { BattleStartScreen } from "../battle/components/BattleStartScreen";
+import { BattleStartScreenAdapter } from "../screens/tango_adapters/BattleStartScreenAdapter";
 
 export function createBattleEntryKey(
   dreamscapeId: string | null,
@@ -92,6 +93,17 @@ export function BattleSiteRoute({
   // the player clicks "Begin Battle", the playable surface mounts against the
   // same fold state.
   if (begunEntryKey !== battleEntryKey) {
+    if (runtimeConfig.uiVariant === "tango") {
+      return (
+        <BattleStartScreenAdapter
+          init={battle.init}
+          cardDatabase={cardDatabase}
+          onBegin={() => {
+            setBegunEntryKey(battleEntryKey);
+          }}
+        />
+      );
+    }
     return (
       <BattleStartScreen
         init={battle.init}
