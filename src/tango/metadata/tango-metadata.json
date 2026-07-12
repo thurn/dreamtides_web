@@ -1717,7 +1717,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "false",
-      "description": "Detaches the click / press feedback and marks the button `aria-disabled`."
+      "description": "Dims the control, detaches click / press feedback, and marks it `aria-disabled`."
     },
     {
       "name": "testId",

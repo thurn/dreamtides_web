@@ -245,6 +245,7 @@ describe("TransfigurationSiteScreen", () => {
     expect(commit?.textContent).toBe("Transfigure");
     expect(commit?.textContent).not.toContain("Card");
     expect(commit?.getAttribute("aria-disabled")).toBe("true");
+    expect(commit?.style.opacity).toBe("0.5");
     expect(container.querySelector('[role="radio"][aria-checked="true"]')).toBeNull();
 
     const empowered = container.querySelector<HTMLButtonElement>(
@@ -255,6 +256,7 @@ describe("TransfigurationSiteScreen", () => {
     act(() => empowered?.click());
     expect(empowered?.getAttribute("aria-checked")).toBe("true");
     expect(commit?.getAttribute("aria-disabled")).toBeNull();
+    expect(commit?.style.opacity).toBe("1");
     expect(commit?.textContent).toBe("Transfigure·40");
     act(() => commit?.click());
     expect(onTransfigure).toHaveBeenCalledWith(

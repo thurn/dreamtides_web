@@ -342,7 +342,7 @@ describe("GlassButton", () => {
     });
   });
 
-  it('while disabled sets aria-disabled="true" and does not fire onPress', () => {
+  it('while disabled dims, sets aria-disabled="true", and does not fire onPress', () => {
     const onPress = vi.fn();
     const { container, root } = mount(
       <GlassButton label="Apply" onPress={onPress} disabled />,
@@ -350,11 +350,18 @@ describe("GlassButton", () => {
 
     const button = container.querySelector("button");
     expect(button?.getAttribute("aria-disabled")).toBe("true");
+    expect(button?.getAttribute("style")).toContain("opacity: 0.5");
 
     act(() => {
       button?.click();
     });
     expect(onPress).not.toHaveBeenCalled();
+
+    act(() => {
+      root.render(<GlassButton label="Apply" onPress={onPress} />);
+    });
+    expect(button?.getAttribute("aria-disabled")).toBeNull();
+    expect(button?.getAttribute("style")).toContain("opacity: 1");
 
     act(() => {
       root.unmount();

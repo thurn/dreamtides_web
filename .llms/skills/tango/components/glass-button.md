@@ -24,7 +24,7 @@ The labeled glass action — a text label in the control typography on the share
 | `widthReservations` | `readonly GlassButtonWidthReservation[]` | no | `[]` | Possible dynamic label/cost states. The button reserves the widest state while rendering only the current one, preventing surrounding layout shift. |
 | `variant` | `GlassButtonVariant` = `"default" \| "danger" \| "accent"` | no | `default` | Strict neutral, danger, or purple accent glass surface treatment. |
 | `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the control. `onMedia` uses the full liquid-glass recipe; `onGlass` uses a lighter tonal lens so an existing glass tint is not compounded. Defaults to `onMedia`. |
-| `disabled` | `boolean` | no | `false` | Detaches the click / press feedback and marks the button `aria-disabled`. |
+| `disabled` | `boolean` | no | `false` | Dims the control, detaches click / press feedback, and marks it `aria-disabled`. |
 | `testId` | `string` | no | — | A `data-testid` for selecting the button in tests. |
 
 ## Usage
@@ -63,6 +63,19 @@ Use `placement="onGlass"` when the control rests inside a glass panel. Its light
   label="Decline"
   placement="onGlass"
   onPress={decline}
+/>
+```
+
+### Disabled
+
+A disabled GlassButton dims the complete control and detaches activation and press feedback.
+
+```tsx
+<GlassButton
+  label="Transfigure"
+  variant="accent"
+  disabled
+  onPress={transfigure}
 />
 ```
 

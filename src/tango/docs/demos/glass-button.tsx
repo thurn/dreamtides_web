@@ -86,6 +86,16 @@ import { GLYPHS } from "src/tango/primitives/glyph";
 />`,
     },
     {
+      label: "Disabled",
+      note: "A disabled GlassButton dims the complete control and detaches activation and press feedback.",
+      code: `<GlassButton
+  label="Transfigure"
+  variant="accent"
+  disabled
+  onPress={transfigure}
+/>`,
+    },
+    {
       label: "Danger variant",
       note: 'Use `variant="danger"` for destructive actions. It applies the accent soft-wash recipe in red while preserving the same translucent glass layers.',
       code: `import { GlassButton } from "src/tango/components/controls/GlassButton";

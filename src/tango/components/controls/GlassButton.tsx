@@ -14,8 +14,8 @@
 // text `label` (a resolved string, never caller markup) sits in the control
 // font; an optional leading `glyph` paints a `GlowIcon` before it. Press/hover
 // feedback routes through the one shared `Pressable` primitive (scale-down on
-// press, up on hover); `disabled` marks it `aria-disabled` and detaches its
-// click and press feedback.
+// press, up on hover); `disabled` dims the full control, marks it
+// `aria-disabled`, and detaches its click and press feedback.
 
 import type { ReactElement } from "react";
 import { GlowIcon } from "./GlowIcon";
@@ -105,7 +105,7 @@ export interface GlassButtonProps {
    * compounded. Defaults to `onMedia`.
    */
   placement?: GlassControlPlacement;
-  /** Detaches the click / press feedback and marks the button `aria-disabled`. */
+  /** Dims the control, detaches click / press feedback, and marks it `aria-disabled`. */
   disabled?: boolean;
   /** A `data-testid` for selecting the button in tests. */
   testId?: string;
@@ -114,8 +114,8 @@ export interface GlassButtonProps {
 /**
  * GlassButton — a `controlChrome().trigger` glass surface carrying a text
  * `label` in the control body typography, with an optional leading `glyph`.
- * Shared `Pressable` press/hover feedback; `disabled` detaches its click and
- * press feedback and marks it `aria-disabled`.
+ * Shared `Pressable` press/hover feedback; `disabled` dims the complete glass
+ * control, detaches its interaction, and marks it `aria-disabled`.
  */
 export function GlassButton({
   label,
@@ -151,6 +151,7 @@ export function GlassButton({
         whiteSpace: "nowrap",
         ...chrome.trigger,
         ...variantChrome,
+        opacity: disabled ? 0.5 : 1,
       }}
     >
       {glyph !== undefined && (
