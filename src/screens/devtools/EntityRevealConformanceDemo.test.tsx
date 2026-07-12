@@ -48,6 +48,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  vi.useRealTimers();
   vi.restoreAllMocks();
   document.body.innerHTML = "";
   document.documentElement.removeAttribute("style");
@@ -135,6 +136,7 @@ describe("EntityRevealConformanceDemo", () => {
   });
 
   it("logs exact mobile touch clearance and a real fired activation once", async () => {
+    vi.useFakeTimers();
     Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 390, height: 844, offsetLeft: 3, offsetTop: 5 } });
     for (const [name, value] of [["--safe-area-inset-top", "52px"], ["--safe-area-inset-right", "6px"], ["--safe-area-inset-bottom", "7px"], ["--safe-area-inset-left", "8px"]] as const) document.documentElement.style.setProperty(name, value);
     const baseline = getLogEntries().length;
@@ -145,7 +147,7 @@ describe("EntityRevealConformanceDemo", () => {
     source.getBoundingClientRect = () => DOMRect.fromRect({ x: 80, y: 50, width: 120, height: 168 });
     const point = { x: 195, y: 100 };
     void act(() => source.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, pointerType: "touch", pointerId: 9, clientX: point.x, clientY: point.y })));
-    await act(async () => { await new Promise((resolve) => setTimeout(resolve, 40)); });
+    await act(async () => { await vi.advanceTimersByTimeAsync(40); });
     act(() => resizeCallbacks.forEach((callback) => callback([], {} as ResizeObserver)));
     await vi.waitFor(() => expect(document.querySelector("[data-tango-reveal-card=primary]")).not.toBeNull());
     const opened = getLogEntries().slice(baseline).find((entry) => entry.event === "tango_entity_reveal_opened") as unknown as OpenLog;
