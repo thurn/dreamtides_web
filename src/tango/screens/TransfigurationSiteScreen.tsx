@@ -5,7 +5,10 @@ import { useCallback, useState } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
-import { GlassButton } from "../components/controls/GlassButton";
+import {
+  GlassButton,
+  type AccentGlassButtonVariant,
+} from "../components/controls/GlassButton";
 import { GlowIcon } from "../components/controls/GlowIcon";
 import { groupPanelStyle } from "../components/controls/GroupPanel";
 import { EssenceValue } from "../components/hud/EssenceValue";
@@ -15,6 +18,8 @@ import { GLYPHS, type Glyph } from "../primitives/glyph";
 import { Pressable } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
 import type { TransfigurationType } from "../../types/quest";
+import { AccentGlassButtonTweaks } from "./devtools/AccentGlassButtonTweaks";
+import { useIsDesktop } from "./use-is-desktop";
 import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
@@ -100,6 +105,7 @@ export function TransfigurationSiteScreen({
   onClose,
   onTransfigure,
 }: TransfigurationSiteScreenProps) {
+  const isDesktop = useIsDesktop();
   const reduceMotion =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -108,6 +114,8 @@ export function TransfigurationSiteScreen({
     useState<TransfigurationType | null>(null);
   const [travel, setTravel] = useState<CardTravel | null>(null);
   const [confirming, setConfirming] = useState(false);
+  const [accentVariant, setAccentVariant] =
+    useState<AccentGlassButtonVariant>("accent-depth");
   const picked =
     view.candidates.find((candidate) => candidate.entryId === pickedEntryId) ??
     null;
@@ -170,15 +178,16 @@ export function TransfigurationSiteScreen({
   }, [confirming]);
 
   return (
-    <GuideGallerySiteLayout
-      siteId={view.siteId}
-      scene={view.scene}
-      guide={view.guide}
-      screenTestId="tango-transfiguration-site-screen"
-      guideArtTestId="tango-transfiguration-guide-art"
-      speechAnchorTestId="tango-transfiguration-speech-anchor"
-      speechBubbleTestId="tango-transfiguration-speech-bubble"
-      renderGallery={(layout) => (
+    <>
+      <GuideGallerySiteLayout
+        siteId={view.siteId}
+        scene={view.scene}
+        guide={view.guide}
+        screenTestId="tango-transfiguration-site-screen"
+        guideArtTestId="tango-transfiguration-guide-art"
+        speechAnchorTestId="tango-transfiguration-speech-anchor"
+        speechBubbleTestId="tango-transfiguration-speech-bubble"
+        renderGallery={(layout) => (
         <section
           data-transfiguration-workspace=""
           data-transfiguration-layout={layout}
@@ -203,6 +212,7 @@ export function TransfigurationSiteScreen({
               selectedFormType={selectedFormType}
               confirming={confirming}
               alreadyAccepted={view.alreadyAccepted}
+              accentVariant={accentVariant}
               onBack={goBack}
               onSelectForm={setSelectedFormType}
               onConfirm={(form) => {
@@ -232,6 +242,7 @@ export function TransfigurationSiteScreen({
                 selectedFormType={fallbackCandidate.forms[0]?.type ?? null}
                 confirming={false}
                 alreadyAccepted={false}
+                accentVariant={accentVariant}
                 onBack={() => undefined}
                 onSelectForm={() => undefined}
                 onConfirm={() => undefined}
@@ -268,8 +279,15 @@ export function TransfigurationSiteScreen({
             </motion.div>
           )}
         </section>
+        )}
+      />
+      {import.meta.env.DEV && isDesktop && (
+        <AccentGlassButtonTweaks
+          value={accentVariant}
+          onChange={setAccentVariant}
+        />
       )}
-    />
+    </>
   );
 }
 
@@ -313,6 +331,7 @@ function DetailPanel({
   selectedFormType,
   confirming,
   alreadyAccepted,
+  accentVariant,
   onBack,
   onSelectForm,
   onConfirm,
@@ -321,6 +340,7 @@ function DetailPanel({
   readonly selectedFormType: TransfigurationType | null;
   readonly confirming: boolean;
   readonly alreadyAccepted: boolean;
+  readonly accentVariant: AccentGlassButtonVariant;
   readonly onBack: () => void;
   readonly onSelectForm: (type: TransfigurationType) => void;
   readonly onConfirm: (form: TransfigurationFormView) => void;
@@ -500,6 +520,7 @@ function DetailPanel({
         />
         <GlassButton
           placement="onGlass"
+          variant={accentVariant}
           label={confirming ? "Reforging…" : "Transfigure ·"}
           cost={activeForm?.essenceCost ?? null}
           disabled={disabled}

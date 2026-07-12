@@ -1,5 +1,4 @@
-// GlassButton — the labeled glass secondary action, rung 2 of Tango's button
-// suite.
+// GlassButton — the labeled action on Tango's shared glass material.
 //
 // The suite is four rungs of decreasing weight: the beveled purple Button (the
 // one commit / primary action), THIS labeled glass control (a secondary chrome
@@ -10,7 +9,8 @@
 // the SAME liquid glass as the SegmentedControl / Select trigger — at the md
 // control height (42px) and the control body typography (`--t-body`), so a
 // labeled secondary action reads as one family with the filter/sort controls it
-// sits beside, and stays quietly below the purple commit Button it defers to. A
+// sits beside. Neutral glass serves secondary actions; strict purple accent
+// recipes let a primary action retain the same material language. A
 // text `label` (a resolved string, never caller markup) sits in the control
 // font; an optional leading `glyph` paints a `GlowIcon` before it. Press/hover
 // feedback routes through the one shared `Pressable` primitive (scale-down on
@@ -29,8 +29,23 @@ import { controlChrome } from "../../internal/control-treatment";
 /** The md control height (px) — matches the Select / SegmentedControl cluster. */
 const GLASS_BUTTON_HEIGHT = 42;
 
+/** Purple primary-action recipes available while the accent glass is tuned. */
+export const ACCENT_GLASS_BUTTON_VARIANTS = [
+  "accent-rim",
+  "accent-wash",
+  "accent-glow",
+  "accent-depth",
+  "accent-danger",
+] as const;
+
+export type AccentGlassButtonVariant =
+  (typeof ACCENT_GLASS_BUTTON_VARIANTS)[number];
+
 /** Visual treatment for the glass button surface. */
-export type GlassButtonVariant = "default" | "danger";
+export type GlassButtonVariant =
+  | "default"
+  | "danger"
+  | AccentGlassButtonVariant;
 
 /** One possible label/cost state whose intrinsic width the button reserves. */
 export interface GlassButtonWidthReservation {
@@ -66,6 +81,78 @@ const dangerChromeOnGlass: React.CSSProperties = {
     "inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -12px 24px rgba(150, 12, 35, 0.08), 0 0 0 1px rgba(244, 43, 72, 0.16), 0 10px 28px rgba(244, 43, 72, 0.28)",
 };
 
+interface PlacementChrome {
+  readonly onMedia: React.CSSProperties;
+  readonly onGlass: React.CSSProperties;
+}
+
+const ACCENT_CHROME: Readonly<
+  Record<AccentGlassButtonVariant, PlacementChrome>
+> = {
+  "accent-rim": {
+    onMedia: {
+      background: "linear-gradient(180deg, color-mix(in srgb, var(--accent) 6%, transparent), transparent), var(--glass-sheen), var(--glass-fill)",
+      border: "1px solid color-mix(in srgb, var(--accent-bright) 78%, white 22%)",
+      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.26), 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent), 0 8px 22px color-mix(in srgb, var(--accent) 18%, transparent)",
+    },
+    onGlass: {
+      background: "linear-gradient(180deg, color-mix(in srgb, var(--accent) 7%, transparent), transparent), var(--glass-on-glass-sheen), var(--glass-on-glass-fill)",
+      border: "1px solid color-mix(in srgb, var(--accent-bright) 72%, white 28%)",
+      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.3), 0 0 0 1px color-mix(in srgb, var(--accent) 18%, transparent), 0 8px 20px color-mix(in srgb, var(--accent) 16%, transparent)",
+    },
+  },
+  "accent-wash": {
+    onMedia: {
+      background: "linear-gradient(180deg, color-mix(in srgb, var(--accent-bright) 20%, transparent), color-mix(in srgb, var(--accent-strong) 10%, transparent)), var(--glass-sheen), var(--glass-fill)",
+      border: "1px solid color-mix(in srgb, var(--accent-bright) 62%, white 38%)",
+      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -12px 26px color-mix(in srgb, var(--accent-strong) 12%, transparent), 0 10px 26px color-mix(in srgb, var(--accent) 26%, transparent)",
+    },
+    onGlass: {
+      background: "linear-gradient(180deg, color-mix(in srgb, var(--accent-bright) 18%, transparent), color-mix(in srgb, var(--accent-strong) 8%, transparent)), var(--glass-on-glass-sheen), var(--glass-on-glass-fill)",
+      border: "1px solid color-mix(in srgb, var(--accent-bright) 58%, white 42%)",
+      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.32), inset 0 -10px 22px color-mix(in srgb, var(--accent-strong) 10%, transparent), 0 8px 22px color-mix(in srgb, var(--accent) 22%, transparent)",
+    },
+  },
+  "accent-glow": {
+    onMedia: {
+      background: "linear-gradient(180deg, color-mix(in srgb, var(--accent-bright) 10%, transparent), color-mix(in srgb, var(--accent-strong) 5%, transparent)), var(--glass-sheen), var(--glass-fill)",
+      border: "1px solid color-mix(in srgb, var(--accent-bright) 88%, white 12%)",
+      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.3), 0 0 0 1px color-mix(in srgb, var(--accent) 32%, transparent), 0 0 22px color-mix(in srgb, var(--accent-bright) 46%, transparent), 0 16px 42px color-mix(in srgb, var(--accent-strong) 38%, transparent)",
+    },
+    onGlass: {
+      background: "linear-gradient(180deg, color-mix(in srgb, var(--accent-bright) 10%, transparent), color-mix(in srgb, var(--accent-strong) 4%, transparent)), var(--glass-on-glass-sheen), var(--glass-on-glass-fill)",
+      border: "1px solid color-mix(in srgb, var(--accent-bright) 84%, white 16%)",
+      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.32), 0 0 0 1px color-mix(in srgb, var(--accent) 28%, transparent), 0 0 18px color-mix(in srgb, var(--accent-bright) 40%, transparent), 0 12px 34px color-mix(in srgb, var(--accent-strong) 32%, transparent)",
+    },
+  },
+  "accent-depth": {
+    onMedia: {
+      background: "linear-gradient(180deg, color-mix(in srgb, var(--accent-bright) 28%, transparent), color-mix(in srgb, var(--accent-strong) 22%, transparent)), var(--glass-sheen), var(--glass-fill)",
+      border: "1px solid color-mix(in srgb, var(--accent-bright) 74%, white 26%)",
+      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.34), inset 0 -16px 30px color-mix(in srgb, var(--accent-strong) 30%, transparent), 0 0 0 1px color-mix(in srgb, var(--accent) 24%, transparent), 0 14px 34px color-mix(in srgb, var(--accent-strong) 34%, transparent)",
+    },
+    onGlass: {
+      background: "linear-gradient(180deg, color-mix(in srgb, var(--accent-bright) 24%, transparent), color-mix(in srgb, var(--accent-strong) 18%, transparent)), var(--glass-on-glass-sheen), var(--glass-on-glass-fill)",
+      border: "1px solid color-mix(in srgb, var(--accent-bright) 70%, white 30%)",
+      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -14px 26px color-mix(in srgb, var(--accent-strong) 26%, transparent), 0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent), 0 11px 30px color-mix(in srgb, var(--accent-strong) 28%, transparent)",
+    },
+  },
+  "accent-danger": {
+    // The danger recipe translated from ember red to brand violet: the same
+    // wash/rim/glow hierarchy, with the shared glass layers kept intact.
+    onMedia: {
+      background: "linear-gradient(180deg, color-mix(in srgb, var(--accent-bright) 12%, transparent), color-mix(in srgb, var(--accent-strong) 10%, transparent)), var(--glass-sheen), var(--glass-fill)",
+      border: "1px solid color-mix(in srgb, var(--accent-bright) 82%, white 18%)",
+      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -14px 30px color-mix(in srgb, var(--accent-strong) 10%, transparent), 0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent), 0 14px 36px color-mix(in srgb, var(--accent) 44%, transparent)",
+    },
+    onGlass: {
+      background: "linear-gradient(180deg, color-mix(in srgb, var(--accent-bright) 13%, transparent), color-mix(in srgb, var(--accent-strong) 8%, transparent)), var(--glass-on-glass-sheen), var(--glass-on-glass-fill)",
+      border: "1px solid color-mix(in srgb, var(--accent-bright) 76%, white 24%)",
+      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -12px 24px color-mix(in srgb, var(--accent-strong) 8%, transparent), 0 0 0 1px color-mix(in srgb, var(--accent) 16%, transparent), 0 10px 28px color-mix(in srgb, var(--accent) 28%, transparent)",
+    },
+  },
+};
+
 export interface GlassButtonProps {
   /** The button's text — a resolved string shown in the control typography. */
   label: string;
@@ -80,7 +167,7 @@ export interface GlassButtonProps {
    * while rendering only the current one, preventing surrounding layout shift.
    */
   widthReservations?: readonly GlassButtonWidthReservation[];
-  /** Surface treatment: neutral glass (`default`) or red danger glass. */
+  /** Strict neutral, danger, or purple accent glass surface treatment. */
   variant?: GlassButtonVariant;
   /**
    * Surface beneath the control. `onMedia` uses the full liquid-glass recipe;
@@ -112,16 +199,12 @@ export function GlassButton({
   testId,
 }: GlassButtonProps): ReactElement {
   const chrome = controlChrome(placement);
-  const variantChrome =
-    variant === "danger"
-      ? placement === "onGlass"
-        ? dangerChromeOnGlass
-        : dangerChromeOnMedia
-      : {};
+  const variantChrome = resolveVariantChrome(variant, placement);
   return (
     <Pressable
       as="button"
       data-glass-placement={placement}
+      data-glass-variant={variant}
       data-testid={testId}
       disabled={disabled}
       onClick={disabled ? undefined : onPress}
@@ -133,7 +216,7 @@ export function GlassButton({
         padding: "0 14px",
         boxSizing: "border-box",
         font: token("--t-body"),
-        color: token("--text-primary"),
+        color: token("--text-on-glass"),
         whiteSpace: "nowrap",
         ...chrome.trigger,
         ...variantChrome,
@@ -176,6 +259,17 @@ export function GlassButton({
       </span>
     </Pressable>
   );
+}
+
+function resolveVariantChrome(
+  variant: GlassButtonVariant,
+  placement: GlassControlPlacement,
+): React.CSSProperties {
+  if (variant === "default") return {};
+  if (variant === "danger") {
+    return placement === "onGlass" ? dangerChromeOnGlass : dangerChromeOnMedia;
+  }
+  return ACCENT_CHROME[variant][placement];
 }
 
 function GlassButtonContent({

@@ -241,6 +241,7 @@ describe("TransfigurationSiteScreen", () => {
     const commit = container.querySelector<HTMLButtonElement>(
       '[data-testid="tango-transfiguration-confirm"]',
     );
+    expect(commit?.dataset.glassVariant).toBe("accent-depth");
     expect(commit?.textContent).toContain("Transfigure ·");
     expect(commit?.textContent).not.toContain("Card");
     act(() => commit?.click());
@@ -251,6 +252,47 @@ describe("TransfigurationSiteScreen", () => {
       { fixture: true },
       40,
     );
+
+    act(() => root.unmount());
+  });
+
+  it("offers five dev-only accented glass variants and applies the chosen recipe live", () => {
+    const { container, root } = mount(
+      <TransfigurationSiteScreen
+        view={view()}
+        onClose={vi.fn()}
+        onTransfigure={vi.fn()}
+      />,
+    );
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="tango-transfiguration-card-entry-1"]',
+        )
+        ?.click();
+    });
+
+    const tweaks = container.querySelector<HTMLElement>(
+      "[data-accent-glass-tweaks]",
+    );
+    expect(tweaks).not.toBeNull();
+    expect(
+      tweaks?.querySelectorAll('[data-testid^="accent-glass-tweak-"]'),
+    ).toHaveLength(5);
+
+    act(() => {
+      tweaks
+        ?.querySelector<HTMLButtonElement>(
+          '[data-testid="accent-glass-tweak-accent-glow"]',
+        )
+        ?.click();
+    });
+    expect(
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="tango-transfiguration-confirm"]',
+      )?.dataset.glassVariant,
+    ).toBe("accent-glow");
+    expect(tweaks?.textContent).toContain('"variant": "accent-glow"');
 
     act(() => root.unmount());
   });

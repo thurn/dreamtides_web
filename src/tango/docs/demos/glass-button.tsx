@@ -51,9 +51,9 @@ export const glassButtonDemo: TangoComponent = {
   id: "glass-button",
   title: "Glass Button",
   blurb:
-    "The labeled glass secondary action — a text label in the control typography on the shared liquid-glass control surface, with an optional leading glyph, a danger treatment, and placement-aware recipes for media or an existing glass surface.",
+    "The labeled glass action — a text label in the control typography on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface.",
   callout:
-    "Rung two of the four-rung button suite: the beveled purple Button (commit / primary), THIS labeled glass control (a secondary chrome action), the glyph-only glass IconButton (a corner chrome action), and a bare pressable glyph (the lightest inline affordance). It stays quietly below the purple commit Button it defers to.",
+    "Use neutral glass for secondary actions and an accent-glass treatment for a primary action that must remain materially related to its neutral sibling. The five purple recipes are exposed together on the development transfiguration screen while the final treatment is selected.",
   group: "Components",
   docName: "GlassButton",
   Component: GlassButtonDemo,
@@ -95,6 +95,16 @@ import { GLYPHS } from "src/tango/primitives/glyph";
   label="Purge 1"
   variant="danger"
   onPress={purgeCard}
+/>`,
+    },
+    {
+      label: "Purple accent candidates",
+      note: "The named accent variants preserve the same translucent glass layers while changing the violet wash, rim, inset depth, and outer glow. `accent-danger` translates the established danger recipe into purple.",
+      code: `<GlassButton
+  label="Transfigure"
+  variant="accent-depth"
+  placement="onGlass"
+  onPress={transfigure}
 />`,
     },
     {

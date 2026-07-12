@@ -5,6 +5,7 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GlassButton } from "./GlassButton";
+import { ACCENT_GLASS_BUTTON_VARIANTS } from "./GlassButton";
 import { GLYPHS } from "../../primitives/glyph";
 
 function mount(element: ReactElement): {
@@ -190,6 +191,39 @@ describe("GlassButton", () => {
     act(() => {
       root.unmount();
     });
+  });
+
+  it("renders five named purple accent treatments without dropping the glass blur", () => {
+    expect(ACCENT_GLASS_BUTTON_VARIANTS).toHaveLength(5);
+
+    for (const variant of ACCENT_GLASS_BUTTON_VARIANTS) {
+      const { container, root } = mount(
+        <GlassButton label="Transfigure" variant={variant} onPress={() => {}} />,
+      );
+      const button = container.querySelector<HTMLButtonElement>("button");
+      expect(button?.dataset.glassVariant).toBe(variant);
+      expect(button?.style.backdropFilter).toContain("--glass-blur");
+      expect(button?.getAttribute("style")).toContain("--accent");
+      act(() => root.unmount());
+    }
+  });
+
+  it("bases the danger-inspired purple treatment on the danger layer structure", () => {
+    const { container, root } = mount(
+      <GlassButton
+        label="Transfigure"
+        variant="accent-danger"
+        placement="onGlass"
+        onPress={() => {}}
+      />,
+    );
+    const button = container.querySelector<HTMLButtonElement>("button");
+    expect(button?.style.background).toContain("linear-gradient(180deg");
+    expect(button?.style.background).toContain("--glass-on-glass-sheen");
+    expect(button?.style.background).toContain("--glass-on-glass-fill");
+    expect(button?.style.boxShadow).toContain("inset");
+    expect(button?.style.boxShadow).toContain("--accent");
+    act(() => root.unmount());
   });
 
   it("restores the neutral glass border after leaving the danger state", () => {

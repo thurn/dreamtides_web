@@ -1683,11 +1683,16 @@
       "tsType": "GlassButtonVariant",
       "unionMembers": [
         "default",
-        "danger"
+        "danger",
+        "accent-rim",
+        "accent-wash",
+        "accent-glow",
+        "accent-depth",
+        "accent-danger"
       ],
       "required": false,
       "defaultValue": "default",
-      "description": "Surface treatment: neutral glass (`default`) or red danger glass."
+      "description": "Strict neutral, danger, or purple accent glass surface treatment."
     },
     {
       "name": "placement",
