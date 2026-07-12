@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using TangoMvp.Demo;
 using TangoMvp.Materials;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -28,6 +29,8 @@ namespace TangoMvp.Editor
             "Assets/TangoMvp/Materials/TangoShopBackdrop.mat";
         public const string CapturePath =
             "Artifacts/TangoShopGlassDemo/shop-glass-demo.png";
+        public const string ShadowCapturePath =
+            "Artifacts/TangoShopGlassDemo/shop-glass-demo-shadow.png";
 
         private const string PanelMeshPath = "Assets/TangoMvp/Meshes/TangoPanel.asset";
         private const string MaterialLibraryPath =
@@ -35,6 +38,7 @@ namespace TangoMvp.Editor
         private const float CameraHalfHeight = 5f;
         private const float ReferenceAspect = 16f / 9f;
         private const float PanelSide = 4.6f;
+        private const float BackdropDepth = 4f;
 
         [MenuItem("Tango MVP/Rebuild Shop Glass Demo")]
         public static void Rebuild()
@@ -61,7 +65,11 @@ namespace TangoMvp.Editor
             ReconcileCamera(scene);
             ReconcileDirectionalLight(scene);
             ReconcileBackdrop(scene, backdropTexture, backdropMaterial);
-            ReconcileGlassPanel(scene, panelMesh, library.Resolve(TangoMaterialRole.SceneGlass));
+            ReconcileGlassPanel(
+                scene,
+                panelMesh,
+                library.Resolve(TangoMaterialRole.SceneGlass),
+                library.Resolve(TangoMaterialRole.SolidChrome));
             ConfigureEnvironment();
 
             EditorSceneManager.SaveScene(scene, ScenePath);
@@ -78,6 +86,34 @@ namespace TangoMvp.Editor
                 .Single(root => root.name == "Main Camera")
                 .GetComponent<Camera>();
 
+            Capture(camera, CapturePath);
+        }
+
+        /// <summary>Batch entry point that captures the demo with panel shadow casting enabled.</summary>
+        public static void CaptureShadowBatch()
+        {
+            Rebuild();
+            Scene scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+            Camera camera = scene.GetRootGameObjects()
+                .Single(root => root.name == "Main Camera")
+                .GetComponent<Camera>();
+            TangoPanelShadowToggle toggle = scene.GetRootGameObjects()
+                .Single(root => root.name == "Tango Glass Panel")
+                .GetComponent<TangoPanelShadowToggle>();
+            bool originalValue = toggle.CastShadow;
+            try
+            {
+                toggle.CastShadow = true;
+                Capture(camera, ShadowCapturePath);
+            }
+            finally
+            {
+                toggle.CastShadow = originalValue;
+            }
+        }
+
+        private static void Capture(Camera camera, string capturePath)
+        {
             const int width = 1920;
             const int height = 1080;
             var renderTexture = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32)
@@ -98,7 +134,7 @@ namespace TangoMvp.Editor
                 output.Apply(false, false);
 
                 string projectRoot = Path.GetDirectoryName(Application.dataPath);
-                string absolutePath = Path.Combine(projectRoot, CapturePath);
+                string absolutePath = Path.Combine(projectRoot, capturePath);
                 Directory.CreateDirectory(Path.GetDirectoryName(absolutePath));
                 File.WriteAllBytes(absolutePath, output.EncodeToPNG());
                 Debug.Log($"TANGO_SHOP_GLASS_CAPTURE:{absolutePath}");
@@ -126,10 +162,10 @@ namespace TangoMvp.Editor
 
         private static Material ReconcileBackdropMaterial(Texture2D texture)
         {
-            Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
+            Shader shader = Shader.Find("TangoMvp/ShopBackdropShadowReceiver");
             if (shader == null)
             {
-                throw new InvalidOperationException("Missing URP Unlit shader.");
+                throw new InvalidOperationException("Missing shop backdrop shadow receiver shader.");
             }
 
             Material material = AssetDatabase.LoadAssetAtPath<Material>(BackdropMaterialPath);
@@ -216,7 +252,7 @@ namespace TangoMvp.Editor
             SetTransform(
                 root.transform,
                 Vector3.zero,
-                Quaternion.Euler(48f, -28f, -14f),
+                Quaternion.Euler(25f, -20f, -14f),
                 Vector3.one);
 
             Light light = EnsureComponent<Light>(root);
@@ -245,10 +281,10 @@ namespace TangoMvp.Editor
 
             MeshRenderer renderer = EnsureComponent<MeshRenderer>(root);
             renderer.sharedMaterial = material;
-            ConfigureRenderer(renderer, ShadowCastingMode.Off, false);
+            ConfigureRenderer(renderer, ShadowCastingMode.Off, true);
             SetTransform(
                 root.transform,
-                new Vector3(0f, 0f, 4f),
+                new Vector3(0f, 0f, BackdropDepth),
                 Quaternion.identity,
                 new Vector3(CameraHalfHeight * 2f * ReferenceAspect, CameraHalfHeight * 2f, 1f));
 
@@ -261,15 +297,34 @@ namespace TangoMvp.Editor
             }
         }
 
-        private static void ReconcileGlassPanel(Scene scene, Mesh mesh, Material material)
+        private static void ReconcileGlassPanel(
+            Scene scene,
+            Mesh mesh,
+            Material glassMaterial,
+            Material casterMaterial)
         {
             GameObject root = EnsureRoot(scene, "Tango Glass Panel");
-            KeepOnlyComponents(root, typeof(Transform), typeof(MeshFilter), typeof(MeshRenderer));
+            KeepOnlyComponents(
+                root,
+                typeof(Transform),
+                typeof(MeshFilter),
+                typeof(MeshRenderer),
+                typeof(TangoPanelShadowToggle));
             RemoveChildren(root.transform);
             EnsureComponent<MeshFilter>(root).sharedMesh = mesh;
             MeshRenderer renderer = EnsureComponent<MeshRenderer>(root);
-            renderer.sharedMaterials = new[] { material, material, material };
+            renderer.sharedMaterials = new[] { glassMaterial, glassMaterial, glassMaterial };
             ConfigureRenderer(renderer, ShadowCastingMode.Off, true);
+
+            var caster = new GameObject("Rounded Shadow Caster");
+            caster.transform.SetParent(root.transform, false);
+            caster.transform.localPosition = Vector3.zero;
+            caster.transform.localRotation = Quaternion.identity;
+            caster.transform.localScale = Vector3.one;
+            caster.AddComponent<MeshFilter>().sharedMesh = mesh;
+            MeshRenderer casterRenderer = caster.AddComponent<MeshRenderer>();
+            casterRenderer.sharedMaterials = new[] { casterMaterial, casterMaterial, casterMaterial };
+            ConfigureRenderer(casterRenderer, ShadowCastingMode.ShadowsOnly, false);
 
             Vector3 meshSize = mesh.bounds.size;
             SetTransform(
@@ -277,6 +332,8 @@ namespace TangoMvp.Editor
                 Vector3.zero,
                 Quaternion.identity,
                 new Vector3(PanelSide / meshSize.x, PanelSide / meshSize.y, 1f));
+
+            EnsureComponent<TangoPanelShadowToggle>(root).Configure(casterRenderer);
         }
 
         private static void ConfigureEnvironment()

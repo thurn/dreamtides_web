@@ -25,6 +25,7 @@ namespace TangoMvp.Editor
             {
                 "TangoMvp/SceneGlass",
                 "TangoMvp/OnGlass",
+                "TangoMvp/ShopBackdropShadowReceiver",
                 "Hidden/TangoMvp/SeparableBlur",
             };
             var shaderRecords = new List<ShaderRecord>(shaderNames.Length);

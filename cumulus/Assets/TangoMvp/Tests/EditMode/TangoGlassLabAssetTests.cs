@@ -79,6 +79,86 @@ namespace TangoMvp.Tests
             Assert.That(directional.shadows, Is.EqualTo(LightShadows.Soft));
         }
 
+        [Test]
+        public void ShopGlassDemo_AuthorsAnUncheckedRoundedShadowCasterToggle()
+        {
+            TangoShopGlassDemoBuilder.Rebuild();
+            Scene scene = EditorSceneManager.OpenScene(
+                TangoShopGlassDemoBuilder.ScenePath,
+                OpenSceneMode.Single);
+            GameObject panel = scene.GetRootGameObjects()
+                .Single(root => root.name == "Tango Glass Panel");
+
+            TangoPanelShadowToggle toggle = panel.GetComponent<TangoPanelShadowToggle>();
+            Assert.That(toggle, Is.Not.Null);
+            Assert.That(toggle.CastShadow, Is.False);
+
+            Transform caster = panel.transform.Find("Rounded Shadow Caster");
+            Assert.That(caster, Is.Not.Null);
+            Assert.That(
+                caster.GetComponent<MeshFilter>().sharedMesh,
+                Is.SameAs(panel.GetComponent<MeshFilter>().sharedMesh));
+            MeshRenderer casterRenderer = caster.GetComponent<MeshRenderer>();
+            Assert.That(casterRenderer.shadowCastingMode, Is.EqualTo(ShadowCastingMode.ShadowsOnly));
+            Assert.That(casterRenderer.receiveShadows, Is.False);
+            Assert.That(casterRenderer.enabled, Is.False);
+
+            GameObject backdrop = scene.GetRootGameObjects()
+                .Single(root => root.name == "Tumbleleaf Village Backdrop");
+            MeshRenderer backdropRenderer = backdrop.GetComponent<MeshRenderer>();
+            Assert.That(backdropRenderer.receiveShadows, Is.True);
+            Assert.That(
+                backdropRenderer.sharedMaterial.shader.name,
+                Is.EqualTo("TangoMvp/ShopBackdropShadowReceiver"));
+            Assert.That(
+                backdropRenderer.sharedMaterial.FindPass("DepthOnly"),
+                Is.GreaterThanOrEqualTo(0));
+
+            toggle.CastShadow = true;
+            Assert.That(casterRenderer.enabled, Is.True);
+            toggle.CastShadow = false;
+            Assert.That(casterRenderer.enabled, Is.False);
+        }
+
+        [Test]
+        public void ShopGlassDemo_RebuildRetainsTheShadowCheckboxValue()
+        {
+            byte[] sceneBackup = File.ReadAllBytes(TangoShopGlassDemoBuilder.ScenePath);
+            try
+            {
+                TangoShopGlassDemoBuilder.Rebuild();
+                Scene scene = EditorSceneManager.OpenScene(
+                    TangoShopGlassDemoBuilder.ScenePath,
+                    OpenSceneMode.Single);
+                TangoPanelShadowToggle toggle = scene.GetRootGameObjects()
+                    .Single(root => root.name == "Tango Glass Panel")
+                    .GetComponent<TangoPanelShadowToggle>();
+                toggle.CastShadow = true;
+                EditorSceneManager.MarkSceneDirty(scene);
+                EditorSceneManager.SaveScene(scene);
+
+                TangoShopGlassDemoBuilder.Rebuild();
+                Scene rebuilt = EditorSceneManager.OpenScene(
+                    TangoShopGlassDemoBuilder.ScenePath,
+                    OpenSceneMode.Single);
+                TangoPanelShadowToggle rebuiltToggle = rebuilt.GetRootGameObjects()
+                    .Single(root => root.name == "Tango Glass Panel")
+                    .GetComponent<TangoPanelShadowToggle>();
+                Assert.That(rebuiltToggle.CastShadow, Is.True);
+                Assert.That(
+                    rebuiltToggle.transform.Find("Rounded Shadow Caster")
+                        .GetComponent<MeshRenderer>().enabled,
+                    Is.True);
+            }
+            finally
+            {
+                File.WriteAllBytes(TangoShopGlassDemoBuilder.ScenePath, sceneBackup);
+                AssetDatabase.ImportAsset(
+                    TangoShopGlassDemoBuilder.ScenePath,
+                    ImportAssetOptions.ForceSynchronousImport);
+            }
+        }
+
         private static readonly string[] StableAssetPaths =
         {
             MeshPath,

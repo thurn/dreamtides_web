@@ -272,8 +272,13 @@ try:
     build = json.loads(build_path.read_text(encoding="utf-8"))
 except (OSError, json.JSONDecodeError) as error:
     raise SystemExit(f"invalid shader/build evidence: {error}")
-expected = ["TangoMvp/SceneGlass", "TangoMvp/OnGlass", "Hidden/TangoMvp/SeparableBlur"]
-if shader.get("shaderCount") != 3 or shader.get("errorCount") != 0:
+expected = [
+    "TangoMvp/SceneGlass",
+    "TangoMvp/OnGlass",
+    "TangoMvp/ShopBackdropShadowReceiver",
+    "Hidden/TangoMvp/SeparableBlur",
+]
+if shader.get("shaderCount") != 4 or shader.get("errorCount") != 0:
     raise SystemExit("shader report has an invalid count or nonzero errors")
 records = shader.get("shaders")
 if not isinstance(records, list) or [record.get("name") for record in records] != expected:

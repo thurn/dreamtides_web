@@ -10,6 +10,10 @@ angled directional light provide a stable view of the blur, rim, and sheen.
 The scene intentionally contains no cards, guide, HUD, buttons, labels, or
 other interface elements.
 
+The `Tango Glass Panel` object includes a `TangoPanelShadowToggle` component.
+Its `Cast Shadow` checkbox controls a rounded shadow-only proxy against the
+directional-light-aware backdrop material.
+
 Rebuild it from `Tango MVP > Rebuild Shop Glass Demo`. The builder also exposes
 `TangoMvp.Editor.TangoShopGlassDemoBuilder.CaptureBatch` for a deterministic
 1920 x 1080 review capture.
@@ -71,7 +75,7 @@ A passing summary has schema version `1` and these fields: `overall: "passed"`; 
 
 `render-metrics.json` has exactly `{"schemaVersion": 1, "metrics": [...]}`. It must contain each of the 29 names below exactly once and no other names. Every metric record has exactly: `metricName`, finite numeric `measuredValue`, equivalent string `measuredValueText`, `measuredValueFinite: true`, committed `comparison`, committed numeric `threshold`, recomputed `passed: true`, nonempty `phaseA`, `phaseB`, `graphicsApi`, and `deviceName`. The validator recomputes the verdict rather than trusting `passed`.
 
-`shader-report.json` records `unityVersion`, `shaderCount: 3`, `errorCount: 0`, and ordered records for `TangoMvp/SceneGlass`, `TangoMvp/OnGlass`, and `Hidden/TangoMvp/SeparableBlur`, each with `found: true` and a `messages` array. `build-report.json` records `result: "Succeeded"`, exact output `Builds/TangoMvpVerification/CumulusTangoMvp.app`, `platform: "StandaloneOSX"`, `totalErrors: 0`, positive integer `totalSize`, `totalWarnings`, and `totalTimeSeconds`.
+`shader-report.json` records `unityVersion`, `shaderCount: 4`, `errorCount: 0`, and ordered records for `TangoMvp/SceneGlass`, `TangoMvp/OnGlass`, `TangoMvp/ShopBackdropShadowReceiver`, and `Hidden/TangoMvp/SeparableBlur`, each with `found: true` and a `messages` array. `build-report.json` records `result: "Succeeded"`, exact output `Builds/TangoMvpVerification/CumulusTangoMvp.app`, `platform: "StandaloneOSX"`, `totalErrors: 0`, positive integer `totalSize`, `totalWarnings`, and `totalTimeSeconds`.
 
 ## GPU metric contract
 
