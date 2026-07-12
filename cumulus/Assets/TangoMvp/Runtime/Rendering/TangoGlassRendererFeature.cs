@@ -98,6 +98,8 @@ namespace TangoMvp.Rendering
             private const string VerticalPassName = "Tango Glass Blur Vertical";
             private const string GlobalsPassName = "Tango Glass Publish Globals";
             private const string ActiveMode = "RenderGraph";
+            private const RenderGraphUtils.FullScreenGeometryType BlurGeometry =
+                RenderGraphUtils.FullScreenGeometryType.ProceduralTriangle;
 
             private static readonly int OutputTexelSizeId = Shader.PropertyToID("_TangoBlurOutputTexelSize");
             private static readonly int RadiusId = Shader.PropertyToID("_TangoBlurRadius");
@@ -171,7 +173,8 @@ namespace TangoMvp.Rendering
                     ping,
                     material,
                     0,
-                    blurProperties);
+                    blurProperties,
+                    BlurGeometry);
                 renderGraph.AddBlitPass(horizontalParameters, HorizontalPassName);
 
                 var verticalParameters = new RenderGraphUtils.BlitMaterialParameters(
@@ -179,7 +182,8 @@ namespace TangoMvp.Rendering
                     blur,
                     material,
                     1,
-                    blurProperties);
+                    blurProperties,
+                    BlurGeometry);
                 using (var builder = renderGraph.AddBlitPass(
                     verticalParameters,
                     VerticalPassName,

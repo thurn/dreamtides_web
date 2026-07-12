@@ -102,6 +102,24 @@ namespace TangoMvp.Tests
         }
 
         [Test]
+        public void RendererFeature_BlurUsesMeshIndependentFullscreenGeometry()
+        {
+            Type blurPassType = typeof(TangoGlassRendererFeature).GetNestedType(
+                "TangoGlassBlurPass",
+                BindingFlags.NonPublic);
+            FieldInfo geometry = blurPassType?.GetField(
+                "BlurGeometry",
+                BindingFlags.Static | BindingFlags.NonPublic);
+
+            Assert.That(blurPassType, Is.Not.Null);
+            Assert.That(geometry, Is.Not.Null);
+            Assert.That(geometry.IsLiteral, Is.True);
+            Assert.That(
+                Enum.GetName(geometry.FieldType, geometry.GetRawConstantValue()),
+                Is.EqualTo("ProceduralTriangle"));
+        }
+
+        [Test]
         public void RendererFeature_RadiusIsFixedAndNotAuthorAdjustable()
         {
             FieldInfo[] instanceFields = typeof(TangoGlassRendererFeature).GetFields(
