@@ -1,0 +1,405 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using TangoMvp.Materials;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
+
+namespace TangoMvp.Editor
+{
+    /// <summary>
+    /// Authors the deliberately minimal Tumbleleaf Village glass study: the
+    /// web Card Shop backdrop, one centered square of shared Tango glass, and
+    /// only the scene camera and lighting needed to judge the material.
+    /// </summary>
+    public static class TangoShopGlassDemoBuilder
+    {
+        public const string ScenePath = "Assets/Scenes/TangoShopGlassDemo.unity";
+        public const string BackdropTexturePath =
+            "Assets/TangoMvp/Demo/Art/tumbleleaf_village.png";
+        public const string BackdropMaterialPath =
+            "Assets/TangoMvp/Materials/TangoShopBackdrop.mat";
+        public const string CapturePath =
+            "Artifacts/TangoShopGlassDemo/shop-glass-demo.png";
+
+        private const string PanelMeshPath = "Assets/TangoMvp/Meshes/TangoPanel.asset";
+        private const string MaterialLibraryPath =
+            "Assets/TangoMvp/Materials/TangoMaterialLibrary.asset";
+        private const float CameraHalfHeight = 5f;
+        private const float ReferenceAspect = 16f / 9f;
+        private const float PanelSide = 4.6f;
+
+        [MenuItem("Tango MVP/Rebuild Shop Glass Demo")]
+        public static void Rebuild()
+        {
+            EnsureCoreAssets();
+            ReconcileBackdropTextureImport();
+
+            Texture2D backdropTexture = RequireAsset<Texture2D>(BackdropTexturePath);
+            Material backdropMaterial = ReconcileBackdropMaterial(backdropTexture);
+            Mesh panelMesh = RequireAsset<Mesh>(PanelMeshPath);
+            TangoMaterialLibrary library = RequireAsset<TangoMaterialLibrary>(MaterialLibraryPath);
+            library.Validate();
+
+            Scene scene = AssetDatabase.LoadAssetAtPath<SceneAsset>(ScenePath) == null
+                ? EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single)
+                : EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+
+            RemoveUnexpectedRoots(
+                scene,
+                "Main Camera",
+                "Directional Light",
+                "Tumbleleaf Village Backdrop",
+                "Tango Glass Panel");
+            ReconcileCamera(scene);
+            ReconcileDirectionalLight(scene);
+            ReconcileBackdrop(scene, backdropTexture, backdropMaterial);
+            ReconcileGlassPanel(scene, panelMesh, library.Resolve(TangoMaterialRole.SceneGlass));
+            ConfigureEnvironment();
+
+            EditorSceneManager.SaveScene(scene, ScenePath);
+            AssetDatabase.SaveAssets();
+            NormalizeSerializedWhitespace(ScenePath, BackdropMaterialPath);
+        }
+
+        /// <summary>Batch entry point that authors and captures the demo at 1920 x 1080.</summary>
+        public static void CaptureBatch()
+        {
+            Rebuild();
+            Scene scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+            Camera camera = scene.GetRootGameObjects()
+                .Single(root => root.name == "Main Camera")
+                .GetComponent<Camera>();
+
+            const int width = 1920;
+            const int height = 1080;
+            var renderTexture = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32)
+            {
+                name = "Tango Shop Glass Demo Capture",
+                antiAliasing = 1,
+            };
+            var output = new Texture2D(width, height, TextureFormat.RGBA32, false);
+            RenderTexture previousActive = RenderTexture.active;
+            RenderTexture previousTarget = camera.targetTexture;
+            try
+            {
+                renderTexture.Create();
+                camera.targetTexture = renderTexture;
+                camera.Render();
+                RenderTexture.active = renderTexture;
+                output.ReadPixels(new Rect(0f, 0f, width, height), 0, 0);
+                output.Apply(false, false);
+
+                string projectRoot = Path.GetDirectoryName(Application.dataPath);
+                string absolutePath = Path.Combine(projectRoot, CapturePath);
+                Directory.CreateDirectory(Path.GetDirectoryName(absolutePath));
+                File.WriteAllBytes(absolutePath, output.EncodeToPNG());
+                Debug.Log($"TANGO_SHOP_GLASS_CAPTURE:{absolutePath}");
+            }
+            finally
+            {
+                camera.targetTexture = previousTarget;
+                RenderTexture.active = previousActive;
+                UnityEngine.Object.DestroyImmediate(output);
+                renderTexture.Release();
+                UnityEngine.Object.DestroyImmediate(renderTexture);
+            }
+        }
+
+        private static void EnsureCoreAssets()
+        {
+            if (AssetDatabase.LoadAssetAtPath<Mesh>(PanelMeshPath) != null &&
+                AssetDatabase.LoadAssetAtPath<TangoMaterialLibrary>(MaterialLibraryPath) != null)
+            {
+                return;
+            }
+
+            TangoGlassLabBuilder.Rebuild();
+        }
+
+        private static Material ReconcileBackdropMaterial(Texture2D texture)
+        {
+            Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
+            if (shader == null)
+            {
+                throw new InvalidOperationException("Missing URP Unlit shader.");
+            }
+
+            Material material = AssetDatabase.LoadAssetAtPath<Material>(BackdropMaterialPath);
+            if (material == null)
+            {
+                material = new Material(shader) { name = "TangoShopBackdrop" };
+                AssetDatabase.CreateAsset(material, BackdropMaterialPath);
+            }
+            else
+            {
+                material.shader = shader;
+            }
+
+            float sourceAspect = (float)texture.width / texture.height;
+            float visibleVerticalFraction = sourceAspect / ReferenceAspect;
+            material.SetTexture("_BaseMap", texture);
+            material.SetTextureScale("_BaseMap", new Vector2(1f, visibleVerticalFraction));
+            material.SetTextureOffset(
+                "_BaseMap",
+                new Vector2(0f, (1f - visibleVerticalFraction) * 0.5f));
+            material.SetColor("_BaseColor", Color.white);
+            material.SetFloat("_Surface", 0f);
+            material.SetFloat("_Cull", (float)CullMode.Back);
+            material.SetFloat("_ZWrite", 1f);
+            material.SetOverrideTag("RenderType", "Opaque");
+            material.renderQueue = (int)RenderQueue.Geometry;
+            EditorUtility.SetDirty(material);
+            return material;
+        }
+
+        private static void ReconcileBackdropTextureImport()
+        {
+            TextureImporter importer = AssetImporter.GetAtPath(BackdropTexturePath) as TextureImporter;
+            if (importer == null)
+            {
+                throw new InvalidOperationException(
+                    $"Missing texture importer for {BackdropTexturePath}.");
+            }
+
+            bool changed =
+                importer.npotScale != TextureImporterNPOTScale.None ||
+                importer.maxTextureSize != 4096 ||
+                importer.wrapMode != TextureWrapMode.Clamp ||
+                importer.mipmapEnabled ||
+                importer.textureCompression != TextureImporterCompression.Uncompressed;
+            importer.npotScale = TextureImporterNPOTScale.None;
+            importer.maxTextureSize = 4096;
+            importer.wrapMode = TextureWrapMode.Clamp;
+            importer.mipmapEnabled = false;
+            importer.sRGBTexture = true;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            if (changed)
+            {
+                importer.SaveAndReimport();
+            }
+        }
+
+        private static void ReconcileCamera(Scene scene)
+        {
+            GameObject root = EnsureRoot(scene, "Main Camera");
+            KeepOnlyComponents(root, typeof(Transform), typeof(Camera), typeof(UniversalAdditionalCameraData));
+            RemoveChildren(root.transform);
+            root.tag = "MainCamera";
+            SetTransform(root.transform, new Vector3(0f, 0f, -10f), Quaternion.identity, Vector3.one);
+
+            Camera camera = EnsureComponent<Camera>(root);
+            camera.orthographic = true;
+            camera.orthographicSize = CameraHalfHeight;
+            camera.aspect = ReferenceAspect;
+            camera.nearClipPlane = 0.1f;
+            camera.farClipPlane = 50f;
+            camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.backgroundColor = new Color(0.045f, 0.025f, 0.07f, 1f);
+            camera.allowHDR = true;
+            camera.allowMSAA = false;
+            EnsureComponent<UniversalAdditionalCameraData>(root).renderPostProcessing = false;
+        }
+
+        private static void ReconcileDirectionalLight(Scene scene)
+        {
+            GameObject root = EnsureRoot(scene, "Directional Light");
+            KeepOnlyComponents(root, typeof(Transform), typeof(Light));
+            RemoveChildren(root.transform);
+            SetTransform(
+                root.transform,
+                Vector3.zero,
+                Quaternion.Euler(48f, -28f, -14f),
+                Vector3.one);
+
+            Light light = EnsureComponent<Light>(root);
+            light.type = LightType.Directional;
+            light.color = new Color(1f, 0.86f, 0.7f, 1f);
+            light.intensity = 1.8f;
+            light.shadows = LightShadows.Soft;
+            light.shadowStrength = 0.72f;
+        }
+
+        private static void ReconcileBackdrop(
+            Scene scene,
+            Texture2D texture,
+            Material material)
+        {
+            GameObject root = EnsureRoot(scene, "Tumbleleaf Village Backdrop");
+            KeepOnlyComponents(root, typeof(Transform), typeof(MeshFilter), typeof(MeshRenderer));
+            RemoveChildren(root.transform);
+            MeshFilter filter = EnsureComponent<MeshFilter>(root);
+            if (filter.sharedMesh == null || filter.sharedMesh.name != "Quad")
+            {
+                GameObject primitive = GameObject.CreatePrimitive(PrimitiveType.Quad);
+                filter.sharedMesh = primitive.GetComponent<MeshFilter>().sharedMesh;
+                UnityEngine.Object.DestroyImmediate(primitive);
+            }
+
+            MeshRenderer renderer = EnsureComponent<MeshRenderer>(root);
+            renderer.sharedMaterial = material;
+            ConfigureRenderer(renderer, ShadowCastingMode.Off, false);
+            SetTransform(
+                root.transform,
+                new Vector3(0f, 0f, 4f),
+                Quaternion.identity,
+                new Vector3(CameraHalfHeight * 2f * ReferenceAspect, CameraHalfHeight * 2f, 1f));
+
+            // The material performs the same centered cover crop as the web
+            // shop's object-fit: cover; this assertion guards accidental drift.
+            float expectedFraction = ((float)texture.width / texture.height) / ReferenceAspect;
+            if (Mathf.Abs(material.GetTextureScale("_BaseMap").y - expectedFraction) > 0.0001f)
+            {
+                throw new InvalidOperationException("Shop backdrop cover crop is out of sync.");
+            }
+        }
+
+        private static void ReconcileGlassPanel(Scene scene, Mesh mesh, Material material)
+        {
+            GameObject root = EnsureRoot(scene, "Tango Glass Panel");
+            KeepOnlyComponents(root, typeof(Transform), typeof(MeshFilter), typeof(MeshRenderer));
+            RemoveChildren(root.transform);
+            EnsureComponent<MeshFilter>(root).sharedMesh = mesh;
+            MeshRenderer renderer = EnsureComponent<MeshRenderer>(root);
+            renderer.sharedMaterials = new[] { material, material, material };
+            ConfigureRenderer(renderer, ShadowCastingMode.Off, true);
+
+            Vector3 meshSize = mesh.bounds.size;
+            SetTransform(
+                root.transform,
+                Vector3.zero,
+                Quaternion.identity,
+                new Vector3(PanelSide / meshSize.x, PanelSide / meshSize.y, 1f));
+        }
+
+        private static void ConfigureEnvironment()
+        {
+            RenderSettings.skybox = null;
+            RenderSettings.fog = false;
+            RenderSettings.ambientMode = AmbientMode.Flat;
+            RenderSettings.ambientLight = new Color(0.24f, 0.19f, 0.16f, 1f);
+            RenderSettings.reflectionIntensity = 0f;
+        }
+
+        private static T RequireAsset<T>(string path) where T : UnityEngine.Object
+        {
+            T asset = AssetDatabase.LoadAssetAtPath<T>(path);
+            return asset != null
+                ? asset
+                : throw new InvalidOperationException($"Missing required asset at {path}.");
+        }
+
+        private static GameObject EnsureRoot(Scene scene, string name)
+        {
+            GameObject retained = null;
+            foreach (GameObject root in scene.GetRootGameObjects().Where(root => root.name == name).ToArray())
+            {
+                if (retained == null)
+                {
+                    retained = root;
+                }
+                else
+                {
+                    UnityEngine.Object.DestroyImmediate(root);
+                }
+            }
+
+            if (retained != null)
+            {
+                retained.SetActive(true);
+                return retained;
+            }
+
+            retained = new GameObject(name);
+            SceneManager.MoveGameObjectToScene(retained, scene);
+            return retained;
+        }
+
+        private static void RemoveUnexpectedRoots(Scene scene, params string[] expectedNames)
+        {
+            var expected = new HashSet<string>(expectedNames, StringComparer.Ordinal);
+            foreach (GameObject root in scene.GetRootGameObjects())
+            {
+                if (!expected.Contains(root.name))
+                {
+                    UnityEngine.Object.DestroyImmediate(root);
+                }
+            }
+        }
+
+        private static T EnsureComponent<T>(GameObject target) where T : Component
+        {
+            T retained = target.GetComponent<T>();
+            return retained != null ? retained : target.AddComponent<T>();
+        }
+
+        private static void KeepOnlyComponents(GameObject target, params Type[] expectedTypes)
+        {
+            var expected = new HashSet<Type>(expectedTypes);
+            foreach (Component component in target.GetComponents<Component>().Reverse())
+            {
+                if (component != null && !expected.Contains(component.GetType()))
+                {
+                    UnityEngine.Object.DestroyImmediate(component);
+                }
+            }
+        }
+
+        private static void RemoveChildren(Transform parent)
+        {
+            for (int index = parent.childCount - 1; index >= 0; index--)
+            {
+                UnityEngine.Object.DestroyImmediate(parent.GetChild(index).gameObject);
+            }
+        }
+
+        private static void ConfigureRenderer(
+            Renderer renderer,
+            ShadowCastingMode shadowCasting,
+            bool receiveShadows)
+        {
+            renderer.enabled = true;
+            renderer.shadowCastingMode = shadowCasting;
+            renderer.receiveShadows = receiveShadows;
+            renderer.lightProbeUsage = LightProbeUsage.Off;
+            renderer.reflectionProbeUsage = ReflectionProbeUsage.Off;
+        }
+
+        private static void SetTransform(
+            Transform target,
+            Vector3 position,
+            Quaternion rotation,
+            Vector3 scale)
+        {
+            target.SetPositionAndRotation(position, rotation);
+            target.localScale = scale;
+        }
+
+        private static void NormalizeSerializedWhitespace(params string[] assetPaths)
+        {
+            foreach (string assetPath in assetPaths)
+            {
+                string source = File.ReadAllText(assetPath);
+                string normalized = Regex.Replace(
+                    source,
+                    @"[ \t]+(?=\r?$)",
+                    string.Empty,
+                    RegexOptions.Multiline);
+                if (source == normalized)
+                {
+                    continue;
+                }
+
+                File.WriteAllText(assetPath, normalized, new UTF8Encoding(false));
+                AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceSynchronousImport);
+            }
+        }
+    }
+}

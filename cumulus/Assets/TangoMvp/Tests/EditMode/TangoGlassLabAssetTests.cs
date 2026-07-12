@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
+using TangoMvp.Editor;
 using TangoMvp.Demo;
 using TangoMvp.Interaction;
 using TangoMvp.Materials;
@@ -32,6 +33,51 @@ namespace TangoMvp.Tests
         private const string RendererPath = "Assets/Settings/PC_Renderer.asset";
         private const string MobileRendererPath = "Assets/Settings/Mobile_Renderer.asset";
         private const string BuildSettingsPath = "ProjectSettings/EditorBuildSettings.asset";
+
+        [Test]
+        public void ShopGlassDemo_UsesWebShopBackdropAndOneCenteredSquareGlassPanel()
+        {
+            TangoShopGlassDemoBuilder.Rebuild();
+            Scene scene = EditorSceneManager.OpenScene(
+                TangoShopGlassDemoBuilder.ScenePath,
+                OpenSceneMode.Single);
+            GameObject[] roots = scene.GetRootGameObjects();
+
+            Assert.That(
+                roots.Select(root => root.name),
+                Is.EquivalentTo(new[]
+                {
+                    "Main Camera",
+                    "Directional Light",
+                    "Tumbleleaf Village Backdrop",
+                    "Tango Glass Panel",
+                }));
+
+            Camera camera = roots.Single(root => root.name == "Main Camera").GetComponent<Camera>();
+            Assert.That(camera.orthographic, Is.True);
+            Assert.That(camera.transform.position, Is.EqualTo(new Vector3(0f, 0f, -10f)));
+
+            GameObject panel = roots.Single(root => root.name == "Tango Glass Panel");
+            MeshFilter panelFilter = panel.GetComponent<MeshFilter>();
+            Vector3 panelSize = Vector3.Scale(panelFilter.sharedMesh.bounds.size, panel.transform.localScale);
+            Assert.That(panel.transform.position, Is.EqualTo(Vector3.zero));
+            Assert.That(panelSize.x, Is.EqualTo(panelSize.y).Within(0.001f));
+            Assert.That(panelSize.y / (camera.orthographicSize * 2f), Is.LessThanOrEqualTo(0.5f));
+            Assert.That(
+                AssetDatabase.GetAssetPath(panel.GetComponent<MeshRenderer>().sharedMaterial),
+                Is.EqualTo(SceneGlassPath));
+
+            GameObject backdrop = roots.Single(root => root.name == "Tumbleleaf Village Backdrop");
+            Material backdropMaterial = backdrop.GetComponent<MeshRenderer>().sharedMaterial;
+            Assert.That(
+                AssetDatabase.GetAssetPath(backdropMaterial.mainTexture),
+                Is.EqualTo(TangoShopGlassDemoBuilder.BackdropTexturePath));
+            Assert.That(backdropMaterial.GetTextureScale("_BaseMap").y, Is.LessThan(1f));
+
+            Light directional = roots.Single(root => root.name == "Directional Light").GetComponent<Light>();
+            Assert.That(directional.type, Is.EqualTo(LightType.Directional));
+            Assert.That(directional.shadows, Is.EqualTo(LightShadows.Soft));
+        }
 
         private static readonly string[] StableAssetPaths =
         {

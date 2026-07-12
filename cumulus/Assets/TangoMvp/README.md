@@ -1,5 +1,19 @@
 # Cumulus Tango Glass MVP
 
+## Shop glass demo
+
+Open `Assets/Scenes/TangoShopGlassDemo.unity` for the minimal web-parity study.
+It places one centered square of the shared `SceneGlass` material over the
+Tumbleleaf Village image used by the web Card Shop. The image uses the same
+centered cover crop as the web screen; an orthographic 16:9 camera and a warm,
+angled directional light provide a stable view of the blur, rim, and sheen.
+The scene intentionally contains no cards, guide, HUD, buttons, labels, or
+other interface elements.
+
+Rebuild it from `Tango MVP > Rebuild Shop Glass Demo`. The builder also exposes
+`TangoMvp.Editor.TangoShopGlassDemoBuilder.CaptureBatch` for a deterministic
+1920 x 1080 review capture.
+
 From the repository root, an autonomous agent verifies this proof of concept with one command:
 
 ```bash
