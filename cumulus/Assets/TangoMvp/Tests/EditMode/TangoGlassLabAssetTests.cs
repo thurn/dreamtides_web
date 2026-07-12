@@ -64,7 +64,11 @@ namespace TangoMvp.Tests
             Vector3 panelSize = Vector3.Scale(panelFilter.sharedMesh.bounds.size, panel.transform.localScale);
             Assert.That(panel.transform.position, Is.EqualTo(Vector3.zero));
             Assert.That(panelSize.x, Is.EqualTo(panelSize.y).Within(0.001f));
+            Assert.That(panel.transform.localScale.x, Is.EqualTo(panel.transform.localScale.y).Within(0.0001f));
             Assert.That(panelSize.y / (camera.orthographicSize * 2f), Is.LessThanOrEqualTo(0.5f));
+            Assert.That(
+                ProjectedTopRightCornerRadius(panelFilter.sharedMesh, camera, 2160),
+                Is.EqualTo(8f).Within(0.05f));
             Assert.That(
                 AssetDatabase.GetAssetPath(panel.GetComponent<MeshRenderer>().sharedMaterial),
                 Is.EqualTo(SceneGlassPath));
@@ -177,6 +181,7 @@ namespace TangoMvp.Tests
         private static readonly string[] StableAssetPaths =
         {
             MeshPath,
+            "Assets/TangoMvp/Meshes/TangoShopGlassPanel.asset",
             SceneGlassPath,
             OnGlassPath,
             SolidChromePath,
@@ -186,6 +191,21 @@ namespace TangoMvp.Tests
             PrefabPath,
             ScenePath,
         };
+
+        private static float ProjectedTopRightCornerRadius(
+            Mesh mesh,
+            Camera camera,
+            int captureHeight)
+        {
+            Vector3[] vertices = mesh.vertices;
+            float maximumX = vertices.Max(vertex => vertex.x);
+            float maximumY = vertices.Max(vertex => vertex.y);
+            float topEdgeEndX = vertices
+                .Where(vertex => Mathf.Abs(vertex.y - maximumY) < 0.00001f)
+                .Max(vertex => vertex.x);
+            float worldRadius = maximumX - topEdgeEndX;
+            return worldRadius * captureHeight / (camera.orthographicSize * 2f);
+        }
 
         [Test]
         public void Rebuild_IsByteStableAndRetainsEveryAuthoredGuid()

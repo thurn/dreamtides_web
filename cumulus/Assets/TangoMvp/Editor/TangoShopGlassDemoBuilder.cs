@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using TangoMvp.Demo;
+using TangoMvp.Geometry;
 using TangoMvp.Materials;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -32,12 +33,16 @@ namespace TangoMvp.Editor
         public const string ShadowCapturePath =
             "Artifacts/TangoShopGlassDemo/shop-glass-demo-shadow.png";
 
-        private const string PanelMeshPath = "Assets/TangoMvp/Meshes/TangoPanel.asset";
+        private const string PanelMeshPath =
+            "Assets/TangoMvp/Meshes/TangoShopGlassPanel.asset";
         private const string MaterialLibraryPath =
             "Assets/TangoMvp/Materials/TangoMaterialLibrary.asset";
         private const float CameraHalfHeight = 5f;
         private const float ReferenceAspect = 16f / 9f;
         private const float PanelSide = 4.6f;
+        private const float PanelCornerRadiusPixels = 8f;
+        private const int DefaultComparisonHeight = 2160;
+        private const int PanelCornerSegments = 8;
         private const float BackdropDepth = 4f;
 
         [MenuItem("Tango MVP/Rebuild Shop Glass Demo")]
@@ -48,7 +53,7 @@ namespace TangoMvp.Editor
 
             Texture2D backdropTexture = RequireAsset<Texture2D>(BackdropTexturePath);
             Material backdropMaterial = ReconcileBackdropMaterial(backdropTexture);
-            Mesh panelMesh = RequireAsset<Mesh>(PanelMeshPath);
+            Mesh panelMesh = ReconcilePanelMesh();
             TangoMaterialLibrary library = RequireAsset<TangoMaterialLibrary>(MaterialLibraryPath);
             library.Validate();
 
@@ -151,13 +156,53 @@ namespace TangoMvp.Editor
 
         private static void EnsureCoreAssets()
         {
-            if (AssetDatabase.LoadAssetAtPath<Mesh>(PanelMeshPath) != null &&
-                AssetDatabase.LoadAssetAtPath<TangoMaterialLibrary>(MaterialLibraryPath) != null)
+            if (AssetDatabase.LoadAssetAtPath<TangoMaterialLibrary>(MaterialLibraryPath) != null)
             {
                 return;
             }
 
             TangoGlassLabBuilder.Rebuild();
+        }
+
+        private static Mesh ReconcilePanelMesh()
+        {
+            int captureHeight = ResolveComparisonHeight();
+            float worldUnitsPerPixel = CameraHalfHeight * 2f / captureHeight;
+            float cornerRadius = PanelCornerRadiusPixels * worldUnitsPerPixel;
+            float depth = Mathf.Min(0.02f, cornerRadius * 0.5f);
+            Mesh canonical = TangoRoundedPanelMesh.Create(
+                PanelSide,
+                PanelSide,
+                depth,
+                cornerRadius,
+                PanelCornerSegments);
+            canonical.name = "TangoShopGlassPanel";
+
+            Mesh mesh = AssetDatabase.LoadAssetAtPath<Mesh>(PanelMeshPath);
+            if (mesh == null)
+            {
+                AssetDatabase.CreateAsset(canonical, PanelMeshPath);
+                return canonical;
+            }
+
+            EditorUtility.CopySerialized(canonical, mesh);
+            mesh.name = "TangoShopGlassPanel";
+            EditorUtility.SetDirty(mesh);
+            UnityEngine.Object.DestroyImmediate(canonical);
+            return mesh;
+        }
+
+        private static int ResolveComparisonHeight()
+        {
+            string[] arguments = Environment.GetCommandLineArgs();
+            int index = Array.IndexOf(arguments, "-comparisonHeight");
+            if (index >= 0 && index + 1 < arguments.Length &&
+                int.TryParse(arguments[index + 1], out int height) && height > 0)
+            {
+                return height;
+            }
+
+            return DefaultComparisonHeight;
         }
 
         private static Material ReconcileBackdropMaterial(Texture2D texture)
