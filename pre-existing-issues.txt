@@ -132,3 +132,11 @@ Dream Merchant v2 browser QA — fixed card-source debug update loop
   encounter mounted without publishing or clearing it again. A ScreenRouter
   regression test re-renders with the folded state and a replacement mutation
   object, then verifies that only the initial publication occurred.
+
+Cumulus verification README — inconsistent GPU metric count
+
+- `cumulus/Assets/TangoMvp/README.md` describes the current render-evidence
+  contract as 27 metrics in two places and 29 metrics in another. The
+  authoritative `cumulus/scripts/tango_evidence.py` validator currently defines
+  29 metrics and 20 captures. Keep the prose derived from the validator contract
+  when the point-lighting work expands that evidence set.
