@@ -278,3 +278,24 @@ describe("site QA scenes", () => {
     }
   });
 });
+
+describe('the "dreamscape-with-essence" QA scene', () => {
+  it("parks on the dreamscape overview with an unvisited Essence site", () => {
+    const state = buildQaScene(
+      "dreamscape-with-essence",
+      makeQuestContent(),
+    );
+
+    expect(state).not.toBeNull();
+    expect(state?.screen.type).toBe("dreamscape");
+    expect(state?.activeSiteId).toBeNull();
+    expect(state?.currentDreamscape).not.toBeNull();
+
+    const node = state?.currentDreamscape
+      ? state.atlas.nodes[state.currentDreamscape]
+      : undefined;
+    const essenceSite = node?.sites.find((site) => site.type === "Essence");
+    expect(essenceSite).toBeDefined();
+    expect(essenceSite?.isVisited).toBe(false);
+  });
+});

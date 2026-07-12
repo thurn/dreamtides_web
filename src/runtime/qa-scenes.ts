@@ -276,6 +276,50 @@ const DREAMSCAPE_SCENE: QaScene = {
 };
 
 /**
+ * The starter dreamscape overview with one non-battle site retyped to Essence.
+ * Keeping the run on the overview lets QA exercise the normal site-entry
+ * transition and Essence-screen enter animation instead of booting inside it.
+ */
+const DREAMSCAPE_WITH_ESSENCE_SCENE: QaScene = {
+  id: "dreamscape-with-essence",
+  label: "Dreamscape with Essence",
+  description:
+    "The starter dreamscape overview with an Essence site ready to enter, " +
+    "parked before the site-entry transition for animation QA.",
+  build: (questContent) => {
+    const foundation = createQaQuestFoundation(questContent);
+    if (foundation === null) {
+      return null;
+    }
+
+    const node = foundation.starterNode;
+    const slot = node.sites.find((site) => site.type !== "Battle");
+    if (slot === undefined) {
+      return null;
+    }
+
+    const sites = node.sites.map((site) =>
+      site.id === slot.id ? { ...site, type: "Essence" as const } : site,
+    );
+    const atlas = {
+      ...foundation.atlas,
+      nodes: {
+        ...foundation.atlas.nodes,
+        [node.id]: { ...node, sites },
+      },
+    };
+
+    return {
+      ...foundation.state,
+      atlas,
+      currentDreamscape: node.id,
+      screen: { type: "dreamscape" },
+      activeSiteId: null,
+    };
+  },
+};
+
+/**
  * The scene id that opens the deck-viewer overlay. The overlay is App-local
  * state (not a `Screen`), so parking on it takes two steps: this scene builds
  * the underlying dreamscape state (giving the run a full deck to show), and
@@ -468,6 +512,7 @@ export const QA_SCENES: readonly QaScene[] = [
   battleLayerScene(6),
   battleLayerScene(7),
   DREAMSCAPE_SCENE,
+  DREAMSCAPE_WITH_ESSENCE_SCENE,
   DECK_VIEWER_SCENE,
   STARTING_DECK_SCENE,
   siteScene("draft", "Draft", "Draft"),

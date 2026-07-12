@@ -119,6 +119,7 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `battle`                 | Layer I Battle Start opponent preview; same scene depth as `battle1` |
 | `battle1` … `battle7`    | Battle Start opponent preview for the keeper battle on atlas Layer N, with layer-tuned opponent strength (see "Battle layers") |
 | `dreamscape`             | Starter dreamscape overview with site nodes and the QuestStatusBar |
+| `dreamscape-with-essence` | Starter dreamscape overview with an Essence site ready to enter (site-entry animation QA) |
 | `deckviewer`             | Deck viewer overlay opened over the starter dreamscape (deck grid + press-and-hold zoom) |
 | `startingdeck`           | Starting-deck reveal popup over the starter dreamscape (frosted-glass chrome QA) |
 | `draft`                  | Draft site — the Tango draft screen with a rolled first offer and the floating `Draft (n/total)` pick counter (mobile-gated; see "Draft site" below) |
