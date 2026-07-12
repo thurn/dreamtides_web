@@ -30,7 +30,7 @@ export const pressableDemo: TangoComponent = {
   id: "pressable",
   title: "Pressable",
   blurb:
-    "The one press-feedback primitive. Interactive surfaces scale up on hover and down on press; readable rules-copy reveals use the strict stationary variant so text stays legible under a held finger.",
+    "The one press-feedback primitive. Interactive surfaces measure their rendered box for proportional hover and press movement; readable rules-copy reveals use the strict stationary variant.",
   callout:
     "Reach for a higher-level component first. Pressable is a low-level building block — before wrapping raw markup in it, look for an existing Tango component (Button, TideDisc, SegmentedControl, SiteNode, …) that already bakes in the press feedback. Use Pressable only when you're building a genuinely new interactive surface no component covers.",
   group: "Primitives",
@@ -39,7 +39,7 @@ export const pressableDemo: TangoComponent = {
   usage: [
     {
       label: "Wrap any element",
-      note: "Pressable adds the shared press scale-down, the shared hover-enlarge (mouse/pen — touch never hovers), and a pointer cursor to whatever it wraps. Pass the tag via `as`; extra HTML attributes (onClick, aria-*) forward to the rendered element.",
+      note: "Pressable measures the wrapped element so wide rows and compact controls move by a comparable physical distance. Mouse and pen hover upward, every primary press moves downward, and touch never hovers.",
       code: `import { Pressable } from "src/tango/primitives/Pressable";
 
 <Pressable as="button" onClick={handleActivate}>

@@ -427,18 +427,9 @@ function buildOffer(
     case "Hastened":
       return { type, description: "Adds: Fast.", previewCard };
     case "Amplified": {
-      const match = /\d+/.exec(card.renderedText);
-      if (match === null) {
-        return {
-          type,
-          description: "Modifies a number in rules text.",
-          previewCard,
-        };
-      }
-      const num = parseInt(match[0], 10);
       return {
         type,
-        description: `Number in text: ${String(num)} → ${String(num + 1)}`,
+        description: `“${previewCard.renderedText}”`,
         previewCard,
       };
     }

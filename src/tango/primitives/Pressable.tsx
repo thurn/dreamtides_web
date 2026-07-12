@@ -5,13 +5,12 @@
 // standard is SCALE UP ON HOVER, SCALE DOWN ON PRESS. The one strict exception
 // is selectable rules copy: holding ability text still lets the player read it
 // at its authored size while definition cards are visible.
-//   - a single scale-DOWN factor (PRESS_SCALE = 0.9, the --press-scale token)
-//     — every control compresses by this on press; it never balloons outward
-//     while pressed.
-//   - a single hover scale-UP factor (HOVER_SCALE = 1.03, the --hover-scale
-//     token) — on a hover-capable pointer (mouse/pen), every pressable or
-//     info-revealing surface slightly enlarges under the cursor, so "this
-//     responds to you" reads identically everywhere. Touch never hovers.
+//   - Pressable measures its rendered box and derives scale from the longest
+//     edge, keeping the physical edge movement comparable for a compact chip,
+//     portrait card, or wide option row.
+//   - PRESS_SCALE / HOVER_SCALE and their tokens are the strict bounds used by
+//     controls that consume usePress directly or can only express feedback in
+//     CSS. Press never enlarges; hover-capable mouse/pen pointers enlarge.
 //   - press wins while both apply (a hovered control that is pressed scales
 //     down, not up)
 //   - pointer cursor when actionable, default cursor when disabled
@@ -19,10 +18,9 @@
 //   - one eased, fast transition (skipped entirely when the user has
 //     requested reduced motion)
 //
-// The factor is published as the CSS custom property --press-scale
-// (tango-tokens.css) so controls we can only reach through CSS (e.g. a
-// bare `:active` rule) compress by the identical amount — JS and CSS stay
-// in lock-step. Every ad-hoc scale() elsewhere should route through this.
+// The bounded factors are published as --press-scale and --hover-scale for
+// controls reached through CSS or the lower-level usePress hook. Every ad-hoc
+// scale() elsewhere should route through this interaction system.
 //
 // Two ways to consume it:
 //   - <Pressable as="button" onClick={...}>...</Pressable> — the drop-in
@@ -41,19 +39,18 @@
 
 import * as React from "react";
 import { forwardRef, useEffect, useState } from "react";
+import { feedbackForRect } from "./press-feedback";
 
 /**
- * The one press-down factor. Always < 1 (compress, never enlarge). Mirrors
- * the --press-scale token so JS and CSS :active rules stay identical.
+ * Lower bound for press-down feedback. Always < 1 (compress, never enlarge).
+ * Mirrors the --press-scale token used by CSS and direct usePress consumers.
  */
 export const PRESS_SCALE = 0.9;
 
 /**
- * The one hover-enlarge factor. Always slightly > 1: on a hover-capable
- * pointer, every standard pressable or inline hover-revealing surface grows by
- * this amount under the cursor. Semantic reveal sources derive measured
- * feedback through the coordinator. Mirrors the --hover-scale token so JS and CSS :hover
- * rules stay identical. Press wins while both apply.
+ * Upper bound for hover feedback. Always slightly > 1. Pressable and semantic
+ * reveal sources derive a measured factor within this bound; CSS and direct
+ * usePress consumers use the matching --hover-scale token.
  */
 export const HOVER_SCALE = 1.03;
 
@@ -173,10 +170,9 @@ export interface PressableProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 /**
- * Pressable — renders `as` (default `<button>`) with the standardized
+ * Pressable — renders `as` (default `<button>`) with size-proportional
  * press-down feedback, hover-enlarge (on a hover-capable pointer), pointer
- * cursor, and tap-highlight suppression. Forwards ref and every extra prop
- * (onClick, aria-*, className, ...).
+ * cursor, and tap-highlight suppression. Forwards ref and every extra prop.
  *
  * Notes:
  *   - Writes only `transform`, so DON'T put a base positioning transform on
@@ -201,17 +197,36 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
     },
     ref,
   ) {
+    const [measuredFeedback, setMeasuredFeedback] = useState(() =>
+      feedbackForRect({ width: 1, height: 1 }, "scale"),
+    );
+    const measureFeedback = (event: React.PointerEvent<HTMLElement>): void => {
+      const rect = event.currentTarget.getBoundingClientRect();
+      setMeasuredFeedback(
+        feedbackForRect({ width: rect.width, height: rect.height }, "scale"),
+      );
+    };
     const { pressed, hovered, bind } = usePress({
-      onPointerEnter,
-      onPointerDown,
+      onPointerEnter: (event) => {
+        measureFeedback(event);
+        onPointerEnter?.(event);
+      },
+      onPointerDown: (event) => {
+        measureFeedback(event);
+        onPointerDown?.(event);
+      },
       onPointerUp,
       onPointerLeave,
       onPointerCancel,
     });
     const reducedMotion = usePrefersReducedMotion();
     const measuredRevealFeedback = (rest as Record<string, unknown>)["data-reveal-feedback"] === "measured";
-    const pressScale = measuredRevealFeedback ? "var(--reveal-press-scale)" : String(PRESS_SCALE);
-    const hoverScale = measuredRevealFeedback ? "var(--reveal-hover-scale)" : String(HOVER_SCALE);
+    const pressScale = measuredRevealFeedback
+      ? "var(--reveal-press-scale)"
+      : String(measuredFeedback.pressScale);
+    const hoverScale = measuredRevealFeedback
+      ? "var(--reveal-hover-scale)"
+      : String(measuredFeedback.hoverScale);
 
     // `as` is a runtime-chosen element type (intrinsic tag or component), so
     // its exact prop shape isn't known statically — resolving it against

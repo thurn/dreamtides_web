@@ -7,7 +7,6 @@ import { GameCard } from "../components/card/CardView";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlowIcon } from "../components/controls/GlowIcon";
-import { groupPanelStyle } from "../components/controls/GroupPanel";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { glassSurfaceStyle } from "../internal/glass-surface";
 import type { ArtRef } from "../primitives/art";
@@ -120,11 +119,6 @@ export function TransfigurationSiteScreen({
         (choice) => choice.entryId === entryId,
       );
       if (candidate === undefined) return;
-      const firstForm =
-        candidate.forms.find((form) => form.affordable) ?? candidate.forms[0];
-      if (firstForm === undefined) return;
-      setSelectedFormType(firstForm.type);
-
       if (reduceMotion === true) {
         setPickedEntryId(entryId);
         return;
@@ -153,10 +147,22 @@ export function TransfigurationSiteScreen({
           { duration: 320, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "forwards" },
         );
       }
+      const activeCard = source.querySelector<HTMLElement>(
+        '[data-game-card-source][data-reveal-active="true"]',
+      );
+      const revealCard =
+        activeCard === null
+          ? null
+          : document.querySelector<HTMLElement>(
+              '[data-tango-reveal-card="primary"]',
+            );
+      const travelSource = revealCard ?? source;
+      const sourceRect = snapshotRect(travelSource.getBoundingClientRect());
+      if (revealCard !== null) revealCard.style.visibility = "hidden";
       source.style.visibility = "hidden";
       setTravel({
         candidate,
-        source: snapshotRect(source.getBoundingClientRect()),
+        source: sourceRect,
         target: snapshotRect(target.getBoundingClientRect()),
       });
     },
@@ -204,7 +210,11 @@ export function TransfigurationSiteScreen({
               confirming={confirming}
               alreadyAccepted={view.alreadyAccepted}
               onBack={goBack}
-              onSelectForm={setSelectedFormType}
+              onSelectForm={(type) =>
+                setSelectedFormType((current) =>
+                  current === type ? null : type,
+                )
+              }
               onConfirm={(form) => {
                 setConfirming(true);
                 onTransfigure(
@@ -229,7 +239,7 @@ export function TransfigurationSiteScreen({
             >
               <DetailPanel
                 candidate={fallbackCandidate}
-                selectedFormType={fallbackCandidate.forms[0]?.type ?? null}
+                selectedFormType={null}
                 confirming={false}
                 alreadyAccepted={false}
                 onBack={() => undefined}
@@ -326,9 +336,7 @@ function DetailPanel({
   readonly onConfirm: (form: TransfigurationFormView) => void;
 }) {
   const activeForm =
-    candidate.forms.find((form) => form.type === selectedFormType) ??
-    candidate.forms[0] ??
-    null;
+    candidate.forms.find((form) => form.type === selectedFormType) ?? null;
   const disabled =
     activeForm === null ||
     !activeForm.affordable ||
@@ -404,7 +412,7 @@ function DetailPanel({
               gap: token("--space-3"),
               maxHeight: "min(52vh, 520px)",
               overflowY: "auto",
-              paddingRight: token("--space-2"),
+              padding: token("--space-2"),
             }}
           >
             {candidate.forms.map((form) => {
@@ -419,7 +427,6 @@ function DetailPanel({
                   data-testid={`tango-transfiguration-form-${form.type}`}
                   onClick={() => onSelectForm(form.type)}
                   style={{
-                    ...groupPanelStyle(),
                     width: "100%",
                     boxSizing: "border-box",
                     display: "grid",
@@ -427,8 +434,11 @@ function DetailPanel({
                     gap: token("--space-4"),
                     alignItems: "center",
                     padding: token("--space-4"),
-                    border: `2px solid ${selected ? form.accent : "transparent"}`,
-                    color: token("--text-primary"),
+                    border: `2px solid ${selected ? form.accent : token("--border-soft")}`,
+                    borderRadius: token("--radius-control"),
+                    background: "transparent",
+                    boxShadow: "none",
+                    color: token("--text-on-glass"),
                     textAlign: "left",
                     opacity: form.affordable ? 1 : 0.46,
                   }}
@@ -444,7 +454,7 @@ function DetailPanel({
                       style={{
                         display: "block",
                         font: token("--t-button"),
-                        color: token("--text-primary"),
+                        color: token("--text-on-glass"),
                       }}
                     >
                       {form.type}
@@ -454,7 +464,7 @@ function DetailPanel({
                         display: "block",
                         marginTop: token("--space-1"),
                         font: token("--t-caption"),
-                        color: token("--text-secondary"),
+                        color: token("--text-on-glass-muted"),
                       }}
                     >
                       {form.description}
@@ -463,7 +473,7 @@ function DetailPanel({
                   <span
                     style={{
                       font: token("--t-button"),
-                      color: token("--text-primary"),
+                      color: token("--text-on-glass"),
                       whiteSpace: "nowrap",
                     }}
                   >

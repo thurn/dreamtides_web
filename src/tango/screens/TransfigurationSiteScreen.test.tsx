@@ -186,7 +186,7 @@ describe("TransfigurationSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("opens the detail panel with title-bar Back, left card, right options, and one commit action", () => {
+  it("opens on the base card, toggles forms, and only enables commit while an affordable form is selected", () => {
     const onTransfigure = vi.fn();
     const { container, root } = mount(
       <TransfigurationSiteScreen
@@ -244,6 +244,17 @@ describe("TransfigurationSiteScreen", () => {
     expect(commit?.dataset.glassVariant).toBe("accent");
     expect(commit?.textContent).toContain("Transfigure ·");
     expect(commit?.textContent).not.toContain("Card");
+    expect(commit?.getAttribute("aria-disabled")).toBe("true");
+    expect(container.querySelector('[role="radio"][aria-checked="true"]')).toBeNull();
+
+    const empowered = container.querySelector<HTMLButtonElement>(
+      '[data-testid="tango-transfiguration-form-Empowered"]',
+    );
+    expect(empowered?.style.background).toBe("transparent");
+    expect(empowered?.style.boxShadow).toBe("none");
+    act(() => empowered?.click());
+    expect(empowered?.getAttribute("aria-checked")).toBe("true");
+    expect(commit?.getAttribute("aria-disabled")).toBeNull();
     act(() => commit?.click());
     expect(onTransfigure).toHaveBeenCalledWith(
       "entry-1",
@@ -252,6 +263,10 @@ describe("TransfigurationSiteScreen", () => {
       { fixture: true },
       40,
     );
+
+    act(() => empowered?.click());
+    expect(empowered?.getAttribute("aria-checked")).toBe("false");
+    expect(commit?.getAttribute("aria-disabled")).toBe("true");
 
     act(() => root.unmount());
   });
@@ -263,17 +278,6 @@ describe("TransfigurationSiteScreen", () => {
       configurable: true,
       value: animate,
     });
-    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({
-      x: 0,
-      y: 0,
-      left: 100,
-      top: 120,
-      right: 280,
-      bottom: 380,
-      width: 180,
-      height: 260,
-      toJSON: () => ({}),
-    });
     const { container, root } = mount(
       <TransfigurationSiteScreen
         view={view()}
@@ -282,25 +286,61 @@ describe("TransfigurationSiteScreen", () => {
       />,
     );
 
-    act(() => {
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="tango-transfiguration-card-entry-2"]',
-        )
-        ?.click();
-    });
+    const source = container.querySelector<HTMLElement>(
+      '[data-testid="tango-transfiguration-card-entry-2"]',
+    );
+    source?.setAttribute("data-reveal-active", "true");
+    const target = container.querySelector<HTMLElement>(
+      "[data-transfiguration-detail-card-target]",
+    );
+    if (target === null) throw new Error("Missing detail target");
+    target.getBoundingClientRect = () =>
+      DOMRect.fromRect({ x: 100, y: 120, width: 180, height: 260 });
+    const revealCard = document.createElement("div");
+    revealCard.dataset.tangoRevealCard = "primary";
+    revealCard.getBoundingClientRect = () =>
+      DOMRect.fromRect({ x: 420, y: 80, width: 340, height: 500 });
+    document.body.append(revealCard);
+    act(() => source?.click());
 
     expect(animate).toHaveBeenCalledTimes(2);
-    expect(
-      container.querySelector(
-        '[data-testid="tango-transfiguration-card-travel"]',
-      ),
-    ).not.toBeNull();
+    const traveling = container.querySelector<HTMLElement>(
+      '[data-testid="tango-transfiguration-card-travel"]',
+    );
+    expect(traveling).not.toBeNull();
+    expect(traveling?.style.left).toBe("420px");
+    expect(traveling?.style.top).toBe("80px");
+    expect(revealCard.style.visibility).toBe("hidden");
     expect(
       container.querySelector<HTMLElement>(
         '[data-gallery-entry-id="entry-2"]',
       )?.style.visibility,
     ).toBe("hidden");
+
+    act(() => root.unmount());
+  });
+
+  it("reserves breathing room around the scrolling option list so hover feedback is not clipped", () => {
+    const { container, root } = mount(
+      <TransfigurationSiteScreen
+        view={view()}
+        onClose={vi.fn()}
+        onTransfigure={vi.fn()}
+      />,
+    );
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="tango-transfiguration-card-entry-1"]',
+        )
+        ?.click();
+    });
+
+    const options = container.querySelector<HTMLElement>(
+      "[data-transfiguration-options]",
+    );
+    expect(options?.style.padding).toBe("var(--space-2)");
+    expect(options?.style.overflowY).toBe("auto");
 
     act(() => root.unmount());
   });

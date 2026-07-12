@@ -136,4 +136,12 @@ describe("Pressable press feedback", () => {
     pressDown(el);
     expect(el.style.transform).toBe("scale(var(--reveal-press-scale))");
   });
+
+  it("measures a wide surface so press feedback stays proportional to its rendered size", () => {
+    const { container } = mountInto(<Pressable as="button">Wide option</Pressable>);
+    const el = container.querySelector("button")!;
+    el.getBoundingClientRect = () => DOMRect.fromRect({ width: 600, height: 80 });
+    pressDown(el);
+    expect(el.style.transform).toBe("scale(0.98)");
+  });
 });

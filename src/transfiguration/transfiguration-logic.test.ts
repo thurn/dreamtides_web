@@ -58,6 +58,11 @@ describe("TRANSFIGURATION_COLORS", () => {
       expect(TRANSFIGURATION_COLORS[t]).toMatch(/^#[0-9a-f]{6}$/);
     }
   });
+
+  it("keeps Amplified and Enduring in clearly separate hue families", () => {
+    expect(TRANSFIGURATION_COLORS.Amplified).toBe("#f59e0b");
+    expect(TRANSFIGURATION_COLORS.Enduring).toBe("#6366f1");
+  });
 });
 
 describe("isEmpoweredEligible", () => {
@@ -308,6 +313,9 @@ describe("assignTransfiguration", () => {
     expect(offer).not.toBeNull();
     expect(offer!.type).toBe("Amplified");
     expect(offer!.previewCard.renderedText).toMatch(/Deal [46] damage\./);
+    expect(offer!.description).toBe(
+      `“${offer!.previewCard.renderedText}”`,
+    );
   });
 
   it("Empowered halves the energy cost rounding down for odd numbers", () => {

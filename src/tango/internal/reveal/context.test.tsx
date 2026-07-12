@@ -227,7 +227,7 @@ describe("Tango reveal coordinator root", () => {
     button.getBoundingClientRect = () => ({ x: 10, y: 200, left: 10, top: 200, right: 110, bottom: 250, width: 100, height: 50, toJSON: () => ({}) });
     act(() => { button.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" })); });
     expect(button.getAttribute("data-reveal-feedback")).toBe("measured");
-    expect(button.style.getPropertyValue("--reveal-press-scale")).toBe("0.9");
+    expect(button.style.getPropertyValue("--reveal-press-scale")).toBe("0.94");
     expect(document.body.querySelectorAll(":scope > [data-tango-reveal-portal]")).toHaveLength(1);
   });
 
