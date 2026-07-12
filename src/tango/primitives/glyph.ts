@@ -93,6 +93,18 @@ export const GLYPHS = {
   menu: g("bxf bx-menu"),
   /** The circular refresh arrows used by shop restock actions. */
   refresh: g("bxf bx-refresh-cw"),
+
+  // Named Transfiguration marks. These mirror the card renderer's per-form
+  // emblems and keep forge UI callers out of raw icon-font class strings.
+  transfigurationEmpowered: g("bxf bx-bolt"),
+  transfigurationAmplified: g("bxf bx-trending-up"),
+  transfigurationKindled: g("bxf bx-flame"),
+  transfigurationInspired: g("bxf bx-brain"),
+  transfigurationEnduring: g("bxf bx-infinite"),
+  transfigurationHastened: g("bxf bx-rocket"),
+  transfigurationResonant: g("bxf bx-broadcast"),
+  transfigurationAttuned: g("bxf bx-slider"),
+  transfigurationPerfected: g("bxf bx-diamond"),
 } as const;
 
 /**

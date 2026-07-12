@@ -51,6 +51,23 @@ describe("tangoSiteScreenFor", () => {
     ).not.toBeNull();
   });
 
+  it("resolves standard desktop Transfiguration while enhanced stays on the legacy screen", () => {
+    expect(
+      tangoSiteScreenFor({
+        type: "Transfiguration",
+        id: "site-1",
+        isEnhanced: false,
+      } as SiteState),
+    ).not.toBeNull();
+    expect(
+      tangoSiteScreenFor({
+        type: "Transfiguration",
+        id: "site-1",
+        isEnhanced: true,
+      } as SiteState),
+    ).toBeNull();
+  });
+
   it("returns null for site types not yet migrated, so ScreenRouter falls back to legacy", () => {
     expect(tangoSiteScreenFor({ type: "Reward" } as SiteState)).toBeNull();
   });

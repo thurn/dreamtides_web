@@ -115,7 +115,6 @@ export const BASELINE = [
   "--scrim-strong",
   // Type scale (--t-*) members — sanctioned complete scale; each bundles
   // weight + size + face for a voice UI code applies by role.
-  "--t-button",
   "--t-button-sm",
   "--t-numeral",
   "--t-popover-body",

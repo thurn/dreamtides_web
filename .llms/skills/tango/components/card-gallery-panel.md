@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/card-gallery-panel`
 
-Real consumers: **3** (imports outside `src/tango/docs/` and tests).
+Real consumers: **4** (imports outside `src/tango/docs/` and tests).
 
 The shared card-browser surface: a left-aligned title and subtitle, a trailing header accessory, and a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim.
 

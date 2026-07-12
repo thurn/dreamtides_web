@@ -1,0 +1,149 @@
+import { describe, expect, it } from "vitest";
+import { createDefaultState } from "../../state/quest-context";
+import type { CardData } from "../../types/cards";
+import { asCardId, asCardName } from "../../types/card-identity";
+import type {
+  CardChoiceSiteRuntime,
+  DeckEntry,
+  SiteState,
+  TransfigurationType,
+} from "../../types/quest";
+import {
+  buildTransfigurationCandidates,
+  buildTransfigurationSiteView,
+} from "./transfiguration-view-model";
+
+function makeCard(cardNumber: number): CardData {
+  return {
+    name: asCardName(`Fixture ${String(cardNumber)}`),
+    id: asCardId(`00000000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`),
+    cardNumber,
+    cardType: "Character",
+    subtype: "",
+    isStarter: false,
+    energyCost: 2,
+    spark: 2,
+    isFast: false,
+    renderedText: "Materialized: Gain 1 essence.",
+    imageNumber: cardNumber,
+    artOwned: true,
+  };
+}
+
+function makeEntry(cardNumber: number): DeckEntry {
+  return {
+    entryId: `entry-${String(cardNumber)}`,
+    cardNumber,
+    transfiguration: null,
+    isBane: false,
+  };
+}
+
+function offer(entryId: string, type: TransfigurationType, cost: number) {
+  return {
+    entryId,
+    type,
+    effectDescription: `${type} fixture effect.`,
+    effectDetails: { fixture: type },
+    previewCard: makeCard(Number(entryId.replace("entry-", ""))),
+    essenceCost: cost,
+  };
+}
+
+function runtime(): CardChoiceSiteRuntime {
+  return {
+    kind: "cardChoice",
+    choiceKind: "transfiguration",
+    entryIds: ["entry-1", "entry-2", "entry-3", "entry-4"],
+    acceptedEntryIds: [],
+    transfigurationOffers: [
+      offer("entry-1", "Empowered", 40),
+      offer("entry-1", "Kindled", 70),
+      offer("entry-2", "Amplified", 20),
+      offer("entry-3", "Resonant", 30),
+      offer("entry-4", "Perfected", 50),
+    ],
+  };
+}
+
+const site: SiteState = {
+  id: "transfiguration-site",
+  type: "Transfiguration",
+  isEnhanced: false,
+  isVisited: false,
+};
+
+describe("buildTransfigurationCandidates", () => {
+  it("groups form rows by concrete entry id, keeps UUID card identity, and caps the standard offer at three cards", () => {
+    const state = {
+      ...createDefaultState(),
+      essence: 50,
+      deck: [makeEntry(1), makeEntry(2), makeEntry(3), makeEntry(4)],
+    };
+    const cardDatabase = new Map(
+      state.deck.map((entry) => [entry.cardNumber, makeCard(entry.cardNumber)]),
+    );
+
+    const candidates = buildTransfigurationCandidates(
+      state,
+      runtime(),
+      cardDatabase,
+    );
+
+    expect(candidates.map((candidate) => candidate.entryId)).toEqual([
+      "entry-1",
+      "entry-2",
+      "entry-3",
+    ]);
+    expect(candidates[0]?.model.cardId).toBe(cardDatabase.get(1)?.id);
+    expect(candidates[0]?.forms.map((form) => form.type)).toEqual([
+      "Empowered",
+      "Kindled",
+    ]);
+    expect(candidates[0]?.forms.map((form) => form.affordable)).toEqual([
+      true,
+      false,
+    ]);
+    expect(candidates[0]?.forms[0]?.previewModel.transfiguration?.type).toBe(
+      "Empowered",
+    );
+  });
+
+  it("skips missing, already-transfigured, and form-less entries", () => {
+    const state = {
+      ...createDefaultState(),
+      essence: 100,
+      deck: [{ ...makeEntry(1), transfiguration: "Kindled" as const }],
+    };
+    expect(
+      buildTransfigurationCandidates(
+        state,
+        runtime(),
+        new Map([[1, makeCard(1)]]),
+      ),
+    ).toEqual([]);
+  });
+});
+
+describe("buildTransfigurationSiteView", () => {
+  it("builds Durgan's guide slice and loading state without asserting production content", () => {
+    const state = createDefaultState();
+    const view = buildTransfigurationSiteView({
+      state,
+      sceneNode: null,
+      site,
+      runtime: null,
+      cardDatabase: new Map(),
+      guide: null,
+      guideLine: null,
+    });
+
+    expect(view.siteId).toBe(site.id);
+    expect(view.ready).toBe(false);
+    expect(view.guide).toMatchObject({
+      id: "durgan_forgehammer",
+      name: "Durgan Forgehammer",
+    });
+    expect(view.candidates).toEqual([]);
+  });
+});

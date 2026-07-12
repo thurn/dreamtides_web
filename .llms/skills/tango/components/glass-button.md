@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/glass-button`
 
-Real consumers: **3** (imports outside `src/tango/docs/` and tests).
+Real consumers: **4** (imports outside `src/tango/docs/` and tests).
 
 The labeled glass secondary action — a text label in the control typography on the shared liquid-glass control surface, with an optional leading glyph, a danger treatment, and placement-aware recipes for media or an existing glass surface.
 
