@@ -12,8 +12,6 @@ namespace TangoMvp.Diagnostics
         [SerializeField] private TangoGlassQuality quality = TangoGlassQuality.Desktop;
         [SerializeField] private TangoGlassRendererMode rendererMode = TangoGlassRendererMode.ForwardPlus;
 
-        private Camera targetCamera;
-
         public void Configure(
             TangoMaterialLibrary library,
             TangoGlassQuality glassQuality,
@@ -27,7 +25,6 @@ namespace TangoMvp.Diagnostics
 
         private void OnEnable()
         {
-            targetCamera = GetComponent<Camera>();
             PublishIfChanged();
         }
 
@@ -38,11 +35,7 @@ namespace TangoMvp.Diagnostics
 
         private void PublishIfChanged()
         {
-            if (targetCamera == null)
-            {
-                targetCamera = GetComponent<Camera>();
-            }
-
+            Camera targetCamera = GetComponent<Camera>();
             TangoGlassLightingProfile profile = materialLibrary == null
                 ? null
                 : materialLibrary.LightingProfile;

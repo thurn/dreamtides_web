@@ -18,6 +18,21 @@ Rebuild it from `Tango MVP > Rebuild Shop Glass Demo`. The builder also exposes
 `TangoMvp.Editor.TangoShopGlassDemoBuilder.CaptureBatch` for a deterministic
 1920 x 1080 review capture.
 
+## Point-light authoring
+
+`Assets/TangoMvp/Materials/TangoGlassLightingProfile.asset` is the shared editor
+surface for `SceneGlass` and `OnGlass` lighting. It exposes edge-reflection and
+interior-reflection strength, roughness, light-color response, and a soft HDR
+ceiling for each role. It also declares the bounded desktop and mobile
+additional-light budgets. Individual panels use the shared material library and
+have no lighting overrides.
+
+Open `Assets/Scenes/TangoGlassLab.unity` to inspect a blue point light orbiting
+the generated rounded panels. The modeled bevel carries the narrow moving glint;
+the face carries the broader colored reflection. The desktop path evaluates at
+most four URP additional lights with supported shadows. The mobile shader path
+evaluates at most one additional light without sampling its shadow.
+
 From the repository root, an autonomous agent verifies this proof of concept with one command:
 
 ```bash
@@ -46,9 +61,9 @@ The eight required stages appear in `summary.json.stages` in this exact order:
 
 1. `shell-harness-self-tests` exercises stale/missing/malformed Unity evidence, wrong-version overrides, a real timeout with spawned-child process-group termination, provenance, exact GPU evidence, PNG decoding, and scope-guard negative controls.
 2. `clean-unity-import` deletes `cumulus/Library`, imports with the committed Unity version, and scans the complete log.
-3. `deterministic-builder` rebuilds the scene twice and requires identical SHA-256 manifests for 13 authoritative assets.
+3. `deterministic-builder` rebuilds the scene twice and requires identical SHA-256 manifests for 14 authoritative assets.
 4. `editmode-tests` requires validated passing NUnit XML with at least one test and internally consistent counts.
-5. `gpu-playmode-tests` requires validated passing graphics-enabled NUnit XML, the exact 27-metric contract, and the exact 20 decodable `512 x 288` RGBA PNG captures.
+5. `gpu-playmode-tests` requires validated passing graphics-enabled NUnit XML, the exact 29-metric contract, and the exact 20 decodable `512 x 288` RGBA PNG captures.
 6. `shader-inspection-and-build` requires zero `ShaderUtil.GetShaderMessages` errors for the three required shaders and a nonempty successful `StandaloneOSX` player.
 7. `repository-checks` runs `npm run lint`, `npm run typecheck`, and `npm test` in order.
 8. `static-scope-guard` compares against `TANGO_SCOPE_BASE` or `merge-base HEAD master`, verifies Unity `.meta` pairing, and rejects mechanically detectable deferred systems.
@@ -104,7 +119,7 @@ The thresholds are deliberately relational or broad proof-of-life bounds. They e
 | `fallbackInteriorLuminanceMinimum` | `>= 0.02` | Disabled shared blur still renders a visible finite fallback. Lower means black/invisible fallback. |
 | `fallbackInteriorLuminanceMaximum` | `<= 0.8` | Fallback is bounded below whiteout. Higher means clipped/opaque fallback. |
 
-`<phase>` expands to all four exact suffixes: `bothPanesEnabled`, `mainPaneDisabled`, `independentPaneDisabled`, and `onGlassButtonDisabled`. This produces 12 exact graph/pass records and 27 total metrics.
+`<phase>` expands to all four exact suffixes: `bothPanesEnabled`, `mainPaneDisabled`, `independentPaneDisabled`, and `onGlassButtonDisabled`. This produces 12 exact graph/pass records and 29 total metrics.
 
 The exact capture set is `spinner-a.png`, `spinner-b.png`, `spinner-c.png`, `main-pane-disabled.png`, `independent-pane-disabled.png`, `button-parent-a.png`, `button-parent-b.png`, `button-a.png`, `button-b.png`, `light-a.png`, `light-b.png`, `shadow-on.png`, `shadow-off.png`, `label-bright-backdrop.png`, `label-bright.png`, `label-gold-backdrop.png`, `label-gold.png`, `label-dark-backdrop.png`, `label-dark.png`, and `fallback.png`. The validator checks the exact set, PNG signature and chunk order, CRCs, IHDR format, IDAT decompression, scanlines, and exact `512 x 288`, 8-bit RGBA non-interlaced dimensions.
 

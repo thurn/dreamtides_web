@@ -485,7 +485,7 @@ namespace TangoMvp.Editor
             Light light = EnsureComponent<Light>(lightObject);
             light.type = LightType.Point;
             light.color = new Color(0.28f, 0.72f, 1f, 1f);
-            light.intensity = 7f;
+            light.intensity = 10f;
             light.range = 9f;
             light.shadows = LightShadows.Soft;
             light.shadowStrength = 0.8f;

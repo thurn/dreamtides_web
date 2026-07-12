@@ -173,7 +173,10 @@ namespace TangoMvp.Tests.PlayMode
                 yield return routine.Current;
                 Camera seededCamera = UnityEngine.Object.FindFirstObjectByType<Camera>();
                 TangoSpinner seededSpinner = UnityEngine.Object.FindFirstObjectByType<TangoSpinner>();
-                TangoLightOrbit seededLight = UnityEngine.Object.FindFirstObjectByType<TangoLightOrbit>();
+                TangoLightOrbit seededLight = UnityEngine.Object.FindObjectsByType<TangoLightOrbit>(
+                        FindObjectsInactive.Include,
+                        FindObjectsSortMode.None)
+                    .Single(candidate => candidate.GetComponent<Light>().type == LightType.Directional);
                 TangoGlassRendererFeature seededFeature = Resources.FindObjectsOfTypeAll<TangoGlassRendererFeature>()
                     .First(candidate => candidate.name == "TangoGlassRendererFeature");
                 GameObject seededMain = GameObject.Find("Tango Glass Panel/Glass Face");
@@ -224,6 +227,90 @@ namespace TangoMvp.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator GlassLab_MovingPointLightChangesPositionAndColorOnGlass()
+        {
+            SceneManager.LoadScene("TangoGlassLab", LoadSceneMode.Single);
+            yield return null;
+            Camera camera = UnityEngine.Object.FindFirstObjectByType<Camera>();
+            TangoVerificationMarkers markers = UnityEngine.Object.FindFirstObjectByType<TangoVerificationMarkers>();
+            TangoLightOrbit[] orbits = UnityEngine.Object.FindObjectsByType<TangoLightOrbit>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None);
+            TangoLightOrbit pointOrbit = orbits.Single(candidate => candidate.GetComponent<Light>().type == LightType.Point);
+            TangoLightOrbit directionalOrbit = orbits.Single(candidate => candidate.GetComponent<Light>().type == LightType.Directional);
+            Light pointLight = pointOrbit.GetComponent<Light>();
+            Light directionalLight = directionalOrbit.GetComponent<Light>();
+            TangoGlassRendererFeature feature = Resources.FindObjectsOfTypeAll<TangoGlassRendererFeature>()
+                .First(candidate => candidate != null && candidate.name == "TangoGlassRendererFeature");
+            RenderTexture previousTarget = camera.targetTexture;
+            RenderTexture previousActive = RenderTexture.active;
+            bool pointEnabled = pointLight.enabled;
+            bool directionalEnabled = directionalLight.enabled;
+            bool pointOrbitEnabled = pointOrbit.enabled;
+            bool directionalOrbitEnabled = directionalOrbit.enabled;
+            bool featureActive = feature.isActive;
+            Vector3 pointPosition = pointOrbit.transform.localPosition;
+            var target = new RenderTexture(
+                CaptureWidth,
+                CaptureHeight,
+                24,
+                RenderTextureFormat.ARGB32,
+                RenderTextureReadWrite.sRGB);
+            try
+            {
+                camera.targetTexture = target;
+                target.Create();
+                feature.SetActive(true);
+                pointOrbit.enabled = false;
+                directionalOrbit.enabled = false;
+                directionalLight.enabled = false;
+                RectInt region = Region(markers, camera, TangoVerificationRegion.LiveGlassB);
+
+                pointLight.enabled = false;
+                Color32[] baseline = Capture(camera, target, "point-baseline", false);
+                pointLight.enabled = true;
+                pointOrbit.SetPhase(0f);
+                Color32[] phaseA = Capture(camera, target, "point-phase-a", false);
+                pointOrbit.SetPhase(0.5f);
+                Color32[] phaseB = Capture(camera, target, "point-phase-b", false);
+
+                Assert.That(
+                    TangoImageMetrics.MeanAbsoluteRgbDifference(
+                        baseline,
+                        phaseA,
+                        CaptureWidth,
+                        CaptureHeight,
+                        region),
+                    Is.GreaterThanOrEqualTo(0.002f));
+                Assert.That(
+                    TangoImageMetrics.MeanAbsoluteRgbDifference(
+                        phaseA,
+                        phaseB,
+                        CaptureWidth,
+                        CaptureHeight,
+                        region),
+                    Is.GreaterThanOrEqualTo(0.001f));
+
+                Vector3 channelDelta = MeanPositiveChannelDelta(baseline, phaseA, region);
+                Assert.That(channelDelta.z, Is.GreaterThan(channelDelta.x * 1.05f));
+
+            }
+            finally
+            {
+                feature.SetActive(featureActive);
+                pointLight.enabled = pointEnabled;
+                directionalLight.enabled = directionalEnabled;
+                pointOrbit.enabled = pointOrbitEnabled;
+                directionalOrbit.enabled = directionalOrbitEnabled;
+                pointOrbit.transform.localPosition = pointPosition;
+                camera.targetTexture = previousTarget;
+                RenderTexture.active = previousActive;
+                target.Release();
+                UnityEngine.Object.Destroy(target);
+            }
+        }
+
+        [UnityTest]
         public IEnumerator GlassLab_RendersLiveSharedBlurAndFailClosedFallbackEvidence()
         {
             Directory.CreateDirectory(EvidenceDirectory);
@@ -232,12 +319,15 @@ namespace TangoMvp.Tests.PlayMode
             latestResults.Clear();
             List<TangoGpuAcceptanceResult> results = latestResults;
             Camera camera = null; TangoSpinner spinner = null; TangoLightOrbit lightOrbit = null;
+            TangoLightOrbit pointOrbit = null; Light pointLight = null;
             TangoGlassRendererFeature feature = null; GameObject mainGlass = null; GameObject independentGlass = null;
             GameObject onGlassButton = null; GameObject frameShadowCaster = null; Renderer labelRenderer = null;
             RenderTexture target = null; RenderTexture previousTarget = null; RenderTexture previousActive = RenderTexture.active;
             float previousAspect = 0f; bool featureWasActive = false; ShadowCastingMode originalShadowMode = default;
             bool mainGlassEnabled = false, independentGlassEnabled = false, buttonEnabled = false, labelRendererEnabled = false;
-            bool spinnerEnabled = false, lightOrbitEnabled = false; Quaternion spinnerRotation = default, lightRotation = default;
+            bool spinnerEnabled = false, lightOrbitEnabled = false, pointOrbitEnabled = false, pointLightEnabled = false;
+            Quaternion spinnerRotation = default, lightRotation = default;
+            Vector3 pointPosition = default;
 
             try
             {
@@ -246,7 +336,15 @@ namespace TangoMvp.Tests.PlayMode
                 camera = UnityEngine.Object.FindFirstObjectByType<Camera>();
                 TangoVerificationMarkers markers = UnityEngine.Object.FindFirstObjectByType<TangoVerificationMarkers>();
                 spinner = UnityEngine.Object.FindFirstObjectByType<TangoSpinner>();
-                lightOrbit = UnityEngine.Object.FindFirstObjectByType<TangoLightOrbit>();
+                lightOrbit = UnityEngine.Object.FindObjectsByType<TangoLightOrbit>(
+                        FindObjectsInactive.Include,
+                        FindObjectsSortMode.None)
+                    .Single(candidate => candidate.GetComponent<Light>().type == LightType.Directional);
+                pointOrbit = UnityEngine.Object.FindObjectsByType<TangoLightOrbit>(
+                        FindObjectsInactive.Include,
+                        FindObjectsSortMode.None)
+                    .Single(candidate => candidate.GetComponent<Light>().type == LightType.Point);
+                pointLight = pointOrbit.GetComponent<Light>();
                 feature = Resources.FindObjectsOfTypeAll<TangoGlassRendererFeature>().FirstOrDefault(candidate => candidate != null && candidate.name == "TangoGlassRendererFeature");
                 mainGlass = FindSceneObject("Glass Face"); independentGlass = FindSceneObject("Independent Glass Pane");
                 onGlassButton = FindSceneObject("On Glass Button"); frameShadowCaster = FindSceneObject("Frame Bottom Rail");
@@ -259,9 +357,10 @@ namespace TangoMvp.Tests.PlayMode
                 mainGlassEnabled = mainGlass.activeSelf; independentGlassEnabled = independentGlass.activeSelf; buttonEnabled = onGlassButton.activeSelf;
                 labelRenderer = primaryLabel.GetComponent<Renderer>(); labelRendererEnabled = labelRenderer.enabled;
                 spinnerEnabled = spinner.enabled; lightOrbitEnabled = lightOrbit.enabled; spinnerRotation = spinner.transform.localRotation; lightRotation = lightOrbit.transform.localRotation;
+                pointOrbitEnabled = pointOrbit.enabled; pointLightEnabled = pointLight.enabled; pointPosition = pointOrbit.transform.localPosition;
                 target = new RenderTexture(CaptureWidth, CaptureHeight, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB)
                 { name = "Tango MVP GPU Acceptance", antiAliasing = 1, useMipMap = false, autoGenerateMips = false };
-                spinner.enabled = false; lightOrbit.enabled = false; camera.targetTexture = target; camera.aspect = (float)CaptureWidth / CaptureHeight; target.Create();
+                spinner.enabled = false; lightOrbit.enabled = false; pointOrbit.enabled = false; pointLight.enabled = false; camera.targetTexture = target; camera.aspect = (float)CaptureWidth / CaptureHeight; target.Create();
                 if (forceFailureAfterSetup) throw new InvalidOperationException("Forced GPU setup failure.");
                 string graphicsApi = SystemInfo.graphicsDeviceType.ToString(); string deviceName = SystemInfo.graphicsDeviceName;
                 RectInt liveA = Region(markers, camera, TangoVerificationRegion.LiveGlassA); RectInt liveB = Region(markers, camera, TangoVerificationRegion.LiveGlassB);
@@ -410,6 +509,8 @@ namespace TangoMvp.Tests.PlayMode
                 if (onGlassButton != null) onGlassButton.SetActive(buttonEnabled); if (labelRenderer != null) labelRenderer.enabled = labelRendererEnabled;
                 if (spinner != null) { spinner.enabled = spinnerEnabled; spinner.transform.localRotation = spinnerRotation; }
                 if (lightOrbit != null) { lightOrbit.enabled = lightOrbitEnabled; lightOrbit.transform.localRotation = lightRotation; }
+                if (pointOrbit != null) { pointOrbit.enabled = pointOrbitEnabled; pointOrbit.transform.localPosition = pointPosition; }
+                if (pointLight != null) pointLight.enabled = pointLightEnabled;
                 if (camera != null) { camera.targetTexture = previousTarget; camera.aspect = previousAspect; }
                 RenderTexture.active = previousActive;
                 if (target != null) { target.Release(); UnityEngine.Object.Destroy(target); }
@@ -435,7 +536,7 @@ namespace TangoMvp.Tests.PlayMode
                 .FirstOrDefault(candidate => candidate.scene.IsValid() && candidate.name == name);
         }
 
-        private static Color32[] Capture(Camera camera, RenderTexture target, string name)
+        private static Color32[] Capture(Camera camera, RenderTexture target, string name, bool writeEvidence = true)
         {
             camera.Render();
             RenderTexture previous = RenderTexture.active;
@@ -446,9 +547,16 @@ namespace TangoMvp.Tests.PlayMode
                 texture.ReadPixels(new Rect(0f, 0f, CaptureWidth, CaptureHeight), 0, 0, false);
                 texture.Apply(false, false);
                 Color32[] pixels = texture.GetPixels32();
-                File.WriteAllBytes(
-                    Path.Combine(EvidenceDirectory, name + ".png"),
-                    TangoImageMetrics.EncodeRegionPng(pixels, CaptureWidth, CaptureHeight, new RectInt(0, 0, CaptureWidth, CaptureHeight)));
+                if (writeEvidence)
+                {
+                    File.WriteAllBytes(
+                        Path.Combine(EvidenceDirectory, name + ".png"),
+                        TangoImageMetrics.EncodeRegionPng(
+                            pixels,
+                            CaptureWidth,
+                            CaptureHeight,
+                            new RectInt(0, 0, CaptureWidth, CaptureHeight)));
+                }
                 return pixels;
             }
             finally
@@ -456,6 +564,25 @@ namespace TangoMvp.Tests.PlayMode
                 RenderTexture.active = previous;
                 UnityEngine.Object.DestroyImmediate(texture);
             }
+        }
+
+        private static Vector3 MeanPositiveChannelDelta(Color32[] baseline, Color32[] lit, RectInt region)
+        {
+            Vector3 sum = Vector3.zero;
+            int count = 0;
+            for (int y = region.yMin; y < region.yMax; y++)
+            {
+                for (int x = region.xMin; x < region.xMax; x++)
+                {
+                    int index = y * CaptureWidth + x;
+                    sum.x += Mathf.Max(0f, lit[index].r - baseline[index].r) / 255f;
+                    sum.y += Mathf.Max(0f, lit[index].g - baseline[index].g) / 255f;
+                    sum.z += Mathf.Max(0f, lit[index].b - baseline[index].b) / 255f;
+                    count++;
+                }
+            }
+
+            return count > 0 ? sum / count : Vector3.zero;
         }
 
         private static TangoGlassFrameFacts RequireFacts(Camera camera)

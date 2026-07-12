@@ -644,6 +644,14 @@ lights per pixel. At most two additional lights cast shadows on Tango geometry.
 Priority is directional key light, focused interaction light, nearest authored
 accent light, then distance with stable instance identifier as the tie-breaker.
 
+`SceneGlass` and `OnGlass` share a dielectric GGX lighting module. Tango's
+generated rounded-panel mesh supplies an explicit face-versus-shell channel:
+the shell uses a narrow colored lobe that travels around the modeled bevel, and
+the face uses a broader, lower-energy colored reflection. The shared
+`TangoGlassLightingProfile` authors both semantic roles; panel instances do not
+override it. With no contributing light, both lobes contribute exact zero and
+the calibrated transmission or tonal-lens composition remains unchanged.
+
 Desktop reference budgets are measured at 2560 by 1440:
 
 - At 60 frames per second, total Tango glass GPU cost targets 2.0 milliseconds

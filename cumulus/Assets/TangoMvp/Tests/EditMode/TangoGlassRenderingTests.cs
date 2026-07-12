@@ -365,7 +365,6 @@ namespace TangoMvp.Tests
                 Assert.That(source, Does.Contain("_ADDITIONAL_LIGHTS"));
                 Assert.That(source, Does.Contain("_ADDITIONAL_LIGHT_SHADOWS"));
                 Assert.That(source, Does.Contain("_CLUSTER_LIGHT_LOOP"));
-                Assert.That(source, Does.Contain("_TANGO_GLASS_MOBILE_QUALITY"));
                 Assert.That(source, Does.Contain("EvaluateTangoGlassLighting"));
             }
 
@@ -376,6 +375,8 @@ namespace TangoMvp.Tests
             Assert.That(lightingSource, Does.Contain("0.04h"));
             Assert.That(lightingSource, Does.Contain("distanceAttenuation"));
             Assert.That(lightingSource, Does.Contain("shadowAttenuation"));
+            Assert.That(lightingSource, Does.Contain("defined(SHADER_API_MOBILE)"));
+            Assert.That(lightingSource, Does.Contain("GetAdditionalLight(lightIndex, positionWS)"));
             Assert.That(sceneSource, Does.Not.Contain("EvaluateTangoGlassLighting(transmission"));
             Assert.That(onGlassSource, Does.Not.Contain("_TangoGlassBlurTexture"));
         }

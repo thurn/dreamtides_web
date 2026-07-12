@@ -31,7 +31,10 @@ half TangoGlassGgxSpecular(half3 normalWS, half3 viewDirectionWS, half3 lightDir
     k = k * k * 0.125h;
     half visibilityL = nDotL / max(nDotL * (1.0h - k) + k, 0.0001h);
     half visibilityV = nDotV / max(nDotV * (1.0h - k) + k, 0.0001h);
-    half fresnel = 0.04h + (1.0h - 0.04h) * Pow5(1.0h - vDotH);
+    half oneMinusVDotH = 1.0h - vDotH;
+    half oneMinusVDotHSquared = oneMinusVDotH * oneMinusVDotH;
+    half fresnel = 0.04h + (1.0h - 0.04h) *
+        oneMinusVDotHSquared * oneMinusVDotHSquared * oneMinusVDotH;
     return distribution * visibilityL * visibilityV * fresnel * nDotL;
 }
 
@@ -103,7 +106,7 @@ half3 EvaluateTangoGlassLighting(
         inputData.normalizedScreenSpaceUV = normalizedScreenSpaceUV;
         uint availableLightCount = GetAdditionalLightsCount();
         uint evaluatedLightCount = 0u;
-        #if defined(SHADER_API_MOBILE) || defined(_TANGO_GLASS_MOBILE_QUALITY)
+        #if defined(SHADER_API_MOBILE)
             uint configuredLightLimit = min(
                 (uint)parameters.mobileAdditionalLightLimit,
                 (uint)TANGO_GLASS_MOBILE_LIGHT_LIMIT);
@@ -120,7 +123,7 @@ half3 EvaluateTangoGlassLighting(
             {
                 break;
             }
-            #if defined(SHADER_API_MOBILE) || defined(_TANGO_GLASS_MOBILE_QUALITY)
+            #if defined(SHADER_API_MOBILE)
                 Light additionalLight = GetAdditionalLight(lightIndex, positionWS);
                 additionalLight.shadowAttenuation = 1.0h;
             #else
