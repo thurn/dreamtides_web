@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using TangoMvp.Diagnostics;
+using TangoMvp.Demo;
 using TangoMvp.Materials;
 using TangoMvp.Rendering;
 using UnityEditor;
@@ -245,6 +246,54 @@ namespace TangoMvp.Tests
             {
                 UnityEngine.Object.DestroyImmediate(firstObject);
                 UnityEngine.Object.DestroyImmediate(secondObject);
+            }
+        }
+
+        [Test]
+        public void Diagnostics_RetainLightingConfigurationUntilItChangesOrResets()
+        {
+            var initial = new TangoGlassLightingFacts(
+                "TangoGlassLightingProfile",
+                1,
+                TangoGlassQuality.Desktop,
+                TangoGlassRendererMode.ForwardPlus,
+                4,
+                true,
+                true);
+            Assert.That(TangoGlassDiagnostics.PublishLighting(17, initial), Is.True);
+            Assert.That(TangoGlassDiagnostics.PublishLighting(17, initial), Is.False);
+            Assert.That(TangoGlassDiagnostics.TryGetLightingFacts(17, out TangoGlassLightingFacts facts), Is.True);
+            Assert.That(facts, Is.EqualTo(initial));
+            TangoGlassDiagnostics.Reset();
+            Assert.That(TangoGlassDiagnostics.TryGetLightingFacts(17, out _), Is.False);
+        }
+
+        [Test]
+        public void LightOrbit_MovesPointLightsAndKeepsDirectionalRotation()
+        {
+            var pointObject = new GameObject("Point orbit test");
+            var directionalObject = new GameObject("Directional orbit test");
+            try
+            {
+                Light point = pointObject.AddComponent<Light>();
+                point.type = LightType.Point;
+                TangoLightOrbit pointOrbit = pointObject.AddComponent<TangoLightOrbit>();
+                pointOrbit.ConfigurePointOrbit(Vector3.zero, 3f, 2f, 0f);
+                Assert.That(pointObject.transform.localPosition, Is.EqualTo(new Vector3(3f, 2f, 0f)));
+                pointOrbit.SetPhase(0.25f);
+                Assert.That(pointObject.transform.localPosition.x, Is.EqualTo(0f).Within(0.0001f));
+                Assert.That(pointObject.transform.localPosition.z, Is.EqualTo(3f).Within(0.0001f));
+
+                Light directional = directionalObject.AddComponent<Light>();
+                directional.type = LightType.Directional;
+                TangoLightOrbit directionalOrbit = directionalObject.AddComponent<TangoLightOrbit>();
+                directionalOrbit.SetPhase(0.25f);
+                Assert.That(directionalObject.transform.localRotation.eulerAngles.y, Is.EqualTo(90f).Within(0.01f));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(pointObject);
+                UnityEngine.Object.DestroyImmediate(directionalObject);
             }
         }
 

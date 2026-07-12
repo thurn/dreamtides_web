@@ -9,6 +9,10 @@ namespace TangoMvp.Demo
         private const float LoopsPerSecond = 0.04f;
         private const float PitchDegrees = 52f;
 
+        [SerializeField] private Vector3 pointOrbitCenter;
+        [SerializeField, Min(0f)] private float pointOrbitRadius;
+        [SerializeField] private float pointOrbitHeight;
+
         private float phase;
 
         private void OnEnable()
@@ -28,8 +32,31 @@ namespace TangoMvp.Demo
             ApplyPhase();
         }
 
+        public void ConfigurePointOrbit(
+            Vector3 center,
+            float radius,
+            float height,
+            float normalizedPhase)
+        {
+            pointOrbitCenter = center;
+            pointOrbitRadius = Mathf.Max(0f, radius);
+            pointOrbitHeight = height;
+            SetPhase(normalizedPhase);
+        }
+
         private void ApplyPhase()
         {
+            Light targetLight = GetComponent<Light>();
+            if (targetLight != null && targetLight.type == LightType.Point)
+            {
+                float angle = phase * Mathf.PI * 2f;
+                transform.localPosition = pointOrbitCenter + new Vector3(
+                    Mathf.Cos(angle) * pointOrbitRadius,
+                    pointOrbitHeight,
+                    Mathf.Sin(angle) * pointOrbitRadius);
+                return;
+            }
+
             transform.localRotation = Quaternion.Euler(PitchDegrees, phase * 360f, 0f);
         }
     }

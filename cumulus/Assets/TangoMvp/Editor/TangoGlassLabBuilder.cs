@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using TangoMvp.Demo;
+using TangoMvp.Diagnostics;
 using TangoMvp.Geometry;
 using TangoMvp.Interaction;
 using TangoMvp.Materials;
@@ -360,6 +361,7 @@ namespace TangoMvp.Editor
                     scene,
                     "Main Camera",
                     "Directional Light",
+                    "Point Light",
                     "Moving Striped Object",
                     "Ground Shadow Receiver",
                     "Panel Source Anchor",
@@ -368,8 +370,9 @@ namespace TangoMvp.Editor
                     "Independent Glass Pane",
                     "Tango Verification Markers");
 
-                Camera camera = ReconcileCamera(scene);
+                Camera camera = ReconcileCamera(scene, library);
                 ReconcileLight(scene);
+                ReconcilePointLight(scene);
                 ReconcileBackground(scene, AssetDatabase.LoadAssetAtPath<Material>(BackdropPath));
                 ConfigureCube(
                     EnsureSceneRoot(scene, "Ground Shadow Receiver"),
@@ -425,7 +428,7 @@ namespace TangoMvp.Editor
             }
         }
 
-        private static Camera ReconcileCamera(Scene scene)
+        private static Camera ReconcileCamera(Scene scene, TangoMaterialLibrary library)
         {
             GameObject cameraObject = EnsureSceneRoot(scene, "Main Camera");
             RemoveUnexpectedComponents(
@@ -433,7 +436,8 @@ namespace TangoMvp.Editor
                 typeof(Transform),
                 typeof(Camera),
                 typeof(UniversalAdditionalCameraData),
-                typeof(TangoPointerInteractor));
+                typeof(TangoPointerInteractor),
+                typeof(TangoGlassLightingReporter));
             RemoveUnexpectedChildren(cameraObject.transform);
             cameraObject.tag = "MainCamera";
             SetWorldTransform(cameraObject.transform, new Vector3(0f, 0f, -10f), Quaternion.identity, Vector3.one);
@@ -450,6 +454,10 @@ namespace TangoMvp.Editor
             EnsureComponent<UniversalAdditionalCameraData>(cameraObject).renderPostProcessing = false;
             TangoPointerInteractor interactor = EnsureComponent<TangoPointerInteractor>(cameraObject);
             SetObjectReference(interactor, "interactionCamera", camera);
+            EnsureComponent<TangoGlassLightingReporter>(cameraObject).Configure(
+                library,
+                TangoGlassQuality.Desktop,
+                TangoGlassRendererMode.ForwardPlus);
             return camera;
         }
 
@@ -466,6 +474,26 @@ namespace TangoMvp.Editor
             light.shadows = LightShadows.Soft;
             light.shadowStrength = 0.9f;
             EnsureComponent<TangoLightOrbit>(lightObject).SetPhase(0f);
+        }
+
+        private static void ReconcilePointLight(Scene scene)
+        {
+            GameObject lightObject = EnsureSceneRoot(scene, "Point Light");
+            RemoveUnexpectedComponents(lightObject, typeof(Transform), typeof(Light), typeof(TangoLightOrbit));
+            RemoveUnexpectedChildren(lightObject.transform);
+            SetWorldTransform(lightObject.transform, Vector3.zero, Quaternion.identity, Vector3.one);
+            Light light = EnsureComponent<Light>(lightObject);
+            light.type = LightType.Point;
+            light.color = new Color(0.28f, 0.72f, 1f, 1f);
+            light.intensity = 7f;
+            light.range = 9f;
+            light.shadows = LightShadows.Soft;
+            light.shadowStrength = 0.8f;
+            EnsureComponent<TangoLightOrbit>(lightObject).ConfigurePointOrbit(
+                new Vector3(0f, 0.6f, -1.5f),
+                4.5f,
+                1.2f,
+                0f);
         }
 
         private static void ReconcileBackground(Scene scene, Material material)

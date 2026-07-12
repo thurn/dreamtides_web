@@ -6,6 +6,7 @@ using System.Reflection;
 using NUnit.Framework;
 using TangoMvp.Editor;
 using TangoMvp.Demo;
+using TangoMvp.Diagnostics;
 using TangoMvp.Interaction;
 using TangoMvp.Materials;
 using TangoMvp.Motion;
@@ -404,6 +405,7 @@ namespace TangoMvp.Tests
                 GameObject[] objects = SceneObjects(scene);
                 AssertNameCount(objects, "Main Camera", 1);
                 AssertNameCount(objects, "Directional Light", 1);
+                AssertNameCount(objects, "Point Light", 1);
                 AssertNameCount(objects, "Moving Striped Object", 1);
                 AssertNameCount(objects, "Panel Source Anchor", 1);
                 AssertNameCount(objects, "Panel Destination Anchor", 1);
@@ -417,6 +419,11 @@ namespace TangoMvp.Tests
                 TangoPointerInteractor interactor = camera.GetComponent<TangoPointerInteractor>();
                 Assert.That(interactor, Is.Not.Null);
                 AssertSerializedReference(interactor, "interactionCamera", camera);
+                Assert.That(camera.GetComponent<TangoGlassLightingReporter>(), Is.Not.Null);
+                Light pointLight = objects.Single(item => item.name == "Point Light").GetComponent<Light>();
+                Assert.That(pointLight.type, Is.EqualTo(LightType.Point));
+                Assert.That(pointLight.range, Is.GreaterThan(0f));
+                Assert.That(pointLight.color.b, Is.GreaterThan(pointLight.color.r));
 
                 MeshRenderer[] sceneGlassRenderers = objects
                     .Select(item => item.GetComponent<MeshRenderer>())
@@ -485,7 +492,7 @@ namespace TangoMvp.Tests
                 Assert.That(button.Activated.GetPersistentListenerState(0), Is.EqualTo(UnityEventCallState.RuntimeOnly));
 
                 Assert.That(objects.Count(item => item.GetComponent<TangoSpinner>() != null), Is.EqualTo(1));
-                Assert.That(objects.Count(item => item.GetComponent<TangoLightOrbit>() != null), Is.EqualTo(1));
+                Assert.That(objects.Count(item => item.GetComponent<TangoLightOrbit>() != null), Is.EqualTo(2));
             }
             finally
             {
