@@ -79,8 +79,8 @@ namespace TangoMvp.Diagnostics
             int outputWidth,
             int outputHeight,
             int graphRecordCount,
-            int horizontalPassCount,
-            int verticalPassCount,
+            int downsamplePassCount,
+            int upsamplePassCount,
             bool available)
         {
             FrameCount = frameCount;
@@ -89,8 +89,8 @@ namespace TangoMvp.Diagnostics
             OutputWidth = outputWidth;
             OutputHeight = outputHeight;
             GraphRecordCount = graphRecordCount;
-            HorizontalPassCount = horizontalPassCount;
-            VerticalPassCount = verticalPassCount;
+            DownsamplePassCount = downsamplePassCount;
+            UpsamplePassCount = upsamplePassCount;
             Available = available;
         }
 
@@ -100,8 +100,8 @@ namespace TangoMvp.Diagnostics
         public int OutputWidth { get; }
         public int OutputHeight { get; }
         public int GraphRecordCount { get; }
-        public int HorizontalPassCount { get; }
-        public int VerticalPassCount { get; }
+        public int DownsamplePassCount { get; }
+        public int UpsamplePassCount { get; }
         public bool Available { get; }
     }
 
@@ -160,8 +160,8 @@ namespace TangoMvp.Diagnostics
             int outputWidth,
             int outputHeight,
             int graphRecordCount,
-            int horizontalPassCount,
-            int verticalPassCount,
+            int downsamplePassCount,
+            int upsamplePassCount,
             bool available)
         {
             FactsByCamera[cameraInstanceId] = new TangoGlassFrameFacts(
@@ -171,8 +171,8 @@ namespace TangoMvp.Diagnostics
                 outputWidth,
                 outputHeight,
                 graphRecordCount,
-                horizontalPassCount,
-                verticalPassCount,
+                downsamplePassCount,
+                upsamplePassCount,
                 available);
         }
 

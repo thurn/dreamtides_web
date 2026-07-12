@@ -5,9 +5,6 @@ namespace TangoMvp.Rendering
 {
     public static class TangoGlassBlurDescriptor
     {
-        public const string PingResourceName = "Tango Glass Blur Ping";
-        public const string BlurResourceName = "Tango Glass Blur";
-
         public static RenderTextureDescriptor Create(RenderTextureDescriptor source)
         {
             source.width = HalfWithCeiling(source.width);

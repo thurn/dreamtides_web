@@ -122,12 +122,15 @@ namespace TangoMvp.Tests
         }
 
         [Test]
-        public void RendererFeature_RadiusIsFixedAndNotAuthorAdjustable()
+        public void RendererFeature_PyramidIsFixedAndNotAuthorAdjustable()
         {
             FieldInfo[] instanceFields = typeof(TangoGlassRendererFeature).GetFields(
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            FieldInfo radiusConstant = typeof(TangoGlassRendererFeature).GetField(
-                "BlurRadiusOutputPixels",
+            FieldInfo supportConstant = typeof(TangoGlassRendererFeature).GetField(
+                "BlurSupportOutputPixels",
+                BindingFlags.Static | BindingFlags.NonPublic);
+            FieldInfo levelConstant = typeof(TangoGlassRendererFeature).GetField(
+                "PyramidLevelCount",
                 BindingFlags.Static | BindingFlags.NonPublic);
             MethodInfo declaredSetActive = typeof(TangoGlassRendererFeature).GetMethod(
                 "SetActive",
@@ -136,9 +139,12 @@ namespace TangoMvp.Tests
             Assert.That(instanceFields.Any(field => field.FieldType == typeof(float)), Is.False);
             Assert.That(instanceFields.Any(field =>
                 field.FieldType == typeof(float) && field.GetCustomAttribute<SerializeField>() != null), Is.False);
-            Assert.That(radiusConstant, Is.Not.Null);
-            Assert.That(radiusConstant.IsLiteral, Is.True);
-            Assert.That(radiusConstant.GetRawConstantValue(), Is.EqualTo(44f));
+            Assert.That(supportConstant, Is.Not.Null);
+            Assert.That(supportConstant.IsLiteral, Is.True);
+            Assert.That(supportConstant.GetRawConstantValue(), Is.EqualTo(22f));
+            Assert.That(levelConstant, Is.Not.Null);
+            Assert.That(levelConstant.IsLiteral, Is.True);
+            Assert.That(levelConstant.GetRawConstantValue(), Is.EqualTo(4));
             Assert.That(declaredSetActive, Is.Null);
         }
 
@@ -192,8 +198,8 @@ namespace TangoMvp.Tests
             Assert.That(initial.OutputWidth, Is.EqualTo(960));
             Assert.That(initial.OutputHeight, Is.EqualTo(540));
             Assert.That(initial.GraphRecordCount, Is.EqualTo(1));
-            Assert.That(initial.HorizontalPassCount, Is.EqualTo(1));
-            Assert.That(initial.VerticalPassCount, Is.EqualTo(1));
+            Assert.That(initial.DownsamplePassCount, Is.EqualTo(1));
+            Assert.That(initial.UpsamplePassCount, Is.EqualTo(1));
             Assert.That(initial.Available, Is.True);
 
             TangoGlassDiagnostics.Publish(cameraId, 40, 1280, 720, 640, 360, 1, 1, 1, false);
@@ -298,7 +304,7 @@ namespace TangoMvp.Tests
         }
 
         [Test]
-        public void BlurShader_HasExactlyHorizontalAndVerticalPasses()
+        public void BlurShader_HasExactlyDownsampleAndUpsamplePasses()
         {
             Shader shader = Shader.Find("Hidden/TangoMvp/SeparableBlur");
 
@@ -307,8 +313,8 @@ namespace TangoMvp.Tests
             var material = new Material(shader);
             try
             {
-                Assert.That(material.FindPass("Tango Glass Blur Horizontal"), Is.EqualTo(0));
-                Assert.That(material.FindPass("Tango Glass Blur Vertical"), Is.EqualTo(1));
+                Assert.That(material.FindPass("Tango Glass Blur Downsample"), Is.EqualTo(0));
+                Assert.That(material.FindPass("Tango Glass Blur Upsample"), Is.EqualTo(1));
             }
             finally
             {

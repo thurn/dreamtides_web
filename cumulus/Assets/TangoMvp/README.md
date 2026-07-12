@@ -18,6 +18,22 @@ Rebuild it from `Tango MVP > Rebuild Shop Glass Demo`. The builder also exposes
 `TangoMvp.Editor.TangoShopGlassDemoBuilder.CaptureBatch` for a deterministic
 1920 x 1080 review capture.
 
+## Glass blur architecture
+
+`TangoGlassRendererFeature` records one camera-level blur pyramid before
+transparent geometry. Four locally filtered downsample passes reduce the scene
+color to one-sixteenth resolution, then three filtered upsample passes
+reconstruct a half-resolution texture for every scene-glass pane to share. The
+geometric reduction keeps total texture sampling bounded while the pyramid
+provides 22 output pixels of continuous low-pass support for the CSS glass
+token. Each scale filters adjacent texels, so detailed backgrounds remain
+smooth under glass without imposing pane-specific render work.
+
+The renderer publishes the pyramid level count, calibrated support, output
+dimensions, and active render-graph mode when it initializes. Per-frame GPU
+evidence records four downsample passes, three upsample passes, and one shared
+graph record independently of the number of panes and on-glass controls.
+
 ## Point-light authoring
 
 `Assets/TangoMvp/Materials/TangoGlassLightingProfile.asset` is the shared editor
@@ -105,8 +121,8 @@ The thresholds are deliberately relational or broad proof-of-life bounds. They e
 | `blurEdgeEnergyRatioMaximum` | `<= 0.65` | The peak same-region luminance gradient with glass enabled is at most 65% of the glass-disabled edge. Higher means the surface did not soften its backdrop. |
 | `blurEdgeEnergyRatioMinimum` | `>= 0.005` | The softened same-region gradient retains bounded structure. Lower indicates a flat or excessively blurred result. |
 | `sharedGraphRecords.<phase>` | `== 1` | Exactly one graph record exists for each phase listed below. Any other value means the camera-level effect is missing or duplicated. |
-| `horizontalPasses.<phase>` | `== 1` | Exactly one horizontal blur pass per camera phase. |
-| `verticalPasses.<phase>` | `== 1` | Exactly one vertical blur pass per camera phase. |
+| `downsamplePasses.<phase>` | `== 4` | Exactly four locally filtered pyramid downsample passes per camera phase. |
+| `upsamplePasses.<phase>` | `== 3` | Exactly three filtered pyramid reconstruction passes per camera phase. |
 | `onGlassAdditionalPasses` | `== 0` | Enabling the on-glass button creates no blur work. Nonzero means child UI is incorrectly driving the graph. |
 | `onGlassBackdropDelta` | `>= 0.005` | Scene motion remains visible through the button region. Lower suggests a baked/opaque child. |
 | `onGlassBackdropCorrelation` | `>= 0.5` | Button-region luminance changes follow its parent backdrop. Lower suggests unrelated or reversed scene response. |
@@ -151,7 +167,7 @@ This is the complete automated completion contract. Optional inspection is not p
 | Three MVP shaders have zero reported errors | `shader-inspection-and-build.status`, `shaderErrorCount == 0`, and exact records in `shader-report.json`. |
 | Committed scene builds for macOS | `build.result == "Succeeded"`, positive `build.sizeBytes`, exact `build.outputPath`, and nonempty `.app`. `TangoGlassLabAssetTests.RendererAndBuildSettings_AreInstalledOnceWithoutRemovingSsao` proves the committed scene is the sole enabled build scene. |
 | Moving opaque object stays live through both panes | Metrics `liveBackdropDelta.LiveGlassA` and `.LiveGlassB`; same-phase `surfaceContribution.LiveGlassA` and `.LiveGlassB` prove each pane actually changes its own pixels; `blurEdgeEnergyRatioMaximum` compares each edge against its glass-disabled counterpart; `TangoGlassGpuTests.GlassLab_RendersLiveSharedBlurAndFailClosedFallbackEvidence`. |
-| One shared graph record and two passes regardless of panes/button | All 12 `sharedGraphRecords.*`, `horizontalPasses.*`, and `verticalPasses.*` records; `TangoGlassRenderingTests.BlurShader_HasExactlyHorizontalAndVerticalPasses` and `RendererFeature_OwnsOneMaterialAndOneConfiguredPass`. |
+| One shared graph record and one seven-pass pyramid regardless of panes/button | All 12 `sharedGraphRecords.*`, `downsamplePasses.*`, and `upsamplePasses.*` records; `TangoGlassRenderingTests.BlurShader_HasExactlyDownsampleAndUpsamplePasses` and `RendererFeature_OwnsOneMaterialAndOneConfiguredPass`. |
 | On-glass button adds no pass and retains parent signal | `onGlassAdditionalPasses`, `onGlassBackdropDelta`, and `onGlassBackdropCorrelation`; `TangoGlassRenderingTests.OnGlass_NeverDeclaresOrSamplesSharedBlur`. |
 | Fixed tint, saturation, rim, sheen, and lit-shell roles | `TangoGlassRenderingTests.GlassShaders_ExposeOnlyHiddenFixedRoleProperties`, `SceneGlass_ConsumesSharedBlurOnceAndKeepsTransmissionOutOfDiffuseLighting`, `RebuildMaterials_CreatesStableSharedMaterialVocabulary`, and `TangoRoundedPanelMeshTests.MaterialLibrary_ResolvesEachRoleAndValidatesAssignments`. |
 | Transmission avoids double-lighting | `bevelLightDelta` and `transmissionLightDeltaRatio <= 0.25`; the scene-glass shader contract test above. |

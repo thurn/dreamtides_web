@@ -11,9 +11,6 @@ Shader "Hidden/TangoMvp/SeparableBlur"
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
         #include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"
 
-        float4 _TangoBlurOutputTexelSize;
-        float _TangoBlurRadius;
-
         float4 SampleClamped(float2 uv)
         {
             float2 halfSourceTexel = 0.5 * _BlitTexture_TexelSize.xy;
@@ -21,49 +18,51 @@ Shader "Hidden/TangoMvp/SeparableBlur"
             return SAMPLE_TEXTURE2D_X_LOD(_BlitTexture, sampler_LinearClamp, uv, _BlitMipLevel);
         }
 
-        float4 Blur(Varyings input, float2 outputPixelAxis)
+        float4 Downsample(Varyings input) : SV_Target0
         {
             UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
             float2 uv = input.texcoord.xy;
-            float2 stepUv = outputPixelAxis * _TangoBlurRadius;
-            float4 color = SampleClamped(uv) * 0.227027027;
-            color += SampleClamped(uv + stepUv * 0.25) * 0.194594595;
-            color += SampleClamped(uv - stepUv * 0.25) * 0.194594595;
-            color += SampleClamped(uv + stepUv * 0.50) * 0.121621622;
-            color += SampleClamped(uv - stepUv * 0.50) * 0.121621622;
-            color += SampleClamped(uv + stepUv * 0.75) * 0.054054054;
-            color += SampleClamped(uv - stepUv * 0.75) * 0.054054054;
-            color += SampleClamped(uv + stepUv) * 0.016216216;
-            color += SampleClamped(uv - stepUv) * 0.016216216;
-            return color;
+            float2 halfTexel = 0.5 * _BlitTexture_TexelSize.xy;
+            float4 color = SampleClamped(uv) * 4.0;
+            color += SampleClamped(uv + halfTexel * float2(-1.0, -1.0));
+            color += SampleClamped(uv + halfTexel * float2(1.0, -1.0));
+            color += SampleClamped(uv + halfTexel * float2(-1.0, 1.0));
+            color += SampleClamped(uv + halfTexel * float2(1.0, 1.0));
+            return color * 0.125;
         }
 
-        float4 BlurHorizontal(Varyings input) : SV_Target0
+        float4 Upsample(Varyings input) : SV_Target0
         {
-            return Blur(input, float2(_TangoBlurOutputTexelSize.x, 0.0));
-        }
-
-        float4 BlurVertical(Varyings input) : SV_Target0
-        {
-            return Blur(input, float2(0.0, _TangoBlurOutputTexelSize.y));
+            UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+            float2 uv = input.texcoord.xy;
+            float2 halfTexel = 0.5 * _BlitTexture_TexelSize.xy;
+            float4 color = SampleClamped(uv + halfTexel * float2(-2.0, 0.0)) * 2.0;
+            color += SampleClamped(uv + halfTexel * float2(-1.0, -1.0));
+            color += SampleClamped(uv + halfTexel * float2(0.0, -2.0)) * 2.0;
+            color += SampleClamped(uv + halfTexel * float2(1.0, -1.0));
+            color += SampleClamped(uv + halfTexel * float2(2.0, 0.0)) * 2.0;
+            color += SampleClamped(uv + halfTexel * float2(1.0, 1.0));
+            color += SampleClamped(uv + halfTexel * float2(0.0, 2.0)) * 2.0;
+            color += SampleClamped(uv + halfTexel * float2(-1.0, 1.0));
+            return color / 12.0;
         }
         ENDHLSL
 
         Pass
         {
-            Name "Tango Glass Blur Horizontal"
+            Name "Tango Glass Blur Downsample"
             HLSLPROGRAM
             #pragma vertex Vert
-            #pragma fragment BlurHorizontal
+            #pragma fragment Downsample
             ENDHLSL
         }
 
         Pass
         {
-            Name "Tango Glass Blur Vertical"
+            Name "Tango Glass Blur Upsample"
             HLSLPROGRAM
             #pragma vertex Vert
-            #pragma fragment BlurVertical
+            #pragma fragment Upsample
             ENDHLSL
         }
     }

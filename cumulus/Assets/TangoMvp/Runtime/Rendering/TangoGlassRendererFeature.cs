@@ -9,7 +9,8 @@ namespace TangoMvp.Rendering
 {
     public sealed class TangoGlassRendererFeature : ScriptableRendererFeature
     {
-        private const float BlurRadiusOutputPixels = 44f;
+        private const float BlurSupportOutputPixels = 22f;
+        private const int PyramidLevelCount = 4;
 
         [SerializeField]
         private Material blurMaterial;
@@ -94,26 +95,13 @@ namespace TangoMvp.Rendering
 
         private sealed class TangoGlassBlurPass : ScriptableRenderPass
         {
-            private const string HorizontalPassName = "Tango Glass Blur Horizontal";
-            private const string VerticalPassName = "Tango Glass Blur Vertical";
             private const string GlobalsPassName = "Tango Glass Publish Globals";
             private const string ActiveMode = "RenderGraph";
             private const RenderGraphUtils.FullScreenGeometryType BlurGeometry =
                 RenderGraphUtils.FullScreenGeometryType.ProceduralTriangle;
 
-            private static readonly int OutputTexelSizeId = Shader.PropertyToID("_TangoBlurOutputTexelSize");
-            private static readonly int RadiusId = Shader.PropertyToID("_TangoBlurRadius");
-
-            private readonly MaterialPropertyBlock blurProperties = new MaterialPropertyBlock();
             private Material material;
             private bool initializationLogged;
-
-            public TangoGlassBlurPass()
-            {
-                // Chromium's 22px backdrop blur calibrates to 44 output pixels
-                // of support in this two-pass, half-resolution kernel.
-                blurProperties.SetFloat(RadiusId, BlurRadiusOutputPixels * 0.5f);
-            }
 
             public void Setup(Material blurMaterial)
             {
@@ -126,15 +114,19 @@ namespace TangoMvp.Rendering
                 UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
                 Camera camera = cameraData.camera;
                 RenderTextureDescriptor inputDescriptor = cameraData.cameraTargetDescriptor;
-                RenderTextureDescriptor outputDescriptor = TangoGlassBlurDescriptor.Create(inputDescriptor);
+                RenderTextureDescriptor halfDescriptor = TangoGlassBlurDescriptor.Create(inputDescriptor);
+                RenderTextureDescriptor quarterDescriptor = TangoGlassBlurDescriptor.Create(halfDescriptor);
+                RenderTextureDescriptor eighthDescriptor = TangoGlassBlurDescriptor.Create(quarterDescriptor);
+                RenderTextureDescriptor sixteenthDescriptor = TangoGlassBlurDescriptor.Create(eighthDescriptor);
 
                 if (!initializationLogged)
                 {
                     Debug.Log(
                         $"Tango glass blur initialized: camera={camera.name}, " +
                         $"input={inputDescriptor.width}x{inputDescriptor.height}, " +
-                        $"output={outputDescriptor.width}x{outputDescriptor.height}, " +
-                        $"radiusOutputPixels={BlurRadiusOutputPixels}, mode={ActiveMode}");
+                        $"output={halfDescriptor.width}x{halfDescriptor.height}, " +
+                        $"pyramidLevels={PyramidLevelCount}, " +
+                        $"supportOutputPixels={BlurSupportOutputPixels}, mode={ActiveMode}");
                     initializationLogged = true;
                 }
 
@@ -142,55 +134,45 @@ namespace TangoMvp.Rendering
                 if (resourceData.isActiveTargetBackBuffer || !source.IsValid() || material == null)
                 {
                     Shader.SetGlobalFloat(TangoGlassShaderIds.Available, 0f);
-                    PublishDiagnostics(camera, inputDescriptor, outputDescriptor, 0, 0, false);
+                    PublishDiagnostics(camera, inputDescriptor, halfDescriptor, 0, 0, false);
                     return;
                 }
 
-                TextureHandle ping = UniversalRenderer.CreateRenderGraphTexture(
-                    renderGraph,
-                    outputDescriptor,
-                    TangoGlassBlurDescriptor.PingResourceName,
-                    false,
-                    FilterMode.Bilinear,
-                    TextureWrapMode.Clamp);
-                TextureHandle blur = UniversalRenderer.CreateRenderGraphTexture(
-                    renderGraph,
-                    outputDescriptor,
-                    TangoGlassBlurDescriptor.BlurResourceName,
-                    false,
-                    FilterMode.Bilinear,
-                    TextureWrapMode.Clamp);
+                TextureHandle half = CreateTexture(renderGraph, halfDescriptor, "Tango Glass Blur Half");
+                TextureHandle quarter = CreateTexture(renderGraph, quarterDescriptor, "Tango Glass Blur Quarter");
+                TextureHandle eighth = CreateTexture(renderGraph, eighthDescriptor, "Tango Glass Blur Eighth");
+                TextureHandle sixteenth = CreateTexture(renderGraph, sixteenthDescriptor, "Tango Glass Blur Sixteenth");
+                AddBlurPass(renderGraph, source, half, 0, "Tango Glass Blur Downsample 1");
+                AddBlurPass(renderGraph, half, quarter, 0, "Tango Glass Blur Downsample 2");
+                AddBlurPass(renderGraph, quarter, eighth, 0, "Tango Glass Blur Downsample 3");
+                AddBlurPass(renderGraph, eighth, sixteenth, 0, "Tango Glass Blur Downsample 4");
 
-                Vector4 outputTexelSize = new Vector4(
-                    1f / outputDescriptor.width,
-                    1f / outputDescriptor.height,
-                    outputDescriptor.width,
-                    outputDescriptor.height);
-                blurProperties.SetVector(OutputTexelSizeId, outputTexelSize);
+                TextureHandle eighthUp = CreateTexture(renderGraph, eighthDescriptor, "Tango Glass Blur Eighth Up");
+                TextureHandle quarterUp = CreateTexture(renderGraph, quarterDescriptor, "Tango Glass Blur Quarter Up");
+                TextureHandle blur = CreateTexture(renderGraph, halfDescriptor, "Tango Glass Blur");
+                AddBlurPass(renderGraph, sixteenth, eighthUp, 1, "Tango Glass Blur Upsample 3");
+                AddBlurPass(renderGraph, eighthUp, quarterUp, 1, "Tango Glass Blur Upsample 2");
 
-                var horizontalParameters = new RenderGraphUtils.BlitMaterialParameters(
-                    source,
-                    ping,
-                    material,
-                    0,
-                    blurProperties,
-                    BlurGeometry);
-                renderGraph.AddBlitPass(horizontalParameters, HorizontalPassName);
-
-                var verticalParameters = new RenderGraphUtils.BlitMaterialParameters(
-                    ping,
+                var finalParameters = new RenderGraphUtils.BlitMaterialParameters(
+                    quarterUp,
                     blur,
                     material,
                     1,
-                    blurProperties,
+                    null,
                     BlurGeometry);
                 using (var builder = renderGraph.AddBlitPass(
-                    verticalParameters,
-                    VerticalPassName,
+                    finalParameters,
+                    "Tango Glass Blur Upsample 1",
                     returnBuilder: true))
                 {
                     builder.SetGlobalTextureAfterPass(blur, TangoGlassShaderIds.BlurTexture);
                 }
+
+                Vector4 outputTexelSize = new Vector4(
+                    1f / halfDescriptor.width,
+                    1f / halfDescriptor.height,
+                    halfDescriptor.width,
+                    halfDescriptor.height);
 
                 using (var builder = renderGraph.AddRasterRenderPass<GlobalsPassData>(
                     GlobalsPassName,
@@ -208,15 +190,46 @@ namespace TangoMvp.Rendering
                     });
                 }
 
-                PublishDiagnostics(camera, inputDescriptor, outputDescriptor, 1, 1, true);
+                PublishDiagnostics(camera, inputDescriptor, halfDescriptor, PyramidLevelCount, PyramidLevelCount - 1, true);
+            }
+
+            private static TextureHandle CreateTexture(
+                RenderGraph renderGraph,
+                RenderTextureDescriptor descriptor,
+                string name)
+            {
+                return UniversalRenderer.CreateRenderGraphTexture(
+                    renderGraph,
+                    descriptor,
+                    name,
+                    false,
+                    FilterMode.Bilinear,
+                    TextureWrapMode.Clamp);
+            }
+
+            private void AddBlurPass(
+                RenderGraph renderGraph,
+                TextureHandle source,
+                TextureHandle destination,
+                int materialPass,
+                string name)
+            {
+                var parameters = new RenderGraphUtils.BlitMaterialParameters(
+                    source,
+                    destination,
+                    material,
+                    materialPass,
+                    null,
+                    BlurGeometry);
+                renderGraph.AddBlitPass(parameters, name);
             }
 
             private static void PublishDiagnostics(
                 Camera camera,
                 RenderTextureDescriptor inputDescriptor,
                 RenderTextureDescriptor outputDescriptor,
-                int horizontalPassCount,
-                int verticalPassCount,
+                int downsamplePassCount,
+                int upsamplePassCount,
                 bool available)
             {
                 TangoGlassDiagnostics.Publish(
@@ -227,8 +240,8 @@ namespace TangoMvp.Rendering
                     outputDescriptor.width,
                     outputDescriptor.height,
                     1,
-                    horizontalPassCount,
-                    verticalPassCount,
+                    downsamplePassCount,
+                    upsamplePassCount,
                     available);
             }
 

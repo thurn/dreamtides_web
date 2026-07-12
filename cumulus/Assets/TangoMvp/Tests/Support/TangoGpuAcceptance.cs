@@ -35,8 +35,8 @@ namespace TangoMvp.Tests.Support
         public const string BlurEdgeEnergyRatioMaximum = "blurEdgeEnergyRatioMaximum";
         public const string BlurEdgeEnergyRatioMinimum = "blurEdgeEnergyRatioMinimum";
         public const string SharedGraphRecords = "sharedGraphRecords";
-        public const string HorizontalPasses = "horizontalPasses";
-        public const string VerticalPasses = "verticalPasses";
+        public const string DownsamplePasses = "downsamplePasses";
+        public const string UpsamplePasses = "upsamplePasses";
         public const string OnGlassAdditionalPasses = "onGlassAdditionalPasses";
         public const string OnGlassBackdropDelta = "onGlassBackdropDelta";
         public const string OnGlassBackdropCorrelation = "onGlassBackdropCorrelation";

@@ -432,8 +432,8 @@ namespace TangoMvp.Tests.PlayMode
                 spinner.SetPhase(0.29f);
                 Color32[] parentB = Capture(camera, target, "button-parent-b");
                 Record(results, TangoGpuAcceptance.OnGlassAdditionalPasses,
-                    Math.Abs(buttonDisabledFacts.HorizontalPassCount - baselineFacts.HorizontalPassCount)
-                    + Math.Abs(buttonDisabledFacts.VerticalPassCount - baselineFacts.VerticalPassCount),
+                    Math.Abs(buttonDisabledFacts.DownsamplePassCount - baselineFacts.DownsamplePassCount)
+                    + Math.Abs(buttonDisabledFacts.UpsamplePassCount - baselineFacts.UpsamplePassCount),
                     TangoComparison.Equal, 0f, "buttonEnabled", "buttonDisabled", graphicsApi, deviceName);
 
                 onGlassButton.SetActive(true);
@@ -605,10 +605,10 @@ namespace TangoMvp.Tests.PlayMode
         {
             Record(results, TangoGpuAcceptance.SharedGraphRecords + "." + phase, facts.GraphRecordCount,
                 TangoComparison.Equal, 1f, phase, phase, graphicsApi, deviceName);
-            Record(results, TangoGpuAcceptance.HorizontalPasses + "." + phase, facts.HorizontalPassCount,
-                TangoComparison.Equal, 1f, phase, phase, graphicsApi, deviceName);
-            Record(results, TangoGpuAcceptance.VerticalPasses + "." + phase, facts.VerticalPassCount,
-                TangoComparison.Equal, 1f, phase, phase, graphicsApi, deviceName);
+            Record(results, TangoGpuAcceptance.DownsamplePasses + "." + phase, facts.DownsamplePassCount,
+                TangoComparison.Equal, 4f, phase, phase, graphicsApi, deviceName);
+            Record(results, TangoGpuAcceptance.UpsamplePasses + "." + phase, facts.UpsamplePassCount,
+                TangoComparison.Equal, 3f, phase, phase, graphicsApi, deviceName);
         }
 
         private static void Record(
