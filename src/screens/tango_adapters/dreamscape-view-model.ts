@@ -22,10 +22,7 @@ import type {
 } from "../../tango/components/hud/QuestStatusBar";
 import { artRef, type ArtRef } from "../../tango/primitives/art";
 import { glyph } from "../../tango/primitives/glyph";
-import type {
-  DreamscapeHudView,
-  DreamscapeView,
-} from "../../tango/screens/DreamscapeScreen";
+import type { DreamscapeView } from "../../tango/screens/DreamscapeScreen";
 import type {
   Dreamcaller,
   Dreamsign,
@@ -38,6 +35,14 @@ const FINAL_BOSS_COMPLETION_LEVEL = 6;
 
 /** Fallback scatter point when a site index has no seeded position. */
 const FALLBACK_POS = { x: 50, y: 58 } as const;
+
+/** App-shell data consumed once by TangoQuestChrome for every product screen. */
+export interface QuestChromeHudView {
+  essence: number;
+  deck: number;
+  dreamcaller?: QsbDreamcaller;
+  dreamsigns: QsbDreamsign[];
+}
 
 /** The deterministic scatter seed for a dreamscape node, exposed so the adapter
  * can record it in the reconstruction log without reaching into Tango. */
@@ -129,7 +134,7 @@ export function toQsbDreamsigns(
 }
 
 /** The bottom-HUD slice of the view-model, from live run state. */
-export function buildDreamscapeHudView(state: QuestState): DreamscapeHudView {
+export function buildDreamscapeHudView(state: QuestState): QuestChromeHudView {
   return {
     essence: state.essence,
     deck: state.deck.length,
@@ -151,9 +156,8 @@ export function dreamscapeTitle(node: DreamscapeNode): string {
 }
 
 /**
- * The full view-model for the dreamscape screen: the scene, its placed site
- * nodes, and the persistent bottom-HUD data. Deterministic in its arguments —
- * the same node + state always produce the same scatter and HUD.
+ * The full view-model for the dreamscape screen: the scene and its placed site
+ * nodes. Persistent quest chrome is derived once by the router-owned wrapper.
  */
 export function buildDreamscapeView(
   node: DreamscapeNode,
@@ -163,6 +167,5 @@ export function buildDreamscapeView(
     scene: dreamscapeSceneRef(node),
     title: dreamscapeTitle(node),
     sites: buildSiteModels(node, state.completionLevel),
-    hud: buildDreamscapeHudView(state),
   };
 }

@@ -26,7 +26,6 @@ import type {
   CardShopSiteView,
 } from "../../tango/screens/CardShopSiteScreen";
 import {
-  buildDreamscapeHudView,
   dreamscapeSceneRef,
 } from "./dreamscape-view-model";
 
@@ -147,6 +146,5 @@ export function buildCardShopSiteView(params: {
       params.site,
       params.state.essence,
     ),
-    hud: buildDreamscapeHudView(params.state),
   };
 }

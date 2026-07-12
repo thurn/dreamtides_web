@@ -13,7 +13,6 @@ import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
 import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
-  type GuideGalleryHudView,
 } from "./GuideGallerySiteLayout";
 
 export interface CardShopOfferView {
@@ -49,8 +48,6 @@ export interface CardShopSiteView {
   offers: readonly CardShopOfferView[];
   /** The one-use restock action. */
   restock: CardShopRestockView;
-  /** Persistent bottom-HUD data. */
-  hud: GuideGalleryHudView;
 }
 
 export interface CardShopSiteScreenProps {
@@ -62,8 +59,6 @@ export interface CardShopSiteScreenProps {
   onRestock: () => void;
   /** Leave the shop. */
   onClose: () => void;
-  /** Open the deck viewer from the QuestStatusBar deck sprite. */
-  onViewDeck?: () => void;
 }
 
 export function CardShopSiteScreen({
@@ -71,15 +66,12 @@ export function CardShopSiteScreen({
   onBuy,
   onRestock,
   onClose,
-  onViewDeck,
 }: CardShopSiteScreenProps) {
   return (
     <GuideGallerySiteLayout
       siteId={view.siteId}
       scene={view.scene}
       guide={view.guide}
-      hud={view.hud}
-      onViewDeck={onViewDeck}
       screenTestId="tango-card-shop-site-screen"
       guideArtTestId="tango-card-shop-guide-art"
       speechAnchorTestId="tango-card-shop-speech-anchor"

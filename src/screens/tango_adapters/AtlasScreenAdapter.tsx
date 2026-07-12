@@ -19,11 +19,7 @@ import { buildAtlasView, atlasChoiceLayer } from "./atlas-view-model";
  * atlas + run state, enters an available node's dreamscape on select, and logs
  * the presented atlas once per navigation for reconstruction.
  */
-export function AtlasScreenAdapter({
-  onViewDeck,
-}: {
-  onViewDeck?: () => void;
-}) {
+export function AtlasScreenAdapter() {
   const { state, mutations, questContent } = useQuest();
   const { atlas } = state;
   const isDesktop = useIsDesktop();
@@ -67,6 +63,6 @@ export function AtlasScreenAdapter({
   );
 
   return (
-    <AtlasScreen view={view} onEnterNode={handleEnterNode} onViewDeck={onViewDeck} />
+    <AtlasScreen view={view} onEnterNode={handleEnterNode} />
   );
 }

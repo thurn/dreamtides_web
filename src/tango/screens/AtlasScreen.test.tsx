@@ -251,12 +251,11 @@ function makeView(): AtlasView {
     edges: [
       { key: "starter-frontier", x1: 500, y1: 210, x2: 500, y2: 900, kind: "open" },
     ],
-    hud: { essence: 42, deck: 12, dreamsigns: [] },
   };
 }
 
 describe("Tango AtlasScreen", () => {
-  it("renders every node and docks the HUD essence total", () => {
+  it("renders every node and leaves persistent chrome to the router", () => {
     const { container, root } = mount(
       <AtlasScreen view={makeView()} onEnterNode={vi.fn()} />,
     );
@@ -265,7 +264,7 @@ describe("Tango AtlasScreen", () => {
     expect(container.querySelectorAll("[data-node-state]")).toHaveLength(3);
     expect(container.querySelector("[data-node-starting]")).not.toBeNull();
     expect(container.querySelector("[data-node-boss]")).not.toBeNull();
-    expect(container.textContent).toContain("42");
+    expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
 
     act(() => {
       root.unmount();

@@ -9,7 +9,6 @@ import type { ArtRef } from "../primitives/art";
 import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
-  type GuideGalleryHudView,
 } from "./GuideGallerySiteLayout";
 
 export type PurgeGuideView = GuideGalleryGuideView;
@@ -32,11 +31,7 @@ export interface PurgeSiteView {
   visitCosts: readonly number[];
   /** Maximum paid cards selectable with current essence and visit cap. */
   maxPaidSelections: number;
-  /** The persistent bottom-HUD data. */
-  hud: PurgeHudView;
 }
-
-export type PurgeHudView = GuideGalleryHudView;
 
 export interface PurgeSiteScreenProps {
   /** View-model rendered by the pure screen. */
@@ -45,15 +40,12 @@ export interface PurgeSiteScreenProps {
   onClose: () => void;
   /** Commit selected deck entries at the displayed total cost. */
   onPurge: (entryIds: readonly string[], cost: number) => void;
-  /** Open the deck viewer from the QuestStatusBar deck sprite. */
-  onViewDeck?: () => void;
 }
 
 export function PurgeSiteScreen({
   view,
   onClose,
   onPurge,
-  onViewDeck,
 }: PurgeSiteScreenProps) {
   const [selectedEntryIds, setSelectedEntryIds] = useState<readonly string[]>(
     [],
@@ -109,8 +101,6 @@ export function PurgeSiteScreen({
       siteId={view.siteId}
       scene={view.scene}
       guide={view.guide}
-      hud={view.hud}
-      onViewDeck={onViewDeck}
       screenTestId="tango-purge-site-screen"
       guideArtTestId="tango-purge-guide-art"
       speechAnchorTestId="tango-purge-speech-anchor"

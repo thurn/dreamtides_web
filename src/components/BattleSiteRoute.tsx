@@ -7,6 +7,10 @@ import type { RuntimeConfig } from "../runtime/runtime-config";
 import { PlayableBattleScreen } from "../battle/components/PlayableBattleScreen";
 import { BattleStartScreen } from "../battle/components/BattleStartScreen";
 import { BattleStartScreenAdapter } from "../screens/tango_adapters/BattleStartScreenAdapter";
+import {
+  TangoQuestChrome,
+  type TangoQuestChromeHandlers,
+} from "./TangoQuestChrome";
 
 export function createBattleEntryKey(
   dreamscapeId: string | null,
@@ -35,10 +39,12 @@ export function BattleSiteRoute({
   site,
   cardDatabase,
   runtimeConfig,
+  tangoChromeHandlers,
 }: {
   site: SiteState;
   cardDatabase: Map<number, CardData>;
   runtimeConfig: RuntimeConfig;
+  tangoChromeHandlers?: TangoQuestChromeHandlers;
 }) {
   const { state } = useQuest();
   const gameState = useGameState();
@@ -95,13 +101,15 @@ export function BattleSiteRoute({
   if (begunEntryKey !== battleEntryKey) {
     if (runtimeConfig.uiVariant === "tango") {
       return (
-        <BattleStartScreenAdapter
-          init={battle.init}
-          cardDatabase={cardDatabase}
-          onBegin={() => {
-            setBegunEntryKey(battleEntryKey);
-          }}
-        />
+        <TangoQuestChrome handlers={tangoChromeHandlers}>
+          <BattleStartScreenAdapter
+            init={battle.init}
+            cardDatabase={cardDatabase}
+            onBegin={() => {
+              setBegunEntryKey(battleEntryKey);
+            }}
+          />
+        </TangoQuestChrome>
       );
     }
     return (

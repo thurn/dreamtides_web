@@ -9,10 +9,8 @@ import { buildPurgeSiteView, resolvePurgeGuide } from "./purge-view-model";
 
 export function PurgeSiteScreenAdapter({
   siteId,
-  onViewDeck,
 }: {
   siteId: string;
-  onViewDeck?: () => void;
 }) {
   const { state, mutations, questContent } = useQuest();
   const node =
@@ -111,7 +109,6 @@ export function PurgeSiteScreenAdapter({
       view={view}
       onClose={handleClose}
       onPurge={handlePurge}
-      onViewDeck={onViewDeck}
     />
   );
 }

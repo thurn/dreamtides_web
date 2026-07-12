@@ -39,11 +39,6 @@ function view(): DreamsignRevelationView {
       dreamsign("right", "rosemary.png"),
     ],
     offerReady: true,
-    hud: {
-      essence: 200,
-      deck: 30,
-      dreamsigns: [],
-    },
     purge: null,
   };
 }

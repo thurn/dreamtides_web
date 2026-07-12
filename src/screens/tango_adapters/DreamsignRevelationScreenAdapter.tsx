@@ -13,10 +13,8 @@ const FLY_TO_HUD_MS = 900;
 
 export function DreamsignRevelationScreenAdapter({
   siteId,
-  onViewDeck,
 }: {
   siteId: string;
-  onViewDeck?: () => void;
 }) {
   const { state, mutations, questContent } = useQuest();
   const node = state.currentDreamscape !== null
@@ -115,7 +113,6 @@ export function DreamsignRevelationScreenAdapter({
       view={view}
       onClaim={handleClaim}
       onSkip={handleSkip}
-      onViewDeck={onViewDeck}
       onPurge={handlePurge}
       onCancelPurge={() => { setPendingPurgeDreamsign(null); }}
       claimedIndex={claimedIndex}

@@ -42,6 +42,10 @@ import { logEvent } from "../logging";
 import type { Screen, SiteState } from "../types/quest";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { BattleSiteRoute } from "./BattleSiteRoute";
+import {
+  TangoQuestChrome,
+  type TangoQuestChromeHandlers,
+} from "./TangoQuestChrome";
 import { SiteGuide } from "./SiteGuide";
 import { guideForSiteType } from "../data/dreamscapes";
 import { ErrorBoundary } from "./ErrorBoundary";
@@ -60,11 +64,11 @@ function screenKey(screen: Screen): string {
 export function ScreenRouter({
   runtimeConfig,
   onJourneyExplanationChange,
-  onViewDeck,
+  tangoChromeHandlers,
 }: {
   runtimeConfig: RuntimeConfig;
   onJourneyExplanationChange?: (explanation: JourneyExplanation | null) => void;
-  onViewDeck?: () => void;
+  tangoChromeHandlers?: TangoQuestChromeHandlers;
 }) {
   const { state } = useQuest();
   const { screen } = state;
@@ -74,7 +78,7 @@ export function ScreenRouter({
   // the legacy switch below, so the app stays fully navigable during migration.
   const tangoScreen =
     runtimeConfig.uiVariant === "tango"
-      ? tangoScreenFor(screen, { onViewDeck })
+      ? tangoScreenFor(screen)
       : null;
 
   // Record which UI served each screen, one entry per navigation, so a
@@ -105,7 +109,16 @@ export function ScreenRouter({
 
   function renderScreen() {
     if (tangoScreen !== null) {
-      return tangoScreen;
+      return screen.type === "questStart" ? (
+        tangoScreen
+      ) : (
+        <TangoQuestChrome
+          handlers={tangoChromeHandlers}
+          showAtlasRegenerate={screen.type === "atlas"}
+        >
+          {tangoScreen}
+        </TangoQuestChrome>
+      );
     }
     switch (screen.type) {
       case "questStart":
@@ -120,7 +133,7 @@ export function ScreenRouter({
             siteId={screen.siteId}
             runtimeConfig={runtimeConfig}
             onJourneyExplanationChange={onJourneyExplanationChange}
-            onViewDeck={onViewDeck}
+            tangoChromeHandlers={tangoChromeHandlers}
           />
         );
       case "questComplete":
@@ -161,12 +174,12 @@ function SiteScreen({
   siteId,
   runtimeConfig,
   onJourneyExplanationChange,
-  onViewDeck,
+  tangoChromeHandlers,
 }: {
   siteId: string;
   runtimeConfig: RuntimeConfig;
   onJourneyExplanationChange?: (explanation: JourneyExplanation | null) => void;
-  onViewDeck?: () => void;
+  tangoChromeHandlers?: TangoQuestChromeHandlers;
 }) {
   const { state, cardDatabase } = useQuest();
   const { atlas, currentDreamscape } = state;
@@ -189,26 +202,25 @@ function SiteScreen({
         site={site}
         cardDatabase={cardDatabase}
         runtimeConfig={runtimeConfig}
+        tangoChromeHandlers={tangoChromeHandlers}
       />
     );
   }
 
-  // A Tango site screen (`?ui=tango`) is self-contained: it draws its own
-  // full-bleed scene and docks its own QuestStatusBar, and per the Tango
-  // legibility rules never darkens the scene — so it renders directly, without
-  // the legacy dimmed backdrop wrapper. An unmigrated site type resolves to null
-  // and falls through to the legacy screens, which are presented over the
-  // dreamscape's dimmed scene art.
+  // A Tango site screen (`?ui=tango`) draws its own full-bleed scene and the
+  // router supplies persistent quest chrome around it. It renders directly,
+  // without the legacy dimmed backdrop wrapper. An unmigrated site type resolves
+  // to null and falls through to the legacy screens over the scene backdrop.
   const tangoSite =
     runtimeConfig.uiVariant === "tango"
-      ? tangoSiteScreenFor(site, {
-          onViewDeck,
-          runtimeConfig,
-          onJourneyExplanationChange,
-        })
+      ? tangoSiteScreenFor(site)
       : null;
   if (tangoSite !== null) {
-    return tangoSite;
+    return (
+      <TangoQuestChrome handlers={tangoChromeHandlers}>
+        {tangoSite}
+      </TangoQuestChrome>
+    );
   }
 
   let content: ReactNode;

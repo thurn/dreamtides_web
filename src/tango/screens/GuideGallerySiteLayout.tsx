@@ -2,12 +2,9 @@
 // sites whose primary action lives in a glass gallery. Mobile stacks the guide
 // band over the gallery; desktop places the guide and gallery side by side.
 
-import { useRef, type ReactElement } from "react";
+import type { ReactElement } from "react";
 import {
-  QuestStatusBar,
   QUEST_STATUS_BAR_CLEARANCE_OP,
-  type QsbDreamcaller,
-  type QsbDreamsign,
 } from "../components/hud/QuestStatusBar";
 import { Motes } from "../components/hud/Motes";
 import { SpeechBubble } from "../components/overlay/SpeechBubble";
@@ -28,18 +25,6 @@ export interface GuideGalleryGuideView {
   art: ArtRef;
 }
 
-/** The persistent QuestStatusBar slice shared by guide-gallery sites. */
-export interface GuideGalleryHudView {
-  /** Essence total shown in the HUD. */
-  essence: number;
-  /** Deck size shown on the deck sprite. */
-  deck: number;
-  /** The active Dreamcaller bust, when one has been chosen. */
-  dreamcaller?: QsbDreamcaller;
-  /** The run's owned Dreamsigns. */
-  dreamsigns: QsbDreamsign[];
-}
-
 export interface GuideGallerySiteLayoutProps {
   /** Stable site id exposed to QA hooks. */
   siteId: string;
@@ -47,12 +32,8 @@ export interface GuideGallerySiteLayoutProps {
   scene: ArtRef | null;
   /** Resident guide art and dialog. */
   guide: GuideGalleryGuideView;
-  /** Persistent bottom-HUD data. */
-  hud: GuideGalleryHudView;
   /** Render the screen-specific gallery for the active layout. */
   renderGallery: (layout: "mobile" | "desktop") => ReactElement;
-  /** Open the deck viewer from the QuestStatusBar deck sprite. */
-  onViewDeck?: () => void;
   /** Stable test id for the screen root. */
   screenTestId?: string;
   /** Stable test id for the guide art. */
@@ -73,21 +54,17 @@ export function GuideGallerySiteLayout({
   siteId,
   scene,
   guide,
-  hud,
   renderGallery,
-  onViewDeck,
   screenTestId,
   guideArtTestId,
   speechAnchorTestId,
   speechBubbleTestId,
 }: GuideGallerySiteLayoutProps) {
-  const stageRef = useRef<HTMLDivElement>(null);
   const isDesktop = useIsDesktop();
   const sceneUrl = scene !== null ? resolveArtRef(scene) : null;
 
   return (
     <div
-      ref={stageRef}
       className="tango"
       data-testid={screenTestId}
       data-guide-gallery-site={siteId}
@@ -140,16 +117,6 @@ export function GuideGallerySiteLayout({
           {renderGallery("mobile")}
         </>
       )}
-
-      <QuestStatusBar
-        stageRef={stageRef}
-        essence={hud.essence}
-        deck={hud.deck}
-        onViewDeck={onViewDeck}
-        dreamcaller={hud.dreamcaller}
-        dreamsigns={hud.dreamsigns}
-        size={isDesktop ? "grand" : "compact"}
-      />
     </div>
   );
 }

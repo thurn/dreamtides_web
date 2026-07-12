@@ -23,7 +23,6 @@ import type {
 import type { DreamGuideContent } from "../../types/content";
 import { toDeckCardView } from "./mobile-deck-view-model";
 import {
-  buildDreamscapeHudView,
   dreamscapeSceneRef,
 } from "./dreamscape-view-model";
 
@@ -112,6 +111,5 @@ export function buildPurgeSiteView(params: {
     cards: buildPurgeCardViews(params.state.deck, params.cardDatabase),
     visitCosts: buildPurgeVisitCosts(modifiers),
     maxPaidSelections,
-    hud: buildDreamscapeHudView(params.state),
   };
 }

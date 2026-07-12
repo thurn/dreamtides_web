@@ -8,10 +8,6 @@ import type { DreamscapeSiteModel } from "../components/dreamscape/SiteNode";
 import { glyph } from "../primitives/glyph";
 import { artRef } from "../primitives/art";
 import type { SiteState } from "../../types/quest";
-import {
-  QUEST_STATUS_BAR_BOTTOM_INSET,
-  QUEST_STATUS_BAR_TOTAL_HEIGHT,
-} from "../components/hud/QuestStatusBar";
 import { TangoRoot } from "../TangoRoot";
 
 function siteModel(
@@ -50,18 +46,6 @@ const VIEW: DreamscapeView = {
     siteModel(siteState("s-draft", { type: "Draft" }), { label: "Draft 5x" }),
     siteModel(siteState("s-visited", { type: "Shop", isVisited: true })),
   ],
-  hud: {
-    essence: 240,
-    deck: 12,
-    dreamcaller: {
-      id: "00000000-0000-4000-8000-000000000052",
-      name: "Drusus Calvus",
-      epithet: "Triumphator",
-      portrait: artRef.dreamcaller("0007"),
-      ability: "Gain 1 essence.",
-    },
-    dreamsigns: [],
-  },
 };
 
 let container: HTMLDivElement;
@@ -116,21 +100,12 @@ describe("DreamscapeScreen", () => {
     expect(container.querySelector('[data-site-id="s-draft"]')).not.toBeNull();
   });
 
-  it("docks the essence total in the QuestStatusBar", () => {
+  it("leaves persistent quest chrome to the router-owned wrapper", () => {
     act(() => {
       root.render(
         <TangoRoot><DreamscapeScreen view={VIEW} onSelectSite={() => undefined} /></TangoRoot>,
       );
     });
-    expect(container.textContent).toContain("240");
-    const anchor = container.querySelector<HTMLElement>(
-      "[data-quest-status-bar-anchor]",
-    );
-    const row = anchor?.firstElementChild as HTMLElement | null;
-    expect(anchor?.style.bottom).toBe("0px");
-    expect(anchor?.style.position).toBe("fixed");
-    expect(anchor?.style.height).toBe(QUEST_STATUS_BAR_TOTAL_HEIGHT);
-    expect(row?.style.height).toBe("100%");
-    expect(row?.style.paddingBottom).toBe(QUEST_STATUS_BAR_BOTTOM_INSET);
+    expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
   });
 });

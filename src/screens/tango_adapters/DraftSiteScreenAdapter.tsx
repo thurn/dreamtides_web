@@ -19,10 +19,8 @@ import { DraftScreen } from "../../tango/screens/DraftScreen";
  * card, and completes back to the dreamscape once the pack runs out. */
 export function DraftSiteScreenAdapter({
   siteId,
-  onViewDeck,
 }: {
   siteId: string;
-  onViewDeck?: () => void;
 }) {
   const { state, mutations, cardDatabase } = useQuest();
   const completedRef = useRef(false);
@@ -80,5 +78,5 @@ export function DraftSiteScreenAdapter({
   if (state.draftState === null) return null;
   if (progress.isComplete) return null;
 
-  return <DraftScreen view={view} onPick={handlePick} onViewDeck={onViewDeck} />;
+  return <DraftScreen view={view} onPick={handlePick} />;
 }

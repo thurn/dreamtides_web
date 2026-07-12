@@ -42,13 +42,19 @@ The reference files and the index are projections of the component sources
 
 ## Required screen chrome
 
-Every Tango product screen includes the shared quest chrome unless the user
-explicitly says the screen should omit it:
+Every registered Tango product screen receives shared quest chrome from the
+router-owned `TangoQuestChrome` wrapper unless the route is an explicit
+pre-quest or battle-shell exception:
 
 - a top-right gear icon on desktop;
 - a top-left hamburger menu icon on mobile;
 - the `QuestStatusBar` bottom HUD, replacing any legacy status bar on the
   screen.
+
+Pure screen files and their view models do not import, render, or carry data for
+this chrome. Registration applies it automatically, and the screen-chrome
+contract test rejects local `QuestStatusBar` or quest-menu rendering under
+`src/tango/screens/`.
 
 ## Component index
 
@@ -71,7 +77,7 @@ explicitly says the screen should omit it:
 | Group Panel | Components | 2 | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |
 | Glow Icon | Primitives | 9 | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a Boxicons glyph that paints in the caller's resource hue, with an optional content-protection shadow and an optional emitted-light glow pinned to its own font-size so both scale with the mark. |
 | Pip Badge | Components | 2 | [components/pip-badge.md](components/pip-badge.md) | The circled number on a colored disc for card stats: a spark value or an energy cost, and the inline spark reference inside rules text. |
-| Quest Status Bar | Components | 5 | [components/quest-status-bar.md](components/quest-status-bar.md) | The persistent, transparent bottom HUD for quest screens. |
+| Quest Status Bar | Components | 4 | [components/quest-status-bar.md](components/quest-status-bar.md) | The persistent, transparent bottom HUD for quest screens. |
 | Dreamcaller Portrait | Components | 22 | [components/dreamcaller-portrait.md](components/dreamcaller-portrait.md) | The one way to render a dreamcaller's character art: the transparent full-body cutout in one of six fixed framings. |
 | Rich Text | Components | 14 | [components/rich-text.md](components/rich-text.md) | The design system's model for a run of formatted copy. |
 | Rules Text | Components | 18 | [components/rules-text.md](components/rules-text.md) | Renders Dreamtides rules copy from card data — resource pips, ability carets, and glossary keywords styled in place — so ability text reads the same everywhere it appears. |

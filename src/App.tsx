@@ -30,7 +30,6 @@ import { MobileDeckViewerAdapter } from "./screens/tango_adapters/MobileDeckView
 import { useIsDesktop } from "./tango/screens/use-is-desktop";
 import { PoolViewer } from "./components/PoolViewer";
 import { StartingDeckOverlayAdapter } from "./screens/tango_adapters/StartingDeckOverlayAdapter";
-import { DreamscapeQuestMenu } from "./components/DreamscapeQuestMenu";
 import { GlossaryPopup } from "./components/GlossaryPopup";
 import { DebugScreen } from "./screens/DebugScreen";
 import QuestDebugEditor from "./screens/QuestDebugEditor";
@@ -43,7 +42,11 @@ import { regenerateAtlasInPlace } from "./atlas/regenerate-atlas";
 import type { RuntimeConfig } from "./runtime/runtime-config";
 import { DECK_VIEWER_SCENE_ID, findQaScene } from "./runtime/qa-scenes";
 import { useQuestUrlSync } from "./runtime/use-quest-url-sync";
-import type { QuestState, SiteType } from "./types/quest";
+import type { QuestState, SiteState } from "./types/quest";
+import {
+  isTangoScreenRegistered,
+  isTangoSiteRegistered,
+} from "./screens/tango_adapters/registry";
 import {
   JourneyExplanationOverlay,
   type JourneyExplanation,
@@ -73,41 +76,23 @@ export function QuestApp({
   // live dreamscape; the HUD and screen return once it is dismissed.
   const showStarterDeckIntro =
     state.dreamcaller !== null && !state.hasSeenStartingDeckPopup;
-  // The Tango quest map screens (dreamscape, atlas) re-home the persistent
-  // bottom bar into their own in-screen QuestStatusBar and their utility menu
-  // into the top-left DreamscapeQuestMenu, so the app-shell legacy HUD is
-  // suppressed there to avoid a doubled bottom bar.
   const isDesktopViewport = useIsDesktop();
-  const atlasUsesTango =
-    runtimeConfig.uiVariant === "tango" && state.screen.type === "atlas";
-  const dreamscapeUsesTango =
-    runtimeConfig.uiVariant === "tango" && state.screen.type === "dreamscape";
-  // Tango site screens that own their app-shell chrome suppress the legacy HUD.
-  // Menu ownership is a separate gate: some site screens dock the Tango status
-  // bar without taking over the top-left utility menu on every viewport.
-  const activeSite = activeSiteType(state);
-  const tangoSiteSuppressesLegacyHud =
+  const activeSite = resolveActiveSite(state);
+  const activeSiteType = activeSite?.type ?? null;
+  // Registered Tango routes receive persistent chrome from ScreenRouter, so
+  // the legacy HUD suppression follows the registry automatically.
+  const tangoRouteUsesQuestChrome =
     runtimeConfig.uiVariant === "tango"
-    && (activeSite === "Draft"
-      || activeSite === "DreamsignRevelation"
-      || activeSite === "Purge"
-      || activeSite === "Shop");
+    && ((state.screen.type !== "questStart"
+      && isTangoScreenRegistered(state.screen))
+      || (activeSite !== null && isTangoSiteRegistered(activeSite)));
   const hidePresencePill =
     runtimeConfig.uiVariant === "tango"
-    && (activeSite === "Purge" || activeSite === "Shop");
-  const tangoSiteUsesQuestMenu =
-    runtimeConfig.uiVariant === "tango"
-    && (activeSite === "Draft"
-      || activeSite === "Purge"
-      || activeSite === "Shop"
-      || (!isDesktopViewport && activeSite === "DreamsignRevelation"));
-  const tangoScreenUsesQuestMenu =
-    dreamscapeUsesTango || atlasUsesTango || tangoSiteUsesQuestMenu;
+    && (activeSiteType === "Purge" || activeSiteType === "Shop");
   const showHud =
     state.screen.type !== "questStart"
     && !isBattleSiteHudHidden(state)
-    && !tangoScreenUsesQuestMenu
-    && !tangoSiteSuppressesLegacyHud;
+    && !tangoRouteUsesQuestChrome;
   const [deckViewerOpen, setDeckViewerOpen] = useState(false);
   const [poolViewerOpen, setPoolViewerOpen] = useState(false);
   const [glossaryOpen, setGlossaryOpen] = useState(false);
@@ -466,23 +451,18 @@ export function QuestApp({
         <ScreenRouter
           runtimeConfig={runtimeConfig}
           onJourneyExplanationChange={setJourneyExplanation}
-          onViewDeck={handleOpenDeckViewer}
+          tangoChromeHandlers={{
+            onViewDeck: handleOpenDeckViewer,
+            onOpenGlossary: handleOpenGlossary,
+            onOpenPoolViewer: handleOpenPoolViewer,
+            onOpenDebugScreen: handleOpenDebugScreen,
+            onOpenQuestEditor: handleOpenQuestEditor,
+            hasDraftData,
+            onLoadQuestState: mutations.loadQuestState,
+            onRegenerateAtlas: handleRegenerateAtlas,
+            elevated: deckViewerOpen && !isDesktopViewport,
+          }}
         />
-        {tangoScreenUsesQuestMenu && state.dreamcaller !== null && (
-          <ErrorBoundary scope="overlay:dreamscape-menu">
-            <DreamscapeQuestMenu
-              onOpenDeckViewer={handleOpenDeckViewer}
-              onOpenGlossary={handleOpenGlossary}
-              onOpenPoolViewer={handleOpenPoolViewer}
-              onOpenDebugScreen={handleOpenDebugScreen}
-              onOpenQuestEditor={handleOpenQuestEditor}
-              hasDraftData={hasDraftData}
-              onLoadQuestState={mutations.loadQuestState}
-              onRegenerateAtlas={atlasUsesTango ? handleRegenerateAtlas : undefined}
-              elevated={deckViewerOpen && !isDesktopViewport}
-            />
-          </ErrorBoundary>
-        )}
         {showHud && (
           <ErrorBoundary scope="overlay:hud">
             <HUD
@@ -612,9 +592,8 @@ function stripLoadQuestParam(): void {
   window.history.replaceState(window.history.state, "", url.toString());
 }
 
-/** The type of the site the run is currently parked on, or null when the
- * current screen is not a resolvable site. */
-function activeSiteType(state: QuestState): SiteType | null {
+/** The site the run is currently parked on, or null when it cannot be resolved. */
+function resolveActiveSite(state: QuestState): SiteState | null {
   if (state.screen.type !== "site" || state.currentDreamscape === null) {
     return null;
   }
@@ -622,7 +601,7 @@ function activeSiteType(state: QuestState): SiteType | null {
   const site = state.atlas.nodes[state.currentDreamscape]?.sites.find(
     (candidate) => candidate.id === siteId,
   );
-  return site?.type ?? null;
+  return site ?? null;
 }
 
 function isBattleSiteHudHidden(state: QuestState): boolean {

@@ -44,13 +44,24 @@ import type {
   AtlasNodePrimary,
   AtlasNodeSite,
 } from "../../tango/components/atlas/AtlasNode";
+import type {
+  QsbDreamcaller,
+  QsbDreamsign,
+} from "../../tango/components/hud/QuestStatusBar";
 import { artRef } from "../../tango/primitives/art";
 import { glyph } from "../../tango/primitives/glyph";
-import type { AtlasHudView, AtlasView } from "../../tango/screens/AtlasScreen";
+import type { AtlasView } from "../../tango/screens/AtlasScreen";
 import type { QuestContent } from "../../data/quest-content";
 import type { DreamAtlas, DreamscapeNode, QuestState } from "../../types/quest";
 import { type LayerName, layerOrdinal } from "../../types/layer-name";
 import { toQsbDreamcaller, toQsbDreamsigns } from "./dreamscape-view-model";
+
+interface AtlasHudView {
+  essence: number;
+  deck: number;
+  dreamcaller?: QsbDreamcaller;
+  dreamsigns: QsbDreamsign[];
+}
 
 /**
  * The portrait design canvas the mobile atlas stage scales to fit (letterboxed).
@@ -605,12 +616,12 @@ export function buildAtlasView(
   state: QuestState,
   isDesktop = false,
 ): AtlasView {
+  void state;
   const profile = atlasLayoutProfile(isDesktop);
   return {
     stageWidth: profile.stageWidth,
     stageHeight: profile.stageHeight,
     nodes: buildAtlasMapNodes(atlas, questContent, profile),
     edges: buildAtlasMapEdges(atlas, profile),
-    hud: buildAtlasHudView(state),
   };
 }

@@ -125,7 +125,6 @@ describe("buildDraftView", () => {
     // The key is the offered card numbers (identity), not names.
     expect(view.offerKey).toBe("5,6");
     expect(view.scene).toBeNull();
-    expect(view.hud.essence).toBe(40);
   });
 
   it("derives the 1-indexed pick counter from picks completed and the site's total", () => {

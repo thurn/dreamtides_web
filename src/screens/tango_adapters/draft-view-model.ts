@@ -7,12 +7,23 @@
 import { draftSitePickCount } from "../../draft/draft-site-config";
 import type { CardData } from "../../types/cards";
 import type { DreamscapeNode, QuestState, SiteState } from "../../types/quest";
-import type { DraftHudView, DraftView } from "../../tango/screens/DraftScreen";
+import type {
+  QsbDreamcaller,
+  QsbDreamsign,
+} from "../../tango/components/hud/QuestStatusBar";
+import type { DraftView } from "../../tango/screens/DraftScreen";
 import {
   dreamscapeSceneRef,
   toQsbDreamcaller,
   toQsbDreamsigns,
 } from "./dreamscape-view-model";
+
+interface DraftHudView {
+  essence: number;
+  deck: number;
+  dreamcaller?: QsbDreamcaller;
+  dreamsigns: QsbDreamsign[];
+}
 
 /**
  * Sort an offered pack for display: cheapest first, then alphabetically as a
@@ -79,6 +90,5 @@ export function buildDraftView(params: {
     // Clamp so the last pack never reads past the total (e.g. "(6/5)").
     pickNumber: Math.min(params.sitePicksCompleted + 1, Math.max(pickTotal, 1)),
     pickTotal,
-    hud: buildDraftHudView(params.state),
   };
 }

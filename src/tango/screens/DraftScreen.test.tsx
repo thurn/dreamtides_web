@@ -36,7 +36,6 @@ function view(offer: number[]): DraftView {
     offerKey: offer.join(","),
     pickNumber: 1,
     pickTotal: 5,
-    hud: { essence: 100, deck: 12, dreamsigns: [] },
   };
 }
 

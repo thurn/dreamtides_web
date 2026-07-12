@@ -153,6 +153,5 @@ describe("buildCardShopSiteView", () => {
       line: "A chosen greeting.",
     });
     expect(view.offers).toHaveLength(3);
-    expect(view.hud).toMatchObject({ essence: 250, deck: 0, dreamsigns: [] });
   });
 });

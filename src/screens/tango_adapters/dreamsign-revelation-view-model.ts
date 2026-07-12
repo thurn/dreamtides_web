@@ -14,8 +14,6 @@ import type {
 } from "../../tango/screens/DreamsignRevelationScreen";
 import {
   dreamscapeSceneRef,
-  toQsbDreamcaller,
-  toQsbDreamsigns,
 } from "./dreamscape-view-model";
 
 const FALLBACK_GUIDE_ID = "sigrun";
@@ -60,12 +58,6 @@ export function buildDreamsignRevelationView(params: {
     guide: buildDreamsignRevelationGuideView(params.guide, params.guideLine),
     offer: params.offeredDreamsigns ?? [],
     offerReady: params.offeredDreamsigns !== null,
-    hud: {
-      essence: params.state.essence,
-      deck: params.state.deck.length,
-      dreamcaller: toQsbDreamcaller(params.state.dreamcaller),
-      dreamsigns: toQsbDreamsigns(params.state.dreamsigns),
-    },
     purge:
       params.pendingPurgeDreamsign === null
         ? null

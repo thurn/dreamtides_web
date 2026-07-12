@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { SiteState } from "../../types/quest";
-import { parseRuntimeConfig } from "../../runtime/runtime-config";
-import { tangoScreenFor, tangoSiteScreenFor } from "./registry";
+import {
+  isTangoScreenRegistered,
+  isTangoSiteRegistered,
+  tangoScreenFor,
+  tangoSiteScreenFor,
+} from "./registry";
 
 describe("tangoScreenFor", () => {
   it("resolves the migrated questStart screen to a Tango node", () => {
@@ -20,6 +24,11 @@ describe("tangoScreenFor", () => {
     expect(tangoScreenFor({ type: "site", siteId: "site-1" })).toBeNull();
     expect(tangoScreenFor({ type: "questComplete" })).toBeNull();
     expect(tangoScreenFor({ type: "questFailed" })).toBeNull();
+  });
+
+  it("reports registration from the same resolver used by the router", () => {
+    expect(isTangoScreenRegistered({ type: "atlas" })).toBe(true);
+    expect(isTangoScreenRegistered({ type: "questComplete" })).toBe(false);
   });
 });
 
@@ -42,20 +51,12 @@ describe("tangoSiteScreenFor", () => {
     ).not.toBeNull();
   });
 
-  it("accepts router-owned site context needed by future site migrations", () => {
-    expect(
-      tangoSiteScreenFor(
-        { type: "Draft", id: "site-1" } as SiteState,
-        {
-          runtimeConfig: parseRuntimeConfig("?journey=classic"),
-          onJourneyExplanationChange: () => {},
-          onViewDeck: () => {},
-        },
-      ),
-    ).not.toBeNull();
-  });
-
   it("returns null for site types not yet migrated, so ScreenRouter falls back to legacy", () => {
     expect(tangoSiteScreenFor({ type: "Reward" } as SiteState)).toBeNull();
+  });
+
+  it("reports site registration from the same resolver used by the router", () => {
+    expect(isTangoSiteRegistered({ type: "Draft", id: "site-1" } as SiteState)).toBe(true);
+    expect(isTangoSiteRegistered({ type: "Reward" } as SiteState)).toBe(false);
   });
 });

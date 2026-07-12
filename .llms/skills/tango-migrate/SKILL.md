@@ -133,6 +133,10 @@ testing-library). Two required incantations, copied from
 - Add the case to `tangoScreenFor` (or `tangoSiteScreenFor`, which receives
   the `SiteState` and passes it to the adapter as a prop) in
   `src/screens/tango_adapters/registry.tsx`.
+- Registration automatically wraps the screen in `TangoQuestChrome`, which
+  supplies the persistent `QuestStatusBar` and platform menu from live quest
+  state. Do not add HUD data to the screen view-model or render persistent quest
+  chrome inside the pure screen.
 - Update `src/screens/tango_adapters/registry.test.tsx`: the migrated screen moves
   from the asserted-null list to an asserted-non-null case. This test breaks
   on every migration **by design** — it is the reminder that a registry entry

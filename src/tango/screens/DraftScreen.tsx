@@ -2,11 +2,10 @@
 // draft site offers a pack of cards and the player picks one, five times over.
 // The Tango version strips the screen to the offer itself: the dreamscape scene
 // fills the viewport (never darkened — legibility comes from the cards' own
-// opacity and the HUD's outline dilation), the pack sits as a 2x2 mobile grid
-// or a four-card desktop row of GameCards centered over it, and the persistent
-// QuestStatusBar docks the run's essence, deck, Dreamcaller, and dreamsigns
-// along the bottom. The utility menu lives in the app-shell corner chrome,
-// matching the dreamscape and atlas screens — the screen's only text is a
+// opacity and the app chrome's outline dilation), and the pack sits as a 2x2
+// mobile grid or a four-card desktop row of GameCards centered over it. The
+// router-owned quest chrome provides the status bar and responsive utility
+// menu — the screen's only text is a
 // subtle pick counter riding under the pack; it renders no title, progress bar,
 // or drafted-card rail of its own.
 //
@@ -16,16 +15,13 @@
 // view types, and holds only the local pick latch that plays the pick-out
 // animation.
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { CARD_ASPECT_H, CARD_ASPECT_W } from "../components/card/card-aspect";
 import { Motes } from "../components/hud/Motes";
 import {
-  QuestStatusBar,
   QUEST_STATUS_BAR_CLEARANCE_OP,
-  type QsbDreamcaller,
-  type QsbDreamsign,
 } from "../components/hud/QuestStatusBar";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
@@ -35,18 +31,6 @@ import {
   MENU_EDGE_INSET_MOBILE_PX,
 } from "./chrome-geometry";
 import { useIsDesktop } from "./use-is-desktop";
-
-/** The bottom-HUD slice of the view-model — what the QuestStatusBar docks. */
-export interface DraftHudView {
-  /** Essence total shown in the HUD. */
-  essence: number;
-  /** Deck size shown on the deck sprite. */
-  deck: number;
-  /** The active Dreamcaller bust, or undefined before one is chosen. */
-  dreamcaller?: QsbDreamcaller;
-  /** The run's owned dreamsigns, docked to the left of the deck sprite. */
-  dreamsigns: QsbDreamsign[];
-}
 
 /** Everything the draft screen renders, mapped from live quest state. */
 export interface DraftView {
@@ -60,8 +44,6 @@ export interface DraftView {
   pickNumber: number;
   /** How many picks this draft site offers in total. */
   pickTotal: number;
-  /** The persistent bottom-HUD data. */
-  hud: DraftHudView;
 }
 
 export interface DraftScreenProps {
@@ -69,8 +51,6 @@ export interface DraftScreenProps {
   view: DraftView;
   /** Pick a card from the current pack; carries the card's draft number. */
   onPick: (cardNumber: number) => void;
-  /** Open the deck viewer; fired from the HUD deck sprite. */
-  onViewDeck?: () => void;
 }
 
 // The vertical bands reserved down the screen, as raw calc operands so the
@@ -80,8 +60,7 @@ const TOP_GAP_OP = token("--space-6");
 // The band under the pack that holds the small pick counter (its gap above the
 // label plus the label's own line).
 const COUNTER_BAND_OP = token("--space-9");
-// Bottom: the docked QuestStatusBar (bar + elevated Dreamcaller bust +
-// home-indicator inset).
+// Bottom: clearance for the router-owned quest chrome and home-indicator inset.
 const HUD_CLEARANCE_OP = `${QUEST_STATUS_BAR_CLEARANCE_OP} + ${token("--space-9")}`;
 const TOP_GAP = `calc(${TOP_GAP_OP})`;
 const HUD_CLEARANCE = `calc(${HUD_CLEARANCE_OP})`;
@@ -128,13 +107,10 @@ function offerCellWidthFor(params: {
 
 /**
  * The Tango draft screen. Pure and props-driven: full-bleed scene art, the pack
- * of {@link GameCard}s over it, drifting {@link Motes}, and the persistent
- * {@link QuestStatusBar} docked to the bottom.
+ * of {@link GameCard}s over it, and drifting {@link Motes}. Persistent quest
+ * chrome is supplied by the router.
  */
-export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
-  // The stage the QuestStatusBar popovers portal into, so their placement and
-  // on-screen clamp use viewport coordinates.
-  const stageRef = useRef<HTMLDivElement>(null);
+export function DraftScreen({ view, onPick }: DraftScreenProps) {
   const isDesktop = useIsDesktop();
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const offerColumns = isDesktop ? 4 : 2;
@@ -167,7 +143,6 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
 
   return (
     <div
-      ref={stageRef}
       className="tango"
       data-tango-draft=""
       style={{
@@ -295,16 +270,6 @@ export function DraftScreen({ view, onPick, onViewDeck }: DraftScreenProps) {
       <div
         style={{ flexShrink: 0, height: HUD_CLEARANCE }}
         aria-hidden="true"
-      />
-
-      <QuestStatusBar
-        stageRef={stageRef}
-        essence={view.hud.essence}
-        deck={view.hud.deck}
-        onViewDeck={onViewDeck}
-        dreamcaller={view.hud.dreamcaller}
-        dreamsigns={view.hud.dreamsigns}
-        size={isDesktop ? "grand" : "compact"}
       />
     </div>
   );

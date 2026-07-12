@@ -51,7 +51,6 @@ function view(): CardShopSiteView {
       price: 50,
       state: "available",
     },
-    hud: { essence: 400, deck: 12, dreamsigns: [] },
   };
 }
 
@@ -200,6 +199,9 @@ describe("CardShopSiteScreen", () => {
   it("purchases an affordable card immediately and refreshes from the restock icon", () => {
     const onBuy = vi.fn();
     const onRestock = vi.fn();
+    const deckTarget = document.createElement("div");
+    deckTarget.dataset.questDeckTarget = "";
+    document.body.append(deckTarget);
     const { container, root } = mount(
       <CardShopSiteScreen
         view={view()}

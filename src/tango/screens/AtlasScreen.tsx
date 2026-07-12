@@ -4,9 +4,8 @@
 // mobile runs it VERTICALLY, reading bottom-up (the First Light Meadow starter at
 // the bottom, each layer climbing toward the Apollyon boss battle at the top);
 // desktop runs it left-to-right (the starter at the left, advancing to the boss
-// at the right). Either way the persistent Tango QuestStatusBar docks the run's
-// essence, deck, Dreamcaller, and dreamsigns along the bottom. The utility menu
-// (deck viewer, glossary, atlas regenerate, ...) lives in the app-shell chrome —
+// at the right). Persistent inventory and the utility menu (deck viewer,
+// glossary, atlas regenerate, ...) live in the app-shell chrome —
 // the top-left hamburger on mobile, the top-right gear on desktop — so this
 // screen renders no title, layer numerals, or debug chrome of its own.
 //
@@ -14,30 +13,15 @@
 // `onEnterNode`; the adapter owns state, navigation, and logging. The screen
 // owns and exports its view types. The map surface, its scale-to-fit, and the
 // node hover previews live in the `AtlasMap` component; this screen composes
-// that surface with the drifting Motes and the docked QuestStatusBar.
+// that surface with drifting Motes.
 
-import { useRef } from "react";
 import {
   AtlasMap,
   type AtlasMapEdge,
   type AtlasMapNode,
 } from "../components/atlas/AtlasMap";
 import { Motes } from "../components/hud/Motes";
-import {
-  QuestStatusBar,
-  type QsbDreamcaller,
-  type QsbDreamsign,
-} from "../components/hud/QuestStatusBar";
 import { token } from "../primitives/tokens";
-import { useIsDesktop } from "./use-is-desktop";
-
-/** The bottom-HUD slice of the atlas view-model — what the QuestStatusBar docks. */
-export interface AtlasHudView {
-  essence: number;
-  deck: number;
-  dreamcaller?: QsbDreamcaller;
-  dreamsigns: QsbDreamsign[];
-}
 
 /** Everything the atlas screen renders, mapped from live quest state. */
 export interface AtlasView {
@@ -49,8 +33,6 @@ export interface AtlasView {
   nodes: AtlasMapNode[];
   /** Forward connectors between nodes. */
   edges: AtlasMapEdge[];
-  /** The persistent bottom-HUD data. */
-  hud: AtlasHudView;
 }
 
 export interface AtlasScreenProps {
@@ -58,24 +40,15 @@ export interface AtlasScreenProps {
   view: AtlasView;
   /** Enter a node's dreamscape; fired on a tap / click of an available node. */
   onEnterNode: (nodeId: string) => void;
-  /** Open the deck viewer; fired from the HUD deck sprite. */
-  onViewDeck?: () => void;
 }
 
 /**
  * The Tango Dream Atlas. Pure and props-driven: the vertical {@link AtlasMap}
- * of the run graph, drifting {@link Motes}, and the persistent
- * {@link QuestStatusBar} docked to the bottom.
+ * of the run graph and drifting {@link Motes}.
  */
-export function AtlasScreen({ view, onEnterNode, onViewDeck }: AtlasScreenProps) {
-  // The stage the QuestStatusBar popovers portal into, so their placement and
-  // on-screen clamp use viewport coordinates.
-  const stageRef = useRef<HTMLDivElement>(null);
-  const isDesktop = useIsDesktop();
-
+export function AtlasScreen({ view, onEnterNode }: AtlasScreenProps) {
   return (
     <div
-      ref={stageRef}
       className="tango"
       data-tango-atlas=""
       style={{
@@ -93,16 +66,6 @@ export function AtlasScreen({ view, onEnterNode, onViewDeck }: AtlasScreenProps)
         nodes={view.nodes}
         edges={view.edges}
         onEnterNode={onEnterNode}
-      />
-
-      <QuestStatusBar
-        stageRef={stageRef}
-        essence={view.hud.essence}
-        deck={view.hud.deck}
-        onViewDeck={onViewDeck}
-        dreamcaller={view.hud.dreamcaller}
-        dreamsigns={view.hud.dreamsigns}
-        size={isDesktop ? "grand" : "compact"}
       />
     </div>
   );

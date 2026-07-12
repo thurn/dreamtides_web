@@ -381,7 +381,6 @@ describe("buildAtlasView", () => {
     expect(view.nodes).toHaveLength(3);
     // starter → middle and middle → boss.
     expect(view.edges).toHaveLength(2);
-    expect(view.hud.essence).toBe(0);
   });
 
   it("assembles a landscape stage on desktop", () => {

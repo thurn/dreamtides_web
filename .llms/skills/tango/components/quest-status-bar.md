@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/quest-status-bar`
 
-Real consumers: **5** (imports outside `src/tango/docs/` and tests).
+Real consumers: **4** (imports outside `src/tango/docs/` and tests).
 
 The persistent, transparent bottom HUD for quest screens. The essence total, deck, Dreamcaller, and docked dreamsigns sit directly on the scene art, made legible by their own glyph outline. It docks at two sizes — `compact` on mobile, `grand` on desktop — scaling the whole bar up in proportion.
 

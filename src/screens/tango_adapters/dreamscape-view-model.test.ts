@@ -155,9 +155,6 @@ describe("buildDreamscapeView", () => {
     const view = buildDreamscapeView(node(), state);
     expect(view.title).toBe("Ember Wood");
     expect(view.sites).toHaveLength(3);
-    expect(view.hud.essence).toBe(240);
-    expect(view.hud.deck).toBe(3);
-    expect(view.hud.dreamcaller).toBeUndefined();
   });
 });
 

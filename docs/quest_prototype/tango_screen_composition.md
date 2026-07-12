@@ -28,17 +28,19 @@ Use one atmospheric layer per screen. A nested feature that needs particles
 should route through the screen's existing `Motes` policy or become a documented
 component variant.
 
-## Status Bar Wiring
+## Persistent Quest Chrome
 
-`QuestStatusBar` is a screen component, not a global HUD singleton. Each migrated
-screen receives the status-bar view model from its adapter or screen builder and
-places the bar where that screen's composition requires it. The deck-viewer
-action is app-owned, so the router threads `onViewDeck` into Tango adapters and
-site adapters through the registry handler object.
+`TangoQuestChrome` is the app-owned wrapper around every registered Tango
+product screen. It derives the `QuestStatusBar` model directly from live quest
+state, docks the bar at the bottom, and mounts the desktop gear or mobile menu
+with the app-owned overlay actions. Registration through `tangoScreenFor` or
+`tangoSiteScreenFor` applies this wrapper automatically; pure screens and their
+view-model builders contain scene-specific data only.
 
-Journey explanation state is also app-owned. Site migrations that replace legacy
-journey routes receive `runtimeConfig` and `onJourneyExplanationChange` through
-`tangoSiteScreenFor`, matching the data available to the legacy route.
+The quest-start choice is the explicit exception because a run has no selected
+Dreamcaller or persistent quest inventory yet. The battle route applies the
+same wrapper to its Tango opponent preview and leaves the playable battle shell
+in its battle-specific chrome.
 
 ## Z-Index Bands
 
@@ -46,7 +48,8 @@ Keep screen layers in broad bands:
 
 - Backdrop art and motes: base layer.
 - Stage objects: map nodes, site nodes, cards, dreamsigns.
-- Screen chrome: headers, filters, local panels, `QuestStatusBar`.
+- Screen chrome: headers, filters, and local panels.
+- Persistent quest chrome: router-owned `TangoQuestChrome`.
 - Entity reveals: the single root coordinator portal used by named semantic
   Tango components.
 - App overlays: deck viewer, starting-deck popup, error boundary fallback.

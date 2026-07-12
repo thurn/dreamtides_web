@@ -9,10 +9,6 @@ import { asCardId, asCardName } from "../../types/card-identity";
 import { artRef } from "../primitives/art";
 import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
 import {
-  QUEST_STATUS_BAR_BOTTOM_INSET,
-  QUEST_STATUS_BAR_TOTAL_HEIGHT,
-} from "../components/hud/QuestStatusBar";
-import {
   PurgeSiteScreen,
   purgeActionWidthReservations,
   type PurgeSiteView,
@@ -64,11 +60,6 @@ function view(cardCount = 2): PurgeSiteView {
     }),
     visitCosts: [0, 40, 100],
     maxPaidSelections: 2,
-    hud: {
-      essence: 200,
-      deck: 2,
-      dreamsigns: [],
-    },
   };
 }
 
@@ -151,9 +142,7 @@ describe("PurgeSiteScreen", () => {
     expect(
       container.querySelector('[data-testid="tango-purge-commit-bar"]'),
     ).toBeNull();
-    expect(
-      container.querySelector('button[aria-label="View deck — 2 cards"]'),
-    ).not.toBeNull();
+    expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
 
     act(() => {
       root.unmount();
@@ -259,20 +248,11 @@ describe("PurgeSiteScreen", () => {
     });
   });
 
-  it("anchors the mobile status bar to the shared safe-area bottom inset", () => {
+  it("leaves persistent quest chrome to the router-owned wrapper", () => {
     const { container, root } = mount(
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
     );
-    const anchor = container.querySelector<HTMLElement>(
-      "[data-quest-status-bar-anchor]",
-    );
-    const row = anchor?.firstElementChild as HTMLElement | null;
-
-    expect(anchor?.style.bottom).toBe("0px");
-    expect(anchor?.style.position).toBe("fixed");
-    expect(anchor?.style.height).toBe(QUEST_STATUS_BAR_TOTAL_HEIGHT);
-    expect(row?.style.height).toBe("100%");
-    expect(row?.style.paddingBottom).toBe(QUEST_STATUS_BAR_BOTTOM_INSET);
+    expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
 
     act(() => {
       root.unmount();

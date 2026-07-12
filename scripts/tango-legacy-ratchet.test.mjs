@@ -66,6 +66,8 @@ export const COMPONENTS_TSX = [
   "ScreenRouter.tsx",
   "SiteGuide.tsx",
   "SiteSceneBackdrop.tsx",
+  "TangoQuestChrome.test.tsx",
+  "TangoQuestChrome.tsx",
   "TransfigurationCardDemo.tsx",
 ];
 

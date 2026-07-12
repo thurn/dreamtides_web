@@ -12,10 +12,8 @@ import {
 
 export function CardShopSiteScreenAdapter({
   siteId,
-  onViewDeck,
 }: {
   siteId: string;
-  onViewDeck?: () => void;
 }) {
   const { state, mutations, questContent } = useQuest();
   const node =
@@ -122,7 +120,6 @@ export function CardShopSiteScreenAdapter({
       onBuy={handleBuy}
       onRestock={handleRestock}
       onClose={handleClose}
-      onViewDeck={onViewDeck}
     />
   );
 }

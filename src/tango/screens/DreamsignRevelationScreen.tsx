@@ -1,9 +1,8 @@
 // DreamsignRevelationScreen — the Tango rendering of Sigrun's dreamsign-offer
 // site. The scene stays full-bleed, the guide and her speech occupy the left
-// side on desktop, the dreamsign choices sit opposite, and the persistent
-// QuestStatusBar remains the bottom HUD.
+// side on desktop, and the dreamsign choices sit opposite. Persistent quest
+// chrome is supplied by the router-owned wrapper.
 
-import { useRef } from "react";
 import { motion } from "framer-motion";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
@@ -12,10 +11,7 @@ import { GlassButton } from "../components/controls/GlassButton";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { Motes } from "../components/hud/Motes";
 import {
-  QuestStatusBar,
   QUEST_STATUS_BAR_CLEARANCE_OP,
-  type QsbDreamcaller,
-  type QsbDreamsign,
 } from "../components/hud/QuestStatusBar";
 import { SpeechBubble } from "../components/overlay/SpeechBubble";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
@@ -32,18 +28,6 @@ export interface DreamsignRevelationGuideView {
   line: string;
   /** Transparent character render. */
   art: ArtRef;
-}
-
-/** Bottom-HUD data for the Revelation screen. */
-export interface DreamsignRevelationHudView {
-  /** Essence total shown in the HUD. */
-  essence: number;
-  /** Deck size shown on the deck sprite. */
-  deck: number;
-  /** Active Dreamcaller bust. */
-  dreamcaller?: QsbDreamcaller;
-  /** Owned dreamsigns already docked in the HUD. */
-  dreamsigns: QsbDreamsign[];
 }
 
 /** Dreamsign-cap replacement state shown after claiming at the cap. */
@@ -66,8 +50,6 @@ export interface DreamsignRevelationView {
   offer: readonly DreamsignData[];
   /** Null while loading, otherwise the offer is ready to display. */
   offerReady: boolean;
-  /** Bottom HUD slice. */
-  hud: DreamsignRevelationHudView;
   /** Non-null when the player must replace an existing dreamsign. */
   purge: DreamsignRevelationPurgeView | null;
 }
@@ -79,8 +61,6 @@ export interface DreamsignRevelationScreenProps {
   onClaim: (index: number) => void;
   /** Skip the offer and return to the dreamscape. */
   onSkip: () => void;
-  /** Open the deck viewer from the QuestStatusBar deck sprite. */
-  onViewDeck?: () => void;
   /** Replace an owned dreamsign while accepting the pending one. */
   onPurge: (index: number) => void;
   /** Cancel cap handling and return to the offer. */
@@ -106,12 +86,10 @@ export function DreamsignRevelationScreen({
   view,
   onClaim,
   onSkip,
-  onViewDeck,
   onPurge,
   onCancelPurge,
   claimedIndex,
 }: DreamsignRevelationScreenProps) {
-  const stageRef = useRef<HTMLDivElement>(null);
   const isDesktop = useIsDesktop();
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const guideUrl = resolveArtRef(view.guide.art);
@@ -119,7 +97,6 @@ export function DreamsignRevelationScreen({
 
   return (
     <div
-      ref={stageRef}
       className="tango"
       data-tango-dreamsign-revelation=""
       data-testid="tango-dreamsign-revelation-screen"
@@ -169,16 +146,6 @@ export function DreamsignRevelationScreen({
           onSkip={onSkip}
         />
       )}
-
-      <QuestStatusBar
-        stageRef={stageRef}
-        essence={view.hud.essence}
-        deck={view.hud.deck}
-        onViewDeck={onViewDeck}
-        dreamcaller={view.hud.dreamcaller}
-        dreamsigns={view.hud.dreamsigns}
-      />
-
       {view.purge !== null && (
         <PurgeDialog
           purge={view.purge}
