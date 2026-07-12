@@ -5,7 +5,7 @@ Shader "TangoMvp/SceneGlass"
         [HideInInspector] _TangoFillColor("Tango Fill", Color) = (0.004392, 0.004392, 0.005182, 0.78)
         [HideInInspector] _TangoSaturation("Tango Saturation", Float) = 1.5
         [HideInInspector] _TangoSheenAlpha("Tango Sheen Alpha", Float) = 0.015
-        [HideInInspector] _TangoRimAlpha("Tango Rim Alpha", Float) = 0.14
+        [HideInInspector] _TangoRimAlpha("Tango Rim Alpha", Float) = 0.06
         [HideInInspector] _TangoFallbackAlpha("Tango Fallback Alpha", Float) = 0.72
     }
 
@@ -93,7 +93,15 @@ Shader "TangoMvp/SceneGlass"
                 return lerp(saturatedSource, _TangoFillColor.rgb, _TangoFillColor.a);
             }
 
-            half3 ComputeShellLighting(Varyings input)
+            half EdgeDistancePixels(float2 paneUv)
+            {
+                half2 uvPerPixel = max(fwidth(paneUv), half2(0.00001h, 0.00001h));
+                half2 edgeDistanceUv = min(paneUv, 1.0h - paneUv);
+                half2 edgeDistancePixels = edgeDistanceUv / uvPerPixel;
+                return min(edgeDistancePixels.x, edgeDistancePixels.y);
+            }
+
+            void ComputeShellLighting(Varyings input, out half3 additiveLighting, out half rimOpacity)
             {
                 half3 normalWS = normalize(input.normalWS);
                 half3 viewDirectionWS = GetWorldSpaceNormalizeViewDir(input.positionWS);
@@ -103,39 +111,47 @@ Shader "TangoMvp/SceneGlass"
                     mainLight.distanceAttenuation * mainLight.shadowAttenuation;
                 half fresnel = pow(1.0h - saturate(dot(normalWS, viewDirectionWS)), 5.0h);
 
-                half2 edgeDistance = min(input.paneUv, 1.0h - input.paneUv);
-                half rimMask = 1.0h - smoothstep(0.0h, 0.035h, min(edgeDistance.x, edgeDistance.y));
-                half topInset = (1.0h - smoothstep(0.0h, 0.06h, 1.0h - input.paneUv.y)) * 0.05h;
+                half rimMask = 1.0h - smoothstep(0.25h, 1.25h, EdgeDistancePixels(input.paneUv));
+                half topDistancePixels = (1.0h - input.paneUv.y) /
+                    max(fwidth(input.paneUv.y), 0.00001h);
+                half topInset = (1.0h - smoothstep(0.25h, 1.75h, topDistancePixels)) * 0.05h;
                 half lowerInteriorWash = (1.0h - smoothstep(0.0h, 0.32h, input.paneUv.y)) * 0.01h;
                 half diagonal = input.paneUv.x + input.paneUv.y * 0.57735h;
                 half sheen = (1.0h - smoothstep(0.0h, 0.42h, abs(diagonal - 0.52h))) * _TangoSheenAlpha;
 
-                half3 shellLighting = mainLight.color * specular * 0.32h;
-                shellLighting += rimMask * _TangoRimAlpha;
-                shellLighting += topInset;
-                shellLighting += lowerInteriorWash;
-                shellLighting += sheen;
-                shellLighting += fresnel * 0.10h;
-                return shellLighting;
+                additiveLighting = mainLight.color * specular * 0.32h;
+                additiveLighting += topInset;
+                additiveLighting += lowerInteriorWash;
+                additiveLighting += sheen;
+                additiveLighting += fresnel * 0.10h;
+                rimOpacity = rimMask * _TangoRimAlpha;
             }
 
-            half4 ComposeFallback(half3 interior, half3 shellLighting)
+            half3 CompositeRim(half3 color, half rimOpacity)
+            {
+                return lerp(color, 1.0h.xxx, saturate(rimOpacity));
+            }
+
+            half4 ComposeFallback(half3 interior, half3 additiveLighting, half rimOpacity)
             {
                 half outputAlpha = max(_TangoFallbackAlpha, 0.0001h);
-                return half4(interior + shellLighting / outputAlpha, outputAlpha);
+                half3 sourceColor = interior + additiveLighting / outputAlpha;
+                return half4(CompositeRim(sourceColor, rimOpacity), outputAlpha);
             }
 
             half4 Frag(Varyings input) : SV_Target
             {
-                half3 shellLighting = ComputeShellLighting(input);
+                half3 additiveLighting;
+                half rimOpacity;
+                ComputeShellLighting(input, additiveLighting, rimOpacity);
                 UNITY_BRANCH
                 if (_TangoGlassAvailable < 0.5h)
                 {
-                    return ComposeFallback(_TangoFillColor.rgb, shellLighting);
+                    return ComposeFallback(_TangoFillColor.rgb, additiveLighting, rimOpacity);
                 }
 
                 half3 transmission = SampleTransmission(input.positionCS);
-                return half4(transmission + shellLighting, 1.0h);
+                return half4(CompositeRim(transmission + additiveLighting, rimOpacity), 1.0h);
             }
             ENDHLSL
         }

@@ -5,8 +5,16 @@ import "../../../src/tango/primitives/tango-tokens.css";
 import { glassSurfaceStyle } from "../../../src/tango/internal/glass-surface";
 
 type Manifest = {
-  capture: { width: number; height: number };
-  scenarios: Array<{ id: string; background: string }>;
+  capture: {
+    width: number;
+    height: number;
+    edgePanel: { x: number; y: number; width: number; height: number };
+  };
+  scenarios: Array<{
+    id: string;
+    background: string;
+    purpose: "interior" | "edge";
+  }>;
 };
 
 const query = new URLSearchParams(window.location.search);
@@ -24,6 +32,10 @@ const manifest = (await fetch(manifestUrl).then((response) => {
 const scenario = manifest.scenarios.find((candidate) => candidate.id === scenarioId);
 if (!scenario) throw new Error(`Unknown parity scenario: ${scenarioId}`);
 const backgroundUrl = new URL(scenario.background, manifestUrl).href;
+const glassBounds =
+  scenario.purpose === "edge"
+    ? manifest.capture.edgePanel
+    : { x: 0, y: 0, width: manifest.capture.width, height: manifest.capture.height };
 const image = new Image();
 image.src = backgroundUrl;
 await image.decode();
@@ -53,7 +65,11 @@ function ParityFrame() {
           style={{
             ...glassSurfaceStyle({ radius: null }),
             position: "absolute",
-            inset: 0,
+            left: glassBounds.x,
+            top: glassBounds.y,
+            width: glassBounds.width,
+            height: glassBounds.height,
+            boxSizing: "border-box",
           }}
         />
       ) : null}

@@ -54,9 +54,19 @@ def cool_radial():
     return pixels
 
 
+def edge_neutral():
+    """A flat field that isolates the pane edge from blur and scene detail."""
+    return [(72, 78, 96, 255)] * (WIDTH * HEIGHT)
+
+
 def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    for name, factory in (("fine-grid", fine_grid), ("warm-bands", warm_bands), ("cool-radial", cool_radial)):
+    for name, factory in (
+        ("fine-grid", fine_grid),
+        ("warm-bands", warm_bands),
+        ("cool-radial", cool_radial),
+        ("edge-neutral", edge_neutral),
+    ):
         path = OUTPUT / f"{name}.png"
         write_png(path, WIDTH, HEIGHT, factory())
         print(path)

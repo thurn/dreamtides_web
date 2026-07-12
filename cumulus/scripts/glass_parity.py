@@ -118,10 +118,10 @@ def load_manifest(path):
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as error:
         raise ValueError(f"invalid manifest: {error}") from error
-    if set(data) != {"schemaVersion", "capture", "scenarios", "metrics", "budget"} or data["schemaVersion"] != 1:
-        raise ValueError("manifest root does not match schema version 1")
+    if set(data) != {"schemaVersion", "capture", "scenarios", "metrics", "budget"} or data["schemaVersion"] != 2:
+        raise ValueError("manifest root does not match schema version 2")
     capture = data["capture"]
-    if set(capture) != {"width", "height", "comparisonRegion"}:
+    if set(capture) != {"width", "height", "comparisonRegion", "edgePanel"}:
         raise ValueError("capture contract is malformed")
     width, height = capture["width"], capture["height"]
     if not isinstance(width, int) or not isinstance(height, int) or width <= 0 or height <= 0:
@@ -131,19 +131,31 @@ def load_manifest(path):
         raise ValueError("comparison region is malformed")
     if region["x"] < 0 or region["y"] < 0 or region["width"] <= 1 or region["height"] <= 1 or region["x"] + region["width"] > width or region["y"] + region["height"] > height:
         raise ValueError("comparison region lies outside the capture")
+    edge_panel = capture["edgePanel"]
+    if set(edge_panel) != {"x", "y", "width", "height"} or any(not isinstance(edge_panel[key], int) for key in edge_panel):
+        raise ValueError("edge panel is malformed")
+    if edge_panel["x"] < 0 or edge_panel["y"] < 0 or edge_panel["width"] < 96 or edge_panel["height"] < 32 or edge_panel["x"] + edge_panel["width"] > width or edge_panel["y"] + edge_panel["height"] > height:
+        raise ValueError("edge panel lies outside the capture or is too small")
     scenarios = data["scenarios"]
     if not isinstance(scenarios, list) or len(scenarios) < 2:
         raise ValueError("at least two background scenarios are required")
     identifiers = []
+    purposes = []
     for scenario in scenarios:
-        if not isinstance(scenario, dict) or set(scenario) != {"id", "background"}:
+        if not isinstance(scenario, dict) or set(scenario) != {"id", "background", "purpose"}:
             raise ValueError("scenario contract is malformed")
         identifier = scenario["id"]
         if not isinstance(identifier, str) or not identifier or not all(character.isalnum() or character in "-_" for character in identifier):
             raise ValueError("scenario id is invalid")
         identifiers.append(identifier)
+        purpose = scenario["purpose"]
+        if purpose not in ("interior", "edge"):
+            raise ValueError("scenario purpose is invalid")
+        purposes.append(purpose)
     if len(set(identifiers)) != len(identifiers):
         raise ValueError("scenario ids must be unique")
+    if purposes.count("interior") < 2 or purposes.count("edge") != 1:
+        raise ValueError("the parity contract requires at least two interior scenarios and one edge scenario")
     if set(data["metrics"]) != set(METRIC_NAMES):
         raise ValueError("metric names do not match the parity contract")
     total_weight = 0.0
@@ -157,7 +169,13 @@ def load_manifest(path):
         total_weight += weight
     if abs(total_weight - 1.0) > 1e-9:
         raise ValueError("metric weights must sum to 1")
-    if set(data["budget"]) != {"maximumMeanScore", "maximumWorstScore", "maximumScenarioScore"}:
+    if set(data["budget"]) != {
+        "maximumMeanScore",
+        "maximumWorstScore",
+        "maximumScenarioScore",
+        "maximumEdgeWidthPixels",
+        "maximumEdgeLuminanceLift",
+    }:
         raise ValueError("budget contract is malformed")
     for name, value in data["budget"].items():
         if _finite_number(value, name) < 0:
@@ -235,6 +253,57 @@ def _scenario_metrics(web_bare, web_glass, unity_bare, unity_glass, width, regio
     return metrics, heat
 
 
+def _edge_side_metrics(effect, width, panel, from_left):
+    center_y = panel["y"] + panel["height"] // 2
+    edge_x = panel["x"] if from_left else panel["x"] + panel["width"] - 1
+    direction = 1 if from_left else -1
+    profile = [
+        _luminance(effect[center_y * width + edge_x + direction * offset])
+        for offset in range(48)
+    ]
+    # Fit the pane's slow sheen/fill gradient well inside the surface, then
+    # extrapolate it back to the edge. What remains is the spatially local rim
+    # response rather than the material's intentional interior gradient.
+    fit_indices = range(24, 48)
+    count = len(fit_indices)
+    sum_x = sum(fit_indices)
+    sum_y = sum(profile[index] for index in fit_indices)
+    sum_xx = sum(index * index for index in fit_indices)
+    sum_xy = sum(index * profile[index] for index in fit_indices)
+    denominator = count * sum_xx - sum_x * sum_x
+    slope = (count * sum_xy - sum_x * sum_y) / denominator
+    intercept = (sum_y - slope * sum_x) / count
+    lifts = [value - (intercept + slope * index) for index, value in enumerate(profile)]
+    peak = max(0.0, max(lifts[:16]))
+    threshold = max(0.005, peak * 0.1)
+    width_pixels = 0.0
+    for index, lift in enumerate(lifts[:24]):
+        if lift <= threshold:
+            if index == 0:
+                width_pixels = 0.0
+            else:
+                previous = lifts[index - 1]
+                span = max(previous - lift, 1e-9)
+                width_pixels = (index - 1) + max(0.0, min(1.0, (previous - threshold) / span))
+            break
+    else:
+        width_pixels = 24.0
+    return {"widthPixels": width_pixels, "luminanceLift": peak}
+
+
+def _edge_metrics(bare, glass, width, panel):
+    effect = _effect(bare, glass)
+    sides = (
+        _edge_side_metrics(effect, width, panel, True),
+        _edge_side_metrics(effect, width, panel, False),
+    )
+    return {
+        "maximumWidthPixels": max(side["widthPixels"] for side in sides),
+        "maximumLuminanceLift": max(side["luminanceLift"] for side in sides),
+        "sides": {"left": sides[0], "right": sides[1]},
+    }
+
+
 def compare(manifest_path, web_directory, unity_directory, output_directory):
     contract = load_manifest(manifest_path)
     width, height = contract["capture"]["width"], contract["capture"]["height"]
@@ -258,6 +327,7 @@ def compare(manifest_path, web_directory, unity_directory, output_directory):
             extra = sorted(actual_capture_names - expected_capture_names)
             raise ValueError(f"{renderer} capture matrix mismatch: missing={missing}, extra={extra}")
     results = []
+    edge_result = None
     for scenario in contract["scenarios"]:
         identifier = scenario["id"]
         captures = {}
@@ -272,15 +342,25 @@ def compare(manifest_path, web_directory, unity_directory, output_directory):
                     raise ValueError(f"capture dimensions differ from manifest: {path}")
                 captures[f"{renderer}_{mode}"] = pixels
                 input_hashes[f"{renderer}.{mode}"] = hashlib.sha256(path.read_bytes()).hexdigest()
-        metrics, heat = _scenario_metrics(
-            captures["web_bare"], captures["web_glass"], captures["unity_bare"], captures["unity_glass"], width, region)
-        score = sum(metrics[name] * contract["metrics"][name]["weight"] for name in METRIC_NAMES)
-        heat_pixels = []
-        for value in heat:
-            intensity = max(0, min(255, round(value * 255 * 4)))
-            heat_pixels.append((intensity, min(255, intensity // 3), 0, 255))
-        write_png(output_directory / f"{identifier}-effect-diff.png", width, height, heat_pixels)
-        results.append({"scenario": identifier, "score": score, "metrics": metrics, "inputSha256": input_hashes})
+        if scenario["purpose"] == "interior":
+            metrics, heat = _scenario_metrics(
+                captures["web_bare"], captures["web_glass"], captures["unity_bare"], captures["unity_glass"], width, region)
+            score = sum(metrics[name] * contract["metrics"][name]["weight"] for name in METRIC_NAMES)
+            heat_pixels = []
+            for value in heat:
+                intensity = max(0, min(255, round(value * 255 * 4)))
+                heat_pixels.append((intensity, min(255, intensity // 3), 0, 255))
+            write_png(output_directory / f"{identifier}-effect-diff.png", width, height, heat_pixels)
+            results.append({"scenario": identifier, "score": score, "metrics": metrics, "inputSha256": input_hashes})
+        else:
+            edge_result = {
+                "scenario": identifier,
+                "web": _edge_metrics(captures["web_bare"], captures["web_glass"], width, contract["capture"]["edgePanel"]),
+                "unity": _edge_metrics(captures["unity_bare"], captures["unity_glass"], width, contract["capture"]["edgePanel"]),
+                "inputSha256": input_hashes,
+            }
+    if edge_result is None:
+        raise ValueError("edge scenario was not measured")
     mean_score = sum(item["score"] for item in results) / len(results)
     worst = max(results, key=lambda item: item["score"])
     budget = contract["budget"]
@@ -288,12 +368,15 @@ def compare(manifest_path, web_directory, unity_directory, output_directory):
         mean_score <= budget["maximumMeanScore"]
         and worst["score"] <= budget["maximumWorstScore"]
         and all(item["score"] <= budget["maximumScenarioScore"] for item in results)
+        and edge_result["unity"]["maximumWidthPixels"] <= budget["maximumEdgeWidthPixels"]
+        and edge_result["unity"]["maximumLuminanceLift"] <= budget["maximumEdgeLuminanceLift"]
     )
     report = {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "manifest": str(manifest_path),
         "comparisonRegion": region,
         "scenarios": results,
+        "edgeRestraint": edge_result,
         "overall": {
             "meanScore": mean_score,
             "worstScore": worst["score"],
@@ -320,6 +403,16 @@ def compare(manifest_path, web_directory, unity_directory, output_directory):
         f"Mean score: **{mean_score:.6f}** (budget {budget['maximumMeanScore']:.6f})",
         "",
         f"Worst score: **{worst['score']:.6f}** on `{worst['scenario']}` (budget {budget['maximumWorstScore']:.6f})",
+        "",
+        "## Edge restraint",
+        "",
+        "| Renderer | Maximum width | Maximum luminance lift |",
+        "| --- | ---: | ---: |",
+        f"| Web | {edge_result['web']['maximumWidthPixels']:.3f} px | {edge_result['web']['maximumLuminanceLift']:.6f} |",
+        f"| Unity | {edge_result['unity']['maximumWidthPixels']:.3f} px | {edge_result['unity']['maximumLuminanceLift']:.6f} |",
+        "",
+        f"Unity budgets: **{budget['maximumEdgeWidthPixels']:.3f} px** maximum width; "
+        f"**{budget['maximumEdgeLuminanceLift']:.6f}** maximum luminance lift.",
         "",
         f"Verdict: **{'PASS' if passed else 'FAIL'}**",
         "",

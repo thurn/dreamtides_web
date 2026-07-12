@@ -27,7 +27,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _TangoFallbackAlpha: 0.72
-    - _TangoRimAlpha: 0.14
+    - _TangoRimAlpha: 0.06
     - _TangoSaturation: 1.5
     - _TangoSheenAlpha: 0.015
     m_Colors:

@@ -17,6 +17,8 @@ namespace TangoMvp.Tests.PlayMode
     {
         private const int CaptureWidth = 512;
         private const int CaptureHeight = 288;
+        private const int EdgePanelWidth = 320;
+        private const int EdgePanelHeight = 176;
         private static readonly string EvidenceDirectory = Path.GetFullPath("Artifacts/GlassParity/unity");
         [UnityTest]
         public IEnumerator SharedBackgroundMatrix_CapturesBareAndSceneGlassFrames()
@@ -96,6 +98,13 @@ namespace TangoMvp.Tests.PlayMode
                 foreach (Texture2D texture in backgrounds)
                 {
                     backgroundMaterial.mainTexture = texture;
+                    bool edgeScenario = texture.name == "edge-neutral";
+                    glass.transform.localScale = edgeScenario
+                        ? new Vector3(
+                            (160f / 9f) * EdgePanelWidth / CaptureWidth,
+                            10f * EdgePanelHeight / CaptureHeight,
+                            1f)
+                        : new Vector3(160f / 9f, 10f, 1f);
                     glass.SetActive(false);
                     Capture(camera, target, texture.name + "-bare");
                     glass.SetActive(true);

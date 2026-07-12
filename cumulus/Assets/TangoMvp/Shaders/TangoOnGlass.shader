@@ -3,7 +3,7 @@ Shader "TangoMvp/OnGlass"
     Properties
     {
         [HideInInspector] _TangoLensColor("Tango Lens", Color) = (0.001214, 0.001214, 0.001821, 0.13)
-        [HideInInspector] _TangoRimAlpha("Tango Rim Alpha", Float) = 0.18
+        [HideInInspector] _TangoRimAlpha("Tango Rim Alpha", Float) = 0.08
         [HideInInspector] _TangoHighlightAlpha("Tango Highlight Alpha", Float) = 0.10
     }
 
@@ -65,16 +65,25 @@ Shader "TangoMvp/OnGlass"
 
             half4 Frag(Varyings input) : SV_Target
             {
-                half2 edgeDistance = min(input.paneUv, 1.0h - input.paneUv);
-                half rim = 1.0h - smoothstep(0.0h, 0.055h, min(edgeDistance.x, edgeDistance.y));
+                half2 uvPerPixel = max(fwidth(input.paneUv), half2(0.00001h, 0.00001h));
+                half2 edgeDistanceUv = min(input.paneUv, 1.0h - input.paneUv);
+                half2 edgeDistancePixels = edgeDistanceUv / uvPerPixel;
+                half rim = 1.0h - smoothstep(
+                    0.25h,
+                    1.25h,
+                    min(edgeDistancePixels.x, edgeDistancePixels.y));
                 half2 highlightDelta = (input.paneUv - half2(0.36h, 0.78h)) / half2(0.22h, 0.14h);
                 half localHighlight = pow(saturate(1.0h - dot(highlightDelta, highlightDelta)), 3.0h);
                 half3 normalWS = normalize(input.normalWS);
                 half3 viewDirectionWS = GetWorldSpaceNormalizeViewDir(input.positionWS);
                 half fresnel = pow(1.0h - saturate(dot(normalWS, viewDirectionWS)), 4.0h);
 
-                half highlight = rim * _TangoRimAlpha + localHighlight * _TangoHighlightAlpha + fresnel * 0.08h;
-                return half4(_TangoLensColor.rgb + highlight, saturate(_TangoLensColor.a + highlight));
+                half highlight = localHighlight * _TangoHighlightAlpha + fresnel * 0.08h;
+                half4 lens = half4(
+                    _TangoLensColor.rgb + highlight,
+                    saturate(_TangoLensColor.a + highlight));
+                half rimOpacity = saturate(rim * _TangoRimAlpha);
+                return lerp(lens, half4(1.0h, 1.0h, 1.0h, 1.0h), rimOpacity);
             }
             ENDHLSL
         }

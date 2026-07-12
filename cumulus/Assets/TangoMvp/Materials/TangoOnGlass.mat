@@ -27,7 +27,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _TangoHighlightAlpha: 0.1
-    - _TangoRimAlpha: 0.18
+    - _TangoRimAlpha: 0.08
     m_Colors:
     - _TangoLensColor: {r: 0.001214108, g: 0.001214108, b: 0.001821162, a: 0.13}
   m_BuildTextureStacks: []

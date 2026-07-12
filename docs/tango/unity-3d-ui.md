@@ -183,23 +183,25 @@ The standard glass target begins with the existing Tango values:
 - Backdrop saturation: 1.5.
 - Directional sheen: white at 7 percent, fading through 42 percent of the
   surface along the existing 150-degree direction.
-- Rim: white at 14 percent.
+- Rim role: a one-output-pixel white hairline whose rendered luminance matches
+  the web's 14-percent rim under the reference output transform.
 - Top inset highlight: white at 22 percent.
 - Lower interior wash: white at 4 percent.
 - Elevation color: cool purple-black rather than neutral gray.
 
-These values are perceptual references. World-space presentation may require
-resolution-, distance-, and exposure-aware conversion, but must preserve the
-reference appearance under the visual conformance scenes.
+These values are perceptual references. Renderer projections use calibrated
+values appropriate to their compositing space and preserve the reference
+appearance under the visual conformance scenes.
 
 The reference presentation is a 2560 by 1440 display-linear capture. The pane
 covers 40 percent of output height and its face remains within 15 degrees of
 the camera plane. A black-and-white edge moving behind the pane must produce a
 22-pixel plus or minus 2-pixel perceptual blur spread. Flat-region tint must
 remain within a Delta E 2000 value of 3 from the browser reference after the
-same output transform; rim and sheen peak luminance must remain within 10
-percent. Primary text targets 4.5:1 measured contrast against the composed
-glass result.
+same output transform; interior sheen peak luminance must remain within 10
+percent. The face rim remains at most two output pixels wide and contributes at
+most 0.065 display-linear luminance above the fitted local interior. Primary
+text targets 4.5:1 measured contrast against the composed glass result.
 
 ### Lighting without double-lighting
 
@@ -399,6 +401,13 @@ The diagonal sheen is anchored to the pane's authored surface coordinates so
 it travels with the object. Fresnel and specular response are view- and
 light-dependent. This combination makes the pane feel materially stable while
 remaining responsive to movement.
+
+The face rim is evaluated in output-pixel space. The shader converts authored
+surface distance with screen-space derivatives, giving standard and on-glass
+roles a stable hairline across pane dimensions, aspect ratios, render scales,
+and perspective. The rim composites toward white at its calibrated opacity.
+Physical bevel, specular, and Fresnel responses provide the spatial edge
+behavior around that restrained face treatment.
 
 Subtle refraction may offset the blur sample using the physical surface normal
 or an authored normal field. Refraction remains subordinate to legibility. It
@@ -955,8 +964,10 @@ Legible current-frame UI is preferred to temporally smoothed ghosting.
 
 ### Visual material
 
-- Standard and popover glass match Tango reference captures for tint,
-  saturation, blur, sheen, rim, and cool elevation character.
+- Standard and popover glass interiors match Tango reference captures for
+  tint, saturation, blur, sheen, and cool elevation character.
+- Standard and on-glass face rims satisfy the screen-space width and luminance
+  restraint budgets independently of interior parity.
 - On-glass controls preserve the parent scene color and read as a distinct
   nested object.
 - Bevel and rim respond coherently to moving camera and scene lights.
@@ -1016,6 +1027,8 @@ Legible current-frame UI is preferred to temporally smoothed ghosting.
    on-glass controls, solid chrome, text, and a moving light. Compare the
    materials with Tango reference captures on bright, dark, white, gold, and
    violet scene backgrounds.
+   Confirm the face rim remains a hairline while the physical bevel responds
+   to the scene light.
 2. Move an opaque animated character behind stationary glass. Confirm current
    motion remains visible as blurred form and color without freezing, trails,
    or frame-rate stepping.

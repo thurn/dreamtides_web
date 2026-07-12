@@ -280,14 +280,18 @@ namespace TangoMvp.Tests
             Assert.That(
                 Regex.Matches(source, @"SAMPLE_TEXTURE2D_X\s*\(\s*_TangoGlassBlurTexture").Count,
                 Is.EqualTo(1));
-            string shellBody = ExtractFunctionBody(source, "half3 ComputeShellLighting(Varyings input)");
+            string shellBody = ExtractFunctionBody(
+                source,
+                "void ComputeShellLighting(Varyings input, out half3 additiveLighting, out half rimOpacity)");
             Assert.That(shellBody, Does.Not.Contain("transmission"));
             Assert.That(shellBody, Does.Not.Contain("_TangoGlassBlurTexture"));
             Assert.That(shellBody, Does.Contain("GetMainLight"));
-            Assert.That(source, Does.Contain("half3 shellLighting = ComputeShellLighting(input);"));
+            Assert.That(source, Does.Contain("ComputeShellLighting(input, additiveLighting, rimOpacity);"));
             Assert.That(Regex.Matches(source, @"\btransmission\b").Count, Is.EqualTo(2));
             Assert.That(source, Does.Contain("half3 transmission = SampleTransmission(input.positionCS);"));
-            Assert.That(source, Does.Contain("return half4(transmission + shellLighting, 1.0h);"));
+            Assert.That(
+                source,
+                Does.Contain("return half4(CompositeRim(transmission + additiveLighting, rimOpacity), 1.0h);"));
             Assert.That(source, Does.Contain("1.0h - input.paneUv.y"));
             Assert.That(source, Does.Contain("0.72"));
             Assert.That(source, Does.Contain("ZWrite Off"));
@@ -303,11 +307,11 @@ namespace TangoMvp.Tests
             string source = ReadShaderSource(shader);
             string fallbackBody = ExtractFunctionBody(
                 source,
-                "half4 ComposeFallback(half3 interior, half3 shellLighting)");
+                "half4 ComposeFallback(half3 interior, half3 additiveLighting, half rimOpacity)");
             Assert.That(fallbackBody, Does.Contain("max(_TangoFallbackAlpha, 0.0001h)"));
             Assert.That(
                 fallbackBody,
-                Does.Contain("return half4(interior + shellLighting / outputAlpha, outputAlpha);"));
+                Does.Contain("return half4(CompositeRim(sourceColor, rimOpacity), outputAlpha);"));
 
             const float fallbackAlpha = 0.72f;
             Color linearFill = ((Color)new Color32(14, 14, 16, 255)).linear;
@@ -366,6 +370,24 @@ namespace TangoMvp.Tests
         }
 
         [Test]
+        public void GlassRims_AreDerivativeScaledHairlinesWithCompositedWhite()
+        {
+            string sceneSource = ReadShaderSource(Shader.Find("TangoMvp/SceneGlass"));
+            string onGlassSource = ReadShaderSource(Shader.Find("TangoMvp/OnGlass"));
+
+            foreach (string source in new[] { sceneSource, onGlassSource })
+            {
+                Assert.That(source, Does.Contain("fwidth("));
+                Assert.That(source, Does.Contain("edgeDistanceUv / uvPerPixel"));
+                Assert.That(source, Does.Contain("0.25h"));
+                Assert.That(source, Does.Contain("1.25h"));
+            }
+
+            Assert.That(sceneSource, Does.Contain("return lerp(color, 1.0h.xxx, saturate(rimOpacity));"));
+            Assert.That(onGlassSource, Does.Contain("return lerp(lens, half4(1.0h, 1.0h, 1.0h, 1.0h), rimOpacity);"));
+        }
+
+        [Test]
         public void RebuildMaterials_CreatesStableSharedMaterialVocabulary()
         {
             InvokeRebuildMaterials();
@@ -405,7 +427,7 @@ namespace TangoMvp.Tests
             Assert.That(fill.a, Is.EqualTo(0.78f).Within(0.0001f));
             Assert.That(sceneGlass.GetFloat("_TangoSaturation"), Is.EqualTo(1.5f));
             Assert.That(sceneGlass.GetFloat("_TangoSheenAlpha"), Is.EqualTo(0.015f));
-            Assert.That(sceneGlass.GetFloat("_TangoRimAlpha"), Is.EqualTo(0.14f));
+            Assert.That(sceneGlass.GetFloat("_TangoRimAlpha"), Is.EqualTo(0.06f));
             Assert.That(sceneGlass.GetFloat("_TangoFallbackAlpha"), Is.EqualTo(0.72f));
             Color lens = onGlass.GetColor("_TangoLensColor");
             Color expectedLens = ((Color)new Color32(4, 4, 6, 255)).linear;
@@ -413,7 +435,7 @@ namespace TangoMvp.Tests
             Assert.That(lens.g, Is.EqualTo(expectedLens.g).Within(0.0001f));
             Assert.That(lens.b, Is.EqualTo(expectedLens.b).Within(0.0001f));
             Assert.That(lens.a, Is.EqualTo(0.13f).Within(0.0001f));
-            Assert.That(onGlass.GetFloat("_TangoRimAlpha"), Is.EqualTo(0.18f));
+            Assert.That(onGlass.GetFloat("_TangoRimAlpha"), Is.EqualTo(0.08f));
             Assert.That(onGlass.GetFloat("_TangoHighlightAlpha"), Is.EqualTo(0.10f));
             Assert.That(solidChrome.shader.name, Is.EqualTo("Universal Render Pipeline/Lit"));
             Assert.That(solidChrome.renderQueue, Is.EqualTo((int)RenderQueue.Geometry));

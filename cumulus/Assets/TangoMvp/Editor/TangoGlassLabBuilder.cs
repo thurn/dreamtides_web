@@ -869,7 +869,9 @@ namespace TangoMvp.Editor
             material.SetFloat("_TangoSaturation", 1.5f);
             // CSS alpha compositing calibrates to this linear-HDR intensity.
             material.SetFloat("_TangoSheenAlpha", 0.015f);
-            material.SetFloat("_TangoRimAlpha", 0.14f);
+            // CSS composites its 14-percent white rim in the browser's color
+            // pipeline. This linear-HDR opacity matches that rendered lift.
+            material.SetFloat("_TangoRimAlpha", 0.06f);
             material.SetFloat("_TangoFallbackAlpha", 0.72f);
             material.SetOverrideTag("RenderType", "Transparent");
             material.renderQueue = (int)RenderQueue.Transparent;
@@ -879,7 +881,8 @@ namespace TangoMvp.Editor
         private static void ConfigureOnGlass(Material material)
         {
             material.SetColor("_TangoLensColor", SrgbTokenColor(4, 4, 6, 0.13f));
-            material.SetFloat("_TangoRimAlpha", 0.18f);
+            // Linear-HDR calibration of the web role's 18-percent white rim.
+            material.SetFloat("_TangoRimAlpha", 0.08f);
             material.SetFloat("_TangoHighlightAlpha", 0.10f);
             material.SetOverrideTag("RenderType", "Transparent");
             material.renderQueue = (int)RenderQueue.Transparent + 10;

@@ -1,22 +1,31 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "capture": {
     "width": 512,
     "height": 288,
-    "comparisonRegion": { "x": 48, "y": 32, "width": 416, "height": 224 }
+    "comparisonRegion": { "x": 48, "y": 32, "width": 416, "height": 224 },
+    "edgePanel": { "x": 96, "y": 56, "width": 320, "height": 176 }
   },
   "scenarios": [
     {
       "id": "fine-grid",
-      "background": "../Assets/TangoMvp/Parity/Resources/TangoParityBackgrounds/fine-grid.png"
+      "background": "../Assets/TangoMvp/Parity/Resources/TangoParityBackgrounds/fine-grid.png",
+      "purpose": "interior"
     },
     {
       "id": "warm-bands",
-      "background": "../Assets/TangoMvp/Parity/Resources/TangoParityBackgrounds/warm-bands.png"
+      "background": "../Assets/TangoMvp/Parity/Resources/TangoParityBackgrounds/warm-bands.png",
+      "purpose": "interior"
     },
     {
       "id": "cool-radial",
-      "background": "../Assets/TangoMvp/Parity/Resources/TangoParityBackgrounds/cool-radial.png"
+      "background": "../Assets/TangoMvp/Parity/Resources/TangoParityBackgrounds/cool-radial.png",
+      "purpose": "interior"
+    },
+    {
+      "id": "edge-neutral",
+      "background": "../Assets/TangoMvp/Parity/Resources/TangoParityBackgrounds/edge-neutral.png",
+      "purpose": "edge"
     }
   ],
   "metrics": {
@@ -28,6 +37,8 @@
   "budget": {
     "maximumMeanScore": 0.018,
     "maximumWorstScore": 0.027,
-    "maximumScenarioScore": 0.027
+    "maximumScenarioScore": 0.027,
+    "maximumEdgeWidthPixels": 2.0,
+    "maximumEdgeLuminanceLift": 0.065
   }
 }

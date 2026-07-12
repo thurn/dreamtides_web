@@ -6,12 +6,16 @@ import tempfile
 
 import glass_parity as parity
 
+WIDTH = 128
+HEIGHT = 64
+EDGE_PANEL = {"x": 16, "y": 16, "width": 96, "height": 32}
+
 
 def solid(width, height, rgba):
     return [rgba] * (width * height)
 
 
-def write_pair(root, renderer, scenario, bare, glass, width=4, height=3):
+def write_pair(root, renderer, scenario, bare, glass, width=WIDTH, height=HEIGHT):
     directory = root / renderer
     directory.mkdir(parents=True, exist_ok=True)
     parity.write_png(directory / f"{scenario}-bare.png", width, height, bare)
@@ -20,13 +24,17 @@ def write_pair(root, renderer, scenario, bare, glass, width=4, height=3):
 
 def manifest(root, scenarios=("a", "b"), threshold=0.0):
     data = {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "capture": {
-            "width": 4,
-            "height": 3,
-            "comparisonRegion": {"x": 0, "y": 0, "width": 4, "height": 3},
+            "width": WIDTH,
+            "height": HEIGHT,
+            "comparisonRegion": {"x": 0, "y": 0, "width": WIDTH, "height": HEIGHT},
+            "edgePanel": EDGE_PANEL,
         },
-        "scenarios": [{"id": scenario, "background": f"{scenario}.png"} for scenario in scenarios],
+        "scenarios": [
+            *[{"id": scenario, "background": f"{scenario}.png", "purpose": "interior"} for scenario in scenarios],
+            {"id": "edge", "background": "edge.png", "purpose": "edge"},
+        ],
         "metrics": {
             "effectMae": {"weight": 0.4},
             "effectRmse": {"weight": 0.25},
@@ -37,6 +45,8 @@ def manifest(root, scenarios=("a", "b"), threshold=0.0):
             "maximumMeanScore": threshold,
             "maximumWorstScore": threshold,
             "maximumScenarioScore": threshold,
+            "maximumEdgeWidthPixels": 2.5,
+            "maximumEdgeLuminanceLift": 0.12,
         },
     }
     path = root / "manifest.json"
@@ -46,9 +56,9 @@ def manifest(root, scenarios=("a", "b"), threshold=0.0):
 
 with tempfile.TemporaryDirectory() as temporary:
     root = Path(temporary)
-    black = solid(4, 3, (0, 0, 0, 255))
-    gray = solid(4, 3, (96, 96, 96, 255))
-    for scenario in ("a", "b"):
+    black = solid(WIDTH, HEIGHT, (0, 0, 0, 255))
+    gray = solid(WIDTH, HEIGHT, (96, 96, 96, 255))
+    for scenario in ("a", "b", "edge"):
         write_pair(root, "web", scenario, black, gray)
         write_pair(root, "unity", scenario, black, gray)
     report = parity.compare(manifest(root), root / "web", root / "unity", root / "out")
@@ -62,12 +72,12 @@ print("PASS: identical material effects score zero across multiple backgrounds")
 
 with tempfile.TemporaryDirectory() as temporary:
     root = Path(temporary)
-    black = solid(4, 3, (0, 0, 0, 255))
-    gray = solid(4, 3, (96, 96, 96, 255))
-    red = solid(4, 3, (255, 0, 0, 255))
-    for scenario in ("a", "b"):
+    black = solid(WIDTH, HEIGHT, (0, 0, 0, 255))
+    gray = solid(WIDTH, HEIGHT, (96, 96, 96, 255))
+    red = solid(WIDTH, HEIGHT, (255, 0, 0, 255))
+    for scenario in ("a", "b", "edge"):
         write_pair(root, "web", scenario, black, gray)
-        write_pair(root, "unity", scenario, black, gray if scenario == "a" else red)
+        write_pair(root, "unity", scenario, black, red if scenario == "b" else gray)
     report = parity.compare(manifest(root, threshold=0.01), root / "web", root / "unity", root / "out")
     assert report["overall"]["passed"] is False
     assert report["overall"]["worstScenario"] == "b"
@@ -77,8 +87,8 @@ print("PASS: worst-background regression cannot hide behind the aggregate")
 
 with tempfile.TemporaryDirectory() as temporary:
     root = Path(temporary)
-    black = solid(4, 3, (0, 0, 0, 255))
-    gray = solid(4, 3, (96, 96, 96, 255))
+    black = solid(WIDTH, HEIGHT, (0, 0, 0, 255))
+    gray = solid(WIDTH, HEIGHT, (96, 96, 96, 255))
     write_pair(root, "web", "a", black, gray)
     write_pair(root, "unity", "a", black, gray)
     try:
@@ -88,6 +98,30 @@ with tempfile.TemporaryDirectory() as temporary:
     else:
         raise AssertionError("missing scenarios must fail closed")
 print("PASS: incomplete capture matrices are rejected")
+
+
+def pane_with_edge(edge_width):
+    pixels = solid(WIDTH, HEIGHT, (0, 0, 0, 255))
+    for y in range(EDGE_PANEL["y"], EDGE_PANEL["y"] + EDGE_PANEL["height"]):
+        for x in range(EDGE_PANEL["x"], EDGE_PANEL["x"] + EDGE_PANEL["width"]):
+            distance = min(x - EDGE_PANEL["x"], EDGE_PANEL["x"] + EDGE_PANEL["width"] - 1 - x)
+            pixels[y * WIDTH + x] = (224, 224, 224, 255) if distance < edge_width else (96, 96, 96, 255)
+    return pixels
+
+
+with tempfile.TemporaryDirectory() as temporary:
+    root = Path(temporary)
+    black = solid(WIDTH, HEIGHT, (0, 0, 0, 255))
+    gray = solid(WIDTH, HEIGHT, (96, 96, 96, 255))
+    for scenario in ("a", "b"):
+        write_pair(root, "web", scenario, black, gray)
+        write_pair(root, "unity", scenario, black, gray)
+    write_pair(root, "web", "edge", black, pane_with_edge(1))
+    write_pair(root, "unity", "edge", black, pane_with_edge(8))
+    report = parity.compare(manifest(root), root / "web", root / "unity", root / "out")
+    assert report["overall"]["passed"] is False
+    assert report["edgeRestraint"]["unity"]["maximumWidthPixels"] > 2.5
+print("PASS: broad Unity rims fail the independent edge-restraint budget")
 
 
 with tempfile.TemporaryDirectory() as temporary:
