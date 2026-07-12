@@ -213,6 +213,11 @@ describe("TransfigurationSiteScreen", () => {
         '[data-testid="tango-transfiguration-choose-again"]',
       ),
     ).not.toBeNull();
+    const actions = container.querySelector<HTMLElement>(
+      "[data-transfiguration-actions]",
+    );
+    expect(actions?.style.justifyContent).toBe("flex-end");
+    expect(actions?.style.gap).toBe("var(--space-4)");
     expect(
       container.querySelector('[data-testid="tango-transfiguration-back"]'),
     ).toBeNull();

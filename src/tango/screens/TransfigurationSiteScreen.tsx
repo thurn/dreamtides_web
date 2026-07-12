@@ -480,17 +480,17 @@ function DetailPanel({
         </div>
       </div>
       <footer
+        data-transfiguration-actions=""
         style={{
-          display: "grid",
-          gridTemplateColumns: "1fr auto 1fr",
+          display: "flex",
           alignItems: "center",
-          gap: token("--space-6"),
+          justifyContent: "flex-end",
+          gap: token("--space-4"),
           paddingRight: token("--space-8"),
           paddingBottom: token("--space-6"),
           paddingLeft: token("--space-8"),
         }}
       >
-        <span />
         <GlassButton
           placement="onGlass"
           label="Choose Again"
@@ -498,18 +498,16 @@ function DetailPanel({
           onPress={onBack}
           testId="tango-transfiguration-choose-again"
         />
-        <span style={{ justifySelf: "end" }}>
-          <GlassButton
-            placement="onGlass"
-            label={confirming ? "Reforging…" : "Transfigure ·"}
-            cost={activeForm?.essenceCost ?? null}
-            disabled={disabled}
-            onPress={() => {
-              if (activeForm !== null) onConfirm(activeForm);
-            }}
-            testId="tango-transfiguration-confirm"
-          />
-        </span>
+        <GlassButton
+          placement="onGlass"
+          label={confirming ? "Reforging…" : "Transfigure ·"}
+          cost={activeForm?.essenceCost ?? null}
+          disabled={disabled}
+          onPress={() => {
+            if (activeForm !== null) onConfirm(activeForm);
+          }}
+          testId="tango-transfiguration-confirm"
+        />
       </footer>
     </section>
   );
