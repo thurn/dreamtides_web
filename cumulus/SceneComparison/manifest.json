@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "defaultCapture": { "width": 3840, "height": 2160 },
+  "scenes": [
+    {
+      "id": "tango-shop-glass-demo",
+      "unityScene": "Assets/Scenes/TangoShopGlassDemo.unity",
+      "unityRebuildMethod": "TangoMvp.Editor.TangoShopGlassDemoBuilder.Rebuild",
+      "webPath": "/cumulus/SceneComparison/Web/?scene=tango-shop-glass-demo",
+      "renderer": "shopGlassDemo",
+      "backdrop": "../Assets/TangoMvp/Demo/Art/tumbleleaf_village.png",
+      "panelViewportHeight": 0.46
+    }
+  ]
+}
