@@ -55,18 +55,30 @@ describe("CardGalleryPanel", () => {
     act(() => root.unmount()); container.remove();
   });
 
+  it("keeps reserved entries in the grid without rendering acquired content", () => {
+    const container = document.createElement("div"); document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<CardGalleryPanel title="Shop" cards={[
+      { entryId: "reserved", model: model("Purchased"), reserved: true },
+    ]} columns="three" />));
+    const slot = container.querySelector<HTMLElement>('[data-gallery-entry-id="reserved"]');
+    expect(slot?.dataset.galleryReserved).toBe("true");
+    expect(slot?.style.visibility).toBe("hidden");
+    act(() => root.unmount()); container.remove();
+  });
+
   it("preserves header and trailing gallery actions", () => {
     const close = vi.fn(); const restock = vi.fn();
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<TangoRoot><CardGalleryPanel title="Card Shop" cards={[]} rightAccessory={{ kind: "iconButton", glyph: GLYPHS.close, label: "Close", onPress: close, testId: "close" }} endAction={{ entryId: "restock", glyph: GLYPHS.refresh, label: "Restock", caption: { kind: "essence", amount: 50 }, testId: "restock" }} onEndActionPress={restock} /></TangoRoot>));
+    act(() => root.render(<TangoRoot><CardGalleryPanel title="Card Shop" cards={[]} rightAccessory={{ kind: "iconButton", glyph: GLYPHS.close, label: "Close", onPress: close, testId: "close" }} endAction={{ entryId: "restock", glyph: GLYPHS.refresh, label: "Restock", caption: { kind: "essence", amount: 50 }, interactionFeedback: "stationary", testId: "restock" }} onEndActionPress={restock} /></TangoRoot>));
     act(() => (container.querySelector('[data-testid="close"]') as HTMLButtonElement).click());
     act(() => (container.querySelector('[data-testid="restock"]') as HTMLButtonElement).click());
     expect(close).toHaveBeenCalledOnce(); expect(restock).toHaveBeenCalledWith("restock");
     const action = container.querySelector<HTMLButtonElement>('[data-testid="restock"]');
     const actionSurface = container.querySelector<HTMLElement>('[data-gallery-action-surface]');
     expect(actionSurface?.style.boxSizing).toBe("border-box");
-    expect(actionSurface?.style.aspectRatio).toBe("5 / 7");
+    expect(actionSurface?.style.height).toContain("+ 2px");
     expect(actionSurface?.style.borderRadius).toBe("3.6% / 2.57%");
     expect(actionSurface?.style.background).toContain("var(--gallery-action-fill)");
     expect(actionSurface?.style.border).toBe("1px solid var(--gallery-action-rim)");
@@ -78,7 +90,8 @@ describe("CardGalleryPanel", () => {
     const glyph = container.querySelector<HTMLElement>('[data-gallery-action-glyph]');
     expect(glyph?.style.color).toBe("var(--gallery-action-foreground)");
     expect(glyph?.style.textShadow).toBe("var(--shadow-sm)");
-    expect(glyph?.style.filter).toBe("var(--gallery-action-soften)");
+    expect(glyph?.style.filter).toBe("");
+    expect(action?.dataset.pressFeedback).toBe("stationary");
     act(() => root.unmount()); container.remove();
   });
 });

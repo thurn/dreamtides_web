@@ -540,7 +540,6 @@
   --gallery-action-fill: rgba(24, 41, 10, 0.35);  /* @kind color */
   --gallery-action-rim: rgba(255, 255, 255, 0.20);  /* @kind color */
   --gallery-action-foreground: #d7d1c4;  /* @kind color */
-  --gallery-action-soften: blur(0.35px);  /* @kind other */
 
   /* ---- Object materials (a thing's OWN surface, never a legibility
      overlay). The energy orb fill, the wordmark gradient, the reward gold. ---- */

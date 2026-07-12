@@ -57,6 +57,8 @@ export interface CardGalleryCardView {
   caption?: CardGalleryCaption;
   /** Visually recede this card while preserving press-preview behavior. */
   muted?: boolean;
+  /** Preserve this card's grid footprint while hiding all of its content. */
+  reserved?: boolean;
 }
 
 /** The small white line shown beneath a gallery item. */
@@ -76,6 +78,8 @@ export interface CardGalleryActionView {
   caption: CardGalleryCaption;
   /** Detach interaction and visually recede the action. */
   disabled?: boolean;
+  /** Interaction motion for the action surface. Defaults to `responsive`. */
+  interactionFeedback?: "responsive" | "stationary";
   /** Optional stable test id on the action button. */
   testId?: string;
 }
@@ -113,6 +117,10 @@ function CardGalleryAction({
       aria-label={action.label}
       aria-disabled={action.disabled || undefined}
       disabled={action.disabled}
+      pressFeedback={
+        action.interactionFeedback === "stationary" ? "stationary" : "scale"
+      }
+      data-press-feedback={action.interactionFeedback ?? "responsive"}
       data-testid={action.testId}
       data-reveal-complete-game-card="false"
       onPointerDown={(event) => {
@@ -731,7 +739,8 @@ export function CardGalleryPanel({
               }}
             >
               {cards.map((card) => {
-                const disabled = card.disabled === true;
+                const reserved = card.reserved === true;
+                const disabled = card.disabled === true || reserved;
                 const interactive = onCardPress !== undefined;
                 const tileStyle: CSSProperties = {
                   position: "relative",
@@ -765,12 +774,16 @@ export function CardGalleryPanel({
                 return (
                   <div
                     key={card.entryId}
+                    data-gallery-entry-id={card.entryId}
+                    data-gallery-reserved={reserved || undefined}
+                    aria-hidden={reserved || undefined}
                     style={{
                       minWidth: 0,
                       display: "flex",
                       flexDirection: "column",
                       gap: card.caption === undefined ? 0 : token("--space-1"),
                       opacity: card.muted === true ? 0.52 : 1,
+                      visibility: reserved ? "hidden" : undefined,
                     }}
                   >
                     {cardNode}

@@ -254,7 +254,6 @@ export const TOKENS = {
   "--gallery-action-fill": { var: "var(--gallery-action-fill)", value: "rgba(24, 41, 10, 0.35)", kind: "color" },
   "--gallery-action-rim": { var: "var(--gallery-action-rim)", value: "rgba(255, 255, 255, 0.20)", kind: "color" },
   "--gallery-action-foreground": { var: "var(--gallery-action-foreground)", value: "#d7d1c4", kind: "color" },
-  "--gallery-action-soften": { var: "var(--gallery-action-soften)", value: "blur(0.35px)", kind: "other" },
   "--gradient-accent": { var: "var(--gradient-accent)", value: "linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)", kind: "other" },
   "--gradient-gold": { var: "var(--gradient-gold)", value: "linear-gradient(135deg, #ffd34d 0%, #e0a82a 100%)", kind: "other" },
   "--gradient-energy": { var: "var(--gradient-energy)", value: "linear-gradient(160deg, #38bdf8 0%, #0ea5e9 100%)", kind: "other" },

@@ -512,6 +512,7 @@ function QsbHudBar({
       <button
         type="button"
         className="qsbDeck"
+        data-quest-deck-target=""
         aria-label={`View deck — ${String(deck)} cards`}
         onClick={onViewDeck}
         style={{

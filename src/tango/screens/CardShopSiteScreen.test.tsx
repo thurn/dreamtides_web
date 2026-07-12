@@ -99,7 +99,7 @@ afterEach(() => {
 });
 
 describe("CardShopSiteScreen", () => {
-  it("shows Tobias above five directly priced cards and one outlined restock icon", () => {
+  it("shows the Dream Market with five directly priced cards and a mobile restock action", () => {
     const { container, root } = mount(
       <CardShopSiteScreen
         view={view()}
@@ -136,7 +136,14 @@ describe("CardShopSiteScreen", () => {
     expect(restockGlyph?.style.textShadow).toBe("var(--shadow-sm)");
     expect(
       container.querySelector("[data-gallery-action-label]")?.textContent,
-    ).toBe("Restock Offers");
+    ).toBe("Restock");
+    expect(container.querySelector("h2")?.textContent).toBe("Dream Market");
+    expect(container.textContent).not.toContain("Tap a card to purchase it");
+    expect(restockGlyph?.style.filter).toBe("");
+    expect(
+      container.querySelector('[data-testid="tango-card-shop-restock"]')
+        ?.getAttribute("data-press-feedback"),
+    ).toBe("stationary");
     const price = container.querySelector<HTMLElement>(
       '[data-gallery-caption="essence"]',
     );
@@ -183,6 +190,9 @@ describe("CardShopSiteScreen", () => {
     expect(gallery?.dataset.gallerySpacing).toBe("regular");
     expect(gallery?.dataset.galleryWidthMode).toBe("fill");
     expect(gallery?.style.width).toBe("100%");
+    expect(
+      container.querySelector("[data-gallery-action-label]")?.textContent,
+    ).toBe("Restock Offers");
 
     act(() => root.unmount());
   });
@@ -207,6 +217,14 @@ describe("CardShopSiteScreen", () => {
         ?.click();
     });
     expect(onBuy).toHaveBeenCalledWith(0);
+    expect(
+      container.querySelector('[data-gallery-entry-id="shop-offer-0"]')
+        ?.getAttribute("data-gallery-reserved"),
+    ).toBe("true");
+    expect(
+      container.querySelector('[data-testid="tango-card-shop-purchase-travel"]'),
+    ).not.toBeNull();
+    expect(container.textContent).not.toContain("Acquired");
 
     act(() => {
       container

@@ -2,7 +2,10 @@ import type { ReactElement } from "react";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import type { Glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import { CARD_ASPECT_RATIO, CARD_CORNER_RADIUS } from "./card-aspect";
+import {
+  CARD_ASPECT_RATIO,
+  CARD_CORNER_RADIUS,
+} from "./card-aspect";
 
 export interface GalleryActionCardProps {
   readonly action: { readonly glyph: Glyph; readonly label: string };
@@ -17,44 +20,56 @@ export function GalleryActionCard({
   const resolvedWidth = typeof width === "number" ? `${String(width)}px` : width;
   return (
     <div
-      data-gallery-action-surface=""
       style={{
         width: "100%",
         aspectRatio: CARD_ASPECT_RATIO,
-        boxSizing: "border-box",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: token("--space-3"),
-        overflow: "hidden",
-        ...glassSurfaceStyle({ radius: CARD_CORNER_RADIUS }),
-        background: `${token("--glass-sheen")}, ${token("--gallery-action-fill")}`,
-        border: `1px solid ${token("--gallery-action-rim")}`,
-        boxShadow: token("--glass-on-glass-shadow"),
+        position: "relative",
       }}
     >
-      <i
-        className={action.glyph}
-        aria-hidden="true"
-        data-gallery-action-glyph=""
+      <div
+        data-gallery-action-surface=""
         style={{
-          fontSize: `calc(${resolvedWidth} * 0.38)`,
-          color: token("--gallery-action-foreground"),
-          textShadow: token("--shadow-sm"),
-          filter: token("--gallery-action-soften"),
-        }}
-      />
-      <span
-        data-gallery-action-label=""
-        style={{
-          font: token("--t-body"),
-          color: token("--gallery-action-foreground"),
-          textAlign: "center",
+          position: "absolute",
+          top: "-1px",
+          left: 0,
+          width: "100%",
+          // The one-pixel rim sits inside border-box sizing. Extending both
+          // vertical edges keeps the visible action face aligned with a card.
+          height: "calc(100% + 2px)",
+          boxSizing: "border-box",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: token("--space-3"),
+          overflow: "hidden",
+          ...glassSurfaceStyle({ radius: CARD_CORNER_RADIUS }),
+          background: `${token("--glass-sheen")}, ${token("--gallery-action-fill")}`,
+          border: `1px solid ${token("--gallery-action-rim")}`,
+          boxShadow: token("--glass-on-glass-shadow"),
         }}
       >
-        {action.label}
-      </span>
+        <i
+          className={action.glyph}
+          aria-hidden="true"
+          data-gallery-action-glyph=""
+          style={{
+            fontSize: `calc(${resolvedWidth} * 0.38)`,
+            color: token("--gallery-action-foreground"),
+            textShadow: token("--shadow-sm"),
+          }}
+        />
+        <span
+          data-gallery-action-label=""
+          style={{
+            font: token("--t-body"),
+            color: token("--gallery-action-foreground"),
+            textAlign: "center",
+          }}
+        >
+          {action.label}
+        </span>
+      </div>
     </div>
   );
 }

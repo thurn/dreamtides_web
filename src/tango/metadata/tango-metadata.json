@@ -691,6 +691,12 @@
             "description": "Detach interaction and visually recede the action."
           },
           {
+            "name": "interactionFeedback",
+            "tsType": "\"responsive\" | \"stationary\"",
+            "optional": true,
+            "description": "Interaction motion for the action surface. Defaults to `responsive`."
+          },
+          {
             "name": "testId",
             "tsType": "string",
             "optional": true,

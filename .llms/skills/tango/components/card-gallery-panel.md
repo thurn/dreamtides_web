@@ -53,6 +53,7 @@ The shared card-browser surface: a left-aligned title and subtitle, a trailing h
 | `label` | `string` | no | Accessible action label. |
 | `caption` | `CardGalleryCaption` | no | Small uncontained line rendered directly below the glyph. |
 | `disabled` | `boolean` | yes | Detach interaction and visually recede the action. |
+| `interactionFeedback` | `"responsive" \| "stationary"` | yes | Interaction motion for the action surface. Defaults to `responsive`. |
 | `testId` | `string` | yes | Optional stable test id on the action button. |
 
 ## Usage
