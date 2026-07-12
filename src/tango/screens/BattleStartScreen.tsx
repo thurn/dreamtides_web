@@ -2,13 +2,12 @@
 // opponent-and-dossier composition; mobile gives the opponent the upper scene
 // and condenses the decision-critical briefing into a bottom glass sheet.
 
-import { useRef, useState, type ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
 import { RulesText } from "../components/card/RulesText";
 import { Button } from "../components/controls/Button";
 import { GlassButton } from "../components/controls/GlassButton";
-import { GroupPanel } from "../components/controls/GroupPanel";
 import { IconButton } from "../components/controls/IconButton";
 import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
 import { Dreamsign } from "../components/hud/Dreamsign";
@@ -21,7 +20,7 @@ import { resolveArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
-import { AbilityReveal, ConsoleDivider } from "./quest-start-shared";
+import { ConsoleDivider, OnMediaEyebrow } from "./quest-start-shared";
 import { useIsDesktop } from "./use-is-desktop";
 
 export interface BattleStartDreamcallerView {
@@ -59,7 +58,6 @@ const SIGNATURE_CARD_WIDTH = 116;
 const DREAMSIGN_SIZE = 62;
 const MOBILE_SIGNATURE_CARD_WIDTH = 64;
 const MOBILE_DREAMSIGN_SIZE = 48;
-const MOBILE_DETAIL_CAROUSEL_HEIGHT = 96;
 
 export function BattleStartScreen({ view, onBegin }: BattleStartScreenProps) {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -325,13 +323,14 @@ function MobileBattleStartTitle({
         top: token("--safe-top"),
         left: 0,
         right: 0,
-        padding: `${token("--space-10")} ${token("--gutter")} 0`,
+        padding: `${token("--space-5")} ${token("--gutter")} 0`,
         zIndex: 4,
         textAlign: "center",
         pointerEvents: "none",
       }}
     >
-      <h1 style={{ margin: 0 }}>
+      <OnMediaEyebrow label="Battle Opponent" />
+      <h1 style={{ margin: `${token("--space-6")} 0 0` }}>
         <span
           style={{
             display: "block",
@@ -366,10 +365,22 @@ function MobileBattleConsole({ view, onBegin }: BattleStartScreenProps) {
     view.dreamcaller.ability !== "" && view.dreamcaller.abilityActive;
 
   return (
-    <GroupPanel>
+    <section
+      style={{
+        ...glassSurfaceStyle({ radius: token("--radius-popover") }),
+        padding: token("--space-6"),
+        color: token("--text-on-glass"),
+      }}
+    >
       {showsAbility && (
-        <div data-battle-start-mobile-ability="">
-          <AbilityReveal text={view.dreamcaller.ability} />
+        <div
+          data-battle-start-mobile-ability=""
+          style={{
+            font: token("--t-rules"),
+            color: token("--text-on-glass"),
+          }}
+        >
+          <RulesText text={view.dreamcaller.ability} />
         </div>
       )}
 
@@ -393,7 +404,7 @@ function MobileBattleConsole({ view, onBegin }: BattleStartScreenProps) {
       >
         <Button label="Begin Battle" size="lg" full onClick={onBegin} />
       </div>
-    </GroupPanel>
+    </section>
   );
 }
 
@@ -406,56 +417,85 @@ function MobileDetailCarousel({
   readonly index: number;
   readonly onChange: (index: number) => void;
 }) {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [contentHeight, setContentHeight] = useState<number | null>(null);
+
+  useLayoutEffect(() => {
+    const content = contentRef.current;
+    if (content === null) return;
+    const nextHeight = content.scrollHeight;
+    if (nextHeight > 0) setContentHeight(nextHeight);
+  }, [
+    index,
+    view.dreamsigns,
+    view.signatureCards,
+    view.pointsToWin,
+    view.essenceReward,
+  ]);
+
   return (
     <div
       data-battle-start-detail-carousel=""
       data-battle-start-detail-page={String(index)}
       style={{
         position: "relative",
-        height: MOBILE_DETAIL_CAROUSEL_HEIGHT,
-        display: "grid",
-        placeItems: "center",
+        height: contentHeight ?? "auto",
+        overflow: "hidden",
+        transition:
+          contentHeight === null
+            ? undefined
+            : `height ${token("--dur-base")} ${token("--ease-out")}`,
       }}
     >
-      {index === 0 && <MobileBattleStakes view={view} />}
-      {index === 1 && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: token("--space-3"),
-          }}
-        >
-          {view.dreamsigns.map((dreamsign) => (
-            <Dreamsign
-              key={dreamsign.id}
-              dreamsign={dreamsign}
-              sizePx={MOBILE_DREAMSIGN_SIZE}
-              testid={`tango-battle-start-dreamsign-${String(dreamsign.id)}`}
-            />
-          ))}
-        </div>
-      )}
-      {index === 2 && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: token("--space-3"),
-            alignItems: "flex-start",
-          }}
-        >
-          {view.signatureCards.map((card) => (
+      <div ref={contentRef} style={{ width: "100%" }}>
+        {index === 0 && (
+          <MobileCarouselPage title="Victory:">
+            <MobileBattleStakes view={view} />
+          </MobileCarouselPage>
+        )}
+        {index === 1 && (
+          <MobileCarouselPage title="Dreamsigns:">
             <div
-              key={card.cardId}
-              data-signature-card-id={card.cardId}
-              style={{ width: MOBILE_SIGNATURE_CARD_WIDTH, flex: "none" }}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: token("--space-3"),
+              }}
             >
-              <GameCard model={card.model} hideRulesText />
+              {view.dreamsigns.map((dreamsign) => (
+                <Dreamsign
+                  key={dreamsign.id}
+                  dreamsign={dreamsign}
+                  sizePx={MOBILE_DREAMSIGN_SIZE}
+                  testid={`tango-battle-start-dreamsign-${String(dreamsign.id)}`}
+                />
+              ))}
             </div>
-          ))}
-        </div>
-      )}
+          </MobileCarouselPage>
+        )}
+        {index === 2 && (
+          <MobileCarouselPage title="Signature Cards:">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: token("--space-3"),
+                alignItems: "flex-start",
+              }}
+            >
+              {view.signatureCards.map((card) => (
+                <div
+                  key={card.cardId}
+                  data-signature-card-id={card.cardId}
+                  style={{ width: MOBILE_SIGNATURE_CARD_WIDTH, flex: "none" }}
+                >
+                  <GameCard model={card.model} hideRulesText />
+                </div>
+              ))}
+            </div>
+          </MobileCarouselPage>
+        )}
+      </div>
 
       {index > 0 && (
         <MobileCarouselChevron
@@ -473,6 +513,37 @@ function MobileDetailCarousel({
   );
 }
 
+function MobileCarouselPage({
+  title,
+  children,
+}: {
+  readonly title: string;
+  readonly children: ReactNode;
+}) {
+  return (
+    <div
+      style={{
+        display: "grid",
+        justifyItems: "center",
+        gap: token("--space-3"),
+      }}
+    >
+      <span
+        data-battle-start-detail-title=""
+        style={{
+          font: token("--t-eyebrow"),
+          letterSpacing: token("--tracking-eyebrow"),
+          textTransform: "uppercase",
+          color: token("--text-on-glass"),
+        }}
+      >
+        {title}
+      </span>
+      {children}
+    </div>
+  );
+}
+
 function MobileCarouselChevron({
   direction,
   onPress,
@@ -485,7 +556,7 @@ function MobileCarouselChevron({
       style={{
         position: "absolute",
         top: "50%",
-        [direction]: `calc(-1 * ${token("--space-8")})`,
+        [direction]: token("--space-2"),
         transform: "translateY(-50%)",
         zIndex: 2,
       }}

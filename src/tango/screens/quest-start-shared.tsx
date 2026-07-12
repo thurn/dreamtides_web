@@ -8,10 +8,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { ResourceChip } from "../components/hud/ResourceChip";
 import { RulesText } from "../components/card/RulesText";
-import {
-  TideDisc,
-  type TideDiscSize,
-} from "../components/hud/TideDisc";
+import { TideDisc, type TideDiscSize } from "../components/hud/TideDisc";
 import { type Tide } from "../components/hud/tide-spec";
 import { token } from "../primitives/tokens";
 import type { DreamcallerPortraitFocus } from "../../types/content";
@@ -68,7 +65,9 @@ export function TideDiscReveal({
   );
   return hitSlop != null ? (
     <span style={{ display: "inline-flex", padding: hitSlop }}>{disc}</span>
-  ) : disc;
+  ) : (
+    disc
+  );
 }
 
 /** The plain "Tides:" caption above/beside a tide-disc row — the uppercase
@@ -182,6 +181,24 @@ export interface QuestStartScreenProps {
   dreamcallers: DreamcallerOfferView[];
   /** Called with a Dreamcaller's id when the player commits to it. */
   onPick: (dreamcallerId: string) => void;
+}
+
+/** The small purple uppercase context label painted directly over scene art. */
+export function OnMediaEyebrow({ label }: { readonly label: string }) {
+  return (
+    <span
+      style={{
+        display: "block",
+        font: token("--t-eyebrow"),
+        letterSpacing: token("--tracking-eyebrow"),
+        textTransform: "uppercase",
+        color: token("--accent-bright"),
+        textShadow: token("--text-outline-media"),
+      }}
+    >
+      {label}
+    </span>
+  );
 }
 
 /** The side-by-side Dreamcaller triptych is this screen's desktop idiom, so it
@@ -308,8 +325,25 @@ export function EssenceReveal({
   dreamcaller: DreamcallerOfferView;
 }) {
   return (
-    <span data-starting-essence-value={dreamcaller.id} style={{ display: "inline-flex", alignItems: "center", font: token("--t-body"), color: token("--text-primary") }}>
-      <ResourceChip kind="essence" value={dreamcaller.startingEssence} entity={{ id: dreamcaller.id, label: "Starting Essence", description: "The essence this Dreamcaller begins the quest with, spent at sites this run." }} />
+    <span
+      data-starting-essence-value={dreamcaller.id}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        font: token("--t-body"),
+        color: token("--text-primary"),
+      }}
+    >
+      <ResourceChip
+        kind="essence"
+        value={dreamcaller.startingEssence}
+        entity={{
+          id: dreamcaller.id,
+          label: "Starting Essence",
+          description:
+            "The essence this Dreamcaller begins the quest with, spent at sites this run.",
+        }}
+      />
     </span>
   );
 }

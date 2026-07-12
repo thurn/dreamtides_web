@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/group-panel`
 
-Real consumers: **4** (imports outside `src/tango/docs/` and tests).
+Real consumers: **3** (imports outside `src/tango/docs/` and tests).
 
 The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. It earns its place by organizing information, not by holding a lone label — and reads as a distinct surface from InfoCard's glass.
 

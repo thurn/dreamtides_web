@@ -16,6 +16,7 @@ import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
 import {
   AbilityReveal,
   ConsoleDivider,
+  OnMediaEyebrow,
   TidesEssenceBlock,
   type DreamcallerOfferView,
   type QuestStartScreenProps,
@@ -51,10 +52,7 @@ function DreamcallerConsole({
       </div>
 
       <div style={{ marginTop: token("--space-6") }}>
-        <TidesEssenceBlock
-          dreamcaller={dreamcaller}
-          hitSlop={TIDE_HIT_SLOP}
-        />
+        <TidesEssenceBlock dreamcaller={dreamcaller} hitSlop={TIDE_HIT_SLOP} />
       </div>
 
       <div
@@ -69,7 +67,11 @@ function DreamcallerConsole({
 
 /** The Dreamcaller's name and epithet, sitting directly on the portrait so it
  * earns legibility from the on-media outline dilation rather than a plate. */
-function DreamcallerTitle({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
+function DreamcallerTitle({
+  dreamcaller,
+}: {
+  dreamcaller: DreamcallerOfferView;
+}) {
   return (
     <div
       style={{
@@ -123,16 +125,9 @@ function ScreenHeader() {
         padding: `${token("--space-5")} ${token("--gutter")} 0`,
         textAlign: "center",
         pointerEvents: "none",
-        font: token("--t-eyebrow"),
-        letterSpacing: token("--tracking-eyebrow"),
-        textTransform: "uppercase",
-        color: token("--accent-bright"),
-        // The eyebrow sits directly on the portrait too, so it earns the same
-        // on-media outline dilation as the name rather than a soft shadow.
-        textShadow: token("--text-outline-media"),
       }}
     >
-      Choose Your Dreamcaller
+      <OnMediaEyebrow label="Choose Your Dreamcaller" />
     </div>
   );
 }
@@ -211,10 +206,7 @@ function DreamcallerPage({
           transition: `transform ${token("--dur-base")} ${token("--ease-out")}`,
         }}
       >
-        <DreamcallerConsole
-          dreamcaller={dreamcaller}
-          onChoose={onChoose}
-        />
+        <DreamcallerConsole dreamcaller={dreamcaller} onChoose={onChoose} />
       </div>
     </div>
   );
@@ -222,10 +214,16 @@ function DreamcallerPage({
 
 /** The mobile Dreamcaller-selection carousel: a full-bleed swipe carousel of
  * the offered Dreamcallers, one per page. */
-export function CarouselSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
+export function CarouselSelect({
+  dreamcallers,
+  onPick,
+}: QuestStartScreenProps) {
   const [index, setIndex] = useState(0);
   const [dx, setDx] = useState(0);
-  const drag = useRef<{ active: boolean; x0: number }>({ active: false, x0: 0 });
+  const drag = useRef<{ active: boolean; x0: number }>({
+    active: false,
+    x0: 0,
+  });
   const count = dreamcallers.length;
 
   const clamp = (next: number): number =>
