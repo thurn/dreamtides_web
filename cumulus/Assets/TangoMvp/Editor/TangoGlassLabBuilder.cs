@@ -95,6 +95,8 @@ namespace TangoMvp.Editor
 
             TangoMaterialLibrary library = GetOrCreateLibrary();
             TangoGlassLightingProfile lightingProfile = GetOrCreateLightingProfile();
+            ConfigureGlassLighting(sceneGlass, lightingProfile.SceneGlass.Sanitized(), lightingProfile);
+            ConfigureGlassLighting(onGlass, lightingProfile.OnGlass.Sanitized(), lightingProfile);
             var serializedLibrary = new SerializedObject(library);
             serializedLibrary.FindProperty("sceneGlass").objectReferenceValue = sceneGlass;
             serializedLibrary.FindProperty("onGlass").objectReferenceValue = onGlass;
@@ -889,6 +891,22 @@ namespace TangoMvp.Editor
             material.SetFloat("_TangoHighlightAlpha", 0.10f);
             material.SetOverrideTag("RenderType", "Transparent");
             material.renderQueue = (int)RenderQueue.Transparent + 10;
+            EditorUtility.SetDirty(material);
+        }
+
+        private static void ConfigureGlassLighting(
+            Material material,
+            TangoGlassLightingRoleSettings settings,
+            TangoGlassLightingProfile profile)
+        {
+            material.SetFloat("_TangoEdgeStrength", settings.EdgeStrength);
+            material.SetFloat("_TangoEdgeRoughness", settings.EdgeRoughness);
+            material.SetFloat("_TangoInteriorStrength", settings.InteriorStrength);
+            material.SetFloat("_TangoInteriorRoughness", settings.InteriorRoughness);
+            material.SetFloat("_TangoLightColorResponse", settings.LightColorResponse);
+            material.SetFloat("_TangoReflectionCeiling", settings.ReflectionLuminanceCeiling);
+            material.SetFloat("_TangoDesktopAdditionalLightLimit", profile.DesktopAdditionalLightLimit);
+            material.SetFloat("_TangoMobileAdditionalLightLimit", profile.MobileAdditionalLightLimit);
             EditorUtility.SetDirty(material);
         }
 

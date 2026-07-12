@@ -7,6 +7,14 @@ Shader "TangoMvp/SceneGlass"
         [HideInInspector] _TangoSheenAlpha("Tango Sheen Alpha", Float) = 0.015
         [HideInInspector] _TangoRimAlpha("Tango Rim Alpha", Float) = 0.06
         [HideInInspector] _TangoFallbackAlpha("Tango Fallback Alpha", Float) = 0.72
+        [HideInInspector] _TangoEdgeStrength("Tango Edge Strength", Float) = 0.65
+        [HideInInspector] _TangoEdgeRoughness("Tango Edge Roughness", Float) = 0.14
+        [HideInInspector] _TangoInteriorStrength("Tango Interior Strength", Float) = 0.14
+        [HideInInspector] _TangoInteriorRoughness("Tango Interior Roughness", Float) = 0.42
+        [HideInInspector] _TangoLightColorResponse("Tango Light Color Response", Float) = 1.0
+        [HideInInspector] _TangoReflectionCeiling("Tango Reflection Ceiling", Float) = 1.25
+        [HideInInspector] _TangoDesktopAdditionalLightLimit("Tango Desktop Light Limit", Float) = 4
+        [HideInInspector] _TangoMobileAdditionalLightLimit("Tango Mobile Light Limit", Float) = 1
     }
 
     SubShader
@@ -31,15 +39,21 @@ Shader "TangoMvp/SceneGlass"
             #pragma vertex Vert
             #pragma fragment Frag
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS
+            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
+            #pragma shader_feature_local_fragment _TANGO_GLASS_MOBILE_QUALITY
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+            #include "TangoGlassLighting.hlsl"
 
             struct Attributes
             {
                 float4 positionOS : POSITION;
                 float3 normalOS : NORMAL;
                 float2 uv : TEXCOORD0;
+                float2 shellRegion : TEXCOORD1;
             };
 
             struct Varyings
@@ -48,6 +62,7 @@ Shader "TangoMvp/SceneGlass"
                 float3 positionWS : TEXCOORD0;
                 half3 normalWS : TEXCOORD1;
                 float2 paneUv : TEXCOORD2;
+                half shellRegion : TEXCOORD3;
             };
 
             TEXTURE2D_X(_TangoGlassBlurTexture);
@@ -61,6 +76,14 @@ Shader "TangoMvp/SceneGlass"
                 half _TangoSheenAlpha;
                 half _TangoRimAlpha;
                 half _TangoFallbackAlpha;
+                half _TangoEdgeStrength;
+                half _TangoEdgeRoughness;
+                half _TangoInteriorStrength;
+                half _TangoInteriorRoughness;
+                half _TangoLightColorResponse;
+                half _TangoReflectionCeiling;
+                half _TangoDesktopAdditionalLightLimit;
+                half _TangoMobileAdditionalLightLimit;
             CBUFFER_END
 
             Varyings Vert(Attributes input)
@@ -71,6 +94,7 @@ Shader "TangoMvp/SceneGlass"
                 output.positionWS = positions.positionWS;
                 output.normalWS = TransformObjectToWorldNormal(input.normalOS);
                 output.paneUv = input.uv;
+                output.shellRegion = input.shellRegion.x;
                 return output;
             }
 
@@ -105,10 +129,6 @@ Shader "TangoMvp/SceneGlass"
             {
                 half3 normalWS = normalize(input.normalWS);
                 half3 viewDirectionWS = GetWorldSpaceNormalizeViewDir(input.positionWS);
-                Light mainLight = GetMainLight(TransformWorldToShadowCoord(input.positionWS));
-                half3 halfDirection = SafeNormalize(mainLight.direction + viewDirectionWS);
-                half specular = pow(saturate(dot(normalWS, halfDirection)), 64.0h) *
-                    mainLight.distanceAttenuation * mainLight.shadowAttenuation;
                 half fresnel = pow(1.0h - saturate(dot(normalWS, viewDirectionWS)), 5.0h);
 
                 half rimMask = 1.0h - smoothstep(0.25h, 1.25h, EdgeDistancePixels(input.paneUv));
@@ -119,8 +139,7 @@ Shader "TangoMvp/SceneGlass"
                 half diagonal = input.paneUv.x + input.paneUv.y * 0.57735h;
                 half sheen = (1.0h - smoothstep(0.0h, 0.42h, abs(diagonal - 0.52h))) * _TangoSheenAlpha;
 
-                additiveLighting = mainLight.color * specular * 0.32h;
-                additiveLighting += topInset;
+                additiveLighting = topInset;
                 additiveLighting += lowerInteriorWash;
                 additiveLighting += sheen;
                 additiveLighting += fresnel * 0.10h;
@@ -144,6 +163,22 @@ Shader "TangoMvp/SceneGlass"
                 half3 additiveLighting;
                 half rimOpacity;
                 ComputeShellLighting(input, additiveLighting, rimOpacity);
+                TangoGlassLightingParameters lightingParameters;
+                lightingParameters.edgeStrength = _TangoEdgeStrength;
+                lightingParameters.edgeRoughness = _TangoEdgeRoughness;
+                lightingParameters.interiorStrength = _TangoInteriorStrength;
+                lightingParameters.interiorRoughness = _TangoInteriorRoughness;
+                lightingParameters.lightColorResponse = _TangoLightColorResponse;
+                lightingParameters.reflectionCeiling = _TangoReflectionCeiling;
+                lightingParameters.desktopAdditionalLightLimit = _TangoDesktopAdditionalLightLimit;
+                lightingParameters.mobileAdditionalLightLimit = _TangoMobileAdditionalLightLimit;
+                additiveLighting += EvaluateTangoGlassLighting(
+                    input.positionWS,
+                    GetNormalizedScreenSpaceUV(input.positionCS),
+                    normalize(input.normalWS),
+                    GetWorldSpaceNormalizeViewDir(input.positionWS),
+                    input.shellRegion,
+                    lightingParameters);
                 UNITY_BRANCH
                 if (_TangoGlassAvailable < 0.5h)
                 {

@@ -26,7 +26,15 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
+    - _TangoDesktopAdditionalLightLimit: 4
+    - _TangoEdgeRoughness: 0.2
+    - _TangoEdgeStrength: 0.42
     - _TangoHighlightAlpha: 0.1
+    - _TangoInteriorRoughness: 0.52
+    - _TangoInteriorStrength: 0.08
+    - _TangoLightColorResponse: 0.85
+    - _TangoMobileAdditionalLightLimit: 1
+    - _TangoReflectionCeiling: 0.75
     - _TangoRimAlpha: 0.08
     m_Colors:
     - _TangoLensColor: {r: 0.001214108, g: 0.001214108, b: 0.001821162, a: 0.13}

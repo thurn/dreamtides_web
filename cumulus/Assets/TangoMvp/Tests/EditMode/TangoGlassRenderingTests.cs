@@ -23,6 +23,7 @@ namespace TangoMvp.Tests
         private const string SolidChromeMaterialPath = "Assets/TangoMvp/Materials/TangoSolidChrome.mat";
         private const string BlurMaterialPath = "Assets/TangoMvp/Materials/TangoBlur.mat";
         private const string MaterialLibraryPath = "Assets/TangoMvp/Materials/TangoMaterialLibrary.asset";
+        private const string GlassLightingIncludePath = "Assets/TangoMvp/Shaders/TangoGlassLighting.hlsl";
 
         [SetUp]
         public void SetUp()
@@ -283,6 +284,51 @@ namespace TangoMvp.Tests
             AssertHiddenProperty(onGlass, "_TangoLensColor");
             AssertHiddenProperty(onGlass, "_TangoRimAlpha");
             AssertHiddenProperty(onGlass, "_TangoHighlightAlpha");
+            string[] lightingProperties =
+            {
+                "_TangoEdgeStrength",
+                "_TangoEdgeRoughness",
+                "_TangoInteriorStrength",
+                "_TangoInteriorRoughness",
+                "_TangoLightColorResponse",
+                "_TangoReflectionCeiling",
+                "_TangoDesktopAdditionalLightLimit",
+                "_TangoMobileAdditionalLightLimit",
+            };
+            foreach (string property in lightingProperties)
+            {
+                AssertHiddenProperty(sceneGlass, property);
+                AssertHiddenProperty(onGlass, property);
+            }
+        }
+
+        [Test]
+        public void GlassShaders_UseSharedBoundedUrpLightingWithoutRelightingTransmission()
+        {
+            string sceneSource = ReadShaderSource(Shader.Find("TangoMvp/SceneGlass"));
+            string onGlassSource = ReadShaderSource(Shader.Find("TangoMvp/OnGlass"));
+            Assert.That(File.Exists(GlassLightingIncludePath), Is.True);
+            string lightingSource = File.ReadAllText(GlassLightingIncludePath);
+
+            foreach (string source in new[] { sceneSource, onGlassSource })
+            {
+                Assert.That(source, Does.Contain("TangoGlassLighting.hlsl"));
+                Assert.That(source, Does.Contain("_ADDITIONAL_LIGHTS"));
+                Assert.That(source, Does.Contain("_ADDITIONAL_LIGHT_SHADOWS"));
+                Assert.That(source, Does.Contain("_CLUSTER_LIGHT_LOOP"));
+                Assert.That(source, Does.Contain("_TANGO_GLASS_MOBILE_QUALITY"));
+                Assert.That(source, Does.Contain("EvaluateTangoGlassLighting"));
+            }
+
+            Assert.That(lightingSource, Does.Contain("LIGHT_LOOP_BEGIN"));
+            Assert.That(lightingSource, Does.Contain("LIGHT_LOOP_END"));
+            Assert.That(lightingSource, Does.Contain("TANGO_GLASS_DESKTOP_LIGHT_LIMIT 4"));
+            Assert.That(lightingSource, Does.Contain("TANGO_GLASS_MOBILE_LIGHT_LIMIT 1"));
+            Assert.That(lightingSource, Does.Contain("0.04h"));
+            Assert.That(lightingSource, Does.Contain("distanceAttenuation"));
+            Assert.That(lightingSource, Does.Contain("shadowAttenuation"));
+            Assert.That(sceneSource, Does.Not.Contain("EvaluateTangoGlassLighting(transmission"));
+            Assert.That(onGlassSource, Does.Not.Contain("_TangoGlassBlurTexture"));
         }
 
         [Test]
@@ -303,7 +349,8 @@ namespace TangoMvp.Tests
                 "void ComputeShellLighting(Varyings input, out half3 additiveLighting, out half rimOpacity)");
             Assert.That(shellBody, Does.Not.Contain("transmission"));
             Assert.That(shellBody, Does.Not.Contain("_TangoGlassBlurTexture"));
-            Assert.That(shellBody, Does.Contain("GetMainLight"));
+            Assert.That(shellBody, Does.Not.Contain("GetMainLight"));
+            Assert.That(source, Does.Contain("EvaluateTangoGlassLighting"));
             Assert.That(source, Does.Contain("ComputeShellLighting(input, additiveLighting, rimOpacity);"));
             Assert.That(Regex.Matches(source, @"\btransmission\b").Count, Is.EqualTo(2));
             Assert.That(source, Does.Contain("half3 transmission = SampleTransmission(input.positionCS);"));
