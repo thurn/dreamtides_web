@@ -152,7 +152,7 @@ describe("Tango BattleStartScreen", () => {
     act(() => root.unmount());
   });
 
-  it("uses a mobile opponent-over-briefing hierarchy and omits signature cards", () => {
+  it("mirrors the mobile Dreamcaller Select hierarchy and reveals opponent intel separately", () => {
     stubMatchMedia(false);
     const onBegin = vi.fn();
     const container = document.createElement("div");
@@ -170,18 +170,50 @@ describe("Tango BattleStartScreen", () => {
       '[data-battle-start-layout="mobile"]',
     );
     expect(layout).not.toBeNull();
+    const title = layout?.querySelector<HTMLElement>(
+      "[data-battle-start-title]",
+    );
+    const consolePanel = layout?.querySelector<HTMLElement>(
+      "[data-battle-start-console]",
+    );
+    expect(title?.textContent).toContain("Aeris, the Prism Guide");
+    expect(title?.textContent).toContain("Storm Archivist");
+    expect(consolePanel?.textContent).not.toContain("Aeris, the Prism Guide");
+    expect(
+      (consolePanel?.firstElementChild as HTMLElement | null)?.style.background,
+    ).toBe("var(--surface-card)");
     expect(
       layout?.querySelector("[data-battle-start-opponent]"),
     ).not.toBeNull();
-    expect(layout?.querySelector("[data-battle-start-panel]")).not.toBeNull();
+    expect(
+      layout
+        ?.querySelector("[data-battle-start-opponent]")
+        ?.getAttribute("data-battle-start-opponent-framing"),
+    ).toBe("standing");
     expect(layout?.querySelectorAll("[data-signature-card-id]")).toHaveLength(
       0,
     );
     expect(layout?.textContent).not.toContain("Signature Cards");
-    expect(layout?.textContent).toContain("Ability");
-    expect(layout?.textContent).toContain("Dreamsigns");
+    expect(layout?.textContent).toContain(
+      "Whenever an event resolves, gain momentum.",
+    );
+    expect(layout?.textContent).not.toContain("Dreamsigns");
     expect(layout?.textContent).toContain("To Win");
     expect(layout?.textContent).toContain("Reward");
+
+    const intelToggle = layout?.querySelector<HTMLButtonElement>(
+      '[data-testid="tango-battle-start-intel-toggle"]',
+    );
+    expect(intelToggle?.textContent).toContain("View opponent intel");
+    act(() => intelToggle?.click());
+    expect(layout?.textContent).not.toContain("To Win");
+    expect(layout?.textContent).not.toContain("Reward");
+    expect(layout?.textContent).toContain("Signature Cards");
+    expect(layout?.textContent).toContain("Dreamsigns");
+    expect(layout?.querySelectorAll("[data-signature-card-id]")).toHaveLength(
+      3,
+    );
+    expect(intelToggle?.textContent).toContain("View battle stakes");
 
     const action = layout?.querySelector<HTMLElement>(
       '[data-testid="tango-battle-start-begin"]',

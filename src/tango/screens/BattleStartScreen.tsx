@@ -2,12 +2,13 @@
 // opponent-and-dossier composition; mobile gives the opponent the upper scene
 // and condenses the decision-critical briefing into a bottom glass sheet.
 
-import { useRef, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
 import { RulesText } from "../components/card/RulesText";
 import { Button } from "../components/controls/Button";
 import { GlassButton } from "../components/controls/GlassButton";
+import { GroupPanel } from "../components/controls/GroupPanel";
 import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
@@ -17,8 +18,10 @@ import { glassSurfaceStyle } from "../internal/glass-surface";
 import type { ArtRef } from "../primitives/art";
 import { resolveArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
+import { Pressable } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
+import { AbilityReveal, ConsoleDivider } from "./quest-start-shared";
 import { useIsDesktop } from "./use-is-desktop";
 
 export interface BattleStartDreamcallerView {
@@ -54,7 +57,8 @@ const PANEL_MAX_WIDTH = 660;
 const CHARACTER_STAGE_MAX_WIDTH = 760;
 const SIGNATURE_CARD_WIDTH = 116;
 const DREAMSIGN_SIZE = 62;
-const MOBILE_DREAMSIGN_SIZE = 52;
+const MOBILE_SIGNATURE_CARD_WIDTH = 64;
+const MOBILE_DREAMSIGN_SIZE = 48;
 
 export function BattleStartScreen({ view, onBegin }: BattleStartScreenProps) {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -264,18 +268,17 @@ function MobileBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
       style={{
         position: "absolute",
         inset: 0,
-        paddingBottom: `calc(${QUEST_STATUS_BAR_CLEARANCE_OP} + ${token("--space-4")})`,
-        boxSizing: "border-box",
       }}
     >
       <section
         data-battle-start-opponent={view.dreamcaller.id}
+        data-battle-start-opponent-framing="standing"
         style={{
           position: "absolute",
-          top: `max(var(--safe-area-inset-top), ${token("--space-2")})`,
-          left: token("--space-4"),
-          right: token("--space-4"),
-          height: "48%",
+          top: `calc(${token("--safe-top")} + ${token("--space-12")} + (${token("--space-10")} * 2))`,
+          left: 0,
+          right: 0,
+          bottom: `calc(${QUEST_STATUS_BAR_CLEARANCE_OP})`,
         }}
       >
         <DreamcallerPortrait
@@ -284,141 +287,302 @@ function MobileBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
             name: view.dreamcaller.name,
             title: view.dreamcaller.title,
           }}
-          variant="cutout"
+          variant="standing"
         />
       </section>
 
-      <section
+      <MobileBattleStartTitle dreamcaller={view.dreamcaller} />
+
+      <div
         data-battle-start-panel=""
+        data-battle-start-console=""
         style={{
-          ...glassSurfaceStyle({ radius: token("--radius-panel") }),
           position: "absolute",
-          left: `max(var(--safe-area-inset-left), ${token("--space-4")})`,
-          right: `max(var(--safe-area-inset-right), ${token("--space-4")})`,
+          left: 0,
+          right: 0,
           bottom: `calc(${QUEST_STATUS_BAR_CLEARANCE_OP} + ${token("--space-4")})`,
-          maxHeight: "64%",
-          boxSizing: "border-box",
-          padding: token("--space-6"),
-          display: "grid",
-          gridTemplateRows: "auto minmax(0, auto) auto",
-          gap: token("--space-5"),
-          color: token("--text-on-glass"),
-          overflow: "hidden",
+          zIndex: 4,
+          padding: `0 max(var(--safe-area-inset-right), ${token("--gutter")}) 0 max(var(--safe-area-inset-left), ${token("--gutter")})`,
         }}
       >
-        <header style={{ display: "grid", gap: token("--space-2") }}>
-          <h1 style={{ margin: 0, font: token("--t-display") }}>
-            {view.dreamcaller.name}
-          </h1>
-          {view.dreamcaller.title !== "" && (
-            <p
-              style={{
-                margin: 0,
-                font: token("--t-title-sm"),
-                fontStyle: "italic",
-                color: token("--text-on-glass-muted"),
-              }}
-            >
-              {view.dreamcaller.title}
-            </p>
-          )}
-        </header>
-
-        <div
-          data-battle-start-mobile-briefing=""
-          style={{
-            minHeight: 0,
-            overflowY: "auto",
-            display: "grid",
-            gap: token("--space-5"),
-          }}
-        >
-          {view.dreamcaller.ability !== "" &&
-            view.dreamcaller.abilityActive && (
-              <MobilePanelSection label="Ability">
-                <div style={{ font: token("--t-rules") }}>
-                  <RulesText text={view.dreamcaller.ability} />
-                </div>
-              </MobilePanelSection>
-            )}
-
-          {view.dreamsigns.length > 0 && (
-            <MobilePanelSection label="Dreamsigns">
-              <div
-                style={{
-                  display: "flex",
-                  gap: token("--space-5"),
-                  alignItems: "center",
-                }}
-              >
-                {view.dreamsigns.map((dreamsign) => (
-                  <Dreamsign
-                    key={dreamsign.id}
-                    dreamsign={dreamsign}
-                    sizePx={MOBILE_DREAMSIGN_SIZE}
-                    testid={`tango-battle-start-dreamsign-${String(dreamsign.id)}`}
-                  />
-                ))}
-              </div>
-            </MobilePanelSection>
-          )}
-        </div>
-
-        <footer
-          style={{
-            paddingTop: token("--space-5"),
-            borderTop: `1px solid ${token("--glass-rim")}`,
-            display: "grid",
-            gap: token("--space-5"),
-          }}
-        >
-          <div
-            data-battle-start-stakes=""
-            style={{
-              display: "flex",
-              justifyContent: "space-around",
-              gap: token("--space-6"),
-            }}
-          >
-            <Stake label="To Win">
-              <span>{view.pointsToWin}</span>
-              <GlowIcon iconClass={GLYPHS.points} color="white" size="1em" />
-            </Stake>
-            <Stake label="Reward">
-              <EssenceValue amount={view.essenceReward} tone="inherit" />
-            </Stake>
-          </div>
-          <div data-testid="tango-battle-start-begin">
-            <Button label="Begin Battle" size="md" full onClick={onBegin} />
-          </div>
-        </footer>
-      </section>
+        <MobileBattleConsole view={view} onBegin={onBegin} />
+      </div>
     </main>
   );
 }
 
-function MobilePanelSection({
+function MobileBattleStartTitle({
+  dreamcaller,
+}: {
+  readonly dreamcaller: BattleStartDreamcallerView;
+}) {
+  return (
+    <div
+      data-battle-start-title=""
+      style={{
+        position: "absolute",
+        top: token("--safe-top"),
+        left: 0,
+        right: 0,
+        padding: `${token("--space-10")} ${token("--gutter")} 0`,
+        zIndex: 4,
+        textAlign: "center",
+        pointerEvents: "none",
+      }}
+    >
+      <h1 style={{ margin: 0 }}>
+        <span
+          style={{
+            display: "block",
+            font: token("--t-hero"),
+            color: token("--text-primary"),
+            textShadow: token("--text-outline-media"),
+          }}
+        >
+          {dreamcaller.name}
+        </span>
+        {dreamcaller.title !== "" && (
+          <span
+            style={{
+              display: "block",
+              marginTop: token("--space-1"),
+              font: token("--t-hero-epithet"),
+              color: token("--text-primary"),
+              textShadow: token("--text-outline-media"),
+            }}
+          >
+            {dreamcaller.title}
+          </span>
+        )}
+      </h1>
+    </div>
+  );
+}
+
+function MobileBattleConsole({ view, onBegin }: BattleStartScreenProps) {
+  const [showIntel, setShowIntel] = useState(false);
+  const showsAbility =
+    view.dreamcaller.ability !== "" && view.dreamcaller.abilityActive;
+
+  return (
+    <GroupPanel>
+      {showsAbility && (
+        <div data-battle-start-mobile-ability="">
+          <AbilityReveal text={view.dreamcaller.ability} />
+        </div>
+      )}
+
+      {showsAbility && (
+        <div style={{ marginTop: token("--space-6") }}>
+          <ConsoleDivider flush />
+        </div>
+      )}
+
+      <div style={{ marginTop: showsAbility ? token("--space-5") : 0 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: token("--space-4"),
+          }}
+        >
+          <h2
+            style={{
+              margin: 0,
+              font: token("--t-eyebrow"),
+              letterSpacing: token("--tracking-eyebrow"),
+              textTransform: "uppercase",
+              color: token("--text-secondary"),
+            }}
+          >
+            {showIntel ? "Opponent Intel" : "Battle Stakes"}
+          </h2>
+          <Pressable
+            as="button"
+            data-testid="tango-battle-start-intel-toggle"
+            aria-expanded={showIntel}
+            onClick={() => setShowIntel((current) => !current)}
+            style={{
+              padding: token("--space-2"),
+              margin: `calc(-1 * ${token("--space-2")})`,
+              border: 0,
+              background: "none",
+              font: token("--t-body"),
+              color: token("--text-primary"),
+              textDecoration: "underline",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {showIntel ? "View battle stakes" : "View opponent intel"}
+          </Pressable>
+        </div>
+
+        <div style={{ marginTop: token("--space-4") }}>
+          {showIntel ? (
+            <MobileOpponentIntel view={view} />
+          ) : (
+            <MobileBattleStakes view={view} />
+          )}
+        </div>
+      </div>
+
+      <div
+        data-testid="tango-battle-start-begin"
+        style={{ marginTop: token("--space-6") }}
+      >
+        <Button label="Begin Battle" size="lg" full onClick={onBegin} />
+      </div>
+    </GroupPanel>
+  );
+}
+
+function MobileBattleStakes({ view }: { readonly view: BattleStartView }) {
+  return (
+    <div
+      data-battle-start-stakes=""
+      style={{
+        display: "flex",
+        justifyContent: "space-around",
+        gap: token("--space-6"),
+      }}
+    >
+      <MobileStake label="To Win">
+        <span>{view.pointsToWin}</span>
+        <GlowIcon iconClass={GLYPHS.points} color="white" size="1em" />
+      </MobileStake>
+      <MobileStake label="Reward">
+        <EssenceValue amount={view.essenceReward} tone="inherit" />
+      </MobileStake>
+    </div>
+  );
+}
+
+function MobileOpponentIntel({ view }: { readonly view: BattleStartView }) {
+  const hasSignatureCards = view.signatureCards.length > 0;
+  const hasDreamsigns = view.dreamsigns.length > 0;
+  return (
+    <div
+      data-battle-start-opponent-intel=""
+      style={{
+        display: "grid",
+        gridTemplateColumns:
+          hasSignatureCards && hasDreamsigns ? "minmax(0, 1fr) auto" : "1fr",
+        gap: token("--space-5"),
+        alignItems: "end",
+      }}
+    >
+      {hasSignatureCards && (
+        <IntelGroup label="Signature Cards">
+          <div
+            style={{
+              display: "flex",
+              gap: token("--space-3"),
+              alignItems: "flex-start",
+            }}
+          >
+            {view.signatureCards.map((card) => (
+              <div
+                key={card.cardId}
+                data-signature-card-id={card.cardId}
+                style={{ width: MOBILE_SIGNATURE_CARD_WIDTH, flex: "none" }}
+              >
+                <GameCard model={card.model} hideRulesText />
+              </div>
+            ))}
+          </div>
+        </IntelGroup>
+      )}
+
+      {hasDreamsigns && (
+        <IntelGroup label="Dreamsigns">
+          <div style={{ display: "flex", gap: token("--space-3") }}>
+            {view.dreamsigns.map((dreamsign) => (
+              <Dreamsign
+                key={dreamsign.id}
+                dreamsign={dreamsign}
+                sizePx={MOBILE_DREAMSIGN_SIZE}
+                testid={`tango-battle-start-dreamsign-${String(dreamsign.id)}`}
+              />
+            ))}
+          </div>
+        </IntelGroup>
+      )}
+
+      {!hasSignatureCards && !hasDreamsigns && (
+        <p
+          style={{
+            margin: 0,
+            font: token("--t-body"),
+            color: token("--text-secondary"),
+          }}
+        >
+          No additional opponent intel.
+        </p>
+      )}
+    </div>
+  );
+}
+
+function IntelGroup({
   label,
   children,
 }: {
-  label: string;
-  children: ReactNode;
+  readonly label: string;
+  readonly children: ReactNode;
 }) {
   return (
     <section style={{ display: "grid", gap: token("--space-3") }}>
-      <h2
+      <h3
         style={{
           margin: 0,
           font: token("--t-eyebrow"),
-          letterSpacing: "0.12em",
+          letterSpacing: token("--tracking-eyebrow"),
           textTransform: "uppercase",
-          color: token("--text-on-glass-muted"),
+          color: token("--text-secondary"),
         }}
       >
         {label}
-      </h2>
+      </h3>
       {children}
     </section>
+  );
+}
+
+function MobileStake({
+  label,
+  children,
+}: {
+  readonly label: string;
+  readonly children: ReactNode;
+}) {
+  return (
+    <div
+      data-battle-start-stake={label}
+      style={{ display: "grid", gap: token("--space-3") }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: token("--space-3"),
+          font: token("--t-title-sm"),
+          color: token("--text-primary"),
+        }}
+      >
+        {children}
+      </div>
+      <span
+        style={{
+          font: token("--t-eyebrow"),
+          letterSpacing: token("--tracking-eyebrow"),
+          textTransform: "uppercase",
+          color: token("--text-secondary"),
+        }}
+      >
+        {label}
+      </span>
+    </div>
   );
 }
 
