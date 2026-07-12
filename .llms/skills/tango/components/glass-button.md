@@ -20,6 +20,7 @@ The labeled glass action — a text label in the control typography on the share
 | `onPress` | `() => void` | yes | — | Fires when the button is activated (no-op while disabled). |
 | `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `GlowIcon` before the label. |
 | `cost` | `number \| null` | no | `null` | Optional inline essence cost rendered after the label. |
+| `costSeparator` | `"dot"` | no | — | Optional separator rendered between the label and a present cost. |
 | `widthReservations` | `readonly GlassButtonWidthReservation[]` | no | `[]` | Possible dynamic label/cost states. The button reserves the widest state while rendering only the current one, preventing surrounding layout shift. |
 | `variant` | `GlassButtonVariant` = `"default" \| "danger" \| "accent"` | no | `default` | Strict neutral, danger, or purple accent glass surface treatment. |
 | `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the control. `onMedia` uses the full liquid-glass recipe; `onGlass` uses a lighter tonal lens so an existing glass tint is not compounded. Defaults to `onMedia`. |
@@ -82,11 +83,13 @@ import { GLYPHS } from "src/tango/primitives/glyph";
 
 ### Purple accent
 
-Use the purple soft-wash accent for a primary action that should stay materially paired with a neutral glass sibling.
+Use the purple soft-wash accent for a primary action that should stay materially paired with a neutral glass sibling. A dot separator is centered between the label and a present cost and is omitted with a null cost.
 
 ```tsx
 <GlassButton
   label="Transfigure"
+  cost={40}
+  costSeparator="dot"
   variant="accent"
   placement="onGlass"
   onPress={transfigure}

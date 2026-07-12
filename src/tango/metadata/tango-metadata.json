@@ -1671,6 +1671,16 @@
       "description": "Optional inline essence cost rendered after the label."
     },
     {
+      "name": "costSeparator",
+      "tsType": "\"dot\"",
+      "unionMembers": [
+        "dot"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional separator rendered between the label and a present cost."
+    },
+    {
       "name": "widthReservations",
       "tsType": "readonly GlassButtonWidthReservation[]",
       "unionMembers": [],

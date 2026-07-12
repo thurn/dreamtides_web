@@ -511,8 +511,9 @@ function DetailPanel({
         <GlassButton
           placement="onGlass"
           variant="accent"
-          label={confirming ? "Reforging…" : "Transfigure ·"}
+          label={confirming ? "Reforging…" : "Transfigure"}
           cost={activeForm?.essenceCost ?? null}
+          costSeparator="dot"
           disabled={disabled}
           onPress={() => {
             if (activeForm !== null) onConfirm(activeForm);

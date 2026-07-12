@@ -92,6 +92,41 @@ describe("GlassButton", () => {
     });
   });
 
+  it("renders a cost separator as its own evenly-spaced item only when a cost is present", () => {
+    const { container, root } = mount(
+      <GlassButton
+        label="Transfigure"
+        cost={40}
+        costSeparator="dot"
+        onPress={() => {}}
+      />,
+    );
+    const content = container.querySelector<HTMLElement>(
+      "[data-glass-button-content]",
+    );
+    expect(content?.style.gap).toBe("8px");
+    expect(
+      content?.querySelector("[data-glass-button-cost-separator]")?.textContent,
+    ).toBe("·");
+
+    act(() => {
+      root.render(
+        <GlassButton
+          label="Transfigure"
+          cost={null}
+          costSeparator="dot"
+          onPress={() => {}}
+        />,
+      );
+    });
+    expect(
+      container.querySelector("[data-glass-button-cost-separator]"),
+    ).toBeNull();
+    expect(container.querySelector("button")?.textContent).toBe("Transfigure");
+
+    act(() => root.unmount());
+  });
+
   it("keeps every dynamic width reservation in one hidden sizing grid", () => {
     const reservations = [
       { label: "Decline", cost: null },

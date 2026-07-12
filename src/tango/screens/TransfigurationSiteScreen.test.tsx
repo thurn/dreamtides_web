@@ -242,7 +242,7 @@ describe("TransfigurationSiteScreen", () => {
       '[data-testid="tango-transfiguration-confirm"]',
     );
     expect(commit?.dataset.glassVariant).toBe("accent");
-    expect(commit?.textContent).toContain("Transfigure ·");
+    expect(commit?.textContent).toBe("Transfigure");
     expect(commit?.textContent).not.toContain("Card");
     expect(commit?.getAttribute("aria-disabled")).toBe("true");
     expect(container.querySelector('[role="radio"][aria-checked="true"]')).toBeNull();
@@ -255,6 +255,7 @@ describe("TransfigurationSiteScreen", () => {
     act(() => empowered?.click());
     expect(empowered?.getAttribute("aria-checked")).toBe("true");
     expect(commit?.getAttribute("aria-disabled")).toBeNull();
+    expect(commit?.textContent).toBe("Transfigure·40");
     act(() => commit?.click());
     expect(onTransfigure).toHaveBeenCalledWith(
       "entry-1",

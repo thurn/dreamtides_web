@@ -32,6 +32,9 @@ const GLASS_BUTTON_HEIGHT = 42;
 /** Visual treatment for the glass button surface. */
 export type GlassButtonVariant = "default" | "danger" | "accent";
 
+/** Optional punctuation placed symmetrically between the label and a cost. */
+export type GlassButtonCostSeparator = "dot";
+
 /** One possible label/cost state whose intrinsic width the button reserves. */
 export interface GlassButtonWidthReservation {
   label: string;
@@ -87,6 +90,8 @@ export interface GlassButtonProps {
   glyph?: Glyph;
   /** Optional inline essence cost rendered after the label. */
   cost?: number | null;
+  /** Optional separator rendered between the label and a present cost. */
+  costSeparator?: GlassButtonCostSeparator;
   /**
    * Possible dynamic label/cost states. The button reserves the widest state
    * while rendering only the current one, preventing surrounding layout shift.
@@ -117,6 +122,7 @@ export function GlassButton({
   onPress,
   glyph,
   cost = null,
+  costSeparator,
   widthReservations = [],
   variant = "default",
   placement = "onMedia",
@@ -161,7 +167,11 @@ export function GlassButton({
             : { display: "grid" }
         }
       >
-        <GlassButtonContent label={label} cost={cost} />
+        <GlassButtonContent
+          label={label}
+          cost={cost}
+          costSeparator={costSeparator}
+        />
         {widthReservations.map((reservation, index) => (
           <span
             key={`${reservation.label}-${String(reservation.cost)}-${String(index)}`}
@@ -178,6 +188,7 @@ export function GlassButton({
             <GlassButtonContent
               label={reservation.label}
               cost={reservation.cost ?? null}
+              costSeparator={costSeparator}
             />
           </span>
         ))}
@@ -200,12 +211,15 @@ function resolveVariantChrome(
 function GlassButtonContent({
   label,
   cost,
+  costSeparator,
 }: {
   readonly label: string;
   readonly cost: number | null;
+  readonly costSeparator: GlassButtonCostSeparator | undefined;
 }): ReactElement {
   return (
     <span
+      data-glass-button-content=""
       style={{
         gridArea: "1 / 1",
         display: "inline-flex",
@@ -214,6 +228,11 @@ function GlassButtonContent({
       }}
     >
       <span>{label}</span>
+      {cost !== null && costSeparator === "dot" && (
+        <span aria-hidden="true" data-glass-button-cost-separator="">
+          ·
+        </span>
+      )}
       {cost !== null && <EssenceValue amount={cost} tone="inherit" />}
     </span>
   );

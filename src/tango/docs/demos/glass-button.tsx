@@ -99,9 +99,11 @@ import { GLYPHS } from "src/tango/primitives/glyph";
     },
     {
       label: "Purple accent",
-      note: "Use the purple soft-wash accent for a primary action that should stay materially paired with a neutral glass sibling.",
+      note: "Use the purple soft-wash accent for a primary action that should stay materially paired with a neutral glass sibling. A dot separator is centered between the label and a present cost and is omitted with a null cost.",
       code: `<GlassButton
   label="Transfigure"
+  cost={40}
+  costSeparator="dot"
   variant="accent"
   placement="onGlass"
   onPress={transfigure}
