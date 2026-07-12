@@ -26,8 +26,8 @@
     "meanColorShiftError": { "weight": 0.15 }
   },
   "budget": {
-    "maximumMeanScore": 0.11,
-    "maximumWorstScore": 0.135,
-    "maximumScenarioScore": 0.135
+    "maximumMeanScore": 0.018,
+    "maximumWorstScore": 0.027,
+    "maximumScenarioScore": 0.027
   }
 }

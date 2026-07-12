@@ -9,7 +9,7 @@ namespace TangoMvp.Rendering
 {
     public sealed class TangoGlassRendererFeature : ScriptableRendererFeature
     {
-        private const float BlurRadiusOutputPixels = 22f;
+        private const float BlurRadiusOutputPixels = 44f;
 
         [SerializeField]
         private Material blurMaterial;
@@ -108,8 +108,8 @@ namespace TangoMvp.Rendering
 
             public TangoGlassBlurPass()
             {
-                // The blur resource is half-resolution. Convert the fixed
-                // output-space token to blur-texture texels before sampling.
+                // Chromium's 22px backdrop blur calibrates to 44 output pixels
+                // of support in this two-pass, half-resolution kernel.
                 blurProperties.SetFloat(RadiusId, BlurRadiusOutputPixels * 0.5f);
             }
 
@@ -131,7 +131,8 @@ namespace TangoMvp.Rendering
                     Debug.Log(
                         $"Tango glass blur initialized: camera={camera.name}, " +
                         $"input={inputDescriptor.width}x{inputDescriptor.height}, " +
-                        $"output={outputDescriptor.width}x{outputDescriptor.height}, mode={ActiveMode}");
+                        $"output={outputDescriptor.width}x{outputDescriptor.height}, " +
+                        $"radiusOutputPixels={BlurRadiusOutputPixels}, mode={ActiveMode}");
                     initializationLogged = true;
                 }
 

@@ -32,6 +32,8 @@ The comparison region excludes the outer 48 horizontal and 32 vertical pixels. I
 
 The aggregate reports both the mean score and the worst background. The manifest also applies the same cap to every individual scenario, so a strong result on one image cannot compensate for a regression on another.
 
+The Unity reference uses 44 output pixels of kernel support for Chromium's `blur(22px)`, a `0.78` linear-HDR fill alpha for the web material's `rgba(14, 14, 16, 0.54)` layer, and linear-calibrated sheen and inset intensities. These are cross-renderer calibration values: the parity score measures their rendered result rather than requiring the two graphics APIs to use identical numeric inputs.
+
 ## Improving the renderer
 
 Lower scores are closer to the web baseline. Use the per-scenario metrics to choose the next rendering adjustment:

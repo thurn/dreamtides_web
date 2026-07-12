@@ -863,9 +863,12 @@ namespace TangoMvp.Editor
 
         private static void ConfigureSceneGlass(Material material)
         {
-            material.SetColor("_TangoFillColor", SrgbTokenColor(14, 14, 16, 0.54f));
+            // Unity's linear-HDR composition needs this calibrated alpha to
+            // match the effective 0.54 CSS fill across the parity backgrounds.
+            material.SetColor("_TangoFillColor", SrgbTokenColor(14, 14, 16, 0.78f));
             material.SetFloat("_TangoSaturation", 1.5f);
-            material.SetFloat("_TangoSheenAlpha", 0.07f);
+            // CSS alpha compositing calibrates to this linear-HDR intensity.
+            material.SetFloat("_TangoSheenAlpha", 0.015f);
             material.SetFloat("_TangoRimAlpha", 0.14f);
             material.SetFloat("_TangoFallbackAlpha", 0.72f);
             material.SetOverrideTag("RenderType", "Transparent");

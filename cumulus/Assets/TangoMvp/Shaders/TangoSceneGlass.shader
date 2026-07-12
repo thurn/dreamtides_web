@@ -2,9 +2,9 @@ Shader "TangoMvp/SceneGlass"
 {
     Properties
     {
-        [HideInInspector] _TangoFillColor("Tango Fill", Color) = (0.004392, 0.004392, 0.005182, 0.54)
+        [HideInInspector] _TangoFillColor("Tango Fill", Color) = (0.004392, 0.004392, 0.005182, 0.78)
         [HideInInspector] _TangoSaturation("Tango Saturation", Float) = 1.5
-        [HideInInspector] _TangoSheenAlpha("Tango Sheen Alpha", Float) = 0.07
+        [HideInInspector] _TangoSheenAlpha("Tango Sheen Alpha", Float) = 0.015
         [HideInInspector] _TangoRimAlpha("Tango Rim Alpha", Float) = 0.14
         [HideInInspector] _TangoFallbackAlpha("Tango Fallback Alpha", Float) = 0.72
     }
@@ -105,8 +105,8 @@ Shader "TangoMvp/SceneGlass"
 
                 half2 edgeDistance = min(input.paneUv, 1.0h - input.paneUv);
                 half rimMask = 1.0h - smoothstep(0.0h, 0.035h, min(edgeDistance.x, edgeDistance.y));
-                half topInset = (1.0h - smoothstep(0.0h, 0.06h, 1.0h - input.paneUv.y)) * 0.22h;
-                half lowerInteriorWash = (1.0h - smoothstep(0.0h, 0.32h, input.paneUv.y)) * 0.04h;
+                half topInset = (1.0h - smoothstep(0.0h, 0.06h, 1.0h - input.paneUv.y)) * 0.05h;
+                half lowerInteriorWash = (1.0h - smoothstep(0.0h, 0.32h, input.paneUv.y)) * 0.01h;
                 half diagonal = input.paneUv.x + input.paneUv.y * 0.57735h;
                 half sheen = (1.0h - smoothstep(0.0h, 0.42h, abs(diagonal - 0.52h))) * _TangoSheenAlpha;
 

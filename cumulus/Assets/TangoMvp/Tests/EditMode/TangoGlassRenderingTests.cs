@@ -118,7 +118,7 @@ namespace TangoMvp.Tests
                 field.FieldType == typeof(float) && field.GetCustomAttribute<SerializeField>() != null), Is.False);
             Assert.That(radiusConstant, Is.Not.Null);
             Assert.That(radiusConstant.IsLiteral, Is.True);
-            Assert.That(radiusConstant.GetRawConstantValue(), Is.EqualTo(22f));
+            Assert.That(radiusConstant.GetRawConstantValue(), Is.EqualTo(44f));
             Assert.That(declaredSetActive, Is.Null);
         }
 
@@ -402,9 +402,9 @@ namespace TangoMvp.Tests
             Assert.That(fill.r, Is.EqualTo(expectedFill.r).Within(0.0001f));
             Assert.That(fill.g, Is.EqualTo(expectedFill.g).Within(0.0001f));
             Assert.That(fill.b, Is.EqualTo(expectedFill.b).Within(0.0001f));
-            Assert.That(fill.a, Is.EqualTo(0.54f).Within(0.0001f));
+            Assert.That(fill.a, Is.EqualTo(0.78f).Within(0.0001f));
             Assert.That(sceneGlass.GetFloat("_TangoSaturation"), Is.EqualTo(1.5f));
-            Assert.That(sceneGlass.GetFloat("_TangoSheenAlpha"), Is.EqualTo(0.07f));
+            Assert.That(sceneGlass.GetFloat("_TangoSheenAlpha"), Is.EqualTo(0.015f));
             Assert.That(sceneGlass.GetFloat("_TangoRimAlpha"), Is.EqualTo(0.14f));
             Assert.That(sceneGlass.GetFloat("_TangoFallbackAlpha"), Is.EqualTo(0.72f));
             Color lens = onGlass.GetColor("_TangoLensColor");
