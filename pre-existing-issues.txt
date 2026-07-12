@@ -140,3 +140,14 @@ Cumulus verification README — inconsistent GPU metric count
   authoritative `cumulus/scripts/tango_evidence.py` validator currently defines
   29 metrics and 20 captures. Keep the prose derived from the validator contract
   when the point-lighting work expands that evidence set.
+
+Cumulus clean PlayMode gate — wall-clock-sensitive panel travel assertion
+
+- On the first clean-library verification of point-lit glass, unrelated
+  `TangoPanelTravelTests.ToggleDestination_ReachesBothExactAnchorsInReferenceDuration`
+  measured the 420 ms travel at 601 ms after all glass tests passed. The same
+  full PlayMode assembly had passed repeatedly against the warm library. The
+  test compares wall-clock coroutine duration with a ±20 ms tolerance, so an
+  editor/graphics hitch can fail behavior whose final anchor is correct. Replace
+  the wall-clock assertion with deterministic stepped-time evidence or separate
+  the curve-duration contract from host scheduling latency.
