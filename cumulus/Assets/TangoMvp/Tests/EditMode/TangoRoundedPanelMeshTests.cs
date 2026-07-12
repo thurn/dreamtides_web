@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using TangoMvp.Geometry;
 using TangoMvp.Materials;
@@ -34,6 +35,15 @@ namespace TangoMvp.Tests
                 {
                     Assert.That(IsFinite(normal.x) && IsFinite(normal.y) && IsFinite(normal.z), Is.True);
                 }
+
+                var shellRegions = new List<Vector2>();
+                mesh.GetUVs(1, shellRegions);
+                Assert.That(shellRegions, Has.Count.EqualTo(mesh.vertexCount));
+                Assert.That(shellRegions[0].x, Is.Zero, "Front center");
+                Assert.That(shellRegions[1 + 4 * 5].x, Is.Zero, "Back center");
+                Assert.That(shellRegions[2 + 2 * 4 * 5].x, Is.EqualTo(1f), "Front bevel");
+                Assert.That(shellRegions, Has.All.Matches<Vector2>(region =>
+                    IsFinite(region.x) && region.x >= 0f && region.x <= 1f));
 
                 Vector3[] vertices = mesh.vertices;
                 int[] triangles = mesh.triangles;
@@ -79,6 +89,7 @@ namespace TangoMvp.Tests
             Material sceneGlass = new Material(shader);
             Material onGlass = new Material(shader);
             Material solidChrome = new Material(shader);
+            TangoGlassLightingProfile lightingProfile = ScriptableObject.CreateInstance<TangoGlassLightingProfile>();
 
             try
             {
@@ -86,11 +97,13 @@ namespace TangoMvp.Tests
                 serializedLibrary.FindProperty("sceneGlass").objectReferenceValue = sceneGlass;
                 serializedLibrary.FindProperty("onGlass").objectReferenceValue = onGlass;
                 serializedLibrary.FindProperty("solidChrome").objectReferenceValue = solidChrome;
+                serializedLibrary.FindProperty("lightingProfile").objectReferenceValue = lightingProfile;
                 serializedLibrary.ApplyModifiedPropertiesWithoutUndo();
 
                 Assert.That(library.Resolve(TangoMaterialRole.SceneGlass), Is.SameAs(sceneGlass));
                 Assert.That(library.Resolve(TangoMaterialRole.OnGlass), Is.SameAs(onGlass));
                 Assert.That(library.Resolve(TangoMaterialRole.SolidChrome), Is.SameAs(solidChrome));
+                Assert.That(library.LightingProfile, Is.SameAs(lightingProfile));
                 library.Validate();
 
                 serializedLibrary.FindProperty("onGlass").objectReferenceValue = null;
@@ -103,7 +116,31 @@ namespace TangoMvp.Tests
                 UnityEngine.Object.DestroyImmediate(sceneGlass);
                 UnityEngine.Object.DestroyImmediate(onGlass);
                 UnityEngine.Object.DestroyImmediate(solidChrome);
+                UnityEngine.Object.DestroyImmediate(lightingProfile);
                 UnityEngine.Object.DestroyImmediate(library);
+            }
+        }
+
+        [Test]
+        public void GlassLightingProfile_HasValidatedRoleAndQualityDefaults()
+        {
+            TangoGlassLightingProfile profile = ScriptableObject.CreateInstance<TangoGlassLightingProfile>();
+            try
+            {
+                Assert.That(TangoGlassLightingProfile.SettingsVersion, Is.EqualTo(1));
+                Assert.That(profile.SceneGlass.EdgeStrength, Is.EqualTo(0.65f));
+                Assert.That(profile.SceneGlass.InteriorStrength, Is.EqualTo(0.14f));
+                Assert.That(profile.OnGlass.EdgeStrength, Is.EqualTo(0.42f));
+                Assert.That(profile.OnGlass.InteriorStrength, Is.EqualTo(0.08f));
+                Assert.That(profile.DesktopAdditionalLightLimit, Is.EqualTo(4));
+                Assert.That(profile.MobileAdditionalLightLimit, Is.EqualTo(1));
+                Assert.That(profile.DesktopAdditionalLightShadows, Is.True);
+                Assert.That(profile.ForQuality(TangoGlassQuality.Mobile).AdditionalLightShadows, Is.False);
+                Assert.DoesNotThrow(profile.Validate);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(profile);
             }
         }
 

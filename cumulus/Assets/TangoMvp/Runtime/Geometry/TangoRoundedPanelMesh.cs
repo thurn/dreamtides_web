@@ -35,6 +35,7 @@ namespace TangoMvp.Geometry
             var vertices = new List<Vector3>(2 + outlineCount * 8);
             var normals = new List<Vector3>(2 + outlineCount * 8);
             var uvs = new List<Vector2>(2 + outlineCount * 8);
+            var shellRegions = new List<Vector2>(2 + outlineCount * 8);
             var frontTriangles = new List<int>(outlineCount * 3);
             var backTriangles = new List<int>(outlineCount * 3);
             var bevelTriangles = new List<int>(outlineCount * 18);
@@ -60,6 +61,12 @@ namespace TangoMvp.Geometry
             int backBevelInnerRing = AddBevelRing(vertices, normals, uvs, faceOutline, -halfDepth, -1f);
             AddRingBridge(bevelTriangles, backBevelOuterRing, backBevelInnerRing, outlineCount, false);
 
+            int faceVertexCount = 2 + outlineCount * 2;
+            for (int index = 0; index < vertices.Count; index++)
+            {
+                shellRegions.Add(new Vector2(index < faceVertexCount ? 0f : 1f, 0f));
+            }
+
             var mesh = new Mesh
             {
                 name = $"Tango Rounded Panel {width:0.###}x{height:0.###}x{depth:0.###}",
@@ -68,6 +75,7 @@ namespace TangoMvp.Geometry
             mesh.SetVertices(vertices);
             mesh.SetNormals(normals);
             mesh.SetUVs(0, uvs);
+            mesh.SetUVs(1, shellRegions);
             mesh.subMeshCount = 3;
             mesh.SetTriangles(frontTriangles, FrontSubmesh, false);
             mesh.SetTriangles(backTriangles, BackSubmesh, false);

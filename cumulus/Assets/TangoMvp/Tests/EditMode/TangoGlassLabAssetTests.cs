@@ -25,6 +25,7 @@ namespace TangoMvp.Tests
         private const string MeshPath = "Assets/TangoMvp/Meshes/TangoPanel.asset";
         private const string SceneGlassPath = "Assets/TangoMvp/Materials/TangoSceneGlass.mat";
         private const string OnGlassPath = "Assets/TangoMvp/Materials/TangoOnGlass.mat";
+        private const string LightingProfilePath = "Assets/TangoMvp/Materials/TangoGlassLightingProfile.asset";
         private const string SolidChromePath = "Assets/TangoMvp/Materials/TangoSolidChrome.mat";
         private const string BlurPath = "Assets/TangoMvp/Materials/TangoBlur.mat";
         private const string LibraryPath = "Assets/TangoMvp/Materials/TangoMaterialLibrary.asset";
@@ -180,6 +181,7 @@ namespace TangoMvp.Tests
             SolidChromePath,
             BlurPath,
             LibraryPath,
+            LightingProfilePath,
             PrefabPath,
             ScenePath,
         };

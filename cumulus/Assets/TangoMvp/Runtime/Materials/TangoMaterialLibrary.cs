@@ -9,6 +9,9 @@ namespace TangoMvp.Materials
         [SerializeField] private Material sceneGlass;
         [SerializeField] private Material onGlass;
         [SerializeField] private Material solidChrome;
+        [SerializeField] private TangoGlassLightingProfile lightingProfile;
+
+        public TangoGlassLightingProfile LightingProfile => lightingProfile;
 
         public Material Resolve(TangoMaterialRole role)
         {
@@ -30,6 +33,12 @@ namespace TangoMvp.Materials
             ValidateAssignment(TangoMaterialRole.SceneGlass, sceneGlass);
             ValidateAssignment(TangoMaterialRole.OnGlass, onGlass);
             ValidateAssignment(TangoMaterialRole.SolidChrome, solidChrome);
+            if (lightingProfile == null)
+            {
+                throw new InvalidOperationException("Tango material library has no glass lighting profile.");
+            }
+
+            lightingProfile.Validate();
         }
 
         private static void ValidateAssignment(TangoMaterialRole role, Material material)

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d09035aaeb949d2a220bc6d4ada342c, type: 3}
+  m_Name: TangoGlassLightingProfile
+  m_EditorClassIdentifier: TangoMvp.Runtime::TangoMvp.Materials.TangoGlassLightingProfile
+  sceneGlass:
+    edgeStrength: 0.65
+    edgeRoughness: 0.14
+    interiorStrength: 0.14
+    interiorRoughness: 0.42
+    lightColorResponse: 1
+    reflectionLuminanceCeiling: 1.25
+  onGlass:
+    edgeStrength: 0.42
+    edgeRoughness: 0.2
+    interiorStrength: 0.08
+    interiorRoughness: 0.52
+    lightColorResponse: 0.85
+    reflectionLuminanceCeiling: 0.75
+  desktopAdditionalLightLimit: 4
+  mobileAdditionalLightLimit: 1
+  desktopAdditionalLightShadows: 1

@@ -210,6 +210,7 @@ write_asset_manifest() {
       Assets/Settings/PC_Renderer.asset \
       Assets/TangoMvp/Materials/TangoBackdropUnlit.mat \
       Assets/TangoMvp/Materials/TangoBlur.mat \
+      Assets/TangoMvp/Materials/TangoGlassLightingProfile.asset \
       Assets/TangoMvp/Materials/TangoMaterialLibrary.asset \
       Assets/TangoMvp/Materials/TangoOnGlass.mat \
       Assets/TangoMvp/Materials/TangoSceneGlass.mat \

@@ -31,6 +31,7 @@ namespace TangoMvp.Editor
         private const string TextOutlinePath = MaterialsFolder + "/TangoTextOutline.mat";
         private const string BlurPath = MaterialsFolder + "/TangoBlur.mat";
         private const string LibraryPath = MaterialsFolder + "/TangoMaterialLibrary.asset";
+        private const string LightingProfilePath = MaterialsFolder + "/TangoGlassLightingProfile.asset";
         private const string MeshesFolder = "Assets/TangoMvp/Meshes";
         private const string MeshPath = MeshesFolder + "/TangoPanel.asset";
         private const string PrefabsFolder = "Assets/TangoMvp/Prefabs";
@@ -93,10 +94,12 @@ namespace TangoMvp.Editor
             ConfigureBlur(blur);
 
             TangoMaterialLibrary library = GetOrCreateLibrary();
+            TangoGlassLightingProfile lightingProfile = GetOrCreateLightingProfile();
             var serializedLibrary = new SerializedObject(library);
             serializedLibrary.FindProperty("sceneGlass").objectReferenceValue = sceneGlass;
             serializedLibrary.FindProperty("onGlass").objectReferenceValue = onGlass;
             serializedLibrary.FindProperty("solidChrome").objectReferenceValue = solidChrome;
+            serializedLibrary.FindProperty("lightingProfile").objectReferenceValue = lightingProfile;
             serializedLibrary.ApplyModifiedPropertiesWithoutUndo();
             library.Validate();
             EditorUtility.SetDirty(library);
@@ -993,6 +996,22 @@ namespace TangoMvp.Editor
             }
 
             return library;
+        }
+
+        private static TangoGlassLightingProfile GetOrCreateLightingProfile()
+        {
+            TangoGlassLightingProfile profile =
+                AssetDatabase.LoadAssetAtPath<TangoGlassLightingProfile>(LightingProfilePath);
+            if (profile == null)
+            {
+                profile = ScriptableObject.CreateInstance<TangoGlassLightingProfile>();
+                profile.name = "TangoGlassLightingProfile";
+                AssetDatabase.CreateAsset(profile, LightingProfilePath);
+            }
+
+            profile.Validate();
+            EditorUtility.SetDirty(profile);
+            return profile;
         }
 
         private static Shader RequireShader(string name)
