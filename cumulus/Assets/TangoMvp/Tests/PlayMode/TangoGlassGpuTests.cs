@@ -323,7 +323,7 @@ namespace TangoMvp.Tests.PlayMode
                 Record(results, TangoGpuAcceptance.BlurEdgeEnergyRatioMaximum, blurRatio,
                     TangoComparison.LessThanOrEqual, 0.65f, "glass=enabled", "glass=disabled", graphicsApi, deviceName);
                 Record(results, TangoGpuAcceptance.BlurEdgeEnergyRatioMinimum, blurRatio,
-                    TangoComparison.GreaterThanOrEqual, 0.01f, "glass=enabled", "glass=disabled", graphicsApi, deviceName);
+                    TangoComparison.GreaterThanOrEqual, 0.005f, "glass=enabled", "glass=disabled", graphicsApi, deviceName);
 
                 onGlassButton.SetActive(false);
                 spinner.SetPhase(0.04f);

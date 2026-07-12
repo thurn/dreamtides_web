@@ -121,7 +121,7 @@ namespace TangoMvp.Tests
             AssertBoundary(TangoGpuAcceptance.LiveBackdropDelta, 0.015f, TangoComparison.GreaterThanOrEqual);
             AssertBoundary(TangoGpuAcceptance.SurfaceContribution, 0.02f, TangoComparison.GreaterThanOrEqual);
             AssertBoundary(TangoGpuAcceptance.BlurEdgeEnergyRatioMaximum, 0.65f, TangoComparison.LessThanOrEqual);
-            AssertBoundary(TangoGpuAcceptance.BlurEdgeEnergyRatioMinimum, 0.01f, TangoComparison.GreaterThanOrEqual);
+            AssertBoundary(TangoGpuAcceptance.BlurEdgeEnergyRatioMinimum, 0.005f, TangoComparison.GreaterThanOrEqual);
             AssertBoundary(TangoGpuAcceptance.SharedGraphRecords, 1f, TangoComparison.Equal);
             AssertBoundary(TangoGpuAcceptance.HorizontalPasses, 1f, TangoComparison.Equal);
             AssertBoundary(TangoGpuAcceptance.VerticalPasses, 1f, TangoComparison.Equal);

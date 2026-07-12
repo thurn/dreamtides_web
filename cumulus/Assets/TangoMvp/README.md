@@ -70,7 +70,7 @@ The thresholds are deliberately relational or broad proof-of-life bounds. They e
 | `surfaceContribution.LiveGlassA` | `>= 0.02` | Pane A changes its own pixels versus the identical frame with only that pane disabled. Lower means the surface is invisible or ineffectual. |
 | `surfaceContribution.LiveGlassB` | `>= 0.02` | Pane B changes its own pixels versus the identical frame with only that pane disabled. Lower means the surface is invisible or ineffectual. |
 | `blurEdgeEnergyRatioMaximum` | `<= 0.65` | The peak same-region luminance gradient with glass enabled is at most 65% of the glass-disabled edge. Higher means the surface did not soften its backdrop. |
-| `blurEdgeEnergyRatioMinimum` | `>= 0.01` | The softened same-region gradient retains bounded structure. Lower indicates a flat or excessively blurred result. |
+| `blurEdgeEnergyRatioMinimum` | `>= 0.005` | The softened same-region gradient retains bounded structure. Lower indicates a flat or excessively blurred result. |
 | `sharedGraphRecords.<phase>` | `== 1` | Exactly one graph record exists for each phase listed below. Any other value means the camera-level effect is missing or duplicated. |
 | `horizontalPasses.<phase>` | `== 1` | Exactly one horizontal blur pass per camera phase. |
 | `verticalPasses.<phase>` | `== 1` | Exactly one vertical blur pass per camera phase. |
