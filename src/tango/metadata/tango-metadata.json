@@ -543,6 +543,55 @@
       }
     },
     {
+      "name": "footerAction",
+      "tsType": "CardGalleryFooterAction",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional centered GlassButton rendered below the card grid.",
+      "nested": {
+        "name": "CardGalleryFooterAction",
+        "fields": [
+          {
+            "name": "label",
+            "tsType": "string",
+            "optional": false,
+            "description": "Resolved button label."
+          },
+          {
+            "name": "onPress",
+            "tsType": "() => void",
+            "optional": false,
+            "description": "Fires when the footer action is activated."
+          },
+          {
+            "name": "glyph",
+            "tsType": "Glyph",
+            "optional": true,
+            "description": "Optional leading glyph."
+          },
+          {
+            "name": "cost",
+            "tsType": "number | null",
+            "optional": true,
+            "description": "Optional inline essence cost."
+          },
+          {
+            "name": "disabled",
+            "tsType": "boolean",
+            "optional": true,
+            "description": "Detach interaction and visually recede the action."
+          },
+          {
+            "name": "testId",
+            "tsType": "string",
+            "optional": true,
+            "description": "A `data-testid` for selecting the footer action in tests."
+          }
+        ]
+      }
+    },
+    {
       "name": "cards",
       "tsType": "readonly CardGalleryCardView[]",
       "unionMembers": [],
@@ -600,6 +649,7 @@
       "tsType": "CardGallerySpacing",
       "unionMembers": [
         "compact",
+        "spacious",
         "regular",
         "medium"
       ],

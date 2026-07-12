@@ -164,6 +164,23 @@ describe("TransfigurationSiteScreen", () => {
         '[data-testid="tango-transfiguration-picker"]',
       )?.dataset.galleryColumns,
     ).toBe("3");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="tango-transfiguration-picker"]',
+      )?.dataset.gallerySpacing,
+    ).toBe("spacious");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="tango-transfiguration-picker"]',
+      )?.dataset.galleryWidthMode,
+    ).toBe("content");
+    expect(
+      container.querySelector('[data-testid="tango-transfiguration-decline"]')
+        ?.textContent,
+    ).toBe("Decline Offer");
+    expect(
+      container.querySelector('[data-testid="tango-transfiguration-leave"]'),
+    ).toBeNull();
     expect(container.textContent).not.toContain("Essence 500");
 
     act(() => root.unmount());
@@ -179,6 +196,7 @@ describe("TransfigurationSiteScreen", () => {
       />,
     );
 
+    const pickerTitleFont = container.querySelector("h2")?.style.font;
     act(() => {
       container
         .querySelector<HTMLButtonElement>(
@@ -191,8 +209,15 @@ describe("TransfigurationSiteScreen", () => {
       container.querySelector('[data-testid="tango-transfiguration-detail"]'),
     ).not.toBeNull();
     expect(
-      container.querySelector('[data-testid="tango-transfiguration-back"]'),
+      container.querySelector(
+        '[data-testid="tango-transfiguration-choose-again"]',
+      ),
     ).not.toBeNull();
+    expect(
+      container.querySelector('[data-testid="tango-transfiguration-back"]'),
+    ).toBeNull();
+    expect(container.querySelector("h2")?.style.font).toBe(pickerTitleFont);
+    expect(container.textContent).not.toContain("TRANSFIGURATION");
     expect(
       container.querySelector("[data-transfiguration-detail-card-target]"),
     ).not.toBeNull();
@@ -208,10 +233,11 @@ describe("TransfigurationSiteScreen", () => {
     ).toBe("true");
     expect(container.textContent).not.toContain("How much essence");
 
-    const buttons = [...container.querySelectorAll("button")];
-    const commit = buttons.find((button) =>
-      button.textContent?.includes("Transfigure Card"),
+    const commit = container.querySelector<HTMLButtonElement>(
+      '[data-testid="tango-transfiguration-confirm"]',
     );
+    expect(commit?.textContent).toContain("Transfigure ·");
+    expect(commit?.textContent).not.toContain("Card");
     act(() => commit?.click());
     expect(onTransfigure).toHaveBeenCalledWith(
       "entry-1",

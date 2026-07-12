@@ -19,7 +19,6 @@ import { DreamsignRevelationScreenAdapter } from "./DreamsignRevelationScreenAda
 import { PurgeSiteScreenAdapter } from "./PurgeSiteScreenAdapter";
 import { CardShopSiteScreenAdapter } from "./CardShopSiteScreenAdapter";
 import { TransfigurationSiteScreenAdapter } from "./TransfigurationSiteScreenAdapter";
-import { DESKTOP_MIN_WIDTH } from "../../tango/screens/use-is-desktop";
 
 /**
  * The Tango implementation of a top-level `Screen`, or null when none exists yet
@@ -67,13 +66,7 @@ export function tangoSiteScreenFor(
         <CardShopSiteScreenAdapter siteId={site.id} />
       );
     case "Transfiguration":
-      if (
-        site.isEnhanced ||
-        (typeof window !== "undefined" &&
-          window.innerWidth < DESKTOP_MIN_WIDTH)
-      ) {
-        return null;
-      }
+      if (site.isEnhanced) return null;
       return (
         <TransfigurationSiteScreenAdapter siteId={site.id} />
       );

@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/tango#/card-gallery-panel`
 
 Real consumers: **4** (imports outside `src/tango/docs/` and tests).
 
-The shared card-browser surface: a left-aligned title and subtitle, a trailing header accessory, and a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim.
+The shared card-browser surface: a left-aligned title and subtitle, optional header and centered footer actions, and a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim.
 
 > **Guidance:** Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component derives material from frame geometry: floating is rounded glass and full-bleed is the edge-to-edge standard alpha scrim. It owns the header, accessory slot, internal scroll, fixed grid modes, optional captions and trailing card-sized action, and mobile press-preview sizing with whole-card touch-circle clearance. Callers provide resolved card models keyed by entry id or UUID.
 
@@ -19,12 +19,13 @@ The shared card-browser surface: a left-aligned title and subtitle, a trailing h
 | `title` | `string` | yes | — | Header title, rendered as an `<h2>`. |
 | `subtitle` | `string` | no | — | Optional intro line under the title. |
 | `rightAccessory` | `CardGalleryAccessory` | no | — | Optional trailing header action. |
+| `footerAction` | `CardGalleryFooterAction` | no | — | Optional centered GlassButton rendered below the card grid. |
 | `cards` | `readonly CardGalleryCardView[]` | yes | — | Resolved cards rendered in order. |
 | `emptyLabel` | `string` | no | `No cards.` | Empty-state copy shown when `cards` is empty. |
 | `columns` | `CardGalleryColumns` = `"auto" \| "two" \| "three" \| "four" \| "five"` | no | `auto` | Card grid mode. Defaults to `auto`. |
 | `cardSize` | `CardGalleryCardSize` = `"compact" \| "standard" \| "roomy"` | no | `standard` | Card size preset. Defaults to `standard`. |
 | `frame` | `CardGalleryFrame` = `"floating" \| "fullBleed"` | no | `floating` | Panel frame geometry and material. `floating` uses liquid glass; `fullBleed` fills its parent edge-to-edge with the standard alpha scrim and no floating rim or shadow. Defaults to `floating`. |
-| `spacing` | `CardGallerySpacing` = `"compact" \| "regular" \| "medium"` | no | `regular` | Internal padding and grid gap scale. Defaults to `regular`. |
+| `spacing` | `CardGallerySpacing` = `"compact" \| "spacious" \| "regular" \| "medium"` | no | `regular` | Internal padding and grid gap scale. Defaults to `regular`. |
 | `widthMode` | `CardGalleryWidthMode` = `"content" \| "fill"` | no | `content` | Floating-frame width behavior. Defaults to `content`. |
 | `largeCards` | `boolean` | no | `false` | Draw each tile with GameCard's larger readable type scale. |
 | `testId` | `string` | no | — | Test id for the panel root. |
@@ -43,6 +44,17 @@ The shared card-browser surface: a left-aligned title and subtitle, a trailing h
 | `glyph` | `Glyph` | yes |  |
 | `disabled` | `boolean` | yes |  |
 | `testId` | `string` | yes | A `data-testid` for selecting the button in tests. A `data-testid` for selecting the disc in tests. |
+
+### `footerAction`: the `CardGalleryFooterAction` model
+
+| Field | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | no | Resolved button label. |
+| `onPress` | `() => void` | no | Fires when the footer action is activated. |
+| `glyph` | `Glyph` | yes | Optional leading glyph. |
+| `cost` | `number \| null` | yes | Optional inline essence cost. |
+| `disabled` | `boolean` | yes | Detach interaction and visually recede the action. |
+| `testId` | `string` | yes | A `data-testid` for selecting the footer action in tests. |
 
 ### `endAction`: the `CardGalleryActionView` model
 
@@ -79,6 +91,7 @@ import { CardGalleryPanel } from "src/tango/components/card/CardGalleryPanel";
   frame="floating"
   spacing="medium"
   onCardPress={toggleCard}
+  footerAction={{ label: "Decline Offer", onPress: decline }}
   endAction={{
     entryId: "restock",
     glyph: GLYPHS.refresh,

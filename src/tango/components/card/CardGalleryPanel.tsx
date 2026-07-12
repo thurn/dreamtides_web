@@ -178,6 +178,22 @@ export type CardGalleryAccessory =
       testId?: string;
     };
 
+/** A centered labeled action rendered below the card grid. */
+export interface CardGalleryFooterAction {
+  /** Resolved button label. */
+  label: string;
+  /** Fires when the footer action is activated. */
+  onPress: () => void;
+  /** Optional leading glyph. */
+  glyph?: Glyph;
+  /** Optional inline essence cost. */
+  cost?: number | null;
+  /** Detach interaction and visually recede the action. */
+  disabled?: boolean;
+  /** A `data-testid` for selecting the footer action in tests. */
+  testId?: string;
+}
+
 /** The grid column count for the card body. */
 export type CardGalleryColumns = "auto" | "two" | "three" | "four" | "five";
 
@@ -188,7 +204,11 @@ export type CardGalleryCardSize = "compact" | "standard" | "roomy";
 export type CardGalleryFrame = "floating" | "fullBleed";
 
 /** The gallery's internal spacing scale. */
-export type CardGallerySpacing = "regular" | "medium" | "compact";
+export type CardGallerySpacing =
+  | "spacious"
+  | "regular"
+  | "medium"
+  | "compact";
 
 /** Whether a floating gallery hugs its grid or fills the caller's width. */
 export type CardGalleryWidthMode = "content" | "fill";
@@ -200,6 +220,8 @@ export interface CardGalleryPanelProps {
   subtitle?: string;
   /** Optional trailing header action. */
   rightAccessory?: CardGalleryAccessory;
+  /** Optional centered GlassButton rendered below the card grid. */
+  footerAction?: CardGalleryFooterAction;
   /** Resolved cards rendered in order. */
   cards: readonly CardGalleryCardView[];
   /** Empty-state copy shown when `cards` is empty. */
@@ -400,6 +422,7 @@ function headerPaddingFor(spacing: CardGallerySpacing): string {
 }
 
 function gridGapFor(spacing: CardGallerySpacing): string {
+  if (spacing === "spacious") return token("--space-6");
   return spacing === "compact" ? token("--space-3") : token("--space-4");
 }
 
@@ -542,6 +565,7 @@ export function CardGalleryPanel({
   title,
   subtitle,
   rightAccessory,
+  footerAction,
   cards,
   emptyLabel = "No cards.",
   columns = "auto",
@@ -813,6 +837,28 @@ export function CardGalleryPanel({
             </div>
           )}
         </div>
+        {footerAction !== undefined && (
+          <footer
+            style={{
+              flexShrink: 0,
+              display: "grid",
+              placeItems: "center",
+              paddingRight: galleryPadding,
+              paddingBottom: galleryPadding,
+              paddingLeft: galleryPadding,
+            }}
+          >
+            <GlassButton
+              placement={accessoryPlacement}
+              label={footerAction.label}
+              glyph={footerAction.glyph}
+              cost={footerAction.cost}
+              disabled={footerAction.disabled}
+              testId={footerAction.testId}
+              onPress={footerAction.onPress}
+            />
+          </footer>
+        )}
       </section>
     </>
   );

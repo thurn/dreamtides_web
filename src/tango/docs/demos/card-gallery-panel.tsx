@@ -82,8 +82,12 @@ function CardGalleryPanelDemo() {
         cards={cards}
         columns="three"
         frame="floating"
-        spacing="regular"
+        spacing="spacious"
         onCardPress={(entryId) => setSelected(entryId)}
+        footerAction={{
+          label: "Decline Offer",
+          onPress: () => setSelected(null),
+        }}
         endAction={{
           entryId: "restock",
           glyph: GLYPHS.refresh,
@@ -99,7 +103,7 @@ export const cardGalleryPanelDemo: TangoComponent = {
   id: "card-gallery-panel",
   title: "Card Gallery Panel",
   blurb:
-    "The shared card-browser surface: a left-aligned title and subtitle, a trailing header accessory, and a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim.",
+    "The shared card-browser surface: a left-aligned title and subtitle, optional header and centered footer actions, and a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim.",
   callout:
     "Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component derives material from frame geometry: floating is rounded glass and full-bleed is the edge-to-edge standard alpha scrim. It owns the header, accessory slot, internal scroll, fixed grid modes, optional captions and trailing card-sized action, and mobile press-preview sizing with whole-card touch-circle clearance. Callers provide resolved card models keyed by entry id or UUID.",
   group: "Components",
@@ -126,6 +130,7 @@ export const cardGalleryPanelDemo: TangoComponent = {
   frame="floating"
   spacing="medium"
   onCardPress={toggleCard}
+  footerAction={{ label: "Decline Offer", onPress: decline }}
   endAction={{
     entryId: "restock",
     glyph: GLYPHS.refresh,

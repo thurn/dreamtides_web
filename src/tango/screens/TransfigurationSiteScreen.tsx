@@ -5,7 +5,6 @@ import { useCallback, useState } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
-import { Button } from "../components/controls/Button";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlowIcon } from "../components/controls/GlowIcon";
 import { groupPanelStyle } from "../components/controls/GroupPanel";
@@ -193,6 +192,7 @@ export function TransfigurationSiteScreen({
             pointerEvents: "auto",
             display: "grid",
             alignItems: "center",
+            justifyItems: "center",
           }}
         >
           {picked === null ? (
@@ -286,12 +286,10 @@ function PickerPanel({
     <CardGalleryPanel
       title="Transfiguration"
       subtitle={view.ready ? "Choose a card to reforge" : "Heating the forge…"}
-      rightAccessory={{
-        kind: "iconButton",
-        glyph: GLYPHS.close,
-        label: "Leave Transfiguration",
+      footerAction={{
+        label: "Decline Offer",
         onPress: onClose,
-        testId: "tango-transfiguration-leave",
+        testId: "tango-transfiguration-decline",
       }}
       cards={view.candidates.map((candidate) => ({
         entryId: candidate.entryId,
@@ -302,8 +300,8 @@ function PickerPanel({
       columns="three"
       cardSize="roomy"
       frame="floating"
-      widthMode="fill"
-      spacing="regular"
+      widthMode="content"
+      spacing="spacious"
       testId="tango-transfiguration-picker"
       onCardPress={onPick}
     />
@@ -353,32 +351,12 @@ function DetailPanel({
         style={{
           display: "flex",
           alignItems: "center",
-          gap: token("--space-5"),
           padding: token("--space-6"),
           borderBottom: `1px solid ${token("--border-strong")}`,
         }}
       >
-        <GlassButton
-          placement="onGlass"
-          glyph={GLYPHS.chevronLeft}
-          label="Back"
-          disabled={confirming}
-          onPress={onBack}
-          testId="tango-transfiguration-back"
-        />
         <div style={{ minWidth: 0 }}>
-          <p
-            style={{
-              margin: 0,
-              font: token("--t-eyebrow"),
-              letterSpacing: token("--tracking-eyebrow"),
-              textTransform: "uppercase",
-              color: token("--text-on-glass-muted"),
-            }}
-          >
-            Transfiguration
-          </p>
-          <h2 style={{ margin: 0, font: token("--t-title") }}>
+          <h2 style={{ margin: 0, font: token("--t-title-sm") }}>
             Choose Its New Form
           </h2>
         </div>
@@ -389,7 +367,7 @@ function DetailPanel({
           display: "grid",
           gridTemplateColumns: "minmax(220px, 0.82fr) minmax(320px, 1.18fr)",
           gap: token("--space-8"),
-          alignItems: "center",
+          alignItems: "start",
           padding: token("--space-8"),
         }}
       >
@@ -499,19 +477,40 @@ function DetailPanel({
               );
             })}
           </div>
-          <div style={{ alignSelf: "flex-end" }}>
-            <Button
-              size="lg"
-              label={confirming ? "Reforging…" : "Transfigure Card"}
-              cost={activeForm?.essenceCost ?? null}
-              disabled={disabled}
-              onClick={() => {
-                if (activeForm !== null) onConfirm(activeForm);
-              }}
-            />
-          </div>
         </div>
       </div>
+      <footer
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr auto 1fr",
+          alignItems: "center",
+          gap: token("--space-6"),
+          paddingRight: token("--space-8"),
+          paddingBottom: token("--space-6"),
+          paddingLeft: token("--space-8"),
+        }}
+      >
+        <span />
+        <GlassButton
+          placement="onGlass"
+          label="Choose Again"
+          disabled={confirming}
+          onPress={onBack}
+          testId="tango-transfiguration-choose-again"
+        />
+        <span style={{ justifySelf: "end" }}>
+          <GlassButton
+            placement="onGlass"
+            label={confirming ? "Reforging…" : "Transfigure ·"}
+            cost={activeForm?.essenceCost ?? null}
+            disabled={disabled}
+            onPress={() => {
+              if (activeForm !== null) onConfirm(activeForm);
+            }}
+            testId="tango-transfiguration-confirm"
+          />
+        </span>
+      </footer>
     </section>
   );
 }
