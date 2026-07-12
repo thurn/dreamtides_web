@@ -1,7 +1,9 @@
 # Cumulus Tango Glass Point Lighting — Design
 
-**Status:** Approved for implementation planning  
-**Target:** Cumulus Unity 6.5 project, URP 17.5  
+**Status:** Approved for implementation planning
+
+**Target:** Cumulus Unity 6.5 project, URP 17.5
+
 **Material roles:** `SceneGlass` and `OnGlass`
 
 ## Summary
