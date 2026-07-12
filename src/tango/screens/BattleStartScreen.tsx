@@ -12,7 +12,10 @@ import { IconButton } from "../components/controls/IconButton";
 import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
-import { QUEST_STATUS_BAR_CLEARANCE_OP } from "../components/hud/QuestStatusBar";
+import {
+  QUEST_STATUS_BAR_CLEARANCE_OP,
+  QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+} from "../components/hud/QuestStatusBar";
 import { GlowIcon } from "../components/controls/GlowIcon";
 import { glassSurfaceStyle } from "../internal/glass-surface";
 import type { ArtRef } from "../primitives/art";
@@ -299,7 +302,7 @@ function MobileBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
           position: "absolute",
           left: 0,
           right: 0,
-          bottom: `calc(${QUEST_STATUS_BAR_CLEARANCE_OP} + ${token("--space-4")})`,
+          bottom: QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
           zIndex: 4,
           padding: `0 max(var(--safe-area-inset-right), ${token("--gutter")}) 0 max(var(--safe-area-inset-left), ${token("--gutter")})`,
         }}

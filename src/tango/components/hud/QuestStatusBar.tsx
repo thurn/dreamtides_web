@@ -87,6 +87,18 @@ export const QUEST_STATUS_BAR_TOTAL_HEIGHT =
 export const QUEST_STATUS_BAR_CLEARANCE_OP =
   "var(--hud-h) + var(--safe-area-inset-bottom) + var(--space-2)";
 
+/**
+ * Shared mobile bottom edge for a screen-level floating glass panel. The
+ * additional space matches the Purge composition and keeps the panel visually
+ * separate from the transparent status-bar objects.
+ */
+export const QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP =
+  `${QUEST_STATUS_BAR_CLEARANCE_OP} + ${token("--space-8")}`;
+
+/** Ready-to-use CSS length for mobile floating glass panel positioning. */
+export const QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE =
+  `calc(${QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP})`;
+
 /** One docked dreamsign, as the domain dreamsign shape the shared
  * {@link Dreamsign} object consumes (art resolved from `imageName`, never by
  * name). The HUD renders each through `<Dreamsign variant="hud">`. */

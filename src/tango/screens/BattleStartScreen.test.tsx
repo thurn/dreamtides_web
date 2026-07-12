@@ -7,6 +7,7 @@ import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { artRef } from "../primitives/art";
 import { TangoRoot } from "../TangoRoot";
+import { QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/QuestStatusBar";
 import { BattleStartScreen, type BattleStartView } from "./BattleStartScreen";
 
 beforeEach(() => {
@@ -184,6 +185,9 @@ describe("Tango BattleStartScreen", () => {
       (consolePanel?.firstElementChild as HTMLElement | null)?.style
         .backdropFilter,
     ).toContain("--glass-blur");
+    expect(consolePanel?.style.bottom).toBe(
+      QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+    );
     expect(
       layout?.querySelector("[data-battle-start-opponent]"),
     ).not.toBeNull();

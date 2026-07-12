@@ -4,7 +4,8 @@
 
 import type { ReactElement } from "react";
 import {
-  QUEST_STATUS_BAR_CLEARANCE_OP,
+  QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+  QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP,
 } from "../components/hud/QuestStatusBar";
 import { Motes } from "../components/hud/Motes";
 import { SpeechBubble } from "../components/overlay/SpeechBubble";
@@ -45,9 +46,8 @@ export interface GuideGallerySiteLayoutProps {
 }
 
 const GUIDE_TOP_ROWS = "clamp(170px, 28dvh, 240px) minmax(0, 1fr)";
-const HUD_CLEARANCE = `calc(${QUEST_STATUS_BAR_CLEARANCE_OP} + ${token("--space-8")})`;
 // The grand desktop HUD is taller than the root HUD token.
-const DESKTOP_HUD_CLEARANCE = `calc(${HUD_CLEARANCE} + ${token("--space-9")})`;
+const DESKTOP_HUD_CLEARANCE = `calc(${QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-9")})`;
 
 /** Shared character, glass-gallery, and HUD composition for site screens. */
 export function GuideGallerySiteLayout({
@@ -77,7 +77,9 @@ export function GuideGallerySiteLayout({
         overflow: "hidden",
         background: token("--bg-app"),
         boxSizing: "border-box",
-        paddingBottom: isDesktop ? undefined : HUD_CLEARANCE,
+        paddingBottom: isDesktop
+          ? undefined
+          : QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
       }}
     >
       {sceneUrl !== null && (

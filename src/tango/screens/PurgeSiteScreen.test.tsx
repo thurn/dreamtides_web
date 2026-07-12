@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { artRef } from "../primitives/art";
+import { QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/QuestStatusBar";
 import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
 import {
   PurgeSiteScreen,
@@ -232,6 +233,10 @@ describe("PurgeSiteScreen", () => {
       '[data-testid="tango-purge-card-gallery"]',
     );
     expect(cardRegion?.dataset.purgeLayout).toBe("mobile");
+    expect(
+      container.querySelector<HTMLElement>("[data-guide-gallery-site]")
+        ?.style.paddingBottom,
+    ).toBe(QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE);
     expect(cardRegion?.style.height).toBe("100%");
     expect(cardRegion?.style.width).toBe("calc(100vw - (var(--space-4) * 2))");
     expect(cardRegion?.style.minHeight).toBe("0px");

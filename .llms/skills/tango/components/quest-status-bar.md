@@ -46,7 +46,7 @@ The persistent, transparent bottom HUD for quest screens. The essence total, dec
 
 ## Usage
 
-A transparent HUD that positions itself against the screen root and reveals the Dreamcaller / dreamsign popups anchored to it, so pass the screen's `stageRef`. Render it inside a `position: relative` scene root. Its shared bottom anchor adds one small visible gap after the real device safe area; screens should not reposition it.
+A transparent HUD that positions itself against the screen root and reveals the Dreamcaller / dreamsign popups anchored to it, so pass the screen's `stageRef`. Render it inside a `position: relative` scene root. Its shared bottom anchor adds one small visible gap after the real device safe area; screens should not reposition it. Mobile screen-level floating glass panels use `QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE` for their bottom edge so every screen preserves the same separation from the HUD.
 
 ```tsx
 import { useRef } from "react";
