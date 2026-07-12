@@ -9,6 +9,7 @@ import { RulesText } from "../components/card/RulesText";
 import { Button } from "../components/controls/Button";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GroupPanel } from "../components/controls/GroupPanel";
+import { IconButton } from "../components/controls/IconButton";
 import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
@@ -18,7 +19,6 @@ import { glassSurfaceStyle } from "../internal/glass-surface";
 import type { ArtRef } from "../primitives/art";
 import { resolveArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
-import { Pressable } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
 import { AbilityReveal, ConsoleDivider } from "./quest-start-shared";
@@ -59,6 +59,7 @@ const SIGNATURE_CARD_WIDTH = 116;
 const DREAMSIGN_SIZE = 62;
 const MOBILE_SIGNATURE_CARD_WIDTH = 64;
 const MOBILE_DREAMSIGN_SIZE = 48;
+const MOBILE_DETAIL_CAROUSEL_HEIGHT = 96;
 
 export function BattleStartScreen({ view, onBegin }: BattleStartScreenProps) {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -360,7 +361,7 @@ function MobileBattleStartTitle({
 }
 
 function MobileBattleConsole({ view, onBegin }: BattleStartScreenProps) {
-  const [showIntel, setShowIntel] = useState(false);
+  const [detailIndex, setDetailIndex] = useState(0);
   const showsAbility =
     view.dreamcaller.ability !== "" && view.dreamcaller.abilityActive;
 
@@ -379,52 +380,11 @@ function MobileBattleConsole({ view, onBegin }: BattleStartScreenProps) {
       )}
 
       <div style={{ marginTop: showsAbility ? token("--space-5") : 0 }}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: token("--space-4"),
-          }}
-        >
-          <h2
-            style={{
-              margin: 0,
-              font: token("--t-eyebrow"),
-              letterSpacing: token("--tracking-eyebrow"),
-              textTransform: "uppercase",
-              color: token("--text-secondary"),
-            }}
-          >
-            {showIntel ? "Opponent Intel" : "Battle Stakes"}
-          </h2>
-          <Pressable
-            as="button"
-            data-testid="tango-battle-start-intel-toggle"
-            aria-expanded={showIntel}
-            onClick={() => setShowIntel((current) => !current)}
-            style={{
-              padding: token("--space-2"),
-              margin: `calc(-1 * ${token("--space-2")})`,
-              border: 0,
-              background: "none",
-              font: token("--t-body"),
-              color: token("--text-primary"),
-              textDecoration: "underline",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {showIntel ? "View battle stakes" : "View opponent intel"}
-          </Pressable>
-        </div>
-
-        <div style={{ marginTop: token("--space-4") }}>
-          {showIntel ? (
-            <MobileOpponentIntel view={view} />
-          ) : (
-            <MobileBattleStakes view={view} />
-          )}
-        </div>
+        <MobileDetailCarousel
+          view={view}
+          index={detailIndex}
+          onChange={setDetailIndex}
+        />
       </div>
 
       <div
@@ -434,6 +394,112 @@ function MobileBattleConsole({ view, onBegin }: BattleStartScreenProps) {
         <Button label="Begin Battle" size="lg" full onClick={onBegin} />
       </div>
     </GroupPanel>
+  );
+}
+
+function MobileDetailCarousel({
+  view,
+  index,
+  onChange,
+}: {
+  readonly view: BattleStartView;
+  readonly index: number;
+  readonly onChange: (index: number) => void;
+}) {
+  return (
+    <div
+      data-battle-start-detail-carousel=""
+      data-battle-start-detail-page={String(index)}
+      style={{
+        position: "relative",
+        height: MOBILE_DETAIL_CAROUSEL_HEIGHT,
+        display: "grid",
+        placeItems: "center",
+      }}
+    >
+      {index === 0 && <MobileBattleStakes view={view} />}
+      {index === 1 && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: token("--space-3"),
+          }}
+        >
+          {view.dreamsigns.map((dreamsign) => (
+            <Dreamsign
+              key={dreamsign.id}
+              dreamsign={dreamsign}
+              sizePx={MOBILE_DREAMSIGN_SIZE}
+              testid={`tango-battle-start-dreamsign-${String(dreamsign.id)}`}
+            />
+          ))}
+        </div>
+      )}
+      {index === 2 && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: token("--space-3"),
+            alignItems: "flex-start",
+          }}
+        >
+          {view.signatureCards.map((card) => (
+            <div
+              key={card.cardId}
+              data-signature-card-id={card.cardId}
+              style={{ width: MOBILE_SIGNATURE_CARD_WIDTH, flex: "none" }}
+            >
+              <GameCard model={card.model} hideRulesText />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {index > 0 && (
+        <MobileCarouselChevron
+          direction="left"
+          onPress={() => onChange(index - 1)}
+        />
+      )}
+      {index < 2 && (
+        <MobileCarouselChevron
+          direction="right"
+          onPress={() => onChange(index + 1)}
+        />
+      )}
+    </div>
+  );
+}
+
+function MobileCarouselChevron({
+  direction,
+  onPress,
+}: {
+  readonly direction: "left" | "right";
+  readonly onPress: () => void;
+}) {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        top: "50%",
+        [direction]: `calc(-1 * ${token("--space-8")})`,
+        transform: "translateY(-50%)",
+        zIndex: 2,
+      }}
+    >
+      <IconButton
+        size="sm"
+        glyph={direction === "left" ? GLYPHS.chevronLeft : GLYPHS.chevronRight}
+        label={
+          direction === "left" ? "Previous battle detail" : "Next battle detail"
+        }
+        onPress={onPress}
+        testId={`tango-battle-start-carousel-${direction === "left" ? "previous" : "next"}`}
+      />
+    </div>
   );
 }
 
@@ -455,97 +521,6 @@ function MobileBattleStakes({ view }: { readonly view: BattleStartView }) {
         <EssenceValue amount={view.essenceReward} tone="inherit" />
       </MobileStake>
     </div>
-  );
-}
-
-function MobileOpponentIntel({ view }: { readonly view: BattleStartView }) {
-  const hasSignatureCards = view.signatureCards.length > 0;
-  const hasDreamsigns = view.dreamsigns.length > 0;
-  return (
-    <div
-      data-battle-start-opponent-intel=""
-      style={{
-        display: "grid",
-        gridTemplateColumns:
-          hasSignatureCards && hasDreamsigns ? "minmax(0, 1fr) auto" : "1fr",
-        gap: token("--space-5"),
-        alignItems: "end",
-      }}
-    >
-      {hasSignatureCards && (
-        <IntelGroup label="Signature Cards">
-          <div
-            style={{
-              display: "flex",
-              gap: token("--space-3"),
-              alignItems: "flex-start",
-            }}
-          >
-            {view.signatureCards.map((card) => (
-              <div
-                key={card.cardId}
-                data-signature-card-id={card.cardId}
-                style={{ width: MOBILE_SIGNATURE_CARD_WIDTH, flex: "none" }}
-              >
-                <GameCard model={card.model} hideRulesText />
-              </div>
-            ))}
-          </div>
-        </IntelGroup>
-      )}
-
-      {hasDreamsigns && (
-        <IntelGroup label="Dreamsigns">
-          <div style={{ display: "flex", gap: token("--space-3") }}>
-            {view.dreamsigns.map((dreamsign) => (
-              <Dreamsign
-                key={dreamsign.id}
-                dreamsign={dreamsign}
-                sizePx={MOBILE_DREAMSIGN_SIZE}
-                testid={`tango-battle-start-dreamsign-${String(dreamsign.id)}`}
-              />
-            ))}
-          </div>
-        </IntelGroup>
-      )}
-
-      {!hasSignatureCards && !hasDreamsigns && (
-        <p
-          style={{
-            margin: 0,
-            font: token("--t-body"),
-            color: token("--text-secondary"),
-          }}
-        >
-          No additional opponent intel.
-        </p>
-      )}
-    </div>
-  );
-}
-
-function IntelGroup({
-  label,
-  children,
-}: {
-  readonly label: string;
-  readonly children: ReactNode;
-}) {
-  return (
-    <section style={{ display: "grid", gap: token("--space-3") }}>
-      <h3
-        style={{
-          margin: 0,
-          font: token("--t-eyebrow"),
-          letterSpacing: token("--tracking-eyebrow"),
-          textTransform: "uppercase",
-          color: token("--text-secondary"),
-        }}
-      >
-        {label}
-      </h3>
-      {children}
-    </section>
   );
 }
 

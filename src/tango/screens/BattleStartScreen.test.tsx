@@ -152,7 +152,7 @@ describe("Tango BattleStartScreen", () => {
     act(() => root.unmount());
   });
 
-  it("mirrors the mobile Dreamcaller Select hierarchy and reveals opponent intel separately", () => {
+  it("mirrors the mobile Dreamcaller Select hierarchy with an unlabeled three-page detail carousel", () => {
     stubMatchMedia(false);
     const onBegin = vi.fn();
     const container = document.createElement("div");
@@ -197,23 +197,56 @@ describe("Tango BattleStartScreen", () => {
     expect(layout?.textContent).toContain(
       "Whenever an event resolves, gain momentum.",
     );
+    expect(layout?.textContent).not.toContain("Battle Stakes");
+    expect(layout?.textContent).not.toContain("Opponent Intel");
+    expect(layout?.textContent).not.toContain("Signature Cards");
     expect(layout?.textContent).not.toContain("Dreamsigns");
     expect(layout?.textContent).toContain("To Win");
     expect(layout?.textContent).toContain("Reward");
 
-    const intelToggle = layout?.querySelector<HTMLButtonElement>(
-      '[data-testid="tango-battle-start-intel-toggle"]',
+    expect(
+      layout?.querySelector(
+        '[data-testid="tango-battle-start-carousel-previous"]',
+      ),
+    ).toBeNull();
+    const next = layout?.querySelector<HTMLButtonElement>(
+      '[data-testid="tango-battle-start-carousel-next"]',
     );
-    expect(intelToggle?.textContent).toContain("View opponent intel");
-    act(() => intelToggle?.click());
+    act(() => next?.click());
     expect(layout?.textContent).not.toContain("To Win");
     expect(layout?.textContent).not.toContain("Reward");
-    expect(layout?.textContent).toContain("Signature Cards");
-    expect(layout?.textContent).toContain("Dreamsigns");
+    expect(
+      layout?.querySelectorAll(
+        '[data-testid^="tango-battle-start-dreamsign-"]',
+      ),
+    ).toHaveLength(1);
+    expect(layout?.querySelectorAll("[data-signature-card-id]")).toHaveLength(
+      0,
+    );
+    expect(
+      layout?.querySelector(
+        '[data-testid="tango-battle-start-carousel-previous"]',
+      ),
+    ).not.toBeNull();
+
+    act(() =>
+      layout
+        ?.querySelector<HTMLButtonElement>(
+          '[data-testid="tango-battle-start-carousel-next"]',
+        )
+        ?.click(),
+    );
     expect(layout?.querySelectorAll("[data-signature-card-id]")).toHaveLength(
       3,
     );
-    expect(intelToggle?.textContent).toContain("View battle stakes");
+    expect(
+      layout?.querySelectorAll(
+        '[data-testid^="tango-battle-start-dreamsign-"]',
+      ),
+    ).toHaveLength(0);
+    expect(
+      layout?.querySelector('[data-testid="tango-battle-start-carousel-next"]'),
+    ).toBeNull();
 
     const action = layout?.querySelector<HTMLElement>(
       '[data-testid="tango-battle-start-begin"]',
