@@ -6,11 +6,11 @@
 
 Components · Live demo & interactive props: `/tango#/glass-button`
 
-Real consumers: **5** (imports outside `src/tango/docs/` and tests).
+Real consumers: **4** (imports outside `src/tango/docs/` and tests).
 
 The labeled glass action — a text label in the control typography on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface.
 
-> **Guidance:** Use neutral glass for secondary actions and an accent-glass treatment for a primary action that must remain materially related to its neutral sibling. The five purple recipes are exposed together on the development transfiguration screen while the final treatment is selected.
+> **Guidance:** Use neutral glass for secondary actions and purple accent glass for a primary action that must remain materially related to its neutral sibling. Danger uses the same soft-wash material recipe in red, keeping destructive actions in the same family.
 
 ## Props
 
@@ -21,7 +21,7 @@ The labeled glass action — a text label in the control typography on the share
 | `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `GlowIcon` before the label. |
 | `cost` | `number \| null` | no | `null` | Optional inline essence cost rendered after the label. |
 | `widthReservations` | `readonly GlassButtonWidthReservation[]` | no | `[]` | Possible dynamic label/cost states. The button reserves the widest state while rendering only the current one, preventing surrounding layout shift. |
-| `variant` | `GlassButtonVariant` = `"default" \| "danger" \| "accent-rim" \| "accent-wash" \| "accent-glow" \| "accent-depth" \| "accent-danger"` | no | `default` | Strict neutral, danger, or purple accent glass surface treatment. |
+| `variant` | `GlassButtonVariant` = `"default" \| "danger" \| "accent"` | no | `default` | Strict neutral, danger, or purple accent glass surface treatment. |
 | `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the control. `onMedia` uses the full liquid-glass recipe; `onGlass` uses a lighter tonal lens so an existing glass tint is not compounded. Defaults to `onMedia`. |
 | `disabled` | `boolean` | no | `false` | Detaches the click / press feedback and marks the button `aria-disabled`. |
 | `testId` | `string` | no | — | A `data-testid` for selecting the button in tests. |
@@ -67,7 +67,7 @@ Use `placement="onGlass"` when the control rests inside a glass panel. Its light
 
 ### Danger variant
 
-Use `variant="danger"` for destructive secondary actions that should stay glassy while carrying a red warning rim and glow.
+Use `variant="danger"` for destructive actions. It applies the accent soft-wash recipe in red while preserving the same translucent glass layers.
 
 ```tsx
 import { GlassButton } from "src/tango/components/controls/GlassButton";
@@ -80,14 +80,14 @@ import { GLYPHS } from "src/tango/primitives/glyph";
 />
 ```
 
-### Purple accent candidates
+### Purple accent
 
-The named accent variants preserve the same translucent glass layers while changing the violet wash, rim, inset depth, and outer glow. `accent-danger` translates the established danger recipe into purple.
+Use the purple soft-wash accent for a primary action that should stay materially paired with a neutral glass sibling.
 
 ```tsx
 <GlassButton
   label="Transfigure"
-  variant="accent-depth"
+  variant="accent"
   placement="onGlass"
   onPress={transfigure}
 />

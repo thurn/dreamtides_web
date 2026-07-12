@@ -1684,11 +1684,7 @@
       "unionMembers": [
         "default",
         "danger",
-        "accent-rim",
-        "accent-wash",
-        "accent-glow",
-        "accent-depth",
-        "accent-danger"
+        "accent"
       ],
       "required": false,
       "defaultValue": "default",

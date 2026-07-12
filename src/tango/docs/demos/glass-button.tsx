@@ -53,7 +53,7 @@ export const glassButtonDemo: TangoComponent = {
   blurb:
     "The labeled glass action — a text label in the control typography on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface.",
   callout:
-    "Use neutral glass for secondary actions and an accent-glass treatment for a primary action that must remain materially related to its neutral sibling. The five purple recipes are exposed together on the development transfiguration screen while the final treatment is selected.",
+    "Use neutral glass for secondary actions and purple accent glass for a primary action that must remain materially related to its neutral sibling. Danger uses the same soft-wash material recipe in red, keeping destructive actions in the same family.",
   group: "Components",
   docName: "GlassButton",
   Component: GlassButtonDemo,
@@ -87,7 +87,7 @@ import { GLYPHS } from "src/tango/primitives/glyph";
     },
     {
       label: "Danger variant",
-      note: 'Use `variant="danger"` for destructive secondary actions that should stay glassy while carrying a red warning rim and glow.',
+      note: 'Use `variant="danger"` for destructive actions. It applies the accent soft-wash recipe in red while preserving the same translucent glass layers.',
       code: `import { GlassButton } from "src/tango/components/controls/GlassButton";
 import { GLYPHS } from "src/tango/primitives/glyph";
 
@@ -98,11 +98,11 @@ import { GLYPHS } from "src/tango/primitives/glyph";
 />`,
     },
     {
-      label: "Purple accent candidates",
-      note: "The named accent variants preserve the same translucent glass layers while changing the violet wash, rim, inset depth, and outer glow. `accent-danger` translates the established danger recipe into purple.",
+      label: "Purple accent",
+      note: "Use the purple soft-wash accent for a primary action that should stay materially paired with a neutral glass sibling.",
       code: `<GlassButton
   label="Transfigure"
-  variant="accent-depth"
+  variant="accent"
   placement="onGlass"
   onPress={transfigure}
 />`,

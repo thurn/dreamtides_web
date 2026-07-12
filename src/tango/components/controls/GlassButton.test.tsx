@@ -5,7 +5,6 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GlassButton } from "./GlassButton";
-import { ACCENT_GLASS_BUTTON_VARIANTS } from "./GlassButton";
 import { GLYPHS } from "../../primitives/glyph";
 
 function mount(element: ReactElement): {
@@ -185,44 +184,31 @@ describe("GlassButton", () => {
     );
 
     const button = container.querySelector("button");
-    expect(button?.style.borderColor).toBe("rgba(255, 111, 130, 0.92)");
-    expect(button?.style.background).toContain("rgba(244, 43, 72, 0.12)");
+    expect(button?.style.background).toContain("var(--danger) 20%");
+    expect(button?.style.background).toContain("var(--danger) 10%");
+    expect(button?.style.boxShadow).toContain("inset 0 -12px 26px");
+    expect(button?.style.boxShadow).toContain("0 10px 26px");
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("renders five named purple accent treatments without dropping the glass blur", () => {
-    expect(ACCENT_GLASS_BUTTON_VARIANTS).toHaveLength(5);
-
-    for (const variant of ACCENT_GLASS_BUTTON_VARIANTS) {
-      const { container, root } = mount(
-        <GlassButton label="Transfigure" variant={variant} onPress={() => {}} />,
-      );
-      const button = container.querySelector<HTMLButtonElement>("button");
-      expect(button?.dataset.glassVariant).toBe(variant);
-      expect(button?.style.backdropFilter).toContain("--glass-blur");
-      expect(button?.getAttribute("style")).toContain("--accent");
-      act(() => root.unmount());
-    }
-  });
-
-  it("bases the danger-inspired purple treatment on the danger layer structure", () => {
+  it("renders the purple soft-wash accent without dropping the glass blur", () => {
     const { container, root } = mount(
       <GlassButton
         label="Transfigure"
-        variant="accent-danger"
-        placement="onGlass"
+        variant="accent"
         onPress={() => {}}
       />,
     );
     const button = container.querySelector<HTMLButtonElement>("button");
-    expect(button?.style.background).toContain("linear-gradient(180deg");
-    expect(button?.style.background).toContain("--glass-on-glass-sheen");
-    expect(button?.style.background).toContain("--glass-on-glass-fill");
-    expect(button?.style.boxShadow).toContain("inset");
-    expect(button?.style.boxShadow).toContain("--accent");
+    expect(button?.dataset.glassVariant).toBe("accent");
+    expect(button?.style.backdropFilter).toContain("--glass-blur");
+    expect(button?.style.background).toContain("var(--accent-bright) 20%");
+    expect(button?.style.background).toContain("var(--accent-strong) 10%");
+    expect(button?.style.boxShadow).toContain("inset 0 -12px 26px");
+    expect(button?.style.boxShadow).toContain("0 10px 26px");
     act(() => root.unmount());
   });
 
@@ -262,8 +248,11 @@ describe("GlassButton", () => {
     );
 
     const button = container.querySelector("button");
-    expect(button?.style.borderColor).toBe("rgba(255, 111, 130, 0.82)");
+    expect(button?.style.background).toContain("var(--danger) 18%");
+    expect(button?.style.background).toContain("var(--danger) 8%");
     expect(button?.style.background).toContain("--glass-on-glass-fill");
+    expect(button?.style.boxShadow).toContain("inset 0 -10px 22px");
+    expect(button?.style.boxShadow).toContain("0 8px 22px");
 
     act(() => {
       root.unmount();

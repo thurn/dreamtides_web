@@ -182,8 +182,16 @@ describe("PurgeSiteScreen", () => {
     expect(
       container.querySelector<HTMLElement>(
         '[data-testid="tango-purge-header-action"]',
-      )?.style.borderColor,
-    ).not.toBe("");
+      )?.style.border,
+    ).toContain("--danger");
+    const selectedAction = container.querySelector<HTMLElement>(
+      '[data-testid="tango-purge-header-action"]',
+    );
+    expect(selectedAction?.dataset.glassVariant).toBe("danger");
+    expect(selectedAction?.style.background).toContain("var(--danger) 18%");
+    expect(selectedAction?.style.background).toContain(
+      "--glass-on-glass-fill",
+    );
     expect(
       container.querySelector('[data-testid="tango-purge-commit-bar"]'),
     ).toBeNull();
