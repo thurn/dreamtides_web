@@ -34,9 +34,11 @@ function makeInit() {
         abilityText: "Whenever you score, foresee 1.",
         dreamsigns: [
           {
+            id: "dreamsign-catalog-uuid",
             name: "A Test Sign",
             effectDescription: "A stable test effect.",
             imageName: "test.webp",
+            imageAlt: "A test Dreamsign",
             isBane: false,
           },
         ],
@@ -68,7 +70,11 @@ describe("buildBattleStartView", () => {
     expect(view.signatureCards.map((card) => card.cardId)).toEqual(
       init.enemyDescriptor.signatureCards.map((card) => card.cardId),
     );
-    expect(view.dreamsigns[0]?.id).toBe(`${init.battleId}:dreamsign:0`);
+    expect(view.dreamsigns[0]).toMatchObject({
+      id: "dreamsign-catalog-uuid",
+      imageName: "test.webp",
+      imageAlt: "A test Dreamsign",
+    });
     expect(view.pointsToWin).toBe(15);
     expect(view.essenceReward).toBe(90);
   });

@@ -337,6 +337,7 @@ export interface BattleDreamcallerSummary {
 }
 
 export interface BattleDreamsignSummary {
+  id?: Dreamsign["id"];
   name: Dreamsign["name"];
   effectDescription: Dreamsign["effectDescription"];
   imageName?: Dreamsign["imageName"];

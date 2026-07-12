@@ -104,10 +104,16 @@ describe("Tango BattleStartScreen", () => {
     expect(container.textContent).toContain(view.dreamcaller.name);
     expect(container.textContent).toContain("Ability");
     expect(container.querySelectorAll("[data-signature-card-id]")).toHaveLength(3);
-    expect(container.textContent).toContain("Points to Win");
+    expect(container.textContent).toContain("To Win");
+    expect(container.textContent).not.toContain("Opposing Dreamcaller");
     expect(container.textContent).toContain("Reward");
     expect(container.textContent).toContain("12");
     expect(container.textContent).toContain("80");
+    const pointsValue = container.querySelector(
+      '[data-battle-start-stake="To Win"] > div',
+    );
+    expect(pointsValue?.children[0]?.textContent).toBe("12");
+    expect(pointsValue?.children[1]?.tagName).toBe("I");
 
     act(() => root.unmount());
   });

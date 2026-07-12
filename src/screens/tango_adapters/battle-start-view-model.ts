@@ -35,10 +35,9 @@ export function buildBattleStartView(
         resolveRunLayerCount(init.atlasSnapshot.layers),
       ),
     },
-    dreamsigns: (enemy.dreamsigns ?? []).map((dreamsign, index) => ({
-      ...dreamsign,
-      id: `${init.battleId}:dreamsign:${String(index)}`,
-    })),
+    dreamsigns: (enemy.dreamsigns ?? []).flatMap((dreamsign) =>
+      dreamsign.id === undefined ? [] : [{ ...dreamsign, id: dreamsign.id }],
+    ),
     signatureCards: (enemy.signatureCards ?? []).flatMap((summary) => {
       const card = cardDatabase.get(summary.cardNumber);
       return card === undefined

@@ -746,6 +746,8 @@ describe("createBattleInit", () => {
           id: "enemy-sign-1",
           name: "Enemy Sign One",
           effectDescription: "An opposing boon.",
+          imageName: "enemy-sign-one.webp",
+          imageAlt: "A luminous enemy sigil",
         },
         {
           id: "enemy-sign-2",
@@ -768,6 +770,14 @@ describe("createBattleInit", () => {
         expect(dreamsignNames.has(dreamsign.name)).toBe(true);
         expect(dreamsign.isBane).toBe(false);
       }
+      const dreamsign = init.enemyDescriptor.dreamsigns[0];
+      const source = templates.find((template) => template.id === dreamsign?.id);
+      expect(source).toBeDefined();
+      expect(dreamsign).toMatchObject({
+        id: source?.id,
+        imageName: source?.imageName,
+        imageAlt: source?.imageAlt,
+      });
     });
 
     it("gives a pre-midpoint opponent no dreamsigns even when templates are supplied", () => {

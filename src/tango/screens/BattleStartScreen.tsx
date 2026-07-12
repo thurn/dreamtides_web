@@ -138,16 +138,6 @@ export function BattleStartScreen({ view, onBegin }: BattleStartScreenProps) {
           }}
         >
           <header style={{ display: "grid", gap: token("--space-3") }}>
-            <span
-              style={{
-                font: token("--t-eyebrow"),
-                letterSpacing: "0.16em",
-                textTransform: "uppercase",
-                color: token("--text-on-glass-muted"),
-              }}
-            >
-              Opposing Dreamcaller
-            </span>
             <h1 style={{ margin: 0, font: token("--t-hero") }}>
               {view.dreamcaller.name}
             </h1>
@@ -231,9 +221,9 @@ export function BattleStartScreen({ view, onBegin }: BattleStartScreenProps) {
               data-battle-start-stakes=""
               style={{ display: "flex", gap: token("--space-8") }}
             >
-              <Stake label="Points to Win">
-                <GlowIcon iconClass={GLYPHS.points} color="white" size="1em" />
+              <Stake label="To Win">
                 <span>{view.pointsToWin}</span>
+                <GlowIcon iconClass={GLYPHS.points} color="white" size="1em" />
               </Stake>
               <Stake label="Reward">
                 <EssenceValue amount={view.essenceReward} tone="inherit" />
@@ -280,7 +270,10 @@ function PanelSection({ label, children }: { label: string; children: ReactNode 
 
 function Stake({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div style={{ display: "grid", gap: token("--space-3") }}>
+    <div
+      data-battle-start-stake={label}
+      style={{ display: "grid", gap: token("--space-3") }}
+    >
       <div
         style={{
           display: "flex",

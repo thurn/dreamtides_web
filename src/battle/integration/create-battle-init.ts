@@ -607,8 +607,11 @@ export function buildEnemyDescriptor(
 ): BattleEnemyDescriptor {
   const dreamsigns: BattleDreamsignSummary[] = dreamsignTemplates.map(
     (template) => ({
+      id: template.id,
       name: template.name,
       effectDescription: template.effectDescription,
+      imageName: template.imageName,
+      imageAlt: template.imageAlt,
       isBane: false,
     }),
   );
@@ -865,6 +868,7 @@ function freezeBattleDreamsignSummary(
   dreamsign: QuestState["dreamsigns"][number],
 ): BattleDreamsignSummary {
   return Object.freeze({
+    id: dreamsign.id,
     name: dreamsign.name,
     effectDescription: dreamsign.effectDescription,
     imageName: dreamsign.imageName,
