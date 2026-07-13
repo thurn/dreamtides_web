@@ -1507,6 +1507,12 @@
             "description": "Visible and accessible action label."
           },
           {
+            "name": "description",
+            "tsType": "string",
+            "optional": false,
+            "description": "Plain-language explanation revealed through the shared InfoCard."
+          },
+          {
             "name": "price",
             "tsType": "number | null",
             "optional": false,

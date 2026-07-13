@@ -2,9 +2,11 @@
 // Dreamsigns. It keeps the Dream Market's header and captions while rendering
 // both the collectible art and the restock glyph without object backgrounds.
 
-import type { ReactElement } from "react";
+import { useRef, type ReactElement } from "react";
 import type { Dreamsign as DreamsignData } from "../../../types/quest";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
+import { useRevealSource } from "../../internal/reveal/context";
+import { revealEntityId } from "../../internal/reveal/identity";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
@@ -12,6 +14,7 @@ import { IconButton } from "../controls/IconButton";
 import { Dreamsign } from "../hud/Dreamsign";
 import { EssenceValue } from "../hud/EssenceValue";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
+import { richText } from "./rich-text";
 
 /** One UUID-keyed Dreamsign offered by a gallery. */
 export interface DreamsignGalleryEntryView {
@@ -33,6 +36,8 @@ export interface DreamsignGalleryActionView {
   glyph: Glyph;
   /** Visible and accessible action label. */
   label: string;
+  /** Plain-language explanation revealed through the shared InfoCard. */
+  description: string;
   /** Essence price, or null for a free/spent text caption. */
   price: number | null;
   /** Caption used when the action is free or already spent. */
@@ -64,6 +69,7 @@ export interface DreamsignGalleryPanelProps {
 
 const COMPACT_ITEM_WIDTH = 92;
 const STANDARD_ITEM_WIDTH = 126;
+const END_ACTION_GLYPH_SCALE = 0.82;
 
 function captionNode(
   price: number | null,
@@ -84,6 +90,89 @@ function captionNode(
     >
       {price === null ? text : <EssenceValue amount={price} tone="inherit" />}
     </p>
+  );
+}
+
+function DreamsignGalleryEndAction({
+  action,
+  size,
+  onActivate,
+}: {
+  readonly action: DreamsignGalleryActionView;
+  readonly size: "compact" | "standard";
+  readonly onActivate: () => void;
+}): ReactElement {
+  const itemWidth = size === "compact" ? COMPACT_ITEM_WIDTH : STANDARD_ITEM_WIDTH;
+  const itemHeight = itemWidth / CARD_ASPECT_RATIO_VALUE;
+  const binding = useRevealSource({
+    identity: {
+      entityType: "dreamsign-gallery-action",
+      entityId: revealEntityId("dreamsign-gallery-action", action.entryId),
+    },
+    spec: {
+      primary: {
+        kind: "infoCard",
+        card: {
+          variant: "icon",
+          glyph: action.glyph,
+          title: action.label,
+          body: richText.plain(action.description),
+        },
+      },
+      secondaries: [],
+    },
+    onActivate: action.disabled ? undefined : onActivate,
+  });
+  const lastPointerType = useRef<string | null>(null);
+  const pointerDown = binding.sourceProps.onPointerDown;
+
+  return (
+    <Pressable
+      as="button"
+      ref={binding.ref}
+      {...binding.sourceProps}
+      aria-label={action.label}
+      aria-disabled={action.disabled || undefined}
+      data-testid="tango-dreamsign-bazaar-restock"
+      data-reveal-complete-game-card="false"
+      pressFeedback="stationary"
+      onPointerDown={(event) => {
+        lastPointerType.current = event.pointerType;
+        pointerDown?.(event);
+      }}
+      onClick={() => {
+        if (!action.disabled && lastPointerType.current !== "touch") onActivate();
+      }}
+      style={{
+        ...binding.sourceProps.style,
+        width: "100%",
+        display: "block",
+        appearance: "none",
+        padding: 0,
+        border: 0,
+        background: "transparent",
+      }}
+    >
+      <span
+        style={{
+          width: itemWidth,
+          height: itemHeight,
+          display: "grid",
+          placeItems: "center",
+        }}
+      >
+        <i
+          className={action.glyph}
+          aria-hidden="true"
+          data-dreamsign-gallery-action-glyph=""
+          style={{
+            fontSize: itemWidth * END_ACTION_GLYPH_SCALE,
+            color: token("--text-on-accent"),
+            textShadow: token("--text-outline-media"),
+          }}
+        />
+      </span>
+    </Pressable>
   );
 }
 
@@ -209,42 +298,11 @@ export function DreamsignGalleryPanel({
             opacity: endAction.disabled ? 0.42 : 1,
           }}
         >
-          <Pressable
-            as="button"
-            aria-label={endAction.label}
-            disabled={endAction.disabled}
-            data-testid="tango-dreamsign-bazaar-restock"
-            pressFeedback="stationary"
-            onClick={endAction.disabled ? undefined : onEndActionPress}
-            style={{
-              width: "100%",
-              display: "block",
-              appearance: "none",
-              padding: 0,
-              border: 0,
-              background: "transparent",
-            }}
-          >
-            <span
-              style={{
-                width: itemWidth,
-                height: itemHeight,
-                display: "grid",
-                placeItems: "center",
-              }}
-            >
-              <i
-                className={endAction.glyph}
-                aria-hidden="true"
-                data-dreamsign-gallery-action-glyph=""
-                style={{
-                  fontSize: compact ? 52 : 68,
-                  color: token("--text-on-accent"),
-                  textShadow: token("--text-outline-media"),
-                }}
-              />
-            </span>
-          </Pressable>
+          <DreamsignGalleryEndAction
+            action={endAction}
+            size={size}
+            onActivate={onEndActionPress}
+          />
           {captionNode(endAction.price, endAction.text)}
         </div>
       </div>

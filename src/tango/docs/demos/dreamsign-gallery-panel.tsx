@@ -45,6 +45,8 @@ function DreamsignGalleryPanelDemo() {
           entryId: "restock",
           glyph: GLYPHS.refresh,
           label: "Restock Offers",
+          description:
+            "Replace the current offers with three new Dreamsigns. You may restock once per visit.",
           price: 50,
           text: null,
           disabled: false,

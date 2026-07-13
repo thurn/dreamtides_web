@@ -70,6 +70,14 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
         const binding = useRevealSource({ identity: { entityType: "transfiguration-form", entityId: revealEntityId("transfiguration-form", id) }, spec });`,
     },
     {
+      name: "Dreamsign gallery owns its end action's semantic reveal registration",
+      filename: "src/tango/components/card/DreamsignGalleryPanel.tsx",
+      code: `import { useRevealSource } from "../../internal/reveal/context";
+        import { revealEntityId } from "../../internal/reveal/identity";
+        const id = revealEntityId("dreamsign-gallery-action", entryId);
+        const binding = useRevealSource({ identity: { entityType: "dreamsign-gallery-action", entityId: id }, spec });`,
+    },
+    {
       name: "explicitly approved non-reveal portal owner stays legal",
       filename: "src/tango/components/controls/Select.tsx",
       code: `import { createPortal as mountPortal } from "react-dom";

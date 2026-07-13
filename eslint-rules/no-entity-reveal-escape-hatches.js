@@ -13,6 +13,7 @@ const CONTEXT_COMPONENTS = [
   "src/tango/components/atlas/AtlasNode.tsx",
   "src/tango/components/card/CardStatOrb.tsx",
   "src/tango/components/card/CardGalleryPanel.tsx",
+  "src/tango/components/card/DreamsignGalleryPanel.tsx",
   "src/tango/components/card/CardView.tsx",
   "src/tango/components/card/CompactGameCardRow.tsx",
   "src/tango/components/card/GlossaryTerm.tsx",

@@ -122,9 +122,17 @@ describe("DreamsignBazaarSiteScreen", () => {
     expect(restock?.getAttribute("aria-label")).toBe("Restock");
     expect(restock?.textContent).toBe("");
     expect(restock?.style.background).toBe("transparent");
+    expect(restock?.dataset.revealPrimaryVariant).toBe("icon");
+    const restockDescription = document.getElementById(
+      restock?.getAttribute("aria-describedby") ?? "",
+    );
+    expect(restockDescription?.textContent).toContain(
+      "Replace the current offers with three new Dreamsigns.",
+    );
     const restockGlyph = container.querySelector<HTMLElement>(
       "[data-dreamsign-gallery-action-glyph]",
     );
+    expect(Number.parseFloat(restockGlyph?.style.fontSize ?? "0")).toBeGreaterThan(70);
     expect(restockGlyph?.style.color).toBe("var(--text-on-accent)");
     expect(restockGlyph?.style.textShadow).toBe("var(--text-outline-media)");
     expect(restockGlyph?.parentElement?.style.background).toBe("");
