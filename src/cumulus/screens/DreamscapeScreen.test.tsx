@@ -14,7 +14,7 @@ import { CumulusRoot } from "../CumulusRoot";
 vi.mock("framer-motion", () => ({
   motion: {
     div: ({
-      animate: _animate,
+      animate,
       children,
       initial: _initial,
       transition: _transition,
@@ -24,7 +24,14 @@ vi.mock("framer-motion", () => ({
       children: ReactNode;
       initial?: unknown;
       transition?: unknown;
-    } & HTMLAttributes<HTMLDivElement>) => <div {...props}>{children}</div>,
+    } & HTMLAttributes<HTMLDivElement>) => (
+      <div
+        {...props}
+        data-motion-animate={JSON.stringify(animate)}
+      >
+        {children}
+      </div>
+    ),
   },
 }));
 
@@ -158,8 +165,14 @@ describe("DreamscapeScreen", () => {
     const reward = container.querySelector(
       '[data-essence-collection="s-essence"]',
     );
+    const departingSite = container.querySelector(
+      '[data-essence-site-departure="s-essence"]',
+    );
     expect(reward?.textContent).toContain("+275");
     expect(reward?.getAttribute("aria-label")).toBe("Gained 275 essence");
+    expect(departingSite?.getAttribute("data-motion-animate")).toBe(
+      JSON.stringify({ opacity: [1, 0.55, 0, 0] }),
+    );
     expect(onEssenceAnimationComplete).not.toHaveBeenCalled();
 
     const refreshedCollect = vi.fn();

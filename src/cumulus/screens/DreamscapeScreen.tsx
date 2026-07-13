@@ -41,7 +41,7 @@ export interface DreamscapeScreenProps {
   onEssenceAnimationComplete: (siteId: string) => void;
 }
 
-/** Duration of the gain-and-rise animation before the collected node leaves. */
+/** Duration of the gain-and-rise sequence; the site fades during its opening. */
 const ESSENCE_COLLECTION_DURATION_SECONDS = 1.2;
 
 /**
@@ -137,18 +137,63 @@ export function DreamscapeScreen({
             !model.site.isVisited ||
             model.site.id === collectingEssenceSiteId,
         )
-        .map((model) => (
-          <SiteNode
-            key={model.site.id}
-            model={
-              collectingEssenceSiteId === null
-                ? model
-                : { ...model, isInteractive: false }
-            }
-            motion
-            onSelect={handleSelectSite}
-          />
-        ))}
+        .map((model) => {
+          const isCollecting = model.site.id === collectingEssenceSiteId;
+          const renderedModel =
+            collectingEssenceSiteId === null
+              ? model
+              : { ...model, isInteractive: false };
+
+          if (model.site.type !== "Essence") {
+            return (
+              <SiteNode
+                key={model.site.id}
+                model={renderedModel}
+                motion
+                onSelect={handleSelectSite}
+              />
+            );
+          }
+
+          return (
+            <motion.div
+              key={model.site.id}
+              data-essence-site-departure={
+                isCollecting ? model.site.id : undefined
+              }
+              initial={false}
+              animate={{
+                opacity: isCollecting ? [1, 0.55, 0, 0] : 1,
+              }}
+              transition={
+                isCollecting
+                  ? {
+                      duration: ESSENCE_COLLECTION_DURATION_SECONDS,
+                      // Clear the site early while the gained value continues
+                      // rising through the rest of the collection sequence.
+                      times: [0, 0.18, 0.58, 1],
+                      ease: [0.16, 1, 0.3, 1],
+                    }
+                  : { duration: 0 }
+              }
+              style={{
+                position: "absolute",
+                left: `${String(model.pos.x)}%`,
+                top: `${String(model.pos.y)}%`,
+                width: 0,
+                height: 0,
+                zIndex: 10,
+                willChange: "opacity",
+              }}
+            >
+              <SiteNode
+                model={{ ...renderedModel, pos: { x: 0, y: 0 } }}
+                motion
+                onSelect={handleSelectSite}
+              />
+            </motion.div>
+          );
+        })}
 
       {collectingModel !== null &&
         collectingReward !== null && (
