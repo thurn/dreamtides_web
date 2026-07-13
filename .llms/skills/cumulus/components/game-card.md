@@ -21,7 +21,6 @@ The playable card object — art, cost, stats, and rules text — rendered at an
 | `unavailable` | `boolean` | no | `false` | Whether the action is unavailable while the card remains informative. |
 | `selected` | `boolean` | no | `false` | Draw the semantic selection state. |
 | `selectionColor` | `CumulusColor` = `"danger" \| "accent" \| "accent-bright" \| "accent-strong" \| "essence" \| "energy" \| "energy-bright" \| "spark" \| "points" \| "positive" \| "selected" \| "sale" \| "gold" \| "gold-light" \| "text-primary" \| "text-secondary" \| "text-muted" \| "text-faint" \| "text-on-accent" \| "white"` | no | — | Selection-ring color. Defaults to the shared selected role. |
-| `large` | `boolean` | no | `false` | Use the larger card typography preset. |
 | `hideRulesText` | `boolean` | no | `false` | Hide source rules on dense surfaces; the reveal stays complete. |
 | `figment` | `boolean` | no | `false` | Render the figment frame. |
 | `figmentTitleBar` | `boolean` | no | `false` | Render a title bar on a named figment. |
@@ -39,12 +38,14 @@ The playable card object — art, cost, stats, and rules text — rendered at an
 
 ### Render a card
 
-Give it a resolved `CardData` (loaded by UUID from the card database — never by name). `large` switches to the bigger card + text sizing.
+Give it a resolved `CardData` (loaded by UUID from the card database — never by name). Size the wrapper; GameCard fills its width and applies the mobile typography treatment automatically.
 
 ```tsx
 import { GameCard } from "src/cumulus/components/card/CardView";
 
-<GameCard model={{ cardId: card.id, displaySnapshot: card }} large />
+<div style={{ width: 240 }}>
+  <GameCard model={{ cardId: card.id, displaySnapshot: card }} />
+</div>
 ```
 
 ### Selected in a picker

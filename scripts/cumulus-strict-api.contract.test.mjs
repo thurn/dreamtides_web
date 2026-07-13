@@ -109,6 +109,11 @@ describe("Cumulus strict-API contract (resolved surface)", () => {
     expect(offenders).toEqual([]);
   });
 
+  it("GameCard does not expose caller-selected sizing", () => {
+    const propNames = (surface.GameCard ?? []).map((prop) => prop.name);
+    expect(propNames).not.toContain("large");
+  });
+
   it("only container components take `children` or a raw ReactNode slot", () => {
     // The AST rule catches this on the source; this asserts on the RESOLVED
     // surface, so a node slot that leaks in through an extended/aliased type

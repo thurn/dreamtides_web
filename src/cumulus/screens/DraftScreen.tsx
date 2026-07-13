@@ -235,7 +235,6 @@ export function DraftScreen({ view, onPick }: DraftScreenProps) {
                 >
                   <GameCard
                     model={model}
-                    large={!isDesktop}
                     onActivate={
                       pendingPick === null
                         ? () => {

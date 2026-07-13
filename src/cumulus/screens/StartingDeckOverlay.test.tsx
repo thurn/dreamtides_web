@@ -37,8 +37,8 @@ vi.mock("../../logging", () => ({
 // GameCard pulls in the card-database art pipeline; the overlay's behavior does
 // not depend on the card's pixels, so stub it to its name for the tests.
 vi.mock("../components/card/CardView", () => ({
-  GameCard: ({ model, large, testId }: { model: { displaySnapshot: CardData }; large?: boolean; testId?: string }) => (
-    <div data-testid={testId} data-game-card-large={large ? "true" : "false"}>{model.displaySnapshot.name}</div>
+  GameCard: ({ model, testId }: { model: { displaySnapshot: CardData }; testId?: string }) => (
+    <div data-testid={testId}>{model.displaySnapshot.name}</div>
   ),
 }));
 
@@ -231,12 +231,6 @@ describe("StartingDeckOverlay", () => {
     expect(gallery?.dataset.galleryFrame).toBe("floating");
     expect(gallery?.dataset.galleryColumns).toBe("5");
     expect(gallery?.style.backdropFilter).toContain("blur(");
-    expect(
-      container
-        .querySelector("[data-game-card-large]")
-        ?.getAttribute("data-game-card-large"),
-    ).toBe("true");
-
     act(() => {
       root.unmount();
     });

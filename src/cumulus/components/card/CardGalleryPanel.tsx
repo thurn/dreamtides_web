@@ -240,8 +240,6 @@ export interface CardGalleryPanelProps {
   spacing?: CardGallerySpacing;
   /** Floating-frame width behavior. Defaults to `content`. */
   widthMode?: CardGalleryWidthMode;
-  /** Draw each tile with GameCard's larger readable type scale. */
-  largeCards?: boolean;
   /** Test id for the panel root. */
   testId?: string;
   /**
@@ -573,7 +571,6 @@ export function CardGalleryPanel({
   frame = "floating",
   spacing = "regular",
   widthMode = "content",
-  largeCards = false,
   testId,
   cutoutAwareAccessory = false,
   onCardPress,
@@ -787,7 +784,6 @@ export function CardGalleryPanel({
                       model={card.model}
                       selected={card.selected}
                       selectionColor={card.selectionColor}
-                      large={largeCards}
                       unavailable={disabled}
                       testId={card.testId}
                       onActivate={interactive ? () => onCardPress(card.entryId) : undefined}

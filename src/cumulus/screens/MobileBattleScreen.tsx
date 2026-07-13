@@ -309,12 +309,12 @@ function SideZones({
 function FaceUpCard({
   card,
   zone,
-  large = false,
+  showRulesText = false,
   interaction,
 }: {
   readonly card: MobileBattleCardView;
   readonly zone: string;
-  readonly large?: boolean;
+  readonly showRulesText?: boolean;
   readonly interaction?: {
     readonly draggable: boolean;
     readonly onActivate?: () => void;
@@ -361,8 +361,7 @@ function FaceUpCard({
     >
       <GameCard
         model={card.model}
-        large={large}
-        hideRulesText={!large}
+        hideRulesText={!showRulesText}
         figment={card.figment}
         figmentTitleBar={card.figmentTitleBar}
         testId={`battle-card-face:${card.id}`}
@@ -562,7 +561,7 @@ function PlayerHand({
             <FaceUpCard
               card={card}
               zone="player-hand"
-              large
+              showRulesText
               interaction={
                 interactions === undefined
                   ? undefined

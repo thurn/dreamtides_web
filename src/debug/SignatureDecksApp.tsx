@@ -419,7 +419,7 @@ function CardLightbox({
       }}
     >
       <div style={{ width: "min(86vw, 360px)", flexShrink: 0 }}>
-        <GameCard model={{ cardId: card.id, displaySnapshot: card }} large />
+        <GameCard model={{ cardId: card.id, displaySnapshot: card }} />
       </div>
       {terms.length > 0 && (
         <div

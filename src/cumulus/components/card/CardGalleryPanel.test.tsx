@@ -9,10 +9,10 @@ import { CumulusRoot } from "../../CumulusRoot";
 import { CardGalleryPanel } from "./CardGalleryPanel";
 
 vi.mock("./CardView", () => ({
-  GameCard: ({ model, onActivate, testId, unavailable, large }: {
+  GameCard: ({ model, onActivate, testId, unavailable }: {
     model: { displaySnapshot: { name: string } }; onActivate?: () => void;
-    testId?: string; unavailable?: boolean; large?: boolean;
-  }) => <button data-testid={testId} data-unavailable={String(unavailable)} data-large={String(large)} onClick={unavailable ? undefined : onActivate}>{model.displaySnapshot.name}</button>,
+    testId?: string; unavailable?: boolean;
+  }) => <button data-testid={testId} data-unavailable={String(unavailable)} onClick={unavailable ? undefined : onActivate}>{model.displaySnapshot.name}</button>,
 }));
 
 function model(name: string) {

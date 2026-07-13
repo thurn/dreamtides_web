@@ -4,7 +4,7 @@
 // signature and the auto-generated control panel cannot synthesize. So this
 // wrapper loads the real card database and renders a curated, deterministic set
 // of cards identified by UUID (never by name — names are not unique). The
-// control-panel args (size, selection, dense mode, figment frame) are forwarded
+// control-panel args (selection, dense mode, figment frame) are forwarded
 // to every card so toggling a control demonstrates that affordance live across
 // the whole set; `docName` still points at the real GameCard so the props table
 // reports its actual API.
@@ -41,8 +41,6 @@ const CURATED_CARD_IDS = [
 ] as const;
 
 interface GameCardDemoArgs {
-  /** Larger card + text sizing (the compact-vs-large affordance). */
-  large?: boolean;
   /** Draw the selection ring. */
   selected?: boolean;
   /** Selection ring color. */
@@ -54,7 +52,6 @@ interface GameCardDemoArgs {
 }
 
 function GameCardDemo({
-  large = false,
   selected = false,
   selectionColor,
   hideRulesText = false,
@@ -113,10 +110,9 @@ function GameCardDemo({
       }}
     >
       {cards.map((card) => (
-        <div key={card.id} style={{ width: large ? 240 : 168, flex: "0 0 auto" }}>
+        <div key={card.id} style={{ width: 168, flex: "0 0 auto" }}>
           <GameCard
             model={{ cardId: card.id, displaySnapshot: card }}
-            large={large}
             selected={selected}
             selectionColor={selectionColor}
             hideRulesText={hideRulesText}
@@ -141,10 +137,12 @@ export const gameCardDemo: CumulusComponent = {
   usage: [
     {
       label: "Render a card",
-      note: "Give it a resolved `CardData` (loaded by UUID from the card database — never by name). `large` switches to the bigger card + text sizing.",
+      note: "Give it a resolved `CardData` (loaded by UUID from the card database — never by name). Size the wrapper; GameCard fills its width and applies the mobile typography treatment automatically.",
       code: `import { GameCard } from "src/cumulus/components/card/CardView";
 
-<GameCard model={{ cardId: card.id, displaySnapshot: card }} large />`,
+<div style={{ width: 240 }}>
+  <GameCard model={{ cardId: card.id, displaySnapshot: card }} />
+</div>`,
     },
     {
       label: "Selected in a picker",
@@ -159,7 +157,6 @@ export const gameCardDemo: CumulusComponent = {
   ],
   demo: {
     defaultArgs: {
-      large: false,
       selected: false,
       hideRulesText: false,
       figment: false,

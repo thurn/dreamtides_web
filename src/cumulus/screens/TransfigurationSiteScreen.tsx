@@ -406,7 +406,6 @@ function PickerPanel({
             ? "spacious"
             : "medium"
       }
-      largeCards={enhanced}
       testId="cumulus-transfiguration-picker"
       onCardPress={onPick}
     />
@@ -512,7 +511,6 @@ function DetailPanel({
             model={activeForm?.previewModel ?? candidate.model}
             selected={activeForm !== null}
             selectionColor={activeForm?.accent}
-            large
           />
         </div>
 

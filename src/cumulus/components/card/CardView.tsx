@@ -1617,8 +1617,6 @@ export interface GameCardProps {
   readonly selected?: boolean;
   /** Selection-ring color. Defaults to the shared selected role. */
   readonly selectionColor?: CumulusColor;
-  /** Use the larger card typography preset. */
-  readonly large?: boolean;
   /** Hide source rules on dense surfaces; the reveal stays complete. */
   readonly hideRulesText?: boolean;
   /** Render the figment frame. */
@@ -1640,7 +1638,6 @@ export function GameCard({
   unavailable = false,
   selected = false,
   selectionColor,
-  large = false,
   hideRulesText = false,
   figment = false,
   figmentTitleBar = false,
@@ -1710,7 +1707,6 @@ export function GameCard({
         transfiguration={model.transfiguration}
         selected={selected}
         selectionColor={selectionColor}
-        large={large}
         hideRulesText={hideRulesText}
         figment={figment}
         figmentTitleBar={figmentTitleBar}

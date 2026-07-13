@@ -135,7 +135,6 @@ export function StartingDeckOverlay({
               emptyLabel="No cards in starting deck."
               columns={isDesktop ? "five" : "four"}
               cardSize={isDesktop ? "roomy" : "standard"}
-              largeCards={isDesktop}
               frame={isDesktop ? "floating" : "fullBleed"}
               spacing={isDesktop ? "regular" : "compact"}
               cutoutAwareAccessory

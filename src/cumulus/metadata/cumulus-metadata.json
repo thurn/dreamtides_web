@@ -769,14 +769,6 @@
       "description": "Floating-frame width behavior. Defaults to `content`."
     },
     {
-      "name": "largeCards",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "Draw each tile with GameCard's larger readable type scale."
-    },
-    {
       "name": "testId",
       "tsType": "string",
       "unionMembers": [],
@@ -1828,14 +1820,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Selection-ring color. Defaults to the shared selected role."
-    },
-    {
-      "name": "large",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "Use the larger card typography preset."
     },
     {
       "name": "hideRulesText",
