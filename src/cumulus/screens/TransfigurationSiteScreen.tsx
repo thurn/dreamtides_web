@@ -462,7 +462,7 @@ function DetailPanel({
             height: mobile ? "auto" : undefined,
             aspectRatio: mobile ? String(CARD_ASPECT_RATIO_VALUE) : undefined,
             justifySelf: "center",
-            alignSelf: mobile ? "center" : undefined,
+            alignSelf: mobile ? "start" : undefined,
             minHeight: 0,
           }}
           data-transfiguration-detail-card-target=""

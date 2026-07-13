@@ -417,6 +417,11 @@ describe("TransfigurationSiteScreen", () => {
       container.querySelector("[data-transfiguration-detail-card-target]"),
     ).not.toBeNull();
     expect(
+      container.querySelector<HTMLElement>(
+        "[data-transfiguration-detail-card-target]",
+      )?.style.alignSelf,
+    ).toBe("start");
+    expect(
       container.querySelector<HTMLElement>("[data-transfiguration-options]")
         ?.dataset.transfigurationOptionLayout,
     ).toBe("compact");
