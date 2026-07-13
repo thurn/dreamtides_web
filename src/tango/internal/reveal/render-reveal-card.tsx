@@ -23,7 +23,11 @@ export function renderRevealCard(card: RevealCard, width: number): ReactElement 
   return (
     <Suspense fallback={<div data-reveal-render-pending="" style={{ width, aspectRatio: "2 / 3" }} />}>
       <div data-reveal-render="game-card" style={{ width }}>
-        <RevealGameCard card={card.displaySnapshot} eagerRulesFit />
+        <RevealGameCard
+          card={card.displaySnapshot}
+          transfiguration={card.transfiguration}
+          eagerRulesFit
+        />
       </div>
     </Suspense>
   );

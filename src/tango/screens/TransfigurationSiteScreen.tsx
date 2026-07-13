@@ -87,6 +87,9 @@ interface CardTravel {
 }
 
 const CARD_DISMISS_SCALE = 0;
+// The authored mobile card ceiling expressed as width so the card can fit both
+// its equal visual column and the live detail-row height without distortion.
+const MOBILE_DETAIL_CARD_MAX_WIDTH = 227;
 
 export function TransfigurationSiteScreen({
   view,
@@ -175,6 +178,9 @@ export function TransfigurationSiteScreen({
       scene={view.scene}
       guide={view.guide}
       mobileComposition="revelation"
+      mobileRegionSize={
+        picked !== null && picked.forms.length > 3 ? "expanded" : "standard"
+      }
       screenTestId="tango-transfiguration-site-screen"
       guideArtTestId="tango-transfiguration-guide-art"
       speechAnchorTestId="tango-transfiguration-speech-anchor"
@@ -202,38 +208,61 @@ export function TransfigurationSiteScreen({
             justifySelf: layout === "mobile" ? "center" : undefined,
           }}
         >
-          {picked === null ? (
-            <PickerPanel
-              layout={layout}
-              view={view}
-              onClose={onClose}
-              onPick={beginPick}
-            />
-          ) : (
-            <DetailPanel
-              layout={layout}
-              candidate={picked}
-              selectedFormType={selectedFormType}
-              confirming={confirming}
-              alreadyAccepted={view.alreadyAccepted}
-              onBack={goBack}
-              onSelectForm={(type) =>
-                setSelectedFormType((current) =>
-                  current === type ? null : type,
-                )
-              }
-              onConfirm={(form) => {
-                setConfirming(true);
-                onTransfigure(
-                  picked.entryId,
-                  form.type,
-                  form.description,
-                  form.effectDetails,
-                  form.essenceCost,
-                );
-              }}
-            />
-          )}
+          <motion.div
+            data-transfiguration-panel-viewport=""
+            initial={false}
+            animate={
+              layout === "mobile"
+                ? { height: picked === null ? "auto" : "100%" }
+                : undefined
+            }
+            transition={{
+              height: {
+                duration: reduceMotion === true ? 0 : 0.32,
+                ease: [0.22, 0.61, 0.36, 1],
+              },
+            }}
+            style={{
+              width: "100%",
+              maxHeight: "100%",
+              overflow: layout === "mobile" ? "hidden" : "visible",
+              display: "grid",
+              placeItems: "center",
+            }}
+          >
+            {picked === null ? (
+              <PickerPanel
+                layout={layout}
+                view={view}
+                onClose={onClose}
+                onPick={beginPick}
+              />
+            ) : (
+              <DetailPanel
+                layout={layout}
+                candidate={picked}
+                selectedFormType={selectedFormType}
+                confirming={confirming}
+                alreadyAccepted={view.alreadyAccepted}
+                onBack={goBack}
+                onSelectForm={(type) =>
+                  setSelectedFormType((current) =>
+                    current === type ? null : type,
+                  )
+                }
+                onConfirm={(form) => {
+                  setConfirming(true);
+                  onTransfigure(
+                    picked.entryId,
+                    form.type,
+                    form.description,
+                    form.effectDetails,
+                    form.essenceCost,
+                  );
+                }}
+              />
+            )}
+          </motion.div>
           {picked === null && fallbackCandidate !== null && (
             <div
               aria-hidden="true"
@@ -412,10 +441,11 @@ function DetailPanel({
         }
         style={{
           display: "grid",
+          containerType: mobile ? "size" : undefined,
           flex: mobile ? "1 1 auto" : undefined,
           minHeight: mobile ? 0 : undefined,
           gridTemplateColumns: mobile
-            ? "minmax(0, 1fr) auto"
+            ? "minmax(0, 1fr) minmax(0, 1fr)"
             : "minmax(220px, 0.82fr) minmax(320px, 1.18fr)",
           gridTemplateRows: mobile ? "minmax(0, 1fr)" : undefined,
           gap: mobile ? token("--space-4") : token("--space-8"),
@@ -429,10 +459,10 @@ function DetailPanel({
           style={{
             // Let short phones spend every remaining vertical pixel on the
             // card while wide/tall phones stop at the authored readable size.
-            width: mobile ? "auto" : "min(100%, 278px)",
-            height: mobile ? "100%" : undefined,
-            maxWidth: mobile ? "58vw" : undefined,
-            maxHeight: mobile ? 318 : undefined,
+            width: mobile
+              ? `min(100%, calc(100cqh * ${String(CARD_ASPECT_RATIO_VALUE)}), ${String(MOBILE_DETAIL_CARD_MAX_WIDTH)}px)`
+              : "min(100%, 278px)",
+            height: mobile ? "auto" : undefined,
             aspectRatio: mobile ? String(CARD_ASPECT_RATIO_VALUE) : undefined,
             justifySelf: "center",
             alignSelf: mobile ? "center" : undefined,
@@ -452,7 +482,7 @@ function DetailPanel({
           style={{
             minWidth: 0,
             minHeight: mobile ? 0 : undefined,
-            width: mobile ? "auto" : undefined,
+            width: mobile ? "100%" : undefined,
             flex: mobile ? "0 0 auto" : undefined,
             display: "flex",
             flexDirection: "column",
@@ -470,6 +500,7 @@ function DetailPanel({
               height: mobile ? "100%" : undefined,
               boxSizing: "border-box",
               flexDirection: "column",
+              alignItems: mobile ? "center" : undefined,
               justifyContent: mobile ? "center" : undefined,
               gap: token("--space-3"),
               maxHeight: mobile ? undefined : "min(52vh, 520px)",
@@ -593,6 +624,13 @@ function DetailPanel({
           label={confirming ? "Reforging…" : "Transfigure"}
           cost={activeForm?.essenceCost ?? null}
           costSeparator="dot"
+          widthReservations={[
+            { label: "Transfigure", cost: null },
+            ...candidate.forms.flatMap((form) => [
+              { label: "Transfigure", cost: form.essenceCost },
+              { label: "Reforging…", cost: form.essenceCost },
+            ]),
+          ]}
           disabled={disabled}
           onPress={() => {
             if (activeForm !== null) onConfirm(activeForm);

@@ -243,11 +243,18 @@ describe("TransfigurationSiteScreen", () => {
     const commit = container.querySelector<HTMLButtonElement>(
       '[data-testid="tango-transfiguration-confirm"]',
     );
+    const visibleCommitContent = (): string | undefined =>
+      commit?.querySelector<HTMLElement>("[data-glass-button-content]")
+        ?.textContent ?? undefined;
     expect(commit?.dataset.glassVariant).toBe("accent");
-    expect(commit?.textContent).toBe("Transfigure");
-    expect(commit?.textContent).not.toContain("Card");
+    expect(visibleCommitContent()).toBe("Transfigure");
+    expect(visibleCommitContent()).not.toContain("Card");
     expect(commit?.getAttribute("aria-disabled")).toBe("true");
     expect(commit?.style.opacity).toBe("0.5");
+    expect(
+      commit?.querySelectorAll("[data-glass-button-width-reservation]"),
+    ).toHaveLength(5);
+    expect(commit?.textContent).toContain("Reforging…·80");
     expect(container.querySelector('[role="radio"][aria-checked="true"]')).toBeNull();
 
     const empowered = container.querySelector<HTMLButtonElement>(
@@ -259,7 +266,7 @@ describe("TransfigurationSiteScreen", () => {
     expect(empowered?.getAttribute("aria-checked")).toBe("true");
     expect(commit?.getAttribute("aria-disabled")).toBeNull();
     expect(commit?.style.opacity).toBe("1");
-    expect(commit?.textContent).toBe("Transfigure·40");
+    expect(visibleCommitContent()).toBe("Transfigure·40");
     act(() => commit?.click());
     expect(onTransfigure).toHaveBeenCalledWith(
       "entry-1",
@@ -421,12 +428,31 @@ describe("TransfigurationSiteScreen", () => {
     expect(
       container.querySelector<HTMLElement>(
         "[data-transfiguration-detail-body]",
+      )?.style.containerType,
+    ).toBe("size");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-transfiguration-detail-body]",
       )?.style.gridTemplateRows,
     ).toBe("minmax(0, 1fr)");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-transfiguration-detail-body]",
+      )?.style.gridTemplateColumns,
+    ).toBe("minmax(0, 1fr) minmax(0, 1fr)");
     expect(
       container.querySelector<HTMLElement>("[data-transfiguration-options]")
         ?.style.flexDirection,
     ).toBe("column");
+    expect(
+      container.querySelector<HTMLElement>("[data-transfiguration-options]")
+        ?.style.alignItems,
+    ).toBe("center");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-transfiguration-panel-viewport]",
+      )?.style.overflow,
+    ).toBe("hidden");
     expect(container.querySelectorAll('[role="radio"]')).toHaveLength(2);
     expect(
       container.querySelector<HTMLButtonElement>(
@@ -456,6 +482,53 @@ describe("TransfigurationSiteScreen", () => {
       container.querySelector<HTMLElement>("[data-transfiguration-actions]")
         ?.style.justifyContent,
     ).toBe("center");
+
+    act(() => root.unmount());
+  });
+
+  it("grows the mobile panel upward for a dense form offer", () => {
+    stubMatchMedia(true, false);
+    const denseView = view();
+    const first = denseView.candidates[0];
+    if (first === undefined) throw new Error("Missing candidate fixture");
+    const inspired = {
+      ...first.forms[0],
+      type: "Inspired" as const,
+      accent: TRANSFIGURATION_COLORS.Inspired,
+    };
+    const enduring = {
+      ...first.forms[0],
+      type: "Enduring" as const,
+      accent: TRANSFIGURATION_COLORS.Enduring,
+    };
+    const { container, root } = mount(
+      <TransfigurationSiteScreen
+        view={{
+          ...denseView,
+          candidates: [
+            { ...first, forms: [...first.forms, inspired, enduring] },
+            ...denseView.candidates.slice(1),
+          ],
+        }}
+        onClose={vi.fn()}
+        onTransfigure={vi.fn()}
+      />,
+    );
+
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="tango-transfiguration-card-entry-1"]',
+        )
+        ?.click();
+    });
+
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-guide-gallery-mobile-region]",
+      )?.dataset.guideGalleryMobileRegionSize,
+    ).toBe("expanded");
+    expect(container.querySelectorAll('[role="radio"]')).toHaveLength(4);
 
     act(() => root.unmount());
   });

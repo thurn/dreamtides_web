@@ -1668,6 +1668,9 @@ export function GameCard({
         kind: "gameCard",
         cardId: model.cardId,
         displaySnapshot: model.displaySnapshot,
+        ...(model.transfiguration === undefined
+          ? {}
+          : { transfiguration: model.transfiguration }),
       },
       secondaries: glossaryCards,
     },

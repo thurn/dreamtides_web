@@ -2,6 +2,7 @@
 // sites whose primary action lives in a glass gallery. Mobile stacks the guide
 // band over the gallery; desktop places the guide and gallery side by side.
 
+import { motion, useReducedMotion } from "framer-motion";
 import type { ReactElement } from "react";
 import {
   QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
@@ -37,6 +38,8 @@ export interface GuideGallerySiteLayoutProps {
   renderGallery: (layout: "mobile" | "desktop") => ReactElement;
   /** Mobile guide/gallery staging. Defaults to the compact stacked band. */
   mobileComposition?: "band" | "revelation";
+  /** Revelation gallery height. Expanded grows upward for dense content. */
+  mobileRegionSize?: "standard" | "expanded";
   /** Stable test id for the screen root. */
   screenTestId?: string;
   /** Stable test id for the guide art. */
@@ -51,6 +54,7 @@ const GUIDE_TOP_ROWS = "clamp(170px, 28dvh, 240px) minmax(0, 1fr)";
 const REVELATION_VERTICAL_OFFSET = "10dvh";
 const REVELATION_GUIDE_TOP = `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${REVELATION_VERTICAL_OFFSET})`;
 const REVELATION_GALLERY_TOP = `max(44dvh, calc(${token("--safe-top")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-7")} + ${REVELATION_VERTICAL_OFFSET}))`;
+const REVELATION_GALLERY_TOP_EXPANDED = `max(36dvh, calc(${token("--safe-top")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-7")} + ${REVELATION_VERTICAL_OFFSET}))`;
 // The grand desktop HUD is taller than the root HUD token.
 const DESKTOP_HUD_CLEARANCE = `calc(${QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-9")})`;
 
@@ -61,6 +65,7 @@ export function GuideGallerySiteLayout({
   guide,
   renderGallery,
   mobileComposition = "band",
+  mobileRegionSize = "standard",
   screenTestId,
   guideArtTestId,
   speechAnchorTestId,
@@ -119,6 +124,7 @@ export function GuideGallerySiteLayout({
         <MobileRevelationComposition
           guide={guide}
           renderGallery={renderGallery}
+          regionSize={mobileRegionSize}
           guideArtTestId={guideArtTestId}
           speechAnchorTestId={speechAnchorTestId}
           speechBubbleTestId={speechBubbleTestId}
@@ -141,16 +147,19 @@ export function GuideGallerySiteLayout({
 function MobileRevelationComposition({
   guide,
   renderGallery,
+  regionSize,
   guideArtTestId,
   speechAnchorTestId,
   speechBubbleTestId,
 }: {
   readonly guide: GuideGalleryGuideView;
   readonly renderGallery: (layout: "mobile" | "desktop") => ReactElement;
+  readonly regionSize: "standard" | "expanded";
   readonly guideArtTestId?: string;
   readonly speechAnchorTestId?: string;
   readonly speechBubbleTestId?: string;
 }) {
+  const reduceMotion = useReducedMotion();
   return (
     <>
       <section
@@ -173,11 +182,22 @@ function MobileRevelationComposition({
           speechBubbleTestId={speechBubbleTestId}
         />
       </section>
-      <main
+      <motion.main
         data-guide-gallery-mobile-region="revelation"
+        data-guide-gallery-mobile-region-size={regionSize}
+        layout="size"
+        transition={{
+          layout: {
+            duration: reduceMotion === true ? 0 : 0.32,
+            ease: [0.22, 0.61, 0.36, 1],
+          },
+        }}
         style={{
           position: "absolute",
-          top: REVELATION_GALLERY_TOP,
+          top:
+            regionSize === "expanded"
+              ? REVELATION_GALLERY_TOP_EXPANDED
+              : REVELATION_GALLERY_TOP,
           left: 0,
           right: 0,
           bottom: QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
@@ -188,7 +208,7 @@ function MobileRevelationComposition({
         }}
       >
         {renderGallery("mobile")}
-      </main>
+      </motion.main>
     </>
   );
 }

@@ -1,5 +1,6 @@
 import type { FrozenCardData } from "../../../types/cards";
 import type { CardId } from "../../../types/card-identity";
+import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
 import type { InfoCardProps, InfoCardVariant } from "../../components/overlay/InfoCard";
 import type { Glyph } from "../../primitives/glyph";
 
@@ -27,6 +28,8 @@ export type RevealCard =
       readonly cardId: CardId;
       /** Strict resolved display semantics; its id must equal the canonical cardId. */
       readonly displaySnapshot: FrozenCardData;
+      /** Optional applied transfiguration rendered on the reading copy. */
+      readonly transfiguration?: CardTransfigurationDisplay;
     }
   | { readonly kind: "galleryAction"; readonly action: RevealGalleryActionModel }
   | { readonly kind: "infoCard"; readonly card: RevealInfoCardModel };

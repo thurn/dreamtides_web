@@ -134,6 +134,49 @@ describe("GameCard reveal contract", () => {
     act(() => root.unmount());
   });
 
+  it("renders an applied proposed transfiguration on the reading copy", async () => {
+    const displaySnapshot = card({ energyCost: 1 });
+    const { container, root } = mount(
+      <GameCard
+        model={{
+          cardId: CARD_ID,
+          displaySnapshot,
+          transfiguration: {
+            type: "Empowered",
+            color: "#20d6a2",
+            markedText: displaySnapshot.renderedText,
+            energyChanged: true,
+            sparkChanged: false,
+            fastChanged: false,
+          },
+        }}
+      />,
+    );
+    const source = container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    act(() => {
+      source?.dispatchEvent(
+        pointer("pointerover", { pointerType: "mouse", pointerId: 1 }),
+      );
+    });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+    remeasure();
+    await vi.waitFor(() =>
+      expect(
+        document.querySelector('[data-tango-reveal-card="primary"]'),
+      ).not.toBeNull(),
+    );
+    expect(
+      document.querySelector(
+        '[data-tango-reveal-card="primary"] [aria-label="Empowered transfiguration"]',
+      ),
+    ).not.toBeNull();
+    act(() => root.unmount());
+  });
+
   it("keeps informative unavailable cards focusable while suppressing activation", async () => {
     const activate = vi.fn();
     const { container, root } = mount(<GameCard model={model()} unavailable onActivate={activate} />);
