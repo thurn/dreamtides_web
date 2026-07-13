@@ -130,7 +130,6 @@ def main() -> int:
         lowered = asset_path.lower()
         protected = (
             asset_path == "cumulus/Assets/Settings/Mobile_Renderer.asset"
-            or asset_path.startswith("cumulus/Assets/TextMesh Pro/")
             or lowered.endswith((".uxml", ".uss"))
             or "uidocument" in lowered
             or (
@@ -179,8 +178,7 @@ def main() -> int:
     field = source_fields()
     forbidden_import = re.compile(
         r"\busing\s+(?:(?:[A-Za-z_]\w*)\s*=\s*)?"
-        r"(?:(?:global\s*::\s*)?UnityEngine\s*\.\s*(?:UIElements|UI)|"
-        r"(?:global\s*::\s*)?TMPro)"
+        r"(?:global\s*::\s*)?UnityEngine\s*\.\s*(?:UIElements|UI)"
         r"(?:\s*\.\s*[A-Za-z_]\w*)*\s*;"
     )
     source_root = root / "cumulus/Assets/CumulusMvp"

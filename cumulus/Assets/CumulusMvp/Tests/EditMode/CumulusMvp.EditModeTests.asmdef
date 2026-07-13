@@ -5,6 +5,7 @@
     "CumulusMvp.Editor",
     "CumulusMvp.Runtime",
     "CumulusMvp.TestSupport",
+    "Unity.TextMeshPro",
     "Unity.RenderPipelines.Universal.Runtime"
   ],
   "includePlatforms": [

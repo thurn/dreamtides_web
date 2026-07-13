@@ -3,6 +3,7 @@
   "rootNamespace": "CumulusMvp.Editor",
   "references": [
     "CumulusMvp.Runtime",
+    "Unity.TextMeshPro",
     "Unity.RenderPipelines.Universal.Runtime"
   ],
   "includePlatforms": [

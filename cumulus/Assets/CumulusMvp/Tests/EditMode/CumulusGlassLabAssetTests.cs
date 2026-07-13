@@ -18,6 +18,7 @@ using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 namespace CumulusMvp.Tests
 {
@@ -35,6 +36,21 @@ namespace CumulusMvp.Tests
         private const string RendererPath = "Assets/Settings/PC_Renderer.asset";
         private const string MobileRendererPath = "Assets/Settings/Mobile_Renderer.asset";
         private const string BuildSettingsPath = "ProjectSettings/EditorBuildSettings.asset";
+
+        [Test]
+        public void Rebuild_DoesNotOwnTextRenderingAssets()
+        {
+            InvokeRebuild();
+
+            Assert.That(
+                AssetDatabase.LoadAssetAtPath<Material>(
+                    "Assets/CumulusMvp/Materials/CumulusTextOutline.mat"),
+                Is.Null);
+            Assert.That(
+                AssetDatabase.LoadAssetAtPath<Shader>(
+                    "Assets/CumulusMvp/Shaders/CumulusTextOutline.shader"),
+                Is.Null);
+        }
 
         [Test]
         public void ShopGlassDemo_UsesWebShopBackdropAndOneCenteredSquareGlassPanel()
@@ -473,15 +489,19 @@ namespace CumulusMvp.Tests
                 Assert.That(frame.sharedMaterial.renderQueue, Is.LessThan((int)RenderQueue.Transparent));
                 Assert.That(frame.shadowCastingMode, Is.EqualTo(ShadowCastingMode.On));
 
-                TextMesh[] labels = objects.Select(item => item.GetComponent<TextMesh>())
+                TextMeshPro[] labels = objects.Select(item => item.GetComponent<TextMeshPro>())
                     .Where(label => label != null)
                     .ToArray();
                 Assert.That(labels, Has.Length.EqualTo(2));
                 Assert.That(labels.Select(label => label.name), Is.EquivalentTo(new[] { "Primary Label", "Button Label" }));
-                Assert.That(labels, Has.All.Matches<TextMesh>(label => label.GetComponentInParent<Canvas>() == null));
-                Assert.That(labels, Has.All.Matches<TextMesh>(label => label.color.r >= 0.9f && label.color.g >= 0.8f));
-                Assert.That(labels, Has.All.Matches<TextMesh>(label =>
-                    label.GetComponent<Renderer>().sharedMaterial.shader.name.Contains("Text")));
+                Assert.That(labels.Select(label => label.text), Is.EquivalentTo(new[] { "CUMULUS GLASS", "TRAVEL" }));
+                Assert.That(labels, Has.All.Matches<TextMeshPro>(label => label.GetComponentInParent<Canvas>() == null));
+                Assert.That(labels, Has.All.Matches<TextMeshPro>(label => label.color == Color.white));
+                Assert.That(labels, Has.All.Matches<TextMeshPro>(label => label.font != null));
+                Assert.That(labels, Has.All.Matches<TextMeshPro>(label =>
+                    AssetDatabase.GetAssetPath(label.fontSharedMaterial) ==
+                    "Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset"));
+                Assert.That(objects.Select(item => item.GetComponent<TextMesh>()).Any(label => label != null), Is.False);
 
                 CumulusPressable[] pressables = objects.Select(item => item.GetComponent<CumulusPressable>())
                     .Where(pressable => pressable != null)

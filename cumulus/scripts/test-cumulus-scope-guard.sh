@@ -237,17 +237,28 @@ expect_reject_with "UI Toolkit import" "forbidden UI namespace import" \
 
 for import_case in \
   "ugui|using UnityEngine.UI; public sealed class BadUi { }" \
-  "tmp|using TMPro; public sealed class BadTmp { }" \
   "aliased-ugui|using UI = UnityEngine.UI; public sealed class BadAliasedUi { }" \
   "global-elements|using Elements = global::UnityEngine.UIElements; public sealed class BadGlobalElements { }" \
-  "aliased-tmp|using Text = TMPro; public sealed class BadAliasedTmp { }" \
   "aliased-ugui-descendant|using Button = UnityEngine.UI.Button; public sealed class BadAliasedButton { }" \
-  "global-elements-descendant|using Visual = global::UnityEngine.UIElements.VisualElement; public sealed class BadAliasedVisual { }" \
-  "aliased-tmp-descendant|using Label = TMPro.TextMeshPro; public sealed class BadAliasedLabel { }"; do
+  "global-elements-descendant|using Visual = global::UnityEngine.UIElements.VisualElement; public sealed class BadAliasedVisual { }"; do
   import_name="${import_case%%|*}"; import_body="${import_case#*|}"; fixture="$TEST_ROOT/$import_name"
   write_source "$fixture" "cumulus/Assets/CumulusMvp/Runtime/Bad${import_name}.cs" "$import_body"
   expect_reject_with "$import_name import" "forbidden UI namespace import" python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$fixture"
 done
+
+tmp_import="$TEST_ROOT/tmp-import"
+write_source "$tmp_import" "cumulus/Assets/CumulusMvp/Editor/TmpLabelBuilder.cs" \
+  'using TMPro; public sealed class TmpLabelBuilder { public TextMeshPro Build() => null; }'
+expect_accept "TextMesh Pro import" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$tmp_import"
+
+tmp_resource="$TEST_ROOT/tmp-resource"
+mkdir -p "$tmp_resource/cumulus/Assets/TextMesh Pro/Resources"
+printf 'fixture\n' > "$tmp_resource/cumulus/Assets/TextMesh Pro/Resources/Font.asset"
+printf 'fileFormatVersion: 2\nguid: 1234567890abcdef1234567890abcdef\n' \
+  > "$tmp_resource/cumulus/Assets/TextMesh Pro/Resources/Font.asset.meta"
+expect_accept "TextMesh Pro resource" \
+  python3 "$GUARD" --repo-root "$REPO_ROOT" --fixture-root "$tmp_resource"
 
 missing_meta="$TEST_ROOT/missing-meta"
 mkdir -p "$missing_meta/cumulus/Assets/CumulusMvp"

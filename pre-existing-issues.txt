@@ -167,3 +167,11 @@ Transfiguration mobile QA — detail layout clips heading and confirm action
   The card stat orbs and their transfiguration badges remain inside the card.
   Make the detail composition vertically scrollable and constrain the action
   row to the mobile viewport without changing the desktop stage geometry.
+
+Unity project serialization — built-in Tango key was renamed
+
+- `cumulus/ProjectSettings/ProjectSettings.asset` contains
+  `AndroidEnableCumulus`, but Unity 6000.5.3f1 serializes this built-in player
+  setting as `AndroidEnableTango`. Opening the project therefore rewrites the
+  tracked file. Restore Unity's canonical field name in a dedicated cleanup so
+  normal editor runs keep the project settings byte-stable.

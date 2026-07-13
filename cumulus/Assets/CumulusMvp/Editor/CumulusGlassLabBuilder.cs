@@ -11,6 +11,7 @@ using CumulusMvp.Interaction;
 using CumulusMvp.Materials;
 using CumulusMvp.Motion;
 using CumulusMvp.Rendering;
+using TMPro;
 using UnityEditor;
 using UnityEditor.Events;
 using UnityEditor.SceneManagement;
@@ -29,7 +30,6 @@ namespace CumulusMvp.Editor
         private const string SolidChromePath = MaterialsFolder + "/CumulusSolidChrome.mat";
         private const string BackdropPath = MaterialsFolder + "/CumulusBackdropUnlit.mat";
         private const string ShadowReceiverPath = MaterialsFolder + "/CumulusShadowReceiver.mat";
-        private const string TextOutlinePath = MaterialsFolder + "/CumulusTextOutline.mat";
         private const string BlurPath = MaterialsFolder + "/CumulusBlur.mat";
         private const string LibraryPath = MaterialsFolder + "/CumulusMaterialLibrary.asset";
         private const string LightingProfilePath = MaterialsFolder + "/CumulusGlassLightingProfile.asset";
@@ -40,6 +40,8 @@ namespace CumulusMvp.Editor
         private const string ScenesFolder = "Assets/Scenes";
         private const string ScenePath = ScenesFolder + "/CumulusGlassLab.unity";
         private const string RendererPath = "Assets/Settings/PC_Renderer.asset";
+        private const string DefaultTmpFontPath =
+            "Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset";
 
         [MenuItem("Cumulus MVP/Rebuild Glass Lab")]
         public static void Rebuild()
@@ -52,7 +54,12 @@ namespace CumulusMvp.Editor
             Mesh panelMesh = ReconcilePanelMesh();
             CumulusMaterialLibrary library = AssetDatabase.LoadAssetAtPath<CumulusMaterialLibrary>(LibraryPath);
             library.Validate();
-            GameObject panelPrefab = ReconcilePanelPrefab(panelMesh, library);
+            TMP_FontAsset textFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(DefaultTmpFontPath);
+            if (textFont == null)
+            {
+                throw new InvalidOperationException($"Missing TextMesh Pro font asset at {DefaultTmpFontPath}.");
+            }
+            GameObject panelPrefab = ReconcilePanelPrefab(panelMesh, library, textFont);
             ReconcileScene(panelMesh, panelPrefab, library);
             InstallRendererFeature();
             InstallBuildSettings();
@@ -85,11 +92,6 @@ namespace CumulusMvp.Editor
                 ShadowReceiverPath,
                 RequireShader("Universal Render Pipeline/Lit"));
             ConfigureShadowReceiver(shadowReceiver);
-
-            Material textOutline = GetOrCreateMaterial(
-                TextOutlinePath,
-                RequireShader("CumulusMvp/TextOutline"));
-            ConfigureTextOutline(textOutline);
 
             Material blur = GetOrCreateMaterial(BlurPath, RequireShader("Hidden/CumulusMvp/SeparableBlur"));
             ConfigureBlur(blur);
@@ -136,7 +138,8 @@ namespace CumulusMvp.Editor
 
         private static GameObject ReconcilePanelPrefab(
             Mesh panelMesh,
-            CumulusMaterialLibrary library)
+            CumulusMaterialLibrary library,
+            TMP_FontAsset textFont)
         {
             GameObject existing = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
             bool loadedContents = existing != null;
@@ -170,12 +173,14 @@ namespace CumulusMvp.Editor
                     true);
                 RemoveUnexpectedChildren(glassFace.transform);
                 ConfigureFrame(root.transform, library.Resolve(CumulusMaterialRole.SolidChrome));
-                ConfigureText(
+                ConfigureWorldSpaceText(
                     EnsureChild(root.transform, "Primary Label"),
                     "CUMULUS GLASS",
                     new Vector3(0f, 0.48f, -0.16f),
                     Vector3.one,
-                    0.032f);
+                    new Vector2(4f, 0.8f),
+                    3.2f,
+                    textFont);
 
                 GameObject buttonRoot = EnsureChild(root.transform, "On Glass Button");
                 RemoveUnexpectedComponents(
@@ -206,12 +211,14 @@ namespace CumulusMvp.Editor
                     ShadowCastingMode.Off,
                     true);
                 RemoveUnexpectedChildren(buttonVisual.transform, "Button Label");
-                ConfigureText(
+                ConfigureWorldSpaceText(
                     EnsureChild(buttonVisual.transform, "Button Label"),
                     "TRAVEL",
                     new Vector3(0f, 0f, -0.12f),
                     Vector3.one,
-                    0.025f);
+                    new Vector2(1.48f, 0.54f),
+                    5.2f,
+                    textFont);
 
                 CumulusPressable pressable = EnsureComponent<CumulusPressable>(buttonRoot);
                 SetObjectReference(pressable, "hitCollider", collider);
@@ -318,33 +325,36 @@ namespace CumulusMvp.Editor
             SetLocalTransform(target.transform, localPosition, Quaternion.identity, localScale);
         }
 
-        private static void ConfigureText(
+        private static void ConfigureWorldSpaceText(
             GameObject target,
             string text,
             Vector3 localPosition,
             Vector3 localScale,
-            float characterSize)
+            Vector2 bounds,
+            float fontSize,
+            TMP_FontAsset font)
         {
             target.SetActive(true);
-            RemoveUnexpectedComponents(target, typeof(Transform), typeof(TextMesh), typeof(MeshRenderer));
+            RemoveUnexpectedComponents(
+                target,
+                typeof(Transform),
+                typeof(RectTransform),
+                typeof(TextMeshPro),
+                typeof(MeshRenderer));
             RemoveUnexpectedChildren(target.transform);
-            TextMesh textMesh = EnsureComponent<TextMesh>(target);
-            textMesh.text = text;
-            textMesh.anchor = TextAnchor.MiddleCenter;
-            textMesh.alignment = TextAlignment.Center;
-            textMesh.fontSize = 64;
-            textMesh.characterSize = characterSize;
-            textMesh.fontStyle = FontStyle.Normal;
-            textMesh.offsetZ = 0f;
-            textMesh.lineSpacing = 1f;
-            textMesh.tabSize = 4f;
-            textMesh.color = new Color(1f, 0.94f, 0.82f, 1f);
-            textMesh.richText = false;
-            Font font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            TextMeshPro textMesh = EnsureComponent<TextMeshPro>(target);
             textMesh.font = font;
-            textMesh.GetComponent<Renderer>().sharedMaterial =
-                AssetDatabase.LoadAssetAtPath<Material>(TextOutlinePath);
-            ConfigureRenderer(textMesh.GetComponent<Renderer>(), ShadowCastingMode.Off, false);
+            textMesh.fontSharedMaterial = font.material;
+            textMesh.text = text;
+            textMesh.alignment = TextAlignmentOptions.Center;
+            textMesh.fontSize = fontSize;
+            textMesh.fontStyle = FontStyles.Normal;
+            textMesh.color = Color.white;
+            textMesh.richText = false;
+            textMesh.textWrappingMode = TextWrappingModes.NoWrap;
+            textMesh.overflowMode = TextOverflowModes.Overflow;
+            textMesh.rectTransform.sizeDelta = bounds;
+            ConfigureRenderer(textMesh.renderer, ShadowCastingMode.Off, false);
             SetLocalTransform(target.transform, localPosition, Quaternion.identity, localScale);
         }
 
@@ -981,16 +991,6 @@ namespace CumulusMvp.Editor
             material.DisableKeyword("_SURFACE_TYPE_TRANSPARENT");
             material.DisableKeyword("_ALPHATEST_ON");
             material.renderQueue = (int)RenderQueue.Geometry;
-            EditorUtility.SetDirty(material);
-        }
-
-        private static void ConfigureTextOutline(Material material)
-        {
-            Font font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            material.mainTexture = font.material.mainTexture;
-            material.SetColor("_OutlineColor", new Color(0.006f, 0.004f, 0.01f, 1f));
-            material.SetFloat("_OutlineWidth", 10f);
-            material.renderQueue = (int)RenderQueue.Transparent + 20;
             EditorUtility.SetDirty(material);
         }
 

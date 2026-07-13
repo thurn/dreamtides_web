@@ -216,7 +216,7 @@ write_asset_manifest() {
       Assets/CumulusMvp/Materials/CumulusSceneGlass.mat \
       Assets/CumulusMvp/Materials/CumulusShadowReceiver.mat \
       Assets/CumulusMvp/Materials/CumulusSolidChrome.mat \
-      Assets/CumulusMvp/Materials/CumulusTextOutline.mat \
+      "Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset" \
       Assets/CumulusMvp/Meshes/CumulusPanel.asset \
       Assets/CumulusMvp/Prefabs/CumulusGlassPanel.prefab \
       ProjectSettings/EditorBuildSettings.asset; do

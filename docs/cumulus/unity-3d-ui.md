@@ -521,9 +521,9 @@ rather than by ad hoc graph variants.
 
 ### Typography and legibility
 
-Text is world-space geometry or a mesh-based text renderer placed with a small,
-intentional separation from its supporting surface. It is not rasterized into
-the glass capture.
+Text uses standard world-space TextMesh Pro geometry placed with a small,
+intentional separation from its supporting surface and outside the glass
+capture.
 
 Text on liquid glass uses the Cumulus on-glass primary and muted roles. Accent
 purple is reserved for framing, glow, and semantic marks rather than paragraph
