@@ -834,7 +834,7 @@
       ],
       "required": false,
       "defaultValue": null,
-      "description": "Monochrome shape marker for a transfiguration-changed stat. Empowered uses\na bolt on energy cost; Kindled uses a flame on spark."
+      "description": "Monochrome direction marker for a transfiguration-changed stat. Empowered\nuses a down arrow on energy cost; Kindled uses an up arrow on spark."
     }
   ],
   "CardTermDefinitions": [

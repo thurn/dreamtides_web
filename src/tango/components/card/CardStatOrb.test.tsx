@@ -41,8 +41,8 @@ afterEach(() => {
 
 describe("CardStatOrb transfiguration badge", () => {
   it.each([
-    ["empowered", "bx-bolt"],
-    ["kindled", "bx-flame"],
+    ["empowered", "bx-arrow-down"],
+    ["kindled", "bx-arrow-up"],
   ] as const)("renders the %s shape while preserving the white numeral", (changeBadge, glyphClass) => {
     const { container, root } = mountOrb("12", changeBadge);
     const orb = container.querySelector<HTMLElement>("[data-card-stat]");
@@ -57,6 +57,7 @@ describe("CardStatOrb transfiguration badge", () => {
       "rgb(255, 255, 255)",
     );
     expect(badge?.style.width).toBe("calc(30px)");
+    expect(badge?.style.right).toBe("calc(-9px)");
     expect(badge?.style.background).toBe("rgb(0, 0, 0)");
     expect(badge?.style.border).toContain("rgb(255, 255, 255)");
     expect(badge?.querySelector(`.${glyphClass}`)).not.toBeNull();

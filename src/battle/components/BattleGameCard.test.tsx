@@ -137,7 +137,7 @@ describe("BattleGameCard", () => {
     expect(container.querySelector<HTMLElement>('[data-card-stat="spark"] div')?.style.color).toBe("rgb(255, 255, 255)");
     const badge = container.querySelector<HTMLElement>('[data-card-stat-change="kindled"]');
     expect(badge).not.toBeNull();
-    expect(badge?.querySelector(".bx-flame")).not.toBeNull();
+    expect(badge?.querySelector(".bx-arrow-up")).not.toBeNull();
     act(() => root.unmount()); container.remove();
   });
 

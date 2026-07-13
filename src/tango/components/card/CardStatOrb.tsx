@@ -29,11 +29,11 @@ const CHANGE_BADGE_BY_TYPE: Readonly<
   Record<CardStatChangeBadge, { glyph: Glyph; label: string }>
 > = {
   empowered: {
-    glyph: GLYPHS.transfigurationEmpowered,
+    glyph: GLYPHS.statDecrease,
     label: "Empowered",
   },
   kindled: {
-    glyph: GLYPHS.transfigurationKindled,
+    glyph: GLYPHS.statIncrease,
     label: "Kindled",
   },
 };
@@ -44,6 +44,8 @@ const CHANGE_BADGE_BY_TYPE: Readonly<
  * or shrinks.
  */
 const CHANGE_BADGE_TO_ORB_RATIO = 30 / (500 * 0.12);
+/** Keep 70% of the badge inside the orb box so it intersects the icon edge. */
+const CHANGE_BADGE_OUTSIDE_FRACTION = 0.3;
 
 /**
  * Glyph spec per stat variant. Both stats render the same way — a shadowed
@@ -116,8 +118,8 @@ interface CardStatOrbProps {
   /** Optional hover tooltip: a short plain-language description string. */
   tooltip?: string;
   /**
-   * Monochrome shape marker for a transfiguration-changed stat. Empowered uses
-   * a bolt on energy cost; Kindled uses a flame on spark.
+   * Monochrome direction marker for a transfiguration-changed stat. Empowered
+   * uses a down arrow on energy cost; Kindled uses an up arrow on spark.
    */
   changeBadge?: CardStatChangeBadge;
 }
@@ -243,8 +245,8 @@ export function CardStatOrb({
           aria-hidden="true"
           style={{
             position: "absolute",
-            right: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO * -0.5)})`,
-            bottom: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO * -0.5)})`,
+            right: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO * -CHANGE_BADGE_OUTSIDE_FRACTION)})`,
+            bottom: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO * -CHANGE_BADGE_OUTSIDE_FRACTION)})`,
             zIndex: 2,
             display: "inline-flex",
             alignItems: "center",
