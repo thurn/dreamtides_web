@@ -109,25 +109,27 @@ export function DuplicationSiteScreen({
                     : "Choose a card to copy"
                   : "Gathering possibilities…"
               }
-              rightAccessory={{
-                kind: "glassButton",
-                label: confirming ? "Duplicating…" : "Duplicate",
-                variant: "accent",
-                disabled: selectedEntryId === null || locked,
-                onPress: commitDuplicate,
-                testId: "cumulus-duplication-confirm",
-              }}
-              footerAction={{
-                label: desktop ? "Decline Offer" : "Decline",
-                disabled: locked,
-                onPress: onClose,
-                testId: "cumulus-duplication-decline",
-              }}
+              footerActions={[
+                {
+                  label: desktop ? "Decline Offer" : "Decline",
+                  disabled: locked,
+                  onPress: onClose,
+                  testId: "cumulus-duplication-decline",
+                },
+                {
+                  label: confirming ? "Duplicating…" : "Duplicate",
+                  variant: "accent",
+                  disabled: selectedEntryId === null || locked,
+                  onPress: commitDuplicate,
+                  testId: "cumulus-duplication-confirm",
+                },
+              ]}
               cards={view.cards.map((card) => ({
                 entryId: card.entryId,
                 model: card.model,
                 testId: `cumulus-duplication-card-${card.entryId}`,
                 selected: selectedEntryId === card.entryId,
+                stackedCopy: selectedEntryId === card.entryId,
                 disabled: locked,
                 selectionColor: "accent",
               }))}

@@ -3,6 +3,7 @@ import type { CardId } from "../../../types/card-identity";
 import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
 import type { InfoCardProps, InfoCardVariant } from "../../components/overlay/InfoCard";
 import type { Glyph } from "../../primitives/glyph";
+import type { CumulusColor } from "../../primitives/color";
 
 export interface RevealSourceIdentity {
   readonly entityType: string;
@@ -30,6 +31,10 @@ export type RevealCard =
       readonly displaySnapshot: FrozenCardData;
       /** Optional applied transfiguration rendered on the reading copy. */
       readonly transfiguration?: CardTransfigurationDisplay;
+      /** Whether the reading copy carries the source card's selection ring. */
+      readonly selected?: boolean;
+      /** Selection-ring color inherited from the source card. */
+      readonly selectionColor?: CumulusColor;
     }
   | { readonly kind: "galleryAction"; readonly action: RevealGalleryActionModel }
   | { readonly kind: "infoCard"; readonly card: RevealInfoCardModel };

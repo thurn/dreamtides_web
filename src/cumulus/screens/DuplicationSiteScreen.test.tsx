@@ -123,12 +123,17 @@ describe("DuplicationSiteScreen", () => {
     );
     expect(confirm?.dataset.glassVariant).toBe("accent");
     expect(confirm?.getAttribute("aria-disabled")).toBe("true");
+    expect(
+      container.querySelector<HTMLElement>("[data-gallery-footer-actions]")
+        ?.style.gridTemplateColumns,
+    ).toBe("repeat(2, minmax(0, 1fr))");
 
     const first = container.querySelector<HTMLButtonElement>(
       '[data-testid="cumulus-duplication-card-entry-1"]',
     );
     act(() => first?.click());
     expect(confirm?.getAttribute("aria-disabled")).toBeNull();
+    expect(container.querySelector("[data-gallery-stacked-copy]")).not.toBeNull();
     expect(
       container.querySelector('[data-testid="cumulus-duplication-detail"]'),
     ).toBeNull();

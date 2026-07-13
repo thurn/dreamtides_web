@@ -1659,6 +1659,7 @@ export function GameCard({
         ...(model.transfiguration === undefined
           ? {}
           : { transfiguration: model.transfiguration }),
+        ...(selected ? { selected: true, selectionColor } : {}),
       },
       secondaries: glossaryCards,
     },

@@ -31,10 +31,8 @@ import {
   type GlassButtonWidthReservation,
 } from "../controls/GlassButton";
 import { IconButton, type IconButtonSize } from "../controls/IconButton";
-import {
-  CARD_ASPECT_RATIO_VALUE,
-} from "./card-aspect";
-import { GameCard, type GameCardModel } from "./CardView";
+import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
+import { CardView, GameCard, type GameCardModel } from "./CardView";
 import { GalleryActionCard } from "./GalleryActionCard";
 
 /** One resolved card in a {@link CardGalleryPanel}. */
@@ -59,6 +57,8 @@ export interface CardGalleryCardView {
   muted?: boolean;
   /** Preserve this card's grid footprint while hiding all of its content. */
   reserved?: boolean;
+  /** Render a noninteractive offset copy beneath the primary card. */
+  stackedCopy?: boolean;
 }
 
 /** The small white line shown beneath a gallery item. */
@@ -190,6 +190,8 @@ export interface CardGalleryFooterAction {
   cost?: number | null;
   /** Detach interaction and visually recede the action. */
   disabled?: boolean;
+  /** Semantic surface treatment for the action. */
+  variant?: GlassButtonVariant;
   /** A `data-testid` for selecting the footer action in tests. */
   testId?: string;
 }
@@ -222,6 +224,8 @@ export interface CardGalleryPanelProps {
   rightAccessory?: CardGalleryAccessory;
   /** Optional centered GlassButton rendered below the card grid. */
   footerAction?: CardGalleryFooterAction;
+  /** Optional equal-width pair of GlassButtons rendered below the card grid. */
+  footerActions?: readonly [CardGalleryFooterAction, CardGalleryFooterAction];
   /** Resolved cards rendered in order. */
   cards: readonly CardGalleryCardView[];
   /** Empty-state copy shown when `cards` is empty. */
@@ -564,6 +568,7 @@ export function CardGalleryPanel({
   subtitle,
   rightAccessory,
   footerAction,
+  footerActions,
   cards,
   emptyLabel = "No cards.",
   columns = "auto",
@@ -780,14 +785,38 @@ export function CardGalleryPanel({
                 };
                 const cardNode = (
                   <div style={tileStyle}>
-                    <GameCard
-                      model={card.model}
-                      selected={card.selected}
-                      selectionColor={card.selectionColor}
-                      unavailable={disabled}
-                      testId={card.testId}
-                      onActivate={interactive ? () => onCardPress(card.entryId) : undefined}
-                    />
+                    {card.stackedCopy === true && (
+                      <div
+                        aria-hidden="true"
+                        data-gallery-stacked-copy=""
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          zIndex: 0,
+                          pointerEvents: "none",
+                          transform: `translate(${token("--space-4")}, ${token("--space-4")})`,
+                        }}
+                      >
+                        <CardView
+                          card={card.model.displaySnapshot}
+                          transfiguration={card.model.transfiguration}
+                        />
+                      </div>
+                    )}
+                    <div style={{ position: "relative", zIndex: 1 }}>
+                      <GameCard
+                        model={card.model}
+                        selected={card.selected}
+                        selectionColor={card.selectionColor}
+                        unavailable={disabled}
+                        testId={card.testId}
+                        onActivate={
+                          interactive
+                            ? () => onCardPress(card.entryId)
+                            : undefined
+                        }
+                      />
+                    </div>
                   </div>
                 );
 
@@ -833,7 +862,7 @@ export function CardGalleryPanel({
             </div>
           )}
         </div>
-        {footerAction !== undefined && (
+        {(footerAction !== undefined || footerActions !== undefined) && (
           <footer
             style={{
               flexShrink: 0,
@@ -844,15 +873,42 @@ export function CardGalleryPanel({
               paddingLeft: galleryPadding,
             }}
           >
-            <GlassButton
-              placement={accessoryPlacement}
-              label={footerAction.label}
-              glyph={footerAction.glyph}
-              cost={footerAction.cost}
-              disabled={footerAction.disabled}
-              testId={footerAction.testId}
-              onPress={footerAction.onPress}
-            />
+            {footerActions !== undefined ? (
+              <div
+                data-gallery-footer-actions=""
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                  gap: token("--space-4"),
+                  width: "min(100%, 360px)",
+                }}
+              >
+                {footerActions.map((action) => (
+                  <GlassButton
+                    key={action.testId ?? action.label}
+                    placement={accessoryPlacement}
+                    label={action.label}
+                    glyph={action.glyph}
+                    cost={action.cost}
+                    disabled={action.disabled}
+                    variant={action.variant}
+                    testId={action.testId}
+                    onPress={action.onPress}
+                  />
+                ))}
+              </div>
+            ) : footerAction !== undefined ? (
+              <GlassButton
+                placement={accessoryPlacement}
+                label={footerAction.label}
+                glyph={footerAction.glyph}
+                cost={footerAction.cost}
+                disabled={footerAction.disabled}
+                variant={footerAction.variant}
+                testId={footerAction.testId}
+                onPress={footerAction.onPress}
+              />
+            ) : null}
           </footer>
         )}
       </section>

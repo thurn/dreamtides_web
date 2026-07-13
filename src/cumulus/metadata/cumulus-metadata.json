@@ -683,6 +683,12 @@
             "description": "Detach interaction and visually recede the action."
           },
           {
+            "name": "variant",
+            "tsType": "GlassButtonVariant",
+            "optional": true,
+            "description": "Semantic surface treatment for the action."
+          },
+          {
             "name": "testId",
             "tsType": "string",
             "optional": true,
@@ -690,6 +696,14 @@
           }
         ]
       }
+    },
+    {
+      "name": "footerActions",
+      "tsType": "readonly [CardGalleryFooterAction, CardGalleryFooterAction]",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional equal-width pair of GlassButtons rendered below the card grid."
     },
     {
       "name": "cards",

@@ -9,6 +9,7 @@ import { CumulusRoot } from "../../CumulusRoot";
 import { CardGalleryPanel } from "./CardGalleryPanel";
 
 vi.mock("./CardView", () => ({
+  CardView: ({ card }: { card: { name: string } }) => <div data-testid="card-view-copy">{card.name}</div>,
   GameCard: ({ model, onActivate, testId, unavailable }: {
     model: { displaySnapshot: { name: string } }; onActivate?: () => void;
     testId?: string; unavailable?: boolean;
@@ -92,6 +93,26 @@ describe("CardGalleryPanel", () => {
     expect(glyph?.style.textShadow).toBe("var(--shadow-sm)");
     expect(glyph?.style.filter).toBe("");
     expect(action?.dataset.pressFeedback).toBe("stationary");
+    act(() => root.unmount()); container.remove();
+  });
+
+  it("renders an equal-width footer action pair and a decorative stacked copy", () => {
+    const decline = vi.fn(); const confirm = vi.fn();
+    const container = document.createElement("div"); document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<CumulusRoot><CardGalleryPanel title="Duplication" cards={[
+      { entryId: "selected", model: model("Selected"), stackedCopy: true },
+    ]} footerActions={[
+      { label: "Decline Offer", onPress: decline, testId: "decline" },
+      { label: "Duplicate", onPress: confirm, variant: "accent", testId: "confirm" },
+    ]} /></CumulusRoot>));
+    const actions = container.querySelector<HTMLElement>("[data-gallery-footer-actions]");
+    expect(actions?.style.gridTemplateColumns).toBe("repeat(2, minmax(0, 1fr))");
+    expect(container.querySelector('[data-gallery-stacked-copy] [data-testid="card-view-copy"]')?.textContent).toBe("Selected");
+    expect(container.querySelector<HTMLElement>('[data-testid="confirm"]')?.dataset.glassVariant).toBe("accent");
+    act(() => (container.querySelector('[data-testid="decline"]') as HTMLButtonElement).click());
+    act(() => (container.querySelector('[data-testid="confirm"]') as HTMLButtonElement).click());
+    expect(decline).toHaveBeenCalledOnce(); expect(confirm).toHaveBeenCalledOnce();
     act(() => root.unmount()); container.remove();
   });
 });

@@ -20,6 +20,7 @@ The shared card-browser surface: a left-aligned title and subtitle, optional hea
 | `subtitle` | `string` | no | — | Optional intro line under the title. |
 | `rightAccessory` | `CardGalleryAccessory` | no | — | Optional trailing header action. |
 | `footerAction` | `CardGalleryFooterAction` | no | — | Optional centered GlassButton rendered below the card grid. |
+| `footerActions` | `readonly [CardGalleryFooterAction, CardGalleryFooterAction]` | no | — | Optional equal-width pair of GlassButtons rendered below the card grid. |
 | `cards` | `readonly CardGalleryCardView[]` | yes | — | Resolved cards rendered in order. |
 | `emptyLabel` | `string` | no | `No cards.` | Empty-state copy shown when `cards` is empty. |
 | `columns` | `CardGalleryColumns` = `"auto" \| "two" \| "three" \| "four" \| "five"` | no | `auto` | Card grid mode. Defaults to `auto`. |
@@ -53,6 +54,7 @@ The shared card-browser surface: a left-aligned title and subtitle, optional hea
 | `glyph` | `Glyph` | yes | Optional leading glyph. |
 | `cost` | `number \| null` | yes | Optional inline essence cost. |
 | `disabled` | `boolean` | yes | Detach interaction and visually recede the action. |
+| `variant` | `GlassButtonVariant` | yes | Semantic surface treatment for the action. |
 | `testId` | `string` | yes | A `data-testid` for selecting the footer action in tests. |
 
 ### `endAction`: the `CardGalleryActionView` model
