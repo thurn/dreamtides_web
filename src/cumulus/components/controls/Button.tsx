@@ -65,7 +65,7 @@ const SIZES: Record<ButtonSize, SizeSpec> = {
 export interface ButtonProps {
   /** Height/scale. 'lg' is the taller commit height ("Begin Your Dream") — commit is a size, not a variant. */
   size?: ButtonSize;
-  /** Stretch to fill the container width. */
+  /** Stretch to fill the container width; the component keeps its content centered. */
   full?: boolean;
   /** Dims the button and detaches its click/press feedback. */
   disabled?: boolean;
@@ -82,9 +82,10 @@ export interface ButtonProps {
   onClick?: () => void;
   /** Accessible label when the visible content is a bare price with no text. */
   ariaLabel?: string;
-  /** The button's text label. Resolve any UUID/name to a plain string before
-   * passing it — the button renders copy, never arbitrary caller markup. Omit
-   * only for a price-only button (supply `ariaLabel` instead). */
+  /** The button's text label, centered by the component at every rendered width.
+   * Resolve any UUID/name to a plain string before passing it — the button
+   * renders copy, never arbitrary caller markup. Omit only for a price-only
+   * button (supply `ariaLabel` instead). */
   label?: string;
 }
 
@@ -139,6 +140,7 @@ export function Button({
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
+        textAlign: "center",
         gap: 9,
         minHeight: spec.height,
         width: full ? "100%" : "auto",

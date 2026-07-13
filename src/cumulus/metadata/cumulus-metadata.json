@@ -501,7 +501,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "false",
-      "description": "Stretch to fill the container width."
+      "description": "Stretch to fill the container width; the component keeps its content centered."
     },
     {
       "name": "disabled",
@@ -555,7 +555,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "The button's text label. Resolve any UUID/name to a plain string before\npassing it — the button renders copy, never arbitrary caller markup. Omit\nonly for a price-only button (supply `ariaLabel` instead)."
+      "description": "The button's text label, centered by the component at every rendered width.\nResolve any UUID/name to a plain string before passing it — the button\nrenders copy, never arbitrary caller markup. Omit only for a price-only\nbutton (supply `ariaLabel` instead)."
     }
   ],
   "CardBack": [
@@ -1893,7 +1893,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "The button's text — a resolved string shown in the control typography."
+      "description": "The button's text, centered by the component at every rendered width."
     },
     {
       "name": "onPress",

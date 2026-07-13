@@ -82,7 +82,7 @@ const accentChrome = {
 };
 
 export interface GlassButtonProps {
-  /** The button's text — a resolved string shown in the control typography. */
+  /** The button's text, centered by the component at every rendered width. */
   label: string;
   /** Fires when the button is activated (no-op while disabled). */
   onPress: () => void;
@@ -142,12 +142,14 @@ export function GlassButton({
       style={{
         display: "inline-flex",
         alignItems: "center",
+        justifyContent: "center",
         gap: 8,
         height: GLASS_BUTTON_HEIGHT,
         padding: "0 14px",
         boxSizing: "border-box",
         font: token("--t-body"),
         color: token("--text-on-glass"),
+        textAlign: "center",
         whiteSpace: "nowrap",
         ...chrome.trigger,
         ...variantChrome,

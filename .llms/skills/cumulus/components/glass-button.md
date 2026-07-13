@@ -16,7 +16,7 @@ The labeled glass action — a text label in the control typography on the share
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `label` | `string` | yes | — | The button's text — a resolved string shown in the control typography. |
+| `label` | `string` | yes | — | The button's text, centered by the component at every rendered width. |
 | `onPress` | `() => void` | yes | — | Fires when the button is activated (no-op while disabled). |
 | `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `GlowIcon` before the label. |
 | `cost` | `number \| null` | no | `null` | Optional inline essence cost rendered after the label. |

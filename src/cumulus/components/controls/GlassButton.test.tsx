@@ -173,7 +173,7 @@ describe("GlassButton", () => {
     });
   });
 
-  it("centers the visible label within reserved dynamic width", () => {
+  it("owns centered content at the control root and within reserved dynamic width", () => {
     const { container, root } = mount(
       <GlassButton
         label="Transfigure"
@@ -185,8 +185,11 @@ describe("GlassButton", () => {
       />,
     );
 
+    const button = container.querySelector<HTMLButtonElement>("button");
+    expect(button?.style.justifyContent).toBe("center");
+    expect(button?.style.textAlign).toBe("center");
     expect(
-      container.querySelector<HTMLElement>("[data-glass-button-content]")
+      button?.querySelector<HTMLElement>("[data-glass-button-content]")
         ?.style.justifyContent,
     ).toBe("center");
 

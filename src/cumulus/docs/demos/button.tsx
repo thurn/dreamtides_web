@@ -11,6 +11,8 @@ export const buttonDemo: CumulusComponent = {
   title: "Button",
   blurb:
     "Rung 1 of Cumulus's four-rung button suite — the beveled purple sprite, the primary/commit action, scaled to any label and to a taller commit height. Lower-emphasis actions step down a rung (GlassButton, IconButton, plain pressable text), never to a recolored Button.",
+  callout:
+    "Every labeled Cumulus Button component owns centered content alignment at every rendered width. Callers may size and position the control through layout; label alignment is fixed by the component.",
   group: "Components",
   docName: "Button",
   Component: Button,

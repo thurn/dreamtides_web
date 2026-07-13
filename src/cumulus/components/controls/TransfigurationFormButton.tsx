@@ -85,6 +85,7 @@ export function TransfigurationFormButton({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        textAlign: "center",
         gap: token("--space-2"),
         paddingRight: token("--space-3"),
         paddingLeft: token("--space-3"),

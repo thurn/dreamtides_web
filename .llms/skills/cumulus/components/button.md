@@ -10,18 +10,20 @@ Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 
 Rung 1 of Cumulus's four-rung button suite — the beveled purple sprite, the primary/commit action, scaled to any label and to a taller commit height. Lower-emphasis actions step down a rung (GlassButton, IconButton, plain pressable text), never to a recolored Button.
 
+> **Guidance:** Every labeled Cumulus Button component owns centered content alignment at every rendered width. Callers may size and position the control through layout; label alignment is fixed by the component.
+
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `size` | `ButtonSize` = `"sm" \| "md" \| "lg"` | no | `md` | Height/scale. 'lg' is the taller commit height ("Begin Your Dream") — commit is a size, not a variant. |
-| `full` | `boolean` | no | `false` | Stretch to fill the container width. |
+| `full` | `boolean` | no | `false` | Stretch to fill the container width; the component keeps its content centered. |
 | `disabled` | `boolean` | no | `false` | Dims the button and detaches its click/press feedback. |
 | `cost` | `number \| null` | no | `null` | Appends an inline price, e.g. cost={100} -> "… 100◆", rendered in the button's own on-accent white so the price reads as part of the label. The currency is set by `costKind` (default essence). |
 | `costKind` | `EconomyKind` = `"essence" \| "energy" \| "spark" \| "points" \| "counter"` | no | `essence` | Which currency the `cost` is denominated in — essence, energy, spark, points, or counter. Picks the shared economy-spec price mark (bx-crypto / bx-fire-alt / bx-sparkles / bx-star-circle / bx-hourglass); the mark stays on-accent white. Default essence. Ignored when `cost` is null. |
 | `onClick` | `(() => void)` | no | — | Fires when the button is activated (no-op while disabled). |
 | `ariaLabel` | `string` | no | — | Accessible label when the visible content is a bare price with no text. |
-| `label` | `string` | no | — | The button's text label. Resolve any UUID/name to a plain string before passing it — the button renders copy, never arbitrary caller markup. Omit only for a price-only button (supply `ariaLabel` instead). |
+| `label` | `string` | no | — | The button's text label, centered by the component at every rendered width. Resolve any UUID/name to a plain string before passing it — the button renders copy, never arbitrary caller markup. Omit only for a price-only button (supply `ariaLabel` instead). |
 
 ## Usage
 
