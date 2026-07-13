@@ -59,9 +59,6 @@ const SIGNATURE_CARD_WIDTH = 116;
 const DREAMSIGN_SIZE = 62;
 const MOBILE_SIGNATURE_CARD_WIDTH = 92;
 const MOBILE_DREAMSIGN_SIZE = 48;
-/** Matches the measured three-card signature page so the initial briefing
- * keeps the same glass-panel height while centering its stakes in that space. */
-const MOBILE_DETAIL_PAGE_MIN_HEIGHT = 148;
 
 export function BattleStartScreen({ view, onBegin }: BattleStartScreenProps) {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -307,7 +304,7 @@ function MobileBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
           // The console's midpoint sits at the opponent's waist. Anchoring its
           // center, rather than its bottom edge, lets taller carousel pages add
           // equal visual weight above and below that shared waist line.
-          top: "66%",
+          top: "64%",
           transform: "translateY(-50%)",
           zIndex: 4,
           padding: `0 max(var(--safe-area-inset-right), ${token("--gutter")}) 0 max(var(--safe-area-inset-left), ${token("--gutter")})`,
@@ -376,7 +373,7 @@ function MobileBattleConsole({ view, onBegin }: BattleStartScreenProps) {
     <section
       style={{
         ...glassSurfaceStyle({ radius: token("--radius-popover") }),
-        padding: token("--space-6"),
+        padding: `${token("--space-9")} ${token("--space-6")}`,
         color: token("--text-on-glass"),
       }}
     >
@@ -485,19 +482,11 @@ function MobileDetailCarousel({
           aria-hidden={index !== 0}
           inert={index !== 0}
           data-battle-start-detail-active={String(index === 0)}
-          style={{
-            width: "100%",
-            minHeight: MOBILE_DETAIL_PAGE_MIN_HEIGHT,
-            flex: "none",
-            display: "flex",
-            alignItems: "center",
-          }}
+          style={{ width: "100%", flex: "none" }}
         >
-          <div style={{ width: "100%" }}>
-            <MobileCarouselPage title={null}>
-              <MobileBattleStakes view={view} />
-            </MobileCarouselPage>
-          </div>
+          <MobileCarouselPage title={null}>
+            <MobileBattleStakes view={view} />
+          </MobileCarouselPage>
         </div>
         {view.dreamsigns.length > 0 && (
           <div

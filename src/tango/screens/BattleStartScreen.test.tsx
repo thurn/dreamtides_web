@@ -191,7 +191,10 @@ describe("Tango BattleStartScreen", () => {
       (consolePanel?.firstElementChild as HTMLElement | null)?.style
         .backdropFilter,
     ).toContain("--glass-blur");
-    expect(consolePanel?.style.top).toBe("66%");
+    expect(
+      (consolePanel?.firstElementChild as HTMLElement | null)?.style.padding,
+    ).toBe("var(--space-9) var(--space-6)");
+    expect(consolePanel?.style.top).toBe("64%");
     expect(consolePanel?.style.transform).toBe("translateY(-50%)");
     expect(
       layout?.querySelector("[data-battle-start-opponent]"),
@@ -211,8 +214,8 @@ describe("Tango BattleStartScreen", () => {
     expect(activePage()?.textContent).not.toContain("Victory:");
     expect(activePage()?.textContent).toContain("To Win");
     expect(activePage()?.textContent).toContain("Reward");
-    expect(activePage()?.style.minHeight).toBe("148px");
-    expect(activePage()?.style.alignItems).toBe("center");
+    expect(activePage()?.style.minHeight).toBe("");
+    expect(activePage()?.style.alignItems).toBe("");
     expect(
       activePage()?.querySelector<HTMLElement>(
         '[data-battle-start-stake="To Win"] > div',
