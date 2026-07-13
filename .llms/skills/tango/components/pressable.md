@@ -6,7 +6,7 @@
 
 Primitives · Live demo & interactive props: `/tango#/pressable`
 
-Real consumers: **22** (imports outside `src/tango/docs/` and tests).
+Real consumers: **24** (imports outside `src/tango/docs/` and tests).
 
 The one press-feedback primitive. Interactive surfaces measure their rendered box for proportional hover and press movement; readable rules-copy reveals use the strict stationary variant.
 

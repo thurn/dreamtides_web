@@ -61,11 +61,11 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 <!-- BEGIN GENERATED COMPONENT INDEX (npm run tango-docs) -->
 | Component | Group | Consumers | Reference | What it is |
 | --- | --- | --- | --- | --- |
-| Pressable | Primitives | 22 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
+| Pressable | Primitives | 24 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
 | Resource Chip | Components | 2 | [components/resource-chip.md](components/resource-chip.md) | The sized, self-contained value-and-mark chip for the game economy. |
-| Essence Value | Components | 13 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
+| Essence Value | Components | 14 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
 | Button | Components | 3 | [components/button.md](components/button.md) | Rung 1 of Tango's four-rung button suite — the beveled purple sprite, the primary/commit action, scaled to any label and to a taller commit height. |
-| Icon Button | Components | 13 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — a corner chrome action with placement-aware recipes for scene media or an existing glass surface, made fully round so it reads as one family with the filter/sort controls. |
+| Icon Button | Components | 14 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — a corner chrome action with placement-aware recipes for scene media or an existing glass surface, made fully round so it reads as one family with the filter/sort controls. |
 | Glass Button | Components | 4 | [components/glass-button.md](components/glass-button.md) | The labeled glass action — a text label in the control typography on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface. |
 | Glass Dialog | Components | 0 | [components/glass-dialog.md](components/glass-dialog.md) | The glass overlay shell: a modal dialog with a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and a glass close disc) over a scrolling body. |
 | Speech Bubble | Components | 2 | [components/speech-bubble.md](components/speech-bubble.md) | A guide-dialog bubble for character-led site screens: the same frosted information material as an InfoCard, with a strict left-or-right arrow that points back to the speaker. |
@@ -80,7 +80,7 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 | Pip Badge | Components | 2 | [components/pip-badge.md](components/pip-badge.md) | The circled number on a colored disc for card stats: a spark value or an energy cost, and the inline spark reference inside rules text. |
 | Quest Status Bar | Components | 5 | [components/quest-status-bar.md](components/quest-status-bar.md) | The persistent, transparent bottom HUD for quest screens. |
 | Dreamcaller Portrait | Components | 22 | [components/dreamcaller-portrait.md](components/dreamcaller-portrait.md) | The one way to render a dreamcaller's character art: the transparent full-body cutout in one of six fixed framings. |
-| Rich Text | Components | 15 | [components/rich-text.md](components/rich-text.md) | The design system's model for a run of formatted copy. |
+| Rich Text | Components | 16 | [components/rich-text.md](components/rich-text.md) | The design system's model for a run of formatted copy. |
 | Rules Text | Components | 18 | [components/rules-text.md](components/rules-text.md) | Renders Dreamtides rules copy from card data — resource pips, ability carets, and glossary keywords styled in place — so ability text reads the same everywhere it appears. |
 | Game Card | Components | 26 | [components/game-card.md](components/game-card.md) | The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name. |
 | Card Gallery Panel | Components | 4 | [components/card-gallery-panel.md](components/card-gallery-panel.md) | The shared card-browser surface: a left-aligned title and subtitle, optional header and centered footer actions, and a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim. |
@@ -90,7 +90,8 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 | Atlas Node | Components | 3 | [components/atlas-node.md](components/atlas-node.md) | One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engine: a framed circular icon whose glow and badges track its state — revealed, known, visited, completed, forgone, or a looming boss — and which reveals its scene / detail card on hover or press. |
 | Atlas Edge | Components | 2 | [components/atlas-edge.md](components/atlas-edge.md) | The connector between two Atlas nodes, drawn inside the map's SVG. |
 | Atlas Map | Components | 1 | [components/atlas-map.md](components/atlas-map.md) | The Dream Atlas map surface — the run graph of dreamscape nodes and their connectors, fitted into a fixed portrait design stage that uniformly scales to fit its container (letterboxed). |
-| Dreamsign | Components | 10 | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
+| Dreamsign | Components | 12 | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
+| Dreamsign Gallery Panel | Components | 1 | [components/dreamsign-gallery-panel.md](components/dreamsign-gallery-panel.md) | The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one bare-glyph end action. |
 | Site Node | Components | 2 | [components/site-node.md](components/site-node.md) | The dreamscape site disc: a floating circular node over scene art carrying a glyph and accent ring. |
 <!-- END GENERATED COMPONENT INDEX -->
 
