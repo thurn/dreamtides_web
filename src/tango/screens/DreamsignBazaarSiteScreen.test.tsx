@@ -120,6 +120,7 @@ describe("DreamsignBazaarSiteScreen", () => {
       '[data-testid="tango-dreamsign-bazaar-restock"]',
     );
     expect(restock?.getAttribute("aria-label")).toBe("Restock");
+    expect(restock?.dataset.pressFeedback).toBe("responsive");
     expect(restock?.textContent).toBe("");
     expect(restock?.style.background).toBe("transparent");
     expect(restock?.dataset.revealPrimaryVariant).toBe("icon");
@@ -165,6 +166,11 @@ describe("DreamsignBazaarSiteScreen", () => {
         '[data-testid="tango-dreamsign-bazaar-gallery"]',
       )?.dataset.dreamsignGallerySize,
     ).toBe("standard");
+    const galleryRegion = container.querySelector<HTMLElement>(
+      "[data-dreamsign-bazaar-gallery-region]",
+    );
+    expect(galleryRegion?.style.maxWidth).toBe("680px");
+    expect(galleryRegion?.style.justifySelf).toBe("center");
 
     act(() => {
       container

@@ -15,6 +15,10 @@ import {
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
 
+// Four 126px items, three 16px gaps, and the panel's 64px horizontal padding
+// occupy 616px; this cap keeps a deliberate 32px breathing edge per side.
+const DESKTOP_GALLERY_MAX_WIDTH = 680;
+
 export interface DreamsignBazaarOfferView {
   /** Stable UUID-derived gallery entry id. */
   entryId: string;
@@ -199,10 +203,11 @@ function DreamsignBazaarGallery({
         height: "100%",
         maxHeight: "100%",
         width: desktop ? "100%" : `calc(100vw - (${token("--space-4")} * 2))`,
+        maxWidth: desktop ? DESKTOP_GALLERY_MAX_WIDTH : "100%",
         boxSizing: "border-box",
         pointerEvents: "auto",
         alignSelf: desktop ? "stretch" : "start",
-        justifySelf: desktop ? undefined : "center",
+        justifySelf: "center",
         display: desktop ? "grid" : undefined,
         alignItems: desktop ? "center" : undefined,
       }}

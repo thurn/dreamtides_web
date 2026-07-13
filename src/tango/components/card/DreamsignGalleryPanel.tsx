@@ -135,7 +135,7 @@ function DreamsignGalleryEndAction({
       aria-disabled={action.disabled || undefined}
       data-testid="tango-dreamsign-bazaar-restock"
       data-reveal-complete-game-card="false"
-      pressFeedback="stationary"
+      data-press-feedback="responsive"
       onPointerDown={(event) => {
         lastPointerType.current = event.pointerType;
         pointerDown?.(event);
