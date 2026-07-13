@@ -1,6 +1,6 @@
 // DreamsignGalleryPanel — the liquid-glass offer shelf for purchasable
-// Dreamsigns. It keeps the Dream Market's header, captions, and card-shaped
-// restock object while rendering the collectible art itself without chrome.
+// Dreamsigns. It keeps the Dream Market's header and captions while rendering
+// both the collectible art and the restock glyph without object backgrounds.
 
 import type { ReactElement } from "react";
 import type { Dreamsign as DreamsignData } from "../../../types/quest";
@@ -12,7 +12,6 @@ import { IconButton } from "../controls/IconButton";
 import { Dreamsign } from "../hud/Dreamsign";
 import { EssenceValue } from "../hud/EssenceValue";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
-import { GalleryActionCard } from "./GalleryActionCard";
 
 /** One UUID-keyed Dreamsign offered by a gallery. */
 export interface DreamsignGalleryEntryView {
@@ -26,7 +25,7 @@ export interface DreamsignGalleryEntryView {
   state: "available" | "unaffordable" | "purchased";
 }
 
-/** The card-shaped action appended after the Dreamsign offers. */
+/** The bare-glyph action appended after the Dreamsign offers. */
 export interface DreamsignGalleryActionView {
   /** Stable action id. */
   entryId: string;
@@ -47,7 +46,7 @@ export interface DreamsignGalleryPanelProps {
   title: string;
   /** Dreamsign offers in persistent slot order. */
   entries: readonly DreamsignGalleryEntryView[];
-  /** Card-shaped action shown after the offers. */
+  /** Bare-glyph action shown after the offers. */
   endAction: DreamsignGalleryActionView;
   /** Compact uses the two-column phone shelf; standard uses the four-column desktop shelf. */
   size?: "compact" | "standard";
@@ -226,10 +225,25 @@ export function DreamsignGalleryPanel({
               background: "transparent",
             }}
           >
-            <GalleryActionCard
-              action={{ glyph: endAction.glyph, label: endAction.label }}
-              width={itemWidth}
-            />
+            <span
+              style={{
+                width: itemWidth,
+                height: itemHeight,
+                display: "grid",
+                placeItems: "center",
+              }}
+            >
+              <i
+                className={endAction.glyph}
+                aria-hidden="true"
+                data-dreamsign-gallery-action-glyph=""
+                style={{
+                  fontSize: compact ? 52 : 68,
+                  color: token("--text-on-accent"),
+                  textShadow: token("--text-outline-media"),
+                }}
+              />
+            </span>
           </Pressable>
           {captionNode(endAction.price, endAction.text)}
         </div>

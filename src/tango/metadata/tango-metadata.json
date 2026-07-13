@@ -1484,7 +1484,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Card-shaped action shown after the offers.",
+      "description": "Bare-glyph action shown after the offers.",
       "nested": {
         "name": "DreamsignGalleryActionView",
         "fields": [

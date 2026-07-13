@@ -116,9 +116,18 @@ describe("DreamsignBazaarSiteScreen", () => {
     expect(
       container.querySelectorAll('[data-dreamsign-gallery-caption="essence"]'),
     ).toHaveLength(4);
-    expect(container.querySelector("[data-gallery-action-label]")?.textContent).toBe(
-      "Restock",
+    const restock = container.querySelector<HTMLElement>(
+      '[data-testid="tango-dreamsign-bazaar-restock"]',
     );
+    expect(restock?.getAttribute("aria-label")).toBe("Restock");
+    expect(restock?.textContent).toBe("");
+    expect(restock?.style.background).toBe("transparent");
+    const restockGlyph = container.querySelector<HTMLElement>(
+      "[data-dreamsign-gallery-action-glyph]",
+    );
+    expect(restockGlyph?.style.color).toBe("var(--text-on-accent)");
+    expect(restockGlyph?.style.textShadow).toBe("var(--text-outline-media)");
+    expect(restockGlyph?.parentElement?.style.background).toBe("");
 
     act(() => root.unmount());
   });

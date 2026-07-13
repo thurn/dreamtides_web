@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/tango#/dreamsign-gallery-panel`
 
 Real consumers: **1** (imports outside `src/tango/docs/` and tests).
 
-The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one card-shaped end action.
+The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one bare-glyph end action.
 
 > **Guidance:** Use this when Dreamsigns are the primary purchasable objects. The panel preserves the chrome-free Dreamsign material and shared InfoCard reveal while matching the Dream Market's gallery frame and direct-buy interaction.
 
@@ -18,7 +18,7 @@ The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art
 | --- | --- | --- | --- | --- |
 | `title` | `string` | yes | — | Header title. |
 | `entries` | `readonly DreamsignGalleryEntryView[]` | yes | — | Dreamsign offers in persistent slot order. |
-| `endAction` | `DreamsignGalleryActionView` | yes | — | Card-shaped action shown after the offers. |
+| `endAction` | `DreamsignGalleryActionView` | yes | — | Bare-glyph action shown after the offers. |
 | `size` | `"compact" \| "standard"` | no | `standard` | Compact uses the two-column phone shelf; standard uses the four-column desktop shelf. |
 | `closeLabel` | `string` | yes | — | Accessible label for the close control. |
 | `onClose` | `() => void` | yes | — | Fires when the close disc is activated. |

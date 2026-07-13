@@ -62,7 +62,7 @@ export const dreamsignGalleryPanelDemo: TangoComponent = {
   id: "dreamsign-gallery-panel",
   title: "Dreamsign Gallery Panel",
   blurb:
-    "The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one card-shaped end action.",
+    "The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one bare-glyph end action.",
   callout:
     "Use this when Dreamsigns are the primary purchasable objects. The panel preserves the chrome-free Dreamsign material and shared InfoCard reveal while matching the Dream Market's gallery frame and direct-buy interaction.",
   group: "Components",
