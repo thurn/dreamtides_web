@@ -359,6 +359,11 @@ describe("TransfigurationSiteScreen", () => {
 
   it("uses the compact mobile gallery and a card-first icon detail surface", () => {
     stubMatchMedia(true, false);
+    const animate = vi.fn(() => ({}) as Animation);
+    Object.defineProperty(HTMLElement.prototype, "animate", {
+      configurable: true,
+      value: animate,
+    });
     const { container, root } = mount(
       <TransfigurationSiteScreen
         view={view()}
@@ -453,6 +458,17 @@ describe("TransfigurationSiteScreen", () => {
         "[data-transfiguration-panel-viewport]",
       )?.style.overflow,
     ).toBe("hidden");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-transfiguration-panel-viewport]",
+      )?.style.height,
+    ).toBe("100%");
+    expect(
+      container.querySelector(
+        '[data-testid="tango-transfiguration-card-travel"]',
+      ),
+    ).toBeNull();
+    expect(animate).not.toHaveBeenCalled();
     expect(container.querySelectorAll('[role="radio"]')).toHaveLength(2);
     expect(
       container.querySelector<HTMLButtonElement>(
@@ -486,7 +502,7 @@ describe("TransfigurationSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("grows the mobile panel upward for a dense form offer", () => {
+  it("reserves the expanded mobile region before choosing a dense form offer", () => {
     stubMatchMedia(true, false);
     const denseView = view();
     const first = denseView.candidates[0];
@@ -514,6 +530,12 @@ describe("TransfigurationSiteScreen", () => {
         onTransfigure={vi.fn()}
       />,
     );
+
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-guide-gallery-mobile-region]",
+      )?.dataset.guideGalleryMobileRegionSize,
+    ).toBe("expanded");
 
     act(() => {
       container

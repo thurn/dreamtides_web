@@ -110,13 +110,13 @@ export function TransfigurationSiteScreen({
   const fallbackCandidate = picked ?? view.candidates[0] ?? null;
 
   const beginPick = useCallback(
-    (entryId: string) => {
+    (entryId: string, layout: "mobile" | "desktop") => {
       if (travel !== null) return;
       const candidate = view.candidates.find(
         (choice) => choice.entryId === entryId,
       );
       if (candidate === undefined) return;
-      if (reduceMotion === true) {
+      if (layout === "mobile" || reduceMotion === true) {
         setPickedEntryId(entryId);
         return;
       }
@@ -179,7 +179,9 @@ export function TransfigurationSiteScreen({
       guide={view.guide}
       mobileComposition="revelation"
       mobileRegionSize={
-        picked !== null && picked.forms.length > 3 ? "expanded" : "standard"
+        view.candidates.some((candidate) => candidate.forms.length > 3)
+          ? "expanded"
+          : "standard"
       }
       screenTestId="tango-transfiguration-site-screen"
       guideArtTestId="tango-transfiguration-guide-art"
@@ -208,22 +210,11 @@ export function TransfigurationSiteScreen({
             justifySelf: layout === "mobile" ? "center" : undefined,
           }}
         >
-          <motion.div
+          <div
             data-transfiguration-panel-viewport=""
-            initial={false}
-            animate={
-              layout === "mobile"
-                ? { height: picked === null ? "auto" : "100%" }
-                : undefined
-            }
-            transition={{
-              height: {
-                duration: reduceMotion === true ? 0 : 0.32,
-                ease: [0.22, 0.61, 0.36, 1],
-              },
-            }}
             style={{
               width: "100%",
+              height: layout === "mobile" ? "100%" : undefined,
               maxHeight: "100%",
               overflow: layout === "mobile" ? "hidden" : "visible",
               display: "grid",
@@ -235,7 +226,7 @@ export function TransfigurationSiteScreen({
                 layout={layout}
                 view={view}
                 onClose={onClose}
-                onPick={beginPick}
+                onPick={(entryId) => beginPick(entryId, layout)}
               />
             ) : (
               <DetailPanel
@@ -262,8 +253,10 @@ export function TransfigurationSiteScreen({
                 }}
               />
             )}
-          </motion.div>
-          {picked === null && fallbackCandidate !== null && (
+          </div>
+          {layout === "desktop" &&
+            picked === null &&
+            fallbackCandidate !== null && (
             <div
               aria-hidden="true"
               style={{

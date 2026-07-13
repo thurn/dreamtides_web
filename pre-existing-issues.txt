@@ -151,3 +151,11 @@ Cumulus clean PlayMode gate — wall-clock-sensitive panel travel assertion
   editor/graphics hitch can fail behavior whose final anchor is correct. Replace
   the wall-clock assertion with deterministic stepped-time evidence or separate
   the curve-duration contract from host scheduling latency.
+
+Quest prototype dependency audit — four moderate advisories
+
+- `npm install` reports four moderate vulnerabilities in the current lockfile.
+  `npm audit` identifies the direct `firebase-tools` development dependency and
+  its transitive `@google-cloud/pubsub` / `@opentelemetry/core` chain, plus
+  transitive `morgan`. The suggested Firebase resolution is a semver-major
+  change, so dependency remediation should be handled as a separate upgrade.
