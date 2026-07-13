@@ -46,11 +46,12 @@ export function buildTransfigurationGuideView(
   };
 }
 
-/** Group the persisted flat offer rows into the three standard card choices. */
+/** Group persisted form rows into card choices for the active visit mode. */
 export function buildTransfigurationCandidates(
   state: QuestState,
   runtime: CardChoiceSiteRuntime | null,
   cardDatabase: ReadonlyMap<number, CardData>,
+  isEnhanced: boolean,
 ): TransfigurationCandidateView[] {
   if (runtime === null || runtime.choiceKind !== "transfiguration") return [];
 
@@ -67,10 +68,12 @@ export function buildTransfigurationCandidates(
 
     let candidate = candidates.get(entry.entryId);
     if (candidate === undefined) {
-      if (candidates.size >= STANDARD_CANDIDATE_COUNT) continue;
+      if (!isEnhanced && candidates.size >= STANDARD_CANDIDATE_COUNT) continue;
       candidate = {
         entryId: entry.entryId,
         model: { cardId: card.id, displaySnapshot: card },
+        availability: "available",
+        reforgedType: null,
         forms: [],
       };
       candidates.set(entry.entryId, candidate);
@@ -92,9 +95,38 @@ export function buildTransfigurationCandidates(
     });
   }
 
-  return [...candidates.values()].filter(
+  const available = [...candidates.values()].filter(
     (candidate) => candidate.forms.length > 0,
   );
+  if (!isEnhanced) return available;
+
+  const availableByEntryId = new Map(
+    available.map((candidate) => [candidate.entryId, candidate]),
+  );
+  const wholeDeck: TransfigurationCandidateView[] = [];
+  for (const entry of state.deck) {
+    const candidate = availableByEntryId.get(entry.entryId);
+    if (candidate !== undefined) {
+      wholeDeck.push(candidate);
+      continue;
+    }
+    if (entry.transfiguration === null) continue;
+    const card = cardDatabase.get(entry.cardNumber);
+    if (card === undefined) continue;
+    const reforged = buildTransfigurationDisplay(card, entry.transfiguration);
+    wholeDeck.push({
+      entryId: entry.entryId,
+      model: {
+        cardId: card.id,
+        displaySnapshot: reforged.card,
+        transfiguration: reforged.display,
+      },
+      availability: "reforged",
+      reforgedType: entry.transfiguration,
+      forms: [],
+    });
+  }
+  return wholeDeck;
 }
 
 /** Build the complete standard desktop Transfiguration site view. */
@@ -114,12 +146,13 @@ export function buildTransfigurationSiteView(params: {
     scene,
     guide: buildTransfigurationGuideView(params.guide, params.guideLine),
     ready: params.runtime !== null,
-    alreadyAccepted:
-      (params.runtime?.acceptedEntryIds.length ?? 0) > 0,
+    isEnhanced: params.site.isEnhanced,
+    alreadyAccepted: (params.runtime?.acceptedEntryIds.length ?? 0) > 0,
     candidates: buildTransfigurationCandidates(
       params.state,
       params.runtime,
       params.cardDatabase,
+      params.site.isEnhanced,
     ),
   };
 }

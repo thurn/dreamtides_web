@@ -39,6 +39,8 @@ function candidate(index: number): TransfigurationCandidateView {
   return {
     entryId: `entry-${String(index)}`,
     model: { cardId: card.id, displaySnapshot: card },
+    availability: "available",
+    reforgedType: null,
     forms: [
       {
         type: "Empowered",
@@ -95,16 +97,48 @@ function view(): TransfigurationSiteView {
       art: artRef.dreamGuide("durgan_forgehammer"),
     },
     ready: true,
+    isEnhanced: false,
     alreadyAccepted: false,
     candidates: [candidate(1), candidate(2), candidate(3)],
   };
 }
 
+function enhancedView(): TransfigurationSiteView {
+  const reforgedCard = makeCard(5);
+  return {
+    ...view(),
+    isEnhanced: true,
+    candidates: [
+      candidate(1),
+      candidate(2),
+      candidate(3),
+      candidate(4),
+      {
+        entryId: "entry-5",
+        model: {
+          cardId: reforgedCard.id,
+          displaySnapshot: reforgedCard,
+          transfiguration: {
+            type: "Kindled",
+            color: TRANSFIGURATION_TINT_COLORS.Kindled,
+            markedText: reforgedCard.renderedText,
+            energyChanged: false,
+            sparkChanged: true,
+            fastChanged: false,
+          },
+        },
+        availability: "reforged",
+        reforgedType: "Kindled",
+        forms: [],
+      },
+      candidate(6),
+    ],
+  };
+}
+
 function stubMatchMedia(reducedMotion: boolean, desktop = true): void {
   window.matchMedia = ((query: string) => ({
-    matches: query.includes("prefers-reduced-motion")
-      ? reducedMotion
-      : desktop,
+    matches: query.includes("prefers-reduced-motion") ? reducedMotion : desktop,
     media: query,
     onchange: null,
     addEventListener: () => undefined,
@@ -155,11 +189,14 @@ describe("TransfigurationSiteScreen", () => {
       />,
     );
 
-    expect(container.querySelector("[data-guide-gallery-desktop-composition]"))
-      .not.toBeNull();
+    expect(
+      container.querySelector("[data-guide-gallery-desktop-composition]"),
+    ).not.toBeNull();
     expect(container.querySelector("h2")?.textContent).toBe("Transfiguration");
     expect(
-      container.querySelectorAll('[data-testid^="cumulus-transfiguration-card-"]'),
+      container.querySelectorAll(
+        '[data-testid^="cumulus-transfiguration-card-"]',
+      ),
     ).toHaveLength(3);
     expect(
       container.querySelector<HTMLElement>(
@@ -184,6 +221,72 @@ describe("TransfigurationSiteScreen", () => {
       container.querySelector('[data-testid="cumulus-transfiguration-leave"]'),
     ).toBeNull();
     expect(container.textContent).not.toContain("Essence 500");
+
+    act(() => root.unmount());
+  });
+
+  it("shows the enhanced whole-deck picker in the shared purge-gallery geometry", () => {
+    const onClose = vi.fn();
+    const { container, root } = mount(
+      <TransfigurationSiteScreen
+        view={enhancedView()}
+        onClose={onClose}
+        onTransfigure={vi.fn()}
+      />,
+    );
+
+    const picker = container.querySelector<HTMLElement>(
+      '[data-testid="cumulus-transfiguration-picker"]',
+    );
+    expect(picker?.dataset.galleryColumns).toBe("5");
+    expect(picker?.dataset.gallerySpacing).toBe("regular");
+    expect(picker?.dataset.galleryWidthMode).toBe("fill");
+    expect(container.textContent).toContain("Pick any card to reforge");
+    expect(
+      container.querySelectorAll(
+        '[data-testid^="cumulus-transfiguration-card-"]',
+      ),
+    ).toHaveLength(6);
+    expect(
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-transfiguration-card-entry-5"]',
+        )
+        ?.getAttribute("aria-disabled"),
+    ).toBe("true");
+    expect(container.textContent).toContain("Kindled · Reforged");
+    expect(
+      container.querySelector('[data-testid="cumulus-transfiguration-decline"]')
+        ?.textContent,
+    ).toBe("Decline");
+
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-transfiguration-decline"]',
+        )
+        ?.click();
+    });
+    expect(onClose).toHaveBeenCalledOnce();
+
+    act(() => root.unmount());
+  });
+
+  it("uses four columns for the enhanced whole-deck picker on mobile", () => {
+    stubMatchMedia(true, false);
+    const { container, root } = mount(
+      <TransfigurationSiteScreen
+        view={enhancedView()}
+        onClose={vi.fn()}
+        onTransfigure={vi.fn()}
+      />,
+    );
+
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="cumulus-transfiguration-picker"]',
+      )?.dataset.galleryColumns,
+    ).toBe("4");
 
     act(() => root.unmount());
   });
@@ -234,9 +337,11 @@ describe("TransfigurationSiteScreen", () => {
         ?.style.overflowY,
     ).toBe("auto");
     expect(
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="cumulus-transfiguration-form-Kindled"]',
-      )?.getAttribute("aria-disabled"),
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-transfiguration-form-Kindled"]',
+        )
+        ?.getAttribute("aria-disabled"),
     ).toBe("true");
     expect(container.textContent).not.toContain("How much essence");
 
@@ -255,7 +360,9 @@ describe("TransfigurationSiteScreen", () => {
       commit?.querySelectorAll("[data-glass-button-width-reservation]"),
     ).toHaveLength(5);
     expect(commit?.textContent).toContain("Reforging…·80");
-    expect(container.querySelector('[role="radio"][aria-checked="true"]')).toBeNull();
+    expect(
+      container.querySelector('[role="radio"][aria-checked="true"]'),
+    ).toBeNull();
 
     const empowered = container.querySelector<HTMLButtonElement>(
       '[data-testid="cumulus-transfiguration-form-Empowered"]',
@@ -324,9 +431,8 @@ describe("TransfigurationSiteScreen", () => {
     expect(traveling?.style.top).toBe("80px");
     expect(revealCard.style.visibility).toBe("hidden");
     expect(
-      container.querySelector<HTMLElement>(
-        '[data-gallery-entry-id="entry-2"]',
-      )?.style.visibility,
+      container.querySelector<HTMLElement>('[data-gallery-entry-id="entry-2"]')
+        ?.style.visibility,
     ).toBe("hidden");
 
     act(() => root.unmount());
@@ -426,29 +532,24 @@ describe("TransfigurationSiteScreen", () => {
         ?.dataset.transfigurationOptionLayout,
     ).toBe("compact");
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-transfiguration-detail-body]",
-      )?.dataset.transfigurationDetailBodyLayout,
+      container.querySelector<HTMLElement>("[data-transfiguration-detail-body]")
+        ?.dataset.transfigurationDetailBodyLayout,
     ).toBe("side-by-side");
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-transfiguration-detail-body]",
-      )?.style.padding,
+      container.querySelector<HTMLElement>("[data-transfiguration-detail-body]")
+        ?.style.padding,
     ).toBe("var(--space-6) var(--space-4)");
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-transfiguration-detail-body]",
-      )?.style.containerType,
+      container.querySelector<HTMLElement>("[data-transfiguration-detail-body]")
+        ?.style.containerType,
     ).toBe("inline-size");
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-transfiguration-detail-body]",
-      )?.style.gridTemplateRows,
+      container.querySelector<HTMLElement>("[data-transfiguration-detail-body]")
+        ?.style.gridTemplateRows,
     ).toBe("auto");
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-transfiguration-detail-body]",
-      )?.style.gridTemplateColumns,
+      container.querySelector<HTMLElement>("[data-transfiguration-detail-body]")
+        ?.style.gridTemplateColumns,
     ).toBe("minmax(0, 1fr) minmax(0, 1fr)");
     expect(
       container.querySelector<HTMLElement>("[data-transfiguration-options]")
@@ -485,9 +586,11 @@ describe("TransfigurationSiteScreen", () => {
       )?.textContent,
     ).toBe("Empowered");
     expect(
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="cumulus-transfiguration-form-Empowered"]',
-      )?.getAttribute("aria-label"),
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-transfiguration-form-Empowered"]',
+        )
+        ?.getAttribute("aria-label"),
     ).toBe("Empowered, 40 essence");
     expect(
       container.querySelector<HTMLElement>(
@@ -561,9 +664,8 @@ describe("TransfigurationSiteScreen", () => {
     );
 
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-guide-gallery-mobile-region]",
-      )?.dataset.guideGalleryMobileRegionSize,
+      container.querySelector<HTMLElement>("[data-guide-gallery-mobile-region]")
+        ?.dataset.guideGalleryMobileRegionSize,
     ).toBe("expanded");
 
     act(() => {
@@ -575,9 +677,8 @@ describe("TransfigurationSiteScreen", () => {
     });
 
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-guide-gallery-mobile-region]",
-      )?.dataset.guideGalleryMobileRegionSize,
+      container.querySelector<HTMLElement>("[data-guide-gallery-mobile-region]")
+        ?.dataset.guideGalleryMobileRegionSize,
     ).toBe("expanded");
     expect(container.querySelectorAll('[role="radio"]')).toHaveLength(5);
     expect(

@@ -53,11 +53,14 @@ describe("cumulusSiteScreenFor", () => {
 
   it("resolves the migrated Dreamsign Bazaar site to a Cumulus node", () => {
     expect(
-      cumulusSiteScreenFor({ type: "DreamsignMarket", id: "site-1" } as SiteState),
+      cumulusSiteScreenFor({
+        type: "DreamsignMarket",
+        id: "site-1",
+      } as SiteState),
     ).not.toBeNull();
   });
 
-  it("resolves standard desktop Transfiguration while enhanced stays on the legacy screen", () => {
+  it("resolves both standard and enhanced Transfiguration to Cumulus", () => {
     expect(
       cumulusSiteScreenFor({
         type: "Transfiguration",
@@ -71,7 +74,7 @@ describe("cumulusSiteScreenFor", () => {
         id: "site-1",
         isEnhanced: true,
       } as SiteState),
-    ).toBeNull();
+    ).not.toBeNull();
   });
 
   it("returns null for site types not yet migrated, so ScreenRouter falls back to legacy", () => {
@@ -79,7 +82,11 @@ describe("cumulusSiteScreenFor", () => {
   });
 
   it("reports site registration from the same resolver used by the router", () => {
-    expect(isCumulusSiteRegistered({ type: "Draft", id: "site-1" } as SiteState)).toBe(true);
-    expect(isCumulusSiteRegistered({ type: "Reward" } as SiteState)).toBe(false);
+    expect(
+      isCumulusSiteRegistered({ type: "Draft", id: "site-1" } as SiteState),
+    ).toBe(true);
+    expect(isCumulusSiteRegistered({ type: "Reward" } as SiteState)).toBe(
+      false,
+    );
   });
 });

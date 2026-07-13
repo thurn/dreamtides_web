@@ -46,8 +46,12 @@ export interface TransfigurationFormView {
 export interface TransfigurationCandidateView {
   /** Concrete deck-entry id; duplicate cards remain independent choices. */
   entryId: string;
-  /** Unmodified card shown in the three-card picker. */
+  /** Card shown in the picker; reforged context cards include their form. */
   model: GameCardModel;
+  /** Whether the card can enter the forge or is completed deck context. */
+  availability: "available" | "reforged";
+  /** Existing form named beneath a disabled reforged card. */
+  reforgedType: TransfigurationType | null;
   /** Eligible forms in persisted offer order. */
   forms: TransfigurationFormView[];
 }
@@ -57,6 +61,7 @@ export interface TransfigurationSiteView {
   scene: ArtRef | null;
   guide: TransfigurationGuideView;
   ready: boolean;
+  isEnhanced: boolean;
   alreadyAccepted: boolean;
   candidates: readonly TransfigurationCandidateView[];
 }
@@ -107,7 +112,12 @@ export function TransfigurationSiteScreen({
   const picked =
     view.candidates.find((candidate) => candidate.entryId === pickedEntryId) ??
     null;
-  const fallbackCandidate = picked ?? view.candidates[0] ?? null;
+  const fallbackCandidate =
+    picked ??
+    view.candidates.find(
+      (candidate) => candidate.availability === "available",
+    ) ??
+    null;
 
   const beginPick = useCallback(
     (entryId: string, layout: "mobile" | "desktop") => {
@@ -115,7 +125,9 @@ export function TransfigurationSiteScreen({
       const candidate = view.candidates.find(
         (choice) => choice.entryId === entryId,
       );
-      if (candidate === undefined) return;
+      if (candidate === undefined || candidate.availability !== "available") {
+        return;
+      }
       if (layout === "mobile" || reduceMotion === true) {
         setPickedEntryId(entryId);
         return;
@@ -141,7 +153,11 @@ export function TransfigurationSiteScreen({
             { transform: "scale(1)" },
             { transform: `scale(${String(CARD_DISMISS_SCALE)})` },
           ],
-          { duration: 320, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "forwards" },
+          {
+            duration: 320,
+            easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+            fill: "forwards",
+          },
         );
       }
       const activeCard = source.querySelector<HTMLElement>(
@@ -262,27 +278,27 @@ export function TransfigurationSiteScreen({
           {layout === "desktop" &&
             picked === null &&
             fallbackCandidate !== null && (
-            <div
-              aria-hidden="true"
-              style={{
-                position: "absolute",
-                inset: 0,
-                visibility: "hidden",
-                pointerEvents: "none",
-              }}
-            >
-              <DetailPanel
-                layout={layout}
-                candidate={fallbackCandidate}
-                selectedFormType={null}
-                confirming={false}
-                alreadyAccepted={false}
-                onBack={() => undefined}
-                onSelectForm={() => undefined}
-                onConfirm={() => undefined}
-              />
-            </div>
-          )}
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  visibility: "hidden",
+                  pointerEvents: "none",
+                }}
+              >
+                <DetailPanel
+                  layout={layout}
+                  candidate={fallbackCandidate}
+                  selectedFormType={null}
+                  confirming={false}
+                  alreadyAccepted={false}
+                  onBack={() => undefined}
+                  onSelectForm={() => undefined}
+                  onConfirm={() => undefined}
+                />
+              </div>
+            )}
           {travel !== null && (
             <motion.div
               data-testid="cumulus-transfiguration-card-travel"
@@ -330,22 +346,29 @@ function PickerPanel({
   readonly onPick: (entryId: string) => void;
 }) {
   const desktop = layout === "desktop";
+  const enhanced = view.isEnhanced;
   return (
     <CardGalleryPanel
       title="Transfiguration"
-      subtitle={view.ready ? "Choose a card to reforge" : "Heating the forge…"}
+      subtitle={
+        view.ready
+          ? enhanced
+            ? "Pick any card to reforge"
+            : "Choose a card to reforge"
+          : "Heating the forge…"
+      }
       rightAccessory={
-        desktop
-          ? undefined
-          : {
+        enhanced || !desktop
+          ? {
               kind: "glassButton",
               label: "Decline",
               onPress: onClose,
               testId: "cumulus-transfiguration-decline",
             }
+          : undefined
       }
       footerAction={
-        desktop
+        desktop && !enhanced
           ? {
               label: "Decline Offer",
               onPress: onClose,
@@ -357,13 +380,33 @@ function PickerPanel({
         entryId: candidate.entryId,
         model: candidate.model,
         testId: `cumulus-transfiguration-card-${candidate.entryId}`,
+        disabled: candidate.availability !== "available",
+        muted: candidate.availability !== "available",
+        caption:
+          candidate.reforgedType === null
+            ? undefined
+            : {
+                kind: "text" as const,
+                text: `${candidate.reforgedType} · Reforged`,
+              },
       }))}
-      emptyLabel={view.ready ? "No eligible cards to reforge." : "Heating the forge…"}
-      columns="three"
-      cardSize={desktop ? "roomy" : "standard"}
+      emptyLabel={
+        view.ready ? "No eligible cards to reforge." : "Heating the forge…"
+      }
+      columns={enhanced ? (desktop ? "five" : "four") : "three"}
+      cardSize={enhanced ? "standard" : desktop ? "roomy" : "standard"}
       frame="floating"
-      widthMode={desktop ? "content" : "fill"}
-      spacing={desktop ? "spacious" : "medium"}
+      widthMode={enhanced || !desktop ? "fill" : "content"}
+      spacing={
+        enhanced
+          ? desktop
+            ? "regular"
+            : "medium"
+          : desktop
+            ? "spacious"
+            : "medium"
+      }
+      largeCards={enhanced}
       testId="cumulus-transfiguration-picker"
       onCardPress={onPick}
     />
@@ -404,9 +447,7 @@ function DetailPanel({
       data-transfiguration-detail-layout={layout}
       style={{
         ...glassSurfaceStyle(),
-        width: mobile
-          ? `calc(100vw - (${token("--space-4")} * 2))`
-          : "100%",
+        width: mobile ? `calc(100vw - (${token("--space-4")} * 2))` : "100%",
         height: mobile ? "auto" : undefined,
         minHeight: mobile ? "100%" : undefined,
         maxHeight: mobile ? undefined : "100%",

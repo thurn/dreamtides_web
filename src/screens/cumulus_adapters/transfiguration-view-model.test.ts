@@ -16,7 +16,9 @@ import {
 function makeCard(cardNumber: number): CardData {
   return {
     name: asCardName(`Fixture ${String(cardNumber)}`),
-    id: asCardId(`00000000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`),
+    id: asCardId(
+      `00000000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`,
+    ),
     cardNumber,
     cardType: "Character",
     subtype: "",
@@ -88,6 +90,7 @@ describe("buildTransfigurationCandidates", () => {
       state,
       runtime(),
       cardDatabase,
+      false,
     );
 
     expect(candidates.map((candidate) => candidate.entryId)).toEqual([
@@ -120,8 +123,53 @@ describe("buildTransfigurationCandidates", () => {
         state,
         runtime(),
         new Map([[1, makeCard(1)]]),
+        false,
       ),
     ).toEqual([]);
+  });
+
+  it("shows the whole enhanced deck in deck order and keeps reforged cards as disabled context", () => {
+    const state = {
+      ...createDefaultState(),
+      essence: 100,
+      deck: [
+        makeEntry(4),
+        makeEntry(2),
+        { ...makeEntry(5), transfiguration: "Kindled" as const },
+        makeEntry(1),
+        makeEntry(3),
+      ],
+    };
+    const cardDatabase = new Map(
+      state.deck.map((entry) => [entry.cardNumber, makeCard(entry.cardNumber)]),
+    );
+
+    const candidates = buildTransfigurationCandidates(
+      state,
+      runtime(),
+      cardDatabase,
+      true,
+    );
+
+    expect(candidates.map((candidate) => candidate.entryId)).toEqual([
+      "entry-4",
+      "entry-2",
+      "entry-5",
+      "entry-1",
+      "entry-3",
+    ]);
+    expect(candidates.map((candidate) => candidate.availability)).toEqual([
+      "available",
+      "available",
+      "reforged",
+      "available",
+      "available",
+    ]);
+    expect(candidates[2]).toMatchObject({
+      reforgedType: "Kindled",
+      forms: [],
+    });
+    expect(candidates[2]?.model.transfiguration?.type).toBe("Kindled");
   });
 });
 
@@ -139,6 +187,7 @@ describe("buildTransfigurationSiteView", () => {
     });
 
     expect(view.siteId).toBe(site.id);
+    expect(view.isEnhanced).toBe(false);
     expect(view.ready).toBe(false);
     expect(view.guide).toMatchObject({
       id: "durgan_forgehammer",

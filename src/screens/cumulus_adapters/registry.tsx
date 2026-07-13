@@ -26,9 +26,7 @@ import { TransfigurationSiteScreenAdapter } from "./TransfigurationSiteScreenAda
  * (the caller then renders the legacy screen). Only screens listed here are
  * served by the Cumulus UI; every other screen falls back to legacy.
  */
-export function cumulusScreenFor(
-  screen: Screen,
-): ReactNode | null {
+export function cumulusScreenFor(screen: Screen): ReactNode | null {
   switch (screen.type) {
     case "questStart":
       return <QuestStartScreenAdapter />;
@@ -46,35 +44,20 @@ export function cumulusScreenFor(
  * caller then renders the legacy site screen). The migrated site owns its
  * responsive Cumulus idioms internally.
  */
-export function cumulusSiteScreenFor(
-  site: SiteState,
-): ReactNode | null {
+export function cumulusSiteScreenFor(site: SiteState): ReactNode | null {
   switch (site.type) {
     case "Draft":
-      return (
-        <DraftSiteScreenAdapter siteId={site.id} />
-      );
+      return <DraftSiteScreenAdapter siteId={site.id} />;
     case "DreamsignRevelation":
-      return (
-        <DreamsignRevelationScreenAdapter siteId={site.id} />
-      );
+      return <DreamsignRevelationScreenAdapter siteId={site.id} />;
     case "Purge":
-      return (
-        <PurgeSiteScreenAdapter siteId={site.id} />
-      );
+      return <PurgeSiteScreenAdapter siteId={site.id} />;
     case "Shop":
-      return (
-        <CardShopSiteScreenAdapter siteId={site.id} />
-      );
+      return <CardShopSiteScreenAdapter siteId={site.id} />;
     case "DreamsignMarket":
-      return (
-        <DreamsignBazaarSiteScreenAdapter siteId={site.id} />
-      );
+      return <DreamsignBazaarSiteScreenAdapter siteId={site.id} />;
     case "Transfiguration":
-      if (site.isEnhanced) return null;
-      return (
-        <TransfigurationSiteScreenAdapter siteId={site.id} />
-      );
+      return <TransfigurationSiteScreenAdapter siteId={site.id} />;
     default:
       return null;
   }
