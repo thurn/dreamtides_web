@@ -70,8 +70,8 @@ function card(index: number): CardData {
 }
 
 function view(): DreamAugurySiteView {
-  const first = card(1);
-  const second = card(2);
+  const choices = [card(1), card(2), card(3), card(4)];
+  const direct = card(5);
   return {
     siteId: "augury-site",
     scene: null,
@@ -90,15 +90,13 @@ function view(): DreamAugurySiteView {
         visual: {
           kind: "cardChoices",
           doubled: false,
-          choices: [
-            {
-              id: "choice-1",
-              card: {
-                id: first.id,
-                model: { cardId: first.id, displaySnapshot: first },
-              },
+          choices: choices.map((choice, index) => ({
+            id: `choice-${String(index + 1)}`,
+            card: {
+              id: choice.id,
+              model: { cardId: choice.id, displaySnapshot: choice },
             },
-          ],
+          })),
         },
       },
       {
@@ -110,8 +108,8 @@ function view(): DreamAugurySiteView {
           kind: "cards",
           cards: [
             {
-              id: second.id,
-              model: { cardId: second.id, displaySnapshot: second },
+              id: direct.id,
+              model: { cardId: direct.id, displaySnapshot: direct },
             },
           ],
         },
@@ -150,11 +148,16 @@ afterEach(() => {
 });
 
 describe("DreamAugurySiteScreen", () => {
-  it("stages Aldric between two equal choices under one explicit instruction", () => {
+  it("stages two preview-only visions around Aldric", () => {
     const container = mount(
       <DreamAugurySiteScreen view={view()} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
     );
 
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="cumulus-dream-augury-site-screen"]',
+      )?.dataset.auguryPhase,
+    ).toBe("comparison");
     expect(container.textContent).toContain("Choose One");
     expect(container.querySelectorAll("[data-augury-offer]")).toHaveLength(2);
     expect(
@@ -165,12 +168,64 @@ describe("DreamAugurySiteScreen", () => {
     expect(
       container.querySelectorAll('[data-glass-variant="accent"]'),
     ).toHaveLength(2);
+    expect(
+      container.querySelector('[data-testid="cumulus-augury-choice-choice-1"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-testid="cumulus-dream-augury-detail"]'),
+    ).toBeNull();
   });
 
-  it("requires an inner candidate pick, then confirms the selected offer", () => {
+  it("opens one vision before exposing its detailed candidate pick", () => {
+    const onInspectOffer = vi.fn();
+    const container = mount(
+      <DreamAugurySiteScreen
+        view={view()}
+        onInspectOffer={onInspectOffer}
+        onChoose={() => ({ ok: true })}
+        onClose={() => undefined}
+      />,
+    );
+
+    click(
+      container.querySelector(
+        '[data-testid="cumulus-dream-augury-preview-A"]',
+      ),
+    );
+
+    expect(onInspectOffer).toHaveBeenCalledWith("A");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="cumulus-dream-augury-site-screen"]',
+      )?.dataset.auguryPhase,
+    ).toBe("detail");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="cumulus-dream-augury-detail"]',
+      )?.dataset.offerId,
+    ).toBe("A");
+    expect(container.querySelectorAll("[data-augury-offer]")).toHaveLength(1);
+    expect(
+      container.querySelector('[data-testid="cumulus-dream-augury-preview-B"]'),
+    ).toBeNull();
+    expect(
+      container.querySelectorAll('[data-testid^="cumulus-augury-choice-"]'),
+    ).toHaveLength(4);
+    expect(
+      container.querySelector('[data-testid="cumulus-dream-augury-choose-again"]'),
+    ).not.toBeNull();
+  });
+
+  it("requires an inner candidate pick in detail, then confirms the selected offer", () => {
     const onChoose = vi.fn(() => ({ ok: true } as const));
     const container = mount(
       <DreamAugurySiteScreen view={view()} onChoose={onChoose} onClose={() => undefined} />,
+    );
+
+    click(
+      container.querySelector(
+        '[data-testid="cumulus-dream-augury-preview-A"]',
+      ),
     );
     const confirm = container.querySelector(
       '[data-testid="cumulus-dream-augury-confirm-A"]',
@@ -182,7 +237,7 @@ describe("DreamAugurySiteScreen", () => {
     expect(onChoose).toHaveBeenCalledWith("A", "choice-1");
   });
 
-  it("confirms a direct offer without an inner selection", () => {
+  it("previews a direct offer before enabling its separate confirmation", () => {
     const onChoose = vi.fn(() => ({ ok: true } as const));
     const container = mount(
       <DreamAugurySiteScreen view={view()} onChoose={onChoose} onClose={() => undefined} />,
@@ -190,9 +245,51 @@ describe("DreamAugurySiteScreen", () => {
 
     click(
       container.querySelector(
+        '[data-testid="cumulus-dream-augury-preview-B"]',
+      ),
+    );
+    expect(onChoose).not.toHaveBeenCalled();
+    click(
+      container.querySelector(
         '[data-testid="cumulus-dream-augury-confirm-B"]',
       ),
     );
     expect(onChoose).toHaveBeenCalledWith("B", null);
+  });
+
+  it("returns to both previews and clears an abandoned inner choice", () => {
+    const container = mount(
+      <DreamAugurySiteScreen view={view()} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
+    );
+
+    click(
+      container.querySelector(
+        '[data-testid="cumulus-dream-augury-preview-A"]',
+      ),
+    );
+    click(
+      container.querySelector('[data-testid="cumulus-augury-choice-choice-1"]'),
+    );
+    click(
+      container.querySelector(
+        '[data-testid="cumulus-dream-augury-choose-again"]',
+      ),
+    );
+    click(
+      container.querySelector(
+        '[data-testid="cumulus-dream-augury-preview-A"]',
+      ),
+    );
+
+    expect(
+      container
+        .querySelector('[data-testid="cumulus-augury-choice-choice-1"]')
+        ?.getAttribute("data-selected"),
+    ).toBe("false");
+    expect(
+      container
+        .querySelector('[data-testid="cumulus-dream-augury-confirm-A"]')
+        ?.getAttribute("aria-disabled"),
+    ).toBe("true");
   });
 });

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { logEventOnce } from "../../logging";
+import { logEvent, logEventOnce } from "../../logging";
 import { useQuest } from "../../state/quest-context";
 import { DreamAugurySiteScreen } from "../../cumulus/screens/DreamAugurySiteScreen";
 import {
@@ -23,13 +23,7 @@ export function DreamAugurySiteScreenAdapter({ siteId }: { siteId: string }) {
     () =>
       site === null
         ? null
-        : buildDreamAugurySiteModel({
-            state,
-            sceneNode: node,
-            site,
-            questContent,
-            guide,
-          }),
+        : buildDreamAugurySiteModel({ state, sceneNode: node, site, questContent, guide }),
     [state, node, site, questContent, guide],
   );
 
@@ -41,9 +35,8 @@ export function DreamAugurySiteScreenAdapter({ siteId }: { siteId: string }) {
     [guide?.id, result, site],
   );
   useEffect(() => {
-    for (const entry of logEntries) {
+    for (const entry of logEntries)
       logEventOnce(entry.key, entry.event, entry.payload);
-    }
   }, [logEntries]);
 
   const publishedSignatureRef = useRef<string | null>(null);
@@ -99,11 +92,26 @@ export function DreamAugurySiteScreenAdapter({ siteId }: { siteId: string }) {
     else mutations.declineDreamMerchant(site.id, request);
   }, [mutations, result, site]);
 
+  const handleInspect = useCallback((offerId: string) => {
+    const offer = result?.encounter?.offers.find(
+      (candidate) => candidate.offerId === offerId,
+    );
+    if (site === null || offer === undefined) return;
+    logEvent("merchant_offer_preview_selected", {
+      siteId: site.id,
+      encounterSignature: offer.encounterSignature,
+      offerId,
+      archetypeId: offer.archetypeId,
+      ui: "cumulus",
+    });
+  }, [result, site]);
+
   if (site === null || result === null) return null;
   return (
     <DreamAugurySiteScreen
       key={result.view.encounterSignature}
       view={result.view}
+      onInspectOffer={handleInspect}
       onChoose={handleChoose}
       onClose={handleClose}
     />
