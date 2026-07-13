@@ -23,7 +23,14 @@ const DEMO_FORMS = [
 function TransfigurationFormButtonDemo() {
   const [selected, setSelected] = useState<TransfigurationType | null>(null);
   return (
-    <div style={{ display: "flex", gap: token("--space-4") }}>
+    <div
+      style={{
+        width: 240,
+        display: "flex",
+        flexDirection: "column",
+        gap: token("--space-4"),
+      }}
+    >
       {DEMO_FORMS.map((form) => (
         <TransfigurationFormButton
           key={form.type}
@@ -45,16 +52,16 @@ export const transfigurationFormButtonDemo: CumulusComponent = {
   id: "transfiguration-form-button",
   title: "Transfiguration Form Button",
   blurb:
-    "The compact forge-form choice: a colored transfiguration glyph and form name in one touch-sized control, with the cost and effect revealed through InfoCard.",
+    "The compact forge-form choice: a centered transfiguration glyph and form name in one equal-width, touch-sized control.",
   callout:
-    "Use this on space-constrained transfiguration surfaces. A quick activation selects an affordable form; hover, focus, or touch-hold reveals its complete meaning without spending permanent screen area.",
+    "Use this on space-constrained transfiguration surfaces. A quick activation selects an affordable form and updates the adjacent card preview.",
   group: "Components",
   docName: "TransfigurationFormButton",
   Component: TransfigurationFormButtonDemo,
   usage: [
     {
       label: "Compact forge form",
-      note: "Give each concrete card/form pairing a stable id so its reveal identity stays distinct.",
+      note: "Give each concrete card/form pairing a stable id and place sibling options in a shared-width column.",
       code: `import { TransfigurationFormButton } from "src/cumulus/components/controls/TransfigurationFormButton";
 
 <TransfigurationFormButton

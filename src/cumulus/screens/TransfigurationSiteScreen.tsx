@@ -215,10 +215,15 @@ export function TransfigurationSiteScreen({
             style={{
               width: "100%",
               height: layout === "mobile" ? "100%" : undefined,
+              minHeight: layout === "mobile" ? 0 : undefined,
               maxHeight: "100%",
-              overflow: layout === "mobile" ? "hidden" : "visible",
+              overflow: "visible",
               display: "grid",
-              placeItems: "center",
+              alignContent:
+                layout === "mobile" && picked !== null ? "end" : "center",
+              alignItems:
+                layout === "mobile" && picked !== null ? "end" : "center",
+              justifyItems: "center",
             }}
           >
             {picked === null ? (
@@ -402,8 +407,9 @@ function DetailPanel({
         width: mobile
           ? `calc(100vw - (${token("--space-4")} * 2))`
           : "100%",
-        height: mobile ? "100%" : undefined,
-        maxHeight: "100%",
+        height: mobile ? "auto" : undefined,
+        minHeight: mobile ? "100%" : undefined,
+        maxHeight: mobile ? undefined : "100%",
         boxSizing: "border-box",
         overflow: "hidden",
         color: token("--text-on-glass"),
@@ -434,13 +440,13 @@ function DetailPanel({
         }
         style={{
           display: "grid",
-          containerType: mobile ? "size" : undefined,
-          flex: mobile ? "1 1 auto" : undefined,
-          minHeight: mobile ? 0 : undefined,
+          containerType: mobile ? "inline-size" : undefined,
+          flex: mobile ? "1 0 auto" : undefined,
+          minHeight: mobile ? "auto" : undefined,
           gridTemplateColumns: mobile
             ? "minmax(0, 1fr) minmax(0, 1fr)"
             : "minmax(220px, 0.82fr) minmax(320px, 1.18fr)",
-          gridTemplateRows: mobile ? "minmax(0, 1fr)" : undefined,
+          gridTemplateRows: mobile ? "auto" : undefined,
           gap: mobile ? token("--space-4") : token("--space-8"),
           alignItems: mobile ? "stretch" : "start",
           padding: mobile
@@ -450,10 +456,8 @@ function DetailPanel({
       >
         <div
           style={{
-            // Let short phones spend every remaining vertical pixel on the
-            // card while wide/tall phones stop at the authored readable size.
             width: mobile
-              ? `min(100%, calc(100cqh * ${String(CARD_ASPECT_RATIO_VALUE)}), ${String(MOBILE_DETAIL_CARD_MAX_WIDTH)}px)`
+              ? `min(100%, ${String(MOBILE_DETAIL_CARD_MAX_WIDTH)}px)`
               : "min(100%, 278px)",
             height: mobile ? "auto" : undefined,
             aspectRatio: mobile ? String(CARD_ASPECT_RATIO_VALUE) : undefined,
@@ -490,14 +494,14 @@ function DetailPanel({
             style={{
               display: "flex",
               minHeight: mobile ? 0 : undefined,
-              height: mobile ? "100%" : undefined,
+              height: mobile ? "auto" : undefined,
               boxSizing: "border-box",
               flexDirection: "column",
-              alignItems: mobile ? "center" : undefined,
-              justifyContent: mobile ? "center" : undefined,
+              alignItems: mobile ? "stretch" : undefined,
+              justifyContent: mobile ? "flex-start" : undefined,
               gap: token("--space-3"),
               maxHeight: mobile ? undefined : "min(52vh, 520px)",
-              overflowY: "auto",
+              overflowY: mobile ? "visible" : "auto",
               padding: token("--space-2"),
             }}
           >

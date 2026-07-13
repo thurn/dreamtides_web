@@ -8,9 +8,9 @@ Components · Live demo & interactive props: `/cumulus#/transfiguration-form-but
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The compact forge-form choice: a colored transfiguration glyph and form name in one touch-sized control, with the cost and effect revealed through InfoCard.
+The compact forge-form choice: a centered transfiguration glyph and form name in one equal-width, touch-sized control.
 
-> **Guidance:** Use this on space-constrained transfiguration surfaces. A quick activation selects an affordable form; hover, focus, or touch-hold reveals its complete meaning without spending permanent screen area.
+> **Guidance:** Use this on space-constrained transfiguration surfaces. A quick activation selects an affordable form and updates the adjacent card preview.
 
 ## Props
 
@@ -18,8 +18,8 @@ The compact forge-form choice: a colored transfiguration glyph and form name in 
 | --- | --- | --- | --- | --- |
 | `id` | `string` | yes | — | Stable identity pairing the concrete deck entry with this offered form. |
 | `type` | `TransfigurationType` = `"Empowered" \| "Amplified" \| "Kindled" \| "Inspired" \| "Enduring" \| "Hastened" \| "Resonant" \| "Attuned" \| "Perfected"` | yes | — | Named transfiguration form, which determines the canonical glyph. |
-| `description` | `string` | yes | — | Player-facing rules change revealed through the shared InfoCard. |
-| `essenceCost` | `number` | yes | — | Quoted essence cost shown in the accessible label and InfoCard. |
+| `description` | `string` | yes | — | Player-facing rules change announced as the option's accessible description. |
+| `essenceCost` | `number` | yes | — | Quoted essence cost announced in the accessible label. |
 | `affordable` | `boolean` | yes | — | Whether the player can currently pay the quoted cost. |
 | `accent` | `CumulusColor` = `"danger" \| "accent" \| "accent-bright" \| "accent-strong" \| "essence" \| "energy" \| "energy-bright" \| "spark" \| "points" \| "positive" \| "selected" \| "sale" \| "gold" \| "gold-light" \| "text-primary" \| "text-secondary" \| "text-muted" \| "text-faint" \| "text-on-accent" \| "white"` | yes | — | Data-defined transfiguration hue used for the glyph and selection edge. |
 | `selected` | `boolean` | yes | — | Whether this form is the active radio choice. |
@@ -31,7 +31,7 @@ The compact forge-form choice: a colored transfiguration glyph and form name in 
 
 ### Compact forge form
 
-Give each concrete card/form pairing a stable id so its reveal identity stays distinct.
+Give each concrete card/form pairing a stable id and place sibling options in a shared-width column.
 
 ```tsx
 import { TransfigurationFormButton } from "src/cumulus/components/controls/TransfigurationFormButton";

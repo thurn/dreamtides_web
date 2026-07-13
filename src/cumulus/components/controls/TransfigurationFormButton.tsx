@@ -1,14 +1,10 @@
-// TransfigurationFormButton — the compact, self-revealing forge-form choice.
+// TransfigurationFormButton — the compact forge-form choice.
 
-import { useRef } from "react";
 import type { TransfigurationType } from "../../../types/quest";
-import { useRevealSource } from "../../internal/reveal/context";
-import { revealEntityId } from "../../internal/reveal/identity";
 import type { CumulusColor } from "../../primitives/color";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
-import { richText } from "../card/rich-text";
 import { GlowIcon } from "./GlowIcon";
 
 /** Canonical glyph for each named transfiguration form. */
@@ -31,9 +27,9 @@ export interface TransfigurationFormButtonProps {
   id: string;
   /** Named transfiguration form, which determines the canonical glyph. */
   type: TransfigurationType;
-  /** Player-facing rules change revealed through the shared InfoCard. */
+  /** Player-facing rules change announced as the option's accessible description. */
   description: string;
-  /** Quoted essence cost shown in the accessible label and InfoCard. */
+  /** Quoted essence cost announced in the accessible label. */
   essenceCost: number;
   /** Whether the player can currently pay the quoted cost. */
   affordable: boolean;
@@ -50,8 +46,8 @@ export interface TransfigurationFormButtonProps {
 }
 
 /**
- * Compact mobile form choice. A quick tap selects; hover, focus, or a touch
- * hold reveals the cost and full effect through InfoCard.
+ * Compact mobile form choice. A quick tap selects the form and updates the
+ * adjacent card preview.
  */
 export function TransfigurationFormButton({
   id,
@@ -65,65 +61,34 @@ export function TransfigurationFormButton({
   onActivate,
   testId,
 }: TransfigurationFormButtonProps) {
-  const lastPointerType = useRef<string | null>(null);
   const canSelect = affordable && !disabled;
   const glyph = TRANSFIGURATION_FORM_GLYPHS[type];
-  const binding = useRevealSource({
-    identity: {
-      entityType: "transfiguration-form",
-      entityId: revealEntityId("transfiguration-form", id),
-    },
-    spec: {
-      primary: {
-        kind: "infoCard",
-        card: {
-          variant: "text",
-          meta:
-            essenceCost === 0
-              ? "Free Transfiguration"
-              : `${String(essenceCost)} Essence`,
-          title: type,
-          leadGlyph: glyph,
-          body: richText.plain(description),
-        },
-      },
-      secondaries: [],
-    },
-    onActivate: canSelect ? onActivate : undefined,
-  });
-  const pointerDown = binding.sourceProps.onPointerDown;
 
   return (
     <Pressable
       as="button"
-      ref={binding.ref}
-      {...binding.sourceProps}
+      data-transfiguration-form-id={id}
       role="radio"
       aria-checked={selected}
-      aria-disabled={!canSelect || undefined}
+      aria-description={description}
       aria-label={`${type}, ${
         essenceCost === 0 ? "free" : `${String(essenceCost)} essence`
       }`}
-      disabled={disabled}
+      disabled={!canSelect}
       data-testid={testId}
-      onPointerDown={(event) => {
-        lastPointerType.current = event.pointerType;
-        pointerDown?.(event);
-      }}
-      onClick={() => {
-        if (lastPointerType.current !== "touch" && canSelect) onActivate();
-      }}
+      onClick={canSelect ? onActivate : undefined}
       style={{
-        ...binding.sourceProps.style,
         height: token("--touch-min"),
-        minWidth: "max-content",
+        width: "100%",
+        minWidth: 0,
         flex: "none",
         display: "flex",
         alignItems: "center",
-        justifyContent: "flex-start",
+        justifyContent: "center",
         gap: token("--space-2"),
         paddingRight: token("--space-3"),
         paddingLeft: token("--space-3"),
+        boxSizing: "border-box",
         border: `2px solid ${selected ? accent : token("--border-soft")}`,
         borderRadius: token("--radius-control"),
         background: "transparent",

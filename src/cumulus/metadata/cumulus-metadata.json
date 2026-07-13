@@ -3405,7 +3405,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Player-facing rules change revealed through the shared InfoCard."
+      "description": "Player-facing rules change announced as the option's accessible description."
     },
     {
       "name": "essenceCost",
@@ -3413,7 +3413,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Quoted essence cost shown in the accessible label and InfoCard."
+      "description": "Quoted essence cost announced in the accessible label."
     },
     {
       "name": "affordable",

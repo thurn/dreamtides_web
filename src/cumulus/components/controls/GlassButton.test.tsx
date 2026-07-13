@@ -173,6 +173,26 @@ describe("GlassButton", () => {
     });
   });
 
+  it("centers the visible label within reserved dynamic width", () => {
+    const { container, root } = mount(
+      <GlassButton
+        label="Transfigure"
+        widthReservations={[
+          { label: "Transfigure", cost: null },
+          { label: "Reforging…", cost: 80 },
+        ]}
+        onPress={() => {}}
+      />,
+    );
+
+    expect(
+      container.querySelector<HTMLElement>("[data-glass-button-content]")
+        ?.style.justifyContent,
+    ).toBe("center");
+
+    act(() => root.unmount());
+  });
+
   it("omits the `<i>` when no glyph is given", () => {
     const { container, root } = mount(
       <GlassButton label="Filter" onPress={() => {}} />,

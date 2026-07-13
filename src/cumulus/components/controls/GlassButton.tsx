@@ -225,6 +225,7 @@ function GlassButtonContent({
         gridArea: "1 / 1",
         display: "inline-flex",
         alignItems: "center",
+        justifyContent: "center",
         gap: 8,
       }}
     >

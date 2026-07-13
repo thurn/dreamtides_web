@@ -434,12 +434,12 @@ describe("TransfigurationSiteScreen", () => {
       container.querySelector<HTMLElement>(
         "[data-transfiguration-detail-body]",
       )?.style.containerType,
-    ).toBe("size");
+    ).toBe("inline-size");
     expect(
       container.querySelector<HTMLElement>(
         "[data-transfiguration-detail-body]",
       )?.style.gridTemplateRows,
-    ).toBe("minmax(0, 1fr)");
+    ).toBe("auto");
     expect(
       container.querySelector<HTMLElement>(
         "[data-transfiguration-detail-body]",
@@ -452,12 +452,16 @@ describe("TransfigurationSiteScreen", () => {
     expect(
       container.querySelector<HTMLElement>("[data-transfiguration-options]")
         ?.style.alignItems,
-    ).toBe("center");
+    ).toBe("stretch");
+    expect(
+      container.querySelector<HTMLElement>("[data-transfiguration-options]")
+        ?.style.justifyContent,
+    ).toBe("flex-start");
     expect(
       container.querySelector<HTMLElement>(
         "[data-transfiguration-panel-viewport]",
       )?.style.overflow,
-    ).toBe("hidden");
+    ).toBe("visible");
     expect(
       container.querySelector<HTMLElement>(
         "[data-transfiguration-panel-viewport]",
@@ -484,8 +488,20 @@ describe("TransfigurationSiteScreen", () => {
       container.querySelector<HTMLElement>(
         '[data-testid="cumulus-transfiguration-form-Empowered"]',
       )?.dataset.revealPrimaryVariant,
-    ).toBe("text");
-    expect(container.textContent).toContain("Reduce this card's energy cost.");
+    ).toBeUndefined();
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="cumulus-transfiguration-form-Empowered"]',
+      )?.style.width,
+    ).toBe("100%");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="cumulus-transfiguration-form-Empowered"]',
+      )?.style.justifyContent,
+    ).toBe("center");
+    expect(container.textContent).not.toContain(
+      "Reduce this card's energy cost.",
+    );
     expect(
       container.querySelector('[data-testid="cumulus-transfiguration-back"]'),
     ).toBeNull();
@@ -517,12 +533,20 @@ describe("TransfigurationSiteScreen", () => {
       type: "Enduring" as const,
       accent: TRANSFIGURATION_COLORS.Enduring,
     };
+    const amplified = {
+      ...first.forms[0],
+      type: "Amplified" as const,
+      accent: TRANSFIGURATION_COLORS.Amplified,
+    };
     const { container, root } = mount(
       <TransfigurationSiteScreen
         view={{
           ...denseView,
           candidates: [
-            { ...first, forms: [...first.forms, inspired, enduring] },
+            {
+              ...first,
+              forms: [...first.forms, inspired, enduring, amplified],
+            },
             ...denseView.candidates.slice(1),
           ],
         }}
@@ -550,7 +574,40 @@ describe("TransfigurationSiteScreen", () => {
         "[data-guide-gallery-mobile-region]",
       )?.dataset.guideGalleryMobileRegionSize,
     ).toBe("expanded");
-    expect(container.querySelectorAll('[role="radio"]')).toHaveLength(4);
+    expect(container.querySelectorAll('[role="radio"]')).toHaveLength(5);
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="cumulus-transfiguration-detail"]',
+      )?.style.height,
+    ).toBe("auto");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="cumulus-transfiguration-detail"]',
+      )?.style.minHeight,
+    ).toBe("100%");
+    expect(
+      container.querySelector<HTMLElement>("[data-transfiguration-options]")
+        ?.style.height,
+    ).toBe("auto");
+    expect(
+      container.querySelector<HTMLElement>("[data-transfiguration-options]")
+        ?.style.overflowY,
+    ).toBe("visible");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-transfiguration-panel-viewport]",
+      )?.style.overflow,
+    ).toBe("visible");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-transfiguration-panel-viewport]",
+      )?.style.minHeight,
+    ).toBe("0px");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-transfiguration-panel-viewport]",
+      )?.style.alignContent,
+    ).toBe("end");
 
     act(() => root.unmount());
   });
