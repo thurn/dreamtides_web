@@ -449,21 +449,24 @@ function MobileDetailCarousel({
           <MobileCarouselSlide active={index === 0} hasNext>
             {view.dreamcaller.ability !== "" && (
               <>
-                <div
-                  data-battle-start-mobile-ability=""
-                  style={{
-                    font: token("--t-rules"),
-                    color: view.dreamcaller.abilityActive
-                      ? token("--text-on-glass")
-                      : token("--text-on-glass-muted"),
-                  }}
-                >
-                  {view.dreamcaller.abilityActive ? (
-                    <RulesText text={view.dreamcaller.ability} />
-                  ) : (
-                    <span>Opponent dreamcaller ability is not active.</span>
-                  )}
-                </div>
+                <MobileCarouselPage title="Ability:">
+                  <div
+                    data-battle-start-mobile-ability=""
+                    style={{
+                      font: token("--t-rules"),
+                      textAlign: "center",
+                      color: view.dreamcaller.abilityActive
+                        ? token("--text-on-glass")
+                        : token("--text-on-glass-muted"),
+                    }}
+                  >
+                    {view.dreamcaller.abilityActive ? (
+                      <RulesText text={view.dreamcaller.ability} />
+                    ) : (
+                      <span>Opponent dreamcaller ability is not active.</span>
+                    )}
+                  </div>
+                </MobileCarouselPage>
                 <div style={{ marginTop: token("--space-6") }}>
                   <ConsoleDivider flush />
                 </div>
@@ -477,7 +480,9 @@ function MobileDetailCarousel({
                   view.dreamcaller.ability === "" ? 0 : token("--space-9"),
               }}
             >
-              <MobileBattleStakes view={view} />
+              <MobileCarouselPage title="Victory:">
+                <MobileBattleStakes view={view} />
+              </MobileCarouselPage>
             </div>
 
             <div
@@ -581,6 +586,7 @@ function MobileCarouselSlide({
   readonly children: ReactNode;
 }) {
   const controlGutter = `calc(${token("--touch-min")} + ${token("--space-5")})`;
+  const reservesControlSpace = hasPrevious || hasNext;
   return (
     <div
       aria-hidden={!active}
@@ -591,9 +597,9 @@ function MobileCarouselSlide({
         flex: "none",
         boxSizing: "border-box",
         paddingTop: token("--space-9"),
-        paddingRight: hasNext ? controlGutter : token("--space-6"),
+        paddingRight: reservesControlSpace ? controlGutter : token("--space-6"),
         paddingBottom: token("--space-9"),
-        paddingLeft: hasPrevious ? controlGutter : token("--space-6"),
+        paddingLeft: reservesControlSpace ? controlGutter : token("--space-6"),
       }}
     >
       {children}
@@ -620,6 +626,8 @@ function MobileCarouselPage({
         <span
           data-battle-start-detail-title=""
           style={{
+            justifySelf: "stretch",
+            textAlign: "left",
             font: token("--t-eyebrow"),
             letterSpacing: token("--tracking-eyebrow"),
             textTransform: "uppercase",
@@ -672,8 +680,8 @@ function MobileBattleStakes({ view }: { readonly view: BattleStartView }) {
       data-battle-start-stakes=""
       style={{
         display: "flex",
-        justifyContent: "space-around",
-        gap: token("--space-6"),
+        justifyContent: "center",
+        gap: token("--space-9"),
       }}
     >
       <MobileStake label="To Win">

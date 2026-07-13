@@ -211,10 +211,31 @@ describe("Cumulus BattleStartScreen", () => {
       layout?.querySelector<HTMLElement>(
         '[data-battle-start-detail-active="true"]',
       );
-    expect(activePage()?.textContent).not.toContain("Victory:");
+    expect(activePage()?.textContent).toContain("Victory:");
     expect(activePage()?.textContent).toContain(
       "Whenever an event resolves, gain momentum.",
     );
+    const overviewTitles = Array.from(
+      activePage()?.querySelectorAll<HTMLElement>(
+        "[data-battle-start-detail-title]",
+      ) ?? [],
+    );
+    expect(overviewTitles.map((title) => title.textContent)).toEqual([
+      "Ability:",
+      "Victory:",
+    ]);
+    expect(
+      overviewTitles.every(
+        (title) =>
+          title.style.justifySelf === "stretch" &&
+          title.style.textAlign === "left",
+      ),
+    ).toBe(true);
+    expect(
+      activePage()?.querySelector<HTMLElement>(
+        "[data-battle-start-mobile-ability]",
+      )?.style.textAlign,
+    ).toBe("center");
     expect(activePage()?.textContent).toContain("To Win");
     expect(activePage()?.textContent).toContain("Reward");
     expect(
@@ -227,6 +248,17 @@ describe("Cumulus BattleStartScreen", () => {
         '[data-battle-start-stake="To Win"] > div',
       )?.style.font,
     ).toContain("--t-body");
+    const stakes = activePage()?.querySelector<HTMLElement>(
+      "[data-battle-start-stakes]",
+    );
+    expect(stakes?.style.justifyContent).toBe("center");
+    expect(stakes?.style.gap).toBe("var(--space-9)");
+    expect(activePage()?.style.paddingLeft).toBe(
+      "calc(var(--touch-min) + var(--space-5))",
+    );
+    expect(activePage()?.style.paddingRight).toBe(
+      "calc(var(--touch-min) + var(--space-5))",
+    );
 
     const track = layout?.querySelector<HTMLElement>(
       "[data-battle-start-detail-track]",
@@ -280,6 +312,14 @@ describe("Cumulus BattleStartScreen", () => {
     expect(activePage()?.style.paddingLeft).toBe(
       "calc(var(--touch-min) + var(--space-5))",
     );
+    expect(activePage()?.style.paddingRight).toBe(
+      "calc(var(--touch-min) + var(--space-5))",
+    );
+    const signatureTitle = activePage()?.querySelector<HTMLElement>(
+      "[data-battle-start-detail-title]",
+    );
+    expect(signatureTitle?.style.justifySelf).toBe("stretch");
+    expect(signatureTitle?.style.textAlign).toBe("left");
     expect(
       activePage()?.querySelectorAll("[data-signature-card-id]"),
     ).toHaveLength(3);
@@ -342,7 +382,7 @@ describe("Cumulus BattleStartScreen", () => {
       layout?.querySelector<HTMLElement>(
         '[data-battle-start-detail-active="true"]',
       );
-    expect(activePage()?.textContent).not.toContain("Victory:");
+    expect(activePage()?.textContent).toContain("Victory:");
     act(() =>
       layout
         ?.querySelector<HTMLButtonElement>(
