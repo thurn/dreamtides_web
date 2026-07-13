@@ -63,7 +63,7 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 | --- | --- | --- | --- | --- |
 | Pressable | Primitives | 24 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
 | Resource Chip | Components | 3 | [components/resource-chip.md](components/resource-chip.md) | The sized, self-contained value-and-mark chip for the game economy. |
-| Essence Value | Components | 14 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
+| Essence Value | Components | 15 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
 | Button | Components | 3 | [components/button.md](components/button.md) | Rung 1 of Cumulus's four-rung button suite — the beveled purple sprite, the primary/commit action, scaled to any label and to a taller commit height. |
 | Icon Button | Components | 14 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — normalized across browser-native button chrome, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
 | Glass Button | Components | 4 | [components/glass-button.md](components/glass-button.md) | The labeled glass action — a text label in the control typography on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface. |

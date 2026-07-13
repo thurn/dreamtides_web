@@ -387,11 +387,20 @@ describe("ACCEPT_ESSENCE", () => {
     expect(out.state.quest.screen.type).toBe("dreamscape");
   });
 
-  it("bounces accept-before-open (no runtime)", () => {
+  it("generates and accepts the reward atomically when the site was not opened", () => {
     const state = siteState("Essence");
     const out = reduce(state, "ACCEPT_ESSENCE", { siteId: SITE_ID });
-    expect(out.outcome).toBe("bounced");
-    expect(out.state).toBe(state);
+    expect(out.outcome).toBe("applied");
+    const runtime = out.state.quest.siteRuntime[SITE_ID];
+    expect(runtime?.kind).toBe("essence");
+    if (runtime?.kind !== "essence") throw new Error("expected Essence runtime");
+    expect(runtime.amount).toBeGreaterThanOrEqual(200);
+    expect(runtime.amount).toBeLessThanOrEqual(300);
+    expect(runtime.accepted).toBe(true);
+    expect(out.state.quest.essence).toBe(
+      Math.min(state.quest.essenceCap, state.quest.essence + runtime.amount),
+    );
+    expect(out.state.quest.visitedSites).toContain(SITE_ID);
   });
 
   it("bounces a double-accept on an already-accepted site", () => {

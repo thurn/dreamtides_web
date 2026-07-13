@@ -420,21 +420,35 @@ export function acceptReward(
 }
 
 /**
- * `ACCEPT_ESSENCE { siteId }` — legacy `acceptEssenceSite`. Adds the runtime
- * amount (clamped to the essence cap), marks accepted, and completes the site.
- * Bounces on a missing runtime, a wrong kind, or an already-accepted site.
+ * `ACCEPT_ESSENCE { siteId }` — legacy `acceptEssenceSite`. Generates the
+ * site's deterministic reward when it has not been opened, adds the amount
+ * (clamped to the essence cap), marks accepted, and completes the site.
+ * Bounces on a wrong site/runtime kind or an already-accepted site.
  */
 export function acceptEssence(
   quest: QuestState,
   payload: Record<string, unknown>,
+  ctx: EventContext,
 ): QuestState | null {
   const siteId = asString(payload.siteId);
   if (siteId === null) return null;
   if (quest.visitedSites.includes(siteId)) return null;
-  const runtime = quest.siteRuntime[siteId];
-  if (runtime === undefined || runtime.kind !== "essence" || runtime.accepted) {
+  const existing = quest.siteRuntime[siteId];
+  if (existing !== undefined && existing.kind !== "essence") {
     return null;
   }
+  if (existing?.accepted) return null;
+  const site = findSite(quest, siteId);
+  if (site?.type !== "Essence") return null;
+  const runtime =
+    existing ??
+    ({
+      kind: "essence" as const,
+      amount: site.isEnhanced
+        ? randomIntInRange(ctx.rng, 0, 400, 600)
+        : randomIntInRange(ctx.rng, 0, 200, 300),
+      accepted: false,
+    } satisfies SiteRuntimeState);
   const next = withRuntime(
     {
       ...quest,

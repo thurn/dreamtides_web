@@ -163,9 +163,18 @@ export function buildDreamscapeView(
   node: DreamscapeNode,
   state: QuestState,
 ): DreamscapeView {
+  const essenceRewards: Record<string, number> = {};
+  node.sites.forEach((site) => {
+    if (site.type !== "Essence") return;
+    const runtime = state.siteRuntime[site.id];
+    if (runtime?.kind === "essence") {
+      essenceRewards[site.id] = runtime.amount;
+    }
+  });
   return {
     scene: dreamscapeSceneRef(node),
     title: dreamscapeTitle(node),
     sites: buildSiteModels(node, state.completionLevel),
+    essenceRewards,
   };
 }

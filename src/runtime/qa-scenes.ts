@@ -287,15 +287,15 @@ const DREAMSCAPE_SCENE: QaScene = {
 
 /**
  * The starter dreamscape overview with one non-battle site retyped to Essence.
- * Keeping the run on the overview lets QA exercise the normal site-entry
- * transition and Essence-screen enter animation instead of booting inside it.
+ * Keeping the run on the overview lets QA exercise the in-place Essence gain
+ * animation and the visited site's removal from the dreamscape.
  */
 const DREAMSCAPE_WITH_ESSENCE_SCENE: QaScene = {
   id: "dreamscape-with-essence",
   label: "Dreamscape with Essence",
   description:
     "The starter dreamscape overview with an Essence site ready to enter, " +
-    "parked before the site-entry transition for animation QA.",
+    "parked before its in-place collection animation for QA.",
   build: (questContent) => {
     const foundation = createQaQuestFoundation(questContent);
     if (foundation === null) {

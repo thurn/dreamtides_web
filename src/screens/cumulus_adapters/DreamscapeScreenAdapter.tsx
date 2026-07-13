@@ -1,7 +1,7 @@
 // Adapter bridging live quest state to the pure Cumulus dreamscape screen
 // (`src/cumulus/screens/DreamscapeScreen`). Adapters are wiring only: this one
-// owns `useQuest()`, builds the view-model, wires the site-select callback to
-// `setScreen`, and emits the reconstruction logging. All mapping from domain
+// owns `useQuest()`, builds the view-model, wires site selection to navigation
+// or in-place Essence collection, and emits the reconstruction logging. All mapping from domain
 // data to the screen's view types lives in the pure builder
 // (`dreamscape-view-model.ts`); the Cumulus screen itself stays pure.
 
@@ -16,7 +16,7 @@ import {
 
 /**
  * Live dreamscape screen: resolves the current dreamscape node, builds its
- * view-model (seeded scatter + bottom-HUD data), enters a site on select, and
+ * view-model (seeded scatter + bottom-HUD data), handles site selection, and
  * logs the presented overview once per dreamscape for reconstruction.
  */
 export function DreamscapeScreenAdapter() {
@@ -74,10 +74,52 @@ export function DreamscapeScreenAdapter() {
         dreamscapeId: node.id,
         siteId: site.id,
         isEnhanced: site.isEnhanced,
+        essenceBefore: state.essence,
+        ui: "cumulus",
       });
+      if (site.type === "Essence") {
+        mutations.ensureEssenceSiteRuntime(site.id, site.isEnhanced);
+        return;
+      }
       mutations.setScreen({ type: "site", siteId });
     },
-    [node, mutations],
+    [node, mutations, state.essence],
+  );
+
+  const handleEssenceAnimationComplete = useCallback(
+    (siteId: string) => {
+      if (node === undefined) return;
+      const site = node.sites.find((candidate) => candidate.id === siteId);
+      const runtime = state.siteRuntime[siteId];
+      if (
+        site?.type !== "Essence" ||
+        runtime?.kind !== "essence" ||
+        runtime.accepted
+      ) {
+        return;
+      }
+      logEvent("site_completed", {
+        siteType: "Essence",
+        outcome: "collected",
+        siteId,
+        rewardAmount: runtime.amount,
+        isEnhanced: site.isEnhanced,
+        essenceBefore: state.essence,
+        essenceAfter: Math.min(
+          state.essenceCap,
+          state.essence + runtime.amount,
+        ),
+        ui: "cumulus",
+      });
+      mutations.acceptEssenceSite(siteId);
+    },
+    [
+      node,
+      mutations,
+      state.essence,
+      state.essenceCap,
+      state.siteRuntime,
+    ],
   );
 
   if (view === null) {
@@ -88,6 +130,7 @@ export function DreamscapeScreenAdapter() {
     <DreamscapeScreen
       view={view}
       onSelectSite={handleSelectSite}
+      onEssenceAnimationComplete={handleEssenceAnimationComplete}
     />
   );
 }

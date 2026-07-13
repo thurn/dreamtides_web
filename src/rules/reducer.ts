@@ -260,7 +260,7 @@ export function routeDomain(
     case "REJECT_DREAMSIGN_OFFER":
       return questCase(state, sites.rejectDreamsignOffer(quest, payload));
     case "ACCEPT_ESSENCE":
-      return questCase(state, sites.acceptEssence(quest, payload));
+      return questCase(state, sites.acceptEssence(quest, payload, ctx));
     case "REROLL_DREAM_AUGURY":
       return questCase(state, sites.rerollDreamAugury(quest, payload));
     case "FORCE_DREAM_AUGURY_ARCHETYPE":

@@ -155,6 +155,27 @@ describe("buildDreamscapeView", () => {
     const view = buildDreamscapeView(node(), state);
     expect(view.title).toBe("Ember Wood");
     expect(view.sites).toHaveLength(3);
+    expect(view.essenceRewards).toEqual({});
+  });
+
+  it("maps generated Essence rewards by site id for the in-place animation", () => {
+    const essenceNode = node({
+      sites: [site({ id: "s-essence", type: "Essence" })],
+    });
+    const state = {
+      essence: 240,
+      deck: [],
+      dreamcaller: null,
+      dreamsigns: [],
+      completionLevel: 2,
+      siteRuntime: {
+        "s-essence": { kind: "essence", amount: 275, accepted: false },
+      },
+    } as unknown as QuestState;
+
+    expect(buildDreamscapeView(essenceNode, state).essenceRewards).toEqual({
+      "s-essence": 275,
+    });
   });
 });
 
