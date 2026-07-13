@@ -1,7 +1,7 @@
 import path from "node:path";
 
 /**
- * Bans purple/accent/resource text colors inside Tango files that import the
+ * Bans purple/accent/resource text colors inside Cumulus files that import the
  * shared blurred-glass material recipes.
  *
  * The glass surface samples whatever scene art sits behind it, so purple text
@@ -39,16 +39,16 @@ export function toRepoRelativePosix(absolutePath, cwd) {
 
 /** True when this rule can govern the given repo-relative POSIX path. */
 export function isGovernedFile(fileRelative) {
-  if (!fileRelative.startsWith("src/tango/")) {
+  if (!fileRelative.startsWith("src/cumulus/")) {
     return false;
   }
   if (/\.(test|spec)\./.test(fileRelative)) {
     return false;
   }
-  if (fileRelative.startsWith("src/tango/docs/")) {
+  if (fileRelative.startsWith("src/cumulus/docs/")) {
     return false;
   }
-  return !fileRelative.startsWith("src/tango/primitives/");
+  return !fileRelative.startsWith("src/cumulus/primitives/");
 }
 
 function propertyName(node) {
@@ -84,7 +84,7 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Ban accent/essence/points violet text tokens in Tango files that use blurred glass recipes; use --text-on-glass instead.",
+        "Ban accent/essence/points violet text tokens in Cumulus files that use blurred glass recipes; use --text-on-glass instead.",
     },
     schema: [],
     messages: {

@@ -11,10 +11,10 @@ describe("toRepoRelativePosix (no-escape-hatch-props)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/tango/components/Button.tsx",
+        "/Users/x/quest_prototype/src/cumulus/components/Button.tsx",
         "/Users/x/quest_prototype",
       ),
-    ).toBe("src/tango/components/Button.tsx");
+    ).toBe("src/cumulus/components/Button.tsx");
   });
 });
 
@@ -33,7 +33,7 @@ describe("isDomAttributeTypeName (no-escape-hatch-props)", () => {
     }
   });
 
-  it("does not match ordinary or Tango prop type names", () => {
+  it("does not match ordinary or Cumulus prop type names", () => {
     for (const name of ["ButtonProps", "CSSProperties", "ReactNode", "string"]) {
       expect(isDomAttributeTypeName(name)).toBe(false);
     }
@@ -93,7 +93,7 @@ const ruleTester = new RuleTester({
   },
 });
 
-const COMPONENT = "src/tango/components/Widget.tsx";
+const COMPONENT = "src/cumulus/components/Widget.tsx";
 
 ruleTester.run("no-escape-hatch-props", rule, {
   valid: [
@@ -109,7 +109,7 @@ ruleTester.run("no-escape-hatch-props", rule, {
     },
     {
       name: "a container in the allowlist may take children",
-      filename: "src/tango/components/GroupPanel.tsx",
+      filename: "src/cumulus/components/GroupPanel.tsx",
       code: `interface GroupPanelProps { size?: "sm" | "md"; children?: React.ReactNode; }`,
     },
     {
@@ -139,17 +139,17 @@ ruleTester.run("no-escape-hatch-props", rule, {
     },
     {
       name: "a strict screen-local *Props is fine",
-      filename: "src/tango/screens/HomeScreen.tsx",
+      filename: "src/cumulus/screens/HomeScreen.tsx",
       code: `interface RowProps { label: string; onSelect?: () => void; }`,
     },
     {
-      name: "tango docs/mockups are not the component surface",
-      filename: "src/tango/docs/mockups/scene.tsx",
+      name: "cumulus docs/mockups are not the component surface",
+      filename: "src/cumulus/docs/mockups/scene.tsx",
       code: `interface DemoProps { style?: React.CSSProperties; }`,
     },
     {
       name: "primitives are transparent mechanisms — they may forward DOM props",
-      filename: "src/tango/primitives/Pressable.tsx",
+      filename: "src/cumulus/primitives/Pressable.tsx",
       code: `interface PressableProps extends React.HTMLAttributes<HTMLElement> { as?: React.ElementType; }`,
     },
   ],
@@ -216,13 +216,13 @@ ruleTester.run("no-escape-hatch-props", rule, {
     },
     {
       name: "style ban still applies to an allowlisted container",
-      filename: "src/tango/components/GroupPanel.tsx",
+      filename: "src/cumulus/components/GroupPanel.tsx",
       code: `interface GroupPanelProps { children?: ReactNode; style?: React.CSSProperties; }`,
       errors: [{ messageId: "styleMember" }],
     },
     {
       name: "a screen-local *Props escape hatch is now caught too",
-      filename: "src/tango/screens/HomeScreen.tsx",
+      filename: "src/cumulus/screens/HomeScreen.tsx",
       code: `interface RowProps { style?: React.CSSProperties; }`,
       errors: [{ messageId: "styleMember" }],
     },

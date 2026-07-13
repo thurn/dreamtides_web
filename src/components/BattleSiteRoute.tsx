@@ -7,11 +7,11 @@ import type { RuntimeConfig } from "../runtime/runtime-config";
 import { PLAYABLE_BATTLE_SCENE_ID } from "../runtime/qa-scenes";
 import { PlayableBattleScreen } from "../battle/components/PlayableBattleScreen";
 import { BattleStartScreen } from "../battle/components/BattleStartScreen";
-import { BattleStartScreenAdapter } from "../screens/tango_adapters/BattleStartScreenAdapter";
+import { BattleStartScreenAdapter } from "../screens/cumulus_adapters/BattleStartScreenAdapter";
 import {
-  TangoQuestChrome,
-  type TangoQuestChromeHandlers,
-} from "./TangoQuestChrome";
+  CumulusQuestChrome,
+  type CumulusQuestChromeHandlers,
+} from "./CumulusQuestChrome";
 
 export function createBattleEntryKey(
   dreamscapeId: string | null,
@@ -40,12 +40,12 @@ export function BattleSiteRoute({
   site,
   cardDatabase,
   runtimeConfig,
-  tangoChromeHandlers,
+  cumulusChromeHandlers,
 }: {
   site: SiteState;
   cardDatabase: Map<number, CardData>;
   runtimeConfig: RuntimeConfig;
-  tangoChromeHandlers?: TangoQuestChromeHandlers;
+  cumulusChromeHandlers?: CumulusQuestChromeHandlers;
 }) {
   const { state } = useQuest();
   const gameState = useGameState();
@@ -102,9 +102,9 @@ export function BattleSiteRoute({
   const opensDirectlyOnPlayableBattle =
     runtimeConfig.gotoScene === PLAYABLE_BATTLE_SCENE_ID;
   if (begunEntryKey !== battleEntryKey && !opensDirectlyOnPlayableBattle) {
-    if (runtimeConfig.uiVariant === "tango") {
+    if (runtimeConfig.uiVariant === "cumulus") {
       return (
-        <TangoQuestChrome handlers={tangoChromeHandlers}>
+        <CumulusQuestChrome handlers={cumulusChromeHandlers}>
           <BattleStartScreenAdapter
             init={battle.init}
             cardDatabase={cardDatabase}
@@ -112,7 +112,7 @@ export function BattleSiteRoute({
               setBegunEntryKey(battleEntryKey);
             }}
           />
-        </TangoQuestChrome>
+        </CumulusQuestChrome>
       );
     }
     return (

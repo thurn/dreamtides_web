@@ -1,5 +1,5 @@
-import { CardView } from "../tango/components/card/CardView";
-import type { CardViewProps } from "../tango/components/card/CardView";
+import { CardView } from "../cumulus/components/card/CardView";
+import type { CardViewProps } from "../cumulus/components/card/CardView";
 
 /**
  * Compatibility wrapper for existing quest card surfaces.

@@ -5,7 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 MANIFEST="$REPO_ROOT/cumulus/SceneComparison/manifest.json"
-SCENE_ID="${1:-tango-shop-glass-demo}"
+SCENE_ID="${1:-cumulus-shop-glass-demo}"
 WIDTH="${2:-}"
 HEIGHT="${3:-}"
 PORT="${CUMULUS_SCENE_COMPARE_PORT:-5188}"
@@ -58,7 +58,7 @@ trap cleanup EXIT INT TERM
 source "$SCRIPT_DIR/lib/unity-run.sh"
 run_unity_stage "scene-compare-$SCENE_ID" graphics \
   -quit \
-  -executeMethod TangoMvp.Editor.TangoSceneComparisonCapture.CaptureBatch \
+  -executeMethod CumulusMvp.Editor.CumulusSceneComparisonCapture.CaptureBatch \
   -comparisonScene "$UNITY_SCENE" \
   -comparisonRebuildMethod "$REBUILD_METHOD" \
   -comparisonWidth "$WIDTH" \

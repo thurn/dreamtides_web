@@ -1,10 +1,10 @@
 import path from "node:path";
 
 /**
- * Bans raw design PRIMITIVES from Tango UI code.
+ * Bans raw design PRIMITIVES from Cumulus UI code.
  *
- * The Tango token system has two tiers (see
- * src/tango/primitives/tango-tokens.css):
+ * The Cumulus token system has two tiers (see
+ * src/cumulus/primitives/cumulus-tokens.css):
  *   - PRIMITIVES (`--primitive-*`) name a raw value — a color-ramp step, a
  *     radius step, a font face, a weight. They are the material the semantic
  *     layer is built from.
@@ -13,11 +13,11 @@ import path from "node:path";
  *
  * A `--primitive-*` token may be referenced ONLY inside the two directories
  * that legitimately handle raw values:
- *   - `src/tango/primitives/` — where the semantic layer is defined.
- *   - `src/tango/components/` — leaf components that occasionally need a raw
+ *   - `src/cumulus/primitives/` — where the semantic layer is defined.
+ *   - `src/cumulus/components/` — leaf components that occasionally need a raw
  *     ramp step with no semantic role (e.g. a specific tide-tone).
  * Everywhere else — doc pages, demos, mockups, product screens, and the
- * adapter/builder layer in `src/screens/tango_adapters/` — referencing a primitive is
+ * adapter/builder layer in `src/screens/cumulus_adapters/` — referencing a primitive is
  * an error. No exceptions.
  *
  * To avoid false positives on prose or on code that merely INSPECTS token
@@ -27,11 +27,11 @@ import path from "node:path";
  *   2. a string/template literal containing `var(--primitive-…)` — an inline
  *      style or CSS-in-JS reference.
  *
- * Files outside `src/tango/` are unaffected (the rule is a no-op there).
+ * Files outside `src/cumulus/` are unaffected (the rule is a no-op there).
  */
 
 /** Repo-relative POSIX dir prefixes allowed to reference `--primitive-*`. */
-const ALLOWED_PREFIXES = ["src/tango/primitives/", "src/tango/components/"];
+const ALLOWED_PREFIXES = ["src/cumulus/primitives/", "src/cumulus/components/"];
 
 /** A `var(--primitive-…)` reference anywhere inside a string. */
 const VAR_PRIMITIVE_RE = /var\(\s*--primitive-/;
@@ -47,14 +47,14 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Ban raw --primitive-* design tokens outside src/tango/primitives and src/tango/components; UI code uses semantic tokens.",
+        "Ban raw --primitive-* design tokens outside src/cumulus/primitives and src/cumulus/components; UI code uses semantic tokens.",
     },
     schema: [],
     messages: {
       primitiveToken:
-        "'{{token}}' is a raw primitive. UI code must use a semantic token (e.g. --surface-card, --radius-control, --font-ui) instead. Primitives may be referenced only in src/tango/primitives/ or src/tango/components/.",
+        "'{{token}}' is a raw primitive. UI code must use a semantic token (e.g. --surface-card, --radius-control, --font-ui) instead. Primitives may be referenced only in src/cumulus/primitives/ or src/cumulus/components/.",
       primitiveInString:
-        "This value references a raw primitive ({{token}}). UI code must use a semantic token instead. Primitives may be referenced only in src/tango/primitives/ or src/tango/components/.",
+        "This value references a raw primitive ({{token}}). UI code must use a semantic token instead. Primitives may be referenced only in src/cumulus/primitives/ or src/cumulus/components/.",
     },
   },
 
@@ -66,12 +66,12 @@ const rule = {
     const cwd = typeof context.cwd === "string" ? context.cwd : process.cwd();
     const fileRelative = toRepoRelativePosix(rawFilename, cwd);
 
-    // Act on files under src/tango/ (never the two allowed dirs) and on the
-    // adapter/builder layer in src/screens/tango_adapters/.
-    const inTango =
-      fileRelative.startsWith("src/tango/") &&
+    // Act on files under src/cumulus/ (never the two allowed dirs) and on the
+    // adapter/builder layer in src/screens/cumulus_adapters/.
+    const inCumulus =
+      fileRelative.startsWith("src/cumulus/") &&
       !ALLOWED_PREFIXES.some((prefix) => fileRelative.startsWith(prefix));
-    if (!inTango && !fileRelative.startsWith("src/screens/tango_adapters/")) {
+    if (!inCumulus && !fileRelative.startsWith("src/screens/cumulus_adapters/")) {
       return {};
     }
 

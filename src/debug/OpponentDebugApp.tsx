@@ -17,9 +17,9 @@ import {
 import { createBattleRngStreams, deriveBattleSeed } from "../battle/random";
 import { logEvent } from "../logging";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
-import { CardView } from "../tango/components/card/CardView";
-import { DreamcallerPortrait } from "../tango/components/hud/DreamcallerPortrait";
-import { dreamsignIconUrl } from "../tango/components/atlas/atlas-display";
+import { CardView } from "../cumulus/components/card/CardView";
+import { DreamcallerPortrait } from "../cumulus/components/hud/DreamcallerPortrait";
+import { dreamsignIconUrl } from "../cumulus/components/atlas/atlas-display";
 import {
   getAlgorithm,
   OPPONENT_ALGORITHMS,

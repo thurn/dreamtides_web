@@ -12,9 +12,9 @@ import {
   makeBattleTestState,
 } from "../test-support";
 import { BattleHandTray } from "./BattleHandTray";
-import { TangoRoot } from "../../tango/TangoRoot";
+import { CumulusRoot } from "../../cumulus/CumulusRoot";
 
-function renderWithTango(root: Root, element: ReactElement): void { root.render(<TangoRoot>{element}</TangoRoot>); }
+function renderWithCumulus(root: Root, element: ReactElement): void { root.render(<CumulusRoot>{element}</CumulusRoot>); }
 
 function createState() {
   const battleInit = createBattleInit({
@@ -46,7 +46,7 @@ function mount(): {
   const root = createRoot(container);
 
   act(() => {
-    renderWithTango(root,
+    renderWithCumulus(root,
       <BattleHandTray
         canInteract
         currentEnergy={state.sides.player.currentEnergy}
@@ -115,7 +115,7 @@ describe("BattleHandTray", () => {
 
     // Re-render with the mutated state so the overpriced card is in the tray.
     act(() => {
-      renderWithTango(root,
+      renderWithCumulus(root,
         <BattleHandTray
           canInteract
           currentEnergy={0}
@@ -156,7 +156,7 @@ describe("BattleHandTray", () => {
     const root = createRoot(container);
 
     act(() => {
-      renderWithTango(root,
+      renderWithCumulus(root,
         <BattleHandTray
           canInteract={false}
           currentEnergy={state.sides.player.currentEnergy}

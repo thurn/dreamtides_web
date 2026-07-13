@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { LayerName } from "../../types/layer-name";
-import { GameCard } from "../../tango/components/card/CardView";
-import { GlossaryTerm } from "../../tango/components/card/GlossaryTerm";
-import { InfoCard } from "../../tango/components/overlay/InfoCard";
-import { AtlasNode, type AtlasNodeModel } from "../../tango/components/atlas/AtlasNode";
-import { DreamcallerPortrait } from "../../tango/components/hud/DreamcallerPortrait";
-import { artRef } from "../../tango/primitives/art";
-import { GLYPHS } from "../../tango/primitives/glyph";
-import { richText } from "../../tango/components/card/rich-text";
+import { GameCard } from "../../cumulus/components/card/CardView";
+import { GlossaryTerm } from "../../cumulus/components/card/GlossaryTerm";
+import { InfoCard } from "../../cumulus/components/overlay/InfoCard";
+import { AtlasNode, type AtlasNodeModel } from "../../cumulus/components/atlas/AtlasNode";
+import { DreamcallerPortrait } from "../../cumulus/components/hud/DreamcallerPortrait";
+import { artRef } from "../../cumulus/primitives/art";
+import { GLYPHS } from "../../cumulus/primitives/glyph";
+import { richText } from "../../cumulus/components/card/rich-text";
 import { BattleGameCard } from "../../battle/components/BattleGameCard";
 import type { BattleCardInstance } from "../../battle/types";
 import { createDefaultBattleCardStatus } from "../../battle/state/create-initial-state";
@@ -93,17 +93,17 @@ export function EntityRevealConformanceDemo() {
   }, [scenario]);
   useEffect(() => {
     const root = document.documentElement;
-    const previous = root.dataset.tangoReducedMotion;
-    if (scenario === "reduced-motion") root.dataset.tangoReducedMotion = "reduce";
-    else delete root.dataset.tangoReducedMotion;
+    const previous = root.dataset.cumulusReducedMotion;
+    if (scenario === "reduced-motion") root.dataset.cumulusReducedMotion = "reduce";
+    else delete root.dataset.cumulusReducedMotion;
     return () => {
-      if (previous === undefined) delete root.dataset.tangoReducedMotion;
-      else root.dataset.tangoReducedMotion = previous;
+      if (previous === undefined) delete root.dataset.cumulusReducedMotion;
+      else root.dataset.cumulusReducedMotion = previous;
     };
   }, [scenario]);
   return (
     <main
-      className="tango"
+      className="cumulus"
       data-entity-reveal-conformance=""
       data-active-conformance-scenario={scenario}
       style={{ minHeight: "100vh", padding: topEdge ? "4px 24px 40px" : "72px 24px 40px", color: "var(--text-primary)", background: "#100c19", boxSizing: "border-box", ...(scenario === "safe-area" ? { "--safe-area-inset-top": "52px", paddingTop: "52px" } : {}) } as React.CSSProperties}

@@ -2,20 +2,20 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace the Tango Dreamcaller-selection screen (a static row of cards) with the imported mobile design — a full-bleed swipe carousel — and, along the way, make every glossary-keyword reveal render as `InfoCard` tiles.
+**Goal:** Replace the Cumulus Dreamcaller-selection screen (a static row of cards) with the imported mobile design — a full-bleed swipe carousel — and, along the way, make every glossary-keyword reveal render as `InfoCard` tiles.
 
-**Architecture:** Three cooperating changes. (1) `CardTermDefinitions` is evolved in place to render `InfoCard` tiles instead of the legacy `GlossaryDefinitionCard`, so `Dreamsign`/`GameCard` and two shared legacy consumers inherit the new look automatically. (2) A new `TideCluster` Tango component carries the collapsed-discs→named-pills container-transform. (3) `QuestStartScreen` is rewritten as a pure swipe carousel composed from Tango, using a screen-local full-bleed portrait, `GroupPanel`, `Button`, `TideCluster`, `ResourceChip`, and an ability reveal wired through `InfoCard.PressInfo` + `CardTermDefinitions`. The adapter and view-model are unchanged.
+**Architecture:** Three cooperating changes. (1) `CardTermDefinitions` is evolved in place to render `InfoCard` tiles instead of the legacy `GlossaryDefinitionCard`, so `Dreamsign`/`GameCard` and two shared legacy consumers inherit the new look automatically. (2) A new `TideCluster` Cumulus component carries the collapsed-discs→named-pills container-transform. (3) `QuestStartScreen` is rewritten as a pure swipe carousel composed from Cumulus, using a screen-local full-bleed portrait, `GroupPanel`, `Button`, `TideCluster`, `ResourceChip`, and an ability reveal wired through `InfoCard.PressInfo` + `CardTermDefinitions`. The adapter and view-model are unchanged.
 
-**Tech Stack:** TypeScript, React 18, Vite, Vitest (jsdom), the Tango design system (`src/tango`), ESLint with the `tango/*` rule suite.
+**Tech Stack:** TypeScript, React 18, Vite, Vitest (jsdom), the Cumulus design system (`src/cumulus`), ESLint with the `cumulus/*` rule suite.
 
 ## Global Constraints
 
 - Run all commands from the repository root. In a fresh worktree run `npm install` first (`node_modules` is not committed).
 - Core checks after every task: `npm run lint`, `npm run typecheck`, `npm test`.
-- After changing any file under `src/tango/components` or `src/tango/primitives`, run `npm run tango-metadata && npm run tango-docs` and commit any regenerated artifacts (the `tango-generated-docs-drift` test fails on stale docs). Regeneration may produce no changes — commit only if `git status` shows some.
+- After changing any file under `src/cumulus/components` or `src/cumulus/primitives`, run `npm run cumulus-metadata && npm run cumulus-docs` and commit any regenerated artifacts (the `cumulus-generated-docs-drift` test fails on stale docs). Regeneration may produce no changes — commit only if `git status` shows some.
 - Identify cards/dreamcallers by **UUID/id, never by name**. Never key a map/set on a display name.
 - Tests must not assert specific production TOML/glossary values; derive fixtures from live data or use plain hand-built fixtures (per `AGENTS.md`).
-- Tango code imports only other `src/tango` code, `node_modules`, and the non-UI allowlist (`src/data`, `src/types`, `src/logging`, `src/runtime`). No `className`/`style`/`CSSProperties`/raw-color/raw-length escape-hatch props on Tango components (lint + the `tango-strict-api.contract.test.mjs` enforce this; the contract test scans `src/tango/screens` too, so screen-local components must also be escape-hatch-free).
+- Cumulus code imports only other `src/cumulus` code, `node_modules`, and the non-UI allowlist (`src/data`, `src/types`, `src/logging`, `src/runtime`). No `className`/`style`/`CSSProperties`/raw-color/raw-length escape-hatch props on Cumulus components (lint + the `cumulus-strict-api.contract.test.mjs` enforce this; the contract test scans `src/cumulus/screens` too, so screen-local components must also be escape-hatch-free).
 - All visual values come from tokens via `token("--…")` (spacing, color, radius, shadow, motion). Box *measures* (width/height/min/max) may be raw numbers.
 - Type is applied one voice at a time: `font: token("--t-…")`. Never hand-compose weight/face around a `--t-*` token.
 - Commit with a detailed message and `git push` immediately after each task (per `AGENTS.md`). End commit messages with `Claude-Session: https://claude.ai/code/session_01GkWjuYnPndxz9r86wiuWdv`.
@@ -25,21 +25,21 @@
 ## File Structure
 
 **Task 1 — CardTermDefinitions → InfoCard tiles**
-- Modify: `src/tango/components/card/CardTermDefinitions.tsx` (render `InfoCard` tiles; keep name + `text`/`testId`/`side` props)
-- Create: `src/tango/components/card/CardTermDefinitions.test.tsx`
+- Modify: `src/cumulus/components/card/CardTermDefinitions.tsx` (render `InfoCard` tiles; keep name + `text`/`testId`/`side` props)
+- Create: `src/cumulus/components/card/CardTermDefinitions.test.tsx`
 
 **Task 2 — TideCluster component**
-- Modify: `src/tango/components/hud/TidePill.tsx` (export a `tideVisual(tide)` accessor + the `TideSpec`-shaped return)
-- Create: `src/tango/components/hud/TideCluster.tsx`
-- Create: `src/tango/components/hud/TideCluster.test.tsx`
-- Create: `src/tango/docs/demos/tide-cluster.tsx`
-- Modify: `src/tango/docs/registry.ts` (register the demo)
+- Modify: `src/cumulus/components/hud/TidePill.tsx` (export a `tideVisual(tide)` accessor + the `TideSpec`-shaped return)
+- Create: `src/cumulus/components/hud/TideCluster.tsx`
+- Create: `src/cumulus/components/hud/TideCluster.test.tsx`
+- Create: `src/cumulus/docs/demos/tide-cluster.tsx`
+- Modify: `src/cumulus/docs/registry.ts` (register the demo)
 
 **Task 3 — The carousel screen**
-- Modify: `src/tango/primitives/glyph.ts` (add `chevronLeft`/`chevronRight`)
-- Rewrite: `src/tango/screens/QuestStartScreen.tsx` (carousel; keeps exported view types)
-- Rewrite: `src/tango/screens/QuestStartScreen.test.tsx`
-- Unchanged (verify only): `src/screens/tango_adapters/QuestStartScreenAdapter.tsx`, `src/screens/tango_adapters/quest-start-view-model.ts`, `src/screens/tango_adapters/registry.tsx` (already wires `questStart`)
+- Modify: `src/cumulus/primitives/glyph.ts` (add `chevronLeft`/`chevronRight`)
+- Rewrite: `src/cumulus/screens/QuestStartScreen.tsx` (carousel; keeps exported view types)
+- Rewrite: `src/cumulus/screens/QuestStartScreen.test.tsx`
+- Unchanged (verify only): `src/screens/cumulus_adapters/QuestStartScreenAdapter.tsx`, `src/screens/cumulus_adapters/quest-start-view-model.ts`, `src/screens/cumulus_adapters/registry.tsx` (already wires `questStart`)
 
 **Task 4 — Verification & browser QA**
 - No new files; runs the full check suite and an agent-browser pass.
@@ -51,8 +51,8 @@
 Rewrites the shared term-definition stack to emit `InfoCard variant="text"` tiles, fully tokenized. Name and prop surface (`text`, `testId`, `side`) are preserved, so `Dreamsign` (which keys its test on the `testId` container `dreamsign-reveal-definition-stack`), `GameCard`/`CardView` (via `useCardTermPopover`), and the two shared legacy consumers all inherit the new tiles with no signature change.
 
 **Files:**
-- Modify: `src/tango/components/card/CardTermDefinitions.tsx`
-- Test: `src/tango/components/card/CardTermDefinitions.test.tsx`
+- Modify: `src/cumulus/components/card/CardTermDefinitions.tsx`
+- Test: `src/cumulus/components/card/CardTermDefinitions.test.tsx`
 
 **Interfaces:**
 - Consumes: `extractGlossaryTerms(text): GlossaryEntry[]` from `src/data/glossary-terms` (each entry has `readonly term: string; readonly definition: string`); `InfoCard` from `../overlay/InfoCard`; `richText` from `./rich-text`; `token` from `../../primitives/tokens`.
@@ -60,7 +60,7 @@ Rewrites the shared term-definition stack to emit `InfoCard variant="text"` tile
 
 - [ ] **Step 1: Write the failing test**
 
-Create `src/tango/components/card/CardTermDefinitions.test.tsx`:
+Create `src/cumulus/components/card/CardTermDefinitions.test.tsx`:
 
 ```tsx
 // @vitest-environment jsdom
@@ -144,12 +144,12 @@ describe("CardTermDefinitions", () => {
 
 - [ ] **Step 2: Run the test to verify it fails**
 
-Run: `npx vitest run src/tango/components/card/CardTermDefinitions.test.tsx`
+Run: `npx vitest run src/cumulus/components/card/CardTermDefinitions.test.tsx`
 Expected: the "reading order" test FAILS — the current component renders `GlossaryDefinitionCard`, whose markup differs, and the test file is new so it exercises behavior not yet in place. (If it happens to pass, proceed; the rewrite still applies.)
 
 - [ ] **Step 3: Rewrite the component to render InfoCard tiles**
 
-Replace the entire contents of `src/tango/components/card/CardTermDefinitions.tsx` with:
+Replace the entire contents of `src/cumulus/components/card/CardTermDefinitions.tsx` with:
 
 ```tsx
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
@@ -220,28 +220,28 @@ export function CardTermDefinitions({
 
 - [ ] **Step 4: Run the tests to verify they pass**
 
-Run: `npx vitest run src/tango/components/card/CardTermDefinitions.test.tsx`
+Run: `npx vitest run src/cumulus/components/card/CardTermDefinitions.test.tsx`
 Expected: PASS (both cases).
 
 - [ ] **Step 5: Verify the Dreamsign reveal test still passes**
 
-Run: `npx vitest run src/tango/components/hud/Dreamsign.test.tsx`
+Run: `npx vitest run src/cumulus/components/hud/Dreamsign.test.tsx`
 Expected: PASS — the reveal still renders a container with `data-testid="dreamsign-reveal-definition-stack"` (the preserved `testId` prop); only the tiles inside changed.
 
-- [ ] **Step 6: Regenerate Tango artifacts and run the full suite**
+- [ ] **Step 6: Regenerate Cumulus artifacts and run the full suite**
 
-Run: `npm run tango-metadata && npm run tango-docs`
+Run: `npm run cumulus-metadata && npm run cumulus-docs`
 Then: `npm run lint && npm run typecheck && npm test`
-Expected: all pass. If `git status` shows regenerated files under `src/tango/metadata/` or `.claude/skills/tango/` or `.llms/`, include them in the commit.
+Expected: all pass. If `git status` shows regenerated files under `src/cumulus/metadata/` or `.claude/skills/cumulus/` or `.llms/`, include them in the commit.
 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/tango/components/card/CardTermDefinitions.tsx \
-        src/tango/components/card/CardTermDefinitions.test.tsx
-git add -A src/tango/metadata .claude/skills/tango .llms 2>/dev/null || true
+git add src/cumulus/components/card/CardTermDefinitions.tsx \
+        src/cumulus/components/card/CardTermDefinitions.test.tsx
+git add -A src/cumulus/metadata .claude/skills/cumulus .llms 2>/dev/null || true
 git commit -m "$(cat <<'MSG'
-feat(tango): render glossary term definitions as InfoCard tiles
+feat(cumulus): render glossary term definitions as InfoCard tiles
 
 Evolve CardTermDefinitions in place to render each keyword as an InfoCard
 variant="text" tile instead of the legacy GlossaryDefinitionCard, fully
@@ -259,14 +259,14 @@ git push
 
 ## Task 2: `TideCluster` — collapsed discs → named pills container-transform
 
-A new Tango component: closed, it shows a "Tides" label and the tides' overlapping colored glyph discs; tapping runs a Material container-transform where each disc flies to its slot and grows into the full named `TidePill`. Reduced-motion collapses to an instant open/close. It renders `TidePill`s as the resting state and reuses `TidePill`'s tide visuals via a new exported accessor.
+A new Cumulus component: closed, it shows a "Tides" label and the tides' overlapping colored glyph discs; tapping runs a Material container-transform where each disc flies to its slot and grows into the full named `TidePill`. Reduced-motion collapses to an instant open/close. It renders `TidePill`s as the resting state and reuses `TidePill`'s tide visuals via a new exported accessor.
 
 **Files:**
-- Modify: `src/tango/components/hud/TidePill.tsx`
-- Create: `src/tango/components/hud/TideCluster.tsx`
-- Test: `src/tango/components/hud/TideCluster.test.tsx`
-- Create: `src/tango/docs/demos/tide-cluster.tsx`
-- Modify: `src/tango/docs/registry.ts`
+- Modify: `src/cumulus/components/hud/TidePill.tsx`
+- Create: `src/cumulus/components/hud/TideCluster.tsx`
+- Test: `src/cumulus/components/hud/TideCluster.test.tsx`
+- Create: `src/cumulus/docs/demos/tide-cluster.tsx`
+- Modify: `src/cumulus/docs/registry.ts`
 
 **Interfaces:**
 - Consumes: `TidePill`, `type Tide` from `./TidePill`; `token`, `GLYPHS` from primitives; `InfoCard` engine is not needed directly (pills own their reveal).
@@ -277,7 +277,7 @@ A new Tango component: closed, it shows a "Tides" label and the tides' overlappi
 
 - [ ] **Step 1: Export `tideVisual` from TidePill**
 
-In `src/tango/components/hud/TidePill.tsx`, add this export directly below the `const TIDES: Record<Tide, TideSpec> = { … };` block:
+In `src/cumulus/components/hud/TidePill.tsx`, add this export directly below the `const TIDES: Record<Tide, TideSpec> = { … };` block:
 
 ```tsx
 /**
@@ -297,7 +297,7 @@ export function tideVisual(tide: Tide): {
 
 - [ ] **Step 2: Write the failing test**
 
-Create `src/tango/components/hud/TideCluster.test.tsx`:
+Create `src/cumulus/components/hud/TideCluster.test.tsx`:
 
 ```tsx
 // @vitest-environment jsdom
@@ -383,12 +383,12 @@ describe("TideCluster", () => {
 
 - [ ] **Step 3: Run the test to verify it fails**
 
-Run: `npx vitest run src/tango/components/hud/TideCluster.test.tsx`
+Run: `npx vitest run src/cumulus/components/hud/TideCluster.test.tsx`
 Expected: FAIL — `TideCluster` does not exist yet ("Failed to resolve import").
 
 - [ ] **Step 4: Implement `TideCluster`**
 
-Create `src/tango/components/hud/TideCluster.tsx`:
+Create `src/cumulus/components/hud/TideCluster.tsx`:
 
 ```tsx
 // TideCluster — the collapsed tide disclosure used on the Dreamcaller-select
@@ -769,12 +769,12 @@ interface Box {
 
 - [ ] **Step 5: Run the test to verify it passes**
 
-Run: `npx vitest run src/tango/components/hud/TideCluster.test.tsx`
-Expected: PASS (both cases). If `token("--tracking-eyebrow")` or `token("--font-ui")` is rejected by `typecheck` as an unknown token, run `grep -n "tracking-eyebrow\|font-ui" src/tango/primitives/tango-tokens.css` and substitute the real token name reported there.
+Run: `npx vitest run src/cumulus/components/hud/TideCluster.test.tsx`
+Expected: PASS (both cases). If `token("--tracking-eyebrow")` or `token("--font-ui")` is rejected by `typecheck` as an unknown token, run `grep -n "tracking-eyebrow\|font-ui" src/cumulus/primitives/cumulus-tokens.css` and substitute the real token name reported there.
 
 - [ ] **Step 6: Add the demo entry**
 
-Create `src/tango/docs/demos/tide-cluster.tsx`:
+Create `src/cumulus/docs/demos/tide-cluster.tsx`:
 
 ```tsx
 // Registry demo entry for TideCluster — see tide-pill.tsx for the recipe. The
@@ -782,7 +782,7 @@ Create `src/tango/docs/demos/tide-cluster.tsx`:
 // bounded demo stage), the standalone reveal path.
 
 import { TideCluster, type TideClusterTideView } from "../../components/hud/TideCluster";
-import type { TangoComponent } from "../registry";
+import type { CumulusComponent } from "../registry";
 
 const DEMO_TIDES: TideClusterTideView[] = [
   { id: "vision", label: "Singular Storm", description: "Foresight and spells — scry deep, then break one overwhelming storm.", tide: "vision" },
@@ -794,17 +794,17 @@ function TideClusterDemo() {
   return <TideCluster tides={DEMO_TIDES} />;
 }
 
-export const tideClusterDemo: TangoComponent = {
+export const tideClusterDemo: CumulusComponent = {
   id: "tide-cluster",
   title: "Tide Cluster",
   description:
     "The collapsed tide disclosure: overlapping colored glyph discs that expand, with a container-transform, into the full named tide pills.",
   group: "Components",
-  Component: TideClusterDemo as TangoComponent["Component"],
+  Component: TideClusterDemo as CumulusComponent["Component"],
   docName: "TideCluster",
   usage: [
     {
-      code: `import { TideCluster } from "src/tango/components/hud/TideCluster";
+      code: `import { TideCluster } from "src/cumulus/components/hud/TideCluster";
 
 <TideCluster
   tides={[
@@ -818,35 +818,35 @@ export const tideClusterDemo: TangoComponent = {
 };
 ```
 
-Note: match the exact field names the other demo entries use. Open `src/tango/docs/demos/tide-pill.tsx` and `src/tango/docs/registry.ts` and mirror the `TangoComponent` shape precisely (field names for `Component`, `docName`, `usage`, `group`); adjust the object above if a field differs.
+Note: match the exact field names the other demo entries use. Open `src/cumulus/docs/demos/tide-pill.tsx` and `src/cumulus/docs/registry.ts` and mirror the `CumulusComponent` shape precisely (field names for `Component`, `docName`, `usage`, `group`); adjust the object above if a field differs.
 
 - [ ] **Step 7: Register the demo**
 
-In `src/tango/docs/registry.ts`, add the import beside the other demo imports (alphabetical):
+In `src/cumulus/docs/registry.ts`, add the import beside the other demo imports (alphabetical):
 
 ```tsx
 import { tideClusterDemo } from "./demos/tide-cluster";
 ```
 
-and add `tideClusterDemo` to the `TANGO_COMPONENTS` array next to `tidePillDemo`.
+and add `tideClusterDemo` to the `CUMULUS_COMPONENTS` array next to `tidePillDemo`.
 
 - [ ] **Step 8: Regenerate docs and run the full suite**
 
-Run: `npm run tango-metadata && npm run tango-docs`
+Run: `npm run cumulus-metadata && npm run cumulus-docs`
 Then: `npm run lint && npm run typecheck && npm test`
 Expected: all pass; the drift test now sees a fresh `tide-cluster.md`, index row, and metadata entry. Commit the regenerated files.
 
 - [ ] **Step 9: Commit**
 
 ```bash
-git add src/tango/components/hud/TidePill.tsx \
-        src/tango/components/hud/TideCluster.tsx \
-        src/tango/components/hud/TideCluster.test.tsx \
-        src/tango/docs/demos/tide-cluster.tsx \
-        src/tango/docs/registry.ts
-git add -A src/tango/metadata .claude/skills/tango .llms 2>/dev/null || true
+git add src/cumulus/components/hud/TidePill.tsx \
+        src/cumulus/components/hud/TideCluster.tsx \
+        src/cumulus/components/hud/TideCluster.test.tsx \
+        src/cumulus/docs/demos/tide-cluster.tsx \
+        src/cumulus/docs/registry.ts
+git add -A src/cumulus/metadata .claude/skills/cumulus .llms 2>/dev/null || true
 git commit -m "$(cat <<'MSG'
-feat(tango): add TideCluster container-transform component
+feat(cumulus): add TideCluster container-transform component
 
 A collapsed tide disclosure — overlapping colored glyph discs that expand,
 with a Material container-transform (flying clones that grow into pills), into
@@ -866,9 +866,9 @@ git push
 Replaces the static card row with the full-bleed swipe carousel. Pure presentation: renders from the existing `DreamcallerOfferView[]`, calls `onPick(id)`. Uses a screen-local full-bleed portrait, `Motes`, `GroupPanel` console, the ability reveal (`InfoCard.PressInfo` + `CardTermDefinitions`, guarded on term presence), `TideCluster`, `ResourceChip`, and `Button`.
 
 **Files:**
-- Modify: `src/tango/primitives/glyph.ts`
-- Rewrite: `src/tango/screens/QuestStartScreen.tsx`
-- Rewrite: `src/tango/screens/QuestStartScreen.test.tsx`
+- Modify: `src/cumulus/primitives/glyph.ts`
+- Rewrite: `src/cumulus/screens/QuestStartScreen.tsx`
+- Rewrite: `src/cumulus/screens/QuestStartScreen.test.tsx`
 
 **Interfaces:**
 - Consumes: `DreamcallerOfferView` (kept, exported from this file); `Motes`, `ResourceChip`, `TideCluster`, `Button`, `GroupPanel`, `RulesText`, `CardTermDefinitions`, `InfoCard`, `Pressable`, `token`, `GLYPHS`, `richText`, `dreamcallerImageSrc`, `extractGlossaryTerms`.
@@ -876,7 +876,7 @@ Replaces the static card row with the full-bleed swipe carousel. Pure presentati
 
 - [ ] **Step 1: Add chevron glyphs**
 
-In `src/tango/primitives/glyph.ts`, add to the `GLYPHS` object (near `info`):
+In `src/cumulus/primitives/glyph.ts`, add to the `GLYPHS` object (near `info`):
 
 ```tsx
   chevronLeft: g("bx bx-chevron-left"),
@@ -885,7 +885,7 @@ In `src/tango/primitives/glyph.ts`, add to the `GLYPHS` object (near `info`):
 
 - [ ] **Step 2: Write the failing screen test**
 
-Replace the entire contents of `src/tango/screens/QuestStartScreen.test.tsx` with:
+Replace the entire contents of `src/cumulus/screens/QuestStartScreen.test.tsx` with:
 
 ```tsx
 // @vitest-environment jsdom
@@ -957,7 +957,7 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
   return { container, root };
 }
 
-describe("Tango QuestStartScreen (carousel)", () => {
+describe("Cumulus QuestStartScreen (carousel)", () => {
   it("renders a page with identity, essence, and a Choose action per Dreamcaller", () => {
     const { container, root } = mount(
       <QuestStartScreen dreamcallers={OFFERED} onPick={vi.fn()} />,
@@ -1031,15 +1031,15 @@ describe("Tango QuestStartScreen (carousel)", () => {
 
 - [ ] **Step 3: Run the test to verify it fails**
 
-Run: `npx vitest run src/tango/screens/QuestStartScreen.test.tsx`
+Run: `npx vitest run src/cumulus/screens/QuestStartScreen.test.tsx`
 Expected: FAIL — the current screen has no `data-dreamcaller-page` / `data-choose-dreamcaller` / `data-tide-disc` hooks.
 
 - [ ] **Step 4: Rewrite the screen**
 
-Replace the entire contents of `src/tango/screens/QuestStartScreen.tsx` with:
+Replace the entire contents of `src/cumulus/screens/QuestStartScreen.tsx` with:
 
 ```tsx
-// QuestStartScreen — the Tango rendering of Dreamcaller selection (the quest's
+// QuestStartScreen — the Cumulus rendering of Dreamcaller selection (the quest's
 // opening screen), as a full-bleed mobile swipe carousel: one Dreamcaller per
 // page (cinematic portrait + serif name/epithet + a frosted GroupPanel console
 // holding ability text, an expandable TideCluster, starting essence, and a
@@ -1378,7 +1378,7 @@ function DreamcallerPage({
 }
 
 /**
- * The Tango Dreamcaller-selection carousel: a full-bleed swipe carousel of the
+ * The Cumulus Dreamcaller-selection carousel: a full-bleed swipe carousel of the
  * offered Dreamcallers. Pure and props-driven — it renders {@link
  * QuestStartScreenProps.dreamcallers} and calls {@link
  * QuestStartScreenProps.onPick} with the chosen Dreamcaller's id.
@@ -1414,7 +1414,7 @@ export function QuestStartScreen({ dreamcallers, onPick }: QuestStartScreenProps
   return (
     <div
       ref={stageRef}
-      className="tango"
+      className="cumulus"
       style={{
         position: "relative",
         minHeight: "100vh",
@@ -1489,25 +1489,25 @@ export function QuestStartScreen({ dreamcallers, onPick }: QuestStartScreenProps
 
 - [ ] **Step 5: Run the screen test to verify it passes**
 
-Run: `npx vitest run src/tango/screens/QuestStartScreen.test.tsx`
+Run: `npx vitest run src/cumulus/screens/QuestStartScreen.test.tsx`
 Expected: PASS (all three cases).
 
-If `typecheck` later reports an unknown token among `--t-rules`, `--t-title-sm`, `--t-body`, `--dur-base`, `--border-soft`, `--gold`, `--tracking-eyebrow`, resolve the real name with `grep -n "<name>" src/tango/primitives/tango-tokens.css` and substitute. `--surface-glass`, `--safe-top`, `--safe-bottom`, `--gutter`, `--dur-slow`, `--ease-out`, `--line-strong`, `--bg-app`, `--bg-sunken`, `--accent`, `--accent-bright`, `--text-primary/secondary/muted`, `--space-*`, `--radius-pill` are already confirmed to exist.
+If `typecheck` later reports an unknown token among `--t-rules`, `--t-title-sm`, `--t-body`, `--dur-base`, `--border-soft`, `--gold`, `--tracking-eyebrow`, resolve the real name with `grep -n "<name>" src/cumulus/primitives/cumulus-tokens.css` and substitute. `--surface-glass`, `--safe-top`, `--safe-bottom`, `--gutter`, `--dur-slow`, `--ease-out`, `--line-strong`, `--bg-app`, `--bg-sunken`, `--accent`, `--accent-bright`, `--text-primary/secondary/muted`, `--space-*`, `--radius-pill` are already confirmed to exist.
 
 - [ ] **Step 6: Run the full check suite**
 
 Run: `npm run lint && npm run typecheck && npm test`
-Expected: all pass. In particular `tango-strict-api.contract.test.mjs` must pass — the screen-local components expose only model/callback props (no `style`/`className`/`CSSProperties`). All spacing/radii/shadows in the code above are tokenized; if `no-untokenized-lengths` still flags a leftover raw px in a *style* position (not a box measure — width/height/position/fontSize are box measures and stay raw), replace it with the nearest `--space-*` token. The one remaining bespoke value is the TideCluster disc-overlap ring `boxShadow: 0 0 0 2px var(--bg-app)`; if the rule rejects it, express the 2px ring as a `border`/`outline` in the tide's `--bg-app` color rather than disabling the rule.
+Expected: all pass. In particular `cumulus-strict-api.contract.test.mjs` must pass — the screen-local components expose only model/callback props (no `style`/`className`/`CSSProperties`). All spacing/radii/shadows in the code above are tokenized; if `no-untokenized-lengths` still flags a leftover raw px in a *style* position (not a box measure — width/height/position/fontSize are box measures and stay raw), replace it with the nearest `--space-*` token. The one remaining bespoke value is the TideCluster disc-overlap ring `boxShadow: 0 0 0 2px var(--bg-app)`; if the rule rejects it, express the 2px ring as a `border`/`outline` in the tide's `--bg-app` color rather than disabling the rule.
 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/tango/primitives/glyph.ts \
-        src/tango/screens/QuestStartScreen.tsx \
-        src/tango/screens/QuestStartScreen.test.tsx
-git add -A src/tango/metadata .claude/skills/tango .llms 2>/dev/null || true
+git add src/cumulus/primitives/glyph.ts \
+        src/cumulus/screens/QuestStartScreen.tsx \
+        src/cumulus/screens/QuestStartScreen.test.tsx
+git add -A src/cumulus/metadata .claude/skills/cumulus .llms 2>/dev/null || true
 git commit -m "$(cat <<'MSG'
-feat(tango): rewrite Dreamcaller selection as a mobile swipe carousel
+feat(cumulus): rewrite Dreamcaller selection as a mobile swipe carousel
 
 Replace the static card row with the imported full-bleed swipe carousel: one
 Dreamcaller per page (cinematic screen-local portrait + serif name/epithet + a
@@ -1533,7 +1533,7 @@ Confirms the whole flow end-to-end in a real browser and locks in the checks.
 - [ ] **Step 1: Full check suite**
 
 Run: `npm run lint && npm run typecheck && npm test`
-Expected: all green, including `tango-strict-api.contract.test.mjs` and `tango-generated-docs-drift.test.mjs`.
+Expected: all green, including `cumulus-strict-api.contract.test.mjs` and `cumulus-generated-docs-drift.test.mjs`.
 
 - [ ] **Step 2: Start a QA dev server on a non-default port**
 
@@ -1558,7 +1558,7 @@ Use `/opt/homebrew/bin/agent-browser` (fallback `npx agent-browser`) against `ht
 
 - [ ] **Step 4: Compare against the legacy screen**
 
-Load `http://localhost:5174/?ui=legacy` and confirm the legacy card-row screen still renders (the rollback path is intact), then return to `?ui=tango` (default).
+Load `http://localhost:5174/?ui=legacy` and confirm the legacy card-row screen still renders (the rollback path is intact), then return to `?ui=cumulus` (default).
 
 - [ ] **Step 5: Tear down only the QA server**
 

@@ -1,10 +1,10 @@
 import path from "node:path";
-import { colorTokenFor } from "./tango-token-index.js";
+import { colorTokenFor } from "./cumulus-token-index.js";
 
 /**
- * Bans hardcoded COLOR literals in Tango's product-UI tier.
+ * Bans hardcoded COLOR literals in Cumulus's product-UI tier.
  *
- * The Tango token system exposes a semantic color layer (`--accent`,
+ * The Cumulus token system exposes a semantic color layer (`--accent`,
  * `--surface-card`, `--text-primary`, …) that re-skins the whole app from one
  * place. Product UI must build from those tokens; a raw `#a855f7`, `rgb(...)`,
  * or `hsl(...)` literal hardcodes a value the design system can no longer
@@ -13,18 +13,18 @@ import { colorTokenFor } from "./tango-token-index.js";
  * color, autofixing when the whole string is a single color.
  *
  * SCOPE. The rule fires only on the composition / product-UI tier: files under
- * `src/tango/` that are NOT in {@link EXEMPT_PREFIXES}. The exempt dirs are:
- *   - `src/tango/primitives/`, `src/tango/components/`, and `src/tango/internal/`
+ * `src/cumulus/` that are NOT in {@link EXEMPT_PREFIXES}. The exempt dirs are:
+ *   - `src/cumulus/primitives/`, `src/cumulus/components/`, and `src/cumulus/internal/`
  *     — the primitive, leaf-component, and material-recipe layers legitimately
  *     author raw values (a leaf occasionally needs a specific ramp step; the
  *     primitives sheet DEFINES the colors; a material recipe like the glass
  *     surface IS its own bespoke literals). This mirrors `no-primitive-tokens`.
- *   - `src/tango/docs/` — the design-system's own documentation site: demos and
+ *   - `src/cumulus/docs/` — the design-system's own documentation site: demos and
  *     mockups intentionally show components against arbitrary sample colors and
  *     backdrops, and the doc chrome is tooling, not product UI.
- * Everywhere else under `src/tango/` — above all `src/tango/screens/`, the
+ * Everywhere else under `src/cumulus/` — above all `src/cumulus/screens/`, the
  * migrated product screens — a hardcoded color is an error, and so is the
- * adapter/builder layer in `src/screens/tango_adapters/` (a color minted in an adapter
+ * adapter/builder layer in `src/screens/cumulus_adapters/` (a color minted in an adapter
  * or view-model flows straight into the screen). All other files are a no-op.
  *
  * Only NUMERIC color literals (hex / `rgb(a)` / `hsl(a)`) are flagged: they are
@@ -36,11 +36,11 @@ import { colorTokenFor } from "./tango-token-index.js";
 
 /** Repo-relative POSIX dir prefixes that may author raw color values. */
 const EXEMPT_PREFIXES = [
-  "src/tango/primitives/",
-  "src/tango/components/",
-  "src/tango/internal/",
-  "src/tango/docs/",
-  "src/tango/screens/devtools/",
+  "src/cumulus/primitives/",
+  "src/cumulus/components/",
+  "src/cumulus/internal/",
+  "src/cumulus/docs/",
+  "src/cumulus/screens/devtools/",
 ];
 
 /** Finds each hex / rgb(a) / hsl(a) color literal inside a string. */
@@ -61,14 +61,14 @@ const rule = {
     fixable: "code",
     docs: {
       description:
-        "Ban hardcoded color literals (hex/rgb/hsl) in Tango product UI; use semantic color tokens.",
+        "Ban hardcoded color literals (hex/rgb/hsl) in Cumulus product UI; use semantic color tokens.",
     },
     schema: [],
     messages: {
       hardcodedColorWithToken:
         "'{{value}}' is a hardcoded color. Use the semantic token {{token}} (var({{token}})) — product UI builds from tokens, not raw color values.",
       hardcodedColorNoToken:
-        "'{{value}}' is a hardcoded color with no matching Tango token. Add a semantic token for it in src/tango/primitives/tango-tokens.css, or use the nearest existing token — product UI builds from tokens, not raw color values.",
+        "'{{value}}' is a hardcoded color with no matching Cumulus token. Add a semantic token for it in src/cumulus/primitives/cumulus-tokens.css, or use the nearest existing token — product UI builds from tokens, not raw color values.",
     },
   },
 
@@ -80,10 +80,10 @@ const rule = {
     const cwd = typeof context.cwd === "string" ? context.cwd : process.cwd();
     const fileRelative = toRepoRelativePosix(rawFilename, cwd);
 
-    const inTango =
-      fileRelative.startsWith("src/tango/") &&
+    const inCumulus =
+      fileRelative.startsWith("src/cumulus/") &&
       !EXEMPT_PREFIXES.some((prefix) => fileRelative.startsWith(prefix));
-    if (!inTango && !fileRelative.startsWith("src/screens/tango_adapters/")) {
+    if (!inCumulus && !fileRelative.startsWith("src/screens/cumulus_adapters/")) {
       return {};
     }
 

@@ -5,9 +5,9 @@ import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { requireDreamsignId } from "../data/dreamsigns";
 import { SiteGuide } from "../components/SiteGuide";
-import { IconButton } from "../tango/components/controls/IconButton";
-import { GLYPHS } from "../tango/primitives/glyph";
-import { Dreamsign as TangoDreamsign } from "../tango/components/hud/Dreamsign";
+import { IconButton } from "../cumulus/components/controls/IconButton";
+import { GLYPHS } from "../cumulus/primitives/glyph";
+import { Dreamsign as CumulusDreamsign } from "../cumulus/components/hud/Dreamsign";
 import { DreamsignPurgeOverlay } from "./DreamsignPurgeOverlay";
 import "./dreamsign-revelation.css";
 import "./site-leave-control.css";
@@ -154,7 +154,7 @@ export function DreamsignRevelationScreen({
 
       <SiteGuide siteType="DreamsignRevelation" isEnhanced={site.isEnhanced} />
 
-      <div className="tango site-leave-control">
+      <div className="cumulus site-leave-control">
         <IconButton
           glyph={GLYPHS.close}
           label="Leave site"
@@ -208,7 +208,7 @@ function RevelationCard({
           className={`dsr-art-wrap${dreamsign.isBane ? " bane" : ""}`}
           aria-label={`Dreamsign: ${dreamsign.name}`}
         >
-          <TangoDreamsign dreamsign={dreamsign} sizePx={200} />
+          <CumulusDreamsign dreamsign={dreamsign} sizePx={200} />
         </div>
       </div>
 

@@ -4,9 +4,9 @@ import type { Dreamsign, SiteState } from "../types/quest";
 import { requireDreamsignId } from "../data/dreamsigns";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
-import { Dreamsign as DreamsignEntity } from "../tango/components/hud/Dreamsign";
-import { EssenceGlyph } from "../tango/components/hud/EssenceValue";
-import { RulesText } from "../tango/components/card/RulesText";
+import { Dreamsign as DreamsignEntity } from "../cumulus/components/hud/Dreamsign";
+import { EssenceGlyph } from "../cumulus/components/hud/EssenceValue";
+import { RulesText } from "../cumulus/components/card/RulesText";
 
 /** Props for the RewardSiteScreen component. */
 interface RewardSiteScreenProps {

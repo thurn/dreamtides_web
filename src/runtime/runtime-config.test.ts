@@ -17,7 +17,7 @@ describe("parseRuntimeConfig", () => {
       gameId: null,
       databaseMode: "emulator",
       journeyVariant: "v2",
-      uiVariant: "tango",
+      uiVariant: "cumulus",
       poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "pool",
       fresh20PackSize: undefined,
@@ -59,16 +59,16 @@ describe("parseRuntimeConfig", () => {
   });
 
   describe("uiVariant", () => {
-    it("defaults to tango when ui is absent or an unknown value", () => {
-      expect(parseRuntimeConfig("").uiVariant).toBe("tango");
-      expect(parseRuntimeConfig("?ui=").uiVariant).toBe("tango");
-      expect(parseRuntimeConfig("?ui=something").uiVariant).toBe("tango");
+    it("defaults to cumulus when ui is absent or an unknown value", () => {
+      expect(parseRuntimeConfig("").uiVariant).toBe("cumulus");
+      expect(parseRuntimeConfig("?ui=").uiVariant).toBe("cumulus");
+      expect(parseRuntimeConfig("?ui=something").uiVariant).toBe("cumulus");
     });
 
     it("selects the legacy UI only for the exact value legacy", () => {
       expect(parseRuntimeConfig("?ui=legacy").uiVariant).toBe("legacy");
-      expect(parseRuntimeConfig("?ui=tango").uiVariant).toBe("tango");
-      expect(parseRuntimeConfig("?ui=Legacy").uiVariant).toBe("tango");
+      expect(parseRuntimeConfig("?ui=cumulus").uiVariant).toBe("cumulus");
+      expect(parseRuntimeConfig("?ui=Legacy").uiVariant).toBe("cumulus");
     });
   });
 

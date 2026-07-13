@@ -3,13 +3,13 @@
 import { act } from "react";
 import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { TangoRoot } from "../tango/TangoRoot";
+import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
-import { computeCardTextScale } from "../tango/components/card/card-display-scale";
+import { computeCardTextScale } from "../cumulus/components/card/card-display-scale";
 import { CardDisplay } from "./CardDisplay";
-import { CardView } from "../tango/components/card/CardView";
+import { CardView } from "../cumulus/components/card/CardView";
 
 function makeCard(overrides: Partial<CardData>): CardData {
   return {
@@ -37,7 +37,7 @@ function mount(element: ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(<TangoRoot>{element}</TangoRoot>);
+    root.render(<CumulusRoot>{element}</CumulusRoot>);
   });
   return { container, root };
 }

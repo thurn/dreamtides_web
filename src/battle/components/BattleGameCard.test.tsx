@@ -3,7 +3,7 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { TangoRoot } from "../../tango/TangoRoot";
+import { CumulusRoot } from "../../cumulus/CumulusRoot";
 import { getLogEntries, resetLog } from "../../logging";
 import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
 import { TRANSFIGURE_MARK_END, TRANSFIGURE_MARK_START } from "../../runtime/transfigure-markers";
@@ -42,7 +42,7 @@ function instance(overrides: Partial<BattleCardInstance> = {}): BattleCardInstan
 
 function mount(node: React.ReactNode) {
   const container = document.createElement("div"); document.body.append(container);
-  const root = createRoot(container); act(() => root.render(<TangoRoot>{node}</TangoRoot>));
+  const root = createRoot(container); act(() => root.render(<CumulusRoot>{node}</CumulusRoot>));
   return { container, root };
 }
 
@@ -160,7 +160,7 @@ describe("BattleGameCard", () => {
     act(() => { source.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse", pointerId: 1 })); });
     await act(async () => { await Promise.resolve(); });
     act(() => resizeCallbacks.forEach((callback) => callback([], {} as ResizeObserver)));
-    await vi.waitFor(() => expect(getLogEntries().some((entry) => entry.event === "tango_entity_reveal_opened" && entry.sourceEntityId === model.cardId)).toBe(true));
+    await vi.waitFor(() => expect(getLogEntries().some((entry) => entry.event === "cumulus_entity_reveal_opened" && entry.sourceEntityId === model.cardId)).toBe(true));
     act(() => root.unmount()); container.remove();
   });
 
@@ -184,11 +184,11 @@ describe("BattleGameCard", () => {
     act(() => { source.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse", pointerId: 1 })); });
     await act(async () => { await new Promise((resolve) => setTimeout(resolve, 0)); });
     act(() => resizeCallbacks.forEach((callback) => callback([], {} as ResizeObserver)));
-    await vi.waitFor(() => expect(document.querySelector("[data-tango-reveal-group]")).not.toBeNull());
+    await vi.waitFor(() => expect(document.querySelector("[data-cumulus-reveal-group]")).not.toBeNull());
 
     act(() => { source.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, pointerType: "mouse", pointerId: 1, button: 0 })); });
     act(() => { wrapper.dispatchEvent(new Event("dragstart", { bubbles: true })); });
-    expect(document.querySelector("[data-tango-reveal-group]")).toBeNull();
+    expect(document.querySelector("[data-cumulus-reveal-group]")).toBeNull();
     act(() => {
       source.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, pointerType: "mouse", pointerId: 1 }));
       wrapper.dispatchEvent(new Event("dragend", { bubbles: true }));

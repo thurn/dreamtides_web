@@ -66,8 +66,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f731c231eff5545c0b337528d95b07ef, type: 3}
-  m_Name: TangoGlassRendererFeature
-  m_EditorClassIdentifier: TangoMvp.Runtime::TangoMvp.Rendering.TangoGlassRendererFeature
+  m_Name: CumulusGlassRendererFeature
+  m_EditorClassIdentifier: CumulusMvp.Runtime::CumulusMvp.Rendering.CumulusGlassRendererFeature
   m_Active: 1
   blurMaterial: {fileID: 2100000, guid: e98e1937512c445658e5d5f70e07af69, type: 2}
 --- !u!114 &7833122117494664109

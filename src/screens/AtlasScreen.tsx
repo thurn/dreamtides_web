@@ -5,8 +5,8 @@ import {
   useState,
 } from "react";
 import { useQuest } from "../state/quest-context";
-import { AtlasNode, type AtlasNodeModel } from "../tango/components/atlas/AtlasNode";
-import { AtlasEdge, type AtlasEdgeKind } from "../tango/components/atlas/AtlasEdge";
+import { AtlasNode, type AtlasNodeModel } from "../cumulus/components/atlas/AtlasNode";
+import { AtlasEdge, type AtlasEdgeKind } from "../cumulus/components/atlas/AtlasEdge";
 import {
   reachableAtlasNodeIds,
   regenerateAtlasForProgress,
@@ -18,9 +18,9 @@ import {
 } from "../atlas/atlas-generator";
 import {
   BOSS_DISPLAY,
-} from "../tango/components/atlas/atlas-display";
-import { glyph } from "../tango/primitives/glyph";
-import { artRef } from "../tango/primitives/art";
+} from "../cumulus/components/atlas/atlas-display";
+import { glyph } from "../cumulus/primitives/glyph";
+import { artRef } from "../cumulus/primitives/art";
 import type {
   AffiliationContent,
   ApollyonIncarnationContent,

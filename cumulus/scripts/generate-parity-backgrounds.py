@@ -12,7 +12,7 @@ from glass_parity import write_png
 
 WIDTH = 512
 HEIGHT = 288
-OUTPUT = Path(__file__).resolve().parents[1] / "Assets/TangoMvp/Parity/Resources/TangoParityBackgrounds"
+OUTPUT = Path(__file__).resolve().parents[1] / "Assets/CumulusMvp/Parity/Resources/CumulusParityBackgrounds"
 
 
 def clamp(value):

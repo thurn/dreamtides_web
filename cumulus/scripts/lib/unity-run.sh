@@ -15,7 +15,7 @@ fi
 UNITY_RUN_SCRIPT_DIR="$(cd "$(dirname "$_UNITY_RUN_SOURCE_PATH")" && pwd)"
 unset _UNITY_RUN_SOURCE_PATH
 UNITY_RUN_PROJECT_ROOT="$(cd "$UNITY_RUN_SCRIPT_DIR/../.." && pwd)"
-UNITY_RUN_ARTIFACT_ROOT="$UNITY_RUN_PROJECT_ROOT/Artifacts/TangoMvpVerification/stages"
+UNITY_RUN_ARTIFACT_ROOT="$UNITY_RUN_PROJECT_ROOT/Artifacts/CumulusMvpVerification/stages"
 UNITY_RUN_TIMEOUT_SECONDS=900
 UNITY_RUN_COMPLETION_MARKER='Exiting batchmode successfully now!'
 UNITY_RUN_TEST_COMPLETION_MARKER='Test run completed. Exiting with code 0 (Ok). Run completed.'

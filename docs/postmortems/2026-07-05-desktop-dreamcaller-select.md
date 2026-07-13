@@ -3,7 +3,7 @@
 **Date range:** 2026-07-04 16:13 → 2026-07-05 07:46 (local), plus a follow-up
 file split later that morning.
 **Surface:** the desktop (wide-viewport) layout of the Dreamcaller select
-screen (`src/tango/screens/quest-start-desktop.tsx`, formerly the desktop half
+screen (`src/cumulus/screens/quest-start-desktop.tsx`, formerly the desktop half
 of `QuestStartScreen.tsx`).
 **Sources:** four Claude session transcripts
 (`ba1dac74`, `3da28f94`, `44eca388`, `21947819`), `git log`
@@ -24,7 +24,7 @@ and at least seven distinct rounds of user rejection after Claude had declared
 the work done.
 
 The headline finding is **not** that verification was skipped. Every session
-loaded the Tango skill, ran lint/typecheck/tests, and ran a real
+loaded the Cumulus skill, ran lint/typecheck/tests, and ran a real
 browser-QA loop (87 `agent-browser` invocations across the four sessions)
 before every "done" declaration. The "obviously wrong" UI shipped anyway,
 because the QA loop verified the wrong things: it checked *requested elements
@@ -77,7 +77,7 @@ These are worth keeping deliberately, not just noting in passing:
   hover became a typed `compress` prop on `Pressable`/`PressInfo`; both were
   documented in demos and the docs regenerated — exactly rung 3 of the ladder.
 - **Escape hatches were closed behind us.** The tweaks panel required adding
-  `src/tango/devtools/` to three lint-rule exemption lists; the final
+  `src/cumulus/devtools/` to three lint-rule exemption lists; the final
   normalize commit (`aea34715`) deleted the panel, reverted all three
   exemptions, and left zero residue (verified by grep in the current tree).
 - **The tweaks-panel loop itself worked.** Once taste-values (portrait scale,
@@ -260,13 +260,13 @@ cluster and the desktop select render it. This is now tracked in
 
 ## Recommendations
 
-### A. Skill-level: add a "visual QA bar" to the tango skill
+### A. Skill-level: add a "visual QA bar" to the cumulus skill
 
-The tango skill is thorough about *what to build with* and silent about *how
+The cumulus skill is thorough about *what to build with* and silent about *how
 to judge the result*. The four sessions independently invented the missing
 practices after being burned; codify them so the next screen starts with them.
 Proposed additions (a short "Verifying a screen" section in
-`.claude/skills/tango/SKILL.md`, or a referenced checklist):
+`.claude/skills/cumulus/SKILL.md`, or a referenced checklist):
 
 1. **Measure, don't adjectivize.** Any spacing/size claim in a QA summary
    must be a number obtained from the DOM (`getBoundingClientRect()` deltas),
@@ -306,12 +306,12 @@ Proposed additions (a short "Verifying a screen" section in
    readout + "paste back and bake" converged in minutes what
    guess-and-reject cycles failed to converge in hours, and the cleanup
    contract (delete panel, revert exemptions, bake constants, same push) was
-   honored. Name it in the tango skill as the sanctioned way to tune box
+   honored. Name it in the cumulus skill as the sanctioned way to tune box
    measures, with that cleanup contract spelled out — and consider a small
    reusable `devtools` harness (schema-driven panel + lint exemption already
    in place) so the ~380 lines of panel don't get rebuilt per screen.
 8. **Document the equal-height/variable-content trap.** One paragraph in the
-   tango skill's screen-composition guidance: for N side-by-side cards with
+   cumulus skill's screen-composition guidance: for N side-by-side cards with
    variable content, prefer natural height + cross-axis centering with a
    small min-height floor; a fixed height or stretch-equalization parks the
    slack in whichever flex spacer is nearest, and that slack *will* read as a
@@ -338,20 +338,20 @@ Proposed additions (a short "Verifying a screen" section in
 ## Action items
 
 - [x] Add the "Verifying a screen" QA bar (items A1–A5) to
-      `.claude/skills/tango/SKILL.md`.
-- [x] Name the tweaks-panel workflow + cleanup contract in the tango skill.
+      `.claude/skills/cumulus/SKILL.md`.
+- [x] Name the tweaks-panel workflow + cleanup contract in the cumulus skill.
       Evaluated the reusable devtools panel harness and decided against
       pre-building it: the panel is ~300 lines of schema-specific UI built
       rarely, and a permanent harness would need a standing lint exemption
       for raw inputs, whereas the documented contract keeps every exemption
       temporary. Revisit if a third screen needs a panel.
 - [x] Add the equal-height/variable-content guidance to the screen-composition
-      docs (a "Variable-content siblings" rule under the tango skill's Core
+      docs (a "Variable-content siblings" rule under the cumulus skill's Core
       rendering rules).
-- [x] Add the convergence trigger (recommendation C10) to the tango skill's
+- [x] Add the convergence trigger (recommendation C10) to the cumulus skill's
       Customization section ("Requested divergence must converge").
 - [x] Unify the collapsed tide disc into one component rendering with one
-      size constant: `TideDisc` (`src/tango/components/hud/TideDisc.tsx`)
+      size constant: `TideDisc` (`src/cumulus/components/hud/TideDisc.tsx`)
       exports the single disc rendering and `TIDE_DISC_PX`; TideCluster and
       the desktop select both consume it, and TideCluster's flyer reads the
       sm pill metrics exported by TidePill instead of re-declaring them.

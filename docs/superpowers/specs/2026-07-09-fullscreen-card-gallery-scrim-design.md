@@ -3,7 +3,7 @@
 ## Context
 
 Card-gallery experiences use two geometries with different material needs. A
-bounded gallery is a floating object over the quest scene and uses Tango's
+bounded gallery is a floating object over the quest scene and uses Cumulus's
 liquid-glass surface. A gallery that fills the viewport is the screen's focus
 layer and uses the standard dark alpha scrim so the scene remains sharp and
 quiet behind the cards.

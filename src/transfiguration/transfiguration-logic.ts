@@ -12,7 +12,7 @@ import {
 import type { CardTransfigurationDisplay } from "../runtime/transfiguration-display";
 
 // The card-display constants and the display descriptor type live in
-// `src/runtime/transfiguration-display.ts` so the Tango UI library can import
+// `src/runtime/transfiguration-display.ts` so the Cumulus UI library can import
 // the card-rendering pieces without reaching into this game-logic module. They
 // are re-exported here so this module's existing consumers keep importing them
 // from `transfiguration-logic`.

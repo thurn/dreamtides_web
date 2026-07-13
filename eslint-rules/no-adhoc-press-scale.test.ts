@@ -12,37 +12,37 @@ describe("toRepoRelativePosix (no-adhoc-press-scale)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/tango/components/hud/QuestStatusBar.tsx",
+        "/Users/x/quest_prototype/src/cumulus/components/hud/QuestStatusBar.tsx",
         "/Users/x/quest_prototype",
       ),
-    ).toBe("src/tango/components/hud/QuestStatusBar.tsx");
+    ).toBe("src/cumulus/components/hud/QuestStatusBar.tsx");
   });
 });
 
 describe("isTestFile", () => {
   it("matches a .test.tsx file", () => {
-    expect(isTestFile("src/tango/primitives/Pressable.test.tsx")).toBe(true);
+    expect(isTestFile("src/cumulus/primitives/Pressable.test.tsx")).toBe(true);
   });
   it("does not match a production file", () => {
-    expect(isTestFile("src/tango/primitives/Pressable.tsx")).toBe(false);
+    expect(isTestFile("src/cumulus/primitives/Pressable.tsx")).toBe(false);
   });
 });
 
 describe("isGovernedFile", () => {
-  it("governs a tango component file", () => {
-    expect(isGovernedFile("src/tango/components/hud/QuestStatusBar.tsx")).toBe(
+  it("governs a cumulus component file", () => {
+    expect(isGovernedFile("src/cumulus/components/hud/QuestStatusBar.tsx")).toBe(
       true,
     );
   });
   it("exempts the Pressable definition file", () => {
-    expect(isGovernedFile("src/tango/primitives/Pressable.tsx")).toBe(false);
+    expect(isGovernedFile("src/cumulus/primitives/Pressable.tsx")).toBe(false);
   });
   it("exempts test files (they assert against rendered transforms)", () => {
-    expect(isGovernedFile("src/tango/primitives/Pressable.test.tsx")).toBe(
+    expect(isGovernedFile("src/cumulus/primitives/Pressable.test.tsx")).toBe(
       false,
     );
   });
-  it("ignores files outside the tango tier", () => {
+  it("ignores files outside the cumulus tier", () => {
     expect(isGovernedFile("src/screens/ShopScreen.tsx")).toBe(false);
   });
 });
@@ -79,8 +79,8 @@ const ruleTester = new RuleTester({
   },
 });
 
-const COMPONENT = "src/tango/components/hud/QuestStatusBar.tsx";
-const PRESSABLE = "src/tango/primitives/Pressable.tsx";
+const COMPONENT = "src/cumulus/components/hud/QuestStatusBar.tsx";
+const PRESSABLE = "src/cumulus/primitives/Pressable.tsx";
 
 ruleTester.run("no-adhoc-press-scale", rule, {
   valid: [
@@ -115,7 +115,7 @@ ruleTester.run("no-adhoc-press-scale", rule, {
       code: "const t = `scale(${PRESS_SCALE})`;",
     },
     {
-      name: "a raw scale literal outside the tango tier is inert",
+      name: "a raw scale literal outside the cumulus tier is inert",
       filename: "src/screens/ShopScreen.tsx",
       code: 'const t = "scale(1.08)";',
     },
@@ -129,7 +129,7 @@ ruleTester.run("no-adhoc-press-scale", rule, {
     },
     {
       name: "a bare integer scale literal (an image crop) is flagged",
-      filename: "src/tango/components/hud/DreamcallerPortrait.tsx",
+      filename: "src/cumulus/components/hud/DreamcallerPortrait.tsx",
       code: 'const t = "scale(2)";',
       errors: [{ messageId: "adhocScale" }],
     },

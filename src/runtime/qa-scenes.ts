@@ -273,7 +273,7 @@ function dreamscapeSceneState(
  * The inside-a-dreamscape overview, parked on the starter dreamscape with its
  * scatter of sites and a few docked dreamsigns. Otherwise reached only by
  * winning the keeper battle and choosing a dreamscape; parking here lets the
- * Tango dreamscape redesign (the scene, the site nodes, and the QuestStatusBar
+ * Cumulus dreamscape redesign (the scene, the site nodes, and the QuestStatusBar
  * HUD) be QA'd from a URL.
  */
 const DREAMSCAPE_SCENE: QaScene = {

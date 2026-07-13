@@ -4,7 +4,7 @@ import { act } from "react";
 import { MINIMAL_ATLAS_CONFIG, MINIMAL_DREAMSCAPES } from "../__test-helpers__/atlas-fixtures";
 import type { HTMLAttributes, ReactElement, ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { TangoRoot } from "../tango/TangoRoot";
+import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { QuestMutations } from "../state/quest-context";
 import type { CardData } from "../types/cards";
@@ -237,7 +237,7 @@ function mount(element: ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(<TangoRoot>{element}</TangoRoot>);
+    root.render(<CumulusRoot>{element}</CumulusRoot>);
   });
   return { container, root };
 }

@@ -10,10 +10,10 @@ describe("toRepoRelativePosix (no-name-keyed-cards)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/tango/screens/DraftScreen.tsx",
+        "/Users/x/quest_prototype/src/cumulus/screens/DraftScreen.tsx",
         "/Users/x/quest_prototype",
       ),
-    ).toBe("src/tango/screens/DraftScreen.tsx");
+    ).toBe("src/cumulus/screens/DraftScreen.tsx");
   });
 });
 
@@ -67,8 +67,8 @@ const ruleTester = new RuleTester({
   },
 });
 
-const SCREEN = "src/tango/screens/DraftScreen.tsx";
-const ADAPTER = "src/screens/tango_adapters/draft-view-model.ts";
+const SCREEN = "src/cumulus/screens/DraftScreen.tsx";
+const ADAPTER = "src/screens/cumulus_adapters/draft-view-model.ts";
 
 ruleTester.run("no-name-keyed-cards", rule, {
   valid: [
@@ -88,7 +88,7 @@ ruleTester.run("no-name-keyed-cards", rule, {
       code: `const sitesByName = new Map(sites.map((site) => [site.name, site])); sitesByName.get(site.name);`,
     },
     {
-      name: "outside Tango product surfaces the rule is inert",
+      name: "outside Cumulus product surfaces the rule is inert",
       filename: "src/components/LegacyCardList.tsx",
       code: `const byName = new Map(cards.map((card) => [card.name, card]));`,
     },

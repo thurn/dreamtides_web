@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { GLOSSARY } from "../data/glossary";
-import { GlossaryDefinitionCard } from "../tango/components/card/GlossaryDefinitionCard";
-import { INFO_CARD_WIDTH } from "../tango/components/overlay/InfoCard";
+import { GlossaryDefinitionCard } from "../cumulus/components/card/GlossaryDefinitionCard";
+import { INFO_CARD_WIDTH } from "../cumulus/components/overlay/InfoCard";
 import { logEvent } from "../logging";
 
 /**
@@ -16,7 +16,7 @@ const GLOSSARY_PANEL_WIDTH_PX = INFO_CARD_WIDTH + 32;
  * definition.
  *
  * Sourced from `GLOSSARY` in `src/data/glossary.ts` — the same data the
- * card-text tokenizer (`src/tango/components/card/card-text.ts`) uses to wrap
+ * card-text tokenizer (`src/cumulus/components/card/card-text.ts`) uses to wrap
  * matching words in hover popovers. There is exactly one place that
  * names the terms and writes their definitions; this popup and the
  * in-card tooltip both consume that single source.

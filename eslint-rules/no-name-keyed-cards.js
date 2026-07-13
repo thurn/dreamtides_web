@@ -1,14 +1,14 @@
 import path from "node:path";
 
 /**
- * Bans using card display names as lookup identity in Tango product surfaces.
+ * Bans using card display names as lookup identity in Cumulus product surfaces.
  *
- * Card names are display text and are not unique. A migrated Tango screen may
+ * Card names are display text and are not unique. A migrated Cumulus screen may
  * resolve a card name right before rendering, but Maps, Sets, object indexes,
  * and membership checks must be keyed by UUID/card id instead.
  */
 
-const TARGET_PREFIXES = ["src/tango/screens/", "src/screens/tango_adapters/"];
+const TARGET_PREFIXES = ["src/cumulus/screens/", "src/screens/cumulus_adapters/"];
 const MAP_KEY_METHODS = new Set(["get", "has", "set", "delete"]);
 const SET_KEY_METHODS = new Set(["add", "has", "delete"]);
 
@@ -93,7 +93,7 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Ban Map/Set/object lookup identity keyed by card display names in Tango product UI.",
+        "Ban Map/Set/object lookup identity keyed by card display names in Cumulus product UI.",
     },
     schema: [],
     messages: {

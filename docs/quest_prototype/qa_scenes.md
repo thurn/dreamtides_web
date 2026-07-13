@@ -99,15 +99,15 @@ and interaction QA.
 run on it. The QA foundation seeds a valid `draftState`, so on entry the draft
 screen rolls its first offer and paints a real card pack over the starter
 dreamscape, with the floating `Draft (n/total)` pick counter beneath it. The
-Tango layout is a 2×2 pack on mobile and a four-card row on desktop. Picking a
+Cumulus layout is a 2×2 pack on mobile and a four-card row on desktop. Picking a
 card mints and paints the next offer and advances the counter; exhausting the
 pack completes the site and returns to the dreamscape overview.
 
-Open this scene with `&ui=tango` to see the Tango pack. Pair with
+Open this scene with `&ui=cumulus` to see the Cumulus pack. Pair with
 `&deviceFrame=iphone16` to render the phone chrome for framed mobile QA, e.g.:
 
 ```
-http://localhost:5174/?goto=draft&ui=tango&deviceFrame=iphone16
+http://localhost:5174/?goto=draft&ui=cumulus&deviceFrame=iphone16
 ```
 
 ## Registered scenes
@@ -126,7 +126,7 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `dreamscape-with-essence` | Starter dreamscape overview with an Essence site ready to enter (site-entry animation QA) |
 | `deckviewer`             | Deck viewer overlay opened over the starter dreamscape (deck grid + press-and-hold zoom) |
 | `startingdeck`           | Starting-deck reveal popup over the starter dreamscape (frosted-glass chrome QA) |
-| `draft`                  | Draft site — the Tango draft screen with a rolled first offer and the floating `Draft (n/total)` pick counter (mobile-gated; see "Draft site" below) |
+| `draft`                  | Draft site — the Cumulus draft screen with a rolled first offer and the floating `Draft (n/total)` pick counter (mobile-gated; see "Draft site" below) |
 | `essence`                | Essence site                                                     |
 | `transfiguration`        | Transfiguration site                                             |
 | `transfiguration-enhanced` | Transfiguration site, enhanced                                |
@@ -172,7 +172,7 @@ place of `<App>`, bypassing the whole quest workflow. The dispatch lives in
 `QuestState`, and no multiplayer gate.
 
 `?demo=device-frame` mounts `DeviceFrameDemo`
-(`src/tango/screens/devtools/DeviceFrameDemo.tsx`), the browser-QA page that
+(`src/cumulus/screens/devtools/DeviceFrameDemo.tsx`), the browser-QA page that
 proves the device-frame safe-area injection end to end. It renders a title band
 padded by `var(--safe-area-inset-top)` so the "Your Deck" title clears the
 Dynamic Island, and a control parked to the right of the island from the
@@ -189,7 +189,7 @@ node scripts/device-screenshots.mjs -d iphone-16 --query 'demo=device-frame'
 ```
 
 `?demo=entity-reveals` mounts the deterministic entity-reveal conformance page.
-It uses fixed UUID-backed fixtures and the public named Tango components for a
+It uses fixed UUID-backed fixtures and the public named Cumulus components for a
 popup GameCard, press-in-place GameCard, strict InfoCard content, glossary term,
 unavailable card, Atlas node, and battle card. Its semantic scenario controls
 arrange top-edge, side-fallback, truncation, best-effort, reduced-motion, and

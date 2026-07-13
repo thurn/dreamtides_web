@@ -1,35 +1,35 @@
 import path from "node:path";
 
 /**
- * Bans the `className` JSX attribute in Tango's product-UI tier.
+ * Bans the `className` JSX attribute in Cumulus's product-UI tier.
  *
  * Tailwind is active in the build and global stylesheets are loadable, so a
  * single `className="p-3 text-purple-400"` (or a class hooked to a bespoke
  * .css file) silently routes around the entire token system — colors,
  * spacing, and type all escape at once, with zero diagnostics from the other
- * Tango rules, which check inline values. In the product tier, appearance
- * comes from Tango components and token-valued inline styles; utility classes
+ * Cumulus rules, which check inline values. In the product tier, appearance
+ * comes from Cumulus components and token-valued inline styles; utility classes
  * and ad-hoc stylesheets are not a sanctioned styling channel.
  *
- * The one legitimate class in product UI is the literal `"tango"` scope class
+ * The one legitimate class in product UI is the literal `"cumulus"` scope class
  * a screen's root element carries so the token custom properties resolve for
  * its subtree; that exact value is allowed.
  *
- * SCOPE. Files under `src/tango/` outside {@link EXEMPT_PREFIXES}, plus the
- * adapter layer in `src/screens/tango_adapters/` (an adapter renders no chrome of its
+ * SCOPE. Files under `src/cumulus/` outside {@link EXEMPT_PREFIXES}, plus the
+ * adapter layer in `src/screens/cumulus_adapters/` (an adapter renders no chrome of its
  * own, so it has no business classing anything). Components, primitives, and
  * the doc site legitimately author class-based styling and are exempt.
  */
 
 /** Repo-relative POSIX dir prefixes exempt from the check. */
 const EXEMPT_PREFIXES = [
-  "src/tango/primitives/",
-  "src/tango/components/",
-  "src/tango/docs/",
+  "src/cumulus/primitives/",
+  "src/cumulus/components/",
+  "src/cumulus/docs/",
 ];
 
 /** The one class value product UI may apply: the token-scope root class. */
-const ALLOWED_CLASS_VALUES = new Set(["tango"]);
+const ALLOWED_CLASS_VALUES = new Set(["cumulus"]);
 
 /** Convert an OS path to a repo-relative POSIX path against ESLint's cwd. */
 export function toRepoRelativePosix(absolutePath, cwd) {
@@ -38,11 +38,11 @@ export function toRepoRelativePosix(absolutePath, cwd) {
 
 /** True when this rule governs the given repo-relative POSIX path. */
 export function isProductUiFile(fileRelative) {
-  if (fileRelative.startsWith("src/screens/tango_adapters/")) {
+  if (fileRelative.startsWith("src/screens/cumulus_adapters/")) {
     return true;
   }
   return (
-    fileRelative.startsWith("src/tango/") &&
+    fileRelative.startsWith("src/cumulus/") &&
     !EXEMPT_PREFIXES.some((prefix) => fileRelative.startsWith(prefix))
   );
 }
@@ -53,12 +53,12 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Ban className in Tango product UI (except the literal \"tango\" scope class): utility classes and ad-hoc stylesheets bypass the token system.",
+        "Ban className in Cumulus product UI (except the literal \"cumulus\" scope class): utility classes and ad-hoc stylesheets bypass the token system.",
     },
     schema: [],
     messages: {
       classNameProp:
-        "className is not a styling channel in Tango product UI — utility classes and stylesheets bypass the token system entirely. Style with token-valued inline styles, or compose a Tango component. (The literal \"tango\" scope class on a screen root is the one exception.)",
+        "className is not a styling channel in Cumulus product UI — utility classes and stylesheets bypass the token system entirely. Style with token-valued inline styles, or compose a Cumulus component. (The literal \"cumulus\" scope class on a screen root is the one exception.)",
     },
   },
 

@@ -5,29 +5,29 @@ import rule, {
   toRepoRelativePosix,
   isProductUiFile,
 } from "./no-untokenized-lengths.js";
-import { spaceTokenFor } from "./tango-token-index.js";
+import { spaceTokenFor } from "./cumulus-token-index.js";
 
 describe("toRepoRelativePosix (no-untokenized-lengths)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/tango/screens/HomeScreen.tsx",
+        "/Users/x/quest_prototype/src/cumulus/screens/HomeScreen.tsx",
         "/Users/x/quest_prototype",
       ),
-    ).toBe("src/tango/screens/HomeScreen.tsx");
+    ).toBe("src/cumulus/screens/HomeScreen.tsx");
   });
 });
 
 describe("isProductUiFile (no-untokenized-lengths)", () => {
   it("covers the product tier and the adapter layer", () => {
-    expect(isProductUiFile("src/tango/screens/HomeScreen.tsx")).toBe(true);
-    expect(isProductUiFile("src/screens/tango_adapters/HomeScreenAdapter.tsx")).toBe(
+    expect(isProductUiFile("src/cumulus/screens/HomeScreen.tsx")).toBe(true);
+    expect(isProductUiFile("src/screens/cumulus_adapters/HomeScreenAdapter.tsx")).toBe(
       true,
     );
   });
-  it("exempts primitives, components, docs, and non-tango files", () => {
-    expect(isProductUiFile("src/tango/components/Button.tsx")).toBe(false);
-    expect(isProductUiFile("src/tango/docs/TangoApp.tsx")).toBe(false);
+  it("exempts primitives, components, docs, and non-cumulus files", () => {
+    expect(isProductUiFile("src/cumulus/components/Button.tsx")).toBe(false);
+    expect(isProductUiFile("src/cumulus/docs/CumulusApp.tsx")).toBe(false);
     expect(isProductUiFile("src/screens/LegacyScreen.tsx")).toBe(false);
   });
 });
@@ -62,7 +62,7 @@ const ruleTester = new RuleTester({
   },
 });
 
-const SCREEN = "src/tango/screens/HomeScreen.tsx";
+const SCREEN = "src/cumulus/screens/HomeScreen.tsx";
 
 ruleTester.run("no-untokenized-lengths", rule, {
   valid: [
@@ -93,12 +93,12 @@ ruleTester.run("no-untokenized-lengths", rule, {
     },
     {
       name: "view-model data with CSS-ish field names is not a style object",
-      filename: "src/screens/tango_adapters/atlas-view-model.ts",
+      filename: "src/screens/cumulus_adapters/atlas-view-model.ts",
       code: `export function build() { return { top: ${ON_SCALE}, left: 340, gap: 3 }; }`,
     },
     {
       name: "the components tier authors raw values legitimately",
-      filename: "src/tango/components/Button.tsx",
+      filename: "src/cumulus/components/Button.tsx",
       code: `const el = <div style={{ gap: ${ON_SCALE} }} />;`,
     },
     {
@@ -160,7 +160,7 @@ ruleTester.run("no-untokenized-lengths", rule, {
     },
     {
       name: "adapters are covered too",
-      filename: "src/screens/tango_adapters/HomeScreenAdapter.tsx",
+      filename: "src/screens/cumulus_adapters/HomeScreenAdapter.tsx",
       code: `const el = <div style={{ gap: ${ON_SCALE} }} />;`,
       output: `const el = <div style={{ gap: "var(${ON_SCALE_TOKEN})" }} />;`,
       errors: [{ messageId: "rawSpacingWithToken" }],

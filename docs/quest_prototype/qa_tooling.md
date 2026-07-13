@@ -53,7 +53,7 @@ on the machine and **persists between runs** — it accumulates stale tabs from
 earlier sessions that were never closed. The failure modes this produces:
 
 - Your command lands on a leftover tab pointed at a different server/port
-  (an old `?goto=atlas` tab, a `/tango` doc page), so your `eval` / `screenshot`
+  (an old `?goto=atlas` tab, a `/cumulus` doc page), so your `eval` / `screenshot`
   reads the wrong page.
 - Another QA run — yours later, or a second agent concurrently — changes the
   active tab or the viewport out from under you between your commands.

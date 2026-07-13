@@ -6,7 +6,7 @@
 
 **Architecture:** `CardGalleryPanel` derives material and accessory placement from its existing `frame` value. `StartingDeckOverlay` selects `fullBleed` on mobile and `floating` on desktop, so the material rule follows geometry without a new appearance prop.
 
-**Tech Stack:** React 19, TypeScript, Vitest, Tango semantic CSS tokens.
+**Tech Stack:** React 19, TypeScript, Vitest, Cumulus semantic CSS tokens.
 
 ## Global Constraints
 
@@ -21,13 +21,13 @@
 ### Task 1: Derive Card Gallery Material From Frame Geometry
 
 **Files:**
-- Modify: `src/tango/components/card/CardGalleryPanel.tsx`
-- Modify: `src/tango/components/card/CardGalleryPanel.test.tsx`
-- Modify: `src/tango/screens/StartingDeckOverlay.tsx`
-- Modify: `src/tango/screens/StartingDeckOverlay.test.tsx`
-- Modify: `src/tango/docs/demos/card-gallery-panel.tsx`
-- Modify: `.llms/skills/tango/materials.md`
-- Regenerate: `src/tango/metadata/tango-metadata.json`, `.llms/skills/tango/`
+- Modify: `src/cumulus/components/card/CardGalleryPanel.tsx`
+- Modify: `src/cumulus/components/card/CardGalleryPanel.test.tsx`
+- Modify: `src/cumulus/screens/StartingDeckOverlay.tsx`
+- Modify: `src/cumulus/screens/StartingDeckOverlay.test.tsx`
+- Modify: `src/cumulus/docs/demos/card-gallery-panel.tsx`
+- Modify: `.llms/skills/cumulus/materials.md`
+- Regenerate: `src/cumulus/metadata/cumulus-metadata.json`, `.llms/skills/cumulus/`
 
 **Interfaces:**
 - Consumes: `CardGalleryFrame = "floating" | "fullBleed"` and `--scrim-gallery`.
@@ -39,7 +39,7 @@ Assert the full-bleed gallery background is `var(--scrim-gallery)`, its rendered
 
 - [ ] **Step 2: Run the focused tests and confirm the material assertions fail**
 
-Run: `npx vitest run src/tango/components/card/CardGalleryPanel.test.tsx src/tango/screens/StartingDeckOverlay.test.tsx`
+Run: `npx vitest run src/cumulus/components/card/CardGalleryPanel.test.tsx src/cumulus/screens/StartingDeckOverlay.test.tsx`
 
 Expected: failures show the full-bleed gallery still uses the glass background/filter and `onGlass` accessory placement.
 
@@ -47,9 +47,9 @@ Expected: failures show the full-bleed gallery still uses the glass background/f
 
 Keep `glassSurfaceStyle()` and the popover glass fill for `floating`. For `fullBleed`, emit only `background: token("--scrim-gallery")` from the material branch and select `onMedia` for the accessory. Remove the redundant mobile `GlassBackdrop` from `StartingDeckOverlay`.
 
-- [ ] **Step 4: Regenerate Tango metadata/docs and run verification**
+- [ ] **Step 4: Regenerate Cumulus metadata/docs and run verification**
 
-Run the focused tests, `npm run tango-metadata && npm run tango-docs`, `npm run lint`, `npm run typecheck`, and `npm test`.
+Run the focused tests, `npm run cumulus-metadata && npm run cumulus-docs`, `npm run lint`, `npm run typecheck`, and `npm test`.
 
 - [ ] **Step 5: Browser QA and delivery**
 

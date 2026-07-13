@@ -7,16 +7,16 @@ import rule, {
 } from "./no-purple-text-on-glass.js";
 
 describe("isGovernedFile (no-purple-text-on-glass)", () => {
-  it("governs Tango glass components", () => {
-    expect(isGovernedFile("src/tango/components/overlay/SpeechBubble.tsx")).toBe(
+  it("governs Cumulus glass components", () => {
+    expect(isGovernedFile("src/cumulus/components/overlay/SpeechBubble.tsx")).toBe(
       true,
     );
   });
 
   it("exempts docs and test files", () => {
-    expect(isGovernedFile("src/tango/docs/TangoApp.tsx")).toBe(false);
+    expect(isGovernedFile("src/cumulus/docs/CumulusApp.tsx")).toBe(false);
     expect(
-      isGovernedFile("src/tango/components/overlay/InfoCard.test.tsx"),
+      isGovernedFile("src/cumulus/components/overlay/InfoCard.test.tsx"),
     ).toBe(false);
   });
 });
@@ -25,10 +25,10 @@ describe("toRepoRelativePosix (no-purple-text-on-glass)", () => {
   it("returns a repo-relative POSIX path", () => {
     expect(
       toRepoRelativePosix(
-        "/repo/src/tango/components/overlay/SpeechBubble.tsx",
+        "/repo/src/cumulus/components/overlay/SpeechBubble.tsx",
         "/repo",
       ),
-    ).toBe("src/tango/components/overlay/SpeechBubble.tsx");
+    ).toBe("src/cumulus/components/overlay/SpeechBubble.tsx");
   });
 });
 
@@ -44,7 +44,7 @@ const ruleTester = new RuleTester({
   },
 });
 
-const SPEECH_BUBBLE = "src/tango/components/overlay/SpeechBubble.tsx";
+const SPEECH_BUBBLE = "src/cumulus/components/overlay/SpeechBubble.tsx";
 
 ruleTester.run("no-purple-text-on-glass", rule, {
   valid: [
@@ -58,12 +58,12 @@ ruleTester.run("no-purple-text-on-glass", rule, {
     },
     {
       name: "accent text is legal in a non-glass file",
-      filename: "src/tango/screens/QuestStartScreen.tsx",
+      filename: "src/cumulus/screens/QuestStartScreen.tsx",
       code: 'const style = { color: token("--accent-bright") };',
     },
     {
       name: "docs are exempt",
-      filename: "src/tango/docs/TangoApp.tsx",
+      filename: "src/cumulus/docs/CumulusApp.tsx",
       code: `
         import { glassSurfaceStyle } from "../internal/glass-surface";
         const style = { color: token("--accent-bright") };
@@ -82,7 +82,7 @@ ruleTester.run("no-purple-text-on-glass", rule, {
     },
     {
       name: "essence text in a glass control file",
-      filename: "src/tango/components/controls/GlassButton.tsx",
+      filename: "src/cumulus/components/controls/GlassButton.tsx",
       code: `
         import { glassTrack } from "../../internal/control-treatment";
         const style = { ...glassTrack(), color: token("--essence") };

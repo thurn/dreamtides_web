@@ -7,7 +7,7 @@ import {
   hasGlossaryTerm,
   lookupGlossaryTerm,
 } from "./glossary";
-import { tokenizeRulesText } from "../tango/components/card/card-text";
+import { tokenizeRulesText } from "../cumulus/components/card/card-text";
 
 const SRC_DIR = join(__dirname, "..");
 
@@ -85,7 +85,7 @@ describe("glossary", () => {
   // import from it.
   it("is the single source of truth shared by the card-text tooltip and the glossary popup", () => {
     const cardText = readFileSync(
-      join(SRC_DIR, "tango", "components", "card", "card-text.ts"),
+      join(SRC_DIR, "cumulus", "components", "card", "card-text.ts"),
       "utf8",
     );
     const popup = readFileSync(

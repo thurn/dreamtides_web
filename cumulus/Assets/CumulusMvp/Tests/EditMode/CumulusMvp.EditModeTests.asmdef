@@ -1,0 +1,16 @@
+{
+  "name": "CumulusMvp.EditModeTests",
+  "rootNamespace": "CumulusMvp.Tests",
+  "references": [
+    "CumulusMvp.Editor",
+    "CumulusMvp.Runtime",
+    "CumulusMvp.TestSupport",
+    "Unity.RenderPipelines.Universal.Runtime"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

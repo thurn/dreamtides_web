@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-// Tango base interaction reset — disables native mobile long-press behaviour
-// (selection magnifier, iOS callout, Android context menu) across the `.tango`
-// subtree so it never fights Tango's own long-press-to-reveal gesture. Loaded
-// with the game entry only, so the /tango docs and editor tools keep normal
-// text selection. See src/tango/primitives/tango-base.css.
-import "./tango/primitives/tango-base.css";
+// Cumulus base interaction reset — disables native mobile long-press behaviour
+// (selection magnifier, iOS callout, Android context menu) across the `.cumulus`
+// subtree so it never fights Cumulus's own long-press-to-reveal gesture. Loaded
+// with the game entry only, so the /cumulus docs and editor tools keep normal
+// text selection. See src/cumulus/primitives/cumulus-base.css.
+import "./cumulus/primitives/cumulus-base.css";
 import type { Database } from "firebase/database";
 import type { CardData } from "./types/cards";
 import type { QuestContent } from "./data/quest-content";
@@ -25,11 +25,11 @@ import { useQuest } from "./state/quest-context";
 import { CoopQuestProvider } from "./state/coop-quest-context";
 import { ScreenRouter } from "./components/ScreenRouter";
 import { HUD } from "./components/HUD";
-import { DesktopDeckViewerAdapter } from "./screens/tango_adapters/DesktopDeckViewerAdapter";
-import { MobileDeckViewerAdapter } from "./screens/tango_adapters/MobileDeckViewerAdapter";
-import { useIsDesktop } from "./tango/screens/use-is-desktop";
+import { DesktopDeckViewerAdapter } from "./screens/cumulus_adapters/DesktopDeckViewerAdapter";
+import { MobileDeckViewerAdapter } from "./screens/cumulus_adapters/MobileDeckViewerAdapter";
+import { useIsDesktop } from "./cumulus/screens/use-is-desktop";
 import { PoolViewer } from "./components/PoolViewer";
-import { StartingDeckOverlayAdapter } from "./screens/tango_adapters/StartingDeckOverlayAdapter";
+import { StartingDeckOverlayAdapter } from "./screens/cumulus_adapters/StartingDeckOverlayAdapter";
 import { GlossaryPopup } from "./components/GlossaryPopup";
 import { DebugScreen } from "./screens/DebugScreen";
 import QuestDebugEditor from "./screens/QuestDebugEditor";
@@ -44,9 +44,9 @@ import { DECK_VIEWER_SCENE_ID, findQaScene } from "./runtime/qa-scenes";
 import { useQuestUrlSync } from "./runtime/use-quest-url-sync";
 import type { QuestState, SiteState } from "./types/quest";
 import {
-  isTangoScreenRegistered,
-  isTangoSiteRegistered,
-} from "./screens/tango_adapters/registry";
+  isCumulusScreenRegistered,
+  isCumulusSiteRegistered,
+} from "./screens/cumulus_adapters/registry";
 import {
   JourneyExplanationOverlay,
   type JourneyExplanation,
@@ -79,20 +79,20 @@ export function QuestApp({
   const isDesktopViewport = useIsDesktop();
   const activeSite = resolveActiveSite(state);
   const activeSiteType = activeSite?.type ?? null;
-  // Registered Tango routes receive persistent chrome from ScreenRouter, so
+  // Registered Cumulus routes receive persistent chrome from ScreenRouter, so
   // the legacy HUD suppression follows the registry automatically.
-  const tangoRouteUsesQuestChrome =
-    runtimeConfig.uiVariant === "tango"
+  const cumulusRouteUsesQuestChrome =
+    runtimeConfig.uiVariant === "cumulus"
     && ((state.screen.type !== "questStart"
-      && isTangoScreenRegistered(state.screen))
-      || (activeSite !== null && isTangoSiteRegistered(activeSite)));
+      && isCumulusScreenRegistered(state.screen))
+      || (activeSite !== null && isCumulusSiteRegistered(activeSite)));
   const hidePresencePill =
-    runtimeConfig.uiVariant === "tango"
+    runtimeConfig.uiVariant === "cumulus"
     && (activeSiteType === "Purge" || activeSiteType === "Shop");
   const showHud =
     state.screen.type !== "questStart"
     && !isBattleSiteHudHidden(state)
-    && !tangoRouteUsesQuestChrome;
+    && !cumulusRouteUsesQuestChrome;
   const [deckViewerOpen, setDeckViewerOpen] = useState(false);
   const [poolViewerOpen, setPoolViewerOpen] = useState(false);
   const [glossaryOpen, setGlossaryOpen] = useState(false);
@@ -451,7 +451,7 @@ export function QuestApp({
         <ScreenRouter
           runtimeConfig={runtimeConfig}
           onJourneyExplanationChange={setJourneyExplanation}
-          tangoChromeHandlers={{
+          cumulusChromeHandlers={{
             onViewDeck: handleOpenDeckViewer,
             onOpenGlossary: handleOpenGlossary,
             onOpenPoolViewer: handleOpenPoolViewer,
@@ -625,17 +625,17 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
   const [database, setDatabase] = useState<Database | null>(null);
   const [firebaseError, setFirebaseError] = useState<string | null>(null);
 
-  // Long-press context-menu suppression for the Tango subtree. The CSS reset
-  // (tango-base.css) kills selection and the iOS callout, but Android raises a
+  // Long-press context-menu suppression for the Cumulus subtree. The CSS reset
+  // (cumulus-base.css) kills selection and the iOS callout, but Android raises a
   // context menu when an image is held, and desktop shows the browser menu on
   // right-click — neither is expressible in CSS. One delegated listener cancels
-  // it for any target inside a `.tango` element (cards, art, controls), leaving
-  // non-Tango surfaces untouched. Scoped to the game because this effect only
+  // it for any target inside a `.cumulus` element (cards, art, controls), leaving
+  // non-Cumulus surfaces untouched. Scoped to the game because this effect only
   // mounts with the game app.
   useEffect(() => {
     const onContextMenu = (event: MouseEvent): void => {
       const target = event.target;
-      if (target instanceof Element && target.closest(".tango")) {
+      if (target instanceof Element && target.closest(".cumulus")) {
         event.preventDefault();
       }
     };

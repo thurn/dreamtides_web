@@ -4,28 +4,28 @@ import { describe, it, expect } from "vitest";
 import rule, { toRepoRelativePosix, isGovernedFile } from "./no-inline-glass.js";
 
 describe("isGovernedFile", () => {
-  it("governs a tango component", () => {
+  it("governs a cumulus component", () => {
     expect(
-      isGovernedFile("src/tango/components/card/CardView.tsx"),
+      isGovernedFile("src/cumulus/components/card/CardView.tsx"),
     ).toBe(true);
   });
-  it("governs a tango screen", () => {
-    expect(isGovernedFile("src/tango/screens/MobileDeckViewer.tsx")).toBe(
+  it("governs a cumulus screen", () => {
+    expect(isGovernedFile("src/cumulus/screens/MobileDeckViewer.tsx")).toBe(
       true,
     );
   });
   it("exempts the internal material recipes (the legal home)", () => {
-    expect(isGovernedFile("src/tango/internal/glass-surface.ts")).toBe(false);
+    expect(isGovernedFile("src/cumulus/internal/glass-surface.ts")).toBe(false);
   });
   it("exempts the docs site", () => {
-    expect(isGovernedFile("src/tango/docs/TangoApp.tsx")).toBe(false);
+    expect(isGovernedFile("src/cumulus/docs/CumulusApp.tsx")).toBe(false);
   });
   it("exempts the primitives token mirror", () => {
-    expect(isGovernedFile("src/tango/primitives/tokens.ts")).toBe(false);
+    expect(isGovernedFile("src/cumulus/primitives/tokens.ts")).toBe(false);
   });
   it("exempts test files", () => {
     expect(
-      isGovernedFile("src/tango/components/overlay/InfoCard.test.ts"),
+      isGovernedFile("src/cumulus/components/overlay/InfoCard.test.ts"),
     ).toBe(false);
   });
 });
@@ -34,10 +34,10 @@ describe("toRepoRelativePosix (no-inline-glass)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/repo/src/tango/components/card/CardView.tsx",
+        "/repo/src/cumulus/components/card/CardView.tsx",
         "/repo",
       ),
-    ).toBe("src/tango/components/card/CardView.tsx");
+    ).toBe("src/cumulus/components/card/CardView.tsx");
   });
 });
 
@@ -53,7 +53,7 @@ const ruleTester = new RuleTester({
   },
 });
 
-const CARD_VIEW = "src/tango/components/card/CardView.tsx";
+const CARD_VIEW = "src/cumulus/components/card/CardView.tsx";
 
 ruleTester.run("no-inline-glass", rule, {
   valid: [
@@ -69,16 +69,16 @@ ruleTester.run("no-inline-glass", rule, {
     },
     {
       name: "the internal material recipe is the legal home for raw glass",
-      filename: "src/tango/internal/glass-surface.ts",
+      filename: "src/cumulus/internal/glass-surface.ts",
       code: 'const s = "blur(22px) saturate(1.5)";',
     },
     {
       name: "the docs site is exempt",
-      filename: "src/tango/docs/TangoApp.tsx",
+      filename: "src/cumulus/docs/CumulusApp.tsx",
       code: 'const s = "blur(8px)";',
     },
     {
-      name: "a non-tango file's raw glass is inert",
+      name: "a non-cumulus file's raw glass is inert",
       filename: "src/components/HUD.tsx",
       code: 'const s = "blur(8px)";',
     },

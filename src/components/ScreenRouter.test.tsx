@@ -13,7 +13,7 @@ import { parseRuntimeConfig } from "../runtime/runtime-config";
 import type { QuestContent } from "../data/quest-content";
 import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
-import { TangoRoot } from "../tango/TangoRoot";
+import { CumulusRoot } from "../cumulus/CumulusRoot";
 import type { CardSourceDebugState, QuestState, SiteState } from "../types/quest";
 import { LayerName } from "../types/layer-name";
 import {
@@ -306,8 +306,8 @@ function mountWithQuest({
         {children}
       </QuestContextProvider>
     );
-    const tangoTree = <TangoRoot>{tree}</TangoRoot>;
-    root.render(strict ? <StrictMode>{tangoTree}</StrictMode> : tangoTree);
+    const cumulusTree = <CumulusRoot>{tree}</CumulusRoot>;
+    root.render(strict ? <StrictMode>{cumulusTree}</StrictMode> : cumulusTree);
   };
   const renderState = (
     nextState: QuestState,

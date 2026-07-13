@@ -1,18 +1,18 @@
-// DreamscapeQuestMenu — the top-left utility menu for the Tango quest map
+// DreamscapeQuestMenu — the top-left utility menu for the Cumulus quest map
 // screens (the dreamscape and the Dream Atlas). Those screens suppress the
 // legacy bottom HUD, so the shared QuestUtilityMenu renders its root actions
 // here as App-shell corner chrome.
 
 import type { QuestState } from "../types/quest";
-import { token } from "../tango/primitives/tokens";
-import { GLYPHS } from "../tango/primitives/glyph";
-import { useIsDesktop } from "../tango/screens/use-is-desktop";
+import { token } from "../cumulus/primitives/tokens";
+import { GLYPHS } from "../cumulus/primitives/glyph";
+import { useIsDesktop } from "../cumulus/screens/use-is-desktop";
 import {
   MENU_BUTTON_PX,
   MENU_EDGE_INSET_DESKTOP_PX,
   MENU_EDGE_INSET_MOBILE_PX,
-} from "../tango/screens/chrome-geometry";
-import { IconButton } from "../tango/components/controls/IconButton";
+} from "../cumulus/screens/chrome-geometry";
+import { IconButton } from "../cumulus/components/controls/IconButton";
 import { QuestUtilityMenu, type QuestUtilityMenuAction } from "./QuestUtilityMenu";
 
 /** The App-shell overlay handlers the menu triggers. */
@@ -108,7 +108,7 @@ export function DreamscapeQuestMenu({
 
   return (
     <div
-      className="tango"
+      className="cumulus"
       data-dreamscape-menu=""
       style={{
         position: "fixed",
@@ -124,7 +124,7 @@ export function DreamscapeQuestMenu({
       }}
     >
       <QuestUtilityMenu
-        variant="tango"
+        variant="cumulus"
         actions={actions}
         builtIns={["saveQuest", "loadQuest", "buildSha", "downloadLog"]}
         onLoadQuestState={onLoadQuestState}

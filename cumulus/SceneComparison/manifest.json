@@ -3,12 +3,12 @@
   "defaultCapture": { "width": 3840, "height": 2160 },
   "scenes": [
     {
-      "id": "tango-shop-glass-demo",
-      "unityScene": "Assets/Scenes/TangoShopGlassDemo.unity",
-      "unityRebuildMethod": "TangoMvp.Editor.TangoShopGlassDemoBuilder.Rebuild",
-      "webPath": "/cumulus/SceneComparison/Web/?scene=tango-shop-glass-demo",
+      "id": "cumulus-shop-glass-demo",
+      "unityScene": "Assets/Scenes/CumulusShopGlassDemo.unity",
+      "unityRebuildMethod": "CumulusMvp.Editor.CumulusShopGlassDemoBuilder.Rebuild",
+      "webPath": "/cumulus/SceneComparison/Web/?scene=cumulus-shop-glass-demo",
       "renderer": "shopGlassDemo",
-      "backdrop": "../Assets/TangoMvp/Demo/Art/tumbleleaf_village.png",
+      "backdrop": "../Assets/CumulusMvp/Demo/Art/tumbleleaf_village.png",
       "panelViewportHeight": 0.46
     }
   ]

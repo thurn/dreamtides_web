@@ -9,22 +9,22 @@
   "scenarios": [
     {
       "id": "fine-grid",
-      "background": "../Assets/TangoMvp/Parity/Resources/TangoParityBackgrounds/fine-grid.png",
+      "background": "../Assets/CumulusMvp/Parity/Resources/CumulusParityBackgrounds/fine-grid.png",
       "purpose": "interior"
     },
     {
       "id": "warm-bands",
-      "background": "../Assets/TangoMvp/Parity/Resources/TangoParityBackgrounds/warm-bands.png",
+      "background": "../Assets/CumulusMvp/Parity/Resources/CumulusParityBackgrounds/warm-bands.png",
       "purpose": "interior"
     },
     {
       "id": "cool-radial",
-      "background": "../Assets/TangoMvp/Parity/Resources/TangoParityBackgrounds/cool-radial.png",
+      "background": "../Assets/CumulusMvp/Parity/Resources/CumulusParityBackgrounds/cool-radial.png",
       "purpose": "interior"
     },
     {
       "id": "edge-neutral",
-      "background": "../Assets/TangoMvp/Parity/Resources/TangoParityBackgrounds/edge-neutral.png",
+      "background": "../Assets/CumulusMvp/Parity/Resources/CumulusParityBackgrounds/edge-neutral.png",
       "purpose": "edge"
     }
   ],

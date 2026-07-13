@@ -3,7 +3,7 @@
 import { act } from "react";
 import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { TangoRoot } from "../../tango/TangoRoot";
+import { CumulusRoot } from "../../cumulus/CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import type {
@@ -17,9 +17,9 @@ import { makeMerchantTestCard } from "../testing/fixtures";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { DreamMerchantScreen } from "./DreamMerchantScreen";
 
-vi.mock("../../tango/components/card/CardView", async (importOriginal) => ({
+vi.mock("../../cumulus/components/card/CardView", async (importOriginal) => ({
   ...(await importOriginal<
-    typeof import("../../tango/components/card/CardView")
+    typeof import("../../cumulus/components/card/CardView")
   >()),
   CardView: ({ card }: { card: CardData }) => (
     <div data-testid="mock-card-view" data-card-number={card.cardNumber}>
@@ -28,8 +28,8 @@ vi.mock("../../tango/components/card/CardView", async (importOriginal) => ({
   ),
 }));
 
-vi.mock("../../tango/components/hud/Dreamsign", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("../../tango/components/hud/Dreamsign")>()),
+vi.mock("../../cumulus/components/hud/Dreamsign", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../cumulus/components/hud/Dreamsign")>()),
   DreamsignInfoCard: () => null,
 }));
 
@@ -59,7 +59,7 @@ function mount(element: ReactElement): HTMLDivElement {
   const root = createRoot(container);
   roots.push(root);
   act(() => {
-    root.render(<TangoRoot>{element}</TangoRoot>);
+    root.render(<CumulusRoot>{element}</CumulusRoot>);
   });
   return container;
 }

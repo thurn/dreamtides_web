@@ -1,6 +1,6 @@
 import { selectEffectiveSparkForInstance } from "../state/figments";
 import type { BattleCardInstance } from "../types";
-import type { GameCardModel } from "../../tango/components/card/CardView";
+import type { GameCardModel } from "../../cumulus/components/card/CardView";
 import { asCardId, asCardName, isCardId } from "../../types/card-identity";
 import { semanticEntityId } from "../../types/semantic-identity";
 

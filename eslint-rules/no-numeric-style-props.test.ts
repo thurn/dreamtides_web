@@ -50,7 +50,7 @@ const ruleTester = new RuleTester({
   },
 });
 
-const COMPONENT = "src/tango/components/Widget.tsx";
+const COMPONENT = "src/cumulus/components/Widget.tsx";
 
 ruleTester.run("no-numeric-style-props", rule, {
   valid: [
@@ -61,7 +61,7 @@ ruleTester.run("no-numeric-style-props", rule, {
     },
     {
       name: "an allowlisted numeric knob is exempt",
-      filename: "src/tango/components/hud/DreamcallerPortrait.tsx",
+      filename: "src/cumulus/components/hud/DreamcallerPortrait.tsx",
       code: `export interface DreamcallerPortraitProps { size?: number; }`,
       options: [{ allow: ["DreamcallerPortraitProps.size"] }],
     },
@@ -71,7 +71,7 @@ ruleTester.run("no-numeric-style-props", rule, {
       code: `export interface SizeSpec { size?: number; gap?: number; }`,
     },
     {
-      name: "outside src/tango/components/ the rule is inert",
+      name: "outside src/cumulus/components/ the rule is inert",
       filename: "src/screens/DraftSiteScreen.tsx",
       code: `export interface RowProps { size?: number; gap?: number; }`,
     },
@@ -92,20 +92,20 @@ ruleTester.run("no-numeric-style-props", rule, {
     },
     {
       name: "__fixture__ files are skipped",
-      filename: "src/tango/components/__docgen_fixture__.tsx",
+      filename: "src/cumulus/components/__docgen_fixture__.tsx",
       code: `export interface WidgetProps { size?: number; }`,
     },
   ],
   invalid: [
     {
       name: "numeric size + gap knobs on an exported *Props are both flagged",
-      filename: "src/tango/components/controls/ResourceChip.tsx",
+      filename: "src/cumulus/components/controls/ResourceChip.tsx",
       code: `export interface ResourceChipProps { size?: number; gap?: number; }`,
       errors: [{ messageId: "numericKnob" }, { messageId: "numericKnob" }],
     },
     {
       name: "a camelCase knob suffix on an exported *View is flagged",
-      filename: "src/tango/components/atlas/AtlasNode.tsx",
+      filename: "src/cumulus/components/atlas/AtlasNode.tsx",
       code: `export interface AtlasNodeView { badgeScale?: number; }`,
       errors: [{ messageId: "numericKnob" }],
     },

@@ -4,10 +4,10 @@ import type { CardData } from "../types/cards";
 import type { Dreamsign, SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
-import { EssenceValue } from "../tango/components/hud/EssenceValue";
-import { Dreamsign as TangoDreamsign } from "../tango/components/hud/Dreamsign";
-import { IconButton } from "../tango/components/controls/IconButton";
-import { GLYPHS } from "../tango/primitives/glyph";
+import { EssenceValue } from "../cumulus/components/hud/EssenceValue";
+import { Dreamsign as CumulusDreamsign } from "../cumulus/components/hud/Dreamsign";
+import { IconButton } from "../cumulus/components/controls/IconButton";
+import { GLYPHS } from "../cumulus/primitives/glyph";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
@@ -192,7 +192,7 @@ export function ShopScreen({ site }: ShopScreenProps) {
       data-testid="shop-screen"
       data-shop-variant={site.type}
     >
-      <div className="tango site-leave-control">
+      <div className="cumulus site-leave-control">
         <IconButton
           glyph={GLYPHS.close}
           label="Leave shop"
@@ -424,7 +424,7 @@ function ShopDreamsignArt({ dreamsign }: { dreamsign: Dreamsign }) {
             : `Dreamsign: ${dreamsign.name}`
         }
       >
-        <TangoDreamsign dreamsign={dreamsign} sizePx={160} />
+        <CumulusDreamsign dreamsign={dreamsign} sizePx={160} />
       </div>
     </div>
   );

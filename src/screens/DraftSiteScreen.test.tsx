@@ -12,7 +12,7 @@ import type { DraftState } from "../types/draft";
 import type { QuestState } from "../types/quest";
 import { DraftSiteScreen } from "./DraftSiteScreen";
 import { useQuest } from "../state/quest-context";
-import { TangoRoot } from "../tango/TangoRoot";
+import { CumulusRoot } from "../cumulus/CumulusRoot";
 
 vi.mock("framer-motion", async () => {
   const React = await import("react");
@@ -444,7 +444,7 @@ function mount(element: ReactElement): {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
-  mountedElement = <TangoRoot>{element}</TangoRoot>;
+  mountedElement = <CumulusRoot>{element}</CumulusRoot>;
   mountedRoot = root;
   act(() => {
     root.render(mountedElement);
@@ -945,7 +945,7 @@ describe("DraftSiteScreen", () => {
     act(() => {
       row?.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" }));
     });
-    expect(document.body.querySelector("[data-tango-reveal-portal]")).not.toBeNull();
+    expect(document.body.querySelector("[data-cumulus-reveal-portal]")).not.toBeNull();
 
     act(() => {
       root.unmount();
@@ -1010,7 +1010,7 @@ describe("DraftSiteScreen", () => {
     act(() => {
       row?.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" }));
     });
-    expect(document.body.querySelector("[data-tango-reveal-portal]")).not.toBeNull();
+    expect(document.body.querySelector("[data-cumulus-reveal-portal]")).not.toBeNull();
 
     act(() => {
       row?.dispatchEvent(new PointerEvent("pointerout", { bubbles: true, pointerType: "mouse" }));
@@ -1018,7 +1018,7 @@ describe("DraftSiteScreen", () => {
     });
 
     expect(
-      document.body.querySelectorAll("[data-tango-reveal-portal]"),
+      document.body.querySelectorAll("[data-cumulus-reveal-portal]"),
     ).toHaveLength(0);
 
     act(() => {
@@ -1048,7 +1048,7 @@ describe("DraftSiteScreen", () => {
     act(() => {
       row.focus();
     });
-    expect(document.body.querySelector("[data-tango-reveal-portal]")).not.toBeNull();
+    expect(document.body.querySelector("[data-cumulus-reveal-portal]")).not.toBeNull();
 
     act(() => {
       row.blur();
@@ -1056,7 +1056,7 @@ describe("DraftSiteScreen", () => {
     });
 
     expect(
-      document.body.querySelectorAll("[data-tango-reveal-portal]"),
+      document.body.querySelectorAll("[data-cumulus-reveal-portal]"),
     ).toHaveLength(0);
 
     act(() => {
@@ -1141,7 +1141,7 @@ describe("DraftSiteScreen", () => {
         },
       };
       act(() => {
-        root.render(<TangoRoot><DraftSiteScreen siteId="site-1" /></TangoRoot>);
+        root.render(<CumulusRoot><DraftSiteScreen siteId="site-1" /></CumulusRoot>);
       });
 
       const textAfter = draftRoot?.textContent ?? "";

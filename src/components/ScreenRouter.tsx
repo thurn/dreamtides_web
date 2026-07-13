@@ -35,7 +35,7 @@ import {
   type MerchantGameObject,
 } from "../journey_v2";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
-import { tangoScreenFor, tangoSiteScreenFor } from "../screens/tango_adapters/registry";
+import { cumulusScreenFor, cumulusSiteScreenFor } from "../screens/cumulus_adapters/registry";
 import type { QuestContent } from "../data/quest-content";
 import { siteTypeName } from "../atlas/atlas-generator";
 import { logEvent } from "../logging";
@@ -43,9 +43,9 @@ import type { Screen, SiteState } from "../types/quest";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { BattleSiteRoute } from "./BattleSiteRoute";
 import {
-  TangoQuestChrome,
-  type TangoQuestChromeHandlers,
-} from "./TangoQuestChrome";
+  CumulusQuestChrome,
+  type CumulusQuestChromeHandlers,
+} from "./CumulusQuestChrome";
 import { SiteGuide } from "./SiteGuide";
 import { guideForSiteType } from "../data/dreamscapes";
 import { ErrorBoundary } from "./ErrorBoundary";
@@ -64,21 +64,21 @@ function screenKey(screen: Screen): string {
 export function ScreenRouter({
   runtimeConfig,
   onJourneyExplanationChange,
-  tangoChromeHandlers,
+  cumulusChromeHandlers,
 }: {
   runtimeConfig: RuntimeConfig;
   onJourneyExplanationChange?: (explanation: JourneyExplanation | null) => void;
-  tangoChromeHandlers?: TangoQuestChromeHandlers;
+  cumulusChromeHandlers?: CumulusQuestChromeHandlers;
 }) {
   const { state } = useQuest();
   const { screen } = state;
 
-  // Prefer the Tango implementation of this screen when `?ui=tango` (the
+  // Prefer the Cumulus implementation of this screen when `?ui=cumulus` (the
   // default); a screen not yet migrated resolves to null and falls through to
   // the legacy switch below, so the app stays fully navigable during migration.
-  const tangoScreen =
-    runtimeConfig.uiVariant === "tango"
-      ? tangoScreenFor(screen)
+  const cumulusScreen =
+    runtimeConfig.uiVariant === "cumulus"
+      ? cumulusScreenFor(screen)
       : null;
 
   // Record which UI served each screen, one entry per navigation, so a
@@ -91,10 +91,10 @@ export function ScreenRouter({
   // signature only re-fires the log when the visible navigation actually
   // changes — the same guard idiom `useQuestUrlSync` uses for `quest_url_synced`.
   const siteId = screen.type === "site" ? screen.siteId : null;
-  const servedByTango = tangoScreen !== null;
+  const servedByCumulus = cumulusScreen !== null;
   const lastLoggedNavigationRef = useRef<string | null>(null);
   useEffect(() => {
-    const signature = `${runtimeConfig.uiVariant}|${screen.type}|${siteId ?? ""}|${String(servedByTango)}`;
+    const signature = `${runtimeConfig.uiVariant}|${screen.type}|${siteId ?? ""}|${String(servedByCumulus)}`;
     if (lastLoggedNavigationRef.current === signature) {
       return;
     }
@@ -103,21 +103,21 @@ export function ScreenRouter({
       uiVariant: runtimeConfig.uiVariant,
       screenType: screen.type,
       siteId,
-      servedByTango,
+      servedByCumulus,
     });
-  }, [runtimeConfig.uiVariant, screen.type, siteId, servedByTango]);
+  }, [runtimeConfig.uiVariant, screen.type, siteId, servedByCumulus]);
 
   function renderScreen() {
-    if (tangoScreen !== null) {
+    if (cumulusScreen !== null) {
       return screen.type === "questStart" ? (
-        tangoScreen
+        cumulusScreen
       ) : (
-        <TangoQuestChrome
-          handlers={tangoChromeHandlers}
+        <CumulusQuestChrome
+          handlers={cumulusChromeHandlers}
           showAtlasRegenerate={screen.type === "atlas"}
         >
-          {tangoScreen}
-        </TangoQuestChrome>
+          {cumulusScreen}
+        </CumulusQuestChrome>
       );
     }
     switch (screen.type) {
@@ -133,7 +133,7 @@ export function ScreenRouter({
             siteId={screen.siteId}
             runtimeConfig={runtimeConfig}
             onJourneyExplanationChange={onJourneyExplanationChange}
-            tangoChromeHandlers={tangoChromeHandlers}
+            cumulusChromeHandlers={cumulusChromeHandlers}
           />
         );
       case "questComplete":
@@ -174,12 +174,12 @@ function SiteScreen({
   siteId,
   runtimeConfig,
   onJourneyExplanationChange,
-  tangoChromeHandlers,
+  cumulusChromeHandlers,
 }: {
   siteId: string;
   runtimeConfig: RuntimeConfig;
   onJourneyExplanationChange?: (explanation: JourneyExplanation | null) => void;
-  tangoChromeHandlers?: TangoQuestChromeHandlers;
+  cumulusChromeHandlers?: CumulusQuestChromeHandlers;
 }) {
   const { state, cardDatabase } = useQuest();
   const { atlas, currentDreamscape } = state;
@@ -202,24 +202,24 @@ function SiteScreen({
         site={site}
         cardDatabase={cardDatabase}
         runtimeConfig={runtimeConfig}
-        tangoChromeHandlers={tangoChromeHandlers}
+        cumulusChromeHandlers={cumulusChromeHandlers}
       />
     );
   }
 
-  // A Tango site screen (`?ui=tango`) draws its own full-bleed scene and the
+  // A Cumulus site screen (`?ui=cumulus`) draws its own full-bleed scene and the
   // router supplies persistent quest chrome around it. It renders directly,
   // without the legacy dimmed backdrop wrapper. An unmigrated site type resolves
   // to null and falls through to the legacy screens over the scene backdrop.
-  const tangoSite =
-    runtimeConfig.uiVariant === "tango"
-      ? tangoSiteScreenFor(site)
+  const cumulusSite =
+    runtimeConfig.uiVariant === "cumulus"
+      ? cumulusSiteScreenFor(site)
       : null;
-  if (tangoSite !== null) {
+  if (cumulusSite !== null) {
     return (
-      <TangoQuestChrome handlers={tangoChromeHandlers}>
-        {tangoSite}
-      </TangoQuestChrome>
+      <CumulusQuestChrome handlers={cumulusChromeHandlers}>
+        {cumulusSite}
+      </CumulusQuestChrome>
     );
   }
 

@@ -1,6 +1,6 @@
 import { useRef, type CSSProperties, type DragEventHandler, type MouseEventHandler } from "react";
 import { isCardId } from "../../types/card-identity";
-import { GameCard } from "../../tango/components/card/CardView";
+import { GameCard } from "../../cumulus/components/card/CardView";
 import type { BattleCardInstance } from "../types";
 import { selectFigmentCount } from "../state/figments";
 import { battleGameCardModel } from "../ui/battle-game-card-model";
@@ -30,7 +30,7 @@ export interface BattleGameCardProps {
   readonly onDragEnd?: DragEventHandler<HTMLDivElement>;
 }
 
-/** Battle adapter for the canonical Tango GameCard reveal path. */
+/** Battle adapter for the canonical Cumulus GameCard reveal path. */
 export function BattleGameCard({
   instance, variant = "mini", compact = false, hidden = false,
   exhausted = instance.status.isExhausted, playable = false, selected = false,

@@ -1,11 +1,11 @@
-// Display descriptor data shared by the card renderer (Tango's CardView) and the
+// Display descriptor data shared by the card renderer (Cumulus's CardView) and the
 // transfiguration game logic. These are the pure, non-UI presentation values a
 // transfiguration attaches to a card: the per-type accent colors, the lighter
 // tints painted onto the card itself, the Boxicons glyph classes shown in the
 // name bar, and the descriptor a CardView consumes to paint a transfigured card.
 //
 // They live here (an allowlisted `src/runtime/` module) rather than in
-// `src/transfiguration/transfiguration-logic.ts` so the Tango UI library can
+// `src/transfiguration/transfiguration-logic.ts` so the Cumulus UI library can
 // import the card-display pieces it needs without reaching into the game-logic
 // module. `transfiguration-logic.ts` re-exports every symbol below, so its
 // existing consumers are unaffected.
@@ -13,7 +13,7 @@
 import type { TransfigurationType } from "../types/quest";
 
 /** Color hex value for each transfiguration type. The `#${string}` type matches
- * Tango's `HexColor`, so these feed a strict `TangoColor` prop directly. */
+ * Cumulus's `HexColor`, so these feed a strict `CumulusColor` prop directly. */
 export const TRANSFIGURATION_COLORS: Readonly<
   Record<TransfigurationType, `#${string}`>
 > = {
@@ -83,7 +83,7 @@ export const TRANSFIGURATION_ICONS: Readonly<
 export interface CardTransfigurationDisplay {
   type: TransfigurationType;
   /** Light tint for the name gem and changed text. A
-   * `#${string}` hex, matching Tango's `HexColor`. */
+   * `#${string}` hex, matching Cumulus's `HexColor`. */
   color: `#${string}`;
   /** Rules text with the changed/added spans wrapped in transfigure markers. */
   markedText: string;

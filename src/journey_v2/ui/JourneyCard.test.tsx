@@ -4,7 +4,7 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
-import { TangoRoot } from "../../tango/TangoRoot";
+import { CumulusRoot } from "../../cumulus/CumulusRoot";
 import type { JourneyCardObject } from "./offerPresentation";
 import { JourneyCard } from "./JourneyCard";
 
@@ -39,7 +39,7 @@ describe("JourneyCard", () => {
     const activate = vi.fn();
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<TangoRoot><JourneyCard object={object} widthPx={120} onClick={activate} testId="journey-card" /></TangoRoot>));
+    act(() => root.render(<CumulusRoot><JourneyCard object={object} widthPx={120} onClick={activate} testId="journey-card" /></CumulusRoot>));
     const source = container.querySelector<HTMLElement>("[data-game-card-source]")!;
     expect(source.dataset.cardId).toBe(ID);
     expect(container.querySelector("[data-journey-card-zoom]")).toBeNull();

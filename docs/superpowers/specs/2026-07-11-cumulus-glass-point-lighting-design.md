@@ -1,4 +1,4 @@
-# Cumulus Tango Glass Point Lighting — Design
+# Cumulus Cumulus Glass Point Lighting — Design
 
 **Status:** Approved for implementation planning
 
@@ -8,14 +8,14 @@
 
 ## Summary
 
-Cumulus Tango glass will respond to Unity scene lights through a bounded native
+Cumulus Cumulus glass will respond to Unity scene lights through a bounded native
 URP light loop. Moving point lights will produce colored highlights that travel
-around the modeled edge of Tango rounded panels and a broader, softer colored
+around the modeled edge of Cumulus rounded panels and a broader, softer colored
 reflection across their interiors. The lit result may be substantially more
 expressive than the browser material. With no contributing scene light, the
 current web-calibrated glass composition remains unchanged.
 
-The feature applies to Tango's generated rounded-panel meshes and the shared
+The feature applies to Cumulus's generated rounded-panel meshes and the shared
 `SceneGlass` and `OnGlass` material roles. It does not support arbitrary meshes
 or per-panel appearance overrides. Desktop evaluates a small bounded set of
 additional lights with point-light shadow attenuation. Mobile evaluates at most
@@ -23,16 +23,16 @@ one unshadowed additional light per glass pixel.
 
 ## Context
 
-`TangoSceneGlass.shader` currently samples the shared blurred scene color and
+`CumulusSceneGlass.shader` currently samples the shared blurred scene color and
 adds main-light specular, Fresnel, rim, sheen, and interior washes. It calls
 `GetMainLight` but does not compile or iterate URP additional lights, so point
-lights do not affect the material. `TangoOnGlass.shader` has a static local
+lights do not affect the material. `CumulusOnGlass.shader` has a static local
 highlight and view Fresnel but no scene-light response.
 
-The generated `TangoRoundedPanelMesh` already supplies world-space-transformable
+The generated `CumulusRoundedPanelMesh` already supplies world-space-transformable
 face, bevel, and side normals. The PC renderer uses Forward+ and permits four
 additional lights per object. The mobile renderer uses Forward and permits four,
-but the Tango mobile material policy budgets only one additional light per
+but the Cumulus mobile material policy budgets only one additional light per
 pixel. The implementation should use those existing URP paths instead of
 introducing a separate light registry.
 
@@ -55,7 +55,7 @@ introducing a separate light registry.
 
 ## Non-goals
 
-- Supporting arbitrary meshes, flat quads without a Tango bevel, or imported
+- Supporting arbitrary meshes, flat quads without a Cumulus bevel, or imported
   meshes with unknown vertex contracts.
 - Per-object or per-instance lighting appearance overrides.
 - Refraction, recursive glass, caustics, ray tracing, planar reflections, or
@@ -63,7 +63,7 @@ introducing a separate light registry.
 - Making the captured backdrop behave as diffuse albedo. Scene color behind the
   glass remains transmission and is not lit a second time.
 - Adding point-light shadow sampling to the mobile glass path.
-- Changing `SolidChrome` or unrelated Tango material roles.
+- Changing `SolidChrome` or unrelated Cumulus material roles.
 - Matching the web material while scene lights actively illuminate the glass.
 
 ## Visual Model
@@ -75,7 +75,7 @@ Lighting is added to the existing glass composition as two reflections.
 The edge response is a narrow colored specular lobe evaluated with the actual
 bevel and side normals. Its highlight therefore migrates around the rounded
 silhouette as a point light moves. A Fresnel factor strengthens the glint toward
-grazing view angles. The existing output-pixel face rim remains the stable Tango
+grazing view angles. The existing output-pixel face rim remains the stable Cumulus
 hairline; local light may brighten the rim near the illuminated bevel but does
 not widen it.
 
@@ -136,7 +136,7 @@ at the precision required by the target platform.
 
 ### Generated mesh contract
 
-`TangoRoundedPanelMesh` adds a secondary UV stream containing the shell-region
+`CumulusRoundedPanelMesh` adds a secondary UV stream containing the shell-region
 mask. The contract is:
 
 - Front and back face centers and rings: `0`.
@@ -150,8 +150,8 @@ builders are regenerated to include the new stream.
 
 ### Lighting profile
 
-`TangoGlassLightingProfile` is a shared editor-authored asset referenced by
-`TangoMaterialLibrary`. It contains one settings group for `SceneGlass`, one for
+`CumulusGlassLightingProfile` is a shared editor-authored asset referenced by
+`CumulusMaterialLibrary`. It contains one settings group for `SceneGlass`, one for
 `OnGlass`, and platform quality settings. Its primary controls are:
 
 | Setting | `SceneGlass` default | `OnGlass` default | Meaning |
@@ -210,7 +210,7 @@ command buffer, per-light component callback, or per-panel CPU update.
   URP Forward light-loop semantics.
 - Evaluate at most four additional lights per fragment.
 - Apply supported main- and additional-light shadow attenuation.
-- Preserve the existing total Tango desktop target of at most 2.0 ms at
+- Preserve the existing total Cumulus desktop target of at most 2.0 ms at
   2560 by 1440 and 60 frames per second in the reference stress scene.
 - Avoid dynamic branches inside a light evaluation where arithmetic produces
   the same bounded result more predictably.
@@ -219,9 +219,9 @@ command buffer, per-light component callback, or per-panel CPU update.
 
 - Evaluate at most one additional light per fragment, selected through URP's
   normal per-object Forward light list.
-- Do not compile or sample additional-light shadows for Tango glass.
+- Do not compile or sample additional-light shadows for Cumulus glass.
 - Use half precision where GPU captures show stable color and highlight motion.
-- Preserve the existing high-end mobile total Tango target of at most 3.0 ms at
+- Preserve the existing high-end mobile total Cumulus target of at most 3.0 ms at
   a sustained 60 frames per second after thermal stabilization.
 - Allow a zero-additional-light quality setting for devices that cannot sustain
   the one-light profile. The main-light response remains available.
@@ -235,7 +235,7 @@ runtime integer controlling an unbounded Forward+ loop is not acceptable.
 Desktop point-light shadows attenuate both reflection lobes when URP reports an
 additional-light shadow. An occluder can therefore interrupt the edge shine and
 interior reflection. Shadow strength follows Unity's light and shadow settings;
-the Tango profile controls reflection strength rather than inventing another
+the Cumulus profile controls reflection strength rather than inventing another
 shadow-opacity control.
 
 Mobile point lights do not sample shadow maps. Their response still falls off by
@@ -265,7 +265,7 @@ mobile one-light path with an unbounded desktop path.
 
 ## Diagnostics and Logging
 
-`TangoGlassDiagnostics` will expose and log a stable snapshot when a camera's
+`CumulusGlassDiagnostics` will expose and log a stable snapshot when a camera's
 glass configuration becomes active or changes. The snapshot includes:
 
 - Active glass quality profile.
@@ -336,7 +336,7 @@ whole-frame averages.
 - Inspect desktop occlusion and mobile unshadowed behavior side by side so the
   declared quality difference is intentional and stable.
 
-The repository-level acceptance gate remains `bash cumulus/scripts/verify-tango-mvp.sh`,
+The repository-level acceptance gate remains `bash cumulus/scripts/verify-cumulus-mvp.sh`,
 including shader inspection, deterministic asset generation, EditMode and GPU
 PlayMode tests, player build, repository checks, and scope verification.
 

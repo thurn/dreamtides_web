@@ -1,9 +1,9 @@
 import path from "node:path";
-import { knownTokenNames } from "./tango-token-index.js";
+import { knownTokenNames } from "./cumulus-token-index.js";
 
 /**
- * Every literal `var(--x)` reference in Tango product UI must name a token
- * that is actually declared in `src/tango/primitives/tango-tokens.css`.
+ * Every literal `var(--x)` reference in Cumulus product UI must name a token
+ * that is actually declared in `src/cumulus/primitives/cumulus-tokens.css`.
  *
  * The typed `token()` helper already guarantees this for its own call sites —
  * its argument is a union of the real token names. But a plain string like
@@ -13,13 +13,13 @@ import { knownTokenNames } from "./tango-token-index.js";
  * disappears. This rule turns that invisible failure into an error at
  * authoring time.
  *
- * SCOPE. All of the Tango tier: every file under `src/tango/` EXCEPT the
- * primitive layer (`src/tango/primitives/`, which DEFINES the tokens) and the
- * doc site (`src/tango/docs/`, whose specimens intentionally print token names
+ * SCOPE. All of the Cumulus tier: every file under `src/cumulus/` EXCEPT the
+ * primitive layer (`src/cumulus/primitives/`, which DEFINES the tokens) and the
+ * doc site (`src/cumulus/docs/`, whose specimens intentionally print token names
  * that may not all resolve), plus the adapter/builder layer in
- * `src/screens/tango_adapters/`. Component ownership is included: a `var(--x)`
- * inside `src/tango/components/` must resolve to a real token, catching the
- * `--cv-textbox-blur`-class of leak. See {@link isTangoOwnedFile}.
+ * `src/screens/cumulus_adapters/`. Component ownership is included: a `var(--x)`
+ * inside `src/cumulus/components/` must resolve to a real token, catching the
+ * `--cv-textbox-blur`-class of leak. See {@link isCumulusOwnedFile}.
  *
  * COMPONENT-LOCAL ALLOWLIST. Components legitimately reference JS-injected,
  * component-local runtime CSS custom properties that are not design tokens —
@@ -33,18 +33,18 @@ import { knownTokenNames } from "./tango-token-index.js";
 
 /** Repo-relative POSIX dir prefixes exempt from the {@link isProductUiFile} check. */
 const EXEMPT_PREFIXES = [
-  "src/tango/primitives/",
-  "src/tango/components/",
-  "src/tango/internal/",
-  "src/tango/docs/",
+  "src/cumulus/primitives/",
+  "src/cumulus/components/",
+  "src/cumulus/internal/",
+  "src/cumulus/docs/",
 ];
 
 /**
- * Repo-relative POSIX dir prefixes under `src/tango/` that {@link isTangoOwnedFile}
+ * Repo-relative POSIX dir prefixes under `src/cumulus/` that {@link isCumulusOwnedFile}
  * excludes from token-ownership: the primitive layer defines the tokens, and
  * the doc site prints specimen names that need not all resolve.
  */
-const OWNERSHIP_EXEMPT_PREFIXES = ["src/tango/primitives/", "src/tango/docs/"];
+const OWNERSHIP_EXEMPT_PREFIXES = ["src/cumulus/primitives/", "src/cumulus/docs/"];
 
 /**
  * CSS custom-property name prefixes that are component-local, JS-injected
@@ -63,27 +63,27 @@ export function toRepoRelativePosix(absolutePath, cwd) {
 
 /** True when this rule governs the given repo-relative POSIX path. */
 export function isProductUiFile(fileRelative) {
-  if (fileRelative.startsWith("src/screens/tango_adapters/")) {
+  if (fileRelative.startsWith("src/screens/cumulus_adapters/")) {
     return true;
   }
   return (
-    fileRelative.startsWith("src/tango/") &&
+    fileRelative.startsWith("src/cumulus/") &&
     !EXEMPT_PREFIXES.some((prefix) => fileRelative.startsWith(prefix))
   );
 }
 
 /**
  * True when this rule OWNS token references in the given repo-relative POSIX
- * path. Covers the adapter/builder layer plus all of `src/tango/` (component
+ * path. Covers the adapter/builder layer plus all of `src/cumulus/` (component
  * ownership included), excluding only the primitive and doc tiers
  * ({@link OWNERSHIP_EXEMPT_PREFIXES}).
  */
-export function isTangoOwnedFile(fileRelative) {
-  if (fileRelative.startsWith("src/screens/tango_adapters/")) {
+export function isCumulusOwnedFile(fileRelative) {
+  if (fileRelative.startsWith("src/screens/cumulus_adapters/")) {
     return true;
   }
   return (
-    fileRelative.startsWith("src/tango/") &&
+    fileRelative.startsWith("src/cumulus/") &&
     !OWNERSHIP_EXEMPT_PREFIXES.some((prefix) => fileRelative.startsWith(prefix))
   );
 }
@@ -94,12 +94,12 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Every literal var(--x) reference across the Tango tier (all of src/tango/ — component ownership included — plus src/screens/tango_adapters/) must name a token declared in tango-tokens.css; a typo'd or invented token silently drops the whole declaration at runtime. Component-local runtime var families (--cv-, --atlas-, --qsb-, --info-card-) are allowlisted.",
+        "Every literal var(--x) reference across the Cumulus tier (all of src/cumulus/ — component ownership included — plus src/screens/cumulus_adapters/) must name a token declared in cumulus-tokens.css; a typo'd or invented token silently drops the whole declaration at runtime. Component-local runtime var families (--cv-, --atlas-, --qsb-, --info-card-) are allowlisted.",
     },
     schema: [],
     messages: {
       unknownToken:
-        "var({{name}}) does not match any token in src/tango/primitives/tango-tokens.css — the browser will silently drop this declaration. Check the name against the token reference (or prefer the typed token() helper, which cannot misspell).",
+        "var({{name}}) does not match any token in src/cumulus/primitives/cumulus-tokens.css — the browser will silently drop this declaration. Check the name against the token reference (or prefer the typed token() helper, which cannot misspell).",
     },
   },
 
@@ -111,7 +111,7 @@ const rule = {
     const cwd = typeof context.cwd === "string" ? context.cwd : process.cwd();
     const fileRelative = toRepoRelativePosix(rawFilename, cwd);
 
-    if (!isTangoOwnedFile(fileRelative)) {
+    if (!isCumulusOwnedFile(fileRelative)) {
       return {};
     }
     const known = knownTokenNames();

@@ -13,7 +13,7 @@ import {
   makeBattleTestState,
 } from "../test-support";
 import { BattlefieldGrid } from "./BattlefieldGrid";
-import { TangoRoot } from "../../tango/TangoRoot";
+import { CumulusRoot } from "../../cumulus/CumulusRoot";
 
 function createState() {
   const battleInit = createBattleInit({
@@ -50,7 +50,7 @@ function mount(zone: "backRank" | "frontRank"): {
 
   act(() => {
     root.render(
-      <TangoRoot><BattlefieldGrid
+      <CumulusRoot><BattlefieldGrid
         side="player"
         zone={zone}
         state={state}
@@ -63,7 +63,7 @@ function mount(zone: "backRank" | "frontRank"): {
         onCardClick={cardClicks}
         onCardContextMenu={() => undefined}
         onSlotClick={slotClicks as (target: BattleFieldSlotAddress, isOccupied: boolean) => void}
-      /></TangoRoot>,
+      /></CumulusRoot>,
     );
   });
 
@@ -94,9 +94,9 @@ describe("BattlefieldGrid", () => {
     const slotClicks = vi.fn();
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<TangoRoot><BattlefieldGrid side="player" zone="frontRank" state={state}
+    act(() => root.render(<CumulusRoot><BattlefieldGrid side="player" zone="frontRank" state={state}
       canInteract handSelectionSide={null} pendingDragCardId={null} selectedCardId={null}
-      selectedSlot={null} selectionAnchor={null} onCardClick={cardClicks} onSlotClick={slotClicks} /></TangoRoot>));
+      selectedSlot={null} selectionAnchor={null} onCardClick={cardClicks} onSlotClick={slotClicks} /></CumulusRoot>));
     const source = container.querySelector<HTMLElement>(`[data-battle-card-id="${battleCardId}"] [data-game-card-source]`);
     expect(source).not.toBeNull();
     expect(source?.closest("button")).toBeNull();
@@ -127,7 +127,7 @@ describe("BattlefieldGrid", () => {
 
     act(() => {
       root.render(
-        <TangoRoot><BattlefieldGrid
+        <CumulusRoot><BattlefieldGrid
           side="player"
           zone="backRank"
           state={state}
@@ -141,7 +141,7 @@ describe("BattlefieldGrid", () => {
           onCardDragStart={cardDragStart}
           onSlotClick={() => undefined}
           onSlotDrop={slotDrop}
-        /></TangoRoot>,
+        /></CumulusRoot>,
       );
     });
 

@@ -26,7 +26,7 @@ const SRC_DIR = path.resolve(__dirname);
 const INDEX_CSS = path.join(SRC_DIR, "index.css");
 const SITE_NODE = path.join(
   SRC_DIR,
-  "tango",
+  "cumulus",
   "components",
   "dreamscape",
   "SiteNode.tsx",

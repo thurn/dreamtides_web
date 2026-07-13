@@ -2,14 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import type { SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
-import { EssenceGlyph, EssenceValue } from "../tango/components/hud/EssenceValue";
-import { RulesText } from "../tango/components/card/RulesText";
+import { EssenceGlyph, EssenceValue } from "../cumulus/components/hud/EssenceValue";
+import { RulesText } from "../cumulus/components/card/RulesText";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
-import { dreamsignIconUrl } from "../tango/components/atlas/atlas-display";
+import { dreamsignIconUrl } from "../cumulus/components/atlas/atlas-display";
 import { SiteGuide } from "../components/SiteGuide";
-import { IconButton } from "../tango/components/controls/IconButton";
-import { GLYPHS } from "../tango/primitives/glyph";
+import { IconButton } from "../cumulus/components/controls/IconButton";
+import { GLYPHS } from "../cumulus/primitives/glyph";
 import {
   MAX_PURGE_PER_VISIT,
   maxAffordablePurgeCount,
@@ -444,7 +444,7 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
       {/* Master Takeshi (shared SiteGuide), docked lower-left in landscape. */}
       <SiteGuide siteType="Purge" isEnhanced={site.isEnhanced} />
 
-      <div className="tango site-leave-control">
+      <div className="cumulus site-leave-control">
         <IconButton
           glyph={GLYPHS.close}
           label="Leave site"

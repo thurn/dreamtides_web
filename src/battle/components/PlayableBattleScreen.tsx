@@ -85,8 +85,8 @@ import {
   createMoveCardToZoneCommand,
 } from "./battle-ui-commands";
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
-import { MobileBattleScreenAdapter } from "../../screens/tango_adapters/MobileBattleScreenAdapter";
-import { useIsDesktop } from "../../tango/screens/use-is-desktop";
+import { MobileBattleScreenAdapter } from "../../screens/cumulus_adapters/MobileBattleScreenAdapter";
+import { useIsDesktop } from "../../cumulus/screens/use-is-desktop";
 
 const DESKTOP_INSPECTOR_WIDTH = 1280;
 // `BattleLogDrawer` renders from the append-only coop fold, so its
@@ -179,7 +179,7 @@ function PlayableBattleScreenInner({
 
   const { state: questState, cardDatabase, questContent } = useQuest();
   const isDesktopInspectorLayout = useIsDesktopInspectorLayout();
-  const isTangoDesktopLayout = useIsDesktop();
+  const isCumulusDesktopLayout = useIsDesktop();
   const [isInspectorDrawerOpen, setIsInspectorDrawerOpen] = useState(readIsDesktopInspectorLayout());
   const [isBattleLogOpen, setIsBattleLogOpen] = useState(false);
   const [isDreamwellHistoryOpen, setIsDreamwellHistoryOpen] = useState(false);
@@ -932,9 +932,9 @@ function PlayableBattleScreenInner({
     resolveRunLayerCount(battleInit.atlasSnapshot.layers),
   );
 
-  const showTangoMobileLayout = uiVariant === "tango" && !isTangoDesktopLayout;
+  const showCumulusMobileLayout = uiVariant === "cumulus" && !isCumulusDesktopLayout;
   useEffect(() => {
-    if (!showTangoMobileLayout) {
+    if (!showCumulusMobileLayout) {
       return;
     }
     logEventOnce(
@@ -944,17 +944,17 @@ function PlayableBattleScreenInner({
         battleId: battleInit.battleId,
         enemyHandSize: board.sides.enemy.hand.length,
         playerHandSize: board.sides.player.hand.length,
-        uiVariant: "tango",
+        uiVariant: "cumulus",
       },
     );
   }, [
     battleInit.battleId,
     board.sides.enemy.hand.length,
     board.sides.player.hand.length,
-    showTangoMobileLayout,
+    showCumulusMobileLayout,
   ]);
 
-  if (showTangoMobileLayout) {
+  if (showCumulusMobileLayout) {
     return (
       <MobileBattleScreenAdapter
         init={battleInit}

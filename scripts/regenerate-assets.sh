@@ -18,9 +18,9 @@
 #    4. bake-tides4           data/tides4.jsonc + docs/cards2/tides4_decklists.md
 #    5. bake-tides5           data/tides5.jsonc + docs/cards2/tides5_decklists.md
 #    6. setup-assets         copy the fresh artifacts into public/
-#    7. generate-tango-tokens    src/tango/primitives/tokens.ts
-#    8. generate-tango-metadata  src/tango/metadata/tango-metadata.json
-#    9. generate-tango-docs   .llms/skills/tango/ component reference + index
+#    7. generate-cumulus-tokens    src/cumulus/primitives/tokens.ts
+#    8. generate-cumulus-metadata  src/cumulus/metadata/cumulus-metadata.json
+#    9. generate-cumulus-docs   .llms/skills/cumulus/ component reference + index
 #   10. check-tides4          confirm the tides4 freshness gate passes
 #   11. check-tides5          confirm the tides5 freshness gate passes
 #   12. check-tide-annotations  confirm each tide label matches its deck contents
@@ -66,14 +66,14 @@ node scripts/bake-tides5.mjs
 step "6/12  setup-assets — copy fresh artifacts into public/"
 node scripts/setup-assets.mjs
 
-step "7/12  generate-tango-tokens — src/tango/primitives/tokens.ts"
-node scripts/generate-tango-tokens.mjs
+step "7/12  generate-cumulus-tokens — src/cumulus/primitives/tokens.ts"
+node scripts/generate-cumulus-tokens.mjs
 
-step "8/12  generate-tango-metadata — src/tango/metadata/tango-metadata.json"
-node scripts/generate-tango-metadata.mjs
+step "8/12  generate-cumulus-metadata — src/cumulus/metadata/cumulus-metadata.json"
+node scripts/generate-cumulus-metadata.mjs
 
-step "9/12  generate-tango-docs — .llms/skills/tango component reference"
-node scripts/generate-tango-docs.mjs
+step "9/12  generate-cumulus-docs — .llms/skills/cumulus component reference"
+node scripts/generate-cumulus-docs.mjs
 
 step "10/12  check-tides4 — verify the freshness gate"
 node scripts/check-tides4.mjs
@@ -85,7 +85,7 @@ step "12/12  check-tide-annotations — verify tide labels match their decks"
 node scripts/check-tide-annotations.mjs
 
 step "Done — git-tracked files changed by this run"
-git status --short -- data docs src/tango/primitives/tokens.ts src/tango/metadata/tango-metadata.json .llms/skills/tango || true
+git status --short -- data docs src/cumulus/primitives/tokens.ts src/cumulus/metadata/cumulus-metadata.json .llms/skills/cumulus || true
 
 cat <<'EOF'
 

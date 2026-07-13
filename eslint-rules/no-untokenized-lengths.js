@@ -1,8 +1,8 @@
 import path from "node:path";
-import { spaceTokenFor } from "./tango-token-index.js";
+import { spaceTokenFor } from "./cumulus-token-index.js";
 
 /**
- * Spacing in Tango product UI comes from the `--space-*` scale, and corner
+ * Spacing in Cumulus product UI comes from the `--space-*` scale, and corner
  * rounding from the `--radius-*` roles — never from raw pixel literals.
  *
  * A raw `gap: 12` or `padding: "16px 18px 20px"` hardcodes a rhythm step the
@@ -22,20 +22,20 @@ import { spaceTokenFor } from "./tango-token-index.js";
  * are hairline border widths, type metrics (the `--t-*` voices own those),
  * zIndex, opacity, or flex factors.
  *
- * SCOPE. The product-UI tier: files under `src/tango/` outside
+ * SCOPE. The product-UI tier: files under `src/cumulus/` outside
  * {@link EXEMPT_PREFIXES}, plus the adapter/builder layer in
- * `src/screens/tango_adapters/`, mirroring `no-hardcoded-values` (the primitive,
+ * `src/screens/cumulus_adapters/`, mirroring `no-hardcoded-values` (the primitive,
  * component, and internal/ material-recipe tiers legitimately author raw
  * values; the doc site is tooling).
  */
 
 /** Repo-relative POSIX dir prefixes exempt from the check. */
 const EXEMPT_PREFIXES = [
-  "src/tango/primitives/",
-  "src/tango/components/",
-  "src/tango/internal/",
-  "src/tango/docs/",
-  "src/tango/screens/devtools/",
+  "src/cumulus/primitives/",
+  "src/cumulus/components/",
+  "src/cumulus/internal/",
+  "src/cumulus/docs/",
+  "src/cumulus/screens/devtools/",
 ];
 
 /** Style-object property names whose values are rhythm steps. */
@@ -101,11 +101,11 @@ export function toRepoRelativePosix(absolutePath, cwd) {
 
 /** True when this rule governs the given repo-relative POSIX path. */
 export function isProductUiFile(fileRelative) {
-  if (fileRelative.startsWith("src/screens/tango_adapters/")) {
+  if (fileRelative.startsWith("src/screens/cumulus_adapters/")) {
     return true;
   }
   return (
-    fileRelative.startsWith("src/tango/") &&
+    fileRelative.startsWith("src/cumulus/") &&
     !EXEMPT_PREFIXES.some((prefix) => fileRelative.startsWith(prefix))
   );
 }
@@ -159,7 +159,7 @@ const rule = {
     fixable: "code",
     docs: {
       description:
-        "Spacing and radius values in Tango product UI come from the --space-*/--radius-* tokens, never raw pixel literals.",
+        "Spacing and radius values in Cumulus product UI come from the --space-*/--radius-* tokens, never raw pixel literals.",
     },
     schema: [],
     messages: {

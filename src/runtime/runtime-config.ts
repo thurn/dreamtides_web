@@ -15,8 +15,8 @@ export interface RuntimeConfig {
   databaseMode: DatabaseMode;
   journeyVariant: JourneyVariant;
   /**
-   * Which UI implementation renders each quest screen, from `?ui=`. `"tango"`
-   * (the default) renders the Tango design-system screen where one exists and
+   * Which UI implementation renders each quest screen, from `?ui=`. `"cumulus"`
+   * (the default) renders the Cumulus design-system screen where one exists and
    * silently falls back to the legacy screen for any screen not yet migrated;
    * `"legacy"` forces the legacy implementation everywhere. The value is a
    * query param, so it survives the address-bar path reflection
@@ -87,7 +87,7 @@ export interface RuntimeConfig {
 
 export type DatabaseMode = "emulator" | "realtime";
 export type JourneyVariant = "classic" | "v2";
-export type UiVariant = "tango" | "legacy";
+export type UiVariant = "cumulus" | "legacy";
 
 /**
  * Extracts the fold-relevant content slice a room pins into its genesis. Only
@@ -189,12 +189,12 @@ function parseJourneyVariant(rawJourney: string | null): JourneyVariant {
 }
 
 /**
- * Resolves `?ui=`. Only the exact value `legacy` opts out of the Tango UI; any
- * other value (including absent) defaults to `tango`, so the new UI is the
+ * Resolves `?ui=`. Only the exact value `legacy` opts out of the Cumulus UI; any
+ * other value (including absent) defaults to `cumulus`, so the new UI is the
  * default and un-migrated screens fall back per-screen inside `ScreenRouter`.
  */
 function parseUiVariant(rawUi: string | null): UiVariant {
-  return rawUi === "legacy" ? "legacy" : "tango";
+  return rawUi === "legacy" ? "legacy" : "cumulus";
 }
 
 function parseDraftMode(rawAlgo: string | null): "pool" | "replay" | "fresh20" {

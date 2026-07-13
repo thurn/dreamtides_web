@@ -5,7 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 MANIFEST="$REPO_ROOT/cumulus/SceneComparison/manifest.json"
-SCENE_ID="${1:-tango-shop-glass-demo}"
+SCENE_ID="${1:-cumulus-shop-glass-demo}"
 WIDTH="${2:-}"
 HEIGHT="${3:-}"
 

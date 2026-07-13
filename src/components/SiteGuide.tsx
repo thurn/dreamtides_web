@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useQuest } from "../state/quest-context";
 import { guideForSiteType } from "../data/dreamscapes";
-import { guidePortraitUrl } from "../tango/components/atlas/atlas-display";
+import { guidePortraitUrl } from "../cumulus/components/atlas/atlas-display";
 import { logEvent } from "../logging";
 import type { SiteType } from "../types/quest";
 import "./site-guide.css";

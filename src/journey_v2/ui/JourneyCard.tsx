@@ -1,6 +1,6 @@
 import { type CSSProperties, type ReactNode } from "react";
 import type { CardData } from "../../types/cards";
-import { GameCard } from "../../tango/components/card/CardView";
+import { GameCard } from "../../cumulus/components/card/CardView";
 import { JOURNEY_SHADOW_IDLE } from "./journeyTheme";
 import type { JourneyCardObject } from "./offerPresentation";
 
@@ -33,7 +33,7 @@ interface JourneyCardProps {
  * the outer wrapper so the ring and any `overlay` (CHOSEN / ×2 / check) ride
  * along with the card's idle drift and never detach from it.
  *
- * The visible card is the named Tango GameCard source. The root coordinator
+ * The visible card is the named Cumulus GameCard source. The root coordinator
  * owns its reading copy, glossary context, pointer modality, placement, and
  * activation boundary even when the Journey stage is CSS-scaled.
  */

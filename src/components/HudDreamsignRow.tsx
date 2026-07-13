@@ -1,11 +1,11 @@
-import { Dreamsign as TangoDreamsign } from "../tango/components/hud/Dreamsign";
+import { Dreamsign as CumulusDreamsign } from "../cumulus/components/hud/Dreamsign";
 import type { Dreamsign } from "../types/quest";
 import { requireDreamsignId } from "../data/dreamsigns";
 
 /**
  * Compact HUD row of dreamsign thumbnails — one square per owned dreamsign.
  *
- * Each thumbnail is the named Tango Dreamsign source, so the root reveal
+ * Each thumbnail is the named Cumulus Dreamsign source, so the root reveal
  * coordinator supplies its complete reading copy.
  *
  * Bane dreamsigns get a red ring and a faint desaturation so they read at a
@@ -47,7 +47,7 @@ export function HudDreamsignRow({ dreamsigns }: HudDreamsignRowProps) {
 function HudDreamsignIcon({ dreamsign }: { dreamsign: Dreamsign }) {
   return (
     <span className="inline-block" role="listitem">
-      <TangoDreamsign dreamsign={dreamsign} sizePx={ICON_SIZE_PX} testid="hud-dreamsign-icon" />
+      <CumulusDreamsign dreamsign={dreamsign} sizePx={ICON_SIZE_PX} testid="hud-dreamsign-icon" />
     </span>
   );
 }

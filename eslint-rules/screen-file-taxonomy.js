@@ -1,7 +1,7 @@
 import path from "node:path";
 
 /**
- * Every file in `src/screens/tango_adapters/` must be one of the roles the migrated
+ * Every file in `src/screens/cumulus_adapters/` must be one of the roles the migrated
  * screen architecture defines, because the OTHER rules select their targets
  * by filename: `thin-adapters` + `max-lines` fire on `*Adapter.tsx`, and the
  * builder-purity import block fires on `*-view-model.ts`. Without this rule
@@ -16,7 +16,7 @@ import path from "node:path";
  *     only: a builder is React-free by rule, so it can never need `.tsx`.
  *
  * Anything else errors. Code that seems to need a new home here belongs in
- * the view-model module (pure mapping), the Tango screen (presentation), or
+ * the view-model module (pure mapping), the Cumulus screen (presentation), or
  * `src/data/` (domain rules).
  */
 
@@ -46,12 +46,12 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "src/screens/tango_adapters/ holds only registry, *Adapter.tsx, and *-view-model.ts files (plus their tests); the screen architecture's rules select targets by filename, so any other file escapes them.",
+        "src/screens/cumulus_adapters/ holds only registry, *Adapter.tsx, and *-view-model.ts files (plus their tests); the screen architecture's rules select targets by filename, so any other file escapes them.",
     },
     schema: [],
     messages: {
       unknownRole:
-        "'{{basename}}' is not a sanctioned file role in src/screens/tango_adapters/ (registry.tsx, *Adapter.tsx, *-view-model.ts, or their tests). Pure mapping belongs in a *-view-model.ts module, presentation in the Tango screen (src/tango/screens/), and domain rules in src/data/.",
+        "'{{basename}}' is not a sanctioned file role in src/screens/cumulus_adapters/ (registry.tsx, *Adapter.tsx, *-view-model.ts, or their tests). Pure mapping belongs in a *-view-model.ts module, presentation in the Cumulus screen (src/cumulus/screens/), and domain rules in src/data/.",
     },
   },
 
@@ -63,7 +63,7 @@ const rule = {
     const cwd = typeof context.cwd === "string" ? context.cwd : process.cwd();
     const fileRelative = toRepoRelativePosix(rawFilename, cwd);
 
-    if (!fileRelative.startsWith("src/screens/tango_adapters/")) {
+    if (!fileRelative.startsWith("src/screens/cumulus_adapters/")) {
       return {};
     }
     const basename = path.posix.basename(fileRelative);

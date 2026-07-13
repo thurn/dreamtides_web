@@ -1,0 +1,21 @@
+/* Cumulus legibility utilities — the shared on-media text treatments.
+   ================================================================
+   Everything here is scoped under `.cumulus` so it never leaks onto the rest of
+   the app, matching how cumulus-tokens.css scopes its declarations. Loaded
+   globally (src/main.tsx in production, CumulusApp.tsx in the doc site) so any
+   `.cumulus` subtree can reach it.
+
+   `.hud-outline` — rung one of the legibility ladder (design Principle two).
+   Text and glyphs rendered DIRECTLY on scene art / a portrait carry their own
+   black outline instead of a plate, scrim, or blur behind them: a dense
+   16-direction black text-shadow dilation that hugs the contour (and keeps a
+   glyph's sharp points, which a `-webkit-text-stroke` would bevel flat). NEVER
+   pair with a scrim/wash/vignette — the outline IS the legibility. Applies to
+   the element and its `<i>` / `<span>` descendants so an icon beside outlined
+   text is outlined too. */
+
+.cumulus .hud-outline,
+.cumulus .hud-outline i,
+.cumulus .hud-outline span {
+  text-shadow: var(--text-outline-media);
+}

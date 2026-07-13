@@ -1,7 +1,7 @@
 // Debug atlas regeneration, shared by the app-shell quest menu so the atlas can
 // be rebuilt with the current generation logic without starting a new quest.
 // Extracted from the atlas screen so any chrome that hosts the "Regenerate
-// Atlas" action (the Tango dreamscape/atlas hamburger menu) can trigger it
+// Atlas" action (the Cumulus dreamscape/atlas hamburger menu) can trigger it
 // without owning the generation + logging orchestration.
 
 import { logEvent } from "../logging";

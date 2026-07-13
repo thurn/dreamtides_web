@@ -25,7 +25,7 @@ import {
   subtypeOptionsFromCards,
 } from "./card-browser/card-browser-filter";
 import { CardOverlay } from "./CardOverlay";
-import { TideSelectionButton } from "../tango/components/hud/TideSelectionButton";
+import { TideSelectionButton } from "../cumulus/components/hud/TideSelectionButton";
 
 type PoolViewerSource =
   | "run"

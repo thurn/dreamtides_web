@@ -2,8 +2,8 @@ import type {
   BattleDreamcallerSummary,
   BattleDreamsignSummary,
 } from "../types";
-import { DreamcallerPortrait } from "../../tango/components/hud/DreamcallerPortrait";
-import { RulesText } from "../../tango/components/card/RulesText";
+import { DreamcallerPortrait } from "../../cumulus/components/hud/DreamcallerPortrait";
+import { RulesText } from "../../cumulus/components/card/RulesText";
 
 export function BattleDreamcallerPanel({
   dreamcaller,

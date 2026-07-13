@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/TangoGlassLab.unity
+    path: Assets/Scenes/CumulusGlassLab.unity
     guid: 6e17a4fd859624833905f206672a2d09
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

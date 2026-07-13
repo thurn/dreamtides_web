@@ -16,8 +16,8 @@ import {
 import { DreamJourneyMobile } from "./DreamJourneyMobile";
 import { DreamJourneyStage } from "./DreamJourneyStage";
 import { OfferColumn } from "./OfferColumn";
-import { IconButton } from "../../tango/components/controls/IconButton";
-import { GLYPHS } from "../../tango/primitives/glyph";
+import { IconButton } from "../../cumulus/components/controls/IconButton";
+import { GLYPHS } from "../../cumulus/primitives/glyph";
 import "../../screens/site-leave-control.css";
 
 export interface DreamMerchantScreenProps {
@@ -216,7 +216,7 @@ export function DreamMerchantScreen({
           onSelectCandidate={selectCandidate}
           onAccept={acceptOffer}
         />
-        <div className="tango site-leave-control">
+        <div className="cumulus site-leave-control">
           <IconButton
             glyph={GLYPHS.close}
             label="Walk on"
@@ -291,7 +291,7 @@ export function DreamMerchantScreen({
           )
         }
       />
-      <div className="tango site-leave-control">
+      <div className="cumulus site-leave-control">
         <IconButton
           glyph={GLYPHS.close}
           label="Walk on"

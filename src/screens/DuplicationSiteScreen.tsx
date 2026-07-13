@@ -6,8 +6,8 @@ import { CardDisplay } from "../components/CardDisplay";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { SiteGuide } from "../components/SiteGuide";
-import { IconButton } from "../tango/components/controls/IconButton";
-import { GLYPHS } from "../tango/primitives/glyph";
+import { IconButton } from "../cumulus/components/controls/IconButton";
+import { GLYPHS } from "../cumulus/primitives/glyph";
 import "./duplication-site.css";
 import "./site-leave-control.css";
 
@@ -276,7 +276,7 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
       {/* Deacon Holt (shared SiteGuide), docked lower-left in landscape. */}
       <SiteGuide siteType="Duplication" isEnhanced={site.isEnhanced} />
 
-      <div className="tango site-leave-control">
+      <div className="cumulus site-leave-control">
         <IconButton
           glyph={GLYPHS.close}
           label="Leave site"

@@ -216,7 +216,7 @@ Fixes audit finding **P0-3**. Scope note: `PICK_DRAFT_CARD` already advances off
 - Modify: `src/rules/quest/draft.ts` (new `enterDraftSite` case; provider surface extension)
 - Modify: `src/coop/providers/draft-provider.ts` (real provider methods)
 - Modify: `src/coop/actions.ts` (new creator)
-- Modify: `src/screens/DraftSiteScreen.tsx`, `src/screens/tango_adapters/DraftSiteScreenAdapter.tsx` (replace bootstrap effect)
+- Modify: `src/screens/DraftSiteScreen.tsx`, `src/screens/cumulus_adapters/DraftSiteScreenAdapter.tsx` (replace bootstrap effect)
 - Modify: `src/data/draft-site-bootstrap.ts` (rng injected; `Math.random` call sites removed from the live path)
 - Test: `src/rules/quest/draft.test.ts`, `src/rules/reducer.test.ts`, plus browser QA
 
@@ -309,7 +309,7 @@ export function assertJsonSafe(value: unknown, label: string): void;
 - **`RESOLVE_PROMPT` candidate validation**: before resolving a `pick-cards` prompt, require every chosen id to be a member of the candidate ids recorded in `pendingPrompt.options` and the count within the prompt's min/max; violation bounces (rule 5), it does not clear the prompt.
 - **LOAD_STATE**: add `validateLoadedState(payload, genesis): FoldState | null` — structural checks (required QuestState fields present with correct primitive types; `seed === genesis.seed`; run-field nullability rules; if a battle slice is present, every `effectQueue`/`pendingPrompt` `scriptRef` resolves via `selectBattleCardEffectScript`/`selectDreamwellEffectScript` and cursors are in range). `null` → bounce. Remove the LOAD_STATE carve-out from the nullability property test where the validator now enforces it.
 - **Decision-neutral no-ops**: adding the two types to `DECISION_NEUTRAL_EVENT_TYPES` is the complete fix (they stop invalidating partners' windows); their reducer cases are unchanged.
-- **Double-click**: apply `useSingleFlight` to the reward/purchase surfaces that emit delta events (`grep -rn "changeEssence\|grantFreeRerolls\|purgeRandomBaneCards" src/screens src/tango src/components` and wrap the button handlers found); debug-panel deltas are exempt by design (rapid repeat is a feature there).
+- **Double-click**: apply `useSingleFlight` to the reward/purchase surfaces that emit delta events (`grep -rn "changeEssence\|grantFreeRerolls\|purgeRandomBaneCards" src/screens src/cumulus src/components` and wrap the button handlers found); debug-panel deltas are exempt by design (rapid repeat is a feature there).
 
 - [ ] **Step 1: Write failing tests for the reducer-side fixes** (each in its owning suite):
 

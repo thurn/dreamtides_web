@@ -1,4 +1,4 @@
-# Dreamcaller Selection — mobile swipe carousel (Tango)
+# Dreamcaller Selection — mobile swipe carousel (Cumulus)
 
 **Date:** 2026-07-04
 **Status:** Approved design, ready for implementation plan
@@ -7,7 +7,7 @@ file `01-dreamcaller-selection.html` (imported via the design connector).
 
 ## Goal
 
-Replace the current Tango Dreamcaller-selection screen (a static row of pickable
+Replace the current Cumulus Dreamcaller-selection screen (a static row of pickable
 cards) with the imported mobile design: a **full-bleed swipe carousel**, one
 Dreamcaller per page. Focus on getting the mobile presentation right; a
 desktop/wide layout is out of scope for this change.
@@ -45,12 +45,12 @@ A horizontally swipeable carousel of the three offered Dreamcallers. Each page:
 
 - The carousel select screen only.
 - Full container-transform fidelity for the tides disc→pill reveal, promoted to
-  a reusable Tango component.
+  a reusable Cumulus component.
 - A screen-local full-bleed portrait component (`DreamcallerPortrait` is **not**
   modified).
 - Evolving `CardTermDefinitions` in place to render `InfoCard` tiles (no new
   parallel component), which updates the new ability reveal **and** — because
-  they already consume it — the Tango `Dreamsign` and `GameCard`/`CardView`
+  they already consume it — the Cumulus `Dreamsign` and `GameCard`/`CardView`
   reveals, plus the two shared legacy consumers, automatically (see "New
   design-system work → C").
 
@@ -66,16 +66,16 @@ A horizontally swipeable carousel of the three offered Dreamcallers. Each page:
 ## Decisions
 
 1. **Carousel only.** "Choose" → `onPick` → `startQuest`, matching today's flow.
-2. **Full container-transform**, promoted to a Tango component (`TideCluster`).
+2. **Full container-transform**, promoted to a Cumulus component (`TideCluster`).
 3. **Hide the tides row when a run has no tides.** The screen assumes the
    documented `tides4` default (per `AGENTS.md`), under which tides always
    exist. Other draft algorithms produce no tides, and for them the row is
    simply omitted. The signature-card list the legacy screen showed for those
    runs is dropped from the new screen.
 
-## Architecture — three files (per the tango-migrate checklist)
+## Architecture — three files (per the cumulus-migrate checklist)
 
-### 1. `src/tango/screens/QuestStartScreen.tsx` (rewritten, pure)
+### 1. `src/cumulus/screens/QuestStartScreen.tsx` (rewritten, pure)
 
 Pure presentation. Renders from the existing `DreamcallerOfferView[]`; reports
 the chosen Dreamcaller through `onPick(dreamcallerId: string)`. No `useQuest()`,
@@ -95,9 +95,9 @@ type for now (the builder still populates it deterministically); the screen
 ignores it. `onPick` still carries the Dreamcaller **id**, never a domain
 object.
 
-Presentation composed from Tango:
+Presentation composed from Cumulus:
 
-| Design element | Tango |
+| Design element | Cumulus |
 | --- | --- |
 | "Choose {Name}" button | `Button` `size="lg" full label={`Choose ${name}`}` |
 | Ability text | `RulesText` |
@@ -113,9 +113,9 @@ Presentation composed from Tango:
 
 Layout wrappers use `--space-*`, `--gutter`, `--safe-top`, `--safe-bottom`,
 `--touch-min` tokens. Type is applied one voice at a time (`font: token("--t-…")`).
-The root carries `className="tango"` and `minHeight: "100vh"`.
+The root carries `className="cumulus"` and `minHeight: "100vh"`.
 
-**Legibility** (per the ladder): the serif title uses the Tango on-media outline
+**Legibility** (per the ladder): the serif title uses the Cumulus on-media outline
 treatment; the dense console content sits in a `GroupPanel` glass pane. No
 scrim/wash/vignette is painted over the portrait to fake legibility.
 
@@ -127,7 +127,7 @@ scrim/wash/vignette is painted over the portrait to fake legibility.
 - Tides cluster: `data-dreamcaller-tides={dreamcallerId}`.
 - Each resting tide pill: `data-dreamcaller-tide={`${dreamcallerId}:${tideId}`}`.
 
-### 2. `src/screens/tango_adapters/quest-start-view-model.ts` (nearly unchanged)
+### 2. `src/screens/cumulus_adapters/quest-start-view-model.ts` (nearly unchanged)
 
 Already maps domain data to the screen's view types: `name`, `title` (the
 epithet shown after the name), `renderedText` (ability), `startingEssence`, and
@@ -139,7 +139,7 @@ produces the field deterministically and its existing unit tests still hold. (If
 review prefers, a follow-up can drop the field, but that is not required for this
 change and would ripple into the shared screen view types.)
 
-### 3. `src/screens/tango_adapters/QuestStartScreenAdapter.tsx` (unchanged)
+### 3. `src/screens/cumulus_adapters/QuestStartScreenAdapter.tsx` (unchanged)
 
 Still mints the offer + run seed once per mount (`useRef` lazy-init), builds the
 view-model in `useMemo`, and wires `onPick` → `startQuest(dreamcaller, seed)`.
@@ -153,7 +153,7 @@ follows the StrictMode-guarded-ref idiom.
 `DreamcallerPortrait` is **not modified**. The carousel needs a frameless,
 full-bleed cinematic portrait, which is screen-specific presentation, so it is a
 **screen-local component** defined with the screen (in `QuestStartScreen.tsx`, or
-a sibling module under `src/tango/screens/`), not a new shared variant on the
+a sibling module under `src/cumulus/screens/`), not a new shared variant on the
 shared portrait.
 
 - Renders an `<img>` filling its container (`position: absolute; inset: 0;
@@ -167,7 +167,7 @@ shared portrait.
 
 No demo/docs changes (it is not a catalog component).
 
-### B. `TideCluster` — new component (`src/tango/components/hud/TideCluster.tsx`)
+### B. `TideCluster` — new component (`src/cumulus/components/hud/TideCluster.tsx`)
 
 The collapsed overlapping glyph-discs → named-pills container-transform, at full
 fidelity (the design's `TideReveal`: flying clones that fly each disc to its pill
@@ -191,14 +191,14 @@ instant open/close).
   pills in one commit on land). Honors `prefers-reduced-motion`.
 
 Deliverables: the component with per-prop JSDoc, a demo entry
-(`src/tango/docs/demos/tide-cluster.tsx`) registered in
-`src/tango/docs/registry.ts`, and regenerated docs. It must pass the strict-API
+(`src/cumulus/docs/demos/tide-cluster.tsx`) registered in
+`src/cumulus/docs/registry.ts`, and regenerated docs. It must pass the strict-API
 contract test and the isolation-boundary lint.
 
 ### C. `CardTermDefinitions` — evolve it in place to render `InfoCard` tiles
 
 No new parallel component. The existing `CardTermDefinitions`
-(`src/tango/components/card/CardTermDefinitions.tsx`) is **modified in place** to
+(`src/cumulus/components/card/CardTermDefinitions.tsx`) is **modified in place** to
 render its stack as **individual `InfoCard` tiles** instead of the legacy
 `GlossaryDefinitionCard` (which is styled with hardcoded colors + Tailwind,
 outside the token system). Its name and prop surface (`text`, `testId`, `side`)
@@ -214,7 +214,7 @@ becomes InfoCard-vocabulary and fully tokenized.
   order, deduped); it still returns `null` for term-free text, so callers keep
   placing it unconditionally.
 - After the swap the component is lint-clean (no `className`, no raw colors),
-  and the `.tango` token scope resolves because each `InfoCard` re-establishes
+  and the `.cumulus` token scope resolves because each `InfoCard` re-establishes
   it (it already does for its portalled popover shell).
 
 **Because the integration targets already consume `CardTermDefinitions`, their
@@ -242,14 +242,14 @@ for term-free ability text, the screen wraps in `InfoCard.PressInfo` only when
 `RulesText` with no reveal.
 
 **Left unchanged:** `GlossaryDefinitionCard` itself and its remaining direct
-consumers — Tango's `HoverZoomCard` and the legacy `CardHoverPreview`,
+consumers — Cumulus's `HoverZoomCard` and the legacy `CardHoverPreview`,
 `GlossaryPopup`, `JourneyHoverCard`, `SignatureDecksApp` — keep the existing
 tile; this change does not touch them.
 
 **Deliverables:** the in-place `CardTermDefinitions` rewrite; updates to its
 existing test and to `Dreamsign` / `CardView` tests where they assert the old
 tile markup (behavior assertions kept); no new catalog component, so no new demo
-entry (regenerate `tango-metadata` / `tango-docs` only if a touched component's
+entry (regenerate `cumulus-metadata` / `cumulus-docs` only if a touched component's
 JSDoc/demo changed). Must pass the strict-API contract test and the
 isolation-boundary lint.
 
@@ -257,13 +257,13 @@ isolation-boundary lint.
 
 - **Builder tests** (`quest-start-view-model.test.ts`): existing tests continue
   to hold; no production TOML values asserted (per `AGENTS.md`).
-- **Screen tests** (`src/tango/screens/QuestStartScreen.test.tsx`): rewritten for
+- **Screen tests** (`src/cumulus/screens/QuestStartScreen.test.tsx`): rewritten for
   the carousel with the two required incantations
   (`IS_REACT_ACT_ENVIRONMENT = true`; a `window.matchMedia` stub). Assert via the
   `data-*` id hooks: the active page renders, "Choose" fires `onPick` with the
   correct id, tides render when present and are absent when the offer has no
   tides, essence value is shown.
-- **`TideCluster` component test** (`src/tango/components/hud/TideCluster.test.tsx`):
+- **`TideCluster` component test** (`src/cumulus/components/hud/TideCluster.test.tsx`):
   renders the discs collapsed, toggles to pills, asserts the resting `TidePill`s
   appear. Animation timing is not asserted (reduced-motion path exercises the
   instant open/close).
@@ -274,13 +274,13 @@ isolation-boundary lint.
 - **`Dreamsign` / `CardView` tests**: update only where they assert the old
   `GlossaryDefinitionCard` markup (the definition content now renders as InfoCard
   tiles); keep the reveal-behavior assertions.
-- **Contract tests**: `tango-strict-api.contract.test.mjs` (scans
-  `src/tango/screens/` and components) and `tango-generated-docs-drift.test.mjs`
+- **Contract tests**: `cumulus-strict-api.contract.test.mjs` (scans
+  `src/cumulus/screens/` and components) and `cumulus-generated-docs-drift.test.mjs`
   must pass after regenerating metadata/docs.
 
 ## Registration, QA, and rollback
 
-- `?ui=tango` is already the default variant and the screen is already
+- `?ui=cumulus` is already the default variant and the screen is already
   registered via `QuestStartScreenAdapter`; this change rewrites that screen in
   place, so no new registry entry is needed. `?ui=legacy` remains the rollback.
 - QA scene: the screen is the quest opening screen; confirm it has (or add) a
@@ -301,7 +301,7 @@ npm test
 Regenerate and commit generated artifacts after touching components/tokens:
 
 ```bash
-npm run tango-metadata && npm run tango-docs
+npm run cumulus-metadata && npm run cumulus-docs
 ```
 
 (or `npm run regenerate-assets`). Commit with a detailed description and push.

@@ -5,16 +5,16 @@ import { RuleTester } from "eslint";
 import tsParser from "@typescript-eslint/parser";
 import { describe, it, expect } from "vitest";
 import rule, { toRepoRelativePosix } from "./no-hardcoded-values.js";
-import { colorTokenFor, normalizeColor } from "./tango-token-index.js";
+import { colorTokenFor, normalizeColor } from "./cumulus-token-index.js";
 
 describe("toRepoRelativePosix (no-hardcoded-values)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/tango/screens/HomeScreen.tsx",
+        "/Users/x/quest_prototype/src/cumulus/screens/HomeScreen.tsx",
         "/Users/x/quest_prototype",
       ),
-    ).toBe("src/tango/screens/HomeScreen.tsx");
+    ).toBe("src/cumulus/screens/HomeScreen.tsx");
   });
 });
 
@@ -43,7 +43,7 @@ describe("normalizeColor", () => {
 const TOKENS_CSS = readFileSync(
   resolve(
     dirname(fileURLToPath(import.meta.url)),
-    "../src/tango/primitives/tango-tokens.css",
+    "../src/cumulus/primitives/cumulus-tokens.css",
   ),
   "utf8",
 );
@@ -87,7 +87,7 @@ const ruleTester = new RuleTester({
   },
 });
 
-const SCREEN = "src/tango/screens/HomeScreen.tsx";
+const SCREEN = "src/cumulus/screens/HomeScreen.tsx";
 
 ruleTester.run("no-hardcoded-values", rule, {
   valid: [
@@ -108,21 +108,21 @@ ruleTester.run("no-hardcoded-values", rule, {
     },
     {
       name: "components/ may author raw color values",
-      filename: "src/tango/components/Widget.tsx",
+      filename: "src/cumulus/components/Widget.tsx",
       code: `const s = { color: "${KNOWN_HEX}" };`,
     },
     {
       name: "primitives/ define the colors",
-      filename: "src/tango/primitives/tokens.ts",
+      filename: "src/cumulus/primitives/tokens.ts",
       code: `const s = { color: "${UNKNOWN_HEX}" };`,
     },
     {
       name: "docs demos may show arbitrary sample colors",
-      filename: "src/tango/docs/mockups/scene.tsx",
+      filename: "src/cumulus/docs/mockups/scene.tsx",
       code: `const s = { background: "rgba(8,5,17,0.4)" };`,
     },
     {
-      name: "files outside src/tango are inert",
+      name: "files outside src/cumulus are inert",
       filename: "src/screens/LegacyScreen.tsx",
       code: `const s = { color: "${UNKNOWN_HEX}" };`,
     },
@@ -166,8 +166,8 @@ ruleTester.run("no-hardcoded-values", rule, {
       errors: [{ messageId: "hardcodedColorWithToken" }],
     },
     {
-      name: "the adapter/builder layer in src/screens/tango_adapters is covered too",
-      filename: "src/screens/tango_adapters/foo-view-model.ts",
+      name: "the adapter/builder layer in src/screens/cumulus_adapters is covered too",
+      filename: "src/screens/cumulus_adapters/foo-view-model.ts",
       code: `const s = { color: "${UNKNOWN_HEX}" };`,
       output: null,
       errors: [{ messageId: "hardcodedColorNoToken" }],

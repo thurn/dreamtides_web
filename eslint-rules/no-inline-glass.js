@@ -1,11 +1,11 @@
 import path from "node:path";
 
 /**
- * Bans raw, numeric `blur()`/`saturate()` filter literals in Tango's
+ * Bans raw, numeric `blur()`/`saturate()` filter literals in Cumulus's
  * product-UI tier.
  *
  * The liquid-glass material is defined once, in
- * `src/tango/internal/glass-surface.ts`, as `glassSurfaceStyle()` (and its
+ * `src/cumulus/internal/glass-surface.ts`, as `glassSurfaceStyle()` (and its
  * sibling `control-treatment.ts` recipe). Components wear that material by
  * spreading the recipe (or rendering a component that already wears it) —
  * re-typing `blur(22px) saturate(1.5)` inline anywhere else forks the
@@ -13,18 +13,18 @@ import path from "node:path";
  * Token-driven `blur(var(--…))` is not a fork — it still resolves through a
  * single design-token channel — so it is exempt.
  *
- * SCOPE. Files under `src/tango/` outside {@link EXEMPT_PREFIXES} and outside
- * `*.test.*`/`*.spec.*` files. `src/tango/internal/` is exempt because it is
- * the one legal home for the raw material recipe. `src/tango/docs/` is
- * exempt as tooling. `src/tango/primitives/` is exempt as the token mirror
+ * SCOPE. Files under `src/cumulus/` outside {@link EXEMPT_PREFIXES} and outside
+ * `*.test.*`/`*.spec.*` files. `src/cumulus/internal/` is exempt because it is
+ * the one legal home for the raw material recipe. `src/cumulus/docs/` is
+ * exempt as tooling. `src/cumulus/primitives/` is exempt as the token mirror
  * layer.
  */
 
 /** Repo-relative POSIX dir prefixes exempt from the check. */
 const EXEMPT_PREFIXES = [
-  "src/tango/internal/",
-  "src/tango/docs/",
-  "src/tango/primitives/",
+  "src/cumulus/internal/",
+  "src/cumulus/docs/",
+  "src/cumulus/primitives/",
 ];
 
 /** Matches a raw numeric `blur(...)` filter value. */
@@ -49,7 +49,7 @@ export function toRepoRelativePosix(absolutePath, cwd) {
 
 /** True when this rule governs the given repo-relative POSIX path. */
 export function isGovernedFile(fileRelative) {
-  if (!fileRelative.startsWith("src/tango/")) {
+  if (!fileRelative.startsWith("src/cumulus/")) {
     return false;
   }
   if (/\.(test|spec)\./.test(fileRelative)) {
@@ -64,12 +64,12 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Ban raw blur()/saturate() glass-filter literals in Tango product UI; spread the glassSurfaceStyle() recipe instead.",
+        "Ban raw blur()/saturate() glass-filter literals in Cumulus product UI; spread the glassSurfaceStyle() recipe instead.",
     },
     schema: [],
     messages: {
       inlineGlass:
-        "Raw glass filter literal. The liquid-glass material is defined once in `src/tango/internal/glass-surface.ts` — spread `glassSurfaceStyle()` (or a component that already wears it) instead of inlining `blur()`/`saturate()`. Token-driven `blur(var(--…))` is fine.",
+        "Raw glass filter literal. The liquid-glass material is defined once in `src/cumulus/internal/glass-surface.ts` — spread `glassSurfaceStyle()` (or a component that already wears it) instead of inlining `blur()`/`saturate()`. Token-driven `blur(var(--…))` is fine.",
     },
   },
 

@@ -8,7 +8,7 @@ Complete. The compatibility APIs and independent reveal engine are deleted, the 
 
 - RED: `npx vitest run eslint-rules/no-entity-reveal-escape-hatches.test.ts` failed because `no-entity-reveal-escape-hatches.js` did not exist.
 - GREEN: the lint-rule suite passes 22 cases covering exact internal-import ownership, aliased InfoCard statics, structural generic wrappers, arbitrary ReactNode/spec APIs, aliased and namespace reveal portals, mechanical props, controlled state, named components, and internal implementation/tests.
-- RED: `npx vitest run src/tango/screens/devtools/EntityRevealConformanceDemo.test.tsx` failed because `EntityRevealConformanceDemo.tsx` did not exist.
+- RED: `npx vitest run src/cumulus/screens/devtools/EntityRevealConformanceDemo.test.tsx` failed because `EntityRevealConformanceDemo.tsx` did not exist.
 - GREEN: all three demo tests pass. The end-to-end tests compare exact logged viewport/source/final rectangles, shown/dropped counts, fallback flags, circle clearance, one open/close lifecycle, dismissal reason, and activation outcome on desktop and mobile touch paths.
 - Existing Draft preview tests failed after the retired wrapper was deleted. They drove the strict named `CompactGameCardRow`, which preserves the compact row while deriving the canonical GameCard primary and glossary secondaries from UUID-backed card data.
 
@@ -24,12 +24,12 @@ Complete. The compatibility APIs and independent reveal engine are deleted, the 
   - CardSource aggregate tide help is static explanatory copy;
   - Draft compact deck rows use strict `CompactGameCardRow` semantics.
 - Retired-symbol source audit is empty after the stale DeckViewer test comment cleanup.
-- Imports from `src/tango/internal/reveal` outside `TangoRoot`, the internal directory, and named Tango components: empty.
-- Reveal portal ownership: `src/tango/internal/reveal/RevealOverlay.tsx`. Other `createPortal` matches are unrelated Select, BattleContextMenu, and SignatureDecks visualization portals.
+- Imports from `src/cumulus/internal/reveal` outside `CumulusRoot`, the internal directory, and named Cumulus components: empty.
+- Reveal portal ownership: `src/cumulus/internal/reveal/RevealOverlay.tsx`. Other `createPortal` matches are unrelated Select, BattleContextMenu, and SignatureDecks visualization portals.
 
 ## ESLint rule
 
-`tango/no-entity-reveal-escape-hatches` is registered for `src/**/*.{ts,tsx}` and `docs/**/*.{ts,tsx}`. It rejects:
+`cumulus/no-entity-reveal-escape-hatches` is registered for `src/**/*.{ts,tsx}` and `docs/**/*.{ts,tsx}`. It rejects:
 
 - product imports from the internal reveal package;
 - InfoCard interaction statics;
@@ -39,7 +39,7 @@ Complete. The compatibility APIs and independent reveal engine are deleted, the 
 - anchor, portal, timing, side, gap, and other mechanical props;
 - caller-controlled open/shown state on named reveal components.
 
-Internal coordinator files/tests and the named Tango component layer are the explicit implementation boundary. Compatibility APIs have no baseline. Numeric-prop allowances for retired press wrappers were deleted.
+Internal coordinator files/tests and the named Cumulus component layer are the explicit implementation boundary. Compatibility APIs have no baseline. Numeric-prop allowances for retired press wrappers were deleted.
 
 ## Conformance demo and diagnostics
 
@@ -61,8 +61,8 @@ The end-to-end diagnostic assertion validates the actual source rectangle, rende
 ## Regeneration and automated verification
 
 - `scripts/regenerate-assets.sh`: passed all 12 stages.
-- Tango metadata: 37 components, 202 props.
-- Tango docs: 30 component references, stale HoverPopover reference swept.
+- Cumulus metadata: 37 components, 202 props.
+- Cumulus docs: 30 component references, stale HoverPopover reference swept.
 - `npm run lint`: pass.
 - `npm run typecheck`: pass.
 - `npm test`: 392 files passed, 1 skipped; 4,254 tests passed, 4 skipped.
@@ -85,11 +85,11 @@ Runtime: `http://localhost:5174`, unique session `q6-entity-5174`, device scale 
 
 ### Normal workflows and entity spot checks
 
-- Atlas: `/atlas?goto=atlas&ui=tango&seed=task6&game=f9ft3g`, 1440×900. Seventeen Atlas nodes. Available-node hover produced 248×294.08 primary plus two 248px top-aligned secondaries to its right.
-- Draft: `/dreamscape/0-firstlight-meadow/draft?goto=draft&ui=tango&seed=task6&game=jespnf`, 1440×900. Four GameCards. Hover produced 340×476 primary plus three ordered secondaries.
-- Shop: `/dreamscape/0-firstlight-meadow/shop?goto=shop&ui=tango&seed=task6&game=mysfdm`, 1440×900. Five GameCards. Hover produced a 340×476 reading copy and 248px secondary.
-- Deck/HUD: `/dreamscape/0-firstlight-meadow?goto=deckviewer&ui=tango&seed=task6&game=ezty56`, 1440×900. Semantic-source inventory included site, dreamcaller, resource-essence, dreamsign, game-card, card-spark-stat, and card-energy-stat. Dreamsign hover produced a 248×239.30 reveal above the HUD.
-- Battle: `/dreamscape/0-firstlight-meadow/battle?startInBattle=1&ui=tango&seed=task6&game=77esaw`, 1440×900 after **Begin Battle**. Five battle hand cards, all using named GameCard sources. Hover produced 340×476 primary plus a 248×120.30 Support secondary; drag dismissed it.
+- Atlas: `/atlas?goto=atlas&ui=cumulus&seed=task6&game=f9ft3g`, 1440×900. Seventeen Atlas nodes. Available-node hover produced 248×294.08 primary plus two 248px top-aligned secondaries to its right.
+- Draft: `/dreamscape/0-firstlight-meadow/draft?goto=draft&ui=cumulus&seed=task6&game=jespnf`, 1440×900. Four GameCards. Hover produced 340×476 primary plus three ordered secondaries.
+- Shop: `/dreamscape/0-firstlight-meadow/shop?goto=shop&ui=cumulus&seed=task6&game=mysfdm`, 1440×900. Five GameCards. Hover produced a 340×476 reading copy and 248px secondary.
+- Deck/HUD: `/dreamscape/0-firstlight-meadow?goto=deckviewer&ui=cumulus&seed=task6&game=ezty56`, 1440×900. Semantic-source inventory included site, dreamcaller, resource-essence, dreamsign, game-card, card-spark-stat, and card-energy-stat. Dreamsign hover produced a 248×239.30 reveal above the HUD.
+- Battle: `/dreamscape/0-firstlight-meadow/battle?startInBattle=1&ui=cumulus&seed=task6&game=77esaw`, 1440×900 after **Begin Battle**. Five battle hand cards, all using named GameCard sources. Hover produced 340×476 primary plus a 248×120.30 Support secondary; drag dismissed it.
 - Conformance/documentation coverage supplied GlossaryTerm, InfoCard variants, unavailable, Atlas, and battle-labelled canonical card spot checks; normal HUD supplied sites, Dreamcaller, resources, Dreamsigns, GameCards, and stat orbs.
 
 ### Screenshots
@@ -132,7 +132,7 @@ Stable path: `screenshots/entity-reveals/`
   semantic source. Its stable test id now sits on the same activation and
   reveal boundary. A focused test proves UUID identity, reveal activation, one
   click callback, and absence of the retired zoom node.
-- Reworked `tango/no-entity-reveal-escape-hatches` around exact file/symbol
+- Reworked `cumulus/no-entity-reveal-escape-hatches` around exact file/symbol
   allowlists. The rule follows aliased and namespace `react-dom` imports,
   variable indirection, aliased/destructured InfoCard statics, and structural
   wrapper contracts expressed through interfaces, type literals, JSX props,
@@ -148,7 +148,7 @@ Stable path: `screenshots/entity-reveals/`
   and final rectangles, placement families/orientations, counts, fallback
   flags, circle clearance, and exactly one open/close lifecycle. The touch
   activation path records `activationOutcome: "fired"` for one quick tap.
-- Updated `tango_screen_composition.md` and `tango_design_system.md` to describe
+- Updated `cumulus_screen_composition.md` and `cumulus_design_system.md` to describe
   the current single-coordinator architecture, named semantic source roster,
   visual-only InfoCard contract, gesture timing, lifecycle diagnostics, and
   one-active-group rule. Retired-symbol and historical-contrast scans are empty
@@ -266,16 +266,16 @@ Stable path: `screenshots/entity-reveals/`
   `Pick<GameCardProps, ...>` have explicit negative-control coverage.
 - The focused lint-rule suite passes 45 cases. Lint, typecheck, the full
   4,254-test suite, and `git diff --check` pass. The rule/test-only change does
-  not affect generated Tango metadata or references, so regeneration was not
+  not affect generated Cumulus metadata or references, so regeneration was not
   required. No production/demo code changed, so browser QA was not rerun.
 
 ## Commit and push
 
-- `f02a2d8e` — `refactor(tango): enforce unified entity reveal system`.
-- `76bb98be` — `fix(tango): close entity reveal enforcement gaps`.
-- `6748ef4c` — `fix(tango): harden entity reveal conformance`.
-- `39ba1b40` — `fix(tango): close remaining reveal boundary gaps`.
-- Remediation 4 commit subject: `fix(tango): require reveal props provenance`.
+- `f02a2d8e` — `refactor(cumulus): enforce unified entity reveal system`.
+- `76bb98be` — `fix(cumulus): close entity reveal enforcement gaps`.
+- `6748ef4c` — `fix(cumulus): harden entity reveal conformance`.
+- `39ba1b40` — `fix(cumulus): close remaining reveal boundary gaps`.
+- Remediation 4 commit subject: `fix(cumulus): require reveal props provenance`.
 - Branch: `wt/entity-reveal-rewrite-plan`.
 - Each completed remediation commit is pushed immediately.
 
@@ -311,7 +311,7 @@ Stable path: `screenshots/entity-reveals/`
 - Hover-capable pen interactions retain pen modality. `visualViewport.resize` dismisses with cleanup.
 - Generated battle figments derive a deterministic UUID from `battleCardId`, independent of display name, and use `BattleGameCard`. Battle hover-preview callback APIs are deleted and lint rejects arbitrary hover/press handlers while preserving semantic activation.
 - Dreamsign, SiteNode, AtlasNode, and QuestStatusBar sources allow pan scrolling; coordinator scroll cancellation remains authoritative.
-- Atlas preview/clamp components, obsolete CSS, and orphaned Tango tokens are deleted. Current documentation describes coordinator ownership.
+- Atlas preview/clamp components, obsolete CSS, and orphaned Cumulus tokens are deleted. Current documentation describes coordinator ownership.
 - The conformance integration renders canonical and generated `BattleGameCard` fixtures and actively installs deterministic reduced motion.
 - Regeneration completed 12/12. Final verification: lint passed; typecheck passed; 392 files passed and 1 skipped; 4,273 tests passed and 4 skipped; `git diff --check` passed.
 - Browser QA used `http://localhost:5188` and session `q7-whole-5188`: desktop group fit, reduced-motion immediate exit, mobile 0/20/40ms timing and scroll dismissal, canonical/generated battle cards, normal Atlas, and normal battle. Error buffers were empty. Session closed; port 5188 is free.

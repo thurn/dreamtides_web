@@ -4,7 +4,7 @@ import {
   dreamscapeIconUrl,
   dreamscapeSceneUrl,
   guidePortraitUrl,
-} from "../tango/components/atlas/atlas-display";
+} from "../cumulus/components/atlas/atlas-display";
 import { siteTypeIcon } from "../atlas/atlas-generator";
 import type { SiteType } from "../types/quest";
 import DreamscapeResidents, {

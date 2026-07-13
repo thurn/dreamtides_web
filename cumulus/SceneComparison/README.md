@@ -11,7 +11,7 @@ width and height to change the target while preserving identical dimensions on
 both renderers:
 
 ```bash
-npm run compare-cumulus-scene -- tango-shop-glass-demo 2560 1440
+npm run compare-cumulus-scene -- cumulus-shop-glass-demo 2560 1440
 ```
 
 To copy `unity.png` and `web.png` into a fresh temporary directory and open
@@ -24,7 +24,7 @@ npm run open-cumulus-scene-comparison
 The open command accepts the same optional scene id, width, and height:
 
 ```bash
-npm run open-cumulus-scene-comparison -- tango-shop-glass-demo 2560 1440
+npm run open-cumulus-scene-comparison -- cumulus-shop-glass-demo 2560 1440
 ```
 
 The command rebuilds and renders the Unity scene, opens its paired web endpoint
@@ -37,7 +37,7 @@ amplified difference image, and a center split image under:
 Artifacts are ignored by Git. The web reference for the initial scene is
 available while Vite is running at:
 
-`/cumulus/SceneComparison/Web/?scene=tango-shop-glass-demo`
+`/cumulus/SceneComparison/Web/?scene=cumulus-shop-glass-demo`
 
 ## Adding a scene
 

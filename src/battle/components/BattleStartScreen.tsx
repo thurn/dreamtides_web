@@ -2,11 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import "./battle-start.css";
 import type { BattleInit } from "../types";
 import type { CardData } from "../../types/cards";
-import { GameCard } from "../../tango/components/card/CardView";
-import { RulesText } from "../../tango/components/card/RulesText";
-import { EssenceValue } from "../../tango/components/hud/EssenceValue";
-import { dreamcallerCutoutSrc } from "../../tango/components/hud/DreamcallerPortrait";
-import { dreamscapeSceneUrl } from "../../tango/components/atlas/atlas-display";
+import { GameCard } from "../../cumulus/components/card/CardView";
+import { RulesText } from "../../cumulus/components/card/RulesText";
+import { EssenceValue } from "../../cumulus/components/hud/EssenceValue";
+import { dreamcallerCutoutSrc } from "../../cumulus/components/hud/DreamcallerPortrait";
+import { dreamscapeSceneUrl } from "../../cumulus/components/atlas/atlas-display";
 import { assetUrl } from "../../runtime/asset-url";
 import {
   opponentCarriesDreamsign,

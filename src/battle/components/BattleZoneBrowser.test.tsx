@@ -12,7 +12,7 @@ import {
   makeBattleTestState,
 } from "../test-support";
 import { BattleZoneBrowser } from "./BattleZoneBrowser";
-import { TangoRoot } from "../../tango/TangoRoot";
+import { CumulusRoot } from "../../cumulus/CumulusRoot";
 
 function createState() {
   const battleInit = createBattleInit({
@@ -59,7 +59,7 @@ function mount(
 
   act(() => {
     root.render(
-      <TangoRoot><BattleZoneBrowser
+      <CumulusRoot><BattleZoneBrowser
         browser={browser}
         isOpponentHandRevealed={options.isOpponentHandRevealed}
         state={state}
@@ -72,7 +72,7 @@ function mount(
         onCardDragEnd={onCardDragEnd}
         onCardDropToBrowser={onCardDropToBrowser}
         pendingDragSourceSurface="hand-tray"
-      /></TangoRoot>,
+      /></CumulusRoot>,
     );
   });
 

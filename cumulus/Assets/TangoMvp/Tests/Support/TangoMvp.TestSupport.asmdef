@@ -1,7 +1,0 @@
-{
-  "name": "TangoMvp.TestSupport",
-  "rootNamespace": "TangoMvp.Tests.Support",
-  "defineConstraints": [
-    "UNITY_INCLUDE_TESTS"
-  ]
-}

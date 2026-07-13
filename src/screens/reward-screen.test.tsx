@@ -12,7 +12,7 @@ import { asCardId, asCardName } from "../types/card-identity";
 import type { DreamsignTemplate } from "../types/content";
 import { RewardSiteScreen } from "./RewardSiteScreen";
 import { useQuest } from "../state/quest-context";
-import { TangoRoot } from "../tango/TangoRoot";
+import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { logEvent } from "../logging";
 
 vi.mock("framer-motion", () => ({
@@ -229,7 +229,7 @@ function mount(element: ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(<TangoRoot>{element}</TangoRoot>);
+    root.render(<CumulusRoot>{element}</CumulusRoot>);
   });
   return { container, root };
 }
@@ -381,11 +381,11 @@ describe("RewardSiteScreen", () => {
       new Map(),
     );
     act(() => {
-      root.render(<TangoRoot>
+      root.render(<CumulusRoot>
         <RewardSiteScreen
           site={{ id: "site-1", type: "Reward", isEnhanced: false, isVisited: false }}
         />
-      </TangoRoot>,
+      </CumulusRoot>,
       );
     });
 

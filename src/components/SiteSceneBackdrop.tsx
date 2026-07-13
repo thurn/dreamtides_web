@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQuest } from "../state/quest-context";
-import { dreamscapeSceneUrl } from "../tango/components/atlas/atlas-display";
+import { dreamscapeSceneUrl } from "../cumulus/components/atlas/atlas-display";
 import "./site-scene-backdrop.css";
 
 /**

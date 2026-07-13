@@ -1,15 +1,15 @@
 import path from "node:path";
 
 /**
- * Keeps Tango component APIs strict (see the "Strict, Controlled APIs" principle
- * in the /tango Design Philosophy), the numeric-knob half of the escape-hatch
+ * Keeps Cumulus component APIs strict (see the "Strict, Controlled APIs" principle
+ * in the /cumulus Design Philosophy), the numeric-knob half of the escape-hatch
  * bans that `no-escape-hatch-props.js` enforces on node/style passthroughs.
  *
  * A number-typed visual knob — `size?: number`, `gap?: number`, `scale?: number`
  * — is an arbitrary-customization escape hatch: it lets a caller dial any pixel
  * value they like instead of choosing from the design system's enumerated
  * scale. This rule flags such members on an EXPORTED `*Props` / `*View` type in
- * `src/tango/components/`. The strict form is an enumerated string variant
+ * `src/cumulus/components/`. The strict form is an enumerated string variant
  * (`size?: "sm" | "md" | "lg"`); the component maps the token to its own fixed
  * measure.
  *
@@ -28,14 +28,14 @@ import path from "node:path";
  *
  * Scope: only EXPORTED `*Props` / `*View` declarations (an internal, co-located
  * spec type keeps its numeric fields — rename it away from a knob word if it is
- * genuinely private) under `src/tango/components/`. `__*__` fixture files and
+ * genuinely private) under `src/cumulus/components/`. `__*__` fixture files and
  * files outside that surface are a no-op. Only a member whose OWN type is a
  * number is flagged — a numeric knob nested inside an inline object member
  * (`art: { scale: number }`) is a private layout detail, not a public knob.
  */
 
 /** Repo-relative POSIX dir prefixes whose exported `*Props`/`*View` types this rule guards. */
-const SURFACE_PREFIXES = ["src/tango/components/"];
+const SURFACE_PREFIXES = ["src/cumulus/components/"];
 
 /** The visual-knob words. A member named exactly one of these (or ending in a
  * capitalized form of one) is a style knob rather than a data value. */
@@ -85,7 +85,7 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Ban number-typed visual knobs (size/gap/scale/…) on exported Tango *Props/*View types; use an enumerated string variant instead.",
+        "Ban number-typed visual knobs (size/gap/scale/…) on exported Cumulus *Props/*View types; use an enumerated string variant instead.",
     },
     schema: [
       {

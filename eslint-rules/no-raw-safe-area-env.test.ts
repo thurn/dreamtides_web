@@ -7,26 +7,26 @@ import rule, {
 } from "./no-raw-safe-area-env.js";
 
 describe("isGovernedFile", () => {
-  it("governs a tango screen", () => {
-    expect(isGovernedFile("src/tango/screens/DraftScreen.tsx")).toBe(true);
+  it("governs a cumulus screen", () => {
+    expect(isGovernedFile("src/cumulus/screens/DraftScreen.tsx")).toBe(true);
   });
-  it("governs a tango component", () => {
-    expect(isGovernedFile("src/tango/components/overlay/InfoCard.tsx")).toBe(
+  it("governs a cumulus component", () => {
+    expect(isGovernedFile("src/cumulus/components/overlay/InfoCard.tsx")).toBe(
       true,
     );
   });
   it("exempts the primitives token mirror", () => {
-    expect(isGovernedFile("src/tango/primitives/tokens.ts")).toBe(false);
+    expect(isGovernedFile("src/cumulus/primitives/tokens.ts")).toBe(false);
   });
   it("exempts the docs site", () => {
-    expect(isGovernedFile("src/tango/docs/TangoApp.tsx")).toBe(false);
+    expect(isGovernedFile("src/cumulus/docs/CumulusApp.tsx")).toBe(false);
   });
   it("exempts test files", () => {
-    expect(isGovernedFile("src/tango/screens/DraftScreen.test.tsx")).toBe(
+    expect(isGovernedFile("src/cumulus/screens/DraftScreen.test.tsx")).toBe(
       false,
     );
   });
-  it("ignores files outside src/tango/", () => {
+  it("ignores files outside src/cumulus/", () => {
     expect(isGovernedFile("src/components/StartingDeckModal.tsx")).toBe(
       false,
     );
@@ -37,10 +37,10 @@ describe("toRepoRelativePosix (no-raw-safe-area-env)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/repo/src/tango/screens/DraftScreen.tsx",
+        "/repo/src/cumulus/screens/DraftScreen.tsx",
         "/repo",
       ),
-    ).toBe("src/tango/screens/DraftScreen.tsx");
+    ).toBe("src/cumulus/screens/DraftScreen.tsx");
   });
 });
 
@@ -56,7 +56,7 @@ const ruleTester = new RuleTester({
   },
 });
 
-const SCREEN = "src/tango/screens/DraftScreen.tsx";
+const SCREEN = "src/cumulus/screens/DraftScreen.tsx";
 
 ruleTester.run("no-raw-safe-area-env", rule, {
   valid: [
@@ -72,11 +72,11 @@ ruleTester.run("no-raw-safe-area-env", rule, {
     },
     {
       name: "the primitives token mirror may declare the env() fallback",
-      filename: "src/tango/primitives/tokens.ts",
+      filename: "src/cumulus/primitives/tokens.ts",
       code: `const TOP = "env(safe-area-inset-top, 0px)";`,
     },
     {
-      name: "a non-tango file's raw env() is inert",
+      name: "a non-cumulus file's raw env() is inert",
       filename: "src/components/StartingDeckModal.tsx",
       code: `const top = "env(safe-area-inset-top, 0px)";`,
     },

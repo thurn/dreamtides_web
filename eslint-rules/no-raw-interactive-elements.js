@@ -1,7 +1,7 @@
 import path from "node:path";
 
 /**
- * Bans raw native interactive elements in Tango's product-UI tier.
+ * Bans raw native interactive elements in Cumulus's product-UI tier.
  *
  * The design system already provides the interactive surfaces — `Button`,
  * `SegmentedControl`, and the `Pressable` primitive that owns press/hover
@@ -12,18 +12,18 @@ import path from "node:path";
  * component) is the path of least resistance.
  *
  * SCOPE. Fires only on the composition / product-UI tier: files under
- * `src/tango/` that are NOT in {@link EXEMPT_PREFIXES}:
- *   - `src/tango/primitives/`, `src/tango/components/`, and `src/tango/internal/`
+ * `src/cumulus/` that are NOT in {@link EXEMPT_PREFIXES}:
+ *   - `src/cumulus/primitives/`, `src/cumulus/components/`, and `src/cumulus/internal/`
  *     — these are where a native element is legitimately wrapped (`Button`
  *     renders a `<button>`, `Pressable` renders the element it forwards to) or
  *     where a material recipe returns style objects with no elements of its
  *     own. They OWN the native tag.
- *   - `src/tango/docs/` — the documentation site is tooling: its control panel
+ *   - `src/cumulus/docs/` — the documentation site is tooling: its control panel
  *     genuinely needs native `<input>`/`<select>`, and its chrome uses plain
  *     `<button>`s.
- * Everywhere else under `src/tango/` — above all `src/tango/screens/` — a raw
+ * Everywhere else under `src/cumulus/` — above all `src/cumulus/screens/` — a raw
  * interactive element is an error, and so is the adapter/builder layer in
- * `src/screens/tango_adapters/`: compose `Button` / `SegmentedControl` / `Pressable`
+ * `src/screens/cumulus_adapters/`: compose `Button` / `SegmentedControl` / `Pressable`
  * instead. All other files are a no-op.
  *
  * The rule also catches the hand-rolled button: a non-interactive intrinsic
@@ -37,19 +37,19 @@ import path from "node:path";
 
 /** Repo-relative POSIX dir prefixes that may render native interactive tags. */
 const EXEMPT_PREFIXES = [
-  "src/tango/primitives/",
-  "src/tango/components/",
-  "src/tango/internal/",
-  "src/tango/docs/",
-  "src/tango/screens/devtools/",
+  "src/cumulus/primitives/",
+  "src/cumulus/components/",
+  "src/cumulus/internal/",
+  "src/cumulus/docs/",
+  "src/cumulus/screens/devtools/",
 ];
 
-/** Native interactive tag name -> the Tango surface to compose instead. */
+/** Native interactive tag name -> the Cumulus surface to compose instead. */
 const BANNED_ELEMENTS = new Map([
   ["button", "Button, SegmentedControl, or the Pressable primitive"],
-  ["input", "a Tango control component"],
-  ["select", "SegmentedControl or a Tango control component"],
-  ["textarea", "a Tango control component"],
+  ["input", "a Cumulus control component"],
+  ["select", "SegmentedControl or a Cumulus control component"],
+  ["textarea", "a Cumulus control component"],
 ]);
 
 /** Convert an OS path to a repo-relative POSIX path against ESLint's cwd. */
@@ -127,16 +127,16 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Ban raw native interactive elements (button/input/select/textarea/a[href]) in Tango product UI; compose Button/SegmentedControl/Pressable instead.",
+        "Ban raw native interactive elements (button/input/select/textarea/a[href]) in Cumulus product UI; compose Button/SegmentedControl/Pressable instead.",
     },
     schema: [],
     messages: {
       rawInteractive:
         "`<{{tag}}>` is a raw interactive element. Compose {{use}} instead — the design system owns interactive surfaces so product UI doesn't re-implement them.",
       rawAnchor:
-        "`<a href>` is a raw link/button. Use the Pressable primitive (or a Tango button) so press mechanics and styling stay in the design system.",
+        "`<a href>` is a raw link/button. Use the Pressable primitive (or a Cumulus button) so press mechanics and styling stay in the design system.",
       handRolledButton:
-        "`<{{tag}} {{marker}}>` hand-rolls an interactive control. Use the Pressable primitive (or a Tango button) instead — it owns press feedback, keyboard focus, and reduced-motion behavior that a bare element silently lacks.",
+        "`<{{tag}} {{marker}}>` hand-rolls an interactive control. Use the Pressable primitive (or a Cumulus button) instead — it owns press feedback, keyboard focus, and reduced-motion behavior that a bare element silently lacks.",
     },
   },
 
@@ -148,10 +148,10 @@ const rule = {
     const cwd = typeof context.cwd === "string" ? context.cwd : process.cwd();
     const fileRelative = toRepoRelativePosix(rawFilename, cwd);
 
-    const inTango =
-      fileRelative.startsWith("src/tango/") &&
+    const inCumulus =
+      fileRelative.startsWith("src/cumulus/") &&
       !EXEMPT_PREFIXES.some((prefix) => fileRelative.startsWith(prefix));
-    if (!inTango && !fileRelative.startsWith("src/screens/tango_adapters/")) {
+    if (!inCumulus && !fileRelative.startsWith("src/screens/cumulus_adapters/")) {
       return {};
     }
 

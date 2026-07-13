@@ -1,6 +1,6 @@
 import type { CardData } from "../types/cards";
-import { GameCard } from "../tango/components/card/CardView";
-import { DreamcallerPortrait } from "../tango/components/hud/DreamcallerPortrait";
+import { GameCard } from "../cumulus/components/card/CardView";
+import { DreamcallerPortrait } from "../cumulus/components/hud/DreamcallerPortrait";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";
 import type { EditorDreamcaller } from "./tides-types";
 

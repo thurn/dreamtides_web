@@ -1,0 +1,105 @@
+/* SiteNode — the dreamscape site disc and its ambient motes.
+ *
+ * Moved into Cumulus from the screen stylesheet so the component carries its own
+ * styling wherever it renders (the dreamscape screen and the /cumulus demo). The
+ * selectors are intentionally un-scoped (a bare `.ds-node`, not
+ * `.dreamscape-detail .ds-node`): the class names are unique to this component,
+ * and the disc positions itself absolutely inside whatever
+ * `position: relative` stage the consumer provides. */
+
+/* ---- Site nodes ---- */
+.ds-node {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  background: none;
+  transition:
+    transform 0.15s ease,
+    opacity 0.2s ease;
+}
+/* A locked node stays hoverable (so its reveal can explain the state) but is
+ * not actionable, so it keeps the default arrow rather than the global button
+ * pointer. */
+.ds-node[data-interactive="false"] {
+  cursor: default;
+}
+.ds-disc {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--badge-disc-gradient);
+  border: 1px solid rgba(168, 85, 247, 0.45);
+  transition:
+    box-shadow 0.16s ease,
+    border-color 0.16s ease;
+}
+.ds-ico {
+  color: var(--text-on-accent);
+  display: grid;
+  place-items: center;
+  line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
+}
+.ds-node.floaty {
+  animation: ds-float 7.5s ease-in-out infinite;
+}
+@keyframes ds-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -8px;
+  }
+}
+.ds-battle-pulse {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  pointer-events: none;
+  animation: ds-bpulse 3.4s ease-out infinite;
+}
+@keyframes ds-bpulse {
+  0% {
+    transform: scale(0.86);
+    opacity: 0.7;
+  }
+  70% {
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Status badge anchored to a node (the locked padlock). */
+.ds-node-badge {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 1;
+  border: 1px solid rgba(8, 5, 18, 0.7);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+.ds-node-badge.locked {
+  background: var(--bg-band);
+  color: var(--text-on-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-node.floaty,
+  .ds-battle-pulse {
+    animation: none !important;
+    transition: none !important;
+  }
+}

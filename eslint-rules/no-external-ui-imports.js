@@ -1,9 +1,9 @@
 import path from "node:path";
 
 /**
- * Enforces Tango's isolation boundary. `src/tango/**` is the self-contained home
+ * Enforces Cumulus's isolation boundary. `src/cumulus/**` is the self-contained home
  * of the shared UI library, so code under it may import ONLY:
- *   - other code under `src/tango/`,
+ *   - other code under `src/cumulus/`,
  *   - bare `node_modules` packages (specifiers that do not start with `.`),
  *   - an explicit allowlist of non-UI infrastructure (see {@link ALLOWED_PREFIXES}
  *     and {@link ALLOWED_FILES}).
@@ -12,22 +12,22 @@ import path from "node:path";
  * `src/atlas/`) is denied. The rule is FAIL-CLOSED: anything not explicitly
  * allowed is an error, so a future UI directory can never silently leak in.
  *
- * Files outside `src/tango/` are unaffected (the rule is a no-op there).
+ * Files outside `src/cumulus/` are unaffected (the rule is a no-op there).
  */
 
 /**
- * Repo-relative POSIX directory prefixes Tango may import from. Easy to extend:
+ * Repo-relative POSIX directory prefixes Cumulus may import from. Easy to extend:
  * add another `"src/<dir>/"` entry here.
  */
 const ALLOWED_PREFIXES = [
-  "src/tango/",
+  "src/cumulus/",
   "src/data/",
   "src/types/",
   "src/runtime/",
 ];
 
 /**
- * Repo-relative POSIX file paths Tango may import, ignoring any extension. To
+ * Repo-relative POSIX file paths Cumulus may import, ignoring any extension. To
  * extend: add the EXTENSIONLESS repo-relative path (e.g. `"src/logging"`, NOT
  * `"src/logging.ts"`). Matched exactly (not as a prefix). The single non-UI
  * infrastructure file allowed is `src/logging.ts`.
@@ -52,7 +52,7 @@ export function toRepoRelativePosix(absolutePath, cwd) {
   return path.relative(cwd, absolutePath).split(path.sep).join("/");
 }
 
-/** True if a resolved repo-relative POSIX path is permitted for a Tango file. */
+/** True if a resolved repo-relative POSIX path is permitted for a Cumulus file. */
 function isAllowed(resolvedRelative) {
   if (ALLOWED_PREFIXES.some((prefix) => resolvedRelative.startsWith(prefix))) {
     return true;
@@ -67,12 +67,12 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Enforce Tango's isolation boundary: src/tango may import only from itself, bare modules, and the infrastructure allowlist.",
+        "Enforce Cumulus's isolation boundary: src/cumulus may import only from itself, bare modules, and the infrastructure allowlist.",
     },
     schema: [],
     messages: {
       externalImport:
-        "Tango may not import '{{source}}' (resolves to '{{resolved}}'). src/tango/** may only import from itself, bare node_modules packages, or the allowlist (src/data/, src/types/, src/runtime/, src/logging.ts).",
+        "Cumulus may not import '{{source}}' (resolves to '{{resolved}}'). src/cumulus/** may only import from itself, bare node_modules packages, or the allowlist (src/data/, src/types/, src/runtime/, src/logging.ts).",
     },
   },
 
@@ -87,8 +87,8 @@ const rule = {
       typeof context.cwd === "string" ? context.cwd : process.cwd();
     const fileRelative = toRepoRelativePosix(rawFilename, cwd);
 
-    // Only act on files under src/tango/. Elsewhere the rule is inert.
-    if (!fileRelative.startsWith("src/tango/")) {
+    // Only act on files under src/cumulus/. Elsewhere the rule is inert.
+    if (!fileRelative.startsWith("src/cumulus/")) {
       return {};
     }
 

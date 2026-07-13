@@ -13,7 +13,7 @@ import { QuestStartScreen, largestTides } from "./QuestStartScreen";
 import { useQuest } from "../state/quest-context";
 import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";
-import { TangoRoot } from "../tango/TangoRoot";
+import { CumulusRoot } from "../cumulus/CumulusRoot";
 
 
 vi.mock("framer-motion", () => ({
@@ -266,7 +266,7 @@ function mount(element: ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(<TangoRoot>{element}</TangoRoot>);
+    root.render(<CumulusRoot>{element}</CumulusRoot>);
   });
   return { container, root };
 }
@@ -386,7 +386,7 @@ describe("QuestStartScreen", () => {
       expect(glyph).not.toBeNull();
       expect((glyph as HTMLElement | null)?.style.color).toBe("var(--essence)");
       const source = valueNode?.querySelector<HTMLElement>("[data-resource-source]");
-      expect(source?.getAttribute("aria-describedby")).toMatch(/^tango-reveal-description-/);
+      expect(source?.getAttribute("aria-describedby")).toMatch(/^cumulus-reveal-description-/);
       expect(document.getElementById(source?.getAttribute("aria-describedby") ?? "")?.textContent).toContain("Starting Essence");
       const row = container.querySelector(
         `[data-starting-essence="${dreamcaller.id}"]`,
@@ -421,7 +421,7 @@ describe("QuestStartScreen", () => {
   it("renders signature-card help as static explanatory copy", () => {
       const { container, root } = mount(<QuestStartScreen />);
       expect(container.querySelectorAll("[data-signature-cards-label-tooltip]")).toHaveLength(3);
-      expect(document.querySelector("[data-tango-reveal-portal]")).toBeNull();
+      expect(document.querySelector("[data-cumulus-reveal-portal]")).toBeNull();
       act(() => root.unmount());
   });
 
@@ -466,7 +466,7 @@ describe("QuestStartScreen", () => {
       });
 
       expect(container.querySelectorAll("[data-signature-cards-label-tooltip]")).toHaveLength(3);
-      expect(document.querySelector("[data-tango-reveal-portal]")).toBeNull();
+      expect(document.querySelector("[data-cumulus-reveal-portal]")).toBeNull();
 
       act(() => {
         root.unmount();

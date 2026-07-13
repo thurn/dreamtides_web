@@ -1,0 +1,11 @@
+{
+  "name": "CumulusMvp.Editor",
+  "rootNamespace": "CumulusMvp.Editor",
+  "references": [
+    "CumulusMvp.Runtime",
+    "Unity.RenderPipelines.Universal.Runtime"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ]
+}

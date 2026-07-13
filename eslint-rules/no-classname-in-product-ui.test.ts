@@ -10,24 +10,24 @@ describe("toRepoRelativePosix (no-classname-in-product-ui)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/tango/screens/HomeScreen.tsx",
+        "/Users/x/quest_prototype/src/cumulus/screens/HomeScreen.tsx",
         "/Users/x/quest_prototype",
       ),
-    ).toBe("src/tango/screens/HomeScreen.tsx");
+    ).toBe("src/cumulus/screens/HomeScreen.tsx");
   });
 });
 
 describe("isProductUiFile (no-classname-in-product-ui)", () => {
   it("covers the product tier and the adapter layer", () => {
-    expect(isProductUiFile("src/tango/screens/HomeScreen.tsx")).toBe(true);
-    expect(isProductUiFile("src/screens/tango_adapters/HomeScreenAdapter.tsx")).toBe(
+    expect(isProductUiFile("src/cumulus/screens/HomeScreen.tsx")).toBe(true);
+    expect(isProductUiFile("src/screens/cumulus_adapters/HomeScreenAdapter.tsx")).toBe(
       true,
     );
   });
-  it("exempts primitives, components, docs, and non-tango files", () => {
-    expect(isProductUiFile("src/tango/components/Button.tsx")).toBe(false);
-    expect(isProductUiFile("src/tango/primitives/Pressable.tsx")).toBe(false);
-    expect(isProductUiFile("src/tango/docs/TangoApp.tsx")).toBe(false);
+  it("exempts primitives, components, docs, and non-cumulus files", () => {
+    expect(isProductUiFile("src/cumulus/components/Button.tsx")).toBe(false);
+    expect(isProductUiFile("src/cumulus/primitives/Pressable.tsx")).toBe(false);
+    expect(isProductUiFile("src/cumulus/docs/CumulusApp.tsx")).toBe(false);
     expect(isProductUiFile("src/screens/LegacyScreen.tsx")).toBe(false);
   });
 });
@@ -44,14 +44,14 @@ const ruleTester = new RuleTester({
   },
 });
 
-const SCREEN = "src/tango/screens/HomeScreen.tsx";
+const SCREEN = "src/cumulus/screens/HomeScreen.tsx";
 
 ruleTester.run("no-classname-in-product-ui", rule, {
   valid: [
     {
       name: "the token-scope root class is the one allowed value",
       filename: SCREEN,
-      code: `const el = <div className="tango" style={{ minHeight: "100vh" }} />;`,
+      code: `const el = <div className="cumulus" style={{ minHeight: "100vh" }} />;`,
     },
     {
       name: "token-valued inline styles are the styling channel",
@@ -60,12 +60,12 @@ ruleTester.run("no-classname-in-product-ui", rule, {
     },
     {
       name: "components tier legitimately authors class-based styling",
-      filename: "src/tango/components/Button.tsx",
-      code: `const el = <button className="tango-button" />;`,
+      filename: "src/cumulus/components/Button.tsx",
+      code: `const el = <button className="cumulus-button" />;`,
     },
     {
       name: "the doc site is tooling and exempt",
-      filename: "src/tango/docs/TangoApp.tsx",
+      filename: "src/cumulus/docs/CumulusApp.tsx",
       code: `const el = <div className="doc-shell" />;`,
     },
     {
@@ -95,7 +95,7 @@ ruleTester.run("no-classname-in-product-ui", rule, {
     },
     {
       name: "adapters render no chrome and may not class anything",
-      filename: "src/screens/tango_adapters/HomeScreenAdapter.tsx",
+      filename: "src/screens/cumulus_adapters/HomeScreenAdapter.tsx",
       code: `const el = <Widget className="wrap" />;`,
       errors: [{ messageId: "classNameProp" }],
     },

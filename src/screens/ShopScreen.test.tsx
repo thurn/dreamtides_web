@@ -3,7 +3,7 @@
 import { act, type HTMLAttributes, type ReactElement, type ReactNode } from "react";
 import { MINIMAL_ATLAS_CONFIG, MINIMAL_DREAMSCAPES } from "../__test-helpers__/atlas-fixtures";
 import { createRoot, type Root } from "react-dom/client";
-import { TangoRoot } from "../tango/TangoRoot";
+import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { QuestMutations } from "../state/quest-context";
 import type { QuestState, RuntimeShopSlot } from "../types/quest";
@@ -50,7 +50,7 @@ vi.mock("../components/CardOverlay", () => ({
   CardOverlay: () => null,
 }));
 
-vi.mock("../tango/components/card/RulesText", () => ({
+vi.mock("../cumulus/components/card/RulesText", () => ({
   RulesText: ({ text }: { text: string }) => <span>{text}</span>,
 }));
 
@@ -211,7 +211,7 @@ function mount(element: ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(<TangoRoot>{element}</TangoRoot>);
+    root.render(<CumulusRoot>{element}</CumulusRoot>);
   });
   return { container, root };
 }

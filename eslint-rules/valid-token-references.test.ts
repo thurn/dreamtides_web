@@ -4,49 +4,49 @@ import { describe, it, expect } from "vitest";
 import rule, {
   toRepoRelativePosix,
   isProductUiFile,
-  isTangoOwnedFile,
+  isCumulusOwnedFile,
 } from "./valid-token-references.js";
-import { knownTokenNames } from "./tango-token-index.js";
+import { knownTokenNames } from "./cumulus-token-index.js";
 
 describe("toRepoRelativePosix (valid-token-references)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/tango/screens/HomeScreen.tsx",
+        "/Users/x/quest_prototype/src/cumulus/screens/HomeScreen.tsx",
         "/Users/x/quest_prototype",
       ),
-    ).toBe("src/tango/screens/HomeScreen.tsx");
+    ).toBe("src/cumulus/screens/HomeScreen.tsx");
   });
 });
 
 describe("isProductUiFile", () => {
   it("covers screens, composition files, and the adapter layer", () => {
-    expect(isProductUiFile("src/tango/screens/HomeScreen.tsx")).toBe(true);
-    expect(isProductUiFile("src/screens/tango_adapters/HomeScreenAdapter.tsx")).toBe(
+    expect(isProductUiFile("src/cumulus/screens/HomeScreen.tsx")).toBe(true);
+    expect(isProductUiFile("src/screens/cumulus_adapters/HomeScreenAdapter.tsx")).toBe(
       true,
     );
-    expect(isProductUiFile("src/screens/tango_adapters/home-view-model.ts")).toBe(true);
+    expect(isProductUiFile("src/screens/cumulus_adapters/home-view-model.ts")).toBe(true);
   });
-  it("exempts primitives, components, docs, and non-tango files", () => {
-    expect(isProductUiFile("src/tango/primitives/tokens.ts")).toBe(false);
-    expect(isProductUiFile("src/tango/components/Button.tsx")).toBe(false);
-    expect(isProductUiFile("src/tango/docs/TangoApp.tsx")).toBe(false);
+  it("exempts primitives, components, docs, and non-cumulus files", () => {
+    expect(isProductUiFile("src/cumulus/primitives/tokens.ts")).toBe(false);
+    expect(isProductUiFile("src/cumulus/components/Button.tsx")).toBe(false);
+    expect(isProductUiFile("src/cumulus/docs/CumulusApp.tsx")).toBe(false);
     expect(isProductUiFile("src/screens/LegacyScreen.tsx")).toBe(false);
   });
 });
 
-describe("isTangoOwnedFile", () => {
-  it("governs all of src/tango/ (components included) plus the adapter layer", () => {
-    expect(isTangoOwnedFile("src/tango/components/Button.tsx")).toBe(true);
-    expect(isTangoOwnedFile("src/tango/screens/HomeScreen.tsx")).toBe(true);
-    expect(isTangoOwnedFile("src/screens/tango_adapters/HomeScreenAdapter.tsx")).toBe(
+describe("isCumulusOwnedFile", () => {
+  it("governs all of src/cumulus/ (components included) plus the adapter layer", () => {
+    expect(isCumulusOwnedFile("src/cumulus/components/Button.tsx")).toBe(true);
+    expect(isCumulusOwnedFile("src/cumulus/screens/HomeScreen.tsx")).toBe(true);
+    expect(isCumulusOwnedFile("src/screens/cumulus_adapters/HomeScreenAdapter.tsx")).toBe(
       true,
     );
   });
-  it("exempts the primitive and doc tiers, and non-tango files", () => {
-    expect(isTangoOwnedFile("src/tango/primitives/tokens.ts")).toBe(false);
-    expect(isTangoOwnedFile("src/tango/docs/TangoApp.tsx")).toBe(false);
-    expect(isTangoOwnedFile("src/screens/LegacyScreen.tsx")).toBe(false);
+  it("exempts the primitive and doc tiers, and non-cumulus files", () => {
+    expect(isCumulusOwnedFile("src/cumulus/primitives/tokens.ts")).toBe(false);
+    expect(isCumulusOwnedFile("src/cumulus/docs/CumulusApp.tsx")).toBe(false);
+    expect(isCumulusOwnedFile("src/screens/LegacyScreen.tsx")).toBe(false);
   });
 });
 
@@ -70,8 +70,8 @@ const ruleTester = new RuleTester({
   },
 });
 
-const SCREEN = "src/tango/screens/HomeScreen.tsx";
-const ADAPTER = "src/screens/tango_adapters/HomeScreenAdapter.tsx";
+const SCREEN = "src/cumulus/screens/HomeScreen.tsx";
+const ADAPTER = "src/screens/cumulus_adapters/HomeScreenAdapter.tsx";
 
 // Derive a real token from the live stylesheet so the tests never pin a
 // specific token NAME (token vocabulary is design data, subject to change).
@@ -104,12 +104,12 @@ ruleTester.run("valid-token-references", rule, {
     },
     {
       name: "a declared token referenced from a components file is fine",
-      filename: "src/tango/components/GameCard.tsx",
+      filename: "src/cumulus/components/GameCard.tsx",
       code: `const style = { color: "var(${REAL_TOKEN})" };`,
     },
     {
       name: "allowlisted component-local runtime vars are fine in a components file",
-      filename: "src/tango/components/GameCard.tsx",
+      filename: "src/cumulus/components/GameCard.tsx",
       code: `const style = { width: "var(--atlas-node-size)", filter: "blur(var(--cv-name-color))" };`,
     },
     {
@@ -121,7 +121,7 @@ ruleTester.run("valid-token-references", rule, {
   invalid: [
     {
       name: "components are now governed — an unknown token is reported",
-      filename: "src/tango/components/GameCard.tsx",
+      filename: "src/cumulus/components/GameCard.tsx",
       code: `const style = { color: "var(${BOGUS_TOKEN})" };`,
       errors: [{ messageId: "unknownToken" }],
     },

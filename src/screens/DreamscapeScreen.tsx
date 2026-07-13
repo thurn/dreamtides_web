@@ -5,15 +5,15 @@ import {
   siteTypeIcon,
   siteTypeName,
 } from "../atlas/atlas-generator";
-import { dreamscapeSceneUrl } from "../tango/components/atlas/atlas-display";
+import { dreamscapeSceneUrl } from "../cumulus/components/atlas/atlas-display";
 import { draftSitePickCount } from "../draft/draft-site-config";
 import {
   SiteNode,
   type DreamscapeSiteModel,
-} from "../tango/components/dreamscape/SiteNode";
-import { Motes } from "../tango/components/hud/Motes";
-import { scatterSites, seedFromString } from "../tango/components/dreamscape/dreamscape-scatter";
-import { glyph } from "../tango/primitives/glyph";
+} from "../cumulus/components/dreamscape/SiteNode";
+import { Motes } from "../cumulus/components/hud/Motes";
+import { scatterSites, seedFromString } from "../cumulus/components/dreamscape/dreamscape-scatter";
+import { glyph } from "../cumulus/primitives/glyph";
 import { logEvent } from "../logging";
 import "./dreamscape.css";
 

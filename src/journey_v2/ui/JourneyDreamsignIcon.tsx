@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { Dreamsign as TangoDreamsign } from "../../tango/components/hud/Dreamsign";
+import { Dreamsign as CumulusDreamsign } from "../../cumulus/components/hud/Dreamsign";
 import type { Dreamsign } from "../../types/quest";
 import type { JourneyDreamsignObject } from "./offerPresentation";
 
@@ -100,7 +100,7 @@ export function JourneyDreamsignIcon({
           }}
         />
         <div style={{ position: "relative", zIndex: 1, filter: ringColor ? `drop-shadow(0 0 10px ${ringColor})` : undefined }}>
-          <TangoDreamsign dreamsign={dreamsign} sizePx={sizePx} onPress={onClick} testid={testId == null ? undefined : `${testId}-entity`} />
+          <CumulusDreamsign dreamsign={dreamsign} sizePx={sizePx} onPress={onClick} testid={testId == null ? undefined : `${testId}-entity`} />
         </div>
       </div>
       {caption}

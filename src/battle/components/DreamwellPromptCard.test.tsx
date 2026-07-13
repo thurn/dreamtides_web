@@ -14,10 +14,10 @@ import {
 } from "../test-support";
 import { BattleCardPickerOverlay } from "./BattleCardPickerOverlay";
 import { BattleChoicePromptOverlay } from "./BattleChoicePromptOverlay";
-import { TangoRoot } from "../../tango/TangoRoot";
+import { CumulusRoot } from "../../cumulus/CumulusRoot";
 
-function renderWithTango(root: Root, element: ReactElement): void {
-  root.render(<TangoRoot>{element}</TangoRoot>);
+function renderWithCumulus(root: Root, element: ReactElement): void {
+  root.render(<CumulusRoot>{element}</CumulusRoot>);
 }
 
 // A self-constructed Dreamwell card so the test does not depend on production
@@ -65,7 +65,7 @@ describe("Dreamwell prompt overlays surface the source card", () => {
     expect(candidateIds.length).toBeGreaterThan(0);
 
     act(() => {
-      renderWithTango(root,
+      renderWithCumulus(root,
         <BattleCardPickerOverlay
           title="Discard a card"
           sourceCard={SAMPLE_DREAMWELL_CARD}
@@ -92,7 +92,7 @@ describe("Dreamwell prompt overlays surface the source card", () => {
 
   it("renders the driving Dreamwell card inside the choice prompt", () => {
     act(() => {
-      renderWithTango(root,
+      renderWithCumulus(root,
         <BattleChoicePromptOverlay
           title="Choose one"
           sourceCard={SAMPLE_DREAMWELL_CARD}
@@ -112,7 +112,7 @@ describe("Dreamwell prompt overlays surface the source card", () => {
 
   it("omits the source-card header when no Dreamwell card is provided", () => {
     act(() => {
-      renderWithTango(root,
+      renderWithCumulus(root,
         <BattleChoicePromptOverlay
           title="Choose one"
           options={[{ label: "Draw a card" }]}

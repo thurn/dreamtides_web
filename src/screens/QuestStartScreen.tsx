@@ -4,11 +4,11 @@ import { useQuest } from "../state/quest-context";
 import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
 import { selectedTides4Decks } from "../data/tides4-preview";
 import { generateQuestSeed } from "../state/quest-state-actions";
-import { DreamcallerPortrait } from "../tango/components/hud/DreamcallerPortrait";
-import { ResourceChip } from "../tango/components/hud/ResourceChip";
-import { RulesText } from "../tango/components/card/RulesText";
-import { TideDisc } from "../tango/components/hud/TideDisc";
-import type { Tide } from "../tango/components/hud/tide-spec";
+import { DreamcallerPortrait } from "../cumulus/components/hud/DreamcallerPortrait";
+import { ResourceChip } from "../cumulus/components/hud/ResourceChip";
+import { RulesText } from "../cumulus/components/card/RulesText";
+import { TideDisc } from "../cumulus/components/hud/TideDisc";
+import type { Tide } from "../cumulus/components/hud/tide-spec";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";
 import type { DreamcallerContent } from "../types/content";
 

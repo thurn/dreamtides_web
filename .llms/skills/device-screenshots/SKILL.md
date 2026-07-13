@@ -25,7 +25,7 @@ bounding box) into a `deviceFrame` query param on the iframe URL. The app
 republishes them as `var(--safe-area-inset-top/right/bottom/left)` and
 `var(--display-cutout-top/left/right/width/height)` (see
 `src/runtime/device-frame.ts` and the `:root` block in
-`src/tango/primitives/tango-tokens.css`). App code reads those variables — never
+`src/cumulus/primitives/cumulus-tokens.css`). App code reads those variables — never
 `env()` directly — so a notch-clearing layout that works on device also works in
 a mock-up, and the insets zero out on a no-cut-out target like `iphone-se-3`.
 

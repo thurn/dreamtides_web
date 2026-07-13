@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 CUMULUS_ROOT="$REPO_ROOT/cumulus"
 ARTIFACT_ROOT="$CUMULUS_ROOT/Artifacts/GlassParity"
-RESULTS="$CUMULUS_ROOT/Artifacts/TangoMvpVerification/stages/glass-parity-unity/results.xml"
+RESULTS="$CUMULUS_ROOT/Artifacts/CumulusMvpVerification/stages/glass-parity-unity/results.xml"
 
 cd "$REPO_ROOT"
 python3 cumulus/scripts/generate-parity-backgrounds.py >/dev/null
@@ -17,7 +17,7 @@ source cumulus/scripts/lib/unity-run.sh
 run_unity_stage glass-parity-unity graphics \
   -runTests \
   -testPlatform PlayMode \
-  -testFilter TangoMvp.Tests.PlayMode.TangoGlassParityTests \
+  -testFilter CumulusMvp.Tests.PlayMode.CumulusGlassParityTests \
   -testResults "$RESULTS"
 
 python3 cumulus/scripts/glass_parity.py \

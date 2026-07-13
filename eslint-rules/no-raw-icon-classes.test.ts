@@ -11,47 +11,47 @@ describe("toRepoRelativePosix (no-raw-icon-classes)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/tango/components/hud/QuestStatusBar.tsx",
+        "/Users/x/quest_prototype/src/cumulus/components/hud/QuestStatusBar.tsx",
         "/Users/x/quest_prototype",
       ),
-    ).toBe("src/tango/components/hud/QuestStatusBar.tsx");
+    ).toBe("src/cumulus/components/hud/QuestStatusBar.tsx");
   });
 });
 
 describe("isTestFile", () => {
   it("matches a .test.tsx file", () => {
-    expect(isTestFile("src/tango/components/card/RulesText.test.tsx")).toBe(
+    expect(isTestFile("src/cumulus/components/card/RulesText.test.tsx")).toBe(
       true,
     );
   });
   it("does not match a production file", () => {
-    expect(isTestFile("src/tango/components/card/RulesText.tsx")).toBe(false);
+    expect(isTestFile("src/cumulus/components/card/RulesText.tsx")).toBe(false);
   });
 });
 
 describe("isGovernedFile", () => {
-  it("governs a tango component file", () => {
-    expect(isGovernedFile("src/tango/components/hud/QuestStatusBar.tsx")).toBe(
+  it("governs a cumulus component file", () => {
+    expect(isGovernedFile("src/cumulus/components/hud/QuestStatusBar.tsx")).toBe(
       true,
     );
   });
   it("governs the adapter layer", () => {
-    expect(isGovernedFile("src/screens/tango_adapters/ShopAdapter.tsx")).toBe(
+    expect(isGovernedFile("src/screens/cumulus_adapters/ShopAdapter.tsx")).toBe(
       true,
     );
   });
   it("exempts the glyph vocabulary file", () => {
-    expect(isGovernedFile("src/tango/primitives/glyph.ts")).toBe(false);
+    expect(isGovernedFile("src/cumulus/primitives/glyph.ts")).toBe(false);
   });
   it("exempts the doc site", () => {
-    expect(isGovernedFile("src/tango/docs/mockups/site-node.tsx")).toBe(false);
+    expect(isGovernedFile("src/cumulus/docs/mockups/site-node.tsx")).toBe(false);
   });
   it("exempts test files (they assert against rendered classes)", () => {
-    expect(isGovernedFile("src/tango/components/card/RulesText.test.tsx")).toBe(
+    expect(isGovernedFile("src/cumulus/components/card/RulesText.test.tsx")).toBe(
       false,
     );
   });
-  it("ignores files outside the tango tier", () => {
+  it("ignores files outside the cumulus tier", () => {
     expect(isGovernedFile("src/screens/ShopScreen.tsx")).toBe(false);
   });
 });
@@ -68,8 +68,8 @@ const ruleTester = new RuleTester({
   },
 });
 
-const GLYPH_FILE = "src/tango/primitives/glyph.ts";
-const COMPONENT = "src/tango/components/hud/QuestStatusBar.tsx";
+const GLYPH_FILE = "src/cumulus/primitives/glyph.ts";
+const COMPONENT = "src/cumulus/components/hud/QuestStatusBar.tsx";
 
 ruleTester.run("no-raw-icon-classes", rule, {
   valid: [
@@ -100,11 +100,11 @@ ruleTester.run("no-raw-icon-classes", rule, {
     },
     {
       name: "a test file may query the rendered class string",
-      filename: "src/tango/components/card/RulesText.test.tsx",
+      filename: "src/cumulus/components/card/RulesText.test.tsx",
       code: `const flame = container.querySelector("i.bxf.bx-fire-alt");`,
     },
     {
-      name: "raw class strings outside the tango tier are inert",
+      name: "raw class strings outside the cumulus tier are inert",
       filename: "src/screens/ShopScreen.tsx",
       code: `const el = <i className="bxf bx-refresh-cw" />;`,
     },
@@ -136,7 +136,7 @@ ruleTester.run("no-raw-icon-classes", rule, {
     },
     {
       name: "the adapter layer is covered too",
-      filename: "src/screens/tango_adapters/ShopAdapter.tsx",
+      filename: "src/screens/cumulus_adapters/ShopAdapter.tsx",
       code: `const cls = "bxf bx-refresh-cw";`,
       errors: [{ messageId: "rawIconClass" }],
     },

@@ -1,0 +1,103 @@
+/* Floating table of contents for the /cumulus overview (see TableOfContents.tsx).
+   A CSS media query — not JS — decides whether there is room for the rail, so
+   there's no layout-thrashing resize listener and no flash of the wrong layout
+   on first paint.
+
+   The overview's content column is a fixed 960px centered in the viewport, so
+   the free space on each side is `(100vw - 960px) / 2`. Below the breakpoint
+   that gutter is too narrow to hold a readable rail without overlapping the
+   content, so the TOC is hidden and the overview reads as a single column.
+   At/above it the rail floats in the left gutter, its width capped so it always
+   clears the content column. */
+.cumulus-toc {
+  display: none;
+}
+
+@media (min-width: 1320px) {
+  .cumulus-toc {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: var(--space-5);
+    transform: translateY(-50%);
+    width: min(220px, calc((100vw - 960px) / 2 - var(--space-8)));
+    max-height: 82vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: var(--space-6);
+    background: var(--surface-card);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-panel);
+    box-shadow: var(--shadow-lg);
+    z-index: 50;
+    scrollbar-width: thin;
+  }
+}
+
+.cumulus-toc__eyebrow {
+  font: var(--t-eyebrow);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 var(--space-5);
+}
+
+.cumulus-toc__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* Each entry is a full-width button so the whole row is a click target. A
+   left border rail carries the active/trail indicator without shifting the
+   label, so highlighting a row never reflows the list. */
+.cumulus-toc__item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  border-left: 2px solid transparent;
+  border-radius: 0;
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  font: var(--t-body-sm);
+  color: var(--text-muted);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+
+.cumulus-toc__item:hover {
+  color: var(--text-secondary);
+}
+
+.cumulus-toc__item--child {
+  padding-left: var(--space-7);
+  font: var(--t-caption);
+}
+
+/* Trail: an ancestor of the active entry — dimmed accent so the reader can see
+   which group they are inside without it competing with the active row. */
+.cumulus-toc__item--trail {
+  color: var(--text-secondary);
+  border-left-color: var(--border-accent);
+}
+
+/* Active: the entry the reader is currently scrolled to. */
+.cumulus-toc__item--active {
+  color: var(--accent-bright);
+  background: var(--accent-tint);
+  border-left-color: var(--accent-bright);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cumulus-toc__item {
+    transition: none;
+  }
+}

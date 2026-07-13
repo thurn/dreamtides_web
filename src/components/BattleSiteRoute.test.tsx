@@ -51,7 +51,7 @@ vi.mock("../battle/components/BattleStartScreen", () => ({
   ),
 }));
 
-vi.mock("../screens/tango_adapters/BattleStartScreenAdapter", () => ({
+vi.mock("../screens/cumulus_adapters/BattleStartScreenAdapter", () => ({
   BattleStartScreenAdapter: ({
     init,
     onBegin,
@@ -59,8 +59,8 @@ vi.mock("../screens/tango_adapters/BattleStartScreenAdapter", () => ({
     init: { battleId: string };
     onBegin: () => void;
   }) => (
-    <div data-screen="tango-battle-start" data-battle-id={init.battleId}>
-      <button type="button" data-tango-begin="" onClick={onBegin}>
+    <div data-screen="cumulus-battle-start" data-battle-id={init.battleId}>
+      <button type="button" data-cumulus-begin="" onClick={onBegin}>
         Begin Battle
       </button>
     </div>
@@ -70,7 +70,7 @@ vi.mock("../screens/tango_adapters/BattleStartScreenAdapter", () => ({
 vi.mock("../battle/components/PlayableBattleScreen", async () => {
   const { useGameState } = await import("../coop/hooks");
   return {
-    PlayableBattleScreen: ({ uiVariant }: { uiVariant: "tango" | "legacy" }) => {
+    PlayableBattleScreen: ({ uiVariant }: { uiVariant: "cumulus" | "legacy" }) => {
       const gameState = useGameState();
       const battle = gameState.battle;
       if (battle === null) {
@@ -241,7 +241,7 @@ describe("createBattleEntryKey", () => {
 });
 
 describe("BattleSiteRoute", () => {
-  it("serves the Tango Battle Start preview for the default UI variant", () => {
+  it("serves the Cumulus Battle Start preview for the default UI variant", () => {
     mockGameState = makeFoldStateWithBattle();
     const { container } = mount(
       <BattleSiteRoute
@@ -254,24 +254,24 @@ describe("BattleSiteRoute", () => {
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "tango",
+          uiVariant: "cumulus",
         }}
       />,
     );
 
-    expect(container.querySelector('[data-screen="tango-battle-start"]')).not.toBeNull();
+    expect(container.querySelector('[data-screen="cumulus-battle-start"]')).not.toBeNull();
     expect(container.querySelector('[data-screen="battle-start"]')).toBeNull();
-    expect(container.querySelector("[data-tango-quest-chrome]")).not.toBeNull();
+    expect(container.querySelector("[data-cumulus-quest-chrome]")).not.toBeNull();
     act(() => {
-      container.querySelector<HTMLButtonElement>("[data-tango-begin]")?.click();
+      container.querySelector<HTMLButtonElement>("[data-cumulus-begin]")?.click();
     });
-    expect(container.querySelector('[data-screen="tango-playable"]')).not.toBeNull();
+    expect(container.querySelector('[data-screen="cumulus-playable"]')).not.toBeNull();
     expect(container.querySelector('[data-screen="legacy-playable"]')).toBeNull();
-    expect(container.querySelector("[data-tango-quest-chrome]")).toBeNull();
+    expect(container.querySelector("[data-cumulus-quest-chrome]")).toBeNull();
     expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
   });
 
-  it("opens the Tango playable surface directly for the playable battle QA scene", () => {
+  it("opens the Cumulus playable surface directly for the playable battle QA scene", () => {
     mockGameState = makeFoldStateWithBattle();
     const { container } = mount(
       <BattleSiteRoute
@@ -284,15 +284,15 @@ describe("BattleSiteRoute", () => {
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "tango",
+          uiVariant: "cumulus",
           gotoScene: "battle-playable",
         }}
       />,
     );
 
-    expect(container.querySelector('[data-screen="tango-playable"]')).not.toBeNull();
-    expect(container.querySelector('[data-screen="tango-battle-start"]')).toBeNull();
-    expect(container.querySelector("[data-tango-quest-chrome]")).toBeNull();
+    expect(container.querySelector('[data-screen="cumulus-playable"]')).not.toBeNull();
+    expect(container.querySelector('[data-screen="cumulus-battle-start"]')).toBeNull();
+    expect(container.querySelector("[data-cumulus-quest-chrome]")).toBeNull();
   });
 
   it("renders a loading placeholder and appends BEGIN_BATTLE while battle is null", () => {

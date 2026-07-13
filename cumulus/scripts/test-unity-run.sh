@@ -272,7 +272,7 @@ rm -rf "$outside_stage_dir"
 
 for fixture in \
   "compiler-error|error CS0246: The type or namespace name 'Missing' could not be found" \
-  "shader-error|Shader error in 'TangoMvp/SceneGlass': syntax error" \
+  "shader-error|Shader error in 'CumulusMvp/SceneGlass': syntax error" \
   "compilation-failed|Compilation failed: 1 error(s), 0 warnings" \
   "scripts-compiler-errors|Scripts have compiler errors." \
   "unhandled-exception|Unhandled Exception: System.InvalidOperationException" \

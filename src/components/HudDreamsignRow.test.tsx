@@ -5,7 +5,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { HudDreamsignRow } from "./HudDreamsignRow";
 import type { Dreamsign } from "../types/quest";
-import { TangoRoot } from "../tango/TangoRoot";
+import { CumulusRoot } from "../cumulus/CumulusRoot";
 
 /**
  * Tests for the HUD dreamsign row: one art tile per owned dreamsign,
@@ -32,7 +32,7 @@ function mountInto(node: React.ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(<TangoRoot>{node}</TangoRoot>);
+    root.render(<CumulusRoot>{node}</CumulusRoot>);
   });
   return { container, root };
 }

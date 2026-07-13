@@ -1,5 +1,5 @@
-import { DreamcallerPortrait } from "../tango/components/hud/DreamcallerPortrait";
-import { RulesText } from "../tango/components/card/RulesText";
+import { DreamcallerPortrait } from "../cumulus/components/hud/DreamcallerPortrait";
+import { RulesText } from "../cumulus/components/card/RulesText";
 
 const ACCENT_COLOR = "#a855f7";
 

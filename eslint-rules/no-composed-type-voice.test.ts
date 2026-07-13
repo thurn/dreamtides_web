@@ -10,21 +10,21 @@ describe("toRepoRelativePosix (no-composed-type-voice)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/tango/screens/HomeScreen.tsx",
+        "/Users/x/quest_prototype/src/cumulus/screens/HomeScreen.tsx",
         "/Users/x/quest_prototype",
       ),
-    ).toBe("src/tango/screens/HomeScreen.tsx");
+    ).toBe("src/cumulus/screens/HomeScreen.tsx");
   });
 });
 
 describe("isProductUiFile (no-composed-type-voice)", () => {
   it("covers the product tier and the adapter layer", () => {
-    expect(isProductUiFile("src/tango/screens/HomeScreen.tsx")).toBe(true);
-    expect(isProductUiFile("src/screens/tango_adapters/home-view-model.ts")).toBe(true);
+    expect(isProductUiFile("src/cumulus/screens/HomeScreen.tsx")).toBe(true);
+    expect(isProductUiFile("src/screens/cumulus_adapters/home-view-model.ts")).toBe(true);
   });
-  it("exempts primitives, components, docs, and non-tango files", () => {
-    expect(isProductUiFile("src/tango/components/InfoCard.tsx")).toBe(false);
-    expect(isProductUiFile("src/tango/docs/TangoApp.tsx")).toBe(false);
+  it("exempts primitives, components, docs, and non-cumulus files", () => {
+    expect(isProductUiFile("src/cumulus/components/InfoCard.tsx")).toBe(false);
+    expect(isProductUiFile("src/cumulus/docs/CumulusApp.tsx")).toBe(false);
     expect(isProductUiFile("src/screens/LegacyScreen.tsx")).toBe(false);
   });
 });
@@ -41,7 +41,7 @@ const ruleTester = new RuleTester({
   },
 });
 
-const SCREEN = "src/tango/screens/HomeScreen.tsx";
+const SCREEN = "src/cumulus/screens/HomeScreen.tsx";
 
 ruleTester.run("no-composed-type-voice", rule, {
   valid: [
@@ -109,7 +109,7 @@ ruleTester.run("no-composed-type-voice", rule, {
     },
     {
       name: "adapters and view-models are covered too",
-      filename: "src/screens/tango_adapters/home-view-model.ts",
+      filename: "src/screens/cumulus_adapters/home-view-model.ts",
       code: `const font = "700 var(--t-title-sm)";`,
       errors: [{ messageId: "composedVoice" }],
     },

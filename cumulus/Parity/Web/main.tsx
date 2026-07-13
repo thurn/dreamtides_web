@@ -1,8 +1,8 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 
-import "../../../src/tango/primitives/tango-tokens.css";
-import { glassSurfaceStyle } from "../../../src/tango/internal/glass-surface";
+import "../../../src/cumulus/primitives/cumulus-tokens.css";
+import { glassSurfaceStyle } from "../../../src/cumulus/internal/glass-surface";
 
 type Manifest = {
   capture: {
@@ -47,7 +47,7 @@ document.body.style.cssText = "margin:0;overflow:hidden;background:#000";
 function ParityFrame() {
   return (
     <main
-      className="tango"
+      className="cumulus"
       data-parity-frame=""
       data-parity-ready="true"
       style={{

@@ -11,14 +11,14 @@ import type { CardData } from "../types/cards";
 import type { DreamcallerContent } from "../types/content";
 import { loadQuestContent, type QuestContent } from "../data/quest-content";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
-import { GameCard } from "../tango/components/card/CardView";
+import { GameCard } from "../cumulus/components/card/CardView";
 import {
   DreamcallerPortrait,
   dreamcallerImageSrc,
-} from "../tango/components/hud/DreamcallerPortrait";
+} from "../cumulus/components/hud/DreamcallerPortrait";
 import { extractGlossaryTerms } from "../data/glossary-terms";
-import { GlossaryDefinitionCard } from "../tango/components/card/GlossaryDefinitionCard";
-import { INFO_CARD_WIDTH } from "../tango/components/overlay/InfoCard";
+import { GlossaryDefinitionCard } from "../cumulus/components/card/GlossaryDefinitionCard";
+import { INFO_CARD_WIDTH } from "../cumulus/components/overlay/InfoCard";
 import { logEvent } from "../logging";
 import { buildIdfStats, signatureFit } from "../draft/idf-fit.ts";
 import { idfCosine } from "../draft/pool/variant-idf.ts";

@@ -1,49 +1,49 @@
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
-import tangoNoExternalUiImports from "./eslint-rules/no-external-ui-imports.js";
-import tangoNoPrimitiveTokens from "./eslint-rules/no-primitive-tokens.js";
-import tangoNoEscapeHatchProps from "./eslint-rules/no-escape-hatch-props.js";
-import tangoNoHardcodedValues from "./eslint-rules/no-hardcoded-values.js";
-import tangoNoRawInteractiveElements from "./eslint-rules/no-raw-interactive-elements.js";
-import tangoNoRawIconClasses from "./eslint-rules/no-raw-icon-classes.js";
-import tangoNoAdhocPressScale from "./eslint-rules/no-adhoc-press-scale.js";
-import tangoThinAdapters from "./eslint-rules/thin-adapters.js";
-import tangoValidTokenReferences from "./eslint-rules/valid-token-references.js";
-import tangoNoComposedTypeVoice from "./eslint-rules/no-composed-type-voice.js";
-import tangoNoClassnameInProductUi from "./eslint-rules/no-classname-in-product-ui.js";
-import tangoScreenFileTaxonomy from "./eslint-rules/screen-file-taxonomy.js";
-import tangoNoUntokenizedLengths from "./eslint-rules/no-untokenized-lengths.js";
-import tangoNoNameKeyedCards from "./eslint-rules/no-name-keyed-cards.js";
-import tangoNoRawSafeAreaEnv from "./eslint-rules/no-raw-safe-area-env.js";
-import tangoNoInlineGlass from "./eslint-rules/no-inline-glass.js";
-import tangoNoNumericStyleProps from "./eslint-rules/no-numeric-style-props.js";
-import tangoNoPurpleTextOnGlass from "./eslint-rules/no-purple-text-on-glass.js";
-import tangoNoEntityRevealEscapeHatches from "./eslint-rules/no-entity-reveal-escape-hatches.js";
+import cumulusNoExternalUiImports from "./eslint-rules/no-external-ui-imports.js";
+import cumulusNoPrimitiveTokens from "./eslint-rules/no-primitive-tokens.js";
+import cumulusNoEscapeHatchProps from "./eslint-rules/no-escape-hatch-props.js";
+import cumulusNoHardcodedValues from "./eslint-rules/no-hardcoded-values.js";
+import cumulusNoRawInteractiveElements from "./eslint-rules/no-raw-interactive-elements.js";
+import cumulusNoRawIconClasses from "./eslint-rules/no-raw-icon-classes.js";
+import cumulusNoAdhocPressScale from "./eslint-rules/no-adhoc-press-scale.js";
+import cumulusThinAdapters from "./eslint-rules/thin-adapters.js";
+import cumulusValidTokenReferences from "./eslint-rules/valid-token-references.js";
+import cumulusNoComposedTypeVoice from "./eslint-rules/no-composed-type-voice.js";
+import cumulusNoClassnameInProductUi from "./eslint-rules/no-classname-in-product-ui.js";
+import cumulusScreenFileTaxonomy from "./eslint-rules/screen-file-taxonomy.js";
+import cumulusNoUntokenizedLengths from "./eslint-rules/no-untokenized-lengths.js";
+import cumulusNoNameKeyedCards from "./eslint-rules/no-name-keyed-cards.js";
+import cumulusNoRawSafeAreaEnv from "./eslint-rules/no-raw-safe-area-env.js";
+import cumulusNoInlineGlass from "./eslint-rules/no-inline-glass.js";
+import cumulusNoNumericStyleProps from "./eslint-rules/no-numeric-style-props.js";
+import cumulusNoPurpleTextOnGlass from "./eslint-rules/no-purple-text-on-glass.js";
+import cumulusNoEntityRevealEscapeHatches from "./eslint-rules/no-entity-reveal-escape-hatches.js";
 
 // One shared plugin object: flat config rejects two config blocks that bind the
-// same plugin name to different objects, and the tango rules apply to more than
-// one file scope (src/tango/** and the adapter layer in src/screens/tango_adapters/**).
-const tangoPlugin = {
+// same plugin name to different objects, and the cumulus rules apply to more than
+// one file scope (src/cumulus/** and the adapter layer in src/screens/cumulus_adapters/**).
+const cumulusPlugin = {
   rules: {
-    "no-external-ui-imports": tangoNoExternalUiImports,
-    "no-primitive-tokens": tangoNoPrimitiveTokens,
-    "no-escape-hatch-props": tangoNoEscapeHatchProps,
-    "no-hardcoded-values": tangoNoHardcodedValues,
-    "no-raw-interactive-elements": tangoNoRawInteractiveElements,
-    "no-raw-icon-classes": tangoNoRawIconClasses,
-    "no-adhoc-press-scale": tangoNoAdhocPressScale,
-    "thin-adapters": tangoThinAdapters,
-    "valid-token-references": tangoValidTokenReferences,
-    "no-composed-type-voice": tangoNoComposedTypeVoice,
-    "no-classname-in-product-ui": tangoNoClassnameInProductUi,
-    "screen-file-taxonomy": tangoScreenFileTaxonomy,
-    "no-untokenized-lengths": tangoNoUntokenizedLengths,
-    "no-name-keyed-cards": tangoNoNameKeyedCards,
-    "no-raw-safe-area-env": tangoNoRawSafeAreaEnv,
-    "no-inline-glass": tangoNoInlineGlass,
-    "no-numeric-style-props": tangoNoNumericStyleProps,
-    "no-purple-text-on-glass": tangoNoPurpleTextOnGlass,
-    "no-entity-reveal-escape-hatches": tangoNoEntityRevealEscapeHatches,
+    "no-external-ui-imports": cumulusNoExternalUiImports,
+    "no-primitive-tokens": cumulusNoPrimitiveTokens,
+    "no-escape-hatch-props": cumulusNoEscapeHatchProps,
+    "no-hardcoded-values": cumulusNoHardcodedValues,
+    "no-raw-interactive-elements": cumulusNoRawInteractiveElements,
+    "no-raw-icon-classes": cumulusNoRawIconClasses,
+    "no-adhoc-press-scale": cumulusNoAdhocPressScale,
+    "thin-adapters": cumulusThinAdapters,
+    "valid-token-references": cumulusValidTokenReferences,
+    "no-composed-type-voice": cumulusNoComposedTypeVoice,
+    "no-classname-in-product-ui": cumulusNoClassnameInProductUi,
+    "screen-file-taxonomy": cumulusScreenFileTaxonomy,
+    "no-untokenized-lengths": cumulusNoUntokenizedLengths,
+    "no-name-keyed-cards": cumulusNoNameKeyedCards,
+    "no-raw-safe-area-env": cumulusNoRawSafeAreaEnv,
+    "no-inline-glass": cumulusNoInlineGlass,
+    "no-numeric-style-props": cumulusNoNumericStyleProps,
+    "no-purple-text-on-glass": cumulusNoPurpleTextOnGlass,
+    "no-entity-reveal-escape-hatches": cumulusNoEntityRevealEscapeHatches,
   },
 };
 
@@ -77,35 +77,35 @@ export default tseslint.config(
     // product surface. The rule itself exempts the coordinator implementation
     // and its focused tests; named semantic components are the public boundary.
     files: ["src/**/*.{ts,tsx}", "docs/**/*.{ts,tsx}"],
-    plugins: { tango: tangoPlugin },
+    plugins: { cumulus: cumulusPlugin },
     rules: {
-      "tango/no-entity-reveal-escape-hatches": "error",
+      "cumulus/no-entity-reveal-escape-hatches": "error",
     },
   },
   {
     // The design-system tier plus the adapter/builder layer in
-    // src/screens/tango_adapters/. Each rule scopes itself further by path (e.g. the
+    // src/screens/cumulus_adapters/. Each rule scopes itself further by path (e.g. the
     // visual rules exempt primitives/components/docs; screen-file-taxonomy
-    // only acts on src/screens/tango_adapters/), so the block can bind them broadly.
-    files: ["src/tango/**/*.{ts,tsx}", "src/screens/tango_adapters/**/*.{ts,tsx}"],
-    plugins: { tango: tangoPlugin },
+    // only acts on src/screens/cumulus_adapters/), so the block can bind them broadly.
+    files: ["src/cumulus/**/*.{ts,tsx}", "src/screens/cumulus_adapters/**/*.{ts,tsx}"],
+    plugins: { cumulus: cumulusPlugin },
     rules: {
-      "tango/no-external-ui-imports": "error",
-      "tango/no-primitive-tokens": "error",
-      "tango/no-escape-hatch-props": "error",
-      "tango/no-hardcoded-values": "error",
-      "tango/no-raw-interactive-elements": "error",
-      "tango/no-raw-icon-classes": "error",
-      "tango/no-adhoc-press-scale": "error",
-      "tango/valid-token-references": "error",
-      "tango/no-composed-type-voice": "error",
-      "tango/no-classname-in-product-ui": "error",
-      "tango/screen-file-taxonomy": "error",
-      "tango/no-untokenized-lengths": "error",
-      "tango/no-name-keyed-cards": "error",
-      "tango/no-raw-safe-area-env": "error",
-      "tango/no-inline-glass": "error",
-      "tango/no-purple-text-on-glass": "error",
+      "cumulus/no-external-ui-imports": "error",
+      "cumulus/no-primitive-tokens": "error",
+      "cumulus/no-escape-hatch-props": "error",
+      "cumulus/no-hardcoded-values": "error",
+      "cumulus/no-raw-interactive-elements": "error",
+      "cumulus/no-raw-icon-classes": "error",
+      "cumulus/no-adhoc-press-scale": "error",
+      "cumulus/valid-token-references": "error",
+      "cumulus/no-composed-type-voice": "error",
+      "cumulus/no-classname-in-product-ui": "error",
+      "cumulus/screen-file-taxonomy": "error",
+      "cumulus/no-untokenized-lengths": "error",
+      "cumulus/no-name-keyed-cards": "error",
+      "cumulus/no-raw-safe-area-env": "error",
+      "cumulus/no-inline-glass": "error",
+      "cumulus/no-purple-text-on-glass": "error",
     },
   },
   {
@@ -117,10 +117,10 @@ export default tseslint.config(
     // have no enumerable form (a computed stage-pixel diameter, a px anchor
     // offset, a fixed box width) — each is a box/measure/multiplier, not a
     // style knob, and carries a comment saying why.
-    files: ["src/tango/components/**/*.{ts,tsx}"],
-    plugins: { tango: tangoPlugin },
+    files: ["src/cumulus/components/**/*.{ts,tsx}"],
+    plugins: { cumulus: cumulusPlugin },
     rules: {
-      "tango/no-numeric-style-props": [
+      "cumulus/no-numeric-style-props": [
         "error",
         {
           allow: [
@@ -137,10 +137,10 @@ export default tseslint.config(
     // callback wiring, one screen render. Mapping logic belongs in the pure
     // *-view-model module; `thin-adapters` enforces the shape and `max-lines`
     // is the backstop against logic hiding inside the component body.
-    files: ["src/screens/tango_adapters/**/*Adapter.tsx"],
-    plugins: { tango: tangoPlugin },
+    files: ["src/screens/cumulus_adapters/**/*Adapter.tsx"],
+    plugins: { cumulus: cumulusPlugin },
     rules: {
-      "tango/thin-adapters": "error",
+      "cumulus/thin-adapters": "error",
       "max-lines": [
         "error",
         { max: 120, skipBlankLines: true, skipComments: true },
@@ -151,7 +151,7 @@ export default tseslint.config(
     // View-model builders are pure functions from domain data to a screen's
     // view types: unit-testable with plain fixtures, no React, no live state.
     // The adapter acquires state and passes it in as arguments.
-    files: ["src/screens/tango_adapters/**/*-view-model.ts"],
+    files: ["src/screens/cumulus_adapters/**/*-view-model.ts"],
     rules: {
       "no-restricted-imports": [
         "error",
@@ -160,7 +160,7 @@ export default tseslint.config(
             {
               group: ["react", "react-dom", "react/*", "react-dom/*"],
               message:
-                "View-model builders are pure, React-free functions. Hooks, refs, and rendering belong in the adapter or the Tango screen.",
+                "View-model builders are pure, React-free functions. Hooks, refs, and rendering belong in the adapter or the Cumulus screen.",
             },
             {
               group: ["**/state/**", "**/state"],
@@ -183,27 +183,27 @@ export default tseslint.config(
     },
   },
   {
-    // src/tango/internal/ holds material RECIPES (glass-surface,
+    // src/cumulus/internal/ holds material RECIPES (glass-surface,
     // control-treatment) — bespoke literal-heavy building blocks meant to be
-    // worn by Tango components, not reached into directly. Rendering a public
-    // Tango component (Button, InfoCard, SegmentedControl, …) from a legacy
+    // worn by Cumulus components, not reached into directly. Rendering a public
+    // Cumulus component (Button, InfoCard, SegmentedControl, …) from a legacy
     // screen is the sanctioned migration story and stays legal; a legacy
     // screen wearing a raw material itself bypasses the component layer
     // entirely and is not. Scoped to all of src/**, ignoring only the linted
-    // src/tango/** tier itself (which legitimately imports its own materials).
-    // Every screen outside src/tango consumes the public Tango API, so no
+    // src/cumulus/** tier itself (which legitimately imports its own materials).
+    // Every screen outside src/cumulus consumes the public Cumulus API, so no
     // legacy reach-in is baselined here.
     files: ["src/**/*.{ts,tsx}"],
-    ignores: ["src/tango/**"],
+    ignores: ["src/cumulus/**"],
     rules: {
       "no-restricted-imports": [
         "error",
         {
           patterns: [
             {
-              group: ["**/tango/internal/**", "**/tango/internal"],
+              group: ["**/cumulus/internal/**", "**/cumulus/internal"],
               message:
-                "src/tango/internal/ material recipes are not for external reach-in. Import a public Tango component instead, or migrate this screen onto the Tango tier — see the tango-migrate skill.",
+                "src/cumulus/internal/ material recipes are not for external reach-in. Import a public Cumulus component instead, or migrate this screen onto the Cumulus tier — see the cumulus-migrate skill.",
             },
           ],
         },

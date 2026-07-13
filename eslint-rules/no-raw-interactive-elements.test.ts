@@ -10,10 +10,10 @@ describe("toRepoRelativePosix (no-raw-interactive-elements)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/tango/screens/HomeScreen.tsx",
+        "/Users/x/quest_prototype/src/cumulus/screens/HomeScreen.tsx",
         "/Users/x/quest_prototype",
       ),
-    ).toBe("src/tango/screens/HomeScreen.tsx");
+    ).toBe("src/cumulus/screens/HomeScreen.tsx");
   });
 });
 
@@ -43,12 +43,12 @@ const ruleTester = new RuleTester({
   },
 });
 
-const SCREEN = "src/tango/screens/HomeScreen.tsx";
+const SCREEN = "src/cumulus/screens/HomeScreen.tsx";
 
 ruleTester.run("no-raw-interactive-elements", rule, {
   valid: [
     {
-      name: "composing Tango components is fine",
+      name: "composing Cumulus components is fine",
       filename: SCREEN,
       code: `const el = <Button size="md"><Pressable /></Button>;`,
     },
@@ -64,17 +64,17 @@ ruleTester.run("no-raw-interactive-elements", rule, {
     },
     {
       name: "components/ own native interactive elements",
-      filename: "src/tango/components/Button.tsx",
+      filename: "src/cumulus/components/Button.tsx",
       code: `const el = <button type="button" />;`,
     },
     {
       name: "primitives/ forward to native elements",
-      filename: "src/tango/primitives/Pressable.tsx",
+      filename: "src/cumulus/primitives/Pressable.tsx",
       code: `const el = <button />;`,
     },
     {
       name: "docs control panel may use native form controls",
-      filename: "src/tango/docs/ControlPanel.tsx",
+      filename: "src/cumulus/docs/ControlPanel.tsx",
       code: `const el = <select><option /></select>;`,
     },
     {
@@ -143,7 +143,7 @@ ruleTester.run("no-raw-interactive-elements", rule, {
     },
     {
       name: "the adapter layer is covered too",
-      filename: "src/screens/tango_adapters/HomeScreenAdapter.tsx",
+      filename: "src/screens/cumulus_adapters/HomeScreenAdapter.tsx",
       code: `const el = <button />;`,
       errors: [{ messageId: "rawInteractive" }],
     },

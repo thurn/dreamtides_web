@@ -1,7 +1,7 @@
 import path from "node:path";
 
 /**
- * Bans ad-hoc numeric `scale()` factors in Tango's `transform` values.
+ * Bans ad-hoc numeric `scale()` factors in Cumulus's `transform` values.
  *
  * Dreamtides has ONE press/hover feedback rule (Pressable.tsx): a control
  * scales DOWN on press by `PRESS_SCALE` (the `--press-scale` token) and UP on
@@ -13,8 +13,8 @@ import path from "node:path";
  * showcase zoom) is likewise a magic number that belongs behind a NAMED
  * constant, not inlined into a `scale()` string.
  *
- * SCOPE. Every file under `src/tango/`, EXCEPT
- *   - {@link EXEMPT_FILE} `src/tango/primitives/Pressable.tsx` — the ONE place
+ * SCOPE. Every file under `src/cumulus/`, EXCEPT
+ *   - {@link EXEMPT_FILE} `src/cumulus/primitives/Pressable.tsx` — the ONE place
  *     the `PRESS_SCALE` / `HOVER_SCALE` numeric literals are DEFINED; and
  *   - test files (`*.test.ts` / `*.test.tsx`) — a render test legitimately
  *     asserts against a CONCRETE rendered transform string
@@ -32,7 +32,7 @@ import path from "node:path";
  */
 
 /** Repo-relative POSIX path of the one file that DEFINES the press/hover factors. */
-const EXEMPT_FILE = "src/tango/primitives/Pressable.tsx";
+const EXEMPT_FILE = "src/cumulus/primitives/Pressable.tsx";
 
 /**
  * Matches a `scale(` / `scaleX(` / `scaleY(` call whose argument is a single
@@ -60,7 +60,7 @@ export function isGovernedFile(fileRelative) {
   if (fileRelative === EXEMPT_FILE || isTestFile(fileRelative)) {
     return false;
   }
-  return fileRelative.startsWith("src/tango/");
+  return fileRelative.startsWith("src/cumulus/");
 }
 
 /**
@@ -88,7 +88,7 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Ban ad-hoc numeric scale() factors in Tango transform values (all of src/tango/ except the Pressable.tsx definition file and test files). A press/hover scale must reference PRESS_SCALE / HOVER_SCALE or the --node-hover-scale token; any other bespoke scale must reference a named constant, so the factor never drifts and JS stays in lock-step with the CSS :active / :hover rules.",
+        "Ban ad-hoc numeric scale() factors in Cumulus transform values (all of src/cumulus/ except the Pressable.tsx definition file and test files). A press/hover scale must reference PRESS_SCALE / HOVER_SCALE or the --node-hover-scale token; any other bespoke scale must reference a named constant, so the factor never drifts and JS stays in lock-step with the CSS :active / :hover rules.",
     },
     schema: [],
     messages: {

@@ -191,18 +191,18 @@ Set to exactly `classic` to use the classic journey variant; any other value
 
 ## `ui`
 
-`parseRuntimeConfig` sets `runtimeConfig.uiVariant` to `"tango"` by default.
+`parseRuntimeConfig` sets `runtimeConfig.uiVariant` to `"cumulus"` by default.
 Set to exactly `legacy` to force the legacy UI for every screen; any other value
-(including empty or absent) keeps `uiVariant` at `"tango"`.
+(including empty or absent) keeps `uiVariant` at `"cumulus"`.
 
 `uiVariant` drives a per-screen implementation swap in `ScreenRouter`. Under
-`"tango"`, each screen renders its Tango design-system implementation when one
-exists (resolved through `src/screens/tango_adapters/registry.tsx`) and falls back to the
+`"cumulus"`, each screen renders its Cumulus design-system implementation when one
+exists (resolved through `src/screens/cumulus_adapters/registry.tsx`) and falls back to the
 legacy screen for any screen not yet migrated, so the app stays fully navigable
 during the migration. Because `ui` is a query parameter, it survives the
 address-bar path reflection (`useQuestUrlSync` preserves the query string) and so
 persists as you navigate within a run. `ScreenRouter` emits a `screen_rendered`
-log event on each navigation recording the variant, the screen, and whether Tango
+log event on each navigation recording the variant, the screen, and whether Cumulus
 served it.
 
 ## Dream Journey Debug Harness

@@ -6,7 +6,7 @@ import type {
 } from "react";
 import { useEffect, useState } from "react";
 import { cardImageUrl } from "../../data/card-database";
-import { DEFAULT_ART_CROP } from "../../tango/components/card/CardView";
+import { DEFAULT_ART_CROP } from "../../cumulus/components/card/CardView";
 import type { ArtCrop, CardData, FrozenCardData } from "../../types/cards";
 import type { BattleCardInstance } from "../types";
 import { selectEffectiveSparkForInstance, selectFigmentCount } from "../state/figments";

@@ -1,0 +1,294 @@
+/*
+ * Dream Atlas node + edge styles, owned by the Cumulus design system. Extracted
+ * from the local atlas screen (`src/atlas/atlas.css`) so `AtlasNode` and
+ * `AtlasEdge` carry their own presentation and render identically in the /cumulus
+ * doc site and in the live atlas screen.
+ *
+ * Everything is scoped under `.dream-atlas` (the atlas screen's root) so the
+ * generic class names (.node, .edge, ...) never collide with the rest of the
+ * app. The `--dt-*` design tokens these rules read are declared on the
+ * `.dream-atlas` root by the live screen and by Cumulus's `cumulus-tokens.css`
+ * under `.cumulus`; the /cumulus demo nests its `.dream-atlas` stage inside `.cumulus`
+ * so the tokens resolve in both contexts.
+ */
+
+/* ---- Connections ---- */
+.dream-atlas .edges {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.dream-atlas .edge {
+  fill: none;
+}
+.dream-atlas .edge-dim {
+  stroke: rgba(206, 192, 236, 0.92);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  /* A soft dark halo so the pale line stays legible where it crosses the
+     brighter node glows and the lighter centre of the wash. */
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.7));
+}
+.dream-atlas .edge-locked {
+  stroke: rgba(182, 154, 248, 0.9);
+  stroke-width: 3.5;
+  stroke-dasharray: 4 8;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.7));
+}
+.dream-atlas .edge-traveled {
+  /* Stroke is a per-edge userSpaceOnUse gradient set inline by AtlasEdge so it
+     survives horizontal/vertical orientations; see AtlasEdge.tsx. */
+  stroke-width: 5;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.55));
+}
+.dream-atlas .edge-open {
+  /* Stroke is a per-edge userSpaceOnUse gradient set inline by AtlasEdge. */
+  stroke-width: 4;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 8px var(--dt-accent-glow));
+}
+.dream-atlas .edge-open-flow {
+  stroke: #ede0ff;
+  stroke-width: 2;
+  stroke-dasharray: 2 16;
+  stroke-linecap: round;
+  animation: dream-atlas-flow 1s linear infinite;
+}
+@keyframes dream-atlas-flow {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+
+/* ---- Nodes ---- */
+.dream-atlas .nodes {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+.dream-atlas .node {
+  position: absolute;
+  /* Centre the node on its stage-space left/top through negative margins set
+     inline per node (-size/2), NOT `transform: translate(-50%,-50%)`: an
+     available node renders through Pressable, which owns the element transform
+     for its press/hover scale, so the centering must stay off transform to
+     compose cleanly. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* An available node renders as a native <button> through Pressable; strip the
+     browser's default button chrome so it reads exactly like the plain-div
+     nodes (mirrors the SiteNode reset). Harmless on the non-interactive div. */
+  appearance: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+}
+.dream-atlas .node-art {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  transition: transform 0.14s ease;
+}
+.dream-atlas .frame-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.dream-atlas .node-glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 74%;
+  height: 74%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.dream-atlas .node-completed .node-glow {
+  background: radial-gradient(closest-side, rgba(212, 160, 23, 0.22), transparent);
+  box-shadow: 0 0 26px 3px rgba(212, 160, 23, 0.45);
+}
+.dream-atlas .node-available {
+  cursor: pointer;
+}
+.dream-atlas .node-available .node-glow {
+  background: radial-gradient(closest-side, rgba(168, 85, 247, 0.32), transparent);
+  box-shadow: 0 0 32px 6px var(--dt-accent-glow);
+  animation: dream-atlas-pulse 2.6s ease-in-out infinite;
+}
+.dream-atlas .node-revealedLocked .node-glow {
+  box-shadow: 0 0 16px 2px rgba(124, 58, 237, 0.22);
+}
+.dream-atlas .node-unrevealed .node-glow {
+  box-shadow: 0 0 14px 2px rgba(80, 70, 110, 0.22);
+}
+.dream-atlas .node-boss .node-glow {
+  background: radial-gradient(closest-side, rgba(239, 68, 68, 0.3), transparent);
+  box-shadow: 0 0 42px 9px rgba(239, 68, 68, 0.5);
+  animation: dream-atlas-pulse 3.4s ease-in-out infinite;
+}
+@keyframes dream-atlas-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.dream-atlas .node-unreachable {
+  /* Fade every node the player can no longer reach (the view-model's
+     `isReachable === false`) — the passed-by siblings and any deeper node cut off
+     from the frontier. Dim via filter only (no opacity) so the node stays opaque
+     and keeps occluding the edges that pass under it; a translucent node lets the
+     lines show through and read as if drawn on top. */
+  filter: grayscale(0.9) brightness(0.42);
+}
+.dream-atlas .node-unreachable .node-glow {
+  display: none;
+}
+
+.dream-atlas .node-available[data-reveal-active="true"] .node-glow {
+  box-shadow: 0 0 42px 10px rgba(168, 85, 247, 0.85);
+}
+.dream-atlas .node-glow[data-ambient-paused="true"] {
+  animation-play-state: paused;
+}
+
+.dream-atlas .unrevealed-face {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+/* Fill the round frame's transparent centre with a solid grey disc so an
+   unrevealed node reads as a filled circle rather than an empty ring. */
+.dream-atlas .unrevealed-face::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 72%;
+  height: 72%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, #4a4658, #322e40);
+  z-index: 0;
+}
+.dream-atlas .unrevealed-face .frame-img {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- Node badges ----
+   Badge diameters and glyph sizes are a fixed fraction of the node's own
+   diameter (`--atlas-node-size`, set inline per node by AtlasNode), so every
+   badge scales in lock-step with its node, then times `--atlas-badge-scale`
+   (also set inline per node) so a profile can enlarge the badges on top of
+   that. The base fractions are the desktop badge sizes divided by the desktop
+   node diameter (132px); with the desktop scale of 1 desktop badges are
+   pixel-unchanged. The mobile profile draws larger nodes *and* sets a larger
+   badge scale, so the site / dreamsign icons stay legibly large once the
+   portrait viewport scales the whole stage down. */
+.dream-atlas .site-badges {
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  gap: 5px;
+}
+.dream-atlas .site-badge {
+  width: calc(var(--atlas-node-size) * 0.27 * var(--atlas-badge-scale, 1));
+  height: calc(var(--atlas-node-size) * 0.27 * var(--atlas-badge-scale, 1));
+  border-radius: 50%;
+  background: var(--badge-disc-gradient);
+  border: 1px solid var(--dt-line-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dt-accent-strong);
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.55);
+}
+.dream-atlas .site-badge-glyph {
+  font-size: calc(var(--atlas-node-size) * 0.16 * var(--atlas-badge-scale, 1));
+  line-height: 1;
+}
+.dream-atlas .boss-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: calc(var(--atlas-node-size) * 0.23);
+  height: calc(var(--atlas-node-size) * 0.23);
+  border-radius: 50%;
+  z-index: 6;
+  background: radial-gradient(closest-side, #ef4444, #7f1d1d);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(var(--atlas-node-size) * 0.12);
+  border: 2px solid #0a0612;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.8);
+}
+.dream-atlas .known-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: calc(var(--atlas-node-size) * 0.35 * var(--atlas-badge-scale, 1));
+  height: calc(var(--atlas-node-size) * 0.35 * var(--atlas-badge-scale, 1));
+  border-radius: 50%;
+  z-index: 7;
+  background: var(--badge-disc-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--dt-gold);
+  box-shadow: 0 0 14px rgba(250, 204, 21, 0.6);
+}
+.dream-atlas .known-badge img {
+  width: calc(var(--atlas-node-size) * 0.26 * var(--atlas-badge-scale, 1));
+  height: calc(var(--atlas-node-size) * 0.26 * var(--atlas-badge-scale, 1));
+  object-fit: contain;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
+  pointer-events: none;
+}
+.dream-atlas .known-badge::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 var(--dt-gold-glow);
+  animation: dream-atlas-signpulse 2.4s ease-out infinite;
+}
+@keyframes dream-atlas-signpulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--dt-gold-glow);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 10px rgba(250, 204, 21, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dream-atlas .node-glow,
+  .dream-atlas .known-badge::after,
+  .dream-atlas .edge-open-flow {
+    animation: none !important;
+  }
+}

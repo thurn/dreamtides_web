@@ -1,0 +1,7 @@
+{
+  "name": "CumulusMvp.TestSupport",
+  "rootNamespace": "CumulusMvp.Tests.Support",
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ]
+}

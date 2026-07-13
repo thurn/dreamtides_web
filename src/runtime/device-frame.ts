@@ -28,7 +28,7 @@
 // On real hardware no `deviceFrame` param is present, nothing is published, and
 // the index.css `env()` defaults apply unchanged.
 
-import { TOKENS } from "../tango/primitives/tokens";
+import { TOKENS } from "../cumulus/primitives/tokens";
 
 /** A rectangle (CSS px) locating the screen cutout within the screen. */
 export interface DisplayCutout {
@@ -55,7 +55,7 @@ export interface DeviceFrame {
 }
 
 // The published CSS var names are constrained to `keyof typeof TOKENS`, so
-// renaming a token in tango-tokens.css (which regenerates tokens.ts) turns a
+// renaming a token in cumulus-tokens.css (which regenerates tokens.ts) turns a
 // stale name here into a compile error instead of a silent no-op injection.
 const SAFE_AREA_VARS = {
   top: "--safe-area-inset-top",

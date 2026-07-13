@@ -82,7 +82,7 @@ Path-based URLs need every path to serve the app shell:
   paths.
 
 `src/main.tsx` dispatches on `window.location.pathname` for the standalone tool
-routes (`/cards`, `/editor`, `/tango`, `/dreamscapes`, …); every other path —
+routes (`/cards`, `/editor`, `/cumulus`, `/dreamscapes`, …); every other path —
 including all quest paths above — renders the quest app. Quest paths are chosen
 not to collide with those tool routes (note the quest `/dreamscape/<layer>-<biome>` is
 singular, distinct from the `/dreamscapes` dreamscape editor).

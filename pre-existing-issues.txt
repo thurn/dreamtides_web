@@ -1,8 +1,8 @@
-Tango sweep findings filed July 8, 2026
+Cumulus sweep findings filed July 8, 2026
 
-- `src/tango/screens/DreamsignRevelationScreen.tsx:341` hand-rolls a purge
+- `src/cumulus/screens/DreamsignRevelationScreen.tsx:341` hand-rolls a purge
   replacement dialog shell (`role="dialog"`, scrim, panel, title/body/actions)
-  alongside the shared `GlassDialog` shell (`src/tango/components/overlay/GlassDialog.tsx:86`).
+  alongside the shared `GlassDialog` shell (`src/cumulus/components/overlay/GlassDialog.tsx:86`).
   Decide whether `GlassDialog` needs footer/action affordances or whether this
   screen can carry the replacement grid and actions in the existing body slot.
 
@@ -12,28 +12,28 @@ Tango sweep findings filed July 8, 2026
   `src/screens/DuplicationSiteScreen.tsx:279`, with only
   `src/screens/site-leave-control.css:1` shared. Introduce a small
   product-screen corner close control or a screen-chrome wrapper, then replace
-  the repeated `<div className="tango site-leave-control"><IconButton ... /></div>`
+  the repeated `<div className="cumulus site-leave-control"><IconButton ... /></div>`
   call sites.
 
 - `SpeechBubble` exposes and demos a right-arrow branch at
-  `src/tango/components/overlay/SpeechBubble.tsx:29` and
-  `src/tango/docs/demos/speech-bubble.tsx:40`, but the only production caller is
+  `src/cumulus/components/overlay/SpeechBubble.tsx:29` and
+  `src/cumulus/docs/demos/speech-bubble.tsx:40`, but the only production caller is
   the Dreamsign Revelation guide composition at
-  `src/tango/screens/DreamsignRevelationScreen.tsx:185`, which passes
+  `src/cumulus/screens/DreamsignRevelationScreen.tsx:185`, which passes
   `arrowSide="left"`. Decide whether the right-arrow path is a planned surface
   or collapse the component and demo to the shipped left-arrow composition.
 
 - `QuestStatusBar` documents both `compact` and `grand` sizes at
-  `src/tango/docs/demos/quest-status-bar.tsx:50`, while its demo defaults only
-  to `compact` at `src/tango/docs/demos/quest-status-bar.tsx:75`.
+  `src/cumulus/docs/demos/quest-status-bar.tsx:50`, while its demo defaults only
+  to `compact` at `src/cumulus/docs/demos/quest-status-bar.tsx:75`.
   Production desktop screens use `size={isDesktop ? "grand" : "compact"}` in
-  `src/tango/screens/AtlasScreen.tsx:99`, `src/tango/screens/DreamscapeScreen.tsx:124`,
-  and `src/tango/screens/DraftScreen.tsx:290`. Add a grand demo/mockup state or
+  `src/cumulus/screens/AtlasScreen.tsx:99`, `src/cumulus/screens/DreamscapeScreen.tsx:124`,
+  and `src/cumulus/screens/DraftScreen.tsx:290`. Add a grand demo/mockup state or
   make the demo stage responsive enough to show the desktop state.
 
 - `GlassDialog` is documented by a bare component demo at
-  `src/tango/docs/demos/glass-dialog.tsx:21`, while its production integration
-  surface is `StartingDeckOverlay` at `src/tango/screens/StartingDeckOverlay.tsx:105`.
+  `src/cumulus/docs/demos/glass-dialog.tsx:21`, while its production integration
+  surface is `StartingDeckOverlay` at `src/cumulus/screens/StartingDeckOverlay.tsx:105`.
   Add an integration demo or fixture that exercises the shipped overlay contract
   (`cutoutAwareClose`, roomy `wide`, card-grid and empty states), or document why
   the bare shell is the canonical catalog surface.
@@ -41,15 +41,15 @@ Tango sweep findings filed July 8, 2026
 - Several one-consumer catalog entries need an adoption decision:
   `ResourceChip`, `GlassButton`, `SpeechBubble`, `SegmentedControl`,
   `TideDisc`, `AtlasNodeReveal`, and `AtlasMap` each report one real consumer
-  via `scripts/lib/tango-consumers.mjs`. Document the single-screen
+  via `scripts/lib/cumulus-consumers.mjs`. Document the single-screen
   specialization, mark planned surfaces as incubating, or fold screen-local
   components into their owning screen modules.
 
-- High-import Tango helper modules act like public primitives without generated
-  references: `src/tango/primitives/art.ts` (~13 imports),
-  `src/tango/components/atlas/atlas-display.ts` (~12),
-  `src/tango/components/card/card-aspect.ts` (~6), and
-  `src/tango/primitives/color.ts` (~5). Add primitive/helper reference pages or
+- High-import Cumulus helper modules act like public primitives without generated
+  references: `src/cumulus/primitives/art.ts` (~13 imports),
+  `src/cumulus/components/atlas/atlas-display.ts` (~12),
+  `src/cumulus/components/card/card-aspect.ts` (~6), and
+  `src/cumulus/primitives/color.ts` (~5). Add primitive/helper reference pages or
   route consumers through documented components so these APIs are not discovered
   only by grep.
 
@@ -95,25 +95,25 @@ Task group 5 assessment — classic Journey event migration remains deprecated-p
 Promotion cleanup — fixed inherited lint issue
 
 - After rebasing this branch onto `master`, `npm run lint` failed in
-  `src/tango/components/card/CardGalleryPanel.tsx` because the rebased base
+  `src/cumulus/components/card/CardGalleryPanel.tsx` because the rebased base
   carried an unused `scrollable` local. The promotion commit removes that unused
   local so the rebased branch can pass the required checks.
 
-Tango Desktop Dreamsign Revelation QA — missing utility menu
+Cumulus Desktop Dreamsign Revelation QA — missing utility menu
 
-- Desktop Dreamsign Revelation renders its Tango Quest Status Bar but no gear
+- Desktop Dreamsign Revelation renders its Cumulus Quest Status Bar but no gear
   utility control. `src/App.tsx` includes `DreamsignRevelation` in
-  `tangoSiteSuppressesLegacyHud`, while `tangoSiteUsesQuestMenu` includes that
+  `cumulusSiteSuppressesLegacyHud`, while `cumulusSiteUsesQuestMenu` includes that
   site only below the desktop breakpoint, leaving the desktop screen without
   either chrome owner. Route the desktop site through the shared quest menu so
-  it satisfies Tango's required screen chrome contract.
+  it satisfies Cumulus's required screen chrome contract.
 
-Tango Desktop Dreamcaller Select QA — 1280px triptych wraps
+Cumulus Desktop Dreamcaller Select QA — 1280px triptych wraps
 
 - At a 1280×800 viewport, the three fixed 400px Dreamcaller columns plus two
   24px gaps and the outer gutters exceed the available content width, so the
   third column wraps to a second row below the viewport. The desktop layout in
-  `src/tango/screens/quest-start-desktop.tsx` should either use a wider desktop
+  `src/cumulus/screens/quest-start-desktop.tsx` should either use a wider desktop
   breakpoint or scale its fixed column geometry before the triptych wraps.
 
 Checks emulator verification — fixed JSON-unsafe optional Dreamcaller metadata
@@ -135,16 +135,16 @@ Dream Merchant v2 browser QA — fixed card-source debug update loop
 
 Cumulus verification README — inconsistent GPU metric count
 
-- `cumulus/Assets/TangoMvp/README.md` describes the current render-evidence
+- `cumulus/Assets/CumulusMvp/README.md` describes the current render-evidence
   contract as 27 metrics in two places and 29 metrics in another. The
-  authoritative `cumulus/scripts/tango_evidence.py` validator currently defines
+  authoritative `cumulus/scripts/cumulus_evidence.py` validator currently defines
   29 metrics and 20 captures. Keep the prose derived from the validator contract
   when the point-lighting work expands that evidence set.
 
 Cumulus clean PlayMode gate — wall-clock-sensitive panel travel assertion
 
 - On the first clean-library verification of point-lit glass, unrelated
-  `TangoPanelTravelTests.ToggleDestination_ReachesBothExactAnchorsInReferenceDuration`
+  `CumulusPanelTravelTests.ToggleDestination_ReachesBothExactAnchorsInReferenceDuration`
   measured the 420 ms travel at 601 ms after all glass tests passed. The same
   full PlayMode assembly had passed repeatedly against the warm library. The
   test compares wall-clock coroutine duration with a ±20 ms tolerance, so an

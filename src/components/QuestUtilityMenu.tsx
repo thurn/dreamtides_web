@@ -8,13 +8,13 @@ import {
   type SavedQuestSummary,
 } from "../state/saved-quests";
 import { useQuest } from "../state/quest-context";
-import { Pressable } from "../tango/primitives/Pressable";
-import { token } from "../tango/primitives/tokens";
+import { Pressable } from "../cumulus/primitives/Pressable";
+import { token } from "../cumulus/primitives/tokens";
 import type { QuestState } from "../types/quest";
 
 type MenuView = "root" | "load";
 type LoadStatus = "idle" | "loading" | "ready" | "error";
-type QuestUtilityMenuVariant = "hud" | "tango";
+type QuestUtilityMenuVariant = "hud" | "cumulus";
 
 export interface QuestUtilityMenuAction {
   id: string;
@@ -288,7 +288,7 @@ export function QuestUtilityMenu({
           style={
             statusStyle ??
             (statusClassName === undefined
-              ? defaultTangoStatusStyle(statusAnchor)
+              ? defaultCumulusStatusStyle(statusAnchor)
               : undefined)
           }
         >
@@ -432,7 +432,7 @@ function LoadSubmenu({
   return (
     <div data-testid={testId} style={{ display: "flex", flexDirection: "column", gap: 2 }}>
       <MenuActionRow
-        variant="tango"
+        variant="cumulus"
         action={{ id: "back", icon: "bxf bx-chevron-left", label: "Back", onClick: onBack }}
         onClick={onBack}
       />
@@ -479,7 +479,7 @@ function LoadSubmenu({
   );
 }
 
-function defaultTangoStatusStyle(anchor: "left" | "right"): CSSProperties {
+function defaultCumulusStatusStyle(anchor: "left" | "right"): CSSProperties {
   return {
     position: "absolute",
     [anchor]: 0,

@@ -94,8 +94,8 @@
   letter-spacing: 0.12em;
 }
 
-/* The connection (edge) and node styles live in the Tango design system
-   (`src/tango/components/atlas.css`, imported by `AtlasNode`/`AtlasEdge`). They
+/* The connection (edge) and node styles live in the Cumulus design system
+   (`src/cumulus/components/atlas.css`, imported by `AtlasNode`/`AtlasEdge`). They
    remain scoped under `.dream-atlas` so they apply to this screen unchanged. */
 
 /* ---- Title block ---- */

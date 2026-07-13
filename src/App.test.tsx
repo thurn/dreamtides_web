@@ -91,7 +91,7 @@ const deckViewerMock = vi.fn<(props: DeckViewerMockProps) => ReactNode>(
   ),
 );
 
-vi.mock("./screens/tango_adapters/DesktopDeckViewerAdapter", () => ({
+vi.mock("./screens/cumulus_adapters/DesktopDeckViewerAdapter", () => ({
   DesktopDeckViewerAdapter: (props: DeckViewerMockProps) => deckViewerMock(props),
 }));
 
@@ -123,7 +123,7 @@ const startingDeckModalMock = vi.fn<
   <div data-starting-deck-open={String(isOpen)}>Starting Deck Overlay</div>
 ));
 
-vi.mock("./screens/tango_adapters/StartingDeckOverlayAdapter", () => ({
+vi.mock("./screens/cumulus_adapters/StartingDeckOverlayAdapter", () => ({
   StartingDeckOverlayAdapter: (props: StartingDeckOverlayMockProps) =>
     startingDeckModalMock(props),
 }));
@@ -716,7 +716,7 @@ describe("QuestApp", () => {
     });
   });
 
-  it("hides the shared HUD on the desktop Tango draft site", () => {
+  it("hides the shared HUD on the desktop Cumulus draft site", () => {
     setQuestState(
       makeState({
         atlas: {
@@ -766,7 +766,7 @@ describe("QuestApp", () => {
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "tango",
+          uiVariant: "cumulus",
         }}
       />,
     );

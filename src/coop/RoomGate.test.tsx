@@ -65,7 +65,7 @@ function runtimeConfig(overrides: Partial<RuntimeConfig> = {}): RuntimeConfig {
     gameId: "abc123",
     databaseMode: "emulator",
     journeyVariant: "v2",
-    uiVariant: "tango",
+    uiVariant: "cumulus",
     poolVariant: "tides4",
     draftMode: "pool",
     fresh20PackSize: undefined,

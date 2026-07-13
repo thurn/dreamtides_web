@@ -10,40 +10,40 @@ const NAMED_REVEAL_COMPONENTS = new Set(["GameCard", "CompactGameCardRow", "Info
 const GENERIC_REVEAL_WRAPPERS = new Set(["HoverPopover", "RevealPopover", "EntityReveal", "GenericReveal", "RevealWrapper", "EntityRevealWrapper"]);
 
 const CONTEXT_COMPONENTS = [
-  "src/tango/components/atlas/AtlasNode.tsx",
-  "src/tango/components/card/CardStatOrb.tsx",
-  "src/tango/components/card/CardGalleryPanel.tsx",
-  "src/tango/components/card/DreamsignGalleryPanel.tsx",
-  "src/tango/components/card/CardView.tsx",
-  "src/tango/components/card/CompactGameCardRow.tsx",
-  "src/tango/components/card/GlossaryTerm.tsx",
-  "src/tango/components/controls/PipBadge.tsx",
-  "src/tango/components/controls/TransfigurationFormButton.tsx",
-  "src/tango/components/dreamscape/SiteNode.tsx",
-  "src/tango/components/hud/DreamcallerPortrait.tsx",
-  "src/tango/components/hud/Dreamsign.tsx",
-  "src/tango/components/hud/QuestStatusBar.tsx",
-  "src/tango/components/hud/ResourceChip.tsx",
-  "src/tango/components/hud/TideDisc.tsx",
-  "src/tango/components/hud/TideSelectionButton.tsx",
+  "src/cumulus/components/atlas/AtlasNode.tsx",
+  "src/cumulus/components/card/CardStatOrb.tsx",
+  "src/cumulus/components/card/CardGalleryPanel.tsx",
+  "src/cumulus/components/card/DreamsignGalleryPanel.tsx",
+  "src/cumulus/components/card/CardView.tsx",
+  "src/cumulus/components/card/CompactGameCardRow.tsx",
+  "src/cumulus/components/card/GlossaryTerm.tsx",
+  "src/cumulus/components/controls/PipBadge.tsx",
+  "src/cumulus/components/controls/TransfigurationFormButton.tsx",
+  "src/cumulus/components/dreamscape/SiteNode.tsx",
+  "src/cumulus/components/hud/DreamcallerPortrait.tsx",
+  "src/cumulus/components/hud/Dreamsign.tsx",
+  "src/cumulus/components/hud/QuestStatusBar.tsx",
+  "src/cumulus/components/hud/ResourceChip.tsx",
+  "src/cumulus/components/hud/TideDisc.tsx",
+  "src/cumulus/components/hud/TideSelectionButton.tsx",
 ];
 const IDENTITY_COMPONENTS = CONTEXT_COMPONENTS.filter((file) => !file.endsWith("CardView.tsx") && !file.endsWith("CompactGameCardRow.tsx"));
 const APPROVED_INTERNAL_IMPORTS = new Map();
-for (const file of CONTEXT_COMPONENTS) APPROVED_INTERNAL_IMPORTS.set(`${file}|src/tango/internal/reveal/context`, new Set(["useRevealSource"]));
-for (const file of IDENTITY_COMPONENTS) APPROVED_INTERNAL_IMPORTS.set(`${file}|src/tango/internal/reveal/identity`, new Set(["revealEntityId"]));
-APPROVED_INTERNAL_IMPORTS.set("src/tango/TangoRoot.tsx|src/tango/internal/reveal/context", new Set(["RevealCoordinatorProvider"]));
-APPROVED_INTERNAL_IMPORTS.set("src/tango/components/atlas/AtlasNode.tsx|src/tango/internal/reveal/model", new Set(["RevealInfoCardModel", "RevealSpec"]));
-APPROVED_INTERNAL_IMPORTS.set("src/tango/components/hud/DreamcallerPortrait.tsx|src/tango/internal/reveal/model", new Set(["RevealSpec"]));
+for (const file of CONTEXT_COMPONENTS) APPROVED_INTERNAL_IMPORTS.set(`${file}|src/cumulus/internal/reveal/context`, new Set(["useRevealSource"]));
+for (const file of IDENTITY_COMPONENTS) APPROVED_INTERNAL_IMPORTS.set(`${file}|src/cumulus/internal/reveal/identity`, new Set(["revealEntityId"]));
+APPROVED_INTERNAL_IMPORTS.set("src/cumulus/CumulusRoot.tsx|src/cumulus/internal/reveal/context", new Set(["RevealCoordinatorProvider"]));
+APPROVED_INTERNAL_IMPORTS.set("src/cumulus/components/atlas/AtlasNode.tsx|src/cumulus/internal/reveal/model", new Set(["RevealInfoCardModel", "RevealSpec"]));
+APPROVED_INTERNAL_IMPORTS.set("src/cumulus/components/hud/DreamcallerPortrait.tsx|src/cumulus/internal/reveal/model", new Set(["RevealSpec"]));
 
 const PORTAL_OWNER_ALLOWLIST = new Set([
-  "src/tango/internal/reveal/RevealOverlay.tsx",
-  "src/tango/components/controls/Select.tsx",
+  "src/cumulus/internal/reveal/RevealOverlay.tsx",
+  "src/cumulus/components/controls/Select.tsx",
   "src/battle/components/BattleContextMenu.tsx",
   "src/debug/SignatureDecksApp.tsx",
 ]);
 const APPROVED_PROP_TYPE_IMPORTS = new Map([
-  ["src/tango/components/card/CardView|GameCardProps", "GameCard"],
-  ["src/tango/components/hud/QuestStatusBar|QuestStatusBarProps", "QuestStatusBar"],
+  ["src/cumulus/components/card/CardView|GameCardProps", "GameCard"],
+  ["src/cumulus/components/hud/QuestStatusBar|QuestStatusBarProps", "QuestStatusBar"],
 ]);
 
 function repoPath(filename, cwd) { return path.relative(cwd, filename).split(path.sep).join("/"); }
@@ -52,7 +52,7 @@ function resolvedImport(filename, source) {
   if (source.startsWith("src/")) return stripExtension(path.posix.normalize(source));
   return stripExtension(path.posix.normalize(path.posix.join(path.posix.dirname(filename), source)));
 }
-function isInternalTest(filename) { return filename.startsWith("src/tango/internal/reveal/") || /\.test\.[cm]?[jt]sx?$/.test(filename); }
+function isInternalTest(filename) { return filename.startsWith("src/cumulus/internal/reveal/") || /\.test\.[cm]?[jt]sx?$/.test(filename); }
 function jsxName(node) { return node?.type === "JSXIdentifier" ? node.name : node?.type === "JSXMemberExpression" ? jsxName(node.property) : ""; }
 function keyName(node) {
   if (!node || node.computed) return "";
@@ -90,9 +90,9 @@ export default {
   meta: {
     type: "problem", schema: [],
     messages: {
-      internalImport: "This file/import relationship is not approved for Tango reveal internals. Named semantic components may import only their explicitly assigned coordinator symbols.",
+      internalImport: "This file/import relationship is not approved for Cumulus reveal internals. Named semantic components may import only their explicitly assigned coordinator symbols.",
       infoCardStatic: "InfoCard is visual content only; interaction statics are forbidden.",
-      genericWrapper: "Generic reveal wrappers are forbidden. Use a named semantic Tango component or static content.",
+      genericWrapper: "Generic reveal wrappers are forbidden. Use a named semantic Cumulus component or static content.",
       arbitraryContent: "Reveal content must be strict coordinator data, not an arbitrary ReactNode/content slot.",
       directPortal: "This module is not an approved portal owner. Entity reveals portal only through the internal coordinator.",
       mechanicalProp: "Reveal placement, timing, anchor, and portal mechanics are coordinator-owned.",
@@ -178,7 +178,7 @@ export default {
 
     function checkInternalImport(node, source) {
       const resolved = resolvedImport(filename, source);
-      if (!resolved.startsWith("src/tango/internal/reveal/")) return;
+      if (!resolved.startsWith("src/cumulus/internal/reveal/")) return;
       const approved = APPROVED_INTERNAL_IMPORTS.get(`${filename}|${resolved}`);
       const imported = node.specifiers.map((specifier) => specifier.type === "ImportSpecifier" ? String(specifier.imported.name ?? specifier.imported.value) : "*");
       if (!approved || imported.some((name) => !approved.has(name))) context.report({ node, messageId: "internalImport" });
@@ -187,7 +187,7 @@ export default {
 
     function checkInternalBoundary(node, source) {
       const resolved = resolvedImport(filename, source);
-      if (resolved.startsWith("src/tango/internal/reveal/")) {
+      if (resolved.startsWith("src/cumulus/internal/reveal/")) {
         context.report({ node, messageId: "internalImport" });
       }
     }

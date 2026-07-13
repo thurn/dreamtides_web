@@ -9,14 +9,14 @@ import "./vendor/boxicons/boxicons-filled.css";
 // no matching glyph. Self-hosted via the bundled package, not a CDN.
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "./index.css";
-// Tango design tokens ship on every entry so named components and the root
+// Cumulus design tokens ship on every entry so named components and the root
 // entity-reveal coordinator resolve the same semantic surface vocabulary.
-import "./tango/primitives/tango-tokens.css";
-import "./tango/primitives/legibility.css";
+import "./cumulus/primitives/cumulus-tokens.css";
+import "./cumulus/primitives/legibility.css";
 import CardEditorApp from "./editor/CardEditorApp";
 import { verifyFonts } from "./runtime/verify-fonts";
 import { applyDeviceFrameFromSearch } from "./runtime/device-frame";
-import { TangoRoot } from "./tango/TangoRoot";
+import { CumulusRoot } from "./cumulus/CumulusRoot";
 
 // Screenshot mock-ups load the app in an iframe with no physical display
 // cutout, so `env(safe-area-inset-*)` reads 0. When the device-screenshot tool
@@ -35,7 +35,7 @@ const root = createRoot(document.getElementById("root")!);
 function renderStrict(children: ReactNode) {
   root.render(
     <StrictMode>
-      <TangoRoot>{children}</TangoRoot>
+      <CumulusRoot>{children}</CumulusRoot>
     </StrictMode>,
   );
 }
@@ -102,9 +102,9 @@ if (pathname === "/editor" || pathname === "/cards") {
     "./debug/SignatureDecksApp"
   );
   renderStrict(<SignatureDecksApp />);
-} else if (pathname === "/tango") {
-  const { default: TangoApp } = await import("./tango/docs/TangoApp");
-  renderStrict(<TangoApp />);
+} else if (pathname === "/cumulus") {
+  const { default: CumulusApp } = await import("./cumulus/docs/CumulusApp");
+  renderStrict(<CumulusApp />);
 } else {
   // The dev card/figment/config data hot-reload plugins (see vite.config.ts)
   // emit targeted custom HMR events instead of a full reload, so that saving in
@@ -136,7 +136,7 @@ if (pathname === "/editor" || pathname === "/cards") {
     import("./components/HudDreamsignLayoutDemo"),
     import("./journeys/ui/JourneyHoverCardDemo"),
     import("./components/TransfigurationCardDemo"),
-    import("./tango/screens/devtools/DeviceFrameDemo"),
+    import("./cumulus/screens/devtools/DeviceFrameDemo"),
     import("./screens/devtools/EntityRevealConformanceDemo"),
     import("./runtime/runtime-config"),
   ]);

@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
-import { CompactGameCardRow } from "../tango/components/card/CompactGameCardRow";
+import { CompactGameCardRow } from "../cumulus/components/card/CompactGameCardRow";
 import {
   OFFERING_ACCENT,
   OfferingAcceptButton,
@@ -17,7 +17,7 @@ import {
 } from "../draft/draft-engine";
 import type { DraftState } from "../types/draft";
 import type { CardData } from "../types/cards";
-import { CARD_ASPECT_RATIO } from "../tango/components/card/card-aspect";
+import { CARD_ASPECT_RATIO } from "../cumulus/components/card/card-aspect";
 import { DRAFT_OFFER_CARD_WIDTH } from "../components/card-size";
 import { logEvent } from "../logging";
 

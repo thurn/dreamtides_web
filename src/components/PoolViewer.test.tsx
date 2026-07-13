@@ -15,7 +15,7 @@ import type { DraftRecord } from "../data/cards-v2-database";
 import type { PoolVariant } from "../draft/pool/types";
 import { logEvent } from "../logging";
 import { PoolViewer } from "./PoolViewer";
-import { TangoRoot } from "../tango/TangoRoot";
+import { CumulusRoot } from "../cumulus/CumulusRoot";
 
 vi.mock("../logging", () => ({
   logEvent: vi.fn(),
@@ -142,7 +142,7 @@ function mount(element: ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(<TangoRoot>{element}</TangoRoot>);
+    root.render(<CumulusRoot>{element}</CumulusRoot>);
   });
   return { container, root };
 }

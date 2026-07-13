@@ -1,11 +1,11 @@
 import path from "node:path";
-import { CONTAINER_COMPONENTS } from "./tango-containers.js";
+import { CONTAINER_COMPONENTS } from "./cumulus-containers.js";
 
 /**
- * Keeps Tango component APIs strict (see commit a7cd8d76 and the "Strict,
- * Controlled APIs" principle in the /tango Design Philosophy).
+ * Keeps Cumulus component APIs strict (see commit a7cd8d76 and the "Strict,
+ * Controlled APIs" principle in the /cumulus Design Philosophy).
  *
- * A Tango component exposes only a small, strongly-typed surface — enumerated
+ * A Cumulus component exposes only a small, strongly-typed surface — enumerated
  * variants/sizes and named content slots. Props that let a caller bypass the
  * design system with arbitrary, uncontrolled customization are banned. This
  * rule flags the shapes that re-open that escape hatch on a `*Props` type:
@@ -37,18 +37,18 @@ import { CONTAINER_COMPONENTS } from "./tango-containers.js";
  * The rule fires only on TYPE DECLARATIONS whose name ends in `Props`, so it
  * never touches the many internal `const s: CSSProperties = {…}` locals or
  * module-scope style helpers a component uses to build its own fixed
- * appearance. It is scoped to `src/tango/components/` — the styled public
- * component surface. `src/tango/primitives/` is deliberately excluded: a
+ * appearance. It is scoped to `src/cumulus/components/` — the styled public
+ * component surface. `src/cumulus/primitives/` is deliberately excluded: a
  * primitive like `Pressable` is a transparent interaction MECHANISM whose whole
  * job is to forward every DOM prop (`...rest`: onClick, aria-*, style, …) onto
  * the element it wraps, so it legitimately extends `HTMLAttributes`. Primitives
- * are instead guarded by `scripts/tango-strict-api.contract.test.mjs`, which
+ * are instead guarded by `scripts/cumulus-strict-api.contract.test.mjs`, which
  * asserts on the react-docgen surface (inherited DOM props are filtered out, so
  * only an OWN escape-hatch prop on a primitive would fail).
  *
  * Adding a NEW strict prop (an enumerated variant or a single named data value
  * like an accent color) is always fine; only these arbitrary-customization
- * shapes are banned. Files outside `src/tango/components/` are a no-op.
+ * shapes are banned. Files outside `src/cumulus/components/` are a no-op.
  */
 
 /**
@@ -59,7 +59,7 @@ import { CONTAINER_COMPONENTS } from "./tango-containers.js";
  * its own sub-components. `primitives/` is deliberately excluded (a primitive is
  * a transparent DOM-forwarding mechanism; it is guarded by the contract test).
  */
-const SURFACE_PREFIXES = ["src/tango/components/", "src/tango/screens/"];
+const SURFACE_PREFIXES = ["src/cumulus/components/", "src/cumulus/screens/"];
 
 /** Member names that are an arbitrary-style/appearance passthrough. */
 const BANNED_MEMBER_NAMES = new Set(["style", "className"]);
@@ -72,11 +72,11 @@ const BANNED_MEMBER_NAMES = new Set(["style", "className"]);
  * file that declares both a container and a leaf `*Props` (e.g. InfoCard.tsx,
  * which owns both the leaf `InfoCardProps` and the wrapper `PressPopoverProps` /
  * `PressInfoProps`) is judged per-declaration. The membership lives in
- * `tango-containers.js` (shared with the contract test so the two can't drift);
+ * `cumulus-containers.js` (shared with the contract test so the two can't drift);
  * add a NEW entry there only for a genuine wrapper — the point is to force that
- * to be a deliberate decision. `src/tango/primitives/` (e.g. `Pressable`) is out
+ * to be a deliberate decision. `src/cumulus/primitives/` (e.g. `Pressable`) is out
  * of this rule's scope entirely; primitives are transparent DOM-forwarding
- * mechanisms and are guarded by scripts/tango-strict-api.contract.test.mjs.
+ * mechanisms and are guarded by scripts/cumulus-strict-api.contract.test.mjs.
  */
 export const CONTAINER_PROPS_TYPES = new Set(
   CONTAINER_COMPONENTS.map((name) => `${name}Props`),
@@ -201,18 +201,18 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Keep Tango component *Props APIs strict: no style/className/CSSProperties passthrough, no DOM-attribute extension, no index signatures.",
+        "Keep Cumulus component *Props APIs strict: no style/className/CSSProperties passthrough, no DOM-attribute extension, no index signatures.",
     },
     schema: [],
     messages: {
       styleMember:
-        "Tango components don't take a `{{name}}` prop — that re-opens the arbitrary-customization escape hatch. Appearance is the design system's; wrap the component in your own element for layout.",
+        "Cumulus components don't take a `{{name}}` prop — that re-opens the arbitrary-customization escape hatch. Appearance is the design system's; wrap the component in your own element for layout.",
       cssPropertiesMember:
         "Prop `{{name}}` is typed CSSProperties — an arbitrary inline-style passthrough. Expose a strict prop instead (an enumerated variant/role, or a single named data value like an accent color), or move the styling inside the component.",
       domAttributesHeritage:
-        "A Tango *Props type must not extend or intersect the DOM-attribute type `{{type}}` — that spreads every HTML attribute back into the API. Enumerate the exact props you support.",
+        "A Cumulus *Props type must not extend or intersect the DOM-attribute type `{{type}}` — that spreads every HTML attribute back into the API. Enumerate the exact props you support.",
       indexSignature:
-        "An index signature lets a Tango *Props type accept arbitrary keys. List the exact props instead.",
+        "An index signature lets a Cumulus *Props type accept arbitrary keys. List the exact props instead.",
       childrenProp:
         "Only container components (a card / pressable / panel wrapper) may take `children`. `{{type}}` isn't in the container allowlist — render its content from strict, typed props (a resolved string, a RichText model, an enumerated variant), or add `{{type}}` to CONTAINER_PROPS_TYPES if it really is a wrapper.",
       reactNodeProp:
@@ -232,7 +232,7 @@ const rule = {
       return {};
     }
     // Skip `__*__` fixtures / internal helpers (e.g. __docgen_fixture__.tsx),
-    // matching generate-tango-metadata.mjs — they are not the public surface and
+    // matching generate-cumulus-metadata.mjs — they are not the public surface and
     // deliberately exercise shapes the real components must never expose.
     const basename = fileRelative.slice(fileRelative.lastIndexOf("/") + 1);
     if (/^__.*__/.test(basename)) {

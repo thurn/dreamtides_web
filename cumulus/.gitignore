@@ -13,11 +13,11 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
-/Artifacts/TangoMvpVerification/
-/Artifacts/TangoShopGlassDemo/
+/Artifacts/CumulusMvpVerification/
+/Artifacts/CumulusShopGlassDemo/
 /Artifacts/GlassParity/
 /Artifacts/SceneComparison/
-/Builds/TangoMvpVerification/
+/Builds/CumulusMvpVerification/
 /ProjectSettings/SceneTemplateSettings.json
 *.log
 

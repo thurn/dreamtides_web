@@ -1,0 +1,14 @@
+{
+  "name": "CumulusMvp.PlayModeTests",
+  "rootNamespace": "CumulusMvp.Tests.PlayMode",
+  "references": [
+    "CumulusMvp.Runtime",
+    "CumulusMvp.TestSupport",
+    "Unity.InputSystem",
+    "Unity.InputSystem.TestFramework",
+    "Unity.RenderPipelines.Universal.Runtime"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

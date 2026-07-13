@@ -14,10 +14,10 @@ import {
 } from "../test-support";
 import type { BattleMutableState } from "../types";
 import { BattleForeseeOverlay } from "./BattleForeseeOverlay";
-import { TangoRoot } from "../../tango/TangoRoot";
+import { CumulusRoot } from "../../cumulus/CumulusRoot";
 
-function renderWithTango(root: Root, element: ReactElement): void {
-  root.render(<TangoRoot>{element}</TangoRoot>);
+function renderWithCumulus(root: Root, element: ReactElement): void {
+  root.render(<CumulusRoot>{element}</CumulusRoot>);
 }
 
 beforeEach(() => {
@@ -52,7 +52,7 @@ describe("BattleForeseeOverlay", () => {
     const root = createRoot(container);
 
     act(() => {
-      renderWithTango(root,
+      renderWithCumulus(root,
         <BattleForeseeOverlay
           initialCount={2}
           onClose={() => {}}
@@ -101,7 +101,7 @@ describe("BattleForeseeOverlay", () => {
     const root = createRoot(container);
 
     act(() => {
-      renderWithTango(root,
+      renderWithCumulus(root,
         <BattleForeseeOverlay
           initialCount={5}
           onClose={() => {}}
@@ -130,7 +130,7 @@ describe("BattleForeseeOverlay", () => {
     const root = createRoot(container);
 
     act(() => {
-      renderWithTango(root,
+      renderWithCumulus(root,
         <BattleForeseeOverlay
           initialCount={2}
           onClose={() => {}}
@@ -182,7 +182,7 @@ describe("BattleForeseeOverlay", () => {
     const nextCard = state.sides.player.deck[1];
 
     act(() => {
-      renderWithTango(root,
+      renderWithCumulus(root,
         <BattleForeseeOverlay
           initialCount={1}
           onClose={() => {}}
@@ -226,7 +226,7 @@ describe("BattleForeseeOverlay", () => {
     const topCard = state.cardInstances[topCardId];
 
     act(() => {
-      renderWithTango(root,
+      renderWithCumulus(root,
         <BattleForeseeOverlay
           initialCount={1}
           onClose={() => {}}
@@ -257,7 +257,7 @@ describe("BattleForeseeOverlay", () => {
     const root = createRoot(container);
 
     act(() => {
-      renderWithTango(root,
+      renderWithCumulus(root,
         <BattleForeseeOverlay
           initialCount={2}
           onClose={() => {}}
@@ -289,7 +289,7 @@ describe("BattleForeseeOverlay", () => {
     const root = createRoot(container);
 
     act(() => {
-      renderWithTango(root,
+      renderWithCumulus(root,
         <BattleForeseeOverlay
           initialCount={1}
           onClose={() => {}}

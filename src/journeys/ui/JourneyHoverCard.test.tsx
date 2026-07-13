@@ -16,7 +16,7 @@
 
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { TangoRoot } from "../../tango/TangoRoot";
+import { CumulusRoot } from "../../cumulus/CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { HTMLAttributes, ReactNode } from "react";
 
@@ -56,7 +56,7 @@ function mount(node: ReactNode): MountResult {
   document.body.appendChild(container);
   const root = createRoot(container);
   act(() => {
-    root.render(<TangoRoot>{node}</TangoRoot>);
+    root.render(<CumulusRoot>{node}</CumulusRoot>);
   });
   return { container, root };
 }

@@ -1,7 +1,7 @@
 import path from "node:path";
 
 /**
- * Bans raw Boxicons icon-font class strings in Tango's product-UI tier.
+ * Bans raw Boxicons icon-font class strings in Cumulus's product-UI tier.
  *
  * A glyph must arrive as a typed `Glyph` — `GLYPHS.<name>` (the design system's
  * named vocabulary) or `glyph(className)` (the single documented boundary for a
@@ -10,13 +10,13 @@ import path from "node:path";
  * glyph registry already owns, so the same mark drifts out of sync across call
  * sites (and a typo'd class silently renders a blank box at runtime).
  *
- * SCOPE. Governs the Tango tier: every file under `src/tango/` plus the
- * adapter/builder layer in `src/screens/tango_adapters/`, EXCEPT
- *   - {@link EXEMPT_FILE} `src/tango/primitives/glyph.ts` — the one file that
+ * SCOPE. Governs the Cumulus tier: every file under `src/cumulus/` plus the
+ * adapter/builder layer in `src/screens/cumulus_adapters/`, EXCEPT
+ *   - {@link EXEMPT_FILE} `src/cumulus/primitives/glyph.ts` — the one file that
  *     DEFINES the glyph vocabulary and so legitimately holds the raw class
  *     strings the registry brands;
- *   - the `src/tango/docs/` doc site — its specimens and mockups intentionally
- *     print raw class strings (matching how the sibling Tango lint rules exempt
+ *   - the `src/cumulus/docs/` doc site — its specimens and mockups intentionally
+ *     print raw class strings (matching how the sibling Cumulus lint rules exempt
  *     the doc tier); and
  *   - test files (`*.test.ts` / `*.test.tsx`) — a render test legitimately
  *     asserts against the CONCRETE rendered class (`querySelector("i.bx-x")`),
@@ -34,10 +34,10 @@ import path from "node:path";
  */
 
 /** Repo-relative POSIX path of the one file that DEFINES the glyph vocabulary. */
-const EXEMPT_FILE = "src/tango/primitives/glyph.ts";
+const EXEMPT_FILE = "src/cumulus/primitives/glyph.ts";
 
-/** The doc-site tier, exempt like the sibling Tango rules exempt it. */
-const EXEMPT_PREFIX = "src/tango/docs/";
+/** The doc-site tier, exempt like the sibling Cumulus rules exempt it. */
+const EXEMPT_PREFIX = "src/cumulus/docs/";
 
 /** The sanctioned game-data boundary helper whose argument is exempt. */
 const GLYPH_BOUNDARY_FN = "glyph";
@@ -69,8 +69,8 @@ export function isGovernedFile(fileRelative) {
     return false;
   }
   return (
-    fileRelative.startsWith("src/tango/") ||
-    fileRelative.startsWith("src/screens/tango_adapters/")
+    fileRelative.startsWith("src/cumulus/") ||
+    fileRelative.startsWith("src/screens/cumulus_adapters/")
   );
 }
 
@@ -99,7 +99,7 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Ban raw Boxicons icon-font class strings (bx / bxf / bx-*) across the Tango tier (all of src/tango/ plus src/screens/tango_adapters/), except the vocabulary file src/tango/primitives/glyph.ts, the doc site, and test files. A glyph must arrive as a typed Glyph (GLYPHS.* / glyph()) rendered through GlowIcon / PipBadge.",
+        "Ban raw Boxicons icon-font class strings (bx / bxf / bx-*) across the Cumulus tier (all of src/cumulus/ plus src/screens/cumulus_adapters/), except the vocabulary file src/cumulus/primitives/glyph.ts, the doc site, and test files. A glyph must arrive as a typed Glyph (GLYPHS.* / glyph()) rendered through GlowIcon / PipBadge.",
     },
     schema: [],
     messages: {

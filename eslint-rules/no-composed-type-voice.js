@@ -23,16 +23,16 @@ import path from "node:path";
  * reference — a `token("--t-…")` expression or a literal `var(--t-…)` — with
  * any other content.
  *
- * SCOPE. The product-UI tier: files under `src/tango/` outside
+ * SCOPE. The product-UI tier: files under `src/cumulus/` outside
  * {@link EXEMPT_PREFIXES}, plus the adapter/builder layer in
- * `src/screens/tango_adapters/`, mirroring `no-hardcoded-values`.
+ * `src/screens/cumulus_adapters/`, mirroring `no-hardcoded-values`.
  */
 
 /** Repo-relative POSIX dir prefixes exempt from the check. */
 const EXEMPT_PREFIXES = [
-  "src/tango/primitives/",
-  "src/tango/components/",
-  "src/tango/docs/",
+  "src/cumulus/primitives/",
+  "src/cumulus/components/",
+  "src/cumulus/docs/",
 ];
 
 /** Matches a literal `var(--t-…)` reference inside text. */
@@ -45,11 +45,11 @@ export function toRepoRelativePosix(absolutePath, cwd) {
 
 /** True when this rule governs the given repo-relative POSIX path. */
 export function isProductUiFile(fileRelative) {
-  if (fileRelative.startsWith("src/screens/tango_adapters/")) {
+  if (fileRelative.startsWith("src/screens/cumulus_adapters/")) {
     return true;
   }
   return (
-    fileRelative.startsWith("src/tango/") &&
+    fileRelative.startsWith("src/cumulus/") &&
     !EXEMPT_PREFIXES.some((prefix) => fileRelative.startsWith(prefix))
   );
 }

@@ -1,8 +1,8 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 
-import "../../../src/tango/primitives/tango-tokens.css";
-import { glassSurfaceStyle } from "../../../src/tango/internal/glass-surface";
+import "../../../src/cumulus/primitives/cumulus-tokens.css";
+import { glassSurfaceStyle } from "../../../src/cumulus/internal/glass-surface";
 
 type SceneDefinition = {
   id: string;
@@ -38,7 +38,7 @@ function ShopGlassDemo() {
   const panelSize = `${scene.panelViewportHeight * 100}vh`;
   return (
     <main
-      className="tango"
+      className="cumulus"
       data-scene-comparison-frame=""
       data-scene-comparison-ready="true"
       data-scene-id={scene.id}
