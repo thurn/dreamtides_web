@@ -92,7 +92,6 @@ export const BASELINE = [
   // --motion-container-transform inside tango-tokens.css.
   "--ease-dream",
   "--motion-container-transform",
-  "--motion-object-travel",
   "--stagger-travel",
   // Font roles / canonical face layer (the sanctioned type-face vocabulary).
   "--font-logo",

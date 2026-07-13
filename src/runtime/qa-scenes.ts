@@ -234,6 +234,16 @@ const BATTLE_SCENE: QaScene = {
   build: battleLayerSceneState(1),
 };
 
+/** Developer entry point that mounts the Layer 1 playable battle board. */
+export const PLAYABLE_BATTLE_SCENE_ID = "battle-playable";
+const PLAYABLE_BATTLE_SCENE: QaScene = {
+  id: PLAYABLE_BATTLE_SCENE_ID,
+  label: "Playable Battle (Layer 1)",
+  description:
+    "The Layer 1 keeper battle, mounted directly on the playable board for UI QA.",
+  build: battleLayerSceneState(1),
+};
+
 /**
  * Builds the inside-a-dreamscape overview parked on the starter dreamscape,
  * seeded with `dreamsignCount` owned dreamsigns so the QuestStatusBar's docked
@@ -504,6 +514,7 @@ export const QA_SCENES: readonly QaScene[] = [
   atlasLayerScene(6),
   atlasLayerScene(7),
   BATTLE_SCENE,
+  PLAYABLE_BATTLE_SCENE,
   battleLayerScene(1),
   battleLayerScene(2),
   battleLayerScene(3),

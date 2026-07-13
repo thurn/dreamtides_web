@@ -4,6 +4,7 @@ import type { SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { useGameState, useActions } from "../coop/hooks";
 import type { RuntimeConfig } from "../runtime/runtime-config";
+import { PLAYABLE_BATTLE_SCENE_ID } from "../runtime/qa-scenes";
 import { PlayableBattleScreen } from "../battle/components/PlayableBattleScreen";
 import { BattleStartScreen } from "../battle/components/BattleStartScreen";
 import { BattleStartScreenAdapter } from "../screens/tango_adapters/BattleStartScreenAdapter";
@@ -98,7 +99,9 @@ export function BattleSiteRoute({
   // The opposing Dreamcaller is revealed once the battle's init exists. Once
   // the player clicks "Begin Battle", the playable surface mounts against the
   // same fold state.
-  if (begunEntryKey !== battleEntryKey) {
+  const opensDirectlyOnPlayableBattle =
+    runtimeConfig.gotoScene === PLAYABLE_BATTLE_SCENE_ID;
+  if (begunEntryKey !== battleEntryKey && !opensDirectlyOnPlayableBattle) {
     if (runtimeConfig.uiVariant === "tango") {
       return (
         <TangoQuestChrome handlers={tangoChromeHandlers}>
@@ -128,6 +131,7 @@ export function BattleSiteRoute({
       site={site}
       aiMode={runtimeConfig.aiMode}
       basicAutomation={runtimeConfig.basicAutomation}
+      uiVariant={runtimeConfig.uiVariant}
     />
   );
 }

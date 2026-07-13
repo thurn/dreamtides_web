@@ -70,7 +70,7 @@ vi.mock("../screens/tango_adapters/BattleStartScreenAdapter", () => ({
 vi.mock("../battle/components/PlayableBattleScreen", async () => {
   const { useGameState } = await import("../coop/hooks");
   return {
-    PlayableBattleScreen: () => {
+    PlayableBattleScreen: ({ uiVariant }: { uiVariant: "tango" | "legacy" }) => {
       const gameState = useGameState();
       const battle = gameState.battle;
       if (battle === null) {
@@ -78,7 +78,7 @@ vi.mock("../battle/components/PlayableBattleScreen", async () => {
       }
       return (
         <div
-          data-screen="playable"
+          data-screen={`${uiVariant}-playable`}
           data-battle-id={battle.board.battleId}
         >
           {battle.init.battleEntryKey}
@@ -261,10 +261,38 @@ describe("BattleSiteRoute", () => {
 
     expect(container.querySelector('[data-screen="tango-battle-start"]')).not.toBeNull();
     expect(container.querySelector('[data-screen="battle-start"]')).toBeNull();
+    expect(container.querySelector("[data-tango-quest-chrome]")).not.toBeNull();
     act(() => {
       container.querySelector<HTMLButtonElement>("[data-tango-begin]")?.click();
     });
-    expect(container.querySelector('[data-screen="playable"]')).not.toBeNull();
+    expect(container.querySelector('[data-screen="tango-playable"]')).not.toBeNull();
+    expect(container.querySelector('[data-screen="legacy-playable"]')).toBeNull();
+    expect(container.querySelector("[data-tango-quest-chrome]")).toBeNull();
+    expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
+  });
+
+  it("opens the Tango playable surface directly for the playable battle QA scene", () => {
+    mockGameState = makeFoldStateWithBattle();
+    const { container } = mount(
+      <BattleSiteRoute
+        site={makeSite()}
+        cardDatabase={makeBattleTestCardDatabase()}
+        runtimeConfig={{
+          seedOverride: null,
+          aiMode: false,
+          basicAutomation: false,
+          gameId: null,
+          databaseMode: "emulator",
+          journeyVariant: "classic",
+          uiVariant: "tango",
+          gotoScene: "battle-playable",
+        }}
+      />,
+    );
+
+    expect(container.querySelector('[data-screen="tango-playable"]')).not.toBeNull();
+    expect(container.querySelector('[data-screen="tango-battle-start"]')).toBeNull();
+    expect(container.querySelector("[data-tango-quest-chrome]")).toBeNull();
   });
 
   it("renders a loading placeholder and appends BEGIN_BATTLE while battle is null", () => {
@@ -284,7 +312,7 @@ describe("BattleSiteRoute", () => {
       />,
     );
 
-    expect(container.querySelector('[data-screen="playable"]')).toBeNull();
+    expect(container.querySelector('[data-screen="legacy-playable"]')).toBeNull();
     expect(container.querySelector('[data-screen="battle-start"]')).toBeNull();
     expect(container.textContent).toContain("Preparing battle");
     expect(beginBattleSpy).toHaveBeenCalledWith("site-7");
@@ -314,7 +342,7 @@ describe("BattleSiteRoute", () => {
     expect(startScreen?.getAttribute("data-battle-id")).toBe(
       mockGameState.battle?.init.battleId,
     );
-    expect(container.querySelector('[data-screen="playable"]')).toBeNull();
+    expect(container.querySelector('[data-screen="legacy-playable"]')).toBeNull();
     // BEGIN_BATTLE is not re-appended once the fold's battle already exists.
     expect(beginBattleSpy).not.toHaveBeenCalled();
 
@@ -324,7 +352,7 @@ describe("BattleSiteRoute", () => {
         ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
 
-    const screen = container.querySelector('[data-screen="playable"]');
+    const screen = container.querySelector('[data-screen="legacy-playable"]');
     expect(screen).not.toBeNull();
     expect(screen?.textContent).toBe("site-7::3::dreamscape-2");
     expect(screen?.getAttribute("data-battle-id")).toBe(
@@ -358,7 +386,7 @@ describe("BattleSiteRoute", () => {
         ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
     expect(
-      container.querySelector('[data-screen="playable"]')?.textContent,
+      container.querySelector('[data-screen="legacy-playable"]')?.textContent,
     ).toBe("site-7::3::dreamscape-2");
 
     setQuestState({ completionLevel: 4 });

@@ -108,6 +108,7 @@
   --primitive-plum-600: #221a31;   /* elevated surface, popover */
   --primitive-plum-500: #2a2040;   /* hover / pressed surface  (parent surface-light) */
   --primitive-plum-400: #3a3050;   /* hairline-lifted, chip fill (parent --dt-border) */
+  --primitive-tabletop: #6b6968;   /* measured neutral battle table from the mobile layout reference */
 
   /* ---- Color: violet accent (the brand glow) — matches parent ---- */
   --primitive-violet-700: #6d28d9;
@@ -188,6 +189,7 @@
   --bg-app: var(--primitive-void-800);
   --bg-sunken: var(--primitive-void-900);
   --bg-band: var(--primitive-void-700);
+  --battle-table: var(--primitive-tabletop);
   --surface-card: var(--primitive-plum-700);
   --surface-raised: var(--primitive-plum-600);
   --surface-hover: var(--primitive-plum-500);

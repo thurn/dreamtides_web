@@ -12,8 +12,11 @@ import type { ComponentType } from "react";
 import { atlasEdgeDemo } from "./demos/atlas-edge";
 import { atlasMapDemo } from "./demos/atlas-map";
 import { atlasNodeDemo } from "./demos/atlas-node";
+import { battleStatusDisplayDemo } from "./demos/battle-status-display";
 import { buttonDemo } from "./demos/button";
+import { cardBackDemo } from "./demos/card-back";
 import { cardGalleryPanelDemo } from "./demos/card-gallery-panel";
+import { cardPileDemo } from "./demos/card-pile";
 import { cardStatOrbDemo } from "./demos/card-stat-orb";
 import { cardTermDefinitionsDemo } from "./demos/card-term-definitions";
 import { dreamcallerPortraitDemo } from "./demos/dreamcaller-portrait";
@@ -152,10 +155,13 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   glowIconDemo,
   pipBadgeDemo,
   questStatusBarDemo,
+  battleStatusDisplayDemo,
   dreamcallerPortraitDemo,
   richTextDemo,
   rulesTextDemo,
   gameCardDemo,
+  cardBackDemo,
+  cardPileDemo,
   cardGalleryPanelDemo,
   cardTermDefinitionsDemo,
   glossaryDefinitionCardDemo,

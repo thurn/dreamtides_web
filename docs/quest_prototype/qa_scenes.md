@@ -90,6 +90,9 @@ opposing Dreamcaller, ability, Dreamsigns, and signature cards. Select **Begin
 Battle** to enter the playable board. Plain `?goto=battle` is the same Layer I
 entry point as `battle1`.
 
+`?goto=battle-playable` mounts the Layer I playable board directly for layout
+and interaction QA.
+
 ## Draft site
 
 `?goto=draft` retypes a starter-dreamscape site to the `Draft` type and parks the
@@ -117,6 +120,7 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `atlas`                  | Dream Atlas resting screen at the first frontier the UI labels "Layer II" (one dreamscape completed), with a generated boss node and Apollyon incarnation (atlas UI + boss-preview QA); same screen as `atlas2` |
 | `atlas2` … `atlas7`      | Dream Atlas resting screen the UI labels "Layer N", with the available frontier on column N (see "Atlas layers" below) |
 | `battle`                 | Layer I Battle Start opponent preview; same scene depth as `battle1` |
+| `battle-playable`        | Layer I playable battle board |
 | `battle1` … `battle7`    | Battle Start opponent preview for the keeper battle on atlas Layer N, with layer-tuned opponent strength (see "Battle layers") |
 | `dreamscape`             | Starter dreamscape overview with site nodes and the QuestStatusBar |
 | `dreamscape-with-essence` | Starter dreamscape overview with an Essence site ready to enter (site-entry animation QA) |

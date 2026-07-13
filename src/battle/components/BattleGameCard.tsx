@@ -1,40 +1,12 @@
 import { useRef, type CSSProperties, type DragEventHandler, type MouseEventHandler } from "react";
-import { asCardId, asCardName, isCardId } from "../../types/card-identity";
-import { GameCard, type GameCardModel } from "../../tango/components/card/CardView";
-import { semanticEntityId } from "../../types/semantic-identity";
+import { isCardId } from "../../types/card-identity";
+import { GameCard } from "../../tango/components/card/CardView";
 import type { BattleCardInstance } from "../types";
-import { selectEffectiveSparkForInstance, selectFigmentCount } from "../state/figments";
+import { selectFigmentCount } from "../state/figments";
+import { battleGameCardModel } from "../ui/battle-game-card-model";
 import { AutomationGearIcon } from "./AutomationGearIcon";
 
-/** Resolve canonical battle display state without changing battle-instance identity. */
-export function battleGameCardModel(instance: BattleCardInstance): GameCardModel {
-  const definition = instance.definition;
-  const cardId = asCardId(isCardId(definition.cardId)
-    ? definition.cardId
-    : semanticEntityId("generated-battle-card", instance.battleCardId));
-  return {
-    cardId,
-    transfiguration: definition.transfigurationDisplay,
-    displaySnapshot: {
-      id: cardId,
-      name: asCardName(definition.name),
-      cardNumber: definition.cardNumber,
-      cardType: definition.battleCardKind === "character" ? "Character" : "Event",
-      subtype: definition.subtype,
-      isStarter: false,
-      energyCost: definition.energyCost,
-      ...(definition.energyCosts === undefined ? {} : { energyCosts: definition.energyCosts }),
-      spark: definition.battleCardKind === "character" ? selectEffectiveSparkForInstance(instance) : null,
-      isFast: definition.isFast,
-      isInterrupt: definition.timing === "interrupt",
-      reclaimCost: definition.reclaimCost,
-      renderedText: definition.renderedText,
-      imageNumber: definition.imageNumber,
-      artOwned: definition.imageNumber > 0,
-      ...(definition.art === undefined ? {} : { art: definition.art }),
-    },
-  };
-}
+export { battleGameCardModel } from "../ui/battle-game-card-model";
 
 export interface BattleGameCardProps {
   readonly instance: BattleCardInstance;

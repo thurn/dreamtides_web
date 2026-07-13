@@ -7,6 +7,7 @@ import type {
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { SiteState } from "../../types/quest";
 import type { CardData } from "../../types/cards";
+import type { UiVariant } from "../../runtime/runtime-config";
 import {
   createBattleLogBaseFields,
   logEvent,
@@ -39,6 +40,7 @@ import type {
   BattleDreamcallerSummary,
   BattleEnemyDescriptor,
   BattleFieldSlotAddress,
+  BattlefieldSlotId,
   BattleHistory,
   BattleMutableState,
   BattlePhase,
@@ -83,6 +85,8 @@ import {
   createMoveCardToZoneCommand,
 } from "./battle-ui-commands";
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
+import { MobileBattleScreenAdapter } from "../../screens/tango_adapters/MobileBattleScreenAdapter";
+import { useIsDesktop } from "../../tango/screens/use-is-desktop";
 
 const DESKTOP_INSPECTOR_WIDTH = 1280;
 // `BattleLogDrawer` renders from the append-only coop fold, so its
@@ -119,17 +123,24 @@ export function PlayableBattleScreen({
   site,
   aiMode = false,
   basicAutomation = false,
+  uiVariant = "legacy",
 }: {
   site: SiteState;
   aiMode?: boolean;
   basicAutomation?: boolean;
+  uiVariant?: UiVariant;
 }) {
   const battle = useGameState().battle;
   if (battle === null) {
     return null; // BattleSiteRoute already shows the loading/reveal state.
   }
   return (
-    <PlayableBattleScreenInner site={site} aiMode={aiMode} basicAutomation={basicAutomation} />
+    <PlayableBattleScreenInner
+      site={site}
+      aiMode={aiMode}
+      basicAutomation={basicAutomation}
+      uiVariant={uiVariant}
+    />
   );
 }
 
@@ -137,10 +148,12 @@ function PlayableBattleScreenInner({
   site,
   aiMode,
   basicAutomation,
+  uiVariant,
 }: {
   site: SiteState;
   aiMode: boolean;
   basicAutomation: boolean;
+  uiVariant: UiVariant;
 }) {
   const gameState = useGameState();
   const battle = gameState.battle;
@@ -166,6 +179,7 @@ function PlayableBattleScreenInner({
 
   const { state: questState, cardDatabase, questContent } = useQuest();
   const isDesktopInspectorLayout = useIsDesktopInspectorLayout();
+  const isTangoDesktopLayout = useIsDesktop();
   const [isInspectorDrawerOpen, setIsInspectorDrawerOpen] = useState(readIsDesktopInspectorLayout());
   const [isBattleLogOpen, setIsBattleLogOpen] = useState(false);
   const [isDreamwellHistoryOpen, setIsDreamwellHistoryOpen] = useState(false);
@@ -917,6 +931,64 @@ function PlayableBattleScreenInner({
     battleInit.completionLevelAtStart,
     resolveRunLayerCount(battleInit.atlasSnapshot.layers),
   );
+
+  const showTangoMobileLayout = uiVariant === "tango" && !isTangoDesktopLayout;
+  useEffect(() => {
+    if (!showTangoMobileLayout) {
+      return;
+    }
+    logEventOnce(
+      `battle_mobile_surface_opened:${battleInit.battleId}`,
+      "battle_mobile_surface_opened",
+      {
+        battleId: battleInit.battleId,
+        enemyHandSize: board.sides.enemy.hand.length,
+        playerHandSize: board.sides.player.hand.length,
+        uiVariant: "tango",
+      },
+    );
+  }, [
+    battleInit.battleId,
+    board.sides.enemy.hand.length,
+    board.sides.player.hand.length,
+    showTangoMobileLayout,
+  ]);
+
+  if (showTangoMobileLayout) {
+    return (
+      <MobileBattleScreenAdapter
+        init={battleInit}
+        board={board}
+        enemyDreamcaller={enemyDreamcallerSummary}
+        interactions={{
+          canInteract: canPlayerAct,
+          pendingCardId: pendingDragCardId,
+          onHandCardActivate: handleHandCardDoubleClick,
+          onCardDragStart: (battleCardId, source) => {
+            handleCardDragStart(
+              battleCardId,
+              source === "player-hand" ? "hand-tray" : "battlefield",
+            );
+          },
+          onCardDragEnd: handleCardDragEnd,
+          onSlotDrop: ({ owner, rank, slotId }) => {
+            handleSlotDrop({
+              side: owner,
+              zone: rank === "back" ? "backRank" : "frontRank",
+              slotId: slotId as BattlefieldSlotId,
+            });
+          },
+          onZoneDrop: ({ owner, zone }) => {
+            handleZoneDrop(
+              owner,
+              zone,
+              pendingDrag?.sourceSurface ?? "battlefield",
+            );
+          },
+        }}
+      />
+    );
+  }
 
   return (
     <div

@@ -400,6 +400,88 @@
       "description": "Enter the node's dreamscape. Available nodes invoke this with their UUID."
     }
   ],
+  "BattleStatusDisplay": [
+    {
+      "name": "owner",
+      "tsType": "BattleStatusOwner",
+      "unionMembers": [
+        "player",
+        "enemy"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Combatant represented by this status card."
+    },
+    {
+      "name": "dreamcaller",
+      "tsType": "DreamcallerVisual",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Dreamcaller whose head portrait anchors the card.",
+      "nested": {
+        "name": "DreamcallerVisual",
+        "fields": [
+          {
+            "name": "imageNumber",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "name",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "title",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "portraitFocus",
+            "tsType": "DreamcallerPortraitFocus",
+            "optional": true,
+            "description": "Normalized head position used to center subject-aware crops."
+          }
+        ]
+      }
+    },
+    {
+      "name": "currentEnergy",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Energy currently available to this combatant."
+    },
+    {
+      "name": "maxEnergy",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Maximum energy available to this combatant."
+    },
+    {
+      "name": "points",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Current battle points."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional stable test id for the complete status card."
+    }
+  ],
   "Button": [
     {
       "name": "size",
@@ -474,6 +556,24 @@
       "required": false,
       "defaultValue": null,
       "description": "The button's text label. Resolve any UUID/name to a plain string before\npassing it — the button renders copy, never arbitrary caller markup. Omit\nonly for a price-only button (supply `ariaLabel` instead)."
+    }
+  ],
+  "CardBack": [
+    {
+      "name": "label",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Accessible description of this face-down card in its current zone."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional stable test id for the face-down card object."
     }
   ],
   "CardGalleryPanel": [
@@ -762,6 +862,43 @@
       "required": false,
       "defaultValue": null,
       "description": "Fires with the appended action's stable id when it is activated."
+    }
+  ],
+  "CardPile": [
+    {
+      "name": "cards",
+      "tsType": "readonly BattlePileCard[]",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Cards ordered topmost-first. At most three physical layers are rendered."
+    },
+    {
+      "name": "orientation",
+      "tsType": "CardPileOrientation",
+      "unionMembers": [
+        "portrait",
+        "landscape"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Whether cards rest upright or sideways."
+    },
+    {
+      "name": "label",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Accessible name for the card zone represented by this pile."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional stable test id for the pile as a whole."
     }
   ],
   "CardStatOrb": [
