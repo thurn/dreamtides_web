@@ -175,3 +175,14 @@ Unity project serialization — built-in Tango key was renamed
   setting as `AndroidEnableTango`. Opening the project therefore rewrites the
   tracked file. Restore Unity's canonical field name in a dedicated cleanup so
   normal editor runs keep the project settings byte-stable.
+
+Cumulus site-render logging — site adapters are reported as legacy
+
+- `src/components/ScreenRouter.tsx` derives `servedByCumulus` only from
+  `cumulusScreenFor(screen)`. A top-level `site` screen always resolves to null
+  there because site implementations are selected later through
+  `cumulusSiteScreenFor(site)`. Production `screen_rendered` entries therefore
+  report `servedByCumulus: false` for registered Cumulus sites, including the
+  Duplication screen verified through `?goto=duplication`. Resolve the active
+  site before logging and use the same site-registry decision that renders the
+  route.

@@ -1,0 +1,150 @@
+// DuplicationSiteScreen — Deacon Holt's Cumulus card-copying site.
+
+import { useCallback, useState } from "react";
+import type { GameCardModel } from "../components/card/CardView";
+import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
+import type { ArtRef } from "../primitives/art";
+import { token } from "../primitives/tokens";
+import {
+  GuideGallerySiteLayout,
+  type GuideGalleryGuideView,
+} from "./GuideGallerySiteLayout";
+
+export type DuplicationGuideView = GuideGalleryGuideView;
+
+export interface DuplicationCardView {
+  /** Concrete deck-entry id; duplicate catalog cards remain independent choices. */
+  entryId: string;
+  /** The fully resolved card currently held in the deck. */
+  model: GameCardModel;
+}
+
+export interface DuplicationSiteView {
+  /** Stable site id used by the shared guide-gallery layout. */
+  siteId: string;
+  /** Current dreamscape scene art behind the site, if resolved. */
+  scene: ArtRef | null;
+  /** Deacon Holt's guide art and one stable line for this visit. */
+  guide: DuplicationGuideView;
+  /** Whether the persisted card-choice runtime is ready. */
+  ready: boolean;
+  /** Whether a card has already been duplicated during this visit. */
+  alreadyAccepted: boolean;
+  /** Whether this site offers the whole deck. */
+  isEnhanced: boolean;
+  /** Persisted duplication choices in offer order. */
+  cards: readonly DuplicationCardView[];
+}
+
+export interface DuplicationSiteScreenProps {
+  /** View-model rendered by the pure screen. */
+  view: DuplicationSiteView;
+  /** Leave the site without duplicating a card. */
+  onClose: () => void;
+  /** Duplicate the selected concrete deck entry. */
+  onDuplicate: (entryId: string) => void;
+}
+
+export function DuplicationSiteScreen({
+  view,
+  onClose,
+  onDuplicate,
+}: DuplicationSiteScreenProps) {
+  const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
+  const [confirming, setConfirming] = useState(false);
+  const locked = confirming || view.alreadyAccepted;
+
+  const toggleSelection = useCallback(
+    (entryId: string) => {
+      if (locked) return;
+      setSelectedEntryId((current) => (current === entryId ? null : entryId));
+    },
+    [locked],
+  );
+
+  const commitDuplicate = useCallback(() => {
+    if (selectedEntryId === null || locked) return;
+    setConfirming(true);
+    onDuplicate(selectedEntryId);
+  }, [locked, onDuplicate, selectedEntryId]);
+
+  return (
+    <GuideGallerySiteLayout
+      siteId={view.siteId}
+      scene={view.scene}
+      guide={view.guide}
+      screenTestId="cumulus-duplication-site-screen"
+      guideArtTestId="cumulus-duplication-guide-art"
+      speechAnchorTestId="cumulus-duplication-speech-anchor"
+      speechBubbleTestId="cumulus-duplication-speech-bubble"
+      renderGallery={(layout) => {
+        const desktop = layout === "desktop";
+        return (
+          <section
+            data-duplication-card-grid=""
+            data-duplication-layout={layout}
+            style={{
+              position: "relative",
+              zIndex: 10,
+              minHeight: 0,
+              height: "100%",
+              maxHeight: "100%",
+              width: desktop
+                ? "100%"
+                : `calc(100vw - (${token("--space-4")} * 2))`,
+              boxSizing: "border-box",
+              pointerEvents: "auto",
+              alignSelf: desktop ? "stretch" : "start",
+              justifySelf: desktop ? undefined : "center",
+              display: desktop ? "grid" : undefined,
+              alignItems: desktop ? "center" : undefined,
+            }}
+          >
+            <CardGalleryPanel
+              title="Duplication"
+              subtitle={
+                view.ready
+                  ? view.isEnhanced
+                    ? "Choose any card to copy"
+                    : "Choose a card to copy"
+                  : "Gathering possibilities…"
+              }
+              rightAccessory={{
+                kind: "glassButton",
+                label: confirming ? "Duplicating…" : "Duplicate",
+                variant: "accent",
+                disabled: selectedEntryId === null || locked,
+                onPress: commitDuplicate,
+                testId: "cumulus-duplication-confirm",
+              }}
+              footerAction={{
+                label: desktop ? "Decline Offer" : "Decline",
+                disabled: locked,
+                onPress: onClose,
+                testId: "cumulus-duplication-decline",
+              }}
+              cards={view.cards.map((card) => ({
+                entryId: card.entryId,
+                model: card.model,
+                testId: `cumulus-duplication-card-${card.entryId}`,
+                selected: selectedEntryId === card.entryId,
+                disabled: locked,
+                selectionColor: "accent",
+              }))}
+              emptyLabel={
+                view.ready ? "No cards available to copy." : "Gathering possibilities…"
+              }
+              columns={view.isEnhanced ? (desktop ? "five" : "four") : "three"}
+              cardSize={view.isEnhanced ? "standard" : desktop ? "roomy" : "standard"}
+              frame="floating"
+              spacing={desktop && !view.isEnhanced ? "spacious" : "medium"}
+              widthMode={view.isEnhanced || !desktop ? "fill" : "content"}
+              testId="cumulus-duplication-card-gallery"
+              onCardPress={toggleSelection}
+            />
+          </section>
+        );
+      }}
+    />
+  );
+}

@@ -20,6 +20,7 @@ import { PurgeSiteScreenAdapter } from "./PurgeSiteScreenAdapter";
 import { CardShopSiteScreenAdapter } from "./CardShopSiteScreenAdapter";
 import { DreamsignBazaarSiteScreenAdapter } from "./DreamsignBazaarSiteScreenAdapter";
 import { TransfigurationSiteScreenAdapter } from "./TransfigurationSiteScreenAdapter";
+import { DuplicationSiteScreenAdapter } from "./DuplicationSiteScreenAdapter";
 
 /**
  * The Cumulus implementation of a top-level `Screen`, or null when none exists yet
@@ -58,6 +59,8 @@ export function cumulusSiteScreenFor(site: SiteState): ReactNode | null {
       return <DreamsignBazaarSiteScreenAdapter siteId={site.id} />;
     case "Transfiguration":
       return <TransfigurationSiteScreenAdapter siteId={site.id} />;
+    case "Duplication":
+      return <DuplicationSiteScreenAdapter siteId={site.id} />;
     default:
       return null;
   }

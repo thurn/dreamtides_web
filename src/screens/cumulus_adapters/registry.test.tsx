@@ -77,6 +77,23 @@ describe("cumulusSiteScreenFor", () => {
     ).not.toBeNull();
   });
 
+  it("resolves standard and enhanced Duplication sites to the Cumulus screen", () => {
+    expect(
+      cumulusSiteScreenFor({
+        type: "Duplication",
+        id: "site-1",
+        isEnhanced: false,
+      } as SiteState),
+    ).not.toBeNull();
+    expect(
+      cumulusSiteScreenFor({
+        type: "Duplication",
+        id: "site-1",
+        isEnhanced: true,
+      } as SiteState),
+    ).not.toBeNull();
+  });
+
   it("returns null for site types not yet migrated, so ScreenRouter falls back to legacy", () => {
     expect(cumulusSiteScreenFor({ type: "Reward" } as SiteState)).toBeNull();
   });

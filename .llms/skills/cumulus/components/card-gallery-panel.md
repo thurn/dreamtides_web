@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/card-gallery-panel`
 
-Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
 
 The shared card-browser surface: a left-aligned title and subtitle, optional header and centered footer actions, and a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim.
 
