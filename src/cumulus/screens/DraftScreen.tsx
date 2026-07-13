@@ -3,7 +3,8 @@
 // The Cumulus version strips the screen to the offer itself: the dreamscape scene
 // fills the viewport (never darkened — legibility comes from the cards' own
 // opacity and the app chrome's outline dilation), and the pack sits as a 2x2
-// mobile grid or a four-card desktop row of GameCards centered over it. The
+// mobile grid, a narrow-desktop 2x2 grid, or a wide-desktop four-card row of
+// GameCards centered over it. The
 // router-owned quest chrome provides the status bar and responsive utility
 // menu — the screen's only text is a
 // subtle pick counter riding under the pack; it renders no title, progress bar,
@@ -65,11 +66,33 @@ const HUD_CLEARANCE_OP = `${QUEST_STATUS_BAR_CLEARANCE_OP} + ${token("--space-9"
 const TOP_GAP = `calc(${TOP_GAP_OP})`;
 const HUD_CLEARANCE = `calc(${HUD_CLEARANCE_OP})`;
 const MOBILE_OFFER_GRID_GAP = token("--space-2");
-const DESKTOP_OFFER_GRID_GAP = token("--space-5");
+const DESKTOP_OFFER_GRID_GAP = token("--space-2");
 // Desktop draft cards follow the roomy starting-deck modal card size. This is a
 // content-driven box measure: the cap keeps the four-card row readable without
 // turning each card into a full-height mobile offer.
-const DESKTOP_OFFER_CARD_WIDTH_PX = 260;
+const DESKTOP_OFFER_CARD_WIDTH_PX = 240;
+// Four reading-width cards plus compact gutters fit without overlap from here.
+const DRAFT_ROW_MIN_WIDTH_PX = 1000;
+
+function useWideDraftRow(): boolean {
+  const queryText = `(min-width: ${String(DRAFT_ROW_MIN_WIDTH_PX)}px)`;
+  const [wide, setWide] = useState(() =>
+    typeof window === "undefined" || typeof window.matchMedia !== "function"
+      ? false
+      : window.matchMedia(queryText).matches,
+  );
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return;
+    }
+    const query = window.matchMedia(queryText);
+    const onChange = (): void => setWide(query.matches);
+    onChange();
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, [queryText]);
+  return wide;
+}
 
 function topSafeOpFor(isDesktop: boolean): string {
   const edgeInset = isDesktop
@@ -112,9 +135,10 @@ function offerCellWidthFor(params: {
  */
 export function DraftScreen({ view, onPick }: DraftScreenProps) {
   const isDesktop = useIsDesktop();
+  const wideDraftRow = useWideDraftRow();
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
-  const offerColumns = isDesktop ? 4 : 2;
-  const offerRows = isDesktop ? 1 : 2;
+  const offerColumns = isDesktop && wideDraftRow ? 4 : 2;
+  const offerRows = isDesktop && wideDraftRow ? 1 : 2;
   const offerGridGap = isDesktop
     ? DESKTOP_OFFER_GRID_GAP
     : MOBILE_OFFER_GRID_GAP;

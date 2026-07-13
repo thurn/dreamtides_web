@@ -193,6 +193,7 @@ export function TransfigurationSiteScreen({
       siteId={view.siteId}
       scene={view.scene}
       guide={view.guide}
+      desktopComposition={view.isEnhanced ? "split" : "showcase"}
       mobileComposition="revelation"
       mobileRegionSize={
         view.candidates.some((candidate) => candidate.forms.length > 3)
@@ -221,7 +222,10 @@ export function TransfigurationSiteScreen({
             pointerEvents: "auto",
             display: "grid",
             alignItems: layout === "mobile" ? "start" : "center",
-            justifyItems: "center",
+            justifyItems:
+              layout === "desktop" && !view.isEnhanced && picked === null
+                ? "end"
+                : "center",
             alignSelf: layout === "mobile" ? "start" : undefined,
             justifySelf: layout === "mobile" ? "center" : undefined,
           }}
@@ -239,7 +243,10 @@ export function TransfigurationSiteScreen({
                 layout === "mobile" && picked !== null ? "end" : "center",
               alignItems:
                 layout === "mobile" && picked !== null ? "end" : "center",
-              justifyItems: "center",
+              justifyItems:
+                layout === "desktop" && !view.isEnhanced && picked === null
+                  ? "end"
+                  : "center",
             }}
           >
             {picked === null ? (
@@ -394,18 +401,10 @@ function PickerPanel({
         view.ready ? "No eligible cards to reforge." : "Heating the forge…"
       }
       columns={enhanced ? (desktop ? "five" : "four") : "three"}
-      cardSize={enhanced ? "standard" : desktop ? "roomy" : "standard"}
+      cardSize={enhanced ? "standard" : desktop ? "showcase" : "standard"}
       frame="floating"
       widthMode={enhanced || !desktop ? "fill" : "content"}
-      spacing={
-        enhanced
-          ? desktop
-            ? "regular"
-            : "medium"
-          : desktop
-            ? "spacious"
-            : "medium"
-      }
+      spacing={enhanced && desktop ? "regular" : "medium"}
       testId="cumulus-transfiguration-picker"
       onCardPress={onPick}
     />

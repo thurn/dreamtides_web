@@ -518,6 +518,11 @@ function DeckGrid({
   size: DeckCardSize;
 }) {
   const tileWidth = DECK_CARD_SIZE_PX[size];
+  const lowCount = visible.length > 0 && visible.length <= 3;
+  const lowCountTileWidth = Math.max(
+    tileWidth,
+    DECK_CARD_SIZE_PX.large,
+  );
   return (
     <div
       style={{
@@ -533,11 +538,16 @@ function DeckGrid({
         <GridPlaceholder message="No cards match these filters." />
       ) : (
         <div
+          data-deck-card-grid=""
+          data-deck-card-grid-low-count={lowCount || undefined}
           style={{
             display: "grid",
-            gridTemplateColumns: `repeat(auto-fill, minmax(${String(tileWidth)}px, 1fr))`,
+            gridTemplateColumns: lowCount
+              ? `repeat(${String(visible.length)}, ${String(lowCountTileWidth)}px)`
+              : `repeat(auto-fill, minmax(${String(tileWidth)}px, 1fr))`,
             gap: token("--space-5"),
             alignItems: "start",
+            justifyContent: lowCount ? "center" : undefined,
           }}
         >
           {visible.map((cardView) => (

@@ -116,8 +116,14 @@ describe("DuplicationSiteScreen", () => {
       '[data-testid="cumulus-duplication-card-gallery"]',
     );
     expect(gallery?.dataset.galleryColumns).toBe("3");
+    expect(gallery?.dataset.galleryCardSize).toBe("showcase");
     expect(gallery?.dataset.galleryWidthMode).toBe("content");
     expect(gallery?.dataset.galleryReservesStackedCopy).toBe("true");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-guide-gallery-desktop-layout]",
+      )?.dataset.guideGalleryDesktopLayoutMode,
+    ).toBe("showcase");
     const initialPanelWidth = gallery?.style.width;
 
     const confirm = container.querySelector<HTMLButtonElement>(

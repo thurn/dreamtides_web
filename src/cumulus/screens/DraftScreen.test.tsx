@@ -40,9 +40,17 @@ function view(offer: number[]): DraftView {
 }
 
 /** Stub matchMedia (jsdom lacks it; Pressable reads the reduced-motion query). */
-function stubMatchMedia({ desktop = false }: { desktop?: boolean } = {}): void {
+function stubMatchMedia({
+  desktop = false,
+  wideDraft = desktop,
+}: {
+  desktop?: boolean;
+  wideDraft?: boolean;
+} = {}): void {
   window.matchMedia = ((query: string) => ({
-    matches: desktop && query.includes("min-width: 900px"),
+    matches:
+      (desktop && query.includes("min-width: 900px")) ||
+      (wideDraft && query.includes("min-width: 1000px")),
     media: query,
     onchange: null,
     addEventListener: () => undefined,
@@ -110,15 +118,32 @@ describe("Cumulus DraftScreen", () => {
     const firstCard = container.querySelector<HTMLElement>(
       '[data-draft-offer-card="101"]',
     );
-    expect(firstCard?.style.width).toContain("260px");
+    expect(firstCard?.style.width).toContain("240px");
     const stage = container.querySelector<HTMLElement>("[data-draft-offer-stage]");
     expect(stage?.style.justifyContent).toBe("center");
-    expect(stage?.style.paddingLeft).toBe("var(--space-5)");
-    expect(grid?.style.gap).toBe("var(--space-5)");
+    expect(stage?.style.paddingLeft).toBe("var(--space-2)");
+    expect(grid?.style.gap).toBe("var(--space-2)");
 
     act(() => {
       root.unmount();
     });
+  });
+
+  it("reflows a narrow desktop offer into two columns", () => {
+    stubMatchMedia({ desktop: true, wideDraft: false });
+    const { container, root } = mount(
+      <DraftScreen view={view([101, 102, 103, 104])} onPick={vi.fn()} />,
+    );
+
+    const grid = container.querySelector<HTMLElement>("[data-draft-offer-grid]");
+    expect(grid?.style.gridTemplateColumns).toBe("repeat(2, auto)");
+    expect(grid?.style.gridTemplateRows).toBe("repeat(2, auto)");
+    expect(
+      container.querySelector<HTMLElement>('[data-draft-offer-card="101"]')
+        ?.style.width,
+    ).toContain("240px");
+
+    act(() => root.unmount());
   });
 
   it("renders one offer cell per card in the pack and nothing else", () => {

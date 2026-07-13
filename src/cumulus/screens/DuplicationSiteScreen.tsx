@@ -73,6 +73,7 @@ export function DuplicationSiteScreen({
       siteId={view.siteId}
       scene={view.scene}
       guide={view.guide}
+      desktopComposition={view.isEnhanced ? "split" : "showcase"}
       screenTestId="cumulus-duplication-site-screen"
       guideArtTestId="cumulus-duplication-guide-art"
       speechAnchorTestId="cumulus-duplication-speech-anchor"
@@ -104,6 +105,7 @@ export function DuplicationSiteScreen({
               justifySelf: desktop ? undefined : "center",
               display: desktop ? "grid" : undefined,
               alignItems: desktop ? "center" : undefined,
+              justifyItems: desktop && !view.isEnhanced ? "end" : undefined,
             }}
           >
             <CardGalleryPanel
@@ -145,9 +147,9 @@ export function DuplicationSiteScreen({
                 view.ready ? "No cards available to copy." : "Gathering possibilities…"
               }
               columns={columns}
-              cardSize={view.isEnhanced ? "standard" : desktop ? "roomy" : "standard"}
+              cardSize={view.isEnhanced ? "standard" : desktop ? "showcase" : "standard"}
               frame="floating"
-              spacing={desktop && !view.isEnhanced ? "spacious" : "medium"}
+              spacing="medium"
               widthMode={view.isEnhanced || !desktop ? "fill" : "content"}
               reserveStackedCopySpace
               testId="cumulus-duplication-card-gallery"

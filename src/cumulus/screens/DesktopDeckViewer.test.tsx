@@ -4,7 +4,33 @@ import { act } from "react";
 import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { CardData } from "../../types/cards";
+import { asCardId, asCardName } from "../../types/card-identity";
+import { CumulusRoot } from "../CumulusRoot";
+import type { DeckCardView } from "./MobileDeckViewer";
 import { DesktopDeckViewer } from "./DesktopDeckViewer";
+
+function deckCard(index: number): DeckCardView {
+  const card: CardData = {
+    name: asCardName(`Deck Fixture ${String(index)}`),
+    id: asCardId(`10000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
+    cardNumber: index,
+    cardType: "Character",
+    subtype: "Fixture",
+    isStarter: false,
+    energyCost: 1,
+    spark: 1,
+    isFast: false,
+    renderedText: "Draw a card.",
+    imageNumber: index,
+    artOwned: false,
+  };
+  return {
+    entryId: `entry-${String(index)}`,
+    model: { cardId: card.id, displaySnapshot: card },
+    isBane: false,
+  };
+}
 
 function mount(element: ReactElement): {
   container: HTMLDivElement;
@@ -14,7 +40,7 @@ function mount(element: ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(element);
+    root.render(<CumulusRoot>{element}</CumulusRoot>);
   });
   return { container, root };
 }
@@ -80,5 +106,25 @@ describe("DesktopDeckViewer", () => {
     act(() => {
       root.unmount();
     });
+  });
+
+  it("centers up to three filtered cards at the reading-width floor", () => {
+    const { container, root } = mount(
+      <DesktopDeckViewer
+        view={{
+          cards: [deckCard(1), deckCard(2), deckCard(3)],
+          dreamcaller: null,
+          dreamsigns: [],
+        }}
+        onClose={vi.fn()}
+      />,
+    );
+
+    const grid = container.querySelector<HTMLElement>("[data-deck-card-grid]");
+    expect(grid?.dataset.deckCardGridLowCount).toBe("true");
+    expect(grid?.style.gridTemplateColumns).toBe("repeat(3, 240px)");
+    expect(grid?.style.justifyContent).toBe("center");
+
+    act(() => root.unmount());
   });
 });

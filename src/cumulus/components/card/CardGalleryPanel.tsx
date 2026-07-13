@@ -201,8 +201,15 @@ export interface CardGalleryFooterAction {
 /** The grid column count for the card body. */
 export type CardGalleryColumns = "auto" | "two" | "three" | "four" | "five";
 
-/** The `auto` grid's minimum card column width. */
-export type CardGalleryCardSize = "compact" | "standard" | "roomy";
+/**
+ * The gallery card-size preset. Desktop galleries showing two or three cards
+ * should use `showcase` so cards reach the 240px reading width when space permits.
+ */
+export type CardGalleryCardSize =
+  | "compact"
+  | "standard"
+  | "roomy"
+  | "showcase";
 
 /** The panel frame geometry. */
 export type CardGalleryFrame = "floating" | "fullBleed";
@@ -234,7 +241,10 @@ export interface CardGalleryPanelProps {
   emptyLabel?: string;
   /** Card grid mode. Defaults to `auto`. */
   columns?: CardGalleryColumns;
-  /** Card size preset. Defaults to `standard`. */
+  /**
+   * Card size preset. Defaults to `standard`. Use `showcase` for low-count
+   * desktop choices; compact multi-row collections may use a denser preset.
+   */
   cardSize?: CardGalleryCardSize;
   /**
    * Panel frame geometry and material. `floating` uses liquid glass;
@@ -271,6 +281,10 @@ const COMPACT_CARD_MIN_WIDTH_PX = 44;
 const COMPACT_CARD_MAX_WIDTH_PX = 176;
 const ROOMY_CARD_MIN_WIDTH_PX = 126;
 const ROOMY_CARD_MAX_WIDTH_PX = 188;
+// Low-count choice surfaces should render a complete reading card whenever
+// their stage has room, which also lets desktop reveal keep the source in place.
+const SHOWCASE_CARD_MIN_WIDTH_PX = ROOMY_CARD_MIN_WIDTH_PX;
+const SHOWCASE_CARD_MAX_WIDTH_PX = 240;
 const FLOATING_ACCESSORY_PX = 48;
 const DEFAULT_COLUMN_COUNT = 5;
 const CARD_WIDTH_FLOOR_PX = 64;
@@ -349,6 +363,7 @@ function gapSlotsFor(visibleRows: number): number {
 
 function maxCardWidth(cardSize: CardGalleryCardSize): number {
   if (cardSize === "compact") return COMPACT_CARD_MAX_WIDTH_PX;
+  if (cardSize === "showcase") return SHOWCASE_CARD_MAX_WIDTH_PX;
   return cardSize === "roomy"
     ? ROOMY_CARD_MAX_WIDTH_PX
     : STANDARD_CARD_MAX_WIDTH_PX;
@@ -356,6 +371,7 @@ function maxCardWidth(cardSize: CardGalleryCardSize): number {
 
 function minCardWidth(cardSize: CardGalleryCardSize): number {
   if (cardSize === "compact") return COMPACT_CARD_MIN_WIDTH_PX;
+  if (cardSize === "showcase") return SHOWCASE_CARD_MIN_WIDTH_PX;
   return cardSize === "roomy"
     ? ROOMY_CARD_MIN_WIDTH_PX
     : STANDARD_CARD_MIN_WIDTH_PX;

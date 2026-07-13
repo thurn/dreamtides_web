@@ -741,11 +741,12 @@
       "unionMembers": [
         "compact",
         "standard",
-        "roomy"
+        "roomy",
+        "showcase"
       ],
       "required": false,
       "defaultValue": "standard",
-      "description": "Card size preset. Defaults to `standard`."
+      "description": "Card size preset. Defaults to `standard`. Use `showcase` for low-count\ndesktop choices; compact multi-row collections may use a denser preset."
     },
     {
       "name": "frame",

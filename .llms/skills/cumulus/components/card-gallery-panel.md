@@ -24,7 +24,7 @@ The shared card-browser surface: a left-aligned title and subtitle, optional hea
 | `cards` | `readonly CardGalleryCardView[]` | yes | — | Resolved cards rendered in order. |
 | `emptyLabel` | `string` | no | `No cards.` | Empty-state copy shown when `cards` is empty. |
 | `columns` | `CardGalleryColumns` = `"auto" \| "two" \| "three" \| "four" \| "five"` | no | `auto` | Card grid mode. Defaults to `auto`. |
-| `cardSize` | `CardGalleryCardSize` = `"compact" \| "standard" \| "roomy"` | no | `standard` | Card size preset. Defaults to `standard`. |
+| `cardSize` | `CardGalleryCardSize` = `"compact" \| "standard" \| "roomy" \| "showcase"` | no | `standard` | Card size preset. Defaults to `standard`. Use `showcase` for low-count desktop choices; compact multi-row collections may use a denser preset. |
 | `frame` | `CardGalleryFrame` = `"floating" \| "fullBleed"` | no | `floating` | Panel frame geometry and material. `floating` uses liquid glass; `fullBleed` fills its parent edge-to-edge with the standard alpha scrim and no floating rim or shadow. Defaults to `floating`. |
 | `spacing` | `CardGallerySpacing` = `"compact" \| "spacious" \| "regular" \| "medium"` | no | `regular` | Internal padding and grid gap scale. Defaults to `regular`. |
 | `widthMode` | `CardGalleryWidthMode` = `"content" \| "fill"` | no | `content` | Floating-frame width behavior. Defaults to `content`. |

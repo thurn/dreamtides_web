@@ -207,7 +207,17 @@ describe("TransfigurationSiteScreen", () => {
       container.querySelector<HTMLElement>(
         '[data-testid="cumulus-transfiguration-picker"]',
       )?.dataset.gallerySpacing,
-    ).toBe("spacious");
+    ).toBe("medium");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="cumulus-transfiguration-picker"]',
+      )?.dataset.galleryCardSize,
+    ).toBe("showcase");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-guide-gallery-desktop-layout]",
+      )?.dataset.guideGalleryDesktopLayoutMode,
+    ).toBe("showcase");
     expect(
       container.querySelector<HTMLElement>(
         '[data-testid="cumulus-transfiguration-picker"]',

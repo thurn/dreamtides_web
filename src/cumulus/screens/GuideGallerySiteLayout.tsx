@@ -3,7 +3,7 @@
 // band over the gallery; desktop places the guide and gallery side by side.
 
 import { motion, useReducedMotion } from "framer-motion";
-import type { ReactElement, ReactNode } from "react";
+import { useEffect, useState, type ReactElement, type ReactNode } from "react";
 import {
   QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
   QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP,
@@ -36,6 +36,8 @@ export interface GuideGallerySiteLayoutProps {
   guide: GuideGalleryGuideView;
   /** Render the screen-specific gallery for the active layout. */
   renderGallery: (layout: "mobile" | "desktop") => ReactElement;
+  /** Give a low-count desktop gallery the full stage width. */
+  desktopComposition?: "split" | "showcase";
   /** Mobile guide/gallery staging. Defaults to the compact stacked band. */
   mobileComposition?: "band" | "revelation";
   /** Revelation gallery height. Expanded grows upward for dense content. */
@@ -59,6 +61,32 @@ const REVELATION_GALLERY_TOP = `max(44dvh, calc(${token("--safe-top")} + ${token
 const REVELATION_GALLERY_TOP_EXPANDED = `max(36dvh, calc(${token("--safe-top")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-7")} + ${REVELATION_VERTICAL_OFFSET}))`;
 // The grand desktop HUD is taller than the root HUD token.
 const DESKTOP_HUD_CLEARANCE = `calc(${QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-9")})`;
+// Three 240px cards plus the showcase gallery's compact gutters and padding.
+// This is a content-box measure used to leave the guide the remaining width.
+const SHOWCASE_GALLERY_RESERVE_PX = 800;
+// Below this width the gallery leaves too little horizontal space for dialog,
+// so the speech bubble moves into the clear band above the showcase panel.
+const COMPACT_SHOWCASE_MAX_WIDTH_PX = 960;
+
+function useCompactShowcase(): boolean {
+  const queryText = `(max-width: ${String(COMPACT_SHOWCASE_MAX_WIDTH_PX)}px)`;
+  const [compact, setCompact] = useState(() =>
+    typeof window === "undefined" || typeof window.matchMedia !== "function"
+      ? false
+      : window.matchMedia(queryText).matches,
+  );
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return;
+    }
+    const query = window.matchMedia(queryText);
+    const onChange = (): void => setCompact(query.matches);
+    onChange();
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, [queryText]);
+  return compact;
+}
 
 /** Shared character, glass-gallery, and HUD composition for site screens. */
 export function GuideGallerySiteLayout({
@@ -66,6 +94,7 @@ export function GuideGallerySiteLayout({
   scene,
   guide,
   renderGallery,
+  desktopComposition = "split",
   mobileComposition = "band",
   mobileRegionSize = "standard",
   screenTestId,
@@ -75,6 +104,7 @@ export function GuideGallerySiteLayout({
   children,
 }: GuideGallerySiteLayoutProps) {
   const isDesktop = useIsDesktop();
+  const compactShowcase = useCompactShowcase();
   const revelationMobile = !isDesktop && mobileComposition === "revelation";
   const sceneUrl = scene !== null ? resolveArtRef(scene) : null;
 
@@ -119,6 +149,8 @@ export function GuideGallerySiteLayout({
         <DesktopComposition
           guide={guide}
           renderGallery={renderGallery}
+          composition={desktopComposition}
+          compactShowcase={compactShowcase}
           guideArtTestId={guideArtTestId}
           speechAnchorTestId={speechAnchorTestId}
           speechBubbleTestId={speechBubbleTestId}
@@ -220,12 +252,16 @@ function MobileRevelationComposition({
 function DesktopComposition({
   guide,
   renderGallery,
+  composition,
+  compactShowcase,
   guideArtTestId,
   speechAnchorTestId,
   speechBubbleTestId,
 }: {
   readonly guide: GuideGalleryGuideView;
   readonly renderGallery: (layout: "mobile" | "desktop") => ReactElement;
+  readonly composition: "split" | "showcase";
+  readonly compactShowcase: boolean;
   readonly guideArtTestId?: string;
   readonly speechAnchorTestId?: string;
   readonly speechBubbleTestId?: string;
@@ -247,24 +283,48 @@ function DesktopComposition({
     >
       <div
         data-guide-gallery-desktop-layout=""
+        data-guide-gallery-desktop-layout-mode={composition}
         style={{
-          width: `calc(100% - ${token("--space-12")} - ${token("--space-12")})`,
+          position: "relative",
+          width:
+            composition === "showcase"
+              ? `calc(100% - ${token("--space-8")} - ${token("--space-8")})`
+              : `calc(100% - ${token("--space-12")} - ${token("--space-12")})`,
           maxWidth: 1500,
           height: "100%",
           minHeight: 0,
           display: "grid",
-          gridTemplateColumns: "minmax(0, 0.9fr) minmax(0, 1.1fr)",
+          gridTemplateColumns:
+            composition === "showcase"
+              ? "minmax(0, 1fr)"
+              : "minmax(0, 0.9fr) minmax(0, 1.1fr)",
           gridTemplateRows: "minmax(0, 1fr)",
-          gap: token("--space-12"),
+          gap: composition === "showcase" ? 0 : token("--space-12"),
           alignItems: "center",
         }}
       >
-        <DesktopGuideScene
-          guide={guide}
-          guideArtTestId={guideArtTestId}
-          speechAnchorTestId={speechAnchorTestId}
-          speechBubbleTestId={speechBubbleTestId}
-        />
+        <div
+          style={
+            composition === "showcase"
+              ? {
+                  position: "absolute",
+                  inset: 0,
+                  width: `max(0px, calc(100% - ${String(SHOWCASE_GALLERY_RESERVE_PX)}px))`,
+                  height: "100%",
+                  zIndex: 0,
+                }
+              : { width: "100%", height: "100%" }
+          }
+        >
+          <DesktopGuideScene
+            guide={guide}
+            showcase={composition === "showcase"}
+            compactShowcase={composition === "showcase" && compactShowcase}
+            guideArtTestId={guideArtTestId}
+            speechAnchorTestId={speechAnchorTestId}
+            speechBubbleTestId={speechBubbleTestId}
+          />
+        </div>
         {renderGallery("desktop")}
       </div>
     </section>
@@ -273,11 +333,15 @@ function DesktopComposition({
 
 function DesktopGuideScene({
   guide,
+  showcase,
+  compactShowcase,
   guideArtTestId,
   speechAnchorTestId,
   speechBubbleTestId,
 }: {
   readonly guide: GuideGalleryGuideView;
+  readonly showcase: boolean;
+  readonly compactShowcase: boolean;
   readonly guideArtTestId?: string;
   readonly speechAnchorTestId?: string;
   readonly speechBubbleTestId?: string;
@@ -315,10 +379,17 @@ function DesktopGuideScene({
         data-testid={speechAnchorTestId}
         style={{
           position: "absolute",
-          top: "14%",
-          left: `clamp(calc(${token("--space-12")} + ${token("--space-12")} + ${token("--space-11")} + ${token("--space-7")}), 18vw, calc(${token("--space-12")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-11")} + ${token("--space-7")}))`,
-          right: 0,
-          maxWidth: 380,
+          top: compactShowcase
+            ? `calc(-1 * (${token("--space-12")} + ${token("--space-5")}))`
+            : "14%",
+          left: compactShowcase
+            ? `calc(-1 * ${token("--space-4")})`
+            : showcase
+            ? 0
+            : `clamp(calc(${token("--space-12")} + ${token("--space-12")} + ${token("--space-11")} + ${token("--space-7")}), 18vw, calc(${token("--space-12")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-11")} + ${token("--space-7")}))`,
+          right: compactShowcase ? "auto" : 0,
+          width: compactShowcase ? 190 : undefined,
+          maxWidth: compactShowcase ? 190 : 380,
         }}
       >
         <SpeechBubble

@@ -1630,7 +1630,10 @@ export interface GameCardProps {
 /**
  * Player-facing card entity. It derives its complete reading copy and glossary
  * secondaries from semantic card data and registers them with the root reveal
- * coordinator. Callers provide meaning and activation only.
+ * coordinator. Callers provide meaning and activation only. Desktop layouts
+ * showing two or three cards should size their wrappers to at least 240px when
+ * space permits, keeping the complete source in place during reveal. Dense
+ * collections may render smaller cards and rely on the reading copy.
  */
 export function GameCard({
   model,
