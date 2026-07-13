@@ -158,7 +158,7 @@ describe("Cumulus BattleStartScreen", () => {
     act(() => root.unmount());
   });
 
-  it("mirrors the mobile Dreamcaller Select hierarchy with an unlabeled three-page detail carousel", () => {
+  it("carousels the complete mobile battle console across its three detail pages", () => {
     stubMatchMedia(false);
     const onBegin = vi.fn();
     const container = document.createElement("div");
@@ -193,7 +193,7 @@ describe("Cumulus BattleStartScreen", () => {
     ).toContain("--glass-blur");
     expect(
       (consolePanel?.firstElementChild as HTMLElement | null)?.style.padding,
-    ).toBe("var(--space-9) var(--space-6)");
+    ).toBe("");
     expect(consolePanel?.style.top).toBe("61%");
     expect(consolePanel?.style.transform).toBe("translateY(-50%)");
     expect(
@@ -212,20 +212,16 @@ describe("Cumulus BattleStartScreen", () => {
         '[data-battle-start-detail-active="true"]',
       );
     expect(activePage()?.textContent).not.toContain("Victory:");
+    expect(activePage()?.textContent).toContain(
+      "Whenever an event resolves, gain momentum.",
+    );
     expect(activePage()?.textContent).toContain("To Win");
     expect(activePage()?.textContent).toContain("Reward");
+    expect(
+      activePage()?.querySelector('[data-testid="cumulus-battle-start-begin"]'),
+    ).not.toBeNull();
     expect(activePage()?.style.minHeight).toBe("");
     expect(activePage()?.style.alignItems).toBe("");
-    expect(
-      layout?.querySelector<HTMLElement>(
-        "[data-battle-start-detail-spacing]",
-      )?.style.marginTop,
-    ).toBe("var(--space-9)");
-    expect(
-      layout?.querySelector<HTMLElement>(
-        "[data-battle-start-action-spacing]",
-      )?.style.marginTop,
-    ).toBe("var(--space-9)");
     expect(
       activePage()?.querySelector<HTMLElement>(
         '[data-battle-start-stake="To Win"] > div',
@@ -250,14 +246,22 @@ describe("Cumulus BattleStartScreen", () => {
     act(() => next?.click());
     expect(track?.style.transform).toBe("translateX(-100%)");
     expect(activePage()?.textContent).toContain("Dreamsigns:");
+    expect(activePage()?.textContent).not.toContain(
+      "Whenever an event resolves, gain momentum.",
+    );
     expect(activePage()?.textContent).not.toContain("To Win");
     expect(activePage()?.textContent).not.toContain("Reward");
+    expect(
+      activePage()?.querySelector('[data-testid="cumulus-battle-start-begin"]'),
+    ).toBeNull();
     expect(
       activePage()?.querySelectorAll(
         '[data-testid^="cumulus-battle-start-dreamsign-"]',
       ),
     ).toHaveLength(1);
-    expect(activePage()?.querySelectorAll("[data-signature-card-id]")).toHaveLength(0);
+    expect(
+      activePage()?.querySelectorAll("[data-signature-card-id]"),
+    ).toHaveLength(0);
     expect(
       layout?.querySelector(
         '[data-testid="cumulus-battle-start-carousel-previous"]',
@@ -273,30 +277,54 @@ describe("Cumulus BattleStartScreen", () => {
     );
     expect(track?.style.transform).toBe("translateX(-200%)");
     expect(activePage()?.textContent).toContain("Signature Cards:");
-    expect(activePage()?.querySelectorAll("[data-signature-card-id]")).toHaveLength(
-      3,
+    expect(activePage()?.style.paddingLeft).toBe(
+      "calc(var(--touch-min) + var(--space-5))",
     );
+    expect(
+      activePage()?.querySelectorAll("[data-signature-card-id]"),
+    ).toHaveLength(3);
     expect(
       activePage()?.querySelectorAll(
         '[data-testid^="cumulus-battle-start-dreamsign-"]',
       ),
     ).toHaveLength(0);
     expect(
-      activePage()?.querySelectorAll(
-        '[data-reveal-complete-game-card="true"]',
-      ),
+      activePage()?.querySelectorAll('[data-reveal-complete-game-card="true"]'),
     ).toHaveLength(3);
     expect(
-      layout?.querySelector('[data-testid="cumulus-battle-start-carousel-next"]'),
+      layout?.querySelector(
+        '[data-testid="cumulus-battle-start-carousel-next"]',
+      ),
     ).toBeNull();
 
-    const action = layout?.querySelector<HTMLButtonElement>(
+    const action = activePage()?.querySelector<HTMLButtonElement>(
       '[data-testid="cumulus-battle-start-begin"]',
     );
-    expect(action?.textContent).toContain("Begin Battle");
-    expect(action?.getAttribute("data-glass-variant")).toBe("accent");
-    expect(action?.getAttribute("data-glass-placement")).toBe("onGlass");
-    act(() => action?.click());
+    expect(action).toBeNull();
+
+    act(() =>
+      layout
+        ?.querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-battle-start-carousel-previous"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      layout
+        ?.querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-battle-start-carousel-previous"]',
+        )
+        ?.click(),
+    );
+    const firstPageAction = activePage()?.querySelector<HTMLButtonElement>(
+      '[data-testid="cumulus-battle-start-begin"]',
+    );
+    expect(firstPageAction?.textContent).toContain("Begin Battle");
+    expect(firstPageAction?.getAttribute("data-glass-variant")).toBe("accent");
+    expect(firstPageAction?.getAttribute("data-glass-placement")).toBe(
+      "onGlass",
+    );
+    act(() => firstPageAction?.click());
     expect(onBegin).toHaveBeenCalledTimes(1);
 
     act(() => root.unmount());
@@ -326,13 +354,15 @@ describe("Cumulus BattleStartScreen", () => {
     expect(activePage()?.textContent).toContain("Signature Cards:");
     expect(activePage()?.textContent).not.toContain("Dreamsigns:");
     expect(
-      layout?.querySelector('[data-testid="cumulus-battle-start-carousel-next"]'),
+      layout?.querySelector(
+        '[data-testid="cumulus-battle-start-carousel-next"]',
+      ),
     ).toBeNull();
 
     act(() => root.unmount());
   });
 
-  it("does not spend mobile briefing space on an inactive ability", () => {
+  it("shows the inactive ability copy in the mobile briefing", () => {
     stubMatchMedia(false);
     const view = makeView();
     const { container, root } = mount({
@@ -340,8 +370,7 @@ describe("Cumulus BattleStartScreen", () => {
       dreamcaller: { ...view.dreamcaller, abilityActive: false },
     });
 
-    expect(container.textContent).not.toContain("Ability");
-    expect(container.textContent).not.toContain(
+    expect(container.textContent).toContain(
       "Opponent dreamcaller ability is not active.",
     );
 

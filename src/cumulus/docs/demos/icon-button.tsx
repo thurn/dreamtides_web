@@ -6,7 +6,10 @@
 // component. `docName` still points at IconButton so the props table stays
 // accurate to its actual API.
 
-import { IconButton, type IconButtonSize } from "../../components/controls/IconButton";
+import {
+  IconButton,
+  type IconButtonSize,
+} from "../../components/controls/IconButton";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
 import { GLYPHS } from "../../primitives/glyph";
 import type { CumulusComponent } from "../registry";
@@ -44,7 +47,7 @@ export const iconButtonDemo: CumulusComponent = {
   id: "icon-button",
   title: "Icon Button",
   blurb:
-    "The compact glyph-only glass disc — a corner chrome action with placement-aware recipes for scene media or an existing glass surface, made fully round so it reads as one family with the filter/sort controls.",
+    "The compact glyph-only glass disc — normalized across browser-native button chrome, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls.",
   callout:
     "Rung three of the four-rung button suite: the beveled purple Button (commit / primary), a plain pressable text affordance (secondary), THIS glass icon disc (a corner chrome action), and a bare pressable glyph (the lightest inline affordance).",
   group: "Components",
@@ -60,7 +63,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
     },
     {
       label: "On glass",
-      note: "Use `placement=\"onGlass\"` for a disc nested inside a glass panel.",
+      note: 'Use `placement="onGlass"` for a disc nested inside a glass panel.',
       code: `<IconButton
   glyph={GLYPHS.close}
   label="Close deck"
@@ -70,7 +73,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
     },
     {
       label: "Small",
-      note: "`size=\"sm\"` is the 40px disc, for a tighter corner cluster.",
+      note: '`size="sm"` is the 40px disc, for a tighter corner cluster.',
       code: `<IconButton
   size="sm"
   glyph={GLYPHS.close}

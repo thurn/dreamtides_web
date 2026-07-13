@@ -94,6 +94,8 @@ export function IconButton({
       disabled={disabled}
       onClick={disabled ? undefined : onPress}
       style={{
+        appearance: "none",
+        WebkitAppearance: "none",
         width: spec.disc,
         height: spec.disc,
         display: "grid",

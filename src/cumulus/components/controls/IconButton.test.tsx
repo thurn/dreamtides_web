@@ -54,6 +54,8 @@ describe("IconButton", () => {
     const button = container.querySelector("button");
     expect(button).not.toBeNull();
     expect(button?.getAttribute("aria-label")).toBe("Close deck");
+    expect(button?.style.appearance).toBe("none");
+    expect(button?.style.webkitAppearance).toBe("none");
     // The disc shows only its glyph — the close mark (`bx bx-x`).
     expect(button?.querySelector("i.bx-x")).not.toBeNull();
 
@@ -72,7 +74,8 @@ describe("IconButton", () => {
       />,
     );
 
-    const style = container.querySelector("button")?.getAttribute("style") ?? "";
+    const style =
+      container.querySelector("button")?.getAttribute("style") ?? "";
     expect(style).toContain("width: 40px");
     expect(style).toContain("height: 40px");
     expect(style).toContain("font-size: 22px");
@@ -92,7 +95,8 @@ describe("IconButton", () => {
       />,
     );
 
-    const style = container.querySelector("button")?.getAttribute("style") ?? "";
+    const style =
+      container.querySelector("button")?.getAttribute("style") ?? "";
     expect(style).toContain("width: 48px");
     expect(style).toContain("height: 48px");
     expect(style).toContain("font-size: 26px");
@@ -107,7 +111,8 @@ describe("IconButton", () => {
       <IconButton glyph={GLYPHS.close} label="Close" onPress={() => {}} />,
     );
 
-    const style = container.querySelector("button")?.getAttribute("style") ?? "";
+    const style =
+      container.querySelector("button")?.getAttribute("style") ?? "";
     expect(style).toContain("width: 48px");
     expect(style).toContain("font-size: 26px");
 
@@ -152,7 +157,7 @@ describe("IconButton", () => {
     });
   });
 
-  it("while disabled sets aria-disabled=\"true\" and does not fire onPress", () => {
+  it('while disabled sets aria-disabled="true" and does not fire onPress', () => {
     const onPress = vi.fn();
     const { container, root } = mount(
       <IconButton

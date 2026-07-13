@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/icon-button`
 
 Real consumers: **14** (imports outside `src/cumulus/docs/` and tests).
 
-The compact glyph-only glass disc — a corner chrome action with placement-aware recipes for scene media or an existing glass surface, made fully round so it reads as one family with the filter/sort controls.
+The compact glyph-only glass disc — normalized across browser-native button chrome, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls.
 
 > **Guidance:** Rung three of the four-rung button suite: the beveled purple Button (commit / primary), a plain pressable text affordance (secondary), THIS glass icon disc (a corner chrome action), and a bare pressable glyph (the lightest inline affordance).
 

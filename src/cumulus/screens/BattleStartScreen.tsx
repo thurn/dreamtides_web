@@ -11,9 +11,7 @@ import { IconButton } from "../components/controls/IconButton";
 import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
-import {
-  QUEST_STATUS_BAR_CLEARANCE_OP,
-} from "../components/hud/QuestStatusBar";
+import { QUEST_STATUS_BAR_CLEARANCE_OP } from "../components/hud/QuestStatusBar";
 import { GlowIcon } from "../components/controls/GlowIcon";
 import { glassSurfaceStyle } from "../internal/glass-surface";
 import type { ArtRef } from "../primitives/art";
@@ -57,7 +55,7 @@ const PANEL_MAX_WIDTH = 660;
 const CHARACTER_STAGE_MAX_WIDTH = 760;
 const SIGNATURE_CARD_WIDTH = 116;
 const DREAMSIGN_SIZE = 62;
-const MOBILE_SIGNATURE_CARD_WIDTH = 92;
+const MOBILE_SIGNATURE_CARD_MAX_WIDTH = 92;
 const MOBILE_DREAMSIGN_SIZE = 48;
 
 export function BattleStartScreen({ view, onBegin }: BattleStartScreenProps) {
@@ -366,62 +364,21 @@ function MobileBattleStartTitle({
 
 function MobileBattleConsole({ view, onBegin }: BattleStartScreenProps) {
   const [detailIndex, setDetailIndex] = useState(0);
-  const showsAbility =
-    view.dreamcaller.ability !== "" && view.dreamcaller.abilityActive;
 
   return (
     <section
       style={{
         ...glassSurfaceStyle({ radius: token("--radius-popover") }),
-        padding: `${token("--space-9")} ${token("--space-6")}`,
+        position: "relative",
         color: token("--text-on-glass"),
       }}
     >
-      {showsAbility && (
-        <div
-          data-battle-start-mobile-ability=""
-          style={{
-            font: token("--t-rules"),
-            color: token("--text-on-glass"),
-          }}
-        >
-          <RulesText text={view.dreamcaller.ability} />
-        </div>
-      )}
-
-      {showsAbility && (
-        <div style={{ marginTop: token("--space-6") }}>
-          <ConsoleDivider flush />
-        </div>
-      )}
-
-      <div
-        data-battle-start-detail-spacing=""
-        style={{ marginTop: showsAbility ? token("--space-9") : 0 }}
-      >
-        <MobileDetailCarousel
-          view={view}
-          index={detailIndex}
-          onChange={setDetailIndex}
-        />
-      </div>
-
-      <div
-        data-battle-start-action-spacing=""
-        style={{
-          marginTop: token("--space-9"),
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <GlassButton
-          label="Begin Battle"
-          variant="accent"
-          placement="onGlass"
-          onPress={onBegin}
-          testId="cumulus-battle-start-begin"
-        />
-      </div>
+      <MobileDetailCarousel
+        view={view}
+        index={detailIndex}
+        onChange={setDetailIndex}
+        onBegin={onBegin}
+      />
     </section>
   );
 }
@@ -430,10 +387,12 @@ function MobileDetailCarousel({
   view,
   index,
   onChange,
+  onBegin,
 }: {
   readonly view: BattleStartView;
   readonly index: number;
   readonly onChange: (index: number) => void;
+  readonly onBegin: () => void;
 }) {
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState<number | null>(null);
@@ -460,91 +419,137 @@ function MobileDetailCarousel({
       data-battle-start-detail-page={String(index)}
       style={{
         position: "relative",
-        height: contentHeight ?? "auto",
-        overflow: "hidden",
-        transition:
-          contentHeight === null
-            ? undefined
-            : `height ${token("--dur-base")} ${token("--ease-out")}`,
       }}
     >
       <div
-        ref={contentRef}
-        data-battle-start-detail-track=""
+        data-battle-start-detail-viewport=""
         style={{
-          width: "100%",
-          display: "flex",
-          alignItems: "flex-start",
-          transform:
-            index === 0
-              ? "translateX(0%)"
-              : `translateX(-${String(index * 100)}%)`,
-          transition: `transform ${token("--dur-slow")} ${token("--ease-out")}`,
+          height: contentHeight ?? "auto",
+          overflow: "hidden",
+          transition:
+            contentHeight === null
+              ? undefined
+              : `height ${token("--dur-base")} ${token("--ease-out")}`,
         }}
       >
         <div
-          aria-hidden={index !== 0}
-          inert={index !== 0}
-          data-battle-start-detail-active={String(index === 0)}
-          style={{ width: "100%", flex: "none" }}
+          ref={contentRef}
+          data-battle-start-detail-track=""
+          style={{
+            width: "100%",
+            display: "flex",
+            alignItems: "flex-start",
+            transform:
+              index === 0
+                ? "translateX(0%)"
+                : `translateX(-${String(index * 100)}%)`,
+            transition: `transform ${token("--dur-slow")} ${token("--ease-out")}`,
+          }}
         >
-          <MobileCarouselPage title={null}>
-            <MobileBattleStakes view={view} />
-          </MobileCarouselPage>
-        </div>
-        {view.dreamsigns.length > 0 && (
-          <div
-            aria-hidden={index !== 1}
-            inert={index !== 1}
-            data-battle-start-detail-active={String(index === 1)}
-            style={{ width: "100%", flex: "none" }}
+          <MobileCarouselSlide active={index === 0} hasNext>
+            {view.dreamcaller.ability !== "" && (
+              <>
+                <div
+                  data-battle-start-mobile-ability=""
+                  style={{
+                    font: token("--t-rules"),
+                    color: view.dreamcaller.abilityActive
+                      ? token("--text-on-glass")
+                      : token("--text-on-glass-muted"),
+                  }}
+                >
+                  {view.dreamcaller.abilityActive ? (
+                    <RulesText text={view.dreamcaller.ability} />
+                  ) : (
+                    <span>Opponent dreamcaller ability is not active.</span>
+                  )}
+                </div>
+                <div style={{ marginTop: token("--space-6") }}>
+                  <ConsoleDivider flush />
+                </div>
+              </>
+            )}
+
+            <div
+              data-battle-start-detail-spacing=""
+              style={{
+                marginTop:
+                  view.dreamcaller.ability === "" ? 0 : token("--space-9"),
+              }}
+            >
+              <MobileBattleStakes view={view} />
+            </div>
+
+            <div
+              data-battle-start-action-spacing=""
+              style={{
+                marginTop: token("--space-9"),
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <GlassButton
+                label="Begin Battle"
+                variant="accent"
+                placement="onGlass"
+                onPress={onBegin}
+                testId="cumulus-battle-start-begin"
+              />
+            </div>
+          </MobileCarouselSlide>
+          {view.dreamsigns.length > 0 && (
+            <MobileCarouselSlide active={index === 1} hasPrevious hasNext>
+              <MobileCarouselPage title="Dreamsigns:">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    gap: token("--space-3"),
+                  }}
+                >
+                  {view.dreamsigns.map((dreamsign) => (
+                    <Dreamsign
+                      key={dreamsign.id}
+                      dreamsign={dreamsign}
+                      sizePx={MOBILE_DREAMSIGN_SIZE}
+                      testid={`cumulus-battle-start-dreamsign-${String(dreamsign.id)}`}
+                    />
+                  ))}
+                </div>
+              </MobileCarouselPage>
+            </MobileCarouselSlide>
+          )}
+          <MobileCarouselSlide
+            active={index === signatureCardIndex}
+            hasPrevious
           >
-            <MobileCarouselPage title="Dreamsigns:">
+            <MobileCarouselPage title="Signature Cards:">
               <div
+                data-battle-start-signature-cards=""
                 style={{
+                  width: "100%",
                   display: "flex",
                   justifyContent: "center",
-                  gap: token("--space-3"),
+                  gap: token("--space-2"),
+                  alignItems: "flex-start",
                 }}
               >
-                {view.dreamsigns.map((dreamsign) => (
-                  <Dreamsign
-                    key={dreamsign.id}
-                    dreamsign={dreamsign}
-                    sizePx={MOBILE_DREAMSIGN_SIZE}
-                    testid={`cumulus-battle-start-dreamsign-${String(dreamsign.id)}`}
-                  />
+                {view.signatureCards.map((card) => (
+                  <div
+                    key={card.cardId}
+                    data-signature-card-id={card.cardId}
+                    style={{
+                      maxWidth: MOBILE_SIGNATURE_CARD_MAX_WIDTH,
+                      minWidth: 0,
+                      flex: "1 1 0",
+                    }}
+                  >
+                    <GameCard model={card.model} />
+                  </div>
                 ))}
               </div>
             </MobileCarouselPage>
-          </div>
-        )}
-        <div
-          aria-hidden={index !== signatureCardIndex}
-          inert={index !== signatureCardIndex}
-          data-battle-start-detail-active={String(index === signatureCardIndex)}
-          style={{ width: "100%", flex: "none" }}
-        >
-          <MobileCarouselPage title="Signature Cards:">
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                gap: token("--space-3"),
-                alignItems: "flex-start",
-              }}
-            >
-              {view.signatureCards.map((card) => (
-                <div
-                  key={card.cardId}
-                  data-signature-card-id={card.cardId}
-                  style={{ width: MOBILE_SIGNATURE_CARD_WIDTH, flex: "none" }}
-                >
-                  <GameCard model={card.model} />
-                </div>
-              ))}
-            </div>
-          </MobileCarouselPage>
+          </MobileCarouselSlide>
         </div>
       </div>
 
@@ -560,6 +565,38 @@ function MobileDetailCarousel({
           onPress={() => onChange(index + 1)}
         />
       )}
+    </div>
+  );
+}
+
+function MobileCarouselSlide({
+  active,
+  hasPrevious = false,
+  hasNext = false,
+  children,
+}: {
+  readonly active: boolean;
+  readonly hasPrevious?: boolean;
+  readonly hasNext?: boolean;
+  readonly children: ReactNode;
+}) {
+  const controlGutter = `calc(${token("--touch-min")} + ${token("--space-5")})`;
+  return (
+    <div
+      aria-hidden={!active}
+      inert={!active}
+      data-battle-start-detail-active={String(active)}
+      style={{
+        width: "100%",
+        flex: "none",
+        boxSizing: "border-box",
+        paddingTop: token("--space-9"),
+        paddingRight: hasNext ? controlGutter : token("--space-6"),
+        paddingBottom: token("--space-9"),
+        paddingLeft: hasPrevious ? controlGutter : token("--space-6"),
+      }}
+    >
+      {children}
     </div>
   );
 }
@@ -606,10 +643,11 @@ function MobileCarouselChevron({
 }) {
   return (
     <div
+      data-battle-start-carousel-chevron={direction}
       style={{
         position: "absolute",
         top: "50%",
-        [direction]: token("--space-2"),
+        [direction]: token("--space-5"),
         transform: "translateY(-50%)",
         zIndex: 2,
       }}
