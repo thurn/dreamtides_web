@@ -212,7 +212,7 @@ describe("Tango BattleStartScreen", () => {
     expect(activePage()?.textContent).toContain("To Win");
     expect(activePage()?.textContent).toContain("Reward");
     expect(activePage()?.style.minHeight).toBe("148px");
-    expect(activePage()?.style.alignItems).toBe("flex-end");
+    expect(activePage()?.style.alignItems).toBe("center");
     expect(
       activePage()?.querySelector<HTMLElement>(
         '[data-battle-start-stake="To Win"] > div',

@@ -60,7 +60,7 @@ const DREAMSIGN_SIZE = 62;
 const MOBILE_SIGNATURE_CARD_WIDTH = 92;
 const MOBILE_DREAMSIGN_SIZE = 48;
 /** Matches the measured three-card signature page so the initial briefing
- * keeps the same glass-panel height while placing its extra air above stakes. */
+ * keeps the same glass-panel height while centering its stakes in that space. */
 const MOBILE_DETAIL_PAGE_MIN_HEIGHT = 148;
 
 export function BattleStartScreen({ view, onBegin }: BattleStartScreenProps) {
@@ -490,7 +490,7 @@ function MobileDetailCarousel({
             minHeight: MOBILE_DETAIL_PAGE_MIN_HEIGHT,
             flex: "none",
             display: "flex",
-            alignItems: "flex-end",
+            alignItems: "center",
           }}
         >
           <div style={{ width: "100%" }}>
