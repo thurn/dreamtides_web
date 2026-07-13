@@ -101,7 +101,7 @@ describe("CardGalleryPanel", () => {
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
     act(() => root.render(<CumulusRoot><CardGalleryPanel title="Duplication" reserveStackedCopySpace cards={[
-      { entryId: "selected", model: model("Selected"), stackedCopy: true },
+      { entryId: "selected", model: model("Selected"), stackedCopy: true, stackedCopyDirection: "left" },
     ]} footerActions={[
       { label: "Decline Offer", onPress: decline, testId: "decline" },
       { label: "Duplicate", onPress: confirm, variant: "accent", testId: "confirm" },
@@ -114,7 +114,7 @@ describe("CardGalleryPanel", () => {
     ).toBe("true");
     const stackedCopy = container.querySelector<HTMLElement>("[data-gallery-stacked-copy]");
     expect(stackedCopy?.querySelector('[data-testid="card-view-copy"]')?.textContent).toBe("Selected");
-    expect(stackedCopy?.style.transform).toContain("rotate(3deg)");
+    expect(stackedCopy?.style.transform).toContain("rotate(-3deg)");
     expect(container.querySelector<HTMLElement>('[data-testid="confirm"]')?.dataset.glassVariant).toBe("accent");
     act(() => (container.querySelector('[data-testid="decline"]') as HTMLButtonElement).click());
     act(() => (container.querySelector('[data-testid="confirm"]') as HTMLButtonElement).click());

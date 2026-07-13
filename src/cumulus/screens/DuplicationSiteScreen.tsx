@@ -79,6 +79,12 @@ export function DuplicationSiteScreen({
       speechBubbleTestId="cumulus-duplication-speech-bubble"
       renderGallery={(layout) => {
         const desktop = layout === "desktop";
+        const columnCount = view.isEnhanced ? (desktop ? 5 : 4) : 3;
+        const columns = view.isEnhanced
+          ? desktop
+            ? "five"
+            : "four"
+          : "three";
         return (
           <section
             data-duplication-card-grid=""
@@ -124,19 +130,21 @@ export function DuplicationSiteScreen({
                   testId: "cumulus-duplication-confirm",
                 },
               ]}
-              cards={view.cards.map((card) => ({
+              cards={view.cards.map((card, index) => ({
                 entryId: card.entryId,
                 model: card.model,
                 testId: `cumulus-duplication-card-${card.entryId}`,
                 selected: selectedEntryId === card.entryId,
                 stackedCopy: selectedEntryId === card.entryId,
+                stackedCopyDirection:
+                  (index + 1) % columnCount === 0 ? "left" : "right",
                 disabled: locked,
                 selectionColor: "accent",
               }))}
               emptyLabel={
                 view.ready ? "No cards available to copy." : "Gathering possibilities…"
               }
-              columns={view.isEnhanced ? (desktop ? "five" : "four") : "three"}
+              columns={columns}
               cardSize={view.isEnhanced ? "standard" : desktop ? "roomy" : "standard"}
               frame="floating"
               spacing={desktop && !view.isEnhanced ? "spacious" : "medium"}

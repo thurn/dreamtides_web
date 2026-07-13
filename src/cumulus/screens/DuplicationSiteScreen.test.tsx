@@ -168,6 +168,16 @@ describe("DuplicationSiteScreen", () => {
     act(() => first?.click());
     act(() => first?.click());
     expect(confirm?.getAttribute("aria-disabled")).toBe("true");
+    const rightmost = container.querySelector<HTMLButtonElement>(
+      '[data-testid="cumulus-duplication-card-entry-3"]',
+    );
+    act(() => rightmost?.click());
+    expect(
+      container.querySelector<HTMLElement>("[data-gallery-stacked-copy]")
+        ?.style.transform,
+    ).toContain("rotate(-3deg)");
+    act(() => rightmost?.click());
+    expect(confirm?.getAttribute("aria-disabled")).toBe("true");
     act(() => confirm?.click());
     expect(onDuplicate).not.toHaveBeenCalled();
 

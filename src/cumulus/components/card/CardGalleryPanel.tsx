@@ -59,6 +59,8 @@ export interface CardGalleryCardView {
   reserved?: boolean;
   /** Render a noninteractive offset copy beneath the primary card. */
   stackedCopy?: boolean;
+  /** Horizontal fan direction for the offset copy. Defaults to `right`. */
+  stackedCopyDirection?: "left" | "right";
 }
 
 /** The small white line shown beneath a gallery item. */
@@ -799,6 +801,7 @@ export function CardGalleryPanel({
                 const reserved = card.reserved === true;
                 const disabled = card.disabled === true || reserved;
                 const interactive = onCardPress !== undefined;
+                const stackedCopyLeft = card.stackedCopyDirection === "left";
                 const tileStyle: CSSProperties = {
                   position: "relative",
                   zIndex: card.stackedCopy === true ? 1 : undefined,
@@ -826,7 +829,11 @@ export function CardGalleryPanel({
                           inset: 0,
                           zIndex: 0,
                           pointerEvents: "none",
-                          transform: `translate(${token("--space-7")}, ${token("--space-7")}) rotate(3deg)`,
+                          transform: `translate(${
+                            stackedCopyLeft
+                              ? `calc(${token("--space-7")} * -1)`
+                              : token("--space-7")
+                          }, ${token("--space-7")}) rotate(${stackedCopyLeft ? "-3deg" : "3deg"})`,
                           transformOrigin: "center",
                         }}
                       >
