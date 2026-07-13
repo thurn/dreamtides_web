@@ -1461,6 +1461,124 @@
       "description": "The tile's material. `\"flat\"` (default) is the chrome-free collectible tile\nused in lists over a solid surface; `\"hud\"` composes {@link DS_SHADOW} — a\ndrop-shadow + violet glow — into the tile filter so the object lifts off busy\nscene art in the transparent quest HUD. `\"revelation\"` uses a stronger\npath-following shadow for large choices over bright Revelation site art."
     }
   ],
+  "DreamsignGalleryPanel": [
+    {
+      "name": "title",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Header title."
+    },
+    {
+      "name": "entries",
+      "tsType": "readonly DreamsignGalleryEntryView[]",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Dreamsign offers in persistent slot order."
+    },
+    {
+      "name": "endAction",
+      "tsType": "DreamsignGalleryActionView",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Card-shaped action shown after the offers.",
+      "nested": {
+        "name": "DreamsignGalleryActionView",
+        "fields": [
+          {
+            "name": "entryId",
+            "tsType": "string",
+            "optional": false,
+            "description": "Stable action id."
+          },
+          {
+            "name": "glyph",
+            "tsType": "Glyph",
+            "optional": false,
+            "description": "Glyph that identifies the action."
+          },
+          {
+            "name": "label",
+            "tsType": "string",
+            "optional": false,
+            "description": "Visible and accessible action label."
+          },
+          {
+            "name": "price",
+            "tsType": "number | null",
+            "optional": false,
+            "description": "Essence price, or null for a free/spent text caption."
+          },
+          {
+            "name": "text",
+            "tsType": "string | null",
+            "optional": false,
+            "description": "Caption used when the action is free or already spent."
+          },
+          {
+            "name": "disabled",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "Whether the action can currently be triggered."
+          }
+        ]
+      }
+    },
+    {
+      "name": "size",
+      "tsType": "\"compact\" | \"standard\"",
+      "unionMembers": [
+        "compact",
+        "standard"
+      ],
+      "required": false,
+      "defaultValue": "standard",
+      "description": "Compact uses the two-column phone shelf; standard uses the four-column desktop shelf."
+    },
+    {
+      "name": "closeLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Accessible label for the close control."
+    },
+    {
+      "name": "onClose",
+      "tsType": "() => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Fires when the close disc is activated."
+    },
+    {
+      "name": "onEntryPress",
+      "tsType": "(entryId: string) => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Fires with the UUID-derived entry id when an available Dreamsign is activated."
+    },
+    {
+      "name": "onEndActionPress",
+      "tsType": "() => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Fires when the appended action is activated."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Stable test id for the panel root."
+    }
+  ],
   "EssenceGlyph": [],
   "EssenceValue": [
     {

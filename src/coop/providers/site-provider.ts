@@ -262,14 +262,16 @@ export function createSiteContentProvider(
       }
     },
 
-    rerollShop: ({ quest, rng }): ShopRerollResult | null => {
+    rerollShop: ({ quest, site, rng }): ShopRerollResult | null => {
       const stream = streamFromKeyed(rng);
+      const isMarket = site.type === "DreamsignMarket";
       const generated = generateShopInventory({
         cardDatabase: content.cardDatabase,
-        draftState: shopSourceDraftState(quest),
+        draftState: isMarket ? null : shopSourceDraftState(quest),
         remainingDreamsignPoolIds: quest.remainingDreamsignPool,
         dreamsignTemplates: content.dreamsignTemplates,
         dreamsignRegenerationPoolIds: dreamsignRegenerationPoolIds(quest),
+        ...(isMarket ? { cardCount: 0, dreamsignCount: 3 } : {}),
         rng: stream,
       });
       // Task-15 trap: deck-fit runs keep the live draft state, and a card-less

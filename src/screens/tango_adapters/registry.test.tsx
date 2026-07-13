@@ -51,6 +51,12 @@ describe("tangoSiteScreenFor", () => {
     ).not.toBeNull();
   });
 
+  it("resolves the migrated Dreamsign Bazaar site to a Tango node", () => {
+    expect(
+      tangoSiteScreenFor({ type: "DreamsignMarket", id: "site-1" } as SiteState),
+    ).not.toBeNull();
+  });
+
   it("resolves standard desktop Transfiguration while enhanced stays on the legacy screen", () => {
     expect(
       tangoSiteScreenFor({

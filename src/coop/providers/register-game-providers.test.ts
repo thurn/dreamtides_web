@@ -226,7 +226,7 @@ describe("registerGameProviders (real content providers)", () => {
       expect(siteIdByType.get(siteType)).toBeDefined();
     }
 
-    // Phase 2: OPEN each content site, REROLL the shop, BEGIN the battle.
+    // Phase 2: OPEN each content site, REROLL both shop variants, BEGIN battle.
     const tail: SeqEvent[] = [];
     for (const siteType of CONTENT_SITE_TYPES) {
       seq += 1;
@@ -238,6 +238,13 @@ describe("registerGameProviders (real content providers)", () => {
     tail.push(
       ev(seq, "REROLL_SHOP", {
         siteId: siteIdByType.get("Shop"),
+        essenceCost: 0,
+      }),
+    );
+    seq += 1;
+    tail.push(
+      ev(seq, "REROLL_SHOP", {
+        siteId: siteIdByType.get("DreamsignMarket"),
         essenceCost: 0,
       }),
     );
@@ -258,6 +265,18 @@ describe("registerGameProviders (real content providers)", () => {
     }
     // The battle slice exists after BEGIN_BATTLE.
     expect(first.finalState.battle).not.toBeNull();
+    const marketSiteId = siteIdByType.get("DreamsignMarket");
+    expect(marketSiteId).toBeDefined();
+    if (marketSiteId !== undefined) {
+      const marketRuntime = first.finalState.quest.siteRuntime[marketSiteId];
+      expect(marketRuntime?.kind).toBe("shop");
+      if (marketRuntime?.kind === "shop") {
+        expect(marketRuntime.slots).toHaveLength(3);
+        expect(
+          marketRuntime.slots.every((slot) => slot.itemType === "dreamsign"),
+        ).toBe(true);
+      }
+    }
 
     // (b) Determinism: folding the identical log again is byte-identical.
     const second = replayLog({ genesis: GENESIS, events });

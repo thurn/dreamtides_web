@@ -18,6 +18,7 @@ import { DraftSiteScreenAdapter } from "./DraftSiteScreenAdapter";
 import { DreamsignRevelationScreenAdapter } from "./DreamsignRevelationScreenAdapter";
 import { PurgeSiteScreenAdapter } from "./PurgeSiteScreenAdapter";
 import { CardShopSiteScreenAdapter } from "./CardShopSiteScreenAdapter";
+import { DreamsignBazaarSiteScreenAdapter } from "./DreamsignBazaarSiteScreenAdapter";
 import { TransfigurationSiteScreenAdapter } from "./TransfigurationSiteScreenAdapter";
 
 /**
@@ -64,6 +65,10 @@ export function tangoSiteScreenFor(
     case "Shop":
       return (
         <CardShopSiteScreenAdapter siteId={site.id} />
+      );
+    case "DreamsignMarket":
+      return (
+        <DreamsignBazaarSiteScreenAdapter siteId={site.id} />
       );
     case "Transfiguration":
       if (site.isEnhanced) return null;

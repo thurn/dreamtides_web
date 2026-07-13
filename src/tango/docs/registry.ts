@@ -18,6 +18,7 @@ import { cardStatOrbDemo } from "./demos/card-stat-orb";
 import { cardTermDefinitionsDemo } from "./demos/card-term-definitions";
 import { dreamcallerPortraitDemo } from "./demos/dreamcaller-portrait";
 import { dreamsignDemo } from "./demos/dreamsign";
+import { dreamsignGalleryPanelDemo } from "./demos/dreamsign-gallery-panel";
 import { essenceValueDemo } from "./demos/essence-value";
 import { gameCardDemo } from "./demos/game-card";
 import { glassButtonDemo } from "./demos/glass-button";
@@ -163,6 +164,7 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   atlasEdgeDemo,
   atlasMapDemo,
   dreamsignDemo,
+  dreamsignGalleryPanelDemo,
   siteNodeDemo,
 ];
 

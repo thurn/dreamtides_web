@@ -3,7 +3,7 @@
 // band over the gallery; desktop places the guide and gallery side by side.
 
 import { motion, useReducedMotion } from "framer-motion";
-import type { ReactElement } from "react";
+import type { ReactElement, ReactNode } from "react";
 import {
   QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
   QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP,
@@ -48,6 +48,8 @@ export interface GuideGallerySiteLayoutProps {
   speechAnchorTestId?: string;
   /** Stable test id for the speech bubble. */
   speechBubbleTestId?: string;
+  /** Optional screen-owned overlay rendered above the shared composition. */
+  children?: ReactNode;
 }
 
 const GUIDE_TOP_ROWS = "clamp(170px, 28dvh, 240px) minmax(0, 1fr)";
@@ -70,6 +72,7 @@ export function GuideGallerySiteLayout({
   guideArtTestId,
   speechAnchorTestId,
   speechBubbleTestId,
+  children,
 }: GuideGallerySiteLayoutProps) {
   const isDesktop = useIsDesktop();
   const revelationMobile = !isDesktop && mobileComposition === "revelation";
@@ -140,6 +143,7 @@ export function GuideGallerySiteLayout({
           {renderGallery("mobile")}
         </>
       )}
+      {children}
     </div>
   );
 }
