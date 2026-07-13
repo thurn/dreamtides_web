@@ -141,6 +141,7 @@ export function DuplicationSiteScreen({
               frame="floating"
               spacing={desktop && !view.isEnhanced ? "spacious" : "medium"}
               widthMode={view.isEnhanced || !desktop ? "fill" : "content"}
+              reserveStackedCopySpace
               testId="cumulus-duplication-card-gallery"
               onCardPress={toggleSelection}
             />

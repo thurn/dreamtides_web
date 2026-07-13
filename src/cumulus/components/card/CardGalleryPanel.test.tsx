@@ -100,7 +100,7 @@ describe("CardGalleryPanel", () => {
     const decline = vi.fn(); const confirm = vi.fn();
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CumulusRoot><CardGalleryPanel title="Duplication" cards={[
+    act(() => root.render(<CumulusRoot><CardGalleryPanel title="Duplication" reserveStackedCopySpace cards={[
       { entryId: "selected", model: model("Selected"), stackedCopy: true },
     ]} footerActions={[
       { label: "Decline Offer", onPress: decline, testId: "decline" },
@@ -108,6 +108,10 @@ describe("CardGalleryPanel", () => {
     ]} /></CumulusRoot>));
     const actions = container.querySelector<HTMLElement>("[data-gallery-footer-actions]");
     expect(actions?.style.gridTemplateColumns).toBe("repeat(2, minmax(0, 1fr))");
+    expect(
+      container.querySelector<HTMLElement>("section")?.dataset
+        .galleryReservesStackedCopy,
+    ).toBe("true");
     const stackedCopy = container.querySelector<HTMLElement>("[data-gallery-stacked-copy]");
     expect(stackedCopy?.querySelector('[data-testid="card-view-copy"]')?.textContent).toBe("Selected");
     expect(stackedCopy?.style.transform).toContain("rotate(3deg)");

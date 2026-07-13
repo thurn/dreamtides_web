@@ -783,6 +783,14 @@
       "description": "Floating-frame width behavior. Defaults to `content`."
     },
     {
+      "name": "reserveStackedCopySpace",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Reserve the fanned-copy footprint before any card displays its copy."
+    },
+    {
       "name": "testId",
       "tsType": "string",
       "unionMembers": [],

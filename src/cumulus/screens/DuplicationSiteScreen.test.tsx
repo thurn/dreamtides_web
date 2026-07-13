@@ -117,6 +117,8 @@ describe("DuplicationSiteScreen", () => {
     );
     expect(gallery?.dataset.galleryColumns).toBe("3");
     expect(gallery?.dataset.galleryWidthMode).toBe("content");
+    expect(gallery?.dataset.galleryReservesStackedCopy).toBe("true");
+    const initialPanelWidth = gallery?.style.width;
 
     const confirm = container.querySelector<HTMLButtonElement>(
       '[data-testid="cumulus-duplication-confirm"]',
@@ -132,6 +134,7 @@ describe("DuplicationSiteScreen", () => {
       '[data-testid="cumulus-duplication-card-entry-1"]',
     );
     act(() => first?.click());
+    expect(gallery?.style.width).toBe(initialPanelWidth);
     expect(confirm?.getAttribute("aria-disabled")).toBeNull();
     expect(container.querySelector("[data-gallery-stacked-copy]")).not.toBeNull();
     expect(

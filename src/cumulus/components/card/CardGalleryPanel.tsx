@@ -244,6 +244,8 @@ export interface CardGalleryPanelProps {
   spacing?: CardGallerySpacing;
   /** Floating-frame width behavior. Defaults to `content`. */
   widthMode?: CardGalleryWidthMode;
+  /** Reserve the fanned-copy footprint before any card displays its copy. */
+  reserveStackedCopySpace?: boolean;
   /** Test id for the panel root. */
   testId?: string;
   /**
@@ -584,6 +586,7 @@ export function CardGalleryPanel({
   frame = "floating",
   spacing = "regular",
   widthMode = "content",
+  reserveStackedCopySpace = false,
   testId,
   cutoutAwareAccessory = false,
   onCardPress,
@@ -608,7 +611,8 @@ export function CardGalleryPanel({
   const fallbackVisibleGapSlots = gapSlotsFor(fallbackVisibleRows);
   const hasCaptions =
     endAction !== undefined || cards.some((card) => card.caption !== undefined);
-  const hasStackedCopy = cards.some((card) => card.stackedCopy === true);
+  const hasStackedCopy =
+    reserveStackedCopySpace || cards.some((card) => card.stackedCopy === true);
   const rowSupplementPx = hasCaptions ? CAPTION_BLOCK_PX : 0;
   const trailingReservePx = hasStackedCopy ? STACKED_COPY_RESERVE_PX : 0;
   const { rootRef, headerRef, bodyRef, gridRef, measure } = useGalleryMeasure({
@@ -668,6 +672,9 @@ export function CardGalleryPanel({
         data-gallery-spacing={spacing}
         data-gallery-card-size={cardSize}
         data-gallery-width-mode={widthMode}
+        data-gallery-reserves-stacked-copy={
+          reserveStackedCopySpace || undefined
+        }
         style={{
           ...materialStyle,
           position: "relative",
