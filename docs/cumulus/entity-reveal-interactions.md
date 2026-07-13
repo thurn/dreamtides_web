@@ -199,7 +199,7 @@ while keeping policy centralized.
 | Activation | `onActivate` and unavailable state | Tap/hold discrimination and click suppression |
 | Input | Nothing | Mouse, pen, touch, focus, and hybrid-device behavior |
 | Timing | Nothing | 30ms intent filter, 300ms hold boundary, exit motion |
-| Sizing | Nothing | 45vw mobile cards, 340px desktop GameCards, source-size feedback |
+| Sizing | Nothing | 45vw mobile cards, 240px desktop GameCards, source-size feedback |
 | Placement | Nothing | Viewport measurement, circle clearance, orientation, fallbacks |
 | Overflow | Nothing | Priority order, measured leading-prefix fit, and omission |
 | Layering | Nothing | The single root portal and highest application layer |
@@ -437,10 +437,10 @@ All cards remain top-aligned. The group never flips below the source.
 
 ### GameCard reading state
 
-Every desktop `GameCard` with a rendered width below 340px immediately resolves
-to a 340px-wide reading copy on hover or eligible focus. Initial card size does
+Every desktop `GameCard` with a rendered width below 240px immediately resolves
+to a 240px-wide reading copy on hover or eligible focus. Initial card size does
 not determine a scale factor; all small cards converge on the same physical
-reading width. A card already at least 340px wide remains at its current size.
+reading width. A card already at least 240px wide remains at its current size.
 
 The reading copy preserves the source card's center and translates only enough
 to stay inside the visual viewport. Secondary cards prefer the right side of
@@ -454,7 +454,7 @@ produce a visible duplicate during either state. Under reduced motion, entry
 and exit are both instantaneous.
 
 Pointer-down keeps the reading copy active and applies size-aware press
-compression relative to the 340px reading state, floored at the source card's
+compression relative to the 240px reading state, floored at the source card's
 original rendered size. Pointer-up restores the reading state while hover
 continues. Moving outside the source entity ends hover; the pointer-transparent
 reading copy does not extend the source hit area.
@@ -503,7 +503,7 @@ Keyboard-originated focus reveals the same primary and secondary information
 and uses the same placement rules as pointer hover. A pointer press that focuses
 an element does not qualify as keyboard focus. Non-GameCard sources keep their
 standard visible focus ring without hover enlargement. Focused GameCards use
-the 340px reading state because that state is the information surface itself.
+the 240px reading state because that state is the information surface itself.
 
 Below 900px, keyboard focus uses 45vw cards but has no protected touch circle.
 Placement anchors to the focused entity's rectangle, preferring the top-aligned

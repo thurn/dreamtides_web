@@ -68,7 +68,7 @@ beforeEach(() => {
   } as unknown as typeof ResizeObserver;
   vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function getRect(this: HTMLElement) {
     if (this.hasAttribute("data-game-card-source")) return rect(Number(this.parentElement?.dataset.testWidth ?? 160));
-    if (this.getAttribute("data-reveal-measure") === "primary") return rect(340, 0, 0);
+    if (this.getAttribute("data-reveal-measure") === "primary") return rect(240, 0, 0);
     if (this.getAttribute("data-reveal-measure") === "secondary") return rect(248, 0, 0);
     if (this.classList.contains("card-view")) return rect(160);
     return rect(100);
@@ -98,8 +98,8 @@ describe("GameCard reveal contract", () => {
     act(() => root.unmount());
   });
 
-  it("uses a reading copy below 340px and leaves a complete wide source in place", async () => {
-    const small = mount(<div data-test-width="160"><GameCard model={model()} /></div>);
+  it("uses a reading copy below 240px and leaves a complete 240px source in place", async () => {
+    const small = mount(<div data-test-width="239"><GameCard model={model()} /></div>);
     const smallSource = small.container.querySelector<HTMLElement>("[data-game-card-source]");
     act(() => { smallSource?.dispatchEvent(pointer("pointerover", { pointerType: "mouse", pointerId: 1 })); });
     expect(smallSource?.dataset.revealActive).toBe("true");
@@ -107,10 +107,10 @@ describe("GameCard reveal contract", () => {
     remeasure();
     await vi.waitFor(() => expect(document.querySelector('[data-cumulus-reveal-card="primary"]')).not.toBeNull());
     expect(smallSource?.style.opacity).toBe("0");
-    expect(document.querySelector<HTMLElement>('[data-cumulus-reveal-card="primary"]')?.style.width).toBe("340px");
+    expect(document.querySelector<HTMLElement>('[data-cumulus-reveal-card="primary"]')?.style.width).toBe("240px");
     act(() => small.root.unmount());
 
-    const wide = mount(<div data-test-width="360"><GameCard model={model()} /></div>);
+    const wide = mount(<div data-test-width="240"><GameCard model={model()} /></div>);
     const wideSource = wide.container.querySelector<HTMLElement>("[data-game-card-source]");
     act(() => { wideSource?.dispatchEvent(pointer("pointerover", { pointerType: "mouse", pointerId: 2 })); });
     await act(async () => { await new Promise((resolve) => setTimeout(resolve, 0)); });

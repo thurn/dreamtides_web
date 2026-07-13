@@ -130,7 +130,7 @@ export const gameCardDemo: CumulusComponent = {
   blurb:
     "The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name.",
   callout:
-    "GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. Compact cards read at 340px on desktop and 45vw on mobile; glossary definitions, focus, press, activation, and drag dismissal are automatic.",
+    "GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, focus, press, activation, and drag dismissal are automatic.",
   group: "Components",
   docName: "GameCard",
   Component: GameCardDemo,

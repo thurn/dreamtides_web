@@ -7,7 +7,10 @@ import { RevealOverlay, type RevealOverlayActive } from "./RevealOverlay";
 import { makeTextRevealSpec } from "./test-utils";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import type { RevealGeometrySnapshot, RevealSpec } from "./model";
-import type { RevealPlacementDecision } from "./geometry";
+import {
+  DESKTOP_GAME_CARD_WIDTH,
+  type RevealPlacementDecision,
+} from "./geometry";
 import { CumulusRoot } from "../../CumulusRoot";
 
 const UUID = "00000000-0000-4000-8000-000000000001";
@@ -128,7 +131,9 @@ describe("RevealOverlay", () => {
     measuredPrimaryHeight = 240;
     act(() => { for (const callback of resizeCallbacks) callback([], {} as ResizeObserver); });
     expect(onPlaced).toHaveBeenCalledTimes(1);
-    expect(placedDecision?.primaryRect.height).toBeCloseTo(816);
+    expect(placedDecision?.primaryRect.height).toBeCloseTo(
+      DESKTOP_GAME_CARD_WIDTH * (measuredPrimaryHeight / 100),
+    );
   });
 
   it("keeps a desktop GameCard source and reading copy visually unique", () => {

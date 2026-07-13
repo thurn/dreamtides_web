@@ -38,7 +38,7 @@ beforeEach(() => {
   } as unknown as typeof ResizeObserver;
   vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function rect(this: HTMLElement) {
     if (this.hasAttribute("data-game-card-source")) return DOMRect.fromRect({ x: 80, y: 300, width: 160, height: 224 });
-    if (this.dataset.revealMeasure === "primary") return DOMRect.fromRect({ width: 340, height: 476 });
+    if (this.dataset.revealMeasure === "primary") return DOMRect.fromRect({ width: 240, height: 336 });
     if (this.dataset.revealMeasure === "secondary") return DOMRect.fromRect({ width: 248, height: 120 });
     if (this.dataset.cumulusRevealCard !== undefined) {
       return DOMRect.fromRect({ x: Number.parseFloat(this.style.left), y: Number.parseFloat(this.style.top), width: Number.parseFloat(this.style.width), height: Number.parseFloat(this.style.height) });
@@ -122,7 +122,7 @@ describe("EntityRevealConformanceDemo", () => {
     expect(opened.viewport).toEqual({ layout: "desktop", width: 1200, height: 800, offsetLeft: 7, offsetTop: 13, safeArea: { top: 11, right: 12, bottom: 13, left: 14 } });
     expect(opened.placement).toEqual({ family: "desktop-game-card-reading", orientation: "primary-left" });
     expect(opened.finalRects).toEqual({ primary: rendered[0], secondaries: rendered.slice(1) });
-    expect(opened.finalRects).toEqual({ primary: { x: 21, y: 174, width: 340, height: 476 }, secondaries: [{ x: 371, y: 174, width: 248, height: 120 }, { x: 371, y: 304, width: 248, height: 120 }, { x: 371, y: 434, width: 248, height: 120 }] });
+    expect(opened.finalRects).toEqual({ primary: { x: 40, y: 244, width: 240, height: 336 }, secondaries: [{ x: 290, y: 244, width: 248, height: 120 }, { x: 290, y: 374, width: 248, height: 120 }, { x: 290, y: 504, width: 248, height: 120 }] });
     expect(opened.circleClearance).toBeUndefined();
     expect(opened.shownSecondaryCount).toBe(rendered.length - 1);
     expect(opened.droppedSecondaryCount).toBe(0);

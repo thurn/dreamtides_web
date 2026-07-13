@@ -175,7 +175,6 @@ Unity project serialization — built-in Tango key was renamed
   setting as `AndroidEnableTango`. Opening the project therefore rewrites the
   tracked file. Restore Unity's canonical field name in a dedicated cleanup so
   normal editor runs keep the project settings byte-stable.
-
 Cumulus site-render logging — site adapters are reported as legacy
 
 - `src/components/ScreenRouter.tsx` derives `servedByCumulus` only from
@@ -186,3 +185,11 @@ Cumulus site-render logging — site adapters are reported as legacy
   Duplication screen verified through `?goto=duplication`. Resolve the active
   site before logging and use the same site-registry decision that renders the
   route.
+
+Cumulus reveal documentation — feedback dimension disagrees with implementation
+
+- `docs/cumulus/entity-reveal-interactions.md` defines size-aware pointer
+  feedback from the shorter rendered dimension, while
+  `src/cumulus/primitives/press-feedback.ts` deliberately computes it from the
+  longest edge. Align the current-system documentation and its representative
+  scale examples with the implementation contract.

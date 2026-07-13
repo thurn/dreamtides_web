@@ -6,7 +6,7 @@ const CARD_GAP = 10;
 const DESKTOP_SOURCE_GAP = 14;
 const MOBILE_SOURCE_GAP = DESKTOP_SOURCE_GAP;
 const TOUCH_RADIUS = 24;
-const DESKTOP_GAME_CARD_WIDTH = 340;
+export const DESKTOP_GAME_CARD_WIDTH = 240;
 
 export interface RevealSize { readonly width: number; readonly height: number }
 export interface RevealPlacementInput {

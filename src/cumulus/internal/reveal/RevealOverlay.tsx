@@ -1,6 +1,11 @@
 import { useLayoutEffect, useMemo, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
-import { selectRevealPlacement, type RevealPlacementDecision, type RevealSize } from "./geometry";
+import {
+  DESKTOP_GAME_CARD_WIDTH,
+  selectRevealPlacement,
+  type RevealPlacementDecision,
+  type RevealSize,
+} from "./geometry";
 import type { RevealCoordinatorSource, RevealGeometrySnapshot, RevealPoint, RevealReason, RevealRect, RevealSpec } from "./model";
 import { renderRevealCard, renderRevealInfoCard } from "./render-reveal-card";
 import { captureVisualViewport } from "./viewport";
@@ -88,7 +93,7 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
   const sourcePrimaryInPlace = active !== null && decision !== null
     && active.spec.primary.kind === "gameCard"
     && (decision.pressInPlace || (viewport?.layout === "desktop" && active.sourceShowsCompleteGameCard
-      && active.sourceRect.width >= 340));
+      && active.sourceRect.width >= DESKTOP_GAME_CARD_WIDTH));
   useLayoutEffect(() => {
     if (active === null || viewport?.layout !== "desktop" || !primaryIsCardShaped || decision === null || sourcePrimaryInPlace) return;
     const previousOpacity = active.element.style.opacity;
@@ -100,7 +105,7 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
   const mobileWidth = viewport.width * 0.45;
   const measurePrimaryWidth = viewport.layout === "mobile"
     ? mobileWidth
-    : primaryIsCardShaped ? Math.max(340, active.sourceRect.width) : 248;
+    : primaryIsCardShaped ? Math.max(DESKTOP_GAME_CARD_WIDTH, active.sourceRect.width) : 248;
   const measureSecondaryWidth = viewport.layout === "mobile" ? mobileWidth : 248;
 
   return createPortal(

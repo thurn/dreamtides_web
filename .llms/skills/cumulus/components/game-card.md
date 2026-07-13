@@ -10,7 +10,7 @@ Real consumers: **28** (imports outside `src/cumulus/docs/` and tests).
 
 The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name.
 
-> **Guidance:** GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. Compact cards read at 340px on desktop and 45vw on mobile; glossary definitions, focus, press, activation, and drag dismissal are automatic.
+> **Guidance:** GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, focus, press, activation, and drag dismissal are automatic.
 
 ## Props
 
