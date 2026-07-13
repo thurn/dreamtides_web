@@ -417,12 +417,22 @@ describe("TransfigurationSiteScreen", () => {
       container.querySelector<HTMLElement>(
         "[data-transfiguration-detail-body]",
       )?.style.padding,
-    ).toBe("var(--space-4)");
+    ).toBe("var(--space-6) var(--space-4)");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-transfiguration-detail-body]",
+      )?.style.gridTemplateRows,
+    ).toBe("minmax(0, 1fr)");
     expect(
       container.querySelector<HTMLElement>("[data-transfiguration-options]")
         ?.style.flexDirection,
     ).toBe("column");
     expect(container.querySelectorAll('[role="radio"]')).toHaveLength(2);
+    expect(
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="tango-transfiguration-form-Empowered"]',
+      )?.textContent,
+    ).toBe("Empowered");
     expect(
       container.querySelector<HTMLButtonElement>(
         '[data-testid="tango-transfiguration-form-Empowered"]',

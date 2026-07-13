@@ -417,9 +417,12 @@ function DetailPanel({
           gridTemplateColumns: mobile
             ? "minmax(0, 1fr) auto"
             : "minmax(220px, 0.82fr) minmax(320px, 1.18fr)",
+          gridTemplateRows: mobile ? "minmax(0, 1fr)" : undefined,
           gap: mobile ? token("--space-4") : token("--space-8"),
           alignItems: mobile ? "stretch" : "start",
-          padding: mobile ? token("--space-4") : token("--space-8"),
+          padding: mobile
+            ? `${token("--space-6")} ${token("--space-4")}`
+            : token("--space-8"),
         }}
       >
         <div
@@ -448,6 +451,7 @@ function DetailPanel({
         <div
           style={{
             minWidth: 0,
+            minHeight: mobile ? 0 : undefined,
             width: mobile ? "auto" : undefined,
             flex: mobile ? "0 0 auto" : undefined,
             display: "flex",
@@ -462,7 +466,9 @@ function DetailPanel({
             data-transfiguration-option-layout={mobile ? "compact" : "detailed"}
             style={{
               display: "flex",
+              minHeight: mobile ? 0 : undefined,
               height: mobile ? "100%" : undefined,
+              boxSizing: "border-box",
               flexDirection: "column",
               justifyContent: mobile ? "center" : undefined,
               gap: token("--space-3"),

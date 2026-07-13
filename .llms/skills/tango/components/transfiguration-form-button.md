@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/tango#/transfiguration-form-butto
 
 Real consumers: **1** (imports outside `src/tango/docs/` and tests).
 
-The compact forge-form choice: a colored transfiguration glyph in a touch-sized square, with the form name, cost, and effect revealed through InfoCard.
+The compact forge-form choice: a colored transfiguration glyph and form name in one touch-sized control, with the cost and effect revealed through InfoCard.
 
 > **Guidance:** Use this on space-constrained transfiguration surfaces. A quick activation selects an affordable form; hover, focus, or touch-hold reveals its complete meaning without spending permanent screen area.
 

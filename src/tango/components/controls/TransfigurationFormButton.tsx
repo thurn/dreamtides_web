@@ -50,8 +50,8 @@ export interface TransfigurationFormButtonProps {
 }
 
 /**
- * Icon-only mobile form choice. A quick tap selects; hover, focus, or a touch
- * hold reveals the form name, cost, and full effect through InfoCard.
+ * Compact mobile form choice. A quick tap selects; hover, focus, or a touch
+ * hold reveals the cost and full effect through InfoCard.
  */
 export function TransfigurationFormButton({
   id,
@@ -115,12 +115,15 @@ export function TransfigurationFormButton({
       }}
       style={{
         ...binding.sourceProps.style,
-        width: token("--touch-min"),
         height: token("--touch-min"),
+        minWidth: "max-content",
         flex: "none",
-        display: "grid",
-        placeItems: "center",
-        padding: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        gap: token("--space-2"),
+        paddingRight: token("--space-3"),
+        paddingLeft: token("--space-3"),
         border: `2px solid ${selected ? accent : token("--border-soft")}`,
         borderRadius: token("--radius-control"),
         background: "transparent",
@@ -128,7 +131,16 @@ export function TransfigurationFormButton({
         opacity: affordable ? 1 : 0.46,
       }}
     >
-      <GlowIcon iconClass={glyph} color={accent} size="24px" shadow />
+      <GlowIcon iconClass={glyph} color={accent} size="20px" shadow />
+      <span
+        style={{
+          font: token("--t-button"),
+          color: token("--text-on-glass"),
+          whiteSpace: "nowrap",
+        }}
+      >
+        {type}
+      </span>
     </Pressable>
   );
 }
