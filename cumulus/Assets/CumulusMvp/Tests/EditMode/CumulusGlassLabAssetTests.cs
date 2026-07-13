@@ -146,6 +146,85 @@ namespace CumulusMvp.Tests
                 Is.EqualTo(first));
         }
 
+        [Test]
+        public void DreamsignGlassDemo_UsesThreeLitShadowCapableQuestMeshesOnSharedGlass()
+        {
+            CumulusDreamsignGlassDemoBuilder.Rebuild();
+            Scene scene = EditorSceneManager.OpenScene(
+                CumulusDreamsignGlassDemoBuilder.ScenePath,
+                OpenSceneMode.Single);
+            GameObject[] roots = scene.GetRootGameObjects();
+            string[] dreamsignIds =
+            {
+                "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
+                "EDE46F71-AA77-4B12-9824-0D3706DA6A22",
+                "A98F468B-5E76-4041-83EE-69C0871A6BF0",
+            };
+
+            Assert.That(
+                roots.Select(root => root.name),
+                Is.EquivalentTo(new[]
+                {
+                    "Main Camera",
+                    "Directional Light",
+                    "Tumbleleaf Village Backdrop",
+                    "Cumulus Glass Panel",
+                    "Dreamsign Violet Point Light",
+                    "Dreamsign Cyan Point Light",
+                }.Concat(dreamsignIds.Select(id => "Dreamsign " + id))));
+
+            GameObject glass = roots.Single(root => root.name == "Cumulus Glass Panel");
+            Assert.That(glass.GetComponent<MeshRenderer>().receiveShadows, Is.True);
+            Assert.That(
+                AssetDatabase.GetAssetPath(glass.GetComponent<MeshRenderer>().sharedMaterial),
+                Is.EqualTo(SceneGlassPath));
+
+            foreach (string id in dreamsignIds)
+            {
+                GameObject dreamsign = roots.Single(root => root.name == "Dreamsign " + id);
+                MeshRenderer renderer = dreamsign.GetComponent<MeshRenderer>();
+                Material material = renderer.sharedMaterial;
+
+                Assert.That(dreamsign.transform.position.z, Is.LessThan(glass.transform.position.z));
+                Assert.That(renderer.shadowCastingMode, Is.EqualTo(ShadowCastingMode.On));
+                Assert.That(renderer.receiveShadows, Is.True);
+                Assert.That(material.shader.name, Is.EqualTo("Universal Render Pipeline/Lit"));
+                Assert.That(material.IsKeywordEnabled("_ALPHATEST_ON"), Is.True);
+                Assert.That(material.IsKeywordEnabled("_RECEIVE_SHADOWS_OFF"), Is.False);
+                Assert.That(material.renderQueue, Is.EqualTo((int)RenderQueue.AlphaTest));
+                Assert.That(
+                    AssetDatabase.GetAssetPath(material.GetTexture("_BaseMap")),
+                    Is.EqualTo($"Assets/CumulusMvp/Demo/Art/Dreamsigns/{id}.png"));
+            }
+
+            foreach (string lightName in new[]
+                     {
+                         "Dreamsign Violet Point Light",
+                         "Dreamsign Cyan Point Light",
+                     })
+            {
+                Light light = roots.Single(root => root.name == lightName).GetComponent<Light>();
+                Assert.That(light.type, Is.EqualTo(LightType.Point));
+                Assert.That(light.shadows, Is.EqualTo(LightShadows.Soft));
+            }
+
+            Assert.That(roots.SelectMany(root => root.GetComponentsInChildren<TMP_Text>()), Is.Empty);
+            Assert.That(roots.SelectMany(root => root.GetComponentsInChildren<Canvas>()), Is.Empty);
+        }
+
+        [Test]
+        public void DreamsignGlassDemo_RebuildIsByteStable()
+        {
+            CumulusDreamsignGlassDemoBuilder.Rebuild();
+            byte[] first = File.ReadAllBytes(CumulusDreamsignGlassDemoBuilder.ScenePath);
+
+            CumulusDreamsignGlassDemoBuilder.Rebuild();
+
+            Assert.That(
+                File.ReadAllBytes(CumulusDreamsignGlassDemoBuilder.ScenePath),
+                Is.EqualTo(first));
+        }
+
         private static readonly string[] StableAssetPaths =
         {
             MeshPath,

@@ -14,6 +14,19 @@ Rebuild it from `Cumulus MVP > Rebuild Shop Glass Demo`. The builder also expose
 `CumulusMvp.Editor.CumulusShopGlassDemoBuilder.CaptureBatch` for a deterministic
 1920 x 1080 review capture.
 
+## Dreamsign glass demo
+
+Open `Assets/Scenes/CumulusDreamsignGlassDemo.unity` to inspect three quest
+Dreamsigns as alpha-cut, URP-lit world-space meshes over the shared blurred
+glass. Each Dreamsign uses its production UUID and image, writes depth, receives
+directional and additional-light shadows, and casts its image silhouette into
+shadow maps. Two colored point lights make the local-light response visible on
+both the Dreamsigns and the Cumulus glass.
+
+Rebuild it from `Cumulus MVP > Rebuild Dreamsign Glass Demo` or invoke
+`CumulusMvp.Editor.CumulusDreamsignGlassDemoBuilder.CaptureBatch` for a
+deterministic 1920 x 1080 review capture.
+
 ## Glass blur architecture
 
 `CumulusGlassRendererFeature` records one camera-level blur pyramid before
