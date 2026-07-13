@@ -331,7 +331,7 @@ art-owned = false
 card-number = 18
 
 [[cards]]
-name = "Call to the Unknown"
+name = "Rift Pilgrim"
 mtg-name = "Recruiter of the Guard"
 id = "5e1b943f-9fa2-4055-b613-5dd09a048c99"
 rendered-text = "▸Materialized: Discover a ≤2✦ character."
@@ -342,10 +342,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July13"]
-image-number = 1991802455
+tags = ["Art Rework", "July13", "Art OK"]
+image-number = 2256745741
 art-owned = false
 card-number = 19
+art = { x = 0, y = 1, scale = 1.16 }
 
 [[cards]]
 name = "Door to Possibility"
@@ -921,7 +922,7 @@ card-number = 49
 art = { x = 0.168, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Avatar of Cosmic Reckoning"
+name = "Silent Mourner"
 mtg-name = "Marionette Apprentice"
 id = "cbabe603-1333-42bd-85c0-555c664b60b3"
 rendered-text = '''
@@ -935,11 +936,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Blood Artist", "Score Trigger", "Art Rework", "July13", "Ally Audit"]
-image-number = 2287054243
+tags = ["Blood Artist", "Score Trigger", "Art Rework", "July13", "Ally Audit", "Art OK"]
+image-number = 410444932
 art-owned = false
 card-number = 50
-art = { x = -0.2, y = 1, scale = 1.37 }
+art = { x = -0.2, y = 0.298, scale = 1 }
 
 [[cards]]
 name = "Ashen Remnant"
@@ -3535,19 +3536,19 @@ card-number = 189
 art = { x = 0.454, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Titan of Forgotten Echoes"
+name = "Clockwork Conductor"
 mtg-name = "Vizier of Remedies"
 id = "9adbe3db-d872-4b75-92b5-d7f2798c22ce"
 rendered-text = "Cards you reclaim are not banished when they leave play."
 energy-cost = 2
 card-type = "Character"
-subtype = "Ancient"
+subtype = "Synth"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July13"]
-image-number = 2521694543
+tags = ["Art Rework", "July13", "Art OK"]
+image-number = 1180104211
 art-owned = true
 card-number = 190
 
@@ -4245,7 +4246,7 @@ card-number = 228
 art = { x = 0, y = -0.552, scale = 1.17 }
 
 [[cards]]
-name = "Rusted Monolith"
+name = "Circuit Breaker"
 mtg-name = "Murderous Redcap"
 id = "2a828466-450a-4637-9c68-6b54522450c0"
 rendered-text = """
@@ -4259,8 +4260,8 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July13"]
-image-number = 1926604856
+tags = ["Art Rework", "July13", "Art OK"]
+image-number = 644603722
 art-owned = false
 card-number = 229
 
@@ -5411,7 +5412,7 @@ art-owned = false
 card-number = 291
 
 [[cards]]
-name = "Dream Garden Visitor"
+name = "Winterbough Guide"
 mtg-name = "Emry, Lurker of the Loch"
 id = "96e2c30c-930c-47af-abb0-d4fbab454d56"
 rendered-text = """
@@ -5420,15 +5421,16 @@ rendered-text = """
 Once per turn, you may play a warrior from your void."""
 energy-cost = 2
 card-type = "Character"
-subtype = "Child"
+subtype = "Warrior"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July13"]
-image-number = 758082499
+tags = ["Art Rework", "July13", "Art OK"]
+image-number = 1726923520
 art-owned = false
 card-number = 292
+art = { x = 0, y = 0.766, scale = 1.57 }
 
 [[cards]]
 name = "Dreamcatcher's Call"

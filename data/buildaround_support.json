@@ -329,7 +329,7 @@
       ]
     },
     "cbabe603-1333-42bd-85c0-555c664b60b3": {
-      "name": "Avatar of Cosmic Reckoning",
+      "name": "Silent Mourner",
       "needs": [
         {
           "theme": "abandon",
@@ -544,7 +544,7 @@
       ]
     },
     "5e1b943f-9fa2-4055-b613-5dd09a048c99": {
-      "name": "Call to the Unknown",
+      "name": "Rift Pilgrim",
       "needs": [],
       "supports": [
         "cheap-characters"
@@ -1052,7 +1052,7 @@
       ]
     },
     "96e2c30c-930c-47af-abb0-d4fbab454d56": {
-      "name": "Dream Garden Visitor",
+      "name": "Winterbough Guide",
       "needs": [
         {
           "theme": "warriors",
@@ -3248,7 +3248,7 @@
       ]
     },
     "2a828466-450a-4637-9c68-6b54522450c0": {
-      "name": "Rusted Monolith",
+      "name": "Circuit Breaker",
       "needs": [],
       "supports": [
         "reclaim",
@@ -4331,7 +4331,7 @@
       ]
     },
     "9adbe3db-d872-4b75-92b5-d7f2798c22ce": {
-      "name": "Titan of Forgotten Echoes",
+      "name": "Clockwork Conductor",
       "needs": [
         {
           "theme": "reclaim",
