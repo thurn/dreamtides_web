@@ -71,7 +71,6 @@ export const BASELINE = [
   "--device-h",
   "--device-w",
   "--sheet-grab", // reserved layout constant: bottom-sheet drag-handle width
-  "--touch-min", // reserved layout floor: Apple HIG 44pt minimum touch target
   "--gutter-tight", // reserved screen gutter for dense grids
   // Production bridge (--dt-* atlas/shared re-exports). --dt-line additionally
   // feeds the live canonical --line token inside tango-tokens.css.

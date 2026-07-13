@@ -62,6 +62,14 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
         const binding = useRevealSource(registration);`,
     },
     {
+      name: "transfiguration form owns its semantic reveal and identity",
+      filename:
+        "src/tango/components/controls/TransfigurationFormButton.tsx",
+      code: `import { useRevealSource } from "../../internal/reveal/context";
+        import { revealEntityId } from "../../internal/reveal/identity";
+        const binding = useRevealSource({ identity: { entityType: "transfiguration-form", entityId: revealEntityId("transfiguration-form", id) }, spec });`,
+    },
+    {
       name: "explicitly approved non-reveal portal owner stays legal",
       filename: "src/tango/components/controls/Select.tsx",
       code: `import { createPortal as mountPortal } from "react-dom";

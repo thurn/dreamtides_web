@@ -3117,5 +3117,118 @@
       "defaultValue": null,
       "description": ""
     }
+  ],
+  "TransfigurationFormButton": [
+    {
+      "name": "id",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Stable identity pairing the concrete deck entry with this offered form."
+    },
+    {
+      "name": "type",
+      "tsType": "TransfigurationType",
+      "unionMembers": [
+        "Empowered",
+        "Amplified",
+        "Kindled",
+        "Inspired",
+        "Enduring",
+        "Hastened",
+        "Resonant",
+        "Attuned",
+        "Perfected"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Named transfiguration form, which determines the canonical glyph."
+    },
+    {
+      "name": "description",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Player-facing rules change revealed through the shared InfoCard."
+    },
+    {
+      "name": "essenceCost",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Quoted essence cost shown in the accessible label and InfoCard."
+    },
+    {
+      "name": "affordable",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Whether the player can currently pay the quoted cost."
+    },
+    {
+      "name": "accent",
+      "tsType": "TangoColor",
+      "unionMembers": [
+        "danger",
+        "accent",
+        "accent-bright",
+        "accent-strong",
+        "essence",
+        "energy",
+        "energy-bright",
+        "spark",
+        "points",
+        "positive",
+        "selected",
+        "sale",
+        "gold",
+        "gold-light",
+        "text-primary",
+        "text-secondary",
+        "text-muted",
+        "text-faint",
+        "text-on-accent",
+        "white"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Data-defined transfiguration hue used for the glyph and selection edge."
+    },
+    {
+      "name": "selected",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Whether this form is the active radio choice."
+    },
+    {
+      "name": "disabled",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Prevent activation while a transfiguration commit is in flight."
+    },
+    {
+      "name": "onActivate",
+      "tsType": "() => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Select this form after a quick activation."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional stable test id for the semantic source."
+    }
   ]
 }

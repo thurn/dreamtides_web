@@ -5,12 +5,19 @@ import { useCallback, useState } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
+import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlowIcon } from "../components/controls/GlowIcon";
+import { IconButton } from "../components/controls/IconButton";
+import {
+  TransfigurationFormButton,
+  TRANSFIGURATION_FORM_GLYPHS,
+} from "../components/controls/TransfigurationFormButton";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { glassSurfaceStyle } from "../internal/glass-surface";
 import type { ArtRef } from "../primitives/art";
-import { GLYPHS, type Glyph } from "../primitives/glyph";
+import type { TangoColor } from "../primitives/color";
+import { GLYPHS } from "../primitives/glyph";
 import { Pressable } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
 import type { TransfigurationType } from "../../types/quest";
@@ -33,7 +40,7 @@ export interface TransfigurationFormView {
   /** Whether the current wallet can pay this quoted cost. */
   affordable: boolean;
   /** Data-driven transfiguration color used for the option edge and card ring. */
-  accent: `#${string}`;
+  accent: TangoColor;
   /** The transformed card plus its marked transfiguration display. */
   previewModel: GameCardModel;
 }
@@ -81,17 +88,6 @@ interface CardTravel {
   target: RectSnapshot;
 }
 
-const FORM_GLYPHS: Readonly<Record<TransfigurationType, Glyph>> = {
-  Empowered: GLYPHS.transfigurationEmpowered,
-  Amplified: GLYPHS.transfigurationAmplified,
-  Kindled: GLYPHS.transfigurationKindled,
-  Inspired: GLYPHS.transfigurationInspired,
-  Enduring: GLYPHS.transfigurationEnduring,
-  Hastened: GLYPHS.transfigurationHastened,
-  Resonant: GLYPHS.transfigurationResonant,
-  Attuned: GLYPHS.transfigurationAttuned,
-  Perfected: GLYPHS.transfigurationPerfected,
-};
 const CARD_DISMISS_SCALE = 0;
 
 export function TransfigurationSiteScreen({
@@ -194,17 +190,29 @@ export function TransfigurationSiteScreen({
             minHeight: 0,
             height: "100%",
             maxHeight: "100%",
-            width: "100%",
+            width:
+              layout === "mobile"
+                ? `calc(100vw - (${token("--space-4")} * 2))`
+                : "100%",
+            boxSizing: "border-box",
             pointerEvents: "auto",
             display: "grid",
-            alignItems: "center",
+            alignItems: layout === "mobile" ? "start" : "center",
             justifyItems: "center",
+            alignSelf: layout === "mobile" ? "start" : undefined,
+            justifySelf: layout === "mobile" ? "center" : undefined,
           }}
         >
           {picked === null ? (
-            <PickerPanel view={view} onClose={onClose} onPick={beginPick} />
+            <PickerPanel
+              layout={layout}
+              view={view}
+              onClose={onClose}
+              onPick={beginPick}
+            />
           ) : (
             <DetailPanel
+              layout={layout}
               candidate={picked}
               selectedFormType={selectedFormType}
               confirming={confirming}
@@ -238,6 +246,7 @@ export function TransfigurationSiteScreen({
               }}
             >
               <DetailPanel
+                layout={layout}
                 candidate={fallbackCandidate}
                 selectedFormType={null}
                 confirming={false}
@@ -284,23 +293,40 @@ export function TransfigurationSiteScreen({
 }
 
 function PickerPanel({
+  layout,
   view,
   onClose,
   onPick,
 }: {
+  readonly layout: "mobile" | "desktop";
   readonly view: TransfigurationSiteView;
   readonly onClose: () => void;
   readonly onPick: (entryId: string) => void;
 }) {
+  const desktop = layout === "desktop";
   return (
     <CardGalleryPanel
       title="Transfiguration"
       subtitle={view.ready ? "Choose a card to reforge" : "Heating the forge…"}
-      footerAction={{
-        label: "Decline Offer",
-        onPress: onClose,
-        testId: "tango-transfiguration-decline",
-      }}
+      rightAccessory={
+        desktop
+          ? undefined
+          : {
+              kind: "glassButton",
+              label: "Decline",
+              onPress: onClose,
+              testId: "tango-transfiguration-decline",
+            }
+      }
+      footerAction={
+        desktop
+          ? {
+              label: "Decline Offer",
+              onPress: onClose,
+              testId: "tango-transfiguration-decline",
+            }
+          : undefined
+      }
       cards={view.candidates.map((candidate) => ({
         entryId: candidate.entryId,
         model: candidate.model,
@@ -308,10 +334,10 @@ function PickerPanel({
       }))}
       emptyLabel={view.ready ? "No eligible cards to reforge." : "Heating the forge…"}
       columns="three"
-      cardSize="roomy"
+      cardSize={desktop ? "roomy" : "standard"}
       frame="floating"
-      widthMode="content"
-      spacing="spacious"
+      widthMode={desktop ? "content" : "fill"}
+      spacing={desktop ? "spacious" : "medium"}
       testId="tango-transfiguration-picker"
       onCardPress={onPick}
     />
@@ -319,6 +345,7 @@ function PickerPanel({
 }
 
 function DetailPanel({
+  layout,
   candidate,
   selectedFormType,
   confirming,
@@ -327,6 +354,7 @@ function DetailPanel({
   onSelectForm,
   onConfirm,
 }: {
+  readonly layout: "mobile" | "desktop";
   readonly candidate: TransfigurationCandidateView;
   readonly selectedFormType: TransfigurationType | null;
   readonly confirming: boolean;
@@ -335,6 +363,7 @@ function DetailPanel({
   readonly onSelectForm: (type: TransfigurationType) => void;
   readonly onConfirm: (form: TransfigurationFormView) => void;
 }) {
+  const mobile = layout === "mobile";
   const activeForm =
     candidate.forms.find((form) => form.type === selectedFormType) ?? null;
   const disabled =
@@ -346,20 +375,29 @@ function DetailPanel({
   return (
     <section
       data-testid="tango-transfiguration-detail"
+      data-transfiguration-detail-layout={layout}
       style={{
         ...glassSurfaceStyle(),
-        width: "100%",
+        width: mobile
+          ? `calc(100vw - (${token("--space-4")} * 2))`
+          : "100%",
+        height: mobile ? "100%" : undefined,
         maxHeight: "100%",
         boxSizing: "border-box",
         overflow: "hidden",
         color: token("--text-on-glass"),
+        display: mobile ? "flex" : undefined,
+        flexDirection: mobile ? "column" : undefined,
+        justifySelf: mobile ? "center" : undefined,
       }}
     >
       <header
         style={{
           display: "flex",
           alignItems: "center",
-          padding: token("--space-6"),
+          justifyContent: mobile ? "space-between" : undefined,
+          padding: mobile ? token("--space-3") : token("--space-6"),
+          paddingLeft: mobile ? token("--space-4") : undefined,
           borderBottom: `1px solid ${token("--border-strong")}`,
         }}
       >
@@ -368,21 +406,44 @@ function DetailPanel({
             Choose Its New Form
           </h2>
         </div>
+        {mobile && (
+          <IconButton
+            glyph={GLYPHS.chevronLeft}
+            label="Choose another card"
+            placement="onGlass"
+            size="sm"
+            disabled={confirming}
+            onPress={onBack}
+            testId="tango-transfiguration-back"
+          />
+        )}
       </header>
 
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(220px, 0.82fr) minmax(320px, 1.18fr)",
-          gap: token("--space-8"),
-          alignItems: "start",
-          padding: token("--space-8"),
+          display: mobile ? "flex" : "grid",
+          flex: mobile ? "1 1 auto" : undefined,
+          minHeight: mobile ? 0 : undefined,
+          flexDirection: mobile ? "column" : undefined,
+          gridTemplateColumns: mobile
+            ? undefined
+            : "minmax(220px, 0.82fr) minmax(320px, 1.18fr)",
+          gap: mobile ? token("--space-2") : token("--space-8"),
+          alignItems: mobile ? "center" : "start",
+          padding: mobile ? token("--space-2") : token("--space-8"),
         }}
       >
         <div
           style={{
-            width: "min(100%, 278px)",
+            // Let short phones spend every remaining vertical pixel on the
+            // card while wide/tall phones stop at the authored readable size.
+            width: mobile ? "auto" : "min(100%, 278px)",
+            height: mobile ? "100%" : undefined,
+            maxWidth: mobile ? "58vw" : undefined,
+            maxHeight: mobile ? 318 : undefined,
+            aspectRatio: mobile ? String(CARD_ASPECT_RATIO_VALUE) : undefined,
             justifySelf: "center",
+            minHeight: 0,
           }}
           data-transfiguration-detail-card-target=""
         >
@@ -397,26 +458,48 @@ function DetailPanel({
         <div
           style={{
             minWidth: 0,
+            width: mobile ? "100%" : undefined,
+            flex: mobile ? "0 0 auto" : undefined,
             display: "flex",
             flexDirection: "column",
-            gap: token("--space-4"),
+            gap: mobile ? token("--space-2") : token("--space-4"),
           }}
         >
           <div
             role="radiogroup"
             aria-label="Transfiguration options"
             data-transfiguration-options=""
+            data-transfiguration-option-layout={mobile ? "compact" : "detailed"}
             style={{
               display: "flex",
-              flexDirection: "column",
-              gap: token("--space-3"),
-              maxHeight: "min(52vh, 520px)",
-              overflowY: "auto",
+              flexDirection: mobile ? "row" : "column",
+              justifyContent: mobile ? "center" : undefined,
+              gap: mobile ? token("--space-4") : token("--space-3"),
+              maxHeight: mobile ? undefined : "min(52vh, 520px)",
+              overflowX: mobile ? "auto" : undefined,
+              overflowY: mobile ? "hidden" : "auto",
               padding: token("--space-2"),
             }}
           >
             {candidate.forms.map((form) => {
               const selected = form.type === activeForm?.type;
+              if (mobile) {
+                return (
+                  <TransfigurationFormButton
+                    key={form.type}
+                    id={`${candidate.entryId}:${form.type}`}
+                    type={form.type}
+                    description={form.description}
+                    essenceCost={form.essenceCost}
+                    affordable={form.affordable}
+                    accent={form.accent}
+                    selected={selected}
+                    disabled={confirming}
+                    onActivate={() => onSelectForm(form.type)}
+                    testId={`tango-transfiguration-form-${form.type}`}
+                  />
+                );
+              }
               return (
                 <Pressable
                   key={form.type}
@@ -444,7 +527,7 @@ function DetailPanel({
                   }}
                 >
                   <GlowIcon
-                    iconClass={FORM_GLYPHS[form.type]}
+                    iconClass={TRANSFIGURATION_FORM_GLYPHS[form.type]}
                     color={form.accent}
                     size="28px"
                     shadow
@@ -496,18 +579,20 @@ function DetailPanel({
           alignItems: "center",
           justifyContent: "flex-end",
           gap: token("--space-4"),
-          paddingRight: token("--space-8"),
-          paddingBottom: token("--space-6"),
-          paddingLeft: token("--space-8"),
+          paddingRight: mobile ? token("--space-4") : token("--space-8"),
+          paddingBottom: mobile ? token("--space-4") : token("--space-6"),
+          paddingLeft: mobile ? token("--space-4") : token("--space-8"),
         }}
       >
-        <GlassButton
-          placement="onGlass"
-          label="Choose Again"
-          disabled={confirming}
-          onPress={onBack}
-          testId="tango-transfiguration-choose-again"
-        />
+        {!mobile && (
+          <GlassButton
+            placement="onGlass"
+            label="Choose Again"
+            disabled={confirming}
+            onPress={onBack}
+            testId="tango-transfiguration-choose-again"
+          />
+        )}
         <GlassButton
           placement="onGlass"
           variant="accent"

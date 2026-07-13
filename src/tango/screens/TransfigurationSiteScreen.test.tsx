@@ -100,9 +100,11 @@ function view(): TransfigurationSiteView {
   };
 }
 
-function stubMatchMedia(reducedMotion: boolean): void {
+function stubMatchMedia(reducedMotion: boolean, desktop = true): void {
   window.matchMedia = ((query: string) => ({
-    matches: query.includes("prefers-reduced-motion") ? reducedMotion : true,
+    matches: query.includes("prefers-reduced-motion")
+      ? reducedMotion
+      : desktop,
     media: query,
     onchange: null,
     addEventListener: () => undefined,
@@ -344,6 +346,78 @@ describe("TransfigurationSiteScreen", () => {
     );
     expect(options?.style.padding).toBe("var(--space-2)");
     expect(options?.style.overflowY).toBe("auto");
+
+    act(() => root.unmount());
+  });
+
+  it("uses the compact mobile gallery and a card-first icon detail surface", () => {
+    stubMatchMedia(true, false);
+    const { container, root } = mount(
+      <TransfigurationSiteScreen
+        view={view()}
+        onClose={vi.fn()}
+        onTransfigure={vi.fn()}
+      />,
+    );
+
+    const picker = container.querySelector<HTMLElement>(
+      '[data-testid="tango-transfiguration-picker"]',
+    );
+    expect(
+      container.querySelector("[data-guide-gallery-desktop-composition]"),
+    ).toBeNull();
+    expect(
+      container.querySelector<HTMLElement>("[data-transfiguration-workspace]")
+        ?.dataset.transfigurationLayout,
+    ).toBe("mobile");
+    expect(picker?.dataset.galleryColumns).toBe("3");
+    expect(picker?.dataset.gallerySpacing).toBe("medium");
+    expect(picker?.dataset.galleryWidthMode).toBe("fill");
+    expect(
+      container.querySelector('[data-testid="tango-transfiguration-decline"]')
+        ?.textContent,
+    ).toBe("Decline");
+
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="tango-transfiguration-card-entry-1"]',
+        )
+        ?.click();
+    });
+
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="tango-transfiguration-detail"]',
+      )?.dataset.transfigurationDetailLayout,
+    ).toBe("mobile");
+    expect(
+      container.querySelector("[data-transfiguration-detail-card-target]"),
+    ).not.toBeNull();
+    expect(
+      container.querySelector<HTMLElement>("[data-transfiguration-options]")
+        ?.dataset.transfigurationOptionLayout,
+    ).toBe("compact");
+    expect(container.querySelectorAll('[role="radio"]')).toHaveLength(2);
+    expect(
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="tango-transfiguration-form-Empowered"]',
+      )?.getAttribute("aria-label"),
+    ).toBe("Empowered, 40 essence");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="tango-transfiguration-form-Empowered"]',
+      )?.dataset.revealPrimaryVariant,
+    ).toBe("text");
+    expect(container.textContent).toContain("Reduce this card's energy cost.");
+    expect(
+      container.querySelector('[data-testid="tango-transfiguration-back"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector(
+        '[data-testid="tango-transfiguration-choose-again"]',
+      ),
+    ).toBeNull();
 
     act(() => root.unmount());
   });
