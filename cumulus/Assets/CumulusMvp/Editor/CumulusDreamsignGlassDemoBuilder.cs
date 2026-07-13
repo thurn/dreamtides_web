@@ -4,6 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using CumulusMvp.Geometry;
+using CumulusMvp.Interaction;
+using CumulusMvp.Materials;
+using TMPro;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -24,6 +28,23 @@ namespace CumulusMvp.Editor
 
         private const string ArtFolder = "Assets/CumulusMvp/Demo/Art/Dreamsigns";
         private const string MaterialFolder = "Assets/CumulusMvp/Materials/Dreamsigns";
+        private const string ButtonMeshPath =
+            "Assets/CumulusMvp/Meshes/CumulusDreamsignGlassButton.asset";
+        private const string MaterialLibraryPath =
+            "Assets/CumulusMvp/Materials/CumulusMaterialLibrary.asset";
+        private const string DefaultTmpFontPath =
+            "Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset";
+        private const string ButtonRootName = "Default Glass Button";
+        private const string ButtonLabel = "Sort";
+        // Chromium measurement of the production GlassButton demo's default
+        // 15 px medium-weight "Sort" state at 1920 x 1080. The scene's camera
+        // maps these output pixels into world units without rounding.
+        private const float CameraHalfHeight = 5f;
+        private const int ReferenceCaptureHeight = 1080;
+        private const float WebButtonWidthPixels = 59.921875f;
+        private const float WebButtonHeightPixels = 42f;
+        private const float WebButtonCornerRadiusPixels = 14f;
+        private const float ButtonFontSize = 2f;
         private const float DreamsignDepth = -0.34f;
         private const float DreamsignScale = 1.3f;
 
@@ -49,6 +70,11 @@ namespace CumulusMvp.Editor
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             EnsureAssetFolder(MaterialFolder);
             CumulusShopGlassDemoBuilder.Rebuild();
+            Mesh buttonMesh = ReconcileButtonMesh();
+            CumulusMaterialLibrary materialLibrary =
+                RequireAsset<CumulusMaterialLibrary>(MaterialLibraryPath);
+            materialLibrary.Validate();
+            TMP_FontAsset textFont = RequireAsset<TMP_FontAsset>(DefaultTmpFontPath);
 
             Scene scene;
             if (AssetDatabase.LoadAssetAtPath<SceneAsset>(ScenePath) == null)
@@ -83,6 +109,12 @@ namespace CumulusMvp.Editor
                 new Color(0.18f, 0.84f, 1f, 1f),
                 8f,
                 6.5f);
+            ReconcileCameraInteraction(scene);
+            ReconcileDefaultGlassButton(
+                scene,
+                buttonMesh,
+                materialLibrary.Resolve(CumulusMaterialRole.SceneGlass),
+                textFont);
 
             var retainedRoots = new HashSet<string>(StringComparer.Ordinal)
             {
@@ -92,6 +124,7 @@ namespace CumulusMvp.Editor
                 "Cumulus Glass Panel",
                 "Dreamsign Violet Point Light",
                 "Dreamsign Cyan Point Light",
+                ButtonRootName,
             };
 
             foreach (DreamsignSpec spec in Dreamsigns)
@@ -106,7 +139,9 @@ namespace CumulusMvp.Editor
             EditorSceneManager.SaveScene(scene, ScenePath);
             AssetDatabase.SaveAssets();
             NormalizeSerializedWhitespace(
-                new[] { ScenePath }.Concat(Dreamsigns.Select(spec => spec.MaterialPath)).ToArray());
+                new[] { ScenePath, ButtonMeshPath }
+                    .Concat(Dreamsigns.Select(spec => spec.MaterialPath))
+                    .ToArray());
         }
 
         /// <summary>Batch entry point that authors and captures the demo at 1920 x 1080.</summary>
@@ -191,6 +226,115 @@ namespace CumulusMvp.Editor
                 spec.Position,
                 spec.Rotation,
                 new Vector3(DreamsignScale, DreamsignScale, 1f));
+        }
+
+        private static Mesh ReconcileButtonMesh()
+        {
+            const float depth = 0.02f;
+            const int cornerSegments = 8;
+            float worldUnitsPerPixel = CameraHalfHeight * 2f / ReferenceCaptureHeight;
+            Mesh canonical = CumulusRoundedPanelMesh.Create(
+                WebButtonWidthPixels * worldUnitsPerPixel,
+                WebButtonHeightPixels * worldUnitsPerPixel,
+                depth,
+                WebButtonCornerRadiusPixels * worldUnitsPerPixel,
+                cornerSegments);
+            canonical.name = "CumulusDreamsignGlassButton";
+
+            Mesh mesh = AssetDatabase.LoadAssetAtPath<Mesh>(ButtonMeshPath);
+            if (mesh == null)
+            {
+                AssetDatabase.CreateAsset(canonical, ButtonMeshPath);
+                return canonical;
+            }
+
+            EditorUtility.CopySerialized(canonical, mesh);
+            mesh.name = canonical.name;
+            EditorUtility.SetDirty(mesh);
+            UnityEngine.Object.DestroyImmediate(canonical);
+            return mesh;
+        }
+
+        private static void ReconcileCameraInteraction(Scene scene)
+        {
+            GameObject cameraRoot = scene.GetRootGameObjects()
+                .Single(root => root.name == "Main Camera");
+            Camera camera = cameraRoot.GetComponent<Camera>();
+            CumulusPointerInteractor interactor = EnsureComponent<CumulusPointerInteractor>(cameraRoot);
+            SetObjectReference(interactor, "interactionCamera", camera);
+            interactor.enabled = true;
+        }
+
+        private static void ReconcileDefaultGlassButton(
+            Scene scene,
+            Mesh mesh,
+            Material material,
+            TMP_FontAsset font)
+        {
+            float worldUnitsPerPixel = CameraHalfHeight * 2f / ReferenceCaptureHeight;
+            float width = WebButtonWidthPixels * worldUnitsPerPixel;
+            float height = WebButtonHeightPixels * worldUnitsPerPixel;
+
+            GameObject root = EnsureRoot(scene, ButtonRootName);
+            KeepOnlyComponents(
+                root,
+                typeof(Transform),
+                typeof(BoxCollider),
+                typeof(CumulusPressable));
+            RemoveUnexpectedChildren(root.transform, "Default Glass Button Visual");
+            SetTransform(
+                root.transform,
+                new Vector3(0f, -4.1f, DreamsignDepth),
+                Quaternion.identity,
+                Vector3.one);
+
+            BoxCollider collider = EnsureComponent<BoxCollider>(root);
+            collider.enabled = true;
+            collider.center = Vector3.zero;
+            collider.size = new Vector3(width, height, 0.12f);
+            collider.isTrigger = false;
+
+            GameObject visual = EnsureChild(root.transform, "Default Glass Button Visual");
+            KeepOnlyComponents(visual, typeof(Transform), typeof(MeshFilter), typeof(MeshRenderer));
+            EnsureComponent<MeshFilter>(visual).sharedMesh = mesh;
+            MeshRenderer renderer = EnsureComponent<MeshRenderer>(visual);
+            renderer.sharedMaterials = Enumerable.Repeat(material, mesh.subMeshCount).ToArray();
+            ConfigureRenderer(renderer, ShadowCastingMode.On, true);
+            SetLocalTransform(visual.transform, Vector3.zero, Quaternion.identity, Vector3.one);
+            RemoveUnexpectedChildren(visual.transform, "Button Label");
+
+            GameObject label = EnsureChild(visual.transform, "Button Label");
+            KeepOnlyComponents(
+                label,
+                typeof(Transform),
+                typeof(RectTransform),
+                typeof(TextMeshPro),
+                typeof(MeshRenderer));
+            TextMeshPro textMesh = EnsureComponent<TextMeshPro>(label);
+            textMesh.font = font;
+            textMesh.fontSharedMaterial = font.material;
+            textMesh.text = ButtonLabel;
+            textMesh.alignment = TextAlignmentOptions.Center;
+            textMesh.fontSize = ButtonFontSize;
+            textMesh.fontWeight = FontWeight.Medium;
+            textMesh.fontStyle = FontStyles.Normal;
+            textMesh.color = new Color32(255, 248, 236, 255);
+            textMesh.richText = false;
+            textMesh.textWrappingMode = TextWrappingModes.NoWrap;
+            textMesh.overflowMode = TextOverflowModes.Overflow;
+            textMesh.rectTransform.sizeDelta = new Vector2(width, height);
+            ConfigureRenderer(textMesh.renderer, ShadowCastingMode.Off, false);
+            SetLocalTransform(
+                label.transform,
+                new Vector3(0f, 0f, -0.03f),
+                Quaternion.identity,
+                Vector3.one);
+
+            CumulusPressable pressable = EnsureComponent<CumulusPressable>(root);
+            SetObjectReference(pressable, "hitCollider", collider);
+            SetObjectReference(pressable, "visual", visual.transform);
+            SetString(pressable, "semanticId", "dreamsign-default-glass-button");
+            pressable.enabled = true;
         }
 
         private static Texture2D ReconcileTextureImport(string path)
@@ -354,6 +498,37 @@ namespace CumulusMvp.Editor
             return retained;
         }
 
+        private static GameObject EnsureChild(Transform parent, string name)
+        {
+            GameObject retained = null;
+            for (int index = parent.childCount - 1; index >= 0; index--)
+            {
+                GameObject child = parent.GetChild(index).gameObject;
+                if (child.name != name)
+                {
+                    continue;
+                }
+
+                if (retained == null)
+                {
+                    retained = child;
+                }
+                else
+                {
+                    UnityEngine.Object.DestroyImmediate(child);
+                }
+            }
+
+            if (retained == null)
+            {
+                retained = new GameObject(name);
+                retained.transform.SetParent(parent, false);
+            }
+
+            retained.SetActive(true);
+            return retained;
+        }
+
         private static T EnsureComponent<T>(GameObject target) where T : Component
         {
             T retained = target.GetComponent<T>();
@@ -381,6 +556,21 @@ namespace CumulusMvp.Editor
             }
         }
 
+        private static void RemoveUnexpectedChildren(
+            Transform parent,
+            params string[] expectedNames)
+        {
+            var expected = new HashSet<string>(expectedNames, StringComparer.Ordinal);
+            for (int index = parent.childCount - 1; index >= 0; index--)
+            {
+                Transform child = parent.GetChild(index);
+                if (!expected.Contains(child.name))
+                {
+                    UnityEngine.Object.DestroyImmediate(child.gameObject);
+                }
+            }
+        }
+
         private static void RemoveUnexpectedRoots(Scene scene, HashSet<string> retainedNames)
         {
             foreach (GameObject root in scene.GetRootGameObjects())
@@ -392,6 +582,52 @@ namespace CumulusMvp.Editor
             }
         }
 
+        private static void ConfigureRenderer(
+            Renderer renderer,
+            ShadowCastingMode shadowCastingMode,
+            bool receiveShadows)
+        {
+            renderer.enabled = true;
+            renderer.shadowCastingMode = shadowCastingMode;
+            renderer.receiveShadows = receiveShadows;
+            renderer.lightProbeUsage = LightProbeUsage.Off;
+            renderer.reflectionProbeUsage = ReflectionProbeUsage.Off;
+        }
+
+        private static void SetObjectReference(
+            UnityEngine.Object owner,
+            string propertyName,
+            UnityEngine.Object value)
+        {
+            var serialized = new SerializedObject(owner);
+            SerializedProperty property = serialized.FindProperty(propertyName);
+            if (property == null)
+            {
+                throw new InvalidOperationException(
+                    $"Missing serialized property {propertyName} on {owner.GetType().Name}.");
+            }
+
+            property.objectReferenceValue = value;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void SetString(
+            UnityEngine.Object owner,
+            string propertyName,
+            string value)
+        {
+            var serialized = new SerializedObject(owner);
+            SerializedProperty property = serialized.FindProperty(propertyName);
+            if (property == null)
+            {
+                throw new InvalidOperationException(
+                    $"Missing serialized property {propertyName} on {owner.GetType().Name}.");
+            }
+
+            property.stringValue = value;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+        }
+
         private static void SetTransform(
             Transform target,
             Vector3 position,
@@ -399,6 +635,17 @@ namespace CumulusMvp.Editor
             Vector3 scale)
         {
             target.SetPositionAndRotation(position, rotation);
+            target.localScale = scale;
+        }
+
+        private static void SetLocalTransform(
+            Transform target,
+            Vector3 position,
+            Quaternion rotation,
+            Vector3 scale)
+        {
+            target.localPosition = position;
+            target.localRotation = rotation;
             target.localScale = scale;
         }
 

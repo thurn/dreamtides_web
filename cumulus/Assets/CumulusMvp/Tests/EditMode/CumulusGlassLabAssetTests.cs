@@ -32,6 +32,8 @@ namespace CumulusMvp.Tests
         private const string LibraryPath = "Assets/CumulusMvp/Materials/CumulusMaterialLibrary.asset";
         private const string PrefabPath = "Assets/CumulusMvp/Prefabs/CumulusGlassPanel.prefab";
         private const string ScenePath = "Assets/Scenes/CumulusGlassLab.unity";
+        private const string DreamsignButtonMeshPath =
+            "Assets/CumulusMvp/Meshes/CumulusDreamsignGlassButton.asset";
         private const string RendererPath = "Assets/Settings/PC_Renderer.asset";
         private const string MobileRendererPath = "Assets/Settings/Mobile_Renderer.asset";
         private const string BuildSettingsPath = "ProjectSettings/EditorBuildSettings.asset";
@@ -171,6 +173,7 @@ namespace CumulusMvp.Tests
                     "Cumulus Glass Panel",
                     "Dreamsign Violet Point Light",
                     "Dreamsign Cyan Point Light",
+                    "Default Glass Button",
                 }.Concat(dreamsignIds.Select(id => "Dreamsign " + id))));
 
             GameObject glass = roots.Single(root => root.name == "Cumulus Glass Panel");
@@ -208,7 +211,59 @@ namespace CumulusMvp.Tests
                 Assert.That(light.shadows, Is.EqualTo(LightShadows.Soft));
             }
 
-            Assert.That(roots.SelectMany(root => root.GetComponentsInChildren<TMP_Text>()), Is.Empty);
+            GameObject button = roots.Single(root => root.name == "Default Glass Button");
+            Assert.That(button.transform.position, Is.EqualTo(new Vector3(0f, -4.1f, -0.34f)));
+            Assert.That(button.GetComponent<CumulusPressable>(), Is.Not.Null);
+            BoxCollider collider = button.GetComponent<BoxCollider>();
+            Assert.That(collider, Is.Not.Null);
+
+            Transform visual = button.transform.Find("Default Glass Button Visual");
+            Assert.That(visual, Is.Not.Null);
+            Mesh buttonMesh = visual.GetComponent<MeshFilter>().sharedMesh;
+            Assert.That(AssetDatabase.GetAssetPath(buttonMesh), Is.EqualTo(DreamsignButtonMeshPath));
+            Assert.That(
+                buttonMesh.bounds.size.x,
+                Is.EqualTo(59.921875f * 10f / 1080f).Within(0.00001f));
+            Assert.That(
+                buttonMesh.bounds.size.y,
+                Is.EqualTo(42f * 10f / 1080f).Within(0.00001f));
+            Assert.That(collider.size.x, Is.EqualTo(buttonMesh.bounds.size.x).Within(0.00001f));
+            Assert.That(collider.size.y, Is.EqualTo(buttonMesh.bounds.size.y).Within(0.00001f));
+
+            MeshRenderer buttonRenderer = visual.GetComponent<MeshRenderer>();
+            Assert.That(
+                buttonRenderer.sharedMaterials,
+                Has.All.SameAs(AssetDatabase.LoadAssetAtPath<Material>(SceneGlassPath)));
+            Assert.That(buttonRenderer.shadowCastingMode, Is.EqualTo(ShadowCastingMode.On));
+
+            TextMeshPro label = visual.GetComponentInChildren<TextMeshPro>();
+            Assert.That(label, Is.Not.Null);
+            Assert.That(label.text, Is.EqualTo("Sort"));
+            Assert.That(label.alignment, Is.EqualTo(TextAlignmentOptions.Center));
+            Assert.That(label.fontSize, Is.EqualTo(2f));
+            Assert.That(label.fontWeight, Is.EqualTo(FontWeight.Medium));
+            Assert.That(label.color.r, Is.EqualTo(1f).Within(0.00001f));
+            Assert.That(label.color.g, Is.EqualTo(248f / 255f).Within(0.00001f));
+            Assert.That(label.color.b, Is.EqualTo(236f / 255f).Within(0.00001f));
+            Assert.That(label.color.a, Is.EqualTo(1f).Within(0.00001f));
+            Assert.That(
+                label.rectTransform.sizeDelta.x,
+                Is.EqualTo(buttonMesh.bounds.size.x).Within(0.00001f));
+            Assert.That(
+                label.rectTransform.sizeDelta.y,
+                Is.EqualTo(buttonMesh.bounds.size.y).Within(0.00001f));
+            Assert.That(
+                AssetDatabase.GetAssetPath(label.font),
+                Is.EqualTo("Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset"));
+            Assert.That(label.GetComponentInParent<Canvas>(), Is.Null);
+
+            Assert.That(
+                roots.Single(root => root.name == "Main Camera")
+                    .GetComponent<CumulusPointerInteractor>(),
+                Is.Not.Null);
+            Assert.That(
+                roots.SelectMany(root => root.GetComponentsInChildren<TMP_Text>()),
+                Is.EquivalentTo(new TMP_Text[] { label }));
             Assert.That(roots.SelectMany(root => root.GetComponentsInChildren<Canvas>()), Is.Empty);
         }
 
