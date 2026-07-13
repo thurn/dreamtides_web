@@ -95,6 +95,9 @@ const CARD_DISMISS_SCALE = 0;
 // The authored mobile card ceiling expressed as width so the card can fit both
 // its equal visual column and the live detail-row height without distortion.
 const MOBILE_DETAIL_CARD_MAX_WIDTH = 227;
+// Matches the standard site's former split-column detail width while the
+// three-card picker uses the wider showcase composition.
+const DESKTOP_DETAIL_PANEL_MAX_WIDTH_PX = 720;
 
 export function TransfigurationSiteScreen({
   view,
@@ -234,6 +237,10 @@ export function TransfigurationSiteScreen({
             data-transfiguration-panel-viewport=""
             style={{
               width: "100%",
+              maxWidth:
+                layout === "desktop" && !view.isEnhanced && picked !== null
+                  ? DESKTOP_DETAIL_PANEL_MAX_WIDTH_PX
+                  : undefined,
               height: layout === "mobile" ? "100%" : undefined,
               minHeight: layout === "mobile" ? 0 : undefined,
               maxHeight: "100%",
@@ -247,6 +254,10 @@ export function TransfigurationSiteScreen({
                 layout === "desktop" && !view.isEnhanced && picked === null
                   ? "end"
                   : "center",
+              justifySelf:
+                layout === "desktop" && !view.isEnhanced && picked !== null
+                  ? "end"
+                  : undefined,
             }}
           >
             {picked === null ? (
@@ -289,7 +300,13 @@ export function TransfigurationSiteScreen({
                 aria-hidden="true"
                 style={{
                   position: "absolute",
-                  inset: 0,
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  width: "100%",
+                  maxWidth: DESKTOP_DETAIL_PANEL_MAX_WIDTH_PX,
+                  display: "grid",
+                  alignItems: "center",
                   visibility: "hidden",
                   pointerEvents: "none",
                 }}

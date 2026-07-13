@@ -136,9 +136,17 @@ function enhancedView(): TransfigurationSiteView {
   };
 }
 
-function stubMatchMedia(reducedMotion: boolean, desktop = true): void {
+function stubMatchMedia(
+  reducedMotion: boolean,
+  desktop = true,
+  compactShowcase = false,
+): void {
   window.matchMedia = ((query: string) => ({
-    matches: query.includes("prefers-reduced-motion") ? reducedMotion : desktop,
+    matches: query.includes("prefers-reduced-motion")
+      ? reducedMotion
+      : query.includes("max-width")
+        ? compactShowcase
+        : desktop,
     media: query,
     onchange: null,
     addEventListener: () => undefined,
@@ -323,6 +331,12 @@ describe("TransfigurationSiteScreen", () => {
     expect(
       container.querySelector('[data-testid="cumulus-transfiguration-detail"]'),
     ).not.toBeNull();
+    const panelViewport = container.querySelector<HTMLElement>(
+      "[data-transfiguration-panel-viewport]",
+    );
+    expect(panelViewport?.style.width).toBe("100%");
+    expect(panelViewport?.style.maxWidth).toBe("720px");
+    expect(panelViewport?.style.justifySelf).toBe("end");
     expect(
       container.querySelector(
         '[data-testid="cumulus-transfiguration-choose-again"]',

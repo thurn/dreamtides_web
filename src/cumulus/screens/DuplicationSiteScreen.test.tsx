@@ -54,9 +54,16 @@ function view(cardCount = 3, isEnhanced = false): DuplicationSiteView {
   };
 }
 
-function stubMatchMedia(desktop = true): void {
+function stubMatchMedia(
+  desktop = true,
+  compactShowcase = false,
+): void {
   window.matchMedia = ((query: string) => ({
-    matches: query.includes("prefers-reduced-motion") ? false : desktop,
+    matches: query.includes("prefers-reduced-motion")
+      ? false
+      : query.includes("max-width")
+        ? compactShowcase
+        : desktop,
     media: query,
     onchange: null,
     addEventListener: () => undefined,
@@ -124,6 +131,11 @@ describe("DuplicationSiteScreen", () => {
         "[data-guide-gallery-desktop-layout]",
       )?.dataset.guideGalleryDesktopLayoutMode,
     ).toBe("showcase");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="cumulus-duplication-speech-anchor"]',
+      )?.style.left,
+    ).toBe("52%");
     const initialPanelWidth = gallery?.style.width;
 
     const confirm = container.querySelector<HTMLButtonElement>(
