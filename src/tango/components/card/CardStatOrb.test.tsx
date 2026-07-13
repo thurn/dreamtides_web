@@ -56,7 +56,7 @@ describe("CardStatOrb transfiguration badge", () => {
     expect(orb?.querySelector<HTMLElement>(":scope > div")?.style.color).toBe(
       "rgb(255, 255, 255)",
     );
-    expect(badge?.style.width).toBe("calc(15px)");
+    expect(badge?.style.width).toBe("calc(30px)");
     expect(badge?.style.background).toBe("rgb(0, 0, 0)");
     expect(badge?.style.border).toContain("rgb(255, 255, 255)");
     expect(badge?.querySelector(`.${glyphClass}`)).not.toBeNull();

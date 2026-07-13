@@ -39,11 +39,11 @@ const CHANGE_BADGE_BY_TYPE: Readonly<
 };
 
 /**
- * A 15px badge at the card chrome's canonical 500px design width. Deriving it
+ * A 30px badge at the card chrome's canonical 500px design width. Deriving it
  * from the orb diameter keeps the badge proportional when the whole card grows
  * or shrinks.
  */
-const CHANGE_BADGE_TO_ORB_RATIO = 15 / (500 * 0.12);
+const CHANGE_BADGE_TO_ORB_RATIO = 30 / (500 * 0.12);
 
 /**
  * Glyph spec per stat variant. Both stats render the same way — a shadowed
@@ -253,7 +253,7 @@ export function CardStatOrb({
             height: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO)})`,
             borderRadius: "50%",
             background: "#000000",
-            border: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO / 15)}) solid #ffffff`,
+            border: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO / 30)}) solid #ffffff`,
             color: "#ffffff",
             boxSizing: "border-box",
             fontSize: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO * 0.62)})`,
