@@ -274,6 +274,10 @@ const CARD_WIDTH_FLOOR_PX = 64;
 // measure used by the gallery fitter so two captioned rows remain fully visible.
 const CAPTION_LINE_PX = 18;
 const CAPTION_BLOCK_PX = 22;
+// An offset, slightly fanned card needs a real footprint beyond its primary.
+// Reserving the rotated bounds keeps the copy clear of the next tile and the
+// gallery footer instead of relying on overflow that a scroll body will clip.
+const STACKED_COPY_RESERVE_PX = 40;
 
 interface GalleryMeasure {
   cardWidthPx: number;
@@ -358,6 +362,7 @@ function fallbackCardWidth(
   cardSize: CardGalleryCardSize,
   columnCount: number,
   spacing: CardGallerySpacing,
+  columnGap: string,
 ): string {
   const minWidth = minCardWidth(cardSize);
   const maxWidth = maxCardWidth(cardSize);
@@ -371,8 +376,7 @@ function fallbackCardWidth(
       : "0px";
   const gapSlots = Math.max(0, columnCount - 1);
   const padding = bodyPaddingFor(spacing);
-  const gap = gridGapFor(spacing);
-  return `clamp(${String(minWidth)}px, calc((100vw - ${edgeReserve} - ${edgeReserve} - (${padding} * 2) - (${gap} * ${String(gapSlots)})) / ${String(columnCount)}), ${String(maxWidth)}px)`;
+  return `clamp(${String(minWidth)}px, calc((100vw - ${edgeReserve} - ${edgeReserve} - (${padding} * 2) - (${columnGap} * ${String(gapSlots)})) / ${String(columnCount)}), ${String(maxWidth)}px)`;
 }
 
 function gridTemplate(columns: number, cardWidth: string): string {
@@ -435,6 +439,7 @@ function useGalleryMeasure({
   spacing,
   fallbackVisibleRows,
   rowSupplementPx,
+  trailingReservePx,
 }: {
   readonly frame: CardGalleryFrame;
   readonly columnCount: number;
@@ -442,6 +447,7 @@ function useGalleryMeasure({
   readonly spacing: CardGallerySpacing;
   readonly fallbackVisibleRows: number;
   readonly rowSupplementPx: number;
+  readonly trailingReservePx: number;
 }): {
   readonly rootRef: React.RefObject<HTMLElement | null>;
   readonly headerRef: React.RefObject<HTMLElement | null>;
@@ -503,7 +509,8 @@ function useGalleryMeasure({
         ((availableBodyHeight -
           blockPadding -
           gap * visibleGapSlots -
-          rowSupplementPx * visibleRows) *
+          rowSupplementPx * visibleRows -
+          trailingReservePx) *
           CARD_ASPECT_RATIO_VALUE) /
         visibleRows;
       const cardWidthPx = Math.max(
@@ -557,6 +564,7 @@ function useGalleryMeasure({
     frame,
     rowSupplementPx,
     spacing,
+    trailingReservePx,
   ]);
 
   return { rootRef, headerRef, bodyRef, gridRef, measure };
@@ -600,7 +608,9 @@ export function CardGalleryPanel({
   const fallbackVisibleGapSlots = gapSlotsFor(fallbackVisibleRows);
   const hasCaptions =
     endAction !== undefined || cards.some((card) => card.caption !== undefined);
+  const hasStackedCopy = cards.some((card) => card.stackedCopy === true);
   const rowSupplementPx = hasCaptions ? CAPTION_BLOCK_PX : 0;
+  const trailingReservePx = hasStackedCopy ? STACKED_COPY_RESERVE_PX : 0;
   const { rootRef, headerRef, bodyRef, gridRef, measure } = useGalleryMeasure({
     frame,
     columnCount,
@@ -608,19 +618,32 @@ export function CardGalleryPanel({
     spacing,
     fallbackVisibleRows,
     rowSupplementPx,
+    trailingReservePx,
   });
   const visibleRows = measure?.visibleRows ?? fallbackVisibleRows;
   const visibleGapSlots = measure?.visibleGapSlots ?? fallbackVisibleGapSlots;
+  const galleryBaseGap = gridGapFor(spacing);
+  const galleryColumnGap = hasStackedCopy
+    ? `calc(${galleryBaseGap} + ${token("--space-7")})`
+    : galleryBaseGap;
+  const galleryRowGap = hasStackedCopy
+    ? `calc(${galleryBaseGap} + ${String(STACKED_COPY_RESERVE_PX)}px)`
+    : galleryBaseGap;
   const cardWidth =
     measure === null
-      ? fallbackCardWidth(frame, cardSize, columnCount, spacing)
+      ? fallbackCardWidth(
+          frame,
+          cardSize,
+          columnCount,
+          spacing,
+          galleryColumnGap,
+        )
       : `${String(Math.max(1, Math.floor(measure.cardWidthPx)))}px`;
-  const galleryGap = gridGapFor(spacing);
   const galleryPadding = bodyPaddingFor(spacing);
   const headerPadding = headerPaddingFor(spacing);
   const cardHeight = `calc(${cardWidth} / ${String(CARD_ASPECT_RATIO_VALUE)})`;
-  const bodyHeight = `calc(((${cardHeight} + ${String(rowSupplementPx)}px) * ${String(visibleRows)}) + (${galleryGap} * ${String(visibleGapSlots)}) + (${galleryPadding} * 2))`;
-  const panelWidth = `calc((${cardWidth} * ${String(columnCount)}) + (${galleryGap} * ${String(Math.max(0, columnCount - 1))}) + (${galleryPadding} * 2))`;
+  const bodyHeight = `calc(((${cardHeight} + ${String(rowSupplementPx)}px) * ${String(visibleRows)}) + (${galleryRowGap} * ${String(visibleGapSlots)}) + (${galleryPadding} * 2) + ${String(trailingReservePx)}px)`;
+  const panelWidth = `calc((${cardWidth} * ${String(columnCount)}) + (${galleryColumnGap} * ${String(Math.max(0, columnCount - 1))}) + (${galleryPadding} * 2))`;
   const materialStyle: CSSProperties =
     frame === "fullBleed"
       ? {
@@ -760,7 +783,8 @@ export function CardGalleryPanel({
               style={{
                 display: "grid",
                 gridTemplateColumns: gridTemplate(columnCount, cardWidth),
-                gap: galleryGap,
+                columnGap: galleryColumnGap,
+                rowGap: galleryRowGap,
                 justifyContent: "center",
               }}
             >
@@ -770,6 +794,7 @@ export function CardGalleryPanel({
                 const interactive = onCardPress !== undefined;
                 const tileStyle: CSSProperties = {
                   position: "relative",
+                  zIndex: card.stackedCopy === true ? 1 : undefined,
                   display: "block",
                   width: "100%",
                   borderRadius: token("--radius-card"),
@@ -794,7 +819,8 @@ export function CardGalleryPanel({
                           inset: 0,
                           zIndex: 0,
                           pointerEvents: "none",
-                          transform: `translate(${token("--space-4")}, ${token("--space-4")})`,
+                          transform: `translate(${token("--space-7")}, ${token("--space-7")}) rotate(3deg)`,
+                          transformOrigin: "center",
                         }}
                       >
                         <CardView

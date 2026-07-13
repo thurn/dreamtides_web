@@ -108,7 +108,9 @@ describe("CardGalleryPanel", () => {
     ]} /></CumulusRoot>));
     const actions = container.querySelector<HTMLElement>("[data-gallery-footer-actions]");
     expect(actions?.style.gridTemplateColumns).toBe("repeat(2, minmax(0, 1fr))");
-    expect(container.querySelector('[data-gallery-stacked-copy] [data-testid="card-view-copy"]')?.textContent).toBe("Selected");
+    const stackedCopy = container.querySelector<HTMLElement>("[data-gallery-stacked-copy]");
+    expect(stackedCopy?.querySelector('[data-testid="card-view-copy"]')?.textContent).toBe("Selected");
+    expect(stackedCopy?.style.transform).toContain("rotate(3deg)");
     expect(container.querySelector<HTMLElement>('[data-testid="confirm"]')?.dataset.glassVariant).toBe("accent");
     act(() => (container.querySelector('[data-testid="decline"]') as HTMLButtonElement).click());
     act(() => (container.querySelector('[data-testid="confirm"]') as HTMLButtonElement).click());
