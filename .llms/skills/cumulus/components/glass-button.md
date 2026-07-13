@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/glass-button`
 
-Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
 
 The labeled glass action — a text label in the control typography on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface.
 

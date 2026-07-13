@@ -94,6 +94,16 @@ describe("cumulusSiteScreenFor", () => {
     ).not.toBeNull();
   });
 
+  it("resolves Dream Augury to Cumulus", () => {
+    expect(
+      cumulusSiteScreenFor({
+        type: "DreamAugury",
+        id: "site-1",
+        isEnhanced: false,
+      } as SiteState),
+    ).not.toBeNull();
+  });
+
   it("returns null for site types not yet migrated, so ScreenRouter falls back to legacy", () => {
     expect(cumulusSiteScreenFor({ type: "Reward" } as SiteState)).toBeNull();
   });

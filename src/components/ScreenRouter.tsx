@@ -35,7 +35,11 @@ import {
   type MerchantGameObject,
 } from "../journey_v2";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
-import { cumulusScreenFor, cumulusSiteScreenFor } from "../screens/cumulus_adapters/registry";
+import {
+  cumulusScreenFor,
+  cumulusSiteScreenFor,
+  isCumulusSiteRegistered,
+} from "../screens/cumulus_adapters/registry";
 import type { QuestContent } from "../data/quest-content";
 import { siteTypeName } from "../atlas/atlas-generator";
 import { logEvent } from "../logging";
@@ -91,7 +95,17 @@ export function ScreenRouter({
   // signature only re-fires the log when the visible navigation actually
   // changes — the same guard idiom `useQuestUrlSync` uses for `quest_url_synced`.
   const siteId = screen.type === "site" ? screen.siteId : null;
-  const servedByCumulus = cumulusScreen !== null;
+  const activeSite =
+    screen.type === "site" && state.currentDreamscape !== null
+      ? state.atlas.nodes[state.currentDreamscape]?.sites.find(
+          (candidate) => candidate.id === screen.siteId,
+        )
+      : undefined;
+  const servedByCumulus =
+    cumulusScreen !== null ||
+    (runtimeConfig.uiVariant === "cumulus" &&
+      activeSite !== undefined &&
+      isCumulusSiteRegistered(activeSite));
   const lastLoggedNavigationRef = useRef<string | null>(null);
   useEffect(() => {
     const signature = `${runtimeConfig.uiVariant}|${screen.type}|${siteId ?? ""}|${String(servedByCumulus)}`;
