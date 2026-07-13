@@ -6,7 +6,6 @@ import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
 import { RulesText } from "../components/card/RulesText";
-import { Button } from "../components/controls/Button";
 import { GlassButton } from "../components/controls/GlassButton";
 import { IconButton } from "../components/controls/IconButton";
 import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
@@ -14,7 +13,6 @@ import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import {
   QUEST_STATUS_BAR_CLEARANCE_OP,
-  QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
 } from "../components/hud/QuestStatusBar";
 import { GlowIcon } from "../components/controls/GlowIcon";
 import { glassSurfaceStyle } from "../internal/glass-surface";
@@ -23,7 +21,7 @@ import { resolveArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
-import { ConsoleDivider, OnMediaEyebrow } from "./quest-start-shared";
+import { ConsoleDivider } from "./quest-start-shared";
 import { useIsDesktop } from "./use-is-desktop";
 
 export interface BattleStartDreamcallerView {
@@ -59,7 +57,7 @@ const PANEL_MAX_WIDTH = 660;
 const CHARACTER_STAGE_MAX_WIDTH = 760;
 const SIGNATURE_CARD_WIDTH = 116;
 const DREAMSIGN_SIZE = 62;
-const MOBILE_SIGNATURE_CARD_WIDTH = 64;
+const MOBILE_SIGNATURE_CARD_WIDTH = 92;
 const MOBILE_DREAMSIGN_SIZE = 48;
 
 export function BattleStartScreen({ view, onBegin }: BattleStartScreenProps) {
@@ -207,7 +205,7 @@ function DesktopBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
                   data-signature-card-id={card.cardId}
                   style={{ width: SIGNATURE_CARD_WIDTH, flex: "none" }}
                 >
-                  <GameCard model={card.model} hideRulesText />
+                  <GameCard model={card.model} />
                 </div>
               ))}
             </div>
@@ -253,6 +251,7 @@ function DesktopBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
           </div>
           <GlassButton
             label="Begin Battle"
+            variant="accent"
             placement="onGlass"
             onPress={onBegin}
             testId="tango-battle-start-begin"
@@ -302,7 +301,11 @@ function MobileBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
           position: "absolute",
           left: 0,
           right: 0,
-          bottom: QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+          // The console's midpoint sits at the opponent's waist. Anchoring its
+          // center, rather than its bottom edge, lets taller carousel pages add
+          // equal visual weight above and below that shared waist line.
+          top: "66%",
+          transform: "translateY(-50%)",
           zIndex: 4,
           padding: `0 max(var(--safe-area-inset-right), ${token("--gutter")}) 0 max(var(--safe-area-inset-left), ${token("--gutter")})`,
         }}
@@ -332,8 +335,7 @@ function MobileBattleStartTitle({
         pointerEvents: "none",
       }}
     >
-      <OnMediaEyebrow label="Battle Opponent" />
-      <h1 style={{ margin: `${token("--space-6")} 0 0` }}>
+      <h1 style={{ margin: token("--space-6") }}>
         <span
           style={{
             display: "block",
@@ -342,7 +344,7 @@ function MobileBattleStartTitle({
             textShadow: token("--text-outline-media"),
           }}
         >
-          {dreamcaller.name}
+          vs. {dreamcaller.name}
         </span>
         {dreamcaller.title !== "" && (
           <span
@@ -402,10 +404,19 @@ function MobileBattleConsole({ view, onBegin }: BattleStartScreenProps) {
       </div>
 
       <div
-        data-testid="tango-battle-start-begin"
-        style={{ marginTop: token("--space-6") }}
+        style={{
+          marginTop: token("--space-6"),
+          display: "flex",
+          justifyContent: "center",
+        }}
       >
-        <Button label="Begin Battle" size="lg" full onClick={onBegin} />
+        <GlassButton
+          label="Begin Battle"
+          variant="accent"
+          placement="onGlass"
+          onPress={onBegin}
+          testId="tango-battle-start-begin"
+        />
       </div>
     </section>
   );
@@ -425,7 +436,9 @@ function MobileDetailCarousel({
   const signatureCardIndex = view.dreamsigns.length > 0 ? 2 : 1;
 
   useLayoutEffect(() => {
-    const content = contentRef.current;
+    const content = contentRef.current?.children.item(
+      index,
+    ) as HTMLElement | null;
     if (content === null) return;
     const nextHeight = content.scrollHeight;
     if (nextHeight > 0) setContentHeight(nextHeight);
@@ -451,33 +464,63 @@ function MobileDetailCarousel({
             : `height ${token("--dur-base")} ${token("--ease-out")}`,
       }}
     >
-      <div ref={contentRef} style={{ width: "100%" }}>
-        {index === 0 && (
-          <MobileCarouselPage title="Victory:">
+      <div
+        ref={contentRef}
+        data-battle-start-detail-track=""
+        style={{
+          width: "100%",
+          display: "flex",
+          alignItems: "flex-start",
+          transform:
+            index === 0
+              ? "translateX(0%)"
+              : `translateX(-${String(index * 100)}%)`,
+          transition: `transform ${token("--dur-slow")} ${token("--ease-out")}`,
+        }}
+      >
+        <div
+          aria-hidden={index !== 0}
+          inert={index !== 0}
+          data-battle-start-detail-active={String(index === 0)}
+          style={{ width: "100%", flex: "none" }}
+        >
+          <MobileCarouselPage title={null}>
             <MobileBattleStakes view={view} />
           </MobileCarouselPage>
+        </div>
+        {view.dreamsigns.length > 0 && (
+          <div
+            aria-hidden={index !== 1}
+            inert={index !== 1}
+            data-battle-start-detail-active={String(index === 1)}
+            style={{ width: "100%", flex: "none" }}
+          >
+            <MobileCarouselPage title="Dreamsigns:">
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: token("--space-3"),
+                }}
+              >
+                {view.dreamsigns.map((dreamsign) => (
+                  <Dreamsign
+                    key={dreamsign.id}
+                    dreamsign={dreamsign}
+                    sizePx={MOBILE_DREAMSIGN_SIZE}
+                    testid={`tango-battle-start-dreamsign-${String(dreamsign.id)}`}
+                  />
+                ))}
+              </div>
+            </MobileCarouselPage>
+          </div>
         )}
-        {view.dreamsigns.length > 0 && index === 1 && (
-          <MobileCarouselPage title="Dreamsigns:">
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                gap: token("--space-3"),
-              }}
-            >
-              {view.dreamsigns.map((dreamsign) => (
-                <Dreamsign
-                  key={dreamsign.id}
-                  dreamsign={dreamsign}
-                  sizePx={MOBILE_DREAMSIGN_SIZE}
-                  testid={`tango-battle-start-dreamsign-${String(dreamsign.id)}`}
-                />
-              ))}
-            </div>
-          </MobileCarouselPage>
-        )}
-        {index === signatureCardIndex && (
+        <div
+          aria-hidden={index !== signatureCardIndex}
+          inert={index !== signatureCardIndex}
+          data-battle-start-detail-active={String(index === signatureCardIndex)}
+          style={{ width: "100%", flex: "none" }}
+        >
           <MobileCarouselPage title="Signature Cards:">
             <div
               style={{
@@ -493,12 +536,12 @@ function MobileDetailCarousel({
                   data-signature-card-id={card.cardId}
                   style={{ width: MOBILE_SIGNATURE_CARD_WIDTH, flex: "none" }}
                 >
-                  <GameCard model={card.model} hideRulesText />
+                  <GameCard model={card.model} />
                 </div>
               ))}
             </div>
           </MobileCarouselPage>
-        )}
+        </div>
       </div>
 
       {index > 0 && (
@@ -521,7 +564,7 @@ function MobileCarouselPage({
   title,
   children,
 }: {
-  readonly title: string;
+  readonly title: string | null;
   readonly children: ReactNode;
 }) {
   return (
@@ -532,17 +575,19 @@ function MobileCarouselPage({
         gap: token("--space-3"),
       }}
     >
-      <span
-        data-battle-start-detail-title=""
-        style={{
-          font: token("--t-eyebrow"),
-          letterSpacing: token("--tracking-eyebrow"),
-          textTransform: "uppercase",
-          color: token("--text-on-glass"),
-        }}
-      >
-        {title}
-      </span>
+      {title !== null && (
+        <span
+          data-battle-start-detail-title=""
+          style={{
+            font: token("--t-eyebrow"),
+            letterSpacing: token("--tracking-eyebrow"),
+            textTransform: "uppercase",
+            color: token("--text-on-glass"),
+          }}
+        >
+          {title}
+        </span>
+      )}
       {children}
     </div>
   );
@@ -571,6 +616,7 @@ function MobileCarouselChevron({
         label={
           direction === "left" ? "Previous battle detail" : "Next battle detail"
         }
+        placement="onGlass"
         onPress={onPress}
         testId={`tango-battle-start-carousel-${direction === "left" ? "previous" : "next"}`}
       />

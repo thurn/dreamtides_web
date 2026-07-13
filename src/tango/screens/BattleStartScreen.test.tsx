@@ -7,7 +7,6 @@ import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { artRef } from "../primitives/art";
 import { TangoRoot } from "../TangoRoot";
-import { QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/QuestStatusBar";
 import { BattleStartScreen, type BattleStartView } from "./BattleStartScreen";
 
 beforeEach(() => {
@@ -116,6 +115,11 @@ describe("Tango BattleStartScreen", () => {
     expect(container.querySelectorAll("[data-signature-card-id]")).toHaveLength(
       3,
     );
+    expect(
+      container.querySelectorAll(
+        '[data-signature-card-id] [data-reveal-complete-game-card="true"]',
+      ),
+    ).toHaveLength(3);
     expect(container.textContent).toContain("To Win");
     expect(container.textContent).not.toContain("Opposing Dreamcaller");
     expect(container.textContent).toContain("Reward");
@@ -130,7 +134,7 @@ describe("Tango BattleStartScreen", () => {
     act(() => root.unmount());
   });
 
-  it("uses the neutral glass action and reports begin", () => {
+  it("uses the accented glass action and reports begin", () => {
     const onBegin = vi.fn();
     const container = document.createElement("div");
     document.body.append(container);
@@ -147,6 +151,7 @@ describe("Tango BattleStartScreen", () => {
       '[data-testid="tango-battle-start-begin"]',
     );
     expect(button?.getAttribute("data-glass-placement")).toBe("onGlass");
+    expect(button?.getAttribute("data-glass-variant")).toBe("accent");
     act(() => button?.click());
     expect(onBegin).toHaveBeenCalledTimes(1);
 
@@ -177,17 +182,16 @@ describe("Tango BattleStartScreen", () => {
     const consolePanel = layout?.querySelector<HTMLElement>(
       "[data-battle-start-console]",
     );
-    expect(title?.textContent).toContain("Battle Opponent");
-    expect(title?.textContent).toContain("Aeris, the Prism Guide");
+    expect(title?.textContent).not.toContain("Battle Opponent");
+    expect(title?.textContent).toContain("vs. Aeris, the Prism Guide");
     expect(title?.textContent).toContain("Storm Archivist");
     expect(consolePanel?.textContent).not.toContain("Aeris, the Prism Guide");
     expect(
       (consolePanel?.firstElementChild as HTMLElement | null)?.style
         .backdropFilter,
     ).toContain("--glass-blur");
-    expect(consolePanel?.style.bottom).toBe(
-      QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
-    );
+    expect(consolePanel?.style.top).toBe("66%");
+    expect(consolePanel?.style.transform).toBe("translateY(-50%)");
     expect(
       layout?.querySelector("[data-battle-start-opponent]"),
     ).not.toBeNull();
@@ -196,18 +200,22 @@ describe("Tango BattleStartScreen", () => {
         ?.querySelector("[data-battle-start-opponent]")
         ?.getAttribute("data-battle-start-opponent-framing"),
     ).toBe("standing");
-    expect(layout?.querySelectorAll("[data-signature-card-id]")).toHaveLength(
-      0,
-    );
-    expect(layout?.textContent).not.toContain("Signature Cards");
     expect(layout?.textContent).toContain(
       "Whenever an event resolves, gain momentum.",
     );
-    expect(layout?.textContent).toContain("Victory:");
-    expect(layout?.textContent).not.toContain("Signature Cards:");
-    expect(layout?.textContent).not.toContain("Dreamsigns:");
-    expect(layout?.textContent).toContain("To Win");
-    expect(layout?.textContent).toContain("Reward");
+    const activePage = () =>
+      layout?.querySelector<HTMLElement>(
+        '[data-battle-start-detail-active="true"]',
+      );
+    expect(activePage()?.textContent).not.toContain("Victory:");
+    expect(activePage()?.textContent).toContain("To Win");
+    expect(activePage()?.textContent).toContain("Reward");
+
+    const track = layout?.querySelector<HTMLElement>(
+      "[data-battle-start-detail-track]",
+    );
+    expect(track?.style.transform).toBe("translateX(0%)");
+    expect(track?.style.transition).toContain("transform");
 
     expect(
       layout?.querySelector(
@@ -217,18 +225,18 @@ describe("Tango BattleStartScreen", () => {
     const next = layout?.querySelector<HTMLButtonElement>(
       '[data-testid="tango-battle-start-carousel-next"]',
     );
+    expect(next?.getAttribute("data-glass-placement")).toBe("onGlass");
     act(() => next?.click());
-    expect(layout?.textContent).toContain("Dreamsigns:");
-    expect(layout?.textContent).not.toContain("To Win");
-    expect(layout?.textContent).not.toContain("Reward");
+    expect(track?.style.transform).toBe("translateX(-100%)");
+    expect(activePage()?.textContent).toContain("Dreamsigns:");
+    expect(activePage()?.textContent).not.toContain("To Win");
+    expect(activePage()?.textContent).not.toContain("Reward");
     expect(
-      layout?.querySelectorAll(
+      activePage()?.querySelectorAll(
         '[data-testid^="tango-battle-start-dreamsign-"]',
       ),
     ).toHaveLength(1);
-    expect(layout?.querySelectorAll("[data-signature-card-id]")).toHaveLength(
-      0,
-    );
+    expect(activePage()?.querySelectorAll("[data-signature-card-id]")).toHaveLength(0);
     expect(
       layout?.querySelector(
         '[data-testid="tango-battle-start-carousel-previous"]',
@@ -242,26 +250,32 @@ describe("Tango BattleStartScreen", () => {
         )
         ?.click(),
     );
-    expect(layout?.textContent).toContain("Signature Cards:");
-    expect(layout?.querySelectorAll("[data-signature-card-id]")).toHaveLength(
+    expect(track?.style.transform).toBe("translateX(-200%)");
+    expect(activePage()?.textContent).toContain("Signature Cards:");
+    expect(activePage()?.querySelectorAll("[data-signature-card-id]")).toHaveLength(
       3,
     );
     expect(
-      layout?.querySelectorAll(
+      activePage()?.querySelectorAll(
         '[data-testid^="tango-battle-start-dreamsign-"]',
       ),
     ).toHaveLength(0);
     expect(
+      activePage()?.querySelectorAll(
+        '[data-reveal-complete-game-card="true"]',
+      ),
+    ).toHaveLength(3);
+    expect(
       layout?.querySelector('[data-testid="tango-battle-start-carousel-next"]'),
     ).toBeNull();
 
-    const action = layout?.querySelector<HTMLElement>(
+    const action = layout?.querySelector<HTMLButtonElement>(
       '[data-testid="tango-battle-start-begin"]',
     );
-    expect(action?.querySelector("button")?.textContent).toContain(
-      "Begin Battle",
-    );
-    act(() => action?.querySelector("button")?.click());
+    expect(action?.textContent).toContain("Begin Battle");
+    expect(action?.getAttribute("data-glass-variant")).toBe("accent");
+    expect(action?.getAttribute("data-glass-placement")).toBe("onGlass");
+    act(() => action?.click());
     expect(onBegin).toHaveBeenCalledTimes(1);
 
     act(() => root.unmount());
@@ -275,7 +289,11 @@ describe("Tango BattleStartScreen", () => {
       '[data-battle-start-layout="mobile"]',
     );
 
-    expect(layout?.textContent).toContain("Victory:");
+    const activePage = () =>
+      layout?.querySelector<HTMLElement>(
+        '[data-battle-start-detail-active="true"]',
+      );
+    expect(activePage()?.textContent).not.toContain("Victory:");
     act(() =>
       layout
         ?.querySelector<HTMLButtonElement>(
@@ -284,8 +302,8 @@ describe("Tango BattleStartScreen", () => {
         ?.click(),
     );
 
-    expect(layout?.textContent).toContain("Signature Cards:");
-    expect(layout?.textContent).not.toContain("Dreamsigns:");
+    expect(activePage()?.textContent).toContain("Signature Cards:");
+    expect(activePage()?.textContent).not.toContain("Dreamsigns:");
     expect(
       layout?.querySelector('[data-testid="tango-battle-start-carousel-next"]'),
     ).toBeNull();
