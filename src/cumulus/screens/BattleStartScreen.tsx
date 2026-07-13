@@ -449,7 +449,7 @@ function MobileDetailCarousel({
           <MobileCarouselSlide active={index === 0} hasNext>
             {view.dreamcaller.ability !== "" && (
               <>
-                <MobileCarouselPage title="Ability:">
+                <MobileCarouselPage title={null}>
                   <div
                     data-battle-start-mobile-ability=""
                     style={{
@@ -480,7 +480,7 @@ function MobileDetailCarousel({
                   view.dreamcaller.ability === "" ? 0 : token("--space-9"),
               }}
             >
-              <MobileCarouselPage title="Victory:">
+              <MobileCarouselPage title={null}>
                 <MobileBattleStakes view={view} />
               </MobileCarouselPage>
             </div>

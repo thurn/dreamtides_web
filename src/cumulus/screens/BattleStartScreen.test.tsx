@@ -211,7 +211,7 @@ describe("Cumulus BattleStartScreen", () => {
       layout?.querySelector<HTMLElement>(
         '[data-battle-start-detail-active="true"]',
       );
-    expect(activePage()?.textContent).toContain("Victory:");
+    expect(activePage()?.textContent).not.toContain("Victory:");
     expect(activePage()?.textContent).toContain(
       "Whenever an event resolves, gain momentum.",
     );
@@ -220,17 +220,8 @@ describe("Cumulus BattleStartScreen", () => {
         "[data-battle-start-detail-title]",
       ) ?? [],
     );
-    expect(overviewTitles.map((title) => title.textContent)).toEqual([
-      "Ability:",
-      "Victory:",
-    ]);
-    expect(
-      overviewTitles.every(
-        (title) =>
-          title.style.justifySelf === "stretch" &&
-          title.style.textAlign === "left",
-      ),
-    ).toBe(true);
+    expect(overviewTitles).toHaveLength(0);
+    expect(activePage()?.textContent).not.toContain("Ability:");
     expect(
       activePage()?.querySelector<HTMLElement>(
         "[data-battle-start-mobile-ability]",
@@ -382,7 +373,7 @@ describe("Cumulus BattleStartScreen", () => {
       layout?.querySelector<HTMLElement>(
         '[data-battle-start-detail-active="true"]',
       );
-    expect(activePage()?.textContent).toContain("Victory:");
+    expect(activePage()?.textContent).not.toContain("Victory:");
     act(() =>
       layout
         ?.querySelector<HTMLButtonElement>(
