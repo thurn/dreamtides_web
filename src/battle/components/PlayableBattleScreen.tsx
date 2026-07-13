@@ -2102,6 +2102,9 @@ function resolveEnemyDreamcallerSummary(
     name: enemyDescriptor.name,
     renderedText: enemyDescriptor.abilityText,
     title: enemyDescriptor.subtitle,
+    ...(sourceDreamcaller?.portraitFocus === undefined
+      ? {}
+      : { portraitFocus: sourceDreamcaller.portraitFocus }),
   };
 }
 

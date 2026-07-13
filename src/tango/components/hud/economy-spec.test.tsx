@@ -103,6 +103,32 @@ describe("ResourceChip", () => {
       large.root.unmount();
     });
   });
+
+  it("can inherit a glass surface's text tone without changing the default resource tone", () => {
+    const inherited = mountInto(
+      <div style={{ color: "var(--text-on-glass)" }}>
+        <ResourceChip kind="points" value={4} tone="inherit" />
+      </div>,
+    );
+    const inheritedChip = inherited.container.querySelector<HTMLElement>(
+      "[data-resource-chip]",
+    );
+    expect(inheritedChip?.style.color).toBe("inherit");
+    expect(inheritedChip?.querySelector("i")?.style.color).toBe("inherit");
+    act(() => {
+      inherited.root.unmount();
+    });
+
+    const defaultPoints = mountInto(<ResourceChip kind="points" value={4} />);
+    const defaultChip = defaultPoints.container.querySelector<HTMLElement>(
+      "[data-resource-chip]",
+    );
+    expect(defaultChip?.style.color).toBe("var(--text-primary)");
+    expect(defaultChip?.querySelector("i")?.style.color).toContain("--points");
+    act(() => {
+      defaultPoints.root.unmount();
+    });
+  });
 });
 
 describe("Button cost mark", () => {

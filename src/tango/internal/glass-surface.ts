@@ -14,6 +14,7 @@
 //     same recipe),
 //   - GlassDialog — both its GlassBackdrop (a full-bleed frosted layer reduced
 //     to fill + blur for an edge-to-edge surface) and its centered glass panel,
+//   - BattleStatusDisplay — the passive battle resources and portrait card,
 //   - control-treatment.ts's glassTrack() (via glassSurfaceStyle({ radius: null
 //     })), which flows on to glassIconButtonChrome() → IconButton and
 //     controlChrome() → the Select / SegmentedControl track+trigger and

@@ -61,7 +61,10 @@ function makeCard(index: number, instanceId: string): MobileBattleCardView {
   };
 }
 
-function makeSide(owner: "enemy" | "player", cardOffset: number): MobileBattleSideView {
+function makeSide(
+  owner: "enemy" | "player",
+  cardOffset: number,
+): MobileBattleSideView {
   return {
     deckCardIds: Array.from(
       { length: 4 },
@@ -77,6 +80,7 @@ function makeSide(owner: "enemy" | "player", cardOffset: number): MobileBattleSi
         id: `${owner}-back-filled`,
         card: makeCard(cardOffset + 2, `${owner}-back-card`),
       },
+      { id: `${owner}-back-second-empty`, card: null },
     ],
     frontRank: [
       {
@@ -84,10 +88,6 @@ function makeSide(owner: "enemy" | "player", cardOffset: number): MobileBattleSi
         card: makeCard(cardOffset + 3, `${owner}-front-card`),
       },
       { id: `${owner}-front-empty`, card: null },
-      {
-        id: `${owner}-front-second`,
-        card: makeCard(cardOffset + 4, `${owner}-front-second-card`),
-      },
     ],
     status: {
       dreamcaller: {
@@ -180,9 +180,17 @@ describe("MobileBattleScreen", () => {
       expect(
         row?.querySelector(`[data-testid="${owner}-battle-status"]`),
       ).not.toBeNull();
+      expect(row?.style.gridTemplateColumns).toBe(
+        "minmax(0, 0.82fr) minmax(0, 1.6fr) minmax(0, 0.82fr)",
+      );
+      expect(row?.style.columnGap).toBe("var(--space-5)");
+      const deckZone = row?.querySelector<HTMLElement>(
+        `[data-battle-zone="${owner}-deck"]`,
+      );
       const voidZone = row?.querySelector<HTMLElement>(
         `[data-battle-zone="${owner}-void"]`,
       );
+      expect(deckZone?.style.height).toBe(voidZone?.style.height);
       expect(voidZone?.dataset.battleZoneTopCardId).toBe(
         view[owner].voidCards[0]?.id,
       );
@@ -220,9 +228,9 @@ describe("MobileBattleScreen", () => {
         rank.getAttribute("data-battle-rank"),
       ),
     ).toEqual(["player-front", "player-back"]);
-    expect(
-      enemyArea?.querySelectorAll("[data-battle-slot-id]"),
-    ).toHaveLength(view.enemy.backRank.length + view.enemy.frontRank.length);
+    expect(enemyArea?.querySelectorAll("[data-battle-slot-id]")).toHaveLength(
+      view.enemy.backRank.length + view.enemy.frontRank.length,
+    );
     const emptySlot = enemyArea?.querySelector<HTMLElement>(
       '[data-battle-slot-filled="false"]',
     );
@@ -231,6 +239,78 @@ describe("MobileBattleScreen", () => {
     expect(
       playerArea?.querySelector('[data-battle-card-id="player-front-card"]'),
     ).not.toBeNull();
+
+    for (const owner of ["enemy", "player"] as const) {
+      const backSlots = Array.from(
+        container.querySelectorAll<HTMLElement>(
+          `[data-battle-rank="${owner}-back"] [data-battle-slot-center-percent]`,
+        ),
+      );
+      const frontSlots = Array.from(
+        container.querySelectorAll<HTMLElement>(
+          `[data-battle-rank="${owner}-front"] [data-battle-slot-center-percent]`,
+        ),
+      );
+      expect(backSlots).toHaveLength(frontSlots.length + 1);
+      frontSlots.forEach((frontSlot, index) => {
+        const leftCenter = Number(
+          backSlots[index]?.dataset.battleSlotCenterPercent,
+        );
+        const rightCenter = Number(
+          backSlots[index + 1]?.dataset.battleSlotCenterPercent,
+        );
+        expect(Number(frontSlot.dataset.battleSlotCenterPercent)).toBeCloseTo(
+          (leftCenter + rightCenter) / 2,
+          8,
+        );
+        expect(frontSlot.style.transform).toBe("translateX(-50%)");
+      });
+    }
+
+    act(() => root.unmount());
+  });
+
+  it("lane-sizes expanded staggered ranks without overlapping slot targets", () => {
+    const view = makeView();
+    const expandedBackRank = Array.from({ length: 6 }, (_, index) => ({
+      id: `expanded-back-${String(index)}`,
+      card: null,
+    }));
+    const expandedFrontRank = Array.from({ length: 5 }, (_, index) => ({
+      id: `expanded-front-${String(index)}`,
+      card: null,
+    }));
+    const expandedView: MobileBattleView = {
+      ...view,
+      enemy: {
+        ...view.enemy,
+        backRank: expandedBackRank,
+        frontRank: expandedFrontRank,
+      },
+      player: {
+        ...view.player,
+        backRank: expandedBackRank,
+        frontRank: expandedFrontRank,
+      },
+    };
+    const { container, root } = mount(expandedView);
+
+    for (const owner of ["enemy", "player"] as const) {
+      for (const rank of ["back", "front"] as const) {
+        const rankElement = container.querySelector<HTMLElement>(
+          `[data-battle-rank="${owner}-${rank}"]`,
+        );
+        const slots = Array.from(
+          rankElement?.querySelectorAll<HTMLElement>("[data-battle-slot-id]") ??
+            [],
+        );
+        expect(rankElement?.style.containerType).toBe("size");
+        expect(slots[0]?.style.width).toContain("100cqw / 6");
+        expect(slots[0]?.style.width).toContain("var(--space-2)");
+        expect(slots[0]?.style.width).toContain("100cqh");
+        expect(slots[0]?.style.height).toBe("");
+      }
+    }
 
     act(() => root.unmount());
   });
@@ -253,14 +333,27 @@ describe("MobileBattleScreen", () => {
 
     expect(enemyHand?.dataset.battleHandCount).toBe("8");
     expect(enemyCards).toHaveLength(6);
-    expect(enemyCards?.[0]?.querySelector("[data-battle-card-motion]")).not.toBeNull();
     expect(
-      Array.from(enemyHand?.querySelectorAll("img") ?? []).map(
-        (image) => image.getAttribute("alt"),
+      enemyCards?.[0]?.querySelector("[data-battle-card-motion]"),
+    ).not.toBeNull();
+    expect(enemyCards?.[0]?.style.top).toBe("0px");
+    expect(enemyCards?.[0]?.style.bottom).toBe("");
+    expect(enemyCards?.[0]?.style.transformOrigin).toBe("50% 0%");
+    expect(enemyCards?.[0]?.style.transform).toContain("rotate(6deg)");
+    expect(enemyCards?.[enemyCards.length - 1]?.style.transform).toContain(
+      "rotate(-6deg)",
+    );
+    expect(
+      Array.from(enemyHand?.querySelectorAll("img") ?? []).map((image) =>
+        image.getAttribute("alt"),
       ),
     ).toEqual(Array.from({ length: 6 }, () => "Enemy card"));
     expect(playerHand?.dataset.battleHandCount).toBe("4");
     expect(playerCards).toHaveLength(view.playerHand.length);
+    expect(playerCards?.[0]?.parentElement?.style.top).toBe(
+      "calc(8% + var(--space-6))",
+    );
+    expect(playerCards?.[0]?.parentElement?.style.bottom).toBe("");
 
     act(() => root.unmount());
   });
@@ -313,14 +406,22 @@ describe("MobileBattleScreen", () => {
       handCard?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       handCard?.dispatchEvent(new Event("dragstart", { bubbles: true }));
       battlefieldCard?.dispatchEvent(new Event("dragstart", { bubbles: true }));
-      emptySlot?.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
-      playerVoid?.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
-      playerHand?.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+      emptySlot?.dispatchEvent(
+        new Event("drop", { bubbles: true, cancelable: true }),
+      );
+      playerVoid?.dispatchEvent(
+        new Event("drop", { bubbles: true, cancelable: true }),
+      );
+      playerHand?.dispatchEvent(
+        new Event("drop", { bubbles: true, cancelable: true }),
+      );
       handCard?.dispatchEvent(new Event("dragend", { bubbles: true }));
     });
 
     expect(handCard?.draggable).toBe(true);
-    expect(interactions.onHandCardActivate).toHaveBeenCalledWith("player-hand-0");
+    expect(interactions.onHandCardActivate).toHaveBeenCalledWith(
+      "player-hand-0",
+    );
     expect(interactions.onCardDragStart).toHaveBeenNthCalledWith(
       1,
       "player-hand-0",

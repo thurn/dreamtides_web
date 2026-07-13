@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/tango#/resource-chip`
 
 Real consumers: **3** (imports outside `src/tango/docs/` and tests).
 
-The sized, self-contained value-and-mark chip for the game economy. It owns the economy mark, role color, and enumerated size/spacing variants (sm/md/lg, tight/loose) for HUD-like readouts. For a bare essence amount inside flowing text, reach for EssenceValue instead; for a standalone essence mark, use EssenceGlyph; Button owns its inline cost mark through the shared economy spec.
+The sized, self-contained value-and-mark chip for the game economy. It owns the economy mark, role color, and enumerated size/spacing/tone variants for HUD-like readouts. For a bare essence amount inside flowing text, reach for EssenceValue instead; for a standalone essence mark, use EssenceGlyph; Button owns its inline cost mark through the shared economy spec.
 
 ## Props
 
@@ -19,6 +19,7 @@ The sized, self-contained value-and-mark chip for the game economy. It owns the 
 | `size` | `ResourceChipSize` = `"sm" \| "md" \| "lg"` | no | `md` | Inline scale — sm (13px) / md (16px, default) / lg (20px). |
 | `chip` | `boolean` | no | `false` | Render as a solid pill badge (for HUD/over-art) instead of inline text. |
 | `spacing` | `ResourceChipSpacing` = `"tight" \| "loose"` | no | `tight` | Gap between value and mark — tight (0px, default) or loose (4px). |
+| `tone` | `ResourceChipTone` = `"inherit" \| "resource"` | no | `resource` | Color treatment — the resource role (default) or the parent surface. |
 | `entity` | `ResourceEntity` | no | — | Semantic resource represented by this chip; makes the named chip self-revealing. |
 
 ### `entity`: the `ResourceEntity` model
@@ -55,4 +56,12 @@ The value hugs its mark by default (tight); pass `spacing="loose"` to add a litt
 
 ```tsx
 <ResourceChip kind="spark" value={12} spacing="loose" />
+```
+
+### Inherited surface tone
+
+Use the inherited tone when the parent glass or control surface supplies the readable text color.
+
+```tsx
+<ResourceChip kind="points" value={4} tone="inherit" />
 ```

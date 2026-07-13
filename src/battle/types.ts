@@ -334,6 +334,7 @@ export interface BattleDreamcallerSummary {
   title: Dreamcaller["title"];
   renderedText: Dreamcaller["renderedText"];
   imageNumber: Dreamcaller["imageNumber"];
+  portraitFocus?: Dreamcaller["portraitFocus"];
 }
 
 export interface BattleDreamsignSummary {

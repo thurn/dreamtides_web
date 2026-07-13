@@ -4,7 +4,10 @@ import {
   GameCard,
   type GameCardModel,
 } from "../components/card/CardView";
-import { CARD_ASPECT_RATIO } from "../components/card/card-aspect";
+import {
+  CARD_ASPECT_RATIO,
+  CARD_ASPECT_RATIO_VALUE,
+} from "../components/card/card-aspect";
 import { BattleStatusDisplay } from "../components/battle/BattleStatusDisplay";
 import { CardBack } from "../components/battle/CardBack";
 import {
@@ -151,7 +154,7 @@ function EnemyHand({ cardIds }: { readonly cardIds: readonly string[] }) {
           maximumSpread: 36,
           spacing: 8,
         });
-        const rotation = normalized * 12;
+        const rotation = normalized * -12;
         const drop = normalized * normalized * 16;
         return (
           <div
@@ -161,12 +164,12 @@ function EnemyHand({ cardIds }: { readonly cardIds: readonly string[] }) {
             data-battle-card-face="down"
             style={{
               position: "absolute",
-              bottom: 0,
+              top: 0,
               left,
               height: "94%",
               aspectRatio: CARD_ASPECT_RATIO,
-              transformOrigin: "50% 100%",
-              transform: `translateX(-50%) translateY(${String(drop)}%) rotate(${String(rotation)}deg)`,
+              transformOrigin: "50% 0%",
+              transform: `translateX(-50%) translateY(-${String(drop)}%) rotate(${String(rotation)}deg)`,
               zIndex: index + 1,
             }}
           >
@@ -230,10 +233,11 @@ function SideZones({
       style={{
         ...ROW_STYLE,
         display: "grid",
-        gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1.6fr) minmax(0, 1fr)",
+        gridTemplateColumns:
+          "minmax(0, 0.82fr) minmax(0, 1.6fr) minmax(0, 0.82fr)",
         alignItems: "center",
-        columnGap: token("--space-2"),
-        paddingInline: token("--space-3"),
+        columnGap: token("--space-5"),
+        paddingInline: token("--space-4"),
       }}
     >
       <div
@@ -371,16 +375,17 @@ function Rank({
   owner,
   rank,
   slots,
+  backSlotCount,
   order,
   interactions,
 }: {
   readonly owner: MobileBattleOwner;
   readonly rank: MobileBattleRank;
   readonly slots: readonly MobileBattleSlotView[];
+  readonly backSlotCount: number;
   readonly order: number;
   readonly interactions?: MobileBattleInteractions;
 }) {
-  const forwardOffset = rank === "front" ? -4 : 4;
   const canDrop =
     interactions?.canInteract === true && interactions.pendingCardId !== null;
   return (
@@ -394,63 +399,68 @@ function Rank({
         height: "57%",
         top: order === 0 ? 0 : undefined,
         bottom: order === 1 ? 0 : undefined,
-        display: "flex",
-        alignItems: order === 0 ? "flex-start" : "flex-end",
-        justifyContent: "center",
-        gap: token("--space-2"),
-        transform: `translateX(${String(forwardOffset)}%)`,
+        containerType: "size",
         zIndex: order + 1,
       }}
     >
-      {slots.map((slot) => (
-        <div
-          key={slot.id}
-          data-battle-slot-id={slot.id}
-          data-battle-slot-filled={slot.card !== null ? "true" : "false"}
-          data-battle-drop-target={canDrop ? "true" : undefined}
-          onDragOver={(event) => {
-            if (canDrop) event.preventDefault();
-          }}
-          onDrop={(event) => {
-            if (!canDrop) return;
-            event.preventDefault();
-            interactions.onSlotDrop({ owner, rank, slotId: slot.id });
-          }}
-          style={{
-            height: "100%",
-            maxWidth: "22%",
-            aspectRatio: CARD_ASPECT_RATIO,
-            flex: "0 1 auto",
-            boxSizing: "border-box",
-            border:
-              slot.card === null
-                ? `1px dashed ${token("--border-soft")}`
-                : undefined,
-            borderRadius:
-              slot.card === null ? token("--radius-card") : undefined,
-          }}
-        >
-          {slot.card !== null ? (
-            <FaceUpCard
-              card={slot.card}
-              zone={`${owner}-${rank}-rank`}
-              interaction={
-                interactions === undefined
-                  ? undefined
-                  : {
-                      draggable: interactions.canInteract,
-                      onDragStart: () =>
-                        interactions.onCardDragStart(
-                          slot.card?.id ?? "",
-                          "battlefield",
-                        ),
-                      onDragEnd: interactions.onCardDragEnd,
-                    }
-              }
-            />
-          ) : null}
-        </div>
-      ))}
+      {slots.map((slot, index) => {
+        const laneCount = Math.max(backSlotCount, 1);
+        const centerPercent =
+          ((rank === "back" ? index + 0.5 : index + 1) / laneCount) * 100;
+        return (
+          <div
+            key={slot.id}
+            data-battle-slot-id={slot.id}
+            data-battle-slot-center-percent={String(centerPercent)}
+            data-battle-slot-filled={slot.card !== null ? "true" : "false"}
+            data-battle-drop-target={canDrop ? "true" : undefined}
+            onDragOver={(event) => {
+              if (canDrop) event.preventDefault();
+            }}
+            onDrop={(event) => {
+              if (!canDrop) return;
+              event.preventDefault();
+              interactions.onSlotDrop({ owner, rank, slotId: slot.id });
+            }}
+            style={{
+              position: "absolute",
+              left: `${String(centerPercent)}%`,
+              top: order === 0 ? 0 : undefined,
+              bottom: order === 1 ? 0 : undefined,
+              width: `min(22cqw, calc((100cqw / ${String(laneCount)}) - ${token("--space-2")}), calc(100cqh * ${String(CARD_ASPECT_RATIO_VALUE)}))`,
+              aspectRatio: CARD_ASPECT_RATIO,
+              transform: "translateX(-50%)",
+              boxSizing: "border-box",
+              border:
+                slot.card === null
+                  ? `1px dashed ${token("--border-soft")}`
+                  : undefined,
+              borderRadius:
+                slot.card === null ? token("--radius-card") : undefined,
+            }}
+          >
+            {slot.card !== null ? (
+              <FaceUpCard
+                card={slot.card}
+                zone={`${owner}-${rank}-rank`}
+                interaction={
+                  interactions === undefined
+                    ? undefined
+                    : {
+                        draggable: interactions.canInteract,
+                        onDragStart: () =>
+                          interactions.onCardDragStart(
+                            slot.card?.id ?? "",
+                            "battlefield",
+                          ),
+                        onDragEnd: interactions.onCardDragEnd,
+                      }
+                }
+              />
+            ) : null}
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -489,6 +499,7 @@ function PlayArea({
           owner={owner}
           rank={rank}
           slots={slots}
+          backSlotCount={side.backRank.length}
           order={order}
           interactions={interactions}
         />
@@ -540,7 +551,7 @@ function PlayerHand({
             style={{
               position: "absolute",
               left,
-              bottom: 0,
+              top: "calc(8% + var(--space-6))",
               height: "92%",
               aspectRatio: CARD_ASPECT_RATIO,
               transformOrigin: "50% 100%",

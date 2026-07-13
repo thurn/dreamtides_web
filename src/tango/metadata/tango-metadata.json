@@ -2923,6 +2923,17 @@
       "description": "Gap between value and mark — tight (0px, default) or loose (4px)."
     },
     {
+      "name": "tone",
+      "tsType": "ResourceChipTone",
+      "unionMembers": [
+        "inherit",
+        "resource"
+      ],
+      "required": false,
+      "defaultValue": "resource",
+      "description": "Color treatment — the resource role (default) or the parent surface."
+    },
+    {
       "name": "entity",
       "tsType": "ResourceEntity",
       "unionMembers": [],

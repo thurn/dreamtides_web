@@ -15,6 +15,7 @@ const ENEMY_DREAMCALLER: BattleDreamcallerSummary = {
   title: "Keeper of Tests",
   renderedText: "A synthetic test ability.",
   imageNumber: "008",
+  portraitFocus: { x: 0.58, y: 0.23 },
 };
 
 function definition(index: number): BattleDeckCardDefinition {
@@ -76,6 +77,7 @@ function makeInit(): BattleInit {
       title: "Builder of Fixtures",
       renderedText: "Another synthetic test ability.",
       imageNumber: "007",
+      portraitFocus: { x: 0.48, y: 0.19 },
     },
     dreamsignSummaries: [],
     atlasSnapshot: makeBattleTestState().atlas,
@@ -184,13 +186,23 @@ describe("buildMobileBattleView", () => {
     const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER);
 
     expect(view.player.status).toEqual({
-      dreamcaller: { imageNumber: "007", name: "Player Caller", title: "Builder of Fixtures" },
+      dreamcaller: {
+        imageNumber: "007",
+        name: "Player Caller",
+        title: "Builder of Fixtures",
+        portraitFocus: { x: 0.48, y: 0.19 },
+      },
       currentEnergy: 2,
       maxEnergy: 4,
       points: 5,
     });
     expect(view.enemy.status).toEqual({
-      dreamcaller: { imageNumber: "008", name: "Enemy Caller", title: "Keeper of Tests" },
+      dreamcaller: {
+        imageNumber: "008",
+        name: "Enemy Caller",
+        title: "Keeper of Tests",
+        portraitFocus: { x: 0.58, y: 0.23 },
+      },
       currentEnergy: 1,
       maxEnergy: 3,
       points: 8,

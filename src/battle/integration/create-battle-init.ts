@@ -861,6 +861,11 @@ function freezeBattleDreamcallerSummary(
     title: dreamcaller.title,
     renderedText: dreamcaller.renderedText,
     imageNumber: dreamcaller.imageNumber,
+    ...(dreamcaller.portraitFocus === undefined
+      ? {}
+      : {
+          portraitFocus: Object.freeze({ ...dreamcaller.portraitFocus }),
+        }),
   });
 }
 

@@ -82,7 +82,7 @@ const PORTRAIT_STANDING_SCALE = 1.2;
  * so they read as intentional crops rather than magic numbers in a transform. */
 const HERO_CROP_SCALE = 2;
 const PANEL_CROP_SCALE = 1.18;
-const THUMB_CROP_SCALE = 1.22;
+const THUMB_CROP_SCALE = 2.9;
 
 /** Vertical target for the authored head point in the mobile showcase. */
 const FULL_BLEED_HEAD_Y = "27%";
@@ -157,7 +157,10 @@ function frameStyle(variant: FramedVariant): CSSProperties {
 }
 
 /** Per-variant crop: each variant frames the character's face consistently. */
-function imageStyle(variant: FramedVariant): CSSProperties {
+function imageStyle(
+  variant: FramedVariant,
+  focus: DreamcallerPortraitFocus,
+): CSSProperties {
   switch (variant) {
     case "hero":
       return {
@@ -177,16 +180,23 @@ function imageStyle(variant: FramedVariant): CSSProperties {
         transform: `scale(${String(PANEL_CROP_SCALE)})`,
         transformOrigin: "50% 18%",
       };
-    case "thumb":
+    case "thumb": {
+      const objectPositionY = Math.max(
+        0,
+        Math.min(1, 3 * focus.y - 1 / THUMB_CROP_SCALE),
+      );
       return {
+        position: "relative",
+        left: `${String((0.5 - focus.x) * THUMB_CROP_SCALE * 100)}%`,
         width: "100%",
         height: "100%",
         display: "block",
         objectFit: "cover",
-        objectPosition: "50% 22%",
+        objectPosition: `50% ${String(objectPositionY * 100)}%`,
         transform: `scale(${String(THUMB_CROP_SCALE)})`,
-        transformOrigin: "50% 18%",
+        transformOrigin: "50% 0%",
       };
+    }
   }
 }
 
@@ -447,7 +457,7 @@ function DreamcallerPortraitSurface({
         <img
           src={dreamcallerCutoutSrc(dreamcaller.imageNumber)}
           alt={alt}
-          style={imageStyle(variant)}
+          style={imageStyle(variant, focus)}
           onError={() => {
             setBroken(true);
           }}

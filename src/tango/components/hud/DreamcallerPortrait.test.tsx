@@ -98,6 +98,21 @@ describe("DreamcallerPortrait standing/fullBleed variants", () => {
     expect(img?.style.height).toBe("100%");
   });
 
+  it("thumb centers the authored head coordinate in a close bust crop", () => {
+    const { container } = mountInto(
+      <DreamcallerPortrait
+        dreamcaller={{ ...DC, portraitFocus: { x: 0.58, y: 0.23 } }}
+        variant="thumb"
+      />,
+    );
+
+    const img = container.querySelector("img");
+    expect(Number.parseFloat(img?.style.left ?? "")).toBeCloseTo(-23.2, 8);
+    expect(img?.style.objectPosition).not.toBe("50% 22%");
+    expect(img?.style.transform).toBe("scale(2.9)");
+    expect(img?.style.transformOrigin).toBe("50% 0%");
+  });
+
   it("standing falls back to the name's first letter when the art 404s", () => {
     const { container } = mountInto(
       <DreamcallerPortrait dreamcaller={DC} variant="standing" />,

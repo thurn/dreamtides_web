@@ -29,6 +29,7 @@ Who wears it:
   that every press/hover popup renders through (it overrides the fill to the
   warmer `--glass-fill-popover` tint; see below);
 - **the StartingDeckModal panel**;
+- **the BattleStatusDisplay card**;
 - **the glass controls and glass icon buttons** — `glassTrack()` and
   `glassIconButtonChrome()` in `control-treatment.ts`, which route through the
   same recipe (via `glassSurfaceStyle({ radius: null })`) so a control track and

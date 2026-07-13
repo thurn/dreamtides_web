@@ -14,7 +14,7 @@ beforeEach(() => {
 });
 
 describe("BattleStatusDisplay", () => {
-  it("composes energy, a head portrait, and points on fixed solid chrome", () => {
+  it("composes centered resources and a head portrait on standard Tango glass", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -44,10 +44,36 @@ describe("BattleStatusDisplay", () => {
     expect(status?.getAttribute("aria-label")).toBe(
       "Enemy: 2 of 3 energy, 4 points",
     );
-    expect(status?.style.background).toBe("var(--surface-chrome)");
+    expect(status?.style.background).toContain("var(--glass-sheen)");
+    expect(status?.style.background).toContain("var(--glass-fill)");
+    expect(status?.style.backdropFilter).toContain("var(--glass-blur)");
+    expect(status?.style.border).toContain("var(--glass-rim)");
     expect(status?.style.borderRadius).toBe("var(--radius-panel)");
+    expect(status?.style.color).toBe("var(--text-on-glass)");
     expect(status?.textContent).toContain("2/3");
     expect(status?.textContent).toContain("4");
+    const energy = status?.querySelector<HTMLElement>(
+      '[data-battle-status-resource="energy"]',
+    );
+    const points = status?.querySelector<HTMLElement>(
+      '[data-battle-status-resource="points"]',
+    );
+    expect(energy?.style.justifyContent).toBe("center");
+    expect(points?.style.justifyContent).toBe("center");
+    expect(
+      energy?.querySelector<HTMLElement>("[data-resource-chip]")?.style
+        .fontSize,
+    ).toBe("16px");
+    expect(
+      points?.querySelector<HTMLElement>("[data-resource-chip]")?.style
+        .fontSize,
+    ).toBe("16px");
+    expect(energy?.querySelector("i")?.getAttribute("style")).toContain(
+      "--energy",
+    );
+    expect(points?.querySelector("i")?.getAttribute("style")).toContain(
+      "inherit",
+    );
     expect(container.querySelector("img")?.alt).toBe("Astra, The Dawnbound");
     expect(container.querySelector("button")).toBeNull();
     expect(container.querySelector('[role="button"]')).toBeNull();

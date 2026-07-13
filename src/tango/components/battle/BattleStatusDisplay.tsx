@@ -1,3 +1,4 @@
+import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { token } from "../../primitives/tokens";
 import {
   DreamcallerPortrait,
@@ -24,7 +25,7 @@ export interface BattleStatusDisplayProps {
 }
 
 /**
- * The fixed solid status object on a battle board: energy at left, a cropped
+ * The glass status object on a battle board: energy at left, a cropped
  * Dreamcaller portrait at center, and points at right. It has no interaction or
  * phase state; callers only place the complete card.
  */
@@ -55,24 +56,28 @@ export function BattleStatusDisplay({
         alignItems: "center",
         gap: token("--space-2"),
         padding: token("--space-3"),
-        background: token("--surface-chrome"),
-        border: `1px solid ${token("--border-soft")}`,
-        borderRadius: token("--radius-panel"),
-        boxShadow: token("--shadow-card"),
+        color: token("--text-on-glass"),
+        ...glassSurfaceStyle({ radius: token("--radius-panel") }),
       }}
     >
-      <div style={{ display: "flex", justifyContent: "flex-start", minWidth: 0 }}>
+      <div
+        data-battle-status-resource="energy"
+        style={{ display: "flex", justifyContent: "center", minWidth: 0 }}
+      >
         <ResourceChip
           kind="energy"
           value={`${String(currentEnergy)}/${String(maxEnergy)}`}
-          size="lg"
+          size="md"
         />
       </div>
       <div style={{ width: token("--touch-min") }}>
         <DreamcallerPortrait dreamcaller={dreamcaller} variant="thumb" />
       </div>
-      <div style={{ display: "flex", justifyContent: "flex-end", minWidth: 0 }}>
-        <ResourceChip kind="points" value={points} size="lg" />
+      <div
+        data-battle-status-resource="points"
+        style={{ display: "flex", justifyContent: "center", minWidth: 0 }}
+      >
+        <ResourceChip kind="points" value={points} size="md" tone="inherit" />
       </div>
     </div>
   );

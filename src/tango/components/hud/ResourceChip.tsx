@@ -47,6 +47,8 @@ export interface ResourceEntity {
 export type ResourceChipSize = "sm" | "md" | "lg";
 /** Gap between the value and its mark. `tight` (0px) glues them into one unit. */
 export type ResourceChipSpacing = "tight" | "loose";
+/** Color treatment. `resource` uses the economy role; `inherit` follows its surface. */
+export type ResourceChipTone = "resource" | "inherit";
 
 /** Font pixel size per enumerated scale; everything else scales from it. */
 const SIZE_PX: Record<ResourceChipSize, number> = {
@@ -74,6 +76,8 @@ export interface ResourceChipProps {
   chip?: boolean;
   /** Gap between value and mark — tight (0px, default) or loose (4px). */
   spacing?: ResourceChipSpacing;
+  /** Color treatment — the resource role (default) or the parent surface. */
+  tone?: ResourceChipTone;
   /** Semantic resource represented by this chip; makes the named chip self-revealing. */
   entity?: ResourceEntity;
 }
@@ -90,24 +94,29 @@ export function ResourceChip({
   size = "md",
   chip = false,
   spacing = "tight",
+  tone = "resource",
   entity,
 }: ResourceChipProps) {
-  const visual = <ResourceChipVisual kind={kind} value={value} size={size} chip={chip} spacing={spacing} />;
+  const visual = <ResourceChipVisual kind={kind} value={value} size={size} chip={chip} spacing={spacing} tone={tone} />;
   return entity === undefined ? visual : <ResourceChipReveal kind={kind} entity={entity}>{visual}</ResourceChipReveal>;
 }
 
-function ResourceChipVisual({ kind, value, size, chip, spacing }: Required<Pick<ResourceChipProps, "kind" | "size" | "chip" | "spacing">> & Pick<ResourceChipProps, "value">) {
+function ResourceChipVisual({ kind, value, size, chip, spacing, tone }: Required<Pick<ResourceChipProps, "kind" | "size" | "chip" | "spacing" | "tone">> & Pick<ResourceChipProps, "value">) {
   const mark = ECONOMY_MARKS[kind] ?? ECONOMY_MARKS.essence;
   const fontSize = SIZE_PX[size];
   const glyph = (
     <i
       className={mark.glyph}
       aria-hidden="true"
-      style={{ color: mark.color, fontSize: "1.04em", lineHeight: 1 }}
+      style={{ color: tone === "inherit" ? "inherit" : mark.color, fontSize: "1.04em", lineHeight: 1 }}
     />
   );
   return (
     <span
+      data-resource-chip=""
+      data-resource-chip-kind={kind}
+      data-resource-chip-size={size}
+      data-resource-chip-tone={tone}
       style={{
         display: "inline-flex",
         alignItems: "center",
@@ -116,7 +125,7 @@ function ResourceChipVisual({ kind, value, size, chip, spacing }: Required<Pick<
         fontSize,
         fontWeight: 800,
         lineHeight: 1,
-        color: token("--text-primary"),
+        color: tone === "inherit" ? "inherit" : token("--text-primary"),
         fontVariantNumeric: "tabular-nums",
         ...(chip
           ? {

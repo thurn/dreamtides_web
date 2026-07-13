@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/tango#/battle-status-display`
 
 Real consumers: **1** (imports outside `src/tango/docs/` and tests).
 
-The solid physical status card for one battle participant: current and maximum energy at left, a head-focused Dreamcaller portrait at center, and current points at right.
+The glass status card for one battle participant: centered current and maximum energy at left, a head-focused Dreamcaller portrait at center, and centered current points at right.
 
 > **Guidance:** This display has no phase, active-state, debug, or interaction API. Place the complete fixed object through a wrapper.
 

@@ -113,6 +113,10 @@ function buildStatusView(
       imageNumber: dreamcaller.imageNumber,
       name: dreamcaller.name,
       title: dreamcaller.title,
+      ...("portraitFocus" in dreamcaller &&
+      dreamcaller.portraitFocus !== undefined
+        ? { portraitFocus: dreamcaller.portraitFocus }
+        : {}),
     },
     currentEnergy: sideState.currentEnergy,
     maxEnergy: sideState.maxEnergy,

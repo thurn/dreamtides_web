@@ -30,7 +30,7 @@ export const battleStatusDisplayDemo: TangoComponent = {
   id: "battle-status-display",
   title: "Battle Status Display",
   blurb:
-    "The solid physical status card for one battle participant: current and maximum energy at left, a head-focused Dreamcaller portrait at center, and current points at right.",
+    "The glass status card for one battle participant: centered current and maximum energy at left, a head-focused Dreamcaller portrait at center, and centered current points at right.",
   callout:
     "This display has no phase, active-state, debug, or interaction API. Place the complete fixed object through a wrapper.",
   group: "Components",
