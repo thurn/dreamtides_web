@@ -422,6 +422,7 @@ function MobileDetailCarousel({
 }) {
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState<number | null>(null);
+  const signatureCardIndex = view.dreamsigns.length > 0 ? 2 : 1;
 
   useLayoutEffect(() => {
     const content = contentRef.current;
@@ -456,7 +457,7 @@ function MobileDetailCarousel({
             <MobileBattleStakes view={view} />
           </MobileCarouselPage>
         )}
-        {index === 1 && (
+        {view.dreamsigns.length > 0 && index === 1 && (
           <MobileCarouselPage title="Dreamsigns:">
             <div
               style={{
@@ -476,7 +477,7 @@ function MobileDetailCarousel({
             </div>
           </MobileCarouselPage>
         )}
-        {index === 2 && (
+        {index === signatureCardIndex && (
           <MobileCarouselPage title="Signature Cards:">
             <div
               style={{
@@ -506,7 +507,7 @@ function MobileDetailCarousel({
           onPress={() => onChange(index - 1)}
         />
       )}
-      {index < 2 && (
+      {index < signatureCardIndex && (
         <MobileCarouselChevron
           direction="right"
           onPress={() => onChange(index + 1)}

@@ -267,6 +267,32 @@ describe("Tango BattleStartScreen", () => {
     act(() => root.unmount());
   });
 
+  it("skips the mobile Dreamsign detail when the opponent has no Dreamsigns", () => {
+    stubMatchMedia(false);
+    const view = makeView();
+    const { container, root } = mount({ ...view, dreamsigns: [] });
+    const layout = container.querySelector<HTMLElement>(
+      '[data-battle-start-layout="mobile"]',
+    );
+
+    expect(layout?.textContent).toContain("Victory:");
+    act(() =>
+      layout
+        ?.querySelector<HTMLButtonElement>(
+          '[data-testid="tango-battle-start-carousel-next"]',
+        )
+        ?.click(),
+    );
+
+    expect(layout?.textContent).toContain("Signature Cards:");
+    expect(layout?.textContent).not.toContain("Dreamsigns:");
+    expect(
+      layout?.querySelector('[data-testid="tango-battle-start-carousel-next"]'),
+    ).toBeNull();
+
+    act(() => root.unmount());
+  });
+
   it("does not spend mobile briefing space on an inactive ability", () => {
     stubMatchMedia(false);
     const view = makeView();
