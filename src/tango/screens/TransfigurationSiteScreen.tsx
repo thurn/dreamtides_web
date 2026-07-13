@@ -8,7 +8,6 @@ import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlowIcon } from "../components/controls/GlowIcon";
-import { IconButton } from "../components/controls/IconButton";
 import {
   TransfigurationFormButton,
   TRANSFIGURATION_FORM_GLYPHS,
@@ -17,7 +16,6 @@ import { EssenceValue } from "../components/hud/EssenceValue";
 import { glassSurfaceStyle } from "../internal/glass-surface";
 import type { ArtRef } from "../primitives/art";
 import type { TangoColor } from "../primitives/color";
-import { GLYPHS } from "../primitives/glyph";
 import { Pressable } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
 import type { TransfigurationType } from "../../types/quest";
@@ -176,6 +174,7 @@ export function TransfigurationSiteScreen({
       siteId={view.siteId}
       scene={view.scene}
       guide={view.guide}
+      mobileComposition="revelation"
       screenTestId="tango-transfiguration-site-screen"
       guideArtTestId="tango-transfiguration-guide-art"
       speechAnchorTestId="tango-transfiguration-speech-anchor"
@@ -395,9 +394,7 @@ function DetailPanel({
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: mobile ? "space-between" : undefined,
-          padding: mobile ? token("--space-3") : token("--space-6"),
-          paddingLeft: mobile ? token("--space-4") : undefined,
+          padding: mobile ? token("--space-4") : token("--space-6"),
           borderBottom: `1px solid ${token("--border-strong")}`,
         }}
       >
@@ -406,31 +403,23 @@ function DetailPanel({
             Choose Its New Form
           </h2>
         </div>
-        {mobile && (
-          <IconButton
-            glyph={GLYPHS.chevronLeft}
-            label="Choose another card"
-            placement="onGlass"
-            size="sm"
-            disabled={confirming}
-            onPress={onBack}
-            testId="tango-transfiguration-back"
-          />
-        )}
       </header>
 
       <div
+        data-transfiguration-detail-body=""
+        data-transfiguration-detail-body-layout={
+          mobile ? "side-by-side" : "desktop-columns"
+        }
         style={{
-          display: mobile ? "flex" : "grid",
+          display: "grid",
           flex: mobile ? "1 1 auto" : undefined,
           minHeight: mobile ? 0 : undefined,
-          flexDirection: mobile ? "column" : undefined,
           gridTemplateColumns: mobile
-            ? undefined
+            ? "minmax(0, 1fr) auto"
             : "minmax(220px, 0.82fr) minmax(320px, 1.18fr)",
-          gap: mobile ? token("--space-2") : token("--space-8"),
-          alignItems: mobile ? "center" : "start",
-          padding: mobile ? token("--space-2") : token("--space-8"),
+          gap: mobile ? token("--space-4") : token("--space-8"),
+          alignItems: mobile ? "stretch" : "start",
+          padding: mobile ? token("--space-4") : token("--space-8"),
         }}
       >
         <div
@@ -443,6 +432,7 @@ function DetailPanel({
             maxHeight: mobile ? 318 : undefined,
             aspectRatio: mobile ? String(CARD_ASPECT_RATIO_VALUE) : undefined,
             justifySelf: "center",
+            alignSelf: mobile ? "center" : undefined,
             minHeight: 0,
           }}
           data-transfiguration-detail-card-target=""
@@ -458,7 +448,7 @@ function DetailPanel({
         <div
           style={{
             minWidth: 0,
-            width: mobile ? "100%" : undefined,
+            width: mobile ? "auto" : undefined,
             flex: mobile ? "0 0 auto" : undefined,
             display: "flex",
             flexDirection: "column",
@@ -472,12 +462,12 @@ function DetailPanel({
             data-transfiguration-option-layout={mobile ? "compact" : "detailed"}
             style={{
               display: "flex",
-              flexDirection: mobile ? "row" : "column",
+              height: mobile ? "100%" : undefined,
+              flexDirection: "column",
               justifyContent: mobile ? "center" : undefined,
-              gap: mobile ? token("--space-4") : token("--space-3"),
+              gap: token("--space-3"),
               maxHeight: mobile ? undefined : "min(52vh, 520px)",
-              overflowX: mobile ? "auto" : undefined,
-              overflowY: mobile ? "hidden" : "auto",
+              overflowY: "auto",
               padding: token("--space-2"),
             }}
           >
@@ -577,22 +567,20 @@ function DetailPanel({
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "flex-end",
+          justifyContent: mobile ? "center" : "flex-end",
           gap: token("--space-4"),
           paddingRight: mobile ? token("--space-4") : token("--space-8"),
           paddingBottom: mobile ? token("--space-4") : token("--space-6"),
           paddingLeft: mobile ? token("--space-4") : token("--space-8"),
         }}
       >
-        {!mobile && (
-          <GlassButton
-            placement="onGlass"
-            label="Choose Again"
-            disabled={confirming}
-            onPress={onBack}
-            testId="tango-transfiguration-choose-again"
-          />
-        )}
+        <GlassButton
+          placement="onGlass"
+          label="Choose Again"
+          disabled={confirming}
+          onPress={onBack}
+          testId="tango-transfiguration-choose-again"
+        />
         <GlassButton
           placement="onGlass"
           variant="accent"

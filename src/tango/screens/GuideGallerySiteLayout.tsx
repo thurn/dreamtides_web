@@ -35,6 +35,8 @@ export interface GuideGallerySiteLayoutProps {
   guide: GuideGalleryGuideView;
   /** Render the screen-specific gallery for the active layout. */
   renderGallery: (layout: "mobile" | "desktop") => ReactElement;
+  /** Mobile guide/gallery staging. Defaults to the compact stacked band. */
+  mobileComposition?: "band" | "revelation";
   /** Stable test id for the screen root. */
   screenTestId?: string;
   /** Stable test id for the guide art. */
@@ -46,6 +48,9 @@ export interface GuideGallerySiteLayoutProps {
 }
 
 const GUIDE_TOP_ROWS = "clamp(170px, 28dvh, 240px) minmax(0, 1fr)";
+const REVELATION_VERTICAL_OFFSET = "10dvh";
+const REVELATION_GUIDE_TOP = `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${REVELATION_VERTICAL_OFFSET})`;
+const REVELATION_GALLERY_TOP = `max(44dvh, calc(${token("--safe-top")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-7")} + ${REVELATION_VERTICAL_OFFSET}))`;
 // The grand desktop HUD is taller than the root HUD token.
 const DESKTOP_HUD_CLEARANCE = `calc(${QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-9")})`;
 
@@ -55,12 +60,14 @@ export function GuideGallerySiteLayout({
   scene,
   guide,
   renderGallery,
+  mobileComposition = "band",
   screenTestId,
   guideArtTestId,
   speechAnchorTestId,
   speechBubbleTestId,
 }: GuideGallerySiteLayoutProps) {
   const isDesktop = useIsDesktop();
+  const revelationMobile = !isDesktop && mobileComposition === "revelation";
   const sceneUrl = scene !== null ? resolveArtRef(scene) : null;
 
   return (
@@ -72,12 +79,12 @@ export function GuideGallerySiteLayout({
         position: "fixed",
         inset: 0,
         minHeight: "100dvh",
-        display: isDesktop ? "block" : "grid",
-        gridTemplateRows: isDesktop ? undefined : GUIDE_TOP_ROWS,
+        display: isDesktop || revelationMobile ? "block" : "grid",
+        gridTemplateRows: isDesktop || revelationMobile ? undefined : GUIDE_TOP_ROWS,
         overflow: "hidden",
         background: token("--bg-app"),
         boxSizing: "border-box",
-        paddingBottom: isDesktop
+        paddingBottom: isDesktop || revelationMobile
           ? undefined
           : QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
       }}
@@ -108,6 +115,14 @@ export function GuideGallerySiteLayout({
           speechAnchorTestId={speechAnchorTestId}
           speechBubbleTestId={speechBubbleTestId}
         />
+      ) : revelationMobile ? (
+        <MobileRevelationComposition
+          guide={guide}
+          renderGallery={renderGallery}
+          guideArtTestId={guideArtTestId}
+          speechAnchorTestId={speechAnchorTestId}
+          speechBubbleTestId={speechBubbleTestId}
+        />
       ) : (
         <>
           <MobileGuideBand
@@ -120,6 +135,61 @@ export function GuideGallerySiteLayout({
         </>
       )}
     </div>
+  );
+}
+
+function MobileRevelationComposition({
+  guide,
+  renderGallery,
+  guideArtTestId,
+  speechAnchorTestId,
+  speechBubbleTestId,
+}: {
+  readonly guide: GuideGalleryGuideView;
+  readonly renderGallery: (layout: "mobile" | "desktop") => ReactElement;
+  readonly guideArtTestId?: string;
+  readonly speechAnchorTestId?: string;
+  readonly speechBubbleTestId?: string;
+}) {
+  return (
+    <>
+      <section
+        data-guide-gallery-mobile-composition="revelation"
+        style={{
+          position: "absolute",
+          top: REVELATION_GUIDE_TOP,
+          left: 0,
+          right: 0,
+          height: "34dvh",
+          zIndex: 10,
+          pointerEvents: "none",
+        }}
+      >
+        <MobileGuideBand
+          guide={guide}
+          revelation
+          guideArtTestId={guideArtTestId}
+          speechAnchorTestId={speechAnchorTestId}
+          speechBubbleTestId={speechBubbleTestId}
+        />
+      </section>
+      <main
+        data-guide-gallery-mobile-region="revelation"
+        style={{
+          position: "absolute",
+          top: REVELATION_GALLERY_TOP,
+          left: 0,
+          right: 0,
+          bottom: QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+          display: "grid",
+          placeItems: "stretch center",
+          zIndex: 20,
+          pointerEvents: "none",
+        }}
+      >
+        {renderGallery("mobile")}
+      </main>
+    </>
   );
 }
 
@@ -240,11 +310,13 @@ function DesktopGuideScene({
 
 function MobileGuideBand({
   guide,
+  revelation = false,
   guideArtTestId,
   speechAnchorTestId,
   speechBubbleTestId,
 }: {
   readonly guide: GuideGalleryGuideView;
+  readonly revelation?: boolean;
   readonly guideArtTestId?: string;
   readonly speechAnchorTestId?: string;
   readonly speechBubbleTestId?: string;
@@ -257,7 +329,9 @@ function MobileGuideBand({
       style={{
         position: "relative",
         zIndex: 10,
-        overflow: "hidden",
+        width: "100%",
+        height: "100%",
+        overflow: revelation ? "visible" : "hidden",
         pointerEvents: "none",
       }}
     >
@@ -268,12 +342,15 @@ function MobileGuideBand({
         data-testid={guideArtTestId}
         style={{
           position: "absolute",
-          left: `max(var(--safe-area-inset-left), ${String(MENU_EDGE_INSET_MOBILE_PX)}px)`,
-          bottom: `calc(-1 * ${token("--space-8")})`,
-          width: "58vw",
-          height: "100%",
+          top: revelation ? token("--space-4") : undefined,
+          left: revelation
+            ? `calc(-1 * (${token("--space-12")} + ${token("--space-4")}))`
+            : `max(var(--safe-area-inset-left), ${String(MENU_EDGE_INSET_MOBILE_PX)}px)`,
+          bottom: revelation ? undefined : `calc(-1 * ${token("--space-8")})`,
+          width: revelation ? "62vw" : "58vw",
+          height: revelation ? "70dvh" : "100%",
           objectFit: "contain",
-          objectPosition: "50% 100%",
+          objectPosition: revelation ? "50% 0%" : "50% 100%",
           userSelect: "none",
         }}
       />
@@ -281,9 +358,11 @@ function MobileGuideBand({
         data-testid={speechAnchorTestId}
         style={{
           position: "absolute",
-          left: "40vw",
-          right: `calc(${token("--gutter")} + ${token("--space-11")})`,
-          top: token("--space-2"),
+          left: revelation ? "34vw" : "40vw",
+          right: revelation
+            ? `calc(${token("--space-5")} + ${token("--space-11")} + ${token("--space-3")})`
+            : `calc(${token("--gutter")} + ${token("--space-11")})`,
+          top: revelation ? token("--space-5") : token("--space-2"),
         }}
       >
         <SpeechBubble

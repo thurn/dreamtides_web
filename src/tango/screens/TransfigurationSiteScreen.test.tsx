@@ -367,6 +367,16 @@ describe("TransfigurationSiteScreen", () => {
       container.querySelector("[data-guide-gallery-desktop-composition]"),
     ).toBeNull();
     expect(
+      container.querySelector(
+        '[data-guide-gallery-mobile-composition="revelation"]',
+      ),
+    ).not.toBeNull();
+    expect(
+      container.querySelector<HTMLImageElement>(
+        '[data-testid="tango-transfiguration-guide-art"]',
+      )?.style.width,
+    ).toBe("62vw");
+    expect(
       container.querySelector<HTMLElement>("[data-transfiguration-workspace]")
         ?.dataset.transfigurationLayout,
     ).toBe("mobile");
@@ -398,6 +408,20 @@ describe("TransfigurationSiteScreen", () => {
       container.querySelector<HTMLElement>("[data-transfiguration-options]")
         ?.dataset.transfigurationOptionLayout,
     ).toBe("compact");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-transfiguration-detail-body]",
+      )?.dataset.transfigurationDetailBodyLayout,
+    ).toBe("side-by-side");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-transfiguration-detail-body]",
+      )?.style.padding,
+    ).toBe("var(--space-4)");
+    expect(
+      container.querySelector<HTMLElement>("[data-transfiguration-options]")
+        ?.style.flexDirection,
+    ).toBe("column");
     expect(container.querySelectorAll('[role="radio"]')).toHaveLength(2);
     expect(
       container.querySelector<HTMLButtonElement>(
@@ -412,12 +436,16 @@ describe("TransfigurationSiteScreen", () => {
     expect(container.textContent).toContain("Reduce this card's energy cost.");
     expect(
       container.querySelector('[data-testid="tango-transfiguration-back"]'),
-    ).not.toBeNull();
+    ).toBeNull();
     expect(
       container.querySelector(
         '[data-testid="tango-transfiguration-choose-again"]',
       ),
-    ).toBeNull();
+    ).not.toBeNull();
+    expect(
+      container.querySelector<HTMLElement>("[data-transfiguration-actions]")
+        ?.style.justifyContent,
+    ).toBe("center");
 
     act(() => root.unmount());
   });

@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/icon-button`
 
-Real consumers: **14** (imports outside `src/tango/docs/` and tests).
+Real consumers: **13** (imports outside `src/tango/docs/` and tests).
 
 The compact glyph-only glass disc — a corner chrome action with placement-aware recipes for scene media or an existing glass surface, made fully round so it reads as one family with the filter/sort controls.
 
