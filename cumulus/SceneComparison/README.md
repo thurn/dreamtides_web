@@ -14,6 +14,19 @@ both renderers:
 npm run compare-cumulus-scene -- tango-shop-glass-demo 2560 1440
 ```
 
+To copy `unity.png` and `web.png` into a fresh temporary directory and open
+both images in their default macOS application, run:
+
+```bash
+npm run open-cumulus-scene-comparison
+```
+
+The open command accepts the same optional scene id, width, and height:
+
+```bash
+npm run open-cumulus-scene-comparison -- tango-shop-glass-demo 2560 1440
+```
+
 The command rebuilds and renders the Unity scene, opens its paired web endpoint
 in an isolated browser session, verifies the URL and viewport, and captures the
 same full frame. It writes renderer PNGs, numeric whole-frame error metrics, an
