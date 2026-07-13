@@ -194,7 +194,7 @@ describe("Tango BattleStartScreen", () => {
     expect(
       (consolePanel?.firstElementChild as HTMLElement | null)?.style.padding,
     ).toBe("var(--space-9) var(--space-6)");
-    expect(consolePanel?.style.top).toBe("64%");
+    expect(consolePanel?.style.top).toBe("61%");
     expect(consolePanel?.style.transform).toBe("translateY(-50%)");
     expect(
       layout?.querySelector("[data-battle-start-opponent]"),
@@ -216,6 +216,16 @@ describe("Tango BattleStartScreen", () => {
     expect(activePage()?.textContent).toContain("Reward");
     expect(activePage()?.style.minHeight).toBe("");
     expect(activePage()?.style.alignItems).toBe("");
+    expect(
+      layout?.querySelector<HTMLElement>(
+        "[data-battle-start-detail-spacing]",
+      )?.style.marginTop,
+    ).toBe("var(--space-9)");
+    expect(
+      layout?.querySelector<HTMLElement>(
+        "[data-battle-start-action-spacing]",
+      )?.style.marginTop,
+    ).toBe("var(--space-9)");
     expect(
       activePage()?.querySelector<HTMLElement>(
         '[data-battle-start-stake="To Win"] > div',

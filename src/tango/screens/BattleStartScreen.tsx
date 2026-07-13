@@ -304,7 +304,7 @@ function MobileBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
           // The console's midpoint sits at the opponent's waist. Anchoring its
           // center, rather than its bottom edge, lets taller carousel pages add
           // equal visual weight above and below that shared waist line.
-          top: "64%",
+          top: "61%",
           transform: "translateY(-50%)",
           zIndex: 4,
           padding: `0 max(var(--safe-area-inset-right), ${token("--gutter")}) 0 max(var(--safe-area-inset-left), ${token("--gutter")})`,
@@ -395,7 +395,10 @@ function MobileBattleConsole({ view, onBegin }: BattleStartScreenProps) {
         </div>
       )}
 
-      <div style={{ marginTop: showsAbility ? token("--space-5") : 0 }}>
+      <div
+        data-battle-start-detail-spacing=""
+        style={{ marginTop: showsAbility ? token("--space-9") : 0 }}
+      >
         <MobileDetailCarousel
           view={view}
           index={detailIndex}
@@ -404,8 +407,9 @@ function MobileBattleConsole({ view, onBegin }: BattleStartScreenProps) {
       </div>
 
       <div
+        data-battle-start-action-spacing=""
         style={{
-          marginTop: token("--space-6"),
+          marginTop: token("--space-9"),
           display: "flex",
           justifyContent: "center",
         }}
