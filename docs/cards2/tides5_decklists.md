@@ -78,7 +78,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 2× Ashen Remnant
 - 2× The Dread Sovereign
 - 2× Entropy Spike
-- 2× Fargazer
+- 2× Iconoclast
 - 2× Defiant Holdout
 - 2× Exiles of the Last Light
 - 2× Vigil Keeper
@@ -102,7 +102,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Tidewreck Navigator
 - 1× Graywatch
 - 1× Abomination of Memory
-- 1× Enginespeaker
+- 1× Spirit of the Lightgrove
 - 1× Veil of the Wastes
 - 1× Unbroken
 - 1× Signal Resonant
@@ -178,7 +178,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 2× Price of Redemption
 - 2× Entropy Spike
 - 2× Stolen Genesis
-- 2× Fargazer
+- 2× Iconoclast
 - 2× Exile
 - 2× Kindred Sparks
 - 2× Defiant Holdout
@@ -263,7 +263,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 2× Eternal Stag
 - 2× Ashen Remnant
 - 2× The Dread Sovereign
-- 2× Crumbling Behemoth
+- 2× God of Wrath
 - 2× Dreamvale Monarch
 - 2× Ghostlight Wolves
 - 2× Celestial Reverie
@@ -368,7 +368,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 2× Abomination of Memory
 - 2× Shaper of Memory
 - 2× Pyrestone Avatar
-- 2× Fargazer
+- 2× Iconoclast
 - 2× Ash Harbinger
 - 2× Annihilation from Below
 - 2× Silent Gatherer
@@ -440,7 +440,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Torchbearer of the Abyss
 - 1× Gateweaver
 - 1× Aerie Defender
-- 1× Harrowing Officiant
+- 1× Titan of Forgotten Echoes
 - 1× The Rising God
 - 1× Door to Possibility
 - 1× Evacuation Enforcer
@@ -468,7 +468,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 2× Dustborn Veteran
 - 2× Searcher in the Mists
 - 2× Abomination of Memory
-- 2× Fargazer
+- 2× Iconoclast
 - 2× Exiles of the Last Light
 - 2× Wasteland Arbitrator
 - 2× Vigil Keeper
@@ -531,7 +531,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Ambersting
 - 1× Duskwall Delver
 - 1× Headtaker
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Cinderheart
 - 1× Sylvan Matriarch
 - 1× Urban Cipher
@@ -583,7 +583,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 2× Part the Veil
 - 2× Verdant Wayfarer
 - 2× Grotto Seer
-- 2× Fargazer
+- 2× Iconoclast
 - 2× Urban Cipher
 - 2× Ash Harbinger
 - 2× Silent Gatherer
@@ -654,7 +654,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 1× Lurking Dread
 - 1× Wasteland Arbitrator
 - 1× Aerie Defender
-- 1× Harrowing Officiant
+- 1× Titan of Forgotten Echoes
 - 1× Shadowcaller
 - 1× The Rising God
 - 1× Wreckage Prowler
@@ -687,7 +687,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 2× Veil of the Wastes
 - 2× Price of Redemption
 - 2× Duskwall Delver
-- 2× Fargazer
+- 2× Iconoclast
 - 2× Defiant Holdout
 - 2× Wasteland Arbitrator
 - 2× Vigil Keeper
@@ -753,7 +753,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Exiles of the Last Light
 - 1× Dreadweaver
 - 1× Lurking Dread
-- 1× Harrowing Officiant
+- 1× Titan of Forgotten Echoes
 - 1× Shadowcaller
 - 1× Avatar of Cosmic Reckoning
 - 1× The Rising God
@@ -798,7 +798,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 2× Immolate
 - 2× Entropy Spike
 - 2× Duskwall Delver
-- 2× Fargazer
+- 2× Iconoclast
 - 2× Cinderheart
 - 2× Exile
 - 2× Kindred Sparks
@@ -824,7 +824,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Immolate and Rise
 - 1× Graywatch
 - 1× Abomination of Memory
-- 1× Enginespeaker
+- 1× Spirit of the Lightgrove
 - 1× Veil of the Wastes
 - 1× Signal Resonant
 - 1× Duskreaper
@@ -939,7 +939,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Duskwall Delver
 - 1× Collapse Protocol
 - 1× Resilient Wanderer
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Breach Artist
 - 1× Cost of Victory
 - 1× Exile
@@ -1047,7 +1047,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Collapse Protocol
 - 1× Resilient Wanderer
 - 1× Genesis Burst
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Breach Artist
 - 1× Cost of Victory
 - 1× Exile
@@ -1115,7 +1115,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Unquenched
 - 1× Fell Swoop
 - 1× Burst of Obliteration
-- 1× Intermezzo Balladeer
+- 1× Storm Soloist
 - 1× The Thinning
 - 1× Stratospheric Voyage
 - 1× Wheel of the Heavens
@@ -1273,7 +1273,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Arc Gate Opening
 - 1× Surge of Fury
 - 1× Aerie Defender
-- 1× Harrowing Officiant
+- 1× Titan of Forgotten Echoes
 - 1× Flash of Power
 - 1× Thornwood Delver
 - 1× Echoes of Eternity
@@ -1377,7 +1377,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Arc Gate Opening
 - 1× Wasteland Arbitrator
 - 1× Aerie Defender
-- 1× Harrowing Officiant
+- 1× Titan of Forgotten Echoes
 - 1× Flash of Power
 - 1× Thornwood Delver
 - 1× Ripple Through Reality
@@ -1411,7 +1411,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 2× Eternal Stag
 - 2× Vigilant Howler
 - 2× Reclaimer of Lost Paths
-- 2× Crumbling Behemoth
+- 2× God of Wrath
 - 2× Dreamvale Monarch
 - 2× Spirit of the Greenwood
 - 2× Spiritbound Alpha
@@ -1516,7 +1516,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 2× Ebonwing
 - 2× Moonbound Wolf
 - 2× Ethereal Courser
-- 2× Crumbling Behemoth
+- 2× God of Wrath
 - 2× Abomination of Memory
 - 2× Dreamvale Monarch
 - 2× Spirit of the Greenwood
@@ -1599,7 +1599,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 2× Ebonwing
 - 2× Moonbound Wolf
 - 2× Ethereal Courser
-- 2× Crumbling Behemoth
+- 2× God of Wrath
 - 2× Dreamvale Monarch
 - 2× Spirit of the Greenwood
 - 2× Empyreal Light
@@ -1679,7 +1679,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 2× Ebonwing
 - 2× Moonbound Wolf
 - 2× Ethereal Courser
-- 2× Crumbling Behemoth
+- 2× God of Wrath
 - 2× Abomination of Memory
 - 2× Dreamvale Monarch
 - 2× Spirit of the Greenwood
@@ -1775,7 +1775,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Standard Bearer
 - 1× Overwhelm
 - 1× The Deathsworn
-- 1× Intermezzo Balladeer
+- 1× Storm Soloist
 - 1× Emberfang
 - 1× Sworn Defender
 - 1× Dreadcall Warden
@@ -1880,7 +1880,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 1× Defiant Parry
 - 1× Overwhelm
 - 1× The Deathsworn
-- 1× Intermezzo Balladeer
+- 1× Storm Soloist
 - 1× Stratospheric Voyage
 - 1× Emberfang
 - 1× Sworn Defender
@@ -1973,7 +1973,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× Inferno's Herald
 - 1× Standard Bearer
 - 1× The Deathsworn
-- 1× Intermezzo Balladeer
+- 1× Storm Soloist
 - 1× Emberfang
 - 1× Borrowed Minutes
 - 1× Sky Legion Captain
@@ -2065,7 +2065,7 @@ Tide-fac-01 is an almost entirely character-based (40 of 45 copies) midrange eng
 - 1× Entropy Spike
 - 1× Duskwall Delver
 - 1× Headtaker
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Cinderheart
 - 1× Kindred Sparks
 - 1× Defiant Holdout
@@ -2105,7 +2105,7 @@ Tide-fac-02 is built almost entirely of characters (41 of 45 cards) and operates
 - 1× Watcher in the Ruins
 - 1× Guide of Lost Souls
 - 1× Abomination of Memory
-- 1× Enginespeaker
+- 1× Spirit of the Lightgrove
 - 1× Veil of the Wastes
 - 1× Duskreaper
 - 1× Hope's Vanguard
@@ -2119,7 +2119,7 @@ Tide-fac-02 is built almost entirely of characters (41 of 45 cards) and operates
 - 1× Reclaimer of Lost Paths
 - 1× Dune Reaper
 - 1× Headtaker
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Cinderheart
 - 1× Titan of Forgotten Echoes
 - 1× Kindred Sparks
@@ -2150,7 +2150,7 @@ Tide-fac-03 is an event-heavy (34 events, 11 characters) tide built around assem
 - 1× Inverted Reflection
 - 1× Pulse of Sacrifice
 - 1× Burst of Obliteration
-- 1× Intermezzo Balladeer
+- 1× Storm Soloist
 - 1× Stratospheric Voyage
 - 1× Call the Lost
 - 1× Sunken Radiance
@@ -2207,7 +2207,7 @@ Tide-fac-04 is built almost entirely around spirit animals, with 35 characters a
 - 1× Ebonwing
 - 1× Moonbound Wolf
 - 1× Ethereal Courser
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Dreamvale Monarch
 - 1× Spirit of the Greenwood
 - 1× Empyreal Light
@@ -2258,7 +2258,7 @@ Tide-fac-05 is a character-heavy (37 of 45 copies) spirit animal swarm built aro
 - 1× Ebonwing
 - 1× Moonbound Wolf
 - 1× Ethereal Courser
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Spirit of the Greenwood
 - 1× Empyreal Light
 - 1× Spiritbound Alpha
@@ -2397,7 +2397,7 @@ This tide is built around a dense curve of inexpensive survivors whose arrival a
 - 1× Guide of Lost Souls
 - 1× Graywatch
 - 1× Abomination of Memory
-- 1× Enginespeaker
+- 1× Spirit of the Lightgrove
 - 1× Veil of the Wastes
 - 1× Hope's Vanguard
 - 1× Corrupted Host
@@ -2406,7 +2406,7 @@ This tide is built around a dense curve of inexpensive survivors whose arrival a
 - 1× Desperation
 - 1× Duskwall Delver
 - 1× Headtaker
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Cinderheart
 - 1× Defiant Holdout
 - 1× Dreadweaver
@@ -2449,7 +2449,7 @@ Tide-fac-07 runs an even split of events and characters (22/23) built around two
 - 1× Winterbough Monk
 - 1× Ambersting
 - 1× Ethereal Courser
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Abomination of Memory
 - 1× Lumineth
 - 1× Dreamvale Monarch
@@ -2501,8 +2501,8 @@ Tide-fac-08 is an 80% character tide built almost entirely around spirit animals
 - 1× Moonbound Wolf
 - 1× Duskwall Delver
 - 1× Ethereal Courser
-- 1× Crumbling Behemoth
-- 1× Fargazer
+- 1× God of Wrath
+- 1× Iconoclast
 - 1× Abomination of Memory
 - 1× Lumineth
 - 1× Dreamvale Monarch
@@ -2562,7 +2562,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 1× Blight Weaver
 - 1× Silent Gatherer
 - 1× Gateweaver
-- 1× Harrowing Officiant
+- 1× Titan of Forgotten Echoes
 - 1× Rubble Diviner
 - 1× Shoreline Penitent
 - 1× Oracle of Shifting Skies
@@ -2614,7 +2614,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Silent Gatherer
 - 1× Torchbearer of the Abyss
 - 1× Aerie Defender
-- 1× Harrowing Officiant
+- 1× Titan of Forgotten Echoes
 - 1× Rubble Diviner
 - 1× Shoreline Penitent
 - 1× Pinnacle Ascendant
@@ -2704,7 +2704,7 @@ Tide-fac-31 is almost entirely characters (41 of 45 cards), built around a dense
 - 1× Ebonwing
 - 1× Moonbound Wolf
 - 1× Ethereal Courser
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Lumineth
 - 1× Dreamvale Monarch
 - 1× Spirit of the Greenwood
@@ -2758,7 +2758,7 @@ Tide-fac-13 is a character-heavy spirit animal tribal deck (35 of 45 copies are 
 - 1× Entropy Spike
 - 1× Duskwall Delver
 - 1× Headtaker
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Cinderheart
 - 1× Dawnrunner
 - 1× Kindred Sparks
@@ -2781,7 +2781,7 @@ This tide is almost entirely characters (43 of 45 copies), with warriors making 
 
 - 2× Searcher in the Mists
 - 2× Abomination of Memory
-- 2× Fargazer
+- 2× Iconoclast
 - 2× Wasteland Arbitrator
 - 1× Unleashed Destruction
 - 1× Standard Bearer
@@ -3004,7 +3004,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Dune Reaper
 - 1× Stolen Genesis
 - 1× Duskwall Delver
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Cinderheart
 - 1× Exile
 - 1× Dawnrunner
@@ -3093,7 +3093,7 @@ Tide-fac-20 is an event-heavy combo tide (34 events, 11 characters) built around
 - 1× Vigilant Howler
 - 1× Moonbound Wolf
 - 1× Ethereal Courser
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Lumineth
 - 1× Dreamvale Monarch
 - 1× Spirit of the Greenwood
@@ -3139,7 +3139,7 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 - 1× Ebonwing
 - 1× Moonbound Wolf
 - 1× Ethereal Courser
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Abomination of Memory
 - 1× Lumineth
 - 1× Spirit of the Greenwood
@@ -3261,7 +3261,7 @@ Tide-fac-26 is a character-heavy survivor tide built around the abandon trigger 
 
 - 2× Dustborn Veteran
 - 2× Searcher in the Mists
-- 2× Fargazer
+- 2× Iconoclast
 - 1× Iron Pharaoh
 - 1× Herald of the Last Light
 - 1× Fallen Angel
@@ -3334,7 +3334,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Immolate
 - 1× Entropy Spike
 - 1× Stolen Genesis
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Cinderheart
 - 1× Exile
 - 1× Dawnrunner
@@ -3386,7 +3386,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Silent Gatherer
 - 1× Gateweaver
 - 1× Aerie Defender
-- 1× Harrowing Officiant
+- 1× Titan of Forgotten Echoes
 - 1× Rubble Diviner
 - 1× Shoreline Penitent
 - 1× Oracle of Shifting Skies
@@ -3437,7 +3437,7 @@ This tide is split between characters and events (22 characters, 23 events), wit
 - 1× Silent Gatherer
 - 1× Torchbearer of the Abyss
 - 1× Aerie Defender
-- 1× Harrowing Officiant
+- 1× Titan of Forgotten Echoes
 - 1× Rubble Diviner
 - 1× Shoreline Penitent
 - 1× Oracle of Shifting Skies
@@ -3520,7 +3520,7 @@ This tide is split between characters and events (22 characters, 23 events), wit
 - 1× Ebonwing
 - 1× Moonbound Wolf
 - 1× Ethereal Courser
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Lumineth
 - 1× Dreamvale Monarch
 - 1× Spirit of the Greenwood
@@ -3571,7 +3571,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Entropy Spike
 - 1× Duskwall Delver
 - 1× Headtaker
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Cinderheart
 - 1× Exile
 - 1× Dawnrunner
@@ -3603,7 +3603,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Dawnhorn Elder
 - 1× Moonbound Wolf
 - 1× Ethereal Courser
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Abomination of Memory
 - 1× Dreamvale Monarch
 - 1× Spirit of the Greenwood
@@ -3676,7 +3676,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× The Dread Sovereign
 - 1× Entropy Spike
 - 1× Duskwall Delver
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Cinderheart
 - 1× Kindred Sparks
 - 1× Defiant Holdout
@@ -3804,7 +3804,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Path to Redemption
 - 1× Inverted Reflection
 - 1× Pulse of Sacrifice
-- 1× Intermezzo Balladeer
+- 1× Storm Soloist
 - 1× Stratospheric Voyage
 - 1× Call the Lost
 - 1× Sunken Radiance
@@ -3941,7 +3941,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Portal of Twin Paths
 - 1× Eternal Stag
 - 1× The Bondweaver
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Aurora Conductor
 - 1× Spiritbound Alpha
 - 1× Starsea Traveler

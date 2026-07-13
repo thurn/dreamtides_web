@@ -296,7 +296,7 @@ art-owned = false
 card-number = 16
 
 [[cards]]
-name = "Shadow Soloist"
+name = "Shadow Balladeer"
 mtg-name = "Jeskai Ascendancy"
 id = "181b4924-743b-49c3-8056-6afd08ebde1d"
 rendered-text = "When you play an event, awaken each character you control."
@@ -1816,7 +1816,7 @@ card-number = 97
 art = { x = -0.334, y = -0.438, scale = 1.27 }
 
 [[cards]]
-name = "Enginespeaker"
+name = "Spirit of the Lightgrove"
 mtg-name = "Putrid Goblin"
 id = "401fdd0a-356b-49c1-806d-d50617b084d2"
 rendered-text = """
@@ -1825,15 +1825,16 @@ This character has all character types.
 Reclaim 0●"""
 energy-cost = 2
 card-type = "Character"
-subtype = "Child"
+subtype = "*"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July13"]
-image-number = 2018848973
+tags = ["Art Rework", "July13", "Art OK"]
+image-number = 264681587
 art-owned = false
 card-number = 98
+art = { x = -0.512, y = -0.074, scale = 1.57 }
 
 [[cards]]
 name = "Amythest Aurelia"
@@ -2568,7 +2569,7 @@ card-number = 137
 art = { x = 0.126, y = 0, scale = 1.17 }
 
 [[cards]]
-name = "Fargazer"
+name = "Iconoclast"
 mtg-name = "Stitcher's Supplier"
 id = "8571d7b3-5401-4678-9e81-e14538c8c46e"
 rendered-text = '''
@@ -2577,15 +2578,16 @@ When you play a character, erode 1.
 Reclaim 2●'''
 energy-cost = 2
 card-type = "Character"
-subtype = "Explorer"
+subtype = "Mage"
 rarity = ""
 is-fast = false
 is-interrupt = false
-spark = 5
-tags = ["Art Rework", "July13"]
-image-number = 640098148
+spark = 3
+tags = ["Art Rework", "July13", "Art OK"]
+image-number = 2025883238
 art-owned = false
 card-number = 138
+art = { x = 0, y = -0.386, scale = 1.4 }
 
 [[cards]]
 name = "Angel of the Eclipse"
@@ -4151,7 +4153,7 @@ card-number = 223
 art = { x = 0, y = 1, scale = 1 }
 
 [[cards]]
-name = "Harrowing Officiant"
+name = "Titan of Forgotten Echoes"
 mtg-name = "Vengevine"
 id = "c32ef131-d283-4bf1-bf65-2d5e5d232168"
 rendered-text = "When you play your second card in a turn, materialize this character from your void."
@@ -4163,7 +4165,7 @@ is-fast = false
 is-interrupt = false
 spark = 5
 tags = ["Art Rework", "July14"]
-image-number = 571228789
+image-number = 2521694543
 art-owned = true
 card-number = 224
 
@@ -4878,7 +4880,7 @@ card-number = 262
 art = { x = 0, y = 1, scale = 1.1 }
 
 [[cards]]
-name = "Intermezzo Balladeer"
+name = "Storm Soloist"
 mtg-name = "Aetherflux Reservoir"
 id = "2305722e-59c1-47d7-9e05-dc1c32c946a2"
 rendered-text = "When you play a card, gain 1⍟ for each other card you've played this turn."
@@ -4889,7 +4891,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Score Trigger", "Art Rework", "July13"]
+tags = ["Score Trigger", "Art Rework", "July13", "Art OK"]
 image-number = 1005938032
 art-owned = false
 card-number = 263
@@ -5403,7 +5405,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Self-Mill", "Art Rework", "July13"]
+tags = ["Self-Mill", "Art Rework", "July13", "Art OK"]
 image-number = 1983798665
 art-owned = false
 card-number = 291
@@ -8678,7 +8680,7 @@ card-number = 465
 art = { x = -0.096, y = 0.6, scale = 1.67 }
 
 [[cards]]
-name = "Crumbling Behemoth"
+name = "God of Wrath"
 mtg-name = "Finale of Devastation"
 id = "8451340c-02c5-465a-8c25-51efb2dc857a"
 rendered-text = "Other characters you control have 10✦."
@@ -8689,10 +8691,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 4
-tags = ["Art Rework", "July13", "Ally Audit"]
-image-number = 461706985
+tags = ["Art Rework", "July13", "Ally Audit", "Art OK"]
+image-number = 2421338071
 art-owned = false
 card-number = 466
+art = { x = 0, y = 1, scale = 1.47 }
 
 [[cards]]
 name = "Beacon of Tomorrow"

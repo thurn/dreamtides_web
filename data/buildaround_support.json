@@ -1361,7 +1361,7 @@
       ]
     },
     "401fdd0a-356b-49c1-806d-d50617b084d2": {
-      "name": "Enginespeaker",
+      "name": "Spirit of the Lightgrove",
       "needs": [],
       "supports": [
         "reclaim",
@@ -1477,7 +1477,7 @@
       ]
     },
     "8571d7b3-5401-4678-9e81-e14538c8c46e": {
-      "name": "Fargazer",
+      "name": "Iconoclast",
       "needs": [],
       "supports": [
         "reclaim"
@@ -1943,7 +1943,7 @@
       ]
     },
     "c32ef131-d283-4bf1-bf65-2d5e5d232168": {
-      "name": "Harrowing Officiant",
+      "name": "Titan of Forgotten Echoes",
       "needs": [
         {
           "theme": "storm",
@@ -2107,7 +2107,7 @@
       ]
     },
     "2305722e-59c1-47d7-9e05-dc1c32c946a2": {
-      "name": "Intermezzo Balladeer",
+      "name": "Storm Soloist",
       "needs": [
         {
           "theme": "storm",
@@ -3458,7 +3458,7 @@
       ]
     },
     "181b4924-743b-49c3-8056-6afd08ebde1d": {
-      "name": "Shadow Soloist",
+      "name": "Shadow Balladeer",
       "needs": [
         {
           "theme": "events",

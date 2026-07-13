@@ -75,7 +75,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 2× Entropy Spike
 - 2× Stolen Genesis
 - 2× Duskwall Delver
-- 2× Fargazer
+- 2× Iconoclast
 - 2× Dawnrunner
 - 2× Kindred Sparks
 - 2× Defiant Holdout
@@ -174,7 +174,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 2× Reclaimer of Lost Paths
 - 2× Stolen Genesis
 - 2× Duskwall Delver
-- 2× Fargazer
+- 2× Iconoclast
 - 2× Cinderheart
 - 2× Cost of Victory
 - 2× Kindred Sparks
@@ -198,7 +198,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 1× Immolate and Rise
 - 1× Graywatch
 - 1× Abomination of Memory
-- 1× Enginespeaker
+- 1× Spirit of the Lightgrove
 - 1× Signal Resonant
 - 1× Duskreaper
 - 1× Depthwalker
@@ -273,7 +273,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Spirit Bond
 - 1× Sky Voyager
 - 1× Abomination of Memory
-- 1× Enginespeaker
+- 1× Spirit of the Lightgrove
 - 1× Veil of the Wastes
 - 1× Soulcleft Spinner
 - 1× Duskreaper
@@ -303,9 +303,9 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Ambersting
 - 1× Duskwall Delver
 - 1× Headtaker
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Fractured Vessel
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Cost of Victory
 - 1× Dreamvale Monarch
 - 1× Pyrokinetic Surge
@@ -414,7 +414,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Embrace the Infinite
 - 1× Canopy of Stars
 - 1× Abandon Constraints
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Minstrel of Falling Light
 - 1× Gleamharvester
 - 1× Eruption
@@ -436,7 +436,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Wasteland Arbitrator
 - 1× Dreadwood Emissary
 - 1× Aerie Defender
-- 1× Harrowing Officiant
+- 1× Titan of Forgotten Echoes
 - 1× Flash of Power
 - 1× Thornwood Delver
 - 1× Key Sifter
@@ -464,7 +464,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 2× Abomination of Memory
 - 2× Veil of the Wastes
 - 2× Price of Redemption
-- 2× Fargazer
+- 2× Iconoclast
 - 2× Kindred Sparks
 - 2× Wasteland Arbitrator
 - 1× Silent Gatherer
@@ -537,7 +537,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Ferryman of the Falls
 - 1× Dreadweaver
 - 1× Lurking Dread
-- 1× Harrowing Officiant
+- 1× Titan of Forgotten Echoes
 - 1× Shadowcaller
 - 1× Avatar of Cosmic Reckoning
 - 1× The Rising God
@@ -624,7 +624,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 1× Embrace the Infinite
 - 1× Duskwall Delver
 - 1× Abandon Constraints
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Minstrel of Falling Light
 - 1× Gleamharvester
 - 1× Eruption
@@ -640,7 +640,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 1× Exiles of the Last Light
 - 1× Lurking Dread
 - 1× Aerie Defender
-- 1× Harrowing Officiant
+- 1× Titan of Forgotten Echoes
 - 1× Shadowcaller
 - 1× Key Sifter
 - 1× The Rising God
@@ -675,7 +675,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 2× Veil of the Wastes
 - 2× Price of Redemption
 - 2× Duskwall Delver
-- 2× Fargazer
+- 2× Iconoclast
 - 2× Kindred Sparks
 - 2× Wasteland Arbitrator
 - 2× The Rising God
@@ -740,7 +740,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Dreadweaver
 - 1× Lurking Dread
 - 1× Aerie Defender
-- 1× Harrowing Officiant
+- 1× Titan of Forgotten Echoes
 - 1× Shadowcaller
 - 1× Avatar of Cosmic Reckoning
 - 1× Ruin Scavenger
@@ -778,14 +778,14 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 2× Guide of Lost Souls
 - 2× Graywatch
 - 2× Abomination of Memory
-- 2× Enginespeaker
+- 2× Spirit of the Lightgrove
 - 2× Veil of the Wastes
 - 2× Corrupted Host
 - 2× Price of Redemption
 - 2× Entropy Spike
 - 2× Reclaimer of Lost Paths
 - 2× Duskwall Delver
-- 2× Fargazer
+- 2× Iconoclast
 - 2× Kindred Sparks
 - 2× Exiles of the Last Light
 - 2× Wasteland Arbitrator
@@ -1114,7 +1114,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Overwhelm
 - 1× Twilight Troubadour
 - 1× Rite of Summoning
-- 1× Intermezzo Balladeer
+- 1× Storm Soloist
 - 1× Wheel of the Heavens
 - 1× Architect of Memory
 - 1× Weight of Memory
@@ -1396,7 +1396,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 2× Ebonwing
 - 2× Moonbound Wolf
 - 2× Ethereal Courser
-- 2× Crumbling Behemoth
+- 2× God of Wrath
 - 2× Dreamvale Monarch
 - 2× Spirit of the Greenwood
 - 2× Empyreal Light
@@ -1488,7 +1488,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 2× Ebonwing
 - 2× Moonbound Wolf
 - 2× Ethereal Courser
-- 2× Crumbling Behemoth
+- 2× God of Wrath
 - 2× Dreamvale Monarch
 - 2× Spirit of the Greenwood
 - 2× Empyreal Light
@@ -1570,7 +1570,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 2× Ebonwing
 - 2× Moonbound Wolf
 - 2× Ethereal Courser
-- 2× Crumbling Behemoth
+- 2× God of Wrath
 - 2× Dreamvale Monarch
 - 2× Aurora Conductor
 - 2× Spirit of the Greenwood
@@ -1646,7 +1646,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 2× Ebonwing
 - 2× Moonbound Wolf
 - 2× Ethereal Courser
-- 2× Crumbling Behemoth
+- 2× God of Wrath
 - 2× Dreamvale Monarch
 - 2× Spirit of the Greenwood
 - 2× Empyreal Light
@@ -1841,7 +1841,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 1× Standard Bearer
 - 1× Overwhelm
 - 1× Night Raid Commando
-- 1× Intermezzo Balladeer
+- 1× Storm Soloist
 - 1× Emberfang
 - 1× Frostbound Defiant
 - 1× Dreadcall Warden
@@ -1937,7 +1937,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× Standard Bearer
 - 1× Night Raid Commando
 - 1× The Deathsworn
-- 1× Intermezzo Balladeer
+- 1× Storm Soloist
 - 1× Through the Rift
 - 1× Reforged Automaton
 - 1× Tidecaller
@@ -2017,7 +2017,7 @@ Tide-fac-01 is an almost entirely character-based (40 of 45 copies) midrange eng
 - 1× Stolen Genesis
 - 1× Duskwall Delver
 - 1× Headtaker
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Cinderheart
 - 1× Cost of Victory
 - 1× Pyrokinetic Surge
@@ -2043,7 +2043,7 @@ Tide-fac-02 is built almost entirely of characters (41 of 45 cards) and operates
 - 2× Fallen Angel
 - 2× Rusted Monolith
 - 2× Guide of Lost Souls
-- 2× Enginespeaker
+- 2× Spirit of the Lightgrove
 - 2× Corrupted Host
 - 2× Exiles of the Last Light
 - 2× Avatar of Cosmic Reckoning
@@ -2067,7 +2067,7 @@ Tide-fac-02 is built almost entirely of characters (41 of 45 cards) and operates
 - 1× Dune Reaper
 - 1× Stolen Genesis
 - 1× Duskwall Delver
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Titan of Forgotten Echoes
 - 1× Dawnrunner
 - 1× Kindred Sparks
@@ -2151,7 +2151,7 @@ Tide-fac-04 is built almost entirely around spirit animals, with 35 characters a
 - 1× Ebonwing
 - 1× Moonbound Wolf
 - 1× Ethereal Courser
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Amber Aurelia
 - 1× Aurora Conductor
 - 1× Spirit of the Greenwood
@@ -2199,7 +2199,7 @@ Tide-fac-05 is a character-heavy (37 of 45 copies) spirit animal swarm built aro
 - 1× Ebonwing
 - 1× Moonbound Wolf
 - 1× Ethereal Courser
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Spirit of the Greenwood
 - 1× Empyreal Light
 - 1× Spiritbound Alpha
@@ -2302,7 +2302,7 @@ Tide-fac-07 runs an even split of events and characters (22/23) built around two
 - 1× Moonbound Wolf
 - 1× Ambersting
 - 1× Ethereal Courser
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Dreamvale Monarch
 - 1× Aurora Conductor
 - 1× Empyreal Light
@@ -2334,7 +2334,7 @@ Tide-fac-08 is an 80% character tide built almost entirely around spirit animals
 - 2× Graywatch
 - 2× Veil of the Wastes
 - 2× Price of Redemption
-- 2× Fargazer
+- 2× Iconoclast
 - 2× The Rising God
 - 2× Evacuation Enforcer
 - 1× Ridge Vortex Explorer
@@ -2362,7 +2362,7 @@ Tide-fac-08 is an 80% character tide built almost entirely around spirit animals
 - 1× Silent Gatherer
 - 1× Lurking Dread
 - 1× Wasteland Arbitrator
-- 1× Harrowing Officiant
+- 1× Titan of Forgotten Echoes
 - 1× Shadowcaller
 - 1× Ruin Scavenger
 - 1× Vessel of Echoes
@@ -2555,7 +2555,7 @@ Tide-fac-12 is built almost entirely of warriors (42 of 45 copies) and organizes
 - 1× Ebonwing
 - 1× Moonbound Wolf
 - 1× Ethereal Courser
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Spirit of the Greenwood
 - 1× Empyreal Light
 - 1× Spiritbound Alpha
@@ -2595,7 +2595,7 @@ Tide-fac-13 is a character-heavy spirit animal tribal deck (35 of 45 copies are 
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
 - 1× Tidewreck Navigator
-- 1× Enginespeaker
+- 1× Spirit of the Lightgrove
 - 1× Veil of the Wastes
 - 1× Hope's Vanguard
 - 1× Corrupted Host
@@ -2606,7 +2606,7 @@ Tide-fac-13 is a character-heavy spirit animal tribal deck (35 of 45 copies are 
 - 1× Stolen Genesis
 - 1× Duskwall Delver
 - 1× Headtaker
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Cinderheart
 - 1× Cost of Victory
 - 1× Pyrokinetic Surge
@@ -2866,7 +2866,7 @@ Tide-fac-18 is built around two interlocking halves: an energy ramp package and 
 - 1× Apocalypse
 - 1× Stolen Genesis
 - 1× Duskwall Delver
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Exile
 - 1× Pyrokinetic Surge
 - 1× Dawnrunner
@@ -2957,7 +2957,7 @@ Tide-fac-21 is a character-heavy spirit animal swarm built around stacking ✦ o
 - 1× Ebonwing
 - 1× Moonbound Wolf
 - 1× Ethereal Courser
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Spirit of the Greenwood
 - 1× Kindlehorn
 - 1× Empyreal Light
@@ -3004,7 +3004,7 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 - 1× Ebonwing
 - 1× Moonbound Wolf
 - 1× Ethereal Courser
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Aurora Conductor
 - 1× Spirit of the Greenwood
 - 1× Empyreal Light
@@ -3150,7 +3150,7 @@ This tide is built around a dense curve of inexpensive survivors whose arrival a
 - 1× Watcher in the Ruins
 - 1× Tidewreck Navigator
 - 1× Graywatch
-- 1× Enginespeaker
+- 1× Spirit of the Lightgrove
 - 1× Veil of the Wastes
 - 1× Hope's Vanguard
 - 1× Corrupted Host
@@ -3161,7 +3161,7 @@ This tide is built around a dense curve of inexpensive survivors whose arrival a
 - 1× Stolen Genesis
 - 1× Duskwall Delver
 - 1× Headtaker
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Cinderheart
 - 1× Pyrokinetic Surge
 - 1× Dawnrunner
@@ -3183,7 +3183,7 @@ This tide is built around a dense curve of inexpensive survivors whose arrival a
 Tide-fac-26 is a character-heavy survivor tide built around the abandon trigger as a compounding resource. Its central payoffs are characters that scale in spark when you abandon: Specter of Silent Snow draws a card and gains +1✦ every Dawn and every time you abandon, Herald of the Last Light grows +1✦ per abandon and can eventually convert that into card draws, Cinderheart accumulates +1✦ per abandon and then cashes the whole stack as ⍟ when it dissolves, and Harvester of Despair gains +1✦ for each abandon activation. Kindred Sparks (the doubled anchor card) provides the economic foundation: with any allied survivor in play the card costs only 1●, letting the deck flood the board cheaply and fuel repeated abandons without falling behind on tempo. Two fast events — Together Against the Tide (dissolve a ≤3● enemy at 1● if you abandoned this turn) and Unleash Ruin (dissolve a ≤3● enemy outright) — reward the abandon pattern with interactive, cost-efficient removal. Where the nearest sibling (tide-fac-31) runs double Dustborn Veteran and double Volcanic Channeler to generate survivor figments and energy whenever allies are dissolved, and leans on Stolen Genesis and The Rising God as a reclaim-finisher lane, this tide keeps its dissolve-payoff pieces at single copies and instead commits its doubled slots to the +✦ scaling engine, making Specter of Silent Snow the primary win condition that grows larger with every character sacrificed.
 
 - 2× Searcher in the Mists
-- 2× Fargazer
+- 2× Iconoclast
 - 2× Kindred Sparks
 - 1× Iron Pharaoh
 - 1× Herald of the Last Light
@@ -3253,7 +3253,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Guide of Lost Souls
 - 1× Graywatch
 - 1× Abomination of Memory
-- 1× Enginespeaker
+- 1× Spirit of the Lightgrove
 - 1× Veil of the Wastes
 - 1× Hope's Vanguard
 - 1× Corrupted Host
@@ -3262,7 +3262,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Twilight Reclaimer
 - 1× Entropy Spike
 - 1× Duskwall Delver
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Cinderheart
 - 1× Cost of Victory
 - 1× Exile
@@ -3465,7 +3465,7 @@ Tide-fac-31 is almost entirely characters (41 of 45 cards), built around a dense
 - 1× Ebonwing
 - 1× Moonbound Wolf
 - 1× Ethereal Courser
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Dreamvale Monarch
 - 1× Spirit of the Greenwood
 - 1× Empyreal Light
@@ -3515,7 +3515,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Entropy Spike
 - 1× Stolen Genesis
 - 1× Duskwall Delver
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Cinderheart
 - 1× Exile
 - 1× Dawnrunner
@@ -3640,7 +3640,7 @@ This tide is built almost entirely from spirit animal characters (23 of 30 cards
 - 1× Vigilant Howler
 - 1× Moonbound Wolf
 - 1× Ethereal Courser
-- 1× Crumbling Behemoth
+- 1× God of Wrath
 - 1× Dreamvale Monarch
 - 1× Spirit of the Greenwood
 - 1× Empyreal Light
@@ -3684,7 +3684,7 @@ Tide-neu-03 is a character-heavy (24 of 30 cards) deck built around two interloc
 - 1× Entropy Spike
 - 1× Lunar Hart
 - 1× Duskwall Delver
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Bloodpact Berserker
 - 1× Cost of Victory
 - 1× Dawnrunner
@@ -3802,7 +3802,7 @@ Tide-neu-06 is a character-dense discard engine built around accumulating a larg
 - 1× Forgotten Sleeper
 - 1× Wandering Archivist
 
-## Broad: Guide of Lost Souls / Enginespeaker — Abandon into Removal
+## Broad: Guide of Lost Souls / Spirit of the Lightgrove — Abandon into Removal
 
 `tide-neu-07` — neutral tide, 27 distinct cards, 30 copies
 
@@ -3811,7 +3811,7 @@ Tide-neu-06 is a character-dense discard engine built around accumulating a larg
 Tide-neu-07 is built almost entirely on characters (28 of 30 cards), organized around a two-step sacrifice loop: abandon a character to stockpile ⧗ counters, then spend those counters to dissolve an enemy of matching ✦. The repeatable ⧗-fueled removal pieces — characters that read "Abandon a character: Store 1⧗" and "X⧗: Dissolve an enemy with X✦" — form the central engine, with a second character that scales its own ✦ each time you abandon and converts that growth into ⍟ on dissolution. Dissolution events trigger a cluster of ⍟-reward characters (including the double-copy anchor that gains 1⍟ whenever any character is dissolved, and a second anchor that gains 1⍟ whenever any ally leaves play), turning the removal engine into an income stream. Supporting pieces include a fast event that draws a card for each ally dissolved in a turn, and a reclaim-enabled event that abandons a character to materialize a higher-cost one from your deck, providing an escalation path when ⧗ removal thins the board. Where the closest sibling tide (tide-neu-11) uses dissolution as a trigger to materialize figment tokens — building board width through Defiant Holdout, Shadowcaller, and Dustborn Veteran — tide-neu-07 uses dissolution as a payoff and abandonment as the active resource to generate targeted removal, playing as a controlling sacrifice deck that accumulates ⍟ and card advantage through careful enemy dissolution rather than converting deaths into replacement bodies.
 
 - 2× Guide of Lost Souls
-- 2× Enginespeaker
+- 2× Spirit of the Lightgrove
 - 2× Skull Weaver
 - 1× Fathomless Maw
 - 1× Dustborn Veteran
@@ -3899,7 +3899,7 @@ Tide-neu-09 is a character-heavy neutral tide (25 characters, 5 events, all at 1
 - 1× Immolate
 - 1× Entropy Spike
 - 1× Duskwall Delver
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Cinderheart
 - 1× Dawnrunner
 - 1× Kindred Sparks
@@ -3922,7 +3922,7 @@ Tide-neu-10 is built almost entirely from warriors, with its central engine driv
 
 - 2× Starbound Striker
 - 1× Harbor Warden
-- 1× Intermezzo Balladeer
+- 1× Storm Soloist
 - 1× Sky Legion Captain
 - 1× Burning Revenant
 - 1× Cinderblade Legionnaire
@@ -3974,7 +3974,7 @@ Tide-neu-11 is an almost entirely character-based (28 of 30 cards) abandon-and-d
 - 1× Entropy Spike
 - 1× Stolen Genesis
 - 1× Headtaker
-- 1× Fargazer
+- 1× Iconoclast
 - 1× Cinderheart
 - 1× Dawnrunner
 - 1× Defiant Holdout
