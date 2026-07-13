@@ -59,6 +59,9 @@ const SIGNATURE_CARD_WIDTH = 116;
 const DREAMSIGN_SIZE = 62;
 const MOBILE_SIGNATURE_CARD_WIDTH = 92;
 const MOBILE_DREAMSIGN_SIZE = 48;
+/** Matches the measured three-card signature page so the initial briefing
+ * keeps the same glass-panel height while placing its extra air above stakes. */
+const MOBILE_DETAIL_PAGE_MIN_HEIGHT = 148;
 
 export function BattleStartScreen({ view, onBegin }: BattleStartScreenProps) {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -339,12 +342,12 @@ function MobileBattleStartTitle({
         <span
           style={{
             display: "block",
-            font: token("--t-hero"),
+            font: token("--t-title"),
             color: token("--text-primary"),
             textShadow: token("--text-outline-media"),
           }}
         >
-          vs. {dreamcaller.name}
+          Battle vs. {dreamcaller.name}
         </span>
         {dreamcaller.title !== "" && (
           <span
@@ -482,11 +485,19 @@ function MobileDetailCarousel({
           aria-hidden={index !== 0}
           inert={index !== 0}
           data-battle-start-detail-active={String(index === 0)}
-          style={{ width: "100%", flex: "none" }}
+          style={{
+            width: "100%",
+            minHeight: MOBILE_DETAIL_PAGE_MIN_HEIGHT,
+            flex: "none",
+            display: "flex",
+            alignItems: "flex-end",
+          }}
         >
-          <MobileCarouselPage title={null}>
-            <MobileBattleStakes view={view} />
-          </MobileCarouselPage>
+          <div style={{ width: "100%" }}>
+            <MobileCarouselPage title={null}>
+              <MobileBattleStakes view={view} />
+            </MobileCarouselPage>
+          </div>
         </div>
         {view.dreamsigns.length > 0 && (
           <div
@@ -662,7 +673,7 @@ function MobileStake({
           display: "flex",
           alignItems: "center",
           gap: token("--space-3"),
-          font: token("--t-title-sm"),
+          font: token("--t-body"),
           color: token("--text-primary"),
         }}
       >

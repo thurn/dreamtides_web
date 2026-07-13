@@ -183,7 +183,8 @@ describe("Tango BattleStartScreen", () => {
       "[data-battle-start-console]",
     );
     expect(title?.textContent).not.toContain("Battle Opponent");
-    expect(title?.textContent).toContain("vs. Aeris, the Prism Guide");
+    expect(title?.textContent).toContain("Battle vs. Aeris, the Prism Guide");
+    expect(title?.querySelector("span")?.style.font).toContain("--t-title");
     expect(title?.textContent).toContain("Storm Archivist");
     expect(consolePanel?.textContent).not.toContain("Aeris, the Prism Guide");
     expect(
@@ -210,6 +211,13 @@ describe("Tango BattleStartScreen", () => {
     expect(activePage()?.textContent).not.toContain("Victory:");
     expect(activePage()?.textContent).toContain("To Win");
     expect(activePage()?.textContent).toContain("Reward");
+    expect(activePage()?.style.minHeight).toBe("148px");
+    expect(activePage()?.style.alignItems).toBe("flex-end");
+    expect(
+      activePage()?.querySelector<HTMLElement>(
+        '[data-battle-start-stake="To Win"] > div',
+      )?.style.font,
+    ).toContain("--t-body");
 
     const track = layout?.querySelector<HTMLElement>(
       "[data-battle-start-detail-track]",
