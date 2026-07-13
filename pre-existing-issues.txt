@@ -193,3 +193,11 @@ Cumulus reveal documentation — feedback dimension disagrees with implementatio
   `src/cumulus/primitives/press-feedback.ts` deliberately computes it from the
   longest edge. Align the current-system documentation and its representative
   scale examples with the implementation contract.
+
+Duplication site logging — offer contents are logged before runtime hydration
+
+- Entering `?goto=duplication-enhanced` renders ten selectable deck entries,
+  while each `site_entered` event records `candidateCount: 0` because the mount
+  effect runs before the shared card-choice runtime is populated. Emit the
+  reconstruction event after the runtime is ready and include the offered entry
+  identities so production logs describe the actual choice set.

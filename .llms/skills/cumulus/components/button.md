@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/button`
 
-Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
 
 Rung 1 of Cumulus's four-rung button suite — the beveled purple sprite, the primary/commit action, scaled to any label and to a taller commit height. Lower-emphasis actions step down a rung (GlassButton, IconButton, plain pressable text), never to a recolored Button.
 

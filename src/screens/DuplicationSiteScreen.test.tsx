@@ -219,7 +219,7 @@ function selectFirstAndConfirm(container: HTMLElement): void {
   });
 
   const confirm = container.querySelector<HTMLButtonElement>(
-    "[data-testid='duplication-confirm']",
+    "[data-testid='duplication-confirm'] > button",
   );
   if (confirm === null) {
     throw new Error("Missing duplicate confirm button");
@@ -243,6 +243,24 @@ afterEach(() => {
 });
 
 describe("DuplicationSiteScreen", () => {
+  it("renders the commit action through the centered Cumulus Button", () => {
+    const mutations = makeMutations();
+    setQuestContext(makeState(), mutations);
+    const { container, root } = mount(<DuplicationSiteScreen site={makeSite()} />);
+
+    const confirm = container.querySelector<HTMLButtonElement>(
+      "[data-testid='duplication-confirm'] > button",
+    );
+    expect(confirm).not.toBeNull();
+    expect(confirm?.style.justifyContent).toBe("center");
+    expect(confirm?.style.textAlign).toBe("center");
+    expect(container.querySelector(".dup-dupe-btn")).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("shows the preparing fallback for a wrong runtime kind", () => {
     const mutations = makeMutations();
     setQuestContext(

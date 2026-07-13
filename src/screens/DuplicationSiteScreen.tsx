@@ -6,6 +6,7 @@ import { CardDisplay } from "../components/CardDisplay";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { SiteGuide } from "../components/SiteGuide";
+import { Button } from "../cumulus/components/controls/Button";
 import { IconButton } from "../cumulus/components/controls/IconButton";
 import { GLYPHS } from "../cumulus/primitives/glyph";
 import "./duplication-site.css";
@@ -189,7 +190,9 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
     >
       {/* Top bar: the duplicate commit button pinned right so the way to
           confirm is always visible above the scrolling deck. */}
-      <div className="dup-topbar">
+      <div
+        className={`dup-topbar${site.isEnhanced ? " is-enhanced" : ""}`}
+      >
         <div className="dup-summary">
           {site.isEnhanced && (
             <div className="dup-cell is-enhanced" data-duplication-enhanced="true">
@@ -199,16 +202,16 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
           )}
         </div>
 
-        <button
-          type="button"
-          className="dup-dupe-btn"
+        <div
+          className="cumulus duplication-confirm-control"
           data-testid="duplication-confirm"
-          disabled={!hasPick || copying || duplicated}
-          onClick={handleConfirm}
         >
-          <i className="bxf bx-copy" aria-hidden="true" />
-          Duplicate this card
-        </button>
+          <Button
+            label="Duplicate this card"
+            disabled={!hasPick || copying || duplicated}
+            onClick={handleConfirm}
+          />
+        </div>
       </div>
 
       {/* Scrollable deck area — one selectable card per candidate. The scroll is

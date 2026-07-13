@@ -206,49 +206,10 @@
   cursor: pointer;
 }
 
-/* ---- Duplicate commit button (top bar, right) ---- */
-.duplication-site .dup-dupe-btn {
+/* The caller owns only the commit control's top-bar placement. Button owns
+ * the centered label, material, typography, and interaction feedback. */
+.duplication-site .duplication-confirm-control {
   flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 13px 30px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-weight: 700;
-  font-size: 17px;
-  letter-spacing: 0.01em;
-  color: #fff;
-  border: 1px solid rgba(168, 85, 247, 0.6);
-  background: linear-gradient(180deg, rgba(124, 77, 255, 0.5), rgba(88, 38, 196, 0.55));
-  box-shadow:
-    0 8px 22px rgba(80, 40, 180, 0.45),
-    0 0 22px rgba(168, 85, 247, 0.26),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
-  transition:
-    transform 0.12s ease,
-    box-shadow 0.14s ease,
-    filter 0.14s ease,
-    opacity 0.14s ease;
-}
-.duplication-site .dup-dupe-btn:hover:not(:disabled) {
-  filter: brightness(1.1);
-  box-shadow:
-    0 10px 28px rgba(110, 60, 230, 0.6),
-    0 0 30px rgba(168, 85, 247, 0.5);
-}
-.duplication-site .dup-dupe-btn:active:not(:disabled) {
-  transform: scale(0.98);
-}
-.duplication-site .dup-dupe-btn:disabled {
-  opacity: 0.42;
-  cursor: not-allowed;
-  filter: none;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-}
-.duplication-site .dup-dupe-btn i {
-  font-size: 1.05em;
 }
 
 /* collection target, bottom-right — the copy lands here on confirm */
@@ -286,6 +247,21 @@
 @media (min-width: 1200px) {
   .duplication-site .dup-scroll {
     padding-left: 312px;
+  }
+}
+
+/* The enhanced readout and commit action cannot share the mobile top row with
+ * the fixed close control. Stack the two authored surfaces in the available
+ * width so neither is clipped or allowed to influence the other's internals. */
+@media (max-width: 600px) {
+  .duplication-site .dup-topbar.is-enhanced {
+    min-height: 143px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
   }
 }
 
