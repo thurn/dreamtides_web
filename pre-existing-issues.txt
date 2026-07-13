@@ -151,7 +151,6 @@ Cumulus clean PlayMode gate — wall-clock-sensitive panel travel assertion
   editor/graphics hitch can fail behavior whose final anchor is correct. Replace
   the wall-clock assertion with deterministic stepped-time evidence or separate
   the curve-duration contract from host scheduling latency.
-
 Quest prototype dependency audit — four moderate advisories
 
 - `npm install` reports four moderate vulnerabilities in the current lockfile.
@@ -159,3 +158,12 @@ Quest prototype dependency audit — four moderate advisories
   its transitive `@google-cloud/pubsub` / `@opentelemetry/core` chain, plus
   transitive `morgan`. The suggested Firebase resolution is a semver-major
   change, so dependency remediation should be handled as a separate upgrade.
+
+Transfiguration mobile QA — detail layout clips heading and confirm action
+
+- At a fresh 390×844 viewport on the `?goto=transfiguration-enhanced` detail
+  step, the “Choose its new form.” heading begins 12px above the viewport and
+  the confirm button's right edge lands at 496px, 106px beyond the viewport.
+  The card stat orbs and their transfiguration badges remain inside the card.
+  Make the detail composition vertically scrollable and constrain the action
+  row to the mobile viewport without changing the desktop stage geometry.

@@ -123,7 +123,7 @@ describe("BattleGameCard", () => {
     act(() => root.unmount()); container.remove();
   });
 
-  it("visibly renders counters, figment count, and the transfiguration marker/tint", () => {
+  it("visibly renders counters, figment count, and the transfiguration markers", () => {
     const baseInstance = instance();
     const figmentInstance = instance({
       provenance: { ...baseInstance.provenance, kind: "generated-figment" },
@@ -134,7 +134,10 @@ describe("BattleGameCard", () => {
     const marker = container.querySelector<HTMLElement>('[aria-label="Kindled transfiguration"]');
     expect(marker).not.toBeNull();
     expect(marker?.style.color).toBe("rgb(252, 165, 165)");
-    expect(container.querySelector<HTMLElement>('[data-card-stat="spark"] div')?.style.color).not.toBe("rgb(255, 255, 255)");
+    expect(container.querySelector<HTMLElement>('[data-card-stat="spark"] div')?.style.color).toBe("rgb(255, 255, 255)");
+    const badge = container.querySelector<HTMLElement>('[data-card-stat-change="kindled"]');
+    expect(badge).not.toBeNull();
+    expect(badge?.querySelector(".bx-flame")).not.toBeNull();
     act(() => root.unmount()); container.remove();
   });
 

@@ -8,7 +8,9 @@ Components · Live demo & interactive props: `/tango#/card-stat-orb`
 
 Real consumers: **2** (imports outside `src/tango/docs/` and tests).
 
-The card-corner resource stat: a centered number over the energy, spark, or Dreamwell-energy glyph with fitted digits and optional tooltip.
+The card-corner resource stat: a fitted white numeral over the energy, spark, or Dreamwell-energy glyph, with an optional monochrome transfiguration badge.
+
+> **Guidance:** Changed numerals stay white. Use the Empowered bolt on a changed energy cost and the Kindled flame on changed spark; the 15px design-size badge scales with the resource mark.
 
 ## Props
 
@@ -21,7 +23,7 @@ The card-corner resource stat: a centered number over the energy, spark, or Drea
 | `numberCapPx` | `number` | yes | — | Upper bound (px) for the digit auto-shrink search. The displayed size is the smaller of the CSS digit ceiling and the fitted size, so this only needs to sit at or above the rendered digit size. |
 | `ariaLabel` | `string` | no | — |  |
 | `tooltip` | `string` | no | — | Optional hover tooltip: a short plain-language description string. |
-| `tintColor` | `TangoColor` = `"danger" \| "accent" \| "accent-bright" \| "accent-strong" \| "essence" \| "energy" \| "energy-bright" \| "spark" \| "points" \| "positive" \| "selected" \| "sale" \| "gold" \| "gold-light" \| "text-primary" \| "text-secondary" \| "text-muted" \| "text-faint" \| "text-on-accent" \| "white"` | no | — | Tint applied to the digit when the stat has been changed by a transfiguration (e.g. a bumped spark or halved energy cost). Only the number picks up the tint; the resource glyph behind it keeps its resource hue so a changed stat still reads as the same kind of resource. |
+| `changeBadge` | `CardStatChangeBadge` = `"empowered" \| "kindled"` | no | — | Monochrome shape marker for a transfiguration-changed stat. Empowered uses a bolt on energy cost; Kindled uses a flame on spark. |
 
 ## Usage
 
@@ -34,5 +36,6 @@ import { CardStatOrb } from "src/tango/components/card/CardStatOrb";
   sizeVar="44px"
   numberSizeVar="18px"
   numberCapPx={18}
+  changeBadge="empowered"
 />
 ```

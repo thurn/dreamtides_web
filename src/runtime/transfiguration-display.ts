@@ -82,14 +82,14 @@ export const TRANSFIGURATION_ICONS: Readonly<
  */
 export interface CardTransfigurationDisplay {
   type: TransfigurationType;
-  /** Light tint for the name gem, changed stat orb(s), and changed text. A
+  /** Light tint for the name gem and changed text. A
    * `#${string}` hex, matching Tango's `HexColor`. */
   color: `#${string}`;
   /** Rules text with the changed/added spans wrapped in transfigure markers. */
   markedText: string;
-  /** True when the energy cost changed (Empowered); tints the energy orb. */
+  /** True when the energy cost changed (Empowered); badges the energy orb. */
   energyChanged: boolean;
-  /** True when the spark changed (Kindled); tints the spark orb. */
+  /** True when the spark changed (Kindled); badges the spark orb. */
   sparkChanged: boolean;
   /** True when the card gained Fast (Hastened); tints the speed bolt. */
   fastChanged: boolean;

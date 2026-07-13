@@ -38,16 +38,6 @@ import { useRevealSource } from "../../internal/reveal/context";
 const SELECTION_DEFAULT_COLOR: TangoColor = "selected";
 
 /**
- * Tints for a transfiguration-changed corner stat digit. These are chosen for
- * legibility against the orb's own bright glyph — a warm gold reads on the blue
- * energy flame, a bright cyan reads on the amber spark sparkle — rather than to
- * match the transfiguration color (the name gem already carries that hue). Only
- * the digit takes the tint; the glyph keeps its resource color.
- */
-const ENERGY_CHANGE_TINT = "#fcd34d";
-const SPARK_CHANGE_TINT = "#67e8f9";
-
-/**
  * Fallback art crop for cards that carry no authored `art` setting: centered
  * with a slight cover zoom that hides source letterboxing. The card editor's
  * focused editor overrides this per card by writing an `art` table to the card
@@ -789,8 +779,9 @@ export interface CardViewProps {
   selectionColor?: TangoColor;
   /**
    * When set, paints the card as transfigured: a small colored gem follows the
-   * name, the changed corner stat(s) take the tint, and only the added/changed
-   * rules text is tinted (driven by the descriptor's marked text). The card
+   * name, changed corner stats gain their Empowered/Kindled shape badges, and
+   * only the added/changed rules text is tinted (driven by the descriptor's
+   * marked text). The card
    * itself should already carry the transfigured stats and rules text — pass the
    * `card` and `display` from `buildTransfigurationDisplay` together.
    */
@@ -980,8 +971,8 @@ function GameCardSurface(props: CardViewProps) {
       numberSizeVar="var(--cv-energy-orb-font-size)"
       numberCapPx={energyOrbCapPx}
       tooltip={ENERGY_PIP_TOOLTIP}
-      tintColor={
-        transfiguration?.energyChanged === true ? ENERGY_CHANGE_TINT : undefined
+      changeBadge={
+        transfiguration?.energyChanged === true ? "empowered" : undefined
       }
     />
   );
@@ -1208,8 +1199,8 @@ function GameCardSurface(props: CardViewProps) {
         numberSizeVar={sparkFontVar}
         numberCapPx={sparkCapPx}
         tooltip={SPARK_PIP_TOOLTIP}
-        tintColor={
-          transfiguration?.sparkChanged === true ? SPARK_CHANGE_TINT : undefined
+        changeBadge={
+          transfiguration?.sparkChanged === true ? "kindled" : undefined
         }
       />
     ) : null;

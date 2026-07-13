@@ -17,6 +17,11 @@ function CardStatOrbDemo(args: Record<string, unknown>) {
       numberCapPx={typeof args.numberCapPx === "number" ? args.numberCapPx : 22}
       ariaLabel={typeof args.ariaLabel === "string" ? args.ariaLabel : undefined}
       tooltip={typeof args.tooltip === "string" ? args.tooltip : undefined}
+      changeBadge={
+        args.changeBadge === "empowered" || args.changeBadge === "kindled"
+          ? args.changeBadge
+          : undefined
+      }
     />
   );
 }
@@ -25,7 +30,9 @@ export const cardStatOrbDemo: TangoComponent = {
   id: "card-stat-orb",
   title: "Card Stat Orb",
   blurb:
-    "The card-corner resource stat: a centered number over the energy, spark, or Dreamwell-energy glyph with fitted digits and optional tooltip.",
+    "The card-corner resource stat: a fitted white numeral over the energy, spark, or Dreamwell-energy glyph, with an optional monochrome transfiguration badge.",
+  callout:
+    "Changed numerals stay white. Use the Empowered bolt on a changed energy cost and the Kindled flame on changed spark; the 15px design-size badge scales with the resource mark.",
   group: "Components",
   docName: "CardStatOrb",
   Component: CardStatOrbDemo,
@@ -39,6 +46,7 @@ export const cardStatOrbDemo: TangoComponent = {
   sizeVar="44px"
   numberSizeVar="18px"
   numberCapPx={18}
+  changeBadge="empowered"
 />`,
     },
   ],
@@ -51,6 +59,7 @@ export const cardStatOrbDemo: TangoComponent = {
       numberCapPx: 22,
       ariaLabel: "energy cost",
       tooltip: "Energy is paid to play the card.",
+      changeBadge: "empowered",
     },
   },
 };

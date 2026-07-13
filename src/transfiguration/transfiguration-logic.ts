@@ -248,8 +248,8 @@ interface StatStepResult {
 /**
  * Applies a stat-only step: Empowered halves the energy cost (rounded down, so a
  * 1● card becomes free), Kindled doubles the base spark (or sets a 0-spark
- * character to 1). The flags drive which corner stat orb is tinted in the card
- * display.
+ * character to 1). The flags drive which corner stat orb receives a shape
+ * badge in the card display.
  */
 function applyStatStep(
   card: CardData,

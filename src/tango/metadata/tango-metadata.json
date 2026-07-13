@@ -826,33 +826,15 @@
       "description": "Optional hover tooltip: a short plain-language description string."
     },
     {
-      "name": "tintColor",
-      "tsType": "TangoColor",
+      "name": "changeBadge",
+      "tsType": "CardStatChangeBadge",
       "unionMembers": [
-        "danger",
-        "accent",
-        "accent-bright",
-        "accent-strong",
-        "essence",
-        "energy",
-        "energy-bright",
-        "spark",
-        "points",
-        "positive",
-        "selected",
-        "sale",
-        "gold",
-        "gold-light",
-        "text-primary",
-        "text-secondary",
-        "text-muted",
-        "text-faint",
-        "text-on-accent",
-        "white"
+        "empowered",
+        "kindled"
       ],
       "required": false,
       "defaultValue": null,
-      "description": "Tint applied to the digit when the stat has been changed by a\ntransfiguration (e.g. a bumped spark or halved energy cost). Only the number\npicks up the tint; the resource glyph behind it keeps its resource hue so a\nchanged stat still reads as the same kind of resource."
+      "description": "Monochrome shape marker for a transfiguration-changed stat. Empowered uses\na bolt on energy cost; Kindled uses a flame on spark."
     }
   ],
   "CardTermDefinitions": [
@@ -944,7 +926,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "When set, paints the card as transfigured: a small colored gem follows the\nname, the changed corner stat(s) take the tint, and only the added/changed\nrules text is tinted (driven by the descriptor's marked text). The card\nitself should already carry the transfigured stats and rules text — pass the\n`card` and `display` from `buildTransfigurationDisplay` together.",
+      "description": "When set, paints the card as transfigured: a small colored gem follows the\nname, changed corner stats gain their Empowered/Kindled shape badges, and\nonly the added/changed rules text is tinted (driven by the descriptor's\nmarked text). The card\nitself should already carry the transfigured stats and rules text — pass the\n`card` and `display` from `buildTransfigurationDisplay` together.",
       "nested": {
         "name": "CardTransfigurationDisplay",
         "fields": [
@@ -958,7 +940,7 @@
             "name": "color",
             "tsType": "`#${string}`",
             "optional": false,
-            "description": "Light tint for the name gem, changed stat orb(s), and changed text. A\n`#${string}` hex, matching Tango's `HexColor`."
+            "description": "Light tint for the name gem and changed text. A\n`#${string}` hex, matching Tango's `HexColor`."
           },
           {
             "name": "markedText",
@@ -970,13 +952,13 @@
             "name": "energyChanged",
             "tsType": "boolean",
             "optional": false,
-            "description": "True when the energy cost changed (Empowered); tints the energy orb."
+            "description": "True when the energy cost changed (Empowered); badges the energy orb."
           },
           {
             "name": "sparkChanged",
             "tsType": "boolean",
             "optional": false,
-            "description": "True when the spark changed (Kindled); tints the spark orb."
+            "description": "True when the spark changed (Kindled); badges the spark orb."
           },
           {
             "name": "fastChanged",

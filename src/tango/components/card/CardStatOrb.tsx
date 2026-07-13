@@ -7,13 +7,14 @@ import {
   SPARK_ICON_COLOR,
 } from "../controls/GlowIcon";
 import { useFitText } from "../controls/useFitText";
-import { type Glyph } from "../../primitives/glyph";
+import { type Glyph, GLYPHS } from "../../primitives/glyph";
 import { type TangoColor, resolveColor } from "../../primitives/color";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 
 export type CardStatOrbVariant = "energy" | "spark" | "dreamwellEnergy";
+export type CardStatChangeBadge = "empowered" | "kindled";
 
 /** Purple fill for the Dreamwell energy mark; the number stays white. */
 export const DREAMWELL_ENERGY_ICON_COLOR: TangoColor = "#a855f7";
@@ -23,6 +24,26 @@ const DEFAULT_LABEL: Readonly<Record<CardStatOrbVariant, string>> = {
   spark: "spark",
   dreamwellEnergy: "energy added",
 };
+
+const CHANGE_BADGE_BY_TYPE: Readonly<
+  Record<CardStatChangeBadge, { glyph: Glyph; label: string }>
+> = {
+  empowered: {
+    glyph: GLYPHS.transfigurationEmpowered,
+    label: "Empowered",
+  },
+  kindled: {
+    glyph: GLYPHS.transfigurationKindled,
+    label: "Kindled",
+  },
+};
+
+/**
+ * A 15px badge at the card chrome's canonical 500px design width. Deriving it
+ * from the orb diameter keeps the badge proportional when the whole card grows
+ * or shrinks.
+ */
+const CHANGE_BADGE_TO_ORB_RATIO = 15 / (500 * 0.12);
 
 /**
  * Glyph spec per stat variant. Both stats render the same way — a shadowed
@@ -95,12 +116,10 @@ interface CardStatOrbProps {
   /** Optional hover tooltip: a short plain-language description string. */
   tooltip?: string;
   /**
-   * Tint applied to the digit when the stat has been changed by a
-   * transfiguration (e.g. a bumped spark or halved energy cost). Only the number
-   * picks up the tint; the resource glyph behind it keeps its resource hue so a
-   * changed stat still reads as the same kind of resource.
+   * Monochrome shape marker for a transfiguration-changed stat. Empowered uses
+   * a bolt on energy cost; Kindled uses a flame on spark.
    */
-  tintColor?: TangoColor;
+  changeBadge?: CardStatChangeBadge;
 }
 
 /**
@@ -110,7 +129,9 @@ interface CardStatOrbProps {
  * right of the name bar. Both marks carry a soft content-protection shadow (no
  * emitted bloom — the glow stays on the inline rules-text references) so they
  * read as a matched pair. The number is set in Anton — white with a soft dark
- * shadow — and auto-shrinks to fit so multi-digit values never overflow.
+ * shadow — and auto-shrinks to fit so multi-digit values never overflow. A
+ * changed stat keeps the same white numeral and resource hue, adding a small
+ * black-and-white shape badge at the glyph's lower-right edge.
  *
  * Single source of truth for the corner stat treatment shared by every
  * `CardView` surface. The inline `⍏N` references in rules text keep their own
@@ -124,10 +145,12 @@ export function CardStatOrb({
   numberCapPx,
   ariaLabel,
   tooltip,
-  tintColor,
+  changeBadge,
 }: CardStatOrbProps) {
   const label = ariaLabel ?? DEFAULT_LABEL[variant];
   const icon = ICON_BY_VARIANT[variant];
+  const badge =
+    changeBadge === undefined ? undefined : CHANGE_BADGE_BY_TYPE[changeBadge];
   // The digit box edge equals the CSS digit size; the digit sits over the
   // glyph's body so it reads over the fullest region rather than the edges.
   const numberBoxSize = numberSizeVar;
@@ -141,7 +164,7 @@ export function CardStatOrb({
   const numberStyle: CSSProperties = {
     fontFamily: '"Anton", system-ui, sans-serif',
     fontWeight: 400,
-    color: resolveColor(tintColor ?? "white"),
+    color: resolveColor("white"),
     lineHeight: 1,
     textAlign: "center",
     whiteSpace: "nowrap",
@@ -160,7 +183,7 @@ export function CardStatOrb({
   const orb = (
     <span
       data-card-stat={variant}
-      aria-label={label}
+      aria-label={badge === undefined ? label : `${label}, ${badge.label}`}
       role="img"
       style={{
         position: "relative",
@@ -214,6 +237,32 @@ export function CardStatOrb({
       >
         {value}
       </div>
+      {badge === undefined ? null : (
+        <span
+          data-card-stat-change={changeBadge}
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            right: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO * -0.5)})`,
+            bottom: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO * -0.5)})`,
+            zIndex: 2,
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO)})`,
+            height: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO)})`,
+            borderRadius: "50%",
+            background: "#000000",
+            border: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO / 15)}) solid #ffffff`,
+            color: "#ffffff",
+            boxSizing: "border-box",
+            fontSize: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO * 0.62)})`,
+            lineHeight: 1,
+          }}
+        >
+          <i className={badge.glyph} aria-hidden="true" />
+        </span>
+      )}
     </span>
   );
 
