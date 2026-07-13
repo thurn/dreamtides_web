@@ -4,7 +4,7 @@
 
 **Goal:** Build one deterministic Unity lab scene that proves live shared Cumulus frost, tangible mesh controls, stable pointer interaction, and material-continuity motion.
 
-**Architecture:** A URP Render Graph renderer feature downsamples and separably blurs the opaque camera color once per game camera immediately before transparent rendering, then publishes that texture globally for every scene-glass mesh. Strict scene-glass, on-glass, and solid-chrome roles render on procedural shallow geometry; a collider-owning pressable and a separate visual child keep hit volumes stable while hover, press, and panel travel animate the visible object. A single non-interactive verification command compiles and imports the project, rejects shader errors, runs structural and GPU-backed behavior tests, builds a standalone player, scans every Unity log, and emits machine-readable evidence.
+**Architecture:** A URP Render Graph renderer feature downsamples and separably blurs the opaque camera color once per game camera immediately before transparent rendering, then publishes that texture globally for every scene-glass mesh. Strict scene-glass and on-glass roles render on procedural shallow geometry; a collider-owning pressable and a separate visual child keep hit volumes stable while hover, press, and panel travel animate the visible object. A single non-interactive verification command compiles and imports the project, rejects shader errors, runs structural and GPU-backed behavior tests, builds a standalone player, scans every Unity log, and emits machine-readable evidence.
 
 **Tech Stack:** Unity 6000.5.3f1, URP 17.5.0, Render Graph, Input System 1.19.0, NUnit/Unity Test Framework 1.7.0, HLSL, C#.
 
@@ -17,7 +17,7 @@
 - Capture opaque scene color and publish the blur at `RenderPassEvent.BeforeRenderingTransparents`. The design document's after-post-processing Cumulus pass, transparent capture membership, TAA integration, and depth-owner pass are later production work.
 - Perform exactly one two-pass shared blur per participating game camera per frame; panes and nested controls never request private cameras, render textures, or blur passes.
 - Use half-width and half-height blur textures, one horizontal pass, one vertical pass, `msaaSamples = 1`, and no depth buffer.
-- Keep the three material roles closed: `SceneGlass`, `OnGlass`, and `SolidChrome`. Scene instances may select a role but may not supply blur, tint, rim, sheen, saturation, or motion values.
+- Keep the two glass material roles closed: `SceneGlass` and `OnGlass`. Scene instances may select a role but may not supply blur, tint, rim, sheen, saturation, or motion values.
 - Use the Cumulus reference values for the MVP: scene fill `(0.055, 0.055, 0.063, 0.54)`, saturation `1.5`, sheen alpha `0.07`, rim alpha `0.14`, and travel duration `0.42` seconds with cubic Bézier `(0.16, 1, 0.3, 1)`.
 - Render labels as world-space mesh text, never through a Canvas, uGUI control, or UI Toolkit panel. The MVP uses Unity `TextMesh` to avoid importing the full TextMesh Pro resource bundle.
 - Keep interaction colliders on stable roots. Hover, press, and travel affect visual children and never resize or replace the collider.
@@ -59,7 +59,6 @@
 - `cumulus/Assets/CumulusMvp/Shaders/CumulusOnGlass.shader` — nested tonal lens without backdrop sampling.
 - `cumulus/Assets/CumulusMvp/Materials/CumulusSceneGlass.mat` — shared `SceneGlass` material.
 - `cumulus/Assets/CumulusMvp/Materials/CumulusOnGlass.mat` — shared `OnGlass` material.
-- `cumulus/Assets/CumulusMvp/Materials/CumulusSolidChrome.mat` — shared URP Lit frame and text-backing material.
 - `cumulus/Assets/CumulusMvp/Materials/CumulusBlur.mat` — hidden renderer-feature blur material.
 - `cumulus/Assets/CumulusMvp/Materials/CumulusMaterialLibrary.asset` — the committed role catalog.
 - `cumulus/Assets/CumulusMvp/Meshes/CumulusPanel.asset` — generated reusable shallow rounded-panel mesh.
@@ -170,7 +169,7 @@
 - Create all Unity `.meta` files generated for the new folders and assets.
 
 **Interfaces:**
-- Produces: `enum CumulusMaterialRole { SceneGlass, OnGlass, SolidChrome }`.
+- Produces: `enum CumulusMaterialRole { SceneGlass, OnGlass }`.
 - Produces: `Material CumulusMaterialLibrary.Resolve(CumulusMaterialRole role)` and `void CumulusMaterialLibrary.Validate()`.
 - Produces: `Mesh CumulusRoundedPanelMesh.Create(float width, float height, float depth, float cornerRadius, int cornerSegments)`.
 - Consumes: Unity `Mesh`, `Material`, and `ScriptableObject` only; rendering and interaction are not part of this task.
@@ -269,7 +268,7 @@
 
 ---
 
-### Task 3: Scene Glass, On-Glass, and Solid Chrome Rendering
+### Task 3: Scene Glass and On-Glass Rendering
 
 **Files:**
 - Create: `cumulus/Assets/CumulusMvp/Shaders/CumulusSceneGlass.shader`
@@ -278,7 +277,6 @@
 - Create: `cumulus/Assets/CumulusMvp/Editor/CumulusGlassLabBuilder.cs` with material-only build entry points in this task.
 - Create: `cumulus/Assets/CumulusMvp/Materials/CumulusSceneGlass.mat`
 - Create: `cumulus/Assets/CumulusMvp/Materials/CumulusOnGlass.mat`
-- Create: `cumulus/Assets/CumulusMvp/Materials/CumulusSolidChrome.mat`
 - Create: `cumulus/Assets/CumulusMvp/Materials/CumulusBlur.mat`
 - Create: `cumulus/Assets/CumulusMvp/Materials/CumulusMaterialLibrary.asset`
 - Modify: `cumulus/Assets/CumulusMvp/Tests/EditMode/CumulusGlassRenderingTests.cs`
@@ -286,7 +284,7 @@
 **Interfaces:**
 - Consumes: `_CumulusGlassBlurTexture`, `_CumulusGlassBlurTexelSize`, and `_CumulusGlassAvailable` from Task 2.
 - Produces: menu/CLI method `CumulusMvp.Editor.CumulusGlassLabBuilder.RebuildMaterials()`.
-- Produces: four shared materials and one validated `CumulusMaterialLibrary` asset at the exact paths above.
+- Produces: three shared materials and one validated `CumulusMaterialLibrary` asset at the exact paths above.
 
 - [ ] **Step 1: Extend the rendering tests with failing shader and asset contracts**
 
@@ -300,9 +298,9 @@
 
   Compose the blurred source exactly once: saturate around luminance by `1.5`, apply the fixed neutral near-black fill at alpha `0.54`, then add pane-UV anchored diagonal sheen, rim, top inset highlight, main-light specular, and Fresnel. The background sample is transmission and must not enter the direct diffuse-light calculation. When `_CumulusGlassAvailable < 0.5`, render the same lit shell over a deterministic 72%-alpha interior. Use transparent blending, depth test against the opaque scene, and no depth write for this MVP.
 
-- [ ] **Step 4: Implement the on-glass shader and solid material role**
+- [ ] **Step 4: Implement the on-glass shader**
 
-  On-glass uses a low-alpha neutral lens, brighter rim, and tighter local highlight without scene-color sampling. Solid chrome uses the committed URP Lit shader with an opaque deep-plum/black base and normal shadow casting. Keep label text warm white and unlit so moving scene light cannot destroy contrast.
+  On-glass uses a low-alpha neutral lens, brighter rim, and tighter local highlight without scene-color sampling. Keep label text warm white and unlit so moving scene light cannot destroy contrast.
 
 - [ ] **Step 5: Implement idempotent material asset generation**
 
@@ -326,7 +324,7 @@
 
   ```bash
   git add cumulus/Assets/CumulusMvp
-  git commit -m "feat(cumulus): define Cumulus MVP glass material vocabulary" -m "Add fixed scene-glass, nested on-glass, and solid-chrome rendering roles with deterministic fallback behavior and idempotently generated shared material assets."
+  git commit -m "feat(cumulus): define Cumulus MVP glass material vocabulary" -m "Add fixed scene-glass and nested on-glass rendering roles with deterministic fallback behavior and idempotently generated shared material assets."
   git push
   ```
 
@@ -408,11 +406,11 @@
 - Consumes: all Tasks 1–4 runtime contracts and shared assets.
 - Produces: menu/CLI method `CumulusMvp.Editor.CumulusGlassLabBuilder.Rebuild()`.
 - Produces: one scene containing exactly two independent scene-glass panes, one nested on-glass button, one moving high-contrast object, one moving directional light, and two panel anchors.
-- Produces: deterministic `SetPhase(float normalizedPhase)` methods on the spinner and light plus named `Rect GetViewportRegion(CumulusVerificationRegion region, Camera camera)` probes for `LiveGlassA`, `LiveGlassB`, `UncoveredPattern`, `OnGlassButton`, `SolidBevel`, `FrameShadowReceiver`, and `PrimaryLabel`.
+- Produces: deterministic `SetPhase(float normalizedPhase)` methods on the spinner and light plus named `Rect GetViewportRegion(CumulusVerificationRegion region, Camera camera)` probes for `LiveGlassA`, `LiveGlassB`, `UncoveredPattern`, and `OnGlassButton`.
 
 - [ ] **Step 1: Write failing lab-asset tests**
 
-  Run `Rebuild()` twice and assert stable GUIDs for the mesh, four materials, library, prefab, and scene. Assert `PC_Renderer.asset` contains exactly one active `CumulusGlassRendererFeature` with the shared blur material. Open the scene additively and assert exact object names and counts, two scene-glass renderers share the same material object, the nested button uses the on-glass material, the solid frame uses an opaque material with `ShadowCastingMode.On`, both labels are `TextMesh` components outside any Canvas, every pressable has one stable root collider, all seven verification regions project inside the camera viewport without overlap, and `EditorBuildSettings` enables only `Assets/Scenes/CumulusGlassLab.unity` for the MVP.
+  Run `Rebuild()` twice and assert stable GUIDs for the mesh, three materials, library, prefab, and scene. Assert `PC_Renderer.asset` contains exactly one active `CumulusGlassRendererFeature` with the shared blur material. Open the scene additively and assert exact object names and counts, two scene-glass renderers share the same material object, the nested button uses the on-glass material, both labels are `TextMesh` components outside any Canvas, every pressable has one stable root collider, all four verification regions project inside the camera viewport without overlap, and `EditorBuildSettings` enables only `Assets/Scenes/CumulusGlassLab.unity` for the MVP.
 
 - [ ] **Step 2: Run the lab-asset tests and confirm the intended failure**
 
@@ -424,7 +422,7 @@
 
 - [ ] **Step 4: Complete the idempotent scene builder**
 
-  Build a fixed camera, bright/dark/gold background geometry, ground receiver, moving striped object, directional light, source/destination anchors, main panel prefab instance, and second independent glass pane. The main panel hierarchy contains the shallow glass face, opaque bevel/frame, warm-white mesh label, raised on-glass button visual, stable button collider, pressable, and travel component. Wire button activation to `ToggleDestination()` in serialized scene data. Add one `CumulusPointerInteractor` to the camera, one `CumulusVerificationMarkers` object whose named regions are fully visible at `512 × 288`, including a clean ground patch receiving the frame shadow, and log Unity/URP versions plus `live-shared-blur` mode at scene start.
+  Build a fixed camera, bright/dark/gold background geometry, moving striped object, directional light, source/destination anchors, main panel prefab instance, and second independent glass pane. The main panel hierarchy contains the shallow glass face and bevel, warm-white mesh label, raised on-glass button visual, stable button collider, pressable, and travel component. Wire button activation to `ToggleDestination()` in serialized scene data. Add one `CumulusPointerInteractor` to the camera, one `CumulusVerificationMarkers` object whose named regions are fully visible at `512 × 288`, and log Unity/URP versions plus `live-shared-blur` mode at scene start.
 
 - [ ] **Step 5: Install exactly one renderer feature and update build settings**
 
@@ -480,7 +478,7 @@
 
 - [ ] **Step 1: Write failing image-metric boundary tests**
 
-  Test constant-color images, a single hard edge, a blurred edge, identical/different frames, percentile contrast with known luminances, image correlation, empty regions, out-of-bounds regions, NaN input, and images with mismatched dimensions. For each committed threshold, construct one result immediately inside and immediately outside the boundary and assert the verdict flips. Use these initial named thresholds: `liveBackdropDelta >= 0.015`, `blurEdgeEnergyRatio <= 0.65`, `blurEdgeEnergyRatio >= 0.05`, `sharedGraphRecords == 1`, `horizontalPasses == 1`, `verticalPasses == 1`, `onGlassAdditionalPasses == 0`, `onGlassBackdropDelta >= 0.005`, `onGlassBackdropCorrelation >= 0.5`, `bevelLightDelta >= 0.02`, `transmissionLightDeltaRatio <= 0.25`, `frameShadowDelta >= 0.02`, `labelContrast >= 4.5`, `fallbackInteriorLuminance >= 0.02`, and `fallbackInteriorLuminance <= 0.8`.
+  Test constant-color images, a single hard edge, a blurred edge, identical/different frames, percentile contrast with known luminances, image correlation, empty regions, out-of-bounds regions, NaN input, and images with mismatched dimensions. For each committed threshold, construct one result immediately inside and immediately outside the boundary and assert the verdict flips. Use these initial named thresholds: `liveBackdropDelta >= 0.015`, `blurEdgeEnergyRatio <= 0.65`, `blurEdgeEnergyRatio >= 0.05`, `sharedGraphRecords == 1`, `horizontalPasses == 1`, `verticalPasses == 1`, `onGlassAdditionalPasses == 0`, `onGlassBackdropDelta >= 0.005`, `onGlassBackdropCorrelation >= 0.5`, `fallbackInteriorLuminance >= 0.02`, and `fallbackInteriorLuminance <= 0.8`.
 
 - [ ] **Step 2: Run the image-metric tests and confirm the intended failure**
 
@@ -504,8 +502,6 @@
   - `CumulusGlassDiagnostics` reports one graph record, one horizontal pass, and one vertical pass for a rendered camera frame with both panes enabled;
   - disabling either independent pane and separately disabling the on-glass button leaves those three pass counts unchanged, proving work is per camera rather than per surface;
   - the on-glass region changes by at least `0.005` and correlates with its parent backdrop at `0.5` or greater as the spinner moves, proving it preserves inherited scene color rather than becoming opaque or requesting recursive frost;
-  - changing only light phase changes the solid bevel by at least `0.02` while the center transmission region changes by at most `0.25` of that amount, guarding against double-lighting the captured scene;
-  - toggling only the solid frame's `shadowCastingMode` between `On` and `Off` changes the named ground receiver region by at least `0.02`, proving the authored frame shadow reaches the scene;
   - the primary-label region estimates at least `4.5:1` contrast over bright, gold, and dark background phases;
   - deactivating the renderer feature through `ScriptableRendererFeature.SetActive(false)` produces finite fallback pixels whose interior luminance stays between `0.02` and `0.8` while existing press/travel PlayMode tests still pass; restore the feature in `finally` so the committed asset remains active.
 
@@ -613,7 +609,6 @@
 - [ ] GPU tests show the on-glass button adds zero blur passes and retains the parent scene signal.
 - [ ] Asset/shader contract tests prove fixed Cumulus tint, saturation, rim, sheen, and lit-shell roles.
 - [ ] Relational light metrics keep transmission change at or below 25% of bevel change, guarding against double-lighting.
-- [ ] GPU tests show the solid bevel responds to the moving light and the ground receiver changes when frame shadow casting is toggled.
 - [ ] GPU tests estimate at least `4.5:1` contrast for warm-white world-space mesh text across bright, gold, and dark phases.
 - [ ] PlayMode tests prove hover, press, cancellation, and activation use the stable root collider.
 - [ ] PlayMode tests prove panel travel lasts 420 ms, follows `(0.16, 1, 0.3, 1)`, and remains smooth when interrupted.

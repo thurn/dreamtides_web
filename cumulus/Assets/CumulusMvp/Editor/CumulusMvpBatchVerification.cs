@@ -25,7 +25,6 @@ namespace CumulusMvp.Editor
             {
                 "CumulusMvp/SceneGlass",
                 "CumulusMvp/OnGlass",
-                "CumulusMvp/ShopBackdropShadowReceiver",
                 "Hidden/CumulusMvp/SeparableBlur",
             };
             var shaderRecords = new List<ShaderRecord>(shaderNames.Length);

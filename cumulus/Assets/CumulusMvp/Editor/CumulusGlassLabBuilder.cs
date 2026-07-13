@@ -27,9 +27,7 @@ namespace CumulusMvp.Editor
         private const string MaterialsFolder = "Assets/CumulusMvp/Materials";
         private const string SceneGlassPath = MaterialsFolder + "/CumulusSceneGlass.mat";
         private const string OnGlassPath = MaterialsFolder + "/CumulusOnGlass.mat";
-        private const string SolidChromePath = MaterialsFolder + "/CumulusSolidChrome.mat";
         private const string BackdropPath = MaterialsFolder + "/CumulusBackdropUnlit.mat";
-        private const string ShadowReceiverPath = MaterialsFolder + "/CumulusShadowReceiver.mat";
         private const string BlurPath = MaterialsFolder + "/CumulusBlur.mat";
         private const string LibraryPath = MaterialsFolder + "/CumulusMaterialLibrary.asset";
         private const string LightingProfilePath = MaterialsFolder + "/CumulusGlassLightingProfile.asset";
@@ -78,20 +76,10 @@ namespace CumulusMvp.Editor
             Material onGlass = GetOrCreateMaterial(OnGlassPath, RequireShader("CumulusMvp/OnGlass"));
             ConfigureOnGlass(onGlass);
 
-            Material solidChrome = GetOrCreateMaterial(
-                SolidChromePath,
-                RequireShader("Universal Render Pipeline/Lit"));
-            ConfigureSolidChrome(solidChrome);
-
             Material backdrop = GetOrCreateMaterial(
                 BackdropPath,
                 RequireShader("Universal Render Pipeline/Unlit"));
             ConfigureBackdrop(backdrop);
-
-            Material shadowReceiver = GetOrCreateMaterial(
-                ShadowReceiverPath,
-                RequireShader("Universal Render Pipeline/Lit"));
-            ConfigureShadowReceiver(shadowReceiver);
 
             Material blur = GetOrCreateMaterial(BlurPath, RequireShader("Hidden/CumulusMvp/SeparableBlur"));
             ConfigureBlur(blur);
@@ -103,18 +91,11 @@ namespace CumulusMvp.Editor
             var serializedLibrary = new SerializedObject(library);
             serializedLibrary.FindProperty("sceneGlass").objectReferenceValue = sceneGlass;
             serializedLibrary.FindProperty("onGlass").objectReferenceValue = onGlass;
-            serializedLibrary.FindProperty("solidChrome").objectReferenceValue = solidChrome;
             serializedLibrary.FindProperty("lightingProfile").objectReferenceValue = lightingProfile;
             serializedLibrary.ApplyModifiedPropertiesWithoutUndo();
             library.Validate();
             EditorUtility.SetDirty(library);
 
-            AssetDatabase.SaveAssets();
-
-            // Let URP's material import validation normalize Lit serialization during this
-            // rebuild, then reassert the closed role values before the final save.
-            AssetDatabase.ImportAsset(SolidChromePath, ImportAssetOptions.ForceUpdate);
-            ConfigureSolidChrome(solidChrome);
             AssetDatabase.SaveAssets();
         }
 
@@ -155,10 +136,6 @@ namespace CumulusMvp.Editor
                 RemoveUnexpectedChildren(
                     root.transform,
                     "Glass Face",
-                    "Solid Frame",
-                    "Frame Bottom Rail",
-                    "Frame Left Rail",
-                    "Frame Right Rail",
                     "Primary Label",
                     "On Glass Button");
 
@@ -172,7 +149,6 @@ namespace CumulusMvp.Editor
                     ShadowCastingMode.Off,
                     true);
                 RemoveUnexpectedChildren(glassFace.transform);
-                ConfigureFrame(root.transform, library.Resolve(CumulusMaterialRole.SolidChrome));
                 ConfigureWorldSpaceText(
                     EnsureChild(root.transform, "Primary Label"),
                     "CUMULUS GLASS",
@@ -253,30 +229,6 @@ namespace CumulusMvp.Editor
             }
 
             return AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
-        }
-
-        private static void ConfigureFrame(Transform parent, Material material)
-        {
-            ConfigureCube(
-                EnsureChild(parent, "Solid Frame"),
-                new Vector3(0f, 1.16f, -0.1f),
-                new Vector3(3.66f, 0.12f, 0.16f),
-                material);
-            ConfigureCube(
-                EnsureChild(parent, "Frame Bottom Rail"),
-                new Vector3(0f, -1.16f, -0.1f),
-                new Vector3(3.66f, 0.12f, 0.16f),
-                material);
-            ConfigureCube(
-                EnsureChild(parent, "Frame Left Rail"),
-                new Vector3(-1.94f, 0f, -0.1f),
-                new Vector3(0.12f, 2.2f, 0.16f),
-                material);
-            ConfigureCube(
-                EnsureChild(parent, "Frame Right Rail"),
-                new Vector3(1.94f, 0f, -0.1f),
-                new Vector3(0.12f, 2.2f, 0.16f),
-                material);
         }
 
         private static void ConfigureCube(
@@ -373,7 +325,6 @@ namespace CumulusMvp.Editor
                     "Directional Light",
                     "Point Light",
                     "Moving Striped Object",
-                    "Ground Shadow Receiver",
                     "Panel Source Anchor",
                     "Panel Destination Anchor",
                     "Cumulus Glass Panel",
@@ -384,11 +335,6 @@ namespace CumulusMvp.Editor
                 ReconcileLight(scene);
                 ReconcilePointLight(scene);
                 ReconcileBackground(scene, AssetDatabase.LoadAssetAtPath<Material>(BackdropPath));
-                ConfigureCube(
-                    EnsureSceneRoot(scene, "Ground Shadow Receiver"),
-                    new Vector3(0f, -3.65f, 2.8f),
-                    new Vector3(16f, 1.5f, 0.2f),
-                    AssetDatabase.LoadAssetAtPath<Material>(ShadowReceiverPath));
 
                 Transform sourceAnchor = ReconcileAnchor(scene, "Panel Source Anchor", new Vector3(-3f, 1f, 0f));
                 Transform destinationAnchor = ReconcileAnchor(scene, "Panel Destination Anchor", new Vector3(-1.4f, 2.7f, 0f));
@@ -566,18 +512,12 @@ namespace CumulusMvp.Editor
             AddOrReconcileMarker(markers, root.transform, "LiveGlassB", new Vector3(3.25f, 1.35f, -0.5f), new Vector2(0.72f, 0.58f));
             AddOrReconcileMarker(markers, root.transform, "UncoveredPattern", new Vector3(0.35f, -0.55f, 3.5f), new Vector2(0.62f, 0.54f));
             AddOrReconcileMarker(markers, root.transform, "OnGlassButton", new Vector3(-3f, 0.44f, -0.5f), new Vector2(0.86f, 0.3f));
-            AddOrReconcileMarker(markers, root.transform, "SolidBevel", new Vector3(-4.93f, 1.72f, -0.5f), new Vector2(0.12f, 0.52f));
-            AddOrReconcileMarker(markers, root.transform, "FrameShadowReceiver", new Vector3(-3f, -3.73f, 2.7f), new Vector2(0.7f, 0.06f));
-            AddOrReconcileMarker(markers, root.transform, "PrimaryLabel", new Vector3(-3f, 1.48f, -0.5f), new Vector2(1.25f, 0.28f));
             RemoveUnexpectedChildren(
                 root.transform,
                 "Region LiveGlassA",
                 "Region LiveGlassB",
                 "Region UncoveredPattern",
-                "Region OnGlassButton",
-                "Region SolidBevel",
-                "Region FrameShadowReceiver",
-                "Region PrimaryLabel");
+                "Region OnGlassButton");
 
             foreach (CumulusVerificationRegion region in Enum.GetValues(typeof(CumulusVerificationRegion)))
             {
@@ -948,24 +888,6 @@ namespace CumulusMvp.Editor
             EditorUtility.SetDirty(material);
         }
 
-        private static void ConfigureSolidChrome(Material material)
-        {
-            material.SetColor("_BaseColor", new Color(0.42f, 0.24f, 0.62f, 1f));
-            material.SetFloat("_Surface", 0f);
-            material.SetFloat("_Blend", 0f);
-            material.SetFloat("_AlphaClip", 0f);
-            material.SetFloat("_Smoothness", 0.72f);
-            material.SetFloat("_Metallic", 0.34f);
-            material.SetFloat("_Cull", (float)CullMode.Back);
-            material.SetFloat("_ZWrite", 1f);
-            material.SetOverrideTag("RenderType", "Opaque");
-            material.DisableKeyword("_SURFACE_TYPE_TRANSPARENT");
-            material.DisableKeyword("_ALPHATEST_ON");
-            material.SetShaderPassEnabled("ShadowCaster", true);
-            material.renderQueue = (int)RenderQueue.Geometry;
-            EditorUtility.SetDirty(material);
-        }
-
         private static Color SrgbTokenColor(byte red, byte green, byte blue, float alpha)
         {
             Color color = ((Color)new Color32(red, green, blue, 255)).linear;
@@ -990,24 +912,6 @@ namespace CumulusMvp.Editor
             material.SetOverrideTag("RenderType", "Opaque");
             material.DisableKeyword("_SURFACE_TYPE_TRANSPARENT");
             material.DisableKeyword("_ALPHATEST_ON");
-            material.renderQueue = (int)RenderQueue.Geometry;
-            EditorUtility.SetDirty(material);
-        }
-
-        private static void ConfigureShadowReceiver(Material material)
-        {
-            material.SetColor("_BaseColor", new Color(0.28f, 0.22f, 0.34f, 1f));
-            material.SetFloat("_Surface", 0f);
-            material.SetFloat("_Blend", 0f);
-            material.SetFloat("_AlphaClip", 0f);
-            material.SetFloat("_Smoothness", 0.18f);
-            material.SetFloat("_Metallic", 0f);
-            material.SetFloat("_Cull", (float)CullMode.Back);
-            material.SetFloat("_ZWrite", 1f);
-            material.SetOverrideTag("RenderType", "Opaque");
-            material.DisableKeyword("_SURFACE_TYPE_TRANSPARENT");
-            material.DisableKeyword("_ALPHATEST_ON");
-            material.SetShaderPassEnabled("ShadowCaster", true);
             material.renderQueue = (int)RenderQueue.Geometry;
             EditorUtility.SetDirty(material);
         }

@@ -214,8 +214,6 @@ write_asset_manifest() {
       Assets/CumulusMvp/Materials/CumulusMaterialLibrary.asset \
       Assets/CumulusMvp/Materials/CumulusOnGlass.mat \
       Assets/CumulusMvp/Materials/CumulusSceneGlass.mat \
-      Assets/CumulusMvp/Materials/CumulusShadowReceiver.mat \
-      Assets/CumulusMvp/Materials/CumulusSolidChrome.mat \
       "Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset" \
       Assets/CumulusMvp/Meshes/CumulusPanel.asset \
       Assets/CumulusMvp/Prefabs/CumulusGlassPanel.prefab \
@@ -276,10 +274,9 @@ except (OSError, json.JSONDecodeError) as error:
 expected = [
     "CumulusMvp/SceneGlass",
     "CumulusMvp/OnGlass",
-    "CumulusMvp/ShopBackdropShadowReceiver",
     "Hidden/CumulusMvp/SeparableBlur",
 ]
-if shader.get("shaderCount") != 4 or shader.get("errorCount") != 0:
+if shader.get("shaderCount") != 3 or shader.get("errorCount") != 0:
     raise SystemExit("shader report has an invalid count or nonzero errors")
 records = shader.get("shaders")
 if not isinstance(records, list) or [record.get("name") for record in records] != expected:

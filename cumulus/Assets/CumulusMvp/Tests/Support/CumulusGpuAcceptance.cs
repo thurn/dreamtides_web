@@ -40,10 +40,6 @@ namespace CumulusMvp.Tests.Support
         public const string OnGlassAdditionalPasses = "onGlassAdditionalPasses";
         public const string OnGlassBackdropDelta = "onGlassBackdropDelta";
         public const string OnGlassBackdropCorrelation = "onGlassBackdropCorrelation";
-        public const string BevelLightDelta = "bevelLightDelta";
-        public const string TransmissionLightDeltaRatio = "transmissionLightDeltaRatio";
-        public const string FrameShadowDelta = "frameShadowDelta";
-        public const string LabelContrast = "labelContrast";
         public const string FallbackInteriorLuminanceMinimum = "fallbackInteriorLuminanceMinimum";
         public const string FallbackInteriorLuminanceMaximum = "fallbackInteriorLuminanceMaximum";
 

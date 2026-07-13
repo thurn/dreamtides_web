@@ -28,7 +28,6 @@ namespace CumulusMvp.Tests
         private const string SceneGlassPath = "Assets/CumulusMvp/Materials/CumulusSceneGlass.mat";
         private const string OnGlassPath = "Assets/CumulusMvp/Materials/CumulusOnGlass.mat";
         private const string LightingProfilePath = "Assets/CumulusMvp/Materials/CumulusGlassLightingProfile.asset";
-        private const string SolidChromePath = "Assets/CumulusMvp/Materials/CumulusSolidChrome.mat";
         private const string BlurPath = "Assets/CumulusMvp/Materials/CumulusBlur.mat";
         private const string LibraryPath = "Assets/CumulusMvp/Materials/CumulusMaterialLibrary.asset";
         private const string PrefabPath = "Assets/CumulusMvp/Prefabs/CumulusGlassPanel.prefab";
@@ -49,6 +48,21 @@ namespace CumulusMvp.Tests
             Assert.That(
                 AssetDatabase.LoadAssetAtPath<Shader>(
                     "Assets/CumulusMvp/Shaders/CumulusTextOutline.shader"),
+                Is.Null);
+        }
+
+        [Test]
+        public void Rebuild_DoesNotCreateOpaqueCumulusSurfaceMaterials()
+        {
+            InvokeRebuild();
+
+            Assert.That(
+                AssetDatabase.LoadAssetAtPath<Material>(
+                    "Assets/CumulusMvp/Materials/CumulusSolidChrome.mat"),
+                Is.Null);
+            Assert.That(
+                AssetDatabase.LoadAssetAtPath<Material>(
+                    "Assets/CumulusMvp/Materials/CumulusShadowReceiver.mat"),
                 Is.Null);
         }
 
@@ -102,7 +116,7 @@ namespace CumulusMvp.Tests
         }
 
         [Test]
-        public void ShopGlassDemo_AuthorsAnUncheckedRoundedShadowCasterToggle()
+        public void ShopGlassDemo_UsesOnlyTheSharedGlassSurface()
         {
             CumulusShopGlassDemoBuilder.Rebuild();
             Scene scene = EditorSceneManager.OpenScene(
@@ -111,74 +125,12 @@ namespace CumulusMvp.Tests
             GameObject panel = scene.GetRootGameObjects()
                 .Single(root => root.name == "Cumulus Glass Panel");
 
-            CumulusPanelShadowToggle toggle = panel.GetComponent<CumulusPanelShadowToggle>();
-            Assert.That(toggle, Is.Not.Null);
-            Assert.That(toggle.CastShadow, Is.False);
-
-            Transform caster = panel.transform.Find("Rounded Shadow Caster");
-            Assert.That(caster, Is.Not.Null);
+            Assert.That(panel.transform.childCount, Is.Zero);
+            MeshRenderer renderer = panel.GetComponent<MeshRenderer>();
+            Assert.That(renderer.shadowCastingMode, Is.EqualTo(ShadowCastingMode.Off));
             Assert.That(
-                caster.GetComponent<MeshFilter>().sharedMesh,
-                Is.SameAs(panel.GetComponent<MeshFilter>().sharedMesh));
-            MeshRenderer casterRenderer = caster.GetComponent<MeshRenderer>();
-            Assert.That(casterRenderer.shadowCastingMode, Is.EqualTo(ShadowCastingMode.ShadowsOnly));
-            Assert.That(casterRenderer.receiveShadows, Is.False);
-            Assert.That(casterRenderer.enabled, Is.False);
-
-            GameObject backdrop = scene.GetRootGameObjects()
-                .Single(root => root.name == "Tumbleleaf Village Backdrop");
-            MeshRenderer backdropRenderer = backdrop.GetComponent<MeshRenderer>();
-            Assert.That(backdropRenderer.receiveShadows, Is.True);
-            Assert.That(
-                backdropRenderer.sharedMaterial.shader.name,
-                Is.EqualTo("CumulusMvp/ShopBackdropShadowReceiver"));
-            Assert.That(
-                backdropRenderer.sharedMaterial.FindPass("DepthOnly"),
-                Is.GreaterThanOrEqualTo(0));
-
-            toggle.CastShadow = true;
-            Assert.That(casterRenderer.enabled, Is.True);
-            toggle.CastShadow = false;
-            Assert.That(casterRenderer.enabled, Is.False);
-        }
-
-        [Test]
-        public void ShopGlassDemo_RebuildRetainsTheShadowCheckboxValue()
-        {
-            byte[] sceneBackup = File.ReadAllBytes(CumulusShopGlassDemoBuilder.ScenePath);
-            try
-            {
-                CumulusShopGlassDemoBuilder.Rebuild();
-                Scene scene = EditorSceneManager.OpenScene(
-                    CumulusShopGlassDemoBuilder.ScenePath,
-                    OpenSceneMode.Single);
-                CumulusPanelShadowToggle toggle = scene.GetRootGameObjects()
-                    .Single(root => root.name == "Cumulus Glass Panel")
-                    .GetComponent<CumulusPanelShadowToggle>();
-                toggle.CastShadow = true;
-                EditorSceneManager.MarkSceneDirty(scene);
-                EditorSceneManager.SaveScene(scene);
-
-                CumulusShopGlassDemoBuilder.Rebuild();
-                Scene rebuilt = EditorSceneManager.OpenScene(
-                    CumulusShopGlassDemoBuilder.ScenePath,
-                    OpenSceneMode.Single);
-                CumulusPanelShadowToggle rebuiltToggle = rebuilt.GetRootGameObjects()
-                    .Single(root => root.name == "Cumulus Glass Panel")
-                    .GetComponent<CumulusPanelShadowToggle>();
-                Assert.That(rebuiltToggle.CastShadow, Is.True);
-                Assert.That(
-                    rebuiltToggle.transform.Find("Rounded Shadow Caster")
-                        .GetComponent<MeshRenderer>().enabled,
-                    Is.True);
-            }
-            finally
-            {
-                File.WriteAllBytes(CumulusShopGlassDemoBuilder.ScenePath, sceneBackup);
-                AssetDatabase.ImportAsset(
-                    CumulusShopGlassDemoBuilder.ScenePath,
-                    ImportAssetOptions.ForceSynchronousImport);
-            }
+                renderer.sharedMaterials,
+                Has.All.SameAs(AssetDatabase.LoadAssetAtPath<Material>(SceneGlassPath)));
         }
 
         [Test]
@@ -200,7 +152,6 @@ namespace CumulusMvp.Tests
             "Assets/CumulusMvp/Meshes/CumulusShopGlassPanel.asset",
             SceneGlassPath,
             OnGlassPath,
-            SolidChromePath,
             BlurPath,
             LibraryPath,
             LightingProfilePath,
@@ -318,7 +269,7 @@ namespace CumulusMvp.Tests
                     renderer.enabled = false;
                 }
 
-                UnityEngine.Object.DestroyImmediate(roots.Single(root => root.name == "Ground Shadow Receiver"));
+                UnityEngine.Object.DestroyImmediate(roots.Single(root => root.name == "Point Light"));
                 new GameObject("Unexpected Builder Drift");
                 EditorSceneManager.SaveScene(driftedScene, ScenePath);
 
@@ -350,7 +301,7 @@ namespace CumulusMvp.Tests
 
                 Scene repairedScene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
                 GameObject[] repairedRoots = repairedScene.GetRootGameObjects();
-                Assert.That(repairedRoots.Any(root => root.name == "Ground Shadow Receiver"), Is.True);
+                Assert.That(repairedRoots.Any(root => root.name == "Point Light"), Is.True);
                 Assert.That(repairedRoots.Any(root => root.name == "Unexpected Builder Drift"), Is.False);
                 Assert.That(repairedRoots.Single(root => root.name == "Independent Glass Pane").transform.position,
                     Is.EqualTo(new Vector3(3.25f, 1.35f, 0.35f)));
@@ -484,10 +435,11 @@ namespace CumulusMvp.Tests
                 Assert.That(onGlass.sharedMaterials,
                     Has.All.SameAs(AssetDatabase.LoadAssetAtPath<Material>(OnGlassPath)));
 
-                MeshRenderer frame = objects.Single(item => item.name == "Solid Frame").GetComponent<MeshRenderer>();
-                Assert.That(frame.sharedMaterial, Is.SameAs(AssetDatabase.LoadAssetAtPath<Material>(SolidChromePath)));
-                Assert.That(frame.sharedMaterial.renderQueue, Is.LessThan((int)RenderQueue.Transparent));
-                Assert.That(frame.shadowCastingMode, Is.EqualTo(ShadowCastingMode.On));
+                string[] objectNames = objects.Select(item => item.name).ToArray();
+                Assert.That(objectNames, Does.Not.Contain("Solid Frame"));
+                Assert.That(objectNames, Does.Not.Contain("Frame Bottom Rail"));
+                Assert.That(objectNames, Does.Not.Contain("Frame Left Rail"));
+                Assert.That(objectNames, Does.Not.Contain("Frame Right Rail"));
 
                 TextMeshPro[] labels = objects.Select(item => item.GetComponent<TextMeshPro>())
                     .Where(label => label != null)
@@ -557,7 +509,7 @@ namespace CumulusMvp.Tests
 
                 CumulusVerificationRegion[] names = (CumulusVerificationRegion[])Enum.GetValues(
                     typeof(CumulusVerificationRegion));
-                Assert.That(names, Has.Length.EqualTo(7));
+                Assert.That(names, Has.Length.EqualTo(4));
                 var regions = new List<Rect>(names.Length);
                 foreach (CumulusVerificationRegion name in names)
                 {
@@ -580,55 +532,6 @@ namespace CumulusMvp.Tests
             {
                 EditorSceneManager.CloseScene(scene, true);
             }
-        }
-
-        [Test]
-        public void FrameShadowReceiver_SitsInsideProjectedBottomRailShadowWithMargin()
-        {
-            InvokeRebuild();
-            Scene scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
-            GameObject[] objects = SceneObjects(scene);
-            Renderer rail = objects.Single(item => item.name == "Frame Bottom Rail").GetComponent<Renderer>();
-            Renderer receiver = objects.Single(item => item.name == "Ground Shadow Receiver").GetComponent<Renderer>();
-            Light light = objects.Single(item => item.name == "Directional Light").GetComponent<Light>();
-            CumulusVerificationMarkers markers = objects
-                .Single(item => item.name == "Cumulus Verification Markers")
-                .GetComponent<CumulusVerificationMarkers>();
-            Transform marker = GetSerializedReference<Transform>(markers, "frameShadowReceiver");
-
-            const float margin = 0.015f;
-            float receiverPlaneZ = receiver.bounds.min.z;
-            Vector3 direction = light.transform.forward;
-            Assert.That(direction.z, Is.GreaterThan(0f));
-            Bounds railBounds = rail.bounds;
-            float projectedMinX = float.PositiveInfinity;
-            float projectedMinY = float.PositiveInfinity;
-            float projectedMaxX = float.NegativeInfinity;
-            float projectedMaxY = float.NegativeInfinity;
-            for (int x = -1; x <= 1; x += 2)
-            {
-                for (int y = -1; y <= 1; y += 2)
-                {
-                    for (int z = -1; z <= 1; z += 2)
-                    {
-                        Vector3 corner = railBounds.center + Vector3.Scale(
-                            railBounds.extents,
-                            new Vector3(x, y, z));
-                        Vector3 projected = corner + direction * ((receiverPlaneZ - corner.z) / direction.z);
-                        projectedMinX = Mathf.Min(projectedMinX, projected.x);
-                        projectedMinY = Mathf.Min(projectedMinY, projected.y);
-                        projectedMaxX = Mathf.Max(projectedMaxX, projected.x);
-                        projectedMaxY = Mathf.Max(projectedMaxY, projected.y);
-                    }
-                }
-            }
-
-            Vector3 markerHalfSize = marker.lossyScale * 0.5f;
-            Assert.That(marker.position.x - markerHalfSize.x, Is.GreaterThan(projectedMinX + margin));
-            Assert.That(marker.position.x + markerHalfSize.x, Is.LessThan(projectedMaxX - margin));
-            Assert.That(marker.position.y - markerHalfSize.y, Is.GreaterThan(projectedMinY + margin));
-            Assert.That(marker.position.y + markerHalfSize.y, Is.LessThan(projectedMaxY - margin));
-            Assert.That(marker.position.z, Is.EqualTo(receiverPlaneZ).Within(0.001f));
         }
 
         [Test]

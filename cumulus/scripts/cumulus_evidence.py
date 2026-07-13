@@ -23,12 +23,6 @@ EXPECTED_METRICS = {
     "onGlassAdditionalPasses": ("equal", 0.0),
     "onGlassBackdropDelta": ("greaterThanOrEqual", 0.005),
     "onGlassBackdropCorrelation": ("greaterThanOrEqual", 0.5),
-    "bevelLightDelta": ("greaterThanOrEqual", 0.02),
-    "transmissionLightDeltaRatio": ("lessThanOrEqual", 0.25),
-    "frameShadowDelta": ("greaterThanOrEqual", 0.02),
-    "labelContrast.bright": ("greaterThanOrEqual", 4.5),
-    "labelContrast.gold": ("greaterThanOrEqual", 4.5),
-    "labelContrast.dark": ("greaterThanOrEqual", 4.5),
     "fallbackInteriorLuminanceMinimum": ("greaterThanOrEqual", 0.02),
     "fallbackInteriorLuminanceMaximum": ("lessThanOrEqual", 0.8),
 }
@@ -36,10 +30,7 @@ EXPECTED_CAPTURES = {
     "spinner-a.png", "spinner-b.png", "spinner-c.png",
     "main-pane-disabled.png", "independent-pane-disabled.png",
     "button-parent-a.png", "button-parent-b.png", "button-a.png", "button-b.png",
-    "light-a.png", "light-b.png", "shadow-on.png", "shadow-off.png",
-    "label-bright-backdrop.png", "label-bright.png",
-    "label-gold-backdrop.png", "label-gold.png",
-    "label-dark-backdrop.png", "label-dark.png", "fallback.png",
+    "fallback.png",
 }
 METRIC_FIELDS = {
     "metricName", "measuredValue", "measuredValueText", "measuredValueFinite",

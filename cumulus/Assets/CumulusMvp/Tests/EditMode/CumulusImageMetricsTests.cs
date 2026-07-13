@@ -128,10 +128,6 @@ namespace CumulusMvp.Tests
             AssertBoundary(CumulusGpuAcceptance.OnGlassAdditionalPasses, 0f, CumulusComparison.Equal);
             AssertBoundary(CumulusGpuAcceptance.OnGlassBackdropDelta, 0.005f, CumulusComparison.GreaterThanOrEqual);
             AssertBoundary(CumulusGpuAcceptance.OnGlassBackdropCorrelation, 0.5f, CumulusComparison.GreaterThanOrEqual);
-            AssertBoundary(CumulusGpuAcceptance.BevelLightDelta, 0.02f, CumulusComparison.GreaterThanOrEqual);
-            AssertBoundary(CumulusGpuAcceptance.TransmissionLightDeltaRatio, 0.25f, CumulusComparison.LessThanOrEqual);
-            AssertBoundary(CumulusGpuAcceptance.FrameShadowDelta, 0.02f, CumulusComparison.GreaterThanOrEqual);
-            AssertBoundary(CumulusGpuAcceptance.LabelContrast, 4.5f, CumulusComparison.GreaterThanOrEqual);
             AssertBoundary(CumulusGpuAcceptance.FallbackInteriorLuminanceMinimum, 0.02f, CumulusComparison.GreaterThanOrEqual);
             AssertBoundary(CumulusGpuAcceptance.FallbackInteriorLuminanceMaximum, 0.8f, CumulusComparison.LessThanOrEqual);
         }

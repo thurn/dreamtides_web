@@ -10,9 +10,6 @@ namespace CumulusMvp.Demo
         LiveGlassB,
         UncoveredPattern,
         OnGlassButton,
-        SolidBevel,
-        FrameShadowReceiver,
-        PrimaryLabel,
     }
 
     [DisallowMultipleComponent]
@@ -22,9 +19,6 @@ namespace CumulusMvp.Demo
         [SerializeField] private Transform liveGlassB;
         [SerializeField] private Transform uncoveredPattern;
         [SerializeField] private Transform onGlassButton;
-        [SerializeField] private Transform solidBevel;
-        [SerializeField] private Transform frameShadowReceiver;
-        [SerializeField] private Transform primaryLabel;
 
         private void Start()
         {
@@ -86,12 +80,6 @@ namespace CumulusMvp.Demo
                     return uncoveredPattern;
                 case CumulusVerificationRegion.OnGlassButton:
                     return onGlassButton;
-                case CumulusVerificationRegion.SolidBevel:
-                    return solidBevel;
-                case CumulusVerificationRegion.FrameShadowReceiver:
-                    return frameShadowReceiver;
-                case CumulusVerificationRegion.PrimaryLabel:
-                    return primaryLabel;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(region), region, "Unknown verification region.");
             }

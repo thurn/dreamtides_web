@@ -321,10 +321,10 @@ namespace CumulusMvp.Tests.PlayMode
             Camera camera = null; CumulusSpinner spinner = null; CumulusLightOrbit lightOrbit = null;
             CumulusLightOrbit pointOrbit = null; Light pointLight = null;
             CumulusGlassRendererFeature feature = null; GameObject mainGlass = null; GameObject independentGlass = null;
-            GameObject onGlassButton = null; GameObject frameShadowCaster = null; Renderer labelRenderer = null;
+            GameObject onGlassButton = null;
             RenderTexture target = null; RenderTexture previousTarget = null; RenderTexture previousActive = RenderTexture.active;
-            float previousAspect = 0f; bool featureWasActive = false; ShadowCastingMode originalShadowMode = default;
-            bool mainGlassEnabled = false, independentGlassEnabled = false, buttonEnabled = false, labelRendererEnabled = false;
+            float previousAspect = 0f; bool featureWasActive = false;
+            bool mainGlassEnabled = false, independentGlassEnabled = false, buttonEnabled = false;
             bool spinnerEnabled = false, lightOrbitEnabled = false, pointOrbitEnabled = false, pointLightEnabled = false;
             Quaternion spinnerRotation = default, lightRotation = default;
             Vector3 pointPosition = default;
@@ -347,15 +347,12 @@ namespace CumulusMvp.Tests.PlayMode
                 pointLight = pointOrbit.GetComponent<Light>();
                 feature = Resources.FindObjectsOfTypeAll<CumulusGlassRendererFeature>().FirstOrDefault(candidate => candidate != null && candidate.name == "CumulusGlassRendererFeature");
                 mainGlass = FindSceneObject("Glass Face"); independentGlass = FindSceneObject("Independent Glass Pane");
-                onGlassButton = FindSceneObject("On Glass Button"); frameShadowCaster = FindSceneObject("Frame Bottom Rail");
-                GameObject primaryLabel = FindSceneObject("Primary Label");
+                onGlassButton = FindSceneObject("On Glass Button");
                 Assert.That(camera, Is.Not.Null); Assert.That(markers, Is.Not.Null); Assert.That(spinner, Is.Not.Null); Assert.That(lightOrbit, Is.Not.Null);
                 Assert.That(feature, Is.Not.Null); Assert.That(mainGlass, Is.Not.Null); Assert.That(independentGlass, Is.Not.Null);
-                Assert.That(onGlassButton, Is.Not.Null); Assert.That(frameShadowCaster, Is.Not.Null); Assert.That(primaryLabel, Is.Not.Null);
+                Assert.That(onGlassButton, Is.Not.Null);
                 previousTarget = camera.targetTexture; previousAspect = camera.aspect; featureWasActive = feature.isActive;
-                originalShadowMode = frameShadowCaster.GetComponent<Renderer>().shadowCastingMode;
                 mainGlassEnabled = mainGlass.activeSelf; independentGlassEnabled = independentGlass.activeSelf; buttonEnabled = onGlassButton.activeSelf;
-                labelRenderer = primaryLabel.GetComponent<Renderer>(); labelRendererEnabled = labelRenderer.enabled;
                 spinnerEnabled = spinner.enabled; lightOrbitEnabled = lightOrbit.enabled; spinnerRotation = spinner.transform.localRotation; lightRotation = lightOrbit.transform.localRotation;
                 pointOrbitEnabled = pointOrbit.enabled; pointLightEnabled = pointLight.enabled; pointPosition = pointOrbit.transform.localPosition;
                 target = new RenderTexture(CaptureWidth, CaptureHeight, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB)
@@ -365,8 +362,6 @@ namespace CumulusMvp.Tests.PlayMode
                 string graphicsApi = SystemInfo.graphicsDeviceType.ToString(); string deviceName = SystemInfo.graphicsDeviceName;
                 RectInt liveA = Region(markers, camera, CumulusVerificationRegion.LiveGlassA); RectInt liveB = Region(markers, camera, CumulusVerificationRegion.LiveGlassB);
                 RectInt uncovered = Region(markers, camera, CumulusVerificationRegion.UncoveredPattern); RectInt button = Region(markers, camera, CumulusVerificationRegion.OnGlassButton);
-                RectInt bevel = Region(markers, camera, CumulusVerificationRegion.SolidBevel); RectInt receiver = Region(markers, camera, CumulusVerificationRegion.FrameShadowReceiver);
-                RectInt label = Region(markers, camera, CumulusVerificationRegion.PrimaryLabel);
                 feature.SetActive(true);
                 lightOrbit.SetPhase(0f);
                 spinner.SetPhase(0.04f);
@@ -449,50 +444,6 @@ namespace CumulusMvp.Tests.PlayMode
                     CumulusComparison.GreaterThanOrEqual, 0.5f, "buttonOverBackdropA", "buttonOverBackdropB", graphicsApi, deviceName);
 
                 spinner.SetPhase(0.04f);
-                lightOrbit.SetPhase(0f);
-                Color32[] lightA = Capture(camera, target, "light-a");
-                lightOrbit.SetPhase(0.5f);
-                Color32[] lightB = Capture(camera, target, "light-b");
-                float bevelDelta = CumulusImageMetrics.MeanAbsoluteRgbDifference(lightA, lightB, CaptureWidth, CaptureHeight, bevel);
-                float transmissionDelta = CumulusImageMetrics.MeanAbsoluteRgbDifference(lightA, lightB, CaptureWidth, CaptureHeight, liveA);
-                Record(results, CumulusGpuAcceptance.BevelLightDelta, bevelDelta,
-                    CumulusComparison.GreaterThanOrEqual, 0.02f, "light=0", "light=0.5", graphicsApi, deviceName);
-                Record(results, CumulusGpuAcceptance.TransmissionLightDeltaRatio,
-                    bevelDelta > 0f ? transmissionDelta / bevelDelta : float.NaN,
-                    CumulusComparison.LessThanOrEqual, 0.25f, "light=0", "light=0.5", graphicsApi, deviceName);
-
-                lightOrbit.SetPhase(0f);
-                Renderer frameRenderer = frameShadowCaster.GetComponent<Renderer>();
-                frameRenderer.shadowCastingMode = ShadowCastingMode.On;
-                Color32[] shadowOn = Capture(camera, target, "shadow-on");
-                frameRenderer.shadowCastingMode = ShadowCastingMode.Off;
-                Color32[] shadowOff = Capture(camera, target, "shadow-off");
-                Record(results, CumulusGpuAcceptance.FrameShadowDelta,
-                    CumulusImageMetrics.MeanAbsoluteRgbDifference(shadowOn, shadowOff, CaptureWidth, CaptureHeight, receiver),
-                    CumulusComparison.GreaterThanOrEqual, 0.02f, "shadow=On", "shadow=Off", graphicsApi, deviceName);
-
-                frameRenderer.shadowCastingMode = originalShadowMode;
-                float[] labelPhases = { 0.04f, 0.70f, 0.37f };
-                string[] labelNames = { "bright", "gold", "dark" };
-                for (int index = 0; index < labelPhases.Length; index++)
-                {
-                    spinner.SetPhase(labelPhases[index]);
-                    labelRenderer.enabled = false;
-                    Color32[] labelBackdrop = Capture(camera, target, "label-" + labelNames[index] + "-backdrop");
-                    labelRenderer.enabled = true;
-                    Color32[] labelCapture = Capture(camera, target, "label-" + labelNames[index]);
-                    Record(results, CumulusGpuAcceptance.LabelContrast + "." + labelNames[index],
-                        CumulusImageMetrics.PercentileContrast(
-                            labelCapture,
-                            labelBackdrop,
-                            CaptureWidth,
-                            CaptureHeight,
-                            label),
-                        CumulusComparison.GreaterThanOrEqual, 4.5f,
-                        "background=" + labelNames[index], "background=" + labelNames[index], graphicsApi, deviceName);
-                }
-
-                spinner.SetPhase(0.04f);
                 feature.SetActive(false);
                 Color32[] fallback = Capture(camera, target, "fallback");
                 float fallbackLuminance = CumulusImageMetrics.MeanLuminance(fallback, CaptureWidth, CaptureHeight, liveA);
@@ -504,9 +455,8 @@ namespace CumulusMvp.Tests.PlayMode
             finally
             {
                 if (feature != null) feature.SetActive(featureWasActive);
-                if (frameShadowCaster != null) frameShadowCaster.GetComponent<Renderer>().shadowCastingMode = originalShadowMode;
                 if (mainGlass != null) mainGlass.SetActive(mainGlassEnabled); if (independentGlass != null) independentGlass.SetActive(independentGlassEnabled);
-                if (onGlassButton != null) onGlassButton.SetActive(buttonEnabled); if (labelRenderer != null) labelRenderer.enabled = labelRendererEnabled;
+                if (onGlassButton != null) onGlassButton.SetActive(buttonEnabled);
                 if (spinner != null) { spinner.enabled = spinnerEnabled; spinner.transform.localRotation = spinnerRotation; }
                 if (lightOrbit != null) { lightOrbit.enabled = lightOrbitEnabled; lightOrbit.transform.localRotation = lightRotation; }
                 if (pointOrbit != null) { pointOrbit.enabled = pointOrbitEnabled; pointOrbit.transform.localPosition = pointPosition; }

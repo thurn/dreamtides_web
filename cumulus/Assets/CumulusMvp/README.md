@@ -10,10 +10,6 @@ angled directional light provide a stable view of the blur, rim, and sheen.
 The scene intentionally contains no cards, guide, HUD, buttons, labels, or
 other interface elements.
 
-The `Cumulus Glass Panel` object includes a `CumulusPanelShadowToggle` component.
-Its `Cast Shadow` checkbox controls a rounded shadow-only proxy against the
-directional-light-aware backdrop material.
-
 Rebuild it from `Cumulus MVP > Rebuild Shop Glass Demo`. The builder also exposes
 `CumulusMvp.Editor.CumulusShopGlassDemoBuilder.CaptureBatch` for a deterministic
 1920 x 1080 review capture.
@@ -77,9 +73,9 @@ The eight required stages appear in `summary.json.stages` in this exact order:
 
 1. `shell-harness-self-tests` exercises stale/missing/malformed Unity evidence, wrong-version overrides, a real timeout with spawned-child process-group termination, provenance, exact GPU evidence, PNG decoding, and scope-guard negative controls.
 2. `clean-unity-import` deletes `cumulus/Library`, imports with the committed Unity version, and scans the complete log.
-3. `deterministic-builder` rebuilds the scene twice and requires identical SHA-256 manifests for 14 authoritative assets.
+3. `deterministic-builder` rebuilds the scene twice and requires identical SHA-256 manifests for 12 authoritative assets.
 4. `editmode-tests` requires validated passing NUnit XML with at least one test and internally consistent counts.
-5. `gpu-playmode-tests` requires validated passing graphics-enabled NUnit XML, the exact 29-metric contract, and the exact 20 decodable `512 x 288` RGBA PNG captures.
+5. `gpu-playmode-tests` requires validated passing graphics-enabled NUnit XML, the exact 23-metric contract, and the exact 10 decodable `512 x 288` RGBA PNG captures.
 6. `shader-inspection-and-build` requires zero `ShaderUtil.GetShaderMessages` errors for the three required shaders and a nonempty successful `StandaloneOSX` player.
 7. `repository-checks` runs `npm run lint`, `npm run typecheck`, and `npm test` in order.
 8. `static-scope-guard` compares against `CUMULUS_SCOPE_BASE` or `merge-base HEAD master`, verifies Unity `.meta` pairing, and rejects mechanically detectable deferred systems.
@@ -106,7 +102,7 @@ A passing summary has schema version `1` and these fields: `overall: "passed"`; 
 
 `render-metrics.json` has exactly `{"schemaVersion": 1, "metrics": [...]}`. It must contain each of the 29 names below exactly once and no other names. Every metric record has exactly: `metricName`, finite numeric `measuredValue`, equivalent string `measuredValueText`, `measuredValueFinite: true`, committed `comparison`, committed numeric `threshold`, recomputed `passed: true`, nonempty `phaseA`, `phaseB`, `graphicsApi`, and `deviceName`. The validator recomputes the verdict rather than trusting `passed`.
 
-`shader-report.json` records `unityVersion`, `shaderCount: 4`, `errorCount: 0`, and ordered records for `CumulusMvp/SceneGlass`, `CumulusMvp/OnGlass`, `CumulusMvp/ShopBackdropShadowReceiver`, and `Hidden/CumulusMvp/SeparableBlur`, each with `found: true` and a `messages` array. `build-report.json` records `result: "Succeeded"`, exact output `Builds/CumulusMvpVerification/CumulusCumulusMvp.app`, `platform: "StandaloneOSX"`, `totalErrors: 0`, positive integer `totalSize`, `totalWarnings`, and `totalTimeSeconds`.
+`shader-report.json` records `unityVersion`, `shaderCount: 3`, `errorCount: 0`, and ordered records for `CumulusMvp/SceneGlass`, `CumulusMvp/OnGlass`, and `Hidden/CumulusMvp/SeparableBlur`, each with `found: true` and a `messages` array. `build-report.json` records `result: "Succeeded"`, exact output `Builds/CumulusMvpVerification/CumulusCumulusMvp.app`, `platform: "StandaloneOSX"`, `totalErrors: 0`, positive integer `totalSize`, `totalWarnings`, and `totalTimeSeconds`.
 
 ## GPU metric contract
 
@@ -126,18 +122,12 @@ The thresholds are deliberately relational or broad proof-of-life bounds. They e
 | `onGlassAdditionalPasses` | `== 0` | Enabling the on-glass button creates no blur work. Nonzero means child UI is incorrectly driving the graph. |
 | `onGlassBackdropDelta` | `>= 0.005` | Scene motion remains visible through the button region. Lower suggests a baked/opaque child. |
 | `onGlassBackdropCorrelation` | `>= 0.5` | Button-region luminance changes follow its parent backdrop. Lower suggests unrelated or reversed scene response. |
-| `bevelLightDelta` | `>= 0.02` | The solid bevel responds to the moving directional light. Lower means the lit shell is inert. |
-| `transmissionLightDeltaRatio` | `<= 0.25` | Transmitted interior changes by no more than 25% of the bevel change. Higher suggests double-lighting of transmission. |
-| `frameShadowDelta` | `>= 0.02` | Toggling frame shadow casting changes the receiver. Lower means the frame shadow is absent. |
-| `labelContrast.bright` | `>= 4.5` | Warm-white mesh text reaches the contrast floor over the bright phase. |
-| `labelContrast.gold` | `>= 4.5` | Warm-white mesh text reaches the contrast floor over the gold phase. |
-| `labelContrast.dark` | `>= 4.5` | Warm-white mesh text reaches the contrast floor over the dark phase. |
 | `fallbackInteriorLuminanceMinimum` | `>= 0.02` | Disabled shared blur still renders a visible finite fallback. Lower means black/invisible fallback. |
 | `fallbackInteriorLuminanceMaximum` | `<= 0.8` | Fallback is bounded below whiteout. Higher means clipped/opaque fallback. |
 
-`<phase>` expands to all four exact suffixes: `bothPanesEnabled`, `mainPaneDisabled`, `independentPaneDisabled`, and `onGlassButtonDisabled`. This produces 12 exact graph/pass records and 29 total metrics.
+`<phase>` expands to all four exact suffixes: `bothPanesEnabled`, `mainPaneDisabled`, `independentPaneDisabled`, and `onGlassButtonDisabled`. This produces 12 exact graph/pass records and 23 total metrics.
 
-The exact capture set is `spinner-a.png`, `spinner-b.png`, `spinner-c.png`, `main-pane-disabled.png`, `independent-pane-disabled.png`, `button-parent-a.png`, `button-parent-b.png`, `button-a.png`, `button-b.png`, `light-a.png`, `light-b.png`, `shadow-on.png`, `shadow-off.png`, `label-bright-backdrop.png`, `label-bright.png`, `label-gold-backdrop.png`, `label-gold.png`, `label-dark-backdrop.png`, `label-dark.png`, and `fallback.png`. The validator checks the exact set, PNG signature and chunk order, CRCs, IHDR format, IDAT decompression, scanlines, and exact `512 x 288`, 8-bit RGBA non-interlaced dimensions.
+The exact capture set is `spinner-a.png`, `spinner-b.png`, `spinner-c.png`, `main-pane-disabled.png`, `independent-pane-disabled.png`, `button-parent-a.png`, `button-parent-b.png`, `button-a.png`, `button-b.png`, and `fallback.png`. The validator checks the exact set, PNG signature and chunk order, CRCs, IHDR format, IDAT decompression, scanlines, and exact `512 x 288`, 8-bit RGBA non-interlaced dimensions.
 
 ## Failure signatures and diagnosis
 
@@ -170,9 +160,7 @@ This is the complete automated completion contract. Optional inspection is not p
 | One shared graph record and one seven-pass pyramid regardless of panes/button | All 12 `sharedGraphRecords.*`, `downsamplePasses.*`, and `upsamplePasses.*` records; `CumulusGlassRenderingTests.BlurShader_HasExactlyDownsampleAndUpsamplePasses` and `RendererFeature_OwnsOneMaterialAndOneConfiguredPass`. |
 | On-glass button adds no pass and retains parent signal | `onGlassAdditionalPasses`, `onGlassBackdropDelta`, and `onGlassBackdropCorrelation`; `CumulusGlassRenderingTests.OnGlass_NeverDeclaresOrSamplesSharedBlur`. |
 | Fixed tint, saturation, rim, sheen, and lit-shell roles | `CumulusGlassRenderingTests.GlassShaders_ExposeOnlyHiddenFixedRoleProperties`, `SceneGlass_ConsumesSharedBlurOnceAndKeepsTransmissionOutOfDiffuseLighting`, `RebuildMaterials_CreatesStableSharedMaterialVocabulary`, and `CumulusRoundedPanelMeshTests.MaterialLibrary_ResolvesEachRoleAndValidatesAssignments`. |
-| Transmission avoids double-lighting | `bevelLightDelta` and `transmissionLightDeltaRatio <= 0.25`; the scene-glass shader contract test above. |
-| Solid bevel responds and frame casts a ground shadow | `bevelLightDelta`, `frameShadowDelta`, and `CumulusGlassLabAssetTests.FrameShadowReceiver_SitsInsideProjectedBottomRailShadowWithMargin`. |
-| Labels reach 4.5:1 over bright, gold, and dark phases | `labelContrast.bright`, `.gold`, and `.dark`; `CumulusImageMetricsTests.PercentileContrast_WithBackdropFindsGlyphAndItsOnePixelOutline`. |
+| Transmission avoids double-lighting | The scene-glass shader contract proves transmitted scene color is excluded from direct diffuse lighting. |
 | Stable root collider handles hover, press, cancel, activation | `CumulusPressableTests.StateMachine_ScalesOnlyVisualAndPressWinsHover`, `StateMachine_CancelsAwayAndActivatesOnceOver`, `VirtualMouse_ActivatesThroughPointerInteractor`, and `VirtualMouse_DragOffCancelsOriginalPress`; `CumulusGlassLabAssetTests.Scene_ReopensWithExactProofObjectsAndSharedMaterialRoles` proves one root collider and its serialized binding. |
 | Travel is 420 ms, follows `(0.16, 1, 0.3, 1)`, and is interruptible | `CumulusPanelTravelTests.ToggleDestination_ReachesBothExactAnchorsInReferenceDuration`, `ToggleDestination_InterruptsFromCurrentPoseWithoutSnap`, and all three `CumulusCubicBezierTests` using those exact control points. |
 | Panel, button, labels, collider, and sheen stay aligned | The scene/prefab hierarchy and bindings are asserted by `CumulusGlassLabAssetTests.Scene_ReopensWithExactProofObjectsAndSharedMaterialRoles`; `ToggleDestination_ReachesBothExactAnchorsInReferenceDuration` moves the common panel root and `StateMachine_ScalesOnlyVisualAndPressWinsHover` proves interaction scaling leaves the root/collider unchanged. |
@@ -187,7 +175,7 @@ This is the complete automated completion contract. Optional inspection is not p
 
 Visual review is supporting evidence only. It cannot make a failed command pass and is not required for autonomous completion.
 
-An agent may inspect the 20 generated PNGs for unintended aesthetic artifacts. It may also open `cumulus/Assets/Scenes/CumulusGlassLab.unity`, select the PC renderer, set the Game view to `1920 x 1080`, enter Play Mode, hover/click/drag off the world-space button, and watch the panel travel and moving background. Record observations separately from `summary.json`; preference-level observations do not alter automated thresholds.
+An agent may inspect the 10 generated PNGs for unintended aesthetic artifacts. It may also open `cumulus/Assets/Scenes/CumulusGlassLab.unity`, select the PC renderer, set the Game view to `1920 x 1080`, enter Play Mode, hover/click/drag off the world-space button, and watch the panel travel and moving background. Record observations separately from `summary.json`; preference-level observations do not alter automated thresholds.
 
 ## Bounded MVP scope
 

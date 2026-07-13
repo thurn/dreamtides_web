@@ -88,7 +88,6 @@ namespace CumulusMvp.Tests
             Shader shader = Shader.Find("Hidden/InternalErrorShader");
             Material sceneGlass = new Material(shader);
             Material onGlass = new Material(shader);
-            Material solidChrome = new Material(shader);
             CumulusGlassLightingProfile lightingProfile = ScriptableObject.CreateInstance<CumulusGlassLightingProfile>();
 
             try
@@ -96,13 +95,11 @@ namespace CumulusMvp.Tests
                 SerializedObject serializedLibrary = new SerializedObject(library);
                 serializedLibrary.FindProperty("sceneGlass").objectReferenceValue = sceneGlass;
                 serializedLibrary.FindProperty("onGlass").objectReferenceValue = onGlass;
-                serializedLibrary.FindProperty("solidChrome").objectReferenceValue = solidChrome;
                 serializedLibrary.FindProperty("lightingProfile").objectReferenceValue = lightingProfile;
                 serializedLibrary.ApplyModifiedPropertiesWithoutUndo();
 
                 Assert.That(library.Resolve(CumulusMaterialRole.SceneGlass), Is.SameAs(sceneGlass));
                 Assert.That(library.Resolve(CumulusMaterialRole.OnGlass), Is.SameAs(onGlass));
-                Assert.That(library.Resolve(CumulusMaterialRole.SolidChrome), Is.SameAs(solidChrome));
                 Assert.That(library.LightingProfile, Is.SameAs(lightingProfile));
                 library.Validate();
 
@@ -115,7 +112,6 @@ namespace CumulusMvp.Tests
             {
                 UnityEngine.Object.DestroyImmediate(sceneGlass);
                 UnityEngine.Object.DestroyImmediate(onGlass);
-                UnityEngine.Object.DestroyImmediate(solidChrome);
                 UnityEngine.Object.DestroyImmediate(lightingProfile);
                 UnityEngine.Object.DestroyImmediate(library);
             }

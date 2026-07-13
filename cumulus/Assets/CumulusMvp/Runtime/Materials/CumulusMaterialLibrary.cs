@@ -8,7 +8,6 @@ namespace CumulusMvp.Materials
     {
         [SerializeField] private Material sceneGlass;
         [SerializeField] private Material onGlass;
-        [SerializeField] private Material solidChrome;
         [SerializeField] private CumulusGlassLightingProfile lightingProfile;
 
         public CumulusGlassLightingProfile LightingProfile => lightingProfile;
@@ -21,8 +20,6 @@ namespace CumulusMvp.Materials
                     return sceneGlass;
                 case CumulusMaterialRole.OnGlass:
                     return onGlass;
-                case CumulusMaterialRole.SolidChrome:
-                    return solidChrome;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(role), role, "Unknown Cumulus material role.");
             }
@@ -32,7 +29,6 @@ namespace CumulusMvp.Materials
         {
             ValidateAssignment(CumulusMaterialRole.SceneGlass, sceneGlass);
             ValidateAssignment(CumulusMaterialRole.OnGlass, onGlass);
-            ValidateAssignment(CumulusMaterialRole.SolidChrome, solidChrome);
             if (lightingProfile == null)
             {
                 throw new InvalidOperationException("Cumulus material library has no glass lighting profile.");

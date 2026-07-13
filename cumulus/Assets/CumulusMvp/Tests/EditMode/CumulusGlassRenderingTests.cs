@@ -21,7 +21,6 @@ namespace CumulusMvp.Tests
     {
         private const string SceneGlassMaterialPath = "Assets/CumulusMvp/Materials/CumulusSceneGlass.mat";
         private const string OnGlassMaterialPath = "Assets/CumulusMvp/Materials/CumulusOnGlass.mat";
-        private const string SolidChromeMaterialPath = "Assets/CumulusMvp/Materials/CumulusSolidChrome.mat";
         private const string BlurMaterialPath = "Assets/CumulusMvp/Materials/CumulusBlur.mat";
         private const string MaterialLibraryPath = "Assets/CumulusMvp/Materials/CumulusMaterialLibrary.asset";
         private const string GlassLightingIncludePath = "Assets/CumulusMvp/Shaders/CumulusGlassLighting.hlsl";
@@ -517,7 +516,6 @@ namespace CumulusMvp.Tests
             {
                 SceneGlassMaterialPath,
                 OnGlassMaterialPath,
-                SolidChromeMaterialPath,
                 BlurMaterialPath,
                 MaterialLibraryPath,
             };
@@ -530,13 +528,11 @@ namespace CumulusMvp.Tests
 
             Material sceneGlass = AssetDatabase.LoadAssetAtPath<Material>(SceneGlassMaterialPath);
             Material onGlass = AssetDatabase.LoadAssetAtPath<Material>(OnGlassMaterialPath);
-            Material solidChrome = AssetDatabase.LoadAssetAtPath<Material>(SolidChromeMaterialPath);
             Material blur = AssetDatabase.LoadAssetAtPath<Material>(BlurMaterialPath);
             CumulusMaterialLibrary library = AssetDatabase.LoadAssetAtPath<CumulusMaterialLibrary>(MaterialLibraryPath);
 
             Assert.That(sceneGlass, Is.Not.Null);
             Assert.That(onGlass, Is.Not.Null);
-            Assert.That(solidChrome, Is.Not.Null);
             Assert.That(blur, Is.Not.Null);
             Assert.That(library, Is.Not.Null);
             Assert.That(sceneGlass.renderQueue, Is.EqualTo((int)RenderQueue.Transparent));
@@ -558,21 +554,15 @@ namespace CumulusMvp.Tests
             Assert.That(lens.a, Is.EqualTo(0.13f).Within(0.0001f));
             Assert.That(onGlass.GetFloat("_CumulusRimAlpha"), Is.EqualTo(0.08f));
             Assert.That(onGlass.GetFloat("_CumulusHighlightAlpha"), Is.EqualTo(0.10f));
-            Assert.That(solidChrome.shader.name, Is.EqualTo("Universal Render Pipeline/Lit"));
-            Assert.That(solidChrome.renderQueue, Is.EqualTo((int)RenderQueue.Geometry));
-            Assert.That(solidChrome.GetShaderPassEnabled("ShadowCaster"), Is.True);
-
             Material[] resolved =
             {
                 library.Resolve(CumulusMaterialRole.SceneGlass),
                 library.Resolve(CumulusMaterialRole.OnGlass),
-                library.Resolve(CumulusMaterialRole.SolidChrome),
             };
             Assert.That(resolved, Has.All.Not.Null);
-            Assert.That(resolved.Distinct().Count(), Is.EqualTo(3));
+            Assert.That(resolved.Distinct().Count(), Is.EqualTo(2));
             Assert.That(AssetDatabase.GetAssetPath(resolved[0]), Is.EqualTo(SceneGlassMaterialPath));
             Assert.That(AssetDatabase.GetAssetPath(resolved[1]), Is.EqualTo(OnGlassMaterialPath));
-            Assert.That(AssetDatabase.GetAssetPath(resolved[2]), Is.EqualTo(SolidChromeMaterialPath));
             Assert.DoesNotThrow(library.Validate);
         }
 

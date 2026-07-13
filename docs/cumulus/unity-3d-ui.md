@@ -168,7 +168,6 @@ The Unity material catalog mirrors Cumulus's semantic roles:
 - Scene glass is the standard live frosted material over scene media.
 - Popover glass uses the warmer violet-black reveal tint.
 - On-glass is a lighter tonal lens for a control resting on parent glass.
-- Solid chrome is an opaque or near-opaque material for dense information.
 - On-media content uses outline or physical backing appropriate to its role.
 
 Callers choose one of these named roles. They do not supply arbitrary blur,
@@ -230,10 +229,8 @@ even when the renderer can technically expose more.
 
 ### Art-directed shadow behavior
 
-Every tangible Cumulus object has a defined shadow role:
+Every Cumulus glass object has a defined shadow role:
 
-- Solid frames, bevels, cards, icon discs, and opaque chrome cast normal
-  geometry shadows.
 - The translucent pane casts a faint, art-directed coverage shadow when that
   shadow improves spatial grounding.
 - Fine text and decorative marks do not create noisy shadow silhouettes.
@@ -242,13 +239,12 @@ Every tangible Cumulus object has a defined shadow role:
 - Hidden, disabled, or culled interface objects do not remain in shadow maps.
 
 Transparent visible shading and shadow-map rendering are separate contracts.
-The pane's visual alpha does not directly determine shadow darkness. Semantic
+The pane's visual alpha does not directly determine shadow darkness. Glass
 caster coverage at reference quality is:
 
-- Solid frame, card, disc, and chrome: 100 percent.
 - Standard and popover live pane: 20 percent.
 - Mobile live pane: 12.5 percent.
-- Tile-preserving pane: zero; its frame remains at 100 percent.
+- Tile-preserving pane: zero.
 - On-glass child control: zero independent coverage; its parent owns the
   composite shadow.
 
@@ -487,7 +483,6 @@ The component catalog includes at least:
 - Dialog surface.
 - Game card.
 - Resource and stat marks.
-- Persistent status chrome.
 
 Each family uses shared authored geometry and material roles. Screen-specific
 copies of a component's mesh, material, or interaction behavior are component
@@ -589,7 +584,7 @@ Cumulus's material-continuity rules apply in world space:
 - Containers expand or contract around persistent content.
 - Cards, resources, and other tangible entities retain identity during state
   changes.
-- Readout chrome may remain still.
+- Readouts may remain still.
 - Ambient tangible objects may drift gently.
 - State changes avoid opacity-only entrances and exits.
 
@@ -1032,7 +1027,7 @@ Legible current-frame UI is preferred to temporally smoothed ghosting.
 ## Manual QA
 
 1. Open the reference scene with one standard pane, one popover pane, nested
-   on-glass controls, solid chrome, text, and a moving light. Compare the
+   on-glass controls, text, and a moving light. Compare the
    materials with Cumulus reference captures on bright, dark, white, gold, and
    violet scene backgrounds.
    Confirm the face rim remains a hairline while the physical bevel responds
@@ -1070,7 +1065,7 @@ Legible current-frame UI is preferred to temporally smoothed ghosting.
     validation passes, the lit fallback remains recognizably Cumulus, and no
     camera color or depth texture is requested by the glass system.
 13. Force blur allocation failure, camera incompatibility, and a quality
-    transition. Confirm the deterministic fallback remains opaque enough to
+    transition. Confirm the deterministic fallback remains legible enough to
     read, interaction continues, and diagnostics explain the decision.
 14. If XR is enabled, validate both eyes with single-pass instanced rendering,
     head motion, controller rays, and overlapping panes. Confirm stereo-correct

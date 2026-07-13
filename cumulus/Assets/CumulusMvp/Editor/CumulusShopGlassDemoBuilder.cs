@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using CumulusMvp.Demo;
 using CumulusMvp.Geometry;
 using CumulusMvp.Materials;
 using UnityEditor;
@@ -30,9 +29,6 @@ namespace CumulusMvp.Editor
             "Assets/CumulusMvp/Materials/CumulusShopBackdrop.mat";
         public const string CapturePath =
             "Artifacts/CumulusShopGlassDemo/shop-glass-demo.png";
-        public const string ShadowCapturePath =
-            "Artifacts/CumulusShopGlassDemo/shop-glass-demo-shadow.png";
-
         private const string PanelMeshPath =
             "Assets/CumulusMvp/Meshes/CumulusShopGlassPanel.asset";
         private const string MaterialLibraryPath =
@@ -73,8 +69,7 @@ namespace CumulusMvp.Editor
             ReconcileGlassPanel(
                 scene,
                 panelMesh,
-                library.Resolve(CumulusMaterialRole.SceneGlass),
-                library.Resolve(CumulusMaterialRole.SolidChrome));
+                library.Resolve(CumulusMaterialRole.SceneGlass));
             ConfigureEnvironment();
 
             EditorSceneManager.SaveScene(scene, ScenePath);
@@ -92,29 +87,6 @@ namespace CumulusMvp.Editor
                 .GetComponent<Camera>();
 
             Capture(camera, CapturePath);
-        }
-
-        /// <summary>Batch entry point that captures the demo with panel shadow casting enabled.</summary>
-        public static void CaptureShadowBatch()
-        {
-            Rebuild();
-            Scene scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
-            Camera camera = scene.GetRootGameObjects()
-                .Single(root => root.name == "Main Camera")
-                .GetComponent<Camera>();
-            CumulusPanelShadowToggle toggle = scene.GetRootGameObjects()
-                .Single(root => root.name == "Cumulus Glass Panel")
-                .GetComponent<CumulusPanelShadowToggle>();
-            bool originalValue = toggle.CastShadow;
-            try
-            {
-                toggle.CastShadow = true;
-                Capture(camera, ShadowCapturePath);
-            }
-            finally
-            {
-                toggle.CastShadow = originalValue;
-            }
         }
 
         private static void Capture(Camera camera, string capturePath)
@@ -207,10 +179,10 @@ namespace CumulusMvp.Editor
 
         private static Material ReconcileBackdropMaterial(Texture2D texture)
         {
-            Shader shader = Shader.Find("CumulusMvp/ShopBackdropShadowReceiver");
+            Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
             if (shader == null)
             {
-                throw new InvalidOperationException("Missing shop backdrop shadow receiver shader.");
+                throw new InvalidOperationException("Missing URP unlit shader for the shop backdrop.");
             }
 
             Material material = AssetDatabase.LoadAssetAtPath<Material>(BackdropMaterialPath);
@@ -326,7 +298,7 @@ namespace CumulusMvp.Editor
 
             MeshRenderer renderer = EnsureComponent<MeshRenderer>(root);
             renderer.sharedMaterial = material;
-            ConfigureRenderer(renderer, ShadowCastingMode.Off, true);
+            ConfigureRenderer(renderer, ShadowCastingMode.Off, false);
             SetTransform(
                 root.transform,
                 new Vector3(0f, 0f, BackdropDepth),
@@ -345,32 +317,15 @@ namespace CumulusMvp.Editor
         private static void ReconcileGlassPanel(
             Scene scene,
             Mesh mesh,
-            Material glassMaterial,
-            Material casterMaterial)
+            Material glassMaterial)
         {
             GameObject root = EnsureRoot(scene, "Cumulus Glass Panel");
-            KeepOnlyComponents(
-                root,
-                typeof(Transform),
-                typeof(MeshFilter),
-                typeof(MeshRenderer),
-                typeof(CumulusPanelShadowToggle));
+            KeepOnlyComponents(root, typeof(Transform), typeof(MeshFilter), typeof(MeshRenderer));
+            RemoveChildren(root.transform);
             EnsureComponent<MeshFilter>(root).sharedMesh = mesh;
             MeshRenderer renderer = EnsureComponent<MeshRenderer>(root);
             renderer.sharedMaterials = new[] { glassMaterial, glassMaterial, glassMaterial };
             ConfigureRenderer(renderer, ShadowCastingMode.Off, true);
-
-            GameObject caster = EnsureChild(root.transform, "Rounded Shadow Caster");
-            RemoveUnexpectedChildren(root.transform, caster.transform);
-            KeepOnlyComponents(caster, typeof(Transform), typeof(MeshFilter), typeof(MeshRenderer));
-            RemoveChildren(caster.transform);
-            caster.transform.localPosition = Vector3.zero;
-            caster.transform.localRotation = Quaternion.identity;
-            caster.transform.localScale = Vector3.one;
-            EnsureComponent<MeshFilter>(caster).sharedMesh = mesh;
-            MeshRenderer casterRenderer = EnsureComponent<MeshRenderer>(caster);
-            casterRenderer.sharedMaterials = new[] { casterMaterial, casterMaterial, casterMaterial };
-            ConfigureRenderer(casterRenderer, ShadowCastingMode.ShadowsOnly, false);
 
             Vector3 meshSize = mesh.bounds.size;
             SetTransform(
@@ -378,8 +333,6 @@ namespace CumulusMvp.Editor
                 Vector3.zero,
                 Quaternion.identity,
                 new Vector3(PanelSide / meshSize.x, PanelSide / meshSize.y, 1f));
-
-            EnsureComponent<CumulusPanelShadowToggle>(root).Configure(casterRenderer);
         }
 
         private static void ConfigureEnvironment()
@@ -488,6 +441,7 @@ namespace CumulusMvp.Editor
 
         private static void KeepOnlyComponents(GameObject target, params Type[] expectedTypes)
         {
+            GameObjectUtility.RemoveMonoBehavioursWithMissingScript(target);
             var expected = new HashSet<Type>(expectedTypes);
             foreach (Component component in target.GetComponents<Component>().Reverse())
             {
