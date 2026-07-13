@@ -295,6 +295,115 @@ describe("CardEditorApp", () => {
     });
   });
 
+  it("warns on every card whose name or art is reused in the source catalog", async () => {
+    window.history.pushState(null, "", "/cards?artedit=1");
+    const sharedName = "Shared Name";
+    const sharedImageNumber = 404;
+    const cards = [
+      makeEditorCard({
+        id: "duplicate-both-1",
+        name: sharedName,
+        preview: makePreview({
+          id: "duplicate-both-1",
+          name: sharedName,
+          imageNumber: sharedImageNumber,
+        }),
+      }),
+      makeEditorCard({
+        id: "duplicate-name-2",
+        name: sharedName,
+        preview: makePreview({
+          id: "duplicate-name-2",
+          name: sharedName,
+          imageNumber: 405,
+        }),
+      }),
+      makeEditorCard({
+        id: "duplicate-art-2",
+        name: "Different Name",
+        preview: makePreview({
+          id: "duplicate-art-2",
+          name: "Different Name",
+          imageNumber: sharedImageNumber,
+        }),
+      }),
+      makeEditorCard({
+        id: "unique-card",
+        name: "Unique Name",
+        preview: makePreview({
+          id: "unique-card",
+          name: "Unique Name",
+          imageNumber: 406,
+        }),
+      }),
+    ];
+    const { container, root } = await mountLoadedApp(cards);
+
+    const bothWarning = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="duplicate-both-1"] [data-editor-duplicate-warning="true"]',
+    );
+    const nameWarning = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="duplicate-name-2"] [data-editor-duplicate-warning="true"]',
+    );
+    const artWarning = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="duplicate-art-2"] [data-editor-duplicate-warning="true"]',
+    );
+
+    expect(bothWarning?.getAttribute("data-editor-duplicate-name")).toBe("true");
+    expect(bothWarning?.getAttribute("data-editor-duplicate-art")).toBe("true");
+    expect(bothWarning?.getAttribute("aria-label")).toContain("Duplicate name");
+    expect(bothWarning?.getAttribute("aria-label")).toContain("Duplicate art");
+    expect(nameWarning?.getAttribute("data-editor-duplicate-name")).toBe("true");
+    expect(nameWarning?.getAttribute("data-editor-duplicate-art")).toBe("false");
+    expect(artWarning?.getAttribute("data-editor-duplicate-name")).toBe("false");
+    expect(artWarning?.getAttribute("data-editor-duplicate-art")).toBe("true");
+    expect(
+      container.querySelector(
+        '[data-editor-card-id="unique-card"] [data-editor-duplicate-warning="true"]',
+      ),
+    ).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("keeps duplicate warnings when the matching card is filtered out", async () => {
+    window.history.pushState(null, "", "/cards?q=Visible&artedit=1");
+    const cards = [
+      makeEditorCard({
+        id: "visible-card",
+        name: "Visible Card",
+        preview: makePreview({
+          id: "visible-card",
+          name: "Visible Card",
+          imageNumber: 707,
+        }),
+      }),
+      makeEditorCard({
+        id: "hidden-card",
+        name: "Hidden Card",
+        preview: makePreview({
+          id: "hidden-card",
+          name: "Hidden Card",
+          imageNumber: 707,
+        }),
+      }),
+    ];
+    const { container, root } = await mountLoadedApp(cards);
+
+    expect(editorCardIds(container)).toEqual(["visible-card"]);
+    expect(
+      container.querySelector(
+        '[data-editor-card-id="visible-card"] [data-editor-duplicate-art="true"]',
+      ),
+    ).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("keeps the desktop shell fixed and exposes narrow scroll-layout hooks", async () => {
     const { container, root } = await mountLoadedApp([
       makeEditorCard({ id: "card-id-1" }),

@@ -1,5 +1,6 @@
 import CardBrowserGrid from "../components/card-browser/CardBrowserGrid";
 import EditableCard from "./EditableCard";
+import type { CardDuplicateUsage } from "./card-duplicate-usage";
 import type { EditableSaveState, EditableFieldValue } from "./save-state";
 import { fieldSaveEntry } from "./save-state";
 import type {
@@ -16,6 +17,7 @@ export interface CardTagSaveState {
 
 export interface CardEditorGridProps {
   cards: readonly EditorCardRecord[];
+  duplicateUsageByCardId: ReadonlyMap<string, CardDuplicateUsage>;
   size: EditorDisplayState["size"];
   saveState: EditableSaveState;
   tagEditing: boolean;
@@ -67,6 +69,7 @@ export interface CardEditorGridProps {
  */
 export default function CardEditorGrid({
   cards,
+  duplicateUsageByCardId,
   size,
   saveState,
   tagEditing,
@@ -107,6 +110,7 @@ export default function CardEditorGrid({
       renderItem={(card) => (
         <EditableCard
           card={card}
+          duplicateUsage={duplicateUsageByCardId.get(card.id) ?? null}
           size={size}
           nameSaveEntry={fieldSaveEntry(saveState, {
             cardId: card.id,

@@ -73,6 +73,8 @@ export const GLYPHS = {
   info: g("bx bx-info-circle"),
   /** The filled (i) help mark — the solid disc variant for on-media use. */
   infoFilled: g("bxf bx-info-circle"),
+  /** The filled warning triangle used for authoring and validation alerts. */
+  warning: g("bxf bx-alert-triangle"),
   chevronLeft: g("bx bx-chevron-left"),
   chevronRight: g("bx bx-chevron-right"),
   /** A downward chevron. */

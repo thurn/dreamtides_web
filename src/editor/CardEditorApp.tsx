@@ -19,6 +19,7 @@ import CardEditorToolbar from "./CardEditorToolbar";
 import FocusedCardEditor from "./FocusedCardEditor";
 import type { FocusedSaveStatus } from "./FocusedCardEditor";
 import ManageTagsModal from "./ManageTagsModal";
+import { buildCardDuplicateUsageById } from "./card-duplicate-usage";
 import { CardView, DEFAULT_ART_CROP } from "../cumulus/components/card/CardView";
 import type { ArtCrop, CardData } from "../types/cards";
 import {
@@ -567,6 +568,10 @@ export default function CardEditorApp({
   }, [apiClient, loadAttempt]);
 
   const loadedCards = loadStatus.kind === "loaded" ? loadStatus.cards : [];
+  const duplicateUsageByCardId = useMemo(
+    () => buildCardDuplicateUsageById(loadedCards),
+    [loadedCards],
+  );
   const subtypeOptions = useMemo(
     () => subtypeOptionsFromCards(loadedCards),
     [loadedCards],
@@ -1138,6 +1143,7 @@ export default function CardEditorApp({
             ) : (
               <CardEditorGrid
                 cards={visibleCards}
+                duplicateUsageByCardId={duplicateUsageByCardId}
                 size={displayState.size}
                 saveState={saveState}
                 tagEditing={displayState.tagEditing}

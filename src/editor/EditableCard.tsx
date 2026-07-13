@@ -2,7 +2,9 @@ import { asCardName } from "../types/card-identity";
 import { useCallback, useRef, useState, type ReactNode } from "react";
 import { CardView } from "../cumulus/components/card/CardView";
 import type { CardViewSlots } from "../cumulus/components/card/CardView";
+import { GLYPHS } from "../cumulus/primitives/glyph";
 import { MtgNameTooltip } from "../components/card-browser/MtgNameTooltip";
+import type { CardDuplicateUsage } from "./card-duplicate-usage";
 import CardTagEditor from "./CardTagEditor";
 import EditableField from "./EditableField";
 import { readableTextColor, tagColor } from "./tag-color";
@@ -16,6 +18,7 @@ import type {
 
 export interface EditableCardProps {
   card: EditorCardRecord;
+  duplicateUsage: CardDuplicateUsage | null;
   size: EditorDisplayState["size"];
   nameSaveEntry: EditableFieldSaveEntry | null;
   energySaveEntry: EditableFieldSaveEntry | null;
@@ -237,6 +240,7 @@ function CheckboxTagControl({
 
 export default function EditableCard({
   card,
+  duplicateUsage,
   size,
   nameSaveEntry,
   energySaveEntry,
@@ -330,6 +334,36 @@ export default function EditableCard({
     />
   ) : null;
 
+  const duplicateName = (duplicateUsage?.nameCount ?? 1) > 1;
+  const duplicateArt = (duplicateUsage?.artCount ?? 1) > 1;
+  const duplicateDetails = [
+    duplicateName
+      ? `Duplicate name: ${String(duplicateUsage?.nameCount)} cards use “${card.name}”.`
+      : null,
+    duplicateArt
+      ? `Duplicate art: ${String(duplicateUsage?.artCount)} cards use image ${String(card.preview.imageNumber)}.`
+      : null,
+  ].filter((detail): detail is string => detail !== null);
+  const duplicateWarning =
+    duplicateDetails.length > 0 ? (
+      <i
+        className={GLYPHS.warning}
+        role="img"
+        aria-label={duplicateDetails.join(" ")}
+        title={duplicateDetails.join(" ")}
+        data-editor-duplicate-warning="true"
+        data-editor-duplicate-name={String(duplicateName)}
+        data-editor-duplicate-art={String(duplicateArt)}
+        style={{
+          flex: "0 0 auto",
+          color: "var(--color-danger)",
+          fontSize: "1.05em",
+          lineHeight: 1,
+          textShadow: "var(--cv-name-text-shadow)",
+        }}
+      />
+    ) : null;
+
   // While the rules-text field is open, grow the card's text box so the inline
   // editing textarea has room to show several lines instead of the three-line
   // display cap.
@@ -403,9 +437,12 @@ export default function EditableCard({
       </EditableField>
     ),
     name: (_context, defaultNode) => (
-      <EditableField {...fieldProps("name", card.name, nameSaveEntry)}>
-        {defaultNode}
-      </EditableField>
+      <>
+        <EditableField {...fieldProps("name", card.name, nameSaveEntry)}>
+          {defaultNode}
+        </EditableField>
+        {duplicateWarning}
+      </>
     ),
     typeLineContent: (context, defaultNode) => {
       const subtype = context.card.subtype.trim();
@@ -493,6 +530,18 @@ export default function EditableCard({
         <CardView
           card={visibleCard}
           large={size === "large"}
+          slots={
+            duplicateWarning === null
+              ? undefined
+              : {
+                  name: (_context, defaultNode) => (
+                    <>
+                      {defaultNode}
+                      {duplicateWarning}
+                    </>
+                  ),
+                }
+          }
           onClick={() => onOpenArtEditor(card)}
           onRulesFontSizeChange={handleRulesFontSize}
           eagerRulesFit={eagerRulesFit}
