@@ -32,7 +32,7 @@ export const cardStatOrbDemo: TangoComponent = {
   blurb:
     "The card-corner resource stat: a fitted white numeral over the energy, spark, or Dreamwell-energy glyph, with an optional monochrome transfiguration badge.",
   callout:
-    "Changed numerals stay white. Use a down arrow for Empowered's reduced energy cost and an up arrow for Kindled's increased spark; the 30px design-size badge intersects the mark's lower-right edge and scales with it.",
+    "Changed numerals stay white. The hammer matches the Transfiguration site's atlas icon; the 30px design-size badge intersects the mark's lower-right edge and scales with it.",
   group: "Components",
   docName: "CardStatOrb",
   Component: CardStatOrbDemo,

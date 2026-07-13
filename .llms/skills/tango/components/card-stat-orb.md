@@ -10,7 +10,7 @@ Real consumers: **2** (imports outside `src/tango/docs/` and tests).
 
 The card-corner resource stat: a fitted white numeral over the energy, spark, or Dreamwell-energy glyph, with an optional monochrome transfiguration badge.
 
-> **Guidance:** Changed numerals stay white. Use a down arrow for Empowered's reduced energy cost and an up arrow for Kindled's increased spark; the 30px design-size badge intersects the mark's lower-right edge and scales with it.
+> **Guidance:** Changed numerals stay white. The hammer matches the Transfiguration site's atlas icon; the 30px design-size badge intersects the mark's lower-right edge and scales with it.
 
 ## Props
 
@@ -23,7 +23,7 @@ The card-corner resource stat: a fitted white numeral over the energy, spark, or
 | `numberCapPx` | `number` | yes | — | Upper bound (px) for the digit auto-shrink search. The displayed size is the smaller of the CSS digit ceiling and the fitted size, so this only needs to sit at or above the rendered digit size. |
 | `ariaLabel` | `string` | no | — |  |
 | `tooltip` | `string` | no | — | Optional hover tooltip: a short plain-language description string. |
-| `changeBadge` | `CardStatChangeBadge` = `"empowered" \| "kindled"` | no | — | Monochrome direction marker for a transfiguration-changed stat. Empowered uses a down arrow on energy cost; Kindled uses an up arrow on spark. |
+| `changeBadge` | `CardStatChangeBadge` = `"empowered" \| "kindled"` | no | — | Monochrome hammer marker for a transfiguration-changed stat, shared with the Transfiguration site's atlas icon. |
 
 ## Usage
 

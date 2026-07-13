@@ -83,10 +83,8 @@ export const GLYPHS = {
   caretDown: g("bxf bx-caret-down"),
   /** Filled up/down arrows — the leading mark on a sort dropdown button. */
   sort: g("bxf bx-arrow-up-down"),
-  /** Down arrow marking a reduced card stat. */
-  statDecrease: g("bx bx-arrow-down"),
-  /** Up arrow marking an increased card stat. */
-  statIncrease: g("bx bx-arrow-up"),
+  /** Hammer shared with the Transfiguration atlas-site mark. */
+  transfigurationSite: g("fa-solid fa-hammer"),
   /** Filled funnel — the leading mark on a filter dropdown button. */
   filter: g("bxf bx-filter"),
   /** The filled star that heads a curated / signature item. */

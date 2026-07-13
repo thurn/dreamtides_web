@@ -29,11 +29,11 @@ const CHANGE_BADGE_BY_TYPE: Readonly<
   Record<CardStatChangeBadge, { glyph: Glyph; label: string }>
 > = {
   empowered: {
-    glyph: GLYPHS.statDecrease,
+    glyph: GLYPHS.transfigurationSite,
     label: "Empowered",
   },
   kindled: {
-    glyph: GLYPHS.statIncrease,
+    glyph: GLYPHS.transfigurationSite,
     label: "Kindled",
   },
 };
@@ -118,8 +118,8 @@ interface CardStatOrbProps {
   /** Optional hover tooltip: a short plain-language description string. */
   tooltip?: string;
   /**
-   * Monochrome direction marker for a transfiguration-changed stat. Empowered
-   * uses a down arrow on energy cost; Kindled uses an up arrow on spark.
+   * Monochrome hammer marker for a transfiguration-changed stat, shared with
+   * the Transfiguration site's atlas icon.
    */
   changeBadge?: CardStatChangeBadge;
 }

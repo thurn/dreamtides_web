@@ -41,8 +41,8 @@ afterEach(() => {
 
 describe("CardStatOrb transfiguration badge", () => {
   it.each([
-    ["empowered", "bx-arrow-down"],
-    ["kindled", "bx-arrow-up"],
+    ["empowered", "fa-hammer"],
+    ["kindled", "fa-hammer"],
   ] as const)("renders the %s shape while preserving the white numeral", (changeBadge, glyphClass) => {
     const { container, root } = mountOrb("12", changeBadge);
     const orb = container.querySelector<HTMLElement>("[data-card-stat]");

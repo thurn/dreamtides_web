@@ -834,7 +834,7 @@
       ],
       "required": false,
       "defaultValue": null,
-      "description": "Monochrome direction marker for a transfiguration-changed stat. Empowered\nuses a down arrow on energy cost; Kindled uses an up arrow on spark."
+      "description": "Monochrome hammer marker for a transfiguration-changed stat, shared with\nthe Transfiguration site's atlas icon."
     }
   ],
   "CardTermDefinitions": [
