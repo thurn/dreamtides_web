@@ -20,15 +20,18 @@ describe("cumulusScreenFor", () => {
     expect(cumulusScreenFor({ type: "atlas" })).not.toBeNull();
   });
 
+  it("resolves the migrated questComplete screen to a Cumulus node", () => {
+    expect(cumulusScreenFor({ type: "questComplete" })).not.toBeNull();
+  });
+
   it("returns null for screens not yet migrated, so ScreenRouter falls back to legacy", () => {
     expect(cumulusScreenFor({ type: "site", siteId: "site-1" })).toBeNull();
-    expect(cumulusScreenFor({ type: "questComplete" })).toBeNull();
     expect(cumulusScreenFor({ type: "questFailed" })).toBeNull();
   });
 
   it("reports registration from the same resolver used by the router", () => {
     expect(isCumulusScreenRegistered({ type: "atlas" })).toBe(true);
-    expect(isCumulusScreenRegistered({ type: "questComplete" })).toBe(false);
+    expect(isCumulusScreenRegistered({ type: "questComplete" })).toBe(true);
   });
 });
 

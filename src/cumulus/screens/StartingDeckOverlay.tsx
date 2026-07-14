@@ -19,14 +19,9 @@
 // PURE: renders from a view-model (`starting-deck-view-model.ts` builds it from
 // live quest state in the adapter) and reports dismissal through `onClose`.
 
-import { useEffect } from "react";
 import type { ReactElement } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import type { GameCardModel } from "../components/card/CardView";
-import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
-import { GLYPHS } from "../primitives/glyph";
-import { token } from "../primitives/tokens";
-import { useIsDesktop } from "./use-is-desktop";
+import { DeckGalleryOverlay } from "./DeckGalleryOverlay";
 
 /**
  * One starting-deck card, resolved to the card the player actually holds
@@ -67,81 +62,15 @@ export function StartingDeckOverlay({
   view,
   onClose,
 }: StartingDeckOverlayProps): ReactElement {
-  const isDesktop = useIsDesktop();
-
-  // The overlay carries Escape-to-close behavior. Active only while open.
-  useEffect(() => {
-    if (!isOpen) return undefined;
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    }
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isOpen, onClose]);
-
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          key="starting-deck-overlay"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Starting Deck"
-          className="cumulus"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          style={{
-            position: "fixed",
-            inset: 0,
-            width: isDesktop ? undefined : "100dvw",
-            height: isDesktop ? undefined : "100dvh",
-            zIndex: 60,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: isDesktop ? token("--space-8") : 0,
-          }}
-        >
-          <div
-            style={{
-              position: "relative",
-              zIndex: 1,
-              width: isDesktop ? "min(100%, 1180px)" : "100%",
-              height: isDesktop ? undefined : "100%",
-              maxHeight: isDesktop
-                ? `calc(100vh - ${token("--space-8")} - ${token("--space-8")})`
-                : undefined,
-              minHeight: 0,
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <CardGalleryPanel
-              title="Starting Deck"
-              subtitle="These are the cards you begin the quest with."
-              rightAccessory={{
-                kind: "iconButton",
-                glyph: GLYPHS.close,
-                label: "Close starting deck",
-                onPress: onClose,
-              }}
-              cards={view.cards}
-              emptyLabel="No cards in starting deck."
-              columns={isDesktop ? "five" : "four"}
-              cardSize={isDesktop ? "roomy" : "standard"}
-              frame={isDesktop ? "floating" : "fullBleed"}
-              spacing={isDesktop ? "regular" : "compact"}
-              cutoutAwareAccessory
-            />
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <DeckGalleryOverlay
+      isOpen={isOpen}
+      title="Starting Deck"
+      subtitle="These are the cards you begin the quest with."
+      cards={view.cards}
+      emptyLabel="No cards in starting deck."
+      closeLabel="Close starting deck"
+      onClose={onClose}
+    />
   );
 }

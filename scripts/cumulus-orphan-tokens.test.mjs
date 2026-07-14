@@ -58,7 +58,6 @@ const DOCS_PREFIX = "src/cumulus/docs/";
 // identically in the desktop/production system.
 export const BASELINE = [
   // Semantic roles — reserved for a specific use, no current Cumulus reader.
-  "--accent-tint", // reserved low-alpha fill behind accents
   "--surface-raised", // reserved surface: raised card fill (one step above --surface-card)
   "--surface-chip", // reserved surface: chip fill
   "--text-on-card", // reserved text role: card name on card chrome

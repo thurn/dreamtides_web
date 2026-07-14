@@ -6,7 +6,7 @@
 
 Primitives · Live demo & interactive props: `/cumulus#/glow-icon`
 
-Real consumers: **11** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **12** (imports outside `src/cumulus/docs/` and tests).
 
 The resource-glyph renderer for card marks: a Boxicons glyph that paints in the caller's resource hue, with an optional content-protection shadow and an optional emitted-light glow pinned to its own font-size so both scale with the mark.
 

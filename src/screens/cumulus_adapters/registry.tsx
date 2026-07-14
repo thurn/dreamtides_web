@@ -23,6 +23,7 @@ import { TransfigurationSiteScreenAdapter } from "./TransfigurationSiteScreenAda
 import { DuplicationSiteScreenAdapter } from "./DuplicationSiteScreenAdapter";
 import { DreamAugurySiteScreenAdapter } from "./DreamAugurySiteScreenAdapter";
 import { WorkInProgressSiteScreenAdapter } from "./WorkInProgressSiteScreenAdapter";
+import { QuestCompleteScreenAdapter } from "./QuestCompleteScreenAdapter";
 
 /**
  * The Cumulus implementation of a top-level `Screen`, or null when none exists yet
@@ -37,6 +38,8 @@ export function cumulusScreenFor(screen: Screen): ReactNode | null {
       return <DreamscapeScreenAdapter />;
     case "atlas":
       return <AtlasScreenAdapter />;
+    case "questComplete":
+      return <QuestCompleteScreenAdapter />;
     default:
       return null;
   }

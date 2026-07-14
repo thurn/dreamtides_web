@@ -481,9 +481,36 @@ const QUEST_COMPLETE_SCENE: QaScene = {
     if (foundation === null) {
       return null;
     }
+    const atlas = regenerateAtlasForProgress(
+      6,
+      {},
+      {
+        dreamscapes: questContent.dreamscapes,
+        atlasConfig: questContent.atlasConfig,
+        dreamsignPoolIds: foundation.state.remainingDreamsignPool,
+        apollyonIncarnations: questContent.apollyonIncarnations,
+      },
+      { logEvents: true },
+    );
+    const boss = atlas.nodes[atlas.bossNodeId];
+    if (boss === undefined) {
+      return null;
+    }
+    const dreamsigns = questContent.dreamsignTemplates
+      .slice(0, 4)
+      .map((template) => createDreamsign(template));
     return {
       ...foundation.state,
+      atlas: {
+        ...atlas,
+        nodes: {
+          ...atlas.nodes,
+          [boss.id]: { ...boss, state: "completed" },
+        },
+      },
       completionLevel: 7,
+      currentDreamscape: boss.id,
+      dreamsigns,
       screen: { type: "questComplete" },
     };
   },
