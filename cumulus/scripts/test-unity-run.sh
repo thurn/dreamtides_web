@@ -100,6 +100,10 @@ fi
 if [[ -n "${FAKE_UNITY_LAUNCH_MARKER:-}" ]]; then
   printf 'launched\n' > "$FAKE_UNITY_LAUNCH_MARKER"
 fi
+if [[ -n "${FAKE_UNITY_SIGNAL:-}" ]]; then
+  kill -s "$FAKE_UNITY_SIGNAL" "$$"
+  sleep 1
+fi
 log_path=""
 results_path=""
 while (( $# > 0 )); do
@@ -140,6 +144,35 @@ else
   PASS_COUNT=$((PASS_COUNT + 1))
 fi
 rm -rf "$UNITY_RUN_ARTIFACT_ROOT/self-test-wrong-version"
+
+signal_stage="self-test-signal"
+signal_stage_dir="$UNITY_RUN_ARTIFACT_ROOT/$signal_stage"
+signal_number="$(python3 - <<'PY'
+import signal
+print(signal.SIGBUS.value)
+PY
+)"
+signal_status=$((128 + signal_number))
+rm -rf "$signal_stage_dir"
+signal_output="$(
+  env \
+    FAKE_UNITY_VERSION="$(_unity_committed_version)" \
+    FAKE_UNITY_SIGNAL=BUS \
+    UNITY="$fake_unity" \
+    bash -c "source '$HARNESS'; run_unity_stage '$signal_stage' nographics -quit" \
+    2>&1
+)"
+if [[ "$?" -ne 0 ]] \
+  && grep -Fq "Unity terminated by signal SIGBUS ($signal_number)" <<< "$signal_output" \
+  && [[ -f "$signal_stage_dir/exit-code" ]] \
+  && [[ "$(< "$signal_stage_dir/exit-code")" == "$signal_status" ]]; then
+  echo "PASS: signal termination reports the signal and normalized shell status"
+  PASS_COUNT=$((PASS_COUNT + 1))
+else
+  echo "FAIL: signal termination was not reported with normalized evidence (output=$signal_output)" >&2
+  FAIL_COUNT=$((FAIL_COUNT + 1))
+fi
+rm -rf "$signal_stage_dir"
 
 timeout_tree="$TEST_ROOT/timeout-tree"
 cat > "$timeout_tree" <<'SH'

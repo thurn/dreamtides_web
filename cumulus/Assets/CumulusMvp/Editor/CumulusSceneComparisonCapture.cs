@@ -50,9 +50,8 @@ namespace CumulusMvp.Editor
             {
                 target.Create();
                 camera.targetTexture = target;
-                // Prime freshly imported URP shader variants and render-target
-                // bindings before recording the authoritative comparison frame.
-                Shader.WarmupAllShaders();
+                // The first render primes the scene's URP shader variants and
+                // render-target bindings before the authoritative frame.
                 camera.Render();
                 camera.Render();
                 RenderTexture.active = target;

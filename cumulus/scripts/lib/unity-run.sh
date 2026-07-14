@@ -169,7 +169,9 @@ validate_unity_result() {
   local nunit_xml_path="${3:-}"
   local stage_dir
   local exit_code_path
+  local launcher_log
   local process_exit
+  local signal_summary
   local failure_pattern
   local completion_evidence=0
 
@@ -177,8 +179,8 @@ validate_unity_result() {
     _unity_run_error "invalid stage name: $stage_name"
     return 1
   }
-  [[ -n "$log_path" && -f "$log_path" ]] || {
-    _unity_run_error "$stage_name: missing Unity log: $log_path"
+  [[ -n "$log_path" ]] || {
+    _unity_run_error "$stage_name: missing Unity log path"
     return 1
   }
 
@@ -188,6 +190,7 @@ validate_unity_result() {
     return 1
   }
   exit_code_path="$stage_dir/exit-code"
+  launcher_log="$stage_dir/launcher.log"
   [[ -f "$exit_code_path" ]] || {
     _unity_run_error "$stage_name: missing process exit evidence"
     return 1
@@ -198,7 +201,19 @@ validate_unity_result() {
     return 1
   }
   (( process_exit == 0 )) || {
+    signal_summary=""
+    if [[ -f "$launcher_log" ]]; then
+      signal_summary="$(LC_ALL=C sed -n '/^Unity terminated by signal /p' "$launcher_log" | tail -n 1)"
+    fi
+    if [[ -n "$signal_summary" ]]; then
+      _unity_run_error "$stage_name: $signal_summary (shell status $process_exit)"
+      return 1
+    fi
     _unity_run_error "$stage_name: Unity exited with status $process_exit"
+    return 1
+  }
+  [[ -f "$log_path" ]] || {
+    _unity_run_error "$stage_name: missing Unity log: $log_path"
     return 1
   }
 
@@ -259,7 +274,19 @@ with open(launcher_log, "w", encoding="utf-8") as output:
         raise SystemExit(127)
 
     try:
-        raise SystemExit(process.wait(timeout=timeout_seconds))
+        return_code = process.wait(timeout=timeout_seconds)
+        if return_code < 0:
+            signal_number = -return_code
+            try:
+                signal_name = signal.Signals(signal_number).name
+            except ValueError:
+                signal_name = "UNKNOWN"
+            print(
+                f"Unity terminated by signal {signal_name} ({signal_number})",
+                file=output,
+            )
+            raise SystemExit(128 + signal_number)
+        raise SystemExit(return_code)
     except subprocess.TimeoutExpired:
         print(f"Unity exceeded {timeout_seconds} seconds; terminating process group", file=output)
         os.killpg(process.pid, signal.SIGTERM)
