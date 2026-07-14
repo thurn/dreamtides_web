@@ -149,7 +149,7 @@ namespace CumulusMvp.Tests
         }
 
         [Test]
-        public void DreamsignGlassDemo_UsesThreeLitShadowCapableQuestMeshesOnSharedGlass()
+        public void DreamsignGlassDemo_UsesThreeParityLitShadowCapableQuestMeshesOnSharedGlass()
         {
             CumulusDreamsignGlassDemoBuilder.Rebuild();
             Scene scene = EditorSceneManager.OpenScene(
@@ -191,10 +191,16 @@ namespace CumulusMvp.Tests
                 Assert.That(dreamsign.transform.position.z, Is.LessThan(glass.transform.position.z));
                 Assert.That(renderer.shadowCastingMode, Is.EqualTo(ShadowCastingMode.On));
                 Assert.That(renderer.receiveShadows, Is.True);
-                Assert.That(material.shader.name, Is.EqualTo("Universal Render Pipeline/Lit"));
-                Assert.That(material.IsKeywordEnabled("_ALPHATEST_ON"), Is.True);
-                Assert.That(material.IsKeywordEnabled("_RECEIVE_SHADOWS_OFF"), Is.False);
+                Assert.That(material.shader.name, Is.EqualTo("CumulusMvp/Dreamsign"));
+                Assert.That(material.FindPass("Cumulus Dreamsign Forward"), Is.GreaterThanOrEqualTo(0));
+                Assert.That(material.FindPass("Cumulus Dreamsign Shadow Caster"), Is.GreaterThanOrEqualTo(0));
                 Assert.That(material.renderQueue, Is.EqualTo((int)RenderQueue.AlphaTest));
+                Assert.That(material.GetFloat("_CumulusDreamsignBrightness"), Is.EqualTo(1.08f));
+                Assert.That(material.GetFloat("_CumulusDreamsignSaturation"), Is.EqualTo(1.08f));
+                Assert.That(material.GetFloat("_CumulusDreamsignLightStrength"), Is.EqualTo(0.08f));
+                Assert.That(material.GetFloat("_CumulusDreamsignLightTintStrength"), Is.EqualTo(0.04f));
+                Assert.That(material.GetFloat("_CumulusDreamsignShadowStrength"), Is.EqualTo(0.28f));
+                Assert.That(material.GetFloat("_CumulusDreamsignAlphaCutoff"), Is.EqualTo(0.08f));
                 Assert.That(
                     AssetDatabase.GetAssetPath(material.GetTexture("_BaseMap")),
                     Is.EqualTo($"Assets/CumulusMvp/Demo/Art/Dreamsigns/{id}.png"));

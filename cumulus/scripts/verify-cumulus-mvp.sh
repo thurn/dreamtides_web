@@ -274,9 +274,10 @@ except (OSError, json.JSONDecodeError) as error:
 expected = [
     "CumulusMvp/SceneGlass",
     "CumulusMvp/OnGlass",
+    "CumulusMvp/Dreamsign",
     "Hidden/CumulusMvp/SeparableBlur",
 ]
-if shader.get("shaderCount") != 3 or shader.get("errorCount") != 0:
+if shader.get("shaderCount") != 4 or shader.get("errorCount") != 0:
     raise SystemExit("shader report has an invalid count or nonzero errors")
 records = shader.get("shaders")
 if not isinstance(records, list) or [record.get("name") for record in records] != expected:

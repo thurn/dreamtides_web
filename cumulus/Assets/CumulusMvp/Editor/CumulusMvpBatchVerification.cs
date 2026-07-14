@@ -25,6 +25,7 @@ namespace CumulusMvp.Editor
             {
                 "CumulusMvp/SceneGlass",
                 "CumulusMvp/OnGlass",
+                "CumulusMvp/Dreamsign",
                 "Hidden/CumulusMvp/SeparableBlur",
             };
             var shaderRecords = new List<ShaderRecord>(shaderNames.Length);

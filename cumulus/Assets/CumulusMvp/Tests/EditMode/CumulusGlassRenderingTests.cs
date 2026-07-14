@@ -357,6 +357,51 @@ namespace CumulusMvp.Tests
         }
 
         [Test]
+        public void DreamsignShader_AnchorsWebColorAndBoundsUrpLightAndShadowResponse()
+        {
+            Shader shader = Shader.Find("CumulusMvp/Dreamsign");
+            Assert.That(shader, Is.Not.Null);
+            Assert.That(shader.passCount, Is.EqualTo(2));
+            var material = new Material(shader);
+            try
+            {
+                Assert.That(material.FindPass("Cumulus Dreamsign Forward"), Is.EqualTo(0));
+                Assert.That(material.FindPass("Cumulus Dreamsign Shadow Caster"), Is.EqualTo(1));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(material);
+            }
+
+            foreach (string property in new[]
+                     {
+                         "_BaseMap",
+                         "_CumulusDreamsignBrightness",
+                         "_CumulusDreamsignSaturation",
+                         "_CumulusDreamsignLightStrength",
+                         "_CumulusDreamsignLightTintStrength",
+                         "_CumulusDreamsignShadowStrength",
+                         "_CumulusDreamsignAlphaCutoff",
+                         "_CumulusDreamsignDesktopAdditionalLightLimit",
+                         "_CumulusDreamsignMobileAdditionalLightLimit",
+                     })
+            {
+                AssertHiddenProperty(shader, property);
+            }
+
+            string source = ReadShaderSource(shader);
+            Assert.That(source, Does.Contain("LinearToSRGB(sampledLinear)"));
+            Assert.That(source, Does.Contain("SRGBToLinear(saturate(displayColor))"));
+            Assert.That(source, Does.Contain("directLighting / (1.0h.xxx + directLighting)"));
+            Assert.That(source, Does.Contain("GetMainLight(TransformWorldToShadowCoord"));
+            Assert.That(source, Does.Contain("GetAdditionalLight"));
+            Assert.That(source, Does.Contain("light.shadowAttenuation"));
+            Assert.That(source, Does.Contain("ApplyShadowBias"));
+            Assert.That(source, Does.Contain("AlphaToMask On"));
+            Assert.That(source, Does.Not.Contain("UniversalFragmentPBR"));
+        }
+
+        [Test]
         public void GlassShaders_UseSharedBoundedUrpLightingWithoutRelightingTransmission()
         {
             string sceneSource = ReadShaderSource(Shader.Find("CumulusMvp/SceneGlass"));

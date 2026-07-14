@@ -50,6 +50,12 @@ namespace CumulusMvp.Editor
         private const float ButtonDepth = -0.06f;
         private const float DreamsignDepth = -0.34f;
         private const float DreamsignScale = 1.3f;
+        private const float DreamsignWebBrightness = 1.08f;
+        private const float DreamsignWebSaturation = 1.08f;
+        private const float DreamsignLightStrength = 0.08f;
+        private const float DreamsignLightTintStrength = 0.04f;
+        private const float DreamsignShadowStrength = 0.28f;
+        private const float DreamsignAlphaCutoff = 0.08f;
 
         private static readonly DreamsignSpec[] Dreamsigns =
         {
@@ -381,40 +387,39 @@ namespace CumulusMvp.Editor
 
         private static Material ReconcileMaterial(string path, Texture2D texture)
         {
-            Shader shader = Shader.Find("Universal Render Pipeline/Lit");
+            Shader shader = Shader.Find("CumulusMvp/Dreamsign");
             if (shader == null)
             {
-                throw new InvalidOperationException("Missing URP Lit shader for physical Dreamsigns.");
+                throw new InvalidOperationException("Missing Cumulus Dreamsign shader.");
             }
 
             Material material = AssetDatabase.LoadAssetAtPath<Material>(path);
+            var canonical = new Material(shader)
+            {
+                name = Path.GetFileNameWithoutExtension(path),
+                doubleSidedGI = true,
+                renderQueue = (int)RenderQueue.AlphaTest,
+            };
+            canonical.SetTexture("_BaseMap", texture);
+            canonical.SetFloat("_CumulusDreamsignBrightness", DreamsignWebBrightness);
+            canonical.SetFloat("_CumulusDreamsignSaturation", DreamsignWebSaturation);
+            canonical.SetFloat("_CumulusDreamsignLightStrength", DreamsignLightStrength);
+            canonical.SetFloat("_CumulusDreamsignLightTintStrength", DreamsignLightTintStrength);
+            canonical.SetFloat("_CumulusDreamsignShadowStrength", DreamsignShadowStrength);
+            canonical.SetFloat("_CumulusDreamsignAlphaCutoff", DreamsignAlphaCutoff);
+            canonical.SetFloat("_CumulusDreamsignDesktopAdditionalLightLimit", 4f);
+            canonical.SetFloat("_CumulusDreamsignMobileAdditionalLightLimit", 1f);
             if (material == null)
             {
-                material = new Material(shader)
-                {
-                    name = Path.GetFileNameWithoutExtension(path),
-                };
+                material = canonical;
                 AssetDatabase.CreateAsset(material, path);
             }
             else
             {
-                material.shader = shader;
+                EditorUtility.CopySerialized(canonical, material);
+                UnityEngine.Object.DestroyImmediate(canonical);
             }
 
-            material.SetTexture("_BaseMap", texture);
-            material.SetColor("_BaseColor", Color.white);
-            material.SetFloat("_Surface", 0f);
-            material.SetFloat("_AlphaClip", 1f);
-            material.SetFloat("_Cutoff", 0.08f);
-            material.SetFloat("_Metallic", 0f);
-            material.SetFloat("_Smoothness", 0.48f);
-            material.SetFloat("_Cull", (float)CullMode.Off);
-            material.SetFloat("_ZWrite", 1f);
-            material.SetOverrideTag("RenderType", "TransparentCutout");
-            material.EnableKeyword("_ALPHATEST_ON");
-            material.DisableKeyword("_RECEIVE_SHADOWS_OFF");
-            material.DisableKeyword("_SURFACE_TYPE_TRANSPARENT");
-            material.renderQueue = (int)RenderQueue.AlphaTest;
             EditorUtility.SetDirty(material);
             return material;
         }

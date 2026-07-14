@@ -201,3 +201,13 @@ Duplication site logging — offer contents are logged before runtime hydration
   effect runs before the shared card-choice runtime is populated. Emit the
   reconstruction event after the runtime is ready and include the offered entry
   identities so production logs describe the actual choice set.
+
+Cumulus Dreamsign comparison — shop glass mesh rebuild dirties the worktree
+
+- Running `npm run compare-cumulus-scene -- cumulus-dreamsign-glass-demo 1920 1080`
+  invokes `CumulusShopGlassDemoBuilder.Rebuild` and rewrites the tracked
+  `cumulus/Assets/CumulusMvp/Meshes/CumulusShopGlassPanel.asset`. The generated
+  face depth changes from `0.009259259` to `0.01`, its inset extent changes from
+  `2.2953703` to `2.2949998`, and the serialized vertex payload changes with it.
+  Reconcile the committed generated mesh with the current builder so the
+  canonical scene-comparison command leaves tracked assets byte-stable.

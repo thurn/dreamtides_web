@@ -17,13 +17,15 @@ Rebuild it from `Cumulus MVP > Rebuild Shop Glass Demo`. The builder also expose
 ## Dreamsign glass demo
 
 Open `Assets/Scenes/CumulusDreamsignGlassDemo.unity` to inspect three quest
-Dreamsigns as alpha-cut, URP-lit world-space meshes over the shared blurred
-glass. Each Dreamsign uses its production UUID and image, writes depth, receives
-directional and additional-light shadows, and casts its image silhouette into
-shadow maps. Two colored point lights make the local-light response visible on
-both the Dreamsigns and the Cumulus glass. A centered `Sort` Glass Button at the
-bottom uses the web default's measured 59.921875 by 42 pixel proportions,
-14-pixel control radius, nested on-glass material, and a TextMesh Pro label.
+Dreamsigns as alpha-cut world-space meshes over the shared blurred glass. The
+`CumulusMvp/Dreamsign` shader anchors each production UUID image to the web
+brightness and saturation transform, then applies bounded directional and
+additional-light brightness, tint, and shadow modulation. Each Dreamsign writes
+depth, receives scene shadows, and casts its image silhouette into shadow maps.
+Two colored point lights make the local-light response visible on both the
+Dreamsigns and the Cumulus glass. A centered `Sort` Glass Button at the bottom
+uses the web default's measured 59.921875 by 42 pixel proportions, 14-pixel
+control radius, nested on-glass material, and a TextMesh Pro label.
 
 Rebuild it from `Cumulus MVP > Rebuild Dreamsign Glass Demo` or invoke
 `CumulusMvp.Editor.CumulusDreamsignGlassDemoBuilder.CaptureBatch` for a
@@ -91,7 +93,7 @@ The eight required stages appear in `summary.json.stages` in this exact order:
 3. `deterministic-builder` rebuilds the scene twice and requires identical SHA-256 manifests for 12 authoritative assets.
 4. `editmode-tests` requires validated passing NUnit XML with at least one test and internally consistent counts.
 5. `gpu-playmode-tests` requires validated passing graphics-enabled NUnit XML, the exact 23-metric contract, and the exact 10 decodable `512 x 288` RGBA PNG captures.
-6. `shader-inspection-and-build` requires zero `ShaderUtil.GetShaderMessages` errors for the three required shaders and a nonempty successful `StandaloneOSX` player.
+6. `shader-inspection-and-build` requires zero `ShaderUtil.GetShaderMessages` errors for the four required shaders and a nonempty successful `StandaloneOSX` player.
 7. `repository-checks` runs `npm run lint`, `npm run typecheck`, and `npm test` in order.
 8. `static-scope-guard` compares against `CUMULUS_SCOPE_BASE` or `merge-base HEAD master`, verifies Unity `.meta` pairing, and rejects mechanically detectable deferred systems.
 
@@ -117,7 +119,7 @@ A passing summary has schema version `1` and these fields: `overall: "passed"`; 
 
 `render-metrics.json` has exactly `{"schemaVersion": 1, "metrics": [...]}`. It must contain each of the 29 names below exactly once and no other names. Every metric record has exactly: `metricName`, finite numeric `measuredValue`, equivalent string `measuredValueText`, `measuredValueFinite: true`, committed `comparison`, committed numeric `threshold`, recomputed `passed: true`, nonempty `phaseA`, `phaseB`, `graphicsApi`, and `deviceName`. The validator recomputes the verdict rather than trusting `passed`.
 
-`shader-report.json` records `unityVersion`, `shaderCount: 3`, `errorCount: 0`, and ordered records for `CumulusMvp/SceneGlass`, `CumulusMvp/OnGlass`, and `Hidden/CumulusMvp/SeparableBlur`, each with `found: true` and a `messages` array. `build-report.json` records `result: "Succeeded"`, exact output `Builds/CumulusMvpVerification/CumulusCumulusMvp.app`, `platform: "StandaloneOSX"`, `totalErrors: 0`, positive integer `totalSize`, `totalWarnings`, and `totalTimeSeconds`.
+`shader-report.json` records `unityVersion`, `shaderCount: 4`, `errorCount: 0`, and ordered records for `CumulusMvp/SceneGlass`, `CumulusMvp/OnGlass`, `CumulusMvp/Dreamsign`, and `Hidden/CumulusMvp/SeparableBlur`, each with `found: true` and a `messages` array. `build-report.json` records `result: "Succeeded"`, exact output `Builds/CumulusMvpVerification/CumulusCumulusMvp.app`, `platform: "StandaloneOSX"`, `totalErrors: 0`, positive integer `totalSize`, `totalWarnings`, and `totalTimeSeconds`.
 
 ## GPU metric contract
 
