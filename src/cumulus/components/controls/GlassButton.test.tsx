@@ -92,6 +92,15 @@ describe("GlassButton", () => {
     expect(
       content?.querySelector("[data-glass-button-essence-cost]")?.textContent,
     ).toBe(" (20)");
+    expect(
+      content?.querySelector<HTMLElement>("[data-glass-button-essence-cost]")
+        ?.style.marginLeft,
+    ).toBe("var(--space-2)");
+    const closeParenthesis = content?.querySelector<HTMLElement>(
+      "[data-glass-button-cost-close]",
+    );
+    expect(closeParenthesis?.textContent).toBe(")");
+    expect(closeParenthesis?.style.marginLeft).toBe("-0.2em");
 
     act(() => {
       root.render(

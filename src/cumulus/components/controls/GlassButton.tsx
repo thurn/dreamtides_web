@@ -227,10 +227,20 @@ function GlassButtonContent({
     >
       <span>{label}</span>
       {essenceCost !== null && (
-        <span data-glass-button-essence-cost="">
+        <span
+          data-glass-button-essence-cost=""
+          style={{ marginLeft: token("--space-2") }}
+        >
           {" ("}
           <EssenceValue amount={essenceCost} tone="inherit" />
-          {")"}
+          <span
+            data-glass-button-cost-close=""
+            // Boxicons leaves a wide right side-bearing on the essence mark;
+            // pull the close parenthesis into that empty advance width.
+            style={{ marginLeft: "-0.2em" }}
+          >
+            )
+          </span>
         </span>
       )}
     </span>
