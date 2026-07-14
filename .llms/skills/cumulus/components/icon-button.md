@@ -8,9 +8,9 @@ Components · Live demo & interactive props: `/cumulus#/icon-button`
 
 Real consumers: **15** (imports outside `src/cumulus/docs/` and tests).
 
-The compact glyph-only glass disc — normalized across browser-native button chrome, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls.
+The compact glyph-only glass disc — neutral or purple accent liquid glass, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls.
 
-> **Guidance:** Rung three of the four-rung button suite: the beveled purple Button (commit / primary), a plain pressable text affordance (secondary), THIS glass icon disc (a corner chrome action), and a bare pressable glyph (the lightest inline affordance).
+> **Guidance:** Rung three of the four-rung button suite: use neutral glass for secondary corner actions and purple accent glass for the primary action in a paired icon cluster.
 
 ## Props
 
@@ -19,6 +19,7 @@ The compact glyph-only glass disc — normalized across browser-native button ch
 | `glyph` | `Glyph` | yes | — | The glyph painted centered in the disc (e.g. `GLYPHS.close`). |
 | `size` | `IconButtonSize` = `"sm" \| "md"` | no | `md` | Disc size — `sm` (40/22) or `md` (48/26). Defaults to `md`. |
 | `label` | `string` | yes | — | The disc's accessible name (`aria-label`); the disc shows only its glyph. |
+| `variant` | `IconButtonVariant` = `"default" \| "accent"` | no | `default` | Strict neutral or purple accent glass surface treatment. |
 | `onPress` | `() => void` | yes | — | Fires when the disc is activated (no-op while disabled). |
 | `disabled` | `boolean` | no | `false` | Detaches the click / press feedback and marks the disc `aria-disabled`. |
 | `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the control. `onMedia` uses the full liquid-glass recipe; `onGlass` uses a lighter tonal lens so an existing glass tint is not compounded. Defaults to `onMedia`. |
@@ -61,5 +62,18 @@ Use `placement="onGlass"` for a disc nested inside a glass panel.
   glyph={GLYPHS.close}
   label="Close deck"
   onPress={closeViewer}
+/>
+```
+
+### Purple accent
+
+Use `variant="accent"` for the primary action in a paired glass-icon cluster.
+
+```tsx
+<IconButton
+  variant="accent"
+  glyph={GLYPHS.arrowRight}
+  label="Next phase"
+  onPress={advancePhase}
 />
 ```

@@ -74,6 +74,34 @@ export function glassTrack(
 }
 
 /**
+ * Purple soft-wash treatment shared by accent glass controls. The surface
+ * beneath the control chooses the matching media or nested-glass recipe while
+ * preserving the base material's fill, blur, rim, and shadow geometry.
+ */
+export function glassAccentChrome(
+  placement: GlassControlPlacement = "onMedia",
+): CSSProperties {
+  if (placement === "onGlass") {
+    return {
+      background:
+        "linear-gradient(180deg, color-mix(in srgb, var(--accent-bright) 18%, transparent), color-mix(in srgb, var(--accent-strong) 8%, transparent)), var(--glass-on-glass-sheen), var(--glass-on-glass-fill)",
+      border:
+        "1px solid color-mix(in srgb, var(--accent-bright) 58%, white 42%)",
+      boxShadow:
+        "inset 0 1px 0 rgba(255,255,255,0.32), inset 0 -10px 22px color-mix(in srgb, var(--accent-strong) 10%, transparent), 0 8px 22px color-mix(in srgb, var(--accent) 22%, transparent)",
+    };
+  }
+  return {
+    background:
+      "linear-gradient(180deg, color-mix(in srgb, var(--accent-bright) 20%, transparent), color-mix(in srgb, var(--accent-strong) 10%, transparent)), var(--glass-sheen), var(--glass-fill)",
+    border:
+      "1px solid color-mix(in srgb, var(--accent-bright) 62%, white 38%)",
+    boxShadow:
+      "inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -12px 26px color-mix(in srgb, var(--accent-strong) 12%, transparent), 0 10px 26px color-mix(in srgb, var(--accent) 26%, transparent)",
+  };
+}
+
+/**
  * Resolve the control surface to its concrete appearance — the ONE place the
  * glass material is defined. Both SegmentedControl and Select render from the
  * result so a control cluster reads as one liquid-glass surface, with a neutral

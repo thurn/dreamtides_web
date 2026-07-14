@@ -9,7 +9,9 @@
 // The disc wears the ONE shared control material — `glassIconButtonChrome()`,
 // the same liquid glass as the SegmentedControl / Select surface, made a
 // fully-round disc — so a corner icon button reads as a member of the same
-// family as the filter/sort controls it sits beside. A `GlowIcon` paints the
+// family as the filter/sort controls it sits beside. Neutral glass serves
+// secondary actions; the shared purple accent recipe gives a primary icon
+// action the same emphasis as an accent GlassButton. A `GlowIcon` paints the
 // glyph centered in the disc, and press/hover feedback routes through the one
 // shared `Pressable` primitive (scale-down on press, up on hover). The disc
 // shows only its glyph; `label` is its accessible name.
@@ -20,10 +22,16 @@ import { Pressable } from "../../primitives/Pressable";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
 import type { Glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import { glassIconButtonChrome } from "../../internal/control-treatment";
+import {
+  glassAccentChrome,
+  glassIconButtonChrome,
+} from "../../internal/control-treatment";
 
 /** The two disc sizes the screens observed. `md` is the default. */
 export type IconButtonSize = "sm" | "md";
+
+/** Visual treatment for the glass icon-button surface. */
+export type IconButtonVariant = "default" | "accent";
 
 interface IconButtonSizeSpec {
   /** Diameter of the fully-round disc, in px. */
@@ -48,6 +56,8 @@ export interface IconButtonProps {
   size?: IconButtonSize;
   /** The disc's accessible name (`aria-label`); the disc shows only its glyph. */
   label: string;
+  /** Strict neutral or purple accent glass surface treatment. */
+  variant?: IconButtonVariant;
   /** Fires when the disc is activated (no-op while disabled). */
   onPress: () => void;
   /** Detaches the click / press feedback and marks the disc `aria-disabled`. */
@@ -77,6 +87,7 @@ export function IconButton({
   glyph,
   size = "md",
   label,
+  variant = "default",
   onPress,
   disabled = false,
   placement = "onMedia",
@@ -90,6 +101,7 @@ export function IconButton({
       aria-label={label}
       aria-expanded={ariaExpanded}
       data-glass-placement={placement}
+      data-glass-variant={variant}
       data-testid={testId}
       disabled={disabled}
       onClick={disabled ? undefined : onPress}
@@ -105,6 +117,7 @@ export function IconButton({
         fontSize: spec.glyph,
         color: token("--text-primary"),
         ...glassIconButtonChrome(placement),
+        ...(variant === "accent" ? glassAccentChrome(placement) : {}),
       }}
     >
       <GlowIcon iconClass={glyph} color="text-primary" size="1em" />

@@ -2429,6 +2429,17 @@
       "description": "The disc's accessible name (`aria-label`); the disc shows only its glyph."
     },
     {
+      "name": "variant",
+      "tsType": "IconButtonVariant",
+      "unionMembers": [
+        "default",
+        "accent"
+      ],
+      "required": false,
+      "defaultValue": "default",
+      "description": "Strict neutral or purple accent glass surface treatment."
+    },
+    {
       "name": "onPress",
       "tsType": "() => void",
       "unionMembers": [],

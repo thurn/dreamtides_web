@@ -24,7 +24,10 @@ import { Pressable } from "../../primitives/Pressable";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
 import type { Glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import { controlChrome } from "../../internal/control-treatment";
+import {
+  controlChrome,
+  glassAccentChrome,
+} from "../../internal/control-treatment";
 
 /** The md control height (px) — matches the Select / SegmentedControl cluster. */
 const GLASS_BUTTON_HEIGHT = 42;
@@ -63,19 +66,6 @@ const dangerChromeOnGlass: React.CSSProperties = {
   border: "1px solid color-mix(in srgb, var(--danger) 58%, white 42%)",
   boxShadow:
     "inset 0 1px 0 rgba(255,255,255,0.32), inset 0 -10px 22px color-mix(in srgb, var(--danger) 10%, transparent), 0 8px 22px color-mix(in srgb, var(--danger) 22%, transparent)",
-};
-
-const accentChrome = {
-  onMedia: {
-    background: "linear-gradient(180deg, color-mix(in srgb, var(--accent-bright) 20%, transparent), color-mix(in srgb, var(--accent-strong) 10%, transparent)), var(--glass-sheen), var(--glass-fill)",
-    border: "1px solid color-mix(in srgb, var(--accent-bright) 62%, white 38%)",
-    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -12px 26px color-mix(in srgb, var(--accent-strong) 12%, transparent), 0 10px 26px color-mix(in srgb, var(--accent) 26%, transparent)",
-  },
-  onGlass: {
-    background: "linear-gradient(180deg, color-mix(in srgb, var(--accent-bright) 18%, transparent), color-mix(in srgb, var(--accent-strong) 8%, transparent)), var(--glass-on-glass-sheen), var(--glass-on-glass-fill)",
-    border: "1px solid color-mix(in srgb, var(--accent-bright) 58%, white 42%)",
-    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.32), inset 0 -10px 22px color-mix(in srgb, var(--accent-strong) 10%, transparent), 0 8px 22px color-mix(in srgb, var(--accent) 22%, transparent)",
-  },
 };
 
 export interface GlassButtonProps {
@@ -204,7 +194,7 @@ function resolveVariantChrome(
   if (variant === "danger") {
     return placement === "onGlass" ? dangerChromeOnGlass : dangerChromeOnMedia;
   }
-  return accentChrome[placement];
+  return glassAccentChrome(placement);
 }
 
 function GlassButtonContent({

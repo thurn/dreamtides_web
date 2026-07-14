@@ -614,6 +614,7 @@ function ControlRow({
       <IconButton
         glyph={GLYPHS.arrowRight}
         size="sm"
+        variant="accent"
         label="Next phase"
         disabled={disabled}
         onPress={() => interactions?.onNextPhase()}
