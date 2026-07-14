@@ -12,7 +12,12 @@ import { Motes } from "../components/hud/Motes";
 import { SpeechBubble } from "../components/overlay/SpeechBubble";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
-import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
+import {
+  GUIDE_GALLERY_MOBILE_GRID_ROWS,
+  GUIDE_GALLERY_MOBILE_GUIDE_BOTTOM,
+  GUIDE_GALLERY_MOBILE_GUIDE_LEFT,
+  GUIDE_GALLERY_MOBILE_GUIDE_WIDTH,
+} from "./guide-gallery-geometry";
 import { useIsDesktop } from "./use-is-desktop";
 
 /** The resident guide displayed by a character-led site. */
@@ -54,7 +59,6 @@ export interface GuideGallerySiteLayoutProps {
   children?: ReactNode;
 }
 
-const GUIDE_TOP_ROWS = "clamp(170px, 28dvh, 240px) minmax(0, 1fr)";
 const REVELATION_VERTICAL_OFFSET = "10dvh";
 const REVELATION_GUIDE_TOP = `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${REVELATION_VERTICAL_OFFSET})`;
 const REVELATION_GALLERY_TOP = `max(44dvh, calc(${token("--safe-top")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-7")} + ${REVELATION_VERTICAL_OFFSET}))`;
@@ -121,7 +125,10 @@ export function GuideGallerySiteLayout({
         inset: 0,
         minHeight: "100dvh",
         display: isDesktop || revelationMobile ? "block" : "grid",
-        gridTemplateRows: isDesktop || revelationMobile ? undefined : GUIDE_TOP_ROWS,
+        gridTemplateRows:
+          isDesktop || revelationMobile
+            ? undefined
+            : GUIDE_GALLERY_MOBILE_GRID_ROWS,
         overflow: "hidden",
         background: token("--bg-app"),
         boxSizing: "border-box",
@@ -438,9 +445,9 @@ function MobileGuideBand({
           top: revelation ? token("--space-4") : undefined,
           left: revelation
             ? `calc(-1 * (${token("--space-12")} + ${token("--space-4")}))`
-            : `max(var(--safe-area-inset-left), ${String(MENU_EDGE_INSET_MOBILE_PX)}px)`,
-          bottom: revelation ? undefined : `calc(-1 * ${token("--space-8")})`,
-          width: revelation ? "62vw" : "58vw",
+            : GUIDE_GALLERY_MOBILE_GUIDE_LEFT,
+          bottom: revelation ? undefined : GUIDE_GALLERY_MOBILE_GUIDE_BOTTOM,
+          width: revelation ? "62vw" : GUIDE_GALLERY_MOBILE_GUIDE_WIDTH,
           height: revelation ? "70dvh" : "100%",
           objectFit: "contain",
           objectPosition: revelation ? "50% 0%" : "50% 100%",

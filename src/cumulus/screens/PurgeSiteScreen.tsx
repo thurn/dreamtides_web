@@ -4,12 +4,12 @@ import { useCallback, useMemo, useState } from "react";
 import type { DeckCardView } from "./MobileDeckViewer";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
 import type { GlassButtonWidthReservation } from "../components/controls/GlassButton";
-import { token } from "../primitives/tokens";
 import type { ArtRef } from "../primitives/art";
 import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
+import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 
 export type PurgeGuideView = GuideGalleryGuideView;
 
@@ -157,7 +157,7 @@ function PurgeGallery({
         minHeight: 0,
         height: "100%",
         maxHeight: "100%",
-        width: desktop ? "100%" : `calc(100vw - (${token("--space-4")} * 2))`,
+        width: desktop ? "100%" : GUIDE_GALLERY_MOBILE_PANEL_WIDTH,
         boxSizing: "border-box",
         pointerEvents: "auto",
         alignSelf: desktop ? "stretch" : "start",

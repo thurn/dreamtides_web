@@ -8,6 +8,7 @@ import type { CardData } from "../../types/cards";
 import { QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/QuestStatusBar";
 import { artRef } from "../primitives/art";
 import { CumulusRoot } from "../CumulusRoot";
+import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
 import { BattleStartScreen, type BattleStartView } from "./BattleStartScreen";
 
 beforeEach(() => {
@@ -192,16 +193,25 @@ describe("Cumulus BattleStartScreen", () => {
     const panel = layout?.querySelector<HTMLElement>(
       "[data-battle-start-panel]",
     );
+    expect(layout?.style.display).toBe("grid");
+    expect(layout?.style.gridTemplateRows).toBe(
+      "clamp(170px, 28dvh, 240px) minmax(0, 1fr)",
+    );
+    expect(layout?.style.paddingBottom).toBe(
+      QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+    );
     expect(panel?.style.backdropFilter).toContain("--glass-blur");
-    expect(panel?.style.top).toBe("33.333%");
+    expect(panel?.style.position).toBe("relative");
+    expect(panel?.style.top).toBe("");
     expect(panel?.style.bottom).toBe("");
-    expect(panel?.style.maxHeight).toBe(
-      `calc(66.667dvh - ${QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE})`,
+    expect(panel?.style.width).toBe(
+      "calc(100vw - (var(--space-4) * 2))",
     );
-    expect(panel?.style.left).toBe(
-      "max(var(--safe-area-inset-left), var(--gutter))",
-    );
+    expect(panel?.style.maxHeight).toBe("100%");
+    expect(panel?.style.alignSelf).toBe("start");
+    expect(panel?.style.justifySelf).toBe("center");
     expect(panel?.style.padding).toBe("var(--space-6)");
+    expect(panel?.style.gap).toBe("var(--space-6)");
     expect(panel?.style.justifyContent).toBe("");
     expect(panel?.getAttribute("data-battle-start-panel-density")).toBe(
       "compact",
@@ -213,7 +223,15 @@ describe("Cumulus BattleStartScreen", () => {
       layout
         ?.querySelector("[data-battle-start-opponent]")
         ?.getAttribute("data-battle-start-opponent-framing"),
-    ).toBe("standing");
+    ).toBe("cutout");
+    const opponent = layout?.querySelector<HTMLElement>(
+      "[data-battle-start-opponent]",
+    );
+    expect(opponent?.style.left).toBe(
+      `max(var(--safe-area-inset-left), ${String(MENU_EDGE_INSET_MOBILE_PX)}px)`,
+    );
+    expect(opponent?.style.bottom).toBe("calc(-1 * var(--space-8))");
+    expect(opponent?.style.width).toBe("58vw");
     expect(panel?.textContent).toContain("Aeris, the Prism Guide");
     expect(panel?.textContent).toContain("Storm Archivist");
     expect(panel?.textContent).toContain("Ability");
@@ -235,6 +253,24 @@ describe("Cumulus BattleStartScreen", () => {
         '[data-testid^="cumulus-battle-start-dreamsign-"]',
       ),
     ).toHaveLength(1);
+    expect(
+      objectSection?.querySelector<HTMLElement>(
+        '[data-testid^="cumulus-battle-start-dreamsign-"]',
+      )?.style.width,
+    ).toBe("52px");
+    expect(
+      panel?.querySelector<HTMLElement>(
+        '[data-battle-start-panel-section="Ability"]',
+      )?.style.paddingTop,
+    ).toBe("var(--space-5)");
+    expect(
+      panel?.querySelector<HTMLElement>(
+        '[data-battle-start-panel-section="Ability"]',
+      )?.style.gap,
+    ).toBe("var(--space-4)");
+    expect(panel?.querySelector<HTMLElement>("footer")?.style.paddingTop).toBe(
+      "var(--space-5)",
+    );
     expect(
       Array.from(panel?.querySelectorAll("h2") ?? []).some(
         (heading) => heading.textContent === "Dreamsigns",

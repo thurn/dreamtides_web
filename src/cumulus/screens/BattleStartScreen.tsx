@@ -18,6 +18,13 @@ import { resolveArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
+import {
+  GUIDE_GALLERY_MOBILE_GRID_ROWS,
+  GUIDE_GALLERY_MOBILE_GUIDE_BOTTOM,
+  GUIDE_GALLERY_MOBILE_GUIDE_LEFT,
+  GUIDE_GALLERY_MOBILE_GUIDE_WIDTH,
+  GUIDE_GALLERY_MOBILE_PANEL_WIDTH,
+} from "./guide-gallery-geometry";
 import { useIsDesktop } from "./use-is-desktop";
 
 export interface BattleStartDreamcallerView {
@@ -58,9 +65,7 @@ const CHARACTER_STAGE_MAX_WIDTH = 760;
 const SIGNATURE_CARD_WIDTH = 116;
 const DREAMSIGN_SIZE = 62;
 const COMPACT_SIGNATURE_CARD_WIDTH = 64;
-const COMPACT_DREAMSIGN_SIZE = 42;
-/** The dossier begins after the opponent-only upper third of the viewport. */
-const MOBILE_PANEL_TOP = "33.333%";
+const COMPACT_DREAMSIGN_SIZE = 52;
 
 export function BattleStartScreen({ view, onBegin }: BattleStartScreenProps) {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -146,21 +151,30 @@ function MobileBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
   return (
     <main
       data-battle-start-layout="mobile"
-      style={{ position: "absolute", inset: 0 }}
+      style={{
+        position: "absolute",
+        inset: 0,
+        display: "grid",
+        gridTemplateRows: GUIDE_GALLERY_MOBILE_GRID_ROWS,
+        paddingBottom: QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+        boxSizing: "border-box",
+      }}
     >
       <section
         data-battle-start-opponent={view.dreamcaller.id}
-        data-battle-start-opponent-framing="standing"
+        data-battle-start-opponent-framing="cutout"
         style={{
-          position: "absolute",
-          top: token("--safe-top"),
-          left: 0,
-          right: 0,
-          bottom: "66.667%",
+          position: "relative",
+          left: GUIDE_GALLERY_MOBILE_GUIDE_LEFT,
+          bottom: GUIDE_GALLERY_MOBILE_GUIDE_BOTTOM,
+          width: GUIDE_GALLERY_MOBILE_GUIDE_WIDTH,
+          height: "100%",
+          alignSelf: "stretch",
+          justifySelf: "start",
           zIndex: 1,
         }}
       >
-        <OpponentPortrait dreamcaller={view.dreamcaller} variant="standing" />
+        <OpponentPortrait dreamcaller={view.dreamcaller} variant="cutout" />
       </section>
 
       <BattleStartPanel view={view} onBegin={onBegin} density="compact" />
@@ -221,26 +235,22 @@ function BattleStartPanel({
       data-battle-start-panel-density={density}
       style={{
         ...glassSurfaceStyle({ radius: token("--radius-panel") }),
-        position: compact ? "absolute" : "relative",
-        top: compact ? MOBILE_PANEL_TOP : undefined,
-        right: compact
-          ? "max(var(--safe-area-inset-right), var(--gutter))"
-          : undefined,
+        position: "relative",
+        top: undefined,
+        right: undefined,
         bottom: undefined,
-        left: compact
-          ? "max(var(--safe-area-inset-left), var(--gutter))"
-          : undefined,
+        left: undefined,
         zIndex: compact ? 4 : undefined,
-        width: compact ? undefined : "100%",
+        width: compact ? GUIDE_GALLERY_MOBILE_PANEL_WIDTH : "100%",
         maxWidth: compact ? undefined : PANEL_MAX_WIDTH,
-        maxHeight: compact
-          ? `calc(66.667dvh - ${QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE})`
-          : "100%",
+        maxHeight: "100%",
+        alignSelf: compact ? "start" : undefined,
+        justifySelf: compact ? "center" : undefined,
         boxSizing: "border-box",
         padding: compact ? token("--space-6") : token("--space-9"),
         display: "flex",
         flexDirection: "column",
-        gap: compact ? token("--space-5") : token("--space-7"),
+        gap: compact ? token("--space-6") : token("--space-7"),
         overflowY: compact ? "auto" : undefined,
         overscrollBehavior: compact ? "contain" : undefined,
         color: token("--text-on-glass"),
@@ -339,7 +349,7 @@ function BattleStartPanel({
 
       <footer
         style={{
-          paddingTop: compact ? token("--space-4") : token("--space-6"),
+          paddingTop: compact ? token("--space-5") : token("--space-6"),
           borderTop: `1px solid ${token("--glass-rim")}`,
           display: "flex",
           alignItems: "center",
@@ -387,11 +397,12 @@ function PanelSection({
   const compact = density === "compact";
   return (
     <section
+      data-battle-start-panel-section={label}
       style={{
-        paddingTop: compact ? token("--space-4") : token("--space-6"),
+        paddingTop: compact ? token("--space-5") : token("--space-6"),
         borderTop: `1px solid ${token("--glass-rim")}`,
         display: "grid",
-        gap: compact ? token("--space-3") : token("--space-5"),
+        gap: compact ? token("--space-4") : token("--space-5"),
       }}
     >
       <h2
