@@ -55,6 +55,7 @@ import { guideForSiteType } from "../data/dreamscapes";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { SiteSceneBackdrop } from "./SiteSceneBackdrop";
 import type { ReactNode } from "react";
+import { useDreamAuguryQuestMenuActions } from "./DreamAuguryQuestMenu";
 
 /** Computes a stable key for AnimatePresence from the current screen. */
 function screenKey(screen: Screen): string {
@@ -199,6 +200,7 @@ function SiteScreen({
   const { atlas, currentDreamscape } = state;
   const node = currentDreamscape !== null ? atlas.nodes[currentDreamscape] : undefined;
   const site = node?.sites.find((s) => s.id === siteId);
+  const dreamAuguryMenuActions = useDreamAuguryQuestMenuActions(site, node);
 
   if (!site) {
     return (
@@ -230,8 +232,18 @@ function SiteScreen({
       ? cumulusSiteScreenFor(site)
       : null;
   if (cumulusSite !== null) {
+    const handlers =
+      dreamAuguryMenuActions.length === 0
+        ? cumulusChromeHandlers
+        : {
+            ...cumulusChromeHandlers,
+            contextualActions: [
+              ...(cumulusChromeHandlers?.contextualActions ?? []),
+              ...dreamAuguryMenuActions,
+            ],
+          };
     return (
-      <CumulusQuestChrome handlers={cumulusChromeHandlers}>
+      <CumulusQuestChrome handlers={handlers}>
         {cumulusSite}
       </CumulusQuestChrome>
     );

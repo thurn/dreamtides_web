@@ -134,4 +134,20 @@ describe("DreamscapeQuestMenu", () => {
       root.unmount();
     });
   });
+
+  it("bounds long menus to the viewport and scrolls their contents", () => {
+    const { container, root } = renderMenu();
+    const menuButton = container.querySelector<HTMLButtonElement>(
+      '[data-testid="dreamscape-menu-button"]',
+    );
+    act(() => menuButton?.click());
+
+    const menu = container.querySelector<HTMLElement>(
+      '[data-testid="dreamscape-menu"]',
+    );
+    expect(menu?.style.maxHeight).toContain("100dvh");
+    expect(menu?.style.overflowY).toBe("auto");
+
+    act(() => root.unmount());
+  });
 });

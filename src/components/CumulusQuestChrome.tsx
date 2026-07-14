@@ -4,6 +4,7 @@
 
 import { useRef, type ReactNode } from "react";
 import { DreamscapeQuestMenu } from "./DreamscapeQuestMenu";
+import type { QuestUtilityMenuAction } from "./QuestUtilityMenu";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { useQuest } from "../state/quest-context";
 import { QuestStatusBar } from "../cumulus/components/hud/QuestStatusBar";
@@ -22,6 +23,7 @@ export interface CumulusQuestChromeHandlers {
   hasDraftData?: boolean;
   onLoadQuestState?: (state: QuestState, source: string) => void;
   onRegenerateAtlas?: () => void;
+  contextualActions?: readonly QuestUtilityMenuAction[];
   elevated?: boolean;
 }
 
@@ -71,6 +73,7 @@ export function CumulusQuestChrome({
             onRegenerateAtlas={
               showAtlasRegenerate ? handlers.onRegenerateAtlas : undefined
             }
+            contextualActions={handlers.contextualActions}
             elevated={handlers.elevated ?? false}
           />
         </ErrorBoundary>

@@ -26,6 +26,10 @@ import {
 } from "../journey_v2/testing/fixtures";
 import { getLogEntries, resetLog } from "../logging";
 import { ALL_SITE_TYPES } from "../atlas/atlas-generator";
+import {
+  MERCHANT_ARCHETYPE_LABELS,
+  type MerchantArchetypeId,
+} from "../journey_v2";
 
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
@@ -162,6 +166,8 @@ function makeMutations(): QuestMutations {
     completeDreamAugurySite: vi.fn(),
     acceptDreamMerchantOffer: vi.fn(),
     declineDreamMerchant: vi.fn(),
+    rerollDreamAugury: vi.fn(),
+    forceDreamAuguryArchetype: vi.fn(),
     pickDraftCard: vi.fn(),
     enterDraftSite: vi.fn(),
     addCard: vi.fn(),
@@ -385,6 +391,68 @@ describe("ScreenRouter DreamAugury routing", () => {
     expect(
       getLogEntries().find((entry) => entry.event === "screen_rendered"),
     ).toMatchObject({ servedByCumulus: true });
+  });
+
+  it("adds reroll and force-category debug commands to the Cumulus quest menu", () => {
+    const site = makeSite("DreamAugury");
+    const mutations = makeMutations();
+    const state = makeStateFor(site);
+    state.dreamcaller = {
+      id: "72000000-0000-4000-8000-000000000001",
+      name: "Menu Fixture",
+      title: "Keeper of Tests",
+      renderedText: "",
+      imageNumber: "0000",
+      startingEssence: 180,
+    };
+    const container = renderWithQuest({
+      state,
+      mutations,
+      questContent: merchantContent(),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />,
+    });
+
+    const openMenu = () => {
+      const trigger = container.querySelector<HTMLButtonElement>(
+        '[data-testid="dreamscape-menu-button"]',
+      );
+      act(() => trigger?.click());
+    };
+    const menuRow = (label: string) =>
+      Array.from(
+        container.querySelectorAll<HTMLElement>(
+          '[data-testid="dreamscape-menu"] div',
+        ),
+      ).find((element) => element.textContent === label);
+
+    openMenu();
+    expect(menuRow("Force Category")).toBeDefined();
+    const reroll = menuRow("Reroll Journey");
+    expect(reroll).toBeDefined();
+    act(() => reroll?.click());
+    expect(mutations.rerollDreamAugury).toHaveBeenCalledWith(site.id);
+
+    openMenu();
+    act(() => menuRow("Force Category")?.click());
+    expect(menuRow("Random (clear force)")).toBeDefined();
+
+    const generated = getLogEntries().find(
+      (entry) => entry.event === "merchant_encounter_generated",
+    );
+    const eligibleArchetypeIds = (
+      generated?.debug as { eligibleArchetypeIds?: MerchantArchetypeId[] } | undefined
+    )?.eligibleArchetypeIds;
+    const firstEligible = eligibleArchetypeIds?.[0];
+    expect(firstEligible).toBeDefined();
+    const categoryLabel =
+      firstEligible === undefined ? "" : MERCHANT_ARCHETYPE_LABELS[firstEligible];
+    const category = menuRow(categoryLabel);
+    expect(category).toBeDefined();
+    act(() => category?.click());
+    expect(mutations.forceDreamAuguryArchetype).toHaveBeenCalledWith(
+      site.id,
+      firstEligible,
+    );
   });
 
   it("logs screen_rendered exactly once per navigation under strict mode", () => {

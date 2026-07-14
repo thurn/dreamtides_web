@@ -34,6 +34,8 @@ interface DreamscapeQuestMenuProps {
    * on the atlas screen; when present, a "Regenerate Atlas" row is shown.
    */
   onRegenerateAtlas?: () => void;
+  /** Screen-specific debug commands supplied by the active Cumulus route. */
+  contextualActions?: readonly QuestUtilityMenuAction[];
   /**
    * Lifts the menu above a full-screen overlay so it stays reachable from on
    * top of it — set while the mobile deck viewer is open, which otherwise
@@ -65,6 +67,7 @@ export function DreamscapeQuestMenu({
   hasDraftData,
   onLoadQuestState,
   onRegenerateAtlas,
+  contextualActions = [],
   elevated = false,
 }: DreamscapeQuestMenuProps) {
   const isDesktop = useIsDesktop();
@@ -75,6 +78,7 @@ export function DreamscapeQuestMenu({
   const menuEdgeInset = isDesktop
     ? MENU_EDGE_INSET_DESKTOP_PX
     : MENU_EDGE_INSET_MOBILE_PX;
+  const menuPanelGap = 6;
   const actions: QuestUtilityMenuAction[] = [
     { id: "deck", icon: "bxf bx-rectangle-vertical", label: "View Deck", onClick: onOpenDeckViewer },
     { id: "glossary", icon: "bxf bx-book-open", label: "Glossary", onClick: onOpenGlossary },
@@ -82,6 +86,7 @@ export function DreamscapeQuestMenu({
     ...(hasDraftData
       ? [{ id: "package", icon: "bxf bx-package", label: "Package Debug", onClick: onOpenDebugScreen }]
       : []),
+    ...contextualActions,
     { id: "editor", icon: "bxf bx-edit-alt", label: "Edit Quest State", onClick: onOpenQuestEditor },
     ...(onRegenerateAtlas !== undefined
       ? [{ id: "regenerateAtlas", icon: "bxf bx-refresh-cw", label: "Regenerate Atlas", onClick: onRegenerateAtlas }]
@@ -93,9 +98,11 @@ export function DreamscapeQuestMenu({
     // Anchor the dropdown under whichever corner the trigger occupies so it opens
     // inward and never off the screen edge (right corner on desktop, left on mobile).
     ...(isDesktop ? { right: 0 } : { left: 0 }),
-    top: "calc(100% + 6px)",
+    top: `calc(100% + ${String(menuPanelGap)}px)`,
     zIndex: 62,
     width: 220,
+    maxHeight: `calc(100dvh - max(var(--safe-area-inset-top), ${String(menuEdgeInset)}px) - ${String(MENU_BUTTON_PX)}px - ${String(menuPanelGap)}px - max(var(--safe-area-inset-bottom), ${String(menuEdgeInset)}px))`,
+    overflowY: "auto",
     padding: 6,
     background: token("--surface-chrome-strong"),
     border: `1px solid ${token("--border-soft")}`,

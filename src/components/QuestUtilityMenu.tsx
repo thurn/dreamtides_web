@@ -12,19 +12,37 @@ import { Pressable } from "../cumulus/primitives/Pressable";
 import { token } from "../cumulus/primitives/tokens";
 import type { QuestState } from "../types/quest";
 
-type MenuView = "root" | "load";
+type MenuView =
+  | { kind: "root" }
+  | { kind: "load" }
+  | { kind: "submenu"; actionId: string };
 type LoadStatus = "idle" | "loading" | "ready" | "error";
 type QuestUtilityMenuVariant = "hud" | "cumulus";
 
-export interface QuestUtilityMenuAction {
+interface QuestUtilityMenuActionBase {
   id: string;
   label: string;
-  onClick: () => void;
   icon?: string;
   active?: boolean;
   accent?: boolean;
   testId?: string;
 }
+
+export interface QuestUtilityMenuCommandAction
+  extends QuestUtilityMenuActionBase {
+  onClick: () => void;
+  items?: never;
+}
+
+export interface QuestUtilityMenuSubmenuAction
+  extends QuestUtilityMenuActionBase {
+  items: readonly QuestUtilityMenuCommandAction[];
+  onClick?: never;
+}
+
+export type QuestUtilityMenuAction =
+  | QuestUtilityMenuCommandAction
+  | QuestUtilityMenuSubmenuAction;
 
 type QuestUtilityMenuBuiltIn =
   | "saveQuest"
@@ -74,7 +92,7 @@ export function QuestUtilityMenu({
 }: QuestUtilityMenuProps) {
   const { state } = useQuest();
   const [open, setOpen] = useState(false);
-  const [menuView, setMenuView] = useState<MenuView>("root");
+  const [menuView, setMenuView] = useState<MenuView>({ kind: "root" });
   const [loadStatus, setLoadStatus] = useState<LoadStatus>("idle");
   const [loadSaves, setLoadSaves] = useState<SavedQuestSummary[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -102,7 +120,7 @@ export function QuestUtilityMenu({
 
   function closeMenu(): void {
     setOpen(false);
-    setMenuView("root");
+    setMenuView({ kind: "root" });
   }
 
   function runAction(action: () => void): void {
@@ -139,7 +157,7 @@ export function QuestUtilityMenu({
   }
 
   function handleOpenLoadMenu(): void {
-    setMenuView("load");
+    setMenuView({ kind: "load" });
     setLoadStatus("loading");
     setLoadError(null);
     void listSavedQuests()
@@ -191,11 +209,11 @@ export function QuestUtilityMenu({
   }
 
   function toggle(): void {
-    setMenuView("root");
+    setMenuView({ kind: "root" });
     setOpen((value) => !value);
   }
 
-  const renderedBuiltIns = builtIns
+  const renderedBuiltIns: QuestUtilityMenuCommandAction[] = builtIns
     .filter((builtIn) => builtIn !== "loadQuest" || onLoadQuestState !== undefined)
     .map((builtIn) => {
       switch (builtIn) {
@@ -248,7 +266,7 @@ export function QuestUtilityMenu({
             className={panelClassName}
             style={panelStyle}
           >
-            {menuView === "root" ? (
+            {menuView.kind === "root" ? (
               <>
                 {[...actions, ...renderedBuiltIns].map((action) => (
                   <MenuActionRow
@@ -256,7 +274,9 @@ export function QuestUtilityMenu({
                     variant={variant}
                     action={action}
                     onClick={() => {
-                      if (action.id === "loadQuest") {
+                      if (action.items !== undefined) {
+                        setMenuView({ kind: "submenu", actionId: action.id });
+                      } else if (action.id === "loadQuest") {
                         action.onClick();
                       } else {
                         runAction(action.onClick);
@@ -265,16 +285,26 @@ export function QuestUtilityMenu({
                   />
                 ))}
               </>
-            ) : (
+            ) : menuView.kind === "load" ? (
               <LoadSubmenu
                 variant={variant}
                 testId={loadMenuTestId}
                 status={loadStatus}
                 saves={loadSaves}
                 error={loadError}
-                onBack={() => setMenuView("root")}
+                onBack={() => setMenuView({ kind: "root" })}
                 onRetry={handleOpenLoadMenu}
                 onSelect={(summary) => void handleSelectLoad(summary)}
+              />
+            ) : (
+              <ActionSubmenu
+                variant={variant}
+                action={actions.find(
+                  (action): action is QuestUtilityMenuSubmenuAction =>
+                    action.id === menuView.actionId && action.items !== undefined,
+                )}
+                onBack={() => setMenuView({ kind: "root" })}
+                onSelect={(action) => runAction(action.onClick)}
               />
             )}
           </div>
@@ -351,7 +381,51 @@ function MenuActionRow({
         />
       )}
       {action.label}
+      {action.active === true && (
+        <i
+          className="bxf bx-check"
+          aria-hidden="true"
+          style={{ marginLeft: "auto", color: token("--accent-bright") }}
+        />
+      )}
     </Pressable>
+  );
+}
+
+function ActionSubmenu({
+  variant,
+  action,
+  onBack,
+  onSelect,
+}: {
+  variant: QuestUtilityMenuVariant;
+  action: QuestUtilityMenuSubmenuAction | undefined;
+  onBack: () => void;
+  onSelect: (action: QuestUtilityMenuCommandAction) => void;
+}) {
+  if (action === undefined) {
+    return null;
+  }
+  return (
+    <>
+      <MenuActionRow
+        variant={variant}
+        action={{
+          id: `${action.id}:back`,
+          label: `‹ ${action.label}`,
+          onClick: onBack,
+        }}
+        onClick={onBack}
+      />
+      {action.items.map((item) => (
+        <MenuActionRow
+          key={item.id}
+          variant={variant}
+          action={item}
+          onClick={() => onSelect(item)}
+        />
+      ))}
+    </>
   );
 }
 
