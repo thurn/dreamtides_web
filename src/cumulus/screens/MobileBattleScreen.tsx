@@ -374,6 +374,7 @@ function FaceUpCard({
       <GameCard
         model={card.model}
         hideRulesText={!showRulesText}
+        presentation={showRulesText ? "full" : "battlefield"}
         figment={card.figment}
         figmentTitleBar={card.figmentTitleBar}
         testId={`battle-card-face:${card.id}`}

@@ -22,6 +22,7 @@ The playable card object — art, cost, stats, and rules text — rendered at an
 | `selected` | `boolean` | no | `false` | Draw the semantic selection state. |
 | `selectionColor` | `CumulusColor` = `"danger" \| "accent" \| "accent-bright" \| "accent-strong" \| "essence" \| "energy" \| "energy-bright" \| "spark" \| "points" \| "positive" \| "selected" \| "sale" \| "gold" \| "gold-light" \| "text-primary" \| "text-secondary" \| "text-muted" \| "text-faint" \| "text-on-accent" \| "white"` | no | — | Selection-ring color. Defaults to the shared selected role. |
 | `hideRulesText` | `boolean` | no | `false` | Hide source rules on dense surfaces; the reveal stays complete. |
+| `presentation` | `GameCardPresentation` = `"full" \| "battlefield"` | no | `full` | Visual treatment for the source card. `"battlefield"` shows only art and an enlarged top-right spark value while preserving the complete reveal. |
 | `figment` | `boolean` | no | `false` | Render the figment frame. |
 | `figmentTitleBar` | `boolean` | no | `false` | Render a title bar on a named figment. |
 | `testId` | `string` | no | — | Optional stable test id for the semantic source. |
@@ -58,5 +59,16 @@ Draw the selection ring with `selected`; `hideRulesText` gives the dense identit
   selected
   selectionColor="#f97316"
   hideRulesText
+/>
+```
+
+### On the battlefield
+
+Use the strict battlefield presentation for in-play cards. The source shows only art and enlarged spark while hover, focus, or touch-hold reveals the complete original card.
+
+```tsx
+<GameCard
+  model={{ cardId: card.id, displaySnapshot: card }}
+  presentation="battlefield"
 />
 ```

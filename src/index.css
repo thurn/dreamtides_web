@@ -351,6 +351,11 @@ button:disabled {
   --cv-spark-orb-font-size: 9cqw;
   --cv-energy-orb-top: 2cqw;
   --cv-energy-orb-left: 5cqw;
+  /* In-play cards keep only art and a spark mark. The mark itself is enlarged
+   * by the strict battlefield presentation; these offsets seat it against the
+   * top-right corner without crowding the card rim. */
+  --cv-battlefield-spark-top: 2.8cqw;
+  --cv-battlefield-spark-right: 1.6cqw;
   /* Multi-cost cards lay their orbs in a horizontal row; each orb after the
    * first tucks behind the one before it by this overlap. Tuned to slide the
    * earlier orb up to just shy of the centered glyph of the orb behind it (the

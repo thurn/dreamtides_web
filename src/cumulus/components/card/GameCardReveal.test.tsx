@@ -134,6 +134,55 @@ describe("GameCard reveal contract", () => {
     act(() => root.unmount());
   });
 
+  it("renders the battlefield face as art and enlarged spark while revealing the complete card", async () => {
+    const { container, root } = mount(
+      <GameCard model={model()} presentation="battlefield" />,
+    );
+    const source = container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    const surface = source?.querySelector<HTMLElement>(".card-view");
+    const spark = surface?.querySelector<HTMLElement>(
+      '[data-card-stat="spark"]',
+    );
+
+    expect(source?.dataset.revealCompleteGameCard).toBe("false");
+    expect(surface?.dataset.cardPresentation).toBe("battlefield");
+    expect(surface?.textContent).toBe("3");
+    expect(surface?.querySelector('[data-card-energy-anchor]')).toBeNull();
+    expect(surface?.querySelector('[data-testid="card-type-line"]')).toBeNull();
+    expect(spark?.style.width).toBe(
+      "calc(var(--cv-spark-orb-size) * 2.5)",
+    );
+    expect(spark?.style.height).toBe(
+      "calc(var(--cv-spark-orb-size) * 2.5)",
+    );
+
+    act(() => {
+      source?.dispatchEvent(
+        pointer("pointerover", { pointerType: "mouse", pointerId: 1 }),
+      );
+    });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+    remeasure();
+    await vi.waitFor(() =>
+      expect(
+        document.querySelector('[data-cumulus-reveal-card="primary"]'),
+      ).not.toBeNull(),
+    );
+    const reveal = document.querySelector<HTMLElement>(
+      '[data-cumulus-reveal-card="primary"]',
+    );
+    expect(reveal?.textContent).toContain("Archive Sentry");
+    expect(reveal?.textContent).toContain("Synth");
+    expect(reveal?.textContent).toContain("Discard a bane");
+    expect(reveal?.querySelector('[data-card-energy-anchor]')).not.toBeNull();
+
+    act(() => root.unmount());
+  });
+
   it("renders an applied proposed transfiguration on the reading copy", async () => {
     const displaySnapshot = card({ energyCost: 1 });
     const { container, root } = mount(

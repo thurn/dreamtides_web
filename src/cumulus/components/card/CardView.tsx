@@ -770,6 +770,9 @@ export interface CardViewSlots {
   spark?: (context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode;
 }
 
+/** Strict visual treatments for the semantic card source. */
+export type GameCardPresentation = "full" | "battlefield";
+
 /** Props for the shared CardView component. */
 export interface CardViewProps {
   card: CardData | FrozenCardData;
@@ -803,6 +806,11 @@ export interface CardViewProps {
   figmentTitleBar?: boolean;
   /** Hide rules text for dense card surfaces that show identity and stats. */
   hideRulesText?: boolean;
+  /**
+   * Visual treatment for the source card. `"battlefield"` keeps only the art
+   * and an enlarged top-right spark mark; the shared reveal remains complete.
+   */
+  presentation?: GameCardPresentation;
   /** Optional editor wrappers for individual rendered card slots. */
   slots?: CardViewSlots;
   /**
@@ -854,6 +862,7 @@ function GameCardSurface(props: CardViewProps) {
     figment = false,
     figmentTitleBar = false,
     hideRulesText = false,
+    presentation = "full",
     slots = {},
     onRulesFontSizeChange,
     onBoxTopFracChange,
@@ -947,7 +956,11 @@ function GameCardSurface(props: CardViewProps) {
       : "";
   const rarityAttr = card.rarity !== undefined ? card.rarity : undefined;
 
-  const showRulesText = !hideRulesText && card.renderedText.trim() !== "";
+  const battlefieldPresentation = presentation === "battlefield";
+  const showRulesText =
+    !battlefieldPresentation &&
+    !hideRulesText &&
+    card.renderedText.trim() !== "";
   const slotContext: CardViewSlotContext = {
     card,
     large,
@@ -1183,13 +1196,21 @@ function GameCardSurface(props: CardViewProps) {
   // figment instead seats the regular-size spark at the title bar's right edge,
   // exactly like a normal card's name bar.
   const figmentCornerSpark = figment && !figmentTitleBar;
-  const sparkSizeVar = figmentCornerSpark
-    ? "var(--cv-figment-spark-size)"
-    : "var(--cv-spark-orb-size)";
-  const sparkFontVar = figmentCornerSpark
-    ? "var(--cv-figment-spark-font-size)"
-    : "var(--cv-spark-orb-font-size)";
-  const sparkCapPx = figmentCornerSpark ? widthPx * 0.14 : sparkOrbCapPx;
+  const sparkSizeVar = battlefieldPresentation
+    ? "calc(var(--cv-spark-orb-size) * 2.5)"
+    : figmentCornerSpark
+      ? "var(--cv-figment-spark-size)"
+      : "var(--cv-spark-orb-size)";
+  const sparkFontVar = battlefieldPresentation
+    ? "calc(var(--cv-spark-orb-font-size) * 2.5)"
+    : figmentCornerSpark
+      ? "var(--cv-figment-spark-font-size)"
+      : "var(--cv-spark-orb-font-size)";
+  const sparkCapPx = battlefieldPresentation
+    ? sparkOrbCapPx * 2.5
+    : figmentCornerSpark
+      ? widthPx * 0.14
+      : sparkOrbCapPx;
   const sparkOrbNode =
     card.spark !== null || card.sparkVariable === true ? (
       <CardStatOrb
@@ -1200,7 +1221,9 @@ function GameCardSurface(props: CardViewProps) {
         numberCapPx={sparkCapPx}
         tooltip={SPARK_PIP_TOOLTIP}
         changeBadge={
-          transfiguration?.sparkChanged === true ? "kindled" : undefined
+          !battlefieldPresentation && transfiguration?.sparkChanged === true
+            ? "kindled"
+            : undefined
         }
       />
     ) : null;
@@ -1212,8 +1235,9 @@ function GameCardSurface(props: CardViewProps) {
     renderedSparkContent !== false;
 
   const renderedNameNode = slots.name?.(slotContext, nameNode) ?? nameNode;
-  const renderedTypeLineNode =
-    slots.typeLine?.(slotContext, typeLineNode) ?? typeLineNode;
+  const renderedTypeLineNode = battlefieldPresentation
+    ? null
+    : (slots.typeLine?.(slotContext, typeLineNode) ?? typeLineNode);
   const renderedRulesNode =
     slots.rulesText?.(slotContext, rulesTextNode) ?? rulesTextNode;
   const hasTextboxContent = Boolean(renderedRulesNode);
@@ -1279,7 +1303,7 @@ function GameCardSurface(props: CardViewProps) {
   // watermark-clipped bottom always tucks under the box's first text line. The
   // figment frame is full-bleed (no fill band), so its art is instead held
   // covering to the very bottom edge.
-  const safeAreaTarget = figment
+  const safeAreaTarget = figment || battlefieldPresentation
     ? FIGMENT_ART_SAFE_AREA_TARGET
     : artSafeAreaTarget(boxTopFrac);
 
@@ -1315,6 +1339,7 @@ function GameCardSurface(props: CardViewProps) {
       data-card-text-scale={textScale.toFixed(2)}
       data-rarity={rarityAttr}
       data-card-type={card.cardType}
+      data-card-presentation={presentation}
       data-figment={figment ? "true" : undefined}
       style={
         {
@@ -1355,7 +1380,7 @@ function GameCardSurface(props: CardViewProps) {
           safeAreaTarget={safeAreaTarget}
           widthPx={widthPx}
           bandTopPct={bandTopPct}
-          fullBleed={figment}
+          fullBleed={figment || battlefieldPresentation}
           onLoad={(event) => {
             const image = event.currentTarget;
             const { naturalWidth, naturalHeight } = image;
@@ -1464,7 +1489,22 @@ function GameCardSurface(props: CardViewProps) {
         </div>
       ) : null}
 
-      {figment ? (
+      {battlefieldPresentation ? (
+        hasSparkContent ? (
+          <div
+            className="absolute"
+            data-card-battlefield-spark=""
+            style={{
+              top: "var(--cv-battlefield-spark-top)",
+              right: "var(--cv-battlefield-spark-right)",
+              display: "flex",
+              zIndex: 6,
+            }}
+          >
+            {renderedSparkContent}
+          </div>
+        ) : null
+      ) : figment ? (
         <>
           {/*
             Figment top chrome. A title-less figment is art-forward: the spark
@@ -1619,6 +1659,11 @@ export interface GameCardProps {
   readonly selectionColor?: CumulusColor;
   /** Hide source rules on dense surfaces; the reveal stays complete. */
   readonly hideRulesText?: boolean;
+  /**
+   * Visual treatment for the source card. `"battlefield"` shows only art and
+   * an enlarged top-right spark value while preserving the complete reveal.
+   */
+  readonly presentation?: GameCardPresentation;
   /** Render the figment frame. */
   readonly figment?: boolean;
   /** Render a title bar on a named figment. */
@@ -1642,6 +1687,7 @@ export function GameCard({
   selected = false,
   selectionColor,
   hideRulesText = false,
+  presentation = "full",
   figment = false,
   figmentTitleBar = false,
   testId,
@@ -1682,7 +1728,9 @@ export function GameCard({
       data-testid={testId}
       data-game-card-source=""
       data-card-id={model.cardId}
-      data-reveal-complete-game-card={hideRulesText ? "false" : "true"}
+      data-reveal-complete-game-card={
+        hideRulesText || presentation === "battlefield" ? "false" : "true"
+      }
       onPointerDown={(event) => {
         lastPointerType.current = event.pointerType;
         pointerDown?.(event);
@@ -1712,6 +1760,7 @@ export function GameCard({
         selected={selected}
         selectionColor={selectionColor}
         hideRulesText={hideRulesText}
+        presentation={presentation}
         figment={figment}
         figmentTitleBar={figmentTitleBar}
       />

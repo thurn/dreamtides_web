@@ -1078,6 +1078,17 @@
       "description": "Hide rules text for dense card surfaces that show identity and stats."
     },
     {
+      "name": "presentation",
+      "tsType": "GameCardPresentation",
+      "unionMembers": [
+        "full",
+        "battlefield"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Visual treatment for the source card. `\"battlefield\"` keeps only the art\nand an enlarged top-right spark mark; the shared reveal remains complete."
+    },
+    {
       "name": "slots",
       "tsType": "CardViewSlots",
       "unionMembers": [],
@@ -1775,6 +1786,17 @@
       "required": false,
       "defaultValue": "false",
       "description": "Hide source rules on dense surfaces; the reveal stays complete."
+    },
+    {
+      "name": "presentation",
+      "tsType": "GameCardPresentation",
+      "unionMembers": [
+        "full",
+        "battlefield"
+      ],
+      "required": false,
+      "defaultValue": "full",
+      "description": "Visual treatment for the source card. `\"battlefield\"` shows only art and\nan enlarged top-right spark value while preserving the complete reveal."
     },
     {
       "name": "figment",

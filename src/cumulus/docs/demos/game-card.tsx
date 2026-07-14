@@ -18,7 +18,10 @@
 import { useEffect, useState } from "react";
 import type { CardData } from "../../../types/cards";
 import { loadCardDatabase } from "../../../data/card-database";
-import { GameCard } from "../../components/card/CardView";
+import {
+  GameCard,
+  type GameCardPresentation,
+} from "../../components/card/CardView";
 import { type CumulusColor } from "../../primitives/color";
 import type { CumulusComponent } from "../registry";
 
@@ -49,6 +52,8 @@ interface GameCardDemoArgs {
   hideRulesText?: boolean;
   /** Render the full-bleed figment frame. */
   figment?: boolean;
+  /** Show the complete card or its art-and-spark battlefield face. */
+  presentation?: GameCardPresentation;
 }
 
 function GameCardDemo({
@@ -56,6 +61,7 @@ function GameCardDemo({
   selectionColor,
   hideRulesText = false,
   figment = false,
+  presentation = "full",
 }: GameCardDemoArgs) {
   const [cards, setCards] = useState<CardData[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -117,6 +123,7 @@ function GameCardDemo({
             selectionColor={selectionColor}
             hideRulesText={hideRulesText}
             figment={figment}
+            presentation={presentation}
           />
         </div>
       ))}
@@ -154,12 +161,21 @@ export const gameCardDemo: CumulusComponent = {
   hideRulesText
 />`,
     },
+    {
+      label: "On the battlefield",
+      note: "Use the strict battlefield presentation for in-play cards. The source shows only art and enlarged spark while hover, focus, or touch-hold reveals the complete original card.",
+      code: `<GameCard
+  model={{ cardId: card.id, displaySnapshot: card }}
+  presentation="battlefield"
+/>`,
+    },
   ],
   demo: {
     defaultArgs: {
       selected: false,
       hideRulesText: false,
       figment: false,
+      presentation: "full",
     },
   },
 };

@@ -281,6 +281,49 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("uses art-and-spark faces on the battlefield and complete faces in hand", () => {
+    const { container, root } = mount();
+    const battlefieldCards = Array.from(
+      container.querySelectorAll<HTMLElement>(
+        '[data-battle-card-zone$="-rank"] [data-game-card-source]',
+      ),
+    );
+    const handCards = Array.from(
+      container.querySelectorAll<HTMLElement>(
+        '[data-battle-card-zone="player-hand"] [data-game-card-source]',
+      ),
+    );
+
+    expect(battlefieldCards).toHaveLength(4);
+    battlefieldCards.forEach((card) => {
+      expect(card.dataset.revealCompleteGameCard).toBe("false");
+      expect(
+        card.querySelector<HTMLElement>(".card-view")?.dataset.cardPresentation,
+      ).toBe("battlefield");
+      expect(card.querySelector('[data-card-energy-anchor]')).toBeNull();
+      expect(card.querySelector('[data-testid="card-type-line"]')).toBeNull();
+      expect(card.textContent).not.toContain("Fixture Card");
+      expect(card.textContent).not.toContain("Fixture");
+      expect(card.textContent).not.toContain("A stable fixture ability");
+    });
+    expect(
+      container.querySelectorAll(
+        '[data-battle-card-zone$="-rank"] [data-card-stat="spark"]',
+      ),
+    ).toHaveLength(2);
+    expect(handCards).toHaveLength(4);
+    handCards.forEach((card) => {
+      expect(card.dataset.revealCompleteGameCard).toBe("true");
+      expect(
+        card.querySelector<HTMLElement>(".card-view")?.dataset.cardPresentation,
+      ).toBe("full");
+      expect(card.querySelector('[data-card-energy-anchor]')).not.toBeNull();
+      expect(card.querySelector('[data-testid="card-type-line"]')).not.toBeNull();
+    });
+
+    act(() => root.unmount());
+  });
+
   it("lane-sizes expanded staggered ranks without overlapping slot targets", () => {
     const view = makeView();
     const expandedBackRank = Array.from({ length: 6 }, (_, index) => ({
