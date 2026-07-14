@@ -148,7 +148,11 @@ describe("MobileBattleScreen", () => {
     expect(screen?.className).toBe("cumulus");
     expect(screen?.style.position).toBe("fixed");
     expect(screen?.style.height).toBe("100dvh");
-    expect(screen?.style.background).toBe("var(--battle-table)");
+    expect(screen?.style.backgroundColor).toBe("var(--battle-table)");
+    expect(screen?.style.backgroundImage).toContain("battle-background.png");
+    expect(screen?.style.backgroundPosition).toBe("center center");
+    expect(screen?.style.backgroundRepeat).toBe("no-repeat");
+    expect(screen?.style.backgroundSize).toBe("100% 100%");
     expect(rowNames).toEqual([
       "enemy-hand",
       "enemy-zones",

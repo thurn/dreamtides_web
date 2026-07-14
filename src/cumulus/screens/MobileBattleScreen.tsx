@@ -17,6 +17,7 @@ import {
 import type { DreamcallerVisual } from "../components/hud/DreamcallerPortrait";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
+import battleBackgroundUrl from "../assets/battle-background.png";
 
 /** One physical face-up card instance rendered by the battle board. */
 export interface MobileBattleCardView {
@@ -110,7 +111,11 @@ const ROOT_STYLE: CSSProperties = {
   paddingRight: `var(${SAFE_AREA_INSET_PROPERTIES.right})`,
   paddingBottom: `var(${SAFE_AREA_INSET_PROPERTIES.bottom})`,
   paddingLeft: `var(${SAFE_AREA_INSET_PROPERTIES.left})`,
-  background: token("--battle-table"),
+  backgroundColor: token("--battle-table"),
+  backgroundImage: `url("${battleBackgroundUrl}")`,
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
+  backgroundSize: "100% 100%",
 };
 
 const ROW_STYLE: CSSProperties = {
