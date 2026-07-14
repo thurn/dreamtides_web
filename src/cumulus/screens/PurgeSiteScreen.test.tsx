@@ -177,7 +177,7 @@ describe("PurgeSiteScreen", () => {
         .querySelector('[data-testid="cumulus-purge-header-action"]')
         ?.querySelector<HTMLElement>("[data-glass-button-content]")
         ?.textContent,
-    ).toBe("Purge 1\u2002•\u200240");
+    ).toBe("Purge 1 (40)");
     expect(
       container.querySelector<HTMLElement>(
         '[data-testid="cumulus-purge-header-action"]',

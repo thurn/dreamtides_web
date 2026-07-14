@@ -1918,7 +1918,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "null",
-      "description": "Optional numerical essence cost rendered as a half-spaced bullet followed\nby the amount and essence glyph: `Transfigure • 20◆`."
+      "description": "Optional numerical essence cost rendered in parentheses after the label:\n`Transfigure (20◆)`."
     },
     {
       "name": "widthReservations",

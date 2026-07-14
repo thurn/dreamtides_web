@@ -19,7 +19,7 @@ The labeled glass action — a bold text label with optional numerical essence c
 | `label` | `string` | yes | — | The button's text, centered by the component at every rendered width. |
 | `onPress` | `() => void` | yes | — | Fires when the button is activated (no-op while disabled). |
 | `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `GlowIcon` before the label. |
-| `essenceCost` | `number \| null` | no | `null` | Optional numerical essence cost rendered as a half-spaced bullet followed by the amount and essence glyph: `Transfigure • 20◆`. |
+| `essenceCost` | `number \| null` | no | `null` | Optional numerical essence cost rendered in parentheses after the label: `Transfigure (20◆)`. |
 | `widthReservations` | `readonly GlassButtonWidthReservation[]` | no | `[]` | Possible dynamic label/essence-cost states. The button reserves the widest state while rendering only the current one, preventing surrounding layout shift. |
 | `variant` | `GlassButtonVariant` = `"default" \| "danger" \| "accent"` | no | `default` | Strict neutral, danger, or purple accent glass surface treatment. |
 | `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the control. `onMedia` uses the full liquid-glass recipe; `onGlass` uses a lighter tonal lens so an existing glass tint is not compounded. Defaults to `onMedia`. |
@@ -95,7 +95,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 ### Purple accent
 
-Use the purple soft-wash accent for a primary action that should stay materially paired with a neutral glass sibling. A numerical essence cost uses the component-owned half-spaced bullet and essence glyph.
+Use the purple soft-wash accent for a primary action that should stay materially paired with a neutral glass sibling. A numerical essence cost appears in component-owned parentheses with the essence glyph.
 
 ```tsx
 <GlassButton

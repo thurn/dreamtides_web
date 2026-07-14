@@ -77,21 +77,21 @@ describe("GlassButton", () => {
     });
   });
 
-  it("renders an optional inline essence cost with half-spaced bullet punctuation", () => {
+  it("renders an optional inline essence cost in parentheses", () => {
     const { container, root } = mount(
       <GlassButton label="Transfigure" essenceCost={20} onPress={() => {}} />,
     );
 
     const button = container.querySelector("button");
-    expect(button?.textContent).toBe("Transfigure\u2002•\u200220");
+    expect(button?.textContent).toBe("Transfigure (20)");
     expect(button?.querySelector("i")?.className).toContain("bx-crypto");
     const content = container.querySelector<HTMLElement>(
       "[data-glass-button-content]",
     );
     expect(content?.style.gap).toBe("0px");
     expect(
-      content?.querySelector("[data-glass-button-cost-separator]")?.textContent,
-    ).toBe("\u2002•\u2002");
+      content?.querySelector("[data-glass-button-essence-cost]")?.textContent,
+    ).toBe(" (20)");
 
     act(() => {
       root.render(
@@ -103,7 +103,7 @@ describe("GlassButton", () => {
       );
     });
     expect(
-      container.querySelector("[data-glass-button-cost-separator]"),
+      container.querySelector("[data-glass-button-essence-cost]"),
     ).toBeNull();
     expect(container.querySelector("button")?.textContent).toBe("Transfigure");
 
@@ -130,8 +130,8 @@ describe("GlassButton", () => {
     );
     expect(initialReservations).toEqual([
       "Decline",
-      "Purge 1\u2002•\u200240",
-      "Purge 2\u2002•\u2002100",
+      "Purge 1 (40)",
+      "Purge 2 (100)",
     ]);
 
     act(() => {

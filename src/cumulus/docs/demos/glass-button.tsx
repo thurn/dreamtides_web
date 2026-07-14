@@ -112,7 +112,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
     },
     {
       label: "Purple accent",
-      note: "Use the purple soft-wash accent for a primary action that should stay materially paired with a neutral glass sibling. A numerical essence cost uses the component-owned half-spaced bullet and essence glyph.",
+      note: "Use the purple soft-wash accent for a primary action that should stay materially paired with a neutral glass sibling. A numerical essence cost appears in component-owned parentheses with the essence glyph.",
       code: `<GlassButton
   label="Transfigure"
   essenceCost={20}

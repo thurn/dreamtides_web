@@ -38,9 +38,6 @@ export interface GlassButtonWidthReservation {
   essenceCost?: number | null;
 }
 
-/** U+2002 is the typographic half-space requested around the large bullet. */
-const ESSENCE_COST_SEPARATOR = "\u2002•\u2002";
-
 /**
  * Danger treatment for destructive actions: the accent soft-wash material in
  * red, preserving the same glass body, wash strength, rim, and shadow geometry.
@@ -89,8 +86,8 @@ export interface GlassButtonProps {
   /** Optional leading glyph painted as a `GlowIcon` before the label. */
   glyph?: Glyph;
   /**
-   * Optional numerical essence cost rendered as a half-spaced bullet followed
-   * by the amount and essence glyph: `Transfigure • 20◆`.
+   * Optional numerical essence cost rendered in parentheses after the label:
+   * `Transfigure (20◆)`.
    */
   essenceCost?: number | null;
   /**
@@ -230,12 +227,11 @@ function GlassButtonContent({
     >
       <span>{label}</span>
       {essenceCost !== null && (
-        <span aria-hidden="true" data-glass-button-cost-separator="">
-          {ESSENCE_COST_SEPARATOR}
+        <span data-glass-button-essence-cost="">
+          {" ("}
+          <EssenceValue amount={essenceCost} tone="inherit" />
+          {")"}
         </span>
-      )}
-      {essenceCost !== null && (
-        <EssenceValue amount={essenceCost} tone="inherit" />
       )}
     </span>
   );
