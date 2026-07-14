@@ -23,7 +23,7 @@ directional and additional-light shadows, and casts its image silhouette into
 shadow maps. Two colored point lights make the local-light response visible on
 both the Dreamsigns and the Cumulus glass. A centered `Sort` Glass Button at the
 bottom uses the web default's measured 59.921875 by 42 pixel proportions,
-14-pixel control radius, shared scene-glass material, and a TextMesh Pro label.
+14-pixel control radius, nested on-glass material, and a TextMesh Pro label.
 
 Rebuild it from `Cumulus MVP > Rebuild Dreamsign Glass Demo` or invoke
 `CumulusMvp.Editor.CumulusDreamsignGlassDemoBuilder.CaptureBatch` for a

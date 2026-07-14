@@ -212,7 +212,10 @@ namespace CumulusMvp.Tests
             }
 
             GameObject button = roots.Single(root => root.name == "Default Glass Button");
-            Assert.That(button.transform.position, Is.EqualTo(new Vector3(0f, -4.1f, -0.34f)));
+            float expectedButtonCenterY = -4.6f * 0.5f + (24f + 42f * 0.5f) * 10f / 1080f;
+            Assert.That(button.transform.position.x, Is.EqualTo(0f).Within(0.00001f));
+            Assert.That(button.transform.position.y, Is.EqualTo(expectedButtonCenterY).Within(0.00001f));
+            Assert.That(button.transform.position.z, Is.EqualTo(-0.06f).Within(0.00001f));
             Assert.That(button.GetComponent<CumulusPressable>(), Is.Not.Null);
             BoxCollider collider = button.GetComponent<BoxCollider>();
             Assert.That(collider, Is.Not.Null);
@@ -233,8 +236,8 @@ namespace CumulusMvp.Tests
             MeshRenderer buttonRenderer = visual.GetComponent<MeshRenderer>();
             Assert.That(
                 buttonRenderer.sharedMaterials,
-                Has.All.SameAs(AssetDatabase.LoadAssetAtPath<Material>(SceneGlassPath)));
-            Assert.That(buttonRenderer.shadowCastingMode, Is.EqualTo(ShadowCastingMode.On));
+                Has.All.SameAs(AssetDatabase.LoadAssetAtPath<Material>(OnGlassPath)));
+            Assert.That(buttonRenderer.shadowCastingMode, Is.EqualTo(ShadowCastingMode.Off));
 
             TextMeshPro label = visual.GetComponentInChildren<TextMeshPro>();
             Assert.That(label, Is.Not.Null);

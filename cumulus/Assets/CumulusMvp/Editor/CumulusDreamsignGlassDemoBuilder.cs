@@ -44,7 +44,10 @@ namespace CumulusMvp.Editor
         private const float WebButtonWidthPixels = 59.921875f;
         private const float WebButtonHeightPixels = 42f;
         private const float WebButtonCornerRadiusPixels = 14f;
+        private const float WebButtonBottomInsetPixels = 24f;
         private const float ButtonFontSize = 2f;
+        private const float GlassPanelSide = 4.6f;
+        private const float ButtonDepth = -0.06f;
         private const float DreamsignDepth = -0.34f;
         private const float DreamsignScale = 1.3f;
 
@@ -113,7 +116,7 @@ namespace CumulusMvp.Editor
             ReconcileDefaultGlassButton(
                 scene,
                 buttonMesh,
-                materialLibrary.Resolve(CumulusMaterialRole.SceneGlass),
+                materialLibrary.Resolve(CumulusMaterialRole.OnGlass),
                 textFont);
 
             var retainedRoots = new HashSet<string>(StringComparer.Ordinal)
@@ -274,6 +277,9 @@ namespace CumulusMvp.Editor
             float worldUnitsPerPixel = CameraHalfHeight * 2f / ReferenceCaptureHeight;
             float width = WebButtonWidthPixels * worldUnitsPerPixel;
             float height = WebButtonHeightPixels * worldUnitsPerPixel;
+            float centerY =
+                -GlassPanelSide * 0.5f +
+                (WebButtonBottomInsetPixels + WebButtonHeightPixels * 0.5f) * worldUnitsPerPixel;
 
             GameObject root = EnsureRoot(scene, ButtonRootName);
             KeepOnlyComponents(
@@ -284,7 +290,7 @@ namespace CumulusMvp.Editor
             RemoveUnexpectedChildren(root.transform, "Default Glass Button Visual");
             SetTransform(
                 root.transform,
-                new Vector3(0f, -4.1f, DreamsignDepth),
+                new Vector3(0f, centerY, ButtonDepth),
                 Quaternion.identity,
                 Vector3.one);
 
@@ -299,7 +305,7 @@ namespace CumulusMvp.Editor
             EnsureComponent<MeshFilter>(visual).sharedMesh = mesh;
             MeshRenderer renderer = EnsureComponent<MeshRenderer>(visual);
             renderer.sharedMaterials = Enumerable.Repeat(material, mesh.subMeshCount).ToArray();
-            ConfigureRenderer(renderer, ShadowCastingMode.On, true);
+            ConfigureRenderer(renderer, ShadowCastingMode.Off, true);
             SetLocalTransform(visual.transform, Vector3.zero, Quaternion.identity, Vector3.one);
             RemoveUnexpectedChildren(visual.transform, "Button Label");
 
