@@ -11,6 +11,19 @@ export function buildQuestCompleteView(
     (node) => node.state === "completed",
   ).length;
   return {
+    dreamcaller:
+      state.dreamcaller === null
+        ? null
+        : {
+            id: state.dreamcaller.id,
+            name: state.dreamcaller.name,
+            title: state.dreamcaller.title,
+            ability: state.dreamcaller.renderedText,
+            imageNumber: state.dreamcaller.imageNumber,
+            ...(state.dreamcaller.portraitFocus === undefined
+              ? {}
+              : { portraitFocus: state.dreamcaller.portraitFocus }),
+          },
     stats: [
       { id: "battles", label: "Battles Won", value: state.completionLevel, kind: "number" },
       { id: "dreamscapes", label: "Dreamscapes", value: completedDreamscapes, kind: "number" },

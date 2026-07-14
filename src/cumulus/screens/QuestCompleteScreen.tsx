@@ -1,6 +1,10 @@
 import type { ReactElement } from "react";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GroupPanel } from "../components/controls/GroupPanel";
+import {
+  DreamcallerPortrait,
+  type DreamcallerVisual,
+} from "../components/hud/DreamcallerPortrait";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { Motes } from "../components/hud/Motes";
 import { token } from "../primitives/tokens";
@@ -13,7 +17,13 @@ export interface QuestCompleteStatView {
   kind: "number" | "essence";
 }
 
+export interface QuestCompleteDreamcallerView extends DreamcallerVisual {
+  id: string;
+  ability: string;
+}
+
 export interface QuestCompleteView {
+  dreamcaller: QuestCompleteDreamcallerView | null;
   stats: readonly QuestCompleteStatView[];
 }
 
@@ -84,15 +94,17 @@ export function QuestCompleteScreen({
           }}
         >
           <div
+            data-quest-complete-hierarchy=""
             style={{
               flex: 1,
               display: "flex",
               flexDirection: "column",
-              justifyContent: "center",
-              gap: token("--space-8"),
             }}
           >
-            <header style={{ textAlign: "center" }}>
+            <header
+              data-quest-complete-section="title"
+              style={{ textAlign: "center" }}
+            >
               <h1
                 style={{
                   margin: 0,
@@ -104,21 +116,56 @@ export function QuestCompleteScreen({
               </h1>
             </header>
 
-            <GroupPanel>
-              <dl
-                data-quest-complete-summary=""
+            {view.dreamcaller !== null && (
+              <div
+                data-quest-complete-section="portrait"
+                data-quest-complete-dreamcaller={view.dreamcaller.id}
                 style={{
-                  margin: 0,
-                  display: "grid",
-                  gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                  gap: token("--space-5"),
+                  alignSelf: "center",
+                  display: "flex",
+                  lineHeight: 0,
+                  marginTop: token("--space-6"),
                 }}
               >
-                {view.stats.map((stat) => (
-                  <SummaryStat key={stat.id} stat={stat} />
-                ))}
-              </dl>
-            </GroupPanel>
+                <DreamcallerPortrait
+                  dreamcaller={view.dreamcaller}
+                  variant="panel"
+                  size={112}
+                  profile={{
+                    id: view.dreamcaller.id,
+                    ability: view.dreamcaller.ability,
+                  }}
+                />
+              </div>
+            )}
+
+            <div
+              data-quest-complete-section="stats"
+              style={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                paddingBlock: token("--space-6"),
+                boxSizing: "border-box",
+              }}
+            >
+              <GroupPanel>
+                <dl
+                  data-quest-complete-summary=""
+                  style={{
+                    margin: 0,
+                    display: "grid",
+                    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                    gap: token("--space-5"),
+                  }}
+                >
+                  {view.stats.map((stat) => (
+                    <SummaryStat key={stat.id} stat={stat} />
+                  ))}
+                </dl>
+              </GroupPanel>
+            </div>
           </div>
 
           <div
@@ -127,7 +174,6 @@ export function QuestCompleteScreen({
               flexShrink: 0,
               display: "flex",
               justifyContent: "center",
-              paddingTop: token("--space-8"),
             }}
           >
             <GlassButton

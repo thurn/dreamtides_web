@@ -10,6 +10,14 @@ import {
 } from "./QuestCompleteScreen";
 
 const VIEW: QuestCompleteView = {
+  dreamcaller: {
+    id: "00000000-0000-4000-8000-000000000061",
+    name: "The Wayfinder",
+    title: "Bearer of the Last Light",
+    ability: "Whenever you map a dream, gain 1 essence.",
+    imageNumber: "001",
+    portraitFocus: { x: 0.42, y: 0.18 },
+  },
   stats: [
     { id: "battles", label: "Battles Won", value: 7, kind: "number" },
     { id: "dreamscapes", label: "Dreamscapes", value: 7, kind: "number" },
@@ -50,18 +58,35 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
 }
 
 describe("Cumulus QuestCompleteScreen", () => {
-  it("renders the run summary without Dreamcaller or secondary actions", () => {
+  it("orders the title, interactive portrait, and run summary without a resting name", () => {
     const { container, root } = mount(
       <QuestCompleteScreen view={VIEW} onNewQuest={vi.fn()} />,
     );
 
     expect(container.textContent).toContain("Quest Complete");
+    const hierarchy = container.querySelector("[data-quest-complete-hierarchy]");
+    const portrait = hierarchy?.querySelector<HTMLElement>(
+      "[data-quest-complete-dreamcaller]",
+    );
+    expect(
+      Array.from(hierarchy?.children ?? []).map((element) =>
+        element.getAttribute("data-quest-complete-section"),
+      ),
+    ).toEqual(["title", "portrait", "stats"]);
+    const statsSection = hierarchy?.querySelector<HTMLElement>(
+      '[data-quest-complete-section="stats"]',
+    );
+    expect(statsSection?.style.flex).toBe("1 1 0%");
+    expect(statsSection?.style.justifyContent).toBe("center");
+    expect(portrait?.textContent).toBe("");
+    expect(portrait?.querySelector("[data-dreamcaller-source]")).not.toBeNull();
+    expect(portrait?.querySelector("img")?.getAttribute("alt")).toContain(
+      "The Wayfinder",
+    );
     expect(container.querySelectorAll("[data-quest-complete-stat]")).toHaveLength(5);
     expect(
       container.querySelector('[data-quest-complete-stat="essence"]')?.textContent,
     ).toContain("140");
-    expect(container.querySelector("[data-quest-complete-dreamcaller]")).toBeNull();
-    expect(container.querySelector("img")).toBeNull();
     expect(container.querySelector('[title="Victory"]')).toBeNull();
     expect(container.querySelector('[data-testid="quest-complete-view-deck"]')).toBeNull();
     expect(container.querySelector('[data-testid="quest-complete-download-log"]')).toBeNull();

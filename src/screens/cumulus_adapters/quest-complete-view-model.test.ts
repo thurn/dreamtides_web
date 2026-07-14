@@ -82,9 +82,16 @@ function state(): QuestState {
 }
 
 describe("buildQuestCompleteView", () => {
-  it("builds the victory statistics from run state", () => {
+  it("builds the interactive Dreamcaller portrait and victory statistics from run state", () => {
     const view = buildQuestCompleteView(state());
 
+    expect(view.dreamcaller).toEqual({
+      id: "dreamcaller-uuid",
+      name: "The Wayfinder",
+      title: "Bearer of the Last Light",
+      ability: "A fixture ability.",
+      imageNumber: "001",
+    });
     expect(view.stats.map(({ id, value }) => [id, value])).toEqual([
       ["battles", 7],
       ["dreamscapes", 2],
