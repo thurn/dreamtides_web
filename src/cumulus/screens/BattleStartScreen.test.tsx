@@ -5,6 +5,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
+import { QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/QuestStatusBar";
 import { artRef } from "../primitives/art";
 import { CumulusRoot } from "../CumulusRoot";
 import { BattleStartScreen, type BattleStartView } from "./BattleStartScreen";
@@ -112,6 +113,18 @@ describe("Cumulus BattleStartScreen", () => {
     ).toBe(view.dreamcaller.id);
     expect(container.textContent).toContain(view.dreamcaller.name);
     expect(container.textContent).toContain("Ability");
+    const desktopSectionTitles = Array.from(
+      container.querySelectorAll("h2"),
+      (heading) => heading.textContent,
+    );
+    expect(desktopSectionTitles).toContain("Signature Cards");
+    expect(desktopSectionTitles).toContain("Dreamsigns");
+    expect(desktopSectionTitles).not.toContain(
+      "Signature Cards & Dreamsigns",
+    );
+    expect(
+      container.querySelector("[data-battle-start-signature-objects]"),
+    ).toBeNull();
     expect(container.querySelectorAll("[data-signature-card-id]")).toHaveLength(
       3,
     );
@@ -181,6 +194,15 @@ describe("Cumulus BattleStartScreen", () => {
     );
     expect(panel?.style.backdropFilter).toContain("--glass-blur");
     expect(panel?.style.top).toBe("33.333%");
+    expect(panel?.style.bottom).toBe("");
+    expect(panel?.style.maxHeight).toBe(
+      `calc(66.667dvh - ${QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE})`,
+    );
+    expect(panel?.style.left).toBe(
+      "max(var(--safe-area-inset-left), var(--gutter))",
+    );
+    expect(panel?.style.padding).toBe("var(--space-6)");
+    expect(panel?.style.justifyContent).toBe("");
     expect(panel?.getAttribute("data-battle-start-panel-density")).toBe(
       "compact",
     );
@@ -198,17 +220,26 @@ describe("Cumulus BattleStartScreen", () => {
     expect(panel?.textContent).toContain(
       "Whenever an event resolves, gain momentum.",
     );
-    expect(panel?.textContent).toContain("Signature Cards");
-    expect(panel?.querySelectorAll("[data-signature-card-id]")).toHaveLength(3);
+    const objectSection = panel?.querySelector<HTMLElement>(
+      "[data-battle-start-signature-objects]",
+    );
+    expect(objectSection?.previousElementSibling?.textContent).toBe(
+      "Signature Cards & Dreamsigns",
+    );
+    expect(objectSection?.querySelectorAll("[data-signature-card-id]")).toHaveLength(3);
     expect(
-      panel?.querySelectorAll('[data-reveal-complete-game-card="true"]'),
+      objectSection?.querySelectorAll('[data-reveal-complete-game-card="true"]'),
     ).toHaveLength(3);
-    expect(panel?.textContent).toContain("Dreamsigns");
     expect(
-      panel?.querySelectorAll(
+      objectSection?.querySelectorAll(
         '[data-testid^="cumulus-battle-start-dreamsign-"]',
       ),
     ).toHaveLength(1);
+    expect(
+      Array.from(panel?.querySelectorAll("h2") ?? []).some(
+        (heading) => heading.textContent === "Dreamsigns",
+      ),
+    ).toBe(false);
     expect(panel?.textContent).toContain("To Win");
     expect(panel?.textContent).toContain("Reward");
     expect(
@@ -227,6 +258,26 @@ describe("Cumulus BattleStartScreen", () => {
     expect(action?.getAttribute("data-glass-placement")).toBe("onGlass");
     act(() => action?.click());
     expect(onBegin).toHaveBeenCalledTimes(1);
+
+    act(() => root.unmount());
+  });
+
+  it("labels the combined object section Signature Cards when no Dreamsigns are present", () => {
+    stubMatchMedia(false);
+    const view = makeView();
+    const { container, root } = mount({ ...view, dreamsigns: [] });
+
+    const objectSection = container.querySelector<HTMLElement>(
+      "[data-battle-start-signature-objects]",
+    );
+    expect(objectSection?.previousElementSibling?.textContent).toBe(
+      "Signature Cards",
+    );
+    expect(
+      objectSection?.querySelectorAll(
+        '[data-testid^="cumulus-battle-start-dreamsign-"]',
+      ),
+    ).toHaveLength(0);
 
     act(() => root.unmount());
   });

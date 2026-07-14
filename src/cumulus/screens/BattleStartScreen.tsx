@@ -11,7 +11,7 @@ import { GlowIcon } from "../components/controls/GlowIcon";
 import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
-import { QUEST_STATUS_BAR_CLEARANCE_OP } from "../components/hud/QuestStatusBar";
+import { QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/QuestStatusBar";
 import { glassSurfaceStyle } from "../internal/glass-surface";
 import type { ArtRef } from "../primitives/art";
 import { resolveArtRef } from "../primitives/art";
@@ -197,6 +197,23 @@ function BattleStartPanel({
     ? COMPACT_SIGNATURE_CARD_WIDTH
     : SIGNATURE_CARD_WIDTH;
   const dreamsignSize = compact ? COMPACT_DREAMSIGN_SIZE : DREAMSIGN_SIZE;
+  const signatureCards = view.signatureCards.map((card) => (
+    <div
+      key={card.cardId}
+      data-signature-card-id={card.cardId}
+      style={{ width: cardWidth, flex: "none" }}
+    >
+      <GameCard model={card.model} />
+    </div>
+  ));
+  const dreamsigns = view.dreamsigns.map((dreamsign) => (
+    <Dreamsign
+      key={dreamsign.id}
+      dreamsign={dreamsign}
+      sizePx={dreamsignSize}
+      testid={`cumulus-battle-start-dreamsign-${String(dreamsign.id)}`}
+    />
+  ));
 
   return (
     <section
@@ -207,26 +224,23 @@ function BattleStartPanel({
         position: compact ? "absolute" : "relative",
         top: compact ? MOBILE_PANEL_TOP : undefined,
         right: compact
-          ? `max(var(--safe-area-inset-right), ${token("--space-3")})`
+          ? "max(var(--safe-area-inset-right), var(--gutter))"
           : undefined,
-        bottom: compact
-          ? `calc(${QUEST_STATUS_BAR_CLEARANCE_OP})`
-          : undefined,
+        bottom: undefined,
         left: compact
-          ? `max(var(--safe-area-inset-left), ${token("--space-3")})`
+          ? "max(var(--safe-area-inset-left), var(--gutter))"
           : undefined,
         zIndex: compact ? 4 : undefined,
         width: compact ? undefined : "100%",
         maxWidth: compact ? undefined : PANEL_MAX_WIDTH,
-        maxHeight: compact ? undefined : "100%",
+        maxHeight: compact
+          ? `calc(66.667dvh - ${QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE})`
+          : "100%",
         boxSizing: "border-box",
-        padding: compact
-          ? `${token("--space-3")} ${token("--space-4")}`
-          : token("--space-9"),
+        padding: compact ? token("--space-6") : token("--space-9"),
         display: "flex",
         flexDirection: "column",
-        justifyContent: compact ? "space-between" : undefined,
-        gap: compact ? token("--space-3") : token("--space-7"),
+        gap: compact ? token("--space-5") : token("--space-7"),
         overflowY: compact ? "auto" : undefined,
         overscrollBehavior: compact ? "contain" : undefined,
         color: token("--text-on-glass"),
@@ -271,7 +285,31 @@ function BattleStartPanel({
         </PanelSection>
       )}
 
-      {view.signatureCards.length > 0 && (
+      {compact &&
+        (view.signatureCards.length > 0 || view.dreamsigns.length > 0) && (
+          <PanelSection
+            label={
+              view.dreamsigns.length > 0
+                ? "Signature Cards & Dreamsigns"
+                : "Signature Cards"
+            }
+            density={density}
+          >
+            <div
+              data-battle-start-signature-objects=""
+              style={{
+                display: "flex",
+                gap: token("--space-4"),
+                alignItems: "center",
+              }}
+            >
+              {signatureCards}
+              {dreamsigns}
+            </div>
+          </PanelSection>
+        )}
+
+      {!compact && view.signatureCards.length > 0 && (
         <PanelSection label="Signature Cards" density={density}>
           <div
             data-battle-start-signature-cards=""
@@ -281,20 +319,12 @@ function BattleStartPanel({
               alignItems: "flex-start",
             }}
           >
-            {view.signatureCards.map((card) => (
-              <div
-                key={card.cardId}
-                data-signature-card-id={card.cardId}
-                style={{ width: cardWidth, flex: "none" }}
-              >
-                <GameCard model={card.model} />
-              </div>
-            ))}
+            {signatureCards}
           </div>
         </PanelSection>
       )}
 
-      {view.dreamsigns.length > 0 && (
+      {!compact && view.dreamsigns.length > 0 && (
         <PanelSection label="Dreamsigns" density={density}>
           <div
             style={{
@@ -302,21 +332,14 @@ function BattleStartPanel({
               gap: compact ? token("--space-3") : token("--space-6"),
             }}
           >
-            {view.dreamsigns.map((dreamsign) => (
-              <Dreamsign
-                key={dreamsign.id}
-                dreamsign={dreamsign}
-                sizePx={dreamsignSize}
-                testid={`cumulus-battle-start-dreamsign-${String(dreamsign.id)}`}
-              />
-            ))}
+            {dreamsigns}
           </div>
         </PanelSection>
       )}
 
       <footer
         style={{
-          paddingTop: compact ? token("--space-3") : token("--space-6"),
+          paddingTop: compact ? token("--space-4") : token("--space-6"),
           borderTop: `1px solid ${token("--glass-rim")}`,
           display: "flex",
           alignItems: "center",
@@ -365,10 +388,10 @@ function PanelSection({
   return (
     <section
       style={{
-        paddingTop: compact ? token("--space-3") : token("--space-6"),
+        paddingTop: compact ? token("--space-4") : token("--space-6"),
         borderTop: `1px solid ${token("--glass-rim")}`,
         display: "grid",
-        gap: compact ? token("--space-2") : token("--space-5"),
+        gap: compact ? token("--space-3") : token("--space-5"),
       }}
     >
       <h2
