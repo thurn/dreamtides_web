@@ -75,6 +75,8 @@ export const GLYPHS = {
   infoFilled: g("bxf bx-info-circle"),
   /** The filled warning triangle used for authoring and validation alerts. */
   warning: g("bxf bx-alert-triangle"),
+  arrowLeft: g("bx bx-arrow-left"),
+  arrowRight: g("bx bx-arrow-right"),
   chevronLeft: g("bx bx-chevron-left"),
   chevronRight: g("bx bx-chevron-right"),
   /** A downward chevron. */

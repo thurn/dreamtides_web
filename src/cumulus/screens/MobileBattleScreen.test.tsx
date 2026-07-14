@@ -138,7 +138,7 @@ function mount(
 }
 
 describe("MobileBattleScreen", () => {
-  it("renders exactly the six mobile battle rows in table order", () => {
+  it("renders the mobile control row between the battlefield and player status", () => {
     const { container, root } = mount();
     const screen = container.querySelector<HTMLElement>("[data-battle-mobile]");
     const rowNames = Array.from(screen?.children ?? []).map((row) =>
@@ -158,6 +158,7 @@ describe("MobileBattleScreen", () => {
       "enemy-zones",
       "enemy-play-area",
       "player-play-area",
+      "control-row",
       "player-zones",
       "player-hand",
     ]);
@@ -370,11 +371,40 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("contains no controls, phase UI, debug rail, or quest chrome", () => {
-    const { container, root } = mount();
-    expect(
-      container.querySelector("button, input, select, textarea, [role=button]"),
-    ).toBeNull();
+  it("renders neutral glass phase arrows without debug rail or quest chrome", () => {
+    const interactions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(makeView(), interactions);
+    const controlRow = container.querySelector<HTMLElement>(
+      '[data-battle-mobile-row="control-row"]',
+    );
+    const previous = controlRow?.querySelector<HTMLButtonElement>(
+      '[aria-label="Previous phase"]',
+    );
+    const next = controlRow?.querySelector<HTMLButtonElement>(
+      '[aria-label="Next phase"]',
+    );
+
+    expect(controlRow?.style.height).toBe("40px");
+    expect(previous?.dataset.glassPlacement).toBe("onMedia");
+    expect(next?.dataset.glassPlacement).toBe("onMedia");
+
+    act(() => {
+      previous?.click();
+      next?.click();
+    });
+
+    expect(interactions.onPreviousPhase).toHaveBeenCalledTimes(1);
+    expect(interactions.onNextPhase).toHaveBeenCalledTimes(1);
     expect(
       container.querySelector(
         "[data-quest-status-bar], [data-quest-menu], [data-battle-phase], [data-battle-debug], [data-debug-rail]",
@@ -396,6 +426,8 @@ describe("MobileBattleScreen", () => {
       onCardDragEnd: vi.fn(),
       onSlotDrop: vi.fn(),
       onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
     };
     const { container, root } = mount(makeView(), interactions);
     const handCard = container.querySelector<HTMLElement>(
@@ -458,9 +490,7 @@ describe("MobileBattleScreen", () => {
       zone: "hand",
     });
     expect(interactions.onCardDragEnd).toHaveBeenCalledTimes(1);
-    expect(
-      container.querySelector("button, input, select, textarea, [role=button]"),
-    ).toBeNull();
+    expect(container.querySelectorAll("button")).toHaveLength(2);
 
     act(() => root.unmount());
   });

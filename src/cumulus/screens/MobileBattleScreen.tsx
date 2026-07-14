@@ -14,7 +14,9 @@ import {
   CardPile,
   type BattlePileCard,
 } from "../components/battle/CardPile";
+import { IconButton } from "../components/controls/IconButton";
 import type { DreamcallerVisual } from "../components/hud/DreamcallerPortrait";
+import { GLYPHS } from "../primitives/glyph";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
 import battleBackgroundUrl from "../assets/battle-background.png";
@@ -93,6 +95,8 @@ export interface MobileBattleInteractions {
   readonly onCardDragEnd: () => void;
   readonly onSlotDrop: (target: MobileBattleSlotTarget) => void;
   readonly onZoneDrop: (target: MobileBattleZoneTarget) => void;
+  readonly onPreviousPhase: () => void;
+  readonly onNextPhase: () => void;
 }
 
 const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
@@ -106,7 +110,7 @@ const ROOT_STYLE: CSSProperties = {
   overflow: "hidden",
   display: "grid",
   gridTemplateRows:
-    "minmax(0, 9fr) minmax(0, 12fr) minmax(0, 20fr) minmax(0, 20fr) minmax(0, 12fr) minmax(0, 27fr)",
+    "minmax(0, 9fr) minmax(0, 12fr) minmax(0, 20fr) minmax(0, 20fr) 40px minmax(0, 12fr) minmax(0, 27fr)",
   paddingTop: `var(${SAFE_AREA_INSET_PROPERTIES.top})`,
   paddingRight: `var(${SAFE_AREA_INSET_PROPERTIES.right})`,
   paddingBottom: `var(${SAFE_AREA_INSET_PROPERTIES.bottom})`,
@@ -579,7 +583,44 @@ function PlayerHand({
   );
 }
 
-/** Six-row, mobile-only battle table composed entirely from battle objects. */
+function ControlRow({
+  interactions,
+}: {
+  readonly interactions?: MobileBattleInteractions;
+}) {
+  const disabled = interactions?.canInteract !== true;
+  return (
+    <div
+      data-battle-mobile-row="control-row"
+      aria-label="Battle controls"
+      style={{
+        ...ROW_STYLE,
+        height: 40,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: token("--space-4"),
+      }}
+    >
+      <IconButton
+        glyph={GLYPHS.arrowLeft}
+        size="sm"
+        label="Previous phase"
+        disabled={disabled}
+        onPress={() => interactions?.onPreviousPhase()}
+      />
+      <IconButton
+        glyph={GLYPHS.arrowRight}
+        size="sm"
+        label="Next phase"
+        disabled={disabled}
+        onPress={() => interactions?.onNextPhase()}
+      />
+    </div>
+  );
+}
+
+/** Seven-row, mobile-only battle table composed entirely from battle objects. */
 export function MobileBattleScreen({ view, interactions }: MobileBattleScreenProps) {
   return (
     <>
@@ -594,6 +635,7 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
           <SideZones owner="enemy" side={view.enemy} interactions={interactions} />
           <PlayArea owner="enemy" side={view.enemy} interactions={interactions} />
           <PlayArea owner="player" side={view.player} interactions={interactions} />
+          <ControlRow interactions={interactions} />
           <SideZones owner="player" side={view.player} interactions={interactions} />
           <PlayerHand cards={view.playerHand} interactions={interactions} />
         </LayoutGroup>

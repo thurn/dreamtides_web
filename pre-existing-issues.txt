@@ -79,6 +79,18 @@ Task 30 QA — observations
    bootstrap effects on the room's confirmed log being empty (head === 0) rather
    than on the pre-fold `state.dreamcaller`.
 
+Cumulus mobile battle QA — fresh `?goto=battle` commands bounce before battle confirmation
+
+- On a fresh `?goto=battle&ai=0&automation=0` room, the opposing-Dreamcaller
+  preview and playable board render from the optimistic `BEGIN_BATTLE`, but the
+  confirmed room log contains only the QA `LOAD_STATE`. The automatic Dreamwell
+  command and phase-control commands then append as bounced `invalid_action`
+  events because the confirmed fold has no battle slice. Reloading the same
+  room without the `goto` parameter commits `BEGIN_BATTLE`; the same Dreamwell
+  and phase-control commands then apply normally. Gate the battle preview and
+  playable board on the confirmed `BEGIN_BATTLE`, or ensure the initial QA
+  bootstrap sequences `LOAD_STATE` before emitting `BEGIN_BATTLE`.
+
 Task group 5 assessment — classic Journey event migration remains deprecated-path debt
 
 - R-P2-1 applies to the deprecated classic Dream Augury route:

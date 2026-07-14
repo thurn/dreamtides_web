@@ -394,6 +394,84 @@ function PlayableBattleScreenInner({
     });
   }, [handleCommand, logDreamwellReveal, board.turnNumber]);
 
+  const handleSetBattleFlow = useCallback((target: BattleFlowTarget): void => {
+    handleCommand({
+      id: "DEBUG_EDIT",
+      edit: {
+        kind: "SET_BATTLE_FLOW",
+        phase: target.phase,
+        activeSide: target.activeSide,
+        turnNumber: target.turnNumber,
+      },
+      sourceSurface: "phase-controls",
+    });
+    // In AI mode, the human advancing the turn into the enemy's turn IS the
+    // enemy's start-of-turn handoff. With basic automation off the handoff is a
+    // passthrough, so this block gives the enemy what the automated handoff
+    // otherwise would: its Dreamwell reveal and energy plus its start-of-turn
+    // draw. A forward player→enemy handoff keeps the turn number (see
+    // `advanceBattleTurnPair`); the backward variant decrements it, so the
+    // equality check excludes rewinds. When automation is on it owns every
+    // start-of-turn reveal, energy, and draw (for both sides), so this shortcut
+    // stands down to avoid duplicates.
+    const isAiEnemyHandoff =
+      aiMode &&
+      !isBasicAutomationEnabled &&
+      board.activeSide === "player" &&
+      target.activeSide === "enemy" &&
+      target.turnNumber === board.turnNumber;
+    if (!isAiEnemyHandoff) {
+      return;
+    }
+
+    // Read the card about to be drawn (the deck index has not advanced yet) so
+    // its energy can be applied alongside the reveal even though automation is
+    // off.
+    const dreamwellCard = battleInit.dreamwellDeck[board.dreamwellDeckIndex];
+    logDreamwellReveal("enemy", target.turnNumber, "phase-controls");
+    handleCommand({
+      id: "DEBUG_EDIT",
+      edit: {
+        kind: "DRAW_DREAMWELL_CARD",
+        side: "enemy",
+        turnNumber: target.turnNumber,
+      },
+      sourceSurface: "phase-controls",
+    });
+    for (const edit of dreamwellEnergyEdits(
+      "enemy",
+      board.sides.enemy.maxEnergy,
+      dreamwellCard?.energyAdded ?? 0,
+    )) {
+      handleCommand({
+        id: "DEBUG_EDIT",
+        edit,
+        sourceSurface: "phase-controls",
+      });
+    }
+    // Mirror the handoff draw rule (see `drawsAtStartOfTurn`): only the first
+    // player's first turn skips the draw. A player→enemy handoff keeps
+    // turnNumber at 1, so the enemy (second player) still draws on its first
+    // turn.
+    if (drawsAtStartOfTurn("enemy", target.turnNumber)) {
+      handleCommand({
+        id: "DEBUG_EDIT",
+        edit: { kind: "DRAW_CARD", side: "enemy" },
+        sourceSurface: "phase-controls",
+      });
+    }
+  }, [
+    aiMode,
+    battleInit.dreamwellDeck,
+    board.activeSide,
+    board.dreamwellDeckIndex,
+    board.sides.enemy.maxEnergy,
+    board.turnNumber,
+    handleCommand,
+    isBasicAutomationEnabled,
+    logDreamwellReveal,
+  ]);
+
   // Dreamwell reveal: whenever the active side rests on its Dreamwell phase
   // without having drawn this turn's Dreamwell card yet, reveal it (rules §The
   // Dreamwell and Energy). This is core turn flow — it fires regardless of basic
@@ -984,6 +1062,12 @@ function PlayableBattleScreenInner({
               pendingDrag?.sourceSurface ?? "battlefield",
             );
           },
+          onPreviousPhase: () => {
+            handleSetBattleFlow(computePhaseControlTarget(board, "previous"));
+          },
+          onNextPhase: () => {
+            handleSetBattleFlow(computePhaseControlTarget(board, "next"));
+          },
         }}
       />
     );
@@ -1420,75 +1504,7 @@ function PlayableBattleScreenInner({
                   proposal={aiMode ? proposal : null}
                   onApprove={approve}
                   onReject={reject}
-                  onSetBattleFlow={(target) => {
-                    handleCommand({
-                      id: "DEBUG_EDIT",
-                      edit: {
-                        kind: "SET_BATTLE_FLOW",
-                        phase: target.phase,
-                        activeSide: target.activeSide,
-                        turnNumber: target.turnNumber,
-                      },
-                      sourceSurface: "phase-controls",
-                    });
-                    // In AI mode, the human advancing the turn into the enemy's
-                    // turn IS the enemy's start-of-turn handoff. With basic
-                    // automation off the handoff is a passthrough, so this block
-                    // gives the enemy what the automated handoff otherwise would:
-                    // its Dreamwell reveal and energy plus its start-of-turn draw.
-                    // Without it the enemy is frozen at zero energy and the
-                    // planner, unable to afford any development, passes every turn.
-                    // A forward player→enemy handoff keeps the turn number (see
-                    // `advanceBattleTurnPair`); the backward variant decrements it,
-                    // so the equality check excludes rewinds. When automation is on
-                    // it owns every start-of-turn reveal, energy, and draw (for
-                    // both sides), so this shortcut stands down to avoid duplicates.
-                    const isAiEnemyHandoff =
-                      aiMode &&
-                      !isBasicAutomationEnabled &&
-                      board.activeSide === "player" &&
-                      target.activeSide === "enemy" &&
-                      target.turnNumber === board.turnNumber;
-                    if (isAiEnemyHandoff) {
-                      // Read the card about to be drawn (the deck index has not
-                      // advanced yet) so its energy can be applied alongside the
-                      // reveal even though automation is off.
-                      const dreamwellCard =
-                        battleInit.dreamwellDeck[board.dreamwellDeckIndex];
-                      logDreamwellReveal("enemy", target.turnNumber, "phase-controls");
-                      handleCommand({
-                        id: "DEBUG_EDIT",
-                        edit: {
-                          kind: "DRAW_DREAMWELL_CARD",
-                          side: "enemy",
-                          turnNumber: target.turnNumber,
-                        },
-                        sourceSurface: "phase-controls",
-                      });
-                      for (const edit of dreamwellEnergyEdits(
-                        "enemy",
-                        board.sides.enemy.maxEnergy,
-                        dreamwellCard?.energyAdded ?? 0,
-                      )) {
-                        handleCommand({
-                          id: "DEBUG_EDIT",
-                          edit,
-                          sourceSurface: "phase-controls",
-                        });
-                      }
-                      // Mirror the handoff draw rule (see `drawsAtStartOfTurn`):
-                      // only the first player's first turn skips the draw. A
-                      // player→enemy handoff keeps turnNumber at 1, so the enemy
-                      // (second player) still draws on its first turn.
-                      if (drawsAtStartOfTurn("enemy", target.turnNumber)) {
-                        handleCommand({
-                          id: "DEBUG_EDIT",
-                          edit: { kind: "DRAW_CARD", side: "enemy" },
-                          sourceSurface: "phase-controls",
-                        });
-                      }
-                    }
-                  }}
+                  onSetBattleFlow={handleSetBattleFlow}
                 />
               </div>
             </div>
