@@ -2688,13 +2688,13 @@
             "name": "label",
             "tsType": "string",
             "optional": false,
-            "description": "Category name used by accessibility and the hover InfoCard."
+            "description": "Category name used by the tile's accessible button label."
           },
           {
             "name": "description",
             "tsType": "string",
             "optional": false,
-            "description": "One-sentence category explanation used by the hover InfoCard."
+            "description": "Succinct action sentence rendered as the hover InfoCard's only copy."
           },
           {
             "name": "kind",

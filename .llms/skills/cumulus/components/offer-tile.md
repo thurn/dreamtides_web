@@ -10,7 +10,7 @@ Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
 The 150×150 symbolic Dream Augury offer button: UUID-backed card art, dreamsign art, and operation marks composed on a distinct glass surface without spelling out the complete offer.
 
-> **Guidance:** Use the named offer kind that matches the category. Inner objects are deliberately decorative; the complete tile is the only hover, focus, and press target, and its one-sentence category explanation always renders through InfoCard.
+> **Guidance:** Use the named offer kind that matches the category. Inner objects are deliberately decorative; the complete tile is the only hover, focus, and press target, and its succinct action sentence renders as the sole InfoCard copy.
 
 ## Props
 
@@ -25,8 +25,8 @@ The 150×150 symbolic Dream Augury offer button: UUID-backed card art, dreamsign
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `id` | `string` | no | Stable identity for this visible offer. Production callers should combine the encounter signature and offer id so simultaneous offers never collide. |
-| `label` | `string` | no | Category name used by accessibility and the hover InfoCard. |
-| `description` | `string` | no | One-sentence category explanation used by the hover InfoCard. |
+| `label` | `string` | no | Category name used by the tile's accessible button label. |
+| `description` | `string` | no | Succinct action sentence rendered as the hover InfoCard's only copy. |
 | `kind` | `"card-gift" \| "power-card" \| "card-draft" \| "copies-draft" \| "category-draft" \| "transfigured-draft" \| "card-bundle" \| "transfigure-card" \| "keyword-modification" \| "tribal-change" \| "transfigure-starters" \| "purge-card" \| "trade-card" \| "duplicate-card" \| "dreamsign-gift" \| "dreamsign-draft" \| "add-site"` | no |  |
 
 ## Usage
@@ -41,7 +41,7 @@ import { OfferTile } from "src/cumulus/components/controls/OfferTile";
     id: encounterSignature + ":" + offerId,
     kind: "card-draft",
     label: "Card Draft",
-    description: "Lets you choose one of four cards selected to complement your deck.",
+    description: "Choose one of four cards to add to your deck.",
     cards: offeredCards.map(({ id, imageNumber }) => ({ cardId: id, imageNumber })),
   }}
   onPress={chooseOffer}

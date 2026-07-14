@@ -46,9 +46,9 @@ interface OfferTileBase {
    * the encounter signature and offer id so simultaneous offers never collide.
    */
   id: string;
-  /** Category name used by accessibility and the hover InfoCard. */
+  /** Category name used by the tile's accessible button label. */
   label: string;
-  /** One-sentence category explanation used by the hover InfoCard. */
+  /** Succinct action sentence rendered as the hover InfoCard's only copy. */
   description: string;
 }
 
@@ -121,8 +121,6 @@ export function OfferTile({
         kind: "infoCard",
         card: {
           variant: "text",
-          meta: "Dream Augury",
-          title: model.label,
           body: richText.plain(model.description),
         },
       },

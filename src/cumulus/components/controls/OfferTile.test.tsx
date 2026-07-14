@@ -11,7 +11,7 @@ const MODEL: OfferTileModel = {
   id: "debug-fit-card-draft",
   kind: "card-draft",
   label: "Card Draft",
-  description: "Choose one of four cards selected to complement your deck.",
+  description: "Choose one of four cards to add to your deck.",
   cards: [
     { cardId: asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"), imageNumber: 287269511 },
     { cardId: asCardId("161482b6-af07-4d9e-822d-8c738672beb9"), imageNumber: 2022594419 },
@@ -55,10 +55,11 @@ describe("OfferTile", () => {
     const description = document.getElementById(
       source.getAttribute("aria-describedby") ?? "",
     );
-    expect(description?.textContent).toContain("Card Draft");
-    expect(description?.textContent).toContain(
-      "Choose one of four cards selected to complement your deck.",
+    expect(description?.textContent).toBe(
+      "Choose one of four cards to add to your deck.",
     );
+    expect(description?.textContent).not.toContain("Dream Augury");
+    expect(description?.textContent).not.toContain("Card Draft");
 
     act(() => source.click());
     expect(activate).toHaveBeenCalledWith(MODEL.id);

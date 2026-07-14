@@ -9,7 +9,7 @@ const MODEL: OfferTileModel = {
   id: "cumulus-demo-card-draft",
   kind: "card-draft",
   label: "Card Draft",
-  description: "Lets you choose one of four cards selected to complement your deck.",
+  description: "Choose one of four cards to add to your deck.",
   cards: [
     { cardId: asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"), imageNumber: 287269511 },
     { cardId: asCardId("161482b6-af07-4d9e-822d-8c738672beb9"), imageNumber: 2022594419 },
@@ -28,7 +28,7 @@ export const offerTileDemo: CumulusComponent = {
   blurb:
     "The 150×150 symbolic Dream Augury offer button: UUID-backed card art, dreamsign art, and operation marks composed on a distinct glass surface without spelling out the complete offer.",
   callout:
-    "Use the named offer kind that matches the category. Inner objects are deliberately decorative; the complete tile is the only hover, focus, and press target, and its one-sentence category explanation always renders through InfoCard.",
+    "Use the named offer kind that matches the category. Inner objects are deliberately decorative; the complete tile is the only hover, focus, and press target, and its succinct action sentence renders as the sole InfoCard copy.",
   group: "Components",
   docName: "OfferTile",
   Component: OfferTileDemo,
@@ -42,7 +42,7 @@ export const offerTileDemo: CumulusComponent = {
     id: encounterSignature + ":" + offerId,
     kind: "card-draft",
     label: "Card Draft",
-    description: "Lets you choose one of four cards selected to complement your deck.",
+    description: "Choose one of four cards to add to your deck.",
     cards: offeredCards.map(({ id, imageNumber }) => ({ cardId: id, imageNumber })),
   }}
   onPress={chooseOffer}

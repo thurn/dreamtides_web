@@ -5,7 +5,7 @@ import { createRoot } from "react-dom/client";
 import { describe, expect, it } from "vitest";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { MERCHANT_ARCHETYPE_BUILDERS } from "../journey_v2/archetypes/registry";
-import OffersDebugApp from "./OffersDebugApp";
+import OffersDebugApp, { OFFER_TILE_DEBUG_MODELS } from "./OffersDebugApp";
 
 describe("OffersDebugApp", () => {
   it("shows one OfferTile for every canonical Dream Augury archetype", () => {
@@ -27,9 +27,18 @@ describe("OffersDebugApp", () => {
     expect(tiles).toHaveLength(MERCHANT_ARCHETYPE_BUILDERS.length);
     expect(MERCHANT_ARCHETYPE_BUILDERS).toHaveLength(17);
     for (const builder of MERCHANT_ARCHETYPE_BUILDERS) {
-      expect(
-        container.querySelector(`[data-offer-category="${builder.archetypeId}"]`),
-      ).not.toBeNull();
+      const category = container.querySelector(
+        `[data-offer-category="${builder.archetypeId}"]`,
+      );
+      const tile = category?.querySelector<HTMLElement>("[data-offer-tile]");
+      const description = document.getElementById(
+        tile?.getAttribute("aria-describedby") ?? "",
+      );
+      const model = OFFER_TILE_DEBUG_MODELS[builder.archetypeId];
+      expect(category).not.toBeNull();
+      expect(description?.textContent).toBe(model.description);
+      expect(description?.textContent).not.toContain(model.label);
+      expect(description?.textContent).not.toContain("Dream Augury");
     }
 
     act(() => root.unmount());
