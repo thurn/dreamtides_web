@@ -1,0 +1,9 @@
+Unity shop glass mesh serialization — fixed default-builder drift
+
+- The committed `cumulus/Assets/CumulusMvp/Meshes/CumulusShopGlassPanel.asset`
+  encoded a 0.02-unit depth, while the authoritative builder's default 2160px
+  reference height produces a 0.018518518-unit depth from the radius-constrained
+  geometry. A clean Unity EditMode run therefore modified the tracked mesh even
+  though the glass-button change did not touch that geometry. The builder-canonical
+  mesh output is included with the glass-button parity work so clean verification
+  starts from the asset shape authored by `CumulusShopGlassDemoBuilder`.

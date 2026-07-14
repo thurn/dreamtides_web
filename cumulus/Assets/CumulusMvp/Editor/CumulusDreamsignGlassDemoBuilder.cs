@@ -83,7 +83,6 @@ namespace CumulusMvp.Editor
             CumulusMaterialLibrary materialLibrary =
                 RequireAsset<CumulusMaterialLibrary>(MaterialLibraryPath);
             materialLibrary.Validate();
-            TMP_FontAsset textFont = RequireAsset<TMP_FontAsset>(ButtonTmpFontPath);
 
             Scene scene;
             if (AssetDatabase.LoadAssetAtPath<SceneAsset>(ScenePath) == null)
@@ -122,8 +121,7 @@ namespace CumulusMvp.Editor
             ReconcileDefaultGlassButton(
                 scene,
                 buttonMesh,
-                materialLibrary.Resolve(CumulusMaterialRole.OnGlass),
-                textFont);
+                materialLibrary.Resolve(CumulusMaterialRole.OnGlass));
 
             var retainedRoots = new HashSet<string>(StringComparer.Ordinal)
             {
@@ -277,9 +275,9 @@ namespace CumulusMvp.Editor
         private static void ReconcileDefaultGlassButton(
             Scene scene,
             Mesh mesh,
-            Material material,
-            TMP_FontAsset font)
+            Material material)
         {
+            TMP_FontAsset font = RequireAsset<TMP_FontAsset>(ButtonTmpFontPath);
             float worldUnitsPerPixel = CameraHalfHeight * 2f / ReferenceCaptureHeight;
             float width = WebButtonWidthPixels * worldUnitsPerPixel;
             float height = WebButtonHeightPixels * worldUnitsPerPixel;
@@ -323,8 +321,6 @@ namespace CumulusMvp.Editor
                 typeof(TextMeshPro),
                 typeof(MeshRenderer));
             TextMeshPro textMesh = EnsureComponent<TextMeshPro>(label);
-            textMesh.font = font;
-            textMesh.fontSharedMaterial = font.material;
             textMesh.text = ButtonLabel;
             textMesh.alignment = TextAlignmentOptions.Center;
             textMesh.fontSize = ButtonFontSize;
@@ -341,6 +337,14 @@ namespace CumulusMvp.Editor
                 new Vector3(0f, 0f, -0.03f),
                 Quaternion.identity,
                 Vector3.one);
+            // TextMesh Pro's material setter can preserve the previous font
+            // reference while swapping atlases. Repair both serialized
+            // references after the label properties so the bold face and its
+            // atlas remain paired in the authored scene.
+            var serializedText = new SerializedObject(textMesh);
+            serializedText.FindProperty("m_fontAsset").objectReferenceValue = font;
+            serializedText.FindProperty("m_sharedMaterial").objectReferenceValue = font.material;
+            serializedText.ApplyModifiedPropertiesWithoutUndo();
 
             CumulusPressable pressable = EnsureComponent<CumulusPressable>(root);
             SetObjectReference(pressable, "hitCollider", collider);
