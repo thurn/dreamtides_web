@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { TRANSFIGURATION_COLORS } from "../../../runtime/transfiguration-display";
 import type { TransfigurationType } from "../../../types/quest";
-import { TransfigurationFormButton } from "../../components/controls/TransfigurationFormButton";
+import {
+  TransfigurationFormButton,
+  type TransfigurationFormButtonVariant,
+} from "../../components/controls/TransfigurationFormButton";
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
 
@@ -22,27 +24,38 @@ const DEMO_FORMS = [
 
 function TransfigurationFormButtonDemo() {
   const [selected, setSelected] = useState<TransfigurationType | null>(null);
+  const variants: readonly TransfigurationFormButtonVariant[] = [
+    "compact",
+    "detailed",
+  ];
   return (
     <div
       style={{
-        width: 240,
-        display: "flex",
-        flexDirection: "column",
-        gap: token("--space-4"),
+        width: 560,
+        display: "grid",
+        gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+        gap: token("--space-6"),
       }}
     >
-      {DEMO_FORMS.map((form) => (
-        <TransfigurationFormButton
-          key={form.type}
-          id={`demo:${form.type}`}
-          type={form.type}
-          description={form.description}
-          essenceCost={form.essenceCost}
-          affordable={form.affordable}
-          accent={TRANSFIGURATION_COLORS[form.type]}
-          selected={selected === form.type}
-          onActivate={() => setSelected(form.type)}
-        />
+      {variants.map((variant) => (
+        <div
+          key={variant}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: token("--space-4"),
+          }}
+        >
+          {DEMO_FORMS.map((form) => (
+            <TransfigurationFormButton
+              key={form.type}
+              form={form}
+              variant={variant}
+              selected={selected === form.type}
+              onActivate={setSelected}
+            />
+          ))}
+        </div>
       ))}
     </div>
   );
@@ -52,27 +65,23 @@ export const transfigurationFormButtonDemo: CumulusComponent = {
   id: "transfiguration-form-button",
   title: "Transfiguration Form Button",
   blurb:
-    "The compact forge-form choice: a centered transfiguration glyph and form name in one equal-width, touch-sized control.",
+    "The canonical forge-form choice: compact and detailed controls with shared glyph, color, state, and accessibility behavior.",
   callout:
-    "Use this on space-constrained transfiguration surfaces. A quick activation selects an affordable form and updates the adjacent card preview.",
+    "Use the compact variant for space-constrained lists and the detailed variant when each choice carries visible rules text and an essence quote.",
   group: "Components",
   docName: "TransfigurationFormButton",
   Component: TransfigurationFormButtonDemo,
   usage: [
     {
-      label: "Compact forge form",
-      note: "Give each concrete card/form pairing a stable id and place sibling options in a shared-width column.",
+      label: "Forge form",
+      note: "Pass the structured form model and choose one of the two strict presentation variants.",
       code: `import { TransfigurationFormButton } from "src/cumulus/components/controls/TransfigurationFormButton";
 
 <TransfigurationFormButton
-  id={entryId + ":" + form.type}
-  type={form.type}
-  description={form.description}
-  essenceCost={form.essenceCost}
-  affordable={form.affordable}
-  accent={form.accent}
+  form={form}
+  variant="detailed"
   selected={selectedType === form.type}
-  onActivate={() => selectForm(form.type)}
+  onActivate={selectForm}
 />`,
     },
   ],

@@ -5,10 +5,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
-import {
-  TRANSFIGURATION_COLORS,
-  TRANSFIGURATION_TINT_COLORS,
-} from "../../runtime/transfiguration-display";
+import { TRANSFIGURATION_TINT_COLORS } from "../../runtime/transfiguration-display";
 import { artRef } from "../primitives/art";
 import { CumulusRoot } from "../CumulusRoot";
 import {
@@ -48,7 +45,6 @@ function candidate(index: number): TransfigurationCandidateView {
         effectDetails: { fixture: true },
         essenceCost: 40,
         affordable: true,
-        accent: TRANSFIGURATION_COLORS.Empowered,
         previewModel: {
           cardId: card.id,
           displaySnapshot: { ...card, energyCost: 1 },
@@ -68,7 +64,6 @@ function candidate(index: number): TransfigurationCandidateView {
         effectDetails: { fixture: true },
         essenceCost: 80,
         affordable: false,
-        accent: TRANSFIGURATION_COLORS.Kindled,
         previewModel: {
           cardId: card.id,
           displaySnapshot: { ...card, spark: 4 },
@@ -391,6 +386,10 @@ describe("TransfigurationSiteScreen", () => {
     const empowered = container.querySelector<HTMLButtonElement>(
       '[data-testid="cumulus-transfiguration-form-Empowered"]',
     );
+    expect(empowered?.dataset.transfigurationFormVariant).toBe("detailed");
+    expect(empowered?.getAttribute("aria-description")).toBe(
+      "Reduce this card's energy cost.",
+    );
     expect(empowered?.style.background).toBe("transparent");
     expect(empowered?.style.boxShadow).toBe("none");
     act(() => empowered?.click());
@@ -408,7 +407,7 @@ describe("TransfigurationSiteScreen", () => {
     );
 
     act(() => empowered?.click());
-    expect(empowered?.getAttribute("aria-checked")).toBe("false");
+    expect(empowered?.getAttribute("aria-checked")).toBe("true");
     expect(commit?.getAttribute("aria-disabled")).toBe("true");
 
     act(() => root.unmount());
@@ -610,6 +609,11 @@ describe("TransfigurationSiteScreen", () => {
       )?.textContent,
     ).toBe("Empowered");
     expect(
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="cumulus-transfiguration-form-Empowered"]',
+      )?.dataset.transfigurationFormVariant,
+    ).toBe("compact");
+    expect(
       container
         .querySelector<HTMLButtonElement>(
           '[data-testid="cumulus-transfiguration-form-Empowered"]',
@@ -658,17 +662,14 @@ describe("TransfigurationSiteScreen", () => {
     const inspired = {
       ...first.forms[0],
       type: "Inspired" as const,
-      accent: TRANSFIGURATION_COLORS.Inspired,
     };
     const enduring = {
       ...first.forms[0],
       type: "Enduring" as const,
-      accent: TRANSFIGURATION_COLORS.Enduring,
     };
     const amplified = {
       ...first.forms[0],
       type: "Amplified" as const,
-      accent: TRANSFIGURATION_COLORS.Amplified,
     };
     const { container, root } = mount(
       <TransfigurationSiteScreen

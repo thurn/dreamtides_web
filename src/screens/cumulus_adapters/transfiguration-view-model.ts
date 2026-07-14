@@ -11,7 +11,6 @@ import type {
   QuestState,
   SiteState,
 } from "../../types/quest";
-import { TRANSFIGURATION_COLORS } from "../../runtime/transfiguration-display";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import type {
   TransfigurationCandidateView,
@@ -86,7 +85,6 @@ export function buildTransfigurationCandidates(
       effectDetails: offer.effectDetails,
       essenceCost: offer.essenceCost,
       affordable: offer.essenceCost <= state.essence,
-      accent: TRANSFIGURATION_COLORS[offer.type],
       previewModel: {
         cardId: card.id,
         displaySnapshot: preview.card,

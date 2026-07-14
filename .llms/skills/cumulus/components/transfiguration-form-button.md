@@ -8,42 +8,43 @@ Components · Live demo & interactive props: `/cumulus#/transfiguration-form-but
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The compact forge-form choice: a centered transfiguration glyph and form name in one equal-width, touch-sized control.
+The canonical forge-form choice: compact and detailed controls with shared glyph, color, state, and accessibility behavior.
 
-> **Guidance:** Use this on space-constrained transfiguration surfaces. A quick activation selects an affordable form and updates the adjacent card preview.
+> **Guidance:** Use the compact variant for space-constrained lists and the detailed variant when each choice carries visible rules text and an essence quote.
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `id` | `string` | yes | — | Stable identity pairing the concrete deck entry with this offered form. |
-| `type` | `TransfigurationType` = `"Empowered" \| "Amplified" \| "Kindled" \| "Inspired" \| "Enduring" \| "Hastened" \| "Resonant" \| "Attuned" \| "Perfected"` | yes | — | Named transfiguration form, which determines the canonical glyph. |
-| `description` | `string` | yes | — | Player-facing rules change announced as the option's accessible description. |
-| `essenceCost` | `number` | yes | — | Quoted essence cost announced in the accessible label. |
-| `affordable` | `boolean` | yes | — | Whether the player can currently pay the quoted cost. |
-| `accent` | `CumulusColor` = `"danger" \| "accent" \| "accent-bright" \| "accent-strong" \| "essence" \| "energy" \| "energy-bright" \| "spark" \| "points" \| "positive" \| "selected" \| "sale" \| "gold" \| "gold-light" \| "text-primary" \| "text-secondary" \| "text-muted" \| "text-faint" \| "text-on-accent" \| "white"` | yes | — | Data-defined transfiguration hue used for the glyph and selection edge. |
+| `form` | `TransfigurationFormButtonModel` | yes | — | Structured offered-form data; the component owns its canonical glyph and color. |
+| `variant` | `TransfigurationFormButtonVariant` = `"compact" \| "detailed"` | yes | — | Compact name-only choice or a wider choice with description and essence price. |
 | `selected` | `boolean` | yes | — | Whether this form is the active radio choice. |
 | `disabled` | `boolean` | no | `false` | Prevent activation while a transfiguration commit is in flight. |
-| `onActivate` | `() => void` | yes | — | Select this form after a quick activation. |
+| `onActivate` | `(type: TransfigurationType) => void` | yes | — | Select the activated form after a quick activation. |
 | `testId` | `string` | no | — | Optional stable test id for the semantic source. |
+
+### `form`: the `TransfigurationFormButtonModel` model
+
+| Field | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `type` | `TransfigurationType` | no | Named transfiguration form, which determines the canonical glyph. |
+| `description` | `string` | no | Player-facing rules change announced as the option's accessible description. |
+| `essenceCost` | `number` | no | Quoted essence cost announced in the accessible label. |
+| `affordable` | `boolean` | no | Whether the player can currently pay the quoted cost. |
 
 ## Usage
 
-### Compact forge form
+### Forge form
 
-Give each concrete card/form pairing a stable id and place sibling options in a shared-width column.
+Pass the structured form model and choose one of the two strict presentation variants.
 
 ```tsx
 import { TransfigurationFormButton } from "src/cumulus/components/controls/TransfigurationFormButton";
 
 <TransfigurationFormButton
-  id={entryId + ":" + form.type}
-  type={form.type}
-  description={form.description}
-  essenceCost={form.essenceCost}
-  affordable={form.affordable}
-  accent={form.accent}
+  form={form}
+  variant="detailed"
   selected={selectedType === form.type}
-  onActivate={() => selectForm(form.type)}
+  onActivate={selectForm}
 />
 ```

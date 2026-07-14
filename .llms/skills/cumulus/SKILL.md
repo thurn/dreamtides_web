@@ -61,7 +61,7 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 <!-- BEGIN GENERATED COMPONENT INDEX (npm run cumulus-docs) -->
 | Component | Group | Consumers | Reference | What it is |
 | --- | --- | --- | --- | --- |
-| Pressable | Primitives | 24 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
+| Pressable | Primitives | 23 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
 | Resource Chip | Components | 3 | [components/resource-chip.md](components/resource-chip.md) | The sized, self-contained value-and-mark chip for the game economy. |
 | Essence Value | Components | 15 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
 | Button | Components | 4 | [components/button.md](components/button.md) | Rung 1 of Cumulus's four-rung button suite — the beveled purple sprite, the primary/commit action, scaled to any label and to a taller commit height. |
@@ -72,11 +72,11 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 | Segmented Control | Components | 1 | [components/segmented-control.md](components/segmented-control.md) | The compact tab and filter switch used for type filters, sort direction, and small mode toggles. |
 | Select | Components | 2 | [components/select.md](components/select.md) | The compact dropdown control, and Cumulus's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. |
 | Tide Disc | Components | 2 | [components/tide-disc.md](components/tide-disc.md) | The single semantic tide mark: a colored disc carrying the tide's glyph and its own strict tide reveal, sized 'sm' or 'lg'. |
-| Transfiguration Form Button | Components | 1 | [components/transfiguration-form-button.md](components/transfiguration-form-button.md) | The compact forge-form choice: a centered transfiguration glyph and form name in one equal-width, touch-sized control. |
+| Transfiguration Form Button | Components | 1 | [components/transfiguration-form-button.md](components/transfiguration-form-button.md) | The canonical forge-form choice: compact and detailed controls with shared glyph, color, state, and accessibility behavior. |
 | Motes | Components | 9 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
 | Info Card | Components | 6 | [components/info-card.md](components/info-card.md) | The one press-to-reveal information card. |
 | Group Panel | Components | 2 | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |
-| Glow Icon | Primitives | 12 | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a Boxicons glyph that paints in the caller's resource hue, with an optional content-protection shadow and an optional emitted-light glow pinned to its own font-size so both scale with the mark. |
+| Glow Icon | Primitives | 11 | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a Boxicons glyph that paints in the caller's resource hue, with an optional content-protection shadow and an optional emitted-light glow pinned to its own font-size so both scale with the mark. |
 | Pip Badge | Components | 2 | [components/pip-badge.md](components/pip-badge.md) | The circled number on a colored disc for card stats: a spark value or an energy cost, and the inline spark reference inside rules text. |
 | Quest Status Bar | Components | 6 | [components/quest-status-bar.md](components/quest-status-bar.md) | The persistent, transparent bottom HUD for quest screens. |
 | Battle Status Display | Components | 1 | [components/battle-status-display.md](components/battle-status-display.md) | The glass status card for one battle participant: centered current and maximum energy at left, a head-focused Dreamcaller portrait at center, and centered current points at right. |

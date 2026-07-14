@@ -1,14 +1,15 @@
-// TransfigurationFormButton — the compact forge-form choice.
+// TransfigurationFormButton — the canonical forge-form choice.
 
+import { TRANSFIGURATION_COLORS } from "../../../runtime/transfiguration-display";
 import type { TransfigurationType } from "../../../types/quest";
-import type { CumulusColor } from "../../primitives/color";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
+import { EssenceValue } from "../hud/EssenceValue";
 import { GlowIcon } from "./GlowIcon";
 
 /** Canonical glyph for each named transfiguration form. */
-export const TRANSFIGURATION_FORM_GLYPHS: Readonly<
+const TRANSFIGURATION_FORM_GLYPHS: Readonly<
   Record<TransfigurationType, Glyph>
 > = {
   Empowered: GLYPHS.transfigurationEmpowered,
@@ -22,9 +23,8 @@ export const TRANSFIGURATION_FORM_GLYPHS: Readonly<
   Perfected: GLYPHS.transfigurationPerfected,
 };
 
-export interface TransfigurationFormButtonProps {
-  /** Stable identity pairing the concrete deck entry with this offered form. */
-  id: string;
+/** Player-facing data for one offered transfiguration form. */
+export interface TransfigurationFormButtonModel {
   /** Named transfiguration form, which determines the canonical glyph. */
   type: TransfigurationType;
   /** Player-facing rules change announced as the option's accessible description. */
@@ -33,80 +33,140 @@ export interface TransfigurationFormButtonProps {
   essenceCost: number;
   /** Whether the player can currently pay the quoted cost. */
   affordable: boolean;
-  /** Data-defined transfiguration hue used for the glyph and selection edge. */
-  accent: CumulusColor;
+}
+
+/** Strict visual treatments for compact and description-bearing form lists. */
+export type TransfigurationFormButtonVariant = "compact" | "detailed";
+
+export interface TransfigurationFormButtonProps {
+  /** Structured offered-form data; the component owns its canonical glyph and color. */
+  form: TransfigurationFormButtonModel;
+  /** Compact name-only choice or a wider choice with description and essence price. */
+  variant: TransfigurationFormButtonVariant;
   /** Whether this form is the active radio choice. */
   selected: boolean;
   /** Prevent activation while a transfiguration commit is in flight. */
   disabled?: boolean;
-  /** Select this form after a quick activation. */
-  onActivate: () => void;
+  /** Select the activated form after a quick activation. */
+  onActivate: (type: TransfigurationType) => void;
   /** Optional stable test id for the semantic source. */
   testId?: string;
 }
 
 /**
- * Compact mobile form choice. A quick tap selects the form and updates the
- * adjacent card preview.
+ * Canonical forge-form choice. A quick activation selects the form and updates
+ * the adjacent card preview.
  */
 export function TransfigurationFormButton({
-  id,
-  type,
-  description,
-  essenceCost,
-  affordable,
-  accent,
+  form,
+  variant,
   selected,
   disabled = false,
   onActivate,
   testId,
 }: TransfigurationFormButtonProps) {
-  const canSelect = affordable && !disabled;
-  const glyph = TRANSFIGURATION_FORM_GLYPHS[type];
+  const canSelect = form.affordable && !disabled;
+  const glyph = TRANSFIGURATION_FORM_GLYPHS[form.type];
+  const accent = TRANSFIGURATION_COLORS[form.type];
+  const compact = variant === "compact";
 
   return (
     <Pressable
       as="button"
-      data-transfiguration-form-id={id}
+      data-transfiguration-form-variant={variant}
       role="radio"
       aria-checked={selected}
-      aria-description={description}
-      aria-label={`${type}, ${
-        essenceCost === 0 ? "free" : `${String(essenceCost)} essence`
+      aria-description={form.description}
+      aria-label={`${form.type}, ${
+        form.essenceCost === 0
+          ? "free"
+          : `${String(form.essenceCost)} essence`
       }`}
       disabled={!canSelect}
       data-testid={testId}
-      onClick={canSelect ? onActivate : undefined}
+      onClick={canSelect ? () => onActivate(form.type) : undefined}
       style={{
-        height: token("--touch-min"),
+        height: compact ? token("--touch-min") : undefined,
         width: "100%",
         minWidth: 0,
         flex: "none",
-        display: "flex",
+        display: compact ? "flex" : "grid",
+        gridTemplateColumns: compact
+          ? undefined
+          : "auto minmax(0, 1fr) auto",
         alignItems: "center",
-        justifyContent: "center",
-        textAlign: "center",
-        gap: token("--space-2"),
-        paddingRight: token("--space-3"),
-        paddingLeft: token("--space-3"),
+        justifyContent: compact ? "center" : undefined,
+        textAlign: compact ? "center" : "left",
+        gap: compact ? token("--space-2") : token("--space-4"),
+        ...(compact
+          ? {
+              paddingRight: token("--space-3"),
+              paddingLeft: token("--space-3"),
+            }
+          : { padding: token("--space-4") }),
         boxSizing: "border-box",
         border: `2px solid ${selected ? accent : token("--border-soft")}`,
         borderRadius: token("--radius-control"),
         background: "transparent",
+        boxShadow: "none",
         color: token("--text-on-glass"),
-        opacity: affordable ? 1 : 0.46,
+        opacity: form.affordable ? 1 : 0.46,
       }}
     >
-      <GlowIcon iconClass={glyph} color={accent} size="20px" shadow />
-      <span
-        style={{
-          font: token("--t-button"),
-          color: token("--text-on-glass"),
-          whiteSpace: "nowrap",
-        }}
-      >
-        {type}
-      </span>
+      <GlowIcon
+        iconClass={glyph}
+        color={accent}
+        size={compact ? "20px" : "28px"}
+        shadow
+      />
+      {compact ? (
+        <span
+          style={{
+            font: token("--t-button"),
+            color: token("--text-on-glass"),
+            whiteSpace: "nowrap",
+          }}
+        >
+          {form.type}
+        </span>
+      ) : (
+        <span style={{ minWidth: 0 }}>
+          <strong
+            style={{
+              display: "block",
+              font: token("--t-button"),
+              color: token("--text-on-glass"),
+            }}
+          >
+            {form.type}
+          </strong>
+          <span
+            style={{
+              display: "block",
+              marginTop: token("--space-1"),
+              font: token("--t-caption"),
+              color: token("--text-on-glass-muted"),
+            }}
+          >
+            {form.description}
+          </span>
+        </span>
+      )}
+      {!compact && (
+        <span
+          style={{
+            font: token("--t-button"),
+            color: token("--text-on-glass"),
+            whiteSpace: "nowrap",
+          }}
+        >
+          {form.essenceCost === 0 ? (
+            "Free"
+          ) : (
+            <EssenceValue amount={form.essenceCost} tone="inherit" />
+          )}
+        </span>
+      )}
     </Pressable>
   );
 }

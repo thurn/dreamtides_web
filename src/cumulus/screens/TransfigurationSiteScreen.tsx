@@ -7,17 +7,14 @@ import { GameCard } from "../components/card/CardView";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
 import { GlassButton } from "../components/controls/GlassButton";
-import { GlowIcon } from "../components/controls/GlowIcon";
 import {
   TransfigurationFormButton,
-  TRANSFIGURATION_FORM_GLYPHS,
+  type TransfigurationFormButtonModel,
 } from "../components/controls/TransfigurationFormButton";
-import { EssenceValue } from "../components/hud/EssenceValue";
 import { glassSurfaceStyle } from "../internal/glass-surface";
 import type { ArtRef } from "../primitives/art";
-import type { CumulusColor } from "../primitives/color";
-import { Pressable } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
+import { TRANSFIGURATION_COLORS } from "../../runtime/transfiguration-display";
 import type { TransfigurationType } from "../../types/quest";
 import {
   GuideGallerySiteLayout,
@@ -26,19 +23,10 @@ import {
 
 export type TransfigurationGuideView = GuideGalleryGuideView;
 
-export interface TransfigurationFormView {
-  /** Named forge form committed to the concrete deck entry. */
-  type: TransfigurationType;
-  /** Player-facing description of the resulting rules change. */
-  description: string;
+export interface TransfigurationFormView
+  extends TransfigurationFormButtonModel {
   /** Persisted reconstruction payload passed back to the mutation. */
   effectDetails: Record<string, unknown>;
-  /** Stable quoted essence cost for this visit. */
-  essenceCost: number;
-  /** Whether the current wallet can pay this quoted cost. */
-  affordable: boolean;
-  /** Data-driven transfiguration color used for the option edge and card ring. */
-  accent: CumulusColor;
   /** The transformed card plus its marked transfiguration display. */
   previewModel: GameCardModel;
 }
@@ -526,7 +514,11 @@ function DetailPanel({
           <GameCard
             model={activeForm?.previewModel ?? candidate.model}
             selected={activeForm !== null}
-            selectionColor={activeForm?.accent}
+            selectionColor={
+              activeForm === null
+                ? undefined
+                : TRANSFIGURATION_COLORS[activeForm.type]
+            }
           />
         </div>
 
@@ -562,90 +554,16 @@ function DetailPanel({
           >
             {candidate.forms.map((form) => {
               const selected = form.type === activeForm?.type;
-              if (mobile) {
-                return (
-                  <TransfigurationFormButton
-                    key={form.type}
-                    id={`${candidate.entryId}:${form.type}`}
-                    type={form.type}
-                    description={form.description}
-                    essenceCost={form.essenceCost}
-                    affordable={form.affordable}
-                    accent={form.accent}
-                    selected={selected}
-                    disabled={confirming}
-                    onActivate={() => onSelectForm(form.type)}
-                    testId={`cumulus-transfiguration-form-${form.type}`}
-                  />
-                );
-              }
               return (
-                <Pressable
+                <TransfigurationFormButton
                   key={form.type}
-                  as="button"
-                  role="radio"
-                  aria-checked={selected}
-                  disabled={!form.affordable || confirming}
-                  data-testid={`cumulus-transfiguration-form-${form.type}`}
-                  onClick={() => onSelectForm(form.type)}
-                  style={{
-                    width: "100%",
-                    boxSizing: "border-box",
-                    display: "grid",
-                    gridTemplateColumns: "auto minmax(0, 1fr) auto",
-                    gap: token("--space-4"),
-                    alignItems: "center",
-                    padding: token("--space-4"),
-                    border: `2px solid ${selected ? form.accent : token("--border-soft")}`,
-                    borderRadius: token("--radius-control"),
-                    background: "transparent",
-                    boxShadow: "none",
-                    color: token("--text-on-glass"),
-                    textAlign: "left",
-                    opacity: form.affordable ? 1 : 0.46,
-                  }}
-                >
-                  <GlowIcon
-                    iconClass={TRANSFIGURATION_FORM_GLYPHS[form.type]}
-                    color={form.accent}
-                    size="28px"
-                    shadow
-                  />
-                  <span style={{ minWidth: 0 }}>
-                    <strong
-                      style={{
-                        display: "block",
-                        font: token("--t-button"),
-                        color: token("--text-on-glass"),
-                      }}
-                    >
-                      {form.type}
-                    </strong>
-                    <span
-                      style={{
-                        display: "block",
-                        marginTop: token("--space-1"),
-                        font: token("--t-caption"),
-                        color: token("--text-on-glass-muted"),
-                      }}
-                    >
-                      {form.description}
-                    </span>
-                  </span>
-                  <span
-                    style={{
-                      font: token("--t-button"),
-                      color: token("--text-on-glass"),
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {form.essenceCost === 0 ? (
-                      "Free"
-                    ) : (
-                      <EssenceValue amount={form.essenceCost} tone="inherit" />
-                    )}
-                  </span>
-                </Pressable>
+                  form={form}
+                  variant={mobile ? "compact" : "detailed"}
+                  selected={selected}
+                  disabled={confirming}
+                  onActivate={onSelectForm}
+                  testId={`cumulus-transfiguration-form-${form.type}`}
+                />
               );
             })}
           </div>

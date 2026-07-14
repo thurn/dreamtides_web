@@ -3371,83 +3371,52 @@
   ],
   "TransfigurationFormButton": [
     {
-      "name": "id",
-      "tsType": "string",
+      "name": "form",
+      "tsType": "TransfigurationFormButtonModel",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Stable identity pairing the concrete deck entry with this offered form."
+      "description": "Structured offered-form data; the component owns its canonical glyph and color.",
+      "nested": {
+        "name": "TransfigurationFormButtonModel",
+        "fields": [
+          {
+            "name": "type",
+            "tsType": "TransfigurationType",
+            "optional": false,
+            "description": "Named transfiguration form, which determines the canonical glyph."
+          },
+          {
+            "name": "description",
+            "tsType": "string",
+            "optional": false,
+            "description": "Player-facing rules change announced as the option's accessible description."
+          },
+          {
+            "name": "essenceCost",
+            "tsType": "number",
+            "optional": false,
+            "description": "Quoted essence cost announced in the accessible label."
+          },
+          {
+            "name": "affordable",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "Whether the player can currently pay the quoted cost."
+          }
+        ]
+      }
     },
     {
-      "name": "type",
-      "tsType": "TransfigurationType",
+      "name": "variant",
+      "tsType": "TransfigurationFormButtonVariant",
       "unionMembers": [
-        "Empowered",
-        "Amplified",
-        "Kindled",
-        "Inspired",
-        "Enduring",
-        "Hastened",
-        "Resonant",
-        "Attuned",
-        "Perfected"
+        "compact",
+        "detailed"
       ],
       "required": true,
       "defaultValue": null,
-      "description": "Named transfiguration form, which determines the canonical glyph."
-    },
-    {
-      "name": "description",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Player-facing rules change announced as the option's accessible description."
-    },
-    {
-      "name": "essenceCost",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Quoted essence cost announced in the accessible label."
-    },
-    {
-      "name": "affordable",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Whether the player can currently pay the quoted cost."
-    },
-    {
-      "name": "accent",
-      "tsType": "CumulusColor",
-      "unionMembers": [
-        "danger",
-        "accent",
-        "accent-bright",
-        "accent-strong",
-        "essence",
-        "energy",
-        "energy-bright",
-        "spark",
-        "points",
-        "positive",
-        "selected",
-        "sale",
-        "gold",
-        "gold-light",
-        "text-primary",
-        "text-secondary",
-        "text-muted",
-        "text-faint",
-        "text-on-accent",
-        "white"
-      ],
-      "required": true,
-      "defaultValue": null,
-      "description": "Data-defined transfiguration hue used for the glyph and selection edge."
+      "description": "Compact name-only choice or a wider choice with description and essence price."
     },
     {
       "name": "selected",
@@ -3467,11 +3436,11 @@
     },
     {
       "name": "onActivate",
-      "tsType": "() => void",
+      "tsType": "(type: TransfigurationType) => void",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Select this form after a quick activation."
+      "description": "Select the activated form after a quick activation."
     },
     {
       "name": "testId",
