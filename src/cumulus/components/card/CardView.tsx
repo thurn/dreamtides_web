@@ -12,6 +12,9 @@ import { identiconsForced } from "../../../runtime/identicon-mode";
 import {
   ART_EXTENSION_FRACTION,
   ART_REGION_ASPECT_RATIO_VALUE,
+  BATTLEFIELD_CARD_ASPECT_RATIO,
+  BATTLEFIELD_CARD_ASPECT_RATIO_VALUE,
+  BATTLEFIELD_CARD_CORNER_RADIUS,
   CARD_ASPECT_RATIO,
   CARD_CORNER_RADIUS,
 } from "./card-aspect";
@@ -107,8 +110,11 @@ function artMaxPanYFrac(renderH: number): number {
  * a pan fraction `p`; this solves that for `target`. It is capped at the
  * symmetric down bound so it never asks the art to pan past its own overscan.
  */
-function artPanYLowerFrac(renderH: number, target: number): number {
-  const region = 1 - ART_EXTENSION_FRACTION;
+function artPanYLowerFrac(
+  renderH: number,
+  target: number,
+  region: number = 1 - ART_EXTENSION_FRACTION,
+): number {
   const imgH = renderH * region;
   const pMin = (target - region / 2) / imgH - 0.5 + ART_SOURCE_BOTTOM_CROP;
   return Math.min(pMin, artMaxPanYFrac(renderH));
@@ -127,6 +133,7 @@ function artCoverMetrics(
   imageAspect: number,
   frameAspect: number,
   target: number,
+  region: number = 1 - ART_EXTENSION_FRACTION,
 ): { renderW: number; renderH: number; panX: number; panY: number } {
   // ratio > 1 means the image is wider than the frame (its sides are cropped by
   // covering); ratio < 1 means it is taller (its top/bottom are cropped).
@@ -140,7 +147,7 @@ function artCoverMetrics(
   let panY = 0;
   if (renderH > 1) {
     const maxPanYFrac = artMaxPanYFrac(renderH);
-    const lowerPanYFrac = artPanYLowerFrac(renderH, target);
+    const lowerPanYFrac = artPanYLowerFrac(renderH, target, region);
     panY = Math.max(art.y * maxPanYFrac, lowerPanYFrac) * 100;
   }
   return { renderW, renderH, panX, panY };
@@ -185,11 +192,15 @@ export function minArtOffsetY(
  * image never sits shorter than the region, and the width floor `1 / coverW`
  * guards the horizontal cover for a source narrower than the region.
  */
-export function minArtScale(imageAspect: number, target: number): number {
-  const ratio = imageAspect / ART_REGION_ASPECT_RATIO_VALUE;
+export function minArtScale(
+  imageAspect: number,
+  target: number,
+  frameAspect: number = ART_REGION_ASPECT_RATIO_VALUE,
+  region: number = 1 - ART_EXTENSION_FRACTION,
+): number {
+  const ratio = imageAspect / frameAspect;
   const coverW = ratio >= 1 ? ratio : 1;
   const coverH = ratio >= 1 ? 1 : 1 / ratio;
-  const region = 1 - ART_EXTENSION_FRACTION;
   const renderHForTarget = target / (region * (1 - ART_SOURCE_BOTTOM_CROP));
   const renderHMin = Math.max(1, renderHForTarget);
   return Math.max(1 / coverW, renderHMin / coverH);
@@ -244,6 +255,8 @@ function artImageStyleExtended(
   art: { x: number; y: number; scale: number },
   imageAspect: number | null,
   target: number,
+  frameAspect: number = ART_REGION_ASPECT_RATIO_VALUE,
+  region: number = 1 - ART_EXTENSION_FRACTION,
 ): CSSProperties {
   // Clip the watermark strip off the source bottom (the image renders the source
   // 1:1 along its own height, so the clipped sliver falls behind the fill/box).
@@ -260,16 +273,19 @@ function artImageStyleExtended(
     };
   }
 
-  const region = 1 - ART_EXTENSION_FRACTION;
   // Floor the zoom at the safe-area minimum so a stored (or in-flight) crop that
   // is too zoomed out can never leave the source short of the box; this is what
   // keeps existing under-zoomed cards rendering inside the safe area.
-  const safeScale = Math.max(art.scale, minArtScale(imageAspect, target));
+  const safeScale = Math.max(
+    art.scale,
+    minArtScale(imageAspect, target, frameAspect, region),
+  );
   const { renderW, renderH, panX, panY } = artCoverMetrics(
     { x: art.x, y: art.y, scale: safeScale },
     imageAspect,
-    ART_REGION_ASPECT_RATIO_VALUE,
+    frameAspect,
     target,
+    region,
   );
   // Heights are fractions of the art region; scale them to fractions of the
   // full card, and center on the art region's center (not the card's), so the
@@ -376,6 +392,8 @@ function ArtLayers({
   widthPx,
   bandTopPct,
   fullBleed = false,
+  frameAspect = ART_REGION_ASPECT_RATIO_VALUE,
+  region = 1 - ART_EXTENSION_FRACTION,
   onLoad,
   onError,
 }: {
@@ -394,6 +412,10 @@ function ArtLayers({
    * full-bleed art rather than art-over-a-grounded-band.
    */
   fullBleed?: boolean;
+  /** Width-to-height ratio of the art viewport. */
+  frameAspect?: number;
+  /** Height of the art viewport as a fraction of the rendered card. */
+  region?: number;
   onLoad: (event: React.SyntheticEvent<HTMLImageElement>) => void;
   onError: () => void;
 }) {
@@ -401,6 +423,8 @@ function ArtLayers({
     artCrop,
     imageAspect,
     safeAreaTarget,
+    frameAspect,
+    region,
   );
   const blurPx = Math.max(2, widthPx * ART_EXTENSION_BLUR_RATIO);
   // The band is one uniform dark color: it backs the art and is the tint
@@ -807,8 +831,10 @@ export interface CardViewProps {
   /** Hide rules text for dense card surfaces that show identity and stats. */
   hideRulesText?: boolean;
   /**
-   * Visual treatment for the source card. `"battlefield"` keeps only the art
-   * and an enlarged top-right spark mark; the shared reveal remains complete.
+   * Visual treatment for the source card. `"battlefield"` uses a rounded square
+   * frame that widens the art viewport at its existing vertical scale, keeping
+   * only the art and an enlarged top-right spark mark; the shared reveal remains
+   * complete.
    */
   presentation?: GameCardPresentation;
   /** Optional editor wrappers for individual rendered card slots. */
@@ -1330,6 +1356,15 @@ function GameCardSurface(props: CardViewProps) {
     : { maxHeight: "var(--cv-textbox-max-height)" };
 
   const artCrop = card.art ?? DEFAULT_ART_CROP;
+  const renderedArtCrop = battlefieldPresentation
+    ? {
+        ...artCrop,
+        // The battlefield frame grows sideways from the portrait card's
+        // existing height. Preserve the artwork's physical vertical scale so
+        // the added square area reveals the sides instead of zooming in.
+        scale: artCrop.scale * (1 - ART_EXTENSION_FRACTION),
+      }
+    : artCrop;
 
   return (
     <div
@@ -1343,8 +1378,12 @@ function GameCardSurface(props: CardViewProps) {
       data-figment={figment ? "true" : undefined}
       style={
         {
-          aspectRatio: CARD_ASPECT_RATIO,
-          "--cv-radius": CARD_CORNER_RADIUS,
+          aspectRatio: battlefieldPresentation
+            ? BATTLEFIELD_CARD_ASPECT_RATIO
+            : CARD_ASPECT_RATIO,
+          "--cv-radius": battlefieldPresentation
+            ? BATTLEFIELD_CARD_CORNER_RADIUS
+            : CARD_CORNER_RADIUS,
           borderRadius: "var(--cv-radius)",
           boxShadow: shadowLayers.join(", "),
         } as CSSProperties
@@ -1375,12 +1414,18 @@ function GameCardSurface(props: CardViewProps) {
         <ArtLayers
           imageUrl={cardImageUrl(card.imageNumber)}
           alt={card.name}
-          artCrop={artCrop}
+          artCrop={renderedArtCrop}
           imageAspect={imageAspect}
           safeAreaTarget={safeAreaTarget}
           widthPx={widthPx}
           bandTopPct={bandTopPct}
           fullBleed={figment || battlefieldPresentation}
+          frameAspect={
+            battlefieldPresentation
+              ? BATTLEFIELD_CARD_ASPECT_RATIO_VALUE
+              : undefined
+          }
+          region={battlefieldPresentation ? 1 : undefined}
           onLoad={(event) => {
             const image = event.currentTarget;
             const { naturalWidth, naturalHeight } = image;
@@ -1660,8 +1705,10 @@ export interface GameCardProps {
   /** Hide source rules on dense surfaces; the reveal stays complete. */
   readonly hideRulesText?: boolean;
   /**
-   * Visual treatment for the source card. `"battlefield"` shows only art and
-   * an enlarged top-right spark value while preserving the complete reveal.
+   * Visual treatment for the source card. `"battlefield"` uses a rounded square
+   * frame that widens the art viewport at its existing vertical scale, showing
+   * only art and an enlarged top-right spark value while preserving the complete
+   * reveal.
    */
   readonly presentation?: GameCardPresentation;
   /** Render the figment frame. */

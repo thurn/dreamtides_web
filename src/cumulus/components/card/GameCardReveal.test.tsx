@@ -148,6 +148,9 @@ describe("GameCard reveal contract", () => {
 
     expect(source?.dataset.revealCompleteGameCard).toBe("false");
     expect(surface?.dataset.cardPresentation).toBe("battlefield");
+    expect(surface?.style.aspectRatio).toBe("1 / 1");
+    expect(surface?.style.borderRadius).toBe("var(--cv-radius)");
+    expect(surface?.style.getPropertyValue("--cv-radius")).toBe("3.6%");
     expect(surface?.textContent).toBe("3");
     expect(surface?.querySelector('[data-card-energy-anchor]')).toBeNull();
     expect(surface?.querySelector('[data-testid="card-type-line"]')).toBeNull();
@@ -181,6 +184,43 @@ describe("GameCard reveal contract", () => {
     expect(reveal?.querySelector('[data-card-energy-anchor]')).not.toBeNull();
 
     act(() => root.unmount());
+  });
+
+  it("widens the battlefield art viewport without increasing its vertical crop", () => {
+    const displaySnapshot = card({
+      art: { x: 0, y: 0, scale: 1.3 },
+    });
+    const full = mount(<GameCard model={model(displaySnapshot)} />);
+    const battlefield = mount(
+      <GameCard model={model(displaySnapshot)} presentation="battlefield" />,
+    );
+    const fullImage = full.container.querySelector<HTMLImageElement>(
+      'img[alt="Archive Sentry"]',
+    );
+    const battlefieldImage =
+      battlefield.container.querySelector<HTMLImageElement>(
+        'img[alt="Archive Sentry"]',
+      );
+
+    for (const image of [fullImage, battlefieldImage]) {
+      Object.defineProperties(image, {
+        naturalWidth: { configurable: true, value: 462 },
+        naturalHeight: { configurable: true, value: 280 },
+      });
+      act(() => {
+        image?.dispatchEvent(new Event("load", { bubbles: true }));
+      });
+    }
+
+    expect(battlefieldImage?.style.height).toBe(fullImage?.style.height);
+    expect(Number.parseFloat(battlefieldImage?.style.width ?? "Infinity")).toBeLessThan(
+      Number.parseFloat(fullImage?.style.width ?? "0"),
+    );
+
+    act(() => {
+      full.root.unmount();
+      battlefield.root.unmount();
+    });
   });
 
   it("renders an applied proposed transfiguration on the reading copy", async () => {

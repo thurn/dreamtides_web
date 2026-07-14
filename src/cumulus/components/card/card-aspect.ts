@@ -16,6 +16,12 @@ export const CARD_ASPECT_RATIO = `${CARD_ASPECT_W} / ${CARD_ASPECT_H}`;
 /** Numeric width-to-height ratio of the card, for layout math. */
 export const CARD_ASPECT_RATIO_VALUE = CARD_ASPECT_W / CARD_ASPECT_H;
 
+/** Square geometry used by the art-forward in-play battlefield face. */
+export const BATTLEFIELD_CARD_ASPECT_RATIO = "1 / 1";
+
+/** Numeric width-to-height ratio of the in-play battlefield face. */
+export const BATTLEFIELD_CARD_ASPECT_RATIO_VALUE = 1;
+
 /**
  * Fraction of the card's height, measured up from the bottom edge, that does
  * not render the source artwork. Instead this band is filled by an
@@ -49,6 +55,9 @@ export const CARD_CORNER_RADIUS = `${CARD_CORNER_RADIUS_PCT}% / ${(
   (CARD_CORNER_RADIUS_PCT * CARD_ASPECT_W) /
   CARD_ASPECT_H
 ).toFixed(2)}%`;
+
+/** Uniform corner radius for the square in-play battlefield face. */
+export const BATTLEFIELD_CARD_CORNER_RADIUS = `${CARD_CORNER_RADIUS_PCT}%`;
 
 /**
  * Width of a single card in the quest draft offer: the smaller of half the

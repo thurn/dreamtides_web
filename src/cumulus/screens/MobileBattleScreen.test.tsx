@@ -271,6 +271,10 @@ describe("MobileBattleScreen", () => {
       expect(backRank?.style.zIndex).toBe("1");
       expect(frontRank?.style.zIndex).toBe("2");
       expect(backSlots).toHaveLength(frontSlots.length + 1);
+      backSlots.forEach((backSlot) => {
+        expect(backSlot.style.aspectRatio).toBe("1 / 1");
+        expect(backSlot.style.width).toContain("calc(100cqh * 1)");
+      });
       frontSlots.forEach((frontSlot) => {
         expect(frontSlot.style.width).toBe(backSlots[0]?.style.width);
         expect(frontSlot.style.position).toBe("relative");

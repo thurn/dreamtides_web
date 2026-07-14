@@ -5,8 +5,9 @@ import {
   type GameCardModel,
 } from "../components/card/CardView";
 import {
+  BATTLEFIELD_CARD_ASPECT_RATIO,
+  BATTLEFIELD_CARD_ASPECT_RATIO_VALUE,
   CARD_ASPECT_RATIO,
-  CARD_ASPECT_RATIO_VALUE,
 } from "../components/card/card-aspect";
 import { BattleStatusDisplay } from "../components/battle/BattleStatusDisplay";
 import { CardBack } from "../components/battle/CardBack";
@@ -451,8 +452,8 @@ function Rank({
             style={{
               position: "relative",
               flex: "0 0 auto",
-              width: `min(22cqw, calc((100cqw - ${String(laneCount - 1)} * ${token("--space-2")}) / ${String(laneCount)}), calc(100cqh * ${String(CARD_ASPECT_RATIO_VALUE)}))`,
-              aspectRatio: CARD_ASPECT_RATIO,
+              width: `min(22cqw, calc((100cqw - ${String(laneCount - 1)} * ${token("--space-2")}) / ${String(laneCount)}), calc(100cqh * ${String(BATTLEFIELD_CARD_ASPECT_RATIO_VALUE)}))`,
+              aspectRatio: BATTLEFIELD_CARD_ASPECT_RATIO,
               boxSizing: "border-box",
             }}
           >

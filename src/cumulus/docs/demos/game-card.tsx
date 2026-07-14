@@ -163,7 +163,7 @@ export const gameCardDemo: CumulusComponent = {
     },
     {
       label: "On the battlefield",
-      note: "Use the strict battlefield presentation for in-play cards. The source shows only art and enlarged spark while hover, focus, or touch-hold reveals the complete original card.",
+      note: "Use the strict battlefield presentation for in-play cards. Its rounded square frame widens the art viewport at the portrait card's vertical scale, showing only art and enlarged spark while hover, focus, or touch-hold reveals the complete original card.",
       code: `<GameCard
   model={{ cardId: card.id, displaySnapshot: card }}
   presentation="battlefield"

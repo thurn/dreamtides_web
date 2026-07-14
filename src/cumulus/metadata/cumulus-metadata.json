@@ -1086,7 +1086,7 @@
       ],
       "required": false,
       "defaultValue": null,
-      "description": "Visual treatment for the source card. `\"battlefield\"` keeps only the art\nand an enlarged top-right spark mark; the shared reveal remains complete."
+      "description": "Visual treatment for the source card. `\"battlefield\"` uses a rounded square\nframe that widens the art viewport at its existing vertical scale, keeping\nonly the art and an enlarged top-right spark mark; the shared reveal remains\ncomplete."
     },
     {
       "name": "slots",
@@ -1796,7 +1796,7 @@
       ],
       "required": false,
       "defaultValue": "full",
-      "description": "Visual treatment for the source card. `\"battlefield\"` shows only art and\nan enlarged top-right spark value while preserving the complete reveal."
+      "description": "Visual treatment for the source card. `\"battlefield\"` uses a rounded square\nframe that widens the art viewport at its existing vertical scale, showing\nonly art and an enlarged top-right spark value while preserving the complete\nreveal."
     },
     {
       "name": "figment",
