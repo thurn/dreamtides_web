@@ -1,6 +1,6 @@
 # Cumulus whole-scene comparison
 
-Capture and compare the registered shop-glass scene from the repository root:
+Capture and compare the default registered shop-glass scene from the repository root:
 
 ```bash
 npm run compare-cumulus-scene
@@ -12,6 +12,12 @@ both renderers:
 
 ```bash
 npm run compare-cumulus-scene -- cumulus-shop-glass-demo 2560 1440
+```
+
+The Dreamsign glass demo has its own registered pair:
+
+```bash
+npm run compare-cumulus-scene -- cumulus-dreamsign-glass-demo 1920 1080
 ```
 
 To copy `unity.png` and `web.png` into a fresh temporary directory and open
@@ -38,6 +44,10 @@ Artifacts are ignored by Git. The web reference for the initial scene is
 available while Vite is running at:
 
 `/cumulus/SceneComparison/Web/?scene=cumulus-shop-glass-demo`
+
+The Dreamsign reference is available at:
+
+`/cumulus/SceneComparison/Web/?scene=cumulus-dreamsign-glass-demo`
 
 ## Adding a scene
 

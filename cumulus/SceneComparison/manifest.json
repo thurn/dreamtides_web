@@ -10,6 +10,44 @@
       "renderer": "shopGlassDemo",
       "backdrop": "../Assets/CumulusMvp/Demo/Art/tumbleleaf_village.png",
       "panelViewportHeight": 0.46
+    },
+    {
+      "id": "cumulus-dreamsign-glass-demo",
+      "unityScene": "Assets/Scenes/CumulusDreamsignGlassDemo.unity",
+      "unityRebuildMethod": "CumulusMvp.Editor.CumulusDreamsignGlassDemoBuilder.Rebuild",
+      "webPath": "/cumulus/SceneComparison/Web/?scene=cumulus-dreamsign-glass-demo",
+      "renderer": "dreamsignGlassDemo",
+      "backdrop": "../Assets/CumulusMvp/Demo/Art/tumbleleaf_village.png",
+      "panelViewportHeight": 0.46,
+      "dreamsigns": [
+        {
+          "id": "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
+          "art": "../Assets/CumulusMvp/Demo/Art/Dreamsigns/C706D0BA-2F41-4B14-95D8-DB168AC6246C.png",
+          "xViewportHeight": -0.148,
+          "yViewportHeight": 0,
+          "rotateX": -2,
+          "rotateY": -8,
+          "rotateZ": -3
+        },
+        {
+          "id": "EDE46F71-AA77-4B12-9824-0D3706DA6A22",
+          "art": "../Assets/CumulusMvp/Demo/Art/Dreamsigns/EDE46F71-AA77-4B12-9824-0D3706DA6A22.png",
+          "xViewportHeight": 0,
+          "yViewportHeight": 0.004,
+          "rotateX": 3,
+          "rotateY": 0,
+          "rotateZ": 2
+        },
+        {
+          "id": "A98F468B-5E76-4041-83EE-69C0871A6BF0",
+          "art": "../Assets/CumulusMvp/Demo/Art/Dreamsigns/A98F468B-5E76-4041-83EE-69C0871A6BF0.png",
+          "xViewportHeight": 0.148,
+          "yViewportHeight": 0,
+          "rotateX": -2,
+          "rotateY": 8,
+          "rotateZ": -2
+        }
+      ]
     }
   ]
 }
