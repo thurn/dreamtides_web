@@ -238,36 +238,42 @@ describe("MobileBattleScreen", () => {
     const emptySlot = enemyArea?.querySelector<HTMLElement>(
       '[data-battle-slot-filled="false"]',
     );
-    expect(emptySlot?.style.border).toContain("dashed");
-    expect(emptySlot?.style.borderRadius).toBe("var(--radius-card)");
+    expect(emptySlot?.style.border).toBe("");
+    expect(emptySlot?.style.borderRadius).toBe("");
     expect(
       playerArea?.querySelector('[data-battle-card-id="player-front-card"]'),
     ).not.toBeNull();
 
     for (const owner of ["enemy", "player"] as const) {
+      const backRank = container.querySelector<HTMLElement>(
+        `[data-battle-rank="${owner}-back"]`,
+      );
+      const frontRank = container.querySelector<HTMLElement>(
+        `[data-battle-rank="${owner}-front"]`,
+      );
       const backSlots = Array.from(
         container.querySelectorAll<HTMLElement>(
-          `[data-battle-rank="${owner}-back"] [data-battle-slot-center-percent]`,
+          `[data-battle-rank="${owner}-back"] [data-battle-slot-id]`,
         ),
       );
       const frontSlots = Array.from(
         container.querySelectorAll<HTMLElement>(
-          `[data-battle-rank="${owner}-front"] [data-battle-slot-center-percent]`,
+          `[data-battle-rank="${owner}-front"] [data-battle-slot-id]`,
         ),
       );
+      expect(backRank?.style.display).toBe("flex");
+      expect(frontRank?.style.display).toBe("flex");
+      expect(backRank?.style.justifyContent).toBe("center");
+      expect(frontRank?.style.justifyContent).toBe("center");
+      expect(backRank?.style.columnGap).toBe("var(--space-2)");
+      expect(frontRank?.style.columnGap).toBe("var(--space-2)");
+      expect(backRank?.style.zIndex).toBe("1");
+      expect(frontRank?.style.zIndex).toBe("2");
       expect(backSlots).toHaveLength(frontSlots.length + 1);
-      frontSlots.forEach((frontSlot, index) => {
-        const leftCenter = Number(
-          backSlots[index]?.dataset.battleSlotCenterPercent,
-        );
-        const rightCenter = Number(
-          backSlots[index + 1]?.dataset.battleSlotCenterPercent,
-        );
-        expect(Number(frontSlot.dataset.battleSlotCenterPercent)).toBeCloseTo(
-          (leftCenter + rightCenter) / 2,
-          8,
-        );
-        expect(frontSlot.style.transform).toBe("translateX(-50%)");
+      frontSlots.forEach((frontSlot) => {
+        expect(frontSlot.style.width).toBe(backSlots[0]?.style.width);
+        expect(frontSlot.style.position).toBe("relative");
+        expect(frontSlot.style.transform).toBe("");
       });
     }
 
@@ -309,7 +315,9 @@ describe("MobileBattleScreen", () => {
             [],
         );
         expect(rankElement?.style.containerType).toBe("size");
-        expect(slots[0]?.style.width).toContain("100cqw / 6");
+        expect(slots[0]?.style.width).toContain(
+          "100cqw - 5 * var(--space-2)",
+        );
         expect(slots[0]?.style.width).toContain("var(--space-2)");
         expect(slots[0]?.style.width).toContain("100cqh");
         expect(slots[0]?.style.height).toBe("");

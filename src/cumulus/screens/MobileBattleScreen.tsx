@@ -403,19 +403,20 @@ function Rank({
         height: "57%",
         top: order === 0 ? 0 : undefined,
         bottom: order === 1 ? 0 : undefined,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: order === 0 ? "flex-start" : "flex-end",
+        columnGap: token("--space-2"),
         containerType: "size",
-        zIndex: order + 1,
+        zIndex: rank === "front" ? 2 : 1,
       }}
     >
-      {slots.map((slot, index) => {
+      {slots.map((slot) => {
         const laneCount = Math.max(backSlotCount, 1);
-        const centerPercent =
-          ((rank === "back" ? index + 0.5 : index + 1) / laneCount) * 100;
         return (
           <div
             key={slot.id}
             data-battle-slot-id={slot.id}
-            data-battle-slot-center-percent={String(centerPercent)}
             data-battle-slot-filled={slot.card !== null ? "true" : "false"}
             data-battle-drop-target={canDrop ? "true" : undefined}
             onDragOver={(event) => {
@@ -427,20 +428,11 @@ function Rank({
               interactions.onSlotDrop({ owner, rank, slotId: slot.id });
             }}
             style={{
-              position: "absolute",
-              left: `${String(centerPercent)}%`,
-              top: order === 0 ? 0 : undefined,
-              bottom: order === 1 ? 0 : undefined,
-              width: `min(22cqw, calc((100cqw / ${String(laneCount)}) - ${token("--space-2")}), calc(100cqh * ${String(CARD_ASPECT_RATIO_VALUE)}))`,
+              position: "relative",
+              flex: "0 0 auto",
+              width: `min(22cqw, calc((100cqw - ${String(laneCount - 1)} * ${token("--space-2")}) / ${String(laneCount)}), calc(100cqh * ${String(CARD_ASPECT_RATIO_VALUE)}))`,
               aspectRatio: CARD_ASPECT_RATIO,
-              transform: "translateX(-50%)",
               boxSizing: "border-box",
-              border:
-                slot.card === null
-                  ? `1px dashed ${token("--border-soft")}`
-                  : undefined,
-              borderRadius:
-                slot.card === null ? token("--radius-card") : undefined,
             }}
           >
             {slot.card !== null ? (
