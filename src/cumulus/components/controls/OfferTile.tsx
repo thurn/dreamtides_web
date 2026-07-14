@@ -1,4 +1,10 @@
-import { useRef, useState, type CSSProperties, type ReactElement } from "react";
+import {
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import { cardIdenticonUri, cardImageUrl, hasAssignedImage } from "../../../data/card-database";
 import type { CardId } from "../../../types/card-identity";
 import { useRevealSource } from "../../internal/reveal/context";
@@ -220,22 +226,22 @@ type CardTreatment = "plain" | "purged" | "incoming" | "duplicate";
 function CardArtPiece({
   card,
   treatment = "plain",
-  size = "medium",
+  size,
 }: {
   readonly card: OfferTileCard;
   readonly treatment?: CardTreatment;
-  readonly size?: "tiny" | "small" | "medium" | "large";
+  readonly size: "compact" | "medium" | "large" | "draft";
 }): ReactElement {
   const [imageBroken, setImageBroken] = useState(false);
   const hasImage = !imageBroken && hasAssignedImage(card.imageNumber);
   const dimensions =
-    size === "tiny"
-      ? { width: 36, height: 44 }
-      : size === "small"
-      ? { width: 48, height: 54 }
+    size === "compact"
+      ? { width: 43, height: 50 }
+      : size === "draft"
+        ? { width: 60, height: 68 }
       : size === "large"
-        ? { width: 84, height: 100 }
-        : { width: 60, height: 76 };
+        ? { width: 90, height: 108 }
+        : { width: 64, height: 82 };
   const treatmentStyle: CSSProperties =
     treatment === "purged"
       ? {
@@ -297,7 +303,7 @@ function DreamsignArtPiece({
   readonly size?: "small" | "large";
 }): ReactElement {
   const [imageBroken, setImageBroken] = useState(false);
-  const edge = size === "small" ? 62 : 98;
+  const edge = size === "small" ? 66 : 128;
   return (
     <span
       data-offer-tile-dreamsign-id={dreamsign.id}
@@ -338,11 +344,11 @@ function DreamsignArtPiece({
 function OperationMark({
   glyph,
   tone = "neutral",
-  position = "corner",
+  layout,
 }: {
   readonly glyph: Glyph;
   readonly tone?: "neutral" | "accent" | "danger" | "spark" | "duplicate";
-  readonly position?: "corner" | "center";
+  readonly layout: "inline" | "overlay";
 }): ReactElement {
   const color =
     tone === "accent"
@@ -357,15 +363,18 @@ function OperationMark({
   return (
     <span
       data-offer-tile-operation=""
+      data-offer-tile-operation-layout={layout}
       style={{
-        position: "absolute",
-        right: position === "corner" ? 24 : "50%",
-        bottom: position === "corner" ? 24 : "50%",
-        translate: position === "center" ? "50% 50%" : undefined,
+        position: layout === "overlay" ? "absolute" : "relative",
+        left: layout === "overlay" ? "50%" : undefined,
+        top: layout === "overlay" ? "50%" : undefined,
+        translate: layout === "overlay" ? "-50% -50%" : undefined,
+        zIndex: 1,
         display: "grid",
         placeItems: "center",
-        width: 38,
-        height: 38,
+        flex: "0 0 auto",
+        width: layout === "overlay" ? 48 : 58,
+        height: layout === "overlay" ? 48 : 58,
         borderRadius: token("--radius-pill"),
         color,
         background: token("--surface-chrome-strong"),
@@ -376,8 +385,49 @@ function OperationMark({
     >
       <i
         className={glyph}
-        style={{ fontSize: 20, lineHeight: 1, pointerEvents: "none" }}
+        style={{
+          fontSize: layout === "overlay" ? 26 : 32,
+          lineHeight: 1,
+          pointerEvents: "none",
+        }}
       />
+    </span>
+  );
+}
+
+function OperationComposition({
+  children,
+  glyph,
+  tone,
+  layout,
+}: {
+  readonly children: ReactNode;
+  readonly glyph: Glyph;
+  readonly tone?: "neutral" | "accent" | "danger" | "spark" | "duplicate";
+  readonly layout: "inline" | "overlay";
+}): ReactElement {
+  return (
+    <span
+      data-offer-tile-composition={layout}
+      style={
+        layout === "overlay"
+          ? {
+              position: "relative",
+              display: "grid",
+              placeItems: "center",
+              pointerEvents: "none",
+            }
+          : {
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+              pointerEvents: "none",
+            }
+      }
+    >
+      {children}
+      <OperationMark glyph={glyph} tone={tone} layout={layout} />
     </span>
   );
 }
@@ -387,13 +437,13 @@ function DraftGrid({ cards }: { readonly cards: readonly OfferTileCard[] }) {
     <span
       style={{
         display: "grid",
-        gridTemplateColumns: "repeat(2, 48px)",
-        gap: 6,
+        gridTemplateColumns: "repeat(2, 60px)",
+        gap: 8,
         pointerEvents: "none",
       }}
     >
       {cards.map((card) => (
-        <CardArtPiece key={card.cardId} card={card} size="small" />
+        <CardArtPiece key={card.cardId} card={card} size="draft" />
       ))}
     </span>
   );
@@ -412,8 +462,8 @@ function CardFan({
       style={{
         position: "relative",
         display: "block",
-        width: 118,
-        height: 100,
+        width: 104,
+        height: 104,
         pointerEvents: "none",
       }}
     >
@@ -425,13 +475,13 @@ function CardFan({
             key={card.cardId}
             style={{
               position: "absolute",
-              left: 29 + offset * 18,
-              top: 12 + Math.abs(offset) * 4,
+              left: 20 + offset * 14,
+              top: 10 + Math.abs(offset) * 4,
               rotate: `${String(offset * 7)}deg`,
               pointerEvents: "none",
             }}
           >
-            <CardArtPiece card={card} treatment={treatment} />
+            <CardArtPiece card={card} treatment={treatment} size="medium" />
           </span>
         );
       })}
@@ -443,104 +493,110 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
   switch (model.kind) {
     case "card-gift":
       return (
-        <>
+        <OperationComposition glyph={GLYPHS.gift} tone="spark" layout="inline">
           <CardArtPiece card={model.card} size="large" />
-          <OperationMark glyph={GLYPHS.gift} tone="spark" />
-        </>
+        </OperationComposition>
       );
     case "power-card":
       return (
-        <>
+        <OperationComposition glyph={GLYPHS.star} tone="spark" layout="inline">
           <CardArtPiece card={model.card} size="large" />
-          <OperationMark glyph={GLYPHS.star} tone="spark" />
-        </>
+        </OperationComposition>
       );
     case "card-draft":
       return <DraftGrid cards={model.cards} />;
     case "copies-draft":
       return (
-        <>
+        <OperationComposition glyph={GLYPHS.copy} tone="duplicate" layout="overlay">
           <DraftGrid cards={model.cards} />
-          <OperationMark glyph={GLYPHS.copy} tone="duplicate" />
-        </>
+        </OperationComposition>
       );
     case "category-draft":
       return (
-        <>
+        <OperationComposition glyph={GLYPHS.filter} layout="overlay">
           <DraftGrid cards={model.cards} />
-          <OperationMark glyph={GLYPHS.filter} />
-        </>
+        </OperationComposition>
       );
     case "transfigured-draft":
       return (
-        <>
+        <OperationComposition
+          glyph={GLYPHS.transfigurationSite}
+          tone="accent"
+          layout="overlay"
+        >
           <DraftGrid cards={model.cards} />
-          <OperationMark glyph={GLYPHS.transfigurationSite} tone="accent" />
-        </>
+        </OperationComposition>
       );
     case "card-bundle":
       return (
-        <>
+        <OperationComposition glyph={GLYPHS.plus} tone="spark" layout="inline">
           <CardFan cards={model.cards} />
-          <OperationMark glyph={GLYPHS.plus} tone="spark" />
-        </>
+        </OperationComposition>
       );
     case "transfigure-card":
       return (
-        <>
-          <span style={{ display: "flex", gap: 10, pointerEvents: "none" }}>
-            <CardArtPiece card={model.card} />
-            <CardArtPiece card={model.card} treatment="incoming" />
-          </span>
-          <OperationMark glyph={GLYPHS.transfigurationSite} tone="accent" position="center" />
-        </>
+        <OperationComposition
+          glyph={GLYPHS.transfigurationSite}
+          tone="accent"
+          layout="inline"
+        >
+          <CardArtPiece card={model.card} size="large" treatment="incoming" />
+        </OperationComposition>
       );
     case "transfigure-starters":
       return (
-        <>
+        <OperationComposition
+          glyph={GLYPHS.transfigurationSite}
+          tone="accent"
+          layout="inline"
+        >
           <CardFan cards={model.cards} />
-          <OperationMark glyph={GLYPHS.transfigurationSite} tone="accent" />
-        </>
+        </OperationComposition>
       );
     case "keyword-modification":
       return (
-        <>
+        <OperationComposition glyph={GLYPHS.spark} tone="accent" layout="inline">
           <CardArtPiece card={model.card} size="large" />
-          <OperationMark glyph={GLYPHS.spark} tone="accent" />
-        </>
+        </OperationComposition>
       );
     case "tribal-change":
       return (
-        <>
+        <OperationComposition
+          glyph={GLYPHS.affiliationRow}
+          tone="accent"
+          layout="inline"
+        >
           <CardArtPiece card={model.card} size="large" />
-          <OperationMark glyph={GLYPHS.affiliationRow} tone="accent" />
-        </>
+        </OperationComposition>
       );
     case "purge-card":
       return (
-        <>
+        <OperationComposition
+          glyph={GLYPHS.closeFilled}
+          tone="danger"
+          layout="inline"
+        >
           <CardArtPiece card={model.card} size="large" treatment="purged" />
-          <OperationMark glyph={GLYPHS.closeFilled} tone="danger" />
-        </>
+        </OperationComposition>
       );
     case "trade-card":
       return (
-        <>
+        <OperationComposition glyph={GLYPHS.caretRight} layout="overlay">
           <span
             style={{
               display: "grid",
-              gridTemplateColumns: "48px 76px",
+              gridTemplateColumns: "64px 92px",
               alignItems: "center",
-              gap: 10,
+              gap: 8,
               pointerEvents: "none",
             }}
           >
-            <CardArtPiece card={model.outgoing} treatment="purged" size="small" />
+            <CardArtPiece card={model.outgoing} treatment="purged" size="medium" />
             <span
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(2, 36px)",
-                gap: 4,
+                gridTemplateColumns: "repeat(2, 43px)",
+                gap: 6,
                 pointerEvents: "none",
               }}
             >
@@ -549,20 +605,18 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
                   key={card.cardId}
                   card={card}
                   treatment="incoming"
-                  size="tiny"
+                  size="compact"
                 />
               ))}
             </span>
           </span>
-          <OperationMark glyph={GLYPHS.caretRight} position="center" />
-        </>
+        </OperationComposition>
       );
     case "duplicate-card":
       return (
-        <>
+        <OperationComposition glyph={GLYPHS.copy} tone="duplicate" layout="inline">
           <CardFan cards={model.cards} treatment="duplicate" />
-          <OperationMark glyph={GLYPHS.copy} tone="duplicate" />
-        </>
+        </OperationComposition>
       );
     case "dreamsign-gift":
       return <DreamsignArtPiece dreamsign={model.dreamsign} />;
@@ -571,7 +625,7 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
         <span
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(2, 62px)",
+            gridTemplateColumns: "repeat(2, 66px)",
             placeItems: "center",
             gap: 4,
             pointerEvents: "none",
@@ -596,8 +650,8 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
           style={{
             display: "grid",
             placeItems: "center",
-            width: 104,
-            height: 104,
+            width: 132,
+            height: 132,
             borderRadius: token("--radius-pill"),
             background: token("--surface-chrome-strong"),
             border: `2px solid ${token("--border-strong")}`,
@@ -609,7 +663,7 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
         >
           <i
             className={model.site.glyph}
-            style={{ fontSize: 68, lineHeight: 1, pointerEvents: "none" }}
+            style={{ fontSize: 86, lineHeight: 1, pointerEvents: "none" }}
           />
         </span>
       );

@@ -28,7 +28,7 @@ export const offerTileDemo: CumulusComponent = {
   blurb:
     "The 200×200 circular symbolic Dream Augury offer button: UUID-backed card art, dreamsign art, and operation marks composed on a distinct glass surface without spelling out the complete offer.",
   callout:
-    "Use the named offer kind that matches the category and pass every object surfaced by the generated offer. Fixed-target variants show their exact affected cards; chooser variants show every choice. Inner objects stay decorative, and the complete tile owns interaction plus its body-only InfoCard.",
+    "Use the named offer kind that matches the category and pass every object surfaced by the generated offer. Fixed-target variants show their exact affected cards; chooser variants show every choice. Four-card operations center their mark over the art grid, while smaller card sets pair the mark inline with enlarged art. Inner objects stay decorative, and the complete tile owns interaction plus its body-only InfoCard.",
   group: "Components",
   docName: "OfferTile",
   Component: OfferTileDemo,

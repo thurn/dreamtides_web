@@ -132,6 +132,13 @@ describe("OfferTile", () => {
       description: "Choose one of up to three cards in your deck to duplicate.",
       cards: [cards[0], cards[1], cards[2]],
     };
+    const copies: OfferTileModel = {
+      id: "debug-copies",
+      kind: "copies-draft",
+      label: "Copies Draft",
+      description: "Choose one of four cards to add copies of to your deck.",
+      cards,
+    };
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -141,6 +148,7 @@ describe("OfferTile", () => {
         <CumulusRoot>
           <OfferTile model={trade} onPress={() => {}} testId="trade-tile" />
           <OfferTile model={duplicate} onPress={() => {}} testId="duplicate-tile" />
+          <OfferTile model={copies} onPress={() => {}} testId="copies-tile" />
         </CumulusRoot>,
       );
     });
@@ -153,6 +161,21 @@ describe("OfferTile", () => {
         '[data-testid="duplicate-tile"] [data-offer-tile-card-id]',
       ),
     ).toHaveLength(3);
+    expect(
+      container.querySelector(
+        '[data-testid="copies-tile"] [data-offer-tile-operation-layout]',
+      )?.getAttribute("data-offer-tile-operation-layout"),
+    ).toBe("overlay");
+    expect(
+      container.querySelector(
+        '[data-testid="duplicate-tile"] [data-offer-tile-operation-layout]',
+      )?.getAttribute("data-offer-tile-operation-layout"),
+    ).toBe("inline");
+    expect(
+      container.querySelector(
+        '[data-testid="trade-tile"] [data-offer-tile-operation-layout]',
+      )?.getAttribute("data-offer-tile-operation-layout"),
+    ).toBe("overlay");
 
     act(() => root.unmount());
     container.remove();
