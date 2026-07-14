@@ -598,7 +598,9 @@ function ControlRow({
         height: 40,
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "flex-end",
+        boxSizing: "border-box",
+        paddingRight: token("--space-4"),
         gap: token("--space-4"),
       }}
     >

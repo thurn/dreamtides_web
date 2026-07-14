@@ -395,6 +395,9 @@ describe("MobileBattleScreen", () => {
     );
 
     expect(controlRow?.style.height).toBe("40px");
+    expect(controlRow?.style.justifyContent).toBe("flex-end");
+    expect(controlRow?.style.paddingRight).toBe("var(--space-4)");
+    expect(controlRow?.style.boxSizing).toBe("border-box");
     expect(previous?.dataset.glassPlacement).toBe("onMedia");
     expect(next?.dataset.glassPlacement).toBe("onMedia");
 
