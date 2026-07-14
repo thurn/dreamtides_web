@@ -355,9 +355,9 @@ describe("TransfigurationSiteScreen", () => {
       "[data-transfiguration-detail-body]",
     );
     expect(detailBody?.style.gridTemplateColumns).toBe(
-      "minmax(220px, 278px) minmax(240px, 274px)",
+      "minmax(220px, 278px) minmax(240px, 288px)",
     );
-    expect(detailBody?.style.gap).toBe("var(--space-6)");
+    expect(detailBody?.style.gap).toBe("var(--space-8)");
     expect(detailBody?.style.alignItems).toBe("center");
     expect(
       container.querySelector<HTMLElement>("[data-transfiguration-options]")

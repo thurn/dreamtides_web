@@ -489,9 +489,9 @@ function DetailPanel({
           minHeight: mobile ? "auto" : undefined,
           gridTemplateColumns: mobile
             ? "minmax(0, 1fr) minmax(0, 1fr)"
-            : "minmax(220px, 278px) minmax(240px, 274px)",
+            : "minmax(220px, 278px) minmax(240px, 288px)",
           gridTemplateRows: mobile ? "auto" : undefined,
-          gap: mobile ? token("--space-4") : token("--space-6"),
+          gap: mobile ? token("--space-4") : token("--space-8"),
           alignItems: mobile ? "stretch" : "center",
           padding: mobile
             ? `${token("--space-6")} ${token("--space-4")}`
