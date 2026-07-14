@@ -30,12 +30,16 @@ component variant.
 
 ## Persistent Quest Chrome
 
-`CumulusQuestChrome` is the app-owned wrapper around every registered Cumulus
-product screen. It derives the `QuestStatusBar` model directly from live quest
-state, docks the bar at the bottom, and mounts the desktop gear or mobile menu
-with the app-owned overlay actions. Registration through `cumulusScreenFor` or
-`cumulusSiteScreenFor` applies this wrapper automatically; pure screens and their
-view-model builders contain scene-specific data only.
+`CumulusQuestChrome` is the app-owned wrapper around registered Cumulus product
+screens. It derives the `QuestStatusBar` model directly from live quest state,
+docks the bar at the bottom of active-run screens, and mounts the desktop gear
+or mobile menu with the app-owned overlay actions. Registration through
+`cumulusScreenFor` or `cumulusSiteScreenFor` applies this wrapper automatically;
+pure screens and their view-model builders contain scene-specific data only.
+
+Quest completion keeps the utility menu and omits the status bar. Its centered
+run summary is the terminal inventory readout, and its bottom action starts the
+next quest.
 
 The quest-start choice is the explicit exception because a run has no selected
 Dreamcaller or persistent quest inventory yet. The battle route applies the

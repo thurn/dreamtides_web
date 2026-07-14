@@ -118,5 +118,21 @@ describe("CumulusQuestChrome", () => {
         ?.className,
     ).toBe("bxf bx-menu");
   });
-});
 
+  it("keeps the utility menu while omitting the status bar for an end screen", () => {
+    stubViewport(false);
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <CumulusQuestChrome showStatusBar={false}>
+            <div data-testid="end-screen-content" />
+          </CumulusQuestChrome>
+        </CumulusRoot>,
+      );
+    });
+
+    expect(container.querySelector('[data-testid="end-screen-content"]')).not.toBeNull();
+    expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
+    expect(container.querySelector('[data-testid="dreamscape-menu-button"]')).not.toBeNull();
+  });
+});

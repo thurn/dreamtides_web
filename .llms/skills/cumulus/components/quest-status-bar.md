@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/quest-status-bar`
 
-Real consumers: **7** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
 
 The persistent, transparent bottom HUD for quest screens. The essence total, deck, Dreamcaller, and docked dreamsigns sit directly on the scene art, made legible by their own glyph outline. It docks at two sizes — `compact` on mobile, `grand` on desktop — scaling the whole bar up in proportion.
 

@@ -1,32 +1,32 @@
 import type { CardData } from "../../types/cards";
 import type { QuestState } from "../../types/quest";
-import type {
-  QuestCompleteDreamcallerView,
-  QuestCompleteView,
-} from "../../cumulus/screens/QuestCompleteScreen";
+import type { QuestCompleteView } from "../../cumulus/screens/QuestCompleteScreen";
 import { buildStartingDeckView } from "./starting-deck-view-model";
 
-/** Map the selected Dreamcaller to the victory portrait contract. */
-export function buildQuestCompleteDreamcallerView(
+/** Build the victory statistics shown on the completion surface. */
+export function buildQuestCompleteView(
   state: QuestState,
-): QuestCompleteDreamcallerView | null {
-  if (state.dreamcaller === null) return null;
+): QuestCompleteView {
+  const completedDreamscapes = Object.values(state.atlas.nodes).filter(
+    (node) => node.state === "completed",
+  ).length;
   return {
-    id: state.dreamcaller.id,
-    name: state.dreamcaller.name,
-    title: state.dreamcaller.title,
-    imageNumber: state.dreamcaller.imageNumber,
-    portraitFocus: state.dreamcaller.portraitFocus,
+    stats: [
+      { id: "battles", label: "Battles Won", value: state.completionLevel, kind: "number" },
+      { id: "dreamscapes", label: "Dreamscapes", value: completedDreamscapes, kind: "number" },
+      { id: "cards", label: "Final Deck", value: state.deck.length, kind: "number" },
+      { id: "dreamsigns", label: "Dreamsigns", value: state.dreamsigns.length, kind: "number" },
+      { id: "essence", label: "Essence Remaining", value: state.essence, kind: "essence" },
+    ],
   };
 }
 
-/** Build the complete victory summary from live quest state. */
-export function buildQuestCompleteView(
-  state: QuestState,
+/** Resolve the final deck's UUIDs for the completion log. */
+export function buildQuestCompleteCardIds(
+  deck: QuestState["deck"],
   cardDatabase: Map<number, CardData>,
-): QuestCompleteView {
-  return {
-    dreamcaller: buildQuestCompleteDreamcallerView(state),
-    finalDeck: buildStartingDeckView(state.deck, cardDatabase).cards,
-  };
+): readonly string[] {
+  return buildStartingDeckView(deck, cardDatabase).cards.map(
+    (entry) => entry.model.cardId,
+  );
 }

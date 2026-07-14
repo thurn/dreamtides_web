@@ -1,66 +1,39 @@
-import { useState, type ReactElement } from "react";
-import { Button } from "../components/controls/Button";
+import type { ReactElement } from "react";
 import { GlassButton } from "../components/controls/GlassButton";
-import { GlowIcon } from "../components/controls/GlowIcon";
-import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
+import { GroupPanel } from "../components/controls/GroupPanel";
+import { EssenceValue } from "../components/hud/EssenceValue";
 import { Motes } from "../components/hud/Motes";
-import { QUEST_STATUS_BAR_CLEARANCE_OP } from "../components/hud/QuestStatusBar";
-import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import {
-  DeckGalleryOverlay,
-  type DeckGalleryCardView,
-} from "./DeckGalleryOverlay";
 import { MENU_BUTTON_PX, MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
 
-export interface QuestCompleteDreamcallerView {
-  id: string;
-  name: string;
-  title: string;
-  imageNumber: string;
-  portraitFocus?: { x: number; y: number };
+export interface QuestCompleteStatView {
+  id: "battles" | "dreamscapes" | "cards" | "dreamsigns" | "essence";
+  label: string;
+  value: number;
+  kind: "number" | "essence";
 }
 
 export interface QuestCompleteView {
-  dreamcaller: QuestCompleteDreamcallerView | null;
-  finalDeck: readonly DeckGalleryCardView[];
+  stats: readonly QuestCompleteStatView[];
 }
 
 export interface QuestCompleteScreenProps {
   view: QuestCompleteView;
   onNewQuest: () => void;
-  onDownloadLog: () => void;
-  onOpenFinalDeck: () => void;
-  onCloseFinalDeck: () => void;
 }
 
 const CONTENT_MAX_WIDTH_PX = 440;
-const PORTRAIT_SIZE_PX = 96;
 const TOP_CHROME_CLEARANCE =
   `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}, ` +
   `calc(max(var(--safe-area-inset-top), ${String(MENU_EDGE_INSET_MOBILE_PX)}px) + ${String(MENU_BUTTON_PX)}px)) + ${token("--space-5")})`;
-const BOTTOM_CLEARANCE =
-  `calc(${QUEST_STATUS_BAR_CLEARANCE_OP} + ${token("--space-6")})`;
+const BOTTOM_SAFE_PADDING =
+  `calc(max(var(--safe-area-inset-bottom), ${token("--safe-bottom")}) + ${token("--space-6")})`;
 
-/** The Cumulus victory summary, designed around a narrow mobile stage. */
+/** The sparse Cumulus victory summary, designed around a narrow mobile stage. */
 export function QuestCompleteScreen({
   view,
   onNewQuest,
-  onDownloadLog,
-  onOpenFinalDeck,
-  onCloseFinalDeck,
 }: QuestCompleteScreenProps): ReactElement {
-  const [showFinalDeck, setShowFinalDeck] = useState(false);
-
-  const openFinalDeck = (): void => {
-    setShowFinalDeck(true);
-    onOpenFinalDeck();
-  };
-  const closeFinalDeck = (): void => {
-    setShowFinalDeck(false);
-    onCloseFinalDeck();
-  };
-
   return (
     <div
       className="cumulus"
@@ -90,17 +63,13 @@ export function QuestCompleteScreen({
         data-quest-complete-content=""
         style={{
           position: "absolute",
-          top: 0,
-          right: 0,
-          bottom: BOTTOM_CLEARANCE,
-          left: 0,
+          inset: 0,
           overflowY: "auto",
           overscrollBehavior: "contain",
-          padding: `${TOP_CHROME_CLEARANCE} ${token("--space-6")} ${token("--space-8")}`,
+          padding: `${TOP_CHROME_CLEARANCE} ${token("--space-6")} ${BOTTOM_SAFE_PADDING}`,
           boxSizing: "border-box",
           display: "flex",
           justifyContent: "center",
-          alignItems: "center",
           zIndex: 3,
         }}
       >
@@ -108,113 +77,108 @@ export function QuestCompleteScreen({
           style={{
             width: "100%",
             maxWidth: CONTENT_MAX_WIDTH_PX,
+            minHeight: "100%",
             display: "flex",
             flexDirection: "column",
             alignItems: "stretch",
-            gap: token("--space-9"),
           }}
         >
-          <header
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
-              gap: token("--space-5"),
-            }}
-          >
-            <GlowIcon
-              iconClass={GLYPHS.star}
-              color="gold"
-              size="1.8em"
-              glowFilter="spark-glow"
-              title="Victory"
-            />
-            <h1
-              style={{
-                margin: 0,
-                font: token("--t-title"),
-                color: token("--text-primary"),
-              }}
-            >
-              Quest Complete
-            </h1>
-          </header>
-
-          {view.dreamcaller !== null && (
-            <section
-              data-quest-complete-dreamcaller={view.dreamcaller.id}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: token("--space-4"),
-              }}
-            >
-              <DreamcallerPortrait
-                dreamcaller={view.dreamcaller}
-                variant="panel"
-                size={PORTRAIT_SIZE_PX}
-              />
-              <div style={{ textAlign: "center" }}>
-                <strong style={{ font: token("--t-title-sm") }}>
-                  {view.dreamcaller.name}
-                </strong>
-              </div>
-            </section>
-          )}
-
           <div
             style={{
+              flex: 1,
               display: "flex",
               flexDirection: "column",
-              alignItems: "stretch",
-              gap: token("--space-4"),
+              justifyContent: "center",
+              gap: token("--space-8"),
             }}
           >
-            <div data-quest-complete-action="new-quest">
-              <Button
-                full
-                size="lg"
-                label="New Quest"
-                onClick={onNewQuest}
-              />
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                flexWrap: "wrap",
-                gap: token("--space-4"),
-              }}
-            >
-              <GlassButton
-                label="Final Deck"
-                glyph={GLYPHS.affiliationRow}
-                onPress={openFinalDeck}
-                testId="quest-complete-view-deck"
-              />
-              <GlassButton
-                label="Log"
-                onPress={onDownloadLog}
-                testId="quest-complete-download-log"
-              />
-            </div>
+            <header style={{ textAlign: "center" }}>
+              <h1
+                style={{
+                  margin: 0,
+                  font: token("--t-title"),
+                  color: token("--text-primary"),
+                }}
+              >
+                Quest Complete
+              </h1>
+            </header>
+
+            <GroupPanel>
+              <dl
+                data-quest-complete-summary=""
+                style={{
+                  margin: 0,
+                  display: "grid",
+                  gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                  gap: token("--space-5"),
+                }}
+              >
+                {view.stats.map((stat) => (
+                  <SummaryStat key={stat.id} stat={stat} />
+                ))}
+              </dl>
+            </GroupPanel>
+          </div>
+
+          <div
+            data-quest-complete-action="new-quest"
+            style={{
+              flexShrink: 0,
+              display: "flex",
+              justifyContent: "center",
+              paddingTop: token("--space-8"),
+            }}
+          >
+            <GlassButton
+              label="New Quest"
+              variant="accent"
+              onPress={onNewQuest}
+              testId="quest-complete-new-quest"
+            />
           </div>
         </div>
       </main>
+    </div>
+  );
+}
 
-      <DeckGalleryOverlay
-        isOpen={showFinalDeck}
-        title="Final Deck"
-        subtitle="Every card that carried you through the dream."
-        cards={view.finalDeck}
-        emptyLabel="No cards remain in the final deck."
-        closeLabel="Close final deck"
-        clearMobileQuestMenu
-        onClose={closeFinalDeck}
-      />
+function SummaryStat({ stat }: { readonly stat: QuestCompleteStatView }) {
+  return (
+    <div
+      data-quest-complete-stat={stat.id}
+      style={{
+        gridColumn: stat.id === "essence" ? "1 / -1" : undefined,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: token("--space-2"),
+        textAlign: "center",
+      }}
+    >
+      <dd
+        style={{
+          margin: 0,
+          font: token("--t-title-sm"),
+          color: stat.kind === "essence" ? token("--essence") : token("--gold"),
+        }}
+      >
+        {stat.kind === "essence" ? (
+          <EssenceValue amount={stat.value} />
+        ) : (
+          stat.value
+        )}
+      </dd>
+      <dt
+        style={{
+          font: token("--t-eyebrow"),
+          letterSpacing: token("--tracking-eyebrow"),
+          textTransform: "uppercase",
+          color: token("--text-muted"),
+        }}
+      >
+        {stat.label}
+      </dt>
     </div>
   );
 }

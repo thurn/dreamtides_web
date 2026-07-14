@@ -4,37 +4,19 @@ import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../CumulusRoot";
-import { Pressable } from "../primitives/Pressable";
 import {
   QuestCompleteScreen,
   type QuestCompleteView,
 } from "./QuestCompleteScreen";
 
-vi.mock("./DeckGalleryOverlay", () => ({
-  DeckGalleryOverlay: ({
-    isOpen,
-    title,
-    onClose,
-  }: {
-    isOpen: boolean;
-    title: string;
-    onClose: () => void;
-  }) =>
-    isOpen ? (
-      <div role="dialog" aria-label={title}>
-        <Pressable as="button" onClick={onClose}>Close</Pressable>
-      </div>
-    ) : null,
-}));
-
 const VIEW: QuestCompleteView = {
-  dreamcaller: {
-    id: "dreamcaller-uuid",
-    name: "The Wayfinder",
-    title: "Bearer of the Last Light",
-    imageNumber: "001",
-  },
-  finalDeck: [],
+  stats: [
+    { id: "battles", label: "Battles Won", value: 7, kind: "number" },
+    { id: "dreamscapes", label: "Dreamscapes", value: 7, kind: "number" },
+    { id: "cards", label: "Final Deck", value: 30, kind: "number" },
+    { id: "dreamsigns", label: "Dreamsigns", value: 4, kind: "number" },
+    { id: "essence", label: "Essence Remaining", value: 140, kind: "essence" },
+  ],
 };
 
 beforeEach(() => {
@@ -68,68 +50,37 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
 }
 
 describe("Cumulus QuestCompleteScreen", () => {
-  it("renders only the essential victory identity on the default surface", () => {
+  it("renders the run summary without Dreamcaller or secondary actions", () => {
     const { container, root } = mount(
-      <QuestCompleteScreen
-        view={VIEW}
-        onNewQuest={vi.fn()}
-        onDownloadLog={vi.fn()}
-        onOpenFinalDeck={vi.fn()}
-        onCloseFinalDeck={vi.fn()}
-      />,
+      <QuestCompleteScreen view={VIEW} onNewQuest={vi.fn()} />,
     );
 
     expect(container.textContent).toContain("Quest Complete");
-    expect(container.textContent).toContain("The Wayfinder");
-    expect(container.textContent).toContain("New Quest");
-    expect(container.textContent).toContain("Final Deck");
-    expect(container.textContent).toContain("Log");
-    expect(container.textContent).not.toContain("Battles Won");
-    expect(container.textContent).not.toContain("Dreamscapes");
-    expect(container.textContent).not.toContain("Essence Remaining");
-    expect(container.textContent).not.toContain("Bearer of the Last Light");
-    expect(container.querySelector("[data-quest-complete-summary]")).toBeNull();
+    expect(container.querySelectorAll("[data-quest-complete-stat]")).toHaveLength(5);
+    expect(
+      container.querySelector('[data-quest-complete-stat="essence"]')?.textContent,
+    ).toContain("140");
+    expect(container.querySelector("[data-quest-complete-dreamcaller]")).toBeNull();
+    expect(container.querySelector("img")).toBeNull();
+    expect(container.querySelector('[title="Victory"]')).toBeNull();
+    expect(container.querySelector('[data-testid="quest-complete-view-deck"]')).toBeNull();
+    expect(container.querySelector('[data-testid="quest-complete-download-log"]')).toBeNull();
 
     act(() => root.unmount());
   });
 
-  it("reports every action and opens the shared final-deck gallery", () => {
+  it("renders the bottom action as accent glass and reports activation", () => {
     const onNewQuest = vi.fn();
-    const onDownloadLog = vi.fn();
-    const onOpenFinalDeck = vi.fn();
-    const onCloseFinalDeck = vi.fn();
     const { container, root } = mount(
-      <QuestCompleteScreen
-        view={VIEW}
-        onNewQuest={onNewQuest}
-        onDownloadLog={onDownloadLog}
-        onOpenFinalDeck={onOpenFinalDeck}
-        onCloseFinalDeck={onCloseFinalDeck}
-      />,
+      <QuestCompleteScreen view={VIEW} onNewQuest={onNewQuest} />,
+    );
+    const button = container.querySelector<HTMLButtonElement>(
+      '[data-testid="quest-complete-new-quest"]',
     );
 
-    act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-quest-complete-action="new-quest"] button',
-      )?.click();
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="quest-complete-download-log"]',
-      )?.click();
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="quest-complete-view-deck"]',
-      )?.click();
-    });
-
+    expect(button?.dataset.glassVariant).toBe("accent");
+    act(() => button?.click());
     expect(onNewQuest).toHaveBeenCalledOnce();
-    expect(onDownloadLog).toHaveBeenCalledOnce();
-    expect(onOpenFinalDeck).toHaveBeenCalledOnce();
-    expect(container.querySelector('[role="dialog"][aria-label="Final Deck"]')).not.toBeNull();
-
-    act(() => {
-      container.querySelector<HTMLButtonElement>('[role="dialog"] button')?.click();
-    });
-    expect(onCloseFinalDeck).toHaveBeenCalledOnce();
-    expect(container.querySelector('[role="dialog"]')).toBeNull();
 
     act(() => root.unmount());
   });

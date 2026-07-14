@@ -1,6 +1,6 @@
-// App-owned chrome for every registered Cumulus product screen. Screen authors
-// render only their scene/content; the router wraps that content here so the
-// QuestStatusBar and platform-appropriate quest menu cannot be forgotten.
+// App-owned chrome for registered Cumulus product screens. Screen authors
+// render only their scene/content; the router decides which persistent chrome
+// belongs around each route.
 
 import { useRef, type ReactNode } from "react";
 import { DreamscapeQuestMenu } from "./DreamscapeQuestMenu";
@@ -31,10 +31,12 @@ export function CumulusQuestChrome({
   children,
   handlers = {},
   showAtlasRegenerate = false,
+  showStatusBar = true,
 }: {
   children: ReactNode;
   handlers?: CumulusQuestChromeHandlers;
   showAtlasRegenerate?: boolean;
+  showStatusBar?: boolean;
 }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const { state } = useQuest();
@@ -49,17 +51,19 @@ export function CumulusQuestChrome({
       style={{ position: "fixed", inset: 0, minHeight: "100dvh" }}
     >
       {children}
-      <ErrorBoundary scope="overlay:cumulus-status-bar">
-        <QuestStatusBar
-          stageRef={stageRef}
-          essence={hud.essence}
-          deck={hud.deck}
-          onViewDeck={handlers.onViewDeck}
-          dreamcaller={hud.dreamcaller}
-          dreamsigns={hud.dreamsigns}
-          size={isDesktop ? "grand" : "compact"}
-        />
-      </ErrorBoundary>
+      {showStatusBar && (
+        <ErrorBoundary scope="overlay:cumulus-status-bar">
+          <QuestStatusBar
+            stageRef={stageRef}
+            essence={hud.essence}
+            deck={hud.deck}
+            onViewDeck={handlers.onViewDeck}
+            dreamcaller={hud.dreamcaller}
+            dreamsigns={hud.dreamsigns}
+            size={isDesktop ? "grand" : "compact"}
+          />
+        </ErrorBoundary>
+      )}
       {state.dreamcaller !== null && (
         <ErrorBoundary scope="overlay:cumulus-quest-menu">
           <DreamscapeQuestMenu

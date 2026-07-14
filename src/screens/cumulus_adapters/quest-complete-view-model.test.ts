@@ -4,7 +4,10 @@ import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { createDefaultState } from "../../state/quest-context";
 import type { DreamscapeNode, QuestState } from "../../types/quest";
-import { buildQuestCompleteView } from "./quest-complete-view-model";
+import {
+  buildQuestCompleteCardIds,
+  buildQuestCompleteView,
+} from "./quest-complete-view-model";
 
 function card(cardNumber: number, id: string): CardData {
   return {
@@ -79,33 +82,29 @@ function state(): QuestState {
 }
 
 describe("buildQuestCompleteView", () => {
-  it("builds the minimal victory identity from run state", () => {
-    const view = buildQuestCompleteView(
-      state(),
-      new Map([
-        [1, card(1, "00000000-0000-0000-0000-000000000001")],
-        [2, card(2, "00000000-0000-0000-0000-000000000002")],
-      ]),
-    );
+  it("builds the victory statistics from run state", () => {
+    const view = buildQuestCompleteView(state());
 
-    expect(view.dreamcaller?.id).toBe("dreamcaller-uuid");
-    expect(view.dreamcaller?.name).toBe("The Wayfinder");
+    expect(view.stats.map(({ id, value }) => [id, value])).toEqual([
+      ["battles", 7],
+      ["dreamscapes", 2],
+      ["cards", 2],
+      ["dreamsigns", 1],
+      ["essence", 140],
+    ]);
   });
 
-  it("keeps same-named cards distinct by deck-entry id and card UUID", () => {
-    const view = buildQuestCompleteView(
-      state(),
+  it("resolves same-named final-deck cards to distinct UUIDs for logging", () => {
+    const fixtureState = state();
+    const cardIds = buildQuestCompleteCardIds(
+      fixtureState.deck,
       new Map([
         [1, card(1, "00000000-0000-0000-0000-000000000001")],
         [2, card(2, "00000000-0000-0000-0000-000000000002")],
       ]),
     );
 
-    expect(view.finalDeck.map((entry) => entry.entryId)).toEqual([
-      "entry-a",
-      "entry-b",
-    ]);
-    expect(view.finalDeck.map((entry) => entry.model.cardId)).toEqual([
+    expect(cardIds).toEqual([
       "00000000-0000-0000-0000-000000000001",
       "00000000-0000-0000-0000-000000000002",
     ]);
