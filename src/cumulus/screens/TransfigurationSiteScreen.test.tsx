@@ -358,11 +358,15 @@ describe("TransfigurationSiteScreen", () => {
       "minmax(220px, 278px) minmax(240px, 288px)",
     );
     expect(detailBody?.style.gap).toBe("var(--space-8)");
-    expect(detailBody?.style.alignItems).toBe("center");
+    expect(detailBody?.style.alignItems).toBe("start");
     expect(
       container.querySelector<HTMLElement>("[data-transfiguration-options]")
         ?.style.overflowY,
     ).toBe("auto");
+    expect(
+      container.querySelector<HTMLElement>("[data-transfiguration-options]")
+        ?.style.paddingBlockStart,
+    ).toBe("0px");
     expect(
       container
         .querySelector<HTMLButtonElement>(

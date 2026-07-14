@@ -492,7 +492,7 @@ function DetailPanel({
             : "minmax(220px, 278px) minmax(240px, 288px)",
           gridTemplateRows: mobile ? "auto" : undefined,
           gap: mobile ? token("--space-4") : token("--space-8"),
-          alignItems: mobile ? "stretch" : "center",
+          alignItems: mobile ? "stretch" : "start",
           padding: mobile
             ? `${token("--space-6")} ${token("--space-4")}`
             : token("--space-8"),
@@ -550,6 +550,7 @@ function DetailPanel({
               maxHeight: mobile ? undefined : "min(52vh, 520px)",
               overflowY: mobile ? "visible" : "auto",
               padding: token("--space-2"),
+              paddingBlockStart: mobile ? token("--space-2") : 0,
             }}
           >
             {candidate.forms.map((form) => {
