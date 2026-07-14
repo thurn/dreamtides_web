@@ -20,6 +20,12 @@ def compare(web_path, unity_path, output_directory):
         raise ValueError(
             f"capture dimensions differ: web={web_width}x{web_height}, "
             f"unity={unity_width}x{unity_height}")
+    for label, pixels in (("web", web), ("unity", unity)):
+        translucent_pixel_count = sum(pixel[3] != 255 for pixel in pixels)
+        if translucent_pixel_count:
+            raise ValueError(
+                f"{label} capture must be opaque: "
+                f"{translucent_pixel_count} translucent pixels")
 
     absolute_sum = squared_sum = maximum = 0
     differing_pixels = 0

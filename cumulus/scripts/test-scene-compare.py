@@ -40,6 +40,19 @@ class SceneCompareTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "dimensions differ"):
                 scene_compare.compare(web, unity, root / "out")
 
+    def test_rejects_translucent_capture_pixels(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            web = root / "web.png"
+            unity = root / "unity.png"
+            scene_compare.write_png(web, 1, 1, [(10, 20, 30, 255)])
+            scene_compare.write_png(unity, 1, 1, [(10, 20, 30, 127)])
+
+            with self.assertRaisesRegex(
+                    ValueError,
+                    "unity capture must be opaque: 1 translucent pixels"):
+                scene_compare.compare(web, unity, root / "out")
+
 
 if __name__ == "__main__":
     unittest.main()

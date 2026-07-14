@@ -40,7 +40,10 @@ namespace CumulusMvp.Editor
                 name = "Cumulus Scene Comparison Capture",
                 antiAliasing = 1,
             };
-            var output = new Texture2D(width, height, TextureFormat.RGBA32, false);
+            // The Game view presents an opaque backbuffer. RGB readback preserves
+            // that displayed frame instead of exporting material alpha written by
+            // opaque cutout shaders as transparency in the comparison PNG.
+            var output = new Texture2D(width, height, TextureFormat.RGB24, false);
             RenderTexture previousActive = RenderTexture.active;
             RenderTexture previousTarget = camera.targetTexture;
             try
@@ -53,7 +56,7 @@ namespace CumulusMvp.Editor
                 camera.Render();
                 camera.Render();
                 RenderTexture.active = target;
-                output.ReadPixels(new Rect(0f, 0f, width, height), 0, 0);
+                output.ReadPixels(new Rect(0f, 0f, width, height), 0, 0, false);
                 output.Apply(false, false);
 
                 string absolutePath = Path.GetFullPath(outputPath);
