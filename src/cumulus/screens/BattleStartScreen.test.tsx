@@ -158,7 +158,7 @@ describe("Cumulus BattleStartScreen", () => {
     act(() => root.unmount());
   });
 
-  it("carousels the complete mobile battle console across its three detail pages", () => {
+  it("shows the complete desktop dossier in one compact mobile glass panel", () => {
     stubMatchMedia(false);
     const onBegin = vi.fn();
     const container = document.createElement("div");
@@ -176,26 +176,14 @@ describe("Cumulus BattleStartScreen", () => {
       '[data-battle-start-layout="mobile"]',
     );
     expect(layout).not.toBeNull();
-    const title = layout?.querySelector<HTMLElement>(
-      "[data-battle-start-title]",
+    const panel = layout?.querySelector<HTMLElement>(
+      "[data-battle-start-panel]",
     );
-    const consolePanel = layout?.querySelector<HTMLElement>(
-      "[data-battle-start-console]",
+    expect(panel?.style.backdropFilter).toContain("--glass-blur");
+    expect(panel?.style.top).toBe("33.333%");
+    expect(panel?.getAttribute("data-battle-start-panel-density")).toBe(
+      "compact",
     );
-    expect(title?.textContent).not.toContain("Battle Opponent");
-    expect(title?.textContent).toContain("Battle vs. Aeris, the Prism Guide");
-    expect(title?.querySelector("span")?.style.font).toContain("--t-title");
-    expect(title?.textContent).toContain("Storm Archivist");
-    expect(consolePanel?.textContent).not.toContain("Aeris, the Prism Guide");
-    expect(
-      (consolePanel?.firstElementChild as HTMLElement | null)?.style
-        .backdropFilter,
-    ).toContain("--glass-blur");
-    expect(
-      (consolePanel?.firstElementChild as HTMLElement | null)?.style.padding,
-    ).toBe("");
-    expect(consolePanel?.style.top).toBe("61%");
-    expect(consolePanel?.style.transform).toBe("translateY(-50%)");
     expect(
       layout?.querySelector("[data-battle-start-opponent]"),
     ).not.toBeNull();
@@ -204,191 +192,41 @@ describe("Cumulus BattleStartScreen", () => {
         ?.querySelector("[data-battle-start-opponent]")
         ?.getAttribute("data-battle-start-opponent-framing"),
     ).toBe("standing");
-    expect(layout?.textContent).toContain(
+    expect(panel?.textContent).toContain("Aeris, the Prism Guide");
+    expect(panel?.textContent).toContain("Storm Archivist");
+    expect(panel?.textContent).toContain("Ability");
+    expect(panel?.textContent).toContain(
       "Whenever an event resolves, gain momentum.",
     );
-    const activePage = () =>
-      layout?.querySelector<HTMLElement>(
-        '[data-battle-start-detail-active="true"]',
-      );
-    expect(activePage()?.textContent).not.toContain("Victory:");
-    expect(activePage()?.textContent).toContain(
-      "Whenever an event resolves, gain momentum.",
-    );
-    const overviewTitles = Array.from(
-      activePage()?.querySelectorAll<HTMLElement>(
-        "[data-battle-start-detail-title]",
-      ) ?? [],
-    );
-    expect(overviewTitles).toHaveLength(0);
-    expect(activePage()?.textContent).not.toContain("Ability:");
+    expect(panel?.textContent).toContain("Signature Cards");
+    expect(panel?.querySelectorAll("[data-signature-card-id]")).toHaveLength(3);
     expect(
-      activePage()?.querySelector<HTMLElement>(
-        "[data-battle-start-mobile-ability]",
-      )?.style.textAlign,
-    ).toBe("center");
-    expect(activePage()?.textContent).toContain("To Win");
-    expect(activePage()?.textContent).toContain("Reward");
+      panel?.querySelectorAll('[data-reveal-complete-game-card="true"]'),
+    ).toHaveLength(3);
+    expect(panel?.textContent).toContain("Dreamsigns");
     expect(
-      activePage()?.querySelector('[data-testid="cumulus-battle-start-begin"]'),
-    ).not.toBeNull();
-    expect(activePage()?.style.minHeight).toBe("");
-    expect(activePage()?.style.alignItems).toBe("");
-    expect(
-      activePage()?.querySelector<HTMLElement>(
-        '[data-battle-start-stake="To Win"] > div',
-      )?.style.font,
-    ).toContain("--t-body");
-    const stakes = activePage()?.querySelector<HTMLElement>(
-      "[data-battle-start-stakes]",
-    );
-    expect(stakes?.style.justifyContent).toBe("center");
-    expect(stakes?.style.gap).toBe("var(--space-9)");
-    expect(activePage()?.style.paddingLeft).toBe(
-      "calc(var(--touch-min) + var(--space-5))",
-    );
-    expect(activePage()?.style.paddingRight).toBe(
-      "calc(var(--touch-min) + var(--space-5))",
-    );
-
-    const track = layout?.querySelector<HTMLElement>(
-      "[data-battle-start-detail-track]",
-    );
-    expect(track?.style.transform).toBe("translateX(0%)");
-    expect(track?.style.transition).toContain("transform");
-
-    expect(
-      layout?.querySelector(
-        '[data-testid="cumulus-battle-start-carousel-previous"]',
-      ),
-    ).toBeNull();
-    const next = layout?.querySelector<HTMLButtonElement>(
-      '[data-testid="cumulus-battle-start-carousel-next"]',
-    );
-    expect(next?.getAttribute("data-glass-placement")).toBe("onGlass");
-    act(() => next?.click());
-    expect(track?.style.transform).toBe("translateX(-100%)");
-    expect(activePage()?.textContent).toContain("Dreamsigns:");
-    expect(activePage()?.textContent).not.toContain(
-      "Whenever an event resolves, gain momentum.",
-    );
-    expect(activePage()?.textContent).not.toContain("To Win");
-    expect(activePage()?.textContent).not.toContain("Reward");
-    expect(
-      activePage()?.querySelector('[data-testid="cumulus-battle-start-begin"]'),
-    ).toBeNull();
-    expect(
-      activePage()?.querySelectorAll(
+      panel?.querySelectorAll(
         '[data-testid^="cumulus-battle-start-dreamsign-"]',
       ),
     ).toHaveLength(1);
+    expect(panel?.textContent).toContain("To Win");
+    expect(panel?.textContent).toContain("Reward");
     expect(
-      activePage()?.querySelectorAll("[data-signature-card-id]"),
-    ).toHaveLength(0);
-    expect(
-      layout?.querySelector(
-        '[data-testid="cumulus-battle-start-carousel-previous"]',
-      ),
+      panel?.querySelector('[data-testid="cumulus-battle-start-begin"]'),
     ).not.toBeNull();
-
-    act(() =>
-      layout
-        ?.querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-battle-start-carousel-next"]',
-        )
-        ?.click(),
-    );
-    expect(track?.style.transform).toBe("translateX(-200%)");
-    expect(activePage()?.textContent).toContain("Signature Cards:");
-    expect(activePage()?.style.paddingLeft).toBe(
-      "calc(var(--touch-min) + var(--space-5))",
-    );
-    expect(activePage()?.style.paddingRight).toBe(
-      "calc(var(--touch-min) + var(--space-5))",
-    );
-    const signatureTitle = activePage()?.querySelector<HTMLElement>(
-      "[data-battle-start-detail-title]",
-    );
-    expect(signatureTitle?.style.justifySelf).toBe("stretch");
-    expect(signatureTitle?.style.textAlign).toBe("left");
-    expect(
-      activePage()?.querySelectorAll("[data-signature-card-id]"),
-    ).toHaveLength(3);
-    expect(
-      activePage()?.querySelectorAll(
-        '[data-testid^="cumulus-battle-start-dreamsign-"]',
-      ),
-    ).toHaveLength(0);
-    expect(
-      activePage()?.querySelectorAll('[data-reveal-complete-game-card="true"]'),
-    ).toHaveLength(3);
     expect(
       layout?.querySelector(
-        '[data-testid="cumulus-battle-start-carousel-next"]',
+        '[data-testid^="cumulus-battle-start-carousel-"]',
       ),
     ).toBeNull();
-
-    const action = activePage()?.querySelector<HTMLButtonElement>(
+    const action = panel?.querySelector<HTMLButtonElement>(
       '[data-testid="cumulus-battle-start-begin"]',
     );
-    expect(action).toBeNull();
-
-    act(() =>
-      layout
-        ?.querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-battle-start-carousel-previous"]',
-        )
-        ?.click(),
-    );
-    act(() =>
-      layout
-        ?.querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-battle-start-carousel-previous"]',
-        )
-        ?.click(),
-    );
-    const firstPageAction = activePage()?.querySelector<HTMLButtonElement>(
-      '[data-testid="cumulus-battle-start-begin"]',
-    );
-    expect(firstPageAction?.textContent).toContain("Begin Battle");
-    expect(firstPageAction?.getAttribute("data-glass-variant")).toBe("accent");
-    expect(firstPageAction?.getAttribute("data-glass-placement")).toBe(
-      "onGlass",
-    );
-    act(() => firstPageAction?.click());
+    expect(action?.textContent).toContain("Begin Battle");
+    expect(action?.getAttribute("data-glass-variant")).toBe("accent");
+    expect(action?.getAttribute("data-glass-placement")).toBe("onGlass");
+    act(() => action?.click());
     expect(onBegin).toHaveBeenCalledTimes(1);
-
-    act(() => root.unmount());
-  });
-
-  it("skips the mobile Dreamsign detail when the opponent has no Dreamsigns", () => {
-    stubMatchMedia(false);
-    const view = makeView();
-    const { container, root } = mount({ ...view, dreamsigns: [] });
-    const layout = container.querySelector<HTMLElement>(
-      '[data-battle-start-layout="mobile"]',
-    );
-
-    const activePage = () =>
-      layout?.querySelector<HTMLElement>(
-        '[data-battle-start-detail-active="true"]',
-      );
-    expect(activePage()?.textContent).not.toContain("Victory:");
-    act(() =>
-      layout
-        ?.querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-battle-start-carousel-next"]',
-        )
-        ?.click(),
-    );
-
-    expect(activePage()?.textContent).toContain("Signature Cards:");
-    expect(activePage()?.textContent).not.toContain("Dreamsigns:");
-    expect(
-      layout?.querySelector(
-        '[data-testid="cumulus-battle-start-carousel-next"]',
-      ),
-    ).toBeNull();
 
     act(() => root.unmount());
   });

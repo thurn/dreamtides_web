@@ -1,25 +1,23 @@
-// BattleStartScreen — the pure Cumulus opponent preview. Desktop keeps the
-// opponent-and-dossier composition; mobile gives the opponent the upper scene
-// and condenses the decision-critical briefing into a bottom glass sheet.
+// BattleStartScreen — the pure Cumulus opponent preview. Desktop and mobile
+// share one complete opponent dossier; only its placement and object scale
+// respond to the viewport.
 
-import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
 import { RulesText } from "../components/card/RulesText";
 import { GlassButton } from "../components/controls/GlassButton";
-import { IconButton } from "../components/controls/IconButton";
+import { GlowIcon } from "../components/controls/GlowIcon";
 import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { QUEST_STATUS_BAR_CLEARANCE_OP } from "../components/hud/QuestStatusBar";
-import { GlowIcon } from "../components/controls/GlowIcon";
-import { GlassPanel } from "../components/overlay/GlassPanel";
+import { glassSurfaceStyle } from "../internal/glass-surface";
 import type { ArtRef } from "../primitives/art";
 import { resolveArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
-import { ConsoleDivider } from "./quest-start-shared";
 import { useIsDesktop } from "./use-is-desktop";
 
 export interface BattleStartDreamcallerView {
@@ -51,12 +49,18 @@ export interface BattleStartScreenProps {
   onBegin: () => void;
 }
 
+type PanelDensity = "standard" | "compact";
+
+/** Desktop dossier width and opponent-stage width are composition measures. */
 const PANEL_MAX_WIDTH = 660;
 const CHARACTER_STAGE_MAX_WIDTH = 760;
+/** Semantic game objects shrink together in the compact mobile dossier. */
 const SIGNATURE_CARD_WIDTH = 116;
 const DREAMSIGN_SIZE = 62;
-const MOBILE_SIGNATURE_CARD_MAX_WIDTH = 92;
-const MOBILE_DREAMSIGN_SIZE = 48;
+const COMPACT_SIGNATURE_CARD_WIDTH = 64;
+const COMPACT_DREAMSIGN_SIZE = 42;
+/** The dossier begins after the opponent-only upper third of the viewport. */
+const MOBILE_PANEL_TOP = "33.333%";
 
 export function BattleStartScreen({ view, onBegin }: BattleStartScreenProps) {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -130,134 +134,10 @@ function DesktopBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
           alignSelf: "stretch",
         }}
       >
-        <DreamcallerPortrait
-          dreamcaller={{
-            imageNumber: view.dreamcaller.imageNumber,
-            name: view.dreamcaller.name,
-            title: view.dreamcaller.title,
-          }}
-          variant="cutout"
-        />
+        <OpponentPortrait dreamcaller={view.dreamcaller} variant="cutout" />
       </section>
 
-      <section
-        data-battle-start-panel=""
-        style={{
-          width: "100%",
-          maxWidth: PANEL_MAX_WIDTH,
-          maxHeight: "100%",
-          boxSizing: "border-box",
-        }}
-      >
-        <GlassPanel
-          title={view.dreamcaller.name}
-          subtitle={
-            view.dreamcaller.title === "" ? undefined : view.dreamcaller.title
-          }
-          headingLevel="h1"
-          titleVoice="hero"
-          headerDivider={false}
-          headerSpacing="spacious"
-          overflow="visible"
-          footer={
-            <div
-              style={{
-                padding: `${token("--space-6")} ${token("--space-9")} ${token("--space-9")}`,
-                borderTop: `1px solid ${token("--glass-rim")}`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: token("--space-8"),
-              }}
-            >
-              <div
-                data-battle-start-stakes=""
-                style={{ display: "flex", gap: token("--space-8") }}
-              >
-                <Stake label="To Win">
-                  <span>{view.pointsToWin}</span>
-                  <GlowIcon
-                    iconClass={GLYPHS.points}
-                    color="white"
-                    size="1em"
-                  />
-                </Stake>
-                <Stake label="Reward">
-                  <EssenceValue amount={view.essenceReward} tone="inherit" />
-                </Stake>
-              </div>
-              <GlassButton
-                label="Begin Battle"
-                variant="accent"
-                placement="onGlass"
-                onPress={onBegin}
-                testId="cumulus-battle-start-begin"
-              />
-            </div>
-          }
-        >
-          <div
-            style={{
-              padding: `${token("--space-7")} ${token("--space-9")}`,
-              display: "flex",
-              flexDirection: "column",
-              gap: token("--space-7"),
-            }}
-          >
-            {view.dreamcaller.ability !== "" && (
-              <PanelSection label="Ability">
-                <div style={{ font: token("--t-rules") }}>
-                  {view.dreamcaller.abilityActive ? (
-                    <RulesText text={view.dreamcaller.ability} />
-                  ) : (
-                    <span style={{ color: token("--text-on-glass-muted") }}>
-                      Opponent dreamcaller ability is not active.
-                    </span>
-                  )}
-                </div>
-              </PanelSection>
-            )}
-
-            {view.signatureCards.length > 0 && (
-              <PanelSection label="Signature Cards">
-                <div
-                  data-battle-start-signature-cards=""
-                  style={{
-                    display: "flex",
-                    gap: token("--space-6"),
-                    alignItems: "flex-start",
-                  }}
-                >
-                  {view.signatureCards.map((card) => (
-                    <div
-                      key={card.cardId}
-                      data-signature-card-id={card.cardId}
-                      style={{ width: SIGNATURE_CARD_WIDTH, flex: "none" }}
-                    >
-                      <GameCard model={card.model} />
-                    </div>
-                  ))}
-                </div>
-              </PanelSection>
-            )}
-
-            {view.dreamsigns.length > 0 && (
-              <PanelSection label="Dreamsigns">
-                <div style={{ display: "flex", gap: token("--space-6") }}>
-                  {view.dreamsigns.map((dreamsign) => (
-                    <Dreamsign
-                      key={dreamsign.id}
-                      dreamsign={dreamsign}
-                      sizePx={DREAMSIGN_SIZE}
-                      testid={`cumulus-battle-start-dreamsign-${String(dreamsign.id)}`}
-                    />
-                  ))}
-                </div>
-              </PanelSection>
-            )}
-          </div>
-        </GlassPanel>
-      </section>
+      <BattleStartPanel view={view} onBegin={onBegin} density="standard" />
     </main>
   );
 }
@@ -266,489 +146,236 @@ function MobileBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
   return (
     <main
       data-battle-start-layout="mobile"
-      style={{
-        position: "absolute",
-        inset: 0,
-      }}
+      style={{ position: "absolute", inset: 0 }}
     >
       <section
         data-battle-start-opponent={view.dreamcaller.id}
         data-battle-start-opponent-framing="standing"
         style={{
           position: "absolute",
-          top: `calc(${token("--safe-top")} + ${token("--space-12")} + (${token("--space-10")} * 2))`,
+          top: token("--safe-top"),
           left: 0,
           right: 0,
-          bottom: `calc(${QUEST_STATUS_BAR_CLEARANCE_OP})`,
+          bottom: "66.667%",
+          zIndex: 1,
         }}
       >
-        <DreamcallerPortrait
-          dreamcaller={{
-            imageNumber: view.dreamcaller.imageNumber,
-            name: view.dreamcaller.name,
-            title: view.dreamcaller.title,
-          }}
-          variant="standing"
-        />
+        <OpponentPortrait dreamcaller={view.dreamcaller} variant="standing" />
       </section>
 
-      <MobileBattleStartTitle dreamcaller={view.dreamcaller} />
-
-      <div
-        data-battle-start-panel=""
-        data-battle-start-console=""
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          // The console's midpoint sits at the opponent's waist. Anchoring its
-          // center, rather than its bottom edge, lets taller carousel pages add
-          // equal visual weight above and below that shared waist line.
-          top: "61%",
-          transform: "translateY(-50%)",
-          zIndex: 4,
-          padding: `0 max(var(--safe-area-inset-right), ${token("--gutter")}) 0 max(var(--safe-area-inset-left), ${token("--gutter")})`,
-        }}
-      >
-        <MobileBattleConsole view={view} onBegin={onBegin} />
-      </div>
+      <BattleStartPanel view={view} onBegin={onBegin} density="compact" />
     </main>
   );
 }
 
-function MobileBattleStartTitle({
+function OpponentPortrait({
   dreamcaller,
+  variant,
 }: {
   readonly dreamcaller: BattleStartDreamcallerView;
+  readonly variant: "cutout" | "standing";
 }) {
   return (
-    <div
-      data-battle-start-title=""
+    <DreamcallerPortrait
+      dreamcaller={{
+        imageNumber: dreamcaller.imageNumber,
+        name: dreamcaller.name,
+        title: dreamcaller.title,
+      }}
+      variant={variant}
+    />
+  );
+}
+
+function BattleStartPanel({
+  view,
+  onBegin,
+  density,
+}: BattleStartScreenProps & { readonly density: PanelDensity }) {
+  const compact = density === "compact";
+  const cardWidth = compact
+    ? COMPACT_SIGNATURE_CARD_WIDTH
+    : SIGNATURE_CARD_WIDTH;
+  const dreamsignSize = compact ? COMPACT_DREAMSIGN_SIZE : DREAMSIGN_SIZE;
+
+  return (
+    <section
+      data-battle-start-panel=""
+      data-battle-start-panel-density={density}
       style={{
-        position: "absolute",
-        top: token("--safe-top"),
-        left: 0,
-        right: 0,
-        padding: `${token("--space-5")} ${token("--gutter")} 0`,
-        zIndex: 4,
-        textAlign: "center",
-        pointerEvents: "none",
+        ...glassSurfaceStyle({ radius: token("--radius-panel") }),
+        position: compact ? "absolute" : "relative",
+        top: compact ? MOBILE_PANEL_TOP : undefined,
+        right: compact
+          ? `max(var(--safe-area-inset-right), ${token("--space-3")})`
+          : undefined,
+        bottom: compact
+          ? `calc(${QUEST_STATUS_BAR_CLEARANCE_OP})`
+          : undefined,
+        left: compact
+          ? `max(var(--safe-area-inset-left), ${token("--space-3")})`
+          : undefined,
+        zIndex: compact ? 4 : undefined,
+        width: compact ? undefined : "100%",
+        maxWidth: compact ? undefined : PANEL_MAX_WIDTH,
+        maxHeight: compact ? undefined : "100%",
+        boxSizing: "border-box",
+        padding: compact
+          ? `${token("--space-3")} ${token("--space-4")}`
+          : token("--space-9"),
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: compact ? "space-between" : undefined,
+        gap: compact ? token("--space-3") : token("--space-7"),
+        overflowY: compact ? "auto" : undefined,
+        overscrollBehavior: compact ? "contain" : undefined,
+        color: token("--text-on-glass"),
       }}
     >
-      <h1 style={{ margin: token("--space-6") }}>
-        <span
+      <header style={{ display: "grid", gap: compact ? 0 : token("--space-3") }}>
+        <h1
           style={{
-            display: "block",
-            font: token("--t-title"),
-            color: token("--text-primary"),
-            textShadow: token("--text-outline-media"),
+            margin: 0,
+            font: compact ? token("--t-title-sm") : token("--t-hero"),
           }}
         >
-          Battle vs. {dreamcaller.name}
-        </span>
-        {dreamcaller.title !== "" && (
-          <span
+          {view.dreamcaller.name}
+        </h1>
+        {view.dreamcaller.title !== "" && (
+          <p
             style={{
-              display: "block",
-              marginTop: token("--space-1"),
-              font: token("--t-hero-epithet"),
-              color: token("--text-primary"),
-              textShadow: token("--text-outline-media"),
+              margin: 0,
+              font: compact
+                ? token("--t-body")
+                : token("--t-hero-epithet"),
+              fontStyle: "italic",
+              color: token("--text-on-glass-muted"),
             }}
           >
-            {dreamcaller.title}
-          </span>
+            {view.dreamcaller.title}
+          </p>
         )}
-      </h1>
-    </div>
-  );
-}
+      </header>
 
-function MobileBattleConsole({ view, onBegin }: BattleStartScreenProps) {
-  const [detailIndex, setDetailIndex] = useState(0);
+      {view.dreamcaller.ability !== "" && (
+        <PanelSection label="Ability" density={density}>
+          <div style={{ font: token("--t-rules") }}>
+            {view.dreamcaller.abilityActive ? (
+              <RulesText text={view.dreamcaller.ability} />
+            ) : (
+              <span style={{ color: token("--text-on-glass-muted") }}>
+                Opponent dreamcaller ability is not active.
+              </span>
+            )}
+          </div>
+        </PanelSection>
+      )}
 
-  return (
-    <GlassPanel radius="popover" overflow="visible">
-      <MobileDetailCarousel
-        view={view}
-        index={detailIndex}
-        onChange={setDetailIndex}
-        onBegin={onBegin}
-      />
-    </GlassPanel>
-  );
-}
+      {view.signatureCards.length > 0 && (
+        <PanelSection label="Signature Cards" density={density}>
+          <div
+            data-battle-start-signature-cards=""
+            style={{
+              display: "flex",
+              gap: compact ? token("--space-3") : token("--space-6"),
+              alignItems: "flex-start",
+            }}
+          >
+            {view.signatureCards.map((card) => (
+              <div
+                key={card.cardId}
+                data-signature-card-id={card.cardId}
+                style={{ width: cardWidth, flex: "none" }}
+              >
+                <GameCard model={card.model} />
+              </div>
+            ))}
+          </div>
+        </PanelSection>
+      )}
 
-function MobileDetailCarousel({
-  view,
-  index,
-  onChange,
-  onBegin,
-}: {
-  readonly view: BattleStartView;
-  readonly index: number;
-  readonly onChange: (index: number) => void;
-  readonly onBegin: () => void;
-}) {
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [contentHeight, setContentHeight] = useState<number | null>(null);
-  const signatureCardIndex = view.dreamsigns.length > 0 ? 2 : 1;
+      {view.dreamsigns.length > 0 && (
+        <PanelSection label="Dreamsigns" density={density}>
+          <div
+            style={{
+              display: "flex",
+              gap: compact ? token("--space-3") : token("--space-6"),
+            }}
+          >
+            {view.dreamsigns.map((dreamsign) => (
+              <Dreamsign
+                key={dreamsign.id}
+                dreamsign={dreamsign}
+                sizePx={dreamsignSize}
+                testid={`cumulus-battle-start-dreamsign-${String(dreamsign.id)}`}
+              />
+            ))}
+          </div>
+        </PanelSection>
+      )}
 
-  useLayoutEffect(() => {
-    const content = contentRef.current?.children.item(
-      index,
-    ) as HTMLElement | null;
-    if (content === null) return;
-    const nextHeight = content.scrollHeight;
-    if (nextHeight > 0) setContentHeight(nextHeight);
-  }, [
-    index,
-    view.dreamsigns,
-    view.signatureCards,
-    view.pointsToWin,
-    view.essenceReward,
-  ]);
-
-  return (
-    <div
-      data-battle-start-detail-carousel=""
-      data-battle-start-detail-page={String(index)}
-      style={{
-        position: "relative",
-      }}
-    >
-      <div
-        data-battle-start-detail-viewport=""
+      <footer
         style={{
-          height: contentHeight ?? "auto",
-          overflow: "hidden",
-          transition:
-            contentHeight === null
-              ? undefined
-              : `height ${token("--dur-base")} ${token("--ease-out")}`,
+          paddingTop: compact ? token("--space-3") : token("--space-6"),
+          borderTop: `1px solid ${token("--glass-rim")}`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: compact ? token("--space-4") : token("--space-8"),
+          marginTop: compact ? undefined : "auto",
         }}
       >
         <div
-          ref={contentRef}
-          data-battle-start-detail-track=""
+          data-battle-start-stakes=""
           style={{
-            width: "100%",
             display: "flex",
-            alignItems: "flex-start",
-            transform:
-              index === 0
-                ? "translateX(0%)"
-                : `translateX(-${String(index * 100)}%)`,
-            transition: `transform ${token("--dur-slow")} ${token("--ease-out")}`,
+            gap: compact ? token("--space-5") : token("--space-8"),
           }}
         >
-          <MobileCarouselSlide active={index === 0} hasNext>
-            {view.dreamcaller.ability !== "" && (
-              <>
-                <MobileCarouselPage title={null}>
-                  <div
-                    data-battle-start-mobile-ability=""
-                    style={{
-                      font: token("--t-rules"),
-                      textAlign: "center",
-                      color: view.dreamcaller.abilityActive
-                        ? token("--text-on-glass")
-                        : token("--text-on-glass-muted"),
-                    }}
-                  >
-                    {view.dreamcaller.abilityActive ? (
-                      <RulesText text={view.dreamcaller.ability} />
-                    ) : (
-                      <span>Opponent dreamcaller ability is not active.</span>
-                    )}
-                  </div>
-                </MobileCarouselPage>
-                <div style={{ marginTop: token("--space-6") }}>
-                  <ConsoleDivider flush />
-                </div>
-              </>
-            )}
-
-            <div
-              data-battle-start-detail-spacing=""
-              style={{
-                marginTop:
-                  view.dreamcaller.ability === "" ? 0 : token("--space-9"),
-              }}
-            >
-              <MobileCarouselPage title={null}>
-                <MobileBattleStakes view={view} />
-              </MobileCarouselPage>
-            </div>
-
-            <div
-              data-battle-start-action-spacing=""
-              style={{
-                marginTop: token("--space-9"),
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <GlassButton
-                label="Begin Battle"
-                variant="accent"
-                placement="onGlass"
-                onPress={onBegin}
-                testId="cumulus-battle-start-begin"
-              />
-            </div>
-          </MobileCarouselSlide>
-          {view.dreamsigns.length > 0 && (
-            <MobileCarouselSlide active={index === 1} hasPrevious hasNext>
-              <MobileCarouselPage title="Dreamsigns:">
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    gap: token("--space-3"),
-                  }}
-                >
-                  {view.dreamsigns.map((dreamsign) => (
-                    <Dreamsign
-                      key={dreamsign.id}
-                      dreamsign={dreamsign}
-                      sizePx={MOBILE_DREAMSIGN_SIZE}
-                      testid={`cumulus-battle-start-dreamsign-${String(dreamsign.id)}`}
-                    />
-                  ))}
-                </div>
-              </MobileCarouselPage>
-            </MobileCarouselSlide>
-          )}
-          <MobileCarouselSlide
-            active={index === signatureCardIndex}
-            hasPrevious
-          >
-            <MobileCarouselPage title="Signature Cards:">
-              <div
-                data-battle-start-signature-cards=""
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  gap: token("--space-2"),
-                  alignItems: "flex-start",
-                }}
-              >
-                {view.signatureCards.map((card) => (
-                  <div
-                    key={card.cardId}
-                    data-signature-card-id={card.cardId}
-                    style={{
-                      maxWidth: MOBILE_SIGNATURE_CARD_MAX_WIDTH,
-                      minWidth: 0,
-                      flex: "1 1 0",
-                    }}
-                  >
-                    <GameCard model={card.model} />
-                  </div>
-                ))}
-              </div>
-            </MobileCarouselPage>
-          </MobileCarouselSlide>
+          <Stake label="To Win" density={density}>
+            <span>{view.pointsToWin}</span>
+            <GlowIcon iconClass={GLYPHS.points} color="white" size="1em" />
+          </Stake>
+          <Stake label="Reward" density={density}>
+            <EssenceValue amount={view.essenceReward} tone="inherit" />
+          </Stake>
         </div>
-      </div>
-
-      {index > 0 && (
-        <MobileCarouselChevron
-          direction="left"
-          onPress={() => onChange(index - 1)}
+        <GlassButton
+          label="Begin Battle"
+          variant="accent"
+          placement="onGlass"
+          onPress={onBegin}
+          testId="cumulus-battle-start-begin"
         />
-      )}
-      {index < signatureCardIndex && (
-        <MobileCarouselChevron
-          direction="right"
-          onPress={() => onChange(index + 1)}
-        />
-      )}
-    </div>
-  );
-}
-
-function MobileCarouselSlide({
-  active,
-  hasPrevious = false,
-  hasNext = false,
-  children,
-}: {
-  readonly active: boolean;
-  readonly hasPrevious?: boolean;
-  readonly hasNext?: boolean;
-  readonly children: ReactNode;
-}) {
-  const controlGutter = `calc(${token("--touch-min")} + ${token("--space-5")})`;
-  const reservesControlSpace = hasPrevious || hasNext;
-  return (
-    <div
-      aria-hidden={!active}
-      inert={!active}
-      data-battle-start-detail-active={String(active)}
-      style={{
-        width: "100%",
-        flex: "none",
-        boxSizing: "border-box",
-        paddingTop: token("--space-9"),
-        paddingRight: reservesControlSpace ? controlGutter : token("--space-6"),
-        paddingBottom: token("--space-9"),
-        paddingLeft: reservesControlSpace ? controlGutter : token("--space-6"),
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-function MobileCarouselPage({
-  title,
-  children,
-}: {
-  readonly title: string | null;
-  readonly children: ReactNode;
-}) {
-  return (
-    <div
-      style={{
-        display: "grid",
-        justifyItems: "center",
-        gap: token("--space-3"),
-      }}
-    >
-      {title !== null && (
-        <span
-          data-battle-start-detail-title=""
-          style={{
-            justifySelf: "stretch",
-            textAlign: "left",
-            font: token("--t-eyebrow"),
-            letterSpacing: token("--tracking-eyebrow"),
-            textTransform: "uppercase",
-            color: token("--text-on-glass"),
-          }}
-        >
-          {title}
-        </span>
-      )}
-      {children}
-    </div>
-  );
-}
-
-function MobileCarouselChevron({
-  direction,
-  onPress,
-}: {
-  readonly direction: "left" | "right";
-  readonly onPress: () => void;
-}) {
-  return (
-    <div
-      data-battle-start-carousel-chevron={direction}
-      style={{
-        position: "absolute",
-        top: "50%",
-        [direction]: token("--space-5"),
-        transform: "translateY(-50%)",
-        zIndex: 2,
-      }}
-    >
-      <IconButton
-        size="sm"
-        glyph={direction === "left" ? GLYPHS.chevronLeft : GLYPHS.chevronRight}
-        label={
-          direction === "left" ? "Previous battle detail" : "Next battle detail"
-        }
-        placement="onGlass"
-        onPress={onPress}
-        testId={`cumulus-battle-start-carousel-${direction === "left" ? "previous" : "next"}`}
-      />
-    </div>
-  );
-}
-
-function MobileBattleStakes({ view }: { readonly view: BattleStartView }) {
-  return (
-    <div
-      data-battle-start-stakes=""
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        gap: token("--space-9"),
-      }}
-    >
-      <MobileStake label="To Win">
-        <span>{view.pointsToWin}</span>
-        <GlowIcon iconClass={GLYPHS.points} color="white" size="1em" />
-      </MobileStake>
-      <MobileStake label="Reward">
-        <EssenceValue amount={view.essenceReward} tone="inherit" />
-      </MobileStake>
-    </div>
-  );
-}
-
-function MobileStake({
-  label,
-  children,
-}: {
-  readonly label: string;
-  readonly children: ReactNode;
-}) {
-  return (
-    <div
-      data-battle-start-stake={label}
-      style={{ display: "grid", gap: token("--space-3") }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: token("--space-3"),
-          font: token("--t-body"),
-          color: token("--text-primary"),
-        }}
-      >
-        {children}
-      </div>
-      <span
-        style={{
-          font: token("--t-eyebrow"),
-          letterSpacing: token("--tracking-eyebrow"),
-          textTransform: "uppercase",
-          color: token("--text-secondary"),
-        }}
-      >
-        {label}
-      </span>
-    </div>
+      </footer>
+    </section>
   );
 }
 
 function PanelSection({
   label,
+  density,
   children,
 }: {
-  label: string;
-  children: ReactNode;
+  readonly label: string;
+  readonly density: PanelDensity;
+  readonly children: ReactNode;
 }) {
+  const compact = density === "compact";
   return (
     <section
       style={{
-        paddingTop: token("--space-6"),
+        paddingTop: compact ? token("--space-3") : token("--space-6"),
         borderTop: `1px solid ${token("--glass-rim")}`,
         display: "grid",
-        gap: token("--space-5"),
+        gap: compact ? token("--space-2") : token("--space-5"),
       }}
     >
       <h2
         style={{
           margin: 0,
           font: token("--t-eyebrow"),
-          letterSpacing: "0.14em",
+          letterSpacing: token("--tracking-eyebrow"),
           textTransform: "uppercase",
           color: token("--text-on-glass-muted"),
         }}
@@ -760,18 +387,27 @@ function PanelSection({
   );
 }
 
-function Stake({ label, children }: { label: string; children: ReactNode }) {
+function Stake({
+  label,
+  density,
+  children,
+}: {
+  readonly label: string;
+  readonly density: PanelDensity;
+  readonly children: ReactNode;
+}) {
+  const compact = density === "compact";
   return (
     <div
       data-battle-start-stake={label}
-      style={{ display: "grid", gap: token("--space-3") }}
+      style={{ display: "grid", gap: compact ? 0 : token("--space-3") }}
     >
       <div
         style={{
           display: "flex",
           alignItems: "center",
-          gap: token("--space-3"),
-          font: token("--t-title-sm"),
+          gap: compact ? token("--space-2") : token("--space-3"),
+          font: compact ? token("--t-body") : token("--t-title-sm"),
           color: token("--text-on-glass"),
         }}
       >
@@ -780,7 +416,7 @@ function Stake({ label, children }: { label: string; children: ReactNode }) {
       <span
         style={{
           font: token("--t-eyebrow"),
-          letterSpacing: "0.1em",
+          letterSpacing: token("--tracking-eyebrow"),
           textTransform: "uppercase",
           color: token("--text-on-glass-muted"),
         }}
