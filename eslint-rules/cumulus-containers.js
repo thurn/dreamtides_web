@@ -24,6 +24,7 @@
 export const CONTAINER_COMPONENTS = [
   "GroupPanel",
   "HoverZoomCard",
+  "GlassPanel", // the shared titled liquid-glass content container
   "GlassDialog", // the glass overlay shell — holds caller-supplied body content
   "GlassBackdrop", // the frosted layer — hosts optional lifted-above-the-frost content
   "GuideGallerySiteLayout", // responsive site stage — hosts each site's typed gallery

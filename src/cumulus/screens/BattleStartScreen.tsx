@@ -13,7 +13,7 @@ import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { QUEST_STATUS_BAR_CLEARANCE_OP } from "../components/hud/QuestStatusBar";
 import { GlowIcon } from "../components/controls/GlowIcon";
-import { glassSurfaceStyle } from "../internal/glass-surface";
+import { GlassPanel } from "../components/overlay/GlassPanel";
 import type { ArtRef } from "../primitives/art";
 import { resolveArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
@@ -143,118 +143,120 @@ function DesktopBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
       <section
         data-battle-start-panel=""
         style={{
-          ...glassSurfaceStyle({ radius: token("--radius-panel") }),
           width: "100%",
           maxWidth: PANEL_MAX_WIDTH,
           maxHeight: "100%",
           boxSizing: "border-box",
-          padding: token("--space-9"),
-          display: "flex",
-          flexDirection: "column",
-          gap: token("--space-7"),
-          color: token("--text-on-glass"),
         }}
       >
-        <header style={{ display: "grid", gap: token("--space-3") }}>
-          <h1 style={{ margin: 0, font: token("--t-hero") }}>
-            {view.dreamcaller.name}
-          </h1>
-          {view.dreamcaller.title !== "" && (
-            <p
-              style={{
-                margin: 0,
-                font: token("--t-hero-epithet"),
-                fontStyle: "italic",
-                color: token("--text-on-glass-muted"),
-              }}
-            >
-              {view.dreamcaller.title}
-            </p>
-          )}
-        </header>
-
-        {view.dreamcaller.ability !== "" && (
-          <PanelSection label="Ability">
-            <div style={{ font: token("--t-rules") }}>
-              {view.dreamcaller.abilityActive ? (
-                <RulesText text={view.dreamcaller.ability} />
-              ) : (
-                <span style={{ color: token("--text-on-glass-muted") }}>
-                  Opponent dreamcaller ability is not active.
-                </span>
-              )}
-            </div>
-          </PanelSection>
-        )}
-
-        {view.signatureCards.length > 0 && (
-          <PanelSection label="Signature Cards">
+        <GlassPanel
+          title={view.dreamcaller.name}
+          subtitle={
+            view.dreamcaller.title === "" ? undefined : view.dreamcaller.title
+          }
+          headingLevel="h1"
+          titleVoice="hero"
+          headerDivider={false}
+          headerSpacing="spacious"
+          overflow="visible"
+          footer={
             <div
-              data-battle-start-signature-cards=""
               style={{
+                padding: `${token("--space-6")} ${token("--space-9")} ${token("--space-9")}`,
+                borderTop: `1px solid ${token("--glass-rim")}`,
                 display: "flex",
-                gap: token("--space-6"),
-                alignItems: "flex-start",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: token("--space-8"),
               }}
             >
-              {view.signatureCards.map((card) => (
-                <div
-                  key={card.cardId}
-                  data-signature-card-id={card.cardId}
-                  style={{ width: SIGNATURE_CARD_WIDTH, flex: "none" }}
-                >
-                  <GameCard model={card.model} />
-                </div>
-              ))}
+              <div
+                data-battle-start-stakes=""
+                style={{ display: "flex", gap: token("--space-8") }}
+              >
+                <Stake label="To Win">
+                  <span>{view.pointsToWin}</span>
+                  <GlowIcon
+                    iconClass={GLYPHS.points}
+                    color="white"
+                    size="1em"
+                  />
+                </Stake>
+                <Stake label="Reward">
+                  <EssenceValue amount={view.essenceReward} tone="inherit" />
+                </Stake>
+              </div>
+              <GlassButton
+                label="Begin Battle"
+                variant="accent"
+                placement="onGlass"
+                onPress={onBegin}
+                testId="cumulus-battle-start-begin"
+              />
             </div>
-          </PanelSection>
-        )}
-
-        {view.dreamsigns.length > 0 && (
-          <PanelSection label="Dreamsigns">
-            <div style={{ display: "flex", gap: token("--space-6") }}>
-              {view.dreamsigns.map((dreamsign) => (
-                <Dreamsign
-                  key={dreamsign.id}
-                  dreamsign={dreamsign}
-                  sizePx={DREAMSIGN_SIZE}
-                  testid={`cumulus-battle-start-dreamsign-${String(dreamsign.id)}`}
-                />
-              ))}
-            </div>
-          </PanelSection>
-        )}
-
-        <footer
-          style={{
-            paddingTop: token("--space-6"),
-            borderTop: `1px solid ${token("--glass-rim")}`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: token("--space-8"),
-          }}
+          }
         >
           <div
-            data-battle-start-stakes=""
-            style={{ display: "flex", gap: token("--space-8") }}
+            style={{
+              padding: `${token("--space-7")} ${token("--space-9")}`,
+              display: "flex",
+              flexDirection: "column",
+              gap: token("--space-7"),
+            }}
           >
-            <Stake label="To Win">
-              <span>{view.pointsToWin}</span>
-              <GlowIcon iconClass={GLYPHS.points} color="white" size="1em" />
-            </Stake>
-            <Stake label="Reward">
-              <EssenceValue amount={view.essenceReward} tone="inherit" />
-            </Stake>
+            {view.dreamcaller.ability !== "" && (
+              <PanelSection label="Ability">
+                <div style={{ font: token("--t-rules") }}>
+                  {view.dreamcaller.abilityActive ? (
+                    <RulesText text={view.dreamcaller.ability} />
+                  ) : (
+                    <span style={{ color: token("--text-on-glass-muted") }}>
+                      Opponent dreamcaller ability is not active.
+                    </span>
+                  )}
+                </div>
+              </PanelSection>
+            )}
+
+            {view.signatureCards.length > 0 && (
+              <PanelSection label="Signature Cards">
+                <div
+                  data-battle-start-signature-cards=""
+                  style={{
+                    display: "flex",
+                    gap: token("--space-6"),
+                    alignItems: "flex-start",
+                  }}
+                >
+                  {view.signatureCards.map((card) => (
+                    <div
+                      key={card.cardId}
+                      data-signature-card-id={card.cardId}
+                      style={{ width: SIGNATURE_CARD_WIDTH, flex: "none" }}
+                    >
+                      <GameCard model={card.model} />
+                    </div>
+                  ))}
+                </div>
+              </PanelSection>
+            )}
+
+            {view.dreamsigns.length > 0 && (
+              <PanelSection label="Dreamsigns">
+                <div style={{ display: "flex", gap: token("--space-6") }}>
+                  {view.dreamsigns.map((dreamsign) => (
+                    <Dreamsign
+                      key={dreamsign.id}
+                      dreamsign={dreamsign}
+                      sizePx={DREAMSIGN_SIZE}
+                      testid={`cumulus-battle-start-dreamsign-${String(dreamsign.id)}`}
+                    />
+                  ))}
+                </div>
+              </PanelSection>
+            )}
           </div>
-          <GlassButton
-            label="Begin Battle"
-            variant="accent"
-            placement="onGlass"
-            onPress={onBegin}
-            testId="cumulus-battle-start-begin"
-          />
-        </footer>
+        </GlassPanel>
       </section>
     </main>
   );
@@ -366,20 +368,14 @@ function MobileBattleConsole({ view, onBegin }: BattleStartScreenProps) {
   const [detailIndex, setDetailIndex] = useState(0);
 
   return (
-    <section
-      style={{
-        ...glassSurfaceStyle({ radius: token("--radius-popover") }),
-        position: "relative",
-        color: token("--text-on-glass"),
-      }}
-    >
+    <GlassPanel radius="popover" overflow="visible">
       <MobileDetailCarousel
         view={view}
         index={detailIndex}
         onChange={setDetailIndex}
         onBegin={onBegin}
       />
-    </section>
+    </GlassPanel>
   );
 }
 

@@ -25,6 +25,8 @@ fixed recipe.
 
 Who wears it:
 
+- **GlassPanel** — the shared persistent content container with a structured
+  title area, composed body, and optional footer;
 - **the InfoCard press-reveal popover shell** — the reveal-on-interaction card
   that every press/hover popup renders through (it overrides the fill to the
   warmer `--glass-fill-popover` tint; see below);
@@ -63,9 +65,10 @@ and blur, while the control adds a low-alpha neutral fill, a brighter rim and
 specular edge, and a tighter shadow. This keeps the inherited scene color
 visible through the control and makes the nested object boundary clear.
 
-CardGalleryPanel derives this relationship from its frame. A floating gallery
-renders labeled and icon accessories with `placement="onGlass"`; a full-bleed
-gallery uses the standard scrim and renders them with `placement="onMedia"`.
+CardGalleryPanel composes GlassPanel and derives this relationship from its
+frame. A floating gallery renders labeled and icon accessories with
+`placement="onGlass"`; a full-bleed gallery uses the standard scrim and renders
+them with `placement="onMedia"`.
 
 ## `--glass-fill-popover`: the warmer reveal tint
 
@@ -82,11 +85,11 @@ collapses the two fills fails the build.
 
 ## Deck-viewer backdrop
 
-The MobileDeckViewer, DesktopDeckViewer, and full-bleed CardGalleryPanel place
-their content over the 80%-black `--scrim-gallery` alpha overlay. The backdrop
-darkens the live scene without applying a blur, keeping the scene's forms
-recognizable while reducing visual competition with the card grid. Floating
-CardGalleryPanels remain liquid glass.
+The MobileDeckViewer, DesktopDeckViewer, and GlassPanel's full-bleed gallery
+frame place their content over the 80%-black `--scrim-gallery` alpha overlay.
+The backdrop darkens the live scene without applying a blur, keeping the scene's
+forms recognizable while reducing visual competition with the card grid.
+Floating GlassPanels remain liquid glass.
 
 ## The blur-preservation constraint
 

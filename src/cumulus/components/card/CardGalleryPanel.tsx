@@ -15,8 +15,6 @@ import {
   type CSSProperties,
   type ReactElement,
 } from "react";
-import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
-import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import type { CumulusColor } from "../../primitives/color";
@@ -25,12 +23,12 @@ import type { Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { EssenceValue } from "../hud/EssenceValue";
+import { GlassButton, type GlassButtonVariant } from "../controls/GlassButton";
 import {
-  GlassButton,
-  type GlassButtonVariant,
-  type GlassButtonWidthReservation,
-} from "../controls/GlassButton";
-import { IconButton, type IconButtonSize } from "../controls/IconButton";
+  GlassPanel,
+  type GlassPanelAccessory,
+  type GlassPanelHeaderSpacing,
+} from "../overlay/GlassPanel";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import { CardView, GameCard, type GameCardModel } from "./CardView";
 import { GalleryActionCard } from "./GalleryActionCard";
@@ -65,8 +63,7 @@ export interface CardGalleryCardView {
 
 /** The small white line shown beneath a gallery item. */
 export type CardGalleryCaption =
-  | { kind: "essence"; amount: number }
-  | { kind: "text"; text: string };
+  { kind: "essence"; amount: number } | { kind: "text"; text: string };
 
 /** A card-sized action appended to the gallery grid. */
 export interface CardGalleryActionView {
@@ -153,32 +150,7 @@ function CardGalleryAction({
 }
 
 /** The trailing header action rendered by a {@link CardGalleryPanel}. */
-export type CardGalleryAccessory =
-  | {
-      kind: "glassButton";
-      label: string;
-      onPress: () => void;
-      glyph?: Glyph;
-      disabled?: boolean;
-      /** Optional numerical essence cost rendered after the label. */
-      essenceCost?: number | null;
-      /** Dynamic label/essence-cost states whose widest footprint is reserved. */
-      widthReservations?: readonly GlassButtonWidthReservation[];
-      /** Semantic surface treatment for the action. */
-      variant?: GlassButtonVariant;
-      /** A `data-testid` for selecting the button in tests. */
-      testId?: string;
-    }
-  | {
-      kind: "iconButton";
-      glyph: Glyph;
-      label: string;
-      onPress: () => void;
-      disabled?: boolean;
-      size?: IconButtonSize;
-      /** A `data-testid` for selecting the disc in tests. */
-      testId?: string;
-    };
+export type CardGalleryAccessory = GlassPanelAccessory;
 
 /** A centered labeled action rendered below the card grid. */
 export interface CardGalleryFooterAction {
@@ -205,21 +177,13 @@ export type CardGalleryColumns = "auto" | "two" | "three" | "four" | "five";
  * The gallery card-size preset. Desktop galleries showing two or three cards
  * should use `showcase` so cards reach the 240px reading width when space permits.
  */
-export type CardGalleryCardSize =
-  | "compact"
-  | "standard"
-  | "roomy"
-  | "showcase";
+export type CardGalleryCardSize = "compact" | "standard" | "roomy" | "showcase";
 
 /** The panel frame geometry. */
 export type CardGalleryFrame = "floating" | "fullBleed";
 
 /** The gallery's internal spacing scale. */
-export type CardGallerySpacing =
-  | "spacious"
-  | "regular"
-  | "medium"
-  | "compact";
+export type CardGallerySpacing = "spacious" | "regular" | "medium" | "compact";
 
 /** Whether a floating gallery hugs its grid or fills the caller's width. */
 export type CardGalleryWidthMode = "content" | "fill";
@@ -285,7 +249,6 @@ const ROOMY_CARD_MAX_WIDTH_PX = 188;
 // their stage has room, which also lets desktop reveal keep the source in place.
 const SHOWCASE_CARD_MIN_WIDTH_PX = ROOMY_CARD_MIN_WIDTH_PX;
 const SHOWCASE_CARD_MAX_WIDTH_PX = 240;
-const FLOATING_ACCESSORY_PX = 48;
 const DEFAULT_COLUMN_COUNT = 5;
 const CARD_WIDTH_FLOOR_PX = 64;
 // One caption voice plus its gap below each card/action. This is a content box
@@ -301,38 +264,6 @@ interface GalleryMeasure {
   cardWidthPx: number;
   visibleRows: number;
   visibleGapSlots: number;
-}
-
-function accessoryNode(
-  accessory: CardGalleryAccessory,
-  placement: GlassControlPlacement,
-): ReactElement {
-  if (accessory.kind === "glassButton") {
-    return (
-      <GlassButton
-        placement={placement}
-        label={accessory.label}
-        glyph={accessory.glyph}
-        disabled={accessory.disabled}
-        essenceCost={accessory.essenceCost}
-        widthReservations={accessory.widthReservations}
-        variant={accessory.variant}
-        testId={accessory.testId}
-        onPress={accessory.onPress}
-      />
-    );
-  }
-  return (
-    <IconButton
-      placement={placement}
-      glyph={accessory.glyph}
-      size={accessory.size}
-      label={accessory.label}
-      disabled={accessory.disabled}
-      testId={accessory.testId}
-      onPress={accessory.onPress}
-    />
-  );
 }
 
 function configuredColumnCount(columns: CardGalleryColumns): number {
@@ -441,10 +372,12 @@ function bodyPaddingFor(spacing: CardGallerySpacing): string {
   return token("--space-8");
 }
 
-function headerPaddingFor(spacing: CardGallerySpacing): string {
-  if (spacing === "compact") return token("--space-5");
-  if (spacing === "medium") return token("--space-6");
-  return token("--space-8");
+function panelHeaderSpacingFor(
+  spacing: CardGallerySpacing,
+): GlassPanelHeaderSpacing {
+  if (spacing === "compact") return "compact";
+  if (spacing === "medium") return "medium";
+  return "regular";
 }
 
 function gridGapFor(spacing: CardGallerySpacing): string {
@@ -470,13 +403,11 @@ function useGalleryMeasure({
   readonly trailingReservePx: number;
 }): {
   readonly rootRef: React.RefObject<HTMLElement | null>;
-  readonly headerRef: React.RefObject<HTMLElement | null>;
   readonly bodyRef: React.RefObject<HTMLDivElement | null>;
   readonly gridRef: React.RefObject<HTMLDivElement | null>;
   readonly measure: GalleryMeasure | null;
 } {
   const rootRef = useRef<HTMLElement>(null);
-  const headerRef = useRef<HTMLElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const [measure, setMeasure] = useState<GalleryMeasure | null>(null);
@@ -485,8 +416,17 @@ function useGalleryMeasure({
     function nextMeasure(): GalleryMeasure | null {
       const root = rootRef.current;
       const body = bodyRef.current;
-      const header = headerRef.current;
-      if (root === null || body === null || header === null) return null;
+      const header = root?.querySelector<HTMLElement>(
+        "[data-glass-panel-header]",
+      );
+      if (
+        root === null ||
+        body === null ||
+        header === null ||
+        header === undefined
+      ) {
+        return null;
+      }
 
       const bodyStyle = window.getComputedStyle(body);
       const gridStyle =
@@ -570,7 +510,11 @@ function useGalleryMeasure({
       if (root !== null) resizeObserver.observe(root);
       if (parent !== null) resizeObserver.observe(parent);
       if (bodyRef.current !== null) resizeObserver.observe(bodyRef.current);
-      if (headerRef.current !== null) resizeObserver.observe(headerRef.current);
+      const header = root?.querySelector<HTMLElement>(
+        "[data-glass-panel-header]",
+      );
+      if (header !== null && header !== undefined)
+        resizeObserver.observe(header);
     }
     window.addEventListener("resize", update);
     return () => {
@@ -587,7 +531,7 @@ function useGalleryMeasure({
     trailingReservePx,
   ]);
 
-  return { rootRef, headerRef, bodyRef, gridRef, measure };
+  return { rootRef, bodyRef, gridRef, measure };
 }
 
 /** Shared card-gallery surface with a header accessory and scrolling grid. */
@@ -611,17 +555,8 @@ export function CardGalleryPanel({
   endAction,
   onEndActionPress,
 }: CardGalleryPanelProps): ReactElement {
-  const [besideCutout, setBesideCutout] = useState(false);
-  useEffect(() => {
-    setBesideCutout(cutoutAwareAccessory && hasInjectedDisplayCutout());
-  }, [cutoutAwareAccessory]);
-
   const accessoryPlacement: GlassControlPlacement =
     frame === "fullBleed" ? "onMedia" : "onGlass";
-  const accessory =
-    rightAccessory !== undefined
-      ? accessoryNode(rightAccessory, accessoryPlacement)
-      : null;
   const columnCount = renderedColumnCount(columns);
   const itemCount = cards.length + (endAction === undefined ? 0 : 1);
   const rowCount = rowCountFor(itemCount, columnCount);
@@ -633,7 +568,7 @@ export function CardGalleryPanel({
     reserveStackedCopySpace || cards.some((card) => card.stackedCopy === true);
   const rowSupplementPx = hasCaptions ? CAPTION_BLOCK_PX : 0;
   const trailingReservePx = hasStackedCopy ? STACKED_COPY_RESERVE_PX : 0;
-  const { rootRef, headerRef, bodyRef, gridRef, measure } = useGalleryMeasure({
+  const { rootRef, bodyRef, gridRef, measure } = useGalleryMeasure({
     frame,
     columnCount,
     cardSize,
@@ -662,115 +597,93 @@ export function CardGalleryPanel({
         )
       : `${String(Math.max(1, Math.floor(measure.cardWidthPx)))}px`;
   const galleryPadding = bodyPaddingFor(spacing);
-  const headerPadding = headerPaddingFor(spacing);
   const cardHeight = `calc(${cardWidth} / ${String(CARD_ASPECT_RATIO_VALUE)})`;
   const bodyHeight = `calc(((${cardHeight} + ${String(rowSupplementPx)}px) * ${String(visibleRows)}) + (${galleryRowGap} * ${String(visibleGapSlots)}) + (${galleryPadding} * 2) + ${String(trailingReservePx)}px)`;
   const panelWidth = `calc((${cardWidth} * ${String(columnCount)}) + (${galleryColumnGap} * ${String(Math.max(0, columnCount - 1))}) + (${galleryPadding} * 2))`;
-  const materialStyle: CSSProperties =
-    frame === "fullBleed"
-      ? {
-          background: token("--scrim-gallery"),
-          // The viewport surface has no floating-panel perimeter.
-          border: "none",
-          boxShadow: "none",
-        }
-      : {
-          ...glassSurfaceStyle(),
-          background: `${token("--glass-sheen")}, ${token("--glass-fill-popover")}`,
-        };
-
-  return (
-    <>
-      <section
-        ref={rootRef}
-        data-testid={testId}
-        data-gallery-frame={frame}
-        data-gallery-columns={columnCount}
-        data-gallery-visible-rows={visibleRows}
-        data-gallery-spacing={spacing}
-        data-gallery-card-size={cardSize}
-        data-gallery-width-mode={widthMode}
-        data-gallery-reserves-stacked-copy={
-          reserveStackedCopySpace || undefined
-        }
+  const footerNode =
+    footerAction !== undefined || footerActions !== undefined ? (
+      <div
         style={{
-          ...materialStyle,
-          position: "relative",
-          boxSizing: "border-box",
-          width:
-            frame === "fullBleed" || widthMode === "fill"
-              ? "100%"
-              : panelWidth,
-          maxWidth: "100%",
-          height: frame === "fullBleed" ? "100%" : undefined,
-          maxHeight: "100%",
-          borderRadius: frame === "fullBleed" ? 0 : token("--radius-popover"),
-          minHeight: 0,
-          display: "flex",
-          flexDirection: "column",
-          overflow: "hidden",
-          pointerEvents: "auto",
+          display: "grid",
+          placeItems: "center",
+          paddingRight: galleryPadding,
+          paddingBottom: galleryPadding,
+          paddingLeft: galleryPadding,
         }}
       >
-        {besideCutout && accessory !== null && (
+        {footerActions !== undefined ? (
           <div
+            data-gallery-footer-actions=""
             style={{
-              position: "absolute",
-              top: `calc(var(--display-cutout-top) + (var(--display-cutout-height) - ${String(
-                FLOATING_ACCESSORY_PX,
-              )}px) / 2)`,
-              right: token("--gutter"),
-              zIndex: 1,
+              display: "grid",
+              gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+              gap: token("--space-4"),
+              width: "min(100%, 360px)",
             }}
           >
-            {accessory}
+            {footerActions.map((action) => (
+              <GlassButton
+                key={action.testId ?? action.label}
+                placement={accessoryPlacement}
+                label={action.label}
+                glyph={action.glyph}
+                essenceCost={action.essenceCost}
+                disabled={action.disabled}
+                variant={action.variant}
+                testId={action.testId}
+                onPress={action.onPress}
+              />
+            ))}
           </div>
-        )}
-        <header
-          ref={headerRef}
-          style={{
-            flexShrink: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: token("--space-4"),
-            borderBottom: `1px solid ${token("--border-strong")}`,
-            padding: headerPadding,
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: token("--space-1"),
-              minWidth: 0,
-            }}
-          >
-            <h2
-              style={{
-                margin: 0,
-                font: token("--t-title-sm"),
-                color: token("--text-on-glass"),
-                textAlign: "left",
-                letterSpacing: 0,
-              }}
-            >
-              {title}
-            </h2>
-            {subtitle !== undefined && (
-              <p
-                style={{
-                  margin: 0,
-                  font: token("--t-body"),
-                  color: token("--text-on-glass-muted"),
-                }}
-              >
-                {subtitle}
-              </p>
-            )}
-          </div>
-          {!besideCutout && accessory}
-        </header>
+        ) : footerAction !== undefined ? (
+          <GlassButton
+            placement={accessoryPlacement}
+            label={footerAction.label}
+            glyph={footerAction.glyph}
+            essenceCost={footerAction.essenceCost}
+            disabled={footerAction.disabled}
+            variant={footerAction.variant}
+            testId={footerAction.testId}
+            onPress={footerAction.onPress}
+          />
+        ) : null}
+      </div>
+    ) : undefined;
+
+  return (
+    <section
+      ref={rootRef}
+      data-testid={testId}
+      data-gallery-frame={frame}
+      data-gallery-columns={columnCount}
+      data-gallery-visible-rows={visibleRows}
+      data-gallery-spacing={spacing}
+      data-gallery-card-size={cardSize}
+      data-gallery-width-mode={widthMode}
+      data-gallery-reserves-stacked-copy={reserveStackedCopySpace || undefined}
+      style={{
+        position: "relative",
+        boxSizing: "border-box",
+        width:
+          frame === "fullBleed" || widthMode === "fill" ? "100%" : panelWidth,
+        maxWidth: "100%",
+        height: frame === "fullBleed" ? "100%" : undefined,
+        maxHeight: "100%",
+        minHeight: 0,
+        pointerEvents: "auto",
+      }}
+    >
+      <GlassPanel
+        title={title}
+        subtitle={subtitle}
+        rightAccessory={rightAccessory}
+        cutoutAwareAccessory={cutoutAwareAccessory}
+        frame={frame}
+        radius="popover"
+        tint="popover"
+        headerSpacing={panelHeaderSpacingFor(spacing)}
+        footer={footerNode}
+      >
         <div
           ref={bodyRef}
           style={{
@@ -918,56 +831,7 @@ export function CardGalleryPanel({
             </div>
           )}
         </div>
-        {(footerAction !== undefined || footerActions !== undefined) && (
-          <footer
-            style={{
-              flexShrink: 0,
-              display: "grid",
-              placeItems: "center",
-              paddingRight: galleryPadding,
-              paddingBottom: galleryPadding,
-              paddingLeft: galleryPadding,
-            }}
-          >
-            {footerActions !== undefined ? (
-              <div
-                data-gallery-footer-actions=""
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                  gap: token("--space-4"),
-                  width: "min(100%, 360px)",
-                }}
-              >
-                {footerActions.map((action) => (
-                  <GlassButton
-                    key={action.testId ?? action.label}
-                    placement={accessoryPlacement}
-                    label={action.label}
-                    glyph={action.glyph}
-                    essenceCost={action.essenceCost}
-                    disabled={action.disabled}
-                    variant={action.variant}
-                    testId={action.testId}
-                    onPress={action.onPress}
-                  />
-                ))}
-              </div>
-            ) : footerAction !== undefined ? (
-              <GlassButton
-                placement={accessoryPlacement}
-                label={footerAction.label}
-                glyph={footerAction.glyph}
-                essenceCost={footerAction.essenceCost}
-                disabled={footerAction.disabled}
-                variant={footerAction.variant}
-                testId={footerAction.testId}
-                onPress={footerAction.onPress}
-              />
-            ) : null}
-          </footer>
-        )}
-      </section>
-    </>
+      </GlassPanel>
+    </section>
   );
 }

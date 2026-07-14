@@ -50,11 +50,14 @@ function view(cardCount = 2): PurgeSiteView {
         cardNumber === 1 ? "a" : cardNumber === 2 ? "b" : String(cardNumber);
       return {
         entryId: `entry-${suffix}`,
-        model: (() => { const displaySnapshot = makeCard({
-          name: asCardName(`Test Card ${String(cardNumber)}`),
-          id: asCardId(`card-${suffix}`),
-          cardNumber,
-        }); return { cardId: displaySnapshot.id, displaySnapshot }; })(),
+        model: (() => {
+          const displaySnapshot = makeCard({
+            name: asCardName(`Test Card ${String(cardNumber)}`),
+            id: asCardId(`card-${suffix}`),
+            cardNumber,
+          });
+          return { cardId: displaySnapshot.id, displaySnapshot };
+        })(),
         isBane: false,
         purgeCostKind: "paid",
       };
@@ -143,7 +146,9 @@ describe("PurgeSiteScreen", () => {
     expect(
       container.querySelector('[data-testid="cumulus-purge-commit-bar"]'),
     ).toBeNull();
-    expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
+    expect(
+      container.querySelector("[data-quest-status-bar-anchor]"),
+    ).toBeNull();
 
     act(() => {
       root.unmount();
@@ -188,9 +193,7 @@ describe("PurgeSiteScreen", () => {
     );
     expect(selectedAction?.dataset.glassVariant).toBe("danger");
     expect(selectedAction?.style.background).toContain("var(--danger) 18%");
-    expect(selectedAction?.style.background).toContain(
-      "--glass-on-glass-fill",
-    );
+    expect(selectedAction?.style.background).toContain("--glass-on-glass-fill");
     expect(
       container.querySelector('[data-testid="cumulus-purge-commit-bar"]'),
     ).toBeNull();
@@ -230,29 +233,33 @@ describe("PurgeSiteScreen", () => {
     const gallery = container.querySelector<HTMLElement>(
       '[data-testid="cumulus-purge-card-gallery"]',
     );
+    const surface = gallery?.querySelector<HTMLElement>(
+      '[data-glass-panel-frame="floating"]',
+    );
     expect(cardRegion?.dataset.purgeLayout).toBe("mobile");
     expect(
-      container.querySelector<HTMLElement>("[data-guide-gallery-site]")
-        ?.style.paddingBottom,
+      container.querySelector<HTMLElement>("[data-guide-gallery-site]")?.style
+        .paddingBottom,
     ).toBe(QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE);
     expect(cardRegion?.style.height).toBe("100%");
     expect(cardRegion?.style.width).toBe("calc(100vw - (var(--space-4) * 2))");
     expect(cardRegion?.style.minHeight).toBe("0px");
-    expect(gallery?.style.background).toContain("var(--glass-fill-popover)");
-    expect(gallery?.style.borderRadius).toBe("var(--radius-popover)");
+    expect(surface?.style.background).toContain("var(--glass-fill-popover)");
+    expect(surface?.style.borderRadius).toBe("var(--radius-popover)");
     expect(gallery?.dataset.galleryFrame).toBe("floating");
     expect(gallery?.dataset.galleryColumns).toBe("4");
     expect(gallery?.dataset.gallerySpacing).toBe("medium");
     expect(gallery?.querySelector<HTMLElement>("header")?.style.padding).toBe(
       "var(--space-6)",
     );
-    const galleryBody = gallery?.querySelector<HTMLElement>("header")
-      ?.nextElementSibling as HTMLElement | null;
+    const galleryBody = gallery?.querySelector<HTMLElement>(
+      "[data-glass-panel-content] > div",
+    );
     expect(galleryBody?.style.padding).toBe("var(--space-5)");
     expect(galleryBody?.firstElementChild?.getAttribute("style")).toContain(
       "gap: var(--space-4)",
     );
-    expect(gallery?.style.borderLeft).not.toContain("var(--border-soft)");
+    expect(surface?.style.borderLeft).not.toContain("var(--border-soft)");
 
     act(() => {
       root.unmount();
@@ -263,7 +270,9 @@ describe("PurgeSiteScreen", () => {
     const { container, root } = mount(
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
     );
-    expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
+    expect(
+      container.querySelector("[data-quest-status-bar-anchor]"),
+    ).toBeNull();
 
     act(() => {
       root.unmount();
@@ -334,16 +343,19 @@ describe("PurgeSiteScreen", () => {
     const gallery = container.querySelector<HTMLElement>(
       '[data-testid="cumulus-purge-card-gallery"]',
     );
+    const surface = gallery?.querySelector<HTMLElement>(
+      '[data-glass-panel-frame="floating"]',
+    );
     expect(cardRegion?.dataset.purgeLayout).toBe("desktop");
     expect(cardRegion?.style.height).toBe("100%");
     expect(cardRegion?.style.minHeight).toBe("0px");
     expect(cardRegion?.style.display).toBe("grid");
     expect(cardRegion?.style.alignItems).toBe("center");
-    expect(gallery?.style.background).toContain("var(--glass-fill-popover)");
-    expect(gallery?.style.borderRadius).toBe("var(--radius-popover)");
+    expect(surface?.style.background).toContain("var(--glass-fill-popover)");
+    expect(surface?.style.borderRadius).toBe("var(--radius-popover)");
     expect(gallery?.dataset.galleryFrame).toBe("floating");
     expect(gallery?.dataset.galleryColumns).toBe("5");
-    expect(gallery?.style.borderLeft).not.toContain("var(--border-soft)");
+    expect(surface?.style.borderLeft).not.toContain("var(--border-soft)");
 
     act(() => {
       root.unmount();
@@ -359,11 +371,11 @@ describe("PurgeSiteScreen", () => {
     const cardRegion = container.querySelector<HTMLElement>(
       "[data-purge-card-grid]",
     );
-    const scroll = container.querySelector(
-      '[data-testid="cumulus-purge-card-gallery"] header',
-    )?.nextElementSibling as HTMLElement | null;
     const gallery = container.querySelector<HTMLElement>(
       '[data-testid="cumulus-purge-card-gallery"]',
+    );
+    const scroll = gallery?.querySelector<HTMLElement>(
+      "[data-glass-panel-content] > div",
     );
     expect(cardRegion?.dataset.purgeLayout).toBe("desktop");
     expect(cardRegion?.style.height).toBe("100%");

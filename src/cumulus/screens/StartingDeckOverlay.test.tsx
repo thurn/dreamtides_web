@@ -37,9 +37,13 @@ vi.mock("../../logging", () => ({
 // GameCard pulls in the card-database art pipeline; the overlay's behavior does
 // not depend on the card's pixels, so stub it to its name for the tests.
 vi.mock("../components/card/CardView", () => ({
-  GameCard: ({ model, testId }: { model: { displaySnapshot: CardData }; testId?: string }) => (
-    <div data-testid={testId}>{model.displaySnapshot.name}</div>
-  ),
+  GameCard: ({
+    model,
+    testId,
+  }: {
+    model: { displaySnapshot: CardData };
+    testId?: string;
+  }) => <div data-testid={testId}>{model.displaySnapshot.name}</div>,
 }));
 
 function makeCard(cardNumber: number, name: string, text: string): CardData {
@@ -65,19 +69,22 @@ function makeView(cardCount = 2): StartingDeckView {
       const cardNumber = index + 1;
       return {
         entryId: `entry-${String(cardNumber)}`,
-        model: (() => { const displaySnapshot = makeCard(
-          cardNumber,
-          cardNumber === 1
-            ? "Archive Sentry"
-            : cardNumber === 2
-              ? "Glimpse of What Was"
-              : `Starter ${String(cardNumber)}`,
-          cardNumber === 1
-            ? "Hold the line."
-            : cardNumber === 2
-              ? "Draw a card."
-              : "Begin again.",
-        ); return { cardId: displaySnapshot.id, displaySnapshot }; })(),
+        model: (() => {
+          const displaySnapshot = makeCard(
+            cardNumber,
+            cardNumber === 1
+              ? "Archive Sentry"
+              : cardNumber === 2
+                ? "Glimpse of What Was"
+                : `Starter ${String(cardNumber)}`,
+            cardNumber === 1
+              ? "Hold the line."
+              : cardNumber === 2
+                ? "Draw a card."
+                : "Begin again.",
+          );
+          return { cardId: displaySnapshot.id, displaySnapshot };
+        })(),
         testId: `starting-deck-modal-card-entry-${String(cardNumber)}`,
       };
     }),
@@ -99,12 +106,19 @@ function mount(element: ReactElement): {
 
 /** The panel wrapper bounds the shared CardGalleryPanel. */
 function panelOf(container: HTMLElement): HTMLElement | null {
-  const header = container.querySelector("header");
-  return (header?.parentElement?.parentElement as HTMLElement | null) ?? null;
+  return galleryOf(container)?.parentElement ?? null;
 }
 
 function galleryOf(container: HTMLElement): HTMLElement | null {
   return container.querySelector("[data-gallery-frame]");
+}
+
+function surfaceOf(container: HTMLElement): HTMLElement | null {
+  return container.querySelector("[data-glass-panel-frame]");
+}
+
+function scrollOf(container: HTMLElement): HTMLElement | null {
+  return container.querySelector("[data-glass-panel-content] > div");
 }
 
 function setDesktopViewport(isDesktop: boolean, roomy = false): void {
@@ -202,16 +216,16 @@ describe("StartingDeckOverlay", () => {
     expect(panel?.style.height).toBe("100%");
     expect(panel?.style.maxWidth).toBe("");
     const gallery = galleryOf(container);
+    const surface = surfaceOf(container);
     expect(gallery?.dataset.galleryFrame).toBe("fullBleed");
     expect(gallery?.dataset.galleryColumns).toBe("4");
-    expect(gallery?.style.borderRadius).toBe("0px");
-    expect(gallery?.style.background).toBe("var(--scrim-gallery)");
-    expect(gallery?.getAttribute("style")).not.toContain("backdrop-filter");
-    expect(gallery?.style.borderStyle).toBe("none");
-    expect(gallery?.style.boxShadow).toBe("none");
+    expect(surface?.style.borderRadius).toBe("0px");
+    expect(surface?.style.background).toBe("var(--scrim-gallery)");
+    expect(surface?.getAttribute("style")).not.toContain("backdrop-filter");
+    expect(surface?.style.borderStyle).toBe("none");
+    expect(surface?.style.boxShadow).toBe("none");
     // The body scrolls internally.
-    const scroll = container.querySelector("header")
-      ?.nextElementSibling as HTMLElement | null;
+    const scroll = scrollOf(container);
     expect(scroll?.style.overflowY).toBe("auto");
 
     act(() => {
@@ -228,9 +242,10 @@ describe("StartingDeckOverlay", () => {
     const panel = panelOf(container);
     expect(panel?.style.maxHeight).toContain("100vh");
     const gallery = galleryOf(container);
+    const surface = surfaceOf(container);
     expect(gallery?.dataset.galleryFrame).toBe("floating");
     expect(gallery?.dataset.galleryColumns).toBe("5");
-    expect(gallery?.style.backdropFilter).toContain("blur(");
+    expect(surface?.style.backdropFilter).toContain("blur(");
     act(() => {
       root.unmount();
     });
@@ -248,8 +263,7 @@ describe("StartingDeckOverlay", () => {
     expect(gallery?.dataset.galleryFrame).toBe("floating");
     expect(gallery?.dataset.galleryColumns).toBe("5");
     expect(gallery?.dataset.galleryVisibleRows).toBe("2.5");
-    const scroll = container.querySelector("header")
-      ?.nextElementSibling as HTMLElement | null;
+    const scroll = scrollOf(container);
     expect(scroll?.style.overflowY).toBe("auto");
     expect(
       container.querySelectorAll("[data-testid^='starting-deck-modal-card-']"),

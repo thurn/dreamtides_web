@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/card-gallery-panel`
 
 Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
 
-The shared card-browser surface: a left-aligned title and subtitle, optional header and centered footer actions, and a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim.
+The shared card-browser surface: GlassPanel title and action chrome around a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim.
 
 > **Guidance:** Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component derives material from frame geometry: floating is rounded glass and full-bleed is the edge-to-edge standard alpha scrim. It owns the header, accessory slot, internal scroll, fixed grid modes, optional captions and trailing card-sized action, and mobile press-preview sizing with whole-card touch-circle clearance. Callers provide resolved card models keyed by entry id or UUID.
 
@@ -18,7 +18,7 @@ The shared card-browser surface: a left-aligned title and subtitle, optional hea
 | --- | --- | --- | --- | --- |
 | `title` | `string` | yes | — | Header title, rendered as an `<h2>`. |
 | `subtitle` | `string` | no | — | Optional intro line under the title. |
-| `rightAccessory` | `CardGalleryAccessory` | no | — | Optional trailing header action. |
+| `rightAccessory` | `GlassPanelAccessory` | no | — | Optional trailing header action. |
 | `footerAction` | `CardGalleryFooterAction` | no | — | Optional centered GlassButton rendered below the card grid. |
 | `footerActions` | `readonly [CardGalleryFooterAction, CardGalleryFooterAction]` | no | — | Optional equal-width pair of GlassButtons rendered below the card grid. |
 | `cards` | `readonly CardGalleryCardView[]` | yes | — | Resolved cards rendered in order. |
@@ -35,7 +35,7 @@ The shared card-browser surface: a left-aligned title and subtitle, optional hea
 | `endAction` | `CardGalleryActionView` | no | — | Optional card-sized action appended after the cards. |
 | `onEndActionPress` | `((entryId: string) => void)` | no | — | Fires with the appended action's stable id when it is activated. |
 
-### `rightAccessory`: the `CardGalleryAccessory` model
+### `rightAccessory`: the `GlassPanelAccessory` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |

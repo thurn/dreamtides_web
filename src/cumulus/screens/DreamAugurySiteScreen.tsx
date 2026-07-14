@@ -7,7 +7,7 @@ import { IconButton } from "../components/controls/IconButton";
 import { Motes } from "../components/hud/Motes";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP } from "../components/hud/QuestStatusBar";
-import { glassSurfaceStyle } from "../internal/glass-surface";
+import { GlassPanel } from "../components/overlay/GlassPanel";
 import type { ArtRef } from "../primitives/art";
 import { resolveArtRef } from "../primitives/art";
 import type { Glyph } from "../primitives/glyph";
@@ -92,8 +92,7 @@ export interface DreamAugurySiteView {
 }
 
 export type DreamAuguryChoiceResult =
-  | { ok: true }
-  | { ok: false; message: string };
+  { ok: true } | { ok: false; message: string };
 
 export interface DreamAugurySiteScreenProps {
   view: DreamAugurySiteView;
@@ -129,7 +128,9 @@ export function DreamAugurySiteScreen({
     ReadonlyMap<string, string>
   >(new Map());
   const [inspectedOfferId, setInspectedOfferId] = useState<string | null>(null);
-  const [committingOfferId, setCommittingOfferId] = useState<string | null>(null);
+  const [committingOfferId, setCommittingOfferId] = useState<string | null>(
+    null,
+  );
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const inspectedOffer =
     view.offers.find((offer) => offer.id === inspectedOfferId) ?? null;
@@ -341,20 +342,31 @@ export function DreamAugurySiteScreen({
         ) : (
           <section
             style={{
-              ...glassSurfaceStyle({ radius: token("--radius-panel") }),
               alignSelf: "center",
               justifySelf: "center",
-              padding: token("--space-9"),
-              display: "grid",
-              justifyItems: "center",
-              gap: token("--space-6"),
+              width: "fit-content",
               pointerEvents: "auto",
             }}
           >
-            <p style={{ margin: 0, font: token("--t-lead") }}>
-              The augury is clouded.
-            </p>
-            <GlassButton label="Walk On" placement="onGlass" onPress={onClose} />
+            <GlassPanel overflow="visible">
+              <div
+                style={{
+                  padding: token("--space-9"),
+                  display: "grid",
+                  justifyItems: "center",
+                  gap: token("--space-6"),
+                }}
+              >
+                <p style={{ margin: 0, font: token("--t-lead") }}>
+                  The augury is clouded.
+                </p>
+                <GlassButton
+                  label="Walk On"
+                  placement="onGlass"
+                  onPress={onClose}
+                />
+              </div>
+            </GlassPanel>
           </section>
         )}
       </main>
@@ -364,21 +376,26 @@ export function DreamAugurySiteScreen({
           role="status"
           data-testid="cumulus-dream-augury-error"
           style={{
-            ...glassSurfaceStyle({ radius: token("--radius-control") }),
             position: "absolute",
             left: "25%",
             right: "25%",
             bottom: `calc(${QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-6")})`,
             maxWidth: 520,
             marginInline: "auto",
-            padding: `${token("--space-5")} ${token("--space-7")}`,
-            color: token("--text-on-glass"),
-            font: token("--t-body-sm"),
-            textAlign: "center",
             zIndex: 50,
           }}
         >
-          {errorMessage}
+          <GlassPanel radius="control" overflow="visible">
+            <div
+              style={{
+                padding: `${token("--space-5")} ${token("--space-7")}`,
+                font: token("--t-body-sm"),
+                textAlign: "center",
+              }}
+            >
+              {errorMessage}
+            </div>
+          </GlassPanel>
         </div>
       )}
     </div>
@@ -465,63 +482,53 @@ function OfferPreviewPanel({
       data-augury-offer={offer.id}
       data-augury-offer-mode="preview"
       style={{
-        ...glassSurfaceStyle({ radius: token("--radius-panel") }),
         width: "100%",
         minWidth: 0,
         boxSizing: "border-box",
-        padding: token("--space-7"),
-        display: "grid",
-        gridTemplateRows: "auto auto auto",
-        gap: token("--space-5"),
-        color: token("--text-on-glass"),
         pointerEvents: "auto",
       }}
     >
-      <header
-        style={{
-          display: "grid",
-          justifyItems: "center",
-          gap: token("--space-3"),
-          textAlign: "center",
-        }}
+      <GlassPanel
+        eyebrow={`Vision ${offer.ordinal}`}
+        title={offer.headline}
+        headerAlign="center"
+        headerDivider={false}
+        headerSpacing="medium"
+        overflow="visible"
       >
-        <span
+        <div
           style={{
-            font: token("--t-eyebrow"),
-            letterSpacing: token("--tracking-eyebrow"),
-            color: token("--text-on-glass-muted"),
-            textTransform: "uppercase",
+            display: "grid",
+            gridTemplateRows: "auto auto",
+            gap: token("--space-5"),
+            padding: `0 ${token("--space-7")} ${token("--space-7")}`,
           }}
         >
-          {`Vision ${offer.ordinal}`}
-        </span>
-        <h2 style={{ margin: 0, font: token("--t-title-sm") }}>
-          {offer.headline}
-        </h2>
-      </header>
-      <div
-        data-augury-preview-visual=""
-        style={{
-          height: 330,
-          minWidth: 0,
-          overflow: "visible",
-          display: "grid",
-          placeItems: "center",
-          padding: token("--space-2"),
-        }}
-      >
-        <OfferPreviewVisual visual={offer.visual} />
-      </div>
-      <div style={{ display: "grid", placeItems: "center" }}>
-        <GlassButton
-          label="Choose"
-          variant="accent"
-          placement="onGlass"
-          disabled={disabled}
-          onPress={() => onInspect(offer)}
-          testId={`cumulus-dream-augury-preview-${offer.id}`}
-        />
-      </div>
+          <div
+            data-augury-preview-visual=""
+            style={{
+              height: 330,
+              minWidth: 0,
+              overflow: "visible",
+              display: "grid",
+              placeItems: "center",
+              padding: token("--space-2"),
+            }}
+          >
+            <OfferPreviewVisual visual={offer.visual} />
+          </div>
+          <div style={{ display: "grid", placeItems: "center" }}>
+            <GlassButton
+              label="Choose"
+              variant="accent"
+              placement="onGlass"
+              disabled={disabled}
+              onPress={() => onInspect(offer)}
+              testId={`cumulus-dream-augury-preview-${offer.id}`}
+            />
+          </div>
+        </div>
+      </GlassPanel>
     </article>
   );
 }
@@ -550,85 +557,68 @@ function OfferDetailPanel({
       data-augury-offer={offer.id}
       data-augury-offer-mode="detail"
       style={{
-        ...glassSurfaceStyle({ radius: token("--radius-panel") }),
         width: offer.requiresSelection ? "100%" : "min(100%, 720px)",
         minWidth: 0,
         maxHeight: "100%",
         boxSizing: "border-box",
-        overflow: "hidden",
         justifySelf: "center",
-        color: token("--text-on-glass"),
         pointerEvents: "auto",
       }}
     >
-      <header
-        style={{
-          display: "grid",
-          gap: token("--space-2"),
-          padding: `${token("--space-5")} ${token("--space-7")}`,
-          borderBottom: `1px solid ${token("--border-strong")}`,
-        }}
+      <GlassPanel
+        eyebrow={`Vision ${offer.ordinal}`}
+        title={offer.headline}
+        headerSpacing="medium"
+        footer={
+          <div
+            data-dream-augury-actions=""
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              gap: token("--space-4"),
+              paddingRight: token("--space-7"),
+              paddingBottom: token("--space-6"),
+              paddingLeft: token("--space-7"),
+            }}
+          >
+            <GlassButton
+              label="Choose Again"
+              placement="onGlass"
+              disabled={disabled}
+              onPress={onChooseAgain}
+              testId="cumulus-dream-augury-choose-again"
+            />
+            <GlassButton
+              label="Confirm"
+              variant="accent"
+              placement="onGlass"
+              disabled={confirmDisabled}
+              onPress={() => onConfirm(offer)}
+              testId={`cumulus-dream-augury-confirm-${offer.id}`}
+            />
+          </div>
+        }
       >
-        <span
+        <div
+          data-augury-detail-visual=""
           style={{
-            font: token("--t-eyebrow"),
-            letterSpacing: token("--tracking-eyebrow"),
-            color: token("--text-on-glass-muted"),
-            textTransform: "uppercase",
+            minHeight: 0,
+            maxHeight: "min(62vh, 620px)",
+            overflow: "auto",
+            display: "grid",
+            placeItems: "center",
+            padding: token("--space-8"),
           }}
         >
-          {`Vision ${offer.ordinal}`}
-        </span>
-        <h2 style={{ margin: 0, font: token("--t-title-sm") }}>
-          {offer.headline}
-        </h2>
-      </header>
-      <div
-        data-augury-detail-visual=""
-        style={{
-          minHeight: 0,
-          maxHeight: "min(62vh, 620px)",
-          overflow: "auto",
-          display: "grid",
-          placeItems: "center",
-          padding: token("--space-8"),
-        }}
-      >
-        <OfferDetailVisual
-          offerId={offer.id}
-          visual={offer.visual}
-          selectedChoiceId={selectedChoiceId}
-          onSelect={onSelect}
-        />
-      </div>
-      <footer
-        data-dream-augury-actions=""
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          gap: token("--space-4"),
-          paddingRight: token("--space-7"),
-          paddingBottom: token("--space-6"),
-          paddingLeft: token("--space-7"),
-        }}
-      >
-        <GlassButton
-          label="Choose Again"
-          placement="onGlass"
-          disabled={disabled}
-          onPress={onChooseAgain}
-          testId="cumulus-dream-augury-choose-again"
-        />
-        <GlassButton
-          label="Confirm"
-          variant="accent"
-          placement="onGlass"
-          disabled={confirmDisabled}
-          onPress={() => onConfirm(offer)}
-          testId={`cumulus-dream-augury-confirm-${offer.id}`}
-        />
-      </footer>
+          <OfferDetailVisual
+            offerId={offer.id}
+            visual={offer.visual}
+            selectedChoiceId={selectedChoiceId}
+            onSelect={onSelect}
+          />
+        </div>
+      </GlassPanel>
     </article>
   );
 }
@@ -646,7 +636,9 @@ function OfferPreviewVisual({
         <PreviewCardStack cards={visual.cards} />
       );
     case "cardChoices":
-      return <PreviewCardStack cards={visual.choices.map((choice) => choice.card)} />;
+      return (
+        <PreviewCardStack cards={visual.choices.map((choice) => choice.card)} />
+      );
     case "beforeAfter": {
       const pair = visual.pairs[0];
       return pair === undefined ? null : (
@@ -655,11 +647,7 @@ function OfferPreviewVisual({
     }
     case "purge":
       return (
-        <CardTile
-          card={visual.card}
-          width={PREVIEW_DIRECT_CARD_WIDTH}
-          danger
-        />
+        <CardTile card={visual.card} width={PREVIEW_DIRECT_CARD_WIDTH} danger />
       );
     case "purgeReplace":
       return (
@@ -672,7 +660,9 @@ function OfferPreviewVisual({
     case "duplicate":
       return <PreviewDuplicateCards card={visual.card} />;
     case "duplicateChoices":
-      return <PreviewCardStack cards={visual.choices.map((choice) => choice.card)} />;
+      return (
+        <PreviewCardStack cards={visual.choices.map((choice) => choice.card)} />
+      );
     case "dreamsigns":
       return <PreviewDreamsigns dreamsigns={visual.dreamsigns} />;
     case "dreamsignChoices":
@@ -682,7 +672,9 @@ function OfferPreviewVisual({
         />
       );
     case "site":
-      return <SiteRewardVisual siteName={visual.siteName} glyph={visual.glyph} />;
+      return (
+        <SiteRewardVisual siteName={visual.siteName} glyph={visual.glyph} />
+      );
     case "mixed":
       return (
         <div
@@ -855,7 +847,9 @@ function OfferDetailVisual({
         </div>
       );
     case "site":
-      return <SiteRewardVisual siteName={visual.siteName} glyph={visual.glyph} />;
+      return (
+        <SiteRewardVisual siteName={visual.siteName} glyph={visual.glyph} />
+      );
     case "mixed":
       return (
         <div style={{ display: "grid", gap: token("--space-6") }}>

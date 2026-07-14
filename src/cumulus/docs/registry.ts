@@ -26,6 +26,7 @@ import { essenceValueDemo } from "./demos/essence-value";
 import { gameCardDemo } from "./demos/game-card";
 import { glassButtonDemo } from "./demos/glass-button";
 import { glassDialogDemo } from "./demos/glass-dialog";
+import { glassPanelDemo } from "./demos/glass-panel";
 import { glossaryDefinitionCardDemo } from "./demos/glossary-definition-card";
 import { glowIconDemo } from "./demos/glow-icon";
 import { groupPanelDemo } from "./demos/group-panel";
@@ -143,6 +144,7 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   buttonDemo,
   iconButtonDemo,
   glassButtonDemo,
+  glassPanelDemo,
   glassDialogDemo,
   speechBubbleDemo,
   segmentedControlDemo,

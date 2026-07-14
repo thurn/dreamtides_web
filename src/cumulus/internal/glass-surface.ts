@@ -9,6 +9,7 @@
 //
 // This is the ONE glass recipe, shared so it reads identically everywhere it
 // appears. Its consumers:
+//   - GlassPanel — the shared structured title/body/footer content container,
 //   - the InfoCard press-reveal shell (which overrides the fill to the warmer
 //     --glass-fill-popover tint; its fullBleed / atlasReveal text cards wear the
 //     same recipe),
@@ -19,8 +20,8 @@
 //     })), which flows on to glassIconButtonChrome() → IconButton and
 //     controlChrome() → the Select / SegmentedControl track+trigger and
 //     GlassButton.
-// So the one material reaches the InfoCard reveal shell, GlassDialog (and the
-// shared full-bleed backdrop), IconButton, GlassButton, and the Select /
+// So the one material reaches GlassPanel, the InfoCard reveal shell, GlassDialog
+// (and the shared full-bleed backdrop), IconButton, GlassButton, and the Select /
 // SegmentedControl control cluster.
 //
 // The material's fill, sheen, blur, rim, and shadow live once as the --glass-*

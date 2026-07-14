@@ -11,7 +11,7 @@ import {
   TransfigurationFormButton,
   type TransfigurationFormButtonModel,
 } from "../components/controls/TransfigurationFormButton";
-import { glassSurfaceStyle } from "../internal/glass-surface";
+import { GlassPanel } from "../components/overlay/GlassPanel";
 import type { ArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import { TRANSFIGURATION_COLORS } from "../../runtime/transfiguration-display";
@@ -23,8 +23,7 @@ import {
 
 export type TransfigurationGuideView = GuideGalleryGuideView;
 
-export interface TransfigurationFormView
-  extends TransfigurationFormButtonModel {
+export interface TransfigurationFormView extends TransfigurationFormButtonModel {
   /** Persisted reconstruction payload passed back to the mutation. */
   effectDetails: Record<string, unknown>;
   /** The transformed card plus its marked transfiguration display. */
@@ -225,6 +224,7 @@ export function TransfigurationSiteScreen({
             data-transfiguration-panel-viewport=""
             style={{
               width: "100%",
+              minWidth: 0,
               maxWidth:
                 layout === "desktop" && !view.isEnhanced && picked !== null
                   ? DESKTOP_DETAIL_PANEL_MAX_WIDTH_PX
@@ -449,165 +449,155 @@ function DetailPanel({
       data-testid="cumulus-transfiguration-detail"
       data-transfiguration-detail-layout={layout}
       style={{
-        ...glassSurfaceStyle(),
         width: mobile ? `calc(100vw - (${token("--space-4")} * 2))` : "100%",
         height: mobile ? "auto" : undefined,
         minHeight: mobile ? "100%" : undefined,
         maxHeight: mobile ? undefined : "100%",
         boxSizing: "border-box",
         overflow: "hidden",
-        color: token("--text-on-glass"),
         display: mobile ? "flex" : undefined,
         flexDirection: mobile ? "column" : undefined,
         justifySelf: mobile ? "center" : undefined,
       }}
     >
-      <header
-        style={{
-          display: "flex",
-          alignItems: "center",
-          padding: mobile ? token("--space-4") : token("--space-6"),
-          borderBottom: `1px solid ${token("--border-strong")}`,
-        }}
-      >
-        <div style={{ minWidth: 0 }}>
-          <h2 style={{ margin: 0, font: token("--t-title-sm") }}>
-            Choose Its New Form
-          </h2>
-        </div>
-      </header>
-
-      <div
-        data-transfiguration-detail-body=""
-        data-transfiguration-detail-body-layout={
-          mobile ? "side-by-side" : "desktop-columns"
+      <GlassPanel
+        title="Choose Its New Form"
+        headerSpacing={mobile ? "compact" : "medium"}
+        footer={
+          <div
+            data-transfiguration-actions=""
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: mobile ? "center" : "flex-end",
+              gap: token("--space-4"),
+              paddingRight: mobile ? token("--space-4") : token("--space-8"),
+              paddingBottom: mobile ? token("--space-4") : token("--space-6"),
+              paddingLeft: mobile ? token("--space-4") : token("--space-8"),
+            }}
+          >
+            <GlassButton
+              placement="onGlass"
+              label="Choose Again"
+              disabled={confirming}
+              onPress={onBack}
+              testId="cumulus-transfiguration-choose-again"
+            />
+            <GlassButton
+              placement="onGlass"
+              variant="accent"
+              label={confirming ? "Reforging…" : "Transfigure"}
+              essenceCost={activeForm?.essenceCost ?? null}
+              widthReservations={[
+                { label: "Transfigure", essenceCost: null },
+                ...candidate.forms.flatMap((form) => [
+                  { label: "Transfigure", essenceCost: form.essenceCost },
+                  { label: "Reforging…", essenceCost: form.essenceCost },
+                ]),
+              ]}
+              disabled={disabled}
+              onPress={() => {
+                if (activeForm !== null) onConfirm(activeForm);
+              }}
+              testId="cumulus-transfiguration-confirm"
+            />
+          </div>
         }
-        style={{
-          display: "grid",
-          containerType: mobile ? "inline-size" : undefined,
-          flex: mobile ? "1 0 auto" : undefined,
-          minHeight: mobile ? "auto" : undefined,
-          gridTemplateColumns: mobile
-            ? "minmax(0, 1fr) minmax(0, 1fr)"
-            : "minmax(220px, 278px) minmax(240px, 288px)",
-          gridTemplateRows: mobile ? "auto" : undefined,
-          gap: mobile ? token("--space-4") : token("--space-8"),
-          alignItems: mobile ? "stretch" : "start",
-          padding: mobile
-            ? `${token("--space-6")} ${token("--space-4")}`
-            : token("--space-8"),
-        }}
       >
         <div
+          data-transfiguration-detail-body=""
+          data-transfiguration-detail-body-layout={
+            mobile ? "side-by-side" : "desktop-columns"
+          }
           style={{
-            width: mobile
-              ? `min(100%, ${String(MOBILE_DETAIL_CARD_MAX_WIDTH)}px)`
-              : "min(100%, 278px)",
-            height: mobile ? "auto" : undefined,
-            aspectRatio: mobile ? String(CARD_ASPECT_RATIO_VALUE) : undefined,
-            justifySelf: "center",
-            alignSelf: mobile ? "start" : undefined,
-            minHeight: 0,
-          }}
-          data-transfiguration-detail-card-target=""
-        >
-          <GameCard
-            model={activeForm?.previewModel ?? candidate.model}
-            selected={activeForm !== null}
-            selectionColor={
-              activeForm === null
-                ? undefined
-                : TRANSFIGURATION_COLORS[activeForm.type]
-            }
-          />
-        </div>
-
-        <div
-          style={{
-            minWidth: 0,
-            minHeight: mobile ? 0 : undefined,
-            width: mobile ? "100%" : undefined,
-            flex: mobile ? "0 0 auto" : undefined,
-            display: "flex",
-            flexDirection: "column",
-            gap: mobile ? token("--space-2") : token("--space-4"),
+            display: "grid",
+            containerType: mobile ? "inline-size" : undefined,
+            flex: mobile ? "1 0 auto" : undefined,
+            minHeight: mobile ? "auto" : undefined,
+            gridTemplateColumns: mobile
+              ? "minmax(0, 1fr) minmax(0, 1fr)"
+              : "minmax(220px, 278px) minmax(240px, 288px)",
+            gridTemplateRows: mobile ? "auto" : undefined,
+            gap: mobile ? token("--space-4") : token("--space-8"),
+            alignItems: mobile ? "stretch" : "start",
+            padding: mobile
+              ? `${token("--space-6")} ${token("--space-4")}`
+              : token("--space-8"),
           }}
         >
           <div
-            role="radiogroup"
-            aria-label="Transfiguration options"
-            data-transfiguration-options=""
-            data-transfiguration-option-layout={mobile ? "compact" : "priced"}
             style={{
-              display: "flex",
-              minHeight: mobile ? 0 : undefined,
+              width: mobile
+                ? `min(100%, ${String(MOBILE_DETAIL_CARD_MAX_WIDTH)}px)`
+                : "min(100%, 278px)",
               height: mobile ? "auto" : undefined,
-              boxSizing: "border-box",
+              aspectRatio: mobile ? String(CARD_ASPECT_RATIO_VALUE) : undefined,
+              justifySelf: "center",
+              alignSelf: mobile ? "start" : undefined,
+              minHeight: 0,
+            }}
+            data-transfiguration-detail-card-target=""
+          >
+            <GameCard
+              model={activeForm?.previewModel ?? candidate.model}
+              selected={activeForm !== null}
+              selectionColor={
+                activeForm === null
+                  ? undefined
+                  : TRANSFIGURATION_COLORS[activeForm.type]
+              }
+            />
+          </div>
+
+          <div
+            style={{
+              minWidth: 0,
+              minHeight: mobile ? 0 : undefined,
+              width: mobile ? "100%" : undefined,
+              flex: mobile ? "0 0 auto" : undefined,
+              display: "flex",
               flexDirection: "column",
-              alignItems: mobile ? "stretch" : undefined,
-              justifyContent: mobile ? "flex-start" : undefined,
-              gap: token("--space-3"),
-              maxHeight: mobile ? undefined : "min(52vh, 520px)",
-              overflowY: mobile ? "visible" : "auto",
-              padding: token("--space-2"),
-              paddingBlockStart: mobile ? token("--space-2") : 0,
+              gap: mobile ? token("--space-2") : token("--space-4"),
             }}
           >
-            {candidate.forms.map((form) => {
-              const selected = form.type === activeForm?.type;
-              return (
-                <TransfigurationFormButton
-                  key={form.type}
-                  form={form}
-                  variant={mobile ? "compact" : "priced"}
-                  selected={selected}
-                  disabled={confirming}
-                  onActivate={onSelectForm}
-                  testId={`cumulus-transfiguration-form-${form.type}`}
-                />
-              );
-            })}
+            <div
+              role="radiogroup"
+              aria-label="Transfiguration options"
+              data-transfiguration-options=""
+              data-transfiguration-option-layout={mobile ? "compact" : "priced"}
+              style={{
+                display: "flex",
+                minHeight: mobile ? 0 : undefined,
+                height: mobile ? "auto" : undefined,
+                boxSizing: "border-box",
+                flexDirection: "column",
+                alignItems: mobile ? "stretch" : undefined,
+                justifyContent: mobile ? "flex-start" : undefined,
+                gap: token("--space-3"),
+                maxHeight: mobile ? undefined : "min(52vh, 520px)",
+                overflowY: mobile ? "visible" : "auto",
+                padding: token("--space-2"),
+                paddingBlockStart: mobile ? token("--space-2") : 0,
+              }}
+            >
+              {candidate.forms.map((form) => {
+                const selected = form.type === activeForm?.type;
+                return (
+                  <TransfigurationFormButton
+                    key={form.type}
+                    form={form}
+                    variant={mobile ? "compact" : "priced"}
+                    selected={selected}
+                    disabled={confirming}
+                    onActivate={onSelectForm}
+                    testId={`cumulus-transfiguration-form-${form.type}`}
+                  />
+                );
+              })}
+            </div>
           </div>
         </div>
-      </div>
-      <footer
-        data-transfiguration-actions=""
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: mobile ? "center" : "flex-end",
-          gap: token("--space-4"),
-          paddingRight: mobile ? token("--space-4") : token("--space-8"),
-          paddingBottom: mobile ? token("--space-4") : token("--space-6"),
-          paddingLeft: mobile ? token("--space-4") : token("--space-8"),
-        }}
-      >
-        <GlassButton
-          placement="onGlass"
-          label="Choose Again"
-          disabled={confirming}
-          onPress={onBack}
-          testId="cumulus-transfiguration-choose-again"
-        />
-        <GlassButton
-          placement="onGlass"
-          variant="accent"
-          label={confirming ? "Reforging…" : "Transfigure"}
-          essenceCost={activeForm?.essenceCost ?? null}
-          widthReservations={[
-            { label: "Transfigure", essenceCost: null },
-            ...candidate.forms.flatMap((form) => [
-              { label: "Transfigure", essenceCost: form.essenceCost },
-              { label: "Reforging…", essenceCost: form.essenceCost },
-            ]),
-          ]}
-          disabled={disabled}
-          onPress={() => {
-            if (activeForm !== null) onConfirm(activeForm);
-          }}
-          testId="cumulus-transfiguration-confirm"
-        />
-      </footer>
+      </GlassPanel>
     </section>
   );
 }

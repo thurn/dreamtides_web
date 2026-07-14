@@ -330,6 +330,7 @@ describe("TransfigurationSiteScreen", () => {
       "[data-transfiguration-panel-viewport]",
     );
     expect(panelViewport?.style.width).toBe("100%");
+    expect(panelViewport?.style.minWidth).toBe("0px");
     expect(panelViewport?.style.maxWidth).toBe("640px");
     expect(panelViewport?.style.justifySelf).toBe("end");
     expect(

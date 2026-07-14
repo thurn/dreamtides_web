@@ -595,13 +595,13 @@
     },
     {
       "name": "rightAccessory",
-      "tsType": "CardGalleryAccessory",
+      "tsType": "GlassPanelAccessory",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Optional trailing header action.",
       "nested": {
-        "name": "CardGalleryAccessory",
+        "name": "GlassPanelAccessory",
         "fields": [
           {
             "name": "kind",
@@ -2026,6 +2026,212 @@
       "description": "The scrolling body content."
     }
   ],
+  "GlassPanel": [
+    {
+      "name": "eyebrow",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional uppercase context line rendered above the title."
+    },
+    {
+      "name": "title",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional panel title. Supplying any header copy renders the header."
+    },
+    {
+      "name": "subtitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional supporting line rendered beneath the title."
+    },
+    {
+      "name": "headingLevel",
+      "tsType": "\"h1\" | \"h2\"",
+      "unionMembers": [
+        "h1",
+        "h2"
+      ],
+      "required": false,
+      "defaultValue": "h2",
+      "description": "Semantic heading element for the title. Defaults to `h2`."
+    },
+    {
+      "name": "titleVoice",
+      "tsType": "GlassPanelTitleVoice",
+      "unionMembers": [
+        "standard",
+        "hero"
+      ],
+      "required": false,
+      "defaultValue": "standard",
+      "description": "Title and subtitle typography. Defaults to `standard`."
+    },
+    {
+      "name": "headerAlign",
+      "tsType": "GlassPanelHeaderAlign",
+      "unionMembers": [
+        "start",
+        "center"
+      ],
+      "required": false,
+      "defaultValue": "start",
+      "description": "Header text alignment. Defaults to `start`."
+    },
+    {
+      "name": "headerSpacing",
+      "tsType": "GlassPanelHeaderSpacing",
+      "unionMembers": [
+        "compact",
+        "spacious",
+        "regular",
+        "medium"
+      ],
+      "required": false,
+      "defaultValue": "regular",
+      "description": "Header padding preset. Defaults to `regular`."
+    },
+    {
+      "name": "headerDivider",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "true",
+      "description": "Draw the standard divider below the header. Defaults to `true`."
+    },
+    {
+      "name": "rightAccessory",
+      "tsType": "GlassPanelAccessory",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional structured action at the trailing edge of the header.",
+      "nested": {
+        "name": "GlassPanelAccessory",
+        "fields": [
+          {
+            "name": "kind",
+            "tsType": "\"glassButton\" | \"iconButton\"",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "onPress",
+            "tsType": "(() => void) | (() => void)",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "glyph",
+            "tsType": "Glyph",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "tsType": "boolean",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "testId",
+            "tsType": "string",
+            "optional": true,
+            "description": "A `data-testid` for selecting the button in tests.\nA `data-testid` for selecting the disc in tests."
+          }
+        ]
+      }
+    },
+    {
+      "name": "cutoutAwareAccessory",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Float the accessory beside an injected display cutout when present."
+    },
+    {
+      "name": "frame",
+      "tsType": "GlassPanelFrame",
+      "unionMembers": [
+        "floating",
+        "fullBleed"
+      ],
+      "required": false,
+      "defaultValue": "floating",
+      "description": "Floating glass or the standard full-bleed gallery scrim."
+    },
+    {
+      "name": "radius",
+      "tsType": "GlassPanelRadius",
+      "unionMembers": [
+        "panel",
+        "popover",
+        "control"
+      ],
+      "required": false,
+      "defaultValue": "panel",
+      "description": "Named corner geometry for a floating panel. Defaults to `panel`."
+    },
+    {
+      "name": "tint",
+      "tsType": "GlassPanelTint",
+      "unionMembers": [
+        "default",
+        "popover"
+      ],
+      "required": false,
+      "defaultValue": "default",
+      "description": "Floating glass tint. Defaults to `default`."
+    },
+    {
+      "name": "overflow",
+      "tsType": "\"hidden\" | \"visible\"",
+      "unionMembers": [
+        "hidden",
+        "visible"
+      ],
+      "required": false,
+      "defaultValue": "hidden",
+      "description": "Clip content to the panel edge. Defaults to `hidden`."
+    },
+    {
+      "name": "children",
+      "tsType": "ReactNode",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Panel body content."
+    },
+    {
+      "name": "footer",
+      "tsType": "ReactNode",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional footer content rendered after the body."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Stable test id for the panel root."
+    }
+  ],
   "GlossaryDefinitionCard": [
     {
       "name": "entry",
@@ -2294,8 +2500,8 @@
       "name": "imageCrop",
       "tsType": "ImageCrop",
       "unionMembers": [
-        "top",
-        "center"
+        "center",
+        "top"
       ],
       "required": false,
       "defaultValue": null,
@@ -2515,9 +2721,11 @@
         "object",
         "map",
         "filter",
+        "h1",
+        "h2",
+        "center",
         "text",
         "image",
-        "center",
         "figure",
         "meta",
         "slot",
@@ -2561,8 +2769,6 @@
         "figcaption",
         "footer",
         "form",
-        "h1",
-        "h2",
         "h3",
         "h4",
         "h5",
