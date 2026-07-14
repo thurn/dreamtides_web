@@ -45,8 +45,7 @@ post-Phase-0 layout.
   JSDoc, `TOKEN_GROUPS` in `scripts/generate-cumulus-docs.mjs`, or the trailing
   `/* comment */` on a token), then regenerate. `materials.md` and `SKILL.md`
   are hand-written.
-- Documentation describes the current system only — never "no longer", "removed",
-  "used to", or "unlike before" phrasing.
+- Documentation describes the current system directly.
 - Commits are detailed conventional commits, pushed immediately (repo convention:
   commit + `git push`; do not open branches). End commit messages with the
   `Claude-Session` trailer.
@@ -210,7 +209,7 @@ and document (without changing) MobileDeckViewer's intentional floor-vs-inset sp
 - `src/runtime/device-frame.ts` — derive `SAFE_AREA_VARS` / `CUTOUT_VARS` from
   `TOKENS`; drop `right` from `CUTOUT_VARS`.
 - `src/cumulus/primitives/cumulus-tokens.css` — delete `--display-cutout-right`; edit
-  the paired-box comment so it no longer enumerates `right`.
+  the paired-box comment so it enumerates the active sides.
 - `src/cumulus/primitives/tokens.ts` — GENERATED (via regenerate).
 - `scripts/cumulus-orphan-tokens.test.mjs` — delete the `--display-cutout-right`
   `BASELINE` entry.
@@ -579,7 +578,7 @@ token when the rule lands.
         (`width: "var(--atlas-node-size)"`, `blur(var(--cv-name-color))`).
       - Add an `isCumulusOwnedFile` describe block. Representative assertions:
         ```ts
-        expect(isCumulusOwnedFile("src/cumulus/components/Button.tsx")).toBe(true);
+        expect(isCumulusOwnedFile("src/cumulus/components/GlassButton.tsx")).toBe(true);
         expect(isCumulusOwnedFile("src/cumulus/primitives/tokens.ts")).toBe(false);
         expect(isCumulusOwnedFile("src/cumulus/docs/CumulusApp.tsx")).toBe(false);
         expect(isCumulusOwnedFile("src/screens/cumulus_adapters/HomeScreenAdapter.tsx")).toBe(true);
@@ -698,7 +697,7 @@ state:**
       `grep -rn "cv-textbox-blur:" src/` → only `cumulus-tokens.css`;
       `grep -rn "env(safe-area-inset" src/ | grep -v cumulus-tokens.css` → empty;
       `grep -rn "display-cutout-right" src/` → empty.
-- [ ] Confirm the duplicate-literal `BASELINE` no longer names the glass pair, the
+- [ ] Confirm the duplicate-literal `BASELINE` contains the active glass pairs, the
       disc gradients, or the two atlas rgbas; confirm the orphan `BASELINE` is
       empty or every remaining entry carries an inline justification comment.
 - [ ] Final commit + push if any drift remained:

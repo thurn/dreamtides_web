@@ -109,16 +109,16 @@ toward zero.
 - **`IconButton`** — the glass disc as a component: `glyph: Glyph`,
   `size: "sm" | "md"` (40/22, 48/26), `usePress` feedback, glass material
   from the internal recipe. Accessible label required.
-- **`GlassButton`** — the labeled glass secondary action: same material,
-  text label, `usePress`; for chrome actions that need a real button shape
-  without competing with the purple commit.
+- **`GlassButton`** — the labeled glass action: same material, text label,
+  `usePress`; accent for primary/commit actions, neutral for secondary actions,
+  and danger for destructive actions.
 - **`GlassDialog`** — the rule-of-three shell: glass panel + titled header
   slot + corner `IconButton` close + backdrop, bounded-and-centered on
   desktop, full-bleed on mobile, notch-aware via the safe-area channel.
   Owns the shared `GlassBackdrop` and `GridPlaceholder` internals both
   deck viewers currently copy.
-- **`economy-spec.ts`** — the kind→glyph/color table; `Button` and
-  `ResourceChip` both import it (deletes `COST_ICON_CLASSES`).
+- **`economy-spec.ts`** — the kind→glyph/color table imported by
+  `ResourceChip`.
   `ResourceChip` replaces numeric `size`/`gap` props with enumerated
   variants and gets an honest blurb naming the `EssenceValue` migration
   path.
@@ -127,10 +127,9 @@ toward zero.
   thrice-pasted monogram gradient and fallback).
 - **`useScaleToFit`** extracted from `AtlasMap`; the atlas mockup imports
   it or is labeled archived.
-- **`Button.tsx` doctrine rewrite:** the comment names the four-rung
-  decision tree — purple sprite = commit/primary; glass label = secondary
-  chrome action; glass disc = compact chrome action; plain pressable text
-  = tertiary/inline — and the docs demos show it.
+- **`GlassButton.tsx` doctrine:** accent glass = commit/primary; neutral glass =
+  secondary chrome action; glass disc = compact chrome action; plain pressable
+  text = tertiary/inline — and the docs demos show it.
 
 ## Phase 3 — Migrations
 

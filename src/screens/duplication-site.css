@@ -206,8 +206,8 @@
   cursor: pointer;
 }
 
-/* The caller owns only the commit control's top-bar placement. Button owns
- * the centered label, material, typography, and interaction feedback. */
+/* The caller owns only the commit control's top-bar placement. GlassButton
+ * owns the centered label, material, typography, and interaction feedback. */
 .duplication-site .duplication-confirm-control {
   flex: 0 0 auto;
 }

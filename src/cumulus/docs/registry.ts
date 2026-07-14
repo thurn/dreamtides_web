@@ -13,7 +13,6 @@ import { atlasEdgeDemo } from "./demos/atlas-edge";
 import { atlasMapDemo } from "./demos/atlas-map";
 import { atlasNodeDemo } from "./demos/atlas-node";
 import { battleStatusDisplayDemo } from "./demos/battle-status-display";
-import { buttonDemo } from "./demos/button";
 import { cardBackDemo } from "./demos/card-back";
 import { cardGalleryPanelDemo } from "./demos/card-gallery-panel";
 import { cardPileDemo } from "./demos/card-pile";
@@ -142,7 +141,6 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   pressableDemo,
   resourceChipDemo,
   essenceValueDemo,
-  buttonDemo,
   iconButtonDemo,
   glassButtonDemo,
   offerTileDemo,

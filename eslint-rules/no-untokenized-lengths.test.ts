@@ -26,7 +26,7 @@ describe("isProductUiFile (no-untokenized-lengths)", () => {
     );
   });
   it("exempts primitives, components, docs, and non-cumulus files", () => {
-    expect(isProductUiFile("src/cumulus/components/Button.tsx")).toBe(false);
+    expect(isProductUiFile("src/cumulus/components/GlassButton.tsx")).toBe(false);
     expect(isProductUiFile("src/cumulus/docs/CumulusApp.tsx")).toBe(false);
     expect(isProductUiFile("src/screens/LegacyScreen.tsx")).toBe(false);
   });
@@ -98,7 +98,7 @@ ruleTester.run("no-untokenized-lengths", rule, {
     },
     {
       name: "the components tier authors raw values legitimately",
-      filename: "src/cumulus/components/Button.tsx",
+      filename: "src/cumulus/components/GlassButton.tsx",
       code: `const el = <div style={{ gap: ${ON_SCALE} }} />;`,
     },
     {

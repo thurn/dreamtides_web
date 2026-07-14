@@ -244,7 +244,7 @@ afterEach(() => {
 });
 
 describe("DuplicationSiteScreen", () => {
-  it("renders the commit action through the centered Cumulus Button", () => {
+  it("renders the commit action through the purple accent GlassButton", () => {
     const mutations = makeMutations();
     setQuestContext(makeState(), mutations);
     const { container, root } = mount(<DuplicationSiteScreen site={makeSite()} />);
@@ -253,6 +253,7 @@ describe("DuplicationSiteScreen", () => {
       "[data-testid='duplication-confirm'] > button",
     );
     expect(confirm).not.toBeNull();
+    expect(confirm?.dataset.glassVariant).toBe("accent");
     expect(confirm?.style.justifyContent).toBe("center");
     expect(confirm?.style.textAlign).toBe("center");
     expect(container.querySelector(".dup-dupe-btn")).toBeNull();

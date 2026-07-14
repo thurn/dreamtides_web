@@ -50,7 +50,7 @@ ruleTester.run("no-raw-interactive-elements", rule, {
     {
       name: "composing Cumulus components is fine",
       filename: SCREEN,
-      code: `const el = <Button size="md"><Pressable /></Button>;`,
+      code: `const el = <GlassButton variant="accent"><Pressable /></GlassButton>;`,
     },
     {
       name: "non-interactive intrinsic elements are fine",
@@ -64,7 +64,7 @@ ruleTester.run("no-raw-interactive-elements", rule, {
     },
     {
       name: "components/ own native interactive elements",
-      filename: "src/cumulus/components/Button.tsx",
+      filename: "src/cumulus/components/GlassButton.tsx",
       code: `const el = <button type="button" />;`,
     },
     {

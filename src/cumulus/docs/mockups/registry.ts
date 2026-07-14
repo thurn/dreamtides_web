@@ -15,7 +15,6 @@
 
 import type { ComponentType } from "react";
 import { AtlasMapMockup } from "./atlas-map";
-import { ButtonMockup } from "./button";
 import { DreamsignMockup } from "./dreamsign";
 import { GameCardMockup } from "./game-card";
 import { GlassButtonMockup } from "./glass-button";
@@ -45,7 +44,6 @@ export const MOCKUPS: Record<string, ComponentType> = {
   "info-card": InfoCardMockup,
   pressable: PressableMockup,
   "resource-chip": ResourceChipMockup,
-  button: ButtonMockup,
   "glass-button": GlassButtonMockup,
   "segmented-control": SegmentedControlMockup,
   motes: MotesMockup,

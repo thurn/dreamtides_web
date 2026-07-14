@@ -6,11 +6,11 @@
 
 Components · Live demo & interactive props: `/cumulus#/glass-button`
 
-Real consumers: **7** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **10** (imports outside `src/cumulus/docs/` and tests).
 
 The labeled glass action — a bold text label with optional numerical essence cost on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface.
 
-> **Guidance:** Use neutral glass for secondary actions and purple accent glass for a primary action that must remain materially related to its neutral sibling. Danger uses the same soft-wash material recipe in red, keeping destructive actions in the same family.
+> **Guidance:** Use purple accent glass for primary and commit actions, neutral glass for secondary actions, and danger glass for destructive actions.
 
 ## Props
 
@@ -21,7 +21,7 @@ The labeled glass action — a bold text label with optional numerical essence c
 | `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `GlowIcon` before the label. |
 | `essenceCost` | `number \| null` | no | `null` | Optional numerical essence cost rendered in parentheses after the label: `Transfigure (20◆)`. |
 | `widthReservations` | `readonly GlassButtonWidthReservation[]` | no | `[]` | Possible dynamic label/essence-cost states. The button reserves the widest state while rendering only the current one, preventing surrounding layout shift. |
-| `variant` | `GlassButtonVariant` = `"default" \| "danger" \| "accent"` | no | `default` | Strict neutral, danger, or purple accent glass surface treatment. |
+| `variant` | `GlassButtonVariant` = `"default" \| "danger" \| "accent"` | no | `default` | Strict surface treatment: accent for primary/commit actions, default for secondary actions, or danger for destructive actions. |
 | `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the control. `onMedia` uses the full liquid-glass recipe; `onGlass` uses a lighter tonal lens so an existing glass tint is not compounded. Defaults to `onMedia`. |
 | `disabled` | `boolean` | no | `false` | Dims the control, detaches click / press feedback, and marks it `aria-disabled`. |
 | `testId` | `string` | no | — | A `data-testid` for selecting the button in tests. |
@@ -95,7 +95,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 ### Purple accent
 
-Use the purple soft-wash accent for a primary action that should stay materially paired with a neutral glass sibling. A numerical essence cost appears in component-owned parentheses with the essence glyph.
+Use the purple soft-wash accent for primary and commit actions. A numerical essence cost appears in component-owned parentheses with the essence glyph.
 
 ```tsx
 <GlassButton

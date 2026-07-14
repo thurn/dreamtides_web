@@ -1,9 +1,6 @@
-// economy-spec — the ONE kind→glyph/color table for the game's economy. Both
-// consumers of a currency mark — the HUD `ResourceChip` (an inline value + its
-// mark) and `Button` (an inline price) — read this single table, so a HUD chip
-// and a button price render the SAME glyph for the SAME currency and can never
-// drift apart. Kept in its own module (not on either component) so neither has
-// to import the other.
+// economy-spec — the ONE kind→glyph/color table for ResourceChip's game-economy
+// values. Kept in its own module so other economy surfaces can share the same
+// named glyph and role color without duplicating the mapping.
 //
 // Each mark's glyph is a named `GLYPHS.<kind>` value, never a re-typed class
 // string, so an icon-font rename in the glyph vocabulary propagates here
@@ -11,10 +8,8 @@
 // `--energy`, `--spark`, `--points`, and `--accent-bright` for the generic
 // counter), never a raw hex, so a token reband propagates too.
 //
-// ResourceChip paints its mark in `mark.color`; Button ignores `.color` and
-// renders the same glyph in its own inherited on-accent white — so a price
-// inside the purple sprite reads as part of the label, while the identical
-// currency in the HUD reads in its role color.
+// ResourceChip paints each mark in `mark.color` so every HUD economy value uses
+// its semantic role color.
 
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
@@ -33,7 +28,7 @@ export interface EconomyMark {
 /**
  * The economy's currency marks. Each glyph comes from `GLYPHS.<kind>` (the
  * design system's named vocabulary) and each color from the matching role
- * token — the single table both `ResourceChip` and `Button` read.
+ * token.
  */
 export const ECONOMY_MARKS: Record<EconomyKind, EconomyMark> = {
   essence: { glyph: GLYPHS.essence, color: token("--essence") },

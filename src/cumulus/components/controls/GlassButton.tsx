@@ -1,9 +1,8 @@
 // GlassButton — the labeled action on Cumulus's shared glass material.
 //
-// The suite is four rungs of decreasing weight: the beveled purple Button (the
-// one commit / primary action), THIS labeled glass control (a secondary chrome
-// action), the glyph-only glass IconButton (a corner chrome action), and a bare
-// pressable glyph (the lightest inline affordance).
+// The accent variant is the primary / commit action. Neutral glass serves
+// secondary chrome, the glyph-only IconButton serves compact corner actions,
+// and a bare pressable glyph is the lightest inline affordance.
 //
 // GlassButton wears the ONE shared control material — `controlChrome().trigger`,
 // the SAME liquid glass as the SegmentedControl / Select trigger — at the md
@@ -86,7 +85,8 @@ export interface GlassButtonProps {
    * shift.
    */
   widthReservations?: readonly GlassButtonWidthReservation[];
-  /** Strict neutral, danger, or purple accent glass surface treatment. */
+  /** Strict surface treatment: accent for primary/commit actions, default for
+   * secondary actions, or danger for destructive actions. */
   variant?: GlassButtonVariant;
   /**
    * Surface beneath the control. `onMedia` uses the full liquid-glass recipe;

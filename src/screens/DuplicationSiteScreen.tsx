@@ -6,7 +6,7 @@ import { CardDisplay } from "../components/CardDisplay";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { SiteGuide } from "../components/SiteGuide";
-import { Button } from "../cumulus/components/controls/Button";
+import { GlassButton } from "../cumulus/components/controls/GlassButton";
 import { IconButton } from "../cumulus/components/controls/IconButton";
 import { GLYPHS } from "../cumulus/primitives/glyph";
 import "./duplication-site.css";
@@ -206,10 +206,11 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
           className="cumulus duplication-confirm-control"
           data-testid="duplication-confirm"
         >
-          <Button
+          <GlassButton
             label="Duplicate this card"
+            variant="accent"
             disabled={!hasPick || copying || duplicated}
-            onClick={handleConfirm}
+            onPress={handleConfirm}
           />
         </div>
       </div>

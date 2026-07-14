@@ -10,7 +10,7 @@ export const resourceChipDemo: CumulusComponent = {
   id: "resource-chip",
   title: "Resource Chip",
   blurb:
-    "The sized, self-contained value-and-mark chip for the game economy. It owns the economy mark, role color, and enumerated size/spacing/tone variants for HUD-like readouts. For a bare essence amount inside flowing text, reach for EssenceValue instead; for a standalone essence mark, use EssenceGlyph; Button owns its inline cost mark through the shared economy spec.",
+    "The sized, self-contained value-and-mark chip for the game economy. It owns the economy mark, role color, and enumerated size/spacing/tone variants for HUD-like readouts. For a bare essence amount inside flowing text, reach for EssenceValue instead; for a standalone essence mark, use EssenceGlyph.",
   group: "Components",
   docName: "ResourceChip",
   Component: ResourceChip,

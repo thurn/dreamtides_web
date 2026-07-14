@@ -21,7 +21,7 @@ These apply to every task in every phase plan; each phase plan restates any it d
 - Token values are declared only in `src/cumulus/primitives/cumulus-tokens.css`; `src/cumulus/primitives/tokens.ts` is generated — after any token edit run `npm run regenerate-assets` and commit the regenerated mirror. Never hand-edit `tokens.ts`.
 - Components never take numeric style props (`size`, `gap`, `scale`, `padding`, `radius`, `blur`, `opacity` as numbers); variants are enumerated strings.
 - Never key or compare cards by name; identity is UUID/card number, names resolve only at the display edge.
-- Documentation and code comments describe the current system only — never removed-state phrasing ("no longer", "we removed", "unlike before").
+- Documentation and code comments describe the current system directly.
 - Browser QA per `docs/quest_prototype/qa_tooling.md`: isolated `--session <unique-name>` per QA run, Vite on a port other than 5173, assert `location.href` + `window.innerWidth` before every screenshot, tear down only your own server.
 - Screen adapters are thin wiring (≤120 lines, enforced); view-model builders are pure and React-free (enforced).
 
@@ -34,7 +34,7 @@ Execute strictly in order. A phase is complete when its plan's final "Phase boun
 2. **Phase 1 — Materials and tokens:** `docs/superpowers/plans/2026-07-07-cumulus-phase-1-materials-tokens.md`
    One glass recipe reading `--glass-*` tokens; `--glass-fill-popover`; `--surface-chrome*` rename; safe-area unification (DraftScreen `env()` fix, `device-frame.ts` imports token names, `--display-cutout-right` deleted); dead-token pruning; `--badge-disc-gradient`; `--cv-textbox-blur` moves into Cumulus; breakpoint derivation; `valid-token-references` ownership extension; Materials docs page + safe-area chapter.
 3. **Phase 2 — The component suite:** `docs/superpowers/plans/2026-07-07-cumulus-phase-2-component-suite.md`
-   `IconButton` (sm 40/22, md 48/26), `GlassButton`, `GlassDialog` + `GlassBackdrop`, `economy-spec.ts` (Button + ResourceChip import it; ResourceChip variants enumerated), `DreamcallerPortrait` `standing`/`fullBleed` variants folding the quest-start forks, `useScaleToFit`, Button doctrine rewrite, `no-numeric-style-props` rule.
+   `IconButton` (sm 40/22, md 48/26), `GlassButton`, `GlassDialog` + `GlassBackdrop`, `economy-spec.ts` (ResourceChip imports it; ResourceChip variants enumerated), `DreamcallerPortrait` `standing`/`fullBleed` variants folding the quest-start forks, `useScaleToFit`, GlassButton doctrine, `no-numeric-style-props` rule.
 4. **Phase 3 — Migrations:** `docs/superpowers/plans/2026-07-07-cumulus-phase-3-migrations.md`
    Six icon-button call sites onto `IconButton`; deck sort-direction control; `GlassBackdrop`/`GridPlaceholder` dedupe; StartingDeckModal → `StartingDeckOverlay` + adapter in the Cumulus tier (legacy file deleted, baselines shrink); convergence folds (`QsbSignObject`→`Dreamsign`, `DreamscapeMotes`→`Motes`, dreamscape module moves, `HOVER_TARGET_WIDTH_PX` derivation, press-scale routing); draft-screen clearance constants + qa-scene; `no-raw-icon-classes`, `no-adhoc-press-scale`, `no-raw-interactive-elements` components-tier extension.
 5. **Phase 4 — Deletions and catalog honesty:** `docs/superpowers/plans/2026-07-07-cumulus-phase-4-catalog.md`

@@ -25,7 +25,7 @@ describe("isProductUiFile (no-classname-in-product-ui)", () => {
     );
   });
   it("exempts primitives, components, docs, and non-cumulus files", () => {
-    expect(isProductUiFile("src/cumulus/components/Button.tsx")).toBe(false);
+    expect(isProductUiFile("src/cumulus/components/GlassButton.tsx")).toBe(false);
     expect(isProductUiFile("src/cumulus/primitives/Pressable.tsx")).toBe(false);
     expect(isProductUiFile("src/cumulus/docs/CumulusApp.tsx")).toBe(false);
     expect(isProductUiFile("src/screens/LegacyScreen.tsx")).toBe(false);
@@ -60,7 +60,7 @@ ruleTester.run("no-classname-in-product-ui", rule, {
     },
     {
       name: "components tier legitimately authors class-based styling",
-      filename: "src/cumulus/components/Button.tsx",
+      filename: "src/cumulus/components/GlassButton.tsx",
       code: `const el = <button className="cumulus-button" />;`,
     },
     {

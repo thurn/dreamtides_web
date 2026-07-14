@@ -482,82 +482,6 @@
       "description": "Optional stable test id for the complete status card."
     }
   ],
-  "Button": [
-    {
-      "name": "size",
-      "tsType": "ButtonSize",
-      "unionMembers": [
-        "sm",
-        "md",
-        "lg"
-      ],
-      "required": false,
-      "defaultValue": "md",
-      "description": "Height/scale. 'lg' is the taller commit height (\"Begin Your Dream\") — commit is a size, not a variant."
-    },
-    {
-      "name": "full",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "Stretch to fill the container width; the component keeps its content centered."
-    },
-    {
-      "name": "disabled",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "Dims the button and detaches its click/press feedback."
-    },
-    {
-      "name": "cost",
-      "tsType": "number | null",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "null",
-      "description": "Appends an inline price, e.g. cost={100} -> \"… 100◆\", rendered in the\nbutton's own on-accent white so the price reads as part of the label. The\ncurrency is set by `costKind` (default essence)."
-    },
-    {
-      "name": "costKind",
-      "tsType": "EconomyKind",
-      "unionMembers": [
-        "essence",
-        "energy",
-        "spark",
-        "points",
-        "counter"
-      ],
-      "required": false,
-      "defaultValue": "essence",
-      "description": "Which currency the `cost` is denominated in — essence, energy, spark,\npoints, or counter. Picks the shared economy-spec price mark (bx-crypto /\nbx-fire-alt / bx-sparkles / bx-star-circle / bx-hourglass); the mark stays\non-accent white. Default essence. Ignored when `cost` is null."
-    },
-    {
-      "name": "onClick",
-      "tsType": "(() => void)",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Fires when the button is activated (no-op while disabled)."
-    },
-    {
-      "name": "ariaLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Accessible label when the visible content is a bare price with no text."
-    },
-    {
-      "name": "label",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "The button's text label, centered by the component at every rendered width.\nResolve any UUID/name to a plain string before passing it — the button\nrenders copy, never arbitrary caller markup. Omit only for a price-only\nbutton (supply `ariaLabel` instead)."
-    }
-  ],
   "CardBack": [
     {
       "name": "label",
@@ -1938,7 +1862,7 @@
       ],
       "required": false,
       "defaultValue": "default",
-      "description": "Strict neutral, danger, or purple accent glass surface treatment."
+      "description": "Strict surface treatment: accent for primary/commit actions, default for\nsecondary actions, or danger for destructive actions."
     },
     {
       "name": "placement",

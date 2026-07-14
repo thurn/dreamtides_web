@@ -5,7 +5,6 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { ECONOMY_MARKS, type EconomyKind } from "./economy-spec";
 import { ResourceChip } from "./ResourceChip";
-import { Button } from "../controls/Button";
 import { GLYPHS } from "../../primitives/glyph";
 
 // The five economy kinds, listed locally (per AGENTS.md fixtures derive from the
@@ -128,22 +127,5 @@ describe("ResourceChip", () => {
     act(() => {
       defaultPoints.root.unmount();
     });
-  });
-});
-
-describe("Button cost mark", () => {
-  it("renders the same glyph class as ResourceChip for each cost kind", () => {
-    for (const kind of KINDS) {
-      const { container, root } = mountInto(
-        <Button label="Buy" cost={5} costKind={kind} />,
-      );
-
-      const mark = container.querySelector("i");
-      expect(mark?.className).toBe(String(ECONOMY_MARKS[kind].glyph));
-
-      act(() => {
-        root.unmount();
-      });
-    }
   });
 });

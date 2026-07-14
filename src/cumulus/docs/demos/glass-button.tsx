@@ -56,7 +56,7 @@ export const glassButtonDemo: CumulusComponent = {
   blurb:
     "The labeled glass action — a bold text label with optional numerical essence cost on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface.",
   callout:
-    "Use neutral glass for secondary actions and purple accent glass for a primary action that must remain materially related to its neutral sibling. Danger uses the same soft-wash material recipe in red, keeping destructive actions in the same family.",
+    "Use purple accent glass for primary and commit actions, neutral glass for secondary actions, and danger glass for destructive actions.",
   group: "Components",
   docName: "GlassButton",
   Component: GlassButtonDemo,
@@ -112,7 +112,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
     },
     {
       label: "Purple accent",
-      note: "Use the purple soft-wash accent for a primary action that should stay materially paired with a neutral glass sibling. A numerical essence cost appears in component-owned parentheses with the essence glyph.",
+      note: "Use the purple soft-wash accent for primary and commit actions. A numerical essence cost appears in component-owned parentheses with the essence glyph.",
       code: `<GlassButton
   label="Transfigure"
   essenceCost={20}

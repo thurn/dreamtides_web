@@ -51,11 +51,10 @@ doc drift, doctrine drift, and duplication inside the system's own files.
 
 ## 1. The button suite
 
-`Button.tsx:1-8` states the doctrine: one button, the beveled purple sprite;
-"low-emphasis... actions are plain pressable TEXT / ICON affordances...
-never a second button color." Production has outgrown this. There is now a
-clear second button language — the **glass button** — and because the
-catalog doesn't offer it, every screen improvised:
+Labeled actions use **GlassButton**. Its purple accent treatment carries
+primary and commit actions, its neutral treatment carries secondary actions,
+and its danger treatment carries destructive actions. Compact glyph actions
+use **IconButton**:
 
 | Control | Where | Size / glyph | Material |
 |---|---|---|---|
@@ -75,22 +74,18 @@ service as a two-item `↑`/`↓` toggle (`DesktopDeckViewer.tsx:603-613`) with
 layout-glue compensating so "the pair reads as one sort control." Some
 controls in the deck viewer should just be buttons.
 
-**Recommendation — offer a full button suite (new components, rung 4):**
+**Recommendation — offer a full button suite:**
 
-- **`Button`** stays the purple sprite: the primary/commit action. Rewrite
-  its doctrine comment to name the suite instead of denying it.
+- **`GlassButton`** — the labeled glass action: `accent` for primary and commit
+  actions, `default` for secondary chrome, and `danger` for destructive actions.
 - **`IconButton`** — the glass disc: `glassIconButtonChrome()` promoted to a
   component with a `Glyph` prop and an enumerated size (`sm` = 40/22,
   `md` = 48/26 — exactly the two observed tuples), press feedback via
   `usePress`. Fold all five call sites onto it; the QuestStatusBar close and
   `EdgeChevron` are bug-fixes as much as migrations.
-- **`GlassButton`** (label variant) — the same glass material with a text
-  label, for secondary actions that need a real button shape but must not
-  compete with the purple commit. This is the variant the deck viewer's
-  chrome wanted and the "plain text affordance" doctrine failed to supply.
-- Document the decision tree in the demos: purple sprite = commit / primary;
-  glass label = secondary chrome action; glass icon = compact chrome action;
-  plain pressable text = tertiary/inline.
+- Document the decision tree in the demos: accent glass label = commit / primary;
+  neutral glass label = secondary chrome action; glass icon = compact chrome
+  action; plain pressable text = tertiary/inline.
 
 ## 2. The glass material
 
@@ -193,16 +188,14 @@ catalog presence** and no token backing. Current state:
 counter number routes through it." Reality: **one** consumer
 (`quest-start-shared.tsx:398`); the role it claims is actually held by the
 legacy `EssenceValue` (10 consumers, all outside Cumulus), whose own comment
-defers to ResourceChip. Meanwhile `Button.tsx:71-77` hand-mirrors
-ResourceChip's glyph table (`COST_ICON_CLASSES` vs `SPECS`) instead of
-importing a shared spec, and ResourceChip carries open numeric `size` and
-`gap` props — exactly the knobs the customization ladder bans, grandfathered
-from the original port.
+defers to ResourceChip. ResourceChip carries open numeric `size` and `gap`
+props — exactly the knobs the customization ladder bans, grandfathered from
+the original port.
 
 **Recommendation:** keep ResourceChip as the one economy mark, but (a)
-extract the kind→glyph/color table into a shared `economy-spec.ts` that
-Button imports too, (b) replace the numeric `size`/`gap` knobs with
-enumerated variants, (c) rewrite the blurb to say what is true today and
+extract the kind→glyph/color table into `economy-spec.ts`, (b) replace the
+numeric `size`/`gap` knobs with enumerated variants, (c) rewrite the blurb to
+say what is true today and
 name the plan: legacy screens migrate from `EssenceValue` onto it as they
 Cumulus-ify, then `EssenceValue` is deleted. What it is *for* is the answer
 to the user-facing question: the HUD/quest-economy number-with-mark —
@@ -415,9 +408,9 @@ concern.
 
 Priority 1 — the system offerings the next screen will need:
 
-- [ ] Promote the button suite: `IconButton` (glass disc, `sm`/`md`),
-      `GlassButton` (label), rewrite `Button.tsx`'s doctrine, migrate the
-      five bespoke call sites, document the decision tree. (§1)
+- [ ] Promote the button suite: `IconButton` (glass disc, `sm`/`md`) and
+      `GlassButton` (accent primary, neutral secondary, danger destructive);
+      migrate the bespoke call sites and document the decision tree. (§1)
 - [ ] Consolidate glass: one recipe module, `--glass-*` tokens, resolve
       InfoCard's fill, rename opaque `--surface-glass*` → `--surface-chrome*`,
       dedupe `GlassBackdrop`/`GridPlaceholder`, add the Materials docs page. (§2)

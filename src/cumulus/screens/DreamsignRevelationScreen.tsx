@@ -6,7 +6,6 @@
 import { motion } from "framer-motion";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
-import { Button } from "../components/controls/Button";
 import { GlassButton } from "../components/controls/GlassButton";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { Motes } from "../components/hud/Motes";
@@ -580,10 +579,10 @@ function PurgeDialog({
                 testid={`dreamsign-revelation-purge-art-${String(index)}`}
                 variant="hud"
               />
-              <Button
-                size="sm"
+              <GlassButton
                 label="Replace"
-                onClick={() => onPurge(index)}
+                variant="accent"
+                onPress={() => onPurge(index)}
               />
             </div>
           ))}

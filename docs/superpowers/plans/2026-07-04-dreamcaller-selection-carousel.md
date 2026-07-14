@@ -1050,7 +1050,7 @@ Replace the entire contents of `src/cumulus/screens/QuestStartScreen.tsx` with:
 import { useRef, useState } from "react";
 import { Motes } from "../components/hud/Motes";
 import { GroupPanel } from "../components/controls/GroupPanel";
-import { Button } from "../components/controls/Button";
+import { GlassButton } from "../components/controls/GlassButton";
 import { ResourceChip } from "../components/hud/ResourceChip";
 import { RulesText } from "../components/card/RulesText";
 import { CardTermDefinitions } from "../components/card/CardTermDefinitions";
@@ -1362,13 +1362,12 @@ function DreamcallerPage({
 
           <div
             data-choose-dreamcaller={dreamcaller.id}
-            style={{ marginTop: token("--space-6") }}
+            style={{ marginTop: token("--space-6"), display: "grid" }}
           >
-            <Button
-              size="lg"
-              full
+            <GlassButton
               label={`Choose ${dreamcaller.name}`}
-              onClick={onChoose}
+              variant="accent"
+              onPress={onChoose}
             />
           </div>
         </GroupPanel>

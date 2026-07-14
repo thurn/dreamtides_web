@@ -72,24 +72,22 @@ Vite dev server for browser QA, `agent-browser` for automated QA.
   non-5173 port (`npm run dev -- --port 5174`), assert `location.href` +
   `window.innerWidth` before each screenshot, and tear down only your own server
   (match `dev-with-emulator.mjs --port 5174`, never a broad `pkill -f vite`).
-- **Docs never use removed-state phrasing** ("no longer", "we removed", "unlike
-  before"). Describe the current system directly.
+- **Docs describe the current system directly.**
 - **Regenerate after every component change.** New/edited component `.tsx` under
   `src/cumulus/components` or `src/cumulus/primitives` requires `npm run cumulus-metadata`
   (or `npm run regenerate-assets`); commit the regenerated JSON.
 
 ---
 
-### Task 1 — `economy-spec.ts`: shared economy table; refactor Button + ResourceChip to enumerated variants
+### Task 1 — `economy-spec.ts`: shared economy table; refactor ResourceChip to enumerated variants
 
-Extract the kind→glyph/color table `Button` and `ResourceChip` each hand-mirror,
-have both import it, and replace `ResourceChip`'s numeric `size`/`gap` props with
-enumerated variants that preserve its one consumer's current rendering exactly.
+Extract the kind→glyph/color table for `ResourceChip` and replace its numeric
+`size`/`gap` props with enumerated variants that preserve its one consumer's
+current rendering exactly.
 
 **Files**
 - Create `src/cumulus/components/hud/economy-spec.ts` — the shared kind→mark table.
 - Modify `src/cumulus/components/hud/ResourceChip.tsx` — props + body to enumerated variants.
-- Modify `src/cumulus/components/controls/Button.tsx` — drop the inlined cost-icon table; read the shared one.
 - Create `src/cumulus/components/hud/economy-spec.test.tsx` — shared-mark + ResourceChip render tests.
 - Modify `src/cumulus/docs/demos/resource-chip.tsx` — enumerated-prop blurb + defaultArgs.
 
@@ -142,22 +140,17 @@ enumerated variants that preserve its one consumer's current rendering exactly.
   from live `GLYPHS`/tokens — no re-typed glyph strings).
 - [ ] Run `npx vitest run src/cumulus/components/hud/economy-spec.test.tsx` — expect failure: `economy-spec` module not found.
 - [ ] Create `economy-spec.ts` satisfying the Interfaces + Fidelity contracts above,
-  with a header comment stating it is the ONE economy table both consumers import.
+  with a header comment stating it is the ONE economy table ResourceChip imports.
 - [ ] Rewrite `ResourceChip.tsx` end state: keep its doctrine header (naming the
   EssenceValue migration path); props are exactly `ResourceChipProps`; internal
   `SIZE_PX`/`SPACING_PX` maps encode the px meanings above; the body renders
   `value` (when non-null) beside the shared mark, `chip` drawing the optional pill
   surface. No numeric prop survives.
-- [ ] Edit `Button.tsx`: delete the inlined `COST_ICON_CLASSES` table + its doc block;
-  import `ECONOMY_MARKS` and `EconomyKind` from `../hud/economy-spec`; retype
-  `costKind` to `EconomyKind` (update its two prop-doc references); render the cost
-  `<i>` from `ECONOMY_MARKS[costKind].glyph`, keeping the mark on-accent white (do
-  NOT apply `.color`).
 - [ ] Rewrite `resource-chip.tsx` demo: honest blurb naming the EssenceValue
   migration; usage entries covering an inline value (`size="lg"`), a standalone
   `chip`, and `spacing="loose"`; `defaultArgs` using the enumerated props.
 - [ ] Run `npx vitest run src/cumulus/components/hud/economy-spec.test.tsx` — expect pass.
-- [ ] Run `npm run cumulus-metadata` (ResourceChip/Button props changed), then
+- [ ] Run `npm run cumulus-metadata` (ResourceChip props changed), then
   `npm run lint && npm run typecheck && npm test`.
 - [ ] Commit + push: `refactor(cumulus): share the economy glyph/color table and give ResourceChip enumerated size/spacing`.
 
@@ -210,16 +203,16 @@ call sites' rendered look (`sm` = 40px disc / 22px glyph; `md` = 48px / 26px).
   ```
 - [ ] Run `npx vitest run src/cumulus/components/controls/IconButton.test.tsx` — expect failure: `IconButton` module not found.
 - [ ] Create `IconButton.tsx` satisfying the Interfaces + Fidelity contracts, with a
-  header comment placing it as rung 3 of the button suite (compact glyph-only chrome
-  action). Encode the size tuples in a `Record<IconButtonSize, …>` map.
+  header comment placing it as the compact glyph-only chrome action. Encode the
+  size tuples in a `Record<IconButtonSize, …>` map.
 - [ ] Create `icon-button.tsx` demo: a small wrapper supplying `glyph`/`onPress` and
   forwarding the `size` + `disabled` controls, mounting `IconButton` with
   `GLYPHS.close`; `status: "incubating"`; blurb naming the deck-viewer close +
-  dreamscape menu call sites; callout naming the four-rung suite; usage entries for
-  a default disc and `size="sm"`.
+  dreamscape menu call sites; callout naming the labeled-action and compact-icon
+  hierarchy; usage entries for a default disc and `size="sm"`.
 - [ ] Edit `registry.ts`: add `import { iconButtonDemo } from "./demos/icon-button";`
-  (alphabetical) and insert `iconButtonDemo` into `CUMULUS_COMPONENTS` after
-  `buttonDemo`. (`status` already exists on `CumulusComponent` from Phase 0.)
+  (alphabetical) and insert `iconButtonDemo` into `CUMULUS_COMPONENTS` beside
+  `glassButtonDemo`. (`status` already exists on `CumulusComponent` from Phase 0.)
 - [ ] Run `npx vitest run src/cumulus/components/controls/IconButton.test.tsx` — expect pass.
 - [ ] Run `npm run cumulus-metadata`, then `npm run lint && npm run typecheck && npm test`.
 - [ ] **Browser QA** (isolated session): `npm run dev -- --port 5174 &` then
@@ -233,10 +226,11 @@ call sites' rendered look (`sm` = 40px disc / 22px glyph; `md` = 48px / 26px).
 
 ---
 
-### Task 3 — `GlassButton`: the labeled glass secondary action
+### Task 3 — `GlassButton`: the labeled glass action
 
 The same glass material with a text label in the control typography (matching how
-`Select`/`SegmentedControl` style their labels), plus an optional leading glyph.
+`Select`/`SegmentedControl` style their labels), strict accent/default/danger
+treatments, and an optional leading glyph.
 
 **Files**
 - Create `src/cumulus/components/controls/GlassButton.tsx` — the labeled glass button.
@@ -248,7 +242,8 @@ The same glass material with a text label in the control typography (matching ho
 - Produces:
   ```ts
   export function GlassButton(props: {
-    label: string; onPress: () => void; glyph?: Glyph; disabled?: boolean;
+    label: string; onPress: () => void; glyph?: Glyph;
+    variant?: "default" | "danger" | "accent"; disabled?: boolean;
   }): JSX.Element;
   ```
 - Consumes: `Pressable`, `GlowIcon`, `Glyph`/`GLYPHS`, `token`,
@@ -261,7 +256,8 @@ The same glass material with a text label in the control typography (matching ho
 - `label` is a resolved string (never caller markup); `glyph`, when given, is a
   leading `GlowIcon` before the label; when absent no `<i>` renders.
 - `disabled` sets `aria-disabled` and detaches press feedback / click.
-- Secondary to the purple commit `Button` — must not compete with it.
+- `accent` carries primary and commit actions, `default` carries secondary
+  actions, and `danger` carries destructive actions.
 
 **Steps**
 
@@ -277,11 +273,11 @@ The same glass material with a text label in the control typography (matching ho
   ```
 - [ ] Run `npx vitest run src/cumulus/components/controls/GlassButton.test.tsx` — expect failure: module not found.
 - [ ] Create `GlassButton.tsx` satisfying the Interfaces + Fidelity contracts, header
-  comment naming it rung 2 of the button suite (labeled secondary chrome action).
+  comment naming the accent/default/danger action hierarchy.
 - [ ] Create `glass-button.tsx` demo: wrapper supplying `onPress` and a `withGlyph`
   toggle (→ `GLYPHS.sort`), forwarding `label` + `disabled`; `status: "incubating"`;
-  blurb + four-rung callout; usage entries for a plain label and a leading glyph
-  (`GLYPHS.filter`).
+  blurb + action-hierarchy callout; usage entries for accent primary, neutral
+  secondary, danger destructive, and a leading glyph (`GLYPHS.filter`).
 - [ ] Edit `registry.ts`: import `glassButtonDemo` and insert it after `iconButtonDemo`.
 - [ ] Run `npx vitest run src/cumulus/components/controls/GlassButton.test.tsx` — expect pass.
 - [ ] Run `npm run cumulus-metadata`, then `npm run lint && npm run typecheck && npm test`.
@@ -544,41 +540,35 @@ these as geometry facts, matching the current call sites)
 
 ---
 
-### Task 7 — Rewrite the `Button` doctrine and add the decision tree to its demo
+### Task 7 — Document the labeled-action decision tree on `GlassButton`
 
 **Files**
-- Modify `src/cumulus/components/controls/Button.tsx` — header + component-doc comment blocks (documentation only).
-- Modify `src/cumulus/docs/demos/button.tsx` — blurb/callout + a decision-tree usage note.
+- Modify `src/cumulus/components/controls/GlassButton.tsx` — header + component-doc comment blocks (documentation only).
+- Modify `src/cumulus/docs/demos/glass-button.tsx` — blurb/callout + a decision-tree usage note.
 
 **Interfaces**
 - No API change; documentation only.
 
 **Doctrine contract**
-- The header names the four-rung suite by emphasis: (1) `Button` — the beveled purple
-  sprite, primary/commit; (2) `GlassButton` — a labeled glass control-surface
-  secondary chrome action; (3) `IconButton` — the glass disc, a compact glyph-only
-  chrome action; (4) plain pressable text — tertiary/inline (Back, Skip, Reset).
-- It states directly that `Button` stays the ONE purple sprite — a secondary action
-  steps down a rung, never to a recolored `Button` — written as current-state prose,
-  with no removed-state phrasing ("no longer", "unlike before").
+- The header names the action hierarchy: accent `GlassButton` for primary/commit,
+  neutral `GlassButton` for secondary chrome, `IconButton` for compact glyph-only
+  chrome, and plain pressable text for tertiary/inline actions.
+- It describes each treatment as current-state prose.
 
 **Steps**
 
-- [ ] Edit `Button.tsx`: rewrite the header comment to the Doctrine contract above,
-  keeping the existing appearance/press/hover/cost bullets that follow. Update the
-  component-level doc to "the commit/primary rung of the button suite" — describe the
-  current suite directly.
-- [ ] Edit `button.tsx` demo: reblurb to place Button in the suite, and add a leading
-  usage entry ("When to use which button") whose note + code spell out the decision
-  tree — purple `Button` commits, `GlassButton` is a labeled secondary, `IconButton`
-  is a compact glyph disc, plain pressable text is tertiary/inline.
+- [ ] Edit `GlassButton.tsx`: write the action hierarchy into the header comment and
+  keep the existing material, placement, press/hover, and cost contracts.
+- [ ] Edit `glass-button.tsx` demo: show accent primary/commit, neutral secondary,
+  danger destructive, `IconButton` compact chrome, and plain pressable text as
+  tertiary/inline.
 - [ ] Run `npm run lint && npm run typecheck && npm test` (docs-only; if a doctrine
   test asserts the old "ONE button" wording, update it to the suite language).
-- [ ] **Browser QA**: `agent-browser --session cumulus-button open http://localhost:5174/cumulus#/button`
+- [ ] **Browser QA**: `agent-browser --session cumulus-glass-button open http://localhost:5174/cumulus#/glass-button`
   (assert URL + innerWidth). Confirm the decision-tree usage block renders in the
-  Usage section and the button still renders/press-feedbacks correctly. Error buffer
+  Usage section and the control renders/press-feedbacks correctly. Error buffer
   clean. Tear down your own server.
-- [ ] Commit + push: `docs(cumulus): rewrite the Button doctrine to name the four-rung button suite`.
+- [ ] Commit + push: `docs(cumulus): document the GlassButton action hierarchy`.
 
 ---
 
@@ -678,13 +668,12 @@ out of scope.)
   + innerWidth) — the index lists Icon Button, Glass Button, Glass Dialog each with
   the `incubating` badge and a 0-real-consumer count (they migrate in Phase 3). Tear
   down your own server.
-- [ ] Confirm no doc/comment introduced removed-state phrasing:
-  `git diff master --stat` then `grep -rnE "no longer|we removed|unlike before|used to" src/cumulus docs` on the touched files — expect none.
+- [ ] Confirm every touched doc/comment uses direct current-state prose.
 - [ ] Commit any regenerated artifacts + push: `chore(cumulus): regenerate assets for the Phase 2 component suite`.
-- [ ] Report the phase complete: economy-spec shared and both consumers enumerated;
+- [ ] Report the phase complete: economy-spec shared and ResourceChip enumerated;
   IconButton/GlassButton/GlassDialog(+GlassBackdrop) shipped incubating with
   test+demo+registry; DreamcallerPortrait standing/fullBleed variants replacing the
-  two quest-start forks; useScaleToFit adopted by AtlasMap; Button doctrine rewritten;
+  two quest-start forks; useScaleToFit adopted by AtlasMap; GlassButton doctrine documented;
   no-numeric-style-props enforcing the enumerated-variant rule with a documented
   five-entry allowlist. Phase 3 removes the `incubating` flags when the five bespoke
   call sites migrate onto IconButton/GlassButton/GlassDialog.

@@ -161,6 +161,36 @@ describe("DreamsignRevelationScreen", () => {
     });
   });
 
+  it("uses purple accent glass actions for dreamsign replacement", () => {
+    const replacementView: DreamsignRevelationView = {
+      ...view(),
+      purge: {
+        pendingDreamsign: dreamsign("pending", "aurora.png"),
+        currentDreamsigns: [dreamsign("owned", "eye_3.png")],
+        maxDreamsigns: 1,
+      },
+    };
+    const { container, root } = mount(
+      <DreamsignRevelationScreen
+        view={replacementView}
+        claimedIndex={null}
+        onClaim={vi.fn()}
+        onSkip={vi.fn()}
+        onPurge={vi.fn()}
+        onCancelPurge={vi.fn()}
+      />,
+    );
+
+    const replace = Array.from(container.querySelectorAll("button")).find(
+      (button) => button.textContent === "Replace",
+    );
+    expect(replace?.dataset.glassVariant).toBe("accent");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders offer dreamsigns without the revelation shadow", () => {
     const { container, root } = mount(
       <DreamsignRevelationScreen

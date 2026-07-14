@@ -87,6 +87,11 @@ describe("Cumulus QuestStartScreen (carousel)", () => {
       expect(
         container.querySelector(`[data-choose-dreamcaller="${dc.id}"]`),
       ).not.toBeNull();
+      expect(
+        container.querySelector(
+          `[data-choose-dreamcaller="${dc.id}"] [data-glass-variant="accent"]`,
+        ),
+      ).not.toBeNull();
       const essence = container.querySelector(
         `[data-starting-essence-value="${dc.id}"]`,
       );
@@ -163,6 +168,11 @@ describe("Cumulus QuestStartScreen (desktop)", () => {
       ).not.toBeNull();
       expect(
         container.querySelector(`[data-choose-dreamcaller="${dc.id}"]`),
+      ).not.toBeNull();
+      expect(
+        container.querySelector(
+          `[data-choose-dreamcaller="${dc.id}"] [data-glass-variant="accent"]`,
+        ),
       ).not.toBeNull();
       const essence = container.querySelector(
         `[data-starting-essence-value="${dc.id}"]`,

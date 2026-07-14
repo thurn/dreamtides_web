@@ -29,7 +29,7 @@ describe("isProductUiFile", () => {
   });
   it("exempts primitives, components, docs, and non-cumulus files", () => {
     expect(isProductUiFile("src/cumulus/primitives/tokens.ts")).toBe(false);
-    expect(isProductUiFile("src/cumulus/components/Button.tsx")).toBe(false);
+    expect(isProductUiFile("src/cumulus/components/GlassButton.tsx")).toBe(false);
     expect(isProductUiFile("src/cumulus/docs/CumulusApp.tsx")).toBe(false);
     expect(isProductUiFile("src/screens/LegacyScreen.tsx")).toBe(false);
   });
@@ -37,7 +37,7 @@ describe("isProductUiFile", () => {
 
 describe("isCumulusOwnedFile", () => {
   it("governs all of src/cumulus/ (components included) plus the adapter layer", () => {
-    expect(isCumulusOwnedFile("src/cumulus/components/Button.tsx")).toBe(true);
+    expect(isCumulusOwnedFile("src/cumulus/components/GlassButton.tsx")).toBe(true);
     expect(isCumulusOwnedFile("src/cumulus/screens/HomeScreen.tsx")).toBe(true);
     expect(isCumulusOwnedFile("src/screens/cumulus_adapters/HomeScreenAdapter.tsx")).toBe(
       true,

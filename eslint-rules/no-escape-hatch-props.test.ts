@@ -11,10 +11,10 @@ describe("toRepoRelativePosix (no-escape-hatch-props)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/cumulus/components/Button.tsx",
+        "/Users/x/quest_prototype/src/cumulus/components/GlassButton.tsx",
         "/Users/x/quest_prototype",
       ),
-    ).toBe("src/cumulus/components/Button.tsx");
+    ).toBe("src/cumulus/components/GlassButton.tsx");
   });
 });
 
@@ -34,7 +34,7 @@ describe("isDomAttributeTypeName (no-escape-hatch-props)", () => {
   });
 
   it("does not match ordinary or Cumulus prop type names", () => {
-    for (const name of ["ButtonProps", "CSSProperties", "ReactNode", "string"]) {
+    for (const name of ["GlassButtonProps", "CSSProperties", "ReactNode", "string"]) {
       expect(isDomAttributeTypeName(name)).toBe(false);
     }
   });

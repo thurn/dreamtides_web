@@ -23,30 +23,30 @@ function roundTrips(code: string): boolean {
 
 describe("tokenizeTsx", () => {
   it("preserves the source exactly (lossless partition)", () => {
-    const code = `import { Button } from "x";\n<Button size="md" cost={100} />`;
+    const code = `import { GlassButton } from "x";\n<GlassButton variant="accent" essenceCost={100} />`;
     expect(roundTrips(code)).toBe(true);
   });
 
   it("classifies keywords", () => {
-    const kws = valuesOfType(`import { Button } from "x";`, "keyword");
+    const kws = valuesOfType(`import { GlassButton } from "x";`, "keyword");
     expect(kws).toContain("import");
     expect(kws).toContain("from");
   });
 
   it("classifies string literals", () => {
-    expect(valuesOfType(`<Button size="md" />`, "string")).toContain('"md"');
+    expect(valuesOfType(`<GlassButton variant="accent" />`, "string")).toContain('"accent"');
   });
 
   it("classifies a JSX element name and a capitalized reference as a tag", () => {
-    const tags = valuesOfType(`<Button />`, "tag");
-    expect(tags).toContain("Button");
+    const tags = valuesOfType(`<GlassButton />`, "tag");
+    expect(tags).toContain("GlassButton");
   });
 
   it("classifies a bare attribute inside a tag, but not an identifier in an expression", () => {
-    const code = `<Button size="md" onClick={beginBattle} />`;
+    const code = `<GlassButton variant="accent" onPress={beginBattle} />`;
     const attrs = valuesOfType(code, "attr");
-    expect(attrs).toContain("size");
-    expect(attrs).toContain("onClick");
+    expect(attrs).toContain("variant");
+    expect(attrs).toContain("onPress");
     // `beginBattle` sits inside a {…} expression, so it is NOT an attribute.
     expect(attrs).not.toContain("beginBattle");
   });
@@ -56,7 +56,7 @@ describe("tokenizeTsx", () => {
   });
 
   it("classifies line comments", () => {
-    const comments = valuesOfType(`// a note\n<Button />`, "comment");
+    const comments = valuesOfType(`// a note\n<GlassButton />`, "comment");
     expect(comments.some((c) => c.startsWith("//"))).toBe(true);
   });
 });

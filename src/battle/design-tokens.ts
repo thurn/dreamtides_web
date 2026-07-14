@@ -155,8 +155,8 @@ const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
 
 /**
  * Resolve a button variant to its full className string. Prefer the
- * `<Button>` component for new buttons; call this directly when embedding in
- * a legacy button site that cannot yet migrate.
+ * Cumulus `GlassButton` for new labeled actions; call this directly when
+ * embedding in a legacy button site that cannot yet migrate.
  */
 export function buttonVariant(variant: ButtonVariant): string {
   return BUTTON_VARIANTS[variant];

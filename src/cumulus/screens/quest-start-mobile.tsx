@@ -8,7 +8,7 @@
 import { useRef, useState } from "react";
 import { Motes } from "../components/hud/Motes";
 import { GroupPanel } from "../components/controls/GroupPanel";
-import { Button } from "../components/controls/Button";
+import { GlassButton } from "../components/controls/GlassButton";
 import { IconButton } from "../components/controls/IconButton";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
@@ -57,9 +57,9 @@ function DreamcallerConsole({
 
       <div
         data-choose-dreamcaller={dreamcaller.id}
-        style={{ marginTop: token("--space-6") }}
+        style={{ marginTop: token("--space-6"), display: "grid" }}
       >
-        <Button size="lg" full label="Choose" onClick={onChoose} />
+        <GlassButton label="Choose" variant="accent" onPress={onChoose} />
       </div>
     </GroupPanel>
   );

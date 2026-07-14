@@ -12,8 +12,7 @@
 // rather than hand-rolling a scale: a segment already needs to
 // combine the press transform with its `active` (selected) background/
 // color/shadow on the very same element, which is exactly the composition
-// case Pressable.tsx's own doc comment calls out for the hook form (see
-// Button.tsx for the sibling precedent).
+// case Pressable.tsx's own doc comment calls out for the hook form.
 //
 // Ported from the Claude Design "Dreamtides Mobile" project
 // (components/pills/SegmentedControl.jsx / .d.ts).

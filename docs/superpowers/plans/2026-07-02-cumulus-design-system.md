@@ -32,7 +32,7 @@ src/cumulus/
     Pressable.tsx           # the one press-feedback primitive (scale 0.94)
     Icon.tsx                # boxicon/phosphor glyph helper
   components/
-    Button.tsx  ResourceChip.tsx  InfoCard.tsx  SegmentedControl.tsx
+    GlassButton.tsx  ResourceChip.tsx  InfoCard.tsx  SegmentedControl.tsx
     StatTile.tsx  TidePill.tsx  Motes.tsx  QuestStatusBar.tsx  GroupPanel.tsx
     GameCard.tsx  RulesText.tsx  Dreamsign.tsx  SiteNode.tsx
     AtlasNode.tsx  AtlasEdge.tsx  AtlasEdgeDefs.tsx
@@ -40,7 +40,6 @@ src/cumulus/
      CardStatOrb.tsx, PipBadge.tsx, useCardTermPopover.tsx, useFitText.ts,
      atlas-display.ts, dreamscape-scatter.ts, ...>
   assets/
-    Button_Purple.png       # bundled button sprite (9-slice)
     phosphor-fill.css + font # the one Phosphor face (ph-cards)
   docs/                      # the /cumulus page itself (Cumulus-only UI)
     CumulusApp.tsx             # route shell + hash router mount
@@ -415,21 +414,20 @@ Dispatch **one subagent per component** (per super-subagent-driven-development).
 | --- | --- | --- | --- | --- |
 | `pressable` | Pressable | primitives | `components/primitives/Pressable.jsx` | The one press-feedback primitive; scale-down `--press-scale` (0.94) on pointer-down; every interactive Cumulus control routes through it. Also expose `usePress`. |
 | `resource-chip` | ResourceChip | components | `components/buttons/ResourceChip.jsx` | Value + filled-Boxicon mark, tight pairing; color from the resource role tokens (`--energy`/`--spark`/`--essence`/…). |
-| `button` | Button | components | `components/buttons/Button.jsx` | Beveled purple 9-patch. Background = `src/cumulus/assets/Button_Purple.png` bundled via Vite import, rendered as `border-image` 9-slice. Props `size` (`sm/md/lg`, `lg`=taller commit), `full`, `icon`, `cost`, `frameScale`. No color variants. Press via Pressable. |
+| `glass-button` | GlassButton | components | `components/buttons/GlassButton.jsx` | Labeled liquid-glass action. `accent` is primary/commit, `default` is secondary, and `danger` is destructive. Press via Pressable. |
 | `segmented-control` | SegmentedControl | components | `components/pills/SegmentedControl.jsx` | — |
 | `stat-tile` | StatTile | components | `components/pills/StatTile.jsx` | — |
 | `tide-pill` | TidePill | components | `components/pills/TidePill.jsx` | **Keep the name.** Tones `violet/blue/gold/green/rust/red/neutral`; presentational; optional `onPress`. |
 | `motes` | Motes | components | `components/quest/Motes.jsx` | Atmospheric particle layer; `tint` `warm`/`violet`; the one sanctioned opacity animation; respects `prefers-reduced-motion`. |
 
-### Task 2.0 (prerequisite): bundle the button sprite and Phosphor face
+### Task 2.0 (prerequisite): bundle the Phosphor face
 
-**Files:** Create `src/cumulus/assets/Button_Purple.png`, `src/cumulus/assets/phosphor-fill.css` (+ font file)
+**Files:** Create `src/cumulus/assets/phosphor-fill.css` (+ font file)
 
-- [ ] Copy `~/Documents/UI/ClassicFantasyRPG_UI/ARTWORKS/UIelements/Buttons/Medium/Button_Purple.png` into `src/cumulus/assets/`. Confirm it exists and is committed.
 - [ ] Self-host the single Phosphor fill face for `ph-cards` (the one glyph the design pins as a fallback); add its `@font-face` so no CDN is used, matching the repo's self-hosted-icon convention.
-- [ ] Commit (`feat(cumulus): bundle button sprite and phosphor fill face`, push).
+- [ ] Commit (`feat(cumulus): bundle phosphor fill face`, push).
 
-Tasks 2.1–2.7 apply the import recipe to each row of the table above, in that order (Button depends on Task 2.0; the rest are independent and may be dispatched in parallel).
+Tasks 2.1–2.7 apply the import recipe to each row of the table above, in that order; they are independent and may be dispatched in parallel.
 
 ---
 
@@ -553,7 +551,7 @@ Each mockup composes the component into a realistic full-screen (`100vw×100vh`,
 
 ## Self-review
 
-**Spec coverage:** TOC/Intro/Primitives/Components sections (Phase 1.4, 6.1, 6.2); interactive demo + programmatic props table per component (1.1, 1.2, 1.4, recipe); click-through mockups (6.3); every roster row (Phases 2–5); isolation + fail-closed lint (0.5); token import + typed mirror (0.2–0.4); hash routing (1.3); button 9-patch + purple sprite (2.0/2.x); GroupPanel CSS-only (3.2); input-adaptive press-reveal (3.1); real content (4.x, 5.x, 6.3). No spec requirement is left without a task.
+**Spec coverage:** TOC/Intro/Primitives/Components sections (Phase 1.4, 6.1, 6.2); interactive demo + programmatic props table per component (1.1, 1.2, 1.4, recipe); click-through mockups (6.3); every roster row (Phases 2–5); isolation + fail-closed lint (0.5); token import + typed mirror (0.2–0.4); hash routing (1.3); accent liquid-glass primary actions (2.x); GroupPanel CSS-only (3.2); input-adaptive press-reveal (3.1); real content (4.x, 5.x, 6.3). No spec requirement is left without a task.
 
 **Placeholder scan:** No "TBD"/"similar to Task N"/"add error handling". The repeated component work is a single explicit recipe + an enumerated parameter table (each row carries its own constraints), not cross-references.
 

@@ -3,14 +3,15 @@
 // by side — each the standing full-body cutout over a soft glow, the name
 // floating above the head, and a locked-size console card riding up over the
 // legs (ability text, a row of hover-only tide discs + starting-essence chip,
-// and a full-width Button). All columns render at exactly the same size. It
+// and a full-width purple accent GlassButton). All columns render at exactly
+// the same size. It
 // shares the view types and the ability / essence reveals with the mobile
 // carousel via `quest-start-shared`; `QuestStartScreen` picks by viewport.
 // PURE: renders from a view-model and reports the chosen Dreamcaller via `onPick`.
 
 import { Motes } from "../components/hud/Motes";
 import { GroupPanel } from "../components/controls/GroupPanel";
-import { Button } from "../components/controls/Button";
+import { GlassButton } from "../components/controls/GlassButton";
 import { token } from "../primitives/tokens";
 import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
 import {
@@ -152,12 +153,9 @@ function DreamcallerCard({
 
       <div
         data-choose-dreamcaller={dreamcaller.id}
-        style={{ marginTop: token("--space-6") }}
+        style={{ marginTop: token("--space-6"), display: "grid" }}
       >
-        {/* The responsive `md` height — the `lg` commit height belongs to the
-            mobile carousel, where the button is the page's single full-width
-            action. */}
-        <Button size="md" full label="Choose" onClick={onChoose} />
+        <GlassButton label="Choose" variant="accent" onPress={onChoose} />
       </div>
     </div>
   );

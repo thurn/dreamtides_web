@@ -53,7 +53,7 @@ export const iconButtonDemo: CumulusComponent = {
   blurb:
     "The compact glyph-only glass disc — neutral or purple accent liquid glass, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls.",
   callout:
-    "Rung three of the four-rung button suite: use neutral glass for secondary corner actions and purple accent glass for the primary action in a paired icon cluster.",
+    "Use GlassButton for labeled actions, neutral IconButton for secondary corner actions, purple accent IconButton for the primary action in a paired icon cluster, and a bare Pressable glyph for the lightest inline affordance.",
   group: "Components",
   docName: "IconButton",
   Component: IconButtonDemo,

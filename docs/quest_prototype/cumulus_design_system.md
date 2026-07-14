@@ -68,7 +68,7 @@ All Cumulus code lives under `src/cumulus/`:
 src/cumulus/
   primitives/     tokens, Pressable, icon helper
   components/     every documented component
-  assets/         bundled UI art (button sprite, one Phosphor font face)
+  assets/         bundled UI art (one Phosphor font face)
   docs/           the /cumulus page: shell, router, sections, per-component demos + mockups
   metadata/       generated cumulus-metadata.json (docgen output)
 ```
@@ -320,7 +320,7 @@ metadata source.
 - Regeneration is wired into `scripts/regenerate-assets.sh`.
 
 The design's own `.d.ts` files already carry rich JSDoc (see the prop surfaces
-for `Button`, `InfoCard`, `Motes`, and the overlay controls), so the Cumulus
+for `GlassButton`, `InfoCard`, `Motes`, and the overlay controls), so the Cumulus
 `.tsx` ports carry the same doc comments and the tables come out populated.
 
 ### The agent-facing reference (`.llms/skills/cumulus/`)
@@ -378,7 +378,7 @@ radius) but stays deliberately restrained so the components are the focus.
 | --- | --- | --- |
 | Design tokens | `primitives/` | Import values from Claude Design `tokens/*.css` → `cumulus-tokens.css` + generated `tokens.ts` |
 | **Pressable** / `usePress` | `primitives/` | Import from Claude Design (the one press-feedback primitive; scale-down `--press-scale` 0.9) |
-| **Button** | `components/` | Import from Claude Design; beveled purple 9-patch (`Button_Purple.png`), `border-image` 9-slice; sizes `sm/md/lg` (`lg` = taller commit); props `full`, `icon`, `cost`, `frameScale` |
+| **GlassButton** | `components/` | The labeled liquid-glass action. `accent` serves primary and commit actions, `default` serves secondary actions, and `danger` serves destructive actions; `placement` selects the media or nested-glass recipe. |
 | **ResourceChip** | `components/` | Import from Claude Design (value + filled-Boxicon mark, tight pairing) |
 | **InfoCard** | `components/` | Strict visual content variants (`object`, `fullBleed`, `atlasReveal`, `icon`, `tide`, `text`) rendered by named sources through the root coordinator |
 | **SegmentedControl** | `components/` | Import from Claude Design |
@@ -486,8 +486,8 @@ reference, not by a from-scratch subagent rewrite.
 ## 10. Dependencies
 
 - **Runtime:** none new. GroupPanel is CSS-only; icons reuse the self-hosted
-  Boxicons 3 + Font Awesome; the only new asset is one self-hosted Phosphor fill
-  face for `ph-cards` and the bundled `Button_Purple.png`.
+  Boxicons 3 + Font Awesome, plus one self-hosted Phosphor fill face for
+  `ph-cards`.
 - **Dev:** `react-docgen-typescript` for the docgen step.
 
 ---
@@ -497,7 +497,7 @@ reference, not by a from-scratch subagent rewrite.
 - **Phase 0 — Scaffold.** `/cumulus` route + `CumulusApp` shell + hash router; token
   pipeline (`cumulus-tokens.css` + generated `tokens.ts`); the ESLint boundary
   zone; the docgen script skeleton; Introduction + Primitives sections.
-- **Phase 1 — Simple primitives/components.** Pressable, ResourceChip, Button,
+- **Phase 1 — Simple primitives/components.** Pressable, ResourceChip, GlassButton,
   SegmentedControl, Motes, TideDisc, and the economy/spec helpers — one subagent
   each; interactive demos + auto props tables live.
 - **Phase 2 — Surfaces and coordinator.** Strict InfoCard variants, GroupPanel,

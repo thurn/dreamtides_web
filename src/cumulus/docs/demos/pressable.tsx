@@ -32,7 +32,7 @@ export const pressableDemo: CumulusComponent = {
   blurb:
     "The one press-feedback primitive. Interactive surfaces measure their rendered box for proportional hover and press movement; readable rules-copy reveals use the strict stationary variant.",
   callout:
-    "Reach for a higher-level component first. Pressable is a low-level building block — before wrapping raw markup in it, look for an existing Cumulus component (Button, TideDisc, SegmentedControl, SiteNode, …) that already bakes in the press feedback. Use Pressable only when you're building a genuinely new interactive surface no component covers.",
+    "Reach for a higher-level component first. Pressable is a low-level building block — before wrapping raw markup in it, look for an existing Cumulus component (GlassButton, TideDisc, SegmentedControl, SiteNode, …) that already bakes in the press feedback. Use Pressable only when you're building a genuinely new interactive surface no component covers.",
   group: "Primitives",
   docName: "Pressable",
   Component: Pressable,

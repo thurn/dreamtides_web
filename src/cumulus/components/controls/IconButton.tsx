@@ -1,10 +1,9 @@
-// IconButton — the glass icon disc, rung 3 of Cumulus's button suite.
+// IconButton — the compact glass icon disc in Cumulus's control suite.
 //
-// The suite is four rungs of decreasing weight: the beveled purple Button (the
-// one commit/primary action), a plain pressable text affordance (secondary),
-// THIS compact glyph-only glass disc (a chrome action that lives in a corner —
-// a deck viewer's close control, the dreamscape menu), and a bare pressable
-// glyph (the lightest inline affordance).
+// GlassButton carries labeled primary and secondary actions. THIS compact
+// glyph-only glass disc is a chrome action that lives in a corner — a deck
+// viewer's close control or the dreamscape menu — while a bare pressable glyph
+// is the lightest inline affordance.
 //
 // The disc wears the ONE shared control material — `glassIconButtonChrome()`,
 // the same liquid glass as the SegmentedControl / Select surface, made a
