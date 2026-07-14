@@ -233,6 +233,11 @@ export type BattleDebugEdit =
     createdAtMs: number;
   }
   | {
+    kind: "FILL_BATTLEFIELD_PREVIEW";
+    definitions: Record<BattleSide, readonly BattleDeckCardDefinition[]>;
+    createdAtMs: number;
+  }
+  | {
     kind: "REORDER_DECK";
     side: BattleSide;
     order: readonly string[];
@@ -513,6 +518,7 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
     case "PLAY_FROM_DECK_TOP":
       return "zone-move";
     case "SWAP_BATTLEFIELD_SLOTS":
+    case "FILL_BATTLEFIELD_PREVIEW":
       return "battlefield-position";
     case "SET_CARD_VISIBILITY":
     case "SET_SIDE_HAND_VISIBILITY":
@@ -557,6 +563,7 @@ function isCompositeDebugEdit(edit: BattleDebugEdit): boolean {
     case "ABANDON":
     case "INCREASE_MAX_ENERGY_AND_FILL":
     case "SET_BATTLE_FLOW":
+    case "FILL_BATTLEFIELD_PREVIEW":
       return true;
     default:
       return false;
@@ -637,6 +644,13 @@ function collectDebugEditTargets(
         "slotId" in edit.destination
           ? makeSlotTarget(edit.destination)
           : makeZoneTarget(edit.destination.side, edit.destination.zone),
+      ];
+    case "FILL_BATTLEFIELD_PREVIEW":
+      return [
+        makeZoneTarget("player", "frontRank"),
+        makeZoneTarget("player", "backRank"),
+        makeZoneTarget("enemy", "frontRank"),
+        makeZoneTarget("enemy", "backRank"),
       ];
     case "ERODE":
     case "REORDER_DECK":
@@ -734,6 +748,8 @@ function createDebugEditLabel(
       return `Create Figment (${edit.chosenSubtype}/${String(edit.chosenSpark)})`;
     case "CREATE_CARD_FROM_DEFINITION":
       return `Create ${edit.definition.name}`;
+    case "FILL_BATTLEFIELD_PREVIEW":
+      return "Fill Battlefield Preview";
     case "REORDER_DECK":
       return `Reorder ${formatSideLabel(edit.side)} Deck`;
     case "REVEAL_DECK_TOP":

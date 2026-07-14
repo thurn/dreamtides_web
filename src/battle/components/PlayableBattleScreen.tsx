@@ -85,6 +85,7 @@ import {
   createMoveCardToStackCommand,
   createMoveCardToZoneCommand,
 } from "./battle-ui-commands";
+import { createFillBattlefieldPreviewCommand } from "./battle-debug-preview";
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
 import { MobileBattleScreenAdapter } from "../../screens/cumulus_adapters/MobileBattleScreenAdapter";
 import { useIsDesktop } from "../../cumulus/screens/use-is-desktop";
@@ -1009,6 +1010,36 @@ function PlayableBattleScreenInner({
     resolveRunLayerCount(battleInit.atlasSnapshot.layers),
   );
 
+  const handleFillBattlefieldPreview = useCallback((): void => {
+    const command = createFillBattlefieldPreviewCommand(
+      battleInit,
+      Date.now(),
+    );
+    const previewCardIds =
+      command?.id === "DEBUG_EDIT" &&
+      command.edit.kind === "FILL_BATTLEFIELD_PREVIEW"
+        ? [
+            ...command.edit.definitions.player,
+            ...command.edit.definitions.enemy,
+          ].map((definition) => definition.cardId)
+        : [];
+    logEvent("battle_debug_battlefield_preview_requested", {
+      ...createBattleLogBaseFields(board, {
+        sourceSurface: "debug-menu",
+        selectedCardId: null,
+      }),
+      commandCount: command === null ? 0 : 1,
+      previewCardIds,
+      playerBackRankCount: 5,
+      playerFrontRankCount: 4,
+      enemyBackRankCount: 5,
+      enemyFrontRankCount: 4,
+    });
+    if (command !== null) {
+      void actions.battleCommand(command);
+    }
+  }, [actions, battleInit, board]);
+
   const showCumulusMobileLayout = uiVariant === "cumulus" && !isCumulusDesktopLayout;
   useEffect(() => {
     if (!showCumulusMobileLayout) {
@@ -1068,6 +1099,7 @@ function PlayableBattleScreenInner({
           onNextPhase: () => {
             handleSetBattleFlow(computePhaseControlTarget(board, "next"));
           },
+          onFillBattlefieldPreview: handleFillBattlefieldPreview,
         }}
       />
     );

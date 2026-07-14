@@ -187,6 +187,7 @@ export type BattleCommandSourceSurface =
   | "status-strip"
   | "dreamcaller-panel"
   | "pool-viewer"
+  | "debug-menu"
   | "phase-controls";
 
 /**

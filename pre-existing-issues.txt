@@ -256,3 +256,14 @@ Asset regeneration — live Vite watcher races public card-directory replacement
   allowed the same regeneration command to complete. Make public asset-directory
   replacement atomic or retry transient `ENOTEMPTY` failures so regeneration is
   reliable while the documented review server remains live.
+
+Playable battle QA bootstrap — battle intents bounce until a plain room reload
+
+- A fresh `?goto=battle` or `?goto=battle-playable` room renders a playable
+  battle locally after its `LOAD_STATE`, but that event carries only the quest
+  snapshot and the persisted room fold has a null battle slice. Automatic
+  `BATTLE_GESTURE` events and player `BATTLE_COMMAND` events therefore bounce as
+  `invalid_action`. Reloading the same `?game=` room without `?goto=` lets the
+  battle route append `BEGIN_BATTLE`, after which battle intents persist and
+  fold normally. Make the battle QA bootstrap establish the battle through the
+  event log before presenting the playable surface.

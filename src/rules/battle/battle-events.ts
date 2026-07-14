@@ -395,8 +395,13 @@ function applyBattleCommandStep(
   // from queued scripts' edits are detected inside the driver's drain (fold.ts
   // `collectMaterializedRuns` is called around each dispatch), so a card fires
   // exactly once regardless of which layer moved it into play.
-  const inPlayBefore = new Set(inPlayInstanceIds(boardBefore));
-  queue.push(...collectMaterializedRuns(inPlayBefore, boardAfter));
+  const isBattlefieldPreview =
+    command.id === "DEBUG_EDIT" &&
+    command.edit.kind === "FILL_BATTLEFIELD_PREVIEW";
+  if (!isBattlefieldPreview) {
+    const inPlayBefore = new Set(inPlayInstanceIds(boardBefore));
+    queue.push(...collectMaterializedRuns(inPlayBefore, boardAfter));
+  }
 
   let board = boardAfter;
   let dawnFired = battle.dawnFired;
@@ -739,6 +744,15 @@ function coerceBattleDebugEdit(raw: unknown): BattleDebugEdit | null {
       return isPlainRecord(raw.definition) && isDebugZoneDestination(raw.destination) && isFiniteNumber(raw.createdAtMs)
         ? raw as unknown as BattleDebugEdit
         : null;
+    case "FILL_BATTLEFIELD_PREVIEW": {
+      const definitions = raw.definitions;
+      return isPlainRecord(definitions) &&
+        isBattlefieldPreviewDefinitionList(definitions.player) &&
+        isBattlefieldPreviewDefinitionList(definitions.enemy) &&
+        isFiniteNumber(raw.createdAtMs)
+        ? raw as unknown as BattleDebugEdit
+        : null;
+    }
     case "REORDER_DECK":
       return isBattleSide(raw.side) && Array.isArray(raw.order) && raw.order.every((id) => typeof id === "string")
         ? raw as unknown as BattleDebugEdit
@@ -781,6 +795,10 @@ function isBattlePhase(value: unknown): value is BattlePhase {
 
 function isFiniteNumber(value: unknown): value is number {
   return typeof value === "number" && Number.isFinite(value);
+}
+
+function isBattlefieldPreviewDefinitionList(value: unknown): boolean {
+  return Array.isArray(value) && value.length === 9 && value.every(isPlainRecord);
 }
 
 function isNonEmptyString(value: unknown): value is string {

@@ -101,6 +101,8 @@ export const GLYPHS = {
   plus: g("bxf bx-plus"),
   /** The settings gear — the desktop quest-menu disclosure trigger. */
   gear: g("bxf bx-cog"),
+  /** The bug mark — the battle debug-menu disclosure trigger. */
+  bug: g("bxf bx-bug"),
   /** The hamburger bars — the mobile quest-menu disclosure trigger. */
   menu: g("bxf bx-menu"),
   /** The circular refresh arrows used by shop restock actions. */

@@ -1,4 +1,4 @@
-import { useRef, type CSSProperties } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 import { LayoutGroup, motion } from "framer-motion";
 import {
   GameCard,
@@ -14,7 +14,9 @@ import {
   CardPile,
   type BattlePileCard,
 } from "../components/battle/CardPile";
+import { GlassButton } from "../components/controls/GlassButton";
 import { IconButton } from "../components/controls/IconButton";
+import { GlassPanel } from "../components/overlay/GlassPanel";
 import type { DreamcallerVisual } from "../components/hud/DreamcallerPortrait";
 import { GLYPHS } from "../primitives/glyph";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
@@ -97,6 +99,7 @@ export interface MobileBattleInteractions {
   readonly onZoneDrop: (target: MobileBattleZoneTarget) => void;
   readonly onPreviousPhase: () => void;
   readonly onNextPhase: () => void;
+  readonly onFillBattlefieldPreview?: () => void;
 }
 
 const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
@@ -623,6 +626,66 @@ function ControlRow({
   );
 }
 
+function BattleDebugMenu({
+  onFillBattlefieldPreview,
+}: {
+  readonly onFillBattlefieldPreview?: () => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div
+      data-battle-debug="menu"
+      style={{
+        position: "absolute",
+        top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-4")})`,
+        right: `calc(var(${SAFE_AREA_INSET_PROPERTIES.right}) + ${token("--space-4")})`,
+        zIndex: 20,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-end",
+        gap: token("--space-3"),
+      }}
+    >
+      <IconButton
+        glyph={GLYPHS.bug}
+        size="sm"
+        label="Battle debug menu"
+        ariaExpanded={isOpen}
+        testId="battle-debug-menu-trigger"
+        onPress={() => setIsOpen((open) => !open)}
+      />
+      {isOpen ? (
+        <div
+          role="menu"
+          aria-label="Battle debug actions"
+          style={{ width: 268, height: 66 }}
+        >
+          <GlassPanel radius="popover" tint="popover">
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                padding: token("--space-5"),
+              }}
+            >
+              <GlassButton
+                label="Fill Battlefield · 4 Front / 5 Back"
+                placement="onGlass"
+                disabled={onFillBattlefieldPreview === undefined}
+                testId="battle-debug-fill-grid"
+                onPress={() => {
+                  onFillBattlefieldPreview?.();
+                  setIsOpen(false);
+                }}
+              />
+            </div>
+          </GlassPanel>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 /** Seven-row, mobile-only battle table composed entirely from battle objects. */
 export function MobileBattleScreen({ view, interactions }: MobileBattleScreenProps) {
   return (
@@ -642,6 +705,9 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
           <SideZones owner="player" side={view.player} interactions={interactions} />
           <PlayerHand cards={view.playerHand} interactions={interactions} />
         </LayoutGroup>
+        <BattleDebugMenu
+          onFillBattlefieldPreview={interactions?.onFillBattlefieldPreview}
+        />
       </main>
     </>
   );

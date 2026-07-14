@@ -141,9 +141,9 @@ describe("MobileBattleScreen", () => {
   it("renders the mobile control row between the battlefield and player status", () => {
     const { container, root } = mount();
     const screen = container.querySelector<HTMLElement>("[data-battle-mobile]");
-    const rowNames = Array.from(screen?.children ?? []).map((row) =>
-      row.getAttribute("data-battle-mobile-row"),
-    );
+    const rowNames = Array.from(
+      screen?.querySelectorAll(":scope > [data-battle-mobile-row]") ?? [],
+    ).map((row) => row.getAttribute("data-battle-mobile-row"));
 
     expect(screen?.className).toBe("cumulus");
     expect(screen?.style.position).toBe("fixed");
@@ -412,7 +412,7 @@ describe("MobileBattleScreen", () => {
     expect(interactions.onNextPhase).toHaveBeenCalledTimes(1);
     expect(
       container.querySelector(
-        "[data-quest-status-bar], [data-quest-menu], [data-battle-phase], [data-battle-debug], [data-debug-rail]",
+        "[data-quest-status-bar], [data-quest-menu], [data-battle-phase], [data-debug-rail]",
       ),
     ).toBeNull();
     expect(container.querySelector("style")?.textContent).toContain(
@@ -422,7 +422,63 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("routes physical card gestures through intent callbacks without adding controls", () => {
+  it("shows the floating debug disclosure alongside the phase controls", () => {
+    const { container, root } = mount();
+    const controls = container.querySelectorAll(
+      "button, input, select, textarea, [role=button]",
+    );
+    expect(controls).toHaveLength(3);
+    expect(
+      container.querySelector('[data-testid="battle-debug-menu-trigger"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-testid="battle-debug-fill-grid"]'),
+    ).toBeNull();
+
+    act(() => root.unmount());
+  });
+
+  it("opens the debug menu and requests a full nine-character grid", () => {
+    const onFillBattlefieldPreview = vi.fn();
+    const interactions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+      onFillBattlefieldPreview,
+    };
+    const { container, root } = mount(makeView(), interactions);
+    const trigger = container.querySelector<HTMLButtonElement>(
+      '[data-testid="battle-debug-menu-trigger"]',
+    );
+
+    expect(trigger?.getAttribute("aria-expanded")).toBe("false");
+
+    act(() => trigger?.click());
+
+    expect(trigger?.getAttribute("aria-expanded")).toBe("true");
+    const fill = container.querySelector<HTMLButtonElement>(
+      '[data-testid="battle-debug-fill-grid"]',
+    );
+    expect(fill?.textContent).toContain("Fill Battlefield");
+
+    act(() => fill?.click());
+
+    expect(onFillBattlefieldPreview).toHaveBeenCalledTimes(1);
+    expect(trigger?.getAttribute("aria-expanded")).toBe("false");
+    expect(
+      container.querySelector('[data-testid="battle-debug-fill-grid"]'),
+    ).toBeNull();
+
+    act(() => root.unmount());
+  });
+
+  it("routes physical card gestures through intent callbacks without adding gameplay controls", () => {
     const interactions = {
       canInteract: true,
       pendingCardId: "player-hand-0",
@@ -495,7 +551,7 @@ describe("MobileBattleScreen", () => {
       zone: "hand",
     });
     expect(interactions.onCardDragEnd).toHaveBeenCalledTimes(1);
-    expect(container.querySelectorAll("button")).toHaveLength(2);
+    expect(container.querySelectorAll("button")).toHaveLength(3);
 
     act(() => root.unmount());
   });

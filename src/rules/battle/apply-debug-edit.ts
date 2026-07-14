@@ -30,6 +30,7 @@ import type {
 import {
   backRankSlotId,
   ensureContiguousRankSlots,
+  frontRankSlotId,
   rankSlotIds,
 } from "../../battle/types";
 import {
@@ -348,6 +349,13 @@ export function applyDebugEdit(
         nextState,
         edit.definition,
         edit.destination,
+        edit.createdAtMs,
+        context,
+      );
+    case "FILL_BATTLEFIELD_PREVIEW":
+      return fillBattlefieldPreview(
+        state,
+        edit.definitions,
         edit.createdAtMs,
         context,
       );
@@ -1268,6 +1276,76 @@ function createCardFromDefinition(
           context,
         ),
       ],
+    },
+  };
+}
+
+function fillBattlefieldPreview(
+  state: BattleMutableState,
+  definitions: Record<BattleSide, readonly BattleDeckCardDefinition[]>,
+  createdAtMs: number,
+  context: BattleEngineEmissionContext,
+): {
+  state: BattleMutableState;
+  transition: BattleTransitionData;
+} {
+  const characterCountPerSide = 9;
+  if (
+    definitions.player.length !== characterCountPerSide ||
+    definitions.enemy.length !== characterCountPerSide ||
+    [...definitions.player, ...definitions.enemy].some(
+      (definition) => definition.battleCardKind !== "character",
+    )
+  ) {
+    return { state, transition: createEmptyTransitionData() };
+  }
+
+  let current = state;
+  const logEvents: BattleTransitionData["logEvents"] = [];
+  for (const side of ["player", "enemy"] as const) {
+    for (const zone of ["frontRank", "backRank"] as const) {
+      for (const battleCardId of Object.values(current.sides[side][zone])) {
+        if (battleCardId === null) continue;
+        current = moveCardToDebugZone(current, battleCardId, {
+          side,
+          zone: "void",
+        }).state;
+      }
+    }
+  }
+
+  for (const side of ["player", "enemy"] as const) {
+    const destinations = [
+      ...Array.from({ length: 4 }, (_, index) => ({
+        side,
+        zone: "frontRank" as const,
+        slotId: frontRankSlotId(index),
+      })),
+      ...Array.from({ length: 5 }, (_, index) => ({
+        side,
+        zone: "backRank" as const,
+        slotId: backRankSlotId(index),
+      })),
+    ];
+    for (let index = 0; index < destinations.length; index += 1) {
+      const result = createCardFromDefinition(
+        current,
+        cloneBattleMutableState(current),
+        definitions[side][index],
+        destinations[index],
+        createdAtMs,
+        context,
+      );
+      current = result.state;
+      logEvents.push(...result.transition.logEvents);
+    }
+  }
+
+  return {
+    state: current,
+    transition: {
+      ...createEmptyTransitionData(),
+      logEvents,
     },
   };
 }
