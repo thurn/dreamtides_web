@@ -7,10 +7,8 @@ import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { SiteGuide } from "../components/SiteGuide";
 import { GlassButton } from "../cumulus/components/controls/GlassButton";
-import { IconButton } from "../cumulus/components/controls/IconButton";
-import { GLYPHS } from "../cumulus/primitives/glyph";
+import { SiteLeaveControl } from "./SiteLeaveControl";
 import "./duplication-site.css";
-import "./site-leave-control.css";
 
 /** Props for the DuplicationSiteScreen component. */
 interface DuplicationSiteScreenProps {
@@ -280,15 +278,12 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
       {/* Deacon Holt (shared SiteGuide), docked lower-left in landscape. */}
       <SiteGuide siteType="Duplication" isEnhanced={site.isEnhanced} />
 
-      <div className="cumulus site-leave-control">
-        <IconButton
-          glyph={GLYPHS.close}
-          label="Leave site"
-          onPress={handleClose}
-          testId="duplication-walk-on"
-          disabled={copying || duplicated}
-        />
-      </div>
+      <SiteLeaveControl
+        label="Leave site"
+        onLeave={handleClose}
+        testId="duplication-walk-on"
+        disabled={copying || duplicated}
+      />
     </div>
   );
 }

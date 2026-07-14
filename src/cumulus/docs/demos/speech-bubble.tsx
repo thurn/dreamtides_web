@@ -8,41 +8,27 @@ function SpeechBubbleDemo(args: Record<string, unknown>) {
     typeof args.text === "string"
       ? args.text
       : "The frost reveals what is hidden.";
-  const arrowSide = args.arrowSide === "right" ? "right" : "left";
-  return (
-    <SpeechBubble speakerName={speakerName} text={text} arrowSide={arrowSide} />
-  );
+  return <SpeechBubble speakerName={speakerName} text={text} />;
 }
 
 export const speechBubbleDemo: CumulusComponent = {
   id: "speech-bubble",
   title: "Speech Bubble",
   blurb:
-    "A guide-dialog bubble for character-led site screens: the same frosted information material as an InfoCard, with a strict left-or-right arrow that points back to the speaker.",
+    "A guide-dialog bubble for character-led site screens: the same frosted information material as an InfoCard, with a left arrow that points back to the speaker.",
   callout:
-    "Use it beside character art, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, and arrow geometry; the caller supplies only the speaker name, spoken line, and which side faces the character.",
+    "Use it to the right of character art, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, and arrow geometry; the caller supplies the speaker name and spoken line.",
   group: "Components",
   docName: "SpeechBubble",
   Component: SpeechBubbleDemo,
   usage: [
     {
-      label: "Left arrow",
       note: "The bubble sits to the right of the character, so the arrow points left.",
       code: `import { SpeechBubble } from "src/cumulus/components/overlay/SpeechBubble";
 
 <SpeechBubble
   speakerName="Sigrún"
   text="The frost reveals what is hidden."
-  arrowSide="left"
-/>`,
-    },
-    {
-      label: "Right arrow",
-      note: "The bubble sits to the left of the character, so the arrow points right.",
-      code: `<SpeechBubble
-  speakerName="Amunet"
-  text="The sands remember all dreams."
-  arrowSide="right"
 />`,
     },
   ],
@@ -50,7 +36,6 @@ export const speechBubbleDemo: CumulusComponent = {
     defaultArgs: {
       speakerName: "Sigrún",
       text: "The frost reveals what is hidden.",
-      arrowSide: "left",
     },
   },
 };

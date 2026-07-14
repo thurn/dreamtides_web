@@ -6,6 +6,7 @@ import { logEvent, logEventOnce } from "../../logging";
 import { useQuest } from "../../state/quest-context";
 import {
   buildDuplicationSiteView,
+  buildDuplicationOfferLog,
   resolveDuplicationGuide,
 } from "./duplication-view-model";
 
@@ -53,14 +54,24 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
   }, [mutations, persistedRuntime, site]);
 
   useEffect(() => {
-    if (site === null) return;
+    if (site === null || runtime === null) return;
+    const offeredEntries = buildDuplicationOfferLog(
+      state,
+      runtime,
+      questContent.cardDatabase,
+    );
     logEventOnce(`duplication:${site.id}:site-entered`, "site_entered", {
       siteType: site.type,
       isEnhanced: site.isEnhanced,
       deckSize: state.deck.length,
-      candidateCount: runtime?.entryIds.length ?? 0,
+      candidateCount: runtime.entryIds.length,
+      offeredEntries,
       ui: "cumulus",
     });
+  }, [questContent.cardDatabase, runtime, site, state]);
+
+  useEffect(() => {
+    if (site === null) return;
     if (guide !== null) {
       logEventOnce(
         `duplication:${site.id}:guide:${guide.id}`,
@@ -68,7 +79,7 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
         { guideId: guide.id, siteType: site.type, isEnhanced: site.isEnhanced, ui: "cumulus" },
       );
     }
-  }, [guide, runtime, site, state.deck.length]);
+  }, [guide, site]);
 
   const handleClose = useCallback(() => {
     if (site === null) return;

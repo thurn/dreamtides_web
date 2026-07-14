@@ -352,7 +352,7 @@ afterEach(() => {
 });
 
 describe("ScreenRouter DreamAugury routing", () => {
-  it("renders the classic journey path for a DreamAugury site in classic config", () => {
+  it("renders Dream Merchant v2 when a legacy classic query is supplied", () => {
     const site = makeSite("DreamAugury");
     const state = makeStateFor(site);
     const container = renderWithQuest({
@@ -363,8 +363,8 @@ describe("ScreenRouter DreamAugury routing", () => {
       ),
     });
 
-    expect(container.querySelector('[data-testid="classic-journey-screen"]')).not.toBeNull();
-    expect(container.querySelector('[data-testid="dream-merchant-v2-screen"]')).toBeNull();
+    expect(container.querySelector('[data-testid="classic-journey-screen"]')).toBeNull();
+    expect(container.querySelector('[data-testid="dream-merchant-v2-screen"]')).not.toBeNull();
   });
 
   it("renders the Dream Merchant v2 screen for a DreamAugury site in v2 config", () => {

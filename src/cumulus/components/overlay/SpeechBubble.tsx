@@ -25,21 +25,18 @@ export interface SpeechBubbleProps {
   speakerName: string;
   /** The spoken line. Plain text; the component supplies the bubble voice. */
   text: string;
-  /** Which side carries the arrow pointing toward the character. */
-  arrowSide: "left" | "right";
   /** Optional stable test id for product-screen QA. */
   testId?: string;
 }
 
 /**
  * SpeechBubble — a guide-dialog surface that resembles an InfoCard text pane
- * but points toward a character render. The caller chooses only the side of the
- * arrow; material, typography, and spacing stay fixed.
+ * and points left toward the character render. Material, typography, spacing,
+ * and arrow geometry stay fixed.
  */
 export function SpeechBubble({
   speakerName,
   text,
-  arrowSide,
   testId,
 }: SpeechBubbleProps): ReactElement {
   const reactId = useId();
@@ -47,11 +44,7 @@ export function SpeechBubble({
   const bubbleRef = useRef<HTMLElement | null>(null);
   const [bubbleSize, setBubbleSize] = useState({ width: 0, height: 0 });
   const tail = `${String(SPEECH_TAIL_DEPTH)}px`;
-  const path = makeSpeechBubblePath(
-    bubbleSize.width,
-    bubbleSize.height,
-    arrowSide,
-  );
+  const path = makeSpeechBubblePath(bubbleSize.width, bubbleSize.height);
 
   useLayoutEffect(() => {
     const bubble = bubbleRef.current;
@@ -78,12 +71,8 @@ export function SpeechBubble({
     border: "none",
     boxSizing: "border-box",
     width: `calc(100% + ${tail})`,
-    marginLeft: arrowSide === "left" ? `calc(-1 * ${tail})` : undefined,
-    marginRight: arrowSide === "right" ? `calc(-1 * ${tail})` : undefined,
-    padding:
-      arrowSide === "left"
-        ? `${token("--space-5")} ${token("--space-6")} ${token("--space-5")} calc(${tail} + ${token("--space-6")})`
-        : `${token("--space-5")} calc(${tail} + ${token("--space-6")}) ${token("--space-5")} ${token("--space-6")}`,
+    marginLeft: `calc(-1 * ${tail})`,
+    padding: `${token("--space-5")} ${token("--space-6")} ${token("--space-5")} calc(${tail} + ${token("--space-6")})`,
     boxShadow: "none",
     clipPath: path !== null ? `url(#${clipId})` : undefined,
     WebkitClipPath: path !== null ? `url(#${clipId})` : undefined,
@@ -138,7 +127,6 @@ export function SpeechBubble({
 function makeSpeechBubblePath(
   width: number,
   height: number,
-  arrowSide: "left" | "right",
 ): string | null {
   if (width <= 0 || height <= 0) {
     return null;
@@ -155,37 +143,19 @@ function makeSpeechBubblePath(
   const tailTop = tailCenter - halfTail;
   const tailBottom = tailCenter + halfTail;
 
-  if (arrowSide === "left") {
-    return [
-      `M ${tail + corner} 0`,
-      `H ${width - corner}`,
-      `Q ${width} 0 ${width} ${corner}`,
-      `V ${height - corner}`,
-      `Q ${width} ${height} ${width - corner} ${height}`,
-      `H ${tail + corner}`,
-      `Q ${tail} ${height} ${tail} ${height - corner}`,
-      `V ${tailBottom}`,
-      `L 0 ${tailCenter}`,
-      `L ${tail} ${tailTop}`,
-      `V ${corner}`,
-      `Q ${tail} 0 ${tail + corner} 0`,
-      "Z",
-    ].join(" ");
-  }
-
   return [
-    `M ${corner} 0`,
-    `H ${width - tail - corner}`,
-    `Q ${width - tail} 0 ${width - tail} ${corner}`,
-    `V ${tailTop}`,
-    `L ${width} ${tailCenter}`,
-    `L ${width - tail} ${tailBottom}`,
+    `M ${tail + corner} 0`,
+    `H ${width - corner}`,
+    `Q ${width} 0 ${width} ${corner}`,
     `V ${height - corner}`,
-    `Q ${width - tail} ${height} ${width - tail - corner} ${height}`,
-    `H ${corner}`,
-    `Q 0 ${height} 0 ${height - corner}`,
+    `Q ${width} ${height} ${width - corner} ${height}`,
+    `H ${tail + corner}`,
+    `Q ${tail} ${height} ${tail} ${height - corner}`,
+    `V ${tailBottom}`,
+    `L 0 ${tailCenter}`,
+    `L ${tail} ${tailTop}`,
     `V ${corner}`,
-    `Q 0 0 ${corner} 0`,
+    `Q ${tail} 0 ${tail + corner} 0`,
     "Z",
   ].join(" ");
 }

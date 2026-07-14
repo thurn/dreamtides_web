@@ -686,9 +686,8 @@ function wireLayerConnections(
  * alternative choices the player picks between, so two of them sharing a
  * dreamscape (and thus the same signature site icon) reads as a generation
  * glitch; same-layer siblings are not necessarily connected, so they are
- * excluded explicitly in addition to the connected neighbours. After a bounded
- * number of attempts the best candidate is accepted so generation always
- * terminates.
+ * excluded explicitly in addition to the connected neighbours. The draw is
+ * made from the eligible set, guaranteeing uniqueness whenever content exists.
  */
 function drawDreamscapeForNode(
   state: AtlasState,
@@ -716,20 +715,15 @@ function drawDreamscapeForNode(
     }
   }
 
-  const MAX_ATTEMPTS = 12;
-  let fallback: DreamscapeContent | null = null;
-  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-    const weighted = nonStarter.map((d): [DreamscapeContent, number] => [
+  const eligible = nonStarter.filter(
+    (dreamscape) => !ineligibleDreamscapeIds.has(dreamscape.id),
+  );
+  const candidates = eligible.length > 0 ? eligible : nonStarter;
+  const weighted = candidates.map((d): [DreamscapeContent, number] => [
       d,
       state.dreamscapeWeights.get(d.id) ?? 1,
-    ]);
-    const candidate = weightedPick(weighted);
-    fallback ??= candidate;
-    if (!ineligibleDreamscapeIds.has(candidate.id)) {
-      return candidate;
-    }
-  }
-  return fallback ?? nonStarter[0];
+  ]);
+  return weightedPick(weighted);
 }
 
 /** Reduces a placed dreamscape's draw weight, keeping it strictly positive. */

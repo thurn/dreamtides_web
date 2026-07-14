@@ -33,14 +33,15 @@ namespace CumulusMvp.Tests.PlayMode
             CumulusPanelTravel travel = CreateTravel(out Transform panel, out Transform source, out Transform destination);
             yield return null;
 
-            float outwardDuration = 0f;
-            yield return MeasureTravel(travel, duration => outwardDuration = duration);
-            Assert.That(outwardDuration, Is.EqualTo(0.42f).Within(0.02f));
+            Assert.That(CumulusPanelTravel.Duration, Is.EqualTo(0.42f));
+            travel.ToggleDestination();
+            AdvanceTravel(travel, CumulusPanelTravel.Duration * 0.5f);
+            Assert.That(travel.IsTravelling, Is.True);
+            AdvanceTravel(travel, CumulusPanelTravel.Duration * 0.5f);
             AssertPose(panel, destination);
 
-            float returnDuration = 0f;
-            yield return MeasureTravel(travel, duration => returnDuration = duration);
-            Assert.That(returnDuration, Is.EqualTo(0.42f).Within(0.02f));
+            travel.ToggleDestination();
+            AdvanceTravel(travel, CumulusPanelTravel.Duration);
             AssertPose(panel, source);
         }
 
@@ -51,11 +52,7 @@ namespace CumulusMvp.Tests.PlayMode
             yield return null;
 
             travel.ToggleDestination();
-            float interruptAt = Time.time + 0.14f;
-            while (Time.time < interruptAt)
-            {
-                yield return null;
-            }
+            AdvanceTravel(travel, 0.14f);
 
             Vector3 interruptedPosition = panel.position;
             Quaternion interruptedRotation = panel.rotation;
@@ -64,14 +61,13 @@ namespace CumulusMvp.Tests.PlayMode
             travel.ToggleDestination();
             AssertVector(panel.position, interruptedPosition);
             Assert.That(Quaternion.Angle(panel.rotation, interruptedRotation), Is.LessThan(0.001f));
-            yield return null;
-            Assert.That(Vector3.Distance(panel.position, interruptedPosition), Is.LessThan(0.5f));
-            Assert.That(Vector3.Distance(panel.position, source.position), Is.GreaterThan(0.01f));
+            AdvanceTravel(travel, 0.01f);
+            Assert.That(Vector3.Distance(panel.position, interruptedPosition), Is.GreaterThan(0f));
+            Assert.That(
+                Vector3.Distance(panel.position, source.position),
+                Is.LessThan(Vector3.Distance(interruptedPosition, source.position)));
 
-            while (travel.IsTravelling)
-            {
-                yield return null;
-            }
+            AdvanceTravel(travel, CumulusPanelTravel.Duration);
 
             AssertPose(panel, source);
         }
@@ -97,17 +93,13 @@ namespace CumulusMvp.Tests.PlayMode
             return travel;
         }
 
-        private IEnumerator MeasureTravel(CumulusPanelTravel travel, System.Action<float> recordDuration)
+        private static void AdvanceTravel(CumulusPanelTravel travel, float deltaTime)
         {
-            float startedAt = Time.time;
-            travel.ToggleDestination();
-            Assert.That(travel.IsTravelling, Is.True);
-            while (travel.IsTravelling)
-            {
-                yield return null;
-            }
-
-            recordDuration(Time.time - startedAt);
+            MethodInfo advance = typeof(CumulusPanelTravel).GetMethod(
+                "Advance",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(advance, Is.Not.Null, "Missing deterministic travel step");
+            advance.Invoke(travel, new object[] { deltaTime });
         }
 
         private GameObject Track(GameObject gameObject)

@@ -78,6 +78,8 @@ interface CoopContextValue {
   actions: CoopActions;
   /** Connected clients, from the room's presence node. */
   connectedCount: number | null;
+  /** Contiguous confirmed log head; null until the first node is folded. */
+  confirmedHead: number | null;
   /**
    * Newest CONFIRMED seq (the max seq `onEventOutcome` has reported). A prompt
    * whose `promptId` (= its opening event's seq) exceeds this is still an
@@ -120,6 +122,7 @@ export function CoopProvider({
     GAME_ENGINE_CONFIG.genesisState(genesis),
   );
   const [connectedCount, setConnectedCount] = useState<number | null>(null);
+  const [confirmedHead, setConfirmedHead] = useState<number | null>(null);
   const [corruptLog, setCorruptLog] = useState(false);
   const [bounceToken, setBounceToken] = useState(0);
   // The copy for the toast the next `bounceToken` bump shows. Set by whichever
@@ -165,6 +168,7 @@ export function CoopProvider({
   // renders (they read mutable refs), so the client is created once per room.
   useEffect(() => {
     setCorruptLog(false);
+    setConfirmedHead(null);
     const io: LogClientIo = {
       subscribe: (onNode) =>
         subscribeToLog(db, roomId, onNode, () => {
@@ -205,6 +209,7 @@ export function CoopProvider({
             flushPendingAppends();
           }
         },
+        onConfirmedHead: setConfirmedHead,
         onEventOutcome: (event, seq, outcome, detail) => {
           if (seq > confirmedSeqRef.current) {
             confirmedSeqRef.current = seq;
@@ -349,10 +354,11 @@ export function CoopProvider({
       append,
       actions,
       connectedCount,
+      confirmedHead,
       confirmedSeqRef,
       registerOutcomeListener,
     }),
-    [clientId, gameState, append, actions, connectedCount, registerOutcomeListener],
+    [clientId, gameState, append, actions, connectedCount, confirmedHead, registerOutcomeListener],
   );
 
   if (corruptLog) {
@@ -379,6 +385,11 @@ export function CoopProvider({
 /** The displayed fold state (confirmed + optimistic). */
 export function useGameState(): FoldState {
   return useCoop().gameState;
+}
+
+/** The contiguous confirmed log head, or null before the initial fold. */
+export function useConfirmedHead(): number | null {
+  return useCoop().confirmedHead;
 }
 
 /** This client's id, as minted by `RoomGate` (`mintClientId`). Stable for the

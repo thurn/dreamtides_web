@@ -19,21 +19,20 @@ import type { CumulusComponent } from "../registry";
  * toggle) return to the closed state.
  */
 function GlassDialogDemo() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   return (
     <>
       <GlassButton label="Open dialog" onPress={() => setOpen(true)} />
       {open && (
         <GlassDialog
-          title="Starting Deck"
-          subtitle="These are the cards you begin the quest with."
+          title="Choose a Dreamsign to Replace"
+          subtitle="You can hold three dreamsigns."
           onClose={() => setOpen(false)}
         >
           <p style={{ margin: 0, font: token("--t-body"), color: token("--text-primary") }}>
-            The glass dialog shell holds any body content: a card grid, a form,
-            a summary. On desktop it is a bounded, centered panel over the
-            scene; below the desktop breakpoint it goes full-bleed and frosts
-            the background, with its header clearing the device cutout.
+            The Purge replacement flow uses this shell for its dreamsign grid
+            and actions. On desktop it is bounded and centered over the scene;
+            below the desktop breakpoint it fills and frosts the viewport.
           </p>
         </GlassDialog>
       )}
@@ -44,11 +43,10 @@ function GlassDialogDemo() {
 export const glassDialogDemo: CumulusComponent = {
   id: "glass-dialog",
   title: "Glass Dialog",
-  status: "incubating",
   blurb:
     "The glass overlay shell: a modal dialog with a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and a glass close disc) over a scrolling body. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.",
   callout:
-    "The close disc is the shared IconButton at size `md`. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant: on a wide-and-tall desktop (min-width 1400px and min-height 800px) the panel widens and fits a taller viewport so more content lands without internal scroll.",
+    "Dreamsign Revelation uses this shell for its Purge replacement dialog. The close disc is the shared IconButton at size `md`. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant.",
   group: "Components",
   docName: "GlassDialog",
   Component: GlassDialogDemo,

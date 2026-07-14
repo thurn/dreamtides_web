@@ -185,9 +185,9 @@ http://localhost:5173/?algo=fresh20&packsize=30 # fresh-pack draft with 30-card 
 
 ## `journey`
 
-`parseRuntimeConfig` sets `runtimeConfig.journeyVariant` to `"v2"` by default.
-Set to exactly `classic` to use the classic journey variant; any other value
-(including empty or absent) keeps `journeyVariant` at `"v2"`.
+`parseRuntimeConfig` sets `runtimeConfig.journeyVariant` to `"v2"`. The
+parameter is retained in shared room URLs so the fold-relevant content config
+is explicit and reproducible.
 
 ## `ui`
 

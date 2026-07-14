@@ -135,6 +135,8 @@ export const atlasMapDemo: CumulusComponent = {
   title: "Atlas Map",
   blurb:
     "The Dream Atlas map surface — the run graph of dreamscape nodes and their connectors, fitted into a fixed portrait design stage that uniformly scales to fit its container (letterboxed). It owns the `.dream-atlas` scope and the scale-to-fit while the placed view models decide the vertical layout (the starter anchors the bottom, the boss the top); each node reveals its detail through the shared InfoCard press engine — hover on desktop, press-down on touch.",
+  callout:
+    "AtlasScreen is the intentional product owner for this run-specific graph surface. Reuse AtlasMap for Dream Atlas rendering; use lower-level AtlasNode and AtlasEdge components for other graph compositions.",
   group: "Components",
   docName: "AtlasMap",
   Component: AtlasMapDemo,

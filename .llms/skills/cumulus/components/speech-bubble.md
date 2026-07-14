@@ -8,9 +8,9 @@ Components · Live demo & interactive props: `/cumulus#/speech-bubble`
 
 Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 
-A guide-dialog bubble for character-led site screens: the same frosted information material as an InfoCard, with a strict left-or-right arrow that points back to the speaker.
+A guide-dialog bubble for character-led site screens: the same frosted information material as an InfoCard, with a left arrow that points back to the speaker.
 
-> **Guidance:** Use it beside character art, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, and arrow geometry; the caller supplies only the speaker name, spoken line, and which side faces the character.
+> **Guidance:** Use it to the right of character art, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, and arrow geometry; the caller supplies the speaker name and spoken line.
 
 ## Props
 
@@ -18,12 +18,9 @@ A guide-dialog bubble for character-led site screens: the same frosted informati
 | --- | --- | --- | --- | --- |
 | `speakerName` | `string` | yes | — | The speaking character's display name. |
 | `text` | `string` | yes | — | The spoken line. Plain text; the component supplies the bubble voice. |
-| `arrowSide` | `"left" \| "right"` | yes | — | Which side carries the arrow pointing toward the character. |
 | `testId` | `string` | no | — | Optional stable test id for product-screen QA. |
 
 ## Usage
-
-### Left arrow
 
 The bubble sits to the right of the character, so the arrow points left.
 
@@ -33,18 +30,5 @@ import { SpeechBubble } from "src/cumulus/components/overlay/SpeechBubble";
 <SpeechBubble
   speakerName="Sigrún"
   text="The frost reveals what is hidden."
-  arrowSide="left"
-/>
-```
-
-### Right arrow
-
-The bubble sits to the left of the character, so the arrow points right.
-
-```tsx
-<SpeechBubble
-  speakerName="Amunet"
-  text="The sands remember all dreams."
-  arrowSide="right"
 />
 ```

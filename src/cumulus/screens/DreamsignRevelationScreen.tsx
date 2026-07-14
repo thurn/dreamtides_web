@@ -13,6 +13,7 @@ import {
   QUEST_STATUS_BAR_CLEARANCE_OP,
 } from "../components/hud/QuestStatusBar";
 import { SpeechBubble } from "../components/overlay/SpeechBubble";
+import { GlassDialog } from "../components/overlay/GlassDialog";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "./use-is-desktop";
@@ -320,7 +321,6 @@ function GuideScene({
         <SpeechBubble
           speakerName={view.guide.name}
           text={view.guide.line}
-          arrowSide="left"
           testId="revelation-speech-bubble"
         />
       </div>
@@ -506,52 +506,18 @@ function PurgeDialog({
   readonly onCancel: () => void;
 }) {
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="dreamsign-revelation-purge-title"
-      style={{
-        position: "absolute",
-        inset: 0,
-        zIndex: 80,
-        display: "grid",
-        placeItems: "center",
-        padding: token("--space-6"),
-        background: token("--scrim"),
-      }}
+    <GlassDialog
+      title="Choose a Dreamsign to Replace"
+      subtitle={`You can hold ${String(purge.maxDreamsigns)} dreamsigns.`}
+      onClose={onCancel}
+      closeLabel="Cancel replacement"
     >
       <div
         style={{
-          width: "min(100%, 360px)",
-          maxHeight: `calc(100dvh - ${token("--space-12")})`,
-          overflow: "auto",
-          boxSizing: "border-box",
-          padding: token("--space-6"),
-          background: token("--surface-chrome-strong"),
-          border: `1px solid ${token("--border-soft")}`,
-          borderRadius: token("--radius-panel"),
-          boxShadow: token("--shadow-lg"),
+          width: "min(100%, 420px)",
+          margin: "0 auto",
         }}
       >
-        <h2
-          id="dreamsign-revelation-purge-title"
-          style={{
-            margin: 0,
-            font: token("--t-title-sm"),
-            color: token("--text-primary"),
-          }}
-        >
-          Choose a Dreamsign to Replace
-        </h2>
-        <p
-          style={{
-            margin: `${token("--space-3")} 0 ${token("--space-6")}`,
-            font: token("--t-body-sm"),
-            color: token("--text-secondary"),
-          }}
-        >
-          {`You can hold ${String(purge.maxDreamsigns)} dreamsigns.`}
-        </p>
         <div
           style={{
             display: "grid",
@@ -597,6 +563,6 @@ function PurgeDialog({
           <GlassButton label="Cancel" onPress={onCancel} />
         </div>
       </div>
-    </div>
+    </GlassDialog>
   );
 }

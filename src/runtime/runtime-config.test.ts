@@ -103,13 +103,8 @@ describe("parseRuntimeConfig", () => {
       expect(parseRuntimeConfig("").journeyVariant).toBe("v2");
     });
 
-    it("returns classic only when journey=classic", () => {
-      expect(parseRuntimeConfig("?journey=classic").journeyVariant).toBe(
-        "classic",
-      );
-    });
-
-    it("returns v2 for any other journey value", () => {
+    it("uses v2 for every journey query value", () => {
+      expect(parseRuntimeConfig("?journey=classic").journeyVariant).toBe("v2");
       expect(parseRuntimeConfig("?journey=").journeyVariant).toBe("v2");
       expect(parseRuntimeConfig("?journey=v2").journeyVariant).toBe("v2");
       expect(parseRuntimeConfig("?journey=Classic").journeyVariant).toBe("v2");
@@ -285,14 +280,14 @@ describe("contentConfigFromRuntime", () => {
     });
   });
 
-  it("reflects the fresh20 draft mode, pack size, and journey", () => {
+  it("reflects the fresh20 draft mode, pack size, and current journey", () => {
     expect(
       contentConfigFromRuntime(parseRuntimeConfig("?algo=fresh20&packsize=15&journey=classic")),
     ).toEqual({
       poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "fresh20",
       fresh20PackSize: 15,
-      journeyVariant: "classic",
+      journeyVariant: "v2",
     });
   });
 
@@ -324,10 +319,10 @@ describe("contentConfigsEqual", () => {
 describe("applyContentConfigToSearch", () => {
   it("round-trips: reparsing the result yields the same content slice", () => {
     const configs: ContentConfig[] = [
-      { poolVariant: "idf2", draftMode: "pool", fresh20PackSize: null, journeyVariant: "classic" },
+      { poolVariant: "idf2", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" },
       { poolVariant: DEFAULT_POOL_VARIANT, draftMode: "replay", fresh20PackSize: null, journeyVariant: "v2" },
       { poolVariant: DEFAULT_POOL_VARIANT, draftMode: "fresh20", fresh20PackSize: 12, journeyVariant: "v2" },
-      { poolVariant: DEFAULT_POOL_VARIANT, draftMode: "fresh20", fresh20PackSize: null, journeyVariant: "classic" },
+      { poolVariant: DEFAULT_POOL_VARIANT, draftMode: "fresh20", fresh20PackSize: null, journeyVariant: "v2" },
     ];
     for (const config of configs) {
       const search = applyContentConfigToSearch("", config);

@@ -32,6 +32,7 @@ import {
 import { mergeCardKeywordModification } from "../card-type-change";
 import { rerollCost } from "../shop/shop-generator";
 import { buildQaScene } from "../runtime/qa-scenes";
+import { createBattleInitProvider } from "../coop/providers/battle-init-provider";
 import type { CardData } from "../types/cards";
 import type { DreamAtlas, QuestState } from "../types/quest";
 import {
@@ -146,7 +147,27 @@ export function CoopQuestProvider({
       bootstrapQaScene: (sceneId) => {
         const snapshot = buildQaScene(sceneId, questContent);
         if (snapshot === null) return;
-        dispatch(actions.loadState({ ...snapshot, seed: stateRef.current.seed }));
+        const seededSnapshot = { ...snapshot, seed: stateRef.current.seed };
+        const activeSiteId = seededSnapshot.activeSiteId;
+        const battle =
+          activeSiteId === null
+            ? null
+            : createBattleInitProvider(questContent).beginBattle({
+                quest: seededSnapshot,
+                siteId: activeSiteId,
+                rng: () => 0,
+                timestamp: new Date(0).toISOString(),
+              });
+        dispatch(
+          append({
+            type: "LOAD_STATE",
+            payload: {
+              snapshot: seededSnapshot,
+              ...(battle === null ? {} : { battle }),
+            },
+            intentKey: `qa-bootstrap:${sceneId}`,
+          }),
+        );
       },
       dismissStartingDeckPopup: () =>
         dispatch(actions.dismissStartingDeckPopup()),

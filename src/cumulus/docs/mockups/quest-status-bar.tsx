@@ -45,6 +45,7 @@ export function QuestStatusBarMockup() {
       </div>
 
       <QuestStatusBar
+        size="grand"
         stageRef={stageRef}
         essence={240}
         deck={23}

@@ -9,6 +9,7 @@ import type {
 } from "../../types/quest";
 import {
   buildDuplicationCards,
+  buildDuplicationOfferLog,
   buildDuplicationSiteView,
 } from "./duplication-view-model";
 
@@ -82,6 +83,24 @@ describe("buildDuplicationCards", () => {
     expect(
       buildDuplicationCards(state, runtime(), new Map([[1, makeCard(1)]])),
     ).toMatchObject([{ entryId: "entry-1" }]);
+  });
+});
+
+describe("buildDuplicationOfferLog", () => {
+  it("records persisted entry ids with canonical card UUIDs", () => {
+    const state = {
+      ...createDefaultState(),
+      deck: [makeEntry(1), makeEntry(2)],
+    };
+    const cardDatabase = new Map([
+      [1, makeCard(1)],
+      [2, makeCard(2)],
+    ]);
+
+    expect(buildDuplicationOfferLog(state, runtime(), cardDatabase)).toEqual([
+      { entryId: "entry-2", cardId: cardDatabase.get(2)?.id },
+      { entryId: "entry-1", cardId: cardDatabase.get(1)?.id },
+    ]);
   });
 });
 

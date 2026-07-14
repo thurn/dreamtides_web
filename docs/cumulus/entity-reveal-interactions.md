@@ -478,18 +478,18 @@ Press and hover feedback target a consistent physical edge movement rather than
 one scale factor for objects of every size. Measure the source's rendered box at
 gesture start and hold the computed value stable through that interaction.
 
-For press, target 3px of inward movement on each edge using the shorter rendered
+For press, target 3px of inward movement on each edge using the longest rendered
 dimension:
 
-`pressScale = clamp(1 - 6px / min(width, height), 0.90, 0.98)`
+`pressScale = clamp(1 - 6px / max(width, height), 0.90, 0.98)`
 
 Representative results are 0.90 for a 44px control, 0.94 for a 100px entity,
-approximately 0.973 for a 220px card, and approximately 0.982 for a 340px card.
+approximately 0.973 for a 220px card, and 0.98 for a 340px card.
 
 For pointer hover on ordinary entities, target 2px of outward movement on each
 edge:
 
-`hoverScale = clamp(1 + 4px / min(width, height), 1.01, 1.03)`
+`hoverScale = clamp(1 + 4px / max(width, height), 1.01, 1.03)`
 
 Press wins while press and hover are both active. Disabled or unavailable
 entities with useful explanatory information retain feedback and reveal

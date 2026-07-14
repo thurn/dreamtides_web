@@ -65,6 +65,23 @@ export function buildDuplicationCards(
   return cards;
 }
 
+/** UUID-addressed offer identities recorded when the persisted offer is ready. */
+export function buildDuplicationOfferLog(
+  state: QuestState,
+  runtime: CardChoiceSiteRuntime,
+  cardDatabase: Map<number, CardData>,
+): Array<{ entryId: string; cardId: string }> {
+  const deckByEntryId = new Map(
+    state.deck.map((entry) => [entry.entryId, entry]),
+  );
+  return runtime.entryIds.flatMap((entryId) => {
+    const entry = deckByEntryId.get(entryId);
+    const cardId =
+      entry === undefined ? undefined : cardDatabase.get(entry.cardNumber)?.id;
+    return cardId === undefined ? [] : [{ entryId, cardId }];
+  });
+}
+
 /** Build the complete Cumulus Duplication site view. */
 export function buildDuplicationSiteView(params: {
   state: QuestState;

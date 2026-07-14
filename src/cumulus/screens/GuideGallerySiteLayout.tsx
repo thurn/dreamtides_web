@@ -135,6 +135,9 @@ export function GuideGallerySiteLayout({
         paddingBottom: isDesktop || revelationMobile
           ? undefined
           : QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+        paddingTop: isDesktop || revelationMobile
+          ? undefined
+          : "max(var(--safe-area-inset-top, 0px), var(--safe-top, 0px))",
       }}
     >
       {sceneUrl !== null && (
@@ -400,7 +403,6 @@ function DesktopGuideScene({
         <SpeechBubble
           speakerName={guide.name}
           text={guide.line}
-          arrowSide="left"
           testId={speechBubbleTestId}
         />
       </div>
@@ -468,7 +470,6 @@ function MobileGuideBand({
         <SpeechBubble
           speakerName={guide.name}
           text={guide.line}
-          arrowSide="left"
           testId={speechBubbleTestId}
         />
       </div>

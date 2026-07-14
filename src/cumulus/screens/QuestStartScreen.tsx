@@ -30,7 +30,10 @@ export type {
  * standalone portraits on desktop.
  */
 export function QuestStartScreen(props: QuestStartScreenProps) {
-  const isDesktop = useIsDesktop();
+  // Three 400px portrait columns plus their gutters need more room than the
+  // general Cumulus desktop breakpoint. Mid-size desktop windows keep the
+  // carousel instead of wrapping the triptych onto a second row.
+  const isDesktop = useIsDesktop(1344);
   return (
     <div className="cumulus">
       {isDesktop ? <DesktopSelect {...props} /> : <CarouselSelect {...props} />}

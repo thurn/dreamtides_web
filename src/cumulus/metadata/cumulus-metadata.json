@@ -3454,17 +3454,6 @@
       "description": "The spoken line. Plain text; the component supplies the bubble voice."
     },
     {
-      "name": "arrowSide",
-      "tsType": "\"left\" | \"right\"",
-      "unionMembers": [
-        "left",
-        "right"
-      ],
-      "required": true,
-      "defaultValue": null,
-      "description": "Which side carries the arrow pointing toward the character."
-    },
-    {
       "name": "testId",
       "tsType": "string",
       "unionMembers": [],

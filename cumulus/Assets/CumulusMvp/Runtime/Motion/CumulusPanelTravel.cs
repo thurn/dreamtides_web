@@ -36,12 +36,17 @@ namespace CumulusMvp.Motion
 
         private void Update()
         {
+            Advance(Time.deltaTime);
+        }
+
+        private void Advance(float deltaTime)
+        {
             if (!IsTravelling)
             {
                 return;
             }
 
-            elapsed += Time.deltaTime;
+            elapsed += deltaTime;
             float progress = Mathf.Min(elapsed / Duration, 1f);
             float eased = CumulusCubicBezier.Evaluate(progress, Control1, Control2);
             transform.SetPositionAndRotation(

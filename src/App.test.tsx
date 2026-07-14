@@ -48,6 +48,7 @@ vi.mock("./coop/hooks", () => ({
     <div data-coop-provider>{children}</div>
   ),
   useConnectedCount: () => 1,
+  useConfirmedHead: () => 0,
 }));
 
 vi.mock("./coop/providers/register-game-providers", () => ({

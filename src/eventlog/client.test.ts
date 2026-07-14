@@ -109,6 +109,7 @@ interface Harness {
   foldErrors: Array<{ seq: number; message: string }>;
   appendFailures: Array<{ event: GameEvent; error: unknown }>;
   pendingDropped: GameEvent[][];
+  confirmedHeads: number[];
 }
 
 interface HarnessOptions {
@@ -136,6 +137,7 @@ function makeHarness(
   const foldErrors: Harness["foldErrors"] = [];
   const appendFailures: Harness["appendFailures"] = [];
   const pendingDropped: Harness["pendingDropped"] = [];
+  const confirmedHeads: number[] = [];
 
   const io: LogClientIo = {
     subscribe: (cb) => {
@@ -159,6 +161,7 @@ function makeHarness(
 
   const client = createLogClient<ToyState>(cfg, io, {
     onDisplayState: (s) => displayedStates.push(s),
+    onConfirmedHead: (head) => confirmedHeads.push(head),
     onEventOutcome: (event, seq, outcome, detail) =>
       outcomes.push({
         event,
@@ -186,9 +189,25 @@ function makeHarness(
     foldErrors,
     appendFailures,
     pendingDropped,
+    confirmedHeads,
   };
   return { harness, client };
 }
+
+describe("LogClient confirmed head", () => {
+  it("reports the initial baseline and each contiguous folded head", () => {
+    const { harness } = makeHarness();
+    harness.deliver(makeNode({ events: {} }));
+    harness.deliver(
+      makeNode({
+        events: {
+          1: confirmedEvent({ tag: "one", actor: "other", basedOnSeq: 0 }),
+        },
+      }),
+    );
+    expect(harness.confirmedHeads).toEqual([0, 1]);
+  });
+});
 
 /** A confirmed event whose `basedOnSeq` is nonsensical, so the fold's malformed
  *  guard reports a bounced no-op carrying a `FoldError` without reaching the reducer. */

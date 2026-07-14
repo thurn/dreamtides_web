@@ -46,6 +46,8 @@ export interface LogClientIo {
 export interface LogClientCallbacks<S> {
   /** The displayed fold (confirmed + optimistic) after every change. */
   onDisplayState: (state: S) => void;
+  /** The contiguous confirmed log head after each subscribed node is folded. */
+  onConfirmedHead?: (head: number) => void;
   /**
    * Every confirmed event's resolved outcome, reported once per seq. `detail`
    * carries a bounce's machine-readable reason and diagnostic
@@ -382,6 +384,7 @@ export function createLogClient<S>(
 
     initialized = true;
     recomputeDisplayed();
+    callbacks.onConfirmedHead?.(lastFoldedSeq);
   }
 
   const unsubscribe = io.subscribe(onNode);

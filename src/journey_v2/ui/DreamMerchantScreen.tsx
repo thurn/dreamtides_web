@@ -16,9 +16,7 @@ import {
 import { DreamJourneyMobile } from "./DreamJourneyMobile";
 import { DreamJourneyStage } from "./DreamJourneyStage";
 import { OfferColumn } from "./OfferColumn";
-import { IconButton } from "../../cumulus/components/controls/IconButton";
-import { GLYPHS } from "../../cumulus/primitives/glyph";
-import "../../screens/site-leave-control.css";
+import { SiteLeaveControl } from "../../screens/SiteLeaveControl";
 
 export interface DreamMerchantScreenProps {
   site: SiteState;
@@ -216,14 +214,11 @@ export function DreamMerchantScreen({
           onSelectCandidate={selectCandidate}
           onAccept={acceptOffer}
         />
-        <div className="cumulus site-leave-control">
-          <IconButton
-            glyph={GLYPHS.close}
-            label="Walk on"
-            onPress={declineEncounter}
-            testId="merchant-walk-away"
-          />
-        </div>
+        <SiteLeaveControl
+          label="Walk on"
+          onLeave={declineEncounter}
+          testId="merchant-walk-away"
+        />
         {validationMessage !== null && (
           <div
             data-testid="merchant-validation-message"
@@ -291,14 +286,11 @@ export function DreamMerchantScreen({
           )
         }
       />
-      <div className="cumulus site-leave-control">
-        <IconButton
-          glyph={GLYPHS.close}
-          label="Walk on"
-          onPress={declineEncounter}
-          testId="merchant-walk-away"
-        />
-      </div>
+      <SiteLeaveControl
+        label="Walk on"
+        onLeave={declineEncounter}
+        testId="merchant-walk-away"
+      />
     </div>
   );
 }

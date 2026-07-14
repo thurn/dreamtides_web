@@ -8,8 +8,7 @@ import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { dreamsignIconUrl } from "../cumulus/components/atlas/atlas-display";
 import { SiteGuide } from "../components/SiteGuide";
-import { IconButton } from "../cumulus/components/controls/IconButton";
-import { GLYPHS } from "../cumulus/primitives/glyph";
+import { SiteLeaveControl } from "./SiteLeaveControl";
 import {
   MAX_PURGE_PER_VISIT,
   maxAffordablePurgeCount,
@@ -19,7 +18,6 @@ import {
   type PurgePriceModifiers,
 } from "../purge/purge-pricing";
 import "./purge-site.css";
-import "./site-leave-control.css";
 
 /** Props for the PurgeSiteScreen component. */
 interface PurgeSiteScreenProps {
@@ -444,15 +442,12 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
       {/* Master Takeshi (shared SiteGuide), docked lower-left in landscape. */}
       <SiteGuide siteType="Purge" isEnhanced={site.isEnhanced} />
 
-      <div className="cumulus site-leave-control">
-        <IconButton
-          glyph={GLYPHS.close}
-          label="Leave site"
-          onPress={handleClose}
-          testId="purge-walk-on"
-          disabled={purging !== null}
-        />
-      </div>
+      <SiteLeaveControl
+        label="Leave site"
+        onLeave={handleClose}
+        testId="purge-walk-on"
+        disabled={purging !== null}
+      />
     </div>
   );
 }

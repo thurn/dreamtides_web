@@ -6,13 +6,12 @@ import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
 import { EssenceValue } from "../cumulus/components/hud/EssenceValue";
 import { Dreamsign as CumulusDreamsign } from "../cumulus/components/hud/Dreamsign";
-import { IconButton } from "../cumulus/components/controls/IconButton";
-import { GLYPHS } from "../cumulus/primitives/glyph";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";
 import { useCardSourceDebugPublication } from "../state/use-card-source-debug-publication";
 import { logEvent } from "../logging";
 import { SiteGuide } from "../components/SiteGuide";
+import { SiteLeaveControl } from "./SiteLeaveControl";
 import {
   effectiveDiscountPercent,
   effectivePrice,
@@ -22,7 +21,6 @@ import {
   type ShopSlot,
 } from "../shop/shop-generator";
 import "./shop-screen.css";
-import "./site-leave-control.css";
 
 /** Props for the ShopScreen component. */
 interface ShopScreenProps {
@@ -189,14 +187,11 @@ export function ShopScreen({ site }: ShopScreenProps) {
       data-testid="shop-screen"
       data-shop-variant={site.type}
     >
-      <div className="cumulus site-leave-control">
-        <IconButton
-          glyph={GLYPHS.close}
-          label="Leave shop"
-          onPress={handleLeave}
-          testId="shop-leave"
-        />
-      </div>
+      <SiteLeaveControl
+        label="Leave shop"
+        onLeave={handleLeave}
+        testId="shop-leave"
+      />
 
       {/* Offers grid: wares + a single-use restock tile */}
       <div className="sh-grid">

@@ -670,7 +670,9 @@ export function imageHash(imageNumber) {
  * Clean and recreate a directory for idempotent runs.
  */
 function recreateDir(dir) {
-  rmSync(dir, { recursive: true, force: true });
+  // macOS watchers can briefly retain generated children while Vite is live.
+  // Node's retry support makes regeneration robust to those transient handles.
+  rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 50 });
   mkdirSync(dir, { recursive: true });
 }
 

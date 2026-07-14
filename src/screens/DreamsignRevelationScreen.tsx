@@ -5,12 +5,10 @@ import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { requireDreamsignId } from "../data/dreamsigns";
 import { SiteGuide } from "../components/SiteGuide";
-import { IconButton } from "../cumulus/components/controls/IconButton";
-import { GLYPHS } from "../cumulus/primitives/glyph";
 import { Dreamsign as CumulusDreamsign } from "../cumulus/components/hud/Dreamsign";
 import { DreamsignPurgeOverlay } from "./DreamsignPurgeOverlay";
+import { SiteLeaveControl } from "./SiteLeaveControl";
 import "./dreamsign-revelation.css";
-import "./site-leave-control.css";
 
 /** Props for the DreamsignRevelationScreen component. */
 interface DreamsignRevelationScreenProps {
@@ -154,15 +152,12 @@ export function DreamsignRevelationScreen({
 
       <SiteGuide siteType="DreamsignRevelation" isEnhanced={site.isEnhanced} />
 
-      <div className="cumulus site-leave-control">
-        <IconButton
-          glyph={GLYPHS.close}
-          label="Leave site"
-          onPress={handleSkip}
-          testId="dreamsign-revelation-skip"
-          disabled={chosenIndex !== null}
-        />
-      </div>
+      <SiteLeaveControl
+        label="Leave site"
+        onLeave={handleSkip}
+        testId="dreamsign-revelation-skip"
+        disabled={chosenIndex !== null}
+      />
     </div>
   );
 }

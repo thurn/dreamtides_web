@@ -325,6 +325,10 @@ for `GlassButton`, `InfoCard`, `Motes`, and the overlay controls), so the Cumulu
 
 ### The agent-facing reference (`.llms/skills/cumulus/`)
 
+The [Cumulus helper reference](cumulus_helpers.md) documents the shared art,
+atlas-display, card-aspect, and color modules used by product screens and
+component adapters.
+
 The same sources project into a second, markdown renderer for coding agents:
 `scripts/generate-cumulus-docs.mjs` (`npm run cumulus-docs`, wired into
 `regenerate-assets.sh` right after `cumulus-metadata`) statically extracts each

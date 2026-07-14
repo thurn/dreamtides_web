@@ -12,28 +12,27 @@ import { useEffect, useState } from "react";
  * this a screen is its mobile layout; at or above it, its desktop layout. */
 export const DESKTOP_MIN_WIDTH = 900;
 
-const DESKTOP_QUERY = `(min-width: ${String(DESKTOP_MIN_WIDTH)}px)`;
-
 /** True when the viewport is wide enough for a screen's desktop layout. Live
  * via matchMedia so rotating a tablet or resizing a window re-evaluates,
  * mirroring InfoCard's `useFinePointer` idiom. */
-export function useIsDesktop(): boolean {
+export function useIsDesktop(minWidth = DESKTOP_MIN_WIDTH): boolean {
+  const queryText = `(min-width: ${String(minWidth)}px)`;
   const [desktop, setDesktop] = useState<boolean>(() =>
     typeof window === "undefined" || typeof window.matchMedia !== "function"
       ? false
-      : window.matchMedia(DESKTOP_QUERY).matches,
+      : window.matchMedia(queryText).matches,
   );
 
   useEffect(() => {
     if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
       return;
     }
-    const query = window.matchMedia(DESKTOP_QUERY);
+    const query = window.matchMedia(queryText);
     const onChange = (): void => setDesktop(query.matches);
     onChange();
     query.addEventListener("change", onChange);
     return () => query.removeEventListener("change", onChange);
-  }, []);
+  }, [queryText]);
 
   return desktop;
 }

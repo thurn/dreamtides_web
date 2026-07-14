@@ -184,8 +184,8 @@ function parseGotoScene(rawScene: string | null): string | null {
   return trimmed === "" ? null : trimmed;
 }
 
-function parseJourneyVariant(rawJourney: string | null): JourneyVariant {
-  return rawJourney === "classic" ? "classic" : "v2";
+function parseJourneyVariant(_rawJourney: string | null): JourneyVariant {
+  return "v2";
 }
 
 /**

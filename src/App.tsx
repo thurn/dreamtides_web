@@ -18,7 +18,7 @@ import {
 } from "./data/quest-content";
 import { getFirebaseDatabase } from "./firebase/app-config";
 import { RoomGate } from "./coop/RoomGate";
-import { CoopProvider } from "./coop/hooks";
+import { CoopProvider, useConfirmedHead } from "./coop/hooks";
 import { EventLogViewer } from "./coop/EventLogViewer";
 import { registerGameProviders } from "./coop/providers/register-game-providers";
 import { useQuest } from "./state/quest-context";
@@ -102,6 +102,7 @@ export function QuestApp({
   const [journeyExplanationOpen, setJourneyExplanationOpen] = useState(false);
   const [journeyExplanation, setJourneyExplanation] =
     useState<JourneyExplanation | null>(null);
+  const confirmedHead = useConfirmedHead();
   const previousScreenTypeRef = useRef(state.screen.type);
   const gotoSceneFiredRef = useRef(false);
   const openDeckFiredRef = useRef(false);
@@ -125,6 +126,7 @@ export function QuestApp({
     if (
       gotoScene === null ||
       gotoSceneFiredRef.current ||
+      confirmedHead !== 0 ||
       state.dreamcaller !== null
     ) {
       return;
@@ -135,7 +137,7 @@ export function QuestApp({
 
     gotoSceneFiredRef.current = true;
     mutations.bootstrapQaScene(gotoScene);
-  }, [runtimeConfig.gotoScene, state.dreamcaller, mutations]);
+  }, [confirmedHead, runtimeConfig.gotoScene, state.dreamcaller, mutations]);
 
   // `?goto=deckviewer`: the deck-viewer overlay is App-local state, not a
   // `Screen`, so its QA scene parks on the dreamscape (via `bootstrapQaScene`
