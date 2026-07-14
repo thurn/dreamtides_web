@@ -658,7 +658,7 @@ function BattleDebugMenu({
         <div
           role="menu"
           aria-label="Battle debug actions"
-          style={{ width: 268, height: 66 }}
+          style={{ width: 300, height: 66 }}
         >
           <GlassPanel radius="popover" tint="popover">
             <div
