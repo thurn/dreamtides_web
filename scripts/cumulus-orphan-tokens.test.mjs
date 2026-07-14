@@ -88,9 +88,7 @@ export const BASELINE = [
   "--dt-spark",
   "--dt-spark-border",
   "--dt-surface-light",
-  // Motion scale members. --ease-dream additionally feeds
-  // --motion-container-transform inside cumulus-tokens.css.
-  "--ease-dream",
+  // Motion scale members.
   "--motion-container-transform",
   "--stagger-travel",
   // Font roles / canonical face layer (the sanctioned type-face vocabulary).

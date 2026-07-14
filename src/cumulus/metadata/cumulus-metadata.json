@@ -2667,6 +2667,61 @@
       "description": "Stacking order within the positioned parent."
     }
   ],
+  "OfferTile": [
+    {
+      "name": "model",
+      "tsType": "OfferTileModel",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The offer's strict symbolic view model.",
+      "nested": {
+        "name": "OfferTileModel",
+        "fields": [
+          {
+            "name": "id",
+            "tsType": "string",
+            "optional": false,
+            "description": "Stable identity for this visible offer. Production callers should combine\nthe encounter signature and offer id so simultaneous offers never collide."
+          },
+          {
+            "name": "label",
+            "tsType": "string",
+            "optional": false,
+            "description": "Category name used by accessibility and the hover InfoCard."
+          },
+          {
+            "name": "description",
+            "tsType": "string",
+            "optional": false,
+            "description": "One-sentence category explanation used by the hover InfoCard."
+          },
+          {
+            "name": "kind",
+            "tsType": "\"card-gift\" | \"power-card\" | \"card-draft\" | \"copies-draft\" | \"category-draft\" | \"transfigured-draft\" | \"card-bundle\" | \"transfigure-card\" | \"keyword-modification\" | \"tribal-change\" | \"transfigure-starters\" | \"purge-card\" | \"trade-card\" | \"duplicate-card\" | \"dreamsign-gift\" | \"dreamsign-draft\" | \"add-site\"",
+            "optional": false,
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "onPress",
+      "tsType": "(offerId: string) => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Activates the offer, reporting the stable `model.id`."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "offer-tile",
+      "description": "Optional test selector; defaults to `offer-tile`."
+    }
+  ],
   "PipBadge": [
     {
       "name": "variant",

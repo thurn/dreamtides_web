@@ -1,0 +1,34 @@
+.cumulus-offer-tile__depth {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 24% 18%, color-mix(in srgb, var(--accent-bright) 22%, transparent), transparent 54%),
+    linear-gradient(145deg, color-mix(in srgb, var(--text-on-glass) 7%, transparent), transparent 48%);
+  box-shadow: inset 0 -24px 44px color-mix(in srgb, var(--surface-chrome-strong) 38%, transparent);
+}
+
+.cumulus-offer-tile__visual {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  animation: cumulus-offer-tile-drift 5.8s var(--ease-dream) infinite;
+}
+
+@keyframes cumulus-offer-tile-drift {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cumulus-offer-tile__visual {
+    animation: none;
+  }
+}

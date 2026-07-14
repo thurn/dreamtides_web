@@ -61,12 +61,13 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 <!-- BEGIN GENERATED COMPONENT INDEX (npm run cumulus-docs) -->
 | Component | Group | Consumers | Reference | What it is |
 | --- | --- | --- | --- | --- |
-| Pressable | Primitives | 23 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
+| Pressable | Primitives | 24 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
 | Resource Chip | Components | 3 | [components/resource-chip.md](components/resource-chip.md) | The sized, self-contained value-and-mark chip for the game economy. |
 | Essence Value | Components | 15 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
 | Button | Components | 4 | [components/button.md](components/button.md) | Rung 1 of Cumulus's four-rung button suite — the beveled purple sprite, the primary/commit action, scaled to any label and to a taller commit height. |
 | Icon Button | Components | 15 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — neutral or purple accent liquid glass, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
 | Glass Button | Components | 6 | [components/glass-button.md](components/glass-button.md) | The labeled glass action — a bold text label with optional numerical essence cost on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface. |
+| Offer Tile | Components | 1 | [components/offer-tile.md](components/offer-tile.md) | The 150×150 symbolic Dream Augury offer button: UUID-backed card art, dreamsign art, and operation marks composed on a distinct glass surface without spelling out the complete offer. |
 | Glass Panel | Components | 5 | [components/glass-panel.md](components/glass-panel.md) | The shared liquid-glass content container: an optional structured header, a composed body, and an optional footer on the canonical floating material. |
 | Glass Dialog | Components | 0 | [components/glass-dialog.md](components/glass-dialog.md) | The glass overlay shell: a modal dialog with a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and a glass close disc) over a scrolling body. |
 | Speech Bubble | Components | 2 | [components/speech-bubble.md](components/speech-bubble.md) | A guide-dialog bubble for character-led site screens: the same frosted information material as an InfoCard, with a strict left-or-right arrow that points back to the speaker. |
@@ -82,7 +83,7 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 | Quest Status Bar | Components | 6 | [components/quest-status-bar.md](components/quest-status-bar.md) | The persistent, transparent bottom HUD for quest screens. |
 | Battle Status Display | Components | 1 | [components/battle-status-display.md](components/battle-status-display.md) | The glass status card for one battle participant: centered current and maximum energy at left, a head-focused Dreamcaller portrait at center, and centered current points at right. |
 | Dreamcaller Portrait | Components | 23 | [components/dreamcaller-portrait.md](components/dreamcaller-portrait.md) | The one way to render a dreamcaller's character art: the transparent full-body cutout in one of six fixed framings. |
-| Rich Text | Components | 15 | [components/rich-text.md](components/rich-text.md) | The design system's model for a run of formatted copy. |
+| Rich Text | Components | 16 | [components/rich-text.md](components/rich-text.md) | The design system's model for a run of formatted copy. |
 | Rules Text | Components | 18 | [components/rules-text.md](components/rules-text.md) | Renders Dreamtides rules copy from card data — resource pips, ability carets, and glossary keywords styled in place — so ability text reads the same everywhere it appears. |
 | Game Card | Components | 29 | [components/game-card.md](components/game-card.md) | The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name. |
 | Card Back | Components | 2 | [components/card-back.md](components/card-back.md) | The canonical face-down Dreamtides card object: the shipped card-back sprite on the shared 5:7 card geometry, with fixed crop, edge, and elevation. |

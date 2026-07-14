@@ -93,6 +93,12 @@ export const GLYPHS = {
   filter: g("bxf bx-filter"),
   /** The filled star that heads a curated / signature item. */
   star: g("bxf bx-star"),
+  /** A wrapped gift, used for granted objects and rewards. */
+  gift: g("bxf bx-gift"),
+  /** Two overlapping pages, used for duplication and copy effects. */
+  copy: g("bxf bx-copy"),
+  /** A plain plus mark, used to join objects into one granted bundle. */
+  plus: g("bxf bx-plus"),
   /** The settings gear — the desktop quest-menu disclosure trigger. */
   gear: g("bxf bx-cog"),
   /** The hamburger bars — the mobile quest-menu disclosure trigger. */

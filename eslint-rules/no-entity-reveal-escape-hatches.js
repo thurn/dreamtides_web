@@ -6,7 +6,7 @@ const STRONG_MECHANICAL_PROPS = new Set(["anchorRect", "portalTarget", "revealSi
 const CONTROLLED_PROPS = new Set(["open", "shown", "isOpen", "isShown", "revealOpen", "revealShown"]);
 const INTERACTION_ESCAPE_PROPS = new Set(["onMouseEnter", "onMouseMove", "onMouseLeave", "onPointerEnter", "onPointerMove", "onPointerLeave", "onPointerDown", "onPointerUp", "onPointerCancel", "onMouseDown", "onMouseUp", "onTouchStart", "onTouchMove", "onTouchEnd"]);
 const CONTENT_PROPS = new Set(["content", "children", "card", "reveal", "renderedContent"]);
-const NAMED_REVEAL_COMPONENTS = new Set(["GameCard", "CompactGameCardRow", "InfoCard", "AtlasNode", "GlossaryTerm", "BattleGameCard", "Dreamsign", "DreamcallerPortrait", "TideDisc", "ResourceChip", "PipBadge", "CardStatOrb", "QuestStatusBar", "SiteNode", "TransfigurationFormButton"]);
+const NAMED_REVEAL_COMPONENTS = new Set(["GameCard", "CompactGameCardRow", "InfoCard", "AtlasNode", "GlossaryTerm", "BattleGameCard", "Dreamsign", "DreamcallerPortrait", "TideDisc", "ResourceChip", "PipBadge", "CardStatOrb", "QuestStatusBar", "SiteNode", "TransfigurationFormButton", "OfferTile"]);
 const GENERIC_REVEAL_WRAPPERS = new Set(["HoverPopover", "RevealPopover", "EntityReveal", "GenericReveal", "RevealWrapper", "EntityRevealWrapper"]);
 
 const CONTEXT_COMPONENTS = [
@@ -18,6 +18,7 @@ const CONTEXT_COMPONENTS = [
   "src/cumulus/components/card/CompactGameCardRow.tsx",
   "src/cumulus/components/card/GlossaryTerm.tsx",
   "src/cumulus/components/controls/PipBadge.tsx",
+  "src/cumulus/components/controls/OfferTile.tsx",
   "src/cumulus/components/controls/TransfigurationFormButton.tsx",
   "src/cumulus/components/dreamscape/SiteNode.tsx",
   "src/cumulus/components/hud/DreamcallerPortrait.tsx",

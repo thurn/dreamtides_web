@@ -70,6 +70,13 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
         const binding = useRevealSource({ identity: { entityType: "transfiguration-form", entityId: revealEntityId("transfiguration-form", id) }, spec });`,
     },
     {
+      name: "offer tile owns its semantic reveal and identity",
+      filename: "src/cumulus/components/controls/OfferTile.tsx",
+      code: `import { useRevealSource } from "../../internal/reveal/context";
+        import { revealEntityId } from "../../internal/reveal/identity";
+        const binding = useRevealSource({ identity: { entityType: "offer", entityId: revealEntityId("offer", id) }, spec });`,
+    },
+    {
       name: "Dreamsign gallery owns its end action's semantic reveal registration",
       filename: "src/cumulus/components/card/DreamsignGalleryPanel.tsx",
       code: `import { useRevealSource } from "../../internal/reveal/context";

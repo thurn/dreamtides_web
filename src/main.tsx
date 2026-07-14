@@ -102,6 +102,9 @@ if (pathname === "/editor" || pathname === "/cards") {
     "./debug/SignatureDecksApp"
   );
   renderStrict(<SignatureDecksApp />);
+} else if (pathname === "/offers") {
+  const { default: OffersDebugApp } = await import("./debug/OffersDebugApp");
+  renderStrict(<OffersDebugApp />);
 } else if (pathname === "/cumulus") {
   const { default: CumulusApp } = await import("./cumulus/docs/CumulusApp");
   renderStrict(<CumulusApp />);

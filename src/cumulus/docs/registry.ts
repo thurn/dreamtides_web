@@ -33,6 +33,7 @@ import { groupPanelDemo } from "./demos/group-panel";
 import { iconButtonDemo } from "./demos/icon-button";
 import { infoCardDemo } from "./demos/info-card";
 import { motesDemo } from "./demos/motes";
+import { offerTileDemo } from "./demos/offer-tile";
 import { pipBadgeDemo } from "./demos/pip-badge";
 import { pressableDemo } from "./demos/pressable";
 import { questStatusBarDemo } from "./demos/quest-status-bar";
@@ -144,6 +145,7 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   buttonDemo,
   iconButtonDemo,
   glassButtonDemo,
+  offerTileDemo,
   glassPanelDemo,
   glassDialogDemo,
   speechBubbleDemo,
