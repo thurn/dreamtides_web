@@ -84,7 +84,9 @@ describe("GlassButton", () => {
 
     const button = container.querySelector("button");
     expect(button?.textContent).toBe("Transfigure (20)");
-    expect(button?.querySelector("i")?.className).toContain("bx-crypto");
+    const essenceIcon = button?.querySelector<HTMLElement>("i");
+    expect(essenceIcon?.className).toContain("bx-crypto");
+    expect(essenceIcon?.style.transform).toBe("translateY(-0.12em)");
     const content = container.querySelector<HTMLElement>(
       "[data-glass-button-content]",
     );

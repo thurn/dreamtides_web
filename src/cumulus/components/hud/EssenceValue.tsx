@@ -29,7 +29,7 @@ export function EssenceGlyph() {
     <i
       aria-hidden="true"
       className={`${ESSENCE_ICON_CLASS} align-middle`}
-      style={{ transform: "translateY(-0.06em)" }}
+      style={{ transform: "translateY(-0.12em)" }}
     />
   );
 }
