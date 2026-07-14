@@ -598,4 +598,51 @@ describe("MobileBattleScreen", () => {
 
     act(() => root.unmount());
   });
+
+  it("disables native card dragging for the duration of a touch press", () => {
+    const interactions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(makeView(), interactions);
+    const handCard = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-hand-0"]',
+    );
+    const revealSource = handCard?.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    expect(handCard?.draggable).toBe(true);
+
+    act(() => {
+      revealSource?.dispatchEvent(
+        new PointerEvent("pointerdown", {
+          bubbles: true,
+          pointerId: 7,
+          pointerType: "touch",
+        }),
+      );
+    });
+    expect(handCard?.draggable).toBe(false);
+
+    act(() => {
+      revealSource?.dispatchEvent(
+        new PointerEvent("pointerup", {
+          bubbles: true,
+          pointerId: 7,
+          pointerType: "touch",
+        }),
+      );
+    });
+    expect(handCard?.draggable).toBe(true);
+    expect(interactions.onCardDragStart).not.toHaveBeenCalled();
+
+    act(() => root.unmount());
+  });
 });

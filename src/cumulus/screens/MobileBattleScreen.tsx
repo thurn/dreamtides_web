@@ -335,6 +335,8 @@ function FaceUpCard({
   };
 }) {
   const dragSuppressedRef = useRef(false);
+  const [touchDragSuppressed, setTouchDragSuppressed] = useState(false);
+  const draggable = interaction?.draggable === true;
   return (
     <motion.div
       layoutId={`battle-card:${card.id}`}
@@ -342,31 +344,42 @@ function FaceUpCard({
       data-battle-card-zone={zone}
       data-battle-card-face="up"
       data-battle-card-exhausted={card.exhausted ? "true" : "false"}
-      draggable={interaction?.draggable ?? false}
-      onPointerDownCapture={() => {
+      draggable={draggable && !touchDragSuppressed}
+      onPointerDownCapture={(event) => {
         dragSuppressedRef.current = false;
+        const suppressTouchDrag = event.pointerType === "touch";
+        event.currentTarget.draggable = draggable && !suppressTouchDrag;
+        setTouchDragSuppressed(suppressTouchDrag);
+      }}
+      onPointerUpCapture={(event) => {
+        event.currentTarget.draggable = draggable;
+        setTouchDragSuppressed(false);
+      }}
+      onPointerCancelCapture={(event) => {
+        event.currentTarget.draggable = draggable;
+        setTouchDragSuppressed(false);
       }}
       onClick={(event) => {
-        if (!interaction?.draggable) return;
+        if (!draggable) return;
         event.stopPropagation();
         if (dragSuppressedRef.current) {
           dragSuppressedRef.current = false;
           return;
         }
-        interaction.onActivate?.();
+        interaction?.onActivate?.();
       }}
       onDragStart={() => {
-        if (interaction?.draggable) {
+        if (draggable) {
           dragSuppressedRef.current = true;
-          interaction.onDragStart();
+          interaction?.onDragStart();
         }
       }}
       onDragEnd={() => {
-        if (interaction?.draggable) interaction.onDragEnd();
+        if (draggable) interaction?.onDragEnd();
       }}
       style={{
         width: "100%",
-        cursor: interaction?.draggable === true ? "grab" : undefined,
+        cursor: draggable ? "grab" : undefined,
         transform: card.exhausted ? "rotate(90deg)" : undefined,
         transformOrigin: "50% 50%",
       }}
