@@ -19,8 +19,8 @@ const guides: readonly DreamGuideContent[] = [
 ];
 
 function site(
-  type: "Gamble" | "TemporalFork",
-): SiteState & { type: "Gamble" | "TemporalFork" } {
+  type: "TemptingOffer" | "Gamble" | "TemporalFork",
+): SiteState & { type: "TemptingOffer" | "Gamble" | "TemporalFork" } {
   return {
     id: `${type}-site`,
     type,
@@ -30,10 +30,30 @@ function site(
 }
 
 describe("work-in-progress-site-view-model", () => {
-  it("recognizes only the two Cumulus work-in-progress site types", () => {
+  it("recognizes all three Cumulus work-in-progress site types", () => {
+    expect(isWorkInProgressSiteType("TemptingOffer")).toBe(true);
     expect(isWorkInProgressSiteType("Gamble")).toBe(true);
     expect(isWorkInProgressSiteType("TemporalFork")).toBe(true);
-    expect(isWorkInProgressSiteType("TemptingOffer")).toBe(false);
+  });
+
+  it("builds the Tempting Offer fallback without depending on production TOML", () => {
+    const view = buildWorkInProgressSiteView({
+      sceneNode: null,
+      site: site("TemptingOffer"),
+      guide: null,
+      guideLine: null,
+    });
+
+    expect(view).toMatchObject({
+      siteType: "TemptingOffer",
+      title: "Tempting Offer",
+      isEnhanced: false,
+      guide: {
+        id: "maddox",
+        name: "Maddox",
+      },
+    });
+    expect(view.message).toContain("offer");
   });
 
   it("resolves the matching guide and uses explicit dialog when provided", () => {

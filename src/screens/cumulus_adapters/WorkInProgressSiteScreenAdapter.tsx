@@ -1,4 +1,4 @@
-// Wiring-only adapter for the Cumulus Gamble and Temporal Fork placeholders.
+// Wiring-only adapter for Cumulus character-led site placeholders.
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { WorkInProgressSiteScreen } from "../../cumulus/screens/WorkInProgressSiteScreen";

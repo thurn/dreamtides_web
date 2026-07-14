@@ -68,6 +68,7 @@ export function cumulusSiteScreenFor(site: SiteState): ReactNode | null {
       return <DuplicationSiteScreenAdapter siteId={site.id} />;
     case "DreamAugury":
       return <DreamAugurySiteScreenAdapter siteId={site.id} />;
+    case "TemptingOffer":
     case "Gamble":
     case "TemporalFork":
       return <WorkInProgressSiteScreenAdapter siteId={site.id} />;

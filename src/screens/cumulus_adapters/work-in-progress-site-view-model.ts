@@ -1,4 +1,4 @@
-// Pure view-model builder for the Cumulus Gamble and Temporal Fork placeholders.
+// Pure view-model builder for the Cumulus character-led site placeholders.
 
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import type {
@@ -19,6 +19,14 @@ interface WorkInProgressCopy {
 }
 
 const SITE_COPY: Record<WorkInProgressSiteType, WorkInProgressCopy> = {
+  TemptingOffer: {
+    title: "Tempting Offer",
+    message:
+      "The offer is still being shaped. Continue your journey while its costs and rewards settle into place.",
+    fallbackGuideId: "maddox",
+    fallbackGuideName: "Maddox",
+    fallbackGuideLine: "Every bargain has a price.",
+  },
   Gamble: {
     title: "Gamble",
     message:
@@ -41,7 +49,11 @@ const SITE_COPY: Record<WorkInProgressSiteType, WorkInProgressCopy> = {
 export function isWorkInProgressSiteType(
   siteType: SiteType,
 ): siteType is WorkInProgressSiteType {
-  return siteType === "Gamble" || siteType === "TemporalFork";
+  return (
+    siteType === "TemptingOffer" ||
+    siteType === "Gamble" ||
+    siteType === "TemporalFork"
+  );
 }
 
 /** Resolve the Dream Guide who tends the given placeholder site. */
@@ -52,7 +64,7 @@ export function resolveWorkInProgressGuide(
   return guideForSiteType(guides, siteType);
 }
 
-/** Build a complete Cumulus placeholder view for Gamble or Temporal Fork. */
+/** Build a complete Cumulus placeholder view for a character-led stub site. */
 export function buildWorkInProgressSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: WorkInProgressSiteType };

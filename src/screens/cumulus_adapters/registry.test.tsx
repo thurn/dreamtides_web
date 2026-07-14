@@ -107,7 +107,14 @@ describe("cumulusSiteScreenFor", () => {
     ).not.toBeNull();
   });
 
-  it("resolves Gamble and Temporal Fork placeholders to Cumulus", () => {
+  it("resolves all three work-in-progress placeholders to Cumulus", () => {
+    expect(
+      cumulusSiteScreenFor({
+        type: "TemptingOffer",
+        id: "site-0",
+        isEnhanced: false,
+      } as SiteState),
+    ).not.toBeNull();
     expect(
       cumulusSiteScreenFor({
         type: "Gamble",

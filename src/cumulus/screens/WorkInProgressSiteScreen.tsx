@@ -10,7 +10,10 @@ import {
 } from "./GuideGallerySiteLayout";
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 
-export type WorkInProgressSiteType = "Gamble" | "TemporalFork";
+export type WorkInProgressSiteType =
+  | "TemptingOffer"
+  | "Gamble"
+  | "TemporalFork";
 
 export interface WorkInProgressSiteView {
   /** Stable site id used by the shared character-gallery layout. */

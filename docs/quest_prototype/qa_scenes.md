@@ -141,8 +141,8 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `dreamaugury`            | Dream Augury site                                               |
 | `dreamaugury-enhanced`   | Dream Augury site, enhanced flag (same UI as regular)           |
 | `reward`                 | Dreamscape overview with a Reward site ready for inline collection |
-| `tempting`               | Tempting Offer site                                             |
-| `tempting-enhanced`      | Tempting Offer site, enhanced (Enhanced badge)                  |
+| `tempting`               | Tempting Offer work-in-progress site                            |
+| `tempting-enhanced`      | Tempting Offer work-in-progress site, enhanced                  |
 | `gamble`                 | Gamble work-in-progress site                                    |
 | `gamble-enhanced`        | Gamble work-in-progress site, enhanced                          |
 | `temporal-fork`          | Temporal Fork work-in-progress site                             |

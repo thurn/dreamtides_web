@@ -709,20 +709,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
     }
   });
 
-  it("routes the remaining placeholder site type to the stub screen", () => {
-    const site = makeSite("TemptingOffer");
-    const container = renderWithQuest({
-      state: makeStateFor(site),
-      questContent: merchantContent(),
-      children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
-      ),
-    });
-
-    expect(container.querySelector("[data-stub-site-screen]")).not.toBeNull();
-  });
-
-  it.each(["Gamble", "TemporalFork"] as const)(
+  it.each(["TemptingOffer", "Gamble", "TemporalFork"] as const)(
     "routes %s to the Cumulus work-in-progress site and completes it",
     (type) => {
       const site = makeSite(type);
