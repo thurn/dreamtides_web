@@ -59,6 +59,11 @@ beforeEach(() => {
       IS_REACT_ACT_ENVIRONMENT?: boolean;
     }
   ).IS_REACT_ACT_ENVIRONMENT = true;
+  globalThis.ResizeObserver = class ResizeObserverStub {
+    observe(): void {}
+    unobserve(): void {}
+    disconnect(): void {}
+  };
 });
 
 const UUIDS = {
@@ -704,16 +709,22 @@ describe("ScreenRouter site-dispatch completeness", () => {
     }
   });
 
-  it("routes the three stub site types to the stub screen and completes them", () => {
-    const stubTypes = ALL_SITE_TYPES.filter(
-      (type) =>
-        type === "TemptingOffer" ||
-        type === "Gamble" ||
-        type === "TemporalFork",
-    );
-    expect(stubTypes.length).toBe(3);
+  it("routes the remaining placeholder site type to the stub screen", () => {
+    const site = makeSite("TemptingOffer");
+    const container = renderWithQuest({
+      state: makeStateFor(site),
+      questContent: merchantContent(),
+      children: (
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+      ),
+    });
 
-    for (const type of stubTypes) {
+    expect(container.querySelector("[data-stub-site-screen]")).not.toBeNull();
+  });
+
+  it.each(["Gamble", "TemporalFork"] as const)(
+    "routes %s to the Cumulus work-in-progress site and completes it",
+    (type) => {
       const site = makeSite(type);
       const mutations = makeMutations();
       const container = renderWithQuest({
@@ -721,29 +732,31 @@ describe("ScreenRouter site-dispatch completeness", () => {
         questContent: merchantContent(),
         mutations,
         children: (
-          <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+          <ScreenRouter
+            runtimeConfig={parseRuntimeConfig("?journey=v2&ui=cumulus")}
+          />
         ),
       });
 
-      const stub = container.querySelector("[data-stub-site-screen]");
-      expect(stub, `expected stub screen for ${type}`).not.toBeNull();
-      expect(stub?.getAttribute("data-stub-site-type")).toBe(type);
+      expect(
+        container
+          .querySelector("[data-work-in-progress-panel]")
+          ?.getAttribute("data-work-in-progress-site-type"),
+      ).toBe(type);
 
       const continueButton = container.querySelector(
-        "[data-stub-site-continue]",
+        '[data-testid="cumulus-work-in-progress-continue"]',
       );
       if (!(continueButton instanceof HTMLButtonElement)) {
         throw new Error(`expected a Continue button for ${type}`);
       }
       act(() => {
-        continueButton.dispatchEvent(
-          new MouseEvent("click", { bubbles: true }),
-        );
+        continueButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       });
       expect(mutations.completeSite).toHaveBeenCalledWith(
         site.id,
         "stub_site_continue",
       );
-    }
-  });
+    },
+  );
 });

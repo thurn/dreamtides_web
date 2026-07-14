@@ -143,6 +143,10 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `reward`                 | Reward site                                                      |
 | `tempting`               | Tempting Offer site                                             |
 | `tempting-enhanced`      | Tempting Offer site, enhanced (Enhanced badge)                  |
+| `gamble`                 | Gamble work-in-progress site                                    |
+| `gamble-enhanced`        | Gamble work-in-progress site, enhanced                          |
+| `temporal-fork`          | Temporal Fork work-in-progress site                             |
+| `temporal-fork-enhanced` | Temporal Fork work-in-progress site, enhanced                   |
 | `dreamsign-revelation`   | Dreamsign Revelation site                                       |
 | `dreamsign-revelation-enhanced` | Dreamsign Revelation site, enhanced (four choices)        |
 | `questcomplete`          | Quest victory end screen (completion stats + final-deck reveal) |

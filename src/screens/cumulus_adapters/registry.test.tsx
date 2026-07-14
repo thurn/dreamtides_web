@@ -104,6 +104,23 @@ describe("cumulusSiteScreenFor", () => {
     ).not.toBeNull();
   });
 
+  it("resolves Gamble and Temporal Fork placeholders to Cumulus", () => {
+    expect(
+      cumulusSiteScreenFor({
+        type: "Gamble",
+        id: "site-1",
+        isEnhanced: false,
+      } as SiteState),
+    ).not.toBeNull();
+    expect(
+      cumulusSiteScreenFor({
+        type: "TemporalFork",
+        id: "site-2",
+        isEnhanced: true,
+      } as SiteState),
+    ).not.toBeNull();
+  });
+
   it("returns null for site types not yet migrated, so ScreenRouter falls back to legacy", () => {
     expect(cumulusSiteScreenFor({ type: "Reward" } as SiteState)).toBeNull();
   });

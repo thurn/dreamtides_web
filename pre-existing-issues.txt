@@ -211,3 +211,22 @@ Atlas generator verification — layer uniqueness test is intermittent
   deterministic enough to reproduce the failing generation, then either repair
   the generator's within-layer uniqueness invariant or remove uncontrolled
   randomness from the assertion.
+
+QA site completion — fresh `?goto=` rooms roll back `COMPLETE_SITE`
+
+- In a fresh `?goto=gamble` room, selecting Continue briefly renders the
+  dreamscape from the optimistic `COMPLETE_SITE` fold and then returns to the
+  Gamble site. The room log remains at the preceding `LOAD_STATE` event. The
+  same rollback reproduces with both `?ui=legacy` and `?ui=cumulus`, whose
+  adapters call the same `mutations.completeSite` boundary. Diagnose why the
+  RTDB transaction for a keyed `complete-site:unscoped:<siteId>` intent does
+  not persist after a QA-scene `LOAD_STATE` bootstrap.
+
+Cumulus guide-gallery mobile layout — presence badge overlaps guide dialog
+
+- At 390×844, the shared `GuideGallerySiteLayout` places its speech anchor at
+  the top of the mobile guide band while the app places the connected-player
+  badge at top center. The two glass surfaces overlap in every character-led
+  site using the default mobile band composition, including Purge and the
+  Gamble / Temporal Fork placeholders. Reserve the presence badge's top band
+  in the shared layout or move the speech anchor beneath it.

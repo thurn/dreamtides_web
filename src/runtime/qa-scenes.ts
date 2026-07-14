@@ -553,6 +553,15 @@ export const QA_SCENES: readonly QaScene[] = [
   siteScene("reward", "Reward", "Reward"),
   siteScene("tempting", "Offer", "TemptingOffer"),
   siteScene("tempting-enhanced", "Offer (Enhanced)", "TemptingOffer", true),
+  siteScene("gamble", "Gamble", "Gamble"),
+  siteScene("gamble-enhanced", "Gamble (Enhanced)", "Gamble", true),
+  siteScene("temporal-fork", "Temporal Fork", "TemporalFork"),
+  siteScene(
+    "temporal-fork-enhanced",
+    "Temporal Fork (Enhanced)",
+    "TemporalFork",
+    true,
+  ),
   siteScene(
     "dreamsign-revelation",
     "Dreamsign Revelation",
