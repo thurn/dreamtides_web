@@ -79,7 +79,7 @@ function state(): QuestState {
 }
 
 describe("buildQuestCompleteView", () => {
-  it("builds the mobile victory summary from run state", () => {
+  it("builds the minimal victory identity from run state", () => {
     const view = buildQuestCompleteView(
       state(),
       new Map([
@@ -89,13 +89,7 @@ describe("buildQuestCompleteView", () => {
     );
 
     expect(view.dreamcaller?.id).toBe("dreamcaller-uuid");
-    expect(view.stats.map(({ id, value }) => [id, value])).toEqual([
-      ["battles", 7],
-      ["dreamscapes", 2],
-      ["cards", 2],
-      ["dreamsigns", 1],
-      ["essence", 140],
-    ]);
+    expect(view.dreamcaller?.name).toBe("The Wayfinder");
   });
 
   it("keeps same-named cards distinct by deck-entry id and card UUID", () => {

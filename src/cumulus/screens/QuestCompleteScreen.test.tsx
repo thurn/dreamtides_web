@@ -34,13 +34,6 @@ const VIEW: QuestCompleteView = {
     title: "Bearer of the Last Light",
     imageNumber: "001",
   },
-  stats: [
-    { id: "battles", label: "Battles Won", value: 7, kind: "number" },
-    { id: "dreamscapes", label: "Dreamscapes", value: 7, kind: "number" },
-    { id: "cards", label: "Final Deck", value: 30, kind: "number" },
-    { id: "dreamsigns", label: "Dreamsigns", value: 4, kind: "number" },
-    { id: "essence", label: "Essence Remaining", value: 140, kind: "essence" },
-  ],
   finalDeck: [],
 };
 
@@ -75,7 +68,7 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
 }
 
 describe("Cumulus QuestCompleteScreen", () => {
-  it("renders the victory identity, Dreamcaller, and complete run summary", () => {
+  it("renders only the essential victory identity on the default surface", () => {
     const { container, root } = mount(
       <QuestCompleteScreen
         view={VIEW}
@@ -88,10 +81,14 @@ describe("Cumulus QuestCompleteScreen", () => {
 
     expect(container.textContent).toContain("Quest Complete");
     expect(container.textContent).toContain("The Wayfinder");
-    expect(container.querySelectorAll("[data-quest-complete-stat]")).toHaveLength(5);
-    expect(
-      container.querySelector('[data-quest-complete-stat="essence"]')?.textContent,
-    ).toContain("140");
+    expect(container.textContent).toContain("New Quest");
+    expect(container.textContent).toContain("Final Deck");
+    expect(container.textContent).toContain("Log");
+    expect(container.textContent).not.toContain("Battles Won");
+    expect(container.textContent).not.toContain("Dreamscapes");
+    expect(container.textContent).not.toContain("Essence Remaining");
+    expect(container.textContent).not.toContain("Bearer of the Last Light");
+    expect(container.querySelector("[data-quest-complete-summary]")).toBeNull();
 
     act(() => root.unmount());
   });

@@ -2,9 +2,7 @@ import { useState, type ReactElement } from "react";
 import { Button } from "../components/controls/Button";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlowIcon } from "../components/controls/GlowIcon";
-import { GroupPanel } from "../components/controls/GroupPanel";
 import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
-import { EssenceValue } from "../components/hud/EssenceValue";
 import { Motes } from "../components/hud/Motes";
 import { QUEST_STATUS_BAR_CLEARANCE_OP } from "../components/hud/QuestStatusBar";
 import { GLYPHS } from "../primitives/glyph";
@@ -23,16 +21,8 @@ export interface QuestCompleteDreamcallerView {
   portraitFocus?: { x: number; y: number };
 }
 
-export interface QuestCompleteStatView {
-  id: "battles" | "dreamscapes" | "cards" | "dreamsigns" | "essence";
-  label: string;
-  value: number;
-  kind: "number" | "essence";
-}
-
 export interface QuestCompleteView {
   dreamcaller: QuestCompleteDreamcallerView | null;
-  stats: readonly QuestCompleteStatView[];
   finalDeck: readonly DeckGalleryCardView[];
 }
 
@@ -44,8 +34,8 @@ export interface QuestCompleteScreenProps {
   onCloseFinalDeck: () => void;
 }
 
-const CONTENT_MAX_WIDTH_PX = 560;
-const PORTRAIT_SIZE_PX = 64;
+const CONTENT_MAX_WIDTH_PX = 440;
+const PORTRAIT_SIZE_PX = 96;
 const TOP_CHROME_CLEARANCE =
   `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}, ` +
   `calc(max(var(--safe-area-inset-top), ${String(MENU_EDGE_INSET_MOBILE_PX)}px) + ${String(MENU_BUTTON_PX)}px)) + ${token("--space-5")})`;
@@ -110,6 +100,7 @@ export function QuestCompleteScreen({
           boxSizing: "border-box",
           display: "flex",
           justifyContent: "center",
+          alignItems: "center",
           zIndex: 3,
         }}
       >
@@ -120,7 +111,7 @@ export function QuestCompleteScreen({
             display: "flex",
             flexDirection: "column",
             alignItems: "stretch",
-            gap: token("--space-5"),
+            gap: token("--space-9"),
           }}
         >
           <header
@@ -129,7 +120,7 @@ export function QuestCompleteScreen({
               flexDirection: "column",
               alignItems: "center",
               textAlign: "center",
-              gap: token("--space-3"),
+              gap: token("--space-5"),
             }}
           >
             <GlowIcon
@@ -139,37 +130,15 @@ export function QuestCompleteScreen({
               glowFilter="spark-glow"
               title="Victory"
             />
-            <div style={{ display: "grid", gap: token("--space-3") }}>
-              <p
-                style={{
-                  margin: 0,
-                  font: token("--t-eyebrow"),
-                  letterSpacing: token("--tracking-eyebrow"),
-                  textTransform: "uppercase",
-                  color: token("--gold"),
-                }}
-              >
-                The Dream Endures
-              </p>
-              <h1
-                style={{
-                  margin: 0,
-                  font: token("--t-title"),
-                  color: token("--text-primary"),
-                }}
-              >
-                Quest Complete
-              </h1>
-              <p
-                style={{
-                  margin: 0,
-                  font: token("--t-body"),
-                  color: token("--text-secondary"),
-                }}
-              >
-                You crossed the final veil and carried the dream safely home.
-              </p>
-            </div>
+            <h1
+              style={{
+                margin: 0,
+                font: token("--t-title"),
+                color: token("--text-primary"),
+              }}
+            >
+              Quest Complete
+            </h1>
           </header>
 
           {view.dreamcaller !== null && (
@@ -177,6 +146,7 @@ export function QuestCompleteScreen({
               data-quest-complete-dreamcaller={view.dreamcaller.id}
               style={{
                 display: "flex",
+                flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
                 gap: token("--space-4"),
@@ -187,48 +157,13 @@ export function QuestCompleteScreen({
                 variant="panel"
                 size={PORTRAIT_SIZE_PX}
               />
-              <div style={{ display: "grid", gap: token("--space-2") }}>
-                <span
-                  style={{
-                    font: token("--t-eyebrow"),
-                    letterSpacing: token("--tracking-eyebrow"),
-                    textTransform: "uppercase",
-                    color: token("--text-muted"),
-                  }}
-                >
-                  Your Dreamcaller
-                </span>
+              <div style={{ textAlign: "center" }}>
                 <strong style={{ font: token("--t-title-sm") }}>
                   {view.dreamcaller.name}
                 </strong>
-                <span
-                  style={{
-                    font: token("--t-body-sm"),
-                    fontStyle: "italic",
-                    color: token("--text-secondary"),
-                  }}
-                >
-                  {view.dreamcaller.title}
-                </span>
               </div>
             </section>
           )}
-
-          <GroupPanel>
-            <dl
-              data-quest-complete-summary=""
-              style={{
-                margin: 0,
-                display: "grid",
-                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                gap: token("--space-5"),
-              }}
-            >
-              {view.stats.map((stat) => (
-                <SummaryStat key={stat.id} stat={stat} />
-              ))}
-            </dl>
-          </GroupPanel>
 
           <div
             style={{
@@ -242,7 +177,7 @@ export function QuestCompleteScreen({
               <Button
                 full
                 size="lg"
-                label="Begin a New Quest"
+                label="New Quest"
                 onClick={onNewQuest}
               />
             </div>
@@ -255,13 +190,13 @@ export function QuestCompleteScreen({
               }}
             >
               <GlassButton
-                label={`Final Deck (${String(view.finalDeck.length)})`}
+                label="Final Deck"
                 glyph={GLYPHS.affiliationRow}
                 onPress={openFinalDeck}
                 testId="quest-complete-view-deck"
               />
               <GlassButton
-                label="Download Log"
+                label="Log"
                 onPress={onDownloadLog}
                 testId="quest-complete-download-log"
               />
@@ -280,46 +215,6 @@ export function QuestCompleteScreen({
         clearMobileQuestMenu
         onClose={closeFinalDeck}
       />
-    </div>
-  );
-}
-
-function SummaryStat({ stat }: { readonly stat: QuestCompleteStatView }) {
-  return (
-    <div
-      data-quest-complete-stat={stat.id}
-      style={{
-        gridColumn: stat.id === "essence" ? "1 / -1" : undefined,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: token("--space-2"),
-        textAlign: "center",
-      }}
-    >
-      <dd
-        style={{
-          margin: 0,
-          font: token("--t-title-sm"),
-          color: stat.kind === "essence" ? token("--essence") : token("--gold"),
-        }}
-      >
-        {stat.kind === "essence" ? (
-          <EssenceValue amount={stat.value} />
-        ) : (
-          stat.value
-        )}
-      </dd>
-      <dt
-        style={{
-          font: token("--t-eyebrow"),
-          letterSpacing: token("--tracking-eyebrow"),
-          textTransform: "uppercase",
-          color: token("--text-muted"),
-        }}
-      >
-        {stat.label}
-      </dt>
     </div>
   );
 }

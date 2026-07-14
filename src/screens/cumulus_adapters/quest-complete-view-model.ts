@@ -25,18 +25,8 @@ export function buildQuestCompleteView(
   state: QuestState,
   cardDatabase: Map<number, CardData>,
 ): QuestCompleteView {
-  const completedDreamscapes = Object.values(state.atlas.nodes).filter(
-    (node) => node.state === "completed",
-  ).length;
   return {
     dreamcaller: buildQuestCompleteDreamcallerView(state),
-    stats: [
-      { id: "battles", label: "Battles Won", value: state.completionLevel, kind: "number" },
-      { id: "dreamscapes", label: "Dreamscapes", value: completedDreamscapes, kind: "number" },
-      { id: "cards", label: "Final Deck", value: state.deck.length, kind: "number" },
-      { id: "dreamsigns", label: "Dreamsigns", value: state.dreamsigns.length, kind: "number" },
-      { id: "essence", label: "Essence Remaining", value: state.essence, kind: "essence" },
-    ],
     finalDeck: buildStartingDeckView(state.deck, cardDatabase).cards,
   };
 }
