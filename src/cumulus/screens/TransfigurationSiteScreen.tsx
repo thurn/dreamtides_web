@@ -674,13 +674,12 @@ function DetailPanel({
           placement="onGlass"
           variant="accent"
           label={confirming ? "Reforging…" : "Transfigure"}
-          cost={activeForm?.essenceCost ?? null}
-          costSeparator="dot"
+          essenceCost={activeForm?.essenceCost ?? null}
           widthReservations={[
-            { label: "Transfigure", cost: null },
+            { label: "Transfigure", essenceCost: null },
             ...candidate.forms.flatMap((form) => [
-              { label: "Transfigure", cost: form.essenceCost },
-              { label: "Reforging…", cost: form.essenceCost },
+              { label: "Transfigure", essenceCost: form.essenceCost },
+              { label: "Reforging…", essenceCost: form.essenceCost },
             ]),
           ]}
           disabled={disabled}

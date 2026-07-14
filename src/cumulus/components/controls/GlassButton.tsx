@@ -7,7 +7,7 @@
 //
 // GlassButton wears the ONE shared control material — `controlChrome().trigger`,
 // the SAME liquid glass as the SegmentedControl / Select trigger — at the md
-// control height (42px) and the control body typography (`--t-body`), so a
+// control height (42px) and the bold button typography (`--t-button`), so a
 // labeled secondary action reads as one family with the filter/sort controls it
 // sits beside. Neutral glass serves secondary actions; the purple accent
 // recipe lets a primary action retain the same material language. A
@@ -32,14 +32,14 @@ const GLASS_BUTTON_HEIGHT = 42;
 /** Visual treatment for the glass button surface. */
 export type GlassButtonVariant = "default" | "danger" | "accent";
 
-/** Optional punctuation placed symmetrically between the label and a cost. */
-export type GlassButtonCostSeparator = "dot";
-
-/** One possible label/cost state whose intrinsic width the button reserves. */
+/** One possible label/essence-cost state whose intrinsic width is reserved. */
 export interface GlassButtonWidthReservation {
   label: string;
-  cost?: number | null;
+  essenceCost?: number | null;
 }
+
+/** U+2002 is the typographic half-space requested around the large bullet. */
+const ESSENCE_COST_SEPARATOR = "\u2002•\u2002";
 
 /**
  * Danger treatment for destructive actions: the accent soft-wash material in
@@ -88,13 +88,15 @@ export interface GlassButtonProps {
   onPress: () => void;
   /** Optional leading glyph painted as a `GlowIcon` before the label. */
   glyph?: Glyph;
-  /** Optional inline essence cost rendered after the label. */
-  cost?: number | null;
-  /** Optional separator rendered between the label and a present cost. */
-  costSeparator?: GlassButtonCostSeparator;
   /**
-   * Possible dynamic label/cost states. The button reserves the widest state
-   * while rendering only the current one, preventing surrounding layout shift.
+   * Optional numerical essence cost rendered as a half-spaced bullet followed
+   * by the amount and essence glyph: `Transfigure • 20◆`.
+   */
+  essenceCost?: number | null;
+  /**
+   * Possible dynamic label/essence-cost states. The button reserves the widest
+   * state while rendering only the current one, preventing surrounding layout
+   * shift.
    */
   widthReservations?: readonly GlassButtonWidthReservation[];
   /** Strict neutral, danger, or purple accent glass surface treatment. */
@@ -121,8 +123,7 @@ export function GlassButton({
   label,
   onPress,
   glyph,
-  cost = null,
-  costSeparator,
+  essenceCost = null,
   widthReservations = [],
   variant = "default",
   placement = "onMedia",
@@ -147,7 +148,7 @@ export function GlassButton({
         height: GLASS_BUTTON_HEIGHT,
         padding: "0 14px",
         boxSizing: "border-box",
-        font: token("--t-body"),
+        font: token("--t-button"),
         color: token("--text-on-glass"),
         textAlign: "center",
         whiteSpace: "nowrap",
@@ -172,12 +173,11 @@ export function GlassButton({
       >
         <GlassButtonContent
           label={label}
-          cost={cost}
-          costSeparator={costSeparator}
+          essenceCost={essenceCost}
         />
         {widthReservations.map((reservation, index) => (
           <span
-            key={`${reservation.label}-${String(reservation.cost)}-${String(index)}`}
+            key={`${reservation.label}-${String(reservation.essenceCost)}-${String(index)}`}
             aria-hidden="true"
             data-glass-button-width-reservation=""
             style={{
@@ -185,13 +185,12 @@ export function GlassButton({
               visibility: "hidden",
               display: "inline-flex",
               alignItems: "center",
-              gap: 8,
+              gap: 0,
             }}
           >
             <GlassButtonContent
               label={reservation.label}
-              cost={reservation.cost ?? null}
-              costSeparator={costSeparator}
+              essenceCost={reservation.essenceCost ?? null}
             />
           </span>
         ))}
@@ -213,12 +212,10 @@ function resolveVariantChrome(
 
 function GlassButtonContent({
   label,
-  cost,
-  costSeparator,
+  essenceCost,
 }: {
   readonly label: string;
-  readonly cost: number | null;
-  readonly costSeparator: GlassButtonCostSeparator | undefined;
+  readonly essenceCost: number | null;
 }): ReactElement {
   return (
     <span
@@ -228,16 +225,18 @@ function GlassButtonContent({
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
-        gap: 8,
+        gap: 0,
       }}
     >
       <span>{label}</span>
-      {cost !== null && costSeparator === "dot" && (
+      {essenceCost !== null && (
         <span aria-hidden="true" data-glass-button-cost-separator="">
-          ·
+          {ESSENCE_COST_SEPARATOR}
         </span>
       )}
-      {cost !== null && <EssenceValue amount={cost} tone="inherit" />}
+      {essenceCost !== null && (
+        <EssenceValue amount={essenceCost} tone="inherit" />
+      )}
     </span>
   );
 }

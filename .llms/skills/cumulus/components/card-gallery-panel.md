@@ -53,7 +53,7 @@ The shared card-browser surface: a left-aligned title and subtitle, optional hea
 | `label` | `string` | no | Resolved button label. |
 | `onPress` | `() => void` | no | Fires when the footer action is activated. |
 | `glyph` | `Glyph` | yes | Optional leading glyph. |
-| `cost` | `number \| null` | yes | Optional inline essence cost. |
+| `essenceCost` | `number \| null` | yes | Optional numerical essence cost. |
 | `disabled` | `boolean` | yes | Detach interaction and visually recede the action. |
 | `variant` | `GlassButtonVariant` | yes | Semantic surface treatment for the action. |
 | `testId` | `string` | yes | A `data-testid` for selecting the footer action in tests. |
@@ -82,8 +82,8 @@ import { CardGalleryPanel } from "src/cumulus/components/card/CardGalleryPanel";
   subtitle="Choose cards to remove from your deck"
   rightAccessory={{
     kind: "glassButton",
-    label: selectedCount === 0 ? "Decline" : `Purge ${selectedCount}: `,
-    cost: selectedCount === 0 ? null : totalCost,
+    label: selectedCount === 0 ? "Decline" : `Purge ${selectedCount}`,
+    essenceCost: selectedCount === 0 ? null : totalCost,
     widthReservations: possibleActions,
     variant: selectedCount === 0 ? "default" : "danger",
     onPress: selectedCount === 0 ? decline : purge,

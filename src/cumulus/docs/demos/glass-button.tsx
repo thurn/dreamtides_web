@@ -16,6 +16,7 @@ import type { CumulusComponent } from "../registry";
 
 interface GlassButtonDemoArgs {
   label?: string;
+  essenceCost?: number | null;
   withGlyph?: boolean;
   variant?: GlassButtonVariant;
   placement?: GlassControlPlacement;
@@ -29,15 +30,17 @@ interface GlassButtonDemoArgs {
  * `disabled` controls flow through from the generated control panel.
  */
 function GlassButtonDemo({
-  label = "Sort",
+  label = "Transfigure",
+  essenceCost = 20,
   withGlyph = false,
-  variant = "default",
+  variant = "accent",
   placement = "onMedia",
   disabled = false,
 }: GlassButtonDemoArgs) {
   return (
     <GlassButton
       label={label}
+      essenceCost={essenceCost}
       glyph={withGlyph ? GLYPHS.sort : undefined}
       variant={variant}
       placement={placement}
@@ -51,7 +54,7 @@ export const glassButtonDemo: CumulusComponent = {
   id: "glass-button",
   title: "Glass Button",
   blurb:
-    "The labeled glass action — a text label in the control typography on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface.",
+    "The labeled glass action — a bold text label with optional numerical essence cost on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface.",
   callout:
     "Use neutral glass for secondary actions and purple accent glass for a primary action that must remain materially related to its neutral sibling. Danger uses the same soft-wash material recipe in red, keeping destructive actions in the same family.",
   group: "Components",
@@ -109,11 +112,10 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
     },
     {
       label: "Purple accent",
-      note: "Use the purple soft-wash accent for a primary action that should stay materially paired with a neutral glass sibling. A dot separator is centered between the label and a present cost and is omitted with a null cost.",
+      note: "Use the purple soft-wash accent for a primary action that should stay materially paired with a neutral glass sibling. A numerical essence cost uses the component-owned half-spaced bullet and essence glyph.",
       code: `<GlassButton
   label="Transfigure"
-  cost={40}
-  costSeparator="dot"
+  essenceCost={20}
   variant="accent"
   placement="onGlass"
   onPress={transfigure}
@@ -121,10 +123,10 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
     },
     {
       label: "Stable dynamic width",
-      note: "Pass every reachable label/cost state through `widthReservations` when one action changes copy. The hidden sizing grid holds the widest intrinsic footprint while only the current state remains visible.",
+      note: "Pass every reachable label/essence-cost state through `widthReservations` when one action changes copy. The hidden sizing grid holds the widest intrinsic footprint while only the current state remains visible.",
       code: `<GlassButton
-  label={selectedCount === 0 ? "Decline" : \`Purge \${selectedCount}: \`}
-  cost={selectedCount === 0 ? null : totalCost}
+  label={selectedCount === 0 ? "Decline" : \`Purge \${selectedCount}\`}
+  essenceCost={selectedCount === 0 ? null : totalCost}
   widthReservations={possibleActions}
   onPress={commit}
 />`,
@@ -132,9 +134,10 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
   ],
   demo: {
     defaultArgs: {
-      label: "Sort",
+      label: "Transfigure",
+      essenceCost: 20,
       withGlyph: false,
-      variant: "default",
+      variant: "accent",
       placement: "onMedia",
       disabled: false,
     },

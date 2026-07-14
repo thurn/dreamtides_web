@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/glass-button`
 
 Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
 
-The labeled glass action — a text label in the control typography on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface.
+The labeled glass action — a bold text label with optional numerical essence cost on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface.
 
 > **Guidance:** Use neutral glass for secondary actions and purple accent glass for a primary action that must remain materially related to its neutral sibling. Danger uses the same soft-wash material recipe in red, keeping destructive actions in the same family.
 
@@ -19,9 +19,8 @@ The labeled glass action — a text label in the control typography on the share
 | `label` | `string` | yes | — | The button's text, centered by the component at every rendered width. |
 | `onPress` | `() => void` | yes | — | Fires when the button is activated (no-op while disabled). |
 | `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `GlowIcon` before the label. |
-| `cost` | `number \| null` | no | `null` | Optional inline essence cost rendered after the label. |
-| `costSeparator` | `"dot"` | no | — | Optional separator rendered between the label and a present cost. |
-| `widthReservations` | `readonly GlassButtonWidthReservation[]` | no | `[]` | Possible dynamic label/cost states. The button reserves the widest state while rendering only the current one, preventing surrounding layout shift. |
+| `essenceCost` | `number \| null` | no | `null` | Optional numerical essence cost rendered as a half-spaced bullet followed by the amount and essence glyph: `Transfigure • 20◆`. |
+| `widthReservations` | `readonly GlassButtonWidthReservation[]` | no | `[]` | Possible dynamic label/essence-cost states. The button reserves the widest state while rendering only the current one, preventing surrounding layout shift. |
 | `variant` | `GlassButtonVariant` = `"default" \| "danger" \| "accent"` | no | `default` | Strict neutral, danger, or purple accent glass surface treatment. |
 | `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the control. `onMedia` uses the full liquid-glass recipe; `onGlass` uses a lighter tonal lens so an existing glass tint is not compounded. Defaults to `onMedia`. |
 | `disabled` | `boolean` | no | `false` | Dims the control, detaches click / press feedback, and marks it `aria-disabled`. |
@@ -96,13 +95,12 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 ### Purple accent
 
-Use the purple soft-wash accent for a primary action that should stay materially paired with a neutral glass sibling. A dot separator is centered between the label and a present cost and is omitted with a null cost.
+Use the purple soft-wash accent for a primary action that should stay materially paired with a neutral glass sibling. A numerical essence cost uses the component-owned half-spaced bullet and essence glyph.
 
 ```tsx
 <GlassButton
   label="Transfigure"
-  cost={40}
-  costSeparator="dot"
+  essenceCost={20}
   variant="accent"
   placement="onGlass"
   onPress={transfigure}
@@ -111,12 +109,12 @@ Use the purple soft-wash accent for a primary action that should stay materially
 
 ### Stable dynamic width
 
-Pass every reachable label/cost state through `widthReservations` when one action changes copy. The hidden sizing grid holds the widest intrinsic footprint while only the current state remains visible.
+Pass every reachable label/essence-cost state through `widthReservations` when one action changes copy. The hidden sizing grid holds the widest intrinsic footprint while only the current state remains visible.
 
 ```tsx
 <GlassButton
-  label={selectedCount === 0 ? "Decline" : `Purge ${selectedCount}: `}
-  cost={selectedCount === 0 ? null : totalCost}
+  label={selectedCount === 0 ? "Decline" : `Purge ${selectedCount}`}
+  essenceCost={selectedCount === 0 ? null : totalCost}
   widthReservations={possibleActions}
   onPress={commit}
 />

@@ -112,10 +112,10 @@ afterEach(() => {
 describe("PurgeSiteScreen", () => {
   it("derives every reachable action-label footprint from selection limits", () => {
     expect(purgeActionWidthReservations(1, 2, [0, 40, 100])).toEqual([
-      { label: "Decline", cost: null },
-      { label: "Purge 1: ", cost: 100 },
-      { label: "Purge 2: ", cost: 100 },
-      { label: "Purge 3: ", cost: 100 },
+      { label: "Decline", essenceCost: null },
+      { label: "Purge 1", essenceCost: 100 },
+      { label: "Purge 2", essenceCost: 100 },
+      { label: "Purge 3", essenceCost: 100 },
     ]);
   });
 
@@ -173,13 +173,11 @@ describe("PurgeSiteScreen", () => {
       first?.click();
     });
     expect(
-      container.querySelector('[data-testid="cumulus-purge-header-action"]')
+      container
+        .querySelector('[data-testid="cumulus-purge-header-action"]')
+        ?.querySelector<HTMLElement>("[data-glass-button-content]")
         ?.textContent,
-    ).toContain("Purge 1:");
-    expect(
-      container.querySelector('[data-testid="cumulus-purge-header-action"]')
-        ?.textContent,
-    ).toContain("40");
+    ).toBe("Purge 1\u2002•\u200240");
     expect(
       container.querySelector<HTMLElement>(
         '[data-testid="cumulus-purge-header-action"]',

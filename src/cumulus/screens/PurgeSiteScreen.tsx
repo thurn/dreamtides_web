@@ -174,8 +174,8 @@ function PurgeGallery({
           label:
             selectedCount === 0
               ? "Decline"
-              : `Purge ${String(selectedCount)}: `,
-          cost: selectedCount === 0 ? null : totalCost,
+              : `Purge ${String(selectedCount)}`,
+          essenceCost: selectedCount === 0 ? null : totalCost,
           widthReservations: actionWidthReservations,
           variant: selectedCount === 0 ? "default" : "danger",
           onPress: selectedCount === 0 ? onClose : onPurge,
@@ -205,7 +205,7 @@ function PurgeGallery({
   );
 }
 
-/** Every reachable action label, paired with the widest reachable cost. */
+/** Every action label, paired with the widest reachable essence cost. */
 export function purgeActionWidthReservations(
   freeCardCount: number,
   maxPaidSelections: number,
@@ -214,10 +214,10 @@ export function purgeActionWidthReservations(
   const maxSelectionCount = freeCardCount + maxPaidSelections;
   const maxCost = Math.max(0, ...visitCosts.slice(0, maxPaidSelections + 1));
   return [
-    { label: "Decline", cost: null },
+    { label: "Decline", essenceCost: null },
     ...Array.from({ length: maxSelectionCount }, (_, index) => ({
-      label: `Purge ${String(index + 1)}: `,
-      cost: maxCost,
+      label: `Purge ${String(index + 1)}`,
+      essenceCost: maxCost,
     })),
   ];
 }

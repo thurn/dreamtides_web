@@ -160,9 +160,9 @@ export type CardGalleryAccessory =
       onPress: () => void;
       glyph?: Glyph;
       disabled?: boolean;
-      /** Optional inline essence cost rendered after the label. */
-      cost?: number | null;
-      /** Dynamic label/cost states whose widest footprint is reserved. */
+      /** Optional numerical essence cost rendered after the label. */
+      essenceCost?: number | null;
+      /** Dynamic label/essence-cost states whose widest footprint is reserved. */
       widthReservations?: readonly GlassButtonWidthReservation[];
       /** Semantic surface treatment for the action. */
       variant?: GlassButtonVariant;
@@ -188,8 +188,8 @@ export interface CardGalleryFooterAction {
   onPress: () => void;
   /** Optional leading glyph. */
   glyph?: Glyph;
-  /** Optional inline essence cost. */
-  cost?: number | null;
+  /** Optional numerical essence cost. */
+  essenceCost?: number | null;
   /** Detach interaction and visually recede the action. */
   disabled?: boolean;
   /** Semantic surface treatment for the action. */
@@ -314,7 +314,7 @@ function accessoryNode(
         label={accessory.label}
         glyph={accessory.glyph}
         disabled={accessory.disabled}
-        cost={accessory.cost}
+        essenceCost={accessory.essenceCost}
         widthReservations={accessory.widthReservations}
         variant={accessory.variant}
         testId={accessory.testId}
@@ -945,7 +945,7 @@ export function CardGalleryPanel({
                     placement={accessoryPlacement}
                     label={action.label}
                     glyph={action.glyph}
-                    cost={action.cost}
+                    essenceCost={action.essenceCost}
                     disabled={action.disabled}
                     variant={action.variant}
                     testId={action.testId}
@@ -958,7 +958,7 @@ export function CardGalleryPanel({
                 placement={accessoryPlacement}
                 label={footerAction.label}
                 glyph={footerAction.glyph}
-                cost={footerAction.cost}
+                essenceCost={footerAction.essenceCost}
                 disabled={footerAction.disabled}
                 variant={footerAction.variant}
                 testId={footerAction.testId}

@@ -671,10 +671,10 @@
             "description": "Optional leading glyph."
           },
           {
-            "name": "cost",
+            "name": "essenceCost",
             "tsType": "number | null",
             "optional": true,
-            "description": "Optional inline essence cost."
+            "description": "Optional numerical essence cost."
           },
           {
             "name": "disabled",
@@ -1913,22 +1913,12 @@
       "description": "Optional leading glyph painted as a `GlowIcon` before the label."
     },
     {
-      "name": "cost",
+      "name": "essenceCost",
       "tsType": "number | null",
       "unionMembers": [],
       "required": false,
       "defaultValue": "null",
-      "description": "Optional inline essence cost rendered after the label."
-    },
-    {
-      "name": "costSeparator",
-      "tsType": "\"dot\"",
-      "unionMembers": [
-        "dot"
-      ],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional separator rendered between the label and a present cost."
+      "description": "Optional numerical essence cost rendered as a half-spaced bullet followed\nby the amount and essence glyph: `Transfigure • 20◆`."
     },
     {
       "name": "widthReservations",
@@ -1936,7 +1926,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "[]",
-      "description": "Possible dynamic label/cost states. The button reserves the widest state\nwhile rendering only the current one, preventing surrounding layout shift."
+      "description": "Possible dynamic label/essence-cost states. The button reserves the widest\nstate while rendering only the current one, preventing surrounding layout\nshift."
     },
     {
       "name": "variant",

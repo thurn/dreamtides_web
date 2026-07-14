@@ -77,44 +77,27 @@ describe("GlassButton", () => {
     });
   });
 
-  it("renders an optional inline essence cost", () => {
+  it("renders an optional inline essence cost with half-spaced bullet punctuation", () => {
     const { container, root } = mount(
-      <GlassButton label="Purge 1:" cost={40} onPress={() => {}} />,
+      <GlassButton label="Transfigure" essenceCost={20} onPress={() => {}} />,
     );
 
     const button = container.querySelector("button");
-    expect(button?.textContent).toContain("Purge 1:");
-    expect(button?.textContent).toContain("40");
+    expect(button?.textContent).toBe("Transfigure\u2002•\u200220");
     expect(button?.querySelector("i")?.className).toContain("bx-crypto");
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("renders a cost separator as its own evenly-spaced item only when a cost is present", () => {
-    const { container, root } = mount(
-      <GlassButton
-        label="Transfigure"
-        cost={40}
-        costSeparator="dot"
-        onPress={() => {}}
-      />,
-    );
     const content = container.querySelector<HTMLElement>(
       "[data-glass-button-content]",
     );
-    expect(content?.style.gap).toBe("8px");
+    expect(content?.style.gap).toBe("0px");
     expect(
       content?.querySelector("[data-glass-button-cost-separator]")?.textContent,
-    ).toBe("·");
+    ).toBe("\u2002•\u2002");
 
     act(() => {
       root.render(
         <GlassButton
           label="Transfigure"
-          cost={null}
-          costSeparator="dot"
+          essenceCost={null}
           onPress={() => {}}
         />,
       );
@@ -129,9 +112,9 @@ describe("GlassButton", () => {
 
   it("keeps every dynamic width reservation in one hidden sizing grid", () => {
     const reservations = [
-      { label: "Decline", cost: null },
-      { label: "Purge 1: ", cost: 40 },
-      { label: "Purge 2: ", cost: 100 },
+      { label: "Decline", essenceCost: null },
+      { label: "Purge 1", essenceCost: 40 },
+      { label: "Purge 2", essenceCost: 100 },
     ] as const;
     const { container, root } = mount(
       <GlassButton
@@ -147,15 +130,15 @@ describe("GlassButton", () => {
     );
     expect(initialReservations).toEqual([
       "Decline",
-      "Purge 1: 40",
-      "Purge 2: 100",
+      "Purge 1\u2002•\u200240",
+      "Purge 2\u2002•\u2002100",
     ]);
 
     act(() => {
       root.render(
         <GlassButton
-          label="Purge 2: "
-          cost={100}
+          label="Purge 2"
+          essenceCost={100}
           widthReservations={reservations}
           onPress={() => {}}
         />,
@@ -178,8 +161,8 @@ describe("GlassButton", () => {
       <GlassButton
         label="Transfigure"
         widthReservations={[
-          { label: "Transfigure", cost: null },
-          { label: "Reforging…", cost: 80 },
+          { label: "Transfigure", essenceCost: null },
+          { label: "Reforging…", essenceCost: 80 },
         ]}
         onPress={() => {}}
       />,
@@ -188,6 +171,7 @@ describe("GlassButton", () => {
     const button = container.querySelector<HTMLButtonElement>("button");
     expect(button?.style.justifyContent).toBe("center");
     expect(button?.style.textAlign).toBe("center");
+    expect(button?.style.font).toBe("var(--t-button)");
     expect(
       button?.querySelector<HTMLElement>("[data-glass-button-content]")
         ?.style.justifyContent,
