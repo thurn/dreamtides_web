@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { act, type ReactElement } from "react";
+import { StrictMode, act, type ReactElement } from "react";
 import { MINIMAL_ATLAS_CONFIG, MINIMAL_DREAMSCAPES } from "../__test-helpers__/atlas-fixtures";
 import { createRoot, type Root } from "react-dom/client";
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
@@ -315,6 +315,29 @@ describe("BattleSiteRoute", () => {
     expect(container.querySelector('[data-screen="legacy-playable"]')).toBeNull();
     expect(container.querySelector('[data-screen="battle-start"]')).toBeNull();
     expect(container.textContent).toContain("Preparing battle");
+    expect(beginBattleSpy).toHaveBeenCalledWith("site-7");
+  });
+
+  it("appends BEGIN_BATTLE only once when StrictMode replays mount effects", () => {
+    mount(
+      <StrictMode>
+        <BattleSiteRoute
+          site={makeSite()}
+          cardDatabase={makeBattleTestCardDatabase()}
+          runtimeConfig={{
+            seedOverride: null,
+            aiMode: false,
+            basicAutomation: false,
+            gameId: null,
+            databaseMode: "emulator",
+            journeyVariant: "classic",
+            uiVariant: "legacy",
+          }}
+        />
+      </StrictMode>,
+    );
+
+    expect(beginBattleSpy).toHaveBeenCalledTimes(1);
     expect(beginBattleSpy).toHaveBeenCalledWith("site-7");
   });
 

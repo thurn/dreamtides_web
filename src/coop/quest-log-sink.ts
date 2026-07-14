@@ -30,7 +30,7 @@
 import { get, push, ref, runTransaction, update, type Database } from "firebase/database";
 import type { LogEntry, LogSink } from "../logging";
 import { clearLogContext, setLogContext, setLogSink } from "../logging";
-import type { EventOutcome, GameEvent } from "../eventlog/types";
+import type { BounceReason, EventOutcome, GameEvent } from "../eventlog/types";
 
 // ---------------------------------------------------------------------------
 // Limits
@@ -299,6 +299,7 @@ export interface EventBouncedRecord {
   event: "event_bounced";
   seq: number;
   interveningSeqs: number[];
+  bounceReason: BounceReason;
   gameId: string;
 }
 
@@ -350,8 +351,12 @@ export interface CoopLogRecorder {
    * the caller can gate a follow-up {@link recordBounce} on ownership.
    */
   recordCoopEvent(event: GameEvent, seq: number, outcome: EventOutcome): boolean;
-  /** Mirror this client's own bounce with the seqs that intervened. */
-  recordBounce(seq: number, interveningSeqs: readonly number[]): void;
+  /** Mirror this client's own bounce with its cause and intervening seqs. */
+  recordBounce(
+    seq: number,
+    interveningSeqs: readonly number[],
+    bounceReason: BounceReason,
+  ): void;
   /** Mirror a fold divergence observed at `seq` (any client, stamped with clientId). */
   recordDivergence(info: { seq: number; expected: string; actual: string }): void;
   /** Mirror an intent whose `io.append` rejected (always this client's own). */
@@ -395,11 +400,16 @@ export function createCoopLogRecorder(options: CoopLogRecorderOptions): CoopLogR
       emit({ ...record });
       return true;
     },
-    recordBounce(seq: number, interveningSeqs: readonly number[]): void {
+    recordBounce(
+      seq: number,
+      interveningSeqs: readonly number[],
+      bounceReason: BounceReason,
+    ): void {
       const record: EventBouncedRecord = {
         event: "event_bounced",
         seq,
         interveningSeqs: [...interveningSeqs],
+        bounceReason,
         gameId,
       };
       emit({ ...record });

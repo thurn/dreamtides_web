@@ -156,6 +156,23 @@ export interface EncodedLogNode {
 /** Whether a reducer applied an event's effects or bounced it as invalid/stale. */
 export type EventOutcome = "applied" | "bounced";
 
+/** Why a bounced event was not applied, for diagnostics and player-facing copy. */
+export type BounceReason =
+  | "partner_conflict"
+  | "unknown_conflict"
+  | "prompt_pending"
+  | "invalid_action"
+  | "malformed_event"
+  | "fold_error";
+
+/** A reducer's deterministic result for one event. */
+export interface ReducerResult<S> {
+  state: S;
+  outcome: EventOutcome;
+  /** Required by the game reducer for bounces; optional for generic engine clients. */
+  bounceReason?: BounceReason;
+}
+
 /**
  * Everything a reducer needs beyond `(state, event)` to decide and apply
  * an event deterministically.
@@ -201,7 +218,7 @@ export interface EventContext {
  * shape beyond these five functions.
  */
 export interface EngineConfig<S> {
-  reducer: (state: S, event: GameEvent, ctx: EventContext) => { state: S; outcome: EventOutcome };
+  reducer: (state: S, event: GameEvent, ctx: EventContext) => ReducerResult<S>;
   genesisState: (genesis: Genesis) => S;
   /** For baseSnapshot. */
   encode: (s: S) => string;

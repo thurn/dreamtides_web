@@ -170,9 +170,15 @@ describe("createCoopLogRecorder single-writer rule", () => {
 
   it("emits the event_bounced shape with intervening seqs", () => {
     const { emitted, recorder } = setup();
-    recorder.recordBounce(9, [7, 8]);
+    recorder.recordBounce(9, [7, 8], "partner_conflict");
     expect(emitted).toEqual([
-      { event: "event_bounced", seq: 9, interveningSeqs: [7, 8], gameId: "room-1" },
+      {
+        event: "event_bounced",
+        seq: 9,
+        interveningSeqs: [7, 8],
+        bounceReason: "partner_conflict",
+        gameId: "room-1",
+      },
     ]);
   });
 

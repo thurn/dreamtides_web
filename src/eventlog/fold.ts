@@ -12,13 +12,23 @@
 // fold and CAS policy), and §"Error handling and safety rails".
 
 import { eventRng } from "./rng";
-import type { EngineConfig, EventContext, EventOutcome, GameEvent, Genesis } from "./types";
+import type {
+  BounceReason,
+  EngineConfig,
+  EventContext,
+  EventOutcome,
+  GameEvent,
+  Genesis,
+  ReducerResult,
+} from "./types";
 
 /** One event's result: its seq, the event, and how the reducer resolved it. */
 export interface FoldOutcome {
   seq: number;
   event: GameEvent;
   outcome: EventOutcome;
+  /** Machine-readable cause for clear logging and player-facing feedback. */
+  bounceReason?: BounceReason;
   /**
    * Present only when the engine turned a failure into a bounce: a reducer
    * throw contained in production (poison-event containment) or a malformed
@@ -141,6 +151,7 @@ export function foldEvents<S>(
         seq,
         event,
         outcome: "bounced",
+        bounceReason: "malformed_event",
         error: { seq, message: `malformed basedOnSeq ${event.basedOnSeq} for seq ${seq}` },
       });
       continue;
@@ -157,7 +168,7 @@ export function foldEvents<S>(
     // outcome below can attach. See FoldOutcome.interveningSeqs.
     const interveningSeqs = intervening === "unknown" ? undefined : intervening.map((e) => e.seq);
 
-    let result: { state: S; outcome: EventOutcome };
+    let result: ReducerResult<S>;
     try {
       result = config.reducer(state, event, ctx);
     } catch (caught) {
@@ -171,6 +182,7 @@ export function foldEvents<S>(
         seq,
         event,
         outcome: "bounced",
+        bounceReason: "fold_error",
         error: { seq, message: err.message, stack: err.stack },
         interveningSeqs,
       });
@@ -185,7 +197,14 @@ export function foldEvents<S>(
       seq,
       event,
       outcome: result.outcome,
-      ...(result.outcome === "bounced" ? { interveningSeqs } : {}),
+      ...(result.outcome === "bounced"
+        ? {
+            interveningSeqs,
+            ...(result.bounceReason === undefined
+              ? {}
+              : { bounceReason: result.bounceReason }),
+          }
+        : {}),
     });
   }
 

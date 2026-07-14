@@ -13,7 +13,14 @@ import { createLogClient } from "./client";
 import type { LogClientIo } from "./client";
 import { type AppliedEntry, foldEvents } from "./fold";
 import { hashState } from "./hash";
-import type { EngineConfig, EventOutcome, GameEvent, Genesis, LogNode } from "./types";
+import type {
+  BounceReason,
+  EngineConfig,
+  EventOutcome,
+  GameEvent,
+  Genesis,
+  LogNode,
+} from "./types";
 
 interface ToyState {
   applied: string[];
@@ -25,11 +32,11 @@ const config: EngineConfig<ToyState> = {
   genesisState: () => ({ applied: [] }),
   reducer: (state, event, ctx) => {
     if (ctx.intervening === "unknown") {
-      return { state, outcome: "bounced" };
+      return { state, outcome: "bounced", bounceReason: "unknown_conflict" };
     }
     for (const iv of ctx.intervening) {
       if (iv.actor !== event.actor) {
-        return { state, outcome: "bounced" };
+        return { state, outcome: "bounced", bounceReason: "partner_conflict" };
       }
     }
     const tag = event.payload.tag as string;
@@ -94,6 +101,7 @@ interface Harness {
     seq: number;
     outcome: EventOutcome;
     interveningSeqs?: number[];
+    bounceReason?: BounceReason;
   }>;
   divergences: Array<{ seq: number; expected: string; actual: string }>;
   foldErrors: Array<{ seq: number; message: string }>;
@@ -148,7 +156,13 @@ function makeHarness(
   const client = createLogClient<ToyState>(cfg, io, {
     onDisplayState: (s) => displayedStates.push(s),
     onEventOutcome: (event, seq, outcome, detail) =>
-      outcomes.push({ event, seq, outcome, interveningSeqs: detail?.interveningSeqs }),
+      outcomes.push({
+        event,
+        seq,
+        outcome,
+        interveningSeqs: detail?.interveningSeqs,
+        bounceReason: detail?.bounceReason,
+      }),
     onDivergence: (info) => divergences.push(info),
     onFoldError: (error) => foldErrors.push({ seq: error.seq, message: error.message }),
     onAppendFailed: (event, error) => appendFailures.push({ event, error }),
@@ -219,6 +233,7 @@ describe("LogClient optimistic echo rollback", () => {
     expect(harness.displayed()?.applied).toEqual(["P"]);
     const ownOutcome = harness.outcomes.find((o) => o.event.nonce === ownA.nonce);
     expect(ownOutcome?.outcome).toBe("bounced");
+    expect(ownOutcome?.bounceReason).toBe("partner_conflict");
   });
 });
 

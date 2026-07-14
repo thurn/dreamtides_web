@@ -15,7 +15,14 @@
 
 import { type AppliedEntry, type FoldError, foldEvents } from "./fold";
 import { assertJsonSafe } from "./hash";
-import type { EngineConfig, EventOutcome, GameEvent, Genesis, LogNode } from "./types";
+import type {
+  BounceReason,
+  EngineConfig,
+  EventOutcome,
+  GameEvent,
+  Genesis,
+  LogNode,
+} from "./types";
 
 /**
  * Build-time dev flag mirroring `fold.ts`'s `ENV_DEV`. In dev the client runs a
@@ -41,15 +48,15 @@ export interface LogClientCallbacks<S> {
   onDisplayState: (state: S) => void;
   /**
    * Every confirmed event's resolved outcome, reported once per seq. `detail`
-   * carries a bounce's diagnostic `interveningSeqs` (see
-   * `FoldOutcome.interveningSeqs`) when the fold's intervening window was
-   * enumerable; absent on an applied outcome or an unenumerable window.
+   * carries a bounce's machine-readable reason and diagnostic
+   * `interveningSeqs` (see `FoldOutcome`) when available; absent on an applied
+   * outcome.
    */
   onEventOutcome: (
     event: GameEvent,
     seq: number,
     outcome: EventOutcome,
-    detail?: { interveningSeqs?: number[] },
+    detail?: { interveningSeqs?: number[]; bounceReason?: BounceReason },
   ) => void;
   /** A confirmed event's `stateHashAfter` disagreed with this client's fold. */
   onDivergence: (info: { seq: number; expected: string; actual: string }) => void;
@@ -191,7 +198,12 @@ export function createLogClient<S>(
           event,
           seq,
           outcome.outcome,
-          outcome.outcome === "bounced" ? { interveningSeqs: outcome.interveningSeqs } : undefined,
+          outcome.outcome === "bounced"
+            ? {
+                interveningSeqs: outcome.interveningSeqs,
+                bounceReason: outcome.bounceReason,
+              }
+            : undefined,
         );
 
         // Report a contained fold error under the SAME per-seq guard as the

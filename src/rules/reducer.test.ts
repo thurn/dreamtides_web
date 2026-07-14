@@ -87,6 +87,7 @@ describe("rule 3 — compare-and-swap window", () => {
       }),
     );
     expect(result.outcome).toBe("bounced");
+    expect(result.bounceReason).toBe("partner_conflict");
     expect(result.state.quest.essence).toBe(100);
   });
 
@@ -157,6 +158,7 @@ describe("rule 3 — compare-and-swap window", () => {
       ctx({ intervening: "unknown" }),
     );
     expect(result.outcome).toBe("bounced");
+    expect(result.bounceReason).toBe("unknown_conflict");
     expect(result.state.quest.essence).toBe(100);
   });
 });
@@ -301,6 +303,7 @@ describe("rule 4 — prompt gate", () => {
     const state = stateWithPendingPrompt(1);
     const result = reduceGameEvent(state, adjustEssence(10), ctx());
     expect(result.outcome).toBe("bounced");
+    expect(result.bounceReason).toBe("prompt_pending");
     expect(result.state.quest.essence).toBe(100);
   });
 
@@ -385,6 +388,7 @@ describe("rule 5 — routing and garbage tolerance", () => {
     expect(() => reduceGameEvent(state, garbage, ctx())).not.toThrow();
     const result = reduceGameEvent(state, garbage, ctx());
     expect(result.outcome).toBe("bounced");
+    expect(result.bounceReason).toBe("invalid_action");
     expect(result.state).toBe(state);
   });
 
@@ -396,6 +400,7 @@ describe("rule 5 — routing and garbage tolerance", () => {
       ctx(),
     );
     expect(result.outcome).toBe("bounced");
+    expect(result.bounceReason).toBe("invalid_action");
     expect(result.state.quest.essence).toBe(100);
   });
 });

@@ -212,9 +212,9 @@ from the log; if `basedOnSeq < baseSeq` (an appender staler than the
 snapshot horizon), `intervening` is reported as unknown and the rules
 reducer bounces the event — conservative and safe.
 
-The engine reports each event's outcome to the client layer
-(`onEventOutcome(event, seq, outcome)`); the UI shows the bounce toast when
-`event.actor` is this client and the outcome is `bounced`.
+The engine reports each event's outcome and machine-readable bounce reason to
+the client layer. The UI shows the bounce toast when `event.actor` is this
+client and the outcome is `bounced`.
 
 ### Optimistic echo
 
@@ -419,8 +419,9 @@ reducer commands.
   they read from changes. This bounds the churn across the ~100 consumer
   components to import/provider swaps plus removal of undo controls.
 - **Bounce UX** — optimistic echo applies instantly; a bounce visibly rolls
-  back with a toast naming the cause ("your partner acted first"). Never
-  silent.
+  back with cause-specific copy. Partner-conflict copy is reserved for a
+  confirmed cross-client CAS conflict; invalid actions, open prompts, unknown
+  conflict windows, and internal fold errors each have distinct guidance.
 - **Review rule** (enforced going forward, documented in AGENTS.md by the
   plan): React `useState`/`useRef` may never gate game flow; anything both
   players must agree on is a fold of the log.
@@ -439,8 +440,8 @@ reducer commands.
   structurally: the event log *is* the reconstruction.
 - `fold_divergence` is logged loudly when a client's local hash disagrees
   with a peer's `stateHashAfter` at the same seq.
-- Bounces are logged (`event_bounced` with intervening seqs) — bounce-rate
-  is the health metric for the CAS policy.
+- Bounces are logged (`event_bounced` with `bounceReason` and intervening seqs)
+  — bounce-rate is the health metric for the CAS policy.
 - `EventLogViewer.tsx` replaces `RoomLogViewer.tsx` for `?viewLogs=`,
   showing the decoded event log plus the JSONL sink.
 

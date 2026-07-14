@@ -72,11 +72,6 @@ export function BattleSiteRoute({
   const beginRequestedKeyRef = useRef<string | null>(null);
 
   useEffect(() => {
-    setBegunEntryKey(null);
-    beginRequestedKeyRef.current = null;
-  }, [battleEntryKey]);
-
-  useEffect(() => {
     if (battle !== null) {
       return;
     }

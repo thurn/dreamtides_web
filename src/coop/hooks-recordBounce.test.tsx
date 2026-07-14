@@ -1,11 +1,9 @@
 // @vitest-environment jsdom
 
-// Focused regression test for the recordBounce interveningSeqs threading
-// (audit finding P3-9): hooks.ts's onEventOutcome callback used to hardcode
-// `logSink.recordBounce(seq, [])` on a client's own bounce, discarding the
-// fold's diagnostic intervening seqs. This test drives a REAL LogClient
-// through a genuine bounce (an intervening-window rule, not a payload flag)
-// and asserts recordBounce receives the actual seqs, not an empty array.
+// Focused regression coverage for bounce diagnostics and player-facing copy.
+// These tests drive a REAL LogClient through both a partner conflict and a
+// domain-invalid action, then assert the cause, intervening seqs, log record,
+// and toast message stay aligned.
 //
 // Harness pattern (fake IO on a microtask, mocked engine config) copied from
 // coop-provider-append-queue.test.tsx.
@@ -14,7 +12,12 @@ import { useEffect } from "react";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { BounceReason } from "../eventlog/types";
 import type { AppendFn } from "./actions";
+import {
+  INVALID_ACTION_MESSAGE,
+  PARTNER_CONFLICT_MESSAGE,
+} from "./BounceToast";
 
 interface FakeEvent {
   type: string;
@@ -82,11 +85,14 @@ vi.mock("../rules/replay/replay", () => ({
     genesisState: () => ({ n: 0 }),
     reducer: (
       state: { n: number },
-      event: { actor: string },
+      event: { actor: string; type: string },
       ctx: { intervening: "unknown" | Array<{ actor: string }> },
     ) => {
+      if (event.type === "INVALID") {
+        return { state, outcome: "bounced", bounceReason: "invalid_action" };
+      }
       if (ctx.intervening !== "unknown" && ctx.intervening.some((e) => e.actor !== event.actor)) {
-        return { state, outcome: "bounced" };
+        return { state, outcome: "bounced", bounceReason: "partner_conflict" };
       }
       return { state: { n: state.n + 1 }, outcome: "applied" };
     },
@@ -103,7 +109,7 @@ vi.mock("firebase/database", () => ({
 import { CoopProvider, useAppend } from "./hooks";
 import type { RoomReadyContext } from "./RoomGate";
 
-const bounceCalls: Array<[number, readonly number[]]> = [];
+const bounceCalls: Array<[number, readonly number[], BounceReason | undefined]> = [];
 
 function makeContext(): RoomReadyContext {
   return {
@@ -112,9 +118,13 @@ function makeContext(): RoomReadyContext {
     clientId: "client-test",
     genesis: fake.genesis,
     logSink: {
-      recordCoopEvent: () => true, // this client "owns" every event it appends
-      recordBounce: (seq: number, interveningSeqs: readonly number[]) => {
-        bounceCalls.push([seq, interveningSeqs]);
+      recordCoopEvent: (event: FakeEvent) => event.actor === "client-test",
+      recordBounce: (
+        seq: number,
+        interveningSeqs: readonly number[],
+        bounceReason?: BounceReason,
+      ) => {
+        bounceCalls.push([seq, interveningSeqs, bounceReason]);
       },
       recordDivergence: () => {},
     } as unknown as RoomReadyContext["logSink"],
@@ -127,7 +137,7 @@ function CaptureAppend({ onReady }: { onReady: (append: AppendFn) => void }): nu
   return null;
 }
 
-describe("hooks.ts recordBounce threading (P3-9)", () => {
+describe("hooks.ts bounce diagnostics", () => {
   let container: HTMLDivElement;
   let root: Root;
 
@@ -187,8 +197,39 @@ describe("hooks.ts recordBounce threading (P3-9)", () => {
     await settle();
 
     expect(bounceCalls.length).toBeGreaterThan(0);
-    const [seq, interveningSeqs] = bounceCalls[bounceCalls.length - 1];
+    const [seq, interveningSeqs, bounceReason] =
+      bounceCalls[bounceCalls.length - 1];
     expect(seq).toBe(2);
     expect(interveningSeqs).toEqual([1]);
+    expect(bounceReason).toBe("partner_conflict");
+    expect(container.querySelector("[data-coop-bounce-toast]")?.textContent).toBe(
+      PARTNER_CONFLICT_MESSAGE,
+    );
+  });
+
+  it("shows an invalid-action error without blaming a partner", async () => {
+    const holder: { append: AppendFn | null } = { append: null };
+    await act(async () => {
+      root.render(
+        <CoopProvider context={makeContext()}>
+          <CaptureAppend onReady={(fn) => (holder.append = fn)} />
+        </CoopProvider>,
+      );
+      await Promise.resolve();
+    });
+    await settle();
+    const append = holder.append;
+    if (append === null) throw new Error("append was not captured");
+
+    await act(async () => {
+      void append({ type: "INVALID", payload: {} });
+      await Promise.resolve();
+    });
+    await settle();
+
+    expect(bounceCalls).toEqual([[1, [], "invalid_action"]]);
+    const toast = container.querySelector("[data-coop-bounce-toast]");
+    expect(toast?.textContent).toBe(INVALID_ACTION_MESSAGE);
+    expect(toast?.textContent).not.toContain("partner");
   });
 });

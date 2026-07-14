@@ -16,7 +16,11 @@
 // and navigation cases live in `./quest/lifecycle` as pure `(quest, payload)`
 // functions; `routeDomain` wraps their result over the fold state.
 
-import type { EventContext, EventOutcome, GameEvent } from "../eventlog/types";
+import type {
+  BounceReason,
+  EventContext,
+  GameEvent,
+} from "../eventlog/types";
 import {
   CAS_EXEMPT_EVENT_TYPES,
   DECISION_NEUTRAL_EVENT_TYPES,
@@ -33,10 +37,13 @@ import * as shop from "./quest/shop";
 import * as sites from "./quest/sites";
 
 /** The reducer's return shape (matches `EngineConfig.reducer`). */
-export interface ReduceResult {
-  state: FoldState;
-  outcome: EventOutcome;
-}
+export type ReduceResult =
+  | { state: FoldState; outcome: "applied"; bounceReason?: never }
+  | {
+      state: FoldState;
+      outcome: "bounced";
+      bounceReason: BounceReason;
+    };
 
 /**
  * Folds a single event over the room's state per the CAS policy.
@@ -65,12 +72,15 @@ export function reduceGameEvent(
 
   if (!exempt && !matchingResolve) {
     // rule 3 — compare-and-swap with the self-chain / decision-neutral carve-out
+    if (ctx.intervening === "unknown") {
+      return bounce(state, "unknown_conflict");
+    }
     if (!isInterveningWindowClear(ctx.intervening, event.actor)) {
-      return bounce(state);
+      return bounce(state, "partner_conflict");
     }
     // rule 4 — prompt gate
     if (state.battle?.pendingPrompt != null) {
-      return bounce(state);
+      return bounce(state, "prompt_pending");
     }
   }
 
@@ -369,6 +379,9 @@ function foldCase(
   return { state: nextState, outcome: "applied" };
 }
 
-function bounce(state: FoldState): ReduceResult {
-  return { state, outcome: "bounced" };
+function bounce(
+  state: FoldState,
+  bounceReason: BounceReason = "invalid_action",
+): ReduceResult {
+  return { state, outcome: "bounced", bounceReason };
 }

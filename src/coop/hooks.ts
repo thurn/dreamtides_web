@@ -53,9 +53,10 @@ import type { RoomReadyContext } from "./RoomGate";
 import { makeActions, type AppendFn, type CoopActions } from "./actions";
 import {
   APPEND_FAILED_MESSAGE,
-  BOUNCE_MESSAGE,
   BounceToast,
+  INVALID_ACTION_MESSAGE,
   PENDING_DROPPED_MESSAGE,
+  bounceMessageForReason,
 } from "./BounceToast";
 import { UnreadableRoomScreen } from "./UnreadableRoomScreen";
 
@@ -124,7 +125,7 @@ export function CoopProvider({
   // The copy for the toast the next `bounceToken` bump shows. Set by whichever
   // callback triggers it (own bounce / append failure / pending drop); read at
   // render time. A ref (not state) because the token bump already re-renders.
-  const bounceMessageRef = useRef<string>(BOUNCE_MESSAGE);
+  const bounceMessageRef = useRef<string>(INVALID_ACTION_MESSAGE);
 
   const confirmedSeqRef = useRef(0);
   const clientRef = useRef<LogClient | null>(null);
@@ -212,13 +213,17 @@ export function CoopProvider({
           // (returns true), deduped past a high-water seq.
           const owned = logSinkRef.current.recordCoopEvent(event, seq, outcome);
           if (owned && outcome === "bounced") {
-            // Own intent bounced (a partner committed first). `detail`
-            // carries the diagnostic seqs the fold's intervening window saw
-            // for this bounce (absent/empty when the window was unenumerable
-            // or genuinely empty — see FoldOutcome.interveningSeqs).
-            logSinkRef.current.recordBounce(seq, detail?.interveningSeqs ?? []);
+            // Own intent bounced. Preserve both the machine-readable cause and
+            // the diagnostic intervening window, then show cause-specific copy.
+            logSinkRef.current.recordBounce(
+              seq,
+              detail?.interveningSeqs ?? [],
+              detail?.bounceReason ?? "invalid_action",
+            );
             // Surface the toast; a token bump re-shows it even on repeats.
-            bounceMessageRef.current = BOUNCE_MESSAGE;
+            bounceMessageRef.current = bounceMessageForReason(
+              detail?.bounceReason,
+            );
             setBounceToken((token) => token + 1);
           }
           for (const listener of outcomeListenersRef.current) {

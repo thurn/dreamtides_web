@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { buildAppliedIndex, decodeAppliedIndex, foldEvents } from "./fold";
 import { hashState } from "./hash";
-import type { EngineConfig, EventContext, EventOutcome, Genesis, GameEvent } from "./types";
+import type {
+  EngineConfig,
+  EventContext,
+  Genesis,
+  GameEvent,
+  ReducerResult,
+} from "./types";
 
 // A minimal, game-agnostic toy fold state and reducer used to exercise the
 // pure fold driver. `n` is a running counter; `log` records applied events in
@@ -23,20 +29,24 @@ const GENESIS: Genesis = { seed: "toy-seed", reducerVersion: "v1", createdAt: 0,
  *   different actor, the ADD bounces (mirrors the real rule-3 self-chain
  *   exemption at the data level).
  */
-function toyReducer(state: ToyState, event: GameEvent, ctx: EventContext): { state: ToyState; outcome: EventOutcome } {
+function toyReducer(
+  state: ToyState,
+  event: GameEvent,
+  ctx: EventContext,
+): ReducerResult<ToyState> {
   if (event.type === "POISON") {
     throw new Error("poison event exploded");
   }
   if (event.type === "BOUNCE_ME") {
-    return { state, outcome: "bounced" };
+    return { state, outcome: "bounced", bounceReason: "invalid_action" };
   }
   if (event.type === "ADD") {
     if (ctx.intervening === "unknown") {
-      return { state, outcome: "bounced" };
+      return { state, outcome: "bounced", bounceReason: "unknown_conflict" };
     }
     const partnerIntervened = ctx.intervening.some((entry) => entry.actor !== event.actor);
     if (partnerIntervened) {
-      return { state, outcome: "bounced" };
+      return { state, outcome: "bounced", bounceReason: "partner_conflict" };
     }
     const x = (event.payload.x as number) ?? 0;
     return {
@@ -44,7 +54,7 @@ function toyReducer(state: ToyState, event: GameEvent, ctx: EventContext): { sta
       outcome: "applied",
     };
   }
-  return { state, outcome: "bounced" };
+  return { state, outcome: "bounced", bounceReason: "invalid_action" };
 }
 
 const CONFIG: EngineConfig<ToyState> = {
@@ -153,6 +163,7 @@ describe("foldEvents interveningSeqs on a bounced outcome (P3-9)", () => {
     const result = foldEvents(CONFIG, GENESIS, GENESIS_BASE(), events);
     const bySeq = new Map(result.outcomes.map((o) => [o.seq, o]));
     expect(bySeq.get(6)?.outcome).toBe("bounced");
+    expect(bySeq.get(6)?.bounceReason).toBe("partner_conflict");
     expect(bySeq.get(6)?.interveningSeqs).toEqual([4]);
     // An applied outcome carries no interveningSeqs.
     expect(bySeq.get(4)?.interveningSeqs).toBeUndefined();
@@ -164,6 +175,7 @@ describe("foldEvents interveningSeqs on a bounced outcome (P3-9)", () => {
     const events = [ev(1, "A", 0, "BOUNCE_ME")];
     const result = foldEvents(CONFIG, GENESIS, GENESIS_BASE(), events);
     expect(result.outcomes[0].outcome).toBe("bounced");
+    expect(result.outcomes[0].bounceReason).toBe("invalid_action");
     expect(result.outcomes[0].interveningSeqs).toEqual([]);
   });
 
