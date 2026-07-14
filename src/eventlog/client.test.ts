@@ -53,6 +53,7 @@ function confirmedEvent(opts: {
   actor: string;
   basedOnSeq: number;
   nonce?: string;
+  intentKey?: string;
   stateHashAfter?: string;
 }): GameEvent {
   return {
@@ -62,6 +63,7 @@ function confirmedEvent(opts: {
     clientTimestamp: "0",
     basedOnSeq: opts.basedOnSeq,
     nonce: opts.nonce,
+    intentKey: opts.intentKey,
     stateHashAfter: opts.stateHashAfter,
   };
 }
@@ -210,6 +212,128 @@ describe("LogClient double-apply of own intent", () => {
     // Confirmed state contains A exactly once; the pending copy was removed.
     expect(harness.displayed()?.applied).toEqual(["A"]);
     expect(harness.outcomes).toContainEqual({ event: committed, seq: 1, outcome: "applied" });
+  });
+
+  it("coalesces repeated local submissions and reconciles when a partner confirms the intent key", async () => {
+    let resolveAppend: ((seq: number) => void) | undefined;
+    const { harness, client } = makeHarness(config, {
+      append: () =>
+        new Promise<number>((resolve) => {
+          resolveAppend = resolve;
+        }),
+    });
+    harness.deliver(makeNode({ events: {} }));
+
+    const first = client.submit({
+      type: "T",
+      payload: { tag: "automatic" },
+      intentKey: "battle:b-1:dreamwell:player:2",
+    });
+    const replay = client.submit({
+      type: "T",
+      payload: { tag: "automatic" },
+      intentKey: "battle:b-1:dreamwell:player:2",
+    });
+
+    expect(harness.appended).toHaveLength(1);
+    expect(harness.displayed()?.applied).toEqual(["automatic"]);
+
+    const partnerWinner = confirmedEvent({
+      tag: "automatic",
+      actor: "partner",
+      basedOnSeq: 0,
+      nonce: "partner:1",
+      intentKey: "battle:b-1:dreamwell:player:2",
+    });
+    harness.deliver(makeNode({ events: { 1: partnerWinner } }));
+    resolveAppend?.(1);
+
+    await expect(first).resolves.toBe(1);
+    await expect(replay).resolves.toBe(1);
+    expect(harness.displayed()?.applied).toEqual(["automatic"]);
+    expect(harness.outcomes).toContainEqual({
+      event: partnerWinner,
+      seq: 1,
+      outcome: "applied",
+    });
+  });
+
+  it("does not optimistically echo an intent key that is already confirmed", async () => {
+    const { harness, client } = makeHarness();
+    const confirmed = confirmedEvent({
+      tag: "automatic",
+      actor: "partner",
+      basedOnSeq: 0,
+      nonce: "partner:1",
+      intentKey: "battle:b-1:dreamwell:player:2",
+    });
+    harness.deliver(makeNode({ events: { 1: confirmed } }));
+
+    await expect(
+      client.submit({
+        type: "T",
+        payload: { tag: "automatic" },
+        intentKey: "battle:b-1:dreamwell:player:2",
+      }),
+    ).resolves.toBe(1);
+
+    expect(harness.appended).toHaveLength(0);
+    expect(harness.displayed()?.applied).toEqual(["automatic"]);
+    expect(harness.outcomes).toEqual([
+      { event: confirmed, seq: 1, outcome: "applied" },
+    ]);
+  });
+
+  it("appends local submissions in order while echoing both immediately", async () => {
+    const resolvers: Array<(seq: number) => void> = [];
+    const { harness, client } = makeHarness(config, {
+      append: () =>
+        new Promise<number>((resolve) => {
+          resolvers.push(resolve);
+        }),
+    });
+    harness.deliver(makeNode({ events: {} }));
+
+    const first = client.submit({ type: "T", payload: { tag: "first" } });
+    const second = client.submit({ type: "T", payload: { tag: "second" } });
+
+    expect(harness.displayed()?.applied).toEqual(["first", "second"]);
+    expect(harness.appended.map((event) => event.payload.tag)).toEqual(["first"]);
+
+    resolvers[0](1);
+    await expect(first).resolves.toBe(1);
+    await Promise.resolve();
+    expect(harness.appended.map((event) => event.payload.tag)).toEqual([
+      "first",
+      "second",
+    ]);
+
+    resolvers[1](2);
+    await expect(second).resolves.toBe(2);
+  });
+
+  it("remembers a keyed server no-op when the winning event was compacted", async () => {
+    const { harness, client } = makeHarness(config, {
+      append: () => Promise.resolve(5),
+    });
+    harness.deliver(
+      makeNode({
+        baseSeq: 5,
+        baseSnapshot: { applied: ["confirmed"] },
+        events: {},
+      }),
+    );
+
+    const draft = {
+      type: "T",
+      payload: { tag: "automatic" },
+      intentKey: "complete-site:quest:9:site-7",
+    };
+    await expect(client.submit(draft)).resolves.toBe(5);
+    await expect(client.submit(draft)).resolves.toBe(5);
+
+    expect(harness.appended).toHaveLength(1);
+    expect(harness.displayed()?.applied).toEqual(["confirmed"]);
   });
 });
 

@@ -44,6 +44,7 @@ export function createBattleInitProvider(
       );
       const init = createBattleInit({
         battleEntryKey,
+        battleInstanceId: `battle:${quest.runId ?? "unscoped"}:${battleEntryKey}`,
         site,
         state: quest,
         cardDatabase: content.cardDatabase,

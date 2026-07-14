@@ -290,6 +290,7 @@ export interface CoopEventRecord {
   type: string;
   actor: string;
   outcome: EventOutcome;
+  intentKey?: string;
   stateHashAfter?: string;
   gameId: string;
 }
@@ -393,6 +394,7 @@ export function createCoopLogRecorder(options: CoopLogRecorderOptions): CoopLogR
         actor: event.actor,
         outcome,
         gameId,
+        ...(event.intentKey === undefined ? {} : { intentKey: event.intentKey }),
         ...(event.stateHashAfter === undefined
           ? {}
           : { stateHashAfter: event.stateHashAfter }),

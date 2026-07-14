@@ -34,6 +34,13 @@ export interface GameEvent {
    */
   nonce?: string;
   /**
+   * Stable identity for a logical intent that may be observed and submitted by
+   * multiple React mounts or connected clients. The append transaction keeps
+   * at most one event for a key across the room's lifetime; reducers still
+   * validate the winning event against durable state.
+   */
+  intentKey?: string;
+  /**
    * The appender's local fold hash after applying this event, set only
    * when the appender's optimistic prediction matched the committed seq
    * (see design spec §Error handling and safety rails, "Divergence
@@ -139,6 +146,12 @@ export interface EncodedLogNode {
    * node that has not compacted yet.
    */
   appliedIndex?: string;
+  /**
+   * JSON string encoding `Record<seq, intentKey>` for keyed logical intents.
+   * Entries survive event compaction so remounts and late-joining clients
+   * cannot append the same logical transition again.
+   */
+  intentKeyIndex?: string;
   /**
    * Last compaction attempt that failed inside `applyAppend`. The append still
    * commits, but this structural marker makes the skipped compaction visible to

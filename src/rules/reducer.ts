@@ -229,7 +229,7 @@ export function routeDomain(
     case "SELECT_DREAMCALLER":
       return questCase(state, lifecycle.selectDreamcaller(quest, payload));
     case "START_QUEST":
-      return questCase(state, lifecycle.startQuest(quest, payload));
+      return questCase(state, lifecycle.startQuest(quest, payload, ctx));
 
     // --- deck & transfiguration ---
     case "ADD_CARD":
@@ -346,7 +346,7 @@ export function routeDomain(
     case "RESET_QUEST":
       return foldCase(state, lifecycle.resetQuest(state));
     case "LOAD_STATE":
-      return foldCase(state, lifecycle.loadState(state, payload));
+      return foldCase(state, lifecycle.loadState(state, payload, ctx));
 
     default: {
       // Compile-time exhaustiveness: if this still typechecks, `type` is

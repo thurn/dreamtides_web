@@ -8,7 +8,7 @@
 // first offer immediately, so the adapter itself carries no local draft-state
 // bootstrap.
 
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useQuest } from "../../state/quest-context";
 import { logEvent } from "../../logging";
 import { readDraftSiteProgress } from "../../data/draft-site-bootstrap";
@@ -23,12 +23,10 @@ export function DraftSiteScreenAdapter({
   siteId: string;
 }) {
   const { state, mutations, cardDatabase } = useQuest();
-  const completedRef = useRef(false);
 
-  // Enter this site once per visit: fire the intent whenever the displayed
-  // draft state has not (yet) advanced to `siteId`. Idempotent on the
-  // reducer side (ENTER_DRAFT_SITE), so a re-render before the fold catches
-  // up simply re-fires a no-op intent rather than re-rolling the offer.
+  // Enter this site whenever the displayed draft state has not advanced to
+  // `siteId`. The run-scoped event-log key gives every mount and connected
+  // client one shared logical entry intent.
   useEffect(() => {
     if (state.draftState?.activeSiteId === siteId) return;
     mutations.enterDraftSite(siteId);
@@ -62,16 +60,15 @@ export function DraftSiteScreenAdapter({
   );
 
   // The pack is exhausted: log the completed draft and return to the dreamscape,
-  // guarded so it fires exactly once even as effects re-run.
+  // The COMPLETE_SITE run-scoped intent key is the durable once-only owner;
+  // every client observing completion may submit this effect.
   useEffect(() => {
-    if (!progress.isComplete || completedRef.current) return;
-    completedRef.current = true;
+    if (!progress.isComplete) return;
     logEvent("draft_site_completed_ui", {
       siteId,
       picksCompleted: progress.sitePicksCompleted,
     });
     mutations.completeSite(siteId, "draft_site_completed");
-    mutations.setScreen({ type: "dreamscape" });
   }, [progress.isComplete, progress.sitePicksCompleted, mutations, siteId]);
 
   if (cardDatabase.size === 0) return null;

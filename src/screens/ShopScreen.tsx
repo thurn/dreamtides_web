@@ -10,6 +10,7 @@ import { IconButton } from "../cumulus/components/controls/IconButton";
 import { GLYPHS } from "../cumulus/primitives/glyph";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";
+import { useCardSourceDebugPublication } from "../state/use-card-source-debug-publication";
 import { logEvent } from "../logging";
 import { SiteGuide } from "../components/SiteGuide";
 import {
@@ -120,15 +121,11 @@ export function ShopScreen({ site }: ShopScreenProps) {
     }
   }, [mutations, runtime, site]);
 
-  useEffect(() => {
-    mutations.setCardSourceDebug(cardSourceDebugState, "shop_cards_shown");
-  }, [cardSourceDebugState, mutations]);
-
-  useEffect(
-    () => () => {
-      mutations.setCardSourceDebug(null, "shop_cards_hidden");
-    },
-    [mutations],
+  useCardSourceDebugPublication(
+    mutations.setCardSourceDebug,
+    cardSourceDebugState,
+    "shop_cards_shown",
+    "shop_cards_hidden",
   );
 
   // Log once per visit, after the shop runtime is stocked, so a production

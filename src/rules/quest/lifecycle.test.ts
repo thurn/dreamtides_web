@@ -452,8 +452,14 @@ describe("START_QUEST", () => {
   it("assembles a run and preserves the room seed", () => {
     registerQuestLifecycleContentProvider(deterministicProvider());
     const start = genesis();
-    const started = apply(start, "START_QUEST", { dreamcallerId: "dc-7" });
+    const started = apply(
+      start,
+      "START_QUEST",
+      { dreamcallerId: "dc-7" },
+      ctx({ seq: 17 }),
+    );
     expect(started.quest.seed).toBe(GENESIS.seed);
+    expect(started.quest.runId).toBe("quest:17");
     expect(started.quest.dreamcaller?.id).toBe("dc-7");
     expect(started.quest.screen).toEqual({ type: "dreamscape" });
   });
@@ -487,6 +493,7 @@ describe("RESET_QUEST", () => {
 
     const reset = apply(state, "RESET_QUEST", {});
     expect(reset.battle).toBeNull();
+    expect(reset.quest.runId).toBeNull();
     expect(hashState(reset.quest)).toBe(
       hashState(genesisFoldState(GENESIS).quest),
     );
@@ -510,7 +517,13 @@ describe("LOAD_STATE", () => {
       completionLevel: 9,
       essence: 123,
     };
-    const loaded = apply(start, "LOAD_STATE", { snapshot });
+    const loaded = apply(
+      start,
+      "LOAD_STATE",
+      { snapshot },
+      ctx({ seq: 31 }),
+    );
+    expect(loaded.quest.runId).toBe("quest:31");
     expect(loaded.quest.completionLevel).toBe(9);
     expect(loaded.quest.essence).toBe(123);
     expect(loaded.battle).toBeNull();
@@ -520,6 +533,20 @@ describe("LOAD_STATE", () => {
       battle: emptyBattle,
     });
     expect(withBattle.battle).toEqual(emptyBattle);
+  });
+
+  it("loads a legacy snapshot without a run id and mints one from the event", () => {
+    const start = genesis();
+    const { runId: _runId, ...snapshot } = start.quest;
+
+    const loaded = apply(
+      start,
+      "LOAD_STATE",
+      { snapshot },
+      ctx({ seq: 44 }),
+    );
+
+    expect(loaded.quest.runId).toBe("quest:44");
   });
 
   it("bounces a non-object snapshot", () => {

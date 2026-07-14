@@ -157,6 +157,53 @@ describe("applyAppend nonce dedup", () => {
     expect(numericEventKeys(afterRetry)).toEqual([1]);
     expect(decodeEvent(afterRetry.events[1])).toEqual(first);
   });
+
+  it("no-ops a repeated logical intent even when another client supplies a new nonce", () => {
+    const first = {
+      ...makeEvent(1),
+      actor: "client-a",
+      nonce: "client-a:1",
+      intentKey: "open-site:site-7",
+    };
+    const retry = {
+      ...makeEvent(999),
+      actor: "client-b",
+      nonce: "client-b:4",
+      intentKey: "open-site:site-7",
+    };
+    const afterFirst = applyAppend(config, emptyLog(), first);
+
+    const afterRetry = applyAppend(config, afterFirst, retry);
+
+    expect(afterRetry).toBe(afterFirst);
+    expect(afterRetry.head).toBe(1);
+    expect(decodeEvent(afterRetry.events[1])).toEqual(first);
+  });
+
+  it("retains logical intent deduplication after the winning event is compacted", () => {
+    const first = {
+      ...makeEvent(1),
+      nonce: "client-a:1",
+      intentKey: "complete-site:quest:9:site-7",
+    };
+    let log = applyAppend(config, emptyLog(), first);
+    for (let index = 2; index <= COMPACT_THRESHOLD + 1; index += 1) {
+      log = applyAppend(config, log, makeEvent(index));
+    }
+    expect(log.baseSeq).toBeGreaterThanOrEqual(1);
+    expect(log.events[1]).toBeUndefined();
+
+    const retry = {
+      ...makeEvent(999),
+      actor: "client-b",
+      nonce: "client-b:4",
+      intentKey: first.intentKey,
+    };
+    const afterRetry = applyAppend(config, log, retry);
+
+    expect(afterRetry).toBe(log);
+    expect(afterRetry.head).toBe(COMPACT_THRESHOLD + 1);
+  });
 });
 
 describe("applyAppend keeps events dense", () => {

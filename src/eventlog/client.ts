@@ -74,6 +74,8 @@ export interface EventDraft {
   payload: Record<string, unknown>;
   /** Defaults to the client's own id when omitted. */
   actor?: string;
+  /** Stable cross-client identity for one logical automatic intent. */
+  intentKey?: string;
 }
 
 export interface LogClient {
@@ -126,7 +128,28 @@ export function createLogClient<S>(
 
   // Ordered queue of this client's submitted-but-unconfirmed intents.
   const pending: GameEvent[] = [];
+  const submissionsByIntentKey = new Map<string, Promise<number>>();
+  const confirmedSeqByIntentKey = new Map<string, number>();
+  let appendTail: Promise<void> | null = null;
   let nonceCounter = 0;
+
+  function appendInSubmissionOrder(event: GameEvent): Promise<number> {
+    const prior = appendTail;
+    const result = prior === null
+      ? io.append(event)
+      : prior.then(() => io.append(event));
+    const settled = result.then(
+      () => undefined,
+      () => undefined,
+    );
+    appendTail = settled;
+    void settled.then(() => {
+      if (appendTail === settled) {
+        appendTail = null;
+      }
+    });
+    return result;
+  }
 
   function requireGenesis(): Genesis {
     if (genesis === undefined) {
@@ -183,6 +206,9 @@ export function createLogClient<S>(
       );
       confirmedState = result.state;
       lastFoldedSeq = seq;
+      if (event.intentKey !== undefined) {
+        confirmedSeqByIntentKey.set(event.intentKey, seq);
+      }
       const outcome = result.outcomes[0];
       if (outcome.outcome === "applied") {
         appliedBySeq.set(seq, { actor: event.actor, type: event.type });
@@ -241,10 +267,18 @@ export function createLogClient<S>(
         // Reconcile the pending queue: a confirmed event carrying one of our
         // nonces IS our own committed intent — remove it so it is not folded a
         // second time on top of the confirmed state.
-        if (typeof event.nonce === "string") {
-          const idx = pending.findIndex((p) => p.nonce === event.nonce);
-          if (idx >= 0) {
-            pending.splice(idx, 1);
+        if (typeof event.nonce === "string" || typeof event.intentKey === "string") {
+          for (let index = pending.length - 1; index >= 0; index -= 1) {
+            const candidate = pending[index];
+            if (
+              candidate.nonce === event.nonce ||
+              (event.intentKey !== undefined && candidate.intentKey === event.intentKey)
+            ) {
+              pending.splice(index, 1);
+            }
+          }
+          if (event.intentKey !== undefined) {
+            submissionsByIntentKey.delete(event.intentKey);
           }
         }
       }
@@ -316,6 +350,7 @@ export function createLogClient<S>(
       if (rewound) {
         lastEmittedSeq = node.baseSeq;
         divergenceReported.clear();
+        confirmedSeqByIntentKey.clear();
       }
       confirmedState = baseState(node);
       lastFoldedSeq = node.baseSeq;
@@ -338,7 +373,26 @@ export function createLogClient<S>(
 
   const unsubscribe = io.subscribe(onNode);
 
-  async function submit(draft: EventDraft): Promise<number> {
+  function submit(draft: EventDraft): Promise<number> {
+    if (draft.intentKey !== undefined) {
+      const confirmedSeq = confirmedSeqByIntentKey.get(draft.intentKey);
+      if (confirmedSeq !== undefined) {
+        return Promise.resolve(confirmedSeq);
+      }
+      const existing = submissionsByIntentKey.get(draft.intentKey);
+      if (existing !== undefined) {
+        return existing;
+      }
+    }
+
+    const submission = submitNew(draft);
+    if (draft.intentKey !== undefined) {
+      submissionsByIntentKey.set(draft.intentKey, submission);
+    }
+    return submission;
+  }
+
+  async function submitNew(draft: EventDraft): Promise<number> {
     if (!initialized || confirmedState === undefined) {
       throw new Error("LogClient.submit called before the first log node arrived");
     }
@@ -355,6 +409,7 @@ export function createLogClient<S>(
       // this client's own pending intents are covered by the self-chain rule.
       basedOnSeq: lastFoldedSeq,
       nonce,
+      ...(draft.intentKey === undefined ? {} : { intentKey: draft.intentKey }),
     };
 
     // stateHashAfter is written ONLY for a clean prediction: the queue is empty
@@ -376,7 +431,21 @@ export function createLogClient<S>(
     recomputeDisplayed();
 
     try {
-      return await io.append(event);
+      const seq = await appendInSubmissionOrder(event);
+      // A keyed append can resolve to an event this client had already folded
+      // (for example, a remount submitted after the partner's winner arrived).
+      // No subscription update follows an RTDB transaction that made no
+      // change, so retire the optimistic echo here.
+      if (event.intentKey !== undefined && seq <= lastFoldedSeq) {
+        confirmedSeqByIntentKey.set(event.intentKey, seq);
+        const idx = pending.findIndex((entry) => entry.nonce === nonce);
+        if (idx >= 0) {
+          pending.splice(idx, 1);
+          recomputeDisplayed();
+        }
+        submissionsByIntentKey.delete(event.intentKey);
+      }
+      return seq;
     } catch (error) {
       // The append may have reached the server before the ack failed. If the
       // subscription already confirmed this nonce, reconciliation removed the
@@ -390,6 +459,9 @@ export function createLogClient<S>(
       // the intent out by nonce, recompute (rollback IS recomputation), report
       // the failure for UX, and rethrow so the caller sees the rejection.
       pending.splice(idx, 1);
+      if (event.intentKey !== undefined) {
+        submissionsByIntentKey.delete(event.intentKey);
+      }
       recomputeDisplayed();
       callbacks.onAppendFailed?.(event, error);
       throw error;

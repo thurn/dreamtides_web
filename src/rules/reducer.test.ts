@@ -449,8 +449,9 @@ describe("ADJUST_ESSENCE domain case", () => {
 // ---------------------------------------------------------------------------
 
 describe("isCasExempt (rule 1)", () => {
-  it("exempts SET_CARD_NOTE, OPEN_SITE, and ENTER_DRAFT_SITE", () => {
+  it("exempts presentation and site-bootstrap events", () => {
     expect(isCasExempt("SET_CARD_NOTE")).toBe(true);
+    expect(isCasExempt("SET_CARD_SOURCE_DEBUG")).toBe(true);
     expect(isCasExempt("OPEN_SITE")).toBe(true);
     expect(isCasExempt("ENTER_DRAFT_SITE")).toBe(true);
   });
@@ -568,22 +569,31 @@ describe("isInterveningWindowClear (rule 3)", () => {
     ).toBe(true);
   });
 
-  it("still bounces when a partner OPEN_SITE intervened (exempt from bouncing, not from being intervening)", () => {
+  it("ignores a partner OPEN_SITE bootstrap", () => {
     expect(
       isInterveningWindowClear(
         [{ seq: 1, actor: "bob", type: "OPEN_SITE" }],
         "alice",
       ),
-    ).toBe(false);
+    ).toBe(true);
   });
 
-  it("still bounces when a partner ENTER_DRAFT_SITE intervened (exempt from bouncing, not from being intervening)", () => {
+  it("ignores a partner ENTER_DRAFT_SITE bootstrap", () => {
     expect(
       isInterveningWindowClear(
         [{ seq: 1, actor: "bob", type: "ENTER_DRAFT_SITE" }],
         "alice",
       ),
-    ).toBe(false);
+    ).toBe(true);
+  });
+
+  it("ignores client presentation provenance", () => {
+    expect(
+      isInterveningWindowClear(
+        [{ seq: 1, actor: "bob", type: "SET_CARD_SOURCE_DEBUG" }],
+        "alice",
+      ),
+    ).toBe(true);
   });
 });
 

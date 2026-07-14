@@ -103,6 +103,7 @@ function makeMutations(): QuestMutations {
 
 function makeState(overrides: Partial<QuestState> = {}): QuestState {
   return {
+    runId: "quest:test",
     seed: "test-seed",
     essence: 250,
     essenceCap: 500,

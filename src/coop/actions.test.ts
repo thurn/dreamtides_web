@@ -168,4 +168,29 @@ describe("coop actions facade", () => {
       expect(outcome.error, `fold error on "${draft.type}"`).toBeUndefined();
     });
   });
+
+  it("stamps durable logical keys on automatic and site-lifecycle intents", () => {
+    const captured: EventDraft[] = [];
+    const actions = makeActions((draft) => {
+      captured.push(draft);
+      return Promise.resolve(captured.length);
+    });
+
+    void actions.openSite("site-7", "quest:12");
+    void actions.enterDraftSite("site-7", "quest:12");
+    void actions.acceptEssence("site-7", "quest:12");
+    void actions.completeSite("site-7", "quest:12");
+    void actions.battleCommand(
+      { id: "DEBUG_EDIT" },
+      "battle:b-1:dreamwell:player:2",
+    );
+
+    expect(captured.map((draft) => draft.intentKey)).toEqual([
+      "open-site:quest:12:site-7",
+      "enter-draft-site:quest:12:site-7",
+      "accept-essence:quest:12:site-7",
+      "complete-site:quest:12:site-7",
+      "battle:b-1:dreamwell:player:2",
+    ]);
+  });
 });

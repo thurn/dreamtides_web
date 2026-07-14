@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { DreamwellCardViewData } from "../../components/DreamwellCardView";
 import { logEvent } from "../../logging";
 import type { BattleCommand } from "../debug/commands";
@@ -60,30 +60,6 @@ export function BattleForeseeOverlay({
       window.removeEventListener("keydown", handleKeyDown, true);
     };
   }, [isReorderOpen, onClose]);
-
-  // Spec §O-1 / bug-102: only dispatch REVEAL_DECK_TOP when the user widens
-  // the reveal window (mount or `count` increase). The `onDispatchRef` shim
-  // keeps the dispatcher referentially stable from the effect's perspective
-  // so the effect does not re-run on every reducer tick while the overlay is
-  // open. The reducer-side no-op check still guards against duplicate history
-  // commits when the top cards are already revealed.
-  const onDispatchRef = useRef(onDispatch);
-  onDispatchRef.current = onDispatch;
-  useEffect(() => {
-    if (count <= 0) {
-      return;
-    }
-
-    onDispatchRef.current({
-      id: "DEBUG_EDIT",
-      edit: {
-        kind: "REVEAL_DECK_TOP",
-        side,
-        count,
-      },
-      sourceSurface: "foresee-overlay",
-    });
-  }, [count, side]);
 
   const revealed = useMemo(
     () => revealedIds.filter((battleCardId) => deck.includes(battleCardId)),
@@ -185,13 +161,22 @@ export function BattleForeseeOverlay({
                 disabled={!canIncrement}
                 className={createButtonClassName(canIncrement)}
                 onClick={() => {
-                  setCount((previous) => {
-                    const nextCount = Math.min(
-                      MAX_FORESEE_COUNT,
-                      Math.min(deckLength, previous + 1),
-                    );
-                    setRevealedIds((current) => appendMoreRevealedIds(current, deck, nextCount));
-                    return nextCount;
+                  const nextCount = Math.min(
+                    MAX_FORESEE_COUNT,
+                    Math.min(deckLength, count + 1),
+                  );
+                  setCount(nextCount);
+                  setRevealedIds((current) =>
+                    appendMoreRevealedIds(current, deck, nextCount),
+                  );
+                  onDispatch({
+                    id: "DEBUG_EDIT",
+                    edit: {
+                      kind: "REVEAL_DECK_TOP",
+                      side,
+                      count: nextCount,
+                    },
+                    sourceSurface: "foresee-overlay",
                   });
                 }}
               >

@@ -146,6 +146,7 @@ function makeCardDatabase(): Map<number, CardData> {
 
 function makeState(slots: RuntimeShopSlot[]): QuestState {
   return {
+    runId: "quest:test",
     seed: "test-seed",
     essence: 500,
     essenceCap: 500,

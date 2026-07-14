@@ -120,10 +120,9 @@ export interface QuestMutations {
   ) => void;
   pickDraftCard: (siteId: string, cardNumber: number) => void;
   /**
-   * Enters a draft site, revealing its first offer. Idempotent (the
-   * `ENTER_DRAFT_SITE` reducer case): a re-fire while the site is already
-   * active is a no-op, so a screen may call this on every render where the
-   * displayed draft state has not yet caught up to `siteId`.
+   * Enters a draft site, revealing its first offer. The coop event log scopes
+   * this intent to the current run and site, so every observing client may
+   * request it while the displayed fold catches up.
    */
   enterDraftSite: (siteId: string) => void;
   addCard: (cardNumber: number, source: string) => void;
@@ -146,6 +145,7 @@ export interface QuestMutations {
   setCardSourceDebug: (
     cardSourceDebug: CardSourceDebugState | null,
     source: string,
+    publicationId?: string,
   ) => void;
   /**
    * Adds a Dreamsign. When the player is at the 12-Dreamsign cap, `purgeIndex`
@@ -382,6 +382,7 @@ export function QuestContextProvider({
 
 export function createDefaultState(): QuestState {
   return {
+    runId: null,
     seed: "default",
     essence: 200,
     essenceCap: 500,

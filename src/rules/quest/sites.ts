@@ -286,18 +286,18 @@ function randomIntInRange(
 
 /**
  * `OPEN_SITE { siteId }` — collapses the five legacy `ensure*SiteRuntime`
- * writers into one type-dispatched, idempotent generator. Dispatches on the
+ * writers into one type-dispatched generator. Dispatches on the
  * site's TYPE:
  *   - Essence / DreamAugury: generated purely in-reducer (Essence draws its
  *     amount from `ctx.rng`; DreamAugury seeds a fresh, un-completed runtime).
  *   - Reward / DreamsignRevelation / Shop / DreamsignMarket / Transfiguration /
  *     Duplication: delegated to the registered {@link SiteContentProvider}.
  *
- * Idempotent: if a runtime already exists for the site, the existing runtime is
- * NOT regenerated or overwritten — the same state is returned (a no-change
- * APPLIED outcome, so two players opening the same site converge without a
- * bounce toast). Bounces (null) on a malformed payload, an unknown site, a site
- * type that has no runtime, or a content-coupled type with no provider wired.
+ * An existing runtime is authoritative, so a repeated event bounces without
+ * regenerating it. The event-log intent key prevents repeated screen mounts and
+ * connected clients from appending that repeated event. Bounces also cover a
+ * malformed payload, an unknown site, a site type that has no runtime, or a
+ * content-coupled type with no provider wired.
  */
 export function openSite(
   quest: QuestState,
@@ -307,9 +307,7 @@ export function openSite(
   const siteId = asString(payload.siteId);
   if (siteId === null) return null;
 
-  // Idempotence: an existing runtime is authoritative and must not be
-  // regenerated. Return the SAME state so the fold applies a no-change event.
-  if (quest.siteRuntime[siteId] !== undefined) return quest;
+  if (quest.siteRuntime[siteId] !== undefined) return null;
 
   const site = findSite(quest, siteId);
   if (site === null) return null;

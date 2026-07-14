@@ -99,6 +99,7 @@ function makeQuestState(overrides: {
   seed?: string;
 } = {}): QuestState {
   return {
+    runId: "quest:test",
     seed: overrides.seed ?? "test-seed",
     essence: overrides.essence ?? 100,
     essenceCap: overrides.essenceCap ?? 500,

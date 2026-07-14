@@ -354,6 +354,7 @@ function makeDraftState(): DraftState {
 
 function makeState(overrides: Partial<QuestState> = {}): QuestState {
   return {
+    runId: "quest:test",
     seed: "test-seed",
     essence: 100,
     essenceCap: 500,
@@ -917,7 +918,7 @@ describe("DraftSiteScreen", () => {
       "draft_site_completed",
     );
     expect(mutations.markSiteVisited).not.toHaveBeenCalled();
-    expect(mutations.setScreen).toHaveBeenCalledWith({ type: "dreamscape" });
+    expect(mutations.setScreen).not.toHaveBeenCalled();
 
     act(() => {
       root.unmount();

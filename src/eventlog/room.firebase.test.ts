@@ -6,6 +6,8 @@ const firebase = vi.hoisted(() => ({
   updates: [] as Array<{ path: string; value: Record<string, unknown> }>,
   sets: [] as Array<{ path: string; value: unknown }>,
   onDisconnectRemoves: [] as string[],
+  deferOnDisconnectRemove: false,
+  onDisconnectRemoveResolvers: [] as Array<() => void>,
   connectionCallbacks: [] as Array<(snapshot: { val: () => unknown }) => void>,
   unsubscribe: vi.fn(),
 }));
@@ -34,7 +36,12 @@ vi.mock("firebase/database", () => ({
   onDisconnect: vi.fn((ref: { path: string }) => ({
     remove: vi.fn(() => {
       firebase.onDisconnectRemoves.push(ref.path);
-      return Promise.resolve();
+      if (!firebase.deferOnDisconnectRemove) {
+        return Promise.resolve();
+      }
+      return new Promise<void>((resolve) => {
+        firebase.onDisconnectRemoveResolvers.push(resolve);
+      });
     }),
   })),
   set: vi.fn((ref: { path: string }, value: unknown) => {
@@ -72,6 +79,8 @@ beforeEach(() => {
   firebase.updates.length = 0;
   firebase.sets.length = 0;
   firebase.onDisconnectRemoves.length = 0;
+  firebase.deferOnDisconnectRemove = false;
+  firebase.onDisconnectRemoveResolvers.length = 0;
   firebase.connectionCallbacks.length = 0;
   firebase.unsubscribe.mockClear();
 });
@@ -148,5 +157,27 @@ describe("writePresence reconnect handling", () => {
       path: "rooms/room1/presence/client1",
       value: null,
     });
+  });
+
+  it("does not restore presence when cleanup wins a pending onDisconnect registration", async () => {
+    firebase.deferOnDisconnectRemove = true;
+    const cleanup = writePresence({} as never, "old-room", "client1", () => "t1");
+    const callback = firebase.connectionCallbacks[firebase.connectionCallbacks.length - 1];
+    if (callback === undefined) {
+      throw new Error("writePresence did not subscribe to .info/connected");
+    }
+
+    callback({ val: () => true });
+    cleanup();
+    expect(firebase.sets).toEqual([
+      { path: "rooms/old-room/presence/client1", value: null },
+    ]);
+
+    firebase.onDisconnectRemoveResolvers[0]?.();
+    await flushPromises();
+
+    expect(firebase.sets).toEqual([
+      { path: "rooms/old-room/presence/client1", value: null },
+    ]);
   });
 });

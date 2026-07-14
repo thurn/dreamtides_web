@@ -329,13 +329,13 @@ describe("OPEN_SITE generation determinism", () => {
 // ---------------------------------------------------------------------------
 
 describe("OPEN_SITE idempotence", () => {
-  it("second OPEN_SITE on the same site is a no-change APPLIED (not bounced)", () => {
+  it("bounces a repeated OPEN_SITE without changing or regenerating runtime", () => {
     const first = reduce(siteState("Essence"), "OPEN_SITE", {
       siteId: SITE_ID,
     });
     expect(first.outcome).toBe("applied");
     const second = reduce(first.state, "OPEN_SITE", { siteId: SITE_ID });
-    expect(second.outcome).toBe("applied");
+    expect(second.outcome).toBe("bounced");
     // Runtime is not regenerated/overwritten: state hash unchanged.
     expect(JSON.stringify(second.state.quest)).toBe(
       JSON.stringify(first.state.quest),
@@ -355,7 +355,7 @@ describe("OPEN_SITE idempotence", () => {
       { siteId: SITE_ID },
       ctx({ seq: 99, rng: makeRng(777) }),
     );
-    expect(second.outcome).toBe("applied");
+    expect(second.outcome).toBe("bounced");
     expect(second.state.quest.siteRuntime[SITE_ID]).toEqual(
       first.state.quest.siteRuntime[SITE_ID],
     );

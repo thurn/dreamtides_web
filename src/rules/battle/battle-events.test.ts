@@ -1072,6 +1072,18 @@ function parkForeseePrompt(extraQueue: EffectRun[] = []): {
     throw new Error("expected a parked foresee prompt");
   }
   expect(prompt.kind).toBe("foresee");
+  if (prompt.options.kind !== "foresee") {
+    throw new Error("expected foresee prompt options");
+  }
+  const parkedBoard = parked.state.battle!.board;
+  for (const battleCardId of parkedBoard.sides.player.deck.slice(
+    0,
+    prompt.options.count,
+  )) {
+    expect(parkedBoard.cardInstances[battleCardId]?.isRevealedToPlayer).toBe(
+      true,
+    );
+  }
   return {
     state: parked.state,
     promptId: prompt.promptId,

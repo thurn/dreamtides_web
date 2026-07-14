@@ -225,7 +225,20 @@ function runQueue(
       continue;
     }
 
-    // plan.type === "prompt" — park with the parked cursor and materialized options.
+    // plan.type === "prompt" — park with the parked cursor and materialized
+    // options. Foresee's initial reveal belongs to the event that opens the
+    // prompt, so mounting its presentation on any number of clients is inert.
+    if (plan.active.kind === "foresee") {
+      currentBoard = applyDebugEdit(
+        currentBoard,
+        {
+          kind: "REVEAL_DECK_TOP",
+          side: run.side,
+          count: plan.active.count,
+        },
+        EMISSION,
+      ).state;
+    }
     return {
       init,
       board: currentBoard,

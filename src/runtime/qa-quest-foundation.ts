@@ -66,6 +66,7 @@ export function createQaQuestFoundation(
   }
 
   const state: QuestState = {
+    runId: null,
     seed,
     essence: 200,
     essenceCap: 500,

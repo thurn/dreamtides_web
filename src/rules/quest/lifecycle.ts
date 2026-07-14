@@ -21,6 +21,7 @@ import type { QuestState, Screen } from "../../types/quest";
 import type { EffectStep } from "../battle/effect-step";
 import { resolveScript } from "../battle/fold";
 import type { EffectRun, ScriptRef } from "../battle/fold";
+import type { EventContext } from "../../eventlog/types";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (SELECT_DREAMCALLER / START_QUEST)
@@ -334,13 +335,17 @@ export function selectDreamcaller(
 export function startQuest(
   quest: QuestState,
   payload: Record<string, unknown>,
+  ctx: EventContext,
 ): QuestState | null {
   if (quest.dreamcaller !== null) return null;
   const dreamcallerId = payload.dreamcallerId;
   if (typeof dreamcallerId !== "string") return null;
   const provider = contentProvider;
   if (provider === null) return null;
-  return provider.startQuest({ quest, dreamcallerId, seed: quest.seed });
+  const started = provider.startQuest({ quest, dreamcallerId, seed: quest.seed });
+  return started === null
+    ? null
+    : { ...started, runId: `quest:${String(ctx.seq)}` };
 }
 
 // ---------------------------------------------------------------------------
@@ -381,8 +386,15 @@ export function resetQuest(state: FoldState): FoldState {
 export function loadState(
   state: FoldState,
   payload: Record<string, unknown>,
+  ctx: EventContext,
 ): FoldState | null {
-  return validateLoadedState(state, payload);
+  const loaded = validateLoadedState(state, payload);
+  return loaded === null
+    ? null
+    : {
+        ...loaded,
+        quest: { ...loaded.quest, runId: `quest:${String(ctx.seq)}` },
+      };
 }
 
 /**
@@ -450,6 +462,11 @@ function isQuestStateShape(value: unknown): value is QuestState {
     if (!Array.isArray(value[key])) return false;
   }
   if (typeof value.seed !== "string") return false;
+  if (
+    value.runId !== undefined &&
+    value.runId !== null &&
+    typeof value.runId !== "string"
+  ) return false;
   if (typeof value.hasSeenStartingDeckPopup !== "boolean") return false;
   if (!isRecord(value.atlas)) return false;
   if (!isRecord(value.screen)) return false;

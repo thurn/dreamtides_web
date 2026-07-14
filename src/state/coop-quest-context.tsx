@@ -21,7 +21,7 @@
 // See docs/superpowers/specs/2026-07-01-coop-event-sourcing-rewrite-design.md
 // §"Client layer".
 
-import { useMemo, useRef, type ReactNode } from "react";
+import { useCallback, useMemo, useRef, useState, type ReactNode } from "react";
 import type { QuestContent } from "../data/quest-content";
 import { useActions, useAppend, useGameState } from "../coop/hooks";
 import {
@@ -34,6 +34,10 @@ import { rerollCost } from "../shop/shop-generator";
 import { buildQaScene } from "../runtime/qa-scenes";
 import type { CardData } from "../types/cards";
 import type { DreamAtlas, QuestState } from "../types/quest";
+import {
+  updateCardSourcePublication,
+  type CardSourcePublication,
+} from "./card-source-publication";
 
 export interface CoopQuestProviderProps {
   children: ReactNode;
@@ -77,7 +81,23 @@ export function CoopQuestProvider({
   questContent,
 }: CoopQuestProviderProps) {
   const fold = useGameState();
-  const state = fold.quest;
+  const [cardSourcePublication, setCardSourcePublication] =
+    useState<CardSourcePublication | null>(null);
+  const publishCardSourceDebug = useCallback<QuestMutations["setCardSourceDebug"]>(
+    (cardSourceDebug, _source, publicationId) => {
+      setCardSourcePublication((current) =>
+        updateCardSourcePublication(current, cardSourceDebug, publicationId),
+      );
+    },
+    [],
+  );
+  const state = useMemo<QuestState>(
+    () => ({
+      ...fold.quest,
+      cardSourceDebug: cardSourcePublication?.state ?? null,
+    }),
+    [fold.quest, cardSourcePublication],
+  );
   const actions = useActions();
   const append = useAppend();
   const cardDatabase = questContent.cardDatabase;
@@ -238,18 +258,24 @@ export function CoopQuestProvider({
         if (cardId === null) return;
         dispatch(actions.pickDraftCard(packIndex, cardId));
       },
-      enterDraftSite: (siteId) => dispatch(actions.enterDraftSite(siteId)),
+      enterDraftSite: (siteId) =>
+        dispatch(actions.enterDraftSite(siteId, stateRef.current.runId ?? undefined)),
 
       // ---- sites: runtime reveal collapses to OPEN_SITE ----
-      ensureRewardSiteRuntime: (siteId) => dispatch(actions.openSite(siteId)),
+      ensureRewardSiteRuntime: (siteId) =>
+        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined)),
       ensureDreamsignOfferRuntime: (siteId) =>
-        dispatch(actions.openSite(siteId)),
-      ensureEssenceSiteRuntime: (siteId) => dispatch(actions.openSite(siteId)),
-      ensureShopRuntime: (site) => dispatch(actions.openSite(site.id)),
-      ensureCardChoiceRuntime: (siteId) => dispatch(actions.openSite(siteId)),
+        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined)),
+      ensureEssenceSiteRuntime: (siteId) =>
+        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined)),
+      ensureShopRuntime: (site) =>
+        dispatch(actions.openSite(site.id, stateRef.current.runId ?? undefined)),
+      ensureCardChoiceRuntime: (siteId) =>
+        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined)),
 
       // ---- sites: player actions ----
-      completeSite: (siteId) => dispatch(actions.completeSite(siteId)),
+      completeSite: (siteId) =>
+        dispatch(actions.completeSite(siteId, stateRef.current.runId ?? undefined)),
       acceptRewardSite: (siteId, purgeIndex) => {
         // ACCEPT_REWARD's reducer reads `purgeIndex` (the at-cap Dreamsign
         // replace slot), which the typed facade does not carry.
@@ -268,7 +294,8 @@ export function CoopQuestProvider({
       },
       rejectDreamsignOffer: (siteId) =>
         dispatch(actions.rejectDreamsignOffer(siteId)),
-      acceptEssenceSite: (siteId) => dispatch(actions.acceptEssence(siteId)),
+      acceptEssenceSite: (siteId) =>
+        dispatch(actions.acceptEssence(siteId, stateRef.current.runId ?? undefined)),
       acceptTransfigurationChoice: (siteId, entryId, type) =>
         emit("ACCEPT_TRANSFIGURATION_CHOICE", { siteId, entryId, type }),
       acceptDuplicationChoice: (siteId, entryId) =>
@@ -360,8 +387,7 @@ export function CoopQuestProvider({
         dispatch(actions.banSiteType(siteType, dreamscapes)),
       boostSiteAppearance: (siteType, percent, dreamscapes) =>
         dispatch(actions.boostSiteAppearance(siteType, percent, dreamscapes)),
-      setCardSourceDebug: (cardSourceDebug) =>
-        dispatch(actions.setCardSourceDebug(cardSourceDebug)),
+      setCardSourceDebug: publishCardSourceDebug,
 
       // ---- completion & failure (battle-completion bridges; Task 27) ----
       // Battle victory/defeat fold through `END_BATTLE`: the reducer's
@@ -376,7 +402,7 @@ export function CoopQuestProvider({
         dispatch(actions.endBattle("defeat"));
       },
     };
-  }, [actions, append, questContent, cardDatabase]);
+  }, [actions, append, questContent, cardDatabase, publishCardSourceDebug]);
 
   const value = useMemo<QuestContextValue>(
     () => ({ state, mutations, cardDatabase, questContent }),

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { act, type ReactElement } from "react";
+import { act, StrictMode, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { BattleCommand } from "../debug/commands";
@@ -44,7 +44,7 @@ function createTestState(): BattleMutableState {
 }
 
 describe("BattleForeseeOverlay", () => {
-  it("dispatches REVEAL_DECK_TOP on mount with the initial count and re-dispatches when the user reveals more", () => {
+  it("does not dispatch shared flow on a StrictMode mount and reveals once when the user widens", () => {
     const state = createTestState();
     const onDispatch = vi.fn<(command: BattleCommand) => void>();
     const container = document.createElement("div");
@@ -53,24 +53,19 @@ describe("BattleForeseeOverlay", () => {
 
     act(() => {
       renderWithCumulus(root,
-        <BattleForeseeOverlay
-          initialCount={2}
-          onClose={() => {}}
-          onDispatch={onDispatch}
-          side="player"
-          state={state}
-        />,
+        <StrictMode>
+          <BattleForeseeOverlay
+            initialCount={2}
+            onClose={() => {}}
+            onDispatch={onDispatch}
+            side="player"
+            state={state}
+          />
+        </StrictMode>,
       );
     });
 
-    expect(onDispatch).toHaveBeenCalledTimes(1);
-    const firstCall = onDispatch.mock.calls[0][0];
-    if (firstCall.id !== "DEBUG_EDIT" || firstCall.edit.kind !== "REVEAL_DECK_TOP") {
-      throw new Error("expected REVEAL_DECK_TOP dispatch");
-    }
-    expect(firstCall.edit.side).toBe("player");
-    expect(firstCall.edit.count).toBe(2);
-    expect(firstCall.sourceSurface).toBe("foresee-overlay");
+    expect(onDispatch).not.toHaveBeenCalled();
 
     // Reveal More widens count to 3.
     const revealMore = document.querySelector<HTMLButtonElement>(
@@ -81,12 +76,14 @@ describe("BattleForeseeOverlay", () => {
       revealMore?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
 
-    expect(onDispatch).toHaveBeenCalledTimes(2);
-    const secondCall = onDispatch.mock.calls[1][0];
-    if (secondCall.id !== "DEBUG_EDIT" || secondCall.edit.kind !== "REVEAL_DECK_TOP") {
+    expect(onDispatch).toHaveBeenCalledTimes(1);
+    const revealCall = onDispatch.mock.calls[0][0];
+    if (revealCall.id !== "DEBUG_EDIT" || revealCall.edit.kind !== "REVEAL_DECK_TOP") {
       throw new Error("expected second REVEAL_DECK_TOP dispatch");
     }
-    expect(secondCall.edit.count).toBe(3);
+    expect(revealCall.edit.side).toBe("player");
+    expect(revealCall.edit.count).toBe(3);
+    expect(revealCall.sourceSurface).toBe("foresee-overlay");
 
     act(() => {
       root.unmount();

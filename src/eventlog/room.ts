@@ -307,7 +307,12 @@ export function writePresence(
     const entry: PresenceEntry = { connected: true, lastSeenAt: nowIso() };
     void onDisconnect(entryRef)
       .remove()
-      .then(() => set(entryRef, entry))
+      .then(() => {
+        if (disposed) {
+          return undefined;
+        }
+        return set(entryRef, entry);
+      })
       .catch(reportError);
   });
 

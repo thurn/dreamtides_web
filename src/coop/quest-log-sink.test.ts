@@ -134,6 +134,22 @@ describe("createCoopLogRecorder single-writer rule", () => {
     ]);
   });
 
+  it("records a logical intent key for automatic-flow reconstruction", () => {
+    const { emitted, recorder } = setup();
+    const event = {
+      ...makeEvent({ actor: "client-a" }),
+      intentKey: "battle:b-1:dreamwell:player:2",
+    };
+
+    recorder.recordCoopEvent(event, 5, "applied");
+
+    expect(emitted[0]).toMatchObject({
+      event: "coop_event",
+      intentKey: "battle:b-1:dreamwell:player:2",
+      outcome: "applied",
+    });
+  });
+
   it("mirrors the client's own ai:<clientId> events", () => {
     const { emitted, recorder } = setup();
     const recorded = recorder.recordCoopEvent(

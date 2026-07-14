@@ -207,6 +207,7 @@ function makeMutations(): QuestMutations {
 
 function makeState(): QuestState {
   return {
+    runId: null,
     seed: "test-seed",
     essence: 250,
     essenceCap: 500,

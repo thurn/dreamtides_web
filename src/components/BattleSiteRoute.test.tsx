@@ -139,6 +139,7 @@ function makeQuestState(overrides: {
     visitedSites = [] as string[],
   } = overrides;
   return {
+    runId: "quest:test",
     seed: "test-seed",
     essence: 250,
     essenceCap: 500,

@@ -472,6 +472,8 @@ export interface ShopModifiers {
 
 /** The top-level quest state object. */
 export interface QuestState {
+  /** Event-log identity of the current assembled or loaded run. */
+  readonly runId: string | null;
   /**
    * Per-quest random seed generated once at quest start. Mixed into derived
    * generators that must vary across distinct quests but stay stable for the

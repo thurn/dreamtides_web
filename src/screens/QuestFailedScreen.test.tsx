@@ -176,6 +176,7 @@ function makeState(
   failureSummary: QuestFailureSummary | null,
 ): QuestState {
   return {
+    runId: "quest:test",
     seed: "test-seed",
     essence: 250,
     essenceCap: 500,

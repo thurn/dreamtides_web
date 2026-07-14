@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { logEvent, logEventOnce } from "../../logging";
 import { useQuest } from "../../state/quest-context";
+import { useCardSourceDebugPublication } from "../../state/use-card-source-debug-publication";
 import { CardShopSiteScreen } from "../../cumulus/screens/CardShopSiteScreen";
 import {
   buildCardShopDebugState,
@@ -70,10 +71,12 @@ export function CardShopSiteScreenAdapter({
     if (site !== null && runtime === undefined) mutations.ensureShopRuntime(site);
   }, [mutations, runtime, site]);
 
-  useEffect(() => {
-    mutations.setCardSourceDebug(debugState, "shop_cards_shown");
-    return () => mutations.setCardSourceDebug(null, "shop_cards_hidden");
-  }, [debugState, mutations]);
+  useCardSourceDebugPublication(
+    mutations.setCardSourceDebug,
+    debugState,
+    "shop_cards_shown",
+    "shop_cards_hidden",
+  );
 
   useEffect(() => {
     if (site === null || view === null) return;

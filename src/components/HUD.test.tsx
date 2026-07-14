@@ -104,6 +104,7 @@ function makeDreamsign(name: string): Dreamsign {
 
 function makeState(dreamsigns: Dreamsign[]): QuestState {
   return {
+    runId: "quest:test",
     seed: "test-seed",
     essence: 100,
     essenceCap: 500,

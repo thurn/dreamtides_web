@@ -153,29 +153,31 @@ export type TypedGameEvent<T extends GameEventType = GameEventType> = {
 
 /**
  * CAS-exempt types skip CAS-policy rules 2–4 (rule 5 validation still runs).
- * `OPEN_SITE` and `ENTER_DRAFT_SITE` are exempt from *being* bounced (both are
- * idempotent site-entry intents: a concurrent double-entry must converge
- * without a bounce toast) but still count as intervening for other events
- * (each generates an offer); that asymmetry lives in the reducer, not here.
- * `SET_CARD_NOTE` carries no game-rules meaning.
+ * Site bootstrap is serialized by an event-log intent key and may safely pass
+ * a partner's CAS window. Card notes and card-source provenance carry no
+ * game-rules meaning.
  */
 export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
   "SET_CARD_NOTE",
+  "SET_CARD_SOURCE_DEBUG",
   "OPEN_SITE",
   "ENTER_DRAFT_SITE",
 ]);
 
 /**
- * Decision-neutral types are additionally ignored by CAS rule 3: a partner's
- * decision-neutral event in the intervening window must never bounce an
- * unrelated intent. Card notes carry no game-rules meaning. `MARK_SITE_VISITED`
- * and `DISMISS_STARTING_DECK_POPUP` reach a domain case that, on the common
- * already-visited / already-seen path, returns the state unchanged as an applied
- * no-op; treating them as decision-neutral keeps those no-op applies from
- * invalidating a concurrent partner's window.
+ * Decision-neutral types are additionally ignored by CAS rule 3. Presentation
+ * state carries no game-rules meaning, and site bootstrap only materializes the
+ * deterministic runtime or offer for an already-selected site.
  */
 export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<string> = new Set<string>(
-  ["SET_CARD_NOTE", "MARK_SITE_VISITED", "DISMISS_STARTING_DECK_POPUP"],
+  [
+    "SET_CARD_NOTE",
+    "SET_CARD_SOURCE_DEBUG",
+    "MARK_SITE_VISITED",
+    "DISMISS_STARTING_DECK_POPUP",
+    "OPEN_SITE",
+    "ENTER_DRAFT_SITE",
+  ],
 );
 
 /**

@@ -82,6 +82,8 @@ function padBattleDeck(
 
 export interface CreateBattleInitInput {
   battleEntryKey: string;
+  /** Run-scoped identity for logs and automatic intent keys. */
+  battleInstanceId?: string;
   site: SiteState;
   state: Pick<
     QuestState,
@@ -451,7 +453,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     // session-scope identity (battleId used for logs and completion tracking).
     // A `battle:` prefix keeps them semantically distinct even though they
     // remain 1:1 today; callers should not rely on string equality.
-    battleId: `battle:${battleEntryKey}`,
+    battleId: input.battleInstanceId ?? `battle:${battleEntryKey}`,
     battleEntryKey,
     seed,
     siteId: site.id,

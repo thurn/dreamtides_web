@@ -91,18 +91,18 @@ export interface CoopActions {
   // --- draft ---
   setDraftState: (draftState: unknown) => Promise<number>;
   pickDraftCard: (packIndex: number, cardId: string) => Promise<number>;
-  enterDraftSite: (siteId: string) => Promise<number>;
+  enterDraftSite: (siteId: string, runId?: string) => Promise<number>;
 
   // --- sites ---
-  openSite: (siteId: string) => Promise<number>;
+  openSite: (siteId: string, runId?: string) => Promise<number>;
   completeDreamAugury: (siteId: string) => Promise<number>;
   acceptReward: (siteId: string, choiceIndex?: number) => Promise<number>;
   acceptDreamsignOffer: (siteId: string, dreamsignId: string) => Promise<number>;
   rejectDreamsignOffer: (siteId: string) => Promise<number>;
-  acceptEssence: (siteId: string) => Promise<number>;
+  acceptEssence: (siteId: string, runId?: string) => Promise<number>;
   rerollDreamAugury: (siteId: string) => Promise<number>;
   forceDreamAuguryArchetype: (siteId: string, archetypeId: string) => Promise<number>;
-  completeSite: (siteId: string) => Promise<number>;
+  completeSite: (siteId: string, runId?: string) => Promise<number>;
 
   // --- merchant & shop ---
   acceptMerchantOffer: (siteId: string, offer?: unknown) => Promise<number>;
@@ -135,9 +135,9 @@ export interface CoopActions {
 
   // --- battle events ---
   beginBattle: (siteId: string) => Promise<number>;
-  battleCommand: (command: unknown) => Promise<number>;
+  battleCommand: (command: unknown, intentKey?: string) => Promise<number>;
   /** Submit an ordered list of battle commands as one all-or-nothing event. */
-  battleGesture: (commands: readonly unknown[]) => Promise<number>;
+  battleGesture: (commands: readonly unknown[], intentKey?: string) => Promise<number>;
   resolvePrompt: (promptId: number, resolution: unknown) => Promise<number>;
   setCardNote: (
     instanceId: string,
@@ -152,8 +152,14 @@ export interface CoopActions {
  * event.
  */
 export function makeActions(append: AppendFn): CoopActions {
-  const emit = (type: string, payload: Record<string, unknown>): Promise<number> =>
-    append({ type, payload });
+  const emit = (
+    type: string,
+    payload: Record<string, unknown>,
+    intentKey?: string,
+  ): Promise<number> =>
+    append({ type, payload, ...(intentKey === undefined ? {} : { intentKey }) });
+  const siteIntentKey = (kind: string, siteId: string, runId?: string): string =>
+    `${kind}:${runId ?? "unscoped"}:${siteId}`;
 
   return {
     // --- essence & limits ---
@@ -221,10 +227,16 @@ export function makeActions(append: AppendFn): CoopActions {
     // --- draft ---
     setDraftState: (draftState) => emit("SET_DRAFT_STATE", { draftState }),
     pickDraftCard: (packIndex, cardId) => emit("PICK_DRAFT_CARD", { packIndex, cardId }),
-    enterDraftSite: (siteId) => emit("ENTER_DRAFT_SITE", { siteId }),
+    enterDraftSite: (siteId, runId) =>
+      emit(
+        "ENTER_DRAFT_SITE",
+        { siteId },
+        siteIntentKey("enter-draft-site", siteId, runId),
+      ),
 
     // --- sites ---
-    openSite: (siteId) => emit("OPEN_SITE", { siteId }),
+    openSite: (siteId, runId) =>
+      emit("OPEN_SITE", { siteId }, siteIntentKey("open-site", siteId, runId)),
     completeDreamAugury: (siteId) => emit("COMPLETE_DREAM_AUGURY", { siteId }),
     acceptReward: (siteId, choiceIndex) =>
       emit(
@@ -234,11 +246,21 @@ export function makeActions(append: AppendFn): CoopActions {
     acceptDreamsignOffer: (siteId, dreamsignId) =>
       emit("ACCEPT_DREAMSIGN_OFFER", { siteId, dreamsignId }),
     rejectDreamsignOffer: (siteId) => emit("REJECT_DREAMSIGN_OFFER", { siteId }),
-    acceptEssence: (siteId) => emit("ACCEPT_ESSENCE", { siteId }),
+    acceptEssence: (siteId, runId) =>
+      emit(
+        "ACCEPT_ESSENCE",
+        { siteId },
+        siteIntentKey("accept-essence", siteId, runId),
+      ),
     rerollDreamAugury: (siteId) => emit("REROLL_DREAM_AUGURY", { siteId }),
     forceDreamAuguryArchetype: (siteId, archetypeId) =>
       emit("FORCE_DREAM_AUGURY_ARCHETYPE", { siteId, archetypeId }),
-    completeSite: (siteId) => emit("COMPLETE_SITE", { siteId }),
+    completeSite: (siteId, runId) =>
+      emit(
+        "COMPLETE_SITE",
+        { siteId },
+        siteIntentKey("complete-site", siteId, runId),
+      ),
 
     // --- merchant & shop ---
     acceptMerchantOffer: (siteId, offer) =>
@@ -268,8 +290,10 @@ export function makeActions(append: AppendFn): CoopActions {
 
     // --- battle events ---
     beginBattle: (siteId) => emit("BEGIN_BATTLE", { siteId }),
-    battleCommand: (command) => emit("BATTLE_COMMAND", { command }),
-    battleGesture: (commands) => emit("BATTLE_GESTURE", { commands: [...commands] }),
+    battleCommand: (command, intentKey) =>
+      emit("BATTLE_COMMAND", { command }, intentKey),
+    battleGesture: (commands, intentKey) =>
+      emit("BATTLE_GESTURE", { commands: [...commands] }, intentKey),
     resolvePrompt: (promptId, resolution) =>
       emit("RESOLVE_PROMPT", { promptId, resolution }),
     setCardNote: (instanceId, note) => emit("SET_CARD_NOTE", { instanceId, note }),

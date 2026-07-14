@@ -324,19 +324,19 @@ describe("ENTER_DRAFT_SITE", () => {
     expect(next.currentOffer.length).toBeGreaterThan(0);
   });
 
-  it("is an applied no-change with zero rng draws when the site is already active", () => {
+  it("bounces with zero rng draws when the site is already active", () => {
     registerDraftContentProvider(provider());
     const start = stateWithDraftSites(poolDraftState());
     const rngSpy = vi.fn(() => 0);
 
     const result = reduce(start, "ENTER_DRAFT_SITE", { siteId: "site-a" }, ctx({ rng: rngSpy }));
 
-    expect(result.outcome).toBe("applied");
+    expect(result.outcome).toBe("bounced");
     expect(result.state.quest).toBe(start.quest);
     expect(rngSpy).not.toHaveBeenCalled();
   });
 
-  it("two clients entering simultaneously converge: the second entry is a no-change applied, final offers identical to folding the first alone", () => {
+  it("converges if a repeated entry reaches the reducer after the winning entry", () => {
     registerDraftContentProvider(provider());
     const draftState = poolDraftState({
       activeSiteId: null,
@@ -367,7 +367,7 @@ describe("ENTER_DRAFT_SITE", () => {
     );
 
     expect(firstResult.outcome).toBe("applied");
-    expect(secondResult.outcome).toBe("applied");
+    expect(secondResult.outcome).toBe("bounced");
     expect(secondResult.state.quest).toBe(firstResult.state.quest);
     expect(secondResult.state).toEqual(soloResult.state);
   });

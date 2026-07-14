@@ -79,6 +79,13 @@ export function applyAppend<S>(
   if (event.nonce !== undefined && liveWindowHasNonce(encoded, event.nonce)) {
     return encoded;
   }
+  if (
+    event.intentKey !== undefined &&
+    (intentKeyIndexHas(encoded.intentKeyIndex, event.intentKey) ||
+      liveWindowHasIntentKey(encoded, event.intentKey))
+  ) {
+    return encoded;
+  }
 
   const head = encoded.head + 1;
   // Shallow copy so the input node stays untouched across transaction retries.
@@ -91,6 +98,12 @@ export function applyAppend<S>(
   // append and rewritten (extended with the batch's newly-applied events) when
   // compaction folds events below the new horizon.
   let appliedIndex = encoded.appliedIndex;
+  let intentKeyIndex = encoded.intentKeyIndex;
+  if (event.intentKey !== undefined) {
+    const index = decodeIntentKeyIndex(intentKeyIndex);
+    index[String(head)] = event.intentKey;
+    intentKeyIndex = JSON.stringify(index);
+  }
   let compactionError = encoded.compactionError;
 
   if (head - baseSeq > COMPACT_THRESHOLD) {
@@ -160,6 +173,9 @@ export function applyAppend<S>(
   if (appliedIndex !== undefined) {
     next.appliedIndex = appliedIndex;
   }
+  if (intentKeyIndex !== undefined) {
+    next.intentKeyIndex = intentKeyIndex;
+  }
   if (compactionError !== undefined) {
     next.compactionError = compactionError;
   }
@@ -179,6 +195,44 @@ function liveWindowHasNonce(encoded: EncodedLogNode, nonce: string): boolean {
     }
   }
   return false;
+}
+
+function liveWindowHasIntentKey(encoded: EncodedLogNode, intentKey: string): boolean {
+  for (let seq = encoded.baseSeq + 1; seq <= encoded.head; seq += 1) {
+    const raw = encoded.events?.[seq];
+    if (raw === undefined) continue;
+    try {
+      if (decodeEvent(raw).intentKey === intentKey) {
+        return true;
+      }
+    } catch {
+      continue;
+    }
+  }
+  return false;
+}
+
+function decodeIntentKeyIndex(raw: string | undefined): Record<string, string> {
+  if (raw === undefined) return {};
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+      return {};
+    }
+    const valid: Record<string, string> = {};
+    for (const [seq, value] of Object.entries(parsed)) {
+      if (Number.isInteger(Number(seq)) && typeof value === "string") {
+        valid[seq] = value;
+      }
+    }
+    return valid;
+  } catch {
+    return {};
+  }
+}
+
+function intentKeyIndexHas(raw: string | undefined, intentKey: string): boolean {
+  return Object.values(decodeIntentKeyIndex(raw)).includes(intentKey);
 }
 
 /**

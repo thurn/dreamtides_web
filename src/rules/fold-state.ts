@@ -46,6 +46,7 @@ export function genesisFoldState(genesis: Genesis): FoldState {
 
 function genesisQuestState(genesis: Genesis): QuestState {
   return {
+    runId: null,
     seed: genesis.seed,
     essence: 200,
     essenceCap: 500,

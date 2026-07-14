@@ -60,6 +60,7 @@ import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
 import { BattleDreamcallerPanel } from "./BattleDreamcallerPanel";
 import { BattleFigmentCreator } from "./BattleFigmentCreator";
 import { BattleForeseeOverlay } from "./BattleForeseeOverlay";
+import { automaticBattleIntentKey } from "../automatic-intent-key";
 import { BattleHandTray } from "./BattleHandTray";
 import { BattleInspector } from "./BattleInspector";
 import { BattleCardNoteEditor } from "./BattleCardNoteEditor";
@@ -294,6 +295,11 @@ function PlayableBattleScreenInner({
 
   const handleCommand = useCallback((command: BattleCommand): void => {
     setPendingDrag(null);
+    const intentKey = automaticBattleIntentKey(
+      battleInit.battleId,
+      board,
+      command,
+    );
     // With basic automation on, a single gesture can expand into several
     // commands (e.g. a play also spends energy; ending a turn resolves the
     // Challenge, ramps energy, and draws). The planner reads the live state and
@@ -313,13 +319,13 @@ function PlayableBattleScreenInner({
       // its cost unspent, a handoff with the incoming draw skipped). A single
       // planned command is a plain BATTLE_COMMAND.
       if (plannedCommands.length > 1) {
-        void actions.battleGesture(plannedCommands);
+        void actions.battleGesture(plannedCommands, intentKey);
       } else if (plannedCommands.length === 1) {
-        void actions.battleCommand(plannedCommands[0]);
+        void actions.battleCommand(plannedCommands[0], intentKey);
       }
       return;
     }
-    void actions.battleCommand(command);
+    void actions.battleCommand(command, intentKey);
   }, [
     actions,
     isBasicAutomationEnabled,
@@ -327,7 +333,17 @@ function PlayableBattleScreenInner({
     battleInit.maxEnergyCap,
     battleInit.scoreToWin,
     battleInit.dreamwellDeck,
+    battleInit.battleId,
   ]);
+
+  const handleOpenForesee = useCallback((side: BattleSide, count: number): void => {
+    handleCommand({
+      id: "DEBUG_EDIT",
+      edit: { kind: "REVEAL_DECK_TOP", side, count },
+      sourceSurface: "foresee-overlay",
+    });
+    setOpenForeseeOverlay({ side, count });
+  }, [handleCommand]);
 
   // Deck-aware companion to the reducer's `battle_proto_dreamwell_card_drawn`:
   // logs which card a reveal is about to draw, with the detail the reducer cannot
@@ -384,27 +400,17 @@ function PlayableBattleScreenInner({
   // automation so the card is always shown — while the energy it grants is
   // folded in by the automation expansion of `DRAW_DREAMWELL_CARD`.
   //
-  // The reveal is a once-per-turn gesture, but no longer gated on a client
-  // "primary" flag: the coop CAS policy (single-writer commit per event) makes
-  // a duplicate `DRAW_DREAMWELL_CARD` from a second client a harmless bounce
-  // rather than a double-advance, so every connected client may attempt the
-  // reveal and only the first one lands. The per-(side, turn) ref still guards
-  // this client against re-dispatching within the phase.
+  // Every connected client may observe this durable condition. The automatic
+  // battle intent key identifies the battle, side, and turn, so the room log
+  // commits one reveal and reconciles every observer to that winning event.
   const activeSide = board.activeSide;
   const activePhase = board.phase;
   const activeTurnNumber = board.turnNumber;
   const battleResult = board.result;
-  const lastDreamwellRevealKeyRef = useRef<string | null>(null);
   useEffect(() => {
     if (battleResult !== null || activePhase !== "dreamwell") {
       return;
     }
-    const revealKey = `${activeSide}:${String(activeTurnNumber)}`;
-    if (lastDreamwellRevealKeyRef.current === revealKey) {
-      return;
-    }
-    lastDreamwellRevealKeyRef.current = revealKey;
-    logDreamwellReveal(activeSide, activeTurnNumber, "auto-system");
     handleCommand({
       id: "DEBUG_EDIT",
       edit: {
@@ -416,7 +422,6 @@ function PlayableBattleScreenInner({
     });
   }, [
     handleCommand,
-    logDreamwellReveal,
     activeSide,
     activePhase,
     activeTurnNumber,
@@ -429,10 +434,9 @@ function PlayableBattleScreenInner({
   // so its energy is already applied — auto-advance to the Day phase for the
   // locally-driven side. Skipped on the AI's own turn (the AI driver advances
   // itself) and when automation is off (the operator is stepping manually).
-  // Ref-guarded to fire once per (side, turn).
+  // The event-log intent key owns the once-per-(battle, side, turn) transition.
   const activeDreamwellDrawnTurn =
     board.sides[activeSide].dreamwellDrawnTurn;
-  const lastDreamwellAutoAdvanceKeyRef = useRef<string | null>(null);
   useEffect(() => {
     if (battleResult !== null || activePhase !== "dreamwell") {
       return;
@@ -448,11 +452,6 @@ function PlayableBattleScreenInner({
     if (activeDreamwellDrawnTurn !== activeTurnNumber) {
       return;
     }
-    const advanceKey = `${activeSide}:${String(activeTurnNumber)}`;
-    if (lastDreamwellAutoAdvanceKeyRef.current === advanceKey) {
-      return;
-    }
-    lastDreamwellAutoAdvanceKeyRef.current = advanceKey;
     handleCommand({
       id: "DEBUG_EDIT",
       edit: { kind: "SET_PHASE", phase: "day" },
@@ -1004,7 +1003,7 @@ function PlayableBattleScreenInner({
           state={board}
           onClose={() => setOpenZoneBrowser(null)}
           onCommand={handleCommand}
-          onOpenForesee={(side, count) => setOpenForeseeOverlay({ side, count })}
+          onOpenForesee={handleOpenForesee}
           onOpenReorderMultiple={(side) => setOpenDeckOrderPicker(side)}
           onCardContextMenu={handleCardContextMenu}
           onCardDragStart={handleCardDragStart}
@@ -1560,7 +1559,7 @@ function PlayableBattleScreenInner({
           })}
           onOpenFigmentCreator={(side) => setOpenFigmentCreator(side)}
           onOpenPoolViewer={() => setIsPoolViewerOpen(true)}
-          onOpenForesee={(side, count) => setOpenForeseeOverlay({ side, count })}
+          onOpenForesee={handleOpenForesee}
           onOpenZone={handleOpenZoneBrowser}
           onResetBattle={handleResetBattle}
           onToggleOpponentHand={() => setIsOpponentHandRevealed((value) => !value)}

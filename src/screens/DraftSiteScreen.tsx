@@ -20,6 +20,7 @@ import type { CardData } from "../types/cards";
 import { CARD_ASPECT_RATIO } from "../cumulus/components/card/card-aspect";
 import { DRAFT_OFFER_CARD_WIDTH } from "../components/card-size";
 import { logEvent } from "../logging";
+import { useCardSourceDebugPublication } from "../state/use-card-source-debug-publication";
 
 
 /** Delay in ms before showing the next pack after a pick. */
@@ -375,24 +376,19 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
     [currentOfferCards, isComplete, state.resolvedPackage],
   );
 
-  // Enter this site once per visit: fire the intent whenever the displayed
-  // draft state has not (yet) advanced to `siteId`. Idempotent on the
-  // reducer side (ENTER_DRAFT_SITE), so a re-render before the fold catches
-  // up simply re-fires a no-op intent rather than re-rolling the offer.
+  // Enter this site whenever the displayed draft state has not advanced to
+  // `siteId`. The run-scoped event-log key gives every mount and connected
+  // client one shared logical entry intent.
   useEffect(() => {
     if (state.draftState?.activeSiteId === siteId) return;
     mutations.enterDraftSite(siteId);
   }, [siteId, state.draftState?.activeSiteId, mutations]);
 
-  useEffect(() => {
-    mutations.setCardSourceDebug(cardSourceDebugState, "draft_site_cards_shown");
-  }, [cardSourceDebugState, mutations]);
-
-  useEffect(
-    () => () => {
-      mutations.setCardSourceDebug(null, "draft_site_cards_hidden");
-    },
-    [mutations],
+  useCardSourceDebugPublication(
+    mutations.setCardSourceDebug,
+    cardSourceDebugState,
+    "draft_site_cards_shown",
+    "draft_site_cards_hidden",
   );
 
   useEffect(() => {
@@ -526,7 +522,6 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
     });
 
     mutations.completeSite(siteId, "draft_site_completed");
-    mutations.setScreen({ type: "dreamscape" });
   }, [siteId, draftedCardNumbers, mutations]);
 
   const pickNumber = draftSitePicksCompleted + 1;
