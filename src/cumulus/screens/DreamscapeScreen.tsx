@@ -15,10 +15,17 @@ import {
   SiteNode,
   type DreamscapeSiteModel,
 } from "../components/dreamscape/SiteNode";
+import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { Motes } from "../components/hud/Motes";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
+import type { Dreamsign as DreamsignData } from "../../types/quest";
+
+/** A generated site reward ready to animate and grant on the dreamscape. */
+export type InlineRewardView =
+  | { kind: "essence"; amount: number }
+  | { kind: "dreamsign"; dreamsign: DreamsignData };
 
 /** Everything the screen renders, mapped from live quest state by the builder. */
 export interface DreamscapeView {
@@ -28,8 +35,8 @@ export interface DreamscapeView {
   title: string;
   /** The placed, seeded, labelled site nodes. */
   sites: DreamscapeSiteModel[];
-  /** Generated Essence reward amounts, keyed by the site's stable id. */
-  essenceRewards: Readonly<Record<string, number>>;
+  /** Generated Essence and Reward results, keyed by the site's stable id. */
+  inlineRewards: Readonly<Record<string, InlineRewardView>>;
 }
 
 export interface DreamscapeScreenProps {
@@ -37,12 +44,15 @@ export interface DreamscapeScreenProps {
   view: DreamscapeView;
   /** Enter a site; fired on a tap / click of an interactive node only. */
   onSelectSite: (siteId: string) => void;
-  /** Report that an in-place Essence collection animation has finished. */
-  onEssenceAnimationComplete: (siteId: string) => void;
+  /** Report that an in-place reward collection animation has finished. */
+  onInlineRewardAnimationComplete: (siteId: string) => void;
 }
 
-/** Duration of the gain-and-rise sequence; the site fades during its opening. */
-const ESSENCE_COLLECTION_DURATION_SECONDS = 1.2;
+/** Duration of the inline grant sequence. */
+const INLINE_REWARD_DURATION_SECONDS = 1.2;
+
+/** Box measure for the collectible while its grant pulse plays at the site. */
+const REWARD_DREAMSIGN_SIZE_PX = 112;
 
 /**
  * The Cumulus dreamscape screen. Pure and props-driven: full-bleed scene art with
@@ -51,53 +61,59 @@ const ESSENCE_COLLECTION_DURATION_SECONDS = 1.2;
 export function DreamscapeScreen({
   view,
   onSelectSite,
-  onEssenceAnimationComplete,
+  onInlineRewardAnimationComplete,
 }: DreamscapeScreenProps) {
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
-  const [collectingEssenceSiteId, setCollectingEssenceSiteId] = useState<
+  const [collectingSiteId, setCollectingSiteId] = useState<
     string | null
   >(null);
   const completionRequestedRef = useRef<string | null>(null);
-  const onEssenceAnimationCompleteRef = useRef(onEssenceAnimationComplete);
+  const onInlineRewardAnimationCompleteRef = useRef(
+    onInlineRewardAnimationComplete,
+  );
   useEffect(() => {
-    onEssenceAnimationCompleteRef.current = onEssenceAnimationComplete;
-  }, [onEssenceAnimationComplete]);
+    onInlineRewardAnimationCompleteRef.current =
+      onInlineRewardAnimationComplete;
+  }, [onInlineRewardAnimationComplete]);
   const collectingModel =
-    collectingEssenceSiteId === null
+    collectingSiteId === null
       ? null
       : (view.sites.find(
-          (model) => model.site.id === collectingEssenceSiteId,
+          (model) => model.site.id === collectingSiteId,
         ) ?? null);
   const collectingReward =
-    collectingEssenceSiteId === null
+    collectingSiteId === null
       ? null
-      : (view.essenceRewards[collectingEssenceSiteId] ?? null);
+      : (view.inlineRewards[collectingSiteId] ?? null);
 
   const handleSelectSite = useCallback(
     (siteId: string) => {
-      if (collectingEssenceSiteId !== null) return;
+      if (collectingSiteId !== null) return;
       const model = view.sites.find((candidate) => candidate.site.id === siteId);
-      if (model?.site.type === "Essence") {
+      if (
+        model?.site.type === "Essence" ||
+        model?.site.type === "Reward"
+      ) {
         completionRequestedRef.current = null;
-        setCollectingEssenceSiteId(siteId);
+        setCollectingSiteId(siteId);
       }
       onSelectSite(siteId);
     },
-    [collectingEssenceSiteId, onSelectSite, view.sites],
+    [collectingSiteId, onSelectSite, view.sites],
   );
 
   useEffect(() => {
-    if (collectingEssenceSiteId === null || collectingReward === null) {
+    if (collectingSiteId === null || collectingReward === null) {
       return;
     }
     const timer = window.setTimeout(() => {
-      if (completionRequestedRef.current === collectingEssenceSiteId) return;
-      completionRequestedRef.current = collectingEssenceSiteId;
-      setCollectingEssenceSiteId(null);
-      onEssenceAnimationCompleteRef.current(collectingEssenceSiteId);
-    }, ESSENCE_COLLECTION_DURATION_SECONDS * 1000);
+      if (completionRequestedRef.current === collectingSiteId) return;
+      completionRequestedRef.current = collectingSiteId;
+      setCollectingSiteId(null);
+      onInlineRewardAnimationCompleteRef.current(collectingSiteId);
+    }, INLINE_REWARD_DURATION_SECONDS * 1000);
     return () => window.clearTimeout(timer);
-  }, [collectingEssenceSiteId, collectingReward]);
+  }, [collectingSiteId, collectingReward]);
 
   return (
     <div
@@ -135,16 +151,18 @@ export function DreamscapeScreen({
         .filter(
           (model) =>
             !model.site.isVisited ||
-            model.site.id === collectingEssenceSiteId,
+            model.site.id === collectingSiteId,
         )
         .map((model) => {
-          const isCollecting = model.site.id === collectingEssenceSiteId;
+          const isCollecting = model.site.id === collectingSiteId;
           const renderedModel =
-            collectingEssenceSiteId === null
+            collectingSiteId === null
               ? model
               : { ...model, isInteractive: false };
+          const isInlineRewardSite =
+            model.site.type === "Essence" || model.site.type === "Reward";
 
-          if (model.site.type !== "Essence") {
+          if (!isInlineRewardSite) {
             return (
               <SiteNode
                 key={model.site.id}
@@ -159,16 +177,28 @@ export function DreamscapeScreen({
             <motion.div
               key={model.site.id}
               data-essence-site-departure={
-                isCollecting ? model.site.id : undefined
+                isCollecting && model.site.type === "Essence"
+                  ? model.site.id
+                  : undefined
+              }
+              data-reward-site-departure={
+                isCollecting && model.site.type === "Reward"
+                  ? model.site.id
+                  : undefined
               }
               initial={false}
               animate={{
-                opacity: isCollecting ? [1, 0.55, 0, 0] : 1,
+                opacity:
+                  isCollecting && model.site.type === "Reward"
+                    ? 0
+                    : isCollecting
+                      ? [1, 0.55, 0, 0]
+                      : 1,
               }}
               transition={
-                isCollecting
+                isCollecting && model.site.type === "Essence"
                   ? {
-                      duration: ESSENCE_COLLECTION_DURATION_SECONDS,
+                      duration: INLINE_REWARD_DURATION_SECONDS,
                       // Clear the site early while the gained value continues
                       // rising through the rest of the collection sequence.
                       times: [0, 0.18, 0.58, 1],
@@ -183,7 +213,10 @@ export function DreamscapeScreen({
                 width: 0,
                 height: 0,
                 zIndex: 10,
-                willChange: "opacity",
+                willChange:
+                  isCollecting && model.site.type === "Essence"
+                    ? "opacity"
+                    : undefined,
               }}
             >
               <SiteNode
@@ -195,41 +228,125 @@ export function DreamscapeScreen({
           );
         })}
 
-      {collectingModel !== null &&
-        collectingReward !== null && (
-          <motion.div
-            key={collectingModel.site.id}
-            role="status"
-            aria-live="polite"
-            aria-label={`Gained ${String(collectingReward)} essence`}
-            data-essence-collection={collectingModel.site.id}
-            initial={{ opacity: 0, scale: 0.72, y: 0 }}
-            animate={{
-              opacity: [0, 1, 1, 0],
-              scale: [0.72, 1.16, 1.08, 0.92],
-              y: [0, -8, -40, -64],
-            }}
-            transition={{
-              duration: ESSENCE_COLLECTION_DURATION_SECONDS,
-              times: [0, 0.18, 0.72, 1],
-              ease: [0.16, 1, 0.3, 1],
-            }}
-            style={{
-              position: "absolute",
-              left: `${String(collectingModel.pos.x)}%`,
-              top: `${String(collectingModel.pos.y)}%`,
-              translate: "-50% -50%",
-              zIndex: 50,
-              pointerEvents: "none",
-              font: token("--t-display"),
-              textShadow: token("--text-outline-media"),
-              filter: "drop-shadow(var(--glow-accent-soft))",
-              willChange: "transform, opacity",
-            }}
-          >
-            <EssenceValue amount={`+${String(collectingReward)}`} />
-          </motion.div>
-        )}
+      {collectingModel !== null && collectingReward !== null && (
+        <div
+          key={collectingModel.site.id}
+          role="status"
+          aria-live="polite"
+          aria-label={
+            collectingReward.kind === "dreamsign"
+              ? `Gained dreamsign: ${collectingReward.dreamsign.name}`
+              : `Gained ${String(collectingReward.amount)} essence`
+          }
+          data-essence-collection={
+            collectingModel.site.type === "Essence"
+              ? collectingModel.site.id
+              : undefined
+          }
+          data-reward-collection={
+            collectingModel.site.type === "Reward"
+              ? collectingModel.site.id
+              : undefined
+          }
+          data-inline-reward-kind={collectingReward.kind}
+          style={{
+            position: "absolute",
+            left: `${String(collectingModel.pos.x)}%`,
+            top: `${String(collectingModel.pos.y)}%`,
+            translate: "-50% -50%",
+            width:
+              collectingReward.kind === "dreamsign"
+                ? REWARD_DREAMSIGN_SIZE_PX
+                : undefined,
+            height:
+              collectingReward.kind === "dreamsign"
+                ? REWARD_DREAMSIGN_SIZE_PX
+                : undefined,
+            zIndex: 50,
+            pointerEvents: "none",
+            font:
+              collectingReward.kind === "essence"
+                ? token("--t-display")
+                : undefined,
+            textShadow:
+              collectingReward.kind === "essence"
+                ? token("--text-outline-media")
+                : undefined,
+            filter:
+              collectingReward.kind === "essence"
+                ? "drop-shadow(var(--glow-accent-soft))"
+                : undefined,
+          }}
+        >
+          {collectingReward.kind === "dreamsign" ? (
+            <>
+              <motion.div
+                aria-hidden="true"
+                data-reward-dreamsign-pulse=""
+                initial={{ opacity: 0, scale: 0.72 }}
+                animate={{ opacity: [0, 0.92, 0], scale: [0.72, 1.08, 1.36] }}
+                transition={{
+                  duration: INLINE_REWARD_DURATION_SECONDS,
+                  times: [0, 0.28, 1],
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                style={{
+                  position: "absolute",
+                  inset: `calc(-1 * ${token("--space-5")})`,
+                  border: `2px solid ${token("--accent-bright")}`,
+                  borderRadius: "50%",
+                  boxShadow: token("--glow-accent-soft"),
+                }}
+              />
+              <Dreamsign
+                dreamsign={collectingReward.dreamsign}
+                sizePx={REWARD_DREAMSIGN_SIZE_PX}
+                unavailable
+                variant="flat"
+                testid="reward-dreamsign-collection"
+              />
+              <motion.div
+                aria-hidden="true"
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: [0, 1, 1, 0], y: [4, 0, -8, -18] }}
+                transition={{
+                  duration: INLINE_REWARD_DURATION_SECONDS,
+                  times: [0, 0.18, 0.72, 1],
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                style={{
+                  position: "absolute",
+                  top: `calc(100% + ${token("--space-4")})`,
+                  left: "50%",
+                  translate: "-50% 0",
+                  color: token("--text-primary"),
+                  font: token("--t-caption"),
+                  textShadow: token("--text-outline-media"),
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Dreamsign gained
+              </motion.div>
+            </>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.72, y: 0 }}
+              animate={{
+                opacity: [0, 1, 1, 0],
+                scale: [0.72, 1.16, 1.08, 0.92],
+                y: [0, -8, -40, -64],
+              }}
+              transition={{
+                duration: INLINE_REWARD_DURATION_SECONDS,
+                times: [0, 0.18, 0.72, 1],
+                ease: [0.16, 1, 0.3, 1],
+              }}
+            >
+              <EssenceValue amount={`+${String(collectingReward.amount)}`} />
+            </motion.div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

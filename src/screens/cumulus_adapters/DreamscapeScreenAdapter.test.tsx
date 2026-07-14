@@ -62,6 +62,12 @@ function makeState(): QuestState {
         isEnhanced: false,
         isVisited: false,
       },
+      {
+        id: "s-reward",
+        type: "Reward",
+        isEnhanced: false,
+        isVisited: false,
+      },
     ],
     position: { x: 0, y: 0 },
     state: "available",
@@ -81,6 +87,21 @@ function makeState(): QuestState {
     dreamsigns: [],
     siteRuntime: {
       "s-essence": { kind: "essence", amount: 275, accepted: false },
+      "s-reward": {
+        kind: "reward",
+        reward: {
+          rewardType: "dreamsign",
+          dreamsign: {
+            id: "dreamsign-uuid",
+            name: "Lantern in the Rain",
+            effectDescription: "Your first dream each dawn costs 1 less.",
+            imageName: "lantern-in-the-rain.webp",
+            isBane: false,
+          },
+        },
+        remainingDreamsignPoolIds: [],
+        accepted: false,
+      },
     },
   } as unknown as QuestState;
 }
@@ -119,7 +140,7 @@ describe("DreamscapeScreenAdapter", () => {
     );
     expect(mutations.setScreen).not.toHaveBeenCalled();
 
-    act(() => lastScreenProps().onEssenceAnimationComplete("s-essence"));
+    act(() => lastScreenProps().onInlineRewardAnimationComplete("s-essence"));
     expect(mutations.acceptEssenceSite).toHaveBeenCalledWith("s-essence");
     expect(logEvent).toHaveBeenCalledWith(
       "site_completed",
@@ -136,10 +157,45 @@ describe("DreamscapeScreenAdapter", () => {
     act(() => root.unmount());
   });
 
+  it("opens and accepts a Reward from the dreamscape without navigating", () => {
+    const mutations = {
+      ensureRewardSiteRuntime: vi.fn(),
+      acceptRewardSite: vi.fn(),
+      setScreen: vi.fn(),
+    } as unknown as QuestMutations;
+    setQuestContext(mutations);
+    const container = document.createElement("div");
+    const root = createRoot(container);
+    act(() => root.render(<DreamscapeScreenAdapter />));
+
+    act(() => lastScreenProps().onSelectSite("s-reward"));
+    expect(mutations.ensureRewardSiteRuntime).toHaveBeenCalledWith("s-reward");
+    expect(mutations.setScreen).not.toHaveBeenCalled();
+
+    act(() =>
+      lastScreenProps().onInlineRewardAnimationComplete("s-reward"),
+    );
+    expect(mutations.acceptRewardSite).toHaveBeenCalledWith("s-reward");
+    expect(logEvent).toHaveBeenCalledWith(
+      "site_completed",
+      expect.objectContaining({
+        siteType: "Reward",
+        outcome: "collected",
+        rewardType: "dreamsign",
+        dreamsignId: "dreamsign-uuid",
+        ui: "cumulus",
+      }),
+    );
+
+    act(() => root.unmount());
+  });
+
   it("continues to navigate when a non-Essence site is selected", () => {
     const mutations = {
       ensureEssenceSiteRuntime: vi.fn(),
       acceptEssenceSite: vi.fn(),
+      ensureRewardSiteRuntime: vi.fn(),
+      acceptRewardSite: vi.fn(),
       setScreen: vi.fn(),
     } as unknown as QuestMutations;
     setQuestContext(mutations);

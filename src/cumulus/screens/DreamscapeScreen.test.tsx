@@ -66,7 +66,7 @@ function siteState(id: string, overrides: Partial<SiteState> = {}): SiteState {
 const VIEW: DreamscapeView = {
   scene: artRef.dreamscapeScene("ember_wood"),
   title: "Ember Wood",
-  essenceRewards: {},
+  inlineRewards: {},
   sites: [
     siteModel(siteState("s-purge")),
     siteModel(siteState("s-draft", { type: "Draft" }), { label: "Draft 5x" }),
@@ -114,7 +114,7 @@ describe("DreamscapeScreen", () => {
   it("renders the scene, one node per unvisited site, and drops visited sites", () => {
     act(() => {
       root.render(
-        <CumulusRoot><DreamscapeScreen view={VIEW} onSelectSite={() => undefined} onEssenceAnimationComplete={() => undefined} /></CumulusRoot>,
+        <CumulusRoot><DreamscapeScreen view={VIEW} onSelectSite={() => undefined} onInlineRewardAnimationComplete={() => undefined} /></CumulusRoot>,
       );
     });
     expect(container.querySelector("[data-cumulus-dreamscape]")).not.toBeNull();
@@ -129,7 +129,7 @@ describe("DreamscapeScreen", () => {
   it("leaves persistent quest chrome to the router-owned wrapper", () => {
     act(() => {
       root.render(
-        <CumulusRoot><DreamscapeScreen view={VIEW} onSelectSite={() => undefined} onEssenceAnimationComplete={() => undefined} /></CumulusRoot>,
+        <CumulusRoot><DreamscapeScreen view={VIEW} onSelectSite={() => undefined} onInlineRewardAnimationComplete={() => undefined} /></CumulusRoot>,
       );
     });
     expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
@@ -142,7 +142,9 @@ describe("DreamscapeScreen", () => {
     const essenceView: DreamscapeView = {
       ...VIEW,
       sites: [siteModel(siteState("s-essence", { type: "Essence" }))],
-      essenceRewards: { "s-essence": 275 },
+      inlineRewards: {
+        "s-essence": { kind: "essence", amount: 275 },
+      },
     };
     act(() => {
       root.render(
@@ -150,7 +152,7 @@ describe("DreamscapeScreen", () => {
           <DreamscapeScreen
             view={essenceView}
             onSelectSite={onSelectSite}
-            onEssenceAnimationComplete={onEssenceAnimationComplete}
+            onInlineRewardAnimationComplete={onEssenceAnimationComplete}
           />
         </CumulusRoot>,
       );
@@ -190,7 +192,7 @@ describe("DreamscapeScreen", () => {
           <DreamscapeScreen
             view={collectedView}
             onSelectSite={onSelectSite}
-            onEssenceAnimationComplete={refreshedCollect}
+            onInlineRewardAnimationComplete={refreshedCollect}
           />
         </CumulusRoot>,
       );
@@ -206,6 +208,94 @@ describe("DreamscapeScreen", () => {
     expect(refreshedCollect).toHaveBeenCalledTimes(1);
     expect(refreshedCollect).toHaveBeenCalledWith("s-essence");
     expect(container.querySelector('[data-site-id="s-essence"]')).toBeNull();
+    vi.useRealTimers();
+  });
+
+  it("animates a Dreamsign Reward at its node and grants it in place", () => {
+    vi.useFakeTimers();
+    const onSelectSite = vi.fn();
+    const onInlineRewardAnimationComplete = vi.fn();
+    const rewardView: DreamscapeView = {
+      ...VIEW,
+      sites: [siteModel(siteState("s-reward", { type: "Reward" }))],
+      inlineRewards: {
+        "s-reward": {
+          kind: "dreamsign",
+          dreamsign: {
+            id: "dreamsign-uuid",
+            name: "Lantern in the Rain",
+            effectDescription: "Your first dream each dawn costs 1 less.",
+            imageName: "lantern-in-the-rain.webp",
+            isBane: false,
+          },
+        },
+      },
+    };
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <DreamscapeScreen
+            view={rewardView}
+            onSelectSite={onSelectSite}
+            onInlineRewardAnimationComplete={
+              onInlineRewardAnimationComplete
+            }
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>('[data-site-id="s-reward"]')
+        ?.click(),
+    );
+
+    expect(onSelectSite).toHaveBeenCalledWith("s-reward");
+    const reward = container.querySelector(
+      '[data-reward-collection="s-reward"]',
+    );
+    expect(reward?.getAttribute("aria-label")).toBe(
+      "Gained dreamsign: Lantern in the Rain",
+    );
+    expect(
+      reward?.querySelector('[data-dreamsign-id="dreamsign-uuid"]'),
+    ).not.toBeNull();
+    expect(
+      reward?.querySelector("[data-reward-dreamsign-pulse]"),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-reward-site-departure="s-reward"]'),
+    ).not.toBeNull();
+    expect(onInlineRewardAnimationComplete).not.toHaveBeenCalled();
+
+    const collectedView: DreamscapeView = {
+      ...rewardView,
+      sites: [
+        siteModel(
+          siteState("s-reward", { type: "Reward", isVisited: true }),
+        ),
+      ],
+    };
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <DreamscapeScreen
+            view={collectedView}
+            onSelectSite={onSelectSite}
+            onInlineRewardAnimationComplete={
+              onInlineRewardAnimationComplete
+            }
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(onInlineRewardAnimationComplete).toHaveBeenCalledWith("s-reward");
+    expect(container.querySelector('[data-site-id="s-reward"]')).toBeNull();
     vi.useRealTimers();
   });
 });

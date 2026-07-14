@@ -22,7 +22,10 @@ import type {
 } from "../../cumulus/components/hud/QuestStatusBar";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
-import type { DreamscapeView } from "../../cumulus/screens/DreamscapeScreen";
+import type {
+  DreamscapeView,
+  InlineRewardView,
+} from "../../cumulus/screens/DreamscapeScreen";
 import type {
   Dreamcaller,
   Dreamsign,
@@ -163,18 +166,32 @@ export function buildDreamscapeView(
   node: DreamscapeNode,
   state: QuestState,
 ): DreamscapeView {
-  const essenceRewards: Record<string, number> = {};
+  const inlineRewards: Record<string, InlineRewardView> = {};
   node.sites.forEach((site) => {
-    if (site.type !== "Essence") return;
-    const runtime = state.siteRuntime[site.id];
-    if (runtime?.kind === "essence") {
-      essenceRewards[site.id] = runtime.amount;
+    const runtime = state.siteRuntime?.[site.id];
+    if (site.type === "Essence" && runtime?.kind === "essence") {
+      inlineRewards[site.id] = { kind: "essence", amount: runtime.amount };
+      return;
     }
+    if (site.type !== "Reward" || runtime?.kind !== "reward") {
+      return;
+    }
+    if (runtime.reward.rewardType === "dreamsign") {
+      inlineRewards[site.id] = {
+        kind: "dreamsign",
+        dreamsign: runtime.reward.dreamsign,
+      };
+      return;
+    }
+    inlineRewards[site.id] = {
+      kind: "essence",
+      amount: runtime.reward.essenceAmount,
+    };
   });
   return {
     scene: dreamscapeSceneRef(node),
     title: dreamscapeTitle(node),
     sites: buildSiteModels(node, state.completionLevel),
-    essenceRewards,
+    inlineRewards,
   };
 }

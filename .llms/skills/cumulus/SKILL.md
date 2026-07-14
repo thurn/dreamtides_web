@@ -94,7 +94,7 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 | Atlas Node | Components | 3 | [components/atlas-node.md](components/atlas-node.md) | One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engine: a framed circular icon whose glow and badges track its state — revealed, known, visited, completed, forgone, or a looming boss — and which reveals its scene / detail card on hover or press. |
 | Atlas Edge | Components | 2 | [components/atlas-edge.md](components/atlas-edge.md) | The connector between two Atlas nodes, drawn inside the map's SVG. |
 | Atlas Map | Components | 1 | [components/atlas-map.md](components/atlas-map.md) | The Dream Atlas map surface — the run graph of dreamscape nodes and their connectors, fitted into a fixed portrait design stage that uniformly scales to fit its container (letterboxed). |
-| Dreamsign | Components | 13 | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
+| Dreamsign | Components | 14 | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
 | Dreamsign Gallery Panel | Components | 1 | [components/dreamsign-gallery-panel.md](components/dreamsign-gallery-panel.md) | The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one bare-glyph end action. |
 | Site Node | Components | 2 | [components/site-node.md](components/site-node.md) | The dreamscape site disc: a floating circular node over scene art carrying a glyph and accent ring. |
 <!-- END GENERATED COMPONENT INDEX -->

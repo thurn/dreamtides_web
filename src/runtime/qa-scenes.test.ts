@@ -258,7 +258,6 @@ describe("site QA scenes", () => {
     const expectedSites = [
       ["draft", "Draft"],
       ["essence", "Essence"],
-      ["reward", "Reward"],
     ] as const;
 
     for (const [sceneId, siteType] of expectedSites) {
@@ -297,5 +296,23 @@ describe('the "dreamscape-with-essence" QA scene', () => {
     const essenceSite = node?.sites.find((site) => site.type === "Essence");
     expect(essenceSite).toBeDefined();
     expect(essenceSite?.isVisited).toBe(false);
+  });
+});
+
+describe('the "reward" QA scene', () => {
+  it("parks on the dreamscape overview with an unvisited Reward site", () => {
+    const state = buildQaScene("reward", makeQuestContent());
+
+    expect(state).not.toBeNull();
+    expect(state?.screen.type).toBe("dreamscape");
+    expect(state?.activeSiteId).toBeNull();
+    expect(state?.currentDreamscape).not.toBeNull();
+
+    const node = state?.currentDreamscape
+      ? state.atlas.nodes[state.currentDreamscape]
+      : undefined;
+    const rewardSite = node?.sites.find((site) => site.type === "Reward");
+    expect(rewardSite).toBeDefined();
+    expect(rewardSite?.isVisited).toBe(false);
   });
 });

@@ -1,8 +1,8 @@
 // Adapter bridging live quest state to the pure Cumulus dreamscape screen
 // (`src/cumulus/screens/DreamscapeScreen`). Adapters are wiring only: this one
 // owns `useQuest()`, builds the view-model, wires site selection to navigation
-// or in-place Essence collection, and emits the reconstruction logging. All mapping from domain
-// data to the screen's view types lives in the pure builder
+// or in-place reward collection, and emits the reconstruction logging. All
+// mapping from domain data to the screen's view types lives in the pure builder
 // (`dreamscape-view-model.ts`); the Cumulus screen itself stays pure.
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
@@ -13,6 +13,7 @@ import {
   buildDreamscapeView,
   dreamscapeLayoutSeed,
 } from "./dreamscape-view-model";
+import { buildInlineRewardCompletionLog } from "./inline-reward-view-model";
 
 /**
  * Live dreamscape screen: resolves the current dreamscape node, builds its
@@ -81,37 +82,28 @@ export function DreamscapeScreenAdapter() {
         mutations.ensureEssenceSiteRuntime(site.id, site.isEnhanced);
         return;
       }
+      if (site.type === "Reward") {
+        mutations.ensureRewardSiteRuntime(site.id);
+        return;
+      }
       mutations.setScreen({ type: "site", siteId });
     },
     [node, mutations, state.essence],
   );
 
-  const handleEssenceAnimationComplete = useCallback(
+  const handleInlineRewardAnimationComplete = useCallback(
     (siteId: string) => {
       if (node === undefined) return;
       const site = node.sites.find((candidate) => candidate.id === siteId);
       const runtime = state.siteRuntime[siteId];
-      if (
-        site?.type !== "Essence" ||
-        runtime?.kind !== "essence" ||
-        runtime.accepted
-      ) {
+      const completion = buildInlineRewardCompletionLog(site, runtime, state);
+      if (completion === null) return;
+      logEvent("site_completed", completion.fields);
+      if (completion.kind === "essence") {
+        mutations.acceptEssenceSite(siteId);
         return;
       }
-      logEvent("site_completed", {
-        siteType: "Essence",
-        outcome: "collected",
-        siteId,
-        rewardAmount: runtime.amount,
-        isEnhanced: site.isEnhanced,
-        essenceBefore: state.essence,
-        essenceAfter: Math.min(
-          state.essenceCap,
-          state.essence + runtime.amount,
-        ),
-        ui: "cumulus",
-      });
-      mutations.acceptEssenceSite(siteId);
+      mutations.acceptRewardSite(siteId);
     },
     [
       node,
@@ -130,7 +122,9 @@ export function DreamscapeScreenAdapter() {
     <DreamscapeScreen
       view={view}
       onSelectSite={handleSelectSite}
-      onEssenceAnimationComplete={handleEssenceAnimationComplete}
+      onInlineRewardAnimationComplete={
+        handleInlineRewardAnimationComplete
+      }
     />
   );
 }

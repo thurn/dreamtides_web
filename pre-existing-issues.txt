@@ -211,7 +211,6 @@ Atlas generator verification — layer uniqueness test is intermittent
   deterministic enough to reproduce the failing generation, then either repair
   the generator's within-layer uniqueness invariant or remove uncontrolled
   randomness from the assertion.
-
 QA site completion — fresh `?goto=` rooms roll back `COMPLETE_SITE`
 
 - In a fresh `?goto=gamble` room, selecting Continue briefly renders the
@@ -230,3 +229,9 @@ Cumulus guide-gallery mobile layout — presence badge overlaps guide dialog
   site using the default mobile band composition, including Purge and the
   Gamble / Temporal Fork placeholders. Reserve the presence badge's top band
   in the shared layout or move the speech anchor beneath it.
+
+Resolved in this branch: LogClient event nonces were scoped only by the stable
+client id and a per-instance counter. React StrictMode remounts the provider
+with the same client id, so the first post-bootstrap intent reused the
+LOAD_STATE nonce and Firebase silently deduplicated it. Nonces now include a
+per-LogClient random scope, with a remount regression test.

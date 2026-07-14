@@ -97,6 +97,18 @@ function randomClientId(): string {
 }
 
 /**
+ * A per-LogClient nonce scope. React StrictMode deliberately remounts the
+ * provider while preserving its stable client id, so a client-local counter by
+ * itself can repeat a nonce from the discarded instance.
+ */
+function randomNonceScope(): string {
+  if (typeof globalThis.crypto?.randomUUID === "function") {
+    return globalThis.crypto.randomUUID();
+  }
+  return Math.random().toString(36).slice(2, 14);
+}
+
+/**
  * Creates a LogClient. Subscribes immediately; the first delivered node
  * initializes the confirmed fold. `submit` may only be called after the first
  * node has arrived (the confirmed baseline must exist to stamp `basedOnSeq`).
@@ -108,6 +120,7 @@ export function createLogClient<S>(
   options: LogClientOptions = {},
 ): LogClient {
   const clientId = options.clientId ?? randomClientId();
+  const nonceScope = randomNonceScope();
 
   let genesis: Genesis | undefined;
   let initialized = false;
@@ -398,7 +411,7 @@ export function createLogClient<S>(
     }
     const g = requireGenesis();
     nonceCounter += 1;
-    const nonce = `${clientId}:${nonceCounter}`;
+    const nonce = `${clientId}:${nonceScope}:${nonceCounter}`;
 
     const event: GameEvent = {
       type: draft.type,

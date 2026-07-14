@@ -116,6 +116,8 @@ interface HarnessOptions {
   rejectAppendWith?: Error;
   /** Optional append implementation for race-shaping tests. */
   append?: (event: GameEvent) => Promise<number>;
+  /** Stable actor id for remount and nonce-scope tests. */
+  clientId?: string;
 }
 
 function makeHarness(
@@ -169,7 +171,7 @@ function makeHarness(
     onFoldError: (error) => foldErrors.push({ seq: error.seq, message: error.message }),
     onAppendFailed: (event, error) => appendFailures.push({ event, error }),
     onPendingDropped: (events) => pendingDropped.push(events),
-  });
+  }, { clientId: opts.clientId });
 
   const harness: Harness = {
     io,
@@ -195,6 +197,23 @@ function malformedConfirmed(tag: string): GameEvent {
 }
 
 describe("LogClient double-apply of own intent", () => {
+  it("does not repeat nonces when the same client id remounts", async () => {
+    const first = makeHarness(config, { clientId: "stable-client" });
+    first.harness.deliver(makeNode({ events: {} }));
+    await first.client.submit({ type: "T", payload: { tag: "first" } });
+    first.client.close();
+
+    const second = makeHarness(config, { clientId: "stable-client" });
+    second.harness.deliver(makeNode({ events: {} }));
+    await second.client.submit({ type: "T", payload: { tag: "second" } });
+
+    expect(first.harness.appended[0]?.nonce).toBeTruthy();
+    expect(second.harness.appended[0]?.nonce).toBeTruthy();
+    expect(second.harness.appended[0]?.nonce).not.toBe(
+      first.harness.appended[0]?.nonce,
+    );
+  });
+
   it("shows an own confirmed intent exactly once (nonce removal)", async () => {
     const { harness, client } = makeHarness();
     harness.deliver(makeNode({ events: {} }));

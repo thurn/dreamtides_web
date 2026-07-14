@@ -155,7 +155,7 @@ describe("buildDreamscapeView", () => {
     const view = buildDreamscapeView(node(), state);
     expect(view.title).toBe("Ember Wood");
     expect(view.sites).toHaveLength(3);
-    expect(view.essenceRewards).toEqual({});
+    expect(view.inlineRewards).toEqual({});
   });
 
   it("maps generated Essence rewards by site id for the in-place animation", () => {
@@ -173,8 +173,40 @@ describe("buildDreamscapeView", () => {
       },
     } as unknown as QuestState;
 
-    expect(buildDreamscapeView(essenceNode, state).essenceRewards).toEqual({
-      "s-essence": 275,
+    expect(buildDreamscapeView(essenceNode, state).inlineRewards).toEqual({
+      "s-essence": { kind: "essence", amount: 275 },
+    });
+  });
+
+  it("maps generated Reward site results by site id for in-place collection", () => {
+    const rewardNode = node({
+      sites: [site({ id: "s-reward", type: "Reward" })],
+    });
+    const dreamsign = {
+      id: "dreamsign-uuid",
+      name: "Lantern in the Rain",
+      effectDescription: "Your first dream each dawn costs 1 less.",
+      imageName: "lantern-in-the-rain.webp",
+      isBane: false,
+    };
+    const state = {
+      essence: 240,
+      deck: [],
+      dreamcaller: null,
+      dreamsigns: [],
+      completionLevel: 2,
+      siteRuntime: {
+        "s-reward": {
+          kind: "reward",
+          reward: { rewardType: "dreamsign", dreamsign },
+          remainingDreamsignPoolIds: [],
+          accepted: false,
+        },
+      },
+    } as unknown as QuestState;
+
+    expect(buildDreamscapeView(rewardNode, state).inlineRewards).toEqual({
+      "s-reward": { kind: "dreamsign", dreamsign },
     });
   });
 });

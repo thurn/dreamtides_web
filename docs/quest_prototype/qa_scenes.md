@@ -140,7 +140,7 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `dreamsignmarket-enhanced` | Dreamsign Market site, enhanced (free restock)                |
 | `dreamaugury`            | Dream Augury site                                               |
 | `dreamaugury-enhanced`   | Dream Augury site, enhanced flag (same UI as regular)           |
-| `reward`                 | Reward site                                                      |
+| `reward`                 | Dreamscape overview with a Reward site ready for inline collection |
 | `tempting`               | Tempting Offer site                                             |
 | `tempting-enhanced`      | Tempting Offer site, enhanced (Enhanced badge)                  |
 | `gamble`                 | Gamble work-in-progress site                                    |
