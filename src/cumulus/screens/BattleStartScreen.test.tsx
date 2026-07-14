@@ -193,23 +193,21 @@ describe("Cumulus BattleStartScreen", () => {
     const panel = layout?.querySelector<HTMLElement>(
       "[data-battle-start-panel]",
     );
-    expect(layout?.style.display).toBe("grid");
-    expect(layout?.style.gridTemplateRows).toBe(
-      "clamp(170px, 28dvh, 240px) minmax(0, 1fr)",
-    );
-    expect(layout?.style.paddingBottom).toBe(
+    expect(panel?.style.backdropFilter).toContain("--glass-blur");
+    expect(panel?.style.position).toBe("absolute");
+    expect(panel?.style.top).toBe("");
+    expect(panel?.style.bottom).toBe(
       QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
     );
-    expect(panel?.style.backdropFilter).toContain("--glass-blur");
-    expect(panel?.style.position).toBe("relative");
-    expect(panel?.style.top).toBe("");
-    expect(panel?.style.bottom).toBe("");
+    expect(panel?.style.left).toBe("var(--space-4)");
     expect(panel?.style.width).toBe(
       "calc(100vw - (var(--space-4) * 2))",
     );
-    expect(panel?.style.maxHeight).toBe("100%");
-    expect(panel?.style.alignSelf).toBe("start");
-    expect(panel?.style.justifySelf).toBe("center");
+    expect(panel?.style.maxHeight).toBe(
+      `calc(100dvh - ${QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE} - var(--space-4))`,
+    );
+    expect(panel?.style.alignSelf).toBe("");
+    expect(panel?.style.justifySelf).toBe("");
     expect(panel?.style.padding).toBe("var(--space-6)");
     expect(panel?.style.gap).toBe("var(--space-6)");
     expect(panel?.style.justifyContent).toBe("");
@@ -230,8 +228,12 @@ describe("Cumulus BattleStartScreen", () => {
     expect(opponent?.style.left).toBe(
       `max(var(--safe-area-inset-left), ${String(MENU_EDGE_INSET_MOBILE_PX)}px)`,
     );
-    expect(opponent?.style.bottom).toBe("calc(-1 * var(--space-8))");
+    expect(opponent?.style.bottom).toBe(
+      QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+    );
     expect(opponent?.style.width).toBe("58vw");
+    expect(opponent?.style.transform).toBe("scale(3)");
+    expect(opponent?.style.transformOrigin).toBe("50% 100%");
     expect(panel?.textContent).toContain("Aeris, the Prism Guide");
     expect(panel?.textContent).toContain("Storm Archivist");
     expect(panel?.textContent).toContain("Ability");

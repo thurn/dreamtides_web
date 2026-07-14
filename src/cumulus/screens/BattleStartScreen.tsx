@@ -19,8 +19,7 @@ import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
 import {
-  GUIDE_GALLERY_MOBILE_GRID_ROWS,
-  GUIDE_GALLERY_MOBILE_GUIDE_BOTTOM,
+  GUIDE_GALLERY_MOBILE_GUIDE_HEIGHT,
   GUIDE_GALLERY_MOBILE_GUIDE_LEFT,
   GUIDE_GALLERY_MOBILE_GUIDE_WIDTH,
   GUIDE_GALLERY_MOBILE_PANEL_WIDTH,
@@ -66,6 +65,8 @@ const SIGNATURE_CARD_WIDTH = 116;
 const DREAMSIGN_SIZE = 62;
 const COMPACT_SIGNATURE_CARD_WIDTH = 64;
 const COMPACT_DREAMSIGN_SIZE = 52;
+/** Enlarges the feet-anchored mobile opponent behind the bottom dossier. */
+const MOBILE_OPPONENT_SCALE = 3;
 
 export function BattleStartScreen({ view, onBegin }: BattleStartScreenProps) {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -151,26 +152,19 @@ function MobileBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
   return (
     <main
       data-battle-start-layout="mobile"
-      style={{
-        position: "absolute",
-        inset: 0,
-        display: "grid",
-        gridTemplateRows: GUIDE_GALLERY_MOBILE_GRID_ROWS,
-        paddingBottom: QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
-        boxSizing: "border-box",
-      }}
+      style={{ position: "absolute", inset: 0 }}
     >
       <section
         data-battle-start-opponent={view.dreamcaller.id}
         data-battle-start-opponent-framing="cutout"
         style={{
-          position: "relative",
+          position: "absolute",
           left: GUIDE_GALLERY_MOBILE_GUIDE_LEFT,
-          bottom: GUIDE_GALLERY_MOBILE_GUIDE_BOTTOM,
+          bottom: QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
           width: GUIDE_GALLERY_MOBILE_GUIDE_WIDTH,
-          height: "100%",
-          alignSelf: "stretch",
-          justifySelf: "start",
+          height: GUIDE_GALLERY_MOBILE_GUIDE_HEIGHT,
+          transform: `scale(${String(MOBILE_OPPONENT_SCALE)})`,
+          transformOrigin: "50% 100%",
           zIndex: 1,
         }}
       >
@@ -235,17 +229,21 @@ function BattleStartPanel({
       data-battle-start-panel-density={density}
       style={{
         ...glassSurfaceStyle({ radius: token("--radius-panel") }),
-        position: "relative",
+        position: compact ? "absolute" : "relative",
         top: undefined,
         right: undefined,
-        bottom: undefined,
-        left: undefined,
+        bottom: compact
+          ? QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE
+          : undefined,
+        left: compact ? token("--space-4") : undefined,
         zIndex: compact ? 4 : undefined,
         width: compact ? GUIDE_GALLERY_MOBILE_PANEL_WIDTH : "100%",
         maxWidth: compact ? undefined : PANEL_MAX_WIDTH,
-        maxHeight: "100%",
-        alignSelf: compact ? "start" : undefined,
-        justifySelf: compact ? "center" : undefined,
+        maxHeight: compact
+          ? `calc(100dvh - ${QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE} - ${token("--space-4")})`
+          : "100%",
+        alignSelf: undefined,
+        justifySelf: undefined,
         boxSizing: "border-box",
         padding: compact ? token("--space-6") : token("--space-9"),
         display: "flex",

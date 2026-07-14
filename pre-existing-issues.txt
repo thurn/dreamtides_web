@@ -211,3 +211,13 @@ Cumulus Dreamsign comparison — shop glass mesh rebuild dirties the worktree
   `2.2953703` to `2.2949998`, and the serialized vertex payload changes with it.
   Reconcile the committed generated mesh with the current builder so the
   canonical scene-comparison command leaves tracked assets byte-stable.
+
+Atlas generator verification — layer uniqueness test is intermittent
+
+- During mobile battle-start verification, the full `npm test` run failed
+  `src/atlas/atlas-generator.test.ts` at “never assigns the same dreamscape twice
+  within one layer”: a four-entry revealed layer contained only three distinct
+  dreamscape ids. Rerunning that test alone passed immediately. Make the fixture
+  deterministic enough to reproduce the failing generation, then either repair
+  the generator's within-layer uniqueness invariant or remove uncontrolled
+  randomness from the assertion.
