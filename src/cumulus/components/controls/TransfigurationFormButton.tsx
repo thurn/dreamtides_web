@@ -35,13 +35,13 @@ export interface TransfigurationFormButtonModel {
   affordable: boolean;
 }
 
-/** Strict visual treatments for compact and description-bearing form lists. */
-export type TransfigurationFormButtonVariant = "compact" | "detailed";
+/** Strict visual treatments for compact and price-bearing form lists. */
+export type TransfigurationFormButtonVariant = "compact" | "priced";
 
 export interface TransfigurationFormButtonProps {
   /** Structured offered-form data; the component owns its canonical glyph and color. */
   form: TransfigurationFormButtonModel;
-  /** Compact name-only choice or a wider choice with description and essence price. */
+  /** Compact name-only choice or a wider choice with a visible essence price. */
   variant: TransfigurationFormButtonVariant;
   /** Whether this form is the active radio choice. */
   selected: boolean;
@@ -103,7 +103,7 @@ export function TransfigurationFormButton({
               paddingRight: token("--space-3"),
               paddingLeft: token("--space-3"),
             }
-          : { padding: token("--space-4") }),
+          : { padding: token("--space-3") }),
         boxSizing: "border-box",
         border: `2px solid ${selected ? accent : token("--border-soft")}`,
         borderRadius: token("--radius-control"),
@@ -119,39 +119,16 @@ export function TransfigurationFormButton({
         size={compact ? "20px" : "28px"}
         shadow
       />
-      {compact ? (
-        <span
-          style={{
-            font: token("--t-button"),
-            color: token("--text-on-glass"),
-            whiteSpace: "nowrap",
-          }}
-        >
-          {form.type}
-        </span>
-      ) : (
-        <span style={{ minWidth: 0 }}>
-          <strong
-            style={{
-              display: "block",
-              font: token("--t-button"),
-              color: token("--text-on-glass"),
-            }}
-          >
-            {form.type}
-          </strong>
-          <span
-            style={{
-              display: "block",
-              marginTop: token("--space-1"),
-              font: token("--t-caption"),
-              color: token("--text-on-glass-muted"),
-            }}
-          >
-            {form.description}
-          </span>
-        </span>
-      )}
+      <strong
+        style={{
+          minWidth: 0,
+          font: token("--t-button"),
+          color: token("--text-on-glass"),
+          whiteSpace: "nowrap",
+        }}
+      >
+        {form.type}
+      </strong>
       {!compact && (
         <span
           style={{

@@ -26,7 +26,7 @@ function TransfigurationFormButtonDemo() {
   const [selected, setSelected] = useState<TransfigurationType | null>(null);
   const variants: readonly TransfigurationFormButtonVariant[] = [
     "compact",
-    "detailed",
+    "priced",
   ];
   return (
     <div
@@ -65,9 +65,9 @@ export const transfigurationFormButtonDemo: CumulusComponent = {
   id: "transfiguration-form-button",
   title: "Transfiguration Form Button",
   blurb:
-    "The canonical forge-form choice: compact and detailed controls with shared glyph, color, state, and accessibility behavior.",
+    "The canonical forge-form choice: compact and price-bearing controls with shared glyph, color, state, and accessibility behavior.",
   callout:
-    "Use the compact variant for space-constrained lists and the detailed variant when each choice carries visible rules text and an essence quote.",
+    "Use the compact variant for space-constrained lists and the priced variant when each choice carries a visible essence quote.",
   group: "Components",
   docName: "TransfigurationFormButton",
   Component: TransfigurationFormButtonDemo,
@@ -79,7 +79,7 @@ export const transfigurationFormButtonDemo: CumulusComponent = {
 
 <TransfigurationFormButton
   form={form}
-  variant="detailed"
+  variant="priced"
   selected={selectedType === form.type}
   onActivate={selectForm}
 />`,

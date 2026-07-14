@@ -3412,11 +3412,11 @@
       "tsType": "TransfigurationFormButtonVariant",
       "unionMembers": [
         "compact",
-        "detailed"
+        "priced"
       ],
       "required": true,
       "defaultValue": null,
-      "description": "Compact name-only choice or a wider choice with description and essence price."
+      "description": "Compact name-only choice or a wider choice with a visible essence price."
     },
     {
       "name": "selected",

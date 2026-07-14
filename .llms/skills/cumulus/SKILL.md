@@ -72,7 +72,7 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 | Segmented Control | Components | 1 | [components/segmented-control.md](components/segmented-control.md) | The compact tab and filter switch used for type filters, sort direction, and small mode toggles. |
 | Select | Components | 2 | [components/select.md](components/select.md) | The compact dropdown control, and Cumulus's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. |
 | Tide Disc | Components | 2 | [components/tide-disc.md](components/tide-disc.md) | The single semantic tide mark: a colored disc carrying the tide's glyph and its own strict tide reveal, sized 'sm' or 'lg'. |
-| Transfiguration Form Button | Components | 1 | [components/transfiguration-form-button.md](components/transfiguration-form-button.md) | The canonical forge-form choice: compact and detailed controls with shared glyph, color, state, and accessibility behavior. |
+| Transfiguration Form Button | Components | 1 | [components/transfiguration-form-button.md](components/transfiguration-form-button.md) | The canonical forge-form choice: compact and price-bearing controls with shared glyph, color, state, and accessibility behavior. |
 | Motes | Components | 9 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
 | Info Card | Components | 6 | [components/info-card.md](components/info-card.md) | The one press-to-reveal information card. |
 | Group Panel | Components | 2 | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |

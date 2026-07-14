@@ -330,7 +330,7 @@ describe("TransfigurationSiteScreen", () => {
       "[data-transfiguration-panel-viewport]",
     );
     expect(panelViewport?.style.width).toBe("100%");
-    expect(panelViewport?.style.maxWidth).toBe("720px");
+    expect(panelViewport?.style.maxWidth).toBe("640px");
     expect(panelViewport?.style.justifySelf).toBe("end");
     expect(
       container.querySelector(
@@ -351,6 +351,14 @@ describe("TransfigurationSiteScreen", () => {
       container.querySelector("[data-transfiguration-detail-card-target]"),
     ).not.toBeNull();
     expect(container.querySelectorAll('[role="radio"]')).toHaveLength(2);
+    const detailBody = container.querySelector<HTMLElement>(
+      "[data-transfiguration-detail-body]",
+    );
+    expect(detailBody?.style.gridTemplateColumns).toBe(
+      "minmax(220px, 278px) minmax(240px, 274px)",
+    );
+    expect(detailBody?.style.gap).toBe("var(--space-6)");
+    expect(detailBody?.style.alignItems).toBe("center");
     expect(
       container.querySelector<HTMLElement>("[data-transfiguration-options]")
         ?.style.overflowY,
@@ -386,10 +394,12 @@ describe("TransfigurationSiteScreen", () => {
     const empowered = container.querySelector<HTMLButtonElement>(
       '[data-testid="cumulus-transfiguration-form-Empowered"]',
     );
-    expect(empowered?.dataset.transfigurationFormVariant).toBe("detailed");
+    expect(empowered?.textContent).toBe("Empowered40");
+    expect(empowered?.dataset.transfigurationFormVariant).toBe("priced");
     expect(empowered?.getAttribute("aria-description")).toBe(
       "Reduce this card's energy cost.",
     );
+    expect(empowered?.style.padding).toBe("var(--space-3)");
     expect(empowered?.style.background).toBe("transparent");
     expect(empowered?.style.boxShadow).toBe("none");
     act(() => empowered?.click());

@@ -83,9 +83,9 @@ const CARD_DISMISS_SCALE = 0;
 // The authored mobile card ceiling expressed as width so the card can fit both
 // its equal visual column and the live detail-row height without distortion.
 const MOBILE_DETAIL_CARD_MAX_WIDTH = 227;
-// Matches the standard site's former split-column detail width while the
-// three-card picker uses the wider showcase composition.
-const DESKTOP_DETAIL_PANEL_MAX_WIDTH_PX = 720;
+// Keeps the desktop detail compact once forge-form descriptions are carried
+// accessibly instead of occupying a second visible line in every option.
+const DESKTOP_DETAIL_PANEL_MAX_WIDTH_PX = 640;
 
 export function TransfigurationSiteScreen({
   view,
@@ -489,10 +489,10 @@ function DetailPanel({
           minHeight: mobile ? "auto" : undefined,
           gridTemplateColumns: mobile
             ? "minmax(0, 1fr) minmax(0, 1fr)"
-            : "minmax(220px, 0.82fr) minmax(320px, 1.18fr)",
+            : "minmax(220px, 278px) minmax(240px, 274px)",
           gridTemplateRows: mobile ? "auto" : undefined,
-          gap: mobile ? token("--space-4") : token("--space-8"),
-          alignItems: mobile ? "stretch" : "start",
+          gap: mobile ? token("--space-4") : token("--space-6"),
+          alignItems: mobile ? "stretch" : "center",
           padding: mobile
             ? `${token("--space-6")} ${token("--space-4")}`
             : token("--space-8"),
@@ -537,7 +537,7 @@ function DetailPanel({
             role="radiogroup"
             aria-label="Transfiguration options"
             data-transfiguration-options=""
-            data-transfiguration-option-layout={mobile ? "compact" : "detailed"}
+            data-transfiguration-option-layout={mobile ? "compact" : "priced"}
             style={{
               display: "flex",
               minHeight: mobile ? 0 : undefined,
@@ -558,7 +558,7 @@ function DetailPanel({
                 <TransfigurationFormButton
                   key={form.type}
                   form={form}
-                  variant={mobile ? "compact" : "detailed"}
+                  variant={mobile ? "compact" : "priced"}
                   selected={selected}
                   disabled={confirming}
                   onActivate={onSelectForm}

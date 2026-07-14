@@ -68,7 +68,7 @@ describe("TransfigurationFormButton", () => {
     act(() => root.unmount());
   });
 
-  it("owns the detailed treatment and blocks unaffordable activation", () => {
+  it("owns the priced treatment and blocks unaffordable activation", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -78,7 +78,7 @@ describe("TransfigurationFormButton", () => {
       root.render(
         <TransfigurationFormButton
           form={{ ...empowered, essenceCost: 0, affordable: false }}
-          variant="detailed"
+          variant="priced"
           selected
           onActivate={onActivate}
         />,
@@ -86,14 +86,12 @@ describe("TransfigurationFormButton", () => {
     });
 
     const button = container.querySelector<HTMLButtonElement>("button");
-    expect(button?.dataset.transfigurationFormVariant).toBe("detailed");
+    expect(button?.dataset.transfigurationFormVariant).toBe("priced");
     expect(button?.style.gridTemplateColumns).toBe(
       "auto minmax(0, 1fr) auto",
     );
-    expect(button?.style.padding).toBe("var(--space-4)");
-    expect(button?.textContent).toBe(
-      "EmpoweredReduce this card's energy cost.Free",
-    );
+    expect(button?.style.padding).toBe("var(--space-3)");
+    expect(button?.textContent).toBe("EmpoweredFree");
     expect(button?.getAttribute("aria-label")).toBe("Empowered, free");
     expect(button?.getAttribute("aria-disabled")).toBe("true");
 
