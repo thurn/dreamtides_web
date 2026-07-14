@@ -3,7 +3,8 @@ import { siteTypeIcon } from "../atlas/atlas-generator";
 import {
   OfferTile,
   type OfferTileCard,
-  type OfferTileDreamsign,
+  type OfferTileDreamsignChoices,
+  type OfferTileFourCards,
   type OfferTileModel,
 } from "../cumulus/components/controls/OfferTile";
 import { artRef, resolveArtRef } from "../cumulus/primitives/art";
@@ -13,18 +14,45 @@ import { MERCHANT_ARCHETYPE_BUILDERS } from "../journey_v2/archetypes/registry";
 import type { MerchantArchetypeId } from "../journey_v2/archetypes/types";
 import { asCardId } from "../types/card-identity";
 
-const CARDS: readonly OfferTileCard[] = [
-  { cardId: asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"), imageNumber: 287269511 },
-  { cardId: asCardId("161482b6-af07-4d9e-822d-8c738672beb9"), imageNumber: 2022594419 },
-  { cardId: asCardId("b56ef7e8-c634-4d40-ac08-fab591dfbc4a"), imageNumber: 618071684 },
-  { cardId: asCardId("9b9c2743-75b3-499d-b5fb-c3429c92d420"), imageNumber: 1196004046 },
-  { cardId: asCardId("967c714f-40c5-4a77-8e22-40691a2755d4"), imageNumber: 2212744813 },
-  { cardId: asCardId("3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1"), imageNumber: 2218612335 },
-  { cardId: asCardId("25d00336-5ad7-433b-8ced-71720a9f074a"), imageNumber: 1480584617 },
-  { cardId: asCardId("68978d92-aa8b-4873-bb0b-6e52f12b0849"), imageNumber: 1633431265 },
+const fixtureCard = (cardId: string, imageNumber: number): OfferTileCard => ({
+  cardId: asCardId(cardId),
+  imageNumber,
+});
+
+const GENERAL_DRAFT_A: OfferTileFourCards = [
+  fixtureCard("7be2e6d7-abff-4c44-a0c3-35460da1693c", 287269511),
+  fixtureCard("161482b6-af07-4d9e-822d-8c738672beb9", 2022594419),
+  fixtureCard("b56ef7e8-c634-4d40-ac08-fab591dfbc4a", 618071684),
+  fixtureCard("9b9c2743-75b3-499d-b5fb-c3429c92d420", 1196004046),
 ];
 
-const DREAMSIGNS: readonly OfferTileDreamsign[] = [
+const GENERAL_DRAFT_B: OfferTileFourCards = [
+  fixtureCard("967c714f-40c5-4a77-8e22-40691a2755d4", 2212744813),
+  fixtureCard("3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", 2218612335),
+  fixtureCard("25d00336-5ad7-433b-8ced-71720a9f074a", 1480584617),
+  fixtureCard("68978d92-aa8b-4873-bb0-6e52f12b0849", 1633431265),
+];
+
+// Four actual Spirit Animal cards form a realistic subtype draft and bundle.
+const CATEGORY_DRAFT: OfferTileFourCards = [
+  fixtureCard("9b9c2743-75b3-499d-b5fb-c3429c92d420", 1196004046),
+  fixtureCard("401bb341-8385-41e9-8f6f-7b48e9ce174d", 2278837667),
+  fixtureCard("eae928f6-aab2-415e-b4b1-b9c3ed8e6818", 447372529),
+  fixtureCard("c8579b20-95ff-4b1d-b4c6-6bd049fc4760", 2127752129),
+];
+
+// This Event has Reclaim 2 and is therefore a real keyword_mod target.
+const KEYWORD_TARGET = fixtureCard(
+  "2931e20b-1a80-4ddd-8944-20e68d182886",
+  776481901,
+);
+
+const STARTER_TARGETS = [
+  fixtureCard("5a980eff-6ec7-44d8-9977-b98e66bbc2c8", 507269458),
+  fixtureCard("647f5150-b2e0-424b-9480-27557642524e", 1016596168),
+] as const;
+
+const DREAMSIGNS: OfferTileDreamsignChoices = [
   {
     id: "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
     art: artRef.dreamsign("acorn_gold.png"),
@@ -37,13 +65,13 @@ const DREAMSIGNS: readonly OfferTileDreamsign[] = [
     id: "6E20E6C7-295A-48B1-B252-B8B00D6902C9",
     art: artRef.dreamsign("amanita.png"),
   },
+  {
+    id: "49990864-1DB0-4C08-91AE-40A1F04223E4",
+    art: artRef.dreamsign("algae.png"),
+  },
 ];
 
-const card = (index: number): OfferTileCard => CARDS[index % CARDS.length];
-const draft = (offset = 0): readonly OfferTileCard[] =>
-  [card(offset), card(offset + 1), card(offset + 2), card(offset + 3)];
-
-/** One representative, UUID-backed specimen for every canonical archetype. */
+/** One maximal, production-shaped UUID-backed specimen per canonical archetype. */
 export const OFFER_TILE_DEBUG_MODELS: Readonly<
   Record<MerchantArchetypeId, OfferTileModel>
 > = {
@@ -52,99 +80,99 @@ export const OFFER_TILE_DEBUG_MODELS: Readonly<
     kind: "card-gift",
     label: "Card Gift",
     description: "Add one card that complements your deck.",
-    card: card(0),
+    card: GENERAL_DRAFT_A[0],
   },
   fit_card_draft: {
     id: "debug:fit_card_draft",
     kind: "card-draft",
     label: "Card Draft",
     description: "Choose one of four cards to add to your deck.",
-    cards: draft(0),
+    cards: GENERAL_DRAFT_A,
   },
   copies_draft: {
     id: "debug:copies_draft",
     kind: "copies-draft",
     label: "Copies Draft",
     description: "Choose one card and add multiple copies to your deck.",
-    cards: draft(1),
+    cards: GENERAL_DRAFT_B,
   },
   strong_card: {
     id: "debug:strong_card",
     kind: "power-card",
     label: "Power Gift",
     description: "Add one especially powerful card to your deck.",
-    card: card(4),
+    card: GENERAL_DRAFT_B[0],
   },
   category_draft_known: {
     id: "debug:category_draft_known",
     kind: "category-draft",
     label: "Category Draft",
     description: "Choose one card from a category that complements your deck.",
-    cards: draft(2),
+    cards: CATEGORY_DRAFT,
   },
   card_bundle: {
     id: "debug:card_bundle",
     kind: "card-bundle",
     label: "Card Bundle",
-    description: "Add a bundle of related cards to your deck.",
-    cards: [card(1), card(4), card(7)],
+    description: "Add two or three related cards to your deck.",
+    cards: [CATEGORY_DRAFT[0], CATEGORY_DRAFT[1], CATEGORY_DRAFT[2]],
   },
   transfigured_draft: {
     id: "debug:transfigured_draft",
     kind: "transfigured-draft",
     label: "Transfigured Draft",
     description: "Choose one of four cards with transfiguration.",
-    cards: draft(4),
+    cards: GENERAL_DRAFT_B,
   },
   transfigure: {
     id: "debug:transfigure",
     kind: "transfigure-card",
     label: "Transfigure Card",
     description: "Transfigure one card in your deck.",
-    card: card(5),
+    card: GENERAL_DRAFT_B[1],
   },
   starter_transfigure: {
     id: "debug:starter_transfigure",
     kind: "transfigure-starters",
     label: "Refine Starters",
-    description: "Transfigure several starter cards in your deck.",
-    cards: [card(0), card(2), card(4)],
+    description: "Transfigure one or two starter cards in your deck.",
+    cards: STARTER_TARGETS,
   },
   keyword_mod: {
     id: "debug:keyword_mod",
     kind: "keyword-modification",
-    label: "Keyword Gift",
-    description: "Add a new keyword to one card in your deck.",
-    card: card(6),
+    label: "Reduce Reclaim",
+    description: "Reduce the Reclaim cost of one card in your deck.",
+    card: KEYWORD_TARGET,
   },
   tribal_change: {
     id: "debug:tribal_change",
     kind: "tribal-change",
     label: "Kindred Change",
     description: "Change the character type of one card in your deck.",
-    card: card(7),
+    card: GENERAL_DRAFT_A[0],
   },
   purge: {
     id: "debug:purge",
     kind: "purge-card",
     label: "Purge Card",
     description: "Purge one card from your deck.",
-    card: card(3),
+    card: GENERAL_DRAFT_A[3],
   },
   purge_replace: {
     id: "debug:purge_replace",
     kind: "trade-card",
     label: "Trade Card",
-    description: "Purge one card and replace it with another.",
-    outgoing: card(3),
-    incoming: card(0),
+    description: "Purge one card and choose one of four replacements.",
+    outgoing: GENERAL_DRAFT_A[3],
+    incoming: GENERAL_DRAFT_B,
   },
   duplicate: {
     id: "debug:duplicate",
     kind: "duplicate-card",
     label: "Duplicate Card",
-    description: "Duplicate one card in your deck.",
-    card: card(2),
+    description: "Choose one of up to three cards in your deck to duplicate.",
+    cards: [GENERAL_DRAFT_A[0], GENERAL_DRAFT_A[1], GENERAL_DRAFT_A[3]],
   },
   dreamsign: {
     id: "debug:dreamsign",
@@ -157,7 +185,7 @@ export const OFFER_TILE_DEBUG_MODELS: Readonly<
     id: "debug:dreamsign_draft",
     kind: "dreamsign-draft",
     label: "Dreamsign Draft",
-    description: "Choose one dreamsign to add to your collection.",
+    description: "Choose one of two to four dreamsigns to add to your collection.",
     dreamsigns: DREAMSIGNS,
   },
   add_site: {
@@ -170,6 +198,29 @@ export const OFFER_TILE_DEBUG_MODELS: Readonly<
       glyph: glyph(siteTypeIcon("Duplication")),
     },
   },
+};
+
+/** Debug-only explanation of the maximal live offer shape each tile represents. */
+export const OFFER_TILE_DEBUG_NOTES: Readonly<
+  Record<MerchantArchetypeId, string>
+> = {
+  fit_card_grant: "1 preselected card",
+  fit_card_draft: "4 choices · all shown",
+  copies_draft: "4 choices · all shown",
+  strong_card: "1 preselected card",
+  category_draft_known: "4 same-category choices",
+  card_bundle: "3 preselected cards",
+  transfigured_draft: "4 choices · all shown",
+  transfigure: "1 preselected card",
+  starter_transfigure: "2 preselected starters",
+  keyword_mod: "1 preselected eligible card",
+  tribal_change: "1 preselected eligible card",
+  purge: "1 preselected card",
+  purge_replace: "1 purge target · 4 choices",
+  duplicate: "3 choices · all shown",
+  dreamsign: "1 preselected dreamsign",
+  dreamsign_draft: "4 choices · all shown",
+  add_site: "1 preselected site",
 };
 
 export default function OffersDebugApp(): ReactElement {
@@ -239,7 +290,7 @@ export default function OffersDebugApp(): ReactElement {
           </p>
           <h1 style={{ margin: 0, font: token("--t-display") }}>Offer Tiles</h1>
           <p style={{ margin: 0, font: token("--t-body-sm") }}>
-            {models.length} category specimens · hover a tile for its category
+            {models.length} maximal offer shapes · every surfaced choice shown
           </p>
           <p aria-live="polite" style={{ margin: 0, minHeight: 20, font: token("--t-caption") }}>
             {selected === null ? "" : `Pressed ${selected.label}`}
@@ -271,13 +322,22 @@ export default function OffersDebugApp(): ReactElement {
                 <OfferTile model={model} onPress={setLastPressed} />
                 <figcaption
                   style={{
+                    display: "grid",
+                    gap: token("--space-1"),
                     font: token("--t-caption"),
                     color: token("--text-on-glass"),
                     textAlign: "center",
                     textShadow: token("--text-outline-media"),
                   }}
                 >
-                  {model.label}
+                  <span>{model.label}</span>
+                  <span
+                    style={{
+                      color: token("--text-on-glass-muted"),
+                    }}
+                  >
+                    {OFFER_TILE_DEBUG_NOTES[builder.archetypeId]}
+                  </span>
                 </figcaption>
               </figure>
             );

@@ -87,6 +87,10 @@ describe("OfferTile", () => {
           id: "6E20E6C7-295A-48B1-B252-B8B00D6902C9",
           art: { kind: "dreamsign", imageName: "amanita.png" },
         },
+        {
+          id: "49990864-1DB0-4C08-91AE-40A1F04223E4",
+          art: { kind: "dreamsign", imageName: "algae.png" },
+        },
       ],
     };
     const container = document.createElement("div");
@@ -102,9 +106,52 @@ describe("OfferTile", () => {
     });
 
     const source = container.querySelector<HTMLElement>("[data-offer-tile]")!;
-    expect(source.querySelectorAll("[data-offer-tile-dreamsign-id]")).toHaveLength(3);
+    expect(source.querySelectorAll("[data-offer-tile-dreamsign-id]")).toHaveLength(4);
     expect(source.querySelectorAll("[tabindex]")).toHaveLength(0);
     expect(source.querySelectorAll("[data-reveal-entity-type]")).toHaveLength(0);
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("renders every surfaced chooser object without representative truncation", () => {
+    const cards = MODEL.cards;
+    const trade: OfferTileModel = {
+      id: "debug-trade",
+      kind: "trade-card",
+      label: "Trade Card",
+      description: "Purge one card and choose one of four replacements.",
+      outgoing: cards[0],
+      incoming: cards,
+    };
+    const duplicate: OfferTileModel = {
+      id: "debug-duplicate",
+      kind: "duplicate-card",
+      label: "Duplicate Card",
+      description: "Choose one of up to three cards in your deck to duplicate.",
+      cards: [cards[0], cards[1], cards[2]],
+    };
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <OfferTile model={trade} onPress={() => {}} testId="trade-tile" />
+          <OfferTile model={duplicate} onPress={() => {}} testId="duplicate-tile" />
+        </CumulusRoot>,
+      );
+    });
+
+    expect(
+      container.querySelectorAll('[data-testid="trade-tile"] [data-offer-tile-card-id]'),
+    ).toHaveLength(5);
+    expect(
+      container.querySelectorAll(
+        '[data-testid="duplicate-tile"] [data-offer-tile-card-id]',
+      ),
+    ).toHaveLength(3);
 
     act(() => root.unmount());
     container.remove();

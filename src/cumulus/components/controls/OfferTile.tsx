@@ -40,6 +40,41 @@ export interface OfferTileSite {
   glyph: Glyph;
 }
 
+/** The four surfaced card choices carried by every card-draft offer. */
+export type OfferTileFourCards = readonly [
+  OfferTileCard,
+  OfferTileCard,
+  OfferTileCard,
+  OfferTileCard,
+];
+
+/** The two or three fixed cards granted together by a bundle offer. */
+export type OfferTileBundleCards =
+  | readonly [OfferTileCard, OfferTileCard]
+  | readonly [OfferTileCard, OfferTileCard, OfferTileCard];
+
+/** The one or two starter cards preselected for transfiguration. */
+export type OfferTileStarterCards =
+  | readonly [OfferTileCard]
+  | readonly [OfferTileCard, OfferTileCard];
+
+/** The one to three surfaced deck-card choices in a duplicate offer. */
+export type OfferTileDuplicateCards =
+  | readonly [OfferTileCard]
+  | readonly [OfferTileCard, OfferTileCard]
+  | readonly [OfferTileCard, OfferTileCard, OfferTileCard];
+
+/** The two to four surfaced choices in a dreamsign-draft offer. */
+export type OfferTileDreamsignChoices =
+  | readonly [OfferTileDreamsign, OfferTileDreamsign]
+  | readonly [OfferTileDreamsign, OfferTileDreamsign, OfferTileDreamsign]
+  | readonly [
+      OfferTileDreamsign,
+      OfferTileDreamsign,
+      OfferTileDreamsign,
+      OfferTileDreamsign,
+    ];
+
 interface OfferTileBase {
   /**
    * Stable identity for this visible offer. Production callers should combine
@@ -64,31 +99,34 @@ export type OfferTileModel =
         | "copies-draft"
         | "category-draft"
         | "transfigured-draft";
-      cards: readonly OfferTileCard[];
+      cards: OfferTileFourCards;
     })
-  | (OfferTileBase & { kind: "card-bundle"; cards: readonly OfferTileCard[] })
+  | (OfferTileBase & { kind: "card-bundle"; cards: OfferTileBundleCards })
   | (OfferTileBase & {
       kind: "transfigure-card" | "keyword-modification" | "tribal-change";
       card: OfferTileCard;
     })
   | (OfferTileBase & {
       kind: "transfigure-starters";
-      cards: readonly OfferTileCard[];
+      cards: OfferTileStarterCards;
     })
   | (OfferTileBase & { kind: "purge-card"; card: OfferTileCard })
   | (OfferTileBase & {
       kind: "trade-card";
       outgoing: OfferTileCard;
-      incoming: OfferTileCard;
+      incoming: OfferTileFourCards;
     })
-  | (OfferTileBase & { kind: "duplicate-card"; card: OfferTileCard })
+  | (OfferTileBase & {
+      kind: "duplicate-card";
+      cards: OfferTileDuplicateCards;
+    })
   | (OfferTileBase & {
       kind: "dreamsign-gift";
       dreamsign: OfferTileDreamsign;
     })
   | (OfferTileBase & {
       kind: "dreamsign-draft";
-      dreamsigns: readonly OfferTileDreamsign[];
+      dreamsigns: OfferTileDreamsignChoices;
     })
   | (OfferTileBase & { kind: "add-site"; site: OfferTileSite });
 
@@ -186,12 +224,14 @@ function CardArtPiece({
 }: {
   readonly card: OfferTileCard;
   readonly treatment?: CardTreatment;
-  readonly size?: "small" | "medium" | "large";
+  readonly size?: "tiny" | "small" | "medium" | "large";
 }): ReactElement {
   const [imageBroken, setImageBroken] = useState(false);
   const hasImage = !imageBroken && hasAssignedImage(card.imageNumber);
   const dimensions =
-    size === "small"
+    size === "tiny"
+      ? { width: 36, height: 44 }
+      : size === "small"
       ? { width: 48, height: 54 }
       : size === "large"
         ? { width: 84, height: 100 }
@@ -352,7 +392,7 @@ function DraftGrid({ cards }: { readonly cards: readonly OfferTileCard[] }) {
         pointerEvents: "none",
       }}
     >
-      {cards.slice(0, 4).map((card) => (
+      {cards.map((card) => (
         <CardArtPiece key={card.cardId} card={card} size="small" />
       ))}
     </span>
@@ -366,7 +406,7 @@ function CardFan({
   readonly cards: readonly OfferTileCard[];
   readonly treatment?: CardTreatment;
 }) {
-  const visible = cards.slice(0, 4);
+  const visible = cards;
   return (
     <span
       style={{
@@ -486,9 +526,33 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
     case "trade-card":
       return (
         <>
-          <span style={{ display: "flex", gap: 12, pointerEvents: "none" }}>
-            <CardArtPiece card={model.outgoing} treatment="purged" />
-            <CardArtPiece card={model.incoming} treatment="incoming" />
+          <span
+            style={{
+              display: "grid",
+              gridTemplateColumns: "48px 76px",
+              alignItems: "center",
+              gap: 10,
+              pointerEvents: "none",
+            }}
+          >
+            <CardArtPiece card={model.outgoing} treatment="purged" size="small" />
+            <span
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 36px)",
+                gap: 4,
+                pointerEvents: "none",
+              }}
+            >
+              {model.incoming.map((card) => (
+                <CardArtPiece
+                  key={card.cardId}
+                  card={card}
+                  treatment="incoming"
+                  size="tiny"
+                />
+              ))}
+            </span>
           </span>
           <OperationMark glyph={GLYPHS.caretRight} position="center" />
         </>
@@ -496,22 +560,7 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
     case "duplicate-card":
       return (
         <>
-          <span
-            style={{
-              position: "relative",
-              display: "block",
-              width: 106,
-              height: 106,
-              pointerEvents: "none",
-            }}
-          >
-            <span style={{ position: "absolute", left: 8, top: 12, rotate: "-7deg", pointerEvents: "none" }}>
-              <CardArtPiece card={model.card} treatment="duplicate" />
-            </span>
-            <span style={{ position: "absolute", right: 8, bottom: 4, rotate: "7deg", pointerEvents: "none" }}>
-              <CardArtPiece card={model.card} treatment="duplicate" />
-            </span>
-          </span>
+          <CardFan cards={model.cards} treatment="duplicate" />
           <OperationMark glyph={GLYPHS.copy} tone="duplicate" />
         </>
       );
@@ -521,18 +570,17 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
       return (
         <span
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 0,
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 62px)",
+            placeItems: "center",
+            gap: 4,
             pointerEvents: "none",
           }}
         >
-          {model.dreamsigns.slice(0, 3).map((dreamsign, index) => (
+          {model.dreamsigns.map((dreamsign) => (
             <span
               key={dreamsign.id}
               style={{
-                marginLeft: index === 0 ? 0 : -18,
-                rotate: `${String((index - 1) * 8)}deg`,
                 pointerEvents: "none",
               }}
             >
