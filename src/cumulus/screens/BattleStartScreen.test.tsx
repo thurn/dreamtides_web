@@ -120,9 +120,7 @@ describe("Cumulus BattleStartScreen", () => {
     );
     expect(desktopSectionTitles).toContain("Signature Cards");
     expect(desktopSectionTitles).toContain("Dreamsigns");
-    expect(desktopSectionTitles).not.toContain(
-      "Signature Cards & Dreamsigns",
-    );
+    expect(desktopSectionTitles).not.toContain("Signature Cards & Dreamsigns");
     expect(
       container.querySelector("[data-battle-start-signature-objects]"),
     ).toBeNull();
@@ -193,23 +191,25 @@ describe("Cumulus BattleStartScreen", () => {
     const panel = layout?.querySelector<HTMLElement>(
       "[data-battle-start-panel]",
     );
-    expect(panel?.style.backdropFilter).toContain("--glass-blur");
+    const glassPanel = layout?.querySelector<HTMLElement>(
+      '[data-testid="cumulus-battle-start-glass-panel"]',
+    );
+    const panelContent = layout?.querySelector<HTMLElement>(
+      "[data-battle-start-panel-content]",
+    );
+    expect(glassPanel?.style.backdropFilter).toContain("--glass-blur");
     expect(panel?.style.position).toBe("absolute");
     expect(panel?.style.top).toBe("");
-    expect(panel?.style.bottom).toBe(
-      QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
-    );
+    expect(panel?.style.bottom).toBe(QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE);
     expect(panel?.style.left).toBe("var(--space-4)");
-    expect(panel?.style.width).toBe(
-      "calc(100vw - (var(--space-4) * 2))",
-    );
+    expect(panel?.style.width).toBe("calc(100vw - (var(--space-4) * 2))");
     expect(panel?.style.maxHeight).toBe(
       `calc(100dvh - ${QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE} - var(--space-4))`,
     );
     expect(panel?.style.alignSelf).toBe("");
     expect(panel?.style.justifySelf).toBe("");
-    expect(panel?.style.padding).toBe("var(--space-6)");
-    expect(panel?.style.gap).toBe("var(--space-6)");
+    expect(panelContent?.style.padding).toBe("var(--space-6)");
+    expect(panelContent?.style.gap).toBe("var(--space-6)");
     expect(panel?.style.justifyContent).toBe("");
     expect(panel?.getAttribute("data-battle-start-panel-density")).toBe(
       "compact",
@@ -246,9 +246,13 @@ describe("Cumulus BattleStartScreen", () => {
     expect(objectSection?.previousElementSibling?.textContent).toBe(
       "Signature Cards & Dreamsigns",
     );
-    expect(objectSection?.querySelectorAll("[data-signature-card-id]")).toHaveLength(3);
     expect(
-      objectSection?.querySelectorAll('[data-reveal-complete-game-card="true"]'),
+      objectSection?.querySelectorAll("[data-signature-card-id]"),
+    ).toHaveLength(3);
+    expect(
+      objectSection?.querySelectorAll(
+        '[data-reveal-complete-game-card="true"]',
+      ),
     ).toHaveLength(3);
     expect(
       objectSection?.querySelectorAll(
@@ -284,9 +288,7 @@ describe("Cumulus BattleStartScreen", () => {
       panel?.querySelector('[data-testid="cumulus-battle-start-begin"]'),
     ).not.toBeNull();
     expect(
-      layout?.querySelector(
-        '[data-testid^="cumulus-battle-start-carousel-"]',
-      ),
+      layout?.querySelector('[data-testid^="cumulus-battle-start-carousel-"]'),
     ).toBeNull();
     const action = panel?.querySelector<HTMLButtonElement>(
       '[data-testid="cumulus-battle-start-begin"]',

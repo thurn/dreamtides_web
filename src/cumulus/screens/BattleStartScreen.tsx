@@ -12,7 +12,7 @@ import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/QuestStatusBar";
-import { glassSurfaceStyle } from "../internal/glass-surface";
+import { GlassPanel } from "../components/overlay/GlassPanel";
 import type { ArtRef } from "../primitives/art";
 import { resolveArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
@@ -228,13 +228,10 @@ function BattleStartPanel({
       data-battle-start-panel=""
       data-battle-start-panel-density={density}
       style={{
-        ...glassSurfaceStyle({ radius: token("--radius-panel") }),
         position: compact ? "absolute" : "relative",
         top: undefined,
         right: undefined,
-        bottom: compact
-          ? QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE
-          : undefined,
+        bottom: compact ? QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE : undefined,
         left: compact ? token("--space-4") : undefined,
         zIndex: compact ? 4 : undefined,
         width: compact ? GUIDE_GALLERY_MOBILE_PANEL_WIDTH : "100%",
@@ -245,140 +242,152 @@ function BattleStartPanel({
         alignSelf: undefined,
         justifySelf: undefined,
         boxSizing: "border-box",
-        padding: compact ? token("--space-6") : token("--space-9"),
-        display: "flex",
-        flexDirection: "column",
-        gap: compact ? token("--space-6") : token("--space-7"),
-        overflowY: compact ? "auto" : undefined,
-        overscrollBehavior: compact ? "contain" : undefined,
-        color: token("--text-on-glass"),
       }}
     >
-      <header style={{ display: "grid", gap: compact ? 0 : token("--space-3") }}>
-        <h1
-          style={{
-            margin: 0,
-            font: compact ? token("--t-title-sm") : token("--t-hero"),
-          }}
-        >
-          {view.dreamcaller.name}
-        </h1>
-        {view.dreamcaller.title !== "" && (
-          <p
-            style={{
-              margin: 0,
-              font: compact
-                ? token("--t-body")
-                : token("--t-hero-epithet"),
-              fontStyle: "italic",
-              color: token("--text-on-glass-muted"),
-            }}
-          >
-            {view.dreamcaller.title}
-          </p>
-        )}
-      </header>
-
-      {view.dreamcaller.ability !== "" && (
-        <PanelSection label="Ability" density={density}>
-          <div style={{ font: token("--t-rules") }}>
-            {view.dreamcaller.abilityActive ? (
-              <RulesText text={view.dreamcaller.ability} />
-            ) : (
-              <span style={{ color: token("--text-on-glass-muted") }}>
-                Opponent dreamcaller ability is not active.
-              </span>
-            )}
-          </div>
-        </PanelSection>
-      )}
-
-      {compact &&
-        (view.signatureCards.length > 0 || view.dreamsigns.length > 0) && (
-          <PanelSection
-            label={
-              view.dreamsigns.length > 0
-                ? "Signature Cards & Dreamsigns"
-                : "Signature Cards"
-            }
-            density={density}
-          >
-            <div
-              data-battle-start-signature-objects=""
-              style={{
-                display: "flex",
-                gap: token("--space-4"),
-                alignItems: "center",
-              }}
-            >
-              {signatureCards}
-              {dreamsigns}
-            </div>
-          </PanelSection>
-        )}
-
-      {!compact && view.signatureCards.length > 0 && (
-        <PanelSection label="Signature Cards" density={density}>
-          <div
-            data-battle-start-signature-cards=""
-            style={{
-              display: "flex",
-              gap: compact ? token("--space-3") : token("--space-6"),
-              alignItems: "flex-start",
-            }}
-          >
-            {signatureCards}
-          </div>
-        </PanelSection>
-      )}
-
-      {!compact && view.dreamsigns.length > 0 && (
-        <PanelSection label="Dreamsigns" density={density}>
-          <div
-            style={{
-              display: "flex",
-              gap: compact ? token("--space-3") : token("--space-6"),
-            }}
-          >
-            {dreamsigns}
-          </div>
-        </PanelSection>
-      )}
-
-      <footer
-        style={{
-          paddingTop: compact ? token("--space-5") : token("--space-6"),
-          borderTop: `1px solid ${token("--glass-rim")}`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: compact ? token("--space-4") : token("--space-8"),
-          marginTop: compact ? undefined : "auto",
-        }}
+      <GlassPanel
+        testId="cumulus-battle-start-glass-panel"
+        overflow={compact ? "hidden" : "visible"}
       >
         <div
-          data-battle-start-stakes=""
+          data-battle-start-panel-content=""
           style={{
+            maxHeight: "100%",
+            boxSizing: "border-box",
+            padding: compact ? token("--space-6") : token("--space-9"),
             display: "flex",
-            gap: compact ? token("--space-5") : token("--space-8"),
+            flexDirection: "column",
+            gap: compact ? token("--space-6") : token("--space-7"),
+            overflowY: compact ? "auto" : undefined,
+            overscrollBehavior: compact ? "contain" : undefined,
           }}
         >
-          <Stake label="To Win" density={density}>
-            <span>{view.pointsToWin}</span>
-            <GlowIcon iconClass={GLYPHS.points} color="white" size="1em" />
-          </Stake>
-          <Stake label="Reward" density={density}>
-            <EssenceValue amount={view.essenceReward} tone="inherit" />
-          </Stake>
+          <header
+            style={{ display: "grid", gap: compact ? 0 : token("--space-3") }}
+          >
+            <h1
+              style={{
+                margin: 0,
+                font: compact ? token("--t-title-sm") : token("--t-hero"),
+              }}
+            >
+              {view.dreamcaller.name}
+            </h1>
+            {view.dreamcaller.title !== "" && (
+              <p
+                style={{
+                  margin: 0,
+                  font: compact ? token("--t-body") : token("--t-hero-epithet"),
+                  fontStyle: "italic",
+                  color: token("--text-on-glass-muted"),
+                }}
+              >
+                {view.dreamcaller.title}
+              </p>
+            )}
+          </header>
+
+          {view.dreamcaller.ability !== "" && (
+            <PanelSection label="Ability" density={density}>
+              <div style={{ font: token("--t-rules") }}>
+                {view.dreamcaller.abilityActive ? (
+                  <RulesText text={view.dreamcaller.ability} />
+                ) : (
+                  <span style={{ color: token("--text-on-glass-muted") }}>
+                    Opponent dreamcaller ability is not active.
+                  </span>
+                )}
+              </div>
+            </PanelSection>
+          )}
+
+          {compact &&
+            (view.signatureCards.length > 0 || view.dreamsigns.length > 0) && (
+              <PanelSection
+                label={
+                  view.dreamsigns.length > 0
+                    ? "Signature Cards & Dreamsigns"
+                    : "Signature Cards"
+                }
+                density={density}
+              >
+                <div
+                  data-battle-start-signature-objects=""
+                  style={{
+                    display: "flex",
+                    gap: token("--space-4"),
+                    alignItems: "center",
+                  }}
+                >
+                  {signatureCards}
+                  {dreamsigns}
+                </div>
+              </PanelSection>
+            )}
+
+          {!compact && view.signatureCards.length > 0 && (
+            <PanelSection label="Signature Cards" density={density}>
+              <div
+                data-battle-start-signature-cards=""
+                style={{
+                  display: "flex",
+                  gap: compact ? token("--space-3") : token("--space-6"),
+                  alignItems: "flex-start",
+                }}
+              >
+                {signatureCards}
+              </div>
+            </PanelSection>
+          )}
+
+          {!compact && view.dreamsigns.length > 0 && (
+            <PanelSection label="Dreamsigns" density={density}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: compact ? token("--space-3") : token("--space-6"),
+                }}
+              >
+                {dreamsigns}
+              </div>
+            </PanelSection>
+          )}
+
+          <footer
+            style={{
+              paddingTop: compact ? token("--space-5") : token("--space-6"),
+              borderTop: `1px solid ${token("--glass-rim")}`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: compact ? token("--space-4") : token("--space-8"),
+              marginTop: compact ? undefined : "auto",
+            }}
+          >
+            <div
+              data-battle-start-stakes=""
+              style={{
+                display: "flex",
+                gap: compact ? token("--space-5") : token("--space-8"),
+              }}
+            >
+              <Stake label="To Win" density={density}>
+                <span>{view.pointsToWin}</span>
+                <GlowIcon iconClass={GLYPHS.points} color="white" size="1em" />
+              </Stake>
+              <Stake label="Reward" density={density}>
+                <EssenceValue amount={view.essenceReward} tone="inherit" />
+              </Stake>
+            </div>
+            <GlassButton
+              label="Begin Battle"
+              variant="accent"
+              placement="onGlass"
+              onPress={onBegin}
+              testId="cumulus-battle-start-begin"
+            />
+          </footer>
         </div>
-        <GlassButton
-          label="Begin Battle"
-          variant="accent"
-          placement="onGlass"
-          onPress={onBegin}
-          testId="cumulus-battle-start-begin"
-        />
-      </footer>
+      </GlassPanel>
     </section>
   );
 }
