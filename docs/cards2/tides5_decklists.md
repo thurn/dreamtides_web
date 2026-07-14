@@ -96,7 +96,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Sunrise Strummer
 - 1× The Thinning
 - 1× Scuttled Fortune
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Ashborn Necromancer
 - 1× Lurking Regent
 - 1× Tidewreck Navigator
@@ -196,7 +196,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 1× Emberwatch Rescuer
 - 1× Sunrise Strummer
 - 1× Scuttled Fortune
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Ashborn Necromancer
 - 1× Tidewreck Navigator
 - 1× Shardwoven Tyrant
@@ -318,7 +318,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Ethereal Courser
 - 1× Boundless Wanderer
 - 1× Fractured Vessel
-- 1× Abomination of Memory
+- 1× Angel of Memory
 - 1× Wondrous Clearing
 - 1× Sylvan Matriarch
 - 1× Voidcaller
@@ -330,12 +330,12 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Blight Weaver
 - 1× Spiritbound Alpha
 - 1× Defiant Holdout
-- 1× Virtuoso of Harmony
+- 1× Essence Devourer
 - 1× Exiles of the Last Light
 - 1× Shadowpaw
 - 1× Starsea Traveler
 - 1× Looming Oracle
-- 1× Selfless Rescuer
+- 1× Reckless Vigilante
 - 1× Amythest Aurelia
 - 1× Grim Reclaimer
 - 1× Overstory Explorer
@@ -364,7 +364,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 
 - 2× Unquenched
 - 2× Searcher in the Mists
-- 2× Angel of the Eclipse
+- 2× Sage of the High Hills
 - 2× Abomination of Memory
 - 2× Shaper of Memory
 - 2× Pyrestone Avatar
@@ -489,7 +489,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Sunrise Strummer
 - 1× Volcanic Channeler
 - 1× Scuttled Fortune
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
 - 1× Beacon of Tomorrow
@@ -543,7 +543,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Kindred Sparks
 - 1× Blight Weaver
 - 1× Defiant Holdout
-- 1× Virtuoso of Harmony
+- 1× Essence Devourer
 - 1× Silent Gatherer
 - 1× Starsea Traveler
 - 1× Dreadweaver
@@ -576,7 +576,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters) that treats the void as both a resource bank and a pressure source. The doubled core repeatedly moves cards through hand and void: Sunken Radiance draws and discards while reclaiming itself, Grotto Seer and Urban Cipher refill the hand after discarding, Evacuation Enforcer turns awakened activations into draw-three-discard-three churn, and Wasteland Arbitrator makes both players discard while returning for 1●. That churn unlocks several payoff layers: Shaper of Memory pumps the board from the void, Paradox Enforcer and Verdant Wayfarer spend seven void cards for large recurring plays, Vessel of Echoes scales once the void reaches six cards, and Weight of Memory converts raw void size into removal. Reclaim pieces such as Part the Veil, Price of Redemption, Oblivion Guide, Silent Gatherer, and Pinnacle Ascendant keep discarded cards relevant, while Pyrestone Avatar and Pinnacle Ascendant give the deck enough awakened support to reuse its looting bodies immediately. A small survivor and figment package from Dustborn Veteran, Duneguard Captain, Hope's Vanguard, Shadowcaller, and Tidewreck Navigator gives the deck board texture, but the primary identity is still discard velocity feeding void-depth payoffs rather than a pure survivor sacrifice plan.
 
 - 2× Searcher in the Mists
-- 2× Angel of the Eclipse
+- 2× Sage of the High Hills
 - 2× Graywatch
 - 2× Abomination of Memory
 - 2× Veil of the Wastes
@@ -707,7 +707,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× The Thinning
 - 1× Volcanic Channeler
 - 1× Scuttled Fortune
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
 - 1× Tidewreck Navigator
@@ -818,7 +818,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Sunrise Strummer
 - 1× The Thinning
 - 1× Scuttled Fortune
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Ashborn Necromancer
 - 1× Tidewreck Navigator
 - 1× Immolate and Rise
@@ -1120,7 +1120,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Stratospheric Voyage
 - 1× Wheel of the Heavens
 - 1× Architect of Memory
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Soulbinder
 - 1× Weblight Waif
 - 1× Unbroken
@@ -1219,7 +1219,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Architect of Memory
 - 1× Blooming Horror
 - 1× Weight of Memory
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Fallen One
 - 1× Soulbinder
 - 1× Weblight Waif
@@ -1317,14 +1317,14 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Unquenched
 - 1× Fell Swoop
 - 1× Burst of Obliteration
-- 1× Cindermarch
+- 1× Crescent Dancer
 - 1× Conduit of Resonance
 - 1× Call the Lost
 - 1× Sunken Radiance
 - 1× Architect of Memory
 - 1× Blooming Horror
 - 1× Weight of Memory
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Fallen One
 - 1× Soulbinder
 - 1× Weblight Waif
@@ -1430,7 +1430,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Luminwings
 - 1× Ethereal Army
 - 1× Nocturne
-- 1× Cindermarch
+- 1× Crescent Dancer
 - 1× Conduit of Resonance
 - 1× Sworn Defender
 - 1× Petal-Seer
@@ -1457,7 +1457,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Moonbound Wolf
 - 1× Ambersting
 - 1× Ethereal Courser
-- 1× Abomination of Memory
+- 1× Angel of Memory
 - 1× Sylvan Matriarch
 - 1× Bladefall
 - 1× Young Huntress
@@ -1474,7 +1474,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Looming Oracle
 - 1× Frost Visionary
 - 1× Angel of the Eclipse
-- 1× Selfless Rescuer
+- 1× Reckless Vigilante
 - 1× Mirrorlight Architect
 - 1× Paleclaw Panther
 - 1× Amythest Aurelia
@@ -1517,7 +1517,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 2× Moonbound Wolf
 - 2× Ethereal Courser
 - 2× God of Wrath
-- 2× Abomination of Memory
+- 2× Angel of Memory
 - 2× Dreamvale Monarch
 - 2× Spirit of the Greenwood
 - 2× Empyreal Light
@@ -1535,7 +1535,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 2× Scrap Reclaimer
 - 1× Wistful Angler
 - 1× Ethereal Army
-- 1× Cindermarch
+- 1× Crescent Dancer
 - 1× Conduit of Resonance
 - 1× Ethereal Call
 - 1× Sky Voyager
@@ -1558,7 +1558,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 1× Looming Oracle
 - 1× Cloudstrider
 - 1× Angel of the Eclipse
-- 1× Selfless Rescuer
+- 1× Reckless Vigilante
 - 1× Paleclaw Panther
 - 1× Amythest Aurelia
 - 1× Ruin Scavenger
@@ -1619,7 +1619,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 1× Unleash Ruin
 - 1× Wistful Angler
 - 1× Ethereal Army
-- 1× Cindermarch
+- 1× Crescent Dancer
 - 1× Conduit of Resonance
 - 1× Ethereal Call
 - 1× Sky Voyager
@@ -1629,7 +1629,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 1× Dawnhorn Elder
 - 1× Winterbough Monk
 - 1× Ambersting
-- 1× Abomination of Memory
+- 1× Angel of Memory
 - 1× Sylvan Matriarch
 - 1× Lumineth
 - 1× Aurora Conductor
@@ -1640,7 +1640,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 1× Ferryman of the Falls
 - 1× Starsea Traveler
 - 1× Looming Oracle
-- 1× Selfless Rescuer
+- 1× Reckless Vigilante
 - 1× Forgotten Factory Titan
 - 1× Paleclaw Panther
 - 1× Amythest Aurelia
@@ -1680,7 +1680,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 2× Moonbound Wolf
 - 2× Ethereal Courser
 - 2× God of Wrath
-- 2× Abomination of Memory
+- 2× Angel of Memory
 - 2× Dreamvale Monarch
 - 2× Spirit of the Greenwood
 - 2× Spiritbound Alpha
@@ -1697,7 +1697,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Unleash Ruin
 - 1× Wistful Angler
 - 1× Ethereal Army
-- 1× Cindermarch
+- 1× Crescent Dancer
 - 1× Conduit of Resonance
 - 1× Ethereal Call
 - 1× Sky Voyager
@@ -1724,7 +1724,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Starsea Traveler
 - 1× Looming Oracle
 - 1× Angel of the Eclipse
-- 1× Selfless Rescuer
+- 1× Reckless Vigilante
 - 1× Forgotten Factory Titan
 - 1× Paleclaw Panther
 - 1× Amythest Aurelia
@@ -2195,7 +2195,7 @@ Tide-fac-04 is built almost entirely around spirit animals, with 35 characters a
 - 1× Cloudmantle Ray
 - 1× Luminwings
 - 1× Blazing Emberwing
-- 1× Cindermarch
+- 1× Crescent Dancer
 - 1× Conduit of Resonance
 - 1× Beacon of Tomorrow
 - 1× Lumin-Gate Seer
@@ -2450,7 +2450,7 @@ Tide-fac-07 runs an even split of events and characters (22/23) built around two
 - 1× Ambersting
 - 1× Ethereal Courser
 - 1× God of Wrath
-- 1× Abomination of Memory
+- 1× Angel of Memory
 - 1× Lumineth
 - 1× Dreamvale Monarch
 - 1× Empyreal Light
@@ -2503,7 +2503,7 @@ Tide-fac-08 is an 80% character tide built almost entirely around spirit animals
 - 1× Ethereal Courser
 - 1× God of Wrath
 - 1× Iconoclast
-- 1× Abomination of Memory
+- 1× Angel of Memory
 - 1× Lumineth
 - 1× Dreamvale Monarch
 - 1× Spirit of the Greenwood
@@ -2540,7 +2540,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 1× Fell the Mighty
 - 1× Woodland Apparition
 - 1× Architect of Memory
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Abomination of Memory
 - 1× Veil of the Wastes
 - 1× Unbroken
@@ -2587,7 +2587,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Fell Swoop
 - 1× Sunken Radiance
 - 1× Architect of Memory
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Tidewreck Navigator
 - 1× Graywatch
 - 1× Abomination of Memory
@@ -2935,7 +2935,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Woodland Apparition
 - 1× Unquenched
 - 1× Architect of Memory
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Graywatch
 - 1× Abomination of Memory
 - 1× Unbroken
@@ -3080,7 +3080,7 @@ Tide-fac-20 is an event-heavy combo tide (34 events, 11 characters) built around
 - 1× Stoneborn Leviathan
 - 1× Ethereal Army
 - 1× Blazing Emberwing
-- 1× Cindermarch
+- 1× Crescent Dancer
 - 1× Conduit of Resonance
 - 1× Petal-Seer
 - 1× Beacon of Tomorrow
@@ -3140,7 +3140,7 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 - 1× Moonbound Wolf
 - 1× Ethereal Courser
 - 1× God of Wrath
-- 1× Abomination of Memory
+- 1× Angel of Memory
 - 1× Lumineth
 - 1× Spirit of the Greenwood
 - 1× Empyreal Light
@@ -3364,7 +3364,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Fell the Mighty
 - 1× Woodland Apparition
 - 1× Architect of Memory
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Abomination of Memory
 - 1× Veil of the Wastes
 - 1× Unbroken
@@ -3410,7 +3410,7 @@ This tide is split between characters and events (22 characters, 23 events), wit
 - 1× Unquenched
 - 1× Fell Swoop
 - 1× Sunken Radiance
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Tidewreck Navigator
 - 1× Graywatch
 - 1× Abomination of Memory
@@ -3559,7 +3559,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Emberwatch Rescuer
 - 1× Searcher in the Mists
 - 1× Scuttled Fortune
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Watcher in the Ruins
 - 1× Tidewreck Navigator
 - 1× Guide of Lost Souls
@@ -3604,7 +3604,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Moonbound Wolf
 - 1× Ethereal Courser
 - 1× God of Wrath
-- 1× Abomination of Memory
+- 1× Angel of Memory
 - 1× Dreamvale Monarch
 - 1× Spirit of the Greenwood
 - 1× Empyreal Light
@@ -3902,7 +3902,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Woodland Apparition
 - 1× Unquenched
 - 1× Architect of Memory
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Unbroken
 - 1× Shaper of Memory
 - 1× Pathfinder Adrift
@@ -3930,7 +3930,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Cloudmantle Ray
 - 1× Luminwings
 - 1× Blazing Emberwing
-- 1× Cindermarch
+- 1× Crescent Dancer
 - 1× Conduit of Resonance
 - 1× Petal-Seer
 - 1× Beacon of Tomorrow
@@ -3978,16 +3978,16 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Light of Emergence
 - 1× Ambersting
 - 1× Cinderheart
-- 1× Abomination of Memory
+- 1× Angel of Memory
 - 1× Wondrous Clearing
 - 1× Keeper of Forgotten Light
 - 1× Scrap Reclaimer
 - 1× Carrion Lord
 - 1× Blight Weaver
-- 1× Virtuoso of Harmony
+- 1× Essence Devourer
 - 1× The Forsaker
 - 1× Ferryman of the Falls
-- 1× Selfless Rescuer
+- 1× Reckless Vigilante
 - 1× Ruin Scavenger
 - 1× Ruptured Dynamo
 

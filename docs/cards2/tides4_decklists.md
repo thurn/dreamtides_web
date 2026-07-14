@@ -94,7 +94,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Emberwatch Rescuer
 - 1× Sunrise Strummer
 - 1× The Thinning
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Tidecaller
 - 1× Immolate and Rise
 - 1× Graywatch
@@ -194,7 +194,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 1× Blood Sun Oppressor
 - 1× Emberwatch Rescuer
 - 1× Sunrise Strummer
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Immolate and Rise
 - 1× Graywatch
 - 1× Abomination of Memory
@@ -320,7 +320,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Shadowpaw
 - 1× Looming Oracle
 - 1× Dreadweaver
-- 1× Selfless Rescuer
+- 1× Reckless Vigilante
 - 1× Wasteland Arbitrator
 - 1× Shadowcaller
 - 1× Ghostlight Wolves
@@ -382,7 +382,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Architect of Memory
 - 1× Blooming Horror
 - 1× Weight of Memory
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Fallen One
 - 1× Soulbinder
 - 1× Fragments of Vision
@@ -598,7 +598,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 1× Hope's Vanguard
 - 1× Architect of Memory
 - 1× Weight of Memory
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Dreadcall Warden
 - 1× Ashborn Necromancer
 - 1× Tidewreck Navigator
@@ -808,7 +808,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Sunrise Strummer
 - 1× Scuttled Fortune
 - 1× Circuit Breaker
-- 1× Angel of the Eclipse
+- 1× Sage of the High Hills
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
 - 1× Immolate and Rise
@@ -1433,7 +1433,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× He Who Lies Dreaming
 - 1× Gatebound Warden
 - 1× Ambersting
-- 1× Abomination of Memory
+- 1× Angel of Memory
 - 1× Amber Aurelia
 - 1× Sylvan Matriarch
 - 1× Bladefall
@@ -1447,7 +1447,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Infernal Cavalier
 - 1× Looming Oracle
 - 1× Angel of the Eclipse
-- 1× Selfless Rescuer
+- 1× Reckless Vigilante
 - 1× Shattering Gambit
 - 1× Warrior's Path
 - 1× Paleclaw Panther
@@ -1509,7 +1509,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 2× Nexus Wayfinder
 - 1× Unleash Ruin
 - 1× Wistful Angler
-- 1× Cindermarch
+- 1× Crescent Dancer
 - 1× Conduit of Resonance
 - 1× Ethereal Call
 - 1× Sky Voyager
@@ -1522,7 +1522,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 1× Dawnhorn Elder
 - 1× Winterbough Monk
 - 1× Ambersting
-- 1× Abomination of Memory
+- 1× Angel of Memory
 - 1× Amber Aurelia
 - 1× Wondrous Clearing
 - 1× Sylvan Matriarch
@@ -1533,7 +1533,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 1× Forsaken Pact
 - 1× Starsea Traveler
 - 1× Looming Oracle
-- 1× Selfless Rescuer
+- 1× Reckless Vigilante
 - 1× Paleclaw Panther
 - 1× Amythest Aurelia
 - 1× Ruin Scavenger
@@ -1604,7 +1604,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 1× Dawnhorn Elder
 - 1× Winterbough Monk
 - 1× Ambersting
-- 1× Abomination of Memory
+- 1× Angel of Memory
 - 1× Amber Aurelia
 - 1× Wondrous Clearing
 - 1× Sylvan Matriarch
@@ -1613,7 +1613,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 1× Carrion Lord
 - 1× Forsaken Pact
 - 1× Starsea Traveler
-- 1× Selfless Rescuer
+- 1× Reckless Vigilante
 - 1× Paleclaw Panther
 - 1× Amythest Aurelia
 - 1× Ruin Scavenger
@@ -1669,7 +1669,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Endless Projection
 - 1× Wistful Angler
 - 1× Nocturne
-- 1× Cindermarch
+- 1× Crescent Dancer
 - 1× Conduit of Resonance
 - 1× Petal-Seer
 - 1× Ethereal Call
@@ -1683,7 +1683,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Dawnhorn Elder
 - 1× Winterbough Monk
 - 1× Ambersting
-- 1× Abomination of Memory
+- 1× Angel of Memory
 - 1× Amber Aurelia
 - 1× Sylvan Matriarch
 - 1× Lumineth
@@ -1693,7 +1693,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Forsaken Pact
 - 1× Starsea Traveler
 - 1× Looming Oracle
-- 1× Selfless Rescuer
+- 1× Reckless Vigilante
 - 1× Forgotten Factory Titan
 - 1× Paleclaw Panther
 - 1× Amythest Aurelia
@@ -1743,7 +1743,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Twilight Troubadour
 - 1× Night Raid Commando
 - 1× Dreadcall Warden
-- 1× Reforged Automaton
+- 1× Sylvan Matriarch
 - 1× Tidecaller
 - 1× Spellweaver
 - 1× Relentless Pursuer
@@ -1845,7 +1845,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 1× Emberfang
 - 1× Frostbound Defiant
 - 1× Dreadcall Warden
-- 1× Reforged Automaton
+- 1× Sylvan Matriarch
 - 1× Sky Legion Captain
 - 1× Spellweaver
 - 1× Relentless Pursuer
@@ -1939,7 +1939,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× The Deathsworn
 - 1× Storm Soloist
 - 1× Through the Rift
-- 1× Reforged Automaton
+- 1× Sylvan Matriarch
 - 1× Tidecaller
 - 1× Spellweaver
 - 1× Vengeance Taker
@@ -2686,7 +2686,7 @@ This tide is almost entirely warriors (43 of 45 cards) built around a tight loop
 - 1× Harbor Warden
 - 1× The Deathsworn
 - 1× Sun Clan Lieutenant
-- 1× Reforged Automaton
+- 1× Sylvan Matriarch
 - 1× Sky Legion Captain
 - 1× Spellweaver
 - 1× Burning Revenant
@@ -3838,7 +3838,7 @@ Tide-neu-07 is built almost entirely on characters (28 of 30 cards), organized a
 - 1× Silent Mourner
 - 1× Eviscerator of Hope
 
-## Broad: Soulkindler / Abomination of Memory — Void Cycling Recursion
+## Broad: Soulkindler / Angel of Memory — Void Cycling Recursion
 
 `tide-neu-08` — neutral tide, 26 distinct cards, 30 copies
 
@@ -3847,9 +3847,9 @@ Tide-neu-07 is built almost entirely on characters (28 of 30 cards), organized a
 Tide-neu-08 is a character-dense deck (27 of 30 cards are characters) built almost entirely on cheap ≤2● bodies that rotate through the void as both fuel and payoff. The central loop involves deliberately abandoning or spending cheap characters to fill the void, then drawing value from Ferryman of the Falls ("when a ≤2● cost character is put into your void, draw a card") and powering up Abomination of Memory (which gains +4✦ whenever three or more ≤2● characters sit in the void). Scrap Reclaimer, Starsea Traveler, and Clockwork Conductor all return ≤2● characters from the void back to hand or play, sustaining the cycle turn after turn, while Veilseeker can return the entire cohort at once for a burst refill. Payoffs scale with the engine: Carrion Lord materializes a 4✦ monstrosity figment each time a ≤2● character is abandoned, Virtuoso of Harmony converts each such abandon into 1●, and The Forsaker converts each into 1⍟, rewarding repeated sacrifice with both mana acceleration and combat threat generation. The nearest siblings, tide-sig-15 and tide-sig-16, also interact with ≤2● characters but their identity is spirit animal tribal momentum — Dawn-trigger energy from Skyborne Jellyfish and Undying Fang, pack-wide buffs from Ghostlight Wolves and Spiritbound Alpha, and flooding the board rather than cycling through it. Tide-sig-05 uses abandoning as a cost too, but to fuel dissolve removal (Maelstrom Denial, Together Against the Tide) and ⍟ engines, not to stack the void for recursion bonuses. Tide-neu-08's distinctive play pattern is a mid-game grind loop where cheap bodies continually re-enter the void and return to hand, generating incremental card draw, mana, and a steadily growing threat in Abomination of Memory and Carrion Lord's figments.
 
 - 2× Soulkindler
-- 2× Abomination of Memory
+- 2× Angel of Memory
 - 2× Scrap Reclaimer
-- 2× Selfless Rescuer
+- 2× Reckless Vigilante
 - 1× Wraith of Twisting Shadows
 - 1× Unleash Ruin
 - 1× Wistful Angler
@@ -3859,7 +3859,7 @@ Tide-neu-08 is a character-dense deck (27 of 30 cards are characters) built almo
 - 1× Light of Emergence
 - 1× Wondrous Clearing
 - 1× Carrion Lord
-- 1× Virtuoso of Harmony
+- 1× Essence Devourer
 - 1× The Forsaker
 - 1× Forsaken Pact
 - 1× Ferryman of the Falls
@@ -3995,7 +3995,7 @@ Tide-neu-12 is a character-heavy deck (26 of 30 cards are characters) built arou
 
 - 1× Starlight Guide
 - 1× Sworn Defender
-- 1× Reforged Automaton
+- 1× Sylvan Matriarch
 - 1× Lurking Regent
 - 1× Sky Legion Captain
 - 1× Spellweaver

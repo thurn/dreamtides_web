@@ -55,7 +55,7 @@
       ]
     },
     "86881031-393f-4359-96f5-3adde6bdd74d": {
-      "name": "Abomination of Memory",
+      "name": "Angel of Memory",
       "needs": [
         {
           "theme": "void",
@@ -97,7 +97,7 @@
       ]
     },
     "2c9711c7-800c-4e55-a488-17ea5a6813c6": {
-      "name": "Angel of the Eclipse",
+      "name": "Sage of the High Hills",
       "needs": [
         {
           "theme": "cheap-characters",
@@ -1303,7 +1303,7 @@
       ]
     },
     "bd43b120-2503-406c-8b72-ea3dc55198a0": {
-      "name": "Selfless Rescuer",
+      "name": "Reckless Vigilante",
       "needs": [],
       "supports": [
         "abandon"
@@ -3066,7 +3066,7 @@
       ]
     },
     "312e42cb-e8ee-43da-9ef8-173a69583c97": {
-      "name": "Reforged Automaton",
+      "name": "Sylvan Matriarch",
       "needs": [
         {
           "theme": "warriors",
@@ -4628,7 +4628,7 @@
       ]
     },
     "a952f833-825a-435f-82b1-8d85f872d274": {
-      "name": "Virtuoso of Harmony",
+      "name": "Essence Devourer",
       "needs": [
         {
           "theme": "abandon",

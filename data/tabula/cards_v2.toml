@@ -1223,21 +1223,22 @@ card-number = 65
 art = { x = 0, y = 1, scale = 1.37 }
 
 [[cards]]
-name = "Abomination of Memory"
+name = "Angel of Memory"
 mtg-name = "Elvish Reclaimer"
 id = "86881031-393f-4359-96f5-3adde6bdd74d"
 rendered-text = "This character has +4✦ if there are three or more ≤2● cost characters in your void."
 energy-cost = 1
 card-type = "Character"
-subtype = "Ancient"
+subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July14"]
-image-number = 1577968036
+tags = ["Art Rework", "July14", "Art OK"]
+image-number = 682942729
 art-owned = true
 card-number = 66
+art = { x = 0, y = 0.7, scale = 1.3 }
 
 [[cards]]
 name = "Fathomless Maw"
@@ -2591,7 +2592,7 @@ card-number = 138
 art = { x = 0, y = -0.386, scale = 1.4 }
 
 [[cards]]
-name = "Angel of the Eclipse"
+name = "Sage of the High Hills"
 mtg-name = "Molten Gatekeeper"
 id = "2c9711c7-800c-4e55-a488-17ea5a6813c6"
 rendered-text = "When you materialize another character, gain 1⍟."
@@ -2602,8 +2603,8 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Score Trigger", "Art Rework", "July14"]
-image-number = 753489184
+tags = ["Score Trigger", "Art Rework", "July14", "Art OK"]
+image-number = 1084620026
 art-owned = false
 card-number = 139
 art = { x = 0, y = 0.1, scale = 1.2 }
@@ -2801,21 +2802,22 @@ card-number = 149
 art = { x = 0.068, y = 0.897, scale = 1.07 }
 
 [[cards]]
-name = "Virtuoso of Harmony"
+name = "Essence Devourer"
 mtg-name = "Squandered Resources"
 id = "a952f833-825a-435f-82b1-8d85f872d274"
 rendered-text = "Abandon a ≤2● cost character: Gain 1●."
 energy-cost = 2
 card-type = "Character"
-subtype = "Musician"
+subtype = "Monster"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Free Sacrifice", "Art Rework", "July14"]
-image-number = 744309595
+tags = ["Free Sacrifice", "Art Rework", "July14", "Art OK"]
+image-number = 524175406
 art-owned = false
 card-number = 150
+art = { x = 0, y = 1, scale = 1 }
 
 [[cards]]
 name = "Augur Crow"
@@ -4165,10 +4167,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 5
-tags = ["Art Rework", "July14"]
+tags = ["Art Rework", "July14", "Art OK"]
 image-number = 2521694543
 art-owned = true
 card-number = 224
+art = { x = 0.16, y = 1, scale = 1.47 }
 
 [[cards]]
 name = "Ancient Descent"
@@ -4773,7 +4776,7 @@ card-number = 256
 art = { x = -0.462, y = 0.369, scale = 1.17 }
 
 [[cards]]
-name = "Cindermarch"
+name = "Crescent Dancer"
 mtg-name = "Intruder Alarm"
 id = "20a6474c-55b8-4b1b-9155-baac62a06f1e"
 rendered-text = "When you materialize a character, awaken each other character you control."
@@ -4784,11 +4787,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July14", "Ally Audit"]
-image-number = 2018053217
+tags = ["Art Rework", "July14", "Ally Audit", "Art OK"]
+image-number = 1790126252
 art-owned = false
 card-number = 257
-art = { x = 0, y = 1, scale = 1.17 }
+art = { x = 0, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Conduit of Resonance"
@@ -5683,7 +5686,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July14", "Ally Audit"]
+tags = ["Art Rework", "July14", "Ally Audit", "Art OK"]
 image-number = 691496698
 art-owned = false
 card-number = 306
@@ -6008,7 +6011,7 @@ card-number = 323
 art = { x = 0.178, y = 0.212, scale = 1.37 }
 
 [[cards]]
-name = "Reforged Automaton"
+name = "Sylvan Matriarch"
 mtg-name = "Ingenious Smith"
 id = "312e42cb-e8ee-43da-9ef8-173a69583c97"
 rendered-text = """
@@ -6017,15 +6020,16 @@ rendered-text = """
 When you materialize a non-figment warrior, this character gains +1 spark."""
 energy-cost = 2
 card-type = "Character"
-subtype = "Synth"
+subtype = "Noble"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July14"]
-image-number = 608687447
+tags = ["Art Rework", "July14", "Art OK"]
+image-number = 2415692455
 art-owned = false
 card-number = 324
+art = { x = 0, y = -0.237, scale = 1.87 }
 
 [[cards]]
 name = "Empyreal Light"
@@ -6414,21 +6418,22 @@ card-number = 344
 art = { x = 0.172, y = -0.636, scale = 1.57 }
 
 [[cards]]
-name = "Selfless Rescuer"
+name = "Reckless Vigilante"
 mtg-name = "Sylvan Safekeeper"
 id = "bd43b120-2503-406c-8b72-ea3dc55198a0"
 rendered-text = "❖❖ – Abandon another character: A character you control cannot be targeted by effects this turn."
 energy-cost = 1
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Super"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July14", "Ally Audit"]
-image-number = 700253818
+tags = ["Art Rework", "July14", "Ally Audit", "Art OK"]
+image-number = 1246320997
 art-owned = false
 card-number = 345
+art = { x = 0, y = 0, scale = 1.47 }
 
 [[cards]]
 name = "Ecliptic Vantage"
@@ -8723,12 +8728,12 @@ id = "4e1c0192-2649-489f-aad3-75ff2887c0a7"
 rendered-text = "▸Dissolved: A survivor in your void gains reclaim."
 energy-cost = 1
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Survivor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July14"]
+tags = ["Art Rework", "July14", "Art OK"]
 image-number = 1104412604
 art-owned = false
 card-number = 468
@@ -8988,12 +8993,12 @@ id = "409147ec-d959-4f66-b126-564702e2cd4a"
 rendered-text = "When you materialize a ≤2● cost character, return this card from your void to play."
 energy-cost = 3
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Survivor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July14"]
+tags = ["Art Rework", "July14", "Art OK"]
 image-number = 789291004
 art-owned = false
 card-number = 482
