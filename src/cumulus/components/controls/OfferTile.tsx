@@ -13,8 +13,8 @@ import { token } from "../../primitives/tokens";
 import { richText } from "../card/rich-text";
 import "./offer-tile.css";
 
-/** The fixed square edge of an OfferTile, in pixels. */
-export const OFFER_TILE_SIZE = 150;
+/** The fixed circular diameter of an OfferTile, in pixels. */
+export const OFFER_TILE_SIZE = 200;
 
 /** UUID-backed card art shown symbolically inside an offer. */
 export interface OfferTileCard {
@@ -140,7 +140,7 @@ export interface OfferTileProps {
 }
 
 /**
- * A 150×150 symbolic Dream Augury offer button. Its inner card art,
+ * A 200×200 circular symbolic Dream Augury offer button. Its inner card art,
  * dreamsigns, and glyphs are decorative and pointer-transparent; the complete
  * tile is the only hover/focus/press target and reveals one category InfoCard.
  */
@@ -188,7 +188,7 @@ export function OfferTile({
         }
       }}
       style={{
-        ...glassSurfaceStyle({ radius: token("--radius-panel") }),
+        ...glassSurfaceStyle({ radius: token("--radius-pill") }),
         ...binding.sourceProps.style,
         position: "relative",
         width: OFFER_TILE_SIZE,
@@ -359,8 +359,8 @@ function OperationMark({
       data-offer-tile-operation=""
       style={{
         position: "absolute",
-        right: position === "corner" ? 7 : "50%",
-        bottom: position === "corner" ? 7 : "50%",
+        right: position === "corner" ? 24 : "50%",
+        bottom: position === "corner" ? 24 : "50%",
         translate: position === "center" ? "50% 50%" : undefined,
         display: "grid",
         placeItems: "center",

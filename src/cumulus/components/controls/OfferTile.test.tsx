@@ -39,8 +39,9 @@ describe("OfferTile", () => {
 
     const source = container.querySelector<HTMLButtonElement>("[data-offer-tile]")!;
     expect(source.tagName).toBe("BUTTON");
-    expect(source.style.width).toBe("150px");
-    expect(source.style.height).toBe("150px");
+    expect(source.style.width).toBe("200px");
+    expect(source.style.height).toBe("200px");
+    expect(source.style.borderRadius).toBe("var(--radius-pill)");
     expect(source.dataset.revealEntityType).toBe("offer");
     expect(source.dataset.revealEntityId).toMatch(/^[0-9a-f-]{36}$/);
     expect(source.dataset.revealPrimaryVariant).toBe("text");

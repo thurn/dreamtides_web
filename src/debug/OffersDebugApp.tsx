@@ -261,7 +261,7 @@ export default function OffersDebugApp(): ReactElement {
       <main
         style={{
           position: "relative",
-          width: "min(1320px, 100%)",
+          width: "min(1580px, 100%)",
           minHeight: "100vh",
           margin: "0 auto",
           padding: `${token("--space-9")} ${token("--space-8")} ${token("--space-10")}`,
@@ -301,7 +301,7 @@ export default function OffersDebugApp(): ReactElement {
           aria-label="Dream Augury offer categories"
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(176px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
             alignItems: "start",
             gap: token("--space-8"),
           }}
