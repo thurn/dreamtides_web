@@ -249,8 +249,9 @@ namespace CumulusMvp.Tests
             Assert.That(label, Is.Not.Null);
             Assert.That(label.text, Is.EqualTo("Sort"));
             Assert.That(label.alignment, Is.EqualTo(TextAlignmentOptions.Center));
-            Assert.That(label.fontSize, Is.EqualTo(2f));
-            Assert.That(label.fontWeight, Is.EqualTo(FontWeight.Medium));
+            Assert.That(label.fontSize, Is.EqualTo(1.4f));
+            Assert.That(label.fontWeight, Is.EqualTo(FontWeight.Bold));
+            Assert.That(label.fontStyle, Is.EqualTo(FontStyles.Bold));
             Assert.That(label.color.r, Is.EqualTo(1f).Within(0.00001f));
             Assert.That(label.color.g, Is.EqualTo(248f / 255f).Within(0.00001f));
             Assert.That(label.color.b, Is.EqualTo(236f / 255f).Within(0.00001f));
@@ -263,7 +264,7 @@ namespace CumulusMvp.Tests
                 Is.EqualTo(buttonMesh.bounds.size.y).Within(0.00001f));
             Assert.That(
                 AssetDatabase.GetAssetPath(label.font),
-                Is.EqualTo("Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset"));
+                Is.EqualTo("Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Roboto-Bold SDF.asset"));
             Assert.That(label.GetComponentInParent<Canvas>(), Is.Null);
 
             Assert.That(

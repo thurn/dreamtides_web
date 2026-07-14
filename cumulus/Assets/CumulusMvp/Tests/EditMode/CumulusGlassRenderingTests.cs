@@ -597,7 +597,7 @@ namespace CumulusMvp.Tests
             Assert.That(lens.g, Is.EqualTo(expectedLens.g).Within(0.0001f));
             Assert.That(lens.b, Is.EqualTo(expectedLens.b).Within(0.0001f));
             Assert.That(lens.a, Is.EqualTo(0.13f).Within(0.0001f));
-            Assert.That(onGlass.GetFloat("_CumulusRimAlpha"), Is.EqualTo(0.08f));
+            Assert.That(onGlass.GetFloat("_CumulusRimAlpha"), Is.EqualTo(0.32f));
             Assert.That(onGlass.GetFloat("_CumulusHighlightAlpha"), Is.EqualTo(0.10f));
             Material[] resolved =
             {

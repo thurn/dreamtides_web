@@ -35,7 +35,7 @@ Material:
     - _CumulusLightColorResponse: 0.85
     - _CumulusMobileAdditionalLightLimit: 1
     - _CumulusReflectionCeiling: 0.75
-    - _CumulusRimAlpha: 0.08
+    - _CumulusRimAlpha: 0.32
     m_Colors:
     - _CumulusLensColor: {r: 0.001214108, g: 0.001214108, b: 0.001821162, a: 0.13}
   m_BuildTextureStacks: []

@@ -864,8 +864,9 @@ namespace CumulusMvp.Editor
         private static void ConfigureOnGlass(Material material)
         {
             material.SetColor("_CumulusLensColor", SrgbTokenColor(4, 4, 6, 0.13f));
-            // Linear-HDR calibration of the web role's 18-percent white rim.
-            material.SetFloat("_CumulusRimAlpha", 0.08f);
+            // Preserve the web role's prominent one-pixel white rim after
+            // linear-HDR composition over the live parent glass surface.
+            material.SetFloat("_CumulusRimAlpha", 0.32f);
             material.SetFloat("_CumulusHighlightAlpha", 0.10f);
             material.SetOverrideTag("RenderType", "Transparent");
             material.renderQueue = (int)RenderQueue.Transparent + 10;

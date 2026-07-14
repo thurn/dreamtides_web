@@ -32,20 +32,20 @@ namespace CumulusMvp.Editor
             "Assets/CumulusMvp/Meshes/CumulusDreamsignGlassButton.asset";
         private const string MaterialLibraryPath =
             "Assets/CumulusMvp/Materials/CumulusMaterialLibrary.asset";
-        private const string DefaultTmpFontPath =
-            "Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset";
+        private const string ButtonTmpFontPath =
+            "Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Roboto-Bold SDF.asset";
         private const string ButtonRootName = "Default Glass Button";
         private const string ButtonLabel = "Sort";
         // Chromium measurement of the production GlassButton demo's default
-        // 15 px medium-weight "Sort" state at 1920 x 1080. The scene's camera
-        // maps these output pixels into world units without rounding.
+        // 16 px bold "Sort" state at 1920 x 1080. The scene's camera maps these
+        // output pixels into world units without rounding.
         private const float CameraHalfHeight = 5f;
         private const int ReferenceCaptureHeight = 1080;
         private const float WebButtonWidthPixels = 59.921875f;
         private const float WebButtonHeightPixels = 42f;
         private const float WebButtonCornerRadiusPixels = 14f;
         private const float WebButtonBottomInsetPixels = 24f;
-        private const float ButtonFontSize = 2f;
+        private const float ButtonFontSize = 1.4f;
         private const float GlassPanelSide = 4.6f;
         private const float ButtonDepth = -0.06f;
         private const float DreamsignDepth = -0.34f;
@@ -83,7 +83,7 @@ namespace CumulusMvp.Editor
             CumulusMaterialLibrary materialLibrary =
                 RequireAsset<CumulusMaterialLibrary>(MaterialLibraryPath);
             materialLibrary.Validate();
-            TMP_FontAsset textFont = RequireAsset<TMP_FontAsset>(DefaultTmpFontPath);
+            TMP_FontAsset textFont = RequireAsset<TMP_FontAsset>(ButtonTmpFontPath);
 
             Scene scene;
             if (AssetDatabase.LoadAssetAtPath<SceneAsset>(ScenePath) == null)
@@ -328,8 +328,8 @@ namespace CumulusMvp.Editor
             textMesh.text = ButtonLabel;
             textMesh.alignment = TextAlignmentOptions.Center;
             textMesh.fontSize = ButtonFontSize;
-            textMesh.fontWeight = FontWeight.Medium;
-            textMesh.fontStyle = FontStyles.Normal;
+            textMesh.fontWeight = FontWeight.Bold;
+            textMesh.fontStyle = FontStyles.Bold;
             textMesh.color = new Color32(255, 248, 236, 255);
             textMesh.richText = false;
             textMesh.textWrappingMode = TextWrappingModes.NoWrap;
