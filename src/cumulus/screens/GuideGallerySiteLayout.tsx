@@ -64,9 +64,9 @@ const DESKTOP_HUD_CLEARANCE = `calc(${QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE_
 // Three 240px cards plus the showcase gallery's compact gutters and padding.
 // This is a content-box measure used to leave the guide the remaining width.
 const SHOWCASE_GALLERY_RESERVE_PX = 800;
-// The wide showcase dialog starts in the guide region's right half, keeping it
-// beside the portrait while its right edge meets the gallery boundary.
-const SHOWCASE_DIALOG_LEFT = "52%";
+// Keeps the bubble's left arrow beside the character's head at the authored
+// desktop portrait sizes, for both split and showcase compositions.
+const DESKTOP_DIALOG_LEFT = `clamp(calc(${token("--space-12")} + ${token("--space-12")} + ${token("--space-11")} + ${token("--space-7")}), 18vw, calc(${token("--space-12")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-11")} + ${token("--space-7")}))`;
 // Below this width the gallery leaves too little horizontal space for dialog,
 // so the speech bubble moves into the clear band above the showcase panel.
 const COMPACT_SHOWCASE_MAX_WIDTH_PX = 1200;
@@ -321,7 +321,6 @@ function DesktopComposition({
         >
           <DesktopGuideScene
             guide={guide}
-            showcase={composition === "showcase"}
             compactShowcase={composition === "showcase" && compactShowcase}
             guideArtTestId={guideArtTestId}
             speechAnchorTestId={speechAnchorTestId}
@@ -336,14 +335,12 @@ function DesktopComposition({
 
 function DesktopGuideScene({
   guide,
-  showcase,
   compactShowcase,
   guideArtTestId,
   speechAnchorTestId,
   speechBubbleTestId,
 }: {
   readonly guide: GuideGalleryGuideView;
-  readonly showcase: boolean;
   readonly compactShowcase: boolean;
   readonly guideArtTestId?: string;
   readonly speechAnchorTestId?: string;
@@ -387,9 +384,7 @@ function DesktopGuideScene({
             : "14%",
           left: compactShowcase
             ? `calc(-1 * ${token("--space-4")})`
-            : showcase
-            ? SHOWCASE_DIALOG_LEFT
-            : `clamp(calc(${token("--space-12")} + ${token("--space-12")} + ${token("--space-11")} + ${token("--space-7")}), 18vw, calc(${token("--space-12")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-11")} + ${token("--space-7")}))`,
+            : DESKTOP_DIALOG_LEFT,
           right: compactShowcase ? "auto" : 0,
           width: compactShowcase ? 190 : undefined,
           maxWidth: compactShowcase ? 190 : 380,

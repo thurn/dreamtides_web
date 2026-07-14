@@ -135,7 +135,9 @@ describe("DuplicationSiteScreen", () => {
       container.querySelector<HTMLElement>(
         '[data-testid="cumulus-duplication-speech-anchor"]',
       )?.style.left,
-    ).toBe("52%");
+    ).toBe(
+      "clamp(calc(var(--space-12) + var(--space-12) + var(--space-11) + var(--space-7)), 18vw, calc(var(--space-12) + var(--space-12) + var(--space-12) + var(--space-11) + var(--space-7)))",
+    );
     const initialPanelWidth = gallery?.style.width;
 
     const confirm = container.querySelector<HTMLButtonElement>(
