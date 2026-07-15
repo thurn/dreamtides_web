@@ -242,11 +242,13 @@ describe("MobileBattleScreen", () => {
     expect(indicator?.getAttribute("aria-label")).toBe(
       "Player turn, Day phase",
     );
-    expect(indicator?.style.top).toBe("calc(100% + var(--space-2))");
+    expect(indicator?.parentElement?.dataset.battleStatusPhaseAnchor).toBe("");
+    expect(indicator?.style.top).toBe("100%");
     expect(indicator?.style.bottom).toBe("");
     expect(light?.style.width).toBe("6px");
     expect(light?.style.height).toBe("6px");
     expect(light?.style.left).toBe("30%");
+    expect(light?.style.transform).toBe("translate(-50%, -50%)");
     expect(light?.style.backgroundColor).toBe("var(--accent-bright)");
     expect(light?.style.boxShadow).toBe("var(--glow-accent-soft)");
     expect(light?.style.transition).toContain("var(--motion-object-travel)");
@@ -272,9 +274,11 @@ describe("MobileBattleScreen", () => {
       container.querySelector('[data-battle-phase-indicator="player"]'),
     ).toBeNull();
     expect(indicator?.dataset.battleMobilePhase).toBe("challenge");
-    expect(indicator?.style.bottom).toBe("calc(100% + var(--space-2))");
-    expect(indicator?.style.top).toBe("");
+    expect(indicator?.parentElement?.dataset.battleStatusPhaseAnchor).toBe("");
+    expect(indicator?.style.top).toBe("0px");
+    expect(indicator?.style.bottom).toBe("");
     expect(light?.style.left).toBe("90%");
+    expect(light?.style.transform).toBe("translate(-50%, -50%)");
 
     act(() => root.unmount());
   });

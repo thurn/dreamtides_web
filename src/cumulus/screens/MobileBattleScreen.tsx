@@ -320,7 +320,6 @@ function SideZones({
       <div
         data-battle-zone={`${owner}-status`}
         style={{
-          position: "relative",
           minWidth: 0,
           minHeight: 0,
           height: "82%",
@@ -329,17 +328,22 @@ function SideZones({
           justifyContent: "center",
         }}
       >
-        <BattleStatusDisplay
-          owner={owner}
-          dreamcaller={side.status.dreamcaller}
-          currentEnergy={side.status.currentEnergy}
-          maxEnergy={side.status.maxEnergy}
-          points={side.status.points}
-          testId={`${owner}-battle-status`}
-        />
-        {activeSide === owner ? (
-          <PhaseIndicator owner={owner} phase={phase} />
-        ) : null}
+        <div
+          data-battle-status-phase-anchor=""
+          style={{ position: "relative", width: "100%" }}
+        >
+          <BattleStatusDisplay
+            owner={owner}
+            dreamcaller={side.status.dreamcaller}
+            currentEnergy={side.status.currentEnergy}
+            maxEnergy={side.status.maxEnergy}
+            points={side.status.points}
+            testId={`${owner}-battle-status`}
+          />
+          {activeSide === owner ? (
+            <PhaseIndicator owner={owner} phase={phase} />
+          ) : null}
+        </div>
       </div>
       <div
         {...zoneDropProps("void")}
@@ -384,11 +388,9 @@ function PhaseIndicator({
         position: "absolute",
         left: 0,
         right: 0,
-        height: PHASE_LIGHT_SIZE,
+        top: owner === "player" ? "100%" : 0,
+        height: 0,
         pointerEvents: "none",
-        ...(owner === "player"
-          ? { top: `calc(100% + ${token("--space-2")})` }
-          : { bottom: `calc(100% + ${token("--space-2")})` }),
       }}
     >
       <span
@@ -400,7 +402,7 @@ function PhaseIndicator({
           left: PHASE_LIGHT_LEFT[phase],
           width: PHASE_LIGHT_SIZE,
           height: PHASE_LIGHT_SIZE,
-          transform: "translateX(-50%)",
+          transform: "translate(-50%, -50%)",
           borderRadius: token("--radius-pill"),
           backgroundColor: token("--accent-bright"),
           boxShadow: token("--glow-accent-soft"),
