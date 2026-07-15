@@ -115,6 +115,64 @@ describe("OfferTile", () => {
     container.remove();
   });
 
+  it("widens every card-art chip to a square at its existing height", () => {
+    const gift: OfferTileModel = {
+      id: "debug-gift",
+      kind: "card-gift",
+      label: "Card Gift",
+      description: "Add one card that complements your deck.",
+      card: MODEL.cards[0],
+    };
+    const trade: OfferTileModel = {
+      id: "debug-trade-squares",
+      kind: "trade-card",
+      label: "Trade Card",
+      description: "Purge one card and choose one of four replacements.",
+      outgoing: MODEL.cards[0],
+      incoming: MODEL.cards,
+    };
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <OfferTile model={gift} onPress={() => {}} testId="gift-tile" />
+          <OfferTile model={MODEL} onPress={() => {}} testId="draft-tile" />
+          <OfferTile model={trade} onPress={() => {}} testId="trade-square-tile" />
+        </CumulusRoot>,
+      );
+    });
+
+    const expectSquareChips = (testId: string, edge: string) => {
+      const chips = container.querySelectorAll<HTMLElement>(
+        `[data-testid="${testId}"] [data-offer-tile-card-id]`,
+      );
+      expect(chips.length).toBeGreaterThan(0);
+      chips.forEach((chip) => {
+        expect(chip.style.width).toBe(edge);
+        expect(chip.style.height).toBe(edge);
+      });
+    };
+
+    expectSquareChips("gift-tile", "108px");
+    expectSquareChips("draft-tile", "68px");
+
+    const tradeChips = container.querySelectorAll<HTMLElement>(
+      '[data-testid="trade-square-tile"] [data-offer-tile-card-id]',
+    );
+    expect(tradeChips[0]?.style.width).toBe("82px");
+    expect(tradeChips[0]?.style.height).toBe("82px");
+    [...tradeChips].slice(1).forEach((chip) => {
+      expect(chip.style.width).toBe("50px");
+      expect(chip.style.height).toBe("50px");
+    });
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("renders every surfaced chooser object without representative truncation", () => {
     const cards = MODEL.cards;
     const trade: OfferTileModel = {

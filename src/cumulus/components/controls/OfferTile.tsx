@@ -146,9 +146,10 @@ export interface OfferTileProps {
 }
 
 /**
- * A 200×200 circular symbolic Dream Augury offer button. Its inner card art,
- * dreamsigns, and glyphs are decorative and pointer-transparent; the complete
- * tile is the only hover/focus/press target and reveals one category InfoCard.
+ * A 200×200 circular symbolic Dream Augury offer button. Its inner card art is
+ * framed as height-preserving squares; card art, dreamsigns, and glyphs are
+ * decorative and pointer-transparent. The complete tile is the only
+ * hover/focus/press target and reveals one category InfoCard.
  */
 export function OfferTile({
   model,
@@ -222,6 +223,22 @@ export function OfferTile({
 }
 
 type CardTreatment = "plain" | "purged" | "incoming" | "duplicate";
+type CardArtSize = "compact" | "medium" | "large" | "draft";
+
+/**
+ * Square chip edges preserve each portrait chip's former height. Growing only
+ * the width keeps the source art at the same vertical scale while revealing
+ * more of its horizontal extent, matching the battlefield art treatment.
+ */
+const CARD_ART_EDGE: Readonly<Record<CardArtSize, number>> = {
+  compact: 50,
+  draft: 68,
+  large: 108,
+  medium: 82,
+};
+
+/** Width added to the large and medium chips when their frames become square. */
+const CARD_ART_WIDTH_EXPANSION = 18;
 
 function CardArtPiece({
   card,
@@ -230,18 +247,11 @@ function CardArtPiece({
 }: {
   readonly card: OfferTileCard;
   readonly treatment?: CardTreatment;
-  readonly size: "compact" | "medium" | "large" | "draft";
+  readonly size: CardArtSize;
 }): ReactElement {
   const [imageBroken, setImageBroken] = useState(false);
   const hasImage = !imageBroken && hasAssignedImage(card.imageNumber);
-  const dimensions =
-    size === "compact"
-      ? { width: 43, height: 50 }
-      : size === "draft"
-        ? { width: 60, height: 68 }
-      : size === "large"
-        ? { width: 90, height: 108 }
-        : { width: 64, height: 82 };
+  const edge = CARD_ART_EDGE[size];
   const treatmentStyle: CSSProperties =
     treatment === "purged"
       ? {
@@ -263,8 +273,8 @@ function CardArtPiece({
       style={{
         position: "relative",
         display: "block",
-        width: dimensions.width,
-        height: dimensions.height,
+        width: edge,
+        height: edge,
         overflow: "hidden",
         borderRadius: token("--radius-inset"),
         background: token("--surface-card"),
@@ -376,6 +386,8 @@ function OperationMark({
         width: layout === "overlay" ? 48 : 58,
         height: layout === "overlay" ? 48 : 58,
         borderRadius: token("--radius-pill"),
+        marginInlineStart:
+          layout === "inline" ? -CARD_ART_WIDTH_EXPANSION : undefined,
         color,
         background: token("--surface-chrome-strong"),
         border: `1px solid color-mix(in srgb, ${color} 62%, ${token("--text-on-glass")} 38%)`,
@@ -437,8 +449,8 @@ function DraftGrid({ cards }: { readonly cards: readonly OfferTileCard[] }) {
     <span
       style={{
         display: "grid",
-        gridTemplateColumns: "repeat(2, 60px)",
-        gap: 8,
+        gridTemplateColumns: `repeat(2, ${String(CARD_ART_EDGE.draft)}px)`,
+        gap: token("--space-2"),
         pointerEvents: "none",
       }}
     >
@@ -462,7 +474,7 @@ function CardFan({
       style={{
         position: "relative",
         display: "block",
-        width: 104,
+        width: 122,
         height: 104,
         pointerEvents: "none",
       }}
@@ -584,10 +596,8 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
         <OperationComposition glyph={GLYPHS.caretRight} layout="overlay">
           <span
             style={{
-              display: "grid",
-              gridTemplateColumns: "64px 92px",
+              display: "flex",
               alignItems: "center",
-              gap: 8,
               pointerEvents: "none",
             }}
           >
@@ -595,8 +605,11 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
             <span
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(2, 43px)",
-                gap: 6,
+                gridTemplateColumns: `repeat(2, ${String(CARD_ART_EDGE.compact)}px)`,
+                gap: token("--space-2"),
+                // Let the replacement group overlap the outgoing art by the
+                // width it gained, preserving the composition's circle-safe span.
+                marginInlineStart: -CARD_ART_WIDTH_EXPANSION,
                 pointerEvents: "none",
               }}
             >
