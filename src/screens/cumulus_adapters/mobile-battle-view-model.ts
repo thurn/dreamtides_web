@@ -13,6 +13,7 @@ import {
   type BattleSide,
 } from "../../battle/types";
 import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
+import { asCardId } from "../../types/card-identity";
 import type {
   MobileBattleCardView,
   MobileBattlePhase,
@@ -21,6 +22,7 @@ import type {
   MobileBattleStatusView,
   MobileBattleInspectorSideView,
   MobileBattleInspectorView,
+  MobileBattleDreamwellView,
   MobileBattleView,
 } from "../../cumulus/screens/MobileBattleScreen";
 
@@ -62,6 +64,7 @@ export function buildMobileBattleView(
           description: aiProposal.description,
           canReject: aiProposal.kind === "action",
         },
+    dreamwell: buildDreamwellView(init, board),
     activeSide: board.activeSide,
     phase: mobileBattlePhase(board.phase),
     enemyHandCardIds: [...board.sides.enemy.hand],
@@ -83,6 +86,49 @@ export function buildMobileBattleView(
         instance.definition.energyCost <= board.sides.player.currentEnergy,
     ),
     inspector: buildInspectorView(init, board, aiProposal, inspectorOptions),
+  };
+}
+
+function buildDreamwellView(
+  init: BattleInit,
+  board: BattleMutableState,
+): MobileBattleDreamwellView | null {
+  if (
+    board.result !== null ||
+    board.phase !== "dreamwell" ||
+    board.turnNumber <= 1
+  ) {
+    return null;
+  }
+
+  const side = board.activeSide;
+  const sideState = board.sides[side];
+  if (
+    sideState.dreamwellCardIndex === null ||
+    sideState.dreamwellDrawnTurn !== board.turnNumber
+  ) {
+    return null;
+  }
+
+  const definition = init.dreamwellDeck[sideState.dreamwellCardIndex];
+  if (definition === undefined) {
+    return null;
+  }
+
+  const cardId = asCardId(definition.id);
+  return {
+    side,
+    model: {
+      cardId,
+      displaySnapshot: {
+        id: cardId,
+        name: definition.name,
+        renderedText: definition.renderedText,
+        energyAdded: definition.energyAdded,
+        imageNumber: definition.imageNumber,
+        ...(definition.art === undefined ? {} : { art: definition.art }),
+      },
+    },
   };
 }
 

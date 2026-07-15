@@ -60,7 +60,6 @@ export const BASELINE = [
   // Semantic roles — reserved for a specific use, no current Cumulus reader.
   "--surface-raised", // reserved surface: raised card fill (one step above --surface-card)
   "--surface-chip", // reserved surface: chip fill
-  "--text-on-card", // reserved text role: card name on card chrome
   // Production bridge (--color-* global re-exports).
   "--color-essence-glow-strong",
   "--color-primary",

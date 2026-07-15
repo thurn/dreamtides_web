@@ -20,6 +20,7 @@ import { cardOrderEditorDemo } from "./demos/card-order-editor";
 import { cardStatOrbDemo } from "./demos/card-stat-orb";
 import { cardTermDefinitionsDemo } from "./demos/card-term-definitions";
 import { dreamcallerPortraitDemo } from "./demos/dreamcaller-portrait";
+import { dreamwellCardDemo } from "./demos/dreamwell-card";
 import { dreamsignDemo } from "./demos/dreamsign";
 import { dreamsignGalleryPanelDemo } from "./demos/dreamsign-gallery-panel";
 import { disclosureSectionDemo } from "./demos/disclosure-section";
@@ -166,6 +167,7 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   pipBadgeDemo,
   questStatusBarDemo,
   battleStatusDisplayDemo,
+  dreamwellCardDemo,
   dreamcallerPortraitDemo,
   richTextDemo,
   rulesTextDemo,

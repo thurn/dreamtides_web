@@ -114,6 +114,56 @@ function makeBoard(init: BattleInit): BattleMutableState {
 }
 
 describe("buildMobileBattleView", () => {
+  it("surfaces the active turn's UUID-backed Dreamwell card after its reveal commits", () => {
+    const init: BattleInit = {
+      ...makeInit(),
+      dreamwellDeck: [
+        {
+          id: "3a4293da-55a1-4094-898a-df402ffa1c92",
+          name: "Fixture Beacon",
+          renderedText: "Draw a card.",
+          energyAdded: 2,
+          order: 2,
+          cardNumber: 1,
+          imageNumber: 42,
+          art: { x: 0.2, y: -0.1, scale: 1.3 },
+        },
+      ],
+    };
+    const board = makeBoard(init);
+    board.phase = "dreamwell";
+    board.turnNumber = 2;
+    board.activeSide = "enemy";
+    board.sides.enemy.dreamwellCardIndex = 0;
+    board.sides.enemy.dreamwellDrawnTurn = 2;
+
+    expect(buildMobileBattleView(init, board, ENEMY_DREAMCALLER).dreamwell).toEqual({
+      side: "enemy",
+      model: {
+        cardId: "3a4293da-55a1-4094-898a-df402ffa1c92",
+        displaySnapshot: {
+          id: "3a4293da-55a1-4094-898a-df402ffa1c92",
+          name: "Fixture Beacon",
+          renderedText: "Draw a card.",
+          energyAdded: 2,
+          imageNumber: 42,
+          art: { x: 0.2, y: -0.1, scale: 1.3 },
+        },
+      },
+    });
+
+    board.sides.enemy.dreamwellDrawnTurn = 1;
+    expect(
+      buildMobileBattleView(init, board, ENEMY_DREAMCALLER).dreamwell,
+    ).toBeNull();
+
+    board.sides.enemy.dreamwellDrawnTurn = 2;
+    board.result = "victory";
+    expect(
+      buildMobileBattleView(init, board, ENEMY_DREAMCALLER).dreamwell,
+    ).toBeNull();
+  });
+
   it("maps stable battle ids to canonical UUID card models", () => {
     const init = makeInit();
     const board = makeBoard(init);

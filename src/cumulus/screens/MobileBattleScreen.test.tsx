@@ -113,6 +113,7 @@ function makeView(): MobileBattleView {
   return {
     battleId: "battle-mobile-fixture",
     aiApproval: null,
+    dreamwell: null,
     activeSide: "player",
     phase: "day",
     enemyHandCardIds: Array.from(
@@ -167,6 +168,51 @@ function mount(
 }
 
 describe("MobileBattleScreen", () => {
+  it("overlaps a static Dreamwell card above the player status display", () => {
+    const cardId = asCardId("3a4293da-55a1-4094-898a-df402ffa1c92");
+    const view: MobileBattleView = {
+      ...makeView(),
+      dreamwell: {
+        side: "enemy",
+        model: {
+          cardId,
+          displaySnapshot: {
+            id: cardId,
+            name: "Fixture Beacon",
+            renderedText: "Draw a card.",
+            energyAdded: 2,
+            imageNumber: 42,
+          },
+        },
+      },
+    };
+    const { container, root } = mount(view);
+
+    const playerStatus = container.querySelector<HTMLElement>(
+      '[data-battle-zone="player-status"]',
+    );
+    const layer = playerStatus?.querySelector<HTMLElement>(
+      "[data-battle-dreamwell-layer]",
+    );
+    expect(layer?.dataset.battleDreamwellSide).toBe("enemy");
+    expect(layer?.style.position).toBe("absolute");
+    expect(layer?.style.bottom).toBe(
+      "calc(100% + var(--space-3) + var(--space-12) + var(--space-4))",
+    );
+    expect(layer?.style.pointerEvents).toBe("none");
+    expect(layer?.style.animation).toBe("none");
+    expect(layer?.style.transition).toBe("none");
+    expect(
+      layer?.querySelector<HTMLElement>("[data-dreamwell-card]")?.dataset
+        .dreamwellCard,
+    ).toBe(cardId);
+    expect(
+      container.querySelector('[data-battle-zone="enemy-status"] [data-battle-dreamwell-layer]'),
+    ).toBeNull();
+
+    act(() => root.unmount());
+  });
+
   it("renders the mobile control row between the battlefield and player status", () => {
     const { container, root } = mount();
     const screen = container.querySelector<HTMLElement>("[data-battle-mobile]");

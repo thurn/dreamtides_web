@@ -9,6 +9,10 @@ import {
   CARD_ASPECT_RATIO,
 } from "../components/card/card-aspect";
 import { BattleStatusDisplay } from "../components/battle/BattleStatusDisplay";
+import {
+  DreamwellCard,
+  type DreamwellCardModel,
+} from "../components/battle/DreamwellCard";
 import { CardBack } from "../components/battle/CardBack";
 import {
   CardPile,
@@ -82,9 +86,16 @@ export interface MobileBattleAiApprovalView {
   readonly canReject: boolean;
 }
 
+/** The active side's Dreamwell card while its reveal phase is surfaced. */
+export interface MobileBattleDreamwellView {
+  readonly side: MobileBattleOwner;
+  readonly model: DreamwellCardModel;
+}
+
 export interface MobileBattleView {
   readonly battleId: string;
   readonly aiApproval: MobileBattleAiApprovalView | null;
+  readonly dreamwell: MobileBattleDreamwellView | null;
   readonly activeSide: MobileBattleOwner;
   readonly phase: MobileBattlePhase;
   readonly enemyHandCardIds: readonly string[];
@@ -446,6 +457,7 @@ function toVoidPile(
 
 function SideZones({
   activeSide,
+  dreamwell,
   isDesktop,
   owner,
   phase,
@@ -453,6 +465,7 @@ function SideZones({
   interactions,
 }: {
   readonly activeSide: MobileBattleOwner;
+  readonly dreamwell: MobileBattleDreamwellView | null;
   readonly isDesktop: boolean;
   readonly owner: MobileBattleOwner;
   readonly phase: MobileBattlePhase;
@@ -560,6 +573,28 @@ function SideZones({
             points={side.status.points}
             testId={`${owner}-battle-status`}
           />
+          {owner === "player" && dreamwell !== null ? (
+            <div
+              data-battle-dreamwell-layer=""
+              data-battle-dreamwell-side={dreamwell.side}
+              style={{
+                position: "absolute",
+                left: "50%",
+                bottom: isDesktop
+                  ? `calc(100% + ${token("--space-3")})`
+                  : `calc(100% + ${token("--space-3")} + ${token("--space-12")} + ${token("--space-4")})`,
+                width: isDesktop ? 360 : "min(76vw, 340px)",
+                maxWidth: "calc(100vw - 2 * var(--gutter))",
+                transform: "translateX(-50%)",
+                pointerEvents: "none",
+                zIndex: 12,
+                animation: "none",
+                transition: "none",
+              }}
+            >
+              <DreamwellCard model={dreamwell.model} />
+            </div>
+          ) : null}
           {activeSide === owner ? (
             <PhaseIndicator owner={owner} phase={phase} />
           ) : null}
@@ -1810,11 +1845,11 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
       <div aria-hidden="true" data-battle-mobile-safe-area-backdrop="" style={SAFE_AREA_BACKDROP_STYLE} />
       <LayoutGroup id={`mobile-battle:${view.battleId}`}>
         <EnemyHand cardIds={view.enemyHandCardIds} cards={view.enemyHand} revealed={view.inspector.isOpponentHandRevealed} isDesktop={isDesktop} />
-        <SideZones activeSide={view.activeSide} isDesktop={isDesktop} owner="enemy" phase={view.phase} side={view.enemy} interactions={interactions} />
+        <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="enemy" phase={view.phase} side={view.enemy} interactions={interactions} />
         <PlayArea isDesktop={isDesktop} owner="enemy" side={view.enemy} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} interactions={interactions} />
         <PlayArea isDesktop={isDesktop} owner="player" side={view.player} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} interactions={interactions} />
         <ControlRow aiApproval={view.aiApproval} isDesktop={isDesktop} interactions={interactions} />
-        <SideZones activeSide={view.activeSide} isDesktop={isDesktop} owner="player" phase={view.phase} side={view.player} interactions={interactions} />
+        <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="player" phase={view.phase} side={view.player} interactions={interactions} />
         <PlayerHand cards={view.inspector.isPlayerHandHidden ? [] : view.playerHand} isDesktop={isDesktop} interactions={interactions} />
       </LayoutGroup>
       <AiApprovalMessage aiApproval={view.aiApproval} />
