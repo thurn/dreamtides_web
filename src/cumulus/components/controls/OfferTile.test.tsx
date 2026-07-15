@@ -417,6 +417,11 @@ describe("OfferTile", () => {
         '[data-testid="bundle-tile"] [data-offer-tile-full-card-stack]',
       )?.style.width,
     ).toBe("150px");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="bundle-tile"] [data-offer-tile-full-card-stack]',
+      )?.style.translate,
+    ).toBe("0 var(--space-5)");
 
     for (const treatmentCard of container.querySelectorAll<HTMLElement>(
       '[data-testid="trade-tile"] [data-offer-tile-full-card], [data-testid="duplicate-tile"] [data-offer-tile-full-card]',

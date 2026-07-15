@@ -378,6 +378,7 @@ function FullCardStack({
         display: "block",
         width: stageWidth,
         height: stageHeight,
+        translate: bundleLayout ? `0 ${token("--space-5")}` : undefined,
         pointerEvents: "none",
       }}
     >
