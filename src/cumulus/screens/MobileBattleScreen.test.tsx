@@ -234,6 +234,15 @@ describe("MobileBattleScreen", () => {
     const light = indicator?.querySelector<HTMLElement>(
       "[data-battle-phase-light]",
     );
+    const core = light?.querySelector<HTMLElement>(
+      "[data-battle-phase-light-core]",
+    );
+    const halo = light?.querySelector<HTMLElement>(
+      "[data-battle-phase-light-halo]",
+    );
+    const streak = light?.querySelector<HTMLElement>(
+      "[data-battle-phase-light-streak]",
+    );
 
     expect(
       container.querySelector('[data-battle-phase-indicator="enemy"]'),
@@ -249,9 +258,20 @@ describe("MobileBattleScreen", () => {
     expect(light?.style.height).toBe("6px");
     expect(light?.style.left).toBe("30%");
     expect(light?.style.transform).toBe("translate(-50%, -50%)");
-    expect(light?.style.backgroundColor).toBe("var(--accent-bright)");
-    expect(light?.style.boxShadow).toBe("var(--glow-accent-soft)");
     expect(light?.style.transition).toContain("var(--motion-object-travel)");
+    expect(core?.style.width).toBe("6px");
+    expect(core?.style.height).toBe("6px");
+    expect(core?.style.backgroundColor).toBe("var(--accent-bright)");
+    expect(core?.style.boxShadow).toBe("var(--glow-accent-soft)");
+    expect(halo?.style.width).toBe("12px");
+    expect(halo?.style.height).toBe("12px");
+    expect(halo?.style.backgroundColor).toBe("var(--accent)");
+    expect(halo?.style.animation).toBe("");
+    expect(streak?.style.width).toBe("16px");
+    expect(streak?.style.height).toBe("2px");
+    expect(streak?.style.backgroundColor).toBe("var(--accent-bright)");
+    expect(streak?.style.animation).toContain("battle-phase-comet-tail");
+    expect(streak?.style.animation).toContain("var(--dur-slow)");
 
     act(() => root.unmount());
   });
@@ -269,6 +289,9 @@ describe("MobileBattleScreen", () => {
     const light = indicator?.querySelector<HTMLElement>(
       "[data-battle-phase-light]",
     );
+    const halo = light?.querySelector<HTMLElement>(
+      "[data-battle-phase-light-halo]",
+    );
 
     expect(
       container.querySelector('[data-battle-phase-indicator="player"]'),
@@ -279,6 +302,8 @@ describe("MobileBattleScreen", () => {
     expect(indicator?.style.bottom).toBe("");
     expect(light?.style.left).toBe("90%");
     expect(light?.style.transform).toBe("translate(-50%, -50%)");
+    expect(halo?.style.animation).toContain("battle-phase-challenge-pulse");
+    expect(halo?.style.animation).toContain("var(--dur-slow)");
 
     act(() => root.unmount());
   });

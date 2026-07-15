@@ -117,6 +117,12 @@ const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
 const BATTLEFIELD_SIDE_INSET_PERCENT = 6;
 const BATTLEFIELD_WIDTH_PERCENT = 100 - BATTLEFIELD_SIDE_INSET_PERCENT * 2;
 const PHASE_LIGHT_SIZE = 6;
+const PHASE_LIGHT_HALO_SIZE = 12;
+const PHASE_LIGHT_STREAK_WIDTH = 16;
+const PHASE_LIGHT_STREAK_HEIGHT = 2;
+const PHASE_COMET_TAIL_START_SCALE = 0.35;
+const PHASE_COMET_TAIL_PEAK_SCALE = 1.55;
+const PHASE_CHALLENGE_PULSE_PEAK_SCALE = 1.65;
 const PHASE_LIGHT_LEFT = {
   dawn: "10%",
   day: "30%",
@@ -131,6 +137,30 @@ const PHASE_LABEL = {
   night: "Night",
   challenge: "Challenge",
 } satisfies Record<MobileBattlePhase, string>;
+
+const BATTLE_PHASE_LIGHT_CSS = `
+  :where([data-connected-count]) { display: none; }
+
+  @keyframes battle-phase-comet-tail {
+    0% { transform: translateY(-50%) scaleX(${String(PHASE_COMET_TAIL_START_SCALE)}); opacity: 0.12; }
+    45% { transform: translateY(-50%) scaleX(${String(PHASE_COMET_TAIL_PEAK_SCALE)}); opacity: 0.52; }
+    100% { transform: translateY(-50%) scaleX(1); opacity: 0.28; }
+  }
+
+  @keyframes battle-phase-challenge-pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.22; }
+    45% { transform: translate(-50%, -50%) scale(${String(PHASE_CHALLENGE_PULSE_PEAK_SCALE)}); opacity: 0.48; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-battle-phase-light],
+    [data-battle-phase-light-halo],
+    [data-battle-phase-light-streak] {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+`;
 
 const ROOT_STYLE: CSSProperties = {
   position: "fixed",
@@ -403,12 +433,60 @@ function PhaseIndicator({
           width: PHASE_LIGHT_SIZE,
           height: PHASE_LIGHT_SIZE,
           transform: "translate(-50%, -50%)",
-          borderRadius: token("--radius-pill"),
-          backgroundColor: token("--accent-bright"),
-          boxShadow: token("--glow-accent-soft"),
           transition: `left ${token("--motion-object-travel")}`,
         }}
-      />
+      >
+        <span
+          key={`${phase}-streak`}
+          data-battle-phase-light-streak=""
+          style={{
+            position: "absolute",
+            top: "50%",
+            right: "50%",
+            width: PHASE_LIGHT_STREAK_WIDTH,
+            height: PHASE_LIGHT_STREAK_HEIGHT,
+            transform: "translateY(-50%)",
+            transformOrigin: "right center",
+            borderRadius: token("--radius-pill"),
+            backgroundColor: token("--accent-bright"),
+            boxShadow: token("--glow-accent-soft"),
+            opacity: 0.28,
+            animation: `battle-phase-comet-tail ${token("--dur-slow")} ${token("--ease-out")}`,
+          }}
+        />
+        <span
+          key={`${phase}-halo`}
+          data-battle-phase-light-halo=""
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            width: PHASE_LIGHT_HALO_SIZE,
+            height: PHASE_LIGHT_HALO_SIZE,
+            transform: "translate(-50%, -50%)",
+            borderRadius: token("--radius-pill"),
+            backgroundColor: token("--accent"),
+            boxShadow: token("--glow-accent-soft"),
+            opacity: 0.22,
+            animation:
+              phase === "challenge"
+                ? `battle-phase-challenge-pulse ${token("--dur-slow")} ${token("--ease-out")}`
+                : undefined,
+          }}
+        />
+        <span
+          data-battle-phase-light-core=""
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: PHASE_LIGHT_SIZE,
+            height: PHASE_LIGHT_SIZE,
+            borderRadius: token("--radius-pill"),
+            backgroundColor: token("--accent-bright"),
+            boxShadow: token("--glow-accent-soft"),
+          }}
+        />
+      </span>
     </div>
   );
 }
@@ -1067,7 +1145,7 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
   const cardSize = battlefieldCardSize(layoutBackSlotCount);
   return (
     <>
-      <style>{`:where([data-connected-count]) { display: none; }`}</style>
+      <style>{BATTLE_PHASE_LIGHT_CSS}</style>
       <main
         className="cumulus"
         data-battle-mobile={view.battleId}
