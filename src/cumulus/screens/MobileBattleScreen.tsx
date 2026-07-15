@@ -6,7 +6,6 @@ import {
 } from "../components/card/CardView";
 import {
   BATTLEFIELD_CARD_ASPECT_RATIO,
-  BATTLEFIELD_CARD_ASPECT_RATIO_VALUE,
   CARD_ASPECT_RATIO,
 } from "../components/card/card-aspect";
 import { BattleStatusDisplay } from "../components/battle/BattleStatusDisplay";
@@ -104,6 +103,8 @@ export interface MobileBattleInteractions {
 }
 
 const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
+const BATTLEFIELD_SIDE_INSET_PERCENT = 6;
+const BATTLEFIELD_WIDTH_PERCENT = 100 - BATTLEFIELD_SIDE_INSET_PERCENT * 2;
 
 const ROOT_STYLE: CSSProperties = {
   position: "fixed",
@@ -397,45 +398,106 @@ function FaceUpCard({
   );
 }
 
+function lastFilledSlotCount(slots: readonly MobileBattleSlotView[]): number {
+  for (let index = slots.length - 1; index >= 0; index -= 1) {
+    if (slots[index]?.card !== null) return index + 1;
+  }
+  return 0;
+}
+
+function battlefieldLayoutBackSlotCount(view: MobileBattleView): number {
+  const sides = [view.enemy, view.player] as const;
+  return Math.max(
+    1,
+    ...sides.map((side) => lastFilledSlotCount(side.backRank)),
+    ...sides.map((side) => lastFilledSlotCount(side.frontRank) + 1),
+  );
+}
+
+function battlefieldCardSize(layoutBackSlotCount: number): string {
+  const slotCount = Math.max(layoutBackSlotCount, 1);
+  const horizontalGapCount = Math.max(slotCount - 1, 0);
+  return `min(22cqw, calc((${String(BATTLEFIELD_WIDTH_PERCENT)}cqw - ${String(horizontalGapCount)} * ${token("--space-2")}) / ${String(slotCount)}), calc((200cqh - 3 * ${token("--space-2")}) / 4))`;
+}
+
+function battlefieldTrackWidth(
+  slotCount: number,
+  cardSize: string,
+): string {
+  const gapCount = Math.max(slotCount - 1, 0);
+  return `calc(${String(slotCount)} * ${cardSize} + ${String(gapCount)} * ${token("--space-2")})`;
+}
+
 function Rank({
   owner,
   rank,
   slots,
-  backSlotCount,
+  layoutBackSlotCount,
+  cardSize,
   order,
   interactions,
 }: {
   readonly owner: MobileBattleOwner;
   readonly rank: MobileBattleRank;
   readonly slots: readonly MobileBattleSlotView[];
-  readonly backSlotCount: number;
+  readonly layoutBackSlotCount: number;
+  readonly cardSize: string;
   readonly order: number;
   readonly interactions?: MobileBattleInteractions;
 }) {
   const canDrop =
     interactions?.canInteract === true && interactions.pendingCardId !== null;
+  const layoutSlotCount =
+    rank === "back"
+      ? layoutBackSlotCount
+      : Math.max(layoutBackSlotCount - 1, 1);
+  const isCenterFacingRank =
+    (owner === "enemy" && order === 1) ||
+    (owner === "player" && order === 0);
+  const centerOffset = token("--space-1");
+  const outerOffset = `calc(${cardSize} + ${token("--space-2")} + ${centerOffset})`;
   return (
     <div
       data-battle-rank={`${owner}-${rank}`}
       data-battle-rank-order={order}
       style={{
         position: "absolute",
-        left: "6%",
-        right: "6%",
-        height: "57%",
-        top: order === 0 ? 0 : undefined,
-        bottom: order === 1 ? 0 : undefined,
+        left: `${String(BATTLEFIELD_SIDE_INSET_PERCENT)}%`,
+        right: `${String(BATTLEFIELD_SIDE_INSET_PERCENT)}%`,
+        height: cardSize,
+        top:
+          owner === "player"
+            ? isCenterFacingRank
+              ? centerOffset
+              : outerOffset
+            : undefined,
+        bottom:
+          owner === "enemy"
+            ? isCenterFacingRank
+              ? centerOffset
+              : outerOffset
+            : undefined,
         display: "flex",
         justifyContent: "center",
-        alignItems: order === 0 ? "flex-start" : "flex-end",
-        columnGap: token("--space-2"),
-        containerType: "size",
+        alignItems: "center",
         zIndex: rank === "front" ? 2 : 1,
       }}
     >
-      {slots.map((slot) => {
-        const laneCount = Math.max(backSlotCount, 1);
-        return (
+      <div
+        data-battle-rank-track=""
+        style={{
+          position: "relative",
+          flex: "0 0 auto",
+          width: battlefieldTrackWidth(layoutSlotCount, cardSize),
+          height: cardSize,
+          display: "grid",
+          gridTemplateColumns: `repeat(${String(layoutSlotCount)}, ${cardSize})`,
+          gridAutoColumns: cardSize,
+          gridAutoFlow: "column",
+          columnGap: token("--space-2"),
+        }}
+      >
+        {slots.map((slot) => (
           <div
             key={slot.id}
             data-battle-slot-id={slot.id}
@@ -451,8 +513,7 @@ function Rank({
             }}
             style={{
               position: "relative",
-              flex: "0 0 auto",
-              width: `min(22cqw, calc((100cqw - ${String(laneCount - 1)} * ${token("--space-2")}) / ${String(laneCount)}), calc(100cqh * ${String(BATTLEFIELD_CARD_ASPECT_RATIO_VALUE)}))`,
+              width: cardSize,
               aspectRatio: BATTLEFIELD_CARD_ASPECT_RATIO,
               boxSizing: "border-box",
             }}
@@ -477,8 +538,8 @@ function Rank({
               />
             ) : null}
           </div>
-        );
-      })}
+        ))}
+      </div>
     </div>
   );
 }
@@ -486,10 +547,14 @@ function Rank({
 function PlayArea({
   owner,
   side,
+  layoutBackSlotCount,
+  cardSize,
   interactions,
 }: {
   readonly owner: MobileBattleOwner;
   readonly side: MobileBattleSideView;
+  readonly layoutBackSlotCount: number;
+  readonly cardSize: string;
   readonly interactions?: MobileBattleInteractions;
 }) {
   const ranks =
@@ -509,6 +574,7 @@ function PlayArea({
       style={{
         ...ROW_STYLE,
         overflow: "hidden",
+        containerType: "size",
       }}
     >
       {ranks.map(([rank, slots], order) => (
@@ -517,7 +583,8 @@ function PlayArea({
           owner={owner}
           rank={rank}
           slots={slots}
-          backSlotCount={side.backRank.length}
+          layoutBackSlotCount={layoutBackSlotCount}
+          cardSize={cardSize}
           order={order}
           interactions={interactions}
         />
@@ -703,6 +770,8 @@ function BattleDebugMenu({
 
 /** Seven-row, mobile-only battle table composed entirely from battle objects. */
 export function MobileBattleScreen({ view, interactions }: MobileBattleScreenProps) {
+  const layoutBackSlotCount = battlefieldLayoutBackSlotCount(view);
+  const cardSize = battlefieldCardSize(layoutBackSlotCount);
   return (
     <>
       <style>{`:where([data-connected-count]) { display: none; }`}</style>
@@ -714,8 +783,20 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
         <LayoutGroup id={`mobile-battle:${view.battleId}`}>
           <EnemyHand cardIds={view.enemyHandCardIds} />
           <SideZones owner="enemy" side={view.enemy} interactions={interactions} />
-          <PlayArea owner="enemy" side={view.enemy} interactions={interactions} />
-          <PlayArea owner="player" side={view.player} interactions={interactions} />
+          <PlayArea
+            owner="enemy"
+            side={view.enemy}
+            layoutBackSlotCount={layoutBackSlotCount}
+            cardSize={cardSize}
+            interactions={interactions}
+          />
+          <PlayArea
+            owner="player"
+            side={view.player}
+            layoutBackSlotCount={layoutBackSlotCount}
+            cardSize={cardSize}
+            interactions={interactions}
+          />
           <ControlRow interactions={interactions} />
           <SideZones owner="player" side={view.player} interactions={interactions} />
           <PlayerHand cards={view.playerHand} interactions={interactions} />

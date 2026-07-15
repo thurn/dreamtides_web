@@ -266,14 +266,24 @@ describe("MobileBattleScreen", () => {
       expect(frontRank?.style.display).toBe("flex");
       expect(backRank?.style.justifyContent).toBe("center");
       expect(frontRank?.style.justifyContent).toBe("center");
-      expect(backRank?.style.columnGap).toBe("var(--space-2)");
-      expect(frontRank?.style.columnGap).toBe("var(--space-2)");
       expect(backRank?.style.zIndex).toBe("1");
       expect(frontRank?.style.zIndex).toBe("2");
+      expect(backRank?.style.height).toBe(frontRank?.style.height);
+      expect(backRank?.style.height).toContain("200cqh");
+      const backTrack = backRank?.querySelector<HTMLElement>(
+        "[data-battle-rank-track]",
+      );
+      const frontTrack = frontRank?.querySelector<HTMLElement>(
+        "[data-battle-rank-track]",
+      );
+      expect(backTrack?.style.columnGap).toBe("var(--space-2)");
+      expect(frontTrack?.style.columnGap).toBe("var(--space-2)");
+      expect(backTrack?.style.gridTemplateColumns).toContain("repeat(2,");
+      expect(frontTrack?.style.gridTemplateColumns).toContain("repeat(1,");
       expect(backSlots).toHaveLength(frontSlots.length + 1);
       backSlots.forEach((backSlot) => {
         expect(backSlot.style.aspectRatio).toBe("1 / 1");
-        expect(backSlot.style.width).toContain("calc(100cqh * 1)");
+        expect(backSlot.style.width).toBe(backRank?.style.height);
       });
       frontSlots.forEach((frontSlot) => {
         expect(frontSlot.style.width).toBe(backSlots[0]?.style.width);
@@ -328,15 +338,21 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("lane-sizes expanded staggered ranks without overlapping slot targets", () => {
+  it("centers occupied expanded ranks on one shared responsive card scale", () => {
     const view = makeView();
     const expandedBackRank = Array.from({ length: 6 }, (_, index) => ({
       id: `expanded-back-${String(index)}`,
-      card: null,
+      card:
+        index < 5
+          ? makeCard(60 + index, `expanded-back-card-${String(index)}`)
+          : null,
     }));
     const expandedFrontRank = Array.from({ length: 5 }, (_, index) => ({
       id: `expanded-front-${String(index)}`,
-      card: null,
+      card:
+        index < 4
+          ? makeCard(70 + index, `expanded-front-card-${String(index)}`)
+          : null,
     }));
     const expandedView: MobileBattleView = {
       ...view,
@@ -354,23 +370,54 @@ describe("MobileBattleScreen", () => {
     const { container, root } = mount(expandedView);
 
     for (const owner of ["enemy", "player"] as const) {
+      const playArea = container.querySelector<HTMLElement>(
+        `[data-battle-play-area="${owner}"]`,
+      );
+      expect(playArea?.style.containerType).toBe("size");
       for (const rank of ["back", "front"] as const) {
         const rankElement = container.querySelector<HTMLElement>(
           `[data-battle-rank="${owner}-${rank}"]`,
+        );
+        const track = rankElement?.querySelector<HTMLElement>(
+          "[data-battle-rank-track]",
         );
         const slots = Array.from(
           rankElement?.querySelectorAll<HTMLElement>("[data-battle-slot-id]") ??
             [],
         );
-        expect(rankElement?.style.containerType).toBe("size");
-        expect(slots[0]?.style.width).toContain(
-          "100cqw - 5 * var(--space-2)",
+        expect(rankElement?.style.height).toContain(
+          "88cqw - 4 * var(--space-2)",
         );
+        expect(rankElement?.style.height).toContain("200cqh");
+        expect(track?.style.gridTemplateColumns).toContain(
+          rank === "back" ? "repeat(5," : "repeat(4,",
+        );
+        expect(track?.style.width).toContain(
+          rank === "back" ? "5 * min(" : "4 * min(",
+        );
+        expect(track?.style.columnGap).toBe("var(--space-2)");
         expect(slots[0]?.style.width).toContain("var(--space-2)");
-        expect(slots[0]?.style.width).toContain("100cqh");
+        expect(slots[0]?.style.width).toContain("200cqh");
         expect(slots[0]?.style.height).toBe("");
       }
     }
+
+    const enemyBack = container.querySelector<HTMLElement>(
+      '[data-battle-rank="enemy-back"]',
+    );
+    const enemyFront = container.querySelector<HTMLElement>(
+      '[data-battle-rank="enemy-front"]',
+    );
+    const playerFront = container.querySelector<HTMLElement>(
+      '[data-battle-rank="player-front"]',
+    );
+    const playerBack = container.querySelector<HTMLElement>(
+      '[data-battle-rank="player-back"]',
+    );
+    expect(enemyFront?.style.bottom).toBe("var(--space-1)");
+    expect(playerFront?.style.top).toBe("var(--space-1)");
+    expect(enemyBack?.style.bottom).toContain("var(--space-2)");
+    expect(playerBack?.style.top).toContain("var(--space-2)");
 
     act(() => root.unmount());
   });
