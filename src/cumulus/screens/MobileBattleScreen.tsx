@@ -122,12 +122,20 @@ const ROOT_STYLE: CSSProperties = {
   paddingRight: `var(${SAFE_AREA_INSET_PROPERTIES.right})`,
   paddingBottom: `var(${SAFE_AREA_INSET_PROPERTIES.bottom})`,
   paddingLeft: `var(${SAFE_AREA_INSET_PROPERTIES.left})`,
-  backgroundColor: token("--battle-table"),
+  backgroundColor: token("--bg-app"),
   backgroundImage: `url("${battleBackgroundUrl}")`,
   backgroundPosition: "center",
   backgroundRepeat: "no-repeat",
   backgroundSize: "100% 100%",
   touchAction: "none",
+};
+
+const SAFE_AREA_BACKDROP_STYLE: CSSProperties = {
+  position: "absolute",
+  inset: "0 0 auto",
+  height: `var(${SAFE_AREA_INSET_PROPERTIES.top})`,
+  background: token("--bg-app"),
+  pointerEvents: "none",
 };
 
 const ROW_STYLE: CSSProperties = {
@@ -986,6 +994,11 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
         data-battle-mobile={view.battleId}
         style={ROOT_STYLE}
       >
+        <div
+          aria-hidden="true"
+          data-battle-mobile-safe-area-backdrop=""
+          style={SAFE_AREA_BACKDROP_STYLE}
+        />
         <LayoutGroup id={`mobile-battle:${view.battleId}`}>
           <EnemyHand cardIds={view.enemyHandCardIds} />
           <SideZones owner="enemy" side={view.enemy} interactions={interactions} />

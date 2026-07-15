@@ -149,12 +149,21 @@ describe("MobileBattleScreen", () => {
     expect(screen?.className).toBe("cumulus");
     expect(screen?.style.position).toBe("fixed");
     expect(screen?.style.height).toBe("100dvh");
-    expect(screen?.style.backgroundColor).toBe("var(--battle-table)");
+    expect(screen?.style.backgroundColor).toBe("var(--bg-app)");
     expect(screen?.style.backgroundImage).toContain("battle-background.png");
     expect(screen?.style.backgroundPosition).toBe("center center");
     expect(screen?.style.backgroundRepeat).toBe("no-repeat");
     expect(screen?.style.backgroundSize).toBe("100% 100%");
     expect(screen?.style.touchAction).toBe("none");
+    const safeAreaBackdrop = screen?.querySelector<HTMLElement>(
+      ":scope > [data-battle-mobile-safe-area-backdrop]",
+    );
+    expect(safeAreaBackdrop?.style.position).toBe("absolute");
+    expect(safeAreaBackdrop?.style.inset).toBe("0 0 auto");
+    expect(safeAreaBackdrop?.style.height).toBe(
+      "var(--safe-area-inset-top)",
+    );
+    expect(safeAreaBackdrop?.style.background).toBe("var(--bg-app)");
     expect(rowNames).toEqual([
       "enemy-hand",
       "enemy-zones",

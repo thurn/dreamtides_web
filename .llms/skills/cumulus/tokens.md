@@ -271,7 +271,6 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 
 | Token | Value | Notes |
 | --- | --- | --- |
-| `--battle-table` | `var(--primitive-tabletop)` |  |
 | `--layer-reveal` | `2147483647` |  |
 | `--hover-scale` | `1.03` |  |
 | `--glass-fill` | `rgba(14, 14, 16, 0.54)` |  |
