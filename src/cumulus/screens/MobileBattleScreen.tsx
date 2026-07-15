@@ -21,6 +21,7 @@ import type { DreamcallerVisual } from "../components/hud/DreamcallerPortrait";
 import { GLYPHS } from "../primitives/glyph";
 import {
   DOUBLE_TAP_WINDOW_MS,
+  LONG_PRESS_THRESHOLD_MS,
   POINTER_MOVEMENT_SLOP_PX,
 } from "../primitives/pointer-gesture";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
@@ -597,6 +598,8 @@ function FaceUpCard({
   };
 }) {
   const dragSuppressedRef = useRef(false);
+  const longPressSuppressedRef = useRef(false);
+  const touchPressStartedAtRef = useRef<number | null>(null);
   const pendingTapRef = useRef<number | null>(null);
   const touchPointerRef = useRef<{
     pointerId: number;
@@ -658,6 +661,9 @@ function FaceUpCard({
       draggable={draggable}
       onPointerDownCapture={(event) => {
         dragSuppressedRef.current = false;
+        longPressSuppressedRef.current = false;
+        touchPressStartedAtRef.current =
+          event.pointerType === "touch" ? event.timeStamp : null;
         if (!draggable || event.pointerType !== "touch") return;
         event.currentTarget.draggable = false;
         touchPointerRef.current = {
@@ -694,6 +700,7 @@ function FaceUpCard({
         event.preventDefault();
         const dragStarted = !touchPointer.dragging;
         if (dragStarted) {
+          touchPressStartedAtRef.current = null;
           touchPointer.dragging = true;
           dragSuppressedRef.current = true;
           event.currentTarget.dataset.battleTouchDragging = "true";
@@ -715,11 +722,31 @@ function FaceUpCard({
           interaction?.onDragStart();
         }
       }}
-      onPointerUpCapture={(event) => finishTouchDrag(event, true)}
-      onPointerCancelCapture={(event) => finishTouchDrag(event, false)}
+      onPointerUpCapture={(event) => {
+        if (
+          event.pointerType === "touch" &&
+          touchPressStartedAtRef.current !== null &&
+          event.timeStamp - touchPressStartedAtRef.current >=
+            LONG_PRESS_THRESHOLD_MS
+        ) {
+          longPressSuppressedRef.current = true;
+        }
+        touchPressStartedAtRef.current = null;
+        finishTouchDrag(event, true);
+      }}
+      onPointerCancelCapture={(event) => {
+        touchPressStartedAtRef.current = null;
+        finishTouchDrag(event, false);
+      }}
       onClick={(event) => {
         if (!draggable && interaction?.onDebugActivate === undefined) return;
         event.stopPropagation();
+        if (longPressSuppressedRef.current) {
+          longPressSuppressedRef.current = false;
+          dragSuppressedRef.current = false;
+          cancelPendingTap();
+          return;
+        }
         if (dragSuppressedRef.current) {
           dragSuppressedRef.current = false;
           return;

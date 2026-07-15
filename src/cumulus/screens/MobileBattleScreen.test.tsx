@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { CumulusRoot } from "../CumulusRoot";
+import { DOUBLE_TAP_WINDOW_MS } from "../primitives/pointer-gesture";
 import {
   MobileBattleScreen,
   type MobileBattleCardView,
@@ -927,6 +928,64 @@ describe("MobileBattleScreen", () => {
       "player-front-card",
       "battlefield",
     );
+
+    act(() => root.unmount());
+    vi.useRealTimers();
+  });
+
+  it("plays a quick touch tap but suppresses the click once a 300ms long press is detected", () => {
+    vi.useFakeTimers();
+    const interactions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDebugActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(makeView(), interactions);
+    const handCard = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-hand-0"]',
+    );
+    const revealSource = handCard?.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    const dispatchTouch = (type: "pointerdown" | "pointerup", pointerId: number) => {
+      revealSource?.dispatchEvent(
+        new PointerEvent(type, {
+          bubbles: true,
+          cancelable: true,
+          clientX: 20,
+          clientY: 30,
+          pointerId,
+          pointerType: "touch",
+        }),
+      );
+    };
+
+    act(() => {
+      dispatchTouch("pointerdown", 41);
+      vi.advanceTimersByTime(299);
+      dispatchTouch("pointerup", 41);
+      handCard?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      vi.advanceTimersByTime(DOUBLE_TAP_WINDOW_MS);
+    });
+    expect(interactions.onHandCardActivate).toHaveBeenCalledOnce();
+
+    interactions.onHandCardActivate.mockClear();
+    act(() => {
+      dispatchTouch("pointerdown", 42);
+      vi.advanceTimersByTime(300);
+      dispatchTouch("pointerup", 42);
+      handCard?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      vi.advanceTimersByTime(DOUBLE_TAP_WINDOW_MS);
+    });
+    expect(interactions.onHandCardActivate).not.toHaveBeenCalled();
+    expect(interactions.onCardDebugActivate).not.toHaveBeenCalled();
 
     act(() => root.unmount());
     vi.useRealTimers();
