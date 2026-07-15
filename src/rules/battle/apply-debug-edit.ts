@@ -1289,10 +1289,20 @@ function fillBattlefieldPreview(
   state: BattleMutableState;
   transition: BattleTransitionData;
 } {
-  const characterCountPerSide = 9;
+  const battlefieldCharacterCountPerSide = 9;
+  const fullLayoutCharacterCountPerSide = 14;
+  const definitionCounts = [
+    definitions.player.length,
+    definitions.enemy.length,
+  ];
+  const isBattlefieldOnlyPreview = definitionCounts.every(
+    (count) => count === battlefieldCharacterCountPerSide,
+  );
+  const isFullLayoutPreview = definitionCounts.every(
+    (count) => count === fullLayoutCharacterCountPerSide,
+  );
   if (
-    definitions.player.length !== characterCountPerSide ||
-    definitions.enemy.length !== characterCountPerSide ||
+    (!isBattlefieldOnlyPreview && !isFullLayoutPreview) ||
     [...definitions.player, ...definitions.enemy].some(
       (definition) => definition.battleCardKind !== "character",
     )
@@ -1300,6 +1310,7 @@ function fillBattlefieldPreview(
     return { state, transition: createEmptyTransitionData() };
   }
 
+  const voidCharacterCountPerSide = isFullLayoutPreview ? 5 : 0;
   let current = state;
   const logEvents: BattleTransitionData["logEvents"] = [];
   for (const side of ["player", "enemy"] as const) {
@@ -1325,6 +1336,10 @@ function fillBattlefieldPreview(
         side,
         zone: "backRank" as const,
         slotId: backRankSlotId(index),
+      })),
+      ...Array.from({ length: voidCharacterCountPerSide }, () => ({
+        side,
+        zone: "void" as const,
       })),
     ];
     for (let index = 0; index < destinations.length; index += 1) {

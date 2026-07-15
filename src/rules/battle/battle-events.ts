@@ -798,7 +798,11 @@ function isFiniteNumber(value: unknown): value is number {
 }
 
 function isBattlefieldPreviewDefinitionList(value: unknown): boolean {
-  return Array.isArray(value) && value.length === 9 && value.every(isPlainRecord);
+  return (
+    Array.isArray(value) &&
+    (value.length === 9 || value.length === 14) &&
+    value.every(isPlainRecord)
+  );
 }
 
 function isNonEmptyString(value: unknown): value is string {

@@ -485,7 +485,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("opens the debug menu and requests a full nine-character grid", () => {
+  it("opens the debug menu and requests a full battlefield and void layout", () => {
     const onFillBattlefieldPreview = vi.fn();
     const interactions = {
       canInteract: true,
@@ -512,7 +512,7 @@ describe("MobileBattleScreen", () => {
     const fill = container.querySelector<HTMLButtonElement>(
       '[data-testid="battle-debug-fill-grid"]',
     );
-    expect(fill?.textContent).toContain("Fill Battlefield");
+    expect(fill?.textContent).toContain("Fill Battlefield + Voids");
 
     act(() => fill?.click());
 

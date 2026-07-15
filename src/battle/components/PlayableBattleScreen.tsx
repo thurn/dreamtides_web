@@ -1032,8 +1032,10 @@ function PlayableBattleScreenInner({
       previewCardIds,
       playerBackRankCount: 5,
       playerFrontRankCount: 4,
+      playerVoidAddedCount: 5,
       enemyBackRankCount: 5,
       enemyFrontRankCount: 4,
+      enemyVoidAddedCount: 5,
     });
     if (command !== null) {
       void actions.battleCommand(command);

@@ -649,8 +649,14 @@ function collectDebugEditTargets(
       return [
         makeZoneTarget("player", "frontRank"),
         makeZoneTarget("player", "backRank"),
+        ...(edit.definitions.player.length > 9
+          ? [makeZoneTarget("player", "void")]
+          : []),
         makeZoneTarget("enemy", "frontRank"),
         makeZoneTarget("enemy", "backRank"),
+        ...(edit.definitions.enemy.length > 9
+          ? [makeZoneTarget("enemy", "void")]
+          : []),
       ];
     case "ERODE":
     case "REORDER_DECK":
@@ -749,7 +755,9 @@ function createDebugEditLabel(
     case "CREATE_CARD_FROM_DEFINITION":
       return `Create ${edit.definition.name}`;
     case "FILL_BATTLEFIELD_PREVIEW":
-      return "Fill Battlefield Preview";
+      return edit.definitions.player.length > 9
+        ? "Fill Battlefield and Voids Preview"
+        : "Fill Battlefield Preview";
     case "REORDER_DECK":
       return `Reorder ${formatSideLabel(edit.side)} Deck`;
     case "REVEAL_DECK_TOP":

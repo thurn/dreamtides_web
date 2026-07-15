@@ -684,7 +684,7 @@ function BattleDebugMenu({
               }}
             >
               <GlassButton
-                label="Fill Battlefield · 4 Front / 5 Back"
+                label="Fill Battlefield + Voids"
                 placement="onGlass"
                 disabled={onFillBattlefieldPreview === undefined}
                 testId="battle-debug-fill-grid"

@@ -7,3 +7,12 @@ Unity shop glass mesh serialization — fixed default-builder drift
   though the glass-button change did not touch that geometry. The builder-canonical
   mesh output is included with the glass-button parity work so clean verification
   starts from the asset shape authored by `CumulusShopGlassDemoBuilder`.
+
+## npm audit: OpenTelemetry baggage propagation advisory
+
+`npm install` reports GHSA-8988-4f7v-96qf in the transitive
+`@opentelemetry/core` dependency pulled in by `firebase-tools@15.23.0`.
+The advisory is moderate severity (unbounded memory allocation while parsing
+W3C Baggage headers). `npm audit` only offers `firebase-tools@14.23.0` as a
+fix, which is a major-version downgrade and needs a separate dependency-policy
+decision.

@@ -6,13 +6,17 @@ import type {
 
 const PREVIEW_FRONT_CHARACTER_COUNT = 4;
 const PREVIEW_BACK_CHARACTER_COUNT = 5;
+const PREVIEW_VOID_CHARACTER_COUNT = 5;
 const PREVIEW_CHARACTER_COUNT =
-  PREVIEW_FRONT_CHARACTER_COUNT + PREVIEW_BACK_CHARACTER_COUNT;
+  PREVIEW_FRONT_CHARACTER_COUNT +
+  PREVIEW_BACK_CHARACTER_COUNT +
+  PREVIEW_VOID_CHARACTER_COUNT;
 
 /**
  * Builds the single debug edit that replaces both battlefields with a dense
- * staggered-grid preview. Definitions stay UUID-identified and cycle when a
- * deck contains fewer than nine distinct character definitions.
+ * staggered-grid preview and adds five cards to each void. Definitions stay
+ * UUID-identified and cycle when a deck contains fewer than fourteen distinct
+ * character definitions.
  */
 export function createFillBattlefieldPreviewCommand(
   init: BattleInit,
