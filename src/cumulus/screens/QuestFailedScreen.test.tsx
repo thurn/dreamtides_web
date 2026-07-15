@@ -80,6 +80,14 @@ describe("Cumulus QuestFailedScreen", () => {
     expect(container.textContent).toContain("Quest Ended");
     expect(container.textContent).toContain("Your journey ends here.");
     expect(container.textContent).toContain("Score Threshold Reached");
+    expect(container.querySelector("h1")?.style.color).toBe(
+      "var(--text-primary)",
+    );
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-quest-failed-reason="score_target_reached"]:not([data-quest-failed-screen])',
+      )?.style.color,
+    ).toBe("var(--danger)");
     expect(
       Array.from(hierarchy?.children ?? []).map((element) =>
         element.getAttribute("data-quest-failed-section"),

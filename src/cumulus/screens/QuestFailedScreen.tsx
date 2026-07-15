@@ -135,7 +135,7 @@ export function QuestFailedScreen({
                   style={{
                     margin: 0,
                     font: token("--t-title"),
-                    color: token("--danger"),
+                    color: token("--text-primary"),
                   }}
                 >
                   {view.title}
