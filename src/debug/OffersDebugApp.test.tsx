@@ -67,6 +67,22 @@ describe("OffersDebugApp", () => {
       keyword.kind === "keyword-modification" ? keyword.card.cardId : null,
     ).toBe("2931e20b-1a80-4ddd-8944-20e68d182886");
 
+    const frameSelect = container.querySelector<HTMLButtonElement>(
+      '[aria-label="Offer frame sprite"]',
+    );
+    expect(frameSelect?.textContent).toContain("Gold");
+    act(() => frameSelect?.click());
+    const silverDouble = [...document.body.querySelectorAll<HTMLButtonElement>(
+      '[role="option"]',
+    )].find((option) => option.textContent?.includes("Silver Double") === true);
+    act(() => silverDouble?.click());
+    expect(frameSelect?.textContent).toContain("Silver Double");
+    container.querySelectorAll<HTMLElement>("[data-offer-tile]").forEach((tile) => {
+      expect(tile.dataset.offerTileFrameStyle).toBe("silver-2");
+      expect(tile.querySelector<HTMLImageElement>("[data-offer-tile-frame]")?.src)
+        .toContain("Skill_Frame2_silver.png");
+    });
+
     act(() => root.unmount());
     container.remove();
   });

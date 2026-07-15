@@ -4,9 +4,14 @@ import {
   OfferTile,
   type OfferTileCard,
   type OfferTileDreamsignChoices,
+  type OfferTileFrameStyle,
   type OfferTileFourCards,
   type OfferTileModel,
 } from "../cumulus/components/controls/OfferTile";
+import {
+  Select,
+  type SelectOption,
+} from "../cumulus/components/controls/Select";
 import { artRef, resolveArtRef } from "../cumulus/primitives/art";
 import { glyph } from "../cumulus/primitives/glyph";
 import { token } from "../cumulus/primitives/tokens";
@@ -70,6 +75,18 @@ const DREAMSIGNS: OfferTileDreamsignChoices = [
     art: artRef.dreamsign("algae.png"),
   },
 ];
+
+const FRAME_OPTIONS = [
+  { value: "gold", label: "Gold" },
+  { value: "iron", label: "Iron" },
+  { value: "silver-dark", label: "Silver Dark" },
+  { value: "silver-2", label: "Silver Double" },
+  { value: "silver", label: "Silver" },
+] satisfies SelectOption[];
+
+function isOfferTileFrameStyle(value: string): value is OfferTileFrameStyle {
+  return FRAME_OPTIONS.some((option) => option.value === value);
+}
 
 /** One maximal, production-shaped UUID-backed specimen per canonical archetype. */
 export const OFFER_TILE_DEBUG_MODELS: Readonly<
@@ -225,6 +242,7 @@ export const OFFER_TILE_DEBUG_NOTES: Readonly<
 
 export default function OffersDebugApp(): ReactElement {
   const [lastPressed, setLastPressed] = useState<string | null>(null);
+  const [frameStyle, setFrameStyle] = useState<OfferTileFrameStyle>("gold");
   const models = MERCHANT_ARCHETYPE_BUILDERS.map(
     (builder) => OFFER_TILE_DEBUG_MODELS[builder.archetypeId],
   );
@@ -295,6 +313,33 @@ export default function OffersDebugApp(): ReactElement {
           <p aria-live="polite" style={{ margin: 0, minHeight: 20, font: token("--t-caption") }}>
             {selected === null ? "" : `Pressed ${selected.label}`}
           </p>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: token("--space-3"),
+              marginTop: token("--space-3"),
+            }}
+          >
+            <span
+              style={{
+                font: token("--t-eyebrow"),
+                letterSpacing: token("--tracking-eyebrow"),
+                textTransform: "uppercase",
+              }}
+            >
+              Frame
+            </span>
+            <Select
+              options={FRAME_OPTIONS}
+              value={frameStyle}
+              onChange={(value) => {
+                if (isOfferTileFrameStyle(value)) setFrameStyle(value);
+              }}
+              ariaLabel="Offer frame sprite"
+              size="sm"
+            />
+          </div>
         </header>
 
         <section
@@ -319,7 +364,11 @@ export default function OffersDebugApp(): ReactElement {
                   margin: 0,
                 }}
               >
-                <OfferTile model={model} onPress={setLastPressed} />
+                <OfferTile
+                  model={model}
+                  frameStyle={frameStyle}
+                  onPress={setLastPressed}
+                />
                 <figcaption
                   style={{
                     display: "grid",

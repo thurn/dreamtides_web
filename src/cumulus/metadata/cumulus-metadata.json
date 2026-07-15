@@ -2660,6 +2660,20 @@
       "description": "Activates the offer, reporting the stable `model.id`."
     },
     {
+      "name": "frameStyle",
+      "tsType": "OfferTileFrameStyle",
+      "unionMembers": [
+        "gold",
+        "iron",
+        "silver-dark",
+        "silver-2",
+        "silver"
+      ],
+      "required": false,
+      "defaultValue": "gold",
+      "description": "Temporary frame-sprite choice for visual evaluation. Defaults to gold."
+    },
+    {
       "name": "testId",
       "tsType": "string",
       "unionMembers": [],

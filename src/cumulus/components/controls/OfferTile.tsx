@@ -17,11 +17,31 @@ import type { Glyph } from "../../primitives/glyph";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { richText } from "../card/rich-text";
-import offerFrameUrl from "../../assets/Skill_Frame_gold.png";
+import goldFrameUrl from "../../assets/Skill_Frame_gold.png";
+import ironFrameUrl from "../../assets/Skill_Frame_iron.png";
+import silverFrameUrl from "../../assets/Skill_Frame_silver.png";
+import silverDarkFrameUrl from "../../assets/Skill_Frame_silver_dark.png";
+import silverFrame2Url from "../../assets/Skill_Frame2_silver.png";
 import "./offer-tile.css";
 
 /** The fixed width and height of an OfferTile, in pixels. */
 export const OFFER_TILE_SIZE = 200;
+
+/** Temporary sprite choices exposed by the offer-frame evaluation page. */
+export type OfferTileFrameStyle =
+  | "gold"
+  | "iron"
+  | "silver-dark"
+  | "silver-2"
+  | "silver";
+
+const OFFER_TILE_FRAME_URLS: Readonly<Record<OfferTileFrameStyle, string>> = {
+  gold: goldFrameUrl,
+  iron: ironFrameUrl,
+  "silver-2": silverFrame2Url,
+  "silver-dark": silverDarkFrameUrl,
+  silver: silverFrameUrl,
+};
 
 /** UUID-backed card art shown symbolically inside an offer. */
 export interface OfferTileCard {
@@ -142,6 +162,8 @@ export interface OfferTileProps {
   model: OfferTileModel;
   /** Activates the offer, reporting the stable `model.id`. */
   onPress: (offerId: string) => void;
+  /** Temporary frame-sprite choice for visual evaluation. Defaults to gold. */
+  frameStyle?: OfferTileFrameStyle;
   /** Optional test selector; defaults to `offer-tile`. */
   testId?: string;
 }
@@ -155,6 +177,7 @@ export interface OfferTileProps {
 export function OfferTile({
   model,
   onPress,
+  frameStyle = "gold",
   testId = "offer-tile",
 }: OfferTileProps): ReactElement {
   const binding = useRevealSource({
@@ -186,6 +209,7 @@ export function OfferTile({
       data-testid={testId}
       data-offer-tile=""
       data-offer-tile-kind={model.kind}
+      data-offer-tile-frame-style={frameStyle}
       onPointerDown={(event) => {
         lastPointerType.current = event.pointerType;
         pointerDown?.(event);
@@ -196,7 +220,6 @@ export function OfferTile({
         }
       }}
       style={{
-        ...glassSurfaceStyle({ radius: token("--radius-panel") }),
         ...binding.sourceProps.style,
         position: "relative",
         width: OFFER_TILE_SIZE,
@@ -205,12 +228,20 @@ export function OfferTile({
         minHeight: OFFER_TILE_SIZE,
         padding: 0,
         boxSizing: "border-box",
-        overflow: "hidden",
+        overflow: "visible",
         appearance: "none",
+        border: 0,
+        borderRadius: token("--radius-panel"),
+        background: "transparent",
         color: token("--text-on-glass"),
       }}
     >
-      <span className="cumulus-offer-tile__depth" aria-hidden="true" />
+      <span
+        className="cumulus-offer-tile__depth"
+        data-offer-tile-background=""
+        aria-hidden="true"
+        style={glassSurfaceStyle({ radius: token("--radius-panel") })}
+      />
       <span
         className="cumulus-offer-tile__visual"
         data-offer-tile-visual=""
@@ -222,7 +253,7 @@ export function OfferTile({
       <img
         className="cumulus-offer-tile__frame"
         data-offer-tile-frame=""
-        src={offerFrameUrl}
+        src={OFFER_TILE_FRAME_URLS[frameStyle]}
         alt=""
         aria-hidden="true"
         draggable={false}
