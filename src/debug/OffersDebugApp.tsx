@@ -231,7 +231,17 @@ export const OFFER_TILE_DEBUG_ARCHETYPE_IDS = MERCHANT_ARCHETYPE_BUILDERS.map(
   (builder) => builder.archetypeId,
 ).filter((archetypeId) => archetypeId !== "strong_card");
 
-function hydrateOperationCard(
+function hydrateCard(
+  card: OfferTileCard,
+  cardsById: ReadonlyMap<string, CardData>,
+): OfferTileCard {
+  const displaySnapshot = cardsById.get(card.cardId);
+  return displaySnapshot === undefined
+    ? card
+    : { ...card, displaySnapshot };
+}
+
+function hydrateOfferCards(
   model: OfferTileModel,
   cardsById: ReadonlyMap<string, CardData> | null,
 ): OfferTileModel {
@@ -239,14 +249,25 @@ function hydrateOperationCard(
     return model;
   }
   switch (model.kind) {
+    case "card-gift":
+      return { ...model, card: hydrateCard(model.card, cardsById) };
+    case "card-bundle":
+      return {
+        ...model,
+        cards: model.cards.map((card) => hydrateCard(card, cardsById)) as unknown as
+          typeof model.cards,
+      };
+    case "transfigure-starters":
+      return {
+        ...model,
+        cards: model.cards.map((card) => hydrateCard(card, cardsById)) as unknown as
+          typeof model.cards,
+      };
     case "transfigure-card":
     case "keyword-modification":
     case "tribal-change":
     case "purge-card": {
-      const displaySnapshot = cardsById.get(model.card.cardId);
-      return displaySnapshot === undefined
-        ? model
-        : { ...model, card: { ...model.card, displaySnapshot } };
+      return { ...model, card: hydrateCard(model.card, cardsById) };
     }
     default:
       return model;
@@ -282,7 +303,7 @@ export default function OffersDebugApp(): ReactElement {
     };
   }, []);
   const models = OFFER_TILE_DEBUG_ARCHETYPE_IDS.map((archetypeId) =>
-    hydrateOperationCard(OFFER_TILE_DEBUG_MODELS[archetypeId], cardsById),
+    hydrateOfferCards(OFFER_TILE_DEBUG_MODELS[archetypeId], cardsById),
   );
   const selected =
     lastPressed === null
@@ -371,7 +392,7 @@ export default function OffersDebugApp(): ReactElement {
           }}
         >
           {OFFER_TILE_DEBUG_ARCHETYPE_IDS.map((archetypeId) => {
-            const model = hydrateOperationCard(
+            const model = hydrateOfferCards(
               OFFER_TILE_DEBUG_MODELS[archetypeId],
               cardsById,
             );

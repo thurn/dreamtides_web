@@ -7,7 +7,7 @@ import { CumulusRoot } from "../../CumulusRoot";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
 import { GLYPHS } from "../../primitives/glyph";
-import { OfferTile, type OfferTileModel } from "./OfferTile";
+import { OfferTile, type OfferTileCard, type OfferTileModel } from "./OfferTile";
 
 const MODEL: OfferTileModel = {
   id: "debug-fit-card-draft",
@@ -36,6 +36,21 @@ const FULL_CARD: CardData = {
   imageNumber: MODEL.cards[0].imageNumber,
   artOwned: true,
 };
+
+function withFullCard(
+  card: OfferTileCard,
+  cardNumber: number,
+) {
+  return {
+    ...card,
+    displaySnapshot: {
+      ...FULL_CARD,
+      id: card.cardId,
+      cardNumber,
+      imageNumber: card.imageNumber,
+    },
+  };
+}
 
 describe("OfferTile", () => {
   it("renders a fixed symbolic button with one tile-level reveal source", () => {
@@ -145,13 +160,13 @@ describe("OfferTile", () => {
     container.remove();
   });
 
-  it("widens every card-art chip to a square at its existing height", () => {
+  it("renders a full Card Gift while keeping art-only card chips square", () => {
     const gift: OfferTileModel = {
       id: "debug-gift",
       kind: "card-gift",
       label: "Card Gift",
-      description: "Add a specific card to your deck",
-      card: MODEL.cards[0],
+      description: "Add a card to your deck.",
+      card: withFullCard(MODEL.cards[0], 1),
     };
     const trade: OfferTileModel = {
       id: "debug-trade-squares",
@@ -186,7 +201,14 @@ describe("OfferTile", () => {
       });
     };
 
-    expectSquareChips("gift-tile", "108px");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="gift-tile"] [data-offer-tile-full-card]',
+      )?.style.width,
+    ).toBe("88px");
+    expect(
+      container.querySelector('[data-testid="gift-tile"] [data-offer-tile-card-id]'),
+    ).toBeNull();
     expectSquareChips("draft-tile", "68px");
     expect(
       container.querySelector('[data-testid="gift-tile"] [data-offer-tile-operation]'),
@@ -234,7 +256,11 @@ describe("OfferTile", () => {
       kind: "card-bundle",
       label: "Card Bundle",
       description: "Add 3 related cards to your deck.",
-      cards: [cards[0], cards[1], cards[2]],
+      cards: [
+        withFullCard(cards[0], 1),
+        withFullCard(cards[1], 2),
+        withFullCard(cards[2], 3),
+      ],
     };
     const container = document.createElement("div");
     document.body.append(container);
@@ -287,7 +313,7 @@ describe("OfferTile", () => {
     expect([...tradeChips].every((chip) => chip.style.width === "50px")).toBe(true);
     expect(
       container.querySelectorAll(
-        '[data-testid="bundle-tile"] [data-offer-tile-card-id]',
+        '[data-testid="bundle-tile"] [data-offer-tile-full-card]',
       ),
     ).toHaveLength(3);
     expect(
@@ -325,6 +351,16 @@ describe("OfferTile", () => {
       description: "Add a site to the current dreamscape.",
       site: { id: "Duplication", glyph: GLYPHS.copy },
     };
+    const refineStarters: OfferTileModel = {
+      id: "debug-refine-starters",
+      kind: "transfigure-starters",
+      label: "Refine Starters",
+      description: "Transfigure 2 starter cards in your deck.",
+      cards: [
+        withFullCard(MODEL.cards[0], 1),
+        withFullCard(MODEL.cards[1], 2),
+      ],
+    };
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -334,6 +370,11 @@ describe("OfferTile", () => {
         <CumulusRoot>
           <OfferTile model={transfigure} onPress={() => {}} testId="transfigure" />
           <OfferTile model={purge} onPress={() => {}} testId="purge" />
+          <OfferTile
+            model={refineStarters}
+            onPress={() => {}}
+            testId="refine-starters"
+          />
           <OfferTile model={addSite} onPress={() => {}} testId="add-site" />
         </CumulusRoot>,
       );
@@ -346,12 +387,24 @@ describe("OfferTile", () => {
       expect(mark?.dataset.offerTileOperationLayout).toBe("card-overlay");
       expect(mark?.style.width).toBe("54px");
       expect(mark?.style.height).toBe("54px");
+      expect(mark?.style.zIndex).toBe("2");
       const fullCard = container.querySelector<HTMLElement>(
         `[data-testid="${testId}"] [data-offer-tile-full-card]`,
       );
       expect(fullCard?.style.width).toBe("88px");
+      expect(fullCard?.style.zIndex).toBe("1");
       expect(fullCard?.querySelector('[data-card-presentation="full"]')).not.toBeNull();
     }
+    expect(
+      container.querySelectorAll(
+        '[data-testid="refine-starters"] [data-offer-tile-full-card]',
+      ),
+    ).toHaveLength(2);
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="refine-starters"] [data-offer-tile-operation-layout]',
+      )?.dataset.offerTileOperationLayout,
+    ).toBe("card-overlay");
     const purgedCard = container.querySelector<HTMLElement>(
       '[data-testid="purge"] [data-offer-tile-full-card]',
     );
