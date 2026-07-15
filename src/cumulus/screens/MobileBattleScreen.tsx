@@ -174,6 +174,9 @@ const BATTLE_PHASE_LIGHT_CSS = `
 const SIDE_ZONES_GRID_TEMPLATE =
   "minmax(0, 1fr) max-content minmax(0, 1fr)";
 const NEXT_PHASE_CONTROL_WIDTH = 120;
+// The player zones share the hand track: their 64px row is lifted 20px, and
+// this anchor adds the minimum 4px separation after that row's lower edge.
+const PLAYER_HAND_TOP = `calc(${token("--space-12")} - ${token("--space-7")} + ${token("--space-2")})`;
 
 const ROOT_STYLE: CSSProperties = {
   position: "fixed",
@@ -1025,7 +1028,7 @@ function PlayerHand({
             style={{
               position: "absolute",
               left,
-              top: "calc(8% + var(--space-6))",
+              top: PLAYER_HAND_TOP,
               height: "92%",
               aspectRatio: CARD_ASPECT_RATIO,
               transformOrigin: "50% 100%",

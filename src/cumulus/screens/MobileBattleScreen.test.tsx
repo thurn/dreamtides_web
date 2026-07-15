@@ -576,7 +576,7 @@ describe("MobileBattleScreen", () => {
     expect(playerHand?.dataset.battleHandCount).toBe("4");
     expect(playerCards).toHaveLength(view.playerHand.length);
     expect(playerCards?.[0]?.parentElement?.style.top).toBe(
-      "calc(8% + var(--space-6))",
+      "calc(var(--space-12) - var(--space-7) + var(--space-2))",
     );
     expect(playerCards?.[0]?.parentElement?.style.bottom).toBe("");
 
