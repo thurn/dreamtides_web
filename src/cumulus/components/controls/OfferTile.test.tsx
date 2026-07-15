@@ -12,8 +12,6 @@ import { OfferTile, type OfferTileCard, type OfferTileModel } from "./OfferTile"
 const MODEL: OfferTileModel = {
   id: "debug-fit-card-draft",
   kind: "card-draft",
-  label: "Card Draft",
-  description: "Choose a card from 4 to add to your deck.",
   cards: [
     { cardId: asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"), imageNumber: 287269511 },
     { cardId: asCardId("161482b6-af07-4d9e-822d-8c738672beb9"), imageNumber: 2022594419 },
@@ -102,7 +100,7 @@ describe("OfferTile", () => {
       source.getAttribute("aria-describedby") ?? "",
     );
     expect(description?.textContent).toBe(
-      "Choose a card from 4 to add to your deck.",
+      "Choose 1 of 4 cards to add to your deck.",
     );
     expect(description?.textContent).not.toContain("Dream Augury");
     expect(description?.textContent).not.toContain("Card Draft");
@@ -118,8 +116,6 @@ describe("OfferTile", () => {
     const model: OfferTileModel = {
       id: "debug-dreamsign-draft",
       kind: "dreamsign-draft",
-      label: "Dreamsign Draft",
-      description: "Choose a dreamsign from 4 visions.",
       dreamsigns: [
         {
           id: "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
@@ -164,15 +160,11 @@ describe("OfferTile", () => {
     const gift: OfferTileModel = {
       id: "debug-gift",
       kind: "card-gift",
-      label: "Card Gift",
-      description: "Add a card to your deck.",
       card: withFullCard(MODEL.cards[0], 1),
     };
     const trade: OfferTileModel = {
       id: "debug-trade-squares",
       kind: "trade-card",
-      label: "Trade Card",
-      description: "Purge a card and choose a replacement from 4 cards.",
       outgoing: MODEL.cards[0],
       incoming: MODEL.cards,
     };
@@ -231,31 +223,23 @@ describe("OfferTile", () => {
     const trade: OfferTileModel = {
       id: "debug-trade",
       kind: "trade-card",
-      label: "Trade Card",
-      description: "Purge a card and choose a replacement from 4 cards.",
       outgoing: cards[0],
       incoming: cards,
     };
     const duplicate: OfferTileModel = {
       id: "debug-duplicate",
       kind: "duplicate-card",
-      label: "Duplicate Card",
-      description: "Choose a card to duplicate from 3 cards in your deck.",
       cards: [cards[0], cards[1], cards[2]],
     };
     const copies: OfferTileModel = {
       id: "debug-copies",
       kind: "copies-draft",
-      label: "Copies Draft",
-      description: "Choose a card.",
       copyCount: 2,
       cards,
     };
     const bundle: OfferTileModel = {
       id: "debug-bundle",
       kind: "card-bundle",
-      label: "Card Bundle",
-      description: "Add 3 related cards to your deck.",
       cards: [
         withFullCard(cards[0], 1),
         withFullCard(cards[1], 2),
@@ -296,7 +280,7 @@ describe("OfferTile", () => {
     expect(
       document.getElementById(copiesTile?.getAttribute("aria-describedby") ?? "")
         ?.textContent,
-    ).toBe("Choose a card from 4 and add 2 copies of it to your deck.");
+    ).toBe("Choose 1 of 4 cards and add 2 copies of it to your deck.");
     expect(
       container.querySelector(
         '[data-testid="duplicate-tile"] [data-offer-tile-operation-layout]',
@@ -330,15 +314,11 @@ describe("OfferTile", () => {
     const transfigure: OfferTileModel = {
       id: "debug-transfigure",
       kind: "transfigure-card",
-      label: "Transfigure Card",
-      description: "Transfigure a card in your deck.",
       card: { ...MODEL.cards[0], displaySnapshot: FULL_CARD },
     };
     const purge: OfferTileModel = {
       id: "debug-purge",
       kind: "purge-card",
-      label: "Purge Card",
-      description: "Purge a card.",
       card: {
         ...MODEL.cards[1],
         displaySnapshot: { ...FULL_CARD, id: MODEL.cards[1].cardId },
@@ -347,15 +327,11 @@ describe("OfferTile", () => {
     const addSite: OfferTileModel = {
       id: "debug-add-site",
       kind: "add-site",
-      label: "Add Site",
-      description: "Add a site to the current dreamscape.",
       site: { id: "Duplication", glyph: GLYPHS.copy },
     };
     const refineStarters: OfferTileModel = {
       id: "debug-refine-starters",
       kind: "transfigure-starters",
-      label: "Refine Starters",
-      description: "Transfigure 2 starter cards in your deck.",
       cards: [
         withFullCard(MODEL.cards[0], 1),
         withFullCard(MODEL.cards[1], 2),

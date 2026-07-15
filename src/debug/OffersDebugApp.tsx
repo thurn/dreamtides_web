@@ -8,6 +8,7 @@ import {
   type OfferTileFourCards,
   type OfferTileModel,
 } from "../cumulus/components/controls/OfferTile";
+import { offerTileLabel } from "../cumulus/components/controls/offer-tile-descriptions";
 import { artRef, resolveArtRef } from "../cumulus/primitives/art";
 import { glyph } from "../cumulus/primitives/glyph";
 import { token } from "../cumulus/primitives/tokens";
@@ -80,122 +81,88 @@ export const OFFER_TILE_DEBUG_MODELS: Readonly<
   fit_card_grant: {
     id: "debug:fit_card_grant",
     kind: "card-gift",
-    label: "Card Gift",
-    description: "Add a card to your deck.",
     card: GENERAL_DRAFT_A[0],
   },
   fit_card_draft: {
     id: "debug:fit_card_draft",
     kind: "card-draft",
-    label: "Card Draft",
-    description: "Choose a card from 4 to add to your deck.",
     cards: GENERAL_DRAFT_A,
   },
   copies_draft: {
     id: "debug:copies_draft",
     kind: "copies-draft",
-    label: "Copies Draft",
-    description: "Choose a card from 4 and add 2 copies of it to your deck.",
     copyCount: 2,
     cards: GENERAL_DRAFT_B,
   },
   strong_card: {
     id: "debug:strong_card",
     kind: "card-gift",
-    label: "Card Gift",
-    description: "Add a card to your deck.",
     card: GENERAL_DRAFT_B[0],
   },
   category_draft_known: {
     id: "debug:category_draft_known",
     kind: "category-draft",
-    label: "Category Draft",
-    description: "Choose a card from 4 Spirit Animal cards.",
     cards: CATEGORY_DRAFT,
   },
   card_bundle: {
     id: "debug:card_bundle",
     kind: "card-bundle",
-    label: "Card Bundle",
-    description: "Add 3 related cards to your deck.",
     cards: [CATEGORY_DRAFT[0], CATEGORY_DRAFT[1], CATEGORY_DRAFT[2]],
   },
   transfigured_draft: {
     id: "debug:transfigured_draft",
     kind: "transfigured-draft",
-    label: "Transfigured Draft",
-    description: "Choose a card from 4 with transfigurations.",
     cards: GENERAL_DRAFT_B,
   },
   transfigure: {
     id: "debug:transfigure",
     kind: "transfigure-card",
-    label: "Transfigure Card",
-    description: "Transfigure a card in your deck.",
     card: GENERAL_DRAFT_B[1],
   },
   starter_transfigure: {
     id: "debug:starter_transfigure",
     kind: "transfigure-starters",
-    label: "Refine Starters",
-    description: "Transfigure 2 starter cards in your deck.",
     cards: STARTER_TARGETS,
   },
   keyword_mod: {
     id: "debug:keyword_mod",
     kind: "keyword-modification",
-    label: "Reduce Reclaim",
-    description: "Reduce the Reclaim cost of a card in your deck.",
     card: KEYWORD_TARGET,
   },
   tribal_change: {
     id: "debug:tribal_change",
     kind: "tribal-change",
-    label: "Kindred Change",
-    description: "Change the character type of a card in your deck.",
     card: GENERAL_DRAFT_A[0],
   },
   purge: {
     id: "debug:purge",
     kind: "purge-card",
-    label: "Purge Card",
-    description: "Purge a card.",
     card: GENERAL_DRAFT_A[3],
   },
   purge_replace: {
     id: "debug:purge_replace",
     kind: "trade-card",
-    label: "Trade Card",
-    description: "Purge a card and choose a replacement from 4 cards.",
     outgoing: GENERAL_DRAFT_A[3],
     incoming: GENERAL_DRAFT_B,
   },
   duplicate: {
     id: "debug:duplicate",
     kind: "duplicate-card",
-    label: "Duplicate Card",
-    description: "Choose a card to duplicate from 3 cards in your deck.",
     cards: [GENERAL_DRAFT_A[0], GENERAL_DRAFT_A[1], GENERAL_DRAFT_A[3]],
   },
   dreamsign: {
     id: "debug:dreamsign",
     kind: "dreamsign-gift",
-    label: "Dreamsign Gift",
-    description: "Add a dreamsign to your collection.",
     dreamsign: DREAMSIGNS[0],
   },
   dreamsign_draft: {
     id: "debug:dreamsign_draft",
     kind: "dreamsign-draft",
-    label: "Dreamsign Draft",
-    description: "Choose a dreamsign from 4 to add to your collection.",
     dreamsigns: DREAMSIGNS,
   },
   add_site: {
     id: "debug:add_site",
     kind: "add-site",
-    label: "Add Site",
-    description: "Add a site to the current dreamscape.",
     site: {
       id: "Duplication",
       glyph: glyph(siteTypeIcon("Duplication")),
@@ -378,7 +345,7 @@ export default function OffersDebugApp(): ReactElement {
             {models.length} maximal offer shapes · every surfaced choice shown
           </p>
           <p aria-live="polite" style={{ margin: 0, minHeight: 20, font: token("--t-caption") }}>
-            {selected === null ? "" : `Pressed ${selected.label}`}
+            {selected === null ? "" : `Pressed ${offerTileLabel(selected)}`}
           </p>
         </header>
 
@@ -418,7 +385,7 @@ export default function OffersDebugApp(): ReactElement {
                     textShadow: token("--text-outline-media"),
                   }}
                 >
-                  <span>{model.label}</span>
+                  <span>{offerTileLabel(model)}</span>
                   <span
                     style={{
                       color: token("--text-on-glass-muted"),

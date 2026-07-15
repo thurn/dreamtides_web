@@ -8,8 +8,6 @@ import type { CumulusComponent } from "../registry";
 const MODEL: OfferTileModel = {
   id: "cumulus-demo-card-draft",
   kind: "card-draft",
-  label: "Card Draft",
-  description: "Choose a card from 4 to add to your deck.",
   cards: [
     { cardId: asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"), imageNumber: 287269511 },
     { cardId: asCardId("161482b6-af07-4d9e-822d-8c738672beb9"), imageNumber: 2022594419 },
@@ -28,7 +26,7 @@ export const offerTileDemo: CumulusComponent = {
   blurb:
     "The 200×200 rounded symbolic Dream Augury offer button: UUID-backed card art, dreamsign art, and operation marks gathered inside an iron fantasy frame without spelling out the complete offer.",
   callout:
-    "Use the named offer kind that matches the category and pass every object surfaced by the generated offer. Fixed-target variants show their exact affected cards; chooser variants show every choice. Descriptions state exact quantities, and copies-draft models carry their exact copy count. Both single-card grant archetypes use the card-gift kind, label, description, and centered complete-card composition. Card bundles stack every complete card, and starter refinement stacks its complete cards beneath a compact bottom-right mark. The iron frame holds each composition over an inset glass background inside its transparent aperture. Art-only card chips stay square at their established vertical scale. Four-card draft operations center their mark over the art grid; single-card operations center the complete card with a compact bottom-right mark; duplicate operations retain the diagonal art-and-mark composition; trade offers place five equally sized cards around the purge target. Inner objects stay decorative, the complete tile owns interaction plus its body-only InfoCard, and each complete framed tile drifts on its own stable phase.",
+    "Use the named offer kind that matches the category and pass every object surfaced by the generated offer. Fixed-target variants show their exact affected cards; chooser variants show every choice. Labels and descriptions are derived centrally from the model, including exact choice and reward quantities. Both single-card grant archetypes use the card-gift kind and centered complete-card composition. Card bundles stack every complete card, and starter refinement stacks its complete cards beneath a compact bottom-right mark. The iron frame holds each composition over an inset glass background inside its transparent aperture. Art-only card chips stay square at their established vertical scale. Four-card draft operations center their mark over the art grid; single-card operations center the complete card with a compact bottom-right mark; duplicate operations retain the diagonal art-and-mark composition; trade offers place five equally sized cards around the purge target. Inner objects stay decorative, the complete tile owns interaction plus its body-only InfoCard, and each complete framed tile drifts on its own stable phase.",
   group: "Components",
   docName: "OfferTile",
   Component: OfferTileDemo,
@@ -41,8 +39,6 @@ export const offerTileDemo: CumulusComponent = {
   model={{
     id: encounterSignature + ":" + offerId,
     kind: "card-draft",
-    label: "Card Draft",
-    description: "Choose a card from 4 to add to your deck.",
     cards: offeredCards.map(({ id, imageNumber }) => ({ cardId: id, imageNumber })),
   }}
   onPress={chooseOffer}

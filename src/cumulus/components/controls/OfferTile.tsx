@@ -19,6 +19,10 @@ import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { richText } from "../card/rich-text";
 import { CardView } from "../card/CardView";
+import {
+  offerTileDescription,
+  offerTileLabel,
+} from "./offer-tile-descriptions";
 import offerFrameUrl from "../../assets/Skill_Frame_iron.png";
 import "./offer-tile.css";
 
@@ -92,10 +96,6 @@ interface OfferTileBase {
    * the encounter signature and offer id so simultaneous offers never collide.
    */
   id: string;
-  /** Category name used by the tile's accessible button label. */
-  label: string;
-  /** Succinct action sentence rendered as the hover InfoCard's only copy. */
-  description: string;
 }
 
 /**
@@ -163,10 +163,6 @@ export function OfferTile({
   onPress,
   testId = "offer-tile",
 }: OfferTileProps): ReactElement {
-  const description =
-    model.kind === "copies-draft"
-      ? `Choose a card from ${String(model.cards.length)} and add ${String(model.copyCount)} copies of it to your deck.`
-      : model.description;
   const binding = useRevealSource({
     identity: {
       entityType: "offer",
@@ -177,7 +173,7 @@ export function OfferTile({
         kind: "infoCard",
         card: {
           variant: "text",
-          body: richText.plain(description),
+          body: richText.plain(offerTileDescription(model)),
         },
       },
       secondaries: [],
@@ -193,7 +189,7 @@ export function OfferTile({
       as="button"
       ref={binding.ref}
       {...binding.sourceProps}
-      aria-label={model.label}
+      aria-label={offerTileLabel(model)}
       data-testid={testId}
       data-offer-tile=""
       data-offer-tile-kind={model.kind}
