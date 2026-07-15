@@ -1050,27 +1050,41 @@ function ControlRow({
       }}
     >
       <div
-        data-battle-phase-controls="stack"
+        data-battle-phase-controls="row"
         style={{
           gridColumn: 3,
           width: "100%",
-          display: "grid",
-          gap: token("--space-3"),
           position: "relative",
           zIndex: 10,
         }}
       >
-        <GlassButton
-          label="Back"
-          disabled={disabled}
-          onPress={() => interactions?.onPreviousPhase()}
-        />
-        <GlassButton
-          label="Next Phase"
-          variant="accent"
-          disabled={disabled}
-          onPress={() => interactions?.onNextPhase()}
-        />
+        <div
+          data-battle-phase-back=""
+          style={{
+            position: "absolute",
+            top: 0,
+            right: `calc(100% + ${token("--space-3")})`,
+          }}
+        >
+          <IconButton
+            glyph={GLYPHS.arrowLeft}
+            size="sm"
+            label="Back"
+            disabled={disabled}
+            onPress={() => interactions?.onPreviousPhase()}
+          />
+        </div>
+        <div
+          data-battle-phase-next=""
+          style={{ width: "100%", display: "grid" }}
+        >
+          <GlassButton
+            label="Next Phase"
+            variant="accent"
+            disabled={disabled}
+            onPress={() => interactions?.onNextPhase()}
+          />
+        </div>
       </div>
     </div>
   );

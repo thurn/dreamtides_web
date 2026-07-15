@@ -560,7 +560,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("stacks equal-width Back and Next Phase glass controls over the void column", () => {
+  it("places a back arrow to the left of Next Phase in the upper control position", () => {
     const interactions = {
       canInteract: true,
       pendingCardId: null,
@@ -577,7 +577,13 @@ describe("MobileBattleScreen", () => {
       '[data-battle-mobile-row="control-row"]',
     );
     const phaseControls = controlRow?.querySelector<HTMLElement>(
-      '[data-battle-phase-controls="stack"]',
+      '[data-battle-phase-controls="row"]',
+    );
+    const backSlot = phaseControls?.querySelector<HTMLElement>(
+      "[data-battle-phase-back]",
+    );
+    const nextSlot = phaseControls?.querySelector<HTMLElement>(
+      "[data-battle-phase-next]",
     );
     const buttons = phaseControls?.querySelectorAll<HTMLButtonElement>("button");
     const previous = buttons?.[0];
@@ -591,8 +597,13 @@ describe("MobileBattleScreen", () => {
     expect(controlRow?.style.boxSizing).toBe("border-box");
     expect(phaseControls?.style.gridColumn).toBe("3");
     expect(phaseControls?.style.width).toBe("100%");
+    expect(backSlot?.style.position).toBe("absolute");
+    expect(backSlot?.style.right).toBe("calc(100% + var(--space-3))");
+    expect(nextSlot?.style.width).toBe("100%");
     expect(buttons).toHaveLength(2);
-    expect(previous?.textContent).toBe("Back");
+    expect(previous?.getAttribute("aria-label")).toBe("Back");
+    expect(previous?.querySelector(".bx-arrow-left")).not.toBeNull();
+    expect(previous?.textContent).toBe("");
     expect(next?.textContent).toBe("Next Phase");
     expect(previous?.dataset.glassPlacement).toBe("onMedia");
     expect(next?.dataset.glassPlacement).toBe("onMedia");
