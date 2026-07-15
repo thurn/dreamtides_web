@@ -393,12 +393,8 @@ function FaceUpCard({
     dragging: boolean;
     inverseParentTransform: LinearTransform;
   } | null>(null);
-  const [touchPointerActive, setTouchPointerActive] = useState(false);
-  const [touchDragOffset, setTouchDragOffset] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
   const draggable = interaction?.draggable === true;
+  const restingTransform = card.exhausted ? "rotate(90deg)" : "";
   const finishTouchDrag = (
     event: React.PointerEvent<HTMLDivElement>,
     drop: boolean,
@@ -430,8 +426,9 @@ function FaceUpCard({
     }
     touchPointerRef.current = null;
     event.currentTarget.draggable = draggable;
-    setTouchPointerActive(false);
-    setTouchDragOffset(null);
+    event.currentTarget.dataset.battleTouchDragging = "false";
+    event.currentTarget.style.zIndex = "";
+    event.currentTarget.style.transform = restingTransform;
   };
   return (
     <motion.div
@@ -439,8 +436,8 @@ function FaceUpCard({
       data-battle-card-zone={zone}
       data-battle-card-face="up"
       data-battle-card-exhausted={card.exhausted ? "true" : "false"}
-      data-battle-touch-dragging={touchDragOffset === null ? "false" : "true"}
-      draggable={draggable && !touchPointerActive}
+      data-battle-touch-dragging="false"
+      draggable={draggable}
       onPointerDownCapture={(event) => {
         dragSuppressedRef.current = false;
         if (!draggable || event.pointerType !== "touch") return;
@@ -454,7 +451,6 @@ function FaceUpCard({
             event.currentTarget.parentElement,
           ),
         };
-        setTouchPointerActive(true);
         try {
           event.currentTarget.setPointerCapture(event.pointerId);
         } catch {
@@ -478,16 +474,28 @@ function FaceUpCard({
           return;
         }
         event.preventDefault();
-        if (!touchPointer.dragging) {
+        const dragStarted = !touchPointer.dragging;
+        if (dragStarted) {
           touchPointer.dragging = true;
           dragSuppressedRef.current = true;
-          window.dispatchEvent(new Event("dragstart"));
-          interaction?.onDragStart();
+          event.currentTarget.dataset.battleTouchDragging = "true";
+          event.currentTarget.style.zIndex = "100";
         }
         const inverse = touchPointer.inverseParentTransform;
         const x = inverse.a * viewportX + inverse.c * viewportY;
         const y = inverse.b * viewportX + inverse.d * viewportY;
-        setTouchDragOffset({ x, y });
+        // Pointer movement must reach the compositor before React rerenders the
+        // full card/reveal subtree; otherwise the card trails the finger.
+        event.currentTarget.style.transform = [
+          restingTransform,
+          `translate3d(${String(x)}px, ${String(y)}px, 0)`,
+        ]
+          .filter(Boolean)
+          .join(" ");
+        if (dragStarted) {
+          window.dispatchEvent(new Event("dragstart"));
+          interaction?.onDragStart();
+        }
       }}
       onPointerUpCapture={(event) => finishTouchDrag(event, true)}
       onPointerCancelCapture={(event) => finishTouchDrag(event, false)}
@@ -500,7 +508,11 @@ function FaceUpCard({
         }
         interaction?.onActivate?.();
       }}
-      onDragStart={() => {
+      onDragStart={(event) => {
+        if (touchPointerRef.current !== null) {
+          event.preventDefault();
+          return;
+        }
         if (draggable) {
           dragSuppressedRef.current = true;
           interaction?.onDragStart();
@@ -513,16 +525,8 @@ function FaceUpCard({
         width: "100%",
         cursor: draggable ? "grab" : undefined,
         position: "relative",
-        zIndex: touchDragOffset === null ? undefined : 100,
         touchAction: draggable ? "none" : undefined,
-        transform: [
-          card.exhausted ? "rotate(90deg)" : "",
-          touchDragOffset === null
-            ? ""
-            : `translate3d(${String(touchDragOffset.x)}px, ${String(touchDragOffset.y)}px, 0)`,
-        ]
-          .filter(Boolean)
-          .join(" ") || undefined,
+        transform: restingTransform || undefined,
         transformOrigin: "50% 50%",
       }}
     >

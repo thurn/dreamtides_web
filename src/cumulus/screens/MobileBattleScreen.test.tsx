@@ -765,11 +765,16 @@ describe("MobileBattleScreen", () => {
       pointerId: 7,
       pointerType: "touch",
     });
+    let transformDuringPointerMove = "";
     act(() => {
       handCard?.dispatchEvent(dragMove);
+      transformDuringPointerMove = handCard?.style.transform ?? "";
     });
 
     expect(dragMove.defaultPrevented).toBe(true);
+    expect(transformDuringPointerMove).toContain(
+      "translate3d(40px, -24px, 0)",
+    );
     expect(interactions.onCardDragStart).toHaveBeenCalledWith(
       "player-hand-0",
       "player-hand",
