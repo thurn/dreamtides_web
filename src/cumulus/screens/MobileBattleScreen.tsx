@@ -161,6 +161,10 @@ const BATTLE_PHASE_LIGHT_CSS = `
     }
   }
 `;
+// Keeps the void pile and its phase action wide enough for the longer primary
+// label on narrow phones; the zone and control rows share this grid contract.
+const SIDE_ZONES_GRID_TEMPLATE =
+  "minmax(0, 0.82fr) minmax(0, 1.6fr) minmax(120px, 0.82fr)";
 
 const ROOT_STYLE: CSSProperties = {
   position: "fixed",
@@ -319,8 +323,7 @@ function SideZones({
       style={{
         ...ROW_STYLE,
         display: "grid",
-        gridTemplateColumns:
-          "minmax(0, 0.82fr) minmax(0, 1.6fr) minmax(0, 0.82fr)",
+        gridTemplateColumns: SIDE_ZONES_GRID_TEMPLATE,
         alignItems: "center",
         columnGap: token("--space-5"),
         paddingInline: token("--space-4"),
@@ -1038,29 +1041,37 @@ function ControlRow({
       style={{
         ...ROW_STYLE,
         height: 40,
-        display: "flex",
+        display: "grid",
+        gridTemplateColumns: SIDE_ZONES_GRID_TEMPLATE,
         alignItems: "center",
-        justifyContent: "flex-end",
         boxSizing: "border-box",
-        paddingRight: token("--space-4"),
-        gap: token("--space-4"),
+        paddingInline: token("--space-4"),
+        columnGap: token("--space-5"),
       }}
     >
-      <IconButton
-        glyph={GLYPHS.arrowLeft}
-        size="sm"
-        label="Previous phase"
-        disabled={disabled}
-        onPress={() => interactions?.onPreviousPhase()}
-      />
-      <IconButton
-        glyph={GLYPHS.arrowRight}
-        size="sm"
-        variant="accent"
-        label="Next phase"
-        disabled={disabled}
-        onPress={() => interactions?.onNextPhase()}
-      />
+      <div
+        data-battle-phase-controls="stack"
+        style={{
+          gridColumn: 3,
+          width: "100%",
+          display: "grid",
+          gap: token("--space-3"),
+          position: "relative",
+          zIndex: 10,
+        }}
+      >
+        <GlassButton
+          label="Back"
+          disabled={disabled}
+          onPress={() => interactions?.onPreviousPhase()}
+        />
+        <GlassButton
+          label="Next Phase"
+          variant="accent"
+          disabled={disabled}
+          onPress={() => interactions?.onNextPhase()}
+        />
+      </div>
     </div>
   );
 }

@@ -199,7 +199,7 @@ describe("MobileBattleScreen", () => {
         row?.querySelector(`[data-testid="${owner}-battle-status"]`),
       ).not.toBeNull();
       expect(row?.style.gridTemplateColumns).toBe(
-        "minmax(0, 0.82fr) minmax(0, 1.6fr) minmax(0, 0.82fr)",
+        "minmax(0, 0.82fr) minmax(0, 1.6fr) minmax(120px, 0.82fr)",
       );
       expect(row?.style.columnGap).toBe("var(--space-5)");
       const deckZone = row?.querySelector<HTMLElement>(
@@ -560,7 +560,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("renders neutral glass phase arrows without debug rail or quest chrome", () => {
+  it("stacks equal-width Back and Next Phase glass controls over the void column", () => {
     const interactions = {
       canInteract: true,
       pendingCardId: null,
@@ -576,17 +576,24 @@ describe("MobileBattleScreen", () => {
     const controlRow = container.querySelector<HTMLElement>(
       '[data-battle-mobile-row="control-row"]',
     );
-    const previous = controlRow?.querySelector<HTMLButtonElement>(
-      '[aria-label="Previous phase"]',
+    const phaseControls = controlRow?.querySelector<HTMLElement>(
+      '[data-battle-phase-controls="stack"]',
     );
-    const next = controlRow?.querySelector<HTMLButtonElement>(
-      '[aria-label="Next phase"]',
-    );
+    const buttons = phaseControls?.querySelectorAll<HTMLButtonElement>("button");
+    const previous = buttons?.[0];
+    const next = buttons?.[1];
 
     expect(controlRow?.style.height).toBe("40px");
-    expect(controlRow?.style.justifyContent).toBe("flex-end");
-    expect(controlRow?.style.paddingRight).toBe("var(--space-4)");
+    expect(controlRow?.style.gridTemplateColumns).toBe(
+      "minmax(0, 0.82fr) minmax(0, 1.6fr) minmax(120px, 0.82fr)",
+    );
+    expect(controlRow?.style.paddingInline).toBe("var(--space-4)");
     expect(controlRow?.style.boxSizing).toBe("border-box");
+    expect(phaseControls?.style.gridColumn).toBe("3");
+    expect(phaseControls?.style.width).toBe("100%");
+    expect(buttons).toHaveLength(2);
+    expect(previous?.textContent).toBe("Back");
+    expect(next?.textContent).toBe("Next Phase");
     expect(previous?.dataset.glassPlacement).toBe("onMedia");
     expect(next?.dataset.glassPlacement).toBe("onMedia");
     expect(previous?.dataset.glassVariant).toBe("default");
