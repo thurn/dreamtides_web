@@ -54,11 +54,14 @@ function placeCharacter(
 function mount(
   state: BattleMutableState,
   battleCardId: string,
+  presentation: "context-menu" | "sheet" = "context-menu",
 ): {
   container: HTMLDivElement;
+  onClose: ReturnType<typeof vi.fn>;
   onCommand: ReturnType<typeof vi.fn>;
   root: Root;
 } {
+  const onClose = vi.fn();
   const onCommand = vi.fn();
   const container = document.createElement("div");
   document.body.append(container);
@@ -69,17 +72,18 @@ function mount(
       <BattleContextMenu
         battleCardId={battleCardId}
         onOpenNoteEditor={() => undefined}
+        presentation={presentation}
         sourceSurface="inspector"
         state={state}
         x={0}
         y={0}
-        onClose={() => undefined}
+        onClose={onClose}
         onCommand={onCommand}
       />,
     );
   });
 
-  return { container, onCommand, root };
+  return { container, onClose, onCommand, root };
 }
 
 /**
@@ -143,6 +147,45 @@ describe("BattleContextMenu location header", () => {
     act(() => {
       root.unmount();
     });
+  });
+});
+
+describe("BattleContextMenu full-screen sheet", () => {
+  it("renders the right-click action tree as touch controls and drills into Add Spark", () => {
+    const state = createState();
+    const battleCardId = placeCharacter(state, "backRank", "B0");
+    const { onClose, onCommand, root } = mount(state, battleCardId, "sheet");
+
+    const dialog = document.querySelector<HTMLElement>('[role="dialog"]');
+    expect(dialog?.getAttribute("aria-modal")).toBe("true");
+    expect(dialog?.getAttribute("aria-label")).toBe(
+      state.cardInstances[battleCardId].definition.name,
+    );
+    expect(dialog?.textContent).toContain("Player · Back Rank B0");
+    expect(dialog?.textContent).toContain("→ Hand");
+
+    const addSpark = [...document.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent === "Add Spark");
+    act(() => addSpark?.click());
+    expect(dialog?.textContent).toContain("Spark");
+
+    const addTwo = [...document.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent === "+2");
+    act(() => addTwo?.click());
+
+    expect(onCommand).toHaveBeenCalledWith({
+      id: "DEBUG_EDIT",
+      edit: {
+        kind: "KINDLE",
+        amount: 2,
+        preferredBattleCardId: battleCardId,
+        side: "player",
+      },
+      sourceSurface: "inspector",
+    });
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    act(() => root.unmount());
   });
 });
 

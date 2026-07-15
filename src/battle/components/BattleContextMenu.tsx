@@ -1,5 +1,9 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { GlassButton } from "../../cumulus/components/controls/GlassButton";
+import { GlassDialog } from "../../cumulus/components/overlay/GlassDialog";
+import { GLYPHS } from "../../cumulus/primitives/glyph";
+import { token } from "../../cumulus/primitives/tokens";
 import type {
   BattleCommand,
   BattleDebugZoneDestination,
@@ -25,6 +29,7 @@ import { formatSideLabel, formatZoneLabel } from "../ui/format";
 export function BattleContextMenu({
   battleCardId,
   onOpenNoteEditor,
+  presentation = "context-menu",
   sourceSurface,
   state,
   x,
@@ -34,6 +39,7 @@ export function BattleContextMenu({
 }: {
   battleCardId: string;
   onOpenNoteEditor: (battleCardId: string) => void;
+  presentation?: "context-menu" | "sheet";
   sourceSurface: BattleCommandSourceSurface;
   state: BattleMutableState;
   x: number;
@@ -69,15 +75,17 @@ export function BattleContextMenu({
       onClose();
     }
 
-    window.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("scroll", handleScroll, true);
+    if (presentation === "context-menu") {
+      window.addEventListener("mousedown", handleMouseDown);
+      window.addEventListener("scroll", handleScroll, true);
+    }
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("scroll", handleScroll, true);
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [onClose]);
+  }, [onClose, presentation]);
 
   const items = useMemo(() => {
     if (card === undefined || location === null) {
@@ -509,6 +517,17 @@ export function BattleContextMenu({
     ? `${formatSideLabel(location.side)} · ${formatZoneLabel(location.zone)} ${location.slotId}`
     : `${formatSideLabel(location.side)} · ${formatZoneLabel(location.zone)}`;
 
+  if (presentation === "sheet") {
+    return (
+      <BattleContextMenuSheet
+        cardName={card.definition.name}
+        items={items}
+        locationLabel={locationLabel}
+        onClose={onClose}
+      />
+    );
+  }
+
   return (
     <div
       ref={menuRef}
@@ -584,6 +603,80 @@ export function BattleContextMenu({
     appendCreateCopy("→ Deck bottom", { side, zone: "deck", position: "bottom" });
     return items;
   }
+}
+
+function BattleContextMenuSheet({
+  cardName,
+  items,
+  locationLabel,
+  onClose,
+}: {
+  cardName: string;
+  items: ContextMenuItem[];
+  locationLabel: string;
+  onClose: () => void;
+}) {
+  const [submenu, setSubmenu] = useState<{
+    label: string;
+    items: ContextMenuItem[];
+  } | null>(null);
+  const visibleItems = submenu?.items ?? items;
+
+  return (
+    <GlassDialog
+      title={cardName}
+      subtitle={submenu === null ? locationLabel : `${locationLabel} · ${submenu.label}`}
+      closeLabel="Close card actions"
+      onClose={onClose}
+    >
+      <div
+        data-battle-card-debug-sheet=""
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "stretch",
+          gap: token("--space-3"),
+        }}
+      >
+        {submenu !== null ? (
+          <div style={{ display: "grid", marginBottom: token("--space-2") }}>
+            <GlassButton
+              label="Back to Card Actions"
+              glyph={GLYPHS.arrowLeft}
+              placement="onGlass"
+              onPress={() => setSubmenu(null)}
+            />
+          </div>
+        ) : null}
+        {visibleItems.map((item, index) => {
+          if ("divider" in item) return null;
+          if ("submenu" in item) {
+            return (
+              <div key={item.label} style={{ display: "grid" }}>
+                <GlassButton
+                  label={item.label}
+                  placement="onGlass"
+                  onPress={() => setSubmenu({ label: item.label, items: item.submenu })}
+                />
+              </div>
+            );
+          }
+          return (
+            <div key={`${item.label}:${String(index)}`} style={{ display: "grid" }}>
+              <GlassButton
+                label={item.label}
+                placement="onGlass"
+                onPress={() => {
+                  item.action();
+                  onClose();
+                }}
+              />
+            </div>
+          );
+        })}
+      </div>
+    </GlassDialog>
+  );
 }
 
 type ContextMenuItem =

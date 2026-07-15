@@ -815,6 +815,62 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("distinguishes a single hand-card tap from double-tap debug gestures on every face-up card", () => {
+    vi.useFakeTimers();
+    const interactions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDebugActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(makeView(), interactions);
+    const handCard = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-hand-0"]',
+    );
+    const battlefieldCard = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-front-card"]',
+    );
+
+    act(() => {
+      handCard?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      vi.advanceTimersByTime(300);
+    });
+    expect(interactions.onHandCardActivate).toHaveBeenCalledWith(
+      "player-hand-0",
+    );
+    expect(interactions.onCardDebugActivate).not.toHaveBeenCalled();
+
+    interactions.onHandCardActivate.mockClear();
+    act(() => {
+      handCard?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      handCard?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(interactions.onHandCardActivate).not.toHaveBeenCalled();
+    expect(interactions.onCardDebugActivate).toHaveBeenCalledWith(
+      "player-hand-0",
+      "player-hand",
+    );
+
+    interactions.onCardDebugActivate.mockClear();
+    act(() => {
+      battlefieldCard?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      battlefieldCard?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(interactions.onCardDebugActivate).toHaveBeenCalledWith(
+      "player-front-card",
+      "battlefield",
+    );
+
+    act(() => root.unmount());
+    vi.useRealTimers();
+  });
+
   it("drags a hand card by touch into the void without panning or leaving its reveal open", () => {
     const interactions = {
       canInteract: true,

@@ -1,4 +1,4 @@
-import { useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { LayoutGroup, motion } from "framer-motion";
 import {
   GameCard,
@@ -19,7 +19,10 @@ import { IconButton } from "../components/controls/IconButton";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import type { DreamcallerVisual } from "../components/hud/DreamcallerPortrait";
 import { GLYPHS } from "../primitives/glyph";
-import { POINTER_MOVEMENT_SLOP_PX } from "../primitives/pointer-gesture";
+import {
+  DOUBLE_TAP_WINDOW_MS,
+  POINTER_MOVEMENT_SLOP_PX,
+} from "../primitives/pointer-gesture";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
 import battleBackgroundUrl from "../assets/battle-background.png";
@@ -100,6 +103,10 @@ export interface MobileBattleInteractions {
   readonly canInteract: boolean;
   readonly pendingCardId: string | null;
   readonly onHandCardActivate: (battleCardId: string) => void;
+  readonly onCardDebugActivate?: (
+    battleCardId: string,
+    source: MobileBattleCardSource,
+  ) => void;
   readonly onCardDragStart: (
     battleCardId: string,
     source: MobileBattleCardSource,
@@ -548,12 +555,14 @@ function FaceUpCard({
   readonly interaction?: {
     readonly draggable: boolean;
     readonly onActivate?: () => void;
+    readonly onDebugActivate?: () => void;
     readonly onDragStart: () => void;
     readonly onDragEnd: () => void;
     readonly onTouchDrop: (clientX: number, clientY: number) => void;
   };
 }) {
   const dragSuppressedRef = useRef(false);
+  const pendingTapRef = useRef<number | null>(null);
   const touchPointerRef = useRef<{
     pointerId: number;
     startX: number;
@@ -563,6 +572,12 @@ function FaceUpCard({
   } | null>(null);
   const draggable = interaction?.draggable === true;
   const restingTransform = card.exhausted ? "rotate(90deg)" : "";
+  const cancelPendingTap = (): void => {
+    if (pendingTapRef.current === null) return;
+    window.clearTimeout(pendingTapRef.current);
+    pendingTapRef.current = null;
+  };
+  useEffect(() => cancelPendingTap, []);
   const finishTouchDrag = (
     event: React.PointerEvent<HTMLDivElement>,
     drop: boolean,
@@ -668,13 +683,25 @@ function FaceUpCard({
       onPointerUpCapture={(event) => finishTouchDrag(event, true)}
       onPointerCancelCapture={(event) => finishTouchDrag(event, false)}
       onClick={(event) => {
-        if (!draggable) return;
+        if (!draggable && interaction?.onDebugActivate === undefined) return;
         event.stopPropagation();
         if (dragSuppressedRef.current) {
           dragSuppressedRef.current = false;
           return;
         }
-        interaction?.onActivate?.();
+        if (interaction?.onDebugActivate === undefined) {
+          if (draggable) interaction?.onActivate?.();
+          return;
+        }
+        if (pendingTapRef.current !== null) {
+          cancelPendingTap();
+          interaction?.onDebugActivate?.();
+          return;
+        }
+        pendingTapRef.current = window.setTimeout(() => {
+          pendingTapRef.current = null;
+          if (draggable) interaction?.onActivate?.();
+        }, DOUBLE_TAP_WINDOW_MS);
       }}
       onDragStart={(event) => {
         if (touchPointerRef.current !== null) {
@@ -682,6 +709,7 @@ function FaceUpCard({
           return;
         }
         if (draggable) {
+          cancelPendingTap();
           dragSuppressedRef.current = true;
           interaction?.onDragStart();
         }
@@ -854,6 +882,15 @@ function Rank({
                             slot.card?.id ?? "",
                             "battlefield",
                           ),
+                        ...(interactions.onCardDebugActivate === undefined
+                          ? {}
+                          : {
+                              onDebugActivate: () =>
+                                interactions.onCardDebugActivate?.(
+                                  slot.card?.id ?? "",
+                                  "battlefield",
+                                ),
+                            }),
                         onDragEnd: interactions.onCardDragEnd,
                         onTouchDrop: (clientX, clientY) =>
                           dropMobileCardAtPoint(
@@ -986,6 +1023,15 @@ function PlayerHand({
                       draggable: interactions.canInteract,
                       onActivate: () =>
                         interactions.onHandCardActivate(card.id),
+                      ...(interactions.onCardDebugActivate === undefined
+                        ? {}
+                        : {
+                            onDebugActivate: () =>
+                              interactions.onCardDebugActivate?.(
+                                card.id,
+                                "player-hand",
+                              ),
+                          }),
                       onDragStart: () =>
                         interactions.onCardDragStart(card.id, "player-hand"),
                       onDragEnd: interactions.onCardDragEnd,

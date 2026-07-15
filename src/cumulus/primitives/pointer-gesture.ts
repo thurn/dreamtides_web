@@ -4,3 +4,6 @@
  * dragged at the same time.
  */
 export const POINTER_MOVEMENT_SLOP_PX = 10;
+
+/** Maximum pause between taps that still resolves as one double-tap gesture. */
+export const DOUBLE_TAP_WINDOW_MS = 280;

@@ -104,6 +104,7 @@ type RewardOverlayState = {
 } | null;
 type ContextMenuState = {
   battleCardId: string;
+  presentation: "context-menu" | "sheet";
   sourceSurface: BattleCommandSourceSurface;
   x: number;
   y: number;
@@ -808,11 +809,40 @@ function PlayableBattleScreenInner({
     event.preventDefault();
     setContextMenu({
       battleCardId,
+      presentation: "context-menu",
       sourceSurface,
       x: event.clientX,
       y: event.clientY,
     });
     setOpenSideSummary(null);
+  }
+
+  function handleMobileCardDebugActivate(
+    battleCardId: string,
+    source: "player-hand" | "battlefield",
+  ): void {
+    const sourceSurface = source === "player-hand" ? "hand-tray" : "battlefield";
+    const card = board.cardInstances[battleCardId];
+    const location = selectBattleCardLocation(board, battleCardId);
+    if (card === undefined || location === null) return;
+    setContextMenu({
+      battleCardId,
+      presentation: "sheet",
+      sourceSurface,
+      x: 0,
+      y: 0,
+    });
+    setOpenSideSummary(null);
+    logEvent("battle_mobile_card_debug_sheet_opened", {
+      ...createBattleLogBaseFields(board, {
+        sourceSurface,
+        selectedCardId: battleCardId,
+      }),
+      battleCardId,
+      cardId: card.definition.cardId,
+      cardController: card.controller,
+      cardZone: location.zone,
+    });
   }
 
   function handleCardDragStart(
@@ -1077,46 +1107,75 @@ function PlayableBattleScreenInner({
 
   if (showCumulusMobileLayout) {
     return (
-      <MobileBattleScreenAdapter
-        init={battleInit}
-        board={board}
-        enemyDreamcaller={enemyDreamcallerSummary}
-        interactions={{
-          canInteract: canPlayerAct,
-          pendingCardId: pendingDragCardId,
-          onHandCardActivate: handleHandCardDoubleClick,
-          onCardDragStart: (battleCardId, source) => {
-            handleCardDragStart(
-              battleCardId,
-              source === "player-hand" ? "hand-tray" : "battlefield",
-            );
-          },
-          onCardDragEnd: handleCardDragEnd,
-          onSlotDrop: ({ owner, rank, slotId }) => {
-            handleSlotDrop({
-              side: owner,
-              zone: rank === "back" ? "backRank" : "frontRank",
-              slotId: slotId as BattlefieldSlotId,
-            });
-          },
-          onZoneDrop: ({ owner, zone }) => {
-            handleZoneDrop(
-              owner,
-              zone,
-              pendingDrag?.sourceSurface ?? "battlefield",
-            );
-          },
-          onPreviousPhase: () => {
-            handleSetBattleFlow(computePhaseControlTarget(board, "previous"));
-          },
-          onNextPhase: () => {
-            handleSetBattleFlow(computePhaseControlTarget(board, "next"));
-          },
-          onFillBattlefieldPreview: handleFillBattlefieldPreview,
-          onFillTwentyCardBattlefieldPreview:
-            handleFillTwentyCardBattlefieldPreview,
-        }}
-      />
+      <>
+        <MobileBattleScreenAdapter
+          init={battleInit}
+          board={board}
+          enemyDreamcaller={enemyDreamcallerSummary}
+          interactions={{
+            canInteract: canPlayerAct,
+            pendingCardId: pendingDragCardId,
+            onHandCardActivate: handleHandCardDoubleClick,
+            onCardDebugActivate: handleMobileCardDebugActivate,
+            onCardDragStart: (battleCardId, source) => {
+              handleCardDragStart(
+                battleCardId,
+                source === "player-hand" ? "hand-tray" : "battlefield",
+              );
+            },
+            onCardDragEnd: handleCardDragEnd,
+            onSlotDrop: ({ owner, rank, slotId }) => {
+              handleSlotDrop({
+                side: owner,
+                zone: rank === "back" ? "backRank" : "frontRank",
+                slotId: slotId as BattlefieldSlotId,
+              });
+            },
+            onZoneDrop: ({ owner, zone }) => {
+              handleZoneDrop(
+                owner,
+                zone,
+                pendingDrag?.sourceSurface ?? "battlefield",
+              );
+            },
+            onPreviousPhase: () => {
+              handleSetBattleFlow(computePhaseControlTarget(board, "previous"));
+            },
+            onNextPhase: () => {
+              handleSetBattleFlow(computePhaseControlTarget(board, "next"));
+            },
+            onFillBattlefieldPreview: handleFillBattlefieldPreview,
+            onFillTwentyCardBattlefieldPreview:
+              handleFillTwentyCardBattlefieldPreview,
+          }}
+        />
+        {contextMenu !== null ? (
+          <BattleContextMenu
+            key={`${contextMenu.battleCardId}:${contextMenu.sourceSurface}:${contextMenu.presentation}`}
+            battleCardId={contextMenu.battleCardId}
+            onOpenNoteEditor={(cardId) => setOpenNoteEditor(cardId)}
+            presentation={contextMenu.presentation}
+            sourceSurface={contextMenu.sourceSurface}
+            state={board}
+            x={contextMenu.x}
+            y={contextMenu.y}
+            onClose={() => setContextMenu(null)}
+            onCommand={handleCommand}
+          />
+        ) : null}
+        {openNoteEditor !== null ? (
+          <BattleCardNoteEditor
+            battleCardId={openNoteEditor}
+            state={board}
+            onClose={() => setOpenNoteEditor(null)}
+            onSubmit={(edit) => handleCommand({
+              id: "DEBUG_EDIT",
+              edit,
+              sourceSurface: "note-editor",
+            })}
+          />
+        ) : null}
+      </>
     );
   }
 
@@ -1634,6 +1693,7 @@ function PlayableBattleScreenInner({
           key={`${contextMenu.battleCardId}:${contextMenu.sourceSurface}:${String(contextMenu.x)}:${String(contextMenu.y)}`}
           battleCardId={contextMenu.battleCardId}
           onOpenNoteEditor={(battleCardId) => setOpenNoteEditor(battleCardId)}
+          presentation={contextMenu.presentation}
           sourceSurface={contextMenu.sourceSurface}
           state={board}
           x={contextMenu.x}
