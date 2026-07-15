@@ -286,13 +286,9 @@ describe("OfferTile", () => {
     const tradeCards = container.querySelectorAll<HTMLElement>(
       '[data-testid="trade-square-tile"] [data-offer-tile-full-card]',
     );
-    expect([...tradeCards].map((card) => card.style.width)).toEqual([
-      "42px",
-      "42px",
-      "42px",
-      "42px",
-      "54px",
-    ]);
+    expect([...tradeCards].every((card) => card.style.width === "54px")).toBe(
+      true,
+    );
     expect(
       container.querySelectorAll(
         '[data-testid="draft-tile"] [data-offer-tile-card-id], [data-testid="trade-square-tile"] [data-offer-tile-card-id]',
@@ -372,7 +368,17 @@ describe("OfferTile", () => {
       container.querySelector(
         '[data-testid="duplicate-tile"] [data-offer-tile-operation-layout]',
       )?.getAttribute("data-offer-tile-operation-layout"),
-    ).toBe("diagonal");
+    ).toBe("card-overlay");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="duplicate-tile"] [data-offer-tile-operation-layout]',
+      )?.style.width,
+    ).toBe("54px");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="duplicate-tile"] [data-offer-tile-composition]',
+      )?.style.width,
+    ).toBe("150px");
     expect(
       container.querySelector(
         '[data-testid="trade-tile"] [data-offer-tile-operation]',
@@ -381,13 +387,14 @@ describe("OfferTile", () => {
     const tradeCards = container.querySelectorAll<HTMLElement>(
       '[data-testid="trade-tile"] [data-offer-tile-full-card]',
     );
-    expect([...tradeCards].map((card) => card.style.width)).toEqual([
-      "42px",
-      "42px",
-      "42px",
-      "42px",
-      "54px",
-    ]);
+    expect([...tradeCards].every((card) => card.style.width === "54px")).toBe(
+      true,
+    );
+    const tradeGrid = container.querySelector<HTMLElement>(
+      '[data-testid="trade-tile"] [data-offer-tile-card-grid]',
+    );
+    expect(tradeGrid?.style.gridTemplateColumns).toBe("repeat(2, 54px)");
+    expect(tradeGrid?.style.gap).toBe("var(--space-1)");
     expect(
       container.querySelectorAll(
         '[data-testid="bundle-tile"] [data-offer-tile-full-card]',
@@ -398,6 +405,24 @@ describe("OfferTile", () => {
         '[data-testid="bundle-tile"] [data-offer-tile-operation]',
       ),
     ).toBeNull();
+    expect(
+      [
+        ...container.querySelectorAll<HTMLElement>(
+          '[data-testid="bundle-tile"] [data-offer-tile-full-card]',
+        ),
+      ].every((card) => card.style.width === "76px"),
+    ).toBe(true);
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="bundle-tile"] [data-offer-tile-full-card-stack]',
+      )?.style.width,
+    ).toBe("150px");
+
+    for (const treatmentCard of container.querySelectorAll<HTMLElement>(
+      '[data-testid="trade-tile"] [data-offer-tile-full-card], [data-testid="duplicate-tile"] [data-offer-tile-full-card]',
+    )) {
+      expect(treatmentCard.style.borderRadius).toBe("3.6% / 2.57%");
+    }
 
     act(() => root.unmount());
     container.remove();

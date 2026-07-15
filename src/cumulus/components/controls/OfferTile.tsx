@@ -18,6 +18,7 @@ import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { richText } from "../card/rich-text";
 import { CardView } from "../card/CardView";
+import { CARD_CORNER_RADIUS } from "../card/card-aspect";
 import {
   offerTileDescription,
   offerTileLabel,
@@ -258,14 +259,12 @@ function offerTileMotionDelay(offerId: string): string {
 }
 
 type CardTreatment = "plain" | "purged" | "incoming" | "duplicate";
-type FullCardSize = "mini" | "draft" | "fan" | "compact" | "medium" | "standard";
+type FullCardSize = "draft" | "compact" | "medium" | "standard";
 
 const FULL_CARD_WIDTH: Readonly<Record<FullCardSize, number>> = {
   compact: 64,
   draft: 54,
-  fan: 56,
   medium: 76,
-  mini: 42,
   standard: 88,
 };
 
@@ -346,7 +345,7 @@ function FullCardPiece({
         display: "block",
         zIndex: 1,
         width: FULL_CARD_WIDTH[size],
-        borderRadius: token("--radius-inset"),
+        borderRadius: CARD_CORNER_RADIUS,
         pointerEvents: "none",
         ...treatmentStyle,
       }}
@@ -358,20 +357,27 @@ function FullCardPiece({
 
 function FullCardStack({
   cards,
+  layout = "operation",
+  treatment = "plain",
 }: {
   readonly cards: readonly OfferTileCard[];
+  readonly layout?: "bundle" | "operation";
+  readonly treatment?: CardTreatment;
 }): ReactElement {
-  const size = cards.length >= 3 ? "compact" : "medium";
-  const cardWidth = size === "compact" ? 64 : 76;
-  const spread = cards.length >= 3 ? 26 : 22;
+  const bundleLayout = layout === "bundle";
+  const size = bundleLayout ? "medium" : cards.length >= 3 ? "compact" : "medium";
+  const cardWidth = FULL_CARD_WIDTH[size];
+  const stageWidth = bundleLayout ? 150 : 132;
+  const stageHeight = bundleLayout ? 140 : 126;
+  const spread = bundleLayout ? (cards.length >= 3 ? 30 : 26) : cards.length >= 3 ? 26 : 22;
   return (
     <span
       data-offer-tile-full-card-stack=""
       style={{
         position: "relative",
         display: "block",
-        width: 132,
-        height: 126,
+        width: stageWidth,
+        height: stageHeight,
         pointerEvents: "none",
       }}
     >
@@ -382,13 +388,13 @@ function FullCardStack({
             key={card.cardId}
             style={{
               position: "absolute",
-              left: (132 - cardWidth) / 2 + offset * spread,
-              top: 8 + Math.abs(offset) * 4,
+              left: (stageWidth - cardWidth) / 2 + offset * spread,
+              top: (bundleLayout ? 4 : 8) + Math.abs(offset) * 4,
               rotate: `${String(offset * 5)}deg`,
               pointerEvents: "none",
             }}
           >
-            <FullCardPiece card={card} size={size} />
+            <FullCardPiece card={card} size={size} treatment={treatment} />
           </span>
         );
       })}
@@ -538,10 +544,12 @@ function FullCardStackOperation({
   cards,
   glyph,
   tone,
+  treatment,
 }: {
   readonly cards: readonly OfferTileCard[];
   readonly glyph: Glyph;
   readonly tone?: "neutral" | "accent" | "danger" | "spark" | "duplicate";
+  readonly treatment?: CardTreatment;
 }): ReactElement {
   return (
     <span
@@ -555,13 +563,19 @@ function FullCardStackOperation({
         pointerEvents: "none",
       }}
     >
-      <FullCardStack cards={cards} />
+      <FullCardStack cards={cards} treatment={treatment} />
       <OperationMark glyph={glyph} tone={tone} layout="card-overlay" />
     </span>
   );
 }
 
-function DraftGrid({ cards }: { readonly cards: readonly OfferTileCard[] }) {
+function DraftGrid({
+  cards,
+  treatment = "plain",
+}: {
+  readonly cards: readonly OfferTileCard[];
+  readonly treatment?: CardTreatment;
+}) {
   return (
     <span
       data-offer-tile-card-grid=""
@@ -573,48 +587,13 @@ function DraftGrid({ cards }: { readonly cards: readonly OfferTileCard[] }) {
       }}
     >
       {cards.map((card) => (
-        <FullCardPiece key={card.cardId} card={card} size="draft" />
+        <FullCardPiece
+          key={card.cardId}
+          card={card}
+          size="draft"
+          treatment={treatment}
+        />
       ))}
-    </span>
-  );
-}
-
-function CardFan({
-  cards,
-  treatment = "plain",
-}: {
-  readonly cards: readonly OfferTileCard[];
-  readonly treatment?: CardTreatment;
-}) {
-  const visible = cards;
-  return (
-    <span
-      style={{
-        position: "relative",
-        display: "block",
-        width: 122,
-        height: 110,
-        pointerEvents: "none",
-      }}
-    >
-      {visible.map((card, index) => {
-        const center = (visible.length - 1) / 2;
-        const offset = index - center;
-        return (
-          <span
-            key={card.cardId}
-            style={{
-              position: "absolute",
-              left: 20 + offset * 16,
-              top: 10 + Math.abs(offset) * 4,
-              rotate: `${String(offset * 7)}deg`,
-              pointerEvents: "none",
-            }}
-          >
-            <FullCardPiece card={card} treatment={treatment} size="fan" />
-          </span>
-        );
-      })}
     </span>
   );
 }
@@ -631,25 +610,12 @@ function TradeComposition({
       data-offer-tile-trade=""
       style={{
         position: "relative",
-        display: "block",
-        width: 132,
-        height: 142,
+        display: "grid",
+        placeItems: "center",
         pointerEvents: "none",
       }}
     >
-      {incoming.map((card, index) => (
-        <span
-          key={card.cardId}
-          style={{
-            position: "absolute",
-            left: index % 2 === 0 ? 12 : 78,
-            top: index < 2 ? 4 : 78,
-            pointerEvents: "none",
-          }}
-        >
-          <FullCardPiece card={card} treatment="incoming" size="mini" />
-        </span>
-      ))}
+      <DraftGrid cards={incoming} treatment="incoming" />
       <span
         style={{
           position: "absolute",
@@ -695,7 +661,7 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
         </OperationComposition>
       );
     case "card-bundle":
-      return <FullCardStack cards={model.cards} />;
+      return <FullCardStack cards={model.cards} layout="bundle" />;
     case "transfigure-card":
       return (
         <FullCardOperation
@@ -739,9 +705,12 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
       );
     case "duplicate-card":
       return (
-        <OperationComposition glyph={GLYPHS.copy} tone="duplicate" layout="diagonal">
-          <CardFan cards={model.cards} treatment="duplicate" />
-        </OperationComposition>
+        <FullCardStackOperation
+          cards={model.cards}
+          glyph={GLYPHS.copy}
+          tone="duplicate"
+          treatment="duplicate"
+        />
       );
     case "dreamsign-gift":
       return <DreamsignArtPiece dreamsign={model.dreamsign} />;
