@@ -301,6 +301,10 @@ function EnemyHand({
         ...ROW_STYLE,
         gridRow: 1,
         overflow: "hidden",
+        display: isDesktop ? "flex" : undefined,
+        alignItems: isDesktop ? "flex-start" : undefined,
+        justifyContent: isDesktop ? "center" : undefined,
+        gap: isDesktop ? token("--space-2") : undefined,
       }}
     >
       {visibleCardIds.map((cardId, index) => {
@@ -319,13 +323,16 @@ function EnemyHand({
             data-battle-card-zone="enemy-hand"
             data-battle-card-face="down"
             style={{
-              position: "absolute",
+              position: isDesktop ? "relative" : "absolute",
               top: 0,
-              left,
+              left: isDesktop ? undefined : left,
               height: "94%",
+              flex: isDesktop ? "0 0 auto" : undefined,
               aspectRatio: CARD_ASPECT_RATIO,
               transformOrigin: "50% 0%",
-              transform: `translateX(-50%) translateY(-${String(drop)}%) rotate(${String(rotation)}deg)`,
+              transform: isDesktop
+                ? `translateY(-${String(drop)}%) rotate(${String(rotation)}deg)`
+                : `translateX(-50%) translateY(-${String(drop)}%) rotate(${String(rotation)}deg)`,
               zIndex: index + 1,
             }}
           >
@@ -1158,6 +1165,12 @@ function PlayerHand({
         gridRow: 6,
         zIndex: PLAYER_HAND_Z_INDEX,
         overflow: canDrop ? "visible" : "hidden",
+        display: isDesktop ? "flex" : undefined,
+        alignItems: isDesktop ? "flex-start" : undefined,
+        justifyContent: isDesktop ? "center" : undefined,
+        gap: isDesktop ? token("--space-2") : undefined,
+        paddingTop: isDesktop ? token("--space-8") : undefined,
+        boxSizing: isDesktop ? "border-box" : undefined,
       }}
     >
       {cards.map((card, index) => {
@@ -1173,13 +1186,16 @@ function PlayerHand({
           <div
             key={card.id}
             style={{
-              position: "absolute",
-              left,
-              top: isDesktop ? token("--space-8") : PLAYER_HAND_TOP,
+              position: isDesktop ? "relative" : "absolute",
+              left: isDesktop ? undefined : left,
+              top: isDesktop ? undefined : PLAYER_HAND_TOP,
               height: isDesktop ? "88%" : "92%",
+              flex: isDesktop ? "0 0 auto" : undefined,
               aspectRatio: CARD_ASPECT_RATIO,
               transformOrigin: "50% 100%",
-              transform: `translateX(-50%) translateY(${String(drop)}%) rotate(${String(rotation)}deg)`,
+              transform: isDesktop
+                ? `translateY(${String(drop)}%) rotate(${String(rotation)}deg)`
+                : `translateX(-50%) translateY(${String(drop)}%) rotate(${String(rotation)}deg)`,
               zIndex: index + 1,
             }}
           >
@@ -1266,7 +1282,13 @@ function ControlRow({
         gridRow: 5,
         display: "flex",
         alignItems: "flex-start",
-        justifyContent: isDesktop ? "center" : "flex-end",
+        justifyContent: "flex-end",
+        justifySelf: isDesktop ? "center" : undefined,
+        width: isDesktop ? "100%" : undefined,
+        maxWidth: isDesktop ? DESKTOP_SIDE_ZONES_MAX_WIDTH : undefined,
+        transform: isDesktop
+          ? `translateY(calc(-1 * ${token("--space-9")}))`
+          : undefined,
         boxSizing: "border-box",
         paddingInline: token(isDesktop ? "--space-8" : "--space-4"),
         paddingTop: token(isDesktop ? "--space-5" : "--space-4"),
