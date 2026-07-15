@@ -1205,6 +1205,16 @@ function PlayableBattleScreenInner({
                 sourceSurface: "debug-panel",
               });
             },
+            onIncreasePlayerCurrentAndMaxEnergy: () => {
+              handleCommand({
+                id: "DEBUG_EDIT",
+                edit: {
+                  kind: "INCREASE_MAX_ENERGY_AND_FILL",
+                  side: "player",
+                },
+                sourceSurface: "debug-panel",
+              });
+            },
           }}
         />
         {contextMenu !== null ? (

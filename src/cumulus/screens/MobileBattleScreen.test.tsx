@@ -288,6 +288,7 @@ describe("MobileBattleScreen", () => {
       onAdjustPlayerPoints: vi.fn(),
       onAdjustPlayerCurrentEnergy: vi.fn(),
       onAdjustPlayerMaxEnergy: vi.fn(),
+      onIncreasePlayerCurrentAndMaxEnergy: vi.fn(),
     };
     const { container, root } = mount(makeView(), interactions);
     const panel = container.querySelector<HTMLElement>(
@@ -296,7 +297,7 @@ describe("MobileBattleScreen", () => {
 
     expect(panel).not.toBeNull();
     expect(panel?.style.position).toBe("absolute");
-    expect(panel?.style.width).toBe("280px");
+    expect(panel?.style.width).toBe("320px");
     expect(panel?.style.aspectRatio).toBe("1 / 1");
     expect(panel?.style.left).not.toBe("");
     expect(panel?.style.bottom).not.toBe("");
@@ -314,6 +315,10 @@ describe("MobileBattleScreen", () => {
     expect(
       container.querySelector('[data-battle-debug-stat="max-energy"]')?.textContent,
     ).toContain("3");
+    expect(
+      container.querySelector('[data-battle-debug-stat="current-and-max-energy"]')
+        ?.textContent,
+    ).toContain("3/3");
 
     act(() => {
       container
@@ -351,6 +356,11 @@ describe("MobileBattleScreen", () => {
           '[data-testid="battle-debug-increment-max-energy"]',
         )
         ?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-debug-increment-current-and-max-energy"]',
+        )
+        ?.click();
     });
 
     expect(interactions.onDrawPlayerCard).toHaveBeenCalledTimes(1);
@@ -360,6 +370,7 @@ describe("MobileBattleScreen", () => {
     expect(interactions.onAdjustPlayerCurrentEnergy).toHaveBeenNthCalledWith(2, 1);
     expect(interactions.onAdjustPlayerMaxEnergy).toHaveBeenNthCalledWith(1, -1);
     expect(interactions.onAdjustPlayerMaxEnergy).toHaveBeenNthCalledWith(2, 1);
+    expect(interactions.onIncreasePlayerCurrentAndMaxEnergy).toHaveBeenCalledTimes(1);
 
     act(() => root.unmount());
   });

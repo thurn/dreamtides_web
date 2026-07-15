@@ -150,6 +150,7 @@ export interface MobileBattleInteractions {
   readonly onAdjustPlayerMaxEnergy?: (
     amount: MobileBattleDebugAdjustment,
   ) => void;
+  readonly onIncreasePlayerCurrentAndMaxEnergy?: () => void;
 }
 
 const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
@@ -1500,7 +1501,7 @@ function PlayerStateDebugPanel({
         bottom: `calc(var(${SAFE_AREA_INSET_PROPERTIES.bottom}) + ${token("--space-5")})`,
         left: `calc(var(${SAFE_AREA_INSET_PROPERTIES.left}) + ${token("--space-5")})`,
         zIndex: 20,
-        width: 280,
+        width: 320,
         aspectRatio: "1 / 1",
       }}
     >
@@ -1548,8 +1549,71 @@ function PlayerStateDebugPanel({
             value={status.maxEnergy}
             onAdjust={interactions?.onAdjustPlayerMaxEnergy}
           />
+          <PlayerCurrentAndMaxEnergyDebugRow
+            currentEnergy={status.currentEnergy}
+            maxEnergy={status.maxEnergy}
+            onIncrease={interactions?.onIncreasePlayerCurrentAndMaxEnergy}
+          />
         </div>
       </GlassPanel>
+    </div>
+  );
+}
+
+function PlayerCurrentAndMaxEnergyDebugRow({
+  currentEnergy,
+  maxEnergy,
+  onIncrease,
+}: {
+  readonly currentEnergy: number;
+  readonly maxEnergy: number;
+  readonly onIncrease?: () => void;
+}) {
+  return (
+    <div
+      role="group"
+      aria-label={`Current and maximum energy: ${String(currentEnergy)} of ${String(maxEnergy)}`}
+      data-battle-debug-stat="current-and-max-energy"
+      style={{
+        display: "grid",
+        gridTemplateColumns: "minmax(0, 1fr) auto auto",
+        alignItems: "center",
+        gap: token("--space-2"),
+      }}
+    >
+      <span
+        style={{
+          minWidth: 0,
+          font: token("--t-body-sm"),
+          color: token("--text-on-glass-muted"),
+        }}
+      >
+        Current + Max
+      </span>
+      <output
+        aria-live="polite"
+        style={{
+          minWidth: token("--touch-min"),
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <ResourceChip
+          kind="energy"
+          value={`${String(currentEnergy)}/${String(maxEnergy)}`}
+          size="md"
+          tone="inherit"
+        />
+      </output>
+      <IconButton
+        glyph={GLYPHS.plus}
+        size="sm"
+        label="Increase current and maximum energy"
+        placement="onGlass"
+        disabled={onIncrease === undefined}
+        testId="battle-debug-increment-current-and-max-energy"
+        onPress={() => onIncrease?.()}
+      />
     </div>
   );
 }
