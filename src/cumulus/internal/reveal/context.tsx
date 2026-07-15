@@ -14,7 +14,6 @@ import {
 import { logRevealClosed, logRevealOpened } from "./logging";
 import { RevealOverlay, type RevealOverlayActive } from "./RevealOverlay";
 import { feedbackForRect, type RevealFeedback } from "./feedback";
-import { captureVisualViewport } from "./viewport";
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -98,8 +97,6 @@ interface RevealCoordinatorValue {
   readonly registerSource: (key: string, value: SourceRegistration) => () => void;
   readonly updateSourceElement: (key: string, element: HTMLElement | null) => void;
   readonly unregisterSource: (source: RevealCoordinatorSource) => void;
-  readonly beginGameCardReturn: (source: RevealCoordinatorSource) => boolean;
-  readonly cancelGameCardReturn: (reason: RevealDismissalReason) => boolean;
   readonly beginInteraction: (source: RevealCoordinatorSource, reason: NonNullable<ReturnType<typeof reduceRevealState>["reason"]>, sourceRect: InteractionSnapshot["sourceRect"], modality: "mouse" | "pen" | "touch" | "keyboard") => void;
   readonly isKeyboardFocusEligible: () => boolean;
 }
@@ -127,7 +124,6 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
   const parent = useContext(RevealCoordinatorContext);
   if (parent !== null) throw new Error("CumulusRoot cannot be nested; mount exactly one CumulusRoot per application entry.");
   const [state, dispatch] = useReducer(reduceRevealState, initialRevealCoordinatorState);
-  const stateRef = useRef(state); stateRef.current = state;
   const sourcesRef = useRef(new Map<string, SourceRegistration>());
   const keyboardFocusEligibleRef = useRef(true);
   const [, renderDescriptions] = useState(0);
@@ -162,60 +158,9 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
     logRevealClosed({ source: opened.source.identity, interactionId: opened.interactionId, reason: opened.reason, dismissalReason: reason, activationOutcome });
     return true;
   }, []);
-  const [returningActive, setReturningActive] = useState<RevealOverlayActive | null>(null);
-  const returningRef = useRef<RevealOverlayActive | null>(null);
-  const returningOutcomeRef = useRef<typeof state.activationOutcome>("none");
-  const returnGenerationRef = useRef(0);
-  const returnTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const cancelGameCardReturn = useCallback((reason: RevealDismissalReason): boolean => {
-    const returning = returningRef.current;
-    if (returning === null) return false;
-    returnGenerationRef.current += 1;
-    if (returnTimerRef.current !== null) clearTimeout(returnTimerRef.current);
-    returnTimerRef.current = null;
-    returningRef.current = null;
-    setReturningActive(null);
-    closeOpenedInteraction(overlayInteractionKey(returning), reason, returningOutcomeRef.current);
-    return true;
-  }, [closeOpenedInteraction]);
   const unregisterSource = useCallback((source: RevealCoordinatorSource) => {
-    if (returningRef.current?.source.registrationId === source.registrationId) cancelGameCardReturn("source-unmount");
     dispatch({ type: "source-unmount", source, timestamp: performance.now() });
-  }, [cancelGameCardReturn]);
-  const beginGameCardReturn = useCallback((source: RevealCoordinatorSource): boolean => {
-    const current = stateRef.current;
-    const registration = sourcesRef.current.get(source.registrationId);
-    const reduced = document.documentElement.dataset.cumulusReducedMotion === "reduce"
-      || (typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-    if (!sameSource(current, source) || current.reason !== "hover" || registration?.element == null
-      || registration.spec.primary.kind === "infoCard" || captureVisualViewport().layout !== "desktop" || reduced) return false;
-    const returning: RevealOverlayActive = {
-      source: registration.source,
-      spec: registration.spec,
-      element: registration.element,
-      reason: "hover",
-      interactionId: interactionSnapshotRef.current?.id ?? interactionEpochRef.current,
-      sourceRect: interactionSnapshotRef.current?.sourceRect ?? captureSourceRect(registration.element),
-      modality: interactionSnapshotRef.current?.modality ?? "mouse",
-      sourceShowsCompleteGameCard: registration.element.dataset.revealCompleteGameCard === "true",
-      returningGameCard: true,
-    };
-    cancelGameCardReturn("replaced");
-    returningRef.current = returning;
-    returningOutcomeRef.current = current.activationOutcome;
-    setReturningActive(returning);
-    if (returnTimerRef.current !== null) clearTimeout(returnTimerRef.current);
-    const generation = ++returnGenerationRef.current;
-    returnTimerRef.current = setTimeout(() => {
-      if (returnGenerationRef.current !== generation || returningRef.current !== returning) return;
-      returningRef.current = null;
-      setReturningActive(null);
-      returnTimerRef.current = null;
-      closeOpenedInteraction(overlayInteractionKey(returning), "pointer-leave", current.activationOutcome);
-    }, 160);
-    return true;
-  }, [cancelGameCardReturn, closeOpenedInteraction]);
-  useEffect(() => () => { if (returnTimerRef.current !== null) clearTimeout(returnTimerRef.current); }, []);
+  }, []);
 
   useEffect(() => {
     const now = () => performance.now();
@@ -225,27 +170,25 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
     };
     const handlePointerDown = () => { keyboardFocusEligibleRef.current = false; };
     const events = [
-      [window, "resize", () => { cancelGameCardReturn("resize"); dispatch({ type: "resize", timestamp: now() }); }],
-      [window, "orientationchange", () => { cancelGameCardReturn("orientation-change"); dispatch({ type: "orientation-change", timestamp: now() }); }],
-      [window, "blur", () => { cancelGameCardReturn("window-blur"); dispatch({ type: "window-blur", timestamp: now() }); }],
-      [window, "popstate", () => { cancelGameCardReturn("route-change"); dispatch({ type: "route-change", timestamp: now() }); }],
-      [window, "hashchange", () => { cancelGameCardReturn("route-change"); dispatch({ type: "route-change", timestamp: now() }); }],
+      [window, "resize", () => dispatch({ type: "resize", timestamp: now() })],
+      [window, "orientationchange", () => dispatch({ type: "orientation-change", timestamp: now() })],
+      [window, "blur", () => dispatch({ type: "window-blur", timestamp: now() })],
+      [window, "popstate", () => dispatch({ type: "route-change", timestamp: now() })],
+      [window, "hashchange", () => dispatch({ type: "route-change", timestamp: now() })],
     ] as const;
-    const handleVisualViewportResize = () => { cancelGameCardReturn("resize"); dispatch({ type: "resize", timestamp: now() }); };
-    const handleScroll = () => { cancelGameCardReturn("scroll"); dispatch({ type: "scroll", timestamp: now() }); };
-    const handleDragStart = () => { cancelGameCardReturn("drag"); dispatch({ type: "drag", timestamp: now() }); };
+    const handleVisualViewportResize = () => dispatch({ type: "resize", timestamp: now() });
+    const handleScroll = () => dispatch({ type: "scroll", timestamp: now() });
+    const handleDragStart = () => dispatch({ type: "drag", timestamp: now() });
     const pushStateDescriptor = Object.getOwnPropertyDescriptor(window.history, "pushState");
     const replaceStateDescriptor = Object.getOwnPropertyDescriptor(window.history, "replaceState");
     const originalPushState = window.history.pushState.bind(window.history);
     const originalReplaceState = window.history.replaceState.bind(window.history);
     const pushState: History["pushState"] = (...args) => {
       originalPushState(...args);
-      cancelGameCardReturn("route-change");
       dispatch({ type: "route-change", timestamp: now() });
     };
     const replaceState: History["replaceState"] = (...args) => {
       originalReplaceState(...args);
-      cancelGameCardReturn("route-change");
       dispatch({ type: "route-change", timestamp: now() });
     };
     window.history.pushState = pushState;
@@ -272,10 +215,10 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
         else Object.defineProperty(window.history, "replaceState", replaceStateDescriptor);
       }
     };
-  }, [cancelGameCardReturn]);
+  }, []);
 
   const isKeyboardFocusEligible = useCallback(() => keyboardFocusEligibleRef.current, []);
-  const value = useMemo(() => ({ state, dispatch, registerSource, updateSourceElement, unregisterSource, beginGameCardReturn, cancelGameCardReturn, beginInteraction, isKeyboardFocusEligible }), [state, registerSource, updateSourceElement, unregisterSource, beginGameCardReturn, cancelGameCardReturn, beginInteraction, isKeyboardFocusEligible]);
+  const value = useMemo(() => ({ state, dispatch, registerSource, updateSourceElement, unregisterSource, beginInteraction, isKeyboardFocusEligible }), [state, registerSource, updateSourceElement, unregisterSource, beginInteraction, isKeyboardFocusEligible]);
   const activeRegistration = state.activeRegistrationId === null ? undefined : sourcesRef.current.get(state.activeRegistrationId);
   useLayoutEffect(() => {
     if (state.reason !== "focus" || activeRegistration?.element == null) return;
@@ -298,9 +241,10 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
         modality: interactionSnapshot.modality,
         ...(state.touch?.startPoint === undefined ? {} : { touchPoint: state.touch.startPoint }),
         sourceShowsCompleteGameCard: activeRegistration.element.dataset.revealCompleteGameCard === "true",
+        sourceIsBattlefieldGameCard: activeRegistration.element.dataset.gameCardPresentation === "battlefield",
       }
     : null;
-  const overlayActive = liveOverlayActive ?? returningActive;
+  const overlayActive = liveOverlayActive;
   const overlayKey = overlayActive === null ? null : overlayInteractionKey(overlayActive);
   useEffect(() => {
     const opened = openedInteractionRef.current;
@@ -309,7 +253,7 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
     }
   }, [closeOpenedInteraction, overlayKey, state.activationOutcome, state.dismissalReason]);
   const handlePlaced = useCallback<NonNullable<ComponentProps<typeof RevealOverlay>["onPlaced"]>>((decision, geometry) => {
-    if (overlayActive === null || overlayActive.returningGameCard === true) return;
+    if (overlayActive === null) return;
     const openKey = overlayInteractionKey(overlayActive);
     if (openedInteractionRef.current?.key === openKey) return;
     if (openedInteractionRef.current !== null) {
@@ -434,11 +378,10 @@ export function useRevealSource(registration: RevealSourceRegistration): RevealS
           : (spec.primary.card.variant ?? "text"),
       "data-reveal-secondary-titles": spec.secondaries.map((card) => card.title).join("\u001f"),
       style: { "--reveal-press-scale": String(feedback.pressScale), "--reveal-hover-scale": String(feedback.hoverScale) } as CSSProperties,
-      onPointerEnter: (event) => { if (valid) { const hoverCapable = event.pointerType === "mouse" || (event.pointerType === "pen" && event.buttons === 0 && event.pressure === 0); if (hoverCapable && coordinator.state.touch === null) { coordinator.cancelGameCardReturn("replaced"); const sourceRect = captureSourceRect(event.currentTarget); coordinator.beginInteraction(mountedSource, "hover", sourceRect, event.pointerType === "pen" ? "pen" : "mouse"); measureFeedback(sourceRect); } coordinator.dispatch({ type: "pointer-enter", source: mountedSource, pointerType: event.pointerType, hoverCapable, timestamp: event.timeStamp }); } },
+      onPointerEnter: (event) => { if (valid) { const hoverCapable = event.pointerType === "mouse" || (event.pointerType === "pen" && event.buttons === 0 && event.pressure === 0); if (hoverCapable && coordinator.state.touch === null) { const sourceRect = captureSourceRect(event.currentTarget); coordinator.beginInteraction(mountedSource, "hover", sourceRect, event.pointerType === "pen" ? "pen" : "mouse"); measureFeedback(sourceRect); } coordinator.dispatch({ type: "pointer-enter", source: mountedSource, pointerType: event.pointerType, hoverCapable, timestamp: event.timeStamp }); } },
       onPointerLeave: (event) => {
         if (event.pointerType !== "touch" && intentTimer.current !== null) { clearTimeout(intentTimer.current); intentTimer.current = null; }
         if (valid) {
-          if (event.pointerType !== "touch") coordinator.beginGameCardReturn(mountedSource);
           coordinator.dispatch({ type: "pointer-leave", source: mountedSource, pointerId: event.pointerId, timestamp: event.timeStamp });
         }
       },
@@ -465,7 +408,7 @@ export function useRevealSource(registration: RevealSourceRegistration): RevealS
         if (intentTimer.current !== null) { clearTimeout(intentTimer.current); intentTimer.current = null; }
         if (valid) coordinator.dispatch({ type: "pointer-cancel", pointerId: event.pointerId, timestamp: event.timeStamp });
       },
-      onFocus: (event) => { if (valid && coordinator.isKeyboardFocusEligible()) { coordinator.cancelGameCardReturn("replaced"); const sourceRect = captureSourceRect(event.currentTarget); coordinator.beginInteraction(mountedSource, "focus", sourceRect, "keyboard"); measureFeedback(sourceRect); coordinator.dispatch({ type: "focus", source: mountedSource, timestamp: event.timeStamp }); } },
+      onFocus: (event) => { if (valid && coordinator.isKeyboardFocusEligible()) { const sourceRect = captureSourceRect(event.currentTarget); coordinator.beginInteraction(mountedSource, "focus", sourceRect, "keyboard"); measureFeedback(sourceRect); coordinator.dispatch({ type: "focus", source: mountedSource, timestamp: event.timeStamp }); } },
       onBlur: (event) => { if (valid) coordinator.dispatch({ type: "blur", source: mountedSource, timestamp: event.timeStamp }); },
     },
   };

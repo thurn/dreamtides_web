@@ -3193,6 +3193,25 @@
       "description": "Press motion. `scale` is the global control treatment; `stationary` is\nreserved for readable rules-copy reveal surfaces. Default `scale`."
     },
     {
+      "name": "hoverFeedback",
+      "tsType": "\"scale\" | \"stationary\"",
+      "unionMembers": [
+        "scale",
+        "stationary"
+      ],
+      "required": false,
+      "defaultValue": "scale",
+      "description": "Hover motion. `stationary` keeps a source fixed while a separate reading\ncopy is shown. Default `scale`."
+    },
+    {
+      "name": "snapHoverExit",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Whether leaving hover removes the scale immediately instead of easing\nback. Physical cards use this to avoid a stale transformed hit target."
+    },
+    {
       "name": "children",
       "tsType": "ReactNode",
       "unionMembers": [],

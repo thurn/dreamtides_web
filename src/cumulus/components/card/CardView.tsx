@@ -1772,6 +1772,8 @@ export function GameCard({
   return (
     <Pressable
       as="div"
+      hoverFeedback={presentation === "battlefield" ? "stationary" : "scale"}
+      snapHoverExit
       ref={binding.ref}
       {...binding.sourceProps}
       role={interactive ? "button" : undefined}
@@ -1780,6 +1782,7 @@ export function GameCard({
       aria-label={model.displaySnapshot.name}
       data-testid={testId}
       data-game-card-source=""
+      data-game-card-presentation={presentation}
       data-card-id={model.cardId}
       data-reveal-complete-game-card={
         hideRulesText || presentation === "battlefield" ? "false" : "true"

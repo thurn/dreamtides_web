@@ -18,6 +18,7 @@ export interface RevealPlacementInput {
   readonly primarySize: RevealSize;
   readonly secondarySizes: readonly RevealSize[];
   readonly sourceShowsCompleteGameCard: boolean;
+  readonly sourceIsBattlefieldGameCard: boolean;
 }
 
 export interface RevealPlacementDecision {
@@ -247,6 +248,30 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
   const secondarySizes = input.secondarySizes;
   const secondaryWidth = secondarySizes.reduce((width, size) => Math.max(width, size.width), 0);
   if (cardShaped) {
+    if (input.sourceIsBattlefieldGameCard) {
+      const sourceIsLeft = sourceRect.x + sourceRect.width / 2 <= viewport.offsetLeft + viewport.width / 2;
+      const orientation = sourceIsLeft ? "primary-left" : "primary-right";
+      const primaryX = sourceIsLeft ? safeLeft : safeRight - primaryWidth;
+      const pairFits = secondarySizes.length > 0
+        && primaryWidth + CARD_GAP + secondaryWidth <= safeRight - safeLeft;
+      const secondaryX = sourceIsLeft
+        ? primaryX + primaryWidth + CARD_GAP
+        : primaryX - CARD_GAP - secondaryWidth;
+      const count = pairFits
+        ? fitSecondaryPrefix(secondarySizes, safeBottom - safeTop)
+        : 0;
+      return result(input, {
+        family: sourceIsLeft
+          ? "desktop-battlefield-corner-left"
+          : "desktop-battlefield-corner-right",
+        orientation,
+        primaryRect: rect(primaryX, safeTop, primarySize),
+        secondaryRects: secondaryRectsAt(secondarySizes, count, secondaryX, safeTop),
+        pressInPlace: false,
+        sideFallback: false,
+        bestEffortPrimaryOverlap: false,
+      });
+    }
     const primaryX = clamp(sourceRect.x + sourceRect.width / 2 - primaryWidth / 2, safeLeft, safeRight - primaryWidth);
     const primaryY = clamp(sourceRect.y + sourceRect.height / 2 - primarySize.height / 2, safeTop, Math.max(safeTop, safeBottom - primarySize.height));
     const rightX = primaryX + primaryWidth + CARD_GAP;

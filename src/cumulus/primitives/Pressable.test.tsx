@@ -144,4 +144,57 @@ describe("Pressable press feedback", () => {
     pressDown(el);
     expect(el.style.transform).toBe("scale(0.98)");
   });
+
+  it("snaps out of hover when a physical card requests an instant hover exit", () => {
+    const { container } = mountInto(
+      <Pressable as="button" snapHoverExit>
+        Card
+      </Pressable>,
+    );
+    const el = container.querySelector("button")!;
+
+    act(() => {
+      el.dispatchEvent(
+        new PointerEvent("pointerover", {
+          bubbles: true,
+          pointerType: "mouse",
+        }),
+      );
+    });
+    expect(el.style.transform).toContain("scale(");
+    expect(el.style.transition).toContain("transform");
+
+    act(() => {
+      el.dispatchEvent(
+        new PointerEvent("pointerout", {
+          bubbles: true,
+          pointerType: "mouse",
+        }),
+      );
+    });
+    expect(el.style.transform).toBe("none");
+    expect(el.style.transition).toBe("none");
+  });
+
+  it("keeps press feedback while suppressing battlefield hover scaling", () => {
+    const { container } = mountInto(
+      <Pressable as="button" hoverFeedback="stationary">
+        Battlefield card
+      </Pressable>,
+    );
+    const el = container.querySelector("button")!;
+
+    act(() => {
+      el.dispatchEvent(
+        new PointerEvent("pointerover", {
+          bubbles: true,
+          pointerType: "mouse",
+        }),
+      );
+    });
+    expect(el.style.transform).toBe("none");
+
+    pressDown(el);
+    expect(el.style.transform).toContain("scale(");
+  });
 });

@@ -16,6 +16,15 @@ The advisory is moderate severity (unbounded memory allocation while parsing
 W3C Baggage headers). `npm audit` only offers `firebase-tools@14.23.0` as a
 fix, which is a major-version downgrade and needs a separate dependency-policy
 decision.
+
+## npm audit: websocket-driver protocol advisories
+
+`npm install` reports GHSA-mp7j-qc5w-4988 and GHSA-xv26-6w52-cph6 in the
+transitive `websocket-driver` dependency. The advisories cover resource-limit
+bypass through message compression and critical message corruption through
+protocol length headers. `npm audit` reports that a fix is available; updating
+the owning dependency chain needs a separate dependency-policy decision.
+
 ## Asymmetric battle preview ranks align to the left of the larger side
 
 The `Fill 20 vs 9 + Voids` battle debug action sizes both combatants' rank

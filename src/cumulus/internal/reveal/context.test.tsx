@@ -442,8 +442,7 @@ describe("Cumulus reveal coordinator root", () => {
     expect(listeners.size).toBe(0);
   });
 
-  it("keeps a desktop GameCard return copy until the 160ms terminal transition", async () => {
-    vi.useFakeTimers();
+  it("closes a desktop GameCard reveal in the pointer-leave frame", async () => {
     Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 800, offsetLeft: 0, offsetTop: 0 } });
     const cardId = asCardId(UUID_A);
     const spec: RevealSpec = { primary: { kind: "gameCard", cardId, displaySnapshot: {
@@ -459,16 +458,11 @@ describe("Cumulus reveal coordinator root", () => {
     act(() => { for (const callback of resizeCallbacks) callback([], {} as ResizeObserver); });
     expect(getLogEntries().filter((entry) => entry.event === "cumulus_entity_reveal_opened")).toHaveLength(1);
     act(() => { button.dispatchEvent(new PointerEvent("pointerout", { bubbles: true, pointerType: "mouse" })); });
-    expect(document.querySelector("[data-cumulus-reveal-portal]")).not.toBeNull();
-    expect(getLogEntries().filter((entry) => entry.event === "cumulus_entity_reveal_closed")).toHaveLength(0);
-    act(() => { vi.advanceTimersByTime(160); });
     expect(document.querySelector("[data-cumulus-reveal-portal]")).toBeNull();
     expect(getLogEntries().filter((entry) => entry.event === "cumulus_entity_reveal_closed")).toHaveLength(1);
-    vi.useRealTimers();
   });
 
-  it.each(["resize", "orientationchange"])("cancels an in-progress GameCard return immediately on %s", async (eventName) => {
-    vi.useFakeTimers();
+  it.each(["resize", "orientationchange"])("does not duplicate a snapped GameCard close on %s", async (eventName) => {
     Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 800, offsetLeft: 0, offsetTop: 0 } });
     const cardId = asCardId(UUID_A);
     const spec: RevealSpec = { primary: { kind: "gameCard", cardId, displaySnapshot: {
@@ -483,17 +477,15 @@ describe("Cumulus reveal coordinator root", () => {
     act(() => { for (const callback of resizeCallbacks) callback([], {} as ResizeObserver); });
     expect(getLogEntries().filter((entry) => entry.event === "cumulus_entity_reveal_opened")).toHaveLength(1);
     act(() => { button.dispatchEvent(new PointerEvent("pointerout", { bubbles: true, pointerType: "mouse" })); });
-    expect(document.querySelector("[data-cumulus-reveal-portal]")).not.toBeNull();
+    expect(document.querySelector("[data-cumulus-reveal-portal]")).toBeNull();
     act(() => { window.dispatchEvent(new Event(eventName)); });
     expect(document.querySelector("[data-cumulus-reveal-portal]")).toBeNull();
-    act(() => { vi.advanceTimersByTime(200); });
     const closes = getLogEntries().filter((entry) => entry.event === "cumulus_entity_reveal_closed");
     expect(closes).toHaveLength(1);
-    expect(closes[0]).toMatchObject({ dismissalReason: eventName === "resize" ? "resize" : "orientation-change" });
+    expect(closes[0]).toMatchObject({ dismissalReason: "pointer-leave" });
   });
 
-  it("closes a returning interaction exactly once before rapid pointer re-entry opens a fresh one", async () => {
-    vi.useFakeTimers();
+  it("closes once before rapid pointer re-entry opens a fresh interaction", async () => {
     Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 800, offsetLeft: 0, offsetTop: 0 } });
     const cardId = asCardId(UUID_A);
     const spec: RevealSpec = { primary: { kind: "gameCard", cardId, displaySnapshot: {
@@ -509,15 +501,13 @@ describe("Cumulus reveal coordinator root", () => {
     await enter(); leave(); await enter();
     expect(getLogEntries().filter((entry) => entry.event === "cumulus_entity_reveal_opened")).toHaveLength(2);
     expect(getLogEntries().filter((entry) => entry.event === "cumulus_entity_reveal_closed")).toHaveLength(1);
-    act(() => { vi.advanceTimersByTime(200); });
     expect(document.querySelector("[data-cumulus-reveal-portal]")).not.toBeNull();
     expect(getLogEntries().filter((entry) => entry.event === "cumulus_entity_reveal_closed")).toHaveLength(1);
-    leave(); act(() => { vi.advanceTimersByTime(160); });
+    leave();
     expect(getLogEntries().filter((entry) => entry.event === "cumulus_entity_reveal_closed")).toHaveLength(2);
   });
 
-  it("cancels a GameCard return immediately when its source unmounts", () => {
-    vi.useFakeTimers();
+  it("does not duplicate a snapped close when its source unmounts", () => {
     Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 800, offsetLeft: 0, offsetTop: 0 } });
     const cardId = asCardId(UUID_A);
     const spec: RevealSpec = { primary: { kind: "gameCard", cardId, displaySnapshot: {
@@ -529,18 +519,16 @@ describe("Cumulus reveal coordinator root", () => {
     button.getBoundingClientRect = () => ({ x: 400, y: 250, left: 400, top: 250, right: 500, bottom: 300, width: 100, height: 50, toJSON: () => ({}) });
     act(() => { button.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" })); });
     act(() => { button.dispatchEvent(new PointerEvent("pointerout", { bubbles: true, pointerType: "mouse" })); });
-    expect(document.querySelector("[data-cumulus-reveal-portal]")).not.toBeNull();
+    expect(document.querySelector("[data-cumulus-reveal-portal]")).toBeNull();
     act(() => root.render(<CumulusRoot><div /></CumulusRoot>));
     expect(document.querySelector("[data-cumulus-reveal-portal]")).toBeNull();
     const closes = getLogEntries().filter((entry) => entry.event === "cumulus_entity_reveal_closed");
     expect(closes).toHaveLength(1);
-    expect(closes[0]).toMatchObject({ dismissalReason: "source-unmount" });
-    act(() => { vi.advanceTimersByTime(160); });
+    expect(closes[0]).toMatchObject({ dismissalReason: "pointer-leave" });
     expect(getLogEntries().filter((entry) => entry.event === "cumulus_entity_reveal_closed")).toHaveLength(1);
   });
 
-  it("cleans a pending return on provider unmount without stale timer logging", () => {
-    vi.useFakeTimers();
+  it("leaves no reveal portal after provider unmount", () => {
     Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 800, offsetLeft: 0, offsetTop: 0 } });
     const cardId = asCardId(UUID_A);
     const spec: RevealSpec = { primary: { kind: "gameCard", cardId, displaySnapshot: {
@@ -554,7 +542,6 @@ describe("Cumulus reveal coordinator root", () => {
     act(() => root.unmount());
     mountedRoots.delete(root);
     const closeCount = getLogEntries().filter((entry) => entry.event === "cumulus_entity_reveal_closed").length;
-    act(() => { vi.advanceTimersByTime(200); });
     expect(document.querySelector("[data-cumulus-reveal-portal]")).toBeNull();
     expect(getLogEntries().filter((entry) => entry.event === "cumulus_entity_reveal_closed")).toHaveLength(closeCount);
   });

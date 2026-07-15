@@ -320,6 +320,9 @@ describe("MobileBattleScreen", () => {
     expect(playerHand?.style.justifyContent).toBe("center");
     expect(playerHand?.style.gap).toBe("var(--space-2)");
     expect(playerHand?.style.paddingTop).toBe("var(--space-8)");
+    expect(playerHand?.style.transform).toBe(
+      "translateY(var(--space-8))",
+    );
     expect(controls?.style.justifyContent).toBe("flex-end");
     expect(controls?.style.justifySelf).toBe("center");
     expect(controls?.style.maxWidth).toBe("1180px");
@@ -699,6 +702,8 @@ describe("MobileBattleScreen", () => {
       expect(card.textContent).not.toContain("Fixture Card");
       expect(card.textContent).not.toContain("Fixture");
       expect(card.textContent).not.toContain("A stable fixture ability");
+      const physicalCard = card.closest<HTMLElement>("[data-battle-card-id]");
+      expect(physicalCard?.style.transform).toBe("");
     });
     expect(
       container.querySelectorAll(
@@ -1158,11 +1163,14 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("routes physical card gestures through intent callbacks without adding gameplay controls", () => {
+  it("routes a hand-card drop anywhere on the table through the semantic play intent", () => {
     const interactions = {
       canInteract: true,
       pendingCardId: "player-hand-0",
+      pendingCardSource: "player-hand" as const,
+      pendingCardOwner: "player" as const,
       onHandCardActivate: vi.fn(),
+      onHandCardDrop: vi.fn(),
       onCardDragStart: vi.fn(),
       onCardDragEnd: vi.fn(),
       onSlotDrop: vi.fn(),
@@ -1174,14 +1182,8 @@ describe("MobileBattleScreen", () => {
     const handCard = container.querySelector<HTMLElement>(
       '[data-battle-card-id="player-hand-0"]',
     );
-    const battlefieldCard = container.querySelector<HTMLElement>(
-      '[data-battle-card-id="player-front-card"]',
-    );
-    const emptySlot = container.querySelector<HTMLElement>(
-      '[data-battle-rank="player-back"] [data-battle-slot-filled="false"]',
-    );
-    const playerVoid = container.querySelector<HTMLElement>(
-      '[data-battle-zone="player-void"]',
+    const enemySlot = container.querySelector<HTMLElement>(
+      '[data-battle-rank="enemy-back"] [data-battle-slot-filled="false"]',
     );
     const playerHand = container.querySelector<HTMLElement>(
       '[data-battle-mobile-row="player-hand"]',
@@ -1191,14 +1193,7 @@ describe("MobileBattleScreen", () => {
     act(() => {
       handCard?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       handCard?.dispatchEvent(new Event("dragstart", { bubbles: true }));
-      battlefieldCard?.dispatchEvent(new Event("dragstart", { bubbles: true }));
-      emptySlot?.dispatchEvent(
-        new Event("drop", { bubbles: true, cancelable: true }),
-      );
-      playerVoid?.dispatchEvent(
-        new Event("drop", { bubbles: true, cancelable: true }),
-      );
-      playerHand?.dispatchEvent(
+      enemySlot?.dispatchEvent(
         new Event("drop", { bubbles: true, cancelable: true }),
       );
       handCard?.dispatchEvent(new Event("dragend", { bubbles: true }));
@@ -1213,27 +1208,84 @@ describe("MobileBattleScreen", () => {
       "player-hand-0",
       "player-hand",
     );
-    expect(interactions.onCardDragStart).toHaveBeenNthCalledWith(
-      2,
-      "player-front-card",
-      "battlefield",
+    expect(interactions.onHandCardDrop).toHaveBeenCalledTimes(1);
+    expect(interactions.onSlotDrop).not.toHaveBeenCalled();
+    expect(interactions.onZoneDrop).not.toHaveBeenCalled();
+    expect(interactions.onCardDragEnd).toHaveBeenCalledTimes(1);
+    expect(container.querySelectorAll("button")).toHaveLength(4);
+
+    act(() => root.unmount());
+  });
+
+  it("offers battlefield drop targets only on the dragged card's own side", () => {
+    const interactions = {
+      canInteract: true,
+      pendingCardId: "player-front-card",
+      pendingCardSource: "battlefield" as const,
+      pendingCardOwner: "player" as const,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(makeView(), interactions);
+    const playerSlot = container.querySelector<HTMLElement>(
+      '[data-battle-rank="player-back"] [data-battle-slot-filled="false"]',
     );
+    const enemySlot = container.querySelector<HTMLElement>(
+      '[data-battle-rank="enemy-back"] [data-battle-slot-filled="false"]',
+    );
+
+    expect(playerSlot?.dataset.battleDropTarget).toBe("true");
+    expect(enemySlot?.dataset.battleDropTarget).toBeUndefined();
+    act(() => {
+      enemySlot?.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+      playerSlot?.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+    });
+    expect(interactions.onSlotDrop).toHaveBeenCalledTimes(1);
     expect(interactions.onSlotDrop).toHaveBeenCalledWith({
       owner: "player",
       rank: "back",
       slotId: "player-back-empty",
     });
-    expect(interactions.onZoneDrop).toHaveBeenCalledWith({
-      owner: "player",
-      zone: "void",
-    });
-    expect(interactions.onZoneDrop).toHaveBeenCalledWith({
-      owner: "player",
-      zone: "hand",
-    });
-    expect(interactions.onCardDragEnd).toHaveBeenCalledTimes(1);
-    expect(container.querySelectorAll("button")).toHaveLength(4);
 
+    act(() => root.unmount());
+  });
+
+  it("suppresses the browser's composited native drag image", () => {
+    const interactions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(makeView(), interactions);
+    const handCard = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-hand-0"]',
+    );
+    const setDragImage = vi.fn();
+    const dragStart = new Event("dragstart", { bubbles: true, cancelable: true });
+    Object.defineProperty(dragStart, "dataTransfer", {
+      value: { setDragImage },
+    });
+
+    act(() => {
+      handCard?.dispatchEvent(dragStart);
+    });
+
+    expect(setDragImage).toHaveBeenCalledTimes(1);
+    expect(setDragImage.mock.calls[0]?.[0]).toBe(
+      handCard?.querySelector("[data-native-drag-image]"),
+    );
+    expect(setDragImage).toHaveBeenCalledWith(expect.any(HTMLElement), 0, 0);
     act(() => root.unmount());
   });
 

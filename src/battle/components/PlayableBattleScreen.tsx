@@ -78,7 +78,7 @@ import { collectAutomationHashDrift } from "../../rules/battle/battle-card-effec
 import { BattlefieldGrid } from "./BattlefieldGrid";
 import { BattleZoneBrowser } from "./BattleZoneBrowser";
 import {
-  createMoveCardToBattlefieldCommand,
+  createPlayCardFromHandCommand,
   createMoveCardToDeckCommand,
   createMoveCardToStackCommand,
   createMoveCardToZoneCommand,
@@ -187,6 +187,7 @@ function PlayableBattleScreenInner({
   const [isPlayerHandHidden, setIsPlayerHandHidden] = useState(false);
   const [openZoneBrowser, setOpenZoneBrowser] = useState<ZoneBrowserState>(null);
   const [pendingDrag, setPendingDrag] = useState<PendingDragState>(null);
+  const pendingDragDropHandledRef = useRef(false);
   const [contextMenu, setContextMenu] = useState<ContextMenuState>(null);
   const [openForeseeOverlay, setOpenForeseeOverlay] = useState<ForeseeOverlayState>(null);
   const [openDeckOrderPicker, setOpenDeckOrderPicker] = useState<BattleSide | null>(null);
@@ -293,6 +294,16 @@ function PlayableBattleScreenInner({
     : pendingDrag.kind === "battle-card"
       ? pendingDrag.battleCardId
       : "__pool_viewer_card__";
+  const pendingDragLocation = pendingDrag?.kind === "battle-card"
+    ? selectBattleCardLocation(board, pendingDrag.battleCardId)
+    : null;
+  const pendingCardSource = pendingDragLocation?.zone === "hand"
+    && pendingDrag?.sourceSurface === "hand-tray"
+    ? "player-hand"
+    : pendingDrag?.kind === "battle-card"
+      ? "battlefield"
+      : null;
+  const pendingCardOwner = pendingDragLocation?.side ?? null;
 
   // Resolves the single open prompt from the fold. Gated on
   // `useConfirmedPromptId()` so a resolve never targets a promptId that only
@@ -711,12 +722,11 @@ function PlayableBattleScreenInner({
     if (!canPlayerAct) {
       return;
     }
-    const side = selectBattleCardLocation(board, battleCardId)?.side ?? "player";
-    const command = createMoveCardToBattlefieldCommand(
+    const command = createPlayCardFromHandCommand(
       board,
       battleCardId,
-      side,
       "hand-tray",
+      isBasicAutomationEnabled,
     );
     if (command !== null) {
       handleCommand(command);
@@ -856,6 +866,7 @@ function PlayableBattleScreenInner({
     const location = selectBattleCardLocation(board, battleCardId);
     const instance = board.cardInstances[battleCardId];
     if (instance !== undefined) {
+      pendingDragDropHandledRef.current = false;
       setPendingDrag({
         kind: "battle-card",
         battleCardId,
@@ -866,7 +877,32 @@ function PlayableBattleScreenInner({
   }
 
   function handleCardDragEnd(): void {
+    if (
+      !pendingDragDropHandledRef.current
+      && pendingDrag?.kind === "battle-card"
+      && selectBattleCardLocation(board, pendingDrag.battleCardId)?.zone === "hand"
+    ) {
+      handlePlayPendingHandCard();
+      return;
+    }
+    pendingDragDropHandledRef.current = false;
     setPendingDrag(null);
+  }
+
+  function handlePlayPendingHandCard(): void {
+    if (pendingDrag?.kind !== "battle-card") return;
+    pendingDragDropHandledRef.current = true;
+    const command = createPlayCardFromHandCommand(
+      board,
+      pendingDrag.battleCardId,
+      pendingDrag.sourceSurface,
+      isBasicAutomationEnabled,
+    );
+    if (command === null) {
+      setPendingDrag(null);
+      return;
+    }
+    handleCommand(command);
   }
 
   function handlePoolCardDragStart(card: CardData): void {
@@ -907,6 +943,18 @@ function PlayableBattleScreenInner({
     const draggedLocation = pendingDrag.kind === "battle-card"
       ? selectBattleCardLocation(board, pendingDrag.battleCardId)
       : null;
+    if (draggedLocation?.zone === "hand") {
+      handlePlayPendingHandCard();
+      return;
+    }
+    if (
+      (draggedLocation?.zone === "backRank" || draggedLocation?.zone === "frontRank")
+      && draggedLocation.side !== target.side
+    ) {
+      pendingDragDropHandledRef.current = true;
+      setPendingDrag(null);
+      return;
+    }
     const targetOccupant = selectBattlefieldSlotOccupant(board, target);
 
     if (targetOccupant !== null) {
@@ -973,6 +1021,13 @@ function PlayableBattleScreenInner({
     if (pendingDrag === null) {
       return;
     }
+    if (
+      pendingDrag.kind === "battle-card"
+      && selectBattleCardLocation(board, pendingDrag.battleCardId)?.zone === "hand"
+    ) {
+      handlePlayPendingHandCard();
+      return;
+    }
 
     if (pendingDrag.kind === "pool-card") {
       handleCommand({
@@ -1003,6 +1058,13 @@ function PlayableBattleScreenInner({
       return;
     }
     if (pendingDrag === null) {
+      return;
+    }
+    if (
+      pendingDrag.kind === "battle-card"
+      && selectBattleCardLocation(board, pendingDrag.battleCardId)?.zone === "hand"
+    ) {
+      handlePlayPendingHandCard();
       return;
     }
 
@@ -1240,7 +1302,10 @@ function PlayableBattleScreenInner({
           interactions={{
             canInteract: canPlayerAct,
             pendingCardId: pendingDragCardId,
+            pendingCardSource,
+            pendingCardOwner,
             onHandCardActivate: handleHandCardDoubleClick,
+            onHandCardDrop: handlePlayPendingHandCard,
             onCardDebugActivate: handleCumulusCardDebugActivate,
             onCardDragStart: (battleCardId, source) => {
               handleCardDragStart(

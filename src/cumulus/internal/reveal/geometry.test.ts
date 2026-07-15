@@ -5,6 +5,7 @@ const viewport = { layout: "mobile", width: 390, height: 844, offsetLeft: 0, off
 const base: RevealPlacementInput = {
   viewport, reason: "press", primaryKind: "infoCard", sourceRect: { x: 170, y: 650, width: 50, height: 50 },
   touchPoint: { x: 195, y: 675 }, primarySize: { width: 248, height: 190 }, secondarySizes: [], sourceShowsCompleteGameCard: false,
+  sourceIsBattlefieldGameCard: false,
 };
 
 describe("fitSecondaryPrefix", () => {
@@ -64,6 +65,29 @@ describe("selectRevealPlacement", () => {
     const alone = selectRevealPlacement(game);
     const supported = selectRevealPlacement({ ...game, secondarySizes: [{ width: 248, height: 120 }] });
     expect(supported.primaryRect).toEqual(alone.primaryRect);
+  });
+
+  it.each([
+    { sourceX: 120, expectedX: 0, family: "desktop-battlefield-corner-left", orientation: "primary-left" },
+    { sourceX: 1000, expectedX: 960, family: "desktop-battlefield-corner-right", orientation: "primary-right" },
+  ] as const)("pins battlefield reading copies to the top corner above their side", ({ sourceX, expectedX, family, orientation }) => {
+    const result = selectRevealPlacement({
+      ...base,
+      viewport: { ...viewport, layout: "desktop", width: 1200, height: 900, safeArea: { top: 0, right: 0, bottom: 0, left: 0 } },
+      reason: "hover",
+      touchPoint: undefined,
+      primaryKind: "gameCard",
+      sourceRect: { x: sourceX, y: 500, width: 100, height: 100 },
+      primarySize: { width: 100, height: 140 },
+      secondarySizes: [{ width: 248, height: 120 }],
+      sourceIsBattlefieldGameCard: true,
+    });
+
+    expect(result.family).toBe(family);
+    expect(result.orientation).toBe(orientation);
+    expect(result.primaryRect).toMatchObject({ x: expectedX, y: 0, width: 240, height: 336 });
+    expect(result.secondaryRects).toHaveLength(1);
+    expect(result.secondaryRects[0]?.y).toBe(0);
   });
 
   it("gives card-shaped gallery actions the exact GameCard hover rectangle", () => {

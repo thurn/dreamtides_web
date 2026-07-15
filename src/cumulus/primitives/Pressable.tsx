@@ -165,6 +165,12 @@ export interface PressableProps extends React.HTMLAttributes<HTMLElement> {
   /** Press motion. `scale` is the global control treatment; `stationary` is
    * reserved for readable rules-copy reveal surfaces. Default `scale`. */
   pressFeedback?: "scale" | "stationary";
+  /** Hover motion. `stationary` keeps a source fixed while a separate reading
+   * copy is shown. Default `scale`. */
+  hoverFeedback?: "scale" | "stationary";
+  /** Whether leaving hover removes the scale immediately instead of easing
+   * back. Physical cards use this to avoid a stale transformed hit target. */
+  snapHoverExit?: boolean;
   /** Content rendered inside the pressable element. */
   children?: React.ReactNode;
 }
@@ -186,6 +192,8 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
       as = "button",
       disabled = false,
       pressFeedback = "scale",
+      hoverFeedback = "scale",
+      snapHoverExit = false,
       style,
       onPointerEnter,
       onPointerDown,
@@ -269,7 +277,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
           WebkitTouchCallout: "none",
           touchAction: "manipulation",
           transformOrigin: "center",
-          transition: reducedMotion
+          transition: reducedMotion || (snapHoverExit && !hovered)
             ? "none"
             : `transform var(--dur-fast) var(--ease-out)`,
           // Scale down on press, up on hover — the one Dreamtides rule, applied
@@ -281,7 +289,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
               ? "none"
               : pressed
                 ? `scale(${pressScale})`
-              : hovered
+              : hovered && hoverFeedback === "scale"
                 ? `scale(${hoverScale})`
                 : "none",
           ...style,

@@ -27,7 +27,7 @@ function active(overrides: Partial<RevealOverlayActive> = {}): RevealOverlayActi
   return {
     source: { identity: { entityType: "test", entityId: UUID }, registrationId: "one" },
     spec: makeTextRevealSpec("Primary", "Body", ["First", "Second"]), element: source,
-    reason: "hover", sourceShowsCompleteGameCard: false, interactionId: 1,
+    reason: "hover", sourceShowsCompleteGameCard: false, sourceIsBattlefieldGameCard: false, interactionId: 1,
     sourceRect: { x: 400, y: 250, width: 100, height: 50 }, modality: "mouse",
     ...overrides,
   };
@@ -106,15 +106,6 @@ describe("RevealOverlay", () => {
     expect(placedGeometry?.viewport).toMatchObject({ offsetLeft: 7, offsetTop: 13 });
   });
 
-  it("uses the sole 160ms GameCard return transition, skipped under reduced motion", () => {
-    const returning = active({ returningGameCard: true });
-    act(() => renderOverlay(<RevealOverlay active={returning} />));
-    expect(document.querySelector<HTMLElement>("[data-cumulus-reveal-group]")!.style.transition).toBe("");
-    window.matchMedia = vi.fn().mockReturnValue({ matches: true, addEventListener: vi.fn(), removeEventListener: vi.fn() });
-    act(() => renderOverlay(<RevealOverlay active={{ ...returning, source: { ...returning.source, registrationId: "two" } }} />));
-    expect(document.querySelector<HTMLElement>("[data-cumulus-reveal-group]")!.style.transition).toBe("");
-  });
-
   it("waits for the genuinely asynchronous GameCard renderer and remeasures its resolved size", async () => {
     const cardId = asCardId(UUID);
     const spec: RevealSpec = { primary: { kind: "gameCard", cardId, displaySnapshot: {
@@ -146,12 +137,6 @@ describe("RevealOverlay", () => {
     const value = active({ spec });
     act(() => renderOverlay(<RevealOverlay active={value} />));
     expect(value.element.style.opacity).toBe("0");
-    act(() => renderOverlay(<RevealOverlay active={{ ...value, returningGameCard: true }} />));
-    const returningCard = document.querySelector<HTMLElement>("[data-cumulus-reveal-card=\"primary\"]")!;
-    expect(returningCard.style.left).toBe("400px");
-    expect(returningCard.style.top).toBe("250px");
-    expect(returningCard.style.width).toBe("100px");
-    expect(returningCard.style.transition).toContain("160ms");
     act(() => renderOverlay(<RevealOverlay active={null} />));
     expect(value.element.style.opacity).toBe("");
   });

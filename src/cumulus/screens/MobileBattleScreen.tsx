@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type DragEvent as ReactDragEvent } from "react";
 import { LayoutGroup, motion } from "framer-motion";
 import {
   GameCard,
@@ -191,7 +191,10 @@ export interface MobileBattleZoneTarget {
 export interface MobileBattleInteractions {
   readonly canInteract: boolean;
   readonly pendingCardId: string | null;
+  readonly pendingCardSource?: MobileBattleCardSource | null;
+  readonly pendingCardOwner?: MobileBattleOwner | null;
   readonly onHandCardActivate: (battleCardId: string) => void;
+  readonly onHandCardDrop?: () => void;
   readonly onCardDebugActivate?: (
     battleCardId: string,
     source: MobileBattleCardSource,
@@ -475,7 +478,9 @@ function SideZones({
   const deck = toDeckPile(side.deckCardIds);
   const voidPile = toVoidPile(side.voidCards);
   const canDrop =
-    interactions?.canInteract === true && interactions.pendingCardId !== null;
+    interactions?.canInteract === true
+    && interactions.pendingCardId !== null
+    && interactions.pendingCardSource !== "player-hand";
   const zoneDropProps = (zone: "deck" | "void") => ({
     "data-battle-mobile-drop-kind": "zone",
     "data-battle-mobile-drop-owner": owner,
@@ -801,7 +806,7 @@ function FaceUpCard({
     inverseParentTransform: LinearTransform;
   } | null>(null);
   const draggable = interaction?.draggable === true;
-  const restingTransform = card.exhausted ? "rotate(90deg)" : "";
+  const restingTransform = "";
   const cancelPendingTap = (): void => {
     if (pendingTapRef.current === null) return;
     window.clearTimeout(pendingTapRef.current);
@@ -977,12 +982,19 @@ function FaceUpCard({
           y: event.clientY,
         });
       }}
-      onDragStart={(event) => {
+      onDragStartCapture={(event: ReactDragEvent<HTMLDivElement>) => {
         if (touchPointerRef.current !== null) {
           event.preventDefault();
           return;
         }
         if (draggable) {
+          const dragImage = event.currentTarget.querySelector<HTMLElement>(
+            "[data-native-drag-image]",
+          );
+          const dataTransfer = event.dataTransfer;
+          if (dragImage !== null && dataTransfer?.setDragImage !== undefined) {
+            dataTransfer.setDragImage(dragImage, 0, 0);
+          }
           cancelPendingTap();
           dragSuppressedRef.current = true;
           interaction?.onDragStart();
@@ -1000,6 +1012,17 @@ function FaceUpCard({
         transformOrigin: "50% 50%",
       }}
     >
+      <span
+        aria-hidden="true"
+        data-native-drag-image=""
+        style={{
+          position: "fixed",
+          width: 1,
+          height: 1,
+          pointerEvents: "none",
+          opacity: 0,
+        }}
+      />
       <motion.div
         layoutId={`battle-card:${card.id}`}
         data-battle-card-motion=""
@@ -1070,7 +1093,12 @@ function Rank({
   readonly interactions?: MobileBattleInteractions;
 }) {
   const canDrop =
-    interactions?.canInteract === true && interactions.pendingCardId !== null;
+    interactions?.canInteract === true
+    && interactions.pendingCardId !== null
+    && interactions.pendingCardSource !== "player-hand"
+    && (interactions.pendingCardOwner === null
+      || interactions.pendingCardOwner === undefined
+      || interactions.pendingCardOwner === owner);
   const layoutSlotCount =
     rank === "back"
       ? layoutBackSlotCount
@@ -1254,7 +1282,9 @@ function PlayerHand({
   readonly interactions?: MobileBattleInteractions;
 }) {
   const canDrop =
-    interactions?.canInteract === true && interactions.pendingCardId !== null;
+    interactions?.canInteract === true
+    && interactions.pendingCardId !== null
+    && interactions.pendingCardSource !== "player-hand";
   return (
     <div
       data-battle-mobile-row="player-hand"
@@ -1277,12 +1307,19 @@ function PlayerHand({
         gridColumn: 1,
         gridRow: 6,
         zIndex: PLAYER_HAND_Z_INDEX,
-        overflow: canDrop ? "visible" : "hidden",
+        overflow:
+          interactions?.pendingCardId !== undefined
+          && interactions.pendingCardId !== null
+            ? "visible"
+            : "hidden",
         display: isDesktop ? "flex" : undefined,
         alignItems: isDesktop ? "flex-start" : undefined,
         justifyContent: isDesktop ? "center" : undefined,
         gap: isDesktop ? token("--space-2") : undefined,
         paddingTop: isDesktop ? token("--space-8") : undefined,
+        transform: isDesktop
+          ? `translateY(${token("--space-8")})`
+          : undefined,
         boxSizing: isDesktop ? "border-box" : undefined,
       }}
     >
@@ -1360,6 +1397,10 @@ function dropMobileCardAtPoint(
   clientX: number,
   clientY: number,
 ): void {
+  if (interactions.pendingCardSource === "player-hand") {
+    interactions.onHandCardDrop?.();
+    return;
+  }
   const target = document
     .elementFromPoint(clientX, clientY)
     ?.closest<HTMLElement>("[data-battle-mobile-drop-kind]");
@@ -1833,6 +1874,16 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
       className="cumulus"
       data-battle-mobile={view.battleId}
       data-battle-layout={isDesktop ? "desktop" : "mobile"}
+      onDragOver={(event) => {
+        if (interactions?.pendingCardSource === "player-hand") {
+          event.preventDefault();
+        }
+      }}
+      onDrop={(event) => {
+        if (interactions?.pendingCardSource !== "player-hand") return;
+        event.preventDefault();
+        interactions.onHandCardDrop?.();
+      }}
       style={{
         ...rootStyle(isDesktop),
         position: "relative",

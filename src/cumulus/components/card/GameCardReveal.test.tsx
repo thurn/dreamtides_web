@@ -147,6 +147,7 @@ describe("GameCard reveal contract", () => {
     );
 
     expect(source?.dataset.revealCompleteGameCard).toBe("false");
+    expect(source?.dataset.gameCardPresentation).toBe("battlefield");
     expect(surface?.dataset.cardPresentation).toBe("battlefield");
     expect(surface?.style.aspectRatio).toBe("1 / 1");
     expect(surface?.style.borderRadius).toBe("var(--cv-radius)");
@@ -178,6 +179,10 @@ describe("GameCard reveal contract", () => {
     const reveal = document.querySelector<HTMLElement>(
       '[data-cumulus-reveal-card="primary"]',
     );
+    expect(source?.style.opacity).not.toBe("0");
+    expect(source?.style.transform).toBe("none");
+    expect(reveal?.style.top).toBe("0px");
+    expect(reveal?.style.left).toBe("0px");
     expect(reveal?.textContent).toContain("Archive Sentry");
     expect(reveal?.textContent).toContain("Synth");
     expect(reveal?.textContent).toContain("Discard a bane");

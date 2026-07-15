@@ -17,7 +17,7 @@ export interface RevealOverlayActive {
   readonly reason: RevealReason;
   readonly touchPoint?: RevealPoint;
   readonly sourceShowsCompleteGameCard: boolean;
-  readonly returningGameCard?: boolean;
+  readonly sourceIsBattlefieldGameCard: boolean;
   readonly interactionId: number;
   readonly sourceRect: RevealRect;
   readonly modality: "mouse" | "pen" | "touch" | "keyboard";
@@ -31,11 +31,6 @@ export interface RevealOverlayProps {
 interface MeasuredDecision { readonly key: string; readonly decision: RevealPlacementDecision; readonly sourceRect: RevealRect }
 
 const transparent: CSSProperties = { pointerEvents: "none" };
-
-function prefersReducedMotion(): boolean {
-  return document.documentElement.dataset.cumulusReducedMotion === "reduce"
-    || (typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-}
 
 export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
   const key = active === null ? "" : `${active.source.registrationId}:${active.reason}:${String(active.interactionId)}`;
@@ -68,6 +63,7 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
         primarySize: { width: primaryRect.width, height: primaryRect.height },
         secondarySizes,
         sourceShowsCompleteGameCard: active.sourceShowsCompleteGameCard,
+        sourceIsBattlefieldGameCard: active.sourceIsBattlefieldGameCard,
       });
       setMeasured({ key, decision, sourceRect: active.sourceRect });
       onPlaced?.(decision, {
@@ -88,14 +84,13 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
   }, [active, key, onPlaced, viewport]);
 
   const decision = measured?.key === key ? measured.decision : null;
-  const returnRect = measured?.key === key ? measured.sourceRect : null;
   const primaryIsCardShaped = active !== null && active.spec.primary.kind !== "infoCard";
   const sourcePrimaryInPlace = active !== null && decision !== null
     && active.spec.primary.kind === "gameCard"
     && (decision.pressInPlace || (viewport?.layout === "desktop" && active.sourceShowsCompleteGameCard
       && active.sourceRect.width >= DESKTOP_GAME_CARD_WIDTH));
   useLayoutEffect(() => {
-    if (active === null || viewport?.layout !== "desktop" || !primaryIsCardShaped || decision === null || sourcePrimaryInPlace) return;
+    if (active === null || viewport?.layout !== "desktop" || !primaryIsCardShaped || decision === null || sourcePrimaryInPlace || active.sourceIsBattlefieldGameCard) return;
     const previousOpacity = active.element.style.opacity;
     active.element.style.opacity = "0";
     return () => { active.element.style.opacity = previousOpacity; };
@@ -118,10 +113,10 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
       </div>
       {decision !== null && (
         <div data-cumulus-reveal-group="" style={{ position: "fixed", inset: 0, visibility: "visible", pointerEvents: "none" }}>
-          {!sourcePrimaryInPlace && <div data-cumulus-reveal-card="primary" style={{ position: "fixed", left: active.returningGameCard === true && returnRect !== null ? returnRect.x : decision.primaryRect.x, top: active.returningGameCard === true && returnRect !== null ? returnRect.y : decision.primaryRect.y, width: active.returningGameCard === true && returnRect !== null ? returnRect.width : decision.primaryRect.width, height: active.returningGameCard === true && returnRect !== null ? returnRect.height : decision.primaryRect.height, pointerEvents: "none", transition: active.returningGameCard === true && !prefersReducedMotion() ? "left 160ms var(--ease-out), top 160ms var(--ease-out), width 160ms var(--ease-out), height 160ms var(--ease-out)" : "none" }}>
-            {renderRevealCard(active.spec.primary, active.returningGameCard === true && returnRect !== null ? returnRect.width : decision.primaryRect.width)}
+          {!sourcePrimaryInPlace && <div data-cumulus-reveal-card="primary" style={{ position: "fixed", left: decision.primaryRect.x, top: decision.primaryRect.y, width: decision.primaryRect.width, height: decision.primaryRect.height, pointerEvents: "none", transition: "none" }}>
+            {renderRevealCard(active.spec.primary, decision.primaryRect.width)}
           </div>}
-          {(active.returningGameCard === true ? [] : decision.secondaryRects).map((cardRect, index) => (
+          {decision.secondaryRects.map((cardRect, index) => (
             <div data-cumulus-reveal-card="secondary" key={index} style={{ position: "fixed", left: cardRect.x, top: cardRect.y, width: cardRect.width, height: cardRect.height, pointerEvents: "none" }}>
               {renderRevealInfoCard(active.spec.secondaries[index], cardRect.width)}
             </div>
