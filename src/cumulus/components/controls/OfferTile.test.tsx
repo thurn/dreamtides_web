@@ -451,6 +451,7 @@ describe("OfferTile", () => {
       id: "debug-transfigure",
       kind: "transfigure-card",
       card: { ...MODEL.cards[0], displaySnapshot: FULL_CARD },
+      transfiguration: "Empowered",
     };
     const purge: OfferTileModel = {
       id: "debug-purge",
@@ -542,12 +543,13 @@ describe("OfferTile", () => {
       id: "debug-keyword",
       kind: "keyword-modification",
       card: FULL_CARDS[0],
+      reclaimReduction: 1,
     };
     const characterType: OfferTileModel = {
       id: "debug-character-type",
       kind: "tribal-change",
       card: FULL_CARDS[1],
-      newCharacterType: "Warrior",
+      newCharacterSubtype: "Warrior",
     };
     const container = document.createElement("div");
     document.body.append(container);

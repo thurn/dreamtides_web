@@ -39,9 +39,9 @@ describe("OffersDebugApp", () => {
     const tiles = container.querySelectorAll("[data-offer-tile]");
     expect(tiles).toHaveLength(OFFER_TILE_DEBUG_ARCHETYPE_IDS.length);
     expect(MERCHANT_ARCHETYPE_BUILDERS).toHaveLength(17);
-    expect(OFFER_TILE_DEBUG_ARCHETYPE_IDS).toHaveLength(15);
+    expect(OFFER_TILE_DEBUG_ARCHETYPE_IDS).toHaveLength(16);
     expect(OFFER_TILE_DEBUG_ARCHETYPE_IDS).not.toContain("strong_card");
-    expect(OFFER_TILE_DEBUG_ARCHETYPE_IDS).not.toContain("category_draft_known");
+    expect(OFFER_TILE_DEBUG_ARCHETYPE_IDS).toContain("category_draft_known");
     const motionDelays = [...tiles].map(
       (tile) =>
         tile.querySelector<HTMLElement>("[data-offer-tile-floating-frame]")?.style
@@ -69,7 +69,9 @@ describe("OffersDebugApp", () => {
     const fitCardGift = OFFER_TILE_DEBUG_MODELS.fit_card_grant;
     const strongCardGift = OFFER_TILE_DEBUG_MODELS.strong_card;
     const copiesDraft = OFFER_TILE_DEBUG_MODELS.copies_draft;
+    const categoryDraft = OFFER_TILE_DEBUG_MODELS.category_draft_known;
     const cardBundle = OFFER_TILE_DEBUG_MODELS.card_bundle;
+    const transfigure = OFFER_TILE_DEBUG_MODELS.transfigure;
     const duplicate = OFFER_TILE_DEBUG_MODELS.duplicate;
     const dreamsignDraft = OFFER_TILE_DEBUG_MODELS.dreamsign_draft;
     const starters = OFFER_TILE_DEBUG_MODELS.starter_transfigure;
@@ -82,7 +84,15 @@ describe("OffersDebugApp", () => {
     expect(offerTileDescription(copiesDraft)).toBe(
       "Choose a card and add two copies of it to your deck.",
     );
-    expect(offerTileDescription(cardBundle)).toBe("Add three cards to your deck.");
+    expect(offerTileDescription(categoryDraft)).toBe(
+      "Choose a spirit animal to add to your deck.",
+    );
+    expect(offerTileDescription(cardBundle)).toBe(
+      "Add Loading Card, Loading Card, and Loading Card to your deck.",
+    );
+    expect(offerTileDescription(transfigure)).toBe(
+      "Transfigure Loading Card into its Empowered form.",
+    );
     expect(trade.kind).toBe("trade-card");
     expect(trade.kind === "trade-card" ? trade.incoming : []).toHaveLength(4);
     expect(duplicate.kind).toBe("duplicate-card");
@@ -104,10 +114,10 @@ describe("OffersDebugApp", () => {
       keyword.kind === "keyword-modification" ? keyword.card.cardId : null,
     ).toBe("2931e20b-1a80-4ddd-8944-20e68d182886");
     expect(offerTileDescription(keyword)).toBe(
-      "Reduce the reclaim cost of Loading Card.",
+      "Reduce the Reclaim cost of Loading Card by one.",
     );
     expect(offerTileDescription(characterType)).toBe(
-      "Change the character type of Loading Card to Warrior.",
+      "Change the subtype of Loading Card to Warrior.",
     );
     expect(offerTileDescription(dreamsignDraft)).toBe(
       "Choose a dreamsign to gain.",

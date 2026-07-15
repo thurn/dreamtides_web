@@ -7,6 +7,7 @@ import {
 } from "react";
 import type { CardId } from "../../../types/card-identity";
 import type { FrozenCardData } from "../../../types/cards";
+import type { TransfigurationType } from "../../../types/quest";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
@@ -80,8 +81,8 @@ export type OfferTileDuplicateCards =
   | readonly [OfferTileCard, OfferTileCard]
   | readonly [OfferTileCard, OfferTileCard, OfferTileCard];
 
-/** Character types that a Dream Augury offer can apply to a card. */
-export type OfferTileCharacterType =
+/** Character subtypes that a Dream Augury offer can apply to a card. */
+export type OfferTileCharacterSubtype =
   | "Warrior"
   | "Spirit Animal"
   | "Survivor"
@@ -113,8 +114,14 @@ interface OfferTileBase {
 export type OfferTileModel =
   | (OfferTileBase & { kind: "card-gift"; card: OfferTileCard })
   | (OfferTileBase & {
-      kind: "card-draft" | "category-draft" | "transfigured-draft";
+      kind: "card-draft" | "transfigured-draft";
       cards: OfferTileFourCards;
+    })
+  | (OfferTileBase & {
+      kind: "category-draft";
+      cards: OfferTileFourCards;
+      /** Player-facing category noun, such as `warrior` or `Event`. */
+      categoryName: string;
     })
   | (OfferTileBase & {
       kind: "copies-draft";
@@ -124,14 +131,22 @@ export type OfferTileModel =
     })
   | (OfferTileBase & { kind: "card-bundle"; cards: OfferTileBundleCards })
   | (OfferTileBase & {
-      kind: "transfigure-card" | "keyword-modification";
+      kind: "transfigure-card";
       card: OfferTileCard;
+      /** Exact transfiguration applied to the preselected card. */
+      transfiguration: TransfigurationType;
+    })
+  | (OfferTileBase & {
+      kind: "keyword-modification";
+      card: OfferTileCard;
+      /** Exact amount removed from the card's Reclaim cost. */
+      reclaimReduction: number;
     })
   | (OfferTileBase & {
       kind: "tribal-change";
       card: OfferTileCard;
-      /** Character type applied to the card by this offer. */
-      newCharacterType: OfferTileCharacterType;
+      /** Character subtype applied to the card by this offer. */
+      newCharacterSubtype: OfferTileCharacterSubtype;
     })
   | (OfferTileBase & {
       kind: "transfigure-starters";

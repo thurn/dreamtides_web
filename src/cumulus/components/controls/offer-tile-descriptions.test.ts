@@ -83,8 +83,13 @@ const COPY_CASES: ReadonlyArray<
     "Choose a card to add to your deck.",
   ],
   [
-    { id: "category", kind: "category-draft", cards: FOUR_CARDS },
-    "Choose a card to add to your deck.",
+    {
+      id: "category",
+      kind: "category-draft",
+      cards: FOUR_CARDS,
+      categoryName: "warrior",
+    },
+    "Choose a warrior to add to your deck.",
   ],
   [
     { id: "transfigured", kind: "transfigured-draft", cards: FOUR_CARDS },
@@ -104,21 +109,31 @@ const COPY_CASES: ReadonlyArray<
     "Add Test Card and Second Card to your deck.",
   ],
   [
-    { id: "transfigure", kind: "transfigure-card", card: CARD },
-    "Transfigure Test Card.",
+    {
+      id: "transfigure",
+      kind: "transfigure-card",
+      card: CARD,
+      transfiguration: "Empowered",
+    },
+    "Transfigure Test Card into its Empowered form.",
   ],
   [
-    { id: "keyword", kind: "keyword-modification", card: CARD },
-    "Reduce the reclaim cost of Test Card.",
+    {
+      id: "keyword",
+      kind: "keyword-modification",
+      card: CARD,
+      reclaimReduction: 1,
+    },
+    "Reduce the Reclaim cost of Test Card by one.",
   ],
   [
     {
       id: "tribal",
       kind: "tribal-change",
       card: CARD,
-      newCharacterType: "Warrior",
+      newCharacterSubtype: "Warrior",
     },
-    "Change the character type of Test Card to Warrior.",
+    "Change the subtype of Test Card to Warrior.",
   ],
   [
     {
@@ -190,6 +205,25 @@ describe("offer tile descriptions", () => {
     ).toBe("Choose a card and add one copy of it to your deck.");
   });
 
+  it("uses the category's article and exact Reclaim reduction", () => {
+    expect(
+      offerTileDescription({
+        id: "event-category",
+        kind: "category-draft",
+        cards: FOUR_CARDS,
+        categoryName: "event",
+      }),
+    ).toBe("Choose an event to add to your deck.");
+    expect(
+      offerTileDescription({
+        id: "double-reclaim-reduction",
+        kind: "keyword-modification",
+        card: CARD,
+        reclaimReduction: 2,
+      }),
+    ).toBe("Reduce the Reclaim cost of Test Card by two.");
+  });
+
   it("names a single duplicate target and counts three choices in words", () => {
     expect(
       offerTileDescription({
@@ -207,14 +241,14 @@ describe("offer tile descriptions", () => {
     ).toBe("Choose one of three cards in your deck to duplicate.");
   });
 
-  it("names one or two bundled cards and counts larger bundles in words", () => {
+  it("names every bundled card", () => {
     expect(
       offerTileDescription({
         id: "three-card-bundle",
         kind: "card-bundle",
         cards: [CARD, SECOND_CARD, THIRD_CARD],
       }),
-    ).toBe("Add three cards to your deck.");
+    ).toBe("Add Test Card, Second Card, and Third Card to your deck.");
   });
 
   it("underlines specific card and dreamsign names in InfoCard copy", () => {

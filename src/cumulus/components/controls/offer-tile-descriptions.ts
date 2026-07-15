@@ -105,47 +105,72 @@ function namedCards(
   if (cards.length === 2 && cards[0] !== undefined && cards[1] !== undefined) {
     return [cardName(cards[0]), prose(` ${conjunction} `), cardName(cards[1])];
   }
-  return [prose(`${cardinal(cards.length)} cards`)];
+  const segments: DescriptionSegment[] = [];
+  cards.forEach((card, index) => {
+    if (index > 0) {
+      segments.push(
+        prose(index === cards.length - 1 ? `, ${conjunction} ` : ", "),
+      );
+    }
+    segments.push(cardName(card));
+  });
+  return segments;
+}
+
+function indefiniteArticle(noun: string): "a" | "an" {
+  return /^[aeiou]/i.test(noun) ? "an" : "a";
 }
 
 function describeOfferTile(model: OfferTileModel): OfferTileDescription {
   switch (model.kind) {
     case "card-gift":
+      // Fit-card and strong-card grants intentionally share outcome-only copy.
+      // The Augury UI does not expose how the granted card was selected.
       return description(prose("Add "), cardName(model.card), prose(" to your deck."));
     case "card-draft":
-    case "category-draft":
+      // Fit-card drafts intentionally describe the choice, not its fit scoring.
       return description(prose("Choose a card to add to your deck."));
+    case "category-draft":
+      return description(
+        prose(
+          `Choose ${indefiniteArticle(model.categoryName)} ${model.categoryName} to add to your deck.`,
+        ),
+      );
     case "transfigured-draft":
+      // Four distinct transfigurations stay on the surfaced card faces rather
+      // than being repeated in the compact tile description.
       return description(prose("Choose a transfigured card to add to your deck."));
     case "copies-draft":
+      // The copy count is the resulting action; candidate-selection rationale
+      // intentionally remains out of the player-facing description.
       return description(
         prose(
           `Choose a card and add ${cardinal(model.copyCount)} ${model.copyCount === 1 ? "copy" : "copies"} of it to your deck.`,
         ),
       );
     case "card-bundle":
-      return model.cards.length <= 2
-        ? description(
-            prose("Add "),
-            ...namedCards(model.cards, "and"),
-            prose(" to your deck."),
-          )
-        : description(
-            prose(`Add ${cardinal(model.cards.length)} cards to your deck.`),
-          );
+      return description(
+        prose("Add "),
+        ...namedCards(model.cards, "and"),
+        prose(" to your deck."),
+      );
     case "transfigure-card":
-      return description(prose("Transfigure "), cardName(model.card), prose("."));
+      return description(
+        prose("Transfigure "),
+        cardName(model.card),
+        prose(` into its ${model.transfiguration} form.`),
+      );
     case "keyword-modification":
       return description(
-        prose("Reduce the reclaim cost of "),
+        prose("Reduce the Reclaim cost of "),
         cardName(model.card),
-        prose("."),
+        prose(` by ${cardinal(model.reclaimReduction)}.`),
       );
     case "tribal-change":
       return description(
-        prose("Change the character type of "),
+        prose("Change the subtype of "),
         cardName(model.card),
-        prose(` to ${model.newCharacterType}.`),
+        prose(` to ${model.newCharacterSubtype}.`),
       );
     case "transfigure-starters":
       return description(
@@ -156,6 +181,8 @@ function describeOfferTile(model: OfferTileModel): OfferTileDescription {
     case "purge-card":
       return description(prose("Purge "), cardName(model.card), prose("."));
     case "trade-card":
+      // Purge-and-replace copy intentionally describes the swap without
+      // exposing how its replacement candidates were selected.
       return description(
         prose("Purge "),
         cardName(model.outgoing),
@@ -181,12 +208,16 @@ function describeOfferTile(model: OfferTileModel): OfferTileDescription {
             ),
           );
     case "dreamsign-gift":
+      // Dreamsign matching rationale and passive rules text intentionally stay
+      // off the offer tile; the tile communicates only which sign is gained.
       return description(
         prose("Gain "),
         specificName(model.dreamsign.name),
         prose("."),
       );
     case "dreamsign-draft":
+      // The chooser intentionally omits both matching rationale and individual
+      // Dreamsign rules; those details belong to the surfaced signs themselves.
       return description(prose("Choose a dreamsign to gain."));
     case "add-site": {
       const siteName = model.site.name.toLocaleLowerCase();

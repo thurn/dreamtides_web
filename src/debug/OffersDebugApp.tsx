@@ -122,6 +122,7 @@ export const OFFER_TILE_DEBUG_MODELS: Readonly<
   category_draft_known: {
     id: "debug:category_draft_known",
     kind: "category-draft",
+    categoryName: "spirit animal",
     cards: CATEGORY_DRAFT,
   },
   card_bundle: {
@@ -138,6 +139,7 @@ export const OFFER_TILE_DEBUG_MODELS: Readonly<
     id: "debug:transfigure",
     kind: "transfigure-card",
     card: GENERAL_DRAFT_B[1],
+    transfiguration: "Empowered",
   },
   starter_transfigure: {
     id: "debug:starter_transfigure",
@@ -148,12 +150,13 @@ export const OFFER_TILE_DEBUG_MODELS: Readonly<
     id: "debug:keyword_mod",
     kind: "keyword-modification",
     card: KEYWORD_TARGET,
+    reclaimReduction: 1,
   },
   tribal_change: {
     id: "debug:tribal_change",
     kind: "tribal-change",
     card: GENERAL_DRAFT_A[0],
-    newCharacterType: "Warrior",
+    newCharacterSubtype: "Warrior",
   },
   purge: {
     id: "debug:purge",
@@ -218,12 +221,7 @@ export const OFFER_TILE_DEBUG_NOTES: Readonly<
 /** One representative archetype for each distinct player-facing tile shape. */
 export const OFFER_TILE_DEBUG_ARCHETYPE_IDS = MERCHANT_ARCHETYPE_BUILDERS.map(
   (builder) => builder.archetypeId,
-).filter(
-  (archetypeId) =>
-    archetypeId !== "strong_card" &&
-    // The normal four-choice tile represents category_draft_known in the UI.
-    archetypeId !== "category_draft_known",
-);
+).filter((archetypeId) => archetypeId !== "strong_card");
 
 function hydrateCard(
   card: OfferTileCard,
