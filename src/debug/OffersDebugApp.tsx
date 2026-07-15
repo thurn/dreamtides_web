@@ -217,7 +217,12 @@ export const OFFER_TILE_DEBUG_NOTES: Readonly<
 /** One representative archetype for each distinct player-facing tile shape. */
 export const OFFER_TILE_DEBUG_ARCHETYPE_IDS = MERCHANT_ARCHETYPE_BUILDERS.map(
   (builder) => builder.archetypeId,
-).filter((archetypeId) => archetypeId !== "strong_card");
+).filter(
+  (archetypeId) =>
+    archetypeId !== "strong_card" &&
+    // The normal four-choice tile represents category_draft_known in the UI.
+    archetypeId !== "category_draft_known",
+);
 
 function hydrateCard(
   card: OfferTileCard,
