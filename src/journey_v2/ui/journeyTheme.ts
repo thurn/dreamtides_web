@@ -61,7 +61,7 @@ function accent(
 export const JOURNEY_ACCENTS: Readonly<Record<MerchantArchetypeId, JourneyAccent>> =
   {
     strong_card: accent(
-      "Grant · Power Gift",
+      "Grant · Gift",
       "#4fe0c4",
       "rgba(79,224,196,.1)",
       "1px solid rgba(79,224,196,.32)",

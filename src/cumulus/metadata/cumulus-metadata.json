@@ -2644,7 +2644,7 @@
           },
           {
             "name": "kind",
-            "tsType": "\"card-gift\" | \"power-card\" | \"card-draft\" | \"copies-draft\" | \"category-draft\" | \"transfigured-draft\" | \"card-bundle\" | \"transfigure-card\" | \"keyword-modification\" | \"tribal-change\" | \"transfigure-starters\" | \"purge-card\" | \"trade-card\" | \"duplicate-card\" | \"dreamsign-gift\" | \"dreamsign-draft\" | \"add-site\"",
+            "tsType": "\"card-gift\" | \"card-draft\" | \"copies-draft\" | \"category-draft\" | \"transfigured-draft\" | \"card-bundle\" | \"transfigure-card\" | \"keyword-modification\" | \"tribal-change\" | \"transfigure-starters\" | \"purge-card\" | \"trade-card\" | \"duplicate-card\" | \"dreamsign-gift\" | \"dreamsign-draft\" | \"add-site\"",
             "optional": false,
             "description": ""
           }

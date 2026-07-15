@@ -86,6 +86,10 @@ genuinely strong card that still leans toward what the deck is building, so an
 off-archetype bomb is pulled below a comparably strong on-archetype card.
 Band-sample 1 with `bandFraction = 0.15`. Face-up. Always eligible.
 
+The UI presents `fit_card_grant` and `strong_card` identically as **Card Gift**:
+one square card artwork with the description “Add a specific card to your
+deck”. Encounter selection and logging retain each reward's archetype id.
+
 **`category_draft_known`** (w=10) — Draft 1 of 4 cards within a named category
 (e.g. "Draft a Warrior", "Draft a cheap Event", "Draft from the Cradle of Storms
 package"). Category construction is described below. Within the sampled category,

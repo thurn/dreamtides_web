@@ -55,7 +55,7 @@ export type OfferTileFourCards = readonly [
   OfferTileCard,
 ];
 
-/** The two or three fixed cards granted together by a bundle offer. */
+/** The fixed cards granted together by a bundle offer. */
 export type OfferTileBundleCards =
   | readonly [OfferTileCard, OfferTileCard]
   | readonly [OfferTileCard, OfferTileCard, OfferTileCard];
@@ -99,7 +99,7 @@ interface OfferTileBase {
  * component owns the composition; callers provide only UUID-backed subjects.
  */
 export type OfferTileModel =
-  | (OfferTileBase & { kind: "card-gift" | "power-card"; card: OfferTileCard })
+  | (OfferTileBase & { kind: "card-gift"; card: OfferTileCard })
   | (OfferTileBase & {
       kind:
         | "card-draft"
@@ -521,17 +521,7 @@ function CardFan({
 function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElement {
   switch (model.kind) {
     case "card-gift":
-      return (
-        <OperationComposition glyph={GLYPHS.gift} tone="spark" layout="inline">
-          <CardArtPiece card={model.card} size="large" />
-        </OperationComposition>
-      );
-    case "power-card":
-      return (
-        <OperationComposition glyph={GLYPHS.star} tone="spark" layout="inline">
-          <CardArtPiece card={model.card} size="large" />
-        </OperationComposition>
-      );
+      return <CardArtPiece card={model.card} size="large" />;
     case "card-draft":
       return <DraftGrid cards={model.cards} />;
     case "copies-draft":
@@ -557,11 +547,7 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
         </OperationComposition>
       );
     case "card-bundle":
-      return (
-        <OperationComposition glyph={GLYPHS.plus} tone="spark" layout="inline">
-          <CardFan cards={model.cards} />
-        </OperationComposition>
-      );
+      return <CardFan cards={model.cards} />;
     case "transfigure-card":
       return (
         <OperationComposition

@@ -25,7 +25,7 @@ export type JourneyDreamsignObject = Extract<
  * `kind`; every variant carries exactly the objects that treatment needs.
  */
 export type OfferPresentation =
-  /** Power Gift / fit-card gift — one strong card, pre-targeted. */
+  /** Card Gift — one pre-targeted card. */
   | { kind: "heroCard"; card: JourneyCardObject }
   /** Card bundle — several pre-targeted cards granted together, shown in a row. */
   | { kind: "cardBundle"; cards: readonly JourneyCardObject[] }

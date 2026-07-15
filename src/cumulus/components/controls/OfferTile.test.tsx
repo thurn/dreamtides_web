@@ -128,7 +128,7 @@ describe("OfferTile", () => {
       id: "debug-gift",
       kind: "card-gift",
       label: "Card Gift",
-      description: "Add one card that complements your deck.",
+      description: "Add a specific card to your deck",
       card: MODEL.cards[0],
     };
     const trade: OfferTileModel = {
@@ -166,6 +166,9 @@ describe("OfferTile", () => {
 
     expectSquareChips("gift-tile", "108px");
     expectSquareChips("draft-tile", "68px");
+    expect(
+      container.querySelector('[data-testid="gift-tile"] [data-offer-tile-operation]'),
+    ).toBeNull();
 
     const tradeChips = container.querySelectorAll<HTMLElement>(
       '[data-testid="trade-square-tile"] [data-offer-tile-card-id]',
@@ -202,8 +205,15 @@ describe("OfferTile", () => {
       id: "debug-copies",
       kind: "copies-draft",
       label: "Copies Draft",
-      description: "Choose one of four cards to add copies of to your deck.",
+      description: "Choose one card and add multiple copies of it to your deck.",
       cards,
+    };
+    const bundle: OfferTileModel = {
+      id: "debug-bundle",
+      kind: "card-bundle",
+      label: "Card Bundle",
+      description: "Add three related cards to your deck.",
+      cards: [cards[0], cards[1], cards[2]],
     };
     const container = document.createElement("div");
     document.body.append(container);
@@ -215,6 +225,7 @@ describe("OfferTile", () => {
           <OfferTile model={trade} onPress={() => {}} testId="trade-tile" />
           <OfferTile model={duplicate} onPress={() => {}} testId="duplicate-tile" />
           <OfferTile model={copies} onPress={() => {}} testId="copies-tile" />
+          <OfferTile model={bundle} onPress={() => {}} testId="bundle-tile" />
         </CumulusRoot>,
       );
     });
@@ -242,6 +253,16 @@ describe("OfferTile", () => {
         '[data-testid="trade-tile"] [data-offer-tile-operation-layout]',
       )?.getAttribute("data-offer-tile-operation-layout"),
     ).toBe("overlay");
+    expect(
+      container.querySelectorAll(
+        '[data-testid="bundle-tile"] [data-offer-tile-card-id]',
+      ),
+    ).toHaveLength(3);
+    expect(
+      container.querySelector(
+        '[data-testid="bundle-tile"] [data-offer-tile-operation]',
+      ),
+    ).toBeNull();
 
     act(() => root.unmount());
     container.remove();

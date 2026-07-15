@@ -79,7 +79,7 @@ export const OFFER_TILE_DEBUG_MODELS: Readonly<
     id: "debug:fit_card_grant",
     kind: "card-gift",
     label: "Card Gift",
-    description: "Add one card that complements your deck.",
+    description: "Add a specific card to your deck",
     card: GENERAL_DRAFT_A[0],
   },
   fit_card_draft: {
@@ -93,14 +93,14 @@ export const OFFER_TILE_DEBUG_MODELS: Readonly<
     id: "debug:copies_draft",
     kind: "copies-draft",
     label: "Copies Draft",
-    description: "Choose one card and add multiple copies to your deck.",
+    description: "Choose one card and add multiple copies of it to your deck.",
     cards: GENERAL_DRAFT_B,
   },
   strong_card: {
     id: "debug:strong_card",
-    kind: "power-card",
-    label: "Power Gift",
-    description: "Add one especially powerful card to your deck.",
+    kind: "card-gift",
+    label: "Card Gift",
+    description: "Add a specific card to your deck",
     card: GENERAL_DRAFT_B[0],
   },
   category_draft_known: {
@@ -114,7 +114,7 @@ export const OFFER_TILE_DEBUG_MODELS: Readonly<
     id: "debug:card_bundle",
     kind: "card-bundle",
     label: "Card Bundle",
-    description: "Add two or three related cards to your deck.",
+    description: "Add three related cards to your deck.",
     cards: [CATEGORY_DRAFT[0], CATEGORY_DRAFT[1], CATEGORY_DRAFT[2]],
   },
   transfigured_draft: {
@@ -223,10 +223,15 @@ export const OFFER_TILE_DEBUG_NOTES: Readonly<
   add_site: "1 preselected site",
 };
 
+/** One representative archetype for each distinct player-facing tile shape. */
+export const OFFER_TILE_DEBUG_ARCHETYPE_IDS = MERCHANT_ARCHETYPE_BUILDERS.map(
+  (builder) => builder.archetypeId,
+).filter((archetypeId) => archetypeId !== "strong_card");
+
 export default function OffersDebugApp(): ReactElement {
   const [lastPressed, setLastPressed] = useState<string | null>(null);
-  const models = MERCHANT_ARCHETYPE_BUILDERS.map(
-    (builder) => OFFER_TILE_DEBUG_MODELS[builder.archetypeId],
+  const models = OFFER_TILE_DEBUG_ARCHETYPE_IDS.map(
+    (archetypeId) => OFFER_TILE_DEBUG_MODELS[archetypeId],
   );
   const selected =
     lastPressed === null
@@ -306,12 +311,12 @@ export default function OffersDebugApp(): ReactElement {
             gap: token("--space-8"),
           }}
         >
-          {MERCHANT_ARCHETYPE_BUILDERS.map((builder) => {
-            const model = OFFER_TILE_DEBUG_MODELS[builder.archetypeId];
+          {OFFER_TILE_DEBUG_ARCHETYPE_IDS.map((archetypeId) => {
+            const model = OFFER_TILE_DEBUG_MODELS[archetypeId];
             return (
               <figure
-                key={builder.archetypeId}
-                data-offer-category={builder.archetypeId}
+                key={archetypeId}
+                data-offer-category={archetypeId}
                 style={{
                   display: "grid",
                   justifyItems: "center",
@@ -336,7 +341,7 @@ export default function OffersDebugApp(): ReactElement {
                       color: token("--text-on-glass-muted"),
                     }}
                   >
-                    {OFFER_TILE_DEBUG_NOTES[builder.archetypeId]}
+                    {OFFER_TILE_DEBUG_NOTES[archetypeId]}
                   </span>
                 </figcaption>
               </figure>
