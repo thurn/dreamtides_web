@@ -566,26 +566,14 @@ function DraftGrid({ cards }: { readonly cards: readonly OfferTileCard[] }) {
     <span
       data-offer-tile-card-grid=""
       style={{
-        position: "relative",
-        display: "block",
-        width: 132,
-        height: 142,
+        display: "grid",
+        gridTemplateColumns: `repeat(2, ${String(FULL_CARD_WIDTH.draft)}px)`,
+        gap: token("--space-1"),
         pointerEvents: "none",
       }}
     >
-      {cards.map((card, index) => (
-        <span
-          key={card.cardId}
-          style={{
-            position: "absolute",
-            left: index % 2 === 0 ? 7 : 71,
-            top: index < 2 ? 0 : 66,
-            zIndex: index < 2 ? 1 : 2,
-            pointerEvents: "none",
-          }}
-        >
-          <FullCardPiece card={card} size="draft" />
-        </span>
+      {cards.map((card) => (
+        <FullCardPiece key={card.cardId} card={card} size="draft" />
       ))}
     </span>
   );

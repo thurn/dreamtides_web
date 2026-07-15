@@ -125,6 +125,12 @@ describe("OfferTile", () => {
         tile?.querySelectorAll('[data-card-presentation="full"]'),
       ).toHaveLength(expectedCount);
     }
+    const draftGrid = container.querySelector<HTMLElement>(
+      '[data-testid="full-draft"] [data-offer-tile-card-grid]',
+    );
+    expect(draftGrid?.style.display).toBe("grid");
+    expect(draftGrid?.style.gridTemplateColumns).toBe("repeat(2, 54px)");
+    expect(draftGrid?.style.gap).toBe("var(--space-1)");
 
     act(() => root.unmount());
     container.remove();
