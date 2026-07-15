@@ -1289,28 +1289,19 @@ function fillBattlefieldPreview(
   state: BattleMutableState;
   transition: BattleTransitionData;
 } {
-  const battlefieldCharacterCountPerSide = 9;
-  const fullLayoutCharacterCountPerSide = 14;
-  const definitionCounts = [
-    definitions.player.length,
-    definitions.enemy.length,
-  ];
-  const isBattlefieldOnlyPreview = definitionCounts.every(
-    (count) => count === battlefieldCharacterCountPerSide,
-  );
-  const isFullLayoutPreview = definitionCounts.every(
-    (count) => count === fullLayoutCharacterCountPerSide,
-  );
+  const playerLayout = battlefieldPreviewLayout(definitions.player.length);
+  const enemyLayout = battlefieldPreviewLayout(definitions.enemy.length);
   if (
-    (!isBattlefieldOnlyPreview && !isFullLayoutPreview) ||
+    playerLayout === null ||
+    enemyLayout === null ||
     [...definitions.player, ...definitions.enemy].some(
       (definition) => definition.battleCardKind !== "character",
     )
   ) {
     return { state, transition: createEmptyTransitionData() };
   }
+  const layouts = { player: playerLayout, enemy: enemyLayout };
 
-  const voidCharacterCountPerSide = isFullLayoutPreview ? 5 : 0;
   let current = state;
   const logEvents: BattleTransitionData["logEvents"] = [];
   for (const side of ["player", "enemy"] as const) {
@@ -1326,18 +1317,19 @@ function fillBattlefieldPreview(
   }
 
   for (const side of ["player", "enemy"] as const) {
+    const layout = layouts[side];
     const destinations = [
-      ...Array.from({ length: 4 }, (_, index) => ({
+      ...Array.from({ length: layout.frontRank }, (_, index) => ({
         side,
         zone: "frontRank" as const,
         slotId: frontRankSlotId(index),
       })),
-      ...Array.from({ length: 5 }, (_, index) => ({
+      ...Array.from({ length: layout.backRank }, (_, index) => ({
         side,
         zone: "backRank" as const,
         slotId: backRankSlotId(index),
       })),
-      ...Array.from({ length: voidCharacterCountPerSide }, () => ({
+      ...Array.from({ length: layout.void }, () => ({
         side,
         zone: "void" as const,
       })),
@@ -1363,6 +1355,23 @@ function fillBattlefieldPreview(
       logEvents,
     },
   };
+}
+
+function battlefieldPreviewLayout(definitionCount: number): {
+  frontRank: number;
+  backRank: number;
+  void: number;
+} | null {
+  if (definitionCount === 9) {
+    return { frontRank: 4, backRank: 5, void: 0 };
+  }
+  if (definitionCount === 14) {
+    return { frontRank: 4, backRank: 5, void: 5 };
+  }
+  if (definitionCount === 25) {
+    return { frontRank: 10, backRank: 10, void: 5 };
+  }
+  return null;
 }
 
 function isDestinationAvailable(

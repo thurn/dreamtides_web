@@ -100,6 +100,7 @@ export interface MobileBattleInteractions {
   readonly onPreviousPhase: () => void;
   readonly onNextPhase: () => void;
   readonly onFillBattlefieldPreview?: () => void;
+  readonly onFillTwentyCardBattlefieldPreview?: () => void;
 }
 
 const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
@@ -710,8 +711,10 @@ function ControlRow({
 
 function BattleDebugMenu({
   onFillBattlefieldPreview,
+  onFillTwentyCardBattlefieldPreview,
 }: {
   readonly onFillBattlefieldPreview?: () => void;
+  readonly onFillTwentyCardBattlefieldPreview?: () => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -740,13 +743,15 @@ function BattleDebugMenu({
         <div
           role="menu"
           aria-label="Battle debug actions"
-          style={{ width: 300, height: 66 }}
+          style={{ width: 300 }}
         >
           <GlassPanel radius="popover" tint="popover">
             <div
               style={{
                 display: "flex",
-                alignItems: "center",
+                flexDirection: "column",
+                alignItems: "stretch",
+                gap: token("--space-3"),
                 padding: token("--space-5"),
               }}
             >
@@ -757,6 +762,16 @@ function BattleDebugMenu({
                 testId="battle-debug-fill-grid"
                 onPress={() => {
                   onFillBattlefieldPreview?.();
+                  setIsOpen(false);
+                }}
+              />
+              <GlassButton
+                label="Fill 20 vs 9 + Voids"
+                placement="onGlass"
+                disabled={onFillTwentyCardBattlefieldPreview === undefined}
+                testId="battle-debug-fill-twenty-player"
+                onPress={() => {
+                  onFillTwentyCardBattlefieldPreview?.();
                   setIsOpen(false);
                 }}
               />
@@ -803,6 +818,9 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
         </LayoutGroup>
         <BattleDebugMenu
           onFillBattlefieldPreview={interactions?.onFillBattlefieldPreview}
+          onFillTwentyCardBattlefieldPreview={
+            interactions?.onFillTwentyCardBattlefieldPreview
+          }
         />
       </main>
     </>

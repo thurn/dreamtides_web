@@ -1010,10 +1010,13 @@ function PlayableBattleScreenInner({
     resolveRunLayerCount(battleInit.atlasSnapshot.layers),
   );
 
-  const handleFillBattlefieldPreview = useCallback((): void => {
+  const requestBattlefieldPreview = useCallback((playerInPlayCount: 9 | 20): void => {
+    const playerFrontRankCount = Math.floor(playerInPlayCount / 2);
+    const playerBackRankCount = playerInPlayCount - playerFrontRankCount;
     const command = createFillBattlefieldPreviewCommand(
       battleInit,
       Date.now(),
+      { player: playerInPlayCount, enemy: 9 },
     );
     const previewCardIds =
       command?.id === "DEBUG_EDIT" &&
@@ -1030,8 +1033,8 @@ function PlayableBattleScreenInner({
       }),
       commandCount: command === null ? 0 : 1,
       previewCardIds,
-      playerBackRankCount: 5,
-      playerFrontRankCount: 4,
+      playerBackRankCount,
+      playerFrontRankCount,
       playerVoidAddedCount: 5,
       enemyBackRankCount: 5,
       enemyFrontRankCount: 4,
@@ -1041,6 +1044,14 @@ function PlayableBattleScreenInner({
       void actions.battleCommand(command);
     }
   }, [actions, battleInit, board]);
+
+  const handleFillBattlefieldPreview = useCallback((): void => {
+    requestBattlefieldPreview(9);
+  }, [requestBattlefieldPreview]);
+
+  const handleFillTwentyCardBattlefieldPreview = useCallback((): void => {
+    requestBattlefieldPreview(20);
+  }, [requestBattlefieldPreview]);
 
   const showCumulusMobileLayout = uiVariant === "cumulus" && !isCumulusDesktopLayout;
   useEffect(() => {
@@ -1102,6 +1113,8 @@ function PlayableBattleScreenInner({
             handleSetBattleFlow(computePhaseControlTarget(board, "next"));
           },
           onFillBattlefieldPreview: handleFillBattlefieldPreview,
+          onFillTwentyCardBattlefieldPreview:
+            handleFillTwentyCardBattlefieldPreview,
         }}
       />
     );

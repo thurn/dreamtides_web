@@ -534,6 +534,7 @@ describe("MobileBattleScreen", () => {
 
   it("opens the debug menu and requests a full battlefield and void layout", () => {
     const onFillBattlefieldPreview = vi.fn();
+    const onFillTwentyCardBattlefieldPreview = vi.fn();
     const interactions = {
       canInteract: true,
       pendingCardId: null,
@@ -545,6 +546,7 @@ describe("MobileBattleScreen", () => {
       onPreviousPhase: vi.fn(),
       onNextPhase: vi.fn(),
       onFillBattlefieldPreview,
+      onFillTwentyCardBattlefieldPreview,
     };
     const { container, root } = mount(makeView(), interactions);
     const trigger = container.querySelector<HTMLButtonElement>(
@@ -560,13 +562,62 @@ describe("MobileBattleScreen", () => {
       '[data-testid="battle-debug-fill-grid"]',
     );
     expect(fill?.textContent).toContain("Fill Battlefield + Voids");
+    expect(
+      container.querySelector(
+        '[data-testid="battle-debug-fill-twenty-player"]',
+      )?.textContent,
+    ).toContain("Fill 20 vs 9 + Voids");
 
     act(() => fill?.click());
 
     expect(onFillBattlefieldPreview).toHaveBeenCalledTimes(1);
+    expect(onFillTwentyCardBattlefieldPreview).not.toHaveBeenCalled();
     expect(trigger?.getAttribute("aria-expanded")).toBe("false");
     expect(
       container.querySelector('[data-testid="battle-debug-fill-grid"]'),
+    ).toBeNull();
+
+    act(() => root.unmount());
+  });
+
+  it("requests the twenty-player-card stress layout from the debug menu", () => {
+    const onFillTwentyCardBattlefieldPreview = vi.fn();
+    const interactions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+      onFillBattlefieldPreview: vi.fn(),
+      onFillTwentyCardBattlefieldPreview,
+    };
+    const { container, root } = mount(makeView(), interactions);
+
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-debug-menu-trigger"]',
+        )
+        ?.click();
+    });
+
+    const fillTwenty = container.querySelector<HTMLButtonElement>(
+      '[data-testid="battle-debug-fill-twenty-player"]',
+    );
+    expect(fillTwenty?.textContent).toContain("Fill 20 vs 9 + Voids");
+
+    act(() => fillTwenty?.click());
+
+    expect(onFillTwentyCardBattlefieldPreview).toHaveBeenCalledTimes(1);
+    expect(interactions.onFillBattlefieldPreview).not.toHaveBeenCalled();
+    expect(
+      container.querySelector(
+        '[data-testid="battle-debug-fill-twenty-player"]',
+      ),
     ).toBeNull();
 
     act(() => root.unmount());

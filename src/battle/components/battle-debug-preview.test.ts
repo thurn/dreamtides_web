@@ -99,6 +99,40 @@ describe("createFillBattlefieldPreviewCommand", () => {
     expect(next.sides.enemy.void).toContain(existingEnemy);
   });
 
+  it("fills twenty player battlefield slots while keeping nine enemy slots and both void previews", () => {
+    const { init, board } = makeBattle();
+    const existingCardIds = new Set(Object.keys(board.cardInstances));
+
+    const command = createFillBattlefieldPreviewCommand(init, 10_000, {
+      player: 20,
+      enemy: 9,
+    });
+    if (
+      command === null ||
+      command.id !== "DEBUG_EDIT" ||
+      command.edit.kind !== "FILL_BATTLEFIELD_PREVIEW"
+    ) {
+      throw new Error("Expected battlefield preview command");
+    }
+
+    expect(command.edit.definitions.player).toHaveLength(25);
+    expect(command.edit.definitions.enemy).toHaveLength(14);
+
+    const next = applyDebugEdit(board, command.edit, EMISSION).state;
+
+    expect(occupiedCount(next, "player", "frontRank")).toBe(10);
+    expect(occupiedCount(next, "player", "backRank")).toBe(10);
+    expect(occupiedCount(next, "enemy", "frontRank")).toBe(4);
+    expect(occupiedCount(next, "enemy", "backRank")).toBe(5);
+    for (const side of ["player", "enemy"] as const) {
+      expect(
+        next.sides[side].void.filter(
+          (battleCardId) => !existingCardIds.has(battleCardId),
+        ),
+      ).toHaveLength(5);
+    }
+  });
+
   it("does not construct a partial preview when neither deck has a character definition", () => {
     const { init } = makeBattle();
     const eventDefinition = [
