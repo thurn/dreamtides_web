@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { asCardId } from "../../../types/card-identity";
+import { asCardId, asCardName } from "../../../types/card-identity";
 import { GLYPHS } from "../../primitives/glyph";
 import type {
   OfferTileCard,
@@ -14,7 +14,20 @@ import {
 
 const CARD: OfferTileCard = {
   cardId: asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"),
-  imageNumber: 287269511,
+  displaySnapshot: {
+    id: asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"),
+    name: asCardName("Test Card"),
+    cardNumber: 1,
+    cardType: "Character",
+    subtype: "Spirit Animal",
+    isStarter: false,
+    energyCost: 2,
+    spark: 3,
+    isFast: false,
+    renderedText: "",
+    imageNumber: 287269511,
+    artOwned: true,
+  },
 };
 const FOUR_CARDS: OfferTileFourCards = [CARD, CARD, CARD, CARD];
 const DREAMSIGN: OfferTileDreamsign = {

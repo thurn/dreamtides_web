@@ -7,32 +7,52 @@ import { CumulusRoot } from "../../CumulusRoot";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
 import { GLYPHS } from "../../primitives/glyph";
-import { OfferTile, type OfferTileCard, type OfferTileModel } from "./OfferTile";
+import {
+  OfferTile,
+  type OfferTileCard,
+  type OfferTileFourCards,
+  type OfferTileModel,
+} from "./OfferTile";
+
+function fixtureCard(
+  cardId: string,
+  imageNumber: number,
+  cardNumber: number,
+): OfferTileCard {
+  const id = asCardId(cardId);
+  return {
+    cardId: id,
+    displaySnapshot: {
+      id,
+      name: asCardName(`Test Card ${String(cardNumber)}`),
+      cardNumber,
+      cardType: "Character",
+      subtype: "Spirit Animal",
+      isStarter: false,
+      energyCost: 2,
+      spark: 3,
+      isFast: false,
+      renderedText: "▸ Dawn: Draw a card.",
+      imageNumber,
+      artOwned: true,
+    },
+  };
+}
 
 const MODEL: OfferTileModel = {
   id: "debug-fit-card-draft",
   kind: "card-draft",
   cards: [
-    { cardId: asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"), imageNumber: 287269511 },
-    { cardId: asCardId("161482b6-af07-4d9e-822d-8c738672beb9"), imageNumber: 2022594419 },
-    { cardId: asCardId("b56ef7e8-c634-4d40-ac08-fab591dfbc4a"), imageNumber: 618071684 },
-    { cardId: asCardId("9b9c2743-75b3-499d-b5fb-c3429c92d420"), imageNumber: 1196004046 },
+    fixtureCard("7be2e6d7-abff-4c44-a0c3-35460da1693c", 287269511, 1),
+    fixtureCard("161482b6-af07-4d9e-822d-8c738672beb9", 2022594419, 2),
+    fixtureCard("b56ef7e8-c634-4d40-ac08-fab591dfbc4a", 618071684, 3),
+    fixtureCard("9b9c2743-75b3-499d-b5fb-c3429c92d420", 1196004046, 4),
   ],
 };
 
 const FULL_CARD: CardData = {
-  id: MODEL.cards[0].cardId,
+  ...MODEL.cards[0].displaySnapshot,
   name: asCardName("Test Card"),
-  cardNumber: 1,
-  cardType: "Character",
-  subtype: "Spirit Animal",
-  isStarter: false,
-  energyCost: 2,
-  spark: 3,
-  isFast: false,
-  renderedText: "▸ Dawn: Draw a card.",
-  imageNumber: MODEL.cards[0].imageNumber,
-  artOwned: true,
 };
 
 function withFullCard(
@@ -45,12 +65,71 @@ function withFullCard(
       ...FULL_CARD,
       id: card.cardId,
       cardNumber,
-      imageNumber: card.imageNumber,
+      imageNumber: card.displaySnapshot.imageNumber,
     },
   };
 }
 
+const FULL_CARDS = MODEL.cards.map((card, index) =>
+  withFullCard(card, index + 1),
+) as unknown as OfferTileFourCards;
+
 describe("OfferTile", () => {
+  it("renders every surfaced card as a complete card face", () => {
+    const draft: OfferTileModel = {
+      id: "debug-full-draft",
+      kind: "card-draft",
+      cards: FULL_CARDS,
+    };
+    const trade: OfferTileModel = {
+      id: "debug-full-trade",
+      kind: "trade-card",
+      outgoing: FULL_CARDS[0],
+      incoming: FULL_CARDS,
+    };
+    const duplicate: OfferTileModel = {
+      id: "debug-full-duplicate",
+      kind: "duplicate-card",
+      cards: [FULL_CARDS[0], FULL_CARDS[1], FULL_CARDS[2]],
+    };
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <OfferTile model={draft} onPress={() => {}} testId="full-draft" />
+          <OfferTile model={trade} onPress={() => {}} testId="full-trade" />
+          <OfferTile
+            model={duplicate}
+            onPress={() => {}}
+            testId="full-duplicate"
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const expectedCounts = [
+      ["full-draft", 4],
+      ["full-trade", 5],
+      ["full-duplicate", 3],
+    ] as const;
+    for (const [testId, expectedCount] of expectedCounts) {
+      const tile = container.querySelector(`[data-testid="${testId}"]`);
+      expect(tile?.querySelectorAll("[data-offer-tile-full-card]")).toHaveLength(
+        expectedCount,
+      );
+      expect(tile?.querySelectorAll("[data-offer-tile-card-id]")).toHaveLength(0);
+      expect(
+        tile?.querySelectorAll('[data-card-presentation="full"]'),
+      ).toHaveLength(expectedCount);
+    }
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("renders a fixed symbolic button with one tile-level reveal source", () => {
     (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean })
       .IS_REACT_ACT_ENVIRONMENT = true;
@@ -88,7 +167,7 @@ describe("OfferTile", () => {
     expect(source.dataset.revealEntityType).toBe("offer");
     expect(source.dataset.revealEntityId).toMatch(/^[0-9a-f-]{36}$/);
     expect(source.dataset.revealPrimaryVariant).toBe("text");
-    expect(source.querySelectorAll("[data-offer-tile-card-id]")).toHaveLength(4);
+    expect(source.querySelectorAll("[data-offer-tile-full-card]")).toHaveLength(4);
     expect(source.querySelectorAll("[data-reveal-entity-type]")).toHaveLength(0);
     expect(
       [...source.querySelectorAll<HTMLElement>("[data-offer-tile-visual] *")].every(
@@ -156,7 +235,7 @@ describe("OfferTile", () => {
     container.remove();
   });
 
-  it("renders a full Card Gift while keeping art-only card chips square", () => {
+  it("renders complete card faces at the composition's strict sizes", () => {
     const gift: OfferTileModel = {
       id: "debug-gift",
       kind: "card-gift",
@@ -182,37 +261,37 @@ describe("OfferTile", () => {
       );
     });
 
-    const expectSquareChips = (testId: string, edge: string) => {
-      const chips = container.querySelectorAll<HTMLElement>(
-        `[data-testid="${testId}"] [data-offer-tile-card-id]`,
-      );
-      expect(chips.length).toBeGreaterThan(0);
-      chips.forEach((chip) => {
-        expect(chip.style.width).toBe(edge);
-        expect(chip.style.height).toBe(edge);
-      });
-    };
-
     expect(
       container.querySelector<HTMLElement>(
         '[data-testid="gift-tile"] [data-offer-tile-full-card]',
       )?.style.width,
     ).toBe("88px");
-    expect(
-      container.querySelector('[data-testid="gift-tile"] [data-offer-tile-card-id]'),
-    ).toBeNull();
-    expectSquareChips("draft-tile", "68px");
+    const draftCards = container.querySelectorAll<HTMLElement>(
+      '[data-testid="draft-tile"] [data-offer-tile-full-card]',
+    );
+    expect(draftCards).toHaveLength(4);
+    expect([...draftCards].every((card) => card.style.width === "54px")).toBe(
+      true,
+    );
     expect(
       container.querySelector('[data-testid="gift-tile"] [data-offer-tile-operation]'),
     ).toBeNull();
 
-    const tradeChips = container.querySelectorAll<HTMLElement>(
-      '[data-testid="trade-square-tile"] [data-offer-tile-card-id]',
+    const tradeCards = container.querySelectorAll<HTMLElement>(
+      '[data-testid="trade-square-tile"] [data-offer-tile-full-card]',
     );
-    [...tradeChips].forEach((chip) => {
-      expect(chip.style.width).toBe("50px");
-      expect(chip.style.height).toBe("50px");
-    });
+    expect([...tradeCards].map((card) => card.style.width)).toEqual([
+      "42px",
+      "42px",
+      "42px",
+      "42px",
+      "54px",
+    ]);
+    expect(
+      container.querySelectorAll(
+        '[data-testid="draft-tile"] [data-offer-tile-card-id], [data-testid="trade-square-tile"] [data-offer-tile-card-id]',
+      ),
+    ).toHaveLength(0);
 
     act(() => root.unmount());
     container.remove();
@@ -262,11 +341,13 @@ describe("OfferTile", () => {
     });
 
     expect(
-      container.querySelectorAll('[data-testid="trade-tile"] [data-offer-tile-card-id]'),
+      container.querySelectorAll(
+        '[data-testid="trade-tile"] [data-offer-tile-full-card]',
+      ),
     ).toHaveLength(5);
     expect(
       container.querySelectorAll(
-        '[data-testid="duplicate-tile"] [data-offer-tile-card-id]',
+        '[data-testid="duplicate-tile"] [data-offer-tile-full-card]',
       ),
     ).toHaveLength(3);
     expect(
@@ -291,10 +372,16 @@ describe("OfferTile", () => {
         '[data-testid="trade-tile"] [data-offer-tile-operation]',
       ),
     ).toBeNull();
-    const tradeChips = container.querySelectorAll<HTMLElement>(
-      '[data-testid="trade-tile"] [data-offer-tile-card-id]',
+    const tradeCards = container.querySelectorAll<HTMLElement>(
+      '[data-testid="trade-tile"] [data-offer-tile-full-card]',
     );
-    expect([...tradeChips].every((chip) => chip.style.width === "50px")).toBe(true);
+    expect([...tradeCards].map((card) => card.style.width)).toEqual([
+      "42px",
+      "42px",
+      "42px",
+      "42px",
+      "54px",
+    ]);
     expect(
       container.querySelectorAll(
         '[data-testid="bundle-tile"] [data-offer-tile-full-card]',

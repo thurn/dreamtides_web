@@ -8,9 +8,9 @@ Components · Live demo & interactive props: `/cumulus#/offer-tile`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The 200×200 rounded symbolic Dream Augury offer button: UUID-backed card art, dreamsign art, and operation marks gathered inside an iron fantasy frame without spelling out the complete offer.
+The 200×200 rounded symbolic Dream Augury offer button: UUID-backed complete cards, dreamsign art, and operation marks gathered inside an iron fantasy frame without spelling out the complete offer.
 
-> **Guidance:** Use the named offer kind that matches the category and pass every object surfaced by the generated offer. Fixed-target variants show their exact affected cards; chooser variants show every choice. Labels and descriptions are derived centrally from the model, including exact choice and reward quantities. Both single-card grant archetypes use the card-gift kind and centered complete-card composition. Card bundles stack every complete card, and starter refinement stacks its complete cards beneath a compact bottom-right mark. The iron frame holds each composition over an inset glass background inside its transparent aperture. Art-only card chips stay square at their established vertical scale. Four-card draft operations center their mark over the art grid; single-card operations center the complete card with a compact bottom-right mark; duplicate operations retain the diagonal art-and-mark composition; trade offers place five equally sized cards around the purge target. Inner objects stay decorative, the complete tile owns interaction plus its body-only InfoCard, and each complete framed tile drifts on its own stable phase.
+> **Guidance:** Use the named offer kind that matches the category and pass every object surfaced by the generated offer. Fixed-target variants show their exact affected cards; chooser variants show every choice. Labels and descriptions are derived centrally from the model, including exact choice and reward quantities. Every card uses the complete UUID-backed card face. Drafts overlap four complete cards across the four quadrants, bundles and duplicate offers fan complete cards, and trades place four incoming cards around the complete purge target. Every composition stays inset from the iron frame. Operation marks remain compact overlays, inner objects stay decorative, the complete tile owns interaction plus its body-only InfoCard, and each complete framed tile drifts on its own stable phase.
 
 ## Props
 
@@ -38,7 +38,7 @@ import { OfferTile } from "src/cumulus/components/controls/OfferTile";
   model={{
     id: encounterSignature + ":" + offerId,
     kind: "card-draft",
-    cards: offeredCards.map(({ id, imageNumber }) => ({ cardId: id, imageNumber })),
+    cards: offeredCards.map((card) => ({ cardId: card.id, displaySnapshot: card })),
   }}
   onPress={chooseOffer}
 />

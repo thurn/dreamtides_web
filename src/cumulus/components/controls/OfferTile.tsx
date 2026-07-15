@@ -5,7 +5,6 @@ import {
   type ReactElement,
   type ReactNode,
 } from "react";
-import { cardIdenticonUri, cardImageUrl, hasAssignedImage } from "../../../data/card-database";
 import type { CardId } from "../../../types/card-identity";
 import type { FrozenCardData } from "../../../types/cards";
 import { useRevealSource } from "../../internal/reveal/context";
@@ -29,14 +28,12 @@ import "./offer-tile.css";
 /** The fixed width and height of an OfferTile, in pixels. */
 export const OFFER_TILE_SIZE = 200;
 
-/** UUID-backed card art shown symbolically inside an offer. */
+/** UUID-backed complete card shown symbolically inside an offer. */
 export interface OfferTileCard {
   /** Canonical card UUID. Names are display-only and never enter the tile model. */
   cardId: CardId;
-  /** Asset-pipeline image key for the card's assigned art. */
-  imageNumber: number;
-  /** Complete UUID-matched display data for full-card offer compositions. */
-  displaySnapshot?: FrozenCardData;
+  /** Complete UUID-matched display data for the card face. */
+  displaySnapshot: FrozenCardData;
 }
 
 /** UUID-backed dreamsign art shown symbolically inside an offer. */
@@ -154,7 +151,7 @@ export interface OfferTileProps {
 
 /**
  * A 200×200 framed symbolic Dream Augury offer button. Its rounded gold frame
- * surrounds full cards, square card art, dreamsigns, and glyphs. Every inner
+ * surrounds complete cards, dreamsigns, and glyphs. Every inner
  * object is decorative and pointer-transparent. The complete tile is the only
  * hover/focus/press target and reveals one category InfoCard.
  */
@@ -261,83 +258,16 @@ function offerTileMotionDelay(offerId: string): string {
 }
 
 type CardTreatment = "plain" | "purged" | "incoming" | "duplicate";
-type CardArtSize = "compact" | "medium" | "large" | "draft";
+type FullCardSize = "mini" | "draft" | "fan" | "compact" | "medium" | "standard";
 
-/**
- * Square chip edges preserve each portrait chip's former height. Growing only
- * the width keeps the source art at the same vertical scale while revealing
- * more of its horizontal extent, matching the battlefield art treatment.
- */
-const CARD_ART_EDGE: Readonly<Record<CardArtSize, number>> = {
-  compact: 50,
-  draft: 68,
-  large: 108,
-  medium: 82,
+const FULL_CARD_WIDTH: Readonly<Record<FullCardSize, number>> = {
+  compact: 64,
+  draft: 54,
+  fan: 56,
+  medium: 76,
+  mini: 42,
+  standard: 88,
 };
-
-function CardArtPiece({
-  card,
-  treatment = "plain",
-  size,
-}: {
-  readonly card: OfferTileCard;
-  readonly treatment?: CardTreatment;
-  readonly size: CardArtSize;
-}): ReactElement {
-  const [imageBroken, setImageBroken] = useState(false);
-  const hasImage = !imageBroken && hasAssignedImage(card.imageNumber);
-  const edge = CARD_ART_EDGE[size];
-  const treatmentStyle: CSSProperties =
-    treatment === "purged"
-      ? {
-          boxShadow: `0 0 0 3px ${token("--danger")}, ${token("--shadow-card")}`,
-        }
-      : treatment === "incoming"
-        ? {
-            boxShadow: `0 0 0 2px ${token("--spark")}, ${token("--shadow-card")}`,
-          }
-        : treatment === "duplicate"
-          ? {
-              boxShadow: `0 0 0 2px ${token("--energy")}, ${token("--shadow-card")}`,
-            }
-          : { boxShadow: token("--shadow-card") };
-  return (
-    <span
-      data-offer-tile-card-id={card.cardId}
-      style={{
-        position: "relative",
-        display: "block",
-        width: edge,
-        height: edge,
-        overflow: "hidden",
-        borderRadius: token("--radius-inset"),
-        background: token("--surface-card"),
-        border: `1px solid ${token("--border-soft")}`,
-        pointerEvents: "none",
-        ...treatmentStyle,
-      }}
-    >
-      <img
-        src={hasImage ? cardImageUrl(card.imageNumber) : cardIdenticonUri(card.cardId)}
-        alt=""
-        draggable={false}
-        onError={() => setImageBroken(true)}
-        style={{
-          display: "block",
-          width: "100%",
-          // Card art sources reserve a narrow watermark strip at the bottom.
-          // Oversizing the image inside the clipped art chip keeps that strip
-          // out of this deliberately art-only representation.
-          height: "108%",
-          objectFit: "cover",
-          objectPosition: "center top",
-          pointerEvents: "none",
-          userSelect: "none",
-        }}
-      />
-    </span>
-  );
-}
 
 function DreamsignArtPiece({
   dreamsign,
@@ -391,12 +321,23 @@ function FullCardPiece({
   treatment = "plain",
 }: {
   readonly card: OfferTileCard;
-  readonly size?: "compact" | "medium" | "standard";
-  readonly treatment?: "plain" | "purged";
+  readonly size?: FullCardSize;
+  readonly treatment?: CardTreatment;
 }): ReactElement {
-  if (card.displaySnapshot === undefined) {
-    return <CardArtPiece card={card} treatment={treatment} size="large" />;
-  }
+  const treatmentStyle: CSSProperties =
+    treatment === "purged"
+      ? {
+          boxShadow: `0 0 0 3px ${token("--danger")}, ${token("--shadow-card")}`,
+        }
+      : treatment === "incoming"
+        ? {
+            boxShadow: `0 0 0 2px ${token("--spark")}, ${token("--shadow-card")}`,
+          }
+        : treatment === "duplicate"
+          ? {
+              boxShadow: `0 0 0 2px ${token("--energy")}, ${token("--shadow-card")}`,
+            }
+          : { boxShadow: token("--shadow-card") };
   return (
     <span
       data-offer-tile-full-card={card.cardId}
@@ -404,13 +345,10 @@ function FullCardPiece({
         position: "relative",
         display: "block",
         zIndex: 1,
-        width: size === "standard" ? 88 : size === "medium" ? 76 : 64,
+        width: FULL_CARD_WIDTH[size],
         borderRadius: token("--radius-inset"),
-        boxShadow:
-          treatment === "purged"
-            ? `0 0 0 3px ${token("--danger")}, ${token("--shadow-card")}`
-            : token("--shadow-card"),
         pointerEvents: "none",
+        ...treatmentStyle,
       }}
     >
       <CardView card={card.displaySnapshot} statTooltips={false} />
@@ -626,15 +564,28 @@ function FullCardStackOperation({
 function DraftGrid({ cards }: { readonly cards: readonly OfferTileCard[] }) {
   return (
     <span
+      data-offer-tile-card-grid=""
       style={{
-        display: "grid",
-        gridTemplateColumns: `repeat(2, ${String(CARD_ART_EDGE.draft)}px)`,
-        gap: token("--space-2"),
+        position: "relative",
+        display: "block",
+        width: 132,
+        height: 142,
         pointerEvents: "none",
       }}
     >
-      {cards.map((card) => (
-        <CardArtPiece key={card.cardId} card={card} size="draft" />
+      {cards.map((card, index) => (
+        <span
+          key={card.cardId}
+          style={{
+            position: "absolute",
+            left: index % 2 === 0 ? 7 : 71,
+            top: index < 2 ? 0 : 66,
+            zIndex: index < 2 ? 1 : 2,
+            pointerEvents: "none",
+          }}
+        >
+          <FullCardPiece card={card} size="draft" />
+        </span>
       ))}
     </span>
   );
@@ -654,7 +605,7 @@ function CardFan({
         position: "relative",
         display: "block",
         width: 122,
-        height: 104,
+        height: 110,
         pointerEvents: "none",
       }}
     >
@@ -666,13 +617,13 @@ function CardFan({
             key={card.cardId}
             style={{
               position: "absolute",
-              left: 20 + offset * 14,
+              left: 20 + offset * 16,
               top: 10 + Math.abs(offset) * 4,
               rotate: `${String(offset * 7)}deg`,
               pointerEvents: "none",
             }}
           >
-            <CardArtPiece card={card} treatment={treatment} size="medium" />
+            <FullCardPiece card={card} treatment={treatment} size="fan" />
           </span>
         );
       })}
@@ -692,31 +643,36 @@ function TradeComposition({
       data-offer-tile-trade=""
       style={{
         position: "relative",
-        display: "grid",
-        gridTemplateColumns: `repeat(2, ${String(CARD_ART_EDGE.compact)}px)`,
-        gap: token("--space-2"),
+        display: "block",
+        width: 132,
+        height: 142,
         pointerEvents: "none",
       }}
     >
-      {incoming.map((card) => (
-        <CardArtPiece
+      {incoming.map((card, index) => (
+        <span
           key={card.cardId}
-          card={card}
-          treatment="incoming"
-          size="compact"
-        />
+          style={{
+            position: "absolute",
+            left: index % 2 === 0 ? 12 : 78,
+            top: index < 2 ? 4 : 78,
+            pointerEvents: "none",
+          }}
+        >
+          <FullCardPiece card={card} treatment="incoming" size="mini" />
+        </span>
       ))}
       <span
         style={{
           position: "absolute",
           left: "50%",
           top: "50%",
-          zIndex: 1,
+          zIndex: 2,
           translate: "-50% -50%",
           pointerEvents: "none",
         }}
       >
-        <CardArtPiece card={outgoing} treatment="purged" size="compact" />
+        <FullCardPiece card={outgoing} treatment="purged" size="draft" />
       </span>
     </span>
   );

@@ -14,13 +14,29 @@ import { glyph } from "../cumulus/primitives/glyph";
 import { token } from "../cumulus/primitives/tokens";
 import { MERCHANT_ARCHETYPE_BUILDERS } from "../journey_v2/archetypes/registry";
 import type { MerchantArchetypeId } from "../journey_v2/archetypes/types";
-import { asCardId } from "../types/card-identity";
+import { asCardId, asCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 
-const fixtureCard = (cardId: string, imageNumber: number): OfferTileCard => ({
-  cardId: asCardId(cardId),
-  imageNumber,
-});
+const fixtureCard = (cardId: string, imageNumber: number): OfferTileCard => {
+  const id = asCardId(cardId);
+  return {
+    cardId: id,
+    displaySnapshot: {
+      id,
+      name: asCardName("Loading Card"),
+      cardNumber: imageNumber,
+      cardType: "Character",
+      subtype: "",
+      isStarter: false,
+      energyCost: null,
+      spark: null,
+      isFast: false,
+      renderedText: "",
+      imageNumber,
+      artOwned: true,
+    },
+  };
+};
 
 const GENERAL_DRAFT_A: OfferTileFourCards = [
   fixtureCard("7be2e6d7-abff-4c44-a0c3-35460da1693c", 287269511),
@@ -208,6 +224,13 @@ function hydrateCard(
     : { ...card, displaySnapshot };
 }
 
+function hydrateCards<T extends readonly OfferTileCard[]>(
+  cards: T,
+  cardsById: ReadonlyMap<string, CardData>,
+): T {
+  return cards.map((card) => hydrateCard(card, cardsById)) as unknown as T;
+}
+
 function hydrateOfferCards(
   model: OfferTileModel,
   cardsById: ReadonlyMap<string, CardData> | null,
@@ -218,17 +241,25 @@ function hydrateOfferCards(
   switch (model.kind) {
     case "card-gift":
       return { ...model, card: hydrateCard(model.card, cardsById) };
+    case "card-draft":
+      return { ...model, cards: hydrateCards(model.cards, cardsById) };
+    case "category-draft":
+      return { ...model, cards: hydrateCards(model.cards, cardsById) };
+    case "transfigured-draft":
+      return { ...model, cards: hydrateCards(model.cards, cardsById) };
+    case "copies-draft":
+      return { ...model, cards: hydrateCards(model.cards, cardsById) };
     case "card-bundle":
-      return {
-        ...model,
-        cards: model.cards.map((card) => hydrateCard(card, cardsById)) as unknown as
-          typeof model.cards,
-      };
+      return { ...model, cards: hydrateCards(model.cards, cardsById) };
     case "transfigure-starters":
+      return { ...model, cards: hydrateCards(model.cards, cardsById) };
+    case "duplicate-card":
+      return { ...model, cards: hydrateCards(model.cards, cardsById) };
+    case "trade-card":
       return {
         ...model,
-        cards: model.cards.map((card) => hydrateCard(card, cardsById)) as unknown as
-          typeof model.cards,
+        outgoing: hydrateCard(model.outgoing, cardsById),
+        incoming: hydrateCards(model.incoming, cardsById),
       };
     case "transfigure-card":
     case "keyword-modification":
