@@ -157,6 +157,10 @@ describe("MobileBattleScreen", () => {
     expect(screen?.style.backgroundRepeat).toBe("no-repeat");
     expect(screen?.style.backgroundSize).toBe("100% 100%");
     expect(screen?.style.touchAction).toBe("none");
+    expect(screen?.style.gridTemplateColumns).toBe("minmax(0, 1fr)");
+    expect(screen?.style.gridTemplateRows).toBe(
+      "minmax(0, 9fr) minmax(0, 12fr) minmax(0, 20fr) minmax(0, 20fr) minmax(0, 12fr) minmax(0, 27fr)",
+    );
     const safeAreaBackdrop = screen?.querySelector<HTMLElement>(
       ":scope > [data-battle-mobile-safe-area-backdrop]",
     );
@@ -199,9 +203,13 @@ describe("MobileBattleScreen", () => {
         row?.querySelector(`[data-testid="${owner}-battle-status"]`),
       ).not.toBeNull();
       expect(row?.style.gridTemplateColumns).toBe(
-        "minmax(0, 0.82fr) minmax(0, 1.6fr) minmax(120px, 0.82fr)",
+        "minmax(0, 1fr) max-content minmax(0, 1fr)",
       );
-      expect(row?.style.columnGap).toBe("var(--space-5)");
+      expect(row?.style.columnGap).toBe("var(--space-7)");
+      expect(
+        row?.querySelector<HTMLElement>("[data-battle-status-phase-anchor]")
+          ?.style.width,
+      ).toBe("max-content");
       const deckZone = row?.querySelector<HTMLElement>(
         `[data-battle-zone="${owner}-deck"]`,
       );
@@ -217,6 +225,21 @@ describe("MobileBattleScreen", () => {
           .battleCardId,
       ).toBe(view[owner].voidCards[0]?.id);
     }
+
+    const playerZones = container.querySelector<HTMLElement>(
+      '[data-battle-mobile-row="player-zones"]',
+    );
+    const playerHand = container.querySelector<HTMLElement>(
+      '[data-battle-mobile-row="player-hand"]',
+    );
+    expect(playerZones?.style.gridRow).toBe("6");
+    expect(playerZones?.style.gridColumn).toBe("1");
+    expect(playerHand?.style.gridRow).toBe("6");
+    expect(playerHand?.style.gridColumn).toBe("1");
+    expect(playerZones?.style.height).toBe("var(--space-12)");
+    expect(playerZones?.style.transform).toBe(
+      "translateY(calc(-1 * var(--space-7)))",
+    );
 
     expect(container.textContent).not.toContain("Enemy deck");
     expect(container.textContent).not.toContain("Player deck");
@@ -589,17 +612,16 @@ describe("MobileBattleScreen", () => {
     const previous = buttons?.[0];
     const next = buttons?.[1];
 
-    expect(controlRow?.style.height).toBe("40px");
-    expect(controlRow?.style.gridTemplateColumns).toBe(
-      "minmax(0, 0.82fr) minmax(0, 1.6fr) minmax(120px, 0.82fr)",
-    );
+    expect(controlRow?.style.gridRow).toBe("5");
+    expect(controlRow?.style.display).toBe("flex");
+    expect(controlRow?.style.justifyContent).toBe("flex-end");
     expect(controlRow?.style.paddingInline).toBe("var(--space-4)");
+    expect(controlRow?.style.paddingTop).toBe("var(--space-4)");
     expect(controlRow?.style.boxSizing).toBe("border-box");
-    expect(phaseControls?.style.gridColumn).toBe("3");
-    expect(phaseControls?.style.width).toBe("100%");
-    expect(backSlot?.style.position).toBe("absolute");
-    expect(backSlot?.style.right).toBe("calc(100% + var(--space-3))");
-    expect(nextSlot?.style.width).toBe("100%");
+    expect(phaseControls?.style.display).toBe("flex");
+    expect(phaseControls?.style.gap).toBe("var(--space-4)");
+    expect(backSlot?.style.position).toBe("");
+    expect(nextSlot?.style.width).toBe("120px");
     expect(buttons).toHaveLength(2);
     expect(previous?.getAttribute("aria-label")).toBe("Back");
     expect(previous?.querySelector(".bx-arrow-left")).not.toBeNull();

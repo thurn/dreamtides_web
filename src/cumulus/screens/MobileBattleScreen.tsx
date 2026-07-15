@@ -168,10 +168,12 @@ const BATTLE_PHASE_LIGHT_CSS = `
     }
   }
 `;
-// Keeps the void pile and its phase action wide enough for the longer primary
-// label on narrow phones; the zone and control rows share this grid contract.
+// The status keeps its content-driven width while the two physical piles share
+// the remaining room. This leaves a stable gap between all three objects and
+// lets the phase controls size independently below the battlefield.
 const SIDE_ZONES_GRID_TEMPLATE =
-  "minmax(0, 0.82fr) minmax(0, 1.6fr) minmax(120px, 0.82fr)";
+  "minmax(0, 1fr) max-content minmax(0, 1fr)";
+const NEXT_PHASE_CONTROL_WIDTH = 120;
 
 const ROOT_STYLE: CSSProperties = {
   position: "fixed",
@@ -181,8 +183,9 @@ const ROOT_STYLE: CSSProperties = {
   boxSizing: "border-box",
   overflow: "hidden",
   display: "grid",
+  gridTemplateColumns: "minmax(0, 1fr)",
   gridTemplateRows:
-    "minmax(0, 9fr) minmax(0, 12fr) minmax(0, 20fr) minmax(0, 20fr) 40px minmax(0, 12fr) minmax(0, 27fr)",
+    "minmax(0, 9fr) minmax(0, 12fr) minmax(0, 20fr) minmax(0, 20fr) minmax(0, 12fr) minmax(0, 27fr)",
   paddingTop: `var(${SAFE_AREA_INSET_PROPERTIES.top})`,
   paddingRight: `var(${SAFE_AREA_INSET_PROPERTIES.right})`,
   paddingBottom: `var(${SAFE_AREA_INSET_PROPERTIES.bottom})`,
@@ -234,6 +237,7 @@ function EnemyHand({ cardIds }: { readonly cardIds: readonly string[] }) {
       data-battle-hand-visible-count={visibleCardIds.length}
       style={{
         ...ROW_STYLE,
+        gridRow: 1,
         overflow: "hidden",
       }}
     >
@@ -329,10 +333,20 @@ function SideZones({
       data-battle-mobile-row={`${owner}-zones`}
       style={{
         ...ROW_STYLE,
+        gridColumn: 1,
+        gridRow: owner === "enemy" ? 2 : 6,
+        ...(owner === "player"
+          ? {
+              alignSelf: "start",
+              height: token("--space-12"),
+              transform: `translateY(calc(-1 * ${token("--space-7")}))`,
+              zIndex: 3,
+            }
+          : null),
         display: "grid",
         gridTemplateColumns: SIDE_ZONES_GRID_TEMPLATE,
         alignItems: "center",
-        columnGap: token("--space-5"),
+        columnGap: token("--space-7"),
         paddingInline: token("--space-4"),
       }}
     >
@@ -344,7 +358,7 @@ function SideZones({
         style={{
           minWidth: 0,
           minHeight: 0,
-          height: "72%",
+          height: owner === "player" ? "100%" : "72%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -362,7 +376,7 @@ function SideZones({
         style={{
           minWidth: 0,
           minHeight: 0,
-          height: "82%",
+          height: owner === "player" ? "100%" : "82%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -370,7 +384,11 @@ function SideZones({
       >
         <div
           data-battle-status-phase-anchor=""
-          style={{ position: "relative", width: "100%" }}
+          style={{
+            position: "relative",
+            width: "max-content",
+            maxWidth: "100%",
+          }}
         >
           <BattleStatusDisplay
             owner={owner}
@@ -393,7 +411,7 @@ function SideZones({
         style={{
           minWidth: 0,
           minHeight: 0,
-          height: "72%",
+          height: owner === "player" ? "100%" : "72%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -938,6 +956,7 @@ function PlayArea({
       data-battle-play-area={owner}
       style={{
         ...ROW_STYLE,
+        gridRow: owner === "enemy" ? 3 : 4,
         overflow: "hidden",
         containerType: "size",
       }}
@@ -986,6 +1005,8 @@ function PlayerHand({
       }}
       style={{
         ...ROW_STYLE,
+        gridColumn: 1,
+        gridRow: 6,
         overflow: canDrop ? "visible" : "hidden",
       }}
     >
@@ -1086,31 +1107,27 @@ function ControlRow({
       aria-label="Battle controls"
       style={{
         ...ROW_STYLE,
-        height: 40,
-        display: "grid",
-        gridTemplateColumns: SIDE_ZONES_GRID_TEMPLATE,
-        alignItems: "center",
+        gridRow: 5,
+        display: "flex",
+        alignItems: "flex-start",
+        justifyContent: "flex-end",
         boxSizing: "border-box",
         paddingInline: token("--space-4"),
-        columnGap: token("--space-5"),
+        paddingTop: token("--space-4"),
       }}
     >
       <div
         data-battle-phase-controls="row"
         style={{
-          gridColumn: 3,
-          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          gap: token("--space-4"),
           position: "relative",
           zIndex: 10,
         }}
       >
         <div
           data-battle-phase-back=""
-          style={{
-            position: "absolute",
-            top: 0,
-            right: `calc(100% + ${token("--space-3")})`,
-          }}
         >
           <IconButton
             glyph={GLYPHS.arrowLeft}
@@ -1122,7 +1139,7 @@ function ControlRow({
         </div>
         <div
           data-battle-phase-next=""
-          style={{ width: "100%", display: "grid" }}
+          style={{ width: NEXT_PHASE_CONTROL_WIDTH, display: "grid" }}
         >
           <GlassButton
             label="Next Phase"
