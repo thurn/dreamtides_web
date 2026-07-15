@@ -1205,15 +1205,30 @@ function PlayableBattleScreenInner({
                 sourceSurface: "debug-panel",
               });
             },
-            onIncreasePlayerCurrentAndMaxEnergy: () => {
-              handleCommand({
+            onAdjustPlayerCurrentAndMaxEnergy: (amount) => {
+              const setCurrentEnergy: BattleCommand = {
                 id: "DEBUG_EDIT",
                 edit: {
-                  kind: "INCREASE_MAX_ENERGY_AND_FILL",
+                  kind: "SET_CURRENT_ENERGY",
                   side: "player",
+                  value: board.sides.player.currentEnergy + amount,
                 },
                 sourceSurface: "debug-panel",
-              });
+              };
+              const setMaxEnergy: BattleCommand = {
+                id: "DEBUG_EDIT",
+                edit: {
+                  kind: "SET_MAX_ENERGY",
+                  side: "player",
+                  value: board.sides.player.maxEnergy + amount,
+                },
+                sourceSurface: "debug-panel",
+              };
+              void actions.battleGesture(
+                amount > 0
+                  ? [setMaxEnergy, setCurrentEnergy]
+                  : [setCurrentEnergy, setMaxEnergy],
+              );
             },
           }}
         />

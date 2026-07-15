@@ -288,7 +288,7 @@ describe("MobileBattleScreen", () => {
       onAdjustPlayerPoints: vi.fn(),
       onAdjustPlayerCurrentEnergy: vi.fn(),
       onAdjustPlayerMaxEnergy: vi.fn(),
-      onIncreasePlayerCurrentAndMaxEnergy: vi.fn(),
+      onAdjustPlayerCurrentAndMaxEnergy: vi.fn(),
     };
     const { container, root } = mount(makeView(), interactions);
     const panel = container.querySelector<HTMLElement>(
@@ -358,6 +358,11 @@ describe("MobileBattleScreen", () => {
         ?.click();
       container
         .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-debug-decrement-current-and-max-energy"]',
+        )
+        ?.click();
+      container
+        .querySelector<HTMLButtonElement>(
           '[data-testid="battle-debug-increment-current-and-max-energy"]',
         )
         ?.click();
@@ -370,7 +375,8 @@ describe("MobileBattleScreen", () => {
     expect(interactions.onAdjustPlayerCurrentEnergy).toHaveBeenNthCalledWith(2, 1);
     expect(interactions.onAdjustPlayerMaxEnergy).toHaveBeenNthCalledWith(1, -1);
     expect(interactions.onAdjustPlayerMaxEnergy).toHaveBeenNthCalledWith(2, 1);
-    expect(interactions.onIncreasePlayerCurrentAndMaxEnergy).toHaveBeenCalledTimes(1);
+    expect(interactions.onAdjustPlayerCurrentAndMaxEnergy).toHaveBeenNthCalledWith(1, -1);
+    expect(interactions.onAdjustPlayerCurrentAndMaxEnergy).toHaveBeenNthCalledWith(2, 1);
 
     act(() => root.unmount());
   });

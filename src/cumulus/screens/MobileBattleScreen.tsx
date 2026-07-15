@@ -150,7 +150,9 @@ export interface MobileBattleInteractions {
   readonly onAdjustPlayerMaxEnergy?: (
     amount: MobileBattleDebugAdjustment,
   ) => void;
-  readonly onIncreasePlayerCurrentAndMaxEnergy?: () => void;
+  readonly onAdjustPlayerCurrentAndMaxEnergy?: (
+    amount: MobileBattleDebugAdjustment,
+  ) => void;
 }
 
 const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
@@ -1552,7 +1554,7 @@ function PlayerStateDebugPanel({
           <PlayerCurrentAndMaxEnergyDebugRow
             currentEnergy={status.currentEnergy}
             maxEnergy={status.maxEnergy}
-            onIncrease={interactions?.onIncreasePlayerCurrentAndMaxEnergy}
+            onAdjust={interactions?.onAdjustPlayerCurrentAndMaxEnergy}
           />
         </div>
       </GlassPanel>
@@ -1563,11 +1565,11 @@ function PlayerStateDebugPanel({
 function PlayerCurrentAndMaxEnergyDebugRow({
   currentEnergy,
   maxEnergy,
-  onIncrease,
+  onAdjust,
 }: {
   readonly currentEnergy: number;
   readonly maxEnergy: number;
-  readonly onIncrease?: () => void;
+  readonly onAdjust?: (amount: MobileBattleDebugAdjustment) => void;
 }) {
   return (
     <div
@@ -1576,7 +1578,7 @@ function PlayerCurrentAndMaxEnergyDebugRow({
       data-battle-debug-stat="current-and-max-energy"
       style={{
         display: "grid",
-        gridTemplateColumns: "minmax(0, 1fr) auto auto",
+        gridTemplateColumns: "minmax(0, 1fr) auto auto auto",
         alignItems: "center",
         gap: token("--space-2"),
       }}
@@ -1590,6 +1592,15 @@ function PlayerCurrentAndMaxEnergyDebugRow({
       >
         Current + Max
       </span>
+      <IconButton
+        glyph={GLYPHS.minus}
+        size="sm"
+        label="Decrease current and maximum energy"
+        placement="onGlass"
+        disabled={onAdjust === undefined || currentEnergy <= 0 || maxEnergy <= 0}
+        testId="battle-debug-decrement-current-and-max-energy"
+        onPress={() => onAdjust?.(-1)}
+      />
       <output
         aria-live="polite"
         style={{
@@ -1610,9 +1621,9 @@ function PlayerCurrentAndMaxEnergyDebugRow({
         size="sm"
         label="Increase current and maximum energy"
         placement="onGlass"
-        disabled={onIncrease === undefined}
+        disabled={onAdjust === undefined}
         testId="battle-debug-increment-current-and-max-energy"
-        onPress={() => onIncrease?.()}
+        onPress={() => onAdjust?.(1)}
       />
     </div>
   );
