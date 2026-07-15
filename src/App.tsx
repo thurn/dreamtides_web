@@ -30,7 +30,6 @@ import { MobileDeckViewerAdapter } from "./screens/cumulus_adapters/MobileDeckVi
 import { useIsDesktop } from "./cumulus/screens/use-is-desktop";
 import { PoolViewer } from "./components/PoolViewer";
 import { StartingDeckOverlayAdapter } from "./screens/cumulus_adapters/StartingDeckOverlayAdapter";
-import { GlossaryPopup } from "./components/GlossaryPopup";
 import { DebugScreen } from "./screens/DebugScreen";
 import QuestDebugEditor from "./screens/QuestDebugEditor";
 import { CardSourceOverlay } from "./screens/CardSourceOverlay";
@@ -95,7 +94,6 @@ export function QuestApp({
     && !cumulusRouteUsesQuestChrome;
   const [deckViewerOpen, setDeckViewerOpen] = useState(false);
   const [poolViewerOpen, setPoolViewerOpen] = useState(false);
-  const [glossaryOpen, setGlossaryOpen] = useState(false);
   const [debugScreenOpen, setDebugScreenOpen] = useState(false);
   const [questEditorOpen, setQuestEditorOpen] = useState(false);
   const [cardSourceOverlayOpen, setCardSourceOverlayOpen] = useState(false);
@@ -337,14 +335,6 @@ export function QuestApp({
     setPoolViewerOpen(false);
   }, []);
 
-  const handleOpenGlossary = useCallback(() => {
-    setGlossaryOpen(true);
-  }, []);
-
-  const handleCloseGlossary = useCallback(() => {
-    setGlossaryOpen(false);
-  }, []);
-
   const handleBeginQuest = useCallback(() => {
     mutations.dismissStartingDeckPopup();
   }, [mutations]);
@@ -455,7 +445,6 @@ export function QuestApp({
           onJourneyExplanationChange={setJourneyExplanation}
           cumulusChromeHandlers={{
             onViewDeck: handleOpenDeckViewer,
-            onOpenGlossary: handleOpenGlossary,
             onOpenPoolViewer: handleOpenPoolViewer,
             onOpenDebugScreen: handleOpenDebugScreen,
             onOpenQuestEditor: handleOpenQuestEditor,
@@ -469,7 +458,6 @@ export function QuestApp({
           <ErrorBoundary scope="overlay:hud">
             <HUD
               onOpenDeckViewer={handleOpenDeckViewer}
-              onOpenGlossary={handleOpenGlossary}
               onOpenPoolViewer={handleOpenPoolViewer}
               onOpenDebugScreen={handleOpenDebugScreen}
               onOpenQuestEditor={handleOpenQuestEditor}
@@ -524,9 +512,6 @@ export function QuestApp({
             isOpen={showStarterDeckIntro}
             onClose={handleBeginQuest}
           />
-        </ErrorBoundary>
-        <ErrorBoundary scope="overlay:glossary" onClose={handleCloseGlossary}>
-          <GlossaryPopup isOpen={glossaryOpen} onClose={handleCloseGlossary} />
         </ErrorBoundary>
         <ErrorBoundary scope="overlay:debug-screen" onClose={handleCloseDebugScreen}>
           <DebugScreen

@@ -51,8 +51,6 @@ export const COMPONENTS_TSX = [
   "DreamwellCardView.tsx",
   "ErrorBoundary.test.tsx",
   "ErrorBoundary.tsx",
-  "GlossaryPopup.test.tsx",
-  "GlossaryPopup.tsx",
   "HUD.test.tsx",
   "HUD.tsx",
   "HudDreamsignLayoutDemo.tsx",

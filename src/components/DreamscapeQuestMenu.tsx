@@ -18,7 +18,6 @@ import { QuestUtilityMenu, type QuestUtilityMenuAction } from "./QuestUtilityMen
 /** The App-shell overlay handlers the menu triggers. */
 interface DreamscapeQuestMenuProps {
   onOpenDeckViewer: () => void;
-  onOpenGlossary: () => void;
   onOpenPoolViewer: () => void;
   onOpenDebugScreen: () => void;
   onOpenQuestEditor: () => void;
@@ -60,7 +59,6 @@ export const menuBtnSize = MENU_BUTTON_PX;
  */
 export function DreamscapeQuestMenu({
   onOpenDeckViewer,
-  onOpenGlossary,
   onOpenPoolViewer,
   onOpenDebugScreen,
   onOpenQuestEditor,
@@ -81,7 +79,6 @@ export function DreamscapeQuestMenu({
   const menuPanelGap = 6;
   const actions: QuestUtilityMenuAction[] = [
     { id: "deck", icon: "bxf bx-rectangle-vertical", label: "View Deck", onClick: onOpenDeckViewer },
-    { id: "glossary", icon: "bxf bx-book-open", label: "Glossary", onClick: onOpenGlossary },
     { id: "pool", icon: "bxf bx-grid", label: "Pool Viewer", onClick: onOpenPoolViewer },
     ...(hasDraftData
       ? [{ id: "package", icon: "bxf bx-package", label: "Package Debug", onClick: onOpenDebugScreen }]

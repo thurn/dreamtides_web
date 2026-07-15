@@ -78,29 +78,16 @@ describe("glossary", () => {
     expect(hasGlossaryTerm("definitely-not-a-glossary-term")).toBe(false);
   });
 
-  // The card-text hover tooltip pathway (`card-text.ts` →
-  // `RulesText.tsx`) and the HUD glossary popup
-  // (`GlossaryPopup.tsx`) must consume the same data module. There
-  // is exactly one place that lists gameplay terms; both surfaces
-  // import from it.
-  it("is the single source of truth shared by the card-text tooltip and the glossary popup", () => {
+  // Card-text term reveals resolve entries from the canonical glossary module.
+  it("is the single source of truth for card-text term reveals", () => {
     const cardText = readFileSync(
       join(SRC_DIR, "cumulus", "components", "card", "card-text.ts"),
-      "utf8",
-    );
-    const popup = readFileSync(
-      join(SRC_DIR, "components", "GlossaryPopup.tsx"),
       "utf8",
     );
     expect(
       cardText,
       "card-text.ts must look up terms from src/data/glossary",
     ).toMatch(/from\s+"\.\.\/\.\.\/\.\.\/data\/glossary"/);
-    expect(
-      popup,
-      "GlossaryPopup.tsx must source its entries from src/data/glossary",
-    ).toMatch(/from\s+"\.\.\/data\/glossary"/);
-    expect(popup).toMatch(/\bGLOSSARY\b/);
   });
 
   // Every transfiguration named in docs/quests/quests.md must have its own
@@ -141,12 +128,8 @@ describe("glossary", () => {
     ).toEqual([]);
   });
 
-  // The card-text tooltip and the glossary popup must show the same
-  // definition string for each transfiguration color. Both surfaces
-  // render `GlossaryDefinitionCard` directly from a `GlossaryEntry`, so
-  // matching the resolved entry is sufficient: tokenization yields the
-  // same entry the popup iterates.
-  it("uses one definition per transfiguration color across tooltip and popup", () => {
+  // Each transfiguration color resolves to one canonical definition entry.
+  it("uses one definition per transfiguration color", () => {
     const colors = [
       "Empowered",
       "Amplified",
@@ -161,8 +144,8 @@ describe("glossary", () => {
       const entry = lookupGlossaryTerm(color);
       expect(entry, `Missing glossary entry for ${color}`).toBeDefined();
 
-      // Tokenize a representative card-text usage and confirm the
-      // resolved entry is the same object the popup iterates over.
+      // Tokenize a representative card-text usage and confirm the resolved
+      // entry is the canonical glossary object.
       const segments = tokenizeRulesText(`${color} Transfiguration`);
       const termSegment = segments.find(
         (s) => s.kind === "term" && s.word === color,
@@ -173,7 +156,6 @@ describe("glossary", () => {
       ).toBeDefined();
       if (termSegment !== undefined && termSegment.kind === "term") {
         expect(termSegment.entry.definition).toBe(entry?.definition);
-        // Popup renders by reference equality of GLOSSARY entries.
         expect(GLOSSARY).toContain(termSegment.entry);
       }
     }

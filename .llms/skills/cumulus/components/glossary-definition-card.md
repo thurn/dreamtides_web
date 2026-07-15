@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/glossary-definition-card`
 
-Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 
 The one keyword-definition tile: a single glossary entry rendered as an InfoCard text card whose headline is the keyword and whose body is the keyword's rules text. Every surface that reveals what a keyword means renders this one tile, so the definition reads in the same glass shell, radius, and type scale as every other reveal beside it. It re-establishes its own `.cumulus` token scope, so it renders correctly even inside a popover portalled outside the Cumulus subtree.
 

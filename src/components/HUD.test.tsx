@@ -191,7 +191,6 @@ afterEach(() => {
 describe("HUD", () => {
   function renderHud(overrides: Partial<{
     onOpenDeckViewer: () => void;
-    onOpenGlossary: () => void;
     onOpenPoolViewer: () => void;
     onOpenDebugScreen: () => void;
     onOpenQuestEditor: () => void;
@@ -204,7 +203,6 @@ describe("HUD", () => {
     return mount(
       <HUD
         onOpenDeckViewer={overrides.onOpenDeckViewer ?? vi.fn()}
-        onOpenGlossary={overrides.onOpenGlossary ?? vi.fn()}
         onOpenPoolViewer={overrides.onOpenPoolViewer ?? vi.fn()}
         onOpenDebugScreen={overrides.onOpenDebugScreen ?? vi.fn()}
         onOpenQuestEditor={overrides.onOpenQuestEditor ?? vi.fn()}
@@ -259,31 +257,12 @@ describe("HUD", () => {
     });
   });
 
-  it("renders a Glossary button beside View Deck and fires the callback on click", () => {
+  it("omits the glossary button", () => {
     setQuestContext(makeState([]));
-    const onOpenGlossary = vi.fn();
-    const { container, root } = renderHud({ onOpenGlossary });
+    const { container, root } = renderHud();
 
-    const glossaryButton = container.querySelector<HTMLButtonElement>(
-      '[data-testid="hud-glossary-button"]',
-    );
-    expect(glossaryButton).not.toBeNull();
-    expect(glossaryButton?.textContent).toContain("Glossary");
-
-    // The button sits in the same right-side button cluster as
-    // "View Deck" — both are inside the same flex container so the
-    // glossary entry point is always one click away from the deck
-    // viewer entry point.
-    const buttons = Array.from(
-      container.querySelectorAll("button"),
-    ).filter((b) => /Glossary|View Deck/.test(b.textContent ?? ""));
-    expect(buttons.length).toBeGreaterThanOrEqual(2);
-    expect(buttons[0]?.parentElement).toBe(buttons[1]?.parentElement);
-
-    act(() => {
-      glossaryButton?.click();
-    });
-    expect(onOpenGlossary).toHaveBeenCalledTimes(1);
+    expect(container.textContent).not.toContain("Glossary");
+    expect(container.querySelector('[data-testid="hud-glossary-button"]')).toBeNull();
 
     act(() => {
       root.unmount();

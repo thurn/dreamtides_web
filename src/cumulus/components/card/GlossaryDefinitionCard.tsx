@@ -16,8 +16,6 @@ import { richText } from "./rich-text";
  *   * `CardTermDefinitions` stacks one per gameplay term in the hover-help
  *     panel beside a card (full cards, compact-row previews, dreamsign and
  *     Dreamcaller ability reveals, and the battle card preview).
- *   * `GlossaryPopup` shows one per entry in the glossary reference opened from
- *     the HUD.
  *   * `JourneyHoverCard` lists the terms referenced by a journey tooltip.
  *
  * The tile establishes its own `.cumulus` token scope so it renders correctly on

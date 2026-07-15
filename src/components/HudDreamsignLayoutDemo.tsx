@@ -209,7 +209,6 @@ export function HudDreamsignLayoutDemo() {
         <DreamsignRevelationScreen site={demoSite} />
         <HUD
           onOpenDeckViewer={noop}
-          onOpenGlossary={noop}
           onOpenPoolViewer={noop}
           onOpenDebugScreen={noop}
           onOpenQuestEditor={noop}

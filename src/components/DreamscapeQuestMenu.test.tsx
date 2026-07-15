@@ -38,7 +38,6 @@ function renderMenu() {
   return mount(
     <DreamscapeQuestMenu
       onOpenDeckViewer={vi.fn()}
-      onOpenGlossary={vi.fn()}
       onOpenPoolViewer={vi.fn()}
       onOpenDebugScreen={vi.fn()}
       onOpenQuestEditor={vi.fn()}
@@ -147,6 +146,18 @@ describe("DreamscapeQuestMenu", () => {
     );
     expect(menu?.style.maxHeight).toContain("100dvh");
     expect(menu?.style.overflowY).toBe("auto");
+
+    act(() => root.unmount());
+  });
+
+  it("omits the glossary action", () => {
+    const { container, root } = renderMenu();
+    const menuButton = container.querySelector<HTMLButtonElement>(
+      '[data-testid="dreamscape-menu-button"]',
+    );
+    act(() => menuButton?.click());
+
+    expect(container.textContent).not.toContain("Glossary");
 
     act(() => root.unmount());
   });

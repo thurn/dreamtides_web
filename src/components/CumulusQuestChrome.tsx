@@ -16,7 +16,6 @@ const NOOP = (): void => undefined;
 
 export interface CumulusQuestChromeHandlers {
   onViewDeck?: () => void;
-  onOpenGlossary?: () => void;
   onOpenPoolViewer?: () => void;
   onOpenDebugScreen?: () => void;
   onOpenQuestEditor?: () => void;
@@ -68,7 +67,6 @@ export function CumulusQuestChrome({
         <ErrorBoundary scope="overlay:cumulus-quest-menu">
           <DreamscapeQuestMenu
             onOpenDeckViewer={handlers.onViewDeck ?? NOOP}
-            onOpenGlossary={handlers.onOpenGlossary ?? NOOP}
             onOpenPoolViewer={handlers.onOpenPoolViewer ?? NOOP}
             onOpenDebugScreen={handlers.onOpenDebugScreen ?? NOOP}
             onOpenQuestEditor={handlers.onOpenQuestEditor ?? NOOP}
