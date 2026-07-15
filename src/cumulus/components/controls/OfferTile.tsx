@@ -19,10 +19,7 @@ import { token } from "../../primitives/tokens";
 import { richText } from "../card/rich-text";
 import { CardView } from "../card/CardView";
 import { CARD_CORNER_RADIUS } from "../card/card-aspect";
-import {
-  offerTileDescription,
-  offerTileLabel,
-} from "./offer-tile-descriptions";
+import { offerTileDescription } from "./offer-tile-descriptions";
 import offerFrameUrl from "../../assets/Skill_Frame_iron.png";
 import "./offer-tile.css";
 
@@ -187,7 +184,7 @@ export function OfferTile({
       as="button"
       ref={binding.ref}
       {...binding.sourceProps}
-      aria-label={offerTileLabel(model)}
+      aria-label={offerTileDescription(model)}
       data-testid={testId}
       data-offer-tile=""
       data-offer-tile-kind={model.kind}
@@ -215,6 +212,7 @@ export function OfferTile({
         borderRadius: token("--radius-panel"),
         background: "transparent",
         color: token("--text-on-glass"),
+        textAlign: "left",
       }}
     >
       <span
@@ -258,7 +256,7 @@ function offerTileMotionDelay(offerId: string): string {
   return `${String(-hash / 1000)}s`;
 }
 
-type CardTreatment = "plain" | "purged" | "incoming" | "duplicate";
+type CardTreatment = "plain" | "purged" | "duplicate";
 type FullCardSize = "draft" | "compact" | "medium" | "standard";
 
 const FULL_CARD_WIDTH: Readonly<Record<FullCardSize, number>> = {
@@ -328,11 +326,7 @@ function FullCardPiece({
       ? {
           boxShadow: `0 0 0 3px ${token("--danger")}, ${token("--shadow-card")}`,
         }
-      : treatment === "incoming"
-        ? {
-            boxShadow: `0 0 0 2px ${token("--spark")}, ${token("--shadow-card")}`,
-          }
-        : treatment === "duplicate"
+      : treatment === "duplicate"
           ? {
               boxShadow: `0 0 0 2px ${token("--energy")}, ${token("--shadow-card")}`,
             }
@@ -616,7 +610,7 @@ function TradeComposition({
         pointerEvents: "none",
       }}
     >
-      <DraftGrid cards={incoming} treatment="incoming" />
+      <DraftGrid cards={incoming} />
       <span
         style={{
           position: "absolute",

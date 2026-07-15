@@ -1,65 +1,116 @@
-import type { OfferTileModel } from "./OfferTile";
+import type { OfferTileCard, OfferTileModel } from "./OfferTile";
 
-const OFFER_TILE_LABELS: Readonly<
-  Record<OfferTileModel["kind"], string>
-> = {
-  "add-site": "Add Site",
-  "card-bundle": "Card Bundle",
-  "card-draft": "Card Draft",
-  "card-gift": "Card Gift",
-  "category-draft": "Category Draft",
-  "copies-draft": "Copies Draft",
-  "dreamsign-draft": "Dreamsign Draft",
-  "dreamsign-gift": "Dreamsign Gift",
-  "duplicate-card": "Duplicate Card",
-  "keyword-modification": "Keyword Modification",
-  "purge-card": "Purge Card",
-  "trade-card": "Trade Card",
-  "transfigure-card": "Transfigure Card",
-  "transfigure-starters": "Refine Starters",
-  "transfigured-draft": "Transfigured Draft",
-  "tribal-change": "Kindred Change",
-};
+const SMALL_CARDINALS = [
+  "zero",
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+  "ten",
+  "eleven",
+  "twelve",
+  "thirteen",
+  "fourteen",
+  "fifteen",
+  "sixteen",
+  "seventeen",
+  "eighteen",
+  "nineteen",
+] as const;
 
-/** The category name used by an offer tile's accessible button label. */
-export function offerTileLabel(model: OfferTileModel): string {
-  return OFFER_TILE_LABELS[model.kind];
+const TENS_CARDINALS = [
+  "",
+  "",
+  "twenty",
+  "thirty",
+  "forty",
+  "fifty",
+  "sixty",
+  "seventy",
+  "eighty",
+  "ninety",
+] as const;
+
+/** Spell the small, non-negative quantities carried by offer models. */
+function cardinal(value: number): string {
+  if (!Number.isSafeInteger(value) || value < 0) {
+    return "the selected number of";
+  }
+  if (value < SMALL_CARDINALS.length) {
+    return SMALL_CARDINALS[value] ?? "zero";
+  }
+  if (value < 100) {
+    const tens = Math.floor(value / 10);
+    const remainder = value % 10;
+    const tensWord = TENS_CARDINALS[tens] ?? "";
+    return remainder === 0
+      ? tensWord
+      : `${tensWord}-${SMALL_CARDINALS[remainder] ?? "zero"}`;
+  }
+  return "many";
+}
+
+function cardName(card: OfferTileCard): string {
+  return card.displaySnapshot.name;
+}
+
+function namedCards(
+  cards: readonly OfferTileCard[],
+  conjunction: "and" | "or",
+): string {
+  if (cards.length === 1 && cards[0] !== undefined) {
+    return cardName(cards[0]);
+  }
+  if (cards.length === 2 && cards[0] !== undefined && cards[1] !== undefined) {
+    return `${cardName(cards[0])} ${conjunction} ${cardName(cards[1])}`;
+  }
+  return `${cardinal(cards.length)} cards`;
 }
 
 /** Exact player-facing action copy derived from the offer's structured model. */
 export function offerTileDescription(model: OfferTileModel): string {
   switch (model.kind) {
     case "card-gift":
-      return "Add 1 card to your deck.";
+      return `Add ${cardName(model.card)} to your deck.`;
     case "card-draft":
-      return `Choose 1 of ${String(model.cards.length)} cards to add to your deck.`;
     case "category-draft":
-      return `Choose 1 of ${String(model.cards.length)} cards from a shared category to add to your deck.`;
     case "transfigured-draft":
-      return `Choose 1 of ${String(model.cards.length)} transfigured cards to add to your deck.`;
+      return "Choose a card to add to your deck.";
     case "copies-draft":
-      return `Choose 1 of ${String(model.cards.length)} cards and add ${String(model.copyCount)} ${model.copyCount === 1 ? "copy" : "copies"} of it to your deck.`;
+      return `Choose a card and add ${cardinal(model.copyCount)} ${model.copyCount === 1 ? "copy" : "copies"} of it to your deck.`;
     case "card-bundle":
-      return `Add all ${String(model.cards.length)} cards to your deck.`;
+      return model.cards.length <= 2
+        ? `Add ${namedCards(model.cards, "and")} to your deck.`
+        : `Add all ${cardinal(model.cards.length)} cards to your deck.`;
     case "transfigure-card":
-      return "Transfigure 1 card in your deck.";
+      return `Transfigure ${cardName(model.card)}.`;
     case "keyword-modification":
-      return "Modify a keyword on 1 card in your deck.";
+      return `Modify a keyword on ${cardName(model.card)}.`;
     case "tribal-change":
-      return "Change the character type of 1 card in your deck.";
+      return `Change the character type of ${cardName(model.card)}.`;
     case "transfigure-starters":
-      return `Transfigure ${String(model.cards.length)} starter ${model.cards.length === 1 ? "card" : "cards"} in your deck.`;
+      return `Transfigure ${namedCards(model.cards, "and")}.`;
     case "purge-card":
-      return "Purge 1 card from your deck.";
+      return `Purge ${cardName(model.card)}.`;
     case "trade-card":
-      return `Purge 1 card and choose 1 of ${String(model.incoming.length)} cards to add to your deck.`;
+      return `Purge ${cardName(model.outgoing)} and choose a card to replace it.`;
     case "duplicate-card":
-      return `Choose 1 of ${String(model.cards.length)} ${model.cards.length === 1 ? "card" : "cards"} in your deck to duplicate.`;
+      if (model.cards.length === 1) {
+        return `Duplicate ${namedCards(model.cards, "or")}.`;
+      }
+      return model.cards.length === 2
+        ? `Choose ${namedCards(model.cards, "or")} to duplicate.`
+        : `Choose one of ${cardinal(model.cards.length)} cards in your deck to duplicate.`;
     case "dreamsign-gift":
-      return "Add 1 dreamsign to your collection.";
+      return "Add one dreamsign to your collection.";
     case "dreamsign-draft":
-      return `Choose 1 of ${String(model.dreamsigns.length)} dreamsigns to add to your collection.`;
+      return "Choose a dreamsign to add to your collection.";
     case "add-site":
-      return "Add 1 site to the current dreamscape.";
+      return "Add one site to the current dreamscape.";
   }
 }

@@ -16,7 +16,6 @@ The advisory is moderate severity (unbounded memory allocation while parsing
 W3C Baggage headers). `npm audit` only offers `firebase-tools@14.23.0` as a
 fix, which is a major-version downgrade and needs a separate dependency-policy
 decision.
-
 ## Asymmetric battle preview ranks align to the left of the larger side
 
 The `Fill 20 vs 9 + Voids` battle debug action sizes both combatants' rank
@@ -25,3 +24,13 @@ and four-card front rank occupy the leading columns of those wider tracks, so
 the enemy formation appears left-shifted while the twenty-card player
 formation remains centered. The regular `Fill Battlefield + Voids` 9-vs-9
 preview is centered.
+
+## Dev wrapper can time out while `lsof` stats an Arq SMB mount
+
+`npm run dev -- --port 5184` selected free emulator ports and started asset
+setup, then its `lsof` readiness probe warned that a child process was hung
+while statting `/Library/Application Support/ArqAgentUNC.noindex/...` and the
+wrapper exited with `Timed out waiting for the Realtime Database emulator`.
+The documented `npm run dev:vite -- --port 5184` path started successfully, so
+Vite-only screen QA remained available. The wrapper should scope its port
+inspection so unrelated slow or unavailable mounts cannot block startup.

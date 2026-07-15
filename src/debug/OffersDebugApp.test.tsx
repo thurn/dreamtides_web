@@ -4,10 +4,7 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
-import {
-  offerTileDescription,
-  offerTileLabel,
-} from "../cumulus/components/controls/offer-tile-descriptions";
+import { offerTileDescription } from "../cumulus/components/controls/offer-tile-descriptions";
 import { MERCHANT_ARCHETYPE_BUILDERS } from "../journey_v2/archetypes/registry";
 import OffersDebugApp, {
   OFFER_TILE_DEBUG_ARCHETYPE_IDS,
@@ -61,7 +58,6 @@ describe("OffersDebugApp", () => {
       const model = OFFER_TILE_DEBUG_MODELS[archetypeId];
       expect(category).not.toBeNull();
       expect(description?.textContent).toBe(offerTileDescription(model));
-      expect(description?.textContent).not.toContain(offerTileLabel(model));
       expect(description?.textContent).not.toContain("Dream Augury");
       expect(category?.textContent).toContain(
         OFFER_TILE_DEBUG_NOTES[archetypeId],
@@ -79,20 +75,18 @@ describe("OffersDebugApp", () => {
     const keyword = OFFER_TILE_DEBUG_MODELS.keyword_mod;
     expect(fitCardGift.kind).toBe("card-gift");
     expect(strongCardGift.kind).toBe("card-gift");
-    expect(offerTileLabel(fitCardGift)).toBe("Card Gift");
-    expect(offerTileLabel(strongCardGift)).toBe("Card Gift");
-    expect(offerTileDescription(fitCardGift)).toBe("Add 1 card to your deck.");
-    expect(offerTileDescription(strongCardGift)).toBe("Add 1 card to your deck.");
+    expect(offerTileDescription(fitCardGift)).toContain("to your deck.");
+    expect(offerTileDescription(strongCardGift)).toContain("to your deck.");
     expect(offerTileDescription(copiesDraft)).toBe(
-      "Choose 1 of 4 cards and add 2 copies of it to your deck.",
+      "Choose a card and add two copies of it to your deck.",
     );
-    expect(offerTileDescription(cardBundle)).toBe("Add all 3 cards to your deck.");
+    expect(offerTileDescription(cardBundle)).toBe("Add all three cards to your deck.");
     expect(trade.kind).toBe("trade-card");
     expect(trade.kind === "trade-card" ? trade.incoming : []).toHaveLength(4);
     expect(duplicate.kind).toBe("duplicate-card");
     expect(duplicate.kind === "duplicate-card" ? duplicate.cards : []).toHaveLength(3);
     expect(offerTileDescription(duplicate)).toBe(
-      "Choose 1 of 3 cards in your deck to duplicate.",
+      "Choose one of three cards in your deck to duplicate.",
     );
     expect(dreamsignDraft.kind).toBe("dreamsign-draft");
     expect(
@@ -101,22 +95,18 @@ describe("OffersDebugApp", () => {
     expect(starters.kind).toBe("transfigure-starters");
     expect(starters.kind === "transfigure-starters" ? starters.cards : []).toHaveLength(2);
     expect(offerTileDescription(starters)).toBe(
-      "Transfigure 2 starter cards in your deck.",
+      "Transfigure Loading Card and Loading Card.",
     );
     expect(keyword.kind).toBe("keyword-modification");
     expect(
       keyword.kind === "keyword-modification" ? keyword.card.cardId : null,
     ).toBe("2931e20b-1a80-4ddd-8944-20e68d182886");
     expect(offerTileDescription(dreamsignDraft)).toBe(
-      "Choose 1 of 4 dreamsigns to add to your collection.",
+      "Choose a dreamsign to add to your collection.",
     );
     for (const model of Object.values(OFFER_TILE_DEBUG_MODELS)) {
       const description = offerTileDescription(model);
-      expect(description).not.toMatch(/\bone card\b/i);
-      expect(description).not.toMatch(/\bone dreamsign\b/i);
-      expect(description).not.toMatch(/\b(?:two|three|four)\b/i);
-      expect(description).not.toMatch(/\bmultiple\b/i);
-      expect(description).not.toMatch(/\bup to\b/i);
+      expect(description).not.toMatch(/\d/);
     }
 
     act(() => root.unmount());

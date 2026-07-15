@@ -159,6 +159,7 @@ describe("OfferTile", () => {
     expect(source.style.borderRadius).toBe("var(--radius-panel)");
     expect(source.style.background).toBe("transparent");
     expect(source.style.border).toBe("0px");
+    expect(source.style.textAlign).toBe("left");
     expect(source.querySelector("[data-offer-tile-background]")).not.toBeNull();
     const floatingFrame = source.querySelector<HTMLElement>(
       "[data-offer-tile-floating-frame]",
@@ -185,8 +186,9 @@ describe("OfferTile", () => {
       source.getAttribute("aria-describedby") ?? "",
     );
     expect(description?.textContent).toBe(
-      "Choose 1 of 4 cards to add to your deck.",
+      "Choose a card to add to your deck.",
     );
+    expect(source.getAttribute("aria-label")).toBe(description?.textContent);
     expect(description?.textContent).not.toContain("Dream Augury");
     expect(description?.textContent).not.toContain("Card Draft");
 
@@ -363,7 +365,7 @@ describe("OfferTile", () => {
     expect(
       document.getElementById(copiesTile?.getAttribute("aria-describedby") ?? "")
         ?.textContent,
-    ).toBe("Choose 1 of 4 cards and add 2 copies of it to your deck.");
+    ).toBe("Choose a card and add two copies of it to your deck.");
     expect(
       container.querySelector(
         '[data-testid="duplicate-tile"] [data-offer-tile-operation-layout]',
@@ -395,6 +397,13 @@ describe("OfferTile", () => {
     );
     expect(tradeGrid?.style.gridTemplateColumns).toBe("repeat(2, 54px)");
     expect(tradeGrid?.style.gap).toBe("var(--space-1)");
+    expect(
+      [...tradeCards].slice(0, 4).every(
+        (card) =>
+          card.style.boxShadow === "var(--shadow-card)" &&
+          !card.style.boxShadow.includes("var(--spark)"),
+      ),
+    ).toBe(true);
     expect(
       container.querySelectorAll(
         '[data-testid="bundle-tile"] [data-offer-tile-full-card]',

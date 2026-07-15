@@ -8,7 +8,7 @@ import {
   type OfferTileFourCards,
   type OfferTileModel,
 } from "../cumulus/components/controls/OfferTile";
-import { offerTileLabel } from "../cumulus/components/controls/offer-tile-descriptions";
+import { offerTileDescription } from "../cumulus/components/controls/offer-tile-descriptions";
 import { artRef, resolveArtRef } from "../cumulus/primitives/art";
 import { glyph } from "../cumulus/primitives/glyph";
 import { token } from "../cumulus/primitives/tokens";
@@ -376,7 +376,7 @@ export default function OffersDebugApp(): ReactElement {
             {models.length} maximal offer shapes · every surfaced choice shown
           </p>
           <p aria-live="polite" style={{ margin: 0, minHeight: 20, font: token("--t-caption") }}>
-            {selected === null ? "" : `Pressed ${offerTileLabel(selected)}`}
+            {selected === null ? "" : offerTileDescription(selected)}
           </p>
         </header>
 
@@ -416,7 +416,6 @@ export default function OffersDebugApp(): ReactElement {
                     textShadow: token("--text-outline-media"),
                   }}
                 >
-                  <span>{offerTileLabel(model)}</span>
                   <span
                     style={{
                       color: token("--text-on-glass-muted"),
