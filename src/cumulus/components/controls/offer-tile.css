@@ -1,6 +1,7 @@
 .cumulus-offer-tile__depth {
   position: absolute;
   inset: 0;
+  z-index: 0;
   pointer-events: none;
   background:
     radial-gradient(circle at 24% 18%, color-mix(in srgb, var(--accent-bright) 22%, transparent), transparent 54%),
@@ -10,11 +11,23 @@
 
 .cumulus-offer-tile__visual {
   position: absolute;
-  inset: 0;
+  inset: var(--space-4);
+  z-index: 1;
   display: grid;
   place-items: center;
   pointer-events: none;
   animation: cumulus-offer-tile-drift 5.8s var(--ease-dream) infinite;
+}
+
+.cumulus-offer-tile__frame {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  user-select: none;
 }
 
 @keyframes cumulus-offer-tile-drift {

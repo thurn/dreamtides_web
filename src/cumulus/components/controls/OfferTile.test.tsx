@@ -41,7 +41,12 @@ describe("OfferTile", () => {
     expect(source.tagName).toBe("BUTTON");
     expect(source.style.width).toBe("200px");
     expect(source.style.height).toBe("200px");
-    expect(source.style.borderRadius).toBe("var(--radius-pill)");
+    expect(source.style.borderRadius).toBe("var(--radius-panel)");
+    const frame = source.querySelector<HTMLImageElement>("[data-offer-tile-frame]");
+    expect(frame?.src).toContain("Skill_Frame_gold.png");
+    expect(frame?.draggable).toBe(false);
+    expect(frame?.getAttribute("aria-hidden")).toBe("true");
+    expect(frame?.style.pointerEvents).toBe("none");
     expect(source.dataset.revealEntityType).toBe("offer");
     expect(source.dataset.revealEntityId).toMatch(/^[0-9a-f-]{36}$/);
     expect(source.dataset.revealPrimaryVariant).toBe("text");

@@ -17,9 +17,10 @@ import type { Glyph } from "../../primitives/glyph";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { richText } from "../card/rich-text";
+import offerFrameUrl from "../../assets/Skill_Frame_gold.png";
 import "./offer-tile.css";
 
-/** The fixed circular diameter of an OfferTile, in pixels. */
+/** The fixed width and height of an OfferTile, in pixels. */
 export const OFFER_TILE_SIZE = 200;
 
 /** UUID-backed card art shown symbolically inside an offer. */
@@ -146,10 +147,10 @@ export interface OfferTileProps {
 }
 
 /**
- * A 200×200 circular symbolic Dream Augury offer button. Its inner card art is
- * framed as height-preserving squares; card art, dreamsigns, and glyphs are
- * decorative and pointer-transparent. The complete tile is the only
- * hover/focus/press target and reveals one category InfoCard.
+ * A 200×200 framed symbolic Dream Augury offer button. Its rounded gold frame
+ * surrounds height-preserving square card art, dreamsigns, and glyphs. Every
+ * inner object is decorative and pointer-transparent. The complete tile is the
+ * only hover/focus/press target and reveals one category InfoCard.
  */
 export function OfferTile({
   model,
@@ -195,7 +196,7 @@ export function OfferTile({
         }
       }}
       style={{
-        ...glassSurfaceStyle({ radius: token("--radius-pill") }),
+        ...glassSurfaceStyle({ radius: token("--radius-panel") }),
         ...binding.sourceProps.style,
         position: "relative",
         width: OFFER_TILE_SIZE,
@@ -218,6 +219,15 @@ export function OfferTile({
       >
         <OfferVisual model={model} />
       </span>
+      <img
+        className="cumulus-offer-tile__frame"
+        data-offer-tile-frame=""
+        src={offerFrameUrl}
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+        style={{ pointerEvents: "none" }}
+      />
     </Pressable>
   );
 }
@@ -608,7 +618,7 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
                 gridTemplateColumns: `repeat(2, ${String(CARD_ART_EDGE.compact)}px)`,
                 gap: token("--space-2"),
                 // Let the replacement group overlap the outgoing art by the
-                // width it gained, preserving the composition's circle-safe span.
+                // width it gained, preserving the composition's frame-safe span.
                 marginInlineStart: -CARD_ART_WIDTH_EXPANSION,
                 pointerEvents: "none",
               }}
