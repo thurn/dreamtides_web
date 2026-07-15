@@ -120,6 +120,8 @@ describe("buildMobileBattleView", () => {
     const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER);
 
     expect(view.battleId).toBe(board.battleId);
+    expect(view.activeSide).toBe(board.activeSide);
+    expect(view.phase).toBe("dawn");
     expect(view.playerHand.map((card) => card.id)).toEqual(board.sides.player.hand);
     expect(view.playerHand.map((card) => card.model.cardId)).toEqual(
       board.sides.player.hand.map((id) => board.cardInstances[id].definition.cardId),
@@ -135,6 +137,25 @@ describe("buildMobileBattleView", () => {
       figment: true,
       figmentTitleBar: true,
     });
+  });
+
+  it.each([
+    ["dreamwell", "dawn"],
+    ["draw", "dawn"],
+    ["dawn", "dawn"],
+    ["day", "day"],
+    ["dusk", "dusk"],
+    ["night", "night"],
+    ["challenge", "challenge"],
+    ["ending", "challenge"],
+  ] as const)("surfaces bookkeeping phase %s at %s", (phase, visiblePhase) => {
+    const init = makeInit();
+    const board = makeBoard(init);
+    board.phase = phase;
+
+    expect(buildMobileBattleView(init, board, ENEMY_DREAMCALLER).phase).toBe(
+      visiblePhase,
+    );
   });
 
   it("preserves hand and deck order while exposing hidden zones as ids only", () => {

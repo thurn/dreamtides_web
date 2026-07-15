@@ -57,8 +57,17 @@ export interface MobileBattleSideView {
 }
 
 /** The complete, presentation-ready mobile battle board. */
+export type MobileBattlePhase =
+  | "dawn"
+  | "day"
+  | "dusk"
+  | "night"
+  | "challenge";
+
 export interface MobileBattleView {
   readonly battleId: string;
+  readonly activeSide: MobileBattleOwner;
+  readonly phase: MobileBattlePhase;
   readonly enemyHandCardIds: readonly string[];
   readonly enemy: MobileBattleSideView;
   readonly player: MobileBattleSideView;
@@ -107,6 +116,21 @@ export interface MobileBattleInteractions {
 const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
 const BATTLEFIELD_SIDE_INSET_PERCENT = 6;
 const BATTLEFIELD_WIDTH_PERCENT = 100 - BATTLEFIELD_SIDE_INSET_PERCENT * 2;
+const PHASE_LIGHT_SIZE = 6;
+const PHASE_LIGHT_LEFT = {
+  dawn: "10%",
+  day: "30%",
+  dusk: "50%",
+  night: "70%",
+  challenge: "90%",
+} satisfies Record<MobileBattlePhase, string>;
+const PHASE_LABEL = {
+  dawn: "Dawn",
+  day: "Day",
+  dusk: "Dusk",
+  night: "Night",
+  challenge: "Challenge",
+} satisfies Record<MobileBattlePhase, string>;
 
 const ROOT_STYLE: CSSProperties = {
   position: "fixed",
@@ -229,11 +253,15 @@ function toVoidPile(
 }
 
 function SideZones({
+  activeSide,
   owner,
+  phase,
   side,
   interactions,
 }: {
+  readonly activeSide: MobileBattleOwner;
   readonly owner: MobileBattleOwner;
+  readonly phase: MobileBattlePhase;
   readonly side: MobileBattleSideView;
   readonly interactions?: MobileBattleInteractions;
 }) {
@@ -292,6 +320,7 @@ function SideZones({
       <div
         data-battle-zone={`${owner}-status`}
         style={{
+          position: "relative",
           minWidth: 0,
           minHeight: 0,
           height: "82%",
@@ -308,6 +337,9 @@ function SideZones({
           points={side.status.points}
           testId={`${owner}-battle-status`}
         />
+        {activeSide === owner ? (
+          <PhaseIndicator owner={owner} phase={phase} />
+        ) : null}
       </div>
       <div
         {...zoneDropProps("void")}
@@ -330,6 +362,51 @@ function SideZones({
           testId={`${owner}-battle-void`}
         />
       </div>
+    </div>
+  );
+}
+
+function PhaseIndicator({
+  owner,
+  phase,
+}: {
+  readonly owner: MobileBattleOwner;
+  readonly phase: MobileBattlePhase;
+}) {
+  const ownerLabel = owner === "player" ? "Player" : "Opponent";
+  return (
+    <div
+      role="img"
+      aria-label={`${ownerLabel} turn, ${PHASE_LABEL[phase]} phase`}
+      data-battle-phase-indicator={owner}
+      data-battle-mobile-phase={phase}
+      style={{
+        position: "absolute",
+        left: 0,
+        right: 0,
+        height: PHASE_LIGHT_SIZE,
+        pointerEvents: "none",
+        ...(owner === "player"
+          ? { top: `calc(100% + ${token("--space-2")})` }
+          : { bottom: `calc(100% + ${token("--space-2")})` }),
+      }}
+    >
+      <span
+        aria-hidden="true"
+        data-battle-phase-light=""
+        style={{
+          position: "absolute",
+          top: 0,
+          left: PHASE_LIGHT_LEFT[phase],
+          width: PHASE_LIGHT_SIZE,
+          height: PHASE_LIGHT_SIZE,
+          transform: "translateX(-50%)",
+          borderRadius: token("--radius-pill"),
+          backgroundColor: token("--accent-bright"),
+          boxShadow: token("--glow-accent-soft"),
+          transition: `left ${token("--motion-object-travel")}`,
+        }}
+      />
     </div>
   );
 }
@@ -1001,7 +1078,13 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
         />
         <LayoutGroup id={`mobile-battle:${view.battleId}`}>
           <EnemyHand cardIds={view.enemyHandCardIds} />
-          <SideZones owner="enemy" side={view.enemy} interactions={interactions} />
+          <SideZones
+            activeSide={view.activeSide}
+            owner="enemy"
+            phase={view.phase}
+            side={view.enemy}
+            interactions={interactions}
+          />
           <PlayArea
             owner="enemy"
             side={view.enemy}
@@ -1017,7 +1100,13 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
             interactions={interactions}
           />
           <ControlRow interactions={interactions} />
-          <SideZones owner="player" side={view.player} interactions={interactions} />
+          <SideZones
+            activeSide={view.activeSide}
+            owner="player"
+            phase={view.phase}
+            side={view.player}
+            interactions={interactions}
+          />
           <PlayerHand cards={view.playerHand} interactions={interactions} />
         </LayoutGroup>
         <BattleDebugMenu

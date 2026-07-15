@@ -106,6 +106,8 @@ function makeSide(
 function makeView(): MobileBattleView {
   return {
     battleId: "battle-mobile-fixture",
+    activeSide: "player",
+    phase: "day",
     enemyHandCardIds: Array.from(
       { length: 8 },
       (_, index) => `enemy-hand-${String(index)}`,
@@ -220,6 +222,59 @@ describe("MobileBattleScreen", () => {
     expect(container.textContent).not.toContain("Player deck");
     expect(container.textContent).not.toContain("Enemy void");
     expect(container.textContent).not.toContain("Player void");
+
+    act(() => root.unmount());
+  });
+
+  it("moves one glowing phase light beneath the active player status", () => {
+    const { container, root } = mount();
+    const indicator = container.querySelector<HTMLElement>(
+      '[data-battle-phase-indicator="player"]',
+    );
+    const light = indicator?.querySelector<HTMLElement>(
+      "[data-battle-phase-light]",
+    );
+
+    expect(
+      container.querySelector('[data-battle-phase-indicator="enemy"]'),
+    ).toBeNull();
+    expect(indicator?.dataset.battleMobilePhase).toBe("day");
+    expect(indicator?.getAttribute("aria-label")).toBe(
+      "Player turn, Day phase",
+    );
+    expect(indicator?.style.top).toBe("calc(100% + var(--space-2))");
+    expect(indicator?.style.bottom).toBe("");
+    expect(light?.style.width).toBe("6px");
+    expect(light?.style.height).toBe("6px");
+    expect(light?.style.left).toBe("30%");
+    expect(light?.style.backgroundColor).toBe("var(--accent-bright)");
+    expect(light?.style.boxShadow).toBe("var(--glow-accent-soft)");
+    expect(light?.style.transition).toContain("var(--motion-object-travel)");
+
+    act(() => root.unmount());
+  });
+
+  it("places the active opponent phase light above its status", () => {
+    const view: MobileBattleView = {
+      ...makeView(),
+      activeSide: "enemy",
+      phase: "challenge",
+    };
+    const { container, root } = mount(view);
+    const indicator = container.querySelector<HTMLElement>(
+      '[data-battle-phase-indicator="enemy"]',
+    );
+    const light = indicator?.querySelector<HTMLElement>(
+      "[data-battle-phase-light]",
+    );
+
+    expect(
+      container.querySelector('[data-battle-phase-indicator="player"]'),
+    ).toBeNull();
+    expect(indicator?.dataset.battleMobilePhase).toBe("challenge");
+    expect(indicator?.style.bottom).toBe("calc(100% + var(--space-2))");
+    expect(indicator?.style.top).toBe("");
+    expect(light?.style.left).toBe("90%");
 
     act(() => root.unmount());
   });

@@ -11,6 +11,7 @@ import {
 import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
 import type {
   MobileBattleCardView,
+  MobileBattlePhase,
   MobileBattleSideView,
   MobileBattleSlotView,
   MobileBattleStatusView,
@@ -35,6 +36,8 @@ export function buildMobileBattleView(
   const { frontSize, backSize } = selectPlayAreaSize(board);
   return {
     battleId: init.battleId,
+    activeSide: board.activeSide,
+    phase: mobileBattlePhase(board.phase),
     enemyHandCardIds: [...board.sides.enemy.hand],
     enemy: buildSideView("enemy", enemyDreamcaller, board, frontSize, backSize),
     player: buildSideView(
@@ -46,6 +49,21 @@ export function buildMobileBattleView(
     ),
     playerHand: buildCardViews(board.sides.player.hand, board),
   };
+}
+
+function mobileBattlePhase(
+  phase: BattleMutableState["phase"],
+): MobileBattlePhase {
+  switch (phase) {
+    case "dreamwell":
+    case "draw":
+    case "dawn":
+      return "dawn";
+    case "ending":
+      return "challenge";
+    default:
+      return phase;
+  }
 }
 
 export function buildMobileBattleCardView(
