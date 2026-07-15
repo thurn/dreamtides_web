@@ -216,7 +216,15 @@ describe("MobileBattleScreen", () => {
       const voidZone = row?.querySelector<HTMLElement>(
         `[data-battle-zone="${owner}-void"]`,
       );
+      const pileFrames = row?.querySelectorAll<HTMLElement>(
+        "[data-battle-pile-frame]",
+      );
       expect(deckZone?.style.height).toBe(voidZone?.style.height);
+      expect(pileFrames).toHaveLength(2);
+      pileFrames?.forEach((frame) => {
+        expect(frame.style.width).toBe("100%");
+        expect(frame.style.maxWidth).toBe("90px");
+      });
       expect(voidZone?.dataset.battleZoneTopCardId).toBe(
         view[owner].voidCards[0]?.id,
       );
@@ -236,6 +244,7 @@ describe("MobileBattleScreen", () => {
     expect(playerZones?.style.gridColumn).toBe("1");
     expect(playerHand?.style.gridRow).toBe("6");
     expect(playerHand?.style.gridColumn).toBe("1");
+    expect(playerHand?.style.zIndex).toBe("15");
     expect(playerZones?.style.height).toBe("var(--space-12)");
     expect(playerZones?.style.transform).toBe(
       "translateY(calc(-1 * var(--space-7)))",

@@ -173,7 +173,9 @@ const BATTLE_PHASE_LIGHT_CSS = `
 // lets the phase controls size independently below the battlefield.
 const SIDE_ZONES_GRID_TEMPLATE =
   "minmax(0, 1fr) max-content minmax(0, 1fr)";
+const SIDE_PILE_MAX_WIDTH = 90;
 const NEXT_PHASE_CONTROL_WIDTH = 120;
+const PLAYER_HAND_Z_INDEX = 15;
 // The player zones share the hand track: their 64px row is lifted 20px, and
 // this anchor adds the minimum 4px separation after that row's lower edge.
 const PLAYER_HAND_TOP = `calc(${token("--space-12")} - ${token("--space-7")} + ${token("--space-2")})`;
@@ -367,12 +369,17 @@ function SideZones({
           justifyContent: "center",
         }}
       >
-        <CardPile
-          cards={deck}
-          orientation="landscape"
-          label={`${owner === "enemy" ? "Enemy" : "Player"} deck`}
-          testId={`${owner}-battle-deck`}
-        />
+        <div
+          data-battle-pile-frame=""
+          style={{ width: "100%", maxWidth: SIDE_PILE_MAX_WIDTH }}
+        >
+          <CardPile
+            cards={deck}
+            orientation="landscape"
+            label={`${owner === "enemy" ? "Enemy" : "Player"} deck`}
+            testId={`${owner}-battle-deck`}
+          />
+        </div>
       </div>
       <div
         data-battle-zone={`${owner}-status`}
@@ -420,12 +427,17 @@ function SideZones({
           justifyContent: "center",
         }}
       >
-        <CardPile
-          cards={voidPile}
-          orientation="landscape"
-          label={`${owner === "enemy" ? "Enemy" : "Player"} void`}
-          testId={`${owner}-battle-void`}
-        />
+        <div
+          data-battle-pile-frame=""
+          style={{ width: "100%", maxWidth: SIDE_PILE_MAX_WIDTH }}
+        >
+          <CardPile
+            cards={voidPile}
+            orientation="landscape"
+            label={`${owner === "enemy" ? "Enemy" : "Player"} void`}
+            testId={`${owner}-battle-void`}
+          />
+        </div>
       </div>
     </div>
   );
@@ -1010,6 +1022,7 @@ function PlayerHand({
         ...ROW_STYLE,
         gridColumn: 1,
         gridRow: 6,
+        zIndex: PLAYER_HAND_Z_INDEX,
         overflow: canDrop ? "visible" : "hidden",
       }}
     >
