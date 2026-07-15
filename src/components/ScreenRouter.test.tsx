@@ -670,6 +670,72 @@ describe("ScreenRouter DreamAugury routing", () => {
   });
 });
 
+describe("ScreenRouter terminal Cumulus routing", () => {
+  it("renders Quest Failed with utility chrome, no status bar, and the reset action", () => {
+    const state = createDefaultState();
+    state.screen = { type: "questFailed" };
+    state.completionLevel = 2;
+    state.dreamcaller = {
+      id: "73000000-0000-4000-8000-000000000001",
+      name: "Failure Fixture",
+      title: "Keeper of the Last Test",
+      renderedText: "A fixture ability.",
+      imageNumber: "0001",
+      startingEssence: 180,
+    };
+    state.failureSummary = {
+      battleId: "router-failure-battle",
+      result: "defeat",
+      reason: "score_target_reached",
+      siteId: "router-failure-site",
+      siteLabel: "Battle",
+      dreamscapeIdOrNone: "router-failure-dreamscape",
+      turnNumber: 6,
+      playerScore: 4,
+      enemyScore: 10,
+    };
+    const mutations = makeMutations();
+    const container = renderWithQuest({
+      state,
+      mutations,
+      questContent: merchantContent(),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
+    });
+
+    expect(
+      container.querySelector('[data-testid="cumulus-quest-failed-screen"]'),
+    ).not.toBeNull();
+    expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
+    expect(
+      container.querySelector('[data-testid="dreamscape-menu-button"]'),
+    ).not.toBeNull();
+    expect(
+      getLogEntries().find(
+        (entry) => entry.event === "quest_failed_screen_shown",
+      ),
+    ).toMatchObject({
+      battleId: "router-failure-battle",
+      siteId: "router-failure-site",
+      uiVariant: "cumulus",
+    });
+
+    const newQuest = container.querySelector<HTMLButtonElement>(
+      '[data-testid="quest-failed-start-new-run"]',
+    );
+    act(() => newQuest?.click());
+    expect(mutations.resetQuest).toHaveBeenCalledOnce();
+    expect(
+      getLogEntries().find(
+        (entry) => entry.event === "quest_failed_start_new_run",
+      ),
+    ).toMatchObject({
+      battleId: "router-failure-battle",
+      result: "defeat",
+      uiVariant: "cumulus",
+    });
+  });
+});
+
 describe("ScreenRouter site-dispatch completeness", () => {
   // The fallthrough placeholder copy rendered only when no site-type branch
   // matches. Reaching it means a SiteType is unhandled by the router.

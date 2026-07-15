@@ -130,7 +130,9 @@ export function ScreenRouter({
         <CumulusQuestChrome
           handlers={cumulusChromeHandlers}
           showAtlasRegenerate={screen.type === "atlas"}
-          showStatusBar={screen.type !== "questComplete"}
+          showStatusBar={
+            screen.type !== "questComplete" && screen.type !== "questFailed"
+          }
         >
           {cumulusScreen}
         </CumulusQuestChrome>

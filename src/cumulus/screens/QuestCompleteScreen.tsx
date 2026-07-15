@@ -8,7 +8,12 @@ import {
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { Motes } from "../components/hud/Motes";
 import { token } from "../primitives/tokens";
-import { MENU_BUTTON_PX, MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
+import {
+  QUEST_RESULT_BOTTOM_SAFE_PADDING,
+  QUEST_RESULT_CHROME_GRADIENT,
+  QUEST_RESULT_CONTENT_MAX_WIDTH_PX,
+  QUEST_RESULT_TOP_CHROME_CLEARANCE,
+} from "./quest-result-layout";
 
 export interface QuestCompleteStatView {
   id: "battles" | "dreamscapes" | "cards" | "dreamsigns" | "essence";
@@ -31,13 +36,6 @@ export interface QuestCompleteScreenProps {
   view: QuestCompleteView;
   onNewQuest: () => void;
 }
-
-const CONTENT_MAX_WIDTH_PX = 440;
-const TOP_CHROME_CLEARANCE =
-  `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}, ` +
-  `calc(max(var(--safe-area-inset-top), ${String(MENU_EDGE_INSET_MOBILE_PX)}px) + ${String(MENU_BUTTON_PX)}px)) + ${token("--space-5")})`;
-const BOTTOM_SAFE_PADDING =
-  `calc(max(var(--safe-area-inset-bottom), ${token("--safe-bottom")}) + ${token("--space-6")})`;
 
 /** The sparse Cumulus victory summary, designed around a narrow mobile stage. */
 export function QuestCompleteScreen({
@@ -64,7 +62,7 @@ export function QuestCompleteScreen({
           inset: 0,
           background:
             `radial-gradient(circle at 50% 8%, ${token("--accent-tint")} 0%, transparent 44%), ` +
-            `linear-gradient(180deg, ${token("--surface-chrome-strong")} 0%, ${token("--bg-app")} 72%)`,
+            QUEST_RESULT_CHROME_GRADIENT,
         }}
       />
       <Motes on tint="warm" count={18} seed={77} />
@@ -76,7 +74,7 @@ export function QuestCompleteScreen({
           inset: 0,
           overflowY: "auto",
           overscrollBehavior: "contain",
-          padding: `${TOP_CHROME_CLEARANCE} ${token("--space-6")} ${BOTTOM_SAFE_PADDING}`,
+          padding: `${QUEST_RESULT_TOP_CHROME_CLEARANCE} ${token("--space-6")} ${QUEST_RESULT_BOTTOM_SAFE_PADDING}`,
           boxSizing: "border-box",
           display: "flex",
           justifyContent: "center",
@@ -86,7 +84,7 @@ export function QuestCompleteScreen({
         <div
           style={{
             width: "100%",
-            maxWidth: CONTENT_MAX_WIDTH_PX,
+            maxWidth: QUEST_RESULT_CONTENT_MAX_WIDTH_PX,
             minHeight: "100%",
             display: "flex",
             flexDirection: "column",

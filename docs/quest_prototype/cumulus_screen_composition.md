@@ -37,9 +37,9 @@ or mobile menu with the app-owned overlay actions. Registration through
 `cumulusScreenFor` or `cumulusSiteScreenFor` applies this wrapper automatically;
 pure screens and their view-model builders contain scene-specific data only.
 
-Quest completion keeps the utility menu and omits the status bar. Its centered
-run summary is the terminal inventory readout, and its bottom action starts the
-next quest.
+Terminal quest-result screens keep the utility menu and omit the status bar.
+Their centered summaries carry the final run or battle readout, and their
+bottom actions start the next quest.
 
 The quest-start choice is the explicit exception because a run has no selected
 Dreamcaller or persistent quest inventory yet. The battle route applies the
