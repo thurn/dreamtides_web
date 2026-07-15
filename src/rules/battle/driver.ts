@@ -19,7 +19,6 @@
 import type { BattleDebugEdit } from "../../battle/debug/commands";
 import type {
   BattleEngineEmissionContext,
-  BattleInit,
   BattleMutableState,
 } from "../../battle/types";
 import type { EventContext } from "../../eventlog/types";
@@ -176,7 +175,7 @@ function applyEdits(
  * its resolution edits). Returns a fresh `BattleFoldState`.
  */
 function runQueue(
-  init: BattleInit,
+  battle: BattleFoldState,
   board: BattleMutableState,
   queue: EffectRun[],
   seq: number,
@@ -240,7 +239,7 @@ function runQueue(
       ).state;
     }
     return {
-      init,
+      ...battle,
       board: currentBoard,
       effectQueue: currentQueue,
       pendingPrompt: {
@@ -254,7 +253,7 @@ function runQueue(
   }
 
   return {
-    init,
+    ...battle,
     board: currentBoard,
     effectQueue: currentQueue,
     pendingPrompt: null,
@@ -302,7 +301,7 @@ export function advanceEffectQueueWithStream(
 ): BattleFoldState {
   if (battle.pendingPrompt !== null) return battle;
   return runQueue(
-    battle.init,
+    battle,
     battle.board,
     battle.effectQueue,
     seq,
@@ -359,7 +358,7 @@ export function resolvePendingPromptWithStream(
   // bounce before reaching here in production.
   if (promptStep === undefined || promptStep.kind !== "prompt") {
     return runQueue(
-      battle.init,
+      battle,
       battle.board,
       battle.effectQueue,
       seq,
@@ -396,7 +395,7 @@ export function resolvePendingPromptWithStream(
       : [{ ...run, cursor: nextCursor }, ...battle.effectQueue.slice(1)];
 
   return runQueue(
-    battle.init,
+    battle,
     board,
     [...advancedQueue, ...cascadeRuns],
     seq,

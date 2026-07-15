@@ -121,8 +121,10 @@ function captureAllDrafts(): EventDraft[] {
   void actions.setCardSourceDebug(null);
   void actions.endBattle("victory");
   void actions.beginBattle("site-1");
+  void actions.setBattleAutomation(true);
   void actions.battleCommand({});
   void actions.battleGesture([{}, {}]);
+  void actions.battleAiDefend("enemy", "ai:test");
   void actions.resolvePrompt(1, {});
   void actions.setCardNote("instance-1", { noteId: "n1", text: "t", expiry: null });
 

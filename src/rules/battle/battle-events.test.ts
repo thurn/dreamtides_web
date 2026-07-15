@@ -266,6 +266,17 @@ describe("BEGIN_BATTLE", () => {
     expect(first.state.battle?.init.siteId).toBe(SITE_ID);
   });
 
+  it("records the initiating client's automation setting in the battle fold", () => {
+    registerBattleInitProvider(fakeProvider);
+    const result = reduce(baseState(), "BEGIN_BATTLE", {
+      siteId: SITE_ID,
+      basicAutomationEnabled: false,
+    });
+
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.basicAutomationEnabled).toBe(false);
+  });
+
   it("bounces a second BEGIN_BATTLE when a battle is already in progress", () => {
     registerBattleInitProvider(fakeProvider);
     const existing = inBattleState();
@@ -1343,6 +1354,99 @@ describe("SET_CARD_NOTE", () => {
     );
     expect(result.outcome).toBe("applied");
     expect(result.state.battle?.board.cardInstances["bc-note"].notes).toHaveLength(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Shared battle automation and AI defense
+// ---------------------------------------------------------------------------
+
+describe("shared battle automation", () => {
+  function cardPlayState(enabled: boolean): FoldState {
+    const instance = makeInstance("bc-play", "card-play", "player");
+    instance.definition.energyCost = 2;
+    instance.definition.printedEnergyCost = 2;
+    const board = makeRichBoard({
+      instances: [instance],
+      playerHand: [instance.battleCardId],
+    });
+    board.sides.player.currentEnergy = 5;
+    board.sides.player.maxEnergy = 5;
+    return {
+      ...baseState(),
+      battle: battleFrom(board, { basicAutomationEnabled: enabled }),
+    };
+  }
+
+  const playCommand = debugEdit({
+    kind: "MOVE_CARD_TO_ZONE",
+    battleCardId: "bc-play",
+    destination: { side: "player", zone: "backRank", slotId: backRankSlotId(0) },
+  });
+
+  it("expands the same raw command according to the folded setting", () => {
+    const automated = reduce(cardPlayState(true), "BATTLE_COMMAND", playCommand);
+    const manual = reduce(cardPlayState(false), "BATTLE_COMMAND", playCommand);
+
+    expect(automated.state.battle?.board.sides.player.currentEnergy).toBe(3);
+    expect(manual.state.battle?.board.sides.player.currentEnergy).toBe(5);
+    expect(automated.state.battle?.basicAutomationEnabled).toBe(true);
+    expect(manual.state.battle?.basicAutomationEnabled).toBe(false);
+    expect(automated.state.battle?.board.sides.player.backRank[backRankSlotId(0)]).toBe("bc-play");
+    expect(manual.state.battle?.board.sides.player.backRank[backRankSlotId(0)]).toBe("bc-play");
+  });
+
+  it("updates the setting through a shared event", () => {
+    const result = reduce(cardPlayState(false), "SET_BATTLE_AUTOMATION", {
+      enabled: true,
+    });
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.basicAutomationEnabled).toBe(true);
+  });
+});
+
+describe("BATTLE_AI_DEFEND", () => {
+  it("applies deterministic defense once and records the processed turn", () => {
+    const challenger = makeInstance("challenger", "challenger-card", "player");
+    challenger.definition.printedSpark = 2;
+    const blocker = makeInstance("blocker", "blocker-card", "enemy");
+    blocker.definition.printedSpark = 4;
+    const board = makeRichBoard({
+      phase: "dusk",
+      turnNumber: 3,
+      instances: [challenger, blocker],
+      playerFront: { [frontRankSlotId(0)]: challenger.battleCardId },
+    });
+    board.sides.enemy.backRank[backRankSlotId(0)] = blocker.battleCardId;
+    const state = { ...baseState(), battle: battleFrom(board) };
+
+    const first = reduce(state, "BATTLE_AI_DEFEND", { aiSide: "enemy" });
+    expect(first.outcome).toBe("applied");
+    expect(first.state.battle?.board.sides.enemy.frontRank[frontRankSlotId(0)]).toBe(
+      blocker.battleCardId,
+    );
+    expect(first.state.battle?.aiDefenseTurn).toEqual({
+      activeSide: "player",
+      turnNumber: 3,
+    });
+
+    const second = reduce(first.state, "BATTLE_AI_DEFEND", { aiSide: "enemy" });
+    expect(second.outcome).toBe("bounced");
+  });
+
+  it("records an empty defense so reloads do not retry it forever", () => {
+    const board = makeRichBoard({ phase: "dusk", turnNumber: 4 });
+    const result = reduce(
+      { ...baseState(), battle: battleFrom(board) },
+      "BATTLE_AI_DEFEND",
+      { aiSide: "enemy" },
+    );
+
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.aiDefenseTurn).toEqual({
+      activeSide: "player",
+      turnNumber: 4,
+    });
   });
 });
 

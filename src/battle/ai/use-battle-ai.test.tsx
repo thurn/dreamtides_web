@@ -480,7 +480,7 @@ describe("useBattleAi", () => {
     expect(gestureDispatch).toHaveBeenCalledWith(commands);
   });
 
-  it("submits multi-move auto-defense as one gesture", async () => {
+  it("does not dispatch defense from local hook state", async () => {
     const dispatch = vi.fn();
     const gestureDispatch = vi.fn();
     const state = makeEnemyTurnState((mutable) => {
@@ -506,10 +506,7 @@ describe("useBattleAi", () => {
     });
 
     expect(dispatch).not.toHaveBeenCalled();
-    expect(gestureDispatch).toHaveBeenCalledTimes(1);
-    const commands = gestureDispatch.mock.calls[0]?.[0] as readonly BattleCommand[];
-    expect(commands).toHaveLength(2);
-    expect(commands.every((command) => command.id === "DEBUG_EDIT")).toBe(true);
+    expect(gestureDispatch).not.toHaveBeenCalled();
   });
 
   it("produces no proposal and dispatches nothing when disabled", async () => {

@@ -62,7 +62,12 @@ import {
 } from "./driver";
 import type { PromptResolution } from "./effect-runner-core";
 import { dawnClearEdits } from "../../battle/engine/handoff";
+import { forwardModelFromState } from "../../battle/ai/forward-model";
+import { planDefense } from "../../battle/ai/defense";
+import { actionToCommands } from "../../battle/ai/driver";
+import { buildTrace } from "../../battle/ai/trace";
 import { alliesInPlay } from "./effect-step";
+import { planBasicAutomationCommands } from "./basic-automation";
 import {
   collectMaterializedRuns,
   inPlayInstanceIds,
@@ -159,6 +164,13 @@ export function beginBattle(
   if (typeof siteId !== "string" || siteId.length === 0) {
     return null;
   }
+  const basicAutomationEnabled = payload.basicAutomationEnabled;
+  if (
+    basicAutomationEnabled !== undefined &&
+    typeof basicAutomationEnabled !== "boolean"
+  ) {
+    return null;
+  }
   const provider = battleInitProvider;
   if (provider === null) {
     return null;
@@ -172,7 +184,27 @@ export function beginBattle(
   if (battle === null) {
     return null;
   }
-  return { ...state, battle };
+  return {
+    ...state,
+    battle:
+      basicAutomationEnabled === undefined
+        ? battle
+        : { ...battle, basicAutomationEnabled },
+  };
+}
+
+/** Updates the shared automation mode used by subsequent battle commands. */
+export function setBattleAutomation(
+  state: FoldState,
+  payload: Record<string, unknown>,
+): FoldState | null {
+  if (state.battle === null || typeof payload.enabled !== "boolean") {
+    return null;
+  }
+  return {
+    ...state,
+    battle: { ...state.battle, basicAutomationEnabled: payload.enabled },
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -469,7 +501,7 @@ function applyBattleCommandStep(
 
   // Step 5 — advance the queue, continuing the SAME draw counter.
   const advanced = advanceEffectQueueWithStream(
-    { init: battle.init, board, effectQueue: queue, pendingPrompt: null, dawnFired },
+    { ...battle, board, effectQueue: queue, pendingPrompt: null, dawnFired },
     seq,
     random,
     nowMs,
@@ -513,17 +545,29 @@ export function battleCommand(
 
   let drawIndex = 0;
   const random = (): number => ctx.rng(drawIndex++);
-  const next = applyBattleCommandStep(
-    battle,
-    command,
-    ctx.seq,
-    random,
-    isoTimestampToMs(ctx.timestamp) ?? 0,
-  );
-  if (next === null) {
-    return null;
+  const commands = (battle.basicAutomationEnabled ?? false)
+    ? planBasicAutomationCommands(battle.board, command, {
+        maxEnergyCap: battle.init.maxEnergyCap,
+        scoreToWin: battle.init.scoreToWin,
+        dreamwellDeck: battle.init.dreamwellDeck,
+      })
+    : [command];
+  const nowMs = isoTimestampToMs(ctx.timestamp) ?? 0;
+  let current = battle;
+  for (const plannedCommand of commands) {
+    const next = applyBattleCommandStep(
+      current,
+      plannedCommand,
+      ctx.seq,
+      random,
+      nowMs,
+    );
+    if (next === null) {
+      return null;
+    }
+    current = next;
   }
-  return { ...state, battle: next };
+  return { ...state, battle: current };
 }
 
 /**
@@ -575,6 +619,68 @@ export function battleGesture(
     current = next;
   }
   return { ...state, battle: current };
+}
+
+/**
+ * Applies the AI defender's deterministic Dusk repositioning once per opposing
+ * turn. The processed marker lives in the fold so remounts and reloads cannot
+ * repeat the defense or suppress a needed retry.
+ */
+export function battleAiDefend(
+  state: FoldState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+): FoldState | null {
+  const battle = state.battle;
+  const aiSide = payload.aiSide;
+  if (
+    battle === null ||
+    (aiSide !== "player" && aiSide !== "enemy") ||
+    battle.board.result !== null ||
+    battle.board.phase !== "dusk" ||
+    battle.board.activeSide === aiSide
+  ) {
+    return null;
+  }
+
+  const marker = battle.aiDefenseTurn;
+  if (
+    marker?.activeSide === battle.board.activeSide &&
+    marker.turnNumber === battle.board.turnNumber
+  ) {
+    return null;
+  }
+
+  const commands: BattleCommand[] = [];
+  const model = forwardModelFromState(battle.board, aiSide);
+  for (const move of planDefense(model, { scoreToWin: battle.init.scoreToWin })) {
+    const moveCommands = actionToCommands(move, aiSide);
+    const [firstCommand, ...restCommands] = moveCommands;
+    const tracedCommands = firstCommand === undefined
+      ? moveCommands
+      : [{ ...firstCommand, aiChoices: [buildTrace(move)] }, ...restCommands];
+    commands.push(...tracedCommands);
+  }
+
+  let nextBattle = battle;
+  if (commands.length > 0) {
+    const applied = battleGesture(state, { commands }, ctx);
+    if (applied === null || applied.battle === null) {
+      return null;
+    }
+    nextBattle = applied.battle;
+  }
+
+  return {
+    ...state,
+    battle: {
+      ...nextBattle,
+      aiDefenseTurn: {
+        activeSide: battle.board.activeSide,
+        turnNumber: battle.board.turnNumber,
+      },
+    },
+  };
 }
 
 /**

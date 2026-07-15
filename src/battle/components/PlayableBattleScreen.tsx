@@ -17,7 +17,6 @@ import { useQuest } from "../../state/quest-context";
 import { PoolViewer } from "../../components/PoolViewer";
 import {
   useActions,
-  useAppend,
   useClientId,
   useConfirmedPromptId,
   useConnectedCount,
@@ -53,7 +52,6 @@ import type { PromptResolution } from "../../rules/battle/effect-runner-core";
 import { useBattleAi, type AiProposal } from "../ai/use-battle-ai";
 import { aiMayRunHere } from "../ai/ai-may-run-here";
 import { dreamwellEnergyEdits } from "../engine/energy";
-import { planBasicAutomationCommands } from "../../rules/battle/basic-automation";
 import { BattleActionBar } from "./BattleActionBar";
 import { BattleContextMenu } from "./BattleContextMenu";
 import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
@@ -100,7 +98,6 @@ const PHASE_CONTROL_SEQUENCE = ["dreamwell", "day", "dusk", "night", "challenge"
 type ZoneBrowserState = { side: BattleSide; zone: BrowseableZone } | null;
 type RewardOverlayState = {
   rewardSource: string;
-  locked: boolean;
 } | null;
 type ContextMenuState = {
   battleCardId: string;
@@ -125,12 +122,10 @@ type PendingDragState = {
 export function PlayableBattleScreen({
   site,
   aiMode = false,
-  basicAutomation = false,
   uiVariant = "legacy",
 }: {
   site: SiteState;
   aiMode?: boolean;
-  basicAutomation?: boolean;
   uiVariant?: UiVariant;
 }) {
   const battle = useGameState().battle;
@@ -141,7 +136,6 @@ export function PlayableBattleScreen({
     <PlayableBattleScreenInner
       site={site}
       aiMode={aiMode}
-      basicAutomation={basicAutomation}
       uiVariant={uiVariant}
     />
   );
@@ -150,12 +144,10 @@ export function PlayableBattleScreen({
 function PlayableBattleScreenInner({
   site,
   aiMode,
-  basicAutomation,
   uiVariant,
 }: {
   site: SiteState;
   aiMode: boolean;
-  basicAutomation: boolean;
   uiVariant: UiVariant;
 }) {
   const gameState = useGameState();
@@ -176,7 +168,6 @@ function PlayableBattleScreenInner({
 
   const actions = useActions();
   const connectedCount = useConnectedCount();
-  const append = useAppend();
   const clientId = useClientId();
   const confirmedPromptId = useConfirmedPromptId();
 
@@ -201,9 +192,7 @@ function PlayableBattleScreenInner({
   const [openNoteEditor, setOpenNoteEditor] = useState<string | null>(null);
   const [openSideSummary, setOpenSideSummary] = useState<BattleSide | null>(null);
   const [isDreamcallerPanelOpen, setIsDreamcallerPanelOpen] = useState(false);
-  // Initialize from the runtime flag (default ON; `?automation=0` forces off).
-  // The gear toggle below is a manual override that flips this at runtime.
-  const [isBasicAutomationEnabled, setIsBasicAutomationEnabled] = useState(basicAutomation);
+  const isBasicAutomationEnabled = battle.basicAutomationEnabled ?? false;
   const [rewardOverlay, setRewardOverlay] = useState<RewardOverlayState>(null);
   const [isResultOverlayDismissed, setIsResultOverlayDismissed] = useState(false);
 
@@ -233,23 +222,15 @@ function PlayableBattleScreenInner({
   // re-plans.
   const submitAiCommand = useCallback(
     (command: BattleCommand): void => {
-      void append({
-        type: "BATTLE_COMMAND",
-        payload: { command },
-        actor: `ai:${clientId}`,
-      });
+      void actions.battleCommand(command, undefined, `ai:${clientId}`);
     },
-    [append, clientId],
+    [actions, clientId],
   );
   const submitAiGesture = useCallback(
     (commands: readonly BattleCommand[]): void => {
-      void append({
-        type: "BATTLE_GESTURE",
-        payload: { commands: [...commands] },
-        actor: `ai:${clientId}`,
-      });
+      void actions.battleGesture(commands, undefined, `ai:${clientId}`);
     },
-    [append, clientId],
+    [actions, clientId],
   );
   const { proposal, thinking: aiThinking, approve, reject } = useBattleAi({
     board,
@@ -260,6 +241,36 @@ function PlayableBattleScreenInner({
     caps: aiCaps,
     basicAutomation: isBasicAutomationEnabled,
   });
+
+  const aiDefenseTurn = battle.aiDefenseTurn;
+  useEffect(() => {
+    if (
+      !aiMode ||
+      !aiMayRun ||
+      board.result !== null ||
+      board.activeSide === "enemy" ||
+      board.phase !== "dusk"
+    ) {
+      return;
+    }
+    if (
+      aiDefenseTurn?.activeSide === board.activeSide &&
+      aiDefenseTurn.turnNumber === board.turnNumber
+    ) {
+      return;
+    }
+    void actions.battleAiDefend("enemy", `ai:${clientId}`);
+  }, [
+    actions,
+    aiDefenseTurn,
+    aiMayRun,
+    aiMode,
+    board.activeSide,
+    board.phase,
+    board.result,
+    board.turnNumber,
+    clientId,
+  ]);
 
   // While the AI holds an un-approved proposal — or is still computing one — the
   // human drives only via the approve/reject icon controls in the phase cluster.
@@ -302,39 +313,10 @@ function PlayableBattleScreenInner({
       board,
       command,
     );
-    // With basic automation on, a single gesture can expand into several
-    // commands (e.g. a play also spends energy; ending a turn resolves the
-    // Challenge, ramps energy, and draws). The planner reads the live state and
-    // returns the ordered command list; with automation off it is a passthrough.
-    if (isBasicAutomationEnabled) {
-      const plannedCommands = planBasicAutomationCommands(
-        board,
-        command,
-        {
-          maxEnergyCap: battleInit.maxEnergyCap,
-          scoreToWin: battleInit.scoreToWin,
-          dreamwellDeck: battleInit.dreamwellDeck,
-        },
-      );
-      // Submit the expansion as ONE all-or-nothing event so an applied partner
-      // event landing mid-gesture cannot bounce the tail (a card in play with
-      // its cost unspent, a handoff with the incoming draw skipped). A single
-      // planned command is a plain BATTLE_COMMAND.
-      if (plannedCommands.length > 1) {
-        void actions.battleGesture(plannedCommands, intentKey);
-      } else if (plannedCommands.length === 1) {
-        void actions.battleCommand(plannedCommands[0], intentKey);
-      }
-      return;
-    }
     void actions.battleCommand(command, intentKey);
   }, [
     actions,
-    isBasicAutomationEnabled,
     board,
-    battleInit.maxEnergyCap,
-    battleInit.scoreToWin,
-    battleInit.dreamwellDeck,
     battleInit.battleId,
   ]);
 
@@ -629,7 +611,6 @@ function PlayableBattleScreenInner({
     if (board.result === "victory" && rewardOverlay === null) {
       setRewardOverlay({
         rewardSource: "battle_result",
-        locked: false,
       });
       setOpenZoneBrowser(null);
       setContextMenu(null);
@@ -783,12 +764,9 @@ function PlayableBattleScreenInner({
   // clear — the legacy `completeBattleSiteVictory` bridge collapses to one
   // event.
   function handleContinueReward(): void {
-    if (rewardOverlay === null || rewardOverlay.locked) {
+    if (rewardOverlay === null) {
       return;
     }
-    setRewardOverlay((current) => current === null
-      ? null
-      : { ...current, locked: true });
     void actions.endBattle("victory");
   }
 
@@ -1730,7 +1708,9 @@ function PlayableBattleScreenInner({
             isDesktopInspectorLayout={isDesktopInspectorLayout}
             isInspectorDrawerOpen={isInspectorDrawerOpen}
             onOpenForesee={(_side, _count) => undefined}
-            onToggleBasicAutomation={() => setIsBasicAutomationEnabled((value) => !value)}
+            onToggleBasicAutomation={() => {
+              void actions.setBattleAutomation(!isBasicAutomationEnabled);
+            }}
             onToggleBattleLog={() => {
               setIsBattleLogOpen((value) => !value);
               setIsDreamwellHistoryOpen(false);
@@ -1803,14 +1783,14 @@ function PlayableBattleScreenInner({
         board.result === "victory" && rewardOverlay !== null ? (
           <BattleRewardSurface
             battleId={battleInit.battleId}
-            canCancel={!rewardOverlay.locked}
+            canCancel={true}
             enemyName={battleInit.enemyDescriptor.name}
             essenceReward={battleInit.essenceReward}
             enemyScore={board.sides.enemy.score}
             playerScore={board.sides.player.score}
             rewardSource={rewardOverlay.rewardSource}
             turnNumber={board.turnNumber}
-            isLocked={rewardOverlay.locked}
+            isLocked={false}
             onCancel={() => setIsResultOverlayDismissed(true)}
             onContinue={handleContinueReward}
           />

@@ -1,42 +1,28 @@
 // Adapter bridging live quest state to the pure Cumulus Dreamcaller-select screen
 // (`src/cumulus/screens/QuestStartScreen`). Adapters are wiring only: this one
-// owns `useQuest()`, the once-per-mount offer + run seed (both random, so they
-// belong on the impure side), and the pick→`startQuest` callback. All mapping
+// owns `useQuest()`, derives the shared offer from the room seed, and wires the
+// pick→`startQuest` callback. All mapping
 // from domain data to the screen's view types lives in the pure builder
 // (`quest-start-view-model.ts`); the Cumulus screen itself stays pure and
 // data-driven, per the isolation boundary.
 
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo } from "react";
 import { useQuest } from "../../state/quest-context";
-import { selectDreamcallerOffer } from "../../data/dreamcaller-selection";
-import { generateQuestSeed } from "../../state/quest-state-actions";
-import type { DreamcallerContent } from "../../types/content";
+import { selectDreamcallerOfferForSeed } from "../../data/dreamcaller-selection";
 import { buildDreamcallerOfferViews } from "./quest-start-view-model";
 import { QuestStartScreen } from "../../cumulus/screens/QuestStartScreen";
 
 /**
- * Live Dreamcaller-select screen: mints the offer + run seed once, builds the
- * view-model (which previews each Dreamcaller's dealt tides), and hands the
- * chosen Dreamcaller (with the previewed seed, so the dealt pool matches the
- * tides shown) to `startQuest`.
+ * Live Dreamcaller-select screen: derives the offer and preview from the room's
+ * immutable seed, then hands the chosen Dreamcaller to `startQuest`.
  */
 export function QuestStartScreenAdapter() {
-  const { mutations, questContent } = useQuest();
-
-  // The offer and the run seed are minted once per mount. The tides4 preview is
-  // generated from this seed, and the same seed is handed to `startQuest` so the
-  // dealt pool matches the tides shown.
-  const offeredRef = useRef<DreamcallerContent[] | null>(null);
-  if (offeredRef.current === null) {
-    offeredRef.current = selectDreamcallerOffer(questContent.dreamcallers);
-  }
-  const offered = offeredRef.current;
-
-  const seedRef = useRef<string | null>(null);
-  if (seedRef.current === null) {
-    seedRef.current = generateQuestSeed();
-  }
-  const questSeed = seedRef.current;
+  const { state, mutations, questContent } = useQuest();
+  const questSeed = state.seed;
+  const offered = useMemo(
+    () => selectDreamcallerOfferForSeed(questContent.dreamcallers, questSeed),
+    [questContent.dreamcallers, questSeed],
+  );
 
   const dreamcallers = useMemo(
     () =>

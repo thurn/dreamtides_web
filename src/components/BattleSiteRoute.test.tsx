@@ -261,7 +261,7 @@ describe("BattleSiteRoute", () => {
     act(() => {
       container.querySelector<HTMLButtonElement>("[data-cumulus-begin]")?.click();
     });
-    expect(beginBattleSpy).toHaveBeenCalledWith("site-7");
+    expect(beginBattleSpy).toHaveBeenCalledWith("site-7", false);
 
     mockGameState = makeFoldStateWithBattle();
     act(() => {
@@ -336,7 +336,7 @@ describe("BattleSiteRoute", () => {
         .querySelector<HTMLButtonElement>("[data-begin]")
         ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
-    expect(beginBattleSpy).toHaveBeenCalledWith("site-7");
+    expect(beginBattleSpy).toHaveBeenCalledWith("site-7", false);
   });
 
   it("does not append BEGIN_BATTLE during StrictMode mount effects", () => {
@@ -396,7 +396,7 @@ describe("BattleSiteRoute", () => {
         .querySelector<HTMLButtonElement>("[data-begin]")
         ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
-    expect(beginBattleSpy).toHaveBeenCalledWith("site-7");
+    expect(beginBattleSpy).toHaveBeenCalledWith("site-7", false);
 
     mockGameState = makeFoldStateWithBattle();
     act(() => {

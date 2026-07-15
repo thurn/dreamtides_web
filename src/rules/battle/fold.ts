@@ -98,6 +98,13 @@ export interface BattleFoldState {
   board: BattleMutableState;
   effectQueue: EffectRun[];
   pendingPrompt: PendingPrompt | null;
+  /** Shared battle setting used by the reducer when expanding raw commands. */
+  basicAutomationEnabled?: boolean;
+  /** Last opponent Dusk for which the reducer applied AI defense. */
+  aiDefenseTurn?: {
+    activeSide: BattleSide;
+    turnNumber: number;
+  };
   /**
    * Per-side once-per-turn ▸Dawn guard: the last turn number for which each
    * side's Dawn bookend + triggers fired. The reducer is the SOLE Dawn owner

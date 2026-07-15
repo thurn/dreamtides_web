@@ -390,7 +390,6 @@ export function AtlasScreen() {
       const node = atlas.nodes[nodeId];
       if (!node || node.state !== "available") return;
       mutations.setCurrentDreamscape(nodeId);
-      mutations.setScreen({ type: "dreamscape" });
     },
     [atlas.nodes, mutations],
   );

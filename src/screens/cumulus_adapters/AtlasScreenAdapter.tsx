@@ -57,7 +57,6 @@ export function AtlasScreenAdapter() {
         return;
       }
       mutations.setCurrentDreamscape(nodeId);
-      mutations.setScreen({ type: "dreamscape" });
     },
     [atlas.nodes, mutations],
   );

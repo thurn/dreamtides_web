@@ -118,7 +118,8 @@ export interface EventPayloads {
   END_BATTLE: { result: "victory" | "defeat" };
 
   // --- battle events (no legacy 1:1) ---
-  BEGIN_BATTLE: { siteId: string };
+  BEGIN_BATTLE: { siteId: string; basicAutomationEnabled?: boolean };
+  SET_BATTLE_AUTOMATION: { enabled: boolean };
   BATTLE_COMMAND: { command: unknown };
   // A single player gesture that the automation planner expanded into an ordered
   // list of battle commands (e.g. a play that also spends energy, or a turn
@@ -126,6 +127,7 @@ export interface EventPayloads {
   // is a `BattleCommand`, validated in the domain case; the whole list applies
   // all-or-nothing so no half-applied gesture can exist in the log.
   BATTLE_GESTURE: { commands: unknown[] };
+  BATTLE_AI_DEFEND: { aiSide: string };
   RESOLVE_PROMPT: { promptId: number; resolution: unknown };
   // `note` is the `{ noteId, text, expiry }` shape the battle note editor
   // writes; `expiry` is a `BattleCardNoteExpiry`, kept as `unknown` here so this
@@ -249,8 +251,10 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   SET_CARD_SOURCE_DEBUG: true,
   END_BATTLE: true,
   BEGIN_BATTLE: true,
+  SET_BATTLE_AUTOMATION: true,
   BATTLE_COMMAND: true,
   BATTLE_GESTURE: true,
+  BATTLE_AI_DEFEND: true,
   RESOLVE_PROMPT: true,
   SET_CARD_NOTE: true,
 };

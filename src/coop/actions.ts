@@ -134,10 +134,20 @@ export interface CoopActions {
   endBattle: (result: "victory" | "defeat") => Promise<number>;
 
   // --- battle events ---
-  beginBattle: (siteId: string) => Promise<number>;
-  battleCommand: (command: unknown, intentKey?: string) => Promise<number>;
+  beginBattle: (siteId: string, basicAutomationEnabled?: boolean) => Promise<number>;
+  setBattleAutomation: (enabled: boolean) => Promise<number>;
+  battleCommand: (
+    command: unknown,
+    intentKey?: string,
+    actor?: string,
+  ) => Promise<number>;
   /** Submit an ordered list of battle commands as one all-or-nothing event. */
-  battleGesture: (commands: readonly unknown[], intentKey?: string) => Promise<number>;
+  battleGesture: (
+    commands: readonly unknown[],
+    intentKey?: string,
+    actor?: string,
+  ) => Promise<number>;
+  battleAiDefend: (aiSide: string, actor: string) => Promise<number>;
   resolvePrompt: (promptId: number, resolution: unknown) => Promise<number>;
   setCardNote: (
     instanceId: string,
@@ -289,11 +299,30 @@ export function makeActions(append: AppendFn): CoopActions {
     endBattle: (result) => emit("END_BATTLE", { result }),
 
     // --- battle events ---
-    beginBattle: (siteId) => emit("BEGIN_BATTLE", { siteId }),
-    battleCommand: (command, intentKey) =>
-      emit("BATTLE_COMMAND", { command }, intentKey),
-    battleGesture: (commands, intentKey) =>
-      emit("BATTLE_GESTURE", { commands: [...commands] }, intentKey),
+    beginBattle: (siteId, basicAutomationEnabled) =>
+      emit(
+        "BEGIN_BATTLE",
+        basicAutomationEnabled === undefined
+          ? { siteId }
+          : { siteId, basicAutomationEnabled },
+      ),
+    setBattleAutomation: (enabled) => emit("SET_BATTLE_AUTOMATION", { enabled }),
+    battleCommand: (command, intentKey, actor) =>
+      append({
+        type: "BATTLE_COMMAND",
+        payload: { command },
+        ...(intentKey === undefined ? {} : { intentKey }),
+        ...(actor === undefined ? {} : { actor }),
+      }),
+    battleGesture: (commands, intentKey, actor) =>
+      append({
+        type: "BATTLE_GESTURE",
+        payload: { commands: [...commands] },
+        ...(intentKey === undefined ? {} : { intentKey }),
+        ...(actor === undefined ? {} : { actor }),
+      }),
+    battleAiDefend: (aiSide, actor) =>
+      append({ type: "BATTLE_AI_DEFEND", payload: { aiSide }, actor }),
     resolvePrompt: (promptId, resolution) =>
       emit("RESOLVE_PROMPT", { promptId, resolution }),
     setCardNote: (instanceId, note) => emit("SET_CARD_NOTE", { instanceId, note }),

@@ -368,6 +368,8 @@ describe("TRAVEL_TO_DREAMSCAPE", () => {
     expect(next.quest.currentDreamscape).toBe("node-b");
     expect(next.quest.visitedSites).toEqual([]);
     expect(next.quest.dreamscapeModifiers).toEqual([modifier(1, "two")]);
+    expect(next.quest.screen).toEqual({ type: "dreamscape" });
+    expect(next.quest.activeSiteId).toBeNull();
   });
 
   it("does not decrement modifiers when the node is unchanged", () => {
@@ -611,6 +613,29 @@ describe("LOAD_STATE", () => {
       ctx(),
     );
     expect(out.outcome).toBe("bounced");
+  });
+
+  it("validates shared automation and AI-defense markers in loaded battles", () => {
+    const start = genesis();
+    const snapshot: QuestState = { ...start.quest };
+    const validBattle = {
+      ...emptyBattle,
+      basicAutomationEnabled: true,
+      aiDefenseTurn: { activeSide: "player", turnNumber: 3 },
+    };
+    expect(apply(start, "LOAD_STATE", { snapshot, battle: validBattle }).battle).toEqual(
+      validBattle,
+    );
+
+    const malformed = reduceGameEvent(
+      start,
+      event("LOAD_STATE", {
+        snapshot,
+        battle: { ...emptyBattle, aiDefenseTurn: { activeSide: "enemy" } },
+      }),
+      ctx(),
+    );
+    expect(malformed.outcome).toBe("bounced");
   });
 
   it("bounces a battle slice whose pendingPrompt promptId is not numeric", () => {

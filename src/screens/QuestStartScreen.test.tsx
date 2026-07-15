@@ -11,7 +11,7 @@ import type { DreamcallerContent } from "../types/content";
 import type { QuestState } from "../types/quest";
 import { QuestStartScreen, largestTides } from "./QuestStartScreen";
 import { useQuest } from "../state/quest-context";
-import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
+import { selectDreamcallerOfferForSeed } from "../data/dreamcaller-selection";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
 
@@ -95,7 +95,7 @@ vi.mock("../state/quest-context", () => ({
 }));
 
 vi.mock("../data/dreamcaller-selection", () => ({
-  selectDreamcallerOffer: vi.fn(),
+  selectDreamcallerOfferForSeed: vi.fn(),
 }));
 
 const OFFERED_DREAMCALLERS: readonly DreamcallerContent[] = [
@@ -280,7 +280,7 @@ beforeEach(() => {
     }
   ).IS_REACT_ACT_ENVIRONMENT = true;
   setQuestContext();
-  vi.mocked(selectDreamcallerOffer).mockReturnValue([...OFFERED_DREAMCALLERS]);
+  vi.mocked(selectDreamcallerOfferForSeed).mockReturnValue([...OFFERED_DREAMCALLERS]);
 });
 
 afterEach(() => {
@@ -362,11 +362,13 @@ describe("QuestStartScreen", () => {
       );
     });
 
-    // The screen mints the run seed up front (so the tides4 preview matches the
-    // dealt pool) and hands it to startQuest alongside the chosen Dreamcaller.
+    expect(selectDreamcallerOfferForSeed).toHaveBeenCalledWith(
+      OFFERED_DREAMCALLERS,
+      "test-seed",
+    );
     expect(currentMutations.startQuest).toHaveBeenCalledWith(
       OFFERED_DREAMCALLERS[1],
-      expect.any(String),
+      "test-seed",
     );
 
     act(() => {

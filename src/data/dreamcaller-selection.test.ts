@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   selectDreamcallerOffer,
+  selectDreamcallerOfferForSeed,
   toQuestDreamcaller,
 } from "./dreamcaller-selection";
 import type { DreamcallerContent } from "../types/content";
@@ -48,6 +49,17 @@ describe("selectDreamcallerOffer", () => {
         makeDreamcaller("b"),
       ]),
     ).toThrow("Expected at least 3 Dreamcallers");
+  });
+
+  it("derives the same offer from the same room seed across remounts", () => {
+    const dreamcallers = ["a", "b", "c", "d", "e", "f"].map(makeDreamcaller);
+
+    const first = selectDreamcallerOfferForSeed(dreamcallers, "room-seed");
+    const second = selectDreamcallerOfferForSeed(dreamcallers, "room-seed");
+
+    expect(first.map((dreamcaller) => dreamcaller.id)).toEqual(
+      second.map((dreamcaller) => dreamcaller.id),
+    );
   });
 });
 

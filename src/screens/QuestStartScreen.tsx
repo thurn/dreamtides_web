@@ -1,9 +1,8 @@
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useQuest } from "../state/quest-context";
-import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
+import { selectDreamcallerOfferForSeed } from "../data/dreamcaller-selection";
 import { selectedTides4Decks } from "../data/tides4-preview";
-import { generateQuestSeed } from "../state/quest-state-actions";
 import { DreamcallerPortrait } from "../cumulus/components/hud/DreamcallerPortrait";
 import { ResourceChip } from "../cumulus/components/hud/ResourceChip";
 import { RulesText } from "../cumulus/components/card/RulesText";
@@ -46,22 +45,12 @@ export function largestTides(tides: Tides4DeckJson[]): Tides4DeckJson[] {
 
 /** Intro screen where the player picks a dreamcaller to start the quest. */
 export function QuestStartScreen() {
-  const { mutations, questContent } = useQuest();
-
-  const offeredRef = useRef<DreamcallerContent[] | null>(null);
-  if (offeredRef.current === null) {
-    offeredRef.current = selectDreamcallerOffer(questContent.dreamcallers);
-  }
-  const offered = offeredRef.current;
-
-  // Mint the run seed now, before any pick. The `tides4` tide preview below is
-  // generated from this seed, and the same seed is handed to `startQuest` so the
-  // dealt pool matches the tides shown.
-  const seedRef = useRef<string | null>(null);
-  if (seedRef.current === null) {
-    seedRef.current = generateQuestSeed();
-  }
-  const questSeed = seedRef.current;
+  const { state, mutations, questContent } = useQuest();
+  const questSeed = state.seed;
+  const offered = useMemo(
+    () => selectDreamcallerOfferForSeed(questContent.dreamcallers, questSeed),
+    [questContent.dreamcallers, questSeed],
+  );
 
   // For a `tides4` run, the tide decks each offered Dreamcaller's pool will be
   // dealt from. Empty for every other algorithm, which hides the preview.

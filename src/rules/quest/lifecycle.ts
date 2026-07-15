@@ -225,7 +225,11 @@ export function setScreen(
   };
 }
 
-/** `TRAVEL_TO_DREAMSCAPE { nodeId }` — legacy `setCurrentDreamscape`. */
+/**
+ * `TRAVEL_TO_DREAMSCAPE { nodeId }` — enter an Atlas node atomically. The
+ * selected node and the route are one player decision, so both are folded by
+ * this event rather than submitted as independently-bounceable intents.
+ */
 export function travelToDreamscape(
   quest: QuestState,
   payload: Record<string, unknown>,
@@ -246,6 +250,8 @@ export function travelToDreamscape(
     currentDreamscape: nodeId,
     visitedSites: [],
     dreamscapeModifiers,
+    screen: { type: "dreamscape" },
+    activeSiteId: null,
   };
 }
 
@@ -497,6 +503,21 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
   if (!isRecord(value)) return null;
   if (!isRecord(value.init) || !isRecord(value.board)) return null;
   if (!isRecord(value.dawnFired)) return null;
+  if (
+    value.basicAutomationEnabled !== undefined &&
+    typeof value.basicAutomationEnabled !== "boolean"
+  ) return null;
+  if (value.aiDefenseTurn !== undefined) {
+    if (!isRecord(value.aiDefenseTurn)) return null;
+    if (
+      value.aiDefenseTurn.activeSide !== "player" &&
+      value.aiDefenseTurn.activeSide !== "enemy"
+    ) return null;
+    if (
+      typeof value.aiDefenseTurn.turnNumber !== "number" ||
+      !Number.isInteger(value.aiDefenseTurn.turnNumber)
+    ) return null;
+  }
   if (!Array.isArray(value.effectQueue)) return null;
   for (const run of value.effectQueue) {
     if (!isResolvableRun(run)) return null;
