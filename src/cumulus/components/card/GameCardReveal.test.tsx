@@ -182,7 +182,7 @@ describe("GameCard reveal contract", () => {
     expect(source?.style.opacity).not.toBe("0");
     expect(source?.style.transform).toBe("none");
     expect(reveal?.style.top).toBe("0px");
-    expect(reveal?.style.left).toBe("0px");
+    expect(reveal?.style.left).toBe("254px");
     expect(reveal?.textContent).toContain("Archive Sentry");
     expect(reveal?.textContent).toContain("Synth");
     expect(reveal?.textContent).toContain("Discard a bane");

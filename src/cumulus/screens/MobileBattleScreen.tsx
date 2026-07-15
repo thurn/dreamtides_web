@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type DragEvent as ReactDragEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { LayoutGroup, motion } from "framer-motion";
 import {
   GameCard,
@@ -791,14 +791,14 @@ function FaceUpCard({
     ) => void;
     readonly onDragStart: () => void;
     readonly onDragEnd: () => void;
-    readonly onTouchDrop: (clientX: number, clientY: number) => void;
+    readonly onPointerDrop: (clientX: number, clientY: number) => void;
   };
 }) {
   const dragSuppressedRef = useRef(false);
   const longPressSuppressedRef = useRef(false);
   const touchPressStartedAtRef = useRef<number | null>(null);
   const pendingTapRef = useRef<number | null>(null);
-  const touchPointerRef = useRef<{
+  const pointerDragRef = useRef<{
     pointerId: number;
     startX: number;
     startY: number;
@@ -813,24 +813,21 @@ function FaceUpCard({
     pendingTapRef.current = null;
   };
   useEffect(() => cancelPendingTap, []);
-  const finishTouchDrag = (
+  const finishPointerDrag = (
     event: React.PointerEvent<HTMLDivElement>,
     drop: boolean,
   ): void => {
-    const touchPointer = touchPointerRef.current;
-    if (
-      event.pointerType !== "touch" ||
-      touchPointer?.pointerId !== event.pointerId
-    ) {
+    const pointerDrag = pointerDragRef.current;
+    if (pointerDrag?.pointerId !== event.pointerId) {
       return;
     }
-    if (touchPointer.dragging) {
+    if (pointerDrag.dragging) {
       event.preventDefault();
       if (drop) {
         const pointerEvents = event.currentTarget.style.pointerEvents;
         event.currentTarget.style.pointerEvents = "none";
         try {
-          interaction?.onTouchDrop(event.clientX, event.clientY);
+          interaction?.onPointerDrop(event.clientX, event.clientY);
         } finally {
           event.currentTarget.style.pointerEvents = pointerEvents;
         }
@@ -842,9 +839,8 @@ function FaceUpCard({
     } catch {
       // Pointer capture is best-effort in browsers that have already released it.
     }
-    touchPointerRef.current = null;
-    event.currentTarget.draggable = draggable;
-    event.currentTarget.dataset.battleTouchDragging = "false";
+    pointerDragRef.current = null;
+    event.currentTarget.dataset.battlePointerDragging = "false";
     event.currentTarget.style.zIndex = "";
     event.currentTarget.style.transform = restingTransform;
   };
@@ -854,16 +850,15 @@ function FaceUpCard({
       data-battle-card-zone={zone}
       data-battle-card-face="up"
       data-battle-card-exhausted={card.exhausted ? "true" : "false"}
-      data-battle-touch-dragging="false"
-      draggable={draggable}
+      data-battle-pointer-dragging="false"
+      draggable={false}
       onPointerDownCapture={(event) => {
         dragSuppressedRef.current = false;
         longPressSuppressedRef.current = false;
         touchPressStartedAtRef.current =
           event.pointerType === "touch" ? event.timeStamp : null;
-        if (!draggable || event.pointerType !== "touch") return;
-        event.currentTarget.draggable = false;
-        touchPointerRef.current = {
+        if (!draggable || event.button !== 0) return;
+        pointerDragRef.current = {
           pointerId: event.pointerId,
           startX: event.clientX,
           startY: event.clientY,
@@ -879,31 +874,28 @@ function FaceUpCard({
         }
       }}
       onPointerMove={(event) => {
-        const touchPointer = touchPointerRef.current;
-        if (
-          event.pointerType !== "touch" ||
-          touchPointer?.pointerId !== event.pointerId
-        ) {
+        const pointerDrag = pointerDragRef.current;
+        if (pointerDrag?.pointerId !== event.pointerId) {
           return;
         }
-        const viewportX = event.clientX - touchPointer.startX;
-        const viewportY = event.clientY - touchPointer.startY;
+        const viewportX = event.clientX - pointerDrag.startX;
+        const viewportY = event.clientY - pointerDrag.startY;
         if (
-          !touchPointer.dragging &&
+          !pointerDrag.dragging &&
           Math.hypot(viewportX, viewportY) <= POINTER_MOVEMENT_SLOP_PX
         ) {
           return;
         }
         event.preventDefault();
-        const dragStarted = !touchPointer.dragging;
+        const dragStarted = !pointerDrag.dragging;
         if (dragStarted) {
           touchPressStartedAtRef.current = null;
-          touchPointer.dragging = true;
+          pointerDrag.dragging = true;
           dragSuppressedRef.current = true;
-          event.currentTarget.dataset.battleTouchDragging = "true";
+          event.currentTarget.dataset.battlePointerDragging = "true";
           event.currentTarget.style.zIndex = "100";
         }
-        const inverse = touchPointer.inverseParentTransform;
+        const inverse = pointerDrag.inverseParentTransform;
         const x = inverse.a * viewportX + inverse.c * viewportY;
         const y = inverse.b * viewportX + inverse.d * viewportY;
         // Pointer movement must reach the compositor before React rerenders the
@@ -929,11 +921,11 @@ function FaceUpCard({
           longPressSuppressedRef.current = true;
         }
         touchPressStartedAtRef.current = null;
-        finishTouchDrag(event, true);
+        finishPointerDrag(event, true);
       }}
       onPointerCancelCapture={(event) => {
         touchPressStartedAtRef.current = null;
-        finishTouchDrag(event, false);
+        finishPointerDrag(event, false);
       }}
       onClick={(event) => {
         if (!draggable && interaction?.onDebugActivate === undefined) return;
@@ -982,27 +974,6 @@ function FaceUpCard({
           y: event.clientY,
         });
       }}
-      onDragStartCapture={(event: ReactDragEvent<HTMLDivElement>) => {
-        if (touchPointerRef.current !== null) {
-          event.preventDefault();
-          return;
-        }
-        if (draggable) {
-          const dragImage = event.currentTarget.querySelector<HTMLElement>(
-            "[data-native-drag-image]",
-          );
-          const dataTransfer = event.dataTransfer;
-          if (dragImage !== null && dataTransfer?.setDragImage !== undefined) {
-            dataTransfer.setDragImage(dragImage, 0, 0);
-          }
-          cancelPendingTap();
-          dragSuppressedRef.current = true;
-          interaction?.onDragStart();
-        }
-      }}
-      onDragEnd={() => {
-        if (draggable) interaction?.onDragEnd();
-      }}
       style={{
         width: "100%",
         cursor: draggable ? "grab" : undefined,
@@ -1012,17 +983,6 @@ function FaceUpCard({
         transformOrigin: "50% 50%",
       }}
     >
-      <span
-        aria-hidden="true"
-        data-native-drag-image=""
-        style={{
-          position: "fixed",
-          width: 1,
-          height: 1,
-          pointerEvents: "none",
-          opacity: 0,
-        }}
-      />
       <motion.div
         layoutId={`battle-card:${card.id}`}
         data-battle-card-motion=""
@@ -1202,7 +1162,7 @@ function Rank({
                                 ),
                             }),
                         onDragEnd: interactions.onCardDragEnd,
-                        onTouchDrop: (clientX, clientY) =>
+                        onPointerDrop: (clientX, clientY) =>
                           dropMobileCardAtPoint(
                             interactions,
                             clientX,
@@ -1376,7 +1336,7 @@ function PlayerHand({
                       onDragStart: () =>
                         interactions.onCardDragStart(card.id, "player-hand"),
                       onDragEnd: interactions.onCardDragEnd,
-                      onTouchDrop: (clientX, clientY) =>
+                      onPointerDrop: (clientX, clientY) =>
                         dropMobileCardAtPoint(
                           interactions,
                           clientX,

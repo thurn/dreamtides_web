@@ -68,9 +68,9 @@ describe("selectRevealPlacement", () => {
   });
 
   it.each([
-    { sourceX: 120, expectedX: 0, family: "desktop-battlefield-corner-left", orientation: "primary-left" },
-    { sourceX: 1000, expectedX: 960, family: "desktop-battlefield-corner-right", orientation: "primary-right" },
-  ] as const)("pins battlefield reading copies to the top corner above their side", ({ sourceX, expectedX, family, orientation }) => {
+    { sourceX: 120, expectedX: 234, family: "desktop-battlefield-near-right", orientation: "primary-left" },
+    { sourceX: 1000, expectedX: 746, family: "desktop-battlefield-near-left", orientation: "primary-right" },
+  ] as const)("places battlefield reading copies diagonally above and beside their source", ({ sourceX, expectedX, family, orientation }) => {
     const result = selectRevealPlacement({
       ...base,
       viewport: { ...viewport, layout: "desktop", width: 1200, height: 900, safeArea: { top: 0, right: 0, bottom: 0, left: 0 } },
@@ -85,9 +85,14 @@ describe("selectRevealPlacement", () => {
 
     expect(result.family).toBe(family);
     expect(result.orientation).toBe(orientation);
-    expect(result.primaryRect).toMatchObject({ x: expectedX, y: 0, width: 240, height: 336 });
+    expect(result.primaryRect).toMatchObject({ x: expectedX, y: 150, width: 240, height: 336 });
+    expect(result.primaryRect.y + result.primaryRect.height).toBe(500 - 14);
+    expect(
+      result.primaryRect.x >= sourceX + 100 + 14
+      || result.primaryRect.x + result.primaryRect.width <= sourceX - 14,
+    ).toBe(true);
     expect(result.secondaryRects).toHaveLength(1);
-    expect(result.secondaryRects[0]?.y).toBe(0);
+    expect(result.secondaryRects[0]?.y).toBe(150);
   });
 
   it("gives card-shaped gallery actions the exact GameCard hover rectangle", () => {

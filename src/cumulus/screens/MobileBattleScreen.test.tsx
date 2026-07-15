@@ -1192,26 +1192,20 @@ describe("MobileBattleScreen", () => {
 
     act(() => {
       handCard?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      handCard?.dispatchEvent(new Event("dragstart", { bubbles: true }));
       enemySlot?.dispatchEvent(
         new Event("drop", { bubbles: true, cancelable: true }),
       );
-      handCard?.dispatchEvent(new Event("dragend", { bubbles: true }));
     });
 
-    expect(handCard?.draggable).toBe(true);
+    expect(handCard?.draggable).toBe(false);
     expect(interactions.onHandCardActivate).toHaveBeenCalledWith(
       "player-hand-0",
     );
-    expect(interactions.onCardDragStart).toHaveBeenNthCalledWith(
-      1,
-      "player-hand-0",
-      "player-hand",
-    );
+    expect(interactions.onCardDragStart).not.toHaveBeenCalled();
     expect(interactions.onHandCardDrop).toHaveBeenCalledTimes(1);
     expect(interactions.onSlotDrop).not.toHaveBeenCalled();
     expect(interactions.onZoneDrop).not.toHaveBeenCalled();
-    expect(interactions.onCardDragEnd).toHaveBeenCalledTimes(1);
+    expect(interactions.onCardDragEnd).not.toHaveBeenCalled();
     expect(container.querySelectorAll("button")).toHaveLength(4);
 
     act(() => root.unmount());
@@ -1255,7 +1249,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("suppresses the browser's composited native drag image", () => {
+  it("keeps physical cards out of native HTML drag", () => {
     const interactions = {
       canInteract: true,
       pendingCardId: null,
@@ -1271,21 +1265,106 @@ describe("MobileBattleScreen", () => {
     const handCard = container.querySelector<HTMLElement>(
       '[data-battle-card-id="player-hand-0"]',
     );
-    const setDragImage = vi.fn();
+    const dataTransfer = { setDragImage: vi.fn(), effectAllowed: "uninitialized" };
     const dragStart = new Event("dragstart", { bubbles: true, cancelable: true });
     Object.defineProperty(dragStart, "dataTransfer", {
-      value: { setDragImage },
+      value: dataTransfer,
     });
 
     act(() => {
       handCard?.dispatchEvent(dragStart);
     });
 
-    expect(setDragImage).toHaveBeenCalledTimes(1);
-    expect(setDragImage.mock.calls[0]?.[0]).toBe(
-      handCard?.querySelector("[data-native-drag-image]"),
+    expect(handCard?.draggable).toBe(false);
+    expect(dataTransfer.setDragImage).not.toHaveBeenCalled();
+    expect(interactions.onCardDragStart).not.toHaveBeenCalled();
+    act(() => root.unmount());
+  });
+
+  it("moves the physical card with a captured mouse pointer and drops by hit test", () => {
+    const interactions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(makeView(), interactions);
+    const handCard = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-hand-0"]',
     );
-    expect(setDragImage).toHaveBeenCalledWith(expect.any(HTMLElement), 0, 0);
+    const revealSource = handCard?.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    const playerVoid = container.querySelector<HTMLElement>(
+      '[data-battle-zone="player-void"]',
+    );
+    if (handCard?.parentElement !== null && handCard?.parentElement !== undefined) {
+      handCard.parentElement.style.transform = "none";
+    }
+    Object.defineProperty(document, "elementFromPoint", {
+      configurable: true,
+      value: vi.fn(() => playerVoid),
+    });
+
+    act(() => {
+      revealSource?.dispatchEvent(
+        new PointerEvent("pointerdown", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 20,
+          clientY: 30,
+          pointerId: 9,
+          pointerType: "mouse",
+        }),
+      );
+      handCard?.dispatchEvent(
+        new PointerEvent("pointermove", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 44,
+          clientY: 70,
+          pointerId: 9,
+          pointerType: "mouse",
+        }),
+      );
+    });
+
+    expect(handCard?.style.transform).toContain("translate3d(24px, 40px, 0)");
+    expect(handCard?.dataset.battlePointerDragging).toBe("true");
+    expect(interactions.onCardDragStart).toHaveBeenCalledWith(
+      "player-hand-0",
+      "player-hand",
+    );
+
+    act(() => {
+      handCard?.dispatchEvent(
+        new PointerEvent("pointerup", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 44,
+          clientY: 70,
+          pointerId: 9,
+          pointerType: "mouse",
+        }),
+      );
+    });
+
+    expect(interactions.onZoneDrop).toHaveBeenCalledWith({
+      owner: "player",
+      zone: "void",
+    });
+    expect(interactions.onCardDragEnd).toHaveBeenCalledTimes(1);
+    expect(handCard?.style.transform).toBe("");
+    expect(handCard?.dataset.battlePointerDragging).toBe("false");
+
     act(() => root.unmount());
   });
 
@@ -1506,7 +1585,7 @@ describe("MobileBattleScreen", () => {
         return playerVoid;
       }),
     });
-    expect(handCard?.draggable).toBe(true);
+    expect(handCard?.draggable).toBe(false);
     expect(
       handCard?.querySelector(":scope > [data-battle-card-motion]"),
     ).not.toBeNull();
@@ -1552,7 +1631,7 @@ describe("MobileBattleScreen", () => {
       "player-hand",
     );
     expect(revealSource?.dataset.revealActive).toBe("false");
-    expect(handCard?.dataset.battleTouchDragging).toBe("true");
+    expect(handCard?.dataset.battlePointerDragging).toBe("true");
     expect(handCard?.style.pointerEvents).toBe("");
     expect(handCard?.style.transform).toContain("translate3d(40px, -24px, 0)");
 
@@ -1569,14 +1648,14 @@ describe("MobileBattleScreen", () => {
       );
     });
 
-    expect(handCard?.draggable).toBe(true);
+    expect(handCard?.draggable).toBe(false);
     expect(interactions.onZoneDrop).toHaveBeenCalledWith({
       owner: "player",
       zone: "void",
     });
     expect(interactions.onCardDragEnd).toHaveBeenCalledTimes(1);
     expect(pointerEventsDuringHitTest).toBe("none");
-    expect(handCard?.dataset.battleTouchDragging).toBe("false");
+    expect(handCard?.dataset.battlePointerDragging).toBe("false");
     expect(handCard?.style.transform).toBe("");
 
     act(() => root.unmount());

@@ -249,24 +249,38 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
   const secondaryWidth = secondarySizes.reduce((width, size) => Math.max(width, size.width), 0);
   if (cardShaped) {
     if (input.sourceIsBattlefieldGameCard) {
-      const sourceIsLeft = sourceRect.x + sourceRect.width / 2 <= viewport.offsetLeft + viewport.width / 2;
-      const orientation = sourceIsLeft ? "primary-left" : "primary-right";
-      const primaryX = sourceIsLeft ? safeLeft : safeRight - primaryWidth;
-      const pairFits = secondarySizes.length > 0
-        && primaryWidth + CARD_GAP + secondaryWidth <= safeRight - safeLeft;
-      const secondaryX = sourceIsLeft
+      const sourceCenter = sourceRect.x + sourceRect.width / 2;
+      const preferRight = sourceCenter <= viewport.offsetLeft + viewport.width / 2;
+      const rightPrimaryX = sourceRect.x + sourceRect.width + DESKTOP_SOURCE_GAP;
+      const leftPrimaryX = sourceRect.x - DESKTOP_SOURCE_GAP - primaryWidth;
+      const pairWidth = primaryWidth + CARD_GAP + secondaryWidth;
+      const rightPairFits = secondarySizes.length > 0 && rightPrimaryX + pairWidth <= safeRight;
+      const leftPairFits = secondarySizes.length > 0 && leftPrimaryX - CARD_GAP - secondaryWidth >= safeLeft;
+      const rightPrimaryFits = rightPrimaryX + primaryWidth <= safeRight;
+      const leftPrimaryFits = leftPrimaryX >= safeLeft;
+      const useRight = rightPairFits || leftPairFits
+        ? rightPairFits && (!leftPairFits || preferRight)
+        : rightPrimaryFits && (!leftPrimaryFits || preferRight);
+      const orientation = useRight ? "primary-left" : "primary-right";
+      const primaryX = useRight ? rightPrimaryX : leftPrimaryX;
+      const primaryY = Math.max(
+        safeTop,
+        sourceRect.y - DESKTOP_SOURCE_GAP - primarySize.height,
+      );
+      const secondaryX = useRight
         ? primaryX + primaryWidth + CARD_GAP
         : primaryX - CARD_GAP - secondaryWidth;
+      const pairFits = useRight ? rightPairFits : leftPairFits;
       const count = pairFits
-        ? fitSecondaryPrefix(secondarySizes, safeBottom - safeTop)
+        ? fitSecondaryPrefix(secondarySizes, safeBottom - primaryY)
         : 0;
       return result(input, {
-        family: sourceIsLeft
-          ? "desktop-battlefield-corner-left"
-          : "desktop-battlefield-corner-right",
+        family: useRight
+          ? "desktop-battlefield-near-right"
+          : "desktop-battlefield-near-left",
         orientation,
-        primaryRect: rect(primaryX, safeTop, primarySize),
-        secondaryRects: secondaryRectsAt(secondarySizes, count, secondaryX, safeTop),
+        primaryRect: rect(primaryX, primaryY, primarySize),
+        secondaryRects: secondaryRectsAt(secondarySizes, count, secondaryX, primaryY),
         pressInPlace: false,
         sideFallback: false,
         bestEffortPrimaryOverlap: false,
