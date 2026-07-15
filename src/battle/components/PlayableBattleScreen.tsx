@@ -817,9 +817,16 @@ function PlayableBattleScreenInner({
     setOpenSideSummary(null);
   }
 
-  function handleMobileCardDebugActivate(
+  function handleCumulusCardDebugActivate(
     battleCardId: string,
     source: "player-hand" | "battlefield",
+    invocation:
+      | { readonly presentation: "sheet" }
+      | {
+          readonly presentation: "context-menu";
+          readonly x: number;
+          readonly y: number;
+        },
   ): void {
     const sourceSurface = source === "player-hand" ? "hand-tray" : "battlefield";
     const card = board.cardInstances[battleCardId];
@@ -827,22 +834,28 @@ function PlayableBattleScreenInner({
     if (card === undefined || location === null) return;
     setContextMenu({
       battleCardId,
-      presentation: "sheet",
+      presentation: invocation.presentation,
       sourceSurface,
-      x: 0,
-      y: 0,
+      x: invocation.presentation === "context-menu" ? invocation.x : 0,
+      y: invocation.presentation === "context-menu" ? invocation.y : 0,
     });
     setOpenSideSummary(null);
-    logEvent("battle_mobile_card_debug_sheet_opened", {
-      ...createBattleLogBaseFields(board, {
-        sourceSurface,
-        selectedCardId: battleCardId,
-      }),
-      battleCardId,
-      cardId: card.definition.cardId,
-      cardController: card.controller,
-      cardZone: location.zone,
-    });
+    logEvent(
+      invocation.presentation === "context-menu"
+        ? "battle_desktop_card_debug_menu_opened"
+        : "battle_mobile_card_debug_sheet_opened",
+      {
+        ...createBattleLogBaseFields(board, {
+          sourceSurface,
+          selectedCardId: battleCardId,
+        }),
+        battleCardId,
+        cardId: card.definition.cardId,
+        cardController: card.controller,
+        cardZone: location.zone,
+        presentation: invocation.presentation,
+      },
+    );
   }
 
   function handleCardDragStart(
@@ -1083,17 +1096,22 @@ function PlayableBattleScreenInner({
     requestBattlefieldPreview(20);
   }, [requestBattlefieldPreview]);
 
-  const showCumulusMobileLayout = uiVariant === "cumulus" && !isCumulusDesktopLayout;
+  const showCumulusLayout = uiVariant === "cumulus";
   useEffect(() => {
-    if (!showCumulusMobileLayout) {
+    if (!showCumulusLayout) {
       return;
     }
+    const layout = isCumulusDesktopLayout ? "desktop" : "mobile";
+    const eventName = isCumulusDesktopLayout
+      ? "battle_desktop_surface_opened"
+      : "battle_mobile_surface_opened";
     logEventOnce(
-      `battle_mobile_surface_opened:${battleInit.battleId}`,
-      "battle_mobile_surface_opened",
+      `${eventName}:${battleInit.battleId}`,
+      eventName,
       {
         battleId: battleInit.battleId,
         enemyHandSize: board.sides.enemy.hand.length,
+        layout,
         playerHandSize: board.sides.player.hand.length,
         uiVariant: "cumulus",
       },
@@ -1102,10 +1120,11 @@ function PlayableBattleScreenInner({
     battleInit.battleId,
     board.sides.enemy.hand.length,
     board.sides.player.hand.length,
-    showCumulusMobileLayout,
+    isCumulusDesktopLayout,
+    showCumulusLayout,
   ]);
 
-  if (showCumulusMobileLayout) {
+  if (showCumulusLayout) {
     return (
       <>
         <MobileBattleScreenAdapter
@@ -1116,7 +1135,7 @@ function PlayableBattleScreenInner({
             canInteract: canPlayerAct,
             pendingCardId: pendingDragCardId,
             onHandCardActivate: handleHandCardDoubleClick,
-            onCardDebugActivate: handleMobileCardDebugActivate,
+            onCardDebugActivate: handleCumulusCardDebugActivate,
             onCardDragStart: (battleCardId, source) => {
               handleCardDragStart(
                 battleCardId,

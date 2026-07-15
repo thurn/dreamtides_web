@@ -15,12 +15,9 @@ import {
   type MobileBattleView,
 } from "./MobileBattleScreen";
 
-beforeEach(() => {
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
+function mockDesktopViewport(matches: boolean): void {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-    matches: false,
+    matches,
     media: query,
     onchange: null,
     addEventListener: vi.fn(),
@@ -29,6 +26,13 @@ beforeEach(() => {
     removeListener: vi.fn(),
     dispatchEvent: vi.fn(),
   }));
+}
+
+beforeEach(() => {
+  (
+    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
+  ).IS_REACT_ACT_ENVIRONMENT = true;
+  mockDesktopViewport(false);
 });
 
 afterEach(() => {
@@ -154,15 +158,22 @@ describe("MobileBattleScreen", () => {
     expect(screen?.style.position).toBe("fixed");
     expect(screen?.style.height).toBe("100dvh");
     expect(screen?.style.backgroundColor).toBe("var(--bg-app)");
-    expect(screen?.style.backgroundImage).toContain("battle-background.png");
-    expect(screen?.style.backgroundPosition).toBe("center center");
-    expect(screen?.style.backgroundRepeat).toBe("no-repeat");
-    expect(screen?.style.backgroundSize).toBe("100% 100%");
+    expect(screen?.style.backgroundImage).toBe("");
     expect(screen?.style.touchAction).toBe("none");
     expect(screen?.style.gridTemplateColumns).toBe("minmax(0, 1fr)");
     expect(screen?.style.gridTemplateRows).toBe(
       "minmax(0, 9fr) minmax(0, 12fr) minmax(0, 20fr) minmax(0, 20fr) minmax(0, 12fr) minmax(0, 27fr)",
     );
+    const backdrop = screen?.querySelector<HTMLElement>(
+      ":scope > [data-battle-backdrop]",
+    );
+    expect(backdrop?.style.width).toBe("100%");
+    expect(backdrop?.style.height).toBe("100%");
+    expect(backdrop?.style.transform).toBe("translate(-50%, -50%)");
+    expect(backdrop?.style.backgroundImage).toContain("battle-background.png");
+    expect(backdrop?.style.backgroundPosition).toBe("center center");
+    expect(backdrop?.style.backgroundRepeat).toBe("no-repeat");
+    expect(backdrop?.style.backgroundSize).toBe("100% 100%");
     const safeAreaBackdrop = screen?.querySelector<HTMLElement>(
       ":scope > [data-battle-mobile-safe-area-backdrop]",
     );
@@ -181,6 +192,57 @@ describe("MobileBattleScreen", () => {
       "player-zones",
       "player-hand",
     ]);
+
+    act(() => root.unmount());
+  });
+
+  it("renders a landscape desktop composition with a rotated backdrop and flatter hand", () => {
+    mockDesktopViewport(true);
+    const { container, root } = mount();
+    const screen = container.querySelector<HTMLElement>("[data-battle-mobile]");
+    const backdrop = screen?.querySelector<HTMLElement>(
+      ":scope > [data-battle-backdrop]",
+    );
+    const enemyZones = container.querySelector<HTMLElement>(
+      '[data-battle-mobile-row="enemy-zones"]',
+    );
+    const playerZones = container.querySelector<HTMLElement>(
+      '[data-battle-mobile-row="player-zones"]',
+    );
+    const playerHand = container.querySelector<HTMLElement>(
+      '[data-battle-mobile-row="player-hand"]',
+    );
+    const firstHandCard = playerHand?.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-hand-0"]',
+    )?.parentElement;
+    const lastHandCard = playerHand?.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-hand-3"]',
+    )?.parentElement;
+    const controls = container.querySelector<HTMLElement>(
+      '[data-battle-mobile-row="control-row"]',
+    );
+
+    expect(screen?.dataset.battleLayout).toBe("desktop");
+    expect(screen?.style.backgroundImage).toBe("");
+    expect(screen?.style.gridTemplateRows).toBe(
+      "minmax(0, 8fr) minmax(0, 11fr) minmax(0, 23fr) minmax(0, 23fr) minmax(0, 11fr) minmax(0, 24fr)",
+    );
+    expect(backdrop?.style.width).toBe("100vh");
+    expect(backdrop?.style.height).toBe("100vw");
+    expect(backdrop?.style.transform).toBe(
+      "translate(-50%, -50%) rotate(90deg)",
+    );
+    expect(backdrop?.style.backgroundImage).toContain("battle-background.png");
+    expect(enemyZones?.style.maxWidth).toBe("1180px");
+    expect(enemyZones?.style.columnGap).toBe("var(--space-12)");
+    expect(playerZones?.style.transform).toBe(
+      "translateY(calc(-1 * var(--space-11)))",
+    );
+    expect(controls?.style.justifyContent).toBe("center");
+    expect(firstHandCard?.style.transform).toContain("rotate(-4deg)");
+    expect(lastHandCard?.style.transform).toContain("rotate(4deg)");
+    expect(firstHandCard?.style.transform).toContain("translateY(2%)");
+    expect(lastHandCard?.style.transform).toContain("translateY(2%)");
 
     act(() => root.unmount());
   });
@@ -917,6 +979,7 @@ describe("MobileBattleScreen", () => {
     expect(interactions.onCardDebugActivate).toHaveBeenCalledWith(
       "player-hand-0",
       "player-hand",
+      { presentation: "sheet" },
     );
 
     interactions.onCardDebugActivate.mockClear();
@@ -927,10 +990,74 @@ describe("MobileBattleScreen", () => {
     expect(interactions.onCardDebugActivate).toHaveBeenCalledWith(
       "player-front-card",
       "battlefield",
+      { presentation: "sheet" },
     );
 
     act(() => root.unmount());
     vi.useRealTimers();
+  });
+
+  it("uses immediate primary clicks and right click for card debug actions on desktop", () => {
+    mockDesktopViewport(true);
+    const interactions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDebugActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(makeView(), interactions);
+    const handCard = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-hand-0"]',
+    );
+    const battlefieldCard = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-front-card"]',
+    );
+
+    act(() => {
+      handCard?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      handCard?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(interactions.onHandCardActivate).toHaveBeenCalledTimes(2);
+    expect(interactions.onCardDebugActivate).not.toHaveBeenCalled();
+
+    act(() => {
+      handCard?.dispatchEvent(
+        new MouseEvent("contextmenu", {
+          bubbles: true,
+          cancelable: true,
+          clientX: 240,
+          clientY: 720,
+        }),
+      );
+      battlefieldCard?.dispatchEvent(
+        new MouseEvent("contextmenu", {
+          bubbles: true,
+          cancelable: true,
+          clientX: 960,
+          clientY: 420,
+        }),
+      );
+    });
+    expect(interactions.onCardDebugActivate).toHaveBeenNthCalledWith(
+      1,
+      "player-hand-0",
+      "player-hand",
+      { presentation: "context-menu", x: 240, y: 720 },
+    );
+    expect(interactions.onCardDebugActivate).toHaveBeenNthCalledWith(
+      2,
+      "player-front-card",
+      "battlefield",
+      { presentation: "context-menu", x: 960, y: 420 },
+    );
+
+    act(() => root.unmount());
   });
 
   it("plays a quick touch tap but keeps a captured long press revealed and suppresses its click", () => {

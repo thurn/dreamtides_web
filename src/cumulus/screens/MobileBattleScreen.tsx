@@ -26,6 +26,7 @@ import {
 } from "../primitives/pointer-gesture";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
+import { useIsDesktop } from "./use-is-desktop";
 import battleBackgroundUrl from "../assets/battle-background.png";
 
 /** One physical face-up card instance rendered by the battle board. */
@@ -90,6 +91,14 @@ export type MobileBattleRank = "back" | "front";
 export type MobileBattleCardSource = "player-hand" | "battlefield";
 export type MobileBattleDropZone = "deck" | "hand" | "void";
 
+export type MobileBattleDebugInvocation =
+  | { readonly presentation: "sheet" }
+  | {
+      readonly presentation: "context-menu";
+      readonly x: number;
+      readonly y: number;
+    };
+
 export interface MobileBattleSlotTarget {
   readonly owner: MobileBattleOwner;
   readonly rank: MobileBattleRank;
@@ -109,6 +118,7 @@ export interface MobileBattleInteractions {
   readonly onCardDebugActivate?: (
     battleCardId: string,
     source: MobileBattleCardSource,
+    invocation: MobileBattleDebugInvocation,
   ) => void;
   readonly onCardDragStart: (
     battleCardId: string,
@@ -125,6 +135,7 @@ export interface MobileBattleInteractions {
 
 const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
 const BATTLEFIELD_SIDE_INSET_PERCENT = 6;
+const DESKTOP_BATTLEFIELD_SIDE_INSET_PERCENT = 14;
 const BATTLEFIELD_WIDTH_PERCENT = 100 - BATTLEFIELD_SIDE_INSET_PERCENT * 2;
 const PHASE_LIGHT_SIZE = 6;
 const PHASE_LIGHT_HALO_SIZE = 12;
@@ -177,11 +188,21 @@ const BATTLE_PHASE_LIGHT_CSS = `
 const SIDE_ZONES_GRID_TEMPLATE =
   "minmax(0, 1fr) max-content minmax(0, 1fr)";
 const SIDE_PILE_MAX_WIDTH = 90;
+// Desktop keeps the three status objects in one centered landscape dock so
+// the wide viewport creates deliberate outer whitespace instead of stretching
+// the mobile spacing rhythm edge-to-edge.
+const DESKTOP_SIDE_ZONES_MAX_WIDTH = 1180;
+const DESKTOP_SIDE_PILE_MAX_WIDTH = 120;
 const NEXT_PHASE_CONTROL_WIDTH = 120;
 const PLAYER_HAND_Z_INDEX = 15;
 // The player zones share the hand track: their 64px row is lifted 20px, and
 // this anchor adds the minimum 4px separation after that row's lower edge.
 const PLAYER_HAND_TOP = `calc(${token("--space-12")} - ${token("--space-7")} + ${token("--space-2")})`;
+
+const MOBILE_GRID_ROWS =
+  "minmax(0, 9fr) minmax(0, 12fr) minmax(0, 20fr) minmax(0, 20fr) minmax(0, 12fr) minmax(0, 27fr)";
+const DESKTOP_GRID_ROWS =
+  "minmax(0, 8fr) minmax(0, 11fr) minmax(0, 23fr) minmax(0, 23fr) minmax(0, 11fr) minmax(0, 24fr)";
 
 const ROOT_STYLE: CSSProperties = {
   position: "fixed",
@@ -192,19 +213,46 @@ const ROOT_STYLE: CSSProperties = {
   overflow: "hidden",
   display: "grid",
   gridTemplateColumns: "minmax(0, 1fr)",
-  gridTemplateRows:
-    "minmax(0, 9fr) minmax(0, 12fr) minmax(0, 20fr) minmax(0, 20fr) minmax(0, 12fr) minmax(0, 27fr)",
+  gridTemplateRows: MOBILE_GRID_ROWS,
   paddingTop: `var(${SAFE_AREA_INSET_PROPERTIES.top})`,
   paddingRight: `var(${SAFE_AREA_INSET_PROPERTIES.right})`,
   paddingBottom: `var(${SAFE_AREA_INSET_PROPERTIES.bottom})`,
   paddingLeft: `var(${SAFE_AREA_INSET_PROPERTIES.left})`,
   backgroundColor: token("--bg-app"),
-  backgroundImage: `url("${battleBackgroundUrl}")`,
-  backgroundPosition: "center",
-  backgroundRepeat: "no-repeat",
-  backgroundSize: "100% 100%",
   touchAction: "none",
 };
+
+function rootStyle(isDesktop: boolean): CSSProperties {
+  return {
+    ...ROOT_STYLE,
+    gridTemplateRows: isDesktop ? DESKTOP_GRID_ROWS : MOBILE_GRID_ROWS,
+  };
+}
+
+function BattleBackdrop({ isDesktop }: { readonly isDesktop: boolean }) {
+  return (
+    <div
+      aria-hidden="true"
+      data-battle-backdrop=""
+      style={{
+        position: "absolute",
+        left: "50%",
+        top: "50%",
+        width: isDesktop ? "100vh" : "100%",
+        height: isDesktop ? "100vw" : "100%",
+        transform: isDesktop
+          ? "translate(-50%, -50%) rotate(90deg)"
+          : "translate(-50%, -50%)",
+        transformOrigin: "center",
+        backgroundImage: `url("${battleBackgroundUrl}")`,
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "100% 100%",
+        pointerEvents: "none",
+      }}
+    />
+  );
+}
 
 const SAFE_AREA_BACKDROP_STYLE: CSSProperties = {
   position: "absolute",
@@ -236,7 +284,13 @@ function centeredFanPosition(params: {
   };
 }
 
-function EnemyHand({ cardIds }: { readonly cardIds: readonly string[] }) {
+function EnemyHand({
+  cardIds,
+  isDesktop,
+}: {
+  readonly cardIds: readonly string[];
+  readonly isDesktop: boolean;
+}) {
   const visibleCardIds = cardIds.slice(0, ENEMY_HAND_VISIBLE_CARD_CAP);
   return (
     <div
@@ -253,11 +307,11 @@ function EnemyHand({ cardIds }: { readonly cardIds: readonly string[] }) {
         const { left, normalized } = centeredFanPosition({
           index,
           count: visibleCardIds.length,
-          maximumSpread: 36,
-          spacing: 8,
+          maximumSpread: isDesktop ? 42 : 36,
+          spacing: isDesktop ? 9 : 8,
         });
-        const rotation = normalized * -12;
-        const drop = normalized * normalized * 16;
+        const rotation = normalized * (isDesktop ? -8 : -12);
+        const drop = normalized * normalized * (isDesktop ? 8 : 16);
         return (
           <div
             key={cardId}
@@ -307,12 +361,14 @@ function toVoidPile(
 
 function SideZones({
   activeSide,
+  isDesktop,
   owner,
   phase,
   side,
   interactions,
 }: {
   readonly activeSide: MobileBattleOwner;
+  readonly isDesktop: boolean;
   readonly owner: MobileBattleOwner;
   readonly phase: MobileBattlePhase;
   readonly side: MobileBattleSideView;
@@ -347,15 +403,18 @@ function SideZones({
           ? {
               alignSelf: "start",
               height: token("--space-12"),
-              transform: `translateY(calc(-1 * ${token("--space-7")}))`,
+              transform: `translateY(calc(-1 * ${token(isDesktop ? "--space-11" : "--space-7")}))`,
               zIndex: 3,
             }
           : null),
         display: "grid",
         gridTemplateColumns: SIDE_ZONES_GRID_TEMPLATE,
         alignItems: "center",
-        columnGap: token("--space-7"),
-        paddingInline: token("--space-4"),
+        justifySelf: isDesktop ? "center" : undefined,
+        width: isDesktop ? "100%" : undefined,
+        maxWidth: isDesktop ? DESKTOP_SIDE_ZONES_MAX_WIDTH : undefined,
+        columnGap: token(isDesktop ? "--space-12" : "--space-7"),
+        paddingInline: token(isDesktop ? "--space-8" : "--space-4"),
       }}
     >
       <div
@@ -374,7 +433,12 @@ function SideZones({
       >
         <div
           data-battle-pile-frame=""
-          style={{ width: "100%", maxWidth: SIDE_PILE_MAX_WIDTH }}
+          style={{
+            width: "100%",
+            maxWidth: isDesktop
+              ? DESKTOP_SIDE_PILE_MAX_WIDTH
+              : SIDE_PILE_MAX_WIDTH,
+          }}
         >
           <CardPile
             cards={deck}
@@ -432,7 +496,12 @@ function SideZones({
       >
         <div
           data-battle-pile-frame=""
-          style={{ width: "100%", maxWidth: SIDE_PILE_MAX_WIDTH }}
+          style={{
+            width: "100%",
+            maxWidth: isDesktop
+              ? DESKTOP_SIDE_PILE_MAX_WIDTH
+              : SIDE_PILE_MAX_WIDTH,
+          }}
         >
           <CardPile
             cards={voidPile}
@@ -590,8 +659,11 @@ function FaceUpCard({
   readonly showRulesText?: boolean;
   readonly interaction?: {
     readonly draggable: boolean;
+    readonly debugGesture: "context-menu" | "double-tap";
     readonly onActivate?: () => void;
-    readonly onDebugActivate?: () => void;
+    readonly onDebugActivate?: (
+      invocation: MobileBattleDebugInvocation,
+    ) => void;
     readonly onDragStart: () => void;
     readonly onDragEnd: () => void;
     readonly onTouchDrop: (clientX: number, clientY: number) => void;
@@ -755,15 +827,35 @@ function FaceUpCard({
           if (draggable) interaction?.onActivate?.();
           return;
         }
+        if (interaction.debugGesture === "context-menu") {
+          if (draggable) interaction.onActivate?.();
+          return;
+        }
         if (pendingTapRef.current !== null) {
           cancelPendingTap();
-          interaction?.onDebugActivate?.();
+          interaction.onDebugActivate({ presentation: "sheet" });
           return;
         }
         pendingTapRef.current = window.setTimeout(() => {
           pendingTapRef.current = null;
           if (draggable) interaction?.onActivate?.();
         }, DOUBLE_TAP_WINDOW_MS);
+      }}
+      onContextMenu={(event) => {
+        if (
+          interaction?.debugGesture !== "context-menu" ||
+          interaction.onDebugActivate === undefined
+        ) {
+          return;
+        }
+        event.preventDefault();
+        event.stopPropagation();
+        cancelPendingTap();
+        interaction.onDebugActivate({
+          presentation: "context-menu",
+          x: event.clientX,
+          y: event.clientY,
+        });
       }}
       onDragStart={(event) => {
         if (touchPointerRef.current !== null) {
@@ -839,6 +931,7 @@ function battlefieldTrackWidth(
 }
 
 function Rank({
+  isDesktop,
   owner,
   rank,
   slots,
@@ -847,6 +940,7 @@ function Rank({
   order,
   interactions,
 }: {
+  readonly isDesktop: boolean;
   readonly owner: MobileBattleOwner;
   readonly rank: MobileBattleRank;
   readonly slots: readonly MobileBattleSlotView[];
@@ -872,8 +966,8 @@ function Rank({
       data-battle-rank-order={order}
       style={{
         position: "absolute",
-        left: `${String(BATTLEFIELD_SIDE_INSET_PERCENT)}%`,
-        right: `${String(BATTLEFIELD_SIDE_INSET_PERCENT)}%`,
+        left: `${String(isDesktop ? DESKTOP_BATTLEFIELD_SIDE_INSET_PERCENT : BATTLEFIELD_SIDE_INSET_PERCENT)}%`,
+        right: `${String(isDesktop ? DESKTOP_BATTLEFIELD_SIDE_INSET_PERCENT : BATTLEFIELD_SIDE_INSET_PERCENT)}%`,
         height: cardSize,
         top:
           owner === "player"
@@ -941,6 +1035,9 @@ function Rank({
                     ? undefined
                     : {
                         draggable: interactions.canInteract,
+                        debugGesture: isDesktop
+                          ? "context-menu"
+                          : "double-tap",
                         onDragStart: () =>
                           interactions.onCardDragStart(
                             slot.card?.id ?? "",
@@ -949,10 +1046,11 @@ function Rank({
                         ...(interactions.onCardDebugActivate === undefined
                           ? {}
                           : {
-                              onDebugActivate: () =>
+                              onDebugActivate: (invocation) =>
                                 interactions.onCardDebugActivate?.(
                                   slot.card?.id ?? "",
                                   "battlefield",
+                                  invocation,
                                 ),
                             }),
                         onDragEnd: interactions.onCardDragEnd,
@@ -974,12 +1072,14 @@ function Rank({
 }
 
 function PlayArea({
+  isDesktop,
   owner,
   side,
   layoutBackSlotCount,
   cardSize,
   interactions,
 }: {
+  readonly isDesktop: boolean;
   readonly owner: MobileBattleOwner;
   readonly side: MobileBattleSideView;
   readonly layoutBackSlotCount: number;
@@ -1010,6 +1110,7 @@ function PlayArea({
       {ranks.map(([rank, slots], order) => (
         <Rank
           key={rank}
+          isDesktop={isDesktop}
           owner={owner}
           rank={rank}
           slots={slots}
@@ -1025,9 +1126,11 @@ function PlayArea({
 
 function PlayerHand({
   cards,
+  isDesktop,
   interactions,
 }: {
   readonly cards: readonly MobileBattleCardView[];
+  readonly isDesktop: boolean;
   readonly interactions?: MobileBattleInteractions;
 }) {
   const canDrop =
@@ -1061,19 +1164,19 @@ function PlayerHand({
         const { left, normalized } = centeredFanPosition({
           index,
           count: cards.length,
-          maximumSpread: 82,
-          spacing: 18,
+          maximumSpread: isDesktop ? 72 : 82,
+          spacing: isDesktop ? 16 : 18,
         });
-        const rotation = normalized * 18;
-        const drop = normalized * normalized * 18;
+        const rotation = normalized * (isDesktop ? 8 : 18);
+        const drop = normalized * normalized * (isDesktop ? 8 : 18);
         return (
           <div
             key={card.id}
             style={{
               position: "absolute",
               left,
-              top: PLAYER_HAND_TOP,
-              height: "92%",
+              top: isDesktop ? token("--space-8") : PLAYER_HAND_TOP,
+              height: isDesktop ? "88%" : "92%",
               aspectRatio: CARD_ASPECT_RATIO,
               transformOrigin: "50% 100%",
               transform: `translateX(-50%) translateY(${String(drop)}%) rotate(${String(rotation)}deg)`,
@@ -1089,15 +1192,19 @@ function PlayerHand({
                   ? undefined
                   : {
                       draggable: interactions.canInteract,
+                      debugGesture: isDesktop
+                        ? "context-menu"
+                        : "double-tap",
                       onActivate: () =>
                         interactions.onHandCardActivate(card.id),
                       ...(interactions.onCardDebugActivate === undefined
                         ? {}
                         : {
-                            onDebugActivate: () =>
+                            onDebugActivate: (invocation) =>
                               interactions.onCardDebugActivate?.(
                                 card.id,
                                 "player-hand",
+                                invocation,
                               ),
                           }),
                       onDragStart: () =>
@@ -1143,8 +1250,10 @@ function dropMobileCardAtPoint(
 }
 
 function ControlRow({
+  isDesktop,
   interactions,
 }: {
+  readonly isDesktop: boolean;
   readonly interactions?: MobileBattleInteractions;
 }) {
   const disabled = interactions?.canInteract !== true;
@@ -1157,10 +1266,10 @@ function ControlRow({
         gridRow: 5,
         display: "flex",
         alignItems: "flex-start",
-        justifyContent: "flex-end",
+        justifyContent: isDesktop ? "center" : "flex-end",
         boxSizing: "border-box",
-        paddingInline: token("--space-4"),
-        paddingTop: token("--space-4"),
+        paddingInline: token(isDesktop ? "--space-8" : "--space-4"),
+        paddingTop: token(isDesktop ? "--space-5" : "--space-4"),
       }}
     >
       <div
@@ -1274,8 +1383,9 @@ function BattleDebugMenu({
   );
 }
 
-/** Seven-row, mobile-only battle table composed entirely from battle objects. */
+/** Responsive battle table composed entirely from physical battle objects. */
 export function MobileBattleScreen({ view, interactions }: MobileBattleScreenProps) {
+  const isDesktop = useIsDesktop();
   const layoutBackSlotCount = battlefieldLayoutBackSlotCount(view);
   const cardSize = battlefieldCardSize(layoutBackSlotCount);
   return (
@@ -1284,23 +1394,30 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
       <main
         className="cumulus"
         data-battle-mobile={view.battleId}
-        style={ROOT_STYLE}
+        data-battle-layout={isDesktop ? "desktop" : "mobile"}
+        style={rootStyle(isDesktop)}
       >
+        <BattleBackdrop isDesktop={isDesktop} />
         <div
           aria-hidden="true"
           data-battle-mobile-safe-area-backdrop=""
           style={SAFE_AREA_BACKDROP_STYLE}
         />
         <LayoutGroup id={`mobile-battle:${view.battleId}`}>
-          <EnemyHand cardIds={view.enemyHandCardIds} />
+          <EnemyHand
+            cardIds={view.enemyHandCardIds}
+            isDesktop={isDesktop}
+          />
           <SideZones
             activeSide={view.activeSide}
+            isDesktop={isDesktop}
             owner="enemy"
             phase={view.phase}
             side={view.enemy}
             interactions={interactions}
           />
           <PlayArea
+            isDesktop={isDesktop}
             owner="enemy"
             side={view.enemy}
             layoutBackSlotCount={layoutBackSlotCount}
@@ -1308,21 +1425,27 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
             interactions={interactions}
           />
           <PlayArea
+            isDesktop={isDesktop}
             owner="player"
             side={view.player}
             layoutBackSlotCount={layoutBackSlotCount}
             cardSize={cardSize}
             interactions={interactions}
           />
-          <ControlRow interactions={interactions} />
+          <ControlRow isDesktop={isDesktop} interactions={interactions} />
           <SideZones
             activeSide={view.activeSide}
+            isDesktop={isDesktop}
             owner="player"
             phase={view.phase}
             side={view.player}
             interactions={interactions}
           />
-          <PlayerHand cards={view.playerHand} interactions={interactions} />
+          <PlayerHand
+            cards={view.playerHand}
+            isDesktop={isDesktop}
+            interactions={interactions}
+          />
         </LayoutGroup>
         <BattleDebugMenu
           onFillBattlefieldPreview={interactions?.onFillBattlefieldPreview}
