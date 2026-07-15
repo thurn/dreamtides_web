@@ -99,6 +99,8 @@ export const GLYPHS = {
   copy: g("bxf bx-copy"),
   /** A plain plus mark, used to join objects into one granted bundle. */
   plus: g("bxf bx-plus"),
+  /** A plain minus mark, used by compact decrement controls. */
+  minus: g("bxf bx-minus"),
   /** The settings gear — the desktop quest-menu disclosure trigger. */
   gear: g("bxf bx-cog"),
   /** The bug mark — the battle debug-menu disclosure trigger. */

@@ -272,6 +272,109 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("shows player debug controls in a square bottom-left panel on desktop", () => {
+    mockDesktopViewport(true);
+    const interactions: MobileBattleInteractions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+      onDrawPlayerCard: vi.fn(),
+      onAdjustPlayerPoints: vi.fn(),
+      onAdjustPlayerCurrentEnergy: vi.fn(),
+      onAdjustPlayerMaxEnergy: vi.fn(),
+    };
+    const { container, root } = mount(makeView(), interactions);
+    const panel = container.querySelector<HTMLElement>(
+      '[data-battle-debug="player-state-panel"]',
+    );
+
+    expect(panel).not.toBeNull();
+    expect(panel?.style.position).toBe("absolute");
+    expect(panel?.style.width).toBe("280px");
+    expect(panel?.style.aspectRatio).toBe("1 / 1");
+    expect(panel?.style.left).not.toBe("");
+    expect(panel?.style.bottom).not.toBe("");
+    expect(
+      container.querySelector('[data-testid="battle-debug-player-panel"]')
+        ?.textContent,
+    ).toContain("Battle Debug");
+    expect(
+      container.querySelector('[data-battle-debug-stat="points"]')?.textContent,
+    ).toContain("6");
+    expect(
+      container.querySelector('[data-battle-debug-stat="current-energy"]')
+        ?.textContent,
+    ).toContain("3");
+    expect(
+      container.querySelector('[data-battle-debug-stat="max-energy"]')?.textContent,
+    ).toContain("3");
+
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-debug-draw-player-card"]',
+        )
+        ?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-debug-decrement-points"]',
+        )
+        ?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-debug-increment-points"]',
+        )
+        ?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-debug-decrement-current-energy"]',
+        )
+        ?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-debug-increment-current-energy"]',
+        )
+        ?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-debug-decrement-max-energy"]',
+        )
+        ?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-debug-increment-max-energy"]',
+        )
+        ?.click();
+    });
+
+    expect(interactions.onDrawPlayerCard).toHaveBeenCalledTimes(1);
+    expect(interactions.onAdjustPlayerPoints).toHaveBeenNthCalledWith(1, -1);
+    expect(interactions.onAdjustPlayerPoints).toHaveBeenNthCalledWith(2, 1);
+    expect(interactions.onAdjustPlayerCurrentEnergy).toHaveBeenNthCalledWith(1, -1);
+    expect(interactions.onAdjustPlayerCurrentEnergy).toHaveBeenNthCalledWith(2, 1);
+    expect(interactions.onAdjustPlayerMaxEnergy).toHaveBeenNthCalledWith(1, -1);
+    expect(interactions.onAdjustPlayerMaxEnergy).toHaveBeenNthCalledWith(2, 1);
+
+    act(() => root.unmount());
+  });
+
+  it("omits the player debug panel from the mobile battle layout", () => {
+    mockDesktopViewport(false);
+    const { container, root } = mount();
+
+    expect(
+      container.querySelector('[data-battle-debug="player-state-panel"]'),
+    ).toBeNull();
+
+    act(() => root.unmount());
+  });
+
   it("places decks, status cards, and topmost-first void piles without visible zone labels", () => {
     const view = makeView();
     const { container, root } = mount(view);

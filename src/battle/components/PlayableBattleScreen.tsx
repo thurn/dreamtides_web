@@ -1169,6 +1169,42 @@ function PlayableBattleScreenInner({
             onFillBattlefieldPreview: handleFillBattlefieldPreview,
             onFillTwentyCardBattlefieldPreview:
               handleFillTwentyCardBattlefieldPreview,
+            onDrawPlayerCard: () => {
+              handleCommand({
+                id: "DEBUG_EDIT",
+                edit: { kind: "DRAW_CARD", side: "player" },
+                sourceSurface: "debug-panel",
+              });
+            },
+            onAdjustPlayerPoints: (amount) => {
+              handleCommand({
+                id: "DEBUG_EDIT",
+                edit: { kind: "ADJUST_SCORE", side: "player", amount },
+                sourceSurface: "debug-panel",
+              });
+            },
+            onAdjustPlayerCurrentEnergy: (amount) => {
+              handleCommand({
+                id: "DEBUG_EDIT",
+                edit: {
+                  kind: "ADJUST_CURRENT_ENERGY",
+                  side: "player",
+                  amount,
+                },
+                sourceSurface: "debug-panel",
+              });
+            },
+            onAdjustPlayerMaxEnergy: (amount) => {
+              handleCommand({
+                id: "DEBUG_EDIT",
+                edit: {
+                  kind: "ADJUST_MAX_ENERGY",
+                  side: "player",
+                  amount,
+                },
+                sourceSurface: "debug-panel",
+              });
+            },
           }}
         />
         {contextMenu !== null ? (

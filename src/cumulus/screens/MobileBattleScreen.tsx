@@ -17,6 +17,7 @@ import {
 import { GlassButton } from "../components/controls/GlassButton";
 import { IconButton } from "../components/controls/IconButton";
 import { GlassPanel } from "../components/overlay/GlassPanel";
+import { ResourceChip } from "../components/hud/ResourceChip";
 import type { DreamcallerVisual } from "../components/hud/DreamcallerPortrait";
 import { GLYPHS } from "../primitives/glyph";
 import {
@@ -97,6 +98,7 @@ export type MobileBattleOwner = "enemy" | "player";
 export type MobileBattleRank = "back" | "front";
 export type MobileBattleCardSource = "player-hand" | "battlefield";
 export type MobileBattleDropZone = "deck" | "hand" | "void";
+export type MobileBattleDebugAdjustment = -1 | 1;
 
 export type MobileBattleDebugInvocation =
   | { readonly presentation: "sheet" }
@@ -140,6 +142,14 @@ export interface MobileBattleInteractions {
   readonly onRejectAiProposal?: () => void;
   readonly onFillBattlefieldPreview?: () => void;
   readonly onFillTwentyCardBattlefieldPreview?: () => void;
+  readonly onDrawPlayerCard?: () => void;
+  readonly onAdjustPlayerPoints?: (amount: MobileBattleDebugAdjustment) => void;
+  readonly onAdjustPlayerCurrentEnergy?: (
+    amount: MobileBattleDebugAdjustment,
+  ) => void;
+  readonly onAdjustPlayerMaxEnergy?: (
+    amount: MobileBattleDebugAdjustment,
+  ) => void;
 }
 
 const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
@@ -1475,6 +1485,141 @@ function BattleDebugMenu({
   );
 }
 
+function PlayerStateDebugPanel({
+  status,
+  interactions,
+}: {
+  readonly status: MobileBattleStatusView;
+  readonly interactions?: MobileBattleInteractions;
+}) {
+  return (
+    <div
+      data-battle-debug="player-state-panel"
+      style={{
+        position: "absolute",
+        bottom: `calc(var(${SAFE_AREA_INSET_PROPERTIES.bottom}) + ${token("--space-5")})`,
+        left: `calc(var(${SAFE_AREA_INSET_PROPERTIES.left}) + ${token("--space-5")})`,
+        zIndex: 20,
+        width: 280,
+        aspectRatio: "1 / 1",
+      }}
+    >
+      <GlassPanel
+        title="Battle Debug"
+        headerSpacing="compact"
+        radius="panel"
+        tint="popover"
+        testId="battle-debug-player-panel"
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: token("--space-3"),
+            padding: token("--space-5"),
+          }}
+        >
+          <GlassButton
+            label="Draw Card"
+            placement="onGlass"
+            variant="accent"
+            disabled={interactions?.onDrawPlayerCard === undefined}
+            testId="battle-debug-draw-player-card"
+            onPress={() => interactions?.onDrawPlayerCard?.()}
+          />
+          <PlayerStateDebugRow
+            label="Points"
+            resource="points"
+            stat="points"
+            value={status.points}
+            onAdjust={interactions?.onAdjustPlayerPoints}
+          />
+          <PlayerStateDebugRow
+            label="Current Energy"
+            resource="energy"
+            stat="current-energy"
+            value={status.currentEnergy}
+            onAdjust={interactions?.onAdjustPlayerCurrentEnergy}
+          />
+          <PlayerStateDebugRow
+            label="Maximum Energy"
+            resource="energy"
+            stat="max-energy"
+            value={status.maxEnergy}
+            onAdjust={interactions?.onAdjustPlayerMaxEnergy}
+          />
+        </div>
+      </GlassPanel>
+    </div>
+  );
+}
+
+function PlayerStateDebugRow({
+  label,
+  resource,
+  stat,
+  value,
+  onAdjust,
+}: {
+  readonly label: string;
+  readonly resource: "energy" | "points";
+  readonly stat: "current-energy" | "max-energy" | "points";
+  readonly value: number;
+  readonly onAdjust?: (amount: MobileBattleDebugAdjustment) => void;
+}) {
+  return (
+    <div
+      role="group"
+      aria-label={`${label}: ${String(value)}`}
+      data-battle-debug-stat={stat}
+      style={{
+        display: "grid",
+        gridTemplateColumns: "minmax(0, 1fr) auto auto auto",
+        alignItems: "center",
+        gap: token("--space-2"),
+      }}
+    >
+      <span
+        style={{
+          minWidth: 0,
+          font: token("--t-body-sm"),
+          color: token("--text-on-glass-muted"),
+        }}
+      >
+        {label}
+      </span>
+      <IconButton
+        glyph={GLYPHS.minus}
+        size="sm"
+        label={`Decrease ${label.toLowerCase()}`}
+        placement="onGlass"
+        disabled={onAdjust === undefined || value <= 0}
+        testId={`battle-debug-decrement-${stat}`}
+        onPress={() => onAdjust?.(-1)}
+      />
+      <output
+        aria-live="polite"
+        style={{
+          minWidth: token("--touch-min"),
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <ResourceChip kind={resource} value={value} size="md" tone="inherit" />
+      </output>
+      <IconButton
+        glyph={GLYPHS.plus}
+        size="sm"
+        label={`Increase ${label.toLowerCase()}`}
+        placement="onGlass"
+        disabled={onAdjust === undefined}
+        testId={`battle-debug-increment-${stat}`}
+        onPress={() => onAdjust?.(1)}
+      />
+    </div>
+  );
+}
+
 /** Responsive battle table composed entirely from physical battle objects. */
 export function MobileBattleScreen({ view, interactions }: MobileBattleScreenProps) {
   const isDesktop = useIsDesktop();
@@ -1550,6 +1695,12 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
             interactions?.onFillTwentyCardBattlefieldPreview
           }
         />
+        {isDesktop ? (
+          <PlayerStateDebugPanel
+            status={view.player.status}
+            interactions={interactions}
+          />
+        ) : null}
       </main>
     </>
   );
