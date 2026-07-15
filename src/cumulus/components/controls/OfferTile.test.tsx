@@ -536,4 +536,48 @@ describe("OfferTile", () => {
     act(() => root.unmount());
     container.remove();
   });
+
+  it("uses the requested marks for keyword and character-type changes", () => {
+    const keyword: OfferTileModel = {
+      id: "debug-keyword",
+      kind: "keyword-modification",
+      card: FULL_CARDS[0],
+    };
+    const characterType: OfferTileModel = {
+      id: "debug-character-type",
+      kind: "tribal-change",
+      card: FULL_CARDS[1],
+      newCharacterType: "Warrior",
+    };
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <OfferTile model={keyword} onPress={() => {}} testId="keyword" />
+          <OfferTile
+            model={characterType}
+            onPress={() => {}}
+            testId="character-type"
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="keyword"] [data-offer-tile-operation] i',
+      )?.className,
+    ).toBe(GLYPHS.pencilSquare);
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="character-type"] [data-offer-tile-operation] i',
+      )?.className,
+    ).toBe(GLYPHS.refreshCcw);
+
+    act(() => root.unmount());
+    container.remove();
+  });
 });

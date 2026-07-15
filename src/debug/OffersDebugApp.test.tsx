@@ -74,6 +74,7 @@ describe("OffersDebugApp", () => {
     const dreamsignDraft = OFFER_TILE_DEBUG_MODELS.dreamsign_draft;
     const starters = OFFER_TILE_DEBUG_MODELS.starter_transfigure;
     const keyword = OFFER_TILE_DEBUG_MODELS.keyword_mod;
+    const characterType = OFFER_TILE_DEBUG_MODELS.tribal_change;
     expect(fitCardGift.kind).toBe("card-gift");
     expect(strongCardGift.kind).toBe("card-gift");
     expect(offerTileDescription(fitCardGift)).toContain("to your deck.");
@@ -102,6 +103,12 @@ describe("OffersDebugApp", () => {
     expect(
       keyword.kind === "keyword-modification" ? keyword.card.cardId : null,
     ).toBe("2931e20b-1a80-4ddd-8944-20e68d182886");
+    expect(offerTileDescription(keyword)).toBe(
+      "Reduce the reclaim cost of Loading Card.",
+    );
+    expect(offerTileDescription(characterType)).toBe(
+      "Change the character type of Loading Card to Warrior.",
+    );
     expect(offerTileDescription(dreamsignDraft)).toBe(
       "Choose a dreamsign to gain.",
     );

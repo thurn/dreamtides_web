@@ -80,6 +80,13 @@ export type OfferTileDuplicateCards =
   | readonly [OfferTileCard, OfferTileCard]
   | readonly [OfferTileCard, OfferTileCard, OfferTileCard];
 
+/** Character types that a Dream Augury offer can apply to a card. */
+export type OfferTileCharacterType =
+  | "Warrior"
+  | "Spirit Animal"
+  | "Survivor"
+  | "Outsider";
+
 /** The two to four surfaced choices in a dreamsign-draft offer. */
 export type OfferTileDreamsignChoices =
   | readonly [OfferTileDreamsign, OfferTileDreamsign]
@@ -117,8 +124,14 @@ export type OfferTileModel =
     })
   | (OfferTileBase & { kind: "card-bundle"; cards: OfferTileBundleCards })
   | (OfferTileBase & {
-      kind: "transfigure-card" | "keyword-modification" | "tribal-change";
+      kind: "transfigure-card" | "keyword-modification";
       card: OfferTileCard;
+    })
+  | (OfferTileBase & {
+      kind: "tribal-change";
+      card: OfferTileCard;
+      /** Character type applied to the card by this offer. */
+      newCharacterType: OfferTileCharacterType;
     })
   | (OfferTileBase & {
       kind: "transfigure-starters";
@@ -681,13 +694,17 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
       );
     case "keyword-modification":
       return (
-        <FullCardOperation card={model.card} glyph={GLYPHS.spark} tone="accent" />
+        <FullCardOperation
+          card={model.card}
+          glyph={GLYPHS.pencilSquare}
+          tone="accent"
+        />
       );
     case "tribal-change":
       return (
         <FullCardOperation
           card={model.card}
-          glyph={GLYPHS.affiliationRow}
+          glyph={GLYPHS.refreshCcw}
           tone="accent"
         />
       );

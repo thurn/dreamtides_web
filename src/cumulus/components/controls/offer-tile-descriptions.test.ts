@@ -109,11 +109,16 @@ const COPY_CASES: ReadonlyArray<
   ],
   [
     { id: "keyword", kind: "keyword-modification", card: CARD },
-    "Modify a keyword on Test Card.",
+    "Reduce the reclaim cost of Test Card.",
   ],
   [
-    { id: "tribal", kind: "tribal-change", card: CARD },
-    "Change the character type of Test Card.",
+    {
+      id: "tribal",
+      kind: "tribal-change",
+      card: CARD,
+      newCharacterType: "Warrior",
+    },
+    "Change the character type of Test Card to Warrior.",
   ],
   [
     {

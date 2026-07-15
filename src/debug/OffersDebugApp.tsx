@@ -153,6 +153,7 @@ export const OFFER_TILE_DEBUG_MODELS: Readonly<
     id: "debug:tribal_change",
     kind: "tribal-change",
     card: GENERAL_DRAFT_A[0],
+    newCharacterType: "Warrior",
   },
   purge: {
     id: "debug:purge",

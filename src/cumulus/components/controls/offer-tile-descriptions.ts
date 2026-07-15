@@ -137,7 +137,7 @@ function describeOfferTile(model: OfferTileModel): OfferTileDescription {
       return description(prose("Transfigure "), cardName(model.card), prose("."));
     case "keyword-modification":
       return description(
-        prose("Modify a keyword on "),
+        prose("Reduce the reclaim cost of "),
         cardName(model.card),
         prose("."),
       );
@@ -145,7 +145,7 @@ function describeOfferTile(model: OfferTileModel): OfferTileDescription {
       return description(
         prose("Change the character type of "),
         cardName(model.card),
-        prose("."),
+        prose(` to ${model.newCharacterType}.`),
       );
     case "transfigure-starters":
       return description(

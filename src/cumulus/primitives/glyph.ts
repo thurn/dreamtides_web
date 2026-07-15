@@ -107,6 +107,10 @@ export const GLYPHS = {
   menu: g("bxf bx-menu"),
   /** The circular refresh arrows used by shop restock actions. */
   refresh: g("bxf bx-refresh-cw"),
+  /** Counter-clockwise refresh arrows used for character-type changes. */
+  refreshCcw: g("bxf bx-refresh-ccw"),
+  /** A pencil over a square, used for targeted text or keyword edits. */
+  pencilSquare: g("bxf bx-pencil-square"),
 
   // Named Transfiguration marks. These mirror the card renderer's per-form
   // emblems and keep forge UI callers out of raw icon-font class strings.
