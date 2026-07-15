@@ -83,9 +83,11 @@ import {
   createMoveCardToStackCommand,
   createMoveCardToZoneCommand,
 } from "./battle-ui-commands";
+import { resolveBattleInspectorIntent } from "./battle-inspector-intents";
 import { createFillBattlefieldPreviewCommand } from "./battle-debug-preview";
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
 import { MobileBattleScreenAdapter } from "../../screens/cumulus_adapters/MobileBattleScreenAdapter";
+import type { MobileBattleInspectorAction } from "../../cumulus/screens/MobileBattleScreen";
 import { useIsDesktop } from "../../cumulus/screens/use-is-desktop";
 
 const DESKTOP_INSPECTOR_WIDTH = 1280;
@@ -119,6 +121,7 @@ type PendingDragState = {
   definition: BattleDeckCardDefinition;
   sourceSurface: "pool-viewer";
 } | null;
+
 export function PlayableBattleScreen({
   site,
   aiMode = false,
@@ -320,11 +323,15 @@ function PlayableBattleScreenInner({
     battleInit.battleId,
   ]);
 
-  const handleOpenForesee = useCallback((side: BattleSide, count: number): void => {
+  const handleOpenForesee = useCallback((
+    side: BattleSide,
+    count: number,
+    sourceSurface: BattleCommandSourceSurface = "foresee-overlay",
+  ): void => {
     handleCommand({
       id: "DEBUG_EDIT",
       edit: { kind: "REVEAL_DECK_TOP", side, count },
-      sourceSurface: "foresee-overlay",
+      sourceSurface,
     });
     setOpenForeseeOverlay({ side, count });
   }, [handleCommand]);
@@ -364,8 +371,11 @@ function PlayableBattleScreenInner({
   // additional Dreamwell card"). `additional: true` opts out of the per-turn
   // reveal's idempotency guard so a deliberate extra draw always consumes the
   // next card even though the side already drew its mandatory card this turn.
-  const runDreamwellDraw = useCallback((side: BattleSide): void => {
-    logDreamwellReveal(side, board.turnNumber, "status-strip");
+  const runDreamwellDraw = useCallback((
+    side: BattleSide,
+    sourceSurface: BattleCommandSourceSurface = "status-strip",
+  ): void => {
+    logDreamwellReveal(side, board.turnNumber, sourceSurface);
     handleCommand({
       id: "DEBUG_EDIT",
       edit: {
@@ -374,7 +384,7 @@ function PlayableBattleScreenInner({
         turnNumber: board.turnNumber,
         additional: true,
       },
-      sourceSurface: "status-strip",
+      sourceSurface,
     });
   }, [handleCommand, logDreamwellReveal, board.turnNumber]);
 
@@ -1074,6 +1084,63 @@ function PlayableBattleScreenInner({
     requestBattlefieldPreview(20);
   }, [requestBattlefieldPreview]);
 
+  function handleCumulusInspectorAction(action: MobileBattleInspectorAction): void {
+    const resolution = resolveBattleInspectorIntent(action, board);
+    if (resolution.kind === "command") {
+      handleCommand(resolution.command);
+      return;
+    }
+    if (resolution.kind === "gesture") {
+      void actions.battleGesture(resolution.commands);
+      return;
+    }
+    if (resolution.kind === "none") {
+      return;
+    }
+    if (resolution.kind === "presentation") {
+      if (resolution.action === "opened" || resolution.action === "side-selected") {
+        logEvent(
+          resolution.action === "opened"
+            ? "battle_inspector_opened"
+            : "battle_inspector_side_selected",
+          {
+            ...createBattleLogBaseFields(board, {
+              sourceSurface: "inspector",
+              selectedCardId: null,
+            }),
+            selectedSide: action.kind === "opened" || action.kind === "side-selected"
+              ? action.side
+              : null,
+            ...(action.kind === "opened" ? { layout: action.layout } : {}),
+          },
+        );
+      } else if (resolution.action === "toggle-opponent-hand") {
+        setIsOpponentHandRevealed((value) => !value);
+      } else if (resolution.action === "toggle-player-hand") {
+        setIsPlayerHandHidden((value) => !value);
+      } else {
+        handleResetBattle();
+      }
+      return;
+    }
+
+    if (resolution.accessory === "pool-viewer") {
+      setIsPoolViewerOpen(true);
+      return;
+    }
+    if (resolution.side === undefined) {
+      return;
+    }
+    if (resolution.accessory === "foresee") {
+      handleOpenForesee(resolution.side, 1, "inspector");
+    } else if (resolution.accessory === "open-deck") {
+      handleOpenZoneBrowser(resolution.side, "deck");
+    } else if (resolution.accessory === "dreamwell-draw") {
+      runDreamwellDraw(resolution.side, "inspector");
+    } else {
+      setOpenFigmentCreator(resolution.side);
+    }
+  }
   const showCumulusLayout = uiVariant === "cumulus";
   useEffect(() => {
     if (!showCumulusLayout) {
@@ -1105,11 +1172,71 @@ function PlayableBattleScreenInner({
   if (showCumulusLayout) {
     return (
       <>
+        {openZoneBrowser !== null ? (
+          <BattleZoneBrowser
+            browser={openZoneBrowser}
+            isOpponentHandRevealed={isOpponentHandRevealed}
+            state={board}
+            onClose={() => setOpenZoneBrowser(null)}
+            onCommand={handleCommand}
+            onOpenForesee={(side, count) => handleOpenForesee(side, count, "inspector")}
+            onOpenReorderMultiple={(side) => setOpenDeckOrderPicker(side)}
+            onCardContextMenu={handleCardContextMenu}
+            onCardDragStart={handleCardDragStart}
+            onCardDragEnd={handleCardDragEnd}
+            onCardDropToBrowser={() => handleZoneDrop(openZoneBrowser.side, openZoneBrowser.zone, "inspector")}
+            pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
+          />
+        ) : null}
+        {openForeseeOverlay !== null ? (
+          <BattleForeseeOverlay
+            initialCount={openForeseeOverlay.count}
+            side={openForeseeOverlay.side}
+            state={board}
+            onClose={() => setOpenForeseeOverlay(null)}
+            onDispatch={(command) => handleCommand({ ...command, sourceSurface: "inspector" })}
+          />
+        ) : null}
+        {openDeckOrderPicker !== null ? (
+          <BattleDeckOrderPicker
+            initialOrder={board.sides[openDeckOrderPicker].deck}
+            scopeLabel="full"
+            side={openDeckOrderPicker}
+            state={board}
+            onCancel={() => setOpenDeckOrderPicker(null)}
+            onConfirm={(order) => {
+              handleCommand({ id: "DEBUG_EDIT", edit: { kind: "REORDER_DECK", order, side: openDeckOrderPicker }, sourceSurface: "inspector" });
+              setOpenDeckOrderPicker(null);
+            }}
+          />
+        ) : null}
+        {openFigmentCreator !== null ? (
+          <BattleFigmentCreator
+            initialSide={openFigmentCreator}
+            state={board}
+            onClose={() => setOpenFigmentCreator(null)}
+            onSubmit={(edit) => handleCommand({ id: "DEBUG_EDIT", edit, sourceSurface: "inspector" })}
+          />
+        ) : null}
+        <PoolViewer
+          cardDatabase={cardDatabase}
+          draftState={questState.draftState}
+          resolvedPackage={questState.resolvedPackage}
+          isOpen={isPoolViewerOpen}
+          onClose={() => setIsPoolViewerOpen(false)}
+          onPoolCardDragEnd={handleCardDragEnd}
+          onPoolCardDragStart={handlePoolCardDragStart}
+          title="Battle Pool Viewer"
+          variant="floating"
+        />
         <MobileBattleScreenAdapter
           init={battleInit}
           board={board}
           enemyDreamcaller={enemyDreamcallerSummary}
           aiProposal={proposal}
+          aiMode={aiMode}
+          isOpponentHandRevealed={isOpponentHandRevealed}
+          isPlayerHandHidden={isPlayerHandHidden}
           interactions={{
             canInteract: canPlayerAct,
             pendingCardId: pendingDragCardId,
@@ -1147,67 +1274,7 @@ function PlayableBattleScreenInner({
             onFillBattlefieldPreview: handleFillBattlefieldPreview,
             onFillTwentyCardBattlefieldPreview:
               handleFillTwentyCardBattlefieldPreview,
-            onDrawPlayerCard: () => {
-              handleCommand({
-                id: "DEBUG_EDIT",
-                edit: { kind: "DRAW_CARD", side: "player" },
-                sourceSurface: "debug-panel",
-              });
-            },
-            onAdjustPlayerPoints: (amount) => {
-              handleCommand({
-                id: "DEBUG_EDIT",
-                edit: { kind: "ADJUST_SCORE", side: "player", amount },
-                sourceSurface: "debug-panel",
-              });
-            },
-            onAdjustPlayerCurrentEnergy: (amount) => {
-              handleCommand({
-                id: "DEBUG_EDIT",
-                edit: {
-                  kind: "ADJUST_CURRENT_ENERGY",
-                  side: "player",
-                  amount,
-                },
-                sourceSurface: "debug-panel",
-              });
-            },
-            onAdjustPlayerMaxEnergy: (amount) => {
-              handleCommand({
-                id: "DEBUG_EDIT",
-                edit: {
-                  kind: "ADJUST_MAX_ENERGY",
-                  side: "player",
-                  amount,
-                },
-                sourceSurface: "debug-panel",
-              });
-            },
-            onAdjustPlayerCurrentAndMaxEnergy: (amount) => {
-              const setCurrentEnergy: BattleCommand = {
-                id: "DEBUG_EDIT",
-                edit: {
-                  kind: "SET_CURRENT_ENERGY",
-                  side: "player",
-                  value: board.sides.player.currentEnergy + amount,
-                },
-                sourceSurface: "debug-panel",
-              };
-              const setMaxEnergy: BattleCommand = {
-                id: "DEBUG_EDIT",
-                edit: {
-                  kind: "SET_MAX_ENERGY",
-                  side: "player",
-                  value: board.sides.player.maxEnergy + amount,
-                },
-                sourceSurface: "debug-panel",
-              };
-              void actions.battleGesture(
-                amount > 0
-                  ? [setMaxEnergy, setCurrentEnergy]
-                  : [setCurrentEnergy, setMaxEnergy],
-              );
-            },
+            onInspectorAction: handleCumulusInspectorAction,
           }}
         />
         {contextMenu !== null ? (

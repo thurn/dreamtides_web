@@ -164,6 +164,56 @@ describe("buildMobileBattleView", () => {
     });
   });
 
+  it("builds readable inspector snapshot, side zones, availability, visibility, and AI states", () => {
+    const init = makeInit();
+    const board = makeBoard(init);
+    board.phase = "night";
+    board.turnNumber = 4;
+    board.sides.player.banished = [board.sides.player.hand[0]];
+    const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER, {
+      kind: "action",
+      description: "Play the selected instance.",
+      trace: {
+        stage: "character",
+        choice: "PLAY_CARD",
+        battleCardId: board.sides.enemy.hand[0],
+        cardName: "Display-only fixture",
+        sourceHandIndex: 0,
+        sourceSlotId: null,
+        targetSlotId: "B2",
+        heuristicScoreBefore: 2,
+        heuristicScoreAfter: 4.5,
+      },
+    }, {
+      aiMode: true,
+      isOpponentHandRevealed: true,
+      isPlayerHandHidden: true,
+    });
+
+    expect(view.inspector).toMatchObject({
+      opponentName: "Enemy Caller",
+      turn: "4",
+      phase: "Night",
+      result: "In progress",
+      stackCount: 0,
+      nextDreamwellOrder: "Complete",
+      isOpponentHandRevealed: true,
+      isPlayerHandHidden: true,
+    });
+    expect(view.inspector.sides.player).toMatchObject({
+      heading: "Your",
+      points: 5,
+      canDiscard: true,
+      canShuffle: true,
+      zones: { hand: 3, deck: 2, void: 2, banished: 1, backRank: 0, frontRank: 1 },
+    });
+    expect(view.inspector.sides.enemy.zones).toMatchObject({ hand: 2, deck: 2, void: 2, backRank: 1, frontRank: 1 });
+    expect(view.inspector.ai).toMatchObject({ kind: "Action", card: "Display-only fixture", target: "B2", heuristicChange: "2.00 → 4.50" });
+
+    const noAi = buildMobileBattleView(init, board, ENEMY_DREAMCALLER);
+    expect(noAi.inspector.ai).toBeNull();
+  });
+
   it("marks only affordable player hand cards during the player's Day phase", () => {
     const init = makeInit();
     const board = makeBoard(init);

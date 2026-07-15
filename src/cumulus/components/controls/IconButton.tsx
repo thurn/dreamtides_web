@@ -72,6 +72,8 @@ export interface IconButtonProps {
    * the surface it controls is open). Omitted for a plain action button.
    */
   ariaExpanded?: boolean;
+  /** Id of the disclosure surface controlled by this button. */
+  ariaControls?: string;
   /** A `data-testid` for selecting the disc in tests. */
   testId?: string;
 }
@@ -91,6 +93,7 @@ export function IconButton({
   disabled = false,
   placement = "onMedia",
   ariaExpanded,
+  ariaControls,
   testId,
 }: IconButtonProps): ReactElement {
   const spec = ICON_BUTTON_SIZES[size];
@@ -99,6 +102,7 @@ export function IconButton({
       as="button"
       aria-label={label}
       aria-expanded={ariaExpanded}
+      aria-controls={ariaControls}
       data-glass-placement={placement}
       data-glass-variant={variant}
       data-testid={testId}

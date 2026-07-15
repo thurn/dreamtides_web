@@ -26,7 +26,7 @@ The shared liquid-glass content container: an optional structured header, a comp
 | `headerDivider` | `boolean` | no | `true` | Draw the standard divider below the header. Defaults to `true`. |
 | `rightAccessory` | `GlassPanelAccessory` | no | — | Optional structured action at the trailing edge of the header. |
 | `cutoutAwareAccessory` | `boolean` | no | `false` | Float the accessory beside an injected display cutout when present. |
-| `frame` | `GlassPanelFrame` = `"floating" \| "fullBleed"` | no | `floating` | Floating glass or the standard full-bleed gallery scrim. |
+| `frame` | `GlassPanelFrame` = `"floating" \| "fullBleed" \| "edgeRail"` | no | `floating` | Floating glass, edge-attached rail glass, or the standard full-bleed gallery scrim. |
 | `radius` | `GlassPanelRadius` = `"panel" \| "popover" \| "control"` | no | `panel` | Named corner geometry for a floating panel. Defaults to `panel`. |
 | `tint` | `GlassPanelTint` = `"default" \| "popover"` | no | `default` | Floating glass tint. Defaults to `default`. |
 | `overflow` | `"hidden" \| "visible"` | no | `hidden` | Clip content to the panel edge. Defaults to `hidden`. |

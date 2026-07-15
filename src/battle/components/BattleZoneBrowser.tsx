@@ -4,6 +4,9 @@ import type {
   PointerEvent as ReactPointerEvent,
 } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { TextField } from "../../cumulus/components/controls/TextField";
+import { Select } from "../../cumulus/components/controls/Select";
+import { SegmentedControl } from "../../cumulus/components/controls/SegmentedControl";
 import type { BattleCommand } from "../debug/commands";
 import type {
   BattleCommandSourceSurface,
@@ -224,33 +227,40 @@ export function BattleZoneBrowser({
             </div>
           </div>
           <div className="controls">
-            <input
-              data-zone-browser-search=""
-              ref={searchInputRef}
-              type="search"
+            <TextField
+              label="Search cards"
+              inputRef={searchInputRef}
+              kind="search"
               placeholder="Search by name…"
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              testId="battle-zone-browser-search"
+              onChange={setQuery}
             />
-            <select
-              data-zone-browser-sort=""
-              value={sortMode}
-              onChange={(event) => setSortMode(event.target.value as BattleZoneBrowserSortMode)}
-            >
-              <option value="current">Current order</option>
-              <option value="cost">Cost</option>
-              <option value="spark">Spark</option>
-              <option value="name">Name</option>
-            </select>
-            <select
-              data-zone-browser-filter=""
-              value={typeFilter}
-              onChange={(event) => setTypeFilter(event.target.value as BattleZoneBrowserTypeFilter)}
-            >
-              <option value="all">All types</option>
-              <option value="character">Characters</option>
-              <option value="event">Events</option>
-            </select>
+            <div data-zone-browser-sort="">
+              <Select
+                options={[
+                  { value: "current", label: "Current order" },
+                  { value: "cost", label: "Cost" },
+                  { value: "spark", label: "Spark" },
+                  { value: "name", label: "Name" },
+                ]}
+                value={sortMode}
+                ariaLabel="Sort deck cards"
+                onChange={(value) => setSortMode(value as BattleZoneBrowserSortMode)}
+              />
+            </div>
+            <div data-zone-browser-filter="">
+              <SegmentedControl
+                size="sm"
+                options={[
+                  { value: "all", label: "All" },
+                  { value: "character", label: "Characters" },
+                  { value: "event", label: "Events" },
+                ]}
+                value={typeFilter}
+                onChange={(value) => setTypeFilter(value as BattleZoneBrowserTypeFilter)}
+              />
+            </div>
           </div>
           <button type="button" className="btn ghost" onClick={onClose}>
             ✕

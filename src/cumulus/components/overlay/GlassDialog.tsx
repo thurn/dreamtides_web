@@ -107,6 +107,8 @@ export interface GlassDialogProps {
    * gates this on its own roomy-desktop media query.
    */
   wide?: boolean;
+  /** Force the edge-to-edge takeover treatment at any viewport width. */
+  fullScreen?: boolean;
   /** The scrolling body content. */
   children: ReactNode;
 }
@@ -131,11 +133,13 @@ export function GlassDialog({
   closeLabel = "Close",
   cutoutAwareClose = false,
   wide = false,
+  fullScreen = false,
   children,
 }: GlassDialogProps): ReactElement {
   const isDesktop = useIsDesktop();
   const glass = glassSurfaceStyle();
-  const wideDesktop = isDesktop && wide;
+  const boundedDesktop = isDesktop && !fullScreen;
+  const wideDesktop = boundedDesktop && wide;
 
   // On a full-bleed mobile overlay whose screen-cutout box is known (a
   // device-screenshot mock-up), lift the close disc up beside the island. The
@@ -144,14 +148,14 @@ export function GlassDialog({
   const [besideCutout, setBesideCutout] = useState(false);
   useEffect(() => {
     setBesideCutout(
-      cutoutAwareClose && !isDesktop && hasInjectedDisplayCutout(),
+      cutoutAwareClose && !boundedDesktop && hasInjectedDisplayCutout(),
     );
-  }, [cutoutAwareClose, isDesktop]);
+  }, [boundedDesktop, cutoutAwareClose]);
 
   // Desktop is a bounded, centered dialog; mobile is a full-bleed overlay whose
   // fill + blur stay but whose card rim, radius, and shadow drop so it reads
   // edge to edge.
-  const panelStyle: CSSProperties = isDesktop
+  const panelStyle: CSSProperties = boundedDesktop
     ? {
         ...glass,
         position: "relative",
@@ -188,7 +192,7 @@ export function GlassDialog({
     justifyContent: "space-between",
     gap: token("--space-4"),
     borderBottom: `1px solid ${token("--border-strong")}`,
-    ...(isDesktop
+    ...(boundedDesktop
       ? { padding: token("--space-6") }
       : {
           // Clear a device screen cutout on the full-bleed overlay: the safe-area
@@ -224,14 +228,14 @@ export function GlassDialog({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: isDesktop
+        padding: boundedDesktop
           ? wideDesktop
             ? token("--space-8")
             : token("--space-7")
           : 0,
       }}
     >
-      {!isDesktop && <GlassBackdrop />}
+      {!boundedDesktop && <GlassBackdrop />}
       <div style={panelStyle}>
         {besideCutout && (
           // The disc floats up beside the device island (vertically centered on

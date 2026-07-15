@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { LayoutGroup, motion } from "framer-motion";
 import {
   GameCard,
@@ -15,9 +15,13 @@ import {
   type BattlePileCard,
 } from "../components/battle/CardPile";
 import { GlassButton } from "../components/controls/GlassButton";
+import { DisclosureSection } from "../components/controls/DisclosureSection";
+import { GroupPanel } from "../components/controls/GroupPanel";
 import { IconButton } from "../components/controls/IconButton";
+import { NumberStepper } from "../components/controls/NumberStepper";
+import { SegmentedControl } from "../components/controls/SegmentedControl";
+import { GlassDialog } from "../components/overlay/GlassDialog";
 import { GlassPanel } from "../components/overlay/GlassPanel";
-import { ResourceChip } from "../components/hud/ResourceChip";
 import type { DreamcallerVisual } from "../components/hud/DreamcallerPortrait";
 import { GLYPHS } from "../primitives/glyph";
 import {
@@ -84,9 +88,11 @@ export interface MobileBattleView {
   readonly activeSide: MobileBattleOwner;
   readonly phase: MobileBattlePhase;
   readonly enemyHandCardIds: readonly string[];
+  readonly enemyHand: readonly MobileBattleCardView[];
   readonly enemy: MobileBattleSideView;
   readonly player: MobileBattleSideView;
   readonly playerHand: readonly MobileBattleCardView[];
+  readonly inspector: MobileBattleInspectorView;
 }
 
 export interface MobileBattleScreenProps {
@@ -99,6 +105,57 @@ export type MobileBattleRank = "back" | "front";
 export type MobileBattleCardSource = "player-hand" | "battlefield";
 export type MobileBattleDropZone = "deck" | "hand" | "void";
 export type MobileBattleDebugAdjustment = -1 | 1;
+
+export interface MobileBattleInspectorSideView {
+  readonly side: MobileBattleOwner;
+  readonly heading: "Your" | "Enemy";
+  readonly points: number;
+  readonly currentEnergy: number;
+  readonly maxEnergy: number;
+  readonly zones: {
+    readonly hand: number;
+    readonly deck: number;
+    readonly void: number;
+    readonly banished: number;
+    readonly backRank: number;
+    readonly frontRank: number;
+  };
+  readonly canDiscard: boolean;
+  readonly canShuffle: boolean;
+}
+
+export interface MobileBattleInspectorAiView {
+  readonly proposal: string;
+  readonly kind: string;
+  readonly card: string;
+  readonly target: string;
+  readonly heuristicChange: string;
+  readonly liveEvaluation: string;
+}
+
+export interface MobileBattleInspectorView {
+  readonly opponentName: string;
+  readonly turn: string;
+  readonly phase: string;
+  readonly activeSide: string;
+  readonly result: string;
+  readonly stackCount: number;
+  readonly nextDreamwellOrder: string;
+  readonly isOpponentHandRevealed: boolean;
+  readonly isPlayerHandHidden: boolean;
+  readonly sides: Readonly<Record<MobileBattleOwner, MobileBattleInspectorSideView>>;
+  readonly ai: MobileBattleInspectorAiView | null;
+}
+
+export type MobileBattleInspectorAction =
+  | { readonly kind: "opened"; readonly layout: "docked" | "takeover"; readonly side: MobileBattleOwner }
+  | { readonly kind: "side-selected"; readonly side: MobileBattleOwner }
+  | { readonly kind: "adjust-stat"; readonly side: MobileBattleOwner; readonly stat: "points" | "currentEnergy" | "maxEnergy"; readonly amount: MobileBattleDebugAdjustment }
+  | { readonly kind: "adjust-energy-pair"; readonly side: MobileBattleOwner; readonly amount: MobileBattleDebugAdjustment }
+  | { readonly kind: "draw" | "discard" | "foresee" | "shuffle" | "open-deck" | "dreamwell-draw" | "create-figment"; readonly side: MobileBattleOwner }
+  | { readonly kind: "erode"; readonly side: MobileBattleOwner; readonly count: number }
+  | { readonly kind: "open-pool-viewer" | "toggle-opponent-hand" | "toggle-player-hand" | "skip-to-rewards" | "reset-battle" }
+  | { readonly kind: "force-result"; readonly result: "defeat" | "draw" };
 
 export type MobileBattleDebugInvocation =
   | { readonly presentation: "sheet" }
@@ -142,17 +199,7 @@ export interface MobileBattleInteractions {
   readonly onRejectAiProposal?: () => void;
   readonly onFillBattlefieldPreview?: () => void;
   readonly onFillTwentyCardBattlefieldPreview?: () => void;
-  readonly onDrawPlayerCard?: () => void;
-  readonly onAdjustPlayerPoints?: (amount: MobileBattleDebugAdjustment) => void;
-  readonly onAdjustPlayerCurrentEnergy?: (
-    amount: MobileBattleDebugAdjustment,
-  ) => void;
-  readonly onAdjustPlayerMaxEnergy?: (
-    amount: MobileBattleDebugAdjustment,
-  ) => void;
-  readonly onAdjustPlayerCurrentAndMaxEnergy?: (
-    amount: MobileBattleDebugAdjustment,
-  ) => void;
+  readonly onInspectorAction?: (action: MobileBattleInspectorAction) => void;
 }
 
 const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
@@ -308,9 +355,13 @@ function centeredFanPosition(params: {
 
 function EnemyHand({
   cardIds,
+  cards,
+  revealed,
   isDesktop,
 }: {
   readonly cardIds: readonly string[];
+  readonly cards: readonly MobileBattleCardView[];
+  readonly revealed: boolean;
   readonly isDesktop: boolean;
 }) {
   const visibleCardIds = cardIds.slice(0, ENEMY_HAND_VISIBLE_CARD_CAP);
@@ -330,6 +381,7 @@ function EnemyHand({
       }}
     >
       {visibleCardIds.map((cardId, index) => {
+        const card = cards.find((candidate) => candidate.id === cardId);
         const { left, normalized } = centeredFanPosition({
           index,
           count: visibleCardIds.length,
@@ -343,7 +395,7 @@ function EnemyHand({
             key={cardId}
             data-battle-card-id={cardId}
             data-battle-card-zone="enemy-hand"
-            data-battle-card-face="down"
+            data-battle-card-face={revealed ? "up" : "down"}
             style={{
               position: isDesktop ? "relative" : "absolute",
               top: 0,
@@ -358,13 +410,17 @@ function EnemyHand({
               zIndex: index + 1,
             }}
           >
-            <motion.div
-              layoutId={`battle-card:${cardId}`}
-              data-battle-card-motion=""
-              style={{ width: "100%", height: "100%" }}
-            >
-              <CardBack label="Enemy card" />
-            </motion.div>
+            {revealed && card !== undefined ? (
+              <FaceUpCard card={card} zone="enemy-hand" showRulesText />
+            ) : (
+              <motion.div
+                layoutId={`battle-card:${cardId}`}
+                data-battle-card-motion=""
+                style={{ width: "100%", height: "100%" }}
+              >
+                <CardBack label="Enemy card" />
+              </motion.div>
+            )}
           </div>
         );
       })}
@@ -1426,10 +1482,7 @@ function BattleDebugMenu({
     <div
       data-battle-debug="menu"
       style={{
-        position: "absolute",
-        top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-4")})`,
-        right: `calc(var(${SAFE_AREA_INSET_PROPERTIES.right}) + ${token("--space-4")})`,
-        zIndex: 20,
+        position: "relative",
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-end",
@@ -1448,7 +1501,7 @@ function BattleDebugMenu({
         <div
           role="menu"
           aria-label="Battle debug actions"
-          style={{ width: 300 }}
+          style={{ position: "absolute", top: `calc(100% + ${token("--space-3")})`, right: 0, width: 300 }}
         >
           <GlassPanel radius="popover" tint="popover">
             <div
@@ -1488,295 +1541,376 @@ function BattleDebugMenu({
   );
 }
 
-function PlayerStateDebugPanel({
-  status,
-  interactions,
-}: {
-  readonly status: MobileBattleStatusView;
-  readonly interactions?: MobileBattleInteractions;
-}) {
+const INSPECTOR_ID = "cumulus-battle-inspector";
+const INSPECTOR_DOCK_MIN_WIDTH = 1280;
+
+function InspectorValue({ label, value }: { readonly label: string; readonly value: string }) {
   return (
-    <div
-      data-battle-debug="player-state-panel"
-      style={{
-        position: "absolute",
-        bottom: `calc(var(${SAFE_AREA_INSET_PROPERTIES.bottom}) + ${token("--space-5")})`,
-        left: `calc(var(${SAFE_AREA_INSET_PROPERTIES.left}) + ${token("--space-5")})`,
-        zIndex: 20,
-        width: 320,
-        aspectRatio: "1 / 1",
-      }}
-    >
-      <GlassPanel
-        title="Battle Debug"
-        headerSpacing="compact"
-        radius="panel"
-        tint="popover"
-        testId="battle-debug-player-panel"
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: token("--space-3"),
-            padding: token("--space-5"),
-          }}
-        >
-          <GlassButton
-            label="Draw Card"
-            placement="onGlass"
-            variant="accent"
-            disabled={interactions?.onDrawPlayerCard === undefined}
-            testId="battle-debug-draw-player-card"
-            onPress={() => interactions?.onDrawPlayerCard?.()}
-          />
-          <PlayerStateDebugRow
-            label="Points"
-            resource="points"
-            stat="points"
-            value={status.points}
-            onAdjust={interactions?.onAdjustPlayerPoints}
-          />
-          <PlayerStateDebugRow
-            label="Current Energy"
-            resource="energy"
-            stat="current-energy"
-            value={status.currentEnergy}
-            onAdjust={interactions?.onAdjustPlayerCurrentEnergy}
-          />
-          <PlayerStateDebugRow
-            label="Maximum Energy"
-            resource="energy"
-            stat="max-energy"
-            value={status.maxEnergy}
-            onAdjust={interactions?.onAdjustPlayerMaxEnergy}
-          />
-          <PlayerCurrentAndMaxEnergyDebugRow
-            currentEnergy={status.currentEnergy}
-            maxEnergy={status.maxEnergy}
-            onAdjust={interactions?.onAdjustPlayerCurrentAndMaxEnergy}
-          />
-        </div>
-      </GlassPanel>
+    <div style={{ display: "flex", flexDirection: "column", gap: token("--space-1"), minWidth: 0 }}>
+      <span style={{ color: token("--text-on-glass-muted"), font: token("--t-caption") }}>{label}</span>
+      <span style={{ color: token("--text-on-glass"), font: token("--t-body-sm"), overflowWrap: "anywhere" }}>{value}</span>
     </div>
   );
 }
 
-function PlayerCurrentAndMaxEnergyDebugRow({
-  currentEnergy,
-  maxEnergy,
-  onAdjust,
-}: {
-  readonly currentEnergy: number;
-  readonly maxEnergy: number;
-  readonly onAdjust?: (amount: MobileBattleDebugAdjustment) => void;
-}) {
-  return (
-    <div
-      role="group"
-      aria-label={`Current and maximum energy: ${String(currentEnergy)} of ${String(maxEnergy)}`}
-      data-battle-debug-stat="current-and-max-energy"
-      style={{
-        display: "grid",
-        gridTemplateColumns: "minmax(0, 1fr) auto auto auto",
-        alignItems: "center",
-        gap: token("--space-2"),
-      }}
-    >
-      <span
-        style={{
-          minWidth: 0,
-          font: token("--t-body-sm"),
-          color: token("--text-on-glass-muted"),
-        }}
-      >
-        Current + Max
-      </span>
-      <IconButton
-        glyph={GLYPHS.minus}
-        size="sm"
-        label="Decrease current and maximum energy"
-        placement="onGlass"
-        disabled={onAdjust === undefined || currentEnergy <= 0 || maxEnergy <= 0}
-        testId="battle-debug-decrement-current-and-max-energy"
-        onPress={() => onAdjust?.(-1)}
-      />
-      <output
-        aria-live="polite"
-        style={{
-          minWidth: token("--touch-min"),
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <ResourceChip
-          kind="energy"
-          value={`${String(currentEnergy)}/${String(maxEnergy)}`}
-          size="md"
-          tone="inherit"
-        />
-      </output>
-      <IconButton
-        glyph={GLYPHS.plus}
-        size="sm"
-        label="Increase current and maximum energy"
-        placement="onGlass"
-        disabled={onAdjust === undefined}
-        testId="battle-debug-increment-current-and-max-energy"
-        onPress={() => onAdjust?.(1)}
-      />
-    </div>
-  );
-}
-
-function PlayerStateDebugRow({
+function InspectorButton({
   label,
-  resource,
-  stat,
-  value,
-  onAdjust,
+  onPress,
+  disabled = false,
+  variant = "default",
+  testId,
 }: {
   readonly label: string;
-  readonly resource: "energy" | "points";
-  readonly stat: "current-energy" | "max-energy" | "points";
-  readonly value: number;
-  readonly onAdjust?: (amount: MobileBattleDebugAdjustment) => void;
+  readonly onPress: () => void;
+  readonly disabled?: boolean;
+  readonly variant?: "default" | "accent" | "danger";
+  readonly testId?: string;
 }) {
   return (
-    <div
-      role="group"
-      aria-label={`${label}: ${String(value)}`}
-      data-battle-debug-stat={stat}
-      style={{
-        display: "grid",
-        gridTemplateColumns: "minmax(0, 1fr) auto auto auto",
-        alignItems: "center",
-        gap: token("--space-2"),
-      }}
-    >
-      <span
-        style={{
-          minWidth: 0,
-          font: token("--t-body-sm"),
-          color: token("--text-on-glass-muted"),
-        }}
-      >
-        {label}
-      </span>
-      <IconButton
-        glyph={GLYPHS.minus}
-        size="sm"
-        label={`Decrease ${label.toLowerCase()}`}
+    <div style={{ minWidth: 0 }}>
+      <GlassButton
+        label={label}
         placement="onGlass"
-        disabled={onAdjust === undefined || value <= 0}
-        testId={`battle-debug-decrement-${stat}`}
-        onPress={() => onAdjust?.(-1)}
-      />
-      <output
-        aria-live="polite"
-        style={{
-          minWidth: token("--touch-min"),
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <ResourceChip kind={resource} value={value} size="md" tone="inherit" />
-      </output>
-      <IconButton
-        glyph={GLYPHS.plus}
-        size="sm"
-        label={`Increase ${label.toLowerCase()}`}
-        placement="onGlass"
-        disabled={onAdjust === undefined}
-        testId={`battle-debug-increment-${stat}`}
-        onPress={() => onAdjust?.(1)}
+        variant={variant}
+        disabled={disabled}
+        testId={testId}
+        onPress={onPress}
       />
     </div>
+  );
+}
+
+function BattleInspectorContent({
+  inspector,
+  selectedSide,
+  onSelectSide,
+  onAction,
+}: {
+  readonly inspector: MobileBattleInspectorView;
+  readonly selectedSide: MobileBattleOwner;
+  readonly onSelectSide: (side: MobileBattleOwner) => void;
+  readonly onAction?: (action: MobileBattleInspectorAction) => void;
+}) {
+  const side = inspector.sides[selectedSide];
+  const [erodeCount, setErodeCount] = useState(1);
+  const [visibilityOpen, setVisibilityOpen] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
+  const [endBattleOpen, setEndBattleOpen] = useState(false);
+  const actionGrid: CSSProperties = {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+    gap: token("--space-3"),
+  };
+  const groupLayout: CSSProperties = {
+    display: "flex",
+    flexDirection: "column",
+    gap: token("--space-4"),
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: token("--space-4") }}>
+      <GroupPanel>
+        <div style={{ ...groupLayout, gap: token("--space-3") }}>
+          <h3 style={{ margin: 0, color: token("--text-on-glass"), font: token("--t-title-sm") }}>Battle Snapshot</h3>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: token("--space-4") }}>
+            <InspectorValue label="Turn" value={inspector.turn} />
+            <InspectorValue label="Phase" value={inspector.phase} />
+            <InspectorValue label="Active side" value={inspector.activeSide} />
+            <InspectorValue label="Result" value={inspector.result} />
+            <InspectorValue label="Stack cards" value={String(inspector.stackCount)} />
+            <InspectorValue label="Next Dreamwell order" value={inspector.nextDreamwellOrder} />
+          </div>
+        </div>
+      </GroupPanel>
+
+      <div style={{ position: "sticky", top: 0, zIndex: 2 }}>
+        <GroupPanel>
+          <div style={groupLayout}>
+            <SegmentedControl
+              full
+              options={[{ value: "player", label: "You" }, { value: "enemy", label: "Enemy" }]}
+              value={selectedSide}
+              onChange={(value) => onSelectSide(value as MobileBattleOwner)}
+            />
+          </div>
+        </GroupPanel>
+      </div>
+
+      <GroupPanel>
+        <div style={groupLayout}>
+          <h3 style={{ margin: 0, color: token("--text-on-glass"), font: token("--t-title-sm") }}>{side.heading} Resources</h3>
+          <NumberStepper label="Points" value={side.points} resource="points" decrementLabel={`Decrease ${side.heading.toLowerCase()} points`} incrementLabel={`Increase ${side.heading.toLowerCase()} points`} decrementDisabled={side.points <= 0 || onAction === undefined} incrementDisabled={onAction === undefined} onDecrement={() => onAction?.({ kind: "adjust-stat", side: selectedSide, stat: "points", amount: -1 })} onIncrement={() => onAction?.({ kind: "adjust-stat", side: selectedSide, stat: "points", amount: 1 })} />
+          <NumberStepper label="Current energy" value={side.currentEnergy} resource="energy" decrementLabel={`Decrease ${side.heading.toLowerCase()} current energy`} incrementLabel={`Increase ${side.heading.toLowerCase()} current energy`} decrementDisabled={side.currentEnergy <= 0 || onAction === undefined} incrementDisabled={onAction === undefined} onDecrement={() => onAction?.({ kind: "adjust-stat", side: selectedSide, stat: "currentEnergy", amount: -1 })} onIncrement={() => onAction?.({ kind: "adjust-stat", side: selectedSide, stat: "currentEnergy", amount: 1 })} />
+          <NumberStepper label="Maximum energy" value={side.maxEnergy} resource="energy" decrementLabel={`Decrease ${side.heading.toLowerCase()} maximum energy`} incrementLabel={`Increase ${side.heading.toLowerCase()} maximum energy`} decrementDisabled={side.maxEnergy <= 0 || onAction === undefined} incrementDisabled={onAction === undefined} onDecrement={() => onAction?.({ kind: "adjust-stat", side: selectedSide, stat: "maxEnergy", amount: -1 })} onIncrement={() => onAction?.({ kind: "adjust-stat", side: selectedSide, stat: "maxEnergy", amount: 1 })} />
+          <NumberStepper label="Current + maximum" value={side.currentEnergy} displayValue={`${String(side.currentEnergy)}/${String(side.maxEnergy)}`} resource="energy" decrementLabel={`Decrease ${side.heading.toLowerCase()} current and maximum energy`} incrementLabel={`Increase ${side.heading.toLowerCase()} current and maximum energy`} decrementDisabled={side.currentEnergy <= 0 || side.maxEnergy <= 0 || onAction === undefined} incrementDisabled={onAction === undefined} onDecrement={() => onAction?.({ kind: "adjust-energy-pair", side: selectedSide, amount: -1 })} onIncrement={() => onAction?.({ kind: "adjust-energy-pair", side: selectedSide, amount: 1 })} />
+        </div>
+      </GroupPanel>
+
+      <GroupPanel>
+        <div style={groupLayout}>
+          <h3 style={{ margin: 0, color: token("--text-on-glass"), font: token("--t-title-sm") }}>{side.heading} Zones</h3>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: token("--space-4") }}>
+            <InspectorValue label="Hand" value={String(side.zones.hand)} />
+            <InspectorValue label="Deck" value={String(side.zones.deck)} />
+            <InspectorValue label="Void" value={String(side.zones.void)} />
+            <InspectorValue label="Banished" value={String(side.zones.banished)} />
+            <InspectorValue label="Back Rank" value={String(side.zones.backRank)} />
+            <InspectorValue label="Front Rank" value={String(side.zones.frontRank)} />
+          </div>
+        </div>
+      </GroupPanel>
+
+      <GroupPanel>
+        <div style={groupLayout}>
+          <h3 style={{ margin: 0, color: token("--text-on-glass"), font: token("--t-title-sm") }}>{side.heading} Actions</h3>
+          <div style={actionGrid}>
+            <InspectorButton label="Draw" variant="accent" onPress={() => onAction?.({ kind: "draw", side: selectedSide })} disabled={onAction === undefined} testId={`battle-inspector-draw-${selectedSide}`} />
+            <InspectorButton label="Discard" onPress={() => onAction?.({ kind: "discard", side: selectedSide })} disabled={!side.canDiscard || onAction === undefined} testId={`battle-inspector-discard-${selectedSide}`} />
+          </div>
+          <h4 style={{ margin: 0, color: token("--text-on-glass-muted"), font: token("--t-button-sm") }}>Deck & Effects</h4>
+          <div style={actionGrid}>
+            <InspectorButton label="Foresee" onPress={() => onAction?.({ kind: "foresee", side: selectedSide })} disabled={onAction === undefined} />
+            <InspectorButton label="Shuffle" onPress={() => onAction?.({ kind: "shuffle", side: selectedSide })} disabled={!side.canShuffle || onAction === undefined} />
+            <InspectorButton label="Open Deck" onPress={() => onAction?.({ kind: "open-deck", side: selectedSide })} disabled={onAction === undefined} />
+            <InspectorButton label="Dreamwell + Draw" onPress={() => onAction?.({ kind: "dreamwell-draw", side: selectedSide })} disabled={onAction === undefined} />
+          </div>
+          <NumberStepper label="Erode count" value={erodeCount} decrementLabel={`Decrease erode count for ${side.heading.toLowerCase()}`} incrementLabel={`Increase erode count for ${side.heading.toLowerCase()}`} decrementDisabled={erodeCount <= 1} onDecrement={() => setErodeCount((current) => Math.max(1, current - 1))} onIncrement={() => setErodeCount((current) => current + 1)} />
+          <div style={actionGrid}>
+            <InspectorButton label={`Erode ${String(erodeCount)}`} onPress={() => onAction?.({ kind: "erode", side: selectedSide, count: erodeCount })} disabled={onAction === undefined} />
+            <InspectorButton label="Create Figment" onPress={() => onAction?.({ kind: "create-figment", side: selectedSide })} disabled={onAction === undefined} />
+          </div>
+        </div>
+      </GroupPanel>
+
+      <DisclosureSection title="View & Visibility" summary="Pool and hidden hands" expanded={visibilityOpen} onExpandedChange={setVisibilityOpen}>
+        <div style={{ ...actionGrid, marginTop: token("--space-4") }}>
+          <InspectorButton label="Pool Viewer" onPress={() => onAction?.({ kind: "open-pool-viewer" })} disabled={onAction === undefined} />
+          <InspectorButton label={inspector.isOpponentHandRevealed ? "Hide Enemy Hand" : "Show Enemy Hand"} onPress={() => onAction?.({ kind: "toggle-opponent-hand" })} disabled={onAction === undefined} />
+          <InspectorButton label={inspector.isPlayerHandHidden ? "Show Your Hand" : "Hide Your Hand"} onPress={() => onAction?.({ kind: "toggle-player-hand" })} disabled={onAction === undefined} />
+        </div>
+      </DisclosureSection>
+
+      {inspector.ai !== null ? (
+        <DisclosureSection title="AI Analysis" summary={inspector.ai.kind} expanded={aiOpen} onExpandedChange={setAiOpen}>
+          <div style={{ display: "grid", gap: token("--space-4"), marginTop: token("--space-4") }}>
+            <InspectorValue label="Proposal" value={inspector.ai.proposal} />
+            <InspectorValue label="Kind" value={inspector.ai.kind} />
+            <InspectorValue label="Card" value={inspector.ai.card} />
+            <InspectorValue label="Target" value={inspector.ai.target} />
+            <InspectorValue label="Heuristic change" value={inspector.ai.heuristicChange} />
+            <InspectorValue label="Live evaluation" value={inspector.ai.liveEvaluation} />
+          </div>
+        </DisclosureSection>
+      ) : null}
+
+      <DisclosureSection title="End Battle" summary="Outcomes and local reset" expanded={endBattleOpen} onExpandedChange={setEndBattleOpen}>
+        <div style={{ ...actionGrid, marginTop: token("--space-4") }}>
+          <InspectorButton label="Skip to Rewards" onPress={() => onAction?.({ kind: "skip-to-rewards" })} disabled={onAction === undefined} />
+          <InspectorButton label="Force Defeat" onPress={() => onAction?.({ kind: "force-result", result: "defeat" })} disabled={onAction === undefined} />
+          <InspectorButton label="Force Draw" onPress={() => onAction?.({ kind: "force-result", result: "draw" })} disabled={onAction === undefined} />
+          <InspectorButton label="Reset Battle" variant="danger" onPress={() => onAction?.({ kind: "reset-battle" })} disabled={onAction === undefined} />
+        </div>
+      </DisclosureSection>
+    </div>
+  );
+}
+
+function BattleInspectorRail({
+  inspector,
+  selectedSide,
+  onSelectSide,
+  onClose,
+  onAction,
+}: {
+  readonly inspector: MobileBattleInspectorView;
+  readonly selectedSide: MobileBattleOwner;
+  readonly onSelectSide: (side: MobileBattleOwner) => void;
+  readonly onClose: () => void;
+  readonly onAction?: (action: MobileBattleInspectorAction) => void;
+}) {
+  return (
+    <aside id={INSPECTOR_ID} data-battle-inspector="docked" style={{ minWidth: 0, height: "100dvh" }}>
+      <GlassPanel frame="edgeRail" eyebrow="Developer Tools" title="Battle Inspector" subtitle={`Opponent: ${inspector.opponentName}`} headerSpacing="compact" rightAccessory={{ kind: "iconButton", glyph: GLYPHS.close, label: "Close battle inspector", onPress: onClose, size: "sm" }}>
+        <div style={{ height: "100%", overflowY: "auto", padding: token("--space-5"), boxSizing: "border-box" }}>
+          <BattleInspectorContent inspector={inspector} selectedSide={selectedSide} onSelectSide={onSelectSide} onAction={onAction} />
+        </div>
+      </GlassPanel>
+    </aside>
   );
 }
 
 /** Responsive battle table composed entirely from physical battle objects. */
 export function MobileBattleScreen({ view, interactions }: MobileBattleScreenProps) {
   const isDesktop = useIsDesktop();
+  const isDockLayout = useIsDesktop(INSPECTOR_DOCK_MIN_WIDTH);
+  const [isInspectorOpen, setIsInspectorOpen] = useState(isDockLayout);
+  const [selectedSide, setSelectedSide] = useState<MobileBattleOwner>("player");
+  const inspectorTriggerRef = useRef<HTMLElement | null>(null);
+  const previousDockLayout = useRef(isDockLayout);
+  const openedLogKey = useRef<string | null>(null);
   const layoutBackSlotCount = battlefieldLayoutBackSlotCount(view);
   const cardSize = battlefieldCardSize(layoutBackSlotCount);
+
+  useEffect(() => {
+    setSelectedSide("player");
+    setIsInspectorOpen(isDockLayout);
+  }, [view.battleId]);
+
+  useEffect(() => {
+    if (previousDockLayout.current === isDockLayout) return;
+    previousDockLayout.current = isDockLayout;
+    setIsInspectorOpen(isDockLayout);
+  }, [isDockLayout]);
+
+  useEffect(() => {
+    if (!isInspectorOpen) {
+      openedLogKey.current = null;
+      return;
+    }
+    const layout = isDockLayout ? "docked" : "takeover";
+    const key = `${view.battleId}:${layout}`;
+    if (openedLogKey.current === key) return;
+    openedLogKey.current = key;
+    interactions?.onInspectorAction?.({ kind: "opened", layout, side: selectedSide });
+  }, [interactions, isDockLayout, isInspectorOpen, selectedSide, view.battleId]);
+
+  const closeInspector = useCallback(() => {
+    setIsInspectorOpen(false);
+    requestAnimationFrame(() => inspectorTriggerRef.current?.focus());
+  }, []);
+
+  useEffect(() => {
+    if (!isInspectorOpen || isDockLayout) return;
+    const onKeyDown = (event: KeyboardEvent): void => {
+      if (event.key === "Escape") closeInspector();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [closeInspector, isDockLayout, isInspectorOpen]);
+
+  const selectSide = useCallback((side: MobileBattleOwner) => {
+    setSelectedSide(side);
+    interactions?.onInspectorAction?.({ kind: "side-selected", side });
+  }, [interactions]);
+
+  const board = (
+    <main
+      className="cumulus"
+      data-battle-mobile={view.battleId}
+      data-battle-layout={isDesktop ? "desktop" : "mobile"}
+      style={{
+        ...rootStyle(isDesktop),
+        position: "relative",
+        inset: undefined,
+        width: "100%",
+        minWidth: 0,
+      }}
+    >
+      <BattleBackdrop isDesktop={isDesktop} />
+      <div aria-hidden="true" data-battle-mobile-safe-area-backdrop="" style={SAFE_AREA_BACKDROP_STYLE} />
+      <LayoutGroup id={`mobile-battle:${view.battleId}`}>
+        <EnemyHand cardIds={view.enemyHandCardIds} cards={view.enemyHand} revealed={view.inspector.isOpponentHandRevealed} isDesktop={isDesktop} />
+        <SideZones activeSide={view.activeSide} isDesktop={isDesktop} owner="enemy" phase={view.phase} side={view.enemy} interactions={interactions} />
+        <PlayArea isDesktop={isDesktop} owner="enemy" side={view.enemy} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} interactions={interactions} />
+        <PlayArea isDesktop={isDesktop} owner="player" side={view.player} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} interactions={interactions} />
+        <ControlRow aiApproval={view.aiApproval} isDesktop={isDesktop} interactions={interactions} />
+        <SideZones activeSide={view.activeSide} isDesktop={isDesktop} owner="player" phase={view.phase} side={view.player} interactions={interactions} />
+        <PlayerHand cards={view.inspector.isPlayerHandHidden ? [] : view.playerHand} isDesktop={isDesktop} interactions={interactions} />
+      </LayoutGroup>
+      <AiApprovalMessage aiApproval={view.aiApproval} />
+      <div
+        style={{
+          position: "absolute",
+          top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-4")})`,
+          right: `calc(var(${SAFE_AREA_INSET_PROPERTIES.right}) + ${token("--space-4")})`,
+          zIndex: 20,
+          display: "flex",
+          alignItems: "flex-start",
+          gap: token("--space-3"),
+        }}
+      >
+        <BattleDebugMenu
+          onFillBattlefieldPreview={interactions?.onFillBattlefieldPreview}
+          onFillTwentyCardBattlefieldPreview={interactions?.onFillTwentyCardBattlefieldPreview}
+        />
+        <div ref={(node) => { inspectorTriggerRef.current = node?.querySelector("button") ?? null; }}>
+          <IconButton
+            glyph={GLYPHS.sidebarRight}
+            size="sm"
+            label={isInspectorOpen ? "Close battle inspector" : "Open battle inspector"}
+            ariaExpanded={isInspectorOpen}
+            ariaControls={INSPECTOR_ID}
+            testId="battle-inspector-trigger"
+            onPress={() => {
+              if (isInspectorOpen) {
+                closeInspector();
+              } else {
+                inspectorTriggerRef.current = document.activeElement instanceof HTMLElement
+                  ? document.activeElement
+                  : inspectorTriggerRef.current;
+                setIsInspectorOpen(true);
+              }
+            }}
+          />
+        </div>
+      </div>
+    </main>
+  );
+
   return (
     <>
       <style>{BATTLE_PHASE_LIGHT_CSS}</style>
-      <main
+      <div
         className="cumulus"
-        data-battle-mobile={view.battleId}
-        data-battle-layout={isDesktop ? "desktop" : "mobile"}
-        style={rootStyle(isDesktop)}
+        data-battle-inspector-open={isInspectorOpen ? "true" : "false"}
+        data-battle-inspector-layout={isDockLayout ? "docked" : "takeover"}
+        style={{
+          position: "fixed",
+          inset: 0,
+          display: "grid",
+          gridTemplateColumns: isDockLayout && isInspectorOpen
+            ? "minmax(0, 1fr) clamp(340px, 25vw, 400px)"
+            : "minmax(0, 1fr)",
+          width: "100%",
+          height: "100dvh",
+          overflow: "hidden",
+          background: token("--bg-app"),
+        }}
       >
-        <BattleBackdrop isDesktop={isDesktop} />
-        <div
-          aria-hidden="true"
-          data-battle-mobile-safe-area-backdrop=""
-          style={SAFE_AREA_BACKDROP_STYLE}
-        />
-        <LayoutGroup id={`mobile-battle:${view.battleId}`}>
-          <EnemyHand
-            cardIds={view.enemyHandCardIds}
-            isDesktop={isDesktop}
-          />
-          <SideZones
-            activeSide={view.activeSide}
-            isDesktop={isDesktop}
-            owner="enemy"
-            phase={view.phase}
-            side={view.enemy}
-            interactions={interactions}
-          />
-          <PlayArea
-            isDesktop={isDesktop}
-            owner="enemy"
-            side={view.enemy}
-            layoutBackSlotCount={layoutBackSlotCount}
-            cardSize={cardSize}
-            interactions={interactions}
-          />
-          <PlayArea
-            isDesktop={isDesktop}
-            owner="player"
-            side={view.player}
-            layoutBackSlotCount={layoutBackSlotCount}
-            cardSize={cardSize}
-            interactions={interactions}
-          />
-          <ControlRow
-            aiApproval={view.aiApproval}
-            isDesktop={isDesktop}
-            interactions={interactions}
-          />
-          <SideZones
-            activeSide={view.activeSide}
-            isDesktop={isDesktop}
-            owner="player"
-            phase={view.phase}
-            side={view.player}
-            interactions={interactions}
-          />
-          <PlayerHand
-            cards={view.playerHand}
-            isDesktop={isDesktop}
-            interactions={interactions}
-          />
-        </LayoutGroup>
-        <AiApprovalMessage aiApproval={view.aiApproval} />
-        <BattleDebugMenu
-          onFillBattlefieldPreview={interactions?.onFillBattlefieldPreview}
-          onFillTwentyCardBattlefieldPreview={
-            interactions?.onFillTwentyCardBattlefieldPreview
-          }
-        />
-        {isDesktop ? (
-          <PlayerStateDebugPanel
-            status={view.player.status}
-            interactions={interactions}
+        {board}
+        {isDockLayout && isInspectorOpen ? (
+          <BattleInspectorRail
+            inspector={view.inspector}
+            selectedSide={selectedSide}
+            onSelectSide={selectSide}
+            onClose={closeInspector}
+            onAction={interactions?.onInspectorAction}
           />
         ) : null}
-      </main>
+      </div>
+      {!isDockLayout && isInspectorOpen ? (
+        <GlassDialog
+          title="Battle Inspector"
+          subtitle={`Developer Tools · Opponent: ${view.inspector.opponentName}`}
+          closeLabel="Close battle inspector"
+          cutoutAwareClose
+          fullScreen
+          onClose={closeInspector}
+        >
+          <div
+            id={INSPECTOR_ID}
+            data-battle-inspector="takeover"
+            style={{ width: "100%", maxWidth: 720, marginInline: "auto" }}
+          >
+            <BattleInspectorContent
+              inspector={view.inspector}
+              selectedSide={selectedSide}
+              onSelectSide={selectSide}
+              onAction={interactions?.onInspectorAction}
+            />
+          </div>
+        </GlassDialog>
+      ) : null}
     </>
   );
 }

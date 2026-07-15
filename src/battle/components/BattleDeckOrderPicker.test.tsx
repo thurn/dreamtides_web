@@ -19,6 +19,16 @@ beforeEach(() => {
       IS_REACT_ACT_ENVIRONMENT?: boolean;
     }
   ).IS_REACT_ACT_ENVIRONMENT = true;
+  window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }));
 });
 
 afterEach(() => {
@@ -61,13 +71,13 @@ describe("BattleDeckOrderPicker", () => {
     clickRowAction(1, "move-down");
 
     const slotOrder = [
-      ...document.querySelectorAll<HTMLElement>("[data-battle-deck-order-slot]"),
-    ].map((element) => element.getAttribute("data-battle-deck-order-card"));
+      ...document.querySelectorAll<HTMLElement>("[data-card-order-id]"),
+    ].map((element) => element.getAttribute("data-card-order-id"));
 
     expect(slotOrder).toEqual([initialOrder[1], initialOrder[2], initialOrder[0]]);
 
     const confirm = document.querySelector<HTMLButtonElement>(
-      '[data-battle-deck-order-action="confirm"]',
+      '[data-testid="battle-deck-order-confirm"]',
     );
     expect(confirm).not.toBeNull();
     act(() => {
@@ -113,7 +123,7 @@ describe("BattleDeckOrderPicker", () => {
     // Swap the two rows.
     clickRowAction(0, "move-down");
     const confirm = document.querySelector<HTMLButtonElement>(
-      '[data-battle-deck-order-action="confirm"]',
+      '[data-testid="battle-deck-order-confirm"]',
     );
     act(() => {
       confirm?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
@@ -136,10 +146,11 @@ function clickRowAction(
   slot: number,
   action: "move-up" | "move-down",
 ): void {
-  const button = document.querySelector<HTMLButtonElement>(
-    `[data-battle-deck-order-slot="${String(slot)}"] [data-battle-deck-order-action="${action}"]`,
-  );
-  if (button === null) {
+  const row = document.querySelectorAll<HTMLElement>("[data-card-order-id]")[slot];
+  const direction = action === "move-up" ? " up" : " down";
+  const button = [...(row?.querySelectorAll<HTMLButtonElement>("button") ?? [])]
+    .find((candidate) => candidate.getAttribute("aria-label")?.endsWith(direction));
+  if (button === undefined) {
     throw new Error(`Missing deck-order action on row ${String(slot)}: ${action}`);
   }
   act(() => {

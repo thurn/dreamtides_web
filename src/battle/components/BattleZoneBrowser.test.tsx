@@ -117,21 +117,12 @@ describe("BattleZoneBrowser", () => {
 
     expect(container.textContent).toContain("Your Deck");
     expect(
-      container.querySelector<HTMLInputElement>("[data-zone-browser-search]")?.placeholder,
+      container.querySelector<HTMLInputElement>('[data-testid="battle-zone-browser-search"]')?.placeholder,
     ).toBe("Search by name…");
+    expect(container.querySelector('button[aria-label="Sort deck cards"]')?.textContent).toContain("Current order");
     expect(
-      [...container.querySelectorAll<HTMLSelectElement>("select")].flatMap((element) =>
-        [...element.options].map((option) => option.text),
-      ),
-    ).toEqual([
-      "Current order",
-      "Cost",
-      "Spark",
-      "Name",
-      "All types",
-      "Characters",
-      "Events",
-    ]);
+      [...container.querySelectorAll('[data-zone-browser-filter] [role="tab"]')].map((element) => element.textContent),
+    ).toEqual(["All", "Characters", "Events"]);
 
     act(() => {
       container.querySelector<HTMLElement>('[data-zone-browser-card-id]')?.click();

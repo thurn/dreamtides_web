@@ -69,7 +69,7 @@ describe("BattleForeseeOverlay", () => {
 
     // Reveal More widens count to 3.
     const revealMore = document.querySelector<HTMLButtonElement>(
-      '[data-battle-foresee-action="reveal-more"]',
+      'button[aria-label="Foresee 1 more"]',
     );
     expect(revealMore).not.toBeNull();
     act(() => {
@@ -110,9 +110,9 @@ describe("BattleForeseeOverlay", () => {
     });
 
     const revealMore = document.querySelector<HTMLButtonElement>(
-      '[data-battle-foresee-action="reveal-more"]',
+      'button[aria-label="Foresee 1 more"]',
     );
-    expect(revealMore?.disabled).toBe(true);
+    expect(revealMore?.getAttribute("aria-disabled")).toBe("true");
 
     act(() => {
       root.unmount();
@@ -140,7 +140,7 @@ describe("BattleForeseeOverlay", () => {
 
     const topCard = state.sides.player.deck[0];
     const sendToBottom = document.querySelector<HTMLButtonElement>(
-      '[data-battle-foresee-action="send-to-bottom"]',
+      '[data-testid="battle-foresee-send-to-bottom"]',
     );
     expect(sendToBottom).not.toBeNull();
     act(() => {
@@ -199,7 +199,7 @@ describe("BattleForeseeOverlay", () => {
 
     act(() => {
       document.querySelector<HTMLButtonElement>(
-        '[data-battle-foresee-action="send-to-void"]',
+        '[data-testid="battle-foresee-send-to-void"]',
       )?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
 
@@ -247,7 +247,7 @@ describe("BattleForeseeOverlay", () => {
     });
   });
 
-  it("exposes role=dialog and aria-labelledby targeting the title", () => {
+  it("exposes a named modal dialog", () => {
     const state = createTestState();
     const container = document.createElement("div");
     document.body.append(container);
@@ -265,14 +265,10 @@ describe("BattleForeseeOverlay", () => {
       );
     });
 
-    const dialog = document.querySelector<HTMLElement>(
-      "[data-battle-foresee-overlay]",
-    );
+    const dialog = document.querySelector<HTMLElement>('[role="dialog"]');
     expect(dialog?.getAttribute("role")).toBe("dialog");
     expect(dialog?.getAttribute("aria-modal")).toBe("true");
-    const labelledBy = dialog?.getAttribute("aria-labelledby");
-    expect(labelledBy).not.toBeNull();
-    expect(document.getElementById(labelledBy ?? "")).not.toBeNull();
+    expect(dialog?.getAttribute("aria-label")).toBe("Foreseeing 2 Cards");
 
     act(() => {
       root.unmount();
@@ -297,16 +293,9 @@ describe("BattleForeseeOverlay", () => {
       );
     });
 
-    const scrim = document.querySelector<HTMLElement>(
-      "[data-battle-foresee-scrim]",
-    );
-    const dialog = document.querySelector<HTMLElement>(
-      "[data-battle-foresee-overlay]",
-    );
-
-    expect(scrim?.className).toContain("overflow-y-auto");
-    expect(dialog?.className).toContain("max-h-[calc(100vh-1.5rem)]");
-    expect(dialog?.className).toContain("overflow-y-auto");
+    const dialog = document.querySelector<HTMLElement>('[role="dialog"]');
+    const scrollingBody = dialog?.lastElementChild?.lastElementChild as HTMLElement | null;
+    expect(scrollingBody?.style.overflowY).toBe("auto");
 
     act(() => {
       root.unmount();

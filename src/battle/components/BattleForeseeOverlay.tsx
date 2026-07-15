@@ -1,11 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import type { DreamwellCardViewData } from "../../components/DreamwellCardView";
 import { logEvent } from "../../logging";
+import { GameCard } from "../../cumulus/components/card/CardView";
+import { GlassButton } from "../../cumulus/components/controls/GlassButton";
+import { GroupPanel } from "../../cumulus/components/controls/GroupPanel";
+import { NumberStepper } from "../../cumulus/components/controls/NumberStepper";
+import { GlassDialog } from "../../cumulus/components/overlay/GlassDialog";
+import { token } from "../../cumulus/primitives/tokens";
 import type { BattleCommand } from "../debug/commands";
 import type { BattleMutableState, BattleSide } from "../types";
 import { formatSideLabel } from "../ui/format";
 import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
-import { BattleGameCard } from "./BattleGameCard";
+import { battleGameCardModel } from "../ui/battle-game-card-model";
 import { DreamwellPromptCard } from "./DreamwellPromptCard";
 
 const MIN_FORESEE_COUNT = 1;
@@ -96,236 +102,126 @@ export function BattleForeseeOverlay({
   const canIncrement = count < MAX_FORESEE_COUNT && count < deckLength;
 
   return (
-    <div
-      // FIND-07-4 / FIND-09-3: the Foresee overlay is potentially stacked on
-      // top of the zone browser (z-50). Raise to z-[60] so backdrop clicks on
-      // the Foresee scrim don't reach the underlying browser, and so
-      // clicking outside the Foresee dialog only closes Foresee.
-      className="fixed inset-0 z-[60] overflow-y-auto bg-slate-950/85 p-3 backdrop-blur"
-      data-battle-foresee-scrim=""
-      onClick={(event) => {
-        if (event.target === event.currentTarget) {
-          event.stopPropagation();
-          onClose();
-        }
-      }}
-    >
-      <div
-        // bug-099: dialog semantics + labelled heading.
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="battle-foresee-title"
-        tabIndex={-1}
-        data-battle-foresee-overlay=""
-        data-battle-foresee-side={side}
-        data-battle-foresee-count={String(count)}
-        className="pointer-events-auto mx-auto flex max-h-[calc(100vh-1.5rem)] w-full max-w-4xl flex-col gap-4 overflow-y-auto rounded-[2rem] border border-violet-300/25 bg-[linear-gradient(180deg,_rgba(7,10,18,0.98)_0%,_rgba(11,17,30,0.96)_100%)] p-5 shadow-2xl shadow-slate-950/70"
-        onClick={(event) => event.stopPropagation()}
+    <div data-battle-foresee-scrim="">
+      <GlassDialog
+        title={`Foreseeing ${String(count)} ${count === 1 ? "Card" : "Cards"}`}
+        subtitle={`Top of ${formatSideLabel(side)} deck · leave, move, play, or reorder`}
+        closeLabel="Close Foresee"
+        wide
+        onClose={onClose}
       >
-        {sourceCard ? <DreamwellPromptCard card={sourceCard} /> : null}
-        <header className="flex flex-col gap-2 border-b border-slate-800 pb-3 md:flex-row md:items-start md:justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-violet-300">
-              Foresee
-            </p>
-            <h3
-              id="battle-foresee-title"
-              className="mt-2 text-lg font-semibold text-white"
-            >
-              Foreseeing {String(count)} {count === 1 ? "card" : "cards"}
-            </h3>
-            <p className="mt-1 text-sm text-slate-400">
-              Top of {formatSideLabel(side)} deck — leave on top, send to bottom
-              or void, play from top, or reorder all.
-            </p>
+        <div
+          data-battle-foresee-overlay=""
+          data-battle-foresee-side={side}
+          data-battle-foresee-count={String(count)}
+          style={{ display: "grid", gap: token("--space-5") }}
+        >
+          {sourceCard ? <DreamwellPromptCard card={sourceCard} /> : null}
+          <NumberStepper
+            label="Reveal count"
+            value={count}
+            decrementLabel="Foresee 1 fewer"
+            incrementLabel="Foresee 1 more"
+            decrementDisabled={!canDecrement}
+            incrementDisabled={!canIncrement}
+            onDecrement={() => {
+              setCount((previous) => {
+                const nextCount = Math.max(MIN_FORESEE_COUNT, previous - 1);
+                setRevealedIds((current) => current.slice(0, nextCount));
+                return nextCount;
+              });
+            }}
+            onIncrement={() => {
+              const nextCount = Math.min(MAX_FORESEE_COUNT, Math.min(deckLength, count + 1));
+              setCount(nextCount);
+              setRevealedIds((current) => appendMoreRevealedIds(current, deck, nextCount));
+              onDispatch({ id: "DEBUG_EDIT", edit: { kind: "REVEAL_DECK_TOP", side, count: nextCount }, sourceSurface: "foresee-overlay" });
+            }}
+          />
+          {revealed.length === 0 ? (
+            <GroupPanel>
+              <p style={{ margin: 0, color: token("--text-on-glass-muted"), font: token("--t-body") }}>
+                {deckLength === 0 ? "Deck is empty." : "No revealed cards remain."}
+              </p>
+            </GroupPanel>
+          ) : (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: token("--space-4") }}>
+              {revealed.map((battleCardId, index) => {
+                const instance = state.cardInstances[battleCardId];
+                if (instance === undefined) return null;
+                const isTop = index === 0;
+                return (
+                  <article key={battleCardId} data-battle-foresee-card={battleCardId}>
+                    <GroupPanel>
+                      <div style={{ display: "grid", gap: token("--space-3") }}>
+                        <span style={{ color: token("--text-on-glass-muted"), font: token("--t-caption") }}>Position {String(index + 1)}</span>
+                        <div data-battle-foresee-card-scroll="" style={{ width: "100%", maxWidth: 240, marginInline: "auto" }}>
+                          <GameCard model={battleGameCardModel(instance)} presentation="full" />
+                        </div>
+                        <div style={{ display: "grid", gap: token("--space-2") }}>
+                          {isTop ? (
+                            <GlassButton
+                              label="Play from Top"
+                              placement="onGlass"
+                              variant="accent"
+                              disabled={!canPlayFromTop}
+                              testId="battle-foresee-play-from-top"
+                              onPress={() => {
+                                onDispatch({ id: "DEBUG_EDIT", edit: { kind: "PLAY_FROM_DECK_TOP", side }, sourceSurface: "foresee-overlay" });
+                                onClose();
+                              }}
+                            />
+                          ) : null}
+                          <GlassButton
+                            label="Leave on Top"
+                            placement="onGlass"
+                            testId="battle-foresee-leave-on-top"
+                            onPress={() => {
+                              logEvent("battle_proto_foresee_leave_on_top", { side, battleCardId, revealedCount: revealed.length });
+                              onClose();
+                            }}
+                          />
+                          <GlassButton
+                            label="Send to Bottom"
+                            placement="onGlass"
+                            testId="battle-foresee-send-to-bottom"
+                            onPress={() => {
+                              const rest = deck.filter((id) => id !== battleCardId);
+                              setRevealedIds((previous) => previous.filter((id) => id !== battleCardId));
+                              onDispatch({ id: "DEBUG_EDIT", edit: { kind: "REORDER_DECK", side, order: [...rest, battleCardId] }, sourceSurface: "foresee-overlay" });
+                            }}
+                          />
+                          <GlassButton
+                            label="Send to Void"
+                            placement="onGlass"
+                            testId="battle-foresee-send-to-void"
+                            onPress={() => {
+                              setRevealedIds((previous) => previous.filter((id) => id !== battleCardId));
+                              onDispatch({ id: "DEBUG_EDIT", edit: { kind: "MOVE_CARD_TO_ZONE", battleCardId, destination: { side, zone: "void" } }, sourceSurface: "foresee-overlay" });
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </GroupPanel>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <GlassButton
+              label="Reorder Revealed Cards"
+              placement="onGlass"
+              disabled={revealed.length < 2}
+              testId="battle-foresee-reorder-all"
+              onPress={() => setIsReorderOpen(true)}
+            />
           </div>
-          <div className="flex items-center gap-2">
-              <button
-                type="button"
-                data-battle-foresee-action="reveal-less"
-                disabled={!canDecrement}
-                className={createButtonClassName(canDecrement)}
-                onClick={() => {
-                  setCount((previous) => {
-                    const nextCount = Math.max(MIN_FORESEE_COUNT, previous - 1);
-                    setRevealedIds((current) => current.slice(0, nextCount));
-                    return nextCount;
-                  });
-                }}
-              >
-                Foresee 1 Fewer
-              </button>
-              <button
-                type="button"
-                data-battle-foresee-action="reveal-more"
-                disabled={!canIncrement}
-                className={createButtonClassName(canIncrement)}
-                onClick={() => {
-                  const nextCount = Math.min(
-                    MAX_FORESEE_COUNT,
-                    Math.min(deckLength, count + 1),
-                  );
-                  setCount(nextCount);
-                  setRevealedIds((current) =>
-                    appendMoreRevealedIds(current, deck, nextCount),
-                  );
-                  onDispatch({
-                    id: "DEBUG_EDIT",
-                    edit: {
-                      kind: "REVEAL_DECK_TOP",
-                      side,
-                      count: nextCount,
-                    },
-                    sourceSurface: "foresee-overlay",
-                  });
-                }}
-              >
-                Foresee 1 More
-              </button>
-            <button
-              type="button"
-              // FIND-07-4 / FIND-09-3: distinct label "Close Foresee" so the
-              // scope of the Close button is obvious when the overlay is
-              // stacked on top of a parent zone browser.
-              data-battle-foresee-action="close"
-              className={createButtonClassName(true)}
-              onClick={onClose}
-            >
-              Close Foresee
-            </button>
-          </div>
-        </header>
-        {revealed.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-950/60 px-4 py-8 text-center text-sm text-slate-400">
-            {deckLength === 0 ? "Deck is empty." : "No revealed cards remain."}
-          </div>
-        ) : (
-          <div className="flex flex-wrap gap-3">
-            {revealed.map((battleCardId, index) => {
-              const instance = state.cardInstances[battleCardId];
-              const isTop = index === 0;
-              if (instance === undefined) {
-                return null;
-              }
-              return (
-                <article
-                  key={battleCardId}
-                  data-battle-foresee-card={battleCardId}
-                  className="flex w-[12rem] shrink-0 flex-col gap-3 rounded-2xl border border-slate-800 bg-slate-900/75 p-3"
-                >
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-                    Position {String(index + 1)}
-                  </p>
-                  <div data-battle-foresee-card-scroll="">
-                    <div className="w-full">
-                      <BattleGameCard instance={instance} variant="hand" />
-                    </div>
-                  </div>
-                  <div className="mt-1 flex flex-wrap gap-2">
-                    {isTop ? (
-                      <button
-                        type="button"
-                        data-battle-foresee-action="play-from-top"
-                        className={createButtonClassName(canPlayFromTop)}
-                        disabled={!canPlayFromTop}
-                        onClick={() => {
-                          onDispatch({
-                            id: "DEBUG_EDIT",
-                            edit: {
-                              kind: "PLAY_FROM_DECK_TOP",
-                              side,
-                            },
-                            sourceSurface: "foresee-overlay",
-                          });
-                          onClose();
-                        }}
-                      >
-                        Play from top
-                      </button>
-                    ) : null}
-                    <button
-                      type="button"
-                      data-battle-foresee-action="leave-on-top"
-                      className={createButtonClassName(true)}
-                      // bug-102: "Leave on top" is a no-op for state but the
-                      // user's decision is audited via this explicit log event
-                      // so the Foresee session has a close-out record.
-                      onClick={() => {
-                        logEvent("battle_proto_foresee_leave_on_top", {
-                          side,
-                          battleCardId,
-                          revealedCount: revealed.length,
-                        });
-                        onClose();
-                      }}
-                    >
-                      Leave on top
-                    </button>
-                    <button
-                      type="button"
-                      data-battle-foresee-action="send-to-bottom"
-                      className={createButtonClassName(true)}
-                      onClick={() => {
-                        const rest = deck.filter((id) => id !== battleCardId);
-                        setRevealedIds((previous) => previous.filter((id) => id !== battleCardId));
-                        onDispatch({
-                          id: "DEBUG_EDIT",
-                          edit: {
-                            kind: "REORDER_DECK",
-                            side,
-                            order: [...rest, battleCardId],
-                          },
-                          sourceSurface: "foresee-overlay",
-                        });
-                      }}
-                    >
-                      Send to bottom
-                    </button>
-                    <button
-                      type="button"
-                      // bug-022: the spec vocabulary defines Foresee as "look
-                      // at top N; reorder or send to void". This affordance
-                      // restores the void primitive alongside the existing
-                      // "send to bottom" / reorder paths.
-                      data-battle-foresee-action="send-to-void"
-                      className={createButtonClassName(true)}
-                      onClick={() => {
-                        setRevealedIds((previous) => previous.filter((id) => id !== battleCardId));
-                        onDispatch({
-                          id: "DEBUG_EDIT",
-                          edit: {
-                            kind: "MOVE_CARD_TO_ZONE",
-                            battleCardId,
-                            destination: { side, zone: "void" },
-                          },
-                          sourceSurface: "foresee-overlay",
-                        });
-                      }}
-                    >
-                      Send to void
-                    </button>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        )}
-        <div className="flex flex-wrap justify-end gap-2 border-t border-slate-800 pt-3">
-          <button
-            type="button"
-            data-battle-foresee-action="reorder-all"
-            disabled={revealed.length < 2}
-            className={createButtonClassName(revealed.length >= 2)}
-            onClick={() => setIsReorderOpen(true)}
-          >
-            Reorder All...
-          </button>
         </div>
-      </div>
+      </GlassDialog>
     </div>
   );
 }
-
 function clampForeseeCount(requested: number, deckLength: number): number {
   const bounded = Math.max(MIN_FORESEE_COUNT, Math.min(MAX_FORESEE_COUNT, requested));
   return Math.min(bounded, Math.max(0, deckLength));
@@ -347,13 +243,4 @@ function appendMoreRevealedIds(
     .slice(0, count - kept.length);
 
   return [...kept, ...additions];
-}
-
-function createButtonClassName(isEnabled: boolean): string {
-  return [
-    "rounded-full border px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition",
-    isEnabled
-      ? "border-violet-300/45 bg-violet-400/10 text-violet-50 hover:bg-violet-400/20"
-      : "cursor-not-allowed border-slate-800 bg-slate-900/70 text-slate-600",
-  ].join(" ");
 }

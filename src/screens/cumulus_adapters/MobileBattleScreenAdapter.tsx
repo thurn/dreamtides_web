@@ -16,17 +16,27 @@ export function MobileBattleScreenAdapter({
   board,
   enemyDreamcaller,
   aiProposal,
+  aiMode,
+  isOpponentHandRevealed,
+  isPlayerHandHidden,
   interactions,
 }: {
   init: MobileBattleInit;
   board: MobileBattleBoard;
   enemyDreamcaller: MobileBattleDreamcaller;
   aiProposal: MobileBattleAiProposal | null;
+  aiMode: boolean;
+  isOpponentHandRevealed: boolean;
+  isPlayerHandHidden: boolean;
   interactions: MobileBattleInteractions;
 }) {
   const view = useMemo(
-    () => buildMobileBattleView(init, board, enemyDreamcaller, aiProposal),
-    [init, board, enemyDreamcaller, aiProposal],
+    () => buildMobileBattleView(init, board, enemyDreamcaller, aiProposal, {
+      aiMode,
+      isOpponentHandRevealed,
+      isPlayerHandHidden,
+    }),
+    [init, board, enemyDreamcaller, aiProposal, aiMode, isOpponentHandRevealed, isPlayerHandHidden],
   );
 
   return <MobileBattleScreen view={view} interactions={interactions} />;

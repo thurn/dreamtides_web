@@ -1,5 +1,8 @@
 import { selectPlayAreaSize } from "../../battle/state/selectors";
 import type { AiProposal } from "../../battle/ai/use-battle-ai";
+import { evaluate } from "../../battle/ai/evaluate";
+import { forwardModelFromState } from "../../battle/ai/forward-model";
+import { formatPhaseLabel, formatSideLabel } from "../../battle/ui/format";
 import {
   backRankSlotIds,
   frontRankSlotIds,
@@ -16,6 +19,8 @@ import type {
   MobileBattleSideView,
   MobileBattleSlotView,
   MobileBattleStatusView,
+  MobileBattleInspectorSideView,
+  MobileBattleInspectorView,
   MobileBattleView,
 } from "../../cumulus/screens/MobileBattleScreen";
 
@@ -28,13 +33,25 @@ const FALLBACK_PLAYER_DREAMCALLER = {
 export type MobileBattleInit = BattleInit;
 export type MobileBattleBoard = BattleMutableState;
 export type MobileBattleDreamcaller = BattleDreamcallerSummary;
-export type MobileBattleAiProposal = Pick<AiProposal, "kind" | "description">;
+export type MobileBattleAiProposal = Pick<AiProposal, "kind" | "description"> &
+  Partial<Pick<AiProposal, "trace">>;
+
+export interface MobileBattleInspectorOptions {
+  readonly aiMode: boolean;
+  readonly isOpponentHandRevealed: boolean;
+  readonly isPlayerHandHidden: boolean;
+}
 
 export function buildMobileBattleView(
   init: BattleInit,
   board: BattleMutableState,
   enemyDreamcaller: BattleDreamcallerSummary,
   aiProposal: MobileBattleAiProposal | null = null,
+  inspectorOptions: MobileBattleInspectorOptions = {
+    aiMode: false,
+    isOpponentHandRevealed: false,
+    isPlayerHandHidden: false,
+  },
 ): MobileBattleView {
   const { frontSize, backSize } = selectPlayAreaSize(board);
   return {
@@ -48,6 +65,7 @@ export function buildMobileBattleView(
     activeSide: board.activeSide,
     phase: mobileBattlePhase(board.phase),
     enemyHandCardIds: [...board.sides.enemy.hand],
+    enemyHand: buildCardViews(board.sides.enemy.hand, board),
     enemy: buildSideView("enemy", enemyDreamcaller, board, frontSize, backSize),
     player: buildSideView(
       "player",
@@ -64,7 +82,87 @@ export function buildMobileBattleView(
         board.phase === "day" &&
         instance.definition.energyCost <= board.sides.player.currentEnergy,
     ),
+    inspector: buildInspectorView(init, board, aiProposal, inspectorOptions),
   };
+}
+
+function buildInspectorView(
+  init: BattleInit,
+  board: BattleMutableState,
+  aiProposal: MobileBattleAiProposal | null,
+  options: MobileBattleInspectorOptions,
+): MobileBattleInspectorView {
+  const nextDreamwell = init.dreamwellDeck[board.dreamwellDeckIndex];
+  return {
+    opponentName: init.enemyDescriptor.name,
+    turn: String(board.turnNumber),
+    phase: formatPhaseLabel(board.phase),
+    activeSide: formatSideLabel(board.activeSide),
+    result: board.result === null ? "In progress" : titleCase(board.result),
+    stackCount: board.stack?.length ?? 0,
+    nextDreamwellOrder: nextDreamwell === undefined ? "Complete" : String(nextDreamwell.order),
+    isOpponentHandRevealed: options.isOpponentHandRevealed,
+    isPlayerHandHidden: options.isPlayerHandHidden,
+    sides: {
+      player: buildInspectorSideView("player", board),
+      enemy: buildInspectorSideView("enemy", board),
+    },
+    ai: options.aiMode ? buildAiView(board, aiProposal) : null,
+  };
+}
+
+function buildInspectorSideView(
+  side: BattleSide,
+  board: BattleMutableState,
+): MobileBattleInspectorSideView {
+  const state = board.sides[side];
+  return {
+    side,
+    heading: side === "player" ? "Your" : "Enemy",
+    points: state.score,
+    currentEnergy: state.currentEnergy,
+    maxEnergy: state.maxEnergy,
+    zones: {
+      hand: state.hand.length,
+      deck: state.deck.length,
+      void: state.void.length,
+      banished: state.banished.length,
+      backRank: Object.values(state.backRank).filter((id) => id !== null).length,
+      frontRank: Object.values(state.frontRank).filter((id) => id !== null).length,
+    },
+    canDiscard: state.hand.length > 0,
+    canShuffle: state.deck.length >= 2,
+  };
+}
+
+function buildAiView(
+  board: BattleMutableState,
+  proposal: MobileBattleAiProposal | null,
+): NonNullable<MobileBattleInspectorView["ai"]> {
+  const trace = proposal?.trace ?? null;
+  const liveEvaluation = evaluate(forwardModelFromState(board, "enemy"));
+  const before = trace?.heuristicScoreBefore;
+  const after = trace?.heuristicScoreAfter;
+  return {
+    proposal: proposal?.description ?? "No active proposal",
+    kind: proposal === null ? "Idle" : titleCase(proposal.kind),
+    card: trace?.cardName ?? trace?.battleCardId ?? "—",
+    target: trace?.targetSlotId ?? trace?.targetBattleCardId ?? "—",
+    heuristicChange: before === null || before === undefined || after === null || after === undefined
+      ? "—"
+      : `${formatEvaluation(before)} → ${formatEvaluation(after)}`,
+    liveEvaluation: formatEvaluation(liveEvaluation),
+  };
+}
+
+function formatEvaluation(value: number): string {
+  if (value === Number.POSITIVE_INFINITY) return "+∞";
+  if (value === Number.NEGATIVE_INFINITY) return "−∞";
+  return value.toFixed(2);
+}
+
+function titleCase(value: string): string {
+  return value.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/^./, (letter) => letter.toUpperCase());
 }
 
 function mobileBattlePhase(

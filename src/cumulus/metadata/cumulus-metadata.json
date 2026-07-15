@@ -803,6 +803,32 @@
       "description": "Fires with the appended action's stable id when it is activated."
     }
   ],
+  "CardOrderEditor": [
+    {
+      "name": "items",
+      "tsType": "readonly CardOrderEditorItem[]",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Ordered cards, from top to bottom."
+    },
+    {
+      "name": "label",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Accessible name for the ordered collection."
+    },
+    {
+      "name": "onOrderChange",
+      "tsType": "(orderedIds: readonly string[]) => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Returns the complete top-to-bottom sequence of card ids after a move."
+    }
+  ],
   "CardPile": [
     {
       "name": "cards",
@@ -1355,6 +1381,56 @@
       "required": true,
       "defaultValue": null,
       "description": "Comma-separated stable deck entry UUIDs represented by the row."
+    }
+  ],
+  "DisclosureSection": [
+    {
+      "name": "title",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Section heading shown in the disclosure trigger."
+    },
+    {
+      "name": "summary",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional concise context shown beside the heading."
+    },
+    {
+      "name": "expanded",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Controlled open state."
+    },
+    {
+      "name": "onExpandedChange",
+      "tsType": "(expanded: boolean) => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Reports the requested open state."
+    },
+    {
+      "name": "children",
+      "tsType": "ReactNode",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Content revealed beneath the trigger."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Stable test id for the section."
     }
   ],
   "DreamcallerPortrait": [
@@ -1980,6 +2056,14 @@
       "description": "On desktop, widen the panel and trade the `85vh` height cap for explicit\nviewport padding so a roomy grid fits in two rows without internal scroll.\nNo effect on the full-bleed mobile overlay. Defaults to `false`. A caller\ngates this on its own roomy-desktop media query."
     },
     {
+      "name": "fullScreen",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Force the edge-to-edge takeover treatment at any viewport width."
+    },
+    {
       "name": "children",
       "tsType": "ReactNode",
       "unionMembers": [],
@@ -2129,11 +2213,12 @@
       "tsType": "GlassPanelFrame",
       "unionMembers": [
         "floating",
-        "fullBleed"
+        "fullBleed",
+        "edgeRail"
       ],
       "required": false,
       "defaultValue": "floating",
-      "description": "Floating glass or the standard full-bleed gallery scrim."
+      "description": "Floating glass, edge-attached rail glass, or the standard full-bleed gallery scrim."
     },
     {
       "name": "radius",
@@ -2437,6 +2522,14 @@
       "description": "When the disc is a disclosure trigger, its `aria-expanded` state (whether\nthe surface it controls is open). Omitted for a plain action button."
     },
     {
+      "name": "ariaControls",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Id of the disclosure surface controlled by this button."
+    },
+    {
       "name": "testId",
       "tsType": "string",
       "unionMembers": [],
@@ -2448,14 +2541,14 @@
   "InfoCard": [
     {
       "name": "variant",
-      "tsType": "\"object\" | \"fullBleed\" | \"atlasReveal\" | \"icon\" | \"tide\" | \"text\"",
+      "tsType": "\"object\" | \"fullBleed\" | \"text\" | \"atlasReveal\" | \"icon\" | \"tide\"",
       "unionMembers": [
         "object",
         "fullBleed",
+        "text",
         "atlasReveal",
         "icon",
-        "tide",
-        "text"
+        "tide"
       ],
       "required": false,
       "defaultValue": null,
@@ -2629,6 +2722,124 @@
       "description": "Stacking order within the positioned parent."
     }
   ],
+  "NumberStepper": [
+    {
+      "name": "label",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Visible label for the numeric value."
+    },
+    {
+      "name": "value",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Current numeric value."
+    },
+    {
+      "name": "displayValue",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional formatted value while `value` remains the numeric state contract."
+    },
+    {
+      "name": "resource",
+      "tsType": "EconomyKind",
+      "unionMembers": [
+        "essence",
+        "energy",
+        "spark",
+        "points",
+        "counter"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional economy mark paired with the value."
+    },
+    {
+      "name": "decrementLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Accessible label for the decrement action."
+    },
+    {
+      "name": "incrementLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Accessible label for the increment action."
+    },
+    {
+      "name": "onDecrement",
+      "tsType": "() => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Fires when the decrement disc is pressed."
+    },
+    {
+      "name": "onIncrement",
+      "tsType": "() => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Fires when the increment disc is pressed."
+    },
+    {
+      "name": "decrementDisabled",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Prevent decrementing while preserving the control's layout."
+    },
+    {
+      "name": "incrementDisabled",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Prevent incrementing while preserving the control's layout."
+    },
+    {
+      "name": "size",
+      "tsType": "NumberStepperSize",
+      "unionMembers": [
+        "sm",
+        "md"
+      ],
+      "required": false,
+      "defaultValue": "md",
+      "description": "Compact or regular row density. Defaults to `md`."
+    },
+    {
+      "name": "placement",
+      "tsType": "GlassControlPlacement",
+      "unionMembers": [
+        "onMedia",
+        "onGlass"
+      ],
+      "required": false,
+      "defaultValue": "onGlass",
+      "description": "Surface beneath the two icon buttons. Defaults to `onGlass`."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Stable test id for the row."
+    }
+  ],
   "OfferTile": [
     {
       "name": "model",
@@ -2748,10 +2959,11 @@
         "object",
         "map",
         "filter",
+        "text",
+        "search",
         "h1",
         "h2",
         "center",
-        "text",
         "image",
         "figure",
         "meta",
@@ -2839,7 +3051,6 @@
         "ruby",
         "s",
         "samp",
-        "search",
         "script",
         "section",
         "select",
@@ -3475,6 +3686,91 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional stable test id for product-screen QA."
+    }
+  ],
+  "TextField": [
+    {
+      "name": "label",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Visible field label."
+    },
+    {
+      "name": "value",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Controlled value."
+    },
+    {
+      "name": "onChange",
+      "tsType": "(value: string) => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Reports edited text."
+    },
+    {
+      "name": "kind",
+      "tsType": "TextFieldKind",
+      "unionMembers": [
+        "text",
+        "search"
+      ],
+      "required": false,
+      "defaultValue": "text",
+      "description": "Text or search semantics. Defaults to text."
+    },
+    {
+      "name": "placeholder",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional placeholder."
+    },
+    {
+      "name": "supportingText",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional supporting copy beneath the control."
+    },
+    {
+      "name": "error",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Validation copy; also marks the input invalid."
+    },
+    {
+      "name": "disabled",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Prevent editing."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Stable test id for the input."
+    },
+    {
+      "name": "inputRef",
+      "tsType": "Ref<HTMLInputElement>",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional ref to the native input for focus orchestration."
     }
   ],
   "TideDisc": [

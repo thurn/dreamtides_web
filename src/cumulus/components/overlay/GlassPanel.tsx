@@ -42,7 +42,7 @@ export type GlassPanelAccessory =
     };
 
 /** The panel frame geometry and material. */
-export type GlassPanelFrame = "floating" | "fullBleed";
+export type GlassPanelFrame = "floating" | "fullBleed" | "edgeRail";
 
 /** Named corner geometry for the floating panel. */
 export type GlassPanelRadius = "panel" | "popover" | "control";
@@ -81,7 +81,7 @@ export interface GlassPanelProps {
   rightAccessory?: GlassPanelAccessory;
   /** Float the accessory beside an injected display cutout when present. */
   cutoutAwareAccessory?: boolean;
-  /** Floating glass or the standard full-bleed gallery scrim. */
+  /** Floating glass, edge-attached rail glass, or the standard full-bleed gallery scrim. */
   frame?: GlassPanelFrame;
   /** Named corner geometry for a floating panel. Defaults to `panel`. */
   radius?: GlassPanelRadius;
@@ -198,13 +198,16 @@ export function GlassPanel({
       data-glass-panel-radius={radius}
       data-glass-panel-tint={tint}
       style={{
-        ...(frame === "floating"
-          ? floatingMaterial
-          : {
+        ...(frame === "fullBleed"
+          ? {
               background: token("--scrim-gallery"),
               border: "none",
               borderRadius: 0,
               boxShadow: "none",
+            }
+          : {
+              ...floatingMaterial,
+              ...(frame === "edgeRail" ? { borderRadius: 0 } : {}),
             }),
         position: "relative",
         width: "100%",

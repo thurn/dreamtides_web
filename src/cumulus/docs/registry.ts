@@ -16,11 +16,13 @@ import { battleStatusDisplayDemo } from "./demos/battle-status-display";
 import { cardBackDemo } from "./demos/card-back";
 import { cardGalleryPanelDemo } from "./demos/card-gallery-panel";
 import { cardPileDemo } from "./demos/card-pile";
+import { cardOrderEditorDemo } from "./demos/card-order-editor";
 import { cardStatOrbDemo } from "./demos/card-stat-orb";
 import { cardTermDefinitionsDemo } from "./demos/card-term-definitions";
 import { dreamcallerPortraitDemo } from "./demos/dreamcaller-portrait";
 import { dreamsignDemo } from "./demos/dreamsign";
 import { dreamsignGalleryPanelDemo } from "./demos/dreamsign-gallery-panel";
+import { disclosureSectionDemo } from "./demos/disclosure-section";
 import { essenceValueDemo } from "./demos/essence-value";
 import { gameCardDemo } from "./demos/game-card";
 import { glassButtonDemo } from "./demos/glass-button";
@@ -32,6 +34,7 @@ import { groupPanelDemo } from "./demos/group-panel";
 import { iconButtonDemo } from "./demos/icon-button";
 import { infoCardDemo } from "./demos/info-card";
 import { motesDemo } from "./demos/motes";
+import { numberStepperDemo } from "./demos/number-stepper";
 import { offerTileDemo } from "./demos/offer-tile";
 import { pipBadgeDemo } from "./demos/pip-badge";
 import { pressableDemo } from "./demos/pressable";
@@ -44,6 +47,7 @@ import { selectDemo } from "./demos/select";
 import { siteNodeDemo } from "./demos/site-node";
 import { speechBubbleDemo } from "./demos/speech-bubble";
 import { tideDiscDemo } from "./demos/tide-disc";
+import { textFieldDemo } from "./demos/text-field";
 import { transfigurationFormButtonDemo } from "./demos/transfiguration-form-button";
 
 /**
@@ -149,6 +153,10 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   speechBubbleDemo,
   segmentedControlDemo,
   selectDemo,
+  textFieldDemo,
+  numberStepperDemo,
+  disclosureSectionDemo,
+  cardOrderEditorDemo,
   tideDiscDemo,
   transfigurationFormButtonDemo,
   motesDemo,

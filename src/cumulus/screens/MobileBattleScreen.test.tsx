@@ -119,11 +119,30 @@ function makeView(): MobileBattleView {
       { length: 8 },
       (_, index) => `enemy-hand-${String(index)}`,
     ),
+    enemyHand: Array.from({ length: 8 }, (_, index) =>
+      makeCard(60 + index, `enemy-hand-${String(index)}`),
+    ),
     enemy: makeSide("enemy", 1),
     player: makeSide("player", 20),
     playerHand: Array.from({ length: 4 }, (_, index) =>
       makeCard(40 + index, `player-hand-${String(index)}`),
     ),
+    inspector: {
+      opponentName: "Enemy Dreamcaller",
+      turn: "3",
+      phase: "Day",
+      activeSide: "Player",
+      result: "In progress",
+      stackCount: 0,
+      nextDreamwellOrder: "4",
+      isOpponentHandRevealed: false,
+      isPlayerHandHidden: false,
+      sides: {
+        player: { side: "player", heading: "Your", points: 6, currentEnergy: 3, maxEnergy: 3, zones: { hand: 4, deck: 4, void: 2, banished: 0, backRank: 1, frontRank: 1 }, canDiscard: true, canShuffle: true },
+        enemy: { side: "enemy", heading: "Enemy", points: 5, currentEnergy: 2, maxEnergy: 4, zones: { hand: 8, deck: 4, void: 2, banished: 0, backRank: 1, frontRank: 1 }, canDiscard: true, canShuffle: true },
+      },
+      ai: null,
+    },
   };
 }
 
@@ -156,7 +175,7 @@ describe("MobileBattleScreen", () => {
     ).map((row) => row.getAttribute("data-battle-mobile-row"));
 
     expect(screen?.className).toBe("cumulus");
-    expect(screen?.style.position).toBe("fixed");
+    expect(screen?.style.position).toBe("relative");
     expect(screen?.style.height).toBe("100dvh");
     expect(screen?.style.backgroundColor).toBe("var(--bg-app)");
     expect(screen?.style.backgroundImage).toBe("");
@@ -272,8 +291,9 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("shows player debug controls in a square bottom-left panel on desktop", () => {
+  it("opens the unified rail on desktop and dispatches side-scoped actions", () => {
     mockDesktopViewport(true);
+    const onInspectorAction = vi.fn();
     const interactions: MobileBattleInteractions = {
       canInteract: true,
       pendingCardId: null,
@@ -284,111 +304,89 @@ describe("MobileBattleScreen", () => {
       onZoneDrop: vi.fn(),
       onPreviousPhase: vi.fn(),
       onNextPhase: vi.fn(),
-      onDrawPlayerCard: vi.fn(),
-      onAdjustPlayerPoints: vi.fn(),
-      onAdjustPlayerCurrentEnergy: vi.fn(),
-      onAdjustPlayerMaxEnergy: vi.fn(),
-      onAdjustPlayerCurrentAndMaxEnergy: vi.fn(),
+      onInspectorAction,
     };
     const { container, root } = mount(makeView(), interactions);
-    const panel = container.querySelector<HTMLElement>(
-      '[data-battle-debug="player-state-panel"]',
-    );
 
-    expect(panel).not.toBeNull();
-    expect(panel?.style.position).toBe("absolute");
-    expect(panel?.style.width).toBe("320px");
-    expect(panel?.style.aspectRatio).toBe("1 / 1");
-    expect(panel?.style.left).not.toBe("");
-    expect(panel?.style.bottom).not.toBe("");
-    expect(
-      container.querySelector('[data-testid="battle-debug-player-panel"]')
-        ?.textContent,
-    ).toContain("Battle Debug");
-    expect(
-      container.querySelector('[data-battle-debug-stat="points"]')?.textContent,
-    ).toContain("6");
-    expect(
-      container.querySelector('[data-battle-debug-stat="current-energy"]')
-        ?.textContent,
-    ).toContain("3");
-    expect(
-      container.querySelector('[data-battle-debug-stat="max-energy"]')?.textContent,
-    ).toContain("3");
-    expect(
-      container.querySelector('[data-battle-debug-stat="current-and-max-energy"]')
-        ?.textContent,
-    ).toContain("3/3");
+    expect(container.querySelector('[data-battle-inspector="docked"]')).not.toBeNull();
+    expect(container.querySelector('[data-battle-debug="player-state-panel"]')).toBeNull();
+    expect(container.textContent).toContain("Battle Snapshot");
+    expect(container.textContent).toContain("Your Resources");
+    expect(container.textContent).toContain("Back Rank");
 
     act(() => {
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="battle-debug-draw-player-card"]',
-        )
-        ?.click();
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="battle-debug-decrement-points"]',
-        )
-        ?.click();
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="battle-debug-increment-points"]',
-        )
-        ?.click();
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="battle-debug-decrement-current-energy"]',
-        )
-        ?.click();
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="battle-debug-increment-current-energy"]',
-        )
-        ?.click();
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="battle-debug-decrement-max-energy"]',
-        )
-        ?.click();
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="battle-debug-increment-max-energy"]',
-        )
-        ?.click();
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="battle-debug-decrement-current-and-max-energy"]',
-        )
-        ?.click();
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="battle-debug-increment-current-and-max-energy"]',
-        )
-        ?.click();
+      container.querySelector<HTMLButtonElement>('[data-testid="battle-inspector-draw-player"]')?.click();
+      const enemyTab = Array.from(container.querySelectorAll<HTMLButtonElement>('[role="tab"]'))
+        .find((button) => button.textContent === "Enemy");
+      enemyTab?.click();
     });
 
-    expect(interactions.onDrawPlayerCard).toHaveBeenCalledTimes(1);
-    expect(interactions.onAdjustPlayerPoints).toHaveBeenNthCalledWith(1, -1);
-    expect(interactions.onAdjustPlayerPoints).toHaveBeenNthCalledWith(2, 1);
-    expect(interactions.onAdjustPlayerCurrentEnergy).toHaveBeenNthCalledWith(1, -1);
-    expect(interactions.onAdjustPlayerCurrentEnergy).toHaveBeenNthCalledWith(2, 1);
-    expect(interactions.onAdjustPlayerMaxEnergy).toHaveBeenNthCalledWith(1, -1);
-    expect(interactions.onAdjustPlayerMaxEnergy).toHaveBeenNthCalledWith(2, 1);
-    expect(interactions.onAdjustPlayerCurrentAndMaxEnergy).toHaveBeenNthCalledWith(1, -1);
-    expect(interactions.onAdjustPlayerCurrentAndMaxEnergy).toHaveBeenNthCalledWith(2, 1);
+    expect(onInspectorAction).toHaveBeenCalledWith({ kind: "draw", side: "player" });
+    expect(onInspectorAction).toHaveBeenCalledWith({ kind: "side-selected", side: "enemy" });
+    expect(container.textContent).toContain("Enemy Resources");
 
     act(() => root.unmount());
   });
 
-  it("omits the player debug panel from the mobile battle layout", () => {
+  it("keeps the inspector closed initially in the takeover layout", () => {
     mockDesktopViewport(false);
     const { container, root } = mount();
 
-    expect(
-      container.querySelector('[data-battle-debug="player-state-panel"]'),
-    ).toBeNull();
+    expect(container.querySelector('[data-battle-inspector]')).toBeNull();
+    expect(container.querySelector('[data-testid="battle-inspector-trigger"]')).not.toBeNull();
 
+    act(() => root.unmount());
+  });
+
+  it("opens a full-screen takeover with collapsed secondary sections and restores trigger focus on Escape", () => {
+    mockDesktopViewport(false);
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => { callback(0); return 1; });
+    const { container, root } = mount();
+    const trigger = container.querySelector<HTMLButtonElement>('[data-testid="battle-inspector-trigger"]');
+    trigger?.focus();
+    act(() => trigger?.click());
+
+    expect(container.querySelector('[role="dialog"]')).not.toBeNull();
+    expect(container.querySelector('[data-battle-inspector="takeover"]')).not.toBeNull();
+    expect(container.querySelector('[data-disclosure-expanded="true"]')).toBeNull();
+
+    act(() => {
+      window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    });
+    expect(container.querySelector('[role="dialog"]')).toBeNull();
+    expect(document.activeElement).toBe(trigger);
+    act(() => root.unmount());
+  });
+
+  it("disables discard and shuffle from live side availability", () => {
+    mockDesktopViewport(true);
+    const view = makeView();
+    const constrained: MobileBattleView = {
+      ...view,
+      inspector: {
+        ...view.inspector,
+        sides: {
+          ...view.inspector.sides,
+          player: { ...view.inspector.sides.player, canDiscard: false, canShuffle: false },
+        },
+      },
+    };
+    const { container, root } = mount(constrained, {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+      onInspectorAction: vi.fn(),
+    });
+    const discard = container.querySelector<HTMLButtonElement>('[data-testid="battle-inspector-discard-player"]');
+    const shuffle = Array.from(container.querySelectorAll<HTMLButtonElement>("button")).find((button) => button.textContent === "Shuffle");
+    expect(discard?.getAttribute("aria-disabled")).toBe("true");
+    expect(shuffle?.getAttribute("aria-disabled")).toBe("true");
     act(() => root.unmount());
   });
 
@@ -1012,7 +1010,7 @@ describe("MobileBattleScreen", () => {
     const controls = container.querySelectorAll(
       "button, input, select, textarea, [role=button]",
     );
-    expect(controls).toHaveLength(3);
+    expect(controls).toHaveLength(4);
     expect(
       container.querySelector('[data-testid="battle-debug-menu-trigger"]'),
     ).not.toBeNull();
@@ -1188,7 +1186,7 @@ describe("MobileBattleScreen", () => {
       zone: "hand",
     });
     expect(interactions.onCardDragEnd).toHaveBeenCalledTimes(1);
-    expect(container.querySelectorAll("button")).toHaveLength(3);
+    expect(container.querySelectorAll("button")).toHaveLength(4);
 
     act(() => root.unmount());
   });
