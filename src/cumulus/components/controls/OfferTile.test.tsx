@@ -5,13 +5,14 @@ import { createRoot } from "react-dom/client";
 import { describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import { asCardId } from "../../../types/card-identity";
+import { GLYPHS } from "../../primitives/glyph";
 import { OfferTile, type OfferTileModel } from "./OfferTile";
 
 const MODEL: OfferTileModel = {
   id: "debug-fit-card-draft",
   kind: "card-draft",
   label: "Card Draft",
-  description: "Choose one of four cards to add to your deck.",
+  description: "Choose a card from 4 to add to your deck.",
   cards: [
     { cardId: asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"), imageNumber: 287269511 },
     { cardId: asCardId("161482b6-af07-4d9e-822d-8c738672beb9"), imageNumber: 2022594419 },
@@ -45,6 +46,11 @@ describe("OfferTile", () => {
     expect(source.style.background).toBe("transparent");
     expect(source.style.border).toBe("0px");
     expect(source.querySelector("[data-offer-tile-background]")).not.toBeNull();
+    const floatingFrame = source.querySelector<HTMLElement>(
+      "[data-offer-tile-floating-frame]",
+    );
+    expect(floatingFrame).not.toBeNull();
+    expect(floatingFrame?.querySelector("[data-offer-tile-background]")).not.toBeNull();
     const frame = source.querySelector<HTMLImageElement>("[data-offer-tile-frame]");
     expect(frame?.src).toContain("Skill_Frame_iron.png");
     expect(frame?.draggable).toBe(false);
@@ -65,7 +71,7 @@ describe("OfferTile", () => {
       source.getAttribute("aria-describedby") ?? "",
     );
     expect(description?.textContent).toBe(
-      "Choose one of four cards to add to your deck.",
+      "Choose a card from 4 to add to your deck.",
     );
     expect(description?.textContent).not.toContain("Dream Augury");
     expect(description?.textContent).not.toContain("Card Draft");
@@ -82,7 +88,7 @@ describe("OfferTile", () => {
       id: "debug-dreamsign-draft",
       kind: "dreamsign-draft",
       label: "Dreamsign Draft",
-      description: "Choose one dreamsign from a small group of visions.",
+      description: "Choose a dreamsign from 4 visions.",
       dreamsigns: [
         {
           id: "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
@@ -135,7 +141,7 @@ describe("OfferTile", () => {
       id: "debug-trade-squares",
       kind: "trade-card",
       label: "Trade Card",
-      description: "Purge one card and choose one of four replacements.",
+      description: "Purge a card and choose a replacement from 4 cards.",
       outgoing: MODEL.cards[0],
       incoming: MODEL.cards,
     };
@@ -173,9 +179,7 @@ describe("OfferTile", () => {
     const tradeChips = container.querySelectorAll<HTMLElement>(
       '[data-testid="trade-square-tile"] [data-offer-tile-card-id]',
     );
-    expect(tradeChips[0]?.style.width).toBe("82px");
-    expect(tradeChips[0]?.style.height).toBe("82px");
-    [...tradeChips].slice(1).forEach((chip) => {
+    [...tradeChips].forEach((chip) => {
       expect(chip.style.width).toBe("50px");
       expect(chip.style.height).toBe("50px");
     });
@@ -190,7 +194,7 @@ describe("OfferTile", () => {
       id: "debug-trade",
       kind: "trade-card",
       label: "Trade Card",
-      description: "Purge one card and choose one of four replacements.",
+      description: "Purge a card and choose a replacement from 4 cards.",
       outgoing: cards[0],
       incoming: cards,
     };
@@ -198,21 +202,22 @@ describe("OfferTile", () => {
       id: "debug-duplicate",
       kind: "duplicate-card",
       label: "Duplicate Card",
-      description: "Choose one of up to three cards in your deck to duplicate.",
+      description: "Choose a card to duplicate from 3 cards in your deck.",
       cards: [cards[0], cards[1], cards[2]],
     };
     const copies: OfferTileModel = {
       id: "debug-copies",
       kind: "copies-draft",
       label: "Copies Draft",
-      description: "Choose one card and add multiple copies of it to your deck.",
+      description: "Choose a card.",
+      copyCount: 2,
       cards,
     };
     const bundle: OfferTileModel = {
       id: "debug-bundle",
       kind: "card-bundle",
       label: "Card Bundle",
-      description: "Add three related cards to your deck.",
+      description: "Add 3 related cards to your deck.",
       cards: [cards[0], cards[1], cards[2]],
     };
     const container = document.createElement("div");
@@ -243,16 +248,27 @@ describe("OfferTile", () => {
         '[data-testid="copies-tile"] [data-offer-tile-operation-layout]',
       )?.getAttribute("data-offer-tile-operation-layout"),
     ).toBe("overlay");
+    const copiesTile = container.querySelector<HTMLElement>(
+      '[data-testid="copies-tile"]',
+    );
+    expect(
+      document.getElementById(copiesTile?.getAttribute("aria-describedby") ?? "")
+        ?.textContent,
+    ).toBe("Choose a card from 4 and add 2 copies of it to your deck.");
     expect(
       container.querySelector(
         '[data-testid="duplicate-tile"] [data-offer-tile-operation-layout]',
       )?.getAttribute("data-offer-tile-operation-layout"),
-    ).toBe("inline");
+    ).toBe("diagonal");
     expect(
       container.querySelector(
-        '[data-testid="trade-tile"] [data-offer-tile-operation-layout]',
-      )?.getAttribute("data-offer-tile-operation-layout"),
-    ).toBe("overlay");
+        '[data-testid="trade-tile"] [data-offer-tile-operation]',
+      ),
+    ).toBeNull();
+    const tradeChips = container.querySelectorAll<HTMLElement>(
+      '[data-testid="trade-tile"] [data-offer-tile-card-id]',
+    );
+    expect([...tradeChips].every((chip) => chip.style.width === "50px")).toBe(true);
     expect(
       container.querySelectorAll(
         '[data-testid="bundle-tile"] [data-offer-tile-card-id]',
@@ -263,6 +279,65 @@ describe("OfferTile", () => {
         '[data-testid="bundle-tile"] [data-offer-tile-operation]',
       ),
     ).toBeNull();
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("uses balanced diagonal card-and-mark compositions and keeps purge art visible", () => {
+    const transfigure: OfferTileModel = {
+      id: "debug-transfigure",
+      kind: "transfigure-card",
+      label: "Transfigure Card",
+      description: "Transfigure a card in your deck.",
+      card: MODEL.cards[0],
+    };
+    const purge: OfferTileModel = {
+      id: "debug-purge",
+      kind: "purge-card",
+      label: "Purge Card",
+      description: "Purge a card.",
+      card: MODEL.cards[1],
+    };
+    const addSite: OfferTileModel = {
+      id: "debug-add-site",
+      kind: "add-site",
+      label: "Add Site",
+      description: "Add a site to the current dreamscape.",
+      site: { id: "Duplication", glyph: GLYPHS.copy },
+    };
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <OfferTile model={transfigure} onPress={() => {}} testId="transfigure" />
+          <OfferTile model={purge} onPress={() => {}} testId="purge" />
+          <OfferTile model={addSite} onPress={() => {}} testId="add-site" />
+        </CumulusRoot>,
+      );
+    });
+
+    for (const testId of ["transfigure", "purge"]) {
+      const mark = container.querySelector<HTMLElement>(
+        `[data-testid="${testId}"] [data-offer-tile-operation-layout]`,
+      );
+      expect(mark?.dataset.offerTileOperationLayout).toBe("diagonal");
+      expect(mark?.style.width).toBe("82px");
+      expect(mark?.style.height).toBe("82px");
+    }
+    const purgedCard = container.querySelector<HTMLElement>(
+      '[data-testid="purge"] [data-offer-tile-card-id]',
+    );
+    expect(purgedCard?.style.filter).toBe("");
+    expect(purgedCard?.style.boxShadow).toContain("var(--danger)");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="add-site"] [data-offer-tile-site-glyph]',
+      )?.style.fontSize,
+    ).toBe("60px");
 
     act(() => root.unmount());
     container.remove();

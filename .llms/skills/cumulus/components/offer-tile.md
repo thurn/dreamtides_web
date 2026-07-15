@@ -10,7 +10,7 @@ Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
 The 200×200 rounded symbolic Dream Augury offer button: UUID-backed card art, dreamsign art, and operation marks gathered inside an iron fantasy frame without spelling out the complete offer.
 
-> **Guidance:** Use the named offer kind that matches the category and pass every object surfaced by the generated offer. Fixed-target variants show their exact affected cards; chooser variants show every choice. Both single-card grant archetypes use the card-gift kind, label, description, and square-art-only composition. Bundle descriptions state the exact number of cards shown. The iron frame holds each composition over an inset glass background inside its transparent aperture. Card-art frames stay square at their established vertical scale. Four-card operations center their mark over the art grid. Inner objects stay decorative, and the complete tile owns interaction plus its body-only InfoCard.
+> **Guidance:** Use the named offer kind that matches the category and pass every object surfaced by the generated offer. Fixed-target variants show their exact affected cards; chooser variants show every choice. Descriptions state exact quantities, and copies-draft models carry their exact copy count. Both single-card grant archetypes use the card-gift kind, label, description, and square-art-only composition. The iron frame holds each composition over an inset glass background inside its transparent aperture. Card-art frames stay square at their established vertical scale. Four-card draft operations center their mark over the art grid; card operations use a balanced top-left card and bottom-right mark; trade offers place five equally sized cards around the purge target. Inner objects stay decorative, the complete tile owns interaction plus its body-only InfoCard, and each complete framed tile drifts on its own stable phase.
 
 ## Props
 
@@ -27,7 +27,7 @@ The 200×200 rounded symbolic Dream Augury offer button: UUID-backed card art, d
 | `id` | `string` | no | Stable identity for this visible offer. Production callers should combine the encounter signature and offer id so simultaneous offers never collide. |
 | `label` | `string` | no | Category name used by the tile's accessible button label. |
 | `description` | `string` | no | Succinct action sentence rendered as the hover InfoCard's only copy. |
-| `kind` | `"card-gift" \| "card-draft" \| "copies-draft" \| "category-draft" \| "transfigured-draft" \| "card-bundle" \| "transfigure-card" \| "keyword-modification" \| "tribal-change" \| "transfigure-starters" \| "purge-card" \| "trade-card" \| "duplicate-card" \| "dreamsign-gift" \| "dreamsign-draft" \| "add-site"` | no |  |
+| `kind` | `"card-gift" \| "card-draft" \| "category-draft" \| "transfigured-draft" \| "copies-draft" \| "card-bundle" \| "transfigure-card" \| "keyword-modification" \| "tribal-change" \| "transfigure-starters" \| "purge-card" \| "trade-card" \| "duplicate-card" \| "dreamsign-gift" \| "dreamsign-draft" \| "add-site"` | no |  |
 
 ## Usage
 
@@ -41,7 +41,7 @@ import { OfferTile } from "src/cumulus/components/controls/OfferTile";
     id: encounterSignature + ":" + offerId,
     kind: "card-draft",
     label: "Card Draft",
-    description: "Choose one of four cards to add to your deck.",
+    description: "Choose a card from 4 to add to your deck.",
     cards: offeredCards.map(({ id, imageNumber }) => ({ cardId: id, imageNumber })),
   }}
   onPress={chooseOffer}

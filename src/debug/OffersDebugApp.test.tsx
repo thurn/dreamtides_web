@@ -32,6 +32,12 @@ describe("OffersDebugApp", () => {
     expect(MERCHANT_ARCHETYPE_BUILDERS).toHaveLength(17);
     expect(OFFER_TILE_DEBUG_ARCHETYPE_IDS).toHaveLength(16);
     expect(OFFER_TILE_DEBUG_ARCHETYPE_IDS).not.toContain("strong_card");
+    const motionDelays = [...tiles].map(
+      (tile) =>
+        tile.querySelector<HTMLElement>("[data-offer-tile-floating-frame]")?.style
+          .animationDelay,
+    );
+    expect(new Set(motionDelays).size).toBeGreaterThan(8);
     for (const archetypeId of OFFER_TILE_DEBUG_ARCHETYPE_IDS) {
       const category = container.querySelector(
         `[data-offer-category="${archetypeId}"]`,
@@ -63,26 +69,40 @@ describe("OffersDebugApp", () => {
     expect(strongCardGift.kind).toBe("card-gift");
     expect(fitCardGift.label).toBe("Card Gift");
     expect(strongCardGift.label).toBe("Card Gift");
-    expect(fitCardGift.description).toBe("Add a specific card to your deck");
-    expect(strongCardGift.description).toBe("Add a specific card to your deck");
+    expect(fitCardGift.description).toBe("Add a card to your deck.");
+    expect(strongCardGift.description).toBe("Add a card to your deck.");
     expect(copiesDraft.description).toBe(
-      "Choose one card and add multiple copies of it to your deck.",
+      "Choose a card from 4 and add 2 copies of it to your deck.",
     );
-    expect(cardBundle.description).toBe("Add three related cards to your deck.");
+    expect(cardBundle.description).toBe("Add 3 related cards to your deck.");
     expect(trade.kind).toBe("trade-card");
     expect(trade.kind === "trade-card" ? trade.incoming : []).toHaveLength(4);
     expect(duplicate.kind).toBe("duplicate-card");
     expect(duplicate.kind === "duplicate-card" ? duplicate.cards : []).toHaveLength(3);
+    expect(duplicate.description).toBe(
+      "Choose a card to duplicate from 3 cards in your deck.",
+    );
     expect(dreamsignDraft.kind).toBe("dreamsign-draft");
     expect(
       dreamsignDraft.kind === "dreamsign-draft" ? dreamsignDraft.dreamsigns : [],
     ).toHaveLength(4);
     expect(starters.kind).toBe("transfigure-starters");
     expect(starters.kind === "transfigure-starters" ? starters.cards : []).toHaveLength(2);
+    expect(starters.description).toBe("Transfigure 2 starter cards in your deck.");
     expect(keyword.kind).toBe("keyword-modification");
     expect(
       keyword.kind === "keyword-modification" ? keyword.card.cardId : null,
     ).toBe("2931e20b-1a80-4ddd-8944-20e68d182886");
+    expect(dreamsignDraft.description).toBe(
+      "Choose a dreamsign from 4 to add to your collection.",
+    );
+    for (const model of Object.values(OFFER_TILE_DEBUG_MODELS)) {
+      expect(model.description).not.toMatch(/\bone card\b/i);
+      expect(model.description).not.toMatch(/\bone dreamsign\b/i);
+      expect(model.description).not.toMatch(/\b(?:two|three|four)\b/i);
+      expect(model.description).not.toMatch(/\bmultiple\b/i);
+      expect(model.description).not.toMatch(/\bup to\b/i);
+    }
 
     act(() => root.unmount());
     container.remove();

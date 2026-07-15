@@ -9,7 +9,7 @@ const MODEL: OfferTileModel = {
   id: "cumulus-demo-card-draft",
   kind: "card-draft",
   label: "Card Draft",
-  description: "Choose one of four cards to add to your deck.",
+  description: "Choose a card from 4 to add to your deck.",
   cards: [
     { cardId: asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"), imageNumber: 287269511 },
     { cardId: asCardId("161482b6-af07-4d9e-822d-8c738672beb9"), imageNumber: 2022594419 },
@@ -28,7 +28,7 @@ export const offerTileDemo: CumulusComponent = {
   blurb:
     "The 200×200 rounded symbolic Dream Augury offer button: UUID-backed card art, dreamsign art, and operation marks gathered inside an iron fantasy frame without spelling out the complete offer.",
   callout:
-    "Use the named offer kind that matches the category and pass every object surfaced by the generated offer. Fixed-target variants show their exact affected cards; chooser variants show every choice. Both single-card grant archetypes use the card-gift kind, label, description, and square-art-only composition. Bundle descriptions state the exact number of cards shown. The iron frame holds each composition over an inset glass background inside its transparent aperture. Card-art frames stay square at their established vertical scale. Four-card operations center their mark over the art grid. Inner objects stay decorative, and the complete tile owns interaction plus its body-only InfoCard.",
+    "Use the named offer kind that matches the category and pass every object surfaced by the generated offer. Fixed-target variants show their exact affected cards; chooser variants show every choice. Descriptions state exact quantities, and copies-draft models carry their exact copy count. Both single-card grant archetypes use the card-gift kind, label, description, and square-art-only composition. The iron frame holds each composition over an inset glass background inside its transparent aperture. Card-art frames stay square at their established vertical scale. Four-card draft operations center their mark over the art grid; card operations use a balanced top-left card and bottom-right mark; trade offers place five equally sized cards around the purge target. Inner objects stay decorative, the complete tile owns interaction plus its body-only InfoCard, and each complete framed tile drifts on its own stable phase.",
   group: "Components",
   docName: "OfferTile",
   Component: OfferTileDemo,
@@ -42,7 +42,7 @@ export const offerTileDemo: CumulusComponent = {
     id: encounterSignature + ":" + offerId,
     kind: "card-draft",
     label: "Card Draft",
-    description: "Choose one of four cards to add to your deck.",
+    description: "Choose a card from 4 to add to your deck.",
     cards: offeredCards.map(({ id, imageNumber }) => ({ cardId: id, imageNumber })),
   }}
   onPress={chooseOffer}

@@ -1,3 +1,10 @@
+.cumulus-offer-tile__floating-frame {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: cumulus-offer-tile-drift 5.8s var(--ease-dream) infinite;
+}
+
 .cumulus-offer-tile__depth {
   position: absolute;
   inset: var(--space-1);
@@ -25,7 +32,6 @@
   display: grid;
   place-items: center;
   pointer-events: none;
-  animation: cumulus-offer-tile-drift 5.8s var(--ease-dream) infinite;
 }
 
 .cumulus-offer-tile__frame {
@@ -50,7 +56,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cumulus-offer-tile__visual {
+  .cumulus-offer-tile__floating-frame {
     animation: none;
   }
 }
