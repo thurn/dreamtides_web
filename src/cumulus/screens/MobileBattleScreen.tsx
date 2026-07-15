@@ -19,6 +19,7 @@ import { IconButton } from "../components/controls/IconButton";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import type { DreamcallerVisual } from "../components/hud/DreamcallerPortrait";
 import { GLYPHS } from "../primitives/glyph";
+import { POINTER_MOVEMENT_SLOP_PX } from "../primitives/pointer-gesture";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
 import battleBackgroundUrl from "../assets/battle-background.png";
@@ -126,6 +127,7 @@ const ROOT_STYLE: CSSProperties = {
   backgroundPosition: "center",
   backgroundRepeat: "no-repeat",
   backgroundSize: "100% 100%",
+  touchAction: "none",
 };
 
 const ROW_STYLE: CSSProperties = {
@@ -232,6 +234,9 @@ function SideZones({
   const canDrop =
     interactions?.canInteract === true && interactions.pendingCardId !== null;
   const zoneDropProps = (zone: "deck" | "void") => ({
+    "data-battle-mobile-drop-kind": "zone",
+    "data-battle-mobile-drop-owner": owner,
+    "data-battle-mobile-drop-zone": zone,
     "data-battle-drop-target": canDrop ? "true" : undefined,
     onDragOver: (event: React.DragEvent<HTMLDivElement>) => {
       if (canDrop) event.preventDefault();
@@ -321,6 +326,48 @@ function SideZones({
   );
 }
 
+interface LinearTransform {
+  readonly a: number;
+  readonly b: number;
+  readonly c: number;
+  readonly d: number;
+}
+
+const IDENTITY_LINEAR_TRANSFORM: LinearTransform = { a: 1, b: 0, c: 0, d: 1 };
+
+function inverseLinearTransform(element: HTMLElement | null): LinearTransform {
+  if (element === null) return IDENTITY_LINEAR_TRANSFORM;
+  const transform = getComputedStyle(element).transform;
+  const matrix = /^matrix\(([^)]+)\)$/.exec(transform);
+  const matrix3d = /^matrix3d\(([^)]+)\)$/.exec(transform);
+  const values = (matrix?.[1] ?? matrix3d?.[1])
+    ?.split(",")
+    .map((value) => Number(value.trim()));
+  if (values === undefined) return IDENTITY_LINEAR_TRANSFORM;
+  const [a, b, c, d] =
+    matrix !== null
+      ? [values[0], values[1], values[2], values[3]]
+      : [values[0], values[1], values[4], values[5]];
+  if (
+    a === undefined ||
+    b === undefined ||
+    c === undefined ||
+    d === undefined
+  ) {
+    return IDENTITY_LINEAR_TRANSFORM;
+  }
+  const determinant = a * d - b * c;
+  if (!Number.isFinite(determinant) || Math.abs(determinant) < Number.EPSILON) {
+    return IDENTITY_LINEAR_TRANSFORM;
+  }
+  return {
+    a: d / determinant,
+    b: -b / determinant,
+    c: -c / determinant,
+    d: a / determinant,
+  };
+}
+
 function FaceUpCard({
   card,
   zone,
@@ -335,33 +382,115 @@ function FaceUpCard({
     readonly onActivate?: () => void;
     readonly onDragStart: () => void;
     readonly onDragEnd: () => void;
+    readonly onTouchDrop: (clientX: number, clientY: number) => void;
   };
 }) {
   const dragSuppressedRef = useRef(false);
-  const [touchDragSuppressed, setTouchDragSuppressed] = useState(false);
+  const touchPointerRef = useRef<{
+    pointerId: number;
+    startX: number;
+    startY: number;
+    dragging: boolean;
+    inverseParentTransform: LinearTransform;
+  } | null>(null);
+  const [touchPointerActive, setTouchPointerActive] = useState(false);
+  const [touchDragOffset, setTouchDragOffset] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
   const draggable = interaction?.draggable === true;
+  const finishTouchDrag = (
+    event: React.PointerEvent<HTMLDivElement>,
+    drop: boolean,
+  ): void => {
+    const touchPointer = touchPointerRef.current;
+    if (
+      event.pointerType !== "touch" ||
+      touchPointer?.pointerId !== event.pointerId
+    ) {
+      return;
+    }
+    if (touchPointer.dragging) {
+      event.preventDefault();
+      if (drop) {
+        const pointerEvents = event.currentTarget.style.pointerEvents;
+        event.currentTarget.style.pointerEvents = "none";
+        try {
+          interaction?.onTouchDrop(event.clientX, event.clientY);
+        } finally {
+          event.currentTarget.style.pointerEvents = pointerEvents;
+        }
+      }
+      interaction?.onDragEnd();
+    }
+    try {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    } catch {
+      // Pointer capture is best-effort in browsers that have already released it.
+    }
+    touchPointerRef.current = null;
+    event.currentTarget.draggable = draggable;
+    setTouchPointerActive(false);
+    setTouchDragOffset(null);
+  };
   return (
     <motion.div
-      layoutId={`battle-card:${card.id}`}
       data-battle-card-id={card.id}
       data-battle-card-zone={zone}
       data-battle-card-face="up"
       data-battle-card-exhausted={card.exhausted ? "true" : "false"}
-      draggable={draggable && !touchDragSuppressed}
+      data-battle-touch-dragging={touchDragOffset === null ? "false" : "true"}
+      draggable={draggable && !touchPointerActive}
       onPointerDownCapture={(event) => {
         dragSuppressedRef.current = false;
-        const suppressTouchDrag = event.pointerType === "touch";
-        event.currentTarget.draggable = draggable && !suppressTouchDrag;
-        setTouchDragSuppressed(suppressTouchDrag);
+        if (!draggable || event.pointerType !== "touch") return;
+        event.currentTarget.draggable = false;
+        touchPointerRef.current = {
+          pointerId: event.pointerId,
+          startX: event.clientX,
+          startY: event.clientY,
+          dragging: false,
+          inverseParentTransform: inverseLinearTransform(
+            event.currentTarget.parentElement,
+          ),
+        };
+        setTouchPointerActive(true);
+        try {
+          event.currentTarget.setPointerCapture(event.pointerId);
+        } catch {
+          // Pointer capture is best-effort on older Mobile Safari versions.
+        }
       }}
-      onPointerUpCapture={(event) => {
-        event.currentTarget.draggable = draggable;
-        setTouchDragSuppressed(false);
+      onPointerMove={(event) => {
+        const touchPointer = touchPointerRef.current;
+        if (
+          event.pointerType !== "touch" ||
+          touchPointer?.pointerId !== event.pointerId
+        ) {
+          return;
+        }
+        const viewportX = event.clientX - touchPointer.startX;
+        const viewportY = event.clientY - touchPointer.startY;
+        if (
+          !touchPointer.dragging &&
+          Math.hypot(viewportX, viewportY) <= POINTER_MOVEMENT_SLOP_PX
+        ) {
+          return;
+        }
+        event.preventDefault();
+        if (!touchPointer.dragging) {
+          touchPointer.dragging = true;
+          dragSuppressedRef.current = true;
+          window.dispatchEvent(new Event("dragstart"));
+          interaction?.onDragStart();
+        }
+        const inverse = touchPointer.inverseParentTransform;
+        const x = inverse.a * viewportX + inverse.c * viewportY;
+        const y = inverse.b * viewportX + inverse.d * viewportY;
+        setTouchDragOffset({ x, y });
       }}
-      onPointerCancelCapture={(event) => {
-        event.currentTarget.draggable = draggable;
-        setTouchDragSuppressed(false);
-      }}
+      onPointerUpCapture={(event) => finishTouchDrag(event, true)}
+      onPointerCancelCapture={(event) => finishTouchDrag(event, false)}
       onClick={(event) => {
         if (!draggable) return;
         event.stopPropagation();
@@ -383,18 +512,34 @@ function FaceUpCard({
       style={{
         width: "100%",
         cursor: draggable ? "grab" : undefined,
-        transform: card.exhausted ? "rotate(90deg)" : undefined,
+        position: "relative",
+        zIndex: touchDragOffset === null ? undefined : 100,
+        touchAction: draggable ? "none" : undefined,
+        transform: [
+          card.exhausted ? "rotate(90deg)" : "",
+          touchDragOffset === null
+            ? ""
+            : `translate3d(${String(touchDragOffset.x)}px, ${String(touchDragOffset.y)}px, 0)`,
+        ]
+          .filter(Boolean)
+          .join(" ") || undefined,
         transformOrigin: "50% 50%",
       }}
     >
-      <GameCard
-        model={card.model}
-        hideRulesText={!showRulesText}
-        presentation={showRulesText ? "full" : "battlefield"}
-        figment={card.figment}
-        figmentTitleBar={card.figmentTitleBar}
-        testId={`battle-card-face:${card.id}`}
-      />
+      <motion.div
+        layoutId={`battle-card:${card.id}`}
+        data-battle-card-motion=""
+        style={{ width: "100%", height: "100%" }}
+      >
+        <GameCard
+          model={card.model}
+          hideRulesText={!showRulesText}
+          presentation={showRulesText ? "full" : "battlefield"}
+          figment={card.figment}
+          figmentTitleBar={card.figmentTitleBar}
+          testId={`battle-card-face:${card.id}`}
+        />
+      </motion.div>
     </motion.div>
   );
 }
@@ -503,6 +648,10 @@ function Rank({
             key={slot.id}
             data-battle-slot-id={slot.id}
             data-battle-slot-filled={slot.card !== null ? "true" : "false"}
+            data-battle-mobile-drop-kind="slot"
+            data-battle-mobile-drop-owner={owner}
+            data-battle-mobile-drop-rank={rank}
+            data-battle-mobile-drop-slot-id={slot.id}
             data-battle-drop-target={canDrop ? "true" : undefined}
             onDragOver={(event) => {
               if (canDrop) event.preventDefault();
@@ -534,6 +683,12 @@ function Rank({
                             "battlefield",
                           ),
                         onDragEnd: interactions.onCardDragEnd,
+                        onTouchDrop: (clientX, clientY) =>
+                          dropMobileCardAtPoint(
+                            interactions,
+                            clientX,
+                            clientY,
+                          ),
                       }
                 }
               />
@@ -608,6 +763,9 @@ function PlayerHand({
       data-battle-mobile-row="player-hand"
       data-battle-hand-count={cards.length}
       data-battle-hand-visible-count={cards.length}
+      data-battle-mobile-drop-kind="zone"
+      data-battle-mobile-drop-owner="player"
+      data-battle-mobile-drop-zone="hand"
       data-battle-drop-target={canDrop ? "true" : undefined}
       onDragOver={(event) => {
         if (canDrop) event.preventDefault();
@@ -619,7 +777,7 @@ function PlayerHand({
       }}
       style={{
         ...ROW_STYLE,
-        overflow: "hidden",
+        overflow: canDrop ? "visible" : "hidden",
       }}
     >
       {cards.map((card, index) => {
@@ -659,6 +817,12 @@ function PlayerHand({
                       onDragStart: () =>
                         interactions.onCardDragStart(card.id, "player-hand"),
                       onDragEnd: interactions.onCardDragEnd,
+                      onTouchDrop: (clientX, clientY) =>
+                        dropMobileCardAtPoint(
+                          interactions,
+                          clientX,
+                          clientY,
+                        ),
                     }
               }
             />
@@ -667,6 +831,29 @@ function PlayerHand({
       })}
     </div>
   );
+}
+
+function dropMobileCardAtPoint(
+  interactions: MobileBattleInteractions,
+  clientX: number,
+  clientY: number,
+): void {
+  const target = document
+    .elementFromPoint(clientX, clientY)
+    ?.closest<HTMLElement>("[data-battle-mobile-drop-kind]");
+  if (target === undefined || target === null) return;
+  const owner = target.dataset.battleMobileDropOwner;
+  if (owner !== "enemy" && owner !== "player") return;
+  if (target.dataset.battleMobileDropKind === "slot") {
+    const rank = target.dataset.battleMobileDropRank;
+    const slotId = target.dataset.battleMobileDropSlotId;
+    if ((rank !== "back" && rank !== "front") || slotId === undefined) return;
+    interactions.onSlotDrop({ owner, rank, slotId });
+    return;
+  }
+  const zone = target.dataset.battleMobileDropZone;
+  if (zone !== "deck" && zone !== "hand" && zone !== "void") return;
+  interactions.onZoneDrop({ owner, zone });
 }
 
 function ControlRow({

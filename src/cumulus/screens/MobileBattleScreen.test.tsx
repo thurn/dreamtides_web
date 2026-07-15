@@ -31,6 +31,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  vi.restoreAllMocks();
   document.body.innerHTML = "";
 });
 
@@ -153,6 +154,7 @@ describe("MobileBattleScreen", () => {
     expect(screen?.style.backgroundPosition).toBe("center center");
     expect(screen?.style.backgroundRepeat).toBe("no-repeat");
     expect(screen?.style.backgroundSize).toBe("100% 100%");
+    expect(screen?.style.touchAction).toBe("none");
     expect(rowNames).toEqual([
       "enemy-hand",
       "enemy-zones",
@@ -651,6 +653,7 @@ describe("MobileBattleScreen", () => {
     const playerHand = container.querySelector<HTMLElement>(
       '[data-battle-mobile-row="player-hand"]',
     );
+    expect(playerHand?.style.overflow).toBe("visible");
 
     act(() => {
       handCard?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
@@ -701,7 +704,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("disables native card dragging for the duration of a touch press", () => {
+  it("drags a hand card by touch into the void without panning or leaving its reveal open", () => {
     const interactions = {
       canInteract: true,
       pendingCardId: null,
@@ -720,30 +723,84 @@ describe("MobileBattleScreen", () => {
     const revealSource = handCard?.querySelector<HTMLElement>(
       "[data-game-card-source]",
     );
+    const playerVoid = container.querySelector<HTMLElement>(
+      '[data-battle-zone="player-void"]',
+    );
+    let pointerEventsDuringHitTest = "";
+    Object.defineProperty(document, "elementFromPoint", {
+      configurable: true,
+      value: vi.fn(() => {
+        pointerEventsDuringHitTest = handCard?.style.pointerEvents ?? "";
+        return playerVoid;
+      }),
+    });
     expect(handCard?.draggable).toBe(true);
+    expect(
+      handCard?.querySelector(":scope > [data-battle-card-motion]"),
+    ).not.toBeNull();
+    if (handCard?.parentElement !== null && handCard?.parentElement !== undefined) {
+      handCard.parentElement.style.transform = "matrix(0, 1, -1, 0, 0, 0)";
+    }
 
     act(() => {
       revealSource?.dispatchEvent(
         new PointerEvent("pointerdown", {
           bubbles: true,
+          cancelable: true,
+          clientX: 20,
+          clientY: 30,
           pointerId: 7,
           pointerType: "touch",
         }),
       );
     });
+    expect(revealSource?.dataset.revealActive).toBe("true");
     expect(handCard?.draggable).toBe(false);
 
+    const dragMove = new PointerEvent("pointermove", {
+      bubbles: true,
+      cancelable: true,
+      clientX: 44,
+      clientY: 70,
+      pointerId: 7,
+      pointerType: "touch",
+    });
     act(() => {
-      revealSource?.dispatchEvent(
+      handCard?.dispatchEvent(dragMove);
+    });
+
+    expect(dragMove.defaultPrevented).toBe(true);
+    expect(interactions.onCardDragStart).toHaveBeenCalledWith(
+      "player-hand-0",
+      "player-hand",
+    );
+    expect(revealSource?.dataset.revealActive).toBe("false");
+    expect(handCard?.dataset.battleTouchDragging).toBe("true");
+    expect(handCard?.style.pointerEvents).toBe("");
+    expect(handCard?.style.transform).toContain("translate3d(40px, -24px, 0)");
+
+    act(() => {
+      handCard?.dispatchEvent(
         new PointerEvent("pointerup", {
           bubbles: true,
+          cancelable: true,
+          clientX: 44,
+          clientY: 70,
           pointerId: 7,
           pointerType: "touch",
         }),
       );
     });
+
     expect(handCard?.draggable).toBe(true);
-    expect(interactions.onCardDragStart).not.toHaveBeenCalled();
+    expect(interactions.onZoneDrop).toHaveBeenCalledWith({
+      owner: "player",
+      zone: "void",
+    });
+    expect(interactions.onCardDragEnd).toHaveBeenCalledTimes(1);
+    expect(pointerEventsDuringHitTest).toBe("none");
+    expect(handCard?.dataset.battleTouchDragging).toBe("false");
+    expect(handCard?.style.transform).toBe("");
 
     act(() => root.unmount());
   });

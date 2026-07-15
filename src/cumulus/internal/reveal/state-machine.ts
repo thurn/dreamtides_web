@@ -3,10 +3,10 @@ import type {
   RevealCoordinatorSource, RevealDismissalReason, RevealSourceIdentity,
   RevealTouchState,
 } from "./model";
+import { POINTER_MOVEMENT_SLOP_PX } from "../../primitives/pointer-gesture";
 
 export const REVEAL_INTENT_MS = 30;
 export const REVEAL_HOLD_MS = 300;
-export const REVEAL_MOVEMENT_SLOP_PX = 10;
 
 export const initialRevealCoordinatorState: RevealCoordinatorState = {
   phase: "idle", activeSource: null, activeRegistrationId: null,
@@ -75,7 +75,7 @@ export function reduceRevealState(state: RevealCoordinatorState, event: RevealCo
       if (state.touch?.pointerId !== event.pointerId) return state;
       const dx = event.point.x - state.touch.startPoint.x;
       const dy = event.point.y - state.touch.startPoint.y;
-      return Math.hypot(dx, dy) > REVEAL_MOVEMENT_SLOP_PX ? cancel(state, "movement") : state;
+      return Math.hypot(dx, dy) > POINTER_MOVEMENT_SLOP_PX ? cancel(state, "movement") : state;
     }
     case "pointer-up": {
       if (state.touch !== null) {
