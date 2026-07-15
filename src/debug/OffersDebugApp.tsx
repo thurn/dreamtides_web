@@ -1,5 +1,6 @@
-import { useState, type ReactElement } from "react";
+import { useEffect, useState, type ReactElement } from "react";
 import { siteTypeIcon } from "../atlas/atlas-generator";
+import { loadCardDatabase } from "../data/card-database";
 import {
   OfferTile,
   type OfferTileCard,
@@ -13,6 +14,7 @@ import { token } from "../cumulus/primitives/tokens";
 import { MERCHANT_ARCHETYPE_BUILDERS } from "../journey_v2/archetypes/registry";
 import type { MerchantArchetypeId } from "../journey_v2/archetypes/types";
 import { asCardId } from "../types/card-identity";
+import type { CardData } from "../types/cards";
 
 const fixtureCard = (cardId: string, imageNumber: number): OfferTileCard => ({
   cardId: asCardId(cardId),
@@ -229,10 +231,58 @@ export const OFFER_TILE_DEBUG_ARCHETYPE_IDS = MERCHANT_ARCHETYPE_BUILDERS.map(
   (builder) => builder.archetypeId,
 ).filter((archetypeId) => archetypeId !== "strong_card");
 
+function hydrateOperationCard(
+  model: OfferTileModel,
+  cardsById: ReadonlyMap<string, CardData> | null,
+): OfferTileModel {
+  if (cardsById === null) {
+    return model;
+  }
+  switch (model.kind) {
+    case "transfigure-card":
+    case "keyword-modification":
+    case "tribal-change":
+    case "purge-card": {
+      const displaySnapshot = cardsById.get(model.card.cardId);
+      return displaySnapshot === undefined
+        ? model
+        : { ...model, card: { ...model.card, displaySnapshot } };
+    }
+    default:
+      return model;
+  }
+}
+
 export default function OffersDebugApp(): ReactElement {
   const [lastPressed, setLastPressed] = useState<string | null>(null);
-  const models = OFFER_TILE_DEBUG_ARCHETYPE_IDS.map(
-    (archetypeId) => OFFER_TILE_DEBUG_MODELS[archetypeId],
+  const [cardsById, setCardsById] = useState<ReadonlyMap<string, CardData> | null>(
+    null,
+  );
+  const [cardLoadError, setCardLoadError] = useState<string | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    loadCardDatabase()
+      .then((database) => {
+        if (cancelled) {
+          return;
+        }
+        setCardsById(
+          new Map(
+            [...database.values()].map((card) => [card.id, card] as const),
+          ),
+        );
+      })
+      .catch((cause: unknown) => {
+        if (!cancelled) {
+          setCardLoadError(cause instanceof Error ? cause.message : String(cause));
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  const models = OFFER_TILE_DEBUG_ARCHETYPE_IDS.map((archetypeId) =>
+    hydrateOperationCard(OFFER_TILE_DEBUG_MODELS[archetypeId], cardsById),
   );
   const selected =
     lastPressed === null
@@ -242,6 +292,14 @@ export default function OffersDebugApp(): ReactElement {
     <div
       className="cumulus"
       data-testid="offers-debug-page"
+      data-card-catalog-status={
+        cardLoadError !== null
+          ? "error"
+          : cardsById === null
+            ? "loading"
+            : "ready"
+      }
+      data-card-catalog-error={cardLoadError ?? undefined}
       style={{
         position: "relative",
         minHeight: "100vh",
@@ -313,7 +371,10 @@ export default function OffersDebugApp(): ReactElement {
           }}
         >
           {OFFER_TILE_DEBUG_ARCHETYPE_IDS.map((archetypeId) => {
-            const model = OFFER_TILE_DEBUG_MODELS[archetypeId];
+            const model = hydrateOperationCard(
+              OFFER_TILE_DEBUG_MODELS[archetypeId],
+              cardsById,
+            );
             return (
               <figure
                 key={archetypeId}

@@ -4,7 +4,8 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
-import { asCardId } from "../../../types/card-identity";
+import { asCardId, asCardName } from "../../../types/card-identity";
+import type { CardData } from "../../../types/cards";
 import { GLYPHS } from "../../primitives/glyph";
 import { OfferTile, type OfferTileModel } from "./OfferTile";
 
@@ -19,6 +20,21 @@ const MODEL: OfferTileModel = {
     { cardId: asCardId("b56ef7e8-c634-4d40-ac08-fab591dfbc4a"), imageNumber: 618071684 },
     { cardId: asCardId("9b9c2743-75b3-499d-b5fb-c3429c92d420"), imageNumber: 1196004046 },
   ],
+};
+
+const FULL_CARD: CardData = {
+  id: MODEL.cards[0].cardId,
+  name: asCardName("Test Card"),
+  cardNumber: 1,
+  cardType: "Character",
+  subtype: "Spirit Animal",
+  isStarter: false,
+  energyCost: 2,
+  spark: 3,
+  isFast: false,
+  renderedText: "▸ Dawn: Draw a card.",
+  imageNumber: MODEL.cards[0].imageNumber,
+  artOwned: true,
 };
 
 describe("OfferTile", () => {
@@ -284,20 +300,23 @@ describe("OfferTile", () => {
     container.remove();
   });
 
-  it("uses balanced diagonal card-and-mark compositions and keeps purge art visible", () => {
+  it("centers full operation cards under compact marks and keeps purge art visible", () => {
     const transfigure: OfferTileModel = {
       id: "debug-transfigure",
       kind: "transfigure-card",
       label: "Transfigure Card",
       description: "Transfigure a card in your deck.",
-      card: MODEL.cards[0],
+      card: { ...MODEL.cards[0], displaySnapshot: FULL_CARD },
     };
     const purge: OfferTileModel = {
       id: "debug-purge",
       kind: "purge-card",
       label: "Purge Card",
       description: "Purge a card.",
-      card: MODEL.cards[1],
+      card: {
+        ...MODEL.cards[1],
+        displaySnapshot: { ...FULL_CARD, id: MODEL.cards[1].cardId },
+      },
     };
     const addSite: OfferTileModel = {
       id: "debug-add-site",
@@ -324,15 +343,25 @@ describe("OfferTile", () => {
       const mark = container.querySelector<HTMLElement>(
         `[data-testid="${testId}"] [data-offer-tile-operation-layout]`,
       );
-      expect(mark?.dataset.offerTileOperationLayout).toBe("diagonal");
-      expect(mark?.style.width).toBe("82px");
-      expect(mark?.style.height).toBe("82px");
+      expect(mark?.dataset.offerTileOperationLayout).toBe("card-overlay");
+      expect(mark?.style.width).toBe("54px");
+      expect(mark?.style.height).toBe("54px");
+      const fullCard = container.querySelector<HTMLElement>(
+        `[data-testid="${testId}"] [data-offer-tile-full-card]`,
+      );
+      expect(fullCard?.style.width).toBe("88px");
+      expect(fullCard?.querySelector('[data-card-presentation="full"]')).not.toBeNull();
     }
     const purgedCard = container.querySelector<HTMLElement>(
-      '[data-testid="purge"] [data-offer-tile-card-id]',
+      '[data-testid="purge"] [data-offer-tile-full-card]',
     );
     expect(purgedCard?.style.filter).toBe("");
     expect(purgedCard?.style.boxShadow).toContain("var(--danger)");
+    expect(
+      container.querySelectorAll(
+        '[data-testid="transfigure"] [data-offer-tile-visual] [data-reveal-entity-type], [data-testid="purge"] [data-offer-tile-visual] [data-reveal-entity-type]',
+      ),
+    ).toHaveLength(0);
     expect(
       container.querySelector<HTMLElement>(
         '[data-testid="add-site"] [data-offer-tile-site-glyph]',

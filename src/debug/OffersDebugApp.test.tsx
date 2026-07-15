@@ -2,7 +2,7 @@
 
 import { act } from "react";
 import { createRoot } from "react-dom/client";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { MERCHANT_ARCHETYPE_BUILDERS } from "../journey_v2/archetypes/registry";
 import OffersDebugApp, {
@@ -10,6 +10,14 @@ import OffersDebugApp, {
   OFFER_TILE_DEBUG_MODELS,
   OFFER_TILE_DEBUG_NOTES,
 } from "./OffersDebugApp";
+
+vi.mock("../data/card-database", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../data/card-database")>();
+  return {
+    ...actual,
+    loadCardDatabase: vi.fn(() => new Promise(() => {})),
+  };
+});
 
 describe("OffersDebugApp", () => {
   it("shows one OfferTile for every distinct Dream Augury UI presentation", () => {

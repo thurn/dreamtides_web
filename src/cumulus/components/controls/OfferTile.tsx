@@ -7,6 +7,7 @@ import {
 } from "react";
 import { cardIdenticonUri, cardImageUrl, hasAssignedImage } from "../../../data/card-database";
 import type { CardId } from "../../../types/card-identity";
+import type { FrozenCardData } from "../../../types/cards";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
@@ -17,6 +18,7 @@ import type { Glyph } from "../../primitives/glyph";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { richText } from "../card/rich-text";
+import { CardView } from "../card/CardView";
 import offerFrameUrl from "../../assets/Skill_Frame_iron.png";
 import "./offer-tile.css";
 
@@ -29,6 +31,8 @@ export interface OfferTileCard {
   cardId: CardId;
   /** Asset-pipeline image key for the card's assigned art. */
   imageNumber: number;
+  /** Complete UUID-matched display data for full-card offer compositions. */
+  displaySnapshot?: FrozenCardData;
 }
 
 /** UUID-backed dreamsign art shown symbolically inside an offer. */
@@ -150,9 +154,9 @@ export interface OfferTileProps {
 
 /**
  * A 200×200 framed symbolic Dream Augury offer button. Its rounded gold frame
- * surrounds height-preserving square card art, dreamsigns, and glyphs. Every
- * inner object is decorative and pointer-transparent. The complete tile is the
- * only hover/focus/press target and reveals one category InfoCard.
+ * surrounds full cards, square card art, dreamsigns, and glyphs. Every inner
+ * object is decorative and pointer-transparent. The complete tile is the only
+ * hover/focus/press target and reveals one category InfoCard.
  */
 export function OfferTile({
   model,
@@ -385,6 +389,35 @@ function DreamsignArtPiece({
   );
 }
 
+function FullCardPiece({
+  card,
+  treatment = "plain",
+}: {
+  readonly card: OfferTileCard;
+  readonly treatment?: "plain" | "purged";
+}): ReactElement {
+  if (card.displaySnapshot === undefined) {
+    return <CardArtPiece card={card} treatment={treatment} size="large" />;
+  }
+  return (
+    <span
+      data-offer-tile-full-card={card.cardId}
+      style={{
+        display: "block",
+        width: 88,
+        borderRadius: token("--radius-inset"),
+        boxShadow:
+          treatment === "purged"
+            ? `0 0 0 3px ${token("--danger")}, ${token("--shadow-card")}`
+            : token("--shadow-card"),
+        pointerEvents: "none",
+      }}
+    >
+      <CardView card={card.displaySnapshot} statTooltips={false} />
+    </span>
+  );
+}
+
 function OperationMark({
   glyph,
   tone = "neutral",
@@ -392,7 +425,7 @@ function OperationMark({
 }: {
   readonly glyph: Glyph;
   readonly tone?: "neutral" | "accent" | "danger" | "spark" | "duplicate";
-  readonly layout: "diagonal" | "overlay";
+  readonly layout: "card-overlay" | "diagonal" | "overlay";
 }): ReactElement {
   const color =
     tone === "accent"
@@ -412,15 +445,17 @@ function OperationMark({
         position: "absolute",
         left: layout === "overlay" ? "50%" : undefined,
         top: layout === "overlay" ? "50%" : undefined,
-        right: layout === "diagonal" ? 0 : undefined,
-        bottom: layout === "diagonal" ? 0 : undefined,
+        right:
+          layout === "diagonal" ? 0 : layout === "card-overlay" ? 8 : undefined,
+        bottom:
+          layout === "diagonal" ? 0 : layout === "card-overlay" ? 4 : undefined,
         translate: layout === "overlay" ? "-50% -50%" : undefined,
         zIndex: 2,
         display: "grid",
         placeItems: "center",
         flex: "0 0 auto",
-        width: layout === "overlay" ? 48 : 82,
-        height: layout === "overlay" ? 48 : 82,
+        width: layout === "overlay" ? 48 : layout === "diagonal" ? 82 : 54,
+        height: layout === "overlay" ? 48 : layout === "diagonal" ? 82 : 54,
         borderRadius: token("--radius-pill"),
         color,
         background: token("--surface-chrome-strong"),
@@ -432,7 +467,7 @@ function OperationMark({
       <i
         className={glyph}
         style={{
-          fontSize: layout === "overlay" ? 26 : 42,
+          fontSize: layout === "overlay" ? 26 : layout === "diagonal" ? 42 : 30,
           lineHeight: 1,
           pointerEvents: "none",
         }}
@@ -488,6 +523,35 @@ function OperationComposition({
         children
       )}
       <OperationMark glyph={glyph} tone={tone} layout={layout} />
+    </span>
+  );
+}
+
+function FullCardOperation({
+  card,
+  glyph,
+  tone,
+  treatment,
+}: {
+  readonly card: OfferTileCard;
+  readonly glyph: Glyph;
+  readonly tone?: "neutral" | "accent" | "danger" | "spark" | "duplicate";
+  readonly treatment?: "plain" | "purged";
+}): ReactElement {
+  return (
+    <span
+      data-offer-tile-composition="card-overlay"
+      style={{
+        position: "relative",
+        display: "grid",
+        placeItems: "center",
+        width: 150,
+        height: 150,
+        pointerEvents: "none",
+      }}
+    >
+      <FullCardPiece card={card} treatment={treatment} />
+      <OperationMark glyph={glyph} tone={tone} layout="card-overlay" />
     </span>
   );
 }
@@ -623,13 +687,11 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
       return <CardFan cards={model.cards} />;
     case "transfigure-card":
       return (
-        <OperationComposition
+        <FullCardOperation
+          card={model.card}
           glyph={GLYPHS.transfigurationSite}
           tone="accent"
-          layout="diagonal"
-        >
-          <CardArtPiece card={model.card} size="large" treatment="incoming" />
-        </OperationComposition>
+        />
       );
     case "transfigure-starters":
       return (
@@ -643,29 +705,24 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
       );
     case "keyword-modification":
       return (
-        <OperationComposition glyph={GLYPHS.spark} tone="accent" layout="diagonal">
-          <CardArtPiece card={model.card} size="large" />
-        </OperationComposition>
+        <FullCardOperation card={model.card} glyph={GLYPHS.spark} tone="accent" />
       );
     case "tribal-change":
       return (
-        <OperationComposition
+        <FullCardOperation
+          card={model.card}
           glyph={GLYPHS.affiliationRow}
           tone="accent"
-          layout="diagonal"
-        >
-          <CardArtPiece card={model.card} size="large" />
-        </OperationComposition>
+        />
       );
     case "purge-card":
       return (
-        <OperationComposition
+        <FullCardOperation
+          card={model.card}
           glyph={GLYPHS.closeFilled}
           tone="danger"
-          layout="diagonal"
-        >
-          <CardArtPiece card={model.card} size="large" treatment="purged" />
-        </OperationComposition>
+          treatment="purged"
+        />
       );
     case "trade-card":
       return (

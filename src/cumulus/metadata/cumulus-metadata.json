@@ -1078,6 +1078,14 @@
       "description": "Hide rules text for dense card surfaces that show identity and stats."
     },
     {
+      "name": "statTooltips",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Whether corner stats expose their standalone tooltips."
+    },
+    {
       "name": "presentation",
       "tsType": "GameCardPresentation",
       "unionMembers": [
@@ -1786,6 +1794,14 @@
       "required": false,
       "defaultValue": "false",
       "description": "Hide source rules on dense surfaces; the reveal stays complete."
+    },
+    {
+      "name": "statTooltips",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "true",
+      "description": "Whether corner stats expose their standalone tooltips."
     },
     {
       "name": "presentation",
