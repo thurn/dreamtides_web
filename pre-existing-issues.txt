@@ -24,7 +24,6 @@ and four-card front rank occupy the leading columns of those wider tracks, so
 the enemy formation appears left-shifted while the twenty-card player
 formation remains centered. The regular `Fill Battlefield + Voids` 9-vs-9
 preview is centered.
-
 ## Dev wrapper can time out while `lsof` stats an Arq SMB mount
 
 `npm run dev -- --port 5184` selected free emulator ports and started asset
@@ -34,3 +33,13 @@ wrapper exited with `Timed out waiting for the Realtime Database emulator`.
 The documented `npm run dev:vite -- --port 5184` path started successfully, so
 Vite-only screen QA remained available. The wrapper should scope its port
 inspection so unrelated slow or unavailable mounts cannot block startup.
+
+## Coop battle construction drops opponent reconstruction logs
+
+`createBattleInitProvider` passes a `deferOpponentLog` callback that discards
+the deferred emitter from `createBattleInit`. As a result, event-sourced
+`BEGIN_BATTLE` construction does not publish `opponent_signature_cards_selected`,
+`opponent_deck_constructed`, or the corpus equivalents needed to reconstruct
+how the opponent was generated. The provider comment previously claimed the
+primary client emitted those records later, but no source consumer retains or
+invokes the deferred emitter.

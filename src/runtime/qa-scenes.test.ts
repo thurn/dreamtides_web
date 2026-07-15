@@ -14,7 +14,12 @@ import {
   buildTestCorpusCards,
   makeTestPoolContext,
 } from "../__test-helpers__/pool-context";
-import { QA_SCENES, buildQaScene, findQaScene } from "./qa-scenes";
+import {
+  QA_SCENES,
+  buildQaScene,
+  findQaScene,
+  qaSceneLoadsBattle,
+} from "./qa-scenes";
 
 function makeDreamcaller(): DreamcallerContent {
   return {
@@ -202,6 +207,12 @@ describe("the atlas layer QA scenes", () => {
 
 describe("the battle layer QA scenes", () => {
   const displayLayers = [1, 2, 3, 4, 5, 6, 7];
+
+  it("loads an active battle only for the dedicated playable scene", () => {
+    expect(qaSceneLoadsBattle("battle")).toBe(false);
+    expect(qaSceneLoadsBattle("battle3")).toBe(false);
+    expect(qaSceneLoadsBattle("battle-playable")).toBe(true);
+  });
 
   for (const displayLayer of displayLayers) {
     it(`battle${String(displayLayer)} parks on the Layer ${String(displayLayer)} Battle start screen`, () => {

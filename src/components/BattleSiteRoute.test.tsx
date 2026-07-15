@@ -4,12 +4,9 @@ import { StrictMode, act, type ReactElement } from "react";
 import { MINIMAL_ATLAS_CONFIG, MINIMAL_DREAMSCAPES } from "../__test-helpers__/atlas-fixtures";
 import { createRoot, type Root } from "react-dom/client";
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
-import {
-  BattleSiteRoute,
-  createBattleEntryKey,
-} from "./BattleSiteRoute";
+import { BattleSiteRoute } from "./BattleSiteRoute";
 import type { CoopActions } from "../coop/actions";
-import { useQuest } from "../state/quest-context";
+import { createDefaultState, useQuest } from "../state/quest-context";
 import type { FoldState } from "../rules/fold-state";
 import type { CardSourceDebugState, Screen, SiteState } from "../types/quest";
 import {
@@ -22,7 +19,8 @@ import { createBattleInit } from "../battle/integration/create-battle-init";
 import { createInitialBattleState } from "../battle/state/create-initial-state";
 import { emptyDawnFired } from "../rules/battle/fold";
 
-vi.mock("../state/quest-context", () => ({
+vi.mock("../state/quest-context", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../state/quest-context")>()),
   useQuest: vi.fn(),
 }));
 
@@ -138,41 +136,24 @@ function makeQuestState(overrides: {
     screen = { type: "site", siteId: "site-7" } as Screen,
     visitedSites = [] as string[],
   } = overrides;
+  const battleState = makeBattleTestState();
   return {
+    ...createDefaultState(),
+    ...battleState,
     runId: "quest:test",
-    seed: "test-seed",
     essence: 250,
-    essenceCap: 500,
-    maxDreamsigns: 12,
-    deck: [],
-    dreamcaller: null,
-    resolvedPackage: null,
     cardSourceDebug,
-    remainingDreamsignPool: [],
-    dreamsigns: [],
     completionLevel,
     atlas: {
-      nodes: {},
+      ...battleState.atlas,
       startingNodeId: atlasStartingNodeId,
       bossNodeId: atlasStartingNodeId,
       currentNodeId: atlasStartingNodeId,
-      layers: [],
-      knownDreamsignCarrierIds: [],
     },
     currentDreamscape,
     visitedSites,
-    siteRuntime: {},
-    draftState: null,
     screen,
     activeSiteId: "site-7",
-    failureSummary: null,
-    hasSeenStartingDeckPopup: false,
-    battleModifiers: [],
-    shopModifiers: {
-      freeRerolls: 0,
-      essenceDiscountPercent: 0,
-    },
-    dreamscapeModifiers: [],
   };
 }
 
@@ -182,10 +163,10 @@ function setQuestState(
   vi.mocked(useQuest).mockReturnValue({
     state: makeQuestState(overrides),
     mutations: {} as ReturnType<typeof useQuest>["mutations"],
-    cardDatabase: new Map(),
+    cardDatabase: makeBattleTestCardDatabase(),
     questContent: {
-      cardDatabase: new Map(),
-      dreamcallers: [],
+      cardDatabase: makeBattleTestCardDatabase(),
+      dreamcallers: makeBattleTestDreamcallers(),
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: MINIMAL_DREAMSCAPES,
@@ -232,19 +213,32 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-describe("createBattleEntryKey", () => {
-  it("uses the exact task format", () => {
-    expect(createBattleEntryKey("dreamscape-2", "site-7", 3)).toBe(
-      "site-7::3::dreamscape-2",
-    );
-    expect(createBattleEntryKey(null, "site-7", 3)).toBe("site-7::3::none");
-  });
-});
-
 describe("BattleSiteRoute", () => {
-  it("serves the Cumulus Battle Start preview for the default UI variant", () => {
+  it("opens the playable surface on mount when the folded battle already exists", () => {
     mockGameState = makeFoldStateWithBattle();
     const { container } = mount(
+      <BattleSiteRoute
+        site={makeSite()}
+        cardDatabase={makeBattleTestCardDatabase()}
+        runtimeConfig={{
+          seedOverride: null,
+          aiMode: false,
+          basicAutomation: false,
+          gameId: "9a9qfv",
+          databaseMode: "emulator",
+          journeyVariant: "classic",
+          uiVariant: "cumulus",
+        }}
+      />,
+    );
+
+    expect(container.querySelector('[data-screen="cumulus-playable"]')).not.toBeNull();
+    expect(container.querySelector('[data-screen="cumulus-battle-start"]')).toBeNull();
+    expect(beginBattleSpy).not.toHaveBeenCalled();
+  });
+
+  it("serves the Cumulus Battle Start preview before BEGIN_BATTLE folds", () => {
+    const { container, root } = mount(
       <BattleSiteRoute
         site={makeSite()}
         cardDatabase={makeBattleTestCardDatabase()}
@@ -263,8 +257,29 @@ describe("BattleSiteRoute", () => {
     expect(container.querySelector('[data-screen="cumulus-battle-start"]')).not.toBeNull();
     expect(container.querySelector('[data-screen="battle-start"]')).toBeNull();
     expect(container.querySelector("[data-cumulus-quest-chrome]")).not.toBeNull();
+    expect(beginBattleSpy).not.toHaveBeenCalled();
     act(() => {
       container.querySelector<HTMLButtonElement>("[data-cumulus-begin]")?.click();
+    });
+    expect(beginBattleSpy).toHaveBeenCalledWith("site-7");
+
+    mockGameState = makeFoldStateWithBattle();
+    act(() => {
+      root.render(
+        <BattleSiteRoute
+          site={makeSite()}
+          cardDatabase={makeBattleTestCardDatabase()}
+          runtimeConfig={{
+            seedOverride: null,
+            aiMode: false,
+            basicAutomation: false,
+            gameId: null,
+            databaseMode: "emulator",
+            journeyVariant: "classic",
+            uiVariant: "cumulus",
+          }}
+        />,
+      );
     });
     expect(container.querySelector('[data-screen="cumulus-playable"]')).not.toBeNull();
     expect(container.querySelector('[data-screen="legacy-playable"]')).toBeNull();
@@ -272,7 +287,7 @@ describe("BattleSiteRoute", () => {
     expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
   });
 
-  it("opens the Cumulus playable surface directly for the playable battle QA scene", () => {
+  it("opens the Cumulus playable surface when the playable QA scene loads a battle", () => {
     mockGameState = makeFoldStateWithBattle();
     const { container } = mount(
       <BattleSiteRoute
@@ -296,7 +311,7 @@ describe("BattleSiteRoute", () => {
     expect(container.querySelector("[data-cumulus-quest-chrome]")).toBeNull();
   });
 
-  it("renders a loading placeholder and appends BEGIN_BATTLE while battle is null", () => {
+  it("renders the legacy preview and appends BEGIN_BATTLE only after the click", () => {
     const { container } = mount(
       <BattleSiteRoute
         site={makeSite()}
@@ -314,13 +329,18 @@ describe("BattleSiteRoute", () => {
     );
 
     expect(container.querySelector('[data-screen="legacy-playable"]')).toBeNull();
-    expect(container.querySelector('[data-screen="battle-start"]')).toBeNull();
-    expect(container.textContent).toContain("Preparing battle");
+    expect(container.querySelector('[data-screen="battle-start"]')).not.toBeNull();
+    expect(beginBattleSpy).not.toHaveBeenCalled();
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>("[data-begin]")
+        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
     expect(beginBattleSpy).toHaveBeenCalledWith("site-7");
   });
 
-  it("appends BEGIN_BATTLE only once when StrictMode replays mount effects", () => {
-    mount(
+  it("does not append BEGIN_BATTLE during StrictMode mount effects", () => {
+    const { container } = mount(
       <StrictMode>
         <BattleSiteRoute
           site={makeSite()}
@@ -338,13 +358,17 @@ describe("BattleSiteRoute", () => {
       </StrictMode>,
     );
 
+    expect(beginBattleSpy).not.toHaveBeenCalled();
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>("[data-begin]")
+        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
     expect(beginBattleSpy).toHaveBeenCalledTimes(1);
-    expect(beginBattleSpy).toHaveBeenCalledWith("site-7");
   });
 
-  it("reveals the Battle Start screen once the fold's battle exists, then PlayableBattleScreen once Begin Battle is clicked", () => {
-    mockGameState = makeFoldStateWithBattle();
-    const { container } = mount(
+  it("switches from the legacy preview when BEGIN_BATTLE enters the fold", () => {
+    const { container, root } = mount(
       <BattleSiteRoute
         site={makeSite()}
         cardDatabase={makeBattleTestCardDatabase()}
@@ -363,17 +387,34 @@ describe("BattleSiteRoute", () => {
     // The opposing Dreamcaller is revealed before the playable surface mounts.
     const startScreen = container.querySelector('[data-screen="battle-start"]');
     expect(startScreen).not.toBeNull();
-    expect(startScreen?.getAttribute("data-battle-id")).toBe(
-      mockGameState.battle?.init.battleId,
-    );
+    expect(startScreen?.getAttribute("data-battle-id")).toContain("site-7::3::dreamscape-2");
     expect(container.querySelector('[data-screen="legacy-playable"]')).toBeNull();
-    // BEGIN_BATTLE is not re-appended once the fold's battle already exists.
     expect(beginBattleSpy).not.toHaveBeenCalled();
 
     act(() => {
       container
         .querySelector<HTMLButtonElement>("[data-begin]")
         ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(beginBattleSpy).toHaveBeenCalledWith("site-7");
+
+    mockGameState = makeFoldStateWithBattle();
+    act(() => {
+      root.render(
+        <BattleSiteRoute
+          site={makeSite()}
+          cardDatabase={makeBattleTestCardDatabase()}
+          runtimeConfig={{
+            seedOverride: null,
+            aiMode: false,
+            basicAutomation: false,
+            gameId: null,
+            databaseMode: "emulator",
+            journeyVariant: "classic",
+            uiVariant: "legacy",
+          }}
+        />,
+      );
     });
 
     const screen = container.querySelector('[data-screen="legacy-playable"]');
@@ -384,7 +425,7 @@ describe("BattleSiteRoute", () => {
     );
   });
 
-  it("resets the Battle Start reveal gate when the battleEntryKey changes", () => {
+  it("returns to the Battle Start preview after the folded battle is cleared", () => {
     mockGameState = makeFoldStateWithBattle();
     setQuestState({ completionLevel: 3 });
     const { container, root } = mount(
@@ -403,16 +444,11 @@ describe("BattleSiteRoute", () => {
       />,
     );
 
-    // Reach the playable surface through the Battle Start reveal.
-    act(() => {
-      container
-        .querySelector<HTMLButtonElement>("[data-begin]")
-        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-    });
     expect(
       container.querySelector('[data-screen="legacy-playable"]')?.textContent,
     ).toBe("site-7::3::dreamscape-2");
 
+    mockGameState = { quest: makeQuestState({ completionLevel: 4 }), battle: null };
     setQuestState({ completionLevel: 4 });
     act(() => {
       root.render(
@@ -432,8 +468,6 @@ describe("BattleSiteRoute", () => {
       );
     });
 
-    // The battleEntryKey changed (completionLevel 3 → 4), so the per-battle
-    // begin gate resets and the Battle Start reveal returns.
     expect(
       container.querySelector('[data-screen="battle-start"]'),
     ).not.toBeNull();

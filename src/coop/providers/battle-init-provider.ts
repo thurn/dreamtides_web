@@ -10,16 +10,16 @@
 import type { QuestContent } from "../../data/quest-content";
 import { createBattleInit } from "../../battle/integration/create-battle-init";
 import { createInitialBattleState } from "../../battle/state/create-initial-state";
+import type { BattleInit } from "../../battle/types";
 import { findSite } from "../../rules/quest/sites";
 import type { BattleFoldState } from "../../rules/fold-state";
 import { emptyDawnFired } from "../../rules/battle/fold";
 import type { BattleInitProvider } from "../../rules/battle/battle-events";
+import type { QuestState } from "../../types/quest";
 
 /**
- * Replicates `createBattleEntryKey` (which lives in a React module the rules /
- * coop-provider layer must not import). The format is a stable identity, not a
- * secret — a battle at `(siteId, completionLevel, dreamscapeId)` always keys the
- * same, so the derived battle seed is identical on every client.
+ * A battle at `(siteId, completionLevel, dreamscapeId)` always has the same
+ * stable identity, so the derived battle seed is identical on every client.
  */
 function battleEntryKeyFor(
   dreamscapeId: string | null,
@@ -29,40 +29,54 @@ function battleEntryKeyFor(
   return `${siteId}::${String(completionLevel)}::${dreamscapeId ?? "none"}`;
 }
 
+/**
+ * Build the immutable battle preview from folded quest state and loaded
+ * content. Battle construction is keyed by the quest seed and battle entry,
+ * so this is byte-identical to the init `BEGIN_BATTLE` will fold without
+ * creating any game state outside the reducer.
+ */
+export function createBattlePreview(
+  content: QuestContent,
+  quest: QuestState,
+  siteId: string,
+): BattleInit | null {
+  const site = findSite(quest, siteId);
+  if (site === null || site.type !== "Battle") return null;
+
+  const battleEntryKey = battleEntryKeyFor(
+    quest.currentDreamscape,
+    siteId,
+    quest.completionLevel,
+  );
+  return createBattleInit({
+    battleEntryKey,
+    battleInstanceId: `battle:${quest.runId ?? "unscoped"}:${battleEntryKey}`,
+    site,
+    state: quest,
+    cardDatabase: content.cardDatabase,
+    dreamcallers: content.dreamcallers,
+    dreamscapes: content.dreamscapes,
+    affiliations: content.affiliations,
+    dreamwellCards: content.dreamwellCards,
+    dreamsignTemplates: content.dreamsignTemplates,
+    poolContext: content.poolContext,
+    knownGoodDecklists: content.knownGoodDecklists,
+    dreamsignSignatures: content.dreamsignSignatures,
+    fitModel: content.fitModel,
+    draftRecords: content.draftRecords,
+    // Opponent-reconstruction logging is a display/analytics side effect, not
+    // fold state; capture and drop it so preview/reducer construction is pure.
+    deferOpponentLog: () => {},
+  });
+}
+
 export function createBattleInitProvider(
   content: QuestContent,
 ): BattleInitProvider {
   return {
     beginBattle: ({ quest, siteId }): BattleFoldState | null => {
-      const site = findSite(quest, siteId);
-      if (site === null || site.type !== "Battle") return null;
-
-      const battleEntryKey = battleEntryKeyFor(
-        quest.currentDreamscape,
-        siteId,
-        quest.completionLevel,
-      );
-      const init = createBattleInit({
-        battleEntryKey,
-        battleInstanceId: `battle:${quest.runId ?? "unscoped"}:${battleEntryKey}`,
-        site,
-        state: quest,
-        cardDatabase: content.cardDatabase,
-        dreamcallers: content.dreamcallers,
-        dreamscapes: content.dreamscapes,
-        affiliations: content.affiliations,
-        dreamwellCards: content.dreamwellCards,
-        dreamsignTemplates: content.dreamsignTemplates,
-        poolContext: content.poolContext,
-        knownGoodDecklists: content.knownGoodDecklists,
-        dreamsignSignatures: content.dreamsignSignatures,
-        fitModel: content.fitModel,
-        draftRecords: content.draftRecords,
-        // The opponent-reconstruction logs are a display/analytics side effect,
-        // not fold state; capture and drop them so folding a `BEGIN_BATTLE` is a
-        // pure state transition (the primary client's UI emits them later).
-        deferOpponentLog: () => {},
-      });
+      const init = createBattlePreview(content, quest, siteId);
+      if (init === null) return null;
       const board = createInitialBattleState(init);
       return {
         init,

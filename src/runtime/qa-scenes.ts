@@ -33,6 +33,8 @@ export interface QaScene {
    * selected and would otherwise spin forever.
    */
   landsOnQuestStart?: boolean;
+  /** Loads a folded battle slice immediately instead of the pre-battle reveal. */
+  loadsBattle?: boolean;
   /**
    * Builds the parked quest state from current quest content, or returns null
    * when required content is missing.
@@ -241,6 +243,7 @@ const PLAYABLE_BATTLE_SCENE: QaScene = {
   label: "Playable Battle (Layer 1)",
   description:
     "The Layer 1 keeper battle, mounted directly on the playable board for UI QA.",
+  loadsBattle: true,
   build: battleLayerSceneState(1),
 };
 
@@ -652,6 +655,11 @@ export const QA_SCENES: readonly QaScene[] = [
 export function findQaScene(id: string): QaScene | null {
   const normalized = id.trim().toLowerCase();
   return QA_SCENES.find((scene) => scene.id === normalized) ?? null;
+}
+
+/** Whether `id` intentionally bootstraps directly into active battle state. */
+export function qaSceneLoadsBattle(id: string): boolean {
+  return findQaScene(id)?.loadsBattle === true;
 }
 
 /**
