@@ -16,10 +16,12 @@ import { resolveArtRef } from "../../primitives/art";
 import type { Glyph } from "../../primitives/glyph";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import { richText } from "../card/rich-text";
 import { CardView } from "../card/CardView";
 import { CARD_CORNER_RADIUS } from "../card/card-aspect";
-import { offerTileDescription } from "./offer-tile-descriptions";
+import {
+  offerTileDescription,
+  offerTileRichDescription,
+} from "./offer-tile-descriptions";
 import offerFrameUrl from "../../assets/Skill_Frame_iron.png";
 import "./offer-tile.css";
 
@@ -38,6 +40,8 @@ export interface OfferTileCard {
 export interface OfferTileDreamsign {
   /** Canonical dreamsign UUID. */
   id: string;
+  /** Resolved display name used only in player-facing copy. */
+  name: string;
   /** Dreamsign artwork as a named Cumulus art reference. */
   art: ArtRef;
 }
@@ -46,6 +50,8 @@ export interface OfferTileDreamsign {
 export interface OfferTileSite {
   /** Stable site type or fixture id. */
   id: string;
+  /** Resolved display name used only in player-facing copy. */
+  name: string;
   /** The site's named design-system glyph. */
   glyph: Glyph;
 }
@@ -168,7 +174,7 @@ export function OfferTile({
         kind: "infoCard",
         card: {
           variant: "text",
-          body: richText.plain(offerTileDescription(model)),
+          body: offerTileRichDescription(model),
         },
       },
       secondaries: [],

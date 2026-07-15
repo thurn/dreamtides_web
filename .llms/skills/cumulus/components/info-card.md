@@ -34,7 +34,7 @@ The one press-to-reveal information card. Its media treatment varies by content 
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `kind` | `"plain" \| "rules" \| "note" \| "stack"` | no |  |
+| `kind` | `"plain" \| "rules" \| "underline" \| "inline" \| "note" \| "stack"` | no |  |
 
 ## Usage
 

@@ -206,18 +206,22 @@ describe("OfferTile", () => {
       dreamsigns: [
         {
           id: "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
+          name: "Amplified Acorn",
           art: { kind: "dreamsign", imageName: "acorn_gold.png" },
         },
         {
           id: "278EC1AB-F532-4862-84AE-63DF5E49548C",
+          name: "Pyramid Relic",
           art: { kind: "dreamsign", imageName: "aertfact.png" },
         },
         {
           id: "6E20E6C7-295A-48B1-B252-B8B00D6902C9",
+          name: "Amanita",
           art: { kind: "dreamsign", imageName: "amanita.png" },
         },
         {
           id: "49990864-1DB0-4C08-91AE-40A1F04223E4",
+          name: "Algae",
           art: { kind: "dreamsign", imageName: "algae.png" },
         },
       ],
@@ -459,7 +463,7 @@ describe("OfferTile", () => {
     const addSite: OfferTileModel = {
       id: "debug-add-site",
       kind: "add-site",
-      site: { id: "Duplication", glyph: GLYPHS.copy },
+      site: { id: "Duplication", name: "Duplication", glyph: GLYPHS.copy },
     };
     const refineStarters: OfferTileModel = {
       id: "debug-refine-starters",

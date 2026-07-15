@@ -27,9 +27,13 @@ function sameSource(state: ReturnType<typeof reduceRevealState>, source: RevealC
 
 function richTextDescription(value: RichText | undefined): string {
   if (value === undefined) return "";
-  return value.kind === "stack"
-    ? value.parts.map(richTextDescription).filter(Boolean).join(" ")
-    : value.text;
+  if (value.kind === "stack") {
+    return value.parts.map(richTextDescription).filter(Boolean).join(" ");
+  }
+  if (value.kind === "inline") {
+    return value.parts.map(richTextDescription).join("");
+  }
+  return value.text;
 }
 
 function infoCardDescription(card: RevealInfoCardModel): string {

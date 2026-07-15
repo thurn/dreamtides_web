@@ -73,19 +73,23 @@ const STARTER_TARGETS = [
 
 const DREAMSIGNS: OfferTileDreamsignChoices = [
   {
-    id: "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
-    art: artRef.dreamsign("acorn_gold.png"),
+    id: "1A524712-EF7E-43D9-BD79-5DEA5250BF08",
+    name: "Rainbow Horn",
+    art: artRef.dreamsign("horn_rainbow .png"),
   },
   {
     id: "278EC1AB-F532-4862-84AE-63DF5E49548C",
+    name: "Pyramid Relic",
     art: artRef.dreamsign("aertfact.png"),
   },
   {
     id: "6E20E6C7-295A-48B1-B252-B8B00D6902C9",
+    name: "Amanita",
     art: artRef.dreamsign("amanita.png"),
   },
   {
     id: "49990864-1DB0-4C08-91AE-40A1F04223E4",
+    name: "Algae",
     art: artRef.dreamsign("algae.png"),
   },
 ];
@@ -181,6 +185,7 @@ export const OFFER_TILE_DEBUG_MODELS: Readonly<
     kind: "add-site",
     site: {
       id: "Duplication",
+      name: "Duplication",
       glyph: glyph(siteTypeIcon("Duplication")),
     },
   },

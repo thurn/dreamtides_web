@@ -2521,7 +2521,7 @@
         "fields": [
           {
             "name": "kind",
-            "tsType": "\"plain\" | \"rules\" | \"note\" | \"stack\"",
+            "tsType": "\"plain\" | \"rules\" | \"underline\" | \"inline\" | \"note\" | \"stack\"",
             "optional": false,
             "description": ""
           }
@@ -3197,7 +3197,7 @@
         "fields": [
           {
             "name": "kind",
-            "tsType": "\"plain\" | \"rules\" | \"note\" | \"stack\"",
+            "tsType": "\"plain\" | \"rules\" | \"underline\" | \"inline\" | \"note\" | \"stack\"",
             "optional": false,
             "description": ""
           }

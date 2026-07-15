@@ -80,7 +80,7 @@ describe("OffersDebugApp", () => {
     expect(offerTileDescription(copiesDraft)).toBe(
       "Choose a card and add two copies of it to your deck.",
     );
-    expect(offerTileDescription(cardBundle)).toBe("Add all three cards to your deck.");
+    expect(offerTileDescription(cardBundle)).toBe("Add three cards to your deck.");
     expect(trade.kind).toBe("trade-card");
     expect(trade.kind === "trade-card" ? trade.incoming : []).toHaveLength(4);
     expect(duplicate.kind).toBe("duplicate-card");
@@ -102,7 +102,7 @@ describe("OffersDebugApp", () => {
       keyword.kind === "keyword-modification" ? keyword.card.cardId : null,
     ).toBe("2931e20b-1a80-4ddd-8944-20e68d182886");
     expect(offerTileDescription(dreamsignDraft)).toBe(
-      "Choose a dreamsign to add to your collection.",
+      "Choose a dreamsign to gain.",
     );
     for (const model of Object.values(OFFER_TILE_DEBUG_MODELS)) {
       const description = offerTileDescription(model);

@@ -7,7 +7,10 @@ import type {
   OfferTileFourCards,
   OfferTileModel,
 } from "./OfferTile";
-import { offerTileDescription } from "./offer-tile-descriptions";
+import {
+  offerTileDescription,
+  offerTileRichDescription,
+} from "./offer-tile-descriptions";
 
 const CARD: OfferTileCard = {
   cardId: asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"),
@@ -64,6 +67,7 @@ const FOUR_CARDS: OfferTileFourCards = [
 ];
 const DREAMSIGN: OfferTileDreamsign = {
   id: "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
+  name: "Rainbow Horn",
   art: { kind: "dreamsign", imageName: "acorn_gold.png" },
 };
 
@@ -84,7 +88,7 @@ const COPY_CASES: ReadonlyArray<
   ],
   [
     { id: "transfigured", kind: "transfigured-draft", cards: FOUR_CARDS },
-    "Choose a card to add to your deck.",
+    "Choose a transfigured card to add to your deck.",
   ],
   [
     {
@@ -142,7 +146,7 @@ const COPY_CASES: ReadonlyArray<
   ],
   [
     { id: "dreamsign-gift", kind: "dreamsign-gift", dreamsign: DREAMSIGN },
-    "Add one dreamsign to your collection.",
+    "Gain Rainbow Horn.",
   ],
   [
     {
@@ -150,15 +154,15 @@ const COPY_CASES: ReadonlyArray<
       kind: "dreamsign-draft",
       dreamsigns: [DREAMSIGN, DREAMSIGN],
     },
-    "Choose a dreamsign to add to your collection.",
+    "Choose a dreamsign to gain.",
   ],
   [
     {
       id: "site",
       kind: "add-site",
-      site: { id: "Duplication", glyph: GLYPHS.copy },
+      site: { id: "Duplication", name: "Duplication", glyph: GLYPHS.copy },
     },
-    "Add one site to the current dreamscape.",
+    "Add a duplication site to the current dreamscape.",
   ],
 ];
 
@@ -205,7 +209,34 @@ describe("offer tile descriptions", () => {
         kind: "card-bundle",
         cards: [CARD, SECOND_CARD, THIRD_CARD],
       }),
-    ).toBe("Add all three cards to your deck.");
+    ).toBe("Add three cards to your deck.");
+  });
+
+  it("underlines specific card and dreamsign names in InfoCard copy", () => {
+    expect(
+      offerTileRichDescription({ id: "gift", kind: "card-gift", card: CARD }),
+    ).toEqual({
+      kind: "inline",
+      parts: [
+        { kind: "plain", text: "Add " },
+        { kind: "underline", text: "Test Card" },
+        { kind: "plain", text: " to your deck." },
+      ],
+    });
+    expect(
+      offerTileRichDescription({
+        id: "sign",
+        kind: "dreamsign-gift",
+        dreamsign: DREAMSIGN,
+      }),
+    ).toEqual({
+      kind: "inline",
+      parts: [
+        { kind: "plain", text: "Gain " },
+        { kind: "underline", text: "Rainbow Horn" },
+        { kind: "plain", text: "." },
+      ],
+    });
   });
 
   it("never writes player-facing quantities as numerals", () => {

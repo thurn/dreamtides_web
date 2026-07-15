@@ -19,6 +19,8 @@ import { renderRulesText } from "./RulesText";
  *  - `rules` — Dreamtides rules text (see `RulesText`): glossary keywords gain
  *    the spark-amber emphasis and resource symbols (`◆`, `●`, `⍏N`) render as
  *    their inline glyphs. Use for card / dreamcaller / dreamsign ability text.
+ *  - `underline` — a semantically underlined run inside inline prose.
+ *  - `inline` — several parts rendered as one continuous line of prose.
  *  - `note`  — a de-emphasized secondary line (muted + italic), e.g. a
  *    "Locked" / "Visited" status shown under a site blurb.
  *  - `stack` — several parts laid out vertically as separate lines.
@@ -26,6 +28,8 @@ import { renderRulesText } from "./RulesText";
 export type RichText =
   | { readonly kind: "plain"; readonly text: string }
   | { readonly kind: "rules"; readonly text: string }
+  | { readonly kind: "underline"; readonly text: string }
+  | { readonly kind: "inline"; readonly parts: readonly RichText[] }
   | { readonly kind: "note"; readonly text: string }
   | { readonly kind: "stack"; readonly parts: readonly RichText[] };
 
@@ -33,6 +37,8 @@ export type RichText =
 export const richText = {
   plain: (text: string): RichText => ({ kind: "plain", text }),
   rules: (text: string): RichText => ({ kind: "rules", text }),
+  underline: (text: string): RichText => ({ kind: "underline", text }),
+  inline: (...parts: RichText[]): RichText => ({ kind: "inline", parts }),
   note: (text: string): RichText => ({ kind: "note", text }),
   stack: (...parts: RichText[]): RichText => ({ kind: "stack", parts }),
 };
@@ -53,6 +59,18 @@ export function renderRichText(
       return <span key={key}>{value.text}</span>;
     case "rules":
       return <Fragment key={key}>{renderRulesText(value.text)}</Fragment>;
+    case "underline":
+      return (
+        <span key={key} style={{ textDecoration: "underline" }}>
+          {value.text}
+        </span>
+      );
+    case "inline":
+      return (
+        <Fragment key={key}>
+          {value.parts.map((part, i) => renderRichText(part, i))}
+        </Fragment>
+      );
     case "note":
       return (
         <div
