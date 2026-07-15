@@ -1373,12 +1373,10 @@ function ControlRow({
 
 function AiApprovalMessage({
   aiApproval,
-  isDesktop,
 }: {
   readonly aiApproval: MobileBattleAiApprovalView | null;
-  readonly isDesktop: boolean;
 }) {
-  if (!isDesktop || aiApproval === null) return null;
+  if (aiApproval === null) return null;
   return (
     <div
       aria-live="polite"
@@ -1545,10 +1543,7 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
             interactions={interactions}
           />
         </LayoutGroup>
-        <AiApprovalMessage
-          aiApproval={view.aiApproval}
-          isDesktop={isDesktop}
-        />
+        <AiApprovalMessage aiApproval={view.aiApproval} />
         <BattleDebugMenu
           onFillBattlefieldPreview={interactions?.onFillBattlefieldPreview}
           onFillTwentyCardBattlefieldPreview={

@@ -778,7 +778,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("replaces Next Phase with AI proposal controls without mobile description copy", () => {
+  it("replaces Next Phase with AI proposal controls and a compact mobile caption", () => {
     const interactions = {
       canInteract: false,
       pendingCardId: null,
@@ -826,9 +826,12 @@ describe("MobileBattleScreen", () => {
     expect(rejectButton?.getAttribute("aria-disabled")).toBeNull();
     expect(continueButton?.getAttribute("aria-disabled")).toBeNull();
     expect(continueButton?.dataset.glassVariant).toBe("accent");
-    expect(
-      container.querySelector("[data-battle-ai-approval-message]"),
-    ).toBeNull();
+    const message = container.querySelector<HTMLElement>(
+      "[data-battle-ai-approval-message]",
+    );
+    expect(message?.textContent).toBe("Play a fixture card to B2.");
+    expect(message?.style.position).toBe("absolute");
+    expect(message?.style.font).toBe("var(--t-caption)");
 
     act(() => {
       rejectButton?.click();
