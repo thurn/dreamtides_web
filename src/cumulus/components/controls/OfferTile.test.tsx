@@ -9,6 +9,8 @@ import type { CardData } from "../../../types/cards";
 import { GLYPHS } from "../../primitives/glyph";
 import {
   OfferTile,
+  OFFER_TILE_COMPACT_SIZE,
+  OFFER_TILE_STANDARD_SIZE,
   type OfferTileCard,
   type OfferTileFourCards,
   type OfferTileModel,
@@ -75,6 +77,35 @@ const FULL_CARDS = MODEL.cards.map((card, index) =>
 ) as unknown as OfferTileFourCards;
 
 describe("OfferTile", () => {
+  it("preserves standard geometry and uniformly scales the compact composition", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <OfferTile model={MODEL} onPress={() => {}} testId="standard" />
+          <OfferTile model={{ ...MODEL, id: "compact" }} size="compact" onPress={() => {}} testId="compact" />
+        </CumulusRoot>,
+      );
+    });
+    const standard = container.querySelector<HTMLElement>('[data-testid="standard"]')!;
+    const compact = container.querySelector<HTMLElement>('[data-testid="compact"]')!;
+    const compactFrame = compact.querySelector<HTMLElement>("[data-offer-tile-floating-frame]")!;
+    expect(OFFER_TILE_STANDARD_SIZE).toBe(200);
+    expect(OFFER_TILE_COMPACT_SIZE).toBe(160);
+    expect(standard.dataset.offerTileSize).toBe("standard");
+    expect(standard.style.width).toBe("200px");
+    expect(compact.dataset.offerTileSize).toBe("compact");
+    expect(compact.style.width).toBe("160px");
+    expect(compact.style.height).toBe("160px");
+    expect(compactFrame.style.width).toBe("200px");
+    expect(compactFrame.style.height).toBe("200px");
+    expect(compactFrame.style.scale).toBe("0.8");
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("renders every surfaced card as a complete card face", () => {
     const draft: OfferTileModel = {
       id: "debug-full-draft",

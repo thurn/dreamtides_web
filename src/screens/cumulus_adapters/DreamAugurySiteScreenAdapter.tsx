@@ -13,18 +13,24 @@ import {
 
 export function DreamAugurySiteScreenAdapter({ siteId }: { siteId: string }) {
   const { state, mutations, questContent } = useQuest();
-  const node =
-    state.currentDreamscape === null
-      ? null
-      : (state.atlas.nodes[state.currentDreamscape] ?? null);
+  const node = state.currentDreamscape === null
+    ? null
+    : (state.atlas.nodes[state.currentDreamscape] ?? null);
   const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
   const guide = resolveDreamAuguryGuide(questContent.guides);
+  const guideLineRef = useRef<string | null | undefined>(undefined);
+  if (guideLineRef.current === undefined) {
+    const lines = guide?.dialog ?? [];
+    guideLineRef.current = lines.length === 0
+      ? null
+      : lines[Math.floor(Math.random() * lines.length)] ?? null;
+  }
+  const guideLine = guideLineRef.current;
   const result = useMemo(
-    () =>
-      site === null
-        ? null
-        : buildDreamAugurySiteModel({ state, sceneNode: node, site, questContent, guide }),
-    [state, node, site, questContent, guide],
+    () => site === null ? null : buildDreamAugurySiteModel({
+      state, sceneNode: node, site, questContent, guide, guideLine,
+    }),
+    [state, node, site, questContent, guide, guideLine],
   );
 
   const logEntries = useMemo(
@@ -67,11 +73,7 @@ export function DreamAugurySiteScreenAdapter({ siteId }: { siteId: string }) {
       if (site === null || result?.encounter === null || result?.encounter === undefined) {
         return { ok: false as const, message: "The augury is clouded." };
       }
-      const request = buildDreamAuguryAcceptRequest(
-        result.encounter,
-        offerId,
-        choiceId,
-      );
+      const request = buildDreamAuguryAcceptRequest(result.encounter, offerId, choiceId);
       if (request === null) {
         return { ok: false as const, message: "Choose a vision first." };
       }
@@ -102,6 +104,7 @@ export function DreamAugurySiteScreenAdapter({ siteId }: { siteId: string }) {
       encounterSignature: offer.encounterSignature,
       offerId,
       archetypeId: offer.archetypeId,
+      surface: "offer_tile",
       ui: "cumulus",
     });
   }, [result, site]);
@@ -109,7 +112,7 @@ export function DreamAugurySiteScreenAdapter({ siteId }: { siteId: string }) {
   if (site === null || result === null) return null;
   return (
     <DreamAugurySiteScreen
-      key={result.view.encounterSignature}
+      key={result.view.encounterSignature ?? result.view.siteId}
       view={result.view}
       onInspectOffer={handleInspect}
       onChoose={handleChoose}

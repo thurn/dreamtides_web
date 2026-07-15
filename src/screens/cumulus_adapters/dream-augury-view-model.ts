@@ -8,6 +8,7 @@ import {
   generateMerchantEncounterWithDebug,
   resolveOfferPresentation,
 } from "../../journey_v2";
+import { buildCategoryUniverse } from "../../journey_v2/archetypes/categories";
 import type {
   MerchantAcceptRequest,
   MerchantCatalogCard,
@@ -23,6 +24,8 @@ import type {
 import type { MerchantArchetypeId } from "../../journey_v2/archetypes/types";
 import type { MerchantDeckSnapshot } from "../../journey_v2/trace/deckSnapshot";
 import type { CardData } from "../../types/cards";
+import { asCardId } from "../../types/card-identity";
+import { resolveDeckEntryCard } from "../../card-type-change";
 import type { DreamGuideContent } from "../../types/content";
 import type {
   CardSourceDebugState,
@@ -33,6 +36,17 @@ import type {
 } from "../../types/quest";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
+import type {
+  OfferTileCard,
+  OfferTileBundleCards,
+  OfferTileCharacterSubtype,
+  OfferTileDreamsignChoices,
+  OfferTileDreamsign,
+  OfferTileDuplicateCards,
+  OfferTileFourCards,
+  OfferTileModel,
+  OfferTileStarterCards,
+} from "../../cumulus/components/controls/OfferTile";
 import type {
   DreamAuguryCardChoiceView,
   DreamAuguryCardView,
@@ -46,6 +60,8 @@ import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 const FALLBACK_GUIDE_ID = "aldric_the_seer";
 const FALLBACK_GUIDE_NAME = "Aldric, the Seer";
+const FALLBACK_GUIDE_LINE =
+  "Two paths unfold before you. Choose one to shape your dream.";
 
 const OFFER_HEADLINES: Readonly<Record<MerchantArchetypeId, string>> = {
   fit_card_grant: "A New Card",
@@ -93,11 +109,13 @@ export function resolveDreamAuguryGuide(
 
 export function buildDreamAuguryGuideView(
   guide: DreamGuideContent | null,
+  line: string | null,
 ): DreamAuguryGuideView {
   const id = guide?.id ?? FALLBACK_GUIDE_ID;
   return {
     id,
     name: guide?.name ?? FALLBACK_GUIDE_NAME,
+    line: line ?? guide?.dialog[0] ?? FALLBACK_GUIDE_LINE,
     art: artRef.dreamGuide(id),
   };
 }
@@ -146,6 +164,260 @@ function toDreamsign(
     imageAlt: object.dreamsignTemplate.imageAlt,
     isBane: false,
   };
+}
+
+function unavailable(message: string): never {
+  throw new Error(`Dream Augury offer unavailable: ${message}`);
+}
+
+function tileCard(
+  object: CardObject,
+  preview = false,
+): OfferTileCard {
+  const displaySnapshot =
+    preview && object.objectType === "deckCard" && object.previewCard !== undefined
+      ? object.previewCard
+      : object.card;
+  if (displaySnapshot.id !== object.cardUuid) {
+    unavailable(`card UUID mismatch for ${object.cardUuid}`);
+  }
+  return { cardId: asCardId(object.cardUuid), displaySnapshot };
+}
+
+function requiredCard(
+  objects: readonly MerchantGameObject[],
+  label: string,
+  preview = false,
+): OfferTileCard {
+  const object = firstCard(objects);
+  if (object === undefined) unavailable(`${label} has no card`);
+  return tileCard(object, preview);
+}
+
+function candidateCards(
+  offer: MerchantOffer,
+  allowedCounts: readonly number[],
+  preview = false,
+): readonly OfferTileCard[] {
+  const candidates = offer.choiceRequest?.candidates;
+  if (candidates === undefined || !allowedCounts.includes(candidates.length)) {
+    unavailable(
+      `${offer.archetypeId} requires ${allowedCounts.join(" or ")} candidates`,
+    );
+  }
+  return candidates.map((candidate) =>
+    requiredCard(candidate.gameObjects, `${offer.archetypeId} candidate`, preview),
+  );
+}
+
+function fourCards(cards: readonly OfferTileCard[]): OfferTileFourCards {
+  if (cards.length !== 4) unavailable("expected exactly 4 cards");
+  return [cards[0], cards[1], cards[2], cards[3]];
+}
+
+function bundleCards(cards: readonly OfferTileCard[]): OfferTileBundleCards {
+  if (cards.length === 2) return [cards[0], cards[1]];
+  if (cards.length === 3) return [cards[0], cards[1], cards[2]];
+  return unavailable("card_bundle requires 2 or 3 cards");
+}
+
+function starterCards(cards: readonly OfferTileCard[]): OfferTileStarterCards {
+  if (cards.length === 1) return [cards[0]];
+  if (cards.length === 2) return [cards[0], cards[1]];
+  return unavailable("starter_transfigure requires 1 or 2 cards");
+}
+
+function duplicateCards(cards: readonly OfferTileCard[]): OfferTileDuplicateCards {
+  if (cards.length === 1) return [cards[0]];
+  if (cards.length === 2) return [cards[0], cards[1]];
+  if (cards.length === 3) return [cards[0], cards[1], cards[2]];
+  return unavailable("duplicate requires 1 to 3 cards");
+}
+
+function dreamsignTuple(
+  dreamsigns: readonly OfferTileDreamsign[],
+): OfferTileDreamsignChoices {
+  if (dreamsigns.length === 2) return [dreamsigns[0], dreamsigns[1]];
+  if (dreamsigns.length === 3) return [dreamsigns[0], dreamsigns[1], dreamsigns[2]];
+  if (dreamsigns.length === 4) {
+    return [dreamsigns[0], dreamsigns[1], dreamsigns[2], dreamsigns[3]];
+  }
+  return unavailable("dreamsign_draft requires 2 to 4 candidates");
+}
+
+function tileDreamsign(
+  object: Extract<MerchantGameObject, { objectType: "dreamsign" }>,
+): OfferTileDreamsign {
+  const imageName = object.dreamsignTemplate.imageName ?? `${object.dreamsignId}.png`;
+  return {
+    id: object.dreamsignId,
+    name: object.dreamsignTemplate.name,
+    art: artRef.dreamsign(imageName),
+  };
+}
+
+function requiredDreamsign(
+  objects: readonly MerchantGameObject[],
+  label: string,
+): OfferTileDreamsign {
+  const object = objects.find(
+    (candidate): candidate is Extract<MerchantGameObject, { objectType: "dreamsign" }> =>
+      candidate.objectType === "dreamsign",
+  );
+  if (object === undefined) unavailable(`${label} has no dreamsign`);
+  return tileDreamsign(object);
+}
+
+function copyCount(offer: MerchantOffer): number {
+  const candidates = offer.choiceRequest?.candidates;
+  if (candidates === undefined || candidates.length !== 4) {
+    unavailable("copies_draft requires 4 candidates");
+  }
+  const counts = candidates.map((candidate) => {
+    const card = firstCard(candidate.gameObjects);
+    if (card === undefined) unavailable("copies_draft candidate has no card");
+    const countAdds = (payload: typeof candidate.applyPayload): number =>
+      payload.kind === "add_catalog_card"
+        ? Number(payload.cardUuid === card.cardUuid)
+        : payload.kind === "composite"
+          ? payload.children.reduce((sum, child) => sum + countAdds(child), 0)
+          : 0;
+    return countAdds(candidate.applyPayload);
+  });
+  if (counts[0] === undefined || counts[0] < 1 || counts.some((count) => count !== counts[0])) {
+    unavailable("copies_draft candidates grant inconsistent copy counts");
+  }
+  return counts[0];
+}
+
+function categoryName(offer: MerchantOffer, context: MerchantContext): string {
+  const category = buildCategoryUniverse(context).find((candidate) =>
+    offer.targetKey.startsWith(`${candidate.id}:`),
+  );
+  if (category === undefined) unavailable("category_draft_known has an unknown category id");
+  return category.label;
+}
+
+export function buildDreamAuguryOfferTileModel(
+  offer: MerchantOffer,
+  context: MerchantContext,
+): OfferTileModel {
+  const id = `${offer.encounterSignature}:${offer.offerId}`;
+  switch (offer.archetypeId) {
+    case "fit_card_grant":
+    case "strong_card":
+      return { id, kind: "card-gift", card: requiredCard(offer.gameObjects, offer.archetypeId) };
+    case "fit_card_draft":
+      return { id, kind: "card-draft", cards: fourCards(candidateCards(offer, [4])) };
+    case "transfigured_draft":
+      return { id, kind: "transfigured-draft", cards: fourCards(candidateCards(offer, [4], true)) };
+    case "category_draft_known":
+      return {
+        id,
+        kind: "category-draft",
+        cards: fourCards(candidateCards(offer, [4])),
+        categoryName: categoryName(offer, context),
+      };
+    case "copies_draft":
+      return {
+        id,
+        kind: "copies-draft",
+        cards: fourCards(candidateCards(offer, [4])),
+        copyCount: copyCount(offer),
+      };
+    case "card_bundle": {
+      const cards = allCards(offer.gameObjects).map((card) => tileCard(card));
+      return { id, kind: "card-bundle", cards: bundleCards(cards) };
+    }
+    case "transfigure": {
+      const payload = offer.applyPayload;
+      if (payload?.kind !== "transfigure_deck_entry") unavailable("transfigure has malformed payload");
+      return {
+        id,
+        kind: "transfigure-card",
+        card: requiredCard(offer.gameObjects, "transfigure", true),
+        transfiguration: payload.transfiguration,
+      };
+    }
+    case "starter_transfigure": {
+      const cards = allCards(offer.gameObjects).map((card) => tileCard(card, true));
+      return { id, kind: "transfigure-starters", cards: starterCards(cards) };
+    }
+    case "keyword_mod": {
+      const payload = offer.applyPayload;
+      if (payload?.kind !== "change_deck_entry_keywords" || payload.keywords.setReclaim === undefined) {
+        unavailable("keyword_mod has malformed payload");
+      }
+      const deckCard = context.deckEntryById.get(payload.entryId);
+      if (deckCard === undefined) unavailable("keyword_mod targets an unknown deck entry");
+      const original = resolveDeckEntryCard(deckCard.card, deckCard.deckEntry).reclaimCost ?? 0;
+      const reclaimReduction = original - payload.keywords.setReclaim;
+      if (reclaimReduction < 1) unavailable("keyword_mod does not reduce Reclaim");
+      return {
+        id,
+        kind: "keyword-modification",
+        card: requiredCard(offer.gameObjects, "keyword_mod", true),
+        reclaimReduction,
+      };
+    }
+    case "tribal_change": {
+      const payload = offer.applyPayload;
+      if (payload?.kind !== "change_deck_entry_type") unavailable("tribal_change has malformed payload");
+      const subtype = payload.typeChange.subtype as OfferTileCharacterSubtype;
+      if (!["Warrior", "Spirit Animal", "Survivor", "Outsider"].includes(subtype)) {
+        unavailable("tribal_change targets an unsupported subtype");
+      }
+      return {
+        id,
+        kind: "tribal-change",
+        card: requiredCard(offer.gameObjects, "tribal_change", true),
+        newCharacterSubtype: subtype,
+      };
+    }
+    case "purge":
+      return { id, kind: "purge-card", card: requiredCard(offer.gameObjects, "purge") };
+    case "purge_replace":
+      return {
+        id,
+        kind: "trade-card",
+        outgoing: requiredCard(offer.gameObjects, "purge_replace"),
+        incoming: fourCards(candidateCards(offer, [4])),
+      };
+    case "duplicate": {
+      const cards = offer.choiceRequest === undefined
+        ? [requiredCard(offer.gameObjects, "duplicate")]
+        : candidateCards(offer, [1, 2, 3]);
+      return { id, kind: "duplicate-card", cards: duplicateCards(cards) };
+    }
+    case "dreamsign":
+      return { id, kind: "dreamsign-gift", dreamsign: requiredDreamsign(offer.gameObjects, "dreamsign") };
+    case "dreamsign_draft": {
+      const candidates = offer.choiceRequest?.candidates;
+      if (candidates === undefined || candidates.length < 2 || candidates.length > 4) {
+        unavailable("dreamsign_draft requires 2 to 4 candidates");
+      }
+      return {
+        id,
+        kind: "dreamsign-draft",
+        dreamsigns: dreamsignTuple(candidates.map((candidate) =>
+          requiredDreamsign(candidate.gameObjects, "dreamsign_draft candidate"),
+        )),
+      };
+    }
+    case "add_site": {
+      const payload = offer.applyPayload;
+      if (payload?.kind !== "add_site") unavailable("add_site has malformed payload");
+      return {
+        id,
+        kind: "add-site",
+        site: {
+          id: payload.siteType,
+          name: siteTypeName(payload.siteType),
+          glyph: glyph(siteTypeIcon(payload.siteType)),
+        },
+      };
+    }
+  }
 }
 
 function cardChoices(
@@ -278,13 +550,16 @@ function buildOfferVisual(
 
 export function buildDreamAuguryOfferViews(
   encounter: MerchantEncounter,
-  context: Pick<MerchantContext, "deckEntryById">,
+  context: MerchantContext,
 ): DreamAuguryOfferView[] {
-  return encounter.offers.slice(0, 2).map((offer, index) => ({
+  if (encounter.offers.length !== 2) {
+    unavailable("encounter requires exactly 2 offers");
+  }
+  return encounter.offers.map((offer) => ({
     id: offer.offerId,
-    ordinal: index === 0 ? "I" : "II",
     headline: OFFER_HEADLINES[offer.archetypeId],
     requiresSelection: (offer.choiceRequest?.candidates.length ?? 0) > 0,
+    tile: buildDreamAuguryOfferTileModel(offer, context),
     visual: buildOfferVisual(offer, context),
   }));
 }
@@ -313,13 +588,14 @@ export function buildDreamAugurySiteModel(params: {
   site: SiteState;
   questContent: QuestContent;
   guide: DreamGuideContent | null;
+  guideLine: string | null;
 }): DreamAuguryBuildResult {
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
   const baseView = {
     siteId: params.site.id,
     scene,
-    guide: buildDreamAuguryGuideView(params.guide),
+    guide: buildDreamAuguryGuideView(params.guide, params.guideLine),
   };
   try {
     const context = buildMerchantContext({
@@ -333,6 +609,7 @@ export function buildDreamAugurySiteModel(params: {
         ...baseView,
         encounterSignature: encounter.encounterSignature,
         offers: buildDreamAuguryOfferViews(encounter, context),
+        unavailableMessage: null,
       },
       context,
       encounter,
@@ -348,7 +625,13 @@ export function buildDreamAugurySiteModel(params: {
     };
   } catch (error) {
     return {
-      view: { ...baseView, encounterSignature: null, offers: [] },
+      view: {
+        ...baseView,
+        encounterSignature: null,
+        offers: [],
+        unavailableMessage:
+          "The visions are clouded. I cannot read these paths; walk on for now.",
+      },
       context: null,
       encounter: null,
       debug: null,

@@ -47,6 +47,8 @@ export interface GuideGallerySiteLayoutProps {
   mobileComposition?: "band" | "revelation";
   /** Revelation gallery height. Expanded grows upward for dense content. */
   mobileRegionSize?: "standard" | "expanded";
+  /** Whether the guide's speech bubble is rendered. Defaults to visible. */
+  speechBubbleVisible?: boolean;
   /** Stable test id for the screen root. */
   screenTestId?: string;
   /** Stable test id for the guide art. */
@@ -104,6 +106,7 @@ export function GuideGallerySiteLayout({
   desktopComposition = "split",
   mobileComposition = "band",
   mobileRegionSize = "standard",
+  speechBubbleVisible = true,
   screenTestId,
   guideArtTestId,
   speechAnchorTestId,
@@ -164,6 +167,7 @@ export function GuideGallerySiteLayout({
           renderGallery={renderGallery}
           composition={desktopComposition}
           compactShowcase={compactShowcase}
+          speechBubbleVisible={speechBubbleVisible}
           guideArtTestId={guideArtTestId}
           speechAnchorTestId={speechAnchorTestId}
           speechBubbleTestId={speechBubbleTestId}
@@ -173,6 +177,7 @@ export function GuideGallerySiteLayout({
           guide={guide}
           renderGallery={renderGallery}
           regionSize={mobileRegionSize}
+          speechBubbleVisible={speechBubbleVisible}
           guideArtTestId={guideArtTestId}
           speechAnchorTestId={speechAnchorTestId}
           speechBubbleTestId={speechBubbleTestId}
@@ -181,6 +186,7 @@ export function GuideGallerySiteLayout({
         <>
           <MobileGuideBand
             guide={guide}
+            speechBubbleVisible={speechBubbleVisible}
             guideArtTestId={guideArtTestId}
             speechAnchorTestId={speechAnchorTestId}
             speechBubbleTestId={speechBubbleTestId}
@@ -197,6 +203,7 @@ function MobileRevelationComposition({
   guide,
   renderGallery,
   regionSize,
+  speechBubbleVisible,
   guideArtTestId,
   speechAnchorTestId,
   speechBubbleTestId,
@@ -204,6 +211,7 @@ function MobileRevelationComposition({
   readonly guide: GuideGalleryGuideView;
   readonly renderGallery: (layout: "mobile" | "desktop") => ReactElement;
   readonly regionSize: "standard" | "expanded";
+  readonly speechBubbleVisible: boolean;
   readonly guideArtTestId?: string;
   readonly speechAnchorTestId?: string;
   readonly speechBubbleTestId?: string;
@@ -226,6 +234,7 @@ function MobileRevelationComposition({
         <MobileGuideBand
           guide={guide}
           revelation
+          speechBubbleVisible={speechBubbleVisible}
           guideArtTestId={guideArtTestId}
           speechAnchorTestId={speechAnchorTestId}
           speechBubbleTestId={speechBubbleTestId}
@@ -267,6 +276,7 @@ function DesktopComposition({
   renderGallery,
   composition,
   compactShowcase,
+  speechBubbleVisible,
   guideArtTestId,
   speechAnchorTestId,
   speechBubbleTestId,
@@ -275,6 +285,7 @@ function DesktopComposition({
   readonly renderGallery: (layout: "mobile" | "desktop") => ReactElement;
   readonly composition: "split" | "showcase";
   readonly compactShowcase: boolean;
+  readonly speechBubbleVisible: boolean;
   readonly guideArtTestId?: string;
   readonly speechAnchorTestId?: string;
   readonly speechBubbleTestId?: string;
@@ -332,6 +343,7 @@ function DesktopComposition({
           <DesktopGuideScene
             guide={guide}
             compactShowcase={composition === "showcase" && compactShowcase}
+            speechBubbleVisible={speechBubbleVisible}
             guideArtTestId={guideArtTestId}
             speechAnchorTestId={speechAnchorTestId}
             speechBubbleTestId={speechBubbleTestId}
@@ -346,12 +358,14 @@ function DesktopComposition({
 function DesktopGuideScene({
   guide,
   compactShowcase,
+  speechBubbleVisible,
   guideArtTestId,
   speechAnchorTestId,
   speechBubbleTestId,
 }: {
   readonly guide: GuideGalleryGuideView;
   readonly compactShowcase: boolean;
+  readonly speechBubbleVisible: boolean;
   readonly guideArtTestId?: string;
   readonly speechAnchorTestId?: string;
   readonly speechBubbleTestId?: string;
@@ -385,27 +399,29 @@ function DesktopGuideScene({
           userSelect: "none",
         }}
       />
-      <div
-        data-testid={speechAnchorTestId}
-        style={{
-          position: "absolute",
-          top: compactShowcase
-            ? `calc(-1 * (${token("--space-12")} + ${token("--space-5")}))`
-            : "14%",
-          left: compactShowcase
-            ? `calc(-1 * ${token("--space-4")})`
-            : DESKTOP_DIALOG_LEFT,
-          right: compactShowcase ? "auto" : 0,
-          width: compactShowcase ? 190 : undefined,
-          maxWidth: compactShowcase ? 190 : 380,
-        }}
-      >
-        <SpeechBubble
-          speakerName={guide.name}
-          text={guide.line}
-          testId={speechBubbleTestId}
-        />
-      </div>
+      {speechBubbleVisible && (
+        <div
+          data-testid={speechAnchorTestId}
+          style={{
+            position: "absolute",
+            top: compactShowcase
+              ? `calc(-1 * (${token("--space-12")} + ${token("--space-5")}))`
+              : "14%",
+            left: compactShowcase
+              ? `calc(-1 * ${token("--space-4")})`
+              : DESKTOP_DIALOG_LEFT,
+            right: compactShowcase ? "auto" : 0,
+            width: compactShowcase ? 190 : undefined,
+            maxWidth: compactShowcase ? 190 : 380,
+          }}
+        >
+          <SpeechBubble
+            speakerName={guide.name}
+            text={guide.line}
+            testId={speechBubbleTestId}
+          />
+        </div>
+      )}
     </div>
   );
 }
@@ -413,12 +429,14 @@ function DesktopGuideScene({
 function MobileGuideBand({
   guide,
   revelation = false,
+  speechBubbleVisible,
   guideArtTestId,
   speechAnchorTestId,
   speechBubbleTestId,
 }: {
   readonly guide: GuideGalleryGuideView;
   readonly revelation?: boolean;
+  readonly speechBubbleVisible: boolean;
   readonly guideArtTestId?: string;
   readonly speechAnchorTestId?: string;
   readonly speechBubbleTestId?: string;
@@ -456,23 +474,25 @@ function MobileGuideBand({
           userSelect: "none",
         }}
       />
-      <div
-        data-testid={speechAnchorTestId}
-        style={{
-          position: "absolute",
-          left: revelation ? "34vw" : "40vw",
-          right: revelation
-            ? `calc(${token("--space-5")} + ${token("--space-11")} + ${token("--space-3")})`
-            : `calc(${token("--gutter")} + ${token("--space-11")})`,
-          top: revelation ? token("--space-5") : token("--space-2"),
-        }}
-      >
-        <SpeechBubble
-          speakerName={guide.name}
-          text={guide.line}
-          testId={speechBubbleTestId}
-        />
-      </div>
+      {speechBubbleVisible && (
+        <div
+          data-testid={speechAnchorTestId}
+          style={{
+            position: "absolute",
+            left: revelation ? "34vw" : "40vw",
+            right: revelation
+              ? `calc(${token("--space-5")} + ${token("--space-11")} + ${token("--space-3")})`
+              : `calc(${token("--gutter")} + ${token("--space-11")})`,
+            top: revelation ? token("--space-5") : token("--space-2"),
+          }}
+        >
+          <SpeechBubble
+            speakerName={guide.name}
+            text={guide.line}
+            testId={speechBubbleTestId}
+          />
+        </div>
+      )}
     </header>
   );
 }

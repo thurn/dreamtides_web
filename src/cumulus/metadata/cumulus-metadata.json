@@ -2664,6 +2664,17 @@
       "description": "Activates the offer, reporting the stable `model.id`."
     },
     {
+      "name": "size",
+      "tsType": "OfferTileSize",
+      "unionMembers": [
+        "compact",
+        "standard"
+      ],
+      "required": false,
+      "defaultValue": "standard",
+      "description": "Complete tile composition size. Defaults to the 200px standard tile."
+    },
+    {
       "name": "testId",
       "tsType": "string",
       "unionMembers": [],

@@ -26,8 +26,16 @@ import {
 import offerFrameUrl from "../../assets/Skill_Frame_iron.png";
 import "./offer-tile.css";
 
-/** The fixed width and height of an OfferTile, in pixels. */
-export const OFFER_TILE_SIZE = 200;
+/** Named OfferTile edge lengths, in pixels. */
+export const OFFER_TILE_STANDARD_SIZE = 200;
+export const OFFER_TILE_COMPACT_SIZE = 160;
+/** Backward-compatible standard OfferTile edge length. */
+export const OFFER_TILE_SIZE = OFFER_TILE_STANDARD_SIZE;
+export type OfferTileSize = "standard" | "compact";
+export const OFFER_TILE_DIMENSIONS: Readonly<Record<OfferTileSize, number>> = {
+  standard: OFFER_TILE_STANDARD_SIZE,
+  compact: OFFER_TILE_COMPACT_SIZE,
+};
 
 /** UUID-backed complete card shown symbolically inside an offer. */
 export interface OfferTileCard {
@@ -177,6 +185,8 @@ export interface OfferTileProps {
   model: OfferTileModel;
   /** Activates the offer, reporting the stable `model.id`. */
   onPress: (offerId: string) => void;
+  /** Complete tile composition size. Defaults to the 200px standard tile. */
+  size?: OfferTileSize;
   /** Optional test selector; defaults to `offer-tile`. */
   testId?: string;
 }
@@ -190,6 +200,7 @@ export interface OfferTileProps {
 export function OfferTile({
   model,
   onPress,
+  size = "standard",
   testId = "offer-tile",
 }: OfferTileProps): ReactElement {
   const binding = useRevealSource({
@@ -212,6 +223,8 @@ export function OfferTile({
   const lastPointerType = useRef<string | null>(null);
   const pointerDown = binding.sourceProps.onPointerDown;
   const motionDelay = offerTileMotionDelay(model.id);
+  const edge = OFFER_TILE_DIMENSIONS[size];
+  const scale = edge / OFFER_TILE_STANDARD_SIZE;
 
   return (
     <Pressable
@@ -222,6 +235,7 @@ export function OfferTile({
       data-testid={testId}
       data-offer-tile=""
       data-offer-tile-kind={model.kind}
+      data-offer-tile-size={size}
       onPointerDown={(event) => {
         lastPointerType.current = event.pointerType;
         pointerDown?.(event);
@@ -234,10 +248,10 @@ export function OfferTile({
       style={{
         ...binding.sourceProps.style,
         position: "relative",
-        width: OFFER_TILE_SIZE,
-        height: OFFER_TILE_SIZE,
-        minWidth: OFFER_TILE_SIZE,
-        minHeight: OFFER_TILE_SIZE,
+        width: edge,
+        height: edge,
+        minWidth: edge,
+        minHeight: edge,
         padding: 0,
         boxSizing: "border-box",
         overflow: "visible",
@@ -253,7 +267,16 @@ export function OfferTile({
         className="cumulus-offer-tile__floating-frame"
         data-offer-tile-floating-frame=""
         aria-hidden="true"
-        style={{ animationDelay: motionDelay, pointerEvents: "none" }}
+        style={{
+          width: OFFER_TILE_STANDARD_SIZE,
+          height: OFFER_TILE_STANDARD_SIZE,
+          right: "auto",
+          bottom: "auto",
+          scale,
+          transformOrigin: "top left",
+          animationDelay: motionDelay,
+          pointerEvents: "none",
+        }}
       >
         <span
           className="cumulus-offer-tile__depth"

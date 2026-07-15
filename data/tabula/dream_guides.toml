@@ -83,8 +83,11 @@ name = "Aldric, the Seer"
 home-dreamscape-id = "wilderveil"
 site-type = "DreamAugury"
 dialog = [
-  "I have foreseen your arrival.",
-  "Great fortune awaits the worthy.",
+  "Two paths unfold before you. Choose one to shape your dream.",
+  "Weigh both visions, then pick one path for your dream.",
+  "The dream divides here. Choose one vision and make it yours.",
+  "Two futures call to you. You may follow only one.",
+  "Look closely at each path, then choose the one your dream will take.",
 ]
 home-specialty = "Aldric offers curated visions of the future."
 

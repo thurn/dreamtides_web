@@ -31,6 +31,7 @@ export function useDreamAuguryQuestMenuActions(
       site,
       questContent,
       guide: resolveDreamAuguryGuide(questContent.guides),
+      guideLine: null,
     });
   }, [questContent, sceneNode, site, state]);
 
