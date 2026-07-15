@@ -5,11 +5,7 @@ import { createRoot } from "react-dom/client";
 import { describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import { asCardId } from "../../../types/card-identity";
-import {
-  OfferTile,
-  type OfferTileFrameStyle,
-  type OfferTileModel,
-} from "./OfferTile";
+import { OfferTile, type OfferTileModel } from "./OfferTile";
 
 const MODEL: OfferTileModel = {
   id: "debug-fit-card-draft",
@@ -50,7 +46,7 @@ describe("OfferTile", () => {
     expect(source.style.border).toBe("0px");
     expect(source.querySelector("[data-offer-tile-background]")).not.toBeNull();
     const frame = source.querySelector<HTMLImageElement>("[data-offer-tile-frame]");
-    expect(frame?.src).toContain("Skill_Frame_gold.png");
+    expect(frame?.src).toContain("Skill_Frame_iron.png");
     expect(frame?.draggable).toBe(false);
     expect(frame?.getAttribute("aria-hidden")).toBe("true");
     expect(frame?.style.pointerEvents).toBe("none");
@@ -76,47 +72,6 @@ describe("OfferTile", () => {
 
     act(() => source.click());
     expect(activate).toHaveBeenCalledWith(MODEL.id);
-
-    act(() => root.unmount());
-    container.remove();
-  });
-
-  it("supports each temporary frame sprite used by the evaluation page", () => {
-    const frames: ReadonlyArray<readonly [OfferTileFrameStyle, string]> = [
-      ["gold", "Skill_Frame_gold.png"],
-      ["iron", "Skill_Frame_iron.png"],
-      ["silver-dark", "Skill_Frame_silver_dark.png"],
-      ["silver-2", "Skill_Frame2_silver.png"],
-      ["silver", "Skill_Frame_silver.png"],
-    ];
-    const container = document.createElement("div");
-    document.body.append(container);
-    const root = createRoot(container);
-
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          {frames.map(([frameStyle]) => (
-            <OfferTile
-              key={frameStyle}
-              model={{ ...MODEL, id: `debug-${frameStyle}` }}
-              frameStyle={frameStyle}
-              onPress={() => {}}
-              testId={`frame-${frameStyle}`}
-            />
-          ))}
-        </CumulusRoot>,
-      );
-    });
-
-    frames.forEach(([frameStyle, filename]) => {
-      const source = container.querySelector<HTMLElement>(
-        `[data-testid="frame-${frameStyle}"]`,
-      );
-      expect(source?.dataset.offerTileFrameStyle).toBe(frameStyle);
-      expect(source?.querySelector<HTMLImageElement>("[data-offer-tile-frame]")?.src)
-        .toContain(filename);
-    });
 
     act(() => root.unmount());
     container.remove();

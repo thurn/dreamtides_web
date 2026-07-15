@@ -8,9 +8,9 @@ Components · Live demo & interactive props: `/cumulus#/offer-tile`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The 200×200 rounded symbolic Dream Augury offer button: UUID-backed card art, dreamsign art, and operation marks gathered inside a selectable fantasy frame without spelling out the complete offer.
+The 200×200 rounded symbolic Dream Augury offer button: UUID-backed card art, dreamsign art, and operation marks gathered inside an iron fantasy frame without spelling out the complete offer.
 
-> **Guidance:** Use the named offer kind that matches the category and pass every object surfaced by the generated offer. Fixed-target variants show their exact affected cards; chooser variants show every choice. The frame holds each composition over an inset glass background inside its transparent aperture. The temporary frameStyle variants support side-by-side art evaluation. Card-art frames stay square at their established vertical scale. Four-card operations center their mark over the art grid, while smaller card sets pair the mark inline with enlarged art. Inner objects stay decorative, and the complete tile owns interaction plus its body-only InfoCard.
+> **Guidance:** Use the named offer kind that matches the category and pass every object surfaced by the generated offer. Fixed-target variants show their exact affected cards; chooser variants show every choice. The iron frame holds each composition over an inset glass background inside its transparent aperture. Card-art frames stay square at their established vertical scale. Four-card operations center their mark over the art grid, while smaller card sets pair the mark inline with enlarged art. Inner objects stay decorative, and the complete tile owns interaction plus its body-only InfoCard.
 
 ## Props
 
@@ -18,7 +18,6 @@ The 200×200 rounded symbolic Dream Augury offer button: UUID-backed card art, d
 | --- | --- | --- | --- | --- |
 | `model` | `OfferTileModel` | yes | — | The offer's strict symbolic view model. |
 | `onPress` | `(offerId: string) => void` | yes | — | Activates the offer, reporting the stable `model.id`. |
-| `frameStyle` | `OfferTileFrameStyle` = `"gold" \| "iron" \| "silver-dark" \| "silver-2" \| "silver"` | no | `gold` | Temporary frame-sprite choice for visual evaluation. Defaults to gold. |
 | `testId` | `string` | no | `offer-tile` | Optional test selector; defaults to `offer-tile`. |
 
 ### `model`: the `OfferTileModel` model
