@@ -1,4 +1,5 @@
 import { selectPlayAreaSize } from "../../battle/state/selectors";
+import type { AiProposal } from "../../battle/ai/use-battle-ai";
 import {
   backRankSlotIds,
   frontRankSlotIds,
@@ -27,15 +28,23 @@ const FALLBACK_PLAYER_DREAMCALLER = {
 export type MobileBattleInit = BattleInit;
 export type MobileBattleBoard = BattleMutableState;
 export type MobileBattleDreamcaller = BattleDreamcallerSummary;
+export type MobileBattleAiProposal = Pick<AiProposal, "kind" | "description">;
 
 export function buildMobileBattleView(
   init: BattleInit,
   board: BattleMutableState,
   enemyDreamcaller: BattleDreamcallerSummary,
+  aiProposal: MobileBattleAiProposal | null = null,
 ): MobileBattleView {
   const { frontSize, backSize } = selectPlayAreaSize(board);
   return {
     battleId: init.battleId,
+    aiApproval: aiProposal === null
+      ? null
+      : {
+          description: aiProposal.description,
+          canReject: aiProposal.kind === "action",
+        },
     activeSide: board.activeSide,
     phase: mobileBattlePhase(board.phase),
     enemyHandCardIds: [...board.sides.enemy.hand],

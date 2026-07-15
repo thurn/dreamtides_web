@@ -43,3 +43,16 @@ the deferred emitter from `createBattleInit`. As a result, event-sourced
 how the opponent was generated. The provider comment previously claimed the
 primary client emitted those records later, but no source consumer retains or
 invokes the deferred emitter.
+
+## Reloaded coop battle can render a stale phase after phase intents append
+
+During browser QA on a reloaded `?goto=battle-playable&automation=0&game=...`
+room, approving the existing AI end-turn proposal appended its gesture and
+returned the fold to the player's Dreamwell phase. Pressing Next Phase then
+appended a `SET_BATTLE_FLOW` intent for the player's Day phase to the emulator
+room log, but the mounted battle surface continued to render Dawn. Additional
+presses appended duplicate Day intents because the client kept computing the
+target from its stale rendered phase. Reopening the same room reconstructed the
+latest fold state. The room event log and the visible battle board should remain
+in sync after every accepted intent so a stale client cannot emit duplicate
+phase transitions.

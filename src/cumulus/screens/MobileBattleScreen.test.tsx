@@ -112,6 +112,7 @@ function makeSide(
 function makeView(): MobileBattleView {
   return {
     battleId: "battle-mobile-fixture",
+    aiApproval: null,
     activeSide: "player",
     phase: "day",
     enemyHandCardIds: Array.from(
@@ -773,6 +774,104 @@ describe("MobileBattleScreen", () => {
     expect(container.querySelector("style")?.textContent).toContain(
       "[data-connected-count]",
     );
+
+    act(() => root.unmount());
+  });
+
+  it("replaces Next Phase with AI proposal controls without mobile description copy", () => {
+    const interactions = {
+      canInteract: false,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+      onApproveAiProposal: vi.fn(),
+      onRejectAiProposal: vi.fn(),
+    };
+    const view: MobileBattleView = {
+      ...makeView(),
+      aiApproval: {
+        description: "Play a fixture card to B2.",
+        canReject: true,
+      },
+    };
+    const { container, root } = mount(view, interactions);
+    const nextSlot = container.querySelector<HTMLElement>(
+      "[data-battle-phase-next]",
+    );
+    const backButton = container.querySelector<HTMLButtonElement>(
+      "[data-battle-phase-back] button",
+    );
+    const rejectButton = nextSlot?.querySelector<HTMLButtonElement>(
+      '[aria-label="Reject AI action"]',
+    );
+    const approveButton = nextSlot?.querySelector<HTMLButtonElement>(
+      '[aria-label="Approve AI action: Play a fixture card to B2."]',
+    );
+
+    expect(nextSlot?.dataset.battleAiApprovalControls).toBe("");
+    expect(nextSlot?.textContent).not.toContain("Next Phase");
+    expect(nextSlot?.querySelectorAll("button")).toHaveLength(2);
+    expect(backButton?.getAttribute("aria-disabled")).toBe("true");
+    expect(rejectButton?.getAttribute("aria-disabled")).toBeNull();
+    expect(approveButton?.getAttribute("aria-disabled")).toBeNull();
+    expect(
+      container.querySelector("[data-battle-ai-approval-message]"),
+    ).toBeNull();
+
+    act(() => {
+      rejectButton?.click();
+      approveButton?.click();
+    });
+
+    expect(interactions.onRejectAiProposal).toHaveBeenCalledTimes(1);
+    expect(interactions.onApproveAiProposal).toHaveBeenCalledTimes(1);
+    expect(interactions.onNextPhase).not.toHaveBeenCalled();
+
+    act(() => root.unmount());
+  });
+
+  it("shows the held AI action as a small desktop-only status message", () => {
+    mockDesktopViewport(true);
+    const view: MobileBattleView = {
+      ...makeView(),
+      aiApproval: {
+        description: "Pass from Day to Dusk.",
+        canReject: false,
+      },
+    };
+    const { container, root } = mount(view, {
+      canInteract: false,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+      onApproveAiProposal: vi.fn(),
+      onRejectAiProposal: vi.fn(),
+    });
+    const message = container.querySelector<HTMLElement>(
+      "[data-battle-ai-approval-message]",
+    );
+    const nextSlot = container.querySelector<HTMLElement>(
+      "[data-battle-phase-next]",
+    );
+
+    expect(message?.textContent).toBe("Pass from Day to Dusk.");
+    expect(message?.style.position).toBe("absolute");
+    expect(message?.style.font).toBe("var(--t-caption)");
+    expect(message?.style.textShadow).toBe("var(--text-outline-media)");
+    expect(nextSlot?.querySelectorAll("button")).toHaveLength(1);
+    expect(
+      nextSlot?.querySelector('[aria-label="Reject AI action"]'),
+    ).toBeNull();
 
     act(() => root.unmount());
   });

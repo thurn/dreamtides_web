@@ -121,6 +121,7 @@ describe("buildMobileBattleView", () => {
 
     expect(view.battleId).toBe(board.battleId);
     expect(view.activeSide).toBe(board.activeSide);
+    expect(view.aiApproval).toBeNull();
     expect(view.phase).toBe("dawn");
     expect(view.playerHand.map((card) => card.id)).toEqual(board.sides.player.hand);
     expect(view.playerHand.map((card) => card.model.cardId)).toEqual(
@@ -136,6 +137,30 @@ describe("buildMobileBattleView", () => {
       id: board.sides.enemy.backRank.B4,
       figment: true,
       figmentTitleBar: true,
+    });
+  });
+
+  it("maps a held AI proposal into presentation-only approval state", () => {
+    const init = makeInit();
+    const board = makeBoard(init);
+
+    expect(
+      buildMobileBattleView(init, board, ENEMY_DREAMCALLER, {
+        kind: "action",
+        description: "Play a fixture card to B2.",
+      }).aiApproval,
+    ).toEqual({
+      description: "Play a fixture card to B2.",
+      canReject: true,
+    });
+    expect(
+      buildMobileBattleView(init, board, ENEMY_DREAMCALLER, {
+        kind: "endPhase",
+        description: "Pass from Day to Dusk.",
+      }).aiApproval,
+    ).toEqual({
+      description: "Pass from Day to Dusk.",
+      canReject: false,
     });
   });
 

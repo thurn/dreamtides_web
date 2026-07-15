@@ -71,8 +71,15 @@ export type MobileBattlePhase =
   | "night"
   | "challenge";
 
+/** Presentation-only state for the AI action waiting on human approval. */
+export interface MobileBattleAiApprovalView {
+  readonly description: string;
+  readonly canReject: boolean;
+}
+
 export interface MobileBattleView {
   readonly battleId: string;
+  readonly aiApproval: MobileBattleAiApprovalView | null;
   readonly activeSide: MobileBattleOwner;
   readonly phase: MobileBattlePhase;
   readonly enemyHandCardIds: readonly string[];
@@ -129,6 +136,8 @@ export interface MobileBattleInteractions {
   readonly onZoneDrop: (target: MobileBattleZoneTarget) => void;
   readonly onPreviousPhase: () => void;
   readonly onNextPhase: () => void;
+  readonly onApproveAiProposal?: () => void;
+  readonly onRejectAiProposal?: () => void;
   readonly onFillBattlefieldPreview?: () => void;
   readonly onFillTwentyCardBattlefieldPreview?: () => void;
 }
@@ -1266,9 +1275,11 @@ function dropMobileCardAtPoint(
 }
 
 function ControlRow({
+  aiApproval,
   isDesktop,
   interactions,
 }: {
+  readonly aiApproval: MobileBattleAiApprovalView | null;
   readonly isDesktop: boolean;
   readonly interactions?: MobileBattleInteractions;
 }) {
@@ -1317,16 +1328,79 @@ function ControlRow({
         </div>
         <div
           data-battle-phase-next=""
-          style={{ width: NEXT_PHASE_CONTROL_WIDTH, display: "grid" }}
+          data-battle-ai-approval-controls={
+            aiApproval === null ? undefined : ""
+          }
+          style={{
+            width: NEXT_PHASE_CONTROL_WIDTH,
+            display: aiApproval === null ? "grid" : "flex",
+            alignItems: aiApproval === null ? undefined : "center",
+            justifyContent: aiApproval === null ? undefined : "flex-end",
+            gap: aiApproval === null ? undefined : token("--space-3"),
+          }}
         >
-          <GlassButton
-            label="Next Phase"
-            variant="accent"
-            disabled={disabled}
-            onPress={() => interactions?.onNextPhase()}
-          />
+          {aiApproval === null ? (
+            <GlassButton
+              label="Next Phase"
+              variant="accent"
+              disabled={disabled}
+              onPress={() => interactions?.onNextPhase()}
+            />
+          ) : (
+            <>
+              {aiApproval.canReject ? (
+                <IconButton
+                  glyph={GLYPHS.close}
+                  size="sm"
+                  label="Reject AI action"
+                  disabled={interactions?.onRejectAiProposal === undefined}
+                  onPress={() => interactions?.onRejectAiProposal?.()}
+                />
+              ) : null}
+              <IconButton
+                glyph={GLYPHS.check}
+                size="sm"
+                label={`Approve AI action: ${aiApproval.description}`}
+                variant="accent"
+                disabled={interactions?.onApproveAiProposal === undefined}
+                onPress={() => interactions?.onApproveAiProposal?.()}
+              />
+            </>
+          )}
         </div>
       </div>
+    </div>
+  );
+}
+
+function AiApprovalMessage({
+  aiApproval,
+  isDesktop,
+}: {
+  readonly aiApproval: MobileBattleAiApprovalView | null;
+  readonly isDesktop: boolean;
+}) {
+  if (!isDesktop || aiApproval === null) return null;
+  return (
+    <div
+      aria-live="polite"
+      data-battle-ai-approval-message=""
+      style={{
+        position: "absolute",
+        top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-4")})`,
+        left: `calc(var(${SAFE_AREA_INSET_PROPERTIES.left}) + ${token("--space-4")})`,
+        zIndex: 20,
+        maxWidth: 320,
+        overflow: "hidden",
+        color: token("--text-primary"),
+        font: token("--t-caption"),
+        textOverflow: "ellipsis",
+        textShadow: token("--text-outline-media"),
+        whiteSpace: "nowrap",
+        pointerEvents: "none",
+      }}
+    >
+      {aiApproval.description}
     </div>
   );
 }
@@ -1454,7 +1528,11 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
             cardSize={cardSize}
             interactions={interactions}
           />
-          <ControlRow isDesktop={isDesktop} interactions={interactions} />
+          <ControlRow
+            aiApproval={view.aiApproval}
+            isDesktop={isDesktop}
+            interactions={interactions}
+          />
           <SideZones
             activeSide={view.activeSide}
             isDesktop={isDesktop}
@@ -1469,6 +1547,10 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
             interactions={interactions}
           />
         </LayoutGroup>
+        <AiApprovalMessage
+          aiApproval={view.aiApproval}
+          isDesktop={isDesktop}
+        />
         <BattleDebugMenu
           onFillBattlefieldPreview={interactions?.onFillBattlefieldPreview}
           onFillTwentyCardBattlefieldPreview={

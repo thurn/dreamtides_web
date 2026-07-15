@@ -1131,6 +1131,7 @@ function PlayableBattleScreenInner({
           init={battleInit}
           board={board}
           enemyDreamcaller={enemyDreamcallerSummary}
+          aiProposal={proposal}
           interactions={{
             canInteract: canPlayerAct,
             pendingCardId: pendingDragCardId,
@@ -1163,6 +1164,8 @@ function PlayableBattleScreenInner({
             onNextPhase: () => {
               handleSetBattleFlow(computePhaseControlTarget(board, "next"));
             },
+            onApproveAiProposal: approve,
+            onRejectAiProposal: reject,
             onFillBattlefieldPreview: handleFillBattlefieldPreview,
             onFillTwentyCardBattlefieldPreview:
               handleFillTwentyCardBattlefieldPreview,
