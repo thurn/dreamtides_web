@@ -7,30 +7,39 @@
 
 .cumulus-offer-tile__depth {
   position: absolute;
-  inset: var(--space-1);
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.cumulus-offer-tile__depth::before {
-  content: "";
-  position: absolute;
   inset: 0;
-  border-radius: inherit;
-  background:
-    radial-gradient(circle at 24% 18%, color-mix(in srgb, var(--accent-bright) 22%, transparent), transparent 54%),
-    linear-gradient(145deg, color-mix(in srgb, var(--text-on-glass) 7%, transparent), transparent 48%);
-  box-shadow: inset 0 -24px 44px color-mix(in srgb, var(--surface-chrome-strong) 38%, transparent);
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   pointer-events: none;
+  user-select: none;
 }
 
 .cumulus-offer-tile__visual {
   position: absolute;
-  inset: var(--space-4);
+  inset: 0;
   z-index: 1;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  pointer-events: none;
+}
+
+.cumulus-offer-tile__visual-content {
+  /* Measured from the supplied 756×769 frame's isolated 531×531 center opening,
+     then projected into the aspect-preserving 300px authored stage. */
+  position: absolute;
+  left: 46px;
+  top: 28px;
   display: grid;
   place-items: center;
+  width: 208px;
+  height: 208px;
   pointer-events: none;
 }
 
@@ -41,6 +50,7 @@
   display: block;
   width: 100%;
   height: 100%;
+  object-fit: contain;
   pointer-events: none;
   user-select: none;
 }

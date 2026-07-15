@@ -92,15 +92,15 @@ describe("OfferTile", () => {
     const standard = container.querySelector<HTMLElement>('[data-testid="standard"]')!;
     const compact = container.querySelector<HTMLElement>('[data-testid="compact"]')!;
     const compactFrame = compact.querySelector<HTMLElement>("[data-offer-tile-floating-frame]")!;
-    expect(OFFER_TILE_STANDARD_SIZE).toBe(200);
-    expect(OFFER_TILE_COMPACT_SIZE).toBe(160);
+    expect(OFFER_TILE_STANDARD_SIZE).toBe(300);
+    expect(OFFER_TILE_COMPACT_SIZE).toBe(240);
     expect(standard.dataset.offerTileSize).toBe("standard");
-    expect(standard.style.width).toBe("200px");
+    expect(standard.style.width).toBe("300px");
     expect(compact.dataset.offerTileSize).toBe("compact");
-    expect(compact.style.width).toBe("160px");
-    expect(compact.style.height).toBe("160px");
-    expect(compactFrame.style.width).toBe("200px");
-    expect(compactFrame.style.height).toBe("200px");
+    expect(compact.style.width).toBe("240px");
+    expect(compact.style.height).toBe("240px");
+    expect(compactFrame.style.width).toBe("300px");
+    expect(compactFrame.style.height).toBe("300px");
     expect(compactFrame.style.scale).toBe("0.8");
     act(() => root.unmount());
     container.remove();
@@ -160,7 +160,7 @@ describe("OfferTile", () => {
       '[data-testid="full-draft"] [data-offer-tile-card-grid]',
     );
     expect(draftGrid?.style.display).toBe("grid");
-    expect(draftGrid?.style.gridTemplateColumns).toBe("repeat(2, 54px)");
+    expect(draftGrid?.style.gridTemplateColumns).toBe("repeat(2, 64px)");
     expect(draftGrid?.style.gap).toBe("var(--space-1)");
 
     act(() => root.unmount());
@@ -185,23 +185,29 @@ describe("OfferTile", () => {
 
     const source = container.querySelector<HTMLButtonElement>("[data-offer-tile]")!;
     expect(source.tagName).toBe("BUTTON");
-    expect(source.style.width).toBe("200px");
-    expect(source.style.height).toBe("200px");
-    expect(source.style.borderRadius).toBe("var(--radius-panel)");
+    expect(source.style.width).toBe("300px");
+    expect(source.style.height).toBe("300px");
+    expect(source.style.borderRadius).toBe("var(--radius-pill)");
     expect(source.style.background).toBe("transparent");
     expect(source.style.border).toBe("0px");
     expect(source.style.textAlign).toBe("left");
-    expect(source.querySelector("[data-offer-tile-background]")).not.toBeNull();
+    const background = source.querySelector<HTMLImageElement>(
+      "[data-offer-tile-background]",
+    );
+    expect(background?.src).toContain("offer_tile_black_fill.png");
+    expect(background?.tagName).toBe("IMG");
     const floatingFrame = source.querySelector<HTMLElement>(
       "[data-offer-tile-floating-frame]",
     );
     expect(floatingFrame).not.toBeNull();
     expect(floatingFrame?.querySelector("[data-offer-tile-background]")).not.toBeNull();
     const frame = source.querySelector<HTMLImageElement>("[data-offer-tile-frame]");
-    expect(frame?.src).toContain("Skill_Frame_iron.png");
+    expect(frame?.src).toContain("dreamsign_card_frame_2.png");
     expect(frame?.draggable).toBe(false);
     expect(frame?.getAttribute("aria-hidden")).toBe("true");
     expect(frame?.style.pointerEvents).toBe("none");
+    const visual = source.querySelector<HTMLElement>("[data-offer-tile-visual]");
+    expect(visual?.style.maskImage).toContain("offer_tile_black_fill.png");
     expect(source.dataset.revealEntityType).toBe("offer");
     expect(source.dataset.revealEntityId).toMatch(/^[0-9a-f-]{36}$/);
     expect(source.dataset.revealPrimaryVariant).toBe("text");
@@ -308,12 +314,12 @@ describe("OfferTile", () => {
       container.querySelector<HTMLElement>(
         '[data-testid="gift-tile"] [data-offer-tile-full-card]',
       )?.style.width,
-    ).toBe("88px");
+    ).toBe("112px");
     const draftCards = container.querySelectorAll<HTMLElement>(
       '[data-testid="draft-tile"] [data-offer-tile-full-card]',
     );
     expect(draftCards).toHaveLength(4);
-    expect([...draftCards].every((card) => card.style.width === "54px")).toBe(
+    expect([...draftCards].every((card) => card.style.width === "64px")).toBe(
       true,
     );
     expect(
@@ -323,7 +329,7 @@ describe("OfferTile", () => {
     const tradeCards = container.querySelectorAll<HTMLElement>(
       '[data-testid="trade-square-tile"] [data-offer-tile-full-card]',
     );
-    expect([...tradeCards].every((card) => card.style.width === "54px")).toBe(
+    expect([...tradeCards].every((card) => card.style.width === "64px")).toBe(
       true,
     );
     expect(
@@ -410,12 +416,12 @@ describe("OfferTile", () => {
       container.querySelector<HTMLElement>(
         '[data-testid="duplicate-tile"] [data-offer-tile-operation-layout]',
       )?.style.width,
-    ).toBe("54px");
+    ).toBe("60px");
     expect(
       container.querySelector<HTMLElement>(
         '[data-testid="duplicate-tile"] [data-offer-tile-composition]',
       )?.style.width,
-    ).toBe("150px");
+    ).toBe("190px");
     expect(
       container.querySelector(
         '[data-testid="trade-tile"] [data-offer-tile-operation]',
@@ -424,13 +430,13 @@ describe("OfferTile", () => {
     const tradeCards = container.querySelectorAll<HTMLElement>(
       '[data-testid="trade-tile"] [data-offer-tile-full-card]',
     );
-    expect([...tradeCards].every((card) => card.style.width === "54px")).toBe(
+    expect([...tradeCards].every((card) => card.style.width === "64px")).toBe(
       true,
     );
     const tradeGrid = container.querySelector<HTMLElement>(
       '[data-testid="trade-tile"] [data-offer-tile-card-grid]',
     );
-    expect(tradeGrid?.style.gridTemplateColumns).toBe("repeat(2, 54px)");
+    expect(tradeGrid?.style.gridTemplateColumns).toBe("repeat(2, 64px)");
     expect(tradeGrid?.style.gap).toBe("var(--space-1)");
     expect(
       [...tradeCards].slice(0, 4).every(
@@ -454,18 +460,18 @@ describe("OfferTile", () => {
         ...container.querySelectorAll<HTMLElement>(
           '[data-testid="bundle-tile"] [data-offer-tile-full-card]',
         ),
-      ].every((card) => card.style.width === "76px"),
+      ].every((card) => card.style.width === "96px"),
     ).toBe(true);
     expect(
       container.querySelector<HTMLElement>(
         '[data-testid="bundle-tile"] [data-offer-tile-full-card-stack]',
       )?.style.width,
-    ).toBe("150px");
+    ).toBe("190px");
     expect(
       container.querySelector<HTMLElement>(
         '[data-testid="bundle-tile"] [data-offer-tile-full-card-stack]',
       )?.style.translate,
-    ).toBe("0 var(--space-5)");
+    ).toBe("");
 
     for (const treatmentCard of container.querySelectorAll<HTMLElement>(
       '[data-testid="trade-tile"] [data-offer-tile-full-card], [data-testid="duplicate-tile"] [data-offer-tile-full-card]',
@@ -529,13 +535,13 @@ describe("OfferTile", () => {
         `[data-testid="${testId}"] [data-offer-tile-operation-layout]`,
       );
       expect(mark?.dataset.offerTileOperationLayout).toBe("card-overlay");
-      expect(mark?.style.width).toBe("54px");
-      expect(mark?.style.height).toBe("54px");
+      expect(mark?.style.width).toBe("60px");
+      expect(mark?.style.height).toBe("60px");
       expect(mark?.style.zIndex).toBe("2");
       const fullCard = container.querySelector<HTMLElement>(
         `[data-testid="${testId}"] [data-offer-tile-full-card]`,
       );
-      expect(fullCard?.style.width).toBe("88px");
+      expect(fullCard?.style.width).toBe("112px");
       expect(fullCard?.style.zIndex).toBe("1");
       expect(fullCard?.querySelector('[data-card-presentation="full"]')).not.toBeNull();
     }
@@ -563,7 +569,7 @@ describe("OfferTile", () => {
       container.querySelector<HTMLElement>(
         '[data-testid="add-site"] [data-offer-tile-site-glyph]',
       )?.style.fontSize,
-    ).toBe("60px");
+    ).toBe("70px");
 
     act(() => root.unmount());
     container.remove();

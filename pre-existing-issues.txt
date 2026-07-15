@@ -56,3 +56,17 @@ target from its stale rendered phase. Reopening the same room reconstructed the
 latest fold state. The room event log and the visible battle board should remain
 in sync after every accepted intent so a stale client cannot emit duplicate
 phase transitions.
+
+## Production CSS contains a stray closing content tag
+
+`npm run build` completes with an esbuild CSS syntax warning for an unexpected
+`<` token. `src/battle/components/battle-start.css:561` contains the standalone
+text `</content>`, which is not valid CSS and is emitted into the combined CSS
+input passed to the minifier.
+
+## npm audit: websocket-driver resource-limit and message-corruption advisories
+
+`npm install` reports the critical GHSA-mp7j-qc5w-4988 and
+GHSA-xv26-6w52-cph6 advisories in the transitive `websocket-driver@0.7.4`
+dependency. `npm audit fix` reports that a non-breaking dependency update is
+available; dependency-lock maintenance is outside the offer-tile UI change.

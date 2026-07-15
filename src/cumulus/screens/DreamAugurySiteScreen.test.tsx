@@ -192,6 +192,23 @@ describe("DreamAugurySiteScreen", () => {
     ).toBeNull();
   });
 
+  it("keeps the 240px mobile offers in a centered horizontal snap row", () => {
+    stubMatchMedia(false);
+    const container = mount(
+      <DreamAugurySiteScreen view={view()} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
+    );
+
+    const offers = container.querySelectorAll<HTMLElement>("[data-offer-tile]");
+    expect(offers).toHaveLength(2);
+    expect([...offers].every((offer) => offer.style.width === "240px")).toBe(true);
+    const row = container.querySelector<HTMLElement>(
+      "[data-dream-augury-offer-row]",
+    );
+    expect(row?.style.overflowX).toBe("auto");
+    expect(row?.style.scrollSnapType).toBe("x mandatory");
+    expect(row?.style.paddingInline).toBe("calc(0.5 * (100% - 240px))");
+  });
+
   it("opens one vision before exposing its detailed candidate pick", () => {
     const onInspectOffer = vi.fn();
     const container = mount(

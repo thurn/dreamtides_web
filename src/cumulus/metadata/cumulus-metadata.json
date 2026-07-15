@@ -2883,7 +2883,7 @@
       ],
       "required": false,
       "defaultValue": "standard",
-      "description": "Complete tile composition size. Defaults to the 200px standard tile."
+      "description": "Complete tile composition size. Defaults to the 300px standard tile."
     },
     {
       "name": "testId",

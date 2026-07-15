@@ -10,7 +10,6 @@ import type { FrozenCardData } from "../../../types/cards";
 import type { TransfigurationType } from "../../../types/quest";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
-import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { Pressable } from "../../primitives/Pressable";
 import type { ArtRef } from "../../primitives/art";
 import { resolveArtRef } from "../../primitives/art";
@@ -23,12 +22,13 @@ import {
   offerTileDescription,
   offerTileRichDescription,
 } from "./offer-tile-descriptions";
-import offerFrameUrl from "../../assets/Skill_Frame_iron.png";
+import offerFrameUrl from "../../assets/dreamsign_card_frame_2.png";
+import offerBlackFillUrl from "../../assets/offer_tile_black_fill.png";
 import "./offer-tile.css";
 
 /** Named OfferTile edge lengths, in pixels. */
-export const OFFER_TILE_STANDARD_SIZE = 200;
-export const OFFER_TILE_COMPACT_SIZE = 160;
+export const OFFER_TILE_STANDARD_SIZE = 300;
+export const OFFER_TILE_COMPACT_SIZE = 240;
 /** Backward-compatible standard OfferTile edge length. */
 export const OFFER_TILE_SIZE = OFFER_TILE_STANDARD_SIZE;
 export type OfferTileSize = "standard" | "compact";
@@ -185,14 +185,14 @@ export interface OfferTileProps {
   model: OfferTileModel;
   /** Activates the offer, reporting the stable `model.id`. */
   onPress: (offerId: string) => void;
-  /** Complete tile composition size. Defaults to the 200px standard tile. */
+  /** Complete tile composition size. Defaults to the 300px standard tile. */
   size?: OfferTileSize;
   /** Optional test selector; defaults to `offer-tile`. */
   testId?: string;
 }
 
 /**
- * A 200×200 framed symbolic Dream Augury offer button. Its rounded gold frame
+ * A 300×300 framed symbolic Dream Augury offer button. Its circular gold frame
  * surrounds complete cards, dreamsigns, and glyphs. Every inner
  * object is decorative and pointer-transparent. The complete tile is the only
  * hover/focus/press target and reveals one category InfoCard.
@@ -257,7 +257,7 @@ export function OfferTile({
         overflow: "visible",
         appearance: "none",
         border: 0,
-        borderRadius: token("--radius-panel"),
+        borderRadius: token("--radius-pill"),
         background: "transparent",
         color: token("--text-on-glass"),
         textAlign: "left",
@@ -278,17 +278,26 @@ export function OfferTile({
           pointerEvents: "none",
         }}
       >
-        <span
+        <img
           className="cumulus-offer-tile__depth"
           data-offer-tile-background=""
-          style={glassSurfaceStyle({ radius: token("--radius-panel") })}
+          src={offerBlackFillUrl}
+          alt=""
+          aria-hidden="true"
+          draggable={false}
         />
         <span
           className="cumulus-offer-tile__visual"
           data-offer-tile-visual=""
-          style={{ pointerEvents: "none" }}
+          style={{
+            WebkitMaskImage: `url("${offerBlackFillUrl}")`,
+            maskImage: `url("${offerBlackFillUrl}")`,
+            pointerEvents: "none",
+          }}
         >
-          <OfferVisual model={model} />
+          <span className="cumulus-offer-tile__visual-content">
+            <OfferVisual model={model} />
+          </span>
         </span>
         <img
           className="cumulus-offer-tile__frame"
@@ -317,10 +326,10 @@ type CardTreatment = "plain" | "purged" | "duplicate";
 type FullCardSize = "draft" | "compact" | "medium" | "standard";
 
 const FULL_CARD_WIDTH: Readonly<Record<FullCardSize, number>> = {
-  compact: 64,
-  draft: 54,
-  medium: 76,
-  standard: 88,
+  compact: 78,
+  draft: 64,
+  medium: 96,
+  standard: 112,
 };
 
 function DreamsignArtPiece({
@@ -331,7 +340,7 @@ function DreamsignArtPiece({
   readonly size?: "small" | "large";
 }): ReactElement {
   const [imageBroken, setImageBroken] = useState(false);
-  const edge = size === "small" ? 66 : 128;
+  const edge = size === "small" ? 80 : 158;
   return (
     <span
       data-offer-tile-dreamsign-id={dreamsign.id}
@@ -418,9 +427,9 @@ function FullCardStack({
   const bundleLayout = layout === "bundle";
   const size = bundleLayout ? "medium" : cards.length >= 3 ? "compact" : "medium";
   const cardWidth = FULL_CARD_WIDTH[size];
-  const stageWidth = bundleLayout ? 150 : 132;
-  const stageHeight = bundleLayout ? 140 : 126;
-  const spread = bundleLayout ? (cards.length >= 3 ? 30 : 26) : cards.length >= 3 ? 26 : 22;
+  const stageWidth = bundleLayout ? 190 : 174;
+  const stageHeight = bundleLayout ? 175 : 160;
+  const spread = bundleLayout ? (cards.length >= 3 ? 36 : 30) : cards.length >= 3 ? 32 : 28;
   return (
     <span
       data-offer-tile-full-card-stack=""
@@ -429,7 +438,6 @@ function FullCardStack({
         display: "block",
         width: stageWidth,
         height: stageHeight,
-        translate: bundleLayout ? `0 ${token("--space-5")}` : undefined,
         pointerEvents: "none",
       }}
     >
@@ -441,7 +449,7 @@ function FullCardStack({
             style={{
               position: "absolute",
               left: (stageWidth - cardWidth) / 2 + offset * spread,
-              top: (bundleLayout ? 4 : 8) + Math.abs(offset) * 4,
+              top: (bundleLayout ? 8 : 10) + Math.abs(offset) * 5,
               rotate: `${String(offset * 5)}deg`,
               pointerEvents: "none",
             }}
@@ -482,16 +490,16 @@ function OperationMark({
         left: layout === "overlay" ? "50%" : undefined,
         top: layout === "overlay" ? "50%" : undefined,
         right:
-          layout === "diagonal" ? 0 : layout === "card-overlay" ? 8 : undefined,
+          layout === "diagonal" ? 0 : layout === "card-overlay" ? 10 : undefined,
         bottom:
-          layout === "diagonal" ? 0 : layout === "card-overlay" ? 4 : undefined,
+          layout === "diagonal" ? 0 : layout === "card-overlay" ? 10 : undefined,
         translate: layout === "overlay" ? "-50% -50%" : undefined,
         zIndex: 2,
         display: "grid",
         placeItems: "center",
         flex: "0 0 auto",
-        width: layout === "overlay" ? 48 : layout === "diagonal" ? 82 : 54,
-        height: layout === "overlay" ? 48 : layout === "diagonal" ? 82 : 54,
+        width: layout === "overlay" ? 58 : layout === "diagonal" ? 82 : 60,
+        height: layout === "overlay" ? 58 : layout === "diagonal" ? 82 : 60,
         borderRadius: token("--radius-pill"),
         color,
         background: token("--surface-chrome-strong"),
@@ -503,7 +511,7 @@ function OperationMark({
       <i
         className={glyph}
         style={{
-          fontSize: layout === "overlay" ? 26 : layout === "diagonal" ? 42 : 30,
+          fontSize: layout === "overlay" ? 32 : layout === "diagonal" ? 42 : 34,
           lineHeight: 1,
           pointerEvents: "none",
         }}
@@ -537,8 +545,8 @@ function OperationComposition({
           : {
               position: "relative",
               display: "block",
-              width: 150,
-              height: 150,
+              width: 190,
+              height: 190,
               pointerEvents: "none",
             }
       }
@@ -581,8 +589,8 @@ function FullCardOperation({
         position: "relative",
         display: "grid",
         placeItems: "center",
-        width: 150,
-        height: 150,
+        width: 190,
+        height: 190,
         pointerEvents: "none",
       }}
     >
@@ -610,8 +618,8 @@ function FullCardStackOperation({
         position: "relative",
         display: "grid",
         placeItems: "center",
-        width: 150,
-        height: 150,
+        width: 190,
+        height: 190,
         pointerEvents: "none",
       }}
     >
@@ -775,9 +783,9 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
         <span
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(2, 66px)",
+            gridTemplateColumns: "repeat(2, 80px)",
             placeItems: "center",
-            gap: 4,
+            gap: token("--space-2"),
             pointerEvents: "none",
           }}
         >
@@ -800,8 +808,8 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
           style={{
             display: "grid",
             placeItems: "center",
-            width: 116,
-            height: 116,
+            width: 136,
+            height: 136,
             borderRadius: token("--radius-pill"),
             background: token("--surface-chrome-strong"),
             border: `2px solid ${token("--border-strong")}`,
@@ -814,7 +822,7 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
           <i
             className={model.site.glyph}
             data-offer-tile-site-glyph=""
-            style={{ fontSize: 60, lineHeight: 1, pointerEvents: "none" }}
+            style={{ fontSize: 70, lineHeight: 1, pointerEvents: "none" }}
           />
         </span>
       );

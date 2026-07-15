@@ -12,6 +12,7 @@ import { offerTileDescription } from "../cumulus/components/controls/offer-tile-
 import { artRef, resolveArtRef } from "../cumulus/primitives/art";
 import { glyph } from "../cumulus/primitives/glyph";
 import { token } from "../cumulus/primitives/tokens";
+import { useIsDesktop } from "../cumulus/screens/use-is-desktop";
 import { MERCHANT_ARCHETYPE_BUILDERS } from "../journey_v2/archetypes/registry";
 import type { MerchantArchetypeId } from "../journey_v2/archetypes/types";
 import { asCardId, asCardName } from "../types/card-identity";
@@ -282,6 +283,7 @@ function hydrateOfferCards(
 }
 
 export default function OffersDebugApp(): ReactElement {
+  const isDesktop = useIsDesktop();
   const [lastPressed, setLastPressed] = useState<string | null>(null);
   const [cardsById, setCardsById] = useState<ReadonlyMap<string, CardData> | null>(
     null,
@@ -353,7 +355,7 @@ export default function OffersDebugApp(): ReactElement {
       <main
         style={{
           position: "relative",
-          width: "min(1580px, 100%)",
+          width: "min(1740px, 100%)",
           minHeight: "100vh",
           margin: "0 auto",
           padding: `${token("--space-9")} ${token("--space-8")} ${token("--space-10")}`,
@@ -393,7 +395,7 @@ export default function OffersDebugApp(): ReactElement {
           aria-label="Dream Augury offer categories"
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gridTemplateColumns: `repeat(auto-fit, minmax(${isDesktop ? "300px" : "240px"}, 1fr))`,
             alignItems: "start",
             gap: token("--space-8"),
           }}
@@ -414,7 +416,11 @@ export default function OffersDebugApp(): ReactElement {
                   margin: 0,
                 }}
               >
-                <OfferTile model={model} onPress={setLastPressed} />
+                <OfferTile
+                  model={model}
+                  size={isDesktop ? "standard" : "compact"}
+                  onPress={setLastPressed}
+                />
                 <figcaption
                   style={{
                     display: "grid",

@@ -5,7 +5,10 @@ import { GameCard } from "../components/card/CardView";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlowIcon } from "../components/controls/GlowIcon";
 import type { OfferTileModel } from "../components/controls/OfferTile";
-import { OfferTile } from "../components/controls/OfferTile";
+import {
+  OfferTile,
+  OFFER_TILE_COMPACT_SIZE,
+} from "../components/controls/OfferTile";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import type { ArtRef } from "../primitives/art";
@@ -191,15 +194,39 @@ export function DreamAugurySiteScreen({
                 transition={transition}
                 style={{ display: "grid", justifyItems: "center", gap: token("--space-5"), pointerEvents: "auto" }}
               >
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: layout === "desktop" ? token("--space-9") : token("--space-4") }}>
+                <div
+                  data-dream-augury-offer-row=""
+                  style={{
+                    display: "flex",
+                    width: layout === "mobile" ? "100%" : undefined,
+                    maxWidth: "100%",
+                    alignItems: "center",
+                    justifyContent: layout === "desktop" ? "center" : "flex-start",
+                    gap: layout === "desktop" ? token("--space-9") : token("--space-4"),
+                    overflowX: layout === "mobile" ? "auto" : undefined,
+                    paddingInline:
+                      layout === "mobile"
+                        ? `calc((100% - ${String(OFFER_TILE_COMPACT_SIZE)}px) / 2)`
+                        : undefined,
+                    boxSizing: "border-box",
+                    scrollSnapType: layout === "mobile" ? "x mandatory" : undefined,
+                  }}
+                >
                   {view.offers.map((offer) => (
-                    <OfferTile
+                    <div
                       key={offer.id}
-                      model={offer.tile}
-                      size={layout === "desktop" ? "standard" : "compact"}
-                      onPress={() => inspectOffer(offer)}
-                      testId={`cumulus-dream-augury-offer-${offer.id}`}
-                    />
+                      style={{
+                        flex: "0 0 auto",
+                        scrollSnapAlign: layout === "mobile" ? "center" : undefined,
+                      }}
+                    >
+                      <OfferTile
+                        model={offer.tile}
+                        size={layout === "desktop" ? "standard" : "compact"}
+                        onPress={() => inspectOffer(offer)}
+                        testId={`cumulus-dream-augury-offer-${offer.id}`}
+                      />
+                    </div>
                   ))}
                 </div>
                 <GlassButton
