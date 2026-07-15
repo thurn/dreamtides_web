@@ -59,6 +59,7 @@ function makeCard(index: number, instanceId: string): MobileBattleCardView {
     exhausted: index % 3 === 0,
     figment: false,
     figmentTitleBar: false,
+    showPlayableOutline: false,
   };
 }
 
@@ -461,6 +462,35 @@ describe("MobileBattleScreen", () => {
       expect(card.querySelector('[data-card-energy-anchor]')).not.toBeNull();
       expect(card.querySelector('[data-testid="card-type-line"]')).not.toBeNull();
     });
+
+    act(() => root.unmount());
+  });
+
+  it("draws the positive selection outline around playable hand cards", () => {
+    const view = makeView();
+    const outlinedCard = view.playerHand[1];
+    if (outlinedCard === undefined) throw new Error("expected a hand card");
+    const outlinedView: MobileBattleView = {
+      ...view,
+      playerHand: view.playerHand.map((card) => ({
+        ...card,
+        showPlayableOutline: card.id === outlinedCard.id,
+      })),
+    };
+    const { container, root } = mount(outlinedView);
+    const handCards = Array.from(
+      container.querySelectorAll<HTMLElement>(
+        '[data-battle-card-zone="player-hand"] [data-game-card-source]',
+      ),
+    );
+
+    expect(handCards).toHaveLength(view.playerHand.length);
+    expect(handCards[0]?.querySelector<HTMLElement>(".card-view")?.style.boxShadow)
+      .not.toContain("var(--positive)");
+    expect(handCards[1]?.querySelector<HTMLElement>(".card-view")?.style.boxShadow)
+      .toContain("var(--positive)");
+    expect(handCards[2]?.querySelector<HTMLElement>(".card-view")?.style.boxShadow)
+      .not.toContain("var(--positive)");
 
     act(() => root.unmount());
   });

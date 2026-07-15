@@ -47,7 +47,14 @@ export function buildMobileBattleView(
       frontSize,
       backSize,
     ),
-    playerHand: buildCardViews(board.sides.player.hand, board),
+    playerHand: buildCardViews(
+      board.sides.player.hand,
+      board,
+      (instance) =>
+        board.activeSide === "player" &&
+        board.phase === "day" &&
+        instance.definition.energyCost <= board.sides.player.currentEnergy,
+    ),
   };
 }
 
@@ -68,6 +75,7 @@ function mobileBattlePhase(
 
 export function buildMobileBattleCardView(
   instance: BattleCardInstance,
+  showPlayableOutline = false,
 ): MobileBattleCardView {
   const figment = instance.provenance.kind === "generated-figment";
   return {
@@ -76,6 +84,7 @@ export function buildMobileBattleCardView(
     exhausted: instance.status.isExhausted,
     figment,
     figmentTitleBar: figment && instance.definition.name.trim() !== "",
+    showPlayableOutline,
   };
 }
 
@@ -103,10 +112,13 @@ function buildSideView(
 function buildCardViews(
   battleCardIds: readonly string[],
   board: BattleMutableState,
+  showPlayableOutline: (instance: BattleCardInstance) => boolean = () => false,
 ): MobileBattleCardView[] {
   return battleCardIds.flatMap((battleCardId) => {
     const instance = board.cardInstances[battleCardId];
-    return instance === undefined ? [] : [buildMobileBattleCardView(instance)];
+    return instance === undefined
+      ? []
+      : [buildMobileBattleCardView(instance, showPlayableOutline(instance))];
   });
 }
 

@@ -139,6 +139,35 @@ describe("buildMobileBattleView", () => {
     });
   });
 
+  it("marks only affordable player hand cards during the player's Day phase", () => {
+    const init = makeInit();
+    const board = makeBoard(init);
+    board.phase = "day";
+
+    expect(
+      buildMobileBattleView(init, board, ENEMY_DREAMCALLER).playerHand.map(
+        (card) => card.showPlayableOutline,
+      ),
+    ).toEqual([true, true, false]);
+
+    board.phase = "dusk";
+
+    expect(
+      buildMobileBattleView(init, board, ENEMY_DREAMCALLER).playerHand.map(
+        (card) => card.showPlayableOutline,
+      ),
+    ).toEqual([false, false, false]);
+
+    board.phase = "day";
+    board.activeSide = "enemy";
+
+    expect(
+      buildMobileBattleView(init, board, ENEMY_DREAMCALLER).playerHand.map(
+        (card) => card.showPlayableOutline,
+      ),
+    ).toEqual([false, false, false]);
+  });
+
   it.each([
     ["dreamwell", "dawn"],
     ["draw", "dawn"],

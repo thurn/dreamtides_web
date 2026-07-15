@@ -34,6 +34,8 @@ export interface MobileBattleCardView {
   readonly exhausted: boolean;
   readonly figment: boolean;
   readonly figmentTitleBar: boolean;
+  /** Draw the green playable-card outline on this hand card. */
+  readonly showPlayableOutline: boolean;
 }
 
 /** A stable battlefield position which may currently be empty. */
@@ -766,6 +768,8 @@ function FaceUpCard({
       >
         <GameCard
           model={card.model}
+          selected={card.showPlayableOutline}
+          selectionColor="positive"
           hideRulesText={!showRulesText}
           presentation={showRulesText ? "full" : "battlefield"}
           figment={card.figment}
