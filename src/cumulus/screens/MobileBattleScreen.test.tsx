@@ -933,7 +933,7 @@ describe("MobileBattleScreen", () => {
     vi.useRealTimers();
   });
 
-  it("plays a quick touch tap but suppresses the click once a 300ms long press is detected", () => {
+  it("plays a quick touch tap but keeps a captured long press revealed and suppresses its click", () => {
     vi.useFakeTimers();
     const interactions = {
       canInteract: true,
@@ -954,7 +954,7 @@ describe("MobileBattleScreen", () => {
     const revealSource = handCard?.querySelector<HTMLElement>(
       "[data-game-card-source]",
     );
-    const dispatchTouch = (type: "pointerdown" | "pointerup", pointerId: number) => {
+    const dispatchTouch = (type: "pointerdown" | "pointerout" | "pointerup", pointerId: number) => {
       revealSource?.dispatchEvent(
         new PointerEvent(type, {
           bubbles: true,
@@ -979,7 +979,15 @@ describe("MobileBattleScreen", () => {
     interactions.onHandCardActivate.mockClear();
     act(() => {
       dispatchTouch("pointerdown", 42);
-      vi.advanceTimersByTime(300);
+      vi.advanceTimersByTime(30);
+    });
+    expect(document.querySelector("[data-cumulus-reveal-portal]")).not.toBeNull();
+    act(() => {
+      dispatchTouch("pointerout", 42);
+      vi.advanceTimersByTime(270);
+    });
+    expect(document.querySelector("[data-cumulus-reveal-portal]")).not.toBeNull();
+    act(() => {
       dispatchTouch("pointerup", 42);
       handCard?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       vi.advanceTimersByTime(DOUBLE_TAP_WINDOW_MS);

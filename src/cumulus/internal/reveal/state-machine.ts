@@ -92,7 +92,6 @@ export function reduceRevealState(state: RevealCoordinatorState, event: RevealCo
       if (state.touch !== null) return state.touch.pointerId === event.pointerId ? cancel(state, "pointer-cancel") : state;
       return state.pressPointerId === event.pointerId ? cancel(state, "pointer-cancel") : state;
     case "pointer-leave":
-      if (state.touch?.pointerId === event.pointerId) return cancel(state, "pointer-leave");
       if (state.phase === "hover" && (event.source === undefined || sameMountedSource(state.hoveredSource, event.source))) return restoreFocus(state, "pointer-leave");
       return state;
     case "focus":

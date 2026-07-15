@@ -85,9 +85,27 @@ describe("reveal interaction state machine", () => {
     });
   });
 
+  it("keeps an owned touch reveal open when pointer capture makes the source receive pointer-leave", () => {
+    const down = run({
+      type: "pointer-down", source: SA, pointerType: "touch", pointerId: 7,
+      point: { x: 10, y: 10 }, hasAction: true, timestamp: 0,
+    });
+
+    const left = reduceRevealState(down, {
+      type: "pointer-leave", source: SA, pointerId: 7, timestamp: 40,
+    });
+
+    expect(left).toEqual(down);
+    expect(reduceRevealState(left, {
+      type: "pointer-up", pointerId: 7, timestamp: 50,
+    })).toMatchObject({
+      phase: "idle", dismissalReason: "release", activationOutcome: "fired",
+    });
+  });
+
   it.each([
     ["scroll", "scroll"], ["drag", "drag"], ["pointer-cancel", "pointer-cancel"],
-    ["pointer-leave", "pointer-leave"], ["resize", "resize"],
+    ["resize", "resize"],
     ["orientation-change", "orientation-change"], ["window-blur", "window-blur"],
     ["route-change", "route-change"],
   ] as const)("dismisses and cancels touch on %s", (type, reason) => {
@@ -95,7 +113,7 @@ describe("reveal interaction state machine", () => {
       type: "pointer-down", source: SA, pointerType: "touch", pointerId: 1,
       point: { x: 0, y: 0 }, hasAction: true, timestamp: 0,
     };
-    const event = type === "pointer-cancel" || type === "pointer-leave"
+    const event = type === "pointer-cancel"
       ? { type, pointerId: 1, timestamp: 40 }
       : { type, timestamp: 40 };
     expect(run(down, event as RevealCoordinatorEvent)).toMatchObject({

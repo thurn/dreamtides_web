@@ -153,6 +153,36 @@ describe("Cumulus reveal coordinator root", () => {
     expect(activateB).not.toHaveBeenCalled();
   });
 
+  it("keeps a touch reveal open when an ancestor pointer capture retargets the pointer", () => {
+    vi.useFakeTimers();
+    const { container } = mount(<CumulusRoot><Source id={UUID_A} /></CumulusRoot>);
+    const button = container.querySelector("button")!;
+    button.getBoundingClientRect = () => DOMRect.fromRect({ x: 20, y: 220, width: 120, height: 60 });
+
+    act(() => {
+      button.dispatchEvent(new PointerEvent("pointerdown", {
+        bubbles: true, pointerType: "touch", pointerId: 11,
+      }));
+    });
+    expect(button.dataset.revealActive).toBe("true");
+
+    act(() => {
+      button.dispatchEvent(new PointerEvent("pointerout", {
+        bubbles: true, pointerType: "touch", pointerId: 11,
+      }));
+    });
+    expect(button.dataset.revealActive).toBe("true");
+    act(() => { vi.advanceTimersByTime(30); });
+    expect(document.querySelector("[data-cumulus-reveal-portal]")).not.toBeNull();
+
+    act(() => {
+      button.dispatchEvent(new PointerEvent("pointerup", {
+        bubbles: true, pointerType: "touch", pointerId: 11,
+      }));
+    });
+    expect(button.dataset.revealActive).toBe("false");
+  });
+
   it("does not reveal for a contact pen pointer-enter", () => {
     const { container } = mount(<CumulusRoot><Source id={UUID_A} /></CumulusRoot>);
     const button = container.querySelector("button")!;

@@ -432,8 +432,11 @@ export function useRevealSource(registration: RevealSourceRegistration): RevealS
       style: { "--reveal-press-scale": String(feedback.pressScale), "--reveal-hover-scale": String(feedback.hoverScale) } as CSSProperties,
       onPointerEnter: (event) => { if (valid) { const hoverCapable = event.pointerType === "mouse" || (event.pointerType === "pen" && event.buttons === 0 && event.pressure === 0); if (hoverCapable && coordinator.state.touch === null) { coordinator.cancelGameCardReturn("replaced"); const sourceRect = captureSourceRect(event.currentTarget); coordinator.beginInteraction(mountedSource, "hover", sourceRect, event.pointerType === "pen" ? "pen" : "mouse"); measureFeedback(sourceRect); } coordinator.dispatch({ type: "pointer-enter", source: mountedSource, pointerType: event.pointerType, hoverCapable, timestamp: event.timeStamp }); } },
       onPointerLeave: (event) => {
-        if (intentTimer.current !== null) { clearTimeout(intentTimer.current); intentTimer.current = null; }
-        if (valid) { coordinator.beginGameCardReturn(mountedSource); coordinator.dispatch({ type: "pointer-leave", source: mountedSource, pointerId: event.pointerId, timestamp: event.timeStamp }); }
+        if (event.pointerType !== "touch" && intentTimer.current !== null) { clearTimeout(intentTimer.current); intentTimer.current = null; }
+        if (valid) {
+          if (event.pointerType !== "touch") coordinator.beginGameCardReturn(mountedSource);
+          coordinator.dispatch({ type: "pointer-leave", source: mountedSource, pointerId: event.pointerId, timestamp: event.timeStamp });
+        }
       },
       onPointerDown: (event) => {
         if (!valid) return;
