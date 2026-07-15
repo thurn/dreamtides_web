@@ -1332,11 +1332,11 @@ function ControlRow({
             aiApproval === null ? undefined : ""
           }
           style={{
-            width: NEXT_PHASE_CONTROL_WIDTH,
+            width: aiApproval === null ? NEXT_PHASE_CONTROL_WIDTH : undefined,
             display: aiApproval === null ? "grid" : "flex",
             alignItems: aiApproval === null ? undefined : "center",
             justifyContent: aiApproval === null ? undefined : "flex-end",
-            gap: aiApproval === null ? undefined : token("--space-3"),
+            gap: aiApproval === null ? undefined : token("--space-4"),
           }}
         >
           {aiApproval === null ? (
@@ -1357,10 +1357,8 @@ function ControlRow({
                   onPress={() => interactions?.onRejectAiProposal?.()}
                 />
               ) : null}
-              <IconButton
-                glyph={GLYPHS.check}
-                size="sm"
-                label={`Approve AI action: ${aiApproval.description}`}
+              <GlassButton
+                label="Continue"
                 variant="accent"
                 disabled={interactions?.onApproveAiProposal === undefined}
                 onPress={() => interactions?.onApproveAiProposal?.()}

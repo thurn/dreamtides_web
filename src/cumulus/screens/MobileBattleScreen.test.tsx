@@ -803,29 +803,36 @@ describe("MobileBattleScreen", () => {
     const nextSlot = container.querySelector<HTMLElement>(
       "[data-battle-phase-next]",
     );
+    const phaseControls = container.querySelector<HTMLElement>(
+      '[data-battle-phase-controls="row"]',
+    );
     const backButton = container.querySelector<HTMLButtonElement>(
       "[data-battle-phase-back] button",
     );
     const rejectButton = nextSlot?.querySelector<HTMLButtonElement>(
       '[aria-label="Reject AI action"]',
     );
-    const approveButton = nextSlot?.querySelector<HTMLButtonElement>(
-      '[aria-label="Approve AI action: Play a fixture card to B2."]',
-    );
+    const continueButton = Array.from(
+      nextSlot?.querySelectorAll<HTMLButtonElement>("button") ?? [],
+    ).find((button) => button.textContent === "Continue");
 
     expect(nextSlot?.dataset.battleAiApprovalControls).toBe("");
     expect(nextSlot?.textContent).not.toContain("Next Phase");
     expect(nextSlot?.querySelectorAll("button")).toHaveLength(2);
+    expect(nextSlot?.style.width).toBe("");
+    expect(nextSlot?.style.gap).toBe("var(--space-4)");
+    expect(phaseControls?.style.gap).toBe("var(--space-4)");
     expect(backButton?.getAttribute("aria-disabled")).toBe("true");
     expect(rejectButton?.getAttribute("aria-disabled")).toBeNull();
-    expect(approveButton?.getAttribute("aria-disabled")).toBeNull();
+    expect(continueButton?.getAttribute("aria-disabled")).toBeNull();
+    expect(continueButton?.dataset.glassVariant).toBe("accent");
     expect(
       container.querySelector("[data-battle-ai-approval-message]"),
     ).toBeNull();
 
     act(() => {
       rejectButton?.click();
-      approveButton?.click();
+      continueButton?.click();
     });
 
     expect(interactions.onRejectAiProposal).toHaveBeenCalledTimes(1);
@@ -869,6 +876,7 @@ describe("MobileBattleScreen", () => {
     expect(message?.style.font).toBe("var(--t-caption)");
     expect(message?.style.textShadow).toBe("var(--text-outline-media)");
     expect(nextSlot?.querySelectorAll("button")).toHaveLength(1);
+    expect(nextSlot?.querySelector("button")?.textContent).toBe("Continue");
     expect(
       nextSlot?.querySelector('[aria-label="Reject AI action"]'),
     ).toBeNull();
