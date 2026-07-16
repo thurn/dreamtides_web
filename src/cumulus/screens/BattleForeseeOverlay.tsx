@@ -14,7 +14,6 @@ import { useIsDesktop } from "./use-is-desktop";
 const FORESEE_CARD_WIDTH_DESKTOP_PX = 180;
 const FORESEE_CARD_WIDTH_MOBILE_PX = 104;
 /** A compact label target that remains easy to hit without imitating a card. */
-const FORESEE_INDICATOR_WIDTH_DESKTOP_PX = 104;
 const FORESEE_INDICATOR_WIDTH_MOBILE_PX = 64;
 /** Keeps both drop indicators aligned to the complete card silhouette. */
 const FORESEE_ROW_HEIGHT_DESKTOP_PX = 252;
@@ -62,7 +61,7 @@ export function BattleForeseeOverlay({
     ? FORESEE_CARD_WIDTH_DESKTOP_PX
     : FORESEE_CARD_WIDTH_MOBILE_PX;
   const indicatorWidthPx = isDesktop
-    ? FORESEE_INDICATOR_WIDTH_DESKTOP_PX
+    ? cardWidthPx
     : FORESEE_INDICATOR_WIDTH_MOBILE_PX;
   const rowHeightPx = isDesktop
     ? FORESEE_ROW_HEIGHT_DESKTOP_PX
@@ -154,7 +153,7 @@ export function BattleForeseeOverlay({
   } as const;
 
   return (
-    <GlassDialog title={`Foresee ${String(view.cards.length)}`} wide>
+    <GlassDialog title={`Foresee ${String(view.cards.length)}`}>
       <div
         data-battle-cumulus-foresee=""
         style={{ display: "grid", gap: token("--space-5") }}

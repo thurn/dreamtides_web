@@ -130,6 +130,13 @@ describe("BattleForeseeOverlay", () => {
     expect(Array.from(container.querySelectorAll("button"), (button) => button.textContent))
       .toEqual(["Confirm"]);
     expect(container.querySelector("[data-foresee-spacer]")).not.toBeNull();
+    const dialogPanel = container.querySelector<HTMLElement>('[role="dialog"]')
+      ?.firstElementChild as HTMLElement | undefined;
+    expect(dialogPanel?.style.maxWidth).toBe("min(900px, 90vw)");
+    expect(Array.from(
+      container.querySelectorAll<HTMLElement>("[data-foresee-indicator]"),
+      (indicator) => indicator.style.width,
+    )).toEqual(["180px", "180px"]);
 
     act(() => root.unmount());
   });
@@ -192,8 +199,11 @@ describe("BattleForeseeOverlay", () => {
 
     const card = container.querySelector<HTMLElement>("[data-foresee-card-zone=deck]");
     const spacer = container.querySelector<HTMLElement>("[data-foresee-spacer]");
+    const indicators = container.querySelectorAll<HTMLElement>("[data-foresee-indicator]");
     expect(card?.style.width).toBe("104px");
     expect(spacer?.style.minWidth).toBe("104px");
+    expect(Array.from(indicators, (indicator) => indicator.style.width))
+      .toEqual(["64px", "64px"]);
     expect(container.querySelectorAll("button")).toHaveLength(1);
 
     act(() => root.unmount());
