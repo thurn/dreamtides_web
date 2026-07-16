@@ -259,7 +259,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 2× Blazing Emberwing
 - 2× Beacon of Tomorrow
 - 2× Spirit Bond
-- 2× Dusk Duelist
+- 2× Blind Butcher
 - 2× Eternal Stag
 - 2× Ashen Remnant
 - 2× The Dread Sovereign
@@ -500,7 +500,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Graywatch
 - 1× Spirit Bond
 - 1× Sky Voyager
-- 1× Dusk Duelist
+- 1× Blind Butcher
 - 1× Veil of the Wastes
 - 1× Soulcleft Spinner
 - 1× Shadowbinder
@@ -1156,7 +1156,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Urban Cipher
 - 1× Ash Harbinger
 - 1× Somber Flockmaster
-- 1× Ashlight Caller
+- 1× Ritekeeper
 - 1× Pattern Seeker
 - 1× Annihilation from Below
 - 1× Revelation Explorer
@@ -1364,7 +1364,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Ash Harbinger
 - 1× Somber Flockmaster
 - 1× Keeper of the Tides
-- 1× Ashlight Caller
+- 1× Ritekeeper
 - 1× Pattern Seeker
 - 1× Annihilation from Below
 - 1× Spiral Offering
@@ -1435,7 +1435,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Sworn Defender
 - 1× Petal-Seer
 - 1× Sky Voyager
-- 1× Dusk Duelist
+- 1× Blind Butcher
 - 1× Soulflame Predator
 - 1× Soulcleft Spinner
 - 1× Nomad of Endless Paths
@@ -1539,7 +1539,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 1× Conduit of Resonance
 - 1× Ethereal Call
 - 1× Sky Voyager
-- 1× Dusk Duelist
+- 1× Blind Butcher
 - 1× Soulcleft Spinner
 - 1× Curio Dealer
 - 1× Momentum's Edge
@@ -1568,7 +1568,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 1× Quiet Reflection
 - 1× Sunset Chronicler
 - 1× Heavenward Penitent
-- 1× Clockwork Conductor
+- 1× God of the Veil
 - 1× Nexus Wayfinder
 - 1× Augur Crow
 
@@ -1623,7 +1623,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 1× Conduit of Resonance
 - 1× Ethereal Call
 - 1× Sky Voyager
-- 1× Dusk Duelist
+- 1× Blind Butcher
 - 1× Soulcleft Spinner
 - 1× The Bondweaver
 - 1× Dawnhorn Elder
@@ -1701,7 +1701,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Conduit of Resonance
 - 1× Ethereal Call
 - 1× Sky Voyager
-- 1× Dusk Duelist
+- 1× Blind Butcher
 - 1× Soulcleft Spinner
 - 1× Curio Dealer
 - 1× Ashen Remnant
@@ -1738,7 +1738,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Sunset Chronicler
 - 1× Still Dreamer
 - 1× Heavenward Penitent
-- 1× Clockwork Conductor
+- 1× God of the Veil
 - 1× Reforged Construct
 - 1× Nexus Wayfinder
 - 1× Augur Crow
@@ -2170,7 +2170,7 @@ Tide-fac-03 is an event-heavy (34 events, 11 characters) tide built around assem
 - 1× Echoes of the Journey
 - 1× Minstrel of Falling Light
 - 1× Eruption
-- 1× Ashlight Caller
+- 1× Ritekeeper
 - 1× Spiral Offering
 - 1× Renounce Reality
 - 1× Surge of Fury
@@ -2248,7 +2248,7 @@ Tide-fac-05 is a character-heavy (37 of 45 copies) spirit animal swarm built aro
 - 1× Petal-Seer
 - 1× Beacon of Tomorrow
 - 1× Lumin-Gate Seer
-- 1× Dusk Duelist
+- 1× Blind Butcher
 - 1× Emerald Guardian
 - 1× Flamboyant Flamingo
 - 1× Portal of Twin Paths
@@ -2438,7 +2438,7 @@ Tide-fac-07 runs an even split of events and characters (22/23) built around two
 - 1× Beacon of Tomorrow
 - 1× Lumin-Gate Seer
 - 1× Spirit Bond
-- 1× Dusk Duelist
+- 1× Blind Butcher
 - 1× Emerald Guardian
 - 1× Flamboyant Flamingo
 - 1× Glimmerwood Scout
@@ -2490,7 +2490,7 @@ Tide-fac-08 is an 80% character tide built almost entirely around spirit animals
 - 1× Lumin-Gate Seer
 - 1× Graywatch
 - 1× Spirit Bond
-- 1× Dusk Duelist
+- 1× Blind Butcher
 - 1× Abomination of Memory
 - 1× Emerald Guardian
 - 1× Flamboyant Flamingo
@@ -2518,7 +2518,7 @@ Tide-fac-08 is an 80% character tide built almost entirely around spirit animals
 - 1× Blood Moon Triad
 - 1× Turquoise Aurelia
 - 1× Dawnprowler Panther
-- 1× Clockwork Conductor
+- 1× God of the Veil
 - 1× Lord of Hidden Paths
 - 1× Scrap Reclaimer
 
@@ -2692,7 +2692,7 @@ Tide-fac-31 is almost entirely characters (41 of 45 cards), built around a dense
 - 1× Petal-Seer
 - 1× Beacon of Tomorrow
 - 1× Lumin-Gate Seer
-- 1× Dusk Duelist
+- 1× Blind Butcher
 - 1× Emerald Guardian
 - 1× Flamboyant Flamingo
 - 1× Portal of Twin Paths
@@ -3057,7 +3057,7 @@ Tide-fac-20 is an event-heavy combo tide (34 events, 11 characters) built around
 - 1× Minstrel of Falling Light
 - 1× Eruption
 - 1× Starcatcher
-- 1× Ashlight Caller
+- 1× Ritekeeper
 - 1× Spiral Offering
 - 1× Iconoclast
 - 1× Surge of Fury
@@ -3084,7 +3084,7 @@ Tide-fac-20 is an event-heavy combo tide (34 events, 11 characters) built around
 - 1× Conduit of Resonance
 - 1× Petal-Seer
 - 1× Beacon of Tomorrow
-- 1× Dusk Duelist
+- 1× Blind Butcher
 - 1× Emerald Guardian
 - 1× Flamboyant Flamingo
 - 1× Portal of Twin Paths
@@ -3131,7 +3131,7 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 - 1× Blazing Emberwing
 - 1× Beacon of Tomorrow
 - 1× Lumin-Gate Seer
-- 1× Dusk Duelist
+- 1× Blind Butcher
 - 1× Emerald Guardian
 - 1× Flamboyant Flamingo
 - 1× Portal of Twin Paths
@@ -3508,7 +3508,7 @@ This tide is split between characters and events (22 characters, 23 events), wit
 - 1× Petal-Seer
 - 1× Beacon of Tomorrow
 - 1× Lumin-Gate Seer
-- 1× Dusk Duelist
+- 1× Blind Butcher
 - 1× Emerald Guardian
 - 1× Flamboyant Flamingo
 - 1× Portal of Twin Paths
@@ -3815,7 +3815,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Archive of the Forgotten
 - 1× Echoes of the Journey
 - 1× Starcatcher
-- 1× Ashlight Caller
+- 1× Ritekeeper
 - 1× Renounce Reality
 - 1× Iconoclast
 - 1× Surge of Fury
@@ -3957,17 +3957,17 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Scrap Reclaimer
 - 1× Augur Crow
 
-## Broad: Starsea Traveler / Wraith of Twisting Shadows
+## Broad: Starsea Traveler / Remnant Scavenger
 
 `tide-neu-12` — neutral tide, 29 distinct cards, 30 copies
 
 - 2× Starsea Traveler
-- 1× Wraith of Twisting Shadows
+- 1× Remnant Scavenger
 - 1× Unleash Ruin
 - 1× Fathomless Maw
 - 1× Fallen Angel
 - 1× Petal-Seer
-- 1× Dusk Duelist
+- 1× Blind Butcher
 - 1× Vizier of Portents
 - 1× Specter of Silent Snow
 - 1× Collateral Damage
@@ -3975,7 +3975,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Winterbough Monk
 - 1× First Encounter
 - 1× Wake the Fallen
-- 1× Light of Emergence
+- 1× Flesh Cultivator
 - 1× Ambersting
 - 1× Cinderheart
 - 1× Angel of Memory

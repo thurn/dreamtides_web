@@ -246,7 +246,7 @@
       "supports": []
     },
     "995c570b-2d86-4f6f-8f02-dd0902e32fcd": {
-      "name": "Ashlight Caller",
+      "name": "Ritekeeper",
       "needs": [
         {
           "theme": "void",
@@ -683,7 +683,7 @@
       ]
     },
     "fa036c27-2234-4f76-8857-c242530627ce": {
-      "name": "Clockwork Conductor",
+      "name": "God of the Veil",
       "needs": [
         {
           "theme": "cheap-characters",
@@ -2299,7 +2299,7 @@
       ]
     },
     "7977748d-02c1-4702-ba68-5c49f7f0759b": {
-      "name": "Light of Emergence",
+      "name": "Flesh Cultivator",
       "needs": [
         {
           "theme": "abandon",
@@ -4874,7 +4874,7 @@
       ]
     },
     "017a7b4b-3ccf-4635-9956-28a72b22274e": {
-      "name": "Wraith of Twisting Shadows",
+      "name": "Remnant Scavenger",
       "needs": [
         {
           "theme": "void",

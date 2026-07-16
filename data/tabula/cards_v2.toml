@@ -521,21 +521,22 @@ art-owned = false
 card-number = 28
 
 [[cards]]
-name = "Dusk Duelist"
+name = "Blind Butcher"
 mtg-name = "Reclamation Sage"
 id = "3e6a5236-9850-4a69-9fe1-48389365a399"
 rendered-text = "▸Materialized: Dissolve a ≤2✦ enemy."
 energy-cost = 3
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Monster"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Removal", "Art Rework", "July16"]
-image-number = 2281682693
+tags = ["Removal", "Art Rework", "July16", "Art OK"]
+image-number = 1450052378
 art-owned = false
 card-number = 29
+art = { x = 0, y = 1, scale = 1.37 }
 
 [[cards]]
 name = "Molten Duel"
@@ -4202,13 +4203,13 @@ name = "Soul Harvester"
 mtg-name = "Priest of Forgotten Gods"
 id = "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034"
 rendered-text = "2●, ☪, Abandon two other characters: This character gains +2✦. Draw 2 cards."
-energy-cost = 2
+energy-cost = 3
 card-type = "Character"
 subtype = "Ancient"
 rarity = ""
 is-fast = false
 is-interrupt = false
-spark = 2
+spark = 4
 tags = ["Art Rework", "July16", "Art OK"]
 image-number = 2285036629
 art-owned = false
@@ -5942,28 +5943,28 @@ card-number = 319
 art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Wraith of Twisting Shadows"
+name = "Remnant Scavenger"
 mtg-name = "Knight of the Reliquary"
 id = "017a7b4b-3ccf-4635-9956-28a72b22274e"
 rendered-text = """
 This character has +1✦ for each ≤2● cost character in your void.
 
 ☪, Discard a card: Draw a ≤2● cost character."""
-energy-cost = 3
+energy-cost = 2
 card-type = "Character"
 subtype = "Monster"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July16"]
-image-number = 2025883232
+tags = ["Art Rework", "July16", "Art OK"]
+image-number = 581686579
 art-owned = false
 card-number = 320
-art = { x = -0.126, y = 1, scale = 1.17 }
+art = { x = -0.24, y = 0.28, scale = 1.37 }
 
 [[cards]]
-name = "Light of Emergence"
+name = "Flesh Cultivator"
 mtg-name = "Knight of the Reliquary"
 id = "7977748d-02c1-4702-ba68-5c49f7f0759b"
 rendered-text = "☪, Abandon a ≤2● cost character: Materialize a random ≤2● cost character from your deck. This character gains +1✦."
@@ -5974,8 +5975,8 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "July16"]
-image-number = 618071684
+tags = ["Art Rework", "July16", "Art OK"]
+image-number = 2586513023
 art-owned = false
 card-number = 321
 
@@ -6711,21 +6712,22 @@ art-owned = false
 card-number = 359
 
 [[cards]]
-name = "Clockwork Conductor"
+name = "God of the Veil"
 mtg-name = "Crucible of Worlds"
 id = "fa036c27-2234-4f76-8857-c242530627ce"
 rendered-text = "You may play ≤2● cost characters from your void."
 energy-cost = 4
 card-type = "Character"
-subtype = "Tinkerer"
+subtype = "Ancient"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "July16"]
-image-number = 1180104211
+tags = ["Art Rework", "July16", "Art OK"]
+image-number = 695511850
 art-owned = false
 card-number = 360
+art = { x = -0.006, y = 1, scale = 1.16 }
 
 [[cards]]
 name = "Shadowcaller"
@@ -9359,21 +9361,22 @@ card-number = 500
 art = { x = 0, y = 0.814, scale = 1 }
 
 [[cards]]
-name = "Ashlight Caller"
+name = "Ritekeeper"
 mtg-name = "Past in Flames"
 id = "995c570b-2d86-4f6f-8f02-dd0902e32fcd"
 rendered-text = "Discard a card: An event in your void gains reclaim."
 energy-cost = 1
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Explorer"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July16"]
-image-number = 1044240499
+tags = ["Art Rework", "July16", "Art OK"]
+image-number = 712713373
 art-owned = false
 card-number = 501
+art = { x = 0, y = 1, scale = 1.67 }
 
 [[cards]]
 name = "Stoneborn Leviathan"

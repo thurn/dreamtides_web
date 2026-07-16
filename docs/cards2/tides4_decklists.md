@@ -935,7 +935,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Paradox Corps Enforcer
 - 1× Pyrokinetic Surge
 - 1× Keeper of the Tides
-- 1× Ashlight Caller
+- 1× Ritekeeper
 - 1× Guiding Light
 - 1× Annular Recall
 - 1× Seeker of the Radiant Wilds
@@ -1042,7 +1042,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Starcatcher
 - 1× Paradox Corps Enforcer
 - 1× Keeper of the Tides
-- 1× Ashlight Caller
+- 1× Ritekeeper
 - 1× Revelation Explorer
 - 1× Guiding Light
 - 1× Annular Recall
@@ -1098,7 +1098,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 2× Canopy of Stars
 - 2× Twice-Lit Portal
 - 2× Starcatcher
-- 2× Ashlight Caller
+- 2× Ritekeeper
 - 2× Iconoclast
 - 2× Arc Gate Opening
 - 2× Flash of Power
@@ -1241,7 +1241,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Starcatcher
 - 1× Ash Harbinger
 - 1× Somber Flockmaster
-- 1× Ashlight Caller
+- 1× Ritekeeper
 - 1× Pattern Seeker
 - 1× Annihilation from Below
 - 1× Fractured Vessel
@@ -1345,7 +1345,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Seek Answers
 - 1× Ash Harbinger
 - 1× Somber Flockmaster
-- 1× Ashlight Caller
+- 1× Ritekeeper
 - 1× Pattern Seeker
 - 1× Annihilation from Below
 - 1× Guiding Light
@@ -1418,7 +1418,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Petal-Seer
 - 1× Ethereal Call
 - 1× Sky Voyager
-- 1× Dusk Duelist
+- 1× Blind Butcher
 - 1× Soulcleft Spinner
 - 1× Emerald Guardian
 - 1× Futuresight Host
@@ -1513,7 +1513,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 1× Conduit of Resonance
 - 1× Ethereal Call
 - 1× Sky Voyager
-- 1× Dusk Duelist
+- 1× Blind Butcher
 - 1× Soulcleft Spinner
 - 1× Vizier of Portents
 - 1× Curio Dealer
@@ -1596,7 +1596,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 1× Wistful Angler
 - 1× Ethereal Call
 - 1× Sky Voyager
-- 1× Dusk Duelist
+- 1× Blind Butcher
 - 1× Soulcleft Spinner
 - 1× Vizier of Portents
 - 1× Ashen Remnant
@@ -1674,7 +1674,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Petal-Seer
 - 1× Ethereal Call
 - 1× Sky Voyager
-- 1× Dusk Duelist
+- 1× Blind Butcher
 - 1× Soulcleft Spinner
 - 1× Vizier of Portents
 - 1× Curio Dealer
@@ -2090,7 +2090,7 @@ Tide-fac-03 is an event-heavy (34 events, 11 characters) tide built around assem
 - 2× Blooming Horror
 - 2× From the Barrow
 - 2× Starcatcher
-- 2× Ashlight Caller
+- 2× Ritekeeper
 - 2× Iconoclast
 - 2× Arc Gate Opening
 - 2× Entropy Cascade
@@ -2408,7 +2408,7 @@ Tide-fac-09 is almost entirely characters (39 of 45 copies), built around a tigh
 - 1× Duskshore Virtuoso
 - 1× Seek Answers
 - 1× Somber Flockmaster
-- 1× Ashlight Caller
+- 1× Ritekeeper
 - 1× Annihilation from Below
 - 1× Gateweaver
 - 1× Flash of Power
@@ -2455,7 +2455,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Minstrel of Falling Light
 - 1× Seek Answers
 - 1× Starcatcher
-- 1× Ashlight Caller
+- 1× Ritekeeper
 - 1× Pattern Seeker
 - 1× Annihilation from Below
 - 1× Gateweaver
@@ -2815,7 +2815,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Duskshore Virtuoso
 - 1× Seek Answers
 - 1× Starcatcher
-- 1× Ashlight Caller
+- 1× Ritekeeper
 - 1× Cloudback Courier
 - 1× Gateweaver
 - 1× Iconoclast
@@ -2892,7 +2892,7 @@ Tide-fac-20 is an event-heavy combo tide (34 events, 11 characters) built around
 - 2× Blooming Horror
 - 2× From the Barrow
 - 2× Starcatcher
-- 2× Ashlight Caller
+- 2× Ritekeeper
 - 2× Iconoclast
 - 2× Arc Gate Opening
 - 2× Flash of Power
@@ -3365,7 +3365,7 @@ This tide is split between characters and events (22 characters, 23 events), wit
 - 1× Minstrel of Falling Light
 - 1× Seek Answers
 - 1× Starcatcher
-- 1× Ashlight Caller
+- 1× Ritekeeper
 - 1× Pattern Seeker
 - 1× Annihilation from Below
 - 1× Gateweaver
@@ -3850,13 +3850,13 @@ Tide-neu-08 is a character-dense deck (27 of 30 cards are characters) built almo
 - 2× Angel of Memory
 - 2× Void Salvager
 - 2× Reckless Vigilante
-- 1× Wraith of Twisting Shadows
+- 1× Remnant Scavenger
 - 1× Unleash Ruin
 - 1× Wistful Angler
 - 1× Ethereal Army
 - 1× Petal-Seer
 - 1× Vizier of Portents
-- 1× Light of Emergence
+- 1× Flesh Cultivator
 - 1× Wondrous Clearing
 - 1× Carrion Lord
 - 1× Essence Devourer
@@ -3870,7 +3870,7 @@ Tide-neu-08 is a character-dense deck (27 of 30 cards are characters) built almo
 - 1× Memory Tracer
 - 1× Ruptured Dynamo
 - 1× Heavenward Penitent
-- 1× Clockwork Conductor
+- 1× God of the Veil
 - 1× Scrap Reclaimer
 
 ## Broad: Iron Pharaoh / Dustborn Veteran — Abandon Toolkit
