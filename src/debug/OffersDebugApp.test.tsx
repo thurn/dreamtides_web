@@ -85,20 +85,20 @@ describe("OffersDebugApp", () => {
       "Choose a card and add two copies of it to your deck.",
     );
     expect(offerTileDescription(categoryDraft)).toBe(
-      "Choose a spirit animal to add to your deck.",
+      "Choose a card from the shown category to add to your deck.",
     );
     expect(offerTileDescription(cardBundle)).toBe(
-      "Add Loading Card, Loading Card, and Loading Card to your deck.",
+      "Add three cards to your deck.",
     );
     expect(offerTileDescription(transfigure)).toBe(
-      "Transfigure Loading Card into its Empowered form.",
+      "Transfigure a card in your deck.",
     );
     expect(trade.kind).toBe("trade-card");
     expect(trade.kind === "trade-card" ? trade.incoming : []).toHaveLength(4);
     expect(duplicate.kind).toBe("duplicate-card");
     expect(duplicate.kind === "duplicate-card" ? duplicate.cards : []).toHaveLength(3);
     expect(offerTileDescription(duplicate)).toBe(
-      "Choose one of three cards in your deck to duplicate.",
+      "Choose a card in your deck to duplicate.",
     );
     expect(dreamsignDraft.kind).toBe("dreamsign-draft");
     expect(
@@ -107,17 +107,17 @@ describe("OffersDebugApp", () => {
     expect(starters.kind).toBe("transfigure-starters");
     expect(starters.kind === "transfigure-starters" ? starters.cards : []).toHaveLength(2);
     expect(offerTileDescription(starters)).toBe(
-      "Transfigure Loading Card and Loading Card.",
+      "Transfigure your starter cards.",
     );
     expect(keyword.kind).toBe("keyword-modification");
     expect(
       keyword.kind === "keyword-modification" ? keyword.card.cardId : null,
     ).toBe("2931e20b-1a80-4ddd-8944-20e68d182886");
     expect(offerTileDescription(keyword)).toBe(
-      "Reduce the Reclaim cost of Loading Card by one.",
+      "Reduce the Reclaim cost of a card.",
     );
     expect(offerTileDescription(characterType)).toBe(
-      "Change the subtype of Loading Card to Warrior.",
+      "Change the subtype of a card.",
     );
     expect(offerTileDescription(dreamsignDraft)).toBe(
       "Choose a dreamsign to gain.",
@@ -125,6 +125,9 @@ describe("OffersDebugApp", () => {
     for (const model of Object.values(OFFER_TILE_DEBUG_MODELS)) {
       const description = offerTileDescription(model);
       expect(description).not.toMatch(/\d/);
+      expect(description).not.toContain("Loading Card");
+      expect(description).not.toContain("Rainbow Horn");
+      expect(description).not.toContain("Duplication");
     }
 
     act(() => root.unmount());

@@ -76,7 +76,7 @@ const COPY_CASES: ReadonlyArray<
 > = [
   [
     { id: "gift", kind: "card-gift", card: CARD },
-    "Add Test Card to your deck.",
+    "Add a card to your deck.",
   ],
   [
     { id: "draft", kind: "card-draft", cards: FOUR_CARDS },
@@ -89,7 +89,7 @@ const COPY_CASES: ReadonlyArray<
       cards: FOUR_CARDS,
       categoryName: "warrior",
     },
-    "Choose a warrior to add to your deck.",
+    "Choose a card from the shown category to add to your deck.",
   ],
   [
     { id: "transfigured", kind: "transfigured-draft", cards: FOUR_CARDS },
@@ -106,7 +106,7 @@ const COPY_CASES: ReadonlyArray<
   ],
   [
     { id: "bundle", kind: "card-bundle", cards: [CARD, SECOND_CARD] },
-    "Add Test Card and Second Card to your deck.",
+    "Add two cards to your deck.",
   ],
   [
     {
@@ -115,7 +115,7 @@ const COPY_CASES: ReadonlyArray<
       card: CARD,
       transfiguration: "Empowered",
     },
-    "Transfigure Test Card into its Empowered form.",
+    "Transfigure a card in your deck.",
   ],
   [
     {
@@ -124,7 +124,7 @@ const COPY_CASES: ReadonlyArray<
       card: CARD,
       reclaimReduction: 1,
     },
-    "Reduce the Reclaim cost of Test Card by one.",
+    "Reduce the Reclaim cost of a card.",
   ],
   [
     {
@@ -133,7 +133,7 @@ const COPY_CASES: ReadonlyArray<
       card: CARD,
       newCharacterSubtype: "Warrior",
     },
-    "Change the subtype of Test Card to Warrior.",
+    "Change the subtype of a card.",
   ],
   [
     {
@@ -141,11 +141,11 @@ const COPY_CASES: ReadonlyArray<
       kind: "transfigure-starters",
       cards: [CARD, SECOND_CARD],
     },
-    "Transfigure Test Card and Second Card.",
+    "Transfigure your starter cards.",
   ],
   [
     { id: "purge", kind: "purge-card", card: CARD },
-    "Purge Test Card.",
+    "Purge a card from your deck.",
   ],
   [
     {
@@ -154,7 +154,7 @@ const COPY_CASES: ReadonlyArray<
       outgoing: CARD,
       incoming: FOUR_CARDS,
     },
-    "Purge Test Card and choose a card to replace it.",
+    "Purge a card and choose a card to replace it.",
   ],
   [
     {
@@ -162,11 +162,11 @@ const COPY_CASES: ReadonlyArray<
       kind: "duplicate-card",
       cards: [CARD, SECOND_CARD],
     },
-    "Choose Test Card or Second Card to duplicate.",
+    "Choose a card in your deck to duplicate.",
   ],
   [
     { id: "dreamsign-gift", kind: "dreamsign-gift", dreamsign: DREAMSIGN },
-    "Gain Rainbow Horn.",
+    "Gain a dreamsign.",
   ],
   [
     {
@@ -182,7 +182,7 @@ const COPY_CASES: ReadonlyArray<
       kind: "add-site",
       site: { id: "Duplication", name: "Duplication", glyph: GLYPHS.copy },
     },
-    "Add a duplication site to the current dreamscape.",
+    "Add a site to the current dreamscape.",
   ],
 ];
 
@@ -205,7 +205,7 @@ describe("offer tile descriptions", () => {
     ).toBe("Choose a card and add one copy of it to your deck.");
   });
 
-  it("uses the category's article and exact Reclaim reduction", () => {
+  it("keeps category and Reclaim details nonspecific", () => {
     expect(
       offerTileDescription({
         id: "event-category",
@@ -213,7 +213,7 @@ describe("offer tile descriptions", () => {
         cards: FOUR_CARDS,
         categoryName: "event",
       }),
-    ).toBe("Choose an event to add to your deck.");
+    ).toBe("Choose a card from the shown category to add to your deck.");
     expect(
       offerTileDescription({
         id: "double-reclaim-reduction",
@@ -221,61 +221,67 @@ describe("offer tile descriptions", () => {
         card: CARD,
         reclaimReduction: 2,
       }),
-    ).toBe("Reduce the Reclaim cost of Test Card by two.");
+    ).toBe("Reduce the Reclaim cost of a card.");
   });
 
-  it("names a single duplicate target and counts three choices in words", () => {
+  it("describes duplicate targets without names or candidate counts", () => {
     expect(
       offerTileDescription({
         id: "single-duplicate",
         kind: "duplicate-card",
         cards: [CARD],
       }),
-    ).toBe("Duplicate Test Card.");
+    ).toBe("Duplicate a card in your deck.");
     expect(
       offerTileDescription({
         id: "three-duplicates",
         kind: "duplicate-card",
         cards: [CARD, SECOND_CARD, THIRD_CARD],
       }),
-    ).toBe("Choose one of three cards in your deck to duplicate.");
+    ).toBe("Choose a card in your deck to duplicate.");
   });
 
-  it("names every bundled card", () => {
+  it("counts bundled cards without naming them", () => {
     expect(
       offerTileDescription({
         id: "three-card-bundle",
         kind: "card-bundle",
         cards: [CARD, SECOND_CARD, THIRD_CARD],
       }),
-    ).toBe("Add Test Card, Second Card, and Third Card to your deck.");
+    ).toBe("Add three cards to your deck.");
   });
 
-  it("underlines specific card and dreamsign names in InfoCard copy", () => {
+  it("keeps InfoCard copy plain and nonspecific", () => {
     expect(
       offerTileRichDescription({ id: "gift", kind: "card-gift", card: CARD }),
-    ).toEqual({
-      kind: "inline",
-      parts: [
-        { kind: "plain", text: "Add " },
-        { kind: "underline", text: "Test Card" },
-        { kind: "plain", text: " to your deck." },
-      ],
-    });
+    ).toEqual({ kind: "plain", text: "Add a card to your deck." });
     expect(
       offerTileRichDescription({
         id: "sign",
         kind: "dreamsign-gift",
         dreamsign: DREAMSIGN,
       }),
-    ).toEqual({
-      kind: "inline",
-      parts: [
-        { kind: "plain", text: "Gain " },
-        { kind: "underline", text: "Rainbow Horn" },
-        { kind: "plain", text: "." },
-      ],
-    });
+    ).toEqual({ kind: "plain", text: "Gain a dreamsign." });
+  });
+
+  it("never exposes model-provided names or named attributes", () => {
+    const forbidden = [
+      "Test Card",
+      "Second Card",
+      "Third Card",
+      "Fourth Card",
+      "Rainbow Horn",
+      "Duplication",
+      "warrior",
+      "Empowered",
+      "Warrior",
+    ];
+    for (const [model] of COPY_CASES) {
+      const copy = offerTileDescription(model);
+      for (const name of forbidden) {
+        expect(copy).not.toContain(name);
+      }
+    }
   });
 
   it("never writes player-facing quantities as numerals", () => {

@@ -52,7 +52,7 @@ export interface OfferTileCard {
 export interface OfferTileDreamsign {
   /** Canonical dreamsign UUID. */
   id: string;
-  /** Resolved display name used only in player-facing copy. */
+  /** Resolved display name retained with the surfaced object model. */
   name: string;
   /** Dreamsign artwork as a named Cumulus art reference. */
   art: ArtRef;
@@ -62,7 +62,7 @@ export interface OfferTileDreamsign {
 export interface OfferTileSite {
   /** Stable site type or fixture id. */
   id: string;
-  /** Resolved display name used only in player-facing copy. */
+  /** Resolved display name retained with the surfaced object model. */
   name: string;
   /** The site's named design-system glyph. */
   glyph: Glyph;
