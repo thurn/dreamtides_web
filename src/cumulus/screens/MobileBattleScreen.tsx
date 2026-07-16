@@ -1449,9 +1449,6 @@ function ControlRow({
         justifySelf: isDesktop ? "center" : undefined,
         width: isDesktop ? "100%" : undefined,
         maxWidth: isDesktop ? DESKTOP_SIDE_ZONES_MAX_WIDTH : undefined,
-        transform: isDesktop
-          ? `translateY(calc(-1 * ${token("--space-9")}))`
-          : undefined,
         boxSizing: "border-box",
         paddingInline: token(isDesktop ? "--space-8" : "--space-4"),
         paddingTop: token(isDesktop ? "--space-5" : "--space-4"),

@@ -342,13 +342,13 @@ describe("buildMobileBattleView", () => {
     );
   });
 
-  it("materializes the ten-back/nine-front starting grid in left-to-right identity order", () => {
+  it("materializes the eight-back/seven-front starting grid in left-to-right identity order", () => {
     const init = makeInit();
     const board = makeBoard(init);
     const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER);
 
-    const expectedFrontRank = Array.from({ length: 9 }, (_unused, index) => `F${String(index)}`);
-    const expectedBackRank = Array.from({ length: 10 }, (_unused, index) => `B${String(index)}`);
+    const expectedFrontRank = Array.from({ length: 7 }, (_unused, index) => `F${String(index)}`);
+    const expectedBackRank = Array.from({ length: 8 }, (_unused, index) => `B${String(index)}`);
     expect(view.player.frontRank.map((slot) => slot.id)).toEqual(expectedFrontRank);
     expect(view.enemy.frontRank.map((slot) => slot.id)).toEqual(expectedFrontRank);
     expect(view.player.backRank.map((slot) => slot.id)).toEqual(expectedBackRank);

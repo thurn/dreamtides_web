@@ -326,9 +326,7 @@ describe("MobileBattleScreen", () => {
     expect(controls?.style.justifyContent).toBe("flex-end");
     expect(controls?.style.justifySelf).toBe("center");
     expect(controls?.style.maxWidth).toBe("1180px");
-    expect(controls?.style.transform).toBe(
-      "translateY(calc(-1 * var(--space-9)))",
-    );
+    expect(controls?.style.transform).toBe("");
     expect(firstHandCard?.style.position).toBe("relative");
     expect(firstHandCard?.style.left).toBe("");
     expect(firstHandCard?.style.top).toBe("");
@@ -693,8 +691,8 @@ describe("MobileBattleScreen", () => {
       );
       expect(backTrack?.style.columnGap).toBe("var(--space-2)");
       expect(frontTrack?.style.columnGap).toBe("var(--space-2)");
-      expect(backTrack?.style.gridTemplateColumns).toContain("repeat(10,");
-      expect(frontTrack?.style.gridTemplateColumns).toContain("repeat(9,");
+      expect(backTrack?.style.gridTemplateColumns).toContain("repeat(8,");
+      expect(frontTrack?.style.gridTemplateColumns).toContain("repeat(7,");
       expect(backSlots).toHaveLength(frontSlots.length + 1);
       backSlots.forEach((backSlot) => {
         expect(backSlot.style.aspectRatio).toBe("1 / 1");
@@ -784,7 +782,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("centers shorter occupied ranks on the shared ten-slot starting scale", () => {
+  it("centers shorter occupied ranks on the shared eight-slot starting scale", () => {
     const view = makeView();
     const expandedBackRank = Array.from({ length: 6 }, (_, index) => ({
       id: `expanded-back-${String(index)}`,
@@ -832,14 +830,14 @@ describe("MobileBattleScreen", () => {
             [],
         );
         expect(rankElement?.style.height).toContain(
-          "88cqw - 9 * var(--space-2)",
+          "88cqw - 7 * var(--space-2)",
         );
         expect(rankElement?.style.height).toContain("200cqh");
         expect(track?.style.gridTemplateColumns).toContain(
-          rank === "back" ? "repeat(10," : "repeat(9,",
+          rank === "back" ? "repeat(8," : "repeat(7,",
         );
         expect(track?.style.width).toContain(
-          rank === "back" ? "10 * min(" : "9 * min(",
+          rank === "back" ? "8 * min(" : "7 * min(",
         );
         expect(track?.style.columnGap).toBe("var(--space-2)");
         expect(slots[0]?.style.width).toContain("var(--space-2)");
