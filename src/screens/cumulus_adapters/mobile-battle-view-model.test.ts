@@ -275,6 +275,61 @@ describe("buildMobileBattleView", () => {
     expect(confirmed.cardPicker?.canResolve).toBe(true);
   });
 
+  it("maps choice prompts into confirmed inline option controls", () => {
+    const init = makeInit();
+    const board = makeBoard(init);
+    const prompt = {
+      promptId: 44,
+      run: {
+        scriptRef: { table: "dreamwell", id: "prompt-fixture" },
+        cursor: [0],
+        side: "player",
+      },
+      kind: "choice",
+      options: {
+        kind: "choice",
+        label: "Choose one",
+        options: [{ label: "Draw a card" }, { label: "Gain 2●" }],
+      },
+    } satisfies PendingPrompt;
+
+    const optimistic = buildMobileBattleView(
+      init,
+      board,
+      ENEMY_DREAMCALLER,
+      null,
+      {
+        aiMode: false,
+        isOpponentHandRevealed: false,
+        isPlayerHandHidden: false,
+        pendingPrompt: prompt,
+        confirmedPromptId: null,
+      },
+    );
+    expect(optimistic.choicePrompt).toEqual({
+      key: "44",
+      label: "Choose one",
+      options: [{ label: "Draw a card" }, { label: "Gain 2●" }],
+      canResolve: false,
+    });
+
+    const confirmed = buildMobileBattleView(
+      init,
+      board,
+      ENEMY_DREAMCALLER,
+      null,
+      {
+        aiMode: false,
+        isOpponentHandRevealed: false,
+        isPlayerHandHidden: false,
+        pendingPrompt: prompt,
+        confirmedPromptId: prompt.promptId,
+      },
+    );
+    expect(confirmed.choicePrompt?.canResolve).toBe(true);
+    expect(confirmed.cardPicker).toBeNull();
+  });
+
   it("does not map a pick-cards prompt whose candidates are outside the hand", () => {
     const init = makeInit();
     const board = makeBoard(init);

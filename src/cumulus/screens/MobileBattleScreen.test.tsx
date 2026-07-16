@@ -114,6 +114,7 @@ function makeView(): MobileBattleView {
     battleId: "battle-mobile-fixture",
     aiApproval: null,
     cardPicker: null,
+    choicePrompt: null,
     dreamwell: null,
     activeSide: "player",
     phase: "day",
@@ -990,6 +991,63 @@ describe("MobileBattleScreen", () => {
       )?.click();
     });
     expect(onCardPickerSkip).toHaveBeenCalledOnce();
+
+    act(() => root.unmount());
+  });
+
+  it("replaces Next Phase with inline choice-prompt buttons", () => {
+    const onChoicePromptChoose = vi.fn();
+    const { container, root } = mount({
+      ...makeView(),
+      choicePrompt: {
+        key: "prompt-choice-42",
+        label: "Discard your hand and redraw?",
+        options: [{ label: "Yes" }, { label: "Skip" }],
+        canResolve: true,
+      },
+    }, {
+      canInteract: false,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+      onChoicePromptChoose,
+    });
+    const nextSlot = container.querySelector<HTMLElement>(
+      "[data-battle-phase-next]",
+    );
+    const choiceControls = container.querySelector<HTMLElement>(
+      "[data-battle-choice-prompt-controls]",
+    );
+    const promptMessage = container.querySelector<HTMLElement>(
+      "[data-battle-choice-prompt-message]",
+    );
+    const optionButtons = Array.from(
+      choiceControls?.querySelectorAll<HTMLButtonElement>("button") ?? [],
+    );
+
+    expect(container.querySelector('[role="dialog"]')).toBeNull();
+    expect(choiceControls).toBe(nextSlot);
+    expect(choiceControls?.getAttribute("aria-label")).toBe(
+      "Discard your hand and redraw?",
+    );
+    expect(choiceControls?.style.width).toBe("");
+    expect(choiceControls?.style.display).toBe("flex");
+    expect(optionButtons.map((button) => button.textContent)).toEqual([
+      "Yes",
+      "Skip",
+    ]);
+    expect(nextSlot?.textContent).not.toContain("Next Phase");
+    expect(promptMessage?.textContent).toBe("Discard your hand and redraw?");
+
+    act(() => {
+      optionButtons[1]?.click();
+    });
+    expect(onChoicePromptChoose).toHaveBeenCalledWith(1);
 
     act(() => root.unmount());
   });

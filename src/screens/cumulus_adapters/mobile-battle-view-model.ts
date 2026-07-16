@@ -18,6 +18,7 @@ import type { PendingPrompt } from "../../rules/battle/fold";
 import {
   type MobileBattleCardView,
   type MobileBattleCardPickerView,
+  type MobileBattleChoicePromptView,
   type MobileBattlePhase,
   type MobileBattleSideView,
   type MobileBattleSlotView,
@@ -74,6 +75,10 @@ export function buildMobileBattleView(
       inspectorOptions.confirmedPromptId ?? null,
       board,
     ),
+    choicePrompt: buildChoicePromptView(
+      inspectorOptions.pendingPrompt ?? null,
+      inspectorOptions.confirmedPromptId ?? null,
+    ),
     dreamwell: buildDreamwellView(init, board),
     activeSide: board.activeSide,
     phase: mobileBattlePhase(board.phase),
@@ -96,6 +101,26 @@ export function buildMobileBattleView(
         instance.definition.energyCost <= board.sides.player.currentEnergy,
     ),
     inspector: buildInspectorView(init, board, aiProposal, inspectorOptions),
+  };
+}
+
+function buildChoicePromptView(
+  pendingPrompt: PendingPrompt | null,
+  confirmedPromptId: number | null,
+): MobileBattleChoicePromptView | null {
+  if (
+    pendingPrompt === null ||
+    pendingPrompt.options.kind !== "choice"
+  ) {
+    return null;
+  }
+  return {
+    key: String(pendingPrompt.promptId),
+    label: pendingPrompt.options.label,
+    options: pendingPrompt.options.options.map((option) => ({
+      label: option.label,
+    })),
+    canResolve: confirmedPromptId === pendingPrompt.promptId,
   };
 }
 

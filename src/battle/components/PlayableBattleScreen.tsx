@@ -344,6 +344,21 @@ function PlayableBattleScreenInner({
     });
   }, [board, pendingPrompt]);
 
+  const handleCumulusChoicePrompt = useCallback((optionIndex: number): void => {
+    if (pendingPrompt?.options.kind !== "choice") return;
+    logEvent("battle_cumulus_choice_prompt_interaction", {
+      ...createBattleLogBaseFields(board, {
+        sourceSurface: "battlefield",
+        selectedCardId: null,
+      }),
+      promptId: pendingPrompt.promptId,
+      promptLabel: pendingPrompt.options.label,
+      optionIndex,
+      optionLabel: pendingPrompt.options.options[optionIndex]?.label ?? null,
+    });
+    resolvePendingPrompt({ kind: "choice", optionIndex });
+  }, [board, pendingPrompt, resolvePendingPrompt]);
+
   const handleCommand = useCallback((command: BattleCommand): void => {
     setPendingDrag(null);
     const intentKey = automaticBattleIntentKey(
@@ -1430,6 +1445,7 @@ function PlayableBattleScreenInner({
               logCumulusCardPickerInteraction("skip", []);
               resolvePendingPrompt({ kind: "pick-cards", chosenIds: [] });
             },
+            onChoicePromptChoose: handleCumulusChoicePrompt,
             onFillBattlefieldPreview: handleFillBattlefieldPreview,
             onFillTwentyCardBattlefieldPreview:
               handleFillTwentyCardBattlefieldPreview,

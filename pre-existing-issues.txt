@@ -90,3 +90,14 @@ from that client reached the room event log but bounced with
 `bounceReason: "prompt_pending"`. A client rendering a battle with an open
 prompt should always expose the matching resolution surface so the shared fold
 cannot appear playable while rejecting every new intent.
+
+## The battle seed URL parameter is ignored by coop battle construction
+
+`parseRuntimeConfig` accepts `?seed=<number>` and documents it as the battle RNG
+override, but `BattleSiteRoute` only forwards `basicAutomation` to
+`actions.beginBattle`. The coop battle-init provider therefore derives its seed
+from the quest seed and battle entry key instead of receiving
+`runtimeConfig.seedOverride`. During choice-prompt QA, a room opened with
+`?seed=4` logged battle seed `3021161173`. The runtime seed override needs to be
+carried by the authoritative `BEGIN_BATTLE` intent so every client reconstructs
+the same explicitly requested battle.

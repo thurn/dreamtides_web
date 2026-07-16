@@ -100,6 +100,7 @@ export interface MobileBattleView {
   readonly battleId: string;
   readonly aiApproval: MobileBattleAiApprovalView | null;
   readonly cardPicker: MobileBattleCardPickerView | null;
+  readonly choicePrompt: MobileBattleChoicePromptView | null;
   readonly dreamwell: MobileBattleDreamwellView | null;
   readonly activeSide: MobileBattleOwner;
   readonly phase: MobileBattlePhase;
@@ -119,6 +120,14 @@ export interface MobileBattleCardPickerView {
   readonly candidateIds: readonly string[];
   readonly count: number;
   readonly optional: boolean;
+  readonly canResolve: boolean;
+}
+
+/** An in-place option decision owned by the authoritative battle prompt. */
+export interface MobileBattleChoicePromptView {
+  readonly key: string;
+  readonly label: string;
+  readonly options: readonly { readonly label: string }[];
   readonly canResolve: boolean;
 }
 
@@ -238,6 +247,7 @@ export interface MobileBattleInteractions {
   readonly onCardPickerSelectionChange?: (chosenIds: readonly string[]) => void;
   readonly onCardPickerSubmit?: (chosenIds: readonly string[]) => void;
   readonly onCardPickerSkip?: () => void;
+  readonly onChoicePromptChoose?: (optionIndex: number) => void;
   readonly onFillBattlefieldPreview?: () => void;
   readonly onFillTwentyCardBattlefieldPreview?: () => void;
   readonly onInspectorAction?: (action: MobileBattleInspectorAction) => void;
@@ -1684,6 +1694,7 @@ function closestOpenBackRankSlot(
 function ControlRow({
   aiApproval,
   cardPicker,
+  choicePrompt,
   selectedPickerCardIds,
   isDesktop,
   interactions,
@@ -1691,12 +1702,15 @@ function ControlRow({
 }: {
   readonly aiApproval: MobileBattleAiApprovalView | null;
   readonly cardPicker: MobileBattleCardPickerView | null;
+  readonly choicePrompt: MobileBattleChoicePromptView | null;
   readonly selectedPickerCardIds: readonly string[];
   readonly isDesktop: boolean;
   readonly interactions?: MobileBattleInteractions;
   readonly layoutBackSlotCount: number;
 }) {
   const disabled = interactions?.canInteract !== true;
+  const hasAlternateNextControls =
+    aiApproval !== null || choicePrompt !== null;
   const requiredPickerCount = cardPicker === null
     ? 0
     : Math.min(cardPicker.count, cardPicker.candidateIds.length);
@@ -1810,15 +1824,37 @@ function ControlRow({
             data-battle-ai-approval-controls={
               aiApproval === null ? undefined : ""
             }
+            data-battle-choice-prompt-controls={
+              choicePrompt === null ? undefined : ""
+            }
+            aria-label={choicePrompt?.label}
             style={{
-              width: aiApproval === null ? NEXT_PHASE_CONTROL_WIDTH : undefined,
-              display: aiApproval === null ? "grid" : "flex",
-              alignItems: aiApproval === null ? undefined : "center",
-              justifyContent: aiApproval === null ? undefined : "flex-end",
-              gap: aiApproval === null ? undefined : token("--space-4"),
+              width: hasAlternateNextControls
+                ? undefined
+                : NEXT_PHASE_CONTROL_WIDTH,
+              display: hasAlternateNextControls ? "flex" : "grid",
+              alignItems: hasAlternateNextControls ? "center" : undefined,
+              justifyContent: hasAlternateNextControls
+                ? "flex-end"
+                : undefined,
+              gap: hasAlternateNextControls ? token("--space-4") : undefined,
             }}
           >
-            {aiApproval === null ? (
+            {choicePrompt !== null ? (
+              choicePrompt.options.map((option, index) => (
+                <GlassButton
+                  key={`${choicePrompt.key}:${String(index)}`}
+                  label={option.label}
+                  variant={index === 0 ? "accent" : "default"}
+                  disabled={
+                    !choicePrompt.canResolve ||
+                    interactions?.onChoicePromptChoose === undefined
+                  }
+                  testId={`battle-choice-prompt-option-${String(index)}`}
+                  onPress={() => interactions?.onChoicePromptChoose?.(index)}
+                />
+              ))
+            ) : aiApproval === null ? (
               <GlassButton
                 label="Next Phase"
                 variant="accent"
@@ -1851,16 +1887,24 @@ function ControlRow({
   );
 }
 
-function AiApprovalMessage({
+function BattleControlMessage({
   aiApproval,
+  choicePrompt,
 }: {
   readonly aiApproval: MobileBattleAiApprovalView | null;
+  readonly choicePrompt: MobileBattleChoicePromptView | null;
 }) {
-  if (aiApproval === null) return null;
+  const message = choicePrompt?.label ?? aiApproval?.description;
+  if (message === undefined) return null;
   return (
     <div
       aria-live="polite"
-      data-battle-ai-approval-message=""
+      data-battle-ai-approval-message={
+        aiApproval === null ? undefined : ""
+      }
+      data-battle-choice-prompt-message={
+        choicePrompt === null ? undefined : ""
+      }
       style={{
         position: "absolute",
         top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-4")})`,
@@ -1876,7 +1920,7 @@ function AiApprovalMessage({
         pointerEvents: "none",
       }}
     >
-      {aiApproval.description}
+      {message}
     </div>
   );
 }
@@ -2315,6 +2359,7 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
         <ControlRow
           aiApproval={view.aiApproval}
           cardPicker={view.cardPicker}
+          choicePrompt={view.choicePrompt}
           selectedPickerCardIds={selectedPickerCardIds}
           isDesktop={isDesktop}
           interactions={interactions}
@@ -2332,7 +2377,10 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
           interactions={interactions}
         />
       </LayoutGroup>
-      <AiApprovalMessage aiApproval={view.aiApproval} />
+      <BattleControlMessage
+        aiApproval={view.aiApproval}
+        choicePrompt={view.choicePrompt}
+      />
       <div
         style={{
           position: "absolute",
