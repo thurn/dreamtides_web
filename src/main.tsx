@@ -82,7 +82,7 @@ if (pathname === "/editor" || pathname === "/cards") {
     "./editor/DreamwellEditorApp"
   );
   renderStrict(<DreamwellEditorApp />);
-} else if (pathname === "/images") {
+} else if (pathname === "/images" || pathname === "/images/favorites") {
   const { default: ImageViewerApp } = await import(
     "./image_viewer/ImageViewerApp"
   );

@@ -9,6 +9,10 @@ import {
 
 export interface ImageViewerToolbarProps {
   displayState: ImageViewerDisplayState;
+  isFavoritesPage: boolean;
+  favoritesCount: number;
+  favoritesHref: string;
+  allImagesHref: string;
   categories: string[];
   hasGenericPool: boolean;
   visibleCount: number;
@@ -52,6 +56,10 @@ function categoryLabel(name: string): string {
  */
 export default function ImageViewerToolbar({
   displayState,
+  isFavoritesPage,
+  favoritesCount,
+  favoritesHref,
+  allImagesHref,
   categories,
   hasGenericPool,
   visibleCount,
@@ -70,30 +78,47 @@ export default function ImageViewerToolbar({
         flex: "0 0 auto",
       }}
     >
-      <label style={labelStyle}>
-        Pool
-        <select
-          aria-label="Category"
-          value={displayState.category}
-          onChange={(event) =>
-            onDisplayStateChange({
-              ...displayState,
-              category: event.target.value,
-            })
-          }
-          style={controlStyle}
-        >
-          <option value={ALL_CATEGORY}>All categories</option>
-          {hasGenericPool ? (
-            <option value={GENERIC_CATEGORY}>Generic (characters)</option>
-          ) : null}
-          {categories.map((category) => (
-            <option key={category} value={category}>
-              {categoryLabel(category)}
-            </option>
-          ))}
-        </select>
-      </label>
+      <a
+        data-image-viewer-favorites-link=""
+        href={isFavoritesPage ? allImagesHref : favoritesHref}
+        style={{
+          ...controlStyle,
+          display: "inline-flex",
+          alignItems: "center",
+          textDecoration: "none",
+          background: isFavoritesPage ? "#7b5a20" : controlStyle.background,
+          color: isFavoritesPage ? "#fff7e0" : "#f5c96a",
+        }}
+      >
+        {isFavoritesPage ? "All images" : `Favorites (${favoritesCount})`}
+      </a>
+
+      {!isFavoritesPage ? (
+        <label style={labelStyle}>
+          Pool
+          <select
+            aria-label="Category"
+            value={displayState.category}
+            onChange={(event) =>
+              onDisplayStateChange({
+                ...displayState,
+                category: event.target.value,
+              })
+            }
+            style={controlStyle}
+          >
+            <option value={ALL_CATEGORY}>All categories</option>
+            {hasGenericPool ? (
+              <option value={GENERIC_CATEGORY}>Generic (characters)</option>
+            ) : null}
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {categoryLabel(category)}
+              </option>
+            ))}
+          </select>
+        </label>
+      ) : null}
 
       <label style={labelStyle}>
         Per row
@@ -116,33 +141,37 @@ export default function ImageViewerToolbar({
         </select>
       </label>
 
-      <label style={{ ...labelStyle, cursor: "pointer" }}>
-        <input
-          type="checkbox"
-          checked={displayState.showUsed}
-          onChange={(event) =>
-            onDisplayStateChange({
-              ...displayState,
-              showUsed: event.target.checked,
-            })
-          }
-        />
-        Show used images
-      </label>
+      {!isFavoritesPage ? (
+        <>
+          <label style={{ ...labelStyle, cursor: "pointer" }}>
+            <input
+              type="checkbox"
+              checked={displayState.showUsed}
+              onChange={(event) =>
+                onDisplayStateChange({
+                  ...displayState,
+                  showUsed: event.target.checked,
+                })
+              }
+            />
+            Show used images
+          </label>
 
-      <label style={{ ...labelStyle, cursor: "pointer" }}>
-        <input
-          type="checkbox"
-          checked={displayState.onlyNamed}
-          onChange={(event) =>
-            onDisplayStateChange({
-              ...displayState,
-              onlyNamed: event.target.checked,
-            })
-          }
-        />
-        Only named images
-      </label>
+          <label style={{ ...labelStyle, cursor: "pointer" }}>
+            <input
+              type="checkbox"
+              checked={displayState.onlyNamed}
+              onChange={(event) =>
+                onDisplayStateChange({
+                  ...displayState,
+                  onlyNamed: event.target.checked,
+                })
+              }
+            />
+            Only named images
+          </label>
+        </>
+      ) : null}
 
       <label style={{ ...labelStyle, cursor: "pointer" }}>
         <input

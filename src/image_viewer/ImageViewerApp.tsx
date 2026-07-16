@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { logEvent } from "../logging";
 import ImageGrid from "./ImageGrid";
 import ImageViewerToolbar from "./ImageViewerToolbar";
 import {
@@ -11,6 +12,10 @@ import {
   parseImageViewerDisplayState,
   serializeImageViewerDisplayState,
 } from "./image-viewer-url-state";
+import {
+  loadFavoriteImageNumbers,
+  persistFavoriteImageNumbers,
+} from "./image-viewer-favorites";
 import {
   ALL_CATEGORY,
   GENERIC_CATEGORY,
@@ -75,6 +80,9 @@ export default function ImageViewerApp() {
   const [loadAttempt, setLoadAttempt] = useState(0);
   const [manifest, setManifest] = useState<ImageManifest | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [favoriteImageNumbers, setFavoriteImageNumbers] = useState(() =>
+    loadFavoriteImageNumbers(),
+  );
   const [displayState, setDisplayState] = useState<ImageViewerDisplayState>(
     () =>
       typeof window === "undefined"
@@ -89,6 +97,9 @@ export default function ImageViewerApp() {
   const handleShuffle = useCallback(() => {
     setShuffleSeed(Math.floor(Math.random() * 0xffffffff));
   }, []);
+  const isFavoritesPage =
+    typeof window !== "undefined" &&
+    window.location.pathname.replace(/\/+$/u, "") === "/images/favorites";
 
   useEffect(() => {
     const controller = new AbortController();
@@ -127,24 +138,73 @@ export default function ImageViewerApp() {
     if (manifest === null) {
       return [];
     }
-    const selected = categoriesForSelection(displayState.category, manifest);
-    const filtered = manifest.images.filter(
-      (image) =>
-        selected.has(image.category) &&
-        (displayState.showUsed || !(image.used || image.manuallyUsed)) &&
-        (!displayState.onlyNamed || image.cardNames.length > 0),
-    );
+    let filtered: ImageManifestEntry[];
+    if (isFavoritesPage) {
+      filtered = manifest.images.filter((image) =>
+        favoriteImageNumbers.has(image.imageNumber),
+      );
+    } else {
+      const selected = categoriesForSelection(displayState.category, manifest);
+      filtered = manifest.images.filter(
+        (image) =>
+          selected.has(image.category) &&
+          (displayState.showUsed || !(image.used || image.manuallyUsed)) &&
+          (!displayState.onlyNamed || image.cardNames.length > 0),
+      );
+    }
     return displayState.randomOrder
       ? shuffleBySeed(filtered, shuffleSeed)
       : filtered;
   }, [
     manifest,
+    isFavoritesPage,
+    favoriteImageNumbers,
     displayState.category,
     displayState.showUsed,
     displayState.onlyNamed,
     displayState.randomOrder,
     shuffleSeed,
   ]);
+
+  const favoriteImageCount = useMemo(
+    () =>
+      manifest?.images.filter((image) =>
+        favoriteImageNumbers.has(image.imageNumber),
+      ).length ?? 0,
+    [manifest, favoriteImageNumbers],
+  );
+
+  const favoritesHref = useMemo(() => {
+    const favoritesState: ImageViewerDisplayState = {
+      ...displayState,
+      category: ALL_CATEGORY,
+      showUsed: false,
+      onlyNamed: false,
+    };
+    return `/images/favorites${serializeImageViewerDisplayState(favoritesState)}`;
+  }, [displayState]);
+
+  const handleToggleFavorite = useCallback(
+    (entry: ImageManifestEntry) => {
+      const next = new Set(favoriteImageNumbers);
+      const favorite = !next.has(entry.imageNumber);
+      if (favorite) {
+        next.add(entry.imageNumber);
+      } else {
+        next.delete(entry.imageNumber);
+      }
+      persistFavoriteImageNumbers(next);
+      setFavoriteImageNumbers(next);
+      logEvent("image_viewer_favorite_toggled", {
+        imageNumber: entry.imageNumber,
+        category: entry.category,
+        filename: entry.filename,
+        favorite,
+        favoriteCount: next.size,
+      });
+    },
+    [favoriteImageNumbers],
+  );
 
   // Toggle an image's manual-used mark. The mark is keyed by image number on the
   // server, so every manifest entry sharing that number flips together. The grid
@@ -265,13 +325,15 @@ export default function ImageViewerApp() {
             lineHeight: 1.1,
           }}
         >
-          Image Viewer
+          {isFavoritesPage ? "Favorite Images" : "Image Viewer"}
         </h1>
         <span aria-hidden="true" style={{ color: "rgba(247, 241, 223, 0.35)" }}>
           ·
         </span>
-        <span style={{ color: "#8edbd1", fontSize: "0.82rem", fontWeight: 600 }}>
-          Candidate card art
+        <span
+          style={{ color: "#8edbd1", fontSize: "0.82rem", fontWeight: 600 }}
+        >
+          {isFavoritesPage ? "Saved in this browser" : "Candidate card art"}
         </span>
       </header>
 
@@ -295,6 +357,10 @@ export default function ImageViewerApp() {
           <>
             <ImageViewerToolbar
               displayState={displayState}
+              isFavoritesPage={isFavoritesPage}
+              favoritesCount={favoriteImageCount}
+              favoritesHref={favoritesHref}
+              allImagesHref="/images"
               categories={manifest.categories}
               hasGenericPool={manifest.genericSubdirs.length > 0}
               visibleCount={visibleImages.length}
@@ -312,13 +378,17 @@ export default function ImageViewerApp() {
             ) : null}
             {visibleImages.length === 0 ? (
               <p role="status" style={{ margin: 0, color: "#c9d3cf" }}>
-                No images match the current filters.
+                {isFavoritesPage
+                  ? "No favorite images yet."
+                  : "No images match the current filters."}
               </p>
             ) : (
               <ImageGrid
                 images={visibleImages}
                 columns={displayState.columns}
+                favoriteImageNumbers={favoriteImageNumbers}
                 categories={manifest.categories}
+                onToggleFavorite={handleToggleFavorite}
                 onToggleUsed={handleToggleUsed}
                 onChangeCategory={handleChangeCategory}
               />

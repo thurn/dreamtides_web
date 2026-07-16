@@ -5,8 +5,12 @@ import type { ColumnCount, ImageManifestEntry } from "./types";
 export interface ImageGridProps {
   images: readonly ImageManifestEntry[];
   columns: ColumnCount;
+  /** Shutterstock image numbers favorited in this browser. */
+  favoriteImageNumbers: ReadonlySet<string>;
   /** Every category an image can be moved into, in display order. */
   categories: readonly string[];
+  /** Toggle this browser's favorite mark for an image. */
+  onToggleFavorite: (image: ImageManifestEntry) => void;
   /** Toggle the curator's manual-used mark for an image. */
   onToggleUsed: (image: ImageManifestEntry) => void;
   /** Move an image into a different category subdirectory. */
@@ -52,7 +56,9 @@ const IMAGE_BOX_ASPECT_RATIO = "4 / 3";
 export default function ImageGrid({
   images,
   columns,
+  favoriteImageNumbers,
   categories,
+  onToggleFavorite,
   onToggleUsed,
   onChangeCategory,
 }: ImageGridProps) {
@@ -175,6 +181,29 @@ export default function ImageGrid({
                 gap: "6px",
               }}
             >
+              <label
+                style={{
+                  flex: "0 0 auto",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  color: favoriteImageNumbers.has(image.imageNumber)
+                    ? "#f5c96a"
+                    : "#c9d3cf",
+                  cursor: "pointer",
+                  fontSize: "0.72rem",
+                  fontWeight: 700,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                <input
+                  type="checkbox"
+                  aria-label={`Favorite image ${image.imageNumber}`}
+                  checked={favoriteImageNumbers.has(image.imageNumber)}
+                  onChange={() => onToggleFavorite(image)}
+                />
+                Favorite
+              </label>
               <select
                 aria-label={`Category for ${image.filename}`}
                 value={image.category}
