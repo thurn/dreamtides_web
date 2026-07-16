@@ -96,7 +96,8 @@ npm test
 npx vitest run src/battle/components/PlayableBattleScreen.test.tsx
 ```
 
-After the task, commit with a detailed message. Do not bundle unrelated dirty
+Use focused battle tests while iterating and run the complete core checks once
+the implementation is stable. After the task, commit with a detailed message. Do not bundle unrelated dirty
 worktree changes.
 
 ## Browser QA
@@ -172,13 +173,16 @@ When testing interactively:
 1. State the current invariant values.
 2. State what you expect to happen next.
 3. Perform one action.
-4. Take a screenshot.
-5. Re-measure the invariants.
+4. Re-measure the invariants and inspect `window.__caps`.
+5. Take a screenshot when the action changes visual output relevant to the task.
 6. Compare expected vs actual immediately.
 
 Do not batch multiple interactions without measurement in between.
 
-Screenshots are primary evidence. `snapshot -i` is only for finding targets.
+Interaction results, folded game state, logs, DOM geometry, and `window.__caps`
+are primary evidence for behavior. Screenshots are primary evidence for visual
+output and holistic composition. `snapshot -i` helps find targets but does not
+prove behavior or appearance by itself.
 
 ### Battle-Specific Flows To Test
 
@@ -220,11 +224,11 @@ If you fix one of these, test the exact user path that previously failed.
 For battle changes:
 
 1. Run the most relevant focused battle test.
-2. Run `npm run typecheck`.
-3. Run `npm run lint`.
-4. Run `npm test`.
-5. Run browser QA with `agent-browser` on the battle flow you changed.
-6. Commit only the intended battle files.
+2. Run browser QA with `agent-browser` on the changed battle flow when runtime
+   behavior or presentation changed.
+3. Apply the canonical screenshot budget when visual output changed.
+4. Once stable, run `npm run typecheck`, `npm run lint`, and `npm test`.
+5. Commit only the intended battle files.
 
 ## Anti-Patterns
 
@@ -233,6 +237,7 @@ For battle changes:
 - Do not rely on `snapshot -i` alone for QA.
 - Do not assume a `goto=battleN` scene worked without checking the preview's
   displayed layer and opponent details.
-- Do not stop at automated tests for battle UI; browser QA is mandatory.
+- Do not stop at automated tests when battle runtime behavior or presentation
+  changed; exercise the relevant browser workflow.
 - Do not commit unrelated dirty battle files that were already modified before
   your change.

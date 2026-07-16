@@ -150,10 +150,18 @@ testing-library). Two required incantations, copied from
 - If the screen has no `?goto=` scene in `src/runtime/qa-scenes.ts`, add one —
   screens reachable only by playing forward don't get QA'd. The scene doubles
   as legacy-comparison QA via `?ui=legacy`.
-- Run the standard agent-browser pass (AGENTS.md "Verification"): boot the
-  dev server on a non-default port, drive the normal player workflow, check
-  the error buffer, and confirm layout/visibility/coherence. Compare against
-  the legacy screen side by side.
+- Before registration and the full final check, capture one representative
+  state and confirm the overall visual direction. Correct composition problems
+  while the feedback loop is still small.
+- Run the risk-tiered agent-browser pass in AGENTS.md "Verification": boot the
+  dev server on a non-default port, drive the relevant normal player workflow,
+  inspect `window.__caps`, and measure DOM geometry for clipping, overlap, and
+  responsive-branch claims. For routine visual work, keep final screenshots to
+  one representative desktop, one representative mobile, and one changed
+  interaction state when those states are relevant.
+- Compare against `?ui=legacy` side by side only when visual parity or
+  preservation of a legacy behavior is an acceptance criterion. A migration
+  may intentionally establish a different composition.
 
 ## 8. Final checks
 

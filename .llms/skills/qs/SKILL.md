@@ -161,10 +161,13 @@ For tests, prefer the public surface and assert log behavior through
 
 ## Acceptance Criteria
 
-- Run `npm run typecheck`, `npm run lint`, and `npm test` after changes.
-- Run browser QA with `agent-browser`. This is mandatory for quest prototype
-  work, especially when the change touches `room-service.ts`,
-  `multiplayer-quest-context.tsx`, or anything that reshapes `QuestState`.
+- Use focused checks while iterating, then run `npm run typecheck`, `npm run
+  lint`, and `npm test` once the implementation is stable.
+- Select browser and visual QA by the risk matrix in
+  `docs/quest_prototype/qa_tooling.md`. Browser QA is required for changed
+  runtime behavior; screenshot QA is required for changed visual output.
+- Always run the relevant persisted-room workflow when a change touches
+  `room-service.ts`, `multiplayer-quest-context.tsx`, or reshapes `QuestState`.
 
 ## Browser QA With agent-browser
 
@@ -180,24 +183,23 @@ npx agent-browser skills get core    # refresher on snapshot/refs/waits
 Pick one. Both work, but they differ:
 
 ```bash
-npm run dev                          # vite dev with HMR; default port 5173
-npm run build && npm run preview     # serves dist/ on port 4173 by default
+npm run dev -- --port 5174           # vite dev with HMR; choose a free non-5173 port
+npm run build && npm run preview -- --port 4174
 ```
 
 Use `npm run preview` if `npm run dev` fails with a chokidar `ELOOP` error
 on `.claude/.llms` — that symlink points at itself, and the dev-mode file
 watcher chokes on it. The preview server has no watcher and is unaffected.
 
-If port 5173 is already in use Vite silently picks the next free port (5174,
-5175, …). **Read the actual URL from the server stdout** before opening
-agent-browser; do not assume 5173.
+Use a free, explicit port other than 5173. **Read the actual URL from the server
+stdout** before opening agent-browser.
 
 ### Open The App
 
 ```bash
-agent-browser open http://localhost:5173/        # adjust port to match server
-agent-browser wait --load networkidle
-agent-browser snapshot -i -c
+agent-browser --session <unique-name> open http://localhost:5174/
+agent-browser --session <unique-name> wait --load networkidle
+agent-browser --session <unique-name> snapshot -i -c
 ```
 
 The landing screen exposes a single `Create Game` button. Click it; the URL
@@ -258,7 +260,8 @@ empty tree — almost always an unhandled exception during render. Steps:
 
 ### Smoke Path
 
-Use this flow unless the change targets something narrower:
+Use only the relevant portion of this flow. Run the complete path when the
+change can affect quest-wide progression or persistence:
 
 1. Open the app and confirm the landing screen renders a single
    **Create Game** button.
@@ -283,13 +286,14 @@ Use this flow unless the change targets something narrower:
 
 ### Screenshots
 
-Take screenshots at each meaningful state transition:
+Use the screenshot budget and exceptions in `qa_tooling.md`. A routine visual
+change needs at most one desktop, one narrow/mobile, and one changed-interaction
+capture; skip any that do not prove a changed branch.
 
 ```bash
-agent-browser screenshot /tmp/qs-landing.png
-agent-browser screenshot /tmp/qs-dreamcaller.png
-agent-browser screenshot /tmp/qs-dreamscape.png
-agent-browser screenshot /tmp/qs-draft.png
+agent-browser --session <unique-name> screenshot /tmp/qs-desktop.png
+agent-browser --session <unique-name> screenshot /tmp/qs-mobile.png
+agent-browser --session <unique-name> screenshot /tmp/qs-interaction.png
 ```
 
 Inspect screenshots visually after capture. Verify:
@@ -331,7 +335,8 @@ fields that RTDB stripped.
 
 ### Responsive Checks
 
-If the change affects layout, test both desktop and tablet widths:
+If the change affects layout, test the responsive branches it can change.
+Measure objective geometry first and capture only representative evidence:
 
 ```bash
 agent-browser eval "window.resizeTo(1280, 800)"

@@ -68,7 +68,7 @@ From the repository root, an autonomous agent verifies this proof of concept wit
 bash cumulus/scripts/verify-cumulus-mvp.sh
 ```
 
-Exit `0` is the only passing result. It means every stage below passed and `cumulus/Artifacts/CumulusMvpVerification/summary.json` has `"overall": "passed"` for the clean Git commit recorded in `gitCommit`. Any nonzero exit, missing evidence, stale or malformed evidence, dirty working tree, changed `HEAD`, timeout, test failure, shader error, build failure, or failed metric is a failure. Do not infer success from a Unity process exit code or from screenshots alone.
+Exit `0` is the only passing automated result. It means every stage below passed and `cumulus/Artifacts/CumulusMvpVerification/summary.json` has `"overall": "passed"` for the clean Git commit recorded in `gitCommit`. Any nonzero exit, missing evidence, stale or malformed evidence, dirty working tree, changed `HEAD`, timeout, test failure, shader error, build failure, or failed metric is a failure. Visual completion also requires reviewing same-scene on/off evidence and the holistic final frame; neither a Unity process exit code nor screenshots alone establish completion.
 
 ## Prerequisites
 
@@ -165,7 +165,8 @@ Other fail-closed messages identify the contract directly:
 
 ## Acceptance-to-evidence map
 
-This is the complete automated completion contract. Optional inspection is not part of any verdict.
+This is the complete automated acceptance contract. Visual QA adds a separate
+recorded conclusion for rendering work.
 
 | Acceptance criterion | Exact automated evidence |
 |---|---|
@@ -188,11 +189,21 @@ This is the complete automated completion contract. Optional inspection is not p
 | Builder is deterministic and authoritative | `deterministic-builder.status == "passed"`, identical hash manifests, `CumulusGlassLabAssetTests.Rebuild_IsByteStableAndRetainsEveryAuthoredGuid`, and `Rebuild_RepairsMeshPrefabAndSceneDriftWithoutChangingGuids`. |
 | GPU setup failure restores state and still emits evidence | `CumulusGlassGpuTests.EarlyFailure_RestoresEverySeededNonDefaultState`. |
 
-## Optional visual review
+## Visual review
 
-Visual review is supporting evidence only. It cannot make a failed command pass and is not required for autonomous completion.
+Visual review is required for rendering completion and cannot make a failed
+automated command pass. Inspect the 10 generated PNGs, including the identical
+scene with each target pane enabled and disabled. Confirm that every intended
+surface has a nonzero measured contribution, that blur and lighting move in the
+expected direction, and that the committed negative controls fail when the
+target mechanism is deliberately broken. Finish with a cold review of the
+complete frame for composition defects or unintended artifacts.
 
-An agent may inspect the 10 generated PNGs for unintended aesthetic artifacts. It may also open `cumulus/Assets/Scenes/CumulusGlassLab.unity`, select the PC renderer, set the Game view to `1920 x 1080`, enter Play Mode, hover/click/drag off the world-space button, and watch the panel travel and moving background. Record observations separately from `summary.json`; preference-level observations do not alter automated thresholds.
+The scene can also be opened at `cumulus/Assets/Scenes/CumulusGlassLab.unity`:
+select the PC renderer, set the Game view to `1920 x 1080`, enter Play Mode,
+hover/click/drag off the world-space button, and watch the panel travel and
+moving background. Record the visual conclusion separately from `summary.json`;
+preference-level observations do not alter automated thresholds.
 
 ## Bounded MVP scope
 

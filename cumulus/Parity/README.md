@@ -15,6 +15,13 @@ The command captures the current Cumulus web glass and the Unity scene-glass mat
 
 The artifact directory is ignored. A successful command exits `0`; missing captures, malformed images or manifests, failed Unity evidence, or a score outside the committed budget exits nonzero.
 
+For rendering completion, inspect every bare/glass pair and effect-difference
+image after the command passes. Confirm a nonzero material contribution in the
+comparison region, verify that the effect moves blur, tint, and transmission in
+the intended direction, and run a deliberately broken material control that
+fails the relevant metric. Finish with a cold review of the full captures so a
+passing localized metric does not conceal a holistic composition problem.
+
 ## Interior parity
 
 Every renderer produces two captures per background: the background alone and the background under glass. The comparator subtracts each renderer's own bare capture from its glass capture in linear RGB. Comparing these two material-effect images keeps the score focused on blur, tint, and transmission instead of color-management differences between Chromium and Unity.

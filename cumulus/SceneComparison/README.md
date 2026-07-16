@@ -57,6 +57,11 @@ React renderer to `Web/main.tsx`. The capture and comparator do not need
 scene-specific changes.
 
 The whole-frame score includes the backdrop, panel geometry, and glass. Use it
-for convergence and visual localization. The existing Glass Parity harness
-continues to isolate the material effect from renderer color-management and
-geometry differences.
+for convergence and visual localization. Because unchanged backdrop pixels can
+dominate that score, a whole-frame pass does not establish that a localized
+material or lighting effect is active. For those claims, pair this comparison
+with target-region same-scene on/off evidence, a nonzero measured contribution,
+the expected direction of change, and a deliberately broken control that fails.
+Inspect the web, Unity, difference, and split artifacts and record a cold
+conclusion. The Glass Parity harness isolates the material effect from renderer
+color-management and geometry differences.

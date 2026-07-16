@@ -69,11 +69,19 @@ or similar.
 
 ## Common examples
 
+Choose targets that represent the responsive branches or device-specific risks
+in the change. A routine visual check usually needs one desktop and one mobile
+target; add a changed interaction state when it has distinct visual output.
+`--all` is an explicit full-matrix run for a request that names every target or
+for a device-sensitive change whose risks cannot be represented by a smaller
+set. Device captures preview presentation; they do not replace interaction,
+state, DOM-geometry, or error-buffer evidence for behavioral QA.
+
 ```bash
 # Default: iPhone 16, landing screen, into ./screenshots/iphone-16.png
 node scripts/device-screenshots.mjs --url http://localhost:5178
 
-# Every target:
+# Explicit full target matrix:
 node scripts/device-screenshots.mjs --all --url http://localhost:5178
 
 # A desktop viewport jumping straight to a QA scene (real game UI):

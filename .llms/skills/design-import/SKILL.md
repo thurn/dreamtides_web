@@ -123,7 +123,11 @@ this codebase builds things.
 - Add **logging** for any new feature per the repo's logging guidance.
 - Where you deviated from the mock-up to fit reality, note it briefly to the
   user so they can confirm the trade-off.
-- Run the core checks (`npm run lint`, `npm run typecheck`, `npm test`) and do
-  browser QA on the new screen at the tested viewports, per the project's QA
-  guidance, before committing.
+- Capture one representative state early enough to correct the overall visual
+  direction before polishing. Once the implementation is stable, run the core
+  checks (`npm run lint`, `npm run typecheck`, `npm test`) once and perform the
+  risk-tiered browser QA in the project's QA guidance. Measure objective layout
+  claims, keep routine final screenshots to the representative budget, and do
+  a cold review of the final evidence because an imported design is a new or
+  substantially revised screen.
 - Commit with a detailed description and `git push`.

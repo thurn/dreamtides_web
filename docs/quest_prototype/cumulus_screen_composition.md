@@ -94,10 +94,13 @@ retain continuity between states. Review chrome can fade or hold still.
 ## Browser QA Targets
 
 Use `?goto=` scenes for direct screen entry and run QA on a non-default dev port.
-The standard desktop target is 1920 by 1080. Mobile QA should include a narrow
-phone viewport and a tall modern phone viewport. For each run, assert
-`location.href` and `window.innerWidth` before screenshots, inspect the browser
-error buffer, and verify controls through normal player actions.
+Choose viewports that exercise the responsive branches or device-specific risks
+changed by the work. Routine visual evidence is at most one representative
+desktop, one representative mobile, and one changed interaction state when each
+is relevant. Add viewports only when they cover a distinct risk. For each run,
+assert `location.href` and `window.innerWidth`, inspect `window.__caps`, measure
+DOM geometry for clipping and overlap claims, and verify controls through normal
+player actions.
 
 When adding a migrated screen or site, add a `?goto=<scene>` entry in
 `src/runtime/qa-scenes.ts` and document it in `docs/quest_prototype/qa_scenes.md`

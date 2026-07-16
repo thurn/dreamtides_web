@@ -30,8 +30,12 @@ the change inside **device images** — the phone body/bezel frame, via
 a non-default port and point the tool at it (`--url`/`--start`, never port
 5173).
 
-- **A mobile change is captured on all six phone targets, framed.** Pass every
-  phone id with `--frame` in one run:
+- **A routine mobile change is captured on representative framed phones.** Use
+  one modern cut-out phone and one compact or no-cut-out phone so the evidence
+  covers the responsive branches and safe-area risks. Add a desktop viewport
+  when the change also alters desktop layout. Use all six phone targets only
+  when the user requests the full matrix or the change has device-specific
+  behavior that the representative pair cannot cover:
 
   ```bash
   node scripts/device-screenshots.mjs --frame \
@@ -40,9 +44,8 @@ a non-default port and point the tool at it (`--url`/`--start`, never port
     --scene <scene> --url http://localhost:<port> -o "$WORKTREE/screenshots"
   ```
 
-  Six framed phones is the deliverable for a mobile change — one phone is not
-  enough, and an unframed viewport is not a device image. Add a desktop
-  viewport as well when the change also alters the desktop layout.
+  An unframed viewport is not a device image. Keep the routine evidence set to
+  the smallest targets that demonstrate each distinct risk.
 - Jump straight to the affected screen with `--scene`/`--route`/`--query` so
   the capture shows the change, not the landing page. If the change is an
   overlay or state only reachable by interaction, add a `?goto=` QA scene for

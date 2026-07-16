@@ -6,6 +6,29 @@ server you start on a **non-default port** (the developer's own server owns
 substitute Python Playwright when `agent-browser` is available in this
 environment.
 
+## Select The Smallest QA That Proves The Change
+
+Use focused tests during implementation and run the repository core checks once
+the work is stable. Select runtime evidence by risk:
+
+| Change | Runtime evidence |
+| --- | --- |
+| Data, docs, internal refactor | None unless runtime behavior or presentation changes |
+| Stateful UI, routing, drag/drop, coop, overlay | Relevant normal-player browser workflow, state assertions, DOM geometry, and error buffer |
+| Visual or responsive UI | Browser workflow plus one desktop capture, one narrow/mobile capture, and one changed interaction state |
+| New screen or major redesign | Early representative capture, relevant responsive branches, and one final cold visual review |
+| Renderer, shader, compositor | Same-scene feature on/off captures, nonzero target-region contribution, expected-direction metrics, a deliberately broken negative control, and a holistic final image |
+
+Three captures are a budget, not a quota. Skip irrelevant captures, and add a
+state or viewport only when it proves a distinct contract. After a correction,
+recapture only the affected evidence. Use DOM measurements for overlap,
+clipping, overflow, safe-area clearance, dimensions, and hit targets; use
+screenshots for the pixels and composition the player sees.
+
+For subjective visual direction, take the first representative screenshot
+before running the full suite or generating a large device matrix. Resolve the
+direction early, then run the final verification once the design is stable.
+
 ## Browser Automation
 
 Confirm the tool is available (it ships via `npx`):
@@ -122,7 +145,8 @@ matches every Vite process regardless of port and terminates the developer's
 
 ## Hidden Tides Smoke Path
 
-The hidden-tides migration smoke path is:
+Use the relevant subset of this hidden-tides migration smoke path. Run the full
+path only when the change can affect the complete quest flow:
 
 1. Open your QA server (e.g. `http://localhost:5174`) and confirm the app starts
    on the Dreamcaller selection screen.
@@ -140,22 +164,26 @@ The hidden-tides migration smoke path is:
 
 ## Screenshots And Inspection
 
-Take screenshots for each major state change (keep the `--session` you opened
-with on every call):
+Keep the `--session` you opened with on every call. A routine visual change
+starts with the smallest representative set:
 
 ```bash
-agent-browser --session qa-5174 screenshot /tmp/quest-start.png
-agent-browser --session qa-5174 screenshot --annotate /tmp/quest-atlas.png
-agent-browser --session qa-5174 screenshot --full /tmp/quest-draft.png
+agent-browser --session qa-5174 screenshot /tmp/changed-desktop.png
+agent-browser --session qa-5174 screenshot /tmp/changed-mobile.png
+agent-browser --session qa-5174 screenshot /tmp/changed-interaction.png
 ```
 
 Useful inspection commands:
 
 ```bash
 agent-browser --session qa-5174 snapshot -i
-agent-browser --session qa-5174 eval "JSON.stringify(window.__questLog || [])"
-agent-browser --session qa-5174 eval "JSON.stringify(window.__errors || [])"
+agent-browser --session qa-5174 eval "JSON.stringify(window.__caps)"
 ```
+
+`window.__questLog` and `window.__errors` are not application APIs. Never use
+`window.__errors ?? []`: a missing buffer then looks like a clean run. Install
+`window.__caps` before the first tested action, reinstall it after every full
+page load, and treat a missing buffer as a failed QA setup.
 
 Use these checks during QA:
 
@@ -165,7 +193,35 @@ Use these checks during QA:
 - Draft offers remain 4-unique until fewer than 4 unique names remain in the
   pool.
 - Dreamsigns do not repeat within one run.
-- `window.__errors` stays empty.
+- `window.__caps.errors`, `.rejections`, and `.consoleErrors` stay empty.
+
+After checklist verification, perform one cold read of the final visual
+evidence when the task is a new screen, major redesign, or high-risk rendering
+change. State what looks suspicious, what was measured, and whether the image
+actually demonstrates the requested property. Do not count opening an image as
+inspection without recording a conclusion.
+
+## Stop Rule And QA Result
+
+Stop QA when all applicable conditions are true:
+
+1. Focused automated checks pass, and the core suite has passed once on the
+   stable implementation.
+2. The relevant normal-player workflow succeeds.
+3. Changed responsive branches pass objective geometry and interaction checks.
+4. `window.__caps` exists and all three captured error arrays are empty.
+5. The final visual review has no unresolved medium- or high-severity finding.
+
+Before handoff, emit one compact machine-readable record in the task transcript
+so future QA audits do not have to infer causality from tool ordering:
+
+```json
+{"qa_result":{"risk":"visual-ui","checks":["focused-tests","browser-workflow","desktop","mobile"],"finding":"overlap","severity":"medium","production_change":true,"source":"geometry","minutes":12}}
+```
+
+Use `finding: "none"`, `severity: "none"`, and `production_change: false` for
+confirmation-only QA. `source` is one of `automated`, `interaction`, `geometry`,
+`screenshot`, or `user-review`.
 
 ## TypeScript Module Testing
 

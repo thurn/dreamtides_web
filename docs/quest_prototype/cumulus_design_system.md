@@ -489,9 +489,13 @@ reference, not by a from-scratch subagent rewrite.
 - No brittle snapshot or token-value tests on demos (tokens and design data
   change freely). Visual verification is browser QA via `agent-browser` against
   a dev server on a non-default port (e.g. `--port 5174`), including
-  full-screen mockups at multiple emulated viewports. Isolate the
-  `agent-browser` session (`--session <name>`) and assert `location.href` +
-  `window.innerWidth` before each screenshot — see
+  representative full-screen evidence for the changed responsive branches and
+  interaction states. Routine visual work uses the screenshot budget in
+  `qa_tooling.md`; new screens, major redesigns, and high-risk rendering changes
+  expand only for distinct risks and receive a final cold review. Isolate the
+  `agent-browser` session (`--session <name>`), assert `location.href` +
+  `window.innerWidth`, inspect `window.__caps`, and measure objective geometry
+  before screenshots — see
   [qa_tooling.md](qa_tooling.md).
 
 ---

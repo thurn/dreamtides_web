@@ -77,7 +77,8 @@ only use `draft_records_adapted` going forward.
 
 # Verification
 
-Run the core checks after code changes:
+Use focused tests and checks while iterating. Once the implementation is stable,
+run the complete core checks before committing:
 
 ```bash
 npm run lint
@@ -88,7 +89,23 @@ npm test
 Run the commands from the repository root. In a fresh worktree, run
 `npm install` before these checks because `node_modules` is not committed.
 
-For quest prototype UI work, run browser QA with `/opt/homebrew/bin/agent-browser`
+Choose QA in proportion to the change:
+
+- Data, documentation, and internal refactors: focused checks while iterating,
+  then the core checks. Browser QA and screenshots are not required unless the
+  change alters runtime behavior or presentation.
+- Stateful UI, routing, drag/drop, coop, and overlays: exercise the changed
+  normal player workflow with browser QA. Assert state, interaction results,
+  DOM geometry, and the captured error buffer.
+- Visual or responsive changes: add targeted screenshot inspection. The
+  routine budget is one desktop capture, one narrow/mobile capture, and one
+  changed interaction state. Recapture only an affected viewport after a fix.
+- New screens, major redesigns, and renderer/compositor work: expand the state
+  and viewport matrix where each extra capture proves a distinct risk. Require
+  one final cold visual review; renderer work also needs same-scene on/off and
+  deliberately broken negative controls.
+
+For applicable quest prototype UI work, run browser QA with `/opt/homebrew/bin/agent-browser`
 against a local Vite server. `npx agent-browser` is an acceptable fallback when
 the Homebrew-installed binary is unavailable. Start the QA Vite server on a port
 other than `http://localhost:5173` (for example `npm run dev -- --port 5174`) so
@@ -108,13 +125,18 @@ misses it and a broad `pkill -f vite` kills the developer's 5173 server. Full
 session, assert-before-acting, and teardown detail is in
 [docs/quest_prototype/qa_tooling.md](docs/quest_prototype/qa_tooling.md).
 
-Validate the feature through the
-normal player workflow, inspect the captured error buffer for render errors,
+Validate the relevant feature through the normal player workflow, inspect the
+captured `window.__caps` buffer for render errors,
 unhandled rejections, and console errors, and check the UI state directly in
 the browser. Confirm controls are usable, expected state changes occur, text
 and controls are fully visible, layout spacing is stable, elements are free of
 clipping or overlap, and the resulting screen is visually coherent at the
-tested viewport sizes. Full `agent-browser` session, teardown, and
+selected viewport sizes. Prefer DOM measurements for objective layout claims;
+use screenshots for rendered appearance and holistic composition. Stop when
+focused checks pass, the relevant workflow and responsive branches pass, the
+error buffer is empty, and the final visual review has no unresolved material
+finding. Do not repeat the full suite or full screenshot matrix after every
+small visual adjustment. Full `agent-browser` session, teardown, and
 assert-before-acting details are in `docs/quest_prototype/qa_tooling.md`.
 
 # Deploy

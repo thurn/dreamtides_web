@@ -343,7 +343,8 @@ adapter against its own inputs. Full rationale:
 ## Verifying a screen: the visual QA bar
 
 Browser QA (the repo-level verification instructions cover the server, ports,
-and `?goto=` mechanics) confirms much more than "it renders". Walking the
+`?goto=` mechanics, risk tiers, and screenshot budget) confirms much more than
+"it renders". Walking the
 request and confirming each asked-for element exists is necessary but never
 sufficient — element presence is the floor, not the bar. A screen passes QA
 when it clears all five bars below.
@@ -360,26 +361,29 @@ when it clears all five bars below.
    every variable text slot (reload-mint until it appears, or inject it via
    DOM eval), collections at their display cap, and each toggleable state.
    Wherever a constraint exists — a cap, an auto-shrink, an overflow — drive
-   it to its limit and screenshot the limit. Verifying that the constraint's
-   code path computes something is not the same as seeing what it renders.
+   it to its limit. Prove objective geometry with DOM measurements; add a
+   screenshot when rendered pixels or composition are part of the risk.
 3. **Exercise every knob.** A new prop, constant, or tunable must be
-   demonstrated at its extremes during QA; a screenshot of the default
+   demonstrated at its extremes during QA. Measure geometry-affecting knobs
+   and screenshot rendering-affecting extremes; a screenshot of the default
    proves nothing about the knob. This is what catches a knob wired to the
    wrong property — a "portrait height" that adds empty space above the art
    instead of scaling it reads fine until someone actually drags it.
-4. **Take one holistic pass, separate from the checklist pass.** After the
-   per-item checks, judge the composition cold: is the control scale right
+4. **Take one holistic pass, separate from the checklist pass.** For a new
+   screen, major redesign, or other high-aesthetic-risk change, judge the final
+   composition cold: is the control scale right
    for the platform (desktop is its own idiom — denser, smaller controls
    than mobile, never mobile components stretched across a wide viewport)?
    Is visual weight spent where the hierarchy wants it? Is the spacing
    rhythm consistent? Is there anything you could remove without loss?
    Literal per-item fixes accumulate into noise that no individual check
-   sees. A fresh-context subagent judging only the screenshot — without the
-   change list — gives an unanchored read cheaply.
+   sees. Reserve a fresh-context subagent judging only the screenshot — without
+   the change list — for these high-risk changes. Routine component fixes use
+   the canonical screenshot budget and do not need a separate reviewer.
 5. **A hedge is a stop sign.** If the pre-commit summary wants to say "but I
    can tighten it if you'd prefer", the doubt is real and the reader will
-   agree with it. Resolve it before committing: measure it against bar 1,
-   fix it, or put a side-by-side in front of the user and ask.
+   agree with it. Resolve it before committing: measure it against bar 1, fix
+   it, or put an early side-by-side in front of the user before the full suite.
 
 Case study for why these five exist:
 [docs/postmortems/2026-07-05-desktop-dreamcaller-select.md](../../../docs/postmortems/2026-07-05-desktop-dreamcaller-select.md).

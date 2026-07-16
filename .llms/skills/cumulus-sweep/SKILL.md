@@ -155,7 +155,10 @@ npm test
   and commit the regenerated artifacts (the drift test enforces this).
 - Any visually observable change → browser QA per AGENTS.md
   ("Verification"): isolated `agent-browser` session, non-default port,
-  `?goto=` scenes, standard viewports.
+  relevant `?goto=` scenes and responsive branches, DOM measurements for
+  objective layout claims, and screenshots only for the changed visual states.
+  Use the routine screenshot budget from `qa_tooling.md`; expand it only when a
+  distinct viewport or state carries a distinct risk.
 - Commit with detailed descriptions and `git push` immediately, per
   AGENTS.md.
 
