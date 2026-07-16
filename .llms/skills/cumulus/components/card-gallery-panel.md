@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/card-gallery-panel`
 
-Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **7** (imports outside `src/cumulus/docs/` and tests).
 
 The shared card-browser surface: GlassPanel title and action chrome around a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim.
 

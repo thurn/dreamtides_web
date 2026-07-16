@@ -4,6 +4,7 @@ import {
   GameCard,
   type GameCardModel,
 } from "../components/card/CardView";
+import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
 import {
   BATTLEFIELD_CARD_ASPECT_RATIO,
   BATTLEFIELD_CARD_CORNER_RADIUS,
@@ -28,7 +29,7 @@ import { IconButton } from "../components/controls/IconButton";
 import { NumberStepper } from "../components/controls/NumberStepper";
 import { SegmentedControl } from "../components/controls/SegmentedControl";
 import { ResourceChip } from "../components/hud/ResourceChip";
-import { GlassDialog } from "../components/overlay/GlassDialog";
+import { GlassBackdrop, GlassDialog } from "../components/overlay/GlassDialog";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import type { DreamcallerVisual } from "../components/hud/DreamcallerPortrait";
 import { GLYPHS } from "../primitives/glyph";
@@ -132,15 +133,26 @@ export interface MobileBattleView {
   readonly result: MobileBattleResultView | null;
 }
 
-/** An in-place hand-card decision owned by the authoritative battle prompt. */
+/** A UUID-safe card decision owned by the authoritative battle prompt. */
 export interface MobileBattleCardPickerView {
   readonly key: string;
-  readonly side: MobileBattleOwner;
   readonly label: string;
+  readonly candidates: readonly MobileBattleCardPickerCandidateView[];
   readonly candidateIds: readonly string[];
   readonly count: number;
   readonly optional: boolean;
   readonly canResolve: boolean;
+  readonly presentation: "board" | "gallery";
+}
+
+/** One UUID-backed physical candidate in an authoritative card prompt. */
+export interface MobileBattleCardPickerCandidateView {
+  readonly instanceId: string;
+  readonly cardUuid: string;
+  readonly owner: MobileBattleOwner;
+  readonly zone: "hand" | "deck" | "void" | "banished" | "backRank" | "frontRank";
+  readonly card: MobileBattleCardView;
+  readonly highlighted: boolean;
 }
 
 /** An in-place option decision owned by the authoritative battle prompt. */
@@ -285,6 +297,15 @@ function toggleCardPickerSelection(
     return [...selectedIds, cardId];
   }
   return count === 1 ? [cardId] : [...selectedIds];
+}
+
+function pickerCandidate(
+  cardPicker: MobileBattleCardPickerView | null,
+  instanceId: string,
+): MobileBattleCardPickerCandidateView | null {
+  return cardPicker?.candidates.find(
+    (candidate) => candidate.instanceId === instanceId,
+  ) ?? null;
 }
 
 const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
@@ -471,10 +492,14 @@ function EnemyHand({
   readonly selectedPickerCardIds: readonly string[];
   readonly onPickerCardToggle: (cardId: string) => void;
 }) {
-  const enemyCardPicker = cardPicker?.side === "enemy" ? cardPicker : null;
-  const pickerCandidateIds = new Set(enemyCardPicker?.candidateIds ?? []);
-  const showFaceUp = revealed || enemyCardPicker !== null;
-  const visibleCardIds = enemyCardPicker === null
+  const enemyHandCandidates = cardPicker?.candidates.filter(
+    (candidate) => candidate.owner === "enemy" && candidate.zone === "hand",
+  ) ?? [];
+  const pickerCandidateIds = new Set(
+    enemyHandCandidates.map((candidate) => candidate.instanceId),
+  );
+  const showFaceUp = revealed || enemyHandCandidates.length > 0;
+  const visibleCardIds = enemyHandCandidates.length === 0
     ? cardIds.slice(0, ENEMY_HAND_VISIBLE_CARD_CAP)
     : cardIds;
   return (
@@ -494,6 +519,8 @@ function EnemyHand({
     >
       {visibleCardIds.map((cardId, index) => {
         const card = cards.find((candidate) => candidate.id === cardId);
+        const candidate = pickerCandidate(cardPicker, cardId);
+        const highlighted = candidate?.highlighted === true;
         const { left, normalized } = centeredFanPosition({
           index,
           count: visibleCardIds.length,
@@ -513,6 +540,9 @@ function EnemyHand({
             }
             data-battle-card-picker-selected={
               selectedPickerCardIds.includes(cardId) ? "true" : undefined
+            }
+            data-battle-card-picker-highlighted={
+              highlighted ? "true" : undefined
             }
             style={{
               position: isDesktop ? "relative" : "absolute",
@@ -534,11 +564,14 @@ function EnemyHand({
                 zone="enemy-hand"
                 showRulesText
                 selection={
-                  enemyCardPicker === null
+                  candidate === null
                     ? undefined
                     : {
-                        selected: selectedPickerCardIds.includes(cardId),
-                        color: "gold-light",
+                        selected:
+                          selectedPickerCardIds.includes(cardId) || highlighted,
+                        color: selectedPickerCardIds.includes(cardId)
+                          ? "gold-light"
+                          : "gold",
                       }
                 }
                 interaction={
@@ -1374,6 +1407,9 @@ function Rank({
   order,
   draggingCardId,
   snapLayoutCardId,
+  cardPicker,
+  selectedPickerCardIds,
+  onPickerCardToggle,
   onBattlefieldDragChange,
   interactions,
 }: {
@@ -1386,6 +1422,9 @@ function Rank({
   readonly order: number;
   readonly draggingCardId: string | null;
   readonly snapLayoutCardId: string | null;
+  readonly cardPicker: MobileBattleCardPickerView | null;
+  readonly selectedPickerCardIds: readonly string[];
+  readonly onPickerCardToggle: (cardId: string) => void;
   readonly onBattlefieldDragChange: (
     dragging: boolean,
     cardId?: string,
@@ -1453,92 +1492,125 @@ function Rank({
           columnGap: token("--space-2"),
         }}
       >
-        {visibleSlots.map((slot) => (
-          <div
-            key={slot.id}
-            data-battle-slot-id={slot.id}
-            data-battle-slot-filled={slot.card !== null ? "true" : "false"}
-            data-battle-mobile-drop-kind="slot"
-            data-battle-mobile-drop-owner={owner}
-            data-battle-mobile-drop-rank={rank}
-            data-battle-mobile-drop-slot-id={slot.id}
-            data-battle-drop-target={canDrop ? "true" : undefined}
-            onDragOver={(event) => {
-              if (canDrop) event.preventDefault();
-            }}
-            onDrop={(event) => {
-              if (!canDrop) return;
-              event.preventDefault();
-              interactions.onSlotDrop({ owner, rank, slotId: slot.id });
-            }}
-            style={{
-              position: "relative",
-              width: cardSize,
-              aspectRatio: BATTLEFIELD_CARD_ASPECT_RATIO,
-              boxSizing: "border-box",
-            }}
-          >
-            {slot.card === null || slot.card.id === draggingCardId ? (
-              <div
-                aria-hidden="true"
-                data-battle-slot-outline=""
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  borderRadius: BATTLEFIELD_CARD_CORNER_RADIUS,
-                  border: token("--battlefield-slot-border"),
-                  boxSizing: "border-box",
-                  pointerEvents: "none",
-                  zIndex: 3,
-                }}
-              />
-            ) : null}
-            {slot.card !== null ? (
-              <FaceUpCard
-                card={slot.card}
-                zone={`${owner}-${rank}-rank`}
-                snapLayout={snapLayoutCardId === slot.card.id}
-                interaction={
-                  interactions === undefined
-                    ? undefined
-                    : {
-                        draggable: interactions.canInteract,
-                        debugGesture: isDesktop
-                          ? "context-menu"
-                          : "double-tap",
-                        onDragStart: () => {
-                          onBattlefieldDragChange(true, slot.card?.id);
-                          interactions.onCardDragStart(
-                            slot.card?.id ?? "",
-                            "battlefield",
-                          );
-                        },
-                        ...(interactions.onCardDebugActivate === undefined
-                          ? {}
-                          : {
-                              onDebugActivate: (invocation) =>
-                                interactions.onCardDebugActivate?.(
-                                  slot.card?.id ?? "",
-                                  "battlefield",
-                                  invocation,
-                                ),
-                            }),
-                        onDragEnd: () => {
-                          onBattlefieldDragChange(false);
-                          interactions.onCardDragEnd();
-                        },
-                        onPointerDrop: (clientX, clientY) =>
-                          dropMobileCardAtPoint(
-                            interactions,
-                            clientX,
-                            clientY,
-                          ),
-                      }
-                }
-              />
-            ) : null}
-          </div>
-        ))}
+        {visibleSlots.map((slot) => {
+          const candidate = slot.card === null
+            ? null
+            : pickerCandidate(cardPicker, slot.card.id);
+          const isPickerSelected = slot.card !== null &&
+            selectedPickerCardIds.includes(slot.card.id);
+          const isPickerHighlighted = candidate?.highlighted === true;
+          return (
+            <div
+              key={slot.id}
+              data-battle-slot-id={slot.id}
+              data-battle-slot-filled={slot.card !== null ? "true" : "false"}
+              data-battle-mobile-drop-kind="slot"
+              data-battle-mobile-drop-owner={owner}
+              data-battle-mobile-drop-rank={rank}
+              data-battle-mobile-drop-slot-id={slot.id}
+              data-battle-drop-target={canDrop ? "true" : undefined}
+              data-battle-card-picker-candidate={
+                candidate === null ? undefined : "true"
+              }
+              data-battle-card-picker-selected={
+                isPickerSelected ? "true" : undefined
+              }
+              data-battle-card-picker-highlighted={
+                isPickerHighlighted ? "true" : undefined
+              }
+              onDragOver={(event) => {
+                if (canDrop) event.preventDefault();
+              }}
+              onDrop={(event) => {
+                if (!canDrop) return;
+                event.preventDefault();
+                interactions.onSlotDrop({ owner, rank, slotId: slot.id });
+              }}
+              style={{
+                position: "relative",
+                width: cardSize,
+                aspectRatio: BATTLEFIELD_CARD_ASPECT_RATIO,
+                boxSizing: "border-box",
+              }}
+            >
+              {slot.card === null || slot.card.id === draggingCardId ? (
+                <div
+                  aria-hidden="true"
+                  data-battle-slot-outline=""
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    borderRadius: BATTLEFIELD_CARD_CORNER_RADIUS,
+                    border: token("--battlefield-slot-border"),
+                    boxSizing: "border-box",
+                    pointerEvents: "none",
+                    zIndex: 3,
+                  }}
+                />
+              ) : null}
+              {slot.card !== null ? (
+                <FaceUpCard
+                  card={slot.card}
+                  zone={`${owner}-${rank}-rank`}
+                  snapLayout={snapLayoutCardId === slot.card.id}
+                  selection={
+                    candidate === null
+                      ? undefined
+                      : {
+                          selected: isPickerSelected || isPickerHighlighted,
+                          color: isPickerSelected ? "gold-light" : "gold",
+                        }
+                  }
+                  interaction={
+                    candidate !== null
+                      ? {
+                          draggable: false,
+                          debugGesture: isDesktop
+                            ? "context-menu"
+                            : "double-tap",
+                          onActivate: () => onPickerCardToggle(candidate.instanceId),
+                        }
+                      : interactions === undefined
+                        ? undefined
+                        : {
+                            draggable: interactions.canInteract,
+                            debugGesture: isDesktop
+                              ? "context-menu"
+                              : "double-tap",
+                            onDragStart: () => {
+                              onBattlefieldDragChange(true, slot.card?.id);
+                              interactions.onCardDragStart(
+                                slot.card?.id ?? "",
+                                "battlefield",
+                              );
+                            },
+                            ...(interactions.onCardDebugActivate === undefined
+                              ? {}
+                              : {
+                                  onDebugActivate: (invocation) =>
+                                    interactions.onCardDebugActivate?.(
+                                      slot.card?.id ?? "",
+                                      "battlefield",
+                                      invocation,
+                                    ),
+                                }),
+                            onDragEnd: () => {
+                              onBattlefieldDragChange(false);
+                              interactions.onCardDragEnd();
+                            },
+                            onPointerDrop: (clientX, clientY) =>
+                              dropMobileCardAtPoint(
+                                interactions,
+                                clientX,
+                                clientY,
+                              ),
+                          }
+                  }
+                />
+              ) : null}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -1552,6 +1624,9 @@ function PlayArea({
   cardSize,
   draggingCardId,
   snapLayoutCardId,
+  cardPicker,
+  selectedPickerCardIds,
+  onPickerCardToggle,
   onBattlefieldDragChange,
   interactions,
 }: {
@@ -1562,6 +1637,9 @@ function PlayArea({
   readonly cardSize: string;
   readonly draggingCardId: string | null;
   readonly snapLayoutCardId: string | null;
+  readonly cardPicker: MobileBattleCardPickerView | null;
+  readonly selectedPickerCardIds: readonly string[];
+  readonly onPickerCardToggle: (cardId: string) => void;
   readonly onBattlefieldDragChange: (
     dragging: boolean,
     cardId?: string,
@@ -1601,6 +1679,9 @@ function PlayArea({
           order={order}
           draggingCardId={draggingCardId}
           snapLayoutCardId={snapLayoutCardId}
+          cardPicker={cardPicker}
+          selectedPickerCardIds={selectedPickerCardIds}
+          onPickerCardToggle={onPickerCardToggle}
           onBattlefieldDragChange={onBattlefieldDragChange}
           interactions={interactions}
         />
@@ -1680,8 +1761,10 @@ function PlayerHand({
       }}
     >
       {cards.map((card, index) => {
+        const candidate = pickerCandidate(cardPicker, card.id);
         const isPickerCandidate = pickerCandidateIds.has(card.id);
         const isPickerSelected = selectedPickerCardIds.includes(card.id);
+        const isPickerHighlighted = candidate?.highlighted === true;
         const { left, normalized } = centeredFanPosition({
           index,
           count: cards.length,
@@ -1699,7 +1782,10 @@ function PlayerHand({
             selection={
               cardPicker === null
                 ? undefined
-                : { selected: isPickerSelected, color: "gold-light" }
+                : {
+                    selected: isPickerSelected || isPickerHighlighted,
+                    color: isPickerSelected ? "gold-light" : "gold",
+                  }
             }
             interaction={
               cardPicker !== null
@@ -1776,6 +1862,9 @@ function PlayerHand({
                 data-battle-card-picker-selected={
                   cardPicker !== null && isPickerSelected ? "true" : undefined
                 }
+                data-battle-card-picker-highlighted={
+                  cardPicker !== null && isPickerHighlighted ? "true" : undefined
+                }
                 style={{
                   position: "absolute",
                   left: isCenteredCard || isFirstCard ? (isCenteredCard ? "50%" : 0) : undefined,
@@ -1801,6 +1890,9 @@ function PlayerHand({
             }
             data-battle-card-picker-selected={
               cardPicker !== null && isPickerSelected ? "true" : undefined
+            }
+            data-battle-card-picker-highlighted={
+              cardPicker !== null && isPickerHighlighted ? "true" : undefined
             }
             style={{
               position: "absolute",
@@ -1893,6 +1985,132 @@ function closestOpenBackRankSlot(
   return closest === undefined
     ? undefined
     : { owner, rank: "back", slotId: closest.slotId };
+}
+
+function pickerZoneCaption(
+  candidate: MobileBattleCardPickerCandidateView,
+): string {
+  const owner = candidate.owner === "player" ? "Your" : "Enemy";
+  const zone = candidate.zone === "backRank"
+    ? "Back Rank"
+    : candidate.zone === "frontRank"
+      ? "Front Rank"
+      : candidate.zone[0].toUpperCase() + candidate.zone.slice(1);
+  return candidate.highlighted ? "Just Drawn" : `${owner} ${zone}`;
+}
+
+function cardPickerColumns(
+  candidateCount: number,
+): "two" | "three" | "four" | "five" {
+  if (candidateCount <= 2) return "two";
+  if (candidateCount === 3) return "three";
+  if (candidateCount === 4) return "four";
+  return "five";
+}
+
+function CardPickerGallery({
+  cardPicker,
+  selectedPickerCardIds,
+  isDesktop,
+  onPickerCardToggle,
+  interactions,
+}: {
+  readonly cardPicker: MobileBattleCardPickerView;
+  readonly selectedPickerCardIds: readonly string[];
+  readonly isDesktop: boolean;
+  readonly onPickerCardToggle: (cardId: string) => void;
+  readonly interactions?: MobileBattleInteractions;
+}) {
+  const requiredCount = Math.min(
+    cardPicker.count,
+    cardPicker.candidates.length,
+  );
+  const canSubmit = cardPicker.canResolve &&
+    selectedPickerCardIds.length === requiredCount &&
+    interactions?.onCardPickerSubmit !== undefined;
+  const submitAction = {
+    label: requiredCount === 0 ? "Continue" : "Submit",
+    variant: "accent" as const,
+    disabled: !canSubmit,
+    testId: "battle-card-picker-submit",
+    onPress: () => interactions?.onCardPickerSubmit?.(selectedPickerCardIds),
+  };
+  const skipAction = {
+    label: "Skip",
+    disabled:
+      !cardPicker.canResolve || interactions?.onCardPickerSkip === undefined,
+    testId: "battle-card-picker-skip",
+    onPress: () => interactions?.onCardPickerSkip?.(),
+  };
+  const optionalWithCandidates =
+    cardPicker.optional && cardPicker.candidates.length > 0;
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={cardPicker.label}
+      data-battle-card-picker-gallery=""
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 50,
+        display: "grid",
+        placeItems: "center",
+        padding: isDesktop ? token("--space-8") : 0,
+        boxSizing: "border-box",
+      }}
+    >
+      <GlassBackdrop />
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          width: "100%",
+          maxWidth: 1080,
+          height: isDesktop ? "min(84dvh, 760px)" : "100%",
+          minHeight: 0,
+        }}
+      >
+        <CardGalleryPanel
+          title={cardPicker.label}
+          subtitle={`${String(selectedPickerCardIds.length)}/${String(requiredCount)} selected`}
+          cards={cardPicker.candidates.map((candidate) => {
+            const selected = selectedPickerCardIds.includes(candidate.instanceId);
+            return {
+              entryId: candidate.instanceId,
+              model: candidate.card.model,
+              selected: selected || candidate.highlighted,
+              selectionColor: selected ? "gold-light" : "gold",
+              caption: {
+                kind: "text" as const,
+                text: pickerZoneCaption(candidate),
+              },
+              testId: `battle-card-picker-candidate-${candidate.instanceId}`,
+            };
+          })}
+          emptyLabel="No valid targets."
+          columns={isDesktop ? cardPickerColumns(cardPicker.candidates.length) : "two"}
+          cardSize="compact"
+          frame={isDesktop ? "floating" : "fullBleed"}
+          spacing="compact"
+          widthMode="fill"
+          heightMode="fill"
+          testId="battle-card-picker-gallery-panel"
+          footerActions={
+            optionalWithCandidates ? [skipAction, submitAction] : undefined
+          }
+          footerAction={
+            optionalWithCandidates
+              ? undefined
+              : cardPicker.optional
+                ? skipAction
+                : submitAction
+          }
+          onCardPress={onPickerCardToggle}
+        />
+      </div>
+    </div>
+  );
 }
 
 function ControlRow({
@@ -1989,7 +2207,7 @@ function ControlRow({
             />
           ) : null}
           <GlassButton
-            label="Submit"
+            label={requiredPickerCount === 0 ? "Continue" : "Submit"}
             variant="accent"
             disabled={!canSubmitPicker || interactions?.onCardPickerSubmit === undefined}
             testId="battle-card-picker-submit"
@@ -2443,6 +2661,12 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
   const layoutBackSlotCount = battlefieldLayoutBackSlotCount(view, isDesktop);
   const cardSize = battlefieldCardSize(layoutBackSlotCount);
   const cardPickerKey = view.cardPicker?.key ?? null;
+  const boardCardPicker = view.cardPicker?.presentation === "board"
+    ? view.cardPicker
+    : null;
+  const galleryCardPicker = view.cardPicker?.presentation === "gallery"
+    ? view.cardPicker
+    : null;
   const selectedPickerCardIds = cardPickerSelection.pickerKey === cardPickerKey
     ? cardPickerSelection.ids
     : [];
@@ -2519,6 +2743,11 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
   }, []);
 
   useEffect(() => {
+    if (isDockLayout || galleryCardPicker === null || !isInspectorOpen) return;
+    closeInspector();
+  }, [closeInspector, galleryCardPicker, isDockLayout, isInspectorOpen]);
+
+  useEffect(() => {
     if (!isInspectorOpen || isDockLayout) return;
     const onKeyDown = (event: KeyboardEvent): void => {
       if (event.key === "Escape") closeInspector();
@@ -2581,16 +2810,16 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
           cards={view.enemyHand}
           revealed={view.inspector.isOpponentHandRevealed}
           isDesktop={isDesktop}
-          cardPicker={view.cardPicker}
+          cardPicker={boardCardPicker}
           selectedPickerCardIds={selectedPickerCardIds}
           onPickerCardToggle={handlePickerCardToggle}
         />
         <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="enemy" phase={view.phase} side={view.enemy} interactions={interactions} />
-        <PlayArea isDesktop={isDesktop} owner="enemy" side={view.enemy} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
-        <PlayArea isDesktop={isDesktop} owner="player" side={view.player} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
+        <PlayArea isDesktop={isDesktop} owner="enemy" side={view.enemy} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
+        <PlayArea isDesktop={isDesktop} owner="player" side={view.player} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
         <ControlRow
           aiApproval={view.aiApproval}
-          cardPicker={view.cardPicker}
+          cardPicker={boardCardPicker}
           choicePrompt={view.choicePrompt}
           selectedPickerCardIds={selectedPickerCardIds}
           isDesktop={isDesktop}
@@ -2599,10 +2828,18 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
         />
         <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="player" phase={view.phase} side={view.player} interactions={interactions} />
         <PlayerHand
-          cards={view.inspector.isPlayerHandHidden ? [] : view.playerHand}
+          cards={
+            view.inspector.isPlayerHandHidden &&
+            !boardCardPicker?.candidates.some(
+              (candidate) =>
+                candidate.owner === "player" && candidate.zone === "hand",
+            )
+              ? []
+              : view.playerHand
+          }
           isDesktop={isDesktop}
           snapLayoutCardId={snapLayoutCardId}
-          cardPicker={view.cardPicker?.side === "player" ? view.cardPicker : null}
+          cardPicker={boardCardPicker}
           selectedPickerCardIds={selectedPickerCardIds}
           onPickerCardToggle={handlePickerCardToggle}
           onCardDragChange={handleCardDragChange}
@@ -2682,6 +2919,15 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
           />
         </div>
       </div>
+      {galleryCardPicker !== null ? (
+        <CardPickerGallery
+          cardPicker={galleryCardPicker}
+          selectedPickerCardIds={selectedPickerCardIds}
+          isDesktop={isDesktop}
+          onPickerCardToggle={handlePickerCardToggle}
+          interactions={interactions}
+        />
+      ) : null}
     </main>
   );
 

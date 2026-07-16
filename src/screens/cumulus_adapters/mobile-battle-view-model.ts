@@ -1,4 +1,7 @@
-import { selectPlayAreaSize } from "../../battle/state/selectors";
+import {
+  selectBattleCardLocation,
+  selectPlayAreaSize,
+} from "../../battle/state/selectors";
 import {
   selectFigmentCount,
 } from "../../battle/state/figments";
@@ -20,6 +23,7 @@ import { asCardId } from "../../types/card-identity";
 import type { PendingPrompt } from "../../rules/battle/fold";
 import {
   type MobileBattleCardView,
+  type MobileBattleCardPickerCandidateView,
   type MobileBattleCardPickerView,
   type MobileBattleChoicePromptView,
   type MobileBattlePhase,
@@ -172,18 +176,36 @@ function buildCardPickerView(
   ) {
     return null;
   }
-  const handIds = new Set(board.sides[pendingPrompt.run.side].hand);
-  if (!pendingPrompt.options.candidateIds.every((id) => handIds.has(id))) {
-    return null;
-  }
+  const highlightedIds = new Set(pendingPrompt.options.highlightCardIds);
+  const candidates = pendingPrompt.options.candidateIds.flatMap(
+    (instanceId): MobileBattleCardPickerCandidateView[] => {
+      const instance = board.cardInstances[instanceId];
+      const location = selectBattleCardLocation(board, instanceId);
+      if (instance === undefined || location === null) return [];
+      return [{
+        instanceId,
+        cardUuid: instance.definition.cardId,
+        owner: location.side,
+        zone: location.zone,
+        card: buildMobileBattleCardView(instance),
+        highlighted: highlightedIds.has(instanceId),
+      }];
+    },
+  );
+  const staysOnBoard = candidates.every((candidate) =>
+    candidate.zone === "hand" ||
+    candidate.zone === "backRank" ||
+    candidate.zone === "frontRank"
+  );
   return {
     key: String(pendingPrompt.promptId),
-    side: pendingPrompt.run.side,
     label: pendingPrompt.options.label,
+    candidates,
     candidateIds: [...pendingPrompt.options.candidateIds],
     count: pendingPrompt.options.count,
     optional: pendingPrompt.options.optional,
     canResolve: confirmedPromptId === pendingPrompt.promptId,
+    presentation: staysOnBoard ? "board" : "gallery",
   };
 }
 

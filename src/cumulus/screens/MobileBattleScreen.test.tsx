@@ -11,6 +11,7 @@ import { DOUBLE_TAP_WINDOW_MS } from "../primitives/pointer-gesture";
 import {
   MobileBattleScreen,
   type MobileBattleCardView,
+  type MobileBattleCardPickerCandidateView,
   type MobileBattleInteractions,
   type MobileBattleSideView,
   type MobileBattleView,
@@ -150,6 +151,22 @@ function makeView(): MobileBattleView {
       },
       ai: null,
     },
+  };
+}
+
+function makePickerCandidate(
+  card: MobileBattleCardView,
+  owner: "enemy" | "player",
+  zone: MobileBattleCardPickerCandidateView["zone"],
+  highlighted = false,
+): MobileBattleCardPickerCandidateView {
+  return {
+    instanceId: card.id,
+    cardUuid: card.model.cardId,
+    owner,
+    zone,
+    card,
+    highlighted,
   };
 }
 
@@ -1249,12 +1266,15 @@ describe("MobileBattleScreen", () => {
       ...view,
       cardPicker: {
         key: "prompt-42",
-        side: "player",
         label: "Discard 2 cards",
+        candidates: view.playerHand.slice(0, 2).map((card) =>
+          makePickerCandidate(card, "player", "hand")
+        ),
         candidateIds,
         count: 2,
         optional: false,
         canResolve: true,
+        presentation: "board",
       },
       playerHand: view.playerHand.map((card, index) => ({
         ...card,
@@ -1336,12 +1356,13 @@ describe("MobileBattleScreen", () => {
       ...view,
       cardPicker: {
         key: "prompt-optional",
-        side: "player",
         label: "Choose a card",
+        candidates: [makePickerCandidate(view.playerHand[0], "player", "hand")],
         candidateIds: [view.playerHand[0]?.id ?? "missing"],
         count: 1,
         optional: true,
         canResolve: true,
+        presentation: "board",
       },
     }, {
       canInteract: false,
@@ -1433,12 +1454,15 @@ describe("MobileBattleScreen", () => {
       ...view,
       cardPicker: {
         key: "prompt-enemy",
-        side: "enemy",
         label: "Choose a card to discard",
+        candidates: view.enemyHand.map((card) =>
+          makePickerCandidate(card, "enemy", "hand")
+        ),
         candidateIds: view.enemyHandCardIds,
         count: 1,
         optional: false,
         canResolve: true,
+        presentation: "board",
       },
     }, {
       canInteract: false,
@@ -1490,6 +1514,223 @@ describe("MobileBattleScreen", () => {
       )?.click();
     });
     expect(onCardPickerSubmit).toHaveBeenCalledWith([candidateId]);
+
+    act(() => root.unmount());
+  });
+
+  it("selects battlefield candidates from both sides without developer tools", () => {
+    const view = makeView();
+    const playerCard = view.player.frontRank[0]?.card;
+    const enemyCard = view.enemy.frontRank[0]?.card;
+    if (playerCard === null || playerCard === undefined || enemyCard === null || enemyCard === undefined) {
+      throw new Error("expected battlefield fixture cards");
+    }
+    const candidateIds = [enemyCard.id, playerCard.id];
+    const onCardPickerSubmit = vi.fn();
+    const { container, root } = mount({
+      ...view,
+      cardPicker: {
+        key: "prompt-battlefield",
+        label: "Choose battlefield characters",
+        candidates: [
+          makePickerCandidate(enemyCard, "enemy", "frontRank"),
+          makePickerCandidate(playerCard, "player", "frontRank"),
+        ],
+        candidateIds,
+        count: 2,
+        optional: false,
+        canResolve: true,
+        presentation: "board",
+      },
+    }, {
+      canInteract: false,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+      onCardPickerSubmit,
+    });
+
+    const candidates = Array.from(container.querySelectorAll<HTMLElement>(
+      '[data-battle-card-picker-candidate="true"]',
+    ));
+    expect(candidates).toHaveLength(2);
+    act(() => candidates[0]?.querySelector<HTMLElement>("[data-game-card-source]")?.click());
+    act(() => candidates[1]?.querySelector<HTMLElement>("[data-game-card-source]")?.click());
+    expect(candidates.map((candidate) => candidate.dataset.battleCardPickerSelected))
+      .toEqual(["true", "true"]);
+
+    act(() => container.querySelector<HTMLButtonElement>(
+      '[data-testid="battle-card-picker-submit"]',
+    )?.click());
+    expect(onCardPickerSubmit).toHaveBeenCalledWith(candidateIds);
+
+    act(() => root.unmount());
+  });
+
+  it("uses a Cumulus gallery for deck and void candidates from both sides", () => {
+    const view = makeView();
+    const candidates = [
+      makePickerCandidate(view.player.voidCards[0], "player", "void"),
+      makePickerCandidate(view.enemy.voidCards[0], "enemy", "void"),
+      makePickerCandidate(makeCard(90, "player-deck-top"), "player", "deck"),
+      makePickerCandidate(makeCard(91, "enemy-deck-top"), "enemy", "deck"),
+    ];
+    const onCardPickerSubmit = vi.fn();
+    const { container, root } = mount({
+      ...view,
+      cardPicker: {
+        key: "prompt-gallery",
+        label: "Choose cards from hidden zones",
+        candidates,
+        candidateIds: candidates.map((candidate) => candidate.instanceId),
+        count: 2,
+        optional: false,
+        canResolve: true,
+        presentation: "gallery",
+      },
+    }, {
+      canInteract: false,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+      onCardPickerSubmit,
+    });
+
+    expect(container.querySelector('[role="dialog"]')?.getAttribute("aria-label"))
+      .toBe("Choose cards from hidden zones");
+    expect(container.querySelectorAll("[data-gallery-entry-id]")).toHaveLength(4);
+    expect(container.textContent).toContain("Your Void");
+    expect(container.textContent).toContain("Enemy Void");
+    expect(container.textContent).toContain("Your Deck");
+    expect(container.textContent).toContain("Enemy Deck");
+
+    act(() => container.querySelector<HTMLElement>(
+      `[data-testid="battle-card-picker-candidate-${candidates[0].instanceId}"]`,
+    )?.click());
+    act(() => container.querySelector<HTMLElement>(
+      `[data-testid="battle-card-picker-candidate-${candidates[2].instanceId}"]`,
+    )?.click());
+    act(() => container.querySelector<HTMLButtonElement>(
+      '[data-testid="battle-card-picker-submit"]',
+    )?.click());
+    expect(onCardPickerSubmit).toHaveBeenCalledWith([
+      candidates[0].instanceId,
+      candidates[2].instanceId,
+    ]);
+
+    act(() => root.unmount());
+  });
+
+  it("keeps a mobile gallery prompt above the inspector takeover", () => {
+    mockDesktopViewport(false);
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => {
+      callback(0);
+      return 1;
+    });
+    const view = makeView();
+    const candidate = makePickerCandidate(
+      view.player.voidCards[0],
+      "player",
+      "void",
+    );
+    const { container, root } = mount({
+      ...view,
+      cardPicker: {
+        key: "prompt-mobile-gallery",
+        label: "Choose a void card",
+        candidates: [candidate],
+        candidateIds: [candidate.instanceId],
+        count: 1,
+        optional: false,
+        canResolve: true,
+        presentation: "gallery",
+      },
+    });
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="battle-inspector-trigger"]',
+      )?.click();
+    });
+
+    expect(container.querySelector('[data-battle-card-picker-gallery]')).not.toBeNull();
+    expect(container.querySelector('[data-battle-inspector="takeover"]')).toBeNull();
+
+    act(() => root.unmount());
+  });
+
+  it("keeps highlighted candidates visible before selection", () => {
+    const view = makeView();
+    const highlighted = view.playerHand[0];
+    const { container, root } = mount({
+      ...view,
+      cardPicker: {
+        key: "prompt-highlighted",
+        label: "Discard a card",
+        candidates: [makePickerCandidate(highlighted, "player", "hand", true)],
+        candidateIds: [highlighted.id],
+        count: 1,
+        optional: false,
+        canResolve: true,
+        presentation: "board",
+      },
+    });
+
+    const candidate = container.querySelector<HTMLElement>(
+      '[data-battle-card-picker-highlighted="true"]',
+    );
+    expect(candidate).not.toBeNull();
+    expect(candidate?.querySelector<HTMLElement>(".card-view")?.style.boxShadow)
+      .toContain("var(--gold)");
+
+    act(() => root.unmount());
+  });
+
+  it("offers Continue when an authoritative required picker has no candidates", () => {
+    const view = makeView();
+    const onCardPickerSubmit = vi.fn();
+    const { container, root } = mount({
+      ...view,
+      cardPicker: {
+        key: "prompt-empty",
+        label: "Choose a valid target",
+        candidates: [],
+        candidateIds: [],
+        count: 1,
+        optional: false,
+        canResolve: true,
+        presentation: "board",
+      },
+    }, {
+      canInteract: false,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+      onCardPickerSubmit,
+    });
+
+    const submit = container.querySelector<HTMLButtonElement>(
+      '[data-testid="battle-card-picker-submit"]',
+    );
+    expect(submit?.textContent).toContain("Continue");
+    expect(submit?.getAttribute("aria-disabled")).toBeNull();
+    act(() => submit?.click());
+    expect(onCardPickerSubmit).toHaveBeenCalledWith([]);
 
     act(() => root.unmount());
   });

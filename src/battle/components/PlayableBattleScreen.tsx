@@ -91,6 +91,7 @@ import type {
 } from "../../cumulus/screens/MobileBattleScreen";
 import type { MobileBattleResultAction } from "../../cumulus/screens/BattleResultSurface";
 import { useIsDesktop } from "../../cumulus/screens/use-is-desktop";
+import { createBattlePromptResolutionLogFields } from "./battle-prompt-logging";
 
 const DESKTOP_INSPECTOR_WIDTH = 1280;
 // `BattleLogDrawer` renders from the append-only coop fold, so its
@@ -316,9 +317,23 @@ function PlayableBattleScreenInner({
       if (pendingPrompt === null || confirmedPromptId !== pendingPrompt.promptId) {
         return;
       }
+      logEvent("battle_prompt_resolution_requested", {
+        ...createBattleLogBaseFields(board, {
+          sourceSurface: "battlefield",
+          selectedCardId:
+            resolution.kind === "pick-cards"
+              ? resolution.chosenIds[0] ?? null
+              : null,
+        }),
+        ...createBattlePromptResolutionLogFields(
+          board,
+          pendingPrompt,
+          resolution,
+        ),
+      });
       void actions.resolvePrompt(pendingPrompt.promptId, resolution);
     },
-    [actions, pendingPrompt, confirmedPromptId],
+    [actions, board, pendingPrompt, confirmedPromptId],
   );
 
   const logCumulusCardPickerInteraction = useCallback((
@@ -332,9 +347,24 @@ function PlayableBattleScreenInner({
         selectedCardId: chosenIds[0] ?? null,
       }),
       action,
+      dreamwellCardUuid:
+        pendingPrompt.run.scriptRef.table === "dreamwell"
+          ? pendingPrompt.run.scriptRef.id
+          : null,
       promptId: pendingPrompt.promptId,
-      candidateCardIds: pendingPrompt.options.candidateIds,
-      chosenCardIds: chosenIds,
+      candidateBattleCardInstanceIds: pendingPrompt.options.candidateIds,
+      candidateBackingCardUuids: pendingPrompt.options.candidateIds.map(
+        (instanceId) =>
+          board.cardInstances[instanceId]?.definition.cardId ?? null,
+      ),
+      chosenBattleCardInstanceIds: chosenIds,
+      chosenBackingCardUuids: chosenIds.map((instanceId) =>
+        board.cardInstances[instanceId]?.definition.cardId ?? null,
+      ),
+      finalResolution:
+        action === "selection-changed"
+          ? null
+          : { kind: "pick-cards", chosenIds },
       requiredCount: pendingPrompt.options.count,
       optional: pendingPrompt.options.optional,
     });

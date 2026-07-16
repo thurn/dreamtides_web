@@ -12,6 +12,13 @@ import {
   buildMobileBattleView,
 } from "./mobile-battle-view-model";
 import type { PendingPrompt } from "../../rules/battle/fold";
+import type { BattleFoldState } from "../../rules/battle/fold";
+import { emptyDawnFired, newEffectRun } from "../../rules/battle/fold";
+import {
+  advanceEffectQueue,
+  resolvePendingPrompt,
+} from "../../rules/battle/driver";
+import type { EventContext } from "../../eventlog/types";
 
 const ENEMY_DREAMCALLER: BattleDreamcallerSummary = {
   id: "enemy-dreamcaller-uuid",
@@ -299,7 +306,7 @@ describe("buildMobileBattleView", () => {
         candidateIds: board.sides.player.hand.slice(0, 2),
         count: 2,
         optional: false,
-        highlightCardIds: [],
+        highlightCardIds: board.sides.player.hand.slice(0, 1),
       },
     } satisfies PendingPrompt;
 
@@ -316,15 +323,28 @@ describe("buildMobileBattleView", () => {
         confirmedPromptId: null,
       },
     );
-    expect(optimistic.cardPicker).toEqual({
+    expect(optimistic.cardPicker).toMatchObject({
       key: "42",
-      side: "player",
       label: "Discard 2 cards",
       candidateIds: prompt.options.candidateIds,
       count: 2,
       optional: false,
       canResolve: false,
+      presentation: "board",
     });
+    expect(optimistic.cardPicker?.candidates.map((candidate) => ({
+      instanceId: candidate.instanceId,
+      cardUuid: candidate.cardUuid,
+      owner: candidate.owner,
+      zone: candidate.zone,
+      highlighted: candidate.highlighted,
+    }))).toEqual(prompt.options.candidateIds.map((instanceId, index) => ({
+      instanceId,
+      cardUuid: board.cardInstances[instanceId].definition.cardId,
+      owner: "player",
+      zone: "hand",
+      highlighted: index === 0,
+    })));
 
     const confirmed = buildMobileBattleView(
       init,
@@ -397,9 +417,24 @@ describe("buildMobileBattleView", () => {
     expect(confirmed.cardPicker).toBeNull();
   });
 
-  it("does not map a pick-cards prompt whose candidates are outside the hand", () => {
+  it.each([
+    ["player", "hand"],
+    ["player", "void"],
+    ["player", "deck"],
+    ["player", "frontRank"],
+    ["enemy", "hand"],
+    ["enemy", "void"],
+    ["enemy", "deck"],
+    ["enemy", "frontRank"],
+  ] as const)("maps a %s %s candidate into a usable picker", (side, zone) => {
     const init = makeInit();
     const board = makeBoard(init);
+    const candidateId = zone === "frontRank"
+      ? Object.values(board.sides[side].frontRank).find((id) => id !== null)
+      : board.sides[side][zone][0];
+    if (candidateId === undefined || candidateId === null) {
+      throw new Error(`fixture missing ${side} ${zone} candidate`);
+    }
     const prompt = {
       promptId: 43,
       run: {
@@ -410,8 +445,8 @@ describe("buildMobileBattleView", () => {
       kind: "pick-cards",
       options: {
         kind: "pick-cards",
-        label: "Choose a void card",
-        candidateIds: [board.sides.player.void[0] ?? "void-card"],
+        label: "Choose a card",
+        candidateIds: [candidateId],
         count: 1,
         optional: false,
         highlightCardIds: [],
@@ -432,7 +467,55 @@ describe("buildMobileBattleView", () => {
       },
     );
 
-    expect(view.cardPicker).toBeNull();
+    expect(view.cardPicker).toMatchObject({
+      candidateIds: [candidateId],
+      canResolve: true,
+      presentation:
+        zone === "deck" || zone === "void" ? "gallery" : "board",
+      candidates: [{
+        instanceId: candidateId,
+        cardUuid: board.cardInstances[candidateId].definition.cardId,
+        owner: side,
+        zone,
+      }],
+    });
+  });
+
+  it("keeps an empty candidate prompt visible with a zero-card resolution", () => {
+    const init = makeInit();
+    const board = makeBoard(init);
+    const prompt = {
+      promptId: 45,
+      run: {
+        scriptRef: { table: "dreamwell", id: "prompt-fixture" },
+        cursor: [0],
+        side: "player",
+      },
+      kind: "pick-cards",
+      options: {
+        kind: "pick-cards",
+        label: "Choose a missing target",
+        candidateIds: [],
+        count: 1,
+        optional: false,
+        highlightCardIds: [],
+      },
+    } satisfies PendingPrompt;
+
+    const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER, null, {
+      aiMode: false,
+      isOpponentHandRevealed: false,
+      isPlayerHandHidden: false,
+      pendingPrompt: prompt,
+      confirmedPromptId: prompt.promptId,
+    });
+
+    expect(view.cardPicker).toMatchObject({
+      candidateIds: [],
+      candidates: [],
+      canResolve: true,
+      count: 1,
+    });
   });
 
   it("builds readable inspector snapshot, side zones, availability, visibility, and AI states", () => {
@@ -622,4 +705,129 @@ describe("buildMobileBattleView", () => {
       title: "",
     });
   });
+});
+
+function promptContext(seq: number): EventContext {
+  return {
+    seq,
+    rng: () => 0.25,
+    intervening: [],
+    timestamp: "2026-07-16T00:00:00.000Z",
+  };
+}
+
+describe("Cumulus Dreamwell prompt battle flow", () => {
+  it.each([
+    ["2b23a60c-209c-4c75-b63c-b7f73b2e1a56", "void", false],
+    ["a0fbcbd9-96ee-4392-add7-e1d436f99553", "void", false],
+    ["556057bb-b134-497e-86c2-c6f30049e9e3", "void", true],
+    ["fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5", "void", true],
+    ["9954cede-8a16-4053-b6e9-da745f4540f5", "battlefield", false],
+    ["20be0fdd-d691-40a9-b4f8-15689ea7ebaa", "battlefield", true],
+    ["3a4293da-55a1-4094-898a-df402ffa1c92", "deck", false],
+  ] as const)(
+    "%s exposes its %s candidates and returns to normal controls",
+    (dreamwellCardUuid, expectedZone, nestedConfirmation) => {
+      const init = makeInit();
+      const board = makeBoard(init);
+      if (dreamwellCardUuid === "a0fbcbd9-96ee-4392-add7-e1d436f99553") {
+        const eventId = board.sides.player.void[0];
+        if (eventId === undefined) throw new Error("expected a void fixture");
+        board.cardInstances[eventId].definition = {
+          ...board.cardInstances[eventId].definition,
+          battleCardKind: "event",
+        };
+      }
+      const initial: BattleFoldState = {
+        init,
+        board,
+        effectQueue: [newEffectRun({
+          table: "dreamwell",
+          id: dreamwellCardUuid,
+        }, "player")],
+        pendingPrompt: null,
+        dawnFired: emptyDawnFired(),
+      };
+      let parked = advanceEffectQueue(initial, promptContext(70));
+
+      if (nestedConfirmation) {
+        const confirmationView = buildMobileBattleView(
+          init,
+          parked.board,
+          ENEMY_DREAMCALLER,
+          null,
+          {
+            aiMode: false,
+            isOpponentHandRevealed: false,
+            isPlayerHandHidden: false,
+            pendingPrompt: parked.pendingPrompt,
+            confirmedPromptId: parked.pendingPrompt?.promptId ?? null,
+          },
+        );
+        expect(confirmationView.choicePrompt?.options.map((option) => option.label))
+          .toEqual(["Yes", "Skip"]);
+        parked = resolvePendingPrompt(
+          parked,
+          { kind: "choice", optionIndex: 0 },
+          promptContext(71),
+        );
+      }
+
+      expect(parked.pendingPrompt?.options.kind).toBe("pick-cards");
+      const pickerView = buildMobileBattleView(
+        init,
+        parked.board,
+        ENEMY_DREAMCALLER,
+        null,
+        {
+          aiMode: false,
+          isOpponentHandRevealed: false,
+          isPlayerHandHidden: false,
+          pendingPrompt: parked.pendingPrompt,
+          confirmedPromptId: parked.pendingPrompt?.promptId ?? null,
+        },
+      );
+      expect(pickerView.cardPicker).not.toBeNull();
+      expect(pickerView.cardPicker?.candidates.length).toBeGreaterThan(0);
+      expect(pickerView.cardPicker?.candidates.every((candidate) =>
+        expectedZone === "battlefield"
+          ? candidate.zone === "frontRank" || candidate.zone === "backRank"
+          : candidate.zone === expectedZone
+      )).toBe(true);
+      if (dreamwellCardUuid === "9954cede-8a16-4053-b6e9-da745f4540f5") {
+        expect(pickerView.cardPicker?.candidates.every(
+          (candidate) => candidate.owner === "enemy",
+        )).toBe(true);
+      }
+      if (dreamwellCardUuid === "20be0fdd-d691-40a9-b4f8-15689ea7ebaa") {
+        expect(pickerView.cardPicker?.candidates.every(
+          (candidate) => candidate.owner === "player",
+        )).toBe(true);
+      }
+
+      const chosenId = pickerView.cardPicker?.candidateIds[0];
+      if (chosenId === undefined) throw new Error("expected a picker candidate");
+      const resolved = resolvePendingPrompt(
+        parked,
+        { kind: "pick-cards", chosenIds: [chosenId] },
+        promptContext(72),
+      );
+      const finalView = buildMobileBattleView(
+        init,
+        resolved.board,
+        ENEMY_DREAMCALLER,
+        null,
+        {
+          aiMode: false,
+          isOpponentHandRevealed: false,
+          isPlayerHandHidden: false,
+          pendingPrompt: resolved.pendingPrompt,
+          confirmedPromptId: null,
+        },
+      );
+      expect(resolved.pendingPrompt).toBeNull();
+      expect(finalView.cardPicker).toBeNull();
+      expect(finalView.choicePrompt).toBeNull();
+    },
+  );
 });
