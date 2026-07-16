@@ -838,6 +838,27 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("keeps an empty void visible as a dotted landscape card outline", () => {
+    const baseView = makeView();
+    const view: MobileBattleView = {
+      ...baseView,
+      player: { ...baseView.player, voidCards: [] },
+    };
+    const { container, root } = mount(view);
+
+    const voidZone = container.querySelector<HTMLElement>(
+      '[data-battle-zone="player-void"]',
+    );
+    const voidPile = voidZone?.querySelector<HTMLElement>("[data-card-pile]");
+    const outline = voidZone?.querySelector<HTMLElement>("[data-card-pile-empty]");
+    expect(voidPile?.dataset.pileCount).toBe("0");
+    expect(voidPile?.dataset.pileEmptyState).toBe("outlined");
+    expect(voidPile?.style.aspectRatio).toBe("7 / 5");
+    expect(outline?.style.borderStyle).toBe("dotted");
+
+    act(() => root.unmount());
+  });
+
   it("opens deck and void browsers from the physical piles", () => {
     const onZoneOpen = vi.fn();
     const interactions: MobileBattleInteractions = {

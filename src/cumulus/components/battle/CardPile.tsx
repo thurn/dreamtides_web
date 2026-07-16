@@ -43,6 +43,9 @@ export type CardPileOrientation = "portrait" | "landscape";
 /** Whether face-up pile cards participate in the shared reveal interaction. */
 export type CardPileCardInteraction = "inactive" | "reveal";
 
+/** The treatment used when a pile has no physical cards to render. */
+export type CardPileEmptyState = "hidden" | "outlined";
+
 export interface CardPileProps {
   /** Cards ordered topmost-first. At most three physical layers are rendered. */
   readonly cards: readonly BattlePileCard[];
@@ -52,6 +55,8 @@ export interface CardPileProps {
   readonly label: string;
   /** Reveal behavior for face-up cards. Defaults to `reveal`. */
   readonly cardInteraction?: CardPileCardInteraction;
+  /** Treatment shown when the pile has no cards. Defaults to `hidden`. */
+  readonly emptyState?: CardPileEmptyState;
   /** Activates the pile as one zone control. */
   readonly onActivate?: () => void;
   /** Optional stable test id for the pile as a whole. */
@@ -90,6 +95,25 @@ function cardStageStyle(orientation: CardPileOrientation): CSSProperties {
   };
 }
 
+function EmptyPileOutline() {
+  return (
+    <div
+      aria-hidden="true"
+      data-card-pile-empty=""
+      style={{
+        position: "absolute",
+        inset: 0,
+        boxSizing: "border-box",
+        borderWidth: token("--space-1"),
+        borderStyle: "dotted",
+        borderColor: token("--border-mid"),
+        borderRadius: token("--radius-card"),
+        pointerEvents: "none",
+      }}
+    />
+  );
+}
+
 /**
  * A compact physical stack of cards for decks and voids. The first model is
  * the topmost card; deeper cards peek down-left beneath it, capped at three
@@ -101,6 +125,7 @@ export function CardPile({
   orientation,
   label,
   cardInteraction = "reveal",
+  emptyState = "hidden",
   onActivate,
   testId,
 }: CardPileProps) {
@@ -173,6 +198,7 @@ export function CardPile({
     "data-pile-count": String(cards.length),
     "data-pile-visible-count": String(visibleCards.length),
     "data-pile-card-interaction": cardInteraction,
+    "data-pile-empty-state": emptyState,
     "data-testid": testId,
   } as const;
 
@@ -192,6 +218,7 @@ export function CardPile({
         }}
       >
         {layers}
+        {visibleCards.length === 0 && emptyState === "outlined" ? <EmptyPileOutline /> : null}
       </Pressable>
     );
   }
@@ -203,6 +230,7 @@ export function CardPile({
       style={rootStyle}
     >
       {layers}
+      {visibleCards.length === 0 && emptyState === "outlined" ? <EmptyPileOutline /> : null}
     </div>
   );
 }

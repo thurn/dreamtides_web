@@ -935,6 +935,17 @@
       "description": "Reveal behavior for face-up cards. Defaults to `reveal`."
     },
     {
+      "name": "emptyState",
+      "tsType": "CardPileEmptyState",
+      "unionMembers": [
+        "hidden",
+        "outlined"
+      ],
+      "required": false,
+      "defaultValue": "hidden",
+      "description": "Treatment shown when the pile has no cards. Defaults to `hidden`."
+    },
+    {
       "name": "onActivate",
       "tsType": "(() => void)",
       "unionMembers": [],

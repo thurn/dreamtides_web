@@ -778,6 +778,7 @@ function SideZones({
             orientation="landscape"
             label={`${owner === "enemy" ? "Enemy" : "Player"} void`}
             cardInteraction="inactive"
+            emptyState="outlined"
             onActivate={interactions?.onZoneOpen === undefined
               ? undefined
               : () => interactions.onZoneOpen?.({ owner, zone: "void" })}

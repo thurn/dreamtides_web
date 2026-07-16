@@ -20,6 +20,7 @@ A physical deck or void stack built from structured, topmost-first card instance
 | `orientation` | `CardPileOrientation` = `"portrait" \| "landscape"` | yes | — | Whether cards rest upright or sideways. |
 | `label` | `string` | yes | — | Accessible name for the card zone represented by this pile. |
 | `cardInteraction` | `CardPileCardInteraction` = `"inactive" \| "reveal"` | no | `reveal` | Reveal behavior for face-up cards. Defaults to `reveal`. |
+| `emptyState` | `CardPileEmptyState` = `"hidden" \| "outlined"` | no | `hidden` | Treatment shown when the pile has no cards. Defaults to `hidden`. |
 | `onActivate` | `(() => void)` | no | — | Activates the pile as one zone control. |
 | `testId` | `string` | no | — | Optional stable test id for the pile as a whole. |
 
@@ -54,5 +55,18 @@ Inactive face-up layers keep the pile clickable as one zone control without reve
   label="Enemy void"
   cardInteraction="inactive"
   onActivate={openEnemyVoid}
+/>
+```
+
+### Empty void
+
+An empty void retains its physical card footprint with a dotted outline.
+
+```tsx
+<CardPile
+  cards={[]}
+  orientation="landscape"
+  label="Player void"
+  emptyState="outlined"
 />
 ```

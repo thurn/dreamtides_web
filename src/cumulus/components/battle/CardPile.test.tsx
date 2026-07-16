@@ -203,4 +203,35 @@ describe("CardPile", () => {
     act(() => root.unmount());
     container.remove();
   });
+
+  it("draws an outlined card footprint for an empty pile when requested", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CardPile
+          cards={[]}
+          orientation="landscape"
+          label="Player void"
+          emptyState="outlined"
+        />,
+      );
+    });
+
+    const pile = container.querySelector<HTMLElement>("[data-card-pile]");
+    const outline = container.querySelector<HTMLElement>("[data-card-pile-empty]");
+    expect(pile?.dataset.pileCount).toBe("0");
+    expect(pile?.dataset.pileEmptyState).toBe("outlined");
+    expect(pile?.style.aspectRatio).toBe(
+      `${String(CARD_ASPECT_H)} / ${String(CARD_ASPECT_W)}`,
+    );
+    expect(outline?.style.borderStyle).toBe("dotted");
+    expect(outline?.style.borderRadius).toBe("var(--radius-card)");
+    expect(outline?.style.borderWidth).toBe("var(--space-1)");
+
+    act(() => root.unmount());
+    container.remove();
+  });
 });

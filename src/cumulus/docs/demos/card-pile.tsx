@@ -54,6 +54,16 @@ function CardPileDemo(args: Record<string, unknown>) {
           onActivate={() => undefined}
         />
       </div>
+      <div style={{ width }}>
+        <CardPile
+          cards={[]}
+          orientation={orientation}
+          label="Empty void"
+          cardInteraction="inactive"
+          emptyState="outlined"
+          onActivate={() => undefined}
+        />
+      </div>
     </div>
   );
 }
@@ -93,6 +103,16 @@ export const cardPileDemo: CumulusComponent = {
   label="Enemy void"
   cardInteraction="inactive"
   onActivate={openEnemyVoid}
+/>`,
+    },
+    {
+      label: "Empty void",
+      note: "An empty void retains its physical card footprint with a dotted outline.",
+      code: `<CardPile
+  cards={[]}
+  orientation="landscape"
+  label="Player void"
+  emptyState="outlined"
 />`,
     },
   ],
