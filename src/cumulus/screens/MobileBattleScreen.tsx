@@ -22,6 +22,7 @@ import {
 } from "../components/battle/CardPile";
 import { GlassButton } from "../components/controls/GlassButton";
 import { DisclosureSection } from "../components/controls/DisclosureSection";
+import { GlowIcon } from "../components/controls/GlowIcon";
 import { GroupPanel } from "../components/controls/GroupPanel";
 import { IconButton } from "../components/controls/IconButton";
 import { NumberStepper } from "../components/controls/NumberStepper";
@@ -61,6 +62,12 @@ export interface MobileBattleCardView {
   readonly exhausted: boolean;
   readonly figment: boolean;
   readonly figmentTitleBar: boolean;
+  /** Number of physical Figments represented by this battle instance. */
+  readonly figmentCount: number;
+  /** Stored-time counters held by this battle instance. */
+  readonly storedTime: number;
+  /** Whether Basic Automation currently scripts this card's rules text. */
+  readonly automated: boolean;
   /** Draw the green playable-card outline on this hand card. */
   readonly showPlayableOutline: boolean;
 }
@@ -994,6 +1001,9 @@ function FaceUpCard({
       data-battle-card-zone={zone}
       data-battle-card-face="up"
       data-battle-card-exhausted={card.exhausted ? "true" : "false"}
+      data-battle-card-stored-time={String(card.storedTime)}
+      data-battle-card-figment-count={String(card.figmentCount)}
+      data-battle-card-automated={card.automated ? "true" : "false"}
       data-battle-pointer-dragging="false"
       draggable={false}
       onPointerDownCapture={(event) => {
@@ -1142,6 +1152,7 @@ function FaceUpCard({
         width: "100%",
         cursor: draggable ? "grab" : activatable ? "pointer" : undefined,
         position: "relative",
+        containerType: "inline-size",
         touchAction: draggable ? "none" : undefined,
         transform: restingTransform || undefined,
         transformOrigin: "50% 50%",
@@ -1151,7 +1162,13 @@ function FaceUpCard({
         layoutId={snapLayout ? undefined : `battle-card:${card.id}`}
         data-battle-card-motion=""
         data-battle-card-layout-motion={snapLayout ? "snap" : "travel"}
-        style={{ width: "100%", height: "100%" }}
+        style={{
+          width: "100%",
+          height: "100%",
+          filter: card.exhausted
+            ? "grayscale(0.5) brightness(0.62)"
+            : undefined,
+        }}
       >
         <GameCard
           model={card.model}
@@ -1164,7 +1181,121 @@ function FaceUpCard({
           testId={`battle-card-face:${card.id}`}
         />
       </motion.div>
+      <BattleCardStatusIndicators card={card} fullCard={showRulesText} />
     </motion.div>
+  );
+}
+
+// The badge follows the card width at battlefield scale and caps at the legacy
+// hand-card badge measure so the indicators retain one visual weight.
+const BATTLE_CARD_STATUS_BADGE_SIZE = "min(26cqw, 28px)";
+
+const BATTLE_CARD_STATUS_BADGE_STYLE: CSSProperties = {
+  position: "absolute",
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  minWidth: BATTLE_CARD_STATUS_BADGE_SIZE,
+  height: BATTLE_CARD_STATUS_BADGE_SIZE,
+  paddingInline: token("--space-1"),
+  border: `1px solid ${token("--border-strong")}`,
+  borderRadius: token("--radius-pill"),
+  background: token("--surface-card"),
+  color: token("--text-primary"),
+  font: token("--t-popover-meta"),
+  boxShadow: token("--shadow-sm"),
+  boxSizing: "border-box",
+  pointerEvents: "none",
+  zIndex: 4,
+};
+
+function BattleCardStatusIndicators({
+  card,
+  fullCard,
+}: {
+  readonly card: MobileBattleCardView;
+  readonly fullCard: boolean;
+}) {
+  return (
+    <div
+      data-battle-card-status-indicators=""
+      style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
+    >
+      {card.automated ? (
+        <div
+          aria-label="Automated card text"
+          data-battle-card-status="automated"
+          style={{
+            ...BATTLE_CARD_STATUS_BADGE_STYLE,
+            top: fullCard ? "16%" : "4%",
+            left: "4%",
+            width: BATTLE_CARD_STATUS_BADGE_SIZE,
+            paddingInline: 0,
+          }}
+        >
+          <GlowIcon
+            iconClass={GLYPHS.gear}
+            color="text-primary"
+            size="68%"
+            shadow
+          />
+        </div>
+      ) : null}
+      {card.exhausted ? (
+        <div
+          aria-label="Exhausted"
+          data-battle-card-status="exhausted"
+          style={{
+            ...BATTLE_CARD_STATUS_BADGE_STYLE,
+            top: "50%",
+            left: "50%",
+            width: BATTLE_CARD_STATUS_BADGE_SIZE,
+            paddingInline: 0,
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <GlowIcon
+            iconClass={GLYPHS.exhaust}
+            color="accent-bright"
+            size="70%"
+            shadow
+          />
+        </div>
+      ) : null}
+      {card.figmentCount > 1 ? (
+        <div
+          aria-label={`${String(card.figmentCount)} Figments`}
+          data-battle-card-status="figment-count"
+          style={{
+            ...BATTLE_CARD_STATUS_BADGE_STYLE,
+            bottom: "4%",
+            left: "4%",
+          }}
+        >
+          ×{String(card.figmentCount)}
+        </div>
+      ) : null}
+      {card.storedTime > 0 ? (
+        <div
+          aria-label={`${String(card.storedTime)} stored-time counter${card.storedTime === 1 ? "" : "s"}`}
+          data-battle-card-status="stored-time"
+          style={{
+            ...BATTLE_CARD_STATUS_BADGE_STYLE,
+            right: "4%",
+            bottom: "4%",
+            gap: token("--space-1"),
+          }}
+        >
+          <GlowIcon
+            iconClass={GLYPHS.counter}
+            color="accent-bright"
+            size="62%"
+            shadow
+          />
+          {String(card.storedTime)}
+        </div>
+      ) : null}
+    </div>
   );
 }
 

@@ -1,4 +1,7 @@
 import { selectPlayAreaSize } from "../../battle/state/selectors";
+import {
+  selectFigmentCount,
+} from "../../battle/state/figments";
 import type { AiProposal } from "../../battle/ai/use-battle-ai";
 import { evaluate } from "../../battle/ai/evaluate";
 import { forwardModelFromState } from "../../battle/ai/forward-model";
@@ -13,6 +16,7 @@ import {
   type BattleSide,
 } from "../../battle/types";
 import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
+import { battleCardAutomationStatus } from "../../rules/battle/battle-card-effects-table";
 import { asCardId } from "../../types/card-identity";
 import type { PendingPrompt } from "../../rules/battle/fold";
 import {
@@ -45,6 +49,7 @@ export type MobileBattleAiProposal = Pick<AiProposal, "kind" | "description"> &
 
 export interface MobileBattleViewOptions {
   readonly aiMode: boolean;
+  readonly basicAutomationEnabled?: boolean;
   readonly isOpponentHandRevealed: boolean;
   readonly isPlayerHandHidden: boolean;
   readonly pendingPrompt?: PendingPrompt | null;
@@ -59,6 +64,7 @@ export function buildMobileBattleView(
   aiProposal: MobileBattleAiProposal | null = null,
   viewOptions: MobileBattleViewOptions = {
     aiMode: false,
+    basicAutomationEnabled: false,
     isOpponentHandRevealed: false,
     isPlayerHandHidden: false,
   },
@@ -85,18 +91,31 @@ export function buildMobileBattleView(
     activeSide: board.activeSide,
     phase: mobileBattlePhase(board.phase),
     enemyHandCardIds: [...board.sides.enemy.hand],
-    enemyHand: buildCardViews(board.sides.enemy.hand, board),
-    enemy: buildSideView("enemy", enemyDreamcaller, board, frontSize, backSize),
+    enemyHand: buildCardViews(
+      board.sides.enemy.hand,
+      board,
+      viewOptions.basicAutomationEnabled === true,
+    ),
+    enemy: buildSideView(
+      "enemy",
+      enemyDreamcaller,
+      board,
+      frontSize,
+      backSize,
+      viewOptions.basicAutomationEnabled === true,
+    ),
     player: buildSideView(
       "player",
       init.dreamcallerSummary ?? FALLBACK_PLAYER_DREAMCALLER,
       board,
       frontSize,
       backSize,
+      viewOptions.basicAutomationEnabled === true,
     ),
     playerHand: buildCardViews(
       board.sides.player.hand,
       board,
+      viewOptions.basicAutomationEnabled === true,
       (instance) =>
         board.activeSide === "player" &&
         board.phase === "day" &&
@@ -317,6 +336,7 @@ function mobileBattlePhase(
 export function buildMobileBattleCardView(
   instance: BattleCardInstance,
   showPlayableOutline = false,
+  basicAutomationEnabled = false,
 ): MobileBattleCardView {
   const figment = instance.provenance.kind === "generated-figment";
   return {
@@ -325,6 +345,11 @@ export function buildMobileBattleCardView(
     exhausted: instance.status.isExhausted,
     figment,
     figmentTitleBar: figment && instance.definition.name.trim() !== "",
+    figmentCount: selectFigmentCount(instance),
+    storedTime: instance.status.counters,
+    automated:
+      basicAutomationEnabled &&
+      battleCardAutomationStatus(instance.definition.cardId) === "auto",
     showPlayableOutline,
   };
 }
@@ -335,16 +360,31 @@ function buildSideView(
   board: BattleMutableState,
   frontSize: number,
   backSize: number,
+  basicAutomationEnabled: boolean,
 ): MobileBattleSideView {
   const sideState = board.sides[side];
   return {
     deckCardIds: [...sideState.deck],
-    voidCards: buildCardViews([...sideState.void].reverse(), board),
+    voidCards: buildCardViews(
+      [...sideState.void].reverse(),
+      board,
+      basicAutomationEnabled,
+    ),
     backRank: backRankSlotIds(backSize).map((slotId) =>
-      buildSlotView(slotId, sideState.backRank[slotId] ?? null, board),
+      buildSlotView(
+        slotId,
+        sideState.backRank[slotId] ?? null,
+        board,
+        basicAutomationEnabled,
+      ),
     ),
     frontRank: frontRankSlotIds(frontSize).map((slotId) =>
-      buildSlotView(slotId, sideState.frontRank[slotId] ?? null, board),
+      buildSlotView(
+        slotId,
+        sideState.frontRank[slotId] ?? null,
+        board,
+        basicAutomationEnabled,
+      ),
     ),
     status: buildStatusView(dreamcaller, sideState),
   };
@@ -353,13 +393,20 @@ function buildSideView(
 function buildCardViews(
   battleCardIds: readonly string[],
   board: BattleMutableState,
+  basicAutomationEnabled: boolean,
   showPlayableOutline: (instance: BattleCardInstance) => boolean = () => false,
 ): MobileBattleCardView[] {
   return battleCardIds.flatMap((battleCardId) => {
     const instance = board.cardInstances[battleCardId];
     return instance === undefined
       ? []
-      : [buildMobileBattleCardView(instance, showPlayableOutline(instance))];
+      : [
+          buildMobileBattleCardView(
+            instance,
+            showPlayableOutline(instance),
+            basicAutomationEnabled,
+          ),
+        ];
   });
 }
 
@@ -367,11 +414,15 @@ function buildSlotView(
   id: string,
   battleCardId: string | null,
   board: BattleMutableState,
+  basicAutomationEnabled: boolean,
 ): MobileBattleSlotView {
   const instance = battleCardId === null ? undefined : board.cardInstances[battleCardId];
   return {
     id,
-    card: instance === undefined ? null : buildMobileBattleCardView(instance),
+    card:
+      instance === undefined
+        ? null
+        : buildMobileBattleCardView(instance, false, basicAutomationEnabled),
   };
 }
 

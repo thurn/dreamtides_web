@@ -101,3 +101,11 @@ from the quest seed and battle entry key instead of receiving
 `?seed=4` logged battle seed `3021161173`. The runtime seed override needs to be
 carried by the authoritative `BEGIN_BATTLE` intent so every client reconstructs
 the same explicitly requested battle.
+
+## Figment creator uses duplicate React option keys
+
+Opening the battle Figment creator emits React's duplicate-child-key warning
+for the key `warrior`. The creator offers two distinct Warrior Figment types,
+so keying options by subtype collides each time the dialog renders. The option
+list should use the stable Figment type identity so both Warrior entries retain
+independent component identity.

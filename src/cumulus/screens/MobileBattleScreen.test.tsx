@@ -64,6 +64,9 @@ function makeCard(index: number, instanceId: string): MobileBattleCardView {
     exhausted: index % 3 === 0,
     figment: false,
     figmentTitleBar: false,
+    figmentCount: 1,
+    storedTime: 0,
+    automated: false,
     showPlayableOutline: false,
   };
 }
@@ -170,6 +173,111 @@ function mount(
 }
 
 describe("MobileBattleScreen", () => {
+  it("keeps battle-instance status readable on battlefield and hand cards", () => {
+    const view = makeView();
+    const battlefieldCard = view.player.frontRank[0]?.card;
+    const handCard = view.playerHand[0];
+    if (battlefieldCard === null || battlefieldCard === undefined || handCard === undefined) {
+      throw new Error("fixture cards missing");
+    }
+    const statusBattlefieldCard: MobileBattleCardView = {
+      ...battlefieldCard,
+      exhausted: true,
+      figment: true,
+      figmentCount: 3,
+      storedTime: 4,
+      automated: true,
+    };
+    const statusHandCard: MobileBattleCardView = {
+      ...handCard,
+      exhausted: true,
+      figmentCount: 2,
+      storedTime: 5,
+      automated: true,
+    };
+    const statusView: MobileBattleView = {
+      ...view,
+      player: {
+        ...view.player,
+        frontRank: [
+          { ...view.player.frontRank[0], card: statusBattlefieldCard },
+          ...view.player.frontRank.slice(1),
+        ],
+      },
+      playerHand: [statusHandCard, ...view.playerHand.slice(1)],
+    };
+    const { container, root } = mount(statusView);
+
+    const battlefield = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-front-card"][data-battle-card-zone="player-front-rank"]',
+    );
+    const hand = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-hand-0"][data-battle-card-zone="player-hand"]',
+    );
+    expect(battlefield?.dataset.battleCardExhausted).toBe("true");
+    expect(battlefield?.dataset.battleCardStoredTime).toBe("4");
+    expect(battlefield?.dataset.battleCardFigmentCount).toBe("3");
+    expect(battlefield?.dataset.battleCardAutomated).toBe("true");
+    expect(battlefield?.querySelector('[aria-label="Exhausted"]')).not.toBeNull();
+    expect(battlefield?.querySelector('[aria-label="3 Figments"]')).not.toBeNull();
+    expect(
+      battlefield?.querySelector('[aria-label="4 stored-time counters"]'),
+    ).not.toBeNull();
+    expect(
+      battlefield?.querySelector('[aria-label="Automated card text"]'),
+    ).not.toBeNull();
+    expect(
+      battlefield?.querySelector<HTMLElement>("[data-battle-card-motion]")
+        ?.style.filter,
+    ).toContain("grayscale");
+
+    expect(hand?.querySelector('[aria-label="Exhausted"]')).not.toBeNull();
+    expect(hand?.querySelector('[aria-label="2 Figments"]')).not.toBeNull();
+    expect(
+      hand?.querySelector('[aria-label="5 stored-time counters"]'),
+    ).not.toBeNull();
+    expect(
+      hand?.querySelector('[aria-label="Automated card text"]'),
+    ).not.toBeNull();
+
+    const committedView: MobileBattleView = {
+      ...statusView,
+      player: {
+        ...statusView.player,
+        frontRank: [
+          {
+            ...statusView.player.frontRank[0],
+            card: {
+              ...statusBattlefieldCard,
+              exhausted: false,
+              figmentCount: 1,
+              storedTime: 0,
+              automated: false,
+            },
+          },
+          ...statusView.player.frontRank.slice(1),
+        ],
+      },
+    };
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <MobileBattleScreen view={committedView} />
+        </CumulusRoot>,
+      );
+    });
+    const updatedBattlefield = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-front-card"][data-battle-card-zone="player-front-rank"]',
+    );
+    expect(updatedBattlefield?.dataset.battleCardExhausted).toBe("false");
+    expect(updatedBattlefield?.dataset.battleCardStoredTime).toBe("0");
+    expect(updatedBattlefield?.dataset.battleCardFigmentCount).toBe("1");
+    expect(updatedBattlefield?.dataset.battleCardAutomated).toBe("false");
+    expect(updatedBattlefield?.querySelector("[data-battle-card-status]")).toBeNull();
+
+    act(() => root.unmount());
+  });
+
   it("places the result surface above the battle shell and forwards its actions", () => {
     const onResultAction = vi.fn();
     const { container, root } = mount(

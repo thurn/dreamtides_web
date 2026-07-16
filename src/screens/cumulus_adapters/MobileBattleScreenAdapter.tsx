@@ -18,6 +18,7 @@ export function MobileBattleScreenAdapter({
   enemyDreamcaller,
   aiProposal,
   aiMode,
+  basicAutomationEnabled,
   isOpponentHandRevealed,
   isPlayerHandHidden,
   pendingPrompt,
@@ -30,6 +31,7 @@ export function MobileBattleScreenAdapter({
   enemyDreamcaller: MobileBattleDreamcaller;
   aiProposal: MobileBattleAiProposal | null;
   aiMode: boolean;
+  basicAutomationEnabled: boolean;
   isOpponentHandRevealed: boolean;
   isPlayerHandHidden: boolean;
   pendingPrompt: MobileBattlePendingPrompt | null;
@@ -40,6 +42,7 @@ export function MobileBattleScreenAdapter({
   const view = useMemo(
     () => buildMobileBattleView(init, board, enemyDreamcaller, aiProposal, {
       aiMode,
+      basicAutomationEnabled,
       isOpponentHandRevealed,
       isPlayerHandHidden,
       pendingPrompt,
@@ -52,6 +55,7 @@ export function MobileBattleScreenAdapter({
       enemyDreamcaller,
       aiProposal,
       aiMode,
+      basicAutomationEnabled,
       isOpponentHandRevealed,
       isPlayerHandHidden,
       pendingPrompt,

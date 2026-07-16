@@ -215,11 +215,63 @@ describe("buildMobileBattleView", () => {
       exhausted: true,
       figment: false,
       figmentTitleBar: false,
+      figmentCount: 1,
+      storedTime: 0,
+      automated: false,
     });
     expect(view.enemy.backRank[4].card).toMatchObject({
       id: board.sides.enemy.backRank.B4,
       figment: true,
       figmentTitleBar: true,
+      figmentCount: 1,
+      storedTime: 0,
+      automated: false,
+    });
+  });
+
+  it("rebuilds complete card status from the committed battle instance", () => {
+    const init = makeInit();
+    const board = makeBoard(init);
+    const playerCardId = board.sides.player.frontRank.F3;
+    const figmentCardId = board.sides.enemy.backRank.B4;
+    if (playerCardId === null || figmentCardId === null) {
+      throw new Error("fixture battlefield cards missing");
+    }
+
+    const before = buildMobileBattleView(init, board, ENEMY_DREAMCALLER);
+    expect(before.player.frontRank[3].card).toMatchObject({
+      exhausted: true,
+      storedTime: 0,
+      automated: false,
+    });
+    expect(before.enemy.backRank[4].card).toMatchObject({ figmentCount: 1 });
+
+    board.cardInstances[playerCardId].status.isExhausted = false;
+    board.cardInstances[playerCardId].status.counters = 4;
+    board.cardInstances[playerCardId].definition.cardId =
+      "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6";
+    board.cardInstances[figmentCardId].figments = [2, 3, 4];
+
+    const after = buildMobileBattleView(
+      init,
+      board,
+      ENEMY_DREAMCALLER,
+      null,
+      {
+        aiMode: false,
+        basicAutomationEnabled: true,
+        isOpponentHandRevealed: false,
+        isPlayerHandHidden: false,
+      },
+    );
+    expect(after.player.frontRank[3].card).toMatchObject({
+      exhausted: false,
+      storedTime: 4,
+      automated: true,
+    });
+    expect(after.enemy.backRank[4].card).toMatchObject({
+      figmentCount: 3,
+      model: { displaySnapshot: { spark: 9 } },
     });
   });
 
