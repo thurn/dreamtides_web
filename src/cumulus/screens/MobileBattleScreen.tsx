@@ -1712,7 +1712,7 @@ function PlayerHand({
                       onActivate: () => onPickerCardToggle(card.id),
                     }
                   : undefined
-                : interactions === undefined
+                : interactions === undefined || !interactions.canInteract
                 ? undefined
                 : {
                     draggable: interactions.canInteract,
@@ -1976,7 +1976,9 @@ function ControlRow({
               whiteSpace: "nowrap",
             }}
           >
-            {cardPicker.label} · {String(selectedPickerCardIds.length)}/{String(requiredPickerCount)}
+            {cardPicker.label} from {cardPicker.side === "player"
+              ? "your hand"
+              : "the enemy hand"} · {String(selectedPickerCardIds.length)}/{String(requiredPickerCount)}
           </span>
           {cardPicker.optional ? (
             <GlassButton

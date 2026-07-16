@@ -1294,7 +1294,7 @@ describe("MobileBattleScreen", () => {
     expect(container.querySelector("[data-battle-phase-controls]")).toBeNull();
     expect(container.querySelector("[data-battle-card-picker-controls]")).not.toBeNull();
     expect(container.querySelector("[data-battle-card-picker-progress]")?.textContent)
-      .toBe("Discard 2 cards · 0/2");
+      .toBe("Discard 2 cards from your hand · 0/2");
     expect(submit()?.getAttribute("aria-disabled")).toBe("true");
     handCards().forEach((_card, index) => {
       expect(cardShadow(index)).not.toContain("var(--positive)");
@@ -1320,7 +1320,7 @@ describe("MobileBattleScreen", () => {
     expect(cardShadow(1)).toContain("var(--color-gold-light)");
     expect(submit()?.getAttribute("aria-disabled")).toBeNull();
     expect(container.querySelector("[data-battle-card-picker-progress]")?.textContent)
-      .toBe("Discard 2 cards · 2/2");
+      .toBe("Discard 2 cards from your hand · 2/2");
 
     act(() => submit()?.click());
     expect(onCardPickerSubmit).toHaveBeenCalledWith(candidateIds);
@@ -1428,6 +1428,7 @@ describe("MobileBattleScreen", () => {
     const candidateId = view.enemyHandCardIds[7];
     if (candidateId === undefined) throw new Error("expected an enemy hand card");
     const onCardPickerSubmit = vi.fn();
+    const onHandCardActivate = vi.fn();
     const { container, root } = mount({
       ...view,
       cardPicker: {
@@ -1442,7 +1443,7 @@ describe("MobileBattleScreen", () => {
     }, {
       canInteract: false,
       pendingCardId: null,
-      onHandCardActivate: vi.fn(),
+      onHandCardActivate,
       onCardDragStart: vi.fn(),
       onCardDragEnd: vi.fn(),
       onSlotDrop: vi.fn(),
@@ -1464,6 +1465,15 @@ describe("MobileBattleScreen", () => {
     expect(enemyHand?.dataset.battleHandVisibleCount).toBe("8");
     expect(enemyCards).toHaveLength(8);
     expect(candidate?.dataset.battleCardFace).toBe("up");
+    expect(container.querySelector("[data-battle-card-picker-progress]")?.textContent)
+      .toBe("Choose a card to discard from the enemy hand · 0/1");
+
+    act(() => {
+      container.querySelector<HTMLElement>(
+        '[data-battle-card-zone="player-hand"]',
+      )?.click();
+    });
+    expect(onHandCardActivate).not.toHaveBeenCalled();
 
     act(() => {
       candidate?.querySelector<HTMLElement>(
