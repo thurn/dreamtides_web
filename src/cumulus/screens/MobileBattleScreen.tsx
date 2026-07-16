@@ -27,6 +27,7 @@ import { GroupPanel } from "../components/controls/GroupPanel";
 import { IconButton } from "../components/controls/IconButton";
 import { NumberStepper } from "../components/controls/NumberStepper";
 import { SegmentedControl } from "../components/controls/SegmentedControl";
+import { ResourceChip } from "../components/hud/ResourceChip";
 import { GlassDialog } from "../components/overlay/GlassDialog";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import type { DreamcallerVisual } from "../components/hud/DreamcallerPortrait";
@@ -1186,8 +1187,7 @@ function FaceUpCard({
 // The badge follows the card width at battlefield scale and caps at the legacy
 // hand-card badge measure so the indicators retain one visual weight.
 const BATTLE_CARD_STATUS_BADGE_SIZE = "min(26cqw, 28px)";
-const BATTLE_CARD_EXHAUST_ICON_SIZE = "min(22cqw, 24px)";
-const BATTLE_CARD_COUNTER_ICON_SIZE = "min(17cqw, 18px)";
+const BATTLE_CARD_EXHAUST_ICON_SIZE = "min(19cqw, 20px)";
 
 const BATTLE_CARD_STATUS_BADGE_STYLE: CSSProperties = {
   position: "absolute",
@@ -1268,18 +1268,17 @@ function BattleCardStatusIndicators({
             bottom: "4%",
             width: BATTLE_CARD_STATUS_BADGE_SIZE,
             paddingInline: 0,
-            gap: 0,
             borderRadius: token("--radius-status-badge"),
             background: token("--surface-status-badge"),
             color: token("--text-on-accent"),
           }}
         >
-          {String(card.storedTime)}
-          <GlowIcon
-            iconClass={GLYPHS.counter}
-            color="white"
-            size={BATTLE_CARD_COUNTER_ICON_SIZE}
-            shadow
+          <ResourceChip
+            kind="counter"
+            value={card.storedTime}
+            size="sm"
+            spacing="tight"
+            tone="inherit"
           />
         </div>
       ) : null}

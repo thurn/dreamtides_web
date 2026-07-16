@@ -244,15 +244,20 @@ describe("MobileBattleScreen", () => {
     const storedTimeBadge = battlefield?.querySelector<HTMLElement>(
       '[data-battle-card-status="stored-time"]',
     );
-    expect(storedTimeBadge?.firstChild?.textContent).toBe("4");
-    expect(storedTimeBadge?.lastElementChild?.nodeName).toBe("I");
+    const storedTimeChip = storedTimeBadge?.querySelector<HTMLElement>(
+      '[data-resource-chip-kind="counter"]',
+    );
+    expect(storedTimeChip?.dataset.resourceChipSize).toBe("sm");
+    expect(storedTimeChip?.textContent).toBe("4");
+    expect(storedTimeChip?.firstElementChild?.nodeName).toBe("SPAN");
+    expect(storedTimeChip?.lastElementChild?.nodeName).toBe("I");
     expect(
-      (storedTimeBadge?.lastElementChild as HTMLElement | null)?.style.color,
-    ).toBe(whiteStyle.color);
+      (storedTimeChip?.lastElementChild as HTMLElement | null)?.style.color,
+    ).toBe("inherit");
+    expect(storedTimeChip?.style.gap).toBe("0px");
     expect(storedTimeBadge?.style.background).toBe("var(--surface-status-badge)");
     expect(storedTimeBadge?.style.border).toContain("var(--text-on-accent)");
     expect(storedTimeBadge?.style.borderRadius).toBe("var(--radius-status-badge)");
-    expect(storedTimeBadge?.style.gap).toBe("0px");
     expect(
       battlefield?.querySelector('[data-battle-card-status="automated"]'),
     ).toBeNull();
