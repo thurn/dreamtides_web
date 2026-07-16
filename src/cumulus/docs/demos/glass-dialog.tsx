@@ -46,7 +46,7 @@ export const glassDialogDemo: CumulusComponent = {
   blurb:
     "The glass overlay shell: a modal dialog with a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and an optional glass close disc) over a scrolling body. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.",
   callout:
-    "Dreamsign Revelation uses this shell for its Purge replacement dialog. Pass `onClose` for the shared close disc, or omit it when one explicit commit action must own completion. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant.",
+    "Dreamsign Revelation uses this shell for its Purge replacement dialog. Pass `onClose` for the shared close disc, or omit it when one explicit commit action must own completion. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant. Battle overlays use `desktopCenterTarget=\"battlefield\"` so a docked inspector rail stays outside the panel's centering region.",
   group: "Components",
   docName: "GlassDialog",
   Component: GlassDialogDemo,
@@ -66,7 +66,7 @@ export const glassDialogDemo: CumulusComponent = {
     {
       label: "Commit gated",
       note: "Omit `onClose` when the dialog must expose only its explicit commit action. The header remains and no dismissal control is rendered.",
-      code: `<GlassDialog title="Foresee 2" wide>
+      code: `<GlassDialog title="Foresee 2" desktopCenterTarget="battlefield">
   <ForeseeOrder />
   <GlassButton label="Confirm" variant="accent" placement="onGlass" onPress={confirm} />
 </GlassDialog>`,

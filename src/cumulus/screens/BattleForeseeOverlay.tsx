@@ -191,7 +191,10 @@ export function BattleForeseeOverlay({
   } as const;
 
   return (
-    <GlassDialog title={`Foresee ${String(count)}`}>
+    <GlassDialog
+      title={`Foresee ${String(count)}`}
+      desktopCenterTarget="battlefield"
+    >
       <div
         data-battle-cumulus-foresee=""
         style={{ display: "grid", gap: token("--space-5") }}

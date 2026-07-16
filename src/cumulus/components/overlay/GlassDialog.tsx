@@ -29,7 +29,7 @@
 // exactly one close owner — the disc simply moves — so this is a non-breaking,
 // additive extension.
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import type { CSSProperties, ReactElement, ReactNode } from "react";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { useIsDesktop } from "../../screens/use-is-desktop";
@@ -113,6 +113,14 @@ export interface GlassDialogProps {
   wide?: boolean;
   /** Force the edge-to-edge takeover treatment at any viewport width. */
   fullScreen?: boolean;
+  /**
+   * Region used to center a bounded desktop panel. `"battlefield"` measures
+   * the visible `main[data-battle-mobile]` stage, keeping a docked inspector
+   * rail outside the centering calculation while the modal layer continues to
+   * block the complete viewport. Mobile and full-screen dialogs remain
+   * viewport-aligned. Defaults to `"viewport"`.
+   */
+  desktopCenterTarget?: "viewport" | "battlefield";
   /** The scrolling body content. */
   children: ReactNode;
 }
@@ -139,12 +147,43 @@ export function GlassDialog({
   cutoutAwareClose = false,
   wide = false,
   fullScreen = false,
+  desktopCenterTarget = "viewport",
   children,
 }: GlassDialogProps): ReactElement {
   const isDesktop = useIsDesktop();
   const glass = glassSurfaceStyle();
   const boundedDesktop = isDesktop && !fullScreen;
   const wideDesktop = boundedDesktop && wide;
+  const centerOnBattlefield =
+    boundedDesktop && desktopCenterTarget === "battlefield";
+  const [battlefieldEndInset, setBattlefieldEndInset] = useState(0);
+
+  useLayoutEffect(() => {
+    if (!centerOnBattlefield) return;
+    const battlefield = document.querySelector<HTMLElement>(
+      "main[data-battle-mobile]",
+    );
+    if (battlefield === null) return;
+
+    const measure = (): void => {
+      setBattlefieldEndInset(
+        Math.max(
+          0,
+          window.innerWidth - battlefield.getBoundingClientRect().right,
+        ),
+      );
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    const observer = typeof ResizeObserver === "undefined"
+      ? null
+      : new ResizeObserver(measure);
+    observer?.observe(battlefield);
+    return () => {
+      window.removeEventListener("resize", measure);
+      observer?.disconnect();
+    };
+  }, [centerOnBattlefield]);
 
   // On a full-bleed mobile overlay whose screen-cutout box is known (a
   // device-screenshot mock-up), lift the close disc up beside the island. The
@@ -222,6 +261,7 @@ export function GlassDialog({
       onPress={onClose}
     />
   );
+  const desktopPadding = wideDesktop ? token("--space-8") : token("--space-7");
 
   return (
     <div
@@ -229,6 +269,7 @@ export function GlassDialog({
       aria-modal="true"
       aria-label={title}
       className="cumulus"
+      data-glass-dialog-desktop-center-target={desktopCenterTarget}
       style={{
         position: "fixed",
         inset: 0,
@@ -236,10 +277,13 @@ export function GlassDialog({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: boundedDesktop
-          ? wideDesktop
-            ? token("--space-8")
-            : token("--space-7")
+        paddingTop: boundedDesktop ? desktopPadding : 0,
+        paddingBottom: boundedDesktop ? desktopPadding : 0,
+        paddingLeft: boundedDesktop ? desktopPadding : 0,
+        paddingRight: boundedDesktop
+          ? centerOnBattlefield
+            ? `calc(${desktopPadding} + ${String(battlefieldEndInset)}px)`
+            : desktopPadding
           : 0,
       }}
     >

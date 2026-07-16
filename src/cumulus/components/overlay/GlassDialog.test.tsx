@@ -192,6 +192,46 @@ describe("GlassDialog", () => {
     });
   });
 
+  it("centers a desktop panel within the measured battlefield while retaining the viewport modal layer", () => {
+    stubMatchMedia(true);
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 1440,
+    });
+    const battlefield = document.createElement("main");
+    battlefield.dataset.battleMobile = "";
+    battlefield.getBoundingClientRect = () => ({
+      bottom: 900,
+      height: 900,
+      left: 0,
+      right: 1080,
+      top: 0,
+      width: 1080,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+    document.body.append(battlefield);
+
+    const { container, root } = mount(
+      <GlassDialog title="Foresee 2" desktopCenterTarget="battlefield">
+        <div>content</div>
+      </GlassDialog>,
+    );
+
+    const dialog = container.querySelector<HTMLElement>('[role="dialog"]');
+    expect(dialog?.style.position).toBe("fixed");
+    expect(dialog?.style.inset).toBe("0px");
+    expect(dialog?.style.paddingLeft).toBe("var(--space-7)");
+    expect(dialog?.style.paddingRight).toBe("calc(var(--space-7) + 360px)");
+    expect(dialog?.getAttribute("data-glass-dialog-desktop-center-target"))
+      .toBe("battlefield");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("keeps the close disc on the header row when cutoutAwareClose is set but no cutout box is injected", () => {
     // Default: hasInjectedDisplayCutout() is false, so even on mobile the disc
     // stays on the header's trailing edge.

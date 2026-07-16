@@ -119,6 +119,11 @@ describe("BattleForeseeOverlay", () => {
 
     expect(container.querySelector('[role="dialog"]')?.getAttribute("aria-label"))
       .toBe("Foresee 1");
+    expect(
+      container.querySelector('[role="dialog"]')
+        ?.getAttribute("data-glass-dialog-desktop-center-target"),
+    )
+      .toBe("battlefield");
     expect(deckIds(container)).toEqual(["battle-card-1"]);
     expect(Array.from(
       container.querySelectorAll<HTMLElement>("[data-foresee-indicator]"),

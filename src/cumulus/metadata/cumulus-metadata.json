@@ -2099,6 +2099,17 @@
       "description": "Force the edge-to-edge takeover treatment at any viewport width."
     },
     {
+      "name": "desktopCenterTarget",
+      "tsType": "\"battlefield\" | \"viewport\"",
+      "unionMembers": [
+        "battlefield",
+        "viewport"
+      ],
+      "required": false,
+      "defaultValue": "viewport",
+      "description": "Region used to center a bounded desktop panel. `\"battlefield\"` measures\nthe visible `main[data-battle-mobile]` stage, keeping a docked inspector\nrail outside the centering calculation while the modal layer continues to\nblock the complete viewport. Mobile and full-screen dialogs remain\nviewport-aligned. Defaults to `\"viewport\"`."
+    },
+    {
       "name": "children",
       "tsType": "ReactNode",
       "unionMembers": [],

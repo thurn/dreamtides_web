@@ -10,7 +10,7 @@ Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
 
 The glass overlay shell: a modal dialog with a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and an optional glass close disc) over a scrolling body. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.
 
-> **Guidance:** Dreamsign Revelation uses this shell for its Purge replacement dialog. Pass `onClose` for the shared close disc, or omit it when one explicit commit action must own completion. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant.
+> **Guidance:** Dreamsign Revelation uses this shell for its Purge replacement dialog. Pass `onClose` for the shared close disc, or omit it when one explicit commit action must own completion. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant. Battle overlays use `desktopCenterTarget="battlefield"` so a docked inspector rail stays outside the panel's centering region.
 
 ## Props
 
@@ -23,6 +23,7 @@ The glass overlay shell: a modal dialog with a bounded, centered glass panel on 
 | `cutoutAwareClose` | `boolean` | no | `false` | When true, on a full-bleed mobile overlay whose screen-cutout box is known (a device-screenshot mock-up) the close disc floats up beside the device island instead of sitting on the header row, so the header title clears the safe area below it. No effect on desktop or on real hardware (where the island geometry is not exposed). Defaults to `false`. |
 | `wide` | `boolean` | no | `false` | On desktop, widen the panel and trade the `85vh` height cap for explicit viewport padding so a roomy grid fits in two rows without internal scroll. No effect on the full-bleed mobile overlay. Defaults to `false`. A caller gates this on its own roomy-desktop media query. |
 | `fullScreen` | `boolean` | no | `false` | Force the edge-to-edge takeover treatment at any viewport width. |
+| `desktopCenterTarget` | `"battlefield" \| "viewport"` | no | `viewport` | Region used to center a bounded desktop panel. `"battlefield"` measures the visible `main[data-battle-mobile]` stage, keeping a docked inspector rail outside the centering calculation while the modal layer continues to block the complete viewport. Mobile and full-screen dialogs remain viewport-aligned. Defaults to `"viewport"`. |
 | `children` | `ReactNode` | yes | — | The scrolling body content. |
 
 ## Usage
@@ -48,7 +49,7 @@ import { GlassDialog } from "src/cumulus/components/overlay/GlassDialog";
 Omit `onClose` when the dialog must expose only its explicit commit action. The header remains and no dismissal control is rendered.
 
 ```tsx
-<GlassDialog title="Foresee 2" wide>
+<GlassDialog title="Foresee 2" desktopCenterTarget="battlefield">
   <ForeseeOrder />
   <GlassButton label="Confirm" variant="accent" placement="onGlass" onPress={confirm} />
 </GlassDialog>
