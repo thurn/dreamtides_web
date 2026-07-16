@@ -1342,6 +1342,100 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("keeps a dragged battlefield card out of shared layout motion through its committed reposition", () => {
+    const interactions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const view = makeView();
+    const movingCard = view.player.frontRank[0]?.card;
+    expect(movingCard).not.toBeNull();
+    expect(movingCard).not.toBeUndefined();
+    const { container, root } = mount(view, interactions);
+    const battlefieldCard = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-front-card"]',
+    );
+    const revealSource = battlefieldCard?.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+
+    act(() => {
+      revealSource?.dispatchEvent(
+        new PointerEvent("pointerdown", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 20,
+          clientY: 30,
+          pointerId: 13,
+          pointerType: "mouse",
+        }),
+      );
+      battlefieldCard?.dispatchEvent(
+        new PointerEvent("pointermove", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 44,
+          clientY: 70,
+          pointerId: 13,
+          pointerType: "mouse",
+        }),
+      );
+    });
+
+    expect(
+      battlefieldCard?.querySelector<HTMLElement>(
+        ":scope > [data-battle-card-motion]",
+      )?.dataset.battleCardLayoutMotion,
+    ).toBe("snap");
+
+    const committedView: MobileBattleView = {
+      ...view,
+      player: {
+        ...view.player,
+        backRank: view.player.backRank.map((slot, index) =>
+          index === 0 ? { ...slot, card: movingCard ?? null } : slot,
+        ),
+        frontRank: view.player.frontRank.map((slot, index) =>
+          index === 0 ? { ...slot, card: null } : slot,
+        ),
+      },
+    };
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <MobileBattleScreen
+            view={committedView}
+            interactions={interactions}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const committedCard = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-front-card"]',
+    );
+    expect(
+      committedCard?.closest<HTMLElement>("[data-battle-slot-id]")?.dataset
+        .battleSlotId,
+    ).toBe("player-back-empty");
+    expect(
+      committedCard?.querySelector<HTMLElement>(
+        ":scope > [data-battle-card-motion]",
+      )?.dataset.battleCardLayoutMotion,
+    ).toBe("snap");
+
+    act(() => root.unmount());
+  });
+
   it("keeps physical cards out of native HTML drag", () => {
     const interactions = {
       canInteract: true,

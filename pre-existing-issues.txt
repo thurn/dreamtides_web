@@ -79,3 +79,14 @@ input passed to the minifier.
 GHSA-xv26-6w52-cph6 advisories in the transitive `websocket-driver@0.7.4`
 dependency. `npm audit fix` reports that a non-breaking dependency update is
 available; dependency-lock maintenance is outside the offer-tile UI change.
+
+## A joined coop battle client can hide an open Foresee prompt
+
+During battle drag QA, materializing card UUID
+`647f5150-b2e0-424b-9480-27557642524e` parked its scripted Foresee prompt in
+the shared fold. A second client joined the same room and rendered the live
+battlefield without a Foresee overlay or prompt controls. Reposition intents
+from that client reached the room event log but bounced with
+`bounceReason: "prompt_pending"`. A client rendering a battle with an open
+prompt should always expose the matching resolution surface so the shared fold
+cannot appear playable while rejecting every new intent.
