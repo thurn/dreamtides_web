@@ -21,7 +21,6 @@ The shared card-browser surface: GlassPanel title and action chrome around a scr
 | `rightAccessory` | `GlassPanelAccessory` | no | — | Optional trailing header action. |
 | `footerAction` | `CardGalleryFooterAction` | no | — | Optional centered GlassButton rendered below the card grid. |
 | `footerActions` | `readonly [CardGalleryFooterAction, CardGalleryFooterAction]` | no | — | Optional equal-width pair of GlassButtons rendered below the card grid. |
-| `footerActionRow` | `readonly CardGalleryFooterAction[]` | no | — | Optional wrapping row of three or more GlassButtons below the card grid. |
 | `toolbar` | `CardGalleryToolbar` | no | — | Optional structured search, sort, and filter toolbar above the card grid. |
 | `cards` | `readonly CardGalleryCardView[]` | yes | — | Resolved cards rendered in order. |
 | `emptyLabel` | `string` | no | `No cards.` | Empty-state copy shown when `cards` is empty. |
@@ -30,6 +29,7 @@ The shared card-browser surface: GlassPanel title and action chrome around a scr
 | `frame` | `CardGalleryFrame` = `"floating" \| "fullBleed"` | no | `floating` | Panel frame geometry and material. `floating` uses liquid glass; `fullBleed` fills its parent edge-to-edge with the standard alpha scrim and no floating rim or shadow. Defaults to `floating`. |
 | `spacing` | `CardGallerySpacing` = `"compact" \| "spacious" \| "regular" \| "medium"` | no | `regular` | Internal padding and grid gap scale. Defaults to `regular`. |
 | `widthMode` | `CardGalleryWidthMode` = `"content" \| "fill"` | no | `content` | Floating-frame width behavior. Defaults to `content`. |
+| `heightMode` | `CardGalleryHeightMode` = `"content" \| "fill"` | no | `content` | Floating-frame height behavior. Defaults to `content`. |
 | `reserveStackedCopySpace` | `boolean` | no | `false` | Reserve the fanned-copy footprint before any card displays its copy. |
 | `testId` | `string` | no | — | Test id for the panel root. |
 | `cutoutAwareAccessory` | `boolean` | no | `false` | When a screen-cutout box is known, float the accessory beside the device island instead of sharing the header row. |
@@ -67,9 +67,9 @@ The shared card-browser surface: GlassPanel title and action chrome around a scr
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `search` | `CardGallerySearchControl` | no | Search-by-name control. |
-| `sort` | `CardGallerySelectControl` | no | Sort-order control. |
-| `filter` | `CardGallerySelectControl` | no | Type-filter control. |
+| `search` | `CardGallerySearchControl` | yes | Search-by-name control. |
+| `sort` | `CardGallerySelectControl` | yes | Sort-order control. |
+| `filter` | `CardGallerySelectControl` | yes | Type-filter control. |
 
 ### `endAction`: the `CardGalleryActionView` model
 

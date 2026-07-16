@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 import {
   CardGalleryPanel,
   type CardGalleryCardView,
-  type CardGalleryFooterAction,
+  type CardGalleryToolbar,
 } from "../components/card/CardGalleryPanel";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
@@ -29,8 +29,6 @@ export interface CardZoneBrowserOverlayProps {
   readonly zone: CardZoneBrowserZone;
   /** Resolved physical card entries in the zone's current order. */
   readonly cards: readonly CardGalleryCardView[];
-  /** Zone-specific actions fixed beneath the card grid. */
-  readonly actions?: readonly CardGalleryFooterAction[];
   /** Dismisses the browser. */
   readonly onClose: () => void;
   /** Starts a native drag for one physical card entry. */
@@ -118,7 +116,6 @@ export function CardZoneBrowserOverlay({
   ownerLabel,
   zone,
   cards,
-  actions = [],
   onClose,
   onCardDragStart,
   onCardDragEnd,
@@ -171,7 +168,7 @@ export function CardZoneBrowserOverlay({
   }, [isDesktop]);
 
   const subtitle = visibleCards.length === cards.length
-    ? `${String(cards.length)} ${cards.length === 1 ? "Card" : "Cards"}${zone === "deck" ? " · Top To Bottom" : ""}`
+    ? `${String(cards.length)} ${cards.length === 1 ? "Card" : "Cards"}`
     : `${String(visibleCards.length)} of ${String(cards.length)} Cards`;
   const galleryCards = visibleCards.map((card, index) => ({
     ...card,
@@ -179,6 +176,38 @@ export function CardZoneBrowserOverlay({
       ? { caption: { kind: "text" as const, text: `#${String(index + 1)}` } }
       : {}),
   }));
+  const toolbar: CardGalleryToolbar = zone === "void"
+    ? {
+        sort: {
+          ariaLabel: "Sort zone cards",
+          options: SORT_OPTIONS,
+          value: sort,
+          onChange: (value) => setSort(value as CardZoneBrowserSort),
+        },
+      }
+    : {
+        search: {
+          label: "Search Cards",
+          value: query,
+          onChange: setQuery,
+          placeholder: "Search by name…",
+          testId: "card-zone-browser-search",
+          inputRef: searchInputRef,
+        },
+        sort: {
+          ariaLabel: "Sort zone cards",
+          options: SORT_OPTIONS,
+          value: sort,
+          onChange: (value) => setSort(value as CardZoneBrowserSort),
+        },
+        filter: {
+          ariaLabel: "Filter zone cards by type",
+          options: FILTER_OPTIONS,
+          value: filter,
+          onChange: (value) => setFilter(value as CardZoneBrowserFilter),
+        },
+      };
+  const fillsDesktopFrame = isDesktop && zone !== "void";
 
   return (
     <motion.div
@@ -212,7 +241,11 @@ export function CardZoneBrowserOverlay({
           width: isDesktop
             ? `min(100%, ${String(DESKTOP_BROWSER_MAX_WIDTH_PX)}px)`
             : "100%",
-          height: isDesktop ? undefined : "100%",
+          height: fillsDesktopFrame
+            ? `calc(100vh - ${token("--space-8")} - ${token("--space-8")})`
+            : isDesktop
+              ? undefined
+              : "100%",
           maxHeight: isDesktop
             ? `calc(100vh - ${token("--space-8")} - ${token("--space-8")})`
             : undefined,
@@ -230,35 +263,15 @@ export function CardZoneBrowserOverlay({
             label: `Close ${zoneLabel(zone).toLocaleLowerCase()} browser`,
             onPress: onClose,
           }}
-          toolbar={{
-            search: {
-              label: "Search Cards",
-              value: query,
-              onChange: setQuery,
-              placeholder: "Search by name…",
-              testId: "card-zone-browser-search",
-              inputRef: searchInputRef,
-            },
-            sort: {
-              ariaLabel: "Sort zone cards",
-              options: SORT_OPTIONS,
-              value: sort,
-              onChange: (value) => setSort(value as CardZoneBrowserSort),
-            },
-            filter: {
-              ariaLabel: "Filter zone cards by type",
-              options: FILTER_OPTIONS,
-              value: filter,
-              onChange: (value) => setFilter(value as CardZoneBrowserFilter),
-            },
-          }}
+          toolbar={toolbar}
           cards={galleryCards}
           emptyLabel={cards.length === 0 ? "No Cards." : "No Matching Cards."}
           columns={isDesktop ? (zone === "deck" ? "five" : "three") : "four"}
           cardSize={isDesktop ? "standard" : "compact"}
           frame={isDesktop ? "floating" : "fullBleed"}
-          spacing={isDesktop ? "medium" : "compact"}
-          footerActionRow={actions}
+          spacing={isDesktop ? "spacious" : "medium"}
+          widthMode={fillsDesktopFrame ? "fill" : "content"}
+          heightMode={fillsDesktopFrame ? "fill" : "content"}
           cutoutAwareAccessory
           onCardDragStart={onCardDragStart}
           onCardDragEnd={onCardDragEnd}

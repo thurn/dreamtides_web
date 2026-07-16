@@ -209,11 +209,11 @@ export interface CardGallerySelectControl {
 /** Structured search, sort, and filter controls for browser galleries. */
 export interface CardGalleryToolbar {
   /** Search-by-name control. */
-  search: CardGallerySearchControl;
+  search?: CardGallerySearchControl;
   /** Sort-order control. */
-  sort: CardGallerySelectControl;
+  sort?: CardGallerySelectControl;
   /** Type-filter control. */
-  filter: CardGallerySelectControl;
+  filter?: CardGallerySelectControl;
 }
 
 /** The grid column count for the card body. */
@@ -234,6 +234,9 @@ export type CardGallerySpacing = "spacious" | "regular" | "medium" | "compact";
 /** Whether a floating gallery hugs its grid or fills the caller's width. */
 export type CardGalleryWidthMode = "content" | "fill";
 
+/** Whether a floating gallery hugs its content or fills the caller's height. */
+export type CardGalleryHeightMode = "content" | "fill";
+
 export interface CardGalleryPanelProps {
   /** Header title, rendered as an `<h2>`. */
   title: string;
@@ -245,8 +248,6 @@ export interface CardGalleryPanelProps {
   footerAction?: CardGalleryFooterAction;
   /** Optional equal-width pair of GlassButtons rendered below the card grid. */
   footerActions?: readonly [CardGalleryFooterAction, CardGalleryFooterAction];
-  /** Optional wrapping row of three or more GlassButtons below the card grid. */
-  footerActionRow?: readonly CardGalleryFooterAction[];
   /** Optional structured search, sort, and filter toolbar above the card grid. */
   toolbar?: CardGalleryToolbar;
   /** Resolved cards rendered in order. */
@@ -270,6 +271,8 @@ export interface CardGalleryPanelProps {
   spacing?: CardGallerySpacing;
   /** Floating-frame width behavior. Defaults to `content`. */
   widthMode?: CardGalleryWidthMode;
+  /** Floating-frame height behavior. Defaults to `content`. */
+  heightMode?: CardGalleryHeightMode;
   /** Reserve the fanned-copy footprint before any card displays its copy. */
   reserveStackedCopySpace?: boolean;
   /** Test id for the panel root. */
@@ -315,10 +318,6 @@ const CAPTION_BLOCK_PX = 22;
 // Reserving the rotated bounds keeps the copy clear of the next tile and the
 // gallery footer instead of relying on overflow that a scroll body will clip.
 const STACKED_COPY_RESERVE_PX = 40;
-// Browser footer actions wrap at this content width so five deck operations
-// remain readable without stretching across a wide gallery.
-const FOOTER_ACTION_MAX_WIDTH_PX = 180;
-
 interface GalleryMeasure {
   cardWidthPx: number;
   visibleRows: number;
@@ -436,6 +435,7 @@ function panelHeaderSpacingFor(
 ): GlassPanelHeaderSpacing {
   if (spacing === "compact") return "compact";
   if (spacing === "medium") return "medium";
+  if (spacing === "spacious") return "spacious";
   return "regular";
 }
 
@@ -617,7 +617,6 @@ export function CardGalleryPanel({
   rightAccessory,
   footerAction,
   footerActions,
-  footerActionRow,
   toolbar,
   cards,
   emptyLabel = "No cards.",
@@ -626,6 +625,7 @@ export function CardGalleryPanel({
   frame = "floating",
   spacing = "regular",
   widthMode = "content",
+  heightMode = "content",
   reserveStackedCopySpace = false,
   testId,
   cutoutAwareAccessory = false,
@@ -682,9 +682,7 @@ export function CardGalleryPanel({
   const bodyHeight = `calc(((${cardHeight} + ${String(rowSupplementPx)}px) * ${String(visibleRows)}) + (${galleryRowGap} * ${String(visibleGapSlots)}) + (${galleryPadding} * 2) + ${String(trailingReservePx)}px)`;
   const panelWidth = `calc((${cardWidth} * ${String(columnCount)}) + (${galleryColumnGap} * ${String(Math.max(0, columnCount - 1))}) + (${galleryPadding} * 2))`;
   const footerNode =
-    footerAction !== undefined ||
-    footerActions !== undefined ||
-    (footerActionRow !== undefined && footerActionRow.length > 0) ? (
+    footerAction !== undefined || footerActions !== undefined ? (
       <div
         style={{
           display: "grid",
@@ -694,39 +692,7 @@ export function CardGalleryPanel({
           paddingLeft: galleryPadding,
         }}
       >
-        {footerActionRow !== undefined && footerActionRow.length > 0 ? (
-          <div
-            data-gallery-footer-action-row=""
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              gap: token("--space-3"),
-              width: "100%",
-            }}
-          >
-            {footerActionRow.map((action) => (
-              <div
-                key={action.testId ?? action.label}
-                style={{
-                  flex: `0 1 ${String(FOOTER_ACTION_MAX_WIDTH_PX)}px`,
-                  minWidth: 0,
-                }}
-              >
-                <GlassButton
-                  placement={accessoryPlacement}
-                  label={action.label}
-                  glyph={action.glyph}
-                  essenceCost={action.essenceCost}
-                  disabled={action.disabled}
-                  variant={action.variant}
-                  testId={action.testId}
-                  onPress={action.onPress}
-                />
-              </div>
-            ))}
-          </div>
-        ) : footerActions !== undefined ? (
+        {footerActions !== undefined ? (
           <div
             data-gallery-footer-actions=""
             style={{
@@ -765,6 +731,9 @@ export function CardGalleryPanel({
       </div>
     ) : undefined;
 
+  const toolbarGap = spacing === "spacious"
+    ? token("--space-6")
+    : token("--space-4");
   const toolbarNode = toolbar === undefined ? null : (
     <div
       data-gallery-toolbar=""
@@ -773,48 +742,57 @@ export function CardGalleryPanel({
         display: "flex",
         flexWrap: "wrap",
         alignItems: "flex-end",
-        gap: token("--space-3"),
-        paddingTop: token("--space-4"),
+        gap: toolbarGap,
+        paddingTop: galleryPadding,
         paddingRight: galleryPadding,
+        paddingBottom: token("--space-4"),
         paddingLeft: galleryPadding,
       }}
     >
-      <div style={{ flex: "1 1 280px", minWidth: 0 }}>
-        <TextField
-          label={toolbar.search.label}
-          value={toolbar.search.value}
-          onChange={toolbar.search.onChange}
-          kind="search"
-          placeholder={toolbar.search.placeholder}
-          testId={toolbar.search.testId}
-          inputRef={toolbar.search.inputRef}
-        />
-      </div>
+      {toolbar.search === undefined ? null : (
+        <div style={{ flex: "1 1 280px", minWidth: 0 }}>
+          <TextField
+            label={toolbar.search.label}
+            value={toolbar.search.value}
+            onChange={toolbar.search.onChange}
+            kind="search"
+            placeholder={toolbar.search.placeholder}
+            testId={toolbar.search.testId}
+            inputRef={toolbar.search.inputRef}
+          />
+        </div>
+      )}
       <div
         style={{
           display: "flex",
           flex: "0 1 auto",
-          gap: token("--space-3"),
+          alignItems: "center",
+          gap: toolbarGap,
+          height: token("--touch-min"),
           minWidth: 0,
         }}
       >
-        <Select
-          leadingGlyph={GLYPHS.sort}
-          ariaLabel={toolbar.sort.ariaLabel}
-          options={[...toolbar.sort.options]}
-          value={toolbar.sort.value}
-          onChange={toolbar.sort.onChange}
-          size="sm"
-        />
-        <Select
-          leadingGlyph={GLYPHS.filter}
-          ariaLabel={toolbar.filter.ariaLabel}
-          options={[...toolbar.filter.options]}
-          value={toolbar.filter.value}
-          onChange={toolbar.filter.onChange}
-          size="sm"
-          align="end"
-        />
+        {toolbar.sort === undefined ? null : (
+          <Select
+            leadingGlyph={GLYPHS.sort}
+            ariaLabel={toolbar.sort.ariaLabel}
+            options={[...toolbar.sort.options]}
+            value={toolbar.sort.value}
+            onChange={toolbar.sort.onChange}
+            size="md"
+          />
+        )}
+        {toolbar.filter === undefined ? null : (
+          <Select
+            leadingGlyph={GLYPHS.filter}
+            ariaLabel={toolbar.filter.ariaLabel}
+            options={[...toolbar.filter.options]}
+            value={toolbar.filter.value}
+            onChange={toolbar.filter.onChange}
+            size="md"
+            align="end"
+          />
+        )}
       </div>
     </div>
   );
@@ -829,6 +807,7 @@ export function CardGalleryPanel({
       data-gallery-spacing={spacing}
       data-gallery-card-size={cardSize}
       data-gallery-width-mode={widthMode}
+      data-gallery-height-mode={heightMode}
       data-gallery-reserves-stacked-copy={reserveStackedCopySpace || undefined}
       style={{
         position: "relative",
@@ -836,7 +815,8 @@ export function CardGalleryPanel({
         width:
           frame === "fullBleed" || widthMode === "fill" ? "100%" : panelWidth,
         maxWidth: "100%",
-        height: frame === "fullBleed" ? "100%" : undefined,
+        height:
+          frame === "fullBleed" || heightMode === "fill" ? "100%" : undefined,
         maxHeight: "100%",
         minHeight: 0,
         pointerEvents: "auto",
@@ -857,9 +837,15 @@ export function CardGalleryPanel({
         <div
           ref={bodyRef}
           style={{
-            flex: frame === "fullBleed" ? "1 1 auto" : `0 1 ${bodyHeight}`,
+            flex:
+              frame === "fullBleed" || heightMode === "fill"
+                ? "1 1 auto"
+                : `0 1 ${bodyHeight}`,
             minHeight: 0,
-            height: frame === "fullBleed" ? undefined : bodyHeight,
+            height:
+              frame === "fullBleed" || heightMode === "fill"
+                ? undefined
+                : bodyHeight,
             overflowY: "auto",
             WebkitOverflowScrolling: "touch",
             touchAction: "pan-y",

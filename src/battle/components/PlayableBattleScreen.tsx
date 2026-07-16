@@ -1290,9 +1290,6 @@ function PlayableBattleScreenInner({
             }}
             state={board}
             onClose={() => setOpenZoneBrowser(null)}
-            onCommand={handleCommand}
-            onOpenForesee={(side, count) => handleOpenForesee(side, count, "zone-browser-deck")}
-            onOpenReorderMultiple={(side) => setOpenDeckOrderPicker(side)}
             onCardContextMenu={handleCardContextMenu}
             onCardDragStart={handleCardDragStart}
             onCardDragEnd={handleCardDragEnd}

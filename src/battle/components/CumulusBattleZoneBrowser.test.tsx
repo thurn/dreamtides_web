@@ -31,9 +31,6 @@ function mount(
   readonly container: HTMLDivElement;
   readonly root: Root;
   readonly state: ReturnType<typeof createState>;
-  readonly onCommand: ReturnType<typeof vi.fn>;
-  readonly onOpenForesee: ReturnType<typeof vi.fn>;
-  readonly onOpenReorderMultiple: ReturnType<typeof vi.fn>;
   readonly onCardContextMenu: ReturnType<typeof vi.fn>;
   readonly onCardDragStart: ReturnType<typeof vi.fn>;
 } {
@@ -42,9 +39,6 @@ function mount(
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
-  const onCommand = vi.fn();
-  const onOpenForesee = vi.fn();
-  const onOpenReorderMultiple = vi.fn();
   const onCardContextMenu = vi.fn();
   const onCardDragStart = vi.fn();
 
@@ -55,9 +49,6 @@ function mount(
           browser={{ side: "player", zone }}
           state={state}
           onClose={() => undefined}
-          onCommand={onCommand}
-          onOpenForesee={onOpenForesee}
-          onOpenReorderMultiple={onOpenReorderMultiple}
           onCardContextMenu={onCardContextMenu}
           onCardDragStart={onCardDragStart}
         />
@@ -69,9 +60,6 @@ function mount(
     container,
     root,
     state,
-    onCommand,
-    onOpenForesee,
-    onOpenReorderMultiple,
     onCardContextMenu,
     onCardDragStart,
   };
@@ -94,7 +82,7 @@ afterEach(() => {
 });
 
 describe("CumulusBattleZoneBrowser", () => {
-  it("renders the deck browser controls, ordered cards, and per-zone actions", () => {
+  it("renders stable deck browser controls and ordered cards without actions", () => {
     const mounted = mount("deck");
     const { container, state } = mounted;
 
@@ -112,31 +100,18 @@ describe("CumulusBattleZoneBrowser", () => {
       state.sides.player.deck.length,
     );
     expect(container.textContent).toContain("#1");
-    expect(container.textContent).toContain("Reveal Top");
-    expect(container.textContent).toContain("Play From Top");
-    expect(container.textContent).toContain("Hide Top");
-    expect(container.textContent).toContain("Foresee…");
-    expect(container.textContent).toContain("Reorder Full Deck");
-
-    act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="card-zone-browser-reveal-top"]',
-      )?.click();
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="card-zone-browser-foresee"]',
-      )?.click();
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="card-zone-browser-reorder-full"]',
-      )?.click();
-    });
-
-    expect(mounted.onCommand).toHaveBeenCalledWith({
-      id: "DEBUG_EDIT",
-      edit: { kind: "REVEAL_DECK_TOP", count: 3, side: "player" },
-      sourceSurface: "zone-browser-deck",
-    });
-    expect(mounted.onOpenForesee).toHaveBeenCalledWith("player", 1);
-    expect(mounted.onOpenReorderMultiple).toHaveBeenCalledWith("player");
+    expect(container.textContent).not.toContain("Top To Bottom");
+    expect(container.textContent).not.toContain("Reveal Top");
+    expect(container.textContent).not.toContain("Play From Top");
+    expect(container.textContent).not.toContain("Hide Top");
+    expect(container.textContent).not.toContain("Foresee…");
+    expect(container.textContent).not.toContain("Reorder Full Deck");
+    expect(
+      container.querySelector<HTMLElement>("section")?.dataset.galleryWidthMode,
+    ).toBe("fill");
+    expect(
+      container.querySelector<HTMLElement>("section")?.dataset.galleryHeightMode,
+    ).toBe("fill");
 
     act(() => mounted.root.unmount());
   });
@@ -167,7 +142,7 @@ describe("CumulusBattleZoneBrowser", () => {
   });
 
   it.each(["void", "banished"] as const)(
-    "renders %s without deck-only actions and keeps card debug gestures",
+    "renders %s controls and keeps card debug gestures",
     (zone) => {
       let zoneCardId = "";
       const mounted = mount(zone, (state) => {
@@ -182,6 +157,19 @@ describe("CumulusBattleZoneBrowser", () => {
       );
 
       expect(mounted.container.textContent).not.toContain("Reveal Top");
+      if (zone === "void") {
+        expect(mounted.container.querySelector("input[type=search]")).toBeNull();
+        expect(
+          mounted.container.querySelector(
+            'button[aria-label="Filter zone cards by type"]',
+          ),
+        ).toBeNull();
+      } else {
+        expect(mounted.container.querySelector("input[type=search]")).not.toBeNull();
+      }
+      expect(
+        mounted.container.querySelector('button[aria-label="Sort zone cards"]'),
+      ).not.toBeNull();
       expect(entry?.draggable).toBe(true);
 
       act(() => {

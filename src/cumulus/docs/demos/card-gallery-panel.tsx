@@ -109,11 +109,6 @@ function CardGalleryPanelDemo() {
         frame="floating"
         spacing="spacious"
         onCardPress={(entryId) => setSelected(entryId)}
-        footerActionRow={[
-          { label: "Reveal Top", onPress: () => undefined },
-          { label: "Hide Top", onPress: () => undefined },
-          { label: "Reorder", onPress: () => undefined },
-        ]}
         endAction={{
           entryId: "restock",
           glyph: GLYPHS.refresh,

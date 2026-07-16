@@ -2,9 +2,7 @@ import type {
   MouseEvent as ReactMouseEvent,
   ReactElement,
 } from "react";
-import type { CardGalleryFooterAction } from "../../cumulus/components/card/CardGalleryPanel";
 import { CardZoneBrowserOverlay } from "../../cumulus/screens/CardZoneBrowserOverlay";
-import type { BattleCommand } from "../debug/commands";
 import type {
   BattleCommandSourceSurface,
   BattleMutableState,
@@ -21,9 +19,6 @@ export interface CumulusBattleZoneBrowserProps {
   };
   readonly state: BattleMutableState;
   readonly onClose: () => void;
-  readonly onCommand: (command: BattleCommand) => void;
-  readonly onOpenForesee?: (side: BattleSide, count: number) => void;
-  readonly onOpenReorderMultiple?: (side: BattleSide) => void;
   readonly onCardContextMenu?: (
     battleCardId: string,
     event: ReactMouseEvent<HTMLDivElement>,
@@ -53,9 +48,6 @@ export function CumulusBattleZoneBrowser({
   browser,
   state,
   onClose,
-  onCommand,
-  onOpenForesee,
-  onOpenReorderMultiple,
   onCardContextMenu,
   onCardDragEnd,
   onCardDragStart,
@@ -74,61 +66,6 @@ export function CumulusBattleZoneBrowser({
           draggable: true,
         }];
   });
-  const topDeckCount = Math.min(3, cardIds.length);
-  const actions: readonly CardGalleryFooterAction[] = browser.zone === "deck"
-    ? [
-        {
-          label: "Reveal Top",
-          disabled: topDeckCount === 0,
-          testId: "card-zone-browser-reveal-top",
-          onPress: () => onCommand({
-            id: "DEBUG_EDIT",
-            edit: {
-              kind: "REVEAL_DECK_TOP",
-              count: topDeckCount,
-              side: browser.side,
-            },
-            sourceSurface,
-          }),
-        },
-        {
-          label: "Play From Top",
-          disabled: cardIds.length === 0,
-          testId: "card-zone-browser-play-top",
-          onPress: () => onCommand({
-            id: "DEBUG_EDIT",
-            edit: { kind: "PLAY_FROM_DECK_TOP", side: browser.side },
-            sourceSurface,
-          }),
-        },
-        {
-          label: "Hide Top",
-          disabled: topDeckCount === 0,
-          testId: "card-zone-browser-hide-top",
-          onPress: () => onCommand({
-            id: "DEBUG_EDIT",
-            edit: {
-              kind: "HIDE_DECK_TOP",
-              count: topDeckCount,
-              side: browser.side,
-            },
-            sourceSurface,
-          }),
-        },
-        {
-          label: "Foresee…",
-          disabled: cardIds.length === 0,
-          testId: "card-zone-browser-foresee",
-          onPress: () => onOpenForesee?.(browser.side, 1),
-        },
-        {
-          label: "Reorder Full Deck",
-          disabled: cardIds.length === 0,
-          testId: "card-zone-browser-reorder-full",
-          onPress: () => onOpenReorderMultiple?.(browser.side),
-        },
-      ]
-    : [];
   const isDropTarget =
     pendingDragSourceSurface !== null && onCardDropToBrowser !== undefined;
 
@@ -152,7 +89,6 @@ export function CumulusBattleZoneBrowser({
         ownerLabel={browser.side === "player" ? "Your" : "Enemy"}
         zone={browser.zone}
         cards={cards}
-        actions={actions}
         onClose={onClose}
         onCardDragStart={(battleCardId) => {
           onCardDragStart?.(battleCardId, sourceSurface);

@@ -630,14 +630,6 @@
       "description": "Optional equal-width pair of GlassButtons rendered below the card grid."
     },
     {
-      "name": "footerActionRow",
-      "tsType": "readonly CardGalleryFooterAction[]",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional wrapping row of three or more GlassButtons below the card grid."
-    },
-    {
       "name": "toolbar",
       "tsType": "CardGalleryToolbar",
       "unionMembers": [],
@@ -650,19 +642,19 @@
           {
             "name": "search",
             "tsType": "CardGallerySearchControl",
-            "optional": false,
+            "optional": true,
             "description": "Search-by-name control."
           },
           {
             "name": "sort",
             "tsType": "CardGallerySelectControl",
-            "optional": false,
+            "optional": true,
             "description": "Sort-order control."
           },
           {
             "name": "filter",
             "tsType": "CardGallerySelectControl",
-            "optional": false,
+            "optional": true,
             "description": "Type-filter control."
           }
         ]
@@ -745,6 +737,17 @@
       "required": false,
       "defaultValue": "content",
       "description": "Floating-frame width behavior. Defaults to `content`."
+    },
+    {
+      "name": "heightMode",
+      "tsType": "CardGalleryHeightMode",
+      "unionMembers": [
+        "content",
+        "fill"
+      ],
+      "required": false,
+      "defaultValue": "content",
+      "description": "Floating-frame height behavior. Defaults to `content`."
     },
     {
       "name": "reserveStackedCopySpace",
