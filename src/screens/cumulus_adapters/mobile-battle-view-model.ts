@@ -14,8 +14,10 @@ import {
 } from "../../battle/types";
 import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
 import { asCardId } from "../../types/card-identity";
+import type { PendingPrompt } from "../../rules/battle/fold";
 import {
   type MobileBattleCardView,
+  type MobileBattleCardPickerView,
   type MobileBattlePhase,
   type MobileBattleSideView,
   type MobileBattleSlotView,
@@ -35,6 +37,7 @@ const FALLBACK_PLAYER_DREAMCALLER = {
 export type MobileBattleInit = BattleInit;
 export type MobileBattleBoard = BattleMutableState;
 export type MobileBattleDreamcaller = BattleDreamcallerSummary;
+export type MobileBattlePendingPrompt = PendingPrompt;
 export type MobileBattleAiProposal = Pick<AiProposal, "kind" | "description"> &
   Partial<Pick<AiProposal, "trace">>;
 
@@ -42,6 +45,8 @@ export interface MobileBattleInspectorOptions {
   readonly aiMode: boolean;
   readonly isOpponentHandRevealed: boolean;
   readonly isPlayerHandHidden: boolean;
+  readonly pendingPrompt?: PendingPrompt | null;
+  readonly confirmedPromptId?: number | null;
 }
 
 export function buildMobileBattleView(
@@ -64,6 +69,11 @@ export function buildMobileBattleView(
           description: aiProposal.description,
           canReject: aiProposal.kind === "action",
         },
+    cardPicker: buildCardPickerView(
+      inspectorOptions.pendingPrompt ?? null,
+      inspectorOptions.confirmedPromptId ?? null,
+      board,
+    ),
     dreamwell: buildDreamwellView(init, board),
     activeSide: board.activeSide,
     phase: mobileBattlePhase(board.phase),
@@ -86,6 +96,32 @@ export function buildMobileBattleView(
         instance.definition.energyCost <= board.sides.player.currentEnergy,
     ),
     inspector: buildInspectorView(init, board, aiProposal, inspectorOptions),
+  };
+}
+
+function buildCardPickerView(
+  pendingPrompt: PendingPrompt | null,
+  confirmedPromptId: number | null,
+  board: BattleMutableState,
+): MobileBattleCardPickerView | null {
+  if (
+    pendingPrompt === null ||
+    pendingPrompt.options.kind !== "pick-cards"
+  ) {
+    return null;
+  }
+  const handIds = new Set(board.sides[pendingPrompt.run.side].hand);
+  if (!pendingPrompt.options.candidateIds.every((id) => handIds.has(id))) {
+    return null;
+  }
+  return {
+    key: String(pendingPrompt.promptId),
+    side: pendingPrompt.run.side,
+    label: pendingPrompt.options.label,
+    candidateIds: [...pendingPrompt.options.candidateIds],
+    count: pendingPrompt.options.count,
+    optional: pendingPrompt.options.optional,
+    canResolve: confirmedPromptId === pendingPrompt.promptId,
   };
 }
 

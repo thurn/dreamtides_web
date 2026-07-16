@@ -113,6 +113,7 @@ function makeView(): MobileBattleView {
   return {
     battleId: "battle-mobile-fixture",
     aiApproval: null,
+    cardPicker: null,
     dreamwell: null,
     activeSide: "player",
     phase: "day",
@@ -786,6 +787,191 @@ describe("MobileBattleScreen", () => {
       .toContain("var(--positive)");
     expect(handCards[2]?.querySelector<HTMLElement>(".card-view")?.style.boxShadow)
       .not.toContain("var(--positive)");
+
+    act(() => root.unmount());
+  });
+
+  it("uses hand cards and the controls row for an inline card-picker prompt", () => {
+    const view = makeView();
+    const candidateIds = view.playerHand.slice(0, 2).map((card) => card.id);
+    const pickerView: MobileBattleView = {
+      ...view,
+      cardPicker: {
+        key: "prompt-42",
+        side: "player",
+        label: "Discard 2 cards",
+        candidateIds,
+        count: 2,
+        optional: false,
+        canResolve: true,
+      },
+      playerHand: view.playerHand.map((card, index) => ({
+        ...card,
+        showPlayableOutline: index === 2,
+      })),
+    };
+    const onCardPickerSelectionChange = vi.fn();
+    const onCardPickerSubmit = vi.fn();
+    const onHandCardActivate = vi.fn();
+    const { container, root } = mount(pickerView, {
+      canInteract: false,
+      pendingCardId: null,
+      onHandCardActivate,
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+      onCardPickerSelectionChange,
+      onCardPickerSubmit,
+    });
+
+    const handCards = () => Array.from(
+      container.querySelectorAll<HTMLElement>(
+        '[data-battle-card-zone="player-hand"]',
+      ),
+    );
+    const cardShadow = (index: number): string =>
+      handCards()[index]
+        ?.querySelector<HTMLElement>(".card-view")
+        ?.style.boxShadow ?? "";
+    const submit = () => container.querySelector<HTMLButtonElement>(
+      '[data-testid="battle-card-picker-submit"]',
+    );
+
+    expect(container.querySelector("[data-battle-phase-controls]")).toBeNull();
+    expect(container.querySelector("[data-battle-card-picker-controls]")).not.toBeNull();
+    expect(container.querySelector("[data-battle-card-picker-progress]")?.textContent)
+      .toBe("Discard 2 cards · 0/2");
+    expect(submit()?.getAttribute("aria-disabled")).toBe("true");
+    handCards().forEach((_card, index) => {
+      expect(cardShadow(index)).not.toContain("var(--positive)");
+      expect(cardShadow(index)).not.toContain("var(--color-gold-light)");
+    });
+
+    act(() => handCards()[0]?.click());
+
+    expect(cardShadow(0)).toContain("var(--color-gold-light)");
+    expect(cardShadow(1)).not.toContain("var(--color-gold-light)");
+    expect(submit()?.getAttribute("aria-disabled")).toBe("true");
+    expect(onCardPickerSelectionChange).toHaveBeenLastCalledWith([
+      candidateIds[0],
+    ]);
+
+    act(() => handCards()[2]?.click());
+    expect(onCardPickerSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onHandCardActivate).not.toHaveBeenCalled();
+
+    act(() => handCards()[1]?.click());
+
+    expect(cardShadow(0)).toContain("var(--color-gold-light)");
+    expect(cardShadow(1)).toContain("var(--color-gold-light)");
+    expect(submit()?.getAttribute("aria-disabled")).toBeNull();
+    expect(container.querySelector("[data-battle-card-picker-progress]")?.textContent)
+      .toBe("Discard 2 cards · 2/2");
+
+    act(() => submit()?.click());
+    expect(onCardPickerSubmit).toHaveBeenCalledWith(candidateIds);
+    expect(onHandCardActivate).not.toHaveBeenCalled();
+
+    act(() => root.unmount());
+  });
+
+  it("keeps an optional inline card-picker skippable", () => {
+    const view = makeView();
+    const onCardPickerSkip = vi.fn();
+    const { container, root } = mount({
+      ...view,
+      cardPicker: {
+        key: "prompt-optional",
+        side: "player",
+        label: "Choose a card",
+        candidateIds: [view.playerHand[0]?.id ?? "missing"],
+        count: 1,
+        optional: true,
+        canResolve: true,
+      },
+    }, {
+      canInteract: false,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+      onCardPickerSkip,
+    });
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="battle-card-picker-skip"]',
+      )?.click();
+    });
+    expect(onCardPickerSkip).toHaveBeenCalledOnce();
+
+    act(() => root.unmount());
+  });
+
+  it("reveals the full enemy hand when that side owns the inline picker", () => {
+    const view = makeView();
+    const candidateId = view.enemyHandCardIds[7];
+    if (candidateId === undefined) throw new Error("expected an enemy hand card");
+    const onCardPickerSubmit = vi.fn();
+    const { container, root } = mount({
+      ...view,
+      cardPicker: {
+        key: "prompt-enemy",
+        side: "enemy",
+        label: "Choose a card to discard",
+        candidateIds: view.enemyHandCardIds,
+        count: 1,
+        optional: false,
+        canResolve: true,
+      },
+    }, {
+      canInteract: false,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+      onCardPickerSubmit,
+    });
+    const enemyHand = container.querySelector<HTMLElement>(
+      '[data-battle-mobile-row="enemy-hand"]',
+    );
+    const enemyCards = enemyHand?.querySelectorAll<HTMLElement>(
+      ':scope > [data-battle-card-zone="enemy-hand"]',
+    );
+    const candidate = enemyHand?.querySelector<HTMLElement>(
+      `[data-battle-card-id="${candidateId}"]`,
+    );
+
+    expect(enemyHand?.dataset.battleHandVisibleCount).toBe("8");
+    expect(enemyCards).toHaveLength(8);
+    expect(candidate?.dataset.battleCardFace).toBe("up");
+
+    act(() => {
+      candidate?.querySelector<HTMLElement>(
+        '[data-battle-card-zone="enemy-hand"]',
+      )?.click();
+    });
+
+    expect(
+      candidate?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
+    ).toContain("var(--color-gold-light)");
+    act(() => {
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="battle-card-picker-submit"]',
+      )?.click();
+    });
+    expect(onCardPickerSubmit).toHaveBeenCalledWith([candidateId]);
 
     act(() => root.unmount());
   });

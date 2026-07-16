@@ -8,6 +8,7 @@ import type {
   BattleMutableState,
 } from "../../battle/types";
 import { buildMobileBattleView } from "./mobile-battle-view-model";
+import type { PendingPrompt } from "../../rules/battle/fold";
 
 const ENEMY_DREAMCALLER: BattleDreamcallerSummary = {
   id: "enemy-dreamcaller-uuid",
@@ -212,6 +213,104 @@ describe("buildMobileBattleView", () => {
       description: "Pass from Day to Dusk.",
       canReject: false,
     });
+  });
+
+  it("maps a confirmed pick-cards prompt into the inline hand picker", () => {
+    const init = makeInit();
+    const board = makeBoard(init);
+    const prompt = {
+      promptId: 42,
+      run: {
+        scriptRef: { table: "dreamwell", id: "prompt-fixture" },
+        cursor: [0],
+        side: "player",
+      },
+      kind: "pick-cards",
+      options: {
+        kind: "pick-cards",
+        label: "Discard 2 cards",
+        candidateIds: board.sides.player.hand.slice(0, 2),
+        count: 2,
+        optional: false,
+        highlightCardIds: [],
+      },
+    } satisfies PendingPrompt;
+
+    const optimistic = buildMobileBattleView(
+      init,
+      board,
+      ENEMY_DREAMCALLER,
+      null,
+      {
+        aiMode: false,
+        isOpponentHandRevealed: false,
+        isPlayerHandHidden: false,
+        pendingPrompt: prompt,
+        confirmedPromptId: null,
+      },
+    );
+    expect(optimistic.cardPicker).toEqual({
+      key: "42",
+      side: "player",
+      label: "Discard 2 cards",
+      candidateIds: prompt.options.candidateIds,
+      count: 2,
+      optional: false,
+      canResolve: false,
+    });
+
+    const confirmed = buildMobileBattleView(
+      init,
+      board,
+      ENEMY_DREAMCALLER,
+      null,
+      {
+        aiMode: false,
+        isOpponentHandRevealed: false,
+        isPlayerHandHidden: false,
+        pendingPrompt: prompt,
+        confirmedPromptId: prompt.promptId,
+      },
+    );
+    expect(confirmed.cardPicker?.canResolve).toBe(true);
+  });
+
+  it("does not map a pick-cards prompt whose candidates are outside the hand", () => {
+    const init = makeInit();
+    const board = makeBoard(init);
+    const prompt = {
+      promptId: 43,
+      run: {
+        scriptRef: { table: "dreamwell", id: "prompt-fixture" },
+        cursor: [0],
+        side: "player",
+      },
+      kind: "pick-cards",
+      options: {
+        kind: "pick-cards",
+        label: "Choose a void card",
+        candidateIds: [board.sides.player.void[0] ?? "void-card"],
+        count: 1,
+        optional: false,
+        highlightCardIds: [],
+      },
+    } satisfies PendingPrompt;
+
+    const view = buildMobileBattleView(
+      init,
+      board,
+      ENEMY_DREAMCALLER,
+      null,
+      {
+        aiMode: false,
+        isOpponentHandRevealed: false,
+        isPlayerHandHidden: false,
+        pendingPrompt: prompt,
+        confirmedPromptId: prompt.promptId,
+      },
+    );
+
+    expect(view.cardPicker).toBeNull();
   });
 
   it("builds readable inspector snapshot, side zones, availability, visibility, and AI states", () => {

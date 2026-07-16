@@ -324,6 +324,25 @@ function PlayableBattleScreenInner({
     [actions, pendingPrompt, confirmedPromptId],
   );
 
+  const logCumulusCardPickerInteraction = useCallback((
+    action: "selection-changed" | "submit" | "skip",
+    chosenIds: readonly string[],
+  ): void => {
+    if (pendingPrompt?.options.kind !== "pick-cards") return;
+    logEvent("battle_cumulus_card_picker_interaction", {
+      ...createBattleLogBaseFields(board, {
+        sourceSurface: "hand-tray",
+        selectedCardId: chosenIds[0] ?? null,
+      }),
+      action,
+      promptId: pendingPrompt.promptId,
+      candidateCardIds: pendingPrompt.options.candidateIds,
+      chosenCardIds: chosenIds,
+      requiredCount: pendingPrompt.options.count,
+      optional: pendingPrompt.options.optional,
+    });
+  }, [board, pendingPrompt]);
+
   const handleCommand = useCallback((command: BattleCommand): void => {
     setPendingDrag(null);
     const intentKey = automaticBattleIntentKey(
@@ -1339,8 +1358,10 @@ function PlayableBattleScreenInner({
           aiMode={aiMode}
           isOpponentHandRevealed={isOpponentHandRevealed}
           isPlayerHandHidden={isPlayerHandHidden}
+          pendingPrompt={pendingPrompt}
+          confirmedPromptId={confirmedPromptId}
           interactions={{
-            canInteract: canPlayerAct,
+            canInteract: canPlayerAct && pendingPrompt === null,
             pendingCardId: pendingDragCardId,
             pendingCardSource,
             pendingCardOwner,
@@ -1376,6 +1397,17 @@ function PlayableBattleScreenInner({
             },
             onApproveAiProposal: approve,
             onRejectAiProposal: reject,
+            onCardPickerSelectionChange: (ids) => {
+              logCumulusCardPickerInteraction("selection-changed", ids);
+            },
+            onCardPickerSubmit: (ids) => {
+              logCumulusCardPickerInteraction("submit", ids);
+              resolvePendingPrompt({ kind: "pick-cards", chosenIds: [...ids] });
+            },
+            onCardPickerSkip: () => {
+              logCumulusCardPickerInteraction("skip", []);
+              resolvePendingPrompt({ kind: "pick-cards", chosenIds: [] });
+            },
             onFillBattlefieldPreview: handleFillBattlefieldPreview,
             onFillTwentyCardBattlefieldPreview:
               handleFillTwentyCardBattlefieldPreview,

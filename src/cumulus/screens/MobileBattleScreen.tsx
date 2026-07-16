@@ -34,6 +34,7 @@ import {
   LONG_PRESS_THRESHOLD_MS,
   POINTER_MOVEMENT_SLOP_PX,
 } from "../primitives/pointer-gesture";
+import type { CumulusColor } from "../primitives/color";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
 import { MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS } from "./mobile-battle-layout";
@@ -97,6 +98,7 @@ export interface MobileBattleDreamwellView {
 export interface MobileBattleView {
   readonly battleId: string;
   readonly aiApproval: MobileBattleAiApprovalView | null;
+  readonly cardPicker: MobileBattleCardPickerView | null;
   readonly dreamwell: MobileBattleDreamwellView | null;
   readonly activeSide: MobileBattleOwner;
   readonly phase: MobileBattlePhase;
@@ -106,6 +108,17 @@ export interface MobileBattleView {
   readonly player: MobileBattleSideView;
   readonly playerHand: readonly MobileBattleCardView[];
   readonly inspector: MobileBattleInspectorView;
+}
+
+/** An in-place hand-card decision owned by the authoritative battle prompt. */
+export interface MobileBattleCardPickerView {
+  readonly key: string;
+  readonly side: MobileBattleOwner;
+  readonly label: string;
+  readonly candidateIds: readonly string[];
+  readonly count: number;
+  readonly optional: boolean;
+  readonly canResolve: boolean;
 }
 
 export interface MobileBattleScreenProps {
@@ -213,9 +226,26 @@ export interface MobileBattleInteractions {
   readonly onNextPhase: () => void;
   readonly onApproveAiProposal?: () => void;
   readonly onRejectAiProposal?: () => void;
+  readonly onCardPickerSelectionChange?: (chosenIds: readonly string[]) => void;
+  readonly onCardPickerSubmit?: (chosenIds: readonly string[]) => void;
+  readonly onCardPickerSkip?: () => void;
   readonly onFillBattlefieldPreview?: () => void;
   readonly onFillTwentyCardBattlefieldPreview?: () => void;
   readonly onInspectorAction?: (action: MobileBattleInspectorAction) => void;
+}
+
+function toggleCardPickerSelection(
+  selectedIds: readonly string[],
+  cardId: string,
+  count: number,
+): string[] {
+  if (selectedIds.includes(cardId)) {
+    return selectedIds.filter((selectedId) => selectedId !== cardId);
+  }
+  if (selectedIds.length < count) {
+    return [...selectedIds, cardId];
+  }
+  return count === 1 ? [cardId] : [...selectedIds];
 }
 
 const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
@@ -374,13 +404,24 @@ function EnemyHand({
   cards,
   revealed,
   isDesktop,
+  cardPicker,
+  selectedPickerCardIds,
+  onPickerCardToggle,
 }: {
   readonly cardIds: readonly string[];
   readonly cards: readonly MobileBattleCardView[];
   readonly revealed: boolean;
   readonly isDesktop: boolean;
+  readonly cardPicker: MobileBattleCardPickerView | null;
+  readonly selectedPickerCardIds: readonly string[];
+  readonly onPickerCardToggle: (cardId: string) => void;
 }) {
-  const visibleCardIds = cardIds.slice(0, ENEMY_HAND_VISIBLE_CARD_CAP);
+  const enemyCardPicker = cardPicker?.side === "enemy" ? cardPicker : null;
+  const pickerCandidateIds = new Set(enemyCardPicker?.candidateIds ?? []);
+  const showFaceUp = revealed || enemyCardPicker !== null;
+  const visibleCardIds = enemyCardPicker === null
+    ? cardIds.slice(0, ENEMY_HAND_VISIBLE_CARD_CAP)
+    : cardIds;
   return (
     <div
       data-battle-mobile-row="enemy-hand"
@@ -411,7 +452,13 @@ function EnemyHand({
             key={cardId}
             data-battle-card-id={cardId}
             data-battle-card-zone="enemy-hand"
-            data-battle-card-face={revealed ? "up" : "down"}
+            data-battle-card-face={showFaceUp ? "up" : "down"}
+            data-battle-card-picker-candidate={
+              pickerCandidateIds.has(cardId) ? "true" : undefined
+            }
+            data-battle-card-picker-selected={
+              selectedPickerCardIds.includes(cardId) ? "true" : undefined
+            }
             style={{
               position: isDesktop ? "relative" : "absolute",
               top: 0,
@@ -426,8 +473,31 @@ function EnemyHand({
               zIndex: index + 1,
             }}
           >
-            {revealed && card !== undefined ? (
-              <FaceUpCard card={card} zone="enemy-hand" showRulesText />
+            {showFaceUp && card !== undefined ? (
+              <FaceUpCard
+                card={card}
+                zone="enemy-hand"
+                showRulesText
+                selection={
+                  enemyCardPicker === null
+                    ? undefined
+                    : {
+                        selected: selectedPickerCardIds.includes(cardId),
+                        color: "gold-light",
+                      }
+                }
+                interaction={
+                  pickerCandidateIds.has(cardId)
+                    ? {
+                        draggable: false,
+                        debugGesture: isDesktop
+                          ? "context-menu"
+                          : "double-tap",
+                        onActivate: () => onPickerCardToggle(cardId),
+                      }
+                    : undefined
+                }
+              />
             ) : (
               <motion.div
                 layoutId={`battle-card:${cardId}`}
@@ -780,12 +850,17 @@ function FaceUpCard({
   zone,
   showRulesText = false,
   snapLayout = false,
+  selection,
   interaction,
 }: {
   readonly card: MobileBattleCardView;
   readonly zone: string;
   readonly showRulesText?: boolean;
   readonly snapLayout?: boolean;
+  readonly selection?: {
+    readonly selected: boolean;
+    readonly color: CumulusColor;
+  };
   readonly interaction?: {
     readonly draggable: boolean;
     readonly debugGesture: "context-menu" | "double-tap";
@@ -793,9 +868,9 @@ function FaceUpCard({
     readonly onDebugActivate?: (
       invocation: MobileBattleDebugInvocation,
     ) => void;
-    readonly onDragStart: () => void;
-    readonly onDragEnd: () => void;
-    readonly onPointerDrop: (clientX: number, clientY: number) => void;
+    readonly onDragStart?: () => void;
+    readonly onDragEnd?: () => void;
+    readonly onPointerDrop?: (clientX: number, clientY: number) => void;
   };
 }) {
   const dragSuppressedRef = useRef(false);
@@ -810,6 +885,7 @@ function FaceUpCard({
     inverseParentTransform: LinearTransform;
   } | null>(null);
   const draggable = interaction?.draggable === true;
+  const activatable = interaction?.onActivate !== undefined;
   const restingTransform = "";
   const cancelPendingTap = (): void => {
     if (pendingTapRef.current === null) return;
@@ -831,12 +907,12 @@ function FaceUpCard({
         const pointerEvents = event.currentTarget.style.pointerEvents;
         event.currentTarget.style.pointerEvents = "none";
         try {
-          interaction?.onPointerDrop(event.clientX, event.clientY);
+          interaction?.onPointerDrop?.(event.clientX, event.clientY);
         } finally {
           event.currentTarget.style.pointerEvents = pointerEvents;
         }
       }
-      interaction?.onDragEnd();
+      interaction?.onDragEnd?.();
     }
     try {
       event.currentTarget.releasePointerCapture(event.pointerId);
@@ -912,7 +988,7 @@ function FaceUpCard({
           .join(" ");
         if (dragStarted) {
           window.dispatchEvent(new Event("dragstart"));
-          interaction?.onDragStart();
+          interaction?.onDragStart?.();
         }
       }}
       onPointerUpCapture={(event) => {
@@ -932,7 +1008,7 @@ function FaceUpCard({
         finishPointerDrag(event, false);
       }}
       onClick={(event) => {
-        if (!draggable && interaction?.onDebugActivate === undefined) return;
+        if (!activatable && interaction?.onDebugActivate === undefined) return;
         event.stopPropagation();
         if (longPressSuppressedRef.current) {
           longPressSuppressedRef.current = false;
@@ -945,11 +1021,11 @@ function FaceUpCard({
           return;
         }
         if (interaction?.onDebugActivate === undefined) {
-          if (draggable) interaction?.onActivate?.();
+          interaction?.onActivate?.();
           return;
         }
         if (interaction.debugGesture === "context-menu") {
-          if (draggable) interaction.onActivate?.();
+          interaction.onActivate?.();
           return;
         }
         if (pendingTapRef.current !== null) {
@@ -959,7 +1035,7 @@ function FaceUpCard({
         }
         pendingTapRef.current = window.setTimeout(() => {
           pendingTapRef.current = null;
-          if (draggable) interaction?.onActivate?.();
+          interaction?.onActivate?.();
         }, DOUBLE_TAP_WINDOW_MS);
       }}
       onContextMenu={(event) => {
@@ -980,7 +1056,7 @@ function FaceUpCard({
       }}
       style={{
         width: "100%",
-        cursor: draggable ? "grab" : undefined,
+        cursor: draggable ? "grab" : activatable ? "pointer" : undefined,
         position: "relative",
         touchAction: draggable ? "none" : undefined,
         transform: restingTransform || undefined,
@@ -995,8 +1071,8 @@ function FaceUpCard({
       >
         <GameCard
           model={card.model}
-          selected={card.showPlayableOutline}
-          selectionColor="positive"
+          selected={selection?.selected ?? card.showPlayableOutline}
+          selectionColor={selection?.color ?? "positive"}
           hideRulesText={!showRulesText}
           presentation={showRulesText ? "full" : "battlefield"}
           figment={card.figment}
@@ -1305,16 +1381,24 @@ function PlayerHand({
   cards,
   isDesktop,
   snapLayoutCardId,
+  cardPicker,
+  selectedPickerCardIds,
+  onPickerCardToggle,
   onCardDragChange,
   interactions,
 }: {
   readonly cards: readonly MobileBattleCardView[];
   readonly isDesktop: boolean;
   readonly snapLayoutCardId: string | null;
+  readonly cardPicker: MobileBattleCardPickerView | null;
+  readonly selectedPickerCardIds: readonly string[];
+  readonly onPickerCardToggle: (cardId: string) => void;
   readonly onCardDragChange: (dragging: boolean, cardId?: string) => void;
   readonly interactions?: MobileBattleInteractions;
 }) {
+  const pickerCandidateIds = new Set(cardPicker?.candidateIds ?? []);
   const canDrop =
+    cardPicker === null &&
     interactions?.canInteract === true
     && interactions.pendingCardId !== null
     && interactions.pendingCardSource !== "player-hand";
@@ -1357,6 +1441,8 @@ function PlayerHand({
       }}
     >
       {cards.map((card, index) => {
+        const isPickerCandidate = pickerCandidateIds.has(card.id);
+        const isPickerSelected = selectedPickerCardIds.includes(card.id);
         const { left, normalized } = centeredFanPosition({
           index,
           count: cards.length,
@@ -1368,6 +1454,12 @@ function PlayerHand({
         return (
           <div
             key={card.id}
+            data-battle-card-picker-candidate={
+              cardPicker !== null && isPickerCandidate ? "true" : undefined
+            }
+            data-battle-card-picker-selected={
+              cardPicker !== null && isPickerSelected ? "true" : undefined
+            }
             style={{
               position: isDesktop ? "relative" : "absolute",
               left: isDesktop ? undefined : left,
@@ -1387,8 +1479,23 @@ function PlayerHand({
               zone="player-hand"
               showRulesText
               snapLayout={snapLayoutCardId === card.id}
+              selection={
+                cardPicker === null
+                  ? undefined
+                  : { selected: isPickerSelected, color: "gold-light" }
+              }
               interaction={
-                interactions === undefined
+                cardPicker !== null
+                  ? isPickerCandidate
+                    ? {
+                        draggable: false,
+                        debugGesture: isDesktop
+                          ? "context-menu"
+                          : "double-tap",
+                        onActivate: () => onPickerCardToggle(card.id),
+                      }
+                    : undefined
+                  : interactions === undefined
                   ? undefined
                   : {
                       draggable: interactions.canInteract,
@@ -1499,14 +1606,24 @@ function closestOpenBackRankSlot(
 
 function ControlRow({
   aiApproval,
+  cardPicker,
+  selectedPickerCardIds,
   isDesktop,
   interactions,
 }: {
   readonly aiApproval: MobileBattleAiApprovalView | null;
+  readonly cardPicker: MobileBattleCardPickerView | null;
+  readonly selectedPickerCardIds: readonly string[];
   readonly isDesktop: boolean;
   readonly interactions?: MobileBattleInteractions;
 }) {
   const disabled = interactions?.canInteract !== true;
+  const requiredPickerCount = cardPicker === null
+    ? 0
+    : Math.min(cardPicker.count, cardPicker.candidateIds.length);
+  const canSubmitPicker = cardPicker !== null
+    && cardPicker.canResolve
+    && selectedPickerCardIds.length === requiredPickerCount;
   return (
     <div
       data-battle-mobile-row="control-row"
@@ -1526,68 +1643,114 @@ function ControlRow({
         zIndex: 10,
       }}
     >
-      <div
-        data-battle-phase-controls="row"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: token("--space-4"),
-          position: "relative",
-          zIndex: 10,
-        }}
-      >
+      {cardPicker !== null ? (
         <div
-          data-battle-phase-back=""
-        >
-          <IconButton
-            glyph={GLYPHS.arrowLeft}
-            size="sm"
-            label="Back"
-            disabled={disabled}
-            onPress={() => interactions?.onPreviousPhase()}
-          />
-        </div>
-        <div
-          data-battle-phase-next=""
-          data-battle-ai-approval-controls={
-            aiApproval === null ? undefined : ""
-          }
+          data-battle-card-picker-controls=""
           style={{
-            width: aiApproval === null ? NEXT_PHASE_CONTROL_WIDTH : undefined,
-            display: aiApproval === null ? "grid" : "flex",
-            alignItems: aiApproval === null ? undefined : "center",
-            justifyContent: aiApproval === null ? undefined : "flex-end",
-            gap: aiApproval === null ? undefined : token("--space-4"),
+            width: "100%",
+            minWidth: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            gap: token("--space-4"),
+            position: "relative",
+            zIndex: 10,
           }}
         >
-          {aiApproval === null ? (
+          <span
+            aria-live="polite"
+            data-battle-card-picker-progress=""
+            style={{
+              minWidth: 0,
+              overflow: "hidden",
+              color: token("--text-primary"),
+              font: token("--t-caption"),
+              textAlign: "right",
+              textOverflow: "ellipsis",
+              textShadow: token("--text-outline-media"),
+              whiteSpace: "nowrap",
+            }}
+          >
+            {cardPicker.label} · {String(selectedPickerCardIds.length)}/{String(requiredPickerCount)}
+          </span>
+          {cardPicker.optional ? (
             <GlassButton
-              label="Next Phase"
-              variant="accent"
-              disabled={disabled}
-              onPress={() => interactions?.onNextPhase()}
+              label="Skip"
+              disabled={!cardPicker.canResolve}
+              testId="battle-card-picker-skip"
+              onPress={() => interactions?.onCardPickerSkip?.()}
             />
-          ) : (
-            <>
-              {aiApproval.canReject ? (
-                <IconButton
-                  glyph={GLYPHS.close}
-                  size="sm"
-                  label="Reject AI action"
-                  disabled={interactions?.onRejectAiProposal === undefined}
-                  onPress={() => interactions?.onRejectAiProposal?.()}
-                />
-              ) : null}
-              <GlassButton
-                label="Continue"
-                variant="accent"
-                disabled={interactions?.onApproveAiProposal === undefined}
-                onPress={() => interactions?.onApproveAiProposal?.()}
-              />
-            </>
-          )}
+          ) : null}
+          <GlassButton
+            label="Submit"
+            variant="accent"
+            disabled={!canSubmitPicker || interactions?.onCardPickerSubmit === undefined}
+            testId="battle-card-picker-submit"
+            onPress={() => interactions?.onCardPickerSubmit?.(selectedPickerCardIds)}
+          />
         </div>
-      </div>
+      ) : (
+        <div
+          data-battle-phase-controls="row"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: token("--space-4"),
+            position: "relative",
+            zIndex: 10,
+          }}
+        >
+          <div data-battle-phase-back="">
+            <IconButton
+              glyph={GLYPHS.arrowLeft}
+              size="sm"
+              label="Back"
+              disabled={disabled}
+              onPress={() => interactions?.onPreviousPhase()}
+            />
+          </div>
+          <div
+            data-battle-phase-next=""
+            data-battle-ai-approval-controls={
+              aiApproval === null ? undefined : ""
+            }
+            style={{
+              width: aiApproval === null ? NEXT_PHASE_CONTROL_WIDTH : undefined,
+              display: aiApproval === null ? "grid" : "flex",
+              alignItems: aiApproval === null ? undefined : "center",
+              justifyContent: aiApproval === null ? undefined : "flex-end",
+              gap: aiApproval === null ? undefined : token("--space-4"),
+            }}
+          >
+            {aiApproval === null ? (
+              <GlassButton
+                label="Next Phase"
+                variant="accent"
+                disabled={disabled}
+                onPress={() => interactions?.onNextPhase()}
+              />
+            ) : (
+              <>
+                {aiApproval.canReject ? (
+                  <IconButton
+                    glyph={GLYPHS.close}
+                    size="sm"
+                    label="Reject AI action"
+                    disabled={interactions?.onRejectAiProposal === undefined}
+                    onPress={() => interactions?.onRejectAiProposal?.()}
+                  />
+                ) : null}
+                <GlassButton
+                  label="Continue"
+                  variant="accent"
+                  disabled={interactions?.onApproveAiProposal === undefined}
+                  onPress={() => interactions?.onApproveAiProposal?.()}
+                />
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -1898,6 +2061,10 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
   const [isInspectorOpen, setIsInspectorOpen] = useState(isDockLayout);
   const [isCardDragActive, setIsCardDragActive] = useState(false);
   const [snapLayoutCardId, setSnapLayoutCardId] = useState<string | null>(null);
+  const [cardPickerSelection, setCardPickerSelection] = useState<{
+    readonly pickerKey: string | null;
+    readonly ids: readonly string[];
+  }>({ pickerKey: null, ids: [] });
   const [selectedSide, setSelectedSide] = useState<MobileBattleOwner>("player");
   const inspectorTriggerRef = useRef<HTMLElement | null>(null);
   const previousDockLayout = useRef(isDockLayout);
@@ -1905,13 +2072,29 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
   const snapLayoutOriginView = useRef<MobileBattleView | null>(null);
   const layoutBackSlotCount = battlefieldLayoutBackSlotCount(view, isDesktop);
   const cardSize = battlefieldCardSize(layoutBackSlotCount);
+  const cardPickerKey = view.cardPicker?.key ?? null;
+  const selectedPickerCardIds = cardPickerSelection.pickerKey === cardPickerKey
+    ? cardPickerSelection.ids
+    : [];
 
   useEffect(() => {
     setSelectedSide("player");
     setIsInspectorOpen(isDockLayout);
     setIsCardDragActive(false);
     setSnapLayoutCardId(null);
+    setCardPickerSelection({ pickerKey: null, ids: [] });
   }, [view.battleId]);
+
+  const handlePickerCardToggle = useCallback((cardId: string): void => {
+    if (view.cardPicker === null) return;
+    const nextIds = toggleCardPickerSelection(
+      selectedPickerCardIds,
+      cardId,
+      view.cardPicker.count,
+    );
+    setCardPickerSelection({ pickerKey: view.cardPicker.key, ids: nextIds });
+    interactions?.onCardPickerSelectionChange?.(nextIds);
+  }, [interactions, selectedPickerCardIds, view.cardPicker]);
 
   useEffect(() => {
     if (snapLayoutCardId === null || isCardDragActive) return;
@@ -2019,13 +2202,36 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
       <BattleBackdrop isDesktop={isDesktop} />
       <div aria-hidden="true" data-battle-mobile-safe-area-backdrop="" style={SAFE_AREA_BACKDROP_STYLE} />
       <LayoutGroup id={`mobile-battle:${view.battleId}`}>
-        <EnemyHand cardIds={view.enemyHandCardIds} cards={view.enemyHand} revealed={view.inspector.isOpponentHandRevealed} isDesktop={isDesktop} />
+        <EnemyHand
+          cardIds={view.enemyHandCardIds}
+          cards={view.enemyHand}
+          revealed={view.inspector.isOpponentHandRevealed}
+          isDesktop={isDesktop}
+          cardPicker={view.cardPicker}
+          selectedPickerCardIds={selectedPickerCardIds}
+          onPickerCardToggle={handlePickerCardToggle}
+        />
         <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="enemy" phase={view.phase} side={view.enemy} interactions={interactions} />
         <PlayArea isDesktop={isDesktop} owner="enemy" side={view.enemy} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
         <PlayArea isDesktop={isDesktop} owner="player" side={view.player} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
-        <ControlRow aiApproval={view.aiApproval} isDesktop={isDesktop} interactions={interactions} />
+        <ControlRow
+          aiApproval={view.aiApproval}
+          cardPicker={view.cardPicker}
+          selectedPickerCardIds={selectedPickerCardIds}
+          isDesktop={isDesktop}
+          interactions={interactions}
+        />
         <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="player" phase={view.phase} side={view.player} interactions={interactions} />
-        <PlayerHand cards={view.inspector.isPlayerHandHidden ? [] : view.playerHand} isDesktop={isDesktop} snapLayoutCardId={snapLayoutCardId} onCardDragChange={handleCardDragChange} interactions={interactions} />
+        <PlayerHand
+          cards={view.inspector.isPlayerHandHidden ? [] : view.playerHand}
+          isDesktop={isDesktop}
+          snapLayoutCardId={snapLayoutCardId}
+          cardPicker={view.cardPicker?.side === "player" ? view.cardPicker : null}
+          selectedPickerCardIds={selectedPickerCardIds}
+          onPickerCardToggle={handlePickerCardToggle}
+          onCardDragChange={handleCardDragChange}
+          interactions={interactions}
+        />
       </LayoutGroup>
       <AiApprovalMessage aiApproval={view.aiApproval} />
       <div
