@@ -1,10 +1,15 @@
 import {
+  useEffect,
   useRef,
   useState,
-  type CSSProperties,
   type ReactElement,
-  type ReactNode,
 } from "react";
+import {
+  cardIdenticonUri,
+  cardImageUrl,
+  hasAssignedImage,
+} from "../../../data/card-database";
+import { identiconsForced } from "../../../runtime/identicon-mode";
 import type { CardId } from "../../../types/card-identity";
 import type { FrozenCardData } from "../../../types/cards";
 import type { TransfigurationType } from "../../../types/quest";
@@ -16,8 +21,6 @@ import { resolveArtRef } from "../../primitives/art";
 import type { Glyph } from "../../primitives/glyph";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import { CardView } from "../card/CardView";
-import { CARD_CORNER_RADIUS } from "../card/card-aspect";
 import {
   offerTileDescription,
   offerTileRichDescription,
@@ -37,11 +40,11 @@ export const OFFER_TILE_DIMENSIONS: Readonly<Record<OfferTileSize, number>> = {
   compact: OFFER_TILE_COMPACT_SIZE,
 };
 
-/** UUID-backed complete card shown symbolically inside an offer. */
+/** UUID-backed card whose original art is shown inside an offer. */
 export interface OfferTileCard {
   /** Canonical card UUID. Names are display-only and never enter the tile model. */
   cardId: CardId;
-  /** Complete UUID-matched display data for the card face. */
+  /** UUID-matched display data carrying the art asset and authored focal crop. */
   displaySnapshot: FrozenCardData;
 }
 
@@ -193,7 +196,7 @@ export interface OfferTileProps {
 
 /**
  * A 300×300 framed symbolic Dream Augury offer button. Its circular gold frame
- * surrounds complete cards, dreamsigns, and glyphs. Every inner
+ * surrounds full-bleed card art, dreamsigns, and glyphs. Every inner
  * object is decorative and pointer-transparent. The complete tile is the only
  * hover/focus/press target and reveals one category InfoCard.
  */
@@ -322,15 +325,9 @@ function offerTileMotionDelay(offerId: string): string {
   return `${String(-hash / 1000)}s`;
 }
 
-type CardTreatment = "plain" | "purged" | "duplicate";
-type FullCardSize = "draft" | "compact" | "medium" | "standard";
-
-const FULL_CARD_WIDTH: Readonly<Record<FullCardSize, number>> = {
-  compact: 78,
-  draft: 64,
-  medium: 96,
-  standard: 112,
-};
+const OFFER_ART_STAGE_SIZE = 208;
+const OFFER_ART_OVERLAY_SIZE = 84;
+const CARD_ART_VISIBLE_SOURCE_FRACTION = 259 / 280;
 
 function DreamsignArtPiece({
   dreamsign,
@@ -340,7 +337,7 @@ function DreamsignArtPiece({
   readonly size?: "small" | "large";
 }): ReactElement {
   const [imageBroken, setImageBroken] = useState(false);
-  const edge = size === "small" ? 80 : 158;
+  const edge = size === "small" ? 68 : 134;
   return (
     <span
       data-offer-tile-dreamsign-id={dreamsign.id}
@@ -378,86 +375,117 @@ function DreamsignArtPiece({
   );
 }
 
-function FullCardPiece({
+function CardArtPiece({
   card,
-  size = "standard",
   treatment = "plain",
+  overlay = false,
 }: {
   readonly card: OfferTileCard;
-  readonly size?: FullCardSize;
-  readonly treatment?: CardTreatment;
+  readonly treatment?: "plain" | "purged";
+  readonly overlay?: boolean;
 }): ReactElement {
-  const treatmentStyle: CSSProperties =
-    treatment === "purged"
-      ? {
-          boxShadow: `0 0 0 3px ${token("--danger")}, ${token("--shadow-card")}`,
-        }
-      : treatment === "duplicate"
-          ? {
-              boxShadow: `0 0 0 2px ${token("--energy")}, ${token("--shadow-card")}`,
-            }
-          : { boxShadow: token("--shadow-card") };
+  const [imageBroken, setImageBroken] = useState(false);
+  const cardData = card.displaySnapshot;
+  const useCardImage =
+    !identiconsForced() && hasAssignedImage(cardData.imageNumber) && !imageBroken;
+  const imageSource = useCardImage
+    ? cardImageUrl(cardData.imageNumber)
+    : cardIdenticonUri(card.cardId);
+  const focalPoint = cardData.art ?? { x: 0, y: 0 };
+  const objectPosition = `${String((focalPoint.x + 1) * 50)}% ${String((focalPoint.y + 1) * 50)}%`;
+
+  useEffect(() => {
+    setImageBroken(false);
+  }, [card.cardId, cardData.imageNumber]);
+
   return (
     <span
-      data-offer-tile-full-card={card.cardId}
+      data-offer-tile-card-art={card.cardId}
+      data-offer-tile-card-art-treatment={treatment}
       style={{
         position: "relative",
         display: "block",
-        zIndex: 1,
-        width: FULL_CARD_WIDTH[size],
-        borderRadius: CARD_CORNER_RADIUS,
+        overflow: "hidden",
+        width: overlay ? OFFER_ART_OVERLAY_SIZE : "100%",
+        height: overlay ? OFFER_ART_OVERLAY_SIZE : "100%",
+        borderRadius: overlay ? token("--radius-pill") : 0,
+        background: token("--surface-chrome-strong"),
+        boxShadow:
+          treatment === "purged"
+            ? `0 0 0 3px ${token("--danger")}, ${token("--shadow-md")}`
+            : overlay
+              ? token("--shadow-md")
+              : undefined,
         pointerEvents: "none",
-        ...treatmentStyle,
       }}
     >
-      <CardView card={card.displaySnapshot} statTooltips={false} />
+      <img
+        src={imageSource}
+        alt=""
+        draggable={false}
+        onError={useCardImage ? () => setImageBroken(true) : undefined}
+        style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          display: "block",
+          width: "100%",
+          height: useCardImage
+            ? `${String(100 / CARD_ART_VISIBLE_SOURCE_FRACTION)}%`
+            : "100%",
+          objectFit: useCardImage ? "cover" : "contain",
+          objectPosition,
+          pointerEvents: "none",
+          userSelect: "none",
+        }}
+      />
     </span>
   );
 }
 
-function FullCardStack({
+function CardArtMosaic({
   cards,
-  layout = "operation",
-  treatment = "plain",
 }: {
   readonly cards: readonly OfferTileCard[];
-  readonly layout?: "bundle" | "operation";
-  readonly treatment?: CardTreatment;
 }): ReactElement {
-  const bundleLayout = layout === "bundle";
-  const size = bundleLayout ? "medium" : cards.length >= 3 ? "compact" : "medium";
-  const cardWidth = FULL_CARD_WIDTH[size];
-  const stageWidth = bundleLayout ? 190 : 174;
-  const stageHeight = bundleLayout ? 175 : 160;
-  const spread = bundleLayout ? (cards.length >= 3 ? 36 : 30) : cards.length >= 3 ? 32 : 28;
+  const layout =
+    cards.length === 1
+      ? "single"
+      : cards.length === 2
+        ? "split-2"
+        : cards.length === 3
+          ? "split-3"
+          : "grid-4";
+  const columns = cards.length === 4 ? 2 : cards.length;
+  const rows = cards.length === 4 ? 2 : 1;
+
   return (
     <span
-      data-offer-tile-full-card-stack=""
+      data-offer-tile-card-art-layout={layout}
       style={{
-        position: "relative",
-        display: "block",
-        width: stageWidth,
-        height: stageHeight,
+        display: "grid",
+        gridTemplateColumns: `repeat(${String(columns)}, minmax(0, 1fr))`,
+        gridTemplateRows: `repeat(${String(rows)}, minmax(0, 1fr))`,
+        width: OFFER_ART_STAGE_SIZE,
+        height: OFFER_ART_STAGE_SIZE,
+        gap: cards.length > 1 ? token("--space-1") : 0,
         pointerEvents: "none",
       }}
     >
-      {cards.map((card, index) => {
-        const offset = index - (cards.length - 1) / 2;
-        return (
-          <span
-            key={card.cardId}
-            style={{
-              position: "absolute",
-              left: (stageWidth - cardWidth) / 2 + offset * spread,
-              top: (bundleLayout ? 8 : 10) + Math.abs(offset) * 5,
-              rotate: `${String(offset * 5)}deg`,
-              pointerEvents: "none",
-            }}
-          >
-            <FullCardPiece card={card} size={size} treatment={treatment} />
-          </span>
-        );
-      })}
+      {cards.map((card) => (
+        <span
+          key={card.cardId}
+          data-offer-tile-card-art-panel=""
+          style={{
+            minWidth: 0,
+            minHeight: 0,
+            overflow: "hidden",
+            pointerEvents: "none",
+          }}
+        >
+          <CardArtPiece card={card} />
+        </span>
+      ))}
     </span>
   );
 }
@@ -465,11 +493,9 @@ function FullCardStack({
 function OperationMark({
   glyph,
   tone = "neutral",
-  layout,
 }: {
   readonly glyph: Glyph;
   readonly tone?: "neutral" | "accent" | "danger" | "spark" | "duplicate";
-  readonly layout: "card-overlay" | "diagonal" | "overlay";
 }): ReactElement {
   const color =
     tone === "accent"
@@ -484,22 +510,18 @@ function OperationMark({
   return (
     <span
       data-offer-tile-operation=""
-      data-offer-tile-operation-layout={layout}
+      data-offer-tile-operation-layout="overlay"
       style={{
         position: "absolute",
-        left: layout === "overlay" ? "50%" : undefined,
-        top: layout === "overlay" ? "50%" : undefined,
-        right:
-          layout === "diagonal" ? 0 : layout === "card-overlay" ? 10 : undefined,
-        bottom:
-          layout === "diagonal" ? 0 : layout === "card-overlay" ? 10 : undefined,
-        translate: layout === "overlay" ? "-50% -50%" : undefined,
+        left: "50%",
+        top: "50%",
+        translate: "-50% -50%",
         zIndex: 2,
         display: "grid",
         placeItems: "center",
         flex: "0 0 auto",
-        width: layout === "overlay" ? 58 : layout === "diagonal" ? 82 : 60,
-        height: layout === "overlay" ? 58 : layout === "diagonal" ? 82 : 60,
+        width: 58,
+        height: 58,
         borderRadius: token("--radius-pill"),
         color,
         background: token("--surface-chrome-strong"),
@@ -511,7 +533,7 @@ function OperationMark({
       <i
         className={glyph}
         style={{
-          fontSize: layout === "overlay" ? 32 : layout === "diagonal" ? 42 : 34,
+          fontSize: 32,
           lineHeight: 1,
           pointerEvents: "none",
         }}
@@ -520,140 +542,29 @@ function OperationMark({
   );
 }
 
-function OperationComposition({
-  children,
-  glyph,
-  tone,
-  layout,
-}: {
-  readonly children: ReactNode;
-  readonly glyph: Glyph;
-  readonly tone?: "neutral" | "accent" | "danger" | "spark" | "duplicate";
-  readonly layout: "diagonal" | "overlay";
-}): ReactElement {
-  return (
-    <span
-      data-offer-tile-composition={layout}
-      style={
-        layout === "overlay"
-          ? {
-              position: "relative",
-              display: "grid",
-              placeItems: "center",
-              pointerEvents: "none",
-            }
-          : {
-              position: "relative",
-              display: "block",
-              width: 190,
-              height: 190,
-              pointerEvents: "none",
-            }
-      }
-    >
-      {layout === "diagonal" ? (
-        <span
-          style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            zIndex: 1,
-            pointerEvents: "none",
-          }}
-        >
-          {children}
-        </span>
-      ) : (
-        children
-      )}
-      <OperationMark glyph={glyph} tone={tone} layout={layout} />
-    </span>
-  );
-}
-
-function FullCardOperation({
-  card,
-  glyph,
-  tone,
-  treatment,
-}: {
-  readonly card: OfferTileCard;
-  readonly glyph: Glyph;
-  readonly tone?: "neutral" | "accent" | "danger" | "spark" | "duplicate";
-  readonly treatment?: "plain" | "purged";
-}): ReactElement {
-  return (
-    <span
-      data-offer-tile-composition="card-overlay"
-      style={{
-        position: "relative",
-        display: "grid",
-        placeItems: "center",
-        width: 190,
-        height: 190,
-        pointerEvents: "none",
-      }}
-    >
-      <FullCardPiece card={card} treatment={treatment} />
-      <OperationMark glyph={glyph} tone={tone} layout="card-overlay" />
-    </span>
-  );
-}
-
-function FullCardStackOperation({
+function CardArtOperation({
   cards,
   glyph,
   tone,
-  treatment,
 }: {
   readonly cards: readonly OfferTileCard[];
   readonly glyph: Glyph;
   readonly tone?: "neutral" | "accent" | "danger" | "spark" | "duplicate";
-  readonly treatment?: CardTreatment;
 }): ReactElement {
   return (
     <span
-      data-offer-tile-composition="card-overlay"
+      data-offer-tile-composition="overlay"
       style={{
         position: "relative",
         display: "grid",
         placeItems: "center",
-        width: 190,
-        height: 190,
+        width: OFFER_ART_STAGE_SIZE,
+        height: OFFER_ART_STAGE_SIZE,
         pointerEvents: "none",
       }}
     >
-      <FullCardStack cards={cards} treatment={treatment} />
-      <OperationMark glyph={glyph} tone={tone} layout="card-overlay" />
-    </span>
-  );
-}
-
-function DraftGrid({
-  cards,
-  treatment = "plain",
-}: {
-  readonly cards: readonly OfferTileCard[];
-  readonly treatment?: CardTreatment;
-}) {
-  return (
-    <span
-      data-offer-tile-card-grid=""
-      style={{
-        display: "grid",
-        gridTemplateColumns: `repeat(2, ${String(FULL_CARD_WIDTH.draft)}px)`,
-        gap: token("--space-1"),
-        pointerEvents: "none",
-      }}
-    >
-      {cards.map((card) => (
-        <FullCardPiece
-          key={card.cardId}
-          card={card}
-          size="draft"
-          treatment={treatment}
-        />
-      ))}
+      <CardArtMosaic cards={cards} />
+      <OperationMark glyph={glyph} tone={tone} />
     </span>
   );
 }
@@ -672,11 +583,14 @@ function TradeComposition({
         position: "relative",
         display: "grid",
         placeItems: "center",
+        width: OFFER_ART_STAGE_SIZE,
+        height: OFFER_ART_STAGE_SIZE,
         pointerEvents: "none",
       }}
     >
-      <DraftGrid cards={incoming} />
+      <CardArtMosaic cards={incoming} />
       <span
+        data-offer-tile-fifth-card=""
         style={{
           position: "absolute",
           left: "50%",
@@ -686,7 +600,7 @@ function TradeComposition({
           pointerEvents: "none",
         }}
       >
-        <FullCardPiece card={outgoing} treatment="purged" size="draft" />
+        <CardArtPiece card={outgoing} treatment="purged" overlay />
       </span>
     </span>
   );
@@ -695,44 +609,42 @@ function TradeComposition({
 function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElement {
   switch (model.kind) {
     case "card-gift":
-      return <FullCardPiece card={model.card} />;
+      return <CardArtMosaic cards={[model.card]} />;
     case "card-draft":
-      return <DraftGrid cards={model.cards} />;
+      return <CardArtMosaic cards={model.cards} />;
     case "copies-draft":
       return (
-        <OperationComposition glyph={GLYPHS.copy} tone="duplicate" layout="overlay">
-          <DraftGrid cards={model.cards} />
-        </OperationComposition>
+        <CardArtOperation
+          cards={model.cards}
+          glyph={GLYPHS.copy}
+          tone="duplicate"
+        />
       );
     case "category-draft":
       return (
-        <OperationComposition glyph={GLYPHS.filter} layout="overlay">
-          <DraftGrid cards={model.cards} />
-        </OperationComposition>
+        <CardArtOperation cards={model.cards} glyph={GLYPHS.filter} />
       );
     case "transfigured-draft":
       return (
-        <OperationComposition
+        <CardArtOperation
+          cards={model.cards}
           glyph={GLYPHS.transfigurationSite}
           tone="accent"
-          layout="overlay"
-        >
-          <DraftGrid cards={model.cards} />
-        </OperationComposition>
+        />
       );
     case "card-bundle":
-      return <FullCardStack cards={model.cards} layout="bundle" />;
+      return <CardArtMosaic cards={model.cards} />;
     case "transfigure-card":
       return (
-        <FullCardOperation
-          card={model.card}
+        <CardArtOperation
+          cards={[model.card]}
           glyph={GLYPHS.transfigurationSite}
           tone="accent"
         />
       );
     case "transfigure-starters":
       return (
-        <FullCardStackOperation
+        <CardArtOperation
           cards={model.cards}
           glyph={GLYPHS.transfigurationSite}
           tone="accent"
@@ -740,27 +652,26 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
       );
     case "keyword-modification":
       return (
-        <FullCardOperation
-          card={model.card}
+        <CardArtOperation
+          cards={[model.card]}
           glyph={GLYPHS.pencilSquare}
           tone="accent"
         />
       );
     case "tribal-change":
       return (
-        <FullCardOperation
-          card={model.card}
+        <CardArtOperation
+          cards={[model.card]}
           glyph={GLYPHS.refreshCcw}
           tone="accent"
         />
       );
     case "purge-card":
       return (
-        <FullCardOperation
-          card={model.card}
+        <CardArtOperation
+          cards={[model.card]}
           glyph={GLYPHS.closeFilled}
           tone="danger"
-          treatment="purged"
         />
       );
     case "trade-card":
@@ -769,11 +680,10 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
       );
     case "duplicate-card":
       return (
-        <FullCardStackOperation
+        <CardArtOperation
           cards={model.cards}
           glyph={GLYPHS.copy}
           tone="duplicate"
-          treatment="duplicate"
         />
       );
     case "dreamsign-gift":
@@ -783,7 +693,7 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
         <span
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(2, 80px)",
+            gridTemplateColumns: "repeat(2, 68px)",
             placeItems: "center",
             gap: token("--space-2"),
             pointerEvents: "none",
@@ -808,8 +718,8 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
           style={{
             display: "grid",
             placeItems: "center",
-            width: 136,
-            height: 136,
+            width: 116,
+            height: 116,
             borderRadius: token("--radius-pill"),
             background: token("--surface-chrome-strong"),
             border: `2px solid ${token("--border-strong")}`,
@@ -822,7 +732,7 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
           <i
             className={model.site.glyph}
             data-offer-tile-site-glyph=""
-            style={{ fontSize: 70, lineHeight: 1, pointerEvents: "none" }}
+            style={{ fontSize: 60, lineHeight: 1, pointerEvents: "none" }}
           />
         </span>
       );
