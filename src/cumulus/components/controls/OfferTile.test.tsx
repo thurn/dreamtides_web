@@ -229,7 +229,7 @@ describe("OfferTile", () => {
     )!;
     expect(fifthArt.style.width).toBe("84px");
     expect(fifthArt.style.height).toBe("84px");
-    expect(fifthArt.style.borderRadius).toBe("var(--radius-pill)");
+    expect(fifthArt.style.borderRadius).toBe("var(--radius-panel)");
     expect(fifthArt.dataset.offerTileCardArtTreatment).toBe("purged");
 
     act(() => root.unmount());
@@ -284,7 +284,10 @@ describe("OfferTile", () => {
       )!;
       expect(mark.dataset.offerTileOperationLayout).toBe("overlay");
       expect(mark.style.left).toBe("50%");
-      expect(mark.style.top).toBe("50%");
+      expect(mark.style.top).toBe(testId === "one" ? "65%" : "50%");
+      expect(mark.dataset.offerTileOperationPosition).toBe(
+        testId === "one" ? "lower" : "center",
+      );
       expect(mark.style.translate).toBe("-50% -50%");
       expect(mark.style.width).toBe("58px");
       expect(mark.style.height).toBe("58px");

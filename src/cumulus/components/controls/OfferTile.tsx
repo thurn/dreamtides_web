@@ -408,7 +408,7 @@ function CardArtPiece({
         overflow: "hidden",
         width: overlay ? OFFER_ART_OVERLAY_SIZE : "100%",
         height: overlay ? OFFER_ART_OVERLAY_SIZE : "100%",
-        borderRadius: overlay ? token("--radius-pill") : 0,
+        borderRadius: overlay ? token("--radius-panel") : 0,
         background: token("--surface-chrome-strong"),
         boxShadow:
           treatment === "purged"
@@ -493,9 +493,11 @@ function CardArtMosaic({
 function OperationMark({
   glyph,
   tone = "neutral",
+  position = "center",
 }: {
   readonly glyph: Glyph;
   readonly tone?: "neutral" | "accent" | "danger" | "spark" | "duplicate";
+  readonly position?: "center" | "lower";
 }): ReactElement {
   const color =
     tone === "accent"
@@ -511,10 +513,11 @@ function OperationMark({
     <span
       data-offer-tile-operation=""
       data-offer-tile-operation-layout="overlay"
+      data-offer-tile-operation-position={position}
       style={{
         position: "absolute",
         left: "50%",
-        top: "50%",
+        top: position === "lower" ? "65%" : "50%",
         translate: "-50% -50%",
         zIndex: 2,
         display: "grid",
@@ -564,7 +567,11 @@ function CardArtOperation({
       }}
     >
       <CardArtMosaic cards={cards} />
-      <OperationMark glyph={glyph} tone={tone} />
+      <OperationMark
+        glyph={glyph}
+        tone={tone}
+        position={cards.length === 1 ? "lower" : "center"}
+      />
     </span>
   );
 }
