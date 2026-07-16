@@ -1246,6 +1246,34 @@ function PlayableBattleScreenInner({
       return;
     }
 
+    if (
+      resolution.accessory === "battle-log"
+      || resolution.accessory === "dreamwell-history"
+    ) {
+      const isBattleLog = resolution.accessory === "battle-log";
+      setIsBattleLogOpen(isBattleLog);
+      setIsDreamwellHistoryOpen(!isBattleLog);
+      logEvent(
+        isBattleLog
+          ? "battle_log_drawer_opened"
+          : "battle_dreamwell_history_drawer_opened",
+        {
+          ...createBattleLogBaseFields(board, {
+            sourceSurface: "inspector",
+            selectedCardId: null,
+          }),
+          ...(isBattleLog
+            ? {}
+            : {
+                drawnDreamwellCardCount: Math.min(
+                  board.dreamwellDeckIndex,
+                  battleInit.dreamwellDeck.length,
+                ),
+              }),
+        },
+      );
+      return;
+    }
     if (resolution.accessory === "pool-viewer") {
       setIsPoolViewerOpen(true);
       return;
@@ -1478,6 +1506,20 @@ function PlayableBattleScreenInner({
             })}
           />
         ) : null}
+        <BattleLogDrawer
+          battleInit={battleInit}
+          futureCount={0}
+          history={EMPTY_BATTLE_HISTORY}
+          isOpen={isBattleLogOpen}
+          lastTransition={null}
+          onClose={() => setIsBattleLogOpen(false)}
+        />
+        <BattleDreamwellHistoryDrawer
+          dreamwellDeck={battleInit.dreamwellDeck}
+          dreamwellDeckIndex={board.dreamwellDeckIndex}
+          isOpen={isDreamwellHistoryOpen}
+          onClose={() => setIsDreamwellHistoryOpen(false)}
+        />
       </>
     );
   }

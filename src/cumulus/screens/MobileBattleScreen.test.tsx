@@ -417,6 +417,54 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("opens both history drawers from the desktop inspector rail", () => {
+    mockDesktopViewport(true);
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => {
+      callback(0);
+      return 1;
+    });
+    const onInspectorAction = vi.fn();
+    const interactions: MobileBattleInteractions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+      onInspectorAction,
+    };
+    const { container, root } = mount(makeView(), interactions);
+
+    expect(container.textContent).toContain("History");
+    act(() => {
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="battle-inspector-open-battle-log"]',
+      )?.click();
+    });
+    expect(onInspectorAction).toHaveBeenCalledWith({ kind: "open-battle-log" });
+    expect(container.querySelector('[data-battle-inspector="docked"]')).toBeNull();
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="battle-inspector-trigger"]',
+      )?.click();
+    });
+    act(() => {
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="battle-inspector-open-dreamwell-history"]',
+      )?.click();
+    });
+    expect(onInspectorAction).toHaveBeenCalledWith({
+      kind: "open-dreamwell-history",
+    });
+    expect(container.querySelector('[data-battle-inspector="docked"]')).toBeNull();
+
+    act(() => root.unmount());
+  });
+
   it("keeps the inspector closed initially in the takeover layout", () => {
     mockDesktopViewport(false);
     const { container, root } = mount();

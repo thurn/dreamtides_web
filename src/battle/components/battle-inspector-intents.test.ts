@@ -43,6 +43,8 @@ describe("resolveBattleInspectorIntent", () => {
     [{ kind: "dreamwell-draw", side: "player" }, "dreamwell-draw"],
     [{ kind: "create-figment", side: "enemy" }, "create-figment"],
     [{ kind: "open-pool-viewer" }, "pool-viewer"],
+    [{ kind: "open-battle-log" }, "battle-log"],
+    [{ kind: "open-dreamwell-history" }, "dreamwell-history"],
   ] as const)("maps %o to the expected accessory", (action, accessory) => {
     expect(resolveBattleInspectorIntent(action as MobileBattleInspectorAction, state())).toMatchObject({ kind: "accessory", accessory });
   });

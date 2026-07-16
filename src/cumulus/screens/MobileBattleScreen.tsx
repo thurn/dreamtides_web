@@ -192,7 +192,7 @@ export type MobileBattleInspectorAction =
   | { readonly kind: "draw" | "discard" | "foresee" | "shuffle" | "dreamwell-draw" | "create-figment"; readonly side: MobileBattleOwner }
   | { readonly kind: "open-zone"; readonly side: MobileBattleOwner; readonly zone: MobileBattleBrowseZone }
   | { readonly kind: "erode"; readonly side: MobileBattleOwner; readonly count: number }
-  | { readonly kind: "open-pool-viewer" | "toggle-opponent-hand" | "toggle-player-hand" | "skip-to-rewards" | "reset-battle" }
+  | { readonly kind: "open-battle-log" | "open-dreamwell-history" | "open-pool-viewer" | "toggle-opponent-hand" | "toggle-player-hand" | "skip-to-rewards" | "reset-battle" }
   | { readonly kind: "force-result"; readonly result: "defeat" | "draw" };
 
 export type MobileBattleDebugInvocation =
@@ -2078,6 +2078,33 @@ function BattleInspectorContent({
         </div>
       </GroupPanel>
 
+      <GroupPanel>
+        <div style={groupLayout}>
+          <h3 style={{ margin: 0, color: token("--text-on-glass"), font: token("--t-title-sm") }}>History</h3>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: token("--space-3"),
+            }}
+          >
+            <InspectorButton
+              label="Battle Log"
+              onPress={() => onAction?.({ kind: "open-battle-log" })}
+              disabled={onAction === undefined}
+              testId="battle-inspector-open-battle-log"
+            />
+            <InspectorButton
+              label="Dreamwell History"
+              onPress={() => onAction?.({ kind: "open-dreamwell-history" })}
+              disabled={onAction === undefined}
+              testId="battle-inspector-open-dreamwell-history"
+            />
+          </div>
+        </div>
+      </GroupPanel>
+
       <div style={{ position: "sticky", top: 0, zIndex: 2 }}>
         <GroupPanel>
           <div style={groupLayout}>
@@ -2305,7 +2332,11 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
   }, [interactions]);
 
   const handleInspectorAction = useCallback((action: MobileBattleInspectorAction) => {
-    if (!isDockLayout && action.kind === "foresee") {
+    if (
+      (!isDockLayout && action.kind === "foresee")
+      || action.kind === "open-battle-log"
+      || action.kind === "open-dreamwell-history"
+    ) {
       closeInspector();
     }
     interactions?.onInspectorAction?.(action);
