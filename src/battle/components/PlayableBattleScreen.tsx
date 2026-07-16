@@ -58,6 +58,7 @@ import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
 import { BattleDreamcallerPanel } from "./BattleDreamcallerPanel";
 import { BattleFigmentCreator } from "./BattleFigmentCreator";
 import { BattleForeseeOverlay } from "./BattleForeseeOverlay";
+import { CumulusBattleForeseeOverlay } from "./CumulusBattleForeseeOverlay";
 import { automaticBattleIntentKey } from "../automatic-intent-key";
 import { BattleHandTray } from "./BattleHandTray";
 import { BattleInspector } from "./BattleInspector";
@@ -1251,12 +1252,51 @@ function PlayableBattleScreenInner({
           />
         ) : null}
         {openForeseeOverlay !== null ? (
-          <BattleForeseeOverlay
+          <CumulusBattleForeseeOverlay
             initialCount={openForeseeOverlay.count}
             side={openForeseeOverlay.side}
             state={board}
             onClose={() => setOpenForeseeOverlay(null)}
-            onDispatch={(command) => handleCommand({ ...command, sourceSurface: "inspector" })}
+            onConfirm={({ orderedCardIds, voidCardIds }) => {
+              const viewedCardIds = board.sides[openForeseeOverlay.side].deck.slice(
+                0,
+                openForeseeOverlay.count,
+              );
+              handleCommand({
+                id: "DEBUG_EDIT",
+                edit: {
+                  kind: "FORESEE",
+                  side: openForeseeOverlay.side,
+                  viewedCardIds,
+                  orderedCardIds,
+                  voidCardIds,
+                },
+                sourceSurface: "foresee-overlay",
+              });
+              setOpenForeseeOverlay(null);
+            }}
+          />
+        ) : null}
+        {pendingPrompt !== null &&
+        pendingPrompt.options.kind === "foresee" &&
+        openForeseeOverlay === null ? (
+          <CumulusBattleForeseeOverlay
+            initialCount={pendingPrompt.options.count}
+            side={pendingPrompt.run.side}
+            state={board}
+            onClose={() => {
+              if (pendingPrompt.options.kind !== "foresee") return;
+              resolvePendingPrompt({
+                kind: "foresee",
+                orderedCardIds: [...pendingPrompt.options.cardIds],
+                voidCardIds: [],
+              });
+            }}
+            onConfirm={({ orderedCardIds, voidCardIds }) => resolvePendingPrompt({
+              kind: "foresee",
+              orderedCardIds: [...orderedCardIds],
+              voidCardIds: [...voidCardIds],
+            })}
           />
         ) : null}
         {openDeckOrderPicker !== null ? (

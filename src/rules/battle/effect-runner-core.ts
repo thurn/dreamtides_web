@@ -18,12 +18,16 @@ export type ActivePrompt =
       highlightCardIds: string[];
     }
   | { kind: "choice"; label: string; options: { label: string }[] }
-  | { kind: "foresee"; count: number };
+  | { kind: "foresee"; count: number; cardIds: string[] };
 
 export type PromptResolution =
   | { kind: "pick-cards"; chosenIds: string[] }
   | { kind: "choice"; optionIndex: number }
-  | { kind: "foresee" };
+  | {
+      kind: "foresee";
+      orderedCardIds?: string[];
+      voidCardIds?: string[];
+    };
 
 /** Result of inspecting the head of the step queue. */
 export type EffectStepPlan =
@@ -92,7 +96,11 @@ function buildActivePrompt(prompt: EffectPrompt, ctx: StepContext): ActivePrompt
         options: [{ label: "Yes" }, { label: "Skip" }],
       };
     case "foresee":
-      return { kind: "foresee", count: prompt.count };
+      return {
+        kind: "foresee",
+        count: prompt.count,
+        cardIds: ctx.state.sides[ctx.side].deck.slice(0, prompt.count),
+      };
   }
 }
 
@@ -107,7 +115,8 @@ function buildActivePrompt(prompt: EffectPrompt, ctx: StepContext): ActivePrompt
  *  - `choice` → `{ edits: options[optionIndex].build(ctx), rest }`.
  *  - `confirm` with index 0 (Yes) → `{ edits: [], rest: [...onYes, ...rest] }`.
  *  - `confirm` with index 1 (Skip) → `{ edits: [], rest }`.
- *  - `foresee` → `{ edits: [], rest }` (the foresee overlay applies its own edits).
+ *  - `foresee` → one atomic `FORESEE` edit when the resolution carries a
+ *    staged order, or no edits for legacy kind-only resolutions.
  *  - Mismatched prompt/resolution → defensive fallback `{ edits: [], rest }`.
  */
 export function applyPromptResolution(
@@ -137,7 +146,23 @@ export function applyPromptResolution(
       return { edits: [], rest };
     }
     case "foresee": {
-      return { edits: [], rest };
+      if (
+        resolution.kind !== "foresee" ||
+        resolution.orderedCardIds === undefined ||
+        resolution.voidCardIds === undefined
+      ) {
+        return { edits: [], rest };
+      }
+      return {
+        edits: [{
+          kind: "FORESEE",
+          side: ctx.side,
+          viewedCardIds: ctx.state.sides[ctx.side].deck.slice(0, prompt.count),
+          orderedCardIds: resolution.orderedCardIds,
+          voidCardIds: resolution.voidCardIds,
+        }],
+        rest,
+      };
     }
   }
 }

@@ -1907,6 +1907,13 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
     interactions?.onInspectorAction?.({ kind: "side-selected", side });
   }, [interactions]);
 
+  const handleInspectorAction = useCallback((action: MobileBattleInspectorAction) => {
+    if (!isDockLayout && action.kind === "foresee") {
+      closeInspector();
+    }
+    interactions?.onInspectorAction?.(action);
+  }, [closeInspector, interactions, isDockLayout]);
+
   const board = (
     <main
       className="cumulus"
@@ -2008,7 +2015,7 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
             selectedSide={selectedSide}
             onSelectSide={selectSide}
             onClose={closeInspector}
-            onAction={interactions?.onInspectorAction}
+            onAction={handleInspectorAction}
           />
         ) : null}
       </div>
@@ -2030,7 +2037,7 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
               inspector={view.inspector}
               selectedSide={selectedSide}
               onSelectSide={selectSide}
-              onAction={interactions?.onInspectorAction}
+              onAction={handleInspectorAction}
             />
           </div>
         </GlassDialog>

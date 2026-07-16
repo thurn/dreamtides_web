@@ -179,7 +179,7 @@ function stateWithPendingPrompt(promptId: number): FoldState {
       promptId,
       run: { scriptRef: { table: "dreamwell", id: "" }, cursor: [0], side: "player" },
       kind: "foresee",
-      options: { kind: "foresee", count: 0 },
+      options: { kind: "foresee", count: 0, cardIds: [] },
     },
   } as unknown as NonNullable<FoldState["battle"]>;
   return { ...base, battle };
@@ -292,7 +292,7 @@ function stateWithBattleCard(cardId: string, promptId?: number): FoldState {
             promptId,
             run: { scriptRef: { table: "dreamwell", id: "" }, cursor: [0], side: "player" },
             kind: "foresee",
-            options: { kind: "foresee", count: 0 },
+            options: { kind: "foresee", count: 0, cardIds: [] },
           },
   } as unknown as NonNullable<FoldState["battle"]>;
   return { ...base, battle };
@@ -684,7 +684,7 @@ function stateWithPoisonedPrompt(promptId: number): FoldState {
       promptId,
       run,
       kind: "foresee",
-      options: { kind: "foresee", count: 0 },
+      options: { kind: "foresee", count: 0, cardIds: [] },
     },
   } as unknown as NonNullable<FoldState["battle"]>;
   return { ...base, battle };

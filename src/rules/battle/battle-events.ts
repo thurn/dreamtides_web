@@ -863,6 +863,13 @@ function coerceBattleDebugEdit(raw: unknown): BattleDebugEdit | null {
       return isBattleSide(raw.side) && Array.isArray(raw.order) && raw.order.every((id) => typeof id === "string")
         ? raw as unknown as BattleDebugEdit
         : null;
+    case "FORESEE":
+      return isBattleSide(raw.side) &&
+        isStringArray(raw.viewedCardIds) &&
+        isStringArray(raw.orderedCardIds) &&
+        isStringArray(raw.voidCardIds)
+        ? raw as unknown as BattleDebugEdit
+        : null;
     case "PLAY_FROM_DECK_TOP":
       return isBattleSide(raw.side) && (raw.target === undefined || isBattleFieldSlotAddress(raw.target))
         ? raw as unknown as BattleDebugEdit
@@ -880,6 +887,10 @@ function coerceBattleDebugEdit(raw: unknown): BattleDebugEdit | null {
 
 function isBattleResult(value: unknown): value is BattleResult {
   return value === "victory" || value === "defeat" || value === "draw";
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((entry) => typeof entry === "string");
 }
 
 function isBattleSide(value: unknown): value is BattleSide {
@@ -968,8 +979,8 @@ function isBattleCardNoteExpiry(value: unknown): value is BattleCardNoteExpiry {
  * corrupting state.
  *
  * Delegates to {@link resolvePendingPrompt}, which applies the resolution's
- * edits (a `foresee` applies none of its own — the overlay's edits already
- * landed) and continues advancing the queue until it parks on the next prompt
+ * edits (including the atomic ordering/void edit for `foresee`) and continues
+ * advancing the queue until it parks on the next prompt
  * or empties. Returns the next {@link FoldState}, or `null` to bounce when:
  *   - there is no battle;
  *   - no prompt is pending;
@@ -1045,15 +1056,32 @@ function promptResolutionIsValid(
   resolution: PromptResolution,
 ): boolean {
   const options = pending.options;
-  if (options.kind !== "pick-cards") {
-    if (options.kind === "choice") {
-      return (
-        resolution.kind === "choice" &&
-        resolution.optionIndex >= 0 &&
-        resolution.optionIndex < options.options.length
-      );
+  if (options.kind === "foresee") {
+    if (resolution.kind !== "foresee") {
+      return false;
     }
-    return resolution.kind === options.kind;
+    if (
+      resolution.orderedCardIds === undefined ||
+      resolution.voidCardIds === undefined
+    ) {
+      return true;
+    }
+    const resolvedIds = [
+      ...resolution.orderedCardIds,
+      ...resolution.voidCardIds,
+    ];
+    return (
+      resolvedIds.length === options.cardIds.length &&
+      new Set(resolvedIds).size === resolvedIds.length &&
+      resolvedIds.every((id) => options.cardIds.includes(id))
+    );
+  }
+  if (options.kind === "choice") {
+    return (
+      resolution.kind === "choice" &&
+      resolution.optionIndex >= 0 &&
+      resolution.optionIndex < options.options.length
+    );
   }
   if (resolution.kind !== "pick-cards") {
     return false;
@@ -1109,7 +1137,25 @@ function coercePromptResolution(raw: unknown): PromptResolution | null {
     return { kind: "choice", optionIndex };
   }
   if (kind === "foresee") {
-    return { kind: "foresee" };
+    const orderedCardIds = (raw as { orderedCardIds?: unknown }).orderedCardIds;
+    const voidCardIds = (raw as { voidCardIds?: unknown }).voidCardIds;
+    if (orderedCardIds === undefined && voidCardIds === undefined) {
+      return { kind: "foresee" };
+    }
+    if (!Array.isArray(orderedCardIds) || !Array.isArray(voidCardIds)) {
+      return null;
+    }
+    if (
+      orderedCardIds.some((id) => typeof id !== "string") ||
+      voidCardIds.some((id) => typeof id !== "string")
+    ) {
+      return null;
+    }
+    return {
+      kind: "foresee",
+      orderedCardIds: orderedCardIds as string[],
+      voidCardIds: voidCardIds as string[],
+    };
   }
   return null;
 }

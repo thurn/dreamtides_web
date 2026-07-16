@@ -361,6 +361,16 @@ export function applyDebugEdit(
       );
     case "REORDER_DECK":
       return reorderDeck(state, nextState, edit.side, edit.order, context);
+    case "FORESEE":
+      return resolveForesee(
+        state,
+        nextState,
+        edit.side,
+        edit.viewedCardIds,
+        edit.orderedCardIds,
+        edit.voidCardIds,
+        context,
+      );
     case "REVEAL_DECK_TOP":
       return revealDeckTop(state, nextState, edit.side, edit.count);
     case "HIDE_DECK_TOP":
@@ -439,6 +449,78 @@ function reorderDeck(
           { side, orderBefore, orderAfter },
           context,
         ),
+      ],
+    },
+  };
+}
+
+function resolveForesee(
+  state: BattleMutableState,
+  nextState: BattleMutableState,
+  side: BattleSide,
+  viewedCardIds: readonly string[],
+  orderedCardIds: readonly string[],
+  voidCardIds: readonly string[],
+  context: BattleEngineEmissionContext,
+): {
+  state: BattleMutableState;
+  transition: BattleTransitionData;
+} {
+  const deckBefore = state.sides[side].deck;
+  const viewedCount = viewedCardIds.length;
+  const livePrefix = deckBefore.slice(0, viewedCount);
+  const resolvedIds = [...orderedCardIds, ...voidCardIds];
+
+  if (
+    viewedCount === 0 ||
+    !isSameOrder(livePrefix, viewedCardIds) ||
+    !isDeckPermutation(viewedCardIds, resolvedIds)
+  ) {
+    return {
+      state,
+      transition: createEmptyTransitionData(),
+    };
+  }
+
+  const deckAfter = [...orderedCardIds, ...deckBefore.slice(viewedCount)];
+  nextState.sides[side].deck = deckAfter;
+  nextState.sides[side].void = [
+    ...nextState.sides[side].void,
+    ...voidCardIds,
+  ];
+
+  for (const battleCardId of viewedCardIds) {
+    const instance = nextState.cardInstances[battleCardId];
+    if (instance !== undefined) {
+      instance.isRevealedToPlayer = true;
+    }
+  }
+
+  const cardUuids = (battleCardIds: readonly string[]): string[] =>
+    battleCardIds.map(
+      (battleCardId) => nextState.cardInstances[battleCardId]?.definition.cardId ?? "",
+    );
+
+  return {
+    state: nextState,
+    transition: {
+      ...createEmptyTransitionData(),
+      logEvents: [
+        {
+          event: "battle_proto_foresee_resolved",
+          fields: {
+            ...createBattleLogBaseFields(nextState, context),
+            side,
+            viewedCardIds: [...viewedCardIds],
+            viewedCardUuids: cardUuids(viewedCardIds),
+            orderedCardIds: [...orderedCardIds],
+            orderedCardUuids: cardUuids(orderedCardIds),
+            voidCardIds: [...voidCardIds],
+            voidCardUuids: cardUuids(voidCardIds),
+            deckOrderBefore: [...deckBefore],
+            deckOrderAfter: deckAfter,
+          },
+        },
       ],
     },
   };

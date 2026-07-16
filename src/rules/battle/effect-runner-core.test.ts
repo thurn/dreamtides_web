@@ -209,18 +209,23 @@ describe("planNextEffectStep — confirm prompt head", () => {
 // ---------------------------------------------------------------------------
 
 describe("planNextEffectStep — foresee prompt head", () => {
-  it("returns a foresee active prompt with correct count", () => {
+  it("returns the exact inspected deck prefix with the foresee count", () => {
     const foreseePrompt: EffectPrompt = { kind: "foresee", count: 3 };
     const promptStep: EffectStep = { kind: "prompt", prompt: foreseePrompt };
     const tailStep: EffectStep = { kind: "edits", build: () => [] };
+    const ctx = makeCtx();
+    ctx.state = {
+      sides: { player: { deck: ["card-a", "card-b", "card-c", "card-d"] } },
+    } as unknown as BattleMutableState;
 
-    const result = planNextEffectStep([promptStep, tailStep], makeCtx());
+    const result = planNextEffectStep([promptStep, tailStep], ctx);
 
     expect(result.type).toBe("prompt");
     if (result.type !== "prompt") throw new Error();
     expect(result.active.kind).toBe("foresee");
     if (result.active.kind !== "foresee") throw new Error();
     expect(result.active.count).toBe(3);
+    expect(result.active.cardIds).toEqual(["card-a", "card-b", "card-c"]);
     expect(result.prompt).toBe(foreseePrompt);
     expect(result.rest).toHaveLength(1);
     expect(result.rest[0]).toBe(tailStep);
@@ -404,22 +409,47 @@ describe("applyPromptResolution — confirm (CRITICAL)", () => {
 // ---------------------------------------------------------------------------
 
 describe("applyPromptResolution — foresee", () => {
-  it("returns no edits and rest unchanged (foresee overlay handles its own edits)", () => {
+  it("returns one atomic FORESEE edit and leaves the queued rest unchanged", () => {
     const foreseePrompt: EffectPrompt = { kind: "foresee", count: 2 };
     const tailStep: EffectStep = { kind: "edits", build: () => [SENTINEL_EDIT] };
+    const ctx = makeCtx();
+    ctx.state = {
+      sides: { player: { deck: ["card-a", "card-b", "card-c"] } },
+    } as unknown as BattleMutableState;
 
     const { edits, rest } = applyPromptResolution(
       foreseePrompt,
+      {
+        kind: "foresee",
+        orderedCardIds: ["card-b"],
+        voidCardIds: ["card-a"],
+      },
+      [tailStep],
+      ctx,
+    );
+
+    expect(edits).toEqual([{
+      kind: "FORESEE",
+      side: "player",
+      viewedCardIds: ["card-a", "card-b"],
+      orderedCardIds: ["card-b"],
+      voidCardIds: ["card-a"],
+    }]);
+
+    // Bug class: rest dropped
+    expect(rest).toHaveLength(1);
+    expect(rest[0]).toBe(tailStep);
+  });
+
+  it("keeps kind-only legacy resolutions as a no-op", () => {
+    const tailStep: EffectStep = { kind: "edits", build: () => [SENTINEL_EDIT] };
+    const result = applyPromptResolution(
+      { kind: "foresee", count: 2 },
       { kind: "foresee" },
       [tailStep],
       makeCtx(),
     );
 
-    // Bug class: emitting edits from the runner instead of the overlay
-    expect(edits).toEqual([]);
-
-    // Bug class: rest dropped
-    expect(rest).toHaveLength(1);
-    expect(rest[0]).toBe(tailStep);
+    expect(result).toEqual({ edits: [], rest: [tailStep] });
   });
 });

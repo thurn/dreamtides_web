@@ -407,6 +407,38 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("dismisses the mobile inspector takeover before opening Foresee", () => {
+    mockDesktopViewport(false);
+    const onInspectorAction = vi.fn();
+    const { container, root } = mount(makeView(), {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+      onInspectorAction,
+    });
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="battle-inspector-trigger"]',
+      )?.click();
+    });
+    expect(container.querySelector('[data-battle-inspector="takeover"]')).not.toBeNull();
+
+    const foresee = Array.from(container.querySelectorAll<HTMLButtonElement>("button"))
+      .find((button) => button.textContent === "Foresee");
+    act(() => foresee?.click());
+
+    expect(onInspectorAction).toHaveBeenCalledWith({ kind: "foresee", side: "player" });
+    expect(container.querySelector('[data-battle-inspector="takeover"]')).toBeNull();
+    act(() => root.unmount());
+  });
+
   it("disables discard and shuffle from live side availability", () => {
     mockDesktopViewport(true);
     const view = makeView();

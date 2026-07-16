@@ -507,6 +507,7 @@ function makeRichBoard(over: {
   turnNumber?: number;
   dreamwellDeckIndex?: number;
   instances?: BattleCardInstance[];
+  playerDeck?: string[];
   playerHand?: string[];
   playerVoid?: string[];
   playerFront?: Record<string, string | null>;
@@ -515,6 +516,7 @@ function makeRichBoard(over: {
   playerDreamwellDrawnTurn?: number | null;
 } = {}): BattleMutableState {
   const player = makeSide();
+  player.deck = over.playerDeck ?? [];
   player.hand = over.playerHand ?? [];
   player.void = over.playerVoid ?? [];
   player.frontRank = { ...emptyFrontRankSlots(), ...(over.playerFront ?? {}) };
@@ -671,7 +673,7 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
         promptId: 7,
         run: { scriptRef: { table: "battle", id: "x" }, cursor: [0], side: "player" },
         kind: "foresee",
-        options: { kind: "foresee", count: 1 },
+        options: { kind: "foresee", count: 1, cardIds: [board.sides.player.deck[0]] },
       },
     });
     const state = { ...baseState(), battle };
@@ -683,6 +685,35 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     const state = { ...baseState(), battle: battleFrom(makeRichBoard()) };
     expect(reduce(state, "BATTLE_COMMAND", { command: { id: "NONSENSE" } }).outcome).toBe("bounced");
     expect(reduce(state, "BATTLE_COMMAND", {}).outcome).toBe("bounced");
+  });
+
+  it("accepts and applies one atomic Foresee command", () => {
+    const deckInstances = [1, 2, 3].map((index) => makeInstance(
+      `foresee-command-${String(index)}`,
+      `10000000-0000-0000-0000-00000000000${String(index)}`,
+    ));
+    const viewedCardIds = deckInstances.map((instance) => instance.battleCardId);
+    const board = makeRichBoard({
+      instances: deckInstances,
+      playerDeck: viewedCardIds,
+    });
+    const state = { ...baseState(), battle: battleFrom(board) };
+    const result = reduce(state, "BATTLE_COMMAND", debugEdit({
+      kind: "FORESEE",
+      side: "player",
+      viewedCardIds,
+      orderedCardIds: [viewedCardIds[2], viewedCardIds[0]],
+      voidCardIds: [viewedCardIds[1]],
+    }));
+
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.board.sides.player.deck).toEqual([
+      viewedCardIds[2],
+      viewedCardIds[0],
+    ]);
+    expect(result.state.battle?.board.sides.player.void).toEqual([
+      viewedCardIds[1],
+    ]);
   });
 
   it("bounces a DEBUG_EDIT whose side is not a battle side", () => {
@@ -1031,8 +1062,7 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
 
 /**
  * The first registered battle script whose FIRST step is a `foresee` prompt, so
- * a fresh run parked at `cursor: [0]` stops on the prompt immediately and its
- * resolution applies no edits of its own. Resolved from the LIVE table (no
+ * a fresh run parked at `cursor: [0]` stops on the prompt immediately. Resolved from the LIVE table (no
  * hardcoded card ids/names) — data-resilient per AGENTS.md.
  */
 function firstForeseePromptBattleScript(): BattleCardEffectScript {
@@ -1062,9 +1092,19 @@ function parkForeseePrompt(extraQueue: EffectRun[] = []): {
   state: FoldState;
   promptId: number;
   parkedBoardHash: string;
+  cardIds: string[];
 } {
   const foresee = firstForeseePromptBattleScript();
-  const board = makeRichBoard({ turnNumber: 3, phase: "day" });
+  const deckInstances = [1, 2, 3].map((index) => makeInstance(
+    `foresee-${String(index)}`,
+    `00000000-0000-0000-0000-00000000000${String(index)}`,
+  ));
+  const board = makeRichBoard({
+    turnNumber: 3,
+    phase: "day",
+    instances: deckInstances,
+    playerDeck: deckInstances.map((instance) => instance.battleCardId),
+  });
   const battle = battleFrom(board, {
     effectQueue: [
       { scriptRef: { table: "battle", id: foresee.id }, cursor: [0], side: "player" },
@@ -1099,6 +1139,7 @@ function parkForeseePrompt(extraQueue: EffectRun[] = []): {
     state: parked.state,
     promptId: prompt.promptId,
     parkedBoardHash: hashBoard(parked.state.battle!.board),
+    cardIds: prompt.options.cardIds,
   };
 }
 
@@ -1116,18 +1157,54 @@ describe("RESOLVE_PROMPT", () => {
     expect(result.state.battle?.effectQueue).toEqual([]);
   });
 
-  it("applies a foresee resolution with no edits of its own (foresee no-op contract)", () => {
-    const { state, promptId, parkedBoardHash } = parkForeseePrompt();
+  it("applies the staged Foresee order and void choice inside the prompt event", () => {
+    const { state, promptId, cardIds } = parkForeseePrompt();
+    const [voidedCardId, ...orderedCardIds] = cardIds;
+    if (voidedCardId === undefined) throw new Error("expected a foreseen card");
+    const deckTail = state.battle!.board.sides.player.deck.slice(cardIds.length);
+    const voidBefore = state.battle!.board.sides.player.void;
     const result = reduce(
       state,
       "RESOLVE_PROMPT",
-      { promptId, resolution: { kind: "foresee" } },
+      {
+        promptId,
+        resolution: {
+          kind: "foresee",
+          orderedCardIds,
+          voidCardIds: [voidedCardId],
+        },
+      },
       ctx({ seq: PARK_SEQ + 1 }),
     );
     expect(result.outcome).toBe("applied");
-    // The foresee resolution applies NO edits itself — the board is unchanged
-    // from the parked board (the foresee overlay's edits landed before parking).
-    expect(hashBoard(result.state.battle!.board)).toBe(parkedBoardHash);
+    expect(result.state.battle!.board.sides.player.deck).toEqual([
+      ...orderedCardIds,
+      ...deckTail,
+    ]);
+    expect(result.state.battle!.board.sides.player.void).toEqual([
+      ...voidBefore,
+      voidedCardId,
+    ]);
+  });
+
+  it("bounces a Foresee resolution that does not partition the recorded prefix", () => {
+    const { state, promptId, cardIds } = parkForeseePrompt();
+    const result = reduce(
+      state,
+      "RESOLVE_PROMPT",
+      {
+        promptId,
+        resolution: {
+          kind: "foresee",
+          orderedCardIds: [...cardIds, ...cardIds],
+          voidCardIds: [],
+        },
+      },
+      ctx({ seq: PARK_SEQ + 1 }),
+    );
+
+    expect(result.outcome).toBe("bounced");
+    expect(result.state.battle?.pendingPrompt?.promptId).toBe(promptId);
   });
 
   it("resumes and drains the rest of the queue after a matching resolve", () => {

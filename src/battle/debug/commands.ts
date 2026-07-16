@@ -243,6 +243,18 @@ export type BattleDebugEdit =
     order: readonly string[];
   }
   | {
+    /**
+     * Resolves Foresee as one atomic edit. `viewedCardIds` is the exact deck
+     * prefix the player inspected; the other two lists partition that prefix
+     * into the new top-to-bottom deck order and the cards sent to the void.
+     */
+    kind: "FORESEE";
+    side: BattleSide;
+    viewedCardIds: readonly string[];
+    orderedCardIds: readonly string[];
+    voidCardIds: readonly string[];
+  }
+  | {
     kind: "REVEAL_DECK_TOP";
     side: BattleSide;
     count: number;
@@ -515,6 +527,7 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
     case "CREATE_FIGMENT":
     case "CREATE_CARD_FROM_DEFINITION":
     case "REORDER_DECK":
+    case "FORESEE":
     case "PLAY_FROM_DECK_TOP":
       return "zone-move";
     case "SWAP_BATTLEFIELD_SLOTS":
@@ -564,6 +577,7 @@ function isCompositeDebugEdit(edit: BattleDebugEdit): boolean {
     case "INCREASE_MAX_ENERGY_AND_FILL":
     case "SET_BATTLE_FLOW":
     case "FILL_BATTLEFIELD_PREVIEW":
+    case "FORESEE":
       return true;
     default:
       return false;
@@ -661,6 +675,13 @@ function collectDebugEditTargets(
     case "ERODE":
     case "REORDER_DECK":
       return [makeSideTarget(edit.side), makeZoneTarget(edit.side, "deck")];
+    case "FORESEE":
+      return [
+        makeSideTarget(edit.side),
+        makeZoneTarget(edit.side, "deck"),
+        makeZoneTarget(edit.side, "void"),
+        ...edit.viewedCardIds.map(makeCardTarget),
+      ];
     case "REVEAL_DECK_TOP":
     case "HIDE_DECK_TOP":
       return [makeZoneTarget(edit.side, "deck")];
@@ -760,6 +781,8 @@ function createDebugEditLabel(
         : "Fill Battlefield Preview";
     case "REORDER_DECK":
       return `Reorder ${formatSideLabel(edit.side)} Deck`;
+    case "FORESEE":
+      return `Foresee ${String(edit.viewedCardIds.length)} for ${formatSideLabel(edit.side)}`;
     case "REVEAL_DECK_TOP":
       return `Reveal Top ${String(edit.count)} of ${formatSideLabel(edit.side)} Deck`;
     case "HIDE_DECK_TOP":
