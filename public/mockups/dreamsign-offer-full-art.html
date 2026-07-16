@@ -11,9 +11,10 @@
         --dreamsign-low: 21%;
         --dreamsign-high: 51%;
         --dreamsign-center: 36%;
-        --dreamsign-triangle-left: 23.01%;
-        --dreamsign-triangle-right: 48.99%;
-        --dreamsign-triangle-bottom: 43.5%;
+        --dreamsign-triangle-top: 15.84%;
+        --dreamsign-triangle-left: 18.54%;
+        --dreamsign-triangle-right: 53.46%;
+        --dreamsign-triangle-bottom: 46.08%;
         color-scheme: dark;
         font-family:
           Inter,
@@ -226,7 +227,7 @@
       .offer-tile__symbols--draft[data-count="3"]
         .offer-tile__dreamsign:nth-child(1) {
         left: var(--dreamsign-center);
-        top: var(--dreamsign-low);
+        top: var(--dreamsign-triangle-top);
       }
 
       .offer-tile__symbols--draft[data-count="3"]
@@ -765,12 +766,19 @@
         const center = 50 - halfSize;
         const low = 50 - spread - halfSize;
         const high = 50 + spread - halfSize;
-        const triangleHorizontalOffset = spread * (Math.sqrt(3) / 2);
+        // Keep a small gap between all three icon boxes even when the scale is
+        // large and the requested group spread is tight.
+        const triangleSpread = Math.max(spread, size * 0.72);
+        const triangleHorizontalOffset = triangleSpread * (Math.sqrt(3) / 2);
 
         setPercentageProperty("--dreamsign-size", size);
         setPercentageProperty("--dreamsign-low", low);
         setPercentageProperty("--dreamsign-high", high);
         setPercentageProperty("--dreamsign-center", center);
+        setPercentageProperty(
+          "--dreamsign-triangle-top",
+          50 - triangleSpread - halfSize,
+        );
         setPercentageProperty(
           "--dreamsign-triangle-left",
           50 - triangleHorizontalOffset - halfSize,
@@ -781,7 +789,7 @@
         );
         setPercentageProperty(
           "--dreamsign-triangle-bottom",
-          50 + spread / 2 - halfSize,
+          50 + triangleSpread / 2 - halfSize,
         );
         dreamsignSpreadValue.value = `${spread}%`;
         dreamsignScaleValue.value = `${size}%`;
