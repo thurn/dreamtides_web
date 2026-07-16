@@ -7,7 +7,13 @@
     <style>
       :root {
         --background-blur: 0px;
-        --dreamsign-spread: 15%;
+        --dreamsign-size: 28%;
+        --dreamsign-low: 21%;
+        --dreamsign-high: 51%;
+        --dreamsign-center: 36%;
+        --dreamsign-triangle-left: 23.01%;
+        --dreamsign-triangle-right: 48.99%;
+        --dreamsign-triangle-bottom: 43.5%;
         color-scheme: dark;
         font-family:
           Inter,
@@ -102,11 +108,6 @@
         width: min(460px, 43vw);
         aspect-ratio: 756 / 769;
         isolation: isolate;
-        animation: drift 5.8s ease-in-out infinite;
-      }
-
-      .offer:nth-child(2) .offer-tile {
-        animation-delay: -2.4s;
       }
 
       .offer-tile__fill {
@@ -177,47 +178,70 @@
       }
 
       .offer-tile__symbols--draft .offer-tile__dreamsign {
-        /* Spread measures each icon center's offset from the group center.
-           The 12–17% control range stays inside the frame-safe circle. */
+        /* Past 17% spread, the controls gradually reduce icon size so the
+           25% extreme still preserves a gap inside the circular frame. */
         position: absolute;
-        width: 28%;
-        height: 28%;
+        width: var(--dreamsign-size);
+        height: var(--dreamsign-size);
       }
 
       .offer-tile__symbols--draft .offer-tile__dreamsign:nth-child(1) {
-        left: calc(36% - var(--dreamsign-spread));
-        top: calc(36% - var(--dreamsign-spread));
+        left: var(--dreamsign-low);
+        top: var(--dreamsign-low);
       }
 
       .offer-tile__symbols--draft .offer-tile__dreamsign:nth-child(2) {
-        left: calc(36% + var(--dreamsign-spread));
-        top: calc(36% - var(--dreamsign-spread));
+        left: var(--dreamsign-high);
+        top: var(--dreamsign-low);
       }
 
       .offer-tile__symbols--draft .offer-tile__dreamsign:nth-child(3) {
-        left: calc(36% - var(--dreamsign-spread));
-        top: calc(36% + var(--dreamsign-spread));
+        left: var(--dreamsign-low);
+        top: var(--dreamsign-high);
       }
 
       .offer-tile__symbols--draft .offer-tile__dreamsign:nth-child(4) {
-        left: calc(36% + var(--dreamsign-spread));
-        top: calc(36% + var(--dreamsign-spread));
+        left: var(--dreamsign-high);
+        top: var(--dreamsign-high);
       }
 
       .offer-tile__symbols--draft[data-count="2"]
         .offer-tile__dreamsign:nth-child(1) {
-        left: calc(36% - var(--dreamsign-spread));
-        top: 36%;
+        left: var(--dreamsign-low);
+        top: var(--dreamsign-center);
       }
 
       .offer-tile__symbols--draft[data-count="2"]
         .offer-tile__dreamsign:nth-child(2) {
-        left: calc(36% + var(--dreamsign-spread));
-        top: 36%;
+        left: var(--dreamsign-high);
+        top: var(--dreamsign-center);
       }
 
       .offer-tile__symbols--draft[data-count="2"]
         .offer-tile__dreamsign:nth-child(n + 3) {
+        display: none;
+      }
+
+      .offer-tile__symbols--draft[data-count="3"]
+        .offer-tile__dreamsign:nth-child(1) {
+        left: var(--dreamsign-center);
+        top: var(--dreamsign-low);
+      }
+
+      .offer-tile__symbols--draft[data-count="3"]
+        .offer-tile__dreamsign:nth-child(2) {
+        left: var(--dreamsign-triangle-left);
+        top: var(--dreamsign-triangle-bottom);
+      }
+
+      .offer-tile__symbols--draft[data-count="3"]
+        .offer-tile__dreamsign:nth-child(3) {
+        left: var(--dreamsign-triangle-right);
+        top: var(--dreamsign-triangle-bottom);
+      }
+
+      .offer-tile__symbols--draft[data-count="3"]
+        .offer-tile__dreamsign:nth-child(4) {
         display: none;
       }
 
@@ -312,7 +336,8 @@
       }
 
       .range-control__label,
-      .count-control__label {
+      .count-control__label,
+      .randomize-control__label {
         color: rgba(255, 249, 233, 0.82);
         font-size: 12px;
         font-weight: 800;
@@ -370,14 +395,41 @@
         color: #fff9e9;
       }
 
-      @keyframes drift {
-        0%,
-        100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-4px);
-        }
+      .randomize-control {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .randomize-control__actions {
+        justify-self: end;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .randomize-control__status {
+        color: rgba(255, 249, 233, 0.68);
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .randomize-control__button {
+        padding: 7px 13px;
+        border: 1px solid rgba(245, 231, 119, 0.62);
+        border-radius: 999px;
+        background: rgba(245, 231, 119, 0.14);
+        color: #fff9e9;
+        font: inherit;
+        font-size: 12px;
+        font-weight: 850;
+        cursor: pointer;
+      }
+
+      .randomize-control__button:disabled {
+        opacity: 0.48;
+        cursor: wait;
       }
 
       @media (max-width: 760px) {
@@ -405,12 +457,6 @@
 
         .picker__choice span {
           display: none;
-        }
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        .offer-tile {
-          animation: none;
         }
       }
     </style>
@@ -542,7 +588,7 @@
               id="dreamsign-spread"
               type="range"
               min="12"
-              max="17"
+              max="25"
               step="1"
               value="15"
             />
@@ -572,10 +618,38 @@
               <button
                 class="count-control__button"
                 type="button"
+                data-dreamsign-count="3"
+                aria-pressed="false"
+              >
+                3
+              </button>
+              <button
+                class="count-control__button"
+                type="button"
                 data-dreamsign-count="4"
                 aria-pressed="true"
               >
                 4
+              </button>
+            </div>
+          </div>
+          <div class="randomize-control">
+            <span class="randomize-control__label">Dreamsign catalog</span>
+            <div class="randomize-control__actions">
+              <span
+                class="randomize-control__status"
+                id="dreamsign-catalog-status"
+                aria-live="polite"
+              >
+                Loading catalog…
+              </span>
+              <button
+                class="randomize-control__button"
+                id="randomize-dreamsigns"
+                type="button"
+                disabled
+              >
+                Randomize shown
               </button>
             </div>
           </div>
@@ -604,7 +678,16 @@
       const dreamsignCountButtons = document.querySelectorAll(
         "[data-dreamsign-count]",
       );
-      const offerTiles = document.querySelectorAll(".offer-tile");
+      const draftDreamsignImages = draftSymbols.querySelectorAll(
+        ".offer-tile__dreamsign",
+      );
+      const randomizeDreamsigns = document.querySelector(
+        "#randomize-dreamsigns",
+      );
+      const dreamsignCatalogStatus = document.querySelector(
+        "#dreamsign-catalog-status",
+      );
+      let dreamsignCatalog = [];
 
       function render(selectedIndex) {
         const selected = imageNumbers[selectedIndex];
@@ -640,22 +723,44 @@
 
       backgroundBlur.addEventListener("input", () => {
         const blur = `${backgroundBlur.value}px`;
-        const isBlurred = Number(backgroundBlur.value) > 0;
         document.documentElement.style.setProperty("--background-blur", blur);
-        offerTiles.forEach((tile) => {
-          tile.style.animation = isBlurred ? "none" : "";
-        });
         backgroundBlurValue.value = `${backgroundBlur.value} px`;
       });
 
-      dreamsignSpread.addEventListener("input", () => {
-        const spread = `${dreamsignSpread.value}%`;
-        document.documentElement.style.setProperty(
-          "--dreamsign-spread",
-          spread,
+      function setPercentageProperty(name, value) {
+        const rounded = Math.round(value * 100) / 100;
+        document.documentElement.style.setProperty(name, `${rounded}%`);
+      }
+
+      function updateDreamsignLayout() {
+        const spread = Number(dreamsignSpread.value);
+        const size = spread <= 17 ? 28 : 28 - (spread - 17) * 1.5;
+        const halfSize = size / 2;
+        const center = 50 - halfSize;
+        const low = 50 - spread - halfSize;
+        const high = 50 + spread - halfSize;
+        const triangleHorizontalOffset = spread * (Math.sqrt(3) / 2);
+
+        setPercentageProperty("--dreamsign-size", size);
+        setPercentageProperty("--dreamsign-low", low);
+        setPercentageProperty("--dreamsign-high", high);
+        setPercentageProperty("--dreamsign-center", center);
+        setPercentageProperty(
+          "--dreamsign-triangle-left",
+          50 - triangleHorizontalOffset - halfSize,
         );
-        dreamsignSpreadValue.value = spread;
-      });
+        setPercentageProperty(
+          "--dreamsign-triangle-right",
+          50 + triangleHorizontalOffset - halfSize,
+        );
+        setPercentageProperty(
+          "--dreamsign-triangle-bottom",
+          50 + spread / 2 - halfSize,
+        );
+        dreamsignSpreadValue.value = `${spread}%`;
+      }
+
+      dreamsignSpread.addEventListener("input", updateDreamsignLayout);
 
       dreamsignCountButtons.forEach((button) => {
         button.addEventListener("click", () => {
@@ -670,6 +775,51 @@
           });
         });
       });
+
+      function sampleDreamsigns(count) {
+        const pool = [...dreamsignCatalog];
+        for (let index = 0; index < count; index += 1) {
+          const randomIndex =
+            index + Math.floor(Math.random() * (pool.length - index));
+          [pool[index], pool[randomIndex]] = [pool[randomIndex], pool[index]];
+        }
+        return pool.slice(0, count);
+      }
+
+      randomizeDreamsigns.addEventListener("click", () => {
+        const count = Number(draftSymbols.dataset.count);
+        sampleDreamsigns(count).forEach((dreamsign, index) => {
+          const image = draftDreamsignImages[index];
+          image.src = `/dreamsigns/${encodeURIComponent(dreamsign.imageName)}`;
+          image.alt = dreamsign.imageAlt || dreamsign.name;
+          image.dataset.dreamsignId = dreamsign.id;
+        });
+        dreamsignCatalogStatus.textContent = `Randomized ${count} of ${dreamsignCatalog.length}`;
+      });
+
+      async function loadDreamsignCatalog() {
+        try {
+          const response = await fetch("/dreamsign-data.json");
+          if (!response.ok) {
+            throw new Error(`Catalog request failed with ${response.status}`);
+          }
+          const entries = await response.json();
+          dreamsignCatalog = entries.filter(
+            (entry) => entry.id && entry.imageName && entry.imageAlt,
+          );
+          if (dreamsignCatalog.length < 4) {
+            throw new Error("Dreamsign catalog has fewer than four entries");
+          }
+          randomizeDreamsigns.disabled = false;
+          dreamsignCatalogStatus.textContent = `${dreamsignCatalog.length} available`;
+        } catch (error) {
+          dreamsignCatalogStatus.textContent = "Catalog unavailable";
+          console.warn(error);
+        }
+      }
+
+      updateDreamsignLayout();
+      void loadDreamsignCatalog();
     </script>
   </body>
 </html>
