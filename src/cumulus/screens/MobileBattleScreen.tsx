@@ -20,6 +20,7 @@ import {
   CardPile,
   type BattlePileCard,
 } from "../components/battle/CardPile";
+import { BanishedZoneIndicator } from "../components/battle/BanishedZoneIndicator";
 import { GlassButton } from "../components/controls/GlassButton";
 import { DisclosureSection } from "../components/controls/DisclosureSection";
 import { GlowIcon } from "../components/controls/GlowIcon";
@@ -88,6 +89,7 @@ export interface MobileBattleStatusView {
 /** Every zone owned by one side of the battle. */
 export interface MobileBattleSideView {
   readonly deckCardIds: readonly string[];
+  readonly banishedCardCount: number;
   readonly voidCards: readonly MobileBattleCardView[];
   readonly backRank: readonly MobileBattleSlotView[];
   readonly frontRank: readonly MobileBattleSlotView[];
@@ -346,6 +348,7 @@ const SIDE_PILE_MAX_WIDTH = 90;
 // the mobile spacing rhythm edge-to-edge.
 const DESKTOP_SIDE_ZONES_WIDTH = 540;
 const DESKTOP_SIDE_PILE_MAX_WIDTH = 120;
+const DESKTOP_BANISHED_ZONE_SIZE = 72;
 const DESKTOP_SIDE_PILE_HEIGHT =
   DESKTOP_SIDE_PILE_MAX_WIDTH * CARD_ASPECT_RATIO_VALUE;
 const DESKTOP_SIDE_ZONE_MIN_CLEARANCE = token("--space-5");
@@ -665,12 +668,39 @@ function SideZones({
         <div
           data-battle-pile-frame=""
           style={{
+            position: "relative",
             width: "100%",
             maxWidth: isDesktop
               ? DESKTOP_SIDE_PILE_MAX_WIDTH
               : SIDE_PILE_MAX_WIDTH,
           }}
         >
+          {isDesktop
+          && side.banishedCardCount > 0
+          && interactions?.onZoneOpen !== undefined ? (
+            <div
+              data-battle-zone={`${owner}-banished`}
+              data-battle-zone-count={String(side.banishedCardCount)}
+              style={{
+                position: "absolute",
+                right: `calc(100% + ${token("--space-4")})`,
+                top: "50%",
+                width: DESKTOP_BANISHED_ZONE_SIZE,
+                transform: "translateY(-50%)",
+                zIndex: 4,
+              }}
+            >
+              <BanishedZoneIndicator
+                count={side.banishedCardCount}
+                label={`${owner === "enemy" ? "Enemy" : "Player"} banished zone`}
+                onActivate={() => interactions.onZoneOpen?.({
+                  owner,
+                  zone: "banished",
+                })}
+                testId={`${owner}-battle-banished`}
+              />
+            </div>
+          ) : null}
           <CardPile
             cards={deck}
             orientation="landscape"

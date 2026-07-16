@@ -80,6 +80,7 @@ function makeSide(
       { length: 4 },
       (_, index) => `${owner}-deck-${String(index)}`,
     ),
+    banishedCardCount: 0,
     voidCards: [
       makeCard(cardOffset, `${owner}-void-top`),
       makeCard(cardOffset + 1, `${owner}-void-under`),
@@ -870,6 +871,85 @@ describe("MobileBattleScreen", () => {
       owner: "player",
       zone: "void",
     });
+    expect(
+      container.querySelector('[data-battle-zone="player-banished"]'),
+    ).toBeNull();
+
+    act(() => root.unmount());
+  });
+
+  it("shows a non-empty banished portal left of each desktop deck and opens its browser", () => {
+    mockDesktopViewport(true);
+    const view = makeView();
+    const onZoneOpen = vi.fn();
+    const interactions: MobileBattleInteractions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onZoneOpen,
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount({
+      ...view,
+      player: { ...view.player, banishedCardCount: 2 },
+      enemy: { ...view.enemy, banishedCardCount: 0 },
+    }, interactions);
+
+    const playerDeck = container.querySelector<HTMLElement>(
+      '[data-battle-zone="player-deck"]',
+    );
+    const indicatorFrame = playerDeck?.querySelector<HTMLElement>(
+      '[data-battle-zone="player-banished"]',
+    );
+    const indicator = indicatorFrame?.querySelector<HTMLButtonElement>(
+      '[data-testid="player-battle-banished"]',
+    );
+
+    expect(indicatorFrame?.dataset.battleZoneCount).toBe("2");
+    expect(indicatorFrame?.style.position).toBe("absolute");
+    expect(indicatorFrame?.style.right).toBe(
+      "calc(100% + var(--space-4))",
+    );
+    expect(indicatorFrame?.style.width).toBe("72px");
+    expect(indicator?.getAttribute("aria-label")).toBe(
+      "Player banished zone, 2 cards",
+    );
+    expect(
+      container.querySelector('[data-battle-zone="enemy-banished"]'),
+    ).toBeNull();
+
+    act(() => indicator?.click());
+    expect(onZoneOpen).toHaveBeenCalledWith({
+      owner: "player",
+      zone: "banished",
+    });
+
+    act(() => root.unmount());
+  });
+
+  it("keeps the banished portal off the mobile battle layout", () => {
+    const view = makeView();
+    const { container, root } = mount({
+      ...view,
+      player: { ...view.player, banishedCardCount: 2 },
+    }, {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onZoneOpen: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    });
+
     expect(
       container.querySelector('[data-battle-zone="player-banished"]'),
     ).toBeNull();

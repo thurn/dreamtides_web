@@ -350,6 +350,7 @@ function buildSideView(
   const sideState = board.sides[side];
   return {
     deckCardIds: [...sideState.deck],
+    banishedCardCount: sideState.banished.length,
     voidCards: buildCardViews([...sideState.void].reverse(), board),
     backRank: backRankSlotIds(backSize).map((slotId) =>
       buildSlotView(slotId, sideState.backRank[slotId] ?? null, board),

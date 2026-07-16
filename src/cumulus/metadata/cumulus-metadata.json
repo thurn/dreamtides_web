@@ -400,6 +400,40 @@
       "description": "Enter the node's dreamscape. Available nodes invoke this with their UUID."
     }
   ],
+  "BanishedZoneIndicator": [
+    {
+      "name": "count",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Number of cards in the banished zone."
+    },
+    {
+      "name": "label",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Accessible owner-aware name for the zone."
+    },
+    {
+      "name": "onActivate",
+      "tsType": "() => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Opens the banished-card browser."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional stable test id for the indicator."
+    }
+  ],
   "BattleStatusDisplay": [
     {
       "name": "owner",

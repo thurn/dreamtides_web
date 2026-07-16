@@ -542,6 +542,12 @@ describe("buildMobileBattleView", () => {
     expect(view.playerHand.map((card) => card.id)).toEqual(board.sides.player.hand);
     expect(view.player.deckCardIds).toEqual(board.sides.player.deck);
     expect(view.enemy.deckCardIds).toEqual(board.sides.enemy.deck);
+    expect(view.player.banishedCardCount).toBe(
+      board.sides.player.banished.length,
+    );
+    expect(view.enemy.banishedCardCount).toBe(
+      board.sides.enemy.banished.length,
+    );
     expect(view.player.deckCardIds[0]).toBe(board.sides.player.deck[0]);
     expect(view.enemy.deckCardIds[0]).toBe(board.sides.enemy.deck[0]);
   });

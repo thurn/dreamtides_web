@@ -12,6 +12,7 @@ import type { ComponentType } from "react";
 import { atlasEdgeDemo } from "./demos/atlas-edge";
 import { atlasMapDemo } from "./demos/atlas-map";
 import { atlasNodeDemo } from "./demos/atlas-node";
+import { banishedZoneIndicatorDemo } from "./demos/banished-zone-indicator";
 import { battleStatusDisplayDemo } from "./demos/battle-status-display";
 import { cardBackDemo } from "./demos/card-back";
 import { cardGalleryPanelDemo } from "./demos/card-gallery-panel";
@@ -174,6 +175,7 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   gameCardDemo,
   cardBackDemo,
   cardPileDemo,
+  banishedZoneIndicatorDemo,
   cardGalleryPanelDemo,
   cardTermDefinitionsDemo,
   glossaryDefinitionCardDemo,
