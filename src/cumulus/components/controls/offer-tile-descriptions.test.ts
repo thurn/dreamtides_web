@@ -89,7 +89,7 @@ const COPY_CASES: ReadonlyArray<
       cards: FOUR_CARDS,
       categoryName: "warrior",
     },
-    "Choose a card from the shown category to add to your deck.",
+    "Choose a card from a single category to add to your deck.",
   ],
   [
     { id: "transfigured", kind: "transfigured-draft", cards: FOUR_CARDS },
@@ -141,7 +141,7 @@ const COPY_CASES: ReadonlyArray<
       kind: "transfigure-starters",
       cards: [CARD, SECOND_CARD],
     },
-    "Transfigure your starter cards.",
+    "Transfigure two starter cards.",
   ],
   [
     { id: "purge", kind: "purge-card", card: CARD },
@@ -162,7 +162,7 @@ const COPY_CASES: ReadonlyArray<
       kind: "duplicate-card",
       cards: [CARD, SECOND_CARD],
     },
-    "Choose a card in your deck to duplicate.",
+    "Choose one of two cards in your deck to duplicate.",
   ],
   [
     { id: "dreamsign-gift", kind: "dreamsign-gift", dreamsign: DREAMSIGN },
@@ -205,6 +205,23 @@ describe("offer tile descriptions", () => {
     ).toBe("Choose a card and add one copy of it to your deck.");
   });
 
+  it("counts one or two starter cards explicitly", () => {
+    expect(
+      offerTileDescription({
+        id: "one-starter",
+        kind: "transfigure-starters",
+        cards: [CARD],
+      }),
+    ).toBe("Transfigure one starter card.");
+    expect(
+      offerTileDescription({
+        id: "two-starters",
+        kind: "transfigure-starters",
+        cards: [CARD, SECOND_CARD],
+      }),
+    ).toBe("Transfigure two starter cards.");
+  });
+
   it("keeps category and Reclaim details nonspecific", () => {
     expect(
       offerTileDescription({
@@ -213,7 +230,7 @@ describe("offer tile descriptions", () => {
         cards: FOUR_CARDS,
         categoryName: "event",
       }),
-    ).toBe("Choose a card from the shown category to add to your deck.");
+    ).toBe("Choose a card from a single category to add to your deck.");
     expect(
       offerTileDescription({
         id: "double-reclaim-reduction",
@@ -224,7 +241,7 @@ describe("offer tile descriptions", () => {
     ).toBe("Reduce the Reclaim cost of a card.");
   });
 
-  it("describes duplicate targets without names or candidate counts", () => {
+  it("describes duplicate targets without names and counts multiple choices", () => {
     expect(
       offerTileDescription({
         id: "single-duplicate",
@@ -238,7 +255,7 @@ describe("offer tile descriptions", () => {
         kind: "duplicate-card",
         cards: [CARD, SECOND_CARD, THIRD_CARD],
       }),
-    ).toBe("Choose a card in your deck to duplicate.");
+    ).toBe("Choose one of three cards in your deck to duplicate.");
   });
 
   it("counts bundled cards without naming them", () => {

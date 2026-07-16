@@ -85,7 +85,7 @@ describe("OffersDebugApp", () => {
       "Choose a card and add two copies of it to your deck.",
     );
     expect(offerTileDescription(categoryDraft)).toBe(
-      "Choose a card from the shown category to add to your deck.",
+      "Choose a card from a single category to add to your deck.",
     );
     expect(offerTileDescription(cardBundle)).toBe(
       "Add three cards to your deck.",
@@ -98,7 +98,7 @@ describe("OffersDebugApp", () => {
     expect(duplicate.kind).toBe("duplicate-card");
     expect(duplicate.kind === "duplicate-card" ? duplicate.cards : []).toHaveLength(3);
     expect(offerTileDescription(duplicate)).toBe(
-      "Choose a card in your deck to duplicate.",
+      "Choose one of three cards in your deck to duplicate.",
     );
     expect(dreamsignDraft.kind).toBe("dreamsign-draft");
     expect(
@@ -107,7 +107,7 @@ describe("OffersDebugApp", () => {
     expect(starters.kind).toBe("transfigure-starters");
     expect(starters.kind === "transfigure-starters" ? starters.cards : []).toHaveLength(2);
     expect(offerTileDescription(starters)).toBe(
-      "Transfigure your starter cards.",
+      "Transfigure two starter cards.",
     );
     expect(keyword.kind).toBe("keyword-modification");
     expect(

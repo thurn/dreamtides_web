@@ -78,7 +78,7 @@ function describeOfferTile(model: OfferTileModel): OfferTileDescription {
       // Fit-card drafts intentionally describe the choice, not its fit scoring.
       return description("Choose a card to add to your deck.");
     case "category-draft":
-      return description("Choose a card from the shown category to add to your deck.");
+      return description("Choose a card from a single category to add to your deck.");
     case "transfigured-draft":
       // Four distinct transfigurations stay on the surfaced card faces rather
       // than being repeated in the compact tile description.
@@ -101,9 +101,7 @@ function describeOfferTile(model: OfferTileModel): OfferTileDescription {
       return description("Change the subtype of a card.");
     case "transfigure-starters":
       return description(
-        model.cards.length === 1
-          ? "Transfigure a starter card."
-          : "Transfigure your starter cards.",
+        `Transfigure ${cardinal(model.cards.length)} ${model.cards.length === 1 ? "starter card" : "starter cards"}.`,
       );
     case "purge-card":
       return description("Purge a card from your deck.");
@@ -115,7 +113,9 @@ function describeOfferTile(model: OfferTileModel): OfferTileDescription {
       if (model.cards.length === 1) {
         return description("Duplicate a card in your deck.");
       }
-      return description("Choose a card in your deck to duplicate.");
+      return description(
+        `Choose one of ${cardinal(model.cards.length)} cards in your deck to duplicate.`,
+      );
     case "dreamsign-gift":
       // Dreamsign matching rationale and passive rules text intentionally stay
       // off the offer tile; the tile communicates only that a sign is gained.
