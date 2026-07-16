@@ -22,6 +22,7 @@ export function MobileBattleScreenAdapter({
   isPlayerHandHidden,
   pendingPrompt,
   confirmedPromptId,
+  isResultOverlayDismissed,
   interactions,
 }: {
   init: MobileBattleInit;
@@ -33,6 +34,7 @@ export function MobileBattleScreenAdapter({
   isPlayerHandHidden: boolean;
   pendingPrompt: MobileBattlePendingPrompt | null;
   confirmedPromptId: number | null;
+  isResultOverlayDismissed: boolean;
   interactions: MobileBattleInteractions;
 }) {
   const view = useMemo(
@@ -42,6 +44,7 @@ export function MobileBattleScreenAdapter({
       isPlayerHandHidden,
       pendingPrompt,
       confirmedPromptId,
+      isResultOverlayDismissed,
     }),
     [
       init,
@@ -53,6 +56,7 @@ export function MobileBattleScreenAdapter({
       isPlayerHandHidden,
       pendingPrompt,
       confirmedPromptId,
+      isResultOverlayDismissed,
     ],
   );
 

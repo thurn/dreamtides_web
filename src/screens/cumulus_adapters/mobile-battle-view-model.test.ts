@@ -7,7 +7,10 @@ import type {
   BattleInit,
   BattleMutableState,
 } from "../../battle/types";
-import { buildMobileBattleView } from "./mobile-battle-view-model";
+import {
+  buildMobileBattleResultView,
+  buildMobileBattleView,
+} from "./mobile-battle-view-model";
 import type { PendingPrompt } from "../../rules/battle/fold";
 
 const ENEMY_DREAMCALLER: BattleDreamcallerSummary = {
@@ -115,6 +118,36 @@ function makeBoard(init: BattleInit): BattleMutableState {
 }
 
 describe("buildMobileBattleView", () => {
+  it("maps victory reward copy and defeat/draw presentation state", () => {
+    const init = makeInit();
+    const board = makeBoard(init);
+
+    expect(buildMobileBattleResultView(init, board, false)).toBeNull();
+
+    board.result = "victory";
+    board.turnNumber = 6;
+    board.sides.player.score = 10;
+    board.sides.enemy.score = 5;
+    expect(buildMobileBattleResultView(init, board, false)).toEqual({
+      outcome: "victory",
+      dismissed: false,
+      essenceReward: 30,
+      summary: "Defeated Enemy Caller · 10–5 · 6 turns",
+    });
+
+    board.result = "defeat";
+    expect(buildMobileBattleResultView(init, board, true)).toEqual({
+      outcome: "defeat",
+      dismissed: true,
+    });
+
+    board.result = "draw";
+    expect(buildMobileBattleResultView(init, board, false)).toEqual({
+      outcome: "draw",
+      dismissed: false,
+    });
+  });
+
   it("surfaces the active turn's UUID-backed Dreamwell card after its reveal commits", () => {
     const init: BattleInit = {
       ...makeInit(),

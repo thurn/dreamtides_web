@@ -93,6 +93,7 @@ import type {
   MobileBattleInspectorAction,
   MobileBattleSlotTarget,
 } from "../../cumulus/screens/MobileBattleScreen";
+import type { MobileBattleResultAction } from "../../cumulus/screens/BattleResultSurface";
 import { useIsDesktop } from "../../cumulus/screens/use-is-desktop";
 
 const DESKTOP_INSPECTOR_WIDTH = 1280;
@@ -835,10 +836,63 @@ function PlayableBattleScreenInner({
   // clear — the legacy `completeBattleSiteVictory` bridge collapses to one
   // event.
   function handleContinueReward(): void {
-    if (rewardOverlay === null) {
+    if (board.result !== "victory") {
       return;
     }
     void actions.endBattle("victory");
+  }
+
+  function handleCumulusResultAction(action: MobileBattleResultAction): void {
+    if (board.result === null) return;
+    const logFields = createBattleLogBaseFields(board, {
+      sourceSurface: "battlefield",
+      selectedCardId: null,
+    });
+    if (action === "continue") {
+      if (board.result !== "victory") return;
+      logEvent("battle_proto_reward_continued", {
+        ...logFields,
+        essenceReward: battleInit.essenceReward,
+        rewardSource: "battle_result",
+        uiVariant: "cumulus",
+      });
+      handleContinueReward();
+      return;
+    }
+    if (action === "reset") {
+      logEvent("battle_result_reset_requested", {
+        ...logFields,
+        result: board.result,
+        uiVariant: "cumulus",
+      });
+      handleFailureReset();
+      return;
+    }
+    if (action === "reopen") {
+      logEvent("battle_result_reopened", {
+        ...logFields,
+        result: board.result,
+        uiVariant: "cumulus",
+      });
+      setIsResultOverlayDismissed(false);
+      return;
+    }
+
+    logEvent(
+      board.result === "victory"
+        ? "battle_proto_reward_cancelled"
+        : "battle_result_dismissed",
+      {
+        ...logFields,
+        result: board.result,
+        ...(board.result === "victory"
+          ? { rewardSource: "battle_result" }
+          : {}),
+        uiVariant: "cumulus",
+        via: "surface",
+      },
+    );
+    setIsResultOverlayDismissed(true);
   }
 
   function handleOpenSummary(side: BattleSide): void {
@@ -1296,6 +1350,41 @@ function PlayableBattleScreenInner({
   }
   const showCumulusLayout = uiVariant === "cumulus";
   useEffect(() => {
+    if (!showCumulusLayout || board.result === null) return;
+    const logFields = createBattleLogBaseFields(board, {
+      sourceSurface: "battlefield",
+      selectedCardId: null,
+    });
+    if (board.result === "victory") {
+      logEventOnce(
+        `battle_proto_reward_opened:${battleInit.battleId}`,
+        "battle_proto_reward_opened",
+        {
+          ...logFields,
+          essenceReward: battleInit.essenceReward,
+          rewardSource: "battle_result",
+          uiVariant: "cumulus",
+        },
+      );
+      return;
+    }
+    logEventOnce(
+      `battle_result_overlay_opened:${battleInit.battleId}:${board.result}`,
+      "battle_result_overlay_opened",
+      {
+        ...logFields,
+        result: board.result,
+        uiVariant: "cumulus",
+      },
+    );
+  }, [
+    battleInit.battleId,
+    battleInit.essenceReward,
+    board,
+    board.result,
+    showCumulusLayout,
+  ]);
+  useEffect(() => {
     if (!showCumulusLayout) {
       return;
     }
@@ -1422,6 +1511,7 @@ function PlayableBattleScreenInner({
           isPlayerHandHidden={isPlayerHandHidden}
           pendingPrompt={pendingPrompt}
           confirmedPromptId={confirmedPromptId}
+          isResultOverlayDismissed={isResultOverlayDismissed}
           interactions={{
             canInteract: canPlayerAct && pendingPrompt === null,
             pendingCardId: pendingDragCardId,
@@ -1474,6 +1564,7 @@ function PlayableBattleScreenInner({
               resolvePendingPrompt({ kind: "pick-cards", chosenIds: [] });
             },
             onChoicePromptChoose: handleCumulusChoicePrompt,
+            onResultAction: handleCumulusResultAction,
             onFillBattlefieldPreview: handleFillBattlefieldPreview,
             onFillTwentyCardBattlefieldPreview:
               handleFillTwentyCardBattlefieldPreview,

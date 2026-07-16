@@ -90,7 +90,7 @@ listed screen or element is served by Cumulus.
 41. [ ] **Dreamcaller Panel** — the larger, dedicated per-side Dreamcaller/dreamsign sheet (currently unwired; folds into the side-summary surface).
 42. [ ] **Battle Log Drawer** — chronological command/event history backing Undo/Redo, with category filters.
 43. [ ] **Dreamwell History Drawer** — scrollable record of every Dreamwell card drawn this match.
-44. [ ] **Battle Result & Reward** — the victory reward surface (animated essence payoff + Continue) and the defeat/draw result overlay.
+44. [x] **Battle Result & Reward** — the victory reward surface (animated essence payoff + Continue) and the defeat/draw result overlay.
 
 ### Battle developer surfaces (re-home to a dedicated developer screen)
 

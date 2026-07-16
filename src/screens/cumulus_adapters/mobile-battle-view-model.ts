@@ -28,6 +28,7 @@ import {
   type MobileBattleDreamwellView,
   type MobileBattleView,
 } from "../../cumulus/screens/MobileBattleScreen";
+import type { MobileBattleResultView } from "../../cumulus/screens/BattleResultSurface";
 
 const FALLBACK_PLAYER_DREAMCALLER = {
   imageNumber: "001",
@@ -42,12 +43,13 @@ export type MobileBattlePendingPrompt = PendingPrompt;
 export type MobileBattleAiProposal = Pick<AiProposal, "kind" | "description"> &
   Partial<Pick<AiProposal, "trace">>;
 
-export interface MobileBattleInspectorOptions {
+export interface MobileBattleViewOptions {
   readonly aiMode: boolean;
   readonly isOpponentHandRevealed: boolean;
   readonly isPlayerHandHidden: boolean;
   readonly pendingPrompt?: PendingPrompt | null;
   readonly confirmedPromptId?: number | null;
+  readonly isResultOverlayDismissed?: boolean;
 }
 
 export function buildMobileBattleView(
@@ -55,7 +57,7 @@ export function buildMobileBattleView(
   board: BattleMutableState,
   enemyDreamcaller: BattleDreamcallerSummary,
   aiProposal: MobileBattleAiProposal | null = null,
-  inspectorOptions: MobileBattleInspectorOptions = {
+  viewOptions: MobileBattleViewOptions = {
     aiMode: false,
     isOpponentHandRevealed: false,
     isPlayerHandHidden: false,
@@ -71,13 +73,13 @@ export function buildMobileBattleView(
           canReject: aiProposal.kind === "action",
         },
     cardPicker: buildCardPickerView(
-      inspectorOptions.pendingPrompt ?? null,
-      inspectorOptions.confirmedPromptId ?? null,
+      viewOptions.pendingPrompt ?? null,
+      viewOptions.confirmedPromptId ?? null,
       board,
     ),
     choicePrompt: buildChoicePromptView(
-      inspectorOptions.pendingPrompt ?? null,
-      inspectorOptions.confirmedPromptId ?? null,
+      viewOptions.pendingPrompt ?? null,
+      viewOptions.confirmedPromptId ?? null,
     ),
     dreamwell: buildDreamwellView(init, board),
     activeSide: board.activeSide,
@@ -100,7 +102,34 @@ export function buildMobileBattleView(
         board.phase === "day" &&
         instance.definition.energyCost <= board.sides.player.currentEnergy,
     ),
-    inspector: buildInspectorView(init, board, aiProposal, inspectorOptions),
+    inspector: buildInspectorView(init, board, aiProposal, viewOptions),
+    result: buildMobileBattleResultView(
+      init,
+      board,
+      viewOptions.isResultOverlayDismissed ?? false,
+    ),
+  };
+}
+
+export function buildMobileBattleResultView(
+  init: BattleInit,
+  board: BattleMutableState,
+  dismissed: boolean,
+): MobileBattleResultView | null {
+  if (board.result === null) return null;
+  if (board.result !== "victory") {
+    return { outcome: board.result, dismissed };
+  }
+
+  const turnLabel = `${String(board.turnNumber)} turn${board.turnNumber === 1 ? "" : "s"}`;
+  return {
+    outcome: "victory",
+    dismissed,
+    essenceReward: init.essenceReward,
+    summary:
+      `Defeated ${init.enemyDescriptor.name} · ` +
+      `${String(board.sides.player.score)}–${String(board.sides.enemy.score)} · ` +
+      turnLabel,
   };
 }
 
@@ -197,7 +226,7 @@ function buildInspectorView(
   init: BattleInit,
   board: BattleMutableState,
   aiProposal: MobileBattleAiProposal | null,
-  options: MobileBattleInspectorOptions,
+  options: MobileBattleViewOptions,
 ): MobileBattleInspectorView {
   const nextDreamwell = init.dreamwellDeck[board.dreamwellDeckIndex];
   return {

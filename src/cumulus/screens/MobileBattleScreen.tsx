@@ -38,8 +38,16 @@ import {
 import type { CumulusColor } from "../primitives/color";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
-import { MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS } from "./mobile-battle-layout";
+import {
+  MOBILE_BATTLE_INSPECTOR_RAIL_TRACK,
+  MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS,
+} from "./mobile-battle-layout";
 import { useIsDesktop } from "./use-is-desktop";
+import {
+  BattleResultSurface,
+  type MobileBattleResultAction,
+  type MobileBattleResultView,
+} from "./BattleResultSurface";
 import battleBackgroundUrl from "../assets/battle-background.png";
 
 /** One physical face-up card instance rendered by the battle board. */
@@ -110,6 +118,7 @@ export interface MobileBattleView {
   readonly player: MobileBattleSideView;
   readonly playerHand: readonly MobileBattleCardView[];
   readonly inspector: MobileBattleInspectorView;
+  readonly result: MobileBattleResultView | null;
 }
 
 /** An in-place hand-card decision owned by the authoritative battle prompt. */
@@ -248,6 +257,7 @@ export interface MobileBattleInteractions {
   readonly onCardPickerSubmit?: (chosenIds: readonly string[]) => void;
   readonly onCardPickerSkip?: () => void;
   readonly onChoicePromptChoose?: (optionIndex: number) => void;
+  readonly onResultAction?: (action: MobileBattleResultAction) => void;
   readonly onFillBattlefieldPreview?: () => void;
   readonly onFillTwentyCardBattlefieldPreview?: () => void;
   readonly onInspectorAction?: (action: MobileBattleInspectorAction) => void;
@@ -2463,7 +2473,7 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
           inset: 0,
           display: "grid",
           gridTemplateColumns: isDockLayout && isInspectorOpen
-            ? "minmax(0, 1fr) clamp(340px, 25vw, 400px)"
+            ? `minmax(0, 1fr) ${MOBILE_BATTLE_INSPECTOR_RAIL_TRACK}`
             : "minmax(0, 1fr)",
           width: "100%",
           height: "100dvh",
@@ -2504,6 +2514,13 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
             />
           </div>
         </GlassDialog>
+      ) : null}
+      {view.result !== null ? (
+        <BattleResultSurface
+          view={view.result}
+          centerOnBattlefield={isDockLayout && isInspectorOpen}
+          onAction={interactions?.onResultAction}
+        />
       ) : null}
     </>
   );

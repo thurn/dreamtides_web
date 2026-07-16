@@ -105,8 +105,6 @@ export const BASELINE = [
   "--shadow-sheet",
   // Radius scale member.
   "--radius-sheet",
-  // Scrim scale member (full-screen focus darkening).
-  "--scrim-strong",
   // Type scale (--t-*) members — sanctioned complete scale; each bundles
   // weight + size + face for a voice UI code applies by role.
   "--t-popover-body",

@@ -130,6 +130,7 @@ function makeView(): MobileBattleView {
     playerHand: Array.from({ length: 4 }, (_, index) =>
       makeCard(40 + index, `player-hand-${String(index)}`),
     ),
+    result: null,
     inspector: {
       opponentName: "Enemy Dreamcaller",
       turn: "3",
@@ -170,6 +171,41 @@ function mount(
 }
 
 describe("MobileBattleScreen", () => {
+  it("places the result surface above the battle shell and forwards its actions", () => {
+    const onResultAction = vi.fn();
+    const { container, root } = mount(
+      {
+        ...makeView(),
+        result: { outcome: "defeat", dismissed: false },
+      },
+      {
+        canInteract: false,
+        pendingCardId: null,
+        onHandCardActivate: vi.fn(),
+        onCardDragStart: vi.fn(),
+        onCardDragEnd: vi.fn(),
+        onSlotDrop: vi.fn(),
+        onZoneDrop: vi.fn(),
+        onPreviousPhase: vi.fn(),
+        onNextPhase: vi.fn(),
+        onResultAction,
+      },
+    );
+
+    expect(container.querySelector("[data-battle-mobile]")).not.toBeNull();
+    expect(
+      container.querySelector('[data-battle-result-surface="defeat"]'),
+    ).not.toBeNull();
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>('[data-testid="battle-result-inspect"]')
+        ?.click();
+    });
+    expect(onResultAction).toHaveBeenCalledWith("dismiss");
+
+    act(() => root.unmount());
+  });
+
   it("overlaps a static Dreamwell card above the player status display", () => {
     const cardId = asCardId("3a4293da-55a1-4094-898a-df402ffa1c92");
     const view: MobileBattleView = {
