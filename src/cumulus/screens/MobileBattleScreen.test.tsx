@@ -1553,6 +1553,121 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("snaps a dragged hand card into its committed battlefield slot", () => {
+    const interactions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const view = makeView();
+    const movingCard = view.playerHand[0];
+    expect(movingCard).not.toBeUndefined();
+    const { container, root } = mount(view, interactions);
+    const handCard = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-hand-0"]',
+    );
+    const revealSource = handCard?.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    Object.defineProperty(document, "elementFromPoint", {
+      configurable: true,
+      value: vi.fn(() => null),
+    });
+
+    expect(
+      handCard?.querySelector<HTMLElement>(
+        ":scope > [data-battle-card-motion]",
+      )?.dataset.battleCardLayoutMotion,
+    ).toBe("travel");
+
+    act(() => {
+      revealSource?.dispatchEvent(
+        new PointerEvent("pointerdown", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 20,
+          clientY: 30,
+          pointerId: 15,
+          pointerType: "mouse",
+        }),
+      );
+      handCard?.dispatchEvent(
+        new PointerEvent("pointermove", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 44,
+          clientY: 70,
+          pointerId: 15,
+          pointerType: "mouse",
+        }),
+      );
+    });
+
+    expect(
+      handCard?.querySelector<HTMLElement>(
+        ":scope > [data-battle-card-motion]",
+      )?.dataset.battleCardLayoutMotion,
+    ).toBe("snap");
+
+    act(() => {
+      handCard?.dispatchEvent(
+        new PointerEvent("pointerup", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 44,
+          clientY: 70,
+          pointerId: 15,
+          pointerType: "mouse",
+        }),
+      );
+    });
+
+    const committedView: MobileBattleView = {
+      ...view,
+      player: {
+        ...view.player,
+        backRank: view.player.backRank.map((slot, index) =>
+          index === 2 ? { ...slot, card: movingCard ?? null } : slot,
+        ),
+      },
+      playerHand: view.playerHand.slice(1),
+    };
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <MobileBattleScreen
+            view={committedView}
+            interactions={interactions}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const committedCard = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-hand-0"]',
+    );
+    expect(
+      committedCard?.closest<HTMLElement>("[data-battle-slot-id]")?.dataset
+        .battleSlotId,
+    ).toBe("player-back-second-empty");
+    expect(
+      committedCard?.querySelector<HTMLElement>(
+        ":scope > [data-battle-card-motion]",
+      )?.dataset.battleCardLayoutMotion,
+    ).toBe("snap");
+
+    act(() => root.unmount());
+  });
+
   it("keeps physical cards out of native HTML drag", () => {
     const interactions = {
       canInteract: true,

@@ -1304,10 +1304,14 @@ function PlayArea({
 function PlayerHand({
   cards,
   isDesktop,
+  snapLayoutCardId,
+  onCardDragChange,
   interactions,
 }: {
   readonly cards: readonly MobileBattleCardView[];
   readonly isDesktop: boolean;
+  readonly snapLayoutCardId: string | null;
+  readonly onCardDragChange: (dragging: boolean, cardId?: string) => void;
   readonly interactions?: MobileBattleInteractions;
 }) {
   const canDrop =
@@ -1382,6 +1386,7 @@ function PlayerHand({
               card={card}
               zone="player-hand"
               showRulesText
+              snapLayout={snapLayoutCardId === card.id}
               interaction={
                 interactions === undefined
                   ? undefined
@@ -1402,9 +1407,14 @@ function PlayerHand({
                                 invocation,
                               ),
                           }),
-                      onDragStart: () =>
-                        interactions.onCardDragStart(card.id, "player-hand"),
-                      onDragEnd: interactions.onCardDragEnd,
+                      onDragStart: () => {
+                        onCardDragChange(true, card.id);
+                        interactions.onCardDragStart(card.id, "player-hand");
+                      },
+                      onDragEnd: () => {
+                        onCardDragChange(false);
+                        interactions.onCardDragEnd();
+                      },
                       onPointerDrop: (clientX, clientY) =>
                         dropMobileCardAtPoint(
                           interactions,
@@ -1886,7 +1896,7 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
   const isDesktop = useIsDesktop();
   const isDockLayout = useIsDesktop(INSPECTOR_DOCK_MIN_WIDTH);
   const [isInspectorOpen, setIsInspectorOpen] = useState(isDockLayout);
-  const [isBattlefieldDragActive, setIsBattlefieldDragActive] = useState(false);
+  const [isCardDragActive, setIsCardDragActive] = useState(false);
   const [snapLayoutCardId, setSnapLayoutCardId] = useState<string | null>(null);
   const [selectedSide, setSelectedSide] = useState<MobileBattleOwner>("player");
   const inspectorTriggerRef = useRef<HTMLElement | null>(null);
@@ -1899,12 +1909,12 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
   useEffect(() => {
     setSelectedSide("player");
     setIsInspectorOpen(isDockLayout);
-    setIsBattlefieldDragActive(false);
+    setIsCardDragActive(false);
     setSnapLayoutCardId(null);
   }, [view.battleId]);
 
   useEffect(() => {
-    if (snapLayoutCardId === null || isBattlefieldDragActive) return;
+    if (snapLayoutCardId === null || isCardDragActive) return;
     if (view !== snapLayoutOriginView.current) {
       const frame = window.requestAnimationFrame(() => {
         setSnapLayoutCardId((current) =>
@@ -1919,13 +1929,13 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
       );
     }, 1_000);
     return () => window.clearTimeout(timeout);
-  }, [isBattlefieldDragActive, snapLayoutCardId, view]);
+  }, [isCardDragActive, snapLayoutCardId, view]);
 
-  const handleBattlefieldDragChange = useCallback((
+  const handleCardDragChange = useCallback((
     dragging: boolean,
     cardId?: string,
   ): void => {
-    setIsBattlefieldDragActive(dragging);
+    setIsCardDragActive(dragging);
     if (dragging && cardId !== undefined) {
       snapLayoutOriginView.current = view;
       setSnapLayoutCardId(cardId);
@@ -2011,11 +2021,11 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
       <LayoutGroup id={`mobile-battle:${view.battleId}`}>
         <EnemyHand cardIds={view.enemyHandCardIds} cards={view.enemyHand} revealed={view.inspector.isOpponentHandRevealed} isDesktop={isDesktop} />
         <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="enemy" phase={view.phase} side={view.enemy} interactions={interactions} />
-        <PlayArea isDesktop={isDesktop} owner="enemy" side={view.enemy} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} draggingCardId={isBattlefieldDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} onBattlefieldDragChange={handleBattlefieldDragChange} interactions={interactions} />
-        <PlayArea isDesktop={isDesktop} owner="player" side={view.player} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} draggingCardId={isBattlefieldDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} onBattlefieldDragChange={handleBattlefieldDragChange} interactions={interactions} />
+        <PlayArea isDesktop={isDesktop} owner="enemy" side={view.enemy} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
+        <PlayArea isDesktop={isDesktop} owner="player" side={view.player} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
         <ControlRow aiApproval={view.aiApproval} isDesktop={isDesktop} interactions={interactions} />
         <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="player" phase={view.phase} side={view.player} interactions={interactions} />
-        <PlayerHand cards={view.inspector.isPlayerHandHidden ? [] : view.playerHand} isDesktop={isDesktop} interactions={interactions} />
+        <PlayerHand cards={view.inspector.isPlayerHandHidden ? [] : view.playerHand} isDesktop={isDesktop} snapLayoutCardId={snapLayoutCardId} onCardDragChange={handleCardDragChange} interactions={interactions} />
       </LayoutGroup>
       <AiApprovalMessage aiApproval={view.aiApproval} />
       <div
