@@ -121,4 +121,47 @@ describe("CardGalleryPanel", () => {
     expect(decline).toHaveBeenCalledOnce(); expect(confirm).toHaveBeenCalledOnce();
     act(() => root.unmount()); container.remove();
   });
+
+  it("renders browser controls, a wrapping action row, and physical card gestures", () => {
+    const reveal = vi.fn();
+    const dragStart = vi.fn();
+    const contextMenu = vi.fn();
+    const container = document.createElement("div"); document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<CumulusRoot><CardGalleryPanel
+      title="Your Deck"
+      cards={[{ entryId: "physical-card", model: model("Physical"), draggable: true }]}
+      toolbar={{
+        search: { label: "Search Cards", value: "", onChange: vi.fn(), testId: "search" },
+        sort: { ariaLabel: "Sort cards", value: "current", options: [{ value: "current", label: "Current Order" }], onChange: vi.fn() },
+        filter: { ariaLabel: "Filter cards", value: "all", options: [{ value: "all", label: "All Types" }], onChange: vi.fn() },
+      }}
+      footerActionRow={[
+        { label: "Reveal Top", onPress: reveal, testId: "reveal" },
+        { label: "Hide Top", onPress: vi.fn() },
+        { label: "Reorder", onPress: vi.fn() },
+      ]}
+      onCardDragStart={dragStart}
+      onCardContextMenu={contextMenu}
+    /></CumulusRoot>));
+
+    expect(container.querySelector("[data-gallery-toolbar]")).not.toBeNull();
+    expect(container.querySelector('[data-testid="search"]')).not.toBeNull();
+    expect(container.querySelector('button[aria-label="Sort cards"]')).not.toBeNull();
+    expect(container.querySelector('button[aria-label="Filter cards"]')).not.toBeNull();
+    expect(container.querySelectorAll("[data-gallery-footer-action-row] button")).toHaveLength(3);
+    const entry = container.querySelector<HTMLElement>('[data-gallery-entry-id="physical-card"]');
+    expect(entry?.draggable).toBe(true);
+
+    act(() => {
+      entry?.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
+      entry?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, cancelable: true }));
+      (container.querySelector('[data-testid="reveal"]') as HTMLButtonElement).click();
+    });
+    expect(dragStart).toHaveBeenCalledWith("physical-card", expect.any(Object));
+    expect(contextMenu).toHaveBeenCalledWith("physical-card", expect.any(Object));
+    expect(reveal).toHaveBeenCalledOnce();
+
+    act(() => root.unmount()); container.remove();
+  });
 });

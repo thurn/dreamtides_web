@@ -25,6 +25,9 @@ vi.mock("framer-motion", () => ({
 }));
 
 vi.mock("../card/CardView", () => ({
+  CardView: ({ card }: { readonly card: GameCardModel["displaySnapshot"] }) => (
+    <div data-mock-card-view={card.id} />
+  ),
   GameCard: ({
     model,
     figment,
@@ -166,6 +169,36 @@ describe("CardPile", () => {
       `${String(CARD_ASPECT_H)} / ${String(CARD_ASPECT_W)}`,
     );
     expect(stage?.style.transform).toContain("rotate(90deg)");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("activates an inactive pile without registering its face-up card for reveal", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    const onActivate = vi.fn();
+
+    act(() => {
+      root.render(
+        <CardPile
+          cards={[{ face: "up", id: "void-top", model: MODEL }]}
+          orientation="landscape"
+          label="Player void"
+          cardInteraction="inactive"
+          onActivate={onActivate}
+        />,
+      );
+    });
+
+    const pile = container.querySelector<HTMLButtonElement>("[data-card-pile]");
+    expect(pile?.dataset.pileCardInteraction).toBe("inactive");
+    expect(container.querySelector("[data-mock-card-view]")).not.toBeNull();
+    expect(container.querySelector("[data-mock-game-card]")).toBeNull();
+
+    act(() => pile?.click());
+    expect(onActivate).toHaveBeenCalledTimes(1);
 
     act(() => root.unmount());
     container.remove();

@@ -78,6 +78,7 @@ import { dreamwellAutomationStatus } from "../../rules/battle/dreamwell-effects-
 import { collectAutomationHashDrift } from "../../rules/battle/battle-card-effects-table";
 import { BattlefieldGrid } from "./BattlefieldGrid";
 import { BattleZoneBrowser } from "./BattleZoneBrowser";
+import { CumulusBattleZoneBrowser } from "./CumulusBattleZoneBrowser";
 import {
   createPlayCardFromHandCommand,
   createMoveCardToDeckCommand,
@@ -764,10 +765,22 @@ function PlayableBattleScreenInner({
     setContextMenu(null);
   }
 
-  function handleOpenZoneBrowser(side: BattleSide, zone: BrowseableZone): void {
+  function handleOpenZoneBrowser(
+    side: BattleSide,
+    zone: BrowseableZone,
+    sourceSurface: BattleCommandSourceSurface = "battlefield",
+  ): void {
     setOpenZoneBrowser({ side, zone });
     setContextMenu(null);
     setOpenSideSummary(null);
+    logEvent("battle_zone_browser_opened", {
+      ...createBattleLogBaseFields(board, {
+        sourceSurface,
+        selectedCardId: null,
+      }),
+      selectedSide: side,
+      zone,
+    });
   }
 
   // The reducer's `applyDefeat` (END_BATTLE "defeat") already freezes the
@@ -1227,8 +1240,11 @@ function PlayableBattleScreenInner({
     }
     if (resolution.accessory === "foresee") {
       handleOpenForesee(resolution.side, 1, "inspector");
-    } else if (resolution.accessory === "open-deck") {
-      handleOpenZoneBrowser(resolution.side, "deck");
+    } else if (
+      resolution.accessory === "open-zone" &&
+      resolution.zone !== undefined
+    ) {
+      handleOpenZoneBrowser(resolution.side, resolution.zone, "inspector");
     } else if (resolution.accessory === "dreamwell-draw") {
       runDreamwellDraw(resolution.side, "inspector");
     } else {
@@ -1266,19 +1282,25 @@ function PlayableBattleScreenInner({
   if (showCumulusLayout) {
     return (
       <>
-        {openZoneBrowser !== null ? (
-          <BattleZoneBrowser
-            browser={openZoneBrowser}
-            isOpponentHandRevealed={isOpponentHandRevealed}
+        {openZoneBrowser !== null && openZoneBrowser.zone !== "hand" ? (
+          <CumulusBattleZoneBrowser
+            browser={{
+              side: openZoneBrowser.side,
+              zone: openZoneBrowser.zone,
+            }}
             state={board}
             onClose={() => setOpenZoneBrowser(null)}
             onCommand={handleCommand}
-            onOpenForesee={(side, count) => handleOpenForesee(side, count, "inspector")}
+            onOpenForesee={(side, count) => handleOpenForesee(side, count, "zone-browser-deck")}
             onOpenReorderMultiple={(side) => setOpenDeckOrderPicker(side)}
             onCardContextMenu={handleCardContextMenu}
             onCardDragStart={handleCardDragStart}
             onCardDragEnd={handleCardDragEnd}
-            onCardDropToBrowser={() => handleZoneDrop(openZoneBrowser.side, openZoneBrowser.zone, "inspector")}
+            onCardDropToBrowser={(sourceSurface) => handleZoneDrop(
+              openZoneBrowser.side,
+              openZoneBrowser.zone,
+              sourceSurface,
+            )}
             pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
           />
         ) : null}
@@ -1388,6 +1410,9 @@ function PlayableBattleScreenInner({
                 zone,
                 pendingDrag?.sourceSurface ?? "battlefield",
               );
+            },
+            onZoneOpen: ({ owner, zone }) => {
+              handleOpenZoneBrowser(owner, zone, "battlefield");
             },
             onPreviousPhase: () => {
               handleSetBattleFlow(computePhaseControlTarget(board, "previous"));

@@ -630,6 +630,45 @@
       "description": "Optional equal-width pair of GlassButtons rendered below the card grid."
     },
     {
+      "name": "footerActionRow",
+      "tsType": "readonly CardGalleryFooterAction[]",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional wrapping row of three or more GlassButtons below the card grid."
+    },
+    {
+      "name": "toolbar",
+      "tsType": "CardGalleryToolbar",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional structured search, sort, and filter toolbar above the card grid.",
+      "nested": {
+        "name": "CardGalleryToolbar",
+        "fields": [
+          {
+            "name": "search",
+            "tsType": "CardGallerySearchControl",
+            "optional": false,
+            "description": "Search-by-name control."
+          },
+          {
+            "name": "sort",
+            "tsType": "CardGallerySelectControl",
+            "optional": false,
+            "description": "Sort-order control."
+          },
+          {
+            "name": "filter",
+            "tsType": "CardGallerySelectControl",
+            "optional": false,
+            "description": "Type-filter control."
+          }
+        ]
+      }
+    },
+    {
       "name": "cards",
       "tsType": "readonly CardGalleryCardView[]",
       "unionMembers": [],
@@ -738,6 +777,30 @@
       "required": false,
       "defaultValue": null,
       "description": "Fires when an enabled card tile is activated."
+    },
+    {
+      "name": "onCardDragStart",
+      "tsType": "((entryId: string, event: DragEvent<HTMLDivElement>) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires when a draggable card entry begins a native drag."
+    },
+    {
+      "name": "onCardDragEnd",
+      "tsType": "((entryId: string, event: DragEvent<HTMLDivElement>) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires when a draggable card entry's native drag ends."
+    },
+    {
+      "name": "onCardContextMenu",
+      "tsType": "((entryId: string, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires when a card entry requests its contextual actions."
     },
     {
       "name": "endAction",
@@ -856,6 +919,25 @@
       "required": true,
       "defaultValue": null,
       "description": "Accessible name for the card zone represented by this pile."
+    },
+    {
+      "name": "cardInteraction",
+      "tsType": "CardPileCardInteraction",
+      "unionMembers": [
+        "inactive",
+        "reveal"
+      ],
+      "required": false,
+      "defaultValue": "reveal",
+      "description": "Reveal behavior for face-up cards. Defaults to `reveal`."
+    },
+    {
+      "name": "onActivate",
+      "tsType": "(() => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Activates the pile as one zone control."
     },
     {
       "name": "testId",

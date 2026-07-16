@@ -37,11 +37,26 @@ describe("resolveBattleInspectorIntent", () => {
 
   it.each([
     [{ kind: "foresee", side: "player" }, "foresee"],
-    [{ kind: "open-deck", side: "enemy" }, "open-deck"],
+    [{ kind: "open-zone", side: "enemy", zone: "deck" }, "open-zone"],
+    [{ kind: "open-zone", side: "player", zone: "void" }, "open-zone"],
+    [{ kind: "open-zone", side: "player", zone: "banished" }, "open-zone"],
     [{ kind: "dreamwell-draw", side: "player" }, "dreamwell-draw"],
     [{ kind: "create-figment", side: "enemy" }, "create-figment"],
     [{ kind: "open-pool-viewer" }, "pool-viewer"],
   ] as const)("maps %o to the expected accessory", (action, accessory) => {
     expect(resolveBattleInspectorIntent(action as MobileBattleInspectorAction, state())).toMatchObject({ kind: "accessory", accessory });
+  });
+
+  it("preserves the selected zone on open-zone accessories", () => {
+    expect(resolveBattleInspectorIntent({
+      kind: "open-zone",
+      side: "enemy",
+      zone: "banished",
+    }, state())).toMatchObject({
+      kind: "accessory",
+      accessory: "open-zone",
+      side: "enemy",
+      zone: "banished",
+    });
   });
 });

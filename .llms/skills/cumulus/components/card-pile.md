@@ -10,7 +10,7 @@ Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
 A physical deck or void stack built from structured, topmost-first card instances. It shows at most three slightly offset layers and rests upright or sideways as one fixed object.
 
-> **Guidance:** Pass stable battle-card instance ids so the shared layout identity can carry each card continuously between zones. Face-up entries resolve through GameCard; face-down entries resolve through CardBack.
+> **Guidance:** Pass stable battle-card instance ids so the shared layout identity can carry each card continuously between zones. Face-up entries can reveal their card or remain inactive beneath one pile-level activation; face-down entries resolve through CardBack.
 
 ## Props
 
@@ -19,6 +19,8 @@ A physical deck or void stack built from structured, topmost-first card instance
 | `cards` | `readonly BattlePileCard[]` | yes | — | Cards ordered topmost-first. At most three physical layers are rendered. |
 | `orientation` | `CardPileOrientation` = `"portrait" \| "landscape"` | yes | — | Whether cards rest upright or sideways. |
 | `label` | `string` | yes | — | Accessible name for the card zone represented by this pile. |
+| `cardInteraction` | `CardPileCardInteraction` = `"inactive" \| "reveal"` | no | `reveal` | Reveal behavior for face-up cards. Defaults to `reveal`. |
+| `onActivate` | `(() => void)` | no | — | Activates the pile as one zone control. |
 | `testId` | `string` | no | — | Optional stable test id for the pile as a whole. |
 
 ## Usage
@@ -39,7 +41,7 @@ import { CardPile } from "src/cumulus/components/battle/CardPile";
 
 ### Face-up void
 
-Face-up layers carry their canonical UUID-backed GameCard model while the battle instance id remains the motion identity.
+Inactive face-up layers keep the pile clickable as one zone control without revealing the top card itself.
 
 ```tsx
 <CardPile
@@ -50,5 +52,7 @@ Face-up layers carry their canonical UUID-backed GameCard model while the battle
   }))}
   orientation="landscape"
   label="Enemy void"
+  cardInteraction="inactive"
+  onActivate={openEnemyVoid}
 />
 ```

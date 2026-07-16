@@ -1,12 +1,12 @@
 import type { MobileBattleInspectorAction } from "../../cumulus/screens/MobileBattleScreen";
 import type { BattleCommand } from "../debug/commands";
-import type { BattleMutableState, BattleSide } from "../types";
+import type { BattleMutableState, BattleSide, BrowseableZone } from "../types";
 import { createDiscardMostRecentHandCardCommand } from "./battle-ui-commands";
 
 export type BattleInspectorIntentResolution =
   | { readonly kind: "command"; readonly command: BattleCommand }
   | { readonly kind: "gesture"; readonly commands: readonly BattleCommand[] }
-  | { readonly kind: "accessory"; readonly accessory: "foresee" | "open-deck" | "dreamwell-draw" | "create-figment" | "pool-viewer"; readonly side?: BattleSide }
+  | { readonly kind: "accessory"; readonly accessory: "foresee" | "open-zone" | "dreamwell-draw" | "create-figment" | "pool-viewer"; readonly side?: BattleSide; readonly zone?: Exclude<BrowseableZone, "hand"> }
   | { readonly kind: "presentation"; readonly action: "opened" | "side-selected" | "toggle-opponent-hand" | "toggle-player-hand" | "reset-battle" }
   | { readonly kind: "none" };
 
@@ -45,10 +45,16 @@ export function resolveBattleInspectorIntent(
     case "force-result":
       return { kind: "command", command: { id: "FORCE_RESULT", result: action.result, sourceSurface: "inspector" } };
     case "foresee":
-    case "open-deck":
     case "dreamwell-draw":
     case "create-figment":
       return { kind: "accessory", accessory: action.kind, side: action.side };
+    case "open-zone":
+      return {
+        kind: "accessory",
+        accessory: "open-zone",
+        side: action.side,
+        zone: action.zone,
+      };
     case "open-pool-viewer":
       return { kind: "accessory", accessory: "pool-viewer" };
   }

@@ -345,6 +345,7 @@ describe("MobileBattleScreen", () => {
     expect(playerHand?.style.transform).toBe(
       "translateY(var(--space-8))",
     );
+    expect(playerHand?.style.pointerEvents).toBe("none");
     expect(controls?.style.justifyContent).toBe("center");
     expect(controls?.style.gridColumn).toBe("1");
     expect(controls?.style.width).toBe("100%");
@@ -353,10 +354,13 @@ describe("MobileBattleScreen", () => {
     expect(phaseControls?.style.justifyContent).toBe("flex-end");
     expect(phaseControls?.style.width).toContain("46dvh");
     expect(controls?.style.transform).toBe("");
+    expect(controls?.style.pointerEvents).toBe("none");
+    expect(phaseControls?.style.pointerEvents).toBe("auto");
     expect(desktopBackSlots).toHaveLength(10);
     expect(desktopFrontSlots).toHaveLength(9);
     expect(firstHandCard?.style.position).toBe("relative");
     expect(firstHandCard?.style.height).toBe("94%");
+    expect(firstHandCard?.style.pointerEvents).toBe("auto");
     expect(firstHandCard?.style.left).toBe("");
     expect(firstHandCard?.style.top).toBe("");
     expect(firstHandCard?.style.transform).toContain("rotate(-4deg)");
@@ -392,12 +396,20 @@ describe("MobileBattleScreen", () => {
 
     act(() => {
       container.querySelector<HTMLButtonElement>('[data-testid="battle-inspector-draw-player"]')?.click();
+      Array.from(container.querySelectorAll<HTMLButtonElement>("button"))
+        .find((button) => button.textContent === "Open Banished")
+        ?.click();
       const enemyTab = Array.from(container.querySelectorAll<HTMLButtonElement>('[role="tab"]'))
         .find((button) => button.textContent === "Enemy");
       enemyTab?.click();
     });
 
     expect(onInspectorAction).toHaveBeenCalledWith({ kind: "draw", side: "player" });
+    expect(onInspectorAction).toHaveBeenCalledWith({
+      kind: "open-zone",
+      side: "player",
+      zone: "banished",
+    });
     expect(onInspectorAction).toHaveBeenCalledWith({ kind: "side-selected", side: "enemy" });
     expect(container.textContent).toContain("Enemy Resources");
 
@@ -551,6 +563,9 @@ describe("MobileBattleScreen", () => {
         voidZone?.querySelector<HTMLElement>("[data-card-pile-layer]")?.dataset
           .battleCardId,
       ).toBe(view[owner].voidCards[0]?.id);
+      expect(
+        voidZone?.querySelector("[data-game-card-source]"),
+      ).toBeNull();
     }
 
     const playerZones = container.querySelector<HTMLElement>(
@@ -573,6 +588,46 @@ describe("MobileBattleScreen", () => {
     expect(container.textContent).not.toContain("Player deck");
     expect(container.textContent).not.toContain("Enemy void");
     expect(container.textContent).not.toContain("Player void");
+
+    act(() => root.unmount());
+  });
+
+  it("opens deck and void browsers from the physical piles", () => {
+    const onZoneOpen = vi.fn();
+    const interactions: MobileBattleInteractions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onZoneOpen,
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(makeView(), interactions);
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="player-battle-deck"]',
+      )?.click();
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="player-battle-void"]',
+      )?.click();
+    });
+
+    expect(onZoneOpen).toHaveBeenNthCalledWith(1, {
+      owner: "player",
+      zone: "deck",
+    });
+    expect(onZoneOpen).toHaveBeenNthCalledWith(2, {
+      owner: "player",
+      zone: "void",
+    });
+    expect(
+      container.querySelector('[data-battle-zone="player-banished"]'),
+    ).toBeNull();
 
     act(() => root.unmount());
   });

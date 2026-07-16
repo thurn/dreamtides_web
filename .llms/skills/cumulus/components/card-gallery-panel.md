@@ -6,11 +6,11 @@
 
 Components · Live demo & interactive props: `/cumulus#/card-gallery-panel`
 
-Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
 
 The shared card-browser surface: GlassPanel title and action chrome around a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim.
 
-> **Guidance:** Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component derives material from frame geometry: floating is rounded glass and full-bleed is the edge-to-edge standard alpha scrim. It owns the header, accessory slot, internal scroll, fixed grid modes, optional captions and trailing card-sized action, and mobile press-preview sizing with whole-card touch-circle clearance. Callers provide resolved card models keyed by entry id or UUID.
+> **Guidance:** Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal, a card-selection site, or a searchable zone browser. The component derives material from frame geometry: floating is rounded glass and full-bleed is the edge-to-edge standard alpha scrim. It owns the header, optional search/sort/filter toolbar, accessory slot, internal scroll, fixed grid modes, optional captions and footer actions, and mobile press-preview sizing with whole-card touch-circle clearance. Callers provide resolved card models keyed by entry id or UUID.
 
 ## Props
 
@@ -21,6 +21,8 @@ The shared card-browser surface: GlassPanel title and action chrome around a scr
 | `rightAccessory` | `GlassPanelAccessory` | no | — | Optional trailing header action. |
 | `footerAction` | `CardGalleryFooterAction` | no | — | Optional centered GlassButton rendered below the card grid. |
 | `footerActions` | `readonly [CardGalleryFooterAction, CardGalleryFooterAction]` | no | — | Optional equal-width pair of GlassButtons rendered below the card grid. |
+| `footerActionRow` | `readonly CardGalleryFooterAction[]` | no | — | Optional wrapping row of three or more GlassButtons below the card grid. |
+| `toolbar` | `CardGalleryToolbar` | no | — | Optional structured search, sort, and filter toolbar above the card grid. |
 | `cards` | `readonly CardGalleryCardView[]` | yes | — | Resolved cards rendered in order. |
 | `emptyLabel` | `string` | no | `No cards.` | Empty-state copy shown when `cards` is empty. |
 | `columns` | `CardGalleryColumns` = `"auto" \| "two" \| "three" \| "four" \| "five"` | no | `auto` | Card grid mode. Defaults to `auto`. |
@@ -32,6 +34,9 @@ The shared card-browser surface: GlassPanel title and action chrome around a scr
 | `testId` | `string` | no | — | Test id for the panel root. |
 | `cutoutAwareAccessory` | `boolean` | no | `false` | When a screen-cutout box is known, float the accessory beside the device island instead of sharing the header row. |
 | `onCardPress` | `((entryId: string) => void)` | no | — | Fires when an enabled card tile is activated. |
+| `onCardDragStart` | `((entryId: string, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when a draggable card entry begins a native drag. |
+| `onCardDragEnd` | `((entryId: string, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when a draggable card entry's native drag ends. |
+| `onCardContextMenu` | `((entryId: string, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)` | no | — | Fires when a card entry requests its contextual actions. |
 | `endAction` | `CardGalleryActionView` | no | — | Optional card-sized action appended after the cards. |
 | `onEndActionPress` | `((entryId: string) => void)` | no | — | Fires with the appended action's stable id when it is activated. |
 
@@ -57,6 +62,14 @@ The shared card-browser surface: GlassPanel title and action chrome around a scr
 | `disabled` | `boolean` | yes | Detach interaction and visually recede the action. |
 | `variant` | `GlassButtonVariant` | yes | Semantic surface treatment for the action. |
 | `testId` | `string` | yes | A `data-testid` for selecting the footer action in tests. |
+
+### `toolbar`: the `CardGalleryToolbar` model
+
+| Field | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `search` | `CardGallerySearchControl` | no | Search-by-name control. |
+| `sort` | `CardGallerySelectControl` | no | Sort-order control. |
+| `filter` | `CardGallerySelectControl` | no | Type-filter control. |
 
 ### `endAction`: the `CardGalleryActionView` model
 

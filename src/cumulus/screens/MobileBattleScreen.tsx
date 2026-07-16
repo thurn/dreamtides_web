@@ -131,6 +131,7 @@ export type MobileBattleOwner = "enemy" | "player";
 export type MobileBattleRank = "back" | "front";
 export type MobileBattleCardSource = "player-hand" | "battlefield";
 export type MobileBattleDropZone = "deck" | "hand" | "void";
+export type MobileBattleBrowseZone = "deck" | "void" | "banished";
 export type MobileBattleDebugAdjustment = -1 | 1;
 
 export interface MobileBattleInspectorSideView {
@@ -179,7 +180,8 @@ export type MobileBattleInspectorAction =
   | { readonly kind: "side-selected"; readonly side: MobileBattleOwner }
   | { readonly kind: "adjust-stat"; readonly side: MobileBattleOwner; readonly stat: "points" | "currentEnergy" | "maxEnergy"; readonly amount: MobileBattleDebugAdjustment }
   | { readonly kind: "adjust-energy-pair"; readonly side: MobileBattleOwner; readonly amount: MobileBattleDebugAdjustment }
-  | { readonly kind: "draw" | "discard" | "foresee" | "shuffle" | "open-deck" | "dreamwell-draw" | "create-figment"; readonly side: MobileBattleOwner }
+  | { readonly kind: "draw" | "discard" | "foresee" | "shuffle" | "dreamwell-draw" | "create-figment"; readonly side: MobileBattleOwner }
+  | { readonly kind: "open-zone"; readonly side: MobileBattleOwner; readonly zone: MobileBattleBrowseZone }
   | { readonly kind: "erode"; readonly side: MobileBattleOwner; readonly count: number }
   | { readonly kind: "open-pool-viewer" | "toggle-opponent-hand" | "toggle-player-hand" | "skip-to-rewards" | "reset-battle" }
   | { readonly kind: "force-result"; readonly result: "defeat" | "draw" };
@@ -203,6 +205,11 @@ export interface MobileBattleZoneTarget {
   readonly zone: MobileBattleDropZone;
 }
 
+export interface MobileBattleBrowseZoneTarget {
+  readonly owner: MobileBattleOwner;
+  readonly zone: MobileBattleBrowseZone;
+}
+
 /** Intent-only gesture bridge owned by the live battle controller. */
 export interface MobileBattleInteractions {
   readonly canInteract: boolean;
@@ -223,6 +230,7 @@ export interface MobileBattleInteractions {
   readonly onCardDragEnd: () => void;
   readonly onSlotDrop: (target: MobileBattleSlotTarget) => void;
   readonly onZoneDrop: (target: MobileBattleZoneTarget) => void;
+  readonly onZoneOpen?: (target: MobileBattleBrowseZoneTarget) => void;
   readonly onPreviousPhase: () => void;
   readonly onNextPhase: () => void;
   readonly onApproveAiProposal?: () => void;
@@ -638,6 +646,10 @@ function SideZones({
             cards={deck}
             orientation="landscape"
             label={`${owner === "enemy" ? "Enemy" : "Player"} deck`}
+            cardInteraction="inactive"
+            onActivate={interactions?.onZoneOpen === undefined
+              ? undefined
+              : () => interactions.onZoneOpen?.({ owner, zone: "deck" })}
             testId={`${owner}-battle-deck`}
           />
         </div>
@@ -723,6 +735,10 @@ function SideZones({
             cards={voidPile}
             orientation="landscape"
             label={`${owner === "enemy" ? "Enemy" : "Player"} void`}
+            cardInteraction="inactive"
+            onActivate={interactions?.onZoneOpen === undefined
+              ? undefined
+              : () => interactions.onZoneOpen?.({ owner, zone: "void" })}
             testId={`${owner}-battle-void`}
           />
         </div>
@@ -1476,6 +1492,7 @@ function PlayerHand({
         gridColumn: 1,
         gridRow: 6,
         zIndex: PLAYER_HAND_Z_INDEX,
+        pointerEvents: "none",
         overflow:
           interactions?.pendingCardId !== undefined
           && interactions.pendingCardId !== null
@@ -1524,6 +1541,7 @@ function PlayerHand({
                 ? `translateY(${String(drop)}%) rotate(${String(rotation)}deg)`
                 : `translateX(-50%) translateY(${String(drop)}%) rotate(${String(rotation)}deg)`,
               zIndex: index + 1,
+              pointerEvents: "auto",
             }}
           >
             <FaceUpCard
@@ -1702,6 +1720,7 @@ function ControlRow({
         paddingInline: isDesktop ? 0 : token("--space-4"),
         paddingTop: token(isDesktop ? "--space-5" : "--space-4"),
         zIndex: 10,
+        pointerEvents: "none",
       }}
     >
       {cardPicker !== null ? (
@@ -1722,6 +1741,7 @@ function ControlRow({
             gap: token("--space-4"),
             position: "relative",
             zIndex: 10,
+            pointerEvents: "auto",
           }}
         >
           <span
@@ -1773,6 +1793,7 @@ function ControlRow({
             gap: token("--space-4"),
             position: "relative",
             zIndex: 10,
+            pointerEvents: "auto",
           }}
         >
           <div data-battle-phase-back="">
@@ -2061,7 +2082,9 @@ function BattleInspectorContent({
           <div style={actionGrid}>
             <InspectorButton label="Foresee" onPress={() => onAction?.({ kind: "foresee", side: selectedSide })} disabled={onAction === undefined} />
             <InspectorButton label="Shuffle" onPress={() => onAction?.({ kind: "shuffle", side: selectedSide })} disabled={!side.canShuffle || onAction === undefined} />
-            <InspectorButton label="Open Deck" onPress={() => onAction?.({ kind: "open-deck", side: selectedSide })} disabled={onAction === undefined} />
+            <InspectorButton label="Open Deck" onPress={() => onAction?.({ kind: "open-zone", side: selectedSide, zone: "deck" })} disabled={onAction === undefined} />
+            <InspectorButton label="Open Void" onPress={() => onAction?.({ kind: "open-zone", side: selectedSide, zone: "void" })} disabled={onAction === undefined} />
+            <InspectorButton label="Open Banished" onPress={() => onAction?.({ kind: "open-zone", side: selectedSide, zone: "banished" })} disabled={onAction === undefined} />
             <InspectorButton label="Dreamwell + Draw" onPress={() => onAction?.({ kind: "dreamwell-draw", side: selectedSide })} disabled={onAction === undefined} />
           </div>
           <NumberStepper label="Erode count" value={erodeCount} decrementLabel={`Decrease erode count for ${side.heading.toLowerCase()}`} incrementLabel={`Increase erode count for ${side.heading.toLowerCase()}`} decrementDisabled={erodeCount <= 1} onDecrement={() => setErodeCount((current) => Math.max(1, current - 1))} onIncrement={() => setErodeCount((current) => current + 1)} />

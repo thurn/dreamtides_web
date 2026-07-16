@@ -66,7 +66,7 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 <!-- BEGIN GENERATED COMPONENT INDEX (npm run cumulus-docs) -->
 | Component | Group | Consumers | Reference | What it is |
 | --- | --- | --- | --- | --- |
-| Pressable | Primitives | 24 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
+| Pressable | Primitives | 25 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
 | Resource Chip | Components | 4 | [components/resource-chip.md](components/resource-chip.md) | The sized, self-contained value-and-mark chip for the game economy. |
 | Essence Value | Components | 16 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
 | Icon Button | Components | 13 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — neutral or purple accent liquid glass, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
@@ -76,8 +76,8 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 | Glass Dialog | Components | 6 | [components/glass-dialog.md](components/glass-dialog.md) | The glass overlay shell: a modal dialog with a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and an optional glass close disc) over a scrolling body. |
 | Speech Bubble | Components | 2 | [components/speech-bubble.md](components/speech-bubble.md) | A guide-dialog bubble for character-led site screens: the same frosted information material as an InfoCard, with a left arrow that points back to the speaker. |
 | Segmented Control | Components | 3 | [components/segmented-control.md](components/segmented-control.md) | The compact tab and filter switch used for type filters, sort direction, and small mode toggles. |
-| Select | Components | 3 | [components/select.md](components/select.md) | The compact dropdown control, and Cumulus's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. |
-| TextField | Components | 1 | [components/text-field.md](components/text-field.md) | The reusable labeled text and search input on Cumulus control chrome, with supporting and validation messaging. |
+| Select | Components | 4 | [components/select.md](components/select.md) | The compact dropdown control, and Cumulus's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. |
+| TextField | Components | 2 | [components/text-field.md](components/text-field.md) | The reusable labeled text and search input on Cumulus control chrome, with supporting and validation messaging. |
 | NumberStepper | Components | 2 | [components/number-stepper.md](components/number-stepper.md) | A labeled, accessible decrement/value/increment row with optional canonical resource notation. |
 | DisclosureSection | Components | 1 | [components/disclosure-section.md](components/disclosure-section.md) | A controlled Cumulus section for progressively revealing dense secondary information. |
 | CardOrderEditor | Components | 1 | [components/card-order-editor.md](components/card-order-editor.md) | An identity-safe top-to-bottom card ordering control shared by deck and Foresee workflows. |
@@ -97,7 +97,7 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 | Game Card | Components | 31 | [components/game-card.md](components/game-card.md) | The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name. |
 | Card Back | Components | 2 | [components/card-back.md](components/card-back.md) | The canonical face-down Dreamtides card object: the shipped card-back sprite on the shared 5:7 card geometry, with fixed crop, edge, and elevation. |
 | Card Pile | Components | 1 | [components/card-pile.md](components/card-pile.md) | A physical deck or void stack built from structured, topmost-first card instances. |
-| Card Gallery Panel | Components | 5 | [components/card-gallery-panel.md](components/card-gallery-panel.md) | The shared card-browser surface: GlassPanel title and action chrome around a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim. |
+| Card Gallery Panel | Components | 6 | [components/card-gallery-panel.md](components/card-gallery-panel.md) | The shared card-browser surface: GlassPanel title and action chrome around a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim. |
 | Card Term Definitions | Components | 0 | [components/card-term-definitions.md](components/card-term-definitions.md) | A reading-order, de-duped stack of Glossary Definition Cards for every gameplay term in a stretch of rules text, rendered beside or beneath a card so the player reads what every highlighted keyword means without inline tooltips. |
 | Glossary Definition Card | Components | 3 | [components/glossary-definition-card.md](components/glossary-definition-card.md) | The one keyword-definition tile: a single glossary entry rendered as an InfoCard text card whose headline is the keyword and whose body is the keyword's rules text. |
 | Card Stat Orb | Components | 3 | [components/card-stat-orb.md](components/card-stat-orb.md) | The card-corner resource stat: a fitted white numeral over the energy, spark, or Dreamwell-energy glyph, with an optional monochrome transfiguration badge. |

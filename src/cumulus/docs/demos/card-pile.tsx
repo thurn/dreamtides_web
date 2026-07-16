@@ -50,6 +50,8 @@ function CardPileDemo(args: Record<string, unknown>) {
           ]}
           orientation={orientation}
           label="Face-up void"
+          cardInteraction="inactive"
+          onActivate={() => undefined}
         />
       </div>
     </div>
@@ -62,7 +64,7 @@ export const cardPileDemo: CumulusComponent = {
   blurb:
     "A physical deck or void stack built from structured, topmost-first card instances. It shows at most three slightly offset layers and rests upright or sideways as one fixed object.",
   callout:
-    "Pass stable battle-card instance ids so the shared layout identity can carry each card continuously between zones. Face-up entries resolve through GameCard; face-down entries resolve through CardBack.",
+    "Pass stable battle-card instance ids so the shared layout identity can carry each card continuously between zones. Face-up entries can reveal their card or remain inactive beneath one pile-level activation; face-down entries resolve through CardBack.",
   group: "Components",
   docName: "CardPile",
   Component: CardPileDemo,
@@ -80,7 +82,7 @@ export const cardPileDemo: CumulusComponent = {
     },
     {
       label: "Face-up void",
-      note: "Face-up layers carry their canonical UUID-backed GameCard model while the battle instance id remains the motion identity.",
+      note: "Inactive face-up layers keep the pile clickable as one zone control without revealing the top card itself.",
       code: `<CardPile
   cards={voidCards.map((card) => ({
     face: "up",
@@ -89,6 +91,8 @@ export const cardPileDemo: CumulusComponent = {
   }))}
   orientation="landscape"
   label="Enemy void"
+  cardInteraction="inactive"
+  onActivate={openEnemyVoid}
 />`,
     },
   ],

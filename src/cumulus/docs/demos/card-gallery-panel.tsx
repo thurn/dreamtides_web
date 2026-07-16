@@ -29,6 +29,9 @@ function cardsById(database: Map<number, CardData>): Map<string, CardData> {
 function CardGalleryPanelDemo() {
   const [cards, setCards] = useState<CardGalleryCardView[] | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const [sort, setSort] = useState("current");
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     let cancelled = false;
@@ -80,14 +83,37 @@ function CardGalleryPanelDemo() {
           onPress: () => setSelected(null),
         }}
         cards={cards}
+        toolbar={{
+          search: { label: "Search Cards", value: query, onChange: setQuery },
+          sort: {
+            ariaLabel: "Sort cards",
+            value: sort,
+            options: [
+              { value: "current", label: "Current Order" },
+              { value: "name", label: "Name" },
+            ],
+            onChange: setSort,
+          },
+          filter: {
+            ariaLabel: "Filter cards",
+            value: filter,
+            options: [
+              { value: "all", label: "All Types" },
+              { value: "character", label: "Characters" },
+              { value: "event", label: "Events" },
+            ],
+            onChange: setFilter,
+          },
+        }}
         columns="three"
         frame="floating"
         spacing="spacious"
         onCardPress={(entryId) => setSelected(entryId)}
-        footerAction={{
-          label: "Decline Offer",
-          onPress: () => setSelected(null),
-        }}
+        footerActionRow={[
+          { label: "Reveal Top", onPress: () => undefined },
+          { label: "Hide Top", onPress: () => undefined },
+          { label: "Reorder", onPress: () => undefined },
+        ]}
         endAction={{
           entryId: "restock",
           glyph: GLYPHS.refresh,
@@ -105,7 +131,7 @@ export const cardGalleryPanelDemo: CumulusComponent = {
   blurb:
     "The shared card-browser surface: GlassPanel title and action chrome around a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim.",
   callout:
-    "Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal or a card-selection site. The component derives material from frame geometry: floating is rounded glass and full-bleed is the edge-to-edge standard alpha scrim. It owns the header, accessory slot, internal scroll, fixed grid modes, optional captions and trailing card-sized action, and mobile press-preview sizing with whole-card touch-circle clearance. Callers provide resolved card models keyed by entry id or UUID.",
+    "Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal, a card-selection site, or a searchable zone browser. The component derives material from frame geometry: floating is rounded glass and full-bleed is the edge-to-edge standard alpha scrim. It owns the header, optional search/sort/filter toolbar, accessory slot, internal scroll, fixed grid modes, optional captions and footer actions, and mobile press-preview sizing with whole-card touch-circle clearance. Callers provide resolved card models keyed by entry id or UUID.",
   group: "Components",
   docName: "CardGalleryPanel",
   Component: CardGalleryPanelDemo,
