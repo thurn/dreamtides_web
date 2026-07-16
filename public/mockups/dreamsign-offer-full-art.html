@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dreamsign Offer Full-Art Study</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        background: #10091a;
+        color: #fff9e9;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-width: 320px;
+        min-height: 100vh;
+        margin: 0;
+        overflow-x: hidden;
+      }
+
+      .scene {
+        position: relative;
+        display: grid;
+        min-height: 100vh;
+        place-items: center;
+        overflow: hidden;
+        background: #10091a;
+      }
+
+      .scene__art {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .study {
+        position: relative;
+        z-index: 1;
+        width: min(1240px, 100%);
+        padding: 28px 28px 36px;
+      }
+
+      .study__header {
+        display: grid;
+        justify-items: center;
+        margin-bottom: 8px;
+        text-align: center;
+        text-shadow:
+          -2px -2px 0 #050207,
+          2px -2px 0 #050207,
+          -2px 2px 0 #050207,
+          2px 2px 0 #050207,
+          0 5px 12px #050207;
+      }
+
+      .study__eyebrow {
+        margin: 0 0 5px;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .study__title {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(28px, 3vw, 44px);
+        line-height: 1;
+      }
+
+      .offers {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+        justify-items: center;
+        gap: 10px;
+      }
+
+      .offer {
+        display: grid;
+        justify-items: center;
+      }
+
+      .offer-tile {
+        position: relative;
+        width: min(460px, 43vw);
+        aspect-ratio: 756 / 769;
+        isolation: isolate;
+        animation: drift 5.8s ease-in-out infinite;
+      }
+
+      .offer:nth-child(2) .offer-tile {
+        animation-delay: -2.4s;
+      }
+
+      .offer-tile__fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+        -webkit-mask: url("/src/cumulus/assets/offer_tile_black_fill.png")
+          center / contain no-repeat;
+        mask: url("/src/cumulus/assets/offer_tile_black_fill.png") center /
+          contain no-repeat;
+        background: #050207;
+      }
+
+      .offer-tile__frame {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        pointer-events: none;
+      }
+
+      .full-art,
+      .draft-art {
+        position: absolute;
+        left: 15.35%;
+        top: 9.1%;
+        width: 69.3%;
+        height: 68.1%;
+        overflow: hidden;
+      }
+
+      .full-art__image,
+      .draft-art__image {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100%;
+        height: 108%;
+        object-fit: cover;
+        object-position: 50% 42%;
+      }
+
+      .full-art__dreamsign,
+      .draft-art__dreamsign {
+        position: absolute;
+        z-index: 2;
+        display: block;
+        object-fit: contain;
+        filter: drop-shadow(0 4px 0 rgba(3, 1, 5, 0.88))
+          drop-shadow(0 10px 13px rgba(3, 1, 5, 0.9));
+      }
+
+      .full-art__dreamsign {
+        left: 50%;
+        top: 50%;
+        width: 54%;
+        height: 54%;
+        transform: translate(-50%, -50%);
+      }
+
+      .draft-art {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 3px;
+        background: #bda84b;
+      }
+
+      .draft-art__panel {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        background: #050207;
+      }
+
+      .draft-art__dreamsign {
+        left: 50%;
+        top: 50%;
+        width: 66%;
+        height: 66%;
+        transform: translate(-50%, -50%);
+      }
+
+      .offer__caption {
+        max-width: 460px;
+        margin: -4px 0 0;
+        font-size: clamp(16px, 1.8vw, 24px);
+        font-weight: 850;
+        line-height: 1.15;
+        text-align: center;
+        text-shadow:
+          -2px -2px 0 #050207,
+          2px -2px 0 #050207,
+          -2px 2px 0 #050207,
+          2px 2px 0 #050207,
+          0 4px 8px #050207;
+      }
+
+      .picker {
+        display: grid;
+        width: min(720px, 100%);
+        margin: 14px auto 0;
+        padding: 11px 14px 13px;
+        gap: 9px;
+        border: 1px solid rgba(255, 249, 233, 0.24);
+        border-radius: 18px;
+        background: rgba(17, 8, 29, 0.78);
+        box-shadow: 0 16px 42px rgba(2, 0, 5, 0.42);
+        backdrop-filter: blur(18px) saturate(1.15);
+      }
+
+      .picker__label {
+        margin: 0;
+        color: rgba(255, 249, 233, 0.82);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      .picker__choices {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .picker__choice {
+        position: relative;
+        min-width: 0;
+        padding: 0;
+        overflow: hidden;
+        aspect-ratio: 16 / 10;
+        border: 2px solid transparent;
+        border-radius: 10px;
+        background: #050207;
+        color: #fff9e9;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(2, 0, 5, 0.42);
+      }
+
+      .picker__choice[aria-pressed="true"] {
+        border-color: #f5e777;
+        box-shadow:
+          0 0 0 2px rgba(5, 2, 7, 0.9),
+          0 0 20px rgba(245, 231, 119, 0.54);
+      }
+
+      .picker__choice img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .picker__choice span {
+        position: absolute;
+        right: 5px;
+        bottom: 4px;
+        padding: 2px 5px;
+        border-radius: 999px;
+        background: rgba(5, 2, 7, 0.82);
+        font-size: 10px;
+        font-weight: 800;
+      }
+
+      @keyframes drift {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-4px);
+        }
+      }
+
+      @media (max-width: 760px) {
+        .study {
+          padding: 18px 12px 28px;
+        }
+
+        .offers {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+
+        .offer-tile {
+          width: min(390px, 92vw);
+        }
+
+        .picker {
+          margin-top: 8px;
+        }
+
+        .picker__choices {
+          gap: 5px;
+        }
+
+        .picker__choice span {
+          display: none;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .offer-tile {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="scene">
+      <img class="scene__art" src="/dreamscapes/wilderveil.png" alt="" />
+      <section class="study" aria-labelledby="study-title">
+        <header class="study__header">
+          <p class="study__eyebrow">Temporary Visual Study</p>
+          <h1 class="study__title" id="study-title">
+            Full-Art Dreamsign Offers
+          </h1>
+        </header>
+
+        <div class="offers">
+          <article class="offer">
+            <div
+              class="offer-tile"
+              aria-label="One preselected Dreamsign over full card art"
+            >
+              <div class="offer-tile__fill">
+                <div class="full-art">
+                  <img
+                    class="full-art__image"
+                    id="gift-background"
+                    src="/cards/420863587.webp"
+                    alt=""
+                  />
+                  <img
+                    class="full-art__dreamsign"
+                    src="/dreamsigns/horn_rainbow%20.png"
+                    alt="Rainbow Horn"
+                  />
+                </div>
+              </div>
+              <img
+                class="offer-tile__frame"
+                src="/src/cumulus/assets/dreamsign_card_frame_2.png"
+                alt=""
+              />
+            </div>
+            <p class="offer__caption">1 preselected dreamsign</p>
+          </article>
+
+          <article class="offer">
+            <div
+              class="offer-tile"
+              aria-label="Four Dreamsign choices over four full card-art panels"
+            >
+              <div class="offer-tile__fill">
+                <div class="draft-art" id="draft-art">
+                  <div class="draft-art__panel">
+                    <img
+                      class="draft-art__image"
+                      src="/cards/435865921.webp"
+                      alt=""
+                    />
+                    <img
+                      class="draft-art__dreamsign"
+                      src="/dreamsigns/horn_rainbow%20.png"
+                      alt="Rainbow Horn"
+                    />
+                  </div>
+                  <div class="draft-art__panel">
+                    <img
+                      class="draft-art__image"
+                      src="/cards/336703115.webp"
+                      alt=""
+                    />
+                    <img
+                      class="draft-art__dreamsign"
+                      src="/dreamsigns/aertfact.png"
+                      alt="Pyramid Relic"
+                    />
+                  </div>
+                  <div class="draft-art__panel">
+                    <img
+                      class="draft-art__image"
+                      src="/cards/386654065.webp"
+                      alt=""
+                    />
+                    <img
+                      class="draft-art__dreamsign"
+                      src="/dreamsigns/amanita.png"
+                      alt="Amanita"
+                    />
+                  </div>
+                  <div class="draft-art__panel">
+                    <img
+                      class="draft-art__image"
+                      src="/cards/403770328.webp"
+                      alt=""
+                    />
+                    <img
+                      class="draft-art__dreamsign"
+                      src="/dreamsigns/algae.png"
+                      alt="Algae"
+                    />
+                  </div>
+                </div>
+              </div>
+              <img
+                class="offer-tile__frame"
+                src="/src/cumulus/assets/dreamsign_card_frame_2.png"
+                alt=""
+              />
+            </div>
+            <p class="offer__caption">4 choices · all shown</p>
+          </article>
+        </div>
+
+        <div class="picker">
+          <p class="picker__label">
+            Choose the gift backdrop · the other four fill the draft
+          </p>
+          <div class="picker__choices" id="picker-choices"></div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const imageNumbers = [
+        420863587, 435865921, 336703115, 386654065, 403770328,
+      ];
+      const dreamsigns = [
+        ["/dreamsigns/horn_rainbow%20.png", "Rainbow Horn"],
+        ["/dreamsigns/aertfact.png", "Pyramid Relic"],
+        ["/dreamsigns/amanita.png", "Amanita"],
+        ["/dreamsigns/algae.png", "Algae"],
+      ];
+      const giftBackground = document.querySelector("#gift-background");
+      const draftArt = document.querySelector("#draft-art");
+      const pickerChoices = document.querySelector("#picker-choices");
+
+      function render(selectedIndex) {
+        const selected = imageNumbers[selectedIndex];
+        const draftImages = imageNumbers.filter(
+          (_, index) => index !== selectedIndex,
+        );
+        giftBackground.src = `/cards/${selected}.webp`;
+        draftArt.replaceChildren(
+          ...dreamsigns.map(([dreamsignUrl, dreamsignAlt], index) => {
+            const panel = document.createElement("div");
+            panel.className = "draft-art__panel";
+
+            const background = document.createElement("img");
+            background.className = "draft-art__image";
+            background.src = `/cards/${draftImages[index]}.webp`;
+            background.alt = "";
+
+            const dreamsign = document.createElement("img");
+            dreamsign.className = "draft-art__dreamsign";
+            dreamsign.src = dreamsignUrl;
+            dreamsign.alt = dreamsignAlt;
+
+            panel.append(background, dreamsign);
+            return panel;
+          }),
+        );
+
+        pickerChoices.querySelectorAll("button").forEach((button, index) => {
+          button.setAttribute("aria-pressed", String(index === selectedIndex));
+        });
+      }
+
+      imageNumbers.forEach((imageNumber, index) => {
+        const button = document.createElement("button");
+        button.className = "picker__choice";
+        button.type = "button";
+        button.setAttribute(
+          "aria-label",
+          `Use image ${imageNumber} behind the preselected Dreamsign`,
+        );
+        button.setAttribute("aria-pressed", String(index === 0));
+
+        const image = document.createElement("img");
+        image.src = `/cards/${imageNumber}.webp`;
+        image.alt = "";
+
+        const label = document.createElement("span");
+        label.textContent = String(imageNumber);
+
+        button.append(image, label);
+        button.addEventListener("click", () => render(index));
+        pickerChoices.append(button);
+      });
+    </script>
+  </body>
+</html>
