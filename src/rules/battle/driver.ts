@@ -216,6 +216,42 @@ function runQueue(
       continue;
     }
 
+    // A pick with no legal candidates has only one possible resolution. Apply
+    // that empty resolution inside the opening event and keep draining instead
+    // of publishing a prompt that blocks every battle interaction until a
+    // client explicitly submits zero cards.
+    if (
+      plan.active.kind === "pick-cards" &&
+      plan.active.candidateIds.length === 0
+    ) {
+      const promptStep = remaining[0];
+      if (promptStep === undefined || promptStep.kind !== "prompt") {
+        throw new Error("driver: pick-cards plan does not point at a prompt step");
+      }
+      const resolution: PromptResolution = {
+        kind: "pick-cards",
+        chosenIds: [],
+      };
+      const { edits, rest: expectedRest } = applyPromptResolution(
+        promptStep.prompt,
+        resolution,
+        plan.rest,
+        stepCtx,
+      );
+      currentBoard = applyEdits(currentBoard, edits);
+      const nextCursor = nextCursorAfterPrompt(
+        steps,
+        run.cursor,
+        promptStep,
+        resolution,
+      );
+      assertCursorMatchesRest(steps, nextCursor, expectedRest);
+      currentQueue = nextCursor === null
+        ? currentQueue.slice(1)
+        : [{ ...run, cursor: nextCursor }, ...currentQueue.slice(1)];
+      continue;
+    }
+
     // plan.type === "prompt" — park with the parked cursor and materialized
     // options. Foresee's initial reveal belongs to the event that opens the
     // prompt, so mounting its presentation on any number of clients is inert.

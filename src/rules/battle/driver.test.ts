@@ -356,6 +356,20 @@ describe("advanceEffectQueue — step cap", () => {
 // ---------------------------------------------------------------------------
 
 describe("advanceEffectQueue — prompt parking", () => {
+  it("drains 9954cede-8a16-4053-b6e9-da745f4540f5 when no enemy is in play", () => {
+    const ref: ScriptRef = {
+      table: "dreamwell",
+      id: "9954cede-8a16-4053-b6e9-da745f4540f5",
+    };
+    const result = advanceEffectQueue(
+      foldState([newEffectRun(ref, "player")]),
+      ctx({ seq: 9 }),
+    );
+
+    expect(result.pendingPrompt).toBeNull();
+    expect(result.effectQueue).toEqual([]);
+  });
+
   it("parks on a top-level prompt, retaining the run, promptId = ctx.seq", () => {
     const ref = topLevelPickCardsDreamwellRef();
     const context = ctx({ seq: 9 });
