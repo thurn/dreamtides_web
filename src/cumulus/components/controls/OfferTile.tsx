@@ -4,6 +4,10 @@ import {
   cardImageUrl,
   hasAssignedImage,
 } from "../../../data/card-database";
+import {
+  OFFER_TILE_BACKGROUND_IMAGE_NUMBERS,
+  type OfferTileBackgroundKind,
+} from "../../../data/offer-tile-art";
 import { identiconsForced } from "../../../runtime/identicon-mode";
 import type { CardId } from "../../../types/card-identity";
 import type { FrozenCardData } from "../../../types/cards";
@@ -319,8 +323,6 @@ function offerTileMotionDelay(offerId: string): string {
 const OFFER_ART_STAGE_SIZE = 208;
 const OFFER_ART_OVERLAY_SIZE = 84;
 const CARD_ART_VISIBLE_SOURCE_FRACTION = 259 / 280;
-const DREAMSIGN_GIFT_BACKGROUND_IMAGE_NUMBER = 386654065;
-const DREAMSIGN_DRAFT_BACKGROUND_IMAGE_NUMBER = 420863587;
 
 type DreamsignDraftCount = OfferTileDreamsignChoices["length"];
 
@@ -433,19 +435,16 @@ function DreamsignArtPiece({
   );
 }
 
-function DreamsignOfferBackground({
+function OfferFullArtBackground({
   kind,
 }: {
-  readonly kind: "gift" | "draft";
+  readonly kind: OfferTileBackgroundKind;
 }): ReactElement {
-  const imageNumber =
-    kind === "gift"
-      ? DREAMSIGN_GIFT_BACKGROUND_IMAGE_NUMBER
-      : DREAMSIGN_DRAFT_BACKGROUND_IMAGE_NUMBER;
+  const imageNumber = OFFER_TILE_BACKGROUND_IMAGE_NUMBERS[kind];
   return (
     <span
-      data-offer-tile-dreamsign-background={kind}
-      data-offer-tile-dreamsign-background-image={imageNumber}
+      data-offer-tile-full-art-background={kind}
+      data-offer-tile-full-art-background-image={imageNumber}
       style={{
         position: "absolute",
         inset: 0,
@@ -493,7 +492,7 @@ function DreamsignGiftComposition({
         pointerEvents: "none",
       }}
     >
-      <DreamsignOfferBackground kind="gift" />
+      <OfferFullArtBackground kind="dreamsign-gift" />
       <DreamsignArtPiece
         dreamsign={dreamsign}
         edge={offerStagePercentage(54)}
@@ -525,7 +524,7 @@ function DreamsignDraftComposition({
         pointerEvents: "none",
       }}
     >
-      <DreamsignOfferBackground kind="draft" />
+      <OfferFullArtBackground kind="dreamsign-draft" />
       {dreamsigns.map((dreamsign, index) => (
         <DreamsignArtPiece
           key={dreamsign.id}
@@ -534,6 +533,51 @@ function DreamsignDraftComposition({
           position={positions[index]}
         />
       ))}
+    </span>
+  );
+}
+
+function AddSiteComposition({
+  site,
+}: {
+  readonly site: OfferTileSite;
+}): ReactElement {
+  return (
+    <span
+      data-offer-tile-site-layout="single"
+      style={{
+        position: "relative",
+        display: "grid",
+        placeItems: "center",
+        width: OFFER_ART_STAGE_SIZE,
+        height: OFFER_ART_STAGE_SIZE,
+        pointerEvents: "none",
+      }}
+    >
+      <OfferFullArtBackground kind="add-site" />
+      <span
+        data-offer-tile-site-id={site.id}
+        style={{
+          position: "relative",
+          display: "grid",
+          placeItems: "center",
+          width: 116,
+          height: 116,
+          borderRadius: token("--radius-pill"),
+          background: token("--surface-chrome-strong"),
+          border: `2px solid ${token("--border-strong")}`,
+          boxShadow: token("--glow-accent-soft"),
+          color: token("--text-on-glass"),
+          textShadow: token("--text-outline-media"),
+          pointerEvents: "none",
+        }}
+      >
+        <i
+          className={site.glyph}
+          data-offer-tile-site-glyph=""
+          style={{ fontSize: 60, lineHeight: 1, pointerEvents: "none" }}
+        />
+      </span>
     </span>
   );
 }
@@ -858,29 +902,6 @@ function OfferVisual({
     case "dreamsign-draft":
       return <DreamsignDraftComposition dreamsigns={model.dreamsigns} />;
     case "add-site":
-      return (
-        <span
-          data-offer-tile-site-id={model.site.id}
-          style={{
-            display: "grid",
-            placeItems: "center",
-            width: 116,
-            height: 116,
-            borderRadius: token("--radius-pill"),
-            background: token("--surface-chrome-strong"),
-            border: `2px solid ${token("--border-strong")}`,
-            boxShadow: token("--glow-accent-soft"),
-            color: token("--text-on-glass"),
-            textShadow: token("--text-outline-media"),
-            pointerEvents: "none",
-          }}
-        >
-          <i
-            className={model.site.glyph}
-            data-offer-tile-site-glyph=""
-            style={{ fontSize: 60, lineHeight: 1, pointerEvents: "none" }}
-          />
-        </span>
-      );
+      return <AddSiteComposition site={model.site} />;
   }
 }

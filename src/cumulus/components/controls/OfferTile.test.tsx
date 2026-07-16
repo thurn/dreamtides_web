@@ -402,10 +402,10 @@ describe("OfferTile", () => {
       '[data-testid="gift"] [data-offer-tile-dreamsign-layout]',
     )!;
     const giftBackground = giftLayout.querySelector<HTMLElement>(
-      '[data-offer-tile-dreamsign-background="gift"]',
+      '[data-offer-tile-full-art-background="dreamsign-gift"]',
     )!;
     expect(giftLayout.dataset.offerTileDreamsignLayout).toBe("single");
-    expect(giftBackground.dataset.offerTileDreamsignBackgroundImage).toBe(
+    expect(giftBackground.dataset.offerTileFullArtBackgroundImage).toBe(
       "386654065",
     );
     expect(giftBackground.style.overflow).toBe("hidden");
@@ -427,7 +427,7 @@ describe("OfferTile", () => {
         `[data-testid="${testId}"] [data-offer-tile-dreamsign-layout]`,
       )!;
       const background = layout.querySelector<HTMLElement>(
-        '[data-offer-tile-dreamsign-background="draft"]',
+        '[data-offer-tile-full-art-background="dreamsign-draft"]',
       )!;
       const backgroundImage =
         background.querySelector<HTMLImageElement>("img")!;
@@ -435,7 +435,7 @@ describe("OfferTile", () => {
       expect(layout.dataset.offerTileDreamsignSpread).toBe(spread);
       expect(layout.dataset.offerTileDreamsignScale).toBe(scale);
       expect(layout.style.overflow).toBe("visible");
-      expect(background.dataset.offerTileDreamsignBackgroundImage).toBe(
+      expect(background.dataset.offerTileFullArtBackgroundImage).toBe(
         "420863587",
       );
       expect(background.style.overflow).toBe("hidden");
@@ -474,6 +474,25 @@ describe("OfferTile", () => {
     const site = container.querySelector<HTMLElement>(
       '[data-testid="site"] [data-offer-tile-site-id]',
     )!;
+    const siteLayout = container.querySelector<HTMLElement>(
+      '[data-testid="site"] [data-offer-tile-site-layout]',
+    )!;
+    const siteBackground = siteLayout.querySelector<HTMLElement>(
+      '[data-offer-tile-full-art-background="add-site"]',
+    )!;
+    expect(siteLayout.style.width).toBe("208px");
+    expect(siteLayout.style.height).toBe("208px");
+    expect(siteBackground.dataset.offerTileFullArtBackgroundImage).toBe(
+      "334049261",
+    );
+    expect(siteBackground.style.overflow).toBe("hidden");
+    const siteBackgroundImage =
+      siteBackground.querySelector<HTMLImageElement>("img")!;
+    expect(siteBackgroundImage.src).toContain("/cards/334049261.webp");
+    expect(siteBackgroundImage.style.width).toBe("120%");
+    expect(siteBackgroundImage.style.maxWidth).toBe("none");
+    expect(siteBackgroundImage.style.height).toBe("120%");
+    expect(siteBackgroundImage.style.objectFit).toBe("cover");
     expect(site.style.width).toBe("116px");
     expect(site.style.height).toBe("116px");
     expect(

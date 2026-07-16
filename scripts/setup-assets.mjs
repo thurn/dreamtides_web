@@ -7,6 +7,7 @@ import { pathToFileURL } from "node:url";
 import { parse } from "smol-toml";
 import { CARDS_V2_POOL_METADATA } from "../src/data/cards-v2-metadata.ts";
 import { DREAMCALLER_ARCHETYPES } from "../src/data/dreamcallers-v2-database.ts";
+import { OFFER_TILE_BACKGROUND_IMAGE_NUMBERS } from "../src/data/offer-tile-art.ts";
 import {
   CARD_ID_RE,
   readAdaptedRecordDecklists,
@@ -1542,6 +1543,34 @@ export function setupAssets({
 
   console.log(
     `Linked ${linkedV2} of ${jsonCardsV2.length} cards_v2 images (${missingV2} missing)`,
+  );
+
+  // Symbolic offer tiles use a small set of fixed card-art fields that are not
+  // tied to the current card catalogs. Keep them in the generated card-art
+  // directory so local review and production uploads resolve the same assets.
+  let linkedOfferTileBackgrounds = 0;
+  let missingOfferTileBackgrounds = 0;
+  for (const imageNumber of Object.values(OFFER_TILE_BACKGROUND_IMAGE_NUMBERS)) {
+    const hash = imageHash(imageNumber);
+    const cachePath = join(imageCacheDir, hash);
+    const symlinkPath = join(cardsDir, `${imageNumber}.webp`);
+
+    if (existsSync(symlinkPath)) {
+      linkedOfferTileBackgrounds++;
+      continue;
+    }
+    if (existsSync(cachePath)) {
+      symlinkSync(cachePath, symlinkPath);
+      linkedOfferTileBackgrounds++;
+    } else {
+      console.warn(
+        `  Warning: missing cache file for offer tile background ${imageNumber}: ${hash}`,
+      );
+      missingOfferTileBackgrounds++;
+    }
+  }
+  console.log(
+    `Linked ${linkedOfferTileBackgrounds} offer tile backgrounds (${missingOfferTileBackgrounds} missing)`,
   );
 
   // Dreamwell card art, keyed by image number exactly like the card catalogs
