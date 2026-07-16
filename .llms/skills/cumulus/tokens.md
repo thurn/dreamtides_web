@@ -98,6 +98,7 @@ Corner radii by surface role (control, card, panel, sheet, …).
 | Token | Value | Notes |
 | --- | --- | --- |
 | `--radius-inset` | `var(--primitive-radius-sm)` | small nested chips / swatches |
+| `--radius-status-badge` | `var(--primitive-radius-xs)` | compact in-card status squares |
 | `--radius-control` | `var(--primitive-radius-md)` | buttons, chips, inputs, menus |
 | `--radius-card` | `var(--primitive-radius-card)` | the game card |
 | `--radius-panel` | `var(--primitive-radius-lg)` | cards, tiles, group panels |

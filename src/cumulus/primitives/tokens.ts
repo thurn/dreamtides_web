@@ -125,6 +125,7 @@ export const TOKENS = {
   "--scrim-gallery": { var: "var(--scrim-gallery)", value: "var(--primitive-scrim-800)" },
   "--scrim-strong": { var: "var(--scrim-strong)", value: "var(--primitive-scrim-900)" },
   "--radius-inset": { var: "var(--radius-inset)", value: "var(--primitive-radius-sm)" },
+  "--radius-status-badge": { var: "var(--radius-status-badge)", value: "var(--primitive-radius-xs)" },
   "--radius-control": { var: "var(--radius-control)", value: "var(--primitive-radius-md)" },
   "--radius-card": { var: "var(--radius-card)", value: "var(--primitive-radius-card)" },
   "--radius-panel": { var: "var(--radius-panel)", value: "var(--primitive-radius-lg)" },

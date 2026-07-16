@@ -229,13 +229,17 @@ describe("MobileBattleScreen", () => {
     );
     expect(figmentBadge?.style.background).toBe("var(--surface-status-badge)");
     expect(figmentBadge?.style.borderColor).toBe("var(--text-on-accent)");
-    expect(figmentBadge?.style.borderRadius).toBe("var(--radius-inset)");
+    expect(figmentBadge?.style.borderRadius).toBe("var(--radius-status-badge)");
     expect(figmentBadge?.style.color).toBe("var(--text-on-accent)");
     const exhaustedIcon = battlefield?.querySelector<HTMLElement>(
       '[data-battle-card-status="exhausted"] i',
     );
+    const exhaustedBadge = battlefield?.querySelector<HTMLElement>(
+      '[data-battle-card-status="exhausted"]',
+    );
     const whiteStyle = document.createElement("span").style;
     whiteStyle.color = resolveColor("white");
+    expect(exhaustedBadge?.style.border).toContain("var(--text-on-accent)");
     expect(exhaustedIcon?.style.color).toBe(whiteStyle.color);
     const storedTimeBadge = battlefield?.querySelector<HTMLElement>(
       '[data-battle-card-status="stored-time"]',
@@ -245,6 +249,10 @@ describe("MobileBattleScreen", () => {
     expect(
       (storedTimeBadge?.lastElementChild as HTMLElement | null)?.style.color,
     ).toBe(whiteStyle.color);
+    expect(storedTimeBadge?.style.background).toBe("var(--surface-status-badge)");
+    expect(storedTimeBadge?.style.border).toContain("var(--text-on-accent)");
+    expect(storedTimeBadge?.style.borderRadius).toBe("var(--radius-status-badge)");
+    expect(storedTimeBadge?.style.gap).toBe("0px");
     expect(
       battlefield?.querySelector('[data-battle-card-status="automated"]'),
     ).toBeNull();

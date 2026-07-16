@@ -240,6 +240,7 @@
   /* ---- Corner radius, by role. UI code sizes corners by what the
      element IS, not by a scale step. ---- */
   --radius-inset: var(--primitive-radius-sm);       /* small nested chips / swatches */
+  --radius-status-badge: var(--primitive-radius-xs);/* compact in-card status squares */
   --radius-control: var(--primitive-radius-md);     /* buttons, chips, inputs, menus */
   --radius-card: var(--primitive-radius-card);      /* the game card */
   --radius-panel: var(--primitive-radius-lg);       /* cards, tiles, group panels */

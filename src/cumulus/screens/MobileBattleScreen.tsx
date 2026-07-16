@@ -1186,6 +1186,8 @@ function FaceUpCard({
 // The badge follows the card width at battlefield scale and caps at the legacy
 // hand-card badge measure so the indicators retain one visual weight.
 const BATTLE_CARD_STATUS_BADGE_SIZE = "min(26cqw, 28px)";
+const BATTLE_CARD_EXHAUST_ICON_SIZE = "min(22cqw, 24px)";
+const BATTLE_CARD_COUNTER_ICON_SIZE = "min(17cqw, 18px)";
 
 const BATTLE_CARD_STATUS_BADGE_STYLE: CSSProperties = {
   position: "absolute",
@@ -1195,7 +1197,7 @@ const BATTLE_CARD_STATUS_BADGE_STYLE: CSSProperties = {
   minWidth: BATTLE_CARD_STATUS_BADGE_SIZE,
   height: BATTLE_CARD_STATUS_BADGE_SIZE,
   paddingInline: token("--space-1"),
-  border: `1px solid ${token("--border-strong")}`,
+  border: `1px solid ${token("--text-on-accent")}`,
   borderRadius: token("--radius-pill"),
   background: token("--surface-card"),
   color: token("--text-primary"),
@@ -1232,7 +1234,7 @@ function BattleCardStatusIndicators({
           <GlowIcon
             iconClass={GLYPHS.exhaust}
             color="white"
-            size="70%"
+            size={BATTLE_CARD_EXHAUST_ICON_SIZE}
             shadow
           />
         </div>
@@ -1248,7 +1250,7 @@ function BattleCardStatusIndicators({
             width: BATTLE_CARD_STATUS_BADGE_SIZE,
             paddingInline: 0,
             borderColor: token("--text-on-accent"),
-            borderRadius: token("--radius-inset"),
+            borderRadius: token("--radius-status-badge"),
             background: token("--surface-status-badge"),
             color: token("--text-on-accent"),
           }}
@@ -1264,14 +1266,19 @@ function BattleCardStatusIndicators({
             ...BATTLE_CARD_STATUS_BADGE_STYLE,
             right: "4%",
             bottom: "4%",
-            gap: token("--space-1"),
+            width: BATTLE_CARD_STATUS_BADGE_SIZE,
+            paddingInline: 0,
+            gap: 0,
+            borderRadius: token("--radius-status-badge"),
+            background: token("--surface-status-badge"),
+            color: token("--text-on-accent"),
           }}
         >
           {String(card.storedTime)}
           <GlowIcon
             iconClass={GLYPHS.counter}
             color="white"
-            size="62%"
+            size={BATTLE_CARD_COUNTER_ICON_SIZE}
             shadow
           />
         </div>
