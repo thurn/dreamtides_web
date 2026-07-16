@@ -431,8 +431,13 @@ function OfferDetailVisual({
           {visual.choices.map((choice) => {
             const selected = selectedChoiceId === choice.id;
             return (
-              <div key={choice.id} data-selected={selected ? "true" : "false"} style={{ padding: token("--space-2"), borderRadius: token("--radius-panel"), border: `1px solid ${selected ? token("--border-accent") : "transparent"}`, boxShadow: selected ? token("--glow-accent-soft") : undefined }}>
+              <div key={choice.id} data-augury-dreamsign-choice="" data-selected={selected ? "true" : "false"} style={{ position: "relative", padding: token("--space-2"), borderRadius: token("--radius-panel"), border: `4px solid ${selected ? token("--selected") : "transparent"}`, boxShadow: selected ? token("--glow-accent-soft") : undefined }}>
                 <Dreamsign dreamsign={choice.dreamsign} sizePx={dreamsignSize(visual.choices.length, layout)} onPress={() => onSelect(offerId, choice.id)} testid={`cumulus-augury-choice-${choice.id}`} />
+                {selected && (
+                  <span aria-hidden="true" data-augury-dreamsign-selection-marker="" style={{ position: "absolute", top: token("--space-2"), right: token("--space-2"), width: 36, height: 36, borderRadius: token("--radius-pill"), display: "grid", placeItems: "center", color: token("--text-on-accent"), background: token("--selected"), boxShadow: token("--shadow-md"), pointerEvents: "none" }}>
+                    <GlowIcon iconClass={GLYPHS.check} color="white" size="24px" />
+                  </span>
+                )}
               </div>
             );
           })}
@@ -548,5 +553,5 @@ function DreamsignRow({ dreamsigns, layout }: { dreamsigns: readonly DreamsignDa
 }
 
 function SiteRewardVisual({ model }: { model: DreamscapeSiteModel }) {
-  return <div data-augury-site-preview="" style={{ position: "relative", width: 156, height: 156 }}><SiteNode model={model} motion={false} onSelect={() => undefined} /></div>;
+  return <div data-augury-site-preview="" style={{ position: "relative", width: 220, height: 220 }}><SiteNode model={model} motion={false} presentation="reward" onSelect={() => undefined} /></div>;
 }

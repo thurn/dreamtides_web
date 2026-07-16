@@ -1,8 +1,9 @@
 // SiteNode — the dreamscape site disc. A floating circular node over a
 // dreamscape's scene art: a dark radial disc with a white glyph and a soft accent
-// ring. The disc shows one of three states: a plain site, the guardian battle
+// ring. Scene nodes use the compact map presentation; reward previews use a
+// larger presentation of the same component. The disc shows one of three states: a plain site, the guardian battle
 // (a pulsing ring), and a locked guardian (a desaturated disc with a padlock
-// badge). Every site disc is the same size. The disc carries no text label —
+// badge). The disc carries no text label —
 // pressing / hovering it reveals the site name + detail through the coordinator
 // as InfoCard's `icon` variant, whose disc is styled to read identically to
 // the node it rose from.
@@ -14,7 +15,7 @@
 // the shared reveal coordinator, so timing,
 // placement, and the on-screen clamp match every other Cumulus reveal.
 //
-// The component owns the node treatment, placed-site semantics, activation, and
+// The component owns the node treatment, presentation size, placed-site semantics, activation, and
 // reveal registration; the coordinator owns viewport measurement and placement.
 
 import * as React from "react";
@@ -29,11 +30,11 @@ import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import "./site-node.css";
 
-/** Disc diameter in px. Guardian battles use pulse/badge treatment while the
- * disc diameter stays fixed. The disc's size is the design system's, not a
- * caller knob — the screen positions the node (via `model.pos`); it does not
- * resize it. */
-const NODE_SIZE = 60;
+/** Compact diameter for site nodes placed over a dreamscape scene. */
+const SCENE_NODE_SIZE = 60;
+
+/** Larger diameter for a SiteNode presented as the primary reward object. */
+const REWARD_NODE_SIZE = 160;
 
 /** The node's fixed accent — the system's violet, not a per-node color. The ring
  * and reveal disc derive their alpha from it via {@link withAlpha}. */
@@ -83,6 +84,8 @@ export interface SiteNodeProps {
   model: DreamscapeSiteModel;
   /** Enable the calm floaty drift (disabled under reduced-motion via CSS). */
   motion: boolean;
+  /** Scene placement or a large reward preview. Defaults to `scene`. */
+  presentation?: "scene" | "reward";
   /** Enter the site; fired on a tap / click of an interactive node only. */
   onSelect: (siteId: string) => void;
 }
@@ -94,6 +97,7 @@ export interface SiteNodeProps {
 export function SiteNode({
   model,
   motion,
+  presentation = "scene",
   onSelect,
 }: SiteNodeProps): React.ReactElement {
   const { site, pos, index, isBattle, isLocked, isInteractive } = model;
@@ -109,9 +113,9 @@ export function SiteNode({
   const lastPointerType = React.useRef<string | null>(null);
   const pointerDown = binding.sourceProps.onPointerDown;
 
-  // Every site disc is the same size — the guardian battle reads as special
-  // through its pulsing ring and lock badge, not a larger disc.
-  const diameter = NODE_SIZE;
+  const diameter = presentation === "reward"
+    ? REWARD_NODE_SIZE
+    : SCENE_NODE_SIZE;
   // A locked guardian stays at full opacity but its disc is desaturated to a
   // clear, readable "disabled" grey. The dimming lands on the disc alone so the
   // lock badge stays crisp and legible.
@@ -156,6 +160,7 @@ export function SiteNode({
       aria-disabled={!isInteractive}
       data-site-id={site.id}
       data-site-type={site.type}
+      data-site-node-presentation={presentation}
       data-site-locked={isLocked ? "true" : "false"}
       data-interactive={isInteractive ? "true" : "false"}
     >

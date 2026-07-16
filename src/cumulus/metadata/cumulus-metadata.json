@@ -3804,6 +3804,17 @@
       "description": "Enable the calm floaty drift (disabled under reduced-motion via CSS)."
     },
     {
+      "name": "presentation",
+      "tsType": "\"scene\" | \"reward\"",
+      "unionMembers": [
+        "scene",
+        "reward"
+      ],
+      "required": false,
+      "defaultValue": "scene",
+      "description": "Scene placement or a large reward preview. Defaults to `scene`."
+    },
+    {
       "name": "onSelect",
       "tsType": "(siteId: string) => void",
       "unionMembers": [],

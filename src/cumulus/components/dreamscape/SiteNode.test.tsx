@@ -36,4 +36,16 @@ describe("SiteNode", () => {
     expect(activate).not.toHaveBeenCalled();
     act(() => root.unmount()); container.remove();
   });
+
+  it("owns distinct scene and reward presentation sizes", () => {
+    (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
+    const container = document.createElement("div"); document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<CumulusRoot><SiteNode model={MODEL} motion={false} presentation="reward" onSelect={() => undefined} /></CumulusRoot>));
+    const source = container.querySelector<HTMLElement>("[data-site-id]");
+    expect(source?.dataset.siteNodePresentation).toBe("reward");
+    expect(source?.style.width).toBe("160px");
+    expect(source?.style.height).toBe("160px");
+    act(() => root.unmount()); container.remove();
+  });
 });

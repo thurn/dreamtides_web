@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/site-node`
 
 Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 
-The dreamscape site disc: a floating circular node over scene art carrying a glyph and accent ring. It has no text label — pressing or hovering reveals the site's name and detail through the shared InfoCard. The screen positions each node (via `model.pos`); it does not resize or recolor it.
+The dreamscape site disc: a floating circular node carrying a glyph and accent ring. Scene placement uses the compact presentation over art; reward surfaces use the larger reward presentation. It has no text label — pressing or hovering reveals the site's name and detail through the shared InfoCard.
 
 ## Props
 
@@ -16,6 +16,7 @@ The dreamscape site disc: a floating circular node over scene art carrying a gly
 | --- | --- | --- | --- | --- |
 | `model` | `DreamscapeSiteModel` | yes | — | The placed-site model — position, label, glyph, and state. |
 | `motion` | `boolean` | yes | — | Enable the calm floaty drift (disabled under reduced-motion via CSS). |
+| `presentation` | `"scene" \| "reward"` | no | `scene` | Scene placement or a large reward preview. Defaults to `scene`. |
 | `onSelect` | `(siteId: string) => void` | yes | — | Enter the site; fired on a tap / click of an interactive node only. |
 
 ### `model`: the `DreamscapeSiteModel` model
@@ -34,7 +35,7 @@ The dreamscape site disc: a floating circular node over scene art carrying a gly
 
 ## Usage
 
-A dreamscape site disc that positions itself from `model.pos` inside a `position: relative` stage and reveals its description through InfoCard, anchored to the scene's `stageRef`. Every disc is one system size and accent — the guardian battle reads as special through its pulsing ring and lock badge, not a larger disc; `motion` enables the calm floaty drift.
+A dreamscape site disc that positions itself from `model.pos` inside a `position: relative` stage and reveals its description through InfoCard. Use the default `scene` presentation for placed map nodes and `reward` when the node is the primary object being granted; `motion` enables the calm floaty drift.
 
 ```tsx
 import { SiteNode } from "src/cumulus/components/dreamscape/SiteNode";

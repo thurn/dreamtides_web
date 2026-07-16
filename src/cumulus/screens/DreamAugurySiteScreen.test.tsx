@@ -378,6 +378,68 @@ describe("DreamAugurySiteScreen", () => {
     expect(
       container.querySelector('[data-augury-site-preview] [data-interactive="false"]'),
     ).not.toBeNull();
+    const siteNode = container.querySelector<HTMLElement>(
+      '[data-augury-site-preview] [data-site-node-presentation="reward"]',
+    );
+    expect(siteNode?.style.width).toBe("160px");
+    expect(siteNode?.style.height).toBe("160px");
+  });
+
+  it("marks a selected Dreamsign with the standard selection ring and check", () => {
+    const base = view();
+    const first = base.offers[0];
+    if (first === undefined) throw new Error("missing fixture offer");
+    const dreamsignView: DreamAugurySiteView = {
+      ...base,
+      offers: [
+        {
+          ...first,
+          headline: "Choose a Dreamsign",
+          subtitle: "Choose a dreamsign to gain.",
+          requiresSelection: true,
+          visual: {
+            kind: "dreamsignChoices",
+            choices: [
+              {
+                id: "sign-1",
+                dreamsign: {
+                  id: "00000000-0000-4000-8000-000000000091",
+                  name: "Fixture Sign One",
+                  effectDescription: "Fixture effect one.",
+                  imageName: "fixture-one.png",
+                  isBane: false,
+                },
+              },
+              {
+                id: "sign-2",
+                dreamsign: {
+                  id: "00000000-0000-4000-8000-000000000092",
+                  name: "Fixture Sign Two",
+                  effectDescription: "Fixture effect two.",
+                  imageName: "fixture-two.png",
+                  isBane: false,
+                },
+              },
+            ],
+          },
+        },
+        base.offers[1],
+      ],
+    };
+    const container = mount(
+      <DreamAugurySiteScreen view={dreamsignView} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
+    );
+
+    click(container.querySelector('[data-testid="cumulus-dream-augury-offer-A"]'));
+    click(container.querySelector('[data-testid="cumulus-augury-choice-sign-1"]'));
+
+    const selected = container.querySelector<HTMLElement>(
+      '[data-augury-dreamsign-choice][data-selected="true"]',
+    );
+    expect(selected?.style.border).toBe("4px solid var(--selected)");
+    expect(
+      selected?.querySelector("[data-augury-dreamsign-selection-marker]"),
+    ).not.toBeNull();
   });
 
   it("uses a white filled right arrow between distinct transfiguration states", () => {

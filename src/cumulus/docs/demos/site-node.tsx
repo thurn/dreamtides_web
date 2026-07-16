@@ -100,13 +100,13 @@ export const siteNodeDemo: CumulusComponent = {
   id: "site-node",
   title: "Site Node",
   blurb:
-    "The dreamscape site disc: a floating circular node over scene art carrying a glyph and accent ring. It has no text label — pressing or hovering reveals the site's name and detail through the shared InfoCard. The screen positions each node (via `model.pos`); it does not resize or recolor it.",
+    "The dreamscape site disc: a floating circular node carrying a glyph and accent ring. Scene placement uses the compact presentation over art; reward surfaces use the larger reward presentation. It has no text label — pressing or hovering reveals the site's name and detail through the shared InfoCard.",
   group: "Components",
   docName: "SiteNode",
   Component: SiteNodeDemo,
   usage: [
     {
-      note: "A dreamscape site disc that positions itself from `model.pos` inside a `position: relative` stage and reveals its description through InfoCard, anchored to the scene's `stageRef`. Every disc is one system size and accent — the guardian battle reads as special through its pulsing ring and lock badge, not a larger disc; `motion` enables the calm floaty drift.",
+      note: "A dreamscape site disc that positions itself from `model.pos` inside a `position: relative` stage and reveals its description through InfoCard. Use the default `scene` presentation for placed map nodes and `reward` when the node is the primary object being granted; `motion` enables the calm floaty drift.",
       code: `import { SiteNode } from "src/cumulus/components/dreamscape/SiteNode";
 
 <div ref={stageRef} style={{ position: "relative" }}>
