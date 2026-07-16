@@ -308,10 +308,12 @@ const SIDE_PILE_HEIGHT = SIDE_PILE_MAX_WIDTH * CARD_ASPECT_RATIO_VALUE;
 // Desktop keeps the three status objects in one centered landscape dock so
 // the wide viewport creates deliberate outer whitespace instead of stretching
 // the mobile spacing rhythm edge-to-edge.
-const DESKTOP_SIDE_ZONES_MAX_WIDTH = 1180;
+const DESKTOP_SIDE_ZONES_WIDTH = 540;
 const DESKTOP_SIDE_PILE_MAX_WIDTH = 120;
 const DESKTOP_SIDE_PILE_HEIGHT =
   DESKTOP_SIDE_PILE_MAX_WIDTH * CARD_ASPECT_RATIO_VALUE;
+const DESKTOP_SIDE_ZONE_MIN_CLEARANCE = token("--space-5");
+const DESKTOP_SIDE_ZONE_SHIFT = `max(0px, calc(${DESKTOP_SIDE_ZONE_MIN_CLEARANCE} - 5.5vh + ${String(DESKTOP_SIDE_PILE_HEIGHT / 2)}px))`;
 const NEXT_PHASE_CONTROL_WIDTH = 120;
 const PLAYER_HAND_Z_INDEX = 15;
 // Mobile player zones share the hand track and lift one spacing step above it.
@@ -320,8 +322,9 @@ const PLAYER_HAND_TOP = `calc(${token("--space-12")} - ${token("--space-7")} + $
 
 const MOBILE_GRID_ROWS =
   "minmax(0, 9fr) minmax(0, 12fr) minmax(0, 20fr) minmax(0, 20fr) minmax(0, 12fr) minmax(0, 27fr)";
+const DESKTOP_PLAY_AREA_HEIGHT_PERCENT = 23;
 const DESKTOP_GRID_ROWS =
-  "minmax(0, 8fr) minmax(0, 11fr) minmax(0, 23fr) minmax(0, 23fr) minmax(0, 11fr) minmax(0, 24fr)";
+  `minmax(0, 8fr) minmax(0, 11fr) minmax(0, ${String(DESKTOP_PLAY_AREA_HEIGHT_PERCENT)}fr) minmax(0, ${String(DESKTOP_PLAY_AREA_HEIGHT_PERCENT)}fr) minmax(0, 11fr) minmax(0, 24fr)`;
 
 const ROOT_STYLE: CSSProperties = {
   position: "fixed",
@@ -580,20 +583,31 @@ function SideZones({
         gridRow: owner === "enemy" ? 2 : isDesktop ? 5 : 6,
         ...(owner === "player"
           ? isDesktop
-            ? { alignSelf: "stretch", zIndex: 3 }
+            ? {
+                alignSelf: "stretch",
+                transform: `translateY(${DESKTOP_SIDE_ZONE_SHIFT})`,
+                zIndex: 3,
+              }
             : {
                 alignSelf: "start",
                 height: token("--space-12"),
                 transform: `translateY(calc(-1 * ${token("--space-7")}))`,
                 zIndex: 3,
               }
-          : null),
+          : isDesktop
+            ? {
+                transform: `translateY(calc(-1 * ${DESKTOP_SIDE_ZONE_SHIFT}))`,
+              }
+            : null),
         display: "grid",
         gridTemplateColumns: SIDE_ZONES_GRID_TEMPLATE,
         alignItems: "center",
         justifySelf: isDesktop ? "center" : undefined,
         width: isDesktop ? "100%" : undefined,
-        maxWidth: isDesktop ? DESKTOP_SIDE_ZONES_MAX_WIDTH : undefined,
+        maxWidth: isDesktop
+          ? `${String(DESKTOP_SIDE_ZONES_WIDTH)}px`
+          : undefined,
+        boxSizing: isDesktop ? "border-box" : undefined,
         columnGap: token(isDesktop ? "--space-12" : "--space-7"),
         paddingInline: token(isDesktop ? "--space-8" : "--space-4"),
       }}
@@ -1147,6 +1161,13 @@ function battlefieldCardSize(layoutBackSlotCount: number): string {
   return `min(22cqw, calc((${String(BATTLEFIELD_WIDTH_PERCENT)}cqw - ${String(horizontalGapCount)} * ${token("--space-2")}) / ${String(slotCount)}), calc((200cqh - 3 * ${token("--space-2")}) / 4))`;
 }
 
+function desktopControlCardSize(layoutBackSlotCount: number): string {
+  const slotCount = Math.max(layoutBackSlotCount, 1);
+  const horizontalGapCount = Math.max(slotCount - 1, 0);
+  const pairedPlayAreaHeight = DESKTOP_PLAY_AREA_HEIGHT_PERCENT * 2;
+  return `min(22cqw, calc((${String(BATTLEFIELD_WIDTH_PERCENT)}cqw - ${String(horizontalGapCount)} * ${token("--space-2")}) / ${String(slotCount)}), calc((${String(pairedPlayAreaHeight)}dvh - 3 * ${token("--space-2")}) / 4))`;
+}
+
 function battlefieldTrackWidth(
   slotCount: number,
   cardSize: string,
@@ -1655,12 +1676,14 @@ function ControlRow({
   selectedPickerCardIds,
   isDesktop,
   interactions,
+  layoutBackSlotCount,
 }: {
   readonly aiApproval: MobileBattleAiApprovalView | null;
   readonly cardPicker: MobileBattleCardPickerView | null;
   readonly selectedPickerCardIds: readonly string[];
   readonly isDesktop: boolean;
   readonly interactions?: MobileBattleInteractions;
+  readonly layoutBackSlotCount: number;
 }) {
   const disabled = interactions?.canInteract !== true;
   const requiredPickerCount = cardPicker === null
@@ -1675,15 +1698,15 @@ function ControlRow({
       aria-label="Battle controls"
       style={{
         ...ROW_STYLE,
+        gridColumn: 1,
         gridRow: 5,
         display: "flex",
         alignItems: "flex-start",
-        justifyContent: "flex-end",
-        justifySelf: isDesktop ? "center" : undefined,
+        justifyContent: isDesktop ? "center" : "flex-end",
         width: isDesktop ? "100%" : undefined,
-        maxWidth: isDesktop ? DESKTOP_SIDE_ZONES_MAX_WIDTH : undefined,
         boxSizing: "border-box",
-        paddingInline: token(isDesktop ? "--space-8" : "--space-4"),
+        containerType: isDesktop ? "inline-size" : undefined,
+        paddingInline: isDesktop ? 0 : token("--space-4"),
         paddingTop: token(isDesktop ? "--space-5" : "--space-4"),
         zIndex: 10,
       }}
@@ -1692,7 +1715,13 @@ function ControlRow({
         <div
           data-battle-card-picker-controls=""
           style={{
-            width: "100%",
+            width: isDesktop
+              ? battlefieldTrackWidth(
+                  layoutBackSlotCount,
+                  desktopControlCardSize(layoutBackSlotCount),
+                )
+              : "100%",
+            maxWidth: isDesktop ? "100%" : undefined,
             minWidth: 0,
             display: "flex",
             alignItems: "center",
@@ -1740,6 +1769,14 @@ function ControlRow({
           style={{
             display: "flex",
             alignItems: "center",
+            justifyContent: isDesktop ? "flex-end" : undefined,
+            width: isDesktop
+              ? battlefieldTrackWidth(
+                  layoutBackSlotCount,
+                  desktopControlCardSize(layoutBackSlotCount),
+                )
+              : undefined,
+            maxWidth: isDesktop ? "100%" : undefined,
             gap: token("--space-4"),
             position: "relative",
             zIndex: 10,
@@ -2265,6 +2302,7 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
           selectedPickerCardIds={selectedPickerCardIds}
           isDesktop={isDesktop}
           interactions={interactions}
+          layoutBackSlotCount={layoutBackSlotCount}
         />
         <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="player" phase={view.phase} side={view.player} interactions={interactions} />
         <PlayerHand

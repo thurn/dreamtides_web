@@ -294,6 +294,9 @@ describe("MobileBattleScreen", () => {
     const controls = container.querySelector<HTMLElement>(
       '[data-battle-mobile-row="control-row"]',
     );
+    const phaseControls = controls?.querySelector<HTMLElement>(
+      '[data-battle-phase-controls="row"]',
+    );
     const desktopBackSlots = container.querySelectorAll(
       '[data-battle-rank="player-back"] [data-battle-slot-id]',
     );
@@ -312,10 +315,12 @@ describe("MobileBattleScreen", () => {
       "translate(-50%, -50%) rotate(90deg)",
     );
     expect(backdrop?.style.backgroundImage).toContain("battle-background.png");
-    expect(enemyZones?.style.maxWidth).toBe("1180px");
+    expect(enemyZones?.style.width).toBe("100%");
+    expect(enemyZones?.style.maxWidth).toBe("540px");
+    expect(enemyZones?.style.boxSizing).toBe("border-box");
     expect(enemyZones?.style.columnGap).toBe("var(--space-12)");
     expect(playerZones?.style.gridRow).toBe("5");
-    expect(playerZones?.style.transform).toBe("");
+    expect(playerZones?.style.transform).toContain("translateY(max(0px");
     expect(playerZones?.style.height).toBe("");
     expect(
       playerZones?.querySelector<HTMLElement>(
@@ -335,9 +340,13 @@ describe("MobileBattleScreen", () => {
     expect(playerHand?.style.transform).toBe(
       "translateY(var(--space-8))",
     );
-    expect(controls?.style.justifyContent).toBe("flex-end");
-    expect(controls?.style.justifySelf).toBe("center");
-    expect(controls?.style.maxWidth).toBe("1180px");
+    expect(controls?.style.justifyContent).toBe("center");
+    expect(controls?.style.gridColumn).toBe("1");
+    expect(controls?.style.width).toBe("100%");
+    expect(controls?.style.containerType).toBe("inline-size");
+    expect(controls?.style.paddingInline).toBe("0px");
+    expect(phaseControls?.style.justifyContent).toBe("flex-end");
+    expect(phaseControls?.style.width).toContain("46dvh");
     expect(controls?.style.transform).toBe("");
     expect(desktopBackSlots).toHaveLength(10);
     expect(desktopFrontSlots).toHaveLength(9);
