@@ -1101,8 +1101,10 @@ describe("MobileBattleScreen", () => {
       );
       expect(backTrack?.style.columnGap).toBe("var(--space-2)");
       expect(frontTrack?.style.columnGap).toBe("var(--space-2)");
-      expect(backTrack?.style.gridTemplateColumns).toContain("repeat(2,");
-      expect(frontTrack?.style.gridTemplateColumns).toContain("repeat(1,");
+      expect(backTrack?.style.gridTemplateColumns).toContain("repeat(3,");
+      expect(frontTrack?.style.gridTemplateColumns).toContain("repeat(2,");
+      expect(backTrack?.style.width).toContain("3 * min(");
+      expect(frontTrack?.style.width).toContain("2 * min(");
       expect(backSlots).toHaveLength(frontSlots.length + 1);
       backSlots.forEach((backSlot) => {
         expect(backSlot.style.aspectRatio).toBe("1 / 1");
@@ -1434,7 +1436,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("centers occupied expanded mobile ranks on one shared responsive card scale", () => {
+  it("centers materialized expanded mobile ranks on one shared responsive card scale", () => {
     const view = makeView();
     const expandedBackRank = Array.from({ length: 6 }, (_, index) => ({
       id: `expanded-back-${String(index)}`,
@@ -1482,14 +1484,14 @@ describe("MobileBattleScreen", () => {
             [],
         );
         expect(rankElement?.style.height).toContain(
-          "88cqw - 4 * var(--space-2)",
+          "88cqw - 5 * var(--space-2)",
         );
         expect(rankElement?.style.height).toContain("200cqh");
         expect(track?.style.gridTemplateColumns).toContain(
-          rank === "back" ? "repeat(5," : "repeat(4,",
+          rank === "back" ? "repeat(6," : "repeat(5,",
         );
         expect(track?.style.width).toContain(
-          rank === "back" ? "5 * min(" : "4 * min(",
+          rank === "back" ? "6 * min(" : "5 * min(",
         );
         expect(track?.style.columnGap).toBe("var(--space-2)");
         expect(slots[0]?.style.width).toContain("var(--space-2)");
@@ -1514,6 +1516,42 @@ describe("MobileBattleScreen", () => {
     expect(playerFront?.style.top).toBe("var(--space-1)");
     expect(enemyBack?.style.bottom).toContain("var(--space-2)");
     expect(playerBack?.style.top).toContain("var(--space-2)");
+
+    act(() => root.unmount());
+  });
+
+  it("centers each mobile rank when the two sides have different materialized widths", () => {
+    const view = makeView();
+    const playerBackRank = Array.from({ length: 6 }, (_, index) => ({
+      id: `player-expanded-back-${String(index)}`,
+      card: index < 5
+        ? makeCard(80 + index, `player-expanded-back-card-${String(index)}`)
+        : null,
+    }));
+    const playerFrontRank = Array.from({ length: 5 }, (_, index) => ({
+      id: `player-expanded-front-${String(index)}`,
+      card: index < 4
+        ? makeCard(90 + index, `player-expanded-front-card-${String(index)}`)
+        : null,
+    }));
+    const { container, root } = mount({
+      ...view,
+      player: {
+        ...view.player,
+        backRank: playerBackRank,
+        frontRank: playerFrontRank,
+      },
+    });
+
+    const trackColumns = (owner: "enemy" | "player", rank: "back" | "front") =>
+      container.querySelector<HTMLElement>(
+        `[data-battle-rank="${owner}-${rank}"] [data-battle-rank-track]`,
+      )?.style.gridTemplateColumns;
+
+    expect(trackColumns("enemy", "back")).toContain("repeat(3,");
+    expect(trackColumns("enemy", "front")).toContain("repeat(2,");
+    expect(trackColumns("player", "back")).toContain("repeat(6,");
+    expect(trackColumns("player", "front")).toContain("repeat(5,");
 
     act(() => root.unmount());
   });

@@ -1288,13 +1288,6 @@ function BattleCardStatusIndicators({
   );
 }
 
-function lastFilledSlotCount(slots: readonly MobileBattleSlotView[]): number {
-  for (let index = slots.length - 1; index >= 0; index -= 1) {
-    if (slots[index]?.card !== null) return index + 1;
-  }
-  return 0;
-}
-
 function battlefieldLayoutBackSlotCount(
   view: MobileBattleView,
   isDesktop: boolean,
@@ -1302,8 +1295,8 @@ function battlefieldLayoutBackSlotCount(
   const sides = [view.enemy, view.player] as const;
   return Math.max(
     isDesktop ? MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS : 1,
-    ...sides.map((side) => lastFilledSlotCount(side.backRank)),
-    ...sides.map((side) => lastFilledSlotCount(side.frontRank) + 1),
+    ...sides.map((side) => side.backRank.length),
+    ...sides.map((side) => side.frontRank.length + 1),
   );
 }
 
@@ -1379,13 +1372,14 @@ function Rank({
     && (interactions.pendingCardOwner === null
       || interactions.pendingCardOwner === undefined
       || interactions.pendingCardOwner === owner);
-  const layoutSlotCount =
+  const desktopSlotCount =
     rank === "back"
       ? layoutBackSlotCount
       : Math.max(layoutBackSlotCount - 1, 1);
   const visibleSlots = isDesktop
-    ? desktopRankSlots(slots, rank, layoutSlotCount)
+    ? desktopRankSlots(slots, rank, desktopSlotCount)
     : slots;
+  const trackSlotCount = Math.max(visibleSlots.length, 1);
   const isCenterFacingRank =
     (owner === "enemy" && order === 1) ||
     (owner === "player" && order === 0);
@@ -1423,10 +1417,10 @@ function Rank({
         style={{
           position: "relative",
           flex: "0 0 auto",
-          width: battlefieldTrackWidth(layoutSlotCount, cardSize),
+          width: battlefieldTrackWidth(trackSlotCount, cardSize),
           height: cardSize,
           display: "grid",
-          gridTemplateColumns: `repeat(${String(layoutSlotCount)}, ${cardSize})`,
+          gridTemplateColumns: `repeat(${String(trackSlotCount)}, ${cardSize})`,
           gridAutoColumns: cardSize,
           gridAutoFlow: "column",
           columnGap: token("--space-2"),
