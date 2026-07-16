@@ -252,6 +252,10 @@ describe("DreamAugurySiteScreen", () => {
       container.querySelector("[data-guide-gallery-desktop-layout]")
         ?.getAttribute("data-guide-gallery-desktop-layout-mode"),
     ).toBe("showcase");
+    const detailStage = container.querySelector<HTMLElement>(
+      '[data-augury-desktop-placement="center"]',
+    );
+    expect(detailStage?.style.justifySelf).toBe("center");
     expect(container.querySelector("[data-glass-panel-header]")?.querySelector("h2")?.textContent).toBe(
       "Choose a Card",
     );
@@ -304,6 +308,17 @@ describe("DreamAugurySiteScreen", () => {
       ),
     );
     expect(onChoose).not.toHaveBeenCalled();
+    expect(
+      container.querySelector("[data-guide-gallery-desktop-layout]")
+        ?.getAttribute("data-guide-gallery-desktop-layout-mode"),
+    ).toBe("split");
+    expect(
+      container.querySelector("[data-dream-augury-layout]")
+        ?.getAttribute("data-augury-desktop-placement"),
+    ).toBe("right");
+    expect(
+      container.querySelector('[data-testid="cumulus-dream-augury-guide-art"]'),
+    ).not.toBeNull();
     click(
       container.querySelector(
         '[data-testid="cumulus-dream-augury-confirm-B"]',

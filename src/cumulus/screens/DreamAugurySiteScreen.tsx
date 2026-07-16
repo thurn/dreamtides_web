@@ -88,6 +88,31 @@ export interface DreamAugurySiteScreenProps {
   onClose: () => void;
 }
 
+function requiresCenteredDesktopDetail(
+  visual: DreamAuguryOfferVisualView,
+): boolean {
+  switch (visual.kind) {
+    case "cards":
+      return visual.cards.length > 2;
+    case "cardChoices":
+      return visual.choices.length > 2;
+    case "beforeAfter":
+      return visual.pairs.length * 2 > 2;
+    case "purgeReplace":
+      return true;
+    case "duplicateChoices":
+      return visual.choices.length > 2;
+    case "mixed":
+      return visual.cards.length > 2;
+    case "purge":
+    case "duplicate":
+    case "dreamsigns":
+    case "dreamsignChoices":
+    case "site":
+      return false;
+  }
+}
+
 export function DreamAugurySiteScreen({
   view,
   onInspectOffer,
@@ -100,6 +125,8 @@ export function DreamAugurySiteScreen({
   const [committingOfferId, setCommittingOfferId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const inspectedOffer = view.offers.find((offer) => offer.id === inspectedOfferId) ?? null;
+  const centeredDesktopDetail = inspectedOffer !== null
+    && requiresCenteredDesktopDetail(inspectedOffer.visual);
   const available = view.offers.length === 2;
   const guide = available
     ? view.guide
@@ -149,7 +176,7 @@ export function DreamAugurySiteScreen({
       siteId={view.siteId}
       scene={view.scene}
       guide={guide}
-      desktopComposition={inspectedOffer === null ? "split" : "showcase"}
+      desktopComposition={centeredDesktopDetail ? "showcase" : "split"}
       mobileComposition="revelation"
       mobileRegionSize={inspectedOffer === null ? "standard" : "expanded"}
       speechBubbleVisible={inspectedOffer === null}
@@ -161,15 +188,26 @@ export function DreamAugurySiteScreen({
         <section
           data-dream-augury-layout={layout}
           data-augury-phase={inspectedOffer === null ? "comparison" : "detail"}
+          data-augury-desktop-placement={
+            inspectedOffer === null
+              ? undefined
+              : centeredDesktopDetail
+                ? "center"
+                : "right"
+          }
           data-encounter-signature={view.encounterSignature ?? undefined}
           style={{
             width: "100%",
             maxWidth:
               layout === "desktop"
-                ? inspectedOffer === null
-                  ? 820
-                  : 1120
+                ? centeredDesktopDetail
+                  ? 1120
+                  : 820
                 : "100%",
+            justifySelf:
+              layout === "desktop" && centeredDesktopDetail
+                ? "center"
+                : undefined,
             height: "100%",
             minHeight: 0,
             display: "grid",
