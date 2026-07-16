@@ -8,7 +8,7 @@ import { CumulusRoot } from "../../CumulusRoot";
 import { BanishedZoneIndicator } from "./BanishedZoneIndicator";
 
 describe("BanishedZoneIndicator", () => {
-  it("renders fixed symbolic art with an edge fade and opens the zone", () => {
+  it("renders fixed symbolic art with an edge fade and swirling veil", () => {
     (
       globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
     ).IS_REACT_ACT_ENVIRONMENT = true;
@@ -36,6 +36,9 @@ describe("BanishedZoneIndicator", () => {
     const art = indicator?.querySelector<HTMLImageElement>(
       "[data-banished-zone-art]",
     );
+    const swirl = indicator?.querySelector<HTMLElement>(
+      "[data-banished-zone-swirl]",
+    );
 
     expect(indicator?.dataset.banishedZoneCount).toBe("2");
     expect(indicator?.getAttribute("aria-label")).toBe(
@@ -49,6 +52,7 @@ describe("BanishedZoneIndicator", () => {
     );
     expect(art?.style.maskImage).toContain("radial-gradient");
     expect(art?.style.objectFit).toBe("cover");
+    expect(swirl?.getAttribute("aria-hidden")).toBe("true");
 
     act(() => indicator?.click());
     expect(onActivate).toHaveBeenCalledTimes(1);

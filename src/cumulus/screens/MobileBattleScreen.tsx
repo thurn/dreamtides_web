@@ -683,7 +683,7 @@ function SideZones({
               data-battle-zone-count={String(side.banishedCardCount)}
               style={{
                 position: "absolute",
-                right: `calc(100% + ${token("--space-4")})`,
+                right: `calc(100% + ${token("--space-8")})`,
                 top: "50%",
                 width: DESKTOP_BANISHED_ZONE_SIZE,
                 transform: "translateY(-50%)",

@@ -8,9 +8,9 @@ Components · Live demo & interactive props: `/cumulus#/banished-zone-indicator`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-A rounded symbolic portal for a non-empty banished zone, using fixed ethereal art instead of any card in the zone.
+A rounded symbolic portal for a non-empty banished zone, using fixed ethereal art beneath a slowly swirling veil.
 
-> **Guidance:** Render it only when the zone contains cards. Size and place its wrapper beside the deck; activation opens the shared zone browser.
+> **Guidance:** Render it only when the zone contains cards. Size and place its wrapper with clear separation from the deck; activation opens the shared zone browser.
 
 ## Props
 

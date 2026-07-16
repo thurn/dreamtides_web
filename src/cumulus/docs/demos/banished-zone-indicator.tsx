@@ -18,9 +18,9 @@ export const banishedZoneIndicatorDemo: CumulusComponent = {
   id: "banished-zone-indicator",
   title: "Banished Zone Indicator",
   blurb:
-    "A rounded symbolic portal for a non-empty banished zone, using fixed ethereal art instead of any card in the zone.",
+    "A rounded symbolic portal for a non-empty banished zone, using fixed ethereal art beneath a slowly swirling veil.",
   callout:
-    "Render it only when the zone contains cards. Size and place its wrapper beside the deck; activation opens the shared zone browser.",
+    "Render it only when the zone contains cards. Size and place its wrapper with clear separation from the deck; activation opens the shared zone browser.",
   group: "Components",
   docName: "BanishedZoneIndicator",
   Component: BanishedZoneIndicatorDemo,

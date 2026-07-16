@@ -3,6 +3,7 @@ import { cardImageUrl } from "../../../data/card-database";
 import { BANISHED_ZONE_IMAGE_NUMBER } from "../../../data/battle-zone-art";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
+import "./banished-zone-indicator.css";
 
 export interface BanishedZoneIndicatorProps {
   /** Number of cards in the banished zone. */
@@ -71,6 +72,7 @@ export function BanishedZoneIndicator({
           userSelect: "none",
         }}
       />
+      <span data-banished-zone-swirl="" aria-hidden="true" />
     </Pressable>
   );
 }

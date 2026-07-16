@@ -913,7 +913,7 @@ describe("MobileBattleScreen", () => {
     expect(indicatorFrame?.dataset.battleZoneCount).toBe("2");
     expect(indicatorFrame?.style.position).toBe("absolute");
     expect(indicatorFrame?.style.right).toBe(
-      "calc(100% + var(--space-4))",
+      "calc(100% + var(--space-8))",
     );
     expect(indicatorFrame?.style.width).toBe("72px");
     expect(indicator?.getAttribute("aria-label")).toBe(
