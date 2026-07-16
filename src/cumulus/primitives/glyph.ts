@@ -101,7 +101,7 @@ export const GLYPHS = {
   phaseDawn: g("bxf bx-sun-rise"),
   phaseDay: g("bxf bx-sun"),
   phaseDusk: g("bxf bx-sun-set"),
-  phaseNight: g("bxf bx-star"),
+  phaseNight: g("bxf bx-moon-stars"),
   phaseChallenge: g("bxf bx-sword-alt"),
   /** Two overlapping pages, used for duplication and copy effects. */
   copy: g("bxf bx-copy"),

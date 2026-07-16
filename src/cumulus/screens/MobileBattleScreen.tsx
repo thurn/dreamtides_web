@@ -291,9 +291,9 @@ const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
 const BATTLEFIELD_SIDE_INSET_PERCENT = 6;
 const DESKTOP_BATTLEFIELD_SIDE_INSET_PERCENT = 14;
 const BATTLEFIELD_WIDTH_PERCENT = 100 - BATTLEFIELD_SIDE_INSET_PERCENT * 2;
-const PHASE_LIGHT_SIZE = 12;
-const PHASE_LIGHT_HALO_SIZE = 18;
-const PHASE_LIGHT_STREAK_WIDTH = 20;
+const PHASE_LIGHT_SIZE = 24;
+const PHASE_LIGHT_HALO_SIZE = 24;
+const PHASE_LIGHT_STREAK_WIDTH = 28;
 const PHASE_LIGHT_STREAK_HEIGHT = 2;
 const PHASE_COMET_TAIL_START_SCALE = 0.35;
 const PHASE_COMET_TAIL_PEAK_SCALE = 1.55;
@@ -878,7 +878,8 @@ function PhaseIndicator({
           <GlowIcon
             iconClass={PHASE_GLYPH[phase]}
             color="accent-bright"
-            size={token("--space-5")}
+            size={token("--space-8")}
+            shadow
           />
         </span>
       </span>

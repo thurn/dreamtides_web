@@ -983,23 +983,24 @@ describe("MobileBattleScreen", () => {
     expect(indicator?.parentElement?.dataset.battleStatusPhaseAnchor).toBe("");
     expect(indicator?.style.top).toBe("100%");
     expect(indicator?.style.bottom).toBe("");
-    expect(light?.style.width).toBe("12px");
-    expect(light?.style.height).toBe("12px");
+    expect(light?.style.width).toBe("24px");
+    expect(light?.style.height).toBe("24px");
     expect(light?.style.left).toBe("30%");
     expect(light?.style.transform).toBe("translate(-50%, -100%)");
     expect(light?.style.transition).toContain("var(--motion-object-travel)");
     expect(icon?.classList.contains("bxf")).toBe(true);
     expect(icon?.classList.contains("bx-sun")).toBe(true);
-    expect(core?.style.width).toBe("12px");
-    expect(core?.style.height).toBe("12px");
-    expect(icon?.style.width).toBe("var(--space-5)");
-    expect(icon?.style.height).toBe("var(--space-5)");
+    expect(core?.style.width).toBe("24px");
+    expect(core?.style.height).toBe("24px");
+    expect(icon?.style.width).toBe("var(--space-8)");
+    expect(icon?.style.height).toBe("var(--space-8)");
     expect(icon?.style.color).toBe("var(--accent-bright)");
-    expect(halo?.style.width).toBe("18px");
-    expect(halo?.style.height).toBe("18px");
+    expect(icon?.style.filter.match(/drop-shadow/g)).toHaveLength(2);
+    expect(halo?.style.width).toBe("24px");
+    expect(halo?.style.height).toBe("24px");
     expect(halo?.style.backgroundColor).toBe("var(--accent)");
     expect(halo?.style.animation).toBe("");
-    expect(streak?.style.width).toBe("20px");
+    expect(streak?.style.width).toBe("28px");
     expect(streak?.style.height).toBe("2px");
     expect(streak?.style.backgroundColor).toBe("var(--accent-bright)");
     expect(streak?.style.animation).toContain("battle-phase-comet-tail");
@@ -1044,7 +1045,7 @@ describe("MobileBattleScreen", () => {
     ["dawn", "bx-sun-rise"],
     ["day", "bx-sun"],
     ["dusk", "bx-sun-set"],
-    ["night", "bx-star"],
+    ["night", "bx-moon-stars"],
     ["challenge", "bx-sword-alt"],
   ] as const)("renders the filled %s phase glyph", (phase, iconClass) => {
     const { container, root } = mount({ ...makeView(), phase });
