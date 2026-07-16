@@ -163,6 +163,7 @@
 
       .offer-tile__symbols--draft {
         display: block;
+        clip-path: circle(46% at 50% 50%);
       }
 
       .offer-tile__dreamsign {
@@ -178,8 +179,8 @@
       }
 
       .offer-tile__symbols--draft .offer-tile__dreamsign {
-        /* Past 17% spread, the controls gradually reduce icon size so the
-           25% extreme still preserves a gap inside the circular frame. */
+        /* The safe-circle clip preserves a visible ring inside the frame
+           while the spread and scale controls remain fully independent. */
         position: absolute;
         width: var(--dreamsign-size);
         height: var(--dreamsign-size);
@@ -600,6 +601,27 @@
               15%
             </output>
           </div>
+          <div class="range-control">
+            <label class="range-control__label" for="dreamsign-scale">
+              Dreamsign scale
+            </label>
+            <input
+              class="range-control__input"
+              id="dreamsign-scale"
+              type="range"
+              min="12"
+              max="36"
+              step="1"
+              value="28"
+            />
+            <output
+              class="range-control__value"
+              id="dreamsign-scale-value"
+              for="dreamsign-scale"
+            >
+              28%
+            </output>
+          </div>
           <div
             class="count-control"
             role="group"
@@ -673,6 +695,10 @@
       const dreamsignSpreadValue = document.querySelector(
         "#dreamsign-spread-value",
       );
+      const dreamsignScale = document.querySelector("#dreamsign-scale");
+      const dreamsignScaleValue = document.querySelector(
+        "#dreamsign-scale-value",
+      );
       const draftSymbols = document.querySelector("#draft-symbols");
       const draftCaption = document.querySelector("#draft-caption");
       const dreamsignCountButtons = document.querySelectorAll(
@@ -734,7 +760,7 @@
 
       function updateDreamsignLayout() {
         const spread = Number(dreamsignSpread.value);
-        const size = spread <= 17 ? 28 : 28 - (spread - 17) * 1.5;
+        const size = Number(dreamsignScale.value);
         const halfSize = size / 2;
         const center = 50 - halfSize;
         const low = 50 - spread - halfSize;
@@ -758,9 +784,11 @@
           50 + spread / 2 - halfSize,
         );
         dreamsignSpreadValue.value = `${spread}%`;
+        dreamsignScaleValue.value = `${size}%`;
       }
 
       dreamsignSpread.addEventListener("input", updateDreamsignLayout);
+      dreamsignScale.addEventListener("input", updateDreamsignLayout);
 
       dreamsignCountButtons.forEach((button) => {
         button.addEventListener("click", () => {
