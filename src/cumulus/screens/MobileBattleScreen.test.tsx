@@ -983,24 +983,24 @@ describe("MobileBattleScreen", () => {
     expect(indicator?.parentElement?.dataset.battleStatusPhaseAnchor).toBe("");
     expect(indicator?.style.top).toBe("0px");
     expect(indicator?.style.bottom).toBe("");
-    expect(light?.style.width).toBe("24px");
-    expect(light?.style.height).toBe("24px");
-    expect(light?.style.top).toBe("0px");
+    expect(light?.style.width).toBe("19px");
+    expect(light?.style.height).toBe("19px");
+    expect(light?.style.top).toBe("12px");
     expect(light?.style.left).toBe("30%");
     expect(light?.style.transform).toBe("translate(-50%, -100%)");
     expect(light?.style.transition).toContain("var(--motion-object-travel)");
     expect(icon?.classList.contains("bxf")).toBe(true);
     expect(icon?.classList.contains("bx-sun")).toBe(true);
-    expect(core?.style.width).toBe("24px");
-    expect(core?.style.height).toBe("24px");
+    expect(core?.style.width).toBe("19px");
+    expect(core?.style.height).toBe("19px");
     expect(core?.style.borderRadius).toBe("var(--radius-pill)");
     expect(core?.style.backgroundColor).toBe("var(--bg-sunken)");
-    expect(icon?.style.width).toBe("20px");
-    expect(icon?.style.height).toBe("20px");
+    expect(icon?.style.width).toBe("15px");
+    expect(icon?.style.height).toBe("15px");
     expect(icon?.style.color).toBe("var(--accent-bright)");
     expect(icon?.style.filter.match(/drop-shadow/g)).toHaveLength(2);
-    expect(halo?.style.width).toBe("24px");
-    expect(halo?.style.height).toBe("24px");
+    expect(halo?.style.width).toBe("19px");
+    expect(halo?.style.height).toBe("19px");
     expect(halo?.style.backgroundColor).toBe("var(--accent)");
     expect(halo?.style.animation).toBe("");
     expect(streak?.style.width).toBe("28px");
@@ -1036,51 +1036,11 @@ describe("MobileBattleScreen", () => {
     expect(indicator?.parentElement?.dataset.battleStatusPhaseAnchor).toBe("");
     expect(indicator?.style.top).toBe("100%");
     expect(indicator?.style.bottom).toBe("");
-    expect(light?.style.top).toBe("0px");
+    expect(light?.style.top).toBe("-12px");
     expect(light?.style.left).toBe("90%");
     expect(light?.style.transform).toBe("translate(-50%, 0%)");
     expect(halo?.style.animation).toContain("battle-phase-challenge-pulse");
     expect(halo?.style.animation).toContain("var(--dur-slow)");
-
-    act(() => root.unmount());
-  });
-
-  it("applies live phase icon size and vertical offset tweaks", () => {
-    const { container, root } = mount({ ...makeView(), phase: "day" });
-    const size = container.querySelector<HTMLInputElement>(
-      '[data-battle-phase-tweak="icon-size"]',
-    );
-    const offset = container.querySelector<HTMLInputElement>(
-      '[data-battle-phase-tweak="vertical-offset"]',
-    );
-    const setRangeValue = (input: HTMLInputElement | null, value: string) => {
-      if (input === null) return;
-      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")
-        ?.set?.call(input, value);
-      input.dispatchEvent(new Event("input", { bubbles: true }));
-    };
-
-    act(() => {
-      setRangeValue(size, "16");
-    });
-    act(() => {
-      setRangeValue(offset, "6");
-    });
-
-    const light = container.querySelector<HTMLElement>(
-      "[data-battle-phase-light]",
-    );
-    const icon = container.querySelector<HTMLElement>(
-      "[data-battle-phase-light-core] i",
-    );
-    expect(light?.style.width).toBe("20px");
-    expect(light?.style.height).toBe("20px");
-    expect(light?.style.top).toBe("-6px");
-    expect(icon?.style.width).toBe("16px");
-    expect(icon?.style.height).toBe("16px");
-    expect(
-      container.querySelector("[data-battle-phase-tweak-values]")?.textContent,
-    ).toContain('"verticalOffsetPx": 6');
 
     act(() => root.unmount());
   });
@@ -1852,7 +1812,7 @@ describe("MobileBattleScreen", () => {
 
   it("shows the floating debug disclosure alongside the phase controls", () => {
     const { container, root } = mount();
-    const controls = container.querySelector("[data-battle-mobile]")?.querySelectorAll(
+    const controls = container.querySelectorAll(
       "button, input, select, textarea, [role=button]",
     );
     expect(controls).toHaveLength(4);
