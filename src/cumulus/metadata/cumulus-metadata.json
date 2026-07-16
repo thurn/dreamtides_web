@@ -3339,7 +3339,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "[]",
-      "description": "The Dreamsigns to dock. Quest overflow opens a viewer; battle Dreamsigns\nflow in two-high columns.",
+      "description": "The Dreamsigns to dock. Quest overflow opens a viewer; battle Dreamsigns\nflow bottom-up and right-to-left in two-high columns.",
       "nested": {
         "name": "Dreamsign",
         "fields": [
@@ -3467,7 +3467,7 @@
       ],
       "required": false,
       "defaultValue": "quest",
-      "description": "Content arrangement. `quest` shows the complete run inventory;\n`battle` keeps only essence at the lower start edge and two-high Dreamsign\ncolumns at the lower end edge of the playable battle board."
+      "description": "Content arrangement. `quest` shows the complete run inventory;\n`battle` keeps only essence at the lower start edge and bottom-up,\nright-to-left Dreamsign columns at the lower end edge of the playable\nbattle board."
     }
   ],
   "ResourceChip": [

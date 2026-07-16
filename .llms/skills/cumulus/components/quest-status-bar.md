@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/quest-status-bar`
 
 Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
 
-The persistent, transparent bottom HUD for quest screens. Its quest variant shows the complete run inventory; its desktop battle variant keeps essence and two-high Dreamsign columns at the playable board's lower corners. It docks at two sizes — `compact` on mobile, `grand` on desktop — scaling the whole bar up in proportion.
+The persistent, transparent bottom HUD for quest screens. Its quest variant shows the complete run inventory; its desktop battle variant keeps essence and bottom-up, right-to-left Dreamsign columns at the playable board's lower corners. It docks at two sizes — `compact` on mobile, `grand` on desktop — scaling the whole bar up in proportion.
 
 ## Props
 
@@ -16,12 +16,12 @@ The persistent, transparent bottom HUD for quest screens. Its quest variant show
 | --- | --- | --- | --- | --- |
 | `stageRef` | `RefObject<HTMLElement \| null>` | yes | — | Ref to the screen root (position:absolute inset:0 in the scaled frame). Required. |
 | `essence` | `number` | no | — | Essence total shown in the HUD. |
-| `dreamsigns` | `Dreamsign[]` | no | `[]` | The Dreamsigns to dock. Quest overflow opens a viewer; battle Dreamsigns flow in two-high columns. |
+| `dreamsigns` | `Dreamsign[]` | no | `[]` | The Dreamsigns to dock. Quest overflow opens a viewer; battle Dreamsigns flow bottom-up and right-to-left in two-high columns. |
 | `deck` | `string \| number` | no | `0` | Deck size (used in the deck button's aria-label). |
 | `onViewDeck` | `(() => void)` | no | — | Open the deck viewer — fired on a tap / click of the deck sprite. |
 | `dreamcaller` | `QsbDreamcaller` | no | — |  |
 | `size` | `"compact" \| "grand"` | no | `compact` | HUD size. `compact` (default) is the mobile / touch size; `grand` is the larger desktop size the dreamscape screen picks above the wide-viewport breakpoint. |
-| `variant` | `"quest" \| "battle"` | no | `quest` | Content arrangement. `quest` shows the complete run inventory; `battle` keeps only essence at the lower start edge and two-high Dreamsign columns at the lower end edge of the playable battle board. |
+| `variant` | `"quest" \| "battle"` | no | `quest` | Content arrangement. `quest` shows the complete run inventory; `battle` keeps only essence at the lower start edge and bottom-up, right-to-left Dreamsign columns at the lower end edge of the playable battle board. |
 
 ### `dreamsigns`: the `Dreamsign` model
 

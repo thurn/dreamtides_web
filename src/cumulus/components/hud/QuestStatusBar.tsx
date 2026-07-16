@@ -14,7 +14,7 @@
 //   - each docked dreamsign        → InfoCard 'object'
 //   - quest Dreamsigns beyond a fixed count collapse into an overflow stack →
 //     a centered viewer window (not a bottom sheet); battle Dreamsigns flow in
-//     two-high columns
+//     two-high columns which fill bottom-up and right-to-left
 //
 // `stageRef` aligns the docked dreamsign strip with the HUD.
 //
@@ -128,7 +128,7 @@ export interface QuestStatusBarProps {
   /** Essence total shown in the HUD. */
   essence?: number;
   /** The Dreamsigns to dock. Quest overflow opens a viewer; battle Dreamsigns
-   * flow in two-high columns. */
+   * flow bottom-up and right-to-left in two-high columns. */
   dreamsigns?: QsbDreamsign[];
   /** Deck size (used in the deck button's aria-label). */
   deck?: number | string;
@@ -140,8 +140,9 @@ export interface QuestStatusBarProps {
    * breakpoint. */
   size?: "compact" | "grand";
   /** Content arrangement. `quest` shows the complete run inventory;
-   * `battle` keeps only essence at the lower start edge and two-high Dreamsign
-   * columns at the lower end edge of the playable battle board. */
+   * `battle` keeps only essence at the lower start edge and bottom-up,
+   * right-to-left Dreamsign columns at the lower end edge of the playable
+   * battle board. */
   variant?: "quest" | "battle";
 }
 
@@ -648,6 +649,7 @@ function QsbBattleHudBar({
   }, [stageRef]);
 
   const signSize = Math.round(36 * scale);
+  const dreamsignColumnCount = Math.ceil(signs.length / 2);
   const dreamsigns =
     signs.length === 0 ? null : (
       <div
@@ -655,16 +657,24 @@ function QsbBattleHudBar({
         data-quest-status-dreamsign-columns="two-high"
         style={{
           display: "grid",
-          gridAutoFlow: "column",
+          gridTemplateColumns: `repeat(${String(dreamsignColumnCount)}, max-content)`,
           gridTemplateRows: "repeat(2, max-content)",
           alignItems: "center",
           gap: token("--space-1"),
         }}
       >
-        {signs.map((sign) => (
+        {signs.map((sign, index) => (
           <div
             key={requireDreamsignId(sign, "QuestStatusBar battle dreamsign")}
             data-quest-status-dreamsign=""
+            data-quest-status-dreamsign-column={
+              dreamsignColumnCount - Math.floor(index / 2)
+            }
+            data-quest-status-dreamsign-row={index % 2 === 0 ? 2 : 1}
+            style={{
+              gridColumn: dreamsignColumnCount - Math.floor(index / 2),
+              gridRow: index % 2 === 0 ? 2 : 1,
+            }}
           >
             <Dreamsign
               variant="hud"

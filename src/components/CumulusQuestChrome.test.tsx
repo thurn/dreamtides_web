@@ -149,13 +149,31 @@ describe("CumulusQuestChrome", () => {
     const dreamsignColumns = container.querySelector<HTMLElement>(
       '[data-quest-status-dreamsign-columns="two-high"]',
     );
-    expect(dreamsignColumns?.style.gridAutoFlow).toBe("column");
+    expect(dreamsignColumns?.style.gridTemplateColumns).toBe(
+      "repeat(3, max-content)",
+    );
     expect(dreamsignColumns?.style.gridTemplateRows).toBe(
       "repeat(2, max-content)",
     );
     expect(
       dreamsignColumns?.querySelectorAll("[data-quest-status-dreamsign]"),
     ).toHaveLength(5);
+    expect(
+      Array.from(
+        dreamsignColumns?.querySelectorAll<HTMLElement>(
+          "[data-quest-status-dreamsign]",
+        ) ?? [],
+      ).map((dreamsign) => [
+        dreamsign.dataset.questStatusDreamsignColumn,
+        dreamsign.dataset.questStatusDreamsignRow,
+      ]),
+    ).toEqual([
+      ["3", "2"],
+      ["3", "1"],
+      ["2", "2"],
+      ["2", "1"],
+      ["1", "2"],
+    ]);
     expect(container.querySelector('[aria-label^="View deck"]')).toBeNull();
     expect(container.querySelector('[aria-label="Dreamcaller"]')).toBeNull();
     expect(

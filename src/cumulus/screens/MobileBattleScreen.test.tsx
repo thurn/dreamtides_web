@@ -388,8 +388,14 @@ describe("MobileBattleScreen", () => {
     const playerCards = playerHand?.querySelectorAll<HTMLElement>(
       '[data-battle-card-zone="player-hand"]',
     );
-    expect(playerCards?.[0]?.parentElement?.style.marginLeft).toBe("");
-    expect(playerCards?.[1]?.parentElement?.style.marginLeft).toBe("-4dvh");
+    const playerSlots = playerHand?.querySelectorAll<HTMLElement>(
+      "[data-battle-player-hand-slot]",
+    );
+    expect(playerSlots).toHaveLength(playerCards?.length ?? 0);
+    expect(playerSlots?.[0]?.style.flex).toBe("0 1 auto");
+    expect(playerSlots?.[0]?.style.minWidth).toBe("0px");
+    expect(playerCards?.[0]?.parentElement?.style.left).toBe("0px");
+    expect(playerCards?.[1]?.parentElement?.style.left).toBe("50%");
     expect(playerHand?.style.transform).toBe(
       "translateY(var(--space-8))",
     );
@@ -406,11 +412,12 @@ describe("MobileBattleScreen", () => {
     expect(phaseControls?.style.pointerEvents).toBe("auto");
     expect(desktopBackSlots).toHaveLength(10);
     expect(desktopFrontSlots).toHaveLength(9);
-    expect(firstHandCard?.style.position).toBe("relative");
-    expect(firstHandCard?.style.height).toBe("94%");
+    expect(firstHandCard?.style.position).toBe("absolute");
+    expect(firstHandCard?.style.height).toBe("100%");
     expect(firstHandCard?.style.pointerEvents).toBe("auto");
-    expect(firstHandCard?.style.left).toBe("");
-    expect(firstHandCard?.style.top).toBe("");
+    expect(firstHandCard?.style.left).toBe("0px");
+    expect(firstHandCard?.style.top).toBe("0px");
+    expect(lastHandCard?.style.right).toBe("0px");
     expect(firstHandCard?.style.transform).toContain("rotate(-4deg)");
     expect(lastHandCard?.style.transform).toContain("rotate(4deg)");
     expect(firstHandCard?.style.transform).toContain("translateY(2%)");

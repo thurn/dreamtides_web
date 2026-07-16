@@ -1489,10 +1489,6 @@ function PlayerHand({
   readonly interactions?: MobileBattleInteractions;
 }) {
   const pickerCandidateIds = new Set(cardPicker?.candidateIds ?? []);
-  const desktopOverlapDvh = Math.min(
-    11,
-    Math.max(4, cards.length - 3),
-  );
   const canDrop =
     cardPicker === null &&
     interactions?.canInteract === true
@@ -1532,10 +1528,10 @@ function PlayerHand({
         gap: isDesktop ? token("--space-2") : undefined,
         paddingTop: isDesktop ? token("--space-8") : undefined,
         paddingRight: isDesktop
-          ? `calc(var(${BATTLE_HUD_END_CLEARANCE_PROPERTY}, 0px) + ${token("--space-4")})`
+          ? `calc(var(${BATTLE_HUD_END_CLEARANCE_PROPERTY}, 0px) + ${token("--space-8")})`
           : undefined,
         paddingLeft: isDesktop
-          ? `calc(var(${BATTLE_HUD_START_CLEARANCE_PROPERTY}, 0px) + ${token("--space-4")})`
+          ? `calc(var(${BATTLE_HUD_START_CLEARANCE_PROPERTY}, 0px) + ${token("--space-8")})`
           : undefined,
         transform: isDesktop
           ? `translateY(${token("--space-8")})`
@@ -1554,6 +1550,109 @@ function PlayerHand({
         });
         const rotation = normalized * (isDesktop ? 8 : 18);
         const drop = normalized * normalized * (isDesktop ? 8 : 18);
+        const cardContent = (
+          <FaceUpCard
+            card={card}
+            zone="player-hand"
+            showRulesText
+            snapLayout={snapLayoutCardId === card.id}
+            selection={
+              cardPicker === null
+                ? undefined
+                : { selected: isPickerSelected, color: "gold-light" }
+            }
+            interaction={
+              cardPicker !== null
+                ? isPickerCandidate
+                  ? {
+                      draggable: false,
+                      debugGesture: isDesktop
+                        ? "context-menu"
+                        : "double-tap",
+                      onActivate: () => onPickerCardToggle(card.id),
+                    }
+                  : undefined
+                : interactions === undefined
+                ? undefined
+                : {
+                    draggable: interactions.canInteract,
+                    debugGesture: isDesktop
+                      ? "context-menu"
+                      : "double-tap",
+                    onActivate: () =>
+                      interactions.onHandCardActivate(card.id),
+                    ...(interactions.onCardDebugActivate === undefined
+                      ? {}
+                      : {
+                          onDebugActivate: (invocation) =>
+                            interactions.onCardDebugActivate?.(
+                              card.id,
+                              "player-hand",
+                              invocation,
+                            ),
+                        }),
+                    onDragStart: () => {
+                      onCardDragChange(true, card.id);
+                      interactions.onCardDragStart(card.id, "player-hand");
+                    },
+                    onDragEnd: () => {
+                      onCardDragChange(false);
+                      interactions.onCardDragEnd();
+                    },
+                    onPointerDrop: (clientX, clientY) =>
+                      dropMobileCardAtPoint(
+                        interactions,
+                        clientX,
+                        clientY,
+                      ),
+                  }
+            }
+          />
+        );
+        if (isDesktop) {
+          const isOnlyCard = cards.length === 1;
+          const isFirstCard = index === 0;
+          const isLastCard = index === cards.length - 1;
+          const isCenteredCard =
+            isOnlyCard || (!isFirstCard && !isLastCard);
+          return (
+            <div
+              key={card.id}
+              data-battle-player-hand-slot=""
+              style={{
+                position: "relative",
+                height: "94%",
+                minWidth: 0,
+                flex: "0 1 auto",
+                aspectRatio: CARD_ASPECT_RATIO,
+                zIndex: index + 1,
+                pointerEvents: "none",
+              }}
+            >
+              <div
+                data-battle-card-picker-candidate={
+                  cardPicker !== null && isPickerCandidate ? "true" : undefined
+                }
+                data-battle-card-picker-selected={
+                  cardPicker !== null && isPickerSelected ? "true" : undefined
+                }
+                style={{
+                  position: "absolute",
+                  left: isCenteredCard || isFirstCard ? (isCenteredCard ? "50%" : 0) : undefined,
+                  right: isLastCard && !isOnlyCard ? 0 : undefined,
+                  top: 0,
+                  height: "100%",
+                  aspectRatio: CARD_ASPECT_RATIO,
+                  transformOrigin: "50% 100%",
+                  transform: `${isCenteredCard ? "translateX(-50%) " : ""}translateY(${String(drop)}%) rotate(${String(rotation)}deg)`,
+                  pointerEvents: "auto",
+                }}
+              >
+                {cardContent}
+              </div>
+            </div>
+          );
+        }
         return (
           <div
             key={card.id}
@@ -1564,81 +1663,18 @@ function PlayerHand({
               cardPicker !== null && isPickerSelected ? "true" : undefined
             }
             style={{
-              position: isDesktop ? "relative" : "absolute",
-              left: isDesktop ? undefined : left,
-              top: isDesktop ? undefined : PLAYER_HAND_TOP,
-              height: isDesktop ? "94%" : "92%",
-              flex: isDesktop ? "0 0 auto" : undefined,
-              marginLeft:
-                isDesktop && index > 0
-                  ? `-${String(desktopOverlapDvh)}dvh`
-                  : undefined,
+              position: "absolute",
+              left,
+              top: PLAYER_HAND_TOP,
+              height: "92%",
               aspectRatio: CARD_ASPECT_RATIO,
               transformOrigin: "50% 100%",
-              transform: isDesktop
-                ? `translateY(${String(drop)}%) rotate(${String(rotation)}deg)`
-                : `translateX(-50%) translateY(${String(drop)}%) rotate(${String(rotation)}deg)`,
+              transform: `translateX(-50%) translateY(${String(drop)}%) rotate(${String(rotation)}deg)`,
               zIndex: index + 1,
               pointerEvents: "auto",
             }}
           >
-            <FaceUpCard
-              card={card}
-              zone="player-hand"
-              showRulesText
-              snapLayout={snapLayoutCardId === card.id}
-              selection={
-                cardPicker === null
-                  ? undefined
-                  : { selected: isPickerSelected, color: "gold-light" }
-              }
-              interaction={
-                cardPicker !== null
-                  ? isPickerCandidate
-                    ? {
-                        draggable: false,
-                        debugGesture: isDesktop
-                          ? "context-menu"
-                          : "double-tap",
-                        onActivate: () => onPickerCardToggle(card.id),
-                      }
-                    : undefined
-                  : interactions === undefined
-                  ? undefined
-                  : {
-                      draggable: interactions.canInteract,
-                      debugGesture: isDesktop
-                        ? "context-menu"
-                        : "double-tap",
-                      onActivate: () =>
-                        interactions.onHandCardActivate(card.id),
-                      ...(interactions.onCardDebugActivate === undefined
-                        ? {}
-                        : {
-                            onDebugActivate: (invocation) =>
-                              interactions.onCardDebugActivate?.(
-                                card.id,
-                                "player-hand",
-                                invocation,
-                              ),
-                          }),
-                      onDragStart: () => {
-                        onCardDragChange(true, card.id);
-                        interactions.onCardDragStart(card.id, "player-hand");
-                      },
-                      onDragEnd: () => {
-                        onCardDragChange(false);
-                        interactions.onCardDragEnd();
-                      },
-                      onPointerDrop: (clientX, clientY) =>
-                        dropMobileCardAtPoint(
-                          interactions,
-                          clientX,
-                          clientY,
-                        ),
-                    }
-              }
-            />
+            {cardContent}
           </div>
         );
       })}
