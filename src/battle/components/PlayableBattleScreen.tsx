@@ -859,6 +859,7 @@ function PlayableBattleScreenInner({
       handleContinueReward();
       return;
     }
+    if (board.result === "victory") return;
     if (action === "reset") {
       logEvent("battle_result_reset_requested", {
         ...logFields,
@@ -878,20 +879,12 @@ function PlayableBattleScreenInner({
       return;
     }
 
-    logEvent(
-      board.result === "victory"
-        ? "battle_proto_reward_cancelled"
-        : "battle_result_dismissed",
-      {
-        ...logFields,
-        result: board.result,
-        ...(board.result === "victory"
-          ? { rewardSource: "battle_result" }
-          : {}),
-        uiVariant: "cumulus",
-        via: "surface",
-      },
-    );
+    logEvent("battle_result_dismissed", {
+      ...logFields,
+      result: board.result,
+      uiVariant: "cumulus",
+      via: "surface",
+    });
     setIsResultOverlayDismissed(true);
   }
 

@@ -69,7 +69,6 @@ describe("BattleResultSurface", () => {
   it("counts the victory essence payoff before enabling Continue", () => {
     const { container, root, onAction } = mount({
       outcome: "victory",
-      dismissed: false,
       summary: "Defeated Fixture Caller · 10–5 · 6 turns",
       essenceReward: 100,
     });
@@ -81,6 +80,12 @@ describe("BattleResultSurface", () => {
     expect(container.textContent).toContain(
       "Defeated Fixture Caller · 10–5 · 6 turns",
     );
+    expect(
+      container.querySelector('[data-testid="battle-reward-cancel"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-testid="battle-result-reopen"]'),
+    ).toBeNull();
     expect(
       container.querySelector("[data-battle-reward-essence-value]")?.textContent,
     ).toContain("+0");
@@ -100,34 +105,6 @@ describe("BattleResultSurface", () => {
     expect(continueButton?.getAttribute("aria-disabled")).toBe("true");
 
     act(() => root.unmount());
-  });
-
-  it("dismisses a cancellable victory from the control or Escape", () => {
-    const first = mount({
-      outcome: "victory",
-      dismissed: false,
-      summary: "Defeated Fixture Caller · 10–5 · 6 turns",
-      essenceReward: 30,
-    });
-    act(() => {
-      first.container
-        .querySelector<HTMLButtonElement>('[data-testid="battle-reward-cancel"]')
-        ?.click();
-    });
-    expect(first.onAction).toHaveBeenCalledWith("dismiss");
-    act(() => first.root.unmount());
-
-    const second = mount({
-      outcome: "victory",
-      dismissed: false,
-      summary: "Defeated Fixture Caller · 10–5 · 6 turns",
-      essenceReward: 30,
-    });
-    act(() => {
-      window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
-    });
-    expect(second.onAction).toHaveBeenCalledWith("dismiss");
-    act(() => second.root.unmount());
   });
 
   it.each([
@@ -164,17 +141,15 @@ describe("BattleResultSurface", () => {
 
   it("reopens a dismissed result from its bottom control", () => {
     const { container, root, onAction } = mount({
-      outcome: "victory",
+      outcome: "defeat",
       dismissed: true,
-      summary: "Defeated Fixture Caller · 10–5 · 6 turns",
-      essenceReward: 100,
     });
 
     expect(container.querySelector("[role=dialog]")).toBeNull();
     const reopen = container.querySelector<HTMLButtonElement>(
       '[data-testid="battle-result-reopen"]',
     );
-    expect(reopen?.textContent).toContain("Victory — Reopen");
+    expect(reopen?.textContent).toContain("Defeat — Reopen");
     act(() => reopen?.click());
     expect(onAction).toHaveBeenCalledWith("reopen");
 

@@ -124,7 +124,6 @@ export function buildMobileBattleResultView(
   const turnLabel = `${String(board.turnNumber)} turn${board.turnNumber === 1 ? "" : "s"}`;
   return {
     outcome: "victory",
-    dismissed,
     essenceReward: init.essenceReward,
     summary:
       `Defeated ${init.enemyDescriptor.name} · ` +

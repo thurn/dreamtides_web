@@ -5,10 +5,8 @@ import {
 } from "react";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GroupPanel } from "../components/controls/GroupPanel";
-import { IconButton } from "../components/controls/IconButton";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { Motes } from "../components/hud/Motes";
-import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { MOBILE_BATTLE_INSPECTOR_RAIL_TRACK } from "./mobile-battle-layout";
 
@@ -17,7 +15,6 @@ export type MobileBattleResultOutcome = "victory" | "defeat" | "draw";
 export type MobileBattleResultView =
   | {
       readonly outcome: "victory";
-      readonly dismissed: boolean;
       readonly summary: string;
       readonly essenceReward: number;
     }
@@ -45,29 +42,22 @@ const REOPEN_CONTROL_MAX_WIDTH_PX = 220;
 // Two slow Cumulus motion beats give the currency payoff time to read.
 const ESSENCE_COUNT_UP_DURATION_MS = 840;
 
-function titleFor(outcome: MobileBattleResultOutcome): string {
-  if (outcome === "victory") return "Victory!";
+function titleFor(outcome: "defeat" | "draw"): string {
   return outcome === "defeat" ? "Defeat." : "Draw.";
 }
 
-function reopenLabel(outcome: MobileBattleResultOutcome): string {
-  if (outcome === "victory") return "Victory — Reopen";
+function reopenLabel(outcome: "defeat" | "draw"): string {
   return outcome === "defeat" ? "Defeat — Reopen" : "Draw — Reopen";
 }
 
-function useEssenceCountUp(target: number, active: boolean): {
+function useEssenceCountUp(target: number): {
   readonly value: number;
   readonly complete: boolean;
 } {
-  const [value, setValue] = useState(active ? 0 : target);
-  const [complete, setComplete] = useState(!active);
+  const [value, setValue] = useState(0);
+  const [complete, setComplete] = useState(false);
 
   useEffect(() => {
-    if (!active) {
-      setValue(target);
-      setComplete(true);
-      return;
-    }
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setValue(target);
       setComplete(true);
@@ -96,7 +86,7 @@ function useEssenceCountUp(target: number, active: boolean): {
 
     frame = window.requestAnimationFrame(tick);
     return () => window.cancelAnimationFrame(frame);
-  }, [active, target]);
+  }, [target]);
 
   return { value, complete };
 }
@@ -105,7 +95,7 @@ function ReopenControl({
   outcome,
   onAction,
 }: {
-  readonly outcome: MobileBattleResultOutcome;
+  readonly outcome: "defeat" | "draw";
   readonly onAction?: (action: MobileBattleResultAction) => void;
 }): ReactElement {
   return (
@@ -140,25 +130,7 @@ function VictoryReward({
   readonly centerOnBattlefield: boolean;
 }): ReactElement {
   const [committing, setCommitting] = useState(false);
-  const { value, complete } = useEssenceCountUp(
-    view.essenceReward,
-    !view.dismissed,
-  );
-
-  useEffect(() => {
-    if (view.dismissed) return;
-    const handleKeyDown = (event: KeyboardEvent): void => {
-      if (event.key !== "Escape") return;
-      event.preventDefault();
-      onAction?.("dismiss");
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onAction, view.dismissed]);
-
-  if (view.dismissed) {
-    return <ReopenControl outcome="victory" onAction={onAction} />;
-  }
+  const { value, complete } = useEssenceCountUp(view.essenceReward);
 
   const continueDisabled = !complete || committing || onAction === undefined;
   return (
@@ -191,23 +163,6 @@ function VictoryReward({
       }}
     >
       <Motes on tint="warm" count={18} seed={44} zIndex={1} />
-      <div
-        style={{
-          position: "absolute",
-          top: `max(var(--safe-area-inset-top), ${token("--space-5")})`,
-          right: `max(var(--safe-area-inset-right), ${token("--space-5")})`,
-          zIndex: 3,
-        }}
-      >
-        <IconButton
-          glyph={GLYPHS.arrowLeft}
-          label="Cancel reward and inspect battle"
-          disabled={onAction === undefined || committing}
-          testId="battle-reward-cancel"
-          onPress={() => onAction?.("dismiss")}
-        />
-      </div>
-
       <div
         data-battle-reward-content=""
         data-battle-result-layout-content=""

@@ -130,7 +130,6 @@ describe("buildMobileBattleView", () => {
     board.sides.enemy.score = 5;
     expect(buildMobileBattleResultView(init, board, false)).toEqual({
       outcome: "victory",
-      dismissed: false,
       essenceReward: 30,
       summary: "Defeated Enemy Caller · 10–5 · 6 turns",
     });
