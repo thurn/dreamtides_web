@@ -48,6 +48,11 @@ import {
   MOBILE_BATTLE_INSPECTOR_RAIL_TRACK,
   MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS,
 } from "./mobile-battle-layout";
+import {
+  BATTLE_PHASE_TWEAK_DEFAULTS,
+  BattlePhaseTweaksPanel,
+  type BattlePhaseTweaks,
+} from "./devtools/BattlePhaseTweaksPanel";
 import { useIsDesktop } from "./use-is-desktop";
 import {
   BattleResultSurface,
@@ -291,8 +296,7 @@ const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
 const BATTLEFIELD_SIDE_INSET_PERCENT = 6;
 const DESKTOP_BATTLEFIELD_SIDE_INSET_PERCENT = 14;
 const BATTLEFIELD_WIDTH_PERCENT = 100 - BATTLEFIELD_SIDE_INSET_PERCENT * 2;
-const PHASE_LIGHT_SIZE = 24;
-const PHASE_LIGHT_HALO_SIZE = 24;
+const PHASE_LIGHT_DISC_PADDING = 2;
 const PHASE_LIGHT_STREAK_WIDTH = 28;
 const PHASE_LIGHT_STREAK_HEIGHT = 2;
 const PHASE_COMET_TAIL_START_SCALE = 0.35;
@@ -587,6 +591,7 @@ function SideZones({
   isDesktop,
   owner,
   phase,
+  phaseTweaks,
   side,
   interactions,
 }: {
@@ -595,6 +600,7 @@ function SideZones({
   readonly isDesktop: boolean;
   readonly owner: MobileBattleOwner;
   readonly phase: MobileBattlePhase;
+  readonly phaseTweaks: BattlePhaseTweaks;
   readonly side: MobileBattleSideView;
   readonly interactions?: MobileBattleInteractions;
 }) {
@@ -742,7 +748,7 @@ function SideZones({
             </div>
           ) : null}
           {activeSide === owner ? (
-            <PhaseIndicator owner={owner} phase={phase} />
+            <PhaseIndicator owner={owner} phase={phase} tweaks={phaseTweaks} />
           ) : null}
         </div>
       </div>
@@ -788,11 +794,14 @@ function SideZones({
 function PhaseIndicator({
   owner,
   phase,
+  tweaks,
 }: {
   readonly owner: MobileBattleOwner;
   readonly phase: MobileBattlePhase;
+  readonly tweaks: BattlePhaseTweaks;
 }) {
   const ownerLabel = owner === "player" ? "Player" : "Opponent";
+  const markerSize = tweaks.iconSizePx + PHASE_LIGHT_DISC_PADDING * 2;
   return (
     <div
       role="img"
@@ -813,10 +822,12 @@ function PhaseIndicator({
         data-battle-phase-light=""
         style={{
           position: "absolute",
-          top: 0,
+          top: owner === "player"
+            ? -tweaks.verticalOffsetPx
+            : tweaks.verticalOffsetPx,
           left: PHASE_LIGHT_LEFT[phase],
-          width: PHASE_LIGHT_SIZE,
-          height: PHASE_LIGHT_SIZE,
+          width: markerSize,
+          height: markerSize,
           // Sit on the status edge while remaining outside the card and clear
           // of the centered Dreamcaller portrait.
           transform: owner === "player"
@@ -850,8 +861,8 @@ function PhaseIndicator({
             position: "absolute",
             top: "50%",
             left: "50%",
-            width: PHASE_LIGHT_HALO_SIZE,
-            height: PHASE_LIGHT_HALO_SIZE,
+            width: markerSize,
+            height: markerSize,
             transform: "translate(-50%, -50%)",
             borderRadius: token("--radius-pill"),
             backgroundColor: token("--accent"),
@@ -871,14 +882,16 @@ function PhaseIndicator({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: PHASE_LIGHT_SIZE,
-            height: PHASE_LIGHT_SIZE,
+            width: markerSize,
+            height: markerSize,
+            borderRadius: token("--radius-pill"),
+            backgroundColor: token("--bg-sunken"),
           }}
         >
           <GlowIcon
             iconClass={PHASE_GLYPH[phase]}
             color="accent-bright"
-            size={token("--space-8")}
+            size={`${String(tweaks.iconSizePx)}px`}
             shadow
           />
         </span>
@@ -2425,6 +2438,9 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
     readonly ids: readonly string[];
   }>({ pickerKey: null, ids: [] });
   const [selectedSide, setSelectedSide] = useState<MobileBattleOwner>("player");
+  const [phaseTweaks, setPhaseTweaks] = useState<BattlePhaseTweaks>(
+    BATTLE_PHASE_TWEAK_DEFAULTS,
+  );
   const inspectorTriggerRef = useRef<HTMLElement | null>(null);
   const previousDockLayout = useRef(isDockLayout);
   const openedLogKey = useRef<string | null>(null);
@@ -2574,7 +2590,7 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
           selectedPickerCardIds={selectedPickerCardIds}
           onPickerCardToggle={handlePickerCardToggle}
         />
-        <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="enemy" phase={view.phase} side={view.enemy} interactions={interactions} />
+        <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="enemy" phase={view.phase} phaseTweaks={phaseTweaks} side={view.enemy} interactions={interactions} />
         <PlayArea isDesktop={isDesktop} owner="enemy" side={view.enemy} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
         <PlayArea isDesktop={isDesktop} owner="player" side={view.player} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
         <ControlRow
@@ -2586,7 +2602,7 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
           interactions={interactions}
           layoutBackSlotCount={layoutBackSlotCount}
         />
-        <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="player" phase={view.phase} side={view.player} interactions={interactions} />
+        <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="player" phase={view.phase} phaseTweaks={phaseTweaks} side={view.player} interactions={interactions} />
         <PlayerHand
           cards={view.inspector.isPlayerHandHidden ? [] : view.playerHand}
           isDesktop={isDesktop}
@@ -2705,6 +2721,9 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
           />
         ) : null}
       </div>
+      {import.meta.env.DEV ? (
+        <BattlePhaseTweaksPanel value={phaseTweaks} onChange={setPhaseTweaks} />
+      ) : null}
       {!isDockLayout && isInspectorOpen ? (
         <GlassDialog
           title="Battle Inspector"
