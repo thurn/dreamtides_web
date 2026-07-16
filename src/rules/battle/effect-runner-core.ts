@@ -25,6 +25,7 @@ export type PromptResolution =
   | { kind: "choice"; optionIndex: number }
   | {
       kind: "foresee";
+      viewedCardIds?: string[];
       orderedCardIds?: string[];
       voidCardIds?: string[];
     };
@@ -157,7 +158,8 @@ export function applyPromptResolution(
         edits: [{
           kind: "FORESEE",
           side: ctx.side,
-          viewedCardIds: ctx.state.sides[ctx.side].deck.slice(0, prompt.count),
+          viewedCardIds: resolution.viewedCardIds ??
+            ctx.state.sides[ctx.side].deck.slice(0, prompt.count),
           orderedCardIds: resolution.orderedCardIds,
           voidCardIds: resolution.voidCardIds,
         }],

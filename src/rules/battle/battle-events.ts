@@ -986,8 +986,8 @@ function isBattleCardNoteExpiry(value: unknown): value is BattleCardNoteExpiry {
  *   - no prompt is pending;
  *   - `promptId` is not a finite number, or does not match the open prompt;
  *   - `resolution` is not a recognized {@link PromptResolution}; or
- *   - a `pick-cards` resolution names an id outside the candidate set the prompt
- *     recorded at open time, or a count outside its min/max.
+ *   - a resolution violates its prompt's candidate/count constraints, including
+ *     an adjusted Foresee set that is not a complete live deck prefix.
  *
  * A candidate/count violation BOUNCES (rule 5); it does not clear the prompt, so
  * the prompt stays open for a valid retry.
@@ -1021,7 +1021,7 @@ export function resolvePrompt(
   if (resolution === null) {
     return null;
   }
-  if (!promptResolutionIsValid(pending, resolution)) {
+  if (!promptResolutionIsValid(pending, resolution, battle.board)) {
     return null;
   }
 
@@ -1043,17 +1043,14 @@ export function resolvePrompt(
 }
 
 /**
- * Guards a `pick-cards` resolution against the candidate set the prompt fixed at
- * open time: every chosen id must be one of `options.candidateIds`, the chosen
- * ids must be distinct, and the count must fall within the prompt's min/max (max
- * is `options.count`; min is `0` when the prompt is optional, else `count`
- * capped at the number of candidates). Non-`pick-cards` prompts and matching
- * resolution kinds pass through unchanged. A `pick-cards` prompt answered with a
- * non-`pick-cards` resolution fails (the kinds must agree).
+ * Guards prompt resolutions against their live candidate sets. Foresee must
+ * partition an exact top-of-deck prefix; pick-cards must use distinct recorded
+ * candidates and stay within the prompt's min/max selection count.
  */
 function promptResolutionIsValid(
   pending: PendingPrompt,
   resolution: PromptResolution,
+  board: BattleMutableState,
 ): boolean {
   const options = pending.options;
   if (options.kind === "foresee") {
@@ -1066,14 +1063,19 @@ function promptResolutionIsValid(
     ) {
       return true;
     }
+    const viewedCardIds = resolution.viewedCardIds ?? options.cardIds;
+    const deck = board.sides[pending.run.side].deck;
     const resolvedIds = [
       ...resolution.orderedCardIds,
       ...resolution.voidCardIds,
     ];
     return (
-      resolvedIds.length === options.cardIds.length &&
+      viewedCardIds.length >= Math.min(1, deck.length) &&
+      viewedCardIds.length <= deck.length &&
+      viewedCardIds.every((id, index) => deck[index] === id) &&
+      resolvedIds.length === viewedCardIds.length &&
       new Set(resolvedIds).size === resolvedIds.length &&
-      resolvedIds.every((id) => options.cardIds.includes(id))
+      resolvedIds.every((id) => viewedCardIds.includes(id))
     );
   }
   if (options.kind === "choice") {
@@ -1137,15 +1139,25 @@ function coercePromptResolution(raw: unknown): PromptResolution | null {
     return { kind: "choice", optionIndex };
   }
   if (kind === "foresee") {
+    const viewedCardIds = (raw as { viewedCardIds?: unknown }).viewedCardIds;
     const orderedCardIds = (raw as { orderedCardIds?: unknown }).orderedCardIds;
     const voidCardIds = (raw as { voidCardIds?: unknown }).voidCardIds;
-    if (orderedCardIds === undefined && voidCardIds === undefined) {
+    if (
+      viewedCardIds === undefined &&
+      orderedCardIds === undefined &&
+      voidCardIds === undefined
+    ) {
       return { kind: "foresee" };
     }
-    if (!Array.isArray(orderedCardIds) || !Array.isArray(voidCardIds)) {
+    if (
+      (viewedCardIds !== undefined && !Array.isArray(viewedCardIds)) ||
+      !Array.isArray(orderedCardIds) ||
+      !Array.isArray(voidCardIds)
+    ) {
       return null;
     }
     if (
+      (viewedCardIds?.some((id) => typeof id !== "string") ?? false) ||
       orderedCardIds.some((id) => typeof id !== "string") ||
       voidCardIds.some((id) => typeof id !== "string")
     ) {
@@ -1153,6 +1165,9 @@ function coercePromptResolution(raw: unknown): PromptResolution | null {
     }
     return {
       kind: "foresee",
+      ...(viewedCardIds === undefined
+        ? {}
+        : { viewedCardIds: viewedCardIds as string[] }),
       orderedCardIds: orderedCardIds as string[],
       voidCardIds: voidCardIds as string[],
     };

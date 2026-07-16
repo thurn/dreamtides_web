@@ -441,6 +441,33 @@ describe("applyPromptResolution — foresee", () => {
     expect(rest[0]).toBe(tailStep);
   });
 
+  it("uses the adjustable viewed prefix carried by the Foresee resolution", () => {
+    const ctx = makeCtx();
+    ctx.state = {
+      sides: { player: { deck: ["card-a", "card-b", "card-c"] } },
+    } as unknown as BattleMutableState;
+
+    const { edits } = applyPromptResolution(
+      { kind: "foresee", count: 1 },
+      {
+        kind: "foresee",
+        viewedCardIds: ["card-a", "card-b", "card-c"],
+        orderedCardIds: ["card-c", "card-a"],
+        voidCardIds: ["card-b"],
+      },
+      [],
+      ctx,
+    );
+
+    expect(edits).toEqual([{
+      kind: "FORESEE",
+      side: "player",
+      viewedCardIds: ["card-a", "card-b", "card-c"],
+      orderedCardIds: ["card-c", "card-a"],
+      voidCardIds: ["card-b"],
+    }]);
+  });
+
   it("keeps kind-only legacy resolutions as a no-op", () => {
     const tailStep: EffectStep = { kind: "edits", build: () => [SENTINEL_EDIT] };
     const result = applyPromptResolution(

@@ -33,8 +33,9 @@ function makeCard(index: number): CardData {
   };
 }
 
-function makeView(): BattleForeseeView {
+function makeView(initialCount = 1): BattleForeseeView {
   return {
+    initialCount,
     cards: [1, 2, 3].map((index) => {
       const displaySnapshot = makeCard(index);
       return {
@@ -111,24 +112,26 @@ afterEach(() => {
 });
 
 describe("BattleForeseeOverlay", () => {
-  it("renders one horizontal workflow with no controls except Confirm", () => {
+  it("renders one horizontal workflow with count controls and Confirm", () => {
     const { container, root } = mount(
       <BattleForeseeOverlay view={makeView()} onConfirm={() => {}} />,
     );
 
     expect(container.querySelector('[role="dialog"]')?.getAttribute("aria-label"))
-      .toBe("Foresee 3");
-    expect(deckIds(container)).toEqual([
-      "battle-card-1",
-      "battle-card-2",
-      "battle-card-3",
-    ]);
+      .toBe("Foresee 1");
+    expect(deckIds(container)).toEqual(["battle-card-1"]);
     expect(Array.from(
       container.querySelectorAll<HTMLElement>("[data-foresee-indicator]"),
       (indicator) => indicator.textContent,
     )).toEqual(["Deck", "Void"]);
     expect(Array.from(container.querySelectorAll("button"), (button) => button.textContent))
-      .toEqual(["Confirm"]);
+      .toEqual(["", "", "Confirm"]);
+    expect(container.querySelector<HTMLButtonElement>(
+      '[aria-label="Foresee 1 fewer"]',
+    )?.getAttribute("aria-disabled")).toBe("true");
+    expect(container.querySelector<HTMLButtonElement>(
+      '[aria-label="Foresee 1 more"]',
+    )?.hasAttribute("aria-disabled")).toBe(false);
     expect(container.querySelector("[data-foresee-spacer]")).not.toBeNull();
     const dialogPanel = container.querySelector<HTMLElement>('[role="dialog"]')
       ?.firstElementChild as HTMLElement | undefined;
@@ -141,10 +144,65 @@ describe("BattleForeseeOverlay", () => {
     act(() => root.unmount());
   });
 
+  it("adds and removes the next deck card while keeping a half-overlapping stack", () => {
+    const { container, root } = mount(
+      <BattleForeseeOverlay view={makeView()} onConfirm={() => {}} />,
+    );
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[aria-label="Foresee 1 more"]')?.click();
+    });
+    expect(container.querySelector('[role="dialog"]')?.getAttribute("aria-label"))
+      .toBe("Foresee 2");
+    expect(deckIds(container)).toEqual(["battle-card-1", "battle-card-2"]);
+    expect(Array.from(
+      container.querySelectorAll<HTMLElement>('[data-foresee-card-zone="deck"]'),
+      (card) => card.style.marginInlineStart,
+    )).toEqual(["0px", "-90px"]);
+    expect(Array.from(
+      container.querySelectorAll<HTMLElement>('[data-foresee-card-zone="deck"]'),
+      (card) => card.style.zIndex,
+    )).toEqual(["2", "1"]);
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[aria-label="Foresee 1 more"]')?.click();
+    });
+    expect(deckIds(container)).toEqual([
+      "battle-card-1",
+      "battle-card-2",
+      "battle-card-3",
+    ]);
+    expect(container.querySelector<HTMLButtonElement>(
+      '[aria-label="Foresee 1 more"]',
+    )?.getAttribute("aria-disabled")).toBe("true");
+
+    const third = container.querySelector<HTMLElement>(
+      '[data-foresee-card-id="battle-card-3"]',
+    );
+    const voidZone = container.querySelector<HTMLElement>('[data-foresee-zone="void"]');
+    const dragData = transfer();
+    act(() => {
+      third?.dispatchEvent(dragEvent("dragstart", dragData));
+      voidZone?.dispatchEvent(dragEvent("drop", dragData));
+    });
+    expect(container.querySelector('[data-foresee-card-zone="void"]')
+      ?.getAttribute("data-foresee-card-id")).toBe("battle-card-3");
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[aria-label="Foresee 1 fewer"]')?.click();
+    });
+    expect(deckIds(container)).toEqual(["battle-card-1", "battle-card-2"]);
+    expect(container.querySelector('[data-foresee-card-zone="void"]')).toBeNull();
+    expect(container.querySelector('[role="dialog"]')?.getAttribute("aria-label"))
+      .toBe("Foresee 2");
+
+    act(() => root.unmount());
+  });
+
   it("supports drag ordering and dragging a card to the void before one confirmation", () => {
     const onConfirm = vi.fn();
     const { container, root } = mount(
-      <BattleForeseeOverlay view={makeView()} onConfirm={onConfirm} />,
+      <BattleForeseeOverlay view={makeView(3)} onConfirm={onConfirm} />,
     );
     const first = container.querySelector<HTMLElement>(
       '[data-foresee-card-id="battle-card-1"]',
@@ -184,6 +242,7 @@ describe("BattleForeseeOverlay", () => {
       )?.click();
     });
     expect(onConfirm).toHaveBeenCalledWith({
+      viewedCardIds: ["battle-card-1", "battle-card-2", "battle-card-3"],
       orderedCardIds: ["battle-card-1", "battle-card-3"],
       voidCardIds: ["battle-card-2"],
     });
@@ -194,7 +253,7 @@ describe("BattleForeseeOverlay", () => {
   it("fits the mobile row with a blank lane at least one card width", () => {
     stubMatchMedia(false);
     const { container, root } = mount(
-      <BattleForeseeOverlay view={{ cards: makeView().cards.slice(0, 1) }} onConfirm={() => {}} />,
+      <BattleForeseeOverlay view={{ initialCount: 1, cards: makeView().cards.slice(0, 1) }} onConfirm={() => {}} />,
     );
 
     const card = container.querySelector<HTMLElement>("[data-foresee-card-zone=deck]");
@@ -204,7 +263,7 @@ describe("BattleForeseeOverlay", () => {
     expect(spacer?.style.minWidth).toBe("104px");
     expect(Array.from(indicators, (indicator) => indicator.style.width))
       .toEqual(["64px", "64px"]);
-    expect(container.querySelectorAll("button")).toHaveLength(1);
+    expect(container.querySelectorAll("button")).toHaveLength(3);
 
     act(() => root.unmount());
   });

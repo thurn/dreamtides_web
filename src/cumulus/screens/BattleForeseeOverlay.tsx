@@ -6,7 +6,9 @@ import {
 } from "react";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { GlassButton } from "../components/controls/GlassButton";
+import { IconButton } from "../components/controls/IconButton";
 import { GlassDialog } from "../components/overlay/GlassDialog";
+import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "./use-is-desktop";
 
@@ -27,14 +29,18 @@ export interface BattleForeseeCardView {
   model: GameCardModel;
 }
 
-/** The exact top-of-deck prefix available to this Foresee resolution. */
+/** The ordered deck cards available to this adjustable Foresee resolution. */
 export interface BattleForeseeView {
-  /** Cards in their original top-to-bottom order. */
+  /** Number of cards shown when the modal opens. */
+  initialCount: number;
+  /** Available cards in their original top-to-bottom deck order. */
   cards: readonly BattleForeseeCardView[];
 }
 
 /** The complete staged result emitted by one confirmation. */
 export interface BattleForeseeResolution {
+  /** The exact original deck prefix inspected at confirmation time. */
+  viewedCardIds: readonly string[];
   /** Cards returned to the deck, top to bottom. */
   orderedCardIds: readonly string[];
   /** Cards moved to the void, in the order chosen. */
@@ -67,10 +73,34 @@ export function BattleForeseeOverlay({
     ? FORESEE_ROW_HEIGHT_DESKTOP_PX
     : FORESEE_ROW_HEIGHT_MOBILE_PX;
   const allCardIds = view.cards.map((card) => card.battleCardId);
-  const [orderedCardIds, setOrderedCardIds] = useState<readonly string[]>(allCardIds);
+  const minimumCount = allCardIds.length === 0 ? 0 : 1;
+  const initialCount = Math.min(
+    allCardIds.length,
+    Math.max(minimumCount, Math.floor(view.initialCount)),
+  );
+  const [count, setCount] = useState(initialCount);
+  const [orderedCardIds, setOrderedCardIds] = useState<readonly string[]>(
+    allCardIds.slice(0, initialCount),
+  );
   const [voidCardIds, setVoidCardIds] = useState<readonly string[]>([]);
   const draggedCardId = useRef<string | null>(null);
   const cardById = new Map(view.cards.map((card) => [card.battleCardId, card]));
+
+  const incrementCount = (): void => {
+    const addedCardId = allCardIds[count];
+    if (addedCardId === undefined) return;
+    setOrderedCardIds((current) => [...current, addedCardId]);
+    setCount((current) => current + 1);
+  };
+
+  const decrementCount = (): void => {
+    if (count <= minimumCount) return;
+    const removedCardId = allCardIds[count - 1];
+    if (removedCardId === undefined) return;
+    setOrderedCardIds((current) => current.filter((id) => id !== removedCardId));
+    setVoidCardIds((current) => current.filter((id) => id !== removedCardId));
+    setCount((current) => current - 1);
+  };
 
   const moveToVoid = (battleCardId: string): void => {
     setOrderedCardIds((current) => current.filter((id) => id !== battleCardId));
@@ -108,6 +138,8 @@ export function BattleForeseeOverlay({
   const renderCard = (
     battleCardId: string,
     zone: "deck" | "void",
+    stackIndex: number,
+    stackSize: number,
   ): ReactElement | null => {
     const card = cardById.get(battleCardId);
     if (card === undefined) return null;
@@ -133,7 +165,13 @@ export function BattleForeseeOverlay({
             moveToDeck(dragged, battleCardId);
           }
         }}
-        style={{ width: cardWidthPx, flex: "0 0 auto" }}
+        style={{
+          width: cardWidthPx,
+          flex: "0 0 auto",
+          marginInlineStart: stackIndex === 0 ? 0 : -(cardWidthPx / 2),
+          position: "relative",
+          zIndex: stackSize - stackIndex,
+        }}
       >
         <GameCard model={card.model} presentation="full" />
       </article>
@@ -153,11 +191,37 @@ export function BattleForeseeOverlay({
   } as const;
 
   return (
-    <GlassDialog title={`Foresee ${String(view.cards.length)}`}>
+    <GlassDialog title={`Foresee ${String(count)}`}>
       <div
         data-battle-cumulus-foresee=""
         style={{ display: "grid", gap: token("--space-5") }}
       >
+        <div
+          data-foresee-count-controls=""
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: token("--space-3"),
+          }}
+        >
+          <IconButton
+            glyph={GLYPHS.minus}
+            size="sm"
+            label="Foresee 1 fewer"
+            placement="onGlass"
+            disabled={count <= minimumCount}
+            onPress={decrementCount}
+          />
+          <IconButton
+            glyph={GLYPHS.plus}
+            size="sm"
+            label="Foresee 1 more"
+            placement="onGlass"
+            disabled={count >= allCardIds.length}
+            onPress={incrementCount}
+          />
+        </div>
+
         <div style={{ overflowX: "auto", paddingBottom: token("--space-3") }}>
           <div
             data-foresee-row=""
@@ -182,7 +246,14 @@ export function BattleForeseeOverlay({
               Deck
             </div>
 
-            {orderedCardIds.map((battleCardId) => renderCard(battleCardId, "deck"))}
+            <div
+              data-foresee-deck-stack=""
+              style={{ display: "flex", alignItems: "center", flex: "0 0 auto" }}
+            >
+              {orderedCardIds.map((battleCardId, index) => (
+                renderCard(battleCardId, "deck", index, orderedCardIds.length)
+              ))}
+            </div>
 
             <div
               data-foresee-spacer=""
@@ -194,7 +265,14 @@ export function BattleForeseeOverlay({
               }}
             />
 
-            {voidCardIds.map((battleCardId) => renderCard(battleCardId, "void"))}
+            <div
+              data-foresee-void-stack=""
+              style={{ display: "flex", alignItems: "center", flex: "0 0 auto" }}
+            >
+              {voidCardIds.map((battleCardId, index) => (
+                renderCard(battleCardId, "void", index, voidCardIds.length)
+              ))}
+            </div>
 
             <div
               data-foresee-indicator="void"
@@ -219,7 +297,11 @@ export function BattleForeseeOverlay({
             variant="accent"
             testId="battle-foresee-confirm"
             disabled={view.cards.length === 0}
-            onPress={() => onConfirm({ orderedCardIds, voidCardIds })}
+            onPress={() => onConfirm({
+              viewedCardIds: allCardIds.slice(0, count),
+              orderedCardIds,
+              voidCardIds,
+            })}
           />
         </div>
       </div>

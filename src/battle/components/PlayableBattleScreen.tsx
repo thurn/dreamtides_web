@@ -1256,11 +1256,7 @@ function PlayableBattleScreenInner({
             initialCount={openForeseeOverlay.count}
             side={openForeseeOverlay.side}
             state={board}
-            onConfirm={({ orderedCardIds, voidCardIds }) => {
-              const viewedCardIds = board.sides[openForeseeOverlay.side].deck.slice(
-                0,
-                openForeseeOverlay.count,
-              );
+            onConfirm={({ viewedCardIds, orderedCardIds, voidCardIds }) => {
               handleCommand({
                 id: "DEBUG_EDIT",
                 edit: {
@@ -1283,8 +1279,9 @@ function PlayableBattleScreenInner({
             initialCount={pendingPrompt.options.count}
             side={pendingPrompt.run.side}
             state={board}
-            onConfirm={({ orderedCardIds, voidCardIds }) => resolvePendingPrompt({
+            onConfirm={({ viewedCardIds, orderedCardIds, voidCardIds }) => resolvePendingPrompt({
               kind: "foresee",
+              viewedCardIds: [...viewedCardIds],
               orderedCardIds: [...orderedCardIds],
               voidCardIds: [...voidCardIds],
             })}

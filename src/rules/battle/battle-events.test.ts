@@ -1187,6 +1187,41 @@ describe("RESOLVE_PROMPT", () => {
     ]);
   });
 
+  it("applies an adjusted Foresee count when the resolution carries a live deck prefix", () => {
+    const { state, promptId } = parkForeseePrompt();
+    const viewedCardIds = state.battle!.board.sides.player.deck.slice(0, 3);
+    const [firstCardId, secondCardId, thirdCardId] = viewedCardIds;
+    if (
+      firstCardId === undefined ||
+      secondCardId === undefined ||
+      thirdCardId === undefined
+    ) {
+      throw new Error("expected three deck cards");
+    }
+
+    const result = reduce(
+      state,
+      "RESOLVE_PROMPT",
+      {
+        promptId,
+        resolution: {
+          kind: "foresee",
+          viewedCardIds,
+          orderedCardIds: [thirdCardId, firstCardId],
+          voidCardIds: [secondCardId],
+        },
+      },
+      ctx({ seq: PARK_SEQ + 1 }),
+    );
+
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle!.board.sides.player.deck).toEqual([
+      thirdCardId,
+      firstCardId,
+    ]);
+    expect(result.state.battle!.board.sides.player.void).toContain(secondCardId);
+  });
+
   it("bounces a Foresee resolution that does not partition the recorded prefix", () => {
     const { state, promptId, cardIds } = parkForeseePrompt();
     const result = reduce(
@@ -1197,6 +1232,31 @@ describe("RESOLVE_PROMPT", () => {
         resolution: {
           kind: "foresee",
           orderedCardIds: [...cardIds, ...cardIds],
+          voidCardIds: [],
+        },
+      },
+      ctx({ seq: PARK_SEQ + 1 }),
+    );
+
+    expect(result.outcome).toBe("bounced");
+    expect(result.state.battle?.pendingPrompt?.promptId).toBe(promptId);
+  });
+
+  it("bounces an adjusted Foresee resolution whose viewed cards are not a deck prefix", () => {
+    const { state, promptId } = parkForeseePrompt();
+    const deck = state.battle!.board.sides.player.deck;
+    const nonTopCardId = deck[1];
+    if (nonTopCardId === undefined) throw new Error("expected a second deck card");
+
+    const result = reduce(
+      state,
+      "RESOLVE_PROMPT",
+      {
+        promptId,
+        resolution: {
+          kind: "foresee",
+          viewedCardIds: [nonTopCardId],
+          orderedCardIds: [nonTopCardId],
           voidCardIds: [],
         },
       },

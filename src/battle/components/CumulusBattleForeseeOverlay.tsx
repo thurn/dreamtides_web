@@ -22,8 +22,8 @@ export function CumulusBattleForeseeOverlay({
   onConfirm,
 }: CumulusBattleForeseeOverlayProps) {
   const view = useMemo<BattleForeseeView>(() => ({
+    initialCount,
     cards: state.sides[side].deck
-      .slice(0, Math.max(0, initialCount))
       .flatMap((battleCardId) => {
         const instance = state.cardInstances[battleCardId];
         return instance === undefined
