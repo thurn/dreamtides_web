@@ -813,14 +813,12 @@ function PhaseIndicator({
         data-battle-phase-light=""
         style={{
           position: "absolute",
-          top: owner === "player"
-            ? `calc(-1 * ${token("--space-3")})`
-            : token("--space-3"),
+          top: 0,
           left: PHASE_LIGHT_LEFT[phase],
           width: PHASE_LIGHT_SIZE,
           height: PHASE_LIGHT_SIZE,
-          // Keep the larger glyph outside the status card so it stays clear of
-          // the centered Dreamcaller portrait while following the phase track.
+          // Sit on the status edge while remaining outside the card and clear
+          // of the centered Dreamcaller portrait.
           transform: owner === "player"
             ? "translate(-50%, -100%)"
             : "translate(-50%, 0%)",

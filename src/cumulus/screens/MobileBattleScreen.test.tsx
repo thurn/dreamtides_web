@@ -985,7 +985,7 @@ describe("MobileBattleScreen", () => {
     expect(indicator?.style.bottom).toBe("");
     expect(light?.style.width).toBe("24px");
     expect(light?.style.height).toBe("24px");
-    expect(light?.style.top).toBe("calc(-1 * var(--space-3))");
+    expect(light?.style.top).toBe("0px");
     expect(light?.style.left).toBe("30%");
     expect(light?.style.transform).toBe("translate(-50%, -100%)");
     expect(light?.style.transition).toContain("var(--motion-object-travel)");
@@ -1034,7 +1034,7 @@ describe("MobileBattleScreen", () => {
     expect(indicator?.parentElement?.dataset.battleStatusPhaseAnchor).toBe("");
     expect(indicator?.style.top).toBe("100%");
     expect(indicator?.style.bottom).toBe("");
-    expect(light?.style.top).toBe("var(--space-3)");
+    expect(light?.style.top).toBe("0px");
     expect(light?.style.left).toBe("90%");
     expect(light?.style.transform).toBe("translate(-50%, 0%)");
     expect(halo?.style.animation).toContain("battle-phase-challenge-pulse");
