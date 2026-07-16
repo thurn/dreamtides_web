@@ -57,11 +57,18 @@ export type GlassPanelHeaderSpacing =
 /** Title voice for a standard panel heading or a large character dossier. */
 export type GlassPanelTitleVoice = "standard" | "hero";
 
+/** One text run in a structured panel title. */
+export type GlassPanelTitleSegment =
+  | { kind: "text"; text: string }
+  | { kind: "entity"; text: string };
+
 export interface GlassPanelProps {
   /** Optional uppercase context line rendered above the title. */
   eyebrow?: string;
-  /** Optional panel title. Supplying any header copy renders the header. */
+  /** Optional plain panel title. */
   title?: string;
+  /** Optional structured panel title whose entity runs receive the canonical underline. */
+  structuredTitle?: readonly GlassPanelTitleSegment[];
   /** Optional supporting line rendered beneath the title. */
   subtitle?: string;
   /** Semantic heading element for the title. Defaults to `h2`. */
@@ -139,10 +146,23 @@ function accessoryNode(
   );
 }
 
+function titleNode(title: readonly GlassPanelTitleSegment[]): ReactNode {
+  return title.map((segment, index) =>
+    segment.kind === "entity" ? (
+      <u key={`${String(index)}:${segment.text}`} data-glass-panel-title-entity="">
+        {segment.text}
+      </u>
+    ) : (
+      segment.text
+    ),
+  );
+}
+
 /** Shared liquid-glass panel with structured header, body, and footer slots. */
 export function GlassPanel({
   eyebrow,
   title,
+  structuredTitle,
   subtitle,
   headingLevel = "h2",
   titleVoice = "standard",
@@ -167,6 +187,7 @@ export function GlassPanel({
   const hasHeader =
     eyebrow !== undefined ||
     title !== undefined ||
+    structuredTitle !== undefined ||
     subtitle !== undefined ||
     rightAccessory !== undefined;
   const accessory =
@@ -269,7 +290,7 @@ export function GlassPanel({
                 {eyebrow}
               </span>
             )}
-            {title !== undefined && (
+            {(title !== undefined || structuredTitle !== undefined) && (
               <Heading
                 style={{
                   margin: 0,
@@ -281,7 +302,9 @@ export function GlassPanel({
                   letterSpacing: 0,
                 }}
               >
-                {title}
+                {structuredTitle === undefined
+                  ? title
+                  : titleNode(structuredTitle)}
               </Heading>
             )}
             {subtitle !== undefined && (

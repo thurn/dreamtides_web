@@ -120,16 +120,24 @@ function catalogObject(index: number): Extract<MerchantGameObject, { objectType:
   };
 }
 
-const deckEntry = makeMerchantTestDeckEntry({ entryId: "entry-fixture", cardNumber: mappingCards[0].cardNumber });
-const deckObject: MerchantDeckCard = {
-  objectType: "deckCard",
-  entryId: deckEntry.entryId,
-  deckEntry,
-  cardUuid: mappingCards[0].id,
-  cardNumber: mappingCards[0].cardNumber,
-  card: mappingCards[0],
-  displayName: mappingCards[0].name,
-};
+function mappedDeckObject(index: number, entryId: string): MerchantDeckCard {
+  const mappedCard = mappingCards[index];
+  const deckEntry = makeMerchantTestDeckEntry({
+    entryId,
+    cardNumber: mappedCard.cardNumber,
+  });
+  return {
+    objectType: "deckCard",
+    entryId: deckEntry.entryId,
+    deckEntry,
+    cardUuid: mappedCard.id,
+    cardNumber: mappedCard.cardNumber,
+    card: mappedCard,
+    displayName: mappedCard.name,
+  };
+}
+
+const deckObject = mappedDeckObject(0, "entry-fixture");
 
 const mappingContext = {
   candidateGrantCards: mappingCards.slice(0, 4).map((_unused, index) => catalogObject(index)),
@@ -183,6 +191,24 @@ const choiceRequest = (candidates: MerchantChoiceCandidate[], choiceType: "catal
   candidates,
 });
 
+function headlineText(
+  headline: ReturnType<typeof buildDreamAuguryOfferHeadline>,
+): string {
+  return typeof headline === "string"
+    ? headline
+    : headline.map((segment) => segment.text).join("");
+}
+
+function headlineEntities(
+  headline: ReturnType<typeof buildDreamAuguryOfferHeadline>,
+): string[] {
+  return typeof headline === "string"
+    ? []
+    : headline
+        .filter((segment) => segment.kind === "entity")
+        .map((segment) => segment.text);
+}
+
 function dreamsignObject(id: string): Extract<MerchantGameObject, { objectType: "dreamsign" }> {
   return {
     objectType: "dreamsign",
@@ -212,10 +238,11 @@ describe("dream augury view model", () => {
     });
     expect(offers[1]).toMatchObject({
       id: "B",
-      headline: "Gain Fixture Gift",
       subtitle: "Add a card to your deck.",
       requiresSelection: false,
     });
+    expect(headlineText(offers[1].headline)).toBe("Gain Fixture Gift");
+    expect(headlineEntities(offers[1].headline)).toEqual(["Fixture Gift"]);
     expect(JSON.stringify(offers)).not.toContain("Production summary");
   });
 
@@ -352,7 +379,7 @@ describe("dream augury view model", () => {
         targetKey: `type:Character:${mappingCards.slice(0, 4).map((value) => value.id).join(",")}`,
         choiceRequest: choiceRequest(drafts),
       }), "category-draft", "Choose a Card"],
-      [mappedOffer("card_bundle", { gameObjects: [catalogObject(0), catalogObject(1)] }), "card-bundle", "Gain Two Cards"],
+      [mappedOffer("card_bundle", { gameObjects: [catalogObject(0), catalogObject(1)] }), "card-bundle", "Gain Mapping Fixture 1 and Mapping Fixture 2"],
       [mappedOffer("transfigured_draft", { choiceRequest: choiceRequest(drafts) }), "transfigured-draft", "Choose a Transfigured Card"],
       [mappedOffer("transfigure", {
         gameObjects: [{ ...deckObject, previewCard: mappingCards[0] }],
@@ -431,10 +458,53 @@ describe("dream augury view model", () => {
       const model = buildDreamAuguryOfferTileModel(offer, mappingContext);
       expect(model.kind, offer.archetypeId).toBe(expectedKind);
       expect(model.id).toBe(`mapping-encounter:${offer.offerId}`);
-      expect(buildDreamAuguryOfferHeadline(model), offer.archetypeId).toBe(
-        expectedHeadline,
+      expect(
+        headlineText(buildDreamAuguryOfferHeadline(model)),
+        offer.archetypeId,
+      ).toBe(expectedHeadline);
+    }
+  });
+
+  it("underlines the named entities in one- and two-entity action titles", () => {
+    const secondStarter = mappedDeckObject(1, "entry-fixture-2");
+    const cases: readonly [MerchantOffer, readonly string[]][] = [
+      [
+        mappedOffer("purge", { gameObjects: [deckObject] }),
+        ["Mapping Fixture 1"],
+      ],
+      [
+        mappedOffer("card_bundle", {
+          gameObjects: [catalogObject(0), catalogObject(1)],
+        }),
+        ["Mapping Fixture 1", "Mapping Fixture 2"],
+      ],
+      [
+        mappedOffer("starter_transfigure", {
+          gameObjects: [
+            { ...deckObject, previewCard: mappingCards[0] },
+            { ...secondStarter, previewCard: mappingCards[1] },
+          ],
+          applyPayload: { kind: "composite", children: [] },
+        }),
+        ["Mapping Fixture 1", "Mapping Fixture 2"],
+      ],
+    ];
+
+    for (const [offer, expectedEntities] of cases) {
+      const headline = buildDreamAuguryOfferHeadline(
+        buildDreamAuguryOfferTileModel(offer, mappingContext),
+      );
+      expect(headlineEntities(headline), offer.archetypeId).toEqual(
+        expectedEntities,
       );
     }
+
+    const starterHeadline = buildDreamAuguryOfferHeadline(
+      buildDreamAuguryOfferTileModel(cases[2][0], mappingContext),
+    );
+    expect(headlineText(starterHeadline)).toBe(
+      "Transfigure Mapping Fixture 1 and Mapping Fixture 2",
+    );
   });
 
   it("rejects malformed fixed counts and resolves structured category and copy data", () => {

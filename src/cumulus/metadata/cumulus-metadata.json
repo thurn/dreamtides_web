@@ -2218,7 +2218,15 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Optional panel title. Supplying any header copy renders the header."
+      "description": "Optional plain panel title."
+    },
+    {
+      "name": "structuredTitle",
+      "tsType": "readonly GlassPanelTitleSegment[]",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional structured panel title whose entity runs receive the canonical underline."
     },
     {
       "name": "subtitle",

@@ -8,7 +8,10 @@ function GlassPanelDemo() {
     <div style={{ width: "min(620px, 100%)", height: 420 }}>
       <GlassPanel
         eyebrow="Vision I"
-        title="A Thread Rewoven"
+        structuredTitle={[
+          { kind: "text", text: "Transfigure " },
+          { kind: "entity", text: "A Thread Rewoven" },
+        ]}
         subtitle="Choose how the vision resolves."
         rightAccessory={{
           kind: "iconButton",
@@ -47,12 +50,15 @@ export const glassPanelDemo: CumulusComponent = {
   Component: GlassPanelDemo,
   usage: [
     {
-      note: "A titled scene panel with a close accessory and composed body content.",
+      note: "A titled scene panel with a canonical named-entity underline, close accessory, and composed body content.",
       code: `import { GlassPanel } from "src/cumulus/components/overlay/GlassPanel";
 
 <GlassPanel
   eyebrow="Vision I"
-  title="A Thread Rewoven"
+  structuredTitle={[
+    { kind: "text", text: "Transfigure " },
+    { kind: "entity", text: "A Thread Rewoven" },
+  ]}
   subtitle="Choose how the vision resolves."
   rightAccessory={{
     kind: "iconButton",

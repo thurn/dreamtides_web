@@ -24,11 +24,13 @@ vi.mock("../components/card/CardView", async () => {
       model,
       onActivate,
       selected,
+      selectionColor,
       testId,
     }: {
       model: { cardId: string };
       onActivate?: () => void;
       selected?: boolean;
+      selectionColor?: string;
       testId?: string;
     }) => (
       <Pressable
@@ -36,6 +38,7 @@ vi.mock("../components/card/CardView", async () => {
         data-testid={testId}
         data-card-id={model.cardId}
         data-selected={selected ? "true" : "false"}
+        data-selection-color={selectionColor}
         onClick={onActivate}
       />
     ),
@@ -292,8 +295,50 @@ describe("DreamAugurySiteScreen", () => {
     expect(confirm?.getAttribute("aria-disabled")).toBe("true");
 
     click(container.querySelector('[data-testid="cumulus-augury-choice-choice-1"]'));
+    expect(
+      container
+        .querySelector('[data-testid="cumulus-augury-choice-choice-1"]')
+        ?.getAttribute("data-selection-color"),
+    ).toBe("accent-bright");
     click(confirm);
     expect(onChoose).toHaveBeenCalledWith("A", "choice-1");
+  });
+
+  it("marks a doubled card choice with a bright-purple selection and 2x badge", () => {
+    const doubledView = view();
+    const first = doubledView.offers[0];
+    if (first?.visual.kind !== "cardChoices") {
+      throw new Error("missing card-choice fixture");
+    }
+    const container = mount(
+      <DreamAugurySiteScreen
+        view={{
+          ...doubledView,
+          offers: [
+            { ...first, visual: { ...first.visual, doubled: true } },
+            doubledView.offers[1],
+          ],
+        }}
+        onChoose={() => ({ ok: true })}
+        onClose={() => undefined}
+      />,
+    );
+
+    click(container.querySelector('[data-testid="cumulus-dream-augury-offer-A"]'));
+    click(container.querySelector('[data-testid="cumulus-augury-choice-choice-2"]'));
+
+    expect(
+      container
+        .querySelector('[data-testid="cumulus-augury-choice-choice-2"]')
+        ?.getAttribute("data-selection-color"),
+    ).toBe("accent-bright");
+    expect(
+      container.querySelector("[data-augury-card-quantity-badge]")?.textContent,
+    ).toBe("2x");
+    expect(
+      container.querySelector<HTMLElement>("[data-augury-card-quantity-badge]")
+        ?.style.background,
+    ).toBe("var(--accent-bright)");
   });
 
   it("previews a direct offer before enabling its separate confirmation", () => {
@@ -385,7 +430,7 @@ describe("DreamAugurySiteScreen", () => {
     expect(siteNode?.style.height).toBe("160px");
   });
 
-  it("marks a selected Dreamsign with the standard selection ring and check", () => {
+  it("marks a selected Dreamsign with the bright-purple selection ring and check", () => {
     const base = view();
     const first = base.offers[0];
     if (first === undefined) throw new Error("missing fixture offer");
@@ -436,10 +481,12 @@ describe("DreamAugurySiteScreen", () => {
     const selected = container.querySelector<HTMLElement>(
       '[data-augury-dreamsign-choice][data-selected="true"]',
     );
-    expect(selected?.style.border).toBe("4px solid var(--selected)");
-    expect(
-      selected?.querySelector("[data-augury-dreamsign-selection-marker]"),
-    ).not.toBeNull();
+    expect(selected?.style.border).toBe("4px solid var(--accent-bright)");
+    const marker = selected?.querySelector<HTMLElement>(
+      "[data-augury-dreamsign-selection-marker]",
+    );
+    expect(marker).not.toBeNull();
+    expect(marker?.style.background).toBe("var(--accent-bright)");
   });
 
   it("uses a white filled right arrow between distinct transfiguration states", () => {

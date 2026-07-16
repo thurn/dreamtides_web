@@ -37,7 +37,10 @@ describe("GlassPanel", () => {
         <CumulusRoot>
           <GlassPanel
             eyebrow="Vision I"
-            title="A Thread Rewoven"
+            structuredTitle={[
+              { kind: "text", text: "Transfigure " },
+              { kind: "entity", text: "A Thread Rewoven" },
+            ]}
             subtitle="Choose how the vision resolves."
             rightAccessory={{
               kind: "iconButton",
@@ -61,7 +64,12 @@ describe("GlassPanel", () => {
     expect(panel?.dataset.glassPanelFrame).toBe("floating");
     expect(panel?.style.backdropFilter).toContain("--glass-blur");
     expect(panel?.style.borderRadius).toBe("var(--radius-panel)");
-    expect(panel?.querySelector("h2")?.textContent).toBe("A Thread Rewoven");
+    expect(panel?.querySelector("h2")?.textContent).toBe(
+      "Transfigure A Thread Rewoven",
+    );
+    expect(
+      panel?.querySelector("[data-glass-panel-title-entity]")?.textContent,
+    ).toBe("A Thread Rewoven");
     expect(
       panel?.querySelector<HTMLElement>("[data-glass-panel-header]")?.style
         .textAlign,

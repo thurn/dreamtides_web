@@ -17,7 +17,8 @@ The shared liquid-glass content container: an optional structured header, a comp
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `eyebrow` | `string` | no | — | Optional uppercase context line rendered above the title. |
-| `title` | `string` | no | — | Optional panel title. Supplying any header copy renders the header. |
+| `title` | `string` | no | — | Optional plain panel title. |
+| `structuredTitle` | `readonly GlassPanelTitleSegment[]` | no | — | Optional structured panel title whose entity runs receive the canonical underline. |
 | `subtitle` | `string` | no | — | Optional supporting line rendered beneath the title. |
 | `headingLevel` | `"h1" \| "h2"` | no | `h2` | Semantic heading element for the title. Defaults to `h2`. |
 | `titleVoice` | `GlassPanelTitleVoice` = `"standard" \| "hero"` | no | `standard` | Title and subtitle typography. Defaults to `standard`. |
@@ -46,14 +47,17 @@ The shared liquid-glass content container: an optional structured header, a comp
 
 ## Usage
 
-A titled scene panel with a close accessory and composed body content.
+A titled scene panel with a canonical named-entity underline, close accessory, and composed body content.
 
 ```tsx
 import { GlassPanel } from "src/cumulus/components/overlay/GlassPanel";
 
 <GlassPanel
   eyebrow="Vision I"
-  title="A Thread Rewoven"
+  structuredTitle={[
+    { kind: "text", text: "Transfigure " },
+    { kind: "entity", text: "A Thread Rewoven" },
+  ]}
   subtitle="Choose how the vision resolves."
   rightAccessory={{
     kind: "iconButton",

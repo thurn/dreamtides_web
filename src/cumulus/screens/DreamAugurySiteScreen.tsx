@@ -19,7 +19,10 @@ import {
   type DreamscapeSiteModel,
 } from "../components/dreamscape/SiteNode";
 import { Dreamsign } from "../components/hud/Dreamsign";
-import { GlassPanel } from "../components/overlay/GlassPanel";
+import {
+  GlassPanel,
+  type GlassPanelTitleSegment,
+} from "../components/overlay/GlassPanel";
 import type { ArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
@@ -63,7 +66,7 @@ export type DreamAuguryOfferVisualView =
 
 export interface DreamAuguryOfferView {
   id: string;
-  headline: string;
+  headline: string | readonly GlassPanelTitleSegment[];
   subtitle: string;
   requiresSelection: boolean;
   tile: OfferTileModel;
@@ -322,7 +325,9 @@ function OfferDetailPanel({
       style={{ width: "100%", height: "100%", minWidth: 0, minHeight: 0, pointerEvents: "auto" }}
     >
       <GlassPanel
-        title={offer.headline}
+        {...(typeof offer.headline === "string"
+          ? { title: offer.headline }
+          : { structuredTitle: offer.headline })}
         subtitle={offer.subtitle}
         headerSpacing="medium"
         footer={
@@ -384,12 +389,16 @@ function OfferDetailVisual({
   onSelect: (offerId: string, choiceId: string) => void;
 }) {
   const directWidth = cardWidthForCount(1, layout);
-  const choices = (items: readonly DreamAuguryCardChoiceView[]) => (
+  const choices = (
+    items: readonly DreamAuguryCardChoiceView[],
+    selectedBadge?: string,
+  ) => (
     <CardChoices
       offerId={offerId}
       choices={items}
       layout={layout}
       selectedChoiceId={selectedChoiceId}
+      selectedBadge={selectedBadge}
       onSelect={onSelect}
     />
   );
@@ -397,7 +406,7 @@ function OfferDetailVisual({
     case "cards":
       return <CardRow cards={visual.cards} layout={layout} />;
     case "cardChoices":
-      return choices(visual.choices);
+      return choices(visual.choices, visual.doubled ? "2x" : undefined);
     case "beforeAfter":
       return (
         <div style={{ display: "grid", gap: token("--space-4") }}>
@@ -431,10 +440,10 @@ function OfferDetailVisual({
           {visual.choices.map((choice) => {
             const selected = selectedChoiceId === choice.id;
             return (
-              <div key={choice.id} data-augury-dreamsign-choice="" data-selected={selected ? "true" : "false"} style={{ position: "relative", padding: token("--space-2"), borderRadius: token("--radius-panel"), border: `4px solid ${selected ? token("--selected") : "transparent"}`, boxShadow: selected ? token("--glow-accent-soft") : undefined }}>
+              <div key={choice.id} data-augury-dreamsign-choice="" data-selected={selected ? "true" : "false"} style={{ position: "relative", padding: token("--space-2"), borderRadius: token("--radius-panel"), border: `4px solid ${selected ? token("--accent-bright") : "transparent"}`, boxShadow: selected ? token("--glow-accent-soft") : undefined }}>
                 <Dreamsign dreamsign={choice.dreamsign} sizePx={dreamsignSize(visual.choices.length, layout)} onPress={() => onSelect(offerId, choice.id)} testid={`cumulus-augury-choice-${choice.id}`} />
                 {selected && (
-                  <span aria-hidden="true" data-augury-dreamsign-selection-marker="" style={{ position: "absolute", top: token("--space-2"), right: token("--space-2"), width: 36, height: 36, borderRadius: token("--radius-pill"), display: "grid", placeItems: "center", color: token("--text-on-accent"), background: token("--selected"), boxShadow: token("--shadow-md"), pointerEvents: "none" }}>
+                  <span aria-hidden="true" data-augury-dreamsign-selection-marker="" style={{ position: "absolute", top: token("--space-2"), right: token("--space-2"), width: 36, height: 36, borderRadius: token("--radius-pill"), display: "grid", placeItems: "center", color: token("--text-on-accent"), background: token("--accent-bright"), boxShadow: token("--shadow-md"), pointerEvents: "none" }}>
                     <GlowIcon iconClass={GLYPHS.check} color="white" size="24px" />
                   </span>
                 )}
@@ -493,11 +502,11 @@ function cardGridStyle(columns: number, width: CardTileWidth): CSSProperties {
   };
 }
 
-function CardChoices({ offerId, choices, layout, width = cardWidthForCount(choices.length, layout), columns = cardGridColumns(choices.length, layout), selectedChoiceId, onSelect }: { offerId: string; choices: readonly DreamAuguryCardChoiceView[]; layout: "mobile" | "desktop"; width?: CardTileWidth; columns?: number; selectedChoiceId?: string; onSelect: (offerId: string, choiceId: string) => void }) {
+function CardChoices({ offerId, choices, layout, width = cardWidthForCount(choices.length, layout), columns = cardGridColumns(choices.length, layout), selectedChoiceId, selectedBadge, onSelect }: { offerId: string; choices: readonly DreamAuguryCardChoiceView[]; layout: "mobile" | "desktop"; width?: CardTileWidth; columns?: number; selectedChoiceId?: string; selectedBadge?: string; onSelect: (offerId: string, choiceId: string) => void }) {
   return (
     <div data-augury-card-grid-columns={columns} style={cardGridStyle(columns, width)}>
       {choices.map((choice) => (
-        <CardTile key={choice.id} card={choice.card} width={width} selected={selectedChoiceId === choice.id} onActivate={() => onSelect(offerId, choice.id)} testId={`cumulus-augury-choice-${choice.id}`} />
+        <CardTile key={choice.id} card={choice.card} width={width} selected={selectedChoiceId === choice.id} selectionBadge={selectedChoiceId === choice.id ? selectedBadge : undefined} onActivate={() => onSelect(offerId, choice.id)} testId={`cumulus-augury-choice-${choice.id}`} />
       ))}
     </div>
   );
@@ -508,8 +517,17 @@ function CardRow({ cards, layout, width = cardWidthForCount(cards.length, layout
   return <div data-augury-card-grid-columns={columns} style={cardGridStyle(columns, width)}>{cards.map((card) => <CardTile key={card.id} card={card} width={width} />)}</div>;
 }
 
-function CardTile({ card, width, selected = false, muted = false, danger = false, onActivate, testId }: { card: DreamAuguryCardView; width: CardTileWidth; selected?: boolean; muted?: boolean; danger?: boolean; onActivate?: () => void; testId?: string }) {
-  return <div style={{ width }}><GameCard model={card.model} onActivate={onActivate} unavailable={muted} selected={selected || danger} selectionColor={danger ? "danger" : undefined} testId={testId} /></div>;
+function CardTile({ card, width, selected = false, muted = false, danger = false, selectionBadge, onActivate, testId }: { card: DreamAuguryCardView; width: CardTileWidth; selected?: boolean; muted?: boolean; danger?: boolean; selectionBadge?: string; onActivate?: () => void; testId?: string }) {
+  return (
+    <div style={{ position: "relative", width }}>
+      <GameCard model={card.model} onActivate={onActivate} unavailable={muted} selected={selected || danger} selectionColor={danger ? "danger" : "accent-bright"} testId={testId} />
+      {selectionBadge !== undefined && (
+        <span aria-label={`${selectionBadge} copies`} data-augury-card-quantity-badge="" style={{ position: "absolute", right: token("--space-3"), bottom: token("--space-3"), zIndex: 20, width: 36, height: 36, borderRadius: token("--radius-control"), display: "grid", placeItems: "center", color: token("--text-on-accent"), background: token("--accent-bright"), boxShadow: token("--shadow-md"), font: token("--t-button-sm"), pointerEvents: "none" }}>
+          {selectionBadge}
+        </span>
+      )}
+    </div>
+  );
 }
 
 function TransitionArrow({ layout }: { layout: "mobile" | "desktop" }) {
