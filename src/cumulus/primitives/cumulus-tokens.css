@@ -150,6 +150,7 @@
   --primitive-line-strong: rgba(255, 255, 255, 0.18);
   --primitive-line-violet: rgba(168, 85, 247, 0.40);
   --primitive-line-black: #000;
+  --primitive-line-battlefield: rgba(24, 24, 28, 0.30);
   --primitive-scrim-700: rgba(5, 3, 10, 0.72);   /* modal backdrop */
   --primitive-scrim-800: rgba(0, 0, 0, 0.80);    /* full-screen gallery backdrop */
   --primitive-scrim-900: rgba(5, 3, 10, 0.90);
@@ -228,7 +229,7 @@
   --border-mid: var(--primitive-line-mid);
   --border-strong: var(--primitive-line-strong);
   --border-accent: var(--primitive-line-violet);
-  --battlefield-slot-border: 2px dotted var(--border-strong);
+  --battlefield-slot-border: 2px dotted var(--primitive-line-battlefield);
 
   /* ---- Scrims (full-surface darkening behind a focused element) ---- */
   --scrim: var(--primitive-scrim-700);          /* modal / sheet backdrop */

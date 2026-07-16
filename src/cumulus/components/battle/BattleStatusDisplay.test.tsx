@@ -50,6 +50,8 @@ describe("BattleStatusDisplay", () => {
     expect(status?.style.border).toContain("var(--glass-rim)");
     expect(status?.style.borderRadius).toBe("var(--radius-panel)");
     expect(status?.style.color).toBe("var(--text-on-glass)");
+    expect(status?.style.height).toBe("100%");
+    expect(status?.style.boxSizing).toBe("border-box");
     expect(status?.textContent).toContain("2/3");
     expect(status?.textContent).toContain("4");
     const energy = status?.querySelector<HTMLElement>(

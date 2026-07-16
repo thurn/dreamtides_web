@@ -8,6 +8,7 @@ import {
   BATTLEFIELD_CARD_ASPECT_RATIO,
   BATTLEFIELD_CARD_CORNER_RADIUS,
   CARD_ASPECT_RATIO,
+  CARD_ASPECT_RATIO_VALUE,
 } from "../components/card/card-aspect";
 import { BattleStatusDisplay } from "../components/battle/BattleStatusDisplay";
 import {
@@ -303,15 +304,18 @@ const BATTLE_PHASE_LIGHT_CSS = `
 const SIDE_ZONES_GRID_TEMPLATE =
   "minmax(0, 1fr) max-content minmax(0, 1fr)";
 const SIDE_PILE_MAX_WIDTH = 90;
+const SIDE_PILE_HEIGHT = SIDE_PILE_MAX_WIDTH * CARD_ASPECT_RATIO_VALUE;
 // Desktop keeps the three status objects in one centered landscape dock so
 // the wide viewport creates deliberate outer whitespace instead of stretching
 // the mobile spacing rhythm edge-to-edge.
 const DESKTOP_SIDE_ZONES_MAX_WIDTH = 1180;
 const DESKTOP_SIDE_PILE_MAX_WIDTH = 120;
+const DESKTOP_SIDE_PILE_HEIGHT =
+  DESKTOP_SIDE_PILE_MAX_WIDTH * CARD_ASPECT_RATIO_VALUE;
 const NEXT_PHASE_CONTROL_WIDTH = 120;
 const PLAYER_HAND_Z_INDEX = 15;
-// The player zones share the hand track: their 64px row is lifted 20px, and
-// this anchor adds the minimum 4px separation after that row's lower edge.
+// Mobile player zones share the hand track and lift one spacing step above it.
+// Desktop gives both sides matching rows immediately outside the play areas.
 const PLAYER_HAND_TOP = `calc(${token("--space-12")} - ${token("--space-7")} + ${token("--space-2")})`;
 
 const MOBILE_GRID_ROWS =
@@ -573,14 +577,16 @@ function SideZones({
       style={{
         ...ROW_STYLE,
         gridColumn: 1,
-        gridRow: owner === "enemy" ? 2 : 6,
+        gridRow: owner === "enemy" ? 2 : isDesktop ? 5 : 6,
         ...(owner === "player"
-          ? {
-              alignSelf: "start",
-              height: token("--space-12"),
-              transform: `translateY(calc(-1 * ${token(isDesktop ? "--space-11" : "--space-7")}))`,
-              zIndex: 3,
-            }
+          ? isDesktop
+            ? { alignSelf: "stretch", zIndex: 3 }
+            : {
+                alignSelf: "start",
+                height: token("--space-12"),
+                transform: `translateY(calc(-1 * ${token("--space-7")}))`,
+                zIndex: 3,
+              }
           : null),
         display: "grid",
         gridTemplateColumns: SIDE_ZONES_GRID_TEMPLATE,
@@ -640,6 +646,12 @@ function SideZones({
             position: "relative",
             width: "max-content",
             maxWidth: "100%",
+            height:
+              owner === "player"
+                ? isDesktop
+                  ? DESKTOP_SIDE_PILE_HEIGHT
+                  : SIDE_PILE_HEIGHT
+                : undefined,
           }}
         >
           <BattleStatusDisplay
@@ -812,6 +824,10 @@ interface LinearTransform {
 
 const IDENTITY_LINEAR_TRANSFORM: LinearTransform = { a: 1, b: 0, c: 0, d: 1 };
 
+function clamp(value: number, minimum: number, maximum: number): number {
+  return Math.min(Math.max(value, minimum), maximum);
+}
+
 function inverseLinearTransform(element: HTMLElement | null): LinearTransform {
   if (element === null) return IDENTITY_LINEAR_TRANSFORM;
   const transform = getComputedStyle(element).transform;
@@ -883,6 +899,8 @@ function FaceUpCard({
     startY: number;
     dragging: boolean;
     inverseParentTransform: LinearTransform;
+    originBounds: DOMRect;
+    constraintBounds: DOMRect | null;
   } | null>(null);
   const draggable = interaction?.draggable === true;
   const activatable = interaction?.onActivate !== undefined;
@@ -946,6 +964,11 @@ function FaceUpCard({
           inverseParentTransform: inverseLinearTransform(
             event.currentTarget.parentElement,
           ),
+          originBounds: event.currentTarget.getBoundingClientRect(),
+          constraintBounds:
+            event.currentTarget
+              .closest<HTMLElement>("[data-battle-play-area]")
+              ?.getBoundingClientRect() ?? null,
         };
         try {
           event.currentTarget.setPointerCapture(event.pointerId);
@@ -958,11 +981,12 @@ function FaceUpCard({
         if (pointerDrag?.pointerId !== event.pointerId) {
           return;
         }
-        const viewportX = event.clientX - pointerDrag.startX;
-        const viewportY = event.clientY - pointerDrag.startY;
+        const requestedViewportX = event.clientX - pointerDrag.startX;
+        const requestedViewportY = event.clientY - pointerDrag.startY;
         if (
           !pointerDrag.dragging &&
-          Math.hypot(viewportX, viewportY) <= POINTER_MOVEMENT_SLOP_PX
+          Math.hypot(requestedViewportX, requestedViewportY) <=
+            POINTER_MOVEMENT_SLOP_PX
         ) {
           return;
         }
@@ -975,6 +999,20 @@ function FaceUpCard({
           event.currentTarget.dataset.battlePointerDragging = "true";
           event.currentTarget.style.zIndex = "100";
         }
+        const viewportX = pointerDrag.constraintBounds === null
+          ? requestedViewportX
+          : clamp(
+              requestedViewportX,
+              pointerDrag.constraintBounds.left - pointerDrag.originBounds.left,
+              pointerDrag.constraintBounds.right - pointerDrag.originBounds.right,
+            );
+        const viewportY = pointerDrag.constraintBounds === null
+          ? requestedViewportY
+          : clamp(
+              requestedViewportY,
+              pointerDrag.constraintBounds.top - pointerDrag.originBounds.top,
+              pointerDrag.constraintBounds.bottom - pointerDrag.originBounds.bottom,
+            );
         const inverse = pointerDrag.inverseParentTransform;
         const x = inverse.a * viewportX + inverse.c * viewportY;
         const y = inverse.b * viewportX + inverse.d * viewportY;
@@ -1561,6 +1599,13 @@ function dropMobileCardAtPoint(
   if (target === undefined || target === null) return;
   const owner = target.dataset.battleMobileDropOwner;
   if (owner !== "enemy" && owner !== "player") return;
+  if (
+    interactions.pendingCardOwner !== null &&
+    interactions.pendingCardOwner !== undefined &&
+    interactions.pendingCardOwner !== owner
+  ) {
+    return;
+  }
   if (target.dataset.battleMobileDropKind === "slot") {
     const rank = target.dataset.battleMobileDropRank;
     const slotId = target.dataset.battleMobileDropSlotId;

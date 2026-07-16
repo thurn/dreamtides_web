@@ -51,6 +51,8 @@ export function BattleStatusDisplay({
       data-testid={testId}
       style={{
         width: "100%",
+        height: "100%",
+        boxSizing: "border-box",
         display: "grid",
         gridTemplateColumns: "minmax(0, 1fr) auto minmax(0, 1fr)",
         alignItems: "center",

@@ -314,9 +314,14 @@ describe("MobileBattleScreen", () => {
     expect(backdrop?.style.backgroundImage).toContain("battle-background.png");
     expect(enemyZones?.style.maxWidth).toBe("1180px");
     expect(enemyZones?.style.columnGap).toBe("var(--space-12)");
-    expect(playerZones?.style.transform).toBe(
-      "translateY(calc(-1 * var(--space-11)))",
-    );
+    expect(playerZones?.style.gridRow).toBe("5");
+    expect(playerZones?.style.transform).toBe("");
+    expect(playerZones?.style.height).toBe("");
+    expect(
+      playerZones?.querySelector<HTMLElement>(
+        "[data-battle-status-phase-anchor]",
+      )?.style.height,
+    ).toBe("85.71428571428572px");
     expect(enemyHand?.style.display).toBe("flex");
     expect(enemyHand?.style.justifyContent).toBe("center");
     expect(enemyHand?.style.gap).toBe("var(--space-2)");
@@ -505,6 +510,10 @@ describe("MobileBattleScreen", () => {
         row?.querySelector<HTMLElement>("[data-battle-status-phase-anchor]")
           ?.style.width,
       ).toBe("max-content");
+      expect(
+        row?.querySelector<HTMLElement>("[data-battle-status-phase-anchor]")
+          ?.style.height,
+      ).toBe(owner === "player" ? "64.28571428571429px" : "");
       const deckZone = row?.querySelector<HTMLElement>(
         `[data-battle-zone="${owner}-deck"]`,
       );
@@ -1536,6 +1545,165 @@ describe("MobileBattleScreen", () => {
       rank: "back",
       slotId: "player-back-empty",
     });
+
+    act(() => root.unmount());
+  });
+
+  it("keeps an in-play card inside its battlefield half while dragging", () => {
+    const interactions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(makeView(), interactions);
+    const playArea = container.querySelector<HTMLElement>(
+      '[data-battle-play-area="player"]',
+    );
+    const battlefieldCard = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-front-card"]',
+    );
+    const revealSource = battlefieldCard?.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    vi.spyOn(playArea as HTMLElement, "getBoundingClientRect").mockReturnValue({
+      x: 0,
+      y: 100,
+      left: 0,
+      top: 100,
+      right: 500,
+      bottom: 300,
+      width: 500,
+      height: 200,
+      toJSON: () => ({}),
+    });
+    vi.spyOn(battlefieldCard as HTMLElement, "getBoundingClientRect").mockReturnValue({
+      x: 100,
+      y: 200,
+      left: 100,
+      top: 200,
+      right: 200,
+      bottom: 300,
+      width: 100,
+      height: 100,
+      toJSON: () => ({}),
+    });
+
+    act(() => {
+      revealSource?.dispatchEvent(
+        new PointerEvent("pointerdown", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 150,
+          clientY: 250,
+          pointerId: 21,
+          pointerType: "mouse",
+        }),
+      );
+      battlefieldCard?.dispatchEvent(
+        new PointerEvent("pointermove", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 150,
+          clientY: 0,
+          pointerId: 21,
+          pointerType: "mouse",
+        }),
+      );
+    });
+
+    expect(battlefieldCard?.style.transform).toContain(
+      "translate3d(0px, -100px, 0)",
+    );
+
+    act(() => {
+      battlefieldCard?.dispatchEvent(
+        new PointerEvent("pointercancel", {
+          bubbles: true,
+          cancelable: true,
+          pointerId: 21,
+          pointerType: "mouse",
+        }),
+      );
+      root.unmount();
+    });
+  });
+
+  it("ignores a pointer drop from an in-play card onto the opponent battlefield", () => {
+    const interactions = {
+      canInteract: true,
+      pendingCardId: "player-front-card",
+      pendingCardSource: "battlefield" as const,
+      pendingCardOwner: "player" as const,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(makeView(), interactions);
+    const battlefieldCard = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-front-card"]',
+    );
+    const revealSource = battlefieldCard?.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    const enemySlot = container.querySelector<HTMLElement>(
+      '[data-battle-rank="enemy-back"] [data-battle-slot-filled="false"]',
+    );
+    Object.defineProperty(document, "elementFromPoint", {
+      configurable: true,
+      value: vi.fn(() => enemySlot),
+    });
+
+    act(() => {
+      revealSource?.dispatchEvent(
+        new PointerEvent("pointerdown", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 20,
+          clientY: 30,
+          pointerId: 22,
+          pointerType: "mouse",
+        }),
+      );
+      battlefieldCard?.dispatchEvent(
+        new PointerEvent("pointermove", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 20,
+          clientY: 0,
+          pointerId: 22,
+          pointerType: "mouse",
+        }),
+      );
+      battlefieldCard?.dispatchEvent(
+        new PointerEvent("pointerup", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 20,
+          clientY: 0,
+          pointerId: 22,
+          pointerType: "mouse",
+        }),
+      );
+    });
+
+    expect(interactions.onSlotDrop).not.toHaveBeenCalled();
+    expect(interactions.onZoneDrop).not.toHaveBeenCalled();
+    expect(interactions.onCardDragEnd).toHaveBeenCalledTimes(1);
 
     act(() => root.unmount());
   });

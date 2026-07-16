@@ -271,7 +271,7 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 
 | Token | Value | Notes |
 | --- | --- | --- |
-| `--battlefield-slot-border` | `2px dotted var(--border-strong)` |  |
+| `--battlefield-slot-border` | `2px dotted var(--primitive-line-battlefield)` |  |
 | `--layer-reveal` | `2147483647` |  |
 | `--hover-scale` | `1.03` |  |
 | `--glass-fill` | `rgba(14, 14, 16, 0.54)` |  |
