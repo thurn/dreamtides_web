@@ -923,7 +923,7 @@
       ]
     },
     "470bbf9d-a73c-4e00-bc66-cb0fa767c8de": {
-      "name": "Depthwalker",
+      "name": "Vizier of Portents",
       "needs": [],
       "supports": [
         "void",
@@ -2270,7 +2270,7 @@
       ]
     },
     "d89f4c33-ffd3-4313-8106-0a9f7013cad8": {
-      "name": "Lanternwood Scout",
+      "name": "Steel Abomination",
       "needs": [],
       "supports": [
         "abandon",
@@ -2533,7 +2533,7 @@
       ]
     },
     "a7820b34-9fdc-46cc-8357-53c8caa056b1": {
-      "name": "Mirror Protocol",
+      "name": "Bloodbroker",
       "needs": [
         {
           "theme": "warriors",
@@ -2960,7 +2960,7 @@
       ]
     },
     "886c9d49-b25f-4ddd-97f0-2ec4b42eda89": {
-      "name": "Prism Caller",
+      "name": "Aurora Rider",
       "needs": [
         {
           "theme": "warriors",
@@ -3053,7 +3053,7 @@
       ]
     },
     "738a5af0-f848-4d48-bceb-9a43c9b11066": {
-      "name": "Reclaimer of Lost Paths",
+      "name": "Seeker of Lost Paths",
       "needs": [
         {
           "theme": "reclaim",
@@ -3332,7 +3332,7 @@
       ]
     },
     "975f49d3-213a-43fc-8079-5fe40f126a7b": {
-      "name": "Scrap Reclaimer",
+      "name": "Void Salvager",
       "needs": [
         {
           "theme": "cheap-characters",
@@ -4143,7 +4143,7 @@
       ]
     },
     "89c0d03c-2199-415a-bc66-89e451034328": {
-      "name": "Sylvan Matriarch",
+      "name": "Horizon Chaser",
       "needs": [
         {
           "theme": "cheap-characters",
@@ -4372,7 +4372,7 @@
       "supports": []
     },
     "fa7dadd8-c72f-42e7-b203-3d22aa36122f": {
-      "name": "Torn Circuit Feeder",
+      "name": "Reforged Construct",
       "needs": [
         {
           "theme": "reclaim",
@@ -4495,7 +4495,7 @@
       ]
     },
     "1750c85c-f547-4d21-b7e3-9e5c5fcb3171": {
-      "name": "Unquenched",
+      "name": "Sunrise Virtuoso",
       "needs": [
         {
           "theme": "cheap-characters",

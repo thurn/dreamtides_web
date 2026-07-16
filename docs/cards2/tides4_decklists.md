@@ -171,7 +171,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 2× Price of Redemption
 - 2× Twilight Reclaimer
 - 2× Entropy Spike
-- 2× Reclaimer of Lost Paths
+- 2× Seeker of Lost Paths
 - 2× Stolen Genesis
 - 2× Duskwall Delver
 - 2× Iconoclast
@@ -201,7 +201,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 1× Spirit of the Lightgrove
 - 1× Signal Resonant
 - 1× Duskreaper
-- 1× Depthwalker
+- 1× Vizier of Portents
 - 1× Specter of Silent Snow
 - 1× Collateral Damage
 - 1× Immolate
@@ -294,7 +294,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Embersummoner
 - 1× Dawnhorn Elder
 - 1× Entropy Spike
-- 1× Reclaimer of Lost Paths
+- 1× Seeker of Lost Paths
 - 1× Ebonwing
 - 1× Apocalypse
 - 1× Dune Reaper
@@ -342,7 +342,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Vigil Keeper
 - 1× Carrion Shepherd
 - 1× Sunset Chronicler
-- 1× Torn Circuit Feeder
+- 1× Reforged Construct
 - 1× Lord of Hidden Paths
 - 1× Scrap Reclaimer
 
@@ -355,7 +355,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treating every discard as a draw and value event rather than a cost. The engine runs through a dense suite of discard-payoff cards: Key Sifter draws back every discarded card, Pattern Seeker and Torchbearer of the Abyss draw (and Torchbearer ramps 1●) on each discard, Unbroken and Wandering Archivist grow or gain ⍟ as you discard, and Shoreline Penitent, Iconoclast, Gleamharvester and Minstrel of Falling Light loot for further value. A parallel layer of cards is designed to be thrown away and recovered: Part the Veil, Seek Answers, Forsaken Skyline, Pinnacle Ascendant, Oblivion Guide and Fell Swoop all gain reclaim when discarded, and a recursion shell (From the Barrow, Keeper of the Lightpath, Dreadwood Emissary, Somber Flockmaster, Weblight Waif) hands void events reclaim so the discarded spells come back. Bulk looters — Grotto Seer, Rubble Diviner, Urban Cipher, Evacuation Enforcer, Starfall Communion, Sanctum Approach — churn the hand to feed all of this, while discard-cost events (Call of Calamity, Spiral Offering, Desperation, Abandon Constraints) convert the surplus into draws and removal. A light event-copy splash (The Ringleader, Twice-Lit Portal, Echo Architect, Cascade of Reflections) and removable interaction (Fell the Mighty, Molten Duel) round it out, but copying is a minor accent rather than the engine. Its nearest discard siblings, tide-sig-06 and tide-fac-32, share the discard package but point it at void-depth payoffs — banishing or counting the growing void for escalating finishers — whereas this tide spends each discard immediately for draw and reclaim value, keeping the loop churning rather than accumulating.
 
 - 2× Fell the Mighty
-- 2× Unquenched
+- 2× Sunrise Virtuoso
 - 2× Sunken Radiance
 - 2× Shaper of Memory
 - 2× The Ringleader
@@ -427,7 +427,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Pattern Seeker
 - 1× Blight Weaver
 - 1× Spiral Offering
-- 1× Silent Gatherer
+- 1× Fractured Vessel
 - 1× Torchbearer of the Abyss
 - 1× Cloudback Courier
 - 1× Gateweaver
@@ -478,7 +478,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Woodland Apparition
 - 1× Fallen Angel
 - 1× Duneguard Captain
-- 1× Unquenched
+- 1× Sunrise Virtuoso
 - 1× Wreckheap Lookout
 - 1× Blood Sun Oppressor
 - 1× Emberwatch Rescuer
@@ -494,7 +494,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Guide of Lost Souls
 - 1× Immolate and Rise
 - 1× Shaper of Memory
-- 1× Depthwalker
+- 1× Vizier of Portents
 - 1× Hope's Vanguard
 - 1× Corrupted Host
 - 1× Collateral Damage
@@ -532,7 +532,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Dawnrunner
 - 1× Blight Weaver
 - 1× Defiant Holdout
-- 1× Silent Gatherer
+- 1× Fractured Vessel
 - 1× Exiles of the Last Light
 - 1× Ferryman of the Falls
 - 1× Dreadweaver
@@ -566,7 +566,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 
 Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters) that treats the void as both a resource bank and a pressure source. The doubled core repeatedly moves cards through hand and void: Sunken Radiance draws and discards while reclaiming itself, Grotto Seer and Urban Cipher refill the hand after discarding, Evacuation Enforcer turns awakened activations into draw-three-discard-three churn, and Wasteland Arbitrator makes both players discard while returning for 1●. That churn unlocks several payoff layers: Shaper of Memory pumps the board from the void, Paradox Enforcer and Verdant Wayfarer spend seven void cards for large recurring plays, Vessel of Echoes scales once the void reaches six cards, and Weight of Memory converts raw void size into removal. Reclaim pieces such as Part the Veil, Price of Redemption, Oblivion Guide, Silent Gatherer, and Pinnacle Ascendant keep discarded cards relevant, while Pyrestone Avatar and Pinnacle Ascendant give the deck enough awakened support to reuse its looting bodies immediately. A small survivor and figment package from Dustborn Veteran, Duneguard Captain, Hope's Vanguard, Shadowcaller, and Tidewreck Navigator gives the deck board texture, but the primary identity is still discard velocity feeding void-depth payoffs rather than a pure survivor sacrifice plan.
 
-- 2× Unquenched
+- 2× Sunrise Virtuoso
 - 2× Searcher in the Mists
 - 2× Sunken Radiance
 - 2× Fallen One
@@ -581,7 +581,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 2× Pyrestone Avatar
 - 2× Urban Cipher
 - 2× Ash Harbinger
-- 2× Silent Gatherer
+- 2× Fractured Vessel
 - 2× Wasteland Arbitrator
 - 2× Evacuation Enforcer
 - 2× Pinnacle Ascendant
@@ -689,7 +689,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Unleash Ruin
 - 1× Woodland Apparition
 - 1× Fallen Angel
-- 1× Unquenched
+- 1× Sunrise Virtuoso
 - 1× Wreckheap Lookout
 - 1× Hope's Vanguard
 - 1× Sunrise Strummer
@@ -734,7 +734,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Pattern Seeker
 - 1× Dawnrunner
 - 1× Defiant Holdout
-- 1× Silent Gatherer
+- 1× Fractured Vessel
 - 1× Torchbearer of the Abyss
 - 1× Exiles of the Last Light
 - 1× Dreadweaver
@@ -783,7 +783,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 2× Corrupted Host
 - 2× Price of Redemption
 - 2× Entropy Spike
-- 2× Reclaimer of Lost Paths
+- 2× Seeker of Lost Paths
 - 2× Duskwall Delver
 - 2× Iconoclast
 - 2× Kindred Sparks
@@ -801,7 +801,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Unleash Ruin
 - 1× Seer of the Fallen
 - 1× Fathomless Maw
-- 1× Unquenched
+- 1× Sunrise Virtuoso
 - 1× Wreckheap Lookout
 - 1× Blood Sun Oppressor
 - 1× Hope's Vanguard
@@ -837,7 +837,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Dawnrunner
 - 1× Blight Weaver
 - 1× Defiant Holdout
-- 1× Silent Gatherer
+- 1× Fractured Vessel
 - 1× Dreadweaver
 - 1× Lurking Dread
 - 1× Shadowcaller
@@ -1197,7 +1197,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Woodland Apparition
 - 1× Pulse of Sacrifice
 - 1× Twilight Troubadour
-- 1× Unquenched
+- 1× Sunrise Virtuoso
 - 1× Fell Swoop
 - 1× Burst of Obliteration
 - 1× Rite of Summoning
@@ -1244,7 +1244,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Ashlight Caller
 - 1× Pattern Seeker
 - 1× Annihilation from Below
-- 1× Silent Gatherer
+- 1× Fractured Vessel
 - 1× Renounce Reality
 - 1× Cloudback Courier
 - 1× Gateweaver
@@ -1300,7 +1300,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Woodland Apparition
 - 1× Pulse of Sacrifice
 - 1× Twilight Troubadour
-- 1× Unquenched
+- 1× Sunrise Virtuoso
 - 1× Fell Swoop
 - 1× Burst of Obliteration
 - 1× Rite of Summoning
@@ -1349,7 +1349,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Pattern Seeker
 - 1× Annihilation from Below
 - 1× Guiding Light
-- 1× Silent Gatherer
+- 1× Fractured Vessel
 - 1× Torchbearer of the Abyss
 - 1× Cloudback Courier
 - 1× Gateweaver
@@ -1392,7 +1392,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 2× Portal of Twin Paths
 - 2× Eternal Stag
 - 2× Vigilant Howler
-- 2× Reclaimer of Lost Paths
+- 2× Seeker of Lost Paths
 - 2× Ebonwing
 - 2× Moonbound Wolf
 - 2× Ethereal Courser
@@ -1435,7 +1435,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Ambersting
 - 1× Angel of Memory
 - 1× Amber Aurelia
-- 1× Sylvan Matriarch
+- 1× Horizon Chaser
 - 1× Bladefall
 - 1× Lumineth
 - 1× Aurora Conductor
@@ -1459,7 +1459,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Containment Specialist
 - 1× Quiet Reflection
 - 1× Heavenward Penitent
-- 1× Torn Circuit Feeder
+- 1× Reforged Construct
 - 1× Nexus Wayfinder
 - 1× Augur Crow
 
@@ -1515,7 +1515,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 1× Sky Voyager
 - 1× Dusk Duelist
 - 1× Soulcleft Spinner
-- 1× Depthwalker
+- 1× Vizier of Portents
 - 1× Curio Dealer
 - 1× Ashen Remnant
 - 1× The Dread Sovereign
@@ -1525,7 +1525,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 1× Angel of Memory
 - 1× Amber Aurelia
 - 1× Wondrous Clearing
-- 1× Sylvan Matriarch
+- 1× Horizon Chaser
 - 1× Lumineth
 - 1× Aurora Conductor
 - 1× Kindlehorn
@@ -1598,7 +1598,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 1× Sky Voyager
 - 1× Dusk Duelist
 - 1× Soulcleft Spinner
-- 1× Depthwalker
+- 1× Vizier of Portents
 - 1× Ashen Remnant
 - 1× The Dread Sovereign
 - 1× Dawnhorn Elder
@@ -1607,7 +1607,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 1× Angel of Memory
 - 1× Amber Aurelia
 - 1× Wondrous Clearing
-- 1× Sylvan Matriarch
+- 1× Horizon Chaser
 - 1× Lumineth
 - 1× Kindlehorn
 - 1× Carrion Lord
@@ -1642,7 +1642,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 2× Portal of Twin Paths
 - 2× Eternal Stag
 - 2× Vigilant Howler
-- 2× Reclaimer of Lost Paths
+- 2× Seeker of Lost Paths
 - 2× Ebonwing
 - 2× Moonbound Wolf
 - 2× Ethereal Courser
@@ -1676,7 +1676,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Sky Voyager
 - 1× Dusk Duelist
 - 1× Soulcleft Spinner
-- 1× Depthwalker
+- 1× Vizier of Portents
 - 1× Curio Dealer
 - 1× Ashen Remnant
 - 1× The Dread Sovereign
@@ -1685,7 +1685,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Ambersting
 - 1× Angel of Memory
 - 1× Amber Aurelia
-- 1× Sylvan Matriarch
+- 1× Horizon Chaser
 - 1× Lumineth
 - 1× Aurora Conductor
 - 1× Kindlehorn
@@ -1703,7 +1703,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Mother of Flames
 - 1× Still Dreamer
 - 1× Heavenward Penitent
-- 1× Torn Circuit Feeder
+- 1× Reforged Construct
 - 1× Augur Crow
 
 ## Gunnar Deepforge signature — Warrior Abandon Ramp
@@ -1773,7 +1773,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Invoker of Myths
 - 1× Frontline Martyr
 - 1× Crescendo Channeler
-- 1× Prism Caller
+- 1× Aurora Rider
 - 1× Worldbreacher
 - 1× Ash Sower
 - 1× Young Huntress
@@ -1782,7 +1782,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Epiphany Unfolded
 - 1× Shapeshifter Spirit
 - 1× Dawnblade Wanderer
-- 1× Mirror Protocol
+- 1× Bloodbroker
 - 1× Riftwalker
 - 1× Seeker of the Radiant Wilds
 - 1× Featherlight Summoner
@@ -1821,10 +1821,10 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 2× Blood Reaver
 - 2× Assault Leader
 - 2× Company Commander
-- 2× Prism Caller
+- 2× Aurora Rider
 - 2× Young Huntress
 - 2× Winterbough Guide
-- 2× Mirror Protocol
+- 2× Bloodbroker
 - 2× Silent Observer
 - 2× Starbound Striker
 - 2× Revered Prince
@@ -1885,7 +1885,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 1× Wired Duelist
 - 1× Vanguard Charger
 - 1× Ruthless Conquerer
-- 1× Lanternwood Scout
+- 1× Steel Abomination
 - 1× Blood Moon Ronin
 - 1× Advance Gunner
 - 1× Containment Specialist
@@ -1961,12 +1961,12 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× Blade of Unity
 - 1× Pit Descender
 - 1× Invoker of Myths
-- 1× Prism Caller
+- 1× Aurora Rider
 - 1× Prophet of the Consumed
 - 1× Worldbreacher
 - 1× Voidsire
 - 1× Vault Infiltrator
-- 1× Mirror Protocol
+- 1× Bloodbroker
 - 1× Riftwalker
 - 1× Blood Altar Monarch
 - 1× Flamestride Rider
@@ -2063,7 +2063,7 @@ Tide-fac-02 is built almost entirely of characters (41 of 45 cards) and operates
 - 1× Ashen Remnant
 - 1× The Dread Sovereign
 - 1× Entropy Spike
-- 1× Reclaimer of Lost Paths
+- 1× Seeker of Lost Paths
 - 1× Dune Reaper
 - 1× Stolen Genesis
 - 1× Duskwall Delver
@@ -2075,7 +2075,7 @@ Tide-fac-02 is built almost entirely of characters (41 of 45 cards) and operates
 - 1× Dreadweaver
 - 1× Vigil Keeper
 - 1× Carrion Shepherd
-- 1× Torn Circuit Feeder
+- 1× Reforged Construct
 - 1× Scrap Reclaimer
 
 ## Lean: Flash of Power — Event Storm Combo
@@ -2340,7 +2340,7 @@ Tide-fac-08 is an 80% character tide built almost entirely around spirit animals
 - 1× Ridge Vortex Explorer
 - 1× Dustborn Veteran
 - 1× Duneguard Captain
-- 1× Unquenched
+- 1× Sunrise Virtuoso
 - 1× Emberwatch Rescuer
 - 1× Hope's Vanguard
 - 1× Tidewreck Navigator
@@ -2359,7 +2359,7 @@ Tide-fac-08 is an 80% character tide built almost entirely around spirit animals
 - 1× Ash Harbinger
 - 1× Pyrokinetic Surge
 - 1× Kindred Sparks
-- 1× Silent Gatherer
+- 1× Fractured Vessel
 - 1× Lurking Dread
 - 1× Wasteland Arbitrator
 - 1× Titan of Forgotten Echoes
@@ -2431,7 +2431,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Data Pulse
 - 1× Fell the Mighty
 - 1× Pulse of Sacrifice
-- 1× Unquenched
+- 1× Sunrise Virtuoso
 - 1× Echo Architect
 - 1× Call the Lost
 - 1× Sunken Radiance
@@ -2501,12 +2501,12 @@ Tide-fac-30 is built almost entirely around spirit animal characters (36 of 45 c
 - 1× He Who Lies Dreaming
 - 1× Company Commander
 - 1× Dreadmount Sovereign
-- 1× Prism Caller
+- 1× Aurora Rider
 - 1× Young Huntress
 - 1× Voidsire
 - 1× Winterbough Guide
 - 1× Shapeshifter Spirit
-- 1× Mirror Protocol
+- 1× Bloodbroker
 - 1× Riftwalker
 - 1× Silent Observer
 - 1× Starbound Striker
@@ -2579,7 +2579,7 @@ Tide-fac-12 is built almost entirely of warriors (42 of 45 copies) and organizes
 Tide-fac-13 is a character-heavy spirit animal tribal deck (35 of 45 copies are characters) built around flooding the board with cheap spirit animals and then dramatically elevating their spark values. The central pump engine runs on two Support creatures: Eternal Stag, which gives all supported spirit animals +1✦ while also drawing more spirit animals on activation, and Ghostlight Wolves, which grants supported spirit animals +2✦ and generates 1● per allied spirit animal on activation. On top of those stacking auras, Mystic Runefish provides a decisive activated ability that sets every allied spirit animal's ✦ to 7 for 5●, effectively erasing the individual deficiencies of small or low-spark creatures. The draw suite — Celestial Reverie triggering a card draw per character played, Dreamvale Monarch drawing on materialization, Dreamcatcher's Call discovering and directly materializing a character of chosen cost, and Shatterpoint Agent chaining discoveries upward by discarding — refills the hand while deploying the board. Spirit Bond serves as the mass finisher, granting every allied character unstoppable and +X✦ where X equals the number of allied characters, turning a full board into a lethal one-turn swing. The nearest sibling tide shares the same spirit animal shell and Spirit Bond closer, but is oriented around harvesting energy from a wide board of cheap creatures through Dawn triggers and stored charge tokens; tide-fac-13 is distinguished by its investment in ✦ amplification infrastructure — the Support aura pair and Mystic Runefish — that converts board presence into raw spark rather than fuel for further plays.
 
 - 2× Guide of Lost Souls
-- 2× Reclaimer of Lost Paths
+- 2× Seeker of Lost Paths
 - 2× Exiles of the Last Light
 - 1× Iron Pharaoh
 - 1× Dustborn Veteran
@@ -2655,7 +2655,7 @@ This tide is almost entirely characters (43 of 45 copies), with warriors making 
 - 1× Vault Infiltrator
 - 1× Winterbough Guide
 - 1× Shapeshifter Spirit
-- 1× Mirror Protocol
+- 1× Bloodbroker
 - 1× Riftwalker
 - 1× Silent Observer
 - 1× Starbound Striker
@@ -2705,12 +2705,12 @@ This tide is almost entirely warriors (43 of 45 cards) built around a tight loop
 - 1× Dreadmount Sovereign
 - 1× Invoker of Myths
 - 1× Crescendo Channeler
-- 1× Prism Caller
+- 1× Aurora Rider
 - 1× Worldbreacher
 - 1× Young Huntress
 - 1× Voidsire
 - 1× Winterbough Guide
-- 1× Mirror Protocol
+- 1× Bloodbroker
 - 1× Riftwalker
 - 1× Silent Observer
 - 1× Starbound Striker
@@ -2760,7 +2760,7 @@ Tide-fac-16 is almost entirely characters (43 of 45 copies), nearly all warriors
 - 1× Company Commander
 - 1× Dreadmount Sovereign
 - 1× Crescendo Channeler
-- 1× Prism Caller
+- 1× Aurora Rider
 - 1× Young Huntress
 - 1× Winterbough Guide
 - 1× Shapeshifter Spirit
@@ -3135,7 +3135,7 @@ This tide is built around a dense curve of inexpensive survivors whose arrival a
 - 2× Dustborn Veteran
 - 2× Volcanic Channeler
 - 2× Guide of Lost Souls
-- 2× Reclaimer of Lost Paths
+- 2× Seeker of Lost Paths
 - 2× Kindred Sparks
 - 2× Exiles of the Last Light
 - 1× Iron Pharaoh
@@ -3213,7 +3213,7 @@ Tide-fac-26 is a character-heavy survivor tide built around the abandon trigger 
 - 1× Cost of Victory
 - 1× Exile
 - 1× Defiant Holdout
-- 1× Silent Gatherer
+- 1× Fractured Vessel
 - 1× Exiles of the Last Light
 - 1× Dreadweaver
 - 1× Wasteland Arbitrator
@@ -3232,7 +3232,7 @@ Tide-fac-26 is a character-heavy survivor tide built around the abandon trigger 
 
 Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its nearest siblings and centers on a tightly interlocking discard loop. Two copies of Torchbearer of the Abyss ("Once per turn, when you discard a card, draw a card and gain 1●") act as the primary engine: every discard becomes card-neutral and generates energy, letting the deck chain draw-discard effects with Grotto Seer, Evacuation Enforcer, Skies of Change, and Sunken Radiance without falling behind on resources. That energy feeds a secondary event-matter payoff layer: Architect of Memory gains +4✦ and awakened once three events sit in the void, Minstrel of Falling Light grows +1✦ per event in the void and can cycle events at will, and Oracle of Shifting Skies foresees 1 on every event played, turning the discard loop into a constant stream of foresight. The accumulated void depth then unlocks burst finishers — Cascading Detonation copies the next event twice, Twice-Lit Portal copies it once, and Weight of Memory dissolves any enemy whose ✦ is at or below the void count at zero cost as a fast interrupt. Compared to its closest sibling (tide-fac-32), which redirects discards into 1✦ warrior figments via Harborwarden and Hope's Vanguard and leans on cheap-character void recursion (Veil of the Wastes, Graywatch, Paradox Enforcer) to build a persistent board, tide-fac-27 has almost no token production and minimal recursion; instead it converts void depth into immediate removal and explosive event-copy turns, rewarding players who manage the void as a resource rather than a source of recurring bodies.
 
-- 2× Reclaimer of Lost Paths
+- 2× Seeker of Lost Paths
 - 2× Kindred Sparks
 - 1× Silent Avenger
 - 1× Iron Pharaoh
@@ -3292,7 +3292,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 1× Scorched Reckoning
 - 1× Fell the Mighty
 - 1× Woodland Apparition
-- 1× Unquenched
+- 1× Sunrise Virtuoso
 - 1× Rite of Summoning
 - 1× Sunken Radiance
 - 1× Architect of Memory
@@ -3314,7 +3314,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 1× Ash Harbinger
 - 1× Pattern Seeker
 - 1× Annihilation from Below
-- 1× Silent Gatherer
+- 1× Fractured Vessel
 - 1× Wasteland Arbitrator
 - 1× Key Sifter
 - 1× Rubble Diviner
@@ -3342,7 +3342,7 @@ This tide is split between characters and events (22 characters, 23 events), wit
 - 1× Data Pulse
 - 1× Fell the Mighty
 - 1× Pulse of Sacrifice
-- 1× Unquenched
+- 1× Sunrise Virtuoso
 - 1× Echo Architect
 - 1× Call the Lost
 - 1× Sunken Radiance
@@ -3412,12 +3412,12 @@ This is a 43-character warrior tide with only two events, so its card flow and r
 - 1× Company Commander
 - 1× Dreadmount Sovereign
 - 1× Crescendo Channeler
-- 1× Prism Caller
+- 1× Aurora Rider
 - 1× Young Huntress
 - 1× Voidsire
 - 1× Vault Infiltrator
 - 1× Winterbough Guide
-- 1× Mirror Protocol
+- 1× Bloodbroker
 - 1× Riftwalker
 - 1× Silent Observer
 - 1× Starbound Striker
@@ -3545,7 +3545,7 @@ This is a character-heavy discard engine (35 characters, 10 events) whose lean a
 - 1× Ridge Vortex Explorer
 - 1× Fell the Mighty
 - 1× Woodland Apparition
-- 1× Unquenched
+- 1× Sunrise Virtuoso
 - 1× Hope's Vanguard
 - 1× Sunken Radiance
 - 1× Architect of Memory
@@ -3568,7 +3568,7 @@ This is a character-heavy discard engine (35 characters, 10 events) whose lean a
 - 1× Seek Answers
 - 1× Pattern Seeker
 - 1× Annihilation from Below
-- 1× Silent Gatherer
+- 1× Fractured Vessel
 - 1× Torchbearer of the Abyss
 - 1× Wasteland Arbitrator
 - 1× Aerie Defender
@@ -3721,7 +3721,7 @@ Tide-neu-04 is built almost entirely of warriors (28 of 30 cards are characters,
 - 1× Company Commander
 - 1× Young Huntress
 - 1× Winterbough Guide
-- 1× Mirror Protocol
+- 1× Bloodbroker
 - 1× Silent Observer
 - 1× Starbound Striker
 - 1× Revered Prince
@@ -3776,9 +3776,9 @@ Tide-neu-06 is a character-dense discard engine built around accumulating a larg
 
 - 2× Part the Veil
 - 2× Grotto Seer
-- 2× Silent Gatherer
+- 2× Fractured Vessel
 - 1× Woodland Apparition
-- 1× Unquenched
+- 1× Sunrise Virtuoso
 - 1× Sunken Radiance
 - 1× Fallen One
 - 1× Abomination of Memory
@@ -3848,14 +3848,14 @@ Tide-neu-08 is a character-dense deck (27 of 30 cards are characters) built almo
 
 - 2× Soulkindler
 - 2× Angel of Memory
-- 2× Scrap Reclaimer
+- 2× Void Salvager
 - 2× Reckless Vigilante
 - 1× Wraith of Twisting Shadows
 - 1× Unleash Ruin
 - 1× Wistful Angler
 - 1× Ethereal Army
 - 1× Petal-Seer
-- 1× Depthwalker
+- 1× Vizier of Portents
 - 1× Light of Emergence
 - 1× Wondrous Clearing
 - 1× Carrion Lord
@@ -3937,7 +3937,7 @@ Tide-neu-10 is built almost entirely from warriors, with its central engine driv
 - 1× Company Commander
 - 1× Dreadmount Sovereign
 - 1× Desolation's Edge
-- 1× Prism Caller
+- 1× Aurora Rider
 - 1× Young Huntress
 - 1× Winterbough Guide
 - 1× Silent Observer

@@ -367,7 +367,7 @@ card-number = 20
 art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Reclaimer of Lost Paths"
+name = "Seeker of Lost Paths"
 mtg-name = "Anafenza, Kin-Tree Spirit"
 id = "738a5af0-f848-4d48-bceb-9a43c9b11066"
 rendered-text = '''
@@ -376,15 +376,16 @@ Cards you reclaim are not banished when they leave play.
 2●, ☪: A character in your void gains reclaim.'''
 energy-cost = 2
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Suvivor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July15"]
+tags = ["Art Rework", "July15", "Art OK"]
 image-number = 2287436067
 art-owned = false
 card-number = 21
+art = { x = -0.126, y = 0, scale = 1.17 }
 
 [[cards]]
 name = "Clockwork Salvager"
@@ -426,22 +427,22 @@ card-number = 23
 art = { x = 1, y = 0.266, scale = 1.27 }
 
 [[cards]]
-name = "Scrap Reclaimer"
+name = "Void Salvager"
 mtg-name = "Life from the Loam"
 id = "975f49d3-213a-43fc-8079-5fe40f126a7b"
-rendered-text = """
-Awakened, Veil
+rendered-text = '''
+Awakened
 
-2●, ☪, Discard a card: Return up to 2 ≤2● cost characters from your void to your hand."""
+2●, ☪, Discard a card: Return up to two ≤2● cost characters from your void to your hand.'''
 energy-cost = 0
 card-type = "Character"
-subtype = "Tinkerer"
+subtype = "Entity"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 0
-tags = ["Art Rework", "July15"]
-image-number = 2269064817
+tags = ["Art Rework", "July15", "Art OK"]
+image-number = 443761774
 art-owned = true
 card-number = 24
 
@@ -769,21 +770,22 @@ art-owned = false
 card-number = 41
 
 [[cards]]
-name = "Sylvan Matriarch"
+name = "Horizon Chaser"
 mtg-name = "Arwen, Weaver of Hope"
 id = "89c0d03c-2199-415a-bc66-89e451034328"
 rendered-text = "When you materialize a non-figment character, it gains +X✦ where X is this character's ✦."
 energy-cost = 4
 card-type = "Character"
-subtype = "Ancient"
+subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July15"]
-image-number = 2415692455
+tags = ["Art Rework", "July15", "Art OK"]
+image-number = 2275146333
 art-owned = false
 card-number = 42
+art = { x = -0.319, y = 0.028, scale = 1.47 }
 
 [[cards]]
 name = "Riftwalker"
@@ -856,7 +858,7 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = 5
-tags = ["Art Rework", "July23", "Ally Audit"]
+tags = ["Art Rework", "Art OK", "July23", "Ally Audit"]
 image-number = 1529898275
 art-owned = false
 card-number = 46
@@ -1576,24 +1578,25 @@ card-number = 84
 art = { x = 0.546, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Torn Circuit Feeder"
+name = "Reforged Construct"
 mtg-name = "Safehold Elite"
 id = "fa7dadd8-c72f-42e7-b203-3d22aa36122f"
-rendered-text = """
-When you reclaim this character, it loses 1✦.
+rendered-text = '''
+When you reclaim this character, it gains +1✦.
 
-Reclaim 0●"""
+Reclaim 0●'''
 energy-cost = 2
 card-type = "Character"
-subtype = "Synth"
+subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
-spark = 2
-tags = ["Art Rework", "July15"]
-image-number = 2186149273
+spark = 1
+tags = ["Art Rework", "July15", "Art OK"]
+image-number = 2530615371
 art-owned = false
 card-number = 85
+art = { x = -0.084, y = -0.025, scale = 1.47 }
 
 [[cards]]
 name = "Mother of Flames"
@@ -3057,21 +3060,22 @@ card-number = 163
 art = { x = 0, y = 1, scale = 1.37 }
 
 [[cards]]
-name = "Unquenched"
+name = "Sunrise Virtuoso"
 mtg-name = "Anger"
 id = "1750c85c-f547-4d21-b7e3-9e5c5fcb3171"
 rendered-text = "When you materialize a character, trigger its \"▸Dawn\" ability."
 energy-cost = 3
 card-type = "Character"
-subtype = "Monster"
+subtype = "Musician"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "July15", "Ally Audit"]
-image-number = 461706970
+tags = ["Art Rework", "July15", "Ally Audit", "Art OK"]
+image-number = 631097744
 art-owned = false
 card-number = 164
+art = { x = 0.122, y = 0.398, scale = 1.27 }
 
 [[cards]]
 name = "Pyrestone Avatar"
@@ -3896,7 +3900,7 @@ art-owned = false
 card-number = 209
 
 [[cards]]
-name = "Depthwalker"
+name = "Vizier of Portents"
 mtg-name = "Satyr Wayfinder"
 id = "470bbf9d-a73c-4e00-bc66-cb0fa767c8de"
 rendered-text = "▸Materialized: Erode 4. You may return a ≤2● cost character from among those cards to your hand."
@@ -3907,13 +3911,14 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Self-Mill", "Art Rework", "July15"]
-image-number = 1734998174
+tags = ["Self-Mill", "Art Rework", "July15", "Art OK"]
+image-number = 447372526
 art-owned = false
 card-number = 210
+art = { x = 0, y = -0.587, scale = 1.17 }
 
 [[cards]]
-name = "Lanternwood Scout"
+name = "Steel Abomination"
 mtg-name = "Makeshift Munitions"
 id = "d89f4c33-ffd3-4313-8106-0a9f7013cad8"
 rendered-text = '''
@@ -3922,15 +3927,16 @@ rendered-text = '''
 Abandon this character: Gain X⍟ where X is the stored ⧗.'''
 energy-cost = 2
 card-type = "Character"
-subtype = "Explorer"
+subtype = "Ancient"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July15"]
-image-number = 533945359
+tags = ["Art Rework", "July15", "Art OK"]
+image-number = 2281682691
 art-owned = false
 card-number = 211
+art = { x = -0.037, y = 1, scale = 1.27 }
 
 [[cards]]
 name = "Immolate and Rise"
@@ -6925,7 +6931,7 @@ card-number = 371
 art = { x = 0.252, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Mirror Protocol"
+name = "Bloodbroker"
 mtg-name = "Oswald Fiddlebender"
 id = "a7820b34-9fdc-46cc-8357-53c8caa056b1"
 rendered-text = "☪, Abandon a warrior: Discover a warrior with cost 1● higher and materialize it."
@@ -6936,10 +6942,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Discover", "Art Rework", "July15"]
-image-number = 539227204
+tags = ["Discover", "Art Rework", "July15", "Art OK"]
+image-number = 353287676
 art-owned = false
 card-number = 372
+art = { x = 0, y = 0.328, scale = 1 }
 
 [[cards]]
 name = "Lightningborn"
@@ -7554,21 +7561,22 @@ card-number = 404
 art = { x = -0.057, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Prism Caller"
+name = "Aurora Rider"
 mtg-name = "Teshar, Ancestor's Apostle"
 id = "886c9d49-b25f-4ddd-97f0-2ec4b42eda89"
 rendered-text = "When you play a warrior, you may materialize a ≤2● cost character from your void."
 energy-cost = 4
 card-type = "Character"
-subtype = "Explorer"
+subtype = "Ancient"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 4
-tags = ["Art Rework", "July15"]
-image-number = 403770421
+tags = ["Art Rework", "July15", "Art OK"]
+image-number = 2256745747
 art-owned = false
 card-number = 405
+art = { x = 0.216, y = 1, scale = 1.57 }
 
 [[cards]]
 name = "Melodist of the Finale"
@@ -8431,21 +8439,22 @@ card-number = 451
 art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Silent Gatherer"
+name = "Fractured Vessel"
 mtg-name = "Squee, Goblin Nabob"
 id = "af739e3d-bc61-4fab-bf81-a22e78d7e524"
 rendered-text = "▸Dawn: If this character is in your void, return it to your hand."
 energy-cost = 4
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Synth"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July15"]
-image-number = 658076071
+tags = ["Art Rework", "July15", "Art OK"]
+image-number = 410445436
 art-owned = false
 card-number = 452
+art = { x = 0, y = -0.412, scale = 1.37 }
 
 [[cards]]
 name = "Archive of the Forgotten"
