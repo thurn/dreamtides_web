@@ -42,8 +42,6 @@ function makeHandoffState(opts: MakeHandoffStateOptions = {}): BattleMutableStat
     forcedResult: null,
     dreamwellDeckIndex: 0,
     nextBattleCardOrdinal: 1,
-    nextStackEntryOrdinal: 1,
-    stack: [],
     sides: {
       player: playerSide,
       enemy: enemySide,

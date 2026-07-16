@@ -35,7 +35,6 @@ import {
 } from "../../battle/types";
 import {
   allocateBattleCardInstance,
-  allocateBattleStackEntryId,
   cloneBattleDeckCardDefinition,
   cloneBattleMutableState,
 } from "../../battle/state/create-initial-state";
@@ -2142,9 +2141,6 @@ function isSameLocation(
   }
 
   if (destination.zone === "deck") {
-    if (source.zone === "stack") {
-      return false;
-    }
     if (source.zone !== "deck" || source.side !== destination.side) {
       return false;
     }
@@ -2154,13 +2150,6 @@ function isSameLocation(
     }
 
     return source.index === state.sides[destination.side].deck.length - 1;
-  }
-
-  if (destination.zone === "stack") {
-    // A card already on the stack stays put when re-targeted at the stack;
-    // re-pushing would mint a duplicate entry. Side is irrelevant — the stack
-    // is a single shared pile.
-    return source.zone === "stack";
   }
 
   return source.side === destination.side && source.zone === destination.zone;
@@ -2176,9 +2165,6 @@ function removeBattleCardFromLocation(
     case "void":
     case "banished":
       state.sides[source.side][source.zone].splice(source.index, 1);
-      return;
-    case "stack":
-      state.stack?.splice(source.index, 1);
       return;
     case "backRank":
     case "frontRank":
@@ -2212,18 +2198,6 @@ function insertBattleCardAtDebugDestination(
     }
 
     state.sides[destination.side].deck.push(battleCardId);
-    return;
-  }
-
-  if (destination.zone === "stack") {
-    const stackEntryId = allocateBattleStackEntryId(state);
-    state.stack ??= [];
-    state.stack.push({
-      stackEntryId,
-      battleCardId,
-      side: destination.side,
-      paidCost: 0,
-    });
     return;
   }
 

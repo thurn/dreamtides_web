@@ -137,22 +137,6 @@ Relevant implementation:
 - [Legacy automation control](../../src/battle/components/BattleActionBar.tsx)
 - [Cumulus inspector action contract](../../src/cumulus/screens/MobileBattleScreen.tsx)
 
-### Stack zone
-
-The battle state includes an ordered stack. The Cumulus inspector reports its
-card count, while the live board has no stack object, stack drop target, card
-inspection, or resolution actions.
-
-Parity requires Cumulus to display every stack entry, accept the supported
-stack movement gesture, and expose Void and Banish resolution. This is also a
-cross-client requirement: a command submitted from a legacy client can leave a
-card on the shared stack that a Cumulus client must be able to see and resolve.
-
-Relevant implementation:
-
-- [Legacy stack zone](../../src/battle/components/PlayableBattleScreen.tsx)
-- [Shared battle stack state](../../src/battle/types.ts)
-
 ### Full deck toolkit
 
 The Cumulus deck browser presents ordered cards with search, sort, filter, drag,
@@ -234,12 +218,11 @@ following are true on desktop and mobile:
 5. Victory can round-trip between reward presentation and terminal-board
    inspection.
 6. Basic Automation can be changed from Cumulus.
-7. Stack cards are visible, inspectable, movable, and resolvable.
-8. Reveal Top, Hide Top, Play From Top, and Reorder Full Deck are reachable.
-9. Manual Foresee supports cancel, empty-deck dismissal, play-from-top, and
+7. Reveal Top, Hide Top, Play From Top, and Reorder Full Deck are reachable.
+8. Manual Foresee supports cancel, empty-deck dismissal, play-from-top, and
    send-to-bottom behavior.
-10. Both Banished zones have visible counts and direct drop targets.
-11. Turn and result changes have equivalent accessible announcements.
-12. Each interaction submits existing battle intents through the shared
+9. Both Banished zones have visible counts and direct drop targets.
+10. Turn and result changes have equivalent accessible announcements.
+11. Each interaction submits existing battle intents through the shared
     controller and produces enough logging to reconstruct the action from a
     production game.

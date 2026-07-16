@@ -234,7 +234,6 @@ function buildInspectorView(
     phase: formatPhaseLabel(board.phase),
     activeSide: formatSideLabel(board.activeSide),
     result: board.result === null ? "In progress" : titleCase(board.result),
-    stackCount: board.stack?.length ?? 0,
     nextDreamwellOrder: nextDreamwell === undefined ? "Complete" : String(nextDreamwell.order),
     isOpponentHandRevealed: options.isOpponentHandRevealed,
     isPlayerHandHidden: options.isPlayerHandHidden,

@@ -126,7 +126,7 @@ export function createEmptySlotRecord<K extends string>(slotIds: readonly K[]): 
   }
   return record;
 }
-export type BattleZoneId = "deck" | "hand" | "void" | "banished" | "backRank" | "frontRank" | "stack";
+export type BattleZoneId = "deck" | "hand" | "void" | "banished" | "backRank" | "frontRank";
 export type BattlefieldZone = "backRank" | "frontRank";
 export type BrowseableZone = "deck" | "hand" | "void" | "banished";
 export type MarkerDiffState = "set" | "cleared" | "unchanged";
@@ -517,13 +517,6 @@ export interface BattleSideMutableState {
   dreamwellDrawnTurn: number | null;
 }
 
-export interface BattleStackEntry {
-  stackEntryId: string;
-  battleCardId: string;
-  side: BattleSide;
-  paidCost: number;
-}
-
 /**
  * Spec C-3 divides a battle session into immutable metadata (carried on
  * `BattleInit`) and a mutable runtime slice (this interface). `battleId` is
@@ -548,8 +541,6 @@ export interface BattleMutableState {
   /** Next index to draw from the shared `BattleInit.dreamwellDeck`. */
   dreamwellDeckIndex: number;
   nextBattleCardOrdinal: number;
-  nextStackEntryOrdinal?: number;
-  stack?: BattleStackEntry[];
   sides: Record<BattleSide, BattleSideMutableState>;
   cardInstances: Record<string, BattleCardInstance>;
 }
@@ -575,13 +566,7 @@ export interface BattleHandCardLocation {
 
 export interface BattleZoneCardLocation {
   side: BattleSide;
-  zone: Exclude<BattleZoneId, "hand" | "backRank" | "frontRank" | "stack">;
-  index: number;
-}
-
-export interface BattleStackCardLocation {
-  side: BattleSide;
-  zone: "stack";
+  zone: Exclude<BattleZoneId, "hand" | "backRank" | "frontRank">;
   index: number;
 }
 
@@ -594,7 +579,6 @@ export interface BattleFieldCardLocation {
 export type BattleCardLocation =
   | BattleHandCardLocation
   | BattleZoneCardLocation
-  | BattleStackCardLocation
   | BattleFieldCardLocation;
 
 export interface BattleLaneJudgment {

@@ -228,17 +228,6 @@ export function selectBattleCardLocation(
       };
     }
 
-    const stackIndex = (state.stack ?? []).findIndex((entry) =>
-      entry.side === side && entry.battleCardId === battleCardId
-    );
-    if (stackIndex >= 0) {
-      return {
-        side,
-        zone: "stack",
-        index: stackIndex,
-      };
-    }
-
     const reserveLocation = selectOccupiedBattlefieldSlot(
       state,
       side,

@@ -90,6 +90,9 @@ describe("BattleInspector", () => {
     expect(container.textContent).toContain("Skip to rewards");
     expect(container.textContent).not.toContain("Card State");
     expect(container.textContent).not.toContain("Right-click this card");
+    expect(
+      [...container.querySelectorAll(".row-ctl .lbl")].map((node) => node.textContent),
+    ).not.toContain("Stack");
     const stateRow = [...container.querySelectorAll(".row-ctl .val")].find((node) =>
       node.textContent?.includes("Bk"),
     );

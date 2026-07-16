@@ -51,8 +51,6 @@ export function createInitialBattleState(battleInit: BattleInit): BattleMutableS
     forcedResult: null,
     dreamwellDeckIndex: 0,
     nextBattleCardOrdinal: 1,
-    nextStackEntryOrdinal: 1,
-    stack: [],
     sides: {
       // Energy starts at 0 for both sides; each side's maximum ● is raised by
       // the Dreamwell cards it draws (rules §The Dreamwell and Energy). The
@@ -89,8 +87,6 @@ export function cloneBattleMutableState(state: BattleMutableState): BattleMutabl
     forcedResult: state.forcedResult,
     dreamwellDeckIndex: state.dreamwellDeckIndex,
     nextBattleCardOrdinal: state.nextBattleCardOrdinal,
-    nextStackEntryOrdinal: state.nextStackEntryOrdinal ?? 1,
-    stack: (state.stack ?? []).map((entry) => ({ ...entry })),
     sides: {
       player: cloneBattleSideMutableState(state.sides.player),
       enemy: cloneBattleSideMutableState(state.sides.enemy),
@@ -236,11 +232,4 @@ function createEmptyFrontRank(): Record<FrontRankSlotId, string | null> {
 
 export function formatBattleCardId(ordinal: number): string {
   return `bc_${String(ordinal).padStart(4, "0")}`;
-}
-
-export function allocateBattleStackEntryId(state: BattleMutableState): string {
-  const ordinal = state.nextStackEntryOrdinal ?? 1;
-  const stackEntryId = `stack_${String(ordinal).padStart(4, "0")}`;
-  state.nextStackEntryOrdinal = ordinal + 1;
-  return stackEntryId;
 }

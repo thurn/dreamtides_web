@@ -53,8 +53,6 @@ export function formatZoneLabel(zone: BattleZoneId): string {
       return "Back Rank";
     case "frontRank":
       return "Front Rank";
-    case "stack":
-      return "Stack";
   }
 }
 

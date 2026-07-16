@@ -9,7 +9,7 @@ function side(deck: string[], hand: string[]): BattleSideMutableState {
 }
 
 function state(): BattleMutableState {
-  return { battleId: "battle-inspector-fixture", activeSide: "player", turnNumber: 2, phase: "day", result: null, forcedResult: null, dreamwellDeckIndex: 0, nextBattleCardOrdinal: 4, stack: [], cardInstances: {}, sides: { player: side(["p-deck-a", "p-deck-b"], ["p-hand"]), enemy: side(["e-deck-a", "e-deck-b"], ["e-hand"]) } };
+  return { battleId: "battle-inspector-fixture", activeSide: "player", turnNumber: 2, phase: "day", result: null, forcedResult: null, dreamwellDeckIndex: 0, nextBattleCardOrdinal: 4, cardInstances: {}, sides: { player: side(["p-deck-a", "p-deck-b"], ["p-hand"]), enemy: side(["e-deck-a", "e-deck-b"], ["e-hand"]) } };
 }
 
 describe("resolveBattleInspectorIntent", () => {

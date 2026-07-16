@@ -60,9 +60,9 @@ const BOOKEND_PHASES: ReadonlySet<BattlePhase> = new Set<BattlePhase>([
  *
  * The rules currently automated are:
  *
- *  - **Playing a card costs energy.** Moving a card from hand into play (a
- *    battlefield slot or the stack) reduces the controller's current ● by the
- *    card's energy cost (rules §Playing Cards and the Stack).
+ *  - **Playing a card costs energy.** Moving a card from hand into a battlefield
+ *    slot reduces the controller's current ● by the card's energy cost (rules
+ *    §Playing Cards and the Stack).
  *  - **Events resolve to the void.** An event played from hand is routed to the
  *    void instead of staying in play (rules §Card Types — Event).
  *  - **The Challenge phase resolves by spark.** When the active player ends
@@ -144,8 +144,8 @@ export function planBasicAutomationCommands(
 }
 
 /**
- * A "play" is moving a card out of hand and into play (a battlefield slot or the
- * stack). Playing costs energy; an event is routed straight to the void.
+ * A "play" is moving a card out of hand and into a battlefield slot. Playing
+ * costs energy; an event is routed straight to the void.
  */
 function planCardPlay(
   state: BattleMutableState,
@@ -158,8 +158,7 @@ function planCardPlay(
   }
 
   const destination = edit.destination;
-  const isPlayDestination =
-    "slotId" in destination || destination.zone === "stack";
+  const isPlayDestination = "slotId" in destination;
   if (!isPlayDestination) {
     return [command];
   }

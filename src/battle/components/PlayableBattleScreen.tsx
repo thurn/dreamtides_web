@@ -70,7 +70,6 @@ import { BattleRewardSurface } from "./BattleRewardSurface";
 import { BattleSideSummaryPopover } from "./BattleSideSummaryPopover";
 import { BattleStatusBar } from "./BattleStatusBar";
 import { BattleStatusStrip } from "./BattleStatusStrip";
-import { BattleGameCard } from "./BattleGameCard";
 import { BattleDreamwellDisplay } from "./BattleDreamwellDisplay";
 import { BattleCardPickerOverlay } from "./BattleCardPickerOverlay";
 import { BattleChoicePromptOverlay } from "./BattleChoicePromptOverlay";
@@ -82,7 +81,6 @@ import { CumulusBattleZoneBrowser } from "./CumulusBattleZoneBrowser";
 import {
   createPlayCardFromHandCommand,
   createMoveCardToDeckCommand,
-  createMoveCardToStackCommand,
   createMoveCardToZoneCommand,
 } from "./battle-ui-commands";
 import { resolveBattleInspectorIntent } from "./battle-inspector-intents";
@@ -1037,7 +1035,6 @@ function PlayableBattleScreenInner({
   // | Drop onto OCCUPIED slot, source NOT a battlefield slot   | —                                 | no-op (physical restriction)                |
   // | Drop onto hand/void/banished zone button                 | that zone                         | MOVE_CARD_TO_ZONE ({ side, zone })          |
   // | Drop onto deck zone                                      | deck top                          | MOVE_CARD_TO_ZONE ({ side, zone:"deck"... })|
-  // | Drop onto stack zone                                     | stack                             | MOVE_CARD_TO_ZONE ({ side, zone:"stack" })  |
   // | Double-click a hand card                                 | first open reserve, else deployed | MOVE_CARD_TO_ZONE via battlefield helper    |
   function handleSlotDrop(target: BattleFieldSlotAddress): void {
     if (!canPlayerAct) {
@@ -1157,43 +1154,6 @@ function PlayableBattleScreenInner({
       ? createMoveCardToDeckCommand(pendingDrag.battleCardId, side, "top", sourceSurface)
       : createMoveCardToZoneCommand(pendingDrag.battleCardId, side, zone, sourceSurface);
     handleCommand(command);
-    setPendingDrag(null);
-  }
-
-  function handleStackDrop(): void {
-    if (!canPlayerAct) {
-      return;
-    }
-    if (pendingDrag === null) {
-      return;
-    }
-    if (
-      pendingDrag.kind === "battle-card"
-      && selectBattleCardLocation(board, pendingDrag.battleCardId)?.zone === "hand"
-    ) {
-      handlePlayPendingHandCard();
-      return;
-    }
-
-    if (pendingDrag.kind === "pool-card") {
-      handleCommand({
-        id: "DEBUG_EDIT",
-        edit: {
-          kind: "CREATE_CARD_FROM_DEFINITION",
-          definition: pendingDrag.definition,
-          destination: { side: "player", zone: "stack" },
-          createdAtMs: Date.now(),
-        },
-        sourceSurface: "pool-viewer",
-      });
-      setPendingDrag(null);
-      return;
-    }
-
-    const side = selectBattleCardLocation(board, pendingDrag.battleCardId)?.side ?? "player";
-    handleCommand(
-      createMoveCardToStackCommand(pendingDrag.battleCardId, side, pendingDrag.sourceSurface),
-    );
     setPendingDrag(null);
   }
 
@@ -1834,21 +1794,6 @@ function PlayableBattleScreenInner({
               automationEnabled={isBasicAutomationEnabled}
             />
             <div className="battlefield-zone-layout">
-              <BattleStackZone
-                state={board}
-                pendingDragCardId={pendingDragCardId}
-                onDrop={handleStackDrop}
-                onCardClick={handleBattlefieldCardClick}
-                onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
-                onCardDragStart={handleCardDragStart}
-                onCardDragEnd={handleCardDragEnd}
-                onResolveToBanished={(battleCardId, side) => handleCommand(
-                  createMoveCardToZoneCommand(battleCardId, side, "banished", "battlefield"),
-                )}
-                onResolveToVoid={(battleCardId, side) => handleCommand(
-                  createMoveCardToZoneCommand(battleCardId, side, "void", "battlefield"),
-                )}
-              />
               <div className="battle-side-zone-column player">
                 <div className="battle-small-zone-row">
                   <BattleSmallZoneDropTarget
@@ -2229,90 +2174,6 @@ function BattleSmallZoneDropTarget({
       <span className="battle-small-zone-label">{label}</span>
       <span className="battle-small-zone-count">{String(count)}</span>
     </button>
-  );
-}
-
-function BattleStackZone({
-  state,
-  pendingDragCardId,
-  onDrop,
-  onCardClick,
-  onCardContextMenu,
-  onCardDragStart,
-  onCardDragEnd,
-  onResolveToBanished,
-  onResolveToVoid,
-}: {
-  state: BattleMutableState;
-  pendingDragCardId: string | null;
-  onDrop: () => void;
-  onCardClick: (battleCardId: string) => void;
-  onCardContextMenu: (battleCardId: string, event: ReactMouseEvent<HTMLDivElement>) => void;
-  onCardDragStart: (battleCardId: string) => void;
-  onCardDragEnd: () => void;
-  onResolveToBanished: (battleCardId: string, side: BattleSide) => void;
-  onResolveToVoid: (battleCardId: string, side: BattleSide) => void;
-}) {
-  return (
-    <section
-      data-battle-region="stack-zone"
-      className={`battle-stack-zone ${pendingDragCardId !== null ? "drop-target" : ""}`}
-      onDragOver={(event) => {
-        if (pendingDragCardId !== null) {
-          event.preventDefault();
-        }
-      }}
-      onDrop={(event) => {
-        event.preventDefault();
-        onDrop();
-      }}
-    >
-      <div className="battle-stack-zone-header">
-        <span>Stack</span>
-      </div>
-      <div className="battle-stack-zone-cards">
-        {(state.stack ?? []).map((entry) => {
-          const instance = state.cardInstances[entry.battleCardId];
-          if (instance === undefined) {
-            return null;
-          }
-          return (
-            <div key={entry.stackEntryId} className="battle-stack-entry">
-              <BattleGameCard
-                instance={instance}
-                reserved={false}
-                selected={false}
-                draggable
-                onActivate={() => onCardClick(entry.battleCardId)}
-                onContextMenu={(event) => {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  onCardContextMenu(entry.battleCardId, event);
-                }}
-                onDragStart={() => onCardDragStart(entry.battleCardId)}
-                onDragEnd={onCardDragEnd}
-              />
-              <div className="battle-stack-entry-actions">
-                <button
-                  type="button"
-                  className="btn ghost sm"
-                  onClick={() => onResolveToVoid(entry.battleCardId, entry.side)}
-                >
-                  Void
-                </button>
-                <button
-                  type="button"
-                  className="btn ghost sm"
-                  onClick={() => onResolveToBanished(entry.battleCardId, entry.side)}
-                >
-                  Banish
-                </button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </section>
   );
 }
 

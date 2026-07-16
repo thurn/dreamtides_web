@@ -189,7 +189,6 @@ export interface MobileBattleInspectorView {
   readonly phase: string;
   readonly activeSide: string;
   readonly result: string;
-  readonly stackCount: number;
   readonly nextDreamwellOrder: string;
   readonly isOpponentHandRevealed: boolean;
   readonly isPlayerHandHidden: boolean;
@@ -2136,7 +2135,6 @@ function BattleInspectorContent({
             <InspectorValue label="Phase" value={inspector.phase} />
             <InspectorValue label="Active side" value={inspector.activeSide} />
             <InspectorValue label="Result" value={inspector.result} />
-            <InspectorValue label="Stack cards" value={String(inspector.stackCount)} />
             <InspectorValue label="Next Dreamwell order" value={inspector.nextDreamwellOrder} />
           </div>
         </div>

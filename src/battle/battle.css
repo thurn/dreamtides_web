@@ -296,7 +296,7 @@
   min-height: 0;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 12px;
   overflow: hidden;
 }
@@ -492,76 +492,6 @@
 
 .judgment-divider.active {
   background: linear-gradient(90deg, transparent, var(--accent) 25%, var(--accent) 75%, transparent);
-}
-
-.battle-stack-zone {
-  flex: 0 0 clamp(177px, 21vw, 222px);
-  align-self: stretch;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-width: 0;
-  min-height: 0;
-  padding: 9px 10px;
-  border: 1px dashed var(--line);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.03);
-  overflow: hidden;
-}
-
-.battle-stack-zone.drop-target {
-  border-color: var(--accent);
-  background: var(--accent-soft);
-}
-
-.battle-stack-zone-header {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 8px;
-  min-width: 0;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 11px;
-  letter-spacing: 0;
-  text-transform: uppercase;
-  color: var(--text-dim);
-}
-
-.battle-stack-zone-cards {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  min-width: 0;
-  min-height: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.battle-stack-entry {
-  display: grid;
-  grid-template-rows: auto auto;
-  align-items: start;
-  align-content: start;
-  gap: 7px;
-  flex: 0 0 auto;
-  width: clamp(112px, 13vw, 142px);
-  min-height: 0;
-}
-
-.battle-stack-entry .battle-card {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 78 / 108;
-  min-height: 0;
-}
-
-.battle-stack-entry-actions {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 5px;
-  min-width: 0;
 }
 
 .status-strip {

@@ -83,7 +83,7 @@ describe("createInitialBattleState", () => {
       expect(Object.values(state.sides[side].backRank).every((slot) => slot === null)).toBe(true);
       expect(Object.values(state.sides[side].frontRank).every((slot) => slot === null)).toBe(true);
     }
-    expect(state.stack ?? []).toEqual([]);
+    expect(state).not.toHaveProperty("stack");
   });
 
   it("initializes per-side visibility flags required by the spec state model", () => {

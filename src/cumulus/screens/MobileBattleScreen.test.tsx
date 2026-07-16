@@ -137,7 +137,6 @@ function makeView(): MobileBattleView {
       phase: "Day",
       activeSide: "Player",
       result: "In progress",
-      stackCount: 0,
       nextDreamwellOrder: "4",
       isOpponentHandRevealed: false,
       isPlayerHandHidden: false,
@@ -448,6 +447,7 @@ describe("MobileBattleScreen", () => {
     expect(container.textContent).toContain("Battle Snapshot");
     expect(container.textContent).toContain("Your Resources");
     expect(container.textContent).toContain("Back Rank");
+    expect(container.textContent).not.toContain("Stack cards");
 
     act(() => {
       container.querySelector<HTMLButtonElement>('[data-testid="battle-inspector-draw-player"]')?.click();

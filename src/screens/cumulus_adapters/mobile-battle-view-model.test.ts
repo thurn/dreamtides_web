@@ -431,7 +431,6 @@ describe("buildMobileBattleView", () => {
       turn: "4",
       phase: "Night",
       result: "In progress",
-      stackCount: 0,
       nextDreamwellOrder: "Complete",
       isOpponentHandRevealed: true,
       isPlayerHandHidden: true,

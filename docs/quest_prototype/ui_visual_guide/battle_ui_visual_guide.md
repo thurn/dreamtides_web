@@ -142,10 +142,6 @@ battlefield sit two **side-zone columns**, one per side, each containing:
   dreamsigns). The strip also exposes per-side energy/score/draw steppers used
   for manual play and debugging.
 
-There is also a **Stack zone** (labeled "Stack") used while a card/effect is
-resolving, with per-entry "Void" / "Banish" resolution buttons, and it accepts
-dropped cards.
-
 **The player's hand.** A **hand tray** runs along the bottom: the local player's
 cards fanned/rowed face-up, showing each card's cost and art. With Basic
 Automation on, cards whose effect is auto-handled carry a small **automation
@@ -207,7 +203,7 @@ drawer of revealed Dreamwell cards), and the **Inspector** toggle.
 - **The AI approve / reject icons** (in the phase cluster) — when the AI holds a
   proposal, a check **approves** it (committing it to shared state) and a cross
   **rejects** a proposed card play.
-- **Void / Banished / Stack zones** — click to open a zone's card browser; drop
+- **Void / Banished zones** — click to open a zone's card browser; drop
   cards onto them to move cards there.
 - **Side Status Strip portrait** — opens the side's Dreamcaller/dreamsign summary.
 - **Action Bar buttons** — Undo, Redo, toggle Automation, Battle Log, Dreamwell
@@ -234,7 +230,7 @@ Defeat shows the result overlay with a reset path — see the
 
 **Redesign notes.** This is the hardest screen to fit to portrait: it must
 simultaneously present two mirrored multi-rank boards, two side columns of
-resources and zones, a phase timeline, a stack, the hand, and an action bar.
+resources and zones, a phase timeline, the hand, and an action bar.
 The developer Inspector currently consumes roughly a third of the width and
 should be removed from gameplay-layout consideration entirely (re-homed to a
 separate debug screen). The persistent "chrome" a mobile layout must keep
@@ -398,7 +394,7 @@ narrow screen.
 ![Card right-click context menu](images/b04-card-context-menu.png)
 
 **What it does.** Right-clicking (or long-pressing) any card — in hand, on the
-battlefield, in the stack, or in a zone browser — opens a context menu of actions
+battlefield, or in a zone browser — opens a context menu of actions
 for that specific card. It is primarily a **developer/manual-play** tool: it
 exposes direct moves and edits that bypass the normal rules flow, useful for
 setting up board states and debugging. In a mobile redesign this might be a long
@@ -579,8 +575,8 @@ draw order and energy values legible is what matters.
 
 ![Card hover preview with term definitions](images/b15-card-hover-preview.png)
 
-**What it does.** Hovering (or long-pressing) any card on the battlefield, in the
-stack, or in a zone browser raises an enlarged **card preview** floating near the
+**What it does.** Hovering (or long-pressing) any card on the battlefield or in a
+zone browser raises an enlarged **card preview** floating near the
 pointer, alongside a **term-definitions panel** that explains the glossary
 keywords in that card's rules text. This is the pervasive "read this card closely"
 affordance used throughout the battle.
@@ -590,7 +586,7 @@ rules text) with, to one side, a small panel listing each glossary term the card
 uses and its definition (e.g. "▸Dawn — Triggers at the start of your turn"). It
 follows the pointer and flips to stay on screen.
 
-**What you can hover:** any battlefield/stack/zone card. (Hand cards have their own
+**What you can hover:** any battlefield or zone card. (Hand cards have their own
 in-tray enlarge-on-hover behavior.)
 
 **Redesign notes.** This is the primary way players read card detail mid-battle, so
@@ -744,8 +740,8 @@ above a scrolling body of sections.
 - **Battle State** — a read-out: chips for the current **Turn**, **phase**,
   **active side**, and **result** ("Live" until decided); the **Battle**
   (opponent name); per-side **zone counts** in a compact code (H=hand, D=deck,
-  V=void, B=banished, Bk=back rank, Fr=front rank); the **Stack** size; and the
-  **Dreamwell order** band of the next Dreamwell card.
+  V=void, B=banished, Bk=back rank, Fr=front rank); and the **Dreamwell order**
+  band of the next Dreamwell card.
 - **AI Reasoning** (only in AI battles) — the planner's read on the current
   decision: the held **Proposal** description, its **Kind**, the **Card** and
   **Target** involved, the **Heuristic** score before→after, a live static

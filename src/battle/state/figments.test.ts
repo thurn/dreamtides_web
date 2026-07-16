@@ -118,8 +118,6 @@ function makeStateWith(instance: BattleCardInstance): BattleMutableState {
     forcedResult: null,
     dreamwellDeckIndex: 0,
     nextBattleCardOrdinal: 1,
-    nextStackEntryOrdinal: 1,
-    stack: [],
     sides: {
       player: makeEmptySide(),
       enemy: makeEmptySide(),

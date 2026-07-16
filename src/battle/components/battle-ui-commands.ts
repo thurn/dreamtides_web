@@ -133,22 +133,6 @@ export function createMoveCardToZoneCommand(
   };
 }
 
-export function createMoveCardToStackCommand(
-  battleCardId: string,
-  side: BattleSide,
-  sourceSurface: BattleCommandSourceSurface,
-): BattleCommand {
-  return {
-    id: "DEBUG_EDIT",
-    edit: {
-      kind: "MOVE_CARD_TO_ZONE",
-      battleCardId,
-      destination: { side, zone: "stack" },
-    },
-    sourceSurface,
-  };
-}
-
 export function createMoveCardToDeckCommand(
   battleCardId: string,
   side: BattleSide,

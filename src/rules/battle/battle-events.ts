@@ -881,7 +881,7 @@ function isDebugZoneDestination(value: unknown): boolean {
   if (value.zone === "frontRank" || value.zone === "backRank") {
     return isBattleFieldSlotAddress(value);
   }
-  if (value.zone === "hand" || value.zone === "void" || value.zone === "banished" || value.zone === "stack") {
+  if (value.zone === "hand" || value.zone === "void" || value.zone === "banished") {
     return true;
   }
   return value.zone === "deck" && (value.position === "top" || value.position === "bottom");
