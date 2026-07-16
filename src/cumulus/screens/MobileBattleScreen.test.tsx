@@ -954,7 +954,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("moves one glowing phase light beneath the active player status", () => {
+  it("moves one glowing phase light above the active player status", () => {
     const { container, root } = mount();
     const indicator = container.querySelector<HTMLElement>(
       '[data-battle-phase-indicator="player"]',
@@ -981,10 +981,11 @@ describe("MobileBattleScreen", () => {
       "Player turn, Day phase",
     );
     expect(indicator?.parentElement?.dataset.battleStatusPhaseAnchor).toBe("");
-    expect(indicator?.style.top).toBe("100%");
+    expect(indicator?.style.top).toBe("0px");
     expect(indicator?.style.bottom).toBe("");
     expect(light?.style.width).toBe("24px");
     expect(light?.style.height).toBe("24px");
+    expect(light?.style.top).toBe("calc(-1 * var(--space-3))");
     expect(light?.style.left).toBe("30%");
     expect(light?.style.transform).toBe("translate(-50%, -100%)");
     expect(light?.style.transition).toContain("var(--motion-object-travel)");
@@ -1009,7 +1010,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("places the active opponent phase light above its status", () => {
+  it("places the active opponent phase light below its status", () => {
     const view: MobileBattleView = {
       ...makeView(),
       activeSide: "enemy",
@@ -1031,8 +1032,9 @@ describe("MobileBattleScreen", () => {
     ).toBeNull();
     expect(indicator?.dataset.battleMobilePhase).toBe("challenge");
     expect(indicator?.parentElement?.dataset.battleStatusPhaseAnchor).toBe("");
-    expect(indicator?.style.top).toBe("0px");
+    expect(indicator?.style.top).toBe("100%");
     expect(indicator?.style.bottom).toBe("");
+    expect(light?.style.top).toBe("var(--space-3)");
     expect(light?.style.left).toBe("90%");
     expect(light?.style.transform).toBe("translate(-50%, 0%)");
     expect(halo?.style.animation).toContain("battle-phase-challenge-pulse");
