@@ -342,15 +342,17 @@ describe("buildMobileBattleView", () => {
     );
   });
 
-  it("materializes the dynamic staggered slots in left-to-right identity order", () => {
+  it("materializes the ten-back/nine-front starting grid in left-to-right identity order", () => {
     const init = makeInit();
     const board = makeBoard(init);
     const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER);
 
-    expect(view.player.frontRank.map((slot) => slot.id)).toEqual(["F0", "F1", "F2", "F3"]);
-    expect(view.enemy.frontRank.map((slot) => slot.id)).toEqual(["F0", "F1", "F2", "F3"]);
-    expect(view.player.backRank.map((slot) => slot.id)).toEqual(["B0", "B1", "B2", "B3", "B4"]);
-    expect(view.enemy.backRank.map((slot) => slot.id)).toEqual(["B0", "B1", "B2", "B3", "B4"]);
+    const expectedFrontRank = Array.from({ length: 9 }, (_unused, index) => `F${String(index)}`);
+    const expectedBackRank = Array.from({ length: 10 }, (_unused, index) => `B${String(index)}`);
+    expect(view.player.frontRank.map((slot) => slot.id)).toEqual(expectedFrontRank);
+    expect(view.enemy.frontRank.map((slot) => slot.id)).toEqual(expectedFrontRank);
+    expect(view.player.backRank.map((slot) => slot.id)).toEqual(expectedBackRank);
+    expect(view.enemy.backRank.map((slot) => slot.id)).toEqual(expectedBackRank);
     expect(view.player.frontRank[3].card?.id).toBe(board.sides.player.frontRank.F3);
     expect(view.enemy.backRank[4].card?.id).toBe(board.sides.enemy.backRank.B4);
   });

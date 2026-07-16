@@ -118,7 +118,7 @@ export const TOKENS = {
   "--border-mid": { var: "var(--border-mid)", value: "var(--primitive-line-mid)" },
   "--border-strong": { var: "var(--border-strong)", value: "var(--primitive-line-strong)" },
   "--border-accent": { var: "var(--border-accent)", value: "var(--primitive-line-violet)" },
-  "--battlefield-slot-outline": { var: "var(--battlefield-slot-outline)", value: "inset 0 0 0 2px var(--primitive-line-black)", kind: "shadow" },
+  "--battlefield-slot-border": { var: "var(--battlefield-slot-border)", value: "2px dotted var(--border-strong)" },
   "--scrim": { var: "var(--scrim)", value: "var(--primitive-scrim-700)" },
   "--scrim-gallery": { var: "var(--scrim-gallery)", value: "var(--primitive-scrim-800)" },
   "--scrim-strong": { var: "var(--scrim-strong)", value: "var(--primitive-scrim-900)" },

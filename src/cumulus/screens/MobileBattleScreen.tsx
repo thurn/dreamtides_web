@@ -36,6 +36,7 @@ import {
 } from "../primitives/pointer-gesture";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
+import { MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS } from "./mobile-battle-layout";
 import { useIsDesktop } from "./use-is-desktop";
 import battleBackgroundUrl from "../assets/battle-background.png";
 
@@ -1017,7 +1018,7 @@ function lastFilledSlotCount(slots: readonly MobileBattleSlotView[]): number {
 function battlefieldLayoutBackSlotCount(view: MobileBattleView): number {
   const sides = [view.enemy, view.player] as const;
   return Math.max(
-    1,
+    MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS,
     ...sides.map((side) => lastFilledSlotCount(side.backRank)),
     ...sides.map((side) => lastFilledSlotCount(side.frontRank) + 1),
   );
@@ -1155,7 +1156,8 @@ function Rank({
                   position: "absolute",
                   inset: 0,
                   borderRadius: BATTLEFIELD_CARD_CORNER_RADIUS,
-                  boxShadow: token("--battlefield-slot-outline"),
+                  border: token("--battlefield-slot-border"),
+                  boxSizing: "border-box",
                   pointerEvents: "none",
                   zIndex: 3,
                 }}

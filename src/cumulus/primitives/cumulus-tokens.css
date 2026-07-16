@@ -228,7 +228,7 @@
   --border-mid: var(--primitive-line-mid);
   --border-strong: var(--primitive-line-strong);
   --border-accent: var(--primitive-line-violet);
-  --battlefield-slot-outline: inset 0 0 0 2px var(--primitive-line-black); /* @kind shadow */
+  --battlefield-slot-border: 2px dotted var(--border-strong);
 
   /* ---- Scrims (full-surface darkening behind a focused element) ---- */
   --scrim: var(--primitive-scrim-700);          /* modal / sheet backdrop */

@@ -14,16 +14,20 @@ import {
 } from "../../battle/types";
 import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
 import { asCardId } from "../../types/card-identity";
-import type {
-  MobileBattleCardView,
-  MobileBattlePhase,
-  MobileBattleSideView,
-  MobileBattleSlotView,
-  MobileBattleStatusView,
-  MobileBattleInspectorSideView,
-  MobileBattleInspectorView,
-  MobileBattleDreamwellView,
-  MobileBattleView,
+import {
+  MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS,
+  MOBILE_BATTLE_STARTING_FRONT_RANK_SLOTS,
+} from "../../cumulus/screens/mobile-battle-layout";
+import {
+  type MobileBattleCardView,
+  type MobileBattlePhase,
+  type MobileBattleSideView,
+  type MobileBattleSlotView,
+  type MobileBattleStatusView,
+  type MobileBattleInspectorSideView,
+  type MobileBattleInspectorView,
+  type MobileBattleDreamwellView,
+  type MobileBattleView,
 } from "../../cumulus/screens/MobileBattleScreen";
 
 const FALLBACK_PLAYER_DREAMCALLER = {
@@ -55,7 +59,9 @@ export function buildMobileBattleView(
     isPlayerHandHidden: false,
   },
 ): MobileBattleView {
-  const { frontSize, backSize } = selectPlayAreaSize(board);
+  const { frontSize: activeFrontSize, backSize: activeBackSize } = selectPlayAreaSize(board);
+  const frontSize = Math.max(activeFrontSize, MOBILE_BATTLE_STARTING_FRONT_RANK_SLOTS);
+  const backSize = Math.max(activeBackSize, MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS);
   return {
     battleId: init.battleId,
     aiApproval: aiProposal === null

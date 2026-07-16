@@ -693,8 +693,8 @@ describe("MobileBattleScreen", () => {
       );
       expect(backTrack?.style.columnGap).toBe("var(--space-2)");
       expect(frontTrack?.style.columnGap).toBe("var(--space-2)");
-      expect(backTrack?.style.gridTemplateColumns).toContain("repeat(2,");
-      expect(frontTrack?.style.gridTemplateColumns).toContain("repeat(1,");
+      expect(backTrack?.style.gridTemplateColumns).toContain("repeat(10,");
+      expect(frontTrack?.style.gridTemplateColumns).toContain("repeat(9,");
       expect(backSlots).toHaveLength(frontSlots.length + 1);
       backSlots.forEach((backSlot) => {
         expect(backSlot.style.aspectRatio).toBe("1 / 1");
@@ -784,7 +784,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("centers occupied expanded ranks on one shared responsive card scale", () => {
+  it("centers shorter occupied ranks on the shared ten-slot starting scale", () => {
     const view = makeView();
     const expandedBackRank = Array.from({ length: 6 }, (_, index) => ({
       id: `expanded-back-${String(index)}`,
@@ -832,14 +832,14 @@ describe("MobileBattleScreen", () => {
             [],
         );
         expect(rankElement?.style.height).toContain(
-          "88cqw - 4 * var(--space-2)",
+          "88cqw - 9 * var(--space-2)",
         );
         expect(rankElement?.style.height).toContain("200cqh");
         expect(track?.style.gridTemplateColumns).toContain(
-          rank === "back" ? "repeat(5," : "repeat(4,",
+          rank === "back" ? "repeat(10," : "repeat(9,",
         );
         expect(track?.style.width).toContain(
-          rank === "back" ? "5 * min(" : "4 * min(",
+          rank === "back" ? "10 * min(" : "9 * min(",
         );
         expect(track?.style.columnGap).toBe("var(--space-2)");
         expect(slots[0]?.style.width).toContain("var(--space-2)");
@@ -1282,7 +1282,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("always outlines empty staggered battlefield slots with the battlefield card radius", () => {
+  it("draws empty staggered battlefield slots with the battlefield card radius and gray dotted border", () => {
     const view = makeView();
     const { container, root } = mount(view);
     const slots = [
@@ -1309,7 +1309,8 @@ describe("MobileBattleScreen", () => {
       expect(outline.style.position).toBe("absolute");
       expect(outline.style.inset).toBe("0px");
       expect(outline.style.borderRadius).toBe(battlefieldCardRadius);
-      expect(outline.style.boxShadow).toBe("var(--battlefield-slot-outline)");
+      expect(outline.style.border).toBe("var(--battlefield-slot-border)");
+      expect(outline.style.boxSizing).toBe("border-box");
       expect(outline.style.pointerEvents).toBe("none");
     });
 
