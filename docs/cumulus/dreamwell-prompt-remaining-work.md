@@ -1,4 +1,9 @@
-# Dreamwell Prompt Remaining Work
+# Dreamwell Prompt Legacy Parity Tasks
+
+This checklist covers Dreamwell prompt paths that the legacy playable battle UI
+can resolve and the Cumulus playable battle UI cannot. Dreamwell effects
+classified as manual and new rules infrastructure are outside this parity
+scope.
 
 ## Cumulus resolution blockers
 
@@ -28,20 +33,11 @@
   including confirmation-to-picker transitions and successful return to normal
   battle controls.
 
-## Dreamwell effects awaiting rules infrastructure
-
-- [ ] Implement candidate-pool discovery and its Cumulus chooser for:
-  - `f61431f3-33bd-42ff-a229-b4013582e86e`
-  - `8f5f2e26-44b5-447b-90d0-eaf22ab29fed`
-- [ ] Implement rematerialize resolution and its Cumulus chooser for
-  `2ad68489-044a-40d1-9be6-e62497a4e1fd`.
-- [ ] Implement the temporary reclaim grant and its Cumulus chooser for
-  `14dec460-3ec6-40c1-978f-67e70cb0b227`.
-
 ## Completion gate
 
 - [ ] Every authoritative Dreamwell `pendingPrompt` has usable Cumulus controls
   on desktop and mobile, and no valid prompt can leave the battle controls
   disabled without a resolution path.
-- [ ] All scripted and manual Dreamwell interactions complete through normal
-  player UI without developer-inspector intervention.
+- [ ] Every Dreamwell interaction already supported by the legacy playable
+  battle UI completes through normal Cumulus player UI without
+  developer-inspector intervention.
