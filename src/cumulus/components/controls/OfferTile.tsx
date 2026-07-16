@@ -586,10 +586,12 @@ function CardArtPiece({
   card,
   treatment = "plain",
   overlay = false,
+  framing = "authored",
 }: {
   readonly card: OfferTileCard;
   readonly treatment?: "plain" | "purged";
   readonly overlay?: boolean;
+  readonly framing?: "authored" | "centered";
 }): ReactElement {
   const [imageBroken, setImageBroken] = useState(false);
   const cardData = card.displaySnapshot;
@@ -601,7 +603,10 @@ function CardArtPiece({
     ? cardImageUrl(cardData.imageNumber)
     : cardIdenticonUri(card.cardId);
   const focalPoint = cardData.art ?? { x: 0, y: 0 };
-  const objectPosition = `${String((focalPoint.x + 1) * 50)}% ${String((focalPoint.y + 1) * 50)}%`;
+  const objectPosition =
+    framing === "centered"
+      ? "50% 50%"
+      : `${String((focalPoint.x + 1) * 50)}% ${String((focalPoint.y + 1) * 50)}%`;
 
   useEffect(() => {
     setImageBroken(false);
@@ -692,7 +697,10 @@ function CardArtMosaic({
             pointerEvents: "none",
           }}
         >
-          <CardArtPiece card={card} />
+          <CardArtPiece
+            card={card}
+            framing={cards.length > 1 ? "centered" : "authored"}
+          />
         </span>
       ))}
     </span>

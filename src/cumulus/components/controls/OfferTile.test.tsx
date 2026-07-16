@@ -175,16 +175,26 @@ describe("OfferTile", () => {
     expect(four.style.gridTemplateRows).toBe("repeat(2, minmax(0, 1fr))");
     expect(four.style.gap).toBe("var(--space-1)");
 
-    const focusedImage = container.querySelector<HTMLImageElement>(
-      `[data-offer-tile-card-art="${CARDS[0].cardId}"] img`,
+    const focusedSingleImage = container.querySelector<HTMLImageElement>(
+      `[data-testid="one"] [data-offer-tile-card-art="${CARDS[0].cardId}"] img`,
     )!;
-    expect(focusedImage.src).toContain("/cards/287269511.webp");
-    expect(focusedImage.style.objectFit).toBe("cover");
-    expect(focusedImage.style.objectPosition).toBe("75% 25%");
-    expect(Number.parseFloat(focusedImage.style.height)).toBeCloseTo(
+    expect(focusedSingleImage.src).toContain("/cards/287269511.webp");
+    expect(focusedSingleImage.style.objectFit).toBe("cover");
+    expect(focusedSingleImage.style.objectPosition).toBe("75% 25%");
+    expect(Number.parseFloat(focusedSingleImage.style.height)).toBeCloseTo(
       (280 / 259) * 100,
       5,
     );
+
+    for (const testId of ["two", "three", "four"]) {
+      const images = container.querySelectorAll<HTMLImageElement>(
+        `[data-testid="${testId}"] [data-offer-tile-card-art] img`,
+      );
+      expect(images.length).toBeGreaterThan(1);
+      for (const image of images) {
+        expect(image.style.objectPosition).toBe("50% 50%");
+      }
+    }
     expect(container.querySelector("[data-card-presentation]")).toBeNull();
 
     act(() => root.unmount());
