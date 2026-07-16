@@ -1041,6 +1041,8 @@ function Rank({
   layoutBackSlotCount,
   cardSize,
   order,
+  showSlotOutlines,
+  onBattlefieldDragChange,
   interactions,
 }: {
   readonly isDesktop: boolean;
@@ -1050,6 +1052,8 @@ function Rank({
   readonly layoutBackSlotCount: number;
   readonly cardSize: string;
   readonly order: number;
+  readonly showSlotOutlines: boolean;
+  readonly onBattlefieldDragChange: (dragging: boolean) => void;
   readonly interactions?: MobileBattleInteractions;
 }) {
   const canDrop =
@@ -1134,6 +1138,20 @@ function Rank({
               boxSizing: "border-box",
             }}
           >
+            {showSlotOutlines ? (
+              <div
+                aria-hidden="true"
+                data-battle-slot-outline=""
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  borderRadius: token("--radius-card"),
+                  boxShadow: token("--battlefield-slot-outline"),
+                  pointerEvents: "none",
+                  zIndex: 3,
+                }}
+              />
+            ) : null}
             {slot.card !== null ? (
               <FaceUpCard
                 card={slot.card}
@@ -1146,11 +1164,13 @@ function Rank({
                         debugGesture: isDesktop
                           ? "context-menu"
                           : "double-tap",
-                        onDragStart: () =>
+                        onDragStart: () => {
+                          onBattlefieldDragChange(true);
                           interactions.onCardDragStart(
                             slot.card?.id ?? "",
                             "battlefield",
-                          ),
+                          );
+                        },
                         ...(interactions.onCardDebugActivate === undefined
                           ? {}
                           : {
@@ -1161,7 +1181,10 @@ function Rank({
                                   invocation,
                                 ),
                             }),
-                        onDragEnd: interactions.onCardDragEnd,
+                        onDragEnd: () => {
+                          onBattlefieldDragChange(false);
+                          interactions.onCardDragEnd();
+                        },
                         onPointerDrop: (clientX, clientY) =>
                           dropMobileCardAtPoint(
                             interactions,
@@ -1185,6 +1208,8 @@ function PlayArea({
   side,
   layoutBackSlotCount,
   cardSize,
+  showSlotOutlines,
+  onBattlefieldDragChange,
   interactions,
 }: {
   readonly isDesktop: boolean;
@@ -1192,6 +1217,8 @@ function PlayArea({
   readonly side: MobileBattleSideView;
   readonly layoutBackSlotCount: number;
   readonly cardSize: string;
+  readonly showSlotOutlines: boolean;
+  readonly onBattlefieldDragChange: (dragging: boolean) => void;
   readonly interactions?: MobileBattleInteractions;
 }) {
   const ranks =
@@ -1225,6 +1252,8 @@ function PlayArea({
           layoutBackSlotCount={layoutBackSlotCount}
           cardSize={cardSize}
           order={order}
+          showSlotOutlines={showSlotOutlines}
+          onBattlefieldDragChange={onBattlefieldDragChange}
           interactions={interactions}
         />
       ))}
@@ -1780,6 +1809,7 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
   const isDesktop = useIsDesktop();
   const isDockLayout = useIsDesktop(INSPECTOR_DOCK_MIN_WIDTH);
   const [isInspectorOpen, setIsInspectorOpen] = useState(isDockLayout);
+  const [isBattlefieldDragActive, setIsBattlefieldDragActive] = useState(false);
   const [selectedSide, setSelectedSide] = useState<MobileBattleOwner>("player");
   const inspectorTriggerRef = useRef<HTMLElement | null>(null);
   const previousDockLayout = useRef(isDockLayout);
@@ -1790,6 +1820,7 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
   useEffect(() => {
     setSelectedSide("player");
     setIsInspectorOpen(isDockLayout);
+    setIsBattlefieldDragActive(false);
   }, [view.battleId]);
 
   useEffect(() => {
@@ -1857,8 +1888,8 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
       <LayoutGroup id={`mobile-battle:${view.battleId}`}>
         <EnemyHand cardIds={view.enemyHandCardIds} cards={view.enemyHand} revealed={view.inspector.isOpponentHandRevealed} isDesktop={isDesktop} />
         <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="enemy" phase={view.phase} side={view.enemy} interactions={interactions} />
-        <PlayArea isDesktop={isDesktop} owner="enemy" side={view.enemy} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} interactions={interactions} />
-        <PlayArea isDesktop={isDesktop} owner="player" side={view.player} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} interactions={interactions} />
+        <PlayArea isDesktop={isDesktop} owner="enemy" side={view.enemy} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} showSlotOutlines={isBattlefieldDragActive} onBattlefieldDragChange={setIsBattlefieldDragActive} interactions={interactions} />
+        <PlayArea isDesktop={isDesktop} owner="player" side={view.player} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} showSlotOutlines={isBattlefieldDragActive} onBattlefieldDragChange={setIsBattlefieldDragActive} interactions={interactions} />
         <ControlRow aiApproval={view.aiApproval} isDesktop={isDesktop} interactions={interactions} />
         <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="player" phase={view.phase} side={view.player} interactions={interactions} />
         <PlayerHand cards={view.inspector.isPlayerHandHidden ? [] : view.playerHand} isDesktop={isDesktop} interactions={interactions} />

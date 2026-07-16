@@ -1249,6 +1249,99 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("shows every staggered battlefield slot outline only while repositioning a battlefield card", () => {
+    const interactions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const view = makeView();
+    const { container, root } = mount(view, interactions);
+    const battlefieldCard = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-front-card"]',
+    );
+    const revealSource = battlefieldCard?.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    const slotCount =
+      view.enemy.backRank.length
+      + view.enemy.frontRank.length
+      + view.player.backRank.length
+      + view.player.frontRank.length;
+    Object.defineProperty(document, "elementFromPoint", {
+      configurable: true,
+      value: vi.fn(() => null),
+    });
+
+    expect(container.querySelectorAll("[data-battle-slot-outline]")).toHaveLength(0);
+
+    act(() => {
+      revealSource?.dispatchEvent(
+        new PointerEvent("pointerdown", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 20,
+          clientY: 30,
+          pointerId: 12,
+          pointerType: "mouse",
+        }),
+      );
+      battlefieldCard?.dispatchEvent(
+        new PointerEvent("pointermove", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 44,
+          clientY: 70,
+          pointerId: 12,
+          pointerType: "mouse",
+        }),
+      );
+    });
+
+    const outlines = Array.from(
+      container.querySelectorAll<HTMLElement>("[data-battle-slot-outline]"),
+    );
+    expect(outlines).toHaveLength(slotCount);
+    outlines.forEach((outline) => {
+      expect(outline.style.position).toBe("absolute");
+      expect(outline.style.inset).toBe("0px");
+      expect(outline.style.borderRadius).toBe("var(--radius-card)");
+      expect(outline.style.boxShadow).toBe("var(--battlefield-slot-outline)");
+      expect(outline.style.pointerEvents).toBe("none");
+    });
+
+    act(() => {
+      battlefieldCard?.dispatchEvent(
+        new PointerEvent("pointerup", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 44,
+          clientY: 70,
+          pointerId: 12,
+          pointerType: "mouse",
+        }),
+      );
+    });
+
+    expect(container.querySelectorAll("[data-battle-slot-outline]")).toHaveLength(0);
+    expect(interactions.onCardDragStart).toHaveBeenCalledWith(
+      "player-front-card",
+      "battlefield",
+    );
+    expect(interactions.onCardDragEnd).toHaveBeenCalledTimes(1);
+
+    act(() => root.unmount());
+  });
+
   it("keeps physical cards out of native HTML drag", () => {
     const interactions = {
       canInteract: true,
