@@ -3204,12 +3204,12 @@
       "description": "Hover motion. `stationary` keeps a source fixed while a separate reading\ncopy is shown. Default `scale`."
     },
     {
-      "name": "snapHoverExit",
+      "name": "snapFeedbackExit",
       "tsType": "boolean",
       "unionMembers": [],
       "required": false,
       "defaultValue": "false",
-      "description": "Whether leaving hover removes the scale immediately instead of easing\nback. Physical cards use this to avoid a stale transformed hit target."
+      "description": "Whether ending hover or press immediately restores the original scale.\nPhysical cards use this to avoid a stale transformed hit target."
     },
     {
       "name": "children",

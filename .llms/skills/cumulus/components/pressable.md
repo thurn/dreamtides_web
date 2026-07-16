@@ -20,7 +20,7 @@ The one press-feedback primitive. Interactive surfaces measure their rendered bo
 | `disabled` | `boolean` | no | `false` | Disables press feedback and pointer handlers, and shows the default cursor. |
 | `pressFeedback` | `"scale" \| "stationary"` | no | `scale` | Press motion. `scale` is the global control treatment; `stationary` is reserved for readable rules-copy reveal surfaces. Default `scale`. |
 | `hoverFeedback` | `"scale" \| "stationary"` | no | `scale` | Hover motion. `stationary` keeps a source fixed while a separate reading copy is shown. Default `scale`. |
-| `snapHoverExit` | `boolean` | no | `false` | Whether leaving hover removes the scale immediately instead of easing back. Physical cards use this to avoid a stale transformed hit target. |
+| `snapFeedbackExit` | `boolean` | no | `false` | Whether ending hover or press immediately restores the original scale. Physical cards use this to avoid a stale transformed hit target. |
 | `children` | `ReactNode` | no | — | Content rendered inside the pressable element. |
 
 ## Usage

@@ -1773,7 +1773,7 @@ export function GameCard({
     <Pressable
       as="div"
       hoverFeedback={presentation === "battlefield" ? "stationary" : "scale"}
-      snapHoverExit
+      snapFeedbackExit
       ref={binding.ref}
       {...binding.sourceProps}
       role={interactive ? "button" : undefined}

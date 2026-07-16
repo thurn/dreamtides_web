@@ -191,6 +191,47 @@ describe("GameCard reveal contract", () => {
     act(() => root.unmount());
   });
 
+  it.each(["full", "battlefield"] as const)(
+    "snaps the %s card back to its original size when a press ends",
+    (presentation) => {
+      const { container, root } = mount(
+        <GameCard model={model()} presentation={presentation} />,
+      );
+      const source = container.querySelector<HTMLElement>(
+        "[data-game-card-source]",
+      );
+      if (!source) throw new Error("missing game card source");
+
+      act(() => {
+        source.dispatchEvent(
+          pointer("pointerover", { pointerType: "mouse", pointerId: 1 }),
+        );
+        source.dispatchEvent(
+          pointer("pointerdown", {
+            pointerType: "mouse",
+            pointerId: 1,
+            button: 0,
+          }),
+        );
+      });
+      expect(source.style.transform).toContain("scale(");
+
+      act(() => {
+        source.dispatchEvent(
+          pointer("pointerup", {
+            pointerType: "mouse",
+            pointerId: 1,
+            button: 0,
+          }),
+        );
+      });
+      expect(source.style.transform).toBe("none");
+      expect(source.style.transition).toBe("none");
+
+      act(() => root.unmount());
+    },
+  );
+
   it("widens the battlefield art viewport without increasing its vertical crop", () => {
     const displaySnapshot = card({
       art: { x: 0, y: 0, scale: 1.3 },

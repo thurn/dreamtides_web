@@ -15,8 +15,8 @@
 //     down, not up)
 //   - pointer cursor when actionable, default cursor when disabled
 //   - tap-highlight suppression (no blue mobile flash)
-//   - one eased, fast transition (skipped entirely when the user has
-//     requested reduced motion)
+//   - one eased, fast transition (skipped when the user has requested reduced
+//     motion, and on the feedback exit of physical cards)
 //
 // The bounded factors are published as --press-scale and --hover-scale for
 // controls reached through CSS or the lower-level usePress hook. Every ad-hoc
@@ -168,9 +168,9 @@ export interface PressableProps extends React.HTMLAttributes<HTMLElement> {
   /** Hover motion. `stationary` keeps a source fixed while a separate reading
    * copy is shown. Default `scale`. */
   hoverFeedback?: "scale" | "stationary";
-  /** Whether leaving hover removes the scale immediately instead of easing
-   * back. Physical cards use this to avoid a stale transformed hit target. */
-  snapHoverExit?: boolean;
+  /** Whether ending hover or press immediately restores the original scale.
+   * Physical cards use this to avoid a stale transformed hit target. */
+  snapFeedbackExit?: boolean;
   /** Content rendered inside the pressable element. */
   children?: React.ReactNode;
 }
@@ -193,7 +193,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
       disabled = false,
       pressFeedback = "scale",
       hoverFeedback = "scale",
-      snapHoverExit = false,
+      snapFeedbackExit = false,
       style,
       onPointerEnter,
       onPointerDown,
@@ -208,6 +208,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
     const [measuredFeedback, setMeasuredFeedback] = useState(() =>
       feedbackForRect({ width: 1, height: 1 }, "scale"),
     );
+    const [feedbackReset, setFeedbackReset] = useState(false);
     const measureFeedback = (event: React.PointerEvent<HTMLElement>): void => {
       const rect = event.currentTarget.getBoundingClientRect();
       setMeasuredFeedback(
@@ -216,16 +217,27 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
     };
     const { pressed, hovered, bind } = usePress({
       onPointerEnter: (event) => {
+        setFeedbackReset(false);
         measureFeedback(event);
         onPointerEnter?.(event);
       },
       onPointerDown: (event) => {
+        setFeedbackReset(false);
         measureFeedback(event);
         onPointerDown?.(event);
       },
-      onPointerUp,
-      onPointerLeave,
-      onPointerCancel,
+      onPointerUp: (event) => {
+        if (snapFeedbackExit) setFeedbackReset(true);
+        onPointerUp?.(event);
+      },
+      onPointerLeave: (event) => {
+        if (snapFeedbackExit) setFeedbackReset(true);
+        onPointerLeave?.(event);
+      },
+      onPointerCancel: (event) => {
+        if (snapFeedbackExit) setFeedbackReset(true);
+        onPointerCancel?.(event);
+      },
     });
     const reducedMotion = usePrefersReducedMotion();
     const measuredRevealFeedback = (rest as Record<string, unknown>)["data-reveal-feedback"] === "measured";
@@ -235,6 +247,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
     const hoverScale = measuredRevealFeedback
       ? "var(--reveal-hover-scale)"
       : String(measuredFeedback.hoverScale);
+    const resetFeedback = snapFeedbackExit && feedbackReset;
 
     // `as` is a runtime-chosen element type (intrinsic tag or component), so
     // its exact prop shape isn't known statically — resolving it against
@@ -277,7 +290,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
           WebkitTouchCallout: "none",
           touchAction: "manipulation",
           transformOrigin: "center",
-          transition: reducedMotion || (snapHoverExit && !hovered)
+          transition: reducedMotion || resetFeedback
             ? "none"
             : `transform var(--dur-fast) var(--ease-out)`,
           // Scale down on press, up on hover — the one Dreamtides rule, applied
@@ -285,13 +298,15 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
           // control compresses); disabled suppresses both.
           transform: disabled
             ? "none"
-            : pressFeedback === "stationary"
+            : resetFeedback
               ? "none"
-              : pressed
-                ? `scale(${pressScale})`
-              : hovered && hoverFeedback === "scale"
-                ? `scale(${hoverScale})`
-                : "none",
+              : pressFeedback === "stationary"
+                ? "none"
+                : pressed
+                  ? `scale(${pressScale})`
+                  : hovered && hoverFeedback === "scale"
+                    ? `scale(${hoverScale})`
+                    : "none",
           ...style,
           ...(disabled ? { pointerEvents: "none" } : {}),
         }}

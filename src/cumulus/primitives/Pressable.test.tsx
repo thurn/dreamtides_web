@@ -145,9 +145,9 @@ describe("Pressable press feedback", () => {
     expect(el.style.transform).toBe("scale(0.98)");
   });
 
-  it("snaps out of hover when a physical card requests an instant hover exit", () => {
+  it("snaps out of hover when a physical card requests an instant feedback exit", () => {
     const { container } = mountInto(
-      <Pressable as="button" snapHoverExit>
+      <Pressable as="button" snapFeedbackExit>
         Card
       </Pressable>,
     );
@@ -168,6 +168,40 @@ describe("Pressable press feedback", () => {
       el.dispatchEvent(
         new PointerEvent("pointerout", {
           bubbles: true,
+          pointerType: "mouse",
+        }),
+      );
+    });
+    expect(el.style.transform).toBe("none");
+    expect(el.style.transition).toBe("none");
+  });
+
+  it("snaps a released physical card to its original size instead of resuming hover scale", () => {
+    const { container } = mountInto(
+      <Pressable as="button" snapFeedbackExit>
+        Card
+      </Pressable>,
+    );
+    const el = container.querySelector("button")!;
+
+    act(() => {
+      el.dispatchEvent(
+        new PointerEvent("pointerover", {
+          bubbles: true,
+          pointerType: "mouse",
+        }),
+      );
+    });
+    expect(el.style.transform).toContain("scale(");
+
+    pressDown(el);
+    expect(el.style.transform).toContain("scale(");
+
+    act(() => {
+      el.dispatchEvent(
+        new PointerEvent("pointerup", {
+          bubbles: true,
+          button: 0,
           pointerType: "mouse",
         }),
       );
