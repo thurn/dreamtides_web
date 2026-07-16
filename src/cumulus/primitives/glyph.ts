@@ -97,6 +97,12 @@ export const GLYPHS = {
   star: g("bxf bx-star"),
   /** A wrapped gift, used for granted objects and rewards. */
   gift: g("bxf bx-gift"),
+  /** Filled phase marks used by the compact battle phase indicator. */
+  phaseDawn: g("bxf bx-sun-rise"),
+  phaseDay: g("bxf bx-sun"),
+  phaseDusk: g("bxf bx-sun-set"),
+  phaseNight: g("bxf bx-star"),
+  phaseChallenge: g("bxf bx-sword-alt"),
   /** Two overlapping pages, used for duplication and copy effects. */
   copy: g("bxf bx-copy"),
   /** A plain plus mark, used to join objects into one granted bundle. */

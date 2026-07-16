@@ -291,9 +291,9 @@ const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
 const BATTLEFIELD_SIDE_INSET_PERCENT = 6;
 const DESKTOP_BATTLEFIELD_SIDE_INSET_PERCENT = 14;
 const BATTLEFIELD_WIDTH_PERCENT = 100 - BATTLEFIELD_SIDE_INSET_PERCENT * 2;
-const PHASE_LIGHT_SIZE = 6;
-const PHASE_LIGHT_HALO_SIZE = 12;
-const PHASE_LIGHT_STREAK_WIDTH = 16;
+const PHASE_LIGHT_SIZE = 12;
+const PHASE_LIGHT_HALO_SIZE = 18;
+const PHASE_LIGHT_STREAK_WIDTH = 20;
 const PHASE_LIGHT_STREAK_HEIGHT = 2;
 const PHASE_COMET_TAIL_START_SCALE = 0.35;
 const PHASE_COMET_TAIL_PEAK_SCALE = 1.55;
@@ -312,6 +312,13 @@ const PHASE_LABEL = {
   night: "Night",
   challenge: "Challenge",
 } satisfies Record<MobileBattlePhase, string>;
+const PHASE_GLYPH = {
+  dawn: GLYPHS.phaseDawn,
+  day: GLYPHS.phaseDay,
+  dusk: GLYPHS.phaseDusk,
+  night: GLYPHS.phaseNight,
+  challenge: GLYPHS.phaseChallenge,
+} satisfies Record<MobileBattlePhase, (typeof GLYPHS)[keyof typeof GLYPHS]>;
 
 const BATTLE_PHASE_LIGHT_CSS = `
   :where([data-connected-count]) { display: none; }
@@ -810,7 +817,11 @@ function PhaseIndicator({
           left: PHASE_LIGHT_LEFT[phase],
           width: PHASE_LIGHT_SIZE,
           height: PHASE_LIGHT_SIZE,
-          transform: "translate(-50%, -50%)",
+          // Tuck the larger glyph into the status edge so it preserves the
+          // original light's hand-card clearance on the space-tight board.
+          transform: owner === "player"
+            ? "translate(-50%, -100%)"
+            : "translate(-50%, 0%)",
           transition: `left ${token("--motion-object-travel")}`,
         }}
       >
@@ -857,13 +868,19 @@ function PhaseIndicator({
           style={{
             position: "absolute",
             inset: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             width: PHASE_LIGHT_SIZE,
             height: PHASE_LIGHT_SIZE,
-            borderRadius: token("--radius-pill"),
-            backgroundColor: token("--accent-bright"),
-            boxShadow: token("--glow-accent-soft"),
           }}
-        />
+        >
+          <GlowIcon
+            iconClass={PHASE_GLYPH[phase]}
+            color="accent-bright"
+            size={token("--space-5")}
+          />
+        </span>
       </span>
     </div>
   );
