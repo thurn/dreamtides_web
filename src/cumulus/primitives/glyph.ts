@@ -107,6 +107,8 @@ export const GLYPHS = {
   gear: g("bxf bx-cog"),
   /** The bug mark — the battle debug-menu disclosure trigger. */
   bug: g("bxf bx-bug"),
+  /** The prohibition mark — opens a non-empty banished zone. */
+  block: g("bx bx-block"),
   /** A right sidebar — the battle inspector disclosure trigger. */
   sidebarRight: g("bx bx-sidebar-right"),
   /** The hamburger bars — the mobile quest-menu disclosure trigger. */

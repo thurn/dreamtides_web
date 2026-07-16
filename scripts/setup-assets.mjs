@@ -8,7 +8,6 @@ import { parse } from "smol-toml";
 import { CARDS_V2_POOL_METADATA } from "../src/data/cards-v2-metadata.ts";
 import { DREAMCALLER_ARCHETYPES } from "../src/data/dreamcallers-v2-database.ts";
 import { OFFER_TILE_BACKGROUND_IMAGE_NUMBERS } from "../src/data/offer-tile-art.ts";
-import { BANISHED_ZONE_IMAGE_NUMBER } from "../src/data/battle-zone-art.ts";
 import {
   CARD_ID_RE,
   readAdaptedRecordDecklists,
@@ -1573,25 +1572,6 @@ export function setupAssets({
   console.log(
     `Linked ${linkedOfferTileBackgrounds} offer tile backgrounds (${missingOfferTileBackgrounds} missing)`,
   );
-
-  // The banished-zone portal is fixed symbolic art rather than card art, but
-  // it shares the card-image hosting path so local review and deployment use
-  // the same cached Shutterstock asset.
-  const banishedZoneHash = imageHash(BANISHED_ZONE_IMAGE_NUMBER);
-  const banishedZoneCachePath = join(imageCacheDir, banishedZoneHash);
-  const banishedZoneSymlinkPath = join(
-    cardsDir,
-    `${BANISHED_ZONE_IMAGE_NUMBER}.webp`,
-  );
-  if (!existsSync(banishedZoneSymlinkPath)) {
-    if (existsSync(banishedZoneCachePath)) {
-      symlinkSync(banishedZoneCachePath, banishedZoneSymlinkPath);
-    } else {
-      console.warn(
-        `  Warning: missing cache file for banished zone art ${BANISHED_ZONE_IMAGE_NUMBER}: ${banishedZoneHash}`,
-      );
-    }
-  }
 
   // Dreamwell card art, keyed by image number exactly like the card catalogs
   // above and linked into the same `public/cards` directory. A Dreamwell card

@@ -878,7 +878,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("shows a non-empty banished portal left of each desktop deck and opens its browser", () => {
+  it("shows a block icon button at the desktop top left for a non-empty banished zone", () => {
     mockDesktopViewport(true);
     const view = makeView();
     const onZoneOpen = vi.fn();
@@ -900,30 +900,27 @@ describe("MobileBattleScreen", () => {
       enemy: { ...view.enemy, banishedCardCount: 0 },
     }, interactions);
 
-    const playerDeck = container.querySelector<HTMLElement>(
-      '[data-battle-zone="player-deck"]',
-    );
-    const indicatorFrame = playerDeck?.querySelector<HTMLElement>(
+    const controlFrame = container.querySelector<HTMLElement>(
       '[data-battle-zone="player-banished"]',
     );
-    const indicator = indicatorFrame?.querySelector<HTMLButtonElement>(
+    const button = controlFrame?.querySelector<HTMLButtonElement>(
       '[data-testid="player-battle-banished"]',
     );
-
-    expect(indicatorFrame?.dataset.battleZoneCount).toBe("2");
-    expect(indicatorFrame?.style.position).toBe("absolute");
-    expect(indicatorFrame?.style.right).toBe(
-      "calc(100% + var(--space-8))",
+    const topLeftControls = container.querySelector<HTMLElement>(
+      "[data-battle-top-left-controls]",
     );
-    expect(indicatorFrame?.style.width).toBe("72px");
-    expect(indicator?.getAttribute("aria-label")).toBe(
-      "Player banished zone, 2 cards",
-    );
-    expect(
-      container.querySelector('[data-battle-zone="enemy-banished"]'),
-    ).toBeNull();
 
-    act(() => indicator?.click());
+    expect(topLeftControls?.style.position).toBe("absolute");
+    expect(topLeftControls?.style.left).toBe(
+      "calc(var(--safe-area-inset-left) + var(--space-4))",
+    );
+    expect(controlFrame?.dataset.battleZoneCount).toBe("2");
+    expect(button?.getAttribute("aria-label")).toBe(
+      "Open banished cards, 2 cards",
+    );
+    expect(button?.querySelector(".bx-block")).not.toBeNull();
+
+    act(() => button?.click());
     expect(onZoneOpen).toHaveBeenCalledWith({
       owner: "player",
       zone: "banished",
@@ -932,7 +929,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("keeps the banished portal off the mobile battle layout", () => {
+  it("keeps the banished icon button off the mobile battle layout", () => {
     const view = makeView();
     const { container, root } = mount({
       ...view,
@@ -1684,8 +1681,11 @@ describe("MobileBattleScreen", () => {
     const message = container.querySelector<HTMLElement>(
       "[data-battle-ai-approval-message]",
     );
+    const topLeftControls = container.querySelector<HTMLElement>(
+      "[data-battle-top-left-controls]",
+    );
     expect(message?.textContent).toBe("Play a fixture card to B2.");
-    expect(message?.style.position).toBe("absolute");
+    expect(topLeftControls?.style.position).toBe("absolute");
     expect(message?.style.font).toBe("var(--t-caption)");
 
     act(() => {
@@ -1725,12 +1725,15 @@ describe("MobileBattleScreen", () => {
     const message = container.querySelector<HTMLElement>(
       "[data-battle-ai-approval-message]",
     );
+    const topLeftControls = container.querySelector<HTMLElement>(
+      "[data-battle-top-left-controls]",
+    );
     const nextSlot = container.querySelector<HTMLElement>(
       "[data-battle-phase-next]",
     );
 
     expect(message?.textContent).toBe("Pass from Day to Dusk.");
-    expect(message?.style.position).toBe("absolute");
+    expect(topLeftControls?.style.position).toBe("absolute");
     expect(message?.style.font).toBe("var(--t-caption)");
     expect(message?.style.textShadow).toBe("var(--text-outline-media)");
     expect(nextSlot?.querySelectorAll("button")).toHaveLength(1);
