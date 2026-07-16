@@ -7,14 +7,14 @@
     <style>
       :root {
         --background-blur: 0px;
-        --dreamsign-size: 28%;
-        --dreamsign-low: 21%;
-        --dreamsign-high: 51%;
-        --dreamsign-center: 36%;
-        --dreamsign-triangle-top: 15.84%;
-        --dreamsign-triangle-left: 18.54%;
-        --dreamsign-triangle-right: 53.46%;
-        --dreamsign-triangle-bottom: 46.08%;
+        --dreamsign-size: 30%;
+        --dreamsign-low: 17%;
+        --dreamsign-high: 53%;
+        --dreamsign-center: 35%;
+        --dreamsign-triangle-top: 13.4%;
+        --dreamsign-triangle-left: 16.29%;
+        --dreamsign-triangle-right: 53.71%;
+        --dreamsign-triangle-bottom: 45.8%;
         color-scheme: dark;
         font-family:
           Inter,
@@ -164,7 +164,6 @@
 
       .offer-tile__symbols--draft {
         display: block;
-        clip-path: circle(46% at 50% 50%);
       }
 
       .offer-tile__dreamsign {
@@ -180,8 +179,8 @@
       }
 
       .offer-tile__symbols--draft .offer-tile__dreamsign {
-        /* The safe-circle clip preserves a visible ring inside the frame
-           while the spread and scale controls remain fully independent. */
+        /* Authored count presets keep the art inside the circular opening;
+           the shadow remains unclipped so it can fall off naturally. */
         position: absolute;
         width: var(--dreamsign-size);
         height: var(--dreamsign-size);
@@ -283,51 +282,6 @@
         letter-spacing: 0.08em;
         text-align: center;
         text-transform: uppercase;
-      }
-
-      .picker__choices {
-        display: grid;
-        grid-template-columns: repeat(6, minmax(0, 1fr));
-        gap: 8px;
-      }
-
-      .picker__choice {
-        position: relative;
-        min-width: 0;
-        padding: 0;
-        overflow: hidden;
-        aspect-ratio: 16 / 10;
-        border: 2px solid transparent;
-        border-radius: 10px;
-        background: #050207;
-        color: #fff9e9;
-        cursor: pointer;
-        box-shadow: 0 4px 12px rgba(2, 0, 5, 0.42);
-      }
-
-      .picker__choice[aria-pressed="true"] {
-        border-color: #f5e777;
-        box-shadow:
-          0 0 0 2px rgba(5, 2, 7, 0.9),
-          0 0 20px rgba(245, 231, 119, 0.54);
-      }
-
-      .picker__choice img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .picker__choice span {
-        position: absolute;
-        right: 5px;
-        bottom: 4px;
-        padding: 2px 5px;
-        border-radius: 999px;
-        background: rgba(5, 2, 7, 0.82);
-        font-size: 10px;
-        font-weight: 800;
       }
 
       .range-control {
@@ -451,15 +405,6 @@
         .picker {
           margin-top: 8px;
         }
-
-        .picker__choices {
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 5px;
-        }
-
-        .picker__choice span {
-          display: none;
-        }
       }
     </style>
   </head>
@@ -484,7 +429,7 @@
                 <img
                   class="offer-tile__background"
                   id="gift-background"
-                  src="/cards/420863587.webp"
+                  src="/cards/386654065.webp"
                   alt=""
                 />
                 <div class="offer-tile__symbols offer-tile__symbols--single">
@@ -556,10 +501,7 @@
         </div>
 
         <div class="picker">
-          <p class="picker__label">
-            Choose one full-art backdrop for both offer variants
-          </p>
-          <div class="picker__choices" id="picker-choices"></div>
+          <p class="picker__label">Tune the grouped Dreamsign layout</p>
           <div class="range-control">
             <label class="range-control__label" for="background-blur">
               Background blur
@@ -592,14 +534,14 @@
               min="12"
               max="25"
               step="1"
-              value="15"
+              value="18"
             />
             <output
               class="range-control__value"
               id="dreamsign-spread-value"
               for="dreamsign-spread"
             >
-              15%
+              18%
             </output>
           </div>
           <div class="range-control">
@@ -613,14 +555,14 @@
               min="12"
               max="36"
               step="1"
-              value="28"
+              value="30"
             />
             <output
               class="range-control__value"
               id="dreamsign-scale-value"
               for="dreamsign-scale"
             >
-              28%
+              30%
             </output>
           </div>
           <div
@@ -681,13 +623,11 @@
     </main>
 
     <script>
-      const imageNumbers = [
-        420863587, 435865921, 336703115, 386654065, 403770328, 245830771,
-        443761768, 407121790, 236539174, 272291576, 258659153,
-      ];
-      const giftBackground = document.querySelector("#gift-background");
-      const draftBackground = document.querySelector("#draft-background");
-      const pickerChoices = document.querySelector("#picker-choices");
+      const dreamsignLayoutPresets = {
+        2: { spread: 20, scale: 35 },
+        3: { spread: 25, scale: 35 },
+        4: { spread: 18, scale: 30 },
+      };
       const backgroundBlur = document.querySelector("#background-blur");
       const backgroundBlurValue = document.querySelector(
         "#background-blur-value",
@@ -715,38 +655,6 @@
         "#dreamsign-catalog-status",
       );
       let dreamsignCatalog = [];
-
-      function render(selectedIndex) {
-        const selected = imageNumbers[selectedIndex];
-        giftBackground.src = `/cards/${selected}.webp`;
-        draftBackground.src = `/cards/${selected}.webp`;
-
-        pickerChoices.querySelectorAll("button").forEach((button, index) => {
-          button.setAttribute("aria-pressed", String(index === selectedIndex));
-        });
-      }
-
-      imageNumbers.forEach((imageNumber, index) => {
-        const button = document.createElement("button");
-        button.className = "picker__choice";
-        button.type = "button";
-        button.setAttribute(
-          "aria-label",
-          `Use image ${imageNumber} behind both Dreamsign offers`,
-        );
-        button.setAttribute("aria-pressed", String(index === 0));
-
-        const image = document.createElement("img");
-        image.src = `/cards/${imageNumber}.webp`;
-        image.alt = "";
-
-        const label = document.createElement("span");
-        label.textContent = String(imageNumber);
-
-        button.append(image, label);
-        button.addEventListener("click", () => render(index));
-        pickerChoices.append(button);
-      });
 
       backgroundBlur.addEventListener("input", () => {
         const blur = `${backgroundBlur.value}px`;
@@ -798,11 +706,19 @@
       dreamsignSpread.addEventListener("input", updateDreamsignLayout);
       dreamsignScale.addEventListener("input", updateDreamsignLayout);
 
+      function applyDreamsignLayoutPreset(count) {
+        const preset = dreamsignLayoutPresets[count];
+        dreamsignSpread.value = String(preset.spread);
+        dreamsignScale.value = String(preset.scale);
+        updateDreamsignLayout();
+      }
+
       dreamsignCountButtons.forEach((button) => {
         button.addEventListener("click", () => {
           const count = button.dataset.dreamsignCount;
           draftSymbols.dataset.count = count;
           draftCaption.textContent = `${count} choices · all shown`;
+          applyDreamsignLayoutPreset(count);
           dreamsignCountButtons.forEach((candidate) => {
             candidate.setAttribute(
               "aria-pressed",
@@ -854,7 +770,7 @@
         }
       }
 
-      updateDreamsignLayout();
+      applyDreamsignLayoutPreset(4);
       void loadDreamsignCatalog();
     </script>
   </body>
