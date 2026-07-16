@@ -1281,23 +1281,33 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("always shows every staggered battlefield slot outline", () => {
+  it("always outlines empty staggered battlefield slots with the battlefield card radius", () => {
     const view = makeView();
     const { container, root } = mount(view);
-    const slotCount =
-      view.enemy.backRank.length
-      + view.enemy.frontRank.length
-      + view.player.backRank.length
-      + view.player.frontRank.length;
+    const slots = [
+      ...view.enemy.backRank,
+      ...view.enemy.frontRank,
+      ...view.player.backRank,
+      ...view.player.frontRank,
+    ];
+    const emptySlotCount = slots.filter((slot) => slot.card === null).length;
+    const battlefieldCard = container.querySelector<HTMLElement>(
+      '.card-view[data-card-presentation="battlefield"]',
+    );
+    const battlefieldCardRadius = battlefieldCard?.style.getPropertyValue(
+      "--cv-radius",
+    );
 
     const outlines = Array.from(
       container.querySelectorAll<HTMLElement>("[data-battle-slot-outline]"),
     );
-    expect(outlines).toHaveLength(slotCount);
+    expect(battlefieldCardRadius).toBe("3.6%");
+    expect(outlines).toHaveLength(emptySlotCount);
     outlines.forEach((outline) => {
+      expect(outline.parentElement?.dataset.battleSlotFilled).toBe("false");
       expect(outline.style.position).toBe("absolute");
       expect(outline.style.inset).toBe("0px");
-      expect(outline.style.borderRadius).toBe("var(--radius-card)");
+      expect(outline.style.borderRadius).toBe(battlefieldCardRadius);
       expect(outline.style.boxShadow).toBe("var(--battlefield-slot-outline)");
       expect(outline.style.pointerEvents).toBe("none");
     });

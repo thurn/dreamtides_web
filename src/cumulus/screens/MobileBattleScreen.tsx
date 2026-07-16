@@ -6,6 +6,7 @@ import {
 } from "../components/card/CardView";
 import {
   BATTLEFIELD_CARD_ASPECT_RATIO,
+  BATTLEFIELD_CARD_CORNER_RADIUS,
   CARD_ASPECT_RATIO,
 } from "../components/card/card-aspect";
 import { BattleStatusDisplay } from "../components/battle/BattleStatusDisplay";
@@ -1144,18 +1145,20 @@ function Rank({
               boxSizing: "border-box",
             }}
           >
-            <div
-              aria-hidden="true"
-              data-battle-slot-outline=""
-              style={{
-                position: "absolute",
-                inset: 0,
-                borderRadius: token("--radius-card"),
-                boxShadow: token("--battlefield-slot-outline"),
-                pointerEvents: "none",
-                zIndex: 3,
-              }}
-            />
+            {slot.card === null ? (
+              <div
+                aria-hidden="true"
+                data-battle-slot-outline=""
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  borderRadius: BATTLEFIELD_CARD_CORNER_RADIUS,
+                  boxShadow: token("--battlefield-slot-outline"),
+                  pointerEvents: "none",
+                  zIndex: 3,
+                }}
+              />
+            ) : null}
             {slot.card !== null ? (
               <FaceUpCard
                 card={slot.card}
