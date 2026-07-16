@@ -1044,7 +1044,6 @@ function Rank({
   layoutBackSlotCount,
   cardSize,
   order,
-  showSlotOutlines,
   snapLayoutCardId,
   onBattlefieldDragChange,
   interactions,
@@ -1056,7 +1055,6 @@ function Rank({
   readonly layoutBackSlotCount: number;
   readonly cardSize: string;
   readonly order: number;
-  readonly showSlotOutlines: boolean;
   readonly snapLayoutCardId: string | null;
   readonly onBattlefieldDragChange: (
     dragging: boolean,
@@ -1146,20 +1144,18 @@ function Rank({
               boxSizing: "border-box",
             }}
           >
-            {showSlotOutlines ? (
-              <div
-                aria-hidden="true"
-                data-battle-slot-outline=""
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  borderRadius: token("--radius-card"),
-                  boxShadow: token("--battlefield-slot-outline"),
-                  pointerEvents: "none",
-                  zIndex: 3,
-                }}
-              />
-            ) : null}
+            <div
+              aria-hidden="true"
+              data-battle-slot-outline=""
+              style={{
+                position: "absolute",
+                inset: 0,
+                borderRadius: token("--radius-card"),
+                boxShadow: token("--battlefield-slot-outline"),
+                pointerEvents: "none",
+                zIndex: 3,
+              }}
+            />
             {slot.card !== null ? (
               <FaceUpCard
                 card={slot.card}
@@ -1217,7 +1213,6 @@ function PlayArea({
   side,
   layoutBackSlotCount,
   cardSize,
-  showSlotOutlines,
   snapLayoutCardId,
   onBattlefieldDragChange,
   interactions,
@@ -1227,7 +1222,6 @@ function PlayArea({
   readonly side: MobileBattleSideView;
   readonly layoutBackSlotCount: number;
   readonly cardSize: string;
-  readonly showSlotOutlines: boolean;
   readonly snapLayoutCardId: string | null;
   readonly onBattlefieldDragChange: (
     dragging: boolean,
@@ -1266,7 +1260,6 @@ function PlayArea({
           layoutBackSlotCount={layoutBackSlotCount}
           cardSize={cardSize}
           order={order}
-          showSlotOutlines={showSlotOutlines}
           snapLayoutCardId={snapLayoutCardId}
           onBattlefieldDragChange={onBattlefieldDragChange}
           interactions={interactions}
@@ -1942,8 +1935,8 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
       <LayoutGroup id={`mobile-battle:${view.battleId}`}>
         <EnemyHand cardIds={view.enemyHandCardIds} cards={view.enemyHand} revealed={view.inspector.isOpponentHandRevealed} isDesktop={isDesktop} />
         <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="enemy" phase={view.phase} side={view.enemy} interactions={interactions} />
-        <PlayArea isDesktop={isDesktop} owner="enemy" side={view.enemy} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} showSlotOutlines={isBattlefieldDragActive} snapLayoutCardId={snapLayoutCardId} onBattlefieldDragChange={handleBattlefieldDragChange} interactions={interactions} />
-        <PlayArea isDesktop={isDesktop} owner="player" side={view.player} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} showSlotOutlines={isBattlefieldDragActive} snapLayoutCardId={snapLayoutCardId} onBattlefieldDragChange={handleBattlefieldDragChange} interactions={interactions} />
+        <PlayArea isDesktop={isDesktop} owner="enemy" side={view.enemy} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} snapLayoutCardId={snapLayoutCardId} onBattlefieldDragChange={handleBattlefieldDragChange} interactions={interactions} />
+        <PlayArea isDesktop={isDesktop} owner="player" side={view.player} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} snapLayoutCardId={snapLayoutCardId} onBattlefieldDragChange={handleBattlefieldDragChange} interactions={interactions} />
         <ControlRow aiApproval={view.aiApproval} isDesktop={isDesktop} interactions={interactions} />
         <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="player" phase={view.phase} side={view.player} interactions={interactions} />
         <PlayerHand cards={view.inspector.isPlayerHandHidden ? [] : view.playerHand} isDesktop={isDesktop} interactions={interactions} />
