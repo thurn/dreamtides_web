@@ -7,6 +7,7 @@
     <style>
       :root {
         --background-blur: 0px;
+        --dreamsign-spread: 15%;
         color-scheme: dark;
         font-family:
           Inter,
@@ -176,32 +177,48 @@
       }
 
       .offer-tile__symbols--draft .offer-tile__dreamsign {
-        /* The four 30% boxes sit at 20% / 50% on each axis. Their farthest
-           corners remain inside a 42.4% radius, preserving a 7.6% safe ring
-           inside the circular opening before the frame begins. */
+        /* Spread measures each icon center's offset from the group center.
+           The 12–17% control range stays inside the frame-safe circle. */
         position: absolute;
-        width: 30%;
-        height: 30%;
+        width: 28%;
+        height: 28%;
       }
 
       .offer-tile__symbols--draft .offer-tile__dreamsign:nth-child(1) {
-        left: 20%;
-        top: 20%;
+        left: calc(36% - var(--dreamsign-spread));
+        top: calc(36% - var(--dreamsign-spread));
       }
 
       .offer-tile__symbols--draft .offer-tile__dreamsign:nth-child(2) {
-        left: 50%;
-        top: 20%;
+        left: calc(36% + var(--dreamsign-spread));
+        top: calc(36% - var(--dreamsign-spread));
       }
 
       .offer-tile__symbols--draft .offer-tile__dreamsign:nth-child(3) {
-        left: 20%;
-        top: 50%;
+        left: calc(36% - var(--dreamsign-spread));
+        top: calc(36% + var(--dreamsign-spread));
       }
 
       .offer-tile__symbols--draft .offer-tile__dreamsign:nth-child(4) {
-        left: 50%;
-        top: 50%;
+        left: calc(36% + var(--dreamsign-spread));
+        top: calc(36% + var(--dreamsign-spread));
+      }
+
+      .offer-tile__symbols--draft[data-count="2"]
+        .offer-tile__dreamsign:nth-child(1) {
+        left: calc(36% - var(--dreamsign-spread));
+        top: 36%;
+      }
+
+      .offer-tile__symbols--draft[data-count="2"]
+        .offer-tile__dreamsign:nth-child(2) {
+        left: calc(36% + var(--dreamsign-spread));
+        top: 36%;
+      }
+
+      .offer-tile__symbols--draft[data-count="2"]
+        .offer-tile__dreamsign:nth-child(n + 3) {
+        display: none;
       }
 
       .offer__caption {
@@ -221,7 +238,7 @@
 
       .picker {
         display: grid;
-        width: min(720px, 100%);
+        width: min(840px, 100%);
         margin: 14px auto 0;
         padding: 11px 14px 13px;
         gap: 9px;
@@ -244,7 +261,7 @@
 
       .picker__choices {
         display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
+        grid-template-columns: repeat(6, minmax(0, 1fr));
         gap: 8px;
       }
 
@@ -287,14 +304,15 @@
         font-weight: 800;
       }
 
-      .blur-control {
+      .range-control {
         display: grid;
         grid-template-columns: auto minmax(0, 1fr) 48px;
         align-items: center;
         gap: 12px;
       }
 
-      .blur-control__label {
+      .range-control__label,
+      .count-control__label {
         color: rgba(255, 249, 233, 0.82);
         font-size: 12px;
         font-weight: 800;
@@ -302,18 +320,54 @@
         text-transform: uppercase;
       }
 
-      .blur-control__input {
+      .range-control__input {
         width: 100%;
         accent-color: #f5e777;
         cursor: pointer;
       }
 
-      .blur-control__value {
+      .range-control__value {
         color: #fff9e9;
         font-size: 12px;
         font-variant-numeric: tabular-nums;
         font-weight: 800;
         text-align: right;
+      }
+
+      .count-control {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .count-control__buttons {
+        justify-self: end;
+        display: grid;
+        grid-auto-flow: column;
+        padding: 2px;
+        gap: 2px;
+        border-radius: 999px;
+        background: rgba(5, 2, 7, 0.72);
+      }
+
+      .count-control__button {
+        min-width: 56px;
+        padding: 6px 12px;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        background: transparent;
+        color: rgba(255, 249, 233, 0.76);
+        font: inherit;
+        font-size: 12px;
+        font-weight: 850;
+        cursor: pointer;
+      }
+
+      .count-control__button[aria-pressed="true"] {
+        border-color: rgba(245, 231, 119, 0.62);
+        background: rgba(245, 231, 119, 0.18);
+        color: #fff9e9;
       }
 
       @keyframes drift {
@@ -345,6 +399,7 @@
         }
 
         .picker__choices {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 5px;
         }
 
@@ -413,7 +468,11 @@
                   src="/cards/420863587.webp"
                   alt=""
                 />
-                <div class="offer-tile__symbols offer-tile__symbols--draft">
+                <div
+                  class="offer-tile__symbols offer-tile__symbols--draft"
+                  id="draft-symbols"
+                  data-count="4"
+                >
                   <img
                     class="offer-tile__dreamsign"
                     src="/dreamsigns/horn_rainbow%20.png"
@@ -442,7 +501,9 @@
                 alt=""
               />
             </div>
-            <p class="offer__caption">4 choices · all shown</p>
+            <p class="offer__caption" id="draft-caption">
+              4 choices · all shown
+            </p>
           </article>
         </div>
 
@@ -451,12 +512,12 @@
             Choose one full-art backdrop for both offer variants
           </p>
           <div class="picker__choices" id="picker-choices"></div>
-          <div class="blur-control">
-            <label class="blur-control__label" for="background-blur">
+          <div class="range-control">
+            <label class="range-control__label" for="background-blur">
               Background blur
             </label>
             <input
-              class="blur-control__input"
+              class="range-control__input"
               id="background-blur"
               type="range"
               min="0"
@@ -465,12 +526,58 @@
               value="0"
             />
             <output
-              class="blur-control__value"
+              class="range-control__value"
               id="background-blur-value"
               for="background-blur"
             >
               0 px
             </output>
+          </div>
+          <div class="range-control">
+            <label class="range-control__label" for="dreamsign-spread">
+              Group spread
+            </label>
+            <input
+              class="range-control__input"
+              id="dreamsign-spread"
+              type="range"
+              min="12"
+              max="17"
+              step="1"
+              value="15"
+            />
+            <output
+              class="range-control__value"
+              id="dreamsign-spread-value"
+              for="dreamsign-spread"
+            >
+              15%
+            </output>
+          </div>
+          <div
+            class="count-control"
+            role="group"
+            aria-label="Shown Dreamsign count"
+          >
+            <span class="count-control__label">Shown Dreamsigns</span>
+            <div class="count-control__buttons">
+              <button
+                class="count-control__button"
+                type="button"
+                data-dreamsign-count="2"
+                aria-pressed="false"
+              >
+                2
+              </button>
+              <button
+                class="count-control__button"
+                type="button"
+                data-dreamsign-count="4"
+                aria-pressed="true"
+              >
+                4
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -478,7 +585,8 @@
 
     <script>
       const imageNumbers = [
-        420863587, 435865921, 336703115, 386654065, 403770328,
+        420863587, 435865921, 336703115, 386654065, 403770328, 245830771,
+        443761768, 407121790, 236539174, 272291576, 258659153,
       ];
       const giftBackground = document.querySelector("#gift-background");
       const draftBackground = document.querySelector("#draft-background");
@@ -487,6 +595,16 @@
       const backgroundBlurValue = document.querySelector(
         "#background-blur-value",
       );
+      const dreamsignSpread = document.querySelector("#dreamsign-spread");
+      const dreamsignSpreadValue = document.querySelector(
+        "#dreamsign-spread-value",
+      );
+      const draftSymbols = document.querySelector("#draft-symbols");
+      const draftCaption = document.querySelector("#draft-caption");
+      const dreamsignCountButtons = document.querySelectorAll(
+        "[data-dreamsign-count]",
+      );
+      const offerTiles = document.querySelectorAll(".offer-tile");
 
       function render(selectedIndex) {
         const selected = imageNumbers[selectedIndex];
@@ -522,8 +640,35 @@
 
       backgroundBlur.addEventListener("input", () => {
         const blur = `${backgroundBlur.value}px`;
+        const isBlurred = Number(backgroundBlur.value) > 0;
         document.documentElement.style.setProperty("--background-blur", blur);
+        offerTiles.forEach((tile) => {
+          tile.style.animation = isBlurred ? "none" : "";
+        });
         backgroundBlurValue.value = `${backgroundBlur.value} px`;
+      });
+
+      dreamsignSpread.addEventListener("input", () => {
+        const spread = `${dreamsignSpread.value}%`;
+        document.documentElement.style.setProperty(
+          "--dreamsign-spread",
+          spread,
+        );
+        dreamsignSpreadValue.value = spread;
+      });
+
+      dreamsignCountButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const count = button.dataset.dreamsignCount;
+          draftSymbols.dataset.count = count;
+          draftCaption.textContent = `${count} choices · all shown`;
+          dreamsignCountButtons.forEach((candidate) => {
+            candidate.setAttribute(
+              "aria-pressed",
+              String(candidate === button),
+            );
+          });
+        });
       });
     </script>
   </body>
