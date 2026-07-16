@@ -1250,6 +1250,72 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("routes a hand-card drag to the closest open player back-row slot", () => {
+    const interactions = {
+      canInteract: true,
+      pendingCardId: "player-hand-0",
+      pendingCardSource: "player-hand" as const,
+      pendingCardOwner: "player" as const,
+      onHandCardActivate: vi.fn(),
+      onHandCardDrop: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(makeView(), interactions);
+    const screen = container.querySelector<HTMLElement>("[data-battle-mobile]");
+    const leftSlot = container.querySelector<HTMLElement>(
+      '[data-battle-slot-id="player-back-empty"]',
+    );
+    const rightSlot = container.querySelector<HTMLElement>(
+      '[data-battle-slot-id="player-back-second-empty"]',
+    );
+    vi.spyOn(leftSlot as HTMLElement, "getBoundingClientRect").mockReturnValue({
+      x: 50,
+      y: 200,
+      left: 50,
+      top: 200,
+      right: 150,
+      bottom: 340,
+      width: 100,
+      height: 140,
+      toJSON: () => ({}),
+    });
+    vi.spyOn(rightSlot as HTMLElement, "getBoundingClientRect").mockReturnValue({
+      x: 250,
+      y: 200,
+      left: 250,
+      top: 200,
+      right: 350,
+      bottom: 340,
+      width: 100,
+      height: 140,
+      toJSON: () => ({}),
+    });
+
+    act(() => {
+      screen?.dispatchEvent(
+        new MouseEvent("drop", {
+          bubbles: true,
+          cancelable: true,
+          clientX: 290,
+          clientY: 280,
+        }),
+      );
+    });
+
+    expect(interactions.onHandCardDrop).toHaveBeenCalledWith({
+      owner: "player",
+      rank: "back",
+      slotId: "player-back-second-empty",
+    });
+
+    act(() => root.unmount());
+  });
+
   it("offers battlefield drop targets only on the dragged card's own side", () => {
     const interactions = {
       canInteract: true,

@@ -1,7 +1,9 @@
 import type { BattleCommand } from "../debug/commands";
 import type { BattleDebugZoneDestination } from "../debug/commands";
 import {
+  isBattleFieldSlotAddressValid,
   selectBattleCardLocation,
+  selectBattlefieldSlotOccupant,
   selectDefaultCharacterPlaySlot,
 } from "../state/selectors";
 import { backRankSlotId, frontRankSlotId, rankSlotIds } from "../types";
@@ -45,16 +47,18 @@ export function createMoveCardToBattlefieldCommand(
   };
 }
 
-/** Resolves the physical "play this hand card" gesture without using the drop
- * coordinates as gameplay input. Characters choose their controller's first
- * open back-rank slot. Events use the same play destination while Basic
- * Automation is active so its planner can charge energy before redirecting the
- * event to the void; in a manual battle they go directly to the void. */
+/** Resolves the physical "play this hand card" gesture. Characters use a
+ * preferred open back-rank slot when the gesture supplies one, then fall back to
+ * their controller's first open back-rank slot. Events use the same play
+ * destination while Basic Automation is active so its planner can charge energy
+ * before redirecting the event to the void; in a manual battle they go directly
+ * to the void. */
 export function createPlayCardFromHandCommand(
   state: BattleMutableState,
   battleCardId: string,
   sourceSurface: BattleCommandSourceSurface,
   basicAutomationEnabled: boolean,
+  preferredTarget?: BattleFieldSlotAddress,
 ): BattleCommand | null {
   const location = selectBattleCardLocation(state, battleCardId);
   const instance = state.cardInstances[battleCardId];
@@ -72,12 +76,24 @@ export function createPlayCardFromHandCommand(
     );
   }
 
-  return createMoveCardToBattlefieldCommand(
-    state,
-    battleCardId,
-    location.side,
+  const target =
+    preferredTarget?.side === location.side
+    && preferredTarget.zone === "backRank"
+    && isBattleFieldSlotAddressValid(preferredTarget)
+    && selectBattlefieldSlotOccupant(state, preferredTarget) === null
+      ? preferredTarget
+      : selectDefaultCharacterPlaySlot(state, location.side);
+  if (target === null) return null;
+
+  return {
+    id: "DEBUG_EDIT",
+    edit: {
+      kind: "MOVE_CARD_TO_ZONE",
+      battleCardId,
+      destination: target,
+    },
     sourceSurface,
-  );
+  };
 }
 
 export function createMoveCardToRowCommand(

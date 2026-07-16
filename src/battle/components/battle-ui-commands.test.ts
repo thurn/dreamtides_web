@@ -22,7 +22,7 @@ function board() {
 }
 
 describe("createPlayCardFromHandCommand", () => {
-  it("always chooses the first open back-rank slot for a character", () => {
+  it("chooses the first open back-rank slot for a character without a preferred target", () => {
     const state = board();
     const characterId = state.sides.player.hand.find(
       (id) => state.cardInstances[id]?.definition.battleCardKind === "character",
@@ -42,6 +42,31 @@ describe("createPlayCardFromHandCommand", () => {
         kind: "MOVE_CARD_TO_ZONE",
         battleCardId: characterId,
         destination: { side: "player", zone: "backRank", slotId: "B0" },
+      },
+    });
+  });
+
+  it("uses the preferred open back-rank slot for a dragged character", () => {
+    const state = board();
+    const characterId = state.sides.player.hand.find(
+      (id) => state.cardInstances[id]?.definition.battleCardKind === "character",
+    );
+    if (characterId === undefined) throw new Error("expected a character in hand");
+
+    const command = createPlayCardFromHandCommand(
+      state,
+      characterId,
+      "hand-tray",
+      true,
+      { side: "player", zone: "backRank", slotId: "B2" },
+    );
+
+    expect(command).toMatchObject({
+      id: "DEBUG_EDIT",
+      edit: {
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: characterId,
+        destination: { side: "player", zone: "backRank", slotId: "B2" },
       },
     });
   });

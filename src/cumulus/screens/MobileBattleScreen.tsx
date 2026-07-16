@@ -196,7 +196,7 @@ export interface MobileBattleInteractions {
   readonly pendingCardSource?: MobileBattleCardSource | null;
   readonly pendingCardOwner?: MobileBattleOwner | null;
   readonly onHandCardActivate: (battleCardId: string) => void;
-  readonly onHandCardDrop?: () => void;
+  readonly onHandCardDrop?: (target?: MobileBattleSlotTarget) => void;
   readonly onCardDebugActivate?: (
     battleCardId: string,
     source: MobileBattleCardSource,
@@ -1426,13 +1426,21 @@ function dropMobileCardAtPoint(
   clientX: number,
   clientY: number,
 ): void {
+  const hitTarget = document.elementFromPoint(clientX, clientY);
   if (interactions.pendingCardSource === "player-hand") {
-    interactions.onHandCardDrop?.();
+    const battleScreen = hitTarget?.closest<HTMLElement>(
+      "[data-battle-mobile]",
+    );
+    interactions.onHandCardDrop?.(
+      battleScreen === undefined || battleScreen === null
+        ? undefined
+        : closestOpenBackRankSlot(battleScreen, "player", clientX, clientY),
+    );
     return;
   }
-  const target = document
-    .elementFromPoint(clientX, clientY)
-    ?.closest<HTMLElement>("[data-battle-mobile-drop-kind]");
+  const target = hitTarget?.closest<HTMLElement>(
+    "[data-battle-mobile-drop-kind]",
+  );
   if (target === undefined || target === null) return;
   const owner = target.dataset.battleMobileDropOwner;
   if (owner !== "enemy" && owner !== "player") return;
@@ -1446,6 +1454,37 @@ function dropMobileCardAtPoint(
   const zone = target.dataset.battleMobileDropZone;
   if (zone !== "deck" && zone !== "hand" && zone !== "void") return;
   interactions.onZoneDrop({ owner, zone });
+}
+
+function closestOpenBackRankSlot(
+  battleScreen: HTMLElement,
+  owner: MobileBattleOwner,
+  clientX: number,
+  clientY: number,
+): MobileBattleSlotTarget | undefined {
+  if (!Number.isFinite(clientX) || !Number.isFinite(clientY)) return undefined;
+
+  let closest:
+    | { readonly slotId: string; readonly distanceSquared: number }
+    | undefined;
+  const slots = battleScreen.querySelectorAll<HTMLElement>(
+    `[data-battle-rank="${owner}-back"] [data-battle-slot-filled="false"]`,
+  );
+  slots.forEach((slot) => {
+    const slotId = slot.dataset.battleSlotId;
+    if (slotId === undefined) return;
+    const bounds = slot.getBoundingClientRect();
+    const deltaX = clientX - (bounds.left + bounds.width / 2);
+    const deltaY = clientY - (bounds.top + bounds.height / 2);
+    const distanceSquared = deltaX * deltaX + deltaY * deltaY;
+    if (closest === undefined || distanceSquared < closest.distanceSquared) {
+      closest = { slotId, distanceSquared };
+    }
+  });
+
+  return closest === undefined
+    ? undefined
+    : { owner, rank: "back", slotId: closest.slotId };
 }
 
 function ControlRow({
@@ -1950,7 +1989,14 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
       onDrop={(event) => {
         if (interactions?.pendingCardSource !== "player-hand") return;
         event.preventDefault();
-        interactions.onHandCardDrop?.();
+        interactions.onHandCardDrop?.(
+          closestOpenBackRankSlot(
+            event.currentTarget,
+            "player",
+            event.clientX,
+            event.clientY,
+          ),
+        );
       }}
       style={{
         ...rootStyle(isDesktop),

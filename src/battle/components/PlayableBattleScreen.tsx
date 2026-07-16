@@ -88,7 +88,10 @@ import { resolveBattleInspectorIntent } from "./battle-inspector-intents";
 import { createFillBattlefieldPreviewCommand } from "./battle-debug-preview";
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
 import { MobileBattleScreenAdapter } from "../../screens/cumulus_adapters/MobileBattleScreenAdapter";
-import type { MobileBattleInspectorAction } from "../../cumulus/screens/MobileBattleScreen";
+import type {
+  MobileBattleInspectorAction,
+  MobileBattleSlotTarget,
+} from "../../cumulus/screens/MobileBattleScreen";
 import { useIsDesktop } from "../../cumulus/screens/use-is-desktop";
 
 const DESKTOP_INSPECTOR_WIDTH = 1280;
@@ -890,7 +893,9 @@ function PlayableBattleScreenInner({
     setPendingDrag(null);
   }
 
-  function handlePlayPendingHandCard(): void {
+  function handlePlayPendingHandCard(
+    preferredTarget?: MobileBattleSlotTarget,
+  ): void {
     if (pendingDrag?.kind !== "battle-card") return;
     pendingDragDropHandledRef.current = true;
     const command = createPlayCardFromHandCommand(
@@ -898,6 +903,13 @@ function PlayableBattleScreenInner({
       pendingDrag.battleCardId,
       pendingDrag.sourceSurface,
       isBasicAutomationEnabled,
+      preferredTarget === undefined
+        ? undefined
+        : {
+            side: preferredTarget.owner,
+            zone: preferredTarget.rank === "back" ? "backRank" : "frontRank",
+            slotId: preferredTarget.slotId as BattlefieldSlotId,
+          },
     );
     if (command === null) {
       setPendingDrag(null);
