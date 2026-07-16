@@ -505,8 +505,11 @@ describe("DreamAugurySiteScreen", () => {
       offers: [
         {
           ...first,
-          headline: "Transfigure Fixture 1",
-          subtitle: "Transfigure a card in your deck.",
+          headline: "Transfigure a Card",
+          subtitle: [
+            { kind: "text", text: "Transfigure " },
+            { kind: "entity", text: "Fixture 1" },
+          ],
           requiresSelection: false,
           visual: {
             kind: "beforeAfter",
@@ -522,6 +525,12 @@ describe("DreamAugurySiteScreen", () => {
 
     click(container.querySelector('[data-testid="cumulus-dream-augury-offer-A"]'));
 
+    expect(container.querySelector("[data-glass-panel-header] h2")?.textContent).toBe(
+      "Transfigure a Card",
+    );
+    expect(
+      container.querySelector("[data-glass-panel-subtitle-entity]")?.textContent,
+    ).toBe("Fixture 1");
     const arrow = container.querySelector<HTMLElement>(
       "[data-augury-transition-arrow] i",
     );

@@ -2221,20 +2221,20 @@
       "description": "Optional plain panel title."
     },
     {
-      "name": "structuredTitle",
-      "tsType": "readonly GlassPanelTitleSegment[]",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional structured panel title whose entity runs receive the canonical underline."
-    },
-    {
       "name": "subtitle",
       "tsType": "string",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Optional supporting line rendered beneath the title."
+    },
+    {
+      "name": "structuredSubtitle",
+      "tsType": "readonly GlassPanelTextSegment[]",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional structured subtitle whose entity runs receive the canonical underline."
     },
     {
       "name": "headingLevel",

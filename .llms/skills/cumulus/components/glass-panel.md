@@ -18,8 +18,8 @@ The shared liquid-glass content container: an optional structured header, a comp
 | --- | --- | --- | --- | --- |
 | `eyebrow` | `string` | no | — | Optional uppercase context line rendered above the title. |
 | `title` | `string` | no | — | Optional plain panel title. |
-| `structuredTitle` | `readonly GlassPanelTitleSegment[]` | no | — | Optional structured panel title whose entity runs receive the canonical underline. |
 | `subtitle` | `string` | no | — | Optional supporting line rendered beneath the title. |
+| `structuredSubtitle` | `readonly GlassPanelTextSegment[]` | no | — | Optional structured subtitle whose entity runs receive the canonical underline. |
 | `headingLevel` | `"h1" \| "h2"` | no | `h2` | Semantic heading element for the title. Defaults to `h2`. |
 | `titleVoice` | `GlassPanelTitleVoice` = `"standard" \| "hero"` | no | `standard` | Title and subtitle typography. Defaults to `standard`. |
 | `headerSpacing` | `GlassPanelHeaderSpacing` = `"compact" \| "spacious" \| "regular" \| "medium"` | no | `regular` | Header padding preset. Defaults to `regular`. |
@@ -47,18 +47,18 @@ The shared liquid-glass content container: an optional structured header, a comp
 
 ## Usage
 
-A titled scene panel with a canonical named-entity underline, close accessory, and composed body content.
+A titled scene panel with a canonical named-entity underline in its subtitle, close accessory, and composed body content.
 
 ```tsx
 import { GlassPanel } from "src/cumulus/components/overlay/GlassPanel";
 
 <GlassPanel
   eyebrow="Vision I"
-  structuredTitle={[
+  title="Transfigure Your Starters"
+  structuredSubtitle={[
     { kind: "text", text: "Transfigure " },
     { kind: "entity", text: "A Thread Rewoven" },
   ]}
-  subtitle="Choose how the vision resolves."
   rightAccessory={{
     kind: "iconButton",
     glyph: GLYPHS.close,

@@ -52,7 +52,7 @@ import type {
 } from "../../cumulus/components/controls/OfferTile";
 import { offerTileDescription } from "../../cumulus/components/controls/offer-tile-descriptions";
 import type { DreamscapeSiteModel } from "../../cumulus/components/dreamscape/SiteNode";
-import type { GlassPanelTitleSegment } from "../../cumulus/components/overlay/GlassPanel";
+import type { GlassPanelTextSegment } from "../../cumulus/components/overlay/GlassPanel";
 import type {
   DreamAuguryCardChoiceView,
   DreamAuguryCardView,
@@ -140,12 +140,12 @@ function indefiniteArticle(label: string): "a" | "an" {
   return /^[aeiou]/i.test(label) ? "an" : "a";
 }
 
-function namedEntityHeadline(
+function namedEntitySubtitle(
   action: string,
   entityNames: readonly string[],
   suffix = "",
-): DreamAuguryOfferView["headline"] {
-  const segments: GlassPanelTitleSegment[] = [
+): DreamAuguryOfferView["subtitle"] {
+  const segments: GlassPanelTextSegment[] = [
     { kind: "text", text: `${action} ` },
   ];
   entityNames.forEach((name, index) => {
@@ -156,13 +156,13 @@ function namedEntityHeadline(
   return segments;
 }
 
-/** Player-facing detail title derived from the exact structured outcome. */
+/** Player-facing detail title derived from the offer's action category. */
 export function buildDreamAuguryOfferHeadline(
   model: OfferTileModel,
-): DreamAuguryOfferView["headline"] {
+): string {
   switch (model.kind) {
     case "card-gift":
-      return namedEntityHeadline("Gain", [offerCardName(model.card)]);
+      return "Gain a Card";
     case "card-draft":
     case "copies-draft":
     case "category-draft":
@@ -170,38 +170,76 @@ export function buildDreamAuguryOfferHeadline(
     case "transfigured-draft":
       return "Choose a Transfigured Card";
     case "card-bundle":
-      return model.cards.length === 2
-        ? namedEntityHeadline("Gain", model.cards.map(offerCardName))
-        : `Gain ${titleCardinal(model.cards.length)} Cards`;
+      return `Gain ${titleCardinal(model.cards.length)} Cards`;
     case "transfigure-card":
-      return namedEntityHeadline("Transfigure", [offerCardName(model.card)]);
+      return "Transfigure a Card";
     case "transfigure-starters":
-      return namedEntityHeadline("Transfigure", model.cards.map(offerCardName));
+      return "Transfigure Your Starters";
     case "keyword-modification":
-      return namedEntityHeadline("Reduce Reclaim for", [offerCardName(model.card)]);
+      return "Reduce Reclaim";
     case "tribal-change":
-      return namedEntityHeadline(
+      return "Change a Character Type";
+    case "purge-card":
+      return "Purge a Card";
+    case "trade-card":
+      return "Trade a Card";
+    case "duplicate-card":
+      return model.cards.length === 1
+        ? "Duplicate a Card"
+        : "Choose a Card";
+    case "dreamsign-gift":
+      return "Gain a Dreamsign";
+    case "dreamsign-draft":
+      return "Choose a Dreamsign";
+    case "add-site":
+      return "Add a Site";
+  }
+}
+
+/** Supporting detail copy with named outcomes identified at point of display. */
+export function buildDreamAuguryOfferSubtitle(
+  model: OfferTileModel,
+): DreamAuguryOfferView["subtitle"] {
+  switch (model.kind) {
+    case "card-gift":
+      return namedEntitySubtitle("Gain", [offerCardName(model.card)]);
+    case "card-bundle":
+      return model.cards.length === 2
+        ? namedEntitySubtitle("Gain", model.cards.map(offerCardName))
+        : offerTileDescription(model);
+    case "transfigure-card":
+      return namedEntitySubtitle("Transfigure", [offerCardName(model.card)]);
+    case "transfigure-starters":
+      return namedEntitySubtitle("Transfigure", model.cards.map(offerCardName));
+    case "keyword-modification":
+      return namedEntitySubtitle("Reduce Reclaim for", [offerCardName(model.card)]);
+    case "tribal-change":
+      return namedEntitySubtitle(
         "Make",
         [offerCardName(model.card)],
         ` ${indefiniteArticle(model.newCharacterSubtype)} ${model.newCharacterSubtype}`,
       );
     case "purge-card":
-      return namedEntityHeadline("Purge", [offerCardName(model.card)]);
+      return namedEntitySubtitle("Purge", [offerCardName(model.card)]);
     case "trade-card":
-      return namedEntityHeadline("Trade", [offerCardName(model.outgoing)]);
+      return namedEntitySubtitle("Trade", [offerCardName(model.outgoing)]);
     case "duplicate-card":
       return model.cards.length === 1
-        ? namedEntityHeadline("Duplicate", [offerCardName(model.cards[0])])
-        : "Choose a Card";
+        ? namedEntitySubtitle("Duplicate", [offerCardName(model.cards[0])])
+        : offerTileDescription(model);
     case "dreamsign-gift":
-      return namedEntityHeadline("Gain", [model.dreamsign.name]);
-    case "dreamsign-draft":
-      return "Choose a Dreamsign";
+      return namedEntitySubtitle("Gain", [model.dreamsign.name]);
     case "add-site":
-      return namedEntityHeadline(
+      return namedEntitySubtitle(
         `Add ${indefiniteArticle(model.site.name)}`,
         [model.site.name],
       );
+    case "card-draft":
+    case "copies-draft":
+    case "category-draft":
+    case "transfigured-draft":
+    case "dreamsign-draft":
+      return offerTileDescription(model);
   }
 }
 
@@ -655,7 +693,7 @@ export function buildDreamAuguryOfferViews(
     return {
       id: offer.offerId,
       headline: buildDreamAuguryOfferHeadline(tile),
-      subtitle: offerTileDescription(tile),
+      subtitle: buildDreamAuguryOfferSubtitle(tile),
       requiresSelection: (offer.choiceRequest?.candidates.length ?? 0) > 0,
       tile,
       visual: buildOfferVisual(offer, context),

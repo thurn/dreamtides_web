@@ -21,7 +21,7 @@ import {
 import { Dreamsign } from "../components/hud/Dreamsign";
 import {
   GlassPanel,
-  type GlassPanelTitleSegment,
+  type GlassPanelTextSegment,
 } from "../components/overlay/GlassPanel";
 import type { ArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
@@ -66,8 +66,8 @@ export type DreamAuguryOfferVisualView =
 
 export interface DreamAuguryOfferView {
   id: string;
-  headline: string | readonly GlassPanelTitleSegment[];
-  subtitle: string;
+  headline: string;
+  subtitle: string | readonly GlassPanelTextSegment[];
   requiresSelection: boolean;
   tile: OfferTileModel;
   visual: DreamAuguryOfferVisualView;
@@ -325,10 +325,10 @@ function OfferDetailPanel({
       style={{ width: "100%", height: "100%", minWidth: 0, minHeight: 0, pointerEvents: "auto" }}
     >
       <GlassPanel
-        {...(typeof offer.headline === "string"
-          ? { title: offer.headline }
-          : { structuredTitle: offer.headline })}
-        subtitle={offer.subtitle}
+        title={offer.headline}
+        {...(typeof offer.subtitle === "string"
+          ? { subtitle: offer.subtitle }
+          : { structuredSubtitle: offer.subtitle })}
         headerSpacing="medium"
         footer={
           <div

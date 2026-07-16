@@ -37,11 +37,11 @@ describe("GlassPanel", () => {
         <CumulusRoot>
           <GlassPanel
             eyebrow="Vision I"
-            structuredTitle={[
+            title="Transfigure Your Starters"
+            structuredSubtitle={[
               { kind: "text", text: "Transfigure " },
               { kind: "entity", text: "A Thread Rewoven" },
             ]}
-            subtitle="Choose how the vision resolves."
             rightAccessory={{
               kind: "iconButton",
               glyph: GLYPHS.close,
@@ -65,17 +65,17 @@ describe("GlassPanel", () => {
     expect(panel?.style.backdropFilter).toContain("--glass-blur");
     expect(panel?.style.borderRadius).toBe("var(--radius-panel)");
     expect(panel?.querySelector("h2")?.textContent).toBe(
-      "Transfigure A Thread Rewoven",
+      "Transfigure Your Starters",
     );
     expect(
-      panel?.querySelector("[data-glass-panel-title-entity]")?.textContent,
+      panel?.querySelector("[data-glass-panel-subtitle-entity]")?.textContent,
     ).toBe("A Thread Rewoven");
     expect(
       panel?.querySelector<HTMLElement>("[data-glass-panel-header]")?.style
         .textAlign,
     ).toBe("left");
     expect(panel?.textContent).toContain("Vision I");
-    expect(panel?.textContent).toContain("Choose how the vision resolves.");
+    expect(panel?.textContent).toContain("Transfigure A Thread Rewoven");
     expect(panel?.textContent).toContain("Panel content");
     expect(panel?.querySelector("footer")?.textContent).toBe("Footer action");
 
