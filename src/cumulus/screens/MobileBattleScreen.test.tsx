@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { CumulusRoot } from "../CumulusRoot";
+import { resolveColor } from "../primitives/color";
 import { DOUBLE_TAP_WINDOW_MS } from "../primitives/pointer-gesture";
 import {
   MobileBattleScreen,
@@ -66,7 +67,6 @@ function makeCard(index: number, instanceId: string): MobileBattleCardView {
     figmentTitleBar: false,
     figmentCount: 1,
     storedTime: 0,
-    automated: false,
     showPlayableOutline: false,
   };
 }
@@ -186,14 +186,12 @@ describe("MobileBattleScreen", () => {
       figment: true,
       figmentCount: 3,
       storedTime: 4,
-      automated: true,
     };
     const statusHandCard: MobileBattleCardView = {
       ...handCard,
       exhausted: true,
       figmentCount: 2,
       storedTime: 5,
-      automated: true,
     };
     const statusView: MobileBattleView = {
       ...view,
@@ -217,15 +215,39 @@ describe("MobileBattleScreen", () => {
     expect(battlefield?.dataset.battleCardExhausted).toBe("true");
     expect(battlefield?.dataset.battleCardStoredTime).toBe("4");
     expect(battlefield?.dataset.battleCardFigmentCount).toBe("3");
-    expect(battlefield?.dataset.battleCardAutomated).toBe("true");
     expect(battlefield?.querySelector('[aria-label="Exhausted"]')).not.toBeNull();
     expect(battlefield?.querySelector('[aria-label="3 Figments"]')).not.toBeNull();
     expect(
       battlefield?.querySelector('[aria-label="4 stored-time counters"]'),
     ).not.toBeNull();
     expect(
-      battlefield?.querySelector('[aria-label="Automated card text"]'),
-    ).not.toBeNull();
+      battlefield?.querySelector('[data-battle-card-status="figment-count"]')
+        ?.textContent,
+    ).toBe("x3");
+    const figmentBadge = battlefield?.querySelector<HTMLElement>(
+      '[data-battle-card-status="figment-count"]',
+    );
+    expect(figmentBadge?.style.background).toBe("var(--surface-status-badge)");
+    expect(figmentBadge?.style.borderColor).toBe("var(--text-on-accent)");
+    expect(figmentBadge?.style.borderRadius).toBe("var(--radius-inset)");
+    expect(figmentBadge?.style.color).toBe("var(--text-on-accent)");
+    const exhaustedIcon = battlefield?.querySelector<HTMLElement>(
+      '[data-battle-card-status="exhausted"] i',
+    );
+    const whiteStyle = document.createElement("span").style;
+    whiteStyle.color = resolveColor("white");
+    expect(exhaustedIcon?.style.color).toBe(whiteStyle.color);
+    const storedTimeBadge = battlefield?.querySelector<HTMLElement>(
+      '[data-battle-card-status="stored-time"]',
+    );
+    expect(storedTimeBadge?.firstChild?.textContent).toBe("4");
+    expect(storedTimeBadge?.lastElementChild?.nodeName).toBe("I");
+    expect(
+      (storedTimeBadge?.lastElementChild as HTMLElement | null)?.style.color,
+    ).toBe(whiteStyle.color);
+    expect(
+      battlefield?.querySelector('[data-battle-card-status="automated"]'),
+    ).toBeNull();
     expect(
       battlefield?.querySelector<HTMLElement>("[data-battle-card-motion]")
         ?.style.filter,
@@ -237,8 +259,9 @@ describe("MobileBattleScreen", () => {
       hand?.querySelector('[aria-label="5 stored-time counters"]'),
     ).not.toBeNull();
     expect(
-      hand?.querySelector('[aria-label="Automated card text"]'),
-    ).not.toBeNull();
+      hand?.querySelector('[data-battle-card-status="figment-count"]')
+        ?.textContent,
+    ).toBe("x2");
 
     const committedView: MobileBattleView = {
       ...statusView,
@@ -252,7 +275,6 @@ describe("MobileBattleScreen", () => {
               exhausted: false,
               figmentCount: 1,
               storedTime: 0,
-              automated: false,
             },
           },
           ...statusView.player.frontRank.slice(1),
@@ -272,7 +294,6 @@ describe("MobileBattleScreen", () => {
     expect(updatedBattlefield?.dataset.battleCardExhausted).toBe("false");
     expect(updatedBattlefield?.dataset.battleCardStoredTime).toBe("0");
     expect(updatedBattlefield?.dataset.battleCardFigmentCount).toBe("1");
-    expect(updatedBattlefield?.dataset.battleCardAutomated).toBe("false");
     expect(updatedBattlefield?.querySelector("[data-battle-card-status]")).toBeNull();
 
     act(() => root.unmount());

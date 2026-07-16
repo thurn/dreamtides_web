@@ -217,7 +217,6 @@ describe("buildMobileBattleView", () => {
       figmentTitleBar: false,
       figmentCount: 1,
       storedTime: 0,
-      automated: false,
     });
     expect(view.enemy.backRank[4].card).toMatchObject({
       id: board.sides.enemy.backRank.B4,
@@ -225,7 +224,6 @@ describe("buildMobileBattleView", () => {
       figmentTitleBar: true,
       figmentCount: 1,
       storedTime: 0,
-      automated: false,
     });
   });
 
@@ -242,32 +240,17 @@ describe("buildMobileBattleView", () => {
     expect(before.player.frontRank[3].card).toMatchObject({
       exhausted: true,
       storedTime: 0,
-      automated: false,
     });
     expect(before.enemy.backRank[4].card).toMatchObject({ figmentCount: 1 });
 
     board.cardInstances[playerCardId].status.isExhausted = false;
     board.cardInstances[playerCardId].status.counters = 4;
-    board.cardInstances[playerCardId].definition.cardId =
-      "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6";
     board.cardInstances[figmentCardId].figments = [2, 3, 4];
 
-    const after = buildMobileBattleView(
-      init,
-      board,
-      ENEMY_DREAMCALLER,
-      null,
-      {
-        aiMode: false,
-        basicAutomationEnabled: true,
-        isOpponentHandRevealed: false,
-        isPlayerHandHidden: false,
-      },
-    );
+    const after = buildMobileBattleView(init, board, ENEMY_DREAMCALLER);
     expect(after.player.frontRank[3].card).toMatchObject({
       exhausted: false,
       storedTime: 4,
-      automated: true,
     });
     expect(after.enemy.backRank[4].card).toMatchObject({
       figmentCount: 3,

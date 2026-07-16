@@ -1460,7 +1460,6 @@ function PlayableBattleScreenInner({
           enemyDreamcaller={enemyDreamcallerSummary}
           aiProposal={proposal}
           aiMode={aiMode}
-          basicAutomationEnabled={isBasicAutomationEnabled}
           isOpponentHandRevealed={isOpponentHandRevealed}
           isPlayerHandHidden={isPlayerHandHidden}
           pendingPrompt={pendingPrompt}

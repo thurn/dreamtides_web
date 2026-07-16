@@ -94,6 +94,7 @@ export const TOKENS = {
   "--surface-chip": { var: "var(--surface-chip)", value: "var(--primitive-plum-400)" },
   "--surface-chrome": { var: "var(--surface-chrome)", value: "#191423" },
   "--surface-chrome-strong": { var: "var(--surface-chrome-strong)", value: "#120e1c" },
+  "--surface-status-badge": { var: "var(--surface-status-badge)", value: "var(--primitive-line-black)" },
   "--text-primary": { var: "var(--text-primary)", value: "var(--primitive-ink-100)" },
   "--text-secondary": { var: "var(--text-secondary)", value: "var(--primitive-ink-300)" },
   "--text-muted": { var: "var(--text-muted)", value: "var(--primitive-ink-400)" },

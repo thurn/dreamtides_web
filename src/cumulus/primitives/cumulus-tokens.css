@@ -196,6 +196,7 @@
   --surface-chip: var(--primitive-plum-400);
   --surface-chrome: #191423;   /* solid raised chrome (HUD/popovers/windows) */
   --surface-chrome-strong: #120e1c;  /* solid, deeper chrome for windows */
+  --surface-status-badge: var(--primitive-line-black); /* high-contrast in-card status mark */
 
   /* ---- Text ---- */
   --text-primary: var(--primitive-ink-100);

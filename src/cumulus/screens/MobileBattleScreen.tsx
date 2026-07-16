@@ -66,8 +66,6 @@ export interface MobileBattleCardView {
   readonly figmentCount: number;
   /** Stored-time counters held by this battle instance. */
   readonly storedTime: number;
-  /** Whether Basic Automation currently scripts this card's rules text. */
-  readonly automated: boolean;
   /** Draw the green playable-card outline on this hand card. */
   readonly showPlayableOutline: boolean;
 }
@@ -1003,7 +1001,6 @@ function FaceUpCard({
       data-battle-card-exhausted={card.exhausted ? "true" : "false"}
       data-battle-card-stored-time={String(card.storedTime)}
       data-battle-card-figment-count={String(card.figmentCount)}
-      data-battle-card-automated={card.automated ? "true" : "false"}
       data-battle-pointer-dragging="false"
       draggable={false}
       onPointerDownCapture={(event) => {
@@ -1181,7 +1178,7 @@ function FaceUpCard({
           testId={`battle-card-face:${card.id}`}
         />
       </motion.div>
-      <BattleCardStatusIndicators card={card} fullCard={showRulesText} />
+      <BattleCardStatusIndicators card={card} />
     </motion.div>
   );
 }
@@ -1211,36 +1208,14 @@ const BATTLE_CARD_STATUS_BADGE_STYLE: CSSProperties = {
 
 function BattleCardStatusIndicators({
   card,
-  fullCard,
 }: {
   readonly card: MobileBattleCardView;
-  readonly fullCard: boolean;
 }) {
   return (
     <div
       data-battle-card-status-indicators=""
       style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
     >
-      {card.automated ? (
-        <div
-          aria-label="Automated card text"
-          data-battle-card-status="automated"
-          style={{
-            ...BATTLE_CARD_STATUS_BADGE_STYLE,
-            top: fullCard ? "16%" : "4%",
-            left: "4%",
-            width: BATTLE_CARD_STATUS_BADGE_SIZE,
-            paddingInline: 0,
-          }}
-        >
-          <GlowIcon
-            iconClass={GLYPHS.gear}
-            color="text-primary"
-            size="68%"
-            shadow
-          />
-        </div>
-      ) : null}
       {card.exhausted ? (
         <div
           aria-label="Exhausted"
@@ -1256,7 +1231,7 @@ function BattleCardStatusIndicators({
         >
           <GlowIcon
             iconClass={GLYPHS.exhaust}
-            color="accent-bright"
+            color="white"
             size="70%"
             shadow
           />
@@ -1270,9 +1245,15 @@ function BattleCardStatusIndicators({
             ...BATTLE_CARD_STATUS_BADGE_STYLE,
             bottom: "4%",
             left: "4%",
+            width: BATTLE_CARD_STATUS_BADGE_SIZE,
+            paddingInline: 0,
+            borderColor: token("--text-on-accent"),
+            borderRadius: token("--radius-inset"),
+            background: token("--surface-status-badge"),
+            color: token("--text-on-accent"),
           }}
         >
-          ×{String(card.figmentCount)}
+          x{String(card.figmentCount)}
         </div>
       ) : null}
       {card.storedTime > 0 ? (
@@ -1286,13 +1267,13 @@ function BattleCardStatusIndicators({
             gap: token("--space-1"),
           }}
         >
+          {String(card.storedTime)}
           <GlowIcon
             iconClass={GLYPHS.counter}
-            color="accent-bright"
+            color="white"
             size="62%"
             shadow
           />
-          {String(card.storedTime)}
         </div>
       ) : null}
     </div>
