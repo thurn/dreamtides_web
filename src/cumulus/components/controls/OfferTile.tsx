@@ -21,6 +21,10 @@ import type { Glyph } from "../../primitives/glyph";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import {
+  DEFAULT_ART_CROP,
+  resolveCardArtImageStyle,
+} from "../card/card-art-crop";
+import {
   offerTileDescription,
   offerTileRichDescription,
 } from "./offer-tile-descriptions";
@@ -322,7 +326,6 @@ function offerTileMotionDelay(offerId: string): string {
 
 const OFFER_ART_STAGE_SIZE = 208;
 const OFFER_ART_OVERLAY_SIZE = 84;
-const CARD_ART_VISIBLE_SOURCE_FRACTION = 259 / 280;
 
 type DreamsignDraftCount = OfferTileDreamsignChoices["length"];
 
@@ -586,14 +589,15 @@ function CardArtPiece({
   card,
   treatment = "plain",
   overlay = false,
-  framing = "authored",
+  frameAspect = 1,
 }: {
   readonly card: OfferTileCard;
   readonly treatment?: "plain" | "purged";
   readonly overlay?: boolean;
-  readonly framing?: "authored" | "centered";
+  readonly frameAspect?: number;
 }): ReactElement {
   const [imageBroken, setImageBroken] = useState(false);
+  const [imageAspect, setImageAspect] = useState<number | null>(null);
   const cardData = card.displaySnapshot;
   const useCardImage =
     !identiconsForced() &&
@@ -602,14 +606,11 @@ function CardArtPiece({
   const imageSource = useCardImage
     ? cardImageUrl(cardData.imageNumber)
     : cardIdenticonUri(card.cardId);
-  const focalPoint = cardData.art ?? { x: 0, y: 0 };
-  const objectPosition =
-    framing === "centered"
-      ? "50% 50%"
-      : `${String((focalPoint.x + 1) * 50)}% ${String((focalPoint.y + 1) * 50)}%`;
+  const artCrop = cardData.art ?? DEFAULT_ART_CROP;
 
   useEffect(() => {
     setImageBroken(false);
+    setImageAspect(null);
   }, [card.cardId, cardData.imageNumber]);
 
   return (
@@ -637,18 +638,30 @@ function CardArtPiece({
         src={imageSource}
         alt=""
         draggable={false}
+        onLoad={
+          useCardImage
+            ? (event) => {
+                const { naturalWidth, naturalHeight } = event.currentTarget;
+                if (naturalWidth > 0 && naturalHeight > 0) {
+                  setImageAspect(naturalWidth / naturalHeight);
+                }
+              }
+            : undefined
+        }
         onError={useCardImage ? () => setImageBroken(true) : undefined}
         style={{
-          position: "absolute",
-          left: 0,
-          top: 0,
+          ...(useCardImage
+            ? resolveCardArtImageStyle(artCrop, imageAspect, 1, frameAspect, 1)
+            : {
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                objectPosition: "50% 50%",
+              }),
           display: "block",
-          width: "100%",
-          height: useCardImage
-            ? `${String(100 / CARD_ART_VISIBLE_SOURCE_FRACTION)}%`
-            : "100%",
-          objectFit: useCardImage ? "cover" : "contain",
-          objectPosition,
           pointerEvents: "none",
           userSelect: "none",
         }}
@@ -697,10 +710,7 @@ function CardArtMosaic({
             pointerEvents: "none",
           }}
         >
-          <CardArtPiece
-            card={card}
-            framing={cards.length > 1 ? "centered" : "authored"}
-          />
+          <CardArtPiece card={card} frameAspect={rows / columns} />
         </span>
       ))}
     </span>

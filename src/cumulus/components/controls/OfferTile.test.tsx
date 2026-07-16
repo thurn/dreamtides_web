@@ -178,22 +178,65 @@ describe("OfferTile", () => {
     const focusedSingleImage = container.querySelector<HTMLImageElement>(
       `[data-testid="one"] [data-offer-tile-card-art="${CARDS[0].cardId}"] img`,
     )!;
+    Object.defineProperties(focusedSingleImage, {
+      naturalWidth: { configurable: true, value: 462 },
+      naturalHeight: { configurable: true, value: 280 },
+    });
+    act(() => {
+      focusedSingleImage.dispatchEvent(new Event("load", { bubbles: true }));
+    });
     expect(focusedSingleImage.src).toContain("/cards/287269511.webp");
     expect(focusedSingleImage.style.objectFit).toBe("cover");
-    expect(focusedSingleImage.style.objectPosition).toBe("75% 25%");
-    expect(Number.parseFloat(focusedSingleImage.style.height)).toBeCloseTo(
-      (280 / 259) * 100,
-      5,
+    expect(focusedSingleImage.style.objectPosition).toBe("");
+    expect(focusedSingleImage.style.left).toBe("50%");
+    expect(focusedSingleImage.style.top).toBe("50%");
+    expect(Number.parseFloat(focusedSingleImage.style.width)).toBeCloseTo(280.5, 5);
+    expect(Number.parseFloat(focusedSingleImage.style.height)).toBeCloseTo(170, 5);
+    const authoredTranslation = /translate\(([-\d.]+)%, ([-\d.]+)%\)$/.exec(
+      focusedSingleImage.style.transform,
     );
+    expect(authoredTranslation).not.toBeNull();
+    expect(Number(authoredTranslation?.[1])).toBeGreaterThan(0);
+    expect(Number(authoredTranslation?.[2])).toBeLessThan(0);
 
-    for (const testId of ["two", "three", "four"]) {
+    const authoredPanelWidths = {
+      two: 561,
+      three: 841.5,
+      four: 280.5,
+    } as const;
+    for (const testId of ["two", "three", "four"] as const) {
       const images = container.querySelectorAll<HTMLImageElement>(
         `[data-testid="${testId}"] [data-offer-tile-card-art] img`,
       );
       expect(images.length).toBeGreaterThan(1);
+      act(() => {
+        for (const image of images) {
+          Object.defineProperties(image, {
+            naturalWidth: { configurable: true, value: 462 },
+            naturalHeight: { configurable: true, value: 280 },
+          });
+          image.dispatchEvent(new Event("load", { bubbles: true }));
+        }
+      });
       for (const image of images) {
-        expect(image.style.objectPosition).toBe("50% 50%");
+        expect(image.style.objectPosition).toBe("");
+        expect(image.style.left).toBe("50%");
+        expect(image.style.top).toBe("50%");
+        expect(Number.parseFloat(image.style.width)).toBeGreaterThan(100);
       }
+      const authoredPanelImage = container.querySelector<HTMLImageElement>(
+        `[data-testid="${testId}"] [data-offer-tile-card-art="${CARDS[0].cardId}"] img`,
+      )!;
+      const panelTranslation = /translate\(([-\d.]+)%, ([-\d.]+)%\)$/.exec(
+        authoredPanelImage.style.transform,
+      );
+      expect(panelTranslation).not.toBeNull();
+      expect(Number(panelTranslation?.[1])).toBeGreaterThan(0);
+      expect(Number(panelTranslation?.[2])).toBeLessThan(0);
+      expect(Number.parseFloat(authoredPanelImage.style.width)).toBeCloseTo(
+        authoredPanelWidths[testId],
+        5,
+      );
     }
     expect(container.querySelector("[data-card-presentation]")).toBeNull();
 

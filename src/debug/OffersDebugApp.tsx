@@ -67,6 +67,11 @@ const KEYWORD_TARGET = fixtureCard(
   776481901,
 );
 
+const PURGE_TARGET = fixtureCard(
+  "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+  2654359867,
+);
+
 const STARTER_TARGETS = [
   fixtureCard("5a980eff-6ec7-44d8-9977-b98e66bbc2c8", 507269458),
   fixtureCard("647f5150-b2e0-424b-9480-27557642524e", 1016596168),
@@ -162,7 +167,7 @@ export const OFFER_TILE_DEBUG_MODELS: Readonly<
   purge: {
     id: "debug:purge",
     kind: "purge-card",
-    card: GENERAL_DRAFT_A[3],
+    card: PURGE_TARGET,
   },
   purge_replace: {
     id: "debug:purge_replace",
@@ -408,6 +413,7 @@ export default function OffersDebugApp(): ReactElement {
             return (
               <figure
                 key={archetypeId}
+                id={`offer-${archetypeId}`}
                 data-offer-category={archetypeId}
                 style={{
                   display: "grid",

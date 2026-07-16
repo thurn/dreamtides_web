@@ -32,6 +32,17 @@ import { DESKTOP_MIN_WIDTH } from "../../screens/use-is-desktop";
 import { richText } from "./rich-text";
 import { Pressable } from "../../primitives/Pressable";
 import { useRevealSource } from "../../internal/reveal/context";
+import {
+  DEFAULT_ART_CROP,
+  resolveCardArtImageStyle,
+} from "./card-art-crop";
+
+export {
+  DEFAULT_ART_CROP,
+  artPanStep,
+  minArtOffsetY,
+  minArtScale,
+} from "./card-art-crop";
 
 /**
  * Default chrome accent used for the selection ring fallback. The card's type
@@ -39,25 +50,6 @@ import { useRevealSource } from "../../internal/reveal/context";
  * purple accent for events) rather than a colored border.
  */
 const SELECTION_DEFAULT_COLOR: CumulusColor = "selected";
-
-/**
- * Fallback art crop for cards that carry no authored `art` setting: centered
- * with a slight cover zoom that hides source letterboxing. The card editor's
- * focused editor overrides this per card by writing an `art` table to the card
- * TOML. `x`/`y` are normalized pan positions (-1..1, 0 = centered) and `scale`
- * is the cover zoom.
- */
-export const DEFAULT_ART_CROP = { x: 0, y: 0, scale: 1.17 } as const;
-
-/**
- * Fraction of the source image's height, at the very bottom, occupied by a
- * watermark / letterbox strip that must never be shown. The art images are a
- * uniform 280px tall with a ~21px strip, so this crops it off. It is applied as
- * a clip on the art image (which renders the source 1:1 along its height) and
- * excluded from the bottom-color sample so the strip neither shows nor tints the
- * fill.
- */
-const ART_SOURCE_BOTTOM_CROP = 21 / 280;
 
 /**
  * Card-height fraction (measured from the card top) the watermark-clipped art
@@ -89,220 +81,6 @@ export function artSafeAreaTarget(boxTopFrac: number | null): number {
     return 1 - ART_EXTENSION_FRACTION;
   }
   return Math.min(0.98, boxTopFrac + ART_SAFE_AREA_OVERLAP);
-}
-
-/**
- * Symmetric vertical overscan bound (fraction of the image's own height) for a
- * cover image of over-cover height `renderH` (> 1): at the down extreme the raw
- * image bottom meets the art-region bottom and its top meets the region top, so
- * neither edge opens a gap. Callers must guard `renderH > 1` before calling.
- */
-function artMaxPanYFrac(renderH: number): number {
-  return (renderH - 1) / (2 * renderH);
-}
-
-/**
- * Up-pan bound (fraction of the image's own height) that keeps the
- * watermark-clipped art bottom at or below `target` (a card-height fraction), so
- * panning up never lifts a gap into view above the rules box. The image renders
- * the source 1:1 along its height and the bottom `ART_SOURCE_BOTTOM_CROP` is
- * clipped, so the visible bottom sits at `region/2 + imgH * (p + 0.5 - crop)` for
- * a pan fraction `p`; this solves that for `target`. It is capped at the
- * symmetric down bound so it never asks the art to pan past its own overscan.
- */
-function artPanYLowerFrac(
-  renderH: number,
-  target: number,
-  region: number = 1 - ART_EXTENSION_FRACTION,
-): number {
-  const imgH = renderH * region;
-  const pMin = (target - region / 2) / imgH - 0.5 + ART_SOURCE_BOTTOM_CROP;
-  return Math.min(pMin, artMaxPanYFrac(renderH));
-}
-
-/**
- * Cover metrics for an art crop against a frame: the rendered image size (as a
- * multiple of the frame, ≥ 1 on the covered axis) and the pan translate (as a
- * percentage of the image's own size, bounded so |pan| === 1 aligns the image
- * edge with the frame edge — except the up direction, which is bounded by
- * `artPanYLowerFrac` so the art stays covering down to `target`).
- * `frameAspect` is the width-to-height ratio of the box being covered.
- */
-function artCoverMetrics(
-  art: { x: number; y: number; scale: number },
-  imageAspect: number,
-  frameAspect: number,
-  target: number,
-  region: number = 1 - ART_EXTENSION_FRACTION,
-): { renderW: number; renderH: number; panX: number; panY: number } {
-  // ratio > 1 means the image is wider than the frame (its sides are cropped by
-  // covering); ratio < 1 means it is taller (its top/bottom are cropped).
-  const ratio = imageAspect / frameAspect;
-  const coverW = ratio >= 1 ? ratio : 1;
-  const coverH = ratio >= 1 ? 1 : 1 / ratio;
-  const renderW = art.scale * coverW;
-  const renderH = art.scale * coverH;
-  const panX =
-    renderW > 1 ? ((art.x * (renderW - 1)) / (2 * renderW)) * 100 : 0;
-  let panY = 0;
-  if (renderH > 1) {
-    const maxPanYFrac = artMaxPanYFrac(renderH);
-    const lowerPanYFrac = artPanYLowerFrac(renderH, target, region);
-    panY = Math.max(art.y * maxPanYFrac, lowerPanYFrac) * 100;
-  }
-  return { renderW, renderH, panX, panY };
-}
-
-/**
- * Lowest (most upward) `art.y` offset that still keeps the watermark-clipped art
- * covering down to `target`, for a given source aspect and zoom. The art crop
- * editor clamps pan to this so the up arrow stops where the fill band would
- * otherwise be exposed above the rules box, and the data-fix script uses it to
- * pull previously over-panned crops back into range. Defaults to the art-region
- * seam when no box-relative target is supplied. Returns 0 when the image has no
- * overscan (`renderH ≤ 1`), so there is no vertical pan to bound.
- */
-export function minArtOffsetY(
-  imageAspect: number,
-  scale: number,
-  target: number = 1 - ART_EXTENSION_FRACTION,
-): number {
-  const ratio = imageAspect / ART_REGION_ASPECT_RATIO_VALUE;
-  const coverH = ratio >= 1 ? 1 : 1 / ratio;
-  const renderH = scale * coverH;
-  if (renderH <= 1) {
-    return 0;
-  }
-  const maxPanYFrac = artMaxPanYFrac(renderH);
-  const lowerPanYFrac = artPanYLowerFrac(renderH, target);
-  // Convert the clamped pan fraction back to an `art.y` in [-1, 1].
-  return Math.max(-1, Math.min(1, lowerPanYFrac / maxPanYFrac));
-}
-
-/**
- * Smallest cover zoom for which the art can still be panned to keep its
- * watermark-clipped bottom at `target` while also covering the art region's top
- * and full width. Zooming out below this leaves the source too small to reach the
- * safe area at any pan (the gap the fill band would paint above the rules box), so
- * the editor floors zoom-out here and the renderer clamps stored crops up to it.
- *
- * At the down-most pan the visible bottom reduces to `renderH * region *
- * (1 - crop)` (the top is simultaneously flush), so the height that just reaches
- * `target` is `target / (region * (1 - crop))`; `renderH` is floored at 1 so the
- * image never sits shorter than the region, and the width floor `1 / coverW`
- * guards the horizontal cover for a source narrower than the region.
- */
-export function minArtScale(
-  imageAspect: number,
-  target: number,
-  frameAspect: number = ART_REGION_ASPECT_RATIO_VALUE,
-  region: number = 1 - ART_EXTENSION_FRACTION,
-): number {
-  const ratio = imageAspect / frameAspect;
-  const coverW = ratio >= 1 ? ratio : 1;
-  const coverH = ratio >= 1 ? 1 : 1 / ratio;
-  const renderHForTarget = target / (region * (1 - ART_SOURCE_BOTTOM_CROP));
-  const renderHMin = Math.max(1, renderHForTarget);
-  return Math.max(1 / coverW, renderHMin / coverH);
-}
-
-/**
- * Per-axis `art` offset delta that nudges the image by `cardFraction` of the
- * card on each press, for a given source aspect and zoom. The crop offset is
- * normalized to each axis's pan range (|offset| === 1 is the image edge), so a
- * fixed offset step slides a wide source much further across than down — it has
- * far more horizontal overscan than vertical. Scaling the step by each axis's
- * overscan (and, on Y, the art region's shorter height) makes one press travel
- * the same visible distance on both axes. An axis with no overscan reports 0
- * (nothing to pan); steps are capped at the full range so a near-flush axis
- * traverses in a single press rather than returning an absurd multiplier.
- */
-export function artPanStep(
-  imageAspect: number,
-  scale: number,
-  cardFraction: number,
-): { x: number; y: number } {
-  const ratio = imageAspect / ART_REGION_ASPECT_RATIO_VALUE;
-  const coverW = ratio >= 1 ? ratio : 1;
-  const coverH = ratio >= 1 ? 1 : 1 / ratio;
-  const renderW = scale * coverW;
-  const renderH = scale * coverH;
-  const x = renderW > 1 ? Math.min(1, (2 * cardFraction) / (renderW - 1)) : 0;
-  const y =
-    renderH > 1
-      ? Math.min(
-          1,
-          (2 * cardFraction) / ((renderH - 1) * (1 - ART_EXTENSION_FRACTION)),
-        )
-      : 0;
-  return { x, y };
-}
-
-/**
- * Resolve an art crop into CSS for the art image, placed inside a full-card
- * container so the image keeps its art-region size and position yet is free to
- * extend below the seam into the fill band. Used for both the crisp artwork and
- * the blurred band copy, so the two share an identical placement and the blur is
- * a pure defocus of the same pixels rather than a ghosted second copy. The
- * image's content below the art-region crop window is the real source pixels
- * just under it — a genuine downward continuation, so the blurred copy reads as
- * a defocus of the artwork rather than a reflection (no fold or symmetry seam).
- * For a source that does not reach the card's bottom edge (a short/landscape
- * crop), the band's dark base shows through the unreached sliver. `imageAspect`
- * is null until the image loads, in which case a centered cover fallback is used.
- */
-function artImageStyleExtended(
-  art: { x: number; y: number; scale: number },
-  imageAspect: number | null,
-  target: number,
-  frameAspect: number = ART_REGION_ASPECT_RATIO_VALUE,
-  region: number = 1 - ART_EXTENSION_FRACTION,
-): CSSProperties {
-  // Clip the watermark strip off the source bottom (the image renders the source
-  // 1:1 along its own height, so the clipped sliver falls behind the fill/box).
-  const clipPath = `inset(0 0 ${(ART_SOURCE_BOTTOM_CROP * 100).toFixed(3)}% 0)`;
-  if (imageAspect === null) {
-    return {
-      position: "absolute",
-      inset: 0,
-      height: "100%",
-      width: "100%",
-      objectFit: "cover",
-      transform: `scale(${art.scale})`,
-      clipPath,
-    };
-  }
-
-  // Floor the zoom at the safe-area minimum so a stored (or in-flight) crop that
-  // is too zoomed out can never leave the source short of the box; this is what
-  // keeps existing under-zoomed cards rendering inside the safe area.
-  const safeScale = Math.max(
-    art.scale,
-    minArtScale(imageAspect, target, frameAspect, region),
-  );
-  const { renderW, renderH, panX, panY } = artCoverMetrics(
-    { x: art.x, y: art.y, scale: safeScale },
-    imageAspect,
-    frameAspect,
-    target,
-    region,
-  );
-  // Heights are fractions of the art region; scale them to fractions of the
-  // full card, and center on the art region's center (not the card's), so the
-  // placement is identical to the crisp art region above and the image simply
-  // continues past the seam.
-  return {
-    position: "absolute",
-    left: "50%",
-    top: `${(region / 2) * 100}%`,
-    width: `${renderW * 100}%`,
-    height: `${renderH * region * 100}%`,
-    maxWidth: "none",
-    maxHeight: "none",
-    objectFit: "cover",
-    transform: `translate(-50%, -50%) translate(${panX}%, ${panY}%)`,
-    clipPath,
-  };
 }
 
 /**
@@ -419,7 +197,7 @@ function ArtLayers({
   onLoad: (event: React.SyntheticEvent<HTMLImageElement>) => void;
   onError: () => void;
 }) {
-  const extendedStyle = artImageStyleExtended(
+  const extendedStyle = resolveCardArtImageStyle(
     artCrop,
     imageAspect,
     safeAreaTarget,
