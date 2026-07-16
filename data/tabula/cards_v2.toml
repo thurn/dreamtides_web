@@ -4198,22 +4198,22 @@ card-number = 225
 art = { x = 0, y = 0.5, scale = 1.17 }
 
 [[cards]]
-name = "Dreadweaver"
+name = "Soul Harvester"
 mtg-name = "Priest of Forgotten Gods"
 id = "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034"
 rendered-text = "2●, ☪, Abandon two other characters: This character gains +2✦. Draw 2 cards."
 energy-cost = 2
 card-type = "Character"
-subtype = "Mage"
+subtype = "Ancient"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July16"]
-image-number = 649133680
+tags = ["Art Rework", "July16", "Art OK"]
+image-number = 2285036629
 art-owned = false
 card-number = 226
-art = { x = 0, y = 0.9, scale = 1.17 }
+art = { x = 0.3, y = 1, scale = 1.47 }
 
 [[cards]]
 name = "Sundown Surfer"
@@ -5484,14 +5484,14 @@ name = "Urban Desperado"
 mtg-name = "Ranger-Captain of Eos"
 id = "d09a6760-6630-4964-9c77-decc641df713"
 rendered-text = "▸Materialized: The opponent cannot play events this turn."
-energy-cost = 3
+energy-cost = 2
 card-type = "Character"
 subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July16"]
+tags = ["Art Rework", "July16", "Art OK"]
 image-number = 653553988
 art-owned = false
 card-number = 295
@@ -5737,21 +5737,22 @@ card-number = 308
 art = { x = -0.042, y = 0.032, scale = 1.17 }
 
 [[cards]]
-name = "Dawnrunner"
+name = "Haunted Mariner"
 mtg-name = "Jadar, Ghoulcaller of Nephalia"
 id = "9d63ba3e-fafb-466e-8418-ce5f8941ba30"
 rendered-text = "▸Night: If you control no shadow figments, materialize a 2✦ shadow figment."
 energy-cost = 2
 card-type = "Character"
-subtype = "Child"
+subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July16", "Ally Audit"]
-image-number = 1032222661
+tags = ["Art Rework", "July16", "Ally Audit", "Art OK"]
+image-number = 762927766
 art-owned = false
 card-number = 309
+art = { x = 0.334, y = -0.244, scale = 1.77 }
 
 [[cards]]
 name = "Overstory Explorer"
@@ -7731,7 +7732,7 @@ card-number = 413
 art = { x = -0.012, y = 1, scale = 1.1 }
 
 [[cards]]
-name = "Pit Descender"
+name = "Underworld Witch"
 mtg-name = "Goblin Engineer"
 id = "81074582-dfb3-497c-8c04-f97a24d6b1d4"
 rendered-text = """
@@ -7740,15 +7741,16 @@ rendered-text = """
 ☪, Abandon a warrior: Materialize a ≤2● cost warrior from your void."""
 energy-cost = 2
 card-type = "Character"
-subtype = "Explorer"
+subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Self-Mill", "Art Rework", "July16"]
-image-number = 450441286
+tags = ["Self-Mill", "Art Rework", "July16", "Art OK"]
+image-number = 591626954
 art-owned = false
 card-number = 414
+art = { x = 0, y = 0.936, scale = 1 }
 
 [[cards]]
 name = "Portal of Twin Paths"
@@ -8938,7 +8940,7 @@ card-number = 478
 art = { x = -0.228, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Carrion Shepherd"
+name = "Ghostcaller"
 mtg-name = "Ophiomancer"
 id = "f7084ba7-8c85-4847-80df-b0c98ec77d78"
 rendered-text = "▸Dawn: Give a wraith you control +1✦. If you control no wraiths, materialize a 0✦ wraith figment with vengeful instead."
@@ -8949,10 +8951,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July16", "Ally Audit"]
-image-number = 461706649
+tags = ["Art Rework", "July16", "Ally Audit", "Art OK"]
+image-number = 478671154
 art-owned = false
 card-number = 479
+art = { x = 0.062, y = 0, scale = 1.67 }
 
 [[cards]]
 name = "Grim Reclaimer"

@@ -572,7 +572,7 @@
       ]
     },
     "f7084ba7-8c85-4847-80df-b0c98ec77d78": {
-      "name": "Carrion Shepherd",
+      "name": "Ghostcaller",
       "needs": [
         {
           "theme": "figments",
@@ -883,7 +883,7 @@
       ]
     },
     "9d63ba3e-fafb-466e-8418-ce5f8941ba30": {
-      "name": "Dawnrunner",
+      "name": "Haunted Mariner",
       "needs": [],
       "supports": [
         "figments"
@@ -1025,7 +1025,7 @@
       ]
     },
     "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034": {
-      "name": "Dreadweaver",
+      "name": "Soul Harvester",
       "needs": [],
       "supports": [
         "abandon"
@@ -2938,7 +2938,7 @@
       ]
     },
     "81074582-dfb3-497c-8c04-f97a24d6b1d4": {
-      "name": "Pit Descender",
+      "name": "Underworld Witch",
       "needs": [
         {
           "theme": "warriors",

@@ -133,11 +133,11 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Planetgazer
 - 1× Paradox Corps Enforcer
 - 1× Pyrokinetic Surge
-- 1× Dawnrunner
+- 1× Haunted Mariner
 - 1× Kindred Sparks
 - 1× Blight Weaver
 - 1× Frost Visionary
-- 1× Dreadweaver
+- 1× Soul Harvester
 - 1× Lurking Dread
 - 1× Wasteland Arbitrator
 - 1× Shadowcaller
@@ -150,7 +150,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Flagbearer of Decay
 - 1× Eviscerator of Hope
 - 1× Soul Channeling
-- 1× Carrion Shepherd
+- 1× Ghostcaller
 - 1× Ossuary Offering
 - 1× Shared Ruin
 
@@ -233,9 +233,9 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 1× Urban Cipher
 - 1× Pyrokinetic Surge
 - 1× Clockwork Conductor
-- 1× Dawnrunner
+- 1× Haunted Mariner
 - 1× Blight Weaver
-- 1× Dreadweaver
+- 1× Soul Harvester
 - 1× Lurking Dread
 - 1× Shadowcaller
 - 1× The Rising God
@@ -243,7 +243,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 1× The Calling Night
 - 1× Eviscerator of Hope
 - 1× Soul Channeling
-- 1× Carrion Shepherd
+- 1× Ghostcaller
 - 1× Ossuary Offering
 - 1× Shared Ruin
 - 1× Immortal Reaper
@@ -452,7 +452,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Flagbearer of Decay
 - 1× Eviscerator of Hope
 - 1× Vigil Keeper
-- 1× Carrion Shepherd
+- 1× Ghostcaller
 - 1× Entropy Cascade
 - 1× Cascade of Reflections
 - 1× Immortal Reaper
@@ -539,14 +539,14 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Ash Harbinger
 - 1× Dreamvale Monarch
 - 1× Pyrokinetic Surge
-- 1× Dawnrunner
+- 1× Haunted Mariner
 - 1× Kindred Sparks
 - 1× Blight Weaver
 - 1× Defiant Holdout
 - 1× Essence Devourer
 - 1× Fractured Vessel
 - 1× Starsea Traveler
-- 1× Dreadweaver
+- 1× Soul Harvester
 - 1× Lurking Dread
 - 1× Shadowcaller
 - 1× Silent Mourner
@@ -559,7 +559,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Turquoise Aurelia
 - 1× Flagbearer of Decay
 - 1× Eviscerator of Hope
-- 1× Carrion Shepherd
+- 1× Ghostcaller
 - 1× Forgotten Sleeper
 - 1× Sunset Chronicler
 - 1× Lord of Hidden Paths
@@ -650,7 +650,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 1× Defiant Holdout
 - 1× Torchbearer of the Abyss
 - 1× Exiles of the Last Light
-- 1× Dreadweaver
+- 1× Soul Harvester
 - 1× Lurking Dread
 - 1× Wasteland Arbitrator
 - 1× Aerie Defender
@@ -746,12 +746,12 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Emberwatch Veteran
 - 1× Ash Harbinger
 - 1× Pyrokinetic Surge
-- 1× Dawnrunner
+- 1× Haunted Mariner
 - 1× Kindred Sparks
 - 1× Blight Weaver
 - 1× Fractured Vessel
 - 1× Exiles of the Last Light
-- 1× Dreadweaver
+- 1× Soul Harvester
 - 1× Lurking Dread
 - 1× Titan of Forgotten Echoes
 - 1× Shadowcaller
@@ -766,7 +766,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Scrapyard Custodian
 - 1× Flagbearer of Decay
 - 1× Soul Channeling
-- 1× Carrion Shepherd
+- 1× Ghostcaller
 - 1× Forgotten Sleeper
 - 1× Ossuary Offering
 - 1× Wandering Archivist
@@ -849,11 +849,11 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Cost of Victory
 - 1× Pyrokinetic Surge
 - 1× Clockwork Conductor
-- 1× Dawnrunner
+- 1× Haunted Mariner
 - 1× Final Gambit
 - 1× Blight Weaver
 - 1× Fractured Vessel
-- 1× Dreadweaver
+- 1× Soul Harvester
 - 1× Lurking Dread
 - 1× Shadowcaller
 - 1× The Rising God
@@ -863,7 +863,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× The Calling Night
 - 1× Eviscerator of Hope
 - 1× Soul Channeling
-- 1× Carrion Shepherd
+- 1× Ghostcaller
 - 1× Ossuary Offering
 - 1× Shared Ruin
 
@@ -947,7 +947,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Paradox Corps Enforcer
 - 1× Pyrokinetic Surge
 - 1× Keeper of the Tides
-- 1× Dawnrunner
+- 1× Haunted Mariner
 - 1× Kindred Sparks
 - 1× Defiant Holdout
 - 1× Exiles of the Last Light
@@ -967,7 +967,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× The Calling Night
 - 1× The Power Within
 - 1× Vigil Keeper
-- 1× Carrion Shepherd
+- 1× Ghostcaller
 - 1× Ossuary Offering
 - 1× Shared Ruin
 - 1× Skull Weaver
@@ -1054,7 +1054,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Paradox Corps Enforcer
 - 1× Pyrokinetic Surge
 - 1× Keeper of the Tides
-- 1× Dawnrunner
+- 1× Haunted Mariner
 - 1× Kindred Sparks
 - 1× Defiant Holdout
 - 1× Annular Recall
@@ -1074,7 +1074,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× The Calling Night
 - 1× The Power Within
 - 1× Vigil Keeper
-- 1× Carrion Shepherd
+- 1× Ghostcaller
 - 1× Ossuary Offering
 - 1× Shared Ruin
 - 1× Skull Weaver
@@ -1261,7 +1261,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Somber Flockmaster
 - 1× Keeper of the Tides
 - 1× Pattern Seeker
-- 1× Dawnrunner
+- 1× Haunted Mariner
 - 1× Blight Weaver
 - 1× Spiral Offering
 - 1× Fractured Vessel
@@ -1908,7 +1908,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 1× He Who Lies Dreaming
 - 1× Grounded
 - 1× Speaker for the Forgotten
-- 1× Pit Descender
+- 1× Underworld Witch
 - 1× Dreadmount Sovereign
 - 1× Invoker of Myths
 - 1× Frontline Martyr
@@ -2005,7 +2005,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× He Who Lies Dreaming
 - 1× Spirit Field Reclaimer
 - 1× Speaker for the Forgotten
-- 1× Pit Descender
+- 1× Underworld Witch
 - 1× Dreadmount Sovereign
 - 1× Invoker of Myths
 - 1× Frontline Martyr
@@ -2070,7 +2070,7 @@ Tide-fac-01 is an almost entirely character-based (40 of 45 copies) midrange eng
 - 1× Kindred Sparks
 - 1× Defiant Holdout
 - 1× Exiles of the Last Light
-- 1× Dreadweaver
+- 1× Soul Harvester
 - 1× Wasteland Arbitrator
 - 1× Shadowcaller
 - 1× Silent Mourner
@@ -2078,7 +2078,7 @@ Tide-fac-01 is an almost entirely character-based (40 of 45 copies) midrange eng
 - 1× Eviscerator of Hope
 - 1× Soul Channeling
 - 1× Vigil Keeper
-- 1× Carrion Shepherd
+- 1× Ghostcaller
 - 1× Skull Weaver
 
 ## Lean: Clockwork Conductor — Abandon Score Engine
@@ -2124,12 +2124,12 @@ Tide-fac-02 is built almost entirely of characters (41 of 45 cards) and operates
 - 1× Clockwork Conductor
 - 1× Kindred Sparks
 - 1× Defiant Holdout
-- 1× Dreadweaver
+- 1× Soul Harvester
 - 1× Wasteland Arbitrator
 - 1× Silent Mourner
 - 1× Eviscerator of Hope
 - 1× Vigil Keeper
-- 1× Carrion Shepherd
+- 1× Ghostcaller
 
 ## Lean: Flash of Power — Event Storm Combo
 
@@ -2409,7 +2409,7 @@ This tide is built around a dense curve of inexpensive survivors whose arrival a
 - 1× Iconoclast
 - 1× Cinderheart
 - 1× Defiant Holdout
-- 1× Dreadweaver
+- 1× Soul Harvester
 - 1× Wasteland Arbitrator
 - 1× Shadowcaller
 - 1× Silent Mourner
@@ -2760,16 +2760,16 @@ Tide-fac-13 is a character-heavy spirit animal tribal deck (35 of 45 copies are 
 - 1× Headtaker
 - 1× Iconoclast
 - 1× Cinderheart
-- 1× Dawnrunner
+- 1× Haunted Mariner
 - 1× Kindred Sparks
 - 1× Defiant Holdout
-- 1× Dreadweaver
+- 1× Soul Harvester
 - 1× Wasteland Arbitrator
 - 1× Shadowcaller
 - 1× Silent Mourner
 - 1× Eviscerator of Hope
 - 1× Vigil Keeper
-- 1× Carrion Shepherd
+- 1× Ghostcaller
 
 ## Lean: Chaos Crasher — Warrior Blood Ramp
 
@@ -3007,16 +3007,16 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Iconoclast
 - 1× Cinderheart
 - 1× Exile
-- 1× Dawnrunner
+- 1× Haunted Mariner
 - 1× Kindred Sparks
 - 1× Exiles of the Last Light
-- 1× Dreadweaver
+- 1× Soul Harvester
 - 1× Wasteland Arbitrator
 - 1× Shadowcaller
 - 1× Silent Mourner
 - 1× The Calling Night
 - 1× Vigil Keeper
-- 1× Carrion Shepherd
+- 1× Ghostcaller
 
 ## Lean: Call the Lost — Event Count Combo
 
@@ -3292,7 +3292,7 @@ Tide-fac-26 is a character-heavy survivor tide built around the abandon trigger 
 - 1× Kindred Sparks
 - 1× Defiant Holdout
 - 1× Exiles of the Last Light
-- 1× Dreadweaver
+- 1× Soul Harvester
 - 1× Wasteland Arbitrator
 - 1× Shadowcaller
 - 1× Silent Mourner
@@ -3337,17 +3337,17 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Iconoclast
 - 1× Cinderheart
 - 1× Exile
-- 1× Dawnrunner
+- 1× Haunted Mariner
 - 1× Kindred Sparks
 - 1× Defiant Holdout
 - 1× Exiles of the Last Light
-- 1× Dreadweaver
+- 1× Soul Harvester
 - 1× Wasteland Arbitrator
 - 1× Shadowcaller
 - 1× Silent Mourner
 - 1× Soul Channeling
 - 1× Vigil Keeper
-- 1× Carrion Shepherd
+- 1× Ghostcaller
 - 1× Skull Weaver
 
 ## Lean: Aerie Defender
@@ -3574,16 +3574,16 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Iconoclast
 - 1× Cinderheart
 - 1× Exile
-- 1× Dawnrunner
+- 1× Haunted Mariner
 - 1× Defiant Holdout
 - 1× Exiles of the Last Light
-- 1× Dreadweaver
+- 1× Soul Harvester
 - 1× Wasteland Arbitrator
 - 1× Shadowcaller
 - 1× Silent Mourner
 - 1× The Rising God
 - 1× Eviscerator of Hope
-- 1× Carrion Shepherd
+- 1× Ghostcaller
 - 1× Skull Weaver
 
 ## Broad: Cloudmantle Ray / Spirit Bond
@@ -3681,11 +3681,11 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Kindred Sparks
 - 1× Defiant Holdout
 - 1× Exiles of the Last Light
-- 1× Dreadweaver
+- 1× Soul Harvester
 - 1× Wasteland Arbitrator
 - 1× Silent Mourner
 - 1× Vigil Keeper
-- 1× Carrion Shepherd
+- 1× Ghostcaller
 - 1× Skull Weaver
 
 ## Broad: Gloomantler / Harbor Warden
