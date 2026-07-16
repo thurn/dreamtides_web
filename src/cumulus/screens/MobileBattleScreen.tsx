@@ -1015,10 +1015,13 @@ function lastFilledSlotCount(slots: readonly MobileBattleSlotView[]): number {
   return 0;
 }
 
-function battlefieldLayoutBackSlotCount(view: MobileBattleView): number {
+function battlefieldLayoutBackSlotCount(
+  view: MobileBattleView,
+  isDesktop: boolean,
+): number {
   const sides = [view.enemy, view.player] as const;
   return Math.max(
-    MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS,
+    isDesktop ? MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS : 1,
     ...sides.map((side) => lastFilledSlotCount(side.backRank)),
     ...sides.map((side) => lastFilledSlotCount(side.frontRank) + 1),
   );
@@ -1036,6 +1039,22 @@ function battlefieldTrackWidth(
 ): string {
   const gapCount = Math.max(slotCount - 1, 0);
   return `calc(${String(slotCount)} * ${cardSize} + ${String(gapCount)} * ${token("--space-2")})`;
+}
+
+function desktopRankSlots(
+  slots: readonly MobileBattleSlotView[],
+  rank: MobileBattleRank,
+  slotCount: number,
+): readonly MobileBattleSlotView[] {
+  if (slots.length >= slotCount) return slots;
+  const prefix = rank === "back" ? "B" : "F";
+  return [
+    ...slots,
+    ...Array.from({ length: slotCount - slots.length }, (_unused, offset) => ({
+      id: `${prefix}${String(slots.length + offset)}`,
+      card: null,
+    })),
+  ];
 }
 
 function Rank({
@@ -1077,6 +1096,9 @@ function Rank({
     rank === "back"
       ? layoutBackSlotCount
       : Math.max(layoutBackSlotCount - 1, 1);
+  const visibleSlots = isDesktop
+    ? desktopRankSlots(slots, rank, layoutSlotCount)
+    : slots;
   const isCenterFacingRank =
     (owner === "enemy" && order === 1) ||
     (owner === "player" && order === 0);
@@ -1123,7 +1145,7 @@ function Rank({
           columnGap: token("--space-2"),
         }}
       >
-        {slots.map((slot) => (
+        {visibleSlots.map((slot) => (
           <div
             key={slot.id}
             data-battle-slot-id={slot.id}
@@ -1832,7 +1854,7 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
   const previousDockLayout = useRef(isDockLayout);
   const openedLogKey = useRef<string | null>(null);
   const snapLayoutOriginView = useRef<MobileBattleView | null>(null);
-  const layoutBackSlotCount = battlefieldLayoutBackSlotCount(view);
+  const layoutBackSlotCount = battlefieldLayoutBackSlotCount(view, isDesktop);
   const cardSize = battlefieldCardSize(layoutBackSlotCount);
 
   useEffect(() => {

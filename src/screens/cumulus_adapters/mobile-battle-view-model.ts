@@ -15,10 +15,6 @@ import {
 import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
 import { asCardId } from "../../types/card-identity";
 import {
-  MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS,
-  MOBILE_BATTLE_STARTING_FRONT_RANK_SLOTS,
-} from "../../cumulus/screens/mobile-battle-layout";
-import {
   type MobileBattleCardView,
   type MobileBattlePhase,
   type MobileBattleSideView,
@@ -59,9 +55,7 @@ export function buildMobileBattleView(
     isPlayerHandHidden: false,
   },
 ): MobileBattleView {
-  const { frontSize: activeFrontSize, backSize: activeBackSize } = selectPlayAreaSize(board);
-  const frontSize = Math.max(activeFrontSize, MOBILE_BATTLE_STARTING_FRONT_RANK_SLOTS);
-  const backSize = Math.max(activeBackSize, MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS);
+  const { frontSize, backSize } = selectPlayAreaSize(board);
   return {
     battleId: init.battleId,
     aiApproval: aiProposal === null

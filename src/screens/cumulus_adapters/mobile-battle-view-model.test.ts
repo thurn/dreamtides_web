@@ -342,13 +342,13 @@ describe("buildMobileBattleView", () => {
     );
   });
 
-  it("materializes the eight-back/seven-front starting grid in left-to-right identity order", () => {
+  it("materializes the dynamic staggered slots in left-to-right identity order", () => {
     const init = makeInit();
     const board = makeBoard(init);
     const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER);
 
-    const expectedFrontRank = Array.from({ length: 7 }, (_unused, index) => `F${String(index)}`);
-    const expectedBackRank = Array.from({ length: 8 }, (_unused, index) => `B${String(index)}`);
+    const expectedFrontRank = ["F0", "F1", "F2", "F3"];
+    const expectedBackRank = ["B0", "B1", "B2", "B3", "B4"];
     expect(view.player.frontRank.map((slot) => slot.id)).toEqual(expectedFrontRank);
     expect(view.enemy.frontRank.map((slot) => slot.id)).toEqual(expectedFrontRank);
     expect(view.player.backRank.map((slot) => slot.id)).toEqual(expectedBackRank);
