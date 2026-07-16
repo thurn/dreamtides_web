@@ -264,15 +264,12 @@ describe("BEGIN_BATTLE", () => {
     expect(first.state.battle?.init.siteId).toBe(SITE_ID);
   });
 
-  it("records the initiating client's automation setting in the battle fold", () => {
+  it("starts every battle with automation enabled", () => {
     registerBattleInitProvider(fakeProvider);
-    const result = reduce(baseState(), "BEGIN_BATTLE", {
-      siteId: SITE_ID,
-      basicAutomationEnabled: false,
-    });
+    const result = reduce(baseState(), "BEGIN_BATTLE", { siteId: SITE_ID });
 
     expect(result.outcome).toBe("applied");
-    expect(result.state.battle?.basicAutomationEnabled).toBe(false);
+    expect(result.state.battle?.basicAutomationEnabled).toBe(true);
   });
 
   it("bounces a second BEGIN_BATTLE when a battle is already in progress", () => {
@@ -742,11 +739,10 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     const setDawn = { kind: "SET_PHASE", phase: "dawn" };
     const first = reduce(state, "BATTLE_COMMAND", debugEdit(setDawn));
     expect(first.outcome).toBe("applied");
-    expect(first.state.battle?.board.phase).toBe("dawn");
-
-    const phaseOnly = applyDebugEdit(board, setDawn as never, EMISSION).state;
-    expect(hashBoard(first.state.battle!.board)).toBe(hashBoard(phaseOnly));
+    expect(first.state.battle?.board.phase).toBe("day");
     expect(first.state.battle?.dawnFired.player).toBe(4);
+    expect(first.state.battle?.effectQueue).toEqual([]);
+    expect(first.state.battle?.pendingPrompt).toBeNull();
   });
 
   // --- dreamwell reveal queues the revealed card's script ---
@@ -1266,7 +1262,7 @@ describe("SET_CARD_NOTE", () => {
 // Shared battle automation and AI defense
 // ---------------------------------------------------------------------------
 
-describe("shared battle automation", () => {
+describe("battle automation", () => {
   function cardPlayState(enabled: boolean): FoldState {
     const instance = makeInstance("bc-play", "card-play", "player");
     instance.definition.energyCost = 2;
@@ -1289,21 +1285,21 @@ describe("shared battle automation", () => {
     destination: { side: "player", zone: "backRank", slotId: backRankSlotId(0) },
   });
 
-  it("expands the same raw command according to the folded setting", () => {
+  it("expands raw commands even when persisted state carries a false marker", () => {
     const automated = reduce(cardPlayState(true), "BATTLE_COMMAND", playCommand);
-    const manual = reduce(cardPlayState(false), "BATTLE_COMMAND", playCommand);
+    const persistedFalse = reduce(cardPlayState(false), "BATTLE_COMMAND", playCommand);
 
     expect(automated.state.battle?.board.sides.player.currentEnergy).toBe(3);
-    expect(manual.state.battle?.board.sides.player.currentEnergy).toBe(5);
+    expect(persistedFalse.state.battle?.board.sides.player.currentEnergy).toBe(3);
     expect(automated.state.battle?.basicAutomationEnabled).toBe(true);
-    expect(manual.state.battle?.basicAutomationEnabled).toBe(false);
+    expect(persistedFalse.state.battle?.basicAutomationEnabled).toBe(false);
     expect(automated.state.battle?.board.sides.player.backRank[backRankSlotId(0)]).toBe("bc-play");
-    expect(manual.state.battle?.board.sides.player.backRank[backRankSlotId(0)]).toBe("bc-play");
+    expect(persistedFalse.state.battle?.board.sides.player.backRank[backRankSlotId(0)]).toBe("bc-play");
   });
 
-  it("updates the setting through a shared event", () => {
-    const result = reduce(cardPlayState(false), "SET_BATTLE_AUTOMATION", {
-      enabled: true,
+  it("keeps automation enabled when folding a persisted setting event", () => {
+    const result = reduce(cardPlayState(true), "SET_BATTLE_AUTOMATION", {
+      enabled: false,
     });
     expect(result.outcome).toBe("applied");
     expect(result.state.battle?.basicAutomationEnabled).toBe(true);

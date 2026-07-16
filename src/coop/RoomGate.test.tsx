@@ -61,7 +61,6 @@ function runtimeConfig(overrides: Partial<RuntimeConfig> = {}): RuntimeConfig {
   return {
     seedOverride: null,
     aiMode: true,
-    basicAutomation: true,
     gameId: "abc123",
     databaseMode: "emulator",
     journeyVariant: "v2",

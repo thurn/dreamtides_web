@@ -129,9 +129,8 @@ and Dawn auto-advances after its exhaust-clear.
 
 ### Structural automation
 
-Basic Automation is on by default (`runtimeConfig.basicAutomation`; disable with
-`?automation=0`). It rewrites the handful of gestures it understands into the
-ordered edits the rules require:
+Basic Automation is always enabled. It rewrites the gestures it understands
+into the ordered edits the rules require:
 
 - **Playing a card costs energy.** Moving a card from hand into play reduces the
   controller's current ● by the card's energy cost; an event resolves to the
@@ -178,10 +177,9 @@ log, undo, and redo all keep working.
 ### URL parameters and the AI
 
 The enemy is driven by a local AI opponent on by default; `?ai=0` switches the
-battle into a fully manual sandbox where both sides are driven by hand.
-`?automation=0` disables Basic Automation, leaving the player to advance phases
-and resolve the Challenge by hand. The battle is the default entry; pair
-`?goto=battle` with these flags as needed (see
+battle into a sandbox where both sides are driven by hand while structural
+automation continues to resolve routine bookkeeping. The battle is the default
+entry; pair `?goto=battle` with `?ai=0` as needed (see
 `docs/quest_prototype/url_parameters.md`).
 
 The full battle design lives in `docs/battle_rules/battle_rules.md`, and the AI

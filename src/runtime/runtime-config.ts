@@ -6,11 +6,6 @@ import type { ContentConfig } from "../eventlog/types";
 export interface RuntimeConfig {
   seedOverride: number | null;
   aiMode: boolean;
-  /**
-   * Gates Basic Automation (the bookend-phase auto-advance and the Dawn/Ending
-   * automated effects). Mirrors `aiMode`: enabled unless `?automation=0`.
-   */
-  basicAutomation: boolean;
   gameId: string | null;
   databaseMode: DatabaseMode;
   journeyVariant: JourneyVariant;
@@ -159,7 +154,6 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
   return {
     seedOverride: parseSeedOverride(params.get("seed")),
     aiMode: params.get("ai") !== "0",
-    basicAutomation: params.get("automation") !== "0",
     gameId: normalizeRoomId(params.get("game")),
     databaseMode: parseDatabaseMode(params.get("realtime")),
     journeyVariant: parseJourneyVariant(params.get("journey")),

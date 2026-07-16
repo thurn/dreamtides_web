@@ -31,7 +31,6 @@ import {
   selectBattlefieldSlotOccupant,
   selectFailureOverlayResult,
 } from "../state/selectors";
-import { drawsAtStartOfTurn } from "../state/turn-utils";
 import { formatPhaseLabel, formatSideLabel } from "../ui/format";
 import type {
   BattleCommandSourceSurface,
@@ -51,7 +50,6 @@ import type { BattleCommand } from "../debug/commands";
 import type { PromptResolution } from "../../rules/battle/effect-runner-core";
 import { useBattleAi, type AiProposal } from "../ai/use-battle-ai";
 import { aiMayRunHere } from "../ai/ai-may-run-here";
-import { dreamwellEnergyEdits } from "../engine/energy";
 import { BattleActionBar } from "./BattleActionBar";
 import { BattleContextMenu } from "./BattleContextMenu";
 import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
@@ -200,7 +198,6 @@ function PlayableBattleScreenInner({
   const [openNoteEditor, setOpenNoteEditor] = useState<string | null>(null);
   const [openSideSummary, setOpenSideSummary] = useState<BattleSide | null>(null);
   const [isDreamcallerPanelOpen, setIsDreamcallerPanelOpen] = useState(false);
-  const isBasicAutomationEnabled = battle.basicAutomationEnabled ?? false;
   const [rewardOverlay, setRewardOverlay] = useState<RewardOverlayState>(null);
   const [isResultOverlayDismissed, setIsResultOverlayDismissed] = useState(false);
 
@@ -247,7 +244,7 @@ function PlayableBattleScreenInner({
     enabled: aiMode && aiMayRun,
     aiSide: "enemy",
     caps: aiCaps,
-    basicAutomation: isBasicAutomationEnabled,
+    basicAutomation: true,
   });
 
   const aiDefenseTurn = battle.aiDefenseTurn;
@@ -448,72 +445,7 @@ function PlayableBattleScreenInner({
       },
       sourceSurface: "phase-controls",
     });
-    // In AI mode, the human advancing the turn into the enemy's turn IS the
-    // enemy's start-of-turn handoff. With basic automation off the handoff is a
-    // passthrough, so this block gives the enemy what the automated handoff
-    // otherwise would: its Dreamwell reveal and energy plus its start-of-turn
-    // draw. A forward player→enemy handoff keeps the turn number (see
-    // `advanceBattleTurnPair`); the backward variant decrements it, so the
-    // equality check excludes rewinds. When automation is on it owns every
-    // start-of-turn reveal, energy, and draw (for both sides), so this shortcut
-    // stands down to avoid duplicates.
-    const isAiEnemyHandoff =
-      aiMode &&
-      !isBasicAutomationEnabled &&
-      board.activeSide === "player" &&
-      target.activeSide === "enemy" &&
-      target.turnNumber === board.turnNumber;
-    if (!isAiEnemyHandoff) {
-      return;
-    }
-
-    // Read the card about to be drawn (the deck index has not advanced yet) so
-    // its energy can be applied alongside the reveal even though automation is
-    // off.
-    const dreamwellCard = battleInit.dreamwellDeck[board.dreamwellDeckIndex];
-    logDreamwellReveal("enemy", target.turnNumber, "phase-controls");
-    handleCommand({
-      id: "DEBUG_EDIT",
-      edit: {
-        kind: "DRAW_DREAMWELL_CARD",
-        side: "enemy",
-        turnNumber: target.turnNumber,
-      },
-      sourceSurface: "phase-controls",
-    });
-    for (const edit of dreamwellEnergyEdits(
-      "enemy",
-      board.sides.enemy.maxEnergy,
-      dreamwellCard?.energyAdded ?? 0,
-    )) {
-      handleCommand({
-        id: "DEBUG_EDIT",
-        edit,
-        sourceSurface: "phase-controls",
-      });
-    }
-    // Mirror the handoff draw rule (see `drawsAtStartOfTurn`): only the first
-    // player's first turn skips the draw. A player→enemy handoff keeps
-    // turnNumber at 1, so the enemy (second player) still draws on its first
-    // turn.
-    if (drawsAtStartOfTurn("enemy", target.turnNumber)) {
-      handleCommand({
-        id: "DEBUG_EDIT",
-        edit: { kind: "DRAW_CARD", side: "enemy" },
-        sourceSurface: "phase-controls",
-      });
-    }
-  }, [
-    aiMode,
-    battleInit.dreamwellDeck,
-    board.activeSide,
-    board.dreamwellDeckIndex,
-    board.sides.enemy.maxEnergy,
-    board.turnNumber,
-    handleCommand,
-    isBasicAutomationEnabled,
-    logDreamwellReveal,
-  ]);
+  }, [handleCommand]);
 
   // Dreamwell reveal: whenever the active side rests on its Dreamwell phase
   // without having drawn this turn's Dreamwell card yet, reveal it (rules §The
@@ -554,7 +486,7 @@ function PlayableBattleScreenInner({
   // Once round 1's reveal has committed — `dreamwellDrawnTurn` reaches this turn,
   // so its energy is already applied — auto-advance to the Day phase for the
   // locally-driven side. Skipped on the AI's own turn (the AI driver advances
-  // itself) and when automation is off (the operator is stepping manually).
+  // itself).
   // The event-log intent key owns the once-per-(battle, side, turn) transition.
   const activeDreamwellDrawnTurn =
     board.sides[activeSide].dreamwellDrawnTurn;
@@ -562,7 +494,7 @@ function PlayableBattleScreenInner({
     if (battleResult !== null || activePhase !== "dreamwell") {
       return;
     }
-    if (activeTurnNumber > 1 || !isBasicAutomationEnabled) {
+    if (activeTurnNumber > 1) {
       return;
     }
     if (aiMode && activeSide === "enemy") {
@@ -581,7 +513,6 @@ function PlayableBattleScreenInner({
   }, [
     handleCommand,
     aiMode,
-    isBasicAutomationEnabled,
     activeSide,
     activePhase,
     activeTurnNumber,
@@ -764,7 +695,7 @@ function PlayableBattleScreenInner({
       board,
       battleCardId,
       "hand-tray",
-      isBasicAutomationEnabled,
+      true,
     );
     if (command !== null) {
       handleCommand(command);
@@ -994,7 +925,7 @@ function PlayableBattleScreenInner({
       board,
       pendingDrag.battleCardId,
       pendingDrag.sourceSurface,
-      isBasicAutomationEnabled,
+      true,
       preferredTarget === undefined
         ? undefined
         : {
@@ -1765,7 +1696,7 @@ function PlayableBattleScreenInner({
                 canInteract={canPlayerAct}
                 side="opponent"
                 compact={!isPlayerHandHidden}
-                isBasicAutomationEnabled={isBasicAutomationEnabled}
+                isBasicAutomationEnabled
                 currentEnergy={board.sides.enemy.currentEnergy}
                 hand={board.sides.enemy.hand}
                 onHandCardAction={handleCommand}
@@ -1791,7 +1722,7 @@ function PlayableBattleScreenInner({
               side={activeSide}
               visible={isDreamwellDisplayVisible}
               automationStatus={dreamwellDisplayCard ? dreamwellAutomationStatus(dreamwellDisplayCard.id) : "none"}
-              automationEnabled={isBasicAutomationEnabled}
+              automationEnabled
             />
             <div className="battlefield-zone-layout">
               <div className="battle-side-zone-column player">
@@ -1854,7 +1785,7 @@ function PlayableBattleScreenInner({
                     zone="backRank"
                     state={board}
                     canInteract={canPlayerAct}
-                    isBasicAutomationEnabled={isBasicAutomationEnabled}
+                    isBasicAutomationEnabled
                     selectedCardId={null}
                     selectedSlot={null}
                     selectionAnchor={null}
@@ -1872,7 +1803,7 @@ function PlayableBattleScreenInner({
                     zone="frontRank"
                     state={board}
                     canInteract={canPlayerAct}
-                    isBasicAutomationEnabled={isBasicAutomationEnabled}
+                    isBasicAutomationEnabled
                     selectedCardId={null}
                     selectedSlot={null}
                     selectionAnchor={null}
@@ -1894,7 +1825,7 @@ function PlayableBattleScreenInner({
                     zone="frontRank"
                     state={board}
                     canInteract={canPlayerAct}
-                    isBasicAutomationEnabled={isBasicAutomationEnabled}
+                    isBasicAutomationEnabled
                     selectedCardId={null}
                     selectedSlot={null}
                     selectionAnchor={null}
@@ -1912,7 +1843,7 @@ function PlayableBattleScreenInner({
                     zone="backRank"
                     state={board}
                     canInteract={canPlayerAct}
-                    isBasicAutomationEnabled={isBasicAutomationEnabled}
+                    isBasicAutomationEnabled
                     selectedCardId={null}
                     selectedSlot={null}
                     selectionAnchor={null}
@@ -1994,7 +1925,7 @@ function PlayableBattleScreenInner({
               <BattleHandTray
                 canInteract={canPlayerAct}
                 compact={isOpponentHandRevealed}
-                isBasicAutomationEnabled={isBasicAutomationEnabled}
+                isBasicAutomationEnabled
                 currentEnergy={board.sides.player.currentEnergy}
                 hand={board.sides.player.hand}
                 onHandCardAction={handleCommand}
@@ -2016,14 +1947,10 @@ function PlayableBattleScreenInner({
           )}
           <BattleActionBar
             dreamsigns={battleInit.dreamsignSummaries}
-            isBasicAutomationEnabled={isBasicAutomationEnabled}
             isBattleLogOpen={isBattleLogOpen}
             isDesktopInspectorLayout={isDesktopInspectorLayout}
             isInspectorDrawerOpen={isInspectorDrawerOpen}
             onOpenForesee={(_side, _count) => undefined}
-            onToggleBasicAutomation={() => {
-              void actions.setBattleAutomation(!isBasicAutomationEnabled);
-            }}
             onToggleBattleLog={() => {
               setIsBattleLogOpen((value) => !value);
               setIsDreamwellHistoryOpen(false);

@@ -72,7 +72,7 @@ It is written to be read alongside:
 ## Battle Architecture
 
 The playable battle (`src/battle/`) implements the Dreamtides rules with
-structural automation on by default; the human resolves the printed effects of
+structural automation always enabled; the human resolves the printed effects of
 their own cards through the debug rail. Four facts shape this design:
 
 1. **All gameplay is expressed as `BattleDebugEdit` primitives.** Every state
@@ -84,16 +84,16 @@ their own cards through the debug rail. Four facts shape this design:
    in a `BattleCommand` (`DEBUG_EDIT` / `FORCE_RESULT` / `SKIP_TO_REWARDS`) and
    applied through the reducer in `src/battle/state/reducer.ts`.
 
-2. **Basic Automation handles the deterministic rules.** `runtimeConfig.basicAutomation`
-   (on unless `?automation=0`) drives `src/rules/battle/basic-automation.ts`,
-   which rewrites the gestures it understands into the ordered edits the rules
-   require: paying energy on a play (events resolve to the void), the energy ramp
-   and draw at the start of a turn, the Dawn exhaust-clear, the Challenge
-   resolution via `engine/challenge.ts`, the Ending hand-limit discard and
-   end-of-turn banishes, the auto-advancing bookend phases, and forcing the
-   result at the score threshold. Character rules text is resolved manually,
-   with static Support spark computed from the Support registry. Dreamwell
-   effect automation runs through its separate registry and prompt queue.
+2. **Basic Automation handles the deterministic rules.**
+   `src/rules/battle/basic-automation.ts` rewrites the gestures it understands
+   into the ordered edits the rules require: paying energy on a play (events
+   resolve to the void), the energy ramp and draw at the start of a turn, the
+   Dawn exhaust-clear, the Challenge resolution via `engine/challenge.ts`, the
+   Ending hand-limit discard and end-of-turn banishes, the auto-advancing
+   bookend phases, and forcing the result at the score threshold. Character
+   rules text is resolved manually, with static Support spark computed from the
+   Support registry. Dreamwell effect automation runs through its separate
+   registry and prompt queue.
 
 3. **AI scaffolding lives in the type model.** `src/battle/types.ts` defines
    `BattleAiDecisionStage = "character" | "reposition" | "nonCharacter" |

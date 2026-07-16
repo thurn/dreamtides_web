@@ -96,7 +96,7 @@ export interface BattleFoldState {
   board: BattleMutableState;
   effectQueue: EffectRun[];
   pendingPrompt: PendingPrompt | null;
-  /** Shared battle setting used by the reducer when expanding raw commands. */
+  /** Persisted automation marker. Battle command expansion is always enabled. */
   basicAutomationEnabled?: boolean;
   /** Last opponent Dusk for which the reducer applied AI defense. */
   aiDefenseTurn?: {

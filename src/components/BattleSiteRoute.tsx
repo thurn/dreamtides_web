@@ -57,7 +57,7 @@ export function BattleSiteRoute({
             init={preview}
             cardDatabase={cardDatabase}
             onBegin={() => {
-              void actions.beginBattle(site.id, runtimeConfig.basicAutomation);
+              void actions.beginBattle(site.id);
             }}
           />
         </CumulusQuestChrome>
@@ -68,7 +68,7 @@ export function BattleSiteRoute({
         init={preview}
         cardDatabase={cardDatabase}
         onBegin={() => {
-          void actions.beginBattle(site.id, runtimeConfig.basicAutomation);
+          void actions.beginBattle(site.id);
         }}
       />
     );

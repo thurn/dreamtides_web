@@ -1483,17 +1483,6 @@
   line-height: 1;
 }
 
-.btn.automation-active {
-  color: var(--accent);
-  background: var(--surface);
-  border-color: var(--accent);
-}
-
-.btn.automation-active:hover {
-  color: var(--accent);
-  border-color: var(--accent);
-}
-
 .inspector {
   align-self: stretch;
   width: 0;

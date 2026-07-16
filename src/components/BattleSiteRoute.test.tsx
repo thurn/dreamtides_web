@@ -243,7 +243,6 @@ describe("BattleSiteRoute", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          basicAutomation: false,
           gameId: "9a9qfv",
           databaseMode: "emulator",
           journeyVariant: "classic",
@@ -267,7 +266,6 @@ describe("BattleSiteRoute", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
@@ -283,7 +281,7 @@ describe("BattleSiteRoute", () => {
     act(() => {
       container.querySelector<HTMLButtonElement>("[data-cumulus-begin]")?.click();
     });
-    expect(beginBattleSpy).toHaveBeenCalledWith("site-7", false);
+    expect(beginBattleSpy).toHaveBeenCalledWith("site-7");
 
     mockGameState = makeFoldStateWithBattle();
     act(() => {
@@ -295,7 +293,6 @@ describe("BattleSiteRoute", () => {
             runtimeConfig={{
               seedOverride: null,
               aiMode: false,
-              basicAutomation: false,
               gameId: null,
               databaseMode: "emulator",
               journeyVariant: "classic",
@@ -324,7 +321,6 @@ describe("BattleSiteRoute", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
@@ -352,7 +348,6 @@ describe("BattleSiteRoute", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
@@ -373,7 +368,6 @@ describe("BattleSiteRoute", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
@@ -390,7 +384,7 @@ describe("BattleSiteRoute", () => {
         .querySelector<HTMLButtonElement>("[data-begin]")
         ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
-    expect(beginBattleSpy).toHaveBeenCalledWith("site-7", false);
+    expect(beginBattleSpy).toHaveBeenCalledWith("site-7");
   });
 
   it("does not append BEGIN_BATTLE during StrictMode mount effects", () => {
@@ -402,7 +396,6 @@ describe("BattleSiteRoute", () => {
           runtimeConfig={{
             seedOverride: null,
             aiMode: false,
-            basicAutomation: false,
             gameId: null,
             databaseMode: "emulator",
             journeyVariant: "classic",
@@ -429,7 +422,6 @@ describe("BattleSiteRoute", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
@@ -450,7 +442,7 @@ describe("BattleSiteRoute", () => {
         .querySelector<HTMLButtonElement>("[data-begin]")
         ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
-    expect(beginBattleSpy).toHaveBeenCalledWith("site-7", false);
+    expect(beginBattleSpy).toHaveBeenCalledWith("site-7");
 
     mockGameState = makeFoldStateWithBattle();
     act(() => {
@@ -461,7 +453,6 @@ describe("BattleSiteRoute", () => {
           runtimeConfig={{
             seedOverride: null,
             aiMode: false,
-            basicAutomation: false,
             gameId: null,
             databaseMode: "emulator",
             journeyVariant: "classic",
@@ -489,7 +480,6 @@ describe("BattleSiteRoute", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
@@ -512,7 +502,6 @@ describe("BattleSiteRoute", () => {
           runtimeConfig={{
             seedOverride: null,
             aiMode: false,
-            basicAutomation: false,
             gameId: null,
             databaseMode: "emulator",
             journeyVariant: "classic",

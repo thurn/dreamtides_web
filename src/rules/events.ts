@@ -118,7 +118,7 @@ export interface EventPayloads {
   END_BATTLE: { result: "victory" | "defeat" };
 
   // --- battle events (no legacy 1:1) ---
-  BEGIN_BATTLE: { siteId: string; basicAutomationEnabled?: boolean };
+  BEGIN_BATTLE: { siteId: string };
   SET_BATTLE_AUTOMATION: { enabled: boolean };
   BATTLE_COMMAND: { command: unknown };
   // A single player gesture that the automation planner expanded into an ordered

@@ -330,7 +330,6 @@ describe("App", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          basicAutomation: false,
           gameId: "ab12cd",
           databaseMode: "emulator",
           journeyVariant: "classic",
@@ -361,7 +360,6 @@ describe("App", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          basicAutomation: false,
           gameId: "ab12cd",
           databaseMode: "emulator",
           journeyVariant: "classic",
@@ -393,7 +391,6 @@ describe("App", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
@@ -425,7 +422,6 @@ describe("App", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          basicAutomation: false,
           gameId: null,
           databaseMode: "realtime",
           journeyVariant: "classic",
@@ -479,7 +475,6 @@ describe("QuestApp", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
@@ -512,7 +507,6 @@ describe("QuestApp", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
@@ -558,7 +552,6 @@ describe("QuestApp", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
@@ -594,7 +587,6 @@ describe("QuestApp", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
@@ -624,7 +616,6 @@ describe("QuestApp", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
@@ -702,7 +693,6 @@ describe("QuestApp", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
@@ -764,7 +754,6 @@ describe("QuestApp", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",

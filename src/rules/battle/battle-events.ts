@@ -158,13 +158,6 @@ export function beginBattle(
   if (typeof siteId !== "string" || siteId.length === 0) {
     return null;
   }
-  const basicAutomationEnabled = payload.basicAutomationEnabled;
-  if (
-    basicAutomationEnabled !== undefined &&
-    typeof basicAutomationEnabled !== "boolean"
-  ) {
-    return null;
-  }
   const provider = battleInitProvider;
   if (provider === null) {
     return null;
@@ -180,14 +173,11 @@ export function beginBattle(
   }
   return {
     ...state,
-    battle:
-      basicAutomationEnabled === undefined
-        ? battle
-        : { ...battle, basicAutomationEnabled },
+    battle: { ...battle, basicAutomationEnabled: true },
   };
 }
 
-/** Updates the shared automation mode used by subsequent battle commands. */
+/** Keeps automation enabled when folding persisted automation-setting events. */
 export function setBattleAutomation(
   state: FoldState,
   payload: Record<string, unknown>,
@@ -197,7 +187,7 @@ export function setBattleAutomation(
   }
   return {
     ...state,
-    battle: { ...state.battle, basicAutomationEnabled: payload.enabled },
+    battle: { ...state.battle, basicAutomationEnabled: true },
   };
 }
 
@@ -508,13 +498,11 @@ export function battleCommand(
 
   let drawIndex = 0;
   const random = (): number => ctx.rng(drawIndex++);
-  const commands = (battle.basicAutomationEnabled ?? false)
-    ? planBasicAutomationCommands(battle.board, command, {
-        maxEnergyCap: battle.init.maxEnergyCap,
-        scoreToWin: battle.init.scoreToWin,
-        dreamwellDeck: battle.init.dreamwellDeck,
-      })
-    : [command];
+  const commands = planBasicAutomationCommands(battle.board, command, {
+    maxEnergyCap: battle.init.maxEnergyCap,
+    scoreToWin: battle.init.scoreToWin,
+    dreamwellDeck: battle.init.dreamwellDeck,
+  });
   const nowMs = isoTimestampToMs(ctx.timestamp) ?? 0;
   let current = battle;
   for (const plannedCommand of commands) {
