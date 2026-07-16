@@ -946,6 +946,7 @@ describe("MobileBattleScreen", () => {
     expect(controlRow?.style.paddingInline).toBe("var(--space-4)");
     expect(controlRow?.style.paddingTop).toBe("var(--space-4)");
     expect(controlRow?.style.boxSizing).toBe("border-box");
+    expect(controlRow?.style.zIndex).toBe("10");
     expect(phaseControls?.style.display).toBe("flex");
     expect(phaseControls?.style.gap).toBe("var(--space-4)");
     expect(backSlot?.style.position).toBe("");
@@ -1311,6 +1312,76 @@ describe("MobileBattleScreen", () => {
       expect(outline.style.boxShadow).toBe("var(--battlefield-slot-outline)");
       expect(outline.style.pointerEvents).toBe("none");
     });
+
+    act(() => root.unmount());
+  });
+
+  it("outlines a battlefield card's vacated source slot as soon as dragging starts", () => {
+    const interactions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(makeView(), interactions);
+    const sourceSlot = container.querySelector<HTMLElement>(
+      '[data-battle-slot-id="player-front-filled"]',
+    );
+    const battlefieldCard = sourceSlot?.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-front-card"]',
+    );
+    const revealSource = battlefieldCard?.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+
+    expect(sourceSlot?.querySelector("[data-battle-slot-outline]")).toBeNull();
+
+    act(() => {
+      revealSource?.dispatchEvent(
+        new PointerEvent("pointerdown", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 20,
+          clientY: 30,
+          pointerId: 14,
+          pointerType: "mouse",
+        }),
+      );
+      battlefieldCard?.dispatchEvent(
+        new PointerEvent("pointermove", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 44,
+          clientY: 70,
+          pointerId: 14,
+          pointerType: "mouse",
+        }),
+      );
+    });
+
+    expect(
+      sourceSlot?.querySelector("[data-battle-slot-outline]"),
+    ).not.toBeNull();
+
+    act(() => {
+      battlefieldCard?.dispatchEvent(
+        new PointerEvent("pointercancel", {
+          bubbles: true,
+          cancelable: true,
+          pointerId: 14,
+          pointerType: "mouse",
+        }),
+      );
+    });
+
+    expect(sourceSlot?.querySelector("[data-battle-slot-outline]")).toBeNull();
 
     act(() => root.unmount());
   });
