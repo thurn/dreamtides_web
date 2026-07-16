@@ -88,7 +88,7 @@ export interface DreamAugurySiteScreenProps {
   onClose: () => void;
 }
 
-function requiresCenteredDesktopDetail(
+function requiresWideDesktopDetail(
   visual: DreamAuguryOfferVisualView,
 ): boolean {
   switch (visual.kind) {
@@ -125,8 +125,8 @@ export function DreamAugurySiteScreen({
   const [committingOfferId, setCommittingOfferId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const inspectedOffer = view.offers.find((offer) => offer.id === inspectedOfferId) ?? null;
-  const centeredDesktopDetail = inspectedOffer !== null
-    && requiresCenteredDesktopDetail(inspectedOffer.visual);
+  const wideDesktopDetail = inspectedOffer !== null
+    && requiresWideDesktopDetail(inspectedOffer.visual);
   const available = view.offers.length === 2;
   const guide = available
     ? view.guide
@@ -176,7 +176,7 @@ export function DreamAugurySiteScreen({
       siteId={view.siteId}
       scene={view.scene}
       guide={guide}
-      desktopComposition={centeredDesktopDetail ? "showcase" : "split"}
+      desktopComposition={inspectedOffer === null ? "split" : "showcase"}
       mobileComposition="revelation"
       mobileRegionSize={inspectedOffer === null ? "standard" : "expanded"}
       speechBubbleVisible={inspectedOffer === null}
@@ -189,23 +189,19 @@ export function DreamAugurySiteScreen({
           data-dream-augury-layout={layout}
           data-augury-phase={inspectedOffer === null ? "comparison" : "detail"}
           data-augury-desktop-placement={
-            inspectedOffer === null
-              ? undefined
-              : centeredDesktopDetail
-                ? "center"
-                : "right"
+            inspectedOffer === null ? undefined : "center"
           }
           data-encounter-signature={view.encounterSignature ?? undefined}
           style={{
             width: "100%",
             maxWidth:
               layout === "desktop"
-                ? centeredDesktopDetail
+                ? wideDesktopDetail
                   ? 1120
                   : 820
                 : "100%",
             justifySelf:
-              layout === "desktop" && centeredDesktopDetail
+              layout === "desktop" && inspectedOffer !== null
                 ? "center"
                 : undefined,
             height: "100%",

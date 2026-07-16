@@ -311,11 +311,15 @@ describe("DreamAugurySiteScreen", () => {
     expect(
       container.querySelector("[data-guide-gallery-desktop-layout]")
         ?.getAttribute("data-guide-gallery-desktop-layout-mode"),
-    ).toBe("split");
+    ).toBe("showcase");
     expect(
       container.querySelector("[data-dream-augury-layout]")
         ?.getAttribute("data-augury-desktop-placement"),
-    ).toBe("right");
+    ).toBe("center");
+    expect(
+      container.querySelector<HTMLElement>("[data-dream-augury-layout]")
+        ?.style.justifySelf,
+    ).toBe("center");
     expect(
       container.querySelector('[data-testid="cumulus-dream-augury-guide-art"]'),
     ).not.toBeNull();
