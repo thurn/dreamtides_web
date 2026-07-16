@@ -222,18 +222,25 @@ export function buildDreamAuguryOfferSubtitle(
     case "purge-card":
       return namedEntitySubtitle("Purge", [offerCardName(model.card)]);
     case "trade-card":
-      return namedEntitySubtitle("Trade", [offerCardName(model.outgoing)]);
+      return namedEntitySubtitle(
+        "Purge",
+        [offerCardName(model.outgoing)],
+        " and choose a card to replace it",
+      );
     case "duplicate-card":
       return model.cards.length === 1
         ? namedEntitySubtitle("Duplicate", [offerCardName(model.cards[0])])
         : offerTileDescription(model);
     case "dreamsign-gift":
       return namedEntitySubtitle("Gain", [model.dreamsign.name]);
-    case "add-site":
+    case "add-site": {
+      const siteName = model.site.name.toLowerCase();
       return namedEntitySubtitle(
-        `Add ${indefiniteArticle(model.site.name)}`,
-        [model.site.name],
+        `Add ${indefiniteArticle(siteName)}`,
+        [siteName],
+        " site",
       );
+    }
     case "card-draft":
     case "copies-draft":
     case "category-draft":

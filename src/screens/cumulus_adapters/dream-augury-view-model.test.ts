@@ -479,6 +479,21 @@ describe("dream augury view model", () => {
         ["Mapping Fixture 1", "Mapping Fixture 2"],
       ],
       [
+        mappedOffer("purge_replace", {
+          gameObjects: [deckObject],
+          choiceRequest: choiceRequest(fourCandidates(), "replacementCard"),
+        }),
+        ["Mapping Fixture 1"],
+      ],
+      [
+        mappedOffer("add_site", {
+          family: "site",
+          targetKey: "Purge",
+          applyPayload: { kind: "add_site", siteType: "Purge" },
+        }),
+        ["purge"],
+      ],
+      [
         mappedOffer("starter_transfigure", {
           gameObjects: [
             { ...deckObject, previewCard: mappingCards[0] },
@@ -500,7 +515,7 @@ describe("dream augury view model", () => {
     }
 
     const starterModel = buildDreamAuguryOfferTileModel(
-      cases[2][0],
+      cases[4][0],
       mappingContext,
     );
     expect(buildDreamAuguryOfferHeadline(starterModel)).toBe(
@@ -508,6 +523,22 @@ describe("dream augury view model", () => {
     );
     expect(subtitleText(buildDreamAuguryOfferSubtitle(starterModel))).toBe(
       "Transfigure Mapping Fixture 1 and Mapping Fixture 2",
+    );
+
+    const tradeModel = buildDreamAuguryOfferTileModel(
+      cases[2][0],
+      mappingContext,
+    );
+    expect(subtitleText(buildDreamAuguryOfferSubtitle(tradeModel))).toBe(
+      "Purge Mapping Fixture 1 and choose a card to replace it",
+    );
+
+    const siteModel = buildDreamAuguryOfferTileModel(
+      cases[3][0],
+      mappingContext,
+    );
+    expect(subtitleText(buildDreamAuguryOfferSubtitle(siteModel))).toBe(
+      "Add a purge site",
     );
   });
 
