@@ -326,7 +326,12 @@ describe("MobileBattleScreen", () => {
       playerZones?.querySelector<HTMLElement>(
         "[data-battle-status-phase-anchor]",
       )?.style.height,
-    ).toBe("85.71428571428572px");
+    ).toBe("");
+    expect(
+      playerZones?.querySelector<HTMLElement>(
+        '[data-battle-zone="player-status"]',
+      )?.style.alignItems,
+    ).toBe("center");
     expect(enemyHand?.style.display).toBe("flex");
     expect(enemyHand?.style.justifyContent).toBe("center");
     expect(enemyHand?.style.gap).toBe("var(--space-2)");
@@ -351,6 +356,7 @@ describe("MobileBattleScreen", () => {
     expect(desktopBackSlots).toHaveLength(10);
     expect(desktopFrontSlots).toHaveLength(9);
     expect(firstHandCard?.style.position).toBe("relative");
+    expect(firstHandCard?.style.height).toBe("94%");
     expect(firstHandCard?.style.left).toBe("");
     expect(firstHandCard?.style.top).toBe("");
     expect(firstHandCard?.style.transform).toContain("rotate(-4deg)");
@@ -522,7 +528,7 @@ describe("MobileBattleScreen", () => {
       expect(
         row?.querySelector<HTMLElement>("[data-battle-status-phase-anchor]")
           ?.style.height,
-      ).toBe(owner === "player" ? "64.28571428571429px" : "");
+      ).toBe("");
       const deckZone = row?.querySelector<HTMLElement>(
         `[data-battle-zone="${owner}-deck"]`,
       );

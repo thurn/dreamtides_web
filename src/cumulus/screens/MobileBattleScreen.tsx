@@ -304,7 +304,6 @@ const BATTLE_PHASE_LIGHT_CSS = `
 const SIDE_ZONES_GRID_TEMPLATE =
   "minmax(0, 1fr) max-content minmax(0, 1fr)";
 const SIDE_PILE_MAX_WIDTH = 90;
-const SIDE_PILE_HEIGHT = SIDE_PILE_MAX_WIDTH * CARD_ASPECT_RATIO_VALUE;
 // Desktop keeps the three status objects in one centered landscape dock so
 // the wide viewport creates deliberate outer whitespace instead of stretching
 // the mobile spacing rhythm edge-to-edge.
@@ -660,12 +659,6 @@ function SideZones({
             position: "relative",
             width: "max-content",
             maxWidth: "100%",
-            height:
-              owner === "player"
-                ? isDesktop
-                  ? DESKTOP_SIDE_PILE_HEIGHT
-                  : SIDE_PILE_HEIGHT
-                : undefined,
           }}
         >
           <BattleStatusDisplay
@@ -1523,7 +1516,7 @@ function PlayerHand({
               position: isDesktop ? "relative" : "absolute",
               left: isDesktop ? undefined : left,
               top: isDesktop ? undefined : PLAYER_HAND_TOP,
-              height: isDesktop ? "88%" : "92%",
+              height: isDesktop ? "94%" : "92%",
               flex: isDesktop ? "0 0 auto" : undefined,
               aspectRatio: CARD_ASPECT_RATIO,
               transformOrigin: "50% 100%",
