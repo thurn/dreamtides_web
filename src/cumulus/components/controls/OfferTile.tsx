@@ -1,9 +1,4 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-  type ReactElement,
-} from "react";
+import { useEffect, useRef, useState, type ReactElement } from "react";
 import {
   cardIdenticonUri,
   cardImageUrl,
@@ -83,8 +78,7 @@ export type OfferTileBundleCards =
 
 /** The one or two starter cards preselected for transfiguration. */
 export type OfferTileStarterCards =
-  | readonly [OfferTileCard]
-  | readonly [OfferTileCard, OfferTileCard];
+  readonly [OfferTileCard] | readonly [OfferTileCard, OfferTileCard];
 
 /** The one to three surfaced deck-card choices in a duplicate offer. */
 export type OfferTileDuplicateCards =
@@ -94,10 +88,7 @@ export type OfferTileDuplicateCards =
 
 /** Character subtypes that a Dream Augury offer can apply to a card. */
 export type OfferTileCharacterSubtype =
-  | "Warrior"
-  | "Spirit Animal"
-  | "Survivor"
-  | "Outsider";
+  "Warrior" | "Spirit Animal" | "Survivor" | "Outsider";
 
 /** The two to four surfaced choices in a dreamsign-draft offer. */
 export type OfferTileDreamsignChoices =
@@ -328,20 +319,87 @@ function offerTileMotionDelay(offerId: string): string {
 const OFFER_ART_STAGE_SIZE = 208;
 const OFFER_ART_OVERLAY_SIZE = 84;
 const CARD_ART_VISIBLE_SOURCE_FRACTION = 259 / 280;
+const DREAMSIGN_GIFT_BACKGROUND_IMAGE_NUMBER = 386654065;
+const DREAMSIGN_DRAFT_BACKGROUND_IMAGE_NUMBER = 420863587;
+
+type DreamsignDraftCount = OfferTileDreamsignChoices["length"];
+
+const DREAMSIGN_DRAFT_LAYOUTS: Readonly<
+  Record<
+    DreamsignDraftCount,
+    { readonly spread: number; readonly scale: number }
+  >
+> = {
+  2: { spread: 20, scale: 35 },
+  3: { spread: 25, scale: 35 },
+  4: { spread: 18, scale: 30 },
+};
+
+function offerStagePercentage(percentage: number): number {
+  return Math.round(OFFER_ART_STAGE_SIZE * percentage) / 100;
+}
+
+interface DreamsignPosition {
+  readonly left: number;
+  readonly top: number;
+}
+
+function dreamsignDraftPositions(
+  count: DreamsignDraftCount,
+  spread: number,
+  scale: number,
+): readonly DreamsignPosition[] {
+  const halfScale = scale / 2;
+  const center = 50 - halfScale;
+  const low = 50 - spread - halfScale;
+  const high = 50 + spread - halfScale;
+
+  if (count === 2) {
+    return [
+      { left: low, top: center },
+      { left: high, top: center },
+    ];
+  }
+  if (count === 3) {
+    const triangleSpread = Math.max(spread, scale * 0.72);
+    const horizontalOffset = triangleSpread * (Math.sqrt(3) / 2);
+    return [
+      { left: center, top: 50 - triangleSpread - halfScale },
+      {
+        left: 50 - horizontalOffset - halfScale,
+        top: 50 + triangleSpread / 2 - halfScale,
+      },
+      {
+        left: 50 + horizontalOffset - halfScale,
+        top: 50 + triangleSpread / 2 - halfScale,
+      },
+    ];
+  }
+  return [
+    { left: low, top: low },
+    { left: high, top: low },
+    { left: low, top: high },
+    { left: high, top: high },
+  ];
+}
 
 function DreamsignArtPiece({
   dreamsign,
-  size = "large",
+  edge,
+  position,
 }: {
   readonly dreamsign: OfferTileDreamsign;
-  readonly size?: "small" | "large";
+  readonly edge: number;
+  readonly position?: DreamsignPosition;
 }): ReactElement {
   const [imageBroken, setImageBroken] = useState(false);
-  const edge = size === "small" ? 68 : 134;
   return (
     <span
       data-offer-tile-dreamsign-id={dreamsign.id}
       style={{
+        position: position === undefined ? "relative" : "absolute",
+        left: position === undefined ? undefined : `${String(position.left)}%`,
+        top: position === undefined ? undefined : `${String(position.top)}%`,
         display: "grid",
         placeItems: "center",
         width: edge,
@@ -375,6 +433,111 @@ function DreamsignArtPiece({
   );
 }
 
+function DreamsignOfferBackground({
+  kind,
+}: {
+  readonly kind: "gift" | "draft";
+}): ReactElement {
+  const imageNumber =
+    kind === "gift"
+      ? DREAMSIGN_GIFT_BACKGROUND_IMAGE_NUMBER
+      : DREAMSIGN_DRAFT_BACKGROUND_IMAGE_NUMBER;
+  return (
+    <span
+      data-offer-tile-dreamsign-background={kind}
+      data-offer-tile-dreamsign-background-image={imageNumber}
+      style={{
+        position: "absolute",
+        inset: 0,
+        overflow: "hidden",
+        pointerEvents: "none",
+      }}
+    >
+      <img
+        src={cardImageUrl(imageNumber)}
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+        style={{
+          position: "absolute",
+          left: "-10%",
+          top: "-10%",
+          display: "block",
+          width: "120%",
+          maxWidth: "none",
+          height: "120%",
+          objectFit: "cover",
+          objectPosition: "50% 42%",
+          pointerEvents: "none",
+          userSelect: "none",
+        }}
+      />
+    </span>
+  );
+}
+
+function DreamsignGiftComposition({
+  dreamsign,
+}: {
+  readonly dreamsign: OfferTileDreamsign;
+}): ReactElement {
+  return (
+    <span
+      data-offer-tile-dreamsign-layout="single"
+      style={{
+        position: "relative",
+        display: "grid",
+        placeItems: "center",
+        width: OFFER_ART_STAGE_SIZE,
+        height: OFFER_ART_STAGE_SIZE,
+        pointerEvents: "none",
+      }}
+    >
+      <DreamsignOfferBackground kind="gift" />
+      <DreamsignArtPiece
+        dreamsign={dreamsign}
+        edge={offerStagePercentage(54)}
+      />
+    </span>
+  );
+}
+
+function DreamsignDraftComposition({
+  dreamsigns,
+}: {
+  readonly dreamsigns: OfferTileDreamsignChoices;
+}): ReactElement {
+  const count = dreamsigns.length;
+  const layout = DREAMSIGN_DRAFT_LAYOUTS[count];
+  const positions = dreamsignDraftPositions(count, layout.spread, layout.scale);
+  const edge = offerStagePercentage(layout.scale);
+  return (
+    <span
+      data-offer-tile-dreamsign-layout={`draft-${String(count)}`}
+      data-offer-tile-dreamsign-spread={layout.spread}
+      data-offer-tile-dreamsign-scale={layout.scale}
+      style={{
+        position: "relative",
+        display: "block",
+        width: OFFER_ART_STAGE_SIZE,
+        height: OFFER_ART_STAGE_SIZE,
+        overflow: "visible",
+        pointerEvents: "none",
+      }}
+    >
+      <DreamsignOfferBackground kind="draft" />
+      {dreamsigns.map((dreamsign, index) => (
+        <DreamsignArtPiece
+          key={dreamsign.id}
+          dreamsign={dreamsign}
+          edge={edge}
+          position={positions[index]}
+        />
+      ))}
+    </span>
+  );
+}
+
 function CardArtPiece({
   card,
   treatment = "plain",
@@ -387,7 +550,9 @@ function CardArtPiece({
   const [imageBroken, setImageBroken] = useState(false);
   const cardData = card.displaySnapshot;
   const useCardImage =
-    !identiconsForced() && hasAssignedImage(cardData.imageNumber) && !imageBroken;
+    !identiconsForced() &&
+    hasAssignedImage(cardData.imageNumber) &&
+    !imageBroken;
   const imageSource = useCardImage
     ? cardImageUrl(cardData.imageNumber)
     : cardIdenticonUri(card.cardId);
@@ -606,7 +771,11 @@ function TradeComposition({
   );
 }
 
-function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElement {
+function OfferVisual({
+  model,
+}: {
+  readonly model: OfferTileModel;
+}): ReactElement {
   switch (model.kind) {
     case "card-gift":
       return <CardArtMosaic cards={[model.card]} />;
@@ -621,9 +790,7 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
         />
       );
     case "category-draft":
-      return (
-        <CardArtOperation cards={model.cards} glyph={GLYPHS.filter} />
-      );
+      return <CardArtOperation cards={model.cards} glyph={GLYPHS.filter} />;
     case "transfigured-draft":
       return (
         <CardArtOperation
@@ -687,30 +854,9 @@ function OfferVisual({ model }: { readonly model: OfferTileModel }): ReactElemen
         />
       );
     case "dreamsign-gift":
-      return <DreamsignArtPiece dreamsign={model.dreamsign} />;
+      return <DreamsignGiftComposition dreamsign={model.dreamsign} />;
     case "dreamsign-draft":
-      return (
-        <span
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 68px)",
-            placeItems: "center",
-            gap: token("--space-2"),
-            pointerEvents: "none",
-          }}
-        >
-          {model.dreamsigns.map((dreamsign) => (
-            <span
-              key={dreamsign.id}
-              style={{
-                pointerEvents: "none",
-              }}
-            >
-              <DreamsignArtPiece dreamsign={dreamsign} size="small" />
-            </span>
-          ))}
-        </span>
-      );
+      return <DreamsignDraftComposition dreamsigns={model.dreamsigns} />;
     case "add-site":
       return (
         <span

@@ -15,8 +15,9 @@ import {
   type OfferTileModel,
 } from "./OfferTile";
 
-(globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean })
-  .IS_REACT_ACT_ENVIRONMENT = true;
+(
+  globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
+).IS_REACT_ACT_ENVIRONMENT = true;
 
 function fixtureCard(
   cardId: string,
@@ -46,12 +47,11 @@ function fixtureCard(
 }
 
 const CARDS = [
-  fixtureCard(
-    "7be2e6d7-abff-4c44-a0c3-35460da1693c",
-    287269511,
-    1,
-    { x: 0.5, y: -0.5, scale: 1.7 },
-  ),
+  fixtureCard("7be2e6d7-abff-4c44-a0c3-35460da1693c", 287269511, 1, {
+    x: 0.5,
+    y: -0.5,
+    scale: 1.7,
+  }),
   fixtureCard("161482b6-af07-4d9e-822d-8c738672beb9", 2022594419, 2),
   fixtureCard("b56ef7e8-c634-4d40-ac08-fab591dfbc4a", 618071684, 3),
   fixtureCard("9b9c2743-75b3-499d-b5fb-c3429c92d420", 1196004046, 4),
@@ -171,9 +171,7 @@ describe("OfferTile", () => {
     const four = container.querySelector<HTMLElement>(
       '[data-testid="four"] [data-offer-tile-card-art-layout]',
     )!;
-    expect(four.style.gridTemplateColumns).toBe(
-      "repeat(2, minmax(0, 1fr))",
-    );
+    expect(four.style.gridTemplateColumns).toBe("repeat(2, minmax(0, 1fr))");
     expect(four.style.gridTemplateRows).toBe("repeat(2, minmax(0, 1fr))");
     expect(four.style.gap).toBe("var(--space-1)");
 
@@ -214,9 +212,9 @@ describe("OfferTile", () => {
     const tile = container.querySelector<HTMLElement>('[data-testid="trade"]')!;
     expect(tile.querySelectorAll("[data-offer-tile-card-art]")).toHaveLength(5);
     expect(
-      tile.querySelector("[data-offer-tile-card-art-layout]")?.getAttribute(
-        "data-offer-tile-card-art-layout",
-      ),
+      tile
+        .querySelector("[data-offer-tile-card-art-layout]")
+        ?.getAttribute("data-offer-tile-card-art-layout"),
     ).toBe("grid-4");
     const fifth = tile.querySelector<HTMLElement>(
       "[data-offer-tile-fifth-card]",
@@ -249,15 +247,28 @@ describe("OfferTile", () => {
       ],
       [
         "two",
-        { id: "starters", kind: "transfigure-starters", cards: [CARDS[0], CARDS[1]] },
+        {
+          id: "starters",
+          kind: "transfigure-starters",
+          cards: [CARDS[0], CARDS[1]],
+        },
       ],
       [
         "three",
-        { id: "duplicate", kind: "duplicate-card", cards: [CARDS[0], CARDS[1], CARDS[2]] },
+        {
+          id: "duplicate",
+          kind: "duplicate-card",
+          cards: [CARDS[0], CARDS[1], CARDS[2]],
+        },
       ],
       [
         "four",
-        { id: "category", kind: "category-draft", cards: CARDS, categoryName: "Character" },
+        {
+          id: "category",
+          kind: "category-draft",
+          cards: CARDS,
+          categoryName: "Character",
+        },
       ],
     ];
     const container = document.createElement("div");
@@ -309,12 +320,15 @@ describe("OfferTile", () => {
       );
     });
 
-    const source = container.querySelector<HTMLButtonElement>(
-      "[data-offer-tile]",
-    )!;
+    const source =
+      container.querySelector<HTMLButtonElement>("[data-offer-tile]")!;
     expect(source.tagName).toBe("BUTTON");
-    expect(source.querySelectorAll("[data-offer-tile-card-art]")).toHaveLength(4);
-    expect(source.querySelectorAll("[data-reveal-entity-type]")).toHaveLength(0);
+    expect(source.querySelectorAll("[data-offer-tile-card-art]")).toHaveLength(
+      4,
+    );
+    expect(source.querySelectorAll("[data-reveal-entity-type]")).toHaveLength(
+      0,
+    );
     expect(source.dataset.revealEntityType).toBe("offer");
     expect(source.dataset.revealEntityId).toMatch(/^[0-9a-f-]{36}$/);
     expect(source.dataset.revealPrimaryVariant).toBe("text");
@@ -329,7 +343,7 @@ describe("OfferTile", () => {
     container.remove();
   });
 
-  it("renders dreamsigns and added sites at the reduced scale", () => {
+  it("renders Dreamsign offers over their authored full-art backgrounds", () => {
     const gift: OfferTileModel = {
       id: "dreamsign-gift",
       kind: "dreamsign-gift",
@@ -339,13 +353,26 @@ describe("OfferTile", () => {
         art: { kind: "dreamsign", imageName: "acorn_gold.png" },
       },
     };
-    const draft: OfferTileModel = {
-      id: "dreamsign-draft",
+    const dreamsigns = [
+      gift.dreamsign,
+      { ...gift.dreamsign, id: "278EC1AB-F532-4862-84AE-63DF5E49548C" },
+      { ...gift.dreamsign, id: "6E20E6C7-295A-48B1-B252-B8B00D6902C9" },
+      { ...gift.dreamsign, id: "49990864-1DB0-4C08-91AE-40A1F04223E4" },
+    ] as const;
+    const draftTwo: OfferTileModel = {
+      id: "dreamsign-draft-two",
       kind: "dreamsign-draft",
-      dreamsigns: [
-        gift.dreamsign,
-        { ...gift.dreamsign, id: "278EC1AB-F532-4862-84AE-63DF5E49548C" },
-      ],
+      dreamsigns: [dreamsigns[0], dreamsigns[1]],
+    };
+    const draftThree: OfferTileModel = {
+      id: "dreamsign-draft-three",
+      kind: "dreamsign-draft",
+      dreamsigns: [dreamsigns[0], dreamsigns[1], dreamsigns[2]],
+    };
+    const draftFour: OfferTileModel = {
+      id: "dreamsign-draft-four",
+      kind: "dreamsign-draft",
+      dreamsigns,
     };
     const addSite: OfferTileModel = {
       id: "add-site",
@@ -359,22 +386,91 @@ describe("OfferTile", () => {
       root.render(
         <CumulusRoot>
           <OfferTile model={gift} onPress={() => {}} testId="gift" />
-          <OfferTile model={draft} onPress={() => {}} testId="draft" />
+          <OfferTile model={draftTwo} onPress={() => {}} testId="draft-two" />
+          <OfferTile
+            model={draftThree}
+            onPress={() => {}}
+            testId="draft-three"
+          />
+          <OfferTile model={draftFour} onPress={() => {}} testId="draft-four" />
           <OfferTile model={addSite} onPress={() => {}} testId="site" />
         </CumulusRoot>,
       );
     });
 
+    const giftLayout = container.querySelector<HTMLElement>(
+      '[data-testid="gift"] [data-offer-tile-dreamsign-layout]',
+    )!;
+    const giftBackground = giftLayout.querySelector<HTMLElement>(
+      '[data-offer-tile-dreamsign-background="gift"]',
+    )!;
+    expect(giftLayout.dataset.offerTileDreamsignLayout).toBe("single");
+    expect(giftBackground.dataset.offerTileDreamsignBackgroundImage).toBe(
+      "386654065",
+    );
+    expect(giftBackground.style.overflow).toBe("hidden");
     expect(
-      container.querySelector<HTMLElement>(
-        '[data-testid="gift"] [data-offer-tile-dreamsign-id]',
-      )?.style.width,
-    ).toBe("134px");
+      giftBackground.querySelector<HTMLImageElement>("img")?.src,
+    ).toContain("/cards/386654065.webp");
     expect(
-      container.querySelector<HTMLElement>(
-        '[data-testid="draft"] [data-offer-tile-dreamsign-id]',
-      )?.style.width,
-    ).toBe("68px");
+      giftLayout.querySelector<HTMLElement>("[data-offer-tile-dreamsign-id]")
+        ?.style.width,
+    ).toBe("112.32px");
+
+    const presets = [
+      ["draft-two", "draft-2", "20", "35", "72.8px", 2],
+      ["draft-three", "draft-3", "25", "35", "72.8px", 3],
+      ["draft-four", "draft-4", "18", "30", "62.4px", 4],
+    ] as const;
+    for (const [testId, layoutName, spread, scale, edge, count] of presets) {
+      const layout = container.querySelector<HTMLElement>(
+        `[data-testid="${testId}"] [data-offer-tile-dreamsign-layout]`,
+      )!;
+      const background = layout.querySelector<HTMLElement>(
+        '[data-offer-tile-dreamsign-background="draft"]',
+      )!;
+      const backgroundImage =
+        background.querySelector<HTMLImageElement>("img")!;
+      expect(layout.dataset.offerTileDreamsignLayout).toBe(layoutName);
+      expect(layout.dataset.offerTileDreamsignSpread).toBe(spread);
+      expect(layout.dataset.offerTileDreamsignScale).toBe(scale);
+      expect(layout.style.overflow).toBe("visible");
+      expect(background.dataset.offerTileDreamsignBackgroundImage).toBe(
+        "420863587",
+      );
+      expect(background.style.overflow).toBe("hidden");
+      expect(backgroundImage.src).toContain("/cards/420863587.webp");
+      expect(backgroundImage.style.left).toBe("-10%");
+      expect(backgroundImage.style.top).toBe("-10%");
+      expect(backgroundImage.style.right).toBe("");
+      expect(backgroundImage.style.bottom).toBe("");
+      expect(backgroundImage.style.width).toBe("120%");
+      expect(backgroundImage.style.maxWidth).toBe("none");
+      expect(backgroundImage.style.height).toBe("120%");
+      expect(backgroundImage.style.objectFit).toBe("cover");
+      const pieces = layout.querySelectorAll<HTMLElement>(
+        "[data-offer-tile-dreamsign-id]",
+      );
+      expect(pieces).toHaveLength(count);
+      for (const piece of pieces) {
+        expect(piece.style.width).toBe(edge);
+        expect(piece.style.height).toBe(edge);
+      }
+    }
+
+    const triangle = container.querySelectorAll<HTMLElement>(
+      '[data-testid="draft-three"] [data-offer-tile-dreamsign-id]',
+    );
+    expect(Number.parseFloat(triangle[0].style.top)).toBeLessThan(
+      Number.parseFloat(triangle[1].style.top),
+    );
+    expect(Number.parseFloat(triangle[1].style.left)).toBeLessThan(
+      Number.parseFloat(triangle[0].style.left),
+    );
+    expect(Number.parseFloat(triangle[0].style.left)).toBeLessThan(
+      Number.parseFloat(triangle[2].style.left),
+    );
+
     const site = container.querySelector<HTMLElement>(
       '[data-testid="site"] [data-offer-tile-site-id]',
     )!;
