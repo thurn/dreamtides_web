@@ -44,9 +44,9 @@ export const glassDialogDemo: CumulusComponent = {
   id: "glass-dialog",
   title: "Glass Dialog",
   blurb:
-    "The glass overlay shell: a modal dialog with a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and a glass close disc) over a scrolling body. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.",
+    "The glass overlay shell: a modal dialog with a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and an optional glass close disc) over a scrolling body. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.",
   callout:
-    "Dreamsign Revelation uses this shell for its Purge replacement dialog. The close disc is the shared IconButton at size `md`. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant.",
+    "Dreamsign Revelation uses this shell for its Purge replacement dialog. Pass `onClose` for the shared close disc, or omit it when one explicit commit action must own completion. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant.",
   group: "Components",
   docName: "GlassDialog",
   Component: GlassDialogDemo,
@@ -61,6 +61,14 @@ export const glassDialogDemo: CumulusComponent = {
   onClose={closeModal}
 >
   <DeckGrid entries={entries} />
+</GlassDialog>`,
+    },
+    {
+      label: "Commit gated",
+      note: "Omit `onClose` when the dialog must expose only its explicit commit action. The header remains and no dismissal control is rendered.",
+      code: `<GlassDialog title="Foresee 2" wide>
+  <ForeseeOrder />
+  <GlassButton label="Confirm" variant="accent" placement="onGlass" onPress={confirm} />
 </GlassDialog>`,
     },
     {

@@ -87,6 +87,21 @@ describe("GlassBackdrop", () => {
 });
 
 describe("GlassDialog", () => {
+  it("omits the close control when the dialog is commit-gated", () => {
+    const { container, root } = mount(
+      <GlassDialog title="Foresee 2">
+        <div>content</div>
+      </GlassDialog>,
+    );
+
+    expect(container.querySelector('[role="dialog"]')).not.toBeNull();
+    expect(container.querySelector("button")).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders the title as an <h2>, the subtitle, the children, and a labeled close that fires onClose", () => {
     const onClose = vi.fn();
     const { container, root } = mount(

@@ -1256,7 +1256,6 @@ function PlayableBattleScreenInner({
             initialCount={openForeseeOverlay.count}
             side={openForeseeOverlay.side}
             state={board}
-            onClose={() => setOpenForeseeOverlay(null)}
             onConfirm={({ orderedCardIds, voidCardIds }) => {
               const viewedCardIds = board.sides[openForeseeOverlay.side].deck.slice(
                 0,
@@ -1284,14 +1283,6 @@ function PlayableBattleScreenInner({
             initialCount={pendingPrompt.options.count}
             side={pendingPrompt.run.side}
             state={board}
-            onClose={() => {
-              if (pendingPrompt.options.kind !== "foresee") return;
-              resolvePendingPrompt({
-                kind: "foresee",
-                orderedCardIds: [...pendingPrompt.options.cardIds],
-                voidCardIds: [],
-              });
-            }}
             onConfirm={({ orderedCardIds, voidCardIds }) => resolvePendingPrompt({
               kind: "foresee",
               orderedCardIds: [...orderedCardIds],

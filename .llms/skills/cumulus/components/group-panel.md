@@ -6,9 +6,11 @@
 
 Components · Live demo & interactive props: `/cumulus#/group-panel`
 
-Real consumers: **9** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **8** (imports outside `src/cumulus/docs/` and tests).
 
 The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. It earns its place by organizing information, not by holding a lone label — and reads as a distinct surface from InfoCard's glass.
+
+> **Guidance:** Use GroupPanel over scene media or solid screen surfaces. Do not place its opaque purple card inside GlassPanel, GlassDialog, InfoCard, or another liquid-glass surface; lay that content directly on the glass.
 
 ## Props
 

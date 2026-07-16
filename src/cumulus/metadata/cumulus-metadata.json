@@ -2060,11 +2060,11 @@
     },
     {
       "name": "onClose",
-      "tsType": "() => void",
+      "tsType": "(() => void)",
       "unionMembers": [],
-      "required": true,
+      "required": false,
       "defaultValue": null,
-      "description": "Dismisses the dialog; fires when the close disc is activated."
+      "description": "Dismisses the dialog from its close disc. Omit for a commit-gated dialog\nthat intentionally exposes no dismissal control."
     },
     {
       "name": "closeLabel",

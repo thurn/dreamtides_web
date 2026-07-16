@@ -15,8 +15,9 @@
 //
 //   - GlassDialog: a modal overlay with a bounded, centered glass panel on
 //     desktop and a full-bleed frosted overlay on mobile, with a hairline-closed
-//     header (title + optional subtitle + a trailing glass close disc) over a
-//     scrolling body.
+//     header (title + optional subtitle + an optional trailing glass close
+//     disc) over a scrolling body. Commit-gated dialogs omit `onClose` and
+//     expose no dismissal control.
 //
 // The close disc is the shared `IconButton` at size `md` (48px) so the close
 // matches the IconButton size scale rather than inventing a bespoke disc. The
@@ -88,8 +89,11 @@ export interface GlassDialogProps {
   title: string;
   /** Optional intro line under the title. */
   subtitle?: string;
-  /** Dismisses the dialog; fires when the close disc is activated. */
-  onClose: () => void;
+  /**
+   * Dismisses the dialog from its close disc. Omit for a commit-gated dialog
+   * that intentionally exposes no dismissal control.
+   */
+  onClose?: () => void;
   /** Accessible name for the close disc. Defaults to `"Close"`. */
   closeLabel?: string;
   /**
@@ -121,10 +125,11 @@ export interface GlassDialogProps {
  * panel widens to
  * `min(1120px, 90vw)` and trades the `85vh` cap for explicit viewport padding so
  * a roomy grid fits in two rows without internal scroll. The header pairs the
- * title `<h2>` and optional subtitle
- * `<p>` with a trailing `IconButton size="md"` close, closed by a
- * `--border-strong` hairline; on mobile the header pads its top by the safe-area
- * inset so the title clears a device cutout. The body scrolls.
+ * title `<h2>` and optional subtitle `<p>` with an optional trailing
+ * `IconButton size="md"` close, closed by a `--border-strong` hairline; omit
+ * `onClose` for a commit-gated dialog with no dismissal control. On mobile the
+ * header pads its top by the safe-area inset so the title clears a device
+ * cutout. The body scrolls.
  */
 export function GlassDialog({
   title,
@@ -148,9 +153,12 @@ export function GlassDialog({
   const [besideCutout, setBesideCutout] = useState(false);
   useEffect(() => {
     setBesideCutout(
-      cutoutAwareClose && !boundedDesktop && hasInjectedDisplayCutout(),
+      onClose !== undefined &&
+        cutoutAwareClose &&
+        !boundedDesktop &&
+        hasInjectedDisplayCutout(),
     );
-  }, [boundedDesktop, cutoutAwareClose]);
+  }, [boundedDesktop, cutoutAwareClose, onClose]);
 
   // Desktop is a bounded, centered dialog; mobile is a full-bleed overlay whose
   // fill + blur stay but whose card rim, radius, and shadow drop so it reads
@@ -205,7 +213,7 @@ export function GlassDialog({
         }),
   };
 
-  const closeButton = (
+  const closeButton = onClose === undefined ? null : (
     <IconButton
       placement="onGlass"
       glyph={GLYPHS.close}

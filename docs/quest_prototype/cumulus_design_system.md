@@ -269,6 +269,15 @@ production-bridge violet tokens are not text colors on glass. Purple remains a
 valid object glow, border, economy mark, and primary-action surface; glyphs on
 blurred glass stay white or warm near-white.
 
+### Material stacking on glass
+
+Opaque purple container cards, including `GroupPanel`, do not sit inside
+GlassPanel, GlassDialog, InfoCard, or another liquid-glass surface. Their solid
+rectangle interrupts the glass material and reads as a heavy card pasted onto
+the pane. Content uses spacing wrappers and glass text directly on the glass;
+tangible game objects such as `GameCard` may rest there as distinct objects
+without an additional container behind them.
+
 ### Token groups documented in the Tokens section
 
 The `/cumulus` Tokens section renders every token as a specimen, split into a

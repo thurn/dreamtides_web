@@ -13,6 +13,8 @@ export const groupPanelDemo: CumulusComponent = {
   title: "Group Panel",
   blurb:
     "The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. It earns its place by organizing information, not by holding a lone label — and reads as a distinct surface from InfoCard's glass.",
+  callout:
+    "Use GroupPanel over scene media or solid screen surfaces. Do not place its opaque purple card inside GlassPanel, GlassDialog, InfoCard, or another liquid-glass surface; lay that content directly on the glass.",
   group: "Components",
   docName: "GroupPanel",
   Component: GroupPanel,

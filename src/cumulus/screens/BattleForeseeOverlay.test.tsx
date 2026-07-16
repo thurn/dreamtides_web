@@ -35,12 +35,10 @@ function makeCard(index: number): CardData {
 
 function makeView(): BattleForeseeView {
   return {
-    deckOwnerLabel: "your",
     cards: [1, 2, 3].map((index) => {
       const displaySnapshot = makeCard(index);
       return {
         battleCardId: `battle-card-${String(index)}`,
-        displayName: displaySnapshot.name,
         model: { cardId: displaySnapshot.id, displaySnapshot },
       };
     }),
@@ -88,12 +86,9 @@ function dragEvent(type: string, dataTransfer: DataTransfer): Event {
   return event;
 }
 
-beforeEach(() => {
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
+function stubMatchMedia(matches: boolean): void {
   window.matchMedia = vi.fn().mockReturnValue({
-    matches: true,
+    matches,
     media: "",
     onchange: null,
     addEventListener: vi.fn(),
@@ -102,6 +97,13 @@ beforeEach(() => {
     removeListener: vi.fn(),
     dispatchEvent: vi.fn(),
   }) as unknown as typeof window.matchMedia;
+}
+
+beforeEach(() => {
+  (
+    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
+  ).IS_REACT_ACT_ENVIRONMENT = true;
+  stubMatchMedia(true);
 });
 
 afterEach(() => {
@@ -109,9 +111,9 @@ afterEach(() => {
 });
 
 describe("BattleForeseeOverlay", () => {
-  it("renders only the authoritative ordering and void workflow", () => {
+  it("renders one horizontal workflow with no controls except Confirm", () => {
     const { container, root } = mount(
-      <BattleForeseeOverlay view={makeView()} onClose={() => {}} onConfirm={() => {}} />,
+      <BattleForeseeOverlay view={makeView()} onConfirm={() => {}} />,
     );
 
     expect(container.querySelector('[role="dialog"]')?.getAttribute("aria-label"))
@@ -121,11 +123,13 @@ describe("BattleForeseeOverlay", () => {
       "battle-card-2",
       "battle-card-3",
     ]);
-    expect(container.textContent).toContain("Left to right is top to bottom.");
-    expect(container.textContent).toContain("No cards selected.");
-    expect(container.textContent).not.toContain("Reveal count");
-    expect(container.textContent).not.toContain("Play from Top");
-    expect(container.textContent).not.toContain("Send to Bottom");
+    expect(Array.from(
+      container.querySelectorAll<HTMLElement>("[data-foresee-indicator]"),
+      (indicator) => indicator.textContent,
+    )).toEqual(["Deck", "Void"]);
+    expect(Array.from(container.querySelectorAll("button"), (button) => button.textContent))
+      .toEqual(["Confirm"]);
+    expect(container.querySelector("[data-foresee-spacer]")).not.toBeNull();
 
     act(() => root.unmount());
   });
@@ -133,7 +137,7 @@ describe("BattleForeseeOverlay", () => {
   it("supports drag ordering and dragging a card to the void before one confirmation", () => {
     const onConfirm = vi.fn();
     const { container, root } = mount(
-      <BattleForeseeOverlay view={makeView()} onClose={() => {}} onConfirm={onConfirm} />,
+      <BattleForeseeOverlay view={makeView()} onConfirm={onConfirm} />,
     );
     const first = container.querySelector<HTMLElement>(
       '[data-foresee-card-id="battle-card-1"]',
@@ -180,30 +184,17 @@ describe("BattleForeseeOverlay", () => {
     act(() => root.unmount());
   });
 
-  it("provides named controls as a non-drag fallback", () => {
-    const onConfirm = vi.fn();
+  it("fits the mobile row with a blank lane at least one card width", () => {
+    stubMatchMedia(false);
     const { container, root } = mount(
-      <BattleForeseeOverlay view={makeView()} onClose={() => {}} onConfirm={onConfirm} />,
+      <BattleForeseeOverlay view={{ cards: makeView().cards.slice(0, 1) }} onConfirm={() => {}} />,
     );
 
-    act(() => {
-      container.querySelector<HTMLButtonElement>('[aria-label="Move First later"]')?.click();
-    });
-    expect(deckIds(container)).toEqual([
-      "battle-card-2",
-      "battle-card-1",
-      "battle-card-3",
-    ]);
-
-    const second = container.querySelector<HTMLElement>(
-      '[data-foresee-card-id="battle-card-2"]',
-    );
-    act(() => {
-      Array.from(second?.querySelectorAll("button") ?? [])
-        .find((button) => button.textContent?.includes("To Void"))
-        ?.click();
-    });
-    expect(container.querySelector('[data-foresee-card-zone="void"]')).not.toBeNull();
+    const card = container.querySelector<HTMLElement>("[data-foresee-card-zone=deck]");
+    const spacer = container.querySelector<HTMLElement>("[data-foresee-spacer]");
+    expect(card?.style.width).toBe("104px");
+    expect(spacer?.style.minWidth).toBe("104px");
+    expect(container.querySelectorAll("button")).toHaveLength(1);
 
     act(() => root.unmount());
   });

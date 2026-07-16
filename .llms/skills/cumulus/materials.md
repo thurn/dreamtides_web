@@ -70,6 +70,15 @@ frame. A floating gallery renders labeled and icon accessories with
 `placement="onGlass"`; a full-bleed gallery uses the standard scrim and renders
 them with `placement="onMedia"`.
 
+## Do not stack purple container cards on glass
+
+Do not place an opaque purple container card, including `GroupPanel`, inside a
+GlassPanel, GlassDialog, InfoCard, or another liquid-glass surface. The solid
+purple rectangle interrupts the glass material and reads as a heavy card pasted
+onto the pane. Lay the content directly on the glass with the glass text tokens
+and spacing wrappers. Tangible game objects such as `GameCard` remain distinct
+objects and may sit directly on the glass without another container behind them.
+
 ## `--glass-fill-popover`: the warmer reveal tint
 
 There are two glass fills, and the difference is deliberate:
@@ -115,8 +124,9 @@ Most surfaces are solid — they do not sample the backdrop, and choosing glass
 for them would be wrong:
 
 - **GroupPanel** — the information-grouping card — is a flat, solid deep-plum
-  surface. It collects dense related values into one unit and does not refract
-  the scene.
+  surface used over scene media or solid screen surfaces. It collects dense
+  related values into one unit and does not refract the scene; do not nest it
+  inside liquid glass.
 - **`--surface-chrome` / `--surface-chrome-strong`** are solid, opaque chrome
   for HUD elements and windows.
 

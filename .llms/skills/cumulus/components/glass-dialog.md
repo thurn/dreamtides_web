@@ -8,9 +8,9 @@ Components · Live demo & interactive props: `/cumulus#/glass-dialog`
 
 Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
 
-The glass overlay shell: a modal dialog with a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and a glass close disc) over a scrolling body. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.
+The glass overlay shell: a modal dialog with a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and an optional glass close disc) over a scrolling body. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.
 
-> **Guidance:** Dreamsign Revelation uses this shell for its Purge replacement dialog. The close disc is the shared IconButton at size `md`. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant.
+> **Guidance:** Dreamsign Revelation uses this shell for its Purge replacement dialog. Pass `onClose` for the shared close disc, or omit it when one explicit commit action must own completion. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant.
 
 ## Props
 
@@ -18,7 +18,7 @@ The glass overlay shell: a modal dialog with a bounded, centered glass panel on 
 | --- | --- | --- | --- | --- |
 | `title` | `string` | yes | — | The dialog's heading, rendered as an `<h2>`. |
 | `subtitle` | `string` | no | — | Optional intro line under the title. |
-| `onClose` | `() => void` | yes | — | Dismisses the dialog; fires when the close disc is activated. |
+| `onClose` | `(() => void)` | no | — | Dismisses the dialog from its close disc. Omit for a commit-gated dialog that intentionally exposes no dismissal control. |
 | `closeLabel` | `string` | no | `Close` | Accessible name for the close disc. Defaults to `"Close"`. |
 | `cutoutAwareClose` | `boolean` | no | `false` | When true, on a full-bleed mobile overlay whose screen-cutout box is known (a device-screenshot mock-up) the close disc floats up beside the device island instead of sitting on the header row, so the header title clears the safe area below it. No effect on desktop or on real hardware (where the island geometry is not exposed). Defaults to `false`. |
 | `wide` | `boolean` | no | `false` | On desktop, widen the panel and trade the `85vh` height cap for explicit viewport padding so a roomy grid fits in two rows without internal scroll. No effect on the full-bleed mobile overlay. Defaults to `false`. A caller gates this on its own roomy-desktop media query. |
@@ -40,6 +40,17 @@ import { GlassDialog } from "src/cumulus/components/overlay/GlassDialog";
   onClose={closeModal}
 >
   <DeckGrid entries={entries} />
+</GlassDialog>
+```
+
+### Commit gated
+
+Omit `onClose` when the dialog must expose only its explicit commit action. The header remains and no dismissal control is rendered.
+
+```tsx
+<GlassDialog title="Foresee 2" wide>
+  <ForeseeOrder />
+  <GlassButton label="Confirm" variant="accent" placement="onGlass" onPress={confirm} />
 </GlassDialog>
 ```
 
