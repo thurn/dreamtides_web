@@ -119,6 +119,16 @@
         background: #050207;
       }
 
+      .offer-tile__background {
+        position: absolute;
+        inset: -6%;
+        display: block;
+        width: 112%;
+        height: 112%;
+        object-fit: cover;
+        object-position: 50% 42%;
+      }
+
       .offer-tile__frame {
         position: absolute;
         inset: 0;
@@ -130,67 +140,43 @@
         pointer-events: none;
       }
 
-      .full-art,
-      .draft-art {
+      .offer-tile__symbols {
         position: absolute;
         left: 15.35%;
         top: 9.1%;
+        z-index: 2;
         width: 69.3%;
         height: 68.1%;
-        overflow: hidden;
+        pointer-events: none;
       }
 
-      .full-art__image,
-      .draft-art__image {
-        position: absolute;
-        inset: 0;
-        display: block;
-        width: 100%;
-        height: 108%;
-        object-fit: cover;
-        object-position: 50% 42%;
+      .offer-tile__symbols--single {
+        display: grid;
+        place-items: center;
       }
 
-      .full-art__dreamsign,
-      .draft-art__dreamsign {
-        position: absolute;
-        z-index: 2;
+      .offer-tile__symbols--draft {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        place-items: center;
+      }
+
+      .offer-tile__dreamsign {
         display: block;
         object-fit: contain;
         filter: drop-shadow(0 4px 0 rgba(3, 1, 5, 0.88))
           drop-shadow(0 10px 13px rgba(3, 1, 5, 0.9));
       }
 
-      .full-art__dreamsign {
-        left: 50%;
-        top: 50%;
+      .offer-tile__symbols--single .offer-tile__dreamsign {
         width: 54%;
         height: 54%;
-        transform: translate(-50%, -50%);
       }
 
-      .draft-art {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(2, 1fr);
-        gap: 3px;
-        background: #bda84b;
-      }
-
-      .draft-art__panel {
-        position: relative;
-        min-width: 0;
-        min-height: 0;
-        overflow: hidden;
-        background: #050207;
-      }
-
-      .draft-art__dreamsign {
-        left: 50%;
-        top: 50%;
+      .offer-tile__symbols--draft .offer-tile__dreamsign {
         width: 66%;
         height: 66%;
-        transform: translate(-50%, -50%);
       }
 
       .offer__caption {
@@ -338,15 +324,15 @@
               aria-label="One preselected Dreamsign over full card art"
             >
               <div class="offer-tile__fill">
-                <div class="full-art">
+                <img
+                  class="offer-tile__background"
+                  id="gift-background"
+                  src="/cards/420863587.webp"
+                  alt=""
+                />
+                <div class="offer-tile__symbols offer-tile__symbols--single">
                   <img
-                    class="full-art__image"
-                    id="gift-background"
-                    src="/cards/420863587.webp"
-                    alt=""
-                  />
-                  <img
-                    class="full-art__dreamsign"
+                    class="offer-tile__dreamsign"
                     src="/dreamsigns/horn_rainbow%20.png"
                     alt="Rainbow Horn"
                   />
@@ -364,58 +350,36 @@
           <article class="offer">
             <div
               class="offer-tile"
-              aria-label="Four Dreamsign choices over four full card-art panels"
+              aria-label="Four Dreamsign choices over one full card-art background"
             >
               <div class="offer-tile__fill">
-                <div class="draft-art" id="draft-art">
-                  <div class="draft-art__panel">
-                    <img
-                      class="draft-art__image"
-                      src="/cards/435865921.webp"
-                      alt=""
-                    />
-                    <img
-                      class="draft-art__dreamsign"
-                      src="/dreamsigns/horn_rainbow%20.png"
-                      alt="Rainbow Horn"
-                    />
-                  </div>
-                  <div class="draft-art__panel">
-                    <img
-                      class="draft-art__image"
-                      src="/cards/336703115.webp"
-                      alt=""
-                    />
-                    <img
-                      class="draft-art__dreamsign"
-                      src="/dreamsigns/aertfact.png"
-                      alt="Pyramid Relic"
-                    />
-                  </div>
-                  <div class="draft-art__panel">
-                    <img
-                      class="draft-art__image"
-                      src="/cards/386654065.webp"
-                      alt=""
-                    />
-                    <img
-                      class="draft-art__dreamsign"
-                      src="/dreamsigns/amanita.png"
-                      alt="Amanita"
-                    />
-                  </div>
-                  <div class="draft-art__panel">
-                    <img
-                      class="draft-art__image"
-                      src="/cards/403770328.webp"
-                      alt=""
-                    />
-                    <img
-                      class="draft-art__dreamsign"
-                      src="/dreamsigns/algae.png"
-                      alt="Algae"
-                    />
-                  </div>
+                <img
+                  class="offer-tile__background"
+                  id="draft-background"
+                  src="/cards/420863587.webp"
+                  alt=""
+                />
+                <div class="offer-tile__symbols offer-tile__symbols--draft">
+                  <img
+                    class="offer-tile__dreamsign"
+                    src="/dreamsigns/horn_rainbow%20.png"
+                    alt="Rainbow Horn"
+                  />
+                  <img
+                    class="offer-tile__dreamsign"
+                    src="/dreamsigns/aertfact.png"
+                    alt="Pyramid Relic"
+                  />
+                  <img
+                    class="offer-tile__dreamsign"
+                    src="/dreamsigns/amanita.png"
+                    alt="Amanita"
+                  />
+                  <img
+                    class="offer-tile__dreamsign"
+                    src="/dreamsigns/algae.png"
+                    alt="Algae"
+                  />
                 </div>
               </div>
               <img
@@ -430,7 +394,7 @@
 
         <div class="picker">
           <p class="picker__label">
-            Choose the gift backdrop · the other four fill the draft
+            Choose one full-art backdrop for both offer variants
           </p>
           <div class="picker__choices" id="picker-choices"></div>
         </div>
@@ -441,41 +405,14 @@
       const imageNumbers = [
         420863587, 435865921, 336703115, 386654065, 403770328,
       ];
-      const dreamsigns = [
-        ["/dreamsigns/horn_rainbow%20.png", "Rainbow Horn"],
-        ["/dreamsigns/aertfact.png", "Pyramid Relic"],
-        ["/dreamsigns/amanita.png", "Amanita"],
-        ["/dreamsigns/algae.png", "Algae"],
-      ];
       const giftBackground = document.querySelector("#gift-background");
-      const draftArt = document.querySelector("#draft-art");
+      const draftBackground = document.querySelector("#draft-background");
       const pickerChoices = document.querySelector("#picker-choices");
 
       function render(selectedIndex) {
         const selected = imageNumbers[selectedIndex];
-        const draftImages = imageNumbers.filter(
-          (_, index) => index !== selectedIndex,
-        );
         giftBackground.src = `/cards/${selected}.webp`;
-        draftArt.replaceChildren(
-          ...dreamsigns.map(([dreamsignUrl, dreamsignAlt], index) => {
-            const panel = document.createElement("div");
-            panel.className = "draft-art__panel";
-
-            const background = document.createElement("img");
-            background.className = "draft-art__image";
-            background.src = `/cards/${draftImages[index]}.webp`;
-            background.alt = "";
-
-            const dreamsign = document.createElement("img");
-            dreamsign.className = "draft-art__dreamsign";
-            dreamsign.src = dreamsignUrl;
-            dreamsign.alt = dreamsignAlt;
-
-            panel.append(background, dreamsign);
-            return panel;
-          }),
-        );
+        draftBackground.src = `/cards/${selected}.webp`;
 
         pickerChoices.querySelectorAll("button").forEach((button, index) => {
           button.setAttribute("aria-pressed", String(index === selectedIndex));
@@ -488,7 +425,7 @@
         button.type = "button";
         button.setAttribute(
           "aria-label",
-          `Use image ${imageNumber} behind the preselected Dreamsign`,
+          `Use image ${imageNumber} behind both Dreamsign offers`,
         );
         button.setAttribute("aria-pressed", String(index === 0));
 
