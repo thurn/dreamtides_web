@@ -57,9 +57,6 @@ export type GlassPanelHeaderSpacing =
 /** Title voice for a standard panel heading or a large character dossier. */
 export type GlassPanelTitleVoice = "standard" | "hero";
 
-/** Text alignment for the structured panel header. */
-export type GlassPanelHeaderAlign = "start" | "center";
-
 export interface GlassPanelProps {
   /** Optional uppercase context line rendered above the title. */
   eyebrow?: string;
@@ -71,8 +68,6 @@ export interface GlassPanelProps {
   headingLevel?: "h1" | "h2";
   /** Title and subtitle typography. Defaults to `standard`. */
   titleVoice?: GlassPanelTitleVoice;
-  /** Header text alignment. Defaults to `start`. */
-  headerAlign?: GlassPanelHeaderAlign;
   /** Header padding preset. Defaults to `regular`. */
   headerSpacing?: GlassPanelHeaderSpacing;
   /** Draw the standard divider below the header. Defaults to `true`. */
@@ -151,7 +146,6 @@ export function GlassPanel({
   subtitle,
   headingLevel = "h2",
   titleVoice = "standard",
-  headerAlign = "start",
   headerSpacing = "regular",
   headerDivider = true,
   rightAccessory,
@@ -251,15 +245,13 @@ export function GlassPanel({
               ? `1px solid ${token("--border-strong")}`
               : undefined,
             padding: headerPadding(headerSpacing),
-            textAlign: headerAlign === "center" ? "center" : "left",
+            textAlign: "left",
           }}
         >
           <div
             style={{
               display: "flex",
-              flex: headerAlign === "center" ? "1 1 auto" : undefined,
               flexDirection: "column",
-              alignItems: headerAlign === "center" ? "center" : undefined,
               gap:
                 titleVoice === "hero" ? token("--space-3") : token("--space-1"),
               minWidth: 0,

@@ -2251,17 +2251,6 @@
       "description": "Title and subtitle typography. Defaults to `standard`."
     },
     {
-      "name": "headerAlign",
-      "tsType": "GlassPanelHeaderAlign",
-      "unionMembers": [
-        "start",
-        "center"
-      ],
-      "required": false,
-      "defaultValue": "start",
-      "description": "Header text alignment. Defaults to `start`."
-    },
-    {
       "name": "headerSpacing",
       "tsType": "GlassPanelHeaderSpacing",
       "unionMembers": [
@@ -2697,8 +2686,8 @@
       "name": "imageCrop",
       "tsType": "ImageCrop",
       "unionMembers": [
-        "center",
-        "top"
+        "top",
+        "center"
       ],
       "required": false,
       "defaultValue": null,
@@ -3094,8 +3083,8 @@
         "search",
         "h1",
         "h2",
-        "center",
         "image",
+        "center",
         "figure",
         "meta",
         "slot",

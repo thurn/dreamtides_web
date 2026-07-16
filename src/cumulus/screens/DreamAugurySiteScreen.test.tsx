@@ -6,6 +6,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { artRef } from "../primitives/art";
+import { resolveColor } from "../primitives/color";
+import { GLYPHS } from "../primitives/glyph";
 import { CumulusRoot } from "../CumulusRoot";
 import {
   DreamAugurySiteScreen,
@@ -89,6 +91,7 @@ function view(): DreamAugurySiteView {
       {
         id: "A",
         headline: "Choose a Card",
+        subtitle: "Choose a card to add to your deck.",
         requiresSelection: true,
         tile: {
           id: "encounter-fixture:A",
@@ -109,7 +112,8 @@ function view(): DreamAugurySiteView {
       },
       {
         id: "B",
-        headline: "A New Card",
+        headline: "Gain Fixture 5",
+        subtitle: "Add a card to your deck.",
         requiresSelection: false,
         tile: {
           id: "encounter-fixture:B",
@@ -245,6 +249,24 @@ describe("DreamAugurySiteScreen", () => {
       container.querySelectorAll('[data-testid^="cumulus-augury-choice-"]'),
     ).toHaveLength(4);
     expect(
+      container.querySelector("[data-guide-gallery-desktop-layout]")
+        ?.getAttribute("data-guide-gallery-desktop-layout-mode"),
+    ).toBe("showcase");
+    expect(container.querySelector("[data-glass-panel-header]")?.querySelector("h2")?.textContent).toBe(
+      "Choose a Card",
+    );
+    expect(container.textContent).toContain("Choose a card to add to your deck.");
+    expect(
+      container.querySelector<HTMLElement>("[data-glass-panel-header]")?.style.textAlign,
+    ).toBe("left");
+    expect(
+      container.querySelector<HTMLElement>("[data-augury-detail-visual]")?.style.overflow,
+    ).toBe("hidden");
+    expect(
+      container.querySelector("[data-augury-card-grid-columns]")
+        ?.getAttribute("data-augury-card-grid-columns"),
+    ).toBe("4");
+    expect(
       container.querySelector('[data-testid="cumulus-dream-augury-choose-again"]'),
     ).not.toBeNull();
   });
@@ -288,6 +310,97 @@ describe("DreamAugurySiteScreen", () => {
       ),
     );
     expect(onChoose).toHaveBeenCalledWith("B", null);
+  });
+
+  it("renders an added site through the canonical SiteNode", () => {
+    const base = view();
+    const first = base.offers[0];
+    if (first === undefined) throw new Error("missing fixture offer");
+    const siteView: DreamAugurySiteView = {
+      ...base,
+      offers: [
+        {
+          ...first,
+          headline: "Add a Card Shop",
+          subtitle: "Add a site to the current dreamscape.",
+          requiresSelection: false,
+          visual: {
+            kind: "site",
+            model: {
+              site: {
+                id: "dream-augury-preview:Shop",
+                type: "Shop",
+                isEnhanced: false,
+                isVisited: false,
+              },
+              pos: { x: 50, y: 50 },
+              index: 0,
+              isBattle: false,
+              isLocked: false,
+              isInteractive: false,
+              label: "Card Shop",
+              blurb: "Spend essence to add cards to your deck.",
+              icon: GLYPHS.gift,
+            },
+          },
+        },
+        base.offers[1],
+      ],
+    };
+    const container = mount(
+      <DreamAugurySiteScreen view={siteView} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
+    );
+
+    click(container.querySelector('[data-testid="cumulus-dream-augury-offer-A"]'));
+
+    expect(
+      container.querySelector('[data-augury-site-preview] [data-site-type="Shop"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-augury-site-preview] [data-interactive="false"]'),
+    ).not.toBeNull();
+  });
+
+  it("uses a white filled right arrow between distinct transfiguration states", () => {
+    const base = view();
+    const first = base.offers[0];
+    if (first?.visual.kind !== "cardChoices") {
+      throw new Error("missing card-choice fixture");
+    }
+    const before = first.visual.choices[0]?.card;
+    const after = first.visual.choices[1]?.card;
+    if (before === undefined || after === undefined) {
+      throw new Error("missing card fixtures");
+    }
+    const transfigureView: DreamAugurySiteView = {
+      ...base,
+      offers: [
+        {
+          ...first,
+          headline: "Transfigure Fixture 1",
+          subtitle: "Transfigure a card in your deck.",
+          requiresSelection: false,
+          visual: {
+            kind: "beforeAfter",
+            pairs: [{ id: "entry-1", before, after }],
+          },
+        },
+        base.offers[1],
+      ],
+    };
+    const container = mount(
+      <DreamAugurySiteScreen view={transfigureView} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
+    );
+
+    click(container.querySelector('[data-testid="cumulus-dream-augury-offer-A"]'));
+
+    const arrow = container.querySelector<HTMLElement>(
+      "[data-augury-transition-arrow] i",
+    );
+    expect(arrow?.className).toContain("bxf bx-arrow-right");
+    const normalizedWhite = document.createElement("span");
+    normalizedWhite.style.color = resolveColor("white");
+    expect(arrow?.style.color).toBe(normalizedWhite.style.color);
   });
 
   it("returns to both previews and clears an abandoned inner choice", () => {

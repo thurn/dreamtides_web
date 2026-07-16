@@ -21,7 +21,6 @@ The shared liquid-glass content container: an optional structured header, a comp
 | `subtitle` | `string` | no | — | Optional supporting line rendered beneath the title. |
 | `headingLevel` | `"h1" \| "h2"` | no | `h2` | Semantic heading element for the title. Defaults to `h2`. |
 | `titleVoice` | `GlassPanelTitleVoice` = `"standard" \| "hero"` | no | `standard` | Title and subtitle typography. Defaults to `standard`. |
-| `headerAlign` | `GlassPanelHeaderAlign` = `"start" \| "center"` | no | `start` | Header text alignment. Defaults to `start`. |
 | `headerSpacing` | `GlassPanelHeaderSpacing` = `"compact" \| "spacious" \| "regular" \| "medium"` | no | `regular` | Header padding preset. Defaults to `regular`. |
 | `headerDivider` | `boolean` | no | `true` | Draw the standard divider below the header. Defaults to `true`. |
 | `rightAccessory` | `GlassPanelAccessory` | no | — | Optional structured action at the trailing edge of the header. |

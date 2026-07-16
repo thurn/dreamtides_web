@@ -77,6 +77,8 @@ export const GLYPHS = {
   warning: g("bxf bx-alert-triangle"),
   arrowLeft: g("bx bx-arrow-left"),
   arrowRight: g("bx bx-arrow-right"),
+  /** The filled right arrow used between tangible before/after objects. */
+  arrowRightFilled: g("bxf bx-arrow-right"),
   chevronLeft: g("bx bx-chevron-left"),
   chevronRight: g("bx bx-chevron-right"),
   /** A downward chevron. */

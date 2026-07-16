@@ -62,6 +62,10 @@ describe("GlassPanel", () => {
     expect(panel?.style.backdropFilter).toContain("--glass-blur");
     expect(panel?.style.borderRadius).toBe("var(--radius-panel)");
     expect(panel?.querySelector("h2")?.textContent).toBe("A Thread Rewoven");
+    expect(
+      panel?.querySelector<HTMLElement>("[data-glass-panel-header]")?.style
+        .textAlign,
+    ).toBe("left");
     expect(panel?.textContent).toContain("Vision I");
     expect(panel?.textContent).toContain("Choose how the vision resolves.");
     expect(panel?.textContent).toContain("Panel content");

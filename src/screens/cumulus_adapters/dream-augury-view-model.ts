@@ -1,4 +1,8 @@
-import { siteTypeIcon, siteTypeName } from "../../atlas/atlas-generator";
+import {
+  siteTypeDescription,
+  siteTypeIcon,
+  siteTypeName,
+} from "../../atlas/atlas-generator";
 import { buildCardSourceDebugState } from "../../debug/card-source-debug";
 import { guideForSiteType } from "../../data/dreamscapes";
 import type { QuestContent } from "../../data/quest-content";
@@ -21,7 +25,6 @@ import type {
   MerchantOffer,
   MerchantOfferActionResult,
 } from "../../journey_v2";
-import type { MerchantArchetypeId } from "../../journey_v2/archetypes/types";
 import type { MerchantDeckSnapshot } from "../../journey_v2/trace/deckSnapshot";
 import type { CardData } from "../../types/cards";
 import { asCardId } from "../../types/card-identity";
@@ -47,6 +50,8 @@ import type {
   OfferTileModel,
   OfferTileStarterCards,
 } from "../../cumulus/components/controls/OfferTile";
+import { offerTileDescription } from "../../cumulus/components/controls/offer-tile-descriptions";
+import type { DreamscapeSiteModel } from "../../cumulus/components/dreamscape/SiteNode";
 import type {
   DreamAuguryCardChoiceView,
   DreamAuguryCardView,
@@ -62,26 +67,6 @@ const FALLBACK_GUIDE_ID = "aldric_the_seer";
 const FALLBACK_GUIDE_NAME = "Aldric, the Seer";
 const FALLBACK_GUIDE_LINE =
   "Two paths unfold before you. Choose one to shape your dream.";
-
-const OFFER_HEADLINES: Readonly<Record<MerchantArchetypeId, string>> = {
-  fit_card_grant: "A New Card",
-  fit_card_draft: "Choose a Card",
-  copies_draft: "Choose Two Copies",
-  strong_card: "A New Card",
-  category_draft_known: "Choose a Card",
-  card_bundle: "A Card Set",
-  transfigured_draft: "Choose a New Form",
-  transfigure: "A New Form",
-  starter_transfigure: "Refine Your Starters",
-  keyword_mod: "A New Gift",
-  tribal_change: "A New Kin",
-  purge: "Purge a Card",
-  purge_replace: "Trade a Card",
-  duplicate: "Duplicate a Card",
-  dreamsign: "A Dreamsign",
-  dreamsign_draft: "Choose a Dreamsign",
-  add_site: "A New Path",
-};
 
 type CardObject = MerchantCatalogCard | MerchantDeckCard;
 
@@ -124,16 +109,92 @@ function toCardView(
   object: CardObject,
   idSuffix = "",
   card: CardData = object.card,
+  includeTransfiguration = true,
 ): DreamAuguryCardView {
   return {
     id: `${object.cardUuid}${idSuffix}`,
     model: {
       cardId: card.id,
       displaySnapshot: card,
-      ...(object.transfiguration === undefined
+      ...(!includeTransfiguration || object.transfiguration === undefined
         ? {}
         : { transfiguration: object.transfiguration }),
     },
+  };
+}
+
+function titleCardinal(value: number): string {
+  if (value === 1) return "One";
+  if (value === 2) return "Two";
+  if (value === 3) return "Three";
+  if (value === 4) return "Four";
+  return String(value);
+}
+
+function offerCardName(card: OfferTileCard): string {
+  return card.displaySnapshot.name;
+}
+
+function indefiniteArticle(label: string): "a" | "an" {
+  return /^[aeiou]/i.test(label) ? "an" : "a";
+}
+
+/** Player-facing detail title derived from the exact structured outcome. */
+export function buildDreamAuguryOfferHeadline(model: OfferTileModel): string {
+  switch (model.kind) {
+    case "card-gift":
+      return `Gain ${offerCardName(model.card)}`;
+    case "card-draft":
+    case "copies-draft":
+    case "category-draft":
+      return "Choose a Card";
+    case "transfigured-draft":
+      return "Choose a Transfigured Card";
+    case "card-bundle":
+      return `Gain ${titleCardinal(model.cards.length)} Cards`;
+    case "transfigure-card":
+      return `Transfigure ${offerCardName(model.card)}`;
+    case "transfigure-starters":
+      return model.cards.length === 1
+        ? `Transfigure ${offerCardName(model.cards[0])}`
+        : "Transfigure Your Starters";
+    case "keyword-modification":
+      return `Reduce Reclaim for ${offerCardName(model.card)}`;
+    case "tribal-change":
+      return `Make ${offerCardName(model.card)} ${indefiniteArticle(model.newCharacterSubtype)} ${model.newCharacterSubtype}`;
+    case "purge-card":
+      return `Purge ${offerCardName(model.card)}`;
+    case "trade-card":
+      return `Trade ${offerCardName(model.outgoing)}`;
+    case "duplicate-card":
+      return model.cards.length === 1
+        ? `Duplicate ${offerCardName(model.cards[0])}`
+        : "Choose a Card";
+    case "dreamsign-gift":
+      return `Gain ${model.dreamsign.name}`;
+    case "dreamsign-draft":
+      return "Choose a Dreamsign";
+    case "add-site":
+      return `Add ${indefiniteArticle(model.site.name)} ${model.site.name}`;
+  }
+}
+
+function sitePreviewModel(siteType: SiteState["type"]): DreamscapeSiteModel {
+  return {
+    site: {
+      id: `dream-augury-preview:${siteType}`,
+      type: siteType,
+      isEnhanced: false,
+      isVisited: false,
+    },
+    pos: { x: 50, y: 50 },
+    index: 0,
+    isBattle: siteType === "Battle",
+    isLocked: false,
+    isInteractive: false,
+    label: siteTypeName(siteType),
+    blurb: siteTypeDescription(siteType),
+    icon: glyph(siteTypeIcon(siteType)),
   };
 }
 
@@ -485,6 +546,14 @@ function buildOfferVisual(
         presentation.kind === "beforeAfter"
           ? [presentation.object]
           : presentation.objects;
+      if (presentation.kind === "beforeAfterMulti") {
+        return {
+          kind: "cards",
+          cards: objects.map((object) =>
+            toCardView(object, ":after", object.previewCard ?? object.card),
+          ),
+        };
+      }
       return {
         kind: "beforeAfter",
         pairs: objects.map((object) => ({
@@ -493,6 +562,7 @@ function buildOfferVisual(
             object,
             ":before",
             context.deckEntryById.get(object.entryId)?.card ?? object.card,
+            false,
           ),
           after: toCardView(
             object,
@@ -527,8 +597,7 @@ function buildOfferVisual(
     case "addSite":
       return {
         kind: "site",
-        siteName: siteTypeName(presentation.siteType),
-        glyph: glyph(siteTypeIcon(presentation.siteType)),
+        model: sitePreviewModel(presentation.siteType),
       };
     case "fallback":
       return {
@@ -555,13 +624,17 @@ export function buildDreamAuguryOfferViews(
   if (encounter.offers.length !== 2) {
     unavailable("encounter requires exactly 2 offers");
   }
-  return encounter.offers.map((offer) => ({
-    id: offer.offerId,
-    headline: OFFER_HEADLINES[offer.archetypeId],
-    requiresSelection: (offer.choiceRequest?.candidates.length ?? 0) > 0,
-    tile: buildDreamAuguryOfferTileModel(offer, context),
-    visual: buildOfferVisual(offer, context),
-  }));
+  return encounter.offers.map((offer) => {
+    const tile = buildDreamAuguryOfferTileModel(offer, context);
+    return {
+      id: offer.offerId,
+      headline: buildDreamAuguryOfferHeadline(tile),
+      subtitle: offerTileDescription(tile),
+      requiresSelection: (offer.choiceRequest?.candidates.length ?? 0) > 0,
+      tile,
+      visual: buildOfferVisual(offer, context),
+    };
+  });
 }
 
 function collectVisibleGrantCards(encounter: MerchantEncounter): CardData[] {

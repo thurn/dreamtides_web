@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
+import { TRANSFIGURATION_TINT_COLORS } from "../../runtime/transfiguration-display";
 import type {
   MerchantChoiceCandidate,
   MerchantContext,
@@ -14,6 +15,7 @@ import {
 } from "../../journey_v2/testing/fixtures";
 import {
   buildDreamAuguryAcceptRequest,
+  buildDreamAuguryOfferHeadline,
   buildDreamAuguryOfferTileModel,
   buildDreamAuguryOfferViews,
 } from "./dream-augury-view-model";
@@ -205,11 +207,13 @@ describe("dream augury view model", () => {
     expect(offers[0]).toMatchObject({
       id: "A",
       headline: "Choose a Card",
+      subtitle: "Choose a card to add to your deck.",
       requiresSelection: true,
     });
     expect(offers[1]).toMatchObject({
       id: "B",
-      headline: "A New Card",
+      headline: "Gain Fixture Gift",
+      subtitle: "Add a card to your deck.",
       requiresSelection: false,
     });
     expect(JSON.stringify(offers)).not.toContain("Production summary");
@@ -231,6 +235,100 @@ describe("dream augury view model", () => {
     expect(chooser.visual.choices[0]?.card.model.cardId).toBe(card.id);
   });
 
+  it("keeps the original card plain and the transfigured result marked", () => {
+    const previewCard = {
+      ...mappingCards[0],
+      renderedText: "Changed fixture text.",
+    };
+    const transfiguration = {
+      type: "Empowered" as const,
+      color: TRANSFIGURATION_TINT_COLORS.Empowered,
+      markedText: "Changed fixture text.",
+      energyChanged: true,
+      sparkChanged: false,
+      fastChanged: false,
+    };
+    const transfiguredObject = {
+      ...deckObject,
+      previewCard,
+      transfiguration,
+    };
+    const offer = mappedOffer("transfigure", {
+      gameObjects: [transfiguredObject],
+      applyPayload: {
+        kind: "transfigure_deck_entry",
+        entryId: deckObject.entryId,
+        cardUuid: deckObject.cardUuid,
+        cardNumber: deckObject.cardNumber,
+        transfiguration: "Empowered",
+        previewCard,
+        description: "Fixture",
+      },
+    });
+    const offers = buildDreamAuguryOfferViews(
+      { ...encounter(), offers: [offer, directOffer()] },
+      mappingContext,
+    );
+    const visual = offers[0]?.visual;
+    if (visual?.kind !== "beforeAfter") {
+      throw new Error("expected a before/after transfiguration");
+    }
+
+    expect(visual.pairs[0]?.before.model.transfiguration).toBeUndefined();
+    expect(visual.pairs[0]?.after.model.transfiguration).toEqual(
+      transfiguration,
+    );
+    expect(visual.pairs[0]?.after.model.displaySnapshot.renderedText).toBe(
+      "Changed fixture text.",
+    );
+  });
+
+  it("shows only the resulting starter card", () => {
+    const previewCard = {
+      ...mappingCards[0],
+      renderedText: "Improved starter text.",
+    };
+    const offer = mappedOffer("starter_transfigure", {
+      gameObjects: [{ ...deckObject, previewCard }],
+      applyPayload: { kind: "composite", children: [] },
+    });
+    const offers = buildDreamAuguryOfferViews(
+      { ...encounter(), offers: [offer, directOffer()] },
+      mappingContext,
+    );
+    const visual = offers[0]?.visual;
+    if (visual?.kind !== "cards") {
+      throw new Error("expected resulting starter cards");
+    }
+
+    expect(visual.cards).toHaveLength(1);
+    expect(visual.cards[0]?.model.displaySnapshot.renderedText).toBe(
+      "Improved starter text.",
+    );
+  });
+
+  it("builds an added site as a canonical non-interactive site-node model", () => {
+    const offer = mappedOffer("add_site", {
+      family: "site",
+      targetKey: "Shop",
+      applyPayload: { kind: "add_site", siteType: "Shop" },
+    });
+    const offers = buildDreamAuguryOfferViews(
+      { ...encounter(), offers: [offer, directOffer()] },
+      mappingContext,
+    );
+    const visual = offers[0]?.visual;
+    if (visual?.kind !== "site") {
+      throw new Error("expected a site preview");
+    }
+
+    expect(visual.model).toMatchObject({
+      site: { type: "Shop", isVisited: false },
+      isInteractive: false,
+      label: "Card Shop",
+    });
+  });
+
   it("builds the persisted accept request from stable offer and choice ids", () => {
     expect(
       buildDreamAuguryAcceptRequest(encounter(), "A", "choice-2"),
@@ -245,17 +343,17 @@ describe("dream augury view model", () => {
   it("maps every merchant archetype to its strict Offer Tile category", () => {
     const drafts = fourCandidates();
     const dreamsigns = [dreamsignObject("sign-1"), dreamsignObject("sign-2")];
-    const cases: readonly [MerchantOffer, string][] = [
-      [mappedOffer("fit_card_grant", { gameObjects: [catalogObject(0)] }), "card-gift"],
-      [mappedOffer("fit_card_draft", { choiceRequest: choiceRequest(drafts) }), "card-draft"],
-      [mappedOffer("copies_draft", { choiceRequest: choiceRequest(fourCandidates(2)) }), "copies-draft"],
-      [mappedOffer("strong_card", { gameObjects: [catalogObject(0)] }), "card-gift"],
+    const cases: readonly [MerchantOffer, string, string][] = [
+      [mappedOffer("fit_card_grant", { gameObjects: [catalogObject(0)] }), "card-gift", "Gain Mapping Fixture 1"],
+      [mappedOffer("fit_card_draft", { choiceRequest: choiceRequest(drafts) }), "card-draft", "Choose a Card"],
+      [mappedOffer("copies_draft", { choiceRequest: choiceRequest(fourCandidates(2)) }), "copies-draft", "Choose a Card"],
+      [mappedOffer("strong_card", { gameObjects: [catalogObject(0)] }), "card-gift", "Gain Mapping Fixture 1"],
       [mappedOffer("category_draft_known", {
         targetKey: `type:Character:${mappingCards.slice(0, 4).map((value) => value.id).join(",")}`,
         choiceRequest: choiceRequest(drafts),
-      }), "category-draft"],
-      [mappedOffer("card_bundle", { gameObjects: [catalogObject(0), catalogObject(1)] }), "card-bundle"],
-      [mappedOffer("transfigured_draft", { choiceRequest: choiceRequest(drafts) }), "transfigured-draft"],
+      }), "category-draft", "Choose a Card"],
+      [mappedOffer("card_bundle", { gameObjects: [catalogObject(0), catalogObject(1)] }), "card-bundle", "Gain Two Cards"],
+      [mappedOffer("transfigured_draft", { choiceRequest: choiceRequest(drafts) }), "transfigured-draft", "Choose a Transfigured Card"],
       [mappedOffer("transfigure", {
         gameObjects: [{ ...deckObject, previewCard: mappingCards[0] }],
         applyPayload: {
@@ -267,11 +365,11 @@ describe("dream augury view model", () => {
           previewCard: mappingCards[0],
           description: "Fixture",
         },
-      }), "transfigure-card"],
+      }), "transfigure-card", "Transfigure Mapping Fixture 1"],
       [mappedOffer("starter_transfigure", {
         gameObjects: [{ ...deckObject, previewCard: mappingCards[0] }],
         applyPayload: { kind: "composite", children: [] },
-      }), "transfigure-starters"],
+      }), "transfigure-starters", "Transfigure Mapping Fixture 1"],
       [mappedOffer("keyword_mod", {
         gameObjects: [{ ...deckObject, previewCard: { ...mappingCards[0], reclaimCost: 2 } }],
         applyPayload: {
@@ -281,7 +379,7 @@ describe("dream augury view model", () => {
           cardNumber: deckObject.cardNumber,
           keywords: { setReclaim: 2 },
         },
-      }), "keyword-modification"],
+      }), "keyword-modification", "Reduce Reclaim for Mapping Fixture 1"],
       [mappedOffer("tribal_change", {
         gameObjects: [deckObject],
         applyPayload: {
@@ -296,16 +394,16 @@ describe("dream augury view model", () => {
             label: "Fixture",
           },
         },
-      }), "tribal-change"],
-      [mappedOffer("purge", { gameObjects: [deckObject] }), "purge-card"],
+      }), "tribal-change", "Make Mapping Fixture 1 a Survivor"],
+      [mappedOffer("purge", { gameObjects: [deckObject] }), "purge-card", "Purge Mapping Fixture 1"],
       [mappedOffer("purge_replace", {
         gameObjects: [deckObject],
         choiceRequest: choiceRequest(drafts, "replacementCard"),
-      }), "trade-card"],
+      }), "trade-card", "Trade Mapping Fixture 1"],
       [mappedOffer("duplicate", {
         choiceRequest: choiceRequest(drafts.slice(0, 3)),
-      }), "duplicate-card"],
-      [mappedOffer("dreamsign", { gameObjects: [dreamsigns[0]] }), "dreamsign-gift"],
+      }), "duplicate-card", "Choose a Card"],
+      [mappedOffer("dreamsign", { gameObjects: [dreamsigns[0]] }), "dreamsign-gift", "Gain Dreamsign sign-1"],
       [mappedOffer("dreamsign_draft", {
         choiceRequest: choiceRequest(
           dreamsigns.map((object, index) => ({
@@ -321,18 +419,21 @@ describe("dream augury view model", () => {
           })),
           "dreamsign",
         ),
-      }), "dreamsign-draft"],
+      }), "dreamsign-draft", "Choose a Dreamsign"],
       [mappedOffer("add_site", {
         family: "site",
         targetKey: "Shop",
         applyPayload: { kind: "add_site", siteType: "Shop" },
-      }), "add-site"],
+      }), "add-site", "Add a Card Shop"],
     ];
 
-    for (const [offer, expectedKind] of cases) {
+    for (const [offer, expectedKind, expectedHeadline] of cases) {
       const model = buildDreamAuguryOfferTileModel(offer, mappingContext);
       expect(model.kind, offer.archetypeId).toBe(expectedKind);
       expect(model.id).toBe(`mapping-encounter:${offer.offerId}`);
+      expect(buildDreamAuguryOfferHeadline(model), offer.archetypeId).toBe(
+        expectedHeadline,
+      );
     }
   });
 
