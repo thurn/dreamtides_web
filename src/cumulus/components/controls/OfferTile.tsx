@@ -493,11 +493,9 @@ function CardArtMosaic({
 function OperationMark({
   glyph,
   tone = "neutral",
-  position = "center",
 }: {
   readonly glyph: Glyph;
   readonly tone?: "neutral" | "accent" | "danger" | "spark" | "duplicate";
-  readonly position?: "center" | "lower";
 }): ReactElement {
   const color =
     tone === "accent"
@@ -513,12 +511,11 @@ function OperationMark({
     <span
       data-offer-tile-operation=""
       data-offer-tile-operation-layout="overlay"
-      data-offer-tile-operation-position={position}
       style={{
         position: "absolute",
         left: "50%",
-        top: position === "lower" ? "65%" : "50%",
-        translate: "-50% -50%",
+        bottom: 16,
+        translate: "-50% 0",
         zIndex: 2,
         display: "grid",
         placeItems: "center",
@@ -567,11 +564,7 @@ function CardArtOperation({
       }}
     >
       <CardArtMosaic cards={cards} />
-      <OperationMark
-        glyph={glyph}
-        tone={tone}
-        position={cards.length === 1 ? "lower" : "center"}
-      />
+      <OperationMark glyph={glyph} tone={tone} />
     </span>
   );
 }

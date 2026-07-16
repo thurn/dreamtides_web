@@ -236,7 +236,7 @@ describe("OfferTile", () => {
     container.remove();
   });
 
-  it("centers every required icon in the compact operation disc", () => {
+  it("places every required icon sixteen pixels above the inner border", () => {
     const models: readonly [string, OfferTileModel][] = [
       [
         "one",
@@ -284,11 +284,9 @@ describe("OfferTile", () => {
       )!;
       expect(mark.dataset.offerTileOperationLayout).toBe("overlay");
       expect(mark.style.left).toBe("50%");
-      expect(mark.style.top).toBe(testId === "one" ? "65%" : "50%");
-      expect(mark.dataset.offerTileOperationPosition).toBe(
-        testId === "one" ? "lower" : "center",
-      );
-      expect(mark.style.translate).toBe("-50% -50%");
+      expect(mark.style.bottom).toBe("16px");
+      expect(mark.style.top).toBe("");
+      expect(mark.style.translate).toBe("-50% 0");
       expect(mark.style.width).toBe("58px");
       expect(mark.style.height).toBe("58px");
       expect(mark.querySelector<HTMLElement>("i")?.style.fontSize).toBe("32px");
