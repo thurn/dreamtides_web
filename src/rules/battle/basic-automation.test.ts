@@ -407,11 +407,9 @@ describe("planBasicAutomationCommands — turn handoff", () => {
   });
 
   it("delegates the incoming side's Dawn exhaustion-clear to the reducer (emits no status clear)", () => {
-    // The reducer's `BATTLE_COMMAND` is the sole ▸Dawn owner: it fires the
-    // incoming side's exhaustion clear + Dawn triggers when it folds the handoff
-    // flip edit (see `BattleFoldState.dawnFired`). The client expansion therefore
-    // emits NO status-clear edits — doing so would double-clear (harmless) but,
-    // more importantly, the non-idempotent Dawn triggers must fire exactly once.
+    // The reducer's `BATTLE_COMMAND` owns the incoming side's exhaustion clear
+    // when it folds the handoff flip edit. The client expansion emits no
+    // duplicate status-clear edits.
     const incomingFront = makeInstance("e-front", { owner: "enemy", printedSpark: 2 });
     const incomingBack = makeInstance("e-back", { owner: "enemy", printedSpark: 1 });
     const outgoingFront = makeInstance("p-front", { owner: "player", printedSpark: 3 });
@@ -668,10 +666,8 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
   });
 
   it("expands a dawn gesture into a bare crossing into day (Dawn is the reducer's job)", () => {
-    // A `SET_PHASE dawn` navigation just steps dawn → day; the reducer fires the
-    // exhaustion clear + Dawn triggers when it folds the committed `SET_PHASE
-    // dawn` edit (the entered-dawn edge — see `BattleFoldState.dawnFired`), so the
-    // client expansion contributes no dawn edits.
+    // A `SET_PHASE dawn` navigation just steps dawn → day; the reducer clears
+    // exhaustion when it folds the committed Dawn edit.
     const exhausted = makeInstance("p0", { owner: "player", printedSpark: 2 });
     exhausted.status.isExhausted = true;
     const state = makeState({

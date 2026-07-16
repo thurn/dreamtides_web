@@ -54,12 +54,6 @@ const ENERGY_WASTE_WEIGHT = 0.25;
 /** Simple estimate of spark that will score unblocked next Challenge. */
 const EXPECTED_POINTS_WEIGHT = 1;
 
-/** Bonus for a live Runebound Champion (#513), a recurring ▸Dawn point source. */
-const INEVITABILITY_WEIGHT = 2;
-
-/** Card number of Runebound Champion (▸Dawn: gain 1⍟). */
-const RUNEBOUND_CHAMPION = 513;
-
 // --- Helpers --------------------------------------------------------------
 
 /** Base spark of an {@link AiCard}: printed spark times figment stack, plus delta. */
@@ -161,7 +155,6 @@ export function evaluate(model: ForwardModel): number {
   score += HAND_CARD_WEIGHT * model.aiHand.length;
 
   let hintTotal = 0;
-  let hasLiveRuneboundChampion = false;
   for (const card of model.aiHand) {
     hintTotal += valueHintSum(model, card);
   }
@@ -169,26 +162,15 @@ export function evaluate(model: ForwardModel): number {
     const card = model.aiFrontRank[slot];
     if (card !== null) {
       hintTotal += valueHintSum(model, card);
-      if (card.cardNumber === RUNEBOUND_CHAMPION) {
-        hasLiveRuneboundChampion = true;
-      }
     }
   }
   for (const slot of rankSlotIds(model.aiBackRank)) {
     const card = model.aiBackRank[slot];
     if (card !== null) {
       hintTotal += valueHintSum(model, card);
-      if (card.cardNumber === RUNEBOUND_CHAMPION) {
-        hasLiveRuneboundChampion = true;
-      }
     }
   }
   score += VALUE_HINT_WEIGHT * hintTotal;
-
-  // Inevitability: a live Runebound Champion is a recurring ▸Dawn point source.
-  if (hasLiveRuneboundChampion) {
-    score += INEVITABILITY_WEIGHT;
-  }
 
   // Tempo / energy waste: small penalty for unspent AI energy.
   score -= ENERGY_WASTE_WEIGHT * model.aiEnergy;

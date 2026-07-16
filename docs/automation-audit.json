@@ -3,12 +3,12 @@
   "cards": [
     {
       "id": "01298848-1ebb-48a1-b00b-d7e0af890870",
-      "name": "Ashfront Lieutenant",
+      "name": "Silent Gatherer",
       "triggers": [
         "dawn"
       ],
       "ruleLines": {
-        "dawn": "▸Dawn: Gain 1● for each allied figment."
+        "dawn": "▸Dawn: Gain 1● for each figment you control."
       },
       "effects": [
         {
@@ -17,7 +17,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "01a8482b-5b4f-4c49-8791-2702cb5dfd3d",
@@ -35,12 +35,13 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "0269e363-5567-47a4-80cd-8ebc061fe7e1",
-      "name": "Wasteland Tamer",
+      "name": "Silent Avenger",
       "triggers": [
         "materialized"
       ],
@@ -54,11 +55,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "0458658d-7e02-4286-9249-93674d16620b",
-      "name": "Nightmare Manifest",
+      "name": "Iron Pharaoh",
       "triggers": [
         "dawn"
       ],
@@ -72,17 +73,18 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5",
-      "name": "Skyborne Jellyfish",
+      "name": "Cloudmantle Ray",
       "triggers": [
         "dawn"
       ],
       "ruleLines": {
-        "dawn": "▸Dawn: Gain 1● for each allied ≤2● cost character."
+        "dawn": "▸Dawn: Gain 1● for each ≤2● cost character you control."
       },
       "effects": [
         {
@@ -91,7 +93,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "1268a899-b209-46bb-bce4-6def1dcd0404",
@@ -100,7 +102,7 @@
         "support"
       ],
       "ruleLines": {
-        "support": "Support – Supported allies have +2✦ and have unstoppable."
+        "support": "Support – Supported characters have +2✦ and unstoppable."
       },
       "effects": [
         {
@@ -115,12 +117,12 @@
     },
     {
       "id": "14ac6804-ed1d-4148-aad7-11796b6fff6c",
-      "name": "Undying Fang",
+      "name": "Luminwings",
       "triggers": [
         "dawn"
       ],
       "ruleLines": {
-        "dawn": "▸Dawn: Gain 1●. With 3 allied spirit animals, gain 2● instead."
+        "dawn": "▸Dawn: Gain 1●. If you control 3 or more spirit animals, gain 2● instead."
       },
       "effects": [
         {
@@ -134,7 +136,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e",
@@ -155,7 +157,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "15b63630-d9f8-473b-9717-15ad91ff2f16",
@@ -173,7 +175,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "19aeffa6-fd1b-4b8f-bb0c-c35659521976",
@@ -191,12 +193,13 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "1b4d2adc-64ab-4020-bae6-b35321898bf0",
-      "name": "Sigil Analyst",
+      "name": "Harbor Warden",
       "triggers": [
         "materialized"
       ],
@@ -210,12 +213,13 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "1bae969b-0bc4-4777-86f3-1e860d601c5c",
-      "name": "Riftwalker",
+      "name": "Blood Sun Oppressor",
       "triggers": [
         "materialized"
       ],
@@ -229,11 +233,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40",
-      "name": "Ashwalker",
+      "name": "Emberwatch Rescuer",
       "triggers": [
         "materialized"
       ],
@@ -247,8 +251,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "22239029-f53c-4ba9-b9b6-29f6592bb722",
@@ -266,11 +271,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf",
-      "name": "Cinderblade Legionnaire",
+      "name": "Sunrise Strummer",
       "triggers": [
         "dawn"
       ],
@@ -284,11 +289,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "2a828466-450a-4637-9c68-6b54522450c0",
-      "name": "Rusted Monolith",
+      "name": "Circuit Breaker",
       "triggers": [
         "materialized"
       ],
@@ -302,8 +307,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7",
@@ -321,11 +327,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "312e42cb-e8ee-43da-9ef8-173a69583c97",
-      "name": "Reforged Automaton",
+      "name": "Sylvan Matriarch",
       "triggers": [
         "materialized"
       ],
@@ -339,11 +345,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "32f3d6f2-43c5-4510-a23e-558769a7a8c9",
-      "name": "Glimmerwood Scout",
+      "name": "Lurking Regent",
       "triggers": [
         "materialized"
       ],
@@ -357,7 +363,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b",
@@ -375,7 +381,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "3811a0a2-66af-4c06-b179-948dfa9b2ee3",
@@ -393,7 +399,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "382dafa1-f8ff-47b4-9151-15b84067a5b2",
@@ -414,7 +420,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9",
@@ -432,8 +438,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "3e6a5236-9850-4a69-9fe1-48389365a399",
@@ -451,7 +458,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "401bb341-8385-41e9-8f6f-7b48e9ce174d",
@@ -469,11 +476,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "40b44ed7-d737-455b-bd42-e617a263b110",
-      "name": "Voidcaller",
+      "name": "Soulcleft Spinner",
       "triggers": [
         "materialized"
       ],
@@ -487,7 +494,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "41d0aa36-f15a-487d-b97c-7fd765973921",
@@ -505,8 +512,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "44ae8838-4714-43a5-a7bd-e9f806f35ca9",
@@ -515,7 +523,7 @@
         "materialized"
       ],
       "ruleLines": {
-        "materialized": "▸Materialized: Return another ally to hand."
+        "materialized": "▸Materialized: Return a character you control to hand."
       },
       "effects": [
         {
@@ -524,11 +532,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "465d3463-1d8a-466d-b91f-b1993332b4d3",
-      "name": "Blight Weaver2",
+      "name": "Haunted Betrayer",
       "triggers": [
         "dawn",
         "materialized"
@@ -549,7 +557,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
@@ -576,11 +584,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "470bbf9d-a73c-4e00-bc66-cb0fa767c8de",
-      "name": "Depthwalker",
+      "name": "Vizier of Portents",
       "triggers": [
         "materialized"
       ],
@@ -599,11 +607,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "48257e3e-9600-4edf-a905-e73a41ab5ec1",
-      "name": "Ethereal Trailblazer",
+      "name": "Flamboyant Flamingo",
       "triggers": [
         "dawn"
       ],
@@ -617,12 +625,13 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "4b20e66e-2466-4518-8ef9-67f580bd6f14",
-      "name": "Looming Oracle",
+      "name": "Futuresight Host",
       "triggers": [
         "materialized"
       ],
@@ -636,8 +645,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "4b4cc613-2e28-4851-975f-14146286a062",
@@ -646,7 +656,7 @@
         "materialized"
       ],
       "ruleLines": {
-        "materialized": "▸Materialized: Materialize a figment copy of 'Blade of Unity'."
+        "materialized": "▸Materialized: Materialize a Legionnaire figment."
       },
       "effects": [
         {
@@ -655,7 +665,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15",
@@ -673,7 +683,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "4cec92f2-9bac-4949-a602-cd0a44618aaf",
@@ -691,7 +701,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6",
@@ -715,7 +725,7 @@
     },
     {
       "id": "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005",
-      "name": "Pathwalker",
+      "name": "Soulkindler",
       "triggers": [
         "dawn"
       ],
@@ -729,7 +739,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "4ef8b2e7-3525-4c25-aa30-f751467f182f",
@@ -747,7 +757,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "56411ed4-bda9-4fdf-82e5-b5492de67039",
@@ -756,7 +766,7 @@
         "support"
       ],
       "ruleLines": {
-        "support": "Support – Supported characters have +1✦ for each allied warrior."
+        "support": "Support – Supported characters have +1✦ for each warrior you control."
       },
       "effects": [
         {
@@ -786,7 +796,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
@@ -809,7 +819,7 @@
     },
     {
       "id": "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f",
-      "name": "Prophet of the Consumed",
+      "name": "The Bondweaver",
       "triggers": [
         "materialized"
       ],
@@ -826,11 +836,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "5e1b943f-9fa2-4055-b613-5dd09a048c99",
-      "name": "Call to the Unknown",
+      "name": "Rift Pilgrim",
       "triggers": [
         "materialized"
       ],
@@ -844,7 +854,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "5f4bc2cf-4464-409f-acd5-fe4d6df28a05",
@@ -862,7 +872,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "647f5150-b2e0-424b-9480-27557642524e",
@@ -880,12 +890,13 @@
           "interactive": true
         }
       ],
-      "classification": "interactive",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "6497d8b1-85b8-486d-99e2-5c141486d508",
-      "name": "Dreadmount Sovereign",
+      "name": "Dragonward",
       "triggers": [
         "support"
       ],
@@ -919,11 +930,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "69d9e550-eacc-49f2-8cc5-30b8940c9eed",
-      "name": "Dragonward",
+      "name": "Mystic Boatman",
       "triggers": [
         "materialized"
       ],
@@ -937,7 +948,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "6af8cf81-9e9e-481f-b518-f5dadad99b27",
@@ -955,7 +966,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "70716dd8-1133-4966-b01b-757ea627874c",
@@ -976,7 +987,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc",
@@ -994,8 +1005,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "73fc1b7f-3c2b-4993-9590-924240515c2f",
@@ -1017,7 +1029,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "742a376f-68db-466a-b087-405188634ba4",
@@ -1026,7 +1038,7 @@
         "dawn"
       ],
       "ruleLines": {
-        "dawn": "▸Dawn: Each allied warrior gains +1✦."
+        "dawn": "▸Dawn: Each warrior you control gains +1✦."
       },
       "effects": [
         {
@@ -1035,7 +1047,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "7530e916-e4b9-4988-b3ac-0e400c7a04ff",
@@ -1056,7 +1068,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "76766584-a8fb-41cc-8c4b-09655f478703",
@@ -1083,7 +1095,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "78673e2b-a6d1-43de-8850-3d3327de5cc6",
@@ -1092,7 +1104,7 @@
         "support"
       ],
       "ruleLines": {
-        "support": "Support – Supported allies have +1✦ for each stored ⧗."
+        "support": "Support – Supported characters have +1✦ for each stored ⧗."
       },
       "effects": [
         {
@@ -1119,11 +1131,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "7dd2214f-8d16-453a-9f28-62712e64eae1",
-      "name": "Hallowed Stag",
+      "name": "Ambersting",
       "triggers": [
         "dawn"
       ],
@@ -1137,12 +1149,13 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "81074582-dfb3-497c-8c04-f97a24d6b1d4",
-      "name": "Pit Descender",
+      "name": "Underworld Witch",
       "triggers": [
         "materialized"
       ],
@@ -1156,8 +1169,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "831bc7cf-e8c9-4943-8156-91b7397ef849",
@@ -1175,7 +1189,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "867b98cf-171b-497b-9252-9af5dcf70726",
@@ -1193,11 +1207,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "86fd585b-e9d0-4dc1-bce9-488014b9316d",
-      "name": "Cloudmantle Ray",
+      "name": "Amber Aurelia",
       "triggers": [
         "dawn"
       ],
@@ -1211,8 +1225,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "87f075b1-b058-4570-a75f-c4f8f544e192",
@@ -1230,7 +1245,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "881e3a5f-280f-413a-b927-352aeb3bda71",
@@ -1255,7 +1270,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "890970bd-475f-4da4-b835-2fb75882a84d",
@@ -1276,7 +1291,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "8adfa141-6864-4f5f-a9ca-59306eaf5432",
@@ -1298,8 +1313,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd",
@@ -1336,8 +1352,9 @@
           "interactive": true
         }
       ],
-      "classification": "interactive",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "8e7b0eb9-4933-420b-abee-413bf5b3d2fc",
@@ -1355,7 +1372,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "95711262-8510-475c-a572-c1cd144d54cb",
@@ -1373,7 +1390,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d",
@@ -1394,7 +1411,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "965ce3b2-a722-475c-99c5-5b35685d2404",
@@ -1412,12 +1429,13 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "96e2c30c-930c-47af-abb0-d4fbab454d56",
-      "name": "Dream Garden Visitor",
+      "name": "Winterbough Guide",
       "triggers": [
         "dawn",
         "materialized"
@@ -1435,7 +1453,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "99101fce-f2b4-4032-b999-317ce3e4a6dd",
@@ -1453,11 +1471,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "9b9c2743-75b3-499d-b5fb-c3429c92d420",
-      "name": "Driftcaller Sovereign",
+      "name": "Kindlehorn",
       "triggers": [
         "dawn"
       ],
@@ -1471,12 +1489,13 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "a031eada-2c47-49c6-8c19-d2fe85f8ce97",
-      "name": "Barrage Specialist",
+      "name": "Revelation Explorer",
       "triggers": [
         "materialized"
       ],
@@ -1490,7 +1509,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
@@ -1508,8 +1527,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5",
@@ -1527,7 +1547,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b",
@@ -1545,16 +1565,16 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "ad76c77a-e456-4e59-bbf7-6bcb56f892ee",
-      "name": "Ethereal Courser",
+      "name": "Ferryman of the Falls",
       "triggers": [
         "materialized"
       ],
       "ruleLines": {
-        "materialized": "▸Materialized: Return an ally to hand."
+        "materialized": "▸Materialized: Return a character you control to hand."
       },
       "effects": [
         {
@@ -1563,7 +1583,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "ae90a3e1-c650-4f21-83af-de3208151b11",
@@ -1581,11 +1601,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "af739e3d-bc61-4fab-bf81-a22e78d7e524",
-      "name": "Silent Gatherer",
+      "name": "Fractured Vessel",
       "triggers": [
         "dawn"
       ],
@@ -1599,7 +1619,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9",
@@ -1617,8 +1637,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "b4754e5a-29e6-418c-bdfa-8e0230a21b7b",
@@ -1636,11 +1657,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "b5fbff03-f850-4627-94eb-12ed4dc15334",
-      "name": "Worldsong Behemoth",
+      "name": "Shadowpaw",
       "triggers": [
         "dawn"
       ],
@@ -1654,8 +1675,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "b6bad2a1-b857-4dd7-8b22-050eb68433a5",
@@ -1678,11 +1700,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "b8ecc46d-bd92-4826-a416-7ce177e69cbf",
-      "name": "Emberwolf Triad",
+      "name": "Looming Oracle",
       "triggers": [
         "dawn",
         "materialized"
@@ -1705,7 +1727,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "bbf83d18-81b6-48c8-886f-4b9f0feb599f",
@@ -1723,8 +1745,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "bedee263-27b9-4d73-ab77-6b5c747dff69",
@@ -1742,7 +1765,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "bf323913-3695-49ee-8d13-8165657e3dc9",
@@ -1760,7 +1783,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f",
@@ -1797,7 +1820,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "c750af2e-8185-4af0-bb38-4a41430c71b3",
@@ -1819,7 +1842,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "c7c95f67-a838-4e39-879c-cfbf0591540c",
@@ -1837,7 +1860,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "c8579b20-95ff-4b1d-b4c6-6bd049fc4760",
@@ -1875,12 +1898,13 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "cbabe603-1333-42bd-85c0-555c664b60b3",
-      "name": "Avatar of Cosmic Reckoning",
+      "name": "Silent Mourner",
       "triggers": [
         "materialized"
       ],
@@ -1894,7 +1918,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "cc1c1acd-f0ff-46cc-94d9-401b9daf253f",
@@ -1903,7 +1927,7 @@
         "materialized"
       ],
       "ruleLines": {
-        "materialized": "▸Materialized: Return an ally to hand."
+        "materialized": "▸Materialized: Return a character you control to hand."
       },
       "effects": [
         {
@@ -1912,7 +1936,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "ccbefadc-aab8-4f8c-a705-07bd70c91731",
@@ -1930,7 +1954,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "cd3d8e4a-618e-4c2f-be60-0363b81887f1",
@@ -1948,8 +1972,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "ce09ddfa-c349-4b32-b524-fb74444cddcb",
@@ -1967,11 +1992,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c",
-      "name": "Starchaser",
+      "name": "Amythest Aurelia",
       "triggers": [
         "dawn"
       ],
@@ -1985,8 +2010,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "d09a6760-6630-4964-9c77-decc641df713",
@@ -2004,11 +2030,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "d30bd488-f921-49cb-a44f-353c54cb6548",
-      "name": "Starrunner",
+      "name": "Nightprowler Panther",
       "triggers": [
         "dawn"
       ],
@@ -2022,8 +2048,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "d8c90a33-a581-469a-9fd3-9a80d1cc5315",
@@ -2041,8 +2068,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "dbd014b1-1ec8-4762-bd96-48a2a4824de2",
@@ -2063,11 +2091,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "ea118471-164b-4d7f-bb02-044c862ed07e",
-      "name": "Wreckland Maverick",
+      "name": "Wreckborn",
       "triggers": [
         "materialized"
       ],
@@ -2081,7 +2109,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49",
@@ -2090,7 +2118,7 @@
         "dawn"
       ],
       "ruleLines": {
-        "dawn": "▸Dawn: With 3 allied warriors, gain 1●."
+        "dawn": "▸Dawn: If you control 3 or more warriors, gain 1●."
       },
       "effects": [
         {
@@ -2099,7 +2127,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "ecf77f27-df0f-47c4-99c2-48d7fa46a137",
@@ -2117,12 +2145,13 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "f0165a60-df1c-41db-87bb-a784c26835a5",
-      "name": "Blazebound Sentinel",
+      "name": "Turquoise Aurelia",
       "triggers": [
         "dawn"
       ],
@@ -2136,8 +2165,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "f1452b45-51dc-453a-916e-88bd9d29e36e",
@@ -2160,11 +2190,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "f256a0e7-e396-492b-8881-284ecd36025b",
-      "name": "Fern Treader",
+      "name": "Pactbound Challenger",
       "triggers": [
         "dawn"
       ],
@@ -2178,8 +2208,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "f3282494-2fcf-4c06-bfbe-3474b28aa87a",
@@ -2189,8 +2220,8 @@
         "materialized"
       ],
       "ruleLines": {
-        "dawn": "▸Materialized, Dawn: Give an ally +1✦.",
-        "materialized": "▸Materialized, Dawn: Give an ally +1✦."
+        "dawn": "▸Materialized, Dawn: Give a character you control +1✦.",
+        "materialized": "▸Materialized, Dawn: Give a character you control +1✦."
       },
       "effects": [
         {
@@ -2199,16 +2230,16 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "f7084ba7-8c85-4847-80df-b0c98ec77d78",
-      "name": "Carrion Shepherd",
+      "name": "Ghostcaller",
       "triggers": [
         "dawn"
       ],
       "ruleLines": {
-        "dawn": "▸Dawn: Give an allied wraith +1✦. With no allied wraiths, materialize a 0✦ wraith figment with vengeful instead."
+        "dawn": "▸Dawn: Give a wraith you control +1✦. If you control no wraiths, materialize a 0✦ wraith figment with vengeful instead."
       },
       "effects": [
         {
@@ -2220,11 +2251,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "f860e815-3ed9-463d-ac4d-ed8d2778f8ad",
-      "name": "Lone Castaway",
+      "name": "Night Prowler",
       "triggers": [
         "dawn",
         "materialized"
@@ -2242,7 +2273,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "f9a65b32-537b-457c-9eaf-b512cf1f3791",
@@ -2251,7 +2282,7 @@
         "materialized"
       ],
       "ruleLines": {
-        "materialized": "▸Materialized: Return an ally to hand."
+        "materialized": "▸Materialized: Return a character you control to hand."
       },
       "effects": [
         {
@@ -2260,11 +2291,11 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "fcb830e5-85ff-48f3-be1e-46e102a5c8e8",
-      "name": "Shatterpoint Agent",
+      "name": "Scrap Reclaimer",
       "triggers": [
         "materialized"
       ],
@@ -2278,7 +2309,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
       "id": "ffa4fa56-8897-465d-b812-3798e3cf5a1f",
@@ -2287,7 +2318,7 @@
         "materialized"
       ],
       "ruleLines": {
-        "materialized": "▸Materialized: Shuffle all cards in a player's void into their deck."
+        "materialized": "▸Materialized: Put all cards in a player's void on the bottom of their deck."
       },
       "effects": [
         {
@@ -2296,7 +2327,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "character-triggered effects are resolved manually; only Support is automated"
     }
   ]
 }

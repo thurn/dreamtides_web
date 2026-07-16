@@ -96,10 +96,9 @@ and spent Dreamsign pools.
 The playable battle screen (`src/battle/`) implements the Dreamtides battle
 rules (`docs/battle_rules/battle_rules.md`). Structural automation runs the
 deterministic bookkeeping the rules derive purely from board state, while the
-player resolves the printed effect text of their own cards by hand through the
-debug rail. The architecture invariant is that automation and the engine act
-only on card structure and status fields, never on printed effect prose — the
-sole exception being the Challenge resolver's scan for the four sanctioned
+player resolves character rules text by hand through the debug rail. Static
+Support spark is automated. Dreamwell cards retain their independent effect
+automation. The Challenge resolver also applies the four sanctioned resolution
 keywords (Unstoppable, Vengeful, Preeminence, Awakened).
 
 ### Board and ranks

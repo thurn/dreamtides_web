@@ -92,13 +92,9 @@
           "command": {
             "id": "DEBUG_EDIT",
             "edit": {
-              "kind": "MOVE_CARD_TO_ZONE",
-              "battleCardId": "bc-foresee",
-              "destination": {
-                "side": "player",
-                "zone": "frontRank",
-                "slotId": "F1"
-              }
+              "kind": "DRAW_DREAMWELL_CARD",
+              "side": "player",
+              "turnNumber": 2
             }
           }
         },
@@ -138,5 +134,5 @@
       }
     }
   ],
-  "finalHash": "86dbe517de06afd7cd19de9331dda9d19ae4d7bfb1043e233eacc72305ab5e1b"
+  "finalHash": "1e585f7cca5ce462a42a65c8dbc381dfe777b49bf216687bc4c126b46df795e8"
 }

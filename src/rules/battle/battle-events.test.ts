@@ -19,9 +19,7 @@ import {
 import { applyDebugEdit } from "./apply-debug-edit";
 import {
   BATTLE_CARD_EFFECTS,
-  dawnScriptIsInteractive,
   planSupportRecompute,
-  type BattleCardEffectScript,
 } from "./battle-card-effects-table";
 import { DREAMWELL_EFFECTS } from "./dreamwell-effects-table";
 import type { StepContext } from "./effect-step";
@@ -562,59 +560,13 @@ function hashBoard(board: BattleMutableState): string {
   return JSON.stringify(board);
 }
 
-// --- registry selectors (resolve ids from the LIVE tables, never hardcode) ---
-
-/** The first materialized script that is deterministic (no prompt step). */
-function firstDeterministicMaterialized(): BattleCardEffectScript {
-  const script = Object.values(BATTLE_CARD_EFFECTS).find(
-    (s) =>
-      s.trigger === "materialized" &&
-      (s.steps ?? []).length > 0 &&
-      !dawnScriptIsInteractive(s),
-  );
-  if (script === undefined) throw new Error("no deterministic materialized script registered");
-  return script;
-}
-
-/** The first materialized script that needs player input (a prompt step). */
-function firstInteractiveMaterialized(): BattleCardEffectScript {
-  const script = Object.values(BATTLE_CARD_EFFECTS).find(
-    (s) => s.trigger === "materialized" && dawnScriptIsInteractive(s),
-  );
-  if (script === undefined) throw new Error("no interactive materialized script registered");
-  return script;
-}
-
-/** The first deterministic dawn script (all current dawn scripts are edits-only). */
-function firstDeterministicDawn(): BattleCardEffectScript {
-  const script = Object.values(BATTLE_CARD_EFFECTS).find(
-    (s) => s.trigger === "dawn" && (s.steps ?? []).length > 0 && !dawnScriptIsInteractive(s),
-  );
-  if (script === undefined) throw new Error("no deterministic dawn script registered");
-  return script;
-}
-
 /** The first unconditional back-rank support script (no `applies` subtype
  *  filter), so it grants spark to ANY supported front ally regardless of type. */
-function firstSupportScript(): BattleCardEffectScript {
+function firstSupportScript(): { id: string } {
   const script = Object.values(BATTLE_CARD_EFFECTS).find(
-    (s) => s.trigger === "support" && s.support !== undefined && s.support.applies === undefined,
+    (s) => s.support.applies === undefined,
   );
   if (script === undefined) throw new Error("no unconditional support script registered");
-  return script;
-}
-
-/** A deterministic materialized script whose edits gain score for the
- *  controller side (so a cascade firing is observable as a score change). */
-function firstMaterializedGainingScore(probe: BattleMutableState): { id: string } {
-  const ctx: StepContext = { side: "player", state: probe, random: () => 0, nowMs: 0 };
-  const script = Object.values(BATTLE_CARD_EFFECTS).find((s) => {
-    if (s.trigger !== "materialized" || s.steps === undefined) return false;
-    if (s.steps.some((step) => step.kind === "prompt")) return false;
-    const edits = s.steps.flatMap((step) => (step.kind === "edits" ? step.build(ctx) : []));
-    return edits.some((e) => e.kind === "ADJUST_SCORE" && e.side === "player");
-  });
-  if (script === undefined) throw new Error("no score-gaining materialized script registered");
   return script;
 }
 
@@ -750,10 +702,12 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     expect(result.state.battle?.pendingPrompt).toBeNull();
   });
 
-  // --- trigger missed: materialize a scripted card, its edits land same step ---
-  it("fires a newly-materialized character's script in the SAME fold step", () => {
-    const script = firstDeterministicMaterialized();
-    const instance = makeInstance("bc-mat", script.id, "player");
+  it("moves a character into play without resolving its rules text", () => {
+    const instance = makeInstance(
+      "bc-mat",
+      "647f5150-b2e0-424b-9480-27557642524e",
+      "player",
+    );
     const board = makeRichBoard({ turnNumber: 3, phase: "day", playerHand: ["bc-mat"], instances: [instance] });
     const state = { ...baseState(), battle: battleFrom(board) };
 
@@ -765,62 +719,18 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     const result = reduce(state, "BATTLE_COMMAND", debugEdit(moveEdit));
     expect(result.outcome).toBe("applied");
 
-    // The command edit alone (no triggers) would only relocate the card.
     const commandOnly = applyDebugEdit(board, moveEdit as never, EMISSION).state;
-    // With the materialized trigger, the board changed beyond the bare move.
-    expect(hashBoard(result.state.battle!.board)).not.toBe(hashBoard(commandOnly));
-    // The deterministic run walked to completion within this single fold step.
+    expect(hashBoard(result.state.battle!.board)).toBe(hashBoard(commandOnly));
     expect(result.state.battle?.effectQueue).toEqual([]);
     expect(result.state.battle?.pendingPrompt).toBeNull();
   });
 
-  // --- prompt blocks queue: interactive materialization parks on a prompt ---
-  it("parks pendingPrompt when a materialized card needs player input", () => {
-    const script = firstInteractiveMaterialized();
-    const instance = makeInstance("bc-int", script.id, "player");
-    const board = makeRichBoard({ turnNumber: 3, phase: "day", playerHand: ["bc-int"], instances: [instance] });
-    const state = { ...baseState(), battle: battleFrom(board) };
-
-    const result = reduce(state, "BATTLE_COMMAND", debugEdit({
-      kind: "MOVE_CARD_TO_ZONE",
-      battleCardId: "bc-int",
-      destination: { side: "player", zone: "frontRank", slotId: frontRankSlotId(0) },
-    }));
-    expect(result.outcome).toBe("applied");
-    expect(result.state.battle?.pendingPrompt).not.toBeNull();
-    expect(result.state.battle?.pendingPrompt?.run.scriptRef.id).toBe(script.id);
-  });
-
-  it("leaves later queued runs unstarted while a prompt is open", () => {
-    const interactive = firstInteractiveMaterialized();
-    const deterministic = firstDeterministicMaterialized();
-    // Pre-seed the queue: an interactive run ahead of a deterministic one.
-    const board = makeRichBoard({ turnNumber: 3, phase: "day" });
-    const battle = battleFrom(board, {
-      effectQueue: [
-        { scriptRef: { table: "battle", id: interactive.id }, cursor: [0], side: "player", sourceInstanceId: "src-a" },
-        { scriptRef: { table: "battle", id: deterministic.id }, cursor: [0], side: "player", sourceInstanceId: "src-b" },
-      ],
-    });
-    const state = { ...baseState(), battle };
-
-    // A benign command triggers the queue to advance.
-    const result = reduce(state, "BATTLE_COMMAND", debugEdit({ kind: "SET_SCORE", side: "player", value: 1 }));
-    expect(result.outcome).toBe("applied");
-    // The interactive run parks on its prompt.
-    expect(result.state.battle?.pendingPrompt?.run.scriptRef.id).toBe(interactive.id);
-    // The trailing deterministic run is still queued, unstarted (cursor [0]).
-    const queue = result.state.battle?.effectQueue ?? [];
-    const trailing = queue.find((r) => r.scriptRef.id === deterministic.id);
-    expect(trailing).toBeDefined();
-    expect(trailing?.cursor).toEqual([0]);
-  });
-
-  // --- dawn once-per-turn: entering dawn twice cannot re-fire the triggers ---
-  it("fires deterministic Dawn triggers once on entering Dawn and never on re-entry", () => {
-    const dawn = firstDeterministicDawn();
-    const instance = makeInstance("bc-dawn", dawn.id, "player");
-    // A dawn character already in play (so it never fires ▸Materialized), turn > 1.
+  it("runs only the structural Dawn bookend for a character with Dawn text", () => {
+    const instance = makeInstance(
+      "bc-dawn",
+      "0458658d-7e02-4286-9249-93674d16620b",
+      "player",
+    );
     const board = makeRichBoard({
       turnNumber: 4,
       phase: "day",
@@ -834,92 +744,9 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     expect(first.outcome).toBe("applied");
     expect(first.state.battle?.board.phase).toBe("dawn");
 
-    // The dawn trigger changed the board beyond the bare SET_PHASE edit.
     const phaseOnly = applyDebugEdit(board, setDawn as never, EMISSION).state;
-    expect(hashBoard(first.state.battle!.board)).not.toBe(hashBoard(phaseOnly));
-
-    // Re-issuing SET_PHASE(dawn) while already in dawn must NOT re-fire.
-    const second = reduce(first.state, "BATTLE_COMMAND", debugEdit(setDawn));
-    expect(second.outcome).toBe("applied");
-    expect(hashBoard(second.state.battle!.board)).toBe(hashBoard(first.state.battle!.board));
-  });
-
-  it("skips Dawn triggers on turn 1", () => {
-    const dawn = firstDeterministicDawn();
-    const instance = makeInstance("bc-dawn1", dawn.id, "player");
-    const board = makeRichBoard({
-      turnNumber: 1,
-      phase: "day",
-      playerFront: { [frontRankSlotId(0)]: "bc-dawn1" },
-      instances: [instance],
-    });
-    const state = { ...baseState(), battle: battleFrom(board) };
-    const setDawn = { kind: "SET_PHASE", phase: "dawn" };
-    const result = reduce(state, "BATTLE_COMMAND", debugEdit(setDawn));
-    const phaseOnly = applyDebugEdit(board, setDawn as never, EMISSION).state;
-    // No dawn on turn 1 (rules): the board matches the bare phase edit.
-    expect(hashBoard(result.state.battle!.board)).toBe(hashBoard(phaseOnly));
-  });
-
-  // --- dawn on a turn handoff: the incoming side's Dawn fires even though the
-  //     handoff lands the phase on `dreamwell` and never crosses the committed
-  //     `dawn` phase (the drop the reducer-sole-owner model closes) ---
-  function enemyDawnHandoffState(dawnCardId: string): FoldState {
-    const dawn = firstDeterministicDawn();
-    const enemyDawn = makeInstance(dawnCardId, dawn.id, "enemy");
-    const board = makeRichBoard({ turnNumber: 3, phase: "challenge", instances: [enemyDawn] });
-    board.sides.enemy.frontRank[frontRankSlotId(0)] = dawnCardId;
-    return { ...baseState(), battle: battleFrom(board) };
-  }
-
-  const HANDOFF_TO_ENEMY = {
-    kind: "SET_BATTLE_FLOW",
-    phase: "dreamwell",
-    activeSide: "enemy",
-    turnNumber: 3,
-  };
-
-  it("fires the incoming side's deterministic Dawn on a turn handoff", () => {
-    const state = enemyDawnHandoffState("bc-edawn");
-    const boardBefore = state.battle!.board;
-    const result = reduce(state, "BATTLE_COMMAND", debugEdit(HANDOFF_TO_ENEMY));
-    expect(result.outcome).toBe("applied");
-    expect(result.state.battle?.board.activeSide).toBe("enemy");
-
-    // The handoff never crosses the committed dawn phase, yet the enemy's Dawn
-    // trigger changed the board beyond the bare flow edit, and the once-guard is
-    // stamped for (enemy, turn 3).
-    const flowOnly = applyDebugEdit(boardBefore, HANDOFF_TO_ENEMY as never, EMISSION).state;
-    expect(hashBoard(result.state.battle!.board)).not.toBe(hashBoard(flowOnly));
-    expect(result.state.battle?.dawnFired.enemy).toBe(3);
-  });
-
-  it("does not re-fire the incoming side's Dawn when a same-turn SET_PHASE dawn follows the handoff", () => {
-    const afterHandoff = reduce(
-      enemyDawnHandoffState("bc-edawn2"),
-      "BATTLE_COMMAND",
-      debugEdit(HANDOFF_TO_ENEMY),
-    );
-    expect(afterHandoff.state.battle?.dawnFired.enemy).toBe(3);
-
-    // A same-turn SET_PHASE dawn crosses the committed dawn edge, but the
-    // once-per-(side,turn) guard blocks a second, non-idempotent Dawn firing.
-    const setDawn = { kind: "SET_PHASE", phase: "dawn" };
-    const afterDawn = reduce(afterHandoff.state, "BATTLE_COMMAND", debugEdit(setDawn));
-    const phaseOnly = applyDebugEdit(
-      afterHandoff.state.battle!.board,
-      setDawn as never,
-      EMISSION,
-    ).state;
-    expect(hashBoard(afterDawn.state.battle!.board)).toBe(hashBoard(phaseOnly));
-  });
-
-  it("folds a handoff Dawn deterministically: two folds of the same event are byte-identical", () => {
-    const state = enemyDawnHandoffState("bc-edawn3");
-    const a = reduce(state, "BATTLE_COMMAND", debugEdit(HANDOFF_TO_ENEMY));
-    const b = reduce(state, "BATTLE_COMMAND", debugEdit(HANDOFF_TO_ENEMY));
-    expect(hashBoard(a.state.battle!.board)).toBe(hashBoard(b.state.battle!.board));
-    expect(a.state.battle!.dawnFired).toEqual(b.state.battle!.dawnFired);
+    expect(hashBoard(first.state.battle!.board)).toBe(hashBoard(phaseOnly));
+    expect(first.state.battle?.dawnFired.player).toBe(4);
   });
 
   // --- dreamwell reveal queues the revealed card's script ---
@@ -980,68 +807,13 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     expect(again).toEqual([]);
   });
 
-  // --- cascade: a queued script that moves a scripted character into play
-  //     fires THAT character's materialized trigger in the SAME fold step ---
-  it("cascades — a Dreamwell script that moves a scripted character into play fires its materialized trigger", () => {
-    // A materialized script whose deterministic edits gain score for the
-    // controller (so its firing is observable as a score change).
-    const probe = makeRichBoard({ playerVoid: ["probe-void"], instances: [makeInstance("probe-void", "no-script")] });
-    const scoreMat = firstMaterializedGainingScore(probe);
-    // A deterministic Dreamwell script that moves a void character into a play
-    // slot (Celestial-Gateway-shaped): the reducer-applied move is what surfaces
-    // the character, so its ▸Materialized must fire in the driver's drain.
-    const voidToPlay = firstVoidToPlayDreamwell(probe);
-
-    const voidCard = makeInstance("bc-voidchar", scoreMat.id, "player");
-    const dreamwellCard: DreamwellCardDefinition = {
-      id: voidToPlay.id,
-      name: "Fixture Gateway",
-      renderedText: "",
-      energyAdded: 0,
-      order: 0,
-      cardNumber: 0,
-      imageNumber: 0,
-    };
-    const init = makeInit({ dreamwellDeck: [dreamwellCard] });
-    const board = makeRichBoard({
-      turnNumber: 2,
-      phase: "dreamwell",
-      dreamwellDeckIndex: 0,
-      playerVoid: ["bc-voidchar"],
-      instances: [voidCard],
-      playerDreamwellDrawnTurn: null,
-    });
-    const state = { ...baseState(), battle: battleFrom(board, { init }) };
-
-    const result = reduce(state, "BATTLE_COMMAND", debugEdit({ kind: "DRAW_DREAMWELL_CARD", side: "player", turnNumber: 2 }));
-    expect(result.outcome).toBe("applied");
-    const nextBoard = result.state.battle!.board;
-    // The gateway moved the void character into play (a reserve or deploy slot).
-    const inPlay = [
-      ...Object.values(nextBoard.sides.player.backRank),
-      ...Object.values(nextBoard.sides.player.frontRank),
-    ].filter((id) => id !== null);
-    expect(inPlay).toContain("bc-voidchar");
-    expect(nextBoard.sides.player.void).not.toContain("bc-voidchar");
-    // Its materialized trigger fired IN THE SAME fold step — player score rose.
-    expect(nextBoard.sides.player.score).toBeGreaterThan(board.sides.player.score);
-    // The whole cascade drained; no stray queued run or open prompt.
-    expect(result.state.battle?.effectQueue).toEqual([]);
-    expect(result.state.battle?.pendingPrompt).toBeNull();
-
-    // Determinism: folding the same event again is byte-identical.
-    const again = reduce(state, "BATTLE_COMMAND", debugEdit({ kind: "DRAW_DREAMWELL_CARD", side: "player", turnNumber: 2 }));
-    expect(hashBattle(again.state.battle)).toBe(hashBattle(result.state.battle));
-  });
-
   // --- determinism: folding the same event twice yields identical state ---
   it("is deterministic — the same event folds to a byte-identical battle", () => {
-    const script = firstDeterministicMaterialized();
     const board = makeRichBoard({
       turnNumber: 3,
       phase: "day",
       playerHand: ["bc-det"],
-      instances: [makeInstance("bc-det", script.id, "player")],
+      instances: [makeInstance("bc-det", "647f5150-b2e0-424b-9480-27557642524e", "player")],
     });
     const state = { ...baseState(), battle: battleFrom(board) };
     const payload = debugEdit({
@@ -1060,14 +832,10 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
 // RESOLVE_PROMPT (Task 21)
 // ---------------------------------------------------------------------------
 
-/**
- * The first registered battle script whose FIRST step is a `foresee` prompt, so
- * a fresh run parked at `cursor: [0]` stops on the prompt immediately. Resolved from the LIVE table (no
- * hardcoded card ids/names) — data-resilient per AGENTS.md.
- */
-function firstForeseePromptBattleScript(): BattleCardEffectScript {
-  const script = Object.values(BATTLE_CARD_EFFECTS).find((s) => {
-    const first = (s.steps ?? [])[0];
+/** The first Dreamwell script whose first step is a Foresee prompt. */
+function firstForeseePromptDreamwellScript() {
+  const script = Object.values(DREAMWELL_EFFECTS).find((s) => {
+    const first = s.steps[0];
     return (
       first !== undefined &&
       first.kind === "prompt" &&
@@ -1075,7 +843,7 @@ function firstForeseePromptBattleScript(): BattleCardEffectScript {
     );
   });
   if (script === undefined) {
-    throw new Error("no foresee-prompt battle script registered");
+    throw new Error("no foresee-prompt Dreamwell script registered");
   }
   return script;
 }
@@ -1094,7 +862,7 @@ function parkForeseePrompt(extraQueue: EffectRun[] = []): {
   parkedBoardHash: string;
   cardIds: string[];
 } {
-  const foresee = firstForeseePromptBattleScript();
+  const foresee = firstForeseePromptDreamwellScript();
   const deckInstances = [1, 2, 3].map((index) => makeInstance(
     `foresee-${String(index)}`,
     `00000000-0000-0000-0000-00000000000${String(index)}`,
@@ -1107,7 +875,7 @@ function parkForeseePrompt(extraQueue: EffectRun[] = []): {
   });
   const battle = battleFrom(board, {
     effectQueue: [
-      { scriptRef: { table: "battle", id: foresee.id }, cursor: [0], side: "player" },
+      { scriptRef: { table: "dreamwell", id: foresee.id }, cursor: [0], side: "player" },
       ...extraQueue,
     ],
   });
@@ -1451,7 +1219,7 @@ describe("SET_CARD_NOTE", () => {
   });
 
   it("applies through an open prompt without resolving it (CAS-exempt)", () => {
-    const foresee = firstForeseePromptBattleScript();
+    const foresee = firstForeseePromptDreamwellScript();
     const board = makeRichBoard({
       turnNumber: 3,
       phase: "day",
@@ -1459,7 +1227,7 @@ describe("SET_CARD_NOTE", () => {
     });
     const battle = battleFrom(board, {
       effectQueue: [
-        { scriptRef: { table: "battle", id: foresee.id }, cursor: [0], side: "player" },
+        { scriptRef: { table: "dreamwell", id: foresee.id }, cursor: [0], side: "player" },
       ],
     });
     const parked = reduce(
@@ -1636,40 +1404,6 @@ describe("BATTLE_GESTURE", () => {
     expect(hashBattle(a.state.battle)).toBe(hashBattle(b.state.battle));
   });
 
-  it("applies a gesture whose deterministic tail runs before its prompt-opening command", () => {
-    // Prompt-opening commands must be the last command in an expanded gesture:
-    // the deterministic tail can apply first, then the final command parks the
-    // prompt without forcing a later command through the prompt gate.
-    const script = firstInteractiveMaterialized();
-    const board = makeRichBoard({
-      turnNumber: 3,
-      phase: "day",
-      playerHand: ["bc-gesture-int"],
-      instances: [makeInstance("bc-gesture-int", script.id, "player")],
-    });
-    const state = { ...baseState(), battle: battleFrom(board) };
-
-    const playInteractive = {
-      id: "DEBUG_EDIT",
-      edit: {
-        kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: "bc-gesture-int",
-        destination: { side: "player", zone: "frontRank", slotId: frontRankSlotId(0) },
-      },
-    };
-    // Sanity: the same command as a lone BATTLE_COMMAND parks a prompt.
-    const lone = reduce(state, "BATTLE_COMMAND", { command: playInteractive });
-    expect(lone.state.battle?.pendingPrompt).not.toBeNull();
-
-    const result = reduce(state, "BATTLE_GESTURE", {
-      commands: [gainThree, playInteractive],
-    });
-    expect(result.outcome).toBe("applied");
-    expect(result.state.battle?.pendingPrompt).not.toBeNull();
-    expect(result.state.battle?.board.sides.player.score).toBe(board.sides.player.score + 3);
-    expect(result.state.battle?.board.sides.player.hand).not.toContain("bc-gesture-int");
-    expect(result.state.battle?.board.sides.player.frontRank[frontRankSlotId(0)]).toBe("bc-gesture-int");
-  });
 });
 
 // ---------------------------------------------------------------------------

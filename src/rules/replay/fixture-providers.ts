@@ -20,10 +20,9 @@
 //
 // Determinism rails (src/rules/): no `Math.random`, no live clock. Randomness
 // comes from a seeded PRNG here and from `ctx.rng` inside the reducer; the
-// battle card scripts are selected from the LIVE effects table by STRUCTURE
-// (trigger + first-step kind), never by a hardcoded UUID or name — so the
-// fixtures stay resilient to TOML card-data edits while still tripping on an
-// unintended change to the rules tables (exactly the regression net's job).
+// Dreamwell scripts are selected from the live effects table by structure so
+// fixtures stay resilient to TOML card-data edits while still covering the
+// active automation runner.
 
 import type { ResolvedDreamcallerPackage } from "../../types/content";
 import type { PoolDraftState } from "../../types/draft";
@@ -46,10 +45,7 @@ import type {
 } from "../../types/quest";
 import { LayerName } from "../../types/layer-name";
 import { emptyDawnFired, type BattleFoldState } from "../battle/fold";
-import {
-  BATTLE_CARD_EFFECTS,
-  type BattleCardEffectScript,
-} from "../battle/battle-card-effects-table";
+import { DREAMWELL_EFFECTS } from "../battle/dreamwell-effects-table";
 import {
   registerBattleInitProvider,
   type BattleInitProvider,
@@ -125,42 +121,6 @@ function makePrng(seed: number): () => number {
     state >>>= 0;
     return state / 0x1_0000_0000;
   };
-}
-
-// ---------------------------------------------------------------------------
-// Live-table battle-script selectors (by STRUCTURE, never by id/name)
-// ---------------------------------------------------------------------------
-
-/** The first materialized script that resolves with no player input. */
-export function firstDeterministicMaterialized(): BattleCardEffectScript {
-  const script = Object.values(BATTLE_CARD_EFFECTS).find(
-    (candidate) =>
-      candidate.trigger === "materialized" &&
-      (candidate.steps ?? []).length > 0 &&
-      !(candidate.steps ?? []).some((step) => step.kind === "prompt"),
-  );
-  if (script === undefined) {
-    throw new Error("no deterministic materialized script registered");
-  }
-  return script;
-}
-
-/** The first materialized script whose FIRST step is a foresee prompt (so a
- *  fresh materialization parks a foresee prompt answerable with `{kind:"foresee"}`). */
-export function firstForeseeMaterialized(): BattleCardEffectScript {
-  const script = Object.values(BATTLE_CARD_EFFECTS).find((candidate) => {
-    const first = (candidate.steps ?? [])[0];
-    return (
-      candidate.trigger === "materialized" &&
-      first !== undefined &&
-      first.kind === "prompt" &&
-      first.prompt.kind === "foresee"
-    );
-  });
-  if (script === undefined) {
-    throw new Error("no foresee-prompt materialized script registered");
-  }
-  return script;
 }
 
 // ---------------------------------------------------------------------------
@@ -421,29 +381,42 @@ function makeSide(): BattleMutableState["sides"][BattleSide] {
 }
 
 function makeInit(siteId: string): BattleInit {
+  const foresee = Object.values(DREAMWELL_EFFECTS).find((script) => {
+    const first = script.steps[0];
+    return first?.kind === "prompt" && first.prompt.kind === "foresee";
+  });
+  if (foresee === undefined) {
+    throw new Error("replay fixture requires a Foresee Dreamwell script");
+  }
   return {
     battleId: `battle-${siteId}`,
     siteId,
     dreamscapeId: null,
     scoreToWin: 30,
     turnLimit: 12,
-    dreamwellDeck: [],
+    dreamwellDeck: [{
+      id: foresee.id,
+      name: "Fixture Dreamwell",
+      renderedText: "",
+      energyAdded: 0,
+      order: 0,
+      cardNumber: 0,
+      imageNumber: 0,
+    }],
   } as unknown as BattleInit;
 }
 
 export function fixtureBattleInitProvider(): BattleInitProvider {
   return {
     beginBattle: ({ siteId }) => {
-      const detId = firstDeterministicMaterialized().id;
-      const foreseeId = firstForeseeMaterialized().id;
       const player = makeSide();
       player.hand = [BATTLE_CARD_DETERMINISTIC, BATTLE_CARD_FORESEE];
       const enemy = makeSide();
       const board: BattleMutableState = {
         battleId: `battle-${siteId}`,
         activeSide: "player",
-        turnNumber: 3,
-        phase: "day",
+        turnNumber: 2,
+        phase: "dreamwell",
         result: null,
         forcedResult: null,
         dreamwellDeckIndex: 0,
@@ -452,12 +425,12 @@ export function fixtureBattleInitProvider(): BattleInitProvider {
         cardInstances: {
           [BATTLE_CARD_DETERMINISTIC]: makeInstance(
             BATTLE_CARD_DETERMINISTIC,
-            detId,
+            "00000000-0000-0000-0000-000000000001",
             "player",
           ),
           [BATTLE_CARD_FORESEE]: makeInstance(
             BATTLE_CARD_FORESEE,
-            foreseeId,
+            "00000000-0000-0000-0000-000000000002",
             "player",
           ),
         },

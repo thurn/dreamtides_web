@@ -85,14 +85,15 @@ their own cards through the debug rail. Four facts shape this design:
    applied through the reducer in `src/battle/state/reducer.ts`.
 
 2. **Basic Automation handles the deterministic rules.** `runtimeConfig.basicAutomation`
-   (on unless `?automation=0`) drives `src/battle/automation/basic-automation.ts`,
+   (on unless `?automation=0`) drives `src/rules/battle/basic-automation.ts`,
    which rewrites the gestures it understands into the ordered edits the rules
    require: paying energy on a play (events resolve to the void), the energy ramp
    and draw at the start of a turn, the Dawn exhaust-clear, the Challenge
    resolution via `engine/challenge.ts`, the Ending hand-limit discard and
    end-of-turn banishes, the auto-advancing bookend phases, and forcing the
-   result at the score threshold. Automation acts only on card structure and
-   status fields, never on printed effect prose.
+   result at the score threshold. Character rules text is resolved manually,
+   with static Support spark computed from the Support registry. Dreamwell
+   effect automation runs through its separate registry and prompt queue.
 
 3. **AI scaffolding lives in the type model.** `src/battle/types.ts` defines
    `BattleAiDecisionStage = "character" | "reposition" | "nonCharacter" |
@@ -108,8 +109,8 @@ and the **back rank** (zone `backRank`, slots `B0`–`B4`, 5 positions).
 Characters materialize into the back rank, exhausted. Effective spark comes from
 `selectEffectiveSparkForInstance`: a regular character scores `printedSpark +
 sparkDelta`, and a figment stack scores the sum of its discrete figment sparks.
-Support and static spark bonuses are computed by the side that needs them (the
-AI's forward model applies the support-adjacency map itself).
+Support spark bonuses are computed by the side that needs them (the AI's
+forward model applies the support-adjacency map itself).
 
 The screen is wired through `useMultiplayerBattle()` in
 `PlayableBattleScreen.tsx`, which exposes the current `reducerState.mutable`
@@ -129,7 +130,7 @@ tractable.
 | Nocturne Strummer | 2● | 1 | Character / Musician | Support – Supported characters have +2✦. | Back-rank anchor; buffs front rank |
 | Ringwatcher | 3● | 1 | Character / Visionary | ▸Materialized: Foresee 1. | Filtering body |
 | Marked Direwolf | 4● | 4 | Character / Spirit Animal | (vanilla) | Efficient beater |
-| Runebound Champion | 5● | 3 | Character / Warrior | ▸Dawn: Gain 1⍟. | Inevitability engine |
+| Runebound Champion | 5● | 3 | Character / Warrior | ▸Dawn: Gain 1⍟. | Durable body |
 | Final Witness | 3● | 2 | Character / Visitor | ▸Dissolved: Draw a card. | Value trader |
 | Wildflower Colossus | 6● | 6 | Character / Synth | This character has +2✦ for each supporting ally. | Finisher / payoff |
 | Flashpoint Detonation | 2● | — | Event | Dissolve an enemy with cost 3● or less. | Removal |
@@ -143,10 +144,9 @@ tractable.
   The AI therefore never needs to act during the player's turn — no responses,
   no priority windows, no stack interaction. The AI acts only in its own Day
   phase.
-- **Zero activated abilities.** Nothing in the pool is a "Cost: Effect" ability
-  the AI must consider activating. The only abilities are two static/support
-  effects (Nocturne Strummer, Wildflower Colossus) and three triggers
-  (`▸Materialized`, `▸Dawn`, `▸Dissolved`).
+- **Character text is manual.** Character models cover bodies, costs, and
+  Support. Triggered and other static character abilities are resolved by the
+  human through the battle controls.
 - **The deck is fixed and tiny.** Six distinct characters and four distinct
   events. Every card's behavior can be hand-encoded exactly, and the decision
   space per turn is small enough to search.
@@ -157,15 +157,14 @@ is three copies of each card (30 cards); the exact counts are a tuning knob (see
 [Open Questions](#open-questions)).
 
 The deck's strategic shape, which the evaluation weights should reflect:
-cheap bodies and a Support package (Nocturne Strummer behind Wildflower
-Colossus or any front-line body), one piece of removal (Flashpoint Detonation), card
-selection (Glimpse of What Was, Ringwatcher, Sign of Arrival), a proactive pump
-(Worlds Await), and a slow inevitability source (Runebound Champion's ▸Dawn points).
+cheap bodies and a Support package, one piece of removal, event-based card
+selection, and a proactive pump.
 
 ## Design Principles
 
-**1. Asymmetric knowledge.** The AI simulates its own cards exactly and models
-the opponent abstractly. Concretely, the AI reads opponent characters only as
+**1. Asymmetric knowledge.** The AI simulates structural character play,
+Support, and its events while modeling the opponent abstractly. Concretely, the
+AI reads opponent characters only as
 "a body with effective spark `S` at front/back position `P`," reads the
 opponent's hand only as a *count* of unknown cards, and reasons about the
 opponent's deck only through broad priors ("an unknown hand of N cards may
@@ -267,7 +266,7 @@ by both sides (the human benefits from it too).
   an `ADJUST_SCORE` for the points scored plus a `MOVE_CARD_TO_ZONE`-to-void per
   dissolved body — are the edits that commit the outcome (firing `▸Dissolved`,
   e.g. Final Witness) once the human approves. Effective spark here must include
-  Support/static bonuses (see [The Forward Model](#the-forward-model)). The
+  Support bonuses (see [The Forward Model](#the-forward-model)). The
   resolver produces a *proposal* and defers anything it cannot fully model to a
   manual step; see
   [Auto-Resolution and Manual Steps](#auto-resolution-and-manual-steps).
@@ -381,12 +380,10 @@ times per turn. `forward-model.ts` provides a cheap, mutable projection of
 - The opponent's board as abstract bodies (`{ effectiveSpark, rank, slot,
   isFigment }`), the opponent's hand as a count, and the opponent's void as a
   count.
-- Derived, recomputed-on-read **effective spark including Support and static
-  bonuses**, because the engine does not apply these. The model implements the
+- Derived, recomputed-on-read **effective spark including Support**. The model implements the
   support-adjacency map from `battle_rules.md` (B0→F0; B1→F0,F1; B2→F1,F2;
   B3→F2,F3; B4→F3, i.e. a back-rank slot → up-to-two front-rank slots) so that
-  Nocturne Strummer's "+2✦ to supported" and Wildflower Colossus's "+2✦ per
-  supporting ally" produce correct numbers.
+  registered Support bonuses produce correct numbers.
 
 The forward model is a plain data structure with pure mutators, deliberately
 *not* the real reducer: it is allowed to be approximate about anything outside
@@ -404,8 +401,9 @@ Two distinct uses:
 ## Per-Card Knowledge
 
 Each of the ten cards is encoded once as a `StarterCardModel`, registered by
-`cardNumber` in `ai/cards/index.ts`. This is the "deep understanding of its own
-deck." Illustrative shape:
+`cardNumber` in `ai/cards/index.ts`. Character models cover play legality,
+placement, and Support. Event models also cover their automated targeting and
+resolution. Illustrative shape:
 
 ```ts
 interface StarterCardModel {
@@ -414,14 +412,10 @@ interface StarterCardModel {
   canPlay(model: ForwardModel, self: AiCard): boolean;
   // Best target(s) for this card in this state, or null if none worth it.
   chooseTargets(model: ForwardModel, self: AiCard): AiTargetChoice | null;
-  // Apply the play to the forward model (materialize, resolve event, pay cost).
+  // Apply the structural play or resolve an event in the forward model.
   play(model: ForwardModel, self: AiCard, targets: AiTargetChoice | null): void;
-  // Trigger hooks the planner/Challenge resolution fire at the right time.
-  onMaterialized?(model: ForwardModel, self: AiCard): void;   // Ringwatcher
-  onDawn?(model: ForwardModel, self: AiCard): void;           // Runebound Champion
-  onDissolved?(model: ForwardModel, self: AiCard): void;      // Final Witness
-  // Static contribution to a board the planner is evaluating.
-  staticSparkContribution?(model: ForwardModel, self: AiCard): SparkEdit[];
+  // Support contribution to supported front-rank characters.
+  supportSpark?(model: ForwardModel, self: AiCard): number | null;
   // Optional explicit value hint feeding the evaluation function.
   valueHint?(model: ForwardModel, self: AiCard): number;
 }
@@ -429,14 +423,10 @@ interface StarterCardModel {
 
 Per-card notes that the models encode:
 
-- **Nocturne Strummer / Wildflower Colossus** — static spark via
-  `staticSparkContribution`, resolved through the support-adjacency map. The
-  Colossus wants supporters behind its front-rank slot; the planner's reposition
-  stage accounts for that adjacency.
-- **Ringwatcher / Glimpse of What Was** — Foresee/draw selection: keep cards
-  that advance the current plan and curve, bin the rest. Modeled as a deck
-  reorder on the forward model; the real command is `REORDER_DECK` (plus
-  `DRAW_CARD` for Glimpse).
+- **Support sources** — `supportSpark` is resolved through the support-adjacency
+  map and contributes to both planning evaluation and Challenge resolution.
+- **Glimpse of What Was** — draw and Foresee selection keep cards that advance
+  the current plan and curve and bin the rest.
 - **Sign of Arrival (Discover a character)** — choose the best of three offered by
   role need (a front-rank body, a missing supporter, curve fit). Because Discover
   reveals three from the AI's own Starter deck, the candidate set is known and
@@ -448,11 +438,6 @@ Per-card notes that the models encode:
 - **Worlds Await (+3✦ to an ally)** — standard timing means it cannot be an
   instant combat trick; the AI plays it proactively to push a challenger past a
   likely blocker, grow Wildflower Colossus toward lethal, or set up a favorable trade.
-- **Runebound Champion (▸Dawn: gain 1⍟)** — a per-turn point source; its value
-  rises the longer the AI expects the game to run, so the evaluation rewards
-  keeping it alive in the back rank.
-- **Final Witness (▸Dissolved: draw)** — trades up; the evaluation discounts the
-  downside of losing it in combat because the trade replaces it with a card.
 - **Marked Direwolf** — vanilla 4✦ body; pure tempo, the cleanest challenger.
 
 This registry is the only place card-specific logic lives. Adding a card to the
@@ -468,9 +453,8 @@ of view (higher is better). It is a weighted sum of interpretable terms:
 | Score differential | `aiScore - playerScore`, weighted heavily; 25 wins. |
 | Board spark | Effective spark of AI bodies minus opponent bodies, with front-rank/un-exhausted spark weighted above back-rank. |
 | Expected next-Challenge points | Estimated spark that will score unblocked given the committed front rank and the opponent-response model. |
-| Card advantage | AI hand size, plus "virtual" cards from active engines (Final Witness, Glimpse of What Was, Sign of Arrival, Ringwatcher). |
+| Card advantage | AI hand size plus event-based card selection. |
 | Tempo / energy waste | Small penalty for unspent energy. |
-| Inevitability | Bonus for live recurring sources (Runebound Champion ▸Dawn) scaled by expected remaining turns. |
 | Risk exposure | Penalty for over-committing fragile bodies into likely removal/blocks (informed by the opponent model). |
 | Terminal | `+∞` when AI reaches `scoreToWin`; `-∞` when the opponent does. |
 
@@ -489,8 +473,7 @@ map one-to-one onto the existing `BattleAiDecisionStage` enum:
 
 1. **`character`** — choose which characters to play from hand (materialize into
    the back rank, exhausted), in cost order, paying energy. Synergy ordering
-   matters here (e.g. play Nocturne Strummer before Wildflower Colossus so the Colossus
-   evaluates with its supporter present).
+   matters here when a Support source can improve an existing front-rank body.
 2. **`reposition`** — arrange the board: which un-exhausted characters to push
    from the back rank to the front rank to become challengers, and how to place
    supporters in the adjacency that benefits front-rank bodies. (Recall a
@@ -674,8 +657,7 @@ rank.
 3. **Proposal: declare Wildflower Colossus as a challenger.** The awakened
    Colossus is pushed to the front rank, with the Strummer placed in a supporting
    back-rank slot. The proposal shows its computed effective spark — 6 base + 2
-   per supporting ally + 2 from the Strummer's Support, via the adjacency map. You
-   **Approve**.
+   from the Strummer's Support. You **Approve**.
 4. **Proposal: Worlds Await (+3✦) on the Colossus.** With the defender gone the
    opponent model expects no block, so the extra spark converts straight to
    points. You **Approve**.
@@ -797,8 +779,8 @@ channel that already exists end to end.
   objective function for tuning the evaluation weights and the energy ramp,
   matching the project norm of answering design questions by simulation rather
   than argument.
-- **Unit tests** (Vitest, alongside the modules): per-card `StarterCardModel`
-  effects and targeting; the support-adjacency spark computation; the Challenge
+- **Unit tests** (Vitest, alongside the modules): event targeting, structural
+  character play, the support-adjacency spark computation, the Challenge
   resolver against the worked examples in `battle_rules.md` (including
   figment-stack top-down loss via `selectFigmentChallengeLossCount`); the
   time-budget guard returning a valid best-so-far plan under an artificially

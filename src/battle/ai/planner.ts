@@ -121,7 +121,7 @@ function scorePlan(model: ForwardModel, opts: PlannerOptions): number {
 /**
  * Applies a {@link PlanAction} to `model` (already a clone). Locates the card by
  * `battleCardId` so the action composes against any equivalent state, then
- * mutates via the card model (plays + triggers) or a back-rank→front-rank move.
+ * mutates via the card model or a back-rank→front-rank move.
  */
 function applyAction(model: ForwardModel, action: PlanAction): void {
   if (action.kind === "PLAY_CARD") {
@@ -133,9 +133,6 @@ function applyAction(model: ForwardModel, action: PlanAction): void {
     const live = model.aiHand.find((c) => c.battleCardId === action.card.battleCardId);
     const self = live ?? action.card;
     cardModel.play(model, self, action.targets);
-    // `play` does NOT fire triggers; ▸Materialized fires immediately on entering
-    // play (e.g. Circlewatch's Foresee), so the planner fires it here.
-    cardModel.onMaterialized?.(model, self);
     return;
   }
   // MOVE_CARD: back rank → empty front-rank slot.

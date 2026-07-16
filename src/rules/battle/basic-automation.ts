@@ -22,7 +22,7 @@ const NO_SUPPORT_CONTRIBUTION: ReadonlyMap<string, number> = new Map();
  * The eight battle phases in turn order (rules §Turn Structure). Five phases —
  * Dawn, Day, Dusk, Night, and Challenge — are surfaced in the UI, but only four
  * of those (Day, Dusk, Night, Challenge) carry player actions. Dawn auto-advances
- * after waking Dawn triggers, as do the Dreamwell, Draw, and Ending bookends.
+ * after clearing exhaustion, as do the Dreamwell, Draw, and Ending bookends.
  */
 const PHASE_SEQUENCE: readonly BattlePhase[] = [
   "dreamwell",
@@ -83,9 +83,8 @@ const BOOKEND_PHASES: ReadonlySet<BattlePhase> = new Set<BattlePhase>([
  *  - **Start of turn draws.** The incoming player draws a card on the handoff
  *    (skipped on the very first turn of the battle) (rules §Turn Structure —
  *    Draw).
- *  - **Dawn is the reducer's job.** The exhaustion clear and Dawn triggers a
- *    side gets when it begins its turn (rules §Dawn) are fired by the reducer's
- *    `BATTLE_COMMAND` (the sole Dawn owner), not by this expansion.
+ *  - **Dawn is the reducer's job.** The exhaustion clear a side gets when it
+ *    begins its turn is fired by the reducer's `BATTLE_COMMAND`.
  *  - **End-of-turn hand limit.** The outgoing player discards down to ten cards
  *    (rules §Turn Structure — Ending).
  *  - **Ending banishes end-of-turn statuses.** After the hand-limit discard, the
@@ -292,12 +291,9 @@ function planTurnHandoff(
     commands.push(autoCommand(banishEdit));
   }
 
-  // The user's own flow edit performs the side flip. The incoming side's ▸Dawn
-  // (exhaustion clear + Dawn triggers) is fired by the reducer's `BATTLE_COMMAND`
-  // when it folds THIS flip edit (the handoff edge — see
-  // `BattleFoldState.dawnFired`), so the client expansion does not emit it: Dawn
-  // triggers draw from the seq-keyed rng and can be interactive prompts, which a
-  // client cannot bake into logged edits deterministically. The incoming side's
+  // The user's own flow edit performs the side flip. The incoming side's Dawn
+  // exhaustion clear is fired by the reducer's `BATTLE_COMMAND` when it folds
+  // this flip edit. The incoming side's
   // energy is raised separately when its Dreamwell card is revealed on the
   // Dreamwell phase the handoff lands on (see `planDreamwellReveal`).
   commands.push(command);
@@ -386,9 +382,8 @@ function nextSurfaceableTarget(phase: BattlePhase): BattlePhase {
  *
  *  - **Draw:** draw one card for the active side, skipping only the first
  *    player's first turn (see `drawsAtStartOfTurn`).
- *  - **Dawn:** no edits — the reducer's `BATTLE_COMMAND` is the sole Dawn owner
- *    and fires the exhaustion clear + Dawn triggers when it folds the committed
- *    `SET_PHASE dawn` edit this expansion emits (see `BattleFoldState.dawnFired`).
+ *  - **Dawn:** no edits — the reducer owns the exhaustion clear when it folds
+ *    the committed `SET_PHASE dawn` edit.
  *  - **Ending:** discard the active side down to the hand limit, then banish its
  *    end-of-turn statuses (ephemeral in hand, offering in play).
  */
@@ -404,11 +399,7 @@ function bookendEffectEdits(
         ? [{ kind: "DRAW_CARD", side }]
         : [];
     case "dawn":
-      // Dawn (exhaustion clear + Dawn triggers) is fired by the reducer's
-      // `BATTLE_COMMAND` on the committed-`dawn`-phase edge, which the SET_PHASE
-      // dawn navigation this expansion emits crosses. The reducer is the sole
-      // Dawn owner (Dawn triggers use the seq-keyed rng and may be interactive
-      // prompts), so the client expansion contributes no dawn edits here.
+      // The reducer clears exhaustion on the committed Dawn phase edge.
       return [];
     case "ending":
       return [

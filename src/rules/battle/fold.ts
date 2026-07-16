@@ -16,8 +16,6 @@ import type {
   BattleMutableState,
   BattleSide,
 } from "../../battle/types";
-import { rankSlotIds } from "../../battle/types";
-import { selectBattleCardEffectScript } from "./battle-card-effects-table";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
 import type { ActivePrompt } from "./effect-runner-core";
 import type { EffectStep } from "./effect-step";
@@ -26,7 +24,7 @@ import type { EffectStep } from "./effect-step";
 // Cursor + run model
 // ---------------------------------------------------------------------------
 
-/** Key into the two static effect-script tables. `id` is a card/dreamwell UUID. */
+/** Key into a static effect-script table. `id` is a card UUID. */
 export interface ScriptRef {
   table: "battle" | "dreamwell";
   id: string;
@@ -54,7 +52,7 @@ export interface EffectRun {
   scriptRef: ScriptRef;
   cursor: number[];
   side: BattleSide;
-  /** Triggering in-play character id, for self-targeting scripts (Dawn/Materialized). */
+  /** Persisted for compatibility with older queued runs. */
   sourceInstanceId?: string;
 }
 
@@ -106,11 +104,8 @@ export interface BattleFoldState {
     turnNumber: number;
   };
   /**
-   * Per-side once-per-turn ▸Dawn guard: the last turn number for which each
-   * side's Dawn bookend + triggers fired. The reducer is the SOLE Dawn owner
-   * (design decision: Dawn triggers draw from the seq-keyed `ctx.rng` and can be
-   * interactive prompts, so a client cannot bake them into logged edits and have
-   * the fold reproduce them deterministically). It fires a side's Dawn exactly
+   * Per-side once-per-turn Dawn guard: the last turn number for which each
+   * side's structural Dawn bookend fired. The reducer fires a side's Dawn exactly
    * once per turn — on the committed-`dawn`-phase edge OR on the turn handoff
    * that flips the active side into a new turn (the automation flow lands the
    * incoming side on `dreamwell`, never crossing the dawn phase) — applying it
@@ -138,13 +133,12 @@ export function emptyDawnFired(): DawnFiredMarker {
 // ---------------------------------------------------------------------------
 
 /**
- * Resolves a {@link ScriptRef} to its live `EffectStep[]` via the static tables.
- * Returns `[]` when the id is unregistered (or a battle card has no `steps`),
- * so a stale/unknown cursor drives cleanly to "done" rather than throwing.
+ * Resolves a {@link ScriptRef} to its live `EffectStep[]`. Character effect runs
+ * are retained as a stale-state compatibility case and resolve to no steps.
  */
 export function resolveScript(ref: ScriptRef): EffectStep[] {
   if (ref.table === "battle") {
-    return selectBattleCardEffectScript(ref.id)?.steps ?? [];
+    return [];
   }
   return selectDreamwellEffectScript(ref.id)?.steps ?? [];
 }
@@ -162,77 +156,4 @@ export function newEffectRun(
   return sourceInstanceId === undefined
     ? { scriptRef, cursor: [0], side }
     : { scriptRef, cursor: [0], side, sourceInstanceId };
-}
-
-// ---------------------------------------------------------------------------
-// ▸Materialized trigger detection (shared by BATTLE_COMMAND and the driver)
-// ---------------------------------------------------------------------------
-
-/**
- * All non-null front- and back-rank occupant ids, both sides, in a FIXED order
- * (player then enemy; each side's back rank then front rank, left to right).
- * This is the "in-play" set the ▸Materialized trigger tracks — an id that newly
- * appears here has just entered play and is eligible to fire its trigger once.
- * A pure function of the board, reused by both the command-level fold step and
- * the driver's per-dispatch cascade detection.
- */
-export function inPlayInstanceIds(state: BattleMutableState): string[] {
-  const ids: string[] = [];
-  for (const side of ["player", "enemy"] as const) {
-    for (const slotId of rankSlotIds(state.sides[side].backRank)) {
-      const id = state.sides[side].backRank[slotId];
-      if (id !== null) {
-        ids.push(id);
-      }
-    }
-    for (const slotId of rankSlotIds(state.sides[side].frontRank)) {
-      const id = state.sides[side].frontRank[slotId];
-      if (id !== null) {
-        ids.push(id);
-      }
-    }
-  }
-  return ids;
-}
-
-/**
- * The ▸Materialized {@link EffectRun}s for every id that is in play in `state`
- * but was NOT in `previousInPlay`, and whose card has a registered non-empty
- * `"materialized"` script. Iteration follows {@link inPlayInstanceIds} order so
- * the resulting runs are deterministic. Each run's `scriptRef.id` is the card
- * UUID, `side` is the instance's controller, and `sourceInstanceId` is the
- * in-play id (for self-targeting scripts).
- *
- * A pure, diff-driven board-diff. Because only NEWLY-present ids fire, an id
- * already in play (or already fired) never re-fires, and a run whose edits move a
- * card already in play enqueues nothing — so a cascade that stops surfacing new
- * characters terminates. The driver calls this around each queued dispatch so a
- * character brought into play by a queued script fires its own ▸Materialized,
- * chaining multi-level cascades to a fixpoint.
- */
-export function collectMaterializedRuns(
-  previousInPlay: ReadonlySet<string>,
-  state: BattleMutableState,
-): EffectRun[] {
-  const runs: EffectRun[] = [];
-  for (const id of inPlayInstanceIds(state)) {
-    if (previousInPlay.has(id)) {
-      continue;
-    }
-    const instance = state.cardInstances[id];
-    if (instance === undefined) {
-      continue;
-    }
-    const script = selectBattleCardEffectScript(instance.definition.cardId);
-    if (
-      script === null ||
-      script.trigger !== "materialized" ||
-      script.steps === undefined ||
-      script.steps.length === 0
-    ) {
-      continue;
-    }
-    runs.push(newEffectRun({ table: "battle", id: instance.definition.cardId }, instance.controller, id));
-  }
-  return runs;
 }

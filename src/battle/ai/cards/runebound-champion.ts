@@ -3,9 +3,8 @@ import type { StarterCardModel } from "./index";
 import { characterCanPlay, playCharacterToBackRank } from "./helpers";
 
 /**
- * #513 Runebound Champion (Character, 5●, 3✦) — "▸Dawn: Gain 1⍟."
- * (`battle_ai.md` §"The AI Deck"). An inevitability engine: each Dawn it
- * scores a point, so its value rises the longer the game runs.
+ * Starter character #513. Its rules text is resolved manually; the AI model
+ * handles only playing and positioning the body.
  */
 export const runeboundChampion: StarterCardModel = {
   cardNumber: 513,
@@ -17,8 +16,5 @@ export const runeboundChampion: StarterCardModel = {
   },
   play(model: ForwardModel, self: AiCard): void {
     playCharacterToBackRank(model, self);
-  },
-  onDawn(model: ForwardModel): void {
-    model.aiScore += 1;
   },
 };

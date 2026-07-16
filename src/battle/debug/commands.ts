@@ -190,7 +190,7 @@ export type BattleDebugEdit =
   | {
     // Merges a partial `BattleCardStatus` onto the instance's status. Basic
     // automation emits this during the Dawn phase to clear `isExhausted` on the
-    // incoming side's characters (rules §Dawn). Task 4.1 extends its handler
+    // incoming side's characters (rules §Dawn). Its handler
     // with the ☪ auto-retreat behaviour and surfaces the toggle UI.
     kind: "SET_CARD_STATUS";
     battleCardId: string;

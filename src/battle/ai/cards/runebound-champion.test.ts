@@ -1,52 +1,37 @@
 import { describe, expect, it } from "vitest";
-import { runeboundChampion } from "./runebound-champion";
+import { emptyBackRankSlots, emptyFrontRankSlots } from "../../test-support";
 import type { AiCard, ForwardModel } from "../forward-model";
-import { emptyFrontRankSlots, emptyBackRankSlots } from "../../test-support";
+import { runeboundChampion } from "./runebound-champion";
 
-function makeCard(overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">): AiCard {
-  return {
-    name: "card",
-    energyCost: 0,
-    basePrintedSpark: 0,
-    sparkDelta: 0,
-    figmentCount: 1,
-    canChallengeThisTurn: true,
-    ...overrides,
-  };
-}
-
-function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
-  return {
-    aiEnergy: 5,
-    aiMaxEnergy: 5,
-    aiScore: 0,
-    playerScore: 0,
-    aiHand: [],
-    aiDeck: [],
-    aiVoid: [],
-    aiFrontRank: emptyFrontRankSlots(),
-    aiBackRank: emptyBackRankSlots(),
-    opponentBodies: [],
-    opponentHandCount: 0,
-    opponentVoidCount: 0,
-    ...overrides,
-  };
-}
-
-describe("Runebound Champion (#513)", () => {
-  it("onDawn increases aiScore by 1", () => {
-    const self = makeCard({ battleCardId: "champ", cardNumber: 513 });
-    const model = makeModel({ aiScore: 4 });
-    runeboundChampion.onDawn?.(model, self);
-    expect(model.aiScore).toBe(5);
-  });
-
-  it("play materializes the character into reserve, exhausted", () => {
-    const self = makeCard({ battleCardId: "champ", cardNumber: 513, energyCost: 5 });
-    const model = makeModel({ aiEnergy: 6, aiHand: [self] });
+describe("starter character #513", () => {
+  it("plays the character into the back rank without resolving its rules text", () => {
+    const self: AiCard = {
+      battleCardId: "champ",
+      cardNumber: 513,
+      name: "card",
+      energyCost: 5,
+      basePrintedSpark: 3,
+      sparkDelta: 0,
+      figmentCount: 1,
+      canChallengeThisTurn: true,
+    };
+    const model: ForwardModel = {
+      aiEnergy: 6,
+      aiMaxEnergy: 6,
+      aiScore: 4,
+      playerScore: 0,
+      aiHand: [self],
+      aiDeck: [],
+      aiVoid: [],
+      aiFrontRank: emptyFrontRankSlots(),
+      aiBackRank: emptyBackRankSlots(),
+      opponentBodies: [],
+      opponentHandCount: 0,
+      opponentVoidCount: 0,
+    };
     runeboundChampion.play(model, self, null);
     expect(model.aiEnergy).toBe(1);
+    expect(model.aiScore).toBe(4);
     expect(model.aiBackRank.B0?.battleCardId).toBe("champ");
-    expect(model.aiBackRank.B0?.canChallengeThisTurn).toBe(false);
   });
 });

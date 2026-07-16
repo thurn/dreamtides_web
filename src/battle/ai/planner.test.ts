@@ -222,7 +222,6 @@ describe("planNextAction", () => {
           // Apply against the live model, mirroring the driver's commit path.
           const targets = cardModel?.chooseTargets(model, self) ?? null;
           cardModel?.play(model, self, action.targets ?? targets);
-          cardModel?.onMaterialized?.(model, self);
         } else if (action.kind === "MOVE_CARD") {
           const self = action.self as AiCard;
           const toSlot = action.toSlot as "F0";

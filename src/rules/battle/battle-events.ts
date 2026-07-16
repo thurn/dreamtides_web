@@ -50,10 +50,7 @@ import type {
 import type { FoldState } from "../fold-state";
 import { applyDebugEdit, forceBattleResult } from "./apply-debug-edit";
 import {
-  collectDawnTriggerEdits,
-  dawnScriptIsInteractive,
   planSupportRecompute,
-  selectBattleCardEffectScript,
 } from "./battle-card-effects-table";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
 import {
@@ -66,11 +63,8 @@ import { forwardModelFromState } from "../../battle/ai/forward-model";
 import { planDefense } from "../../battle/ai/defense";
 import { actionToCommands } from "../../battle/ai/driver";
 import { buildTrace } from "../../battle/ai/trace";
-import { alliesInPlay } from "./effect-step";
 import { planBasicAutomationCommands } from "./basic-automation";
 import {
-  collectMaterializedRuns,
-  inPlayInstanceIds,
   newEffectRun,
   type BattleFoldState,
   type EffectRun,
@@ -377,24 +371,17 @@ const BATTLE_SIDES: readonly BattleSide[] = ["player", "enemy"];
  * In order (design spec §Battle events):
  *   1. Apply the command (`DEBUG_EDIT` → `applyDebugEdit`; `FORCE_RESULT` /
  *      `SKIP_TO_REWARDS` → `forceBattleResult`).
- *   2. ▸Materialized: diff the in-play instance-id set before/after this single
- *      edit; each newly-present id with a registered `"materialized"` script
- *      pushes an `EffectRun` (FIFO in `inPlayInstanceIds` order — back rank then
- *      front rank, player then enemy).
- *   3. ▸Dawn: when the edit ADVANCED the phase into Dawn (`phase` was not `dawn`
- *      and now is), on a turn that has a Dawn (`turnNumber > 1`), apply the
- *      deterministic Dawn edits (`dawnClearEdits` + `collectDawnTriggerEdits`)
- *      and queue any interactive Dawn scripts, fired at most once per (side,
- *      turn) via the `dawnFired` marker.
- *   4. Dreamwell: for EACH side, when this edit LANDED that side's Dreamwell
+ *   2. Dawn: when the edit advances into Dawn or hands off to a new active side,
+ *      clear that side's exhaustion once for the turn.
+ *   3. Dreamwell: for EACH side, when this edit LANDED that side's Dreamwell
  *      reveal (`dreamwellDrawnTurn` transitioned to `turnNumber`) during the
  *      `"dreamwell"` phase on `turnNumber > 1`, queue the revealed card's script
  *      — the card at `init.dreamwellDeck[dreamwellCardIndex]`. Checking both
  *      sides (not just the active one) fires a non-active-side extra draw's
  *      reveal (the Lily Lake case). The reveal edge is itself the once-per-turn
  *      guard.
- *   5. `advanceEffectQueue` until a prompt is pending or the queue empties.
- *   6. Support recompute AFTER the drain: run `planSupportRecompute` on the
+ *   4. `advanceEffectQueue` until a prompt is pending or the queue empties.
+ *   5. Support recompute AFTER the drain: run `planSupportRecompute` on the
  *      drained board and apply its edits, preserving the drain's
  *      `pendingPrompt`/`effectQueue`. A queued effect can move a supporter or
  *      supported card, so recomputing after the drain keeps `staticSparkBonus`
@@ -421,25 +408,10 @@ function applyBattleCommandStep(
 
   const queue: EffectRun[] = [...battle.effectQueue];
 
-  // Step 2 — ▸Materialized: newly-present in-play ids with a materialized script.
-  // Only the COMMAND edit is applied here (the driver applies queued dispatches),
-  // so this detects materialization caused by the command edit itself. Cascades
-  // from queued scripts' edits are detected inside the driver's drain (fold.ts
-  // `collectMaterializedRuns` is called around each dispatch), so a card fires
-  // exactly once regardless of which layer moved it into play.
-  const isBattlefieldPreview =
-    command.id === "DEBUG_EDIT" &&
-    command.edit.kind === "FILL_BATTLEFIELD_PREVIEW";
-  if (!isBattlefieldPreview) {
-    const inPlayBefore = new Set(inPlayInstanceIds(boardBefore));
-    queue.push(...collectMaterializedRuns(inPlayBefore, boardAfter));
-  }
-
   let board = boardAfter;
   let dawnFired = battle.dawnFired;
 
-  // Step 3 — ▸Dawn bookend + interactive Dawn, fired EXACTLY ONCE per (side,
-  // turn) by the reducer (the sole Dawn owner — see `BattleFoldState.dawnFired`).
+  // Step 2 — structural Dawn bookend, fired exactly once per side and turn.
   // The incoming side's Dawn is due when this edit either:
   //   - crossed into the committed `dawn` phase (an explicit `SET_PHASE dawn`,
   //     e.g. from the inspector) — the "entered dawn" edge; or
@@ -447,10 +419,7 @@ function applyBattleCommandStep(
   //     handoff (`SET_BATTLE_FLOW`) lands the incoming side on `dreamwell` and
   //     never crosses the dawn phase, so the handoff edge is what fires the
   //     incoming side's Dawn.
-  // Turn 1 has no Dawn (rules), and Dawn never fires once the battle has a
-  // result. The `dawnFired` marker makes it at-most-once per (side, turn), so a
-  // handoff followed by a same-turn `SET_PHASE dawn` — or a rewind that replays a
-  // handoff — cannot re-fire the non-idempotent Dawn triggers.
+  // Turn 1 has no Dawn, and Dawn never fires once the battle has a result.
   const enteredDawn = boardBefore.phase !== "dawn" && boardAfter.phase === "dawn";
   const handedOff = boardBefore.activeSide !== boardAfter.activeSide;
   if (
@@ -460,17 +429,11 @@ function applyBattleCommandStep(
     dawnFired[boardAfter.activeSide] !== boardAfter.turnNumber
   ) {
     const side = boardAfter.activeSide;
-    board = applyBoardEdits(board, [
-      ...dawnClearEdits(board, side),
-      ...collectDawnTriggerEdits(board, side, random, nowMs),
-    ]);
-    for (const run of collectInteractiveDawnRuns(board, side)) {
-      queue.push(run);
-    }
+    board = applyBoardEdits(board, dawnClearEdits(board, side));
     dawnFired = { ...dawnFired, [side]: boardAfter.turnNumber };
   }
 
-  // Step 4 — Dreamwell reveal → queue the revealed card's script. Checked
+  // Step 3 — Dreamwell reveal → queue the revealed card's script. Checked
   // per-side (not just the active side) so a manual extra draw for the
   // non-active side (Lily Lake) queues that side's revealed script too.
   for (const side of BATTLE_SIDES) {
@@ -499,7 +462,7 @@ function applyBattleCommandStep(
     }
   }
 
-  // Step 5 — advance the queue, continuing the SAME draw counter.
+  // Step 4 — advance the queue, continuing the SAME draw counter.
   const advanced = advanceEffectQueueWithStream(
     { ...battle, board, effectQueue: queue, pendingPrompt: null, dawnFired },
     seq,
@@ -507,7 +470,7 @@ function applyBattleCommandStep(
     nowMs,
   );
 
-  // Step 6 — Support recompute AFTER the drain (a queued effect may have moved a
+  // Step 5 — Support recompute AFTER the drain (a queued effect may have moved a
   // supporter/supported card). Idempotent, so applying it to the drained board
   // while a prompt is parked is safe; preserve the drain's queue and prompt.
   return {
@@ -522,8 +485,8 @@ function applyBattleCommandStep(
 /**
  * `BATTLE_COMMAND { command }`: the single synchronous fold step for one battle
  * command. Applies the command through {@link applyBattleCommandStep} — its edit
- * plus every trigger it exposes (▸Materialized / ▸Dawn / Dreamwell / Support and
- * force-result routing) — so a single event in yields a fully-triggered state
+ * plus structural Dawn, Dreamwell, Support, and force-result routing — so a
+ * single event in yields a fully-triggered state
  * out and two clients folding the same (seed, seq) converge byte-for-byte.
  *
  * Returns the next {@link FoldState}, or `null` to bounce when there is no
@@ -681,35 +644,6 @@ export function battleAiDefend(
       },
     },
   };
-}
-
-/**
- * The interactive ▸Dawn runs for `side`'s in-play characters whose registered
- * `"dawn"` script needs player input (`dawnScriptIsInteractive`). Deterministic
- * Dawn scripts are NOT returned — their edits already ran in the bookend
- * (`collectDawnTriggerEdits`). Iteration follows `alliesInPlay` order (back rank
- * then front rank) for a deterministic queue.
- */
-function collectInteractiveDawnRuns(
-  state: BattleMutableState,
-  side: BattleSide,
-): EffectRun[] {
-  const runs: EffectRun[] = [];
-  for (const id of alliesInPlay(state, side)) {
-    const instance = state.cardInstances[id];
-    if (instance === undefined) {
-      continue;
-    }
-    const script = selectBattleCardEffectScript(instance.definition.cardId);
-    if (script === null || script.trigger !== "dawn" || script.steps === undefined) {
-      continue;
-    }
-    if (!dawnScriptIsInteractive(script)) {
-      continue;
-    }
-    runs.push(newEffectRun({ table: "battle", id: instance.definition.cardId }, side, id));
-  }
-  return runs;
 }
 
 /** Applies the command's board mutation, routing the three command ids

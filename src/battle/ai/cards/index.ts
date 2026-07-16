@@ -12,18 +12,7 @@ export interface StarterCardModel {
   canPlay(model: ForwardModel, self: AiCard): boolean;
   chooseTargets(model: ForwardModel, self: AiCard): AiTargetChoice | null;
   play(model: ForwardModel, self: AiCard, targets: AiTargetChoice | null): void; // mutates the model
-  onMaterialized?(model: ForwardModel, self: AiCard): void;
-  onDawn?(model: ForwardModel, self: AiCard): void;
-  onDissolved?(model: ForwardModel, self: AiCard): void;
   supportSpark?(model: ForwardModel, self: AiCard): number | null; // feeds effectiveSpark's supportSources
-  /**
-   * Flat +✦ bonus a deployed card grants to ITSELF from a self-static (e.g.
-   * Wildflower Colossus's "+2✦ for each supporting ally"). Returns 0/`null`
-   * when the static is inactive (card not deployed, no supporters). Distinct
-   * from {@link supportSpark}, which a back-rank card grants to OTHER front
-   * allies. See `battle_ai.md` §"Per-Card Knowledge".
-   */
-  selfStaticSpark?(model: ForwardModel, self: AiCard): number;
   valueHint?(model: ForwardModel, self: AiCard): number;
 }
 

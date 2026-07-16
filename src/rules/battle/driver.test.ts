@@ -10,7 +10,6 @@ import { applyDebugEdit } from "./apply-debug-edit";
 import type { ActivePrompt, PromptResolution } from "./effect-runner-core";
 import { isoTimestampToMs } from "./timestamp";
 import type { EffectStep } from "./effect-step";
-import { BATTLE_CARD_EFFECTS } from "./battle-card-effects-table";
 import { DREAMWELL_EFFECTS } from "./dreamwell-effects-table";
 import type { BattleFoldState, EffectRun, ScriptRef } from "./fold";
 import { emptyDawnFired, newEffectRun, resolveScript } from "./fold";
@@ -495,26 +494,5 @@ describe("advanceEffectQueue — multi-run FIFO", () => {
       context,
     );
     expect(hashBoard(result.board)).toBe(hashBoard(expected));
-  });
-});
-
-// A registered battle-card materialized script (Ashwalker-style erode) also
-// drives cleanly through the driver — proves the "battle" table ref path.
-describe("advanceEffectQueue — battle-table script", () => {
-  it("resolves an edit-only battle-card script from the battle table", () => {
-    let ref: ScriptRef | null = null;
-    for (const [id, script] of Object.entries(BATTLE_CARD_EFFECTS)) {
-      if (script.steps !== undefined && script.steps.length > 0 && script.steps.every((s) => s.kind === "edits")) {
-        ref = { table: "battle", id };
-        break;
-      }
-    }
-    if (ref === null) throw new Error("no edit-only battle-card script registered");
-    const context = ctx({ seq: 4 });
-
-    const result = advanceEffectQueue(foldState([newEffectRun(ref, "player", "h0")]), context);
-
-    expect(result.pendingPrompt).toBeNull();
-    expect(result.effectQueue).toEqual([]);
   });
 });

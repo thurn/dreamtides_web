@@ -16,8 +16,8 @@
 // the TOML data, which AGENTS.md forbids. When an intentional reducer /
 // rules-table change moves the hashes, re-run this script to re-stamp
 // `finalHash`. Per AGENTS.md the fixtures assert on HASHES only, never on TOML
-// card content: the card scripts are selected from the live effects table by
-// STRUCTURE, and card
+// card content: Dreamwell scripts are selected from the live effects table by
+// structure, and card
 // definitions in the fixtures are synthetic, so a TOML edit does not move them.
 //
 // Determinism check: run twice; the two runs must produce byte-identical files.
@@ -80,6 +80,10 @@ function moveToFront(battleCardId, slotId) {
   });
 }
 
+function drawDreamwell() {
+  return debugEdit({ kind: "DRAW_DREAMWELL_CARD", side: "player", turnNumber: 2 });
+}
+
 function genesis(seed) {
   // `contentConfig` is pinned into every genesis at room creation; the fold
   // never reads it, so a fixed placeholder keeps fixtures a valid Genesis shape
@@ -137,7 +141,7 @@ function questOnlyFixture() {
 }
 
 // ---------------------------------------------------------------------------
-// (b) battle: begin -> materialize -> prompt -> resolve -> end victory
+// (b) battle: begin -> move character -> Dreamwell prompt -> resolve -> victory
 // ---------------------------------------------------------------------------
 
 function battleFixture() {
@@ -147,12 +151,12 @@ function battleFixture() {
     ["START_QUEST", { dreamcallerId: DREAMCALLER_ID }],
     ["BEGIN_BATTLE", { siteId: BATTLE_SITE_ID }],
     ["BATTLE_COMMAND", moveToFront(BATTLE_CARD_DETERMINISTIC, DETERMINISTIC_SLOT)],
-    ["BATTLE_COMMAND", moveToFront(BATTLE_CARD_FORESEE, FORESEE_SLOT)],
+    ["BATTLE_COMMAND", drawDreamwell()],
   ]);
   const parked = replayLog({ genesis: gen, events: prefix });
   const promptId = parked.finalState.battle?.pendingPrompt?.promptId;
   if (typeof promptId !== "number") {
-    throw new Error("battle fixture: BATTLE_COMMAND did not park a prompt");
+    throw new Error("battle fixture: Dreamwell reveal did not park a prompt");
   }
   const events = [
     ...prefix,
@@ -190,14 +194,14 @@ function adversarialFixture() {
     // OPEN_SITE race — both apply (CAS-exempt); bob's is an idempotent no-op.
     ev(4, "OPEN_SITE", { siteId: ESSENCE_SITE_ID }, "alice", 1),
     ev(5, "OPEN_SITE", { siteId: ESSENCE_SITE_ID }, "bob", 1),
-    // Begin a battle and park a foresee prompt.
+    // Begin a battle and park a Dreamwell Foresee prompt.
     ev(6, "BEGIN_BATTLE", { siteId: BATTLE_SITE_ID }, "alice", 5),
-    ev(7, "BATTLE_COMMAND", moveToFront(BATTLE_CARD_FORESEE, FORESEE_SLOT), "alice", 6),
+    ev(7, "BATTLE_COMMAND", drawDreamwell(), "alice", 6),
   ];
   const parked = replayLog({ genesis: gen, events: prefix });
   const promptId = parked.finalState.battle?.pendingPrompt?.promptId;
   if (typeof promptId !== "number") {
-    throw new Error("adversarial fixture: BATTLE_COMMAND did not park a prompt");
+    throw new Error("adversarial fixture: Dreamwell reveal did not park a prompt");
   }
   const events = [
     ...prefix,
@@ -210,7 +214,7 @@ function adversarialFixture() {
     2: "applied",
     3: "bounced", // CAS intervening-window bounce
     4: "applied",
-    5: "applied", // OPEN_SITE race — idempotent no-op still applies
+    5: "bounced", // OPEN_SITE race loser observes the already-open site
     6: "applied",
     7: "applied",
     8: "applied", // prompt race winner

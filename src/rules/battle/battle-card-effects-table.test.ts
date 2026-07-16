@@ -18,34 +18,16 @@ describe("BATTLE_CARD_EFFECTS structural invariants", () => {
     }
   });
 
-  it("every trigger is one of the allowed values", () => {
+  it("contains only Support scripts", () => {
     for (const script of Object.values(BATTLE_CARD_EFFECTS)) {
-      expect(["dawn", "materialized", "support"]).toContain(script.trigger);
+      expect(script.trigger).toBe("support");
     }
   });
 
-  it('every "support" entry has a support object and no steps', () => {
+  it("every entry exposes callable Support behavior", () => {
     for (const script of Object.values(BATTLE_CARD_EFFECTS)) {
-      if (script.trigger !== "support") continue;
-      expect(script.support).toBeDefined();
-      expect(script.steps).toBeUndefined();
-    }
-  });
-
-  it('every "dawn"/"materialized" entry has a non-empty steps array and no support', () => {
-    for (const script of Object.values(BATTLE_CARD_EFFECTS)) {
-      if (script.trigger === "support") continue;
-      expect(Array.isArray(script.steps)).toBe(true);
-      expect(script.steps?.length ?? 0).toBeGreaterThan(0);
-      expect(script.support).toBeUndefined();
-    }
-  });
-
-  it('every "support" entry exposes callable bonus and (when present) applies', () => {
-    for (const script of Object.values(BATTLE_CARD_EFFECTS)) {
-      if (script.trigger !== "support") continue;
-      expect(typeof script.support?.bonus).toBe("function");
-      if (script.support?.applies !== undefined) {
+      expect(typeof script.support.bonus).toBe("function");
+      if (script.support.applies !== undefined) {
         expect(typeof script.support.applies).toBe("function");
       }
     }
@@ -65,6 +47,10 @@ describe("battleCardAutomationStatus", () => {
 
   it('returns "none" for an unregistered id', () => {
     expect(battleCardAutomationStatus(UNREGISTERED_ID)).toBe("none");
+  });
+
+  it('returns "none" for a character with a manual triggered effect', () => {
+    expect(battleCardAutomationStatus("647f5150-b2e0-424b-9480-27557642524e")).toBe("none");
   });
 });
 

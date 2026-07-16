@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Audit Dawn / Materialized / Support automation candidates.
+// Audit character rules text while enforcing Support-only automation.
 //
 // Loads public/cards_v2-data.json (a JSON ARRAY of card objects, each with
 // `id` UUID, `name`, `renderedText`, `subtype`, `energyCost`, `cardType`) and
@@ -41,6 +41,11 @@
 //   card would fire both triggers' effects on one trigger, producing wrong game
 //   state. Err toward manual: never feed flattened multi-trigger steps
 //   downstream.
+//
+// Automation policy:
+//   - Support is the only character mechanic eligible for automation.
+//   - Dawn and Materialized effects are cataloged for visibility and classified
+//     manual even when their effect text could be expressed by a builder.
 //
 // Classification rules:
 //   - multi-trigger : triggers.length > 1 -> manual, scriptable:false (see
@@ -214,7 +219,7 @@ function parseSupport(body) {
   // e.g. "Supported spirit animals have +2✦."
   //      "Supported allies have +2✦ and have unstoppable."
   let m = body.match(
-    /^Supported ([a-z ]+?) have \+(\d+)✦( and have unstoppable)?\.?$/
+    /^Supported ([a-z ]+?) have \+(\d+)✦( and (?:have )?unstoppable)?\.?$/
   );
   if (m) {
     const filterPhrase = m[1].trim();
@@ -258,6 +263,14 @@ const DETERMINISTIC_KINDS = new Set([
  * note. Returns { classification, scriptable, notes? }.
  */
 function classify(triggers, atoms, partialNote) {
+  if (triggers.some((trigger) => trigger !== 'support')) {
+    return {
+      classification: 'manual',
+      scriptable: false,
+      notes: 'character-triggered effects are resolved manually; only Support is automated',
+    };
+  }
+
   // Multi-trigger cards cannot be automated by the single-trigger registry:
   // registering one trigger would also run the other trigger's flattened
   // steps. Mark manual regardless of how scriptable the effects look.

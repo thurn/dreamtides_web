@@ -67,13 +67,9 @@
           "command": {
             "id": "DEBUG_EDIT",
             "edit": {
-              "kind": "MOVE_CARD_TO_ZONE",
-              "battleCardId": "bc-foresee",
-              "destination": {
-                "side": "player",
-                "zone": "frontRank",
-                "slotId": "F1"
-              }
+              "kind": "DRAW_DREAMWELL_CARD",
+              "side": "player",
+              "turnNumber": 2
             }
           }
         },

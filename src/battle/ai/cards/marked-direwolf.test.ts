@@ -34,12 +34,8 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
 }
 
 describe("Marked Direwolf (#512)", () => {
-  it("is vanilla: no trigger or static hooks defined", () => {
-    expect("onMaterialized" in markedDirewolf).toBe(false);
-    expect("onDawn" in markedDirewolf).toBe(false);
-    expect("onDissolved" in markedDirewolf).toBe(false);
+  it("does not provide Support", () => {
     expect("supportSpark" in markedDirewolf).toBe(false);
-    expect("selfStaticSpark" in markedDirewolf).toBe(false);
   });
 
   it("play pays energy and occupies a reserve slot, exhausted", () => {

@@ -7,16 +7,10 @@ import { starterCardModels } from "./index";
  * Computes every card-keyed +✦ bonus currently active on the AI's board.
  *
  * Returns a map from a front-rank card's `battleCardId` to the total flat spark
- * bonus it receives, combining the two static sources in the Starter pool
- * (see `battle_ai.md` §"Per-Card Knowledge"):
- *
- * - **Support** (e.g. Nocturne Strummer): for each occupied back-rank card whose
+ * bonus it receives from Support: for each occupied back-rank card whose
  *   model returns a `supportSpark` value `V`, add `V` to every occupied
  *   front-rank card sitting in a slot that back-rank card supports (per
  *   `supportedDeploySlots`).
- * - **Self-static** (e.g. Wildflower Colossus): for each occupied front-rank
- *   card whose model returns a `selfStaticSpark` value `V`, add `V` to that
- *   card's own id.
  *
  * Each on-board card's behavior is looked up by `cardNumber` in
  * {@link starterCardModels}; cards without a registered model contribute
@@ -51,19 +45,6 @@ export function buildSupportContribution(model: ForwardModel): Map<string, numbe
       if (frontRankCard !== null) {
         add(frontRankCard.battleCardId, bonus);
       }
-    }
-  }
-
-  // Self-static: front-rank cards buffing themselves.
-  for (const frontRankSlot of rankSlotIds(model.aiFrontRank)) {
-    const frontRankCard = model.aiFrontRank[frontRankSlot];
-    if (frontRankCard === null) {
-      continue;
-    }
-    const frontRankModel = starterCardModels.get(frontRankCard.cardNumber);
-    const selfBonus = frontRankModel?.selfStaticSpark?.(model, frontRankCard);
-    if (selfBonus !== undefined && selfBonus !== 0) {
-      add(frontRankCard.battleCardId, selfBonus);
     }
   }
 

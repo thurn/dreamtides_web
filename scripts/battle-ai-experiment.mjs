@@ -32,9 +32,9 @@
 //     deployed body in the SAME slot -- lower effective spark dissolves, a tie
 //     dissolves both, an unpaired challenger scores its spark. AI-side support
 //     uses buildSupportContribution via a per-side projection, so support math
-//     reuses the shared resolver. onDissolved fires for dissolving cards.
-//   - At the start of each side's turn we fire onDawn for that side's cards and
-//     apply the energy ramp (target = min(turnNumber+1, 10); current reset to
+//     reuses the shared resolver.
+//   - At the start of each side's turn we apply the energy ramp (target =
+//     min(turnNumber+1, 10); current reset to
 //     max), reusing energyRampEdits' formula.
 //   - Win at score >= 25; draw if the turn limit (50) is reached.
 //
@@ -285,26 +285,13 @@ function opponentSlotSet(world, activeSide) {
   return slots;
 }
 
-/** Removes the card at `slot` (deploy or reserve) from a side, firing onDissolved. */
+/** Removes the card at `slot` (deploy or reserve) from a side. */
 function dissolveOpponentSlot(side, slot) {
   const zone = DEPLOY_SLOT_IDS.includes(slot) ? side.deployed : side.reserve;
   const card = zone[slot];
   if (card === null || card === undefined) return;
   zone[slot] = null;
-  fireDissolved(side, card);
   side.void.push(card);
-}
-
-function fireDissolved(side, card) {
-  const cardModel = starterCardModels.get(card.cardNumber);
-  if (cardModel?.onDissolved !== undefined) {
-    // onDissolved (e.g. Final Witness: draw a card) mutates the OWNER's zones.
-    // Run it against a one-side projection, then write drawn zones back.
-    const view = ownBoardModel(side);
-    cardModel.onDissolved(view, card);
-    side.hand = view.aiHand;
-    side.deck = view.aiDeck;
-  }
 }
 
 // --- Actors ---------------------------------------------------------------
@@ -370,7 +357,6 @@ function applyActionToModel(model, action) {
       model.aiHand.find((c) => c.battleCardId === action.self.battleCardId) ??
       action.self;
     cardModel.play(model, live, action.targets ?? null);
-    cardModel.onMaterialized?.(model, live);
     return;
   }
   // MOVE_CARD. planNextAction returns the source reserve slot only inside
@@ -432,19 +418,11 @@ function cloneModelForProbe(model) {
 // --- Turn lifecycle -------------------------------------------------------
 const DRAW_PER_TURN = 1;
 
-/** Start-of-turn: ramp energy, fire onDawn, draw a card. */
+/** Start-of-turn: ramp energy, ready characters, and draw a card. */
 function startTurn(side, turnNumber) {
   const value = Math.min(turnNumber + 1, MAX_ENERGY_CAP);
   side.maxEnergy = value;
   side.energy = value;
-
-  // onDawn for every card on the board (Runebound Champion: gain 1 score).
-  for (const slot of DEPLOY_SLOT_IDS) {
-    fireDawn(side, side.deployed[slot]);
-  }
-  for (const slot of RESERVE_SLOT_IDS) {
-    fireDawn(side, side.reserve[slot]);
-  }
 
   // Re-arm every body so deployed challengers can act this turn.
   for (const slot of DEPLOY_SLOT_IDS) {
@@ -458,16 +436,6 @@ function startTurn(side, turnNumber) {
   for (let i = 0; i < DRAW_PER_TURN; i += 1) {
     const card = side.deck.shift();
     if (card !== undefined) side.hand.push(card);
-  }
-}
-
-function fireDawn(side, card) {
-  if (card === null || card === undefined) return;
-  const cardModel = starterCardModels.get(card.cardNumber);
-  if (cardModel?.onDawn !== undefined) {
-    const view = ownBoardModel(side);
-    cardModel.onDawn(view, card);
-    side.score = view.aiScore;
   }
 }
 

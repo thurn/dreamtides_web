@@ -1,57 +1,38 @@
 import { describe, expect, it } from "vitest";
-import { finalWitness } from "./final-witness";
+import { emptyBackRankSlots, emptyFrontRankSlots } from "../../test-support";
 import type { AiCard, ForwardModel } from "../forward-model";
-import { emptyFrontRankSlots, emptyBackRankSlots } from "../../test-support";
+import { finalWitness } from "./final-witness";
 
-function makeCard(overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">): AiCard {
-  return {
-    name: "card",
-    energyCost: 0,
-    basePrintedSpark: 0,
-    sparkDelta: 0,
-    figmentCount: 1,
-    canChallengeThisTurn: true,
-    ...overrides,
-  };
-}
-
-function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
-  return {
-    aiEnergy: 5,
-    aiMaxEnergy: 5,
-    aiScore: 0,
-    playerScore: 0,
-    aiHand: [],
-    aiDeck: [],
-    aiVoid: [],
-    aiFrontRank: emptyFrontRankSlots(),
-    aiBackRank: emptyBackRankSlots(),
-    opponentBodies: [],
-    opponentHandCount: 0,
-    opponentVoidCount: 0,
-    ...overrides,
-  };
-}
-
-describe("Final Witness (#514)", () => {
-  it("onDissolved moves the top deck card into hand (hand +1, deck -1)", () => {
-    const self = makeCard({ battleCardId: "witness", cardNumber: 514 });
-    const top = makeCard({ battleCardId: "top", cardNumber: 512 });
-    const rest = makeCard({ battleCardId: "rest", cardNumber: 513 });
-    const model = makeModel({ aiDeck: [top, rest], aiHand: [] });
-
-    finalWitness.onDissolved?.(model, self);
-
-    expect(model.aiHand.map((c) => c.battleCardId)).toEqual(["top"]);
-    expect(model.aiDeck.map((c) => c.battleCardId)).toEqual(["rest"]);
-  });
-
-  it("play materializes the character into reserve, exhausted", () => {
-    const self = makeCard({ battleCardId: "witness", cardNumber: 514, energyCost: 3 });
-    const model = makeModel({ aiEnergy: 5, aiHand: [self] });
+describe("starter character #514", () => {
+  it("plays the character into the back rank without resolving its rules text", () => {
+    const self: AiCard = {
+      battleCardId: "witness",
+      cardNumber: 514,
+      name: "card",
+      energyCost: 3,
+      basePrintedSpark: 2,
+      sparkDelta: 0,
+      figmentCount: 1,
+      canChallengeThisTurn: true,
+    };
+    const deckCard = { ...self, battleCardId: "deck-card" };
+    const model: ForwardModel = {
+      aiEnergy: 5,
+      aiMaxEnergy: 5,
+      aiScore: 0,
+      playerScore: 0,
+      aiHand: [self],
+      aiDeck: [deckCard],
+      aiVoid: [],
+      aiFrontRank: emptyFrontRankSlots(),
+      aiBackRank: emptyBackRankSlots(),
+      opponentBodies: [],
+      opponentHandCount: 0,
+      opponentVoidCount: 0,
+    };
     finalWitness.play(model, self, null);
     expect(model.aiEnergy).toBe(2);
+    expect(model.aiDeck).toEqual([deckCard]);
     expect(model.aiBackRank.B0?.battleCardId).toBe("witness");
-    expect(model.aiBackRank.B0?.canChallengeThisTurn).toBe(false);
   });
 });
