@@ -5,6 +5,7 @@ import { MINIMAL_ATLAS_CONFIG, MINIMAL_DREAMSCAPES } from "../__test-helpers__/a
 import { createRoot, type Root } from "react-dom/client";
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import { BattleSiteRoute } from "./BattleSiteRoute";
+import { CumulusRoot } from "../cumulus/CumulusRoot";
 import type { CoopActions } from "../coop/actions";
 import { createDefaultState, useQuest } from "../state/quest-context";
 import type { FoldState } from "../rules/fold-state";
@@ -87,6 +88,19 @@ vi.mock("../battle/components/PlayableBattleScreen", async () => {
 });
 
 const roots: Root[] = [];
+
+function stubViewport(isDesktop: boolean): void {
+  window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+    matches: query.includes("min-width") ? isDesktop : false,
+    media: query,
+    onchange: null,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }));
+}
 
 function makeSite(): SiteState {
   return {
@@ -186,13 +200,19 @@ function mount(element: ReactElement): {
   const root = createRoot(container);
   roots.push(root);
   act(() => {
-    root.render(element);
+    root.render(<CumulusRoot>{element}</CumulusRoot>);
   });
   return { container, root };
 }
 
 beforeEach(() => {
   vi.clearAllMocks();
+  stubViewport(true);
+  globalThis.ResizeObserver = class ResizeObserverStub {
+    observe(): void {}
+    unobserve(): void {}
+    disconnect(): void {}
+  };
   setQuestState();
   mockGameState = { quest: makeQuestState(), battle: null };
   (mockActions as unknown as { beginBattle: typeof beginBattleSpy }).beginBattle = beginBattleSpy;
@@ -232,7 +252,9 @@ describe("BattleSiteRoute", () => {
       />,
     );
 
-    expect(container.querySelector('[data-screen="cumulus-playable"]')).not.toBeNull();
+    expect(
+      container.querySelector('[data-screen="cumulus-playable"]'),
+    ).not.toBeNull();
     expect(container.querySelector('[data-screen="cumulus-battle-start"]')).toBeNull();
     expect(beginBattleSpy).not.toHaveBeenCalled();
   });
@@ -266,25 +288,31 @@ describe("BattleSiteRoute", () => {
     mockGameState = makeFoldStateWithBattle();
     act(() => {
       root.render(
-        <BattleSiteRoute
-          site={makeSite()}
-          cardDatabase={makeBattleTestCardDatabase()}
-          runtimeConfig={{
-            seedOverride: null,
-            aiMode: false,
-            basicAutomation: false,
-            gameId: null,
-            databaseMode: "emulator",
-            journeyVariant: "classic",
-            uiVariant: "cumulus",
-          }}
-        />,
+        <CumulusRoot>
+          <BattleSiteRoute
+            site={makeSite()}
+            cardDatabase={makeBattleTestCardDatabase()}
+            runtimeConfig={{
+              seedOverride: null,
+              aiMode: false,
+              basicAutomation: false,
+              gameId: null,
+              databaseMode: "emulator",
+              journeyVariant: "classic",
+              uiVariant: "cumulus",
+            }}
+          />
+        </CumulusRoot>,
       );
     });
     expect(container.querySelector('[data-screen="cumulus-playable"]')).not.toBeNull();
     expect(container.querySelector('[data-screen="legacy-playable"]')).toBeNull();
-    expect(container.querySelector("[data-cumulus-quest-chrome]")).toBeNull();
-    expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
+    expect(container.querySelector("[data-cumulus-quest-chrome]")).not.toBeNull();
+    expect(
+      container.querySelector('[data-quest-status-bar-variant="battle"]'),
+    ).not.toBeNull();
+    expect(container.querySelector('[aria-label^="View deck"]')).toBeNull();
+    expect(container.querySelector('[aria-label="Dreamcaller"]')).toBeNull();
   });
 
   it("opens the Cumulus playable surface when the playable QA scene loads a battle", () => {
@@ -308,7 +336,33 @@ describe("BattleSiteRoute", () => {
 
     expect(container.querySelector('[data-screen="cumulus-playable"]')).not.toBeNull();
     expect(container.querySelector('[data-screen="cumulus-battle-start"]')).toBeNull();
-    expect(container.querySelector("[data-cumulus-quest-chrome]")).toBeNull();
+    expect(container.querySelector("[data-cumulus-quest-chrome]")).not.toBeNull();
+    expect(
+      container.querySelector('[data-quest-status-bar-variant="battle"]'),
+    ).not.toBeNull();
+  });
+
+  it("omits the partial quest status bar from the mobile Cumulus battle", () => {
+    stubViewport(false);
+    mockGameState = makeFoldStateWithBattle();
+    const { container } = mount(
+      <BattleSiteRoute
+        site={makeSite()}
+        cardDatabase={makeBattleTestCardDatabase()}
+        runtimeConfig={{
+          seedOverride: null,
+          aiMode: false,
+          basicAutomation: false,
+          gameId: null,
+          databaseMode: "emulator",
+          journeyVariant: "classic",
+          uiVariant: "cumulus",
+        }}
+      />,
+    );
+
+    expect(container.querySelector('[data-screen="cumulus-playable"]')).not.toBeNull();
+    expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
   });
 
   it("renders the legacy preview and appends BEGIN_BATTLE only after the click", () => {

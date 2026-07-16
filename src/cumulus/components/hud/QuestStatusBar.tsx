@@ -133,18 +133,24 @@ export interface QuestStatusBarProps {
    * larger desktop size the dreamscape screen picks above the wide-viewport
    * breakpoint. */
   size?: "compact" | "grand";
+  /** Content arrangement. `quest` shows the complete run inventory;
+   * `battle` keeps only essence at the lower start edge and Dreamsigns at the
+   * lower end edge of the playable battle board. */
+  variant?: "quest" | "battle";
 }
 
 /* OverflowStack — the overlapping dreamsign stack shown past STACK_THRESHOLD. A
    press compresses it; a tap opens the viewer window. */
 function QsbOverflowStack({
   signs,
+  scale = 1,
   onOpenWindow,
 }: {
   signs: QsbDreamsign[];
+  scale?: number;
   onOpenWindow: () => void;
 }): ReactElement {
-  const size = 36;
+  const size = Math.round(36 * scale);
   return (
     <Pressable
       as="button"
@@ -276,7 +282,11 @@ function QsbDreamsignStrip({
 
   return (
     <div style={wrap}>
-      <QsbOverflowStack signs={signs} onOpenWindow={onOpenWindow} />
+      <QsbOverflowStack
+        signs={signs}
+        scale={scale}
+        onOpenWindow={onOpenWindow}
+      />
     </div>
   );
 }
@@ -556,6 +566,112 @@ function QsbHudBar({
   );
 }
 
+/* QsbBattleHudBar — the partial quest HUD for the desktop battle board. The
+   measured board bounds keep the resources on the playable surface when the
+   developer inspector occupies a docked column. */
+function QsbBattleHudBar({
+  essence = 0,
+  signs,
+  stageRef,
+  scale = 1,
+  onOpenWindow,
+}: {
+  essence?: number;
+  signs: QsbDreamsign[];
+  stageRef: React.RefObject<HTMLElement | null>;
+  scale?: number;
+  onOpenWindow: () => void;
+}): ReactElement {
+  const [bounds, setBounds] = React.useState({ left: 0, right: 0 });
+
+  React.useLayoutEffect(() => {
+    let observedBattleBoard: HTMLElement | null = null;
+    const measure = (): void => {
+      const battleBoard = stageRef.current?.querySelector<HTMLElement>(
+        "[data-battle-mobile]",
+      );
+      if (battleBoard === null || battleBoard === undefined) {
+        return;
+      }
+      if (observedBattleBoard !== battleBoard) {
+        observedBattleBoard = battleBoard;
+        observer.observe(battleBoard);
+      }
+      const rect = battleBoard.getBoundingClientRect();
+      setBounds({
+        left: rect.left,
+        right: Math.max(0, window.innerWidth - rect.right),
+      });
+    };
+    const observer = new ResizeObserver(measure);
+    const stage = stageRef.current;
+    if (stage !== null && stage !== undefined) observer.observe(stage);
+    measure();
+    const animationFrame = requestAnimationFrame(measure);
+    window.addEventListener("resize", measure);
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      observer.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [stageRef]);
+
+  const signSize = Math.round(36 * scale);
+  const dreamsigns =
+    signs.length === 0 ? null : signs.length <= STACK_THRESHOLD ? (
+      <div
+        data-quest-status-dreamsigns=""
+        style={{ display: "flex", alignItems: "center", gap: 2 }}
+      >
+        {signs.map((sign) => (
+          <Dreamsign
+            key={requireDreamsignId(sign, "QuestStatusBar battle dreamsign")}
+            variant="hud"
+            dreamsign={sign}
+            sizePx={signSize}
+          />
+        ))}
+      </div>
+    ) : (
+      <div data-quest-status-dreamsigns="">
+        <QsbOverflowStack
+          signs={signs}
+          scale={scale}
+          onOpenWindow={onOpenWindow}
+        />
+      </div>
+    );
+
+  return (
+    <div
+      className="qsbBattleHud hud-outline"
+      data-quest-status-bar-anchor=""
+      data-quest-status-bar-variant="battle"
+      style={{
+        position: "fixed",
+        left: bounds.left,
+        right: bounds.right,
+        bottom: 0,
+        height: QUEST_STATUS_BAR_TOTAL_HEIGHT,
+        zIndex: 40,
+        display: "flex",
+        alignItems: "flex-end",
+        justifyContent: "space-between",
+        boxSizing: "border-box",
+        paddingRight: Math.round(12 * scale),
+        paddingBottom: QUEST_STATUS_BAR_BOTTOM_INSET,
+        paddingLeft: Math.round(12 * scale),
+        pointerEvents: "none",
+      }}
+    >
+      <div data-quest-status-essence="" style={{ pointerEvents: "auto" }}>
+        <QsbEssence essence={essence} scale={scale} />
+      </div>
+      <div style={{ pointerEvents: "auto" }}>{dreamsigns}</div>
+    </div>
+  );
+}
+
 /**
  * QuestStatusBar — the persistent, TRANSPARENT bottom HUD for quest screens.
  * Essence total, deck sprite, Dreamcaller bust, and a
@@ -570,6 +686,7 @@ export function QuestStatusBar({
   onViewDeck,
   dreamcaller,
   size = "compact",
+  variant = "quest",
 }: QuestStatusBarProps): ReactElement {
   const [signWindow, setSignWindow] = React.useState(false);
   const scale = size === "grand" ? GRAND_SCALE : 1;
@@ -585,6 +702,26 @@ export function QuestStatusBar({
           "--hud-h": `${String(Math.round(64 * scale))}px`,
           "--qsb-elev": `${String(Math.round(14 * scale))}px`,
         } as CSSProperties);
+
+  if (variant === "battle") {
+    return (
+      <div className="qsb" style={rootVars}>
+        <QsbBattleHudBar
+          essence={essence}
+          signs={dreamsigns}
+          stageRef={stageRef}
+          scale={scale}
+          onOpenWindow={() => setSignWindow(true)}
+        />
+        {signWindow && (
+          <QsbDreamsignWindow
+            signs={dreamsigns}
+            onClose={() => setSignWindow(false)}
+          />
+        )}
+      </div>
+    );
+  }
 
   // The essence value and Dreamcaller bust each own their press-reveal
   // (QsbEssence / QsbDreamcallerBust) with per-element onPointerEnter/Leave, so

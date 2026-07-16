@@ -74,11 +74,14 @@ export function BattleSiteRoute({
     );
   }
 
-  return (
+  const playable = (
     <PlayableBattleScreen
       site={site}
       aiMode={runtimeConfig.aiMode}
       uiVariant={runtimeConfig.uiVariant}
     />
   );
+  return runtimeConfig.uiVariant === "cumulus" ? (
+    <CumulusQuestChrome variant="battle">{playable}</CumulusQuestChrome>
+  ) : playable;
 }

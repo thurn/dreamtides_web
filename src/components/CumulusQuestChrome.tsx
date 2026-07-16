@@ -31,11 +31,13 @@ export function CumulusQuestChrome({
   handlers = {},
   showAtlasRegenerate = false,
   showStatusBar = true,
+  variant = "quest",
 }: {
   children: ReactNode;
   handlers?: CumulusQuestChromeHandlers;
   showAtlasRegenerate?: boolean;
   showStatusBar?: boolean;
+  variant?: "quest" | "battle";
 }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const { state } = useQuest();
@@ -50,7 +52,7 @@ export function CumulusQuestChrome({
       style={{ position: "fixed", inset: 0, minHeight: "100dvh" }}
     >
       {children}
-      {showStatusBar && (
+      {showStatusBar && (variant === "quest" || isDesktop) && (
         <ErrorBoundary scope="overlay:cumulus-status-bar">
           <QuestStatusBar
             stageRef={stageRef}
@@ -60,10 +62,11 @@ export function CumulusQuestChrome({
             dreamcaller={hud.dreamcaller}
             dreamsigns={hud.dreamsigns}
             size={isDesktop ? "grand" : "compact"}
+            variant={variant}
           />
         </ErrorBoundary>
       )}
-      {state.dreamcaller !== null && (
+      {variant === "quest" && state.dreamcaller !== null && (
         <ErrorBoundary scope="overlay:cumulus-quest-menu">
           <DreamscapeQuestMenu
             onOpenDeckViewer={handlers.onViewDeck ?? NOOP}

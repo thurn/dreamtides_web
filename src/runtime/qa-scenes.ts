@@ -242,9 +242,20 @@ const PLAYABLE_BATTLE_SCENE: QaScene = {
   id: PLAYABLE_BATTLE_SCENE_ID,
   label: "Playable Battle (Layer 1)",
   description:
-    "The Layer 1 keeper battle, mounted directly on the playable board for UI QA.",
+    "The Layer 1 keeper battle, mounted directly on the playable board with owned Dreamsigns for UI QA.",
   loadsBattle: true,
-  build: battleLayerSceneState(1),
+  build: (questContent) => {
+    const state = battleLayerSceneState(1)(questContent);
+    if (state === null) {
+      return null;
+    }
+    return {
+      ...state,
+      dreamsigns: questContent.dreamsignTemplates
+        .slice(0, 3)
+        .map((template) => createDreamsign(template)),
+    };
+  },
 };
 
 /**

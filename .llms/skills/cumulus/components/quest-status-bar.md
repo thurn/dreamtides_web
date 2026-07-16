@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/quest-status-bar`
 
 Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
 
-The persistent, transparent bottom HUD for quest screens. The essence total, deck, Dreamcaller, and docked dreamsigns sit directly on the scene art, made legible by their own glyph outline. It docks at two sizes — `compact` on mobile, `grand` on desktop — scaling the whole bar up in proportion.
+The persistent, transparent bottom HUD for quest screens. Its quest variant shows the complete run inventory; its desktop battle variant keeps essence and Dreamsigns at the playable board's lower corners. It docks at two sizes — `compact` on mobile, `grand` on desktop — scaling the whole bar up in proportion.
 
 ## Props
 
@@ -21,6 +21,7 @@ The persistent, transparent bottom HUD for quest screens. The essence total, dec
 | `onViewDeck` | `(() => void)` | no | — | Open the deck viewer — fired on a tap / click of the deck sprite. |
 | `dreamcaller` | `QsbDreamcaller` | no | — |  |
 | `size` | `"compact" \| "grand"` | no | `compact` | HUD size. `compact` (default) is the mobile / touch size; `grand` is the larger desktop size the dreamscape screen picks above the wide-viewport breakpoint. |
+| `variant` | `"quest" \| "battle"` | no | `quest` | Content arrangement. `quest` shows the complete run inventory; `battle` keeps only essence at the lower start edge and Dreamsigns at the lower end edge of the playable battle board. |
 
 ### `dreamsigns`: the `Dreamsign` model
 

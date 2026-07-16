@@ -3457,6 +3457,17 @@
       "required": false,
       "defaultValue": "compact",
       "description": "HUD size. `compact` (default) is the mobile / touch size; `grand` is the\nlarger desktop size the dreamscape screen picks above the wide-viewport\nbreakpoint."
+    },
+    {
+      "name": "variant",
+      "tsType": "\"quest\" | \"battle\"",
+      "unionMembers": [
+        "quest",
+        "battle"
+      ],
+      "required": false,
+      "defaultValue": "quest",
+      "description": "Content arrangement. `quest` shows the complete run inventory;\n`battle` keeps only essence at the lower start edge and Dreamsigns at the\nlower end edge of the playable battle board."
     }
   ],
   "ResourceChip": [
