@@ -48,7 +48,7 @@ export const questStatusBarDemo: CumulusComponent = {
   id: "quest-status-bar",
   title: "Quest Status Bar",
   blurb:
-    "The persistent, transparent bottom HUD for quest screens. Its quest variant shows the complete run inventory; its desktop battle variant keeps essence and Dreamsigns at the playable board's lower corners. It docks at two sizes — `compact` on mobile, `grand` on desktop — scaling the whole bar up in proportion.",
+    "The persistent, transparent bottom HUD for quest screens. Its quest variant shows the complete run inventory; its desktop battle variant keeps essence and two-high Dreamsign columns at the playable board's lower corners. It docks at two sizes — `compact` on mobile, `grand` on desktop — scaling the whole bar up in proportion.",
   group: "Components",
   docName: "QuestStatusBar",
   Component: QuestStatusBarDemo,

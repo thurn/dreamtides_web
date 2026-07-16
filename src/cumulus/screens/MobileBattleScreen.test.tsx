@@ -379,6 +379,17 @@ describe("MobileBattleScreen", () => {
     expect(playerHand?.style.justifyContent).toBe("center");
     expect(playerHand?.style.gap).toBe("var(--space-2)");
     expect(playerHand?.style.paddingTop).toBe("var(--space-8)");
+    expect(playerHand?.style.paddingLeft).toContain(
+      "--battle-hud-start-clearance",
+    );
+    expect(playerHand?.style.paddingRight).toContain(
+      "--battle-hud-end-clearance",
+    );
+    const playerCards = playerHand?.querySelectorAll<HTMLElement>(
+      '[data-battle-card-zone="player-hand"]',
+    );
+    expect(playerCards?.[0]?.parentElement?.style.marginLeft).toBe("");
+    expect(playerCards?.[1]?.parentElement?.style.marginLeft).toBe("-4dvh");
     expect(playerHand?.style.transform).toBe(
       "translateY(var(--space-8))",
     );

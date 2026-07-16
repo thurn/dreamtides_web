@@ -55,15 +55,13 @@ beforeEach(() => {
     imageNumber: "0001",
     startingEssence: 200,
   };
-  state.dreamsigns = [
-    {
-      id: "00000000-0000-4000-8000-000000000002",
-      name: "Test Dreamsign",
-      effectDescription: "Keep watch over the lower corner.",
-      imageName: "bell.png",
-      isBane: false,
-    },
-  ];
+  state.dreamsigns = Array.from({ length: 5 }, (_, index) => ({
+    id: `00000000-0000-4000-8000-${String(index + 2).padStart(12, "0")}`,
+    name: `Test Dreamsign ${String(index + 1)}`,
+    effectDescription: "Keep watch over the lower corner.",
+    imageName: "bell.png",
+    isBane: false,
+  }));
   vi.mocked(useQuest).mockReturnValue({
     state,
     mutations: {},
@@ -148,6 +146,16 @@ describe("CumulusQuestChrome", () => {
     expect(
       container.querySelector('[data-quest-status-dreamsigns] img'),
     ).not.toBeNull();
+    const dreamsignColumns = container.querySelector<HTMLElement>(
+      '[data-quest-status-dreamsign-columns="two-high"]',
+    );
+    expect(dreamsignColumns?.style.gridAutoFlow).toBe("column");
+    expect(dreamsignColumns?.style.gridTemplateRows).toBe(
+      "repeat(2, max-content)",
+    );
+    expect(
+      dreamsignColumns?.querySelectorAll("[data-quest-status-dreamsign]"),
+    ).toHaveLength(5);
     expect(container.querySelector('[aria-label^="View deck"]')).toBeNull();
     expect(container.querySelector('[aria-label="Dreamcaller"]')).toBeNull();
     expect(

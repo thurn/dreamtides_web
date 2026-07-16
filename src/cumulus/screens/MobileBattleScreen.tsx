@@ -39,6 +39,10 @@ import type { CumulusColor } from "../primitives/color";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
 import {
+  BATTLE_HUD_END_CLEARANCE_PROPERTY,
+  BATTLE_HUD_START_CLEARANCE_PROPERTY,
+} from "../primitives/battle-hud-layout";
+import {
   MOBILE_BATTLE_INSPECTOR_RAIL_TRACK,
   MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS,
 } from "./mobile-battle-layout";
@@ -1485,6 +1489,10 @@ function PlayerHand({
   readonly interactions?: MobileBattleInteractions;
 }) {
   const pickerCandidateIds = new Set(cardPicker?.candidateIds ?? []);
+  const desktopOverlapDvh = Math.min(
+    11,
+    Math.max(4, cards.length - 3),
+  );
   const canDrop =
     cardPicker === null &&
     interactions?.canInteract === true
@@ -1523,6 +1531,12 @@ function PlayerHand({
         justifyContent: isDesktop ? "center" : undefined,
         gap: isDesktop ? token("--space-2") : undefined,
         paddingTop: isDesktop ? token("--space-8") : undefined,
+        paddingRight: isDesktop
+          ? `calc(var(${BATTLE_HUD_END_CLEARANCE_PROPERTY}, 0px) + ${token("--space-4")})`
+          : undefined,
+        paddingLeft: isDesktop
+          ? `calc(var(${BATTLE_HUD_START_CLEARANCE_PROPERTY}, 0px) + ${token("--space-4")})`
+          : undefined,
         transform: isDesktop
           ? `translateY(${token("--space-8")})`
           : undefined,
@@ -1555,6 +1569,10 @@ function PlayerHand({
               top: isDesktop ? undefined : PLAYER_HAND_TOP,
               height: isDesktop ? "94%" : "92%",
               flex: isDesktop ? "0 0 auto" : undefined,
+              marginLeft:
+                isDesktop && index > 0
+                  ? `-${String(desktopOverlapDvh)}dvh`
+                  : undefined,
               aspectRatio: CARD_ASPECT_RATIO,
               transformOrigin: "50% 100%",
               transform: isDesktop

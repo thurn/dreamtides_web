@@ -12,8 +12,9 @@
 //   - the essence value           → InfoCard 'text'
 //   - the Dreamcaller bust (pops ABOVE the bar) → InfoCard 'hero'
 //   - each docked dreamsign        → InfoCard 'object'
-//   - beyond a fixed count, docked dreamsigns collapse into an overflow stack →
-//     a centered viewer window (not a bottom sheet)
+//   - quest Dreamsigns beyond a fixed count collapse into an overflow stack →
+//     a centered viewer window (not a bottom sheet); battle Dreamsigns flow in
+//     two-high columns
 //
 // `stageRef` aligns the docked dreamsign strip with the HUD.
 //
@@ -50,6 +51,10 @@ import { DEFAULT_DREAMCALLER_PORTRAIT_FOCUS, dreamcallerRevealSpec } from "./Dre
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
+import {
+  BATTLE_HUD_END_CLEARANCE_PROPERTY,
+  BATTLE_HUD_START_CLEARANCE_PROPERTY,
+} from "../../primitives/battle-hud-layout";
 import "./quest-status-bar.css";
 
 /** Zooms the dreamcaller bust render so the face fills the circular frame. A
@@ -122,7 +127,8 @@ export interface QuestStatusBarProps {
   stageRef: React.RefObject<HTMLElement | null>;
   /** Essence total shown in the HUD. */
   essence?: number;
-  /** The dreamsigns to dock (a small set inline; more collapse to a stack + viewer). */
+  /** The Dreamsigns to dock. Quest overflow opens a viewer; battle Dreamsigns
+   * flow in two-high columns. */
   dreamsigns?: QsbDreamsign[];
   /** Deck size (used in the deck button's aria-label). */
   deck?: number | string;
@@ -134,8 +140,8 @@ export interface QuestStatusBarProps {
    * breakpoint. */
   size?: "compact" | "grand";
   /** Content arrangement. `quest` shows the complete run inventory;
-   * `battle` keeps only essence at the lower start edge and Dreamsigns at the
-   * lower end edge of the playable battle board. */
+   * `battle` keeps only essence at the lower start edge and two-high Dreamsign
+   * columns at the lower end edge of the playable battle board. */
   variant?: "quest" | "battle";
 }
 
@@ -574,18 +580,22 @@ function QsbBattleHudBar({
   signs,
   stageRef,
   scale = 1,
-  onOpenWindow,
 }: {
   essence?: number;
   signs: QsbDreamsign[];
   stageRef: React.RefObject<HTMLElement | null>;
   scale?: number;
-  onOpenWindow: () => void;
 }): ReactElement {
   const [bounds, setBounds] = React.useState({ left: 0, right: 0 });
+  const essenceRef = React.useRef<HTMLDivElement>(null);
+  const dreamsignsRef = React.useRef<HTMLDivElement>(null);
 
   React.useLayoutEffect(() => {
     let observedBattleBoard: HTMLElement | null = null;
+    const clearBoardProperties = (battleBoard: HTMLElement): void => {
+      battleBoard.style.removeProperty(BATTLE_HUD_START_CLEARANCE_PROPERTY);
+      battleBoard.style.removeProperty(BATTLE_HUD_END_CLEARANCE_PROPERTY);
+    };
     const measure = (): void => {
       const battleBoard = stageRef.current?.querySelector<HTMLElement>(
         "[data-battle-mobile]",
@@ -594,14 +604,32 @@ function QsbBattleHudBar({
         return;
       }
       if (observedBattleBoard !== battleBoard) {
+        if (observedBattleBoard !== null) {
+          clearBoardProperties(observedBattleBoard);
+        }
         observedBattleBoard = battleBoard;
         observer.observe(battleBoard);
       }
+      if (essenceRef.current !== null) observer.observe(essenceRef.current);
+      if (dreamsignsRef.current !== null) {
+        observer.observe(dreamsignsRef.current);
+      }
       const rect = battleBoard.getBoundingClientRect();
+      const essenceRect = essenceRef.current?.getBoundingClientRect();
+      const dreamsignsRect = dreamsignsRef.current?.getBoundingClientRect();
+      const resourceInset = Math.round(12 * scale);
       setBounds({
         left: rect.left,
         right: Math.max(0, window.innerWidth - rect.right),
       });
+      battleBoard.style.setProperty(
+        BATTLE_HUD_START_CLEARANCE_PROPERTY,
+        `${String((essenceRect?.width ?? 0) + resourceInset)}px`,
+      );
+      battleBoard.style.setProperty(
+        BATTLE_HUD_END_CLEARANCE_PROPERTY,
+        `${String((dreamsignsRect?.width ?? 0) + resourceInset)}px`,
+      );
     };
     const observer = new ResizeObserver(measure);
     const stage = stageRef.current;
@@ -613,32 +641,38 @@ function QsbBattleHudBar({
       cancelAnimationFrame(animationFrame);
       observer.disconnect();
       window.removeEventListener("resize", measure);
+      if (observedBattleBoard !== null) {
+        clearBoardProperties(observedBattleBoard);
+      }
     };
   }, [stageRef]);
 
   const signSize = Math.round(36 * scale);
   const dreamsigns =
-    signs.length === 0 ? null : signs.length <= STACK_THRESHOLD ? (
+    signs.length === 0 ? null : (
       <div
         data-quest-status-dreamsigns=""
-        style={{ display: "flex", alignItems: "center", gap: 2 }}
+        data-quest-status-dreamsign-columns="two-high"
+        style={{
+          display: "grid",
+          gridAutoFlow: "column",
+          gridTemplateRows: "repeat(2, max-content)",
+          alignItems: "center",
+          gap: token("--space-1"),
+        }}
       >
         {signs.map((sign) => (
-          <Dreamsign
+          <div
             key={requireDreamsignId(sign, "QuestStatusBar battle dreamsign")}
-            variant="hud"
-            dreamsign={sign}
-            sizePx={signSize}
-          />
+            data-quest-status-dreamsign=""
+          >
+            <Dreamsign
+              variant="hud"
+              dreamsign={sign}
+              sizePx={signSize}
+            />
+          </div>
         ))}
-      </div>
-    ) : (
-      <div data-quest-status-dreamsigns="">
-        <QsbOverflowStack
-          signs={signs}
-          scale={scale}
-          onOpenWindow={onOpenWindow}
-        />
       </div>
     );
 
@@ -664,10 +698,16 @@ function QsbBattleHudBar({
         pointerEvents: "none",
       }}
     >
-      <div data-quest-status-essence="" style={{ pointerEvents: "auto" }}>
+      <div
+        ref={essenceRef}
+        data-quest-status-essence=""
+        style={{ pointerEvents: "auto" }}
+      >
         <QsbEssence essence={essence} scale={scale} />
       </div>
-      <div style={{ pointerEvents: "auto" }}>{dreamsigns}</div>
+      <div ref={dreamsignsRef} style={{ pointerEvents: "auto" }}>
+        {dreamsigns}
+      </div>
     </div>
   );
 }
@@ -711,14 +751,7 @@ export function QuestStatusBar({
           signs={dreamsigns}
           stageRef={stageRef}
           scale={scale}
-          onOpenWindow={() => setSignWindow(true)}
         />
-        {signWindow && (
-          <QsbDreamsignWindow
-            signs={dreamsigns}
-            onClose={() => setSignWindow(false)}
-          />
-        )}
       </div>
     );
   }
