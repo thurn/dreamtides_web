@@ -140,7 +140,7 @@ export const glowIconDemo: CumulusComponent = {
   blurb:
     "The resource-glyph renderer for card marks: a Boxicons glyph that paints in the caller's resource hue, with an optional content-protection shadow and an optional emitted-light glow pinned to its own font-size so both scale with the mark.",
   callout:
-    "GlowIcon.tsx is the single source of truth for the resource marks: it exports the spark hue (SPARK_ICON_COLOR), the energy hue (ENERGY_ICON_COLOR, pulled from the shared energy token), the glyph classes (SPARK_ICON_CLASS, ENERGY_ICON_CLASS, BOLT_ICON_CLASS, SPARK_INLINE_ICON_CLASS), and the content-protection shadow (ICON_SHADOW_FILTER). The corner stat orbs and the inline references in rules text read these same constants, so a resource reads identically whether it is a corner orb or an inline `1✦`.",
+    "The glyph vocabulary lives in primitives/glyph.ts. GlowIcon exports the card-stat spark and energy hues plus the content-protection shadow used by CardStatOrb and inline RulesText marks; compact PipBadge fills live in pip-colors.ts. This keeps each rendering role named without claiming one component owns every resource mark.",
   group: "Primitives",
   docName: "GlowIcon",
   Component: GlowIconDemo,

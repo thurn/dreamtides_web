@@ -9,14 +9,10 @@ import { richText } from "./rich-text";
  * self-evidently a keyword, so it carries the name and the rules text and
  * nothing else.
  *
- * Every surface that reveals what a keyword means renders this one tile, so the
- * definition reads in the same vocabulary as every other reveal (the object
- * card it sits beside, the tide pill, the site disc) — one glass shell, one
- * radius, one type scale:
- *   * `CardTermDefinitions` stacks one per gameplay term in the hover-help
- *     panel beside a card (full cards, compact-row previews, dreamsign and
- *     Dreamcaller ability reveals, and the battle card preview).
- *   * `JourneyHoverCard` lists the terms referenced by a journey tooltip.
+ * `JourneyHoverCard`, the signature-deck inspector, and the incubating
+ * `CardTermDefinitions` stack use this renderable tile in normal document flow.
+ * Named entity reveals carry equivalent text-card models through the shared
+ * reveal coordinator.
  *
  * The tile establishes its own `.cumulus` token scope so it renders correctly on
  * any surface, including popovers portalled outside a Cumulus subtree. The body is

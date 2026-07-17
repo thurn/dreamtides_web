@@ -20,9 +20,8 @@ import { type MediaFilter, resolveMediaFilter } from "../../primitives/media";
 /** Solid amber-gold fill for the spark mark. */
 export const SPARK_ICON_COLOR: CumulusColor = "#f3c33f";
 /**
- * Blue fill for the energy mark. Pulled from the shared resource token so the
- * inline energy glyph and the corner energy orb read as the exact same blue
- * and cannot drift apart.
+ * Blue fill for the energy mark. Shared with the compact energy pip so inline
+ * energy glyphs and dense-row values read as the same resource.
  */
 export const ENERGY_ICON_COLOR: CumulusColor = ENERGY_PIP_COLOR;
 

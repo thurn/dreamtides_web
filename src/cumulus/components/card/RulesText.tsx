@@ -30,12 +30,11 @@ import { GlossaryTerm } from "./GlossaryTerm";
  *     of keyword effects and action verbs (`dissolve`, `banish`, `prevent`,
  *     `foresee`, `veil`, `unstoppable`, `reclaim`, …) emphasized in the spark
  *     amber so the eye catches them (see `HIGHLIGHTED_TERMS`). The
- *     plain-language definitions for every term on a card surface beside it in
- *     the card's hover-help panel (see `CardTermDefinitions`).
+ *     plain-language definitions travel with named entity reveal specifications
+ *     through the shared reveal coordinator.
  *
- * Used by `CardDisplay`, `DreamcallerPopover`, and the dreamsign cards on
- * `DreamsignRevelationScreen`. Single source of truth for rules-text
- * rendering. New surfaces should call this rather than duplicate the JSX.
+ * Shared rules-text renderer for card, Dreamcaller, Dreamsign, battle, editor,
+ * and reward surfaces. New surfaces call this rather than duplicate the JSX.
  */
 
 /**

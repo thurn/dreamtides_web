@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/card-term-definitions`
 
 Real consumers: **0** (imports outside `src/cumulus/docs/` and tests).
 
-A reading-order, de-duped stack of Glossary Definition Cards for every gameplay term in a stretch of rules text, rendered beside or beneath a card so the player reads what every highlighted keyword means without inline tooltips. Each term renders as one GlossaryDefinitionCard, so the definitions read in the same shell, radius, and type scale as every other reveal. It renders nothing when the text references no terms, so callers place it unconditionally.
+An incubating reading-order stack of Glossary Definition Cards for every gameplay term in a stretch of rules text. It is the normal-flow multi-card surface for layouts that need definitions beside or beneath an object; named entity reveals carry equivalent glossary cards in their reveal specifications. It renders nothing when the text references no terms.
 
 ## Props
 

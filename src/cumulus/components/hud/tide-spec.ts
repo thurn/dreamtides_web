@@ -1,14 +1,15 @@
-// tide-spec — the game's five tides and their fixed marks + colors, the ONE
-// source the whole design system reads a tide's icon and palette from. Kept in
-// its own leaf module so both TideDisc AND the shared InfoCard can derive a
+// tide-spec — the game's five alignment tides and their fixed marks + colors.
+// Kept in its own leaf module so both TideDisc and the shared InfoCard derive a
 // tide's colored disc from the same table without a circular import (InfoCard
 // carries the reveal engine those callers depend on).
 //
-// The names, colors, and glyphs mirror production's single source of truth,
+// The names, colors, and glyphs mirror production's tide-identity vocabulary,
 // `src/components/tide-visuals.ts` (TIDE_COLOR_CHIP / TIDE_ACCENT_COLOR, keyed
 // by the deck color), as shown on the Dreamcaller-select screen and the tides
 // editor — the Cumulus isolation boundary forbids importing it directly, so the
-// values are mirrored here with that file as the authority:
+// values are mirrored here with that file as the authority. Controls that
+// color by selection provenance use their own role palette rather than this
+// alignment palette:
 //   - Ember  (orange #fb923c) — GLYPHS.tideEmber  / bx-hot
 //   - Valor  (gold   #facc15) — GLYPHS.tideValor  / bx-shield
 //   - Vision (blue   #60a5fa) — GLYPHS.tideVision / bx-eye-alt

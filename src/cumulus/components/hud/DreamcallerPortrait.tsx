@@ -1,4 +1,4 @@
-// DreamcallerPortrait — the ONE way to render a dreamcaller's character art.
+// DreamcallerPortrait — the shared framed and stage-filling Dreamcaller art surface.
 // Five framings (`variant`). Three are self-framing squares/showcases: a large
 // `hero`, a square `panel` for profile cards / popovers, and a small square
 // `thumb` for HUD rows and resident lists. Three are full-bleed fills for a

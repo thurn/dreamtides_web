@@ -23,6 +23,7 @@ import type { CumulusComponent } from "../registry";
 
 function QuestStatusBarDemo(args: Omit<QuestStatusBarProps, "stageRef">) {
   const stageRef = useRef<HTMLDivElement>(null);
+  const size = args.variant === "battle" ? "grand" : args.size;
   return (
     <div
       ref={stageRef}
@@ -39,7 +40,7 @@ function QuestStatusBarDemo(args: Omit<QuestStatusBarProps, "stageRef">) {
         touchAction: "none",
       }}
     >
-      <QuestStatusBar {...args} stageRef={stageRef} />
+      <QuestStatusBar {...args} size={size} stageRef={stageRef} />
     </div>
   );
 }
@@ -48,7 +49,7 @@ export const questStatusBarDemo: CumulusComponent = {
   id: "quest-status-bar",
   title: "Quest Status Bar",
   blurb:
-    "The persistent, transparent bottom HUD for quest screens. Its quest variant shows the complete run inventory; its desktop battle variant keeps essence and bottom-up, right-to-left Dreamsign columns at the playable board's lower corners. It docks at two sizes — `compact` on mobile, `grand` on desktop — scaling the whole bar up in proportion.",
+    "The persistent, transparent bottom HUD for quest screens. Its quest variant shows the complete run inventory; its desktop-only battle variant keeps essence and bottom-up, right-to-left Dreamsign columns at the playable board's lower corners. It docks at `compact` on mobile and `grand` on desktop; choosing the battle demo enforces the production `grand` size.",
   group: "Components",
   docName: "QuestStatusBar",
   Component: QuestStatusBarDemo,

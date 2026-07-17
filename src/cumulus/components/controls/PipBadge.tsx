@@ -20,8 +20,8 @@ import { Pressable } from "../../primitives/Pressable";
  * pip badges sit at the corners of cards and are easy to brush past with
  * the cursor — a quicker tooltip would feel twitchy.
  *
- * Single source of truth for any "circled number on a colored disc" UI.
- * Used by `CardDisplay` for the spark badge and the energy-cost badge.
+ * This compact pip appears in dense card rows and inline rules text. Full game
+ * card corners use the larger, art-aware `CardStatOrb` surface.
  */
 
 export type PipBadgeVariant = "spark" | "energy";

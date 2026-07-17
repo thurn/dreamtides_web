@@ -30,8 +30,10 @@ Who wears it:
 - **the InfoCard press-reveal popover shell** — the reveal-on-interaction card
   that every press/hover popup renders through (it overrides the fill to the
   warmer `--glass-fill-popover` tint; see below);
-- **the StartingDeckModal panel**;
+- **GlassDialog and GlassPanel** — bounded overlays and persistent structured
+  content panes;
 - **the BattleStatusDisplay card**;
+- **object galleries, map chrome, and speech bubbles** that float over scene art;
 - **the glass controls and glass icon buttons** — `glassTrack()` and
   `glassIconButtonChrome()` in `control-treatment.ts`, which route through the
   same recipe (via `glassSurfaceStyle({ radius: null })`) so a control track and

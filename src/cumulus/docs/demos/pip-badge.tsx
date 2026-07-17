@@ -116,9 +116,9 @@ export const pipBadgeDemo: CumulusComponent = {
   id: "pip-badge",
   title: "Pip Badge",
   blurb:
-    "The circled number on a colored disc for card stats: a spark value or an energy cost, and the inline spark reference inside rules text. The value renders in white with a thin outline so it stays legible over the colored fill at small card sizes, and each variant owns its resource fill so a corner pip and an inline reference to the same resource cannot drift apart. An optional tooltip turns a pip into its own hover anchor on a longer delay tuned for card corners.",
+    "The compact circled number used in dense card rows and inline rules text for spark or energy values. The value renders in white with a thin outline at small sizes; full game-card corners use the larger, art-aware CardStatOrb. An optional tooltip turns a pip into its own semantic reveal source.",
   callout:
-    "PipBadge.tsx is the single source of truth for the resource fills: it exports the spark fill (SPARK_PIP_COLOR, gold #facc15) and the energy fill (ENERGY_PIP_COLOR, teal #0ea5e9). GlowIcon reads ENERGY_PIP_COLOR for the inline energy glyph, so a corner energy pip and an inline energy reference in rules text paint the same color. Import these constants rather than re-typing the hex value.",
+    "The compact pip fills live in pip-colors.ts: SPARK_PIP_COLOR is gold #facc15 and ENERGY_PIP_COLOR is teal #0ea5e9. GlowIcon shares the energy constant for inline energy marks; larger CardStatOrb glyphs use the card-stat color treatment. Import the named constants rather than re-typing their values.",
   group: "Components",
   docName: "PipBadge",
   Component: PipBadgeDemo,

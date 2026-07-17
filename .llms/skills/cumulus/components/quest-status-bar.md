@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/quest-status-bar`
 
 Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
 
-The persistent, transparent bottom HUD for quest screens. Its quest variant shows the complete run inventory; its desktop battle variant keeps essence and bottom-up, right-to-left Dreamsign columns at the playable board's lower corners. It docks at two sizes — `compact` on mobile, `grand` on desktop — scaling the whole bar up in proportion.
+The persistent, transparent bottom HUD for quest screens. Its quest variant shows the complete run inventory; its desktop-only battle variant keeps essence and bottom-up, right-to-left Dreamsign columns at the playable board's lower corners. It docks at `compact` on mobile and `grand` on desktop; choosing the battle demo enforces the production `grand` size.
 
 ## Props
 

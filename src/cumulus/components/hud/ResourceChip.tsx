@@ -1,11 +1,10 @@
-// ResourceChip — the canonical inline "value + mark" pairing for the game's
-// economy (energy, spark, essence, points, counters). Every resource number
-// in the game routes through this one component so the mark and its role
-// color stay identical everywhere: a blue droplet for energy, a gold
+// ResourceChip — the sized, self-contained inline "value + mark" pairing for
+// the game's economy (energy, spark, essence, points, counters): a blue droplet
+// for energy, a gold
 // sparkle for spark, a violet crypto-mark for essence/points, an hourglass
 // for generic counters. The kind→glyph/color table lives in the shared
-// `economy-spec` module (imported below), the same one `Button` reads, so a
-// HUD chip and a button price render the same currency mark.
+// `economy-spec` module (imported below). Flowing essence amounts use
+// `EssenceValue`, while standalone essence marks use `EssenceGlyph`.
 //
 // The value and its mark are paired TIGHT (see the parent design system's
 // rules): the default `spacing` is "tight" (a 0px gap) so a value reads as one
@@ -84,9 +83,8 @@ export interface ResourceChipProps {
 
 /**
  * Displays a single game-economy resource value with its colored filled-Boxicon
- * mark. The one component to reach for whenever a number of essence/energy/
- * spark/points/counters appears, so the mark and color stay consistent
- * everywhere — and identical to the parent design system.
+ * mark. Use it for HUD-like readouts that need their own enumerated size,
+ * spacing, and surface treatment; flowing essence copy uses `EssenceValue`.
  */
 export function ResourceChip({
   kind = "essence",

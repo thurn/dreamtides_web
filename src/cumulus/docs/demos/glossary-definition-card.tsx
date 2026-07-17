@@ -37,7 +37,7 @@ export const glossaryDefinitionCardDemo: CumulusComponent = {
   id: "glossary-definition-card",
   title: "Glossary Definition Card",
   blurb:
-    "The one keyword-definition tile: a single glossary entry rendered as an InfoCard text card whose headline is the keyword and whose body is the keyword's rules text. Every surface that reveals what a keyword means renders this one tile, so the definition reads in the same glass shell, radius, and type scale as every other reveal beside it. It re-establishes its own `.cumulus` token scope, so it renders correctly even inside a popover portalled outside the Cumulus subtree.",
+    "A renderable keyword-definition tile for normal document flow: one glossary entry in an InfoCard text card whose headline is the keyword and whose body is the keyword's rules text. Journey tooltips, the signature-deck inspector, and CardTermDefinitions use it directly; named entity reveals carry equivalent text-card models through the shared coordinator. It re-establishes its own `.cumulus` token scope for portalled surfaces.",
   group: "Components",
   docName: "GlossaryDefinitionCard",
   Component: GlossaryDefinitionCardDemo,

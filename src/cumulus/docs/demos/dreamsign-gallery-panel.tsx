@@ -39,7 +39,12 @@ function DreamsignGalleryPanelDemo() {
           entryId: `demo-${dreamsign.id}`,
           dreamsign,
           price: 100 + index * 25,
-          state: "available",
+          state:
+            index === 0
+              ? "available"
+              : index === 1
+                ? "unaffordable"
+                : "purchased",
         }))}
         endAction={{
           entryId: "restock",
@@ -47,9 +52,9 @@ function DreamsignGalleryPanelDemo() {
           label: "Restock Offers",
           description:
             "Replace the current offers with three new Dreamsigns. You may restock once per visit.",
-          price: 50,
-          text: null,
-          disabled: false,
+          price: null,
+          text: "Restocked",
+          disabled: true,
         }}
         closeLabel="Leave bazaar"
         onClose={() => undefined}

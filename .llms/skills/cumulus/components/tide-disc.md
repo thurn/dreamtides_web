@@ -10,7 +10,7 @@ Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 
 The single semantic tide mark: a colored disc carrying the tide's glyph and its own strict tide reveal, sized 'sm' or 'lg'.
 
-> **Guidance:** The tide palette lives in src/cumulus/components/hud/tide-spec.ts. Its five tides — Ember #fb923c, Valor #facc15, Vision #60a5fa, Wild #4ade80, Shadow #c084fc — each own a fixed accent and glyph, exposed as TIDES / tideVisual / tideAlignmentLabel. TideDisc, InfoCard's tide variant, and any tide chip all read that one table, so a tide reads identically everywhere. tide-spec has no renderable component of its own, so it is documented here on its canonical renderer.
+> **Guidance:** The tide-identity palette lives in src/cumulus/components/hud/tide-spec.ts. Its five tides — Ember #fb923c, Valor #facc15, Vision #60a5fa, Wild #4ade80, Shadow #c084fc — each own a fixed accent and glyph, exposed as TIDES / tideVisual / tideAlignmentLabel. TideDisc and InfoCard's tide variant read that table. Selection-provenance controls use role colors instead. tide-spec has no renderable component of its own, so it is documented here on its canonical renderer.
 
 ## Props
 

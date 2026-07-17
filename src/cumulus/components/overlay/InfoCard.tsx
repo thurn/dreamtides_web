@@ -203,11 +203,9 @@ const tAtlasBody: React.CSSProperties = {
 };
 
 /**
- * The violet-glow disc shared by the icon variant AND the dreamscape SiteNode,
- * so the disc reads identically in both. The disc fill is --badge-disc-gradient,
- * the shared token that the dark `.ds-disc` and the atlas badges also wear, so a
- * rebrand of the badge material propagates here; its inset ring is the --accent
- * token so an accent rebrand propagates too.
+ * The icon variant's violet-glow disc. Its fill is --badge-disc-gradient, the
+ * shared dark material also worn by `.ds-disc` and atlas badges; this variant
+ * adds its own accent inset ring and glow for an information-card treatment.
  */
 const siteDiscStyle: React.CSSProperties = {
   background: token("--badge-disc-gradient"),

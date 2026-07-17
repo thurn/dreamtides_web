@@ -11,10 +11,10 @@ import { token } from "../../primitives/tokens";
  * they sit beside, the tide pill, the site disc): one shell, one radius, one
  * type scale.
  *
- * Rendered beside a card / dreamsign / ability so the player can read what
- * every highlighted keyword means without inline tooltips. Shared by the card
- * shared entity reveal coordinator, the dreamsign
- * reveal (`DreamsignInfoCard`), and the Dreamcaller ability reveal.
+ * The catalog marks this stack as incubating. Named card, Dreamsign, and
+ * Dreamcaller surfaces currently carry glossary definitions in their shared
+ * reveal specifications; this component remains the renderable multi-card
+ * stack for a surface that needs definitions in normal document flow.
  *
  * Returns `null` when the text references no glossary terms, so callers place it
  * unconditionally and it renders nothing for plain text.
