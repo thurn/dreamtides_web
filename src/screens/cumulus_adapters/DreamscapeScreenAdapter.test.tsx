@@ -41,7 +41,7 @@ function lastScreenProps(): DreamscapeScreenProps {
   return last[0];
 }
 
-function makeState(): QuestState {
+function makeState(overrides: Partial<QuestState> = {}): QuestState {
   const node: DreamscapeNode = {
     id: "node-1",
     layer: LayerName.One,
@@ -103,12 +103,16 @@ function makeState(): QuestState {
         accepted: false,
       },
     },
+    ...overrides,
   } as unknown as QuestState;
 }
 
-function setQuestContext(mutations: QuestMutations): void {
+function setQuestContext(
+  mutations: QuestMutations,
+  state: QuestState = makeState(),
+): void {
   vi.mocked(useQuest).mockReturnValue({
-    state: makeState(),
+    state,
     mutations,
     questContent: {} as QuestContent,
   } as QuestContextValue);
@@ -185,6 +189,53 @@ describe("DreamscapeScreenAdapter", () => {
         dreamsignId: "dreamsign-uuid",
         ui: "cumulus",
       }),
+    );
+
+    act(() => root.unmount());
+  });
+
+  it("routes an at-cap Dreamsign Reward to the replacement or decline screen", () => {
+    const mutations = {
+      ensureRewardSiteRuntime: vi.fn(),
+      acceptRewardSite: vi.fn(),
+      setScreen: vi.fn(),
+    } as unknown as QuestMutations;
+    setQuestContext(
+      mutations,
+      makeState({
+        maxDreamsigns: 2,
+        dreamsigns: [
+          {
+            id: "held-dreamsign-1",
+            name: "Held One",
+            effectDescription: "First held dreamsign.",
+            isBane: false,
+          },
+          {
+            id: "held-dreamsign-2",
+            name: "Held Two",
+            effectDescription: "Second held dreamsign.",
+            isBane: false,
+          },
+        ],
+      }),
+    );
+    const container = document.createElement("div");
+    const root = createRoot(container);
+    act(() => root.render(<DreamscapeScreenAdapter />));
+
+    act(() =>
+      lastScreenProps().onInlineRewardAnimationComplete("s-reward"),
+    );
+
+    expect(mutations.setScreen).toHaveBeenCalledWith({
+      type: "site",
+      siteId: "s-reward",
+    });
+    expect(mutations.acceptRewardSite).not.toHaveBeenCalled();
+    expect(logEvent).not.toHaveBeenCalledWith(
+      "site_completed",
+      expect.anything(),
     );
 
     act(() => root.unmount());

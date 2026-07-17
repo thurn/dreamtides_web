@@ -98,6 +98,17 @@ export function DreamscapeScreenAdapter() {
       const runtime = state.siteRuntime[siteId];
       const completion = buildInlineRewardCompletionLog(site, runtime, state);
       if (completion === null) return;
+      // An at-cap Dreamsign needs the replacement/decline choice from the
+      // Reward site. Do not log or submit an inline collection here: the
+      // reducer correctly rejects a cap-hit acceptance without `purgeIndex`.
+      if (
+        runtime?.kind === "reward" &&
+        runtime.reward.rewardType === "dreamsign" &&
+        state.dreamsigns.length >= state.maxDreamsigns
+      ) {
+        mutations.setScreen({ type: "site", siteId });
+        return;
+      }
       logEvent("site_completed", completion.fields);
       if (completion.kind === "essence") {
         mutations.acceptEssenceSite(siteId);
@@ -110,6 +121,8 @@ export function DreamscapeScreenAdapter() {
       mutations,
       state.essence,
       state.essenceCap,
+      state.dreamsigns.length,
+      state.maxDreamsigns,
       state.siteRuntime,
     ],
   );

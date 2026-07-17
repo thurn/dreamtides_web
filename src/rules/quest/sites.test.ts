@@ -453,6 +453,47 @@ describe("ACCEPT_REWARD (essence reward)", () => {
   });
 });
 
+describe("ACCEPT_REWARD (Dreamsign reward at the cap)", () => {
+  function openedAtCap(): FoldState {
+    return siteState("Reward", {
+      maxDreamsigns: 2,
+      dreamsigns: [dreamsign("held-1"), dreamsign("held-2")],
+      siteRuntime: {
+        [SITE_ID]: {
+          kind: "reward",
+          reward: {
+            rewardType: "dreamsign",
+            dreamsign: dreamsign("reward-dreamsign"),
+          },
+          remainingDreamsignPoolIds: [],
+          accepted: false,
+        },
+      },
+    });
+  }
+
+  it("requires a purge slot, then replaces that held Dreamsign and completes the site", () => {
+    const state = openedAtCap();
+
+    const withoutReplacement = reduce(state, "ACCEPT_REWARD", {
+      siteId: SITE_ID,
+    });
+    expect(withoutReplacement.outcome).toBe("bounced");
+    expect(withoutReplacement.state.quest.visitedSites).not.toContain(SITE_ID);
+
+    const withReplacement = reduce(state, "ACCEPT_REWARD", {
+      siteId: SITE_ID,
+      purgeIndex: 1,
+    });
+    expect(withReplacement.outcome).toBe("applied");
+    expect(withReplacement.state.quest.dreamsigns.map((sign) => sign.id)).toEqual([
+      "held-1",
+      "reward-dreamsign",
+    ]);
+    expect(withReplacement.state.quest.visitedSites).toContain(SITE_ID);
+  });
+});
+
 describe("dreamsign offer accept / reject", () => {
   function opened(overrides: Partial<QuestState> = {}): FoldState {
     registerSiteContentProvider(fakeProvider);

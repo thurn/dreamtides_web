@@ -439,6 +439,64 @@ describe("RewardSiteScreen", () => {
     });
   });
 
+  it("selects a held Dreamsign as the replacement when accepting at the cap", () => {
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({
+        maxDreamsigns: 2,
+        dreamsigns: [
+          {
+            id: "held-dreamsign-1",
+            name: "Held One",
+            effectDescription: "First held dreamsign.",
+            isBane: false,
+          },
+          {
+            id: "held-dreamsign-2",
+            name: "Held Two",
+            effectDescription: "Second held dreamsign.",
+            isBane: false,
+          },
+        ],
+        siteRuntime: {
+          "site-1": {
+            kind: "reward",
+            reward: {
+              rewardType: "dreamsign",
+              dreamsign: {
+                id: "dreamsign-1",
+                name: "Dreamsign Reward",
+                effectDescription: "A boon.",
+                isBane: false,
+              },
+            },
+            remainingDreamsignPoolIds: [],
+            accepted: false,
+          },
+        },
+      }),
+      mutations,
+    );
+
+    const { container, root } = mount(
+      <RewardSiteScreen
+        site={{ id: "site-1", type: "Reward", isEnhanced: false, isVisited: false }}
+      />,
+    );
+
+    clickButton(container, "Accept");
+
+    expect(container.textContent).toContain("Dreamsign Limit Reached");
+    clickButton(container, "Held Two");
+
+    expect(mutations.acceptRewardSite).toHaveBeenCalledWith("site-1", 1);
+    expect(mutations.completeSite).not.toHaveBeenCalled();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("paints the essence reward as a purple value glued to the crypto glyph", () => {
     const mutations = makeMutations();
     setQuestContext(
