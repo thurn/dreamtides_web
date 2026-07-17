@@ -89,9 +89,10 @@ export type EditorCardSize = "small" | "medium" | "large";
 /**
  * Which card fields the search box matches against. `name` (the default)
  * searches only card names; `all` additionally searches rules text; `mtg`
- * searches the source Magic: The Gathering name.
+ * searches the source Magic: The Gathering name; and `imageNumber` searches
+ * the card-art image number.
  */
-export type EditorSearchScope = "name" | "all" | "mtg";
+export type EditorSearchScope = "name" | "all" | "mtg" | "imageNumber";
 
 export interface EditorDisplayState {
   searchText: string;

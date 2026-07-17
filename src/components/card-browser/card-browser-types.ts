@@ -24,10 +24,10 @@ export type CardBrowserSortDirection = "asc" | "desc";
 
 /**
  * Which card fields the search box matches against. `name` searches card names,
- * `all` additionally searches rules text, and `mtg` searches the source Magic:
- * The Gathering name.
+ * `all` additionally searches rules text, `mtg` searches the source Magic: The
+ * Gathering name, and `imageNumber` searches the card-art image number.
  */
-export type CardBrowserSearchScope = "name" | "all" | "mtg";
+export type CardBrowserSearchScope = "name" | "all" | "mtg" | "imageNumber";
 
 export type CardBrowserSize = CardSizePreset;
 

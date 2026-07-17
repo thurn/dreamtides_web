@@ -66,7 +66,12 @@ const SORT_FIELD_TO_PARAM: Record<EditorSortField, string> = {
 };
 const DIR_VALUES = new Set<EditorSortDirection>(["asc", "desc"]);
 const SIZE_VALUES = new Set<EditorCardSize>(["small", "medium", "large"]);
-const SCOPE_VALUES = new Set<EditorSearchScope>(["name", "all", "mtg"]);
+const SCOPE_VALUES = new Set<EditorSearchScope>([
+  "name",
+  "all",
+  "mtg",
+  "imageNumber",
+]);
 
 function paramsFromSearch(search: string | URLSearchParams): URLSearchParams {
   return new URLSearchParams(search);

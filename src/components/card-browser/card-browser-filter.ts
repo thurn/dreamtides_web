@@ -43,6 +43,9 @@ function cardSearchText(card: CardData, scope: CardBrowserSearchScope): string {
   if (scope === "mtg") {
     return card.mtgName ?? "";
   }
+  if (scope === "imageNumber") {
+    return String(card.imageNumber);
+  }
   if (scope === "all") {
     return `${card.name} ${card.renderedText}`;
   }

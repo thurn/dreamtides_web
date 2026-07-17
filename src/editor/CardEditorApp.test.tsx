@@ -3040,7 +3040,7 @@ describe("CardEditorApp", () => {
     });
   });
 
-  it("scopes search to names, rules text, or MTG name", async () => {
+  it("scopes search to names, rules text, MTG names, or image numbers", async () => {
     const cards = [
       makeEditorCard({
         id: "moon-card",
@@ -3051,6 +3051,7 @@ describe("CardEditorApp", () => {
           id: "moon-card",
           name: "Moonlit Envoy",
           renderedText: "Draw a card.",
+          imageNumber: 1042,
         }),
       }),
       makeEditorCard({
@@ -3131,6 +3132,21 @@ describe("CardEditorApp", () => {
       null,
       "",
       "/editor?q=bolt&scope=mtg",
+    );
+
+    // Image number search uses the number backing the rendered card art.
+    act(() => {
+      setInputValue(searchInput, "1042");
+    });
+    act(() => {
+      setSelectValue(scopeSelect, "imageNumber");
+    });
+    expect(container.textContent).toContain("1 / 3 cards");
+    expect(editorCardIds(container)).toEqual(["moon-card"]);
+    expect(replaceState).toHaveBeenLastCalledWith(
+      null,
+      "",
+      "/editor?q=1042&scope=imageNumber",
     );
     expect(pushState).not.toHaveBeenCalled();
 

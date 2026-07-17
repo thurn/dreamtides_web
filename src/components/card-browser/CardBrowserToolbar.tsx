@@ -73,6 +73,7 @@ const SCOPE_OPTIONS: Array<{
   { value: "name", label: "Card name", placeholder: "Card name" },
   { value: "all", label: "Rules text", placeholder: "Name or rules text" },
   { value: "mtg", label: "MTG name", placeholder: "MTG name" },
+  { value: "imageNumber", label: "Image number", placeholder: "Image number" },
 ];
 
 const COST_OPTIONS: Array<{ value: CardBrowserCostFilter; label: string }> = [

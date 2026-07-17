@@ -121,6 +121,10 @@ function cardSearchText(
     return card.mtgName;
   }
 
+  if (scope === "imageNumber") {
+    return String(card.preview.imageNumber);
+  }
+
   return `${card.name} ${card.preview.name}`;
 }
 

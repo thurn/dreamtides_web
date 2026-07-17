@@ -69,12 +69,16 @@ describe("editor URL display state", () => {
     );
   });
 
-  it("round-trips the rules-text search scope through scope", () => {
+  it("round-trips non-default search scopes through scope", () => {
     expect(parseEditorDisplayState("?q=shield&scope=all")).toMatchObject({
       searchText: "shield",
       searchScope: "all",
     });
     expect(parseEditorDisplayState("?scope=bogus").searchScope).toBe("name");
+    expect(parseEditorDisplayState("?q=1042&scope=imageNumber")).toMatchObject({
+      searchText: "1042",
+      searchScope: "imageNumber",
+    });
     expect(
       serializeEditorDisplayState({
         ...DEFAULT_EDITOR_DISPLAY_STATE,
