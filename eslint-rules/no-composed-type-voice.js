@@ -1,4 +1,5 @@
 import path from "node:path";
+import { isStrictCompositionFile } from "./ui-boundary-roles.js";
 
 /**
  * A `--t-*` type token is a COMPLETE `font` shorthand — it bundles weight,
@@ -45,13 +46,7 @@ export function toRepoRelativePosix(absolutePath, cwd) {
 
 /** True when this rule governs the given repo-relative POSIX path. */
 export function isProductUiFile(fileRelative) {
-  if (fileRelative.startsWith("src/screens/cumulus_adapters/")) {
-    return true;
-  }
-  return (
-    fileRelative.startsWith("src/cumulus/") &&
-    !EXEMPT_PREFIXES.some((prefix) => fileRelative.startsWith(prefix))
-  );
+  return isStrictCompositionFile(fileRelative, EXEMPT_PREFIXES);
 }
 
 /** True when this template expression is a `token("--t-…")` call. */

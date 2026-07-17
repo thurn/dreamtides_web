@@ -1,4 +1,5 @@
 import path from "node:path";
+import { isStrictCompositionFile } from "./ui-boundary-roles.js";
 
 /**
  * Bans the `className` JSX attribute in Cumulus's product-UI tier.
@@ -38,13 +39,7 @@ export function toRepoRelativePosix(absolutePath, cwd) {
 
 /** True when this rule governs the given repo-relative POSIX path. */
 export function isProductUiFile(fileRelative) {
-  if (fileRelative.startsWith("src/screens/cumulus_adapters/")) {
-    return true;
-  }
-  return (
-    fileRelative.startsWith("src/cumulus/") &&
-    !EXEMPT_PREFIXES.some((prefix) => fileRelative.startsWith(prefix))
-  );
+  return isStrictCompositionFile(fileRelative, EXEMPT_PREFIXES);
 }
 
 /** @type {import("eslint").Rule.RuleModule} */

@@ -1,4 +1,5 @@
 import path from "node:path";
+import { isUniversalUiFile } from "./ui-boundary-roles.js";
 
 /**
  * Bans raw `env(safe-area-inset-*)` reads in Cumulus's product-UI tier.
@@ -31,13 +32,10 @@ export function toRepoRelativePosix(absolutePath, cwd) {
 
 /** True when this rule governs the given repo-relative POSIX path. */
 export function isGovernedFile(fileRelative) {
-  if (!fileRelative.startsWith("src/cumulus/")) {
-    return false;
-  }
   if (/\.(test|spec)\./.test(fileRelative)) {
     return false;
   }
-  return !EXEMPT_PREFIXES.some((prefix) => fileRelative.startsWith(prefix));
+  return isUniversalUiFile(fileRelative, EXEMPT_PREFIXES);
 }
 
 /** @type {import("eslint").Rule.RuleModule} */

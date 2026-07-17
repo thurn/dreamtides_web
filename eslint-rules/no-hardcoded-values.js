@@ -1,5 +1,6 @@
 import path from "node:path";
 import { colorTokenFor } from "./cumulus-token-index.js";
+import { isStrictCompositionFile } from "./ui-boundary-roles.js";
 
 /**
  * Bans hardcoded COLOR literals in Cumulus's product-UI tier.
@@ -80,10 +81,7 @@ const rule = {
     const cwd = typeof context.cwd === "string" ? context.cwd : process.cwd();
     const fileRelative = toRepoRelativePosix(rawFilename, cwd);
 
-    const inCumulus =
-      fileRelative.startsWith("src/cumulus/") &&
-      !EXEMPT_PREFIXES.some((prefix) => fileRelative.startsWith(prefix));
-    if (!inCumulus && !fileRelative.startsWith("src/screens/cumulus_adapters/")) {
+    if (!isStrictCompositionFile(fileRelative, EXEMPT_PREFIXES)) {
       return {};
     }
 

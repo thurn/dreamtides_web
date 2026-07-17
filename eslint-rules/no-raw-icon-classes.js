@@ -1,4 +1,5 @@
 import path from "node:path";
+import { isUniversalUiFile } from "./ui-boundary-roles.js";
 
 /**
  * Bans raw Boxicons icon-font class strings in Cumulus's product-UI tier.
@@ -68,10 +69,7 @@ export function isGovernedFile(fileRelative) {
   ) {
     return false;
   }
-  return (
-    fileRelative.startsWith("src/cumulus/") ||
-    fileRelative.startsWith("src/screens/cumulus_adapters/")
-  );
+  return isUniversalUiFile(fileRelative);
 }
 
 /** True when `call` is a `glyph(...)` invocation. */

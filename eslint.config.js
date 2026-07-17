@@ -19,6 +19,7 @@ import cumulusNoInlineGlass from "./eslint-rules/no-inline-glass.js";
 import cumulusNoNumericStyleProps from "./eslint-rules/no-numeric-style-props.js";
 import cumulusNoPurpleTextOnGlass from "./eslint-rules/no-purple-text-on-glass.js";
 import cumulusNoEntityRevealEscapeHatches from "./eslint-rules/no-entity-reveal-escape-hatches.js";
+import { baselineConfigEntries } from "./eslint-rules/ui-boundary-baselines.js";
 
 // One shared plugin object: flat config rejects two config blocks that bind the
 // same plugin name to different objects, and the cumulus rules apply to more than
@@ -72,6 +73,26 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    // Outer UI is classified in eslint-rules/ui-boundary-roles.js. Each rule
+    // consults that shared ownership map, so pending player presentation is
+    // protected now and operator tooling receives only universal safeguards.
+    files: ["src/**/*.{ts,tsx}"],
+    plugins: { cumulus: cumulusPlugin },
+    rules: {
+      "cumulus/no-hardcoded-values": "error",
+      "cumulus/no-raw-interactive-elements": "error",
+      "cumulus/no-raw-icon-classes": "error",
+      "cumulus/valid-token-references": "error",
+      "cumulus/no-composed-type-voice": "error",
+      "cumulus/no-classname-in-product-ui": "error",
+      "cumulus/no-untokenized-lengths": "error",
+      "cumulus/no-name-keyed-cards": "error",
+      "cumulus/no-raw-safe-area-env": "error",
+      "cumulus/no-inline-glass": "error",
+    },
+  },
+  ...baselineConfigEntries(),
   {
     // Entity reveal mechanics are private across every current and transitional
     // product surface. The rule itself exempts the coordinator implementation

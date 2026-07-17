@@ -1,5 +1,6 @@
 import path from "node:path";
 import { knownTokenNames } from "./cumulus-token-index.js";
+import { isUniversalUiFile } from "./ui-boundary-roles.js";
 
 /**
  * Every literal `var(--x)` reference in Cumulus product UI must name a token
@@ -79,13 +80,7 @@ export function isProductUiFile(fileRelative) {
  * ({@link OWNERSHIP_EXEMPT_PREFIXES}).
  */
 export function isCumulusOwnedFile(fileRelative) {
-  if (fileRelative.startsWith("src/screens/cumulus_adapters/")) {
-    return true;
-  }
-  return (
-    fileRelative.startsWith("src/cumulus/") &&
-    !OWNERSHIP_EXEMPT_PREFIXES.some((prefix) => fileRelative.startsWith(prefix))
-  );
+  return isUniversalUiFile(fileRelative, OWNERSHIP_EXEMPT_PREFIXES);
 }
 
 /** @type {import("eslint").Rule.RuleModule} */

@@ -5,34 +5,16 @@ import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import ts from "typescript";
+import {
+  OUTER_UI_FILE_ROLES,
+  OUTER_UI_ROLE_VALUES,
+  isStrictCompositionFile,
+  isUniversalUiFile,
+} from "../eslint-rules/ui-boundary-roles.js";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC_ROOT = resolve(ROOT, "src");
 const CUMULUS_PREFIX = "src/cumulus/";
-
-export const APP_SHELL_COMPONENTS = [
-  "BattleSiteRoute.test.tsx",
-  "BattleSiteRoute.tsx",
-  "CardDisplay.test.tsx",
-  "CardDisplay.tsx",
-  "CardOverlay.tsx",
-  "CumulusQuestChrome.test.tsx",
-  "CumulusQuestChrome.tsx",
-  "DeckViewer.test.tsx",
-  "DeckViewer.tsx",
-  "DreamcallerPopover.test.tsx",
-  "DreamcallerPopover.tsx",
-  "DreamscapeQuestMenu.test.tsx",
-  "DreamscapeQuestMenu.tsx",
-  "DreamwellCardView.tsx",
-  "ErrorBoundary.test.tsx",
-  "ErrorBoundary.tsx",
-  "PoolViewer.test.tsx",
-  "PoolViewer.tsx",
-  "QuestUtilityMenu.tsx",
-  "ScreenRouter.test.tsx",
-  "ScreenRouter.tsx",
-];
 
 const SCREEN_TYPES = [
   "questStart",
@@ -74,11 +56,21 @@ function collectFiles(dir) {
     const full = join(dir, entry.name);
     if (entry.isDirectory()) {
       files.push(...collectFiles(full));
-    } else if (entry.isFile() && /\.(ts|tsx)$/.test(entry.name)) {
+    } else if (entry.isFile() && /\.(ts|tsx|css)$/.test(entry.name)) {
       files.push(full);
     }
   }
   return files;
+}
+
+/** Production TSX and CSS outside the Cumulus ownership boundary. */
+export function collectOuterUiFiles(srcRoot = SRC_ROOT) {
+  return collectFiles(srcRoot)
+    .filter((file) => !relative(ROOT, file).split(sep).join("/").startsWith(CUMULUS_PREFIX))
+    .filter((file) => /\.(tsx|css)$/.test(file))
+    .filter((file) => !/\.(test|spec)\.(tsx|css)$/.test(file))
+    .map((file) => relative(ROOT, file).split(sep).join("/"))
+    .sort();
 }
 
 function extractImportSpecifiers(sourceText, fileName) {
@@ -121,6 +113,7 @@ function casesForFunction(source, name) {
 describe("Cumulus UI boundary", () => {
   it("keeps Cumulus internals private", () => {
     const importers = collectFiles(SRC_ROOT)
+      .filter((file) => /\.(ts|tsx)$/.test(file))
       .filter((file) => !relative(ROOT, file).split(sep).join("/").startsWith(CUMULUS_PREFIX))
       .filter((file) =>
         extractImportSpecifiers(readFileSync(file, "utf8"), file).some((specifier) =>
@@ -132,11 +125,19 @@ describe("Cumulus UI boundary", () => {
     expect(importers).toEqual([]);
   });
 
-  it("pins the app-shell and operator component boundary", () => {
-    const actual = readdirSync(resolve(ROOT, "src/components"))
-      .filter((name) => name.endsWith(".tsx"))
-      .sort();
-    expect(actual).toEqual([...APP_SHELL_COMPONENTS].sort());
+  it("classifies every outer production UI file recursively", () => {
+    expect(Object.keys(OUTER_UI_FILE_ROLES).sort()).toEqual(collectOuterUiFiles());
+    for (const [file, role] of Object.entries(OUTER_UI_FILE_ROLES)) {
+      expect(OUTER_UI_ROLE_VALUES).toContain(role);
+      expect(file).toMatch(/^src\//);
+    }
+  });
+
+  it("applies strict composition only to pending player presentation", () => {
+    expect(isStrictCompositionFile("src/coop/BounceToast.tsx", [])).toBe(true);
+    expect(isStrictCompositionFile("src/editor/CardEditorApp.tsx", [])).toBe(false);
+    expect(isUniversalUiFile("src/editor/CardEditorApp.tsx")).toBe(true);
+    expect(isUniversalUiFile("src/vendor/boxicons/boxicons.css")).toBe(false);
   });
 
   it("keeps deleted player UI out of gameplay routing", () => {

@@ -1,4 +1,5 @@
 import path from "node:path";
+import { isUniversalUiFile } from "./ui-boundary-roles.js";
 
 /**
  * Bans using card display names as lookup identity in Cumulus product surfaces.
@@ -8,7 +9,6 @@ import path from "node:path";
  * and membership checks must be keyed by UUID/card id instead.
  */
 
-const TARGET_PREFIXES = ["src/cumulus/screens/", "src/screens/cumulus_adapters/"];
 const MAP_KEY_METHODS = new Set(["get", "has", "set", "delete"]);
 const SET_KEY_METHODS = new Set(["add", "has", "delete"]);
 
@@ -110,7 +110,7 @@ const rule = {
     const cwd = typeof context.cwd === "string" ? context.cwd : process.cwd();
     const fileRelative = toRepoRelativePosix(rawFilename, cwd);
 
-    if (!TARGET_PREFIXES.some((prefix) => fileRelative.startsWith(prefix))) {
+    if (!isUniversalUiFile(fileRelative)) {
       return {};
     }
 

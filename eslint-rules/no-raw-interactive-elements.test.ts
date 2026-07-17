@@ -147,5 +147,11 @@ ruleTester.run("no-raw-interactive-elements", rule, {
       code: `const el = <button />;`,
       errors: [{ messageId: "rawInteractive" }],
     },
+    {
+      name: "a pending outer player view cannot add a raw button",
+      filename: "src/coop/ConfigGateScreen.tsx",
+      code: `const el = <button />;`,
+      errors: [{ messageId: "rawInteractive" }],
+    },
   ],
 });
