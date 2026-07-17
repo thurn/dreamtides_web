@@ -125,6 +125,10 @@ export const GLYPHS = {
   refreshCcw: g("bxf bx-refresh-ccw"),
   /** A pencil over a square, used for targeted text or keyword edits. */
   pencilSquare: g("bxf bx-pencil-square"),
+  /** GitHub brand mark from the locally vendored Boxicons logos font. */
+  github: g("bxl bxl-github"),
+  /** Discord brand mark from the locally vendored Boxicons logos font. */
+  discord: g("bxl bxl-discord-alt"),
 
   // Named Transfiguration marks. These mirror the card renderer's per-form
   // emblems and keep forge UI callers out of raw icon-font class strings.

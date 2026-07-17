@@ -9,6 +9,7 @@
 // The id → URL mapping lives here, once.
 
 import { assetUrl } from "../../runtime/asset-url";
+import mainMenuBackgroundUrl from "../assets/shutterstock_1891048579.jpg";
 
 /**
  * A reference to a piece of hosted game art, by identity rather than URL. Each
@@ -16,6 +17,10 @@ import { assetUrl } from "../../runtime/asset-url";
  * {@link resolveArtRef} maps it to a URL through the asset pipeline.
  */
 export type ArtRef =
+  | {
+      /** The authored full-bleed background for the Dreamtides main menu. */
+      readonly kind: "main-menu-background";
+    }
   | {
       /** A dreamsign's art, keyed by its `imageName` (includes the extension). */
       readonly kind: "dreamsign";
@@ -53,6 +58,8 @@ export type ArtRef =
 /** Resolve an {@link ArtRef} to a hosted art URL through the asset pipeline. */
 export function resolveArtRef(ref: ArtRef): string {
   switch (ref.kind) {
+    case "main-menu-background":
+      return mainMenuBackgroundUrl;
     case "dreamsign":
       return assetUrl(`/dreamsigns/${ref.imageName}`);
     case "dreamcaller":
@@ -70,6 +77,7 @@ export function resolveArtRef(ref: ArtRef): string {
 
 /** Convenience constructors for the {@link ArtRef} variants. */
 export const artRef = {
+  mainMenuBackground: (): ArtRef => ({ kind: "main-menu-background" }),
   dreamsign: (imageName: string): ArtRef => ({ kind: "dreamsign", imageName }),
   dreamcaller: (imageNumber: string): ArtRef => ({
     kind: "dreamcaller",

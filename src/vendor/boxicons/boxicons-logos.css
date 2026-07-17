@@ -1,0 +1,32 @@
+/* Boxicons 2.1.4 — locally vendored logo glyphs.
+ * Source: the official `boxicons` npm package. The quest already vendors the
+ * Boxicons 3 basic + filled packs; this small stylesheet gives its separate
+ * logo font a distinct family so those packs keep their own code points. */
+@font-face {
+  font-family: "boxicons-logos";
+  src: url("./boxicons-logos.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.bxl {
+  font-family: "boxicons-logos" !important;
+  font-style: normal;
+  font-weight: 400;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  display: inline-block;
+  speak: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.bxl-github::before {
+  content: "\e93a";
+}
+
+.bxl-discord-alt::before {
+  content: "\e925";
+}

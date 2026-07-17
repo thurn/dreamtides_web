@@ -85,7 +85,6 @@ export const BASELINE = [
   "--dt-spark-border",
   "--dt-surface-light",
   // Motion scale members.
-  "--motion-container-transform",
   "--stagger-travel",
   // Font roles / canonical face layer (the sanctioned type-face vocabulary).
   "--font-logo",
@@ -108,7 +107,6 @@ export const BASELINE = [
   "--t-popover-body",
   "--t-popover-epithet",
   "--t-popover-headline",
-  "--tracking-wordmark", // reserved wordmark letter-spacing token
 ];
 
 /** Whether `fullPath` is walked at all: TS/TSX/CSS source under src/. */

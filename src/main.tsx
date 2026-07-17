@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import "./vendor/boxicons/boxicons.css";
 import "./vendor/boxicons/boxicons-filled.css";
+import "./vendor/boxicons/boxicons-logos.css";
 // Font Awesome solid glyphs. The Dream Atlas leans on Boxicons 3 for site
 // iconography, but a few marks (the Transfiguration hammer, the starter flag,
 // the boss skull, completion checks) come from Font Awesome where Boxicons has
@@ -100,6 +101,10 @@ if (pathname === "/editor" || pathname === "/cards") {
 } else if (pathname === "/cumulus") {
   const { default: CumulusApp } = await import("./cumulus/docs/CumulusApp");
   renderStrict(<CumulusApp />);
+} else if (pathname === "/main") {
+  const { MainMenuScreenAdapter } =
+    await import("./screens/cumulus_adapters/MainMenuScreenAdapter");
+  renderStrict(<MainMenuScreenAdapter />);
 } else {
   // The dev card/figment/config data hot-reload plugins (see vite.config.ts)
   // emit targeted custom HMR events instead of a full reload, so that saving in

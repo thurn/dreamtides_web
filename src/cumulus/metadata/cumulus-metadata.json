@@ -2823,6 +2823,45 @@
       "description": "A small leading {@link Glyph}."
     }
   ],
+  "MainMenuButton": [
+    {
+      "name": "label",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Player-facing action label."
+    },
+    {
+      "name": "variant",
+      "tsType": "MainMenuButtonVariant",
+      "unionMembers": [
+        "mist",
+        "bloom",
+        "veil",
+        "ripple"
+      ],
+      "required": false,
+      "defaultValue": "mist",
+      "description": "Right-origin ethereal fill treatment. Defaults to `mist`."
+    },
+    {
+      "name": "onPress",
+      "tsType": "() => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Reports activation to the route adapter."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "A `data-testid` for selecting the action in tests."
+    }
+  ],
   "Motes": [
     {
       "name": "on",

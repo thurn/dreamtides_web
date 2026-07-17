@@ -34,6 +34,7 @@ import { glowIconDemo } from "./demos/glow-icon";
 import { groupPanelDemo } from "./demos/group-panel";
 import { iconButtonDemo } from "./demos/icon-button";
 import { infoCardDemo } from "./demos/info-card";
+import { mainMenuButtonDemo } from "./demos/main-menu-button";
 import { motesDemo } from "./demos/motes";
 import { numberStepperDemo } from "./demos/number-stepper";
 import { offerTileDemo } from "./demos/offer-tile";
@@ -147,6 +148,7 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   resourceChipDemo,
   essenceValueDemo,
   iconButtonDemo,
+  mainMenuButtonDemo,
   glassButtonDemo,
   offerTileDemo,
   glassPanelDemo,

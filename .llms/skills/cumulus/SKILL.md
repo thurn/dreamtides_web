@@ -66,10 +66,11 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 <!-- BEGIN GENERATED COMPONENT INDEX (npm run cumulus-docs) -->
 | Component | Group | Consumers | Reference | What it is |
 | --- | --- | --- | --- | --- |
-| Pressable | Primitives | 25 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
+| Pressable | Primitives | 26 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
 | Resource Chip | Components | 4 | [components/resource-chip.md](components/resource-chip.md) | The sized, self-contained value-and-mark chip for the game economy. |
 | Essence Value | Components | 8 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
-| Icon Button | Components | 12 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — neutral or purple accent liquid glass, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
+| Icon Button | Components | 13 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — neutral or purple accent liquid glass, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
+| Main Menu Button | Components | 1 | [components/main-menu-button.md](components/main-menu-button.md) | The text-first action for the Dreamtides main menu: outlined white at rest, with a deep purple AAA-contrast field and ethereal right-edge glow on hover or focus. |
 | Glass Button | Components | 16 | [components/glass-button.md](components/glass-button.md) | The labeled glass action — a bold text label with optional numerical essence cost on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface. |
 | Offer Tile | Components | 2 | [components/offer-tile.md](components/offer-tile.md) | The circular symbolic Dream Augury offer button in named 300×300 desktop and 240×240 mobile sizes: UUID-backed full-bleed card art, Dreamsigns and site glyphs over authored full-art fields, and centered operation marks inside the gold-and-feather frame. |
 | Glass Panel | Components | 6 | [components/glass-panel.md](components/glass-panel.md) | The shared liquid-glass content container: an optional structured header, a composed body, and an optional footer on the canonical floating material. |

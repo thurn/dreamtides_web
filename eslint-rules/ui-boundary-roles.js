@@ -23,6 +23,7 @@ const fileRoles = {
   "src/battle/battle.css": OUTER_UI_ROLES.PENDING_PRESENTATION,
   "src/vendor/boxicons/boxicons.css": OUTER_UI_ROLES.VENDOR_ASSET,
   "src/vendor/boxicons/boxicons-filled.css": OUTER_UI_ROLES.VENDOR_ASSET,
+  "src/vendor/boxicons/boxicons-logos.css": OUTER_UI_ROLES.VENDOR_ASSET,
 
   "src/components/BattleSiteRoute.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/components/CardDisplay.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
@@ -82,6 +83,7 @@ for (const name of [
   "DreamscapeScreenAdapter", "DreamsignBazaarSiteScreenAdapter",
   "DreamsignRevelationScreenAdapter", "DuplicationSiteScreenAdapter",
   "MobileBattleScreenAdapter", "MobileDeckViewerAdapter", "PurgeSiteScreenAdapter",
+  "MainMenuScreenAdapter",
   "QuestCompleteScreenAdapter", "QuestFailedScreenAdapter", "QuestStartScreenAdapter",
   "StartingDeckOverlayAdapter", "TransfigurationSiteScreenAdapter",
   "WorkInProgressSiteScreenAdapter", "registry",
