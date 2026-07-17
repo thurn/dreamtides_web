@@ -23,8 +23,8 @@ export const MAIN_MENU_TWEAK_SCHEMA = {
     options: ["balanced", "castle", "wanderer", "horizon"],
   },
   hoverStyle: {
-    label: "Button hover",
-    options: ["mist", "bloom", "veil", "ripple"],
+    label: "Hover glass",
+    options: ["frost", "accent", "popover"],
   },
   socialStyle: {
     label: "Social glass",
@@ -35,7 +35,7 @@ export const MAIN_MENU_TWEAK_SCHEMA = {
 export const DEFAULT_MAIN_MENU_TWEAKS: MainMenuTweaks = {
   composition: "cinematic",
   crop: "castle",
-  hoverStyle: "mist",
+  hoverStyle: "accent",
   socialStyle: "neutral",
 };
 

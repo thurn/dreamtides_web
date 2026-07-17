@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/main-menu-button`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The text-first action for the Dreamtides main menu: outlined white at rest, with a deep purple AAA-contrast field and ethereal right-edge glow on hover or focus.
+The text-first action for the Dreamtides main menu: outlined white at rest, revealing the shared Cumulus liquid-glass material from the right on hover or focus.
 
 > **Guidance:** Use only on the full-bleed main-menu scene; labeled actions elsewhere use GlassButton.
 
@@ -17,18 +17,18 @@ The text-first action for the Dreamtides main menu: outlined white at rest, with
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | yes | — | Player-facing action label. |
-| `variant` | `MainMenuButtonVariant` = `"mist" \| "bloom" \| "veil" \| "ripple"` | no | `mist` | Right-origin ethereal fill treatment. Defaults to `mist`. |
+| `variant` | `MainMenuButtonVariant` = `"accent" \| "frost" \| "popover"` | no | `accent` | Liquid-glass reveal treatment. Defaults to `accent`. |
 | `onPress` | `() => void` | yes | — | Reports activation to the route adapter. |
 | `testId` | `string` | no | — | A `data-testid` for selecting the action in tests. |
 
 ## Usage
 
-Choose one of the four named right-origin motion treatments while the menu design is being tuned.
+Choose neutral frost, purple accent, or the warmer reveal tint while the menu design is being tuned; every option uses the shared liquid-glass recipe.
 
 ```tsx
 <MainMenuButton
   label="New Journey"
-  variant="mist"
+  variant="accent"
   onPress={startJourney}
 />
 ```

@@ -8,7 +8,7 @@ interface MainMenuButtonDemoArgs {
   variant?: MainMenuButtonVariant;
 }
 
-function MainMenuButtonDemo({ variant = "mist" }: MainMenuButtonDemoArgs) {
+function MainMenuButtonDemo({ variant = "accent" }: MainMenuButtonDemoArgs) {
   return (
     <div style={{ width: 320 }}>
       <MainMenuButton
@@ -24,7 +24,7 @@ export const mainMenuButtonDemo: CumulusComponent = {
   id: "main-menu-button",
   title: "Main Menu Button",
   blurb:
-    "The text-first action for the Dreamtides main menu: outlined white at rest, with a deep purple AAA-contrast field and ethereal right-edge glow on hover or focus.",
+    "The text-first action for the Dreamtides main menu: outlined white at rest, revealing the shared Cumulus liquid-glass material from the right on hover or focus.",
   callout:
     "Use only on the full-bleed main-menu scene; labeled actions elsewhere use GlassButton.",
   group: "Components",
@@ -32,15 +32,15 @@ export const mainMenuButtonDemo: CumulusComponent = {
   Component: MainMenuButtonDemo,
   usage: [
     {
-      note: "Choose one of the four named right-origin motion treatments while the menu design is being tuned.",
+      note: "Choose neutral frost, purple accent, or the warmer reveal tint while the menu design is being tuned; every option uses the shared liquid-glass recipe.",
       code: `<MainMenuButton
   label="New Journey"
-  variant="mist"
+  variant="accent"
   onPress={startJourney}
 />`,
     },
   ],
   demo: {
-    defaultArgs: { variant: "mist" },
+    defaultArgs: { variant: "accent" },
   },
 };

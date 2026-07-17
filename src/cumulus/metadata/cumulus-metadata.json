@@ -2371,8 +2371,8 @@
       "name": "radius",
       "tsType": "GlassPanelRadius",
       "unionMembers": [
-        "panel",
         "popover",
+        "panel",
         "control"
       ],
       "required": false,
@@ -2836,14 +2836,13 @@
       "name": "variant",
       "tsType": "MainMenuButtonVariant",
       "unionMembers": [
-        "mist",
-        "bloom",
-        "veil",
-        "ripple"
+        "accent",
+        "frost",
+        "popover"
       ],
       "required": false,
-      "defaultValue": "mist",
-      "description": "Right-origin ethereal fill treatment. Defaults to `mist`."
+      "defaultValue": "accent",
+      "description": "Liquid-glass reveal treatment. Defaults to `accent`."
     },
     {
       "name": "onPress",

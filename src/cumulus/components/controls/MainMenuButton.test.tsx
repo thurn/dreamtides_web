@@ -37,12 +37,11 @@ afterEach(() => {
 });
 
 describe("MainMenuButton", () => {
-  it("renders each named hover treatment on the shared press surface", () => {
+  it("renders each named shared-glass treatment on the press surface", () => {
     const variants: readonly MainMenuButtonVariant[] = [
-      "mist",
-      "bloom",
-      "veil",
-      "ripple",
+      "frost",
+      "accent",
+      "popover",
     ];
     const { container, root } = mount(
       <div>
@@ -63,6 +62,26 @@ describe("MainMenuButton", () => {
         (button) => button.dataset.mainMenuButtonVariant,
       ),
     ).toEqual(variants);
+
+    const glassSurfaces = Array.from(
+      container.querySelectorAll<HTMLElement>("[data-main-menu-button-glass]"),
+    );
+    expect(glassSurfaces).toHaveLength(variants.length);
+    for (const surface of glassSurfaces) {
+      expect(surface.style.backdropFilter).toContain("--glass-blur");
+      expect(surface.style.background).toContain("--glass-sheen");
+    }
+    expect(glassSurfaces[0]?.style.background).toContain("--glass-fill");
+    expect(glassSurfaces[0]?.style.border).toContain("--glass-rim");
+    expect(glassSurfaces[0]?.style.boxShadow).toContain("--glass-shadow");
+    expect(glassSurfaces[1]?.style.background).toContain("--accent-bright");
+    expect(glassSurfaces[1]?.style.background).toContain("--glass-fill");
+    expect(glassSurfaces[1]?.style.border).toContain("--accent-bright");
+    expect(glassSurfaces[2]?.style.background).toContain(
+      "--glass-fill-popover",
+    );
+    expect(glassSurfaces[2]?.style.border).toContain("--glass-rim");
+    expect(glassSurfaces[2]?.style.boxShadow).toContain("--glass-shadow");
 
     act(() => root.unmount());
   });

@@ -126,17 +126,17 @@ describe("Cumulus MainMenuScreen", () => {
     expect(hoverSelect).not.toBeNull();
     act(() => {
       if (hoverSelect === null) return;
-      hoverSelect.value = "veil";
+      hoverSelect.value = "popover";
       hoverSelect.dispatchEvent(new Event("change", { bubbles: true }));
     });
     expect(
       container.querySelector("[data-main-menu-actions] button")?.getAttribute(
         "data-main-menu-button-variant",
       ),
-    ).toBe("veil");
+    ).toBe("popover");
     expect(
       container.querySelector('[data-testid="main-menu-tweaks-json"]')?.textContent,
-    ).toContain('"hoverStyle": "veil"');
+    ).toContain('"hoverStyle": "popover"');
 
     act(() => root.unmount());
   });

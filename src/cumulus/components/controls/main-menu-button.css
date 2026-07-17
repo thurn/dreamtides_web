@@ -11,52 +11,25 @@
   border: 0;
   border-radius: var(--radius-control);
   background: transparent;
-  color: var(--text-on-accent);
+  color: var(--text-on-glass);
   font: var(--t-lead);
   text-align: left;
   text-shadow: var(--text-outline-media);
 }
 
-.main-menu-button::before,
-.main-menu-button::after {
+.main-menu-button__glass {
   position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 0;
+  box-sizing: border-box;
   pointer-events: none;
-  content: "";
-}
-
-.main-menu-button::before {
-  z-index: -2;
-  inset: 0;
-  border-radius: inherit;
-  background-color: var(--surface-chrome-strong);
-  background-image: linear-gradient(
-    90deg,
-    transparent,
-    var(--accent-tint)
-  );
-  box-shadow: var(--shadow-md), var(--glow-accent-soft);
-  clip-path: inset(0 0 0 100% round var(--radius-control));
-  opacity: 0;
+  visibility: hidden;
   transition:
-    clip-path var(--motion-container-transform),
-    opacity var(--dur-fast) var(--ease-out),
-    border-radius var(--dur-base) var(--ease-out);
-}
-
-.main-menu-button::after {
-  z-index: -1;
-  top: 16%;
-  right: -8%;
-  width: 38%;
-  height: 68%;
-  border-radius: var(--radius-pill);
-  background: var(--accent);
-  filter: blur(var(--space-7));
-  opacity: 0;
-  transform: translateX(120%);
-  transition:
-    opacity var(--dur-base) var(--ease-out),
-    transform var(--motion-container-transform);
+    width var(--motion-container-transform),
+    visibility 0s linear var(--dur-base);
 }
 
 .main-menu-button__label {
@@ -64,16 +37,13 @@
   z-index: 1;
 }
 
-.main-menu-button:hover::before,
-.main-menu-button:focus-visible::before {
-  opacity: 1;
-  clip-path: inset(0 0 0 0 round var(--radius-control));
-}
-
-.main-menu-button:hover::after,
-.main-menu-button:focus-visible::after {
-  opacity: 0.38;
-  transform: translateX(18%);
+.main-menu-button:hover .main-menu-button__glass,
+.main-menu-button:focus-visible .main-menu-button__glass {
+  width: 100%;
+  visibility: visible;
+  transition:
+    width var(--motion-container-transform),
+    visibility 0s;
 }
 
 .main-menu-button:focus-visible {
@@ -81,43 +51,8 @@
   outline-offset: var(--space-2);
 }
 
-.main-menu-button[data-main-menu-button-variant="bloom"]::before {
-  border-radius: var(--radius-pill);
-  clip-path: circle(8% at 100% 50%);
-}
-
-.main-menu-button[data-main-menu-button-variant="bloom"]:hover::before,
-.main-menu-button[data-main-menu-button-variant="bloom"]:focus-visible::before {
-  border-radius: var(--radius-control);
-  clip-path: circle(150% at 100% 50%);
-}
-
-.main-menu-button[data-main-menu-button-variant="veil"]::before {
-  clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
-  transition:
-    clip-path var(--motion-container-transform),
-    opacity var(--dur-fast) var(--ease-out);
-}
-
-.main-menu-button[data-main-menu-button-variant="veil"]:hover::before,
-.main-menu-button[data-main-menu-button-variant="veil"]:focus-visible::before {
-  clip-path: polygon(14% 0, 100% 0, 100% 100%, 0 100%);
-}
-
-.main-menu-button[data-main-menu-button-variant="ripple"]::before {
-  border-radius: var(--radius-pill);
-  clip-path: ellipse(5% 18% at 100% 50%);
-}
-
-.main-menu-button[data-main-menu-button-variant="ripple"]:hover::before,
-.main-menu-button[data-main-menu-button-variant="ripple"]:focus-visible::before {
-  border-radius: var(--radius-control);
-  clip-path: ellipse(150% 180% at 100% 50%);
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .main-menu-button::before,
-  .main-menu-button::after {
+  .main-menu-button__glass {
     transition: none;
   }
 }
