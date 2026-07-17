@@ -299,7 +299,6 @@ export function BattleForeseeOverlay({
             placement="onGlass"
             variant="accent"
             testId="battle-foresee-confirm"
-            disabled={view.cards.length === 0}
             onPress={() => onConfirm({
               viewedCardIds: allCardIds.slice(0, count),
               orderedCardIds,

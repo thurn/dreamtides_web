@@ -272,4 +272,29 @@ describe("BattleForeseeOverlay", () => {
 
     act(() => root.unmount());
   });
+
+  it("confirms an empty Foresee so an authoritative prompt can resolve", () => {
+    const onConfirm = vi.fn();
+    const { container, root } = mount(
+      <BattleForeseeOverlay
+        view={{ initialCount: 1, cards: [] }}
+        onConfirm={onConfirm}
+      />,
+    );
+
+    const confirm = container.querySelector<HTMLButtonElement>(
+      '[data-testid="battle-foresee-confirm"]',
+    );
+    expect(confirm?.hasAttribute("aria-disabled")).toBe(false);
+
+    act(() => confirm?.click());
+
+    expect(onConfirm).toHaveBeenCalledWith({
+      viewedCardIds: [],
+      orderedCardIds: [],
+      voidCardIds: [],
+    });
+
+    act(() => root.unmount());
+  });
 });
