@@ -561,12 +561,8 @@
   --dur-slow: 420ms;  /* @kind other */
 
   /* ---- Material-continuity motion ----
-     The two canonical transitions every component specs its enter/change/exit
-     against, so timing + easing can't diverge per surface. Nothing fades in;
-     objects TRAVEL and EXPAND, and reverse on the way out.
-       object-travel     — a value / card moving between two anchors
-       container-transform — an object expanding into its detail view */
+     The canonical transition for a value or card moving between two anchors,
+     keeping timing and easing consistent across surfaces. */
   --motion-object-travel: 420ms var(--ease-out);        /* @kind other */
-  --motion-container-transform: 320ms var(--ease-dream);/* @kind other */
   --stagger-travel: 55ms;  /* @kind other */
 }

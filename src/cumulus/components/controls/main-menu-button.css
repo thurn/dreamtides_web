@@ -20,39 +20,24 @@
 .main-menu-button__glass {
   position: absolute;
   z-index: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 0;
+  inset: 0;
   box-sizing: border-box;
   pointer-events: none;
   visibility: hidden;
-  transition:
-    width var(--motion-container-transform),
-    visibility 0s linear var(--dur-base);
 }
 
 .main-menu-button__label {
   position: relative;
   z-index: 1;
+  white-space: nowrap;
 }
 
 .main-menu-button:hover .main-menu-button__glass,
 .main-menu-button:focus-visible .main-menu-button__glass {
-  width: 100%;
   visibility: visible;
-  transition:
-    width var(--motion-container-transform),
-    visibility 0s;
 }
 
 .main-menu-button:focus-visible {
   outline: 2px solid var(--accent-bright);
   outline-offset: var(--space-2);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .main-menu-button__glass {
-    transition: none;
-  }
 }

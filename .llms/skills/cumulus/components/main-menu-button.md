@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/main-menu-button`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The text-first action for the Dreamtides main menu: outlined white at rest, revealing the shared Cumulus liquid-glass material from the right on hover or focus.
+The text-first action for the Dreamtides main menu: outlined white at rest, showing the shared Cumulus liquid-glass material on hover or focus.
 
 > **Guidance:** Use only on the full-bleed main-menu scene; labeled actions elsewhere use GlassButton.
 
@@ -17,18 +17,16 @@ The text-first action for the Dreamtides main menu: outlined white at rest, reve
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | yes | — | Player-facing action label. |
-| `variant` | `MainMenuButtonVariant` = `"accent" \| "frost" \| "popover"` | no | `accent` | Liquid-glass reveal treatment. Defaults to `accent`. |
 | `onPress` | `() => void` | yes | — | Reports activation to the route adapter. |
 | `testId` | `string` | no | — | A `data-testid` for selecting the action in tests. |
 
 ## Usage
 
-Choose neutral frost, purple accent, or the warmer reveal tint while the menu design is being tuned; every option uses the shared liquid-glass recipe.
+Use the standard neutral liquid-glass hover treatment on the full-bleed main menu.
 
 ```tsx
 <MainMenuButton
   label="New Journey"
-  variant="accent"
   onPress={startJourney}
 />
 ```

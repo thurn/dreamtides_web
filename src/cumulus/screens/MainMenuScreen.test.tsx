@@ -111,32 +111,45 @@ describe("Cumulus MainMenuScreen", () => {
     act(() => root.unmount());
   });
 
-  it("keeps design alternatives in a collapsible development panel", () => {
+  it("uses the approved framed composition and neutral glass treatments", () => {
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches: query === "(min-width: 900px)",
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
     const { container, root } = mount(
       <MainMenuScreen view={VIEW} onAction={() => {}} onSocial={() => {}} />,
     );
-    const toggle = container.querySelector<HTMLButtonElement>(
-      '[data-testid="main-menu-tweaks-toggle"]',
+    const menu = container.querySelector<HTMLElement>("[data-main-menu]");
+    const title = container.querySelector<HTMLElement>("[data-main-menu-title]");
+    const actions = container.querySelector<HTMLElement>(
+      "[data-main-menu-actions]",
     );
-    act(() => toggle?.click());
+    const stack = container.querySelector<HTMLElement>(
+      "[data-main-menu-action-stack]",
+    );
 
-    const hoverSelect = container.querySelector<HTMLSelectElement>(
-      '[data-testid="main-menu-tweak-hover-style"]',
-    );
-    expect(hoverSelect).not.toBeNull();
-    act(() => {
-      if (hoverSelect === null) return;
-      hoverSelect.value = "popover";
-      hoverSelect.dispatchEvent(new Event("change", { bubbles: true }));
-    });
+    expect(menu?.style.backgroundPosition).toBe("54% 49%");
+    expect(title?.style.top).toBe("var(--space-10)");
+    expect(actions?.style.left).toBe("var(--space-12)");
+    expect(actions?.style.bottom).toBe("var(--space-11)");
+    expect(actions?.style.width).toBe("280px");
+    expect(stack?.style.zoom).toBe("1.5");
+    expect(stack?.style.gap).toBe("0px");
     expect(
-      container.querySelector("[data-main-menu-actions] button")?.getAttribute(
-        "data-main-menu-button-variant",
+      container.querySelector<HTMLElement>("[data-main-menu-button-glass]")
+        ?.style.background,
+    ).not.toContain("--accent-bright");
+    expect(
+      Array.from(container.querySelectorAll("[data-main-menu-socials] button")).map(
+        (button) => button.getAttribute("data-glass-variant"),
       ),
-    ).toBe("popover");
-    expect(
-      container.querySelector('[data-testid="main-menu-tweaks-json"]')?.textContent,
-    ).toContain('"hoverStyle": "popover"');
+    ).toEqual(["default", "default"]);
 
     act(() => root.unmount());
   });

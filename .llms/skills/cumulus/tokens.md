@@ -198,7 +198,6 @@ Durations, easings, and the two material-continuity transitions (object-travel, 
 | `--dur-base` | `240ms` |  |
 | `--dur-slow` | `420ms` |  |
 | `--motion-object-travel` | `420ms var(--ease-out)` |  |
-| `--motion-container-transform` | `320ms var(--ease-dream)` |  |
 | `--stagger-travel` | `55ms` |  |
 
 ## Safe area & device frame

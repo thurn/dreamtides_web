@@ -298,8 +298,8 @@ a **Primitives** tier below it, each grouped by kind and name-prefix family.
   fallbacks (`fa-solid fa-hammer`, already present, and `ph-fill ph-cards`, the
   one self-hosted Phosphor fill face).
 - **Motion** — `--ease-dream / -out / -in-out`, `--dur-fast/base/slow`,
-  `--press-scale` (0.9), and the two material-continuity tokens
-  (`--motion-object-travel`, `--motion-container-transform`).
+  `--press-scale` (0.9), and the `--motion-object-travel`
+  material-continuity token.
 - **Glow** — `--glow-accent / -soft / -strong`, `--glow-gold`, `--glow-danger`,
   `--glow-text`, plus the cool purple-black elevation shadows and insets.
 

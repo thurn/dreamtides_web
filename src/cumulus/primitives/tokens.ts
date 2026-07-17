@@ -265,7 +265,6 @@ export const TOKENS = {
   "--dur-base": { var: "var(--dur-base)", value: "240ms", kind: "other" },
   "--dur-slow": { var: "var(--dur-slow)", value: "420ms", kind: "other" },
   "--motion-object-travel": { var: "var(--motion-object-travel)", value: "420ms var(--ease-out)", kind: "other" },
-  "--motion-container-transform": { var: "var(--motion-container-transform)", value: "320ms var(--ease-dream)", kind: "other" },
   "--stagger-travel": { var: "var(--stagger-travel)", value: "55ms", kind: "other" },
 } as const;
 

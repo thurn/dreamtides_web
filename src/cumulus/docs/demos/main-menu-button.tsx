@@ -1,21 +1,10 @@
-import {
-  MainMenuButton,
-  type MainMenuButtonVariant,
-} from "../../components/controls/MainMenuButton";
+import { MainMenuButton } from "../../components/controls/MainMenuButton";
 import type { CumulusComponent } from "../registry";
 
-interface MainMenuButtonDemoArgs {
-  variant?: MainMenuButtonVariant;
-}
-
-function MainMenuButtonDemo({ variant = "accent" }: MainMenuButtonDemoArgs) {
+function MainMenuButtonDemo() {
   return (
-    <div style={{ width: 320 }}>
-      <MainMenuButton
-        label="New Journey"
-        variant={variant}
-        onPress={() => {}}
-      />
+    <div style={{ width: 280 }}>
+      <MainMenuButton label="New Journey" onPress={() => {}} />
     </div>
   );
 }
@@ -24,7 +13,7 @@ export const mainMenuButtonDemo: CumulusComponent = {
   id: "main-menu-button",
   title: "Main Menu Button",
   blurb:
-    "The text-first action for the Dreamtides main menu: outlined white at rest, revealing the shared Cumulus liquid-glass material from the right on hover or focus.",
+    "The text-first action for the Dreamtides main menu: outlined white at rest, showing the shared Cumulus liquid-glass material on hover or focus.",
   callout:
     "Use only on the full-bleed main-menu scene; labeled actions elsewhere use GlassButton.",
   group: "Components",
@@ -32,15 +21,14 @@ export const mainMenuButtonDemo: CumulusComponent = {
   Component: MainMenuButtonDemo,
   usage: [
     {
-      note: "Choose neutral frost, purple accent, or the warmer reveal tint while the menu design is being tuned; every option uses the shared liquid-glass recipe.",
+      note: "Use the standard neutral liquid-glass hover treatment on the full-bleed main menu.",
       code: `<MainMenuButton
   label="New Journey"
-  variant="accent"
   onPress={startJourney}
 />`,
     },
   ],
   demo: {
-    defaultArgs: { variant: "accent" },
+    defaultArgs: {},
   },
 };

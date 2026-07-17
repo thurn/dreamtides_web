@@ -2371,8 +2371,8 @@
       "name": "radius",
       "tsType": "GlassPanelRadius",
       "unionMembers": [
-        "popover",
         "panel",
+        "popover",
         "control"
       ],
       "required": false,
@@ -2831,18 +2831,6 @@
       "required": true,
       "defaultValue": null,
       "description": "Player-facing action label."
-    },
-    {
-      "name": "variant",
-      "tsType": "MainMenuButtonVariant",
-      "unionMembers": [
-        "accent",
-        "frost",
-        "popover"
-      ],
-      "required": false,
-      "defaultValue": "accent",
-      "description": "Liquid-glass reveal treatment. Defaults to `accent`."
     },
     {
       "name": "onPress",
