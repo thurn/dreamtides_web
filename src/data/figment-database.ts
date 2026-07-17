@@ -20,6 +20,7 @@ interface FigmentDataEntry {
 
 function toCatalogRecord(entry: FigmentDataEntry): FigmentCatalogRecord {
   return {
+    id: entry.id,
     subtype: entry.subtype,
     spark: typeof entry.spark === "number" ? entry.spark : 0,
     ...(entry.keyword === undefined ? {} : { keyword: entry.keyword }),

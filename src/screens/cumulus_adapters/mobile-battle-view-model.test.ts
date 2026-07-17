@@ -468,6 +468,7 @@ describe("buildMobileBattleView", () => {
     );
 
     expect(view.cardPicker).toMatchObject({
+      side,
       candidateIds: [candidateId],
       canResolve: true,
       presentation:
@@ -511,6 +512,7 @@ describe("buildMobileBattleView", () => {
     });
 
     expect(view.cardPicker).toMatchObject({
+      side: "player",
       candidateIds: [],
       candidates: [],
       canResolve: true,

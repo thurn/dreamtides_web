@@ -6,6 +6,7 @@ import {
   selectEffectiveSparkOrZero,
   selectFailureOverlayResult,
   selectPlayAreaSize,
+  selectSidePlayAreaSize,
 } from "./selectors";
 import type { BattleMutableState } from "../types";
 import {
@@ -150,6 +151,13 @@ describe("selectPlayAreaSize", () => {
     state.sides.player.frontRank.F2 = "p2";
     // Enemy board is empty, but the rendered width follows the busier side.
     expect(selectPlayAreaSize(state)).toEqual({ frontSize: 4, backSize: 5 });
+    expect(selectSidePlayAreaSize(state, "player")).toEqual({
+      frontSize: 4,
+      backSize: 5,
+    });
+    expect(selectSidePlayAreaSize(state, "enemy")).toEqual({
+      frontSize: 2,
+      backSize: 3,
+    });
   });
 });
-

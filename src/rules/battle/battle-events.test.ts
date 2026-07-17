@@ -287,6 +287,43 @@ describe("BEGIN_BATTLE", () => {
     expect(result.outcome).toBe("bounced");
     expect(result.state.battle).toBeNull();
   });
+
+  it("forwards a validated seed override and event sequence to the provider", () => {
+    let captured: Parameters<BattleInitProvider["beginBattle"]>[0] | null = null;
+    registerBattleInitProvider({
+      beginBattle(input) {
+        captured = input;
+        return fakeProvider.beginBattle(input);
+      },
+    });
+
+    const result = reduce(
+      baseState(),
+      "BEGIN_BATTLE",
+      { siteId: SITE_ID, seedOverride: 4242 },
+      ctx({ seq: 77 }),
+    );
+
+    expect(result.outcome).toBe("applied");
+    expect(captured).toMatchObject({
+      siteId: SITE_ID,
+      seedOverride: 4242,
+      seq: 77,
+    });
+  });
+
+  it.each([-1, 1.5, Number.MAX_SAFE_INTEGER + 1, "42"])(
+    "bounces invalid seed override %s",
+    (seedOverride) => {
+      registerBattleInitProvider(fakeProvider);
+      const result = reduce(baseState(), "BEGIN_BATTLE", {
+        siteId: SITE_ID,
+        seedOverride,
+      });
+      expect(result.outcome).toBe("bounced");
+      expect(result.state.battle).toBeNull();
+    },
+  );
 });
 
 // ---------------------------------------------------------------------------

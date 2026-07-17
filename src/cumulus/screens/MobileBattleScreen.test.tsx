@@ -1267,6 +1267,7 @@ describe("MobileBattleScreen", () => {
       cardPicker: {
         key: "prompt-42",
         label: "Discard 2 cards",
+        side: "player",
         candidates: view.playerHand.slice(0, 2).map((card) =>
           makePickerCandidate(card, "player", "hand")
         ),
@@ -1357,6 +1358,7 @@ describe("MobileBattleScreen", () => {
       cardPicker: {
         key: "prompt-optional",
         label: "Choose a card",
+        side: "player",
         candidates: [makePickerCandidate(view.playerHand[0], "player", "hand")],
         candidateIds: [view.playerHand[0]?.id ?? "missing"],
         count: 1,
@@ -1455,6 +1457,7 @@ describe("MobileBattleScreen", () => {
       cardPicker: {
         key: "prompt-enemy",
         label: "Choose a card to discard",
+        side: "enemy",
         candidates: view.enemyHand.map((card) =>
           makePickerCandidate(card, "enemy", "hand")
         ),
@@ -1532,6 +1535,7 @@ describe("MobileBattleScreen", () => {
       cardPicker: {
         key: "prompt-battlefield",
         label: "Choose battlefield characters",
+        side: "player",
         candidates: [
           makePickerCandidate(enemyCard, "enemy", "frontRank"),
           makePickerCandidate(playerCard, "player", "frontRank"),
@@ -1586,6 +1590,7 @@ describe("MobileBattleScreen", () => {
       cardPicker: {
         key: "prompt-gallery",
         label: "Choose cards from hidden zones",
+        side: "player",
         candidates,
         candidateIds: candidates.map((candidate) => candidate.instanceId),
         count: 2,
@@ -1648,6 +1653,7 @@ describe("MobileBattleScreen", () => {
       cardPicker: {
         key: "prompt-mobile-gallery",
         label: "Choose a void card",
+        side: "player",
         candidates: [candidate],
         candidateIds: [candidate.instanceId],
         count: 1,
@@ -1677,6 +1683,7 @@ describe("MobileBattleScreen", () => {
       cardPicker: {
         key: "prompt-highlighted",
         label: "Discard a card",
+        side: "player",
         candidates: [makePickerCandidate(highlighted, "player", "hand", true)],
         candidateIds: [highlighted.id],
         count: 1,
@@ -1704,6 +1711,7 @@ describe("MobileBattleScreen", () => {
       cardPicker: {
         key: "prompt-empty",
         label: "Choose a valid target",
+        side: "player",
         candidates: [],
         candidateIds: [],
         count: 1,
@@ -1851,6 +1859,56 @@ describe("MobileBattleScreen", () => {
     expect(trackColumns("enemy", "front")).toContain("repeat(2,");
     expect(trackColumns("player", "back")).toContain("repeat(6,");
     expect(trackColumns("player", "front")).toContain("repeat(5,");
+
+    act(() => root.unmount());
+  });
+
+  it("centers the smaller formation when one desktop side fills the opening window", () => {
+    mockDesktopViewport(true);
+    const view = makeView();
+    const playerBackRank = Array.from({ length: 10 }, (_, index) => ({
+      id: `B${String(index)}`,
+      card: makeCard(100 + index, `player-full-back-${String(index)}`),
+    }));
+    const playerFrontRank = Array.from({ length: 9 }, (_, index) => ({
+      id: `F${String(index)}`,
+      card: makeCard(120 + index, `player-full-front-${String(index)}`),
+    }));
+    const enemyBackRank = Array.from({ length: 5 }, (_, index) => ({
+      id: `B${String(index)}`,
+      card: makeCard(140 + index, `enemy-small-back-${String(index)}`),
+    }));
+    const enemyFrontRank = Array.from({ length: 4 }, (_, index) => ({
+      id: `F${String(index)}`,
+      card: makeCard(150 + index, `enemy-small-front-${String(index)}`),
+    }));
+    const { container, root } = mount({
+      ...view,
+      enemy: {
+        ...view.enemy,
+        backRank: enemyBackRank,
+        frontRank: enemyFrontRank,
+      },
+      player: {
+        ...view.player,
+        backRank: playerBackRank,
+        frontRank: playerFrontRank,
+      },
+    });
+
+    const track = (owner: "enemy" | "player", rank: "back" | "front") =>
+      container.querySelector<HTMLElement>(
+        `[data-battle-rank="${owner}-${rank}"] [data-battle-rank-track]`,
+      );
+    expect(track("player", "back")?.style.gridTemplateColumns).toContain("repeat(10,");
+    expect(track("player", "front")?.style.gridTemplateColumns).toContain("repeat(9,");
+    expect(track("enemy", "back")?.style.gridTemplateColumns).toContain("repeat(5,");
+    expect(track("enemy", "front")?.style.gridTemplateColumns).toContain("repeat(4,");
+    expect(
+      container.querySelectorAll(
+        '[data-battle-rank="enemy-back"] [data-battle-slot-id]',
+      ),
+    ).toHaveLength(5);
 
     act(() => root.unmount());
   });

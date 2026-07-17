@@ -6,7 +6,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { BattleDebugEdit } from "../debug/commands";
 import { createBattleInit } from "../integration/create-battle-init";
 import { allocateBattleCardInstance, createInitialBattleState } from "../state/create-initial-state";
-import { FIGMENT_CATALOG_ENTRIES } from "../state/figment-catalog";
+import {
+  FIGMENT_CATALOG_ENTRIES,
+  hydrateFigmentCatalog,
+  resetFigmentCatalogHydration,
+} from "../state/figment-catalog";
 import {
   makeBattleTestCardDatabase,
   makeBattleTestDreamcallers,
@@ -65,6 +69,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  resetFigmentCatalogHydration();
   document.body.innerHTML = "";
   vi.restoreAllMocks();
 });
@@ -80,12 +85,52 @@ describe("BattleFigmentCreator", () => {
     const values = Array.from(select?.querySelectorAll("option") ?? []).map(
       (option) => option.value,
     );
-    expect(values).toEqual(FIGMENT_CATALOG_ENTRIES.map((entry) => entry.subtype));
+    expect(values).toEqual(FIGMENT_CATALOG_ENTRIES.map((entry) => entry.id));
     expect(values).toHaveLength(14);
 
     act(() => {
       root.unmount();
     });
+  });
+
+  it("keeps authored types with the same subtype independently selectable", () => {
+    hydrateFigmentCatalog([
+      {
+        id: "00000000-0000-4000-8000-000000000001",
+        subtype: "Shadow",
+        spark: 2,
+        name: "Shadow Figment",
+      },
+      {
+        id: "bb1a5acd-65ce-4514-a9b1-a3a6fb3392b1",
+        subtype: "Warrior",
+        spark: 1,
+        name: "Warrior",
+      },
+      {
+        id: "e757b306-d55e-4e50-985b-c78a8bfed768",
+        subtype: "Warrior",
+        spark: 2,
+        name: "Legionnaire",
+      },
+    ]);
+    const { root } = mount();
+    const options = Array.from(
+      document.querySelectorAll<HTMLOptionElement>(
+        '[data-battle-figment-field="subtype"] option',
+      ),
+    );
+
+    const warriorOptions = options.filter(
+      (option) => option.dataset.figmentSubtype === "Warrior",
+    );
+    expect(warriorOptions.map((option) => option.value)).toEqual([
+      "bb1a5acd-65ce-4514-a9b1-a3a6fb3392b1",
+      "e757b306-d55e-4e50-985b-c78a8bfed768",
+    ]);
+    expect(new Set(options.map((option) => option.value)).size).toBe(3);
+
+    act(() => root.unmount());
   });
 
   it("pre-fills base spark and surfaces the keyword when selecting Ancient", () => {
@@ -214,7 +259,7 @@ describe("BattleFigmentCreator", () => {
     ).toBe("Shadow Figment");
     expect(
       document.querySelector<HTMLInputElement>('[data-battle-figment-field="subtype"]')?.value,
-    ).toBe("Shadow");
+    ).toBe("builtin:shadow");
     expect(
       document.querySelector<HTMLInputElement>('[data-battle-figment-field="spark"]')?.value,
     ).toBe("2");
@@ -495,12 +540,17 @@ function setSelectValue(selector: string, value: string): void {
     throw new Error(`Missing select for ${selector}`);
   }
 
+  const selectedValue = selector === '[data-battle-figment-field="subtype"]'
+    ? Array.from(select.options).find(
+        (option) => option.dataset.figmentSubtype === value,
+      )?.value ?? value
+    : value;
   const descriptor = Object.getOwnPropertyDescriptor(
     window.HTMLSelectElement.prototype,
     "value",
   );
   act(() => {
-    descriptor?.set?.call(select, value);
+    descriptor?.set?.call(select, selectedValue);
     select.dispatchEvent(new Event("change", { bubbles: true }));
   });
 }

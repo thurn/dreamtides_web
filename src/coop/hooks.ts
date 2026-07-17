@@ -36,6 +36,7 @@ import {
   type MutableRefObject,
   type ReactNode,
 } from "react";
+import { settleDeferredOpponentLog } from "./providers/battle-init-provider";
 import { onValue, ref } from "firebase/database";
 import {
   createLogClient,
@@ -217,6 +218,9 @@ export function CoopProvider({
           // Single-writer mirror: records only events THIS client appended
           // (returns true), deduped past a high-water seq.
           const owned = logSinkRef.current.recordCoopEvent(event, seq, outcome);
+          if (event.type === "BEGIN_BATTLE") {
+            settleDeferredOpponentLog(seq, owned && outcome === "applied");
+          }
           if (owned && outcome === "bounced") {
             // Own intent bounced. Preserve both the machine-readable cause and
             // the diagnostic intervening window, then show cause-specific copy.

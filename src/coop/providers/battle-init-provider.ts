@@ -17,6 +17,8 @@ import { emptyDawnFired } from "../../rules/battle/fold";
 import type { BattleInitProvider } from "../../rules/battle/battle-events";
 import type { QuestState } from "../../types/quest";
 
+const deferredOpponentLogs = new Map<number, () => void>();
+
 /**
  * A battle at `(siteId, completionLevel, dreamscapeId)` always has the same
  * stable identity, so the derived battle seed is identical on every client.
@@ -39,6 +41,17 @@ export function createBattlePreview(
   content: QuestContent,
   quest: QuestState,
   siteId: string,
+  seedOverride: number | null = null,
+): BattleInit | null {
+  return buildBattleInit(content, quest, siteId, seedOverride, () => {});
+}
+
+function buildBattleInit(
+  content: QuestContent,
+  quest: QuestState,
+  siteId: string,
+  seedOverride: number | null,
+  deferOpponentLog: (emit: () => void) => void,
 ): BattleInit | null {
   const site = findSite(quest, siteId);
   if (site === null || site.type !== "Battle") return null;
@@ -51,6 +64,7 @@ export function createBattlePreview(
   return createBattleInit({
     battleEntryKey,
     battleInstanceId: `battle:${quest.runId ?? "unscoped"}:${battleEntryKey}`,
+    seedOverride,
     site,
     state: quest,
     cardDatabase: content.cardDatabase,
@@ -64,18 +78,38 @@ export function createBattlePreview(
     dreamsignSignatures: content.dreamsignSignatures,
     fitModel: content.fitModel,
     draftRecords: content.draftRecords,
-    // Opponent-reconstruction logging is a display/analytics side effect, not
-    // fold state; capture and drop it so preview/reducer construction is pure.
-    deferOpponentLog: () => {},
+    deferOpponentLog,
   });
+}
+
+/**
+ * Settle the reconstruction log captured while folding one BEGIN_BATTLE. Every
+ * client consumes its local callback, while only the appending client emits it
+ * after the event is confirmed as applied.
+ */
+export function settleDeferredOpponentLog(
+  seq: number,
+  shouldEmit: boolean,
+): boolean {
+  const emit = deferredOpponentLogs.get(seq);
+  if (emit === undefined) return false;
+  deferredOpponentLogs.delete(seq);
+  if (shouldEmit) emit();
+  return true;
 }
 
 export function createBattleInitProvider(
   content: QuestContent,
 ): BattleInitProvider {
   return {
-    beginBattle: ({ quest, siteId }): BattleFoldState | null => {
-      const init = createBattlePreview(content, quest, siteId);
+    beginBattle: ({ quest, siteId, seedOverride, seq }): BattleFoldState | null => {
+      const init = buildBattleInit(
+        content,
+        quest,
+        siteId,
+        seedOverride,
+        (emit) => deferredOpponentLogs.set(seq, emit),
+      );
       if (init === null) return null;
       const board = createInitialBattleState(init);
       return {

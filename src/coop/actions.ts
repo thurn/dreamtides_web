@@ -134,7 +134,7 @@ export interface CoopActions {
   endBattle: (result: "victory" | "defeat") => Promise<number>;
 
   // --- battle events ---
-  beginBattle: (siteId: string) => Promise<number>;
+  beginBattle: (siteId: string, seedOverride?: number | null) => Promise<number>;
   setBattleAutomation: (enabled: boolean) => Promise<number>;
   battleCommand: (
     command: unknown,
@@ -299,7 +299,12 @@ export function makeActions(append: AppendFn): CoopActions {
     endBattle: (result) => emit("END_BATTLE", { result }),
 
     // --- battle events ---
-    beginBattle: (siteId) => emit("BEGIN_BATTLE", { siteId }),
+    beginBattle: (siteId, seedOverride) => emit("BEGIN_BATTLE", {
+      siteId,
+      ...(seedOverride === undefined || seedOverride === null
+        ? {}
+        : { seedOverride }),
+    }),
     setBattleAutomation: (enabled) => emit("SET_BATTLE_AUTOMATION", { enabled }),
     battleCommand: (command, intentKey, actor) =>
       append({

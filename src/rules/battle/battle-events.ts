@@ -109,6 +109,8 @@ export interface BattleInitProvider {
   beginBattle(input: {
     quest: QuestState;
     siteId: string;
+    seedOverride: number | null;
+    seq: number;
     rng: (drawIndex: number) => number;
     timestamp: string;
   }): BattleFoldState | null;
@@ -137,7 +139,7 @@ export function getBattleInitProvider(): BattleInitProvider | null {
 // ---------------------------------------------------------------------------
 
 /**
- * `BEGIN_BATTLE { siteId }`: construct the in-battle fold slice deterministically
+ * `BEGIN_BATTLE { siteId, seedOverride? }`: construct the in-battle fold slice deterministically
  * from quest state. Returns the next {@link FoldState} on success, or `null` to
  * bounce when:
  *   - a battle is already in progress (`state.battle !== null`) — a pure
@@ -158,6 +160,17 @@ export function beginBattle(
   if (typeof siteId !== "string" || siteId.length === 0) {
     return null;
   }
+  const rawSeedOverride = payload.seedOverride;
+  const seedOverride = rawSeedOverride === undefined || rawSeedOverride === null
+    ? null
+    : typeof rawSeedOverride === "number"
+      && Number.isSafeInteger(rawSeedOverride)
+      && rawSeedOverride >= 0
+      ? rawSeedOverride
+      : null;
+  if (rawSeedOverride !== undefined && rawSeedOverride !== null && seedOverride === null) {
+    return null;
+  }
   const provider = battleInitProvider;
   if (provider === null) {
     return null;
@@ -165,6 +178,8 @@ export function beginBattle(
   const battle = provider.beginBattle({
     quest: state.quest,
     siteId,
+    seedOverride,
+    seq: ctx.seq,
     rng: ctx.rng,
     timestamp: ctx.timestamp,
   });

@@ -258,13 +258,13 @@ describe("BattleSiteRoute", () => {
     expect(beginBattleSpy).not.toHaveBeenCalled();
   });
 
-  it("serves the Cumulus Battle Start preview before BEGIN_BATTLE folds", () => {
+  it("serves the seeded Cumulus Battle Start preview before BEGIN_BATTLE folds", () => {
     const { container, root } = mount(
       <BattleSiteRoute
         site={makeSite()}
         cardDatabase={makeBattleTestCardDatabase()}
         runtimeConfig={{
-          seedOverride: null,
+          seedOverride: 4242,
           aiMode: false,
           gameId: null,
           databaseMode: "emulator",
@@ -281,7 +281,7 @@ describe("BattleSiteRoute", () => {
     act(() => {
       container.querySelector<HTMLButtonElement>("[data-cumulus-begin]")?.click();
     });
-    expect(beginBattleSpy).toHaveBeenCalledWith("site-7");
+    expect(beginBattleSpy).toHaveBeenCalledWith("site-7", 4242);
 
     mockGameState = makeFoldStateWithBattle();
     act(() => {

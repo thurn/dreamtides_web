@@ -195,4 +195,20 @@ describe("coop actions facade", () => {
       "battle:b-1:dreamwell:player:2",
     ]);
   });
+
+  it("carries an explicit battle seed in the authoritative intent", () => {
+    const captured: EventDraft[] = [];
+    const actions = makeActions((draft) => {
+      captured.push(draft);
+      return Promise.resolve(captured.length);
+    });
+
+    void actions.beginBattle("site-7", 4242);
+    void actions.beginBattle("site-8", null);
+
+    expect(captured).toEqual([
+      { type: "BEGIN_BATTLE", payload: { siteId: "site-7", seedOverride: 4242 } },
+      { type: "BEGIN_BATTLE", payload: { siteId: "site-8" } },
+    ]);
+  });
 });

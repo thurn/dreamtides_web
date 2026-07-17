@@ -32,7 +32,10 @@ import {
 import { mergeCardKeywordModification } from "../card-type-change";
 import { rerollCost } from "../shop/shop-generator";
 import { buildQaScene, qaSceneLoadsBattle } from "../runtime/qa-scenes";
-import { createBattleInitProvider } from "../coop/providers/battle-init-provider";
+import {
+  createBattleInitProvider,
+  settleDeferredOpponentLog,
+} from "../coop/providers/battle-init-provider";
 import type { CardData } from "../types/cards";
 import type { DreamAtlas, QuestState } from "../types/quest";
 import {
@@ -155,9 +158,12 @@ export function CoopQuestProvider({
             : createBattleInitProvider(questContent).beginBattle({
                 quest: seededSnapshot,
                 siteId: activeSiteId,
+                seedOverride: null,
+                seq: 0,
                 rng: () => 0,
                 timestamp: new Date(0).toISOString(),
               });
+        settleDeferredOpponentLog(0, false);
         dispatch(
           append({
             type: "LOAD_STATE",

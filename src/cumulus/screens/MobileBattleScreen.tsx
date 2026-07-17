@@ -137,6 +137,7 @@ export interface MobileBattleView {
 export interface MobileBattleCardPickerView {
   readonly key: string;
   readonly label: string;
+  readonly side: MobileBattleOwner;
   readonly candidates: readonly MobileBattleCardPickerCandidateView[];
   readonly candidateIds: readonly string[];
   readonly count: number;
@@ -1403,6 +1404,7 @@ function Rank({
   rank,
   slots,
   layoutBackSlotCount,
+  centerAsymmetricDesktopRanks,
   cardSize,
   order,
   draggingCardId,
@@ -1418,6 +1420,7 @@ function Rank({
   readonly rank: MobileBattleRank;
   readonly slots: readonly MobileBattleSlotView[];
   readonly layoutBackSlotCount: number;
+  readonly centerAsymmetricDesktopRanks: boolean;
   readonly cardSize: string;
   readonly order: number;
   readonly draggingCardId: string | null;
@@ -1442,7 +1445,7 @@ function Rank({
     rank === "back"
       ? layoutBackSlotCount
       : Math.max(layoutBackSlotCount - 1, 1);
-  const visibleSlots = isDesktop
+  const visibleSlots = isDesktop && !centerAsymmetricDesktopRanks
     ? desktopRankSlots(slots, rank, desktopSlotCount)
     : slots;
   const trackSlotCount = Math.max(visibleSlots.length, 1);
@@ -1621,6 +1624,7 @@ function PlayArea({
   owner,
   side,
   layoutBackSlotCount,
+  centerAsymmetricDesktopRanks,
   cardSize,
   draggingCardId,
   snapLayoutCardId,
@@ -1634,6 +1638,7 @@ function PlayArea({
   readonly owner: MobileBattleOwner;
   readonly side: MobileBattleSideView;
   readonly layoutBackSlotCount: number;
+  readonly centerAsymmetricDesktopRanks: boolean;
   readonly cardSize: string;
   readonly draggingCardId: string | null;
   readonly snapLayoutCardId: string | null;
@@ -1675,6 +1680,7 @@ function PlayArea({
           rank={rank}
           slots={slots}
           layoutBackSlotCount={layoutBackSlotCount}
+          centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks}
           cardSize={cardSize}
           order={order}
           draggingCardId={draggingCardId}
@@ -2660,6 +2666,13 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
   const snapLayoutOriginView = useRef<MobileBattleView | null>(null);
   const layoutBackSlotCount = battlefieldLayoutBackSlotCount(view, isDesktop);
   const cardSize = battlefieldCardSize(layoutBackSlotCount);
+  const centerAsymmetricDesktopRanks = isDesktop && (
+    view.enemy.backRank.length >= MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS
+    || view.player.backRank.length >= MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS
+  ) && (
+    view.enemy.backRank.length !== view.player.backRank.length
+    || view.enemy.frontRank.length !== view.player.frontRank.length
+  );
   const cardPickerKey = view.cardPicker?.key ?? null;
   const boardCardPicker = view.cardPicker?.presentation === "board"
     ? view.cardPicker
@@ -2815,8 +2828,8 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
           onPickerCardToggle={handlePickerCardToggle}
         />
         <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="enemy" phase={view.phase} side={view.enemy} interactions={interactions} />
-        <PlayArea isDesktop={isDesktop} owner="enemy" side={view.enemy} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
-        <PlayArea isDesktop={isDesktop} owner="player" side={view.player} layoutBackSlotCount={layoutBackSlotCount} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
+        <PlayArea isDesktop={isDesktop} owner="enemy" side={view.enemy} layoutBackSlotCount={layoutBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
+        <PlayArea isDesktop={isDesktop} owner="player" side={view.player} layoutBackSlotCount={layoutBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
         <ControlRow
           aiApproval={view.aiApproval}
           cardPicker={boardCardPicker}

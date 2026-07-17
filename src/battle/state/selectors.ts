@@ -336,6 +336,19 @@ function selectSideFrontRankRequirement(state: BattleMutableState, side: BattleS
 }
 
 /**
+ * The active play-area dimensions required by one side's formation. Presentation
+ * adapters use this to center asymmetric formations while the rules-level
+ * selector below keeps paired challenge lanes available across both sides.
+ */
+export function selectSidePlayAreaSize(
+  state: BattleMutableState,
+  side: BattleSide,
+): { frontSize: number; backSize: number } {
+  const frontSize = selectSideFrontRankRequirement(state, side);
+  return { frontSize, backSize: frontSize + 1 };
+}
+
+/**
  * The active play-area dimensions: how many front/back slots are currently shown
  * and usable. Derived purely from occupancy (no stored state), so expansion and
  * contraction follow automatically as characters enter and leave play, with no
@@ -348,8 +361,8 @@ export function selectPlayAreaSize(state: BattleMutableState): {
   backSize: number;
 } {
   const frontSize = Math.max(
-    selectSideFrontRankRequirement(state, "player"),
-    selectSideFrontRankRequirement(state, "enemy"),
+    selectSidePlayAreaSize(state, "player").frontSize,
+    selectSidePlayAreaSize(state, "enemy").frontSize,
   );
   return { frontSize, backSize: frontSize + 1 };
 }

@@ -15,6 +15,7 @@ import {
   FIGMENT_CATALOG_ENTRIES,
   figmentCatalogEntries,
   lookupFigmentCatalogEntry,
+  lookupFigmentCatalogEntryById,
   type FigmentCatalogEntry,
   type FigmentKeyword,
 } from "../state/figment-catalog";
@@ -33,11 +34,11 @@ function figmentTypeName(subtype: string): string {
  * from `figments.toml` when hydrated, otherwise the `"<Type> Figment"`
  * derivation. The figment editor's name edits flow through here.
  */
-function defaultFigmentName(subtype: string): string {
-  const authored = lookupFigmentCatalogEntry(subtype)?.name;
+function defaultFigmentName(entry: FigmentCatalogEntry): string {
+  const authored = entry.name;
   return authored !== undefined && authored.trim() !== ""
     ? authored
-    : figmentTypeName(subtype);
+    : figmentTypeName(entry.subtype);
 }
 
 const FIGMENT_KEYWORD_LABELS: Readonly<Record<FigmentKeyword, string>> = {
@@ -59,8 +60,8 @@ export function BattleFigmentCreator({
 }) {
   const defaultEntry =
     lookupFigmentCatalogEntry(DEFAULT_FIGMENT_SUBTYPE) ?? FIGMENT_CATALOG_ENTRIES[0];
-  const [subtype, setSubtype] = useState<string>(defaultEntry.subtype);
-  const [name, setName] = useState(defaultFigmentName(defaultEntry.subtype));
+  const [figmentTypeId, setFigmentTypeId] = useState<string>(defaultEntry.id);
+  const [name, setName] = useState(defaultFigmentName(defaultEntry));
   const [sparkText, setSparkText] = useState(String(defaultEntry.baseSpark));
   const [side, setSide] = useState<BattleSide>(initialSide);
   const [zone, setZone] = useState<FigmentZone>("backRank");
@@ -106,22 +107,22 @@ export function BattleFigmentCreator({
     };
   }, [onClose]);
 
-  const selectedEntry = lookupFigmentCatalogEntry(subtype);
+  const selectedEntry = lookupFigmentCatalogEntryById(figmentTypeId) ?? defaultEntry;
+  const subtype = selectedEntry.subtype;
   const selectedKeyword = selectedEntry?.keyword;
 
-  function handleSelectType(nextSubtype: string): void {
+  function handleSelectType(nextFigmentTypeId: string): void {
     // Selecting a catalog type pre-fills the figment's base spark and derives a
     // default name from the type. The spark stays editable for off-base
     // figments (rules §Figments). The name follows the type only while it still
     // matches the auto-derived pattern, so a hand-edited name is preserved.
-    const entry = lookupFigmentCatalogEntry(nextSubtype);
-    setSubtype(nextSubtype);
-    if (entry !== undefined) {
-      setSparkText(String(entry.baseSpark));
-    }
+    const entry = lookupFigmentCatalogEntryById(nextFigmentTypeId);
+    if (entry === undefined) return;
+    setFigmentTypeId(nextFigmentTypeId);
+    setSparkText(String(entry.baseSpark));
     setName((current) =>
       current.trim() === "" || isAutoDerivedFigmentName(current)
-        ? defaultFigmentName(nextSubtype)
+        ? defaultFigmentName(entry)
         : current,
     );
   }
@@ -222,12 +223,16 @@ export function BattleFigmentCreator({
           </span>
           <select
             data-battle-figment-field="subtype"
-            value={subtype}
+            value={figmentTypeId}
             onChange={(event) => handleSelectType(event.target.value)}
             className="rounded-2xl border border-slate-700 bg-slate-900/80 px-3 py-2 text-sm text-slate-100 focus:border-violet-300/60 focus:outline-none"
           >
             {figmentCatalogEntries().map((entry) => (
-              <option key={entry.key} value={entry.subtype}>
+              <option
+                key={entry.id}
+                value={entry.id}
+                data-figment-subtype={entry.subtype}
+              >
                 {formatCatalogOptionLabel(entry)}
               </option>
             ))}

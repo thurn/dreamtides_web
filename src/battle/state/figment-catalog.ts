@@ -23,6 +23,8 @@ export type FigmentKeyword =
   | "awakened";
 
 export interface FigmentCatalogEntry {
+  /** Stable identity for this authored figment type. */
+  id: string;
   /** The normalized lookup key (`normalizeFigmentCatalogKey(subtype)`). */
   key: string;
   /** The figment type as printed (display form). */
@@ -50,6 +52,7 @@ export interface FigmentCatalogEntry {
  * art into the battle UI.
  */
 export interface FigmentCatalogRecord {
+  id: string;
   subtype: string;
   spark: number;
   keyword?: string;
@@ -79,6 +82,7 @@ function entry(
   keyword?: FigmentKeyword,
 ): FigmentCatalogEntry {
   return {
+    id: `builtin:${normalizeFigmentCatalogKey(subtype)}`,
     key: normalizeFigmentCatalogKey(subtype),
     subtype,
     baseSpark,
@@ -133,6 +137,7 @@ export function hydrateFigmentCatalog(records: readonly FigmentCatalogRecord[]):
   const entries = records.map((record) => {
     const keyword = normalizeHydratedKeyword(record.keyword);
     return {
+      id: record.id,
       key: normalizeFigmentCatalogKey(record.subtype),
       subtype: record.subtype,
       baseSpark: Number.isFinite(record.spark) ? record.spark : 0,
@@ -156,6 +161,19 @@ export function hydrateFigmentCatalog(records: readonly FigmentCatalogRecord[]):
  */
 export function figmentCatalogEntries(): readonly FigmentCatalogEntry[] {
   return hydratedEntries ?? FIGMENT_CATALOG_ENTRIES;
+}
+
+/** Looks up one exact authored figment type by its stable identity. */
+export function lookupFigmentCatalogEntryById(
+  id: string,
+): FigmentCatalogEntry | undefined {
+  return figmentCatalogEntries().find((entry) => entry.id === id);
+}
+
+/** Restore the built-in catalog, primarily for isolated consumers and tests. */
+export function resetFigmentCatalogHydration(): void {
+  hydratedEntries = null;
+  hydratedCatalog = null;
 }
 
 /**

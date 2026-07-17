@@ -34,12 +34,24 @@ export function BattleSiteRoute({
   const gameState = useGameState();
   const actions = useActions();
   const battle = gameState.battle;
+  const beginBattle = (): void => {
+    if (runtimeConfig.seedOverride === null) {
+      void actions.beginBattle(site.id);
+      return;
+    }
+    void actions.beginBattle(site.id, runtimeConfig.seedOverride);
+  };
   const preview = useMemo(
     () =>
       battle === null
-        ? createBattlePreview(questContent, state, site.id)
+        ? createBattlePreview(
+            questContent,
+            state,
+            site.id,
+            runtimeConfig.seedOverride,
+          )
         : null,
-    [battle, questContent, site.id, state],
+    [battle, questContent, runtimeConfig.seedOverride, site.id, state],
   );
 
   if (battle === null) {
@@ -56,9 +68,7 @@ export function BattleSiteRoute({
           <BattleStartScreenAdapter
             init={preview}
             cardDatabase={cardDatabase}
-            onBegin={() => {
-              void actions.beginBattle(site.id);
-            }}
+            onBegin={beginBattle}
           />
         </CumulusQuestChrome>
       );
@@ -67,9 +77,7 @@ export function BattleSiteRoute({
       <BattleStartScreen
         init={preview}
         cardDatabase={cardDatabase}
-        onBegin={() => {
-          void actions.beginBattle(site.id);
-        }}
+        onBegin={beginBattle}
       />
     );
   }

@@ -1,6 +1,6 @@
 import {
   selectBattleCardLocation,
-  selectPlayAreaSize,
+  selectSidePlayAreaSize,
 } from "../../battle/state/selectors";
 import {
   selectFigmentCount,
@@ -70,7 +70,6 @@ export function buildMobileBattleView(
     isPlayerHandHidden: false,
   },
 ): MobileBattleView {
-  const { frontSize, backSize } = selectPlayAreaSize(board);
   return {
     battleId: init.battleId,
     aiApproval: aiProposal === null
@@ -97,15 +96,11 @@ export function buildMobileBattleView(
       "enemy",
       enemyDreamcaller,
       board,
-      frontSize,
-      backSize,
     ),
     player: buildSideView(
       "player",
       init.dreamcallerSummary ?? FALLBACK_PLAYER_DREAMCALLER,
       board,
-      frontSize,
-      backSize,
     ),
     playerHand: buildCardViews(
       board.sides.player.hand,
@@ -200,6 +195,7 @@ function buildCardPickerView(
   return {
     key: String(pendingPrompt.promptId),
     label: pendingPrompt.options.label,
+    side: candidates[0]?.owner ?? pendingPrompt.run.side,
     candidates,
     candidateIds: [...pendingPrompt.options.candidateIds],
     count: pendingPrompt.options.count,
@@ -366,10 +362,9 @@ function buildSideView(
   side: BattleSide,
   dreamcaller: BattleDreamcallerSummary | typeof FALLBACK_PLAYER_DREAMCALLER,
   board: BattleMutableState,
-  frontSize: number,
-  backSize: number,
 ): MobileBattleSideView {
   const sideState = board.sides[side];
+  const { frontSize, backSize } = selectSidePlayAreaSize(board, side);
   return {
     deckCardIds: [...sideState.deck],
     banishedCardCount: sideState.banished.length,
