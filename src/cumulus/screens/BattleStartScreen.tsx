@@ -140,7 +140,7 @@ function DesktopBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
           alignSelf: "stretch",
         }}
       >
-        <OpponentPortrait dreamcaller={view.dreamcaller} variant="cutout" />
+        <OpponentPortrait dreamcaller={view.dreamcaller} />
       </section>
 
       <BattleStartPanel view={view} onBegin={onBegin} density="standard" />
@@ -168,7 +168,7 @@ function MobileBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
           zIndex: 1,
         }}
       >
-        <OpponentPortrait dreamcaller={view.dreamcaller} variant="cutout" />
+        <OpponentPortrait dreamcaller={view.dreamcaller} />
       </section>
 
       <BattleStartPanel view={view} onBegin={onBegin} density="compact" />
@@ -178,10 +178,8 @@ function MobileBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
 
 function OpponentPortrait({
   dreamcaller,
-  variant,
 }: {
   readonly dreamcaller: BattleStartDreamcallerView;
-  readonly variant: "cutout" | "standing";
 }) {
   return (
     <DreamcallerPortrait
@@ -190,7 +188,7 @@ function OpponentPortrait({
         name: dreamcaller.name,
         title: dreamcaller.title,
       }}
-      variant={variant}
+      variant="cutout"
     />
   );
 }

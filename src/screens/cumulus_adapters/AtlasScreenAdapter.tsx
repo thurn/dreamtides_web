@@ -25,8 +25,8 @@ export function AtlasScreenAdapter() {
   const isDesktop = useIsDesktop();
 
   const view = useMemo(
-    () => buildAtlasView(atlas, questContent, state, isDesktop),
-    [atlas, questContent, state, isDesktop],
+    () => buildAtlasView(atlas, questContent, isDesktop),
+    [atlas, questContent, isDesktop],
   );
 
   // Reconstruction log: which atlas was presented, its current frontier, and

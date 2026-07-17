@@ -6,24 +6,9 @@
 
 import { draftSitePickCount } from "../../draft/draft-site-config";
 import type { CardData } from "../../types/cards";
-import type { DreamscapeNode, QuestState, SiteState } from "../../types/quest";
-import type {
-  QsbDreamcaller,
-  QsbDreamsign,
-} from "../../cumulus/components/hud/QuestStatusBar";
+import type { DreamscapeNode, SiteState } from "../../types/quest";
 import type { DraftView } from "../../cumulus/screens/DraftScreen";
-import {
-  dreamscapeSceneRef,
-  toQsbDreamcaller,
-  toQsbDreamsigns,
-} from "./dreamscape-view-model";
-
-interface DraftHudView {
-  essence: number;
-  deck: number;
-  dreamcaller?: QsbDreamcaller;
-  dreamsigns: QsbDreamsign[];
-}
+import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 /**
  * Sort an offered pack for display: cheapest first, then alphabetically as a
@@ -55,21 +40,10 @@ export function resolveOfferCards(
   return sortOfferCards(cards);
 }
 
-/** The bottom-HUD slice of the view-model, from live run state. */
-export function buildDraftHudView(state: QuestState): DraftHudView {
-  return {
-    essence: state.essence,
-    deck: state.deck.length,
-    dreamcaller: toQsbDreamcaller(state.dreamcaller),
-    dreamsigns: toQsbDreamsigns(state.dreamsigns),
-  };
-}
-
 /**
  * The full view-model for the draft screen: the dreamscape scene the draft
  * sits in, the resolved + sorted offer pack (keyed by its card numbers so a new
- * pack cross-fades the grid), the floating pick counter, and the persistent
- * bottom-HUD data.
+ * pack cross-fades the grid), and the floating pick counter.
  */
 export function buildDraftView(params: {
   offerCardNumbers: readonly number[];
@@ -77,7 +51,6 @@ export function buildDraftView(params: {
   sceneNode: DreamscapeNode | null;
   site: Pick<SiteState, "data"> | null;
   sitePicksCompleted: number;
-  state: QuestState;
 }): DraftView {
   const pickTotal = params.site !== null ? draftSitePickCount(params.site) : 0;
   return {

@@ -1,10 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { LayerName } from "../../types/layer-name";
-import type {
-  DreamAtlas,
-  DreamscapeNode,
-  QuestState,
-} from "../../types/quest";
+import type { DreamAtlas, DreamscapeNode } from "../../types/quest";
 import type { QuestContent } from "../../data/quest-content";
 import { MINIMAL_ATLAS_CONFIG } from "../../__test-helpers__/atlas-fixtures";
 import {
@@ -16,7 +12,6 @@ import {
   ATLAS_STAGE_WIDTH,
   atlasChoiceLayer,
   atlasEdgeKind,
-  buildAtlasHudView,
   buildAtlasMapEdges,
   buildAtlasMapNodes,
   buildAtlasView,
@@ -350,32 +345,9 @@ describe("buildAtlasMapEdges", () => {
   });
 });
 
-describe("buildAtlasHudView", () => {
-  it("maps essence and deck size from run state", () => {
-    const state = {
-      essence: 7,
-      deck: [{}, {}, {}],
-      dreamcaller: null,
-      dreamsigns: [],
-    } as unknown as QuestState;
-    const hud = buildAtlasHudView(state);
-    expect(hud.essence).toBe(7);
-    expect(hud.deck).toBe(3);
-    expect(hud.dreamcaller).toBeUndefined();
-    expect(hud.dreamsigns).toEqual([]);
-  });
-});
-
 describe("buildAtlasView", () => {
-  it("assembles the portrait stage, nodes, edges, and HUD", () => {
-    const state = {
-      essence: 0,
-      deck: [],
-      dreamcaller: null,
-      dreamsigns: [],
-      completionLevel: 1,
-    } as unknown as QuestState;
-    const view = buildAtlasView(makeVerticalAtlas(), EMPTY_CONTENT, state);
+  it("assembles the portrait stage, nodes, and edges", () => {
+    const view = buildAtlasView(makeVerticalAtlas(), EMPTY_CONTENT);
     expect(view.stageWidth).toBe(ATLAS_STAGE_WIDTH);
     expect(view.stageHeight).toBe(ATLAS_STAGE_HEIGHT);
     expect(view.nodes).toHaveLength(3);
@@ -384,14 +356,7 @@ describe("buildAtlasView", () => {
   });
 
   it("assembles a landscape stage on desktop", () => {
-    const state = {
-      essence: 0,
-      deck: [],
-      dreamcaller: null,
-      dreamsigns: [],
-      completionLevel: 1,
-    } as unknown as QuestState;
-    const view = buildAtlasView(makeVerticalAtlas(), EMPTY_CONTENT, state, true);
+    const view = buildAtlasView(makeVerticalAtlas(), EMPTY_CONTENT, true);
     expect(view.stageWidth).toBe(ATLAS_STAGE_LANDSCAPE_WIDTH);
     expect(view.stageHeight).toBe(ATLAS_STAGE_LANDSCAPE_HEIGHT);
     expect(view.stageWidth).toBeGreaterThan(view.stageHeight);

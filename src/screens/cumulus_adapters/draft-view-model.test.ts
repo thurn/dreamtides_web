@@ -1,9 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
-import type { QuestState } from "../../types/quest";
 import {
-  buildDraftHudView,
   buildDraftView,
   resolveOfferCards,
   sortOfferCards,
@@ -28,17 +26,6 @@ function card(overrides: Partial<CardData> & { cardNumber: number }): CardData {
 
 function cardDatabase(cards: CardData[]): Map<number, CardData> {
   return new Map(cards.map((c) => [c.cardNumber, c]));
-}
-
-/** A minimal quest state carrying only the fields the HUD builder reads. */
-function questState(overrides: Partial<QuestState> = {}): QuestState {
-  return {
-    essence: 120,
-    deck: [],
-    dreamcaller: null,
-    dreamsigns: [],
-    ...overrides,
-  } as unknown as QuestState;
 }
 
 describe("sortOfferCards", () => {
@@ -89,26 +76,8 @@ describe("resolveOfferCards", () => {
   });
 });
 
-describe("buildDraftHudView", () => {
-  it("reads essence and deck size, with no dreamcaller when absent", () => {
-    const hud = buildDraftHudView(
-      questState({
-        essence: 88,
-        deck: [
-          { entryId: "a", cardNumber: 1, transfiguration: null, isBane: false },
-          { entryId: "b", cardNumber: 2, transfiguration: null, isBane: false },
-        ],
-      }),
-    );
-    expect(hud.essence).toBe(88);
-    expect(hud.deck).toBe(2);
-    expect(hud.dreamcaller).toBeUndefined();
-    expect(hud.dreamsigns).toEqual([]);
-  });
-});
-
 describe("buildDraftView", () => {
-  it("assembles the offer, a card-number key, and the HUD; null scene without a node", () => {
+  it("assembles the offer and a card-number key; null scene without a node", () => {
     const db = cardDatabase([
       card({ cardNumber: 5, energyCost: 2 }),
       card({ cardNumber: 6, energyCost: 1 }),
@@ -119,7 +88,6 @@ describe("buildDraftView", () => {
       sceneNode: null,
       site: { data: { draftPickCount: 5 } },
       sitePicksCompleted: 0,
-      state: questState({ essence: 40 }),
     });
     expect(view.offer.map((c) => c.displaySnapshot.cardNumber)).toEqual([6, 5]);
     // The key is the offered card numbers (identity), not names.
@@ -134,7 +102,6 @@ describe("buildDraftView", () => {
       sceneNode: null,
       site: { data: { draftPickCount: 5 } },
       sitePicksCompleted: 2,
-      state: questState(),
     });
     expect(view.pickNumber).toBe(3);
     expect(view.pickTotal).toBe(5);
@@ -147,7 +114,6 @@ describe("buildDraftView", () => {
       sceneNode: null,
       site: { data: { draftPickCount: 5 } },
       sitePicksCompleted: 5,
-      state: questState(),
     });
     expect(view.pickNumber).toBe(5);
   });
@@ -159,7 +125,6 @@ describe("buildDraftView", () => {
       sceneNode: null,
       site: { data: { draftPickCount: 5 } },
       sitePicksCompleted: 0,
-      state: questState(),
     });
     expect(view.offer).toEqual([]);
     expect(view.offerKey).toBe("");

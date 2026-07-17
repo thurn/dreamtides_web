@@ -47,9 +47,8 @@ export function DraftSiteScreenAdapter({
         sceneNode: node,
         site,
         sitePicksCompleted: progress.sitePicksCompleted,
-        state,
       }),
-    [progress.offerCardNumbers, progress.sitePicksCompleted, cardDatabase, node, site, state],
+    [progress.offerCardNumbers, progress.sitePicksCompleted, cardDatabase, node, site],
   );
 
   const handlePick = useCallback(

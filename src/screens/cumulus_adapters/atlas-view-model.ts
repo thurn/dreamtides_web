@@ -44,24 +44,12 @@ import type {
   AtlasNodePrimary,
   AtlasNodeSite,
 } from "../../cumulus/components/atlas/AtlasNode";
-import type {
-  QsbDreamcaller,
-  QsbDreamsign,
-} from "../../cumulus/components/hud/QuestStatusBar";
 import { artRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
 import type { AtlasView } from "../../cumulus/screens/AtlasScreen";
 import type { QuestContent } from "../../data/quest-content";
-import type { DreamAtlas, DreamscapeNode, QuestState } from "../../types/quest";
+import type { DreamAtlas, DreamscapeNode } from "../../types/quest";
 import { type LayerName, layerOrdinal } from "../../types/layer-name";
-import { toQsbDreamcaller, toQsbDreamsigns } from "./dreamscape-view-model";
-
-interface AtlasHudView {
-  essence: number;
-  deck: number;
-  dreamcaller?: QsbDreamcaller;
-  dreamsigns: QsbDreamsign[];
-}
 
 /**
  * The portrait design canvas the mobile atlas stage scales to fit (letterboxed).
@@ -595,28 +583,15 @@ export function buildAtlasMapNodes(
   return items;
 }
 
-/** The bottom-HUD slice of the atlas view-model, from live run state. */
-export function buildAtlasHudView(state: QuestState): AtlasHudView {
-  return {
-    essence: state.essence,
-    deck: state.deck.length,
-    dreamcaller: toQsbDreamcaller(state.dreamcaller),
-    dreamsigns: toQsbDreamsigns(state.dreamsigns),
-  };
-}
-
 /**
- * The full view-model for the atlas screen: the placed nodes, their forward
- * connectors, and the persistent bottom-HUD data. Deterministic in its
- * arguments.
+ * The full view-model for the atlas screen: the placed nodes and their forward
+ * connectors. Deterministic in its arguments.
  */
 export function buildAtlasView(
   atlas: DreamAtlas,
   questContent: QuestContent,
-  state: QuestState,
   isDesktop = false,
 ): AtlasView {
-  void state;
   const profile = atlasLayoutProfile(isDesktop);
   return {
     stageWidth: profile.stageWidth,
