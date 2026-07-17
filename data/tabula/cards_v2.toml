@@ -1600,24 +1600,22 @@ card-number = 85
 art = { x = -0.084, y = -0.025, scale = 1.47 }
 
 [[cards]]
-name = "Mother of Flames"
+name = "Rower of Changing Seas"
 mtg-name = "Scryb Ranger"
 id = "de946f5a-1e27-4d40-ae44-9ef8cc041949"
-rendered-text = """
-Awakened
-
-☪, Return a character you control to hand: Awaken a character you control."""
+rendered-text = "Return a character you control to hand: Awaken a character you control."
 energy-cost = 2
 card-type = "Character"
-subtype = "Renegade"
+subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Awaken", "Art Rework", "July17", "Ally Audit"]
-image-number = 1486924802
+tags = ["Awaken", "Art Rework", "July17", "Ally Audit", "Art OK"]
+image-number = 496761802
 art-owned = true
 card-number = 86
+art = { x = -0.538, y = 0.897, scale = 1.07 }
 
 [[cards]]
 name = "Dreadwood Emissary"
@@ -1657,21 +1655,22 @@ art-owned = false
 card-number = 88
 
 [[cards]]
-name = "Grotto Seer"
+name = "Catastrophe Broker"
 mtg-name = "Anje's Ravager"
 id = "770b21e4-ea6a-4910-8fca-2ec5b8813da1"
 rendered-text = "▸Challenge: Discard your hand, then draw 3 cards."
 energy-cost = 3
 card-type = "Character"
-subtype = "Explorer"
+subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "July17"]
-image-number = 2600774397
+tags = ["Art Rework", "July17", "Art OK"]
+image-number = 2675749427
 art-owned = false
 card-number = 89
+art = { x = 0, y = 0.15, scale = 1.66 }
 
 [[cards]]
 name = "Ordained Collapse"
@@ -2916,7 +2915,7 @@ card-number = 155
 art = { x = -0.378, y = 1, scale = 1.27 }
 
 [[cards]]
-name = "Revenant of the Lost"
+name = "Phantom Angler"
 mtg-name = "Lurrus of the Dream-Den"
 id = "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e"
 rendered-text = "☪: A ≤2● cost character in your void gains reclaim."
@@ -2927,10 +2926,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Lurrus", "Art Rework", "July17"]
-image-number = 2123360843
+tags = ["Lurrus", "Art Rework", "July17", "Art OK"]
+image-number = 1246321003
 art-owned = false
 card-number = 156
+art = { x = -0.336, y = -0.398, scale = 1.47 }
 
 [[cards]]
 name = "Call of Corruption"
@@ -3162,7 +3162,7 @@ card-number = 168
 art = { x = 0.714, y = 0.31, scale = 1.17 }
 
 [[cards]]
-name = "Gleamharvester"
+name = "Smoke Siphoner"
 mtg-name = "Conspiracy Theorist"
 id = "88994286-96db-4ba6-a660-b30ae9b52cff"
 rendered-text = """
@@ -3176,10 +3176,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July17"]
-image-number = 2030910782
+tags = ["Art Rework", "July17", "Art OK"]
+image-number = 695511787
 art-owned = true
 card-number = 169
+art = { x = -0.189, y = 0.897, scale = 1.07 }
 
 [[cards]]
 name = "Shoreline Penitent"
@@ -5644,7 +5645,7 @@ card-number = 303
 art = { x = 0.168, y = 0.032, scale = 1.17 }
 
 [[cards]]
-name = "Forge Inheritor"
+name = "Thief of Memory"
 mtg-name = "Agatha's Soul Cauldron"
 id = "e72245f2-c153-4e79-ba8e-956d18202b48"
 rendered-text = "☪: Banish a character from a player's void. This character gains the abilities of that character."
@@ -5655,10 +5656,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "July17"]
-image-number = 789291016
+tags = ["Art Rework", "July17", "Art OK"]
+image-number = 1621160803
 art-owned = false
 card-number = 304
+art = { x = 0, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Rift Pilgrim"
@@ -6822,38 +6824,39 @@ art-owned = true
 card-number = 365
 
 [[cards]]
-name = "Blazepath Traveler"
+name = "Flamecaller"
 mtg-name = "Loran of the Third Path"
 id = "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b"
 rendered-text = "▸Materialized: Banish a ≤2● cost enemy."
-energy-cost = 5
+energy-cost = 4
 card-type = "Character"
-subtype = "Explorer"
+subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Removal", "Art Rework", "July17"]
-image-number = 403770346
+tags = ["Removal", "Art Rework", "July17", "Art OK"]
+image-number = 1383318395
 art-owned = false
 card-number = 366
 
 [[cards]]
-name = "Lumen Rover"
+name = "Weaver of Rhapsody"
 mtg-name = "Loran of the Third Path"
 id = "31ecf933-c897-41a5-ab94-822ea65898d8"
-rendered-text = "☪: Each player draws a card."
-energy-cost = 1
+rendered-text = "☪: Each player draws two cards."
+energy-cost = 2
 card-type = "Character"
-subtype = "Tinkerer"
+subtype = "Musician"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July17"]
-image-number = 670293676
+tags = ["Art Rework", "July17", "Art OK"]
+image-number = 744309595
 art-owned = false
 card-number = 367
+art = { x = 0, y = 1, scale = 1.16 }
 
 [[cards]]
 name = "Annihilation from Below"
@@ -7411,7 +7414,7 @@ card-number = 396
 art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Veilseeker"
+name = "Voidsire"
 mtg-name = "Aftermath Analyst"
 id = "d8c90a33-a581-469a-9fd3-9a80d1cc5315"
 rendered-text = """
@@ -7420,15 +7423,16 @@ rendered-text = """
 5●, ☪, Abandon this character: Return all ≤2● cost characters from your void to play."""
 energy-cost = 3
 card-type = "Character"
-subtype = "Explorer"
+subtype = "Ancient"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Self-Mill", "Art Rework", "July17"]
-image-number = 328731494
+tags = ["Self-Mill", "Art Rework", "July17", "Art OK"]
+image-number = 2186149281
 art-owned = false
 card-number = 397
+art = { x = 0, y = 1, scale = 1.37 }
 
 [[cards]]
 name = "Veil Shatter"
@@ -7848,7 +7852,7 @@ card-number = 419
 art = { x = -0.353, y = 0, scale = 1.17 }
 
 [[cards]]
-name = "Emberwatch Veteran"
+name = "Frost Hewer"
 mtg-name = "Putrid Imp"
 id = "9495f501-f627-4b74-a848-b3d928641229"
 rendered-text = "Discard a card: This character gains vengeful this turn."
@@ -7859,10 +7863,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July17"]
-image-number = 2258761879
+tags = ["Art Rework", "July17", "Art OK"]
+image-number = 2544257341
 art-owned = false
 card-number = 420
+art = { x = 0.954, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Vessel of Echoes"
@@ -8151,7 +8156,7 @@ art-owned = true
 card-number = 435
 
 [[cards]]
-name = "Iconoclast"
+name = "Trance Diviner"
 mtg-name = "Birgi, God of Storytelling // Harnfel, Horn of Bounty"
 id = "b957466e-f748-4a95-89b2-8509dc762223"
 rendered-text = "Discard a card: Draw two cards with ephemeral."
@@ -8162,10 +8167,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "July17"]
-image-number = 2025883238
+tags = ["Art Rework", "July17", "Art OK"]
+image-number = 2030910779
 art-owned = false
 card-number = 436
+art = { x = 0, y = -0.038, scale = 1.36 }
 
 [[cards]]
 name = "Starcatcher"

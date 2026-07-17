@@ -1330,7 +1330,7 @@
       ]
     },
     "9495f501-f627-4b74-a848-b3d928641229": {
-      "name": "Emberwatch Veteran",
+      "name": "Frost Hewer",
       "needs": [],
       "supports": [
         "discard",
@@ -1618,7 +1618,7 @@
       ]
     },
     "e72245f2-c153-4e79-ba8e-956d18202b48": {
-      "name": "Forge Inheritor",
+      "name": "Thief of Memory",
       "needs": [
         {
           "theme": "void",
@@ -1840,7 +1840,7 @@
       ]
     },
     "88994286-96db-4ba6-a660-b30ae9b52cff": {
-      "name": "Gleamharvester",
+      "name": "Smoke Siphoner",
       "needs": [
         {
           "theme": "discard",
@@ -1902,7 +1902,7 @@
       ]
     },
     "770b21e4-ea6a-4910-8fca-2ec5b8813da1": {
-      "name": "Grotto Seer",
+      "name": "Catastrophe Broker",
       "needs": [],
       "supports": [
         "discard",
@@ -2025,7 +2025,7 @@
       ]
     },
     "b957466e-f748-4a95-89b2-8509dc762223": {
-      "name": "Iconoclast",
+      "name": "Trance Diviner",
       "needs": [],
       "supports": [
         "discard",
@@ -2380,7 +2380,7 @@
       ]
     },
     "31ecf933-c897-41a5-ab94-822ea65898d8": {
-      "name": "Lumen Rover",
+      "name": "Weaver of Rhapsody",
       "needs": [],
       "supports": [
         "cheap-characters"
@@ -3104,7 +3104,7 @@
       ]
     },
     "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e": {
-      "name": "Revenant of the Lost",
+      "name": "Phantom Angler",
       "needs": [
         {
           "theme": "cheap-characters",
@@ -4563,7 +4563,7 @@
       ]
     },
     "d8c90a33-a581-469a-9fd3-9a80d1cc5315": {
-      "name": "Veilseeker",
+      "name": "Voidsire",
       "needs": [
         {
           "theme": "void",
