@@ -236,13 +236,13 @@
   height: calc(var(--atlas-node-size) * 0.23);
   border-radius: 50%;
   z-index: 6;
-  background: radial-gradient(closest-side, #ef4444, #7f1d1d);
-  color: #fff;
+  background: radial-gradient(closest-side, var(--dt-enemy), #7f1d1d);
+  color: var(--text-on-accent);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: calc(var(--atlas-node-size) * 0.12);
-  border: 2px solid #0a0612;
+  border: 2px solid var(--dt-bg-0);
   box-shadow: 0 0 14px rgba(239, 68, 68, 0.8);
 }
 .dream-atlas .known-badge {

@@ -74,26 +74,6 @@ const DESKTOP_OFFER_CARD_WIDTH_PX = 240;
 // Four reading-width cards plus compact gutters fit without overlap from here.
 const DRAFT_ROW_MIN_WIDTH_PX = 1000;
 
-function useWideDraftRow(): boolean {
-  const queryText = `(min-width: ${String(DRAFT_ROW_MIN_WIDTH_PX)}px)`;
-  const [wide, setWide] = useState(() =>
-    typeof window === "undefined" || typeof window.matchMedia !== "function"
-      ? false
-      : window.matchMedia(queryText).matches,
-  );
-  useEffect(() => {
-    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
-      return;
-    }
-    const query = window.matchMedia(queryText);
-    const onChange = (): void => setWide(query.matches);
-    onChange();
-    query.addEventListener("change", onChange);
-    return () => query.removeEventListener("change", onChange);
-  }, [queryText]);
-  return wide;
-}
-
 function topSafeOpFor(isDesktop: boolean): string {
   const edgeInset = isDesktop
     ? MENU_EDGE_INSET_DESKTOP_PX
@@ -135,7 +115,7 @@ function offerCellWidthFor(params: {
  */
 export function DraftScreen({ view, onPick }: DraftScreenProps) {
   const isDesktop = useIsDesktop();
-  const wideDraftRow = useWideDraftRow();
+  const wideDraftRow = useIsDesktop(DRAFT_ROW_MIN_WIDTH_PX);
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const offerColumns = isDesktop && wideDraftRow ? 4 : 2;
   const offerRows = isDesktop && wideDraftRow ? 1 : 2;

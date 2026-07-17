@@ -9,6 +9,7 @@ import { EssenceValue } from "../components/hud/EssenceValue";
 import { Motes } from "../components/hud/Motes";
 import { token } from "../primitives/tokens";
 import { MOBILE_BATTLE_INSPECTOR_RAIL_TRACK } from "./mobile-battle-layout";
+import { QUEST_RESULT_CONTENT_MAX_WIDTH_PX } from "./quest-result-layout";
 
 export type MobileBattleResultOutcome = "victory" | "defeat" | "draw";
 
@@ -36,7 +37,6 @@ export interface BattleResultSurfaceProps {
   readonly centerOnBattlefield?: boolean;
 }
 
-const RESULT_CONTENT_MAX_WIDTH_PX = 440;
 const REWARD_CALLOUT_MAX_WIDTH_PX = 280;
 const REOPEN_CONTROL_MAX_WIDTH_PX = 220;
 // Two slow Cumulus motion beats give the currency payoff time to read.
@@ -172,7 +172,7 @@ function VictoryReward({
           gridColumn: "1",
           gridRow: "1",
           width: "100%",
-          maxWidth: RESULT_CONTENT_MAX_WIDTH_PX,
+          maxWidth: QUEST_RESULT_CONTENT_MAX_WIDTH_PX,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -309,7 +309,7 @@ function DefeatOrDrawResult({
           gridColumn: "1",
           gridRow: "1",
           width: "100%",
-          maxWidth: RESULT_CONTENT_MAX_WIDTH_PX,
+          maxWidth: QUEST_RESULT_CONTENT_MAX_WIDTH_PX,
         }}
       >
         <GroupPanel>

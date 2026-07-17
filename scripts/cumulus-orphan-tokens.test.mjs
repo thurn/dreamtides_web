@@ -72,11 +72,9 @@ export const BASELINE = [
   "--gutter-tight", // reserved screen gutter for dense grids
   // Production bridge (--dt-* atlas/shared re-exports). --dt-line additionally
   // feeds the live canonical --line token inside cumulus-tokens.css.
-  "--dt-bg-0",
   "--dt-bg-1",
   "--dt-bg-2",
   "--dt-border",
-  "--dt-enemy",
   "--dt-energy",
   "--dt-energy-border",
   "--dt-line", // consumed by --line (a live-read canonical token) in the CSS
