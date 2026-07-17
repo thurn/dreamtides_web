@@ -1,18 +1,17 @@
 ---
 name: cumulus-migrate
-description: Use when migrating an existing quest screen to the Cumulus design system, or building a new Cumulus product screen — the ordered screen/builder/adapter checklist plus the working idioms (adapter randomness minting, screen-test incantations, registry + QA steps). Companion to the cumulus skill. Triggers on migrate screen to cumulus, cumulus screen migration, screen builder adapter, view-model builder, FooScreenAdapter, cumulusScreenFor, registry launch, ?ui=cumulus, ?ui=legacy.
+description: Use when building or changing a quest screen in the Cumulus design system — the ordered screen/builder/adapter checklist plus the working idioms (adapter randomness minting, screen-test incantations, exhaustive registry + QA steps). Companion to the cumulus skill. Triggers on Cumulus screen, screen builder adapter, view-model builder, FooScreenAdapter, screenFor, siteDispositionFor, registry launch.
 ---
 
 # Migrating a quest screen to Cumulus — the checklist
 
-This is the step-by-step recipe for converting one screen to the Cumulus design
+This is the step-by-step recipe for building a screen in the Cumulus design
 system. The architecture and its rationale live in the companion
 [cumulus](../cumulus/SKILL.md) skill and
 [cumulus_design_system.md](../../../docs/quest_prototype/cumulus_design_system.md);
 this skill is the ordered checklist plus the working idioms the pilot screens
-established. Work the steps in order — registration (step 6) launches the
-screen to production, so it comes after tests and before browser QA only
-because `?ui=legacy` remains available as the rollback.
+established. Work the steps in order; registration (step 6) adds the route to
+the exhaustive production resolver.
 
 Every convention here that can be machine-checked is enforced by the `cumulus/*`
 ESLint rules and the contract tests in `scripts/`; when lint blocks you, the
@@ -21,7 +20,7 @@ answer.
 
 ## 0. Before writing code
 
-- Read the legacy screen top to bottom and split every line into one of three
+- Split the product behavior into one of three
   buckets: **presentation** (→ Cumulus screen), **mapping from domain data to
   what's shown** (→ view-model builder), **state/effects/navigation wiring**
   (→ adapter). A domain rule that other systems also need belongs in
@@ -103,7 +102,7 @@ belongs in the builder.
 Established idioms:
 
 - **Per-mount randomness** (offers, seeds) is minted with a lazily
-  initialized `useRef`, *not* `useMemo`/`useState` — StrictMode may re-run a
+  initialized `useRef`, _not_ `useMemo`/`useState` — StrictMode may re-run a
   memo, and the minted value must be the same one later handed to the
   mutation:
 
@@ -128,28 +127,23 @@ testing-library). Two required incantations, copied from
 - A `window.matchMedia` stub — jsdom lacks it and `Pressable` reads the
   reduced-motion query; without the stub the mount crashes opaquely.
 
-## 6. Registration — and registration is launch
+## 6. Production registration
 
-- Add the case to `cumulusScreenFor` (or `cumulusSiteScreenFor`, which receives
-  the `SiteState` and passes it to the adapter as a prop) in
-  `src/screens/cumulus_adapters/registry.tsx`.
+- Add the non-site case to `screenFor`, or add the site case to
+  `siteDispositionFor`, in `src/screens/cumulus_adapters/registry.tsx`.
 - Registration automatically wraps the screen in `CumulusQuestChrome`, which
   supplies the persistent `QuestStatusBar` and platform menu from live quest
   state. Do not add HUD data to the screen view-model or render persistent quest
   chrome inside the pure screen.
-- Update `src/screens/cumulus_adapters/registry.test.tsx`: the migrated screen moves
-  from the asserted-null list to an asserted-non-null case. This test breaks
-  on every migration **by design** — it is the reminder that a registry entry
-  ships the screen.
-- `?ui=cumulus` is the default variant: the moment the registry entry lands,
-  every player gets the Cumulus screen. `?ui=legacy` is the player-side
-  rollback. QA to the production bar *before* committing the registration.
+- Update `src/screens/cumulus_adapters/registry.test.tsx` so the table covers
+  the new case and its production disposition. The permanent UI-boundary test
+  also checks the exhaustive switches against the `Screen` and `SiteType`
+  contracts.
 
 ## 7. Browser QA
 
-- If the screen has no `?goto=` scene in `src/runtime/qa-scenes.ts`, add one —
-  screens reachable only by playing forward don't get QA'd. The scene doubles
-  as legacy-comparison QA via `?ui=legacy`.
+- If the screen has no `?goto=` scene in `src/runtime/qa-scenes.ts`, add one so
+  screens reachable only by playing forward have a direct QA route.
 - Before registration and the full final check, capture one representative
   state and confirm the overall visual direction. Correct composition problems
   while the feedback loop is still small.
@@ -159,9 +153,6 @@ testing-library). Two required incantations, copied from
   responsive-branch claims. For routine visual work, keep final screenshots to
   one representative desktop, one representative mobile, and one changed
   interaction state when those states are relevant.
-- Compare against `?ui=legacy` side by side only when visual parity or
-  preservation of a legacy behavior is an acceptance criterion. A migration
-  may intentionally establish a different composition.
 
 ## 8. Final checks
 

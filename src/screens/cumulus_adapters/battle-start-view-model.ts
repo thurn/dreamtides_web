@@ -42,7 +42,12 @@ export function buildBattleStartView(
       const card = cardDatabase.get(summary.cardNumber);
       return card === undefined
         ? []
-        : [{ cardId: card.id, model: { cardId: card.id, displaySnapshot: card } }];
+        : [
+            {
+              cardId: card.id,
+              model: { cardId: card.id, displaySnapshot: card },
+            },
+          ];
     }),
     pointsToWin: init.scoreToWin,
     essenceReward: init.essenceReward,

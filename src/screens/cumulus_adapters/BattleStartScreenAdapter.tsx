@@ -33,7 +33,6 @@ export function BattleStartScreenAdapter({
         essenceReward: view.essenceReward,
         dreamsignCount: view.dreamsigns.length,
         signatureCardIds: view.signatureCards.map((card) => card.cardId),
-        uiVariant: "cumulus",
       },
     );
   }, [init.battleId, view]);
@@ -42,7 +41,6 @@ export function BattleStartScreenAdapter({
     logEvent("battle_start_screen_begin_clicked", {
       battleId: init.battleId,
       enemyId: view.dreamcaller.id,
-      uiVariant: "cumulus",
     });
     onBegin();
   }, [init.battleId, onBegin, view.dreamcaller.id]);

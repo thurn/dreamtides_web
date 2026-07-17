@@ -6,7 +6,6 @@ import { useGameState, useActions } from "../coop/hooks";
 import { createBattlePreview } from "../coop/providers/battle-init-provider";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { PlayableBattleScreen } from "../battle/components/PlayableBattleScreen";
-import { BattleStartScreen } from "../battle/components/BattleStartScreen";
 import { BattleStartScreenAdapter } from "../screens/cumulus_adapters/BattleStartScreenAdapter";
 import {
   CumulusQuestChrome,
@@ -62,34 +61,20 @@ export function BattleSiteRoute({
         </div>
       );
     }
-    if (runtimeConfig.uiVariant === "cumulus") {
-      return (
-        <CumulusQuestChrome handlers={cumulusChromeHandlers}>
-          <BattleStartScreenAdapter
-            init={preview}
-            cardDatabase={cardDatabase}
-            onBegin={beginBattle}
-          />
-        </CumulusQuestChrome>
-      );
-    }
     return (
-      <BattleStartScreen
-        init={preview}
-        cardDatabase={cardDatabase}
-        onBegin={beginBattle}
-      />
+      <CumulusQuestChrome handlers={cumulusChromeHandlers}>
+        <BattleStartScreenAdapter
+          init={preview}
+          cardDatabase={cardDatabase}
+          onBegin={beginBattle}
+        />
+      </CumulusQuestChrome>
     );
   }
 
-  const playable = (
-    <PlayableBattleScreen
-      site={site}
-      aiMode={runtimeConfig.aiMode}
-      uiVariant={runtimeConfig.uiVariant}
-    />
+  return (
+    <CumulusQuestChrome variant="battle">
+      <PlayableBattleScreen site={site} aiMode={runtimeConfig.aiMode} />
+    </CumulusQuestChrome>
   );
-  return runtimeConfig.uiVariant === "cumulus" ? (
-    <CumulusQuestChrome variant="battle">{playable}</CumulusQuestChrome>
-  ) : playable;
 }

@@ -249,20 +249,10 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 | `--dt-wash-journey` | `radial-gradient(120% 95% at 50% 30%, #241a3a, #140e22 55%, #0a0612)` |  |
 | `--dt-gradient-title` | `linear-gradient(90deg, #f3eefb, #c084fc)` |  |
 | `--color-bg` | `#0a0612` |  |
-| `--color-surface` | `#1a1525` |  |
-| `--color-surface-light` | `#2a2040` |  |
-| `--color-border` | `#3a3050` |  |
 | `--color-primary` | `#7c3aed` |  |
-| `--color-primary-light` | `#a855f7` |  |
-| `--color-gold` | `#d4a017` |  |
 | `--color-gold-light` | `#fbbf24` |  |
-| `--color-essence` | `#a855f7` |  |
 | `--color-essence-glow-strong` | `rgba(168, 85, 247, 0.5)` |  |
-| `--color-essence-glow-soft` | `rgba(168, 85, 247, 0.2)` |  |
-| `--color-essence-bg` | `rgba(168, 85, 247, 0.1)` |  |
-| `--color-essence-border` | `rgba(168, 85, 247, 0.35)` |  |
 | `--color-text` | `#e2e8f0` |  |
-| `--color-text-dim` | `#94a3b8` |  |
 | `--cv-rules-energy-color` | `var(--primitive-energy-400)` | #0ea5e9 |
 | `--cv-rules-spark-color` | `var(--primitive-spark-500)` | #f3c33f |
 | `--cv-rules-highlight-color` | `var(--primitive-spark-500)` | glossary-term amber |

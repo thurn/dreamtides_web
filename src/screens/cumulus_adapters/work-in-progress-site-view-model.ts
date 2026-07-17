@@ -86,9 +86,7 @@ export function buildWorkInProgressSiteView(params: {
       id: guideId,
       name: params.guide?.name ?? copy.fallbackGuideName,
       line:
-        params.guideLine ??
-        params.guide?.dialog[0] ??
-        copy.fallbackGuideLine,
+        params.guideLine ?? params.guide?.dialog[0] ?? copy.fallbackGuideLine,
       art: artRef.dreamGuide(guideId),
     },
   };

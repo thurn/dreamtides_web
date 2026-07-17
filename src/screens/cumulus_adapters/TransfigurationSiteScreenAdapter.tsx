@@ -60,7 +60,6 @@ export function TransfigurationSiteScreenAdapter({ siteId }: { siteId: string })
       siteType: site.type,
       isEnhanced: site.isEnhanced,
       deckSize: state.deck.length,
-      ui: "cumulus",
     });
   }, [site, state.deck.length]);
 
@@ -72,7 +71,6 @@ export function TransfigurationSiteScreenAdapter({ siteId }: { siteId: string })
         runtime === null || runtime.entryIds.length === 0
           ? "no_candidates"
           : "skipped",
-      ui: "cumulus",
     });
     mutations.completeSite(site.id, "transfiguration_skipped");
   }, [mutations, runtime, site]);
@@ -106,7 +104,6 @@ export function TransfigurationSiteScreenAdapter({ siteId }: { siteId: string })
         isEnhanced: site.isEnhanced,
         currentDreamscape: state.currentDreamscape,
         completionLevel: state.completionLevel,
-        ui: "cumulus",
       });
       mutations.acceptTransfigurationChoice(
         site.id, entryId, type, effectDescription, effectDetails,

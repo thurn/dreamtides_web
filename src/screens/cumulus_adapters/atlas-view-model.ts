@@ -178,7 +178,9 @@ export function resolveAtlasNodeGeometry(
   // radius (plus a small inset) from the stage edge along the spread axis, so
   // their outer edges sit just inside the device edge and the full span is used.
   const spreadExtent =
-    profile.orientation === "portrait" ? profile.stageWidth : profile.stageHeight;
+    profile.orientation === "portrait"
+      ? profile.stageWidth
+      : profile.stageHeight;
   const contentRect = profile.edgeAnchorHorizontal
     ? profile.orientation === "portrait"
       ? {
@@ -276,7 +278,10 @@ export function atlasEdgeKind(
   if (from.state === "completed" && to.state === "available") {
     return "open";
   }
-  if (choiceLayer !== null && layerOrdinal(from.layer) > layerOrdinal(choiceLayer)) {
+  if (
+    choiceLayer !== null &&
+    layerOrdinal(from.layer) > layerOrdinal(choiceLayer)
+  ) {
     return "locked";
   }
   return "dim";
@@ -336,15 +341,19 @@ function buildDreamsignCard(
     return null;
   }
   const dreamsign =
-    questContent.dreamsignTemplates.find((t) => t.id === node.knownDreamsignId) ??
-    null;
+    questContent.dreamsignTemplates.find(
+      (t) => t.id === node.knownDreamsignId,
+    ) ?? null;
   if (dreamsign === null) {
     return null;
   }
   return {
     id: dreamsign.id,
     name: dreamsign.name,
-    art: dreamsign.imageName != null ? artRef.dreamsign(dreamsign.imageName) : null,
+    art:
+      dreamsign.imageName != null
+        ? artRef.dreamsign(dreamsign.imageName)
+        : null,
     rulesText: dreamsign.effectDescription,
   };
 }
@@ -424,15 +433,15 @@ function buildNodeCard(
     return {
       primary: {
         sceneArt: artRef.dreamscapeScene(BOSS_DREAMSCAPE_ID),
-      // The boss stands over the Limbo scene as its prominent figure.
+        // The boss stands over the Limbo scene as its prominent figure.
         figureArt: artRef.dreamGuide(BOSS_DISPLAY.guideId),
-      // Title with the run's chosen Apollyon incarnation (its full name, e.g.
-      // "Apollyon, the World's End"), falling back to the default epithet when
-      // no incarnation was assigned.
+        // Title with the run's chosen Apollyon incarnation (its full name, e.g.
+        // "Apollyon, the World's End"), falling back to the default epithet when
+        // no incarnation was assigned.
         title: bossIncarnation?.title ?? BOSS_DISPLAY.title,
         body: bossIncarnation?.description ?? BOSS_DISPLAY.intro,
-      // The desktop hover card presents Limbo as the place with the chosen
-      // incarnation as the guide-line; the boss has no site or affiliation.
+        // The desktop hover card presents Limbo as the place with the chosen
+        // incarnation as the guide-line; the boss has no site or affiliation.
         placeName: BOSS_DISPLAY.place,
         guideName: bossIncarnation?.title ?? BOSS_DISPLAY.title,
       },
@@ -446,7 +455,8 @@ function buildNodeCard(
   // presents the compact "unseen dream" card rather than leaking it.
   const dreamscape =
     isReachable && node.dreamscapeId !== null
-      ? (questContent.dreamscapes.find((d) => d.id === node.dreamscapeId) ?? null)
+      ? (questContent.dreamscapes.find((d) => d.id === node.dreamscapeId) ??
+        null)
       : null;
 
   if (node.state === "unrevealed" || !isReachable || dreamscape === null) {
@@ -456,12 +466,12 @@ function buildNodeCard(
         figureArt: null,
         title: "An Unseen Dream",
         body: UNSEEN_DREAM_BODY,
-      // A still-unseen dream can carry a pre-revealed known dreamsign (its badge
-      // already shows on the node); pressing it reveals that dreamsign's own
-      // companion card beneath the "unseen dream" text. Unreachable nodes hide
-      // it — `buildDreamsignCard` already returns null for those.
-      // An unrevealed node has no scene, so the large desktop hover card falls
-      // back to the compact text card; its detail fields stay null.
+        // A still-unseen dream can carry a pre-revealed known dreamsign (its badge
+        // already shows on the node); pressing it reveals that dreamsign's own
+        // companion card beneath the "unseen dream" text. Unreachable nodes hide
+        // it — `buildDreamsignCard` already returns null for those.
+        // An unrevealed node has no scene, so the large desktop hover card falls
+        // back to the compact text card; its detail fields stay null.
         placeName: null,
         guideName: null,
       },
@@ -499,8 +509,8 @@ function buildNodeCard(
       figureArt: guide != null ? artRef.dreamGuide(guide.id) : null,
       title: guide?.name ?? dreamscape.name,
       body: guide?.homeSpecialty ?? STARTER_BODY,
-    // The large desktop hover card presents the place, its resident guide, the
-    // signature site, and the dreamscape's affiliation as distinct fields.
+      // The large desktop hover card presents the place, its resident guide, the
+      // signature site, and the dreamscape's affiliation as distinct fields.
       placeName: dreamscape.name,
       guideName: guide?.name ?? null,
     },
@@ -550,7 +560,10 @@ export function buildAtlasMapNodes(
     // dreamscapes.
     const revealedSite = revealedAtlasSite(node);
     const siteBadgeGlyph =
-      geo.isBoss || geo.isStarter || dreamscape === null || revealedSite === null
+      geo.isBoss ||
+      geo.isStarter ||
+      dreamscape === null ||
+      revealedSite === null
         ? null
         : glyph(siteTypeIcon(dreamscape.signatureSite));
 
@@ -566,17 +579,17 @@ export function buildAtlasMapNodes(
         : null;
 
     items.push({
-        node,
-        left: geo.left,
-        top: geo.top,
-        size: geo.size,
-        isStarter: geo.isStarter,
-        isBoss: geo.isBoss,
-        isReachable,
-        iconRef,
-        siteBadgeGlyph,
-        knownDreamsignRef,
-        badgeScale: profile.badgeScale,
+      node,
+      left: geo.left,
+      top: geo.top,
+      size: geo.size,
+      isStarter: geo.isStarter,
+      isBoss: geo.isBoss,
+      isReachable,
+      iconRef,
+      siteBadgeGlyph,
+      knownDreamsignRef,
+      badgeScale: profile.badgeScale,
       ...buildNodeCard(node, geo, questContent, atlas, isReachable),
     });
   }

@@ -55,52 +55,44 @@ if (pathname === "/editor" || pathname === "/cards") {
   }
   renderStrict(<CardEditorApp />);
 } else if (pathname === "/dreamsigns") {
-  const { default: DreamsignEditorApp } = await import(
-    "./editor/DreamsignEditorApp"
-  );
+  const { default: DreamsignEditorApp } =
+    await import("./editor/DreamsignEditorApp");
   renderStrict(<DreamsignEditorApp />);
 } else if (pathname === "/dreamcallers") {
-  const { default: DreamcallerEditorApp } = await import(
-    "./editor/DreamcallerEditorApp"
-  );
+  const { default: DreamcallerEditorApp } =
+    await import("./editor/DreamcallerEditorApp");
   renderStrict(<DreamcallerEditorApp />);
 } else if (pathname === "/tides") {
   const { default: TidesEditorApp } = await import("./editor/TidesEditorApp");
   renderStrict(<TidesEditorApp />);
 } else if (pathname === "/dreamscapes") {
-  const { default: DreamscapeEditorApp } = await import(
-    "./editor/DreamscapeEditorApp"
-  );
+  const { default: DreamscapeEditorApp } =
+    await import("./editor/DreamscapeEditorApp");
   renderStrict(<DreamscapeEditorApp />);
 } else if (pathname === "/figments") {
-  const { default: FigmentEditorApp } = await import(
-    "./editor/FigmentEditorApp"
-  );
+  const { default: FigmentEditorApp } =
+    await import("./editor/FigmentEditorApp");
   renderStrict(<FigmentEditorApp />);
 } else if (pathname === "/dreamwell") {
-  const { default: DreamwellEditorApp } = await import(
-    "./editor/DreamwellEditorApp"
-  );
+  const { default: DreamwellEditorApp } =
+    await import("./editor/DreamwellEditorApp");
   renderStrict(<DreamwellEditorApp />);
 } else if (pathname === "/images" || pathname === "/images/favorites") {
-  const { default: ImageViewerApp } = await import(
-    "./image_viewer/ImageViewerApp"
-  );
+  const { default: ImageViewerApp } =
+    await import("./image_viewer/ImageViewerApp");
   renderStrict(<ImageViewerApp />);
 } else if (pathname === "/opponent") {
   // Standalone opponent-generation debugging tool: simulate the pre-battle
   // opponent build (Dreamcaller, dreamsigns, deck) for any run position and
   // dreamscape, and re-roll the same parameters. See `src/debug/OpponentDebugApp`.
-  const { default: OpponentDebugApp } = await import(
-    "./debug/OpponentDebugApp"
-  );
+  const { default: OpponentDebugApp } =
+    await import("./debug/OpponentDebugApp");
   renderStrict(<OpponentDebugApp />);
 } else if (pathname === "/sigdecks") {
   // Temporary visualization: the real draft deck most strongly correlated with
   // each signature-carrying Dreamcaller. See `src/debug/SignatureDecksApp`.
-  const { default: SignatureDecksApp } = await import(
-    "./debug/SignatureDecksApp"
-  );
+  const { default: SignatureDecksApp } =
+    await import("./debug/SignatureDecksApp");
   renderStrict(<SignatureDecksApp />);
 } else if (pathname === "/offers") {
   const { default: OffersDebugApp } = await import("./debug/OffersDebugApp");
@@ -128,23 +120,25 @@ if (pathname === "/editor" || pathname === "/cards") {
 
   const [
     { default: App },
-    { HudDreamsignLayoutDemo },
-    { JourneyHoverCardDemo },
-    { TransfigurationCardDemo },
     { DeviceFrameDemo },
     { EntityRevealConformanceDemo },
-    { parseRuntimeConfig },
+    { parseRuntimeConfig, removeUiParamFromSearch },
   ] = await Promise.all([
     import("./App.tsx"),
-    import("./components/HudDreamsignLayoutDemo"),
-    import("./journeys/ui/JourneyHoverCardDemo"),
-    import("./components/TransfigurationCardDemo"),
     import("./cumulus/screens/devtools/DeviceFrameDemo"),
     import("./screens/devtools/EntityRevealConformanceDemo"),
     import("./runtime/runtime-config"),
   ]);
 
-  const runtimeConfig = parseRuntimeConfig(window.location.search);
+  const canonicalSearch = removeUiParamFromSearch(window.location.search);
+  if (canonicalSearch !== window.location.search) {
+    window.history.replaceState(
+      null,
+      "",
+      window.location.pathname + canonicalSearch + window.location.hash,
+    );
+  }
+  const runtimeConfig = parseRuntimeConfig(canonicalSearch);
 
   // Standalone component demos for browser QA. Mount with
   // `?demo=<name>` to bypass the full quest workflow when inspecting a
@@ -153,13 +147,7 @@ if (pathname === "/editor" || pathname === "/cards") {
 
   renderStrict(
     <>
-      {demoParam === "hud-dreamsign-layout" ? (
-        <HudDreamsignLayoutDemo />
-      ) : demoParam === "journey-hover" ? (
-        <JourneyHoverCardDemo />
-      ) : demoParam === "transfiguration" ? (
-        <TransfigurationCardDemo />
-      ) : demoParam === "device-frame" ? (
+      {demoParam === "device-frame" ? (
         <DeviceFrameDemo />
       ) : demoParam === "entity-reveals" ? (
         <EntityRevealConformanceDemo />

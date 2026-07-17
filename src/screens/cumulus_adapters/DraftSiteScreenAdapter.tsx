@@ -17,11 +17,7 @@ import { DraftScreen } from "../../cumulus/screens/DraftScreen";
 
 /** Live draft site screen: enters the site, builds the view-model, picks a
  * card, and completes back to the dreamscape once the pack runs out. */
-export function DraftSiteScreenAdapter({
-  siteId,
-}: {
-  siteId: string;
-}) {
+export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
   const { state, mutations, cardDatabase } = useQuest();
 
   // Enter this site whenever the displayed draft state has not advanced to
@@ -35,7 +31,7 @@ export function DraftSiteScreenAdapter({
   const progress = readDraftSiteProgress(state.draftState, siteId);
   const node =
     state.currentDreamscape !== null
-      ? state.atlas.nodes[state.currentDreamscape] ?? null
+      ? (state.atlas.nodes[state.currentDreamscape] ?? null)
       : null;
   const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
 
@@ -48,7 +44,13 @@ export function DraftSiteScreenAdapter({
         site,
         sitePicksCompleted: progress.sitePicksCompleted,
       }),
-    [progress.offerCardNumbers, progress.sitePicksCompleted, cardDatabase, node, site],
+    [
+      progress.offerCardNumbers,
+      progress.sitePicksCompleted,
+      cardDatabase,
+      node,
+      site,
+    ],
   );
 
   const handlePick = useCallback(

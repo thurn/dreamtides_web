@@ -20,7 +20,11 @@ describe("buildInlineRewardCompletionLog", () => {
       accepted: false,
     };
 
-    const result = buildInlineRewardCompletionLog(site("Essence"), runtime, STATE);
+    const result = buildInlineRewardCompletionLog(
+      site("Essence"),
+      runtime,
+      STATE,
+    );
     expect(result?.kind).toBe("essence");
     expect(result?.fields.siteId).toBe("site-uuid");
     expect(result?.fields.rewardAmount).toBe(25);
@@ -44,7 +48,11 @@ describe("buildInlineRewardCompletionLog", () => {
       accepted: false,
     };
 
-    const result = buildInlineRewardCompletionLog(site("Reward"), runtime, STATE);
+    const result = buildInlineRewardCompletionLog(
+      site("Reward"),
+      runtime,
+      STATE,
+    );
     expect(result?.kind).toBe("reward");
     expect(result?.fields.rewardType).toBe("dreamsign");
     expect(result?.fields.dreamsignId).toBe("dreamsign-uuid");
@@ -57,6 +65,8 @@ describe("buildInlineRewardCompletionLog", () => {
       accepted: true,
     };
 
-    expect(buildInlineRewardCompletionLog(site("Essence"), runtime, STATE)).toBeNull();
+    expect(
+      buildInlineRewardCompletionLog(site("Essence"), runtime, STATE),
+    ).toBeNull();
   });
 });

@@ -4,9 +4,9 @@ The quest runtime reads query-string parameters from `window.location.search`
 once at page load via `parseRuntimeConfig` in `src/runtime/runtime-config.ts`.
 Quest runtime parameters are not reactive: changing them requires a page reload.
 
-These parameters configure *how a run boots and behaves* and ride in the query
-string. The address-bar **path** is a separate concern: it reflects *where the
-player is* (e.g. `/dreamscape/2-ember-wood/purge`, `/atlas`). See
+These parameters configure _how a run boots and behaves_ and ride in the query
+string. The address-bar **path** is a separate concern: it reflects _where the
+player is_ (e.g. `/dreamscape/2-ember-wood/purge`, `/atlas`). See
 `url_structure.md` for the path grammar; the two compose (a path always carries
 the run's query string).
 
@@ -97,9 +97,9 @@ provides:
   Dreamcaller's identity the way `sigseed` does. Requires the baked artifact
   (`npm run bake-tides3`); see `docs/cards2/tides3_algorithm.md`.
 - `algo=tides4` — the human-legible counterpart of `sigseed`'s run-to-run
-  *variety*. Combines the preconstructed tides in `data/tides4.jsonc` (rendered as
+  _variety_. Combines the preconstructed tides in `data/tides4.jsonc` (rendered as
   `docs/cards2/tides4_decklists.md`): the Dreamcaller's signature tide is always
-  joined as a dense on-theme core, a random subset of its small *facet* tides
+  joined as a dense on-theme core, a random subset of its small _facet_ tides
   (each a single-anchor `sigseed` pool) is mixed in to lean the pool a different
   way each run, and broad tides top it up to a 150-card pool (at most 2 copies of
   any card). Drawing a random facet subset reproduces the variety `sigseed` gets
@@ -139,9 +139,9 @@ pick, rank candidate cards by how well they fit the deck drafted so far:
   twice. Every pack is drawn only from cards still eligible under those rules.
 
 When `algo` is `replay` or `fresh20`, `poolVariant` still resolves to the default
-(`idf3`); the pool variant no longer drives the draft but is retained for the
-resolved Dreamcaller package (signatures, dreamsign pool, starter decklist, and
-the transient shop pool the deck-fit modes draw from).
+(`idf3`) and supplies the resolved Dreamcaller package: signatures, Dreamsign
+pool, starter decklist, and the transient shop pool used by the deck-fit modes.
+The `algo` selection governs draft pack construction.
 
 ## `packsize`
 
@@ -165,22 +165,6 @@ http://localhost:5173/?algo=fresh20&packsize=30 # fresh-pack draft with 30-card 
 `parseRuntimeConfig` sets `runtimeConfig.journeyVariant` to `"v2"`. The
 parameter is retained in shared room URLs so the fold-relevant content config
 is explicit and reproducible.
-
-## `ui`
-
-`parseRuntimeConfig` sets `runtimeConfig.uiVariant` to `"cumulus"` by default.
-Set to exactly `legacy` to force the legacy UI for every screen; any other value
-(including empty or absent) keeps `uiVariant` at `"cumulus"`.
-
-`uiVariant` drives a per-screen implementation swap in `ScreenRouter`. Under
-`"cumulus"`, each screen renders its Cumulus design-system implementation when one
-exists (resolved through `src/screens/cumulus_adapters/registry.tsx`) and falls back to the
-legacy screen for any screen not yet migrated, so the app stays fully navigable
-during the migration. Because `ui` is a query parameter, it survives the
-address-bar path reflection (`useQuestUrlSync` preserves the query string) and so
-persists as you navigate within a run. `ScreenRouter` emits a `screen_rendered`
-log event on each navigation recording the variant, the screen, and whether Cumulus
-served it.
 
 ## Dream Journey Debug Harness
 

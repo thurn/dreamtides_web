@@ -20,8 +20,7 @@ export function WorkInProgressSiteScreenAdapter({
     state.currentDreamscape === null
       ? null
       : (state.atlas.nodes[state.currentDreamscape] ?? null);
-  const candidate =
-    node?.sites.find((site) => site.id === siteId) ?? null;
+  const candidate = node?.sites.find((site) => site.id === siteId) ?? null;
   const site =
     candidate !== null && isWorkInProgressSiteType(candidate.type)
       ? { ...candidate, type: candidate.type }
@@ -57,7 +56,6 @@ export function WorkInProgressSiteScreenAdapter({
       siteType: site.type,
       isEnhanced: site.isEnhanced,
       workInProgress: true,
-      ui: "cumulus",
     });
     if (guide !== null) {
       logEventOnce(
@@ -67,7 +65,6 @@ export function WorkInProgressSiteScreenAdapter({
           guideId: guide.id,
           siteType: site.type,
           isEnhanced: site.isEnhanced,
-          ui: "cumulus",
         },
       );
     }
@@ -79,13 +76,10 @@ export function WorkInProgressSiteScreenAdapter({
       siteId: site.id,
       siteType: site.type,
       outcome: "work_in_progress_continue",
-      ui: "cumulus",
     });
     mutations.completeSite(site.id, "stub_site_continue");
   }, [mutations, site]);
 
   if (site === null || view === null) return null;
-  return (
-    <WorkInProgressSiteScreen view={view} onContinue={handleContinue} />
-  );
+  return <WorkInProgressSiteScreen view={view} onContinue={handleContinue} />;
 }

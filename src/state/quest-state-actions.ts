@@ -1,6 +1,9 @@
 import { generateInitialAtlas } from "../atlas/atlas-generator";
 import { toQuestDreamcaller } from "../data/dreamcaller-selection";
-import { buildDreamcallerPackage, buildReplayDraftState } from "../data/quest-content";
+import {
+  buildDreamcallerPackage,
+  buildReplayDraftState,
+} from "../data/quest-content";
 import type { QuestContent } from "../data/quest-content";
 import { buildIdIndex } from "../data/cards-v2-database";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
@@ -196,8 +199,8 @@ export function prepareDraftCardPickInQuestState({
 
 function arraysEqual<T>(left: readonly T[], right: readonly T[]): boolean {
   return (
-    left.length === right.length
-    && left.every((value, index) => Object.is(value, right[index]))
+    left.length === right.length &&
+    left.every((value, index) => Object.is(value, right[index]))
   );
 }
 
@@ -206,15 +209,15 @@ function deckEntriesEqual(
   right: readonly DeckEntry[],
 ): boolean {
   return (
-    left.length === right.length
-    && left.every((entry, index) => {
+    left.length === right.length &&
+    left.every((entry, index) => {
       const other = right[index];
       return (
-        other !== undefined
-        && entry.entryId === other.entryId
-        && entry.cardNumber === other.cardNumber
-        && entry.transfiguration === other.transfiguration
-        && entry.isBane === other.isBane
+        other !== undefined &&
+        entry.entryId === other.entryId &&
+        entry.cardNumber === other.cardNumber &&
+        entry.transfiguration === other.transfiguration &&
+        entry.isBane === other.isBane
       );
     })
   );
@@ -233,11 +236,11 @@ export function commitPreparedDraftCardPickInQuestState({
   }
 
   if (
-    draftState.activeSiteId !== prepared.expected.siteId
-    || draftState.pickNumber !== prepared.expected.pickNumber
-    || !arraysEqual(draftState.currentOffer, prepared.expected.currentOffer)
-    || !draftState.currentOffer.includes(prepared.expected.cardNumber)
-    || !deckEntriesEqual(prev.deck, prepared.expected.deck)
+    draftState.activeSiteId !== prepared.expected.siteId ||
+    draftState.pickNumber !== prepared.expected.pickNumber ||
+    !arraysEqual(draftState.currentOffer, prepared.expected.currentOffer) ||
+    !draftState.currentOffer.includes(prepared.expected.cardNumber) ||
+    !deckEntriesEqual(prev.deck, prepared.expected.deck)
   ) {
     return null;
   }
@@ -249,10 +252,7 @@ export function commitPreparedDraftCardPickInQuestState({
   };
 }
 
-export function setQuestScreen(
-  prev: QuestState,
-  screen: Screen,
-): QuestState {
+export function setQuestScreen(prev: QuestState, screen: Screen): QuestState {
   return {
     ...prev,
     screen,
@@ -289,10 +289,7 @@ export function canVisitSite(prev: QuestState, siteId: string): boolean {
     if (site.isVisited || prev.visitedSites.includes(siteId)) {
       return false;
     }
-    if (
-      prev.currentDreamscape !== null &&
-      node.id !== prev.currentDreamscape
-    ) {
+    if (prev.currentDreamscape !== null && node.id !== prev.currentDreamscape) {
       return false;
     }
     if (site.type === "Battle") {
@@ -365,8 +362,8 @@ function totalSiteCount(atlas: DreamAtlas): number {
  * the state already has a different number of sites (preventing id collision on
  * repeated rewards).
  *
- * The v1 adapter (`src/journeys/adapter/journeyMutations.ts`) delegates to this
- * function for the `"current"` placement so both paths share one implementation.
+ * Dream Augury site rewards delegate here for `"current"` placement so every
+ * offer shape shares one implementation.
  */
 export function addSiteToCurrentDreamscape(
   prev: QuestState,
@@ -455,7 +452,11 @@ export function startQuestFromDreamcaller({
       "startQuestFromDreamcaller: questContent.poolContext is required",
     );
   }
-  const resolvedPackage = buildDreamcallerPackage(dreamcaller, poolContext, seed);
+  const resolvedPackage = buildDreamcallerPackage(
+    dreamcaller,
+    poolContext,
+    seed,
+  );
 
   const deck = [...prev.deck];
   for (const cardNumber of STARTER_CARD_NUMBERS) {
@@ -503,9 +504,9 @@ export function startQuestFromDreamcaller({
   // modes' shops draw from). The deck-fit modes both require a fit model; when
   // the record corpus failed to load they fall back to the pool draft.
   const useReplayDraft =
-    questContent.draftMode === "replay"
-    && questContent.draftRecords !== undefined
-    && questContent.draftRecords.length > 0;
+    questContent.draftMode === "replay" &&
+    questContent.draftRecords !== undefined &&
+    questContent.draftRecords.length > 0;
   const useFresh20Draft =
     questContent.draftMode === "fresh20" && questContent.fitModel !== undefined;
   const draftState = useReplayDraft

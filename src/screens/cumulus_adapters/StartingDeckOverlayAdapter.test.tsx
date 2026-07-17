@@ -73,7 +73,12 @@ function makeCardDatabase(): Map<number, CardData> {
 function makeState(): QuestState {
   return {
     deck: [
-      { entryId: "entry-1", cardNumber: 1, transfiguration: null, isBane: false },
+      {
+        entryId: "entry-1",
+        cardNumber: 1,
+        transfiguration: null,
+        isBane: false,
+      },
     ],
   } as unknown as QuestState;
 }
@@ -88,7 +93,10 @@ function setQuestContext(): void {
   } as QuestContextValue);
 }
 
-function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
+function mount(element: ReactElement): {
+  container: HTMLDivElement;
+  root: Root;
+} {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -163,7 +171,9 @@ describe("StartingDeckOverlayAdapter", () => {
     const [event, payload] = vi.mocked(logEvent).mock.calls[0] ?? [];
     expect(event).toBe("starting_deck_modal_closed");
     expect(payload).toHaveProperty("durationMs");
-    expect(typeof (payload as { durationMs: number }).durationMs).toBe("number");
+    expect(typeof (payload as { durationMs: number }).durationMs).toBe(
+      "number",
+    );
 
     act(() => {
       root.unmount();

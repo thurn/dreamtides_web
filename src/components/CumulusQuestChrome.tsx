@@ -19,7 +19,10 @@ export interface CumulusQuestChromeHandlers {
   onOpenPoolViewer?: () => void;
   onOpenDebugScreen?: () => void;
   onOpenQuestEditor?: () => void;
+  onToggleCardSourceOverlay?: () => void;
   hasDraftData?: boolean;
+  hasCardSourceDebug?: boolean;
+  isCardSourceOverlayOpen?: boolean;
   onLoadQuestState?: (state: QuestState, source: string) => void;
   onRegenerateAtlas?: () => void;
   contextualActions?: readonly QuestUtilityMenuAction[];
@@ -73,7 +76,12 @@ export function CumulusQuestChrome({
             onOpenPoolViewer={handlers.onOpenPoolViewer ?? NOOP}
             onOpenDebugScreen={handlers.onOpenDebugScreen ?? NOOP}
             onOpenQuestEditor={handlers.onOpenQuestEditor ?? NOOP}
+            onToggleCardSourceOverlay={
+              handlers.onToggleCardSourceOverlay ?? NOOP
+            }
             hasDraftData={handlers.hasDraftData ?? false}
+            hasCardSourceDebug={handlers.hasCardSourceDebug ?? false}
+            isCardSourceOverlayOpen={handlers.isCardSourceOverlayOpen ?? false}
             onLoadQuestState={handlers.onLoadQuestState}
             onRegenerateAtlas={
               showAtlasRegenerate ? handlers.onRegenerateAtlas : undefined

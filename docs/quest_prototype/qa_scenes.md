@@ -103,54 +103,54 @@ Cumulus layout is a 2×2 pack on mobile and a four-card row on desktop. Picking 
 card mints and paints the next offer and advances the counter; exhausting the
 pack completes the site and returns to the dreamscape overview.
 
-Open this scene with `&ui=cumulus` to see the Cumulus pack. Pair with
-`&deviceFrame=iphone16` to render the phone chrome for framed mobile QA, e.g.:
+Pair this scene with `&deviceFrame=iphone16` to render the phone chrome for
+framed mobile QA, e.g.:
 
 ```
-http://localhost:5174/?goto=draft&ui=cumulus&deviceFrame=iphone16
+http://localhost:5174/?goto=draft&deviceFrame=iphone16
 ```
 
 ## Registered scenes
 
 The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 
-| `?goto=` id              | Screen                                                            |
-| ------------------------ | ---------------------------------------------------------------- |
-| `dreamcaller-select`     | Choose-your-Dreamcaller screen a run opens on (`questStart`), without the lobby |
-| `atlas`                  | Dream Atlas resting screen at the first frontier the UI labels "Layer II" (one dreamscape completed), with a generated boss node and Apollyon incarnation (atlas UI + boss-preview QA); same screen as `atlas2` |
-| `atlas2` … `atlas7`      | Dream Atlas resting screen the UI labels "Layer N", with the available frontier on column N (see "Atlas layers" below) |
-| `battle`                 | Layer I Battle Start opponent preview; same scene depth as `battle1` |
-| `battle-playable`        | Layer I playable battle board with owned Dreamsigns |
-| `battle1` … `battle7`    | Battle Start opponent preview for the keeper battle on atlas Layer N, with layer-tuned opponent strength (see "Battle layers") |
-| `dreamscape`             | Starter dreamscape overview with site nodes and the QuestStatusBar |
-| `dreamscape-with-essence` | Starter dreamscape overview with an Essence site ready to enter (site-entry animation QA) |
-| `deckviewer`             | Deck viewer overlay opened over the starter dreamscape (deck grid + press-and-hold zoom) |
-| `startingdeck`           | Starting-deck reveal popup over the starter dreamscape (frosted-glass chrome QA) |
-| `draft`                  | Draft site — the Cumulus draft screen with a rolled first offer and the floating `Draft (n/total)` pick counter (mobile-gated; see "Draft site" below) |
-| `essence`                | Essence site                                                     |
-| `transfiguration`        | Transfiguration site                                             |
-| `transfiguration-enhanced` | Transfiguration site, enhanced                                |
-| `duplication`            | Duplication site                                                |
-| `duplication-enhanced`   | Duplication site, enhanced (whole deck offered)                 |
-| `purge`                  | Purge site                                                       |
-| `purge-enhanced`         | Purge site, enhanced (discounted removals)                      |
-| `shop`                   | Shop site                                                        |
-| `shop-enhanced`          | Shop site, enhanced (free restock, signature-tide cards)        |
-| `dreamsignmarket`        | Dreamsign Market site                                           |
-| `dreamsignmarket-enhanced` | Dreamsign Market site, enhanced (free restock)                |
-| `dreamaugury`            | Dream Augury site                                               |
-| `dreamaugury-enhanced`   | Dream Augury site, enhanced flag (same UI as regular)           |
-| `reward`                 | Dreamscape overview with a Reward site ready for inline collection |
-| `tempting`               | Tempting Offer work-in-progress site                            |
-| `tempting-enhanced`      | Tempting Offer work-in-progress site, enhanced                  |
-| `gamble`                 | Gamble work-in-progress site                                    |
-| `gamble-enhanced`        | Gamble work-in-progress site, enhanced                          |
-| `temporal-fork`          | Temporal Fork work-in-progress site                             |
-| `temporal-fork-enhanced` | Temporal Fork work-in-progress site, enhanced                   |
-| `dreamsign-revelation`   | Dreamsign Revelation site                                       |
-| `dreamsign-revelation-enhanced` | Dreamsign Revelation site, enhanced (four choices)        |
-| `questcomplete`          | Quest victory end screen (completion stats + final-deck reveal) |
-| `questfailed`            | Quest defeat end screen (failure summary)                       |
+| `?goto=` id                     | Screen                                                                                                                                                                                                          |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dreamcaller-select`            | Choose-your-Dreamcaller screen a run opens on (`questStart`), without the lobby                                                                                                                                 |
+| `atlas`                         | Dream Atlas resting screen at the first frontier the UI labels "Layer II" (one dreamscape completed), with a generated boss node and Apollyon incarnation (atlas UI + boss-preview QA); same screen as `atlas2` |
+| `atlas2` … `atlas7`             | Dream Atlas resting screen the UI labels "Layer N", with the available frontier on column N (see "Atlas layers" below)                                                                                          |
+| `battle`                        | Layer I Battle Start opponent preview; same scene depth as `battle1`                                                                                                                                            |
+| `battle-playable`               | Layer I playable battle board with owned Dreamsigns                                                                                                                                                             |
+| `battle1` … `battle7`           | Battle Start opponent preview for the keeper battle on atlas Layer N, with layer-tuned opponent strength (see "Battle layers")                                                                                  |
+| `dreamscape`                    | Starter dreamscape overview with site nodes and the QuestStatusBar                                                                                                                                              |
+| `dreamscape-with-essence`       | Starter dreamscape overview with an Essence site ready to enter (site-entry animation QA)                                                                                                                       |
+| `deckviewer`                    | Deck viewer overlay opened over the starter dreamscape (deck grid + press-and-hold zoom)                                                                                                                        |
+| `startingdeck`                  | Starting-deck reveal popup over the starter dreamscape (frosted-glass chrome QA)                                                                                                                                |
+| `draft`                         | Draft site — the Cumulus draft screen with a rolled first offer and the floating `Draft (n/total)` pick counter (mobile-gated; see "Draft site" below)                                                          |
+| `transfiguration`               | Transfiguration site                                                                                                                                                                                            |
+| `transfiguration-enhanced`      | Transfiguration site, enhanced                                                                                                                                                                                  |
+| `duplication`                   | Duplication site                                                                                                                                                                                                |
+| `duplication-enhanced`          | Duplication site, enhanced (whole deck offered)                                                                                                                                                                 |
+| `purge`                         | Purge site                                                                                                                                                                                                      |
+| `purge-enhanced`                | Purge site, enhanced (discounted removals)                                                                                                                                                                      |
+| `shop`                          | Shop site                                                                                                                                                                                                       |
+| `shop-enhanced`                 | Shop site, enhanced (free restock, signature-tide cards)                                                                                                                                                        |
+| `dreamsignmarket`               | Dreamsign Market site                                                                                                                                                                                           |
+| `dreamsignmarket-enhanced`      | Dreamsign Market site, enhanced (free restock)                                                                                                                                                                  |
+| `dreamaugury`                   | Dream Augury site                                                                                                                                                                                               |
+| `dreamaugury-enhanced`          | Dream Augury site, enhanced flag (same UI as regular)                                                                                                                                                           |
+| `reward`                        | Dreamscape overview with a Reward site ready for inline collection                                                                                                                                              |
+| `reward-at-cap`                 | Dreamscape Reward with a full Dreamsign collection and a pending replacement dialog                                                                                                                             |
+| `tempting`                      | Tempting Offer work-in-progress site                                                                                                                                                                            |
+| `tempting-enhanced`             | Tempting Offer work-in-progress site, enhanced                                                                                                                                                                  |
+| `gamble`                        | Gamble work-in-progress site                                                                                                                                                                                    |
+| `gamble-enhanced`               | Gamble work-in-progress site, enhanced                                                                                                                                                                          |
+| `temporal-fork`                 | Temporal Fork work-in-progress site                                                                                                                                                                             |
+| `temporal-fork-enhanced`        | Temporal Fork work-in-progress site, enhanced                                                                                                                                                                   |
+| `dreamsign-revelation`          | Dreamsign Revelation site                                                                                                                                                                                       |
+| `dreamsign-revelation-enhanced` | Dreamsign Revelation site, enhanced (four choices)                                                                                                                                                              |
+| `questcomplete`                 | Quest victory end screen (completion stats + final-deck reveal)                                                                                                                                                 |
+| `questfailed`                   | Quest defeat end screen (failure summary)                                                                                                                                                                       |
 
 ## Combining with other parameters
 

@@ -74,8 +74,18 @@ describe("buildStartingDeckView", () => {
     // A deck whose entries are out of card-number order still resolves in the
     // order the entries were acquired.
     const deck: DeckEntry[] = [
-      { entryId: "entry-2", cardNumber: 2, transfiguration: null, isBane: false },
-      { entryId: "entry-1", cardNumber: 1, transfiguration: null, isBane: false },
+      {
+        entryId: "entry-2",
+        cardNumber: 2,
+        transfiguration: null,
+        isBane: false,
+      },
+      {
+        entryId: "entry-1",
+        cardNumber: 1,
+        transfiguration: null,
+        isBane: false,
+      },
     ];
 
     const view = buildStartingDeckView(deck, makeCardDatabase());
@@ -85,10 +95,25 @@ describe("buildStartingDeckView", () => {
 
   it("drops an entry whose card is not in the database", () => {
     const deck: DeckEntry[] = [
-      { entryId: "entry-1", cardNumber: 1, transfiguration: null, isBane: false },
+      {
+        entryId: "entry-1",
+        cardNumber: 1,
+        transfiguration: null,
+        isBane: false,
+      },
       // cardNumber 99 is absent from the database.
-      { entryId: "entry-missing", cardNumber: 99, transfiguration: null, isBane: false },
-      { entryId: "entry-2", cardNumber: 2, transfiguration: null, isBane: false },
+      {
+        entryId: "entry-missing",
+        cardNumber: 99,
+        transfiguration: null,
+        isBane: false,
+      },
+      {
+        entryId: "entry-2",
+        cardNumber: 2,
+        transfiguration: null,
+        isBane: false,
+      },
     ];
 
     const view = buildStartingDeckView(deck, makeCardDatabase());

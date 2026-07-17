@@ -24,7 +24,6 @@ import { registerGameProviders } from "./coop/providers/register-game-providers"
 import { useQuest } from "./state/quest-context";
 import { CoopQuestProvider } from "./state/coop-quest-context";
 import { ScreenRouter } from "./components/ScreenRouter";
-import { HUD } from "./components/HUD";
 import { DesktopDeckViewerAdapter } from "./screens/cumulus_adapters/DesktopDeckViewerAdapter";
 import { MobileDeckViewerAdapter } from "./screens/cumulus_adapters/MobileDeckViewerAdapter";
 import { useIsDesktop } from "./cumulus/screens/use-is-desktop";
@@ -42,16 +41,8 @@ import type { RuntimeConfig } from "./runtime/runtime-config";
 import { DECK_VIEWER_SCENE_ID, findQaScene } from "./runtime/qa-scenes";
 import { useQuestUrlSync } from "./runtime/use-quest-url-sync";
 import type { QuestState, SiteState } from "./types/quest";
-import {
-  isCumulusScreenRegistered,
-  isCumulusSiteRegistered,
-} from "./screens/cumulus_adapters/registry";
-import {
-  JourneyExplanationOverlay,
-  type JourneyExplanation,
-} from "./journeys";
 
-/** Inner component that renders the screen router and HUD. */
+/** Inner component that renders the gameplay router and retained app overlays. */
 export function QuestApp({
   cardDatabase,
   runtimeConfig,
@@ -78,28 +69,13 @@ export function QuestApp({
   const isDesktopViewport = useIsDesktop();
   const activeSite = resolveActiveSite(state);
   const activeSiteType = activeSite?.type ?? null;
-  // Registered Cumulus routes receive persistent chrome from ScreenRouter, so
-  // the legacy HUD suppression follows the registry automatically.
-  const cumulusRouteUsesQuestChrome =
-    runtimeConfig.uiVariant === "cumulus"
-    && ((state.screen.type !== "questStart"
-      && isCumulusScreenRegistered(state.screen))
-      || (activeSite !== null && isCumulusSiteRegistered(activeSite)));
   const hidePresencePill =
-    runtimeConfig.uiVariant === "cumulus"
-    && (activeSiteType === "Purge" || activeSiteType === "Shop");
-  const showHud =
-    state.screen.type !== "questStart"
-    && !isBattleSiteHudHidden(state)
-    && !cumulusRouteUsesQuestChrome;
+    activeSiteType === "Purge" || activeSiteType === "Shop";
   const [deckViewerOpen, setDeckViewerOpen] = useState(false);
   const [poolViewerOpen, setPoolViewerOpen] = useState(false);
   const [debugScreenOpen, setDebugScreenOpen] = useState(false);
   const [questEditorOpen, setQuestEditorOpen] = useState(false);
   const [cardSourceOverlayOpen, setCardSourceOverlayOpen] = useState(false);
-  const [journeyExplanationOpen, setJourneyExplanationOpen] = useState(false);
-  const [journeyExplanation, setJourneyExplanation] =
-    useState<JourneyExplanation | null>(null);
   const confirmedHead = useConfirmedHead();
   const previousScreenTypeRef = useRef(state.screen.type);
   const gotoSceneFiredRef = useRef(false);
@@ -165,7 +141,9 @@ export function QuestApp({
       return;
     }
     if (mutations.loadQuestState === undefined) {
-      setLoadQuestError("Loading a saved quest is unavailable in this context.");
+      setLoadQuestError(
+        "Loading a saved quest is unavailable in this context.",
+      );
       setLoadQuestStatus("error");
       return;
     }
@@ -190,7 +168,9 @@ export function QuestApp({
       })
       .catch((error: unknown) => {
         setLoadQuestError(
-          error instanceof Error ? error.message : "Failed to load the saved quest.",
+          error instanceof Error
+            ? error.message
+            : "Failed to load the saved quest.",
         );
         setLoadQuestStatus("error");
       });
@@ -283,7 +263,11 @@ export function QuestApp({
       (dc) => dc.id === resolvedDreamcallerId,
     );
     if (dreamcaller === undefined) return null;
-    return buildDreamcallerTides4Provenance(dreamcaller, poolContext, state.seed);
+    return buildDreamcallerTides4Provenance(
+      dreamcaller,
+      poolContext,
+      state.seed,
+    );
   }, [
     tides4ProvenanceNeeded,
     questContent.poolContext,
@@ -312,12 +296,6 @@ export function QuestApp({
       setCardSourceOverlayOpen(false);
     }
   }, [hasCardSourceDebug]);
-
-  useEffect(() => {
-    if (journeyExplanation === null) {
-      setJourneyExplanationOpen(false);
-    }
-  }, [journeyExplanation]);
 
   const handleOpenDeckViewer = useCallback(() => {
     setDeckViewerOpen(true);
@@ -363,10 +341,6 @@ export function QuestApp({
     setCardSourceOverlayOpen(false);
   }, []);
 
-  const handleToggleJourneyExplanation = useCallback(() => {
-    setJourneyExplanationOpen((prev) => !prev);
-  }, []);
-
   const handleRegenerateAtlas = useCallback(() => {
     regenerateAtlasInPlace({
       state,
@@ -375,10 +349,6 @@ export function QuestApp({
       setCurrentDreamscape: mutations.setCurrentDreamscape,
     });
   }, [state, questContent, mutations]);
-
-  const handleCloseJourneyExplanation = useCallback(() => {
-    setJourneyExplanationOpen(false);
-  }, []);
 
   // `?goto=<scene>`: hold a loading screen — rather than the Dreamcaller
   // selection screen — until `bootstrapQaScene` round-trips through Firebase,
@@ -432,53 +402,42 @@ export function QuestApp({
   }
 
   return (
-    <div style={{ paddingBottom: showHud ? "64px" : "0" }}>
+    <div>
       {/*
         App-shell boundary: catches anything the screen router and HUD throw
         before it reaches the React root. Without this, a render-time crash
         produces a blank #root with no fallback UI.
       */}
       <ErrorBoundary scope="app-shell">
-        {hidePresencePill && <style>{`[data-connected-count]{display:none}`}</style>}
+        {hidePresencePill && (
+          <style>{`[data-connected-count]{display:none}`}</style>
+        )}
         <ScreenRouter
           runtimeConfig={runtimeConfig}
-          onJourneyExplanationChange={setJourneyExplanation}
           cumulusChromeHandlers={{
             onViewDeck: handleOpenDeckViewer,
             onOpenPoolViewer: handleOpenPoolViewer,
             onOpenDebugScreen: handleOpenDebugScreen,
             onOpenQuestEditor: handleOpenQuestEditor,
+            onToggleCardSourceOverlay: handleToggleCardSourceOverlay,
+            hasCardSourceDebug,
+            isCardSourceOverlayOpen: cardSourceOverlayOpen,
             hasDraftData,
             onLoadQuestState: mutations.loadQuestState,
             onRegenerateAtlas: handleRegenerateAtlas,
             elevated: deckViewerOpen && !isDesktopViewport,
           }}
         />
-        {showHud && (
-          <ErrorBoundary scope="overlay:hud">
-            <HUD
-              onOpenDeckViewer={handleOpenDeckViewer}
-              onOpenPoolViewer={handleOpenPoolViewer}
-              onOpenDebugScreen={handleOpenDebugScreen}
-              onOpenQuestEditor={handleOpenQuestEditor}
-              onToggleCardSourceOverlay={handleToggleCardSourceOverlay}
-              hasDraftData={hasDraftData}
-              hasCardSourceDebug={hasCardSourceDebug}
-              isCardSourceOverlayOpen={cardSourceOverlayOpen}
-              hasJourneyExplanation={journeyExplanation !== null}
-              isJourneyExplanationOpen={journeyExplanationOpen}
-              onToggleJourneyExplanation={handleToggleJourneyExplanation}
-              onLoadQuestState={mutations.loadQuestState}
-            />
-          </ErrorBoundary>
-        )}
         {/*
           Per-overlay boundaries: each major modal/panel is isolated so that
           a crash inside (for example) DeckViewer leaves the dreamscape screen
           underneath interactive. `onClose` lets the user dismiss the overlay
           from the fallback.
         */}
-        <ErrorBoundary scope="overlay:deck-viewer" onClose={handleCloseDeckViewer}>
+        <ErrorBoundary
+          scope="overlay:deck-viewer"
+          onClose={handleCloseDeckViewer}
+        >
           {isDesktopViewport ? (
             <DesktopDeckViewerAdapter
               isOpen={deckViewerOpen}
@@ -491,7 +450,10 @@ export function QuestApp({
             />
           )}
         </ErrorBoundary>
-        <ErrorBoundary scope="overlay:pool-viewer" onClose={handleClosePoolViewer}>
+        <ErrorBoundary
+          scope="overlay:pool-viewer"
+          onClose={handleClosePoolViewer}
+        >
           <PoolViewer
             cardDatabase={cardDatabase}
             draftState={state.draftState}
@@ -513,7 +475,10 @@ export function QuestApp({
             onClose={handleBeginQuest}
           />
         </ErrorBoundary>
-        <ErrorBoundary scope="overlay:debug-screen" onClose={handleCloseDebugScreen}>
+        <ErrorBoundary
+          scope="overlay:debug-screen"
+          onClose={handleCloseDebugScreen}
+        >
           <DebugScreen
             isOpen={debugScreenOpen}
             onClose={handleCloseDebugScreen}
@@ -527,7 +492,10 @@ export function QuestApp({
             onLoadQuestState={mutations.loadQuestState}
           />
         </ErrorBoundary>
-        <ErrorBoundary scope="overlay:quest-editor" onClose={handleCloseQuestEditor}>
+        <ErrorBoundary
+          scope="overlay:quest-editor"
+          onClose={handleCloseQuestEditor}
+        >
           <QuestDebugEditor
             isOpen={questEditorOpen}
             onClose={handleCloseQuestEditor}
@@ -544,16 +512,6 @@ export function QuestApp({
             tides4Provenance={tides4Provenance}
             isOpen={cardSourceOverlayOpen}
             onClose={handleCloseCardSourceOverlay}
-          />
-        </ErrorBoundary>
-        <ErrorBoundary
-          scope="overlay:journey-explanation"
-          onClose={handleCloseJourneyExplanation}
-        >
-          <JourneyExplanationOverlay
-            explanation={journeyExplanation}
-            isOpen={journeyExplanationOpen}
-            onClose={handleCloseJourneyExplanation}
           />
         </ErrorBoundary>
       </ErrorBoundary>
@@ -591,22 +549,11 @@ function resolveActiveSite(state: QuestState): SiteState | null {
   return site ?? null;
 }
 
-function isBattleSiteHudHidden(state: QuestState): boolean {
-  if (state.screen.type !== "site") {
-    return false;
-  }
-
-  if (state.currentDreamscape === null) {
-    return false;
-  }
-
-  const siteId = state.screen.siteId;
-  return state.atlas.nodes[state.currentDreamscape]
-    ?.sites.some((site) => site.id === siteId && site.type === "Battle")
-    ?? false;
-}
-
-export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig }) {
+export default function App({
+  runtimeConfig,
+}: {
+  runtimeConfig: RuntimeConfig;
+}) {
   const [questContent, setQuestContent] = useState<QuestContent | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [database, setDatabase] = useState<Database | null>(null);
@@ -651,7 +598,9 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
       })
       .catch((error) => {
         setLoadError(
-          error instanceof Error ? error.message : "Failed to load quest content.",
+          error instanceof Error
+            ? error.message
+            : "Failed to load quest content.",
         );
       });
   }, [
@@ -672,7 +621,9 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
     } catch (error) {
       setDatabase(null);
       setFirebaseError(
-        error instanceof Error ? error.message : "Failed to initialize Firebase.",
+        error instanceof Error
+          ? error.message
+          : "Failed to initialize Firebase.",
       );
     }
   }, [questContent, runtimeConfig.databaseMode]);
@@ -753,7 +704,11 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
   }
 
   return (
-    <RoomGate db={database} gameId={runtimeConfig.gameId} runtimeConfig={runtimeConfig}>
+    <RoomGate
+      db={database}
+      gameId={runtimeConfig.gameId}
+      runtimeConfig={runtimeConfig}
+    >
       {(context) => (
         <CoopProvider context={context}>
           <CoopQuestProvider questContent={questContent}>
@@ -768,7 +723,9 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
   );
 }
 
-function firebaseSetupHelp(databaseMode: RuntimeConfig["databaseMode"]): string {
+function firebaseSetupHelp(
+  databaseMode: RuntimeConfig["databaseMode"],
+): string {
   if (databaseMode === "emulator") {
     return "Run npm start to launch the Firebase Realtime Database emulator with Vite.";
   }

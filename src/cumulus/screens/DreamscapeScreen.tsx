@@ -21,11 +21,19 @@ import { Motes } from "../components/hud/Motes";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
+import {
+  DreamsignReplacementDialog,
+  type DreamsignReplacementView,
+} from "./DreamsignReplacementDialog";
 
 /** A generated site reward ready to animate and grant on the dreamscape. */
 export type InlineRewardView =
   | { kind: "essence"; amount: number }
-  | { kind: "dreamsign"; dreamsign: DreamsignData };
+  | {
+      kind: "dreamsign";
+      dreamsign: DreamsignData;
+      requiresReplacement: boolean;
+    };
 
 /** Everything the screen renders, mapped from live quest state by the builder. */
 export interface DreamscapeView {
@@ -37,6 +45,8 @@ export interface DreamscapeView {
   sites: DreamscapeSiteModel[];
   /** Generated Essence and Reward results, keyed by the site's stable id. */
   inlineRewards: Readonly<Record<string, InlineRewardView>>;
+  /** Replacement choice shown after an at-cap Reward animation. */
+  replacement: DreamsignReplacementView | null;
 }
 
 export interface DreamscapeScreenProps {
@@ -46,6 +56,10 @@ export interface DreamscapeScreenProps {
   onSelectSite: (siteId: string) => void;
   /** Report that an in-place reward collection animation has finished. */
   onInlineRewardAnimationComplete: (siteId: string) => void;
+  /** Replace one held Dreamsign by UUID. */
+  onReplaceDreamsign: (dreamsignId: string) => void;
+  /** Decline the pending Dreamsign Reward. */
+  onDeclineReward: () => void;
 }
 
 /** Duration of the inline grant sequence. */
@@ -62,6 +76,8 @@ export function DreamscapeScreen({
   view,
   onSelectSite,
   onInlineRewardAnimationComplete,
+  onReplaceDreamsign,
+  onDeclineReward,
 }: DreamscapeScreenProps) {
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const [collectingSiteId, setCollectingSiteId] = useState<
@@ -88,7 +104,7 @@ export function DreamscapeScreen({
 
   const handleSelectSite = useCallback(
     (siteId: string) => {
-      if (collectingSiteId !== null) return;
+      if (collectingSiteId !== null || view.replacement !== null) return;
       const model = view.sites.find((candidate) => candidate.site.id === siteId);
       if (
         model?.site.type === "Essence" ||
@@ -99,7 +115,7 @@ export function DreamscapeScreen({
       }
       onSelectSite(siteId);
     },
-    [collectingSiteId, onSelectSite, view.sites],
+    [collectingSiteId, onSelectSite, view.replacement, view.sites],
   );
 
   useEffect(() => {
@@ -123,6 +139,7 @@ export function DreamscapeScreen({
       style={{
         position: "fixed",
         inset: 0,
+        zIndex: view.replacement === null ? undefined : 80,
         overflow: "hidden",
         background: token("--bg-app"),
         touchAction: "none",
@@ -235,7 +252,9 @@ export function DreamscapeScreen({
           aria-live="polite"
           aria-label={
             collectingReward.kind === "dreamsign"
-              ? `Gained dreamsign: ${collectingReward.dreamsign.name}`
+              ? collectingReward.requiresReplacement
+                ? `Found dreamsign: ${collectingReward.dreamsign.name}`
+                : `Gained dreamsign: ${collectingReward.dreamsign.name}`
               : `Gained ${String(collectingReward.amount)} essence`
           }
           data-essence-collection={
@@ -325,7 +344,9 @@ export function DreamscapeScreen({
                   whiteSpace: "nowrap",
                 }}
               >
-                Dreamsign gained
+                {collectingReward.requiresReplacement
+                  ? "Dreamsign found"
+                  : "Dreamsign gained"}
               </motion.div>
             </>
           ) : (
@@ -346,6 +367,15 @@ export function DreamscapeScreen({
             </motion.div>
           )}
         </div>
+      )}
+      {view.replacement !== null && (
+        <DreamsignReplacementDialog
+          view={view.replacement}
+          onReplace={onReplaceDreamsign}
+          onCancel={onDeclineReward}
+          cancelLabel="Keep Current Dreamsigns"
+          closeLabel="Decline Dreamsign reward"
+        />
       )}
     </div>
   );

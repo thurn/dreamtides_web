@@ -1,13 +1,6 @@
-// The Cumulus screen registry — the fallback resolver that `ScreenRouter` consults
-// when `runtimeConfig.uiVariant === "cumulus"`. It maps a quest screen (or site)
-// to its Cumulus adapter, or returns null when no Cumulus implementation exists yet,
-// which makes `ScreenRouter` fall back to the legacy screen for that route. This
-// is what lets the migration proceed one screen at a time while the app stays
-// fully navigable.
-//
-// Each entry renders an ADAPTER (a wiring-only component outside `src/cumulus/`
-// that owns `useQuest()` and calls the screen's pure `*-view-model` builder),
-// never a Cumulus screen directly — the Cumulus screens are pure and hold no state.
+// The exhaustive production registry. Each screen entry renders an adapter
+// outside `src/cumulus/` that owns quest state and supplies a pure Cumulus
+// screen with a view model and callbacks.
 
 import type { ReactNode } from "react";
 import type { Screen, SiteState } from "../../types/quest";
@@ -26,12 +19,15 @@ import { WorkInProgressSiteScreenAdapter } from "./WorkInProgressSiteScreenAdapt
 import { QuestCompleteScreenAdapter } from "./QuestCompleteScreenAdapter";
 import { QuestFailedScreenAdapter } from "./QuestFailedScreenAdapter";
 
-/**
- * The Cumulus implementation of a top-level `Screen`, or null when none exists yet
- * (the caller then renders the legacy screen). Only screens listed here are
- * served by the Cumulus UI; every other screen falls back to legacy.
- */
-export function cumulusScreenFor(screen: Screen): ReactNode | null {
+export type NonSiteScreen = Exclude<Screen, { type: "site" }>;
+
+export type SiteDisposition =
+  | { kind: "screen"; screen: ReactNode }
+  | { kind: "battle" }
+  | { kind: "inline" };
+
+/** Resolves every top-level, non-site gameplay screen to its Cumulus adapter. */
+export function screenFor(screen: NonSiteScreen): ReactNode {
   switch (screen.type) {
     case "questStart":
       return <QuestStartScreenAdapter />;
@@ -43,49 +39,63 @@ export function cumulusScreenFor(screen: Screen): ReactNode | null {
       return <QuestCompleteScreenAdapter />;
     case "questFailed":
       return <QuestFailedScreenAdapter />;
-    default:
-      return null;
   }
 }
 
-/**
- * The Cumulus implementation of a site screen, or null when none exists yet (the
- * caller then renders the legacy site screen). The migrated site owns its
- * responsive Cumulus idioms internally.
- */
-export function cumulusSiteScreenFor(site: SiteState): ReactNode | null {
+/** Resolves every site type to its production rendering disposition. */
+export function siteDispositionFor(site: SiteState): SiteDisposition {
   switch (site.type) {
+    case "Battle":
+      return { kind: "battle" };
+    case "Essence":
+    case "Reward":
+      return { kind: "inline" };
     case "Draft":
-      return <DraftSiteScreenAdapter siteId={site.id} />;
+      return {
+        kind: "screen",
+        screen: <DraftSiteScreenAdapter siteId={site.id} />,
+      };
     case "DreamsignRevelation":
-      return <DreamsignRevelationScreenAdapter siteId={site.id} />;
+      return {
+        kind: "screen",
+        screen: <DreamsignRevelationScreenAdapter siteId={site.id} />,
+      };
     case "Purge":
-      return <PurgeSiteScreenAdapter siteId={site.id} />;
+      return {
+        kind: "screen",
+        screen: <PurgeSiteScreenAdapter siteId={site.id} />,
+      };
     case "Shop":
-      return <CardShopSiteScreenAdapter siteId={site.id} />;
+      return {
+        kind: "screen",
+        screen: <CardShopSiteScreenAdapter siteId={site.id} />,
+      };
     case "DreamsignMarket":
-      return <DreamsignBazaarSiteScreenAdapter siteId={site.id} />;
+      return {
+        kind: "screen",
+        screen: <DreamsignBazaarSiteScreenAdapter siteId={site.id} />,
+      };
     case "Transfiguration":
-      return <TransfigurationSiteScreenAdapter siteId={site.id} />;
+      return {
+        kind: "screen",
+        screen: <TransfigurationSiteScreenAdapter siteId={site.id} />,
+      };
     case "Duplication":
-      return <DuplicationSiteScreenAdapter siteId={site.id} />;
+      return {
+        kind: "screen",
+        screen: <DuplicationSiteScreenAdapter siteId={site.id} />,
+      };
     case "DreamAugury":
-      return <DreamAugurySiteScreenAdapter siteId={site.id} />;
+      return {
+        kind: "screen",
+        screen: <DreamAugurySiteScreenAdapter siteId={site.id} />,
+      };
     case "TemptingOffer":
     case "Gamble":
     case "TemporalFork":
-      return <WorkInProgressSiteScreenAdapter siteId={site.id} />;
-    default:
-      return null;
+      return {
+        kind: "screen",
+        screen: <WorkInProgressSiteScreenAdapter siteId={site.id} />,
+      };
   }
-}
-
-/** Whether a top-level screen has a registered Cumulus implementation. */
-export function isCumulusScreenRegistered(screen: Screen): boolean {
-  return cumulusScreenFor(screen) !== null;
-}
-
-/** Whether a site has a registered Cumulus implementation. */
-export function isCumulusSiteRegistered(site: SiteState): boolean {
-  return cumulusSiteScreenFor(site) !== null;
 }

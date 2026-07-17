@@ -112,11 +112,8 @@ describe("buildDreamsignBazaarRestock", () => {
       buildDreamsignBazaarRestock(runtime(), { ...site, isEnhanced: true }, 0),
     ).toMatchObject({ price: 0, state: "available" });
     expect(
-      buildDreamsignBazaarRestock(
-        { ...runtime(), rerollCount: 1 },
-        site,
-        100,
-      ).state,
+      buildDreamsignBazaarRestock({ ...runtime(), rerollCount: 1 }, site, 100)
+        .state,
     ).toBe("used");
   });
 });

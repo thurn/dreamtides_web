@@ -1,13 +1,9 @@
 import "../battle.css";
 
-import type {
-  MouseEvent as ReactMouseEvent,
-  ReactNode,
-} from "react";
+import type { MouseEvent as ReactMouseEvent } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { SiteState } from "../../types/quest";
 import type { CardData } from "../../types/cards";
-import type { UiVariant } from "../../runtime/runtime-config";
 import {
   createBattleLogBaseFields,
   logEvent,
@@ -23,15 +19,11 @@ import {
   useGameState,
 } from "../../coop/hooks";
 import {
-  opponentCarriesDreamsign,
-  resolveRunLayerCount,
-} from "../integration/opponent-deck";
-import {
   selectBattleCardLocation,
   selectBattlefieldSlotOccupant,
   selectFailureOverlayResult,
 } from "../state/selectors";
-import { formatPhaseLabel, formatSideLabel } from "../ui/format";
+import { formatPhaseLabel } from "../ui/format";
 import type {
   BattleCommandSourceSurface,
   BattleDeckCardDefinition,
@@ -48,33 +40,17 @@ import type {
 import type { QuestContent } from "../../data/quest-content";
 import type { BattleCommand } from "../debug/commands";
 import type { PromptResolution } from "../../rules/battle/effect-runner-core";
-import { useBattleAi, type AiProposal } from "../ai/use-battle-ai";
+import { useBattleAi } from "../ai/use-battle-ai";
 import { aiMayRunHere } from "../ai/ai-may-run-here";
-import { BattleActionBar } from "./BattleActionBar";
 import { BattleContextMenu } from "./BattleContextMenu";
 import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
-import { BattleDreamcallerPanel } from "./BattleDreamcallerPanel";
 import { BattleFigmentCreator } from "./BattleFigmentCreator";
-import { BattleForeseeOverlay } from "./BattleForeseeOverlay";
 import { CumulusBattleForeseeOverlay } from "./CumulusBattleForeseeOverlay";
 import { automaticBattleIntentKey } from "../automatic-intent-key";
-import { BattleHandTray } from "./BattleHandTray";
-import { BattleInspector } from "./BattleInspector";
 import { BattleCardNoteEditor } from "./BattleCardNoteEditor";
 import { BattleDreamwellHistoryDrawer } from "./BattleDreamwellHistoryDrawer";
 import { BattleLogDrawer } from "./BattleLogDrawer";
-import { BattleResultOverlay } from "./BattleResultOverlay";
-import { BattleRewardSurface } from "./BattleRewardSurface";
-import { BattleSideSummaryPopover } from "./BattleSideSummaryPopover";
-import { BattleStatusBar } from "./BattleStatusBar";
-import { BattleStatusStrip } from "./BattleStatusStrip";
-import { BattleDreamwellDisplay } from "./BattleDreamwellDisplay";
-import { BattleCardPickerOverlay } from "./BattleCardPickerOverlay";
-import { BattleChoicePromptOverlay } from "./BattleChoicePromptOverlay";
-import { dreamwellAutomationStatus } from "../../rules/battle/dreamwell-effects-table";
 import { collectAutomationHashDrift } from "../../rules/battle/battle-card-effects-table";
-import { BattlefieldGrid } from "./BattlefieldGrid";
-import { BattleZoneBrowser } from "./BattleZoneBrowser";
 import { CumulusBattleZoneBrowser } from "./CumulusBattleZoneBrowser";
 import {
   createPlayCardFromHandCommand,
@@ -93,17 +69,19 @@ import type { MobileBattleResultAction } from "../../cumulus/screens/BattleResul
 import { useIsDesktop } from "../../cumulus/screens/use-is-desktop";
 import { createBattlePromptResolutionLogFields } from "./battle-prompt-logging";
 
-const DESKTOP_INSPECTOR_WIDTH = 1280;
 // `BattleLogDrawer` renders from the append-only coop fold, so its
 // `history` prop is supplied an empty undo/redo envelope.
 const EMPTY_BATTLE_HISTORY: BattleHistory = { past: [], future: [] };
 // Fires the automated-card hash-drift warning at most once per page session.
 let automationHashDriftWarned = false;
-const PHASE_CONTROL_SEQUENCE = ["dreamwell", "day", "dusk", "night", "challenge"] as const satisfies readonly BattlePhase[];
+const PHASE_CONTROL_SEQUENCE = [
+  "dreamwell",
+  "day",
+  "dusk",
+  "night",
+  "challenge",
+] as const satisfies readonly BattlePhase[];
 type ZoneBrowserState = { side: BattleSide; zone: BrowseableZone } | null;
-type RewardOverlayState = {
-  rewardSource: string;
-} | null;
 type ContextMenuState = {
   battleCardId: string;
   presentation: "context-menu" | "sheet";
@@ -115,47 +93,35 @@ type ForeseeOverlayState = {
   count: number;
   side: BattleSide;
 } | null;
-type PendingDragState = {
-  kind: "battle-card";
-  battleCardId: string;
-  sourceSurface: BattleCommandSourceSurface;
-} | {
-  kind: "pool-card";
-  definition: BattleDeckCardDefinition;
-  sourceSurface: "pool-viewer";
-} | null;
+type PendingDragState =
+  | {
+      kind: "battle-card";
+      battleCardId: string;
+      sourceSurface: BattleCommandSourceSurface;
+    }
+  | {
+      kind: "pool-card";
+      definition: BattleDeckCardDefinition;
+      sourceSurface: "pool-viewer";
+    }
+  | null;
 
 export function PlayableBattleScreen({
   site,
   aiMode = false,
-  uiVariant = "legacy",
 }: {
   site: SiteState;
   aiMode?: boolean;
-  uiVariant?: UiVariant;
 }) {
   const battle = useGameState().battle;
   if (battle === null) {
     return null; // BattleSiteRoute already shows the loading/reveal state.
   }
-  return (
-    <PlayableBattleScreenInner
-      site={site}
-      aiMode={aiMode}
-      uiVariant={uiVariant}
-    />
-  );
+  void site;
+  return <PlayableBattleScreenInner aiMode={aiMode} />;
 }
 
-function PlayableBattleScreenInner({
-  site,
-  aiMode,
-  uiVariant,
-}: {
-  site: SiteState;
-  aiMode: boolean;
-  uiVariant: UiVariant;
-}) {
+function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   const gameState = useGameState();
   const battle = gameState.battle;
   if (battle === null) {
@@ -178,9 +144,7 @@ function PlayableBattleScreenInner({
   const confirmedPromptId = useConfirmedPromptId();
 
   const { state: questState, cardDatabase, questContent } = useQuest();
-  const isDesktopInspectorLayout = useIsDesktopInspectorLayout();
   const isCumulusDesktopLayout = useIsDesktop();
-  const [isInspectorDrawerOpen, setIsInspectorDrawerOpen] = useState(readIsDesktopInspectorLayout());
   const [isBattleLogOpen, setIsBattleLogOpen] = useState(false);
   const [isDreamwellHistoryOpen, setIsDreamwellHistoryOpen] = useState(false);
   const [isOpponentHandRevealed, setIsOpponentHandRevealed] = useState(false);
@@ -188,19 +152,21 @@ function PlayableBattleScreenInner({
   // hand full size (with hover-to-enlarge) in its place, to simulate the local
   // view of a multiplayer game where you see only the opponent's hand.
   const [isPlayerHandHidden, setIsPlayerHandHidden] = useState(false);
-  const [openZoneBrowser, setOpenZoneBrowser] = useState<ZoneBrowserState>(null);
+  const [openZoneBrowser, setOpenZoneBrowser] =
+    useState<ZoneBrowserState>(null);
   const [pendingDrag, setPendingDrag] = useState<PendingDragState>(null);
   const pendingDragDropHandledRef = useRef(false);
   const [contextMenu, setContextMenu] = useState<ContextMenuState>(null);
-  const [openForeseeOverlay, setOpenForeseeOverlay] = useState<ForeseeOverlayState>(null);
-  const [openDeckOrderPicker, setOpenDeckOrderPicker] = useState<BattleSide | null>(null);
-  const [openFigmentCreator, setOpenFigmentCreator] = useState<BattleSide | null>(null);
+  const [openForeseeOverlay, setOpenForeseeOverlay] =
+    useState<ForeseeOverlayState>(null);
+  const [openDeckOrderPicker, setOpenDeckOrderPicker] =
+    useState<BattleSide | null>(null);
+  const [openFigmentCreator, setOpenFigmentCreator] =
+    useState<BattleSide | null>(null);
   const [isPoolViewerOpen, setIsPoolViewerOpen] = useState(false);
   const [openNoteEditor, setOpenNoteEditor] = useState<string | null>(null);
-  const [openSideSummary, setOpenSideSummary] = useState<BattleSide | null>(null);
-  const [isDreamcallerPanelOpen, setIsDreamcallerPanelOpen] = useState(false);
-  const [rewardOverlay, setRewardOverlay] = useState<RewardOverlayState>(null);
-  const [isResultOverlayDismissed, setIsResultOverlayDismissed] = useState(false);
+  const [isResultOverlayDismissed, setIsResultOverlayDismissed] =
+    useState(false);
 
   // Win/turn/energy caps for the AI planner, sourced from the battle init.
   // Wrapped in `useMemo` so the object is referentially stable across renders;
@@ -238,7 +204,12 @@ function PlayableBattleScreenInner({
     },
     [actions, clientId],
   );
-  const { proposal, thinking: aiThinking, approve, reject } = useBattleAi({
+  const {
+    proposal,
+    thinking: aiThinking,
+    approve,
+    reject,
+  } = useBattleAi({
     board,
     submitCommand: submitAiCommand,
     submitGesture: submitAiGesture,
@@ -287,24 +258,23 @@ function PlayableBattleScreenInner({
   // the AI's Dusk/Night/Challenge after its plays are done.
   const canPlayerAct = !(aiMode && (proposal !== null || aiThinking));
   const failureResult = selectFailureOverlayResult(board.result);
-  const showResultOverlay = board.result !== null &&
-    !isResultOverlayDismissed;
-  const showReopenPill = board.result !== null &&
-    isResultOverlayDismissed;
-  const pendingDragCardId = pendingDrag === null
-    ? null
-    : pendingDrag.kind === "battle-card"
-      ? pendingDrag.battleCardId
-      : "__pool_viewer_card__";
-  const pendingDragLocation = pendingDrag?.kind === "battle-card"
-    ? selectBattleCardLocation(board, pendingDrag.battleCardId)
-    : null;
-  const pendingCardSource = pendingDragLocation?.zone === "hand"
-    && pendingDrag?.sourceSurface === "hand-tray"
-    ? "player-hand"
-    : pendingDrag?.kind === "battle-card"
-      ? "battlefield"
+  const pendingDragCardId =
+    pendingDrag === null
+      ? null
+      : pendingDrag.kind === "battle-card"
+        ? pendingDrag.battleCardId
+        : "__pool_viewer_card__";
+  const pendingDragLocation =
+    pendingDrag?.kind === "battle-card"
+      ? selectBattleCardLocation(board, pendingDrag.battleCardId)
       : null;
+  const pendingCardSource =
+    pendingDragLocation?.zone === "hand" &&
+    pendingDrag?.sourceSurface === "hand-tray"
+      ? "player-hand"
+      : pendingDrag?.kind === "battle-card"
+        ? "battlefield"
+        : null;
   const pendingCardOwner = pendingDragLocation?.side ?? null;
 
   // Resolves the single open prompt from the fold. Gated on
@@ -314,7 +284,10 @@ function PlayableBattleScreenInner({
   // avoids a round-trip rejection.
   const resolvePendingPrompt = useCallback(
     (resolution: PromptResolution): void => {
-      if (pendingPrompt === null || confirmedPromptId !== pendingPrompt.promptId) {
+      if (
+        pendingPrompt === null ||
+        confirmedPromptId !== pendingPrompt.promptId
+      ) {
         return;
       }
       logEvent("battle_prompt_resolution_requested", {
@@ -322,7 +295,7 @@ function PlayableBattleScreenInner({
           sourceSurface: "battlefield",
           selectedCardId:
             resolution.kind === "pick-cards"
-              ? resolution.chosenIds[0] ?? null
+              ? (resolution.chosenIds[0] ?? null)
               : null,
         }),
         ...createBattlePromptResolutionLogFields(
@@ -336,81 +309,90 @@ function PlayableBattleScreenInner({
     [actions, board, pendingPrompt, confirmedPromptId],
   );
 
-  const logCumulusCardPickerInteraction = useCallback((
-    action: "selection-changed" | "submit" | "skip",
-    chosenIds: readonly string[],
-  ): void => {
-    if (pendingPrompt?.options.kind !== "pick-cards") return;
-    logEvent("battle_cumulus_card_picker_interaction", {
-      ...createBattleLogBaseFields(board, {
-        sourceSurface: "hand-tray",
-        selectedCardId: chosenIds[0] ?? null,
-      }),
-      action,
-      dreamwellCardUuid:
-        pendingPrompt.run.scriptRef.table === "dreamwell"
-          ? pendingPrompt.run.scriptRef.id
-          : null,
-      promptId: pendingPrompt.promptId,
-      candidateBattleCardInstanceIds: pendingPrompt.options.candidateIds,
-      candidateBackingCardUuids: pendingPrompt.options.candidateIds.map(
-        (instanceId) =>
-          board.cardInstances[instanceId]?.definition.cardId ?? null,
-      ),
-      chosenBattleCardInstanceIds: chosenIds,
-      chosenBackingCardUuids: chosenIds.map((instanceId) =>
-        board.cardInstances[instanceId]?.definition.cardId ?? null,
-      ),
-      finalResolution:
-        action === "selection-changed"
-          ? null
-          : { kind: "pick-cards", chosenIds },
-      requiredCount: pendingPrompt.options.count,
-      optional: pendingPrompt.options.optional,
-    });
-  }, [board, pendingPrompt]);
+  const logCumulusCardPickerInteraction = useCallback(
+    (
+      action: "selection-changed" | "submit" | "skip",
+      chosenIds: readonly string[],
+    ): void => {
+      if (pendingPrompt?.options.kind !== "pick-cards") return;
+      logEvent("battle_cumulus_card_picker_interaction", {
+        ...createBattleLogBaseFields(board, {
+          sourceSurface: "hand-tray",
+          selectedCardId: chosenIds[0] ?? null,
+        }),
+        action,
+        dreamwellCardUuid:
+          pendingPrompt.run.scriptRef.table === "dreamwell"
+            ? pendingPrompt.run.scriptRef.id
+            : null,
+        promptId: pendingPrompt.promptId,
+        candidateBattleCardInstanceIds: pendingPrompt.options.candidateIds,
+        candidateBackingCardUuids: pendingPrompt.options.candidateIds.map(
+          (instanceId) =>
+            board.cardInstances[instanceId]?.definition.cardId ?? null,
+        ),
+        chosenBattleCardInstanceIds: chosenIds,
+        chosenBackingCardUuids: chosenIds.map(
+          (instanceId) =>
+            board.cardInstances[instanceId]?.definition.cardId ?? null,
+        ),
+        finalResolution:
+          action === "selection-changed"
+            ? null
+            : { kind: "pick-cards", chosenIds },
+        requiredCount: pendingPrompt.options.count,
+        optional: pendingPrompt.options.optional,
+      });
+    },
+    [board, pendingPrompt],
+  );
 
-  const handleCumulusChoicePrompt = useCallback((optionIndex: number): void => {
-    if (pendingPrompt?.options.kind !== "choice") return;
-    logEvent("battle_cumulus_choice_prompt_interaction", {
-      ...createBattleLogBaseFields(board, {
-        sourceSurface: "battlefield",
-        selectedCardId: null,
-      }),
-      promptId: pendingPrompt.promptId,
-      promptLabel: pendingPrompt.options.label,
-      optionIndex,
-      optionLabel: pendingPrompt.options.options[optionIndex]?.label ?? null,
-    });
-    resolvePendingPrompt({ kind: "choice", optionIndex });
-  }, [board, pendingPrompt, resolvePendingPrompt]);
+  const handleCumulusChoicePrompt = useCallback(
+    (optionIndex: number): void => {
+      if (pendingPrompt?.options.kind !== "choice") return;
+      logEvent("battle_cumulus_choice_prompt_interaction", {
+        ...createBattleLogBaseFields(board, {
+          sourceSurface: "battlefield",
+          selectedCardId: null,
+        }),
+        promptId: pendingPrompt.promptId,
+        promptLabel: pendingPrompt.options.label,
+        optionIndex,
+        optionLabel: pendingPrompt.options.options[optionIndex]?.label ?? null,
+      });
+      resolvePendingPrompt({ kind: "choice", optionIndex });
+    },
+    [board, pendingPrompt, resolvePendingPrompt],
+  );
 
-  const handleCommand = useCallback((command: BattleCommand): void => {
-    setPendingDrag(null);
-    const intentKey = automaticBattleIntentKey(
-      battleInit.battleId,
-      board,
-      command,
-    );
-    void actions.battleCommand(command, intentKey);
-  }, [
-    actions,
-    board,
-    battleInit.battleId,
-  ]);
+  const handleCommand = useCallback(
+    (command: BattleCommand): void => {
+      setPendingDrag(null);
+      const intentKey = automaticBattleIntentKey(
+        battleInit.battleId,
+        board,
+        command,
+      );
+      void actions.battleCommand(command, intentKey);
+    },
+    [actions, board, battleInit.battleId],
+  );
 
-  const handleOpenForesee = useCallback((
-    side: BattleSide,
-    count: number,
-    sourceSurface: BattleCommandSourceSurface = "foresee-overlay",
-  ): void => {
-    handleCommand({
-      id: "DEBUG_EDIT",
-      edit: { kind: "REVEAL_DECK_TOP", side, count },
-      sourceSurface,
-    });
-    setOpenForeseeOverlay({ side, count });
-  }, [handleCommand]);
+  const handleOpenForesee = useCallback(
+    (
+      side: BattleSide,
+      count: number,
+      sourceSurface: BattleCommandSourceSurface = "foresee-overlay",
+    ): void => {
+      handleCommand({
+        id: "DEBUG_EDIT",
+        edit: { kind: "REVEAL_DECK_TOP", side, count },
+        sourceSurface,
+      });
+      setOpenForeseeOverlay({ side, count });
+    },
+    [handleCommand],
+  );
 
   // Deck-aware companion to the reducer's `battle_proto_dreamwell_card_drawn`:
   // logs which card a reveal is about to draw, with the detail the reducer cannot
@@ -421,7 +403,11 @@ function PlayableBattleScreenInner({
   // reducer event by (side, turn) shows the intended order vs. the actual applied
   // index, exposing any over-advance of the shared deck index.
   const logDreamwellReveal = useCallback(
-    (side: BattleSide, turnNumber: number, sourceSurface: BattleCommandSourceSurface): void => {
+    (
+      side: BattleSide,
+      turnNumber: number,
+      sourceSurface: BattleCommandSourceSurface,
+    ): void => {
       const drawIndex = board.dreamwellDeckIndex;
       const card = battleInit.dreamwellDeck[drawIndex];
       logEvent("battle_proto_dreamwell_card_revealed", {
@@ -447,35 +433,41 @@ function PlayableBattleScreenInner({
   // additional Dreamwell card"). `additional: true` opts out of the per-turn
   // reveal's idempotency guard so a deliberate extra draw always consumes the
   // next card even though the side already drew its mandatory card this turn.
-  const runDreamwellDraw = useCallback((
-    side: BattleSide,
-    sourceSurface: BattleCommandSourceSurface = "status-strip",
-  ): void => {
-    logDreamwellReveal(side, board.turnNumber, sourceSurface);
-    handleCommand({
-      id: "DEBUG_EDIT",
-      edit: {
-        kind: "DRAW_DREAMWELL_CARD",
-        side,
-        turnNumber: board.turnNumber,
-        additional: true,
-      },
-      sourceSurface,
-    });
-  }, [handleCommand, logDreamwellReveal, board.turnNumber]);
+  const runDreamwellDraw = useCallback(
+    (
+      side: BattleSide,
+      sourceSurface: BattleCommandSourceSurface = "status-strip",
+    ): void => {
+      logDreamwellReveal(side, board.turnNumber, sourceSurface);
+      handleCommand({
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "DRAW_DREAMWELL_CARD",
+          side,
+          turnNumber: board.turnNumber,
+          additional: true,
+        },
+        sourceSurface,
+      });
+    },
+    [handleCommand, logDreamwellReveal, board.turnNumber],
+  );
 
-  const handleSetBattleFlow = useCallback((target: BattleFlowTarget): void => {
-    handleCommand({
-      id: "DEBUG_EDIT",
-      edit: {
-        kind: "SET_BATTLE_FLOW",
-        phase: target.phase,
-        activeSide: target.activeSide,
-        turnNumber: target.turnNumber,
-      },
-      sourceSurface: "phase-controls",
-    });
-  }, [handleCommand]);
+  const handleSetBattleFlow = useCallback(
+    (target: BattleFlowTarget): void => {
+      handleCommand({
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "SET_BATTLE_FLOW",
+          phase: target.phase,
+          activeSide: target.activeSide,
+          turnNumber: target.turnNumber,
+        },
+        sourceSurface: "phase-controls",
+      });
+    },
+    [handleCommand],
+  );
 
   // Dreamwell reveal: whenever the active side rests on its Dreamwell phase
   // without having drawn this turn's Dreamwell card yet, reveal it (rules §The
@@ -503,13 +495,7 @@ function PlayableBattleScreenInner({
       },
       sourceSurface: "auto-system",
     });
-  }, [
-    handleCommand,
-    activeSide,
-    activePhase,
-    activeTurnNumber,
-    battleResult,
-  ]);
+  }, [handleCommand, activeSide, activePhase, activeTurnNumber, battleResult]);
 
   // Round 1 surfaces no Dreamwell card (see `isDreamwellDisplayVisible` below),
   // so the player should not have to click through an empty Dreamwell phase.
@@ -518,8 +504,7 @@ function PlayableBattleScreenInner({
   // locally-driven side. Skipped on the AI's own turn (the AI driver advances
   // itself).
   // The event-log intent key owns the once-per-(battle, side, turn) transition.
-  const activeDreamwellDrawnTurn =
-    board.sides[activeSide].dreamwellDrawnTurn;
+  const activeDreamwellDrawnTurn = board.sides[activeSide].dreamwellDrawnTurn;
   useEffect(() => {
     if (battleResult !== null || activePhase !== "dreamwell") {
       return;
@@ -550,102 +535,56 @@ function PlayableBattleScreenInner({
     activeDreamwellDrawnTurn,
   ]);
 
-  // The Dreamwell card the active side is currently showing (the card at its
-  // recorded draw index), rendered centered above the battlefield while the
-  // Dreamwell phase is active.
-  const activeDreamwellCardIndex =
-    board.sides[activeSide].dreamwellCardIndex;
-  const dreamwellDisplayCard = useMemo(() => {
-    if (activeDreamwellCardIndex === null) {
-      return null;
-    }
-    const definition = battleInit.dreamwellDeck[activeDreamwellCardIndex];
-    if (definition === undefined) {
-      return null;
-    }
-    return {
-      id: definition.id,
-      name: definition.name,
-      renderedText: definition.renderedText,
-      energyAdded: definition.energyAdded,
-      imageNumber: definition.imageNumber,
-      art: definition.art,
-    };
-  }, [activeDreamwellCardIndex, battleInit.dreamwellDeck]);
-  // The Dreamwell card is hidden during the opening round (turn 1): no card is
-  // surfaced until each side reaches its Dreamwell phase on a later turn.
-  //
-  // `dreamwellCardIndex` persists across turns — between this side's reveals it
-  // still points at the card it drew last turn. The Dreamwell phase begins
-  // before this turn's `DRAW_DREAMWELL_CARD` reveal has committed, so surfacing
-  // the card the instant the phase opens would flash the previous turn's card
-  // until the draw lands. Gate on the draw having committed for this turn
-  // (`dreamwellDrawnTurn === activeTurnNumber`) so the card appears only once it
-  // is this turn's card; the brief pre-draw moment shows no card rather than a
-  // stale one.
-  const isDreamwellDisplayVisible =
-    activePhase === "dreamwell" &&
-    battleResult === null &&
-    activeTurnNumber > 1 &&
-    activeDreamwellDrawnTurn === activeTurnNumber;
-
   useEffect(() => {
     const baseFields = createBattleLogBaseFields(board, {
       sourceSurface: "auto-system",
       selectedCardId: null,
     });
-    logEventOnce(`battle_proto_init:${battleInit.battleId}`, "battle_proto_init", {
-      ...baseFields,
-      battleEntryKey: battleInit.battleEntryKey,
-      enemyName: battleInit.enemyDescriptor.name,
-      seed: battleInit.seed,
-      siteId: battleInit.siteId,
-    });
+    logEventOnce(
+      `battle_proto_init:${battleInit.battleId}`,
+      "battle_proto_init",
+      {
+        ...baseFields,
+        battleEntryKey: battleInit.battleEntryKey,
+        enemyName: battleInit.enemyDescriptor.name,
+        seed: battleInit.seed,
+        siteId: battleInit.siteId,
+      },
+    );
     logEventOnce(
       `battle_proto_opening_hands:${battleInit.battleId}`,
       "battle_proto_opening_hands",
       {
         ...baseFields,
         enemyHand: board.sides.enemy.hand.map(
-          (battleCardId) => board.cardInstances[battleCardId]?.definition.name ?? "Card",
+          (battleCardId) =>
+            board.cardInstances[battleCardId]?.definition.name ?? "Card",
         ),
         enemyHandSize: board.sides.enemy.hand.length,
         openingHandSize: battleInit.openingHandSize,
         playerHand: board.sides.player.hand.map(
-          (battleCardId) => board.cardInstances[battleCardId]?.definition.name ?? "Card",
+          (battleCardId) =>
+            board.cardInstances[battleCardId]?.definition.name ?? "Card",
         ),
       },
     );
     // This effect is keyed by `battleId` (via `logEventOnce`), so it fires once
     // per battle — intentionally reading `board` only at that first commit
     // rather than tracking it as a reactive dependency.
-  }, [battleInit.battleId, battleInit.battleEntryKey, battleInit.enemyDescriptor.name, battleInit.openingHandSize, battleInit.seed, battleInit.siteId]);
+  }, [
+    battleInit.battleId,
+    battleInit.battleEntryKey,
+    battleInit.enemyDescriptor.name,
+    battleInit.openingHandSize,
+    battleInit.seed,
+    battleInit.siteId,
+  ]);
 
   useEffect(() => {
     if (board.result === null) {
-      setRewardOverlay(null);
       setIsResultOverlayDismissed(false);
       return;
     }
-
-    if (board.result === "victory" && rewardOverlay === null) {
-      setRewardOverlay({
-        rewardSource: "battle_result",
-      });
-      setOpenZoneBrowser(null);
-      setContextMenu(null);
-      setOpenForeseeOverlay(null);
-      setOpenDeckOrderPicker(null);
-      setOpenFigmentCreator(null);
-      setIsPoolViewerOpen(false);
-      setOpenNoteEditor(null);
-      setOpenSideSummary(null);
-      setIsDreamcallerPanelOpen(false);
-      setIsBattleLogOpen(false);
-      setIsDreamwellHistoryOpen(false);
-      return;
-    }
-
     setOpenZoneBrowser(null);
     setContextMenu(null);
     setOpenForeseeOverlay(null);
@@ -653,20 +592,13 @@ function PlayableBattleScreenInner({
     setOpenFigmentCreator(null);
     setIsPoolViewerOpen(false);
     setOpenNoteEditor(null);
-    setOpenSideSummary(null);
-    setIsDreamcallerPanelOpen(false);
-  }, [board.result, rewardOverlay]);
+    setIsBattleLogOpen(false);
+    setIsDreamwellHistoryOpen(false);
+  }, [board.result]);
 
   useEffect(() => {
     setIsOpponentHandRevealed(false);
   }, [battleInit.battleId]);
-
-  useEffect(() => {
-    if (!isDesktopInspectorLayout) {
-      return;
-    }
-    setIsInspectorDrawerOpen(true);
-  }, [isDesktopInspectorLayout]);
 
   // Developer nudge: warn once per session if any automated card's live rules
   // text has drifted away from the script that automates it. This is purely a
@@ -697,11 +629,18 @@ function PlayableBattleScreenInner({
         // which reads differently from a hash mismatch.
         reason: entry.actual === null ? "missing-from-catalog" : "text-drift",
       }));
-      logEventOnce("battle_proto_automation_hash_drift", "battle_proto_automation_hash_drift", {
-        drift: annotated,
-      });
+      logEventOnce(
+        "battle_proto_automation_hash_drift",
+        "battle_proto_automation_hash_drift",
+        {
+          drift: annotated,
+        },
+      );
       const details = annotated
-        .map(({ id, name, reason }) => `  - ${id} (${name ?? "missing from catalog"}) [${reason}]`)
+        .map(
+          ({ id, name, reason }) =>
+            `  - ${id} (${name ?? "missing from catalog"}) [${reason}]`,
+        )
         .join("\n");
       console.warn(
         `Automated battle-card rules text drifted from its script for the ` +
@@ -712,10 +651,6 @@ function PlayableBattleScreenInner({
       // Catalog unavailable or malformed; skip the developer nudge silently.
     }
   }, [cardDatabase]);
-
-  function handleHandCardClick(_battleCardId: string): void {
-    setContextMenu(null);
-  }
 
   function handleHandCardDoubleClick(battleCardId: string): void {
     if (!canPlayerAct) {
@@ -732,14 +667,6 @@ function PlayableBattleScreenInner({
     }
   }
 
-  function handleBattlefieldCardClick(_battleCardId: string): void {
-    setContextMenu(null);
-  }
-
-  function handleBattlefieldSlotClick(_target: BattleFieldSlotAddress, _isOccupied: boolean): void {
-    setContextMenu(null);
-  }
-
   function handleOpenZoneBrowser(
     side: BattleSide,
     zone: BrowseableZone,
@@ -747,7 +674,6 @@ function PlayableBattleScreenInner({
   ): void {
     setOpenZoneBrowser({ side, zone });
     setContextMenu(null);
-    setOpenSideSummary(null);
     logEvent("battle_zone_browser_opened", {
       ...createBattleLogBaseFields(board, {
         sourceSurface,
@@ -782,9 +708,6 @@ function PlayableBattleScreenInner({
     setOpenFigmentCreator(null);
     setIsPoolViewerOpen(false);
     setOpenNoteEditor(null);
-    setOpenSideSummary(null);
-    setIsDreamcallerPanelOpen(false);
-    setRewardOverlay(null);
     setIsOpponentHandRevealed(false);
     setIsResultOverlayDismissed(false);
     setIsBattleLogOpen(false);
@@ -813,7 +736,6 @@ function PlayableBattleScreenInner({
         ...logFields,
         essenceReward: battleInit.essenceReward,
         rewardSource: "battle_result",
-        uiVariant: "cumulus",
       });
       handleContinueReward();
       return;
@@ -823,7 +745,6 @@ function PlayableBattleScreenInner({
       logEvent("battle_result_reset_requested", {
         ...logFields,
         result: board.result,
-        uiVariant: "cumulus",
       });
       handleFailureReset();
       return;
@@ -832,7 +753,6 @@ function PlayableBattleScreenInner({
       logEvent("battle_result_reopened", {
         ...logFields,
         result: board.result,
-        uiVariant: "cumulus",
       });
       setIsResultOverlayDismissed(false);
       return;
@@ -841,19 +761,9 @@ function PlayableBattleScreenInner({
     logEvent("battle_result_dismissed", {
       ...logFields,
       result: board.result,
-      uiVariant: "cumulus",
       via: "surface",
     });
     setIsResultOverlayDismissed(true);
-  }
-
-  function handleOpenSummary(side: BattleSide): void {
-    setOpenSideSummary(side);
-    setContextMenu(null);
-  }
-
-  function handleCloseSummary(side: BattleSide): void {
-    setOpenSideSummary((current) => current === side ? null : current);
   }
 
   function handleCardContextMenu(
@@ -869,7 +779,6 @@ function PlayableBattleScreenInner({
       x: event.clientX,
       y: event.clientY,
     });
-    setOpenSideSummary(null);
   }
 
   function handleCumulusCardDebugActivate(
@@ -893,7 +802,6 @@ function PlayableBattleScreenInner({
       x: invocation.presentation === "context-menu" ? invocation.x : 0,
       y: invocation.presentation === "context-menu" ? invocation.y : 0,
     });
-    setOpenSideSummary(null);
     logEvent(
       invocation.presentation === "context-menu"
         ? "battle_desktop_card_debug_menu_opened"
@@ -934,9 +842,9 @@ function PlayableBattleScreenInner({
 
   function handleCardDragEnd(): void {
     if (
-      !pendingDragDropHandledRef.current
-      && pendingDrag?.kind === "battle-card"
-      && selectBattleCardLocation(board, pendingDrag.battleCardId)?.zone === "hand"
+      !pendingDragDropHandledRef.current &&
+      pendingDrag?.kind === "battle-card" &&
+      selectBattleCardLocation(board, pendingDrag.battleCardId)?.zone === "hand"
     ) {
       handlePlayPendingHandCard();
       return;
@@ -1004,16 +912,18 @@ function PlayableBattleScreenInner({
       return;
     }
 
-    const draggedLocation = pendingDrag.kind === "battle-card"
-      ? selectBattleCardLocation(board, pendingDrag.battleCardId)
-      : null;
+    const draggedLocation =
+      pendingDrag.kind === "battle-card"
+        ? selectBattleCardLocation(board, pendingDrag.battleCardId)
+        : null;
     if (draggedLocation?.zone === "hand") {
       handlePlayPendingHandCard();
       return;
     }
     if (
-      (draggedLocation?.zone === "backRank" || draggedLocation?.zone === "frontRank")
-      && draggedLocation.side !== target.side
+      (draggedLocation?.zone === "backRank" ||
+        draggedLocation?.zone === "frontRank") &&
+      draggedLocation.side !== target.side
     ) {
       pendingDragDropHandledRef.current = true;
       setPendingDrag(null);
@@ -1024,7 +934,8 @@ function PlayableBattleScreenInner({
     if (targetOccupant !== null) {
       const sourceIsBattlefield =
         pendingDrag.kind === "battle-card" &&
-        (draggedLocation?.zone === "backRank" || draggedLocation?.zone === "frontRank");
+        (draggedLocation?.zone === "backRank" ||
+          draggedLocation?.zone === "frontRank");
       if (sourceIsBattlefield) {
         handleCommand({
           id: "DEBUG_EDIT",
@@ -1086,8 +997,8 @@ function PlayableBattleScreenInner({
       return;
     }
     if (
-      pendingDrag.kind === "battle-card"
-      && selectBattleCardLocation(board, pendingDrag.battleCardId)?.zone === "hand"
+      pendingDrag.kind === "battle-card" &&
+      selectBattleCardLocation(board, pendingDrag.battleCardId)?.zone === "hand"
     ) {
       handlePlayPendingHandCard();
       return;
@@ -1099,9 +1010,10 @@ function PlayableBattleScreenInner({
         edit: {
           kind: "CREATE_CARD_FROM_DEFINITION",
           definition: pendingDrag.definition,
-          destination: zone === "deck"
-            ? { side, zone: "deck", position: "top" }
-            : { side, zone },
+          destination:
+            zone === "deck"
+              ? { side, zone: "deck", position: "top" }
+              : { side, zone },
           createdAtMs: Date.now(),
         },
         sourceSurface: "pool-viewer",
@@ -1110,9 +1022,20 @@ function PlayableBattleScreenInner({
       return;
     }
 
-    const command = zone === "deck"
-      ? createMoveCardToDeckCommand(pendingDrag.battleCardId, side, "top", sourceSurface)
-      : createMoveCardToZoneCommand(pendingDrag.battleCardId, side, zone, sourceSurface);
+    const command =
+      zone === "deck"
+        ? createMoveCardToDeckCommand(
+            pendingDrag.battleCardId,
+            side,
+            "top",
+            sourceSurface,
+          )
+        : createMoveCardToZoneCommand(
+            pendingDrag.battleCardId,
+            side,
+            zone,
+            sourceSurface,
+          );
     handleCommand(command);
     setPendingDrag(null);
   }
@@ -1122,48 +1045,43 @@ function PlayableBattleScreenInner({
     questContent,
   );
 
-  // The opponent's Dreamcaller ability comes online from the run midpoint on —
-  // the same gate that grants its dreamsign. Before that point it lies dormant,
-  // so the enemy side summary labels the ability as inactive.
-  const enemyDreamcallerAbilityActive = opponentCarriesDreamsign(
-    battleInit.completionLevelAtStart,
-    resolveRunLayerCount(battleInit.atlasSnapshot.layers),
+  const requestBattlefieldPreview = useCallback(
+    (playerInPlayCount: 9 | 20): void => {
+      const playerFrontRankCount = Math.floor(playerInPlayCount / 2);
+      const playerBackRankCount = playerInPlayCount - playerFrontRankCount;
+      const command = createFillBattlefieldPreviewCommand(
+        battleInit,
+        Date.now(),
+        { player: playerInPlayCount, enemy: 9 },
+      );
+      const previewCardIds =
+        command?.id === "DEBUG_EDIT" &&
+        command.edit.kind === "FILL_BATTLEFIELD_PREVIEW"
+          ? [
+              ...command.edit.definitions.player,
+              ...command.edit.definitions.enemy,
+            ].map((definition) => definition.cardId)
+          : [];
+      logEvent("battle_debug_battlefield_preview_requested", {
+        ...createBattleLogBaseFields(board, {
+          sourceSurface: "debug-menu",
+          selectedCardId: null,
+        }),
+        commandCount: command === null ? 0 : 1,
+        previewCardIds,
+        playerBackRankCount,
+        playerFrontRankCount,
+        playerVoidAddedCount: 5,
+        enemyBackRankCount: 5,
+        enemyFrontRankCount: 4,
+        enemyVoidAddedCount: 5,
+      });
+      if (command !== null) {
+        void actions.battleCommand(command);
+      }
+    },
+    [actions, battleInit, board],
   );
-
-  const requestBattlefieldPreview = useCallback((playerInPlayCount: 9 | 20): void => {
-    const playerFrontRankCount = Math.floor(playerInPlayCount / 2);
-    const playerBackRankCount = playerInPlayCount - playerFrontRankCount;
-    const command = createFillBattlefieldPreviewCommand(
-      battleInit,
-      Date.now(),
-      { player: playerInPlayCount, enemy: 9 },
-    );
-    const previewCardIds =
-      command?.id === "DEBUG_EDIT" &&
-      command.edit.kind === "FILL_BATTLEFIELD_PREVIEW"
-        ? [
-            ...command.edit.definitions.player,
-            ...command.edit.definitions.enemy,
-          ].map((definition) => definition.cardId)
-        : [];
-    logEvent("battle_debug_battlefield_preview_requested", {
-      ...createBattleLogBaseFields(board, {
-        sourceSurface: "debug-menu",
-        selectedCardId: null,
-      }),
-      commandCount: command === null ? 0 : 1,
-      previewCardIds,
-      playerBackRankCount,
-      playerFrontRankCount,
-      playerVoidAddedCount: 5,
-      enemyBackRankCount: 5,
-      enemyFrontRankCount: 4,
-      enemyVoidAddedCount: 5,
-    });
-    if (command !== null) {
-      void actions.battleCommand(command);
-    }
-  }, [actions, battleInit, board]);
 
   const handleFillBattlefieldPreview = useCallback((): void => {
     requestBattlefieldPreview(9);
@@ -1173,7 +1091,9 @@ function PlayableBattleScreenInner({
     requestBattlefieldPreview(20);
   }, [requestBattlefieldPreview]);
 
-  function handleCumulusInspectorAction(action: MobileBattleInspectorAction): void {
+  function handleCumulusInspectorAction(
+    action: MobileBattleInspectorAction,
+  ): void {
     const resolution = resolveBattleInspectorIntent(action, board);
     if (resolution.kind === "command") {
       handleCommand(resolution.command);
@@ -1187,7 +1107,10 @@ function PlayableBattleScreenInner({
       return;
     }
     if (resolution.kind === "presentation") {
-      if (resolution.action === "opened" || resolution.action === "side-selected") {
+      if (
+        resolution.action === "opened" ||
+        resolution.action === "side-selected"
+      ) {
         logEvent(
           resolution.action === "opened"
             ? "battle_inspector_opened"
@@ -1197,9 +1120,10 @@ function PlayableBattleScreenInner({
               sourceSurface: "inspector",
               selectedCardId: null,
             }),
-            selectedSide: action.kind === "opened" || action.kind === "side-selected"
-              ? action.side
-              : null,
+            selectedSide:
+              action.kind === "opened" || action.kind === "side-selected"
+                ? action.side
+                : null,
             ...(action.kind === "opened" ? { layout: action.layout } : {}),
           },
         );
@@ -1214,8 +1138,8 @@ function PlayableBattleScreenInner({
     }
 
     if (
-      resolution.accessory === "battle-log"
-      || resolution.accessory === "dreamwell-history"
+      resolution.accessory === "battle-log" ||
+      resolution.accessory === "dreamwell-history"
     ) {
       const isBattleLog = resolution.accessory === "battle-log";
       setIsBattleLogOpen(isBattleLog);
@@ -1261,9 +1185,8 @@ function PlayableBattleScreenInner({
       setOpenFigmentCreator(resolution.side);
     }
   }
-  const showCumulusLayout = uiVariant === "cumulus";
   useEffect(() => {
-    if (!showCumulusLayout || board.result === null) return;
+    if (board.result === null) return;
     const logFields = createBattleLogBaseFields(board, {
       sourceSurface: "battlefield",
       selectedCardId: null,
@@ -1276,7 +1199,6 @@ function PlayableBattleScreenInner({
           ...logFields,
           essenceReward: battleInit.essenceReward,
           rewardSource: "battle_result",
-          uiVariant: "cumulus",
         },
       );
       return;
@@ -1287,327 +1209,91 @@ function PlayableBattleScreenInner({
       {
         ...logFields,
         result: board.result,
-        uiVariant: "cumulus",
       },
     );
-  }, [
-    battleInit.battleId,
-    battleInit.essenceReward,
-    board,
-    board.result,
-    showCumulusLayout,
-  ]);
+  }, [battleInit.battleId, battleInit.essenceReward, board, board.result]);
   useEffect(() => {
-    if (!showCumulusLayout) {
-      return;
-    }
     const layout = isCumulusDesktopLayout ? "desktop" : "mobile";
     const eventName = isCumulusDesktopLayout
       ? "battle_desktop_surface_opened"
       : "battle_mobile_surface_opened";
-    logEventOnce(
-      `${eventName}:${battleInit.battleId}`,
-      eventName,
-      {
-        battleId: battleInit.battleId,
-        enemyHandSize: board.sides.enemy.hand.length,
-        layout,
-        playerHandSize: board.sides.player.hand.length,
-        uiVariant: "cumulus",
-      },
-    );
+    logEventOnce(`${eventName}:${battleInit.battleId}`, eventName, {
+      battleId: battleInit.battleId,
+      enemyHandSize: board.sides.enemy.hand.length,
+      layout,
+      playerHandSize: board.sides.player.hand.length,
+    });
   }, [
     battleInit.battleId,
     board.sides.enemy.hand.length,
     board.sides.player.hand.length,
     isCumulusDesktopLayout,
-    showCumulusLayout,
   ]);
 
-  if (showCumulusLayout) {
-    return (
-      <>
-        {openZoneBrowser !== null && openZoneBrowser.zone !== "hand" ? (
-          <CumulusBattleZoneBrowser
-            browser={{
-              side: openZoneBrowser.side,
-              zone: openZoneBrowser.zone,
-            }}
-            state={board}
-            onClose={() => setOpenZoneBrowser(null)}
-            onCardContextMenu={handleCardContextMenu}
-            onCardDoubleTap={(battleCardId, sourceSurface) =>
-              handleCumulusCardDebugActivate(
-                battleCardId,
-                sourceSurface,
-                { presentation: "sheet" },
-              )}
-            onCardDragStart={handleCardDragStart}
-            onCardDragEnd={handleCardDragEnd}
-            onCardDropToBrowser={(sourceSurface) => handleZoneDrop(
+  return (
+    <>
+      {openZoneBrowser !== null && openZoneBrowser.zone !== "hand" ? (
+        <CumulusBattleZoneBrowser
+          browser={{
+            side: openZoneBrowser.side,
+            zone: openZoneBrowser.zone,
+          }}
+          state={board}
+          onClose={() => setOpenZoneBrowser(null)}
+          onCardContextMenu={handleCardContextMenu}
+          onCardDoubleTap={(battleCardId, sourceSurface) =>
+            handleCumulusCardDebugActivate(battleCardId, sourceSurface, {
+              presentation: "sheet",
+            })
+          }
+          onCardDragStart={handleCardDragStart}
+          onCardDragEnd={handleCardDragEnd}
+          onCardDropToBrowser={(sourceSurface) =>
+            handleZoneDrop(
               openZoneBrowser.side,
               openZoneBrowser.zone,
               sourceSurface,
-            )}
-            pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
-          />
-        ) : null}
-        {openForeseeOverlay !== null ? (
-          <CumulusBattleForeseeOverlay
-            initialCount={openForeseeOverlay.count}
-            side={openForeseeOverlay.side}
-            state={board}
-            onConfirm={({ viewedCardIds, orderedCardIds, voidCardIds }) => {
-              handleCommand({
-                id: "DEBUG_EDIT",
-                edit: {
-                  kind: "FORESEE",
-                  side: openForeseeOverlay.side,
-                  viewedCardIds,
-                  orderedCardIds,
-                  voidCardIds,
-                },
-                sourceSurface: "foresee-overlay",
-              });
-              setOpenForeseeOverlay(null);
-            }}
-          />
-        ) : null}
-        {pendingPrompt !== null &&
-        pendingPrompt.options.kind === "foresee" &&
-        openForeseeOverlay === null ? (
-          <CumulusBattleForeseeOverlay
-            initialCount={pendingPrompt.options.count}
-            side={pendingPrompt.run.side}
-            state={board}
-            onConfirm={({ viewedCardIds, orderedCardIds, voidCardIds }) => resolvePendingPrompt({
-              kind: "foresee",
-              viewedCardIds: [...viewedCardIds],
-              orderedCardIds: [...orderedCardIds],
-              voidCardIds: [...voidCardIds],
-            })}
-          />
-        ) : null}
-        {openDeckOrderPicker !== null ? (
-          <BattleDeckOrderPicker
-            initialOrder={board.sides[openDeckOrderPicker].deck}
-            scopeLabel="full"
-            side={openDeckOrderPicker}
-            state={board}
-            onCancel={() => setOpenDeckOrderPicker(null)}
-            onConfirm={(order) => {
-              handleCommand({ id: "DEBUG_EDIT", edit: { kind: "REORDER_DECK", order, side: openDeckOrderPicker }, sourceSurface: "inspector" });
-              setOpenDeckOrderPicker(null);
-            }}
-          />
-        ) : null}
-        {openFigmentCreator !== null ? (
-          <BattleFigmentCreator
-            initialSide={openFigmentCreator}
-            state={board}
-            onClose={() => setOpenFigmentCreator(null)}
-            onSubmit={(edit) => handleCommand({ id: "DEBUG_EDIT", edit, sourceSurface: "inspector" })}
-          />
-        ) : null}
-        <PoolViewer
-          cardDatabase={cardDatabase}
-          draftState={questState.draftState}
-          resolvedPackage={questState.resolvedPackage}
-          isOpen={isPoolViewerOpen}
-          onClose={() => setIsPoolViewerOpen(false)}
-          onPoolCardDragEnd={handleCardDragEnd}
-          onPoolCardDragStart={handlePoolCardDragStart}
-          title="Battle Pool Viewer"
-          variant="floating"
-        />
-        <MobileBattleScreenAdapter
-          init={battleInit}
-          board={board}
-          enemyDreamcaller={enemyDreamcallerSummary}
-          aiProposal={proposal}
-          aiMode={aiMode}
-          isOpponentHandRevealed={isOpponentHandRevealed}
-          isPlayerHandHidden={isPlayerHandHidden}
-          pendingPrompt={pendingPrompt}
-          confirmedPromptId={confirmedPromptId}
-          isResultOverlayDismissed={isResultOverlayDismissed}
-          interactions={{
-            canInteract: canPlayerAct && pendingPrompt === null,
-            pendingCardId: pendingDragCardId,
-            pendingCardSource,
-            pendingCardOwner,
-            onHandCardActivate: handleHandCardDoubleClick,
-            onHandCardDrop: handlePlayPendingHandCard,
-            onCardDebugActivate: (battleCardId, source, invocation) =>
-              handleCumulusCardDebugActivate(
-                battleCardId,
-                source === "player-hand" ? "hand-tray" : "battlefield",
-                invocation,
-              ),
-            onCardDragStart: (battleCardId, source) => {
-              handleCardDragStart(
-                battleCardId,
-                source === "player-hand" ? "hand-tray" : "battlefield",
-              );
-            },
-            onCardDragEnd: handleCardDragEnd,
-            onSlotDrop: ({ owner, rank, slotId }) => {
-              handleSlotDrop({
-                side: owner,
-                zone: rank === "back" ? "backRank" : "frontRank",
-                slotId: slotId as BattlefieldSlotId,
-              });
-            },
-            onZoneDrop: ({ owner, zone }) => {
-              handleZoneDrop(
-                owner,
-                zone,
-                pendingDrag?.sourceSurface ?? "battlefield",
-              );
-            },
-            onZoneOpen: ({ owner, zone }) => {
-              handleOpenZoneBrowser(owner, zone, "battlefield");
-            },
-            onPreviousPhase: () => {
-              handleSetBattleFlow(computePhaseControlTarget(board, "previous"));
-            },
-            onNextPhase: () => {
-              handleSetBattleFlow(computePhaseControlTarget(board, "next"));
-            },
-            onApproveAiProposal: approve,
-            onRejectAiProposal: reject,
-            onCardPickerSelectionChange: (ids) => {
-              logCumulusCardPickerInteraction("selection-changed", ids);
-            },
-            onCardPickerSubmit: (ids) => {
-              logCumulusCardPickerInteraction("submit", ids);
-              resolvePendingPrompt({ kind: "pick-cards", chosenIds: [...ids] });
-            },
-            onCardPickerSkip: () => {
-              logCumulusCardPickerInteraction("skip", []);
-              resolvePendingPrompt({ kind: "pick-cards", chosenIds: [] });
-            },
-            onChoicePromptChoose: handleCumulusChoicePrompt,
-            onResultAction: handleCumulusResultAction,
-            onFillBattlefieldPreview: handleFillBattlefieldPreview,
-            onFillTwentyCardBattlefieldPreview:
-              handleFillTwentyCardBattlefieldPreview,
-            onInspectorAction: handleCumulusInspectorAction,
-          }}
-        />
-        {contextMenu !== null ? (
-          <BattleContextMenu
-            key={`${contextMenu.battleCardId}:${contextMenu.sourceSurface}:${contextMenu.presentation}`}
-            battleCardId={contextMenu.battleCardId}
-            onOpenNoteEditor={(cardId) => setOpenNoteEditor(cardId)}
-            presentation={contextMenu.presentation}
-            sourceSurface={contextMenu.sourceSurface}
-            state={board}
-            x={contextMenu.x}
-            y={contextMenu.y}
-            onClose={() => setContextMenu(null)}
-            onCommand={handleCommand}
-          />
-        ) : null}
-        {openNoteEditor !== null ? (
-          <BattleCardNoteEditor
-            battleCardId={openNoteEditor}
-            state={board}
-            onClose={() => setOpenNoteEditor(null)}
-            onSubmit={(edit) => handleCommand({
-              id: "DEBUG_EDIT",
-              edit,
-              sourceSurface: "note-editor",
-            })}
-          />
-        ) : null}
-        <BattleLogDrawer
-          battleInit={battleInit}
-          futureCount={0}
-          history={EMPTY_BATTLE_HISTORY}
-          isOpen={isBattleLogOpen}
-          lastTransition={null}
-          onClose={() => setIsBattleLogOpen(false)}
-        />
-        <BattleDreamwellHistoryDrawer
-          dreamwellDeck={battleInit.dreamwellDeck}
-          dreamwellDeckIndex={board.dreamwellDeckIndex}
-          isOpen={isDreamwellHistoryOpen}
-          onClose={() => setIsDreamwellHistoryOpen(false)}
-        />
-      </>
-    );
-  }
-
-  return (
-    <div
-      className="battle-shell"
-      data-battle-inspector-open={isInspectorDrawerOpen ? "true" : "false"}
-      data-battle-opponent-hand-revealed={isOpponentHandRevealed ? "true" : "false"}
-      data-battle-player-hand-hidden={isPlayerHandHidden ? "true" : "false"}
-    >
-      {openZoneBrowser !== null ? (
-        <BattleZoneBrowser
-          browser={openZoneBrowser}
-          isOpponentHandRevealed={isOpponentHandRevealed}
-          state={board}
-          onClose={() => setOpenZoneBrowser(null)}
-          onCommand={handleCommand}
-          onOpenForesee={handleOpenForesee}
-          onOpenReorderMultiple={(side) => setOpenDeckOrderPicker(side)}
-          onCardContextMenu={handleCardContextMenu}
-          onCardDragStart={handleCardDragStart}
-          onCardDragEnd={handleCardDragEnd}
-          onCardDropToBrowser={(sourceSurface) => handleZoneDrop(
-            openZoneBrowser.side,
-            openZoneBrowser.zone,
-            sourceSurface,
-          )}
+            )
+          }
           pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
         />
       ) : null}
       {openForeseeOverlay !== null ? (
-        <BattleForeseeOverlay
+        <CumulusBattleForeseeOverlay
           initialCount={openForeseeOverlay.count}
           side={openForeseeOverlay.side}
           state={board}
-          onClose={() => setOpenForeseeOverlay(null)}
-          onDispatch={handleCommand}
-        />
-      ) : null}
-      {/* The single open prompt from the fold — ▸Materialized, Dreamwell script,
-          and Support runs alike all park at `battle.pendingPrompt`; the driver
-          (not the client) owns which one is open. The resolve controls are
-          disabled until `useConfirmedPromptId()` confirms the opening event, so
-          a resolve never targets a promptId that only exists optimistically. */}
-      {pendingPrompt !== null && pendingPrompt.options.kind === "pick-cards" ? (
-        <BattleCardPickerOverlay
-          title={pendingPrompt.options.label}
-          candidateIds={pendingPrompt.options.candidateIds}
-          count={pendingPrompt.options.count}
-          optional={pendingPrompt.options.optional}
-          highlightCardIds={pendingPrompt.options.highlightCardIds}
-          state={board}
-          onConfirm={(ids) => resolvePendingPrompt({ kind: "pick-cards", chosenIds: ids })}
-          onSkip={() => resolvePendingPrompt({ kind: "pick-cards", chosenIds: [] })}
-        />
-      ) : null}
-      {pendingPrompt !== null && pendingPrompt.options.kind === "choice" ? (
-        <BattleChoicePromptOverlay
-          title={pendingPrompt.options.label}
-          options={pendingPrompt.options.options}
-          onChoose={(i) => resolvePendingPrompt({ kind: "choice", optionIndex: i })}
+          onConfirm={({ viewedCardIds, orderedCardIds, voidCardIds }) => {
+            handleCommand({
+              id: "DEBUG_EDIT",
+              edit: {
+                kind: "FORESEE",
+                side: openForeseeOverlay.side,
+                viewedCardIds,
+                orderedCardIds,
+                voidCardIds,
+              },
+              sourceSurface: "foresee-overlay",
+            });
+            setOpenForeseeOverlay(null);
+          }}
         />
       ) : null}
       {pendingPrompt !== null &&
       pendingPrompt.options.kind === "foresee" &&
       openForeseeOverlay === null ? (
-        <BattleForeseeOverlay
+        <CumulusBattleForeseeOverlay
           initialCount={pendingPrompt.options.count}
           side={pendingPrompt.run.side}
           state={board}
-          onDispatch={handleCommand}
-          onClose={() => resolvePendingPrompt({ kind: "foresee" })}
+          onConfirm={({ viewedCardIds, orderedCardIds, voidCardIds }) =>
+            resolvePendingPrompt({
+              kind: "foresee",
+              viewedCardIds: [...viewedCardIds],
+              orderedCardIds: [...orderedCardIds],
+              voidCardIds: [...voidCardIds],
+            })
+          }
         />
       ) : null}
       {openDeckOrderPicker !== null ? (
@@ -1620,12 +1306,8 @@ function PlayableBattleScreenInner({
           onConfirm={(order) => {
             handleCommand({
               id: "DEBUG_EDIT",
-              edit: {
-                kind: "REORDER_DECK",
-                order,
-                side: openDeckOrderPicker,
-              },
-              sourceSurface: "deck-order-picker",
+              edit: { kind: "REORDER_DECK", order, side: openDeckOrderPicker },
+              sourceSurface: "inspector",
             });
             setOpenDeckOrderPicker(null);
           }}
@@ -1636,11 +1318,13 @@ function PlayableBattleScreenInner({
           initialSide={openFigmentCreator}
           state={board}
           onClose={() => setOpenFigmentCreator(null)}
-          onSubmit={(edit) => handleCommand({
-            id: "DEBUG_EDIT",
-            edit,
-            sourceSurface: "figment-creator",
-          })}
+          onSubmit={(edit) =>
+            handleCommand({
+              id: "DEBUG_EDIT",
+              edit,
+              sourceSurface: "inspector",
+            })
+          }
         />
       ) : null}
       <PoolViewer
@@ -1654,388 +1338,86 @@ function PlayableBattleScreenInner({
         title="Battle Pool Viewer"
         variant="floating"
       />
-      {openNoteEditor !== null ? (
-        <BattleCardNoteEditor
-          battleCardId={openNoteEditor}
-          state={board}
-          onClose={() => setOpenNoteEditor(null)}
-          onSubmit={(edit) => handleCommand({
-            id: "DEBUG_EDIT",
-            edit,
-            sourceSurface: "note-editor",
-          })}
-        />
-      ) : null}
-      {openSideSummary !== null ? (
-        <BattleSideSummaryPopover
-          side={openSideSummary}
-          state={board}
-          title={openSideSummary === "player"
-            ? battleInit.dreamcallerSummary?.name ?? "Player"
-            : battleInit.enemyDescriptor.name}
-          subtitle={openSideSummary === "player"
-            ? battleInit.dreamcallerSummary?.title ?? ""
-            : battleInit.enemyDescriptor.subtitle}
-          dreamcaller={openSideSummary === "player" ? battleInit.dreamcallerSummary : enemyDreamcallerSummary}
-          dreamsigns={openSideSummary === "player"
-            ? battleInit.dreamsignSummaries
-            : battleInit.enemyDescriptor.dreamsigns}
-          dreamcallerAbilityInactive={
-            openSideSummary === "enemy" && !enemyDreamcallerAbilityActive
-          }
-          isActive={board.activeSide === openSideSummary}
-          isSelected={false}
-          onClose={() => {
-            setOpenSideSummary(null);
-          }}
-        />
-      ) : null}
-      {isDreamcallerPanelOpen ? (
-        <BattleDreamcallerPanel
-          dreamcaller={battleInit.dreamcallerSummary}
-          dreamsigns={battleInit.dreamsignSummaries}
-          onClose={() => setIsDreamcallerPanelOpen(false)}
-        />
-      ) : null}
-      <div className="battle-app-shell">
-        <div className="battle-main">
-          <BattleStatusBar
-            activeSide={board.activeSide}
-            battleId={battleInit.battleId}
-            enemyName={battleInit.enemyDescriptor.name}
-            enemyScore={board.sides.enemy.score}
-            futureCount={0}
-            hasAiOpponent={aiMode}
-            historyCount={0}
-            phase={board.phase}
-            playerScore={board.sides.player.score}
-            result={board.result}
-            roundNumber={board.turnNumber}
-            siteType={site.type}
-            onSetPhase={(phase) => {
-              handleCommand({
-                id: "DEBUG_EDIT",
-                edit: { kind: "SET_PHASE", phase },
-                sourceSurface: "action-bar",
-              });
-            }}
-          />
-          <BattleLiveRegion
-            activeSide={board.activeSide}
-            phase={board.phase}
-            result={board.result}
-            turnNumber={board.turnNumber}
-          />
-          <BattleAiProposalBanner
-            proposal={aiMode ? proposal : null}
-            thinking={aiMode && aiThinking}
-          />
-          {isOpponentHandRevealed ? (
-            <div className={isPlayerHandHidden ? "opponent-hand-zone" : "opponent-hand-zone compact"}>
-              <BattleHandTray
-                canInteract={canPlayerAct}
-                side="opponent"
-                compact={!isPlayerHandHidden}
-                isBasicAutomationEnabled
-                currentEnergy={board.sides.enemy.currentEnergy}
-                hand={board.sides.enemy.hand}
-                onHandCardAction={handleCommand}
-                openingHandSize={battleInit.openingHandSize}
-                playerDrawSkipsTurnOne={battleInit.playerDrawSkipsTurnOne}
-                selectedCardId={null}
-                state={board}
-                onCardClick={handleHandCardClick}
-                onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "opponent-hand-tray")}
-                onCardDoubleClick={handleHandCardDoubleClick}
-                onCardDragStart={handleCardDragStart}
-                onCardDragEnd={handleCardDragEnd}
-                onCardDropToHand={(sourceSurface) => handleZoneDrop("enemy", "hand", sourceSurface)}
-                pendingDragCardId={pendingDragCardId}
-                pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
-                isCardPlayable={undefined}
-              />
-            </div>
-          ) : null}
-          <div className="stage">
-            <BattleDreamwellDisplay
-              card={dreamwellDisplayCard}
-              side={activeSide}
-              visible={isDreamwellDisplayVisible}
-              automationStatus={dreamwellDisplayCard ? dreamwellAutomationStatus(dreamwellDisplayCard.id) : "none"}
-              automationEnabled
-            />
-            <div className="battlefield-zone-layout">
-              <div className="battle-side-zone-column player">
-                <div className="battle-small-zone-row">
-                  <BattleSmallZoneDropTarget
-                    label="Banished"
-                    side="player"
-                    zone="banished"
-                    count={board.sides.player.banished.length}
-                    pendingDrag={pendingDrag}
-                    onDrop={(sourceSurface) => handleZoneDrop("player", "banished", sourceSurface)}
-                    onOpen={() => handleOpenZoneBrowser("player", "banished")}
-                  />
-                  <BattleSmallZoneDropTarget
-                    label="Void"
-                    side="player"
-                    zone="void"
-                    count={board.sides.player.void.length}
-                    pendingDrag={pendingDrag}
-                    onDrop={(sourceSurface) => handleZoneDrop("player", "void", sourceSurface)}
-                    onOpen={() => handleOpenZoneBrowser("player", "void")}
-                  />
-                </div>
-                <BattleStatusStrip
-                  dreamcaller={battleInit.dreamcallerSummary}
-                  side="player"
-                  sideState={board.sides.player}
-                  subtitle={battleInit.dreamcallerSummary?.title ?? ""}
-                  title={battleInit.dreamcallerSummary?.name ?? "Player"}
-                  isActive={board.activeSide === "player"}
-                  isSummarySelected={openSideSummary === "player"}
-                  onSetEnergy={(value) => handleCommand({
-                    id: "DEBUG_EDIT",
-                    edit: { kind: "SET_CURRENT_ENERGY", side: "player", value },
-                    sourceSurface: "status-strip",
-                  })}
-                  onIncreaseMaxEnergyAndFill={() => handleCommand({
-                    id: "DEBUG_EDIT",
-                    edit: { kind: "INCREASE_MAX_ENERGY_AND_FILL", side: "player" },
-                    sourceSurface: "status-strip",
-                  })}
-                  onSetScore={(value) => handleCommand({
-                    id: "DEBUG_EDIT",
-                    edit: { kind: "SET_SCORE", side: "player", value },
-                    sourceSurface: "status-strip",
-                  })}
-                  onDrawCard={() => handleCommand({
-                    id: "DEBUG_EDIT",
-                    edit: { kind: "DRAW_CARD", side: "player" },
-                    sourceSurface: "status-strip",
-                  })}
-                  onOpenSummary={() => handleOpenSummary("player")}
-                  onCloseSummary={() => handleCloseSummary("player")}
-                />
-              </div>
-              <ScaledBattlefield>
-                <div className="battlefield">
-                  <BattlefieldGrid
-                    side="enemy"
-                    zone="backRank"
-                    state={board}
-                    canInteract={canPlayerAct}
-                    isBasicAutomationEnabled
-                    selectedCardId={null}
-                    selectedSlot={null}
-                    selectionAnchor={null}
-                    handSelectionSide={null}
-                    pendingDragCardId={pendingDragCardId}
-                    onCardClick={handleBattlefieldCardClick}
-                    onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
-                    onCardDragStart={handleCardDragStart}
-                    onCardDragEnd={handleCardDragEnd}
-                    onSlotClick={handleBattlefieldSlotClick}
-                    onSlotDrop={handleSlotDrop}
-                  />
-                  <BattlefieldGrid
-                    side="enemy"
-                    zone="frontRank"
-                    state={board}
-                    canInteract={canPlayerAct}
-                    isBasicAutomationEnabled
-                    selectedCardId={null}
-                    selectedSlot={null}
-                    selectionAnchor={null}
-                    handSelectionSide={null}
-                    pendingDragCardId={pendingDragCardId}
-                    onCardClick={handleBattlefieldCardClick}
-                    onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
-                    onCardDragStart={handleCardDragStart}
-                    onCardDragEnd={handleCardDragEnd}
-                    onSlotClick={handleBattlefieldSlotClick}
-                    onSlotDrop={handleSlotDrop}
-                  />
-                  <div
-                    data-battle-region="judgment-divider"
-                    className={`judgment-divider ${board.phase === "challenge" ? "active" : ""}`}
-                  />
-                  <BattlefieldGrid
-                    side="player"
-                    zone="frontRank"
-                    state={board}
-                    canInteract={canPlayerAct}
-                    isBasicAutomationEnabled
-                    selectedCardId={null}
-                    selectedSlot={null}
-                    selectionAnchor={null}
-                    handSelectionSide={null}
-                    pendingDragCardId={pendingDragCardId}
-                    onCardClick={handleBattlefieldCardClick}
-                    onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
-                    onCardDragStart={handleCardDragStart}
-                    onCardDragEnd={handleCardDragEnd}
-                    onSlotClick={handleBattlefieldSlotClick}
-                    onSlotDrop={handleSlotDrop}
-                  />
-                  <BattlefieldGrid
-                    side="player"
-                    zone="backRank"
-                    state={board}
-                    canInteract={canPlayerAct}
-                    isBasicAutomationEnabled
-                    selectedCardId={null}
-                    selectedSlot={null}
-                    selectionAnchor={null}
-                    handSelectionSide={null}
-                    pendingDragCardId={pendingDragCardId}
-                    onCardClick={handleBattlefieldCardClick}
-                    onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
-                    onCardDragStart={handleCardDragStart}
-                    onCardDragEnd={handleCardDragEnd}
-                    onSlotClick={handleBattlefieldSlotClick}
-                    onSlotDrop={handleSlotDrop}
-                  />
-                </div>
-              </ScaledBattlefield>
-              <div className="battle-side-zone-column enemy">
-                <BattleStatusStrip
-                  side="enemy"
-                  dreamcaller={enemyDreamcallerSummary}
-                  sideState={board.sides.enemy}
-                  subtitle={battleInit.enemyDescriptor.subtitle}
-                  title={battleInit.enemyDescriptor.name}
-                  isActive={board.activeSide === "enemy"}
-                  isSummarySelected={openSideSummary === "enemy"}
-                  onSetEnergy={(value) => handleCommand({
-                    id: "DEBUG_EDIT",
-                    edit: { kind: "SET_CURRENT_ENERGY", side: "enemy", value },
-                    sourceSurface: "status-strip",
-                  })}
-                  onIncreaseMaxEnergyAndFill={() => handleCommand({
-                    id: "DEBUG_EDIT",
-                    edit: { kind: "INCREASE_MAX_ENERGY_AND_FILL", side: "enemy" },
-                    sourceSurface: "status-strip",
-                  })}
-                  onSetScore={(value) => handleCommand({
-                    id: "DEBUG_EDIT",
-                    edit: { kind: "SET_SCORE", side: "enemy", value },
-                    sourceSurface: "status-strip",
-                  })}
-                  onDrawCard={() => handleCommand({
-                    id: "DEBUG_EDIT",
-                    edit: { kind: "DRAW_CARD", side: "enemy" },
-                    sourceSurface: "status-strip",
-                  })}
-                  onOpenSummary={() => handleOpenSummary("enemy")}
-                  onCloseSummary={() => handleCloseSummary("enemy")}
-                />
-                <div className="battle-small-zone-row">
-                  <BattleSmallZoneDropTarget
-                    label="Void"
-                    side="enemy"
-                    zone="void"
-                    count={board.sides.enemy.void.length}
-                    pendingDrag={pendingDrag}
-                    onDrop={(sourceSurface) => handleZoneDrop("enemy", "void", sourceSurface)}
-                    onOpen={() => handleOpenZoneBrowser("enemy", "void")}
-                  />
-                  <BattleSmallZoneDropTarget
-                    label="Banished"
-                    side="enemy"
-                    zone="banished"
-                    count={board.sides.enemy.banished.length}
-                    pendingDrag={pendingDrag}
-                    onDrop={(sourceSurface) => handleZoneDrop("enemy", "banished", sourceSurface)}
-                    onOpen={() => handleOpenZoneBrowser("enemy", "banished")}
-                  />
-                </div>
-                <BattlePhaseFloatControls
-                  state={board}
-                  proposal={aiMode ? proposal : null}
-                  onApprove={approve}
-                  onReject={reject}
-                  onSetBattleFlow={handleSetBattleFlow}
-                />
-              </div>
-            </div>
-          </div>
-          {isPlayerHandHidden ? null : (
-            <div className={isOpponentHandRevealed ? "player-hand-zone compact" : "player-hand-zone"}>
-              <BattleHandTray
-                canInteract={canPlayerAct}
-                compact={isOpponentHandRevealed}
-                isBasicAutomationEnabled
-                currentEnergy={board.sides.player.currentEnergy}
-                hand={board.sides.player.hand}
-                onHandCardAction={handleCommand}
-                openingHandSize={battleInit.openingHandSize}
-                playerDrawSkipsTurnOne={battleInit.playerDrawSkipsTurnOne}
-                selectedCardId={null}
-                state={board}
-                onCardClick={handleHandCardClick}
-                onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "hand-tray")}
-                onCardDoubleClick={handleHandCardDoubleClick}
-                onCardDragStart={handleCardDragStart}
-                onCardDragEnd={handleCardDragEnd}
-                onCardDropToHand={(sourceSurface) => handleZoneDrop("player", "hand", sourceSurface)}
-                pendingDragCardId={pendingDragCardId}
-                pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
-                isCardPlayable={undefined}
-              />
-            </div>
-          )}
-          <BattleActionBar
-            dreamsigns={battleInit.dreamsignSummaries}
-            isBattleLogOpen={isBattleLogOpen}
-            isDesktopInspectorLayout={isDesktopInspectorLayout}
-            isInspectorDrawerOpen={isInspectorDrawerOpen}
-            onOpenForesee={(_side, _count) => undefined}
-            onToggleBattleLog={() => {
-              setIsBattleLogOpen((value) => !value);
-              setIsDreamwellHistoryOpen(false);
-            }}
-            onToggleDreamwellHistory={() => {
-              setIsDreamwellHistoryOpen((value) => !value);
-              setIsBattleLogOpen(false);
-            }}
-            onToggleInspector={() => setIsInspectorDrawerOpen((value) => !value)}
-          />
-        </div>
-        <BattleInspector
-          aiMode={aiMode}
-          aiProposal={proposal}
-          battleInit={battleInit}
-          canPlayerAct={canPlayerAct}
-          isDesktopLayout={isDesktopInspectorLayout}
-          isOpponentHandRevealed={isOpponentHandRevealed}
-          isPlayerHandHidden={isPlayerHandHidden}
-          isOpen={isInspectorDrawerOpen}
-          lastTransition={null}
-          state={board}
-          onClose={() => setIsInspectorDrawerOpen(false)}
-          onOpen={() => setIsInspectorDrawerOpen(true)}
-          onCommand={handleCommand}
-          onDreamwellDraw={(side) => runDreamwellDraw(side)}
-          onErode={(side, count) => handleCommand({
-            id: "DEBUG_EDIT",
-            edit: { kind: "ERODE", side, count },
-            sourceSurface: "inspector",
-          })}
-          onOpenFigmentCreator={(side) => setOpenFigmentCreator(side)}
-          onOpenPoolViewer={() => setIsPoolViewerOpen(true)}
-          onOpenForesee={handleOpenForesee}
-          onOpenZone={handleOpenZoneBrowser}
-          onResetBattle={handleResetBattle}
-          onToggleOpponentHand={() => setIsOpponentHandRevealed((value) => !value)}
-          onTogglePlayerHand={() => setIsPlayerHandHidden((value) => !value)}
-        />
-      </div>
+      <MobileBattleScreenAdapter
+        init={battleInit}
+        board={board}
+        enemyDreamcaller={enemyDreamcallerSummary}
+        aiProposal={proposal}
+        aiMode={aiMode}
+        isOpponentHandRevealed={isOpponentHandRevealed}
+        isPlayerHandHidden={isPlayerHandHidden}
+        pendingPrompt={pendingPrompt}
+        confirmedPromptId={confirmedPromptId}
+        isResultOverlayDismissed={isResultOverlayDismissed}
+        interactions={{
+          canInteract: canPlayerAct && pendingPrompt === null,
+          pendingCardId: pendingDragCardId,
+          pendingCardSource,
+          pendingCardOwner,
+          onHandCardActivate: handleHandCardDoubleClick,
+          onHandCardDrop: handlePlayPendingHandCard,
+          onCardDebugActivate: (battleCardId, source, invocation) =>
+            handleCumulusCardDebugActivate(
+              battleCardId,
+              source === "player-hand" ? "hand-tray" : "battlefield",
+              invocation,
+            ),
+          onCardDragStart: (battleCardId, source) => {
+            handleCardDragStart(
+              battleCardId,
+              source === "player-hand" ? "hand-tray" : "battlefield",
+            );
+          },
+          onCardDragEnd: handleCardDragEnd,
+          onSlotDrop: ({ owner, rank, slotId }) => {
+            handleSlotDrop({
+              side: owner,
+              zone: rank === "back" ? "backRank" : "frontRank",
+              slotId: slotId as BattlefieldSlotId,
+            });
+          },
+          onZoneDrop: ({ owner, zone }) => {
+            handleZoneDrop(
+              owner,
+              zone,
+              pendingDrag?.sourceSurface ?? "battlefield",
+            );
+          },
+          onZoneOpen: ({ owner, zone }) => {
+            handleOpenZoneBrowser(owner, zone, "battlefield");
+          },
+          onPreviousPhase: () => {
+            handleSetBattleFlow(computePhaseControlTarget(board, "previous"));
+          },
+          onNextPhase: () => {
+            handleSetBattleFlow(computePhaseControlTarget(board, "next"));
+          },
+          onApproveAiProposal: approve,
+          onRejectAiProposal: reject,
+          onCardPickerSelectionChange: (ids) => {
+            logCumulusCardPickerInteraction("selection-changed", ids);
+          },
+          onCardPickerSubmit: (ids) => {
+            logCumulusCardPickerInteraction("submit", ids);
+            resolvePendingPrompt({ kind: "pick-cards", chosenIds: [...ids] });
+          },
+          onCardPickerSkip: () => {
+            logCumulusCardPickerInteraction("skip", []);
+            resolvePendingPrompt({ kind: "pick-cards", chosenIds: [] });
+          },
+          onChoicePromptChoose: handleCumulusChoicePrompt,
+          onResultAction: handleCumulusResultAction,
+          onFillBattlefieldPreview: handleFillBattlefieldPreview,
+          onFillTwentyCardBattlefieldPreview:
+            handleFillTwentyCardBattlefieldPreview,
+          onInspectorAction: handleCumulusInspectorAction,
+        }}
+      />
       {contextMenu !== null ? (
         <BattleContextMenu
-          key={`${contextMenu.battleCardId}:${contextMenu.sourceSurface}:${String(contextMenu.x)}:${String(contextMenu.y)}`}
+          key={`${contextMenu.battleCardId}:${contextMenu.sourceSurface}:${contextMenu.presentation}`}
           battleCardId={contextMenu.battleCardId}
-          onOpenNoteEditor={(battleCardId) => setOpenNoteEditor(battleCardId)}
+          onOpenNoteEditor={(cardId) => setOpenNoteEditor(cardId)}
           presentation={contextMenu.presentation}
           sourceSurface={contextMenu.sourceSurface}
           state={board}
@@ -2043,6 +1425,20 @@ function PlayableBattleScreenInner({
           y={contextMenu.y}
           onClose={() => setContextMenu(null)}
           onCommand={handleCommand}
+        />
+      ) : null}
+      {openNoteEditor !== null ? (
+        <BattleCardNoteEditor
+          battleCardId={openNoteEditor}
+          state={board}
+          onClose={() => setOpenNoteEditor(null)}
+          onSubmit={(edit) =>
+            handleCommand({
+              id: "DEBUG_EDIT",
+              edit,
+              sourceSurface: "note-editor",
+            })
+          }
         />
       ) : null}
       <BattleLogDrawer
@@ -2059,187 +1455,7 @@ function PlayableBattleScreenInner({
         isOpen={isDreamwellHistoryOpen}
         onClose={() => setIsDreamwellHistoryOpen(false)}
       />
-      {showResultOverlay ? (
-        board.result === "victory" && rewardOverlay !== null ? (
-          <BattleRewardSurface
-            battleId={battleInit.battleId}
-            canCancel={true}
-            enemyName={battleInit.enemyDescriptor.name}
-            essenceReward={battleInit.essenceReward}
-            enemyScore={board.sides.enemy.score}
-            playerScore={board.sides.player.score}
-            rewardSource={rewardOverlay.rewardSource}
-            turnNumber={board.turnNumber}
-            isLocked={false}
-            onCancel={() => setIsResultOverlayDismissed(true)}
-            onContinue={handleContinueReward}
-          />
-        ) : (
-          <BattleResultOverlay
-            result={board.result!}
-            onDismissInspect={() => setIsResultOverlayDismissed(true)}
-            onReset={handleFailureReset}
-          />
-        )
-      ) : null}
-      {showReopenPill ? (
-        <button
-          type="button"
-          data-battle-action="reopen-result"
-          className="result-reopen-pill"
-          onClick={() => setIsResultOverlayDismissed(false)}
-        >
-          {board.result} — reopen
-        </button>
-      ) : null}
-    </div>
-  );
-}
-
-function BattleSmallZoneDropTarget({
-  label,
-  side,
-  zone,
-  count,
-  pendingDrag,
-  onDrop,
-  onOpen,
-}: {
-  label: string;
-  side: BattleSide;
-  zone: "void" | "banished";
-  count: number;
-  pendingDrag: PendingDragState;
-  onDrop: (sourceSurface: BattleCommandSourceSurface) => void;
-  onOpen: () => void;
-}) {
-  const isDropTarget = pendingDrag !== null;
-
-  return (
-    <button
-      type="button"
-      data-battle-region={`${side}-${zone}-zone`}
-      data-battle-zone-open={`${side}:${zone}`}
-      data-battle-zone-count={String(count)}
-      data-battle-zone-drop-target={isDropTarget ? `${side}:${zone}` : undefined}
-      className={`battle-small-zone ${side} ${zone} ${isDropTarget ? "drop-target" : ""}`}
-      onClick={onOpen}
-      onDragOver={(event) => {
-        if (isDropTarget) {
-          event.preventDefault();
-        }
-      }}
-      onDrop={(event) => {
-        if (pendingDrag === null) {
-          return;
-        }
-        event.preventDefault();
-        event.stopPropagation();
-        onDrop(pendingDrag.sourceSurface);
-      }}
-    >
-      <span className="battle-small-zone-label">{label}</span>
-      <span className="battle-small-zone-count">{String(count)}</span>
-    </button>
-  );
-}
-
-/**
- * A slim banner across the top of the battle stage describing the AI's held
- * proposal in plain language (the same description carried on {@link AiProposal}).
- * It surfaces what the AI wants to do while the human decides whether to approve
- * or reject via the phase-control icons. While the planner is still computing the
- * next move (`thinking`) it shows a "thinking" placeholder so the locked controls
- * are explained. Renders nothing when the AI is idle with no proposal (the
- * human's own turn, AI mode off, or the battle is over).
- */
-function BattleAiProposalBanner({
-  proposal,
-  thinking,
-}: {
-  proposal: AiProposal | null;
-  thinking: boolean;
-}) {
-  if (proposal === null) {
-    if (!thinking) {
-      return null;
-    }
-    return (
-      <div
-        className="battle-ai-proposal-banner thinking"
-        data-battle-ai-proposal="thinking"
-        aria-live="polite"
-      >
-        <span className="battle-ai-proposal-banner-label">AI</span>
-        <span
-          className="battle-ai-proposal-banner-description"
-          data-battle-ai-proposal-description
-        >
-          Thinking…
-        </span>
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className="battle-ai-proposal-banner"
-      data-battle-ai-proposal={proposal.kind}
-      aria-live="polite"
-    >
-      <span className="battle-ai-proposal-banner-label">AI proposes</span>
-      <span
-        className="battle-ai-proposal-banner-description"
-        data-battle-ai-proposal-description
-      >
-        {proposal.description}
-      </span>
-    </div>
-  );
-}
-
-function BattleLiveRegion({
-  activeSide,
-  phase,
-  result,
-  turnNumber,
-}: {
-  activeSide: BattleSide;
-  phase: BattleMutableState["phase"];
-  result: BattleMutableState["result"];
-  turnNumber: number;
-}) {
-  const [announcement, setAnnouncement] = useState("");
-  const lastAnnouncementRef = useRef<{
-    activeSide: BattleSide;
-    phase: BattleMutableState["phase"];
-    result: BattleMutableState["result"];
-    turnNumber: number;
-  } | null>(null);
-
-  useEffect(() => {
-    const previous = lastAnnouncementRef.current;
-    if (
-      previous !== null &&
-      previous.turnNumber === turnNumber &&
-      previous.activeSide === activeSide &&
-      previous.phase === phase &&
-      previous.result === result
-    ) {
-      return;
-    }
-    lastAnnouncementRef.current = { activeSide, phase, result, turnNumber };
-    if (result !== null) {
-      setAnnouncement(`Battle ${result}`);
-      return;
-    }
-    setAnnouncement(`${formatSideLabel(activeSide)} Turn ${String(turnNumber)} ${formatPhaseLabel(phase)}`);
-  }, [activeSide, phase, result, turnNumber]);
-
-  return (
-    <div aria-atomic="true" aria-live="polite" className="sr-only">
-      {announcement}
-    </div>
+    </>
   );
 }
 
@@ -2249,91 +1465,6 @@ type BattleFlowTarget = {
   turnNumber: number;
   preview: string;
 };
-
-function BattlePhaseFloatControls({
-  state,
-  proposal,
-  onApprove,
-  onReject,
-  onSetBattleFlow,
-}: {
-  state: BattleMutableState;
-  proposal: AiProposal | null;
-  onApprove: () => void;
-  onReject: () => void;
-  onSetBattleFlow: (target: BattleFlowTarget) => void;
-}) {
-  // While the AI holds a proposal, the phase cluster becomes its approve/reject
-  // controls: a check approves; a cross rejects a card-play action (phase- and
-  // turn-ending proposals cannot be rejected).
-  if (proposal !== null) {
-    const approveLabel = proposal.kind === "action"
-      ? "Approve AI play"
-      : "Approve — pass phase";
-    // Reuse the two-column phase-control grid so the approve button lands at
-    // the exact position and size of the "next" phase-advance button (the
-    // second/rightmost cell), with reject in the first cell. Both stay purple to
-    // match the phase buttons.
-    return (
-      <div className="phase-float-actions" aria-label="AI proposal controls">
-        {proposal.kind === "action" ? (
-          <button
-            type="button"
-            className="phase-float-button reject"
-            style={{ gridColumn: 1 }}
-            data-battle-ai-proposal-reject
-            aria-label="Reject AI play"
-            title="Reject AI play"
-            onClick={onReject}
-          >
-            <i className="bx bx-x" aria-hidden="true" />
-          </button>
-        ) : null}
-        <button
-          type="button"
-          className="phase-float-button approve"
-          style={{ gridColumn: 2 }}
-          data-battle-ai-proposal-approve
-          aria-label={approveLabel}
-          title={`${approveLabel} (${proposal.description})`}
-          onClick={onApprove}
-        >
-          <i className="bx bx-check" aria-hidden="true" />
-        </button>
-      </div>
-    );
-  }
-
-  const previousTarget = computePhaseControlTarget(state, "previous");
-  const nextTarget = computePhaseControlTarget(state, "next");
-
-  return (
-    <div className="phase-float-actions" aria-label="Phase controls">
-      <button
-        type="button"
-        className="phase-float-button"
-        data-battle-phase-control="previous"
-        data-preview={previousTarget.preview}
-        aria-label={previousTarget.preview}
-        title={previousTarget.preview}
-        onClick={() => onSetBattleFlow(previousTarget)}
-      >
-        <i className="bx bx-arrow-left" aria-hidden="true" />
-      </button>
-      <button
-        type="button"
-        className="phase-float-button"
-        data-battle-phase-control="next"
-        data-preview={nextTarget.preview}
-        aria-label={nextTarget.preview}
-        title={nextTarget.preview}
-        onClick={() => onSetBattleFlow(nextTarget)}
-      >
-        <i className="bx bx-arrow-right" aria-hidden="true" />
-      </button>
-    </div>
-  );
-}
 
 function computePhaseControlTarget(
   state: BattleMutableState,
@@ -2347,9 +1478,13 @@ function computePhaseControlTarget(
       return { didWrap: index < 0, nextIndex: index };
     }
     const index = currentIndex + 1;
-    return { didWrap: index >= PHASE_CONTROL_SEQUENCE.length, nextIndex: index };
+    return {
+      didWrap: index >= PHASE_CONTROL_SEQUENCE.length,
+      nextIndex: index,
+    };
   })();
-  const normalizedNextIndex = (nextIndex + PHASE_CONTROL_SEQUENCE.length) % PHASE_CONTROL_SEQUENCE.length;
+  const normalizedNextIndex =
+    (nextIndex + PHASE_CONTROL_SEQUENCE.length) % PHASE_CONTROL_SEQUENCE.length;
   // A forward control that flips into the next turn always lands on that turn's
   // Dreamwell phase — the start-of-turn stop the player clicks through after
   // seeing the drawn Dreamwell card — even the skip control, so the Dreamwell
@@ -2372,7 +1507,9 @@ function computePhaseControlTarget(
   };
 }
 
-function normalizePhaseForControls(phase: BattleMutableState["phase"]): (typeof PHASE_CONTROL_SEQUENCE)[number] {
+function normalizePhaseForControls(
+  phase: BattleMutableState["phase"],
+): (typeof PHASE_CONTROL_SEQUENCE)[number] {
   switch (phase) {
     // Draw and Dawn run as bookkeeping during the turn handoff and are never the
     // resting phase; the surfaced start-of-turn stop is Dreamwell.
@@ -2412,74 +1549,18 @@ function decrementBattleTurnPair(
   return { activeSide: "enemy", turnNumber: Math.max(1, turnNumber - 1) };
 }
 
-function ScaledBattlefield({ children }: { children: ReactNode }) {
-  const wrapRef = useRef<HTMLDivElement | null>(null);
-  const innerRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    function fit(): void {
-      const wrap = wrapRef.current;
-      const inner = innerRef.current;
-      if (wrap === null || inner === null) {
-        return;
-      }
-      inner.style.transform = "none";
-      const naturalWidth = inner.scrollWidth;
-      const naturalHeight = inner.scrollHeight;
-      if (naturalWidth === 0 || naturalHeight === 0) {
-        return;
-      }
-      const scale = computeBattlefieldScale({
-        naturalHeight,
-        naturalWidth,
-        wrapHeight: wrap.clientHeight,
-        wrapWidth: wrap.clientWidth,
-      });
-      if (scale === null) {
-        return;
-      }
-      inner.style.transform = `scale(${String(scale)})`;
-    }
-
-    fit();
-    if (typeof ResizeObserver === "undefined") {
-      window.addEventListener("resize", fit);
-      return () => {
-        window.removeEventListener("resize", fit);
-      };
-    }
-
-    const resizeObserver = new ResizeObserver(fit);
-    if (wrapRef.current !== null) {
-      resizeObserver.observe(wrapRef.current);
-    }
-    if (innerRef.current !== null) {
-      resizeObserver.observe(innerRef.current);
-    }
-    window.addEventListener("resize", fit);
-    return () => {
-      resizeObserver.disconnect();
-      window.removeEventListener("resize", fit);
-    };
-  }, []);
-
-  return (
-    <div className="bf-wrap" ref={wrapRef}>
-      <div className="bf-inner" ref={innerRef}>
-        {children}
-      </div>
-    </div>
-  );
-}
-
 function resolveEnemyDreamcallerSummary(
   enemyDescriptor: BattleEnemyDescriptor,
   questContent: QuestContent,
 ): BattleDreamcallerSummary {
-  const sourceDreamcaller = findEnemySourceDreamcaller(enemyDescriptor, questContent);
+  const sourceDreamcaller = findEnemySourceDreamcaller(
+    enemyDescriptor,
+    questContent,
+  );
   return {
     id: sourceDreamcaller?.id ?? enemyDescriptor.id,
-    imageNumber: enemyDescriptor.imageNumber ?? sourceDreamcaller?.imageNumber ?? "001",
+    imageNumber:
+      enemyDescriptor.imageNumber ?? sourceDreamcaller?.imageNumber ?? "001",
     name: enemyDescriptor.name,
     renderedText: enemyDescriptor.abilityText,
     title: enemyDescriptor.subtitle,
@@ -2495,7 +1576,9 @@ function findEnemySourceDreamcaller(
 ) {
   const sourceId = parseEnemySourceDreamcallerId(enemyDescriptor.id);
   if (sourceId !== null) {
-    const byId = questContent.dreamcallers.find((dreamcaller) => dreamcaller.id === sourceId);
+    const byId = questContent.dreamcallers.find(
+      (dreamcaller) => dreamcaller.id === sourceId,
+    );
     if (byId !== undefined) {
       return byId;
     }
@@ -2505,10 +1588,12 @@ function findEnemySourceDreamcaller(
   return questContent.dreamcallers.find((dreamcaller) => {
     const fullName = dreamcaller.name.toLocaleLowerCase();
     const shortName = fullName.split(",")[0] ?? fullName;
-    return descriptorName === fullName ||
+    return (
+      descriptorName === fullName ||
       descriptorName === shortName ||
       descriptorName.endsWith(` ${fullName}`) ||
-      descriptorName.endsWith(` ${shortName}`);
+      descriptorName.endsWith(` ${shortName}`)
+    );
   });
 }
 
@@ -2523,44 +1608,6 @@ function parseEnemySourceDreamcallerId(enemyId: string): string | null {
     return null;
   }
   return sourceAndSeed.slice(0, seedSeparator);
-}
-
-export function computeBattlefieldScale({
-  naturalHeight,
-  naturalWidth,
-  wrapHeight,
-  wrapWidth,
-}: {
-  naturalHeight: number;
-  naturalWidth: number;
-  wrapHeight: number;
-  wrapWidth: number;
-}): number | null {
-  if (naturalWidth <= 0 || naturalHeight <= 0 || wrapWidth <= 0 || wrapHeight <= 0) {
-    return null;
-  }
-
-  return Math.min(wrapWidth / naturalWidth, wrapHeight / naturalHeight);
-}
-
-function useIsDesktopInspectorLayout(): boolean {
-  const [isDesktopLayout, setIsDesktopLayout] = useState(readIsDesktopInspectorLayout);
-
-  useEffect(() => {
-    function handleResize(): void {
-      setIsDesktopLayout(readIsDesktopInspectorLayout());
-    }
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  return isDesktopLayout;
-}
-
-function readIsDesktopInspectorLayout(): boolean {
-  return typeof window !== "undefined" && window.innerWidth >= DESKTOP_INSPECTOR_WIDTH;
 }
 
 function resolveDragSourceSurface(

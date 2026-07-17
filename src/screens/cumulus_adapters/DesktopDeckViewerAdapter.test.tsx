@@ -8,7 +8,10 @@ import { DesktopDeckViewerAdapter } from "./DesktopDeckViewerAdapter";
 import { logEvent } from "../../logging";
 import { useQuest } from "../../state/quest-context";
 import type { QuestContent } from "../../data/quest-content";
-import type { QuestContextValue, QuestMutations } from "../../state/quest-context";
+import type {
+  QuestContextValue,
+  QuestMutations,
+} from "../../state/quest-context";
 import type { CardData } from "../../types/cards";
 import type { QuestState } from "../../types/quest";
 import { asCardId, asCardName } from "../../types/card-identity";
@@ -167,14 +170,11 @@ describe("DesktopDeckViewerAdapter", () => {
     });
 
     expect(logEvent).toHaveBeenCalledTimes(1);
-    expect(logEvent).toHaveBeenLastCalledWith(
-      "desktop_deck_viewer_opened",
-      {
-        cardCount: 1,
-        dreamsignCount: 1,
-        hasDreamcaller: true,
-      },
-    );
+    expect(logEvent).toHaveBeenLastCalledWith("desktop_deck_viewer_opened", {
+      cardCount: 1,
+      dreamsignCount: 1,
+      hasDreamcaller: true,
+    });
 
     setQuestContext(makeState());
     act(() => {
@@ -184,7 +184,9 @@ describe("DesktopDeckViewerAdapter", () => {
     expect(logEvent).toHaveBeenCalledTimes(1);
 
     act(() => {
-      root.render(<DesktopDeckViewerAdapter isOpen={false} onClose={onClose} />);
+      root.render(
+        <DesktopDeckViewerAdapter isOpen={false} onClose={onClose} />,
+      );
     });
     setQuestContext(makeState());
     act(() => {

@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/tide-disc`
 
-Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
 The single semantic tide mark: a colored disc carrying the tide's glyph and its own strict tide reveal, sized 'sm' or 'lg'.
 

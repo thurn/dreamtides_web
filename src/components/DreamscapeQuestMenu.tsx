@@ -1,7 +1,6 @@
 // DreamscapeQuestMenu — the top-left utility menu for the Cumulus quest map
-// screens (the dreamscape and the Dream Atlas). Those screens suppress the
-// legacy bottom HUD, so the shared QuestUtilityMenu renders its root actions
-// here as App-shell corner chrome.
+// screens (the dreamscape and the Dream Atlas). The shared QuestUtilityMenu
+// renders its root actions here as app-shell corner chrome.
 
 import type { QuestState } from "../types/quest";
 import { token } from "../cumulus/primitives/tokens";
@@ -13,7 +12,10 @@ import {
   MENU_EDGE_INSET_MOBILE_PX,
 } from "../cumulus/screens/chrome-geometry";
 import { IconButton } from "../cumulus/components/controls/IconButton";
-import { QuestUtilityMenu, type QuestUtilityMenuAction } from "./QuestUtilityMenu";
+import {
+  QuestUtilityMenu,
+  type QuestUtilityMenuAction,
+} from "./QuestUtilityMenu";
 
 /** The App-shell overlay handlers the menu triggers. */
 interface DreamscapeQuestMenuProps {
@@ -21,8 +23,11 @@ interface DreamscapeQuestMenuProps {
   onOpenPoolViewer: () => void;
   onOpenDebugScreen: () => void;
   onOpenQuestEditor: () => void;
+  onToggleCardSourceOverlay: () => void;
   /** Package Debug is only meaningful once a pool has been resolved. */
   hasDraftData: boolean;
+  hasCardSourceDebug: boolean;
+  isCardSourceOverlayOpen: boolean;
   /**
    * Replaces the running quest with a saved snapshot loaded by name. Optional
    * because only the live multiplayer provider supplies it (matching the HUD).
@@ -62,7 +67,10 @@ export function DreamscapeQuestMenu({
   onOpenPoolViewer,
   onOpenDebugScreen,
   onOpenQuestEditor,
+  onToggleCardSourceOverlay,
   hasDraftData,
+  hasCardSourceDebug,
+  isCardSourceOverlayOpen,
   onLoadQuestState,
   onRegenerateAtlas,
   contextualActions = [],
@@ -78,15 +86,55 @@ export function DreamscapeQuestMenu({
     : MENU_EDGE_INSET_MOBILE_PX;
   const menuPanelGap = 6;
   const actions: QuestUtilityMenuAction[] = [
-    { id: "deck", icon: "bxf bx-rectangle-vertical", label: "View Deck", onClick: onOpenDeckViewer },
-    { id: "pool", icon: "bxf bx-grid", label: "Pool Viewer", onClick: onOpenPoolViewer },
+    {
+      id: "deck",
+      icon: "bxf bx-rectangle-vertical",
+      label: "View Deck",
+      onClick: onOpenDeckViewer,
+    },
+    {
+      id: "pool",
+      icon: "bxf bx-grid",
+      label: "Pool Viewer",
+      onClick: onOpenPoolViewer,
+    },
     ...(hasDraftData
-      ? [{ id: "package", icon: "bxf bx-package", label: "Package Debug", onClick: onOpenDebugScreen }]
+      ? [
+          {
+            id: "package",
+            icon: "bxf bx-package",
+            label: "Package Debug",
+            onClick: onOpenDebugScreen,
+          },
+        ]
+      : []),
+    ...(hasCardSourceDebug
+      ? [
+          {
+            id: "cardSource",
+            icon: "bxf bx-list-ul",
+            label: "Card Sources",
+            active: isCardSourceOverlayOpen,
+            onClick: onToggleCardSourceOverlay,
+          },
+        ]
       : []),
     ...contextualActions,
-    { id: "editor", icon: "bxf bx-edit-alt", label: "Edit Quest State", onClick: onOpenQuestEditor },
+    {
+      id: "editor",
+      icon: "bxf bx-edit-alt",
+      label: "Edit Quest State",
+      onClick: onOpenQuestEditor,
+    },
     ...(onRegenerateAtlas !== undefined
-      ? [{ id: "regenerateAtlas", icon: "bxf bx-refresh-cw", label: "Regenerate Atlas", onClick: onRegenerateAtlas }]
+      ? [
+          {
+            id: "regenerateAtlas",
+            icon: "bxf bx-refresh-cw",
+            label: "Regenerate Atlas",
+            onClick: onRegenerateAtlas,
+          },
+        ]
       : []),
   ];
 
@@ -120,15 +168,18 @@ export function DreamscapeQuestMenu({
         // Desktop anchors the glass gear button to the top-right corner; mobile
         // keeps the glass menu button in the top-left.
         ...(isDesktop
-          ? { right: `max(var(--safe-area-inset-right), ${String(menuEdgeInset)}px)` }
-          : { left: `max(var(--safe-area-inset-left), ${String(menuEdgeInset)}px)` }),
+          ? {
+              right: `max(var(--safe-area-inset-right), ${String(menuEdgeInset)}px)`,
+            }
+          : {
+              left: `max(var(--safe-area-inset-left), ${String(menuEdgeInset)}px)`,
+            }),
         // Above the deck-viewer overlay (z 60) when it is open, so the menu stays
         // reachable from on top of it; the default corner chrome level otherwise.
         zIndex: elevated ? 65 : 60,
       }}
     >
       <QuestUtilityMenu
-        variant="cumulus"
         actions={actions}
         builtIns={["saveQuest", "loadQuest", "buildSha", "downloadLog"]}
         onLoadQuestState={onLoadQuestState}

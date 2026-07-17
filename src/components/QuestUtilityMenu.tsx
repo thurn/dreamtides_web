@@ -1,4 +1,10 @@
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import { downloadLog, logEvent } from "../logging";
 import { BUILD_GIT_SHA } from "../runtime/build-info";
 import {
@@ -13,12 +19,8 @@ import { token } from "../cumulus/primitives/tokens";
 import type { QuestState } from "../types/quest";
 
 type MenuView =
-  | { kind: "root" }
-  | { kind: "load" }
-  | { kind: "submenu"; actionId: string };
+  { kind: "root" } | { kind: "load" } | { kind: "submenu"; actionId: string };
 type LoadStatus = "idle" | "loading" | "ready" | "error";
-type QuestUtilityMenuVariant = "hud" | "cumulus";
-
 interface QuestUtilityMenuActionBase {
   id: string;
   label: string;
@@ -28,30 +30,23 @@ interface QuestUtilityMenuActionBase {
   testId?: string;
 }
 
-export interface QuestUtilityMenuCommandAction
-  extends QuestUtilityMenuActionBase {
+export interface QuestUtilityMenuCommandAction extends QuestUtilityMenuActionBase {
   onClick: () => void;
   items?: never;
 }
 
-export interface QuestUtilityMenuSubmenuAction
-  extends QuestUtilityMenuActionBase {
+export interface QuestUtilityMenuSubmenuAction extends QuestUtilityMenuActionBase {
   items: readonly QuestUtilityMenuCommandAction[];
   onClick?: never;
 }
 
 export type QuestUtilityMenuAction =
-  | QuestUtilityMenuCommandAction
-  | QuestUtilityMenuSubmenuAction;
+  QuestUtilityMenuCommandAction | QuestUtilityMenuSubmenuAction;
 
 type QuestUtilityMenuBuiltIn =
-  | "saveQuest"
-  | "loadQuest"
-  | "downloadLog"
-  | "buildSha";
+  "saveQuest" | "loadQuest" | "downloadLog" | "buildSha";
 
 interface QuestUtilityMenuProps {
-  variant: QuestUtilityMenuVariant;
   actions: QuestUtilityMenuAction[];
   builtIns: QuestUtilityMenuBuiltIn[];
   onLoadQuestState?: (state: QuestState, source: string) => void;
@@ -66,14 +61,10 @@ interface QuestUtilityMenuProps {
   statusClassName?: string;
   overlay?: boolean;
   statusAnchor?: "left" | "right";
-  renderTrigger: (props: {
-    open: boolean;
-    toggle: () => void;
-  }) => ReactNode;
+  renderTrigger: (props: { open: boolean; toggle: () => void }) => ReactNode;
 }
 
 export function QuestUtilityMenu({
-  variant,
   actions,
   builtIns,
   onLoadQuestState,
@@ -167,7 +158,9 @@ export function QuestUtilityMenu({
       })
       .catch((error: unknown) => {
         setLoadError(
-          error instanceof Error ? error.message : "Failed to list saved quests.",
+          error instanceof Error
+            ? error.message
+            : "Failed to list saved quests.",
         );
         setLoadStatus("error");
       });
@@ -214,7 +207,9 @@ export function QuestUtilityMenu({
   }
 
   const renderedBuiltIns: QuestUtilityMenuCommandAction[] = builtIns
-    .filter((builtIn) => builtIn !== "loadQuest" || onLoadQuestState !== undefined)
+    .filter(
+      (builtIn) => builtIn !== "loadQuest" || onLoadQuestState !== undefined,
+    )
     .map((builtIn) => {
       switch (builtIn) {
         case "saveQuest":
@@ -223,7 +218,6 @@ export function QuestUtilityMenu({
             icon: "bxf bx-save",
             label: "Save Quest",
             onClick: () => void handleSaveQuest(),
-            testId: variant === "hud" ? "hud-save-quest-button" : undefined,
           };
         case "loadQuest":
           return {
@@ -231,7 +225,6 @@ export function QuestUtilityMenu({
             icon: "bxf bx-folder-open",
             label: "Load Quest",
             onClick: handleOpenLoadMenu,
-            testId: variant === "hud" ? "hud-load-quest-button" : undefined,
           };
         case "downloadLog":
           return {
@@ -271,7 +264,6 @@ export function QuestUtilityMenu({
                 {[...actions, ...renderedBuiltIns].map((action) => (
                   <MenuActionRow
                     key={action.id}
-                    variant={variant}
                     action={action}
                     onClick={() => {
                       if (action.items !== undefined) {
@@ -287,7 +279,6 @@ export function QuestUtilityMenu({
               </>
             ) : menuView.kind === "load" ? (
               <LoadSubmenu
-                variant={variant}
                 testId={loadMenuTestId}
                 status={loadStatus}
                 saves={loadSaves}
@@ -298,10 +289,10 @@ export function QuestUtilityMenu({
               />
             ) : (
               <ActionSubmenu
-                variant={variant}
                 action={actions.find(
                   (action): action is QuestUtilityMenuSubmenuAction =>
-                    action.id === menuView.actionId && action.items !== undefined,
+                    action.id === menuView.actionId &&
+                    action.items !== undefined,
                 )}
                 onBack={() => setMenuView({ kind: "root" })}
                 onSelect={(action) => runAction(action.onClick)}
@@ -330,31 +321,12 @@ export function QuestUtilityMenu({
 }
 
 function MenuActionRow({
-  variant,
   action,
   onClick,
 }: {
-  variant: QuestUtilityMenuVariant;
   action: QuestUtilityMenuAction;
   onClick: () => void;
 }) {
-  if (variant === "hud") {
-    return (
-      <button
-        type="button"
-        data-testid={action.testId}
-        className="min-h-9 rounded-md px-3 text-left text-sm font-medium hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
-        style={{
-          background: action.active ? "rgba(34, 211, 238, 0.18)" : "transparent",
-          color: action.active ? "#cffafe" : "#e2e8f0",
-        }}
-        onClick={onClick}
-      >
-        {action.label}
-      </button>
-    );
-  }
-
   return (
     <Pressable
       as="div"
@@ -365,7 +337,9 @@ function MenuActionRow({
         gap: 10,
         padding: "11px 10px",
         borderRadius: token("--radius-inset"),
-        color: action.accent ? token("--accent-bright") : token("--text-secondary"),
+        color: action.accent
+          ? token("--accent-bright")
+          : token("--text-secondary"),
         font: token("--t-body"),
         cursor: "pointer",
       }}
@@ -376,7 +350,9 @@ function MenuActionRow({
           aria-hidden="true"
           style={{
             fontSize: 17,
-            color: action.accent ? token("--accent-bright") : token("--text-faint"),
+            color: action.accent
+              ? token("--accent-bright")
+              : token("--text-faint"),
           }}
         />
       )}
@@ -393,12 +369,10 @@ function MenuActionRow({
 }
 
 function ActionSubmenu({
-  variant,
   action,
   onBack,
   onSelect,
 }: {
-  variant: QuestUtilityMenuVariant;
   action: QuestUtilityMenuSubmenuAction | undefined;
   onBack: () => void;
   onSelect: (action: QuestUtilityMenuCommandAction) => void;
@@ -409,7 +383,6 @@ function ActionSubmenu({
   return (
     <>
       <MenuActionRow
-        variant={variant}
         action={{
           id: `${action.id}:back`,
           label: `‹ ${action.label}`,
@@ -420,7 +393,6 @@ function ActionSubmenu({
       {action.items.map((item) => (
         <MenuActionRow
           key={item.id}
-          variant={variant}
           action={item}
           onClick={() => onSelect(item)}
         />
@@ -430,7 +402,6 @@ function ActionSubmenu({
 }
 
 function LoadSubmenu({
-  variant,
   testId,
   status,
   saves,
@@ -439,7 +410,6 @@ function LoadSubmenu({
   onRetry,
   onSelect,
 }: {
-  variant: QuestUtilityMenuVariant;
   testId: string;
   status: LoadStatus;
   saves: SavedQuestSummary[];
@@ -448,101 +418,111 @@ function LoadSubmenu({
   onRetry: () => void;
   onSelect: (summary: SavedQuestSummary) => void;
 }) {
-  if (variant === "hud") {
-    return (
-      <div data-testid={testId} className="flex flex-col gap-1">
-        <button
-          type="button"
-          className="min-h-9 rounded-md px-3 text-left text-sm font-medium text-slate-300 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
-          onClick={onBack}
-        >
-          {"‹"} Back
-        </button>
-        <div className="my-1 border-t border-slate-700" />
-        {status === "loading" ? (
-          <p className="px-3 py-2 text-xs text-slate-400">
-            Loading saved quests...
-          </p>
-        ) : null}
-        {status === "error" ? (
-          <div className="px-3 py-2 text-xs text-rose-300">
-            <p>{error ?? "Failed to list saved quests."}</p>
-            <button
-              type="button"
-              className="mt-1 rounded-md px-2 py-1 text-xs font-medium text-cyan-200 hover:bg-white/10"
-              onClick={onRetry}
-            >
-              Retry
-            </button>
-          </div>
-        ) : null}
-        {status === "ready" && saves.length === 0 ? (
-          <p className="px-3 py-2 text-xs text-slate-400">No saved quests.</p>
-        ) : null}
-        {status === "ready" && saves.length > 0 ? (
-          <div className="flex max-h-[50vh] flex-col gap-1 overflow-auto">
-            {saves.map((save) => (
-              <button
-                key={save.name}
-                type="button"
-                data-load-quest-option={save.name}
-                className="min-h-9 rounded-md px-3 py-1 text-left hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
-                onClick={() => onSelect(save)}
-              >
-                <span className="block truncate text-sm font-medium text-slate-100">
-                  {save.name}
-                </span>
-                <span className="block truncate text-xs text-slate-400">
-                  {save.screenType} · {formatSavedAt(save.savedAt)}
-                </span>
-              </button>
-            ))}
-          </div>
-        ) : null}
-      </div>
-    );
-  }
-
   return (
-    <div data-testid={testId} style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+    <div
+      data-testid={testId}
+      style={{ display: "flex", flexDirection: "column", gap: 2 }}
+    >
       <MenuActionRow
-        variant="cumulus"
-        action={{ id: "back", icon: "bxf bx-chevron-left", label: "Back", onClick: onBack }}
+        action={{
+          id: "back",
+          icon: "bxf bx-chevron-left",
+          label: "Back",
+          onClick: onBack,
+        }}
         onClick={onBack}
       />
-      <div style={{ height: 1, margin: "2px 6px", background: token("--border-soft") }} />
+      <div
+        style={{
+          height: 1,
+          margin: "2px 6px",
+          background: token("--border-soft"),
+        }}
+      />
       {status === "loading" && (
-        <p style={{ padding: "8px 10px", margin: 0, color: token("--text-muted"), font: token("--t-caption") }}>
+        <p
+          style={{
+            padding: "8px 10px",
+            margin: 0,
+            color: token("--text-muted"),
+            font: token("--t-caption"),
+          }}
+        >
           Loading saved quests…
         </p>
       )}
       {status === "error" && (
-        <div style={{ padding: "8px 10px", color: token("--text-muted"), font: token("--t-caption") }}>
+        <div
+          style={{
+            padding: "8px 10px",
+            color: token("--text-muted"),
+            font: token("--t-caption"),
+          }}
+        >
           <p style={{ margin: 0 }}>{error ?? "Failed to list saved quests."}</p>
-          <Pressable as="div" onClick={onRetry} style={{ marginTop: 4, color: token("--accent-bright"), cursor: "pointer" }}>
+          <Pressable
+            as="div"
+            onClick={onRetry}
+            style={{
+              marginTop: 4,
+              color: token("--accent-bright"),
+              cursor: "pointer",
+            }}
+          >
             Retry
           </Pressable>
         </div>
       )}
       {status === "ready" && saves.length === 0 && (
-        <p style={{ padding: "8px 10px", margin: 0, color: token("--text-muted"), font: token("--t-caption") }}>
+        <p
+          style={{
+            padding: "8px 10px",
+            margin: 0,
+            color: token("--text-muted"),
+            font: token("--t-caption"),
+          }}
+        >
           No saved quests.
         </p>
       )}
       {status === "ready" && saves.length > 0 && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 2, maxHeight: "50vh", overflow: "auto" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            maxHeight: "50vh",
+            overflow: "auto",
+          }}
+        >
           {saves.map((save) => (
             <Pressable
               as="div"
               key={save.name}
               data-load-quest-option={save.name}
               onClick={() => onSelect(save)}
-              style={{ padding: "9px 10px", borderRadius: token("--radius-inset"), cursor: "pointer" }}
+              style={{
+                padding: "9px 10px",
+                borderRadius: token("--radius-inset"),
+                cursor: "pointer",
+              }}
             >
-              <span style={{ display: "block", color: token("--text-primary"), font: token("--t-body") }}>
+              <span
+                style={{
+                  display: "block",
+                  color: token("--text-primary"),
+                  font: token("--t-body"),
+                }}
+              >
                 {save.name}
               </span>
-              <span style={{ display: "block", color: token("--text-muted"), font: token("--t-caption") }}>
+              <span
+                style={{
+                  display: "block",
+                  color: token("--text-muted"),
+                  font: token("--t-caption"),
+                }}
+              >
                 {save.screenType} · {formatSavedAt(save.savedAt)}
               </span>
             </Pressable>

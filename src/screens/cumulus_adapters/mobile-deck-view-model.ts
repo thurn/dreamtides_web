@@ -55,7 +55,10 @@ export function toDeckCardView(
     entryId: entry.entryId,
     model: {
       cardId: transfigured.card.id,
-      displaySnapshot: applyCardStatOverride(transfigured.card, entry.statOverride),
+      displaySnapshot: applyCardStatOverride(
+        transfigured.card,
+        entry.statOverride,
+      ),
       transfiguration: transfigured.display,
     },
     isBane: entry.isBane,

@@ -21,8 +21,8 @@ device class. Adapters only choose the data and callbacks to pass to the screen.
 
 Each screen decides its backdrop policy. A dreamscape screen renders the current
 dreamscape's scene art and owns its atmospheric `Motes` layer. The atlas renders
-its map surface. Site screens that migrate to Cumulus render their own full-bleed
-site scene so the site and its HUD read as one surface.
+its map surface. Site screens render their own full-bleed site scene so the site
+and its quest chrome read as one surface.
 
 Use one atmospheric layer per screen. A nested feature that needs particles
 should route through the screen's existing `Motes` policy or become a documented
@@ -30,11 +30,11 @@ component variant.
 
 ## Persistent Quest Chrome
 
-`CumulusQuestChrome` is the app-owned wrapper around registered Cumulus product
+`CumulusQuestChrome` is the app-owned wrapper around Cumulus product
 screens. It derives the `QuestStatusBar` model directly from live quest state,
 docks the bar at the bottom of active-run screens, and mounts the desktop gear
 or mobile menu with the app-owned overlay actions. Registration through
-`cumulusScreenFor` or `cumulusSiteScreenFor` applies this wrapper automatically;
+`screenFor` or `siteDispositionFor` applies this wrapper;
 pure screens and their view-model builders contain scene-specific data only.
 
 Terminal quest-result screens keep the utility menu and omit the status bar.
@@ -102,6 +102,6 @@ assert `location.href` and `window.innerWidth`, inspect `window.__caps`, measure
 DOM geometry for clipping and overlap claims, and verify controls through normal
 player actions.
 
-When adding a migrated screen or site, add a `?goto=<scene>` entry in
+When adding a screen or site, add a `?goto=<scene>` entry in
 `src/runtime/qa-scenes.ts` and document it in `docs/quest_prototype/qa_scenes.md`
 so the screen can be opened directly for browser QA.

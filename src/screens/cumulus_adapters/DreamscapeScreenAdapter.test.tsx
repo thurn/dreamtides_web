@@ -126,7 +126,7 @@ beforeEach(() => {
 });
 
 describe("DreamscapeScreenAdapter", () => {
-  it("opens and accepts Essence from the dreamscape without navigating", () => {
+  it("accepts a prepared Essence reward without reopening the site", () => {
     const mutations = {
       ensureEssenceSiteRuntime: vi.fn(),
       acceptEssenceSite: vi.fn(),
@@ -138,10 +138,7 @@ describe("DreamscapeScreenAdapter", () => {
     act(() => root.render(<DreamscapeScreenAdapter />));
 
     act(() => lastScreenProps().onSelectSite("s-essence"));
-    expect(mutations.ensureEssenceSiteRuntime).toHaveBeenCalledWith(
-      "s-essence",
-      false,
-    );
+    expect(mutations.ensureEssenceSiteRuntime).not.toHaveBeenCalled();
     expect(mutations.setScreen).not.toHaveBeenCalled();
 
     act(() => lastScreenProps().onInlineRewardAnimationComplete("s-essence"));
@@ -154,14 +151,13 @@ describe("DreamscapeScreenAdapter", () => {
         rewardAmount: 275,
         essenceBefore: 240,
         essenceAfter: 500,
-        ui: "cumulus",
       }),
     );
 
     act(() => root.unmount());
   });
 
-  it("opens and accepts a Reward from the dreamscape without navigating", () => {
+  it("accepts a prepared Reward without reopening the site", () => {
     const mutations = {
       ensureRewardSiteRuntime: vi.fn(),
       acceptRewardSite: vi.fn(),
@@ -173,12 +169,10 @@ describe("DreamscapeScreenAdapter", () => {
     act(() => root.render(<DreamscapeScreenAdapter />));
 
     act(() => lastScreenProps().onSelectSite("s-reward"));
-    expect(mutations.ensureRewardSiteRuntime).toHaveBeenCalledWith("s-reward");
+    expect(mutations.ensureRewardSiteRuntime).not.toHaveBeenCalled();
     expect(mutations.setScreen).not.toHaveBeenCalled();
 
-    act(() =>
-      lastScreenProps().onInlineRewardAnimationComplete("s-reward"),
-    );
+    act(() => lastScreenProps().onInlineRewardAnimationComplete("s-reward"));
     expect(mutations.acceptRewardSite).toHaveBeenCalledWith("s-reward");
     expect(logEvent).toHaveBeenCalledWith(
       "site_completed",
@@ -187,14 +181,36 @@ describe("DreamscapeScreenAdapter", () => {
         outcome: "collected",
         rewardType: "dreamsign",
         dreamsignId: "dreamsign-uuid",
-        ui: "cumulus",
       }),
     );
 
     act(() => root.unmount());
   });
 
-  it("routes an at-cap Dreamsign Reward to the replacement or decline screen", () => {
+  it("opens inline sites whose runtime has not been prepared", () => {
+    const mutations = {
+      ensureEssenceSiteRuntime: vi.fn(),
+      ensureRewardSiteRuntime: vi.fn(),
+      setScreen: vi.fn(),
+    } as unknown as QuestMutations;
+    setQuestContext(mutations, makeState({ siteRuntime: {} }));
+    const container = document.createElement("div");
+    const root = createRoot(container);
+    act(() => root.render(<DreamscapeScreenAdapter />));
+
+    act(() => lastScreenProps().onSelectSite("s-essence"));
+    expect(mutations.ensureEssenceSiteRuntime).toHaveBeenCalledWith(
+      "s-essence",
+      false,
+    );
+    act(() => lastScreenProps().onSelectSite("s-reward"));
+    expect(mutations.ensureRewardSiteRuntime).toHaveBeenCalledWith("s-reward");
+    expect(mutations.setScreen).not.toHaveBeenCalled();
+
+    act(() => root.unmount());
+  });
+
+  it("replaces an owned Dreamsign by UUID for an at-cap Reward", () => {
     const mutations = {
       ensureRewardSiteRuntime: vi.fn(),
       acceptRewardSite: vi.fn(),
@@ -224,20 +240,95 @@ describe("DreamscapeScreenAdapter", () => {
     const root = createRoot(container);
     act(() => root.render(<DreamscapeScreenAdapter />));
 
-    act(() =>
-      lastScreenProps().onInlineRewardAnimationComplete("s-reward"),
-    );
+    act(() => lastScreenProps().onInlineRewardAnimationComplete("s-reward"));
 
-    expect(mutations.setScreen).toHaveBeenCalledWith({
-      type: "site",
-      siteId: "s-reward",
+    expect(mutations.setScreen).not.toHaveBeenCalled();
+    expect(lastScreenProps().view.replacement).toMatchObject({
+      maxDreamsigns: 2,
+      pendingDreamsign: { id: "dreamsign-uuid" },
     });
-    expect(mutations.acceptRewardSite).not.toHaveBeenCalled();
-    expect(logEvent).not.toHaveBeenCalledWith(
+    act(() => lastScreenProps().onReplaceDreamsign("held-dreamsign-2"));
+    expect(mutations.acceptRewardSite).toHaveBeenCalledWith("s-reward", 1);
+    expect(logEvent).toHaveBeenCalledWith(
       "site_completed",
-      expect.anything(),
+      expect.objectContaining({
+        siteId: "s-reward",
+        dreamsignId: "dreamsign-uuid",
+        replacedDreamsignId: "held-dreamsign-2",
+        outcome: "replaced_dreamsign",
+      }),
     );
 
+    act(() => root.unmount());
+  });
+
+  it("declines an at-cap Reward without changing the Dreamsign collection", () => {
+    const mutations = {
+      acceptRewardSite: vi.fn(),
+      completeSite: vi.fn(),
+      setScreen: vi.fn(),
+    } as unknown as QuestMutations;
+    setQuestContext(
+      mutations,
+      makeState({
+        maxDreamsigns: 1,
+        dreamsigns: [
+          {
+            id: "held-dreamsign-1",
+            name: "Held One",
+            effectDescription: "First held dreamsign.",
+            isBane: false,
+          },
+        ],
+      }),
+    );
+    const container = document.createElement("div");
+    const root = createRoot(container);
+    act(() => root.render(<DreamscapeScreenAdapter />));
+    act(() => lastScreenProps().onInlineRewardAnimationComplete("s-reward"));
+    act(() => lastScreenProps().onDeclineReward());
+
+    expect(mutations.completeSite).toHaveBeenCalledWith(
+      "s-reward",
+      "reward_site",
+    );
+    expect(mutations.acceptRewardSite).not.toHaveBeenCalled();
+    expect(logEvent).toHaveBeenCalledWith(
+      "reward_declined",
+      expect.objectContaining({
+        siteId: "s-reward",
+        dreamsignId: "dreamsign-uuid",
+        outcome: "kept_current_collection",
+      }),
+    );
+
+    act(() => root.unmount());
+  });
+
+  it("safely ignores a stale replacement UUID", () => {
+    const mutations = {
+      acceptRewardSite: vi.fn(),
+    } as unknown as QuestMutations;
+    setQuestContext(
+      mutations,
+      makeState({
+        maxDreamsigns: 1,
+        dreamsigns: [{
+          id: "held-dreamsign-1",
+          name: "Held One",
+          effectDescription: "First held dreamsign.",
+          isBane: false,
+        }],
+      }),
+    );
+    const container = document.createElement("div");
+    const root = createRoot(container);
+    act(() => root.render(<DreamscapeScreenAdapter />));
+    act(() => lastScreenProps().onInlineRewardAnimationComplete("s-reward"));
+    act(() => lastScreenProps().onReplaceDreamsign("missing-dreamsign"));
+
+    expect(mutations.acceptRewardSite).not.toHaveBeenCalled();
+    expect(lastScreenProps().view.replacement).not.toBeNull();
     act(() => root.unmount());
   });
 

@@ -9,7 +9,7 @@ under `src/`, with emphasis on effects that append coop events, invoke quest
 mutations, initiate Firebase or asynchronous work, or use local React state and
 refs to gate shared game flow.
 
-The review traced candidate effects through the legacy mutation facade,
+The review traced candidate effects through the quest mutation facade,
 `CoopActions`, `LogClient.submit`, the RTDB append transaction, the fold, and the
 domain reducer. It also inspected `logs/quest-log.jsonl` for adjacent events
 with matching actors and types, applied/bounced pairs, empty intervening
@@ -188,22 +188,15 @@ Recommended direction for all automatic transitions:
 
 Draft entry effects:
 
-- `src/screens/DraftSiteScreen.tsx:382`
-- `src/screens/cumulus_adapters/DraftSiteScreenAdapter.tsx:32`
+- `src/screens/cumulus_adapters/DraftSiteScreenAdapter.tsx`
 
 `OPEN_SITE` effects:
 
-- `src/screens/DreamsignRevelationScreen.tsx:50`
-- `src/screens/cumulus_adapters/DreamsignRevelationScreenAdapter.tsx:38`
-- `src/screens/DuplicationSiteScreen.tsx:78`
-- `src/screens/cumulus_adapters/DuplicationSiteScreenAdapter.tsx:49`
-- `src/screens/EssenceSiteScreen.tsx:30`
-- `src/screens/RewardSiteScreen.tsx:32`
-- `src/screens/ShopScreen.tsx:117`
-- `src/screens/cumulus_adapters/CardShopSiteScreenAdapter.tsx:69`
-- `src/screens/cumulus_adapters/DreamsignBazaarSiteScreenAdapter.tsx:47`
-- `src/screens/TransfigurationSiteScreen.tsx:122`
-- `src/screens/cumulus_adapters/TransfigurationSiteScreenAdapter.tsx:51`
+- `src/screens/cumulus_adapters/DreamsignRevelationScreenAdapter.tsx`
+- `src/screens/cumulus_adapters/DuplicationSiteScreenAdapter.tsx`
+- `src/screens/cumulus_adapters/CardShopSiteScreenAdapter.tsx`
+- `src/screens/cumulus_adapters/DreamsignBazaarSiteScreenAdapter.tsx`
+- `src/screens/cumulus_adapters/TransfigurationSiteScreenAdapter.tsx`
 
 When the rendered snapshot has no site runtime or does not yet identify the
 active draft site, both StrictMode setups observe the same pre-action snapshot

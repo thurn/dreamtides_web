@@ -26,6 +26,7 @@ import type {
   DreamscapeView,
   InlineRewardView,
 } from "../../cumulus/screens/DreamscapeScreen";
+import type { DreamsignReplacementView } from "../../cumulus/screens/DreamsignReplacementDialog";
 import type {
   Dreamcaller,
   Dreamsign,
@@ -53,9 +54,54 @@ export function dreamscapeLayoutSeed(node: DreamscapeNode): number {
   return seedFromString(node.id);
 }
 
+/** Reconstruction fields for one presented dreamscape overview. */
+export function buildDreamscapeOverviewLog(
+  node: DreamscapeNode,
+  view: DreamscapeView,
+  completionLevel: number,
+): Record<string, unknown> {
+  return {
+    nodeId: node.id,
+    dreamscapeId: node.dreamscapeId,
+    biomeName: node.biomeName,
+    completionLevel,
+    layoutSeed: dreamscapeLayoutSeed(node),
+    sites: view.sites.map((model) => ({
+      siteId: model.site.id,
+      type: model.site.type,
+      isEnhanced: model.site.isEnhanced,
+      isVisited: model.site.isVisited,
+      isLocked: model.isLocked,
+      pos: model.pos,
+    })),
+  };
+}
+
+/** Resolves a site click to the live site and its reconstruction fields. */
+export function resolveDreamscapeSiteSelection(
+  node: DreamscapeNode,
+  siteId: string,
+  essence: number,
+) {
+  const site = node.sites.find((candidate) => candidate.id === siteId);
+  if (site === undefined) return null;
+  return {
+    site,
+    fields: {
+      siteType: site.type,
+      dreamscapeId: node.id,
+      siteId: site.id,
+      isEnhanced: site.isEnhanced,
+      essenceBefore: essence,
+    },
+  };
+}
+
 /** Battle label by completion level: the final boss or a plain battle. */
 export function battleLabel(completionLevel: number): string {
-  return completionLevel === FINAL_BOSS_COMPLETION_LEVEL ? "Final Boss" : "Battle";
+  return completionLevel === FINAL_BOSS_COMPLETION_LEVEL
+    ? "Final Boss"
+    : "Battle";
 }
 
 /**
@@ -165,6 +211,7 @@ export function dreamscapeTitle(node: DreamscapeNode): string {
 export function buildDreamscapeView(
   node: DreamscapeNode,
   state: QuestState,
+  replacementSiteId: string | null = null,
 ): DreamscapeView {
   const inlineRewards: Record<string, InlineRewardView> = {};
   node.sites.forEach((site) => {
@@ -180,6 +227,7 @@ export function buildDreamscapeView(
       inlineRewards[site.id] = {
         kind: "dreamsign",
         dreamsign: runtime.reward.dreamsign,
+        requiresReplacement: state.dreamsigns.length >= state.maxDreamsigns,
       };
       return;
     }
@@ -193,5 +241,29 @@ export function buildDreamscapeView(
     title: dreamscapeTitle(node),
     sites: buildSiteModels(node, state.completionLevel),
     inlineRewards,
+    replacement: buildDreamsignReplacementView(state, replacementSiteId),
+  };
+}
+
+/** Build the UUID-backed replacement choice for an at-cap Reward site. */
+export function buildDreamsignReplacementView(
+  state: QuestState,
+  siteId: string | null,
+): DreamsignReplacementView | null {
+  if (siteId === null || state.dreamsigns.length < state.maxDreamsigns) {
+    return null;
+  }
+  const runtime = state.siteRuntime[siteId];
+  if (
+    runtime?.kind !== "reward" ||
+    runtime.accepted ||
+    runtime.reward.rewardType !== "dreamsign"
+  ) {
+    return null;
+  }
+  return {
+    pendingDreamsign: runtime.reward.dreamsign,
+    currentDreamsigns: state.dreamsigns,
+    maxDreamsigns: state.maxDreamsigns,
   };
 }

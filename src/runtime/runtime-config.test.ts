@@ -6,6 +6,7 @@ import {
   contentConfigFromRuntime,
   contentConfigsEqual,
   parseRuntimeConfig,
+  removeUiParamFromSearch,
 } from "./runtime-config";
 
 describe("parseRuntimeConfig", () => {
@@ -16,7 +17,6 @@ describe("parseRuntimeConfig", () => {
       gameId: null,
       databaseMode: "emulator",
       journeyVariant: "v2",
-      uiVariant: "cumulus",
       poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "pool",
       fresh20PackSize: undefined,
@@ -50,24 +50,12 @@ describe("parseRuntimeConfig", () => {
     });
 
     it("returns the trimmed, decoded name when loadQuest is present", () => {
-      expect(parseRuntimeConfig("?loadQuest=warriors%20draft").loadQuestName).toBe(
-        "warriors draft",
+      expect(
+        parseRuntimeConfig("?loadQuest=warriors%20draft").loadQuestName,
+      ).toBe("warriors draft");
+      expect(parseRuntimeConfig("?loadQuest=%20foo%20").loadQuestName).toBe(
+        "foo",
       );
-      expect(parseRuntimeConfig("?loadQuest=%20foo%20").loadQuestName).toBe("foo");
-    });
-  });
-
-  describe("uiVariant", () => {
-    it("defaults to cumulus when ui is absent or an unknown value", () => {
-      expect(parseRuntimeConfig("").uiVariant).toBe("cumulus");
-      expect(parseRuntimeConfig("?ui=").uiVariant).toBe("cumulus");
-      expect(parseRuntimeConfig("?ui=something").uiVariant).toBe("cumulus");
-    });
-
-    it("selects the legacy UI only for the exact value legacy", () => {
-      expect(parseRuntimeConfig("?ui=legacy").uiVariant).toBe("legacy");
-      expect(parseRuntimeConfig("?ui=cumulus").uiVariant).toBe("cumulus");
-      expect(parseRuntimeConfig("?ui=Legacy").uiVariant).toBe("cumulus");
     });
   });
 
@@ -139,7 +127,9 @@ describe("parseRuntimeConfig", () => {
 
   describe("gameId", () => {
     it("returns a normalized game id from game", () => {
-      expect(parseRuntimeConfig("?game=QuestRoom123").gameId).toBe("questroom123");
+      expect(parseRuntimeConfig("?game=QuestRoom123").gameId).toBe(
+        "questroom123",
+      );
     });
 
     it("returns null for invalid game ids", () => {
@@ -152,7 +142,9 @@ describe("parseRuntimeConfig", () => {
   describe("poolVariant", () => {
     it("uses the default pool variant when algo is absent", () => {
       expect(parseRuntimeConfig("").poolVariant).toBe(DEFAULT_POOL_VARIANT);
-      expect(parseRuntimeConfig("?algo=").poolVariant).toBe(DEFAULT_POOL_VARIANT);
+      expect(parseRuntimeConfig("?algo=").poolVariant).toBe(
+        DEFAULT_POOL_VARIANT,
+      );
     });
 
     it("throws on an unrecognised algo (no silent fallback)", () => {
@@ -179,7 +171,9 @@ describe("parseRuntimeConfig", () => {
       expect(parseRuntimeConfig("").databaseMode).toBe("emulator");
       expect(parseRuntimeConfig("?realtime=").databaseMode).toBe("emulator");
       expect(parseRuntimeConfig("?realtime=0").databaseMode).toBe("emulator");
-      expect(parseRuntimeConfig("?realtime=true").databaseMode).toBe("emulator");
+      expect(parseRuntimeConfig("?realtime=true").databaseMode).toBe(
+        "emulator",
+      );
       expect(parseRuntimeConfig("?realtime=2").databaseMode).toBe("emulator");
     });
   });
@@ -224,7 +218,9 @@ describe("parseRuntimeConfig", () => {
   describe("fresh20PackSize", () => {
     it("is undefined when packsize is absent", () => {
       expect(parseRuntimeConfig("").fresh20PackSize).toBeUndefined();
-      expect(parseRuntimeConfig("?algo=fresh20").fresh20PackSize).toBeUndefined();
+      expect(
+        parseRuntimeConfig("?algo=fresh20").fresh20PackSize,
+      ).toBeUndefined();
     });
 
     it("parses a positive integer packsize", () => {
@@ -234,9 +230,15 @@ describe("parseRuntimeConfig", () => {
 
     it("ignores zero, negative, non-integer, and non-numeric packsize", () => {
       expect(parseRuntimeConfig("?packsize=0").fresh20PackSize).toBeUndefined();
-      expect(parseRuntimeConfig("?packsize=-4").fresh20PackSize).toBeUndefined();
-      expect(parseRuntimeConfig("?packsize=2.5").fresh20PackSize).toBeUndefined();
-      expect(parseRuntimeConfig("?packsize=abc").fresh20PackSize).toBeUndefined();
+      expect(
+        parseRuntimeConfig("?packsize=-4").fresh20PackSize,
+      ).toBeUndefined();
+      expect(
+        parseRuntimeConfig("?packsize=2.5").fresh20PackSize,
+      ).toBeUndefined();
+      expect(
+        parseRuntimeConfig("?packsize=abc").fresh20PackSize,
+      ).toBeUndefined();
       expect(parseRuntimeConfig("?packsize=").fresh20PackSize).toBeUndefined();
     });
   });
@@ -256,6 +258,22 @@ describe("parseRuntimeConfig", () => {
   });
 });
 
+describe("removeUiParamFromSearch", () => {
+  it("removes every ui key while preserving unrelated parameters", () => {
+    expect(
+      removeUiParamFromSearch(
+        "?game=room-7&ui=legacy&algo=fresh20&ui=cumulus&deviceFrame=iphone16&debugJourneyShape=single_offer",
+      ),
+    ).toBe(
+      "?game=room-7&algo=fresh20&deviceFrame=iphone16&debugJourneyShape=single_offer",
+    );
+  });
+
+  it("returns an empty search when ui was the only key", () => {
+    expect(removeUiParamFromSearch("?ui=legacy")).toBe("");
+  });
+});
+
 describe("contentConfigFromRuntime", () => {
   it("extracts the fold-relevant slice with defaults for absent optionals", () => {
     expect(contentConfigFromRuntime(parseRuntimeConfig(""))).toEqual({
@@ -268,7 +286,9 @@ describe("contentConfigFromRuntime", () => {
 
   it("reflects the fresh20 draft mode, pack size, and current journey", () => {
     expect(
-      contentConfigFromRuntime(parseRuntimeConfig("?algo=fresh20&packsize=15&journey=classic")),
+      contentConfigFromRuntime(
+        parseRuntimeConfig("?algo=fresh20&packsize=15&journey=classic"),
+      ),
     ).toEqual({
       poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "fresh20",
@@ -278,7 +298,9 @@ describe("contentConfigFromRuntime", () => {
   });
 
   it("reflects a named pool variant", () => {
-    expect(contentConfigFromRuntime(parseRuntimeConfig("?algo=idf2")).poolVariant).toBe("idf2");
+    expect(
+      contentConfigFromRuntime(parseRuntimeConfig("?algo=idf2")).poolVariant,
+    ).toBe("idf2");
   });
 });
 
@@ -295,38 +317,71 @@ describe("contentConfigsEqual", () => {
   });
 
   it("is false when any single field differs", () => {
-    expect(contentConfigsEqual(base, { ...base, poolVariant: "idf3" })).toBe(false);
-    expect(contentConfigsEqual(base, { ...base, draftMode: "replay" })).toBe(false);
-    expect(contentConfigsEqual(base, { ...base, fresh20PackSize: 20 })).toBe(false);
-    expect(contentConfigsEqual(base, { ...base, journeyVariant: "classic" })).toBe(false);
+    expect(contentConfigsEqual(base, { ...base, poolVariant: "idf3" })).toBe(
+      false,
+    );
+    expect(contentConfigsEqual(base, { ...base, draftMode: "replay" })).toBe(
+      false,
+    );
+    expect(contentConfigsEqual(base, { ...base, fresh20PackSize: 20 })).toBe(
+      false,
+    );
+    expect(
+      contentConfigsEqual(base, { ...base, journeyVariant: "classic" }),
+    ).toBe(false);
   });
 });
 
 describe("applyContentConfigToSearch", () => {
   it("round-trips: reparsing the result yields the same content slice", () => {
     const configs: ContentConfig[] = [
-      { poolVariant: "idf2", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" },
-      { poolVariant: DEFAULT_POOL_VARIANT, draftMode: "replay", fresh20PackSize: null, journeyVariant: "v2" },
-      { poolVariant: DEFAULT_POOL_VARIANT, draftMode: "fresh20", fresh20PackSize: 12, journeyVariant: "v2" },
-      { poolVariant: DEFAULT_POOL_VARIANT, draftMode: "fresh20", fresh20PackSize: null, journeyVariant: "v2" },
+      {
+        poolVariant: "idf2",
+        draftMode: "pool",
+        fresh20PackSize: null,
+        journeyVariant: "v2",
+      },
+      {
+        poolVariant: DEFAULT_POOL_VARIANT,
+        draftMode: "replay",
+        fresh20PackSize: null,
+        journeyVariant: "v2",
+      },
+      {
+        poolVariant: DEFAULT_POOL_VARIANT,
+        draftMode: "fresh20",
+        fresh20PackSize: 12,
+        journeyVariant: "v2",
+      },
+      {
+        poolVariant: DEFAULT_POOL_VARIANT,
+        draftMode: "fresh20",
+        fresh20PackSize: null,
+        journeyVariant: "v2",
+      },
     ];
     for (const config of configs) {
       const search = applyContentConfigToSearch("", config);
-      expect(contentConfigFromRuntime(parseRuntimeConfig(search))).toEqual(config);
+      expect(contentConfigFromRuntime(parseRuntimeConfig(search))).toEqual(
+        config,
+      );
     }
   });
 
-  it("preserves unrelated params (game, ui) while overriding content params", () => {
+  it("preserves unrelated gameplay and device params while overriding content params", () => {
     const config: ContentConfig = {
       poolVariant: "idf2",
       draftMode: "pool",
       fresh20PackSize: null,
       journeyVariant: "classic",
     };
-    const result = applyContentConfigToSearch("?game=abc123&ui=legacy&algo=fresh20&packsize=9", config);
+    const result = applyContentConfigToSearch(
+      "?game=abc123&deviceFrame=iphone16&algo=fresh20&packsize=9",
+      config,
+    );
     const params = new URLSearchParams(result);
     expect(params.get("game")).toBe("abc123");
-    expect(params.get("ui")).toBe("legacy");
+    expect(params.get("deviceFrame")).toBe("iphone16");
     expect(params.get("algo")).toBe("idf2");
     // packsize is dropped when the adopted mode is not fresh20.
     expect(params.get("packsize")).toBeNull();

@@ -89,12 +89,18 @@ describe("buildBattleStartView", () => {
           ...init.enemyDescriptor,
           signatureCards: [
             ...init.enemyDescriptor.signatureCards,
-            { cardId: "missing-uuid", cardNumber: missingNumber, name: "Missing" },
+            {
+              cardId: "missing-uuid",
+              cardNumber: missingNumber,
+              name: "Missing",
+            },
           ],
         },
       },
       cardDatabase,
     );
-    expect(view.signatureCards.some((card) => card.cardId === "missing-uuid")).toBe(false);
+    expect(
+      view.signatureCards.some((card) => card.cardId === "missing-uuid"),
+    ).toBe(false);
   });
 });

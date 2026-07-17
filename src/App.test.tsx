@@ -1,7 +1,10 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import { MINIMAL_ATLAS_CONFIG, MINIMAL_DREAMSCAPES } from "./__test-helpers__/atlas-fixtures";
+import {
+  MINIMAL_ATLAS_CONFIG,
+  MINIMAL_DREAMSCAPES,
+} from "./__test-helpers__/atlas-fixtures";
 import type { ReactElement, ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -66,18 +69,20 @@ vi.mock("./state/quest-context", () => ({
 }));
 
 vi.mock("./components/ScreenRouter", () => ({
-  ScreenRouter: () => <div>Screen Router</div>,
-}));
-
-interface HudMockProps {
-  onOpenPoolViewer: () => void;
-}
-
-vi.mock("./components/HUD", () => ({
-  HUD: ({ onOpenPoolViewer }: HudMockProps) => (
-    <button type="button" data-testid="hud" onClick={onOpenPoolViewer}>
-      HUD
-    </button>
+  ScreenRouter: ({
+    cumulusChromeHandlers,
+  }: {
+    cumulusChromeHandlers?: { onOpenPoolViewer?: () => void };
+  }) => (
+    <div data-testid="cumulus-screen-router">
+      <button
+        type="button"
+        data-testid="cumulus-open-pool"
+        onClick={cumulusChromeHandlers?.onOpenPoolViewer}
+      >
+        Pool
+      </button>
+    </div>
   ),
 }));
 
@@ -87,13 +92,12 @@ interface DeckViewerMockProps {
 }
 
 const deckViewerMock = vi.fn<(props: DeckViewerMockProps) => ReactNode>(
-  ({ isOpen }) => (
-    <div data-deck-open={String(isOpen)}>Deck Viewer</div>
-  ),
+  ({ isOpen }) => <div data-deck-open={String(isOpen)}>Deck Viewer</div>,
 );
 
 vi.mock("./screens/cumulus_adapters/DesktopDeckViewerAdapter", () => ({
-  DesktopDeckViewerAdapter: (props: DeckViewerMockProps) => deckViewerMock(props),
+  DesktopDeckViewerAdapter: (props: DeckViewerMockProps) =>
+    deckViewerMock(props),
 }));
 
 interface PoolViewerMockProps {
@@ -246,7 +250,12 @@ function makeQuestContent(): QuestContent {
     cardDatabase: new Map<number, CardData>(),
     dreamcallers: [],
 
-    dreamwellCards: [],    dreamsignTemplates: [],    dreamscapes: MINIMAL_DREAMSCAPES, affiliations: [], guides: [],    atlasConfig: MINIMAL_ATLAS_CONFIG,
+    dreamwellCards: [],
+    dreamsignTemplates: [],
+    dreamscapes: MINIMAL_DREAMSCAPES,
+    affiliations: [],
+    guides: [],
+    atlasConfig: MINIMAL_ATLAS_CONFIG,
   };
 }
 
@@ -259,7 +268,12 @@ function setQuestState(state: QuestState): void {
       cardDatabase: new Map(),
       dreamcallers: [],
 
-      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES, affiliations: [], guides: [],      atlasConfig: MINIMAL_ATLAS_CONFIG,
+      dreamwellCards: [],
+      dreamsignTemplates: [],
+      dreamscapes: MINIMAL_DREAMSCAPES,
+      affiliations: [],
+      guides: [],
+      atlasConfig: MINIMAL_ATLAS_CONFIG,
     },
   });
 }
@@ -289,9 +303,9 @@ beforeEach(() => {
   vi.spyOn(console, "log").mockImplementation(() => {});
   vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(null));
   vi.mocked(loadQuestContent).mockResolvedValue(makeQuestContent());
-  vi.mocked(getFirebaseDatabase).mockReturnValue({} as ReturnType<
-    typeof getFirebaseDatabase
-  >);
+  vi.mocked(getFirebaseDatabase).mockReturnValue(
+    {} as ReturnType<typeof getFirebaseDatabase>,
+  );
   (
     globalThis as typeof globalThis & {
       IS_REACT_ACT_ENVIRONMENT?: boolean;
@@ -333,7 +347,6 @@ describe("App", () => {
           gameId: "ab12cd",
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "legacy",
         }}
       />,
     );
@@ -343,7 +356,9 @@ describe("App", () => {
     expect(getFirebaseDatabase).toHaveBeenCalledWith("emulator");
     expect(container.querySelector("[data-room-gate='ab12cd']")).not.toBeNull();
     expect(container.querySelector("[data-coop-provider]")).not.toBeNull();
-    expect(container.querySelector("[data-coop-quest-provider]")).not.toBeNull();
+    expect(
+      container.querySelector("[data-coop-quest-provider]"),
+    ).not.toBeNull();
 
     act(() => {
       root.unmount();
@@ -363,7 +378,6 @@ describe("App", () => {
           gameId: "ab12cd",
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "legacy",
         }}
       />,
     );
@@ -394,7 +408,6 @@ describe("App", () => {
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "legacy",
         }}
       />,
     );
@@ -402,7 +415,9 @@ describe("App", () => {
     await flushAppEffects();
 
     expect(container.textContent).toContain("Firebase setup issue");
-    expect(container.textContent).toContain("Missing VITE_FIREBASE_DATABASE_URL");
+    expect(container.textContent).toContain(
+      "Missing VITE_FIREBASE_DATABASE_URL",
+    );
     expect(container.textContent).toContain("Run npm start");
     expect(container.querySelector("[data-room-gate]")).toBeNull();
     expect(container.querySelector("[data-multiplayer-provider]")).toBeNull();
@@ -425,7 +440,6 @@ describe("App", () => {
           gameId: null,
           databaseMode: "realtime",
           journeyVariant: "classic",
-          uiVariant: "legacy",
         }}
       />,
     );
@@ -434,8 +448,12 @@ describe("App", () => {
 
     expect(getFirebaseDatabase).toHaveBeenCalledWith("realtime");
     expect(container.textContent).toContain("Firebase setup issue");
-    expect(container.textContent).toContain("Missing VITE_FIREBASE_DATABASE_URL");
-    expect(container.textContent).toContain("Required env: VITE_FIREBASE_API_KEY");
+    expect(container.textContent).toContain(
+      "Missing VITE_FIREBASE_DATABASE_URL",
+    );
+    expect(container.textContent).toContain(
+      "Required env: VITE_FIREBASE_API_KEY",
+    );
 
     act(() => {
       root.unmount();
@@ -478,7 +496,6 @@ describe("QuestApp", () => {
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "legacy",
         }}
       />,
     );
@@ -489,9 +506,9 @@ describe("QuestApp", () => {
     expect(startingDeckModalMock).toHaveBeenLastCalledWith(
       expect.objectContaining({ isOpen: false }),
     );
-    // The dreamcaller-selection screen suppresses the HUD; the deck button is
-    // therefore unavailable so neither overlay should be open here.
-    expect(container.querySelector("[data-testid='hud']")).toBeNull();
+    expect(
+      container.querySelector("[data-testid='cumulus-screen-router']"),
+    ).not.toBeNull();
 
     act(() => {
       root.unmount();
@@ -510,7 +527,6 @@ describe("QuestApp", () => {
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "legacy",
         }}
       />,
     );
@@ -523,9 +539,9 @@ describe("QuestApp", () => {
     expect(deckViewerMock).toHaveBeenLastCalledWith(
       expect.objectContaining({ isOpen: false }),
     );
-    // The HUD is layered behind the modal so the dreamscape remains visible
-    // alongside the starting-deck preview.
-    expect(container.querySelector("[data-testid='hud']")).not.toBeNull();
+    expect(
+      container.querySelector("[data-testid='cumulus-screen-router']"),
+    ).not.toBeNull();
 
     act(() => {
       root.unmount();
@@ -542,7 +558,12 @@ describe("QuestApp", () => {
         cardDatabase: new Map(),
         dreamcallers: [],
 
-        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES, affiliations: [], guides: [],        atlasConfig: MINIMAL_ATLAS_CONFIG,
+        dreamwellCards: [],
+        dreamsignTemplates: [],
+        dreamscapes: MINIMAL_DREAMSCAPES,
+        affiliations: [],
+        guides: [],
+        atlasConfig: MINIMAL_ATLAS_CONFIG,
       },
     });
 
@@ -555,7 +576,6 @@ describe("QuestApp", () => {
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "legacy",
         }}
       />,
     );
@@ -590,7 +610,6 @@ describe("QuestApp", () => {
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "legacy",
         }}
       />,
     );
@@ -607,7 +626,7 @@ describe("QuestApp", () => {
     });
   });
 
-  it("opens and closes the Pool Viewer from the HUD entry point", () => {
+  it("opens and closes the Pool Viewer from Cumulus quest chrome", () => {
     setQuestState(starterCallerState({ hasSeenStartingDeckPopup: true }));
 
     const { container, root } = mount(
@@ -619,7 +638,6 @@ describe("QuestApp", () => {
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "legacy",
         }}
       />,
     );
@@ -629,14 +647,18 @@ describe("QuestApp", () => {
     );
 
     act(() => {
-      container.querySelector<HTMLButtonElement>("[data-testid='hud']")?.click();
+      container
+        .querySelector<HTMLButtonElement>("[data-testid='cumulus-open-pool']")
+        ?.click();
     });
     expect(poolViewerMock).toHaveBeenLastCalledWith(
       expect.objectContaining({ isOpen: true }),
     );
 
     act(() => {
-      container.querySelector<HTMLButtonElement>("[data-pool-open='true']")?.click();
+      container
+        .querySelector<HTMLButtonElement>("[data-pool-open='true']")
+        ?.click();
     });
     expect(poolViewerMock).toHaveBeenLastCalledWith(
       expect.objectContaining({ isOpen: false }),
@@ -647,7 +669,7 @@ describe("QuestApp", () => {
     });
   });
 
-  it("hides the shared HUD on battle sites so the battle dock stays usable", () => {
+  it("renders battle sites through the same Cumulus gameplay router", () => {
     setQuestState(
       makeState({
         atlas: {
@@ -696,12 +718,13 @@ describe("QuestApp", () => {
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "legacy",
         }}
       />,
     );
 
-    expect(container.querySelector('[data-testid="hud"]')).toBeNull();
+    expect(
+      container.querySelector('[data-testid="cumulus-screen-router"]'),
+    ).not.toBeNull();
 
     act(() => {
       root.unmount();
@@ -757,7 +780,6 @@ describe("QuestApp", () => {
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "cumulus",
         }}
       />,
     );

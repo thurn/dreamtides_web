@@ -165,19 +165,20 @@ function battleLayerSceneState(displayLayer: number): QaScene["build"] {
     }
 
     const completionLevel = displayLayer - 1;
-    const atlas = completionLevel === 0
-      ? foundation.atlas
-      : regenerateAtlasForProgress(
-          completionLevel,
-          {},
-          {
-            dreamscapes: questContent.dreamscapes,
-            atlasConfig: questContent.atlasConfig,
-            dreamsignPoolIds: foundation.state.remainingDreamsignPool,
-            apollyonIncarnations: questContent.apollyonIncarnations,
-          },
-          { logEvents: true },
-        );
+    const atlas =
+      completionLevel === 0
+        ? foundation.atlas
+        : regenerateAtlasForProgress(
+            completionLevel,
+            {},
+            {
+              dreamscapes: questContent.dreamscapes,
+              atlasConfig: questContent.atlasConfig,
+              dreamsignPoolIds: foundation.state.remainingDreamsignPool,
+              apollyonIncarnations: questContent.apollyonIncarnations,
+            },
+            { logEvents: true },
+          );
     const layerNodeIds = atlas.layers[completionLevel] ?? [];
     const node = layerNodeIds
       .map((nodeId) => atlas.nodes[nodeId])
@@ -263,9 +264,7 @@ const PLAYABLE_BATTLE_SCENE: QaScene = {
  * seeded with `dreamsignCount` owned dreamsigns so the QuestStatusBar's docked
  * dreamsign strip is exercised (inline up to four, an overflow stack beyond).
  */
-function dreamscapeSceneState(
-  dreamsignCount: number,
-): QaScene["build"] {
+function dreamscapeSceneState(dreamsignCount: number): QaScene["build"] {
   return (questContent) => {
     const foundation = createQaQuestFoundation(questContent);
     if (foundation === null) {
@@ -387,6 +386,45 @@ const REWARD_SCENE: QaScene = {
   },
 };
 
+/** A Reward interaction with a full collection and a pending Dreamsign. */
+const REWARD_AT_CAP_SCENE: QaScene = {
+  id: "reward-at-cap",
+  label: "Reward at Dreamsign Cap",
+  description:
+    "The starter dreamscape with a Reward site whose Dreamsign opens the " +
+    "replacement dialog after its in-place reveal.",
+  build: (questContent) => {
+    const state = REWARD_SCENE.build(questContent);
+    if (state === null || state.currentDreamscape === null) return null;
+    const site = state.atlas.nodes[state.currentDreamscape]?.sites.find(
+      (candidate) => candidate.type === "Reward",
+    );
+    const heldTemplates = questContent.dreamsignTemplates.slice(
+      0,
+      state.maxDreamsigns,
+    );
+    const pendingTemplate =
+      questContent.dreamsignTemplates[state.maxDreamsigns];
+    if (site === undefined || pendingTemplate === undefined) return null;
+    const pendingDreamsign = createDreamsign(pendingTemplate);
+    return {
+      ...state,
+      dreamsigns: heldTemplates.map((template) => createDreamsign(template)),
+      siteRuntime: {
+        ...state.siteRuntime,
+        [site.id]: {
+          kind: "reward",
+          reward: { rewardType: "dreamsign", dreamsign: pendingDreamsign },
+          remainingDreamsignPoolIds: state.remainingDreamsignPool.filter(
+            (id) => id !== pendingDreamsign.id,
+          ),
+          accepted: false,
+        },
+      },
+    };
+  },
+};
+
 /**
  * The scene id that opens the deck-viewer overlay. The overlay is App-local
  * state (not a `Screen`), so parking on it takes two steps: this scene builds
@@ -442,10 +480,7 @@ const STARTING_DECK_SCENE: QaScene = {
  * and parks the run on it. The site's per-screen runtime (e.g. transfiguration
  * offers) is created on entry by the screen itself, exactly as in normal play.
  */
-function parkOnSite(
-  siteType: SiteType,
-  isEnhanced: boolean,
-): QaScene["build"] {
+function parkOnSite(siteType: SiteType, isEnhanced: boolean): QaScene["build"] {
   return (questContent) => {
     const foundation = createQaQuestFoundation(questContent);
     if (foundation === null) {
@@ -610,10 +645,10 @@ export const QA_SCENES: readonly QaScene[] = [
   DREAMSCAPE_SCENE,
   DREAMSCAPE_WITH_ESSENCE_SCENE,
   REWARD_SCENE,
+  REWARD_AT_CAP_SCENE,
   DECK_VIEWER_SCENE,
   STARTING_DECK_SCENE,
   siteScene("draft", "Draft", "Draft"),
-  siteScene("essence", "Essence", "Essence"),
   siteScene("transfiguration", "Transfiguration", "Transfiguration"),
   siteScene(
     "transfiguration-enhanced",
@@ -622,7 +657,12 @@ export const QA_SCENES: readonly QaScene[] = [
     true,
   ),
   siteScene("duplication", "Duplication", "Duplication"),
-  siteScene("duplication-enhanced", "Duplication (Enhanced)", "Duplication", true),
+  siteScene(
+    "duplication-enhanced",
+    "Duplication (Enhanced)",
+    "Duplication",
+    true,
+  ),
   siteScene("purge", "Purge", "Purge"),
   siteScene("purge-enhanced", "Purge (Enhanced)", "Purge", true),
   siteScene("shop", "Shop", "Shop"),
@@ -635,7 +675,12 @@ export const QA_SCENES: readonly QaScene[] = [
     true,
   ),
   siteScene("dreamaugury", "Dream Augury", "DreamAugury"),
-  siteScene("dreamaugury-enhanced", "Dream Augury (Enhanced)", "DreamAugury", true),
+  siteScene(
+    "dreamaugury-enhanced",
+    "Dream Augury (Enhanced)",
+    "DreamAugury",
+    true,
+  ),
   siteScene("tempting", "Offer", "TemptingOffer"),
   siteScene("tempting-enhanced", "Offer (Enhanced)", "TemptingOffer", true),
   siteScene("gamble", "Gamble", "Gamble"),

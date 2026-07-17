@@ -38,14 +38,15 @@ export function MobileBattleScreenAdapter({
   interactions: MobileBattleInteractions;
 }) {
   const view = useMemo(
-    () => buildMobileBattleView(init, board, enemyDreamcaller, aiProposal, {
-      aiMode,
-      isOpponentHandRevealed,
-      isPlayerHandHidden,
-      pendingPrompt,
-      confirmedPromptId,
-      isResultOverlayDismissed,
-    }),
+    () =>
+      buildMobileBattleView(init, board, enemyDreamcaller, aiProposal, {
+        aiMode,
+        isOpponentHandRevealed,
+        isPlayerHandHidden,
+        pendingPrompt,
+        confirmedPromptId,
+        isResultOverlayDismissed,
+      }),
     [
       init,
       board,

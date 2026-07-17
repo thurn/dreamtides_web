@@ -5,6 +5,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { logEventOnce } from "../../logging";
 import type { Dreamsign } from "../../types/quest";
+import { requireDreamsignId } from "../../data/dreamsigns";
 import { DreamsignRevelationScreen } from "../../cumulus/screens/DreamsignRevelationScreen";
 import { useQuest } from "../../state/quest-context";
 import { buildDreamsignRevelationView, resolveDreamsignRevelationGuide } from "./dreamsign-revelation-view-model";
@@ -47,7 +48,6 @@ export function DreamsignRevelationScreenAdapter({
       siteType: site.type,
       isEnhanced: site.isEnhanced,
       optionCount,
-      ui: "cumulus",
     });
   }, [site?.id, site?.type, site?.isEnhanced, optionCount, options]);
 
@@ -57,7 +57,6 @@ export function DreamsignRevelationScreenAdapter({
       guideId: guide.id,
       siteType: site.type,
       isEnhanced: site.isEnhanced,
-      ui: "cumulus",
     });
   }, [guide?.id, site?.id, site?.type, site?.isEnhanced]);
 
@@ -99,12 +98,18 @@ export function DreamsignRevelationScreenAdapter({
   }, [claimedIndex, mutations, pendingPurgeDreamsign, siteId]);
 
   const handlePurge = useCallback(
-    (index: number) => {
+    (dreamsignId: string) => {
       if (pendingPurgeDreamsign === null) return;
+      const index = state.dreamsigns.findIndex(
+        (dreamsign) =>
+          requireDreamsignId(dreamsign, "Dreamsign Revelation replacement") ===
+          dreamsignId,
+      );
+      if (index < 0) return;
       mutations.acceptDreamsignOffer(siteId, pendingPurgeDreamsign, index);
       setPendingPurgeDreamsign(null);
     },
-    [mutations, pendingPurgeDreamsign, siteId],
+    [mutations, pendingPurgeDreamsign, siteId, state.dreamsigns],
   );
 
   if (site === null) return null;

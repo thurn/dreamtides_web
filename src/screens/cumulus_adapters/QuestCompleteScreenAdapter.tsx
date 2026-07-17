@@ -32,18 +32,12 @@ export function QuestCompleteScreenAdapter() {
       dreamsignIds: state.dreamsigns.flatMap((dreamsign) =>
         dreamsign.id === undefined ? [] : [dreamsign.id],
       ),
-      uiVariant: "cumulus",
     });
   }, [cardIds, state]);
 
   const handleNewQuest = useCallback(() => {
-    logEvent("quest_complete_new_quest_clicked", { uiVariant: "cumulus" });
+    logEvent("quest_complete_new_quest_clicked", {});
     mutations.resetQuest();
   }, [mutations]);
-  return (
-    <QuestCompleteScreen
-      view={view}
-      onNewQuest={handleNewQuest}
-    />
-  );
+  return <QuestCompleteScreen view={view} onNewQuest={handleNewQuest} />;
 }

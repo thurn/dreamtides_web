@@ -20,7 +20,7 @@ green on `npm run lint`, `npm run typecheck`, and `npm test`.
 - Every component gets: an **interactive demo**, a **programmatic props table**
   (never hand-maintained), and a click-through **full-screen mockup** detail
   page showing the component in a realistic UI.
-- Cumulus becomes the *home* of the shared UI component library. Reused
+- Cumulus becomes the _home_ of the shared UI component library. Reused
   components (game card, rules text, atlas pieces) move into `src/cumulus/`, and
   the rest of the app imports them from there.
 - Real content is shown wherever it exists (real card UUIDs, real atlas
@@ -30,7 +30,7 @@ green on `npm run lint`, `npm run typecheck`, and `npm test`.
   — and nothing else. Components never accept a raw `className`, an inline
   `style` object, or an arbitrary corner radius / padding / color / filter /
   scale token override. A prop that carries a value which is not free-form text
-  takes a *named* value, not a string: a color is a `CumulusColor` (a palette
+  takes a _named_ value, not a string: a color is a `CumulusColor` (a palette
   role, or a `` `#${string}` `` hex for a genuinely data-driven one), a glyph is
   a `Glyph` from the icon registry, a piece of art is an `ArtRef` the component
   resolves to a URL itself, and a media filter / image crop
@@ -40,7 +40,7 @@ green on `npm run lint`, `npm run typecheck`, and `npm test`.
   a caller silently drift from the system. When a screen needs to size or
   position a component, it wraps the
   component in its own element (layout is the caller's concern; the component's
-  fixed appearance is the system's). Adding a *new strict prop* — one more
+  fixed appearance is the system's). Adding a _new strict prop_ — one more
   enumerated variant — is fine when you are confident no existing variant can
   express the need; widening an existing prop into an open value is not. When in
   doubt, match how the other screens solve it rather than inventing a knob.
@@ -112,11 +112,10 @@ moves):
 - `AtlasNode` → `atlas-display`.
 - `DreamscapeSiteNode` → `dreamscape-scatter`.
 
-### Product screens & the `?ui=` migration toggle
+### Product screens
 
-The quest app's screens migrate into Cumulus one at a time behind a `?ui=` toggle
-(`runtimeConfig.uiVariant`, default `cumulus`). A migrated screen splits into
-**three roles** — a pure screen, a pure view-model builder, and a thin adapter.
+Every gameplay screen uses Cumulus and splits into **three roles** — a pure
+screen, a pure view-model builder, and a thin adapter.
 The bulk of a screen's code lives in the first two, which are both
 plain-data-in / plain-data-out and trivially unit-testable; the adapter is
 deliberately skeletal, because it is the one layer hooks make hard to test.
@@ -126,8 +125,8 @@ deliberately skeletal, because it is the one layer hooks make hard to test.
   allowlisted infra. It holds no `useQuest()`, no mutations, no navigation. It
   **owns and exports its view-model types** (`DreamcallerOfferView`, …) — the
   consumer defines the contract, and the builder maps into it. Purity does not
-  mean logic-free: layout, conditional rendering, formatting, and *local UI
-  state* (hover, selection-in-progress, pan/zoom, animation phase) are all
+  mean logic-free: layout, conditional rendering, formatting, and _local UI
+  state_ (hover, selection-in-progress, pan/zoom, animation phase) are all
   screen code, because none of it touches quest state. Its root carries
   `className="cumulus"` so the semantic tokens resolve (the adapter mounts it
   outside any other `.cumulus` subtree). Screens inherit every strict rule —
@@ -144,10 +143,10 @@ deliberately skeletal, because it is the one layer hooks make hard to test.
   arguments: randomness (offers, seeds) is minted by the adapter and passed in.
   A lint block bans `react` and `src/state` imports in builder modules, so a
   builder can never quietly become a component or acquire state itself. A
-  mapping rule that is genuinely a *domain* rule rather than a display rule
+  mapping rule that is genuinely a _domain_ rule rather than a display rule
   belongs one level lower, in `src/data/` — which is on Cumulus's allowlist, so
   both the builder and Cumulus itself may use it.
-- An **adapter** (`src/screens/cumulus_adapters/*Adapter.tsx`, *outside* Cumulus) is
+- An **adapter** (`src/screens/cumulus_adapters/*Adapter.tsx`, _outside_ Cumulus) is
   **wiring only**: it acquires state (`useQuest()`), mints any per-mount
   randomness, calls the builder, wires callbacks to mutations, and renders the
   Cumulus screen — nothing else. The `thin-adapters` lint rule enforces this
@@ -183,20 +182,15 @@ view-model is plumbed and built:
   facts that must survive the screen (or the session) travel through the
   adapter to quest state.
 
-#### Registry & rollout
+#### Production registry
 
-`ScreenRouter` consults `src/screens/cumulus_adapters/registry.tsx` (`cumulusScreenFor` /
-`cumulusSiteScreenFor`): under `?ui=cumulus` it renders the registered adapter for a
-migrated screen and falls back to the legacy screen when the resolver returns
-null, so the app stays fully navigable throughout the migration. `?ui=legacy`
-forces the legacy screen everywhere. **Registration is launch**: with `cumulus`
-the default variant, adding a registry entry serves that screen to every player
-immediately — there is no registered-but-dark state — so a screen is QA'd to
-the production bar *before* its registry entry lands, and `?ui=legacy` is the
-triage escape hatch afterwards. The end state registers every screen and
-deletes the legacy screen components; the adapters, view-model builders, and
-registry under `src/screens/cumulus_adapters/` remain as the app's permanent state-wiring
-layer. The first migrated screen is Dreamcaller selection (`QuestStartScreen`).
+`ScreenRouter` consults `src/screens/cumulus_adapters/registry.tsx`. `screenFor`
+resolves every non-site `Screen` to a Cumulus adapter. `siteDispositionFor`
+classifies every `SiteType` as a Cumulus screen, the Battle route, or a
+Dreamscape-inline Essence/Reward interaction. Both switches are exhaustive and
+non-null. Adding a `Screen` or `SiteType` therefore requires an explicit
+production disposition in the same change. The adapters, view-model builders,
+and registry are the app's permanent state-wiring layer.
 
 ---
 
@@ -236,17 +230,17 @@ adopts these values verbatim.
 The token sheet is organized into two tiers, and this distinction governs what
 UI code is allowed to reference.
 
-- **Primitives — `--primitive-*`.** A primitive names a raw *value*: a point on
+- **Primitives — `--primitive-*`.** A primitive names a raw _value_: a point on
   a color ramp (`--primitive-violet-500`), a step on the radius scale
   (`--primitive-radius-lg`), a font face (`--primitive-font-sans`), a weight.
   Primitives are the raw material the semantic layer is built from.
-- **Semantic tokens — everything else.** A semantic token names a *use*:
+- **Semantic tokens — everything else.** A semantic token names a _use_:
   `--surface-card`, `--text-primary`, `--accent`, `--radius-control`,
   `--font-ui`. Each resolves through a primitive (or a literal where no ramp step
   fits), so the whole system re-skins by editing the primitive layer alone.
 
 **Write UI code against semantic tokens — never a primitive.** A semantic token
-describes what it is *for*, not what its value *is*; that indirection is the
+describes what it is _for_, not what its value _is_; that indirection is the
 entire point of the token system. Primitives may be referenced **only** inside
 `src/cumulus/primitives/` (where the semantic layer is defined) and
 `src/cumulus/components/` (leaf components that occasionally need a raw ramp step
@@ -295,7 +289,7 @@ a **Primitives** tier below it, each grouped by kind and name-prefix family.
   `--font-numeral` = Anton, `--font-meta` = JetBrains Mono) over the primitive
   font faces (`--primitive-font-*`) and weights (`--primitive-weight-*`).
 - **Corner radius** — semantic roles `--radius-inset / -control / -card / -panel
-  / -sheet / -hero / -pill / -popover` over the primitive scale
+/ -sheet / -hero / -pill / -popover` over the primitive scale
   (`--primitive-radius-xs … -2xl`, `-pill`, `-card`, `-popover`).
 - **Spacing** — the `--space-*` scale + touch-floor tokens (`--safe-*`, 44pt
   floor), used directly.
@@ -324,7 +318,7 @@ metadata source.
 - The **props table** renders from that JSON — never hand-edited.
 - The **interactive controls** are auto-generated from the same type info:
   `boolean → toggle`, string-union → segmented control / select, `number →
-  slider`, `string → text field`, with per-component demo files supplying only
+slider`, `string → text field`, with per-component demo files supplying only
   sample values / default args and any content the types can't infer.
 - Regeneration is wired into `scripts/regenerate-assets.sh`.
 
@@ -364,11 +358,11 @@ flows from the generator.
 Table of contents, then:
 
 1. **Introduction / Design Philosophy** — condensed from the design's governing
-   principles: *material continuity* (objects persist and travel, never fade in;
+   principles: _material continuity_ (objects persist and travel, never fade in;
    the four entities — cards, dreamsigns, essence, Dreamcallers — always obey
-   it), *the legibility ladder* (render on the media with `.hud-outline`; group
-   related info in a `GroupPanel`; never a scrim/wash/vignette), *always in
-   motion* (tangible entities float; readout chrome may rest), the *popup rule*
+   it), _the legibility ladder_ (render on the media with `.hud-outline`; group
+   related info in a `GroupPanel`; never a scrim/wash/vignette), _always in
+   motion_ (tangible entities float; readout chrome may rest), the _popup rule_
    (named semantic sources register strict content with the one
    `CumulusRoot` coordinator; hover/focus reveal on desktop and touch intent
    reveals on mobile; the group is pointer-transparent), and the content voice
@@ -387,22 +381,22 @@ radius) but stays deliberately restrained so the components are the focus.
 
 ## 7. Component roster & per-component strategy
 
-| Component | Location | Strategy |
-| --- | --- | --- |
-| Design tokens | `primitives/` | Import values from Claude Design `tokens/*.css` → `cumulus-tokens.css` + generated `tokens.ts` |
-| **Pressable** / `usePress` | `primitives/` | Import from Claude Design (the one press-feedback primitive; scale-down `--press-scale` 0.9) |
-| **GlassButton** | `components/` | The labeled liquid-glass action. `accent` serves primary and commit actions, `default` serves secondary actions, and `danger` serves destructive actions; `placement` selects the media or nested-glass recipe. |
-| **ResourceChip** | `components/` | Import from Claude Design (value + filled-Boxicon mark, tight pairing) |
-| **InfoCard** | `components/` | Strict visual content variants (`object`, `fullBleed`, `atlasReveal`, `icon`, `tide`, `text`) rendered by named sources through the root coordinator |
-| **SegmentedControl** | `components/` | Import from Claude Design |
-| **Motes** | `components/` | Import from Claude Design (atmospheric particle layer; `warm`/`violet`/`dreamscape` tint; sanctioned particle opacity animation) |
-| **QuestStatusBar** | `components/` | Import from Claude Design (the transparent bottom HUD) |
-| **GroupPanel** | `components/` | A flat, solid deep-plum card (`--surface-card` fill, no border, `--shadow-card` drop shadow) — a distinct surface from InfoCard's glass. The liquid-glass recipe (`backdrop-filter` blur/saturate + specular gradient + inset rim/wash + drop shadow) lives in `glassSurfaceStyle` (`src/cumulus/internal/glass-surface.ts`), shared by GlassPanel, InfoCard, GlassDialog, IconButton, GlassButton, and SpeechBubble. GlassPanel is the persistent title/body/footer container over scene art; CardGalleryPanel composes it. The deck viewer and GlassPanel's full-bleed gallery frame use the 80%-black `--scrim-gallery` alpha overlay; floating GlassPanels use glass. |
-| **GameCard** | `components/` | UUID-backed card source deriving its reading copy and ordered glossary secondaries; activation remains available independently of reading |
-| **RulesText** | `components/` | Canonical rules renderer with inline named `GlossaryTerm` sources and `PipBadge` marks |
-| **Dreamsign** | `components/` | UUID-backed collectible source deriving object/text primary content and glossary secondaries |
-| **SiteNode** | `components/` | UUID-backed site source deriving its icon InfoCard and activation availability |
-| **Atlas Node / Edge / Defs** | `components/` | AtlasNode owns its placed source, strict scene primary, Dreamsign/site/affiliation secondaries, and activation; edges and shared SVG definitions compose the map |
+| Component                    | Location      | Strategy                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ---------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Design tokens                | `primitives/` | Import values from Claude Design `tokens/*.css` → `cumulus-tokens.css` + generated `tokens.ts`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| **Pressable** / `usePress`   | `primitives/` | Import from Claude Design (the one press-feedback primitive; scale-down `--press-scale` 0.9)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| **GlassButton**              | `components/` | The labeled liquid-glass action. `accent` serves primary and commit actions, `default` serves secondary actions, and `danger` serves destructive actions; `placement` selects the media or nested-glass recipe.                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| **ResourceChip**             | `components/` | Import from Claude Design (value + filled-Boxicon mark, tight pairing)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| **InfoCard**                 | `components/` | Strict visual content variants (`object`, `fullBleed`, `atlasReveal`, `icon`, `tide`, `text`) rendered by named sources through the root coordinator                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| **SegmentedControl**         | `components/` | Import from Claude Design                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| **Motes**                    | `components/` | Import from Claude Design (atmospheric particle layer; `warm`/`violet`/`dreamscape` tint; sanctioned particle opacity animation)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| **QuestStatusBar**           | `components/` | Import from Claude Design (the transparent bottom HUD)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| **GroupPanel**               | `components/` | A flat, solid deep-plum card (`--surface-card` fill, no border, `--shadow-card` drop shadow) — a distinct surface from InfoCard's glass. The liquid-glass recipe (`backdrop-filter` blur/saturate + specular gradient + inset rim/wash + drop shadow) lives in `glassSurfaceStyle` (`src/cumulus/internal/glass-surface.ts`), shared by GlassPanel, InfoCard, GlassDialog, IconButton, GlassButton, and SpeechBubble. GlassPanel is the persistent title/body/footer container over scene art; CardGalleryPanel composes it. The deck viewer and GlassPanel's full-bleed gallery frame use the 80%-black `--scrim-gallery` alpha overlay; floating GlassPanels use glass. |
+| **GameCard**                 | `components/` | UUID-backed card source deriving its reading copy and ordered glossary secondaries; activation remains available independently of reading                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| **RulesText**                | `components/` | Canonical rules renderer with inline named `GlossaryTerm` sources and `PipBadge` marks                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| **Dreamsign**                | `components/` | UUID-backed collectible source deriving object/text primary content and glossary secondaries                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| **SiteNode**                 | `components/` | UUID-backed site source deriving its icon InfoCard and activation availability                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| **Atlas Node / Edge / Defs** | `components/` | AtlasNode owns its placed source, strict scene primary, Dreamsign/site/affiliation secondaries, and activation; edges and shared SVG definitions compose the map                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 
 ### Interaction model (input-adaptive reveal)
 
@@ -461,7 +455,7 @@ reference, not by a from-scratch subagent rewrite.
   `components/` `*Props` type re-opens an escape hatch — a `style`/`className`
   member, a `CSSProperties`-typed prop, a DOM-attribute `extends`/intersection,
   or an index signature), `npm run typecheck`, and `npm test` stay green.
-- The migration layer (§2) is lint-enforced too: the `thin-adapters` rule keeps
+- The screen wiring layer (§2) is lint-enforced too: the `thin-adapters` rule keeps
   `src/screens/cumulus_adapters/*Adapter.tsx` wiring-only (one exported `*Adapter`
   component, no module-level helpers/tables/exported types, Cumulus imports
   limited to `src/cumulus/screens/`), backed by a `max-lines` ceiling on adapter
@@ -481,7 +475,7 @@ reference, not by a from-scratch subagent rewrite.
   the build.
   `primitives/` is excluded from the source rule because a mechanism like
   `Pressable` deliberately forwards every DOM prop; react-docgen filters those
-  inherited props out, so the contract test still holds it to no *own* hatch.
+  inherited props out, so the contract test still holds it to no _own_ hatch.
 - Unit tests for the non-visual machinery: the docgen metadata extractor, the
   hash router, and every Cumulus ESLint rule (`eslint-rules/*.test.ts`).
 - Moved production components keep their existing tests (tests move with them —

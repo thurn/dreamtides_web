@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/glossary-definition-card`
 
-Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 
 A renderable keyword-definition tile for normal document flow: one glossary entry in an InfoCard text card whose headline is the keyword and whose body is the keyword's rules text. Journey tooltips, the signature-deck inspector, and CardTermDefinitions use it directly; named entity reveals carry equivalent text-card models through the shared coordinator. It re-establishes its own `.cumulus` token scope for portalled surfaces.
 

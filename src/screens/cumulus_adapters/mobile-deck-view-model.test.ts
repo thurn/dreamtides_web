@@ -51,7 +51,9 @@ describe("toDeckCardView", () => {
   });
 
   it("returns null when the card number is not in the database", () => {
-    expect(toDeckCardView(makeEntry({ cardNumber: 999 }), database())).toBeNull();
+    expect(
+      toDeckCardView(makeEntry({ cardNumber: 999 }), database()),
+    ).toBeNull();
   });
 
   it("applies a debug stat override to the resolved card", () => {
@@ -103,7 +105,10 @@ describe("buildMobileDeckView", () => {
       makeEntry({ entryId: "gone", cardNumber: 42 }),
     ];
 
-    const view = buildMobileDeckView(deck, database(makeCard({ cardNumber: 1 })));
+    const view = buildMobileDeckView(
+      deck,
+      database(makeCard({ cardNumber: 1 })),
+    );
 
     expect(view.cards.map((c) => c.entryId)).toEqual(["ok"]);
   });

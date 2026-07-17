@@ -157,9 +157,7 @@ function namedEntitySubtitle(
 }
 
 /** Player-facing detail title derived from the offer's action category. */
-export function buildDreamAuguryOfferHeadline(
-  model: OfferTileModel,
-): string {
+export function buildDreamAuguryOfferHeadline(model: OfferTileModel): string {
   switch (model.kind) {
     case "card-gift":
       return "Gain a Card";
@@ -184,9 +182,7 @@ export function buildDreamAuguryOfferHeadline(
     case "trade-card":
       return "Trade a Card";
     case "duplicate-card":
-      return model.cards.length === 1
-        ? "Duplicate a Card"
-        : "Choose a Card";
+      return model.cards.length === 1 ? "Duplicate a Card" : "Choose a Card";
     case "dreamsign-gift":
       return "Gain a Dreamsign";
     case "dreamsign-draft":
@@ -212,7 +208,9 @@ export function buildDreamAuguryOfferSubtitle(
     case "transfigure-starters":
       return namedEntitySubtitle("Transfigure", model.cards.map(offerCardName));
     case "keyword-modification":
-      return namedEntitySubtitle("Reduce Reclaim for", [offerCardName(model.card)]);
+      return namedEntitySubtitle("Reduce Reclaim for", [
+        offerCardName(model.card),
+      ]);
     case "tribal-change":
       return namedEntitySubtitle(
         "Make",
@@ -302,12 +300,11 @@ function unavailable(message: string): never {
   throw new Error(`Dream Augury offer unavailable: ${message}`);
 }
 
-function tileCard(
-  object: CardObject,
-  preview = false,
-): OfferTileCard {
+function tileCard(object: CardObject, preview = false): OfferTileCard {
   const displaySnapshot =
-    preview && object.objectType === "deckCard" && object.previewCard !== undefined
+    preview &&
+    object.objectType === "deckCard" &&
+    object.previewCard !== undefined
       ? object.previewCard
       : object.card;
   if (displaySnapshot.id !== object.cardUuid) {
@@ -338,7 +335,11 @@ function candidateCards(
     );
   }
   return candidates.map((candidate) =>
-    requiredCard(candidate.gameObjects, `${offer.archetypeId} candidate`, preview),
+    requiredCard(
+      candidate.gameObjects,
+      `${offer.archetypeId} candidate`,
+      preview,
+    ),
   );
 }
 
@@ -359,7 +360,9 @@ function starterCards(cards: readonly OfferTileCard[]): OfferTileStarterCards {
   return unavailable("starter_transfigure requires 1 or 2 cards");
 }
 
-function duplicateCards(cards: readonly OfferTileCard[]): OfferTileDuplicateCards {
+function duplicateCards(
+  cards: readonly OfferTileCard[],
+): OfferTileDuplicateCards {
   if (cards.length === 1) return [cards[0]];
   if (cards.length === 2) return [cards[0], cards[1]];
   if (cards.length === 3) return [cards[0], cards[1], cards[2]];
@@ -370,7 +373,8 @@ function dreamsignTuple(
   dreamsigns: readonly OfferTileDreamsign[],
 ): OfferTileDreamsignChoices {
   if (dreamsigns.length === 2) return [dreamsigns[0], dreamsigns[1]];
-  if (dreamsigns.length === 3) return [dreamsigns[0], dreamsigns[1], dreamsigns[2]];
+  if (dreamsigns.length === 3)
+    return [dreamsigns[0], dreamsigns[1], dreamsigns[2]];
   if (dreamsigns.length === 4) {
     return [dreamsigns[0], dreamsigns[1], dreamsigns[2], dreamsigns[3]];
   }
@@ -380,7 +384,8 @@ function dreamsignTuple(
 function tileDreamsign(
   object: Extract<MerchantGameObject, { objectType: "dreamsign" }>,
 ): OfferTileDreamsign {
-  const imageName = object.dreamsignTemplate.imageName ?? `${object.dreamsignId}.png`;
+  const imageName =
+    object.dreamsignTemplate.imageName ?? `${object.dreamsignId}.png`;
   return {
     id: object.dreamsignId,
     name: object.dreamsignTemplate.name,
@@ -393,7 +398,9 @@ function requiredDreamsign(
   label: string,
 ): OfferTileDreamsign {
   const object = objects.find(
-    (candidate): candidate is Extract<MerchantGameObject, { objectType: "dreamsign" }> =>
+    (
+      candidate,
+    ): candidate is Extract<MerchantGameObject, { objectType: "dreamsign" }> =>
       candidate.objectType === "dreamsign",
   );
   if (object === undefined) unavailable(`${label} has no dreamsign`);
@@ -416,7 +423,11 @@ function copyCount(offer: MerchantOffer): number {
           : 0;
     return countAdds(candidate.applyPayload);
   });
-  if (counts[0] === undefined || counts[0] < 1 || counts.some((count) => count !== counts[0])) {
+  if (
+    counts[0] === undefined ||
+    counts[0] < 1 ||
+    counts.some((count) => count !== counts[0])
+  ) {
     unavailable("copies_draft candidates grant inconsistent copy counts");
   }
   return counts[0];
@@ -426,7 +437,8 @@ function categoryName(offer: MerchantOffer, context: MerchantContext): string {
   const category = buildCategoryUniverse(context).find((candidate) =>
     offer.targetKey.startsWith(`${candidate.id}:`),
   );
-  if (category === undefined) unavailable("category_draft_known has an unknown category id");
+  if (category === undefined)
+    unavailable("category_draft_known has an unknown category id");
   return category.label;
 }
 
@@ -438,11 +450,23 @@ export function buildDreamAuguryOfferTileModel(
   switch (offer.archetypeId) {
     case "fit_card_grant":
     case "strong_card":
-      return { id, kind: "card-gift", card: requiredCard(offer.gameObjects, offer.archetypeId) };
+      return {
+        id,
+        kind: "card-gift",
+        card: requiredCard(offer.gameObjects, offer.archetypeId),
+      };
     case "fit_card_draft":
-      return { id, kind: "card-draft", cards: fourCards(candidateCards(offer, [4])) };
+      return {
+        id,
+        kind: "card-draft",
+        cards: fourCards(candidateCards(offer, [4])),
+      };
     case "transfigured_draft":
-      return { id, kind: "transfigured-draft", cards: fourCards(candidateCards(offer, [4], true)) };
+      return {
+        id,
+        kind: "transfigured-draft",
+        cards: fourCards(candidateCards(offer, [4], true)),
+      };
     case "category_draft_known":
       return {
         id,
@@ -463,7 +487,8 @@ export function buildDreamAuguryOfferTileModel(
     }
     case "transfigure": {
       const payload = offer.applyPayload;
-      if (payload?.kind !== "transfigure_deck_entry") unavailable("transfigure has malformed payload");
+      if (payload?.kind !== "transfigure_deck_entry")
+        unavailable("transfigure has malformed payload");
       return {
         id,
         kind: "transfigure-card",
@@ -472,19 +497,28 @@ export function buildDreamAuguryOfferTileModel(
       };
     }
     case "starter_transfigure": {
-      const cards = allCards(offer.gameObjects).map((card) => tileCard(card, true));
+      const cards = allCards(offer.gameObjects).map((card) =>
+        tileCard(card, true),
+      );
       return { id, kind: "transfigure-starters", cards: starterCards(cards) };
     }
     case "keyword_mod": {
       const payload = offer.applyPayload;
-      if (payload?.kind !== "change_deck_entry_keywords" || payload.keywords.setReclaim === undefined) {
+      if (
+        payload?.kind !== "change_deck_entry_keywords" ||
+        payload.keywords.setReclaim === undefined
+      ) {
         unavailable("keyword_mod has malformed payload");
       }
       const deckCard = context.deckEntryById.get(payload.entryId);
-      if (deckCard === undefined) unavailable("keyword_mod targets an unknown deck entry");
-      const original = resolveDeckEntryCard(deckCard.card, deckCard.deckEntry).reclaimCost ?? 0;
+      if (deckCard === undefined)
+        unavailable("keyword_mod targets an unknown deck entry");
+      const original =
+        resolveDeckEntryCard(deckCard.card, deckCard.deckEntry).reclaimCost ??
+        0;
       const reclaimReduction = original - payload.keywords.setReclaim;
-      if (reclaimReduction < 1) unavailable("keyword_mod does not reduce Reclaim");
+      if (reclaimReduction < 1)
+        unavailable("keyword_mod does not reduce Reclaim");
       return {
         id,
         kind: "keyword-modification",
@@ -494,9 +528,12 @@ export function buildDreamAuguryOfferTileModel(
     }
     case "tribal_change": {
       const payload = offer.applyPayload;
-      if (payload?.kind !== "change_deck_entry_type") unavailable("tribal_change has malformed payload");
+      if (payload?.kind !== "change_deck_entry_type")
+        unavailable("tribal_change has malformed payload");
       const subtype = payload.typeChange.subtype as OfferTileCharacterSubtype;
-      if (!["Warrior", "Spirit Animal", "Survivor", "Outsider"].includes(subtype)) {
+      if (
+        !["Warrior", "Spirit Animal", "Survivor", "Outsider"].includes(subtype)
+      ) {
         unavailable("tribal_change targets an unsupported subtype");
       }
       return {
@@ -507,7 +544,11 @@ export function buildDreamAuguryOfferTileModel(
       };
     }
     case "purge":
-      return { id, kind: "purge-card", card: requiredCard(offer.gameObjects, "purge") };
+      return {
+        id,
+        kind: "purge-card",
+        card: requiredCard(offer.gameObjects, "purge"),
+      };
     case "purge_replace":
       return {
         id,
@@ -516,29 +557,44 @@ export function buildDreamAuguryOfferTileModel(
         incoming: fourCards(candidateCards(offer, [4])),
       };
     case "duplicate": {
-      const cards = offer.choiceRequest === undefined
-        ? [requiredCard(offer.gameObjects, "duplicate")]
-        : candidateCards(offer, [1, 2, 3]);
+      const cards =
+        offer.choiceRequest === undefined
+          ? [requiredCard(offer.gameObjects, "duplicate")]
+          : candidateCards(offer, [1, 2, 3]);
       return { id, kind: "duplicate-card", cards: duplicateCards(cards) };
     }
     case "dreamsign":
-      return { id, kind: "dreamsign-gift", dreamsign: requiredDreamsign(offer.gameObjects, "dreamsign") };
+      return {
+        id,
+        kind: "dreamsign-gift",
+        dreamsign: requiredDreamsign(offer.gameObjects, "dreamsign"),
+      };
     case "dreamsign_draft": {
       const candidates = offer.choiceRequest?.candidates;
-      if (candidates === undefined || candidates.length < 2 || candidates.length > 4) {
+      if (
+        candidates === undefined ||
+        candidates.length < 2 ||
+        candidates.length > 4
+      ) {
         unavailable("dreamsign_draft requires 2 to 4 candidates");
       }
       return {
         id,
         kind: "dreamsign-draft",
-        dreamsigns: dreamsignTuple(candidates.map((candidate) =>
-          requiredDreamsign(candidate.gameObjects, "dreamsign_draft candidate"),
-        )),
+        dreamsigns: dreamsignTuple(
+          candidates.map((candidate) =>
+            requiredDreamsign(
+              candidate.gameObjects,
+              "dreamsign_draft candidate",
+            ),
+          ),
+        ),
       };
     }
     case "add_site": {
       const payload = offer.applyPayload;
-      if (payload?.kind !== "add_site") unavailable("add_site has malformed payload");
+      if (payload?.kind !== "add_site")
+        unavailable("add_site has malformed payload");
       return {
         id,
         kind: "add-site",
@@ -561,7 +617,9 @@ function cardChoices(
     const object = firstCard(candidate.gameObjects);
     if (object === undefined) continue;
     const card =
-      preview && object.objectType === "deckCard" && object.previewCard !== undefined
+      preview &&
+      object.objectType === "deckCard" &&
+      object.previewCard !== undefined
         ? object.previewCard
         : object.card;
     choices.push({
@@ -608,7 +666,10 @@ function buildOfferVisual(
     case "cardGrid":
       return {
         kind: "cardChoices",
-        choices: cardChoices(presentation.candidates, presentation.transfigured),
+        choices: cardChoices(
+          presentation.candidates,
+          presentation.transfigured,
+        ),
         doubled: presentation.doubled,
       };
     case "beforeAfter":
@@ -659,7 +720,10 @@ function buildOfferVisual(
         choices: cardChoices(presentation.candidates, false),
       };
     case "dreamsign":
-      return { kind: "dreamsigns", dreamsigns: [toDreamsign(presentation.object)] };
+      return {
+        kind: "dreamsigns",
+        dreamsigns: [toDreamsign(presentation.object)],
+      };
     case "dreamsignGrid":
       return {
         kind: "dreamsignChoices",
@@ -680,8 +744,10 @@ function buildOfferVisual(
           .filter(
             (
               object,
-            ): object is Extract<MerchantGameObject, { objectType: "dreamsign" }> =>
-              object.objectType === "dreamsign",
+            ): object is Extract<
+              MerchantGameObject,
+              { objectType: "dreamsign" }
+            > => object.objectType === "dreamsign",
           )
           .map(toDreamsign),
       };
@@ -791,7 +857,9 @@ export function buildDreamAuguryAcceptRequest(
   offerId: string,
   choiceId: string | null,
 ): MerchantAcceptRequest | null {
-  const offer = encounter.offers.find((candidate) => candidate.offerId === offerId);
+  const offer = encounter.offers.find(
+    (candidate) => candidate.offerId === offerId,
+  );
   if (offer === undefined) return null;
   const candidates = offer.choiceRequest?.candidates ?? [];
   if (candidates.length > 0) {
@@ -831,21 +899,28 @@ export function buildDreamAuguryLogEntries(
     {
       key: `augury:${site.id}:site-entered`,
       event: "site_entered",
-      payload: { siteType: site.type, isEnhanced: site.isEnhanced, ui: "cumulus" },
+      payload: {
+        siteType: site.type,
+        isEnhanced: site.isEnhanced,
+      },
     },
   ];
   if (guideId !== null) {
     entries.push({
       key: `augury:${site.id}:guide:${guideId}`,
       event: "dream_guide_presented",
-      payload: { guideId, siteType: site.type, isEnhanced: site.isEnhanced, ui: "cumulus" },
+      payload: {
+        guideId,
+        siteType: site.type,
+        isEnhanced: site.isEnhanced,
+      },
     });
   }
   if (result.context?.fitModel === undefined) {
     entries.push({
       key: `augury:${site.id}:fit-model-missing`,
       event: "merchant_fit_model_missing",
-      payload: { siteId: site.id, ui: "cumulus" },
+      payload: { siteId: site.id },
     });
   }
   if (result.encounter === null) {
@@ -857,7 +932,6 @@ export function buildDreamAuguryLogEntries(
           siteId: site.id,
           reason: "encounter_unavailable",
           message: result.errorMessage,
-          ui: "cumulus",
         },
       });
     }
@@ -873,7 +947,6 @@ export function buildDreamAuguryLogEntries(
       offerCount: encounter.offers.length,
       deck: deckSnapshot,
       debug,
-      ui: "cumulus",
     },
   });
   for (const offer of encounter.offers) {
@@ -891,7 +964,6 @@ export function buildDreamAuguryLogEntries(
         deckSize: deckSnapshot?.size,
         deckHash: deckSnapshot?.hash,
         trace: offer.trace ?? null,
-        ui: "cumulus",
       },
     });
   }

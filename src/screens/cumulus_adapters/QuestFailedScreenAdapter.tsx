@@ -23,7 +23,6 @@ export function QuestFailedScreenAdapter() {
         turnNumber: summary.turnNumber,
         playerScore: summary.playerScore,
         enemyScore: summary.enemyScore,
-        uiVariant: "cumulus",
       },
     );
   }, [summary]);
@@ -33,7 +32,6 @@ export function QuestFailedScreenAdapter() {
     logEvent("quest_failed_start_new_run", {
       battleId: summary.battleId,
       result: summary.result,
-      uiVariant: "cumulus",
     });
     mutations.resetQuest();
   }, [mutations, summary]);

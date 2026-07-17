@@ -142,9 +142,6 @@ export function buildDreamsignBazaarSiteView(params: {
       params.site,
       params.state.essence,
     ),
-    purge: buildDreamsignBazaarPurgeView(
-      params.state,
-      params.pendingDreamsign,
-    ),
+    purge: buildDreamsignBazaarPurgeView(params.state, params.pendingDreamsign),
   };
 }

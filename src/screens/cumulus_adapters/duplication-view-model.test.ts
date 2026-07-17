@@ -16,7 +16,9 @@ import {
 function makeCard(cardNumber: number): CardData {
   return {
     name: asCardName(`Fixture ${String(cardNumber)}`),
-    id: asCardId(`00000000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`),
+    id: asCardId(
+      `00000000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`,
+    ),
     cardNumber,
     cardType: "Character",
     subtype: "",

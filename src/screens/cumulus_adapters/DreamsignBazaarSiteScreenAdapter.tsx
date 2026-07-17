@@ -56,7 +56,6 @@ export function DreamsignBazaarSiteScreenAdapter({ siteId }: { siteId: string })
       offerIds: view.offers.map((offer) => requireDreamsignId(offer.dreamsign, "Dreamsign Bazaar log")),
       offerPrices: view.offers.map((offer) => offer.price),
       restockPrice: view.restock.price,
-      ui: "cumulus",
     });
   }, [site, state.essence, view]);
   useEffect(() => {
@@ -65,7 +64,6 @@ export function DreamsignBazaarSiteScreenAdapter({ siteId }: { siteId: string })
       guideId: guide.id,
       siteType: site.type,
       isEnhanced: site.isEnhanced,
-      ui: "cumulus",
     });
   }, [guide, site]);
 
@@ -89,7 +87,7 @@ export function DreamsignBazaarSiteScreenAdapter({ siteId }: { siteId: string })
   }, [mutations, site]);
   const handleClose = useCallback(() => {
     if (site === null) return;
-    logEvent("site_completed", { siteType: "DreamsignMarket", outcome: "left", ui: "cumulus" });
+    logEvent("site_completed", { siteType: "DreamsignMarket", outcome: "left" });
     mutations.completeSite(site.id, "shop_left");
   }, [mutations, site]);
 

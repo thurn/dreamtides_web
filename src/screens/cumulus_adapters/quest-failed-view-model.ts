@@ -2,7 +2,9 @@ import type { QuestState } from "../../types/quest";
 import type { QuestFailedView } from "../../cumulus/screens/QuestFailedScreen";
 
 /** Build the player-facing terminal summary for a failed quest. */
-export function buildQuestFailedView(state: QuestState): QuestFailedView | null {
+export function buildQuestFailedView(
+  state: QuestState,
+): QuestFailedView | null {
   const summary = state.failureSummary;
   if (summary === null) return null;
 

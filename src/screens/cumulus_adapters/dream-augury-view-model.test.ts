@@ -110,7 +110,9 @@ const mappingCards = [1, 2, 3, 4, 5].map((index) =>
   }),
 );
 
-function catalogObject(index: number): Extract<MerchantGameObject, { objectType: "catalogCard" }> {
+function catalogObject(
+  index: number,
+): Extract<MerchantGameObject, { objectType: "catalogCard" }> {
   const value = mappingCards[index];
   return {
     objectType: "catalogCard",
@@ -141,7 +143,9 @@ function mappedDeckObject(index: number, entryId: string): MerchantDeckCard {
 const deckObject = mappedDeckObject(0, "entry-fixture");
 
 const mappingContext = {
-  candidateGrantCards: mappingCards.slice(0, 4).map((_unused, index) => catalogObject(index)),
+  candidateGrantCards: mappingCards
+    .slice(0, 4)
+    .map((_unused, index) => catalogObject(index)),
   deckCards: [deckObject],
   deckEntryById: new Map([[deckObject.entryId, deckObject]]),
   cardByUuid: new Map(mappingCards.map((value) => [value.id, value])),
@@ -162,9 +166,13 @@ function fourCandidates(payloadCopies = 1): MerchantChoiceCandidate[] {
       title: "Fixture",
       summary: "Fixture",
       gameObjects: [object],
-      applyPayload: payloadCopies === 1
-        ? add
-        : { kind: "composite", children: Array.from({ length: payloadCopies }, () => add) },
+      applyPayload:
+        payloadCopies === 1
+          ? add
+          : {
+              kind: "composite",
+              children: Array.from({ length: payloadCopies }, () => add),
+            },
     };
   });
 }
@@ -186,7 +194,10 @@ function mappedOffer(
   };
 }
 
-const choiceRequest = (candidates: MerchantChoiceCandidate[], choiceType: "catalogCard" | "dreamsign" | "replacementCard" = "catalogCard") => ({
+const choiceRequest = (
+  candidates: MerchantChoiceCandidate[],
+  choiceType: "catalogCard" | "dreamsign" | "replacementCard" = "catalogCard",
+) => ({
   choiceType,
   prompt: "Fixture",
   candidates,
@@ -210,7 +221,9 @@ function subtitleEntities(
         .map((segment) => segment.text);
 }
 
-function dreamsignObject(id: string): Extract<MerchantGameObject, { objectType: "dreamsign" }> {
+function dreamsignObject(
+  id: string,
+): Extract<MerchantGameObject, { objectType: "dreamsign" }> {
   return {
     objectType: "dreamsign",
     dreamsignId: id,
@@ -358,101 +371,183 @@ describe("dream augury view model", () => {
   });
 
   it("builds the persisted accept request from stable offer and choice ids", () => {
-    expect(
-      buildDreamAuguryAcceptRequest(encounter(), "A", "choice-2"),
-    ).toEqual({
-      encounterSignature: "encounter-fixture",
-      offerId: "A",
-      archetypeId: "fit_card_draft",
-      choice: { choiceId: "choice-2" },
-    });
+    expect(buildDreamAuguryAcceptRequest(encounter(), "A", "choice-2")).toEqual(
+      {
+        encounterSignature: "encounter-fixture",
+        offerId: "A",
+        archetypeId: "fit_card_draft",
+        choice: { choiceId: "choice-2" },
+      },
+    );
   });
 
   it("maps every merchant archetype to its strict Offer Tile category", () => {
     const drafts = fourCandidates();
     const dreamsigns = [dreamsignObject("sign-1"), dreamsignObject("sign-2")];
     const cases: readonly [MerchantOffer, string, string][] = [
-      [mappedOffer("fit_card_grant", { gameObjects: [catalogObject(0)] }), "card-gift", "Gain a Card"],
-      [mappedOffer("fit_card_draft", { choiceRequest: choiceRequest(drafts) }), "card-draft", "Choose a Card"],
-      [mappedOffer("copies_draft", { choiceRequest: choiceRequest(fourCandidates(2)) }), "copies-draft", "Choose a Card"],
-      [mappedOffer("strong_card", { gameObjects: [catalogObject(0)] }), "card-gift", "Gain a Card"],
-      [mappedOffer("category_draft_known", {
-        targetKey: `type:Character:${mappingCards.slice(0, 4).map((value) => value.id).join(",")}`,
-        choiceRequest: choiceRequest(drafts),
-      }), "category-draft", "Choose a Card"],
-      [mappedOffer("card_bundle", { gameObjects: [catalogObject(0), catalogObject(1)] }), "card-bundle", "Gain Two Cards"],
-      [mappedOffer("transfigured_draft", { choiceRequest: choiceRequest(drafts) }), "transfigured-draft", "Choose a Transfigured Card"],
-      [mappedOffer("transfigure", {
-        gameObjects: [{ ...deckObject, previewCard: mappingCards[0] }],
-        applyPayload: {
-          kind: "transfigure_deck_entry",
-          entryId: deckObject.entryId,
-          cardUuid: deckObject.cardUuid,
-          cardNumber: deckObject.cardNumber,
-          transfiguration: "Empowered",
-          previewCard: mappingCards[0],
-          description: "Fixture",
-        },
-      }), "transfigure-card", "Transfigure a Card"],
-      [mappedOffer("starter_transfigure", {
-        gameObjects: [{ ...deckObject, previewCard: mappingCards[0] }],
-        applyPayload: { kind: "composite", children: [] },
-      }), "transfigure-starters", "Transfigure Your Starters"],
-      [mappedOffer("keyword_mod", {
-        gameObjects: [{ ...deckObject, previewCard: { ...mappingCards[0], reclaimCost: 2 } }],
-        applyPayload: {
-          kind: "change_deck_entry_keywords",
-          entryId: deckObject.entryId,
-          cardUuid: deckObject.cardUuid,
-          cardNumber: deckObject.cardNumber,
-          keywords: { setReclaim: 2 },
-        },
-      }), "keyword-modification", "Reduce Reclaim"],
-      [mappedOffer("tribal_change", {
-        gameObjects: [deckObject],
-        applyPayload: {
-          kind: "change_deck_entry_type",
-          entryId: deckObject.entryId,
-          cardUuid: deckObject.cardUuid,
-          cardNumber: deckObject.cardNumber,
-          typeChange: {
-            predicateId: "fixture",
-            cardType: "Character",
-            subtype: "Survivor",
-            label: "Fixture",
+      [
+        mappedOffer("fit_card_grant", { gameObjects: [catalogObject(0)] }),
+        "card-gift",
+        "Gain a Card",
+      ],
+      [
+        mappedOffer("fit_card_draft", { choiceRequest: choiceRequest(drafts) }),
+        "card-draft",
+        "Choose a Card",
+      ],
+      [
+        mappedOffer("copies_draft", {
+          choiceRequest: choiceRequest(fourCandidates(2)),
+        }),
+        "copies-draft",
+        "Choose a Card",
+      ],
+      [
+        mappedOffer("strong_card", { gameObjects: [catalogObject(0)] }),
+        "card-gift",
+        "Gain a Card",
+      ],
+      [
+        mappedOffer("category_draft_known", {
+          targetKey: `type:Character:${mappingCards
+            .slice(0, 4)
+            .map((value) => value.id)
+            .join(",")}`,
+          choiceRequest: choiceRequest(drafts),
+        }),
+        "category-draft",
+        "Choose a Card",
+      ],
+      [
+        mappedOffer("card_bundle", {
+          gameObjects: [catalogObject(0), catalogObject(1)],
+        }),
+        "card-bundle",
+        "Gain Two Cards",
+      ],
+      [
+        mappedOffer("transfigured_draft", {
+          choiceRequest: choiceRequest(drafts),
+        }),
+        "transfigured-draft",
+        "Choose a Transfigured Card",
+      ],
+      [
+        mappedOffer("transfigure", {
+          gameObjects: [{ ...deckObject, previewCard: mappingCards[0] }],
+          applyPayload: {
+            kind: "transfigure_deck_entry",
+            entryId: deckObject.entryId,
+            cardUuid: deckObject.cardUuid,
+            cardNumber: deckObject.cardNumber,
+            transfiguration: "Empowered",
+            previewCard: mappingCards[0],
+            description: "Fixture",
           },
-        },
-      }), "tribal-change", "Change a Character Type"],
-      [mappedOffer("purge", { gameObjects: [deckObject] }), "purge-card", "Purge a Card"],
-      [mappedOffer("purge_replace", {
-        gameObjects: [deckObject],
-        choiceRequest: choiceRequest(drafts, "replacementCard"),
-      }), "trade-card", "Trade a Card"],
-      [mappedOffer("duplicate", {
-        choiceRequest: choiceRequest(drafts.slice(0, 3)),
-      }), "duplicate-card", "Choose a Card"],
-      [mappedOffer("dreamsign", { gameObjects: [dreamsigns[0]] }), "dreamsign-gift", "Gain a Dreamsign"],
-      [mappedOffer("dreamsign_draft", {
-        choiceRequest: choiceRequest(
-          dreamsigns.map((object, index) => ({
-            choiceId: `sign-choice-${String(index)}`,
-            title: "Fixture",
-            summary: "Fixture",
-            gameObjects: [object],
-            applyPayload: {
-              kind: "add_dreamsign",
-              dreamsignId: object.dreamsignId,
-              dreamsignTemplate: object.dreamsignTemplate,
+        }),
+        "transfigure-card",
+        "Transfigure a Card",
+      ],
+      [
+        mappedOffer("starter_transfigure", {
+          gameObjects: [{ ...deckObject, previewCard: mappingCards[0] }],
+          applyPayload: { kind: "composite", children: [] },
+        }),
+        "transfigure-starters",
+        "Transfigure Your Starters",
+      ],
+      [
+        mappedOffer("keyword_mod", {
+          gameObjects: [
+            {
+              ...deckObject,
+              previewCard: { ...mappingCards[0], reclaimCost: 2 },
             },
-          })),
-          "dreamsign",
-        ),
-      }), "dreamsign-draft", "Choose a Dreamsign"],
-      [mappedOffer("add_site", {
-        family: "site",
-        targetKey: "Shop",
-        applyPayload: { kind: "add_site", siteType: "Shop" },
-      }), "add-site", "Add a Site"],
+          ],
+          applyPayload: {
+            kind: "change_deck_entry_keywords",
+            entryId: deckObject.entryId,
+            cardUuid: deckObject.cardUuid,
+            cardNumber: deckObject.cardNumber,
+            keywords: { setReclaim: 2 },
+          },
+        }),
+        "keyword-modification",
+        "Reduce Reclaim",
+      ],
+      [
+        mappedOffer("tribal_change", {
+          gameObjects: [deckObject],
+          applyPayload: {
+            kind: "change_deck_entry_type",
+            entryId: deckObject.entryId,
+            cardUuid: deckObject.cardUuid,
+            cardNumber: deckObject.cardNumber,
+            typeChange: {
+              predicateId: "fixture",
+              cardType: "Character",
+              subtype: "Survivor",
+              label: "Fixture",
+            },
+          },
+        }),
+        "tribal-change",
+        "Change a Character Type",
+      ],
+      [
+        mappedOffer("purge", { gameObjects: [deckObject] }),
+        "purge-card",
+        "Purge a Card",
+      ],
+      [
+        mappedOffer("purge_replace", {
+          gameObjects: [deckObject],
+          choiceRequest: choiceRequest(drafts, "replacementCard"),
+        }),
+        "trade-card",
+        "Trade a Card",
+      ],
+      [
+        mappedOffer("duplicate", {
+          choiceRequest: choiceRequest(drafts.slice(0, 3)),
+        }),
+        "duplicate-card",
+        "Choose a Card",
+      ],
+      [
+        mappedOffer("dreamsign", { gameObjects: [dreamsigns[0]] }),
+        "dreamsign-gift",
+        "Gain a Dreamsign",
+      ],
+      [
+        mappedOffer("dreamsign_draft", {
+          choiceRequest: choiceRequest(
+            dreamsigns.map((object, index) => ({
+              choiceId: `sign-choice-${String(index)}`,
+              title: "Fixture",
+              summary: "Fixture",
+              gameObjects: [object],
+              applyPayload: {
+                kind: "add_dreamsign",
+                dreamsignId: object.dreamsignId,
+                dreamsignTemplate: object.dreamsignTemplate,
+              },
+            })),
+            "dreamsign",
+          ),
+        }),
+        "dreamsign-draft",
+        "Choose a Dreamsign",
+      ],
+      [
+        mappedOffer("add_site", {
+          family: "site",
+          targetKey: "Shop",
+          applyPayload: { kind: "add_site", siteType: "Shop" },
+        }),
+        "add-site",
+        "Add a Site",
+      ],
     ];
 
     for (const [offer, expectedKind, expectedHeadline] of cases) {
@@ -545,36 +640,55 @@ describe("dream augury view model", () => {
   it("rejects malformed fixed counts and resolves structured category and copy data", () => {
     const category = buildDreamAuguryOfferTileModel(
       mappedOffer("category_draft_known", {
-        targetKey: `type:Character:${mappingCards.slice(0, 4).map((value) => value.id).join(",")}`,
+        targetKey: `type:Character:${mappingCards
+          .slice(0, 4)
+          .map((value) => value.id)
+          .join(",")}`,
         choiceRequest: choiceRequest(fourCandidates()),
       }),
       mappingContext,
     );
     const copies = buildDreamAuguryOfferTileModel(
-      mappedOffer("copies_draft", { choiceRequest: choiceRequest(fourCandidates(2)) }),
-      mappingContext,
-    );
-    expect(category).toMatchObject({ kind: "category-draft", categoryName: "Character" });
-    expect(copies).toMatchObject({ kind: "copies-draft", copyCount: 2 });
-    expect(() => buildDreamAuguryOfferTileModel(
-      mappedOffer("fit_card_draft", { choiceRequest: choiceRequest(fourCandidates().slice(0, 3)) }),
-      mappingContext,
-    )).toThrow(/requires 4 candidates/);
-    expect(() => buildDreamAuguryOfferTileModel(
-      mappedOffer("dreamsign_draft", {
-        choiceRequest: choiceRequest([{
-          choiceId: "one",
-          title: "Fixture",
-          summary: "Fixture",
-          gameObjects: [dreamsignObject("one")],
-          applyPayload: {
-            kind: "add_dreamsign",
-            dreamsignId: "one",
-            dreamsignTemplate: dreamsignObject("one").dreamsignTemplate,
-          },
-        }], "dreamsign"),
+      mappedOffer("copies_draft", {
+        choiceRequest: choiceRequest(fourCandidates(2)),
       }),
       mappingContext,
-    )).toThrow(/requires 2 to 4 candidates/);
+    );
+    expect(category).toMatchObject({
+      kind: "category-draft",
+      categoryName: "Character",
+    });
+    expect(copies).toMatchObject({ kind: "copies-draft", copyCount: 2 });
+    expect(() =>
+      buildDreamAuguryOfferTileModel(
+        mappedOffer("fit_card_draft", {
+          choiceRequest: choiceRequest(fourCandidates().slice(0, 3)),
+        }),
+        mappingContext,
+      ),
+    ).toThrow(/requires 4 candidates/);
+    expect(() =>
+      buildDreamAuguryOfferTileModel(
+        mappedOffer("dreamsign_draft", {
+          choiceRequest: choiceRequest(
+            [
+              {
+                choiceId: "one",
+                title: "Fixture",
+                summary: "Fixture",
+                gameObjects: [dreamsignObject("one")],
+                applyPayload: {
+                  kind: "add_dreamsign",
+                  dreamsignId: "one",
+                  dreamsignTemplate: dreamsignObject("one").dreamsignTemplate,
+                },
+              },
+            ],
+            "dreamsign",
+          ),
+        }),
+        mappingContext,
+      ),
+    ).toThrow(/requires 2 to 4 candidates/);
   });
 });

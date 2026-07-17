@@ -142,7 +142,9 @@ describe('the "atlas" QA scene', () => {
       (node) => node.state === "available",
     );
     expect(available.length).toBeGreaterThan(0);
-    expect(available.every((node) => layerOrdinal(node.layer) === 1)).toBe(true);
+    expect(available.every((node) => layerOrdinal(node.layer) === 1)).toBe(
+      true,
+    );
   });
 });
 
@@ -155,7 +157,10 @@ describe("the atlas layer QA scenes", () => {
   for (const displayLayer of displayLayers) {
     const frontierLayer = displayLayer - 1;
     it(`atlas${String(displayLayer)} parks on the atlas with the frontier on the "Layer ${String(displayLayer)}" column`, () => {
-      const state = buildQaScene(`atlas${String(displayLayer)}`, makeQuestContent());
+      const state = buildQaScene(
+        `atlas${String(displayLayer)}`,
+        makeQuestContent(),
+      );
 
       expect(state).not.toBeNull();
       expect(state?.screen.type).toBe("atlas");
@@ -183,7 +188,10 @@ describe("the atlas layer QA scenes", () => {
     // reveal-two-layers-ahead rule has fired, so every choice the player can
     // make already shows one layer ahead.
     for (const displayLayer of displayLayers) {
-      const state = buildQaScene(`atlas${String(displayLayer)}`, makeQuestContent());
+      const state = buildQaScene(
+        `atlas${String(displayLayer)}`,
+        makeQuestContent(),
+      );
       const nodes = state?.atlas.nodes ?? {};
       const available = Object.values(nodes).filter(
         (node) => node.state === "available",
@@ -229,9 +237,10 @@ describe("the battle layer QA scenes", () => {
         state?.screen.type === "site" ? state.screen.siteId : null,
       );
 
-      const node = state?.currentDreamscape == null
-        ? undefined
-        : state.atlas.nodes[state.currentDreamscape];
+      const node =
+        state?.currentDreamscape == null
+          ? undefined
+          : state.atlas.nodes[state.currentDreamscape];
       expect(node).toBeDefined();
       expect(node === undefined ? undefined : layerOrdinal(node.layer)).toBe(
         displayLayer - 1,
@@ -254,9 +263,10 @@ describe("the battle layer QA scenes", () => {
     expect(state).not.toBeNull();
     expect(state?.completionLevel).toBe(0);
     expect(state?.screen.type).toBe("site");
-    const node = state?.currentDreamscape == null
-      ? undefined
-      : state.atlas.nodes[state.currentDreamscape];
+    const node =
+      state?.currentDreamscape == null
+        ? undefined
+        : state.atlas.nodes[state.currentDreamscape];
     expect(node === undefined ? undefined : layerOrdinal(node.layer)).toBe(0);
     expect(
       node?.sites.find((site) => site.id === state?.activeSiteId)?.type,
@@ -265,10 +275,9 @@ describe("the battle layer QA scenes", () => {
 });
 
 describe("site QA scenes", () => {
-  it("registers direct QA jumps for migration-critical site screens", () => {
+  it("registers direct QA jumps for gameplay site screens", () => {
     const expectedSites = [
       ["draft", "Draft"],
-      ["essence", "Essence"],
     ] as const;
 
     for (const [sceneId, siteType] of expectedSites) {
@@ -280,10 +289,13 @@ describe("site QA scenes", () => {
         state?.screen.type === "site" ? state.screen.siteId : null,
       );
       const node =
-        state?.currentDreamscape === null || state?.currentDreamscape === undefined
+        state?.currentDreamscape === null ||
+        state?.currentDreamscape === undefined
           ? undefined
           : state?.atlas.nodes[state.currentDreamscape];
-      const activeSite = node?.sites.find((site) => site.id === state?.activeSiteId);
+      const activeSite = node?.sites.find(
+        (site) => site.id === state?.activeSiteId,
+      );
       expect(activeSite?.type).toBe(siteType);
     }
   });
@@ -291,10 +303,7 @@ describe("site QA scenes", () => {
 
 describe('the "dreamscape-with-essence" QA scene', () => {
   it("parks on the dreamscape overview with an unvisited Essence site", () => {
-    const state = buildQaScene(
-      "dreamscape-with-essence",
-      makeQuestContent(),
-    );
+    const state = buildQaScene("dreamscape-with-essence", makeQuestContent());
 
     expect(state).not.toBeNull();
     expect(state?.screen.type).toBe("dreamscape");
@@ -325,5 +334,25 @@ describe('the "reward" QA scene', () => {
     const rewardSite = node?.sites.find((site) => site.type === "Reward");
     expect(rewardSite).toBeDefined();
     expect(rewardSite?.isVisited).toBe(false);
+  });
+
+  it("builds the at-cap replacement state with UUID-backed Dreamsigns", () => {
+    const content = makeQuestContent();
+    content.dreamsignTemplates = Array.from({ length: 13 }, (_, index) => ({
+      id: `dreamsign-${String(index + 1)}`,
+      name: `Dreamsign ${String(index + 1)}`,
+      effectDescription: "A QA effect.",
+    }));
+    const state = buildQaScene("reward-at-cap", content);
+
+    expect(state).not.toBeNull();
+    expect(state?.dreamsigns).toHaveLength(state?.maxDreamsigns ?? 0);
+    const runtime = Object.values(state?.siteRuntime ?? {}).find(
+      (candidate) => candidate.kind === "reward",
+    );
+    expect(runtime?.kind).toBe("reward");
+    if (runtime?.kind === "reward") {
+      expect(runtime.reward.rewardType).toBe("dreamsign");
+    }
   });
 });

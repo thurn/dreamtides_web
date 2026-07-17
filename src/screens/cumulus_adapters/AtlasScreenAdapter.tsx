@@ -46,7 +46,6 @@ export function AtlasScreenAdapter() {
       choiceLayer,
       completionLevel: state.completionLevel,
       nodeCount: view.nodes.length,
-      uiVariant: "cumulus",
     });
   }, [atlas, view.nodes.length, state.completionLevel]);
 
@@ -61,7 +60,5 @@ export function AtlasScreenAdapter() {
     [atlas.nodes, mutations],
   );
 
-  return (
-    <AtlasScreen view={view} onEnterNode={handleEnterNode} />
-  );
+  return <AtlasScreen view={view} onEnterNode={handleEnterNode} />;
 }

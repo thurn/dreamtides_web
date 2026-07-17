@@ -7,11 +7,7 @@ import { useQuest } from "../../state/quest-context";
 import { PurgeSiteScreen } from "../../cumulus/screens/PurgeSiteScreen";
 import { buildPurgeSiteView, resolvePurgeGuide } from "./purge-view-model";
 
-export function PurgeSiteScreenAdapter({
-  siteId,
-}: {
-  siteId: string;
-}) {
+export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
   const { state, mutations, questContent } = useQuest();
   const node =
     state.currentDreamscape !== null
@@ -45,7 +41,6 @@ export function PurgeSiteScreenAdapter({
       siteType: site.type,
       isEnhanced: site.isEnhanced,
       deckSize: state.deck.length,
-      ui: "cumulus",
     });
   }, [site?.id, site?.type, site?.isEnhanced, state.deck.length]);
 
@@ -58,7 +53,6 @@ export function PurgeSiteScreenAdapter({
         guideId: guide.id,
         siteType: site.type,
         isEnhanced: site.isEnhanced,
-        ui: "cumulus",
       },
     );
   }, [guide?.id, site?.id, site?.type, site?.isEnhanced]);
@@ -68,7 +62,6 @@ export function PurgeSiteScreenAdapter({
     logEvent("site_completed", {
       siteType: "Purge",
       outcome: "skipped",
-      ui: "cumulus",
     });
     mutations.completeSite(site.id, "purge_skipped");
   }, [mutations, site]);
@@ -95,7 +88,6 @@ export function PurgeSiteScreenAdapter({
         essenceAfter: Math.max(0, state.essence - cost),
         completionLevel: state.completionLevel,
         currentDreamscape: state.currentDreamscape,
-        ui: "cumulus",
       });
 
       mutations.purgeDeckCards(site.id, entryIds, cost, "purge");
@@ -105,10 +97,6 @@ export function PurgeSiteScreenAdapter({
 
   if (site === null || view === null) return null;
   return (
-    <PurgeSiteScreen
-      view={view}
-      onClose={handleClose}
-      onPurge={handlePurge}
-    />
+    <PurgeSiteScreen view={view} onClose={handleClose} onPurge={handlePurge} />
   );
 }

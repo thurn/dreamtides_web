@@ -54,11 +54,14 @@ export function buildDraftView(params: {
 }): DraftView {
   const pickTotal = params.site !== null ? draftSitePickCount(params.site) : 0;
   return {
-    scene: params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null,
-    offer: resolveOfferCards(params.offerCardNumbers, params.cardDatabase).map((card) => ({
-      cardId: card.id,
-      displaySnapshot: card,
-    })),
+    scene:
+      params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null,
+    offer: resolveOfferCards(params.offerCardNumbers, params.cardDatabase).map(
+      (card) => ({
+        cardId: card.id,
+        displaySnapshot: card,
+      }),
+    ),
     offerKey: params.offerCardNumbers.join(","),
     // Clamp so the last pack never reads past the total (e.g. "(6/5)").
     pickNumber: Math.min(params.sitePicksCompleted + 1, Math.max(pickTotal, 1)),

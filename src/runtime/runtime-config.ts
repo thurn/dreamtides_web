@@ -10,16 +10,6 @@ export interface RuntimeConfig {
   databaseMode: DatabaseMode;
   journeyVariant: JourneyVariant;
   /**
-   * Which UI implementation renders each quest screen, from `?ui=`. `"cumulus"`
-   * (the default) renders the Cumulus design-system screen where one exists and
-   * silently falls back to the legacy screen for any screen not yet migrated;
-   * `"legacy"` forces the legacy implementation everywhere. The value is a
-   * query param, so it survives the address-bar path reflection
-   * (`useQuestUrlSync` preserves the query string) and persists across
-   * navigation for the session. Drives the per-screen swap in `ScreenRouter`.
-   */
-  uiVariant: UiVariant;
-  /**
    * Draft-pool construction strategy from `?algo=`, resolved to a registered
    * `PoolVariant`. An absent `?algo=` uses `DEFAULT_POOL_VARIANT`; a draft-mode
    * value (`replay`/`fresh20`) also uses the default; any other value must name
@@ -82,12 +72,11 @@ export interface RuntimeConfig {
 
 export type DatabaseMode = "emulator" | "realtime";
 export type JourneyVariant = "classic" | "v2";
-export type UiVariant = "cumulus" | "legacy";
 
 /**
  * Extracts the fold-relevant content slice a room pins into its genesis. Only
  * parameters that change how the log folds belong here (draft pool/mode, pack
- * size, journey shape); presentation-only config (`uiVariant`, `aiMode`, debug
+ * size, journey shape); presentation-only config (`aiMode`, debug
  * flags) is excluded so two clients differing purely in presentation still
  * fold — and join — the same room. Absent optional fields fall back to the
  * same defaults `parseRuntimeConfig` applies.
@@ -102,7 +91,10 @@ export function contentConfigFromRuntime(config: RuntimeConfig): ContentConfig {
 }
 
 /** Field-wise equality of two content configs (used by RoomGate's config gate). */
-export function contentConfigsEqual(a: ContentConfig, b: ContentConfig): boolean {
+export function contentConfigsEqual(
+  a: ContentConfig,
+  b: ContentConfig,
+): boolean {
   return (
     a.poolVariant === b.poolVariant &&
     a.draftMode === b.draftMode &&
@@ -120,7 +112,10 @@ export function contentConfigsEqual(a: ContentConfig, b: ContentConfig): boolean
  * feeding the result back through `parseRuntimeConfig` yields a config whose
  * content slice equals `config`.
  */
-export function applyContentConfigToSearch(currentSearch: string, config: ContentConfig): string {
+export function applyContentConfigToSearch(
+  currentSearch: string,
+  config: ContentConfig,
+): string {
   const params = new URLSearchParams(currentSearch);
   if (config.draftMode === "replay") {
     params.set("algo", "replay");
@@ -141,6 +136,14 @@ export function applyContentConfigToSearch(currentSearch: string, config: Conten
   return query === "" ? "" : `?${query}`;
 }
 
+/** Returns a canonical gameplay query string with the obsolete UI key removed. */
+export function removeUiParamFromSearch(search: string): string {
+  const params = new URLSearchParams(search);
+  params.delete("ui");
+  const query = params.toString();
+  return query === "" ? "" : `?${query}`;
+}
+
 export function parseRuntimeConfig(search: string): RuntimeConfig {
   const params = new URLSearchParams(search);
   const rawAlgo = params.get("algo");
@@ -157,7 +160,6 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     gameId: normalizeRoomId(params.get("game")),
     databaseMode: parseDatabaseMode(params.get("realtime")),
     journeyVariant: parseJourneyVariant(params.get("journey")),
-    uiVariant: parseUiVariant(params.get("ui")),
     poolVariant,
     draftMode,
     fresh20PackSize: parsePackSize(params.get("packsize")),
@@ -180,15 +182,6 @@ function parseGotoScene(rawScene: string | null): string | null {
 
 function parseJourneyVariant(_rawJourney: string | null): JourneyVariant {
   return "v2";
-}
-
-/**
- * Resolves `?ui=`. Only the exact value `legacy` opts out of the Cumulus UI; any
- * other value (including absent) defaults to `cumulus`, so the new UI is the
- * default and un-migrated screens fall back per-screen inside `ScreenRouter`.
- */
-function parseUiVariant(rawUi: string | null): UiVariant {
-  return rawUi === "legacy" ? "legacy" : "cumulus";
 }
 
 function parseDraftMode(rawAlgo: string | null): "pool" | "replay" | "fresh20" {

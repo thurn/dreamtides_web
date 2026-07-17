@@ -66,7 +66,6 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
       deckSize: state.deck.length,
       candidateCount: runtime.entryIds.length,
       offeredEntries,
-      ui: "cumulus",
     });
   }, [questContent.cardDatabase, runtime, site, state]);
 
@@ -76,7 +75,7 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
       logEventOnce(
         `duplication:${site.id}:guide:${guide.id}`,
         "dream_guide_presented",
-        { guideId: guide.id, siteType: site.type, isEnhanced: site.isEnhanced, ui: "cumulus" },
+        { guideId: guide.id, siteType: site.type, isEnhanced: site.isEnhanced },
       );
     }
   }, [guide, site]);
@@ -86,7 +85,6 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
     logEvent("site_completed", {
       siteType: "Duplication",
       outcome: runtime === null || runtime.entryIds.length === 0 ? "no_candidates" : "skipped",
-      ui: "cumulus",
     });
     mutations.completeSite(site.id, "duplication_skipped");
   }, [mutations, runtime, site]);
@@ -105,7 +103,6 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
       deckSizeAfter: state.deck.length + 1,
       currentDreamscape: state.currentDreamscape,
       completionLevel: state.completionLevel,
-      ui: "cumulus",
     });
     mutations.acceptDuplicationChoice(site.id, entryId);
   }, [mutations, questContent.cardDatabase, runtime, site, state]);

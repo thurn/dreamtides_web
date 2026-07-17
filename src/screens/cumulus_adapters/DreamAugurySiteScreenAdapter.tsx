@@ -105,7 +105,6 @@ export function DreamAugurySiteScreenAdapter({ siteId }: { siteId: string }) {
       offerId,
       archetypeId: offer.archetypeId,
       surface: "offer_tile",
-      ui: "cumulus",
     });
   }, [result, site]);
 

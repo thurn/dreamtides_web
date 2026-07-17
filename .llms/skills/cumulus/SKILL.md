@@ -26,7 +26,7 @@ component past its typed surface is not an available move at all (see
 - **Materials** (hand-written): [materials.md](materials.md) — the one
   liquid-glass material (who wears it, its `--glass-*` tokens, the
   `--glass-fill-popover` reveal tint, and the blur-preservation constraint) and
-  the solid alternatives that are deliberately *not* glass.
+  the solid alternatives that are deliberately _not_ glass.
 - **Live doc site**: `/cumulus` on the dev server (e.g.
   `http://localhost:5173/cumulus`), with `/cumulus#/<id>` per component —
   interactive demos and the same props tables, useful during browser QA.
@@ -67,46 +67,46 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 | Component | Group | Consumers | Reference | What it is |
 | --- | --- | --- | --- | --- |
 | Pressable | Primitives | 25 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
-| Resource Chip | Components | 5 | [components/resource-chip.md](components/resource-chip.md) | The sized, self-contained value-and-mark chip for the game economy. |
-| Essence Value | Components | 17 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
-| Icon Button | Components | 13 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — neutral or purple accent liquid glass, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
-| Glass Button | Components | 17 | [components/glass-button.md](components/glass-button.md) | The labeled glass action — a bold text label with optional numerical essence cost on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface. |
+| Resource Chip | Components | 4 | [components/resource-chip.md](components/resource-chip.md) | The sized, self-contained value-and-mark chip for the game economy. |
+| Essence Value | Components | 8 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
+| Icon Button | Components | 12 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — neutral or purple accent liquid glass, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
+| Glass Button | Components | 16 | [components/glass-button.md](components/glass-button.md) | The labeled glass action — a bold text label with optional numerical essence cost on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface. |
 | Offer Tile | Components | 2 | [components/offer-tile.md](components/offer-tile.md) | The circular symbolic Dream Augury offer button in named 300×300 desktop and 240×240 mobile sizes: UUID-backed full-bleed card art, Dreamsigns and site glyphs over authored full-art fields, and centered operation marks inside the gold-and-feather frame. |
 | Glass Panel | Components | 6 | [components/glass-panel.md](components/glass-panel.md) | The shared liquid-glass content container: an optional structured header, a composed body, and an optional footer on the canonical floating material. |
-| Glass Dialog | Components | 6 | [components/glass-dialog.md](components/glass-dialog.md) | The glass overlay shell: a modal dialog with a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and an optional glass close disc) over a scrolling body. |
+| Glass Dialog | Components | 5 | [components/glass-dialog.md](components/glass-dialog.md) | The glass overlay shell: a modal dialog with a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and an optional glass close disc) over a scrolling body. |
 | Speech Bubble | Components | 2 | [components/speech-bubble.md](components/speech-bubble.md) | A guide-dialog bubble for character-led site screens: the same frosted information material as an InfoCard, with a left arrow that points back to the speaker. |
-| Segmented Control | Components | 3 | [components/segmented-control.md](components/segmented-control.md) | The compact tab and filter switch used for type filters, sort direction, and small mode toggles. |
-| Select | Components | 4 | [components/select.md](components/select.md) | The compact dropdown control, and Cumulus's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. |
-| TextField | Components | 2 | [components/text-field.md](components/text-field.md) | The reusable labeled text and search input on Cumulus control chrome, with supporting and validation messaging. |
-| NumberStepper | Components | 2 | [components/number-stepper.md](components/number-stepper.md) | A labeled, accessible decrement/value/increment row with optional canonical resource notation. |
+| Segmented Control | Components | 2 | [components/segmented-control.md](components/segmented-control.md) | The compact tab and filter switch used for type filters, sort direction, and small mode toggles. |
+| Select | Components | 3 | [components/select.md](components/select.md) | The compact dropdown control, and Cumulus's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. |
+| TextField | Components | 1 | [components/text-field.md](components/text-field.md) | The reusable labeled text and search input on Cumulus control chrome, with supporting and validation messaging. |
+| NumberStepper | Components | 1 | [components/number-stepper.md](components/number-stepper.md) | A labeled, accessible decrement/value/increment row with optional canonical resource notation. |
 | DisclosureSection | Components | 1 | [components/disclosure-section.md](components/disclosure-section.md) | A controlled Cumulus section for progressively revealing dense secondary information. |
 | CardOrderEditor | Components | 1 | [components/card-order-editor.md](components/card-order-editor.md) | An identity-safe top-to-bottom card ordering control shared by deck and Foresee workflows. |
-| Tide Disc | Components | 2 | [components/tide-disc.md](components/tide-disc.md) | The single semantic tide mark: a colored disc carrying the tide's glyph and its own strict tide reveal, sized 'sm' or 'lg'. |
+| Tide Disc | Components | 1 | [components/tide-disc.md](components/tide-disc.md) | The single semantic tide mark: a colored disc carrying the tide's glyph and its own strict tide reveal, sized 'sm' or 'lg'. |
 | Transfiguration Form Button | Components | 1 | [components/transfiguration-form-button.md](components/transfiguration-form-button.md) | The canonical forge-form choice: compact and price-bearing controls with shared glyph, color, state, and accessibility behavior. |
-| Motes | Components | 11 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
+| Motes | Components | 10 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
 | Info Card | Components | 5 | [components/info-card.md](components/info-card.md) | The one press-to-reveal information card. |
-| Group Panel | Components | 9 | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |
+| Group Panel | Components | 8 | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |
 | Glow Icon | Primitives | 13 | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a Boxicons glyph that paints in the caller's resource hue, with an optional content-protection shadow and an optional emitted-light glow pinned to its own font-size so both scale with the mark. |
 | Pip Badge | Components | 2 | [components/pip-badge.md](components/pip-badge.md) | The compact circled number used in dense card rows and inline rules text for spark or energy values. |
 | Quest Status Bar | Components | 5 | [components/quest-status-bar.md](components/quest-status-bar.md) | The persistent, transparent bottom HUD for quest screens. |
 | Battle Status Display | Components | 1 | [components/battle-status-display.md](components/battle-status-display.md) | The glass status card for one battle participant: centered current and maximum energy at left, a head-focused Dreamcaller portrait at center, and centered current points at right. |
 | Dreamwell Card | Components | 1 | [components/dreamwell-card.md](components/dreamwell-card.md) | The static landscape card drawn from the Dreamwell: UUID-keyed art, energy grant, name, and complete rules text in one readable object. |
-| Dreamcaller Portrait | Components | 25 | [components/dreamcaller-portrait.md](components/dreamcaller-portrait.md) | The shared framed and stage-filling Dreamcaller art surface: the transparent full-body cutout in one of six fixed framings. |
+| Dreamcaller Portrait | Components | 18 | [components/dreamcaller-portrait.md](components/dreamcaller-portrait.md) | The shared framed and stage-filling Dreamcaller art surface: the transparent full-body cutout in one of six fixed framings. |
 | Rich Text | Components | 16 | [components/rich-text.md](components/rich-text.md) | The design system's model for a run of formatted copy. |
-| Rules Text | Components | 19 | [components/rules-text.md](components/rules-text.md) | Renders Dreamtides rules copy from card data — resource pips, ability carets, and glossary keywords styled in place — so ability text reads the same everywhere it appears. |
-| Game Card | Components | 31 | [components/game-card.md](components/game-card.md) | The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name. |
+| Rules Text | Components | 12 | [components/rules-text.md](components/rules-text.md) | Renders Dreamtides rules copy from card data — resource pips, ability carets, and glossary keywords styled in place — so ability text reads the same everywhere it appears. |
+| Game Card | Components | 26 | [components/game-card.md](components/game-card.md) | The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name. |
 | Card Back | Components | 2 | [components/card-back.md](components/card-back.md) | The canonical face-down Dreamtides card object: the shipped card-back sprite on the shared 5:7 card geometry, with fixed crop, edge, and elevation. |
 | Card Pile | Components | 1 | [components/card-pile.md](components/card-pile.md) | A physical deck or void stack built from structured, topmost-first card instances. |
 | Card Gallery Panel | Components | 7 | [components/card-gallery-panel.md](components/card-gallery-panel.md) | The shared card-browser surface: GlassPanel title and action chrome around a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim. |
 | Card Term Definitions | Components | 0 | [components/card-term-definitions.md](components/card-term-definitions.md) | An incubating reading-order stack of Glossary Definition Cards for every gameplay term in a stretch of rules text. |
-| Glossary Definition Card | Components | 3 | [components/glossary-definition-card.md](components/glossary-definition-card.md) | A renderable keyword-definition tile for normal document flow: one glossary entry in an InfoCard text card whose headline is the keyword and whose body is the keyword's rules text. |
+| Glossary Definition Card | Components | 2 | [components/glossary-definition-card.md](components/glossary-definition-card.md) | A renderable keyword-definition tile for normal document flow: one glossary entry in an InfoCard text card whose headline is the keyword and whose body is the keyword's rules text. |
 | Card Stat Orb | Components | 3 | [components/card-stat-orb.md](components/card-stat-orb.md) | The card-corner resource stat: a fitted white numeral over the energy, spark, or Dreamwell-energy glyph, with an optional monochrome transfiguration badge. |
-| Atlas Node | Components | 3 | [components/atlas-node.md](components/atlas-node.md) | One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engine: a framed circular icon whose glow and badges track its state — revealed, known, visited, completed, forgone, or a looming boss — and which reveals its scene / detail card on hover or press. |
-| Atlas Edge | Components | 2 | [components/atlas-edge.md](components/atlas-edge.md) | The connector between two Atlas nodes, drawn inside the map's SVG. |
+| Atlas Node | Components | 2 | [components/atlas-node.md](components/atlas-node.md) | One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engine: a framed circular icon whose glow and badges track its state — revealed, known, visited, completed, forgone, or a looming boss — and which reveals its scene / detail card on hover or press. |
+| Atlas Edge | Components | 1 | [components/atlas-edge.md](components/atlas-edge.md) | The connector between two Atlas nodes, drawn inside the map's SVG. |
 | Atlas Map | Components | 1 | [components/atlas-map.md](components/atlas-map.md) | The Dream Atlas map surface — the run graph of dreamscape nodes and their connectors, fitted into a fixed portrait design stage that uniformly scales to fit its container (letterboxed). |
-| Dreamsign | Components | 14 | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
+| Dreamsign | Components | 10 | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
 | Dreamsign Gallery Panel | Components | 1 | [components/dreamsign-gallery-panel.md](components/dreamsign-gallery-panel.md) | The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one bare-glyph end action. |
-| Site Node | Components | 3 | [components/site-node.md](components/site-node.md) | The dreamscape site disc: a floating circular node carrying a glyph and accent ring. |
+| Site Node | Components | 2 | [components/site-node.md](components/site-node.md) | The dreamscape site disc: a floating circular node carrying a glyph and accent ring. |
 <!-- END GENERATED COMPONENT INDEX -->
 
 ## Customization: step back before adding any knob
@@ -140,7 +140,7 @@ is a "no":
   a pixel measurement is layout; wrap and size your own element (rung 2).
 - A per-instance `color` or `accent` so "this one instance" reads differently
   — states that legitimately differ (a boss node looming larger, a locked
-  node dimmed) are decided *inside* the component from its semantic model,
+  node dimmed) are decided _inside_ the component from its semantic model,
   never handed in as a raw value.
 - `className`, `style`, or a `CSSProperties` prop — these are escape hatches
   that let a call site silently leave the system.
@@ -175,7 +175,7 @@ three files.
 ## Values are named, not stringly typed
 
 A prop that carries anything other than free-form display text takes a
-*named* value type from `src/cumulus/primitives/`, never a bare string:
+_named_ value type from `src/cumulus/primitives/`, never a bare string:
 
 - A color is a `CumulusColor` — a palette role, or a `#hex` literal only for
   genuinely data-driven color. Never a CSS color string or class name.
@@ -206,7 +206,7 @@ color-ramp step, a radius step, a font face) and is the internal material the
 semantic layer is built from; the `no-primitive-tokens` ESLint rule errors on
 any `--primitive-*` reference outside `src/cumulus/primitives/` and
 `src/cumulus/components/`. Everything else is a semantic token that names a
-*use* — `--surface-card`, `--text-secondary`, `--radius-control` — and is
+_use_ — `--surface-card`, `--text-secondary`, `--radius-control` — and is
 what all UI code writes against. This split is what lets the whole system
 re-skin by editing the primitive layer alone.
 
@@ -232,7 +232,7 @@ lint-enforced in product UI: `no-hardcoded-values` catches raw colors,
 `no-untokenized-lengths` catches raw px spacing and radii,
 `no-composed-type-voice` catches hand-assembled font shorthands, and
 `valid-token-references` catches `var(--…)` names that don't exist. Box
-*measures* (width/height/min/max constraints) are content-driven layout and
+_measures_ (width/height/min/max constraints) are content-driven layout and
 stay the caller's numbers.
 
 **Glass text is a special role.** Text on the liquid-glass material uses
@@ -270,10 +270,10 @@ rethink the dependency; never widen the allowlist for UI code.
 
 ## Building a product screen: screen / builder / adapter
 
-A migrated quest screen is three files with strictly separated roles. Lint
+A quest screen is three files with strictly separated roles. Lint
 enforces the split (`thin-adapters`, the builder-purity import block, and the
 Cumulus boundary rules), so put each kind of code in its home from the start.
-**When migrating or building a screen, follow the ordered checklist in the
+**When building a screen, follow the ordered checklist in the
 companion [cumulus-migrate](../cumulus-migrate/SKILL.md) skill** — it carries the
 working idioms (adapter randomness minting, screen-test incantations, the
 registry/QA steps) that this overview compresses:
@@ -289,7 +289,7 @@ registry/QA steps) that this overview compresses:
   types (`buildFooViewModel(...)`). Every mapping rule — capping,
   suppression, display-copy fallbacks, color→variant tables — lives here,
   tested with plain fixtures. Deterministic in its arguments; no `react`, no
-  `src/state` (lint-enforced). A rule that is really a *domain* rule belongs
+  `src/state` (lint-enforced). A rule that is really a _domain_ rule belongs
   in `src/data/` instead, which both the builder and Cumulus may import.
 - **Adapter** (`src/screens/cumulus_adapters/FooScreenAdapter.tsx`) — wiring only:
   acquire state, mint per-mount randomness (offers, seeds), call the builder
@@ -298,10 +298,11 @@ registry/QA steps) that this overview compresses:
   exports, and any `src/cumulus/` import other than `src/cumulus/screens/`. If
   adapter code seems worth testing, it belongs in the builder.
 
-Register the adapter in `src/screens/cumulus_adapters/registry.tsx`. **Registration is
-launch**: `?ui=cumulus` is the default variant, so a registry entry serves the
-screen to production immediately — QA to the production bar first
-(`?ui=legacy` is the rollback flag).
+Register the adapter in the exhaustive production resolver in
+`src/screens/cumulus_adapters/registry.tsx`. Every non-site `Screen` resolves
+through `screenFor`; every `SiteType` receives a screen, Battle, or inline
+disposition through `siteDispositionFor`. Add or update the table-driven
+registry test and QA the route to the production bar.
 
 For big screens (Atlas-sized): keep one view-model at the root; when the tree
 is deep, re-expose it through a screen-scoped React context defined inside

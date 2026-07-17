@@ -22,9 +22,7 @@ import type {
 } from "../../cumulus/screens/PurgeSiteScreen";
 import type { DreamGuideContent } from "../../types/content";
 import { toDeckCardView } from "./mobile-deck-view-model";
-import {
-  dreamscapeSceneRef,
-} from "./dreamscape-view-model";
+import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 const FALLBACK_GUIDE_ID = "takeshi";
 const FALLBACK_GUIDE_NAME = "Master Takeshi";

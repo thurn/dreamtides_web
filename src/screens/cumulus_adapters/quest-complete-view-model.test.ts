@@ -59,8 +59,18 @@ function state(): QuestState {
       startingEssence: 200,
     },
     deck: [
-      { entryId: "entry-a", cardNumber: 1, transfiguration: null, isBane: false },
-      { entryId: "entry-b", cardNumber: 2, transfiguration: null, isBane: false },
+      {
+        entryId: "entry-a",
+        cardNumber: 1,
+        transfiguration: null,
+        isBane: false,
+      },
+      {
+        entryId: "entry-b",
+        cardNumber: 2,
+        transfiguration: null,
+        isBane: false,
+      },
     ],
     dreamsigns: [
       {

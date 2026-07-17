@@ -137,7 +137,10 @@ function setQuestContext(state = makeState()): void {
   } as QuestContextValue);
 }
 
-function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
+function mount(element: ReactElement): {
+  container: HTMLDivElement;
+  root: Root;
+} {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -176,7 +179,6 @@ describe("DreamsignRevelationScreenAdapter", () => {
           siteType: "DreamsignRevelation",
           isEnhanced: false,
           optionCount: 3,
-          ui: "cumulus",
         },
       },
       {
@@ -186,7 +188,6 @@ describe("DreamsignRevelationScreenAdapter", () => {
           guideId: "sigrun-guide",
           siteType: "DreamsignRevelation",
           isEnhanced: false,
-          ui: "cumulus",
         },
       },
     ]);
@@ -198,7 +199,6 @@ describe("DreamsignRevelationScreenAdapter", () => {
         siteType: "DreamsignRevelation",
         isEnhanced: false,
         optionCount: 3,
-        ui: "cumulus",
       },
     );
     expect(loggingMock.logEventOnce).toHaveBeenNthCalledWith(
@@ -209,7 +209,6 @@ describe("DreamsignRevelationScreenAdapter", () => {
         guideId: "sigrun-guide",
         siteType: "DreamsignRevelation",
         isEnhanced: false,
-        ui: "cumulus",
       },
     );
 

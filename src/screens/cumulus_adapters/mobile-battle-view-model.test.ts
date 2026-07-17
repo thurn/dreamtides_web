@@ -66,7 +66,9 @@ function makeInit(): BattleInit {
     startingSide: "player",
     playerDrawSkipsTurnOne: true,
     questDeckEntries: [],
-    playerDeckOrder: Array.from({ length: 8 }, (_unused, index) => definition(index + 1)),
+    playerDeckOrder: Array.from({ length: 8 }, (_unused, index) =>
+      definition(index + 1),
+    ),
     dreamwellDeck: [],
     enemyDescriptor: {
       id: ENEMY_DREAMCALLER.id,
@@ -78,9 +80,8 @@ function makeInit(): BattleInit {
       dreamsigns: [],
       signatureCards: [],
     },
-    enemyDeckDefinition: Array.from(
-      { length: 8 },
-      (_unused, index) => definition(index + 9),
+    enemyDeckDefinition: Array.from({ length: 8 }, (_unused, index) =>
+      definition(index + 9),
     ),
     dreamcallerSummary: {
       id: "player-dreamcaller-uuid",
@@ -177,7 +178,9 @@ describe("buildMobileBattleView", () => {
     board.sides.enemy.dreamwellCardIndex = 0;
     board.sides.enemy.dreamwellDrawnTurn = 2;
 
-    expect(buildMobileBattleView(init, board, ENEMY_DREAMCALLER).dreamwell).toEqual({
+    expect(
+      buildMobileBattleView(init, board, ENEMY_DREAMCALLER).dreamwell,
+    ).toEqual({
       side: "enemy",
       model: {
         cardId: "3a4293da-55a1-4094-898a-df402ffa1c92",
@@ -213,9 +216,13 @@ describe("buildMobileBattleView", () => {
     expect(view.activeSide).toBe(board.activeSide);
     expect(view.aiApproval).toBeNull();
     expect(view.phase).toBe("dawn");
-    expect(view.playerHand.map((card) => card.id)).toEqual(board.sides.player.hand);
+    expect(view.playerHand.map((card) => card.id)).toEqual(
+      board.sides.player.hand,
+    );
     expect(view.playerHand.map((card) => card.model.cardId)).toEqual(
-      board.sides.player.hand.map((id) => board.cardInstances[id].definition.cardId),
+      board.sides.player.hand.map(
+        (id) => board.cardInstances[id].definition.cardId,
+      ),
     );
     expect(view.player.frontRank[3].card).toMatchObject({
       id: board.sides.player.frontRank.F3,
@@ -332,19 +339,23 @@ describe("buildMobileBattleView", () => {
       canResolve: false,
       presentation: "board",
     });
-    expect(optimistic.cardPicker?.candidates.map((candidate) => ({
-      instanceId: candidate.instanceId,
-      cardUuid: candidate.cardUuid,
-      owner: candidate.owner,
-      zone: candidate.zone,
-      highlighted: candidate.highlighted,
-    }))).toEqual(prompt.options.candidateIds.map((instanceId, index) => ({
-      instanceId,
-      cardUuid: board.cardInstances[instanceId].definition.cardId,
-      owner: "player",
-      zone: "hand",
-      highlighted: index === 0,
-    })));
+    expect(
+      optimistic.cardPicker?.candidates.map((candidate) => ({
+        instanceId: candidate.instanceId,
+        cardUuid: candidate.cardUuid,
+        owner: candidate.owner,
+        zone: candidate.zone,
+        highlighted: candidate.highlighted,
+      })),
+    ).toEqual(
+      prompt.options.candidateIds.map((instanceId, index) => ({
+        instanceId,
+        cardUuid: board.cardInstances[instanceId].definition.cardId,
+        owner: "player",
+        zone: "hand",
+        highlighted: index === 0,
+      })),
+    );
 
     const confirmed = buildMobileBattleView(
       init,
@@ -429,9 +440,10 @@ describe("buildMobileBattleView", () => {
   ] as const)("maps a %s %s candidate into a usable picker", (side, zone) => {
     const init = makeInit();
     const board = makeBoard(init);
-    const candidateId = zone === "frontRank"
-      ? Object.values(board.sides[side].frontRank).find((id) => id !== null)
-      : board.sides[side][zone][0];
+    const candidateId =
+      zone === "frontRank"
+        ? Object.values(board.sides[side].frontRank).find((id) => id !== null)
+        : board.sides[side][zone][0];
     if (candidateId === undefined || candidateId === null) {
       throw new Error(`fixture missing ${side} ${zone} candidate`);
     }
@@ -453,32 +465,27 @@ describe("buildMobileBattleView", () => {
       },
     } satisfies PendingPrompt;
 
-    const view = buildMobileBattleView(
-      init,
-      board,
-      ENEMY_DREAMCALLER,
-      null,
-      {
-        aiMode: false,
-        isOpponentHandRevealed: false,
-        isPlayerHandHidden: false,
-        pendingPrompt: prompt,
-        confirmedPromptId: prompt.promptId,
-      },
-    );
+    const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER, null, {
+      aiMode: false,
+      isOpponentHandRevealed: false,
+      isPlayerHandHidden: false,
+      pendingPrompt: prompt,
+      confirmedPromptId: prompt.promptId,
+    });
 
     expect(view.cardPicker).toMatchObject({
       side,
       candidateIds: [candidateId],
       canResolve: true,
-      presentation:
-        zone === "deck" || zone === "void" ? "gallery" : "board",
-      candidates: [{
-        instanceId: candidateId,
-        cardUuid: board.cardInstances[candidateId].definition.cardId,
-        owner: side,
-        zone,
-      }],
+      presentation: zone === "deck" || zone === "void" ? "gallery" : "board",
+      candidates: [
+        {
+          instanceId: candidateId,
+          cardUuid: board.cardInstances[candidateId].definition.cardId,
+          owner: side,
+          zone,
+        },
+      ],
     });
   });
 
@@ -526,25 +533,31 @@ describe("buildMobileBattleView", () => {
     board.phase = "night";
     board.turnNumber = 4;
     board.sides.player.banished = [board.sides.player.hand[0]];
-    const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER, {
-      kind: "action",
-      description: "Play the selected instance.",
-      trace: {
-        stage: "character",
-        choice: "PLAY_CARD",
-        battleCardId: board.sides.enemy.hand[0],
-        cardName: "Display-only fixture",
-        sourceHandIndex: 0,
-        sourceSlotId: null,
-        targetSlotId: "B2",
-        heuristicScoreBefore: 2,
-        heuristicScoreAfter: 4.5,
+    const view = buildMobileBattleView(
+      init,
+      board,
+      ENEMY_DREAMCALLER,
+      {
+        kind: "action",
+        description: "Play the selected instance.",
+        trace: {
+          stage: "character",
+          choice: "PLAY_CARD",
+          battleCardId: board.sides.enemy.hand[0],
+          cardName: "Display-only fixture",
+          sourceHandIndex: 0,
+          sourceSlotId: null,
+          targetSlotId: "B2",
+          heuristicScoreBefore: 2,
+          heuristicScoreAfter: 4.5,
+        },
       },
-    }, {
-      aiMode: true,
-      isOpponentHandRevealed: true,
-      isPlayerHandHidden: true,
-    });
+      {
+        aiMode: true,
+        isOpponentHandRevealed: true,
+        isPlayerHandHidden: true,
+      },
+    );
 
     expect(view.inspector).toMatchObject({
       opponentName: "Enemy Caller",
@@ -560,10 +573,28 @@ describe("buildMobileBattleView", () => {
       points: 5,
       canDiscard: true,
       canShuffle: true,
-      zones: { hand: 3, deck: 2, void: 2, banished: 1, backRank: 0, frontRank: 1 },
+      zones: {
+        hand: 3,
+        deck: 2,
+        void: 2,
+        banished: 1,
+        backRank: 0,
+        frontRank: 1,
+      },
     });
-    expect(view.inspector.sides.enemy.zones).toMatchObject({ hand: 2, deck: 2, void: 2, backRank: 1, frontRank: 1 });
-    expect(view.inspector.ai).toMatchObject({ kind: "Action", card: "Display-only fixture", target: "B2", heuristicChange: "2.00 → 4.50" });
+    expect(view.inspector.sides.enemy.zones).toMatchObject({
+      hand: 2,
+      deck: 2,
+      void: 2,
+      backRank: 1,
+      frontRank: 1,
+    });
+    expect(view.inspector.ai).toMatchObject({
+      kind: "Action",
+      card: "Display-only fixture",
+      target: "B2",
+      heuristicChange: "2.00 → 4.50",
+    });
 
     const noAi = buildMobileBattleView(init, board, ENEMY_DREAMCALLER);
     expect(noAi.inspector.ai).toBeNull();
@@ -624,7 +655,9 @@ describe("buildMobileBattleView", () => {
 
     expect(view.enemyHandCardIds).toEqual(board.sides.enemy.hand);
     expect(view.enemyHandCardIds).toHaveLength(2);
-    expect(view.playerHand.map((card) => card.id)).toEqual(board.sides.player.hand);
+    expect(view.playerHand.map((card) => card.id)).toEqual(
+      board.sides.player.hand,
+    );
     expect(view.player.deckCardIds).toEqual(board.sides.player.deck);
     expect(view.enemy.deckCardIds).toEqual(board.sides.enemy.deck);
     expect(view.player.banishedCardCount).toBe(
@@ -660,11 +693,21 @@ describe("buildMobileBattleView", () => {
 
     const expectedFrontRank = ["F0", "F1", "F2", "F3"];
     const expectedBackRank = ["B0", "B1", "B2", "B3", "B4"];
-    expect(view.player.frontRank.map((slot) => slot.id)).toEqual(expectedFrontRank);
-    expect(view.enemy.frontRank.map((slot) => slot.id)).toEqual(expectedFrontRank);
-    expect(view.player.backRank.map((slot) => slot.id)).toEqual(expectedBackRank);
-    expect(view.enemy.backRank.map((slot) => slot.id)).toEqual(expectedBackRank);
-    expect(view.player.frontRank[3].card?.id).toBe(board.sides.player.frontRank.F3);
+    expect(view.player.frontRank.map((slot) => slot.id)).toEqual(
+      expectedFrontRank,
+    );
+    expect(view.enemy.frontRank.map((slot) => slot.id)).toEqual(
+      expectedFrontRank,
+    );
+    expect(view.player.backRank.map((slot) => slot.id)).toEqual(
+      expectedBackRank,
+    );
+    expect(view.enemy.backRank.map((slot) => slot.id)).toEqual(
+      expectedBackRank,
+    );
+    expect(view.player.frontRank[3].card?.id).toBe(
+      board.sides.player.frontRank.F3,
+    );
     expect(view.enemy.backRank[4].card?.id).toBe(board.sides.enemy.backRank.B4);
   });
 
@@ -743,10 +786,15 @@ describe("Cumulus Dreamwell prompt battle flow", () => {
       const initial: BattleFoldState = {
         init,
         board,
-        effectQueue: [newEffectRun({
-          table: "dreamwell",
-          id: dreamwellCardUuid,
-        }, "player")],
+        effectQueue: [
+          newEffectRun(
+            {
+              table: "dreamwell",
+              id: dreamwellCardUuid,
+            },
+            "player",
+          ),
+        ],
         pendingPrompt: null,
         dawnFired: emptyDawnFired(),
       };
@@ -766,8 +814,9 @@ describe("Cumulus Dreamwell prompt battle flow", () => {
             confirmedPromptId: parked.pendingPrompt?.promptId ?? null,
           },
         );
-        expect(confirmationView.choicePrompt?.options.map((option) => option.label))
-          .toEqual(["Yes", "Skip"]);
+        expect(
+          confirmationView.choicePrompt?.options.map((option) => option.label),
+        ).toEqual(["Yes", "Skip"]);
         parked = resolvePendingPrompt(
           parked,
           { kind: "choice", optionIndex: 0 },
@@ -791,24 +840,31 @@ describe("Cumulus Dreamwell prompt battle flow", () => {
       );
       expect(pickerView.cardPicker).not.toBeNull();
       expect(pickerView.cardPicker?.candidates.length).toBeGreaterThan(0);
-      expect(pickerView.cardPicker?.candidates.every((candidate) =>
-        expectedZone === "battlefield"
-          ? candidate.zone === "frontRank" || candidate.zone === "backRank"
-          : candidate.zone === expectedZone
-      )).toBe(true);
+      expect(
+        pickerView.cardPicker?.candidates.every((candidate) =>
+          expectedZone === "battlefield"
+            ? candidate.zone === "frontRank" || candidate.zone === "backRank"
+            : candidate.zone === expectedZone,
+        ),
+      ).toBe(true);
       if (dreamwellCardUuid === "9954cede-8a16-4053-b6e9-da745f4540f5") {
-        expect(pickerView.cardPicker?.candidates.every(
-          (candidate) => candidate.owner === "enemy",
-        )).toBe(true);
+        expect(
+          pickerView.cardPicker?.candidates.every(
+            (candidate) => candidate.owner === "enemy",
+          ),
+        ).toBe(true);
       }
       if (dreamwellCardUuid === "20be0fdd-d691-40a9-b4f8-15689ea7ebaa") {
-        expect(pickerView.cardPicker?.candidates.every(
-          (candidate) => candidate.owner === "player",
-        )).toBe(true);
+        expect(
+          pickerView.cardPicker?.candidates.every(
+            (candidate) => candidate.owner === "player",
+          ),
+        ).toBe(true);
       }
 
       const chosenId = pickerView.cardPicker?.candidateIds[0];
-      if (chosenId === undefined) throw new Error("expected a picker candidate");
+      if (chosenId === undefined)
+        throw new Error("expected a picker candidate");
       const resolved = resolvePendingPrompt(
         parked,
         { kind: "pick-cards", chosenIds: [chosenId] },

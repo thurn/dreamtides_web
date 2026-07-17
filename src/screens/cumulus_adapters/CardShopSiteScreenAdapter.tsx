@@ -11,11 +11,7 @@ import {
   resolveCardShopGuide,
 } from "./card-shop-view-model";
 
-export function CardShopSiteScreenAdapter({
-  siteId,
-}: {
-  siteId: string;
-}) {
+export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
   const { state, mutations, questContent } = useQuest();
   const node =
     state.currentDreamscape !== null
@@ -68,7 +64,8 @@ export function CardShopSiteScreenAdapter({
   );
 
   useEffect(() => {
-    if (site !== null && runtime === undefined) mutations.ensureShopRuntime(site);
+    if (site !== null && runtime === undefined)
+      mutations.ensureShopRuntime(site);
   }, [mutations, runtime, site]);
 
   useCardSourceDebugPublication(
@@ -85,7 +82,6 @@ export function CardShopSiteScreenAdapter({
       isEnhanced: site.isEnhanced,
       wareCount: view.offers.length,
       essence: state.essence,
-      ui: "cumulus",
     });
   }, [site, state.essence, view]);
 
@@ -95,7 +91,6 @@ export function CardShopSiteScreenAdapter({
       guideId: guide.id,
       siteType: site.type,
       isEnhanced: site.isEnhanced,
-      ui: "cumulus",
     });
   }, [guide, site]);
 
@@ -112,7 +107,10 @@ export function CardShopSiteScreenAdapter({
   }, [mutations, site]);
   const handleClose = useCallback(() => {
     if (site === null) return;
-    logEvent("site_completed", { siteType: "Shop", outcome: "left", ui: "cumulus" });
+    logEvent("site_completed", {
+      siteType: "Shop",
+      outcome: "left",
+    });
     mutations.completeSite(site.id, "shop_left");
   }, [mutations, site]);
 

@@ -14,7 +14,11 @@ import type { QuestContent } from "../data/quest-content";
 import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
-import type { CardSourceDebugState, QuestState, SiteState } from "../types/quest";
+import type {
+  CardSourceDebugState,
+  QuestState,
+  SiteState,
+} from "../types/quest";
 import { LayerName } from "../types/layer-name";
 import {
   makeMerchantTestCard,
@@ -25,7 +29,6 @@ import {
   makeMerchantTestQuestState,
 } from "../journey_v2/testing/fixtures";
 import { getLogEntries, resetLog } from "../logging";
-import { ALL_SITE_TYPES } from "../atlas/atlas-generator";
 import {
   MERCHANT_ARCHETYPE_LABELS,
   type MerchantArchetypeId,
@@ -44,15 +47,10 @@ vi.mock("framer-motion", () => ({
   },
 }));
 
-vi.mock("../journeys", () => ({
-  JourneyScreen: () => <div data-testid="classic-journey-screen" />,
-  buildJourneyContext: vi.fn(() => ({})),
-  buildJourneyContentBundle: vi.fn(() => ({})),
-  createJourneyMutations: vi.fn(() => ({})),
-}));
-
-vi.mock("../screens/RewardSiteScreen", () => ({
-  RewardSiteScreen: () => <div data-testid="reward-site-screen" />,
+vi.mock("./BattleSiteRoute", () => ({
+  BattleSiteRoute: ({ site }: { site: SiteState }) => (
+    <div data-testid="battle-site-route" data-site-id={site.id} />
+  ),
 }));
 
 const roots: Root[] = [];
@@ -146,8 +144,14 @@ function merchantContent() {
   return makeMerchantTestContent({
     cards,
     dreamsignTemplates: [
-      makeMerchantTestDreamsignTemplate({ id: "router-sign-a", name: "Router Sign A" }),
-      makeMerchantTestDreamsignTemplate({ id: "router-sign-b", name: "Router Sign B" }),
+      makeMerchantTestDreamsignTemplate({
+        id: "router-sign-a",
+        name: "Router Sign A",
+      }),
+      makeMerchantTestDreamsignTemplate({
+        id: "router-sign-b",
+        name: "Router Sign B",
+      }),
     ],
     merchantCorpus: makeMerchantTestCorpus({ cards: corpus }),
     dreamsignProfiles: new Map(),
@@ -327,9 +331,10 @@ function mountWithQuest({
   const renderState = (
     nextState: QuestState,
     nextMutations: QuestMutations = mutations,
-  ) => act(() => {
-    renderTree(nextState, nextMutations);
-  });
+  ) =>
+    act(() => {
+      renderTree(nextState, nextMutations);
+    });
   const renderStateAndFlush = async (
     nextState: QuestState,
     nextMutations: QuestMutations = mutations,
@@ -356,32 +361,36 @@ afterEach(() => {
 });
 
 describe("ScreenRouter DreamAugury routing", () => {
-  it("renders Dream Merchant v2 when a legacy classic query is supplied", () => {
+  it("renders the Cumulus Dream Augury screen", () => {
     const site = makeSite("DreamAugury");
     const state = makeStateFor(site);
     const container = renderWithQuest({
       state,
       questContent: makeMerchantTestContent({ cards: fixtureCards() }),
       children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=classic&ui=legacy")} />
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=classic")} />
       ),
     });
 
-    expect(container.querySelector('[data-testid="classic-journey-screen"]')).toBeNull();
-    expect(container.querySelector('[data-testid="dream-merchant-v2-screen"]')).not.toBeNull();
+    expect(
+      container.querySelector('[data-testid="cumulus-dream-augury-offer-A"]'),
+    ).not.toBeNull();
   });
 
-  it("renders the Dream Merchant v2 screen for a DreamAugury site in v2 config", () => {
+  it("renders generated offers for a DreamAugury site", () => {
     const site = makeSite("DreamAugury");
     const state = makeStateFor(site);
     const container = renderWithQuest({
       state,
       questContent: merchantContent(),
-      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2&ui=legacy")} />,
+      children: (
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+      ),
     });
 
-    expect(container.querySelector('[data-testid="dream-merchant-v2-screen"]')).not.toBeNull();
-    expect(container.querySelector('[data-testid="classic-journey-screen"]')).toBeNull();
+    expect(
+      container.querySelector('[data-testid="cumulus-dream-augury-offer-A"]'),
+    ).not.toBeNull();
   });
 
   it("renders the Cumulus Dream Augury screen by default", () => {
@@ -389,7 +398,9 @@ describe("ScreenRouter DreamAugury routing", () => {
     const container = renderWithQuest({
       state: makeStateFor(site),
       questContent: merchantContent(),
-      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />,
+      children: (
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+      ),
     });
 
     expect(
@@ -399,7 +410,7 @@ describe("ScreenRouter DreamAugury routing", () => {
     ).not.toBeNull();
     expect(
       getLogEntries().find((entry) => entry.event === "screen_rendered"),
-    ).toMatchObject({ servedByCumulus: true });
+    ).toMatchObject({ screenType: "site", siteId: site.id });
   });
 
   it("adds reroll and force-category debug commands to the Cumulus quest menu", () => {
@@ -418,7 +429,9 @@ describe("ScreenRouter DreamAugury routing", () => {
       state,
       mutations,
       questContent: merchantContent(),
-      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />,
+      children: (
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+      ),
     });
 
     const openMenu = () => {
@@ -449,12 +462,15 @@ describe("ScreenRouter DreamAugury routing", () => {
       (entry) => entry.event === "merchant_encounter_generated",
     );
     const eligibleArchetypeIds = (
-      generated?.debug as { eligibleArchetypeIds?: MerchantArchetypeId[] } | undefined
+      generated?.debug as
+        { eligibleArchetypeIds?: MerchantArchetypeId[] } | undefined
     )?.eligibleArchetypeIds;
     const firstEligible = eligibleArchetypeIds?.[0];
     expect(firstEligible).toBeDefined();
     const categoryLabel =
-      firstEligible === undefined ? "" : MERCHANT_ARCHETYPE_LABELS[firstEligible];
+      firstEligible === undefined
+        ? ""
+        : MERCHANT_ARCHETYPE_LABELS[firstEligible];
     const category = menuRow(categoryLabel);
     expect(category).toBeDefined();
     act(() => category?.click());
@@ -470,7 +486,9 @@ describe("ScreenRouter DreamAugury routing", () => {
     renderWithQuest({
       state,
       questContent: merchantContent(),
-      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2&ui=legacy")} />,
+      children: (
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+      ),
       strict: true,
     });
 
@@ -490,7 +508,9 @@ describe("ScreenRouter DreamAugury routing", () => {
     renderWithQuest({
       state,
       questContent: merchantContent(),
-      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2&ui=legacy")} />,
+      children: (
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+      ),
       strict: true,
     });
 
@@ -509,7 +529,7 @@ describe("ScreenRouter DreamAugury routing", () => {
           rolledB?: string;
         }
       | undefined;
-    expect((debug?.eligibleArchetypeIds?.length ?? 0)).toBeGreaterThan(0);
+    expect(debug?.eligibleArchetypeIds?.length ?? 0).toBeGreaterThan(0);
     expect(debug?.rolledA).toBeDefined();
     expect(debug?.rolledB).toBeDefined();
   });
@@ -520,7 +540,9 @@ describe("ScreenRouter DreamAugury routing", () => {
     renderWithQuest({
       state,
       questContent: merchantContent(),
-      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2&ui=legacy")} />,
+      children: (
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+      ),
     });
 
     const encounterLogs = getLogEntries().filter(
@@ -578,18 +600,23 @@ describe("ScreenRouter DreamAugury routing", () => {
       state,
       mutations,
       questContent: contentWithoutDreamsigns,
-      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2&ui=legacy")} />,
+      children: (
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+      ),
     });
 
     const [debugState, source] =
       vi.mocked(mutations.setCardSourceDebug).mock.calls[0] ?? [];
-    const cardSourceDebug = debugState as CardSourceDebugState | null | undefined;
+    const cardSourceDebug = debugState as
+      CardSourceDebugState | null | undefined;
     expect(source).toBe("merchant_grant_cards_shown");
     expect(cardSourceDebug?.screenLabel).toBe("Dream Merchant Offers");
     expect(cardSourceDebug?.surface).toBe("Reward");
-    expect(cardSourceDebug?.entries.some((entry) =>
-      typeof entry.cardNumber === "number",
-    )).toBe(true);
+    expect(
+      cardSourceDebug?.entries.some(
+        (entry) => typeof entry.cardNumber === "number",
+      ),
+    ).toBe(true);
   });
 
   it("publishes card source debug once when the coop fold applies that debug state", async () => {
@@ -602,9 +629,12 @@ describe("ScreenRouter DreamAugury routing", () => {
       state,
       mutations,
       questContent: content,
-      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2&ui=legacy")} />,
+      children: (
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+      ),
     });
-    const published = vi.mocked(mutations.setCardSourceDebug).mock.calls[0]?.[0];
+    const published = vi.mocked(mutations.setCardSourceDebug).mock
+      .calls[0]?.[0];
     expect(published).toBeDefined();
 
     await mounted.renderStateAndFlush(
@@ -623,7 +653,9 @@ describe("ScreenRouter DreamAugury routing", () => {
       state: { ...makeStateFor(site), deck: [] },
       mutations,
       questContent: merchantContent(),
-      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2&ui=legacy")} />,
+      children: (
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+      ),
       strict: true,
     });
 
@@ -634,17 +666,20 @@ describe("ScreenRouter DreamAugury routing", () => {
     );
   });
 
-  it("does not route a non-DreamAugury site to the v2 screen in v2 config", () => {
+  it("fails closed when persisted state targets an inline-only site", () => {
     const site = makeSite("Reward");
     const state = makeStateFor(site);
     const container = renderWithQuest({
       state,
       questContent: merchantContent(),
-      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2&ui=legacy")} />,
+      children: (
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+      ),
     });
 
-    expect(container.querySelector('[data-testid="reward-site-screen"]')).not.toBeNull();
-    expect(container.querySelector('[data-testid="dream-merchant-v2-screen"]')).toBeNull();
+    expect(
+      container.querySelector('[data-testid="error-boundary-fallback"]'),
+    ).not.toBeNull();
   });
 
   it("renders a contained v2 fallback when merchant generation is unavailable", () => {
@@ -655,12 +690,13 @@ describe("ScreenRouter DreamAugury routing", () => {
       state,
       mutations,
       questContent: makeMerchantTestContent({ cards: [] }),
-      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2&ui=legacy")} />,
+      children: (
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+      ),
     });
 
-    expect(container.querySelector('[data-testid="dream-merchant-v2-fallback"]')).not.toBeNull();
     const walkAway = container.querySelector(
-      '[data-testid="merchant-fallback-walk-away"]',
+      '[data-testid="cumulus-dream-augury-unavailable-exit"]',
     );
     if (!(walkAway instanceof HTMLButtonElement)) {
       throw new Error("expected fallback walk-away button");
@@ -709,7 +745,9 @@ describe("ScreenRouter terminal Cumulus routing", () => {
     expect(
       container.querySelector('[data-testid="cumulus-quest-failed-screen"]'),
     ).not.toBeNull();
-    expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
+    expect(
+      container.querySelector("[data-quest-status-bar-anchor]"),
+    ).toBeNull();
     expect(
       container.querySelector('[data-testid="dreamscape-menu-button"]'),
     ).not.toBeNull();
@@ -720,7 +758,6 @@ describe("ScreenRouter terminal Cumulus routing", () => {
     ).toMatchObject({
       battleId: "router-failure-battle",
       siteId: "router-failure-site",
-      uiVariant: "cumulus",
     });
 
     const newQuest = container.querySelector<HTMLButtonElement>(
@@ -735,48 +772,33 @@ describe("ScreenRouter terminal Cumulus routing", () => {
     ).toMatchObject({
       battleId: "router-failure-battle",
       result: "defeat",
-      uiVariant: "cumulus",
     });
   });
 });
 
 describe("ScreenRouter site-dispatch completeness", () => {
-  // The fallthrough placeholder copy rendered only when no site-type branch
-  // matches. Reaching it means a SiteType is unhandled by the router.
-  const FALLTHROUGH_TEXT = "This site will be implemented in a later task.";
+  it("keeps a valid site route renderable while the active atlas node advances", () => {
+    const site = makeSite("Battle");
+    const state = makeStateFor(site);
+    const siteNode = state.atlas.nodes["dreamscape-router"];
+    if (siteNode === undefined) throw new Error("expected fixture site node");
+    state.atlas.nodes["next-dreamscape"] = {
+      ...siteNode,
+      id: "next-dreamscape",
+      sites: [],
+    };
+    state.currentDreamscape = "next-dreamscape";
+    const container = renderWithQuest({
+      state,
+      questContent: merchantContent(),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
+    });
 
-  // Battle routes into the heavy playable-battle stack, which needs a full
-  // battle init that this lightweight harness does not assemble. Its dispatch
-  // is covered by BattleSiteRoute's own tests; every other site type must
-  // resolve to a real screen here.
-  const NON_BATTLE_SITE_TYPES = ALL_SITE_TYPES.filter(
-    (type) => type !== "Battle",
-  );
-
-  it("resolves a real screen for every non-Battle site type", () => {
-    for (const type of NON_BATTLE_SITE_TYPES) {
-      const site = makeSite(type);
-      const container = renderWithQuest({
-        state: makeStateFor(site),
-        questContent: merchantContent(),
-        children: (
-          <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
-        ),
-      });
-
-      expect(
-        container.querySelector('[data-quest-screen="site"]'),
-        `expected site screen for ${type}`,
-      ).not.toBeNull();
-      expect(
-        container.textContent,
-        `site type ${type} fell through to the generic placeholder`,
-      ).not.toContain(FALLTHROUGH_TEXT);
-      expect(
-        container.textContent,
-        `site type ${type} did not resolve to a site`,
-      ).not.toContain("Site not found.");
-    }
+    expect(
+      container
+        .querySelector('[data-testid="battle-site-route"]')
+        ?.getAttribute("data-site-id"),
+    ).toBe(site.id);
   });
 
   it.each(["TemptingOffer", "Gamble", "TemporalFork"] as const)(
@@ -789,9 +811,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
         questContent: merchantContent(),
         mutations,
         children: (
-          <ScreenRouter
-            runtimeConfig={parseRuntimeConfig("?journey=v2&ui=cumulus")}
-          />
+          <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
         ),
       });
 
@@ -808,7 +828,9 @@ describe("ScreenRouter site-dispatch completeness", () => {
         throw new Error(`expected a Continue button for ${type}`);
       }
       act(() => {
-        continueButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        continueButton.dispatchEvent(
+          new MouseEvent("click", { bubbles: true }),
+        );
       });
       expect(mutations.completeSite).toHaveBeenCalledWith(
         site.id,

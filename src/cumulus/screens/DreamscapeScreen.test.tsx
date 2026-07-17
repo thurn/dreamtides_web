@@ -67,6 +67,7 @@ const VIEW: DreamscapeView = {
   scene: artRef.dreamscapeScene("ember_wood"),
   title: "Ember Wood",
   inlineRewards: {},
+  replacement: null,
   sites: [
     siteModel(siteState("s-purge")),
     siteModel(siteState("s-draft", { type: "Draft" }), { label: "Draft 5x" }),
@@ -114,7 +115,7 @@ describe("DreamscapeScreen", () => {
   it("renders the scene, one node per unvisited site, and drops visited sites", () => {
     act(() => {
       root.render(
-        <CumulusRoot><DreamscapeScreen view={VIEW} onSelectSite={() => undefined} onInlineRewardAnimationComplete={() => undefined} /></CumulusRoot>,
+        <CumulusRoot><DreamscapeScreen view={VIEW} onSelectSite={() => undefined} onInlineRewardAnimationComplete={() => undefined} onReplaceDreamsign={() => undefined} onDeclineReward={() => undefined} /></CumulusRoot>,
       );
     });
     expect(container.querySelector("[data-cumulus-dreamscape]")).not.toBeNull();
@@ -129,7 +130,7 @@ describe("DreamscapeScreen", () => {
   it("leaves persistent quest chrome to the router-owned wrapper", () => {
     act(() => {
       root.render(
-        <CumulusRoot><DreamscapeScreen view={VIEW} onSelectSite={() => undefined} onInlineRewardAnimationComplete={() => undefined} /></CumulusRoot>,
+        <CumulusRoot><DreamscapeScreen view={VIEW} onSelectSite={() => undefined} onInlineRewardAnimationComplete={() => undefined} onReplaceDreamsign={() => undefined} onDeclineReward={() => undefined} /></CumulusRoot>,
       );
     });
     expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
@@ -153,6 +154,8 @@ describe("DreamscapeScreen", () => {
             view={essenceView}
             onSelectSite={onSelectSite}
             onInlineRewardAnimationComplete={onEssenceAnimationComplete}
+            onReplaceDreamsign={() => undefined}
+            onDeclineReward={() => undefined}
           />
         </CumulusRoot>,
       );
@@ -193,6 +196,8 @@ describe("DreamscapeScreen", () => {
             view={collectedView}
             onSelectSite={onSelectSite}
             onInlineRewardAnimationComplete={refreshedCollect}
+            onReplaceDreamsign={() => undefined}
+            onDeclineReward={() => undefined}
           />
         </CumulusRoot>,
       );
@@ -221,6 +226,7 @@ describe("DreamscapeScreen", () => {
       inlineRewards: {
         "s-reward": {
           kind: "dreamsign",
+          requiresReplacement: false,
           dreamsign: {
             id: "dreamsign-uuid",
             name: "Lantern in the Rain",
@@ -240,6 +246,8 @@ describe("DreamscapeScreen", () => {
             onInlineRewardAnimationComplete={
               onInlineRewardAnimationComplete
             }
+            onReplaceDreamsign={() => undefined}
+            onDeclineReward={() => undefined}
           />
         </CumulusRoot>,
       );
@@ -286,6 +294,8 @@ describe("DreamscapeScreen", () => {
             onInlineRewardAnimationComplete={
               onInlineRewardAnimationComplete
             }
+            onReplaceDreamsign={() => undefined}
+            onDeclineReward={() => undefined}
           />
         </CumulusRoot>,
       );
@@ -296,6 +306,98 @@ describe("DreamscapeScreen", () => {
     });
     expect(onInlineRewardAnimationComplete).toHaveBeenCalledWith("s-reward");
     expect(container.querySelector('[data-site-id="s-reward"]')).toBeNull();
+    vi.useRealTimers();
+  });
+
+  it("shows an at-cap Reward as found and resolves replacement by UUID", () => {
+    vi.useFakeTimers();
+    const onReplaceDreamsign = vi.fn();
+    const onDeclineReward = vi.fn();
+    const pendingDreamsign = {
+      id: "pending-dreamsign",
+      name: "Lantern in the Rain",
+      effectDescription: "Your first dream each dawn costs 1 less.",
+      imageName: "lantern-in-the-rain.webp",
+      isBane: false,
+    };
+    const heldDreamsign = {
+      id: "held-dreamsign",
+      name: "Held Sign",
+      effectDescription: "A held effect.",
+      imageName: "held.webp",
+      isBane: false,
+    };
+    const rewardView: DreamscapeView = {
+      ...VIEW,
+      sites: [siteModel(siteState("s-reward", { type: "Reward" }))],
+      inlineRewards: {
+        "s-reward": {
+          kind: "dreamsign",
+          dreamsign: pendingDreamsign,
+          requiresReplacement: true,
+        },
+      },
+    };
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <DreamscapeScreen
+            view={rewardView}
+            onSelectSite={() => undefined}
+            onInlineRewardAnimationComplete={() => undefined}
+            onReplaceDreamsign={onReplaceDreamsign}
+            onDeclineReward={onDeclineReward}
+          />
+        </CumulusRoot>,
+      );
+    });
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>('[data-site-id="s-reward"]')
+        ?.click(),
+    );
+    expect(
+      container
+        .querySelector('[data-reward-collection="s-reward"]')
+        ?.getAttribute("aria-label"),
+    ).toBe("Found dreamsign: Lantern in the Rain");
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <DreamscapeScreen
+            view={{
+              ...rewardView,
+              replacement: {
+                pendingDreamsign,
+                currentDreamsigns: [heldDreamsign],
+                maxDreamsigns: 1,
+              },
+            }}
+            onSelectSite={() => undefined}
+            onInlineRewardAnimationComplete={() => undefined}
+            onReplaceDreamsign={onReplaceDreamsign}
+            onDeclineReward={onDeclineReward}
+          />
+        </CumulusRoot>,
+      );
+    });
+    act(() =>
+      document
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="replace-dreamsign-held-dreamsign"]',
+        )
+        ?.click(),
+    );
+    expect(onReplaceDreamsign).toHaveBeenCalledWith("held-dreamsign");
+    act(() =>
+      document
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="dreamsign-replacement-cancel"]',
+        )
+        ?.click(),
+    );
+    expect(onDeclineReward).toHaveBeenCalledTimes(1);
     vi.useRealTimers();
   });
 });

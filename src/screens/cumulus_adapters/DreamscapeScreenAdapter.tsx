@@ -1,143 +1,105 @@
-// Adapter bridging live quest state to the pure Cumulus dreamscape screen
-// (`src/cumulus/screens/DreamscapeScreen`). Adapters are wiring only: this one
-// owns `useQuest()`, builds the view-model, wires site selection to navigation
-// or in-place reward collection, and emits the reconstruction logging. All
-// mapping from domain data to the screen's view types lives in the pure builder
-// (`dreamscape-view-model.ts`); the Cumulus screen itself stays pure.
-
-import { useCallback, useEffect, useMemo, useRef } from "react";
-import { useQuest } from "../../state/quest-context";
-import { logEvent } from "../../logging";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DreamscapeScreen } from "../../cumulus/screens/DreamscapeScreen";
+import { logEvent } from "../../logging";
+import { useQuest } from "../../state/quest-context";
 import {
+  buildDreamscapeOverviewLog,
   buildDreamscapeView,
-  dreamscapeLayoutSeed,
+  resolveDreamscapeSiteSelection,
 } from "./dreamscape-view-model";
-import { buildInlineRewardCompletionLog } from "./inline-reward-view-model";
+import {
+  resolveInlineReward,
+  resolveRewardDecline,
+  resolveRewardReplacement,
+} from "./inline-reward-view-model";
 
-/**
- * Live dreamscape screen: resolves the current dreamscape node, builds its
- * view-model (seeded scatter + bottom-HUD data), handles site selection, and
- * logs the presented overview once per dreamscape for reconstruction.
- */
+/** Wires the live quest fold to the pure Cumulus Dreamscape screen. */
 export function DreamscapeScreenAdapter() {
   const { state, mutations } = useQuest();
-  const { currentDreamscape, completionLevel } = state;
-  const node =
-    currentDreamscape !== null ? state.atlas.nodes[currentDreamscape] : undefined;
-
+  const node = state.currentDreamscape === null
+    ? undefined
+    : state.atlas.nodes[state.currentDreamscape];
+  const [replacementSiteId, setReplacementSiteId] = useState<string | null>(null);
   const view = useMemo(
-    () => (node !== undefined ? buildDreamscapeView(node, state) : null),
-    [node, state],
+    () => node === undefined
+      ? null
+      : buildDreamscapeView(node, state, replacementSiteId),
+    [node, replacementSiteId, state],
   );
-
-  // Reconstruction log: which dreamscape was presented, its guardian-unlock
-  // state, and the exact seeded layout of every node shown. Re-logs only when
-  // the presented dreamscape changes, guarded against StrictMode double-fire.
   const loggedNodeRef = useRef<string | null>(null);
+
   useEffect(() => {
-    if (node === undefined || view === null) {
-      return;
-    }
-    if (loggedNodeRef.current === node.id) {
-      return;
-    }
+    if (node === undefined || view === null || loggedNodeRef.current === node.id) return;
     loggedNodeRef.current = node.id;
-    logEvent("dreamscape_overview_presented", {
-      nodeId: node.id,
-      dreamscapeId: node.dreamscapeId,
-      biomeName: node.biomeName,
-      completionLevel,
-      layoutSeed: dreamscapeLayoutSeed(node),
-      uiVariant: "cumulus",
-      sites: view.sites.map((model) => ({
-        siteId: model.site.id,
-        type: model.site.type,
-        isEnhanced: model.site.isEnhanced,
-        isVisited: model.site.isVisited,
-        isLocked: model.isLocked,
-        pos: model.pos,
-      })),
-    });
-  }, [node, view, completionLevel]);
+    logEvent(
+      "dreamscape_overview_presented",
+      buildDreamscapeOverviewLog(node, view, state.completionLevel),
+    );
+  }, [node, state.completionLevel, view]);
 
-  const handleSelectSite = useCallback(
-    (siteId: string) => {
-      if (node === undefined) {
-        return;
+  const handleSelectSite = useCallback((siteId: string) => {
+    if (node === undefined) return;
+    const selection = resolveDreamscapeSiteSelection(node, siteId, state.essence);
+    if (selection === null) return;
+    logEvent("site_entered", selection.fields);
+    if (selection.site.type === "Essence") {
+      if (state.siteRuntime[siteId]?.kind !== "essence") {
+        mutations.ensureEssenceSiteRuntime(siteId, selection.site.isEnhanced);
       }
-      const site = node.sites.find((candidate) => candidate.id === siteId);
-      if (site === undefined) {
-        return;
+    } else if (selection.site.type === "Reward") {
+      if (state.siteRuntime[siteId]?.kind !== "reward") {
+        mutations.ensureRewardSiteRuntime(siteId);
       }
-      logEvent("site_entered", {
-        siteType: site.type,
-        dreamscapeId: node.id,
-        siteId: site.id,
-        isEnhanced: site.isEnhanced,
-        essenceBefore: state.essence,
-        ui: "cumulus",
-      });
-      if (site.type === "Essence") {
-        mutations.ensureEssenceSiteRuntime(site.id, site.isEnhanced);
-        return;
-      }
-      if (site.type === "Reward") {
-        mutations.ensureRewardSiteRuntime(site.id);
-        return;
-      }
+    } else {
       mutations.setScreen({ type: "site", siteId });
-    },
-    [node, mutations, state.essence],
-  );
+    }
+  }, [mutations, node, state.essence, state.siteRuntime]);
 
-  const handleInlineRewardAnimationComplete = useCallback(
-    (siteId: string) => {
-      if (node === undefined) return;
-      const site = node.sites.find((candidate) => candidate.id === siteId);
-      const runtime = state.siteRuntime[siteId];
-      const completion = buildInlineRewardCompletionLog(site, runtime, state);
-      if (completion === null) return;
-      // An at-cap Dreamsign needs the replacement/decline choice from the
-      // Reward site. Do not log or submit an inline collection here: the
-      // reducer correctly rejects a cap-hit acceptance without `purgeIndex`.
-      if (
-        runtime?.kind === "reward" &&
-        runtime.reward.rewardType === "dreamsign" &&
-        state.dreamsigns.length >= state.maxDreamsigns
-      ) {
-        mutations.setScreen({ type: "site", siteId });
-        return;
-      }
-      logEvent("site_completed", completion.fields);
-      if (completion.kind === "essence") {
-        mutations.acceptEssenceSite(siteId);
-        return;
-      }
-      mutations.acceptRewardSite(siteId);
-    },
-    [
+  const handleInlineRewardAnimationComplete = useCallback((siteId: string) => {
+    if (node === undefined) return;
+    const site = node.sites.find((candidate) => candidate.id === siteId);
+    const resolution = resolveInlineReward(site, state.siteRuntime[siteId], state);
+    if (resolution === null) return;
+    if (resolution.kind === "replacement") {
+      setReplacementSiteId(siteId);
+      return;
+    }
+    logEvent("site_completed", resolution.fields);
+    if (resolution.kind === "essence") mutations.acceptEssenceSite(siteId);
+    else mutations.acceptRewardSite(siteId);
+  }, [mutations, node, state]);
+
+  const handleReplaceDreamsign = useCallback((dreamsignId: string) => {
+    if (replacementSiteId === null || node === undefined) return;
+    const resolution = resolveRewardReplacement(
       node,
-      mutations,
-      state.essence,
-      state.essenceCap,
-      state.dreamsigns.length,
-      state.maxDreamsigns,
-      state.siteRuntime,
-    ],
-  );
+      state,
+      replacementSiteId,
+      dreamsignId,
+    );
+    if (resolution === null) return;
+    logEvent("site_completed", resolution.fields);
+    mutations.acceptRewardSite(resolution.siteId, resolution.purgeIndex);
+    setReplacementSiteId(null);
+  }, [mutations, node, replacementSiteId, state]);
 
-  if (view === null) {
-    return null;
-  }
+  const handleDeclineReward = useCallback(() => {
+    if (replacementSiteId === null || node === undefined) return;
+    const resolution = resolveRewardDecline(node, state, replacementSiteId);
+    if (resolution === null) return;
+    logEvent("reward_declined", resolution.fields);
+    mutations.completeSite(resolution.siteId, "reward_site");
+    setReplacementSiteId(null);
+  }, [mutations, node, replacementSiteId, state]);
 
+  if (view === null) return null;
   return (
     <DreamscapeScreen
       view={view}
       onSelectSite={handleSelectSite}
-      onInlineRewardAnimationComplete={
-        handleInlineRewardAnimationComplete
-      }
+      onInlineRewardAnimationComplete={handleInlineRewardAnimationComplete}
+      onReplaceDreamsign={handleReplaceDreamsign}
+      onDeclineReward={handleDeclineReward}
     />
   );
 }

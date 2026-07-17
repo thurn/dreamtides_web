@@ -2,9 +2,7 @@ import {
   selectBattleCardLocation,
   selectSidePlayAreaSize,
 } from "../../battle/state/selectors";
-import {
-  selectFigmentCount,
-} from "../../battle/state/figments";
+import { selectFigmentCount } from "../../battle/state/figments";
 import type { AiProposal } from "../../battle/ai/use-battle-ai";
 import { evaluate } from "../../battle/ai/evaluate";
 import { forwardModelFromState } from "../../battle/ai/forward-model";
@@ -72,12 +70,13 @@ export function buildMobileBattleView(
 ): MobileBattleView {
   return {
     battleId: init.battleId,
-    aiApproval: aiProposal === null
-      ? null
-      : {
-          description: aiProposal.description,
-          canReject: aiProposal.kind === "action",
-        },
+    aiApproval:
+      aiProposal === null
+        ? null
+        : {
+            description: aiProposal.description,
+            canReject: aiProposal.kind === "action",
+          },
     cardPicker: buildCardPickerView(
       viewOptions.pendingPrompt ?? null,
       viewOptions.confirmedPromptId ?? null,
@@ -92,11 +91,7 @@ export function buildMobileBattleView(
     phase: mobileBattlePhase(board.phase),
     enemyHandCardIds: [...board.sides.enemy.hand],
     enemyHand: buildCardViews(board.sides.enemy.hand, board),
-    enemy: buildSideView(
-      "enemy",
-      enemyDreamcaller,
-      board,
-    ),
+    enemy: buildSideView("enemy", enemyDreamcaller, board),
     player: buildSideView(
       "player",
       init.dreamcallerSummary ?? FALLBACK_PLAYER_DREAMCALLER,
@@ -144,10 +139,7 @@ function buildChoicePromptView(
   pendingPrompt: PendingPrompt | null,
   confirmedPromptId: number | null,
 ): MobileBattleChoicePromptView | null {
-  if (
-    pendingPrompt === null ||
-    pendingPrompt.options.kind !== "choice"
-  ) {
+  if (pendingPrompt === null || pendingPrompt.options.kind !== "choice") {
     return null;
   }
   return {
@@ -165,10 +157,7 @@ function buildCardPickerView(
   confirmedPromptId: number | null,
   board: BattleMutableState,
 ): MobileBattleCardPickerView | null {
-  if (
-    pendingPrompt === null ||
-    pendingPrompt.options.kind !== "pick-cards"
-  ) {
+  if (pendingPrompt === null || pendingPrompt.options.kind !== "pick-cards") {
     return null;
   }
   const highlightedIds = new Set(pendingPrompt.options.highlightCardIds);
@@ -177,20 +166,23 @@ function buildCardPickerView(
       const instance = board.cardInstances[instanceId];
       const location = selectBattleCardLocation(board, instanceId);
       if (instance === undefined || location === null) return [];
-      return [{
-        instanceId,
-        cardUuid: instance.definition.cardId,
-        owner: location.side,
-        zone: location.zone,
-        card: buildMobileBattleCardView(instance),
-        highlighted: highlightedIds.has(instanceId),
-      }];
+      return [
+        {
+          instanceId,
+          cardUuid: instance.definition.cardId,
+          owner: location.side,
+          zone: location.zone,
+          card: buildMobileBattleCardView(instance),
+          highlighted: highlightedIds.has(instanceId),
+        },
+      ];
     },
   );
-  const staysOnBoard = candidates.every((candidate) =>
-    candidate.zone === "hand" ||
-    candidate.zone === "backRank" ||
-    candidate.zone === "frontRank"
+  const staysOnBoard = candidates.every(
+    (candidate) =>
+      candidate.zone === "hand" ||
+      candidate.zone === "backRank" ||
+      candidate.zone === "frontRank",
   );
   return {
     key: String(pendingPrompt.promptId),
@@ -261,7 +253,8 @@ function buildInspectorView(
     phase: formatPhaseLabel(board.phase),
     activeSide: formatSideLabel(board.activeSide),
     result: board.result === null ? "In progress" : titleCase(board.result),
-    nextDreamwellOrder: nextDreamwell === undefined ? "Complete" : String(nextDreamwell.order),
+    nextDreamwellOrder:
+      nextDreamwell === undefined ? "Complete" : String(nextDreamwell.order),
     isOpponentHandRevealed: options.isOpponentHandRevealed,
     isPlayerHandHidden: options.isPlayerHandHidden,
     sides: {
@@ -288,8 +281,10 @@ function buildInspectorSideView(
       deck: state.deck.length,
       void: state.void.length,
       banished: state.banished.length,
-      backRank: Object.values(state.backRank).filter((id) => id !== null).length,
-      frontRank: Object.values(state.frontRank).filter((id) => id !== null).length,
+      backRank: Object.values(state.backRank).filter((id) => id !== null)
+        .length,
+      frontRank: Object.values(state.frontRank).filter((id) => id !== null)
+        .length,
     },
     canDiscard: state.hand.length > 0,
     canShuffle: state.deck.length >= 2,
@@ -309,9 +304,13 @@ function buildAiView(
     kind: proposal === null ? "Idle" : titleCase(proposal.kind),
     card: trace?.cardName ?? trace?.battleCardId ?? "—",
     target: trace?.targetSlotId ?? trace?.targetBattleCardId ?? "—",
-    heuristicChange: before === null || before === undefined || after === null || after === undefined
-      ? "—"
-      : `${formatEvaluation(before)} → ${formatEvaluation(after)}`,
+    heuristicChange:
+      before === null ||
+      before === undefined ||
+      after === null ||
+      after === undefined
+        ? "—"
+        : `${formatEvaluation(before)} → ${formatEvaluation(after)}`,
     liveEvaluation: formatEvaluation(liveEvaluation),
   };
 }
@@ -323,7 +322,9 @@ function formatEvaluation(value: number): string {
 }
 
 function titleCase(value: string): string {
-  return value.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/^./, (letter) => letter.toUpperCase());
+  return value
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/^./, (letter) => letter.toUpperCase());
 }
 
 function mobileBattlePhase(
@@ -388,9 +389,7 @@ function buildCardViews(
     const instance = board.cardInstances[battleCardId];
     return instance === undefined
       ? []
-      : [
-          buildMobileBattleCardView(instance, showPlayableOutline(instance)),
-        ];
+      : [buildMobileBattleCardView(instance, showPlayableOutline(instance))];
   });
 }
 
@@ -399,13 +398,11 @@ function buildSlotView(
   battleCardId: string | null,
   board: BattleMutableState,
 ): MobileBattleSlotView {
-  const instance = battleCardId === null ? undefined : board.cardInstances[battleCardId];
+  const instance =
+    battleCardId === null ? undefined : board.cardInstances[battleCardId];
   return {
     id,
-    card:
-      instance === undefined
-        ? null
-        : buildMobileBattleCardView(instance),
+    card: instance === undefined ? null : buildMobileBattleCardView(instance),
   };
 }
 

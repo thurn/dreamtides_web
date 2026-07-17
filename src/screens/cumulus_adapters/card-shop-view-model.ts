@@ -25,9 +25,7 @@ import type {
   CardShopRestockView,
   CardShopSiteView,
 } from "../../cumulus/screens/CardShopSiteScreen";
-import {
-  dreamscapeSceneRef,
-} from "./dreamscape-view-model";
+import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 const FALLBACK_GUIDE_ID = "tobias_tanglefur";
 const FALLBACK_GUIDE_NAME = "Tobias Tanglefur";

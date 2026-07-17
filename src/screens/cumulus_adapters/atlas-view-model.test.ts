@@ -59,17 +59,32 @@ function makeNode(
  * boss at the deepest layer, wired starter → middle → boss.
  */
 function makeVerticalAtlas(): DreamAtlas {
-  const starter = makeNode("starter", LayerName.One, { x: 0, y: 0 }, {
-    state: "completed",
-    forwardIds: ["middle"],
-  });
-  const middle = makeNode("middle", LayerName.Two, { x: 100, y: -40 }, {
-    state: "available",
-    forwardIds: ["boss"],
-  });
-  const boss = makeNode("boss", LayerName.Seven, { x: 600, y: 40 }, {
-    state: "revealedLocked",
-  });
+  const starter = makeNode(
+    "starter",
+    LayerName.One,
+    { x: 0, y: 0 },
+    {
+      state: "completed",
+      forwardIds: ["middle"],
+    },
+  );
+  const middle = makeNode(
+    "middle",
+    LayerName.Two,
+    { x: 100, y: -40 },
+    {
+      state: "available",
+      forwardIds: ["boss"],
+    },
+  );
+  const boss = makeNode(
+    "boss",
+    LayerName.Seven,
+    { x: 600, y: 40 },
+    {
+      state: "revealedLocked",
+    },
+  );
   return {
     layers: [["starter"], ["middle"], [], [], [], [], ["boss"]],
     nodes: { starter, middle, boss },
@@ -86,25 +101,45 @@ function makeVerticalAtlas(): DreamAtlas {
  * unreachable, so the builders fade it and blank its revealed content.
  */
 function makeForgoneAtlas(): DreamAtlas {
-  const starter = makeNode("starter", LayerName.One, { x: 0, y: 0 }, {
-    state: "completed",
-    forwardIds: ["chosen", "passed"],
-  });
-  const chosen = makeNode("chosen", LayerName.Two, { x: 100, y: -40 }, {
-    state: "available",
-    forwardIds: ["boss"],
-    dreamscapeId: "ds_chosen",
-    knownDreamsignId: "sign_chosen",
-  });
-  const passed = makeNode("passed", LayerName.Two, { x: 100, y: 40 }, {
-    state: "forgone",
-    forwardIds: ["boss"],
-    dreamscapeId: "ds_passed",
-    knownDreamsignId: "sign_passed",
-  });
-  const boss = makeNode("boss", LayerName.Seven, { x: 600, y: 0 }, {
-    state: "revealedLocked",
-  });
+  const starter = makeNode(
+    "starter",
+    LayerName.One,
+    { x: 0, y: 0 },
+    {
+      state: "completed",
+      forwardIds: ["chosen", "passed"],
+    },
+  );
+  const chosen = makeNode(
+    "chosen",
+    LayerName.Two,
+    { x: 100, y: -40 },
+    {
+      state: "available",
+      forwardIds: ["boss"],
+      dreamscapeId: "ds_chosen",
+      knownDreamsignId: "sign_chosen",
+    },
+  );
+  const passed = makeNode(
+    "passed",
+    LayerName.Two,
+    { x: 100, y: 40 },
+    {
+      state: "forgone",
+      forwardIds: ["boss"],
+      dreamscapeId: "ds_passed",
+      knownDreamsignId: "sign_passed",
+    },
+  );
+  const boss = makeNode(
+    "boss",
+    LayerName.Seven,
+    { x: 600, y: 0 },
+    {
+      state: "revealedLocked",
+    },
+  );
   return {
     layers: [["starter"], ["chosen", "passed"], [], [], [], [], ["boss"]],
     nodes: { starter, chosen, passed, boss },
@@ -274,12 +309,14 @@ describe("buildAtlasMapNodes", () => {
     const atlas = makeVerticalAtlas();
     atlas.nodes.middle.dreamscapeId = "wilderveil";
     atlas.nodes.middle.biomeName = "Wilderveil";
-    atlas.nodes.middle.sites = [{
-      id: "00000000-0000-4000-8000-000000000091",
-      type: "DreamAugury",
-      isEnhanced: false,
-      isVisited: false,
-    }];
+    atlas.nodes.middle.sites = [
+      {
+        id: "00000000-0000-4000-8000-000000000091",
+        type: "DreamAugury",
+        isEnhanced: false,
+        isVisited: false,
+      },
+    ];
     const content: QuestContent = {
       ...EMPTY_CONTENT,
       dreamscapes: [

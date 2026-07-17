@@ -18,7 +18,9 @@ import {
   toQsbDreamsigns,
 } from "./dreamscape-view-model";
 
-function site(overrides: Partial<SiteState> & Pick<SiteState, "id" | "type">): SiteState {
+function site(
+  overrides: Partial<SiteState> & Pick<SiteState, "id" | "type">,
+): SiteState {
   return { isEnhanced: false, isVisited: false, ...overrides };
 }
 
@@ -77,7 +79,9 @@ describe("buildSiteModels", () => {
         site({ id: "s-battle", type: "Battle" }),
       ],
     });
-    const unlocked = buildSiteModels(visitedNonBattle, 0).find((m) => m.isBattle);
+    const unlocked = buildSiteModels(visitedNonBattle, 0).find(
+      (m) => m.isBattle,
+    );
     expect(unlocked?.isLocked).toBe(false);
     expect(unlocked?.isInteractive).toBe(true);
   });
@@ -118,7 +122,13 @@ describe("toQsbDreamcaller", () => {
 describe("toQsbDreamsigns", () => {
   it("maps owned dreamsigns by imageName and drops those without art", () => {
     const signs: Dreamsign[] = [
-      { id: "orb", name: "Dreaming Orb", effectDescription: "At Dawn, foresee 1.", imageName: "magic-ball.png", isBane: false },
+      {
+        id: "orb",
+        name: "Dreaming Orb",
+        effectDescription: "At Dawn, foresee 1.",
+        imageName: "magic-ball.png",
+        isBane: false,
+      },
       { name: "Nameless", effectDescription: "No art.", isBane: false },
     ];
     const docked = toQsbDreamsigns(signs);
@@ -206,7 +216,52 @@ describe("buildDreamscapeView", () => {
     } as unknown as QuestState;
 
     expect(buildDreamscapeView(rewardNode, state).inlineRewards).toEqual({
-      "s-reward": { kind: "dreamsign", dreamsign },
+      "s-reward": {
+        kind: "dreamsign",
+        dreamsign,
+        requiresReplacement: false,
+      },
+    });
+  });
+
+  it("builds an at-cap Dreamsign replacement view from a Reward runtime", () => {
+    const rewardNode = node({
+      sites: [site({ id: "s-reward", type: "Reward" })],
+    });
+    const pendingDreamsign = {
+      id: "pending-dreamsign",
+      name: "Pending",
+      effectDescription: "Pending effect.",
+      isBane: false,
+    };
+    const heldDreamsign = {
+      id: "held-dreamsign",
+      name: "Held",
+      effectDescription: "Held effect.",
+      isBane: false,
+    };
+    const state = {
+      dreamsigns: [heldDreamsign],
+      maxDreamsigns: 1,
+      completionLevel: 2,
+      siteRuntime: {
+        "s-reward": {
+          kind: "reward",
+          reward: { rewardType: "dreamsign", dreamsign: pendingDreamsign },
+          accepted: false,
+        },
+      },
+    } as unknown as QuestState;
+
+    const view = buildDreamscapeView(rewardNode, state, "s-reward");
+    expect(view.inlineRewards["s-reward"]).toMatchObject({
+      kind: "dreamsign",
+      requiresReplacement: true,
+    });
+    expect(view.replacement).toEqual({
+      pendingDreamsign,
+      currentDreamsigns: [heldDreamsign],
+      maxDreamsigns: 1,
     });
   });
 });

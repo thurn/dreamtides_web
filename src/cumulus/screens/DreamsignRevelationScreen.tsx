@@ -13,10 +13,13 @@ import {
   QUEST_STATUS_BAR_CLEARANCE_OP,
 } from "../components/hud/QuestStatusBar";
 import { SpeechBubble } from "../components/overlay/SpeechBubble";
-import { GlassDialog } from "../components/overlay/GlassDialog";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "./use-is-desktop";
+import {
+  DreamsignReplacementDialog,
+  type DreamsignReplacementView,
+} from "./DreamsignReplacementDialog";
 
 /** The guide who speaks over the Revelation offer. */
 export interface DreamsignRevelationGuideView {
@@ -30,16 +33,6 @@ export interface DreamsignRevelationGuideView {
   art: ArtRef;
 }
 
-/** Dreamsign-cap replacement state shown after claiming at the cap. */
-export interface DreamsignRevelationPurgeView {
-  /** The dreamsign the player is trying to claim. */
-  pendingDreamsign: DreamsignData;
-  /** The currently owned dreamsigns, one of which must be replaced. */
-  currentDreamsigns: readonly DreamsignData[];
-  /** Maximum number of dreamsigns the run may hold. */
-  maxDreamsigns: number;
-}
-
 /** Everything rendered by the pure Revelation screen. */
 export interface DreamsignRevelationView {
   /** The current dreamscape scene art. */
@@ -51,7 +44,7 @@ export interface DreamsignRevelationView {
   /** Null while loading, otherwise the offer is ready to display. */
   offerReady: boolean;
   /** Non-null when the player must replace an existing dreamsign. */
-  purge: DreamsignRevelationPurgeView | null;
+  purge: DreamsignReplacementView | null;
 }
 
 export interface DreamsignRevelationScreenProps {
@@ -62,7 +55,7 @@ export interface DreamsignRevelationScreenProps {
   /** Skip the offer and return to the dreamscape. */
   onSkip: () => void;
   /** Replace an owned dreamsign while accepting the pending one. */
-  onPurge: (index: number) => void;
+  onPurge: (dreamsignId: string) => void;
   /** Cancel cap handling and return to the offer. */
   onCancelPurge: () => void;
   /** Index currently animating toward the QuestStatusBar. */
@@ -103,6 +96,7 @@ export function DreamsignRevelationScreen({
       style={{
         position: "fixed",
         inset: 0,
+        zIndex: view.purge === null ? undefined : 80,
         overflow: "hidden",
         background: token("--bg-app"),
         touchAction: "none",
@@ -147,10 +141,12 @@ export function DreamsignRevelationScreen({
         />
       )}
       {view.purge !== null && (
-        <PurgeDialog
-          purge={view.purge}
-          onPurge={onPurge}
+        <DreamsignReplacementDialog
+          view={view.purge}
+          onReplace={onPurge}
           onCancel={onCancelPurge}
+          cancelLabel="Cancel"
+          closeLabel="Cancel replacement"
         />
       )}
     </div>
@@ -493,76 +489,5 @@ function RevelationOption({
         unavailable={disabled}
       />
     </motion.div>
-  );
-}
-
-function PurgeDialog({
-  purge,
-  onPurge,
-  onCancel,
-}: {
-  readonly purge: DreamsignRevelationPurgeView;
-  readonly onPurge: (index: number) => void;
-  readonly onCancel: () => void;
-}) {
-  return (
-    <GlassDialog
-      title="Choose a Dreamsign to Replace"
-      subtitle={`You can hold ${String(purge.maxDreamsigns)} dreamsigns.`}
-      onClose={onCancel}
-      closeLabel="Cancel replacement"
-    >
-      <div
-        style={{
-          width: "min(100%, 420px)",
-          margin: "0 auto",
-        }}
-      >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-            gap: token("--space-5"),
-            justifyItems: "center",
-          }}
-        >
-          {purge.currentDreamsigns.map((dreamsign, index) => (
-            <div
-              key={requireDreamsignId(
-                dreamsign,
-                "Cumulus Dreamsign Revelation purge",
-              )}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: token("--space-4"),
-              }}
-            >
-              <Dreamsign
-                dreamsign={dreamsign}
-                sizePx={72}
-                testid={`dreamsign-revelation-purge-art-${String(index)}`}
-                variant="hud"
-              />
-              <GlassButton
-                label="Replace"
-                variant="accent"
-                onPress={() => onPurge(index)}
-              />
-            </div>
-          ))}
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginTop: token("--space-6"),
-          }}
-        >
-          <GlassButton label="Cancel" onPress={onCancel} />
-        </div>
-      </div>
-    </GlassDialog>
   );
 }

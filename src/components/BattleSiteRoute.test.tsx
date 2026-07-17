@@ -1,7 +1,10 @@
 // @vitest-environment jsdom
 
 import { StrictMode, act, type ReactElement } from "react";
-import { MINIMAL_ATLAS_CONFIG, MINIMAL_DREAMSCAPES } from "../__test-helpers__/atlas-fixtures";
+import {
+  MINIMAL_ATLAS_CONFIG,
+  MINIMAL_DREAMSCAPES,
+} from "../__test-helpers__/atlas-fixtures";
 import { createRoot, type Root } from "react-dom/client";
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import { BattleSiteRoute } from "./BattleSiteRoute";
@@ -34,22 +37,6 @@ vi.mock("../coop/hooks", () => ({
   useActions: () => mockActions,
 }));
 
-vi.mock("../battle/components/BattleStartScreen", () => ({
-  BattleStartScreen: ({
-    init,
-    onBegin,
-  }: {
-    init: { battleId: string };
-    onBegin: () => void;
-  }) => (
-    <div data-screen="battle-start" data-battle-id={init.battleId}>
-      <button type="button" data-begin="" onClick={onBegin}>
-        Begin Battle
-      </button>
-    </div>
-  ),
-}));
-
 vi.mock("../screens/cumulus_adapters/BattleStartScreenAdapter", () => ({
   BattleStartScreenAdapter: ({
     init,
@@ -69,7 +56,7 @@ vi.mock("../screens/cumulus_adapters/BattleStartScreenAdapter", () => ({
 vi.mock("../battle/components/PlayableBattleScreen", async () => {
   const { useGameState } = await import("../coop/hooks");
   return {
-    PlayableBattleScreen: ({ uiVariant }: { uiVariant: "cumulus" | "legacy" }) => {
+    PlayableBattleScreen: () => {
       const gameState = useGameState();
       const battle = gameState.battle;
       if (battle === null) {
@@ -77,7 +64,7 @@ vi.mock("../battle/components/PlayableBattleScreen", async () => {
       }
       return (
         <div
-          data-screen={`${uiVariant}-playable`}
+          data-screen="cumulus-playable"
           data-battle-id={battle.board.battleId}
         >
           {battle.init.battleEntryKey}
@@ -134,14 +121,16 @@ function makeFoldStateWithBattle(): FoldState {
   };
 }
 
-function makeQuestState(overrides: {
-  atlasStartingNodeId?: string;
-  cardSourceDebug?: CardSourceDebugState | null;
-  completionLevel?: number;
-  currentDreamscape?: string | null;
-  screen?: Screen;
-  visitedSites?: string[];
-} = {}) {
+function makeQuestState(
+  overrides: {
+    atlasStartingNodeId?: string;
+    cardSourceDebug?: CardSourceDebugState | null;
+    completionLevel?: number;
+    currentDreamscape?: string | null;
+    screen?: Screen;
+    visitedSites?: string[];
+  } = {},
+) {
   const {
     atlasStartingNodeId = "",
     cardSourceDebug = null,
@@ -215,7 +204,9 @@ beforeEach(() => {
   };
   setQuestState();
   mockGameState = { quest: makeQuestState(), battle: null };
-  (mockActions as unknown as { beginBattle: typeof beginBattleSpy }).beginBattle = beginBattleSpy;
+  (
+    mockActions as unknown as { beginBattle: typeof beginBattleSpy }
+  ).beginBattle = beginBattleSpy;
   (
     globalThis as typeof globalThis & {
       IS_REACT_ACT_ENVIRONMENT?: boolean;
@@ -246,7 +237,6 @@ describe("BattleSiteRoute", () => {
           gameId: "9a9qfv",
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "cumulus",
         }}
       />,
     );
@@ -254,7 +244,9 @@ describe("BattleSiteRoute", () => {
     expect(
       container.querySelector('[data-screen="cumulus-playable"]'),
     ).not.toBeNull();
-    expect(container.querySelector('[data-screen="cumulus-battle-start"]')).toBeNull();
+    expect(
+      container.querySelector('[data-screen="cumulus-battle-start"]'),
+    ).toBeNull();
     expect(beginBattleSpy).not.toHaveBeenCalled();
   });
 
@@ -269,17 +261,21 @@ describe("BattleSiteRoute", () => {
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "cumulus",
         }}
       />,
     );
 
-    expect(container.querySelector('[data-screen="cumulus-battle-start"]')).not.toBeNull();
-    expect(container.querySelector('[data-screen="battle-start"]')).toBeNull();
-    expect(container.querySelector("[data-cumulus-quest-chrome]")).not.toBeNull();
+    expect(
+      container.querySelector('[data-screen="cumulus-battle-start"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector("[data-cumulus-quest-chrome]"),
+    ).not.toBeNull();
     expect(beginBattleSpy).not.toHaveBeenCalled();
     act(() => {
-      container.querySelector<HTMLButtonElement>("[data-cumulus-begin]")?.click();
+      container
+        .querySelector<HTMLButtonElement>("[data-cumulus-begin]")
+        ?.click();
     });
     expect(beginBattleSpy).toHaveBeenCalledWith("site-7", 4242);
 
@@ -296,15 +292,17 @@ describe("BattleSiteRoute", () => {
               gameId: null,
               databaseMode: "emulator",
               journeyVariant: "classic",
-              uiVariant: "cumulus",
             }}
           />
         </CumulusRoot>,
       );
     });
-    expect(container.querySelector('[data-screen="cumulus-playable"]')).not.toBeNull();
-    expect(container.querySelector('[data-screen="legacy-playable"]')).toBeNull();
-    expect(container.querySelector("[data-cumulus-quest-chrome]")).not.toBeNull();
+    expect(
+      container.querySelector('[data-screen="cumulus-playable"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector("[data-cumulus-quest-chrome]"),
+    ).not.toBeNull();
     expect(
       container.querySelector('[data-quest-status-bar-variant="battle"]'),
     ).not.toBeNull();
@@ -324,15 +322,20 @@ describe("BattleSiteRoute", () => {
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "cumulus",
           gotoScene: "battle-playable",
         }}
       />,
     );
 
-    expect(container.querySelector('[data-screen="cumulus-playable"]')).not.toBeNull();
-    expect(container.querySelector('[data-screen="cumulus-battle-start"]')).toBeNull();
-    expect(container.querySelector("[data-cumulus-quest-chrome]")).not.toBeNull();
+    expect(
+      container.querySelector('[data-screen="cumulus-playable"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-screen="cumulus-battle-start"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector("[data-cumulus-quest-chrome]"),
+    ).not.toBeNull();
     expect(
       container.querySelector('[data-quest-status-bar-variant="battle"]'),
     ).not.toBeNull();
@@ -351,16 +354,19 @@ describe("BattleSiteRoute", () => {
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "cumulus",
         }}
       />,
     );
 
-    expect(container.querySelector('[data-screen="cumulus-playable"]')).not.toBeNull();
-    expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
+    expect(
+      container.querySelector('[data-screen="cumulus-playable"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector("[data-quest-status-bar-anchor]"),
+    ).toBeNull();
   });
 
-  it("renders the legacy preview and appends BEGIN_BATTLE only after the click", () => {
+  it("renders the Cumulus preview and appends BEGIN_BATTLE only after the click", () => {
     const { container } = mount(
       <BattleSiteRoute
         site={makeSite()}
@@ -371,17 +377,20 @@ describe("BattleSiteRoute", () => {
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "legacy",
         }}
       />,
     );
 
-    expect(container.querySelector('[data-screen="legacy-playable"]')).toBeNull();
-    expect(container.querySelector('[data-screen="battle-start"]')).not.toBeNull();
+    expect(
+      container.querySelector('[data-screen="cumulus-playable"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-screen="cumulus-battle-start"]'),
+    ).not.toBeNull();
     expect(beginBattleSpy).not.toHaveBeenCalled();
     act(() => {
       container
-        .querySelector<HTMLButtonElement>("[data-begin]")
+        .querySelector<HTMLButtonElement>("[data-cumulus-begin]")
         ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
     expect(beginBattleSpy).toHaveBeenCalledWith("site-7");
@@ -399,7 +408,6 @@ describe("BattleSiteRoute", () => {
             gameId: null,
             databaseMode: "emulator",
             journeyVariant: "classic",
-            uiVariant: "legacy",
           }}
         />
       </StrictMode>,
@@ -408,13 +416,13 @@ describe("BattleSiteRoute", () => {
     expect(beginBattleSpy).not.toHaveBeenCalled();
     act(() => {
       container
-        .querySelector<HTMLButtonElement>("[data-begin]")
+        .querySelector<HTMLButtonElement>("[data-cumulus-begin]")
         ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
     expect(beginBattleSpy).toHaveBeenCalledTimes(1);
   });
 
-  it("switches from the legacy preview when BEGIN_BATTLE enters the fold", () => {
+  it("switches from the Cumulus preview when BEGIN_BATTLE enters the fold", () => {
     const { container, root } = mount(
       <BattleSiteRoute
         site={makeSite()}
@@ -425,21 +433,26 @@ describe("BattleSiteRoute", () => {
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "legacy",
         }}
       />,
     );
 
     // The opposing Dreamcaller is revealed before the playable surface mounts.
-    const startScreen = container.querySelector('[data-screen="battle-start"]');
+    const startScreen = container.querySelector(
+      '[data-screen="cumulus-battle-start"]',
+    );
     expect(startScreen).not.toBeNull();
-    expect(startScreen?.getAttribute("data-battle-id")).toContain("site-7::3::dreamscape-2");
-    expect(container.querySelector('[data-screen="legacy-playable"]')).toBeNull();
+    expect(startScreen?.getAttribute("data-battle-id")).toContain(
+      "site-7::3::dreamscape-2",
+    );
+    expect(
+      container.querySelector('[data-screen="cumulus-playable"]'),
+    ).toBeNull();
     expect(beginBattleSpy).not.toHaveBeenCalled();
 
     act(() => {
       container
-        .querySelector<HTMLButtonElement>("[data-begin]")
+        .querySelector<HTMLButtonElement>("[data-cumulus-begin]")
         ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
     expect(beginBattleSpy).toHaveBeenCalledWith("site-7");
@@ -456,13 +469,12 @@ describe("BattleSiteRoute", () => {
             gameId: null,
             databaseMode: "emulator",
             journeyVariant: "classic",
-            uiVariant: "legacy",
           }}
         />,
       );
     });
 
-    const screen = container.querySelector('[data-screen="legacy-playable"]');
+    const screen = container.querySelector('[data-screen="cumulus-playable"]');
     expect(screen).not.toBeNull();
     expect(screen?.textContent).toBe("site-7::3::dreamscape-2");
     expect(screen?.getAttribute("data-battle-id")).toBe(
@@ -483,16 +495,18 @@ describe("BattleSiteRoute", () => {
           gameId: null,
           databaseMode: "emulator",
           journeyVariant: "classic",
-          uiVariant: "legacy",
         }}
       />,
     );
 
     expect(
-      container.querySelector('[data-screen="legacy-playable"]')?.textContent,
+      container.querySelector('[data-screen="cumulus-playable"]')?.textContent,
     ).toBe("site-7::3::dreamscape-2");
 
-    mockGameState = { quest: makeQuestState({ completionLevel: 4 }), battle: null };
+    mockGameState = {
+      quest: makeQuestState({ completionLevel: 4 }),
+      battle: null,
+    };
     setQuestState({ completionLevel: 4 });
     act(() => {
       root.render(
@@ -505,14 +519,13 @@ describe("BattleSiteRoute", () => {
             gameId: null,
             databaseMode: "emulator",
             journeyVariant: "classic",
-            uiVariant: "legacy",
           }}
         />,
       );
     });
 
     expect(
-      container.querySelector('[data-screen="battle-start"]'),
+      container.querySelector('[data-screen="cumulus-battle-start"]'),
     ).not.toBeNull();
   });
 });

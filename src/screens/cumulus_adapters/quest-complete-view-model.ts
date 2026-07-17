@@ -4,9 +4,7 @@ import type { QuestCompleteView } from "../../cumulus/screens/QuestCompleteScree
 import { buildStartingDeckView } from "./starting-deck-view-model";
 
 /** Build the victory statistics shown on the completion surface. */
-export function buildQuestCompleteView(
-  state: QuestState,
-): QuestCompleteView {
+export function buildQuestCompleteView(state: QuestState): QuestCompleteView {
   const completedDreamscapes = Object.values(state.atlas.nodes).filter(
     (node) => node.state === "completed",
   ).length;
@@ -25,11 +23,36 @@ export function buildQuestCompleteView(
               : { portraitFocus: state.dreamcaller.portraitFocus }),
           },
     stats: [
-      { id: "battles", label: "Battles Won", value: state.completionLevel, kind: "number" },
-      { id: "dreamscapes", label: "Dreamscapes", value: completedDreamscapes, kind: "number" },
-      { id: "cards", label: "Final Deck", value: state.deck.length, kind: "number" },
-      { id: "dreamsigns", label: "Dreamsigns", value: state.dreamsigns.length, kind: "number" },
-      { id: "essence", label: "Essence Remaining", value: state.essence, kind: "essence" },
+      {
+        id: "battles",
+        label: "Battles Won",
+        value: state.completionLevel,
+        kind: "number",
+      },
+      {
+        id: "dreamscapes",
+        label: "Dreamscapes",
+        value: completedDreamscapes,
+        kind: "number",
+      },
+      {
+        id: "cards",
+        label: "Final Deck",
+        value: state.deck.length,
+        kind: "number",
+      },
+      {
+        id: "dreamsigns",
+        label: "Dreamsigns",
+        value: state.dreamsigns.length,
+        kind: "number",
+      },
+      {
+        id: "essence",
+        label: "Essence Remaining",
+        value: state.essence,
+        kind: "essence",
+      },
     ],
   };
 }

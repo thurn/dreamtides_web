@@ -41,7 +41,10 @@ function renderMenu() {
       onOpenPoolViewer={vi.fn()}
       onOpenDebugScreen={vi.fn()}
       onOpenQuestEditor={vi.fn()}
+      onToggleCardSourceOverlay={vi.fn()}
       hasDraftData={false}
+      hasCardSourceDebug={false}
+      isCardSourceOverlayOpen={false}
     />,
   );
 }
@@ -114,7 +117,9 @@ describe("DreamscapeQuestMenu", () => {
     });
 
     const buildShaButton = Array.from(
-      container.querySelectorAll<HTMLElement>('[data-testid="dreamscape-menu"] div'),
+      container.querySelectorAll<HTMLElement>(
+        '[data-testid="dreamscape-menu"] div',
+      ),
     ).find((element) => element.textContent === "Build SHA");
 
     expect(buildShaButton).toBeDefined();
@@ -122,7 +127,9 @@ describe("DreamscapeQuestMenu", () => {
       buildShaButton?.click();
     });
 
-    expect(container.querySelector('[data-testid="dreamscape-menu"]')).toBeNull();
+    expect(
+      container.querySelector('[data-testid="dreamscape-menu"]'),
+    ).toBeNull();
     expect(container.textContent).toContain("Build Git SHA: abc123def456");
     expect(logEvent).toHaveBeenCalledWith("build_sha_viewed", {
       source: "dreamscape_menu",

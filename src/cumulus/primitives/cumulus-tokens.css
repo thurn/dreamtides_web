@@ -307,20 +307,10 @@
   /* --color-* — global (index.css :root), production literals so desktop code
      referencing them resolves to the exact same values. */
   --color-bg: #0a0612;
-  --color-surface: #1a1525;
-  --color-surface-light: #2a2040;
-  --color-border: #3a3050;
   --color-primary: #7c3aed;
-  --color-primary-light: #a855f7;
-  --color-gold: #d4a017;
   --color-gold-light: #fbbf24;
-  --color-essence: #a855f7;
   --color-essence-glow-strong: rgba(168, 85, 247, 0.5);
-  --color-essence-glow-soft: rgba(168, 85, 247, 0.2);
-  --color-essence-bg: rgba(168, 85, 247, 0.1);
-  --color-essence-border: rgba(168, 85, 247, 0.35);
   --color-text: #e2e8f0;
-  --color-text-dim: #94a3b8;
 
   /* --cv-* — card chrome / rules text (index.css) */
   --cv-rules-energy-color: var(--primitive-energy-400);     /* #0ea5e9 */

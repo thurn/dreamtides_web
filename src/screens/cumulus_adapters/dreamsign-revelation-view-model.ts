@@ -2,19 +2,13 @@
 
 import { guideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
-import type {
-  DreamscapeNode,
-  Dreamsign,
-  QuestState,
-} from "../../types/quest";
+import type { DreamscapeNode, Dreamsign, QuestState } from "../../types/quest";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import type {
   DreamsignRevelationGuideView,
   DreamsignRevelationView,
 } from "../../cumulus/screens/DreamsignRevelationScreen";
-import {
-  dreamscapeSceneRef,
-} from "./dreamscape-view-model";
+import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 const FALLBACK_GUIDE_ID = "sigrun";
 const FALLBACK_GUIDE_NAME = "Sigrún";
