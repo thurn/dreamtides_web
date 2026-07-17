@@ -1,8 +1,7 @@
 /*
- * Dream Atlas node + edge styles, owned by the Cumulus design system. Extracted
- * from the local atlas screen (`src/atlas/atlas.css`) so `AtlasNode` and
- * `AtlasEdge` carry their own presentation and render identically in the /cumulus
- * doc site and in the live atlas screen.
+ * Dream Atlas node + edge styles, owned by the Cumulus design system. `AtlasNode`
+ * and `AtlasEdge` carry their own presentation and render identically in the
+ * /cumulus doc site and in the live atlas screen.
  *
  * Everything is scoped under `.dream-atlas` (the atlas screen's root) so the
  * generic class names (.node, .edge, ...) never collide with the rest of the

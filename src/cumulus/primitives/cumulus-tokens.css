@@ -297,12 +297,8 @@
   --dt-spark-border: var(--primitive-spark-600);
   --dt-enemy: var(--primitive-ember-500);
   --dt-player: var(--primitive-sap-400);
-  --dt-text: #fff8ec;
-  --dt-text-dim: #d8ccba;
-
   /* Atlas-specific gradients & washes (atlas.css `.dream-atlas`) */
   --dt-wash-journey: radial-gradient(120% 95% at 50% 30%, #241a3a, #140e22 55%, #0a0612); /* @kind other */
-  --dt-gradient-title: linear-gradient(90deg, #f3eefb, #c084fc); /* @kind other */
 
   /* --color-* — global (index.css :root), production literals so desktop code
      referencing them resolves to the exact same values. */
@@ -330,8 +326,8 @@
      (`--accent`, `--spark`, `--energy`, `--danger`, `--essence` live in
      the semantic block above; the `--font-*` roles live there too. Listed
      here as the canonical contract.) */
-  --text: var(--dt-text);             /* #fff8ec warm near-white */
-  --text-dim: var(--dt-text-dim);     /* #d8ccba warm */
+  --text: #fff8ec;                    /* warm near-white */
+  --text-dim: #d8ccba;                /* warm */
   --text-faint: var(--primitive-ink-500); /* #bba994 warm muted */
   --surface: var(--surface-card);     /* #1a1525 plum */
   --line: var(--dt-line);             /* rgba(168,85,247,.18) — purple hairline */

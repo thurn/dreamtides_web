@@ -12,8 +12,6 @@ const rows = [
   ["src/battle/components/BattleGameCard.tsx", "cumulus/no-classname-in-product-ui", 8], ["src/battle/components/BattleGameCard.tsx", "cumulus/no-raw-interactive-elements", 1],
   ["src/battle/components/BattleLogDrawer.tsx", "cumulus/no-classname-in-product-ui", 27], ["src/battle/components/BattleLogDrawer.tsx", "cumulus/no-raw-interactive-elements", 5],
   ["src/components/CardOverlay.tsx", "cumulus/no-classname-in-product-ui", 2], ["src/components/CardOverlay.tsx", "cumulus/no-hardcoded-values", 1],
-  ["src/components/DeckViewer.tsx", "cumulus/no-classname-in-product-ui", 72], ["src/components/DeckViewer.tsx", "cumulus/no-hardcoded-values", 86], ["src/components/DeckViewer.tsx", "cumulus/no-raw-interactive-elements", 8],
-  ["src/components/DreamcallerPopover.tsx", "cumulus/no-hardcoded-values", 11], ["src/components/DreamcallerPopover.tsx", "cumulus/no-classname-in-product-ui", 9],
   ["src/components/DreamscapeQuestMenu.tsx", "cumulus/no-raw-icon-classes", 6], ["src/components/DreamscapeQuestMenu.tsx", "cumulus/no-untokenized-lengths", 2],
   ["src/components/DreamwellCardView.tsx", "cumulus/no-hardcoded-values", 22], ["src/components/DreamwellCardView.tsx", "cumulus/valid-token-references", 3], ["src/components/DreamwellCardView.tsx", "cumulus/no-inline-glass", 1], ["src/components/DreamwellCardView.tsx", "cumulus/no-classname-in-product-ui", 1],
   ["src/components/PoolViewer.tsx", "cumulus/no-hardcoded-values", 44], ["src/components/PoolViewer.tsx", "cumulus/no-untokenized-lengths", 20], ["src/components/PoolViewer.tsx", "cumulus/no-raw-interactive-elements", 4], ["src/components/PoolViewer.tsx", "cumulus/no-classname-in-product-ui", 8],
@@ -44,15 +42,12 @@ export function baselineConfigEntries() {
 
 /** CSS debt uses the same exact-count, shrink-only contract as TSX lint debt. */
 export const OUTER_UI_CSS_BASELINES = Object.freeze([
-  { file: "src/index.css", rule: "raw-color", count: 41 },
-  { file: "src/index.css", rule: "raw-length", count: 33 },
-  { file: "src/index.css", rule: "raw-radius", count: 2 },
+  { file: "src/index.css", rule: "raw-color", count: 31 },
+  { file: "src/index.css", rule: "raw-length", count: 16 },
+  { file: "src/index.css", rule: "raw-radius", count: 1 },
   { file: "src/index.css", rule: "cumulus-card-selector", count: 4 },
   { file: "src/battle/battle.css", rule: "raw-length", count: 85 },
   { file: "src/battle/battle.css", rule: "raw-radius", count: 8 },
   { file: "src/battle/battle.css", rule: "inline-glass", count: 1 },
   { file: "src/battle/battle.css", rule: "unknown-token", count: 2 },
-  { file: "src/atlas/atlas.css", rule: "raw-color", count: 23 },
-  { file: "src/atlas/atlas.css", rule: "raw-length", count: 16 },
-  { file: "src/atlas/atlas.css", rule: "raw-radius", count: 2 },
 ]);

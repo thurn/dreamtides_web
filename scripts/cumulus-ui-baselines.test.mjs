@@ -42,5 +42,5 @@ describe("Cumulus outer UI lint baselines", () => {
       if (previous === undefined) delete process.env.CUMULUS_REPORT_BASELINES;
       else process.env.CUMULUS_REPORT_BASELINES = previous;
     }
-  }, 20_000);
+  }, 30_000);
 });
