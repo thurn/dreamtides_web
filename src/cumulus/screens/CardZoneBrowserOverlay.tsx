@@ -175,6 +175,10 @@ export function CardZoneBrowserOverlay({
     : `${String(visibleCards.length)} of ${String(cards.length)} Cards`;
   const galleryCards = visibleCards.map((card, index) => ({
     ...card,
+    // A mobile hold is reserved for the GameCard reading reveal. Leaving the
+    // native draggable attribute on this touch surface lets the browser
+    // promote a sustained press into a drag, which dismisses that reveal.
+    draggable: isDesktop && card.draggable === true,
     ...(zone === "deck"
       ? { caption: { kind: "text" as const, text: `#${String(index + 1)}` } }
       : {}),

@@ -201,7 +201,6 @@ describe("CumulusBattleZoneBrowser", () => {
       act(() => mounted.root.unmount());
     },
   );
-
   it.each(["deck", "void", "banished"] as const)(
     "opens %s card debug actions from a mobile double-tap",
     (zone) => {
@@ -244,4 +243,49 @@ describe("CumulusBattleZoneBrowser", () => {
       vi.useRealTimers();
     },
   );
+
+  it("keeps a mobile void-card reading reveal open while the touch is held", () => {
+    vi.useFakeTimers();
+    window.matchMedia = vi.fn().mockReturnValue({
+      matches: false,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    });
+    const mounted = mount("void", (state) => {
+      const voidCardId = state.sides.player.hand[0] ?? "";
+      state.sides.player.hand = state.sides.player.hand.filter(
+        (cardId) => cardId !== voidCardId,
+      );
+      state.sides.player.void = [voidCardId];
+    });
+    const entry = mounted.container.querySelector<HTMLElement>(
+      "[data-gallery-entry-id]",
+    );
+    const source = entry?.querySelector<HTMLElement>("[data-game-card-source]");
+
+    expect(entry?.draggable).toBe(false);
+    act(() => {
+      source?.dispatchEvent(new PointerEvent("pointerdown", {
+        bubbles: true,
+        pointerType: "touch",
+        pointerId: 7,
+        clientX: 100,
+        clientY: 200,
+      }));
+      vi.advanceTimersByTime(1_000);
+    });
+
+    expect(source?.dataset.revealActive).toBe("true");
+    expect(document.querySelector("[data-cumulus-reveal-portal]")).not.toBeNull();
+
+    act(() => {
+      source?.dispatchEvent(new PointerEvent("pointerup", {
+        bubbles: true,
+        pointerType: "touch",
+        pointerId: 7,
+      }));
+      mounted.root.unmount();
+    });
+    vi.useRealTimers();
+  });
 });
