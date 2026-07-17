@@ -56,7 +56,6 @@ const CONTENT_CONFIG: ContentConfig = {
   poolVariant: "tides4",
   draftMode: "pool",
   fresh20PackSize: null,
-  journeyVariant: "v2",
 };
 
 function genesisAt(createdAt: number): string {

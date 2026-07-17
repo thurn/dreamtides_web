@@ -34,7 +34,7 @@ const fake = vi.hoisted(() => {
     seed: "s",
     reducerVersion: "v",
     createdAt: 0,
-    contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" },
+    contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null },
   };
   const committed: FakeEvent[] = [];
   let subscriber: ((node: unknown) => void) | null = null;

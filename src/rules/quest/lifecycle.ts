@@ -373,7 +373,7 @@ export function resetQuest(state: FoldState): FoldState {
     seed: state.quest.seed,
     reducerVersion: "",
     createdAt: 0,
-    contentConfig: { poolVariant: "", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" },
+    contentConfig: { poolVariant: "", draftMode: "pool", fresh20PackSize: null },
   });
 }
 

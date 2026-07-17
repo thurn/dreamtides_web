@@ -85,7 +85,7 @@ function toyGenesis(seed: string): Genesis {
     seed,
     reducerVersion: "toy-v1",
     createdAt: Date.now(),
-    contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" },
+    contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null },
   };
 }
 
@@ -94,7 +94,7 @@ function realGenesis(seed: string): Genesis {
     seed,
     reducerVersion: "real-v1",
     createdAt: Date.now(),
-    contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" },
+    contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null },
   };
 }
 

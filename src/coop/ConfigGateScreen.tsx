@@ -12,8 +12,8 @@ interface ConfigGateScreenProps {
 /**
  * Read-only screen shown when a room's genesis `contentConfig` does not match
  * this client's local runtime config. Both players must fold the same content
- * (draft pool, draft mode, journey shape), so a client whose `?algo=`/`?journey=`
- * params differ can not safely join. The single action rewrites this tab's query
+ * (draft pool and draft mode), so a client whose `?algo=` params differ cannot
+ * safely join. The single action rewrites this tab's query
  * string to the room's pinned content params (preserving `?game=<id>`) and
  * reloads, so the client adopts the room's config and joins.
  *
@@ -133,13 +133,11 @@ function describeConfig(config: ContentConfig | undefined): Array<[string, strin
       ["Pool", "—"],
       ["Draft", "—"],
       ["Pack size", "—"],
-      ["Journey", "—"],
     ];
   }
   return [
     ["Pool", config.poolVariant],
     ["Draft", config.draftMode],
     ["Pack size", config.fresh20PackSize === null ? "default" : String(config.fresh20PackSize)],
-    ["Journey", config.journeyVariant],
   ];
 }

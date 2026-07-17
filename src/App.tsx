@@ -582,7 +582,6 @@ export default function App({
       runtimeConfig.poolVariant,
       runtimeConfig.draftMode,
       runtimeConfig.fresh20PackSize,
-      runtimeConfig.journeyVariant,
     )
       .then((content) => {
         // Register the five real reducer content providers from the loaded
@@ -607,7 +606,6 @@ export default function App({
     runtimeConfig.poolVariant,
     runtimeConfig.draftMode,
     runtimeConfig.fresh20PackSize,
-    runtimeConfig.journeyVariant,
   ]);
 
   useEffect(() => {

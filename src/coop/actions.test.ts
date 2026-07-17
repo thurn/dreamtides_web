@@ -30,7 +30,7 @@ const GENESIS: Genesis = {
   seed: "actions-test-seed",
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" },
+  contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null },
 };
 
 /** Promote a captured draft into the committed-event shape the fold expects. */

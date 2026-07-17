@@ -63,7 +63,6 @@ function runtimeConfig(overrides: Partial<RuntimeConfig> = {}): RuntimeConfig {
     aiMode: true,
     gameId: "abc123",
     databaseMode: "emulator",
-    journeyVariant: "v2",
     poolVariant: "tides4",
     draftMode: "pool",
     fresh20PackSize: undefined,
@@ -130,18 +129,17 @@ afterEach(() => {
 
 describe("RoomGate content-config gate", () => {
   it("renders the config gate when genesis.contentConfig differs from the local runtime config", async () => {
-    mount(runtimeConfig({ journeyVariant: "v2" }));
+    mount(runtimeConfig());
     await flush();
 
-    // Room pinned a DIFFERENT journey variant than the local config.
+    // Room pinned a different pool variant than the local config.
     act(() => {
       deliverNode?.(
         nodeWith(
           genesisWith({
-            poolVariant: "tides4",
+            poolVariant: "idf3",
             draftMode: "pool",
             fresh20PackSize: null,
-            journeyVariant: "classic",
           }),
         ),
       );
@@ -164,7 +162,6 @@ describe("RoomGate content-config gate", () => {
             poolVariant: "tides4",
             draftMode: "pool",
             fresh20PackSize: null,
-            journeyVariant: "v2",
           }),
         ),
       );

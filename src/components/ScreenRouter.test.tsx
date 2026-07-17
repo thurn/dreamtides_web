@@ -368,7 +368,7 @@ describe("ScreenRouter DreamAugury routing", () => {
       state,
       questContent: makeMerchantTestContent({ cards: fixtureCards() }),
       children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=classic")} />
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
     });
 
@@ -384,7 +384,7 @@ describe("ScreenRouter DreamAugury routing", () => {
       state,
       questContent: merchantContent(),
       children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
     });
 
@@ -399,7 +399,7 @@ describe("ScreenRouter DreamAugury routing", () => {
       state: makeStateFor(site),
       questContent: merchantContent(),
       children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
     });
 
@@ -430,7 +430,7 @@ describe("ScreenRouter DreamAugury routing", () => {
       mutations,
       questContent: merchantContent(),
       children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
     });
 
@@ -487,7 +487,7 @@ describe("ScreenRouter DreamAugury routing", () => {
       state,
       questContent: merchantContent(),
       children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
       strict: true,
     });
@@ -509,7 +509,7 @@ describe("ScreenRouter DreamAugury routing", () => {
       state,
       questContent: merchantContent(),
       children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
       strict: true,
     });
@@ -541,7 +541,7 @@ describe("ScreenRouter DreamAugury routing", () => {
       state,
       questContent: merchantContent(),
       children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
     });
 
@@ -601,7 +601,7 @@ describe("ScreenRouter DreamAugury routing", () => {
       mutations,
       questContent: contentWithoutDreamsigns,
       children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
     });
 
@@ -630,7 +630,7 @@ describe("ScreenRouter DreamAugury routing", () => {
       mutations,
       questContent: content,
       children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
     });
     const published = vi.mocked(mutations.setCardSourceDebug).mock
@@ -654,7 +654,7 @@ describe("ScreenRouter DreamAugury routing", () => {
       mutations,
       questContent: merchantContent(),
       children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
       strict: true,
     });
@@ -673,7 +673,7 @@ describe("ScreenRouter DreamAugury routing", () => {
       state,
       questContent: merchantContent(),
       children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
     });
 
@@ -691,7 +691,7 @@ describe("ScreenRouter DreamAugury routing", () => {
       mutations,
       questContent: makeMerchantTestContent({ cards: [] }),
       children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
     });
 
@@ -811,7 +811,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
         questContent: merchantContent(),
         mutations,
         children: (
-          <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+          <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
         ),
       });
 

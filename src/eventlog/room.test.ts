@@ -19,7 +19,6 @@ const CONTENT_CONFIG: ContentConfig = {
   poolVariant: "tides4",
   draftMode: "pool",
   fresh20PackSize: null,
-  journeyVariant: "v2",
 };
 
 function genesisAt(createdAt: number): string {
@@ -123,7 +122,6 @@ describe("genesisLogNode (createRoom's written node)", () => {
       poolVariant: "idf3",
       draftMode: "fresh20",
       fresh20PackSize: 20,
-      journeyVariant: "classic",
     };
     const genesis: Genesis = {
       seed: "room-seed",

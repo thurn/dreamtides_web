@@ -72,7 +72,7 @@ const GENESIS: Genesis = {
   seed: "real-provider-seed",
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null, journeyVariant: "v2" },
+  contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null },
 };
 
 /** Eight dreamsign templates so the reward / dreamsign / market generators have a live pool. */

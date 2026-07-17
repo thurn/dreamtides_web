@@ -236,7 +236,6 @@ describe("BattleSiteRoute", () => {
           aiMode: false,
           gameId: "9a9qfv",
           databaseMode: "emulator",
-          journeyVariant: "classic",
         }}
       />,
     );
@@ -260,7 +259,6 @@ describe("BattleSiteRoute", () => {
           aiMode: false,
           gameId: null,
           databaseMode: "emulator",
-          journeyVariant: "classic",
         }}
       />,
     );
@@ -291,7 +289,6 @@ describe("BattleSiteRoute", () => {
               aiMode: false,
               gameId: null,
               databaseMode: "emulator",
-              journeyVariant: "classic",
             }}
           />
         </CumulusRoot>,
@@ -321,7 +318,6 @@ describe("BattleSiteRoute", () => {
           aiMode: false,
           gameId: null,
           databaseMode: "emulator",
-          journeyVariant: "classic",
           gotoScene: "battle-playable",
         }}
       />,
@@ -353,7 +349,6 @@ describe("BattleSiteRoute", () => {
           aiMode: false,
           gameId: null,
           databaseMode: "emulator",
-          journeyVariant: "classic",
         }}
       />,
     );
@@ -376,7 +371,6 @@ describe("BattleSiteRoute", () => {
           aiMode: false,
           gameId: null,
           databaseMode: "emulator",
-          journeyVariant: "classic",
         }}
       />,
     );
@@ -407,7 +401,6 @@ describe("BattleSiteRoute", () => {
             aiMode: false,
             gameId: null,
             databaseMode: "emulator",
-            journeyVariant: "classic",
           }}
         />
       </StrictMode>,
@@ -432,7 +425,6 @@ describe("BattleSiteRoute", () => {
           aiMode: false,
           gameId: null,
           databaseMode: "emulator",
-          journeyVariant: "classic",
         }}
       />,
     );
@@ -468,7 +460,6 @@ describe("BattleSiteRoute", () => {
             aiMode: false,
             gameId: null,
             databaseMode: "emulator",
-            journeyVariant: "classic",
           }}
         />,
       );
@@ -494,7 +485,6 @@ describe("BattleSiteRoute", () => {
           aiMode: false,
           gameId: null,
           databaseMode: "emulator",
-          journeyVariant: "classic",
         }}
       />,
     );
@@ -518,7 +508,6 @@ describe("BattleSiteRoute", () => {
             aiMode: false,
             gameId: null,
             databaseMode: "emulator",
-            journeyVariant: "classic",
           }}
         />,
       );

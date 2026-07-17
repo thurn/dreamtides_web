@@ -69,7 +69,6 @@ import {
 } from "../draft/replay/draft-records";
 import { createInitialReplayDraftState } from "../draft/draft-engine";
 import type { ReplayDraftState } from "../types/draft";
-import type { JourneyVariant } from "../runtime/runtime-config";
 
 export interface QuestContent {
   cardDatabase: Map<number, CardData>;
@@ -722,21 +721,14 @@ export function buildDreamcallerTides4Provenance(
  * for the run; it defaults to {@link DEFAULT_POOL_VARIANT}. `draftMode` (from
  * `?algo=`) switches to a deck-fit draft: `"replay"` replays a real record's
  * packs, `"fresh20"` rolls fresh random packs. Both fetch the full draft-record
- * corpus and build the live deck-fit model from it. The v2 journey variant uses
- * the same model in pool mode. Classic pool mode fetches records when the pool
- * variant uses the draft-record corpus. `fresh20PackSize` (from `?packsize=`)
- * is carried through for the fresh20 draft.
+ * corpus and build the live deck-fit model from it. `fresh20PackSize` (from
+ * `?packsize=`) is carried through for the fresh20 draft.
  */
 export async function loadQuestContent(
   poolVariant: PoolVariant = DEFAULT_POOL_VARIANT,
   draftMode: "pool" | "replay" | "fresh20" = "pool",
   fresh20PackSize?: number,
-  journeyVariant: JourneyVariant = "classic",
 ): Promise<QuestContent> {
-  // Deck-fit modes and the v2 merchant path need the record corpus to build the
-  // fit model.
-  const usesFitModel =
-    draftMode === "replay" || draftMode === "fresh20" || journeyVariant === "v2";
   // The `embedded` variant grows from the committed affinity corpus instead of
   // the records, so it fetches `/affinity-corpus-data.json` rather than the
   // 19 MB record bundle; other pool modes skip it.
@@ -821,7 +813,7 @@ export async function loadQuestContent(
     // Fetch the committed `tides5` artifact only for the `tides5` variant.
     poolNeedsTides5 ? loadTides5Decks() : Promise.resolve(null),
     // The merchant corpus and dreamsign profiles are small and always loaded
-    // unconditionally so the v2 journey's merchant has signals on every path.
+    // unconditionally so Dream Augury has signals on every path.
     loadMerchantCorpus(),
     loadDreamsignProfiles().catch(
       () => undefined as ReadonlyMap<string, DreamsignProfile> | undefined,
@@ -932,7 +924,7 @@ export async function loadQuestContent(
     draftRecords,
     knownGoodDecklists,
     fitModel,
-    ...(usesFitModel ? { fresh20PackSize } : {}),
+    fresh20PackSize,
     merchantCorpus,
     dreamsignProfiles,
     dreamsignSignatures,

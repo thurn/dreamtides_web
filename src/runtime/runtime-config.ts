@@ -8,7 +8,6 @@ export interface RuntimeConfig {
   aiMode: boolean;
   gameId: string | null;
   databaseMode: DatabaseMode;
-  journeyVariant: JourneyVariant;
   /**
    * Draft-pool construction strategy from `?algo=`, resolved to a registered
    * `PoolVariant`. An absent `?algo=` uses `DEFAULT_POOL_VARIANT`; a draft-mode
@@ -35,9 +34,6 @@ export interface RuntimeConfig {
    * fresh20 draft uses its default pack size.
    */
   fresh20PackSize?: number;
-  debugJourneyShape?: string | null;
-  debugJourneyReward?: string | null;
-  debugJourneyCost?: string | null;
   /**
    * Name of a saved quest to load on boot, from `?loadQuest=`. When set, the
    * app fetches the matching snapshot from the dev server's `/api/saved-quests`
@@ -71,13 +67,12 @@ export interface RuntimeConfig {
 }
 
 export type DatabaseMode = "emulator" | "realtime";
-export type JourneyVariant = "classic" | "v2";
 
 /**
  * Extracts the fold-relevant content slice a room pins into its genesis. Only
- * parameters that change how the log folds belong here (draft pool/mode, pack
- * size, journey shape); presentation-only config (`aiMode`, debug
- * flags) is excluded so two clients differing purely in presentation still
+ * parameters that change how the log folds belong here (draft pool/mode and
+ * pack size); presentation-only configuration such as `aiMode` is excluded so
+ * two clients differing purely in presentation still
  * fold — and join — the same room. Absent optional fields fall back to the
  * same defaults `parseRuntimeConfig` applies.
  */
@@ -86,7 +81,6 @@ export function contentConfigFromRuntime(config: RuntimeConfig): ContentConfig {
     poolVariant: config.poolVariant ?? DEFAULT_POOL_VARIANT,
     draftMode: config.draftMode ?? "pool",
     fresh20PackSize: config.fresh20PackSize ?? null,
-    journeyVariant: config.journeyVariant,
   };
 }
 
@@ -98,15 +92,14 @@ export function contentConfigsEqual(
   return (
     a.poolVariant === b.poolVariant &&
     a.draftMode === b.draftMode &&
-    a.fresh20PackSize === b.fresh20PackSize &&
-    a.journeyVariant === b.journeyVariant
+    a.fresh20PackSize === b.fresh20PackSize
   );
 }
 
 /**
  * Overlays a content config onto an existing query string, producing the search
  * the config gate reloads to so this client adopts a room's pinned params. The
- * content-bearing params (`algo`, `packsize`, `journey`) are rewritten to match
+ * content-bearing params (`algo`, `packsize`) are rewritten to match
  * `config`; every other param — notably `game` (keep us in the room) and `ui` —
  * is preserved. It is the inverse of the content slice of `parseRuntimeConfig`:
  * feeding the result back through `parseRuntimeConfig` yields a config whose
@@ -131,7 +124,10 @@ export function applyContentConfigToSearch(
     params.set("algo", config.poolVariant);
     params.delete("packsize");
   }
-  params.set("journey", config.journeyVariant);
+  params.delete("journey");
+  params.delete("debugJourneyShape");
+  params.delete("debugJourneyReward");
+  params.delete("debugJourneyCost");
   const query = params.toString();
   return query === "" ? "" : `?${query}`;
 }
@@ -159,13 +155,9 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     aiMode: params.get("ai") !== "0",
     gameId: normalizeRoomId(params.get("game")),
     databaseMode: parseDatabaseMode(params.get("realtime")),
-    journeyVariant: parseJourneyVariant(params.get("journey")),
     poolVariant,
     draftMode,
     fresh20PackSize: parsePackSize(params.get("packsize")),
-    debugJourneyShape: parseDebugJourneyId(params.get("debugJourneyShape")),
-    debugJourneyReward: parseDebugJourneyId(params.get("debugJourneyReward")),
-    debugJourneyCost: parseDebugJourneyId(params.get("debugJourneyCost")),
     loadQuestName: parseLoadQuestName(params.get("loadQuest")),
     gotoScene: parseGotoScene(params.get("goto")),
     viewLogs: normalizeRoomId(params.get("viewLogs")),
@@ -178,10 +170,6 @@ function parseGotoScene(rawScene: string | null): string | null {
   }
   const trimmed = rawScene.trim();
   return trimmed === "" ? null : trimmed;
-}
-
-function parseJourneyVariant(_rawJourney: string | null): JourneyVariant {
-  return "v2";
 }
 
 function parseDraftMode(rawAlgo: string | null): "pool" | "replay" | "fresh20" {
@@ -224,14 +212,6 @@ function parseLoadQuestName(rawName: string | null): string | null {
   }
   const trimmed = rawName.trim();
   return trimmed === "" ? null : trimmed;
-}
-
-function parseDebugJourneyId(rawId: string | null): string | null {
-  if (rawId === null || rawId.trim() === "") {
-    return null;
-  }
-
-  return rawId;
 }
 
 function parseSeedOverride(rawSeed: string | null): number | null {

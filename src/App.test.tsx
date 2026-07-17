@@ -346,7 +346,6 @@ describe("App", () => {
           aiMode: false,
           gameId: "ab12cd",
           databaseMode: "emulator",
-          journeyVariant: "classic",
         }}
       />,
     );
@@ -377,7 +376,6 @@ describe("App", () => {
           aiMode: false,
           gameId: "ab12cd",
           databaseMode: "emulator",
-          journeyVariant: "classic",
         }}
       />,
     );
@@ -407,7 +405,6 @@ describe("App", () => {
           aiMode: false,
           gameId: null,
           databaseMode: "emulator",
-          journeyVariant: "classic",
         }}
       />,
     );
@@ -439,7 +436,6 @@ describe("App", () => {
           aiMode: false,
           gameId: null,
           databaseMode: "realtime",
-          journeyVariant: "classic",
         }}
       />,
     );
@@ -495,7 +491,6 @@ describe("QuestApp", () => {
           aiMode: false,
           gameId: null,
           databaseMode: "emulator",
-          journeyVariant: "classic",
         }}
       />,
     );
@@ -526,7 +521,6 @@ describe("QuestApp", () => {
           aiMode: false,
           gameId: null,
           databaseMode: "emulator",
-          journeyVariant: "classic",
         }}
       />,
     );
@@ -575,7 +569,6 @@ describe("QuestApp", () => {
           aiMode: false,
           gameId: null,
           databaseMode: "emulator",
-          journeyVariant: "classic",
         }}
       />,
     );
@@ -609,7 +602,6 @@ describe("QuestApp", () => {
           aiMode: false,
           gameId: null,
           databaseMode: "emulator",
-          journeyVariant: "classic",
         }}
       />,
     );
@@ -637,7 +629,6 @@ describe("QuestApp", () => {
           aiMode: false,
           gameId: null,
           databaseMode: "emulator",
-          journeyVariant: "classic",
         }}
       />,
     );
@@ -717,7 +708,6 @@ describe("QuestApp", () => {
           aiMode: false,
           gameId: null,
           databaseMode: "emulator",
-          journeyVariant: "classic",
         }}
       />,
     );
@@ -779,7 +769,6 @@ describe("QuestApp", () => {
           aiMode: false,
           gameId: null,
           databaseMode: "emulator",
-          journeyVariant: "classic",
         }}
       />,
     );

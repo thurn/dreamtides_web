@@ -16,13 +16,9 @@ describe("parseRuntimeConfig", () => {
       aiMode: true,
       gameId: null,
       databaseMode: "emulator",
-      journeyVariant: "v2",
       poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "pool",
       fresh20PackSize: undefined,
-      debugJourneyShape: null,
-      debugJourneyReward: null,
-      debugJourneyCost: null,
       loadQuestName: null,
       gotoScene: null,
       viewLogs: null,
@@ -69,43 +65,6 @@ describe("parseRuntimeConfig", () => {
 
     it("returns false only when ai=0", () => {
       expect(parseRuntimeConfig("?ai=0").aiMode).toBe(false);
-    });
-  });
-
-  describe("journeyVariant", () => {
-    it("defaults to v2 when journey is absent", () => {
-      expect(parseRuntimeConfig("").journeyVariant).toBe("v2");
-    });
-
-    it("uses v2 for every journey query value", () => {
-      expect(parseRuntimeConfig("?journey=classic").journeyVariant).toBe("v2");
-      expect(parseRuntimeConfig("?journey=").journeyVariant).toBe("v2");
-      expect(parseRuntimeConfig("?journey=v2").journeyVariant).toBe("v2");
-      expect(parseRuntimeConfig("?journey=Classic").journeyVariant).toBe("v2");
-      expect(parseRuntimeConfig("?journey=classicx").journeyVariant).toBe("v2");
-      expect(parseRuntimeConfig("?journey=other").journeyVariant).toBe("v2");
-    });
-  });
-
-  describe("Dream Journey debug params", () => {
-    it("returns non-empty debug journey ids verbatim", () => {
-      const config = parseRuntimeConfig(
-        "?debugJourneyShape=single_offer&debugJourneyReward=gain_essence&debugJourneyCost=pay_essence",
-      );
-
-      expect(config.debugJourneyShape).toBe("single_offer");
-      expect(config.debugJourneyReward).toBe("gain_essence");
-      expect(config.debugJourneyCost).toBe("pay_essence");
-    });
-
-    it("returns null for empty debug journey params", () => {
-      const config = parseRuntimeConfig(
-        "?debugJourneyShape=&debugJourneyReward=&debugJourneyCost=",
-      );
-
-      expect(config.debugJourneyShape).toBeNull();
-      expect(config.debugJourneyReward).toBeNull();
-      expect(config.debugJourneyCost).toBeNull();
     });
   });
 
@@ -262,10 +221,10 @@ describe("removeUiParamFromSearch", () => {
   it("removes every ui key while preserving unrelated parameters", () => {
     expect(
       removeUiParamFromSearch(
-        "?game=room-7&ui=legacy&algo=fresh20&ui=cumulus&deviceFrame=iphone16&debugJourneyShape=single_offer",
+        "?game=room-7&ui=legacy&algo=fresh20&ui=cumulus&deviceFrame=iphone16",
       ),
     ).toBe(
-      "?game=room-7&algo=fresh20&deviceFrame=iphone16&debugJourneyShape=single_offer",
+      "?game=room-7&algo=fresh20&deviceFrame=iphone16",
     );
   });
 
@@ -280,20 +239,18 @@ describe("contentConfigFromRuntime", () => {
       poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "pool",
       fresh20PackSize: null,
-      journeyVariant: "v2",
     });
   });
 
   it("reflects the fresh20 draft mode, pack size, and current journey", () => {
     expect(
       contentConfigFromRuntime(
-        parseRuntimeConfig("?algo=fresh20&packsize=15&journey=classic"),
+        parseRuntimeConfig("?algo=fresh20&packsize=15"),
       ),
     ).toEqual({
       poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "fresh20",
       fresh20PackSize: 15,
-      journeyVariant: "v2",
     });
   });
 
@@ -309,7 +266,6 @@ describe("contentConfigsEqual", () => {
     poolVariant: "tides4",
     draftMode: "pool",
     fresh20PackSize: null,
-    journeyVariant: "v2",
   };
 
   it("is true for field-wise equal configs", () => {
@@ -326,9 +282,6 @@ describe("contentConfigsEqual", () => {
     expect(contentConfigsEqual(base, { ...base, fresh20PackSize: 20 })).toBe(
       false,
     );
-    expect(
-      contentConfigsEqual(base, { ...base, journeyVariant: "classic" }),
-    ).toBe(false);
   });
 });
 
@@ -339,25 +292,21 @@ describe("applyContentConfigToSearch", () => {
         poolVariant: "idf2",
         draftMode: "pool",
         fresh20PackSize: null,
-        journeyVariant: "v2",
       },
       {
         poolVariant: DEFAULT_POOL_VARIANT,
         draftMode: "replay",
         fresh20PackSize: null,
-        journeyVariant: "v2",
       },
       {
         poolVariant: DEFAULT_POOL_VARIANT,
         draftMode: "fresh20",
         fresh20PackSize: 12,
-        journeyVariant: "v2",
       },
       {
         poolVariant: DEFAULT_POOL_VARIANT,
         draftMode: "fresh20",
         fresh20PackSize: null,
-        journeyVariant: "v2",
       },
     ];
     for (const config of configs) {
@@ -373,10 +322,9 @@ describe("applyContentConfigToSearch", () => {
       poolVariant: "idf2",
       draftMode: "pool",
       fresh20PackSize: null,
-      journeyVariant: "classic",
     };
     const result = applyContentConfigToSearch(
-      "?game=abc123&deviceFrame=iphone16&algo=fresh20&packsize=9",
+      "?game=abc123&deviceFrame=iphone16&algo=fresh20&packsize=9&journey=classic&debugJourneyShape=single_offer",
       config,
     );
     const params = new URLSearchParams(result);
@@ -385,6 +333,7 @@ describe("applyContentConfigToSearch", () => {
     expect(params.get("algo")).toBe("idf2");
     // packsize is dropped when the adopted mode is not fresh20.
     expect(params.get("packsize")).toBeNull();
-    expect(params.get("journey")).toBe("classic");
+    expect(params.get("journey")).toBeNull();
+    expect(params.get("debugJourneyShape")).toBeNull();
   });
 });

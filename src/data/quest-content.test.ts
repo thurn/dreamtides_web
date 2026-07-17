@@ -392,7 +392,7 @@ describe("loadQuestContent", () => {
       draftRecords: [fixtureRecord],
     });
 
-    const content = await loadQuestContent("idf3", "pool", undefined, "v2");
+    const content = await loadQuestContent("idf3", "pool");
 
     expect(content.draftMode).toBe("pool");
     expect(content.draftRecords).toEqual([fixtureRecord]);
