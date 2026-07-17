@@ -37,6 +37,7 @@ The shared card-browser surface: GlassPanel title and action chrome around a scr
 | `onCardDragStart` | `((entryId: string, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when a draggable card entry begins a native drag. |
 | `onCardDragEnd` | `((entryId: string, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when a draggable card entry's native drag ends. |
 | `onCardContextMenu` | `((entryId: string, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)` | no | — | Fires when a card entry requests its contextual actions. |
+| `onCardDoubleTap` | `((entryId: string) => void)` | no | — | Fires when a card receives two quick activations. While present, a primary card press waits briefly so a second tap can take precedence. |
 | `endAction` | `CardGalleryActionView` | no | — | Optional card-sized action appended after the cards. |
 | `onEndActionPress` | `((entryId: string) => void)` | no | — | Fires with the appended action's stable id when it is activated. |
 

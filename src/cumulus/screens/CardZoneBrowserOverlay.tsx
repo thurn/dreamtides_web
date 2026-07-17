@@ -46,6 +46,8 @@ export interface CardZoneBrowserOverlayProps {
     entryId: string,
     event: MouseEvent<HTMLDivElement>,
   ) => void;
+  /** Requests one card entry's mobile double-tap action. */
+  readonly onCardDoubleTap?: (entryId: string) => void;
 }
 
 const SORT_OPTIONS = [
@@ -120,6 +122,7 @@ export function CardZoneBrowserOverlay({
   onCardDragStart,
   onCardDragEnd,
   onCardContextMenu,
+  onCardDoubleTap,
 }: CardZoneBrowserOverlayProps): ReactElement {
   const isDesktop = useIsDesktop();
   const [query, setQuery] = useState("");
@@ -276,6 +279,7 @@ export function CardZoneBrowserOverlay({
           onCardDragStart={onCardDragStart}
           onCardDragEnd={onCardDragEnd}
           onCardContextMenu={onCardContextMenu}
+          onCardDoubleTap={isDesktop ? undefined : onCardDoubleTap}
         />
       </div>
     </motion.div>

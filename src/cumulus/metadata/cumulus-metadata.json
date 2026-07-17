@@ -806,6 +806,14 @@
       "description": "Fires when a card entry requests its contextual actions."
     },
     {
+      "name": "onCardDoubleTap",
+      "tsType": "((entryId: string) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires when a card receives two quick activations. While present, a primary\ncard press waits briefly so a second tap can take precedence."
+    },
+    {
       "name": "endAction",
       "tsType": "CardGalleryActionView",
       "unionMembers": [],

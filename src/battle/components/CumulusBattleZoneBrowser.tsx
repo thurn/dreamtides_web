@@ -24,6 +24,10 @@ export interface CumulusBattleZoneBrowserProps {
     event: ReactMouseEvent<HTMLDivElement>,
     sourceSurface: BattleCommandSourceSurface,
   ) => void;
+  readonly onCardDoubleTap?: (
+    battleCardId: string,
+    sourceSurface: BattleCommandSourceSurface,
+  ) => void;
   readonly onCardDragEnd?: () => void;
   readonly onCardDragStart?: (
     battleCardId: string,
@@ -49,6 +53,7 @@ export function CumulusBattleZoneBrowser({
   state,
   onClose,
   onCardContextMenu,
+  onCardDoubleTap,
   onCardDragEnd,
   onCardDragStart,
   onCardDropToBrowser,
@@ -97,6 +102,9 @@ export function CumulusBattleZoneBrowser({
         onCardContextMenu={(battleCardId, event) => {
           event.preventDefault();
           onCardContextMenu?.(battleCardId, event, sourceSurface);
+        }}
+        onCardDoubleTap={(battleCardId) => {
+          onCardDoubleTap?.(battleCardId, sourceSurface);
         }}
       />
     </div>

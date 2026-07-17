@@ -874,7 +874,7 @@ function PlayableBattleScreenInner({
 
   function handleCumulusCardDebugActivate(
     battleCardId: string,
-    source: "player-hand" | "battlefield",
+    sourceSurface: BattleCommandSourceSurface,
     invocation:
       | { readonly presentation: "sheet" }
       | {
@@ -883,7 +883,6 @@ function PlayableBattleScreenInner({
           readonly y: number;
         },
   ): void {
-    const sourceSurface = source === "player-hand" ? "hand-tray" : "battlefield";
     const card = board.cardInstances[battleCardId];
     const location = selectBattleCardLocation(board, battleCardId);
     if (card === undefined || location === null) return;
@@ -1337,6 +1336,12 @@ function PlayableBattleScreenInner({
             state={board}
             onClose={() => setOpenZoneBrowser(null)}
             onCardContextMenu={handleCardContextMenu}
+            onCardDoubleTap={(battleCardId, sourceSurface) =>
+              handleCumulusCardDebugActivate(
+                battleCardId,
+                sourceSurface,
+                { presentation: "sheet" },
+              )}
             onCardDragStart={handleCardDragStart}
             onCardDragEnd={handleCardDragEnd}
             onCardDropToBrowser={(sourceSurface) => handleZoneDrop(
@@ -1433,7 +1438,12 @@ function PlayableBattleScreenInner({
             pendingCardOwner,
             onHandCardActivate: handleHandCardDoubleClick,
             onHandCardDrop: handlePlayPendingHandCard,
-            onCardDebugActivate: handleCumulusCardDebugActivate,
+            onCardDebugActivate: (battleCardId, source, invocation) =>
+              handleCumulusCardDebugActivate(
+                battleCardId,
+                source === "player-hand" ? "hand-tray" : "battlefield",
+                invocation,
+              ),
             onCardDragStart: (battleCardId, source) => {
               handleCardDragStart(
                 battleCardId,

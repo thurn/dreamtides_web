@@ -25,6 +25,7 @@ import type { GlassControlPlacement } from "../../primitives/control-placement";
 import type { Glyph } from "../../primitives/glyph";
 import { GLYPHS } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
+import { DOUBLE_TAP_WINDOW_MS } from "../../primitives/pointer-gesture";
 import { token } from "../../primitives/tokens";
 import { EssenceValue } from "../hud/EssenceValue";
 import { GlassButton, type GlassButtonVariant } from "../controls/GlassButton";
@@ -290,6 +291,11 @@ export interface CardGalleryPanelProps {
   onCardDragEnd?: (entryId: string, event: DragEvent<HTMLDivElement>) => void;
   /** Fires when a card entry requests its contextual actions. */
   onCardContextMenu?: (entryId: string, event: MouseEvent<HTMLDivElement>) => void;
+  /**
+   * Fires when a card receives two quick activations. While present, a primary
+   * card press waits briefly so a second tap can take precedence.
+   */
+  onCardDoubleTap?: (entryId: string) => void;
   /** Optional card-sized action appended after the cards. */
   endAction?: CardGalleryActionView;
   /** Fires with the appended action's stable id when it is activated. */
@@ -633,9 +639,39 @@ export function CardGalleryPanel({
   onCardDragStart,
   onCardDragEnd,
   onCardContextMenu,
+  onCardDoubleTap,
   endAction,
   onEndActionPress,
 }: CardGalleryPanelProps): ReactElement {
+  const pendingCardTapsRef = useRef(new Map<string, number>());
+  const cancelPendingCardTap = (entryId: string): void => {
+    const timer = pendingCardTapsRef.current.get(entryId);
+    if (timer === undefined) return;
+    window.clearTimeout(timer);
+    pendingCardTapsRef.current.delete(entryId);
+  };
+  const handleCardActivate = (entryId: string): void => {
+    if (onCardDoubleTap === undefined) {
+      onCardPress?.(entryId);
+      return;
+    }
+    if (pendingCardTapsRef.current.has(entryId)) {
+      cancelPendingCardTap(entryId);
+      onCardDoubleTap(entryId);
+      return;
+    }
+    const timer = window.setTimeout(() => {
+      pendingCardTapsRef.current.delete(entryId);
+      onCardPress?.(entryId);
+    }, DOUBLE_TAP_WINDOW_MS);
+    pendingCardTapsRef.current.set(entryId, timer);
+  };
+  useEffect(() => () => {
+    for (const timer of pendingCardTapsRef.current.values()) {
+      window.clearTimeout(timer);
+    }
+    pendingCardTapsRef.current.clear();
+  }, []);
   const accessoryPlacement: GlassControlPlacement =
     frame === "fullBleed" ? "onMedia" : "onGlass";
   const columnCount = renderedColumnCount(columns);
@@ -885,7 +921,8 @@ export function CardGalleryPanel({
               {cards.map((card) => {
                 const reserved = card.reserved === true;
                 const disabled = card.disabled === true || reserved;
-                const interactive = onCardPress !== undefined;
+                const interactive =
+                  onCardPress !== undefined || onCardDoubleTap !== undefined;
                 const stackedCopyLeft = card.stackedCopyDirection === "left";
                 const tileStyle: CSSProperties = {
                   position: "relative",
@@ -937,7 +974,7 @@ export function CardGalleryPanel({
                         testId={card.testId}
                         onActivate={
                           interactive
-                            ? () => onCardPress(card.entryId)
+                            ? () => handleCardActivate(card.entryId)
                             : undefined
                         }
                       />
@@ -964,6 +1001,7 @@ export function CardGalleryPanel({
                       }
                     }}
                     onContextMenu={(event) => {
+                      cancelPendingCardTap(card.entryId);
                       onCardContextMenu?.(card.entryId, event);
                     }}
                     style={{

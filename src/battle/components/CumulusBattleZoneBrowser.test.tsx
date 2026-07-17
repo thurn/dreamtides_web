@@ -4,6 +4,7 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../../cumulus/CumulusRoot";
+import { DOUBLE_TAP_WINDOW_MS } from "../../cumulus/primitives/pointer-gesture";
 import { createBattleInit } from "../integration/create-battle-init";
 import { createInitialBattleState } from "../state/create-initial-state";
 import {
@@ -32,6 +33,7 @@ function mount(
   readonly root: Root;
   readonly state: ReturnType<typeof createState>;
   readonly onCardContextMenu: ReturnType<typeof vi.fn>;
+  readonly onCardDoubleTap: ReturnType<typeof vi.fn>;
   readonly onCardDragStart: ReturnType<typeof vi.fn>;
 } {
   const state = createState();
@@ -40,6 +42,7 @@ function mount(
   document.body.append(container);
   const root = createRoot(container);
   const onCardContextMenu = vi.fn();
+  const onCardDoubleTap = vi.fn();
   const onCardDragStart = vi.fn();
 
   act(() => {
@@ -50,6 +53,7 @@ function mount(
           state={state}
           onClose={() => undefined}
           onCardContextMenu={onCardContextMenu}
+          onCardDoubleTap={onCardDoubleTap}
           onCardDragStart={onCardDragStart}
         />
       </CumulusRoot>,
@@ -61,6 +65,7 @@ function mount(
     root,
     state,
     onCardContextMenu,
+    onCardDoubleTap,
     onCardDragStart,
   };
 }
@@ -194,6 +199,49 @@ describe("CumulusBattleZoneBrowser", () => {
       );
 
       act(() => mounted.root.unmount());
+    },
+  );
+
+  it.each(["deck", "void", "banished"] as const)(
+    "opens %s card debug actions from a mobile double-tap",
+    (zone) => {
+      vi.useFakeTimers();
+      window.matchMedia = vi.fn().mockReturnValue({
+        matches: false,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      });
+      let zoneCardId = "";
+      const mounted = mount(zone, (state) => {
+        if (zone === "deck") {
+          zoneCardId = state.sides.player.deck[0] ?? "";
+          return;
+        }
+        zoneCardId = state.sides.player.hand[0] ?? "";
+        state.sides.player.hand = state.sides.player.hand.filter(
+          (cardId) => cardId !== zoneCardId,
+        );
+        state.sides.player[zone] = [zoneCardId];
+      });
+      const card = mounted.container.querySelector<HTMLElement>(
+        `[data-gallery-entry-id="${zoneCardId}"] [data-game-card-source]`,
+      );
+
+      act(() => {
+        card?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        card?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      });
+
+      expect(mounted.onCardDoubleTap).toHaveBeenCalledWith(
+        zoneCardId,
+        `zone-browser-${zone}`,
+      );
+
+      act(() => {
+        vi.advanceTimersByTime(DOUBLE_TAP_WINDOW_MS);
+        mounted.root.unmount();
+      });
+      vi.useRealTimers();
     },
   );
 });

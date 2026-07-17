@@ -5,6 +5,7 @@ import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import { GLYPHS } from "../../primitives/glyph";
+import { DOUBLE_TAP_WINDOW_MS } from "../../primitives/pointer-gesture";
 import { CumulusRoot } from "../../CumulusRoot";
 import { CardGalleryPanel } from "./CardGalleryPanel";
 
@@ -54,6 +55,36 @@ describe("CardGalleryPanel", () => {
     expect(activate).toHaveBeenCalledWith("available");
     expect(container.querySelector('[data-testid="locked"]')?.getAttribute("data-unavailable")).toBe("true");
     act(() => root.unmount()); container.remove();
+  });
+
+  it("prioritizes an enabled card double-tap over its delayed primary press", () => {
+    vi.useFakeTimers();
+    const activate = vi.fn();
+    const doubleTap = vi.fn();
+    const container = document.createElement("div"); document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<CardGalleryPanel title="Your Void" cards={[
+      { entryId: "physical-card", model: model("Physical"), testId: "physical-card" },
+    ]} onCardPress={activate} onCardDoubleTap={doubleTap} />));
+    const card = container.querySelector<HTMLButtonElement>(
+      '[data-testid="physical-card"]',
+    );
+
+    act(() => {
+      card?.click();
+      card?.click();
+    });
+    expect(activate).not.toHaveBeenCalled();
+    expect(doubleTap).toHaveBeenCalledWith("physical-card");
+
+    act(() => {
+      card?.click();
+      vi.advanceTimersByTime(DOUBLE_TAP_WINDOW_MS);
+    });
+    expect(activate).toHaveBeenCalledWith("physical-card");
+
+    act(() => root.unmount()); container.remove();
+    vi.useRealTimers();
   });
 
   it("keeps reserved entries in the grid without rendering acquired content", () => {
