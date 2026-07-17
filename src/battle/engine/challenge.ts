@@ -272,8 +272,8 @@ function resolveLane(params: {
   }
 
   // Both present: resolve the topmost-vs-topmost spark comparison, with
-  // Preeminence breaking ties. A figment that loses sheds only its topmost
-  // figment; the void move keeps the rest of the stack in play.
+  // Preeminence breaking ties. A Figment that loses destroys only its topmost
+  // member; the leave-play replacement keeps its reserves in play.
   const baseChallengerDissolves = dissolvesAgainst(
     challenger,
     challengerSpark.compare,
@@ -389,7 +389,8 @@ function laneSpark(
  * Whether `self` loses its spark comparison against `opposing`. A character
  * dissolves on a lower or tied spark, except a tie won by Preeminence. For a
  * figment stack `selfSpark`/`opposingSpark` are the topmost figments' sparks, so
- * a losing stack sheds only its topmost figment (handled by the void move).
+ * a losing stack destroys only its topmost Figment through the leave-play
+ * replacement.
  */
 function dissolvesAgainst(
   self: BattleCardInstance,

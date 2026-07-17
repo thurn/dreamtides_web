@@ -129,11 +129,10 @@ export type BattleDebugEdit =
   }
   | {
     // Abandon: voluntarily move one of your own characters from play to the
-    // void (rules §Abandon). When the target is a figment stack of more than
-    // one member, only the topmost figment is abandoned (the stack stays in
-    // play with its remaining members); a single-member figment or any other
-    // character moves wholesale to its controller's void. Abandon only applies
-    // to a character currently in play; off-battlefield targets are a no-op.
+    // void (rules §Abandon). A Figment uses its leave-play replacement: its
+    // topmost member is destroyed, with any reserve members staying in play.
+    // Abandon only applies to a character currently in play; off-battlefield
+    // targets are a no-op.
     kind: "ABANDON";
     battleCardId: string;
   }
@@ -558,7 +557,7 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
  * - `MOVE_CARD_TO_ZONE`: zone transition; the battlefield-to-battlefield
  *   path also edits three fields (source slot, target slot, controller),
  *   and cross-zone moves are enough to warrant the flag for log clarity.
- * - `ABANDON`: a void move whose figment-stack variant drops the topmost
+ * - `ABANDON`: a leave-play action whose Figment variant destroys the topmost
  *   member in place; flagged for the same log-clarity reasons as a move.
  * - `INCREASE_MAX_ENERGY_AND_FILL`: edits both current and maximum energy.
  * - All simple numeric edits, flag toggles, and visibility changes stay

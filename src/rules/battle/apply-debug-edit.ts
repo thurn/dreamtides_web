@@ -1581,18 +1581,25 @@ function moveCardToDebugZone(
 
   const sourceInstance = state.cardInstances[battleCardId];
 
-  // Dissolving a figment stack to the void removes only its topmost figment
-  // (rules §Figments — Challenge resolution, Removal). A multi-member stack
-  // stays in play with its remaining figments; a single-member stack falls
-  // through to the normal void move below.
+  // Figments exist only in play (rules §Figments). Any zone change out of the
+  // battlefield destroys the topmost Figment instead of placing it in the
+  // requested destination. A multi-member stack remains in play with its
+  // reserves; an empty stack releases its battlefield position entirely.
   if (
+    (source.zone === "backRank" || source.zone === "frontRank") &&
     !("slotId" in destination) &&
-    destination.zone === "void" &&
-    isFigmentInstance(sourceInstance) &&
-    selectFigmentCount(sourceInstance) > 1
+    isFigmentInstance(sourceInstance)
   ) {
     const nextState = cloneBattleMutableState(state);
-    dissolveFigmentsFromStackInPlace(nextState, battleCardId, 1);
+    const stackEmptied = dissolveFigmentsFromStackInPlace(
+      nextState,
+      battleCardId,
+      1,
+    );
+    if (stackEmptied) {
+      removeBattleCardFromLocation(nextState, source);
+      delete nextState.cardInstances[battleCardId];
+    }
     return {
       state: nextState,
       transition: createEmptyTransitionData(),
@@ -1907,11 +1914,8 @@ function discardHandCard(
  * Abandon: voluntarily moves one of `battleCardId`'s controller's characters
  * from play to the void (rules §Abandon). Abandon applies only to a character
  * currently in the back or front rank; a target off the battlefield is a no-op.
- *
- * When the target is a figment stack of more than one member, only the topmost
- * figment is abandoned (rules §Abandon, §Figments): the top member is dropped
- * and the stack stays in play with its remaining members. A single-member
- * figment, or any other character, moves wholesale to its controller's void.
+ * Figments use the central leave-play replacement: their topmost member is
+ * destroyed, preserving any reserves in the stack.
  */
 function abandonCard(
   state: BattleMutableState,
@@ -1933,18 +1937,6 @@ function abandonCard(
     };
   }
 
-  // A multi-member figment stack abandons only its topmost member, leaving the
-  // rest of the stack in play.
-  if (isFigmentInstance(instance) && selectFigmentCount(instance) > 1) {
-    const nextState = cloneBattleMutableState(state);
-    dissolveFigmentsFromStackInPlace(nextState, battleCardId, 1);
-    return {
-      state: nextState,
-      transition: createEmptyTransitionData(),
-    };
-  }
-
-  // Otherwise the whole character moves from play to its controller's void.
   return moveCardToDebugZone(state, battleCardId, {
     side: location.side,
     zone: "void",

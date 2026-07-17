@@ -109,3 +109,19 @@ for the key `warrior`. The creator offers two distinct Warrior Figment types,
 so keying options by subtype collides each time the dialog renders. The option
 list should use the stable Figment type identity so both Warrior entries retain
 independent component identity.
+
+## MobileBattleScreen card-picker model lacks its side discriminator
+
+`npm run typecheck` fails at
+`src/cumulus/screens/MobileBattleScreen.tsx:2197`: the screen reads
+`MobileBattleCardPickerView.side`, but that property is absent from the view
+type. The card-picker model and its presentation need a matching owner/side
+contract before the repository typecheck can pass.
+
+## MobileBattleScreen inline card-picker test reports the wrong hand owner
+
+`npm test` fails in
+`src/cumulus/screens/MobileBattleScreen.test.tsx`'s inline card-picker test:
+the rendered progress label says "Discard 2 cards from the enemy hand · 0/2"
+where the fixture expects the player hand. The card-picker label should derive
+the owner from the same source as its candidate cards.

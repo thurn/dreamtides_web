@@ -96,3 +96,74 @@ describe("applyDebugEdit FORESEE", () => {
     expect(incomplete.transition.logEvents).toEqual([]);
   });
 });
+
+describe("applyDebugEdit Figments leaving play", () => {
+  function createBattlefieldFigment(): {
+    state: BattleMutableState;
+    battleCardId: string;
+  } {
+    const created = applyDebugEdit(createTestState(), {
+      kind: "CREATE_FIGMENT",
+      side: "player",
+      chosenSubtype: "Shadow",
+      chosenSpark: 2,
+      name: "Shadow",
+      destination: { side: "player", zone: "backRank", slotId: "B0" },
+      createdAtMs: 0,
+    }, EMISSION);
+    const battleCardId = created.state.sides.player.backRank.B0;
+    if (battleCardId === null) {
+      throw new Error("expected created Figment in B0");
+    }
+    return { state: created.state, battleCardId };
+  }
+
+  it.each(["hand", "void", "banished"] as const)(
+    "destroys a single Figment rather than moving it to %s",
+    (zone) => {
+      const { state, battleCardId } = createBattlefieldFigment();
+
+      const result = applyDebugEdit(state, {
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId,
+        destination: { side: "player", zone },
+      }, EMISSION);
+
+      expect(result.state.sides.player.backRank.B0).toBeNull();
+      expect(result.state.cardInstances[battleCardId]).toBeUndefined();
+      expect(result.state.sides.player[zone]).not.toContain(battleCardId);
+    },
+  );
+
+  it("destroys only the topmost Figment when a stack would leave play", () => {
+    const { state, battleCardId } = createBattlefieldFigment();
+    const stacked = applyDebugEdit(state, {
+      kind: "ADD_FIGMENTS",
+      battleCardId,
+      count: 1,
+    }, EMISSION);
+
+    const result = applyDebugEdit(stacked.state, {
+      kind: "MOVE_CARD_TO_ZONE",
+      battleCardId,
+      destination: { side: "player", zone: "banished" },
+    }, EMISSION);
+
+    expect(result.state.sides.player.backRank.B0).toBe(battleCardId);
+    expect(result.state.cardInstances[battleCardId]?.figments).toEqual([2]);
+    expect(result.state.sides.player.banished).not.toContain(battleCardId);
+  });
+
+  it("uses the same destruction replacement for Abandon", () => {
+    const { state, battleCardId } = createBattlefieldFigment();
+
+    const result = applyDebugEdit(state, {
+      kind: "ABANDON",
+      battleCardId,
+    }, EMISSION);
+
+    expect(result.state.sides.player.backRank.B0).toBeNull();
+    expect(result.state.cardInstances[battleCardId]).toBeUndefined();
+    expect(result.state.sides.player.void).not.toContain(battleCardId);
+  });
+});
