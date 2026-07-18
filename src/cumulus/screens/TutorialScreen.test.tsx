@@ -74,7 +74,7 @@ afterEach(() => {
 });
 
 describe("TutorialScreen", () => {
-  it("fades in the battle with tutorial-specific presentation controls", () => {
+  it("renders the battle while delegating presence to CharacterDialogue", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -102,7 +102,11 @@ describe("TutorialScreen", () => {
       );
     });
 
-    expect(container.querySelector("[data-tutorial-screen]")).not.toBeNull();
+    const tutorialScreen = container.querySelector<HTMLElement>(
+      "[data-tutorial-screen]",
+    );
+    expect(tutorialScreen).not.toBeNull();
+    expect(tutorialScreen?.style.opacity).toBe("");
     expect(
       container.querySelector("[data-battle-mobile='tutorial-battle']"),
     ).not.toBeNull();

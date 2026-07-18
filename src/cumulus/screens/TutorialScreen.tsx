@@ -1,6 +1,4 @@
-import { motion, useReducedMotion } from "framer-motion";
 import { useLayoutEffect, useRef, useState, type ReactElement } from "react";
-import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
 import {
   CharacterDialogue,
@@ -21,8 +19,6 @@ export interface TutorialScreenProps {
   readonly view: TutorialView;
 }
 
-const TUTORIAL_FADE_SECONDS = motionTimeSeconds("--dur-loading-screen-fade");
-
 interface TutorialDialogueAnchor {
   readonly left: number;
   readonly top: number;
@@ -30,7 +26,6 @@ interface TutorialDialogueAnchor {
 
 /** Standalone tutorial battle presentation entered from the loading scene. */
 export function TutorialScreen({ view }: TutorialScreenProps): ReactElement {
-  const reduceMotion = useReducedMotion() === true;
   const desktop = useIsDesktop();
   const screenRef = useRef<HTMLElement | null>(null);
   const [dialogueAnchor, setDialogueAnchor] =
@@ -139,13 +134,10 @@ export function TutorialScreen({ view }: TutorialScreenProps): ReactElement {
   }, [desktop]);
 
   return (
-    <motion.main
+    <main
       ref={screenRef}
       className="cumulus"
       data-tutorial-screen=""
-      initial={{ opacity: reduceMotion ? 1 : 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: reduceMotion ? 0 : TUTORIAL_FADE_SECONDS }}
       style={{
         position: "fixed",
         inset: 0,
@@ -183,6 +175,6 @@ export function TutorialScreen({ view }: TutorialScreenProps): ReactElement {
           testId="tutorial-welcome-dialogue"
         />
       </div>
-    </motion.main>
+    </main>
   );
 }

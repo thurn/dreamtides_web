@@ -37,7 +37,7 @@ afterEach(() => {
 });
 
 describe("CharacterDialogue", () => {
-  it("pairs typed character art and the shared speech bubble inside the dialogue frame", () => {
+  it("pairs typed art and speech at the transparent start of its shared fade-in", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -76,6 +76,7 @@ describe("CharacterDialogue", () => {
     expect(dialogue?.dataset.characterDialogueVisible).toBe("true");
     expect(dialogue?.dataset.characterDialogueSize).toBe("compact");
     expect(dialogue?.getAttribute("aria-hidden")).toBe("false");
+    expect(dialogue?.style.opacity).toBe("0");
     expect(dialogue?.style.gridTemplateColumns).toBe("64px minmax(0, 1fr)");
     expect(bubble?.style.padding).toBe(
       "var(--space-5) var(--space-5) var(--space-5) calc(14px + var(--space-5))",
