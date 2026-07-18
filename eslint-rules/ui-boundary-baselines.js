@@ -4,13 +4,6 @@
  * migrate the file or deliberately shrink this inventory in their task.
  */
 const rows = [
-  ["src/battle/components/AutomationGearIcon.tsx", "cumulus/no-classname-in-product-ui", 1], ["src/battle/components/AutomationGearIcon.tsx", "cumulus/no-hardcoded-values", 4],
-  ["src/battle/components/BattleCardNoteEditor.tsx", "cumulus/no-raw-interactive-elements", 10], ["src/battle/components/BattleCardNoteEditor.tsx", "cumulus/no-classname-in-product-ui", 18], ["src/battle/components/BattleCardNoteEditor.tsx", "cumulus/no-hardcoded-values", 2],
-  ["src/battle/components/BattleContextMenu.tsx", "cumulus/no-raw-interactive-elements", 3], ["src/battle/components/BattleContextMenu.tsx", "cumulus/no-classname-in-product-ui", 12],
-  ["src/battle/components/BattleDreamwellHistoryDrawer.tsx", "cumulus/no-classname-in-product-ui", 6], ["src/battle/components/BattleDreamwellHistoryDrawer.tsx", "cumulus/no-raw-interactive-elements", 1],
-  ["src/battle/components/BattleFigmentCreator.tsx", "cumulus/no-raw-interactive-elements", 11], ["src/battle/components/BattleFigmentCreator.tsx", "cumulus/no-classname-in-product-ui", 36], ["src/battle/components/BattleFigmentCreator.tsx", "cumulus/no-hardcoded-values", 2],
-  ["src/battle/components/BattleGameCard.tsx", "cumulus/no-classname-in-product-ui", 8], ["src/battle/components/BattleGameCard.tsx", "cumulus/no-raw-interactive-elements", 1],
-  ["src/battle/components/BattleLogDrawer.tsx", "cumulus/no-classname-in-product-ui", 27], ["src/battle/components/BattleLogDrawer.tsx", "cumulus/no-raw-interactive-elements", 5],
   ["src/editor/EditableCard.tsx", "cumulus/valid-token-references", 1],
   ["src/editor/DreamwellEditorPreview.tsx", "cumulus/valid-token-references", 3], ["src/editor/DreamwellEditorPreview.tsx", "cumulus/no-inline-glass", 1],
   ["src/editor/TidesDetailView.tsx", "cumulus/no-raw-icon-classes", 3], ["src/editor/TidesListView.tsx", "cumulus/no-raw-icon-classes", 1],
@@ -38,8 +31,4 @@ export const OUTER_UI_CSS_BASELINES = Object.freeze([
   { file: "src/editor/editable-figment.css", rule: "raw-color", count: 2 },
   { file: "src/editor/editable-figment.css", rule: "raw-length", count: 2 },
   { file: "src/editor/editable-figment.css", rule: "raw-radius", count: 1 },
-  { file: "src/battle/battle.css", rule: "raw-length", count: 85 },
-  { file: "src/battle/battle.css", rule: "raw-radius", count: 8 },
-  { file: "src/battle/battle.css", rule: "inline-glass", count: 1 },
-  { file: "src/battle/battle.css", rule: "unknown-token", count: 2 },
 ]);

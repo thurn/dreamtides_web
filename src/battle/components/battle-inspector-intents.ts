@@ -6,7 +6,7 @@ import { createDiscardMostRecentHandCardCommand } from "./battle-ui-commands";
 export type BattleInspectorIntentResolution =
   | { readonly kind: "command"; readonly command: BattleCommand }
   | { readonly kind: "gesture"; readonly commands: readonly BattleCommand[] }
-  | { readonly kind: "accessory"; readonly accessory: "foresee" | "open-zone" | "dreamwell-draw" | "create-figment" | "pool-viewer" | "battle-log" | "dreamwell-history"; readonly side?: BattleSide; readonly zone?: Exclude<BrowseableZone, "hand"> }
+  | { readonly kind: "accessory"; readonly accessory: "foresee" | "reorder-deck" | "open-zone" | "dreamwell-draw" | "create-figment" | "pool-viewer" | "battle-log" | "dreamwell-history"; readonly side?: BattleSide; readonly zone?: Exclude<BrowseableZone, "hand"> }
   | { readonly kind: "presentation"; readonly action: "opened" | "side-selected" | "toggle-opponent-hand" | "toggle-player-hand" | "reset-battle" }
   | { readonly kind: "none" };
 
@@ -45,6 +45,7 @@ export function resolveBattleInspectorIntent(
     case "force-result":
       return { kind: "command", command: { id: "FORCE_RESULT", result: action.result, sourceSurface: "inspector" } };
     case "foresee":
+    case "reorder-deck":
     case "dreamwell-draw":
     case "create-figment":
       return { kind: "accessory", accessory: action.kind, side: action.side };

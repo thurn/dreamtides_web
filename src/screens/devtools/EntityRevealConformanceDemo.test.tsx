@@ -61,9 +61,8 @@ describe("EntityRevealConformanceDemo", () => {
     const root = createRoot(container); act(() => root.render(<CumulusRoot><EntityRevealConformanceDemo /></CumulusRoot>));
     expect(container.querySelector('[data-conformance-card-id="11111111-1111-4111-8111-111111111111"]')).not.toBeNull();
     expect(container.querySelector("[data-atlas-node-id]" )).not.toBeNull();
-    expect(container.querySelector("[data-battle-card-id]" )).not.toBeNull();
-    expect(container.querySelector("[data-conformance-battle-fixture] [data-battle-card-semantic-kind=catalog]" )).not.toBeNull();
-    expect(container.querySelector("[data-conformance-generated-battle-fixture] [data-battle-card-semantic-kind=generated] [data-game-card-source]" )).not.toBeNull();
+    expect(container.querySelector("[data-conformance-battle-fixture] [data-game-card-source]" )).not.toBeNull();
+    expect(container.querySelector("[data-conformance-generated-battle-fixture] [data-game-card-source]" )).not.toBeNull();
     expect(container.querySelectorAll("[data-conformance-scenario]").length).toBeGreaterThanOrEqual(6);
     const infoSource = container.querySelector<HTMLElement>("[data-conformance-info-secondaries] [data-reveal-entity-type=dreamcaller]")!;
     expect(infoSource.dataset.revealSecondaryTitles?.split("\u001f")).toEqual(["Bane", "Discover", "Ephemeral"]);

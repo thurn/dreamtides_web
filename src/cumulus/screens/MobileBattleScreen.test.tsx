@@ -777,6 +777,38 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("dismisses the mobile inspector takeover before opening deck ordering", () => {
+    mockDesktopViewport(false);
+    const onInspectorAction = vi.fn();
+    const { container, root } = mount(makeView(), {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+      onInspectorAction,
+    });
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="battle-inspector-trigger"]',
+      )?.click();
+    });
+    expect(container.querySelector('[data-battle-inspector="takeover"]')).not.toBeNull();
+
+    const reorderDeck = Array.from(container.querySelectorAll<HTMLButtonElement>("button"))
+      .find((button) => button.textContent === "Reorder Deck");
+    act(() => reorderDeck?.click());
+
+    expect(onInspectorAction).toHaveBeenCalledWith({ kind: "reorder-deck", side: "player" });
+    expect(container.querySelector('[data-battle-inspector="takeover"]')).toBeNull();
+    act(() => root.unmount());
+  });
+
   it("disables discard and shuffle from live side availability", () => {
     mockDesktopViewport(true);
     const view = makeView();

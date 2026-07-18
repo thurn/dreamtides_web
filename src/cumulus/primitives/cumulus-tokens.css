@@ -310,11 +310,7 @@
      (`--accent`, `--spark`, `--energy`, `--danger`, `--essence` live in
      the semantic block above; the `--font-*` roles live there too. Listed
      here as the canonical contract.) */
-  --text: #fff8ec;                    /* warm near-white */
-  --text-dim: #d8ccba;                /* warm */
   --text-faint: var(--primitive-ink-500); /* #bba994 warm muted */
-  --surface: var(--surface-card);     /* #1a1525 plum */
-  --line: var(--dt-line);             /* rgba(168,85,247,.18) — purple hairline */
   --line-strong: var(--dt-line-strong);/* rgba(168,85,247,.42) */
   --gold: var(--primitive-gold-600);  /* #d4a017 reward / completed / victory */
   /* canonical font faces (same faces as the --font-* roles above) */

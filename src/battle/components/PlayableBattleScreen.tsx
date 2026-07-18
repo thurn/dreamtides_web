@@ -1160,6 +1160,8 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     }
     if (resolution.accessory === "foresee") {
       handleOpenForesee(resolution.side, 1, "inspector");
+    } else if (resolution.accessory === "reorder-deck") {
+      setOpenDeckOrderPicker(resolution.side);
     } else if (
       resolution.accessory === "open-zone" &&
       resolution.zone !== undefined

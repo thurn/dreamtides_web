@@ -37,6 +37,7 @@ describe("resolveBattleInspectorIntent", () => {
 
   it.each([
     [{ kind: "foresee", side: "player" }, "foresee"],
+    [{ kind: "reorder-deck", side: "enemy" }, "reorder-deck"],
     [{ kind: "open-zone", side: "enemy", zone: "deck" }, "open-zone"],
     [{ kind: "open-zone", side: "player", zone: "void" }, "open-zone"],
     [{ kind: "open-zone", side: "player", zone: "banished" }, "open-zone"],

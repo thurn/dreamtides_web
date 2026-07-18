@@ -234,7 +234,7 @@ export type MobileBattleInspectorAction =
   | { readonly kind: "side-selected"; readonly side: MobileBattleOwner }
   | { readonly kind: "adjust-stat"; readonly side: MobileBattleOwner; readonly stat: "points" | "currentEnergy" | "maxEnergy"; readonly amount: MobileBattleDebugAdjustment }
   | { readonly kind: "adjust-energy-pair"; readonly side: MobileBattleOwner; readonly amount: MobileBattleDebugAdjustment }
-  | { readonly kind: "draw" | "discard" | "foresee" | "shuffle" | "dreamwell-draw" | "create-figment"; readonly side: MobileBattleOwner }
+  | { readonly kind: "draw" | "discard" | "foresee" | "shuffle" | "reorder-deck" | "dreamwell-draw" | "create-figment"; readonly side: MobileBattleOwner }
   | { readonly kind: "open-zone"; readonly side: MobileBattleOwner; readonly zone: MobileBattleBrowseZone }
   | { readonly kind: "erode"; readonly side: MobileBattleOwner; readonly count: number }
   | { readonly kind: "open-battle-log" | "open-dreamwell-history" | "open-pool-viewer" | "toggle-opponent-hand" | "toggle-player-hand" | "skip-to-rewards" | "reset-battle" }
@@ -2592,6 +2592,7 @@ function BattleInspectorContent({
           <div style={actionGrid}>
             <InspectorButton label="Foresee" onPress={() => onAction?.({ kind: "foresee", side: selectedSide })} disabled={onAction === undefined} />
             <InspectorButton label="Shuffle" onPress={() => onAction?.({ kind: "shuffle", side: selectedSide })} disabled={!side.canShuffle || onAction === undefined} />
+            <InspectorButton label="Reorder Deck" onPress={() => onAction?.({ kind: "reorder-deck", side: selectedSide })} disabled={side.zones.deck === 0 || onAction === undefined} />
             <InspectorButton label="Open Deck" onPress={() => onAction?.({ kind: "open-zone", side: selectedSide, zone: "deck" })} disabled={onAction === undefined} />
             <InspectorButton label="Open Void" onPress={() => onAction?.({ kind: "open-zone", side: selectedSide, zone: "void" })} disabled={onAction === undefined} />
             <InspectorButton label="Open Banished" onPress={() => onAction?.({ kind: "open-zone", side: selectedSide, zone: "banished" })} disabled={onAction === undefined} />
@@ -2808,7 +2809,7 @@ export function MobileBattleScreen({
 
   const handleInspectorAction = useCallback((action: MobileBattleInspectorAction) => {
     if (
-      (!isDockLayout && action.kind === "foresee")
+      (!isDockLayout && (action.kind === "foresee" || action.kind === "reorder-deck"))
       || action.kind === "open-battle-log"
       || action.kind === "open-dreamwell-history"
     ) {

@@ -28,7 +28,6 @@ App backdrops, panes, and scrims, by role.
 | `--scrim` | `var(--primitive-scrim-700)` | modal / sheet backdrop |
 | `--scrim-gallery` | `var(--primitive-scrim-800)` | full-screen card gallery |
 | `--scrim-strong` | `var(--primitive-scrim-900)` | full-screen focus (held zoom) |
-| `--surface` | `var(--surface-card)` | #1a1525 plum |
 
 ## Text
 
@@ -45,8 +44,6 @@ Text color roles and letter-spacing. Pick by role (primary/secondary/muted), nev
 | `--text-on-glass` | `var(--primitive-ink-100)` | high-contrast text on blurred glass; never violet/accent |
 | `--text-on-glass-muted` | `var(--primitive-ink-300)` | secondary text on blurred glass |
 | `--text-loading` | `var(--text-on-accent)` | white copy on the true-black loading stage |
-| `--text` | `#fff8ec` | warm near-white |
-| `--text-dim` | `#d8ccba` | warm |
 | `--tracking-eyebrow` | `0.14em` |  |
 | `--tracking-wordmark` | `0.01em` |  |
 | `--text-outline-media` | `1.7px 0 0 #000, 1.6px 0.7px 0 #000, 1.2px 1.2px 0 #000, 0.7px 1.6px 0 #000, 0 1.7px 0 #000, -0.7px 1.6px 0 #000, -1.2px 1.2px 0 #000, -1.6px 0.7px 0 #000, -1.7px 0 0 #000, -1.6px -0.7px 0 #000, -1.2px -1.2px 0 #000, -0.7px -1.6px 0 #000, 0 -1.7px 0 #000, 0.7px -1.6px 0 #000, 1.2px -1.2px 0 #000, 1.6px -0.7px 0 #000, 0 2px 6px rgba(0, 0, 0, 0.7)` |  |
@@ -92,7 +89,6 @@ Hairlines and dividers.
 | `--border-mid` | `var(--primitive-line-mid)` |  |
 | `--border-strong` | `var(--primitive-line-strong)` |  |
 | `--border-accent` | `var(--primitive-line-violet)` |  |
-| `--line` | `var(--dt-line)` | rgba(168,85,247,.18) — purple hairline |
 | `--line-strong` | `var(--dt-line-strong)` | rgba(168,85,247,.42) |
 
 ## Radius
