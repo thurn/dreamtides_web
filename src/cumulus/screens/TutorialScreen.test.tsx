@@ -19,7 +19,14 @@ const screenMocks = vi.hoisted(() => ({
 vi.mock("../components/overlay/CharacterDialogue", () => ({
   CharacterDialogue: (props: CharacterDialogueProps) => {
     screenMocks.dialogueProps = props;
-    return <div data-character-dialogue={props.dialogue.speakerName} />;
+    return (
+      <section data-character-dialogue={props.dialogue.speakerName}>
+        <div data-character-dialogue-portrait-frame="" />
+        <div>
+          <aside />
+        </div>
+      </section>
+    );
   },
 }));
 
@@ -35,6 +42,13 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
   };
 });
 
+class ResizeObserverStub {
+  constructor(_callback: ResizeObserverCallback) {}
+  observe(_target: Element) {}
+  unobserve(_target: Element) {}
+  disconnect() {}
+}
+
 beforeEach(() => {
   (
     globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
@@ -49,6 +63,7 @@ beforeEach(() => {
     removeListener: vi.fn(),
     dispatchEvent: vi.fn(),
   }));
+  globalThis.ResizeObserver = ResizeObserverStub;
   screenMocks.props = null;
   screenMocks.dialogueProps = null;
 });
@@ -97,6 +112,8 @@ describe("TutorialScreen", () => {
       "[data-tutorial-dialogue-anchor]",
     );
     expect(dialogueAnchor?.style.left).toBe("var(--gutter)");
+    expect(dialogueAnchor?.style.top).toBe("0px");
+    expect(dialogueAnchor?.style.bottom).toBe("");
     expect(dialogueAnchor?.style.justifyContent).toBe("flex-start");
     expect(
       container.querySelector("[data-character-dialogue='Mira']"),
@@ -109,6 +126,36 @@ describe("TutorialScreen", () => {
       },
       visible: true,
     });
+
+    const tweakPanel = container.querySelector(
+      "[data-tutorial-dialogue-tweaks]",
+    );
+    const tweakSliders = container.querySelectorAll(
+      "[data-tutorial-dialogue-tweak]",
+    );
+    expect(tweakPanel).not.toBeNull();
+    expect(tweakSliders).toHaveLength(4);
+
+    const portraitSlider = container.querySelector<HTMLInputElement>(
+      '[data-tutorial-dialogue-tweak="portraitSize"]',
+    );
+    act(() => {
+      if (portraitSlider !== null) {
+        Object.getOwnPropertyDescriptor(
+          window.HTMLInputElement.prototype,
+          "value",
+        )?.set?.call(portraitSlider, "88");
+        portraitSlider.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    });
+    const dialogue = container.querySelector<HTMLElement>(
+      "[data-character-dialogue]",
+    );
+    expect(dialogue?.style.gridTemplateColumns).toBe("88px minmax(0, 1fr)");
+    expect(
+      container.querySelector("[data-tutorial-dialogue-tweaks-json]")
+        ?.textContent,
+    ).toContain('"portraitSize": 88');
 
     act(() => root.unmount());
     container.remove();

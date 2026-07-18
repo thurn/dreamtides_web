@@ -1,12 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
-import {
-  useLayoutEffect,
-  useRef,
-  useState,
-  type ReactElement,
-} from "react";
+import { useLayoutEffect, useRef, useState, type ReactElement } from "react";
 import { motionTimeSeconds } from "../primitives/motion-time";
-import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
 import {
   CharacterDialogue,
@@ -16,6 +10,11 @@ import {
   MobileBattleScreen,
   type MobileBattleView,
 } from "./MobileBattleScreen";
+import {
+  DEFAULT_TUTORIAL_DIALOGUE_TWEAKS,
+  TutorialDialogueTweaksPanel,
+  useApplyTutorialDialogueTweaks,
+} from "./devtools/TutorialDialogueTweaksPanel";
 import { useIsDesktop } from "./use-is-desktop";
 
 export interface TutorialView {
@@ -39,15 +38,16 @@ export function TutorialScreen({ view }: TutorialScreenProps): ReactElement {
   const reduceMotion = useReducedMotion() === true;
   const desktop = useIsDesktop();
   const screenRef = useRef<HTMLElement | null>(null);
+  const dialogueHostRef = useRef<HTMLDivElement | null>(null);
+  const [dialogueTweaks, setDialogueTweaks] = useState(
+    DEFAULT_TUTORIAL_DIALOGUE_TWEAKS,
+  );
   const [dialogueAnchor, setDialogueAnchor] =
     useState<TutorialDialogueAnchor | null>(null);
 
-  useLayoutEffect(() => {
-    if (!desktop) {
-      setDialogueAnchor(null);
-      return undefined;
-    }
+  useApplyTutorialDialogueTweaks(dialogueHostRef, dialogueTweaks);
 
+  useLayoutEffect(() => {
     const screen = screenRef.current;
     const dialogue = screen?.querySelector<HTMLElement>(
       "[data-character-dialogue]",
@@ -63,61 +63,75 @@ export function TutorialScreen({ view }: TutorialScreenProps): ReactElement {
       screen === null ||
       screen === undefined ||
       dialogue === null ||
-      dialogue === undefined ||
-      bubble === null ||
-      bubble === undefined ||
-      enemySlots === undefined ||
-      playerSlots === undefined ||
-      enemySlots.length < 2 ||
-      playerSlots.length < 2
+      dialogue === undefined
     ) {
       return undefined;
     }
 
-    const measuredElements = [
-      screen,
-      dialogue,
-      bubble,
-      enemySlots[0],
-      enemySlots[1],
-      playerSlots[0],
-      playerSlots[1],
-    ];
+    if (
+      desktop &&
+      (bubble === null ||
+        bubble === undefined ||
+        enemySlots === undefined ||
+        playerSlots === undefined ||
+        enemySlots.length < 2 ||
+        playerSlots.length < 2)
+    ) {
+      return undefined;
+    }
+
+    const measuredElements: Element[] = [screen, dialogue];
+    if (bubble !== null && bubble !== undefined) measuredElements.push(bubble);
+    if (enemySlots !== undefined) measuredElements.push(...enemySlots);
+    if (playerSlots !== undefined) measuredElements.push(...playerSlots);
     const updateAnchor = (): void => {
       const screenBox = screen.getBoundingClientRect();
       const dialogueBox = dialogue.getBoundingClientRect();
-      const bubbleBox = bubble.getBoundingClientRect();
-      const enemyLeftBox = enemySlots[0].getBoundingClientRect();
-      const enemyRightBox = enemySlots[1].getBoundingClientRect();
-      const playerLeftBox = playerSlots[0].getBoundingClientRect();
-      const playerRightBox = playerSlots[1].getBoundingClientRect();
-      const frontIntersectionX =
-        (enemyLeftBox.right +
-          enemyRightBox.left +
-          playerLeftBox.right +
-          playerRightBox.left) /
-        4;
-      const frontIntersectionY =
-        (enemyLeftBox.bottom +
-          enemyRightBox.bottom +
-          playerLeftBox.top +
-          playerRightBox.top) /
-        4;
-      const next = {
-        left: Math.round(
-          (frontIntersectionX -
-            screenBox.left -
-            (bubbleBox.left - dialogueBox.left)) *
-            10,
-        ) / 10,
-        top:
-          Math.round(
-            (frontIntersectionY -
-              screenBox.top -
-              dialogueBox.height / 2) *
-              10,
-          ) / 10,
-      };
+      let next: TutorialDialogueAnchor;
+      if (
+        desktop &&
+        bubble !== null &&
+        bubble !== undefined &&
+        enemySlots !== undefined &&
+        playerSlots !== undefined
+      ) {
+        const bubbleBox = bubble.getBoundingClientRect();
+        const enemyLeftBox = enemySlots[0].getBoundingClientRect();
+        const enemyRightBox = enemySlots[1].getBoundingClientRect();
+        const playerLeftBox = playerSlots[0].getBoundingClientRect();
+        const playerRightBox = playerSlots[1].getBoundingClientRect();
+        const frontIntersectionX =
+          (enemyLeftBox.right +
+            enemyRightBox.left +
+            playerLeftBox.right +
+            playerRightBox.left) /
+          4;
+        const frontIntersectionY =
+          (enemyLeftBox.bottom +
+            enemyRightBox.bottom +
+            playerLeftBox.top +
+            playerRightBox.top) /
+          4;
+        next = {
+          left:
+            Math.round(
+              (frontIntersectionX -
+                screenBox.left -
+                (bubbleBox.left - dialogueBox.left)) *
+                10,
+            ) / 10,
+          top:
+            Math.round(
+              (frontIntersectionY - screenBox.top - dialogueBox.height / 2) *
+                10,
+            ) / 10,
+        };
+      } else {
+        next = {
+          left: 0,
+          top: Math.round((screenBox.height - dialogueBox.height) * 5) / 10,
+        };
+      }
       setDialogueAnchor((current) =>
         current?.left === next.left && current.top === next.top
           ? current
@@ -133,7 +147,7 @@ export function TutorialScreen({ view }: TutorialScreenProps): ReactElement {
       observer.disconnect();
       window.removeEventListener("resize", updateAnchor);
     };
-  }, [desktop]);
+  }, [desktop, dialogueTweaks.portraitSize, dialogueTweaks.speechBubbleSize]);
 
   return (
     <motion.main
@@ -159,21 +173,20 @@ export function TutorialScreen({ view }: TutorialScreenProps): ReactElement {
         phaseNavigation="hidden"
       />
       <div
+        ref={dialogueHostRef}
         data-tutorial-dialogue-anchor=""
         style={{
           position: "absolute",
           zIndex: 30,
-          top: desktop ? (dialogueAnchor?.top ?? 0) : undefined,
+          top: (dialogueAnchor?.top ?? 0) + dialogueTweaks.verticalPosition,
           right: desktop ? undefined : token("--gutter"),
-          bottom: desktop
-            ? undefined
-            : `max(${token("--space-4")}, var(${SAFE_AREA_INSET_PROPERTIES.bottom}))`,
+          bottom: undefined,
           left: desktop
-            ? (dialogueAnchor?.left ?? 0)
-            : token("--gutter"),
+            ? (dialogueAnchor?.left ?? 0) + dialogueTweaks.horizontalPosition
+            : offsetToken(token("--gutter"), dialogueTweaks.horizontalPosition),
           display: "flex",
           justifyContent: "flex-start",
-          visibility: desktop && dialogueAnchor === null ? "hidden" : "visible",
+          visibility: dialogueAnchor === null ? "hidden" : "visible",
           pointerEvents: "none",
         }}
       >
@@ -183,6 +196,18 @@ export function TutorialScreen({ view }: TutorialScreenProps): ReactElement {
           testId="tutorial-welcome-dialogue"
         />
       </div>
+      {import.meta.env.DEV && (
+        <TutorialDialogueTweaksPanel
+          values={dialogueTweaks}
+          onChange={setDialogueTweaks}
+        />
+      )}
     </motion.main>
   );
+}
+
+function offsetToken(tokenValue: string, offset: number): string {
+  return offset === 0
+    ? tokenValue
+    : `calc(${tokenValue} + ${String(offset)}px)`;
 }
