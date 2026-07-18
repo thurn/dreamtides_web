@@ -248,10 +248,15 @@ describe("TutorialScreen", () => {
     const playerTarget = container.querySelector<HTMLElement>(
       '[data-testid="player-battle-status"] [data-battle-status-dreamcaller-placeholder]',
     );
+    const dialoguePortrait = container.querySelector<HTMLElement>(
+      "[data-character-dialogue-portrait-frame]",
+    );
     tutorialScreen!.getBoundingClientRect = () =>
       DOMRect.fromRect({ x: 0, y: 0, width: 390, height: 844 });
     playerTarget!.getBoundingClientRect = () =>
       DOMRect.fromRect({ x: 173, y: 700, width: 44, height: 44 });
+    dialoguePortrait!.getBoundingClientRect = () =>
+      DOMRect.fromRect({ x: 18, y: 390, width: 150, height: 150 });
 
     act(() => {
       vi.advanceTimersByTime(999);
@@ -269,13 +274,15 @@ describe("TutorialScreen", () => {
     expect(screenMocks.arrivalInitial).toMatchObject({
       x: 173,
       y: 400,
-      scale: 2,
     });
+    expect(
+      (screenMocks.arrivalInitial as { readonly scale: number }).scale,
+    ).toBeCloseTo(150 / 44);
     expect(screenMocks.arrivalAnimate).toMatchObject({
-      x: [173, 261, 173],
-      y: [400, 700, 700],
-      scale: [2, 1, 1],
+      y: [400, 700],
+      scale: [150 / 44, 1],
     });
+    expect(screenMocks.arrivalAnimate).not.toHaveProperty("x");
     expect(screenMocks.props?.view.player.status.dreamcaller).toBeNull();
 
     act(() => screenMocks.arrivalAnimationComplete?.());

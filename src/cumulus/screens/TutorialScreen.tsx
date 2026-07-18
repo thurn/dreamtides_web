@@ -47,9 +47,8 @@ interface TutorialDialogueAnchor {
 interface TutorialDreamcallerTrajectory {
   readonly startX: number;
   readonly startY: number;
-  readonly landingX: number;
-  readonly targetX: number;
   readonly targetY: number;
+  readonly startScale: number;
   readonly width: number;
   readonly height: number;
 }
@@ -64,6 +63,7 @@ const TUTORIAL_DREAMCALLER_DELAY_MS =
 const TUTORIAL_DREAMCALLER_ARRIVAL_SECONDS = motionTimeSeconds(
   "--dur-loading-screen-fade",
 );
+const TUTORIAL_DREAMCALLER_FADE_SECONDS = motionTimeSeconds("--dur-fast");
 
 function TutorialDreamcallerArrival({
   screen,
@@ -81,23 +81,25 @@ function TutorialDreamcallerArrival({
     const target = screen.querySelector<HTMLElement>(
       '[data-testid="player-battle-status"] [data-battle-status-dreamcaller-placeholder]',
     );
-    if (target === null) return undefined;
+    const dialoguePortrait = screen.querySelector<HTMLElement>(
+      "[data-character-dialogue-portrait-frame]",
+    );
+    if (target === null || dialoguePortrait === null) return undefined;
 
     const updateTrajectory = (): void => {
       const screenBox = screen.getBoundingClientRect();
       const targetBox = target.getBoundingClientRect();
+      const dialoguePortraitBox = dialoguePortrait.getBoundingClientRect();
       const targetX = targetBox.left - screenBox.left;
       const targetY = targetBox.top - screenBox.top;
-      const slideDistance = targetBox.width * 2;
       setTrajectory({
-        startX: (screenBox.width - targetBox.width) / 2,
+        startX: targetX,
         startY: (screenBox.height - targetBox.height) / 2,
-        landingX: Math.min(
-          targetX + slideDistance,
-          screenBox.width - targetBox.width,
-        ),
-        targetX,
         targetY,
+        startScale:
+          targetBox.width === 0
+            ? 1
+            : dialoguePortraitBox.width / targetBox.width,
         width: targetBox.width,
         height: targetBox.height,
       });
@@ -107,6 +109,7 @@ function TutorialDreamcallerArrival({
     const observer = new ResizeObserver(updateTrajectory);
     observer.observe(screen);
     observer.observe(target);
+    observer.observe(dialoguePortrait);
     window.addEventListener("resize", updateTrajectory);
     return () => {
       observer.disconnect();
@@ -122,19 +125,19 @@ function TutorialDreamcallerArrival({
       initial={{
         x: trajectory.startX,
         y: trajectory.startY,
-        scale: 2,
+        scale: trajectory.startScale,
         opacity: 0,
       }}
       animate={{
-        x: [trajectory.startX, trajectory.landingX, trajectory.targetX],
-        y: [trajectory.startY, trajectory.targetY, trajectory.targetY],
-        scale: [2, 1, 1],
-        opacity: [0, 1, 1],
+        y: [trajectory.startY, trajectory.targetY],
+        scale: [trajectory.startScale, 1],
+        opacity: 1,
       }}
       transition={{
         duration: TUTORIAL_DREAMCALLER_ARRIVAL_SECONDS,
-        times: [0, 0.68, 1],
+        times: [0, 1],
         ease: [0.22, 0.61, 0.36, 1],
+        opacity: { duration: TUTORIAL_DREAMCALLER_FADE_SECONDS },
       }}
       onAnimationComplete={onComplete}
       style={{
