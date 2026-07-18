@@ -11,9 +11,16 @@ import { SpeechBubble } from "./SpeechBubble";
 
 const DIALOGUE_FRAME_URL = assetUrl("/atlas/Round_frame.png");
 const DIALOGUE_FADE_SECONDS = motionTimeSeconds("--dur-slow");
-// The portrait matches the canonical bubble's common one-line height, keeping
-// the paired object compact enough to sit directly on battlefield geometry.
-const DIALOGUE_PORTRAIT_SIZE = 64;
+
+/** Named dialogue scales for compact mobile and prominent desktop placement. */
+export type CharacterDialogueSize = "compact" | "prominent";
+
+const DIALOGUE_PORTRAIT_SIZE: Record<CharacterDialogueSize, number> = {
+  // Matches the common one-line bubble height on constrained screens.
+  compact: 64,
+  // Settled against the desktop tutorial battlefield during visual tuning.
+  prominent: 150,
+};
 
 /** Art identities that semantically represent a speaking character. */
 export type CharacterDialoguePortraitArt = Extract<
@@ -44,6 +51,8 @@ export interface CharacterDialogueProps {
   readonly dialogue: CharacterDialogueModel;
   /** Whether the paired portrait and bubble are visible; changes fade in or out. */
   readonly visible: boolean;
+  /** Authored scale for compact or prominent character-led placement. */
+  readonly size?: CharacterDialogueSize;
   /** Optional stable test id for product-screen QA. */
   readonly testId?: string;
 }
@@ -55,16 +64,19 @@ export interface CharacterDialogueProps {
 export function CharacterDialogue({
   dialogue,
   visible,
+  size = "compact",
   testId,
 }: CharacterDialogueProps): ReactElement {
   const reduceMotion = useReducedMotion() === true;
   const targetOpacity = visible ? 1 : 0;
+  const portraitSize = DIALOGUE_PORTRAIT_SIZE[size];
 
   return (
     <motion.section
       aria-hidden={!visible}
       aria-label={`${dialogue.speakerName} speaks`}
       data-character-dialogue=""
+      data-character-dialogue-size={size}
       data-character-dialogue-visible={String(visible)}
       data-testid={testId}
       initial={{ opacity: reduceMotion ? targetOpacity : 0 }}
@@ -72,7 +84,7 @@ export function CharacterDialogue({
       transition={{ duration: reduceMotion ? 0 : DIALOGUE_FADE_SECONDS }}
       style={{
         display: "grid",
-        gridTemplateColumns: `${String(DIALOGUE_PORTRAIT_SIZE)}px minmax(0, 1fr)`,
+        gridTemplateColumns: `${String(portraitSize)}px minmax(0, 1fr)`,
         alignItems: "center",
         columnGap: token("--space-4"),
         width: "100%",
@@ -137,8 +149,10 @@ export function CharacterDialogue({
         }}
       >
         <SpeechBubble
+          pointerAlignment="center"
           speakerName={dialogue.speakerName}
           text={dialogue.text}
+          size={size === "prominent" ? "prominent" : "standard"}
         />
       </div>
     </motion.section>

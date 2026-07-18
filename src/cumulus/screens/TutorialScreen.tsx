@@ -10,11 +10,6 @@ import {
   MobileBattleScreen,
   type MobileBattleView,
 } from "./MobileBattleScreen";
-import {
-  DEFAULT_TUTORIAL_DIALOGUE_TWEAKS,
-  TutorialDialogueTweaksPanel,
-  useApplyTutorialDialogueTweaks,
-} from "./devtools/TutorialDialogueTweaksPanel";
 import { useIsDesktop } from "./use-is-desktop";
 
 export interface TutorialView {
@@ -38,14 +33,8 @@ export function TutorialScreen({ view }: TutorialScreenProps): ReactElement {
   const reduceMotion = useReducedMotion() === true;
   const desktop = useIsDesktop();
   const screenRef = useRef<HTMLElement | null>(null);
-  const dialogueHostRef = useRef<HTMLDivElement | null>(null);
-  const [dialogueTweaks, setDialogueTweaks] = useState(
-    DEFAULT_TUTORIAL_DIALOGUE_TWEAKS,
-  );
   const [dialogueAnchor, setDialogueAnchor] =
     useState<TutorialDialogueAnchor | null>(null);
-
-  useApplyTutorialDialogueTweaks(dialogueHostRef, dialogueTweaks);
 
   useLayoutEffect(() => {
     const screen = screenRef.current;
@@ -147,7 +136,7 @@ export function TutorialScreen({ view }: TutorialScreenProps): ReactElement {
       observer.disconnect();
       window.removeEventListener("resize", updateAnchor);
     };
-  }, [desktop, dialogueTweaks.portraitSize, dialogueTweaks.speechBubbleSize]);
+  }, [desktop]);
 
   return (
     <motion.main
@@ -173,17 +162,14 @@ export function TutorialScreen({ view }: TutorialScreenProps): ReactElement {
         phaseNavigation="hidden"
       />
       <div
-        ref={dialogueHostRef}
         data-tutorial-dialogue-anchor=""
         style={{
           position: "absolute",
           zIndex: 30,
-          top: (dialogueAnchor?.top ?? 0) + dialogueTweaks.verticalPosition,
+          top: dialogueAnchor?.top ?? 0,
           right: desktop ? undefined : token("--gutter"),
           bottom: undefined,
-          left: desktop
-            ? (dialogueAnchor?.left ?? 0) + dialogueTweaks.horizontalPosition
-            : offsetToken(token("--gutter"), dialogueTweaks.horizontalPosition),
+          left: desktop ? (dialogueAnchor?.left ?? 0) : token("--gutter"),
           display: "flex",
           justifyContent: "flex-start",
           visibility: dialogueAnchor === null ? "hidden" : "visible",
@@ -192,22 +178,11 @@ export function TutorialScreen({ view }: TutorialScreenProps): ReactElement {
       >
         <CharacterDialogue
           dialogue={view.dialogue}
+          size={desktop ? "prominent" : "compact"}
           visible
           testId="tutorial-welcome-dialogue"
         />
       </div>
-      {import.meta.env.DEV && (
-        <TutorialDialogueTweaksPanel
-          values={dialogueTweaks}
-          onChange={setDialogueTweaks}
-        />
-      )}
     </motion.main>
   );
-}
-
-function offsetToken(tokenValue: string, offset: number): string {
-  return offset === 0
-    ? tokenValue
-    : `calc(${tokenValue} + ${String(offset)}px)`;
 }

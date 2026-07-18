@@ -1326,6 +1326,17 @@
       "description": "Whether the paired portrait and bubble are visible; changes fade in or out."
     },
     {
+      "name": "size",
+      "tsType": "CharacterDialogueSize",
+      "unionMembers": [
+        "compact",
+        "prominent"
+      ],
+      "required": false,
+      "defaultValue": "compact",
+      "description": "Authored scale for compact or prominent character-led placement."
+    },
+    {
       "name": "testId",
       "tsType": "string",
       "unionMembers": [],
@@ -3918,6 +3929,28 @@
       "required": true,
       "defaultValue": null,
       "description": "The spoken line. Plain text; the component supplies the bubble voice."
+    },
+    {
+      "name": "size",
+      "tsType": "SpeechBubbleSize",
+      "unionMembers": [
+        "standard",
+        "prominent"
+      ],
+      "required": false,
+      "defaultValue": "standard",
+      "description": "Authored display scale for compact or prominent character dialogue."
+    },
+    {
+      "name": "pointerAlignment",
+      "tsType": "SpeechBubblePointerAlignment",
+      "unionMembers": [
+        "center",
+        "lower"
+      ],
+      "required": false,
+      "defaultValue": "lower",
+      "description": "Vertical pointer placement for the speaker art beside the bubble."
     },
     {
       "name": "testId",

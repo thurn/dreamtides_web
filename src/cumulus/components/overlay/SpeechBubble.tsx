@@ -18,14 +18,33 @@ const SPEECH_GLASS_BACKGROUND = `${token("--glass-sheen")}, ${SPEECH_GLASS_FILL}
 const SPEECH_TAIL_DEPTH = 14;
 const SPEECH_TAIL_HALF_HEIGHT = 10;
 const SPEECH_CORNER_SIZE = 8;
-const SPEECH_TAIL_CENTER_RATIO = 0.68;
 const SPEECH_CONTENT_PADDING = token("--space-5");
+
+/** Named bubble scales that preserve the component's authored geometry. */
+export type SpeechBubbleSize = "standard" | "prominent";
+
+/** Named pointer alignments for full-height guides or circular portraits. */
+export type SpeechBubblePointerAlignment = "lower" | "center";
+
+const SPEECH_BUBBLE_ZOOM: Record<SpeechBubbleSize, number> = {
+  standard: 1,
+  prominent: 1.25,
+};
+
+const SPEECH_TAIL_CENTER_RATIO: Record<SpeechBubblePointerAlignment, number> = {
+  lower: 0.68,
+  center: 0.5,
+};
 
 export interface SpeechBubbleProps {
   /** The speaking character's display name. */
   speakerName: string;
   /** The spoken line. Plain text; the component supplies the bubble voice. */
   text: string;
+  /** Authored display scale for compact or prominent character dialogue. */
+  size?: SpeechBubbleSize;
+  /** Vertical pointer placement for the speaker art beside the bubble. */
+  pointerAlignment?: SpeechBubblePointerAlignment;
   /** Optional stable test id for product-screen QA. */
   testId?: string;
 }
@@ -38,6 +57,8 @@ export interface SpeechBubbleProps {
 export function SpeechBubble({
   speakerName,
   text,
+  size = "standard",
+  pointerAlignment = "lower",
   testId,
 }: SpeechBubbleProps): ReactElement {
   const reactId = useId();
@@ -45,7 +66,12 @@ export function SpeechBubble({
   const bubbleRef = useRef<HTMLElement | null>(null);
   const [bubbleSize, setBubbleSize] = useState({ width: 0, height: 0 });
   const tail = `${String(SPEECH_TAIL_DEPTH)}px`;
-  const path = makeSpeechBubblePath(bubbleSize.width, bubbleSize.height);
+  const path = makeSpeechBubblePath(
+    bubbleSize.width,
+    bubbleSize.height,
+    pointerAlignment,
+  );
+  const bubbleZoom = SPEECH_BUBBLE_ZOOM[size];
 
   useLayoutEffect(() => {
     const bubble = bubbleRef.current;
@@ -53,17 +79,23 @@ export function SpeechBubble({
       return undefined;
     }
     const updateSize = () => {
-      const next = bubble.getBoundingClientRect();
+      const rendered = bubble.getBoundingClientRect();
       setBubbleSize({
-        width: Math.round(next.width),
-        height: Math.round(next.height),
+        // Clip-path coordinates live in the unzoomed layout space. Measuring
+        // the rendered bounds without removing zoom applies it twice.
+        width:
+          rendered.width > 0 ? rendered.width / bubbleZoom : bubble.offsetWidth,
+        height:
+          rendered.height > 0
+            ? rendered.height / bubbleZoom
+            : bubble.offsetHeight,
       });
     };
     updateSize();
     const observer = new ResizeObserver(updateSize);
     observer.observe(bubble);
     return () => observer.disconnect();
-  }, []);
+  }, [bubbleZoom]);
 
   const bubbleStyle: CSSProperties = {
     position: "relative",
@@ -79,10 +111,17 @@ export function SpeechBubble({
     WebkitClipPath: path !== null ? `url(#${clipId})` : undefined,
     filter: `drop-shadow(${token("--shadow-md")})`,
     color: token("--text-primary"),
+    zoom: bubbleZoom,
   };
 
   return (
-    <aside ref={bubbleRef} data-testid={testId} style={bubbleStyle}>
+    <aside
+      ref={bubbleRef}
+      data-speech-bubble-pointer-alignment={pointerAlignment}
+      data-speech-bubble-size={size}
+      data-testid={testId}
+      style={bubbleStyle}
+    >
       {path !== null && (
         <svg
           aria-hidden="true"
@@ -128,6 +167,7 @@ export function SpeechBubble({
 function makeSpeechBubblePath(
   width: number,
   height: number,
+  pointerAlignment: SpeechBubblePointerAlignment,
 ): string | null {
   if (width <= 0 || height <= 0) {
     return null;
@@ -137,7 +177,7 @@ function makeSpeechBubblePath(
   const halfTail = Math.min(SPEECH_TAIL_HALF_HEIGHT, height / 4);
   const corner = Math.min(SPEECH_CORNER_SIZE, height / 2, width / 2);
   const tailCenter = clamp(
-    height * SPEECH_TAIL_CENTER_RATIO,
+    height * SPEECH_TAIL_CENTER_RATIO[pointerAlignment],
     corner + halfTail,
     height - corner - halfTail,
   );

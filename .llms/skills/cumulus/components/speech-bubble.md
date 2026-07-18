@@ -10,7 +10,7 @@ Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 
 A guide-dialog bubble for character-led site screens: the same frosted information material as an InfoCard, with a left arrow that points back to the speaker.
 
-> **Guidance:** Use it to the right of character art, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, and arrow geometry; the caller supplies the speaker name and spoken line.
+> **Guidance:** Use it to the right of character art, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, named display scales, and pointer geometry; use centered pointer alignment beside circular portraits.
 
 ## Props
 
@@ -18,6 +18,8 @@ A guide-dialog bubble for character-led site screens: the same frosted informati
 | --- | --- | --- | --- | --- |
 | `speakerName` | `string` | yes | — | The speaking character's display name. |
 | `text` | `string` | yes | — | The spoken line. Plain text; the component supplies the bubble voice. |
+| `size` | `SpeechBubbleSize` = `"standard" \| "prominent"` | no | `standard` | Authored display scale for compact or prominent character dialogue. |
+| `pointerAlignment` | `SpeechBubblePointerAlignment` = `"center" \| "lower"` | no | `lower` | Vertical pointer placement for the speaker art beside the bubble. |
 | `testId` | `string` | no | — | Optional stable test id for product-screen QA. |
 
 ## Usage

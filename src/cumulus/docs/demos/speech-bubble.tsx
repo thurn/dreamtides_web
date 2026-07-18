@@ -8,7 +8,17 @@ function SpeechBubbleDemo(args: Record<string, unknown>) {
     typeof args.text === "string"
       ? args.text
       : "The frost reveals what is hidden.";
-  return <SpeechBubble speakerName={speakerName} text={text} />;
+  const size = args.size === "prominent" ? "prominent" : "standard";
+  const pointerAlignment =
+    args.pointerAlignment === "center" ? "center" : "lower";
+  return (
+    <SpeechBubble
+      pointerAlignment={pointerAlignment}
+      size={size}
+      speakerName={speakerName}
+      text={text}
+    />
+  );
 }
 
 export const speechBubbleDemo: CumulusComponent = {
@@ -17,7 +27,7 @@ export const speechBubbleDemo: CumulusComponent = {
   blurb:
     "A guide-dialog bubble for character-led site screens: the same frosted information material as an InfoCard, with a left arrow that points back to the speaker.",
   callout:
-    "Use it to the right of character art, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, and arrow geometry; the caller supplies the speaker name and spoken line.",
+    "Use it to the right of character art, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, named display scales, and pointer geometry; use centered pointer alignment beside circular portraits.",
   group: "Components",
   docName: "SpeechBubble",
   Component: SpeechBubbleDemo,
@@ -34,6 +44,8 @@ export const speechBubbleDemo: CumulusComponent = {
   ],
   demo: {
     defaultArgs: {
+      pointerAlignment: "lower",
+      size: "standard",
       speakerName: "Sigrún",
       text: "The frost reveals what is hidden.",
     },

@@ -124,38 +124,52 @@ describe("TutorialScreen", () => {
         speakerName: "Mira",
         text: "Welcome, Dreamer.",
       },
+      size: "compact",
       visible: true,
     });
+    act(() => root.unmount());
+    container.remove();
+  });
 
-    const tweakPanel = container.querySelector(
-      "[data-tutorial-dialogue-tweaks]",
-    );
-    const tweakSliders = container.querySelectorAll(
-      "[data-tutorial-dialogue-tweak]",
-    );
-    expect(tweakPanel).not.toBeNull();
-    expect(tweakSliders).toHaveLength(4);
+  it("uses the prominent dialogue scale on desktop", () => {
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches: query.includes("min-width"),
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
 
-    const portraitSlider = container.querySelector<HTMLInputElement>(
-      '[data-tutorial-dialogue-tweak="portraitSize"]',
-    );
     act(() => {
-      if (portraitSlider !== null) {
-        Object.getOwnPropertyDescriptor(
-          window.HTMLInputElement.prototype,
-          "value",
-        )?.set?.call(portraitSlider, "88");
-        portraitSlider.dispatchEvent(new Event("input", { bubbles: true }));
-      }
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dialogue: {
+                portrait: {
+                  kind: "character-portrait",
+                  characterId: "mira",
+                },
+                portraitAlt: "Mira",
+                speakerName: "Mira",
+                text: "Welcome, Dreamer.",
+              },
+              battle: {
+                battleId: "tutorial-battle",
+              } as MobileBattleView,
+            }}
+          />
+        </CumulusRoot>,
+      );
     });
-    const dialogue = container.querySelector<HTMLElement>(
-      "[data-character-dialogue]",
-    );
-    expect(dialogue?.style.gridTemplateColumns).toBe("88px minmax(0, 1fr)");
-    expect(
-      container.querySelector("[data-tutorial-dialogue-tweaks-json]")
-        ?.textContent,
-    ).toContain('"portraitSize": 88');
+
+    expect(screenMocks.dialogueProps?.size).toBe("prominent");
 
     act(() => root.unmount());
     container.remove();
