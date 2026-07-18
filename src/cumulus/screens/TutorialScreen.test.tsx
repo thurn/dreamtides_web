@@ -1,6 +1,11 @@
 // @vitest-environment jsdom
 
-import { act } from "react";
+import {
+  act,
+  type CSSProperties,
+  type ReactNode,
+  type Ref,
+} from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../CumulusRoot";
@@ -14,6 +19,42 @@ import type {
 const screenMocks = vi.hoisted(() => ({
   props: null as MobileBattleScreenProps | null,
   dialogueProps: null as CharacterDialogueProps | null,
+  sceneInitial: null as unknown,
+  sceneAnimate: null as unknown,
+  sceneTransition: null as unknown,
+  sceneAnimationComplete: null as (() => void) | null,
+}));
+
+interface MotionMainStubInput {
+  readonly animate?: unknown;
+  readonly children?: ReactNode;
+  readonly className?: string;
+  readonly "data-tutorial-screen"?: string;
+  readonly initial?: unknown;
+  readonly onAnimationComplete?: () => void;
+  readonly ref?: Ref<HTMLElement>;
+  readonly style?: CSSProperties;
+  readonly transition?: unknown;
+}
+
+vi.mock("framer-motion", () => ({
+  useReducedMotion: () => false,
+  motion: {
+    main: ({
+      animate,
+      children,
+      initial,
+      onAnimationComplete,
+      transition,
+      ...elementProps
+    }: MotionMainStubInput) => {
+      screenMocks.sceneInitial = initial;
+      screenMocks.sceneAnimate = animate;
+      screenMocks.sceneTransition = transition;
+      screenMocks.sceneAnimationComplete = onAnimationComplete ?? null;
+      return <main {...elementProps}>{children}</main>;
+    },
+  },
 }));
 
 vi.mock("../components/overlay/CharacterDialogue", () => ({
@@ -66,6 +107,10 @@ beforeEach(() => {
   globalThis.ResizeObserver = ResizeObserverStub;
   screenMocks.props = null;
   screenMocks.dialogueProps = null;
+  screenMocks.sceneInitial = null;
+  screenMocks.sceneAnimate = null;
+  screenMocks.sceneTransition = null;
+  screenMocks.sceneAnimationComplete = null;
 });
 
 afterEach(() => {
@@ -74,7 +119,7 @@ afterEach(() => {
 });
 
 describe("TutorialScreen", () => {
-  it("renders the battle while delegating presence to CharacterDialogue", () => {
+  it("fades in the battle before revealing CharacterDialogue", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -106,7 +151,9 @@ describe("TutorialScreen", () => {
       "[data-tutorial-screen]",
     );
     expect(tutorialScreen).not.toBeNull();
-    expect(tutorialScreen?.style.opacity).toBe("");
+    expect(screenMocks.sceneInitial).toEqual({ opacity: 0 });
+    expect(screenMocks.sceneAnimate).toEqual({ opacity: 1 });
+    expect(screenMocks.sceneTransition).toEqual({ duration: 1.2 });
     expect(
       container.querySelector("[data-battle-mobile='tutorial-battle']"),
     ).not.toBeNull();
@@ -129,8 +176,12 @@ describe("TutorialScreen", () => {
         text: "Welcome, Dreamer.",
       },
       size: "compact",
-      visible: true,
+      visible: false,
     });
+
+    act(() => screenMocks.sceneAnimationComplete?.());
+
+    expect(screenMocks.dialogueProps?.visible).toBe(true);
     act(() => root.unmount());
     container.remove();
   });
