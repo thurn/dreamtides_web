@@ -46,6 +46,8 @@ describe("TutorialScreenAdapter", () => {
           battleId: "tutorial-battle",
           activeSide: "enemy",
           phase: "day",
+          playerDeckSize: 30,
+          enemyDeckSize: 30,
         }),
       ]),
     );

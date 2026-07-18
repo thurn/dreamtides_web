@@ -6,6 +6,16 @@ import type {
 import type { TutorialView } from "../../cumulus/screens/TutorialScreen";
 
 const TUTORIAL_BATTLE_ID = "tutorial-battle";
+const TUTORIAL_DECK_SIZE = 30;
+
+function tutorialDeckIds(
+  owner: "enemy" | "player",
+): readonly string[] {
+  return Array.from(
+    { length: TUTORIAL_DECK_SIZE },
+    (_unused, index) => `tutorial-${owner}-deck-${String(index + 1)}`,
+  );
+}
 
 function emptySlots(
   owner: "enemy" | "player",
@@ -20,7 +30,7 @@ function emptySlots(
 
 function emptySide(owner: "enemy" | "player"): MobileBattleSideView {
   return {
-    deckCardIds: [],
+    deckCardIds: tutorialDeckIds(owner),
     banishedCardCount: 0,
     voidCards: [],
     backRank: emptySlots(owner, "back", 3),
@@ -45,14 +55,14 @@ function emptyInspectorSide(
     maxEnergy: 0,
     zones: {
       hand: 0,
-      deck: 0,
+      deck: TUTORIAL_DECK_SIZE,
       void: 0,
       banished: 0,
       backRank: 0,
       frontRank: 0,
     },
     canDiscard: false,
-    canShuffle: false,
+    canShuffle: true,
   };
 }
 

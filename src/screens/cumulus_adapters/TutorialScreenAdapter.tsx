@@ -15,6 +15,8 @@ export function TutorialScreenAdapter() {
       battleId: view.battle.battleId,
       activeSide: view.battle.activeSide,
       phase: view.battle.phase,
+      playerDeckSize: view.battle.player.deckCardIds.length,
+      enemyDeckSize: view.battle.enemy.deckCardIds.length,
     });
   }, [view]);
 
