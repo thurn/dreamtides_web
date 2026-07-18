@@ -1627,6 +1627,39 @@
       "description": "Root utility commands and their nested groups."
     },
     {
+      "name": "status",
+      "tsType": "CornerUtilityMenuStatus",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional transient result reported by the app-shell command controller.",
+      "nested": {
+        "name": "CornerUtilityMenuStatus",
+        "fields": [
+          {
+            "name": "text",
+            "tsType": "string",
+            "optional": false,
+            "description": "Player-facing status copy."
+          },
+          {
+            "name": "testId",
+            "tsType": "string",
+            "optional": true,
+            "description": "Optional test selector for the status announcement."
+          }
+        ]
+      }
+    },
+    {
+      "name": "elevated",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Lifts the fixed trigger above an app-shell full-screen overlay."
+    },
+    {
       "name": "testId",
       "tsType": "string",
       "unionMembers": [],

@@ -117,9 +117,7 @@ describe("DreamscapeQuestMenu", () => {
     });
 
     const buildShaButton = Array.from(
-      container.querySelectorAll<HTMLElement>(
-        '[data-testid="dreamscape-menu"] div',
-      ),
+      container.querySelectorAll<HTMLButtonElement>('[role="menuitem"]'),
     ).find((element) => element.textContent === "Build SHA");
 
     expect(buildShaButton).toBeDefined();
@@ -127,9 +125,7 @@ describe("DreamscapeQuestMenu", () => {
       buildShaButton?.click();
     });
 
-    expect(
-      container.querySelector('[data-testid="dreamscape-menu"]'),
-    ).toBeNull();
+    expect(container.querySelector('[role="menu"]')).toBeNull();
     expect(container.textContent).toContain("Build Git SHA: abc123def456");
     expect(logEvent).toHaveBeenCalledWith("build_sha_viewed", {
       source: "dreamscape_menu",
@@ -141,17 +137,15 @@ describe("DreamscapeQuestMenu", () => {
     });
   });
 
-  it("bounds long menus to the viewport and scrolls their contents", () => {
+  it("uses the Cumulus-owned viewport-bounded menu surface", () => {
     const { container, root } = renderMenu();
     const menuButton = container.querySelector<HTMLButtonElement>(
       '[data-testid="dreamscape-menu-button"]',
     );
     act(() => menuButton?.click());
 
-    const menu = container.querySelector<HTMLElement>(
-      '[data-testid="dreamscape-menu"]',
-    );
-    expect(menu?.style.maxHeight).toContain("100dvh");
+    const menu = container.querySelector<HTMLElement>('[role="menu"]');
+    expect(menu?.style.maxHeight).toContain("100vh");
     expect(menu?.style.overflowY).toBe("auto");
 
     act(() => root.unmount());

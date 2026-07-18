@@ -91,6 +91,12 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
         mountPortal(<div />, document.body);`,
     },
     {
+      name: "the strict command-menu offering may elevate app-chrome above an overlay",
+      filename: "src/cumulus/components/overlay/CommandMenus.tsx",
+      code: `import { createPortal } from "react-dom";
+        createPortal(<div />, document.body);`,
+    },
+    {
       name: "benign named-component object spreads stay legal",
       filename: "src/cumulus/screens/DraftScreen.tsx",
       code: `const selectedProps = { selected: true };

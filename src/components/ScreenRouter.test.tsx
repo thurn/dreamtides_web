@@ -442,9 +442,7 @@ describe("ScreenRouter DreamAugury routing", () => {
     };
     const menuRow = (label: string) =>
       Array.from(
-        container.querySelectorAll<HTMLElement>(
-          '[data-testid="dreamscape-menu"] div',
-        ),
+        container.querySelectorAll<HTMLButtonElement>('[role="menuitem"]'),
       ).find((element) => element.textContent === label);
 
     openMenu();

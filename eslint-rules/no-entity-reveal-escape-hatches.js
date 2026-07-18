@@ -39,6 +39,7 @@ APPROVED_INTERNAL_IMPORTS.set("src/cumulus/components/hud/DreamcallerPortrait.ts
 const PORTAL_OWNER_ALLOWLIST = new Set([
   "src/cumulus/internal/reveal/RevealOverlay.tsx",
   "src/cumulus/components/controls/Select.tsx",
+  "src/cumulus/components/overlay/CommandMenus.tsx",
   "src/battle/components/BattleContextMenu.tsx",
   "src/debug/SignatureDecksApp.tsx",
 ]);

@@ -6,7 +6,7 @@
 
 Primitives · Live demo & interactive props: `/cumulus#/pressable`
 
-Real consumers: **28** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **27** (imports outside `src/cumulus/docs/` and tests).
 
 The one press-feedback primitive. Interactive surfaces measure their rendered box for proportional hover and press movement; readable rules-copy reveals use the strict stationary variant.
 

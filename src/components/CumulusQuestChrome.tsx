@@ -4,7 +4,7 @@
 
 import { useRef, type ReactNode } from "react";
 import { DreamscapeQuestMenu } from "./DreamscapeQuestMenu";
-import type { QuestUtilityMenuAction } from "./QuestUtilityMenu";
+import type { QuestUtilityMenuAction } from "./QuestUtilityMenuController";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { useQuest } from "../state/quest-context";
 import { QuestStatusBar } from "../cumulus/components/hud/QuestStatusBar";

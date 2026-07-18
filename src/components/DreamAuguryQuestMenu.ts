@@ -9,7 +9,8 @@ import {
 } from "../screens/cumulus_adapters/dream-augury-view-model";
 import { useQuest } from "../state/quest-context";
 import type { DreamscapeNode, SiteState } from "../types/quest";
-import type { QuestUtilityMenuAction } from "./QuestUtilityMenu";
+import { GLYPHS } from "../cumulus/primitives/glyph";
+import type { QuestUtilityMenuAction } from "./QuestUtilityMenuController";
 
 /** Builds the Dream Augury commands contributed to the shared Cumulus menu. */
 export function useDreamAuguryQuestMenuActions(
@@ -51,21 +52,26 @@ export function useDreamAuguryQuestMenuActions(
         .sort(compareArchetypeLabels);
       actions.push({
         id: "forceJourneyCategory",
-        icon: "bxf bx-bug",
+        kind: "group",
+        glyph: GLYPHS.bug,
         label: "Force Category",
         active: forcedArchetypeId !== null,
-        items: [
+        actions: [
           {
             id: "forceJourneyCategory:clear",
+            kind: "action" as const,
+            glyph: GLYPHS.refresh,
             label: "Random (clear force)",
             active: forcedArchetypeId === null,
-            onClick: () => forceCategory(site.id, null),
+            onCommand: () => forceCategory(site.id, null),
           },
           ...eligibleArchetypes.map((archetypeId) => ({
             id: `forceJourneyCategory:${archetypeId}`,
+            kind: "action" as const,
+            glyph: GLYPHS.check,
             label: MERCHANT_ARCHETYPE_LABELS[archetypeId],
             active: forcedArchetypeId === archetypeId,
-            onClick: () => forceCategory(site.id, archetypeId),
+            onCommand: () => forceCategory(site.id, archetypeId),
           })),
         ],
       });
@@ -74,9 +80,10 @@ export function useDreamAuguryQuestMenuActions(
     if (rerollJourney !== undefined) {
       actions.push({
         id: "rerollJourney",
-        icon: "bxf bx-refresh-cw",
+        kind: "action",
+        glyph: GLYPHS.refresh,
         label: "Reroll Journey",
-        onClick: () => rerollJourney(site.id),
+        onCommand: () => rerollJourney(site.id),
       });
     }
     return actions;

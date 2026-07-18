@@ -12,6 +12,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { createPortal } from "react-dom";
 import { GlassDialog } from "./GlassDialog";
 import { IconButton } from "../controls/IconButton";
 import { GlowIcon } from "../controls/GlowIcon";
@@ -21,6 +22,10 @@ import { GLYPHS } from "../../primitives/glyph";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { token } from "../../primitives/tokens";
 import { useIsDesktop } from "../../screens/use-is-desktop";
+import {
+  MENU_EDGE_INSET_DESKTOP_PX,
+  MENU_EDGE_INSET_MOBILE_PX,
+} from "../../screens/chrome-geometry";
 
 /** A semantic emphasis for a command's label and active state. */
 export type CommandMenuAccent = "default" | "accent" | "danger";
@@ -46,6 +51,8 @@ export interface CommandMenuGroup {
   active?: boolean;
   disabled?: boolean;
   accent?: CommandMenuAccent;
+  /** Runs when Cumulus opens this group, before its nested commands are shown. */
+  onOpen?: () => void;
   actions: readonly CommandMenuItem[];
 }
 
@@ -74,7 +81,19 @@ export interface CornerUtilityMenuProps {
   trigger: CornerUtilityMenuTrigger;
   /** Root utility commands and their nested groups. */
   actions: readonly CommandMenuItem[];
+  /** Optional transient result reported by the app-shell command controller. */
+  status?: CornerUtilityMenuStatus;
+  /** Lifts the fixed trigger above an app-shell full-screen overlay. */
+  elevated?: boolean;
   /** Optional test selector for the trigger. */
+  testId?: string;
+}
+
+/** A short app-shell command result shown beneath the fixed utility trigger. */
+export interface CornerUtilityMenuStatus {
+  /** Player-facing status copy. */
+  text: string;
+  /** Optional test selector for the status announcement. */
   testId?: string;
 }
 
@@ -86,11 +105,17 @@ export interface CornerUtilityMenuProps {
 export function CornerUtilityMenu({
   trigger,
   actions,
+  status,
+  elevated = false,
   testId,
 }: CornerUtilityMenuProps): ReactElement {
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const hostRef = useRef<HTMLDivElement>(null);
+  const isDesktop = useIsDesktop();
+  const edgeInset = isDesktop
+    ? MENU_EDGE_INSET_DESKTOP_PX
+    : MENU_EDGE_INSET_MOBILE_PX;
 
   useEffect(() => {
     if (!open) return;
@@ -108,8 +133,19 @@ export function CornerUtilityMenu({
     };
   }, [open]);
 
-  return (
-    <div ref={hostRef} className="cumulus" style={{ position: "relative" }}>
+  const menu = (
+    <div
+      ref={hostRef}
+      className="cumulus"
+      style={{
+        position: "fixed",
+        top: `max(var(--safe-area-inset-top), ${edgeInset}px)`,
+        ...(trigger.corner === "topEnd"
+          ? { right: `max(var(--safe-area-inset-right), ${edgeInset}px)` }
+          : { left: `max(var(--safe-area-inset-left), ${edgeInset}px)` }),
+        zIndex: elevated ? 65 : 60,
+      }}
+    >
       <IconButton
         glyph={trigger.glyph}
         label={trigger.label}
@@ -126,8 +162,31 @@ export function CornerUtilityMenu({
           onDismiss={() => setOpen(false)}
         />
       )}
+      {!open && status !== undefined && (
+        <div
+          role="status"
+          data-testid={status.testId}
+          style={{
+            ...glassSurfaceStyle(),
+            position: "absolute",
+            top: `calc(100% + ${token("--space-3")})`,
+            ...(trigger.corner === "topEnd" ? { right: 0 } : { left: 0 }),
+            zIndex: 1,
+            maxWidth: 260,
+            padding: token("--space-4"),
+            color: token("--text-on-glass"),
+            font: token("--t-caption"),
+          }}
+        >
+          {status.text}
+        </div>
+      )}
     </div>
   );
+  // A full-screen app-shell overlay may live outside the quest chrome's fixed
+  // stacking context. Elevated utility chrome therefore portals to the document
+  // root, where its semantic elevation remains above that overlay.
+  return elevated ? createPortal(menu, document.body) : menu;
 }
 
 /** Anchor supplied by a pointer interaction or a card/source rectangle. */
@@ -261,6 +320,7 @@ function HierarchicalMenu({
   function choose(item: Exclude<CommandMenuItem, CommandMenuDivider>): void {
     if (item.disabled) return;
     if (item.kind === "group") {
+      item.onOpen?.();
       setPath((previous) => [...previous, item.id]);
       return;
     }

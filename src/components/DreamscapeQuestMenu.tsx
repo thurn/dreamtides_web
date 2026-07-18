@@ -3,19 +3,14 @@
 // renders its root actions here as app-shell corner chrome.
 
 import type { QuestState } from "../types/quest";
-import { token } from "../cumulus/primitives/tokens";
 import { GLYPHS } from "../cumulus/primitives/glyph";
 import { useIsDesktop } from "../cumulus/screens/use-is-desktop";
+import { MENU_BUTTON_PX } from "../cumulus/screens/chrome-geometry";
+import { CornerUtilityMenu } from "../cumulus/components/overlay/CommandMenus";
 import {
-  MENU_BUTTON_PX,
-  MENU_EDGE_INSET_DESKTOP_PX,
-  MENU_EDGE_INSET_MOBILE_PX,
-} from "../cumulus/screens/chrome-geometry";
-import { IconButton } from "../cumulus/components/controls/IconButton";
-import {
-  QuestUtilityMenu,
+  useQuestUtilityMenuController,
   type QuestUtilityMenuAction,
-} from "./QuestUtilityMenu";
+} from "./QuestUtilityMenuController";
 
 /** The App-shell overlay handlers the menu triggers. */
 interface DreamscapeQuestMenuProps {
@@ -77,34 +72,29 @@ export function DreamscapeQuestMenu({
   elevated = false,
 }: DreamscapeQuestMenuProps) {
   const isDesktop = useIsDesktop();
-  // Corner placement. Mobile anchors the menu glyph to the top-left corner;
-  // desktop anchors the gear glyph to the top-right. The edge inset keeps the
-  // disc clear of the screen corner (more so on desktop, where there is no
-  // safe-area inset doing that job).
-  const menuEdgeInset = isDesktop
-    ? MENU_EDGE_INSET_DESKTOP_PX
-    : MENU_EDGE_INSET_MOBILE_PX;
-  const menuPanelGap = 6;
   const actions: QuestUtilityMenuAction[] = [
     {
       id: "deck",
-      icon: "bxf bx-rectangle-vertical",
+      kind: "action",
+      glyph: GLYPHS.affiliationRow,
       label: "View Deck",
-      onClick: onOpenDeckViewer,
+      onCommand: onOpenDeckViewer,
     },
     {
       id: "pool",
-      icon: "bxf bx-grid",
+      kind: "action",
+      glyph: GLYPHS.grid,
       label: "Pool Viewer",
-      onClick: onOpenPoolViewer,
+      onCommand: onOpenPoolViewer,
     },
     ...(hasDraftData
       ? [
           {
             id: "package",
-            icon: "bxf bx-package",
+            kind: "action" as const,
+            glyph: GLYPHS.package,
             label: "Package Debug",
-            onClick: onOpenDebugScreen,
+            onCommand: onOpenDebugScreen,
           },
         ]
       : []),
@@ -112,96 +102,58 @@ export function DreamscapeQuestMenu({
       ? [
           {
             id: "cardSource",
-            icon: "bxf bx-list-ul",
+            kind: "action" as const,
+            glyph: GLYPHS.list,
             label: "Card Sources",
             active: isCardSourceOverlayOpen,
-            onClick: onToggleCardSourceOverlay,
+            onCommand: onToggleCardSourceOverlay,
           },
         ]
       : []),
     ...contextualActions,
     {
       id: "editor",
-      icon: "bxf bx-edit-alt",
+      kind: "action",
+      glyph: GLYPHS.edit,
       label: "Edit Quest State",
-      onClick: onOpenQuestEditor,
+      onCommand: onOpenQuestEditor,
     },
     ...(onRegenerateAtlas !== undefined
       ? [
           {
             id: "regenerateAtlas",
-            icon: "bxf bx-refresh-cw",
+            kind: "action" as const,
+            glyph: GLYPHS.refresh,
             label: "Regenerate Atlas",
-            onClick: onRegenerateAtlas,
+            onCommand: onRegenerateAtlas,
           },
         ]
       : []),
   ];
 
-  const panelStyle = {
-    position: "absolute",
-    // Anchor the dropdown under whichever corner the trigger occupies so it opens
-    // inward and never off the screen edge (right corner on desktop, left on mobile).
-    ...(isDesktop ? { right: 0 } : { left: 0 }),
-    top: `calc(100% + ${String(menuPanelGap)}px)`,
-    zIndex: 62,
-    width: 220,
-    maxHeight: `calc(100dvh - max(var(--safe-area-inset-top), ${String(menuEdgeInset)}px) - ${String(MENU_BUTTON_PX)}px - ${String(menuPanelGap)}px - max(var(--safe-area-inset-bottom), ${String(menuEdgeInset)}px))`,
-    overflowY: "auto",
-    padding: 6,
-    background: token("--surface-chrome-strong"),
-    border: `1px solid ${token("--border-soft")}`,
-    borderRadius: token("--radius-control"),
-    boxShadow: token("--shadow-lg"),
-    display: "flex",
-    flexDirection: "column",
-    gap: 2,
-  } as const;
+  const model = useQuestUtilityMenuController({
+    actions,
+    builtIns: ["saveQuest", "loadQuest", "buildSha", "downloadLog"],
+    onLoadQuestState,
+    saveSource: "dreamscape_menu_save_quest",
+    loadSource: "dreamscape_menu_load_quest",
+  });
 
   return (
-    <div
-      className="cumulus"
-      data-dreamscape-menu=""
-      style={{
-        position: "fixed",
-        top: `max(var(--safe-area-inset-top), ${String(menuEdgeInset)}px)`,
-        // Desktop anchors the glass gear button to the top-right corner; mobile
-        // keeps the glass menu button in the top-left.
-        ...(isDesktop
-          ? {
-              right: `max(var(--safe-area-inset-right), ${String(menuEdgeInset)}px)`,
-            }
-          : {
-              left: `max(var(--safe-area-inset-left), ${String(menuEdgeInset)}px)`,
-            }),
-        // Above the deck-viewer overlay (z 60) when it is open, so the menu stays
-        // reachable from on top of it; the default corner chrome level otherwise.
-        zIndex: elevated ? 65 : 60,
+    <CornerUtilityMenu
+      trigger={{
+        glyph: isDesktop ? GLYPHS.gear : GLYPHS.menu,
+        label: "Open menu",
+        corner: isDesktop ? "topEnd" : "topStart",
       }}
-    >
-      <QuestUtilityMenu
-        actions={actions}
-        builtIns={["saveQuest", "loadQuest", "buildSha", "downloadLog"]}
-        onLoadQuestState={onLoadQuestState}
-        saveSource="dreamscape_menu_save_quest"
-        loadSource="dreamscape_menu_load_quest"
-        menuTestId="dreamscape-menu"
-        loadMenuTestId="dreamscape-load-menu"
-        statusTestId="dreamscape-menu-status"
-        panelStyle={panelStyle}
-        overlay
-        statusAnchor={isDesktop ? "right" : "left"}
-        renderTrigger={({ open, toggle }) => (
-          <IconButton
-            size="md"
-            glyph={isDesktop ? GLYPHS.gear : GLYPHS.menu}
-            label="Open menu"
-            ariaExpanded={open}
-            testId="dreamscape-menu-button"
-            onPress={toggle}
-          />
-        )}
-      />
-    </div>
+      actions={model.actions}
+      status={
+        model.status === null
+          ? undefined
+          : { text: model.status, testId: "dreamscape-menu-status" }
+      }
+      elevated={elevated}
+      testId="dreamscape-menu-button"
+    />
   );
 }

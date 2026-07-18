@@ -30,13 +30,15 @@ afterEach(() => { document.body.innerHTML = ""; });
 describe("CornerUtilityMenu", () => {
   it("opens root actions, drills into a submenu, and invokes a leaf", () => {
     const command = vi.fn();
+    const opened = vi.fn();
     const { root } = mount(<CornerUtilityMenu trigger={{ glyph: GLYPHS.menu, label: "Open utilities", corner: "topStart" }} actions={[
       ...actions.slice(0, 2),
-      { kind: "group", id: "more", label: "More", glyph: GLYPHS.chevronRight, actions: [{ kind: "action", id: "load", label: "Load", glyph: GLYPHS.arrowRight, onCommand: command }] },
+      { kind: "group", id: "more", label: "More", glyph: GLYPHS.chevronRight, onOpen: opened, actions: [{ kind: "action", id: "load", label: "Load", glyph: GLYPHS.arrowRight, onCommand: command }] },
     ]} />);
     act(() => document.querySelector<HTMLButtonElement>('[aria-label="Open utilities"]')?.click());
     expect(document.body.textContent).toContain("Save");
     act(() => [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.includes("More"))?.click());
+    expect(opened).toHaveBeenCalledTimes(1);
     expect(document.body.textContent).toContain("Load");
     act(() => [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.includes("Load"))?.click());
     expect(command).toHaveBeenCalledTimes(1);

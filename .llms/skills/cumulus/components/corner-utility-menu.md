@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/corner-utility-menu`
 
-Real consumers: **0** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
 The strict app-chrome command offering: a fixed icon trigger and a hierarchical inward-opening utility menu.
 
@@ -18,6 +18,8 @@ The strict app-chrome command offering: a fixed icon trigger and a hierarchical 
 | --- | --- | --- | --- | --- |
 | `trigger` | `CornerUtilityMenuTrigger` | yes | — | The fixed IconButton trigger rendered by the component. |
 | `actions` | `readonly CommandMenuItem[]` | yes | — | Root utility commands and their nested groups. |
+| `status` | `CornerUtilityMenuStatus` | no | — | Optional transient result reported by the app-shell command controller. |
+| `elevated` | `boolean` | no | `false` | Lifts the fixed trigger above an app-shell full-screen overlay. |
 | `testId` | `string` | no | — | Optional test selector for the trigger. |
 
 ### `trigger`: the `CornerUtilityMenuTrigger` model
@@ -27,6 +29,13 @@ The strict app-chrome command offering: a fixed icon trigger and a hierarchical 
 | `glyph` | `Glyph` | no |  |
 | `label` | `string` | no |  |
 | `corner` | `"topStart" \| "topEnd"` | no |  |
+
+### `status`: the `CornerUtilityMenuStatus` model
+
+| Field | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `text` | `string` | no | Player-facing status copy. |
+| `testId` | `string` | yes | Optional test selector for the status announcement. |
 
 ## Usage
 

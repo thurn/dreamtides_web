@@ -111,6 +111,22 @@ export const GLYPHS = {
   minus: g("bxf bx-minus"),
   /** The settings gear — the desktop quest-menu disclosure trigger. */
   gear: g("bxf bx-cog"),
+  /** Save the current quest snapshot. */
+  save: g("bxf bx-save"),
+  /** Open a saved quest snapshot. */
+  folderOpen: g("bxf bx-folder-open"),
+  /** Export a local artifact such as the quest log. */
+  download: g("bxf bx-arrow-to-bottom"),
+  /** Read build or diagnostic source information. */
+  code: g("bxf bx-code-alt"),
+  /** Browse the quest pool as a grid. */
+  grid: g("bxf bx-grid"),
+  /** Inspect package-level draft diagnostics. */
+  package: g("bxf bx-package"),
+  /** Inspect a list of card sources. */
+  list: g("bxf bx-list-ul"),
+  /** Edit the current quest state. */
+  edit: g("bxf bx-edit-alt"),
   /** The bug mark — the battle debug-menu disclosure trigger. */
   bug: g("bxf bx-bug"),
   /** The prohibition mark — opens a non-empty banished zone. */
