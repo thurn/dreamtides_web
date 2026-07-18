@@ -2054,9 +2054,7 @@ describe("MobileBattleScreen", () => {
         "[data-quest-status-bar], [data-quest-menu], [data-battle-phase], [data-debug-rail]",
       ),
     ).toBeNull();
-    expect(container.querySelector("style")?.textContent).toContain(
-      "[data-connected-count]",
-    );
+    expect(container.querySelector("[data-connected-count]")).toBeNull();
 
     act(() => root.unmount());
   });

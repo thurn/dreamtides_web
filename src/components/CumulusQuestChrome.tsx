@@ -8,6 +8,7 @@ import type { QuestUtilityMenuAction } from "./QuestUtilityMenuController";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { useQuest } from "../state/quest-context";
 import { QuestStatusBar } from "../cumulus/components/hud/QuestStatusBar";
+import { CoopPresenceStatus } from "../cumulus/components/hud/CoopPresenceStatus";
 import { useIsDesktop } from "../cumulus/screens/use-is-desktop";
 import type { QuestState } from "../types/quest";
 import { buildDreamscapeHudView } from "../screens/cumulus_adapters/dreamscape-view-model";
@@ -27,6 +28,8 @@ export interface CumulusQuestChromeHandlers {
   onRegenerateAtlas?: () => void;
   contextualActions?: readonly QuestUtilityMenuAction[];
   elevated?: boolean;
+  showConnectedCount?: boolean;
+  connectedCount?: number | null;
 }
 
 export function CumulusQuestChrome({
@@ -46,6 +49,8 @@ export function CumulusQuestChrome({
   const { state } = useQuest();
   const hud = buildDreamscapeHudView(state);
   const isDesktop = useIsDesktop();
+  const showConnectedCount =
+    handlers.showConnectedCount ?? variant === "quest";
 
   return (
     <div
@@ -55,6 +60,10 @@ export function CumulusQuestChrome({
       style={{ position: "fixed", inset: 0, minHeight: "100dvh" }}
     >
       {children}
+      <CoopPresenceStatus
+        count={handlers.connectedCount ?? null}
+        visible={showConnectedCount}
+      />
       {showStatusBar && (variant === "quest" || isDesktop) && (
         <ErrorBoundary scope="overlay:cumulus-status-bar">
           <QuestStatusBar

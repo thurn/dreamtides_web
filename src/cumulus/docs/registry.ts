@@ -20,6 +20,7 @@ import { cardOrderEditorDemo } from "./demos/card-order-editor";
 import { cardStatOrbDemo } from "./demos/card-stat-orb";
 import { cardTermDefinitionsDemo } from "./demos/card-term-definitions";
 import { characterDialogueDemo } from "./demos/character-dialogue";
+import { coopPresenceStatusDemo } from "./demos/coop-presence-status";
 import { commandMenusDemo, contextActionMenuDemo } from "./demos/command-menus";
 import { dreamcallerPortraitDemo } from "./demos/dreamcaller-portrait";
 import { dreamwellCardDemo } from "./demos/dreamwell-card";
@@ -55,6 +56,7 @@ import { tideDiscDemo } from "./demos/tide-disc";
 import { textFieldDemo } from "./demos/text-field";
 import { textAreaDemo } from "./demos/text-area";
 import { transfigurationFormButtonDemo } from "./demos/transfiguration-form-button";
+import { transientStatusToastDemo } from "./demos/transient-status-toast";
 
 /**
  * A single authored usage snippet shown on a component's doc page. The source
@@ -171,12 +173,14 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   cardOrderEditorDemo,
   tideDiscDemo,
   transfigurationFormButtonDemo,
+  transientStatusToastDemo,
   motesDemo,
   infoCardDemo,
   groupPanelDemo,
   glowIconDemo,
   pipBadgeDemo,
   questStatusBarDemo,
+  coopPresenceStatusDemo,
   battleStatusDisplayDemo,
   dreamwellCardDemo,
   dreamcallerPortraitDemo,

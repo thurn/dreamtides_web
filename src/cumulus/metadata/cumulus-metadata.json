@@ -1586,6 +1586,24 @@
       "description": "Optional test selector for the root offering."
     }
   ],
+  "CoopPresenceStatus": [
+    {
+      "name": "count",
+      "tsType": "number | null",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Presence-derived connected client count, or null while it resolves."
+    },
+    {
+      "name": "visible",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Explicit chrome state supplied by the app-shell view model."
+    }
+  ],
   "CornerUtilityMenu": [
     {
       "name": "trigger",
@@ -4521,6 +4539,53 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional stable test id for the semantic source."
+    }
+  ],
+  "TransientStatusToast": [
+    {
+      "name": "variant",
+      "tsType": "TransientStatusVariant",
+      "unionMembers": [
+        "notice",
+        "warning",
+        "error"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Semantic severity for the status material and assistive announcement."
+    },
+    {
+      "name": "copy",
+      "tsType": "TransientStatusCopy",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Structured player-facing copy.",
+      "nested": {
+        "name": "TransientStatusCopy",
+        "fields": [
+          {
+            "name": "title",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "message",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "onDismiss",
+      "tsType": "(() => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional dismissal callback; lifecycle ownership remains outside Cumulus."
     }
   ]
 }

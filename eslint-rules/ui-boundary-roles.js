@@ -53,13 +53,13 @@ const fileRoles = {
   "src/battle/components/CumulusBattleZoneBrowser.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/battle/components/PlayableBattleScreen.tsx": OUTER_UI_ROLES.APP_SHELL,
 
-  "src/coop/BounceToast.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
-  "src/coop/ConfigGateScreen.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
+  "src/coop/BounceToast.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
+  "src/coop/ConfigGateScreen.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/coop/EventLogViewer.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
   "src/coop/FrontDoorApp.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/coop/RoomGate.tsx": OUTER_UI_ROLES.APP_SHELL,
-  "src/coop/UnreadableRoomScreen.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
-  "src/coop/VersionGateScreen.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
+  "src/coop/UnreadableRoomScreen.tsx": OUTER_UI_ROLES.APP_SHELL,
+  "src/coop/VersionGateScreen.tsx": OUTER_UI_ROLES.APP_SHELL,
 
   "src/debug/OffersDebugApp.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
   "src/debug/OpponentDebugApp.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,

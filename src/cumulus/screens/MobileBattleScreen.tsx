@@ -360,8 +360,6 @@ const PHASE_GLYPH = {
 } satisfies Record<MobileBattlePhase, (typeof GLYPHS)[keyof typeof GLYPHS]>;
 
 const BATTLE_PHASE_LIGHT_CSS = `
-  :where([data-connected-count]) { display: none; }
-
   @keyframes battle-phase-comet-tail {
     0% { transform: translateY(-50%) scaleX(${String(PHASE_COMET_TAIL_START_SCALE)}); opacity: 0.12; }
     45% { transform: translateY(-50%) scaleX(${String(PHASE_COMET_TAIL_PEAK_SCALE)}); opacity: 0.52; }

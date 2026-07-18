@@ -81,6 +81,34 @@ afterEach(() => {
 });
 
 describe("CumulusQuestChrome", () => {
+  it("renders connected count only when explicit chrome state permits it", () => {
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <CumulusQuestChrome
+            handlers={{ connectedCount: 2, showConnectedCount: true }}
+          >
+            <div />
+          </CumulusQuestChrome>
+        </CumulusRoot>,
+      );
+    });
+    expect(container.querySelector("[data-connected-count]")?.textContent).toContain("2 Connected");
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <CumulusQuestChrome
+            handlers={{ connectedCount: 2, showConnectedCount: false }}
+          >
+            <div />
+          </CumulusQuestChrome>
+        </CumulusRoot>,
+      );
+    });
+    expect(container.querySelector("[data-connected-count]")).toBeNull();
+  });
+
   it("automatically docks the live quest HUD and desktop gear around content", () => {
     const onViewDeck = vi.fn();
     act(() => {

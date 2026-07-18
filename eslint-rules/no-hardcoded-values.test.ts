@@ -174,7 +174,7 @@ ruleTester.run("no-hardcoded-values", rule, {
     },
     {
       name: "a pending outer player view is covered before migration",
-      filename: "src/coop/ConfigGateScreen.tsx",
+      filename: "src/components/PoolViewer.tsx",
       code: `const s = { color: "${UNKNOWN_HEX}" };`,
       output: null,
       errors: [{ messageId: "hardcodedColorNoToken" }],

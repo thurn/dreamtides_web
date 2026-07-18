@@ -77,7 +77,9 @@ function pushToCaps(scope: string, error: Error, info: ErrorInfo): void {
 }
 
 /**
- * React error boundary used at three levels of the app:
+ * React error boundary used at three levels of the app. Its default fallback is
+ * the sole emergency-fallback presentation exemption: it deliberately imports
+ * no Cumulus UI so it can still render when Cumulus itself has failed.
  *
  * 1. **App shell** (`scope="app-shell"`) wraps everything inside `App`. A
  *    crash here still produces a contained fallback panel rather than a

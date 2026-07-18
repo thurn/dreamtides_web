@@ -6,16 +6,14 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { onValue, ref, type Database } from "firebase/database";
+import { type Database } from "firebase/database";
 import type { ContentConfig, Genesis, LogNode } from "../eventlog/types";
 import {
-  connectedClientCount,
   createRoomEvictingStale,
   generateRoomId,
   mintClientId,
   RoomExistsError,
   writePresence,
-  type PresenceEntry,
 } from "../eventlog/room";
 import { subscribeToLog } from "../eventlog/subscribe";
 import {
@@ -29,6 +27,7 @@ import { installQuestLogSink, type QuestLogSinkHandle } from "./quest-log-sink";
 import { ConfigGateScreen } from "./ConfigGateScreen";
 import { UnreadableRoomScreen } from "./UnreadableRoomScreen";
 import { VersionGateScreen } from "./VersionGateScreen";
+import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScreen";
 
 // How long to wait for the first log snapshot before treating the room as
 // unreachable/missing. Firebase emits its initial value within a couple of
@@ -205,10 +204,6 @@ export function RoomGate({
       ? { status: "creating" }
       : { status: "loading", roomId: gameId },
   );
-  const [presence, setPresence] = useState<Record<
-    string,
-    PresenceEntry
-  > | null>(null);
   const [logSink, setLogSinkHandle] = useState<QuestLogSinkHandle | null>(null);
 
   const readyRoomId = gateState.status === "ready" ? gateState.roomId : null;
@@ -300,17 +295,6 @@ export function RoomGate({
     };
   }, [activeRoomId, db, localContentConfig]);
 
-  // Track presence for the "connected" pill.
-  useEffect(() => {
-    if (activeRoomId === null) {
-      return undefined;
-    }
-    const presenceRef = ref(db, `rooms/${activeRoomId}/presence`);
-    return onValue(presenceRef, (snapshot) => {
-      setPresence(snapshot.val() as Record<string, PresenceEntry> | null);
-    });
-  }, [db, activeRoomId]);
-
   // Write this client's presence once the room is ready.
   useEffect(() => {
     if (readyRoomId === null) {
@@ -393,144 +377,83 @@ export function RoomGate({
     // children so the ready context is complete.
     if (logSink === null || readyRoomId !== gateState.roomId) {
       return (
-        <RoomShell subtitle="Joining game">
-          Loading {gateState.roomId}...
-        </RoomShell>
+        <ApplicationStateScreen
+          view={{
+            kind: "loading",
+            title: "Joining Game",
+            message: `Preparing ${gateState.roomId}.`,
+            busyLabel: "Joining Game",
+          }}
+        />
       );
     }
     return (
-      <>
-        <ConnectedPill count={connectedClientCount(presence)} />
-        {children({
+      children({
           db,
           roomId: gateState.roomId,
           clientId,
           genesis: gateState.genesis,
           logSink,
-        })}
-      </>
+        })
     );
   }
 
   if (gateState.status === "creating") {
-    return <RoomShell subtitle="Creating game">Creating game...</RoomShell>;
+    return (
+      <ApplicationStateScreen
+        view={{
+          kind: "roomCreation",
+          title: "Creating Game",
+          message: "We are preparing a shared dream.",
+          busyLabel: "Creating Game",
+        }}
+      />
+    );
   }
 
   if (gateState.status === "loading") {
     return (
-      <RoomShell subtitle="Joining game">
-        Loading {gateState.roomId}...
-      </RoomShell>
+      <ApplicationStateScreen
+        view={{
+          kind: "loading",
+          title: "Joining Game",
+          message: `Loading ${gateState.roomId}.`,
+          busyLabel: "Joining Game",
+        }}
+      />
     );
   }
 
   if (gateState.status === "unreachable") {
     return (
-      <RoomShell subtitle="Game not found">
-        <p
-          style={{
-            color: "#cbd5f5",
-            opacity: 0.8,
-            maxWidth: "32rem",
-            textAlign: "center",
-          }}
-        >
-          Could not load &ldquo;{gateState.roomId}&rdquo;. The game may not
-          exist, or the database is unreachable.
-        </p>
-        <CreateGameButton
-          onClick={() => void handleCreateGame()}
-          label="Create New Game"
-        />
-      </RoomShell>
+      <ApplicationStateScreen
+        view={{
+          kind: "unreachableRoom",
+          title: "Game Not Found",
+          message: `Could not load ${gateState.roomId}. The game may not exist, or the database is unreachable.`,
+          actions: [{
+            id: "primary",
+            label: "Create New Game",
+            onPress: () => void handleCreateGame(),
+          }],
+        }}
+      />
     );
   }
 
   return (
-    <RoomShell subtitle="Something went wrong">
-      <p style={{ color: "#fca5a5", maxWidth: "32rem", textAlign: "center" }}>
-        {gateState.message}
-      </p>
-    </RoomShell>
-  );
-}
-
-function ConnectedPill({ count }: { count: number | null }): ReactNode {
-  return (
-    <div
-      data-connected-count
-      className="pointer-events-none fixed top-1 left-1/2 z-40 -translate-x-1/2 select-none rounded-sm px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider opacity-50"
-      style={{
-        color: "#94a3b8",
-        background: "rgba(10, 6, 18, 0.55)",
-        border: "1px solid rgba(124, 58, 237, 0.25)",
+    <ApplicationStateScreen
+      view={{
+        kind: "recoverableError",
+        title: "Something Went Wrong",
+        message: "The game could not finish its room setup.",
+        detail: gateState.message,
+        actions: [{
+          id: "primary",
+          label: "Try Again",
+          onPress: () => void handleCreateGame(),
+        }],
       }}
-    >
-      {count === null ? "connecting..." : `${count} connected`}
-    </div>
-  );
-}
-
-function CreateGameButton({
-  onClick,
-  label,
-}: {
-  onClick: () => void;
-  label: string;
-}): ReactNode {
-  return (
-    <button
-      data-create-game="true"
-      type="button"
-      onClick={onClick}
-      className="cursor-pointer rounded-2xl px-12 py-4 text-xl font-semibold tracking-wide transition-all duration-150 hover:-translate-y-0.5"
-      style={{
-        background:
-          "linear-gradient(135deg, #7c3aed 0%, #a855f7 55%, #c084fc 100%)",
-        color: "#ffffff",
-        border: "2px solid rgba(192, 132, 252, 0.6)",
-        boxShadow:
-          "0 12px 32px rgba(124, 58, 237, 0.4), 0 0 28px rgba(168, 85, 247, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.18)",
-        textShadow: "0 1px 2px rgba(15, 8, 25, 0.35)",
-      }}
-    >
-      {label}
-    </button>
-  );
-}
-
-function RoomShell({
-  subtitle,
-  children,
-}: {
-  subtitle: string;
-  children: ReactNode;
-}): ReactNode {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-6 py-12">
-      <div className="flex w-full max-w-xl flex-col items-center gap-8 text-center">
-        <h1
-          className="text-6xl font-extrabold tracking-wide md:text-7xl"
-          style={{
-            background:
-              "linear-gradient(135deg, #a855f7 0%, #7c3aed 40%, #c084fc 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            textShadow:
-              "0 0 60px rgba(168, 85, 247, 0.4), 0 0 120px rgba(124, 58, 237, 0.2)",
-            filter: "drop-shadow(0 0 40px rgba(168, 85, 247, 0.3))",
-          }}
-        >
-          Dreamtides
-        </h1>
-        <p
-          className="text-lg opacity-70 md:text-xl"
-          style={{ color: "#e2e8f0" }}
-        >
-          {subtitle}
-        </p>
-        <div className="flex flex-col items-center gap-4">{children}</div>
-      </div>
-    </main>
+    />
   );
 }

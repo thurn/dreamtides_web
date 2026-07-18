@@ -382,7 +382,8 @@ describe("App", () => {
 
     await flushAppEffects();
 
-    expect(container.textContent).toContain("Quest content failed to load");
+    expect(container.querySelector('[data-application-state="recoverableError"]')).not.toBeNull();
+    expect(container.textContent).toContain("Quest Content Failed to Load");
     expect(container.textContent).toContain("Failed to load draft records");
     expect(container.querySelector("[data-room-gate]")).toBeNull();
     expect(container.querySelector("[data-coop-provider]")).toBeNull();
@@ -411,7 +412,8 @@ describe("App", () => {
 
     await flushAppEffects();
 
-    expect(container.textContent).toContain("Firebase setup issue");
+    expect(container.querySelector('[data-application-state="fatalConfiguration"]')).not.toBeNull();
+    expect(container.textContent).toContain("Firebase Setup Issue");
     expect(container.textContent).toContain(
       "Missing VITE_FIREBASE_DATABASE_URL",
     );
@@ -443,7 +445,8 @@ describe("App", () => {
     await flushAppEffects();
 
     expect(getFirebaseDatabase).toHaveBeenCalledWith("realtime");
-    expect(container.textContent).toContain("Firebase setup issue");
+    expect(container.querySelector('[data-application-state="fatalConfiguration"]')).not.toBeNull();
+    expect(container.textContent).toContain("Firebase Setup Issue");
     expect(container.textContent).toContain(
       "Missing VITE_FIREBASE_DATABASE_URL",
     );

@@ -11,6 +11,7 @@ import {
   CumulusQuestChrome,
   type CumulusQuestChromeHandlers,
 } from "./CumulusQuestChrome";
+import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScreen";
 
 /**
  * Drives the coop event-sourced battle fold. A null folded battle renders the
@@ -56,9 +57,13 @@ export function BattleSiteRoute({
   if (battle === null) {
     if (preview === null) {
       return (
-        <div className="flex h-screen flex-col items-center justify-center gap-3 p-8">
-          <p className="text-lg opacity-80">Unable to prepare battle.</p>
-        </div>
+        <ApplicationStateScreen
+          view={{
+            kind: "recoverableError",
+            title: "Unable to Prepare Battle",
+            message: "The battle preview could not be prepared from this game state.",
+          }}
+        />
       );
     }
     return (

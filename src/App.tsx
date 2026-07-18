@@ -18,7 +18,7 @@ import {
 } from "./data/quest-content";
 import { getFirebaseDatabase } from "./firebase/app-config";
 import { RoomGate } from "./coop/RoomGate";
-import { CoopProvider, useConfirmedHead } from "./coop/hooks";
+import { CoopProvider, useConfirmedHead, useConnectedCount } from "./coop/hooks";
 import { EventLogViewer } from "./coop/EventLogViewer";
 import { registerGameProviders } from "./coop/providers/register-game-providers";
 import { useQuest } from "./state/quest-context";
@@ -27,6 +27,7 @@ import { ScreenRouter } from "./components/ScreenRouter";
 import { DesktopDeckViewerAdapter } from "./screens/cumulus_adapters/DesktopDeckViewerAdapter";
 import { MobileDeckViewerAdapter } from "./screens/cumulus_adapters/MobileDeckViewerAdapter";
 import { useIsDesktop } from "./cumulus/screens/use-is-desktop";
+import { ApplicationStateScreen } from "./cumulus/screens/ApplicationStateScreen";
 import { PoolViewer } from "./components/PoolViewer";
 import { StartingDeckOverlayAdapter } from "./screens/cumulus_adapters/StartingDeckOverlayAdapter";
 import { DebugScreen } from "./screens/DebugScreen";
@@ -69,7 +70,7 @@ export function QuestApp({
   const isDesktopViewport = useIsDesktop();
   const activeSite = resolveActiveSite(state);
   const activeSiteType = activeSite?.type ?? null;
-  const hidePresencePill =
+  const showConnectedCount =
     activeSiteType === "Purge" || activeSiteType === "Shop";
   const [deckViewerOpen, setDeckViewerOpen] = useState(false);
   const [poolViewerOpen, setPoolViewerOpen] = useState(false);
@@ -77,6 +78,7 @@ export function QuestApp({
   const [questEditorOpen, setQuestEditorOpen] = useState(false);
   const [cardSourceOverlayOpen, setCardSourceOverlayOpen] = useState(false);
   const confirmedHead = useConfirmedHead();
+  const connectedCount = useConnectedCount();
   const previousScreenTypeRef = useRef(state.screen.type);
   const gotoSceneFiredRef = useRef(false);
   const openDeckFiredRef = useRef(false);
@@ -364,10 +366,14 @@ export function QuestApp({
     state.dreamcaller === null
   ) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center gap-3 p-8">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
-        <p className="text-lg opacity-80">Opening QA scene...</p>
-      </div>
+      <ApplicationStateScreen
+        view={{
+          kind: "loading",
+          title: "Opening QA Scene",
+          message: "Preparing this quest state.",
+          busyLabel: "Opening QA Scene",
+        }}
+      />
     );
   }
 
@@ -376,28 +382,27 @@ export function QuestApp({
   // Dreamcaller selection screen.
   if (loadQuestStatus === "pending") {
     return (
-      <div className="flex h-screen flex-col items-center justify-center gap-3 p-8">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
-        <p className="text-lg opacity-80">
-          Loading saved quest &ldquo;{loadQuestName}&rdquo;...
-        </p>
-      </div>
+      <ApplicationStateScreen
+        view={{
+          kind: "loading",
+          title: "Loading Saved Quest",
+          message: `Loading ${loadQuestName ?? "saved quest"}.`,
+          busyLabel: "Loading Saved Quest",
+        }}
+      />
     );
   }
 
   if (loadQuestStatus === "error") {
     return (
-      <div className="flex h-screen items-center justify-center p-8">
-        <div
-          role="alert"
-          className="max-w-2xl w-full rounded-lg border border-red-500/60 bg-red-950/40 p-6 shadow-lg"
-        >
-          <h1 className="mb-3 text-xl font-semibold text-red-200">
-            Could not load saved quest
-          </h1>
-          <p className="font-mono text-sm text-red-100">{loadQuestError}</p>
-        </div>
-      </div>
+      <ApplicationStateScreen
+        view={{
+          kind: "recoverableError",
+          title: "Could Not Load Saved Quest",
+          message: "The saved quest could not be opened.",
+          detail: loadQuestError ?? "Failed to load saved quest.",
+        }}
+      />
     );
   }
 
@@ -409,9 +414,6 @@ export function QuestApp({
         produces a blank #root with no fallback UI.
       */}
       <ErrorBoundary scope="app-shell">
-        {hidePresencePill && (
-          <style>{`[data-connected-count]{display:none}`}</style>
-        )}
         <ScreenRouter
           runtimeConfig={runtimeConfig}
           cumulusChromeHandlers={{
@@ -426,6 +428,8 @@ export function QuestApp({
             onLoadQuestState: mutations.loadQuestState,
             onRegenerateAtlas: handleRegenerateAtlas,
             elevated: deckViewerOpen && !isDesktopViewport,
+            showConnectedCount: !showConnectedCount,
+            connectedCount,
           }}
         />
         {/*
@@ -628,69 +632,65 @@ export default function App({
 
   if (loadError !== null) {
     return (
-      <div className="flex h-screen items-center justify-center p-8">
-        <div
-          role="alert"
-          className="max-w-3xl w-full rounded-lg border border-red-500/60 bg-red-950/40 p-6 shadow-lg"
-        >
-          <h1 className="mb-3 text-xl font-semibold text-red-200">
-            Quest content failed to load
-          </h1>
-          <pre className="max-h-[60vh] overflow-auto whitespace-pre-wrap rounded bg-black/40 p-4 font-mono text-xs text-red-100">
-            {loadError}
-          </pre>
-          <div className="mt-4 flex gap-3">
-            <button
-              type="button"
-              onClick={() => {
-                window.location.reload();
-              }}
-              className="rounded bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-400"
-            >
-              Retry
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                void navigator.clipboard?.writeText(loadError);
-              }}
-              className="rounded border border-red-400/50 px-4 py-2 text-sm font-medium text-red-100 hover:bg-red-500/20"
-            >
-              Copy details
-            </button>
-          </div>
-        </div>
-      </div>
+      <ApplicationStateScreen
+        view={{
+          kind: "recoverableError",
+          title: "Quest Content Failed to Load",
+          message: "The quest content could not be prepared.",
+          detail: loadError,
+          actions: [
+            {
+              id: "primary",
+              label: "Retry",
+              onPress: () => window.location.reload(),
+            },
+            {
+              id: "secondary",
+              label: "Copy Details",
+              onPress: () => void navigator.clipboard?.writeText(loadError),
+            },
+          ],
+        }}
+      />
     );
   }
 
   if (questContent === null) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center gap-3 p-8">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
-        <p className="text-lg opacity-80">Loading quest content...</p>
-      </div>
+      <ApplicationStateScreen
+        view={{
+          kind: "loading",
+          title: "Loading Quest Content",
+          message: "Gathering the dream’s cards and paths.",
+          busyLabel: "Loading Quest Content",
+        }}
+      />
     );
   }
 
   if (firebaseError !== null) {
     return (
-      <main>
-        <h1>Firebase setup issue</h1>
-        <div>
-          <p>{firebaseError}</p>
-          <p>{firebaseSetupHelp(runtimeConfig.databaseMode)}</p>
-        </div>
-      </main>
+      <ApplicationStateScreen
+        view={{
+          kind: "fatalConfiguration",
+          title: "Firebase Setup Issue",
+          message: firebaseSetupHelp(runtimeConfig.databaseMode),
+          detail: firebaseError,
+        }}
+      />
     );
   }
 
   if (database === null) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center gap-3 p-8">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
-        <p className="text-lg opacity-80">Loading quest content...</p>
-      </div>
+      <ApplicationStateScreen
+        view={{
+          kind: "loading",
+          title: "Connecting to Game Service",
+          message: "Preparing your shared game.",
+          busyLabel: "Connecting to Game Service",
+        }}
+      />
     );
   }
 
