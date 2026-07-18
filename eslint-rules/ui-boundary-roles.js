@@ -68,9 +68,9 @@ const fileRoles = {
   "src/image_viewer/ImageViewerApp.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
   "src/image_viewer/ImageViewerToolbar.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
 
-  "src/screens/CardSourceOverlay.tsx": OUTER_UI_ROLES.DEVTOOL,
-  "src/screens/DebugScreen.tsx": OUTER_UI_ROLES.DEVTOOL,
-  "src/screens/QuestDebugEditor.tsx": OUTER_UI_ROLES.DEVTOOL,
+  "src/screens/CardSourceOverlay.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
+  "src/screens/DebugScreen.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
+  "src/screens/QuestDebugEditor.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/screens/devtools/EntityRevealConformanceDemo.tsx": OUTER_UI_ROLES.DEVTOOL,
   "src/state/coop-quest-context.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/state/front-door-context.tsx": OUTER_UI_ROLES.STATE_ADAPTER,

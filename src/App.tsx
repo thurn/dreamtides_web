@@ -511,6 +511,7 @@ export function QuestApp({
         >
           <CardSourceOverlay
             cardSourceDebug={state.cardSourceDebug}
+            cardDatabase={cardDatabase}
             idf3Provenance={cardSourceProvenance}
             seedProvenance={seedProvenance}
             tides4Provenance={tides4Provenance}
