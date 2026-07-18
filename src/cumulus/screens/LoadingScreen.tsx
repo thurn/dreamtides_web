@@ -31,10 +31,9 @@ const DOT_POSITIONS = [0, 1, 2] as const;
 export function LoadingScreen({ view }: LoadingScreenProps): ReactElement {
   const isDesktop = useIsDesktop();
   const reduceMotion = useReducedMotion() === true;
-  const quoteDelay = reduceMotion ? 0 : SCREEN_FADE_SECONDS;
   const attributionDelay = reduceMotion
     ? 0
-    : quoteDelay + QUOTE_FADE_SECONDS + ATTRIBUTION_PAUSE_SECONDS;
+    : QUOTE_FADE_SECONDS + ATTRIBUTION_PAUSE_SECONDS;
 
   return (
     <motion.main
@@ -71,7 +70,7 @@ export function LoadingScreen({ view }: LoadingScreenProps): ReactElement {
           initial={{ opacity: reduceMotion ? 1 : 0 }}
           animate={{ opacity: 1 }}
           transition={{
-            delay: quoteDelay,
+            delay: 0,
             duration: reduceMotion ? 0 : QUOTE_FADE_SECONDS,
           }}
           style={{

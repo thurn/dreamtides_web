@@ -110,9 +110,9 @@ describe("LoadingScreen", () => {
     expect(attribution?.textContent).toBe(VIEW.attribution);
     expect(attribution?.style.textAlign).toBe("right");
     expect(JSON.parse(quote?.dataset.motionTransition ?? "{}"))
-      .toMatchObject({ delay: 1.2, duration: 1.4 });
+      .toMatchObject({ delay: 0, duration: 1.4 });
     expect(JSON.parse(attribution?.dataset.motionTransition ?? "{}"))
-      .toMatchObject({ delay: 4.6, duration: 0.8 });
+      .toMatchObject({ delay: 3.4, duration: 0.8 });
     expect(indicator?.getAttribute("aria-label")).toBe("Loading...");
     expect(container.querySelectorAll("[data-loading-dot]")).toHaveLength(3);
   });
