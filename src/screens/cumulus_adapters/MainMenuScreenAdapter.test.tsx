@@ -7,6 +7,35 @@ import { CumulusRoot } from "../../cumulus/CumulusRoot";
 import { getLogEntries, resetLog } from "../../logging";
 import { MainMenuScreenAdapter } from "./MainMenuScreenAdapter";
 
+const screenMocks = vi.hoisted(() => ({
+  onAction: null as null | ((actionId: string) => void),
+  onExitComplete: null as null | (() => void),
+  onSocial: null as null | ((socialId: string) => void),
+}));
+
+vi.mock("../../cumulus/screens/MainMenuScreen", () => ({
+  MainMenuScreen: ({
+    onAction,
+    onExitComplete,
+    onSocial,
+    transitionPhase,
+  }: {
+    onAction: (actionId: string) => void;
+    onExitComplete?: () => void;
+    onSocial: (socialId: string) => void;
+    transitionPhase?: string;
+  }) => {
+    screenMocks.onAction = onAction;
+    screenMocks.onExitComplete = onExitComplete ?? null;
+    screenMocks.onSocial = onSocial;
+    return <div data-main-menu data-main-menu-phase={transitionPhase} />;
+  },
+}));
+
+vi.mock("../../cumulus/screens/LoadingScreen", () => ({
+  LoadingScreen: () => <main data-loading-screen />,
+}));
+
 beforeEach(() => {
   (
     globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
@@ -22,6 +51,10 @@ beforeEach(() => {
     dispatchEvent: vi.fn(),
   }));
   vi.spyOn(console, "log").mockImplementation(() => {});
+  window.history.replaceState(null, "", "/main");
+  screenMocks.onAction = null;
+  screenMocks.onExitComplete = null;
+  screenMocks.onSocial = null;
   resetLog();
 });
 
@@ -31,7 +64,7 @@ afterEach(() => {
 });
 
 describe("MainMenuScreenAdapter", () => {
-  it("logs presentation and the intentionally inert player intents", () => {
+  it("logs presentation and transitions New Journey to /loading", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -43,20 +76,14 @@ describe("MainMenuScreenAdapter", () => {
       ),
     );
 
-    act(() =>
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="main-menu-action-new-journey"]',
-        )
-        ?.click(),
-    );
-    act(() =>
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="main-menu-social-github"]',
-        )
-        ?.click(),
-    );
+    act(() => screenMocks.onAction?.("new-journey"));
+    expect(
+      container.querySelector("[data-main-menu-phase='exiting']"),
+    ).not.toBeNull();
+    act(() => screenMocks.onSocial?.("github"));
+    act(() => screenMocks.onExitComplete?.());
+    expect(window.location.pathname).toBe("/loading");
+    expect(container.querySelector("[data-loading-screen]")).not.toBeNull();
 
     expect(getLogEntries()).toEqual(
       expect.arrayContaining([
@@ -68,6 +95,11 @@ describe("MainMenuScreenAdapter", () => {
         expect.objectContaining({
           event: "main_menu_social_pressed",
           socialId: "github",
+        }),
+        expect.objectContaining({
+          event: "loading_screen_presented",
+          source: "main_menu",
+          attribution: "— Revelation 6:8",
         }),
       ]),
     );

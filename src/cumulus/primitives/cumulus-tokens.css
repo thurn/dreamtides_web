@@ -190,6 +190,7 @@
   --bg-app: var(--primitive-void-800);
   --bg-sunken: var(--primitive-void-900);
   --bg-band: var(--primitive-void-700);
+  --bg-loading: var(--primitive-line-black); /* true-black cinematic loading stage */
   --surface-card: var(--primitive-plum-700);
   --surface-raised: var(--primitive-plum-600);
   --surface-hover: var(--primitive-plum-500);
@@ -207,6 +208,7 @@
   --text-on-card: #f6f6f5;   /* card name on dark card chrome (parent value) */
   --text-on-glass: var(--primitive-ink-100); /* high-contrast text on blurred glass; never violet/accent */
   --text-on-glass-muted: var(--primitive-ink-300); /* secondary text on blurred glass */
+  --text-loading: var(--text-on-accent); /* white copy on the true-black loading stage */
 
   /* ---- Accent / primary action ---- */
   --accent: var(--primitive-violet-400);
@@ -559,6 +561,11 @@
   --dur-fast: 140ms;  /* @kind other */
   --dur-base: 240ms;  /* @kind other */
   --dur-slow: 420ms;  /* @kind other */
+  --dur-loading-quote: 1400ms;  /* @kind other */
+  --dur-loading-attribution: 800ms;  /* @kind other */
+  --dur-loading-dot-cycle: 1200ms;  /* @kind other */
+  --delay-loading-attribution: 2000ms;  /* @kind other — pause after the quote has fully appeared */
+  --stagger-loading-dot: 180ms;  /* @kind other */
 
   /* ---- Material-continuity motion ----
      The canonical transition for a value or card moving between two anchors,

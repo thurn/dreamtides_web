@@ -42,6 +42,12 @@ vi.mock("../debug/OffersDebugApp", () => ({
   },
 }));
 
+vi.mock("../screens/cumulus_adapters/LoadingScreenAdapter", () => ({
+  LoadingScreenAdapter: function MockLoadingScreenAdapter() {
+    return null;
+  },
+}));
+
 vi.mock("../App.tsx", () => {
   mocks.appImport();
   return {
@@ -115,6 +121,18 @@ describe("main editor route", () => {
 
   it("mounts the isolated OfferTile debug page for the Vite-served /offers/ path", async () => {
     window.history.pushState(null, "", "/offers/");
+
+    await import("../main.tsx");
+
+    expect(mocks.appImport).not.toHaveBeenCalled();
+    expect(mocks.createRoot).toHaveBeenCalledWith(
+      document.getElementById("root"),
+    );
+    expect(mocks.render).toHaveBeenCalledTimes(1);
+  });
+
+  it("mounts the isolated loading screen for the Vite-served /loading/ path", async () => {
+    window.history.pushState(null, "", "/loading/");
 
     await import("../main.tsx");
 

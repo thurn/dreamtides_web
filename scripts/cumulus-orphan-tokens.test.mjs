@@ -9,7 +9,7 @@
 // dead weight: it silently drifts from the values components actually use,
 // and it's easy to miss during review because grepping component code alone
 // never surfaces it. This test scans every non-excluded TS/TSX/CSS file
-// under src/ for a `var(--x)` or `token("--x")`/`readLengthToken("--x")` read
+// under src/ for a `var(--x)` or typed token-helper read
 // and fails the build the moment a NEW orphan appears, so it has to be
 // either wired up or deliberately baselined.
 //
@@ -174,14 +174,16 @@ function escapeForRegExp(name) {
 
 /**
  * Whether `text` contains a live read of token `name`: `var(--x)` /
- * `var(--x, ...)`, or `token("--x")` / `readLengthToken("--x")`. Writes
+ * `var(--x, ...)`, or one of the typed token helpers. Writes
  * (e.g. `top: "--display-cutout-top"` assigning a token *name* as a
  * string, as in device-frame.ts) do not match either pattern.
  */
 function isRead(name, text) {
   const q = escapeForRegExp(name);
   const varRe = new RegExp(`var\\(\\s*${q}\\s*[,)]`);
-  const tokenCallRe = new RegExp(`(token|readLengthToken)\\(\\s*["']${q}["']`);
+  const tokenCallRe = new RegExp(
+    `(token|readLengthToken|motionTimeSeconds)\\(\\s*["']${q}["']`,
+  );
   return varRe.test(text) || tokenCallRe.test(text);
 }
 

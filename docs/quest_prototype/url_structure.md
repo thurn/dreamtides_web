@@ -82,11 +82,12 @@ Path-based URLs need every path to serve the app shell:
   paths.
 
 `src/main.tsx` dispatches on `window.location.pathname` for standalone routes.
-`/main` renders the player-facing Dreamtides main menu, while `/cards`,
-`/editor`, `/cumulus`, `/dreamscapes`, and the other authoring paths render
-their respective tools. Every other path — including all quest paths above —
-renders the quest app. Quest paths are chosen not to collide with those routes
-(note the quest `/dreamscape/<layer>-<biome>` is singular, distinct from the
+`/main` renders the player-facing Dreamtides main menu, and its New Journey
+action transitions to the cinematic `/loading` screen. `/cards`, `/editor`,
+`/cumulus`, `/dreamscapes`, and the other authoring paths render their
+respective tools. Every other path — including all quest paths above — renders
+the quest app. Quest paths are chosen not to collide with those routes (note
+the quest `/dreamscape/<layer>-<biome>` is singular, distinct from the
 `/dreamscapes` dreamscape editor).
 
 ## Logging

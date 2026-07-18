@@ -16,6 +16,7 @@ App backdrops, panes, and scrims, by role.
 | `--bg-app` | `var(--primitive-void-800)` |  |
 | `--bg-sunken` | `var(--primitive-void-900)` |  |
 | `--bg-band` | `var(--primitive-void-700)` |  |
+| `--bg-loading` | `var(--primitive-line-black)` | true-black cinematic loading stage |
 | `--surface-card` | `var(--primitive-plum-700)` |  |
 | `--surface-raised` | `var(--primitive-plum-600)` |  |
 | `--surface-hover` | `var(--primitive-plum-500)` |  |
@@ -42,6 +43,7 @@ Text color roles and letter-spacing. Pick by role (primary/secondary/muted), nev
 | `--text-on-card` | `#f6f6f5` | card name on dark card chrome (parent value) |
 | `--text-on-glass` | `var(--primitive-ink-100)` | high-contrast text on blurred glass; never violet/accent |
 | `--text-on-glass-muted` | `var(--primitive-ink-300)` | secondary text on blurred glass |
+| `--text-loading` | `var(--text-on-accent)` | white copy on the true-black loading stage |
 | `--text` | `#fff8ec` | warm near-white |
 | `--text-dim` | `#d8ccba` | warm |
 | `--tracking-eyebrow` | `0.14em` |  |
@@ -197,6 +199,10 @@ Durations, easings, and the two material-continuity transitions (object-travel, 
 | `--dur-fast` | `140ms` |  |
 | `--dur-base` | `240ms` |  |
 | `--dur-slow` | `420ms` |  |
+| `--dur-loading-quote` | `1400ms` |  |
+| `--dur-loading-attribution` | `800ms` |  |
+| `--dur-loading-dot-cycle` | `1200ms` |  |
+| `--stagger-loading-dot` | `180ms` |  |
 | `--motion-object-travel` | `420ms var(--ease-out)` |  |
 | `--stagger-travel` | `55ms` |  |
 
@@ -278,3 +284,4 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 | `--gallery-action-rim` | `rgba(255, 255, 255, 0.20)` |  |
 | `--gallery-action-foreground` | `#d7d1c4` |  |
 | `--badge-disc-gradient` | `radial-gradient(closest-side, #2a2040, #14101f)` |  |
+| `--delay-loading-attribution` | `2000ms` |  |

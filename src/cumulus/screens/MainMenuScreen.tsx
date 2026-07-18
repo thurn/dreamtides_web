@@ -1,9 +1,11 @@
+import { motion, useReducedMotion } from "framer-motion";
 import type { ReactElement } from "react";
 import { IconButton } from "../components/controls/IconButton";
 import { MainMenuButton } from "../components/controls/MainMenuButton";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import type { Glyph } from "../primitives/glyph";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
+import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "./use-is-desktop";
 import "../primitives/cumulus-base.css";
@@ -39,6 +41,8 @@ export interface MainMenuScreenProps {
   readonly view: MainMenuView;
   readonly onAction: (actionId: MainMenuActionId) => void;
   readonly onSocial: (socialId: MainMenuSocialId) => void;
+  readonly transitionPhase?: "visible" | "exiting";
+  readonly onExitComplete?: () => void;
 }
 
 const TITLE_TOP = token("--space-10");
@@ -47,21 +51,32 @@ const EDGE_BOTTOM = token("--space-11");
 const BACKGROUND_POSITION = { desktop: "54% 49%", mobile: "58% 51%" } as const;
 const BUTTON_BACKGROUND_WIDTH = 280;
 const BUTTON_SCALE = 1.5;
+const SCREEN_FADE_SECONDS = motionTimeSeconds("--dur-slow");
 
 /** Full-bleed Dreamtides menu presentation; route effects stay in its adapter. */
 export function MainMenuScreen({
   view,
   onAction,
   onSocial,
+  transitionPhase = "visible",
+  onExitComplete,
 }: MainMenuScreenProps): ReactElement {
   const isDesktop = useIsDesktop();
+  const reduceMotion = useReducedMotion() === true;
   const mobileEdgeInline = `max(${token(SAFE_AREA_INSET_PROPERTIES.left)}, ${token("--space-6")})`;
   const mobileEdgeBottom = `max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${token("--space-6")})`;
 
   return (
-    <main
+    <motion.main
       className="cumulus"
       data-main-menu
+      data-main-menu-phase={transitionPhase}
+      initial={false}
+      animate={{ opacity: transitionPhase === "exiting" ? 0 : 1 }}
+      transition={{ duration: reduceMotion ? 0 : SCREEN_FADE_SECONDS }}
+      onAnimationComplete={() => {
+        if (transitionPhase === "exiting") onExitComplete?.();
+      }}
       style={{
         position: "fixed",
         inset: 0,
@@ -156,6 +171,6 @@ export function MainMenuScreen({
           />
         ))}
       </div>
-    </main>
+    </motion.main>
   );
 }
