@@ -28,7 +28,7 @@ import { DesktopDeckViewerAdapter } from "./screens/cumulus_adapters/DesktopDeck
 import { MobileDeckViewerAdapter } from "./screens/cumulus_adapters/MobileDeckViewerAdapter";
 import { useIsDesktop } from "./cumulus/screens/use-is-desktop";
 import { ApplicationStateScreen } from "./cumulus/screens/ApplicationStateScreen";
-import { PoolViewer } from "./components/PoolViewer";
+import { PoolViewerAdapter } from "./screens/cumulus_adapters/PoolViewerAdapter";
 import { StartingDeckOverlayAdapter } from "./screens/cumulus_adapters/StartingDeckOverlayAdapter";
 import { DebugScreen } from "./screens/DebugScreen";
 import QuestDebugEditor from "./screens/QuestDebugEditor";
@@ -458,7 +458,7 @@ export function QuestApp({
           scope="overlay:pool-viewer"
           onClose={handleClosePoolViewer}
         >
-          <PoolViewer
+          <PoolViewerAdapter
             cardDatabase={cardDatabase}
             draftState={state.draftState}
             resolvedPackage={state.resolvedPackage}

@@ -33,7 +33,7 @@ interface PipBadgeProps {
   value: string;
   /**
    * `"sm"` matches the small card stat row; `"md"` matches the larger
-   * `large` card variant in `CardDisplay`. Sizes are tuned so the number
+   * `large` GameCard variant. Sizes are tuned so the number
    * stays readable but the badge does not overpower adjacent text.
    */
   size?: "sm" | "md";

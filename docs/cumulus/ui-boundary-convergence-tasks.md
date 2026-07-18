@@ -815,6 +815,7 @@ one-time migrations.
 - [Global stylesheet](../../src/index.css)
 - [Cumulus GameCard implementation](../../src/cumulus/components/card/CardView.tsx)
 - [Quest utility menu controller/presentation](../../src/components/QuestUtilityMenu.tsx)
-- [Pool Viewer](../../src/components/PoolViewer.tsx)
+- [Pool Viewer screen](../../src/cumulus/screens/PoolViewerScreen.tsx)
+- [Pool Viewer view-model builder](../../src/screens/cumulus_adapters/pool-viewer-view-model.ts)
 - [Coop room gate](../../src/coop/RoomGate.tsx)
 - [Playable battle controller](../../src/battle/components/PlayableBattleScreen.tsx)

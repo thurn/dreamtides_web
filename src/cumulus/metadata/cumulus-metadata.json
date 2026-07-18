@@ -3342,7 +3342,7 @@
       ],
       "required": false,
       "defaultValue": "sm",
-      "description": "`\"sm\"` matches the small card stat row; `\"md\"` matches the larger\n`large` card variant in `CardDisplay`. Sizes are tuned so the number\nstays readable but the badge does not overpower adjacent text."
+      "description": "`\"sm\"` matches the small card stat row; `\"md\"` matches the larger\n`large` GameCard variant. Sizes are tuned so the number\nstays readable but the badge does not overpower adjacent text."
     },
     {
       "name": "scale",

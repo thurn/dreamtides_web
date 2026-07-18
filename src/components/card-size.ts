@@ -15,7 +15,7 @@ export const SIZE_PRESETS: Readonly<
   small: {
     // FIND-01-8 (Stage 4): bump minimum small-card tile from 112px to 144px
     // so the 10px rules-text body reads at an acceptable visual size
-    // without needing a cross-cutting CardDisplay typography change.
+    // without needing a cross-cutting GameCard typography change.
     columns: "repeat(auto-fill, minmax(144px, 1fr))",
     cardWidth: "144px",
     gap: "0.375rem",

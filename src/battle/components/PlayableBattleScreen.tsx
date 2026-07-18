@@ -10,7 +10,7 @@ import {
   logEventOnce,
 } from "../../logging";
 import { useQuest } from "../../state/quest-context";
-import { PoolViewer } from "../../components/PoolViewer";
+import { PoolViewerFloatingController } from "./PoolViewerFloatingController";
 import {
   useActions,
   useClientId,
@@ -54,6 +54,7 @@ import { collectAutomationHashDrift } from "../../rules/battle/battle-card-effec
 import { CumulusBattleZoneBrowser } from "./CumulusBattleZoneBrowser";
 import {
   createPlayCardFromHandCommand,
+  createPoolCardDropCommand,
   createMoveCardToDeckCommand,
   createMoveCardToZoneCommand,
 } from "./battle-ui-commands";
@@ -959,16 +960,9 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     }
 
     if (pendingDrag.kind === "pool-card") {
-      handleCommand({
-        id: "DEBUG_EDIT",
-        edit: {
-          kind: "CREATE_CARD_FROM_DEFINITION",
-          definition: pendingDrag.definition,
-          destination: target,
-          createdAtMs: Date.now(),
-        },
-        sourceSurface: "pool-viewer",
-      });
+      handleCommand(
+        createPoolCardDropCommand(pendingDrag.definition, target, Date.now()),
+      );
       setPendingDrag(null);
       return;
     }
@@ -1005,19 +999,13 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     }
 
     if (pendingDrag.kind === "pool-card") {
-      handleCommand({
-        id: "DEBUG_EDIT",
-        edit: {
-          kind: "CREATE_CARD_FROM_DEFINITION",
-          definition: pendingDrag.definition,
-          destination:
-            zone === "deck"
-              ? { side, zone: "deck", position: "top" }
-              : { side, zone },
-          createdAtMs: Date.now(),
-        },
-        sourceSurface: "pool-viewer",
-      });
+      handleCommand(
+        createPoolCardDropCommand(
+          pendingDrag.definition,
+          zone === "deck" ? { side, zone: "deck", position: "top" } : { side, zone },
+          Date.now(),
+        ),
+      );
       setPendingDrag(null);
       return;
     }
@@ -1327,7 +1315,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           }
         />
       ) : null}
-      <PoolViewer
+      <PoolViewerFloatingController
         cardDatabase={cardDatabase}
         draftState={questState.draftState}
         resolvedPackage={questState.resolvedPackage}

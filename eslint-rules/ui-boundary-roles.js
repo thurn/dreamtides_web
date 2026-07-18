@@ -28,13 +28,10 @@ const fileRoles = {
   "src/vendor/boxicons/boxicons-logos.css": OUTER_UI_ROLES.VENDOR_ASSET,
 
   "src/components/BattleSiteRoute.tsx": OUTER_UI_ROLES.APP_SHELL,
-  "src/components/CardDisplay.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
-  "src/components/CardOverlay.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
   "src/components/CumulusQuestChrome.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/components/DreamscapeQuestMenu.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/components/ErrorBoundary.tsx": OUTER_UI_ROLES.EMERGENCY_FALLBACK,
   "src/components/FrontDoorRouter.tsx": OUTER_UI_ROLES.APP_SHELL,
-  "src/components/PoolViewer.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
   "src/components/ScreenRouter.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/components/card-browser/BrowserCard.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
   "src/components/card-browser/CardBrowserGrid.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
@@ -52,6 +49,7 @@ const fileRoles = {
   "src/battle/components/CumulusBattleForeseeOverlay.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/battle/components/CumulusBattleZoneBrowser.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/battle/components/PlayableBattleScreen.tsx": OUTER_UI_ROLES.APP_SHELL,
+  "src/battle/components/PoolViewerFloatingController.tsx": OUTER_UI_ROLES.APP_SHELL,
 
   "src/coop/BounceToast.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/coop/ConfigGateScreen.tsx": OUTER_UI_ROLES.APP_SHELL,
@@ -82,7 +80,7 @@ const fileRoles = {
 
 for (const name of [
   "AtlasScreenAdapter", "BattleStartScreenAdapter", "CardShopSiteScreenAdapter",
-  "DesktopDeckViewerAdapter", "DraftSiteScreenAdapter", "DreamAugurySiteScreenAdapter",
+  "DesktopDeckViewerAdapter", "DraftSiteScreenAdapter", "DreamAugurySiteScreenAdapter", "PoolViewerAdapter",
   "DreamscapeScreenAdapter", "DreamsignBazaarSiteScreenAdapter",
   "DreamsignRevelationScreenAdapter", "DuplicationSiteScreenAdapter",
   "LoadingScreenAdapter",

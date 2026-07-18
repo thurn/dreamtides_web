@@ -7,7 +7,8 @@ import {
   makeBattleTestSite,
   makeBattleTestState,
 } from "../test-support";
-import { createPlayCardFromHandCommand } from "./battle-ui-commands";
+import { createPlayCardFromHandCommand, createPoolCardDropCommand } from "./battle-ui-commands";
+import { createBaseBattleDeckCardDefinition } from "../card-definition";
 
 function board() {
   return createInitialBattleState(
@@ -111,6 +112,30 @@ describe("createPlayCardFromHandCommand", () => {
 
     expect(command).toMatchObject({
       edit: { destination: { side: "player", zone: "backRank", slotId: "B0" } },
+    });
+  });
+});
+
+describe("createPoolCardDropCommand", () => {
+  it("preserves the UUID-resolved card definition in the event-sourced deck mutation", () => {
+    const card = [...makeBattleTestCardDatabase().values()][0];
+    if (card === undefined) throw new Error("expected a fixture card");
+    const definition = createBaseBattleDeckCardDefinition(card);
+    const command = createPoolCardDropCommand(
+      definition,
+      { side: "player", zone: "deck", position: "top" },
+      42,
+    );
+
+    expect(command).toMatchObject({
+      id: "DEBUG_EDIT",
+      sourceSurface: "pool-viewer",
+      edit: {
+        kind: "CREATE_CARD_FROM_DEFINITION",
+        definition: { cardId: definition.cardId },
+        destination: { side: "player", zone: "deck", position: "top" },
+        createdAtMs: 42,
+      },
     });
   });
 });

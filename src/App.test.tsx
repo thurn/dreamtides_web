@@ -113,8 +113,8 @@ const poolViewerMock = vi.fn<(props: PoolViewerMockProps) => ReactNode>(
   ),
 );
 
-vi.mock("./components/PoolViewer", () => ({
-  PoolViewer: (props: PoolViewerMockProps) => poolViewerMock(props),
+vi.mock("./screens/cumulus_adapters/PoolViewerAdapter", () => ({
+  PoolViewerAdapter: (props: PoolViewerMockProps) => poolViewerMock(props),
 }));
 
 interface StartingDeckOverlayMockProps {

@@ -6,7 +6,7 @@ export type CardType = "Character" | "Event";
 /**
  * Card rarity in Dreamtides. Most cards have no rarity; the buckets that
  * exist are `Legendary` (powerful cards that get the gold frame in
- * `CardDisplay`), `Starter` (cards that seed the fixed starter deck), and
+ * `GameCard`), `Starter` (cards that seed the fixed starter deck), and
  * `Special` (bane content like Nightmare that journey effects reference by
  * name to add to the player's deck — see `addBaneCardById` and
  * `pushTemporaryBaneGrant`). Sourced from `data/tabula/cards_v2.toml`

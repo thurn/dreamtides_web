@@ -18,7 +18,7 @@ The compact circled number used in dense card rows and inline rules text for spa
 | --- | --- | --- | --- | --- |
 | `variant` | `PipBadgeVariant` = `"energy" \| "spark"` | yes | — | Which pip this is — picks the fill color. |
 | `value` | `string` | yes | — | The displayed value (string so callers can pass `"X"` for variable cost). |
-| `size` | `"sm" \| "md"` | no | `sm` | `"sm"` matches the small card stat row; `"md"` matches the larger `large` card variant in `CardDisplay`. Sizes are tuned so the number stays readable but the badge does not overpower adjacent text. |
+| `size` | `"sm" \| "md"` | no | `sm` | `"sm"` matches the small card stat row; `"md"` matches the larger `large` GameCard variant. Sizes are tuned so the number stays readable but the badge does not overpower adjacent text. |
 | `scale` | `number` | no | `1` | Multiplier for card renderers that need the pip to follow card text scale. |
 | `ariaLabel` | `string` | no | — | Optional accessible label for screen readers. If omitted, the badge uses a sensible default for its variant. |
 | `tooltip` | `string` | no | — | Optional hover/focus tooltip. When provided, the badge becomes its own hover anchor. A short plain-language description string. |

@@ -11,8 +11,6 @@ const rows = [
   ["src/battle/components/BattleFigmentCreator.tsx", "cumulus/no-raw-interactive-elements", 11], ["src/battle/components/BattleFigmentCreator.tsx", "cumulus/no-classname-in-product-ui", 36], ["src/battle/components/BattleFigmentCreator.tsx", "cumulus/no-hardcoded-values", 2],
   ["src/battle/components/BattleGameCard.tsx", "cumulus/no-classname-in-product-ui", 8], ["src/battle/components/BattleGameCard.tsx", "cumulus/no-raw-interactive-elements", 1],
   ["src/battle/components/BattleLogDrawer.tsx", "cumulus/no-classname-in-product-ui", 27], ["src/battle/components/BattleLogDrawer.tsx", "cumulus/no-raw-interactive-elements", 5],
-  ["src/components/CardOverlay.tsx", "cumulus/no-classname-in-product-ui", 2], ["src/components/CardOverlay.tsx", "cumulus/no-hardcoded-values", 1],
-  ["src/components/PoolViewer.tsx", "cumulus/no-hardcoded-values", 44], ["src/components/PoolViewer.tsx", "cumulus/no-untokenized-lengths", 20], ["src/components/PoolViewer.tsx", "cumulus/no-raw-interactive-elements", 4], ["src/components/PoolViewer.tsx", "cumulus/no-classname-in-product-ui", 8],
   ["src/editor/EditableCard.tsx", "cumulus/valid-token-references", 1],
   ["src/editor/DreamwellEditorPreview.tsx", "cumulus/valid-token-references", 3], ["src/editor/DreamwellEditorPreview.tsx", "cumulus/no-inline-glass", 1],
   ["src/editor/TidesDetailView.tsx", "cumulus/no-raw-icon-classes", 3], ["src/editor/TidesListView.tsx", "cumulus/no-raw-icon-classes", 1],

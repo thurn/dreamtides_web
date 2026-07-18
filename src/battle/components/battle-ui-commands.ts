@@ -14,6 +14,7 @@ import type {
   BattleFieldSlotAddress,
   BattlefieldZone,
 } from "../types";
+import type { BattleDeckCardDefinition } from "../types";
 
 type MoveZoneDebugCommand = {
   id: "DEBUG_EDIT";
@@ -147,6 +148,24 @@ export function createMoveCardToDeckCommand(
       destination: { side, zone: "deck", position },
     },
     sourceSurface,
+  };
+}
+
+/** Creates the event-sourced debug edit used when a UUID-resolved pool card is dropped into battle. */
+export function createPoolCardDropCommand(
+  definition: BattleDeckCardDefinition,
+  destination: BattleDebugZoneDestination,
+  createdAtMs: number,
+): BattleCommand {
+  return {
+    id: "DEBUG_EDIT",
+    edit: {
+      kind: "CREATE_CARD_FROM_DEFINITION",
+      definition,
+      destination,
+      createdAtMs,
+    },
+    sourceSurface: "pool-viewer",
   };
 }
 
