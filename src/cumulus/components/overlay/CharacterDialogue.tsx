@@ -22,6 +22,13 @@ const DIALOGUE_PORTRAIT_SIZE: Record<CharacterDialogueSize, number> = {
   prominent: 150,
 };
 
+const DIALOGUE_MAX_WIDTH: Record<CharacterDialogueSize, number> = {
+  // Keeps a two-line call close to its authored trailing inset on mobile.
+  compact: 300,
+  // Lets a medium-length call remain one line at the prominent desktop scale.
+  prominent: 700,
+};
+
 /** Art identities that semantically represent a speaking character. */
 export type CharacterDialoguePortraitArt = Extract<
   ArtRef,
@@ -70,6 +77,7 @@ export function CharacterDialogue({
   const reduceMotion = useReducedMotion() === true;
   const targetOpacity = visible ? 1 : 0;
   const portraitSize = DIALOGUE_PORTRAIT_SIZE[size];
+  const maxWidth = DIALOGUE_MAX_WIDTH[size];
 
   return (
     <motion.section
@@ -88,7 +96,7 @@ export function CharacterDialogue({
         alignItems: "center",
         columnGap: token("--space-4"),
         width: "100%",
-        maxWidth: 640,
+        maxWidth,
         margin: 0,
         pointerEvents: "none",
       }}

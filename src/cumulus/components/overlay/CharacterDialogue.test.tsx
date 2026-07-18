@@ -78,6 +78,7 @@ describe("CharacterDialogue", () => {
     expect(dialogue?.getAttribute("aria-hidden")).toBe("false");
     expect(dialogue?.style.opacity).toBe("0");
     expect(dialogue?.style.gridTemplateColumns).toBe("64px minmax(0, 1fr)");
+    expect(dialogue?.style.maxWidth).toBe("300px");
     expect(bubble?.style.padding).toBe(
       "var(--space-5) var(--space-5) var(--space-5) calc(14px + var(--space-5))",
     );
@@ -127,6 +128,7 @@ describe("CharacterDialogue", () => {
     );
     expect(dialogue?.dataset.characterDialogueSize).toBe("prominent");
     expect(dialogue?.style.gridTemplateColumns).toBe("150px minmax(0, 1fr)");
+    expect(dialogue?.style.maxWidth).toBe("700px");
     expect(bubble?.dataset.speechBubbleSize).toBe("prominent");
     expect(bubble?.style.zoom).toBe("1.25");
     expect(bubblePath?.getAttribute("d")).toContain("L 0 31");
