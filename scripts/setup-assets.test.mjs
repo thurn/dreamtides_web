@@ -112,6 +112,11 @@ describe("setupAssets", () => {
     const imageCacheDir = join(tempRoot, "image-cache");
     const dreamcallerArtDir = join(tempRoot, "dreamcaller-art");
     const dreamsignArtDir = join(tempRoot, "dreamsign-art");
+    const mainMenuBackgroundArtPath = join(
+      tempRoot,
+      "licensed-art",
+      "main-menu-background.jpg",
+    );
     const cardTomlPath = join(tempRoot, "cards_v2.toml");
     const dreamcallerV2TomlPath = join(tempRoot, "dreamcallers_v2.toml");
     const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
@@ -120,10 +125,12 @@ describe("setupAssets", () => {
     mkdirSync(imageCacheDir, { recursive: true });
     mkdirSync(dreamcallerArtDir, { recursive: true });
     mkdirSync(dreamsignArtDir, { recursive: true });
+    mkdirSync(dirname(mainMenuBackgroundArtPath), { recursive: true });
     mkdirSync(dirname(cachedImagePath), { recursive: true });
     writeFileSync(cachedImagePath, "fake-webp");
     writeFileSync(join(dreamcallerArtDir, "0007.png"), "fake-png");
     writeFileSync(join(dreamsignArtDir, "test-sign.png"), "fake-png");
+    writeFileSync(mainMenuBackgroundArtPath, "fake-jpg");
     writeFileSync(
       join(dreamsignArtDir, "alt_text.txt"),
       "test-sign.png\tSmall idol with a violet glow.\n",
@@ -201,6 +208,7 @@ rendered-text = "Use the canonical Dreamsign text."
       imageCacheDir,
       dreamcallerArtDir,
       dreamsignArtDir,
+      mainMenuBackgroundArtPath,
     });
 
     const cards = JSON.parse(
@@ -212,6 +220,9 @@ rendered-text = "Use the canonical Dreamsign text."
     const dreamsigns = JSON.parse(
       readFileSync(join(publicDir, "dreamsign-data.json"), "utf8"),
     );
+    expect(
+      readFileSync(join(publicDir, "main-menu", "background.jpg"), "utf8"),
+    ).toBe("fake-jpg");
 
     expect(cards).toEqual([
       {

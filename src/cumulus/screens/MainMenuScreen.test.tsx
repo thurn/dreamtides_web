@@ -66,7 +66,7 @@ describe("Cumulus MainMenuScreen", () => {
       "Dreamtides",
     );
     expect(menu?.style.backgroundSize).toBe("cover");
-    expect(menu?.style.backgroundImage).toContain("shutterstock_1891048579");
+    expect(menu?.style.backgroundImage).toContain("/main-menu/background.jpg");
     expect(
       Array.from(container.querySelectorAll("[data-main-menu-actions] button")).map(
         (button) => button.textContent,

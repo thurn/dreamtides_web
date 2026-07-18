@@ -9,7 +9,6 @@
 // The id → URL mapping lives here, once.
 
 import { assetUrl } from "../../runtime/asset-url";
-import mainMenuBackgroundUrl from "../assets/shutterstock_1891048579.jpg";
 
 /**
  * A reference to a piece of hosted game art, by identity rather than URL. Each
@@ -59,7 +58,7 @@ export type ArtRef =
 export function resolveArtRef(ref: ArtRef): string {
   switch (ref.kind) {
     case "main-menu-background":
-      return mainMenuBackgroundUrl;
+      return assetUrl("/main-menu/background.jpg");
     case "dreamsign":
       return assetUrl(`/dreamsigns/${ref.imageName}`);
     case "dreamcaller":

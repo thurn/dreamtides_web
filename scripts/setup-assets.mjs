@@ -39,6 +39,13 @@ const DREAMSIGN_ART_DIR = join(
   "outlined",
 );
 const JOURNEY_ART_DIR = join(homedir(), "Documents", "shutterstock", "images_journeys");
+const MAIN_MENU_BACKGROUND_ART_PATH = join(
+  homedir(),
+  "Documents",
+  "shutterstock",
+  "quest_prototype_assets",
+  "main-menu-background.jpg",
+);
 
 // Dream Atlas art. Each dreamscape ships a rectangular scene image
 // (`<id>.png`, the hover-card art) and a circular node icon (`<id>_icon.png`).
@@ -949,6 +956,7 @@ export function setupAssets({
   dreamcallerArtDir = defaultDreamcallerArtDir(),
   dreamsignArtDir = DREAMSIGN_ART_DIR,
   journeyArtDir = JOURNEY_ART_DIR,
+  mainMenuBackgroundArtPath = MAIN_MENU_BACKGROUND_ART_PATH,
   cardFrameArtDir = CARD_FRAME_ART_DIR,
   dreamscapeSceneArtDir = DREAMSCAPE_SCENE_ART_DIR,
   dreamscapeIconArtDir = DREAMSCAPE_ICON_ART_DIR,
@@ -959,6 +967,7 @@ export function setupAssets({
   const dreamcallersDir = join(publicDir, "dreamcallers");
   const dreamsignsDir = join(publicDir, "dreamsigns");
   const journeysDir = join(publicDir, "journeys");
+  const mainMenuDir = join(publicDir, "main-menu");
   const dreamscapesArtDir = join(publicDir, "dreamscapes");
   const dreamscapeIconsDir = join(publicDir, "dreamscape-icons");
   const dreamGuidesDir = join(publicDir, "dream-guides");
@@ -1745,6 +1754,21 @@ export function setupAssets({
     writeFileSync(journeyExtensionJsonPath, "{}\n");
     console.warn(
       `  Warning: journey art directory not found at ${journeyArtDir} — image URLs will 404`,
+    );
+  }
+
+  // The licensed main-menu background is stored with the other local art and
+  // linked into the ignored public asset tree for local serving and upload.
+  recreateDir(mainMenuDir);
+  if (existsSync(mainMenuBackgroundArtPath)) {
+    symlinkSync(
+      mainMenuBackgroundArtPath,
+      join(mainMenuDir, "background.jpg"),
+    );
+    console.log("Linked main-menu background image");
+  } else {
+    console.warn(
+      `  Warning: missing main-menu background at ${mainMenuBackgroundArtPath}`,
     );
   }
 

@@ -44,6 +44,7 @@ const ART_DIRS = [
   "dreamcallers",
   "dreamsigns",
   "journeys",
+  "main-menu",
   "dreamscapes",
   "dreamscape-icons",
   "dream-guides",

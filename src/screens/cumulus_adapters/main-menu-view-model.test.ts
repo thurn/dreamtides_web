@@ -7,7 +7,7 @@ describe("buildMainMenuView", () => {
     const view = buildMainMenuView();
 
     expect(view.title).toBe("Dreamtides");
-    expect(resolveArtRef(view.background)).toContain("shutterstock_1891048579");
+    expect(resolveArtRef(view.background)).toBe("/main-menu/background.jpg");
     expect(view.actions.map(({ id, label }) => [id, label])).toEqual([
       ["new-journey", "New Journey"],
       ["dream-codex", "Dream Codex"],
