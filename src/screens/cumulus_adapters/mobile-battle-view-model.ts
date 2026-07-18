@@ -17,7 +17,7 @@ import {
   type BattleSide,
 } from "../../battle/types";
 import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
-import { asCardId } from "../../types/card-identity";
+import { dreamwellCardModel } from "../../battle/ui/dreamwell-card-model";
 import type { PendingPrompt } from "../../rules/battle/fold";
 import {
   type MobileBattleCardView,
@@ -223,20 +223,9 @@ function buildDreamwellView(
     return null;
   }
 
-  const cardId = asCardId(definition.id);
   return {
     side,
-    model: {
-      cardId,
-      displaySnapshot: {
-        id: cardId,
-        name: definition.name,
-        renderedText: definition.renderedText,
-        energyAdded: definition.energyAdded,
-        imageNumber: definition.imageNumber,
-        ...(definition.art === undefined ? {} : { art: definition.art }),
-      },
-    },
+    model: dreamwellCardModel(definition),
   };
 }
 

@@ -21,7 +21,7 @@ import {
   DREAMWELL_ART_SCALE_MAX,
   DREAMWELL_ART_SCALE_MIN,
   dreamwellArtPanStep,
-} from "../components/DreamwellCardView";
+} from "./DreamwellEditorPreview";
 import { cardImageUrl, hasAssignedImage } from "../data/card-database";
 import type { ArtCrop } from "../types/cards";
 import CardTagEditor from "./CardTagEditor";

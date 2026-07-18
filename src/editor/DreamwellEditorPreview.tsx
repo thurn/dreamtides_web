@@ -24,7 +24,8 @@ import { renderRulesText } from "../cumulus/components/card/RulesText";
  * is supplied the frosted box is always rendered, so a card with no rules text
  * still offers a target to start an inline edit.
  */
-export interface DreamwellCardViewSlots {
+/** Editor-only inline-editing surfaces for a Dreamwell card preview. */
+export interface DreamwellEditorPreviewSlots {
   name?: (defaultNode: ReactNode) => ReactNode;
   rulesText?: (defaultNode: ReactNode) => ReactNode;
   energy?: (defaultNode: ReactNode) => ReactNode;
@@ -44,7 +45,7 @@ const ENERGY_ORB_RATIO = 0.16;
  * {@link import("../battle/types").DreamwellCardDefinition}, kept structural so
  * the component does not depend on the battle module.
  */
-export interface DreamwellCardViewData {
+export interface DreamwellEditorPreviewData {
   id: string;
   name: string;
   renderedText: string;
@@ -201,8 +202,8 @@ const ART_BAND_MAX_TOP_PCT = 92;
 const ART_RISE_DEFAULT_CQW = 14.5;
 
 /**
- * A Dreamwell card, rendered in landscape (3:2) but wearing the same chrome as a
- * regular {@link import("../cumulus/components/card/CardView").CardView}: full-bleed art under a floating,
+ * An editor-owned Dreamwell card preview, rendered in landscape (3:2) with the
+ * editor's inline-editing affordances over its full-bleed art and floating,
  * frosted panel. The Dreamwell energy orb (the energy flame in **purple**, white
  * number) floats in the top-right corner the way a regular card's energy cost orb
  * does; the `energy-added` value is the orb's number. A bottom-anchored frosted
@@ -218,19 +219,15 @@ const ART_RISE_DEFAULT_CQW = 14.5;
  * (a circular 3.6% of width). A `cqw` radius would resolve against an ancestor
  * container and blow the corner up on wide layouts.
  */
-export function DreamwellCardView({
+export function DreamwellEditorPreview({
   card,
-  className,
-  style,
   slots,
 }: {
-  card: DreamwellCardViewData;
-  className?: string;
-  style?: CSSProperties;
-  slots?: DreamwellCardViewSlots;
+  card: DreamwellEditorPreviewData;
+  slots?: DreamwellEditorPreviewSlots;
 }) {
   const rootRef = useRef<HTMLDivElement | null>(null);
-  // `DreamwellCardView` renders on editor routes that are not wrapped in an
+  // `DreamwellEditorPreview` renders on editor routes that are not wrapped in an
   // error boundary, so a `card` whose `renderedText` is missing (malformed or
   // stale data) would otherwise take down the whole route with an uncaught
   // throw. Normalize the field once so every consumer below sees a string.
@@ -419,7 +416,6 @@ export function DreamwellCardView({
     <div
       ref={rootRef}
       data-dreamwell-card={card.id}
-      className={className}
       style={
         {
           // Art-rise knob: how far the art is lifted up the frame so its lower
@@ -446,7 +442,6 @@ export function DreamwellCardView({
           // outer ring); the card edge reads from the soft inner rim below.
           boxShadow: "0 4px 14px rgba(0, 0, 0, 0.55)",
           userSelect: "none",
-          ...style,
         } as CSSProperties
       }
     >

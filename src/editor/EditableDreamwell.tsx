@@ -1,5 +1,5 @@
 import { useRef, type ReactNode } from "react";
-import { DreamwellCardView } from "../components/DreamwellCardView";
+import { DreamwellEditorPreview } from "./DreamwellEditorPreview";
 import EditableField from "./EditableField";
 import {
   dreamwellPreviewCard,
@@ -52,7 +52,7 @@ function wholeNumberDraft(value: EditableFieldValue): number | null {
 
 /**
  * One Dreamwell card in the editor grid. The card itself is the in-game
- * {@link DreamwellCardView}, with its name heading, rules box, and energy orb
+ * {@link DreamwellEditorPreview}, with its name heading, rules box, and energy orb
  * wrapped in inline {@link EditableField} editors — double-click any of them to
  * edit in place, exactly like the card, dreamsign, and figment editors. The tier
  * is edited inline through the caption beneath the card. Edit mode instead opens
@@ -164,7 +164,7 @@ export default function EditableDreamwell({
               borderRadius: "12px",
             }}
           >
-            <DreamwellCardView card={visibleCard} />
+            <DreamwellEditorPreview card={visibleCard} />
           </button>
         </article>
       ) : (
@@ -174,7 +174,7 @@ export default function EditableDreamwell({
           data-editor-dreamwell-id={record.id}
           style={{ display: "block", position: "relative" }}
         >
-          <DreamwellCardView card={visibleCard} slots={slots} />
+          <DreamwellEditorPreview card={visibleCard} slots={slots} />
         </article>
       )}
 

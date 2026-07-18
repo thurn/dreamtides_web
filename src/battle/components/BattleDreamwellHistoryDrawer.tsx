@@ -1,8 +1,6 @@
 import { useMemo } from "react";
-import {
-  DreamwellCardView,
-  type DreamwellCardViewData,
-} from "../../components/DreamwellCardView";
+import { DreamwellCard } from "../../cumulus/components/battle/DreamwellCard";
+import { dreamwellCardModel } from "../ui/dreamwell-card-model";
 import type { DreamwellCardDefinition } from "../types";
 
 /**
@@ -24,23 +22,16 @@ export function BattleDreamwellHistoryDrawer({
   isOpen: boolean;
   onClose: () => void;
 }) {
-  const drawnCards = useMemo<readonly DreamwellCardViewData[]>(() => {
+  const drawnCards = useMemo(() => {
     const drawnCount = Math.min(dreamwellDeckIndex, dreamwellDeck.length);
-    const cards: DreamwellCardViewData[] = [];
+    const cards: { readonly drawIndex: number; readonly definition: DreamwellCardDefinition }[] = [];
     // Walk from the most-recent draw back to the first so newest sits on top.
     for (let index = drawnCount - 1; index >= 0; index -= 1) {
       const definition = dreamwellDeck[index];
       if (definition === undefined) {
         continue;
       }
-      cards.push({
-        id: definition.id,
-        name: definition.name,
-        renderedText: definition.renderedText,
-        energyAdded: definition.energyAdded,
-        imageNumber: definition.imageNumber,
-        art: definition.art,
-      });
+      cards.push({ drawIndex: index, definition });
     }
     return cards;
   }, [dreamwellDeck, dreamwellDeckIndex]);
@@ -65,16 +56,16 @@ export function BattleDreamwellHistoryDrawer({
         {drawnCards.length === 0 ? (
           <div className="log-empty">No Dreamwell cards drawn yet.</div>
         ) : (
-          drawnCards.map((card, index) => (
+          drawnCards.map(({ drawIndex, definition }) => (
             <div
               // Draw order is the stable identity here: the same Dreamwell card
               // id can legitimately recur once the shared deck cycles, so the
               // sequential position is what keeps each entry distinct.
-              key={`${String(drawnCards.length - index)}:${card.id}`}
+              key={`${String(drawIndex)}:${definition.id}`}
               className="dreamwell-history-entry"
-              data-battle-dreamwell-history-card={card.id}
+              data-battle-dreamwell-history-card={definition.id}
             >
-              <DreamwellCardView card={card} />
+              <DreamwellCard model={dreamwellCardModel(definition)} />
             </div>
           ))
         )}

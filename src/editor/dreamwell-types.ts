@@ -1,4 +1,4 @@
-import type { DreamwellCardViewData } from "../components/DreamwellCardView";
+import type { DreamwellEditorPreviewData } from "./DreamwellEditorPreview";
 import type { ArtCrop } from "../types/cards";
 
 /**
@@ -99,13 +99,13 @@ export interface DreamwellEditorApiClient {
 }
 
 /**
- * Build the {@link DreamwellCardViewData} the in-game Dreamwell card frame
- * renders for an editor record, so the editor preview is pixel-identical to the
- * battle card.
+ * Build the data the editor-owned Dreamwell preview renders for an editor
+ * record. The preview retains inline mutation affordances that belong solely to
+ * the editor surface.
  */
 export function dreamwellPreviewCard(
   record: EditorDreamwellRecord,
-): DreamwellCardViewData {
+): DreamwellEditorPreviewData {
   return {
     id: record.id,
     name: record.name,

@@ -13,7 +13,6 @@ const rows = [
   ["src/battle/components/BattleLogDrawer.tsx", "cumulus/no-classname-in-product-ui", 27], ["src/battle/components/BattleLogDrawer.tsx", "cumulus/no-raw-interactive-elements", 5],
   ["src/components/CardOverlay.tsx", "cumulus/no-classname-in-product-ui", 2], ["src/components/CardOverlay.tsx", "cumulus/no-hardcoded-values", 1],
   ["src/components/DreamscapeQuestMenu.tsx", "cumulus/no-raw-icon-classes", 6], ["src/components/DreamscapeQuestMenu.tsx", "cumulus/no-untokenized-lengths", 2],
-  ["src/components/DreamwellCardView.tsx", "cumulus/no-hardcoded-values", 22], ["src/components/DreamwellCardView.tsx", "cumulus/valid-token-references", 3], ["src/components/DreamwellCardView.tsx", "cumulus/no-inline-glass", 1], ["src/components/DreamwellCardView.tsx", "cumulus/no-classname-in-product-ui", 1],
   ["src/components/PoolViewer.tsx", "cumulus/no-hardcoded-values", 44], ["src/components/PoolViewer.tsx", "cumulus/no-untokenized-lengths", 20], ["src/components/PoolViewer.tsx", "cumulus/no-raw-interactive-elements", 4], ["src/components/PoolViewer.tsx", "cumulus/no-classname-in-product-ui", 8],
   ["src/components/QuestUtilityMenu.tsx", "cumulus/no-raw-icon-classes", 6], ["src/components/QuestUtilityMenu.tsx", "cumulus/no-raw-interactive-elements", 1], ["src/components/QuestUtilityMenu.tsx", "cumulus/no-classname-in-product-ui", 4], ["src/components/QuestUtilityMenu.tsx", "cumulus/no-untokenized-lengths", 16],
   ["src/coop/BounceToast.tsx", "cumulus/no-raw-interactive-elements", 1], ["src/coop/BounceToast.tsx", "cumulus/no-hardcoded-values", 4],
@@ -21,6 +20,7 @@ const rows = [
   ["src/coop/UnreadableRoomScreen.tsx", "cumulus/no-classname-in-product-ui", 6], ["src/coop/UnreadableRoomScreen.tsx", "cumulus/no-hardcoded-values", 11], ["src/coop/UnreadableRoomScreen.tsx", "cumulus/no-raw-interactive-elements", 1],
   ["src/coop/VersionGateScreen.tsx", "cumulus/no-classname-in-product-ui", 6], ["src/coop/VersionGateScreen.tsx", "cumulus/no-hardcoded-values", 11], ["src/coop/VersionGateScreen.tsx", "cumulus/no-raw-interactive-elements", 1],
   ["src/editor/EditableCard.tsx", "cumulus/valid-token-references", 1],
+  ["src/editor/DreamwellEditorPreview.tsx", "cumulus/valid-token-references", 3], ["src/editor/DreamwellEditorPreview.tsx", "cumulus/no-inline-glass", 1],
   ["src/editor/TidesDetailView.tsx", "cumulus/no-raw-icon-classes", 3], ["src/editor/TidesListView.tsx", "cumulus/no-raw-icon-classes", 1],
   ["src/screens/CardSourceOverlay.tsx", "cumulus/no-inline-glass", 1],
 ];

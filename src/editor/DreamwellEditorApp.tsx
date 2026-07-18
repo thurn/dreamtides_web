@@ -12,10 +12,10 @@ import EditableDreamwell from "./EditableDreamwell";
 import FocusedCardEditor from "./FocusedCardEditor";
 import type { FocusedSaveStatus } from "./FocusedCardEditor";
 import {
-  DreamwellCardView,
+  DreamwellEditorPreview,
   DEFAULT_DREAMWELL_ART_CROP,
-  type DreamwellCardViewData,
-} from "../components/DreamwellCardView";
+  type DreamwellEditorPreviewData,
+} from "./DreamwellEditorPreview";
 import {
   beginFieldEdit,
   cancelFieldEdit,
@@ -129,10 +129,10 @@ function validateFieldSave(
  * their own fields once committed; the art crop and image through live controls.
  */
 function dreamwellPreviewWithDrafts(
-  preview: DreamwellCardViewData,
+  preview: DreamwellEditorPreviewData,
   drafts: Record<string, EditableFieldValue>,
-): DreamwellCardViewData {
-  const next: DreamwellCardViewData = { ...preview };
+): DreamwellEditorPreviewData {
+  const next: DreamwellEditorPreviewData = { ...preview };
   const name = drafts.name;
   if (typeof name === "string" && name.trim().length > 0) {
     next.name = name;
@@ -752,7 +752,7 @@ export default function DreamwellEditorApp({
             imageError: artSaveError,
           }}
           renderPreview={(live) => (
-            <DreamwellCardView
+            <DreamwellEditorPreview
               card={{
                 ...dreamwellPreviewWithDrafts(
                   dreamwellPreviewCard(artEditorRecord),

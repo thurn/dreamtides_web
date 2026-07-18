@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/dreamwell-card`
 
-Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 
 The static landscape card drawn from the Dreamwell: UUID-keyed art, energy grant, name, and complete rules text in one readable object.
 
