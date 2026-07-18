@@ -1525,6 +1525,116 @@
       "description": "Comma-separated stable deck entry UUIDs represented by the row."
     }
   ],
+  "ContextActionMenu": [
+    {
+      "name": "title",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Describes the card/pointer subject in the menu's header."
+    },
+    {
+      "name": "subtitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional structured secondary location/context copy."
+    },
+    {
+      "name": "actions",
+      "tsType": "readonly CommandMenuItem[]",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Commands available for the activated card or pointer target."
+    },
+    {
+      "name": "anchor",
+      "tsType": "ContextActionMenuAnchor",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Semantic location used to anchor the desktop pointer menu.",
+      "nested": {
+        "name": "ContextActionMenuAnchor",
+        "fields": [
+          {
+            "name": "kind",
+            "tsType": "\"point\" | \"sourceRect\"",
+            "optional": false,
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "onDismiss",
+      "tsType": "() => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Called after a leaf command, outside dismissal, or Escape."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional test selector for the root offering."
+    }
+  ],
+  "CornerUtilityMenu": [
+    {
+      "name": "trigger",
+      "tsType": "CornerUtilityMenuTrigger",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The fixed IconButton trigger rendered by the component.",
+      "nested": {
+        "name": "CornerUtilityMenuTrigger",
+        "fields": [
+          {
+            "name": "glyph",
+            "tsType": "Glyph",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "corner",
+            "tsType": "\"topStart\" | \"topEnd\"",
+            "optional": false,
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "actions",
+      "tsType": "readonly CommandMenuItem[]",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Root utility commands and their nested groups."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional test selector for the trigger."
+    }
+  ],
   "DeveloperRail": [
     {
       "name": "id",

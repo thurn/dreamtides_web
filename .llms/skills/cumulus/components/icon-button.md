@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/icon-button`
 
-Real consumers: **15** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **16** (imports outside `src/cumulus/docs/` and tests).
 
 The compact glyph-only glass disc — neutral or purple accent liquid glass, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls.
 

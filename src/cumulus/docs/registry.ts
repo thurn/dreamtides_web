@@ -20,6 +20,7 @@ import { cardOrderEditorDemo } from "./demos/card-order-editor";
 import { cardStatOrbDemo } from "./demos/card-stat-orb";
 import { cardTermDefinitionsDemo } from "./demos/card-term-definitions";
 import { characterDialogueDemo } from "./demos/character-dialogue";
+import { commandMenusDemo, contextActionMenuDemo } from "./demos/command-menus";
 import { dreamcallerPortraitDemo } from "./demos/dreamcaller-portrait";
 import { dreamwellCardDemo } from "./demos/dreamwell-card";
 import { dreamsignDemo } from "./demos/dreamsign";
@@ -157,6 +158,8 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   glassPanelDemo,
   glassDialogDemo,
   developerRailDemo,
+  commandMenusDemo,
+  contextActionMenuDemo,
   speechBubbleDemo,
   characterDialogueDemo,
   segmentedControlDemo,
