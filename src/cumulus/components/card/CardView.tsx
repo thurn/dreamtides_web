@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, RefObject } from "react";
+import "./CardView.css";
 import type { CardData, FrozenCardData, Rarity } from "../../../types/cards";
 import type { CardId } from "../../../types/card-identity";
 import {
@@ -305,7 +306,8 @@ function ArtLayers({
 }
 
 /** Card name / type / rules text colors and fonts, as CSS-var references so the
- * `.card-view` rule in `index.css` is the single place these are tuned. */
+ * component-owned `.card-view` rule in `CardView.css` is the single place these
+ * are tuned. */
 const NAME_COLOR = "var(--cv-name-color)";
 const TYPE_COLOR = "var(--cv-type-color)";
 const NAME_FONT_FAMILY = "var(--cv-name-font-family)";
@@ -365,7 +367,7 @@ const SPARK_ORB_RATIO = 0.16;
 
 /**
  * Rules-text ceiling size as a fraction of the rendered card width, matching
- * the `--cv-rules-font-cap` display cap in `index.css`. The fitter writes the
+ * the `--cv-rules-font-cap` display cap in `CardView.css`. The fitter writes the
  * chosen size straight onto the element, so this ceiling is the size a card
  * whose text fits renders at; the fit only drops below it when the text
  * overflows the reserved area. The text box reserves three lines at the larger
@@ -389,7 +391,7 @@ const RULES_MIN_FONT_FRACTION = 0.5;
 /**
  * Below this viewport width a card lifts its rules-text sizing. Mirrors the
  * app's desktop/mobile line (`DESKTOP_MIN_WIDTH` / `useIsDesktop`, 900px) and
- * the `@media (max-width: 899.98px)` block on `.card-view` in `index.css` that
+ * the `@media (max-width: 899.98px)` block on `.card-view` in `CardView.css` that
  * raises the matching box + render-cap CSS vars; the query and that media block
  * must move together so the JS fit ceiling and the CSS cap agree.
  *
@@ -432,7 +434,7 @@ function useMobileCardText(): boolean {
 
 /**
  * Visual treatment for a rarity bucket. A rarity adds a shimmer overlay
- * controlled via a CSS class in `index.css`. The shimmer keyframes honor
+ * controlled via a CSS class in `CardView.css`. The shimmer keyframes honor
  * `prefers-reduced-motion`.
  */
 interface RarityStyle {
@@ -1240,7 +1242,7 @@ function GameCardSurface(props: CardViewProps) {
       {/*
         Rarity shimmer overlay. Rendered only when the card has a rarity
         treatment that defines a CSS hook; the keyframe animation lives in
-        `index.css` so `prefers-reduced-motion` can pause the sweep while
+        `CardView.css` so `prefers-reduced-motion` can pause the sweep while
         keeping the static highlight gradient visible.
       */}
       {rarityStyle?.cssClass !== undefined &&

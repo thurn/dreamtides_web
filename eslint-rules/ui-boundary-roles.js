@@ -21,6 +21,8 @@ const fileRoles = {
   "src/main.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/index.css": OUTER_UI_ROLES.PENDING_PRESENTATION,
   "src/battle/battle.css": OUTER_UI_ROLES.PENDING_PRESENTATION,
+  "src/editor/card-editor.css": OUTER_UI_ROLES.OPERATOR_TOOL,
+  "src/editor/editable-figment.css": OUTER_UI_ROLES.OPERATOR_TOOL,
   "src/vendor/boxicons/boxicons.css": OUTER_UI_ROLES.VENDOR_ASSET,
   "src/vendor/boxicons/boxicons-filled.css": OUTER_UI_ROLES.VENDOR_ASSET,
   "src/vendor/boxicons/boxicons-logos.css": OUTER_UI_ROLES.VENDOR_ASSET,

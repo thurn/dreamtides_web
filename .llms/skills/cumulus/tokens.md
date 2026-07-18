@@ -228,11 +228,10 @@ The hardware-inset channel plus the static design floors that reserve chrome. Ap
 
 ## Production bridge
 
-Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-*) so shared elements (above all the game card) resolve identically in either system. In new Cumulus code prefer the semantic names above.
+Re-exports under the production codebase's --dt-* and --color-* token names. GameCard's --cv-* frame variables live in components/card/CardView.css so every card rendering context loads its complete presentation closure. In new Cumulus code prefer the semantic names above.
 
 | Token | Value | Notes |
 | --- | --- | --- |
-| `--cv-textbox-blur` | `11px` |  |
 | `--dt-bg-0` | `var(--primitive-void-800)` |  |
 | `--dt-bg-1` | `var(--primitive-void-700)` |  |
 | `--dt-bg-2` | `var(--primitive-plum-700)` |  |
@@ -258,11 +257,6 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 | `--color-gold-light` | `#fbbf24` |  |
 | `--color-essence-glow-strong` | `rgba(168, 85, 247, 0.5)` |  |
 | `--color-text` | `#e2e8f0` |  |
-| `--cv-rules-energy-color` | `var(--primitive-energy-400)` | #0ea5e9 |
-| `--cv-rules-spark-color` | `var(--primitive-spark-500)` | #f3c33f |
-| `--cv-rules-highlight-color` | `var(--primitive-spark-500)` | glossary-term amber |
-| `--cv-selection-color` | `var(--primitive-orange-500)` | #f97316 default ring |
-| `--cv-paragraph-gap` | `0.4em` | index.css — gap between ability blocks |
 
 ## Other
 

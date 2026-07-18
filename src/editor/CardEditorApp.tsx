@@ -1,5 +1,6 @@
 import { asCardName } from "../types/card-identity";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import "./card-editor.css";
 import {
   editorTomlParam,
   loadEditorCards,

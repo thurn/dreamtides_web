@@ -1,0 +1,13 @@
+/* Editor-only reveal-on-edit affordances for a figment preview. */
+.figment-edit-affordance {
+  border-radius: 6px;
+  border: 1px dashed transparent;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.figment-edit-affordance:hover,
+.figment-edit-affordance:focus-visible {
+  background: rgba(8, 6, 4, 0.55);
+  border-color: rgba(255, 255, 255, 0.45);
+  outline: none;
+}

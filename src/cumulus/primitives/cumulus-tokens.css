@@ -33,10 +33,10 @@
       directly by any code. They carry no `--primitive-` prefix and the
       lint rule does not touch them.
 
-   3. PRODUCTION BRIDGE — `--dt-*`, `--color-*`, `--cv-*`. Re-exports of
-      the same values under the production codebase's token names, so a
-      shared element (above all the game card) resolves identically in
-      either system. Semantic in nature; not lint-restricted.
+   3. PRODUCTION BRIDGE — `--dt-*`, `--color-*`. Re-exports of the same
+      values under the production codebase's token names. CardView's `--cv-*`
+      frame variables live in its component-owned stylesheet so every card
+      rendering context loads the full closure together.
 
    Trailing `/* @kind ... *\/` comments are preserved because the
    Primitives doc section reads them to group tokens for display.
@@ -78,19 +78,6 @@
   --display-cutout-left: 0px;
   --display-cutout-width: 0px;
   --display-cutout-height: 0px;
-}
-
-/* ================================================================
-   CARD-VIEW ELEMENT CHANNEL — declared on .card-view, not .cumulus.
-   ================================================================
-   The Cumulus CardView renders in NON-.cumulus trees too (CardDisplay,
-   card-browser/BrowserCard, editor/*, journey_v2/ui/*, and battle). So
-   this card-chrome token is scoped to the .card-view element the card
-   always wraps in — a .cumulus-scoped declaration would leave it unresolved
-   in the editor / card browser / battle / journey. It is the static blur
-   radius CardView reads for the frosted floating rules textbox backdrop. */
-.card-view {
-  --cv-textbox-blur: 11px;
 }
 
 /* ================================================================
@@ -267,16 +254,16 @@
      PRODUCTION ALIASES — cross-system bridge
      ================================================================
      The desktop/production codebase references its resources through
-     three other namespaces: --dt-* (atlas, atlas.css), --cv-* (card
-     chrome, index.css) and --color-* (global). The mobile DS holds the
+     two other namespaces: --dt-* (atlas, atlas.css) and --color-* (global).
+     CardView's local --cv-* variables remain in components/card/CardView.css.
+     The mobile DS holds the
      same VALUES under mobile-flavored names; these aliases re-export them
      under the production names so a shared element (above all the game
      card) resolves identically in either system. Add to these as more
      production token names surface (the --color-* global set is pending
      index.css).
 
-     NOTE: --dt-spark / --cv-rules-spark-color resolve to #f3c33f to match
-     production SPARK_ICON_COLOR. */
+     NOTE: --dt-spark resolves to #f3c33f to match production SPARK_ICON_COLOR. */
 
   /* --dt-* — atlas / shared (values authoritative from atlas.css `.dream-atlas`).
      The extra --dt-bg-* / -spark/-enemy/-player names are the parent ramp the
@@ -311,13 +298,6 @@
   --color-gold-light: #fbbf24;
   --color-essence-glow-strong: rgba(168, 85, 247, 0.5);
   --color-text: #e2e8f0;
-
-  /* --cv-* — card chrome / rules text (index.css) */
-  --cv-rules-energy-color: var(--primitive-energy-400);     /* #0ea5e9 */
-  --cv-rules-spark-color: var(--primitive-spark-500);       /* #f3c33f */
-  --cv-rules-highlight-color: var(--primitive-spark-500);   /* glossary-term amber */
-  --cv-selection-color: var(--primitive-orange-500);        /* #f97316 default ring */
-  --cv-paragraph-gap: 0.4em;                       /* index.css — gap between ability blocks */
 
   /* ================================================================
      SHARED CANONICAL LAYER — the one set every surface converges on

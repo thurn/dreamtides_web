@@ -542,8 +542,8 @@ export const TOKEN_GROUPS = [
   },
   {
     title: "Production bridge",
-    note: "Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-*) so shared elements (above all the game card) resolve identically in either system. In new Cumulus code prefer the semantic names above.",
-    prefixes: ["dt-", "color-", "cv-"],
+    note: "Re-exports under the production codebase's --dt-* and --color-* token names. GameCard's --cv-* frame variables live in components/card/CardView.css so every card rendering context loads its complete presentation closure. In new Cumulus code prefer the semantic names above.",
+    prefixes: ["dt-", "color-"],
   },
 ];
 

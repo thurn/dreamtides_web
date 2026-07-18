@@ -1,0 +1,26 @@
+@media (max-width: 520px) {
+  .card-editor-shell {
+    height: auto !important;
+    min-height: 100dvh;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    padding: 16px !important;
+  }
+
+  .card-editor-content {
+    min-height: auto !important;
+    padding-top: 12px !important;
+  }
+
+  .card-editor-loaded-content {
+    min-height: auto !important;
+    gap: 12px !important;
+  }
+
+  .card-editor-toolbar input,
+  .card-editor-toolbar select,
+  .card-editor-toolbar button {
+    max-width: 100%;
+    min-width: 0;
+  }
+}

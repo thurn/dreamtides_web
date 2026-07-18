@@ -1,6 +1,8 @@
 import { asCardName } from "../types/card-identity";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
+import "./editable-figment.css";
+import "./editable-figment.css";
 import {
   loadEditorFigments,
   saveEditorFigmentArt,

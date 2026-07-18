@@ -1,0 +1,191 @@
+/* GameCard owns this complete frame closure: rarity motion, component geometry,
+ * responsive typography, hover-entry motion, and figment/event variants. */
+
+/* Legendary card frame shimmer. */
+@keyframes card-rarity-legendary-shimmer {
+  0% {
+    background-position: -150% 0;
+  }
+  100% {
+    background-position: 150% 0;
+  }
+}
+
+.card-rarity-legendary__shimmer {
+  background: linear-gradient(
+    115deg,
+    rgba(255, 232, 150, 0) 35%,
+    rgba(255, 232, 150, 0.28) 50%,
+    rgba(255, 232, 150, 0) 65%
+  );
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  background-position: -150% 0;
+  mix-blend-mode: screen;
+  animation: card-rarity-legendary-shimmer 2.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-rarity-legendary__shimmer {
+    animation: none;
+    background: linear-gradient(
+      115deg,
+      rgba(255, 232, 150, 0) 35%,
+      rgba(255, 232, 150, 0.2) 50%,
+      rgba(255, 232, 150, 0) 65%
+    );
+    background-size: 100% 100%;
+    background-position: 0 0;
+  }
+}
+
+/*
+ * Rendered-card geometry knobs.
+ *
+ * The card root declares `container-type: inline-size`, so cqw units resolve
+ * against the rendered card width. These card-proportional values are authored
+ * component geometry, not screen tokens.
+ */
+.card-view {
+  container-type: inline-size;
+  background: var(--cv-backing, #0d0814);
+  --cv-textbox-blur: 11px;
+
+  /* Card-level radius follows its aspect ratio; descendant cqw radii resolve
+   * against this container as intended. */
+  --cv-radius: 3.6% / 2.57%;
+  --cv-textbox-radius: 2.35cqw;
+
+  /* Corner resource marks. */
+  --cv-energy-orb-size: 12cqw;
+  --cv-spark-orb-size: var(--cv-energy-orb-size);
+  --cv-energy-orb-font-size: 9cqw;
+  --cv-spark-orb-font-size: 9cqw;
+  --cv-energy-orb-top: 2cqw;
+  --cv-energy-orb-left: 5cqw;
+  --cv-battlefield-spark-top: 2.8cqw;
+  --cv-battlefield-spark-right: 1.6cqw;
+  --cv-energy-orb-overlap: 4.75cqw;
+
+  /* Top name bar geometry. */
+  --cv-header-inset: 3.2cqw;
+  --cv-namebar-top: 4.3cqw;
+  --cv-namebar-left: 10.2cqw;
+  --cv-namebar-height: 9cqw;
+  --cv-namebar-radius: 2.55cqw;
+  --cv-namebar-gap: 1.8cqw;
+  --cv-namebar-pad-left: 8.8cqw;
+  --cv-namebar-pad-left-multi: 18.6cqw;
+  --cv-namebar-pad-right: 1.5cqw;
+  --cv-namebar-bg: var(--cv-textbox-bg);
+  --cv-namebar-border: var(--cv-textbox-border);
+
+  /* Bottom-anchored rules box. */
+  --cv-textbox-inset: 3.25cqw;
+  --cv-textbox-max-height: 74%;
+  --cv-textbox-pad-y: 2.35cqw;
+  --cv-textbox-pad-x: 2.9cqw;
+  --cv-textbox-pad: var(--cv-textbox-pad-y) var(--cv-textbox-pad-x);
+  --cv-type-line-height: 1.2;
+  --cv-rules-line-height: 1.2;
+  --cv-paragraph-gap: 0.4em;
+  --cv-typelabel-gap: 1.1cqw;
+  --cv-textbox-rules-area-height: calc(
+    var(--cv-rules-font-size) * var(--cv-rules-line-height) * 3
+  );
+  --cv-textbox-height: calc(
+    var(--cv-textbox-rules-area-height) + 2 * var(--cv-textbox-pad-y)
+  );
+  --cv-textbox-expanded-height: calc(var(--cv-textbox-height) * 3);
+
+  /* Typography and its three-line readable rules-text cap. */
+  --cv-name-font-size: 5.2cqw;
+  --cv-type-font-size: 4.95cqw;
+  --cv-rules-font-size: 4.5cqw;
+  --cv-rules-font-cap: 4.2cqw;
+  --cv-name-font-family: "EB Garamond", Georgia, serif;
+  --cv-rules-font-family: "Fira Sans Condensed", "Inter", sans-serif;
+  --cv-name-color: #f6f6f5;
+  --cv-name-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  --cv-rules-text-shadow: 0 1px 1px rgba(0, 0, 0, 0.55);
+  --cv-type-color: #fbfbf9;
+  --cv-rules-color: #f1f1f0;
+  --cv-rules-energy-color: #0ea5e9;
+  --cv-rules-spark-color: #f3c33f;
+  --cv-rules-highlight-color: #f3c33f;
+
+  /* Default character-card chrome. */
+  --cv-textbox-bg: linear-gradient(
+    180deg,
+    rgba(6, 6, 7, 0.8) 0%,
+    rgba(2, 2, 3, 0.86) 100%
+  );
+  --cv-textbox-border: var(--primitive-line-mid, rgba(255, 255, 255, 0.14));
+}
+
+/* 899.98px is DESKTOP_MIN_WIDTH (900) − 0.02. It tracks CardView's
+ * MOBILE_CARD_TEXT_QUERY and use-is-desktop's DESKTOP_QUERY. */
+@media (max-width: 899.98px) {
+  .card-view {
+    --cv-rules-font-size: 5.2cqw;
+    --cv-rules-font-cap: 4.85cqw;
+    --cv-name-font-size: 6cqw;
+    --cv-type-font-size: 5.7cqw;
+    --cv-energy-orb-size: 13.85cqw;
+    --cv-energy-orb-font-size: 10.4cqw;
+    --cv-spark-orb-font-size: 10.4cqw;
+    --cv-energy-orb-overlap: 5.5cqw;
+    --cv-namebar-height: 10.4cqw;
+    --cv-namebar-radius: 2.95cqw;
+    --cv-namebar-gap: 2.08cqw;
+    --cv-namebar-pad-left: 10.15cqw;
+    --cv-namebar-pad-left-multi: 21.5cqw;
+    --cv-namebar-pad-right: 1.75cqw;
+  }
+}
+
+.hover-zoom-card__gentle-copy {
+  animation: hover-zoom-card-gentle-in var(--dur-fast) var(--ease-out);
+  transform-origin: center center;
+}
+
+@keyframes hover-zoom-card-gentle-in {
+  from {
+    transform: scale(var(--hover-zoom-entry-scale));
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Figments are art-forward and use a pale, dark-ink rules treatment. */
+.card-view[data-figment="true"] {
+  --cv-textbox-bg: rgba(244, 248, 255, 0.82);
+  --cv-textbox-border: rgba(255, 255, 255, 0.72);
+  --cv-rules-color: #16181c;
+  --cv-rules-highlight-color: #16181c;
+  --cv-rules-text-shadow: none;
+  --cv-rules-spark-color: var(--cv-rules-color);
+  --cv-rules-energy-color: var(--cv-rules-color);
+  --cv-textbox-radius: 3.2cqw;
+  --cv-textbox-pad-y: 2.9cqw;
+  --cv-textbox-pad-x: 3.4cqw;
+  --cv-name-color: #16181c;
+  --cv-name-text-shadow: none;
+  --cv-figment-titlebar-pad: 3.6cqw;
+  --cv-figment-spark-size: 17.5cqw;
+  --cv-figment-spark-font-size: 8.4cqw;
+  --cv-figment-spark-top: 2.8cqw;
+  --cv-figment-spark-right: 1.6cqw;
+}
+
+/* Event frame: a dark purple accent on the name bar and text box. */
+.card-view[data-card-type="Event"] {
+  --cv-textbox-bg: linear-gradient(
+    180deg,
+    rgba(40, 16, 56, 0.82) 0%,
+    rgba(19, 8, 30, 0.88) 100%
+  );
+  --cv-textbox-border: rgba(178, 132, 226, 0.32);
+}

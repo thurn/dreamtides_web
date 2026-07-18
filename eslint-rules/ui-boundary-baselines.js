@@ -42,10 +42,11 @@ export function baselineConfigEntries() {
 
 /** CSS debt uses the same exact-count, shrink-only contract as TSX lint debt. */
 export const OUTER_UI_CSS_BASELINES = Object.freeze([
-  { file: "src/index.css", rule: "raw-color", count: 31 },
-  { file: "src/index.css", rule: "raw-length", count: 16 },
-  { file: "src/index.css", rule: "raw-radius", count: 1 },
-  { file: "src/index.css", rule: "cumulus-card-selector", count: 4 },
+  { file: "src/index.css", rule: "raw-color", count: 6 },
+  { file: "src/editor/card-editor.css", rule: "raw-length", count: 4 },
+  { file: "src/editor/editable-figment.css", rule: "raw-color", count: 2 },
+  { file: "src/editor/editable-figment.css", rule: "raw-length", count: 2 },
+  { file: "src/editor/editable-figment.css", rule: "raw-radius", count: 1 },
   { file: "src/battle/battle.css", rule: "raw-length", count: 85 },
   { file: "src/battle/battle.css", rule: "raw-radius", count: 8 },
   { file: "src/battle/battle.css", rule: "inline-glass", count: 1 },

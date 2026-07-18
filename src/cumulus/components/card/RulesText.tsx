@@ -429,8 +429,8 @@ function splitRulesTextIntoParagraphs(text: string): string[] {
  * cap before the font shrinks) while still reading as separate "list items"
  * rather than "essay paragraphs".
  *
- * The actual size lives in the `--cv-paragraph-gap` design token (see
- * `index.css`) so it can be tuned alongside the other card-view spacing
+ * The actual size lives in the `--cv-paragraph-gap` component variable (see
+ * `CardView.css`) so it can be tuned alongside the other card-view spacing
  * variables. It is expressed in `em` there so it scales with the surrounding
  * (possibly auto-shrunk) font size. The literal fallback keeps the gap sane on
  * any surface that renders rules text without the card-view token in scope.

@@ -53,7 +53,7 @@ const DOCS_PREFIX = "src/cumulus/docs/";
 // inline: (a) it is a member of a sanctioned, deliberately-complete design
 // scale (spacing / type / radius / elevation / motion / gradient / surface /
 // device-frame), reserved so UI code can pick a step by role; or (b) it is a
-// PRODUCTION-BRIDGE re-export (--dt-* / --color-* / --cv-*) that pins a shared
+// PRODUCTION-BRIDGE re-export (--dt-* / --color-*) that pins a shared
 // production token name so an element (above all the game card) resolves
 // identically in the desktop/production system.
 export const BASELINE = [
@@ -63,8 +63,6 @@ export const BASELINE = [
   // Production bridge (--color-* global re-exports).
   "--color-essence-glow-strong",
   "--color-primary",
-  // Production bridge (--cv-* card-chrome re-export).
-  "--cv-selection-color",
   // Device-frame layout constants (the iPhone canvas the kit designs against).
   "--device-h",
   "--device-w",
