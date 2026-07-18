@@ -6,6 +6,8 @@ import { CardView } from "../cumulus/components/card/CardView";
 import CardBrowserGrid from "./card-browser/CardBrowserGrid";
 import { DreamcallerPortrait } from "../cumulus/components/hud/DreamcallerPortrait";
 import { RulesText } from "../cumulus/components/card/RulesText";
+import { GlowIcon } from "../cumulus/components/controls/GlowIcon";
+import { GLYPHS, glyph } from "../cumulus/primitives/glyph";
 import { TIDE_ACCENT_COLOR, TIDE_COLOR_CHIP } from "./tide-visuals";
 import {
   TIDES4_COLORS,
@@ -161,7 +163,7 @@ function ColorPicker({
               boxShadow: selected ? `0 0 0 2px rgba(0,0,0,0.4)` : "none",
             }}
           >
-            <i aria-hidden="true" className={`bx ${chip.icon} text-sm leading-none`} />
+            <GlowIcon iconClass={glyph(`bx ${chip.icon}`)} color="white" size="1em" />
             {color}
           </button>
         );
@@ -235,14 +237,14 @@ export default function TidesDetailView({
             cursor: "pointer",
           }}
         >
-          <i aria-hidden="true" className="bx bx-chevron-left text-base leading-none" />
+          <GlowIcon iconClass={GLYPHS.chevronLeft} color="white" size="1em" />
           All tides
         </button>
         <span
           className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium"
           style={{ background: chip.background, borderColor: chip.border, color: "#ffffff" }}
         >
-          <i aria-hidden="true" className={`bx ${chip.icon} text-sm leading-none`} />
+          <GlowIcon iconClass={glyph(`bx ${chip.icon}`)} color="white" size="1em" />
           {tide.role}
         </span>
         <span style={{ color: "rgba(247, 241, 223, 0.55)", fontSize: "0.82rem" }}>

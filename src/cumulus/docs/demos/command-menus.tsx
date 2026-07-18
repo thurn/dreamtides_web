@@ -25,7 +25,6 @@ export const commandMenusDemo: CumulusComponent = {
   blurb: "The strict app-chrome command offering: a fixed icon trigger and a hierarchical inward-opening utility menu.",
   callout: "Use this for fixed quest chrome. Use ContextActionMenu for an activated card or pointer target, Select for compact value choice, DisclosureSection for reading flow, and InfoCard for entity reveals rather than commands.",
   group: "Components",
-  status: "incubating",
   docName: "CornerUtilityMenu",
   Component: CommandMenusDemo,
   usage: [{
@@ -57,7 +56,6 @@ export const contextActionMenuDemo: CumulusComponent = {
   blurb: "The strict pointer/card command offering: a clamped desktop context menu and a responsive dialog sheet with the same typed hierarchy.",
   callout: "Use this for card and pointer actions. Cumulus owns focus, keyboard navigation, submenu behavior, outside/Escape dismissal, material, collision handling, and the narrow dialog presentation.",
   group: "Components",
-  status: "incubating",
   docName: "ContextActionMenu",
   Component: ContextActionMenuDemo,
   usage: [{

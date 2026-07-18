@@ -356,7 +356,7 @@ export default function EditableCard({
         data-editor-duplicate-art={String(duplicateArt)}
         style={{
           flex: "0 0 auto",
-          color: "var(--color-danger)",
+          color: "#ef4444",
           fontSize: "1.05em",
           lineHeight: 1,
           textShadow: "var(--cv-name-text-shadow)",

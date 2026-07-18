@@ -4,3 +4,22 @@ questState/battleState room schema and in-memory quest store. The production
 runtime now persists an encoded room event log and derives FoldState through
 CoopProvider. These documents need a focused rewrite against src/eventlog/,
 src/coop/hooks.ts, and src/state/coop-quest-context.tsx.
+
+Cumulus catalog lifecycle and battle composition need a focused program. The
+current consumer inventory has eleven documented components with one consumer
+and CardTermDefinitions has zero consumers in its first incubating sweep.
+BattleCardNoteEditor, BattleFigmentCreator, BattleLogDrawer,
+BattleDreamwellHistoryDrawer, and BattleDeckOrderPicker retain mixed state and
+presentation outside the Cumulus closure. Define the intended narrow-role
+exceptions or fold/delete destinations, then split battle state adapters from
+pure Cumulus overlay presentation without changing the battle event contract.
+
+MainMenuScreen scales MainMenuButton with `zoom: BUTTON_SCALE`; converting that
+scene-local scale into a catalog variant requires a component hierarchy decision.
+Define the main-menu action size contract and migrate the screen through the
+selected strict component API.
+
+Atlas CSS mixes live `--dt-*` bridge roles with raw palette literals. Define an
+Atlas semantic material layer and migrate the map surface to it so the
+production bridge and component-local palette have one documented ownership
+model.

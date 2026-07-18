@@ -19,7 +19,10 @@ export const OUTER_UI_ROLES = Object.freeze({
 const fileRoles = {
   "src/App.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/main.tsx": OUTER_UI_ROLES.APP_SHELL,
-  "src/index.css": OUTER_UI_ROLES.PENDING_PRESENTATION,
+  // The entry sheet owns only the app-wide reset, cursor affordance, and
+  // globally inherited legacy color bridge; product presentation belongs to
+  // Cumulus closures.
+  "src/index.css": OUTER_UI_ROLES.APP_SHELL,
   "src/editor/card-editor.css": OUTER_UI_ROLES.OPERATOR_TOOL,
   "src/editor/editable-figment.css": OUTER_UI_ROLES.OPERATOR_TOOL,
   "src/vendor/boxicons/boxicons.css": OUTER_UI_ROLES.VENDOR_ASSET,

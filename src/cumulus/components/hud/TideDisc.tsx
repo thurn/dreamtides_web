@@ -9,12 +9,8 @@
 // hover-reveal row) and `lg` (the mobile select's larger, easier-to-press row).
 // The glyph scales with the disc, so both sizes read as the same mark.
 //
-// The disc is a mark, not a control: reveal/toggle behaviour belongs to the
-// caller. The one interaction the
-// disc owns is its hover brightening, enabled via `interactive` when the caller
-// wires the disc up as a reveal trigger; the shared hover-enlarge comes from
-// that pressable wrapper, so the disc itself never scales (scaling here too
-// would compound with the wrapper's transform into a double enlargement).
+// The disc is a semantic reveal source. It owns the press/hover binding for its
+// tide card; callers supply only the stable tide data and lay the disc out.
 
 import { GlowIcon } from "../controls/GlowIcon";
 import type { CumulusColor } from "../../primitives/color";

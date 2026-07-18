@@ -434,6 +434,9 @@ const REWARD_AT_CAP_SCENE: QaScene = {
  */
 export const DECK_VIEWER_SCENE_ID = "deckviewer";
 
+/** App-local Pool Viewer overlay scene, parked over a populated dreamscape. */
+export const POOL_VIEWER_SCENE_ID = "poolviewer";
+
 /**
  * The deck-viewer overlay, parked on the starter dreamscape so the run carries
  * a full deck. Otherwise reached only by tapping the HUD deck sprite; parking
@@ -446,6 +449,15 @@ const DECK_VIEWER_SCENE: QaScene = {
   description:
     "The deck viewer overlay over the starter dreamscape, opened on boot so " +
     "the card grid and press-and-hold zoom can be QA'd from a URL.",
+  build: dreamscapeSceneState(3),
+};
+
+const POOL_VIEWER_SCENE: QaScene = {
+  id: POOL_VIEWER_SCENE_ID,
+  label: "Pool Viewer",
+  description:
+    "The run-pool browser overlay over the starter dreamscape, opened on boot " +
+    "so its Cumulus controls, gallery, and responsive frame can be QA'd from a URL.",
   build: dreamscapeSceneState(3),
 };
 
@@ -647,6 +659,7 @@ export const QA_SCENES: readonly QaScene[] = [
   REWARD_SCENE,
   REWARD_AT_CAP_SCENE,
   DECK_VIEWER_SCENE,
+  POOL_VIEWER_SCENE,
   STARTING_DECK_SCENE,
   siteScene("draft", "Draft", "Draft"),
   siteScene("transfiguration", "Transfiguration", "Transfiguration"),

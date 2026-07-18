@@ -1,6 +1,7 @@
 import { useMemo, type ReactNode } from "react";
 import type { Database } from "firebase/database";
 import { FrontDoorRouter } from "../components/FrontDoorRouter";
+import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScreen";
 import { getFirebaseDatabase } from "../firebase/app-config";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { FrontDoorProvider } from "../state/front-door-context";
@@ -40,12 +41,12 @@ export default function FrontDoorApp({
 
   if (databaseResult.database === null) {
     return (
-      <main className="flex min-h-screen items-center justify-center p-8">
-        <div role="alert" className="max-w-xl text-center">
-          <h1 className="text-2xl font-semibold">Firebase setup issue</h1>
-          <p className="mt-3 opacity-80">{databaseResult.error}</p>
-        </div>
-      </main>
+      <ApplicationStateScreen view={{
+        kind: "fatalConfiguration",
+        title: "Firebase Setup Issue",
+        message: "This browser could not connect to the quest service.",
+        detail: databaseResult.error,
+      }} />
     );
   }
 

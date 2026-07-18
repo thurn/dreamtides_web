@@ -324,14 +324,9 @@ export function DreamwellEditorPreview({
     renderedText.trim() !== "" || slots?.rulesText != null;
 
   // Resolve the band geometry from the measured box top. The crisp art holds
-  // down to a seam set `--dreamwell-art-underlap` below the box top; from the
-  // seam the blur and tint ramp over `ART_FADE_LENGTH_PCT` to a fully opaque dark
-  // base that holds to the bottom edge, so the art turns solid dark just under
-  // the box's top corner instead of bleeding through the panel. The seam and fade
-  // end are built with `calc()` from CSS variables (`--dreamwell-box-top` carries
-  // the measured box top) so the underlap stays live-tunable from CSS; the
-  // `var()` fallbacks keep the `calc()` valid — and the mask intact — even if a
-  // consumer unsets a variable.
+  // down to a seam set below the measured box top; from the seam the blur and
+  // tint ramp over `ART_FADE_LENGTH_PCT` to a fully opaque dark base that holds
+  // to the bottom edge, so the art turns solid dark just under the text box.
   const bandTopPct =
     boxTopFrac !== null ? boxTopFrac * 100 : ART_BAND_DEFAULT_TOP_PCT;
   const bandTop = Math.min(
@@ -339,7 +334,7 @@ export function DreamwellEditorPreview({
     ART_BAND_MAX_TOP_PCT,
   );
   const boxTopCss = `${bandTop.toFixed(2)}%`;
-  const seamCss = `calc(var(--dreamwell-box-top, ${boxTopCss}) + var(--dreamwell-art-underlap, ${String(ART_UNDERLAP_DEFAULT_PCT)}%))`;
+  const seamCss = `calc(${boxTopCss} + ${String(ART_UNDERLAP_DEFAULT_PCT)}%)`;
   const fadeEndCss = `calc(${seamCss} + ${String(ART_FADE_LENGTH_PCT)}%)`;
   const featherMask = `linear-gradient(to bottom, rgba(0,0,0,0) ${seamCss}, rgba(0,0,0,1) ${fadeEndCss}, rgba(0,0,0,1) 100%)`;
   const tintGradient = `linear-gradient(to bottom, rgba(16,16,19,0) ${seamCss}, rgba(16,16,19,1) ${fadeEndCss}, rgba(16,16,19,1) 100%)`;
@@ -352,12 +347,11 @@ export function DreamwellEditorPreview({
   // `overflow: hidden`). With a crop, the source is panned/zoomed to the curated
   // framing once its aspect is known, clipping the watermark strip in image space
   // so it stays hidden at any pan and zoom.
-  // Lift the art up the frame by `--dreamwell-art-rise` so its lower content
+  // Lift the art up the frame so its lower content
   // rises into view and its bottom edge ends near the text box top. Applied to
   // both art layers (crisp and blurred) so they stay aligned; the watermark stays
   // clipped in image space (`clipPath`) so lifting never reveals it. The fallback
-  // keeps the transform valid if a consumer unsets the variable.
-  const riseTranslate = `translateY(calc(-1 * var(--dreamwell-art-rise, ${String(ART_RISE_DEFAULT_CQW)}cqw)))`;
+  const riseTranslate = `translateY(-${String(ART_RISE_DEFAULT_CQW)}cqw)`;
   const artImgStyle: CSSProperties =
     card.art !== undefined && imageAspect !== null
       ? (() => {
@@ -410,7 +404,7 @@ export function DreamwellEditorPreview({
   const panelBackground =
     "linear-gradient(180deg, rgba(40, 16, 56, 0.82) 0%, rgba(19, 8, 30, 0.88) 100%)";
   const panelBorder = "1px solid rgba(178, 132, 226, 0.32)";
-  const panelBlur = "blur(11px) saturate(1)";
+  const panelBlur = "blur(var(--cv-textbox-blur)) saturate(1)";
 
   return (
     <div
@@ -418,17 +412,6 @@ export function DreamwellEditorPreview({
       data-dreamwell-card={card.id}
       style={
         {
-          // Art-rise knob: how far the art is lifted up the frame so its lower
-          // edge ends near the text box top. A card-width length (`cqw`);
-          // override `--dreamwell-art-rise` here or on an ancestor to tune it.
-          "--dreamwell-art-rise": `${String(ART_RISE_DEFAULT_CQW)}cqw`,
-          // Art-underlap knob (card-height %): how far the lifted art's crisp
-          // edge slips under the text box's top before the dark fadeout.
-          // Defaults to the box's top corner-radius depth; override
-          // `--dreamwell-art-underlap` here or on an ancestor. `--dreamwell-box-top`
-          // is the measured box top the seam's `calc()` builds on.
-          "--dreamwell-art-underlap": `${String(ART_UNDERLAP_DEFAULT_PCT)}%`,
-          "--dreamwell-box-top": boxTopCss,
           position: "relative",
           width: "100%",
           aspectRatio: "3 / 2",

@@ -9,10 +9,10 @@ import { richText } from "./rich-text";
  * self-evidently a keyword, so it carries the name and the rules text and
  * nothing else.
  *
- * `JourneyHoverCard`, the signature-deck inspector, and the incubating
- * `CardTermDefinitions` stack use this renderable tile in normal document flow.
- * Named entity reveals carry equivalent text-card models through the shared
- * reveal coordinator.
+ * The signature-deck inspector uses this renderable tile in normal document
+ * flow. CardTermDefinitions composes the same tile for its documented reading
+ * order surface. Named entity reveals carry equivalent text-card models through
+ * the shared reveal coordinator.
  *
  * The tile establishes its own `.cumulus` token scope so it renders correctly on
  * any surface, including popovers portalled outside a Cumulus subtree. The body is

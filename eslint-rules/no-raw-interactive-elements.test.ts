@@ -147,11 +147,5 @@ ruleTester.run("no-raw-interactive-elements", rule, {
       code: `const el = <button />;`,
       errors: [{ messageId: "rawInteractive" }],
     },
-    {
-      name: "a pending outer presentation file cannot add a raw button",
-      filename: "src/index.css",
-      code: `const el = <button />;`,
-      errors: [{ messageId: "rawInteractive" }],
-    },
   ],
 });

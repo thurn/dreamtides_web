@@ -86,14 +86,14 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 | Text Area | Components | 1 | [components/text-area.md](components/text-area.md) | The reusable multiline authoring field on Cumulus control chrome, with explicit draft and commit callbacks. |
 | NumberStepper | Components | 4 | [components/number-stepper.md](components/number-stepper.md) | A labeled, accessible decrement/value/increment row with optional canonical resource notation. |
 | DisclosureSection | Components | 5 | [components/disclosure-section.md](components/disclosure-section.md) | A controlled Cumulus section for progressively revealing dense secondary information. |
-| CardOrderEditor | Components | 1 | [components/card-order-editor.md](components/card-order-editor.md) | An identity-safe top-to-bottom card ordering control shared by deck and Foresee workflows. |
+| CardOrderEditor | Components | 1 | [components/card-order-editor.md](components/card-order-editor.md) | An identity-safe top-to-bottom card ordering control for the battle deck-order workflow. |
 | Tide Disc | Components | 1 | [components/tide-disc.md](components/tide-disc.md) | The single semantic tide mark: a colored disc carrying the tide's glyph and its own strict tide reveal, sized 'sm' or 'lg'. |
 | Transfiguration Form Button | Components | 1 | [components/transfiguration-form-button.md](components/transfiguration-form-button.md) | The canonical forge-form choice: compact and price-bearing controls with shared glyph, color, state, and accessibility behavior. |
 | Transient Status Toast | Components | 1 | [components/transient-status-toast.md](components/transient-status-toast.md) | The fixed, safe-area-aware short-lived status surface for player notices that need a semantic severity and structured copy. |
 | Motes | Components | 10 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
-| Info Card | Components | 5 | [components/info-card.md](components/info-card.md) | The one press-to-reveal information card. |
+| Info Card | Components | 5 | [components/info-card.md](components/info-card.md) | The strict information-card presentation. |
 | Group Panel | Components | 8 | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |
-| Glow Icon | Primitives | 15 | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a Boxicons glyph that paints in the caller's resource hue, with an optional content-protection shadow and an optional emitted-light glow pinned to its own font-size so both scale with the mark. |
+| Glow Icon | Primitives | 17 | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a Boxicons glyph that paints in the caller's resource hue, with an optional content-protection shadow and an optional emitted-light glow pinned to its own font-size so both scale with the mark. |
 | Pip Badge | Components | 2 | [components/pip-badge.md](components/pip-badge.md) | The compact circled number used in dense card rows and inline rules text for spark or energy values. |
 | Quest Status Bar | Components | 5 | [components/quest-status-bar.md](components/quest-status-bar.md) | The persistent, transparent bottom HUD for quest screens. |
 | Coop Presence Status | Components | 1 | [components/coop-presence-status.md](components/coop-presence-status.md) | The compact, non-interactive app chrome that reports connected room participants from an explicit view-model count. |
@@ -275,6 +275,13 @@ and an explicit allowlist of non-UI infrastructure (`src/data`, `src/types`,
 rest of the app imports its UI from Cumulus. The boundary is a lint gate
 (fail-closed import allowlist) — when it blocks an import, move the code or
 rethink the dependency; never widen the allowlist for UI code.
+
+Outer production UI has a checked role in `eslint-rules/ui-boundary-roles.js`.
+App-shell controllers wire state and Cumulus presentation; state adapters map
+domain data; standalone operator UI stays beneath its named owner; and
+`ErrorBoundary` is the emergency fallback. The boundary test discovers every
+outer TSX/CSS file recursively, so a new presentation file requires an explicit
+architectural disposition before it ships.
 
 ## Building a product screen: screen / builder / adapter
 

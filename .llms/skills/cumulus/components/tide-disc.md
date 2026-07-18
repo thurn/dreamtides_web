@@ -24,9 +24,9 @@ The single semantic tide mark: a colored disc carrying the tide's glyph and its 
 
 ## Usage
 
-### Bare disc
+### Tide disc
 
-The atom on its own — the color and glyph come from the named tide (never a raw value). `interactive` brightens it on hover and shows a pointer cursor. Rarely used alone: production wraps it in a reveal (below).
+The color and glyph come from the named tide (never a raw value). The component owns its strict tide reveal on hover, focus, and touch.
 
 ```tsx
 import { TideDisc } from "src/cumulus/components/hud/TideDisc";

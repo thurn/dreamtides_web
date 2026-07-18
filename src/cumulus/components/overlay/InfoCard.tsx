@@ -830,9 +830,9 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
 }
 
 /**
- * InfoCard — the one press-to-reveal information card. Its media treatment
+ * InfoCard — the strict information-card presentation. Its media treatment
  * varies (object / fullBleed / atlasReveal / icon / tide / text) on one fixed
- * liquid-glass shell (no caret, one GroupPanel material + type scale).
+ * liquid-glass shell (no caret, shared card type scale).
  *
  * Wraps the variant body in the ONE viewport-driven mobile layout rule (see
  * {@link infoCardWidth}): on a phone every info card lays out at the same

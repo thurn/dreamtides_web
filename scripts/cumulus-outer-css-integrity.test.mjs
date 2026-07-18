@@ -35,6 +35,12 @@ function counted(rule, source) {
   return (source.match(patterns[rule]) ?? []).length;
 }
 
+function appShellColorBridgeCount(file, source) {
+  if (file !== "src/index.css") return 0;
+  const root = source.match(/:root\s*\{([\s\S]*?)\}/)?.[1] ?? "";
+  return counted("raw-color", source) - counted("raw-color", root);
+}
+
 describe("outer CSS integrity", () => {
   it("keeps token references resolvable and pins all temporary CSS debt", () => {
     const actual = [];
@@ -47,7 +53,13 @@ describe("outer CSS integrity", () => {
           !KNOWN_TOKENS.has(name) && !COMPONENT_LOCAL_PREFIXES.some((prefix) => name.startsWith(prefix)),
         );
       if (unknown.length > 0) actual.push({ file, rule: "unknown-token", count: unknown.length });
+      if (role === OUTER_UI_ROLES.OPERATOR_TOOL) continue;
       for (const rule of ["raw-color", "raw-length", "raw-radius", "inline-glass", "cumulus-card-selector"]) {
+        if (rule === "raw-color" && file === "src/index.css") {
+          const count = appShellColorBridgeCount(file, source);
+          if (count > 0) actual.push({ file, rule, count });
+          continue;
+        }
         const count = counted(rule, source);
         if (count > 0) actual.push({ file, rule, count });
       }

@@ -1,4 +1,4 @@
-# Cumulus Design System — Implementation Plan
+# Cumulus Design System
 
 `localhost/cumulus` is a self-contained documentation endpoint for **Cumulus**, the
 ground-up redesign of the quest-prototype UI. It combines the redesigned system
@@ -7,8 +7,8 @@ authored in Claude Design
 the code already ships, and presents them as one browseable, interactive
 reference.
 
-This document is the plan. It is written to be built in phases; each phase ends
-green on `npm run lint`, `npm run typecheck`, and `npm test`.
+This document records the shipped architecture. The Cumulus integrity checks,
+typecheck, and test suite maintain the boundary on every change.
 
 ---
 
@@ -91,6 +91,18 @@ in `src/cumulus/**` may resolve imports only to `src/cumulus/**` plus the allowl
 above; every other path under `src/` is denied **by default**. A future UI
 directory can never silently leak in — it fails closed. This rule runs as part
 of `npm run lint`, so the architecture is a lint gate, not a convention.
+
+### Outer UI ownership
+
+Every production TSX and CSS file outside `src/cumulus/` has one checked role
+in `eslint-rules/ui-boundary-roles.js`: app shell/controller, state adapter,
+operator tool, Cumulus devtool or conformance fixture, emergency fallback, or
+vendor asset. The boundary test discovers files recursively and rejects an
+unclassified file. App-shell files wire state and route Cumulus presentation;
+operator tools keep their UI beneath a named tool owner; `ErrorBoundary` is the
+documented emergency fallback. `src/index.css` owns only the application entry
+reset, cursor defaults, and inherited color bridge. Reusable visual components
+and their authored CSS live in the Cumulus closure.
 
 **Moving components in.** When a production component is reused, it and its
 component-specific helper closure physically **move** into `src/cumulus/`, and

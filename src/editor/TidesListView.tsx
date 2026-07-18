@@ -2,6 +2,8 @@ import type { CardData } from "../types/cards";
 import type { Tides4DeckJson, Tides4Role } from "../draft/pool/tides4-io";
 import { TIDE_COLOR_CHIP } from "./tide-visuals";
 import { TideSourcePreview } from "./TideSourcePreview";
+import { GlowIcon } from "../cumulus/components/controls/GlowIcon";
+import { glyph } from "../cumulus/primitives/glyph";
 import type { EditorDreamcaller } from "./tides-types";
 
 interface TidesListViewProps {
@@ -94,7 +96,7 @@ function TideTile({
           className="inline-flex max-w-full items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium"
           style={{ background: chip.background, borderColor: chip.border, color: "#ffffff" }}
         >
-          <i aria-hidden="true" className={`bx ${chip.icon} text-sm leading-none`} />
+          <GlowIcon iconClass={glyph(`bx ${chip.icon}`)} color="white" size="1em" />
           <span className="truncate">{label}</span>
         </span>
         <div

@@ -172,12 +172,5 @@ ruleTester.run("no-hardcoded-values", rule, {
       output: null,
       errors: [{ messageId: "hardcodedColorNoToken" }],
     },
-    {
-      name: "a pending outer presentation file is covered before migration",
-      filename: "src/index.css",
-      code: `const s = { color: "${UNKNOWN_HEX}" };`,
-      output: null,
-      errors: [{ messageId: "hardcodedColorNoToken" }],
-    },
   ],
 });

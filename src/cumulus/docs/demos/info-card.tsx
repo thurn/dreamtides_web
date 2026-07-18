@@ -30,7 +30,7 @@ export const infoCardDemo: CumulusComponent = {
   id: "info-card",
   title: "Info Card",
   blurb:
-    "The one press-to-reveal information card. Its media treatment varies by content — object, full-bleed, atlas reveal, icon, tide, or text — over a single fixed liquid-glass shell and reveal contract. On a narrow viewport a card lays out at 45% of screen width capped at its native 248px, so below ~551px (248 ÷ 0.45) it begins scaling down — an intentional content-driven cutoff, distinct from the 900px desktop/mobile breakpoint.",
+    "The strict information-card presentation. Its media treatment varies by content — object, full-bleed, atlas reveal, icon, tide, or text — over a single fixed liquid-glass shell; named semantic sources register cards with the root reveal coordinator. On a narrow viewport a card lays out at 45% of screen width capped at its native 248px, so below ~551px (248 ÷ 0.45) it begins scaling down — an intentional content-driven cutoff, distinct from the 900px desktop/mobile breakpoint.",
   callout:
     "InfoCard supplies strict visual content variants. Named semantic components register that content with the root coordinator, which owns viewport placement, safe-area bounds, and touch clearance.",
   group: "Components",

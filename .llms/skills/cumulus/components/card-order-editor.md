@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/card-order-editor`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-An identity-safe top-to-bottom card ordering control shared by deck and Foresee workflows.
+An identity-safe top-to-bottom card ordering control for the battle deck-order workflow.
 
 ## Props
 

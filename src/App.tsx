@@ -39,7 +39,7 @@ import { getSavedQuest } from "./state/saved-quests";
 import { logEvent } from "./logging";
 import { regenerateAtlasInPlace } from "./atlas/regenerate-atlas";
 import type { RuntimeConfig } from "./runtime/runtime-config";
-import { DECK_VIEWER_SCENE_ID, findQaScene } from "./runtime/qa-scenes";
+import { DECK_VIEWER_SCENE_ID, POOL_VIEWER_SCENE_ID, findQaScene } from "./runtime/qa-scenes";
 import { useQuestUrlSync } from "./runtime/use-quest-url-sync";
 import type { QuestState, SiteState } from "./types/quest";
 
@@ -82,6 +82,7 @@ export function QuestApp({
   const previousScreenTypeRef = useRef(state.screen.type);
   const gotoSceneFiredRef = useRef(false);
   const openDeckFiredRef = useRef(false);
+  const openPoolViewerFiredRef = useRef(false);
   const loadQuestFiredRef = useRef(false);
   const loadQuestName = runtimeConfig.loadQuestName ?? null;
   // `?loadQuest=<name>` boot flow: 'pending' holds a loading screen until the
@@ -129,6 +130,18 @@ export function QuestApp({
     }
     openDeckFiredRef.current = true;
     setDeckViewerOpen(true);
+  }, [runtimeConfig.gotoScene, state.dreamcaller]);
+
+  useEffect(() => {
+    if (
+      runtimeConfig.gotoScene !== POOL_VIEWER_SCENE_ID ||
+      openPoolViewerFiredRef.current ||
+      state.dreamcaller === null
+    ) {
+      return;
+    }
+    openPoolViewerFiredRef.current = true;
+    setPoolViewerOpen(true);
   }, [runtimeConfig.gotoScene, state.dreamcaller]);
 
   // `?loadQuest=<name>`: fetch the named snapshot from the dev server and

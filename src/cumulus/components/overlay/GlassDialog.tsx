@@ -245,7 +245,7 @@ export function GlassDialog({
           // Clear a device screen cutout on the full-bleed overlay: the safe-area
           // inset carries the real (or mock-up) top inset, so the title drops
           // below the island rather than hiding under it.
-          paddingTop: `max(var(--safe-area-inset-top), ${token("--gutter")})`,
+          paddingTop: `max(${token("--safe-area-inset-top")}, ${token("--gutter")})`,
           paddingRight: token("--gutter"),
           paddingLeft: token("--gutter"),
           paddingBottom: token("--space-4"),

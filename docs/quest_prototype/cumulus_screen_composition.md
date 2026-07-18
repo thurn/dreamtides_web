@@ -83,6 +83,18 @@ A Cumulus screen should render a complete state for each async boundary it owns:
 loading, unavailable data, and recoverable error. The app-level error boundary
 wraps the router, but a screen with local data loading should present a stable
 surface that preserves the frame and primary controls while the data resolves.
+`ApplicationStateScreen` supplies the Cumulus presentation for bootstrap and
+coop gates, including fatal configuration states; controllers retain Firebase,
+room-log, and URL effects.
+
+## App Overlays And Diagnostics
+
+The app shell owns overlay visibility and error isolation. `PoolViewerScreen`
+is the shared Cumulus overlay presentation for the quest utility menu and the
+battle floating controller. Retained diagnostics are Cumulus screens supplied
+by state adapters; standalone operator tools remain under their named route
+owners. Direct overlay QA uses `?goto=deckviewer`, `?goto=poolviewer`, and
+`?goto=startingdeck`; battle overlays begin at `?goto=battle-playable`.
 
 ## Transitions
 

@@ -1,8 +1,6 @@
 // Registry demo entry for TideDisc — see site-node.tsx for the stageRef recipe.
-// Production never renders a bare TideDisc: the disc is always the trigger of an
-// named TideDisc reveal, so the
-// live demo owns a stageRef and wires one disc through that canonical reveal —
-// press or hover it and the tide's InfoCard appears beside it. The disc rows
+// Each TideDisc is its own named reveal source, so the live demo exercises the
+// same press-or-hover interaction production uses. The disc rows
 // above show the five tides at both sizes ('sm' desktop select, 'lg' mobile
 // select). tide-spec.ts is this page's documented palette home (see the callout).
 
@@ -60,8 +58,8 @@ export const tideDiscDemo: CumulusComponent = {
   Component: TideDiscDemo,
   usage: [
     {
-      label: "Bare disc",
-      note: "The atom on its own — the color and glyph come from the named tide (never a raw value). `interactive` brightens it on hover and shows a pointer cursor. Rarely used alone: production wraps it in a reveal (below).",
+      label: "Tide disc",
+      note: "The color and glyph come from the named tide (never a raw value). The component owns its strict tide reveal on hover, focus, and touch.",
       code: `import { TideDisc } from "src/cumulus/components/hud/TideDisc";
 
 // The compact 'sm' disc (desktop select) and the larger 'lg' disc (mobile select):

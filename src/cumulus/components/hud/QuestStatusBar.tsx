@@ -538,8 +538,8 @@ function QsbHudBar({
       >
         <QsbEssence essence={essence} scale={scale} />
       </div>
-      <button
-        type="button"
+      <Pressable
+        as="button"
         className="qsbDeck"
         data-quest-deck-target=""
         aria-label={`View deck — ${String(deck)} cards`}
@@ -568,7 +568,7 @@ function QsbHudBar({
               "drop-shadow(0 2px 5px rgba(0,0,0,0.6)) drop-shadow(0 0 12px rgba(147,51,234,0.3))",
           }}
         />
-      </button>
+      </Pressable>
     </div>
   );
 }
