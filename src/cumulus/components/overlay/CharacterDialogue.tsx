@@ -11,6 +11,9 @@ import { SpeechBubble } from "./SpeechBubble";
 
 const DIALOGUE_FRAME_URL = assetUrl("/atlas/Round_frame.png");
 const DIALOGUE_FADE_SECONDS = motionTimeSeconds("--dur-slow");
+// The portrait matches the canonical bubble's common one-line height, keeping
+// the paired object compact enough to sit directly on battlefield geometry.
+const DIALOGUE_PORTRAIT_SIZE = 64;
 
 /** Art identities that semantically represent a speaking character. */
 export type CharacterDialoguePortraitArt = Extract<
@@ -46,7 +49,7 @@ export interface CharacterDialogueProps {
 }
 
 /**
- * CharacterDialogue — a responsive portrait-and-speech pairing whose frame,
+ * CharacterDialogue — a compact portrait-and-speech pairing whose frame,
  * layout, and presence transition stay consistent across character-led scenes.
  */
 export function CharacterDialogue({
@@ -69,7 +72,7 @@ export function CharacterDialogue({
       transition={{ duration: reduceMotion ? 0 : DIALOGUE_FADE_SECONDS }}
       style={{
         display: "grid",
-        gridTemplateColumns: "clamp(112px, 24vw, 184px) minmax(0, 1fr)",
+        gridTemplateColumns: `${String(DIALOGUE_PORTRAIT_SIZE)}px minmax(0, 1fr)`,
         alignItems: "center",
         columnGap: token("--space-4"),
         width: "100%",
@@ -126,7 +129,13 @@ export function CharacterDialogue({
           }}
         />
       </div>
-      <div style={{ minWidth: 0 }}>
+      <div
+        style={{
+          minWidth: 0,
+          width: "fit-content",
+          maxWidth: "100%",
+        }}
+      >
         <SpeechBubble
           speakerName={dialogue.speakerName}
           text={dialogue.text}

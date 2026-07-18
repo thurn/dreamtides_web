@@ -93,6 +93,11 @@ describe("TutorialScreen", () => {
     ).not.toBeNull();
     expect(screenMocks.props?.inspectorDefault).toBe("collapsed");
     expect(screenMocks.props?.phaseNavigation).toBe("hidden");
+    const dialogueAnchor = container.querySelector<HTMLElement>(
+      "[data-tutorial-dialogue-anchor]",
+    );
+    expect(dialogueAnchor?.style.left).toBe("var(--gutter)");
+    expect(dialogueAnchor?.style.justifyContent).toBe("flex-start");
     expect(
       container.querySelector("[data-character-dialogue='Mira']"),
     ).not.toBeNull();

@@ -8,9 +8,9 @@ Components · Live demo & interactive props: `/cumulus#/character-dialogue`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-A responsive character portrait in the canonical round frame, paired with SpeechBubble and presented as one fadeable guide-dialogue object.
+A compact character portrait in the canonical round frame, paired with SpeechBubble and presented as one fadeable guide-dialogue object.
 
-> **Guidance:** Use it for character-led scene dialogue. The component owns the portrait crop, frame, pairing layout, and fade transition; callers provide typed art, accessible portrait copy, the speaker name, the spoken line, and visibility.
+> **Guidance:** Use it for character-led scene dialogue. The component owns the compact portrait scale, crop, frame, pairing layout, and fade transition; callers provide typed art, accessible portrait copy, the speaker name, the spoken line, and visibility.
 
 ## Props
 

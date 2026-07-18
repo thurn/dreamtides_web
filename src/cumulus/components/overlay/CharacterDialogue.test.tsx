@@ -69,9 +69,18 @@ describe("CharacterDialogue", () => {
     const frameImage = container.querySelector<HTMLImageElement>(
       "[data-character-dialogue-frame]",
     );
+    const bubble = container.querySelector<HTMLElement>(
+      "[data-character-dialogue] aside",
+    );
 
     expect(dialogue?.dataset.characterDialogueVisible).toBe("true");
     expect(dialogue?.getAttribute("aria-hidden")).toBe("false");
+    expect(dialogue?.style.gridTemplateColumns).toBe(
+      "64px minmax(0, 1fr)",
+    );
+    expect(bubble?.style.padding).toBe(
+      "var(--space-5) var(--space-5) var(--space-5) calc(14px + var(--space-5))",
+    );
     expect(portraitImage?.getAttribute("src")).toBe(resolveArtRef(portrait));
     expect(frameImage?.getAttribute("src")).toBe("/atlas/Round_frame.png");
     expect(container.textContent).toContain("Mira");

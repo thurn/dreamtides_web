@@ -19,6 +19,7 @@ const SPEECH_TAIL_DEPTH = 14;
 const SPEECH_TAIL_HALF_HEIGHT = 10;
 const SPEECH_CORNER_SIZE = 8;
 const SPEECH_TAIL_CENTER_RATIO = 0.68;
+const SPEECH_CONTENT_PADDING = token("--space-5");
 
 export interface SpeechBubbleProps {
   /** The speaking character's display name. */
@@ -72,7 +73,7 @@ export function SpeechBubble({
     boxSizing: "border-box",
     width: `calc(100% + ${tail})`,
     marginLeft: `calc(-1 * ${tail})`,
-    padding: `${token("--space-5")} ${token("--space-6")} ${token("--space-5")} calc(${tail} + ${token("--space-6")})`,
+    padding: `${SPEECH_CONTENT_PADDING} ${SPEECH_CONTENT_PADDING} ${SPEECH_CONTENT_PADDING} calc(${tail} + ${SPEECH_CONTENT_PADDING})`,
     boxShadow: "none",
     clipPath: path !== null ? `url(#${clipId})` : undefined,
     WebkitClipPath: path !== null ? `url(#${clipId})` : undefined,
