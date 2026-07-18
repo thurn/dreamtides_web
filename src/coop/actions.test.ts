@@ -69,6 +69,8 @@ function captureAllDrafts(): EventDraft[] {
   // is about the event type + routing, not the payload's game meaning.
   void actions.frontDoorAction("main", "new-journey");
   void actions.advanceFrontDoor("loading", "journey-1");
+  void actions.beginTutorial([], "tutorial:journey-1:begin");
+  void actions.completeTutorialAction("event:1", "welcome");
   void actions.changeEssence(1);
   void actions.setEssence(1);
   void actions.changeMaxEssence(1);

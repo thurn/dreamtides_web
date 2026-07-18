@@ -156,6 +156,7 @@ export function SpeechBubble({
           margin: 0,
           font: token("--t-serif-body"),
           color: token("--text-primary"),
+          whiteSpace: "pre-line",
         }}
       >
         {text}

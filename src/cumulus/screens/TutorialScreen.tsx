@@ -3,18 +3,15 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
-  useMemo,
   useRef,
   useState,
   type ReactElement,
 } from "react";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
-import type { BattleStatusDreamcallerProfile } from "../components/battle/BattleStatusDisplay";
-import {
-  DreamcallerPortrait,
-  type DreamcallerVisual,
-} from "../components/hud/DreamcallerPortrait";
+import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
+import { GLYPHS } from "../primitives/glyph";
+import { IconButton } from "../components/controls/IconButton";
 import {
   CharacterDialogue,
   type CharacterDialogueModel,
@@ -24,21 +21,38 @@ import {
   type MobileBattleView,
 } from "./MobileBattleScreen";
 import { useIsDesktop } from "./use-is-desktop";
+import {
+  TutorialEditorRail,
+  TutorialEditorTakeover,
+} from "./TutorialEditorRail";
+import { MOBILE_BATTLE_INSPECTOR_RAIL_TRACK } from "./mobile-battle-layout";
+import type {
+  TutorialAction,
+  TutorialEditorSaveStatus,
+} from "../../types/tutorial";
 
 export interface TutorialView {
   readonly battle: MobileBattleView;
-  readonly dialogue: CharacterDialogueModel;
-  readonly dialogueAfterDreamcallerArrival: CharacterDialogueModel;
-  readonly dreamcaller: {
-    readonly visual: DreamcallerVisual;
-    readonly profile: BattleStatusDreamcallerProfile;
-  };
+  readonly dialogue: CharacterDialogueModel | null;
+  readonly playbackRunId: string | null;
+  readonly currentAction: TutorialAction | null;
+}
+
+export interface TutorialEditorView {
+  readonly actions: readonly TutorialAction[];
+  readonly saveStatus: TutorialEditorSaveStatus;
+  readonly saveError: string | null;
 }
 
 export interface TutorialScreenProps {
   readonly view: TutorialView;
-  readonly onDialogueReplacementComplete?: () => void;
-  readonly onDreamcallerArrivalComplete?: (dreamcallerId: string) => void;
+  readonly editor?: TutorialEditorView;
+  readonly onActionComplete?: (runId: string, actionId: string) => void;
+  readonly onEditorActionsChange?: (
+    actions: readonly TutorialAction[],
+    persist: boolean,
+  ) => void;
+  readonly onReplay?: () => void;
 }
 
 interface TutorialDialogueAnchor {
@@ -46,199 +60,50 @@ interface TutorialDialogueAnchor {
   readonly top: number;
 }
 
-interface TutorialDreamcallerTrajectory {
-  readonly startX: number;
-  readonly startY: number;
-  readonly targetY: number;
-  readonly startScale: number;
-  readonly width: number;
-  readonly height: number;
-}
-
-type TutorialDreamcallerPhase = "waiting" | "arriving" | "settled";
-type TutorialDialoguePhase = "opening" | "replacing" | "nightmareCall";
-
 const TUTORIAL_FADE_SECONDS = motionTimeSeconds(
   "--dur-loading-screen-fade",
 );
-const TUTORIAL_DREAMCALLER_DELAY_MS =
-  motionTimeSeconds("--delay-tutorial-dreamcaller") * 1000;
-const TUTORIAL_DREAMCALLER_ARRIVAL_SECONDS = motionTimeSeconds(
-  "--dur-loading-screen-fade",
-);
-const TUTORIAL_DREAMCALLER_FADE_SECONDS = motionTimeSeconds("--dur-fast");
-const TUTORIAL_DIALOGUE_REPLACEMENT_MS =
-  motionTimeSeconds("--dur-slow") * 1000;
-
-function TutorialDreamcallerArrival({
-  screen,
-  dreamcaller,
-  onComplete,
-}: {
-  readonly screen: HTMLElement;
-  readonly dreamcaller: DreamcallerVisual;
-  readonly onComplete: () => void;
-}): ReactElement | null {
-  const [trajectory, setTrajectory] =
-    useState<TutorialDreamcallerTrajectory | null>(null);
-
-  useLayoutEffect(() => {
-    const target = screen.querySelector<HTMLElement>(
-      '[data-testid="player-battle-status"] [data-battle-status-dreamcaller-placeholder]',
-    );
-    const dialoguePortrait = screen.querySelector<HTMLElement>(
-      "[data-character-dialogue-portrait-frame]",
-    );
-    if (target === null || dialoguePortrait === null) return undefined;
-
-    const updateTrajectory = (): void => {
-      const screenBox = screen.getBoundingClientRect();
-      const targetBox = target.getBoundingClientRect();
-      const dialoguePortraitBox = dialoguePortrait.getBoundingClientRect();
-      const targetX = targetBox.left - screenBox.left;
-      const targetY = targetBox.top - screenBox.top;
-      setTrajectory({
-        startX: targetX,
-        startY: (screenBox.height - targetBox.height) / 2,
-        targetY,
-        startScale:
-          targetBox.width === 0
-            ? 1
-            : dialoguePortraitBox.width / targetBox.width,
-        width: targetBox.width,
-        height: targetBox.height,
-      });
-    };
-
-    updateTrajectory();
-    const observer = new ResizeObserver(updateTrajectory);
-    observer.observe(screen);
-    observer.observe(target);
-    observer.observe(dialoguePortrait);
-    window.addEventListener("resize", updateTrajectory);
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", updateTrajectory);
-    };
-  }, [screen]);
-
-  if (trajectory === null) return null;
-
-  return (
-    <motion.div
-      data-tutorial-dreamcaller-arrival=""
-      initial={{
-        x: trajectory.startX,
-        y: trajectory.startY,
-        scale: trajectory.startScale,
-        opacity: 0,
-      }}
-      animate={{
-        y: [trajectory.startY, trajectory.targetY],
-        scale: [trajectory.startScale, 1],
-        opacity: 1,
-      }}
-      transition={{
-        duration: TUTORIAL_DREAMCALLER_ARRIVAL_SECONDS,
-        times: [0, 1],
-        ease: [0.22, 0.61, 0.36, 1],
-        opacity: { duration: TUTORIAL_DREAMCALLER_FADE_SECONDS },
-      }}
-      onAnimationComplete={onComplete}
-      style={{
-        position: "absolute",
-        zIndex: 40,
-        top: 0,
-        left: 0,
-        width: trajectory.width,
-        height: trajectory.height,
-        pointerEvents: "none",
-        transformOrigin: "center",
-      }}
-    >
-      <DreamcallerPortrait dreamcaller={dreamcaller} variant="thumb" />
-    </motion.div>
-  );
-}
+const TUTORIAL_EDITOR_DOCK_MIN_WIDTH = 1280;
 
 /** Standalone tutorial battle presentation entered from the loading scene. */
 export function TutorialScreen({
   view,
-  onDialogueReplacementComplete,
-  onDreamcallerArrivalComplete,
+  editor,
+  onActionComplete,
+  onEditorActionsChange,
+  onReplay,
 }: TutorialScreenProps): ReactElement {
   const desktop = useIsDesktop();
+  const dockEditor = useIsDesktop(TUTORIAL_EDITOR_DOCK_MIN_WIDTH);
   const reduceMotion = useReducedMotion() === true;
   const screenRef = useRef<HTMLElement | null>(null);
   const [sceneEntered, setSceneEntered] = useState(reduceMotion);
-  const [dreamcallerPhase, setDreamcallerPhase] =
-    useState<TutorialDreamcallerPhase>("waiting");
-  const arrivalReportedRef = useRef(false);
-  const dialogueReplacementReportedRef = useRef(false);
-  const [dialoguePhase, setDialoguePhase] =
-    useState<TutorialDialoguePhase>("opening");
+  const [editorOpen, setEditorOpen] = useState(false);
+  const [battleInspectorOpen, setBattleInspectorOpen] = useState(false);
   const [dialogueAnchor, setDialogueAnchor] =
     useState<TutorialDialogueAnchor | null>(null);
-
-  const completeDialogueReplacement = useCallback(() => {
-    setDialoguePhase("nightmareCall");
-    if (dialogueReplacementReportedRef.current) return;
-    dialogueReplacementReportedRef.current = true;
-    onDialogueReplacementComplete?.();
-  }, [onDialogueReplacementComplete]);
-
-  const settleDreamcaller = useCallback(() => {
-    if (arrivalReportedRef.current) return;
-    arrivalReportedRef.current = true;
-    setDreamcallerPhase("settled");
-    onDreamcallerArrivalComplete?.(view.dreamcaller.profile.id);
-    if (reduceMotion) {
-      completeDialogueReplacement();
-    } else {
-      setDialoguePhase("replacing");
-    }
-  }, [
-    completeDialogueReplacement,
-    onDreamcallerArrivalComplete,
-    reduceMotion,
-    view.dreamcaller.profile.id,
-  ]);
+  const lastDialogue = useRef<CharacterDialogueModel | null>(view.dialogue);
+  if (view.dialogue !== null) lastDialogue.current = view.dialogue;
+  const renderedDialogue = view.dialogue ?? lastDialogue.current;
 
   useEffect(() => {
-    if (dialoguePhase !== "replacing") return undefined;
+    if (!sceneEntered || view.currentAction === null || view.playbackRunId === null) {
+      return undefined;
+    }
+    const { id, wait } = view.currentAction;
+    const runId = view.playbackRunId;
     const timeout = window.setTimeout(
-      completeDialogueReplacement,
-      TUTORIAL_DIALOGUE_REPLACEMENT_MS,
+      () => onActionComplete?.(runId, id),
+      wait * 1_000,
     );
     return () => window.clearTimeout(timeout);
-  }, [completeDialogueReplacement, dialoguePhase]);
+  }, [onActionComplete, sceneEntered, view.currentAction, view.playbackRunId]);
 
   useEffect(() => {
-    if (!sceneEntered || dreamcallerPhase !== "waiting") return undefined;
-    const timeout = window.setTimeout(() => {
-      if (reduceMotion) {
-        settleDreamcaller();
-      } else {
-        setDreamcallerPhase("arriving");
-      }
-    }, TUTORIAL_DREAMCALLER_DELAY_MS);
-    return () => window.clearTimeout(timeout);
-  }, [dreamcallerPhase, reduceMotion, sceneEntered, settleDreamcaller]);
-
-  const battleView = useMemo<MobileBattleView>(() => {
-    if (dreamcallerPhase !== "settled") return view.battle;
-    return {
-      ...view.battle,
-      player: {
-        ...view.battle.player,
-        status: {
-          ...view.battle.player.status,
-          dreamcaller: view.dreamcaller.visual,
-          dreamcallerProfile: view.dreamcaller.profile,
-        },
-      },
-    };
-  }, [dreamcallerPhase, view]);
+    if (!dockEditor && editorOpen && battleInspectorOpen) {
+      setEditorOpen(false);
+    }
+  }, [battleInspectorOpen, dockEditor, editorOpen]);
 
   useLayoutEffect(() => {
     const screen = screenRef.current;
@@ -340,7 +205,25 @@ export function TutorialScreen({
       observer.disconnect();
       window.removeEventListener("resize", updateAnchor);
     };
-  }, [desktop]);
+  }, [desktop, renderedDialogue]);
+
+  const editorSurface =
+    editor === undefined || onEditorActionsChange === undefined || onReplay === undefined
+      ? null
+      : {
+          ...editor,
+          onActionsChange: onEditorActionsChange,
+          onReplay,
+          onClose: () => setEditorOpen(false),
+        };
+
+  const handleBattleInspectorOpenChange = useCallback(
+    (open: boolean): void => {
+      setBattleInspectorOpen(open);
+      if (open && !dockEditor) setEditorOpen(false);
+    },
+    [dockEditor],
+  );
 
   return (
     <motion.main
@@ -361,17 +244,56 @@ export function TutorialScreen({
         background: token("--bg-loading"),
       }}
     >
-      <MobileBattleScreen
-        view={battleView}
-        inspectorDefault="collapsed"
-        phaseNavigation="hidden"
-      />
-      {dreamcallerPhase === "arriving" && screenRef.current !== null ? (
-        <TutorialDreamcallerArrival
-          screen={screenRef.current}
-          dreamcaller={view.dreamcaller.visual}
-          onComplete={settleDreamcaller}
-        />
+      <div
+        data-tutorial-shell=""
+        style={{
+          position: "absolute",
+          inset: 0,
+          display: "grid",
+          gridTemplateColumns:
+            dockEditor && editorOpen
+              ? `${MOBILE_BATTLE_INSPECTOR_RAIL_TRACK} minmax(0, 1fr)`
+              : "minmax(0, 1fr)",
+          minWidth: 0,
+          minHeight: 0,
+        }}
+      >
+        {dockEditor && editorOpen && editorSurface !== null ? (
+          <TutorialEditorRail {...editorSurface} />
+        ) : null}
+        <div style={{ position: "relative", minWidth: 0, minHeight: 0 }}>
+          <MobileBattleScreen
+            view={view.battle}
+            viewport="contained"
+            inspectorDefault="collapsed"
+            inspectorOpen={battleInspectorOpen}
+            onInspectorOpenChange={handleBattleInspectorOpenChange}
+            phaseNavigation="hidden"
+          />
+        </div>
+      </div>
+      {editorSurface !== null && !editorOpen ? (
+        <div
+          style={{
+            position: "absolute",
+            top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-4")})`,
+            left: `calc(var(${SAFE_AREA_INSET_PROPERTIES.left}) + ${token("--space-4")})`,
+            zIndex: 20,
+          }}
+        >
+          <IconButton
+            glyph={GLYPHS.sidebarLeft}
+            size="sm"
+            label="Open tutorial editor"
+            ariaExpanded={false}
+            ariaControls="cumulus-tutorial-editor"
+            testId="tutorial-editor-trigger"
+            onPress={() => {
+              if (!dockEditor) setBattleInspectorOpen(false);
+              setEditorOpen(true);
+            }}
+          />
+        </div>
       ) : null}
       <div
         data-tutorial-dialogue-anchor=""
@@ -388,17 +310,18 @@ export function TutorialScreen({
           pointerEvents: "none",
         }}
       >
-        <CharacterDialogue
-          dialogue={
-            dialoguePhase === "nightmareCall"
-              ? view.dialogueAfterDreamcallerArrival
-              : view.dialogue
-          }
-          size={desktop ? "prominent" : "compact"}
-          visible={sceneEntered && dialoguePhase !== "replacing"}
-          testId="tutorial-welcome-dialogue"
-        />
+        {renderedDialogue === null ? null : (
+          <CharacterDialogue
+            dialogue={renderedDialogue}
+            size={desktop ? "prominent" : "compact"}
+            visible={sceneEntered && view.dialogue !== null}
+            testId="tutorial-welcome-dialogue"
+          />
+        )}
       </div>
+      {!dockEditor && editorOpen && editorSurface !== null ? (
+        <TutorialEditorTakeover {...editorSurface} />
+      ) : null}
     </motion.main>
   );
 }

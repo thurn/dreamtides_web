@@ -206,6 +206,16 @@ export function routeDomain(
         state,
         frontDoor.advanceFrontDoor(state.frontDoor, payload),
       );
+    case "BEGIN_TUTORIAL":
+      return frontDoorCase(
+        state,
+        frontDoor.beginTutorial(state.frontDoor, payload, ctx),
+      );
+    case "COMPLETE_TUTORIAL_ACTION":
+      return frontDoorCase(
+        state,
+        frontDoor.completeTutorialAction(state.frontDoor, payload),
+      );
 
     // --- essence & limits ---
     case "ADJUST_ESSENCE":

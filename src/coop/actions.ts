@@ -23,6 +23,7 @@
 // §"Client layer" (actions facade).
 
 import type { EventDraft } from "../eventlog/client";
+import type { TutorialAction } from "../types/tutorial";
 
 /**
  * Appends a stamped event, resolving to its committed seq. In production this
@@ -44,6 +45,11 @@ export interface CoopActions {
     from: "mainExiting" | "loading",
     journeyId: string,
   ) => Promise<number>;
+  beginTutorial: (
+    actions: readonly TutorialAction[],
+    intentKey?: string,
+  ) => Promise<number>;
+  completeTutorialAction: (runId: string, actionId: string) => Promise<number>;
 
   // --- essence & limits ---
   changeEssence: (delta: number) => Promise<number>;
@@ -225,6 +231,14 @@ export function makeActions(append: AppendFn): CoopActions {
         payload: { from, journeyId },
         intentKey: `front-door:${journeyId}:${from}`,
       }),
+    beginTutorial: (actions, intentKey) =>
+      emit("BEGIN_TUTORIAL", { actions: [...actions] }, intentKey),
+    completeTutorialAction: (runId, actionId) =>
+      emit(
+        "COMPLETE_TUTORIAL_ACTION",
+        { runId, actionId },
+        `tutorial:${runId}:complete:${actionId}`,
+      ),
 
     // --- essence & limits ---
     changeEssence: (delta) => emit("ADJUST_ESSENCE", { delta }),

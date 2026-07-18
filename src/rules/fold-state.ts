@@ -10,6 +10,7 @@
 
 import type { Genesis } from "../eventlog/types";
 import type { QuestState } from "../types/quest";
+import type { TutorialPlaybackState } from "../types/tutorial";
 
 // The authoritative battle fold shape lives in `battle/fold.ts` (Task 18),
 // which owns the cursor model that keeps the state closure-free. `FoldState`
@@ -24,6 +25,8 @@ export interface FrontDoorState {
   readonly phase: FrontDoorPhase;
   /** Stable identity shared by the automatic transitions for one journey. */
   readonly journeyId: string | null;
+  /** Shared authored snapshot and cursor for the standalone tutorial. */
+  readonly tutorial: TutorialPlaybackState | null;
 }
 
 /**
@@ -52,6 +55,7 @@ export function genesisFoldState(genesis: Genesis): FoldState {
     frontDoor: {
       phase: entry,
       journeyId: entry === "main" ? null : `genesis:${genesis.seed}`,
+      tutorial: null,
     },
     quest: genesisQuestState(genesis),
     battle: null,

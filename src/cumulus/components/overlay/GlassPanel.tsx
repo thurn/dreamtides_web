@@ -39,6 +39,18 @@ export type GlassPanelAccessory =
       size?: IconButtonSize;
       /** A `data-testid` for selecting the disc in tests. */
       testId?: string;
+    }
+  | {
+      kind: "iconButtonGroup";
+      /** Compact header actions rendered together at the trailing edge. */
+      actions: readonly {
+        glyph: Glyph;
+        label: string;
+        onPress: () => void;
+        disabled?: boolean;
+        size?: IconButtonSize;
+        testId?: string;
+      }[];
     };
 
 /** The panel frame geometry and material. */
@@ -131,6 +143,24 @@ function accessoryNode(
         testId={accessory.testId}
         onPress={accessory.onPress}
       />
+    );
+  }
+  if (accessory.kind === "iconButtonGroup") {
+    return (
+      <div style={{ display: "flex", alignItems: "center", gap: token("--space-2") }}>
+        {accessory.actions.map((action) => (
+          <IconButton
+            key={action.label}
+            placement={placement}
+            glyph={action.glyph}
+            size={action.size}
+            label={action.label}
+            disabled={action.disabled}
+            testId={action.testId}
+            onPress={action.onPress}
+          />
+        ))}
+      </div>
     );
   }
   return (

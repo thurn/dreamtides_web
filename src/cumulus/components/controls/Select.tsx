@@ -88,6 +88,8 @@ export interface SelectProps {
   align?: "start" | "end";
   /** Accessible label for the trigger. */
   ariaLabel?: string;
+  /** Text shown when `value` does not match an option, for action-picker controls. */
+  placeholder?: string;
 }
 
 interface SizeSpec {
@@ -126,6 +128,7 @@ export function Select({
   full = false,
   align = "start",
   ariaLabel,
+  placeholder,
 }: SelectProps): ReactElement {
   const spec = SIZES[size];
   const chrome = controlChrome();
@@ -181,6 +184,7 @@ export function Select({
     align === "end" && anchor !== null
       ? { right: anchor.right }
       : { left: anchor?.left };
+  const hasSelection = options.some((option) => option.value === value);
 
   return (
     <div style={{ position: "relative", display: full ? "block" : "inline-block" }}>
@@ -238,6 +242,20 @@ export function Select({
             justifyItems: "start",
           }}
         >
+          {placeholder === undefined ? null : (
+            <span
+              aria-hidden={hasSelection ? true : undefined}
+              style={{
+                gridArea: "1 / 1",
+                visibility: hasSelection ? "hidden" : "visible",
+                whiteSpace: "nowrap",
+                textAlign: "left",
+                color: token("--text-primary"),
+              }}
+            >
+              {placeholder}
+            </span>
+          )}
           {options.map((option) => (
             <span
               key={option.value}

@@ -25,6 +25,7 @@ import { dreamwellCardDemo } from "./demos/dreamwell-card";
 import { dreamsignDemo } from "./demos/dreamsign";
 import { dreamsignGalleryPanelDemo } from "./demos/dreamsign-gallery-panel";
 import { disclosureSectionDemo } from "./demos/disclosure-section";
+import { developerRailDemo } from "./demos/developer-rail";
 import { essenceValueDemo } from "./demos/essence-value";
 import { gameCardDemo } from "./demos/game-card";
 import { glassButtonDemo } from "./demos/glass-button";
@@ -51,6 +52,7 @@ import { siteNodeDemo } from "./demos/site-node";
 import { speechBubbleDemo } from "./demos/speech-bubble";
 import { tideDiscDemo } from "./demos/tide-disc";
 import { textFieldDemo } from "./demos/text-field";
+import { textAreaDemo } from "./demos/text-area";
 import { transfigurationFormButtonDemo } from "./demos/transfiguration-form-button";
 
 /**
@@ -154,11 +156,13 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   offerTileDemo,
   glassPanelDemo,
   glassDialogDemo,
+  developerRailDemo,
   speechBubbleDemo,
   characterDialogueDemo,
   segmentedControlDemo,
   selectDemo,
   textFieldDemo,
+  textAreaDemo,
   numberStepperDemo,
   disclosureSectionDemo,
   cardOrderEditorDemo,

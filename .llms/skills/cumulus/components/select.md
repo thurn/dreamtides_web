@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/select`
 
-Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
 
 The compact dropdown control, and Cumulus's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. Two of them share a single line where a segmented control would not fit.
 
@@ -24,6 +24,7 @@ The compact dropdown control, and Cumulus's standard mobile filter/sort control:
 | `full` | `boolean` | no | `false` | Stretch the trigger to fill the container width. |
 | `align` | `"start" \| "end"` | no | `start` | Which trigger edge the menu aligns to. 'start' (default) opens flush to the leading edge; 'end' opens flush to the trailing edge — use it when the Select sits against the right side of a bar so the menu stays on-screen. |
 | `ariaLabel` | `string` | no | — | Accessible label for the trigger. |
+| `placeholder` | `string` | no | — | Text shown when `value` does not match an option, for action-picker controls. |
 
 ### `options`: the `SelectOption` model
 
@@ -56,6 +57,14 @@ const [sort, setSort] = useState("name");
   value={sort}
   onChange={setSort}
 />
+```
+
+### Action picker
+
+Use placeholder with an unmatched controlled value when choosing an item performs an action and resets the trigger.
+
+```tsx
+<Select placeholder="Add an Action" options={actionOptions} value="" onChange={addAction} />
 ```
 
 ### Right-aligned in a bar

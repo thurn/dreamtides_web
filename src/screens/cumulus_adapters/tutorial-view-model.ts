@@ -4,10 +4,10 @@ import type {
   MobileBattleSlotView,
 } from "../../cumulus/screens/MobileBattleScreen";
 import type { TutorialView } from "../../cumulus/screens/TutorialScreen";
+import type { TutorialPlaybackState } from "../../types/tutorial";
 
 const TUTORIAL_BATTLE_ID = "tutorial-battle";
 const TUTORIAL_DECK_SIZE = 30;
-const TUTORIAL_DREAMCALLER_ID = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
 
 function tutorialDeckIds(
   owner: "enemy" | "player",
@@ -68,33 +68,26 @@ function emptyInspectorSide(
 }
 
 /** Build the quest-independent opening state for the tutorial battle. */
-export function buildTutorialView(): TutorialView {
+export function buildTutorialView(
+  playback: TutorialPlaybackState | null = null,
+): TutorialView {
+  const currentAction =
+    playback?.currentActionIndex === null ||
+    playback?.currentActionIndex === undefined
+      ? null
+      : (playback.actions[playback.currentActionIndex] ?? null);
   return {
-    dreamcaller: {
-      visual: {
-        imageNumber: "0029",
-        name: "Tensho",
-        title: "Daimyo of Lacquered Fury",
-        portraitFocus: { x: 0.5, y: 0.22 },
-      },
-      profile: {
-        id: TUTORIAL_DREAMCALLER_ID,
-        ability: "Dreamcaller ability is not active",
-        unavailable: true,
-      },
-    },
-    dialogue: {
-      portrait: { kind: "character-portrait", characterId: "mira" },
-      portraitAlt: "Mira",
-      speakerName: "Mira",
-      text: "Welcome, Dreamer.",
-    },
-    dialogueAfterDreamcallerArrival: {
-      portrait: { kind: "character-portrait", characterId: "mira" },
-      portraitAlt: "Mira",
-      speakerName: "Mira",
-      text: "You are called to stand against the power of Nightmare.",
-    },
+    dialogue:
+      currentAction?.action === "display-speech-bubble"
+        ? {
+            portrait: { kind: "character-portrait", characterId: "mira" },
+            portraitAlt: "Mira",
+            speakerName: "Mira",
+            text: currentAction.text,
+          }
+        : null,
+    playbackRunId: playback?.runId ?? null,
+    currentAction,
     battle: {
       battleId: TUTORIAL_BATTLE_ID,
       aiApproval: null,

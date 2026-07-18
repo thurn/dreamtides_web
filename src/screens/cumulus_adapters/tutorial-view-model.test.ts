@@ -3,34 +3,28 @@ import { buildTutorialView } from "./tutorial-view-model";
 
 describe("buildTutorialView", () => {
   it("builds a quest-independent opposing Day phase with full decks and empty hands", () => {
-    const tutorial = buildTutorialView();
+    const tutorial = buildTutorialView({
+      runId: "event:7",
+      currentActionIndex: 0,
+      actions: [
+        {
+          id: "greeting",
+          action: "display-speech-bubble",
+          text: "A custom greeting.",
+          wait: 1.5,
+        },
+      ],
+    });
     const view = tutorial.battle;
 
     expect(tutorial.dialogue).toEqual({
       portrait: { kind: "character-portrait", characterId: "mira" },
       portraitAlt: "Mira",
       speakerName: "Mira",
-      text: "Welcome, Dreamer.",
+      text: "A custom greeting.",
     });
-    expect(tutorial.dialogueAfterDreamcallerArrival).toEqual({
-      portrait: { kind: "character-portrait", characterId: "mira" },
-      portraitAlt: "Mira",
-      speakerName: "Mira",
-      text: "You are called to stand against the power of Nightmare.",
-    });
-    expect(tutorial.dreamcaller).toEqual({
-      visual: {
-        imageNumber: "0029",
-        name: "Tensho",
-        title: "Daimyo of Lacquered Fury",
-        portraitFocus: { x: 0.5, y: 0.22 },
-      },
-      profile: {
-        id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
-        ability: "Dreamcaller ability is not active",
-        unavailable: true,
-      },
-    });
+    expect(tutorial.playbackRunId).toBe("event:7");
+    expect(tutorial.currentAction?.id).toBe("greeting");
 
     expect(view.battleId).toBe("tutorial-battle");
     expect(view.activeSide).toBe("enemy");

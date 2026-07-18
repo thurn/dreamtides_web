@@ -93,6 +93,11 @@ const [sort, setSort] = useState("name");
 />`,
     },
     {
+      label: "Action picker",
+      note: "Use placeholder with an unmatched controlled value when choosing an item performs an action and resets the trigger.",
+      code: `<Select placeholder="Add an Action" options={actionOptions} value="" onChange={addAction} />`,
+    },
+    {
       label: "Right-aligned in a bar",
       note: "Set `align=\"end\"` when the Select sits against the trailing edge so its menu stays on-screen.",
       code: `<Select

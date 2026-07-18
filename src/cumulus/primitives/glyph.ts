@@ -117,6 +117,16 @@ export const GLYPHS = {
   block: g("bx bx-block"),
   /** A right sidebar — the battle inspector disclosure trigger. */
   sidebarRight: g("bx bx-sidebar-right"),
+  /** A left sidebar — the Tutorial Editor disclosure trigger. */
+  sidebarLeft: g("bx bx-dock-left"),
+  /** Six-dot grip used to drag authored sequence rows. */
+  dragHandle: g("bx bx-dots-vertical-rounded"),
+  /** Trash can used for destructive authoring-row removal. */
+  trash: g("bx bx-trash"),
+  /** Save disk used for idle or in-progress authoring persistence. */
+  save: g("bx bx-save"),
+  /** Play triangle used to replay an authored sequence. */
+  play: g("bxf bx-play"),
   /** The hamburger bars — the mobile quest-menu disclosure trigger. */
   menu: g("bxf bx-menu"),
   /** The circular refresh arrows used by shop restock actions. */

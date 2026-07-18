@@ -32,6 +32,7 @@ import { SegmentedControl } from "../components/controls/SegmentedControl";
 import { ResourceChip } from "../components/hud/ResourceChip";
 import { GlassBackdrop, GlassDialog } from "../components/overlay/GlassDialog";
 import { GlassPanel } from "../components/overlay/GlassPanel";
+import { DeveloperRail } from "../components/overlay/DeveloperRail";
 import type { DreamcallerVisual } from "../components/hud/DreamcallerPortrait";
 import { GLYPHS } from "../primitives/glyph";
 import {
@@ -173,6 +174,12 @@ export interface MobileBattleScreenProps {
   readonly inspectorDefault?: "responsive" | "collapsed";
   /** Phase controls exposed by this presentation. */
   readonly phaseNavigation?: "both" | "hidden";
+  /** Optional controlled inspector state for a parent shell with another rail. */
+  readonly inspectorOpen?: boolean;
+  /** Reports inspector disclosure changes in controlled compositions. */
+  readonly onInspectorOpenChange?: (open: boolean) => void;
+  /** Fill a positioned parent instead of owning the browser viewport. */
+  readonly viewport?: "fixed" | "contained";
 }
 
 export type MobileBattleOwner = "enemy" | "player";
@@ -2647,13 +2654,17 @@ function BattleInspectorRail({
   readonly onAction?: (action: MobileBattleInspectorAction) => void;
 }) {
   return (
-    <aside id={INSPECTOR_ID} data-battle-inspector="docked" style={{ minWidth: 0, height: "100dvh" }}>
-      <GlassPanel frame="edgeRail" eyebrow="Developer Tools" title="Battle Inspector" subtitle={`Opponent: ${inspector.opponentName}`} headerSpacing="compact" rightAccessory={{ kind: "iconButton", glyph: GLYPHS.close, label: "Close battle inspector", onPress: onClose, size: "sm" }}>
-        <div style={{ height: "100%", overflowY: "auto", padding: token("--space-5"), boxSizing: "border-box" }}>
-          <BattleInspectorContent inspector={inspector} selectedSide={selectedSide} onSelectSide={onSelectSide} onAction={onAction} />
-        </div>
-      </GlassPanel>
-    </aside>
+    <div data-battle-inspector="docked" style={{ minWidth: 0, height: "100dvh" }}>
+      <DeveloperRail
+        id={INSPECTOR_ID}
+        side="right"
+        title="Battle Inspector"
+        subtitle={`Opponent: ${inspector.opponentName}`}
+        onClose={onClose}
+      >
+        <BattleInspectorContent inspector={inspector} selectedSide={selectedSide} onSelectSide={onSelectSide} onAction={onAction} />
+      </DeveloperRail>
+    </div>
   );
 }
 
@@ -2663,11 +2674,19 @@ export function MobileBattleScreen({
   interactions,
   inspectorDefault = "responsive",
   phaseNavigation = "both",
+  inspectorOpen: controlledInspectorOpen,
+  onInspectorOpenChange,
+  viewport = "fixed",
 }: MobileBattleScreenProps) {
   const isDesktop = useIsDesktop();
   const isDockLayout = useIsDesktop(INSPECTOR_DOCK_MIN_WIDTH);
   const inspectorStartsOpen = inspectorDefault === "responsive" && isDockLayout;
-  const [isInspectorOpen, setIsInspectorOpen] = useState(inspectorStartsOpen);
+  const [internalInspectorOpen, setInternalInspectorOpen] = useState(inspectorStartsOpen);
+  const isInspectorOpen = controlledInspectorOpen ?? internalInspectorOpen;
+  const setInspectorOpen = useCallback((open: boolean): void => {
+    setInternalInspectorOpen(open);
+    onInspectorOpenChange?.(open);
+  }, [onInspectorOpenChange]);
   const [isCardDragActive, setIsCardDragActive] = useState(false);
   const [snapLayoutCardId, setSnapLayoutCardId] = useState<string | null>(null);
   const [cardPickerSelection, setCardPickerSelection] = useState<{
@@ -2701,11 +2720,11 @@ export function MobileBattleScreen({
 
   useEffect(() => {
     setSelectedSide("player");
-    setIsInspectorOpen(inspectorStartsOpen);
+    setInspectorOpen(inspectorStartsOpen);
     setIsCardDragActive(false);
     setSnapLayoutCardId(null);
     setCardPickerSelection({ pickerKey: null, ids: [] });
-  }, [inspectorStartsOpen, view.battleId]);
+  }, [inspectorStartsOpen, setInspectorOpen, view.battleId]);
 
   const handlePickerCardToggle = useCallback((cardId: string): void => {
     if (view.cardPicker === null) return;
@@ -2750,8 +2769,8 @@ export function MobileBattleScreen({
   useEffect(() => {
     if (previousDockLayout.current === isDockLayout) return;
     previousDockLayout.current = isDockLayout;
-    setIsInspectorOpen(inspectorStartsOpen);
-  }, [inspectorStartsOpen, isDockLayout]);
+    setInspectorOpen(inspectorStartsOpen);
+  }, [inspectorStartsOpen, isDockLayout, setInspectorOpen]);
 
   useEffect(() => {
     if (!isInspectorOpen) {
@@ -2766,9 +2785,9 @@ export function MobileBattleScreen({
   }, [interactions, isDockLayout, isInspectorOpen, selectedSide, view.battleId]);
 
   const closeInspector = useCallback(() => {
-    setIsInspectorOpen(false);
+    setInspectorOpen(false);
     requestAnimationFrame(() => inspectorTriggerRef.current?.focus());
-  }, []);
+  }, [setInspectorOpen]);
 
   useEffect(() => {
     if (isDockLayout || galleryCardPicker === null || !isInspectorOpen) return;
@@ -2942,7 +2961,7 @@ export function MobileBattleScreen({
                 inspectorTriggerRef.current = document.activeElement instanceof HTMLElement
                   ? document.activeElement
                   : inspectorTriggerRef.current;
-                setIsInspectorOpen(true);
+                setInspectorOpen(true);
               }
             }}
           />
@@ -2968,7 +2987,7 @@ export function MobileBattleScreen({
         data-battle-inspector-open={isInspectorOpen ? "true" : "false"}
         data-battle-inspector-layout={isDockLayout ? "docked" : "takeover"}
         style={{
-          position: "fixed",
+          position: viewport === "contained" ? "absolute" : "fixed",
           inset: 0,
           display: "grid",
           gridTemplateColumns: isDockLayout && isInspectorOpen

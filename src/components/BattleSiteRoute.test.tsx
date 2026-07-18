@@ -110,7 +110,7 @@ function makeFoldStateWithBattle(): FoldState {
   });
   const board = createInitialBattleState(init);
   return {
-    frontDoor: { phase: "main", journeyId: null },
+    frontDoor: { phase: "main", journeyId: null, tutorial: null },
     quest: makeQuestState(),
     battle: {
       init,
@@ -205,7 +205,7 @@ beforeEach(() => {
   };
   setQuestState();
   mockGameState = {
-    frontDoor: { phase: "main", journeyId: null },
+    frontDoor: { phase: "main", journeyId: null, tutorial: null },
     quest: makeQuestState(),
     battle: null,
   };
@@ -499,7 +499,7 @@ describe("BattleSiteRoute", () => {
     ).toBe("site-7::3::dreamscape-2");
 
     mockGameState = {
-      frontDoor: { phase: "main", journeyId: null },
+      frontDoor: { phase: "main", journeyId: null, tutorial: null },
       quest: makeQuestState({ completionLevel: 4 }),
       battle: null,
     };

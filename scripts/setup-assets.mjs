@@ -15,6 +15,7 @@ import {
   resolveToken,
   stripJsonComments,
 } from "./lib/card-refs.mjs";
+import { validateTutorialActions } from "./tutorial-data.mjs";
 
 // Re-exported for `setup-assets.test.mjs`, which exercises the JSONC comment
 // stripper alongside the asset-build helpers defined here.
@@ -959,6 +960,7 @@ export function setupAssets({
     "apollyon_incarnations.toml",
   ),
   figmentTomlPath = join(DATA_DIR, "tabula", "figments.toml"),
+  tutorialTomlPath = join(DATA_DIR, "tabula", "tutorial.toml"),
   merchantCorpusJsonPath = join(DATA_DIR, "merchant_corpus.json"),
   publicDir = PUBLIC_DIR,
   imageCacheDir = IMAGE_CACHE_DIR,
@@ -1002,6 +1004,7 @@ export function setupAssets({
     "apollyon-incarnations-data.json",
   );
   const figmentJsonPath = join(publicDir, "figments-data.json");
+  const tutorialJsonPath = join(publicDir, "tutorial-data.json");
   const merchantCorpusPublicPath = join(publicDir, "merchant-corpus-data.json");
   const journeyExtensionJsonPath = join(journeysDir, "imageId-extension.json");
 
@@ -1012,6 +1015,14 @@ export function setupAssets({
     cardV2JsonPath,
     publicDir,
   });
+
+  const tutorialSource = parse(readFileSync(tutorialTomlPath, "utf8"));
+  const tutorialActions = validateTutorialActions(tutorialSource.actions);
+  writeFileSync(
+    tutorialJsonPath,
+    `${JSON.stringify({ actions: tutorialActions }, null, 2)}\n`,
+  );
+  console.log(`Wrote ${tutorialActions.length} tutorial actions to tutorial-data.json`);
 
   // Real per-deck card lists bundled for the draft test's `decklists` pool
   // variant (and the `idf`/`idf2`/`idf3` variants), which build a pool by

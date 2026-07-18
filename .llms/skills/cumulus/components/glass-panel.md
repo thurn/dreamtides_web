@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/glass-panel`
 
-Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **7** (imports outside `src/cumulus/docs/` and tests).
 
 The shared liquid-glass content container: an optional structured header, a composed body, and an optional footer on the canonical floating material.
 
@@ -38,12 +38,7 @@ The shared liquid-glass content container: an optional structured header, a comp
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `kind` | `"glassButton" \| "iconButton"` | no |  |
-| `label` | `string` | no |  |
-| `onPress` | `(() => void) \| (() => void)` | no |  |
-| `glyph` | `Glyph` | yes |  |
-| `disabled` | `boolean` | yes |  |
-| `testId` | `string` | yes | A `data-testid` for selecting the button in tests. A `data-testid` for selecting the disc in tests. |
+| `kind` | `"glassButton" \| "iconButton" \| "iconButtonGroup"` | no |  |
 
 ## Usage
 

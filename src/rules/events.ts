@@ -35,6 +35,8 @@ export interface EventPayloads {
     from: "mainExiting" | "loading";
     journeyId: string;
   };
+  BEGIN_TUTORIAL: { actions: unknown };
+  COMPLETE_TUTORIAL_ACTION: { runId: string; actionId: string };
 
   // --- essence & limits ---
   ADJUST_ESSENCE: { delta: number };
@@ -173,6 +175,8 @@ export type TypedGameEvent<T extends GameEventType = GameEventType> = {
 export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
   "FRONT_DOOR_ACTION",
   "ADVANCE_FRONT_DOOR",
+  "BEGIN_TUTORIAL",
+  "COMPLETE_TUTORIAL_ACTION",
   "SET_CARD_NOTE",
   "SET_CARD_SOURCE_DEBUG",
   "OPEN_SITE",
@@ -188,6 +192,8 @@ export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<string> =
   new Set<string>([
     "FRONT_DOOR_ACTION",
     "ADVANCE_FRONT_DOOR",
+    "BEGIN_TUTORIAL",
+    "COMPLETE_TUTORIAL_ACTION",
     "SET_CARD_NOTE",
     "SET_CARD_SOURCE_DEBUG",
     "MARK_SITE_VISITED",
@@ -209,6 +215,8 @@ export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<string> =
 const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   FRONT_DOOR_ACTION: true,
   ADVANCE_FRONT_DOOR: true,
+  BEGIN_TUTORIAL: true,
+  COMPLETE_TUTORIAL_ACTION: true,
   ADJUST_ESSENCE: true,
   SET_ESSENCE: true,
   ADJUST_ESSENCE_CAP: true,

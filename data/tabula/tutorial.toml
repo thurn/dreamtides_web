@@ -1,0 +1,7 @@
+# Ordered actions played by the standalone tutorial scene.
+
+[[actions]]
+id = "welcome"
+action = "display-speech-bubble"
+text = "Welcome, Dreamer."
+wait = 3

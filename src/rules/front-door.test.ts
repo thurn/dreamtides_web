@@ -45,10 +45,18 @@ describe("front-door reducer", () => {
   it("derives direct loading and tutorial entries from room genesis", () => {
     expect(
       genesisFoldState({ ...GENESIS, frontDoorEntry: "loading" }).frontDoor,
-    ).toEqual({ phase: "loading", journeyId: "genesis:front-door-seed" });
+    ).toEqual({
+      phase: "loading",
+      journeyId: "genesis:front-door-seed",
+      tutorial: null,
+    });
     expect(
       genesisFoldState({ ...GENESIS, frontDoorEntry: "tutorial" }).frontDoor,
-    ).toEqual({ phase: "tutorial", journeyId: "genesis:front-door-seed" });
+    ).toEqual({
+      phase: "tutorial",
+      journeyId: "genesis:front-door-seed",
+      tutorial: null,
+    });
   });
 
   it("folds New Journey through the animated main, loading, and tutorial phases", () => {
@@ -65,6 +73,7 @@ describe("front-door reducer", () => {
     expect(exiting.state.frontDoor).toEqual({
       phase: "mainExiting",
       journeyId: "event:1",
+      tutorial: null,
     });
 
     const loading = reduceGameEvent(
@@ -133,6 +142,7 @@ describe("front-door reducer", () => {
     expect(journey.state.frontDoor).toEqual({
       phase: "mainExiting",
       journeyId: "event:2",
+      tutorial: null,
     });
   });
 
@@ -146,5 +156,67 @@ describe("front-door reducer", () => {
 
     expect(result.outcome).toBe("applied");
     expect(result.state.frontDoor).toEqual(start.frontDoor);
+  });
+
+  it("folds a validated tutorial snapshot and advances only its current action", () => {
+    const start = genesisFoldState({ ...GENESIS, frontDoorEntry: "tutorial" });
+    const begun = reduceGameEvent(
+      start,
+      event("BEGIN_TUTORIAL", {
+        actions: [
+          {
+            id: "welcome",
+            action: "display-speech-bubble",
+            text: "A first line.",
+            wait: 0.5,
+          },
+          {
+            id: "second",
+            action: "display-speech-bubble",
+            text: "A second line.",
+            wait: 3,
+          },
+        ],
+      }),
+      context(1),
+    );
+
+    expect(begun.outcome).toBe("applied");
+    expect(begun.state.frontDoor.tutorial).toMatchObject({
+      runId: "event:1",
+      currentActionIndex: 0,
+    });
+
+    const wrong = reduceGameEvent(
+      begun.state,
+      event("COMPLETE_TUTORIAL_ACTION", {
+        runId: "event:1",
+        actionId: "second",
+      }),
+      context(2),
+    );
+    expect(wrong.outcome).toBe("bounced");
+
+    const first = reduceGameEvent(
+      begun.state,
+      event("COMPLETE_TUTORIAL_ACTION", {
+        runId: "event:1",
+        actionId: "welcome",
+      }),
+      context(2),
+    );
+    expect(first.outcome).toBe("applied");
+    expect(first.state.frontDoor.tutorial?.currentActionIndex).toBe(1);
+
+    const second = reduceGameEvent(
+      first.state,
+      event("COMPLETE_TUTORIAL_ACTION", {
+        runId: "event:1",
+        actionId: "second",
+      }),
+      context(3),
+    );
+    expect(second.outcome).toBe("applied");
+    expect(second.state.frontDoor.tutorial?.currentActionIndex).toBeNull();
   });
 });

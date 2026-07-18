@@ -531,39 +531,9 @@
         "fields": [
           {
             "name": "kind",
-            "tsType": "\"glassButton\" | \"iconButton\"",
+            "tsType": "\"glassButton\" | \"iconButton\" | \"iconButtonGroup\"",
             "optional": false,
             "description": ""
-          },
-          {
-            "name": "label",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "onPress",
-            "tsType": "(() => void) | (() => void)",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "glyph",
-            "tsType": "Glyph",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "disabled",
-            "tsType": "boolean",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "testId",
-            "tsType": "string",
-            "optional": true,
-            "description": "A `data-testid` for selecting the button in tests.\nA `data-testid` for selecting the disc in tests."
           }
         ]
       }
@@ -1555,6 +1525,83 @@
       "description": "Comma-separated stable deck entry UUIDs represented by the row."
     }
   ],
+  "DeveloperRail": [
+    {
+      "name": "id",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "DOM id targeted by the rail disclosure trigger."
+    },
+    {
+      "name": "title",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Developer tool name shown in the rail header."
+    },
+    {
+      "name": "subtitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional concise tool context."
+    },
+    {
+      "name": "side",
+      "tsType": "\"left\" | \"right\"",
+      "unionMembers": [
+        "left",
+        "right"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Physical screen edge occupied by the docked rail."
+    },
+    {
+      "name": "onClose",
+      "tsType": "() => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Accessible close action."
+    },
+    {
+      "name": "headerAction",
+      "tsType": "{ readonly glyph: Glyph; readonly label: string; readonly onPress: () => void; readonly disabled?: boolean | undefined; readonly testId?: string | undefined; }",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional tool action placed before the close disc."
+    },
+    {
+      "name": "children",
+      "tsType": "ReactNode",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Scrollable tool content."
+    },
+    {
+      "name": "footer",
+      "tsType": "ReactNode",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional fixed rail footer."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Stable test id for product QA."
+    }
+  ],
   "DisclosureSection": [
     {
       "name": "title",
@@ -2378,39 +2425,9 @@
         "fields": [
           {
             "name": "kind",
-            "tsType": "\"glassButton\" | \"iconButton\"",
+            "tsType": "\"glassButton\" | \"iconButton\" | \"iconButtonGroup\"",
             "optional": false,
             "description": ""
-          },
-          {
-            "name": "label",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "onPress",
-            "tsType": "(() => void) | (() => void)",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "glyph",
-            "tsType": "Glyph",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "disabled",
-            "tsType": "boolean",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "testId",
-            "tsType": "string",
-            "optional": true,
-            "description": "A `data-testid` for selecting the button in tests.\nA `data-testid` for selecting the disc in tests."
           }
         ]
       }
@@ -3846,6 +3863,14 @@
       "required": false,
       "defaultValue": null,
       "description": "Accessible label for the trigger."
+    },
+    {
+      "name": "placeholder",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Text shown when `value` does not match an option, for action-picker controls."
     }
   ],
   "SiteNode": [
@@ -3990,6 +4015,88 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional stable test id for product-screen QA."
+    }
+  ],
+  "TextArea": [
+    {
+      "name": "label",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Visible field label."
+    },
+    {
+      "name": "value",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Controlled multiline text."
+    },
+    {
+      "name": "onChange",
+      "tsType": "(value: string) => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Reports each local text edit."
+    },
+    {
+      "name": "onCommit",
+      "tsType": "((value: string) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Commits the draft on blur or Command/Ctrl+Enter."
+    },
+    {
+      "name": "placeholder",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional placeholder shown while empty."
+    },
+    {
+      "name": "supportingText",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Supporting copy beneath the control."
+    },
+    {
+      "name": "error",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Validation copy; also marks the textarea invalid."
+    },
+    {
+      "name": "disabled",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Prevent editing."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Stable test id for product QA."
+    },
+    {
+      "name": "inputRef",
+      "tsType": "Ref<HTMLTextAreaElement>",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional ref to the native textarea."
     }
   ],
   "TextField": [

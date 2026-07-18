@@ -1,6 +1,7 @@
 import { createContext, useContext, useMemo, type ReactNode } from "react";
 import { useActions, useGameState } from "../coop/hooks";
 import type { FrontDoorState } from "../rules/fold-state";
+import type { TutorialAction } from "../types/tutorial";
 
 export interface FrontDoorMutations {
   action: (
@@ -12,6 +13,11 @@ export interface FrontDoorMutations {
     from: "mainExiting" | "loading",
     journeyId: string,
   ) => Promise<number>;
+  beginTutorial: (
+    actions: readonly TutorialAction[],
+    intentKey?: string,
+  ) => Promise<number>;
+  completeTutorialAction: (runId: string, actionId: string) => Promise<number>;
 }
 
 export interface FrontDoorContextValue {
@@ -29,6 +35,8 @@ export function FrontDoorProvider({ children }: { children: ReactNode }) {
     () => ({
       action: actions.frontDoorAction,
       advance: actions.advanceFrontDoor,
+      beginTutorial: actions.beginTutorial,
+      completeTutorialAction: actions.completeTutorialAction,
     }),
     [actions],
   );

@@ -10,7 +10,7 @@ import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../CumulusRoot";
 import type { CharacterDialogueProps } from "../components/overlay/CharacterDialogue";
-import { TutorialScreen, type TutorialView } from "./TutorialScreen";
+import { TutorialScreen } from "./TutorialScreen";
 import type {
   MobileBattleScreenProps,
   MobileBattleView,
@@ -23,10 +23,6 @@ const screenMocks = vi.hoisted(() => ({
   sceneAnimate: null as unknown,
   sceneTransition: null as unknown,
   sceneAnimationComplete: null as (() => void) | null,
-  arrivalInitial: null as unknown,
-  arrivalAnimate: null as unknown,
-  arrivalTransition: null as unknown,
-  arrivalAnimationComplete: null as (() => void) | null,
 }));
 
 interface MotionMainStubInput {
@@ -37,16 +33,6 @@ interface MotionMainStubInput {
   readonly initial?: unknown;
   readonly onAnimationComplete?: () => void;
   readonly ref?: Ref<HTMLElement>;
-  readonly style?: CSSProperties;
-  readonly transition?: unknown;
-}
-
-interface MotionDivStubInput {
-  readonly animate?: unknown;
-  readonly children?: ReactNode;
-  readonly "data-tutorial-dreamcaller-arrival"?: string;
-  readonly initial?: unknown;
-  readonly onAnimationComplete?: () => void;
   readonly style?: CSSProperties;
   readonly transition?: unknown;
 }
@@ -67,20 +53,6 @@ vi.mock("framer-motion", () => ({
       screenMocks.sceneTransition = transition;
       screenMocks.sceneAnimationComplete = onAnimationComplete ?? null;
       return <main {...elementProps}>{children}</main>;
-    },
-    div: ({
-      animate,
-      children,
-      initial,
-      onAnimationComplete,
-      transition,
-      ...elementProps
-    }: MotionDivStubInput) => {
-      screenMocks.arrivalInitial = initial;
-      screenMocks.arrivalAnimate = animate;
-      screenMocks.arrivalTransition = transition;
-      screenMocks.arrivalAnimationComplete = onAnimationComplete ?? null;
-      return <div {...elementProps}>{children}</div>;
     },
   },
 }));
@@ -106,30 +78,10 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
     ...original,
     MobileBattleScreen: (props: MobileBattleScreenProps) => {
       screenMocks.props = props;
-      return (
-        <div data-battle-mobile={props.view.battleId}>
-          <div data-testid="player-battle-status">
-            <div data-battle-status-dreamcaller-placeholder="" />
-          </div>
-        </div>
-      );
+      return <div data-battle-mobile={props.view.battleId} />;
     },
   };
 });
-
-const TUTORIAL_DREAMCALLER: TutorialView["dreamcaller"] = {
-  visual: {
-    imageNumber: "0029",
-    name: "Tensho",
-    title: "Daimyo of Lacquered Fury",
-    portraitFocus: { x: 0.5, y: 0.22 },
-  },
-  profile: {
-    id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
-    ability: "Dreamcaller ability is not active",
-    unavailable: true,
-  },
-};
 
 class ResizeObserverStub {
   constructor(_callback: ResizeObserverCallback) {}
@@ -159,10 +111,6 @@ beforeEach(() => {
   screenMocks.sceneAnimate = null;
   screenMocks.sceneTransition = null;
   screenMocks.sceneAnimationComplete = null;
-  screenMocks.arrivalInitial = null;
-  screenMocks.arrivalAnimate = null;
-  screenMocks.arrivalTransition = null;
-  screenMocks.arrivalAnimationComplete = null;
 });
 
 afterEach(() => {
@@ -172,9 +120,9 @@ afterEach(() => {
 });
 
 describe("TutorialScreen", () => {
-  it("fades in the battle before revealing CharacterDialogue", () => {
+  it("starts an action wait only after the scene has entered", () => {
     vi.useFakeTimers();
-    const onDialogueReplacementComplete = vi.fn();
+    const onActionComplete = vi.fn();
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -183,11 +131,54 @@ describe("TutorialScreen", () => {
       root.render(
         <CumulusRoot>
           <TutorialScreen
-            onDialogueReplacementComplete={
-              onDialogueReplacementComplete
-            }
             view={{
-              dreamcaller: TUTORIAL_DREAMCALLER,
+              dialogue: {
+                portrait: { kind: "character-portrait", characterId: "mira" },
+                portraitAlt: "Mira",
+                speakerName: "Mira",
+                text: "Welcome, Dreamer.",
+              },
+              playbackRunId: "event:1",
+              currentAction: {
+                id: "welcome",
+                action: "display-speech-bubble",
+                text: "Welcome, Dreamer.",
+                wait: 3,
+              },
+              battle: { battleId: "tutorial-battle" } as MobileBattleView,
+            }}
+            onActionComplete={onActionComplete}
+          />
+        </CumulusRoot>,
+      );
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(onActionComplete).not.toHaveBeenCalled();
+
+    act(() => screenMocks.sceneAnimationComplete?.());
+    act(() => {
+      vi.advanceTimersByTime(2_999);
+    });
+    expect(onActionComplete).not.toHaveBeenCalled();
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(onActionComplete).toHaveBeenCalledWith("event:1", "welcome");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("fades in the battle before revealing CharacterDialogue", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
               dialogue: {
                 portrait: {
                   kind: "character-portrait",
@@ -197,25 +188,15 @@ describe("TutorialScreen", () => {
                 speakerName: "Mira",
                 text: "Welcome, Dreamer.",
               },
-              dialogueAfterDreamcallerArrival: {
-                portrait: {
-                  kind: "character-portrait",
-                  characterId: "mira",
-                },
-                portraitAlt: "Mira",
-                speakerName: "Mira",
-                text: "You are called to stand against the power of Nightmare.",
+              playbackRunId: "event:1",
+              currentAction: {
+                id: "welcome",
+                action: "display-speech-bubble",
+                text: "Welcome, Dreamer.",
+                wait: 3,
               },
               battle: {
                 battleId: "tutorial-battle",
-                player: {
-                  status: {
-                    dreamcaller: null,
-                    currentEnergy: 0,
-                    maxEnergy: 0,
-                    points: 0,
-                  },
-                },
               } as MobileBattleView,
             }}
           />
@@ -258,77 +239,6 @@ describe("TutorialScreen", () => {
     act(() => screenMocks.sceneAnimationComplete?.());
 
     expect(screenMocks.dialogueProps?.visible).toBe(true);
-    const playerTarget = container.querySelector<HTMLElement>(
-      '[data-testid="player-battle-status"] [data-battle-status-dreamcaller-placeholder]',
-    );
-    const dialoguePortrait = container.querySelector<HTMLElement>(
-      "[data-character-dialogue-portrait-frame]",
-    );
-    tutorialScreen!.getBoundingClientRect = () =>
-      DOMRect.fromRect({ x: 0, y: 0, width: 390, height: 844 });
-    playerTarget!.getBoundingClientRect = () =>
-      DOMRect.fromRect({ x: 173, y: 700, width: 44, height: 44 });
-    dialoguePortrait!.getBoundingClientRect = () =>
-      DOMRect.fromRect({ x: 18, y: 390, width: 150, height: 150 });
-
-    act(() => {
-      vi.advanceTimersByTime(999);
-    });
-    expect(
-      container.querySelector("[data-tutorial-dreamcaller-arrival]"),
-    ).toBeNull();
-
-    act(() => {
-      vi.advanceTimersByTime(1);
-    });
-    expect(
-      container.querySelector("[data-tutorial-dreamcaller-arrival]"),
-    ).not.toBeNull();
-    expect(screenMocks.arrivalInitial).toMatchObject({
-      x: 173,
-      y: 400,
-    });
-    expect(
-      (screenMocks.arrivalInitial as { readonly scale: number }).scale,
-    ).toBeCloseTo(150 / 44);
-    expect(screenMocks.arrivalAnimate).toMatchObject({
-      y: [400, 700],
-      scale: [150 / 44, 1],
-    });
-    expect(screenMocks.arrivalAnimate).not.toHaveProperty("x");
-    expect(screenMocks.props?.view.player.status.dreamcaller).toBeNull();
-
-    act(() => screenMocks.arrivalAnimationComplete?.());
-
-    expect(screenMocks.props?.view.player.status).toMatchObject({
-      dreamcaller: TUTORIAL_DREAMCALLER.visual,
-      dreamcallerProfile: TUTORIAL_DREAMCALLER.profile,
-    });
-    expect(screenMocks.dialogueProps).toMatchObject({
-      dialogue: { text: "Welcome, Dreamer." },
-      visible: false,
-    });
-    expect(onDialogueReplacementComplete).not.toHaveBeenCalled();
-
-    act(() => {
-      vi.advanceTimersByTime(419);
-    });
-    expect(screenMocks.dialogueProps).toMatchObject({
-      dialogue: { text: "Welcome, Dreamer." },
-      visible: false,
-    });
-
-    act(() => {
-      vi.advanceTimersByTime(1);
-    });
-    expect(screenMocks.dialogueProps).toMatchObject({
-      dialogue: {
-        speakerName: "Mira",
-        text: "You are called to stand against the power of Nightmare.",
-      },
-      visible: true,
-    });
-    expect(onDialogueReplacementComplete).toHaveBeenCalledTimes(1);
     act(() => root.unmount());
     container.remove();
   });
@@ -353,7 +263,6 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamcaller: TUTORIAL_DREAMCALLER,
               dialogue: {
                 portrait: {
                   kind: "character-portrait",
@@ -363,25 +272,15 @@ describe("TutorialScreen", () => {
                 speakerName: "Mira",
                 text: "Welcome, Dreamer.",
               },
-              dialogueAfterDreamcallerArrival: {
-                portrait: {
-                  kind: "character-portrait",
-                  characterId: "mira",
-                },
-                portraitAlt: "Mira",
-                speakerName: "Mira",
-                text: "You are called to stand against the power of Nightmare.",
+              playbackRunId: "event:1",
+              currentAction: {
+                id: "welcome",
+                action: "display-speech-bubble",
+                text: "Welcome, Dreamer.",
+                wait: 3,
               },
               battle: {
                 battleId: "tutorial-battle",
-                player: {
-                  status: {
-                    dreamcaller: null,
-                    currentEnergy: 0,
-                    maxEnergy: 0,
-                    points: 0,
-                  },
-                },
               } as MobileBattleView,
             }}
           />

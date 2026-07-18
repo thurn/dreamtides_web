@@ -45,12 +45,7 @@ The shared card-browser surface: GlassPanel title and action chrome around a scr
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `kind` | `"glassButton" \| "iconButton"` | no |  |
-| `label` | `string` | no |  |
-| `onPress` | `(() => void) \| (() => void)` | no |  |
-| `glyph` | `Glyph` | yes |  |
-| `disabled` | `boolean` | yes |  |
-| `testId` | `string` | yes | A `data-testid` for selecting the button in tests. A `data-testid` for selecting the disc in tests. |
+| `kind` | `"glassButton" \| "iconButton" \| "iconButtonGroup"` | no |  |
 
 ### `footerAction`: the `CardGalleryFooterAction` model
 

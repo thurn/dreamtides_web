@@ -1,0 +1,423 @@
+import { Reorder, motion, useDragControls } from "framer-motion";
+import {
+  type KeyboardEvent,
+  type PointerEvent,
+  type ReactElement,
+} from "react";
+import { GlowIcon } from "../components/controls/GlowIcon";
+import { IconButton } from "../components/controls/IconButton";
+import { NumberStepper } from "../components/controls/NumberStepper";
+import { Select } from "../components/controls/Select";
+import { TextArea } from "../components/controls/TextArea";
+import { DeveloperRail } from "../components/overlay/DeveloperRail";
+import { GlassDialog } from "../components/overlay/GlassDialog";
+import { Pressable } from "../primitives/Pressable";
+import { GLYPHS } from "../primitives/glyph";
+import { token } from "../primitives/tokens";
+import type {
+  TutorialAction,
+  TutorialActionName,
+  TutorialEditorSaveStatus,
+} from "../../types/tutorial";
+
+export interface TutorialEditorRailProps {
+  readonly actions: readonly TutorialAction[];
+  readonly saveStatus: TutorialEditorSaveStatus;
+  readonly saveError: string | null;
+  readonly onActionsChange: (
+    actions: readonly TutorialAction[],
+    persist: boolean,
+  ) => void;
+  readonly onReplay: () => void;
+  readonly onClose: () => void;
+}
+
+const ACTION_OPTIONS = [
+  { value: "display-speech-bubble", label: "Display Speech Bubble" },
+] satisfies readonly { value: TutorialActionName; label: string }[];
+
+function nextActionId(
+  actionName: TutorialActionName,
+  actions: readonly TutorialAction[],
+): string {
+  const ids = new Set(actions.map((action) => action.id));
+  if (!ids.has(actionName)) return actionName;
+  let suffix = 2;
+  while (ids.has(`${actionName}-${String(suffix)}`)) suffix += 1;
+  return `${actionName}-${String(suffix)}`;
+}
+
+function defaultAction(
+  actionName: TutorialActionName,
+  actions: readonly TutorialAction[],
+): TutorialAction {
+  return {
+    id: nextActionId(actionName, actions),
+    action: "display-speech-bubble",
+    text: "New tutorial message.",
+    wait: 3,
+  };
+}
+
+function reorderedActions(
+  actions: readonly TutorialAction[],
+  orderedIds: readonly string[],
+): readonly TutorialAction[] {
+  const byId = new Map(actions.map((action) => [action.id, action]));
+  return orderedIds.flatMap((id) => {
+    const action = byId.get(id);
+    return action === undefined ? [] : [action];
+  });
+}
+
+function withAction(
+  actions: readonly TutorialAction[],
+  nextAction: TutorialAction,
+): readonly TutorialAction[] {
+  return actions.map((action) =>
+    action.id === nextAction.id ? nextAction : action,
+  );
+}
+
+function waitLabel(wait: number): string {
+  return Number.isInteger(wait) ? String(wait) : wait.toFixed(1);
+}
+
+function TutorialActionRow({
+  action,
+  index,
+  actions,
+  onActionsChange,
+}: {
+  readonly action: TutorialAction;
+  readonly index: number;
+  readonly actions: readonly TutorialAction[];
+  readonly onActionsChange: TutorialEditorRailProps["onActionsChange"];
+}): ReactElement {
+  const controls = useDragControls();
+  const update = (nextAction: TutorialAction, persist: boolean): void =>
+    onActionsChange(withAction(actions, nextAction), persist);
+  const move = (from: number, to: number): void => {
+    const next = [...actions];
+    const [moved] = next.splice(from, 1);
+    if (moved === undefined) return;
+    next.splice(to, 0, moved);
+    onActionsChange(next, true);
+  };
+
+  return (
+    <Reorder.Item
+      as="li"
+      value={action.id}
+      dragListener={false}
+      dragControls={controls}
+      onDragEnd={() => onActionsChange(actions, true)}
+      data-tutorial-action-id={action.id}
+      style={{ listStyle: "none" }}
+    >
+      <article
+        style={{
+          display: "grid",
+          gap: token("--space-4"),
+          padding: token("--space-4"),
+          border: `1px solid ${token("--border-strong")}`,
+          borderRadius: token("--radius-control"),
+        }}
+      >
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "auto minmax(0, 1fr) auto",
+            alignItems: "center",
+            gap: token("--space-2"),
+          }}
+        >
+          <Pressable
+            as="button"
+            aria-label={`Drag action ${String(index + 1)}`}
+            onPointerDown={(event: PointerEvent<HTMLButtonElement>) =>
+              controls.start(event)
+            }
+            onKeyDown={(event: KeyboardEvent<HTMLButtonElement>) => {
+              if (event.key === "ArrowUp" && index > 0) {
+                event.preventDefault();
+                move(index, index - 1);
+              }
+              if (event.key === "ArrowDown" && index < actions.length - 1) {
+                event.preventDefault();
+                move(index, index + 1);
+              }
+            }}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: token("--touch-min"),
+              height: token("--touch-min"),
+              padding: 0,
+              border: "none",
+              background: "transparent",
+              color: token("--text-on-glass-muted"),
+              cursor: "grab",
+              touchAction: "none",
+            }}
+          >
+            <GlowIcon iconClass={GLYPHS.dragHandle} color="text-secondary" size="1.4em" />
+          </Pressable>
+          <div style={{ minWidth: 0 }}>
+            <Select
+              full
+              size="sm"
+              ariaLabel={`Action ${String(index + 1)} type`}
+              options={[...ACTION_OPTIONS]}
+              value={action.action}
+              onChange={(value) => {
+                if (value !== "display-speech-bubble") return;
+                update({ ...action, action: value, text: "New tutorial message." }, true);
+              }}
+            />
+          </div>
+          <IconButton
+            glyph={GLYPHS.trash}
+            size="sm"
+            placement="onGlass"
+            label={`Delete action ${String(index + 1)}`}
+            onPress={() =>
+              onActionsChange(
+                actions.filter((candidate) => candidate.id !== action.id),
+                true,
+              )
+            }
+          />
+        </div>
+
+        <TextArea
+          label="Text"
+          value={action.text}
+          error={action.text.trim().length === 0 ? "Text cannot be blank." : undefined}
+          testId={`tutorial-action-text-${action.id}`}
+          onChange={(text) => update({ ...action, text }, false)}
+          onCommit={(text) => update({ ...action, text }, true)}
+        />
+
+        <NumberStepper
+          label="Wait"
+          value={action.wait}
+          displayValue={`${waitLabel(action.wait)}s`}
+          size="sm"
+          decrementLabel={`Decrease wait for action ${String(index + 1)}`}
+          incrementLabel={`Increase wait for action ${String(index + 1)}`}
+          decrementDisabled={action.wait <= 0}
+          onDecrement={() =>
+            update(
+              { ...action, wait: Math.max(0, Math.round((action.wait - 0.5) * 10) / 10) },
+              true,
+            )
+          }
+          onIncrement={() =>
+            update(
+              { ...action, wait: Math.round((action.wait + 0.5) * 10) / 10 },
+              true,
+            )
+          }
+        />
+      </article>
+    </Reorder.Item>
+  );
+}
+
+function SaveStatus({
+  status,
+  error,
+}: {
+  readonly status: TutorialEditorSaveStatus;
+  readonly error: string | null;
+}): ReactElement | null {
+  if (status === "idle") return null;
+  const label =
+    status === "saving"
+      ? "Saving tutorial"
+      : status === "saved"
+        ? "Tutorial saved"
+        : status === "error"
+          ? `Tutorial save failed${error === null ? "" : `: ${error}`}`
+          : "Tutorial changes are saved";
+  const glyph =
+    status === "error"
+      ? GLYPHS.warning
+      : status === "saved"
+        ? GLYPHS.check
+        : GLYPHS.save;
+  return (
+    <motion.span
+      role="status"
+      aria-label={label}
+      title={label}
+      animate={status === "saving" ? { opacity: [0.4, 1, 0.4] } : { opacity: 1 }}
+      transition={status === "saving" ? { repeat: Infinity, duration: 1.2 } : undefined}
+      style={{ display: "inline-flex" }}
+    >
+      <GlowIcon
+        iconClass={glyph}
+        color={status === "error" ? "danger" : "text-secondary"}
+        size="1.25em"
+      />
+    </motion.span>
+  );
+}
+
+function TutorialEditorContent({
+  actions,
+  onActionsChange,
+}: Pick<
+  TutorialEditorRailProps,
+  "actions" | "onActionsChange"
+>): ReactElement {
+  return (
+    <div style={{ display: "grid", gap: token("--space-5") }}>
+      <Reorder.Group
+        as="ol"
+        axis="y"
+        values={actions.map((action) => action.id)}
+        onReorder={(orderedIds: string[]) => {
+          const next = reorderedActions(actions, orderedIds);
+          onActionsChange(next, false);
+        }}
+        style={{
+          display: "grid",
+          gap: token("--space-4"),
+          margin: 0,
+          padding: 0,
+        }}
+      >
+        {actions.map((action, index) => (
+          <TutorialActionRow
+            key={action.id}
+            action={action}
+            index={index}
+            actions={actions}
+            onActionsChange={onActionsChange}
+          />
+        ))}
+      </Reorder.Group>
+      <Select
+        full
+        ariaLabel="Add an action"
+        placeholder="Add an Action"
+        options={[...ACTION_OPTIONS]}
+        value=""
+        onChange={(value) => {
+          if (value !== "display-speech-bubble") return;
+          onActionsChange([...actions, defaultAction(value, actions)], true);
+        }}
+      />
+    </div>
+  );
+}
+
+function TutorialEditorSaveFooter({
+  saveStatus,
+  saveError,
+}: Pick<TutorialEditorRailProps, "saveStatus" | "saveError">): ReactElement {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        minHeight: token("--touch-min"),
+        paddingInline: token("--space-5"),
+        borderTop: `1px solid ${token("--border-strong")}`,
+      }}
+    >
+      <SaveStatus status={saveStatus} error={saveError} />
+    </div>
+  );
+}
+
+/** Draggable, autosaving action list for the local Tutorial Editor. */
+export function TutorialEditorRail({
+  actions,
+  saveStatus,
+  saveError,
+  onActionsChange,
+  onReplay,
+  onClose,
+}: TutorialEditorRailProps): ReactElement {
+  return (
+    <DeveloperRail
+      id="cumulus-tutorial-editor"
+      side="left"
+      title="Tutorial Editor"
+      subtitle={`${String(actions.length)} ${actions.length === 1 ? "action" : "actions"}`}
+      onClose={onClose}
+      headerAction={{
+        glyph: GLYPHS.play,
+        label: "Replay tutorial from start",
+        onPress: onReplay,
+        disabled: actions.length === 0,
+        testId: "tutorial-editor-replay",
+      }}
+      footer={
+        <TutorialEditorSaveFooter
+          saveStatus={saveStatus}
+          saveError={saveError}
+        />
+      }
+    >
+      <TutorialEditorContent
+        actions={actions}
+        onActionsChange={onActionsChange}
+      />
+    </DeveloperRail>
+  );
+}
+
+/** Full-screen Tutorial Editor used below the docked-rail breakpoint. */
+export function TutorialEditorTakeover({
+  actions,
+  saveStatus,
+  saveError,
+  onActionsChange,
+  onReplay,
+  onClose,
+}: TutorialEditorRailProps): ReactElement {
+  return (
+    <GlassDialog
+      title="Tutorial Editor"
+      subtitle={`Developer Tools · ${String(actions.length)} ${actions.length === 1 ? "action" : "actions"}`}
+      closeLabel="Close tutorial editor"
+      cutoutAwareClose
+      fullScreen
+      onClose={onClose}
+    >
+      <div
+        id="cumulus-tutorial-editor"
+        data-tutorial-editor="takeover"
+        style={{
+          display: "grid",
+          gap: token("--space-5"),
+          width: "100%",
+          maxWidth: 720,
+          marginInline: "auto",
+        }}
+      >
+        <div style={{ justifySelf: "start" }}>
+          <IconButton
+            glyph={GLYPHS.play}
+            label="Replay tutorial from start"
+            disabled={actions.length === 0}
+            onPress={onReplay}
+          />
+        </div>
+        <TutorialEditorContent
+          actions={actions}
+          onActionsChange={onActionsChange}
+        />
+        <TutorialEditorSaveFooter
+          saveStatus={saveStatus}
+          saveError={saveError}
+        />
+      </div>
+    </GlassDialog>
+  );
+}

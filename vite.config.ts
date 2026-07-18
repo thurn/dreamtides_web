@@ -23,6 +23,7 @@ import {
 import { createImageViewerApiMiddleware } from "./scripts/image-viewer-api.mjs";
 import { createCardImageApiMiddleware } from "./scripts/card-image-api.mjs";
 import { createSavedQuestsApiMiddleware } from "./scripts/saved-quests-api.mjs";
+import { createTutorialEditorApiMiddleware } from "./scripts/tutorial-editor-api.mjs";
 import { checkGeneratedCardData } from "./scripts/generated-card-data-drift.mjs";
 import { regenerateCardData } from "./scripts/setup-assets.mjs";
 
@@ -255,6 +256,19 @@ function dreamwellEditorApiPlugin(): Plugin {
     apply: "serve",
     configureServer(server) {
       server.middlewares.use(createDreamwellEditorApiMiddleware({ rootDir: __dirname }));
+    },
+  };
+}
+
+/** Dev-only filesystem persistence for the Tutorial Editor rail. */
+function tutorialEditorApiPlugin(): Plugin {
+  return {
+    name: "tutorial-editor-api",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use(
+        createTutorialEditorApiMiddleware({ rootDir: __dirname }),
+      );
     },
   };
 }
@@ -763,6 +777,7 @@ export default defineConfig({
     figmentEditorApiPlugin(),
     figmentDataHotReloadPlugin(),
     dreamwellEditorApiPlugin(),
+    tutorialEditorApiPlugin(),
     dreamwellDataHotReloadPlugin(),
     imageViewerApiPlugin(),
     cardImageApiPlugin(),

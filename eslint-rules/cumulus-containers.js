@@ -26,6 +26,7 @@ export const CONTAINER_COMPONENTS = [
   "HoverZoomCard",
   "GlassPanel", // the shared titled liquid-glass content container
   "GlassDialog", // the glass overlay shell — holds caller-supplied body content
+  "DeveloperRail", // edge-attached developer-tool shell with scrolling body/footer slots
   "GlassBackdrop", // the frosted layer — hosts optional lifted-above-the-frost content
   "DisclosureSection", // progressive-disclosure wrapper for structured secondary content
   "GuideGallerySiteLayout", // responsive site stage — hosts each site's typed gallery
