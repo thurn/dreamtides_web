@@ -32,17 +32,12 @@ const fileRoles = {
   "src/components/ErrorBoundary.tsx": OUTER_UI_ROLES.EMERGENCY_FALLBACK,
   "src/components/FrontDoorRouter.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/components/ScreenRouter.tsx": OUTER_UI_ROLES.APP_SHELL,
-  "src/components/card-browser/BrowserCard.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
-  "src/components/card-browser/CardBrowserGrid.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
-  "src/components/card-browser/CardBrowserToolbar.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
-  "src/components/card-browser/MtgNameTooltip.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
-
-  "src/battle/components/BattleCardNoteEditor.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
-  "src/battle/components/BattleContextMenu.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
-  "src/battle/components/BattleDeckOrderPicker.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
-  "src/battle/components/BattleDreamwellHistoryDrawer.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
-  "src/battle/components/BattleFigmentCreator.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
-  "src/battle/components/BattleLogDrawer.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
+  "src/battle/components/BattleCardNoteEditor.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
+  "src/battle/components/BattleContextMenu.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
+  "src/battle/components/BattleDeckOrderPicker.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
+  "src/battle/components/BattleDreamwellHistoryDrawer.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
+  "src/battle/components/BattleFigmentCreator.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
+  "src/battle/components/BattleLogDrawer.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/battle/components/CumulusBattleForeseeOverlay.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/battle/components/CumulusBattleZoneBrowser.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/battle/components/PlayableBattleScreen.tsx": OUTER_UI_ROLES.APP_SHELL,
@@ -68,7 +63,6 @@ const fileRoles = {
   "src/screens/CardSourceOverlay.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/screens/DebugScreen.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/screens/QuestDebugEditor.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
-  "src/screens/devtools/EntityRevealConformanceDemo.tsx": OUTER_UI_ROLES.DEVTOOL,
   "src/state/coop-quest-context.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/state/front-door-context.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/state/quest-context.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
@@ -104,6 +98,12 @@ for (const name of [
   "TidesListView",
 ]) {
   fileRoles[`src/editor/${name}.tsx`] = OUTER_UI_ROLES.OPERATOR_TOOL;
+}
+
+for (const name of [
+  "CardBrowserGrid", "CardBrowserToolbar", "MtgNameTooltip",
+]) {
+  fileRoles[`src/editor/card-browser/${name}.tsx`] = OUTER_UI_ROLES.OPERATOR_TOOL;
 }
 
 export const OUTER_UI_FILE_ROLES = Object.freeze(fileRoles);

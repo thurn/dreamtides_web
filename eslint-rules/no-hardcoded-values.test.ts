@@ -173,8 +173,8 @@ ruleTester.run("no-hardcoded-values", rule, {
       errors: [{ messageId: "hardcodedColorNoToken" }],
     },
     {
-      name: "a pending outer player view is covered before migration",
-      filename: "src/battle/components/BattleFigmentCreator.tsx",
+      name: "a pending outer presentation file is covered before migration",
+      filename: "src/index.css",
       code: `const s = { color: "${UNKNOWN_HEX}" };`,
       output: null,
       errors: [{ messageId: "hardcodedColorNoToken" }],

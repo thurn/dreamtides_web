@@ -1,12 +1,12 @@
 import { useState } from "react";
 import type { CardData } from "../types/cards";
-import type { CardSizePreset } from "../components/card-size";
-import { SIZE_PRESETS } from "../components/card-size";
+import type { CardSizePreset } from "./card-size";
+import { SIZE_PRESETS } from "./card-size";
 import { CardView } from "../cumulus/components/card/CardView";
-import CardBrowserGrid from "../components/card-browser/CardBrowserGrid";
+import CardBrowserGrid from "./card-browser/CardBrowserGrid";
 import { DreamcallerPortrait } from "../cumulus/components/hud/DreamcallerPortrait";
 import { RulesText } from "../cumulus/components/card/RulesText";
-import { TIDE_ACCENT_COLOR, TIDE_COLOR_CHIP } from "../components/tide-visuals";
+import { TIDE_ACCENT_COLOR, TIDE_COLOR_CHIP } from "./tide-visuals";
 import {
   TIDES4_COLORS,
   type Tides4Color,

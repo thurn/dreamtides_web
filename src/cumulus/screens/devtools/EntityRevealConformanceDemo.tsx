@@ -1,18 +1,15 @@
 import { useEffect, useState } from "react";
-import { asCardId, asCardName } from "../../types/card-identity";
-import type { CardData } from "../../types/cards";
-import { LayerName } from "../../types/layer-name";
-import { GameCard } from "../../cumulus/components/card/CardView";
-import { GlossaryTerm } from "../../cumulus/components/card/GlossaryTerm";
-import { InfoCard } from "../../cumulus/components/overlay/InfoCard";
-import { AtlasNode, type AtlasNodeModel } from "../../cumulus/components/atlas/AtlasNode";
-import { DreamcallerPortrait } from "../../cumulus/components/hud/DreamcallerPortrait";
-import { artRef } from "../../cumulus/primitives/art";
-import { GLYPHS } from "../../cumulus/primitives/glyph";
-import { richText } from "../../cumulus/components/card/rich-text";
-import type { BattleCardInstance } from "../../battle/types";
-import { createDefaultBattleCardStatus } from "../../battle/state/create-initial-state";
-import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
+import { asCardId, asCardName } from "../../../types/card-identity";
+import type { CardData } from "../../../types/cards";
+import { LayerName } from "../../../types/layer-name";
+import { AtlasNode, type AtlasNodeModel } from "../../components/atlas/AtlasNode";
+import { GameCard } from "../../components/card/CardView";
+import { GlossaryTerm } from "../../components/card/GlossaryTerm";
+import { richText } from "../../components/card/rich-text";
+import { DreamcallerPortrait } from "../../components/hud/DreamcallerPortrait";
+import { InfoCard } from "../../components/overlay/InfoCard";
+import { artRef } from "../../primitives/art";
+import { GLYPHS } from "../../primitives/glyph";
 
 const CARD_ID = asCardId("11111111-1111-4111-8111-111111111111");
 const BATTLE_CARD_ID = asCardId("22222222-2222-4222-8222-222222222222");
@@ -42,26 +39,20 @@ const ATLAS_MODEL: AtlasNodeModel = {
   affiliation: { id: "66666666-6666-4666-8666-666666666666", name: "Guides", cardTheme: "Guide" },
 };
 
-const BATTLE_CARD: BattleCardInstance = {
-  battleCardId: "conformance-battle-instance",
-  definition: {
-    sourceDeckEntryId: "conformance-deck-entry", cardId: BATTLE_CARD_ID, cardNumber: 2,
-    name: "Battle Conformance", battleCardKind: "character", subtype: "Guide",
-    energyCost: 1, printedEnergyCost: 1, printedSpark: 2, isFast: true,
-    reclaimCost: null, renderedText: "Bane.", imageNumber: CONFORMANCE_CARD_IMAGE,
-    transfiguration: null, isBane: false,
-  },
-  owner: "player", controller: "player", sparkDelta: 0, staticSparkBonus: 0,
-  isRevealedToPlayer: true, status: createDefaultBattleCardStatus(),
-  markers: { isPrevented: false, isCopied: false }, notes: [],
-  provenance: { kind: "quest-deck", sourceBattleCardId: null, chosenSpark: null, chosenSubtype: null, createdAtTurnNumber: null, createdAtSide: null, createdAtMs: null },
+const BATTLE_CARD: CardData = {
+  ...CARD,
+  id: BATTLE_CARD_ID,
+  name: asCardName("Battle Conformance"),
+  cardNumber: 2,
+  energyCost: 1,
+  spark: 2,
+  isFast: true,
+  renderedText: "Bane.",
 };
-const GENERATED_BATTLE_CARD: BattleCardInstance = {
+const GENERATED_BATTLE_CARD: CardData = {
   ...BATTLE_CARD,
-  battleCardId: "conformance-generated-figment",
-  definition: { ...BATTLE_CARD.definition, sourceDeckEntryId: null, cardId: "", name: "Generated Conformance Figment" },
-  figments: [2],
-  provenance: { ...BATTLE_CARD.provenance, kind: "generated-figment" },
+  id: asCardId("77777777-7777-4777-8777-777777777777"),
+  name: asCardName("Generated Conformance Figment"),
 };
 const TRUNCATION_CARD: CardData = {
   ...CARD,
@@ -142,8 +133,8 @@ export function EntityRevealConformanceDemo() {
         <article data-conformance-info-secondaries=""><h2>InfoCard group source</h2><DreamcallerPortrait dreamcaller={DREAMCALLER} variant="thumb" size={120} profile={{ id: DREAMCALLER.id, ability: "Bane. Discover. Ephemeral." }} /></article>
         <article><h2>Inline</h2><p>Resolve <GlossaryTerm entry={{ term: "Bane", definition: "A penalty card forced into your deck." }} text="Bane" /> here.</p></article>
         <article style={{ position: "relative", width: 184, height: 184 }}><h2>Atlas</h2><AtlasNode model={ATLAS_MODEL} onActivate={() => undefined} /></article>
-        <article data-conformance-battle-fixture="" style={{ width: 160 }}><h2>Battle</h2><GameCard model={battleGameCardModel(BATTLE_CARD)} /></article>
-        <article data-conformance-generated-battle-fixture="" style={{ width: 160 }}><h2>Generated battle figment</h2><GameCard model={battleGameCardModel(GENERATED_BATTLE_CARD)} figment figmentTitleBar /></article>
+        <article data-conformance-battle-fixture="" style={{ width: 160 }}><h2>Battle</h2><GameCard model={{ cardId: BATTLE_CARD.id, displaySnapshot: BATTLE_CARD }} /></article>
+        <article data-conformance-generated-battle-fixture="" style={{ width: 160 }}><h2>Generated battle figment</h2><GameCard model={{ cardId: GENERATED_BATTLE_CARD.id, displaySnapshot: GENERATED_BATTLE_CARD }} figment figmentTitleBar /></article>
       </section>
     </main>
   );

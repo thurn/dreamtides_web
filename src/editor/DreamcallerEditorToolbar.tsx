@@ -1,9 +1,9 @@
-import CardBrowserToolbar from "../components/card-browser/CardBrowserToolbar";
+import CardBrowserToolbar from "./card-browser/CardBrowserToolbar";
 import type {
   CardBrowserSearchScope,
   CardBrowserSortOption,
   CardBrowserToolbarValues,
-} from "../components/card-browser/card-browser-types";
+} from "./card-browser/card-browser-types";
 import { DEFAULT_DREAMCALLER_DISPLAY_STATE } from "./dreamcaller-editor-url-state";
 import type { DreamcallerDisplayState } from "./dreamcaller-types";
 

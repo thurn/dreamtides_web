@@ -3,8 +3,8 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { getLogEntries } from "../../logging";
-import { CumulusRoot } from "../../cumulus/CumulusRoot";
+import { getLogEntries } from "../../../logging";
+import { CumulusRoot } from "../../CumulusRoot";
 import { EntityRevealConformanceDemo } from "./EntityRevealConformanceDemo";
 
 let resizeCallbacks: ResizeObserverCallback[] = [];

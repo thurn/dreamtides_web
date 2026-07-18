@@ -218,8 +218,8 @@ function commonActiveFilterCount(values: CardBrowserToolbarValues): number {
  * The shared filter/sort/size toolbar for the card-browsing surfaces. It owns
  * the always-visible bar (card count, size control, Filters toggle) and the
  * collapsible panel (search, scope, type, cost, subtype, sort). Surfaces inject
- * their own controls through `barExtras`/`panelExtras` (the editor adds its tag,
- * tide, and art modes plus tag/tide filters); the Pool Viewer renders it plain.
+ * their own controls through `barExtras`/`panelExtras` (for example, tag, tide,
+ * and art modes plus tag/tide filters).
  */
 export default function CardBrowserToolbar({
   values,

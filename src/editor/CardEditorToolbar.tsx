@@ -1,11 +1,11 @@
 import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties } from "react";
-import CardBrowserToolbar from "../components/card-browser/CardBrowserToolbar";
+import CardBrowserToolbar from "./card-browser/CardBrowserToolbar";
 import {
   CARD_BROWSER_SORT_OPTIONS,
   type CardBrowserSortOption,
   type CardBrowserToolbarValues,
-} from "../components/card-browser/card-browser-types";
+} from "./card-browser/card-browser-types";
 import { DEFAULT_EDITOR_DISPLAY_STATE } from "./editor-url-state";
 import TagFilterControl from "./TagFilterControl";
 import { tagColor } from "./tag-color";

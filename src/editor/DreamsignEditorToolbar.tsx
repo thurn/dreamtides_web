@@ -1,11 +1,11 @@
 import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties } from "react";
-import CardBrowserToolbar from "../components/card-browser/CardBrowserToolbar";
+import CardBrowserToolbar from "./card-browser/CardBrowserToolbar";
 import type {
   CardBrowserSearchScope,
   CardBrowserSortOption,
   CardBrowserToolbarValues,
-} from "../components/card-browser/card-browser-types";
+} from "./card-browser/card-browser-types";
 import { DEFAULT_DREAMSIGN_DISPLAY_STATE } from "./dreamsign-editor-url-state";
 import TagFilterControl from "./TagFilterControl";
 import { tagColor } from "./tag-color";

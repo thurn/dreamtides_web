@@ -1,4 +1,4 @@
-import CardBrowserGrid from "../components/card-browser/CardBrowserGrid";
+import CardBrowserGrid from "./card-browser/CardBrowserGrid";
 import EditableCard from "./EditableCard";
 import type { CardDuplicateUsage } from "./card-duplicate-usage";
 import type { EditableSaveState, EditableFieldValue } from "./save-state";

@@ -1,6 +1,6 @@
 import type { CardData } from "../types/cards";
 import type { Tides4DeckJson, Tides4Role } from "../draft/pool/tides4-io";
-import { TIDE_COLOR_CHIP } from "../components/tide-visuals";
+import { TIDE_COLOR_CHIP } from "./tide-visuals";
 import { TideSourcePreview } from "./TideSourcePreview";
 import type { EditorDreamcaller } from "./tides-types";
 

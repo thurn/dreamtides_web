@@ -48,6 +48,17 @@ const ROUTER_FILES = [
   "src/battle/components/PlayableBattleScreen.tsx",
 ];
 
+const GENERIC_COMPONENT_SOURCES = [
+  "src/components/BattleSiteRoute.tsx",
+  "src/components/CumulusQuestChrome.tsx",
+  "src/components/DreamAuguryQuestMenu.ts",
+  "src/components/DreamscapeQuestMenu.tsx",
+  "src/components/ErrorBoundary.tsx",
+  "src/components/FrontDoorRouter.tsx",
+  "src/components/QuestUtilityMenuController.ts",
+  "src/components/ScreenRouter.tsx",
+];
+
 const DELETED_PLAYER_UI = /\/(?:AtlasScreen|QuestStartScreen|QuestCompleteScreen|QuestFailedScreen|DreamscapeScreen|DraftSiteScreen|ShopScreen|EssenceSiteScreen|DreamsignRevelationScreen|PurgeSiteScreen|TransfigurationSiteScreen|DuplicationSiteScreen|RewardSiteScreen|StubSiteScreen|HUD|BattleStartScreen)$/;
 
 function collectFiles(dir) {
@@ -69,6 +80,14 @@ export function collectOuterUiFiles(srcRoot = SRC_ROOT) {
     .filter((file) => !relative(ROOT, file).split(sep).join("/").startsWith(CUMULUS_PREFIX))
     .filter((file) => /\.(tsx|css)$/.test(file))
     .filter((file) => !/\.(test|spec)\.(tsx|css)$/.test(file))
+    .map((file) => relative(ROOT, file).split(sep).join("/"))
+    .sort();
+}
+
+function collectGenericComponentSources() {
+  return collectFiles(resolve(SRC_ROOT, "components"))
+    .filter((file) => /\.(ts|tsx)$/.test(file))
+    .filter((file) => !/\.(test|spec)\.(ts|tsx)$/.test(file))
     .map((file) => relative(ROOT, file).split(sep).join("/"))
     .sort();
 }
@@ -131,6 +150,13 @@ describe("Cumulus UI boundary", () => {
       expect(OUTER_UI_ROLE_VALUES).toContain(role);
       expect(file).toMatch(/^src\//);
     }
+  });
+
+  it("reserves generic components for the app shell and emergency fallback", () => {
+    expect(
+      collectGenericComponentSources(),
+      "Reusable presentation belongs in src/cumulus/; standalone tool UI belongs under its named owner.",
+    ).toEqual([...GENERIC_COMPONENT_SOURCES].sort());
   });
 
   it("keeps bootstrap and coop controllers outside strict presentation scope", () => {

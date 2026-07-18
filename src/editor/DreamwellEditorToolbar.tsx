@@ -1,9 +1,9 @@
 import type { CSSProperties } from "react";
-import CardBrowserToolbar from "../components/card-browser/CardBrowserToolbar";
+import CardBrowserToolbar from "./card-browser/CardBrowserToolbar";
 import type {
   CardBrowserSortOption,
   CardBrowserToolbarValues,
-} from "../components/card-browser/card-browser-types";
+} from "./card-browser/card-browser-types";
 import { DEFAULT_DREAMWELL_DISPLAY_STATE } from "./dreamwell-editor-url-state";
 import type { DreamwellDisplayState, DreamwellSortField } from "./dreamwell-types";
 

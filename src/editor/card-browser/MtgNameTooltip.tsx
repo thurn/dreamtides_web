@@ -5,7 +5,7 @@ import { useLayoutEffect, useState, type RefObject } from "react";
  * `position: fixed` and anchored to the owning card so it is never clipped by a
  * scrolling grid and follows the card on scroll/resize. It flips below the card
  * when the card sits too close to the top of the viewport to fit the tooltip
- * above it. Shared by the card editor and the Pool Viewer.
+ * above it. Owned by the editor's card-editing surface.
  */
 export function MtgNameTooltip({
   anchorRef,

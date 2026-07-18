@@ -1,4 +1,4 @@
-import type { CardSizePreset } from "../components/card-size";
+import type { CardSizePreset } from "./card-size";
 
 /**
  * All tides-editor view state lives in the URL so a view is shareable and

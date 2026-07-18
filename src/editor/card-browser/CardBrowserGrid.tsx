@@ -33,8 +33,8 @@ export interface CardBrowserGridProps<T> {
  * at the active size preset's width, centers wrapped rows once a row reaches
  * five cards (so a full row never reads as unbalanced against trailing slack),
  * and establishes the `inline-size` container the "large" preset's draft-width
- * formula resolves against. The card editor renders editable cards through it
- * and the Pool Viewer renders read-only `BrowserCard`s.
+ * formula resolves against. Editor surfaces render their local card controls
+ * through this grid.
  */
 export default function CardBrowserGrid<T>({
   items,

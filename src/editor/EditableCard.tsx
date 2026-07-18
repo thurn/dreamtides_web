@@ -3,7 +3,7 @@ import { useCallback, useRef, useState, type ReactNode } from "react";
 import { CardView } from "../cumulus/components/card/CardView";
 import type { CardViewSlots } from "../cumulus/components/card/CardView";
 import { GLYPHS } from "../cumulus/primitives/glyph";
-import { MtgNameTooltip } from "../components/card-browser/MtgNameTooltip";
+import { MtgNameTooltip } from "./card-browser/MtgNameTooltip";
 import type { CardDuplicateUsage } from "./card-duplicate-usage";
 import CardTagEditor from "./CardTagEditor";
 import EditableField from "./EditableField";

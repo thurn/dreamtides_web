@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CardData } from "../types/cards";
-import type { CardSizePreset } from "../components/card-size";
+import type { CardSizePreset } from "./card-size";
 import { loadCardsV2Database } from "../data/cards-v2-database";
 import TidesListView from "./TidesListView";
 import TidesDetailView, { type TideSaveStatus } from "./TidesDetailView";

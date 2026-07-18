@@ -142,7 +142,7 @@ if (pathname === "/editor" || pathname === "/cards") {
   ] = await Promise.all([
     import("./App.tsx"),
     import("./cumulus/screens/devtools/DeviceFrameDemo"),
-    import("./screens/devtools/EntityRevealConformanceDemo"),
+    import("./cumulus/screens/devtools/EntityRevealConformanceDemo"),
     import("./runtime/runtime-config"),
   ]);
 

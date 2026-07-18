@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import { CardView } from "../cumulus/components/card/CardView";
 import { DreamcallerPortrait } from "../cumulus/components/hud/DreamcallerPortrait";
 import { RulesText } from "../cumulus/components/card/RulesText";
-import { SIZE_PRESETS } from "../components/card-size";
+import { SIZE_PRESETS } from "./card-size";
 import type { CardData } from "../types/cards";
 import type { QuestContent } from "../data/quest-content";
 import type { Tides4DeckJson, Tides4DecksJson } from "../draft/pool/tides4-io";

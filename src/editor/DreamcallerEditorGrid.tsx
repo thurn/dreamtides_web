@@ -1,4 +1,4 @@
-import CardBrowserGrid from "../components/card-browser/CardBrowserGrid";
+import CardBrowserGrid from "./card-browser/CardBrowserGrid";
 import EditableDreamcaller from "./EditableDreamcaller";
 import { fieldSaveEntry } from "./save-state";
 import type { EditableFieldValue, EditableSaveState } from "./save-state";

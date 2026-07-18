@@ -1,11 +1,10 @@
 import type { CardSizePreset } from "../card-size";
 
 /**
- * Shared vocabulary for the card-browsing surfaces (the card editor and the
- * Pool Viewer). These types describe the read-only filter/sort/size controls
- * both surfaces render through `CardBrowserToolbar`; the editor extends the
- * display state with its own editing-only fields (tag/tide filters and editing
- * mode toggles).
+ * Editor-owned vocabulary for card-browsing surfaces. These types describe the
+ * filter, sort, and size controls rendered through `CardBrowserToolbar`; each
+ * editor extends the display state with its own fields (tag/tide filters and
+ * editing mode toggles).
  */
 
 export type CardBrowserTypeFilter = "all" | "character" | "event";
@@ -32,8 +31,8 @@ export type CardBrowserSearchScope = "name" | "all" | "mtg" | "imageNumber";
 export type CardBrowserSize = CardSizePreset;
 
 /**
- * Sort fields available to every card-browsing surface. The editor adds its own
- * facet-specific fields (e.g. tide count) on top of these.
+ * Sort fields available to every editor card-browsing surface. An editor may
+ * add facet-specific fields (for example, tide count) on top of these.
  */
 export type CardBrowserSortField =
   | "cardNumber"

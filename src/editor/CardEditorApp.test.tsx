@@ -7,7 +7,7 @@ import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
-import { SIZE_PRESETS } from "../components/card-size";
+import { SIZE_PRESETS } from "./card-size";
 import CardEditorApp from "./CardEditorApp";
 import { DEFAULT_EDITOR_DISPLAY_STATE } from "./editor-url-state";
 import type { EditorApiClient, EditorCardRecord } from "./types";

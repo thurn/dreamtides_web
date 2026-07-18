@@ -48,7 +48,7 @@ export const GLYPHS = {
   caretRight: g("bxf bx-caret-right"),
 
   // Tide marks (Boxicons v3 filled) — the closed set of five tide icons. These
-  // mirror the production per-color tide glyphs in `src/components/tide-visuals`
+  // mirror the editor per-color tide glyphs in `src/editor/tide-visuals`
   // (TIDE_COLOR_CHIP), the source of truth used by the Dreamcaller-select screen
   // and the tides editor.
   tideEmber: g("bxf bx-hot"),
