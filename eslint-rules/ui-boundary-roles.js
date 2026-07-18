@@ -32,6 +32,7 @@ const fileRoles = {
   "src/components/DreamscapeQuestMenu.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
   "src/components/DreamwellCardView.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
   "src/components/ErrorBoundary.tsx": OUTER_UI_ROLES.EMERGENCY_FALLBACK,
+  "src/components/FrontDoorRouter.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/components/PoolViewer.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
   "src/components/QuestUtilityMenu.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
   "src/components/ScreenRouter.tsx": OUTER_UI_ROLES.APP_SHELL,
@@ -55,6 +56,7 @@ const fileRoles = {
   "src/coop/BounceToast.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
   "src/coop/ConfigGateScreen.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
   "src/coop/EventLogViewer.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
+  "src/coop/FrontDoorApp.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/coop/RoomGate.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/coop/UnreadableRoomScreen.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
   "src/coop/VersionGateScreen.tsx": OUTER_UI_ROLES.PENDING_PRESENTATION,
@@ -74,6 +76,7 @@ const fileRoles = {
   "src/screens/QuestDebugEditor.tsx": OUTER_UI_ROLES.DEVTOOL,
   "src/screens/devtools/EntityRevealConformanceDemo.tsx": OUTER_UI_ROLES.DEVTOOL,
   "src/state/coop-quest-context.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
+  "src/state/front-door-context.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/state/quest-context.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
 };
 

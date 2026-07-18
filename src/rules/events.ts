@@ -25,6 +25,17 @@
  * authoritative set of event types the rules layer understands.
  */
 export interface EventPayloads {
+  // --- standalone front door ---
+  FRONT_DOOR_ACTION: {
+    surface: "main" | "tutorial";
+    actionId: string;
+    detail?: unknown;
+  };
+  ADVANCE_FRONT_DOOR: {
+    from: "mainExiting" | "loading";
+    journeyId: string;
+  };
+
   // --- essence & limits ---
   ADJUST_ESSENCE: { delta: number };
   SET_ESSENCE: { value: number };
@@ -160,6 +171,8 @@ export type TypedGameEvent<T extends GameEventType = GameEventType> = {
  * game-rules meaning.
  */
 export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
+  "FRONT_DOOR_ACTION",
+  "ADVANCE_FRONT_DOOR",
   "SET_CARD_NOTE",
   "SET_CARD_SOURCE_DEBUG",
   "OPEN_SITE",
@@ -171,16 +184,17 @@ export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
  * state carries no game-rules meaning, and site bootstrap only materializes the
  * deterministic runtime or offer for an already-selected site.
  */
-export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<string> = new Set<string>(
-  [
+export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<string> =
+  new Set<string>([
+    "FRONT_DOOR_ACTION",
+    "ADVANCE_FRONT_DOOR",
     "SET_CARD_NOTE",
     "SET_CARD_SOURCE_DEBUG",
     "MARK_SITE_VISITED",
     "DISMISS_STARTING_DECK_POPUP",
     "OPEN_SITE",
     "ENTER_DRAFT_SITE",
-  ],
-);
+  ]);
 
 /**
  * The set of all recognized event types, keyed as a `Record<GameEventType,
@@ -193,6 +207,8 @@ export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<string> = new Set<string>
  * apart silently (audit finding P3-5).
  */
 const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
+  FRONT_DOOR_ACTION: true,
+  ADVANCE_FRONT_DOOR: true,
   ADJUST_ESSENCE: true,
   SET_ESSENCE: true,
   ADJUST_ESSENCE_CAP: true,
@@ -260,7 +276,8 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
 };
 
 // Fails to compile on drift between EventPayloads and KNOWN_EVENT_TYPES_AS_OBJECT.
-const _exhaustive: Record<keyof EventPayloads, true> = KNOWN_EVENT_TYPES_AS_OBJECT;
+const _exhaustive: Record<keyof EventPayloads, true> =
+  KNOWN_EVENT_TYPES_AS_OBJECT;
 void _exhaustive;
 
 /** The set of all recognized event types (for routing / validation). */
@@ -275,7 +292,8 @@ export const KNOWN_EVENT_TYPES: ReadonlySet<string> = new Set<string>(
  * this set is the escape hatch for a type that is intentionally exempt from
  * that check. Empty today — every declared event type is routed.
  */
-export const INTENTIONALLY_UNROUTED_EVENT_TYPES: ReadonlySet<string> = new Set<string>();
+export const INTENTIONALLY_UNROUTED_EVENT_TYPES: ReadonlySet<string> =
+  new Set<string>();
 
 /** Narrows a raw event `type` string to a known `GameEventType`. */
 export function isKnownEventType(type: string): type is GameEventType {

@@ -101,18 +101,21 @@ if (pathname === "/editor" || pathname === "/cards") {
 } else if (pathname === "/cumulus") {
   const { default: CumulusApp } = await import("./cumulus/docs/CumulusApp");
   renderStrict(<CumulusApp />);
-} else if (pathname === "/main") {
-  const { MainMenuScreenAdapter } =
-    await import("./screens/cumulus_adapters/MainMenuScreenAdapter");
-  renderStrict(<MainMenuScreenAdapter />);
-} else if (pathname === "/loading") {
-  const { LoadingScreenAdapter } =
-    await import("./screens/cumulus_adapters/LoadingScreenAdapter");
-  renderStrict(<LoadingScreenAdapter />);
-} else if (pathname === "/tutorial") {
-  const { TutorialScreenAdapter } =
-    await import("./screens/cumulus_adapters/TutorialScreenAdapter");
-  renderStrict(<TutorialScreenAdapter />);
+} else if (
+  pathname === "/main" ||
+  pathname === "/loading" ||
+  pathname === "/tutorial"
+) {
+  const [{ default: FrontDoorApp }, { parseRuntimeConfig }] = await Promise.all(
+    [import("./coop/FrontDoorApp"), import("./runtime/runtime-config")],
+  );
+  const entry = pathname.slice(1) as "main" | "loading" | "tutorial";
+  renderStrict(
+    <FrontDoorApp
+      runtimeConfig={parseRuntimeConfig(window.location.search)}
+      entry={entry}
+    />,
+  );
 } else {
   // The dev card/figment/config data hot-reload plugins (see vite.config.ts)
   // emit targeted custom HMR events instead of a full reload, so that saving in

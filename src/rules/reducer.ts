@@ -16,11 +16,7 @@
 // and navigation cases live in `./quest/lifecycle` as pure `(quest, payload)`
 // functions; `routeDomain` wraps their result over the fold state.
 
-import type {
-  BounceReason,
-  EventContext,
-  GameEvent,
-} from "../eventlog/types";
+import type { BounceReason, EventContext, GameEvent } from "../eventlog/types";
 import {
   CAS_EXEMPT_EVENT_TYPES,
   DECISION_NEUTRAL_EVENT_TYPES,
@@ -29,6 +25,7 @@ import {
 } from "./events";
 import type { FoldState } from "./fold-state";
 import type { QuestState } from "../types/quest";
+import * as frontDoor from "./front-door";
 import * as battleEvents from "./battle/battle-events";
 import * as deck from "./quest/deck";
 import * as draft from "./quest/draft";
@@ -135,10 +132,7 @@ export function isCasExempt(type: string): boolean {
  * event); a missing or non-number payload value never matches and never throws.
  * Exported for direct unit testing independent of the RESOLVE_PROMPT domain case.
  */
-export function isMatchingResolve(
-  state: FoldState,
-  event: GameEvent,
-): boolean {
+export function isMatchingResolve(state: FoldState, event: GameEvent): boolean {
   if (event.type !== "RESOLVE_PROMPT") {
     return false;
   }
@@ -201,6 +195,18 @@ export function routeDomain(
   const quest = state.quest;
   const type: GameEventType = event.type;
   switch (type) {
+    // --- standalone front door ---
+    case "FRONT_DOOR_ACTION":
+      return frontDoorCase(
+        state,
+        frontDoor.frontDoorAction(state.frontDoor, payload, ctx),
+      );
+    case "ADVANCE_FRONT_DOOR":
+      return frontDoorCase(
+        state,
+        frontDoor.advanceFrontDoor(state.frontDoor, payload),
+      );
+
     // --- essence & limits ---
     case "ADJUST_ESSENCE":
       return questCase(state, lifecycle.adjustEssence(quest, payload));
@@ -254,9 +260,15 @@ export function routeDomain(
       return questCase(state, deck.purgeRandomBaneCards(quest, payload, ctx));
 
     case "ACCEPT_TRANSFIGURATION_CHOICE":
-      return questCase(state, sites.acceptTransfigurationChoice(quest, payload));
+      return questCase(
+        state,
+        sites.acceptTransfigurationChoice(quest, payload),
+      );
     case "ACCEPT_DUPLICATION_CHOICE":
-      return questCase(state, sites.acceptDuplicationChoice(quest, payload, ctx));
+      return questCase(
+        state,
+        sites.acceptDuplicationChoice(quest, payload, ctx),
+      );
 
     // --- sites ---
     case "OPEN_SITE":
@@ -374,11 +386,19 @@ function questCase(
   return { state: { ...state, quest: nextQuest }, outcome: "applied" };
 }
 
-/** Wrap a whole-fold domain result: `null` bounces, a new `FoldState` applies. */
-function foldCase(
+function frontDoorCase(
   state: FoldState,
-  nextState: FoldState | null,
+  nextFrontDoor: FoldState["frontDoor"] | null,
 ): ReduceResult {
+  if (nextFrontDoor === null) return bounce(state);
+  return {
+    state: { ...state, frontDoor: nextFrontDoor },
+    outcome: "applied",
+  };
+}
+
+/** Wrap a whole-fold domain result: `null` bounces, a new `FoldState` applies. */
+function foldCase(state: FoldState, nextState: FoldState | null): ReduceResult {
   if (nextState === null) return bounce(state);
   return { state: nextState, outcome: "applied" };
 }

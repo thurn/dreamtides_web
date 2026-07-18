@@ -15,7 +15,10 @@ const ids: string[] = [];
 let attempt = 0;
 
 vi.mock("../eventlog/room", async () => {
-  const actual = await vi.importActual<typeof import("../eventlog/room")>("../eventlog/room");
+  const actual =
+    await vi.importActual<typeof import("../eventlog/room")>(
+      "../eventlog/room",
+    );
   return {
     ...actual,
     generateRoomId: vi.fn(() => {
@@ -29,7 +32,8 @@ vi.mock("../eventlog/room", async () => {
 });
 
 const { createAndNavigateToRoom } = await import("./RoomGate");
-const { createRoomEvictingStale, RoomExistsError } = await import("../eventlog/room");
+const { createRoomEvictingStale, RoomExistsError } =
+  await import("../eventlog/room");
 
 const CONTENT_CONFIG: ContentConfig = {
   poolVariant: "tides4",
@@ -53,6 +57,17 @@ describe("createAndNavigateToRoom retry", () => {
     expect(createRoomEvictingStale).toHaveBeenCalledTimes(1);
   });
 
+  it("stamps a standalone route into a newly created room's genesis", async () => {
+    vi.mocked(createRoomEvictingStale).mockResolvedValueOnce(undefined);
+    await createAndNavigateToRoom(db, CONTENT_CONFIG, "loading");
+
+    expect(createRoomEvictingStale).toHaveBeenCalledWith(
+      db,
+      "room-0",
+      expect.objectContaining({ frontDoorEntry: "loading" }),
+    );
+  });
+
   it("retries with a fresh id after a RoomExistsError collision", async () => {
     vi.mocked(createRoomEvictingStale)
       .mockRejectedValueOnce(new RoomExistsError("room-0 exists"))
@@ -64,17 +79,21 @@ describe("createAndNavigateToRoom retry", () => {
   });
 
   it("gives up after 3 collisions and rejects with the RoomExistsError", async () => {
-    vi.mocked(createRoomEvictingStale).mockRejectedValue(new RoomExistsError("collision"));
-    await expect(createAndNavigateToRoom(db, CONTENT_CONFIG)).rejects.toBeInstanceOf(
-      RoomExistsError,
+    vi.mocked(createRoomEvictingStale).mockRejectedValue(
+      new RoomExistsError("collision"),
     );
+    await expect(
+      createAndNavigateToRoom(db, CONTENT_CONFIG),
+    ).rejects.toBeInstanceOf(RoomExistsError);
     expect(createRoomEvictingStale).toHaveBeenCalledTimes(3);
   });
 
   it("does not retry a non-collision failure", async () => {
     const error = new Error("network down");
     vi.mocked(createRoomEvictingStale).mockRejectedValueOnce(error);
-    await expect(createAndNavigateToRoom(db, CONTENT_CONFIG)).rejects.toBe(error);
+    await expect(createAndNavigateToRoom(db, CONTENT_CONFIG)).rejects.toBe(
+      error,
+    );
     expect(createRoomEvictingStale).toHaveBeenCalledTimes(1);
   });
 });

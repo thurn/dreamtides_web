@@ -13,6 +13,25 @@ const screenMocks = vi.hoisted(() => ({
   onSocial: null as null | ((socialId: string) => void),
 }));
 
+const coopMocks = vi.hoisted(() => ({
+  frontDoor: { phase: "main", journeyId: null } as {
+    phase: string;
+    journeyId: string | null;
+  },
+  frontDoorAction: vi.fn().mockResolvedValue(1),
+  advanceFrontDoor: vi.fn().mockResolvedValue(2),
+}));
+
+vi.mock("../../state/front-door-context", () => ({
+  useFrontDoor: () => ({
+    state: coopMocks.frontDoor,
+    mutations: {
+      action: coopMocks.frontDoorAction,
+      advance: coopMocks.advanceFrontDoor,
+    },
+  }),
+}));
+
 vi.mock("../../cumulus/screens/MainMenuScreen", () => ({
   MainMenuScreen: ({
     onAction,
@@ -30,12 +49,6 @@ vi.mock("../../cumulus/screens/MainMenuScreen", () => ({
     screenMocks.onSocial = onSocial;
     return <div data-main-menu data-main-menu-phase={transitionPhase} />;
   },
-}));
-
-vi.mock("./LoadingScreenAdapter", () => ({
-  LoadingScreenAdapter: ({ source }: { source: string }) => (
-    <main data-loading-screen data-loading-source={source} />
-  ),
 }));
 
 beforeEach(() => {
@@ -57,6 +70,9 @@ beforeEach(() => {
   screenMocks.onAction = null;
   screenMocks.onExitComplete = null;
   screenMocks.onSocial = null;
+  coopMocks.frontDoor = { phase: "main", journeyId: null };
+  coopMocks.frontDoorAction.mockClear();
+  coopMocks.advanceFrontDoor.mockClear();
   resetLog();
 });
 
@@ -66,7 +82,7 @@ afterEach(() => {
 });
 
 describe("MainMenuScreenAdapter", () => {
-  it("logs presentation and transitions New Journey to /loading", () => {
+  it("submits every menu press and advances the shared exit transition", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -79,16 +95,29 @@ describe("MainMenuScreenAdapter", () => {
     );
 
     act(() => screenMocks.onAction?.("new-journey"));
+    expect(coopMocks.frontDoorAction).toHaveBeenCalledWith(
+      "main",
+      "new-journey",
+    );
+
+    coopMocks.frontDoor = { phase: "mainExiting", journeyId: "event:1" };
+    act(() =>
+      root.render(
+        <CumulusRoot>
+          <MainMenuScreenAdapter />
+        </CumulusRoot>,
+      ),
+    );
     expect(
       container.querySelector("[data-main-menu-phase='exiting']"),
     ).not.toBeNull();
     act(() => screenMocks.onSocial?.("github"));
     act(() => screenMocks.onExitComplete?.());
-    expect(window.location.pathname).toBe("/loading");
-    expect(container.querySelector("[data-loading-screen]")).not.toBeNull();
-    expect(
-      container.querySelector("[data-loading-source='main_menu']"),
-    ).not.toBeNull();
+    expect(coopMocks.frontDoorAction).toHaveBeenCalledWith("main", "github");
+    expect(coopMocks.advanceFrontDoor).toHaveBeenCalledWith(
+      "mainExiting",
+      "event:1",
+    );
 
     expect(getLogEntries()).toEqual(
       expect.arrayContaining([

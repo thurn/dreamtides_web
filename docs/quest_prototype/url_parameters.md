@@ -12,10 +12,18 @@ the run's query string).
 
 ## Standalone tutorial paths
 
-`/loading` presents the cinematic journey-loading scene for five seconds, then
-replaces the current history entry with `/tutorial` and fades in the standalone
-tutorial battle. `/tutorial` can also be opened directly. The tutorial battle is
-constructed without a quest room or quest state.
+`/main`, `/loading`, and `/tutorial` run inside the Firebase co-op room carried
+by `?game=<roomId>`. Opening any of these paths without `game` automatically
+creates a room and adds its id to the URL, so another player can join by opening
+the resulting address.
+
+The room event log owns the shared front-door phase. `New Journey` appends a
+menu action that starts the main-menu exit animation; animation completion
+appends the transition to `/loading`; after five seconds the loading scene
+appends the transition to `/tutorial`. Every connected client reflects the same
+folded phase into its own pathname while preserving the room query string and
+hash. `/loading` and `/tutorial` can also create rooms directly, with their
+initial scene stamped into room genesis.
 
 ## `seed`
 

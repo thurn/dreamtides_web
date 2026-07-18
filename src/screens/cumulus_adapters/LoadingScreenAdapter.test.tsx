@@ -7,8 +7,16 @@ import { CumulusRoot } from "../../cumulus/CumulusRoot";
 import { getLogEntries, resetLog } from "../../logging";
 import { LoadingScreenAdapter } from "./LoadingScreenAdapter";
 
-vi.mock("./TutorialScreenAdapter", () => ({
-  TutorialScreenAdapter: () => <main data-tutorial-screen />,
+const coopMocks = vi.hoisted(() => ({
+  frontDoor: { phase: "loading", journeyId: "genesis:seed" },
+  advanceFrontDoor: vi.fn().mockResolvedValue(1),
+}));
+
+vi.mock("../../state/front-door-context", () => ({
+  useFrontDoor: () => ({
+    state: coopMocks.frontDoor,
+    mutations: { advance: coopMocks.advanceFrontDoor },
+  }),
 }));
 
 beforeEach(() => {
@@ -28,6 +36,7 @@ beforeEach(() => {
   vi.spyOn(console, "log").mockImplementation(() => {});
   vi.useFakeTimers();
   window.history.replaceState(null, "", "/loading?seed=7#journey");
+  coopMocks.advanceFrontDoor.mockClear();
   resetLog();
 });
 
@@ -65,15 +74,15 @@ describe("LoadingScreenAdapter", () => {
       vi.advanceTimersByTime(4_999);
     });
     expect(container.querySelector("[data-loading-screen]")).not.toBeNull();
-    expect(window.location.pathname).toBe("/loading");
+    expect(coopMocks.advanceFrontDoor).not.toHaveBeenCalled();
 
     act(() => {
       vi.advanceTimersByTime(1);
     });
-    expect(container.querySelector("[data-tutorial-screen]")).not.toBeNull();
-    expect(window.location.pathname).toBe("/tutorial");
-    expect(window.location.search).toBe("?seed=7");
-    expect(window.location.hash).toBe("#journey");
+    expect(coopMocks.advanceFrontDoor).toHaveBeenCalledWith(
+      "loading",
+      "genesis:seed",
+    );
 
     act(() => root.unmount());
   });

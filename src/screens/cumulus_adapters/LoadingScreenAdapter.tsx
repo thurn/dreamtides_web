@@ -1,21 +1,16 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { LoadingScreen } from "../../cumulus/screens/LoadingScreen";
 import { logEvent } from "../../logging";
+import { useFrontDoor } from "../../state/front-door-context";
 import { buildLoadingView } from "./loading-view-model";
-import { TutorialScreenAdapter } from "./TutorialScreenAdapter";
 
 const TUTORIAL_DELAY_MS = 5_000;
 
-/** Standalone `/loading` wiring and presentation logging. */
-export function LoadingScreenAdapter({
-  source = "direct",
-}: {
-  readonly source?: "direct" | "main_menu";
-}) {
+/** Coop-backed `/loading` wiring and presentation logging. */
+export function LoadingScreenAdapter() {
   const hasLoggedPresentation = useRef(false);
-  const [activeScreen, setActiveScreen] = useState<"loading" | "tutorial">(
-    "loading",
-  );
+  const { state, mutations } = useFrontDoor();
+  const source = state.journeyId?.startsWith("event:") ? "main_menu" : "direct";
   const view = useMemo(() => buildLoadingView(), []);
 
   useEffect(() => {
@@ -28,20 +23,17 @@ export function LoadingScreenAdapter({
   }, [source, view]);
 
   useEffect(() => {
+    if (state.phase !== "loading" || state.journeyId === null) {
+      return undefined;
+    }
+    const journeyId = state.journeyId;
     const timeout = window.setTimeout(() => {
-      window.history.replaceState(
-        null,
-        "",
-        `/tutorial${window.location.search}${window.location.hash}`,
-      );
-      setActiveScreen("tutorial");
+      void mutations.advance("loading", journeyId).catch((error: unknown) => {
+        console.error("Coop loading transition failed", error);
+      });
     }, TUTORIAL_DELAY_MS);
     return () => window.clearTimeout(timeout);
-  }, []);
-
-  if (activeScreen === "tutorial") {
-    return <TutorialScreenAdapter />;
-  }
+  }, [mutations, state.journeyId, state.phase]);
 
   return <LoadingScreen view={view} />;
 }

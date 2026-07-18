@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { onValue, ref, type Database } from "firebase/database";
 import type { ContentConfig, Genesis, LogNode } from "../eventlog/types";
 import {
@@ -17,6 +24,7 @@ import {
   type RuntimeConfig,
 } from "../runtime/runtime-config";
 import { getBuildHash } from "./build-hash";
+import type { FrontDoorPhase } from "../rules/fold-state";
 import { installQuestLogSink, type QuestLogSinkHandle } from "./quest-log-sink";
 import { ConfigGateScreen } from "./ConfigGateScreen";
 import { UnreadableRoomScreen } from "./UnreadableRoomScreen";
@@ -49,6 +57,8 @@ interface RoomGateProps {
   gameId: string | null;
   /** This client's runtime config; its content slice is pinned into a new room's genesis. */
   runtimeConfig: RuntimeConfig;
+  /** Scene stamped into genesis only when this mount creates a fresh room. */
+  frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting">;
   children: (context: RoomReadyContext) => ReactNode;
 }
 
@@ -70,7 +80,9 @@ function freshSeed(): string {
   }
   const bytes = new Uint8Array(16);
   cryptoSource.getRandomValues(bytes);
-  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join(
+    "",
+  );
 }
 
 /**
@@ -78,12 +90,16 @@ function freshSeed(): string {
  * and the fold-relevant content parameters pinned from this client's config so
  * every joiner folds the same content.
  */
-export function createFreshGenesis(contentConfig: ContentConfig): Genesis {
+export function createFreshGenesis(
+  contentConfig: ContentConfig,
+  frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting">,
+): Genesis {
   return {
     seed: freshSeed(),
     reducerVersion: getBuildHash(),
     createdAt: Date.now(),
     contentConfig,
+    ...(frontDoorEntry === undefined ? {} : { frontDoorEntry }),
   };
 }
 
@@ -106,11 +122,16 @@ const CREATE_ROOM_MAX_ATTEMPTS = 3;
 export async function createAndNavigateToRoom(
   db: Database,
   contentConfig: ContentConfig,
+  frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting">,
 ): Promise<string> {
   for (let attempt = 0; attempt < CREATE_ROOM_MAX_ATTEMPTS; attempt++) {
     const roomId = generateRoomId();
     try {
-      await createRoomEvictingStale(db, roomId, createFreshGenesis(contentConfig));
+      await createRoomEvictingStale(
+        db,
+        roomId,
+        createFreshGenesis(contentConfig, frontDoorEntry),
+      );
       navigateToRoom(roomId);
       return roomId;
     } catch (error) {
@@ -151,7 +172,11 @@ export function gateStatusFor(
 function navigateToRoom(roomId: string): void {
   const nextUrl = new URL(window.location.href);
   nextUrl.searchParams.set("game", roomId);
-  window.history.pushState(null, "", `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`);
+  window.history.pushState(
+    null,
+    "",
+    `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`,
+  );
 }
 
 /**
@@ -161,7 +186,13 @@ function navigateToRoom(roomId: string): void {
  * `children` with the ready room context; on a mismatch it renders the
  * read-only `VersionGateScreen`.
  */
-export function RoomGate({ db, gameId, runtimeConfig, children }: RoomGateProps): ReactNode {
+export function RoomGate({
+  db,
+  gameId,
+  runtimeConfig,
+  frontDoorEntry,
+  children,
+}: RoomGateProps): ReactNode {
   const clientId = useMemo(mintClientId, []);
   const localContentConfig = useMemo(
     () => contentConfigFromRuntime(runtimeConfig),
@@ -170,9 +201,14 @@ export function RoomGate({ db, gameId, runtimeConfig, children }: RoomGateProps)
   const autoCreateFiredRef = useRef(false);
   const [activeRoomId, setActiveRoomId] = useState<string | null>(gameId);
   const [gateState, setGateState] = useState<GateState>(
-    gameId === null ? { status: "creating" } : { status: "loading", roomId: gameId },
+    gameId === null
+      ? { status: "creating" }
+      : { status: "loading", roomId: gameId },
   );
-  const [presence, setPresence] = useState<Record<string, PresenceEntry> | null>(null);
+  const [presence, setPresence] = useState<Record<
+    string,
+    PresenceEntry
+  > | null>(null);
   const [logSink, setLogSinkHandle] = useState<QuestLogSinkHandle | null>(null);
 
   const readyRoomId = gateState.status === "ready" ? gateState.roomId : null;
@@ -181,23 +217,30 @@ export function RoomGate({ db, gameId, runtimeConfig, children }: RoomGateProps)
   useEffect(() => {
     setActiveRoomId(gameId);
     setGateState(
-      gameId === null ? { status: "creating" } : { status: "loading", roomId: gameId },
+      gameId === null
+        ? { status: "creating" }
+        : { status: "loading", roomId: gameId },
     );
   }, [gameId]);
 
   const handleCreateGame = useCallback(async (): Promise<void> => {
     setGateState({ status: "creating" });
     try {
-      const roomId = await createAndNavigateToRoom(db, localContentConfig);
+      const roomId = await createAndNavigateToRoom(
+        db,
+        localContentConfig,
+        frontDoorEntry,
+      );
       setActiveRoomId(roomId);
       setGateState({ status: "loading", roomId });
     } catch (error) {
       setGateState({
         status: "error",
-        message: error instanceof Error ? error.message : "Failed to create game.",
+        message:
+          error instanceof Error ? error.message : "Failed to create game.",
       });
     }
-  }, [db, localContentConfig]);
+  }, [db, frontDoorEntry, localContentConfig]);
 
   // Auto-create a room when no `?game=` is present so the coop entry always
   // lands on a room. Fires once per mount; once it navigates to `?game=<id>`
@@ -276,11 +319,18 @@ export function RoomGate({ db, gameId, runtimeConfig, children }: RoomGateProps)
     const handleError = (error: unknown): void => {
       setGateState({
         status: "error",
-        message: error instanceof Error ? error.message : "Failed to write presence.",
+        message:
+          error instanceof Error ? error.message : "Failed to write presence.",
       });
     };
     try {
-      const maybeCleanup: unknown = writePresence(db, readyRoomId, clientId, undefined, handleError);
+      const maybeCleanup: unknown = writePresence(
+        db,
+        readyRoomId,
+        clientId,
+        undefined,
+        handleError,
+      );
       if (typeof maybeCleanup !== "function") {
         return undefined;
       }
@@ -330,7 +380,9 @@ export function RoomGate({ db, gameId, runtimeConfig, children }: RoomGateProps)
   if (gateState.status === "configGate") {
     return (
       <ConfigGateScreen
-        roomContentConfig={gateState.genesis.contentConfig as ContentConfig | undefined}
+        roomContentConfig={
+          gateState.genesis.contentConfig as ContentConfig | undefined
+        }
         localContentConfig={localContentConfig}
       />
     );
@@ -340,7 +392,11 @@ export function RoomGate({ db, gameId, runtimeConfig, children }: RoomGateProps)
     // Wait for the sink install effect to publish the handle before mounting
     // children so the ready context is complete.
     if (logSink === null || readyRoomId !== gateState.roomId) {
-      return <RoomShell subtitle="Joining game">Loading {gateState.roomId}...</RoomShell>;
+      return (
+        <RoomShell subtitle="Joining game">
+          Loading {gateState.roomId}...
+        </RoomShell>
+      );
     }
     return (
       <>
@@ -361,24 +417,40 @@ export function RoomGate({ db, gameId, runtimeConfig, children }: RoomGateProps)
   }
 
   if (gateState.status === "loading") {
-    return <RoomShell subtitle="Joining game">Loading {gateState.roomId}...</RoomShell>;
+    return (
+      <RoomShell subtitle="Joining game">
+        Loading {gateState.roomId}...
+      </RoomShell>
+    );
   }
 
   if (gateState.status === "unreachable") {
     return (
       <RoomShell subtitle="Game not found">
-        <p style={{ color: "#cbd5f5", opacity: 0.8, maxWidth: "32rem", textAlign: "center" }}>
-          Could not load &ldquo;{gateState.roomId}&rdquo;. The game may not exist, or the
-          database is unreachable.
+        <p
+          style={{
+            color: "#cbd5f5",
+            opacity: 0.8,
+            maxWidth: "32rem",
+            textAlign: "center",
+          }}
+        >
+          Could not load &ldquo;{gateState.roomId}&rdquo;. The game may not
+          exist, or the database is unreachable.
         </p>
-        <CreateGameButton onClick={() => void handleCreateGame()} label="Create New Game" />
+        <CreateGameButton
+          onClick={() => void handleCreateGame()}
+          label="Create New Game"
+        />
       </RoomShell>
     );
   }
 
   return (
     <RoomShell subtitle="Something went wrong">
-      <p style={{ color: "#fca5a5", maxWidth: "32rem", textAlign: "center" }}>{gateState.message}</p>
+      <p style={{ color: "#fca5a5", maxWidth: "32rem", textAlign: "center" }}>
+        {gateState.message}
+      </p>
     </RoomShell>
   );
 }
@@ -413,7 +485,8 @@ function CreateGameButton({
       onClick={onClick}
       className="cursor-pointer rounded-2xl px-12 py-4 text-xl font-semibold tracking-wide transition-all duration-150 hover:-translate-y-0.5"
       style={{
-        background: "linear-gradient(135deg, #7c3aed 0%, #a855f7 55%, #c084fc 100%)",
+        background:
+          "linear-gradient(135deg, #7c3aed 0%, #a855f7 55%, #c084fc 100%)",
         color: "#ffffff",
         border: "2px solid rgba(192, 132, 252, 0.6)",
         boxShadow:
@@ -439,7 +512,8 @@ function RoomShell({
         <h1
           className="text-6xl font-extrabold tracking-wide md:text-7xl"
           style={{
-            background: "linear-gradient(135deg, #a855f7 0%, #7c3aed 40%, #c084fc 100%)",
+            background:
+              "linear-gradient(135deg, #a855f7 0%, #7c3aed 40%, #c084fc 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             textShadow:
@@ -449,7 +523,10 @@ function RoomShell({
         >
           Dreamtides
         </h1>
-        <p className="text-lg opacity-70 md:text-xl" style={{ color: "#e2e8f0" }}>
+        <p
+          className="text-lg opacity-70 md:text-xl"
+          style={{ color: "#e2e8f0" }}
+        >
           {subtitle}
         </p>
         <div className="flex flex-col items-center gap-4">{children}</div>

@@ -18,11 +18,20 @@ import type { QuestState } from "../types/quest";
 export type { BattleFoldState, PendingPrompt } from "./battle/fold";
 import type { BattleFoldState } from "./battle/fold";
 
+export type FrontDoorPhase = "main" | "mainExiting" | "loading" | "tutorial";
+
+export interface FrontDoorState {
+  readonly phase: FrontDoorPhase;
+  /** Stable identity shared by the automatic transitions for one journey. */
+  readonly journeyId: string | null;
+}
+
 /**
  * The complete state folded from a room's event log: the quest slice plus an
  * optional in-battle slice. `battle` is null whenever no battle is active.
  */
 export interface FoldState {
+  readonly frontDoor: FrontDoorState;
   readonly quest: QuestState;
   readonly battle: BattleFoldState | null;
 }
@@ -38,7 +47,12 @@ export interface FoldState {
  * src/rules/ lint rails forbid.
  */
 export function genesisFoldState(genesis: Genesis): FoldState {
+  const entry = genesis.frontDoorEntry ?? "main";
   return {
+    frontDoor: {
+      phase: entry,
+      journeyId: entry === "main" ? null : `genesis:${genesis.seed}`,
+    },
     quest: genesisQuestState(genesis),
     battle: null,
   };

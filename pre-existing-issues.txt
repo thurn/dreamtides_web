@@ -1,1 +1,6 @@
-
+docs/quest_prototype/firebase_multiplayer.md and the architecture section of
+docs/quest_prototype/quest_prototype.md describe the legacy mirrored
+questState/battleState room schema and in-memory quest store. The production
+runtime now persists an encoded room event log and derives FoldState through
+CoopProvider. These documents need a focused rewrite against src/eventlog/,
+src/coop/hooks.ts, and src/state/coop-quest-context.tsx.

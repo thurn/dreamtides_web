@@ -1,21 +1,17 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import {
   MainMenuScreen,
   type MainMenuActionId,
   type MainMenuSocialId,
 } from "../../cumulus/screens/MainMenuScreen";
 import { logEvent } from "../../logging";
+import { useFrontDoor } from "../../state/front-door-context";
 import { buildMainMenuView } from "./main-menu-view-model";
-import { LoadingScreenAdapter } from "./LoadingScreenAdapter";
 
-/** Standalone `/main` wiring, including its cinematic New Journey transition. */
+/** Coop-backed `/main` wiring, including its cinematic New Journey transition. */
 export function MainMenuScreenAdapter() {
   const hasLoggedPresentation = useRef(false);
-  const hasCompletedJourneyTransition = useRef(false);
-  const [activeScreen, setActiveScreen] = useState<"main" | "loading">("main");
-  const [transitionPhase, setTransitionPhase] = useState<"visible" | "exiting">(
-    "visible",
-  );
+  const { state, mutations } = useFrontDoor();
   const view = useMemo(() => buildMainMenuView(), []);
 
   useEffect(() => {
@@ -27,36 +23,41 @@ export function MainMenuScreenAdapter() {
     });
   }, [view]);
 
-  const handleAction = useCallback((actionId: MainMenuActionId) => {
-    logEvent("main_menu_action_pressed", { actionId });
-    if (actionId === "new-journey") setTransitionPhase("exiting");
-  }, []);
+  const handleAction = useCallback(
+    (actionId: MainMenuActionId) => {
+      logEvent("main_menu_action_pressed", { actionId });
+      void mutations.action("main", actionId).catch((error: unknown) => {
+        console.error("Coop main-menu action failed", error);
+      });
+    },
+    [mutations],
+  );
 
-  const handleSocial = useCallback((socialId: MainMenuSocialId) => {
-    logEvent("main_menu_social_pressed", { socialId });
-  }, []);
+  const handleSocial = useCallback(
+    (socialId: MainMenuSocialId) => {
+      logEvent("main_menu_social_pressed", { socialId });
+      void mutations.action("main", socialId).catch((error: unknown) => {
+        console.error("Coop main-menu social action failed", error);
+      });
+    },
+    [mutations],
+  );
 
   const handleExitComplete = useCallback(() => {
-    if (hasCompletedJourneyTransition.current) return;
-    hasCompletedJourneyTransition.current = true;
-    window.history.pushState(
-      null,
-      "",
-      `/loading${window.location.search}${window.location.hash}`,
-    );
-    setActiveScreen("loading");
-  }, []);
-
-  if (activeScreen === "loading") {
-    return <LoadingScreenAdapter source="main_menu" />;
-  }
+    if (state.phase !== "mainExiting" || state.journeyId === null) return;
+    void mutations
+      .advance("mainExiting", state.journeyId)
+      .catch((error: unknown) => {
+        console.error("Coop main-menu transition failed", error);
+      });
+  }, [mutations, state.journeyId, state.phase]);
 
   return (
     <MainMenuScreen
       view={view}
       onAction={handleAction}
       onSocial={handleSocial}
-      transitionPhase={transitionPhase}
+      transitionPhase={state.phase === "mainExiting" ? "exiting" : "visible"}
       onExitComplete={handleExitComplete}
     />
   );

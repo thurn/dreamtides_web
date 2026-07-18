@@ -30,7 +30,11 @@ const GENESIS: Genesis = {
   seed: "actions-test-seed",
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null },
+  contentConfig: {
+    poolVariant: "test",
+    draftMode: "pool",
+    fresh20PackSize: null,
+  },
 };
 
 /** Promote a captured draft into the committed-event shape the fold expects. */
@@ -63,6 +67,8 @@ function captureAllDrafts(): EventDraft[] {
 
   // One call per creator. Minimal args; values are placeholders — the contract
   // is about the event type + routing, not the payload's game meaning.
+  void actions.frontDoorAction("main", "new-journey");
+  void actions.advanceFrontDoor("loading", "journey-1");
   void actions.changeEssence(1);
   void actions.setEssence(1);
   void actions.changeMaxEssence(1);
@@ -126,7 +132,11 @@ function captureAllDrafts(): EventDraft[] {
   void actions.battleGesture([{}, {}]);
   void actions.battleAiDefend("enemy", "ai:test");
   void actions.resolvePrompt(1, {});
-  void actions.setCardNote("instance-1", { noteId: "n1", text: "t", expiry: null });
+  void actions.setCardNote("instance-1", {
+    noteId: "n1",
+    text: "t",
+    expiry: null,
+  });
 
   return drafts;
 }
@@ -159,9 +169,15 @@ describe("coop actions facade", () => {
       // devMode:false so a contained throw would surface as an error-tagged
       // bounce rather than escaping — the fold must never throw on a facade
       // event.
-      const result = foldEvents(GAME_ENGINE_CONFIG, GENESIS, base, [{ seq, event }], {
-        devMode: false,
-      });
+      const result = foldEvents(
+        GAME_ENGINE_CONFIG,
+        GENESIS,
+        base,
+        [{ seq, event }],
+        {
+          devMode: false,
+        },
+      );
       const outcome = result.outcomes[0];
       expect(outcome, `no outcome for "${draft.type}"`).toBeDefined();
       expect(["applied", "bounced"]).toContain(outcome.outcome);
@@ -178,6 +194,7 @@ describe("coop actions facade", () => {
       return Promise.resolve(captured.length);
     });
 
+    void actions.advanceFrontDoor("loading", "event:9");
     void actions.openSite("site-7", "quest:12");
     void actions.enterDraftSite("site-7", "quest:12");
     void actions.acceptEssence("site-7", "quest:12");
@@ -188,6 +205,7 @@ describe("coop actions facade", () => {
     );
 
     expect(captured.map((draft) => draft.intentKey)).toEqual([
+      "front-door:event:9:loading",
       "open-site:quest:12:site-7",
       "enter-draft-site:quest:12:site-7",
       "accept-essence:quest:12:site-7",
@@ -207,7 +225,10 @@ describe("coop actions facade", () => {
     void actions.beginBattle("site-8", null);
 
     expect(captured).toEqual([
-      { type: "BEGIN_BATTLE", payload: { siteId: "site-7", seedOverride: 4242 } },
+      {
+        type: "BEGIN_BATTLE",
+        payload: { siteId: "site-7", seedOverride: 4242 },
+      },
       { type: "BEGIN_BATTLE", payload: { siteId: "site-8" } },
     ]);
   });

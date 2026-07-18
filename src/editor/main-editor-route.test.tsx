@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 
+import type { ReactElement } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -42,11 +43,13 @@ vi.mock("../debug/OffersDebugApp", () => ({
   },
 }));
 
-vi.mock("../screens/cumulus_adapters/LoadingScreenAdapter", () => ({
-  LoadingScreenAdapter: function MockLoadingScreenAdapter() {
-    return null;
-  },
-}));
+vi.mock("../coop/FrontDoorApp", () => {
+  return {
+    default: function MockFrontDoorApp() {
+      return null;
+    },
+  };
+});
 
 vi.mock("../screens/cumulus_adapters/TutorialScreenAdapter", () => ({
   TutorialScreenAdapter: function MockTutorialScreenAdapter() {
@@ -77,6 +80,15 @@ afterEach(() => {
 });
 
 describe("main editor route", () => {
+  function renderedFrontDoorEntry(): string | undefined {
+    const strictMode = mocks.render.mock.calls[0]?.[0] as ReactElement<{
+      children: ReactElement<{
+        children: ReactElement<{ entry?: string }>;
+      }>;
+    }>;
+    return strictMode.props.children.props.children.props.entry;
+  }
+
   it("mounts the isolated editor for the Vite-served /editor/ path", async () => {
     window.history.pushState(null, "", "/editor/");
 
@@ -137,24 +149,39 @@ describe("main editor route", () => {
     expect(mocks.render).toHaveBeenCalledTimes(1);
   });
 
-  it("mounts the isolated loading screen for the Vite-served /loading/ path", async () => {
+  it("mounts the Firebase front door for the Vite-served /loading/ path", async () => {
     window.history.pushState(null, "", "/loading/");
 
     await import("../main.tsx");
 
     expect(mocks.appImport).not.toHaveBeenCalled();
+    expect(renderedFrontDoorEntry()).toBe("loading");
     expect(mocks.createRoot).toHaveBeenCalledWith(
       document.getElementById("root"),
     );
     expect(mocks.render).toHaveBeenCalledTimes(1);
   });
 
-  it("mounts the isolated tutorial battle for the Vite-served /tutorial/ path", async () => {
+  it("mounts the Firebase front door for the Vite-served /tutorial/ path", async () => {
     window.history.pushState(null, "", "/tutorial/");
 
     await import("../main.tsx");
 
     expect(mocks.appImport).not.toHaveBeenCalled();
+    expect(renderedFrontDoorEntry()).toBe("tutorial");
+    expect(mocks.createRoot).toHaveBeenCalledWith(
+      document.getElementById("root"),
+    );
+    expect(mocks.render).toHaveBeenCalledTimes(1);
+  });
+
+  it("mounts the Firebase front door for the Vite-served /main/ path", async () => {
+    window.history.pushState(null, "", "/main/");
+
+    await import("../main.tsx");
+
+    expect(mocks.appImport).not.toHaveBeenCalled();
+    expect(renderedFrontDoorEntry()).toBe("main");
     expect(mocks.createRoot).toHaveBeenCalledWith(
       document.getElementById("root"),
     );

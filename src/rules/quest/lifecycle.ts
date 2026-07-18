@@ -348,7 +348,11 @@ export function startQuest(
   if (typeof dreamcallerId !== "string") return null;
   const provider = contentProvider;
   if (provider === null) return null;
-  const started = provider.startQuest({ quest, dreamcallerId, seed: quest.seed });
+  const started = provider.startQuest({
+    quest,
+    dreamcallerId,
+    seed: quest.seed,
+  });
   return started === null
     ? null
     : { ...started, runId: `quest:${String(ctx.seq)}` };
@@ -369,12 +373,17 @@ export function resetQuest(state: FoldState): FoldState {
   // `genesisFoldState` derives the fold from `genesis.seed` alone; the other
   // genesis fields (reducerVersion / createdAt / contentConfig) are pinned at
   // room creation and are not read here, so placeholders satisfy the type.
-  return genesisFoldState({
+  const reset = genesisFoldState({
     seed: state.quest.seed,
     reducerVersion: "",
     createdAt: 0,
-    contentConfig: { poolVariant: "", draftMode: "pool", fresh20PackSize: null },
+    contentConfig: {
+      poolVariant: "",
+      draftMode: "pool",
+      fresh20PackSize: null,
+    },
   });
+  return { ...reset, frontDoor: state.frontDoor };
 }
 
 /**
@@ -431,7 +440,8 @@ export function validateLoadedState(
 
   const before = state.quest;
   if (before.dreamcaller != null && snapshot.dreamcaller == null) return null;
-  if (before.resolvedPackage != null && snapshot.resolvedPackage == null) return null;
+  if (before.resolvedPackage != null && snapshot.resolvedPackage == null)
+    return null;
   if (before.draftState != null && snapshot.draftState == null) return null;
 
   let battle: BattleFoldState | null = null;
@@ -440,7 +450,7 @@ export function validateLoadedState(
     if (battle === null) return null;
   }
 
-  return { quest: snapshot, battle };
+  return { ...state, quest: snapshot, battle };
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -454,9 +464,15 @@ function isRecord(value: unknown): value is Record<string, unknown> {
  */
 function isQuestStateShape(value: unknown): value is QuestState {
   if (!isRecord(value)) return false;
-  const numberKeys = ["essence", "essenceCap", "maxDreamsigns", "completionLevel"];
+  const numberKeys = [
+    "essence",
+    "essenceCap",
+    "maxDreamsigns",
+    "completionLevel",
+  ];
   for (const key of numberKeys) {
-    if (typeof value[key] !== "number" || !Number.isFinite(value[key])) return false;
+    if (typeof value[key] !== "number" || !Number.isFinite(value[key]))
+      return false;
   }
   const arrayKeys = [
     "deck",
@@ -472,7 +488,8 @@ function isQuestStateShape(value: unknown): value is QuestState {
     value.runId !== undefined &&
     value.runId !== null &&
     typeof value.runId !== "string"
-  ) return false;
+  )
+    return false;
   if (typeof value.hasSeenStartingDeckPopup !== "boolean") return false;
   if (!isRecord(value.atlas)) return false;
   if (!isRecord(value.screen)) return false;
@@ -483,7 +500,10 @@ function isQuestStateShape(value: unknown): value is QuestState {
     const field = value[key];
     if (field !== null && !isRecord(field)) return false;
   }
-  if (value.currentDreamscape !== null && typeof value.currentDreamscape !== "string") {
+  if (
+    value.currentDreamscape !== null &&
+    typeof value.currentDreamscape !== "string"
+  ) {
     return false;
   }
   if (value.activeSiteId !== null && typeof value.activeSiteId !== "string") {
@@ -506,17 +526,20 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
   if (
     value.basicAutomationEnabled !== undefined &&
     typeof value.basicAutomationEnabled !== "boolean"
-  ) return null;
+  )
+    return null;
   if (value.aiDefenseTurn !== undefined) {
     if (!isRecord(value.aiDefenseTurn)) return null;
     if (
       value.aiDefenseTurn.activeSide !== "player" &&
       value.aiDefenseTurn.activeSide !== "enemy"
-    ) return null;
+    )
+      return null;
     if (
       typeof value.aiDefenseTurn.turnNumber !== "number" ||
       !Number.isInteger(value.aiDefenseTurn.turnNumber)
-    ) return null;
+    )
+      return null;
   }
   if (!Array.isArray(value.effectQueue)) return null;
   for (const run of value.effectQueue) {
@@ -588,7 +611,8 @@ function isResolvableRun(value: unknown): value is EffectRun {
   const ref = value.scriptRef;
   if (!isScriptRef(ref)) return false;
   const cursor = value.cursor;
-  if (!Array.isArray(cursor) || !cursor.every((n) => Number.isInteger(n))) return false;
+  if (!Array.isArray(cursor) || !cursor.every((n) => Number.isInteger(n)))
+    return false;
   const steps = resolveScript(ref);
   if (steps.length === 0) return false;
   return cursorInRange(steps, cursor as number[]);

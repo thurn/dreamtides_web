@@ -7,8 +7,7 @@
     "contentConfig": {
       "poolVariant": "fixture",
       "draftMode": "pool",
-      "fresh20PackSize": null,
-      "journeyVariant": "v2"
+      "fresh20PackSize": null
     }
   },
   "events": [
@@ -106,5 +105,5 @@
       }
     }
   ],
-  "finalHash": "8e093eb8ed2a56afb2c52309e1aa5bf8390971b7fa5b25645cf459367dea3656"
+  "finalHash": "0679e0ee8d742c300d9d51ceadfd9ada5ca348d08088320b82ff1441a42de9ce"
 }

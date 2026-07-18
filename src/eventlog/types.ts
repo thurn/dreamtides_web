@@ -66,8 +66,14 @@ export interface Genesis {
   /** Epoch milliseconds (see rationale above). */
   createdAt: number;
   /**
+   * Standalone front-door scene a newly created room starts on. Quest rooms
+   * omit this and use the default main-menu scene; the quest router ignores
+   * the front-door slice entirely.
+   */
+  frontDoorEntry?: "main" | "loading" | "tutorial";
+  /**
    * Fold-relevant content parameters, pinned at room creation. Both players
- * must fold the same content (draft pool and draft mode), so
+   * must fold the same content (draft pool and draft mode), so
    * these are captured in the immutable genesis rather than read per-client
    * from each browser's URL — a client whose local config differs is gated
    * out until it adopts the room's pinned params (see RoomGate's config gate).

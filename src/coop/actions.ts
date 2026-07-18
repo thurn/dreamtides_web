@@ -34,6 +34,17 @@ export type AppendFn = (draft: EventDraft) => Promise<number>;
 
 /** The full set of named action creators the screens call. */
 export interface CoopActions {
+  // --- standalone front door ---
+  frontDoorAction: (
+    surface: "main" | "tutorial",
+    actionId: string,
+    detail?: unknown,
+  ) => Promise<number>;
+  advanceFrontDoor: (
+    from: "mainExiting" | "loading",
+    journeyId: string,
+  ) => Promise<number>;
+
   // --- essence & limits ---
   changeEssence: (delta: number) => Promise<number>;
   setEssence: (value: number) => Promise<number>;
@@ -73,11 +84,20 @@ export interface CoopActions {
     },
   ) => Promise<number>;
   duplicateDeckEntry: (entryId: string) => Promise<number>;
-  setDeckEntryStatOverride: (entryId: string, override: unknown) => Promise<number>;
+  setDeckEntryStatOverride: (
+    entryId: string,
+    override: unknown,
+  ) => Promise<number>;
   setDeckEntryKeywords: (entryId: string, keywords: unknown) => Promise<number>;
   setDeckEntryType: (entryId: string, typeChange: unknown) => Promise<number>;
-  transfigureCard: (entryId: string, transfiguration: unknown) => Promise<number>;
-  acceptTransfigurationChoice: (siteId: string, entryId: string) => Promise<number>;
+  transfigureCard: (
+    entryId: string,
+    transfiguration: unknown,
+  ) => Promise<number>;
+  acceptTransfigurationChoice: (
+    siteId: string,
+    entryId: string,
+  ) => Promise<number>;
   acceptDuplicationChoice: (siteId: string, entryId: string) => Promise<number>;
   purgeAllBaneCards: () => Promise<number>;
   purgeRandomBaneCards: (count: number) => Promise<number>;
@@ -97,11 +117,17 @@ export interface CoopActions {
   openSite: (siteId: string, runId?: string) => Promise<number>;
   completeDreamAugury: (siteId: string) => Promise<number>;
   acceptReward: (siteId: string, choiceIndex?: number) => Promise<number>;
-  acceptDreamsignOffer: (siteId: string, dreamsignId: string) => Promise<number>;
+  acceptDreamsignOffer: (
+    siteId: string,
+    dreamsignId: string,
+  ) => Promise<number>;
   rejectDreamsignOffer: (siteId: string) => Promise<number>;
   acceptEssence: (siteId: string, runId?: string) => Promise<number>;
   rerollDreamAugury: (siteId: string) => Promise<number>;
-  forceDreamAuguryArchetype: (siteId: string, archetypeId: string) => Promise<number>;
+  forceDreamAuguryArchetype: (
+    siteId: string,
+    archetypeId: string,
+  ) => Promise<number>;
   completeSite: (siteId: string, runId?: string) => Promise<number>;
 
   // --- merchant & shop ---
@@ -115,7 +141,10 @@ export interface CoopActions {
   // --- modifiers & atlas ---
   pushBattleModifier: (modifier: unknown) => Promise<number>;
   pushTemporaryBaneGrant: (payload: Record<string, unknown>) => Promise<number>;
-  banSiteType: (siteType: string, dreamscapesRemaining: number) => Promise<number>;
+  banSiteType: (
+    siteType: string,
+    dreamscapesRemaining: number,
+  ) => Promise<number>;
   boostSiteAppearance: (
     siteType: string,
     percent: number,
@@ -134,7 +163,10 @@ export interface CoopActions {
   endBattle: (result: "victory" | "defeat") => Promise<number>;
 
   // --- battle events ---
-  beginBattle: (siteId: string, seedOverride?: number | null) => Promise<number>;
+  beginBattle: (
+    siteId: string,
+    seedOverride?: number | null,
+  ) => Promise<number>;
   setBattleAutomation: (enabled: boolean) => Promise<number>;
   battleCommand: (
     command: unknown,
@@ -167,11 +199,33 @@ export function makeActions(append: AppendFn): CoopActions {
     payload: Record<string, unknown>,
     intentKey?: string,
   ): Promise<number> =>
-    append({ type, payload, ...(intentKey === undefined ? {} : { intentKey }) });
-  const siteIntentKey = (kind: string, siteId: string, runId?: string): string =>
-    `${kind}:${runId ?? "unscoped"}:${siteId}`;
+    append({
+      type,
+      payload,
+      ...(intentKey === undefined ? {} : { intentKey }),
+    });
+  const siteIntentKey = (
+    kind: string,
+    siteId: string,
+    runId?: string,
+  ): string => `${kind}:${runId ?? "unscoped"}:${siteId}`;
 
   return {
+    // --- standalone front door ---
+    frontDoorAction: (surface, actionId, detail) =>
+      emit(
+        "FRONT_DOOR_ACTION",
+        detail === undefined
+          ? { surface, actionId }
+          : { surface, actionId, detail },
+      ),
+    advanceFrontDoor: (from, journeyId) =>
+      append({
+        type: "ADVANCE_FRONT_DOOR",
+        payload: { from, journeyId },
+        intentKey: `front-door:${journeyId}:${from}`,
+      }),
+
     // --- essence & limits ---
     changeEssence: (delta) => emit("ADJUST_ESSENCE", { delta }),
     setEssence: (value) => emit("SET_ESSENCE", { value }),
@@ -184,10 +238,14 @@ export function makeActions(append: AppendFn): CoopActions {
     startQuest: (payload = {}) => emit("START_QUEST", { ...payload }),
     resetQuest: () => emit("RESET_QUEST", {}),
     loadState: (snapshot, battle) =>
-      emit("LOAD_STATE", battle === undefined ? { snapshot } : { snapshot, battle }),
+      emit(
+        "LOAD_STATE",
+        battle === undefined ? { snapshot } : { snapshot, battle },
+      ),
 
     // --- dreamcaller ---
-    selectDreamcaller: (dreamcallerId) => emit("SELECT_DREAMCALLER", { dreamcallerId }),
+    selectDreamcaller: (dreamcallerId) =>
+      emit("SELECT_DREAMCALLER", { dreamcallerId }),
 
     // --- navigation ---
     setScreen: (screen, activeSiteId) =>
@@ -236,7 +294,8 @@ export function makeActions(append: AppendFn): CoopActions {
 
     // --- draft ---
     setDraftState: (draftState) => emit("SET_DRAFT_STATE", { draftState }),
-    pickDraftCard: (packIndex, cardId) => emit("PICK_DRAFT_CARD", { packIndex, cardId }),
+    pickDraftCard: (packIndex, cardId) =>
+      emit("PICK_DRAFT_CARD", { packIndex, cardId }),
     enterDraftSite: (siteId, runId) =>
       emit(
         "ENTER_DRAFT_SITE",
@@ -255,7 +314,8 @@ export function makeActions(append: AppendFn): CoopActions {
       ),
     acceptDreamsignOffer: (siteId, dreamsignId) =>
       emit("ACCEPT_DREAMSIGN_OFFER", { siteId, dreamsignId }),
-    rejectDreamsignOffer: (siteId) => emit("REJECT_DREAMSIGN_OFFER", { siteId }),
+    rejectDreamsignOffer: (siteId) =>
+      emit("REJECT_DREAMSIGN_OFFER", { siteId }),
     acceptEssence: (siteId, runId) =>
       emit(
         "ACCEPT_ESSENCE",
@@ -274,20 +334,30 @@ export function makeActions(append: AppendFn): CoopActions {
 
     // --- merchant & shop ---
     acceptMerchantOffer: (siteId, offer) =>
-      emit("ACCEPT_MERCHANT_OFFER", offer === undefined ? { siteId } : { siteId, offer }),
+      emit(
+        "ACCEPT_MERCHANT_OFFER",
+        offer === undefined ? { siteId } : { siteId, offer },
+      ),
     declineMerchant: (siteId) => emit("DECLINE_MERCHANT", { siteId }),
-    buyShopSlot: (siteId, slotIndex) => emit("BUY_SHOP_SLOT", { siteId, slotIndex }),
+    buyShopSlot: (siteId, slotIndex) =>
+      emit("BUY_SHOP_SLOT", { siteId, slotIndex }),
     rerollShop: (siteId) => emit("REROLL_SHOP", { siteId }),
     grantFreeRerolls: (count) => emit("GRANT_FREE_REROLLS", { count }),
     applyShopDiscount: (percent) => emit("APPLY_SHOP_DISCOUNT", { percent }),
 
     // --- modifiers & atlas ---
-    pushBattleModifier: (modifier) => emit("PUSH_BATTLE_MODIFIER", { modifier }),
-    pushTemporaryBaneGrant: (payload) => emit("PUSH_TEMPORARY_BANE_GRANT", { ...payload }),
+    pushBattleModifier: (modifier) =>
+      emit("PUSH_BATTLE_MODIFIER", { modifier }),
+    pushTemporaryBaneGrant: (payload) =>
+      emit("PUSH_TEMPORARY_BANE_GRANT", { ...payload }),
     banSiteType: (siteType, dreamscapesRemaining) =>
       emit("BAN_SITE_TYPE", { siteType, dreamscapesRemaining }),
     boostSiteAppearance: (siteType, percent, dreamscapesRemaining) =>
-      emit("BOOST_SITE_APPEARANCE", { siteType, percent, dreamscapesRemaining }),
+      emit("BOOST_SITE_APPEARANCE", {
+        siteType,
+        percent,
+        dreamscapesRemaining,
+      }),
     replaceSiteType: (nodeId, fromSiteType, toSiteType) =>
       emit("REPLACE_SITE_TYPE", { nodeId, fromSiteType, toSiteType }),
     addSiteToDreamscape: (nodeId, siteType) =>
@@ -299,13 +369,15 @@ export function makeActions(append: AppendFn): CoopActions {
     endBattle: (result) => emit("END_BATTLE", { result }),
 
     // --- battle events ---
-    beginBattle: (siteId, seedOverride) => emit("BEGIN_BATTLE", {
-      siteId,
-      ...(seedOverride === undefined || seedOverride === null
-        ? {}
-        : { seedOverride }),
-    }),
-    setBattleAutomation: (enabled) => emit("SET_BATTLE_AUTOMATION", { enabled }),
+    beginBattle: (siteId, seedOverride) =>
+      emit("BEGIN_BATTLE", {
+        siteId,
+        ...(seedOverride === undefined || seedOverride === null
+          ? {}
+          : { seedOverride }),
+      }),
+    setBattleAutomation: (enabled) =>
+      emit("SET_BATTLE_AUTOMATION", { enabled }),
     battleCommand: (command, intentKey, actor) =>
       append({
         type: "BATTLE_COMMAND",
@@ -324,6 +396,7 @@ export function makeActions(append: AppendFn): CoopActions {
       append({ type: "BATTLE_AI_DEFEND", payload: { aiSide }, actor }),
     resolvePrompt: (promptId, resolution) =>
       emit("RESOLVE_PROMPT", { promptId, resolution }),
-    setCardNote: (instanceId, note) => emit("SET_CARD_NOTE", { instanceId, note }),
+    setCardNote: (instanceId, note) =>
+      emit("SET_CARD_NOTE", { instanceId, note }),
   };
 }
