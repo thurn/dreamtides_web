@@ -1,5 +1,3 @@
-import "../battle.css";
-
 import type { MouseEvent as ReactMouseEvent } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { SiteState } from "../../types/quest";

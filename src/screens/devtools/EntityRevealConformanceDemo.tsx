@@ -10,9 +10,9 @@ import { DreamcallerPortrait } from "../../cumulus/components/hud/DreamcallerPor
 import { artRef } from "../../cumulus/primitives/art";
 import { GLYPHS } from "../../cumulus/primitives/glyph";
 import { richText } from "../../cumulus/components/card/rich-text";
-import { BattleGameCard } from "../../battle/components/BattleGameCard";
 import type { BattleCardInstance } from "../../battle/types";
 import { createDefaultBattleCardStatus } from "../../battle/state/create-initial-state";
+import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
 
 const CARD_ID = asCardId("11111111-1111-4111-8111-111111111111");
 const BATTLE_CARD_ID = asCardId("22222222-2222-4222-8222-222222222222");
@@ -142,8 +142,8 @@ export function EntityRevealConformanceDemo() {
         <article data-conformance-info-secondaries=""><h2>InfoCard group source</h2><DreamcallerPortrait dreamcaller={DREAMCALLER} variant="thumb" size={120} profile={{ id: DREAMCALLER.id, ability: "Bane. Discover. Ephemeral." }} /></article>
         <article><h2>Inline</h2><p>Resolve <GlossaryTerm entry={{ term: "Bane", definition: "A penalty card forced into your deck." }} text="Bane" /> here.</p></article>
         <article style={{ position: "relative", width: 184, height: 184 }}><h2>Atlas</h2><AtlasNode model={ATLAS_MODEL} onActivate={() => undefined} /></article>
-        <article data-conformance-battle-fixture="" style={{ width: 160 }}><h2>Battle</h2><BattleGameCard instance={BATTLE_CARD} /></article>
-        <article data-conformance-generated-battle-fixture="" style={{ width: 160 }}><h2>Generated battle figment</h2><BattleGameCard instance={GENERATED_BATTLE_CARD} /></article>
+        <article data-conformance-battle-fixture="" style={{ width: 160 }}><h2>Battle</h2><GameCard model={battleGameCardModel(BATTLE_CARD)} /></article>
+        <article data-conformance-generated-battle-fixture="" style={{ width: 160 }}><h2>Generated battle figment</h2><GameCard model={battleGameCardModel(GENERATED_BATTLE_CARD)} figment figmentTitleBar /></article>
       </section>
     </main>
   );

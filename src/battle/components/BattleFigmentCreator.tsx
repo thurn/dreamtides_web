@@ -1,4 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import { GlassButton } from "../../cumulus/components/controls/GlassButton";
+import { SegmentedControl } from "../../cumulus/components/controls/SegmentedControl";
+import { Select } from "../../cumulus/components/controls/Select";
+import { TextField } from "../../cumulus/components/controls/TextField";
+import { GlassDialog } from "../../cumulus/components/overlay/GlassDialog";
+import { GLYPHS } from "../../cumulus/primitives/glyph";
+import { token } from "../../cumulus/primitives/tokens";
 import type { BattleDebugEdit, BattleDebugZoneDestination } from "../debug/commands";
 import type { BattleMutableState, BattleSide, FrontRankSlotId, BackRankSlotId } from "../types";
 import {
@@ -70,20 +77,6 @@ export function BattleFigmentCreator({
     () => findFirstOpenReserveSlot(state, initialSide) ?? "B0",
   );
   const nameInputRef = useRef<HTMLInputElement | null>(null);
-  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    // bug-099: focus management — move focus into the dialog on mount and
-    // restore on unmount.
-    previouslyFocusedRef.current = document.activeElement instanceof HTMLElement
-      ? document.activeElement
-      : null;
-    nameInputRef.current?.focus();
-    return () => {
-      previouslyFocusedRef.current?.focus();
-    };
-  }, []);
-
   useEffect(() => {
     // bug-110: reset slot when side changes so the previously highlighted
     // slot on the other side doesn't carry forward as a stale selection.
@@ -93,19 +86,6 @@ export function BattleFigmentCreator({
       setSlot(findFirstOpenDeploySlot(state, side) ?? "F0");
     }
   }, [side, state, zone]);
-
-  useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent): void {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [onClose]);
 
   const selectedEntry = lookupFigmentCatalogEntryById(figmentTypeId) ?? defaultEntry;
   const subtype = selectedEntry.subtype;
@@ -169,245 +149,105 @@ export function BattleFigmentCreator({
     onClose();
   }
 
+  const slotOptions = zone === "backRank"
+    ? backRankSlotIds(selectPlayAreaSize(state).backSize + 1)
+    : frontRankSlotIds(selectPlayAreaSize(state).frontSize + 1);
+
   return (
-    <div
-      className="fixed inset-0 z-50 bg-slate-950/80 p-3 backdrop-blur"
-      onClick={(event) => {
-        if (event.target === event.currentTarget) {
-          onClose();
-        }
-      }}
+    <GlassDialog
+      title="Synthesize a Figment"
+      subtitle="Choose a figment type and a valid destination."
+      closeLabel="Cancel figment creation"
+      onClose={onClose}
+      desktopCenterTarget="battlefield"
     >
       <div
-        // bug-099: dialog semantics + labelled heading.
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="battle-figment-creator-title"
-        tabIndex={-1}
+        className="cumulus"
         data-battle-figment-creator=""
-        className="pointer-events-auto mx-auto flex w-full max-w-lg flex-col gap-4 rounded-[2rem] border border-violet-300/25 bg-[linear-gradient(180deg,_rgba(7,10,18,0.98)_0%,_rgba(11,17,30,0.96)_100%)] p-5 shadow-2xl shadow-slate-950/70"
-        onClick={(event) => event.stopPropagation()}
+        style={{ display: "grid", gap: token("--space-5") }}
       >
-        <header>
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-violet-300">
-            Create Figment
-          </p>
-          <h3
-            id="battle-figment-creator-title"
-            className="mt-2 text-lg font-semibold text-white"
-          >
-            Synthesize a figment token
-          </h3>
-          <p className="mt-1 text-sm text-slate-400">
-            Pick one of the 14 figment types. Each type seeds its base spark and
-            carries its implicit keyword; spark stays editable for off-base
-            figments. The payload never touches the quest deck.
-          </p>
-        </header>
-        <label className="flex flex-col gap-1">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-            Name
-          </span>
-          <input
-            ref={nameInputRef}
-            data-battle-figment-field="name"
-            type="text"
+        <div data-battle-figment-field="name">
+          <TextField
+            label="Name"
             value={name}
-            onChange={(event) => setName(event.target.value)}
-            className="rounded-2xl border border-slate-700 bg-slate-900/80 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-violet-300/60 focus:outline-none"
+            onChange={setName}
+            inputRef={nameInputRef}
+            supportingText="The displayed name for this created figment."
           />
-        </label>
-        <label className="flex flex-col gap-1">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-            Figment Type
-          </span>
-          <select
-            data-battle-figment-field="subtype"
+        </div>
+        <div data-battle-figment-field="subtype" style={{ display: "grid", gap: token("--space-2") }}>
+          <Select
+            ariaLabel="Figment type"
+            leadingGlyph={GLYPHS.spark}
+            full
+            options={figmentCatalogEntries().map((entry) => ({
+              value: entry.id,
+              label: formatCatalogOptionLabel(entry),
+            }))}
             value={figmentTypeId}
-            onChange={(event) => handleSelectType(event.target.value)}
-            className="rounded-2xl border border-slate-700 bg-slate-900/80 px-3 py-2 text-sm text-slate-100 focus:border-violet-300/60 focus:outline-none"
-          >
-            {figmentCatalogEntries().map((entry) => (
-              <option
-                key={entry.id}
-                value={entry.id}
-                data-figment-subtype={entry.subtype}
-              >
-                {formatCatalogOptionLabel(entry)}
-              </option>
-            ))}
-          </select>
-          <span
-            data-battle-figment-keyword=""
-            className="text-[11px] text-slate-400"
-          >
-            {selectedKeyword === undefined
-              ? "No keyword."
-              : `Keyword: ${FIGMENT_KEYWORD_LABELS[selectedKeyword]}.`}
-          </span>
-        </label>
-        <label className="flex flex-col gap-1">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-            Spark
-          </span>
-          <input
-            data-battle-figment-field="spark"
-            type="number"
-            min={0}
-            value={sparkText}
-            onChange={(event) => setSparkText(event.target.value)}
-            className="w-28 rounded-2xl border border-slate-700 bg-slate-900/80 px-3 py-2 text-sm text-slate-100 focus:border-violet-300/60 focus:outline-none"
+            onChange={handleSelectType}
           />
-          <span className="text-[11px] text-slate-400">
-            {selectedEntry === undefined
-              ? "Custom spark."
-              : `Base spark ${String(selectedEntry.baseSpark)} — editable.`}
+          <span data-battle-figment-keyword="" style={{ color: token("--text-on-glass-muted"), font: token("--t-caption") }}>
+            {selectedKeyword === undefined ? "No keyword." : `Keyword: ${FIGMENT_KEYWORD_LABELS[selectedKeyword]}.`}
           </span>
-        </label>
-        <fieldset
-          data-battle-figment-field="side"
-          className="flex flex-col gap-2"
-        >
-          <legend className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-            Side
-          </legend>
-          <div className="flex flex-wrap gap-3 text-sm text-slate-200">
-            {(["player", "enemy"] as const).map((option) => (
-              <label key={option} className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="battle-figment-side"
-                  value={option}
-                  checked={side === option}
-                  onChange={() => setSide(option)}
-                />
-                {option === "player" ? "Player" : "Enemy"}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-        <fieldset
-          data-battle-figment-field="zone"
-          className="flex flex-col gap-2"
-        >
-          <legend className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-            Zone
-          </legend>
-          <div className="flex flex-wrap gap-3 text-sm text-slate-200">
-            {(
-              ["hand", "backRank", "frontRank", "void", "banished", "deck"] as const
-            ).map((option) => (
-              <label key={option} className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="battle-figment-zone"
-                  value={option}
-                  checked={zone === option}
-                  onChange={() => {
-                    setZone(option);
-                    if (option === "backRank" && !isReserveSlot(slot)) {
-                      setSlot("B0");
-                    } else if (option === "frontRank" && !isDeploySlot(slot)) {
-                      setSlot("F0");
-                    }
-                  }}
-                />
-                {formatZoneLabel(option)}
-              </label>
-            ))}
-          </div>
-        </fieldset>
+        </div>
+        <div data-battle-figment-field="spark">
+          <TextField
+            label="Spark"
+            value={sparkText}
+            onChange={setSparkText}
+            error={sparkIsValid ? undefined : "Spark must be a non-negative whole number."}
+            supportingText={`Base spark ${String(selectedEntry.baseSpark)} — editable.`}
+          />
+        </div>
+        <div data-battle-figment-field="side" style={{ display: "grid", gap: token("--space-2") }}>
+          <span style={{ color: token("--text-on-glass-muted"), font: token("--t-caption") }}>Side</span>
+          <SegmentedControl options={[{ value: "player", label: "Player" }, { value: "enemy", label: "Enemy" }]} value={side} onChange={(value) => setSide(value as BattleSide)} full />
+        </div>
+        <div data-battle-figment-field="zone" style={{ display: "grid", gap: token("--space-2") }}>
+          <span style={{ color: token("--text-on-glass-muted"), font: token("--t-caption") }}>Destination</span>
+          <Select
+            ariaLabel="Figment destination"
+            leadingGlyph={GLYPHS.grid}
+            full
+            options={(["hand", "backRank", "frontRank", "void", "banished", "deck"] as const).map((option) => ({ value: option, label: formatZoneLabel(option) }))}
+            value={zone}
+            onChange={(value) => {
+              const nextZone = value as FigmentZone;
+              setZone(nextZone);
+              if (nextZone === "backRank" && !isReserveSlot(slot)) setSlot("B0");
+              if (nextZone === "frontRank" && !isDeploySlot(slot)) setSlot("F0");
+            }}
+          />
+        </div>
         {zone === "deck" ? (
-          <fieldset
-            data-battle-figment-field="position"
-            className="flex flex-col gap-2"
-          >
-            <legend className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-              Deck Position
-            </legend>
-            <div className="flex flex-wrap gap-3 text-sm text-slate-200">
-              {(["top", "bottom"] as const).map((option) => (
-                <label key={option} className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="battle-figment-position"
-                    value={option}
-                    checked={position === option}
-                    onChange={() => setPosition(option)}
-                  />
-                  {option === "top" ? "Top" : "Bottom"}
-                </label>
-              ))}
-            </div>
-          </fieldset>
+          <div data-battle-figment-field="position" style={{ display: "grid", gap: token("--space-2") }}>
+            <span style={{ color: token("--text-on-glass-muted"), font: token("--t-caption") }}>Deck Position</span>
+            <SegmentedControl options={[{ value: "top", label: "Top" }, { value: "bottom", label: "Bottom" }]} value={position} onChange={(value) => setPosition(value as FigmentDeckPosition)} full />
+          </div>
         ) : null}
         {zone === "backRank" || zone === "frontRank" ? (
-          <fieldset
-            data-battle-figment-field="slot"
-            className="flex flex-col gap-2"
-          >
-            <legend className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-              Slot
-            </legend>
-            <div className="flex flex-wrap gap-3 text-sm text-slate-200">
-              {(zone === "backRank"
-                ? backRankSlotIds(selectPlayAreaSize(state).backSize + 1)
-                : frontRankSlotIds(selectPlayAreaSize(state).frontSize + 1)
-              ).map(
-                (option) => (
-                  <label key={option} className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="battle-figment-slot"
-                      value={option}
-                      checked={slot === option}
-                      onChange={() => setSlot(option)}
-                    />
-                    {option}
-                  </label>
-                ),
-              )}
-            </div>
-          </fieldset>
+          <div data-battle-figment-field="slot" style={{ display: "grid", gap: token("--space-2") }}>
+            <span style={{ color: token("--text-on-glass-muted"), font: token("--t-caption") }}>Slot</span>
+            <Select
+              ariaLabel="Figment battlefield slot"
+              leadingGlyph={GLYPHS.grid}
+              full
+              options={slotOptions.map((option) => ({ value: option, label: option }))}
+              value={slot}
+              onChange={(value) => setSlot(value as FigmentBattlefieldSlotId)}
+            />
+          </div>
         ) : null}
-        <div className="flex flex-wrap justify-end gap-2">
-          <button
-            type="button"
-            data-battle-figment-action="cancel"
-            className="rounded-full border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-violet-300/45 hover:text-white"
-            onClick={onClose}
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            data-battle-figment-action="submit"
-            disabled={!canSubmit}
-            aria-describedby={canSubmit ? undefined : "battle-figment-submit-hint"}
-            className={[
-              "rounded-full border px-4 py-2 text-sm font-semibold transition",
-              canSubmit
-                ? "border-violet-300/60 bg-violet-400/15 text-violet-50 hover:bg-violet-400/25"
-                : "cursor-not-allowed border-slate-800 bg-slate-900/70 text-slate-600",
-            ].join(" ")}
-            onClick={handleSubmit}
-          >
-            Create Figment
-          </button>
-          {canSubmit || disabledReason === null ? null : (
-            <p
-              id="battle-figment-submit-hint"
-              data-battle-figment-submit-hint=""
-              className="w-full text-right text-[11px] text-slate-400"
-            >
-              {/* bug-099 / bug-114: expose the disabled-gate rationale for
-                  screen readers, including the occupied-slot case. */}
-              {disabledReason}
-            </p>
-          )}
+        {canSubmit || disabledReason === null ? null : (
+          <p data-battle-figment-submit-hint="" style={{ color: token("--text-on-glass-muted"), font: token("--t-caption") }}>{disabledReason}</p>
+        )}
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: token("--space-3") }}>
+          <GlassButton label="Cancel" placement="onGlass" testId="battle-figment-cancel" onPress={onClose} />
+          <GlassButton label="Create Figment" placement="onGlass" variant="accent" disabled={!canSubmit} testId="battle-figment-submit" onPress={handleSubmit} />
         </div>
       </div>
-    </div>
+    </GlassDialog>
   );
 }
 

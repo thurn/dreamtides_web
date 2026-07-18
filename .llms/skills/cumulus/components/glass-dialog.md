@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/glass-dialog`
 
-Real consumers: **10** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **13** (imports outside `src/cumulus/docs/` and tests).
 
 The glass overlay shell: a modal dialog with a bounded, centered glass panel on desktop and a full-bleed frosted overlay on mobile, with a hairline-closed header (title, optional subtitle, and an optional glass close disc) over a scrolling body. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.
 

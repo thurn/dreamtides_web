@@ -1,6 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import { GlassButton } from "../../cumulus/components/controls/GlassButton";
+import { NumberStepper } from "../../cumulus/components/controls/NumberStepper";
+import { Select } from "../../cumulus/components/controls/Select";
+import { TextField } from "../../cumulus/components/controls/TextField";
+import { GlassDialog } from "../../cumulus/components/overlay/GlassDialog";
+import { GLYPHS } from "../../cumulus/primitives/glyph";
+import { token } from "../../cumulus/primitives/tokens";
 import type { BattleDebugEdit } from "../debug/commands";
-import { buttonVariant, typography } from "../design-tokens";
 import { nextStartOfTurnPair } from "../state/turn-utils";
 import { createNextTurnExpiry } from "../state/notes-utils";
 import type { BattleCardNoteExpiry, BattleMutableState } from "../types";
@@ -33,33 +39,8 @@ export function BattleCardNoteEditor({
   // feature is meant to leave minimal residue.
   const [expiryOption, setExpiryOption] = useState<ExpiryOption>("end-of-next-turn");
   const [afterNTurns, setAfterNTurns] = useState(DEFAULT_AFTER_N_TURNS);
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   // bug-099: resolve the card name so the heading reads as a human label.
   const cardName = state.cardInstances[battleCardId]?.definition.name ?? battleCardId;
-
-  useEffect(() => {
-    previouslyFocusedRef.current = document.activeElement instanceof HTMLElement
-      ? document.activeElement
-      : null;
-    textareaRef.current?.focus();
-    return () => {
-      previouslyFocusedRef.current?.focus();
-    };
-  }, []);
-
-  useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent): void {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [onClose]);
 
   function handleSubmit(): void {
     if (text.trim().length === 0) {
@@ -81,146 +62,61 @@ export function BattleCardNoteEditor({
   }
 
   return (
-    <div
-      className="fixed inset-0 z-50 bg-slate-950/85 p-3 backdrop-blur"
-      onClick={(event) => {
-        if (event.target === event.currentTarget) {
-          onClose();
-        }
-      }}
+    <GlassDialog
+      title={`Annotate ${cardName}`}
+      subtitle="Notes appear on the card and in the inspector."
+      closeLabel="Cancel note"
+      onClose={onClose}
+      desktopCenterTarget="battlefield"
     >
-      <div
-        // bug-099: dialog semantics + labelled heading.
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="battle-note-editor-title"
-        tabIndex={-1}
-        data-battle-note-editor=""
-        data-battle-note-editor-card={battleCardId}
-        className="pointer-events-auto mx-auto flex w-full max-w-md flex-col gap-4 rounded-xl border border-violet-300/25 bg-[linear-gradient(180deg,_rgba(7,10,18,0.98)_0%,_rgba(11,17,30,0.96)_100%)] p-5 shadow-2xl shadow-slate-950/70"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <header>
-          <p className={`${typography.caption} font-semibold uppercase tracking-[0.28em] text-violet-300`}>
-            Add Note
-          </p>
-          <h3
-            id="battle-note-editor-title"
-            className={`mt-2 ${typography.heading} text-white`}
-          >
-            Annotate {cardName}
-          </h3>
-          <p className={`mt-1 ${typography.body} text-slate-400`}>
-            Notes appear as chips on the card and in the inspector.
-          </p>
-        </header>
-        <label className="flex flex-col gap-1">
-          <span className={`${typography.caption} font-semibold uppercase tracking-[0.22em] text-slate-500`}>
-            Note Text
-          </span>
-          <textarea
-            ref={textareaRef}
-            data-battle-note-field="text"
-            maxLength={200}
-            rows={3}
+      <div className="cumulus" data-battle-note-editor="" data-battle-note-editor-card={battleCardId} style={{ display: "grid", gap: token("--space-5") }}>
+        <div data-battle-note-field="text">
+          <TextField
+            label="Note Text"
             value={text}
-            onChange={(event) => setText(event.target.value)}
-            placeholder="Short reminder (max 200 chars)"
-            className="w-full rounded-md border border-slate-700 bg-slate-900/80 px-3 py-2 text-[13px] text-slate-100 placeholder:text-slate-500 focus:border-violet-300/60 focus:outline-none"
+            onChange={(value) => setText(value.slice(0, 200))}
+            placeholder="Short reminder"
+            supportingText={`${String(text.length)}/200 characters`}
+            error={text.trim().length === 0 ? "A note needs text." : undefined}
           />
-        </label>
-        <fieldset
-          data-battle-note-field="expiry"
-          className="flex flex-col gap-2"
-        >
-          <legend className={`${typography.caption} font-semibold uppercase tracking-[0.22em] text-slate-500`}>
-            Expiry
-          </legend>
-          {/* FIND-09-5: granular expiry options. "End of next turn" is the
-              default since temporary notes should auto-expire by default. */}
-          <label className={`flex items-center gap-2 ${typography.body} text-slate-200`}>
-            <input
-              type="radio"
-              name="battle-note-expiry"
-              value="end-of-next-turn"
-              checked={expiryOption === "end-of-next-turn"}
-              onChange={() => setExpiryOption("end-of-next-turn")}
+        </div>
+        <div data-battle-note-field="expiry" style={{ display: "grid", gap: token("--space-2") }}>
+          <span style={{ color: token("--text-on-glass-muted"), font: token("--t-caption") }}>Expiry</span>
+          <Select
+            ariaLabel="Note expiry"
+            leadingGlyph={GLYPHS.counter}
+            full
+            options={[
+              { value: "end-of-next-turn", label: "End of Next Turn" },
+              { value: "end-of-this-turn", label: "End of This Turn" },
+              { value: "after-n-turns", label: "After a Number of Turns" },
+              { value: "manual", label: "Manual Dismissal" },
+            ]}
+            value={expiryOption}
+            onChange={(value) => setExpiryOption(value as ExpiryOption)}
+          />
+        </div>
+        {expiryOption === "after-n-turns" ? (
+          <div data-battle-note-field="after-n-turns">
+            <NumberStepper
+              label="Turns Before Expiry"
+              value={afterNTurns}
+              decrementLabel="Use one fewer turn"
+              incrementLabel="Use one more turn"
+              decrementDisabled={afterNTurns <= MIN_AFTER_N_TURNS}
+              incrementDisabled={afterNTurns >= MAX_AFTER_N_TURNS}
+              onDecrement={() => setAfterNTurns((value) => Math.max(MIN_AFTER_N_TURNS, value - 1))}
+              onIncrement={() => setAfterNTurns((value) => Math.min(MAX_AFTER_N_TURNS, value + 1))}
+              placement="onGlass"
             />
-            Expire end of next turn (default)
-          </label>
-          <label className={`flex items-center gap-2 ${typography.body} text-slate-200`}>
-            <input
-              type="radio"
-              name="battle-note-expiry"
-              value="end-of-this-turn"
-              checked={expiryOption === "end-of-this-turn"}
-              onChange={() => setExpiryOption("end-of-this-turn")}
-            />
-            Expire end of this turn
-          </label>
-          <label className={`flex items-center gap-2 ${typography.body} text-slate-200`}>
-            <input
-              type="radio"
-              name="battle-note-expiry"
-              value="after-n-turns"
-              checked={expiryOption === "after-n-turns"}
-              onChange={() => setExpiryOption("after-n-turns")}
-            />
-            Expire after
-            <input
-              type="number"
-              min={MIN_AFTER_N_TURNS}
-              max={MAX_AFTER_N_TURNS}
-              value={String(afterNTurns)}
-              data-battle-note-field="after-n-turns"
-              aria-label="Number of turns before expiry"
-              disabled={expiryOption !== "after-n-turns"}
-              onChange={(event) => {
-                const parsed = Number.parseInt(event.target.value, 10);
-                if (Number.isNaN(parsed)) {
-                  return;
-                }
-                setAfterNTurns(
-                  Math.max(MIN_AFTER_N_TURNS, Math.min(MAX_AFTER_N_TURNS, parsed)),
-                );
-              }}
-              onFocus={() => setExpiryOption("after-n-turns")}
-              className="w-16 rounded-md border border-slate-700 bg-slate-900/80 px-2 py-1 text-[13px] text-slate-100 focus:border-violet-300/60 focus:outline-none disabled:opacity-50"
-            />
-            turns
-          </label>
-          <label className={`flex items-center gap-2 ${typography.body} text-slate-200`}>
-            <input
-              type="radio"
-              name="battle-note-expiry"
-              value="manual"
-              checked={expiryOption === "manual"}
-              onChange={() => setExpiryOption("manual")}
-            />
-            Manual (until dismissed)
-          </label>
-        </fieldset>
-        <div className="flex flex-wrap justify-end gap-2">
-          <button
-            type="button"
-            data-battle-note-action="cancel"
-            className={buttonVariant("secondary")}
-            onClick={onClose}
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            data-battle-note-action="add"
-            disabled={text.trim().length === 0}
-            className={buttonVariant("primary")}
-            onClick={handleSubmit}
-          >
-            Add Note
-          </button>
+          </div>
+        ) : null}
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: token("--space-3") }}>
+          <GlassButton label="Cancel" placement="onGlass" testId="battle-note-cancel" onPress={onClose} />
+          <GlassButton label="Add Note" placement="onGlass" variant="accent" disabled={text.trim().length === 0} testId="battle-note-add" onPress={handleSubmit} />
         </div>
       </div>
-    </div>
+    </GlassDialog>
   );
 }
 

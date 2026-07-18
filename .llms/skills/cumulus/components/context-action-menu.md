@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/context-action-menu`
 
-Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 
 The strict pointer/card command offering: a clamped desktop context menu and a responsive dialog sheet with the same typed hierarchy.
 

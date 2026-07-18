@@ -1,4 +1,8 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { GlassButton } from "../../cumulus/components/controls/GlassButton";
+import { DisclosureSection } from "../../cumulus/components/controls/DisclosureSection";
+import { GlassDialog } from "../../cumulus/components/overlay/GlassDialog";
+import { token } from "../../cumulus/primitives/tokens";
 import { getLogEntries, subscribeLogEntries } from "../../logging";
 import type {
   BattleAiChoiceTrace,
@@ -85,142 +89,85 @@ export function BattleLogDrawer({
   }
 
   return (
-    <aside
-      className="log-drawer rich"
-      data-battle-log-drawer=""
-      data-battle-region="battle-log"
+    <GlassDialog
+      title="Battle Log"
+      subtitle="Folded battle history and raw diagnostic events."
+      closeLabel="Close battle log"
+      onClose={onClose}
+      desktopCenterTarget="battlefield"
     >
-      <div className="lg-head">
-        <b>Battle log</b>
-        <button type="button" className="btn ghost sm" onClick={onClose}>
-          Close
-        </button>
-      </div>
-      <div className="lg-filters">
-        {HISTORY_KINDS.map((kind) => {
-          const enabled = enabledKinds.has(kind);
-          return (
-            <button
+      <div className="cumulus" data-battle-log-drawer="" data-battle-region="battle-log" style={{ display: "grid", gap: token("--space-5") }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: token("--space-2") }}>
+          {HISTORY_KINDS.map((kind) => (
+            <GlassButton
               key={kind}
-              type="button"
-              data-battle-log-filter={kind}
-              className={`chip ${enabled ? "active" : ""}`}
-              onClick={() => setEnabledKinds((current) => toggleKind(current, kind))}
-            >
-              {kind}
-            </button>
-          );
-        })}
-      </div>
-      <div ref={listRef} className="lg-list rich">
-        {groupedHistoryEntries.length === 0 ? (
-          <div className="log-empty">No matching history entries.</div>
-        ) : groupedHistoryEntries.map((group) => {
-          const turnKey = String(group.turnNumber);
-          const isTurnExpanded = expandedTurns[turnKey] ?? true;
-          return (
-            <section key={turnKey} className="log-turn-group">
-              <button
-                type="button"
-                className="log-turn-header"
-                onClick={() => setExpandedTurns((current) => ({
-                  ...current,
-                  [turnKey]: !isTurnExpanded,
-                }))}
+              label={kind}
+              placement="onGlass"
+              variant={enabledKinds.has(kind) ? "accent" : "default"}
+              testId={`battle-log-filter-${kind}`}
+              onPress={() => setEnabledKinds((current) => toggleKind(current, kind))}
+            />
+          ))}
+        </div>
+        <div ref={listRef} style={{ display: "grid", gap: token("--space-3"), maxHeight: "58vh", overflowY: "auto" }}>
+          {groupedHistoryEntries.length === 0 ? (
+            <p style={{ color: token("--text-on-glass-muted"), font: token("--t-body") }}>No matching history entries.</p>
+          ) : groupedHistoryEntries.map((group) => {
+            const turnKey = String(group.turnNumber);
+            const isTurnExpanded = expandedTurns[turnKey] ?? true;
+            return (
+              <DisclosureSection
+                key={turnKey}
+                title={`Turn ${turnKey}`}
+                summary={`${String(group.entries.length)} entries`}
+                expanded={isTurnExpanded}
+                onExpandedChange={(expanded) => setExpandedTurns((current) => ({ ...current, [turnKey]: expanded }))}
+                testId={`battle-log-turn-${turnKey}`}
               >
-                <span>Turn {turnKey}</span>
-                <span>{isTurnExpanded ? "Collapse" : "Expand"}</span>
-              </button>
-              {isTurnExpanded ? group.entries.map((entry) => {
-                const entryKey = `${entry.metadata.timestamp}-${entry.metadata.commandId}`;
-                const isExpanded = expandedEntries[entryKey] ?? false;
-                return (
-                  <div key={entryKey} className={`log-history-entry ${entry.metadata.kind}`}>
-                    <button
-                      type="button"
-                      data-battle-log-history-entry={entry.metadata.commandId}
-                      className="log-history-summary"
-                      onClick={() => setExpandedEntries((current) => ({
-                        ...current,
-                        [entryKey]: !isExpanded,
-                      }))}
-                    >
-                      <span className="history-label">{entry.metadata.label}</span>
-                      <span className="history-kind">{entry.metadata.kind}</span>
-                    </button>
-                    {isExpanded ? (
-                      <div className="log-history-details">
-                        <div className="detail-line">
-                          <span>Surface</span>
-                          <strong>{entry.metadata.sourceSurface}</strong>
+                <div style={{ display: "grid", gap: token("--space-3"), paddingTop: token("--space-3") }}>
+                  {group.entries.map((entry) => {
+                    const entryKey = `${entry.metadata.timestamp}-${entry.metadata.commandId}`;
+                    const isExpanded = expandedEntries[entryKey] ?? false;
+                    return (
+                      <DisclosureSection
+                        key={entryKey}
+                        title={entry.metadata.label}
+                        summary={entry.metadata.kind}
+                        expanded={isExpanded}
+                        onExpandedChange={(expanded) => setExpandedEntries((current) => ({ ...current, [entryKey]: expanded }))}
+                        testId={`battle-log-history-entry-${entry.metadata.commandId}`}
+                      >
+                        <div style={{ display: "grid", gap: token("--space-2"), paddingTop: token("--space-3"), color: token("--text-on-glass-muted"), font: token("--t-body-sm") }}>
+                          <span>Surface: {entry.metadata.sourceSurface}</span>
+                          <span>Targets: {entry.metadata.targets.map((target) => target.ref).join(", ") || "none"}</span>
+                          {entry.metadata.payload === undefined ? null : <pre style={{ margin: 0, overflowX: "auto", color: token("--text-on-glass"), font: token("--t-caption") }}>{JSON.stringify(entry.metadata.payload, null, 2)}</pre>}
+                          {entry.after.lastTransition?.logEvents.map((event, index) => <span key={`${event.event}-${String(index)}`}>{event.event}</span>)}
+                          {entry.after.lastTransition?.aiChoices.map((choice, index) => (
+                            <span key={`ai-choice-${String(index)}`}>
+                              {formatAiChoiceLabel(choice)}{choice.heuristicScoreBefore != null && choice.heuristicScoreAfter != null ? ` · score ${choice.heuristicScoreBefore.toFixed(1)} → ${choice.heuristicScoreAfter.toFixed(1)}` : ""}
+                            </span>
+                          ))}
                         </div>
-                        <div className="detail-line">
-                          <span>Targets</span>
-                          <strong>{entry.metadata.targets.map((target) => target.ref).join(", ") || "none"}</strong>
-                        </div>
-                        {entry.metadata.payload === undefined ? null : (
-                          <pre>{JSON.stringify(entry.metadata.payload, null, 2)}</pre>
-                        )}
-                        {entry.after.lastTransition?.logEvents.length ? (
-                          <div className="transition-events">
-                            {entry.after.lastTransition.logEvents.map((event, index) => (
-                              <div key={`${event.event}-${String(index)}`} className="transition-event">
-                                <span>{event.event}</span>
-                              </div>
-                            ))}
-                          </div>
-                        ) : null}
-                        {entry.after.lastTransition?.aiChoices.length ? (
-                          <div className="transition-ai-choices">
-                            {entry.after.lastTransition.aiChoices.map((choice, index) => (
-                              <div key={`ai-choice-${String(index)}`} className="ai-choice">
-                                <span className="ai-choice-label">{formatAiChoiceLabel(choice)}</span>
-                                {choice.heuristicScoreBefore != null && choice.heuristicScoreAfter != null ? (
-                                  <span className="ai-choice-score">
-                                    {`score ${choice.heuristicScoreBefore.toFixed(1)} → ${choice.heuristicScoreAfter.toFixed(1)}`}
-                                  </span>
-                                ) : null}
-                              </div>
-                            ))}
-                          </div>
-                        ) : null}
-                      </div>
-                    ) : null}
-                  </div>
-                );
-              }) : null}
-            </section>
-          );
-        })}
-        <section className="log-raw-section">
-          <button
-            type="button"
-            className="log-turn-header"
-            onClick={() => setExpandedRaw((current) => !current)}
-          >
-            <span>Raw Events</span>
-            <span>{expandedRaw ? "Collapse" : "Expand"}</span>
-          </button>
-          {expandedRaw ? (
-            <div className="raw-events">
-              {filteredRawEntries.length === 0 ? (
-                <div className="log-empty">No raw events.</div>
-              ) : filteredRawEntries.map((entry) => {
+                      </DisclosureSection>
+                    );
+                  })}
+                </div>
+              </DisclosureSection>
+            );
+          })}
+          <DisclosureSection title="Raw Events" summary={`${String(filteredRawEntries.length)} captured`} expanded={expandedRaw} onExpandedChange={setExpandedRaw} testId="battle-log-raw-events">
+            <div style={{ display: "grid", gap: token("--space-2"), paddingTop: token("--space-3"), color: token("--text-on-glass-muted"), font: token("--t-caption") }}>
+              {filteredRawEntries.length === 0 ? <span>No raw events.</span> : filteredRawEntries.map((entry) => {
                 const label = readLogText(entry.label) ?? entry.event;
                 const turnNumber = readLogText(entry.turnNumber) ?? "-";
                 const phase = readLogText(entry.phase) ?? "-";
-                const kind = classifyLogKind(entry.event);
-                return (
-                  <div key={`${entry.seq}-${entry.event}`} className={`log-entry ${kind}`}>
-                    {turnNumber} · {phase} · {label}
-                  </div>
-                );
+                return <span key={`${entry.seq}-${entry.event}`} data-battle-log-raw-kind={classifyLogKind(entry.event)}>{turnNumber} · {phase} · {label}</span>;
               })}
             </div>
-          ) : null}
-        </section>
+          </DisclosureSection>
+        </div>
       </div>
-    </aside>
+    </GlassDialog>
   );
 }
 

@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/corner-utility-menu`
 
-Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 
 The strict app-chrome command offering: a fixed icon trigger and a hierarchical inward-opening utility menu.
 

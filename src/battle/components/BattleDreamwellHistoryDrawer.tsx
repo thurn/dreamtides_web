@@ -1,5 +1,7 @@
 import { useMemo } from "react";
 import { DreamwellCard } from "../../cumulus/components/battle/DreamwellCard";
+import { GlassDialog } from "../../cumulus/components/overlay/GlassDialog";
+import { token } from "../../cumulus/primitives/tokens";
 import { dreamwellCardModel } from "../ui/dreamwell-card-model";
 import type { DreamwellCardDefinition } from "../types";
 
@@ -41,20 +43,16 @@ export function BattleDreamwellHistoryDrawer({
   }
 
   return (
-    <aside
-      className="log-drawer dreamwell-history-drawer"
-      data-battle-dreamwell-history-drawer=""
-      data-battle-region="dreamwell-history"
+    <GlassDialog
+      title="Dreamwell History"
+      subtitle="Shared draws, most recent first."
+      closeLabel="Close Dreamwell history"
+      onClose={onClose}
+      desktopCenterTarget="battlefield"
     >
-      <div className="lg-head">
-        <b>Dreamwell</b>
-        <button type="button" className="btn ghost sm" onClick={onClose}>
-          Close
-        </button>
-      </div>
-      <div className="lg-list dreamwell-history-list">
+      <div className="cumulus" data-battle-dreamwell-history-drawer="" data-battle-region="dreamwell-history" style={{ display: "grid", gap: token("--space-4"), maxHeight: "58vh", overflowY: "auto" }}>
         {drawnCards.length === 0 ? (
-          <div className="log-empty">No Dreamwell cards drawn yet.</div>
+          <p style={{ color: token("--text-on-glass-muted"), font: token("--t-body") }}>No Dreamwell cards drawn yet.</p>
         ) : (
           drawnCards.map(({ drawIndex, definition }) => (
             <div
@@ -62,14 +60,14 @@ export function BattleDreamwellHistoryDrawer({
               // id can legitimately recur once the shared deck cycles, so the
               // sequential position is what keeps each entry distinct.
               key={`${String(drawIndex)}:${definition.id}`}
-              className="dreamwell-history-entry"
               data-battle-dreamwell-history-card={definition.id}
+              style={{ display: "grid" }}
             >
               <DreamwellCard model={dreamwellCardModel(definition)} />
             </div>
           ))
         )}
       </div>
-    </aside>
+    </GlassDialog>
   );
 }

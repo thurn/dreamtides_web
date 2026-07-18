@@ -63,6 +63,7 @@ export function TextField({
         aria-invalid={error === undefined ? undefined : true}
         data-testid={testId}
         onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
+        onInput={(event) => onChange(event.currentTarget.value)}
         style={{
           ...chrome.trigger,
           width: "100%",

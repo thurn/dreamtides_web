@@ -1,9 +1,9 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { createPortal } from "react-dom";
-import { GlassButton } from "../../cumulus/components/controls/GlassButton";
-import { GlassDialog } from "../../cumulus/components/overlay/GlassDialog";
+import { useMemo } from "react";
+import {
+  ContextActionMenu,
+  type CommandMenuItem,
+} from "../../cumulus/components/overlay/CommandMenus";
 import { GLYPHS } from "../../cumulus/primitives/glyph";
-import { token } from "../../cumulus/primitives/tokens";
 import type {
   BattleCommand,
   BattleDebugZoneDestination,
@@ -29,7 +29,7 @@ import { formatSideLabel, formatZoneLabel } from "../ui/format";
 export function BattleContextMenu({
   battleCardId,
   onOpenNoteEditor,
-  presentation = "context-menu",
+  presentation: _presentation = "context-menu",
   sourceSurface,
   state,
   x,
@@ -49,44 +49,6 @@ export function BattleContextMenu({
 }) {
   const card = state.cardInstances[battleCardId];
   const location = selectBattleCardLocation(state, battleCardId);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState<{ left: number; top: number } | null>(null);
-
-  useEffect(() => {
-    function handleMouseDown(): void {
-      onClose();
-    }
-    function handleScroll(event: Event): void {
-      // Scrolling inside the menu (or one of its flyout submenus) must not
-      // dismiss it; only an outside-the-menu scroll closes the menu.
-      const target = event.target;
-      if (
-        target instanceof Element
-        && target.closest("[data-battle-context-menu], .ctx-submenu") !== null
-      ) {
-        return;
-      }
-      onClose();
-    }
-    function handleKeyDown(event: KeyboardEvent): void {
-      if (event.key !== "Escape") {
-        return;
-      }
-      onClose();
-    }
-
-    if (presentation === "context-menu") {
-      window.addEventListener("mousedown", handleMouseDown);
-      window.addEventListener("scroll", handleScroll, true);
-    }
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("mousedown", handleMouseDown);
-      window.removeEventListener("scroll", handleScroll, true);
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [onClose, presentation]);
-
   const items = useMemo(() => {
     if (card === undefined || location === null) {
       return [] as ContextMenuItem[];
@@ -481,90 +443,22 @@ export function BattleContextMenu({
     }
   }, [battleCardId, card, location, onCommand, onOpenNoteEditor, sourceSurface, state]);
 
-  // Clamp the menu to the viewport using its real rendered size. Running in a
-  // layout effect (before paint) measures the menu at its initial position and
-  // repositions it so the whole menu stays on-screen, with no visible flash.
-  useLayoutEffect(() => {
-    const element = menuRef.current;
-    if (element === null) {
-      return;
-    }
-    const rect = element.getBoundingClientRect();
-    const margin = 8;
-    const clampedLeft = Math.max(
-      margin,
-      Math.min(x, window.innerWidth - rect.width - margin),
-    );
-    const clampedTop = Math.max(
-      margin,
-      Math.min(y, window.innerHeight - rect.height - margin),
-    );
-    setPos((previous) =>
-      previous !== null && previous.left === clampedLeft && previous.top === clampedTop
-        ? previous
-        : { left: clampedLeft, top: clampedTop });
-  }, [x, y, items]);
-
   if (card === undefined || location === null) {
     return null;
   }
 
-  // First-paint fallback before the layout effect measures the real size; keeps
-  // the menu on-screen even on the initial frame.
-  const left = pos?.left ?? Math.max(8, Math.min(x, window.innerWidth - 248 - 8));
-  const top = pos?.top ?? Math.max(8, Math.min(y, window.innerHeight - 8));
   const locationLabel = location.zone === "backRank" || location.zone === "frontRank"
     ? `${formatSideLabel(location.side)} · ${formatZoneLabel(location.zone)} ${location.slotId}`
     : `${formatSideLabel(location.side)} · ${formatZoneLabel(location.zone)}`;
-
-  if (presentation === "sheet") {
-    return (
-      <BattleContextMenuSheet
-        cardName={card.definition.name}
-        items={items}
-        locationLabel={locationLabel}
-        onClose={onClose}
-      />
-    );
-  }
-
   return (
-    <div
-      ref={menuRef}
-      data-battle-context-menu=""
-      className="ctx-menu"
-      style={{ left, top }}
-      onClick={(event) => event.stopPropagation()}
-      onMouseDown={(event) => event.stopPropagation()}
-      onContextMenu={(event) => event.preventDefault()}
-    >
-      <div className="ctx-header">
-        <span className="ctx-name">{card.definition.name}</span>
-        <span className="ctx-loc">{locationLabel}</span>
-      </div>
-      <div className="ctx-items">
-        {items.map((item, index) => {
-          if ("divider" in item) {
-            return <div key={`divider-${String(index)}`} className="ctx-divider" />;
-          }
-          if ("submenu" in item) {
-            return <ContextSubmenu key={item.label} item={item} onClose={onClose} />;
-          }
-          return (
-            <div
-              key={item.label}
-              className="ctx-item"
-              onClick={() => {
-                item.action();
-                onClose();
-              }}
-            >
-              {item.label}
-            </div>
-          );
-        })}
-      </div>
-    </div>
+    <ContextActionMenu
+      title={card.definition.name}
+      subtitle={locationLabel}
+      actions={toCommandMenuItems(items, battleCardId)}
+      anchor={{ kind: "point", x, y }}
+      onDismiss={onClose}
+      testId="battle-context-menu"
+    />
   );
 
   function createCopySubmenu(side: BattleFieldSlotAddress["side"]): ContextMenuItem[] {
@@ -605,80 +499,6 @@ export function BattleContextMenu({
   }
 }
 
-function BattleContextMenuSheet({
-  cardName,
-  items,
-  locationLabel,
-  onClose,
-}: {
-  cardName: string;
-  items: ContextMenuItem[];
-  locationLabel: string;
-  onClose: () => void;
-}) {
-  const [submenu, setSubmenu] = useState<{
-    label: string;
-    items: ContextMenuItem[];
-  } | null>(null);
-  const visibleItems = submenu?.items ?? items;
-
-  return (
-    <GlassDialog
-      title={cardName}
-      subtitle={submenu === null ? locationLabel : `${locationLabel} · ${submenu.label}`}
-      closeLabel="Close card actions"
-      onClose={onClose}
-    >
-      <div
-        data-battle-card-debug-sheet=""
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "stretch",
-          gap: token("--space-3"),
-        }}
-      >
-        {submenu !== null ? (
-          <div style={{ display: "grid", marginBottom: token("--space-2") }}>
-            <GlassButton
-              label="Back to Card Actions"
-              glyph={GLYPHS.arrowLeft}
-              placement="onGlass"
-              onPress={() => setSubmenu(null)}
-            />
-          </div>
-        ) : null}
-        {visibleItems.map((item, index) => {
-          if ("divider" in item) return null;
-          if ("submenu" in item) {
-            return (
-              <div key={item.label} style={{ display: "grid" }}>
-                <GlassButton
-                  label={item.label}
-                  placement="onGlass"
-                  onPress={() => setSubmenu({ label: item.label, items: item.submenu })}
-                />
-              </div>
-            );
-          }
-          return (
-            <div key={`${item.label}:${String(index)}`} style={{ display: "grid" }}>
-              <GlassButton
-                label={item.label}
-                placement="onGlass"
-                onPress={() => {
-                  item.action();
-                  onClose();
-                }}
-              />
-            </div>
-          );
-        })}
-      </div>
-    </GlassDialog>
-  );
-}
-
 type ContextMenuItem =
   | { divider: true }
   | {
@@ -690,127 +510,31 @@ type ContextMenuItem =
     submenu: Array<ContextMenuItem>;
   };
 
-function ContextSubmenu({
-  item,
-  onClose,
-}: {
-  item: Extract<ContextMenuItem, { submenu: Array<ContextMenuItem> }>;
-  onClose: () => void;
-}) {
-  const [isOpen, setIsOpen] = useState(false);
-  const anchorRef = useRef<HTMLDivElement>(null);
-  const submenuRef = useRef<HTMLDivElement>(null);
-  const closeTimer = useRef<number | null>(null);
-  const [pos, setPos] = useState<{ left: number; top: number } | null>(null);
-
-  function open(): void {
-    if (closeTimer.current !== null) {
-      window.clearTimeout(closeTimer.current);
-      closeTimer.current = null;
+function toCommandMenuItems(
+  items: readonly ContextMenuItem[],
+  battleCardId: string,
+  path = "root",
+): readonly CommandMenuItem[] {
+  return items.map((item, index) => {
+    const id = `${battleCardId}:${path}:${String(index)}`;
+    if ("divider" in item) return { kind: "divider", id };
+    if ("submenu" in item) {
+      return {
+        kind: "group",
+        id,
+        label: item.label,
+        glyph: GLYPHS.list,
+        actions: toCommandMenuItems(item.submenu, battleCardId, id),
+      };
     }
-    setIsOpen(true);
-  }
-
-  function scheduleClose(): void {
-    if (closeTimer.current !== null) {
-      window.clearTimeout(closeTimer.current);
-    }
-    // A short grace period lets the pointer travel from the anchor item to the
-    // flyout (rendered in a body portal) without the submenu closing underneath.
-    closeTimer.current = window.setTimeout(() => {
-      setIsOpen(false);
-      closeTimer.current = null;
-    }, 120);
-  }
-
-  useEffect(() => {
-    return () => {
-      if (closeTimer.current !== null) {
-        window.clearTimeout(closeTimer.current);
-      }
+    return {
+      kind: "action",
+      id,
+      label: item.label,
+      glyph: item.label.includes("Note") ? GLYPHS.pencilSquare : GLYPHS.edit,
+      onCommand: item.action,
     };
-  }, []);
-
-  // Position the flyout next to its anchor, flipping to the left side when it
-  // would overflow the right edge and clamping vertically to the viewport. Runs
-  // before paint so the submenu never appears off-screen.
-  useLayoutEffect(() => {
-    if (!isOpen) {
-      setPos(null);
-      return;
-    }
-    const anchor = anchorRef.current;
-    const flyout = submenuRef.current;
-    if (anchor === null || flyout === null) {
-      return;
-    }
-    const anchorRect = anchor.getBoundingClientRect();
-    const flyoutRect = flyout.getBoundingClientRect();
-    const margin = 8;
-    let left = anchorRect.right;
-    if (left + flyoutRect.width > window.innerWidth - margin) {
-      left = anchorRect.left - flyoutRect.width;
-    }
-    left = Math.max(margin, Math.min(left, window.innerWidth - flyoutRect.width - margin));
-    const top = Math.max(
-      margin,
-      Math.min(anchorRect.top, window.innerHeight - flyoutRect.height - margin),
-    );
-    setPos((previous) =>
-      previous !== null && previous.left === left && previous.top === top
-        ? previous
-        : { left, top });
-  }, [isOpen]);
-
-  return (
-    <div
-      ref={anchorRef}
-      className="ctx-item has-submenu"
-      onMouseEnter={open}
-      onMouseLeave={scheduleClose}
-    >
-      <span>{item.label}</span>
-      <span className="ctx-caret">›</span>
-      {isOpen
-        ? createPortal(
-          <div
-            ref={submenuRef}
-            className="ctx-submenu"
-            style={pos === null
-              ? { position: "fixed", left: 0, top: 0, visibility: "hidden" }
-              : { position: "fixed", left: pos.left, top: pos.top }}
-            onMouseEnter={open}
-            onMouseLeave={scheduleClose}
-            onMouseDown={(event) => event.stopPropagation()}
-            onContextMenu={(event) => event.preventDefault()}
-          >
-            {item.submenu.map((submenuItem, index) => {
-              if ("divider" in submenuItem) {
-                return <div key={`submenu-divider-${String(index)}`} className="ctx-divider" />;
-              }
-              if ("submenu" in submenuItem) {
-                return null;
-              }
-              return (
-                <div
-                  key={submenuItem.label}
-                  className="ctx-item"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    submenuItem.action();
-                    onClose();
-                  }}
-                >
-                  {submenuItem.label}
-                </div>
-              );
-            })}
-          </div>,
-          document.body,
-        )
-        : null}
-    </div>
-  );
+  });
 }
 
 function appendIfPresent(
