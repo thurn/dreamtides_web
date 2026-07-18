@@ -70,7 +70,6 @@ const fileRoles = {
 
   "src/screens/CardSourceOverlay.tsx": OUTER_UI_ROLES.DEVTOOL,
   "src/screens/DebugScreen.tsx": OUTER_UI_ROLES.DEVTOOL,
-  "src/screens/QuestDebugDeckSection.tsx": OUTER_UI_ROLES.DEVTOOL,
   "src/screens/QuestDebugEditor.tsx": OUTER_UI_ROLES.DEVTOOL,
   "src/screens/devtools/EntityRevealConformanceDemo.tsx": OUTER_UI_ROLES.DEVTOOL,
   "src/state/coop-quest-context.tsx": OUTER_UI_ROLES.STATE_ADAPTER,

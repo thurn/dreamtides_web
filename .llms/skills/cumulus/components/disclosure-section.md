@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/disclosure-section`
 
-Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 
 A controlled Cumulus section for progressively revealing dense secondary information.
 

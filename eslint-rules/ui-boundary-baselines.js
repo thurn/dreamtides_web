@@ -14,7 +14,6 @@ const rows = [
   ["src/editor/EditableCard.tsx", "cumulus/valid-token-references", 1],
   ["src/editor/DreamwellEditorPreview.tsx", "cumulus/valid-token-references", 3], ["src/editor/DreamwellEditorPreview.tsx", "cumulus/no-inline-glass", 1],
   ["src/editor/TidesDetailView.tsx", "cumulus/no-raw-icon-classes", 3], ["src/editor/TidesListView.tsx", "cumulus/no-raw-icon-classes", 1],
-  ["src/screens/CardSourceOverlay.tsx", "cumulus/no-inline-glass", 1],
 ];
 
 export const OUTER_UI_BASELINES = Object.freeze(rows.map(([file, rule, count]) => Object.freeze({
