@@ -432,7 +432,7 @@ title = "Daimyo of Lacquered Fury"
 id = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5"
 image-number = "0029"
 portrait-focus = { x = 0.500, y = 0.220 }
-rendered-text = "When the first card you draw in a turn is a warrior, reduce its cost by 1●."
+rendered-text = "The first warrior you play each turn costs 1● less."
 mtg-name = "Mishra's Workshop"
 signature-cards = [
   "426825c7-7259-41af-ac1c-c042b878d69b", # Burning Revenant
