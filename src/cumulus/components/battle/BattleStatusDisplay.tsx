@@ -9,11 +9,20 @@ import { ResourceChip } from "../hud/ResourceChip";
 /** Which combatant this status card describes. */
 export type BattleStatusOwner = "player" | "enemy";
 
+/** Semantic profile revealed from a populated battle Dreamcaller portrait. */
+export interface BattleStatusDreamcallerProfile {
+  readonly id: string;
+  readonly ability: string;
+  readonly unavailable?: boolean;
+}
+
 export interface BattleStatusDisplayProps {
   /** Combatant represented by this status card. */
   readonly owner: BattleStatusOwner;
   /** Dreamcaller whose head portrait anchors the card, or null while it loads. */
   readonly dreamcaller: DreamcallerVisual | null;
+  /** Optional identity and ability copy revealed from the portrait. */
+  readonly dreamcallerProfile?: BattleStatusDreamcallerProfile;
   /** Energy currently available to this combatant. */
   readonly currentEnergy: number;
   /** Maximum energy available to this combatant. */
@@ -32,6 +41,7 @@ export interface BattleStatusDisplayProps {
 export function BattleStatusDisplay({
   owner,
   dreamcaller,
+  dreamcallerProfile,
   currentEnergy,
   maxEnergy,
   points,
@@ -86,7 +96,12 @@ export function BattleStatusDisplay({
             }}
           />
         ) : (
-          <DreamcallerPortrait dreamcaller={dreamcaller} variant="thumb" />
+          <DreamcallerPortrait
+            dreamcaller={dreamcaller}
+            variant="thumb"
+            profile={dreamcallerProfile}
+            unavailable={dreamcallerProfile?.unavailable}
+          />
         )}
       </div>
       <div

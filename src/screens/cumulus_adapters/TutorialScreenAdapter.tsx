@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { TutorialScreen } from "../../cumulus/screens/TutorialScreen";
 import { logEvent } from "../../logging";
 import { buildTutorialView } from "./tutorial-view-model";
@@ -7,6 +7,16 @@ import { buildTutorialView } from "./tutorial-view-model";
 export function TutorialScreenAdapter() {
   const hasLoggedPresentation = useRef(false);
   const view = useMemo(() => buildTutorialView(), []);
+  const handleDreamcallerArrivalComplete = useCallback(
+    (dreamcallerId: string) => {
+      logEvent("tutorial_dreamcaller_arrived", {
+        battleId: view.battle.battleId,
+        dreamcallerId,
+        abilityActive: false,
+      });
+    },
+    [view.battle.battleId],
+  );
 
   useEffect(() => {
     if (hasLoggedPresentation.current) return;
@@ -22,5 +32,10 @@ export function TutorialScreenAdapter() {
     });
   }, [view]);
 
-  return <TutorialScreen view={view} />;
+  return (
+    <TutorialScreen
+      view={view}
+      onDreamcallerArrivalComplete={handleDreamcallerArrivalComplete}
+    />
+  );
 }

@@ -12,6 +12,7 @@ import {
   CARD_ASPECT_RATIO_VALUE,
 } from "../components/card/card-aspect";
 import { BattleStatusDisplay } from "../components/battle/BattleStatusDisplay";
+import type { BattleStatusDreamcallerProfile } from "../components/battle/BattleStatusDisplay";
 import {
   DreamwellCard,
   type DreamwellCardModel,
@@ -81,6 +82,7 @@ export interface MobileBattleSlotView {
 /** The compact resources and Dreamcaller identity shown for one side. */
 export interface MobileBattleStatusView {
   readonly dreamcaller: DreamcallerVisual | null;
+  readonly dreamcallerProfile?: BattleStatusDreamcallerProfile;
   readonly currentEnergy: number;
   readonly maxEnergy: number;
   readonly points: number;
@@ -756,6 +758,7 @@ function SideZones({
           <BattleStatusDisplay
             owner={owner}
             dreamcaller={side.status.dreamcaller}
+            dreamcallerProfile={side.status.dreamcallerProfile}
             currentEnergy={side.status.currentEnergy}
             maxEnergy={side.status.maxEnergy}
             points={side.status.points}

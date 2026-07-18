@@ -12,6 +12,19 @@ describe("buildTutorialView", () => {
       speakerName: "Mira",
       text: "Welcome, Dreamer.",
     });
+    expect(tutorial.dreamcaller).toEqual({
+      visual: {
+        imageNumber: "0029",
+        name: "Tensho",
+        title: "Daimyo of Lacquered Fury",
+        portraitFocus: { x: 0.5, y: 0.22 },
+      },
+      profile: {
+        id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+        ability: "Dreamcaller ability is not active",
+        unavailable: true,
+      },
+    });
 
     expect(view.battleId).toBe("tutorial-battle");
     expect(view.activeSide).toBe("enemy");

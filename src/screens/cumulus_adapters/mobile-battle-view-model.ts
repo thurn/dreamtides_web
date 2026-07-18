@@ -420,6 +420,14 @@ function buildStatusView(
         ? { portraitFocus: dreamcaller.portraitFocus }
         : {}),
     },
+    ...("id" in dreamcaller && "renderedText" in dreamcaller
+      ? {
+          dreamcallerProfile: {
+            id: dreamcaller.id,
+            ability: dreamcaller.renderedText,
+          },
+        }
+      : {}),
     currentEnergy: sideState.currentEnergy,
     maxEnergy: sideState.maxEnergy,
     points: sideState.score,

@@ -18,10 +18,19 @@ The glass status card for one battle participant: centered current and maximum e
 | --- | --- | --- | --- | --- |
 | `owner` | `BattleStatusOwner` = `"player" \| "enemy"` | yes | — | Combatant represented by this status card. |
 | `dreamcaller` | `DreamcallerVisual \| null` | yes | — | Dreamcaller whose head portrait anchors the card, or null while it loads. |
+| `dreamcallerProfile` | `BattleStatusDreamcallerProfile` | no | — | Optional identity and ability copy revealed from the portrait. |
 | `currentEnergy` | `number` | yes | — | Energy currently available to this combatant. |
 | `maxEnergy` | `number` | yes | — | Maximum energy available to this combatant. |
 | `points` | `number` | yes | — | Current battle points. |
 | `testId` | `string` | no | — | Optional stable test id for the complete status card. |
+
+### `dreamcallerProfile`: the `BattleStatusDreamcallerProfile` model
+
+| Field | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `id` | `string` | no |  |
+| `ability` | `string` | no |  |
+| `unavailable` | `boolean` | yes |  |
 
 ## Usage
 

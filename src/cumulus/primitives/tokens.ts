@@ -271,6 +271,7 @@ export const TOKENS = {
   "--dur-loading-screen-fade": { var: "var(--dur-loading-screen-fade)", value: "1200ms", kind: "other" },
   "--dur-loading-quote": { var: "var(--dur-loading-quote)", value: "1400ms", kind: "other" },
   "--dur-loading-dot-cycle": { var: "var(--dur-loading-dot-cycle)", value: "1200ms", kind: "other" },
+  "--delay-tutorial-dreamcaller": { var: "var(--delay-tutorial-dreamcaller)", value: "1000ms", kind: "other" },
   "--stagger-loading-dot": { var: "var(--stagger-loading-dot)", value: "180ms", kind: "other" },
   "--motion-object-travel": { var: "var(--motion-object-travel)", value: "420ms var(--ease-out)", kind: "other" },
   "--stagger-travel": { var: "var(--stagger-travel)", value: "55ms", kind: "other" },

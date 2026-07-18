@@ -723,6 +723,10 @@ describe("buildMobileBattleView", () => {
         title: "Builder of Fixtures",
         portraitFocus: { x: 0.48, y: 0.19 },
       },
+      dreamcallerProfile: {
+        id: "player-dreamcaller-uuid",
+        ability: "Another synthetic test ability.",
+      },
       currentEnergy: 2,
       maxEnergy: 4,
       points: 5,
@@ -733,6 +737,10 @@ describe("buildMobileBattleView", () => {
         name: "Enemy Caller",
         title: "Keeper of Tests",
         portraitFocus: { x: 0.58, y: 0.23 },
+      },
+      dreamcallerProfile: {
+        id: "enemy-dreamcaller-uuid",
+        ability: "A synthetic test ability.",
       },
       currentEnergy: 1,
       maxEnergy: 3,

@@ -1,7 +1,20 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { useLayoutEffect, useRef, useState, type ReactElement } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactElement,
+} from "react";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
+import type { BattleStatusDreamcallerProfile } from "../components/battle/BattleStatusDisplay";
+import {
+  DreamcallerPortrait,
+  type DreamcallerVisual,
+} from "../components/hud/DreamcallerPortrait";
 import {
   CharacterDialogue,
   type CharacterDialogueModel,
@@ -15,10 +28,15 @@ import { useIsDesktop } from "./use-is-desktop";
 export interface TutorialView {
   readonly battle: MobileBattleView;
   readonly dialogue: CharacterDialogueModel;
+  readonly dreamcaller: {
+    readonly visual: DreamcallerVisual;
+    readonly profile: BattleStatusDreamcallerProfile;
+  };
 }
 
 export interface TutorialScreenProps {
   readonly view: TutorialView;
+  readonly onDreamcallerArrivalComplete?: (dreamcallerId: string) => void;
 }
 
 interface TutorialDialogueAnchor {
@@ -26,18 +44,163 @@ interface TutorialDialogueAnchor {
   readonly top: number;
 }
 
+interface TutorialDreamcallerTrajectory {
+  readonly startX: number;
+  readonly startY: number;
+  readonly landingX: number;
+  readonly targetX: number;
+  readonly targetY: number;
+  readonly width: number;
+  readonly height: number;
+}
+
+type TutorialDreamcallerPhase = "waiting" | "arriving" | "settled";
+
 const TUTORIAL_FADE_SECONDS = motionTimeSeconds(
   "--dur-loading-screen-fade",
 );
+const TUTORIAL_DREAMCALLER_DELAY_MS =
+  motionTimeSeconds("--delay-tutorial-dreamcaller") * 1000;
+const TUTORIAL_DREAMCALLER_ARRIVAL_SECONDS = motionTimeSeconds(
+  "--dur-loading-screen-fade",
+);
+
+function TutorialDreamcallerArrival({
+  screen,
+  dreamcaller,
+  onComplete,
+}: {
+  readonly screen: HTMLElement;
+  readonly dreamcaller: DreamcallerVisual;
+  readonly onComplete: () => void;
+}): ReactElement | null {
+  const [trajectory, setTrajectory] =
+    useState<TutorialDreamcallerTrajectory | null>(null);
+
+  useLayoutEffect(() => {
+    const target = screen.querySelector<HTMLElement>(
+      '[data-testid="player-battle-status"] [data-battle-status-dreamcaller-placeholder]',
+    );
+    if (target === null) return undefined;
+
+    const updateTrajectory = (): void => {
+      const screenBox = screen.getBoundingClientRect();
+      const targetBox = target.getBoundingClientRect();
+      const targetX = targetBox.left - screenBox.left;
+      const targetY = targetBox.top - screenBox.top;
+      const slideDistance = targetBox.width * 2;
+      setTrajectory({
+        startX: (screenBox.width - targetBox.width) / 2,
+        startY: (screenBox.height - targetBox.height) / 2,
+        landingX: Math.min(
+          targetX + slideDistance,
+          screenBox.width - targetBox.width,
+        ),
+        targetX,
+        targetY,
+        width: targetBox.width,
+        height: targetBox.height,
+      });
+    };
+
+    updateTrajectory();
+    const observer = new ResizeObserver(updateTrajectory);
+    observer.observe(screen);
+    observer.observe(target);
+    window.addEventListener("resize", updateTrajectory);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateTrajectory);
+    };
+  }, [screen]);
+
+  if (trajectory === null) return null;
+
+  return (
+    <motion.div
+      data-tutorial-dreamcaller-arrival=""
+      initial={{
+        x: trajectory.startX,
+        y: trajectory.startY,
+        scale: 2,
+        opacity: 0,
+      }}
+      animate={{
+        x: [trajectory.startX, trajectory.landingX, trajectory.targetX],
+        y: [trajectory.startY, trajectory.targetY, trajectory.targetY],
+        scale: [2, 1, 1],
+        opacity: [0, 1, 1],
+      }}
+      transition={{
+        duration: TUTORIAL_DREAMCALLER_ARRIVAL_SECONDS,
+        times: [0, 0.68, 1],
+        ease: [0.22, 0.61, 0.36, 1],
+      }}
+      onAnimationComplete={onComplete}
+      style={{
+        position: "absolute",
+        zIndex: 40,
+        top: 0,
+        left: 0,
+        width: trajectory.width,
+        height: trajectory.height,
+        pointerEvents: "none",
+        transformOrigin: "center",
+      }}
+    >
+      <DreamcallerPortrait dreamcaller={dreamcaller} variant="thumb" />
+    </motion.div>
+  );
+}
 
 /** Standalone tutorial battle presentation entered from the loading scene. */
-export function TutorialScreen({ view }: TutorialScreenProps): ReactElement {
+export function TutorialScreen({
+  view,
+  onDreamcallerArrivalComplete,
+}: TutorialScreenProps): ReactElement {
   const desktop = useIsDesktop();
   const reduceMotion = useReducedMotion() === true;
   const screenRef = useRef<HTMLElement | null>(null);
   const [sceneEntered, setSceneEntered] = useState(reduceMotion);
+  const [dreamcallerPhase, setDreamcallerPhase] =
+    useState<TutorialDreamcallerPhase>("waiting");
+  const arrivalReportedRef = useRef(false);
   const [dialogueAnchor, setDialogueAnchor] =
     useState<TutorialDialogueAnchor | null>(null);
+
+  const settleDreamcaller = useCallback(() => {
+    setDreamcallerPhase("settled");
+    if (arrivalReportedRef.current) return;
+    arrivalReportedRef.current = true;
+    onDreamcallerArrivalComplete?.(view.dreamcaller.profile.id);
+  }, [onDreamcallerArrivalComplete, view.dreamcaller.profile.id]);
+
+  useEffect(() => {
+    if (!sceneEntered || dreamcallerPhase !== "waiting") return undefined;
+    const timeout = window.setTimeout(() => {
+      if (reduceMotion) {
+        settleDreamcaller();
+      } else {
+        setDreamcallerPhase("arriving");
+      }
+    }, TUTORIAL_DREAMCALLER_DELAY_MS);
+    return () => window.clearTimeout(timeout);
+  }, [dreamcallerPhase, reduceMotion, sceneEntered, settleDreamcaller]);
+
+  const battleView = useMemo<MobileBattleView>(() => {
+    if (dreamcallerPhase !== "settled") return view.battle;
+    return {
+      ...view.battle,
+      player: {
+        ...view.battle.player,
+        status: {
+          ...view.battle.player.status,
+          dreamcaller: view.dreamcaller.visual,
+          dreamcallerProfile: view.dreamcaller.profile,
+        },
+      },
+    };
+  }, [dreamcallerPhase, view]);
 
   useLayoutEffect(() => {
     const screen = screenRef.current;
@@ -161,10 +324,17 @@ export function TutorialScreen({ view }: TutorialScreenProps): ReactElement {
       }}
     >
       <MobileBattleScreen
-        view={view.battle}
+        view={battleView}
         inspectorDefault="collapsed"
         phaseNavigation="hidden"
       />
+      {dreamcallerPhase === "arriving" && screenRef.current !== null ? (
+        <TutorialDreamcallerArrival
+          screen={screenRef.current}
+          dreamcaller={view.dreamcaller.visual}
+          onComplete={settleDreamcaller}
+        />
+      ) : null}
       <div
         data-tutorial-dialogue-anchor=""
         style={{

@@ -3,6 +3,7 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it } from "vitest";
+import { CumulusRoot } from "../../CumulusRoot";
 import { BattleStatusDisplay } from "./BattleStatusDisplay";
 
 beforeEach(() => {
@@ -112,6 +113,52 @@ describe("BattleStatusDisplay", () => {
     expect(placeholder?.style.borderRadius).toBe("var(--radius-inset)");
     expect(placeholder?.style.background).toBe("var(--surface-placeholder)");
     expect(container.querySelector("img")).toBeNull();
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("registers populated battle portraits with their ability reveal", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <BattleStatusDisplay
+            owner="player"
+            dreamcaller={{
+              imageNumber: "0029",
+              name: "Tensho",
+              title: "Daimyo of Lacquered Fury",
+            }}
+            dreamcallerProfile={{
+              id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+              ability: "Dreamcaller ability is not active",
+              unavailable: true,
+            }}
+            currentEnergy={0}
+            maxEnergy={0}
+            points={0}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const source = container.querySelector<HTMLElement>(
+      "[data-dreamcaller-source]",
+    );
+    expect(source?.dataset.revealEntityId).toBe(
+      "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+    );
+    expect(source?.getAttribute("aria-disabled")).toBe("true");
+    const description = document.getElementById(
+      source?.getAttribute("aria-describedby") ?? "",
+    );
+    expect(description?.textContent).toContain(
+      "Dreamcaller ability is not active",
+    );
 
     act(() => root.unmount());
     container.remove();

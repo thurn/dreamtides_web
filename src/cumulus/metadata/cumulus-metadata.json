@@ -421,6 +421,37 @@
       "description": "Dreamcaller whose head portrait anchors the card, or null while it loads."
     },
     {
+      "name": "dreamcallerProfile",
+      "tsType": "BattleStatusDreamcallerProfile",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional identity and ability copy revealed from the portrait.",
+      "nested": {
+        "name": "BattleStatusDreamcallerProfile",
+        "fields": [
+          {
+            "name": "id",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "ability",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "unavailable",
+            "tsType": "boolean",
+            "optional": true,
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
       "name": "currentEnergy",
       "tsType": "number",
       "unionMembers": [],
