@@ -12,6 +12,12 @@ describe("buildTutorialView", () => {
       speakerName: "Mira",
       text: "Welcome, Dreamer.",
     });
+    expect(tutorial.dialogueAfterDreamcallerArrival).toEqual({
+      portrait: { kind: "character-portrait", characterId: "mira" },
+      portraitAlt: "Mira",
+      speakerName: "Mira",
+      text: "You are called to stand against the power of Nightmare.",
+    });
     expect(tutorial.dreamcaller).toEqual({
       visual: {
         imageNumber: "0029",

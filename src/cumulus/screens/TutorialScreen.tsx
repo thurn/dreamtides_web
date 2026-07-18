@@ -28,6 +28,7 @@ import { useIsDesktop } from "./use-is-desktop";
 export interface TutorialView {
   readonly battle: MobileBattleView;
   readonly dialogue: CharacterDialogueModel;
+  readonly dialogueAfterDreamcallerArrival: CharacterDialogueModel;
   readonly dreamcaller: {
     readonly visual: DreamcallerVisual;
     readonly profile: BattleStatusDreamcallerProfile;
@@ -36,6 +37,7 @@ export interface TutorialView {
 
 export interface TutorialScreenProps {
   readonly view: TutorialView;
+  readonly onDialogueReplacementComplete?: () => void;
   readonly onDreamcallerArrivalComplete?: (dreamcallerId: string) => void;
 }
 
@@ -54,6 +56,7 @@ interface TutorialDreamcallerTrajectory {
 }
 
 type TutorialDreamcallerPhase = "waiting" | "arriving" | "settled";
+type TutorialDialoguePhase = "opening" | "replacing" | "nightmareCall";
 
 const TUTORIAL_FADE_SECONDS = motionTimeSeconds(
   "--dur-loading-screen-fade",
@@ -64,6 +67,8 @@ const TUTORIAL_DREAMCALLER_ARRIVAL_SECONDS = motionTimeSeconds(
   "--dur-loading-screen-fade",
 );
 const TUTORIAL_DREAMCALLER_FADE_SECONDS = motionTimeSeconds("--dur-fast");
+const TUTORIAL_DIALOGUE_REPLACEMENT_MS =
+  motionTimeSeconds("--dur-slow") * 1000;
 
 function TutorialDreamcallerArrival({
   screen,
@@ -159,6 +164,7 @@ function TutorialDreamcallerArrival({
 /** Standalone tutorial battle presentation entered from the loading scene. */
 export function TutorialScreen({
   view,
+  onDialogueReplacementComplete,
   onDreamcallerArrivalComplete,
 }: TutorialScreenProps): ReactElement {
   const desktop = useIsDesktop();
@@ -168,15 +174,44 @@ export function TutorialScreen({
   const [dreamcallerPhase, setDreamcallerPhase] =
     useState<TutorialDreamcallerPhase>("waiting");
   const arrivalReportedRef = useRef(false);
+  const dialogueReplacementReportedRef = useRef(false);
+  const [dialoguePhase, setDialoguePhase] =
+    useState<TutorialDialoguePhase>("opening");
   const [dialogueAnchor, setDialogueAnchor] =
     useState<TutorialDialogueAnchor | null>(null);
 
+  const completeDialogueReplacement = useCallback(() => {
+    setDialoguePhase("nightmareCall");
+    if (dialogueReplacementReportedRef.current) return;
+    dialogueReplacementReportedRef.current = true;
+    onDialogueReplacementComplete?.();
+  }, [onDialogueReplacementComplete]);
+
   const settleDreamcaller = useCallback(() => {
-    setDreamcallerPhase("settled");
     if (arrivalReportedRef.current) return;
     arrivalReportedRef.current = true;
+    setDreamcallerPhase("settled");
     onDreamcallerArrivalComplete?.(view.dreamcaller.profile.id);
-  }, [onDreamcallerArrivalComplete, view.dreamcaller.profile.id]);
+    if (reduceMotion) {
+      completeDialogueReplacement();
+    } else {
+      setDialoguePhase("replacing");
+    }
+  }, [
+    completeDialogueReplacement,
+    onDreamcallerArrivalComplete,
+    reduceMotion,
+    view.dreamcaller.profile.id,
+  ]);
+
+  useEffect(() => {
+    if (dialoguePhase !== "replacing") return undefined;
+    const timeout = window.setTimeout(
+      completeDialogueReplacement,
+      TUTORIAL_DIALOGUE_REPLACEMENT_MS,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [completeDialogueReplacement, dialoguePhase]);
 
   useEffect(() => {
     if (!sceneEntered || dreamcallerPhase !== "waiting") return undefined;
@@ -354,9 +389,13 @@ export function TutorialScreen({
         }}
       >
         <CharacterDialogue
-          dialogue={view.dialogue}
+          dialogue={
+            dialoguePhase === "nightmareCall"
+              ? view.dialogueAfterDreamcallerArrival
+              : view.dialogue
+          }
           size={desktop ? "prominent" : "compact"}
-          visible={sceneEntered}
+          visible={sceneEntered && dialoguePhase !== "replacing"}
           testId="tutorial-welcome-dialogue"
         />
       </div>

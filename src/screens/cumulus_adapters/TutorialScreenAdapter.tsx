@@ -17,6 +17,14 @@ export function TutorialScreenAdapter() {
     },
     [view.battle.battleId],
   );
+  const handleDialogueReplacementComplete = useCallback(() => {
+    logEvent("tutorial_dialogue_replaced", {
+      battleId: view.battle.battleId,
+      dreamcallerId: view.dreamcaller.profile.id,
+      dialogueSpeaker: view.dialogueAfterDreamcallerArrival.speakerName,
+      dialogueText: view.dialogueAfterDreamcallerArrival.text,
+    });
+  }, [view]);
 
   useEffect(() => {
     if (hasLoggedPresentation.current) return;
@@ -35,6 +43,7 @@ export function TutorialScreenAdapter() {
   return (
     <TutorialScreen
       view={view}
+      onDialogueReplacementComplete={handleDialogueReplacementComplete}
       onDreamcallerArrivalComplete={handleDreamcallerArrivalComplete}
     />
   );

@@ -79,6 +79,22 @@ describe("TutorialScreenAdapter", () => {
       ]),
     );
 
+    act(() => {
+      adapterMocks.props?.onDialogueReplacementComplete?.();
+    });
+    expect(getLogEntries()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          event: "tutorial_dialogue_replaced",
+          battleId: "tutorial-battle",
+          dreamcallerId: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+          dialogueSpeaker: "Mira",
+          dialogueText:
+            "You are called to stand against the power of Nightmare.",
+        }),
+      ]),
+    );
+
     act(() => root.unmount());
     container.remove();
   });

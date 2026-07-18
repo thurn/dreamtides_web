@@ -89,6 +89,12 @@ export function buildTutorialView(): TutorialView {
       speakerName: "Mira",
       text: "Welcome, Dreamer.",
     },
+    dialogueAfterDreamcallerArrival: {
+      portrait: { kind: "character-portrait", characterId: "mira" },
+      portraitAlt: "Mira",
+      speakerName: "Mira",
+      text: "You are called to stand against the power of Nightmare.",
+    },
     battle: {
       battleId: TUTORIAL_BATTLE_ID,
       aiApproval: null,

@@ -174,6 +174,7 @@ afterEach(() => {
 describe("TutorialScreen", () => {
   it("fades in the battle before revealing CharacterDialogue", () => {
     vi.useFakeTimers();
+    const onDialogueReplacementComplete = vi.fn();
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -182,6 +183,9 @@ describe("TutorialScreen", () => {
       root.render(
         <CumulusRoot>
           <TutorialScreen
+            onDialogueReplacementComplete={
+              onDialogueReplacementComplete
+            }
             view={{
               dreamcaller: TUTORIAL_DREAMCALLER,
               dialogue: {
@@ -192,6 +196,15 @@ describe("TutorialScreen", () => {
                 portraitAlt: "Mira",
                 speakerName: "Mira",
                 text: "Welcome, Dreamer.",
+              },
+              dialogueAfterDreamcallerArrival: {
+                portrait: {
+                  kind: "character-portrait",
+                  characterId: "mira",
+                },
+                portraitAlt: "Mira",
+                speakerName: "Mira",
+                text: "You are called to stand against the power of Nightmare.",
               },
               battle: {
                 battleId: "tutorial-battle",
@@ -291,6 +304,31 @@ describe("TutorialScreen", () => {
       dreamcaller: TUTORIAL_DREAMCALLER.visual,
       dreamcallerProfile: TUTORIAL_DREAMCALLER.profile,
     });
+    expect(screenMocks.dialogueProps).toMatchObject({
+      dialogue: { text: "Welcome, Dreamer." },
+      visible: false,
+    });
+    expect(onDialogueReplacementComplete).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(419);
+    });
+    expect(screenMocks.dialogueProps).toMatchObject({
+      dialogue: { text: "Welcome, Dreamer." },
+      visible: false,
+    });
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(screenMocks.dialogueProps).toMatchObject({
+      dialogue: {
+        speakerName: "Mira",
+        text: "You are called to stand against the power of Nightmare.",
+      },
+      visible: true,
+    });
+    expect(onDialogueReplacementComplete).toHaveBeenCalledTimes(1);
     act(() => root.unmount());
     container.remove();
   });
@@ -324,6 +362,15 @@ describe("TutorialScreen", () => {
                 portraitAlt: "Mira",
                 speakerName: "Mira",
                 text: "Welcome, Dreamer.",
+              },
+              dialogueAfterDreamcallerArrival: {
+                portrait: {
+                  kind: "character-portrait",
+                  characterId: "mira",
+                },
+                portraitAlt: "Mira",
+                speakerName: "Mira",
+                text: "You are called to stand against the power of Nightmare.",
               },
               battle: {
                 battleId: "tutorial-battle",
