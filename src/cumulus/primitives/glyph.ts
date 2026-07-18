@@ -139,8 +139,6 @@ export const GLYPHS = {
   dragHandle: g("bx bx-dots-vertical-rounded"),
   /** Trash can used for destructive authoring-row removal. */
   trash: g("bx bx-trash"),
-  /** Save disk used for idle or in-progress authoring persistence. */
-  save: g("bx bx-save"),
   /** Play triangle used to replay an authored sequence. */
   play: g("bxf bx-play"),
   /** The hamburger bars — the mobile quest-menu disclosure trigger. */
