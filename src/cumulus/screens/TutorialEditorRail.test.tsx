@@ -105,6 +105,44 @@ describe("TutorialEditorRail", () => {
     container.remove();
   });
 
+  it("adds the fixed Dreamcaller portrait animation without speech parameters", () => {
+    const onChange = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<EditorHarness onChange={onChange} />));
+
+    const addTrigger = container.querySelector<HTMLButtonElement>(
+      'button[aria-label="Add an action"]',
+    );
+    act(() => addTrigger?.click());
+    const animationOption = [...document.body.querySelectorAll<HTMLButtonElement>(
+      'button[role="option"]',
+    )].find((option) =>
+      option.textContent?.includes("Animate Dreamcaller Portrait"),
+    );
+    expect(animationOption).toBeDefined();
+    act(() => animationOption?.click());
+
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        INITIAL_ACTIONS[0],
+        {
+          id: "animate-dreamcaller-portrait",
+          action: "animate-dreamcaller-portrait",
+          wait: 0,
+        },
+      ],
+      true,
+    );
+    expect(
+      container.querySelectorAll('[data-testid^="tutorial-action-text-"]'),
+    ).toHaveLength(1);
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("keeps the bottom-left save icon absent while idle", () => {
     const container = document.createElement("div");
     document.body.append(container);

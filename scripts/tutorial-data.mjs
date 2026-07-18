@@ -43,6 +43,9 @@ export function validateTutorialActions(value) {
       }
       return { id, action, text: candidate.text, wait };
     }
+    if (action === "animate-dreamcaller-portrait") {
+      return { id, action, wait };
+    }
     throw invalid(
       `Tutorial action ${JSON.stringify(id)} has unsupported action ${JSON.stringify(action)}.`,
     );

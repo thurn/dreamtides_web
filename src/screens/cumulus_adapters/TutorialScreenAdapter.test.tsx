@@ -20,12 +20,23 @@ const mocks = vi.hoisted(() => ({
     journeyId: "genesis:test",
     tutorial: {
       runId: "event:1",
-      currentActionIndex: 0,
+      currentActionIndex: 1,
       actions: [
         {
           id: "welcome",
           action: "display-speech-bubble" as const,
           text: "Adapter fixture.",
+          wait: 3,
+        },
+        {
+          id: "dreamcaller-arrival",
+          action: "animate-dreamcaller-portrait" as const,
+          wait: 0,
+        },
+        {
+          id: "nightmare-call",
+          action: "display-speech-bubble" as const,
+          text: "A follow-up.",
           wait: 3,
         },
       ],
@@ -93,15 +104,15 @@ describe("TutorialScreenAdapter", () => {
       expect.arrayContaining([
         expect.objectContaining({
           event: "tutorial_actions_loaded",
-          actionCount: 1,
-          actionIds: ["welcome"],
+          actionCount: 3,
+          actionIds: ["welcome", "dreamcaller-arrival", "nightmare-call"],
         }),
         expect.objectContaining({
           event: "tutorial_action_presented",
           runId: "event:1",
-          actionId: "welcome",
-          action: "display-speech-bubble",
-          waitSeconds: 3,
+          actionId: "dreamcaller-arrival",
+          action: "animate-dreamcaller-portrait",
+          waitSeconds: 0,
         }),
       ]),
     );
@@ -117,23 +128,8 @@ describe("TutorialScreenAdapter", () => {
           event: "tutorial_dreamcaller_arrived",
           battleId: "tutorial-battle",
           dreamcallerId: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+          actionId: "dreamcaller-arrival",
           abilityActive: false,
-        }),
-      ]),
-    );
-
-    act(() => {
-      adapterMocks.props?.onDialogueReplacementComplete?.();
-    });
-    expect(getLogEntries()).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          event: "tutorial_dialogue_replaced",
-          battleId: "tutorial-battle",
-          dreamcallerId: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
-          dialogueSpeaker: "Mira",
-          dialogueText:
-            "You are called to stand against the power of Nightmare.",
         }),
       ]),
     );

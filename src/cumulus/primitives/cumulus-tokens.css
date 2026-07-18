@@ -566,7 +566,6 @@
   --dur-loading-screen-fade: 1200ms;  /* @kind other */
   --dur-loading-quote: 1400ms;  /* @kind other */
   --dur-loading-dot-cycle: 1200ms;  /* @kind other */
-  --delay-tutorial-dreamcaller: 1000ms;  /* @kind other */
   --stagger-loading-dot: 180ms;  /* @kind other */
 
   /* ---- Material-continuity motion ----

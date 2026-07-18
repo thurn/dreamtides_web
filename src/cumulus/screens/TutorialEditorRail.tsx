@@ -34,6 +34,10 @@ export interface TutorialEditorRailProps {
 
 const ACTION_OPTIONS = [
   { value: "display-speech-bubble", label: "Display Speech Bubble" },
+  {
+    value: "animate-dreamcaller-portrait",
+    label: "Animate Dreamcaller Portrait",
+  },
 ] satisfies readonly { value: TutorialActionName; label: string }[];
 
 function nextActionId(
@@ -51,11 +55,36 @@ function defaultAction(
   actionName: TutorialActionName,
   actions: readonly TutorialAction[],
 ): TutorialAction {
+  const id = nextActionId(actionName, actions);
+  return actionName === "display-speech-bubble"
+    ? {
+        id,
+        action: "display-speech-bubble",
+        text: "New tutorial message.",
+        wait: 3,
+      }
+    : { id, action: "animate-dreamcaller-portrait", wait: 0 };
+}
+
+function changedActionType(
+  action: TutorialAction,
+  actionName: TutorialActionName,
+): TutorialAction {
+  if (actionName === "display-speech-bubble") {
+    return {
+      id: action.id,
+      action: actionName,
+      text:
+        action.action === "display-speech-bubble"
+          ? action.text
+          : "New tutorial message.",
+      wait: action.wait,
+    };
+  }
   return {
-    id: nextActionId(actionName, actions),
-    action: "display-speech-bubble",
-    text: "New tutorial message.",
-    wait: 3,
+    id: action.id,
+    action: actionName,
+    wait: action.wait,
   };
 }
 
@@ -172,8 +201,13 @@ function TutorialActionRow({
               options={[...ACTION_OPTIONS]}
               value={action.action}
               onChange={(value) => {
-                if (value !== "display-speech-bubble") return;
-                update({ ...action, action: value, text: "New tutorial message." }, true);
+                if (
+                  value !== "display-speech-bubble" &&
+                  value !== "animate-dreamcaller-portrait"
+                ) {
+                  return;
+                }
+                update(changedActionType(action, value), true);
               }}
             />
           </div>
@@ -191,14 +225,16 @@ function TutorialActionRow({
           />
         </div>
 
-        <TextArea
-          label="Text"
-          value={action.text}
-          error={action.text.trim().length === 0 ? "Text cannot be blank." : undefined}
-          testId={`tutorial-action-text-${action.id}`}
-          onChange={(text) => update({ ...action, text }, false)}
-          onCommit={(text) => update({ ...action, text }, true)}
-        />
+        {action.action === "display-speech-bubble" ? (
+          <TextArea
+            label="Text"
+            value={action.text}
+            error={action.text.trim().length === 0 ? "Text cannot be blank." : undefined}
+            testId={`tutorial-action-text-${action.id}`}
+            onChange={(text) => update({ ...action, text }, false)}
+            onCommit={(text) => update({ ...action, text }, true)}
+          />
+        ) : null}
 
         <NumberStepper
           label="Wait"
@@ -307,7 +343,12 @@ function TutorialEditorContent({
         options={[...ACTION_OPTIONS]}
         value=""
         onChange={(value) => {
-          if (value !== "display-speech-bubble") return;
+          if (
+            value !== "display-speech-bubble" &&
+            value !== "animate-dreamcaller-portrait"
+          ) {
+            return;
+          }
           onActionsChange([...actions, defaultAction(value, actions)], true);
         }}
       />

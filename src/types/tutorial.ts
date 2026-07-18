@@ -1,5 +1,7 @@
 /** Stable action names authored by the Tutorial Editor. */
-export type TutorialActionName = "display-speech-bubble";
+export type TutorialActionName =
+  | "display-speech-bubble"
+  | "animate-dreamcaller-portrait";
 
 /** Fields shared by every authored tutorial action. */
 export interface TutorialActionBase {
@@ -16,8 +18,16 @@ export interface DisplaySpeechBubbleTutorialAction
   readonly text: string;
 }
 
+/** Moves Tensho's portrait into the player's battle-status position. */
+export interface AnimateDreamcallerPortraitTutorialAction
+  extends TutorialActionBase {
+  readonly action: "animate-dreamcaller-portrait";
+}
+
 /** Exhaustive authored tutorial action model. */
-export type TutorialAction = DisplaySpeechBubbleTutorialAction;
+export type TutorialAction =
+  | DisplaySpeechBubbleTutorialAction
+  | AnimateDreamcallerPortraitTutorialAction;
 
 /** Local filesystem persistence state shown by the Tutorial Editor. */
 export type TutorialEditorSaveStatus =

@@ -8,6 +8,7 @@ import type { TutorialPlaybackState } from "../../types/tutorial";
 
 const TUTORIAL_BATTLE_ID = "tutorial-battle";
 const TUTORIAL_DECK_SIZE = 30;
+const TUTORIAL_DREAMCALLER_ID = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
 
 function tutorialDeckIds(
   owner: "enemy" | "player",
@@ -76,7 +77,30 @@ export function buildTutorialView(
     playback?.currentActionIndex === undefined
       ? null
       : (playback.actions[playback.currentActionIndex] ?? null);
+  const dreamcallerActionIndex =
+    playback?.actions.findIndex(
+      (action) => action.action === "animate-dreamcaller-portrait",
+    ) ?? -1;
+  const dreamcallerSettled =
+    playback !== null &&
+    dreamcallerActionIndex >= 0 &&
+    (playback.currentActionIndex === null ||
+      playback.currentActionIndex > dreamcallerActionIndex);
   return {
+    dreamcaller: {
+      visual: {
+        imageNumber: "0029",
+        name: "Tensho",
+        title: "Daimyo of Lacquered Fury",
+        portraitFocus: { x: 0.5, y: 0.22 },
+      },
+      profile: {
+        id: TUTORIAL_DREAMCALLER_ID,
+        ability: "Dreamcaller ability is not active",
+        unavailable: true,
+      },
+      settled: dreamcallerSettled,
+    },
     dialogue:
       currentAction?.action === "display-speech-bubble"
         ? {

@@ -41,6 +41,13 @@ export function parseTutorialActions(value: unknown): readonly TutorialAction[] 
         wait,
       } satisfies TutorialAction;
     }
+    if (record.action === "animate-dreamcaller-portrait") {
+      return {
+        id,
+        action: "animate-dreamcaller-portrait",
+        wait,
+      } satisfies TutorialAction;
+    }
 
     throw new Error(
       `Tutorial action ${JSON.stringify(id)} has unsupported action ${JSON.stringify(record.action)}.`,

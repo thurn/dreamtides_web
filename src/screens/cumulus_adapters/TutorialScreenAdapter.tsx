@@ -67,6 +67,18 @@ export function TutorialScreenAdapter() {
     [mutations],
   );
 
+  const handleDreamcallerArrivalComplete = useCallback(
+    (dreamcallerId: string): void => {
+      logEvent("tutorial_dreamcaller_arrived", {
+        battleId: view.battle.battleId,
+        dreamcallerId,
+        actionId: view.currentAction?.id ?? null,
+        abilityActive: false,
+      });
+    },
+    [view.battle.battleId, view.currentAction?.id],
+  );
+
   const handleReplay = useCallback((): void => {
     let normalized: readonly TutorialAction[];
     try {
@@ -97,6 +109,7 @@ export function TutorialScreenAdapter() {
           : undefined
       }
       onActionComplete={handleActionComplete}
+      onDreamcallerArrivalComplete={handleDreamcallerArrivalComplete}
       onEditorActionsChange={handleEditorActionsChange}
       onReplay={handleReplay}
     />

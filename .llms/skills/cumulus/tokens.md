@@ -285,4 +285,3 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 | `--gallery-action-rim` | `rgba(255, 255, 255, 0.20)` |  |
 | `--gallery-action-foreground` | `#d7d1c4` |  |
 | `--badge-disc-gradient` | `radial-gradient(closest-side, #2a2040, #14101f)` |  |
-| `--delay-tutorial-dreamcaller` | `1000ms` |  |

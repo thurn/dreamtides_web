@@ -13,6 +13,17 @@ describe("buildTutorialView", () => {
           text: "A custom greeting.",
           wait: 1.5,
         },
+        {
+          id: "dreamcaller-arrival",
+          action: "animate-dreamcaller-portrait",
+          wait: 0,
+        },
+        {
+          id: "nightmare-call",
+          action: "display-speech-bubble",
+          text: "A second message.",
+          wait: 3,
+        },
       ],
     });
     const view = tutorial.battle;
@@ -25,6 +36,14 @@ describe("buildTutorialView", () => {
     });
     expect(tutorial.playbackRunId).toBe("event:7");
     expect(tutorial.currentAction?.id).toBe("greeting");
+    expect(tutorial.dreamcaller).toMatchObject({
+      visual: { imageNumber: "0029", name: "Tensho" },
+      profile: {
+        id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+        unavailable: true,
+      },
+      settled: false,
+    });
 
     expect(view.battleId).toBe("tutorial-battle");
     expect(view.activeSide).toBe("enemy");
@@ -49,5 +68,35 @@ describe("buildTutorialView", () => {
 
     expect(view.inspector.sides.player.zones.deck).toBe(30);
     expect(view.inspector.sides.enemy.zones.deck).toBe(30);
+  });
+
+  it("keeps Tensho settled after the portrait animation advances", () => {
+    const tutorial = buildTutorialView({
+      runId: "event:9",
+      currentActionIndex: 2,
+      actions: [
+        {
+          id: "welcome",
+          action: "display-speech-bubble",
+          text: "Welcome, Dreamer.",
+          wait: 3,
+        },
+        {
+          id: "dreamcaller-arrival",
+          action: "animate-dreamcaller-portrait",
+          wait: 0,
+        },
+        {
+          id: "nightmare-call",
+          action: "display-speech-bubble",
+          text: "You are called to stand against Nightmare.",
+          wait: 3,
+        },
+      ],
+    });
+
+    expect(tutorial.currentAction?.id).toBe("nightmare-call");
+    expect(tutorial.dialogue?.text).toContain("Nightmare");
+    expect(tutorial.dreamcaller.settled).toBe(true);
   });
 });

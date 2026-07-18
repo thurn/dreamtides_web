@@ -10,7 +10,7 @@ import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../CumulusRoot";
 import type { CharacterDialogueProps } from "../components/overlay/CharacterDialogue";
-import { TutorialScreen } from "./TutorialScreen";
+import { TutorialScreen, type TutorialView } from "./TutorialScreen";
 import type {
   MobileBattleScreenProps,
   MobileBattleView,
@@ -23,6 +23,10 @@ const screenMocks = vi.hoisted(() => ({
   sceneAnimate: null as unknown,
   sceneTransition: null as unknown,
   sceneAnimationComplete: null as (() => void) | null,
+  arrivalInitial: null as unknown,
+  arrivalAnimate: null as unknown,
+  arrivalTransition: null as unknown,
+  arrivalAnimationComplete: null as (() => void) | null,
 }));
 
 interface MotionMainStubInput {
@@ -33,6 +37,16 @@ interface MotionMainStubInput {
   readonly initial?: unknown;
   readonly onAnimationComplete?: () => void;
   readonly ref?: Ref<HTMLElement>;
+  readonly style?: CSSProperties;
+  readonly transition?: unknown;
+}
+
+interface MotionDivStubInput {
+  readonly animate?: unknown;
+  readonly children?: ReactNode;
+  readonly "data-tutorial-dreamcaller-arrival"?: string;
+  readonly initial?: unknown;
+  readonly onAnimationComplete?: () => void;
   readonly style?: CSSProperties;
   readonly transition?: unknown;
 }
@@ -53,6 +67,20 @@ vi.mock("framer-motion", () => ({
       screenMocks.sceneTransition = transition;
       screenMocks.sceneAnimationComplete = onAnimationComplete ?? null;
       return <main {...elementProps}>{children}</main>;
+    },
+    div: ({
+      animate,
+      children,
+      initial,
+      onAnimationComplete,
+      transition,
+      ...elementProps
+    }: MotionDivStubInput) => {
+      screenMocks.arrivalInitial = initial;
+      screenMocks.arrivalAnimate = animate;
+      screenMocks.arrivalTransition = transition;
+      screenMocks.arrivalAnimationComplete = onAnimationComplete ?? null;
+      return <div {...elementProps}>{children}</div>;
     },
   },
 }));
@@ -78,10 +106,31 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
     ...original,
     MobileBattleScreen: (props: MobileBattleScreenProps) => {
       screenMocks.props = props;
-      return <div data-battle-mobile={props.view.battleId} />;
+      return (
+        <div data-battle-mobile={props.view.battleId}>
+          <div data-testid="player-battle-status">
+            <div data-battle-status-dreamcaller-placeholder="" />
+          </div>
+        </div>
+      );
     },
   };
 });
+
+const TUTORIAL_DREAMCALLER: TutorialView["dreamcaller"] = {
+  visual: {
+    imageNumber: "0029",
+    name: "Tensho",
+    title: "Daimyo of Lacquered Fury",
+    portraitFocus: { x: 0.5, y: 0.22 },
+  },
+  profile: {
+    id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+    ability: "Dreamcaller ability is not active",
+    unavailable: true,
+  },
+  settled: false,
+};
 
 class ResizeObserverStub {
   constructor(_callback: ResizeObserverCallback) {}
@@ -111,6 +160,10 @@ beforeEach(() => {
   screenMocks.sceneAnimate = null;
   screenMocks.sceneTransition = null;
   screenMocks.sceneAnimationComplete = null;
+  screenMocks.arrivalInitial = null;
+  screenMocks.arrivalAnimate = null;
+  screenMocks.arrivalTransition = null;
+  screenMocks.arrivalAnimationComplete = null;
 });
 
 afterEach(() => {
@@ -132,6 +185,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
+              dreamcaller: TUTORIAL_DREAMCALLER,
               dialogue: {
                 portrait: { kind: "character-portrait", characterId: "mira" },
                 portraitAlt: "Mira",
@@ -179,6 +233,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
+              dreamcaller: TUTORIAL_DREAMCALLER,
               dialogue: {
                 portrait: {
                   kind: "character-portrait",
@@ -243,6 +298,98 @@ describe("TutorialScreen", () => {
     container.remove();
   });
 
+  it("finishes the portrait animation before applying its authored wait", () => {
+    vi.useFakeTimers();
+    const onActionComplete = vi.fn();
+    const onDreamcallerArrivalComplete = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamcaller: TUTORIAL_DREAMCALLER,
+              dialogue: null,
+              playbackRunId: "event:2",
+              currentAction: {
+                id: "dreamcaller-arrival",
+                action: "animate-dreamcaller-portrait",
+                wait: 0.5,
+              },
+              battle: {
+                battleId: "tutorial-battle",
+                player: {
+                  status: {
+                    dreamcaller: null,
+                    currentEnergy: 0,
+                    maxEnergy: 0,
+                    points: 0,
+                  },
+                },
+              } as MobileBattleView,
+            }}
+            onActionComplete={onActionComplete}
+            onDreamcallerArrivalComplete={onDreamcallerArrivalComplete}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const tutorialScreen = container.querySelector<HTMLElement>(
+      "[data-tutorial-screen]",
+    );
+    const playerTarget = container.querySelector<HTMLElement>(
+      '[data-testid="player-battle-status"] [data-battle-status-dreamcaller-placeholder]',
+    );
+    tutorialScreen!.getBoundingClientRect = () =>
+      DOMRect.fromRect({ x: 0, y: 0, width: 390, height: 844 });
+    playerTarget!.getBoundingClientRect = () =>
+      DOMRect.fromRect({ x: 173, y: 700, width: 44, height: 44 });
+
+    act(() => screenMocks.sceneAnimationComplete?.());
+
+    expect(
+      container.querySelector("[data-tutorial-dreamcaller-arrival]"),
+    ).not.toBeNull();
+    expect(screenMocks.arrivalInitial).toMatchObject({
+      x: 173,
+      y: 400,
+      scale: 1,
+    });
+    expect(screenMocks.arrivalAnimate).toMatchObject({
+      y: [400, 700],
+      scale: [1, 1],
+    });
+    expect(onActionComplete).not.toHaveBeenCalled();
+
+    act(() => screenMocks.arrivalAnimationComplete?.());
+
+    expect(onDreamcallerArrivalComplete).toHaveBeenCalledWith(
+      TUTORIAL_DREAMCALLER.profile.id,
+    );
+    expect(screenMocks.props?.view.player.status).toMatchObject({
+      dreamcaller: TUTORIAL_DREAMCALLER.visual,
+      dreamcallerProfile: TUTORIAL_DREAMCALLER.profile,
+    });
+    act(() => {
+      vi.advanceTimersByTime(499);
+    });
+    expect(onActionComplete).not.toHaveBeenCalled();
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(onActionComplete).toHaveBeenCalledWith(
+      "event:2",
+      "dreamcaller-arrival",
+    );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("uses the prominent dialogue scale on desktop", () => {
     window.matchMedia = vi.fn().mockImplementation((query: string) => ({
       matches: query.includes("min-width"),
@@ -263,6 +410,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
+              dreamcaller: TUTORIAL_DREAMCALLER,
               dialogue: {
                 portrait: {
                   kind: "character-portrait",

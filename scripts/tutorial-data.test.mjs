@@ -17,6 +17,11 @@ const FIXTURE_ACTIONS = [
     text: "First line.\nSecond line.",
     wait: 1.5,
   },
+  {
+    id: "dreamcaller-arrival",
+    action: "animate-dreamcaller-portrait",
+    wait: 0,
+  },
 ];
 
 describe("tutorial data", () => {
