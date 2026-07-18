@@ -9,6 +9,16 @@
 // The id → URL mapping lives here, once.
 
 import { assetUrl } from "../../runtime/asset-url";
+import miraHeadCircleUrl from "../assets/dreamcallers/0020-head-circle.png";
+
+/** Character portraits authored as local Cumulus assets. */
+export type CharacterPortraitId = "mira";
+
+/** A locally-authored character portrait selected by stable identity. */
+export interface CharacterPortraitArtRef {
+  readonly kind: "character-portrait";
+  readonly characterId: CharacterPortraitId;
+}
 
 /**
  * A reference to a piece of hosted game art, by identity rather than URL. Each
@@ -52,7 +62,8 @@ export type ArtRef =
        * guide id. */
       readonly kind: "dream-guide";
       readonly guideId: string;
-    };
+    }
+  | CharacterPortraitArtRef;
 
 /** Resolve an {@link ArtRef} to a hosted art URL through the asset pipeline. */
 export function resolveArtRef(ref: ArtRef): string {
@@ -71,6 +82,11 @@ export function resolveArtRef(ref: ArtRef): string {
       return assetUrl(`/dreamscapes/${ref.dreamscapeId}.png`);
     case "dream-guide":
       return assetUrl(`/dream-guides/${ref.guideId}.png`);
+    case "character-portrait":
+      switch (ref.characterId) {
+        case "mira":
+          return miraHeadCircleUrl;
+      }
   }
 }
 
@@ -97,5 +113,11 @@ export const artRef = {
   dreamGuide: (guideId: string): ArtRef => ({
     kind: "dream-guide",
     guideId,
+  }),
+  characterPortrait: (
+    characterId: CharacterPortraitId,
+  ): CharacterPortraitArtRef => ({
+    kind: "character-portrait",
+    characterId,
   }),
 } as const;

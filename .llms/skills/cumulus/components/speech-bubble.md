@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/speech-bubble`
 
-Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 
 A guide-dialog bubble for character-led site screens: the same frosted information material as an InfoCard, with a left arrow that points back to the speaker.
 

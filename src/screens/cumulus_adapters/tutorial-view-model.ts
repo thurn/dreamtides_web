@@ -69,6 +69,12 @@ function emptyInspectorSide(
 /** Build the quest-independent opening state for the tutorial battle. */
 export function buildTutorialView(): TutorialView {
   return {
+    dialogue: {
+      portrait: { kind: "character-portrait", characterId: "mira" },
+      portraitAlt: "Mira",
+      speakerName: "Mira",
+      text: "Welcome, Dreamer.",
+    },
     battle: {
       battleId: TUTORIAL_BATTLE_ID,
       aiApproval: null,

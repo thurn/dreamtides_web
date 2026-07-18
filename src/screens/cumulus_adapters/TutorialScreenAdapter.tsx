@@ -17,6 +17,8 @@ export function TutorialScreenAdapter() {
       phase: view.battle.phase,
       playerDeckSize: view.battle.player.deckCardIds.length,
       enemyDeckSize: view.battle.enemy.deckCardIds.length,
+      dialogueSpeaker: view.dialogue.speakerName,
+      dialogueText: view.dialogue.text,
     });
   }, [view]);
 

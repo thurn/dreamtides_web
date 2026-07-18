@@ -117,6 +117,11 @@ describe("setupAssets", () => {
       "licensed-art",
       "main-menu-background.jpg",
     );
+    const tutorialDialogueFrameArtPath = join(
+      tempRoot,
+      "licensed-art",
+      "tutorial-round-frame.png",
+    );
     const cardTomlPath = join(tempRoot, "cards_v2.toml");
     const dreamcallerV2TomlPath = join(tempRoot, "dreamcallers_v2.toml");
     const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
@@ -131,6 +136,7 @@ describe("setupAssets", () => {
     writeFileSync(join(dreamcallerArtDir, "0007.png"), "fake-png");
     writeFileSync(join(dreamsignArtDir, "test-sign.png"), "fake-png");
     writeFileSync(mainMenuBackgroundArtPath, "fake-jpg");
+    writeFileSync(tutorialDialogueFrameArtPath, "fake-png");
     writeFileSync(
       join(dreamsignArtDir, "alt_text.txt"),
       "test-sign.png\tSmall idol with a violet glow.\n",
@@ -209,6 +215,7 @@ rendered-text = "Use the canonical Dreamsign text."
       dreamcallerArtDir,
       dreamsignArtDir,
       mainMenuBackgroundArtPath,
+      tutorialDialogueFrameArtPath,
     });
 
     const cards = JSON.parse(
@@ -223,6 +230,9 @@ rendered-text = "Use the canonical Dreamsign text."
     expect(
       readFileSync(join(publicDir, "main-menu", "background.jpg"), "utf8"),
     ).toBe("fake-jpg");
+    expect(
+      readFileSync(join(publicDir, "atlas", "Round_frame.png"), "utf8"),
+    ).toBe("fake-png");
 
     expect(cards).toEqual([
       {

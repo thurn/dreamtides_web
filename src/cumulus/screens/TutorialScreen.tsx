@@ -1,7 +1,12 @@
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactElement } from "react";
 import { motionTimeSeconds } from "../primitives/motion-time";
+import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
+import {
+  CharacterDialogue,
+  type CharacterDialogueModel,
+} from "../components/overlay/CharacterDialogue";
 import {
   MobileBattleScreen,
   type MobileBattleView,
@@ -9,6 +14,7 @@ import {
 
 export interface TutorialView {
   readonly battle: MobileBattleView;
+  readonly dialogue: CharacterDialogueModel;
 }
 
 export interface TutorialScreenProps {
@@ -43,6 +49,25 @@ export function TutorialScreen({ view }: TutorialScreenProps): ReactElement {
         inspectorDefault="collapsed"
         phaseNavigation="hidden"
       />
+      <div
+        data-tutorial-dialogue-anchor=""
+        style={{
+          position: "absolute",
+          zIndex: 30,
+          right: token("--gutter"),
+          bottom: `max(${token("--space-4")}, var(${SAFE_AREA_INSET_PROPERTIES.bottom}))`,
+          left: token("--gutter"),
+          display: "flex",
+          justifyContent: "center",
+          pointerEvents: "none",
+        }}
+      >
+        <CharacterDialogue
+          dialogue={view.dialogue}
+          visible
+          testId="tutorial-welcome-dialogue"
+        />
+      </div>
     </motion.main>
   );
 }

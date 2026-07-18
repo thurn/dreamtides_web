@@ -3,7 +3,15 @@ import { buildTutorialView } from "./tutorial-view-model";
 
 describe("buildTutorialView", () => {
   it("builds a quest-independent opposing Day phase with full decks and empty hands", () => {
-    const view = buildTutorialView().battle;
+    const tutorial = buildTutorialView();
+    const view = tutorial.battle;
+
+    expect(tutorial.dialogue).toEqual({
+      portrait: { kind: "character-portrait", characterId: "mira" },
+      portraitAlt: "Mira",
+      speakerName: "Mira",
+      text: "Welcome, Dreamer.",
+    });
 
     expect(view.battleId).toBe("tutorial-battle");
     expect(view.activeSide).toBe("enemy");

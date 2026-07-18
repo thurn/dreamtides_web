@@ -46,6 +46,15 @@ const MAIN_MENU_BACKGROUND_ART_PATH = join(
   "quest_prototype_assets",
   "main-menu-background.jpg",
 );
+const TUTORIAL_DIALOGUE_FRAME_ART_PATH = join(
+  homedir(),
+  "Documents",
+  "UI",
+  "ClassicFantasyRPG_UI",
+  "ARTWORKS",
+  "UIelements",
+  "Round_frame.png",
+);
 
 // Dream Atlas art. Each dreamscape ships a rectangular scene image
 // (`<id>.png`, the hover-card art) and a circular node icon (`<id>_icon.png`).
@@ -961,6 +970,7 @@ export function setupAssets({
   dreamscapeSceneArtDir = DREAMSCAPE_SCENE_ART_DIR,
   dreamscapeIconArtDir = DREAMSCAPE_ICON_ART_DIR,
   dreamGuideArtDir = DREAM_GUIDE_ART_DIR,
+  tutorialDialogueFrameArtPath = TUTORIAL_DIALOGUE_FRAME_ART_PATH,
 } = {}) {
   const cardsDir = join(publicDir, "cards");
   const cardFrameDir = join(publicDir, "card-frame");
@@ -1871,6 +1881,18 @@ export function setupAssets({
     console.log("Linked atlas round frame image");
   } else {
     console.warn(`  Warning: missing atlas round frame ${roundFrameSource}`);
+  }
+
+  if (existsSync(tutorialDialogueFrameArtPath)) {
+    symlinkSync(
+      tutorialDialogueFrameArtPath,
+      join(atlasArtDir, "Round_frame.png"),
+    );
+    console.log("Linked tutorial dialogue frame image");
+  } else {
+    console.warn(
+      `  Warning: missing tutorial dialogue frame ${tutorialDialogueFrameArtPath}`,
+    );
   }
 
   console.log("Asset setup complete.");

@@ -48,6 +48,8 @@ describe("TutorialScreenAdapter", () => {
           phase: "day",
           playerDeckSize: 30,
           enemyDeckSize: 30,
+          dialogueSpeaker: "Mira",
+          dialogueText: "Welcome, Dreamer.",
         }),
       ]),
     );

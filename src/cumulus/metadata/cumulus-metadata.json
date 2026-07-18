@@ -1279,6 +1279,61 @@
       "description": "Grow the rules text box to a taller editing height. The card editor sets\nthis while its rules-text field is open so the inline textarea has room to\nshow and edit several lines at once instead of being clipped to the\nthree-line display cap."
     }
   ],
+  "CharacterDialogue": [
+    {
+      "name": "dialogue",
+      "tsType": "CharacterDialogueModel",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Character identity and spoken copy to present.",
+      "nested": {
+        "name": "CharacterDialogueModel",
+        "fields": [
+          {
+            "name": "portrait",
+            "tsType": "CharacterDialoguePortraitArt",
+            "optional": false,
+            "description": "Typed portrait art shown inside the circular frame."
+          },
+          {
+            "name": "portraitAlt",
+            "tsType": "string",
+            "optional": false,
+            "description": "Accessible description of the portrait art."
+          },
+          {
+            "name": "speakerName",
+            "tsType": "string",
+            "optional": false,
+            "description": "Character name shown by the speech bubble."
+          },
+          {
+            "name": "text",
+            "tsType": "string",
+            "optional": false,
+            "description": "Plain spoken line shown by the speech bubble."
+          }
+        ]
+      }
+    },
+    {
+      "name": "visible",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Whether the paired portrait and bubble are visible; changes fade in or out."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional stable test id for product-screen QA."
+    }
+  ],
   "CompactGameCardRow": [
     {
       "name": "card",

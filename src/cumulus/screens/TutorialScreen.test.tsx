@@ -4,6 +4,7 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../CumulusRoot";
+import type { CharacterDialogueProps } from "../components/overlay/CharacterDialogue";
 import { TutorialScreen } from "./TutorialScreen";
 import type {
   MobileBattleScreenProps,
@@ -12,6 +13,14 @@ import type {
 
 const screenMocks = vi.hoisted(() => ({
   props: null as MobileBattleScreenProps | null,
+  dialogueProps: null as CharacterDialogueProps | null,
+}));
+
+vi.mock("../components/overlay/CharacterDialogue", () => ({
+  CharacterDialogue: (props: CharacterDialogueProps) => {
+    screenMocks.dialogueProps = props;
+    return <div data-character-dialogue={props.dialogue.speakerName} />;
+  },
 }));
 
 vi.mock("./MobileBattleScreen", async (importOriginal) => {
@@ -41,6 +50,7 @@ beforeEach(() => {
     dispatchEvent: vi.fn(),
   }));
   screenMocks.props = null;
+  screenMocks.dialogueProps = null;
 });
 
 afterEach(() => {
@@ -59,6 +69,15 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
+              dialogue: {
+                portrait: {
+                  kind: "character-portrait",
+                  characterId: "mira",
+                },
+                portraitAlt: "Mira",
+                speakerName: "Mira",
+                text: "Welcome, Dreamer.",
+              },
               battle: {
                 battleId: "tutorial-battle",
               } as MobileBattleView,
@@ -74,6 +93,17 @@ describe("TutorialScreen", () => {
     ).not.toBeNull();
     expect(screenMocks.props?.inspectorDefault).toBe("collapsed");
     expect(screenMocks.props?.phaseNavigation).toBe("hidden");
+    expect(
+      container.querySelector("[data-character-dialogue='Mira']"),
+    ).not.toBeNull();
+    expect(screenMocks.dialogueProps).toMatchObject({
+      dialogue: {
+        portraitAlt: "Mira",
+        speakerName: "Mira",
+        text: "Welcome, Dreamer.",
+      },
+      visible: true,
+    });
 
     act(() => root.unmount());
     container.remove();
