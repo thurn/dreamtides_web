@@ -48,6 +48,12 @@ vi.mock("../screens/cumulus_adapters/LoadingScreenAdapter", () => ({
   },
 }));
 
+vi.mock("../screens/cumulus_adapters/TutorialScreenAdapter", () => ({
+  TutorialScreenAdapter: function MockTutorialScreenAdapter() {
+    return null;
+  },
+}));
+
 vi.mock("../App.tsx", () => {
   mocks.appImport();
   return {
@@ -133,6 +139,18 @@ describe("main editor route", () => {
 
   it("mounts the isolated loading screen for the Vite-served /loading/ path", async () => {
     window.history.pushState(null, "", "/loading/");
+
+    await import("../main.tsx");
+
+    expect(mocks.appImport).not.toHaveBeenCalled();
+    expect(mocks.createRoot).toHaveBeenCalledWith(
+      document.getElementById("root"),
+    );
+    expect(mocks.render).toHaveBeenCalledTimes(1);
+  });
+
+  it("mounts the isolated tutorial battle for the Vite-served /tutorial/ path", async () => {
+    window.history.pushState(null, "", "/tutorial/");
 
     await import("../main.tsx");
 

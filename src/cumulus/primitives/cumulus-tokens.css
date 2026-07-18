@@ -143,6 +143,7 @@
   --primitive-ink-300: #eee3d2;     /* secondary */
   --primitive-ink-400: #d8ccba;     /* muted */
   --primitive-ink-500: #bba994;     /* faint label / disabled */
+  --primitive-neutral-500: #787878; /* neutral loading placeholder */
 
   /* ---- Color: lines & scrims ---- */
   --primitive-line-soft: rgba(255, 255, 255, 0.07);
@@ -198,6 +199,7 @@
   --surface-chrome: #191423;   /* solid raised chrome (HUD/popovers/windows) */
   --surface-chrome-strong: #120e1c;  /* solid, deeper chrome for windows */
   --surface-status-badge: var(--primitive-line-black); /* high-contrast in-card status mark */
+  --surface-placeholder: var(--primitive-neutral-500); /* content reserved for imminent media */
 
   /* ---- Text ---- */
   --text-primary: var(--primitive-ink-100);

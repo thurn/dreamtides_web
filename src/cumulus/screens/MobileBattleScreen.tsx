@@ -80,7 +80,7 @@ export interface MobileBattleSlotView {
 
 /** The compact resources and Dreamcaller identity shown for one side. */
 export interface MobileBattleStatusView {
-  readonly dreamcaller: DreamcallerVisual;
+  readonly dreamcaller: DreamcallerVisual | null;
   readonly currentEnergy: number;
   readonly maxEnergy: number;
   readonly points: number;
@@ -167,6 +167,10 @@ export interface MobileBattleChoicePromptView {
 export interface MobileBattleScreenProps {
   readonly view: MobileBattleView;
   readonly interactions?: MobileBattleInteractions;
+  /** Initial inspector state at desktop widths. */
+  readonly inspectorDefault?: "responsive" | "collapsed";
+  /** Phase controls exposed by this presentation. */
+  readonly phaseNavigation?: "both" | "hidden";
 }
 
 export type MobileBattleOwner = "enemy" | "player";
@@ -2127,6 +2131,7 @@ function ControlRow({
   isDesktop,
   interactions,
   layoutBackSlotCount,
+  phaseNavigation,
 }: {
   readonly aiApproval: MobileBattleAiApprovalView | null;
   readonly cardPicker: MobileBattleCardPickerView | null;
@@ -2135,6 +2140,7 @@ function ControlRow({
   readonly isDesktop: boolean;
   readonly interactions?: MobileBattleInteractions;
   readonly layoutBackSlotCount: number;
+  readonly phaseNavigation: "both" | "hidden";
 }) {
   const disabled = interactions?.canInteract !== true;
   const hasAlternateNextControls =
@@ -2220,7 +2226,7 @@ function ControlRow({
             onPress={() => interactions?.onCardPickerSubmit?.(selectedPickerCardIds)}
           />
         </div>
-      ) : (
+      ) : phaseNavigation === "both" ? (
         <div
           data-battle-phase-controls="row"
           style={{
@@ -2312,7 +2318,7 @@ function ControlRow({
             )}
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
@@ -2649,10 +2655,16 @@ function BattleInspectorRail({
 }
 
 /** Responsive battle table composed entirely from physical battle objects. */
-export function MobileBattleScreen({ view, interactions }: MobileBattleScreenProps) {
+export function MobileBattleScreen({
+  view,
+  interactions,
+  inspectorDefault = "responsive",
+  phaseNavigation = "both",
+}: MobileBattleScreenProps) {
   const isDesktop = useIsDesktop();
   const isDockLayout = useIsDesktop(INSPECTOR_DOCK_MIN_WIDTH);
-  const [isInspectorOpen, setIsInspectorOpen] = useState(isDockLayout);
+  const inspectorStartsOpen = inspectorDefault === "responsive" && isDockLayout;
+  const [isInspectorOpen, setIsInspectorOpen] = useState(inspectorStartsOpen);
   const [isCardDragActive, setIsCardDragActive] = useState(false);
   const [snapLayoutCardId, setSnapLayoutCardId] = useState<string | null>(null);
   const [cardPickerSelection, setCardPickerSelection] = useState<{
@@ -2686,11 +2698,11 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
 
   useEffect(() => {
     setSelectedSide("player");
-    setIsInspectorOpen(isDockLayout);
+    setIsInspectorOpen(inspectorStartsOpen);
     setIsCardDragActive(false);
     setSnapLayoutCardId(null);
     setCardPickerSelection({ pickerKey: null, ids: [] });
-  }, [view.battleId]);
+  }, [inspectorStartsOpen, view.battleId]);
 
   const handlePickerCardToggle = useCallback((cardId: string): void => {
     if (view.cardPicker === null) return;
@@ -2735,8 +2747,8 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
   useEffect(() => {
     if (previousDockLayout.current === isDockLayout) return;
     previousDockLayout.current = isDockLayout;
-    setIsInspectorOpen(isDockLayout);
-  }, [isDockLayout]);
+    setIsInspectorOpen(inspectorStartsOpen);
+  }, [inspectorStartsOpen, isDockLayout]);
 
   useEffect(() => {
     if (!isInspectorOpen) {
@@ -2838,6 +2850,7 @@ export function MobileBattleScreen({ view, interactions }: MobileBattleScreenPro
           isDesktop={isDesktop}
           interactions={interactions}
           layoutBackSlotCount={layoutBackSlotCount}
+          phaseNavigation={phaseNavigation}
         />
         <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="player" phase={view.phase} side={view.player} interactions={interactions} />
         <PlayerHand

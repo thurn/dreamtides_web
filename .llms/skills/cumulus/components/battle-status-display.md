@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/battle-status-display`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The glass status card for one battle participant: centered current and maximum energy at left, a head-focused Dreamcaller portrait at center, and centered current points at right.
+The glass status card for one battle participant: centered current and maximum energy at left, a head-focused Dreamcaller portrait or loading placeholder at center, and centered current points at right.
 
 > **Guidance:** This display has no phase, active-state, debug, or interaction API. Place the complete fixed object through a wrapper.
 
@@ -17,22 +17,15 @@ The glass status card for one battle participant: centered current and maximum e
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `owner` | `BattleStatusOwner` = `"player" \| "enemy"` | yes | — | Combatant represented by this status card. |
-| `dreamcaller` | `DreamcallerVisual` | yes | — | Dreamcaller whose head portrait anchors the card. |
+| `dreamcaller` | `DreamcallerVisual \| null` | yes | — | Dreamcaller whose head portrait anchors the card, or null while it loads. |
 | `currentEnergy` | `number` | yes | — | Energy currently available to this combatant. |
 | `maxEnergy` | `number` | yes | — | Maximum energy available to this combatant. |
 | `points` | `number` | yes | — | Current battle points. |
 | `testId` | `string` | no | — | Optional stable test id for the complete status card. |
 
-### `dreamcaller`: the `DreamcallerVisual` model
-
-| Field | Type | Optional | Description |
-| --- | --- | --- | --- |
-| `imageNumber` | `string` | no |  |
-| `name` | `string` | no |  |
-| `title` | `string` | no |  |
-| `portraitFocus` | `DreamcallerPortraitFocus` | yes | Normalized head position used to center subject-aware crops. |
-
 ## Usage
+
+### Variant 1
 
 One complete participant status card. Energy and points use the canonical ResourceChip marks; the portrait uses DreamcallerPortrait's thumb framing.
 
@@ -45,5 +38,19 @@ import { BattleStatusDisplay } from "src/cumulus/components/battle/BattleStatusD
   currentEnergy={2}
   maxEnergy={3}
   points={4}
+/>
+```
+
+### Variant 2
+
+Use the null portrait state while the participant identity is being populated.
+
+```tsx
+<BattleStatusDisplay
+  owner="enemy"
+  dreamcaller={null}
+  currentEnergy={0}
+  maxEnergy={0}
+  points={0}
 />
 ```

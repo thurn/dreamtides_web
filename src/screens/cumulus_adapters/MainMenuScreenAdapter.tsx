@@ -1,24 +1,22 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { LoadingScreen } from "../../cumulus/screens/LoadingScreen";
 import {
   MainMenuScreen,
   type MainMenuActionId,
   type MainMenuSocialId,
 } from "../../cumulus/screens/MainMenuScreen";
 import { logEvent } from "../../logging";
-import { buildLoadingView } from "./loading-view-model";
 import { buildMainMenuView } from "./main-menu-view-model";
+import { LoadingScreenAdapter } from "./LoadingScreenAdapter";
 
 /** Standalone `/main` wiring, including its cinematic New Journey transition. */
 export function MainMenuScreenAdapter() {
   const hasLoggedPresentation = useRef(false);
   const hasCompletedJourneyTransition = useRef(false);
   const [activeScreen, setActiveScreen] = useState<"main" | "loading">("main");
-  const [transitionPhase, setTransitionPhase] = useState<
-    "visible" | "exiting"
-  >("visible");
+  const [transitionPhase, setTransitionPhase] = useState<"visible" | "exiting">(
+    "visible",
+  );
   const view = useMemo(() => buildMainMenuView(), []);
-  const loadingView = useMemo(() => buildLoadingView(), []);
 
   useEffect(() => {
     if (hasLoggedPresentation.current) return;
@@ -46,15 +44,11 @@ export function MainMenuScreenAdapter() {
       "",
       `/loading${window.location.search}${window.location.hash}`,
     );
-    logEvent("loading_screen_presented", {
-      source: "main_menu",
-      attribution: loadingView.attribution,
-    });
     setActiveScreen("loading");
-  }, [loadingView]);
+  }, []);
 
   if (activeScreen === "loading") {
-    return <LoadingScreen view={loadingView} />;
+    return <LoadingScreenAdapter source="main_menu" />;
   }
 
   return (

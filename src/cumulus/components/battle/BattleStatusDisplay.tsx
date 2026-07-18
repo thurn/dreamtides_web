@@ -12,8 +12,8 @@ export type BattleStatusOwner = "player" | "enemy";
 export interface BattleStatusDisplayProps {
   /** Combatant represented by this status card. */
   readonly owner: BattleStatusOwner;
-  /** Dreamcaller whose head portrait anchors the card. */
-  readonly dreamcaller: DreamcallerVisual;
+  /** Dreamcaller whose head portrait anchors the card, or null while it loads. */
+  readonly dreamcaller: DreamcallerVisual | null;
   /** Energy currently available to this combatant. */
   readonly currentEnergy: number;
   /** Maximum energy available to this combatant. */
@@ -73,7 +73,21 @@ export function BattleStatusDisplay({
         />
       </div>
       <div style={{ width: token("--touch-min") }}>
-        <DreamcallerPortrait dreamcaller={dreamcaller} variant="thumb" />
+        {dreamcaller === null ? (
+          <div
+            role="img"
+            aria-label="Dreamcaller portrait loading"
+            data-battle-status-dreamcaller-placeholder=""
+            style={{
+              width: "100%",
+              height: token("--touch-min"),
+              borderRadius: token("--radius-inset"),
+              background: token("--surface-placeholder"),
+            }}
+          />
+        ) : (
+          <DreamcallerPortrait dreamcaller={dreamcaller} variant="thumb" />
+        )}
       </div>
       <div
         data-battle-status-resource="points"

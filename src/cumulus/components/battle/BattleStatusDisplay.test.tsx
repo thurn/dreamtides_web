@@ -83,4 +83,37 @@ describe("BattleStatusDisplay", () => {
     act(() => root.unmount());
     container.remove();
   });
+
+  it("reserves the portrait with a neutral rounded placeholder while it loads", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <BattleStatusDisplay
+          owner="player"
+          dreamcaller={null}
+          currentEnergy={0}
+          maxEnergy={0}
+          points={0}
+        />,
+      );
+    });
+
+    const placeholder = container.querySelector<HTMLElement>(
+      "[data-battle-status-dreamcaller-placeholder]",
+    );
+    expect(placeholder?.getAttribute("aria-label")).toBe(
+      "Dreamcaller portrait loading",
+    );
+    expect(placeholder?.style.width).toBe("100%");
+    expect(placeholder?.style.height).toBe("var(--touch-min)");
+    expect(placeholder?.style.borderRadius).toBe("var(--radius-inset)");
+    expect(placeholder?.style.background).toBe("var(--surface-placeholder)");
+    expect(container.querySelector("img")).toBeNull();
+
+    act(() => root.unmount());
+    container.remove();
+  });
 });

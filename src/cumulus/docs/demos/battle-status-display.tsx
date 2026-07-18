@@ -10,14 +10,16 @@ const DREAMCALLER: DreamcallerVisual = {
 
 function BattleStatusDisplayDemo(args: Record<string, unknown>) {
   const owner = args.owner === "enemy" ? "enemy" : "player";
-  const currentEnergy = typeof args.currentEnergy === "number" ? args.currentEnergy : 2;
+  const dreamcaller = args.placeholder === true ? null : DREAMCALLER;
+  const currentEnergy =
+    typeof args.currentEnergy === "number" ? args.currentEnergy : 2;
   const maxEnergy = typeof args.maxEnergy === "number" ? args.maxEnergy : 3;
   const points = typeof args.points === "number" ? args.points : 4;
   return (
     <div style={{ width: 280 }}>
       <BattleStatusDisplay
         owner={owner}
-        dreamcaller={DREAMCALLER}
+        dreamcaller={dreamcaller}
         currentEnergy={currentEnergy}
         maxEnergy={maxEnergy}
         points={points}
@@ -30,7 +32,7 @@ export const battleStatusDisplayDemo: CumulusComponent = {
   id: "battle-status-display",
   title: "Battle Status Display",
   blurb:
-    "The glass status card for one battle participant: centered current and maximum energy at left, a head-focused Dreamcaller portrait at center, and centered current points at right.",
+    "The glass status card for one battle participant: centered current and maximum energy at left, a head-focused Dreamcaller portrait or loading placeholder at center, and centered current points at right.",
   callout:
     "This display has no phase, active-state, debug, or interaction API. Place the complete fixed object through a wrapper.",
   group: "Components",
@@ -49,6 +51,16 @@ export const battleStatusDisplayDemo: CumulusComponent = {
   points={4}
 />`,
     },
+    {
+      note: "Use the null portrait state while the participant identity is being populated.",
+      code: `<BattleStatusDisplay
+  owner="enemy"
+  dreamcaller={null}
+  currentEnergy={0}
+  maxEnergy={0}
+  points={0}
+/>`,
+    },
   ],
   demo: {
     defaultArgs: {
@@ -56,6 +68,7 @@ export const battleStatusDisplayDemo: CumulusComponent = {
       currentEnergy: 2,
       maxEnergy: 3,
       points: 4,
+      placeholder: false,
     },
   },
 };

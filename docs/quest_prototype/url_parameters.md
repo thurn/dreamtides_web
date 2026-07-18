@@ -10,6 +10,13 @@ player is_ (e.g. `/dreamscape/2-ember-wood/purge`, `/atlas`). See
 `url_structure.md` for the path grammar; the two compose (a path always carries
 the run's query string).
 
+## Standalone tutorial paths
+
+`/loading` presents the cinematic journey-loading scene for five seconds, then
+replaces the current history entry with `/tutorial` and fades in the standalone
+tutorial battle. `/tutorial` can also be opened directly. The tutorial battle is
+constructed without a quest room or quest state.
+
 ## `seed`
 
 Overrides the battle RNG seed. The value must be a non-negative integer literal

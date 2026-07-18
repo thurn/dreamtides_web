@@ -191,6 +191,42 @@ function mount(
 }
 
 describe("MobileBattleScreen", () => {
+  it("supports a collapsed inspector with hidden phase navigation", () => {
+    mockDesktopViewport(true);
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <MobileBattleScreen
+            view={makeView()}
+            inspectorDefault="collapsed"
+            phaseNavigation="hidden"
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    expect(
+      container.querySelector("[data-battle-inspector-open]")?.getAttribute(
+        "data-battle-inspector-open",
+      ),
+    ).toBe("false");
+    expect(container.querySelector('[data-battle-inspector="docked"]')).toBeNull();
+    expect(container.querySelector("[data-battle-phase-controls]")).toBeNull();
+    expect(
+      Array.from(container.querySelectorAll("button")).some((button) => {
+        const label = button.getAttribute("aria-label") ?? button.textContent;
+        return label?.includes("Back") === true || label?.includes("Next Phase") === true;
+      }),
+    ).toBe(false);
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("keeps battle-instance status readable on battlefield and hand cards", () => {
     const view = makeView();
     const battlefieldCard = view.player.frontRank[0]?.card;

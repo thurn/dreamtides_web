@@ -7,6 +7,10 @@ import { CumulusRoot } from "../../cumulus/CumulusRoot";
 import { getLogEntries, resetLog } from "../../logging";
 import { LoadingScreenAdapter } from "./LoadingScreenAdapter";
 
+vi.mock("./TutorialScreenAdapter", () => ({
+  TutorialScreenAdapter: () => <main data-tutorial-screen />,
+}));
+
 beforeEach(() => {
   (
     globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
@@ -22,11 +26,14 @@ beforeEach(() => {
     dispatchEvent: vi.fn(),
   }));
   vi.spyOn(console, "log").mockImplementation(() => {});
+  vi.useFakeTimers();
+  window.history.replaceState(null, "", "/loading?seed=7#journey");
   resetLog();
 });
 
 afterEach(() => {
   vi.restoreAllMocks();
+  vi.useRealTimers();
   document.body.innerHTML = "";
 });
 
@@ -53,6 +60,20 @@ describe("LoadingScreenAdapter", () => {
         }),
       ]),
     );
+
+    act(() => {
+      vi.advanceTimersByTime(4_999);
+    });
+    expect(container.querySelector("[data-loading-screen]")).not.toBeNull();
+    expect(window.location.pathname).toBe("/loading");
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(container.querySelector("[data-tutorial-screen]")).not.toBeNull();
+    expect(window.location.pathname).toBe("/tutorial");
+    expect(window.location.search).toBe("?seed=7");
+    expect(window.location.hash).toBe("#journey");
 
     act(() => root.unmount());
   });

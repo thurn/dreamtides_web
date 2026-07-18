@@ -414,40 +414,11 @@
     },
     {
       "name": "dreamcaller",
-      "tsType": "DreamcallerVisual",
+      "tsType": "DreamcallerVisual | null",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Dreamcaller whose head portrait anchors the card.",
-      "nested": {
-        "name": "DreamcallerVisual",
-        "fields": [
-          {
-            "name": "imageNumber",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "name",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "title",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "portraitFocus",
-            "tsType": "DreamcallerPortraitFocus",
-            "optional": true,
-            "description": "Normalized head position used to center subject-aware crops."
-          }
-        ]
-      }
+      "description": "Dreamcaller whose head portrait anchors the card, or null while it loads."
     },
     {
       "name": "currentEnergy",

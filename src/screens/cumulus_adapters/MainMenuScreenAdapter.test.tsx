@@ -32,8 +32,10 @@ vi.mock("../../cumulus/screens/MainMenuScreen", () => ({
   },
 }));
 
-vi.mock("../../cumulus/screens/LoadingScreen", () => ({
-  LoadingScreen: () => <main data-loading-screen />,
+vi.mock("./LoadingScreenAdapter", () => ({
+  LoadingScreenAdapter: ({ source }: { source: string }) => (
+    <main data-loading-screen data-loading-source={source} />
+  ),
 }));
 
 beforeEach(() => {
@@ -84,6 +86,9 @@ describe("MainMenuScreenAdapter", () => {
     act(() => screenMocks.onExitComplete?.());
     expect(window.location.pathname).toBe("/loading");
     expect(container.querySelector("[data-loading-screen]")).not.toBeNull();
+    expect(
+      container.querySelector("[data-loading-source='main_menu']"),
+    ).not.toBeNull();
 
     expect(getLogEntries()).toEqual(
       expect.arrayContaining([
@@ -95,11 +100,6 @@ describe("MainMenuScreenAdapter", () => {
         expect.objectContaining({
           event: "main_menu_social_pressed",
           socialId: "github",
-        }),
-        expect.objectContaining({
-          event: "loading_screen_presented",
-          source: "main_menu",
-          attribution: "— Revelation 6:8",
         }),
       ]),
     );

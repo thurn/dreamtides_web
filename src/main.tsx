@@ -109,6 +109,10 @@ if (pathname === "/editor" || pathname === "/cards") {
   const { LoadingScreenAdapter } =
     await import("./screens/cumulus_adapters/LoadingScreenAdapter");
   renderStrict(<LoadingScreenAdapter />);
+} else if (pathname === "/tutorial") {
+  const { TutorialScreenAdapter } =
+    await import("./screens/cumulus_adapters/TutorialScreenAdapter");
+  renderStrict(<TutorialScreenAdapter />);
 } else {
   // The dev card/figment/config data hot-reload plugins (see vite.config.ts)
   // emit targeted custom HMR events instead of a full reload, so that saving in
