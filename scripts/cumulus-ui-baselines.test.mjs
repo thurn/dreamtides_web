@@ -5,8 +5,12 @@ import { fileURLToPath } from "node:url";
 import { ESLint } from "eslint";
 import { describe, expect, it } from "vitest";
 import { OUTER_UI_BASELINES } from "../eslint-rules/ui-boundary-baselines.js";
+import { OUTER_UI_FILE_ROLES } from "../eslint-rules/ui-boundary-roles.js";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const OUTER_UI_TSX_FILES = Object.keys(OUTER_UI_FILE_ROLES).filter((file) =>
+  file.endsWith(".tsx"),
+);
 
 function normalizedMessages(results) {
   return results.flatMap((result) =>
@@ -25,7 +29,7 @@ describe("Cumulus outer UI lint baselines", () => {
     process.env.CUMULUS_REPORT_BASELINES = "1";
     try {
       const eslint = new ESLint({ cwd: ROOT });
-      const actual = normalizedMessages(await eslint.lintFiles(["src"]));
+      const actual = normalizedMessages(await eslint.lintFiles(OUTER_UI_TSX_FILES));
       const counts = new Map();
       for (const message of actual) {
         const key = `${message.file}:${message.rule}`;
