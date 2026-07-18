@@ -563,9 +563,7 @@
   --dur-slow: 420ms;  /* @kind other */
   --dur-loading-screen-fade: 1200ms;  /* @kind other */
   --dur-loading-quote: 1400ms;  /* @kind other */
-  --dur-loading-attribution: 800ms;  /* @kind other */
   --dur-loading-dot-cycle: 1200ms;  /* @kind other */
-  --delay-loading-attribution: 2000ms;  /* @kind other — pause after the quote has fully appeared */
   --stagger-loading-dot: 180ms;  /* @kind other */
 
   /* ---- Material-continuity motion ----

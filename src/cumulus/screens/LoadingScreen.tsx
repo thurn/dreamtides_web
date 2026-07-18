@@ -17,12 +17,6 @@ export interface LoadingScreenProps {
 
 const SCREEN_FADE_SECONDS = motionTimeSeconds("--dur-loading-screen-fade");
 const QUOTE_FADE_SECONDS = motionTimeSeconds("--dur-loading-quote");
-const ATTRIBUTION_PAUSE_SECONDS = motionTimeSeconds(
-  "--delay-loading-attribution",
-);
-const ATTRIBUTION_FADE_SECONDS = motionTimeSeconds(
-  "--dur-loading-attribution",
-);
 const DOT_CYCLE_SECONDS = motionTimeSeconds("--dur-loading-dot-cycle");
 const DOT_STAGGER_SECONDS = motionTimeSeconds("--stagger-loading-dot");
 const DOT_POSITIONS = [0, 1, 2] as const;
@@ -31,9 +25,6 @@ const DOT_POSITIONS = [0, 1, 2] as const;
 export function LoadingScreen({ view }: LoadingScreenProps): ReactElement {
   const isDesktop = useIsDesktop();
   const reduceMotion = useReducedMotion() === true;
-  const attributionDelay = reduceMotion
-    ? 0
-    : QUOTE_FADE_SECONDS + ATTRIBUTION_PAUSE_SECONDS;
 
   return (
     <motion.main
@@ -90,8 +81,8 @@ export function LoadingScreen({ view }: LoadingScreenProps): ReactElement {
           initial={{ opacity: reduceMotion ? 1 : 0 }}
           animate={{ opacity: 1 }}
           transition={{
-            delay: attributionDelay,
-            duration: reduceMotion ? 0 : ATTRIBUTION_FADE_SECONDS,
+            delay: 0,
+            duration: reduceMotion ? 0 : QUOTE_FADE_SECONDS,
           }}
           style={{
             marginTop: token("--space-8"),

@@ -201,7 +201,6 @@ Durations, easings, and the two material-continuity transitions (object-travel, 
 | `--dur-slow` | `420ms` |  |
 | `--dur-loading-screen-fade` | `1200ms` |  |
 | `--dur-loading-quote` | `1400ms` |  |
-| `--dur-loading-attribution` | `800ms` |  |
 | `--dur-loading-dot-cycle` | `1200ms` |  |
 | `--stagger-loading-dot` | `180ms` |  |
 | `--motion-object-travel` | `420ms var(--ease-out)` |  |
@@ -285,4 +284,3 @@ Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-
 | `--gallery-action-rim` | `rgba(255, 255, 255, 0.20)` |  |
 | `--gallery-action-foreground` | `#d7d1c4` |  |
 | `--badge-disc-gradient` | `radial-gradient(closest-side, #2a2040, #14101f)` |  |
-| `--delay-loading-attribution` | `2000ms` |  |

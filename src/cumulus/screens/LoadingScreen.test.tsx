@@ -112,7 +112,7 @@ describe("LoadingScreen", () => {
     expect(JSON.parse(quote?.dataset.motionTransition ?? "{}"))
       .toMatchObject({ delay: 0, duration: 1.4 });
     expect(JSON.parse(attribution?.dataset.motionTransition ?? "{}"))
-      .toMatchObject({ delay: 3.4, duration: 0.8 });
+      .toMatchObject({ delay: 0, duration: 1.4 });
     expect(indicator?.getAttribute("aria-label")).toBe("Loading...");
     expect(container.querySelectorAll("[data-loading-dot]")).toHaveLength(3);
   });
