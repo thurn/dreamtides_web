@@ -91,6 +91,9 @@ describe("LoadingScreen", () => {
 
     const screen = container.querySelector<HTMLElement>("[data-loading-screen]");
     const quote = container.querySelector<HTMLElement>("[data-loading-quote]");
+    const quoteText = container.querySelector<HTMLElement>(
+      "[data-loading-quote-text]",
+    );
     const attribution = container.querySelector<HTMLElement>(
       "[data-loading-attribution]",
     );
@@ -99,14 +102,17 @@ describe("LoadingScreen", () => {
     );
 
     expect(screen?.style.background).toBe("var(--bg-loading)");
+    expect(JSON.parse(screen?.dataset.motionTransition ?? "{}"))
+      .toMatchObject({ duration: 1.2 });
     expect(quote?.textContent).toBe(VIEW.quote);
     expect(quote?.style.textAlign).toBe("center");
+    expect(quoteText?.style.fontStyle).toBe("italic");
     expect(attribution?.textContent).toBe(VIEW.attribution);
     expect(attribution?.style.textAlign).toBe("right");
     expect(JSON.parse(quote?.dataset.motionTransition ?? "{}"))
-      .toMatchObject({ delay: 0.42, duration: 1.4 });
+      .toMatchObject({ delay: 1.2, duration: 1.4 });
     expect(JSON.parse(attribution?.dataset.motionTransition ?? "{}"))
-      .toMatchObject({ delay: 3.82, duration: 0.8 });
+      .toMatchObject({ delay: 4.6, duration: 0.8 });
     expect(indicator?.getAttribute("aria-label")).toBe("Loading...");
     expect(container.querySelectorAll("[data-loading-dot]")).toHaveLength(3);
   });

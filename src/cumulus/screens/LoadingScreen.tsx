@@ -15,7 +15,7 @@ export interface LoadingScreenProps {
   readonly view: LoadingView;
 }
 
-const SCREEN_FADE_SECONDS = motionTimeSeconds("--dur-slow");
+const SCREEN_FADE_SECONDS = motionTimeSeconds("--dur-loading-screen-fade");
 const QUOTE_FADE_SECONDS = motionTimeSeconds("--dur-loading-quote");
 const ATTRIBUTION_PAUSE_SECONDS = motionTimeSeconds(
   "--delay-loading-attribution",
@@ -81,7 +81,9 @@ export function LoadingScreen({ view }: LoadingScreenProps): ReactElement {
             textAlign: "center",
           }}
         >
-          {view.quote}
+          <span data-loading-quote-text style={{ fontStyle: "italic" }}>
+            {view.quote}
+          </span>
         </motion.blockquote>
 
         <motion.figcaption

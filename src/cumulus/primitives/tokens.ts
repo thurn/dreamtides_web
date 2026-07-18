@@ -266,6 +266,7 @@ export const TOKENS = {
   "--dur-fast": { var: "var(--dur-fast)", value: "140ms", kind: "other" },
   "--dur-base": { var: "var(--dur-base)", value: "240ms", kind: "other" },
   "--dur-slow": { var: "var(--dur-slow)", value: "420ms", kind: "other" },
+  "--dur-loading-screen-fade": { var: "var(--dur-loading-screen-fade)", value: "1200ms", kind: "other" },
   "--dur-loading-quote": { var: "var(--dur-loading-quote)", value: "1400ms", kind: "other" },
   "--dur-loading-attribution": { var: "var(--dur-loading-attribution)", value: "800ms", kind: "other" },
   "--dur-loading-dot-cycle": { var: "var(--dur-loading-dot-cycle)", value: "1200ms", kind: "other" },

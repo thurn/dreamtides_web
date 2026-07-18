@@ -199,6 +199,7 @@ Durations, easings, and the two material-continuity transitions (object-travel, 
 | `--dur-fast` | `140ms` |  |
 | `--dur-base` | `240ms` |  |
 | `--dur-slow` | `420ms` |  |
+| `--dur-loading-screen-fade` | `1200ms` |  |
 | `--dur-loading-quote` | `1400ms` |  |
 | `--dur-loading-attribution` | `800ms` |  |
 | `--dur-loading-dot-cycle` | `1200ms` |  |
