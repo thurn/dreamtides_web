@@ -55,11 +55,20 @@ export function parseTutorialActions(value: unknown): readonly TutorialAction[] 
   });
 }
 
-/** Load the generated tutorial action sequence used by the runtime. */
+export type TutorialActionLoadSource = "editor" | "runtime";
+
+function defaultTutorialActionLoadSource(): TutorialActionLoadSource {
+  return import.meta.env.DEV ? "editor" : "runtime";
+}
+
+/** Load the authored tutorial sequence from the live editor or built runtime data. */
 export async function loadTutorialActions(
   fetcher: typeof fetch = fetch,
+  source: TutorialActionLoadSource = defaultTutorialActionLoadSource(),
 ): Promise<readonly TutorialAction[]> {
-  const response = await fetcher("/tutorial-data.json");
+  const path =
+    source === "editor" ? "/api/editor/tutorial" : "/tutorial-data.json";
+  const response = await fetcher(path);
   if (!response.ok) {
     throw new Error(`Failed to load tutorial actions (${String(response.status)}).`);
   }

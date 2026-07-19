@@ -51,7 +51,7 @@ export function useTutorialEditor(): TutorialEditorState {
       (error: unknown) => {
         if (cancelled) return;
         const message = error instanceof Error ? error.message : String(error);
-        setLoaded(true);
+        setLoaded(false);
         setSaveStatus("error");
         setSaveError(message);
         logEvent("tutorial_actions_load_failed", { message });
