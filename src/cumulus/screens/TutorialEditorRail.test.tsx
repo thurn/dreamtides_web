@@ -130,6 +130,8 @@ describe("TutorialEditorRail", () => {
         {
           id: "animate-dreamcaller-portrait",
           action: "animate-dreamcaller-portrait",
+          owner: "player",
+          pause: 1,
           wait: 0,
         },
       ],
@@ -138,6 +140,47 @@ describe("TutorialEditorRail", () => {
     expect(
       container.querySelectorAll('[data-testid^="tutorial-action-text-"]'),
     ).toHaveLength(1);
+
+    const ownerTrigger = container.querySelector<HTMLButtonElement>(
+      'button[aria-label="Dreamcaller owner for action 2"]',
+    );
+    expect(ownerTrigger?.textContent).toContain("Player");
+    act(() => ownerTrigger?.click());
+    const opponentOption = [
+      ...document.body.querySelectorAll<HTMLButtonElement>('button[role="option"]'),
+    ].find((option) => option.textContent?.includes("Opponent"));
+    act(() => opponentOption?.click());
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        INITIAL_ACTIONS[0],
+        {
+          id: "animate-dreamcaller-portrait",
+          action: "animate-dreamcaller-portrait",
+          owner: "enemy",
+          pause: 1,
+          wait: 0,
+        },
+      ],
+      true,
+    );
+
+    const increasePause = container.querySelector<HTMLButtonElement>(
+      'button[aria-label="Increase large portrait pause for action 2"]',
+    );
+    act(() => increasePause?.click());
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        INITIAL_ACTIONS[0],
+        {
+          id: "animate-dreamcaller-portrait",
+          action: "animate-dreamcaller-portrait",
+          owner: "enemy",
+          pause: 1.5,
+          wait: 0,
+        },
+      ],
+      true,
+    );
 
     act(() => root.unmount());
     container.remove();

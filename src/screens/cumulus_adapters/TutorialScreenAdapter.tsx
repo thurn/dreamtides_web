@@ -4,7 +4,10 @@ import { parseTutorialActions } from "../../data/tutorial-actions";
 import { logEvent } from "../../logging";
 import { useFrontDoor } from "../../state/front-door-context";
 import { useTutorialEditor } from "../../state/use-tutorial-editor";
-import type { TutorialAction } from "../../types/tutorial";
+import type {
+  TutorialAction,
+  TutorialDreamcallerOwner,
+} from "../../types/tutorial";
 import { buildTutorialView } from "./tutorial-view-model";
 
 /** Standalone `/tutorial` wiring, shared playback, and local authoring saves. */
@@ -48,6 +51,9 @@ export function TutorialScreenAdapter() {
       actionId: current.id,
       action: current.action,
       waitSeconds: current.wait,
+      ...(current.action === "animate-dreamcaller-portrait"
+        ? { owner: current.owner, portraitPauseSeconds: current.pause }
+        : {}),
       actionIndex: state.tutorial?.currentActionIndex ?? null,
       actionCount: state.tutorial?.actions.length ?? 0,
     });
@@ -68,10 +74,11 @@ export function TutorialScreenAdapter() {
   );
 
   const handleDreamcallerArrivalComplete = useCallback(
-    (dreamcallerId: string): void => {
+    (dreamcallerId: string, owner: TutorialDreamcallerOwner): void => {
       logEvent("tutorial_dreamcaller_arrived", {
         battleId: view.battle.battleId,
         dreamcallerId,
+        owner,
         actionId: view.currentAction?.id ?? null,
         abilityActive: false,
       });

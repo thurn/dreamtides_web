@@ -42,9 +42,23 @@ export function parseTutorialActions(value: unknown): readonly TutorialAction[] 
       } satisfies TutorialAction;
     }
     if (record.action === "animate-dreamcaller-portrait") {
+      const owner = record.owner ?? "player";
+      const pause = record.pause ?? 0;
+      if (owner !== "player" && owner !== "enemy") {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must target the player or enemy.`,
+        );
+      }
+      if (typeof pause !== "number" || !Number.isFinite(pause) || pause < 0) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must have a non-negative portrait pause.`,
+        );
+      }
       return {
         id,
         action: "animate-dreamcaller-portrait",
+        owner,
+        pause,
         wait,
       } satisfies TutorialAction;
     }

@@ -17,6 +17,7 @@ import { token } from "../primitives/tokens";
 import type {
   TutorialAction,
   TutorialActionName,
+  TutorialDreamcallerOwner,
   TutorialEditorSaveStatus,
 } from "../../types/tutorial";
 
@@ -39,6 +40,11 @@ const ACTION_OPTIONS = [
     label: "Animate Dreamcaller Portrait",
   },
 ] satisfies readonly { value: TutorialActionName; label: string }[];
+
+const DREAMCALLER_OWNER_OPTIONS = [
+  { value: "player", label: "Player" },
+  { value: "enemy", label: "Opponent" },
+] satisfies readonly { value: TutorialDreamcallerOwner; label: string }[];
 
 function nextActionId(
   actionName: TutorialActionName,
@@ -63,7 +69,13 @@ function defaultAction(
         text: "New tutorial message.",
         wait: 3,
       }
-    : { id, action: "animate-dreamcaller-portrait", wait: 0 };
+    : {
+        id,
+        action: "animate-dreamcaller-portrait",
+        owner: "player",
+        pause: 1,
+        wait: 0,
+      };
 }
 
 function changedActionType(
@@ -84,6 +96,14 @@ function changedActionType(
   return {
     id: action.id,
     action: actionName,
+    owner:
+      action.action === "animate-dreamcaller-portrait"
+        ? action.owner
+        : "player",
+    pause:
+      action.action === "animate-dreamcaller-portrait"
+        ? action.pause
+        : 1,
     wait: action.wait,
   };
 }
@@ -234,6 +254,52 @@ function TutorialActionRow({
             onChange={(text) => update({ ...action, text }, false)}
             onCommit={(text) => update({ ...action, text }, true)}
           />
+        ) : null}
+
+        {action.action === "animate-dreamcaller-portrait" ? (
+          <>
+            <Select
+              full
+              size="sm"
+              ariaLabel={`Dreamcaller owner for action ${String(index + 1)}`}
+              options={[...DREAMCALLER_OWNER_OPTIONS]}
+              value={action.owner}
+              onChange={(owner) => {
+                if (owner !== "player" && owner !== "enemy") return;
+                update({ ...action, owner }, true);
+              }}
+            />
+            <NumberStepper
+              label="Large Portrait Pause"
+              value={action.pause}
+              displayValue={`${waitLabel(action.pause)}s`}
+              size="sm"
+              decrementLabel={`Decrease large portrait pause for action ${String(index + 1)}`}
+              incrementLabel={`Increase large portrait pause for action ${String(index + 1)}`}
+              decrementDisabled={action.pause <= 0}
+              onDecrement={() =>
+                update(
+                  {
+                    ...action,
+                    pause: Math.max(
+                      0,
+                      Math.round((action.pause - 0.5) * 10) / 10,
+                    ),
+                  },
+                  true,
+                )
+              }
+              onIncrement={() =>
+                update(
+                  {
+                    ...action,
+                    pause: Math.round((action.pause + 0.5) * 10) / 10,
+                  },
+                  true,
+                )
+              }
+            />
+          </>
         ) : null}
 
         <NumberStepper

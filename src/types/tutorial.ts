@@ -3,6 +3,9 @@ export type TutorialActionName =
   | "display-speech-bubble"
   | "animate-dreamcaller-portrait";
 
+/** Battle-status destination for an arriving tutorial Dreamcaller. */
+export type TutorialDreamcallerOwner = "player" | "enemy";
+
 /** Fields shared by every authored tutorial action. */
 export interface TutorialActionBase {
   readonly id: string;
@@ -18,10 +21,13 @@ export interface DisplaySpeechBubbleTutorialAction
   readonly text: string;
 }
 
-/** Moves Tensho's portrait into the player's battle-status position. */
+/** Presents a Dreamcaller at large scale, then moves it into battle status. */
 export interface AnimateDreamcallerPortraitTutorialAction
   extends TutorialActionBase {
   readonly action: "animate-dreamcaller-portrait";
+  readonly owner: TutorialDreamcallerOwner;
+  /** Seconds the fully revealed portrait remains large before it travels. */
+  readonly pause: number;
 }
 
 /** Exhaustive authored tutorial action model. */

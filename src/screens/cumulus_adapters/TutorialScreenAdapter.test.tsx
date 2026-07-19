@@ -31,6 +31,8 @@ const mocks = vi.hoisted(() => ({
         {
           id: "dreamcaller-arrival",
           action: "animate-dreamcaller-portrait" as const,
+          owner: "player" as const,
+          pause: 1,
           wait: 0,
         },
         {
@@ -112,6 +114,8 @@ describe("TutorialScreenAdapter", () => {
           runId: "event:1",
           actionId: "dreamcaller-arrival",
           action: "animate-dreamcaller-portrait",
+          owner: "player",
+          portraitPauseSeconds: 1,
           waitSeconds: 0,
         }),
       ]),
@@ -120,6 +124,7 @@ describe("TutorialScreenAdapter", () => {
     act(() => {
       adapterMocks.props?.onDreamcallerArrivalComplete?.(
         "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+        "player",
       );
     });
     expect(getLogEntries()).toEqual(
@@ -128,6 +133,7 @@ describe("TutorialScreenAdapter", () => {
           event: "tutorial_dreamcaller_arrived",
           battleId: "tutorial-battle",
           dreamcallerId: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+          owner: "player",
           actionId: "dreamcaller-arrival",
           abilityActive: false,
         }),

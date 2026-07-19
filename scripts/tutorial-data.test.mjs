@@ -20,6 +20,8 @@ const FIXTURE_ACTIONS = [
   {
     id: "dreamcaller-arrival",
     action: "animate-dreamcaller-portrait",
+    owner: "player",
+    pause: 1,
     wait: 0,
   },
 ];
@@ -44,7 +46,7 @@ describe("tutorial data", () => {
     );
   });
 
-  it("rejects duplicate ids, blank speech, and negative waits", () => {
+  it("rejects duplicate ids, blank speech, and negative timings", () => {
     expect(() => validateTutorialActions([...FIXTURE_ACTIONS, ...FIXTURE_ACTIONS])).toThrow(
       /duplicated/u,
     );
@@ -54,5 +56,28 @@ describe("tutorial data", () => {
     expect(() =>
       validateTutorialActions([{ ...FIXTURE_ACTIONS[0], wait: -1 }]),
     ).toThrow(/non-negative wait/u);
+    expect(() =>
+      validateTutorialActions([{ ...FIXTURE_ACTIONS[1], pause: -1 }]),
+    ).toThrow(/non-negative portrait pause/u);
+  });
+
+  it("normalizes legacy portrait actions to the player with no pause", () => {
+    expect(
+      validateTutorialActions([
+        {
+          id: "legacy-arrival",
+          action: "animate-dreamcaller-portrait",
+          wait: 0,
+        },
+      ]),
+    ).toEqual([
+      {
+        id: "legacy-arrival",
+        action: "animate-dreamcaller-portrait",
+        owner: "player",
+        pause: 0,
+        wait: 0,
+      },
+    ]);
   });
 });

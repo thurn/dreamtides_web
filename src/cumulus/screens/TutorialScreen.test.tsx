@@ -108,6 +108,9 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
       screenMocks.props = props;
       return (
         <div data-battle-mobile={props.view.battleId}>
+          <div data-testid="enemy-battle-status">
+            <div data-battle-status-dreamcaller-placeholder="" />
+          </div>
           <div data-testid="player-battle-status">
             <div data-battle-status-dreamcaller-placeholder="" />
           </div>
@@ -117,19 +120,35 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
   };
 });
 
-const TUTORIAL_DREAMCALLER: TutorialView["dreamcaller"] = {
-  visual: {
-    imageNumber: "0029",
-    name: "Tensho",
-    title: "Daimyo of Lacquered Fury",
-    portraitFocus: { x: 0.5, y: 0.22 },
+const TUTORIAL_DREAMCALLERS: TutorialView["dreamcallers"] = {
+  player: {
+    visual: {
+      imageNumber: "0029",
+      name: "Tensho",
+      title: "Daimyo of Lacquered Fury",
+      portraitFocus: { x: 0.5, y: 0.22 },
+    },
+    profile: {
+      id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+      ability: "Dreamcaller ability is not active",
+      unavailable: true,
+    },
+    settled: false,
   },
-  profile: {
-    id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
-    ability: "Dreamcaller ability is not active",
-    unavailable: true,
+  enemy: {
+    visual: {
+      imageNumber: "0087",
+      name: "Vrakmoth",
+      title: "Ashbroker",
+      portraitFocus: { x: 0.49, y: 0.18 },
+    },
+    profile: {
+      id: "86026206-1B11-4F38-A24E-FD3C697F5353",
+      ability: "Dreamcaller ability is not active",
+      unavailable: true,
+    },
+    settled: false,
   },
-  settled: false,
 };
 
 class ResizeObserverStub {
@@ -185,7 +204,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamcaller: TUTORIAL_DREAMCALLER,
+              dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: {
                 portrait: { kind: "character-portrait", characterId: "mira" },
                 portraitAlt: "Mira",
@@ -233,7 +252,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamcaller: TUTORIAL_DREAMCALLER,
+              dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: {
                 portrait: {
                   kind: "character-portrait",
@@ -311,12 +330,14 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamcaller: TUTORIAL_DREAMCALLER,
+              dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: null,
               playbackRunId: "event:2",
               currentAction: {
                 id: "dreamcaller-arrival",
                 action: "animate-dreamcaller-portrait",
+                owner: "player",
+                pause: 1,
                 wait: 0.5,
               },
               battle: {
@@ -360,19 +381,29 @@ describe("TutorialScreen", () => {
       scale: 1,
     });
     expect(screenMocks.arrivalAnimate).toMatchObject({
-      y: [400, 700],
-      scale: [1, 1],
+      y: [400, 400, 700],
+      scale: [1, 1, 1],
     });
+    expect(screenMocks.arrivalTransition).toMatchObject({
+      duration: 2.34,
+    });
+    const arrivalTransition = screenMocks.arrivalTransition as {
+      readonly times: readonly number[];
+    };
+    expect(arrivalTransition.times[0]).toBe(0);
+    expect(arrivalTransition.times[1]).toBeCloseTo(1.14 / 2.34);
+    expect(arrivalTransition.times[2]).toBe(1);
     expect(onActionComplete).not.toHaveBeenCalled();
 
     act(() => screenMocks.arrivalAnimationComplete?.());
 
     expect(onDreamcallerArrivalComplete).toHaveBeenCalledWith(
-      TUTORIAL_DREAMCALLER.profile.id,
+      TUTORIAL_DREAMCALLERS.player.profile.id,
+      "player",
     );
     expect(screenMocks.props?.view.player.status).toMatchObject({
-      dreamcaller: TUTORIAL_DREAMCALLER.visual,
-      dreamcallerProfile: TUTORIAL_DREAMCALLER.profile,
+      dreamcaller: TUTORIAL_DREAMCALLERS.player.visual,
+      dreamcallerProfile: TUTORIAL_DREAMCALLERS.player.profile,
     });
     act(() => {
       vi.advanceTimersByTime(499);
@@ -385,6 +416,85 @@ describe("TutorialScreen", () => {
       "event:2",
       "dreamcaller-arrival",
     );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("animates the opponent portrait into the enemy battle status", () => {
+    const onDreamcallerArrivalComplete = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamcallers: TUTORIAL_DREAMCALLERS,
+              dialogue: null,
+              playbackRunId: "event:3",
+              currentAction: {
+                id: "vrakmoth-arrival",
+                action: "animate-dreamcaller-portrait",
+                owner: "enemy",
+                pause: 1.5,
+                wait: 0,
+              },
+              battle: {
+                battleId: "tutorial-battle",
+                enemy: {
+                  status: {
+                    dreamcaller: null,
+                    currentEnergy: 0,
+                    maxEnergy: 0,
+                    points: 0,
+                  },
+                },
+                inspector: { opponentName: "Awaiting Dreamcaller" },
+              } as MobileBattleView,
+            }}
+            onDreamcallerArrivalComplete={onDreamcallerArrivalComplete}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const tutorialScreen = container.querySelector<HTMLElement>(
+      "[data-tutorial-screen]",
+    );
+    const enemyTarget = container.querySelector<HTMLElement>(
+      '[data-testid="enemy-battle-status"] [data-battle-status-dreamcaller-placeholder]',
+    );
+    tutorialScreen!.getBoundingClientRect = () =>
+      DOMRect.fromRect({ x: 0, y: 0, width: 390, height: 844 });
+    enemyTarget!.getBoundingClientRect = () =>
+      DOMRect.fromRect({ x: 173, y: 100, width: 44, height: 44 });
+
+    act(() => screenMocks.sceneAnimationComplete?.());
+
+    expect(
+      container.querySelector(
+        '[data-tutorial-dreamcaller-arrival][data-tutorial-dreamcaller-owner="enemy"]',
+      ),
+    ).not.toBeNull();
+    expect(screenMocks.arrivalAnimate).toMatchObject({
+      y: [400, 400, 100],
+      scale: [1, 1, 1],
+    });
+
+    act(() => screenMocks.arrivalAnimationComplete?.());
+
+    expect(onDreamcallerArrivalComplete).toHaveBeenCalledWith(
+      TUTORIAL_DREAMCALLERS.enemy.profile.id,
+      "enemy",
+    );
+    expect(screenMocks.props?.view.enemy.status).toMatchObject({
+      dreamcaller: TUTORIAL_DREAMCALLERS.enemy.visual,
+      dreamcallerProfile: TUTORIAL_DREAMCALLERS.enemy.profile,
+    });
+    expect(screenMocks.props?.view.inspector.opponentName).toBe("Vrakmoth");
 
     act(() => root.unmount());
     container.remove();
@@ -410,7 +520,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamcaller: TUTORIAL_DREAMCALLER,
+              dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: {
                 portrait: {
                   kind: "character-portrait",

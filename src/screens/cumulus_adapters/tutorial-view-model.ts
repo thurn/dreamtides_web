@@ -4,11 +4,15 @@ import type {
   MobileBattleSlotView,
 } from "../../cumulus/screens/MobileBattleScreen";
 import type { TutorialView } from "../../cumulus/screens/TutorialScreen";
-import type { TutorialPlaybackState } from "../../types/tutorial";
+import type {
+  TutorialDreamcallerOwner,
+  TutorialPlaybackState,
+} from "../../types/tutorial";
 
 const TUTORIAL_BATTLE_ID = "tutorial-battle";
 const TUTORIAL_DECK_SIZE = 30;
 const TUTORIAL_DREAMCALLER_ID = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
+const TUTORIAL_OPPONENT_DREAMCALLER_ID = "86026206-1B11-4F38-A24E-FD3C697F5353";
 
 function tutorialDeckIds(
   owner: "enemy" | "player",
@@ -77,29 +81,50 @@ export function buildTutorialView(
     playback?.currentActionIndex === undefined
       ? null
       : (playback.actions[playback.currentActionIndex] ?? null);
-  const dreamcallerActionIndex =
-    playback?.actions.findIndex(
-      (action) => action.action === "animate-dreamcaller-portrait",
-    ) ?? -1;
-  const dreamcallerSettled =
-    playback !== null &&
-    dreamcallerActionIndex >= 0 &&
-    (playback.currentActionIndex === null ||
-      playback.currentActionIndex > dreamcallerActionIndex);
+  const dreamcallerSettled = (owner: TutorialDreamcallerOwner): boolean => {
+    const actionIndex =
+      playback?.actions.findIndex(
+        (action) =>
+          action.action === "animate-dreamcaller-portrait" &&
+          action.owner === owner,
+      ) ?? -1;
+    return (
+      playback !== null &&
+      actionIndex >= 0 &&
+      (playback.currentActionIndex === null ||
+        playback.currentActionIndex > actionIndex)
+    );
+  };
   return {
-    dreamcaller: {
-      visual: {
-        imageNumber: "0029",
-        name: "Tensho",
-        title: "Daimyo of Lacquered Fury",
-        portraitFocus: { x: 0.5, y: 0.22 },
+    dreamcallers: {
+      player: {
+        visual: {
+          imageNumber: "0029",
+          name: "Tensho",
+          title: "Daimyo of Lacquered Fury",
+          portraitFocus: { x: 0.5, y: 0.22 },
+        },
+        profile: {
+          id: TUTORIAL_DREAMCALLER_ID,
+          ability: "Dreamcaller ability is not active",
+          unavailable: true,
+        },
+        settled: dreamcallerSettled("player"),
       },
-      profile: {
-        id: TUTORIAL_DREAMCALLER_ID,
-        ability: "Dreamcaller ability is not active",
-        unavailable: true,
+      enemy: {
+        visual: {
+          imageNumber: "0087",
+          name: "Vrakmoth",
+          title: "Ashbroker",
+          portraitFocus: { x: 0.49, y: 0.18 },
+        },
+        profile: {
+          id: TUTORIAL_OPPONENT_DREAMCALLER_ID,
+          ability: "Dreamcaller ability is not active",
+          unavailable: true,
+        },
+        settled: dreamcallerSettled("enemy"),
       },
-      settled: dreamcallerSettled,
     },
     dialogue:
       currentAction?.action === "display-speech-bubble"

@@ -34,17 +34,20 @@ import {
 import { MOBILE_BATTLE_INSPECTOR_RAIL_TRACK } from "./mobile-battle-layout";
 import type {
   TutorialAction,
+  TutorialDreamcallerOwner,
   TutorialEditorSaveStatus,
 } from "../../types/tutorial";
+
+export interface TutorialDreamcallerView {
+  readonly visual: DreamcallerVisual;
+  readonly profile: BattleStatusDreamcallerProfile;
+  readonly settled: boolean;
+}
 
 export interface TutorialView {
   readonly battle: MobileBattleView;
   readonly dialogue: CharacterDialogueModel | null;
-  readonly dreamcaller: {
-    readonly visual: DreamcallerVisual;
-    readonly profile: BattleStatusDreamcallerProfile;
-    readonly settled: boolean;
-  };
+  readonly dreamcallers: Record<TutorialDreamcallerOwner, TutorialDreamcallerView>;
   readonly playbackRunId: string | null;
   readonly currentAction: TutorialAction | null;
 }
@@ -59,7 +62,10 @@ export interface TutorialScreenProps {
   readonly view: TutorialView;
   readonly editor?: TutorialEditorView;
   readonly onActionComplete?: (runId: string, actionId: string) => void;
-  readonly onDreamcallerArrivalComplete?: (dreamcallerId: string) => void;
+  readonly onDreamcallerArrivalComplete?: (
+    dreamcallerId: string,
+    owner: TutorialDreamcallerOwner,
+  ) => void;
   readonly onEditorActionsChange?: (
     actions: readonly TutorialAction[],
     persist: boolean,
@@ -93,10 +99,14 @@ const TUTORIAL_EDITOR_DOCK_MIN_WIDTH = 1280;
 function TutorialDreamcallerArrival({
   screen,
   dreamcaller,
+  owner,
+  pause,
   onComplete,
 }: {
   readonly screen: HTMLElement;
   readonly dreamcaller: DreamcallerVisual;
+  readonly owner: TutorialDreamcallerOwner;
+  readonly pause: number;
   readonly onComplete: () => void;
 }): ReactElement | null {
   const [trajectory, setTrajectory] =
@@ -104,7 +114,7 @@ function TutorialDreamcallerArrival({
 
   useLayoutEffect(() => {
     const target = screen.querySelector<HTMLElement>(
-      '[data-testid="player-battle-status"] [data-battle-status-dreamcaller-placeholder]',
+      `[data-testid="${owner}-battle-status"] [data-battle-status-dreamcaller-placeholder]`,
     );
     const dialoguePortrait = screen.querySelector<HTMLElement>(
       "[data-character-dialogue-portrait-frame]",
@@ -138,13 +148,14 @@ function TutorialDreamcallerArrival({
       observer.disconnect();
       window.removeEventListener("resize", updateTrajectory);
     };
-  }, [screen]);
+  }, [owner, screen]);
 
   if (trajectory === null) return null;
 
   return (
     <motion.div
       data-tutorial-dreamcaller-arrival=""
+      data-tutorial-dreamcaller-owner={owner}
       initial={{
         x: trajectory.startX,
         y: trajectory.startY,
@@ -152,13 +163,23 @@ function TutorialDreamcallerArrival({
         opacity: 0,
       }}
       animate={{
-        y: [trajectory.startY, trajectory.targetY],
-        scale: [trajectory.startScale, 1],
+        y: [trajectory.startY, trajectory.startY, trajectory.targetY],
+        scale: [trajectory.startScale, trajectory.startScale, 1],
         opacity: 1,
       }}
       transition={{
-        duration: TUTORIAL_DREAMCALLER_ARRIVAL_SECONDS,
-        times: [0, 1],
+        duration:
+          TUTORIAL_DREAMCALLER_FADE_SECONDS +
+          pause +
+          TUTORIAL_DREAMCALLER_ARRIVAL_SECONDS,
+        times: [
+          0,
+          (TUTORIAL_DREAMCALLER_FADE_SECONDS + pause) /
+            (TUTORIAL_DREAMCALLER_FADE_SECONDS +
+              pause +
+              TUTORIAL_DREAMCALLER_ARRIVAL_SECONDS),
+          1,
+        ],
         ease: [0.22, 0.61, 0.36, 1],
         opacity: { duration: TUTORIAL_DREAMCALLER_FADE_SECONDS },
       }}
@@ -202,37 +223,74 @@ export function TutorialScreen({
   const lastDialogue = useRef<CharacterDialogueModel | null>(view.dialogue);
   if (view.dialogue !== null) lastDialogue.current = view.dialogue;
   const renderedDialogue = view.dialogue ?? lastDialogue.current;
-  const dreamcallerActionKey =
-    view.playbackRunId !== null &&
-    view.currentAction?.action === "animate-dreamcaller-portrait"
-      ? `${view.playbackRunId}:${view.currentAction.id}`
-      : null;
-  const dreamcallerSettled =
-    view.dreamcaller.settled ||
-    (dreamcallerActionKey !== null && arrivedActionKey === dreamcallerActionKey);
+  const dreamcallerArrival = useMemo(
+    () =>
+      view.playbackRunId !== null &&
+      view.currentAction?.action === "animate-dreamcaller-portrait"
+        ? {
+            key: `${view.playbackRunId}:${view.currentAction.id}`,
+            owner: view.currentAction.owner,
+            pause: view.currentAction.pause,
+            dreamcaller: view.dreamcallers[view.currentAction.owner],
+          }
+        : null,
+    [view.currentAction, view.dreamcallers, view.playbackRunId],
+  );
+  const dreamcallerSettled = useCallback(
+    (owner: TutorialDreamcallerOwner): boolean =>
+      view.dreamcallers[owner].settled ||
+      (dreamcallerArrival?.owner === owner &&
+        arrivedActionKey === dreamcallerArrival.key),
+    [arrivedActionKey, dreamcallerArrival, view.dreamcallers],
+  );
 
   const battleView = useMemo<MobileBattleView>(() => {
-    if (!dreamcallerSettled) return view.battle;
+    const playerSettled = dreamcallerSettled("player");
+    const enemySettled = dreamcallerSettled("enemy");
+    if (!playerSettled && !enemySettled) return view.battle;
     return {
       ...view.battle,
-      player: {
-        ...view.battle.player,
-        status: {
-          ...view.battle.player.status,
-          dreamcaller: view.dreamcaller.visual,
-          dreamcallerProfile: view.dreamcaller.profile,
-        },
-      },
+      ...(playerSettled
+        ? {
+            player: {
+              ...view.battle.player,
+              status: {
+                ...view.battle.player.status,
+                dreamcaller: view.dreamcallers.player.visual,
+                dreamcallerProfile: view.dreamcallers.player.profile,
+              },
+            },
+          }
+        : {}),
+      ...(enemySettled
+        ? {
+            enemy: {
+              ...view.battle.enemy,
+              status: {
+                ...view.battle.enemy.status,
+                dreamcaller: view.dreamcallers.enemy.visual,
+                dreamcallerProfile: view.dreamcallers.enemy.profile,
+              },
+            },
+            inspector: {
+              ...view.battle.inspector,
+              opponentName: view.dreamcallers.enemy.visual.name,
+            },
+          }
+        : {}),
     };
   }, [dreamcallerSettled, view]);
 
   const completeDreamcallerArrival = useCallback((): void => {
-    if (dreamcallerActionKey === null) return;
-    if (reportedArrivalKeys.current.has(dreamcallerActionKey)) return;
-    reportedArrivalKeys.current.add(dreamcallerActionKey);
-    setArrivedActionKey(dreamcallerActionKey);
-    onDreamcallerArrivalComplete?.(view.dreamcaller.profile.id);
-  }, [dreamcallerActionKey, onDreamcallerArrivalComplete, view.dreamcaller.profile.id]);
+    if (dreamcallerArrival === null) return;
+    if (reportedArrivalKeys.current.has(dreamcallerArrival.key)) return;
+    reportedArrivalKeys.current.add(dreamcallerArrival.key);
+    setArrivedActionKey(dreamcallerArrival.key);
+    onDreamcallerArrivalComplete?.(
+      dreamcallerArrival.dreamcaller.profile.id,
+      dreamcallerArrival.owner,
+    );
+  }, [dreamcallerArrival, onDreamcallerArrivalComplete]);
 
   useEffect(() => {
     if (
@@ -255,8 +313,8 @@ export function TutorialScreen({
     if (
       !sceneEntered ||
       !reduceMotion ||
-      dreamcallerActionKey === null ||
-      arrivedActionKey === dreamcallerActionKey
+      dreamcallerArrival === null ||
+      arrivedActionKey === dreamcallerArrival.key
     ) {
       return;
     }
@@ -264,15 +322,15 @@ export function TutorialScreen({
   }, [
     arrivedActionKey,
     completeDreamcallerArrival,
-    dreamcallerActionKey,
+    dreamcallerArrival,
     reduceMotion,
     sceneEntered,
   ]);
 
   useEffect(() => {
     if (
-      dreamcallerActionKey === null ||
-      arrivedActionKey !== dreamcallerActionKey ||
+      dreamcallerArrival === null ||
+      arrivedActionKey !== dreamcallerArrival.key ||
       view.currentAction?.action !== "animate-dreamcaller-portrait" ||
       view.playbackRunId === null
     ) {
@@ -287,7 +345,7 @@ export function TutorialScreen({
     return () => window.clearTimeout(timeout);
   }, [
     arrivedActionKey,
-    dreamcallerActionKey,
+    dreamcallerArrival,
     onActionComplete,
     view.currentAction,
     view.playbackRunId,
@@ -468,12 +526,14 @@ export function TutorialScreen({
       </div>
       {sceneEntered &&
       !reduceMotion &&
-      dreamcallerActionKey !== null &&
-      arrivedActionKey !== dreamcallerActionKey &&
+      dreamcallerArrival !== null &&
+      arrivedActionKey !== dreamcallerArrival.key &&
       screenRef.current !== null ? (
         <TutorialDreamcallerArrival
           screen={screenRef.current}
-          dreamcaller={view.dreamcaller.visual}
+          dreamcaller={dreamcallerArrival.dreamcaller.visual}
+          owner={dreamcallerArrival.owner}
+          pause={dreamcallerArrival.pause}
           onComplete={completeDreamcallerArrival}
         />
       ) : null}

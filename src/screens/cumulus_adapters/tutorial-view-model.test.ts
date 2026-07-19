@@ -16,6 +16,8 @@ describe("buildTutorialView", () => {
         {
           id: "dreamcaller-arrival",
           action: "animate-dreamcaller-portrait",
+          owner: "player",
+          pause: 1,
           wait: 0,
         },
         {
@@ -36,7 +38,7 @@ describe("buildTutorialView", () => {
     });
     expect(tutorial.playbackRunId).toBe("event:7");
     expect(tutorial.currentAction?.id).toBe("greeting");
-    expect(tutorial.dreamcaller).toMatchObject({
+    expect(tutorial.dreamcallers.player).toMatchObject({
       visual: { imageNumber: "0029", name: "Tensho" },
       profile: {
         id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
@@ -84,6 +86,8 @@ describe("buildTutorialView", () => {
         {
           id: "dreamcaller-arrival",
           action: "animate-dreamcaller-portrait",
+          owner: "player",
+          pause: 1,
           wait: 0,
         },
         {
@@ -97,6 +101,53 @@ describe("buildTutorialView", () => {
 
     expect(tutorial.currentAction?.id).toBe("nightmare-call");
     expect(tutorial.dialogue?.text).toContain("Nightmare");
-    expect(tutorial.dreamcaller.settled).toBe(true);
+    expect(tutorial.dreamcallers.player.settled).toBe(true);
+    expect(tutorial.dreamcallers.enemy).toMatchObject({
+      visual: { imageNumber: "0087", name: "Vrakmoth" },
+      profile: { id: "86026206-1B11-4F38-A24E-FD3C697F5353" },
+      settled: false,
+    });
+  });
+
+  it("settles Vrakmoth only after the opponent portrait action advances", () => {
+    const actions = [
+      {
+        id: "dreamcaller-arrival",
+        action: "animate-dreamcaller-portrait" as const,
+        owner: "player" as const,
+        pause: 1,
+        wait: 0,
+      },
+      {
+        id: "nightmare-call",
+        action: "display-speech-bubble" as const,
+        text: "You are called to stand against\nthe power of Nightmare.",
+        wait: 3,
+      },
+      {
+        id: "vrakmoth-arrival",
+        action: "animate-dreamcaller-portrait" as const,
+        owner: "enemy" as const,
+        pause: 1,
+        wait: 0,
+      },
+    ];
+
+    const arriving = buildTutorialView({
+      runId: "event:10",
+      currentActionIndex: 2,
+      actions,
+    });
+    expect(arriving.dreamcallers.player.settled).toBe(true);
+    expect(arriving.dreamcallers.enemy.settled).toBe(false);
+    expect(arriving.currentAction?.id).toBe("vrakmoth-arrival");
+
+    const complete = buildTutorialView({
+      runId: "event:10",
+      currentActionIndex: null,
+      actions,
+    });
+    expect(complete.dreamcallers.player.settled).toBe(true);
+    expect(complete.dreamcallers.enemy.settled).toBe(true);
   });
 });
