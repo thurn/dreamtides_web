@@ -1,11 +1,6 @@
 // @vitest-environment jsdom
 
-import {
-  act,
-  type ReactElement,
-  type ReactNode,
-  useState,
-} from "react";
+import { act, type ReactElement, type ReactNode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { TutorialAction } from "../../types/tutorial";
@@ -17,8 +12,12 @@ vi.mock("framer-motion", () => ({
     span: () => <span role="status" />,
   },
   Reorder: {
-    Group: ({ children }: { readonly children?: ReactNode }) => <ol>{children}</ol>,
-    Item: ({ children }: { readonly children?: ReactNode }) => <li>{children}</li>,
+    Group: ({ children }: { readonly children?: ReactNode }) => (
+      <ol>{children}</ol>
+    ),
+    Item: ({ children }: { readonly children?: ReactNode }) => (
+      <li>{children}</li>
+    ),
   },
   useDragControls: () => ({ start: vi.fn() }),
 }));
@@ -27,6 +26,7 @@ const INITIAL_ACTIONS: readonly TutorialAction[] = [
   {
     id: "welcome",
     action: "display-speech-bubble",
+    speaker: "mira",
     text: "Welcome, Dreamer.",
     wait: 3,
   },
@@ -46,7 +46,10 @@ afterEach(() => {
 function EditorHarness({
   onChange,
 }: {
-  readonly onChange: (actions: readonly TutorialAction[], persist: boolean) => void;
+  readonly onChange: (
+    actions: readonly TutorialAction[],
+    persist: boolean,
+  ) => void;
 }): ReactElement {
   const [actions, setActions] = useState(INITIAL_ACTIONS);
   return (
@@ -91,6 +94,7 @@ describe("TutorialEditorRail", () => {
         {
           id: "display-speech-bubble",
           action: "display-speech-bubble",
+          speaker: "mira",
           text: "New tutorial message.",
           wait: 3,
         },
@@ -100,6 +104,39 @@ describe("TutorialEditorRail", () => {
     expect(
       container.querySelectorAll('[data-testid^="tutorial-action-text-"]'),
     ).toHaveLength(2);
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("authors speech against the opposing Dreamcaller portrait", () => {
+    const onChange = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<EditorHarness onChange={onChange} />));
+
+    const speakerTrigger = container.querySelector<HTMLButtonElement>(
+      'button[aria-label="Speech bubble speaker for action 1"]',
+    );
+    expect(speakerTrigger?.textContent).toContain("Mira");
+    act(() => speakerTrigger?.click());
+    const opponentOption = [
+      ...document.body.querySelectorAll<HTMLButtonElement>(
+        'button[role="option"]',
+      ),
+    ].find((option) => option.textContent?.includes("Opposing Dreamcaller"));
+    act(() => opponentOption?.click());
+
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        {
+          ...INITIAL_ACTIONS[0],
+          speaker: "enemy",
+        },
+      ],
+      true,
+    );
 
     act(() => root.unmount());
     container.remove();
@@ -116,9 +153,11 @@ describe("TutorialEditorRail", () => {
       'button[aria-label="Add an action"]',
     );
     act(() => addTrigger?.click());
-    const animationOption = [...document.body.querySelectorAll<HTMLButtonElement>(
-      'button[role="option"]',
-    )].find((option) =>
+    const animationOption = [
+      ...document.body.querySelectorAll<HTMLButtonElement>(
+        'button[role="option"]',
+      ),
+    ].find((option) =>
       option.textContent?.includes("Animate Dreamcaller Portrait"),
     );
     expect(animationOption).toBeDefined();
@@ -148,7 +187,9 @@ describe("TutorialEditorRail", () => {
     expect(ownerTrigger?.textContent).toContain("Player");
     act(() => ownerTrigger?.click());
     const opponentOption = [
-      ...document.body.querySelectorAll<HTMLButtonElement>('button[role="option"]'),
+      ...document.body.querySelectorAll<HTMLButtonElement>(
+        'button[role="option"]',
+      ),
     ].find((option) => option.textContent?.includes("Opponent"));
     act(() => opponentOption?.click());
     expect(onChange).toHaveBeenLastCalledWith(

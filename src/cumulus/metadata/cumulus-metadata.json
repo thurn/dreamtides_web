@@ -4159,15 +4159,17 @@
       "description": "Authored display scale for compact or prominent character dialogue."
     },
     {
-      "name": "pointerAlignment",
-      "tsType": "SpeechBubblePointerAlignment",
+      "name": "pointerPlacement",
+      "tsType": "SpeechBubblePointerPlacement",
       "unionMembers": [
-        "center",
-        "lower"
+        "left-lower",
+        "left-center",
+        "top-left",
+        "bottom-left"
       ],
       "required": false,
-      "defaultValue": "lower",
-      "description": "Vertical pointer placement for the speaker art beside the bubble."
+      "defaultValue": "left-lower",
+      "description": "Edge and alignment of the pointer toward the speaking character."
     },
     {
       "name": "testId",

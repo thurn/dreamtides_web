@@ -1,11 +1,6 @@
 // @vitest-environment jsdom
 
-import {
-  act,
-  type CSSProperties,
-  type ReactNode,
-  type Ref,
-} from "react";
+import { act, type CSSProperties, type ReactNode, type Ref } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../CumulusRoot";
@@ -106,13 +101,29 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
     ...original,
     MobileBattleScreen: (props: MobileBattleScreenProps) => {
       screenMocks.props = props;
+      const enemyStatus = props.view.enemy?.status;
+      const playerStatus = props.view.player?.status;
       return (
         <div data-battle-mobile={props.view.battleId}>
           <div data-testid="enemy-battle-status">
-            <div data-battle-status-dreamcaller-placeholder="" />
+            {enemyStatus?.dreamcaller === undefined ||
+            enemyStatus.dreamcaller === null ? (
+              <div data-battle-status-dreamcaller-placeholder="" />
+            ) : (
+              <span
+                data-dreamcaller-source={enemyStatus.dreamcallerProfile?.id}
+              />
+            )}
           </div>
           <div data-testid="player-battle-status">
-            <div data-battle-status-dreamcaller-placeholder="" />
+            {playerStatus?.dreamcaller === undefined ||
+            playerStatus.dreamcaller === null ? (
+              <div data-battle-status-dreamcaller-placeholder="" />
+            ) : (
+              <span
+                data-dreamcaller-source={playerStatus.dreamcallerProfile?.id}
+              />
+            )}
           </div>
         </div>
       );
@@ -217,10 +228,13 @@ describe("TutorialScreen", () => {
             view={{
               dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: {
-                portrait: { kind: "character-portrait", characterId: "mira" },
-                portraitAlt: "Mira",
-                speakerName: "Mira",
-                text: "Welcome, Dreamer.",
+                kind: "guide",
+                model: {
+                  portrait: { kind: "character-portrait", characterId: "mira" },
+                  portraitAlt: "Mira",
+                  speakerName: "Mira",
+                  text: "Welcome, Dreamer.",
+                },
               },
               playbackRunId: "event:1",
               currentAction: {
@@ -265,13 +279,16 @@ describe("TutorialScreen", () => {
             view={{
               dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: {
-                portrait: {
-                  kind: "character-portrait",
-                  characterId: "mira",
+                kind: "guide",
+                model: {
+                  portrait: {
+                    kind: "character-portrait",
+                    characterId: "mira",
+                  },
+                  portraitAlt: "Mira",
+                  speakerName: "Mira",
+                  text: "Welcome, Dreamer.",
                 },
-                portraitAlt: "Mira",
-                speakerName: "Mira",
-                text: "Welcome, Dreamer.",
               },
               playbackRunId: "event:1",
               currentAction: {
@@ -355,10 +372,16 @@ describe("TutorialScreen", () => {
             view={{
               dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: {
-                portrait: { kind: "character-portrait", characterId: "mira" },
-                portraitAlt: "Mira",
-                speakerName: "Mira",
-                text: "Welcome, Dreamer.",
+                kind: "guide",
+                model: {
+                  portrait: {
+                    kind: "character-portrait",
+                    characterId: "mira",
+                  },
+                  portraitAlt: "Mira",
+                  speakerName: "Mira",
+                  text: "Welcome, Dreamer.",
+                },
               },
               playbackRunId: "event:2",
               currentAction: {
@@ -538,6 +561,99 @@ describe("TutorialScreen", () => {
     container.remove();
   });
 
+  it("places opposing speech above all UI with a top-left pointer on the portrait rim", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function rectForElement(this: HTMLElement) {
+        if (this.matches("[data-tutorial-screen]")) {
+          return DOMRect.fromRect({ x: 0, y: 0, width: 390, height: 844 });
+        }
+        if (this.matches("[data-dreamcaller-source]")) {
+          return DOMRect.fromRect({ x: 173, y: 100, width: 44, height: 44 });
+        }
+        if (this.matches("[data-tutorial-dreamcaller-dialogue] aside")) {
+          return DOMRect.fromRect({ x: 0, y: 0, width: 220, height: 90 });
+        }
+        return DOMRect.fromRect();
+      },
+    );
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamcallers: {
+                ...TUTORIAL_DREAMCALLERS,
+                enemy: { ...TUTORIAL_DREAMCALLERS.enemy, settled: true },
+              },
+              dialogue: {
+                kind: "dreamcaller",
+                owner: "enemy",
+                speakerName: "Vrakmoth",
+                text: "For the Abyss!",
+              },
+              playbackRunId: "event:4",
+              currentAction: {
+                id: "vrakmoth-taunt",
+                action: "display-speech-bubble",
+                speaker: "enemy",
+                text: "For the Abyss!",
+                wait: 3,
+              },
+              battle: {
+                battleId: "tutorial-battle",
+                enemy: {
+                  status: {
+                    dreamcaller: TUTORIAL_DREAMCALLERS.enemy.visual,
+                    dreamcallerProfile: TUTORIAL_DREAMCALLERS.enemy.profile,
+                    currentEnergy: 0,
+                    maxEnergy: 0,
+                    points: 0,
+                  },
+                },
+              } as MobileBattleView,
+            }}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    act(() => screenMocks.sceneAnimationComplete?.());
+
+    const overlay = container.querySelector<HTMLElement>(
+      '[data-tutorial-dreamcaller-dialogue-owner="enemy"]',
+    );
+    const bubble = container.querySelector<HTMLElement>(
+      '[data-testid="tutorial-enemy-dreamcaller-speech-bubble"]',
+    );
+    const source = container.querySelector<HTMLElement>(
+      "[data-dreamcaller-source]",
+    );
+    expect(source).not.toBeNull();
+    expect(source?.getBoundingClientRect()).toMatchObject({
+      x: 173,
+      y: 100,
+      width: 44,
+      height: 44,
+    });
+    expect(bubble?.getBoundingClientRect()).toMatchObject({
+      width: 220,
+      height: 90,
+    });
+    expect(overlay?.style.left).toBe("146.6px");
+    expect(overlay?.style.top).toBe("142px");
+    expect(overlay?.style.zIndex).toBe("var(--layer-reveal)");
+    expect(overlay?.style.visibility).toBe("visible");
+    expect(bubble?.dataset.speechBubblePointerPlacement).toBe("top-left");
+    expect(bubble?.textContent).toContain("For the Abyss!");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("uses the prominent dialogue scale on desktop", () => {
     window.matchMedia = vi.fn().mockImplementation((query: string) => ({
       matches: query.includes("min-width"),
@@ -560,13 +676,16 @@ describe("TutorialScreen", () => {
             view={{
               dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: {
-                portrait: {
-                  kind: "character-portrait",
-                  characterId: "mira",
+                kind: "guide",
+                model: {
+                  portrait: {
+                    kind: "character-portrait",
+                    characterId: "mira",
+                  },
+                  portraitAlt: "Mira",
+                  speakerName: "Mira",
+                  text: "Welcome, Dreamer.",
                 },
-                portraitAlt: "Mira",
-                speakerName: "Mira",
-                text: "Welcome, Dreamer.",
               },
               playbackRunId: "event:1",
               currentAction: {

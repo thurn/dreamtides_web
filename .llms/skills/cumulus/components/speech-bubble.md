@@ -6,11 +6,11 @@
 
 Components · Live demo & interactive props: `/cumulus#/speech-bubble`
 
-Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
 
-A guide-dialog bubble for character-led site screens: the same frosted information material as an InfoCard, with a left arrow that points back to the speaker.
+A guide-dialog bubble for character-led screens: the same frosted information material as an InfoCard, with a strict left, top-left, or bottom-left pointer toward the speaker.
 
-> **Guidance:** Use it to the right of character art, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, named display scales, and pointer geometry; use centered pointer alignment beside circular portraits.
+> **Guidance:** Use it beside character art or attached above/below a battle portrait, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, named display scales, and pointer geometry. Top-left and bottom-left pointer bases stay clear of the rounded corners.
 
 ## Props
 
@@ -19,12 +19,12 @@ A guide-dialog bubble for character-led site screens: the same frosted informati
 | `speakerName` | `string` | yes | — | The speaking character's display name. |
 | `text` | `string` | yes | — | The spoken line. Plain text; the component supplies the bubble voice. |
 | `size` | `SpeechBubbleSize` = `"standard" \| "prominent"` | no | `standard` | Authored display scale for compact or prominent character dialogue. |
-| `pointerAlignment` | `SpeechBubblePointerAlignment` = `"center" \| "lower"` | no | `lower` | Vertical pointer placement for the speaker art beside the bubble. |
+| `pointerPlacement` | `SpeechBubblePointerPlacement` = `"left-lower" \| "left-center" \| "top-left" \| "bottom-left"` | no | `left-lower` | Edge and alignment of the pointer toward the speaking character. |
 | `testId` | `string` | no | — | Optional stable test id for product-screen QA. |
 
 ## Usage
 
-The bubble sits to the right of the character, so the arrow points left.
+The default bubble sits to the right of the character, so the arrow points left.
 
 ```tsx
 import { SpeechBubble } from "src/cumulus/components/overlay/SpeechBubble";

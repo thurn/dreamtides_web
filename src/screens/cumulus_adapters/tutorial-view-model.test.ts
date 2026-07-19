@@ -1,7 +1,27 @@
 import { describe, expect, it } from "vitest";
-import { buildTutorialView } from "./tutorial-view-model";
+import {
+  buildTutorialView,
+  tutorialActionLogDetails,
+} from "./tutorial-view-model";
 
 describe("buildTutorialView", () => {
+  it("logs the selected speech portrait for sequence reconstruction", () => {
+    expect(
+      tutorialActionLogDetails({
+        id: "enemy-taunt",
+        action: "display-speech-bubble",
+        speaker: "enemy",
+        text: "For the Abyss!",
+        wait: 3,
+      }),
+    ).toEqual({
+      actionId: "enemy-taunt",
+      action: "display-speech-bubble",
+      speaker: "enemy",
+      waitSeconds: 3,
+    });
+  });
+
   it("builds a quest-independent opposing Day phase with full decks and empty hands", () => {
     const tutorial = buildTutorialView({
       runId: "event:7",
@@ -32,10 +52,13 @@ describe("buildTutorialView", () => {
     const view = tutorial.battle;
 
     expect(tutorial.dialogue).toEqual({
-      portrait: { kind: "character-portrait", characterId: "mira" },
-      portraitAlt: "Mira",
-      speakerName: "Mira",
-      text: "A custom greeting.",
+      kind: "guide",
+      model: {
+        portrait: { kind: "character-portrait", characterId: "mira" },
+        portraitAlt: "Mira",
+        speakerName: "Mira",
+        text: "A custom greeting.",
+      },
     });
     expect(tutorial.playbackRunId).toBe("event:7");
     expect(tutorial.currentAction?.id).toBe("greeting");
@@ -102,7 +125,9 @@ describe("buildTutorialView", () => {
     });
 
     expect(tutorial.currentAction?.id).toBe("nightmare-call");
-    expect(tutorial.dialogue?.text).toContain("Nightmare");
+    expect(
+      tutorial.dialogue?.kind === "guide" ? tutorial.dialogue.model.text : null,
+    ).toContain("Nightmare");
     expect(tutorial.dreamcallers.player.settled).toBe(true);
     expect(tutorial.dreamcallers.enemy).toMatchObject({
       visual: { imageNumber: "0087", name: "Vrakmoth" },
@@ -135,20 +160,55 @@ describe("buildTutorialView", () => {
       },
     ];
 
-    expect(
-      buildTutorialView({
-        runId: "event:overlap",
-        currentActionIndex: 1,
-        actions,
-      }).dialogue?.text,
-    ).toBe("Welcome, Dreamer.");
-    expect(
-      buildTutorialView({
-        runId: "event:overlap",
-        currentActionIndex: 2,
-        actions,
-      }).dialogue?.text,
-    ).toBe("The next line.");
+    const overlapping = buildTutorialView({
+      runId: "event:overlap",
+      currentActionIndex: 1,
+      actions,
+    }).dialogue;
+    const next = buildTutorialView({
+      runId: "event:overlap",
+      currentActionIndex: 2,
+      actions,
+    }).dialogue;
+
+    expect(overlapping?.kind === "guide" ? overlapping.model.text : null).toBe(
+      "Welcome, Dreamer.",
+    );
+    expect(next?.kind === "guide" ? next.model.text : null).toBe(
+      "The next line.",
+    );
+  });
+
+  it("attaches authored Dreamcaller speech to that side's battle portrait", () => {
+    const tutorial = buildTutorialView({
+      runId: "event:11",
+      currentActionIndex: 1,
+      actions: [
+        {
+          id: "vrakmoth-arrival",
+          action: "animate-dreamcaller-portrait",
+          owner: "enemy",
+          pause: 1,
+          duration: 0.6,
+          wait: 0,
+        },
+        {
+          id: "vrakmoth-taunt",
+          action: "display-speech-bubble",
+          speaker: "enemy",
+          text: "For the Abyss!",
+          wait: 3,
+        },
+      ],
+    });
+
+    expect(tutorial.dreamcallers.enemy.settled).toBe(true);
+    expect(tutorial.dialogue).toEqual({
+      kind: "dreamcaller",
+      owner: "enemy",
+      speakerName: "Vrakmoth",
+      text: "For the Abyss!",
+    });
   });
 
   it("settles Vrakmoth only after the opponent portrait action advances", () => {
@@ -185,7 +245,11 @@ describe("buildTutorialView", () => {
     expect(arriving.dreamcallers.player.settled).toBe(true);
     expect(arriving.dreamcallers.enemy.settled).toBe(false);
     expect(arriving.currentAction?.id).toBe("vrakmoth-arrival");
-    expect(arriving.dialogue?.text).toContain("power of Nightmare");
+    expect(
+      arriving.dialogue?.kind === "guide"
+        ? arriving.dialogue.model.text
+        : null,
+    ).toContain("power of Nightmare");
 
     const complete = buildTutorialView({
       runId: "event:10",

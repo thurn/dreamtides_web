@@ -22,6 +22,11 @@ import {
   CharacterDialogue,
   type CharacterDialogueModel,
 } from "../components/overlay/CharacterDialogue";
+import { SpeechBubble } from "../components/overlay/SpeechBubble";
+import {
+  speechBubblePointerTip,
+  type SpeechBubblePointerPlacement,
+} from "../components/overlay/speech-bubble-geometry";
 import {
   MobileBattleScreen,
   type MobileBattleView,
@@ -44,10 +49,25 @@ export interface TutorialDreamcallerView {
   readonly settled: boolean;
 }
 
+export type TutorialDialogueView =
+  | {
+      readonly kind: "guide";
+      readonly model: CharacterDialogueModel;
+    }
+  | {
+      readonly kind: "dreamcaller";
+      readonly owner: TutorialDreamcallerOwner;
+      readonly speakerName: string;
+      readonly text: string;
+    };
+
 export interface TutorialView {
   readonly battle: MobileBattleView;
-  readonly dialogue: CharacterDialogueModel | null;
-  readonly dreamcallers: Record<TutorialDreamcallerOwner, TutorialDreamcallerView>;
+  readonly dialogue: TutorialDialogueView | null;
+  readonly dreamcallers: Record<
+    TutorialDreamcallerOwner,
+    TutorialDreamcallerView
+  >;
   readonly playbackRunId: string | null;
   readonly currentAction: TutorialAction | null;
 }
@@ -87,11 +107,137 @@ interface TutorialDreamcallerTrajectory {
   readonly height: number;
 }
 
-const TUTORIAL_FADE_SECONDS = motionTimeSeconds(
-  "--dur-loading-screen-fade",
-);
+const TUTORIAL_FADE_SECONDS = motionTimeSeconds("--dur-loading-screen-fade");
 const TUTORIAL_DREAMCALLER_FADE_SECONDS = motionTimeSeconds("--dur-fast");
 const TUTORIAL_EDITOR_DOCK_MIN_WIDTH = 1280;
+// The pointer overlaps the portrait rim so it visibly connects to the frame.
+const TUTORIAL_PORTRAIT_POINTER_OVERLAP = 2;
+
+interface TutorialDreamcallerDialogueAnchor {
+  readonly left: number;
+  readonly top: number;
+  readonly pointerPlacement: Extract<
+    SpeechBubblePointerPlacement,
+    "top-left" | "bottom-left"
+  >;
+}
+
+function TutorialDreamcallerDialogue({
+  dialogue,
+  visible,
+  layoutKey,
+  desktop,
+}: {
+  readonly dialogue: Extract<
+    TutorialDialogueView,
+    { readonly kind: "dreamcaller" }
+  >;
+  readonly visible: boolean;
+  readonly layoutKey: string;
+  readonly desktop: boolean;
+}): ReactElement {
+  const bubbleFrameRef = useRef<HTMLDivElement | null>(null);
+  const [anchor, setAnchor] =
+    useState<TutorialDreamcallerDialogueAnchor | null>(null);
+
+  useLayoutEffect(() => {
+    const screen = bubbleFrameRef.current?.closest<HTMLElement>(
+      "[data-tutorial-screen]",
+    );
+    if (screen === null || screen === undefined) return undefined;
+    const target = screen.querySelector<HTMLElement>(
+      `[data-testid="${dialogue.owner}-battle-status"] [data-dreamcaller-source]`,
+    );
+    const bubble = bubbleFrameRef.current?.querySelector<HTMLElement>("aside");
+    if (target === null || bubble === null || bubble === undefined) {
+      setAnchor(null);
+      return undefined;
+    }
+
+    const pointerPlacement: TutorialDreamcallerDialogueAnchor["pointerPlacement"] =
+      dialogue.owner === "enemy" ? "top-left" : "bottom-left";
+    const updateAnchor = (): void => {
+      const screenBox = screen.getBoundingClientRect();
+      const targetBox = target.getBoundingClientRect();
+      const bubbleBox = bubble.getBoundingClientRect();
+      if (bubbleBox.width <= 0 || bubbleBox.height <= 0) return;
+
+      const pointer = speechBubblePointerTip(
+        bubbleBox.width,
+        bubbleBox.height,
+        pointerPlacement,
+      );
+      const gutter = Number.parseFloat(
+        getComputedStyle(screen).getPropertyValue("--gutter"),
+      );
+      const horizontalGutter = Number.isFinite(gutter) ? gutter : 0;
+      const targetCenterX =
+        targetBox.left - screenBox.left + targetBox.width / 2;
+      const unclampedLeft = targetCenterX - pointer.x;
+      const left = Math.min(
+        Math.max(unclampedLeft, horizontalGutter),
+        screenBox.width - bubbleBox.width - horizontalGutter,
+      );
+      const targetEdgeY =
+        dialogue.owner === "enemy"
+          ? targetBox.bottom - screenBox.top - TUTORIAL_PORTRAIT_POINTER_OVERLAP
+          : targetBox.top - screenBox.top + TUTORIAL_PORTRAIT_POINTER_OVERLAP;
+      const top = targetEdgeY - pointer.y;
+      const next = {
+        left: Math.round(left * 10) / 10,
+        top: Math.round(top * 10) / 10,
+        pointerPlacement,
+      };
+      setAnchor((current) =>
+        current?.left === next.left &&
+        current.top === next.top &&
+        current.pointerPlacement === next.pointerPlacement
+          ? current
+          : next,
+      );
+    };
+
+    updateAnchor();
+    const observer = new ResizeObserver(updateAnchor);
+    observer.observe(screen);
+    observer.observe(target);
+    observer.observe(bubble);
+    window.addEventListener("resize", updateAnchor);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateAnchor);
+    };
+  }, [desktop, dialogue.owner, layoutKey]);
+
+  const pointerPlacement =
+    anchor?.pointerPlacement ??
+    (dialogue.owner === "enemy" ? "top-left" : "bottom-left");
+
+  return (
+    <div
+      ref={bubbleFrameRef}
+      aria-hidden={!visible}
+      data-tutorial-dreamcaller-dialogue=""
+      data-tutorial-dreamcaller-dialogue-owner={dialogue.owner}
+      style={{
+        position: "absolute",
+        zIndex: token("--layer-reveal"),
+        top: anchor?.top ?? 0,
+        left: anchor?.left ?? 0,
+        width: desktop ? 300 : 220,
+        visibility: visible && anchor !== null ? "visible" : "hidden",
+        pointerEvents: "none",
+      }}
+    >
+      <SpeechBubble
+        speakerName={dialogue.speakerName}
+        text={dialogue.text}
+        pointerPlacement={pointerPlacement}
+        testId={`tutorial-${dialogue.owner}-dreamcaller-speech-bubble`}
+      />
+    </div>
+  );
+}
 
 function TutorialDreamcallerArrival({
   screen,
@@ -167,16 +313,11 @@ function TutorialDreamcallerArrival({
         opacity: 1,
       }}
       transition={{
-        duration:
-          TUTORIAL_DREAMCALLER_FADE_SECONDS +
-          pause +
-          duration,
+        duration: TUTORIAL_DREAMCALLER_FADE_SECONDS + pause + duration,
         times: [
           0,
           (TUTORIAL_DREAMCALLER_FADE_SECONDS + pause) /
-            (TUTORIAL_DREAMCALLER_FADE_SECONDS +
-              pause +
-              duration),
+            (TUTORIAL_DREAMCALLER_FADE_SECONDS + pause + duration),
           1,
         ],
         ease: [0.22, 0.61, 0.36, 1],
@@ -219,7 +360,7 @@ export function TutorialScreen({
   const reportedArrivalKeys = useRef<Set<string>>(new Set());
   const [dialogueAnchor, setDialogueAnchor] =
     useState<TutorialDialogueAnchor | null>(null);
-  const lastDialogue = useRef<CharacterDialogueModel | null>(view.dialogue);
+  const lastDialogue = useRef<TutorialDialogueView | null>(view.dialogue);
   if (view.dialogue !== null) lastDialogue.current = view.dialogue;
   const renderedDialogue = view.dialogue ?? lastDialogue.current;
   const dreamcallerArrival = useMemo(
@@ -469,7 +610,9 @@ export function TutorialScreen({
   }, [desktop, renderedDialogue]);
 
   const editorSurface =
-    editor === undefined || onEditorActionsChange === undefined || onReplay === undefined
+    editor === undefined ||
+    onEditorActionsChange === undefined ||
+    onReplay === undefined
       ? null
       : {
           ...editor,
@@ -585,15 +728,23 @@ export function TutorialScreen({
           pointerEvents: "none",
         }}
       >
-        {renderedDialogue === null ? null : (
+        {renderedDialogue?.kind !== "guide" ? null : (
           <CharacterDialogue
-            dialogue={renderedDialogue}
+            dialogue={renderedDialogue.model}
             size={desktop ? "prominent" : "compact"}
-            visible={sceneEntered && view.dialogue !== null}
+            visible={sceneEntered && view.dialogue?.kind === "guide"}
             testId="tutorial-welcome-dialogue"
           />
         )}
       </div>
+      {renderedDialogue?.kind === "dreamcaller" ? (
+        <TutorialDreamcallerDialogue
+          dialogue={renderedDialogue}
+          visible={sceneEntered && view.dialogue?.kind === "dreamcaller"}
+          layoutKey={`${String(dockEditor)}:${String(editorOpen)}`}
+          desktop={desktop}
+        />
+      ) : null}
       {!dockEditor && editorOpen && editorSurface !== null ? (
         <TutorialEditorTakeover {...editorSurface} />
       ) : null}

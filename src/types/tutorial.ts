@@ -1,10 +1,12 @@
 /** Stable action names authored by the Tutorial Editor. */
 export type TutorialActionName =
-  | "display-speech-bubble"
-  | "animate-dreamcaller-portrait";
+  "display-speech-bubble" | "animate-dreamcaller-portrait";
 
 /** Battle-status destination for an arriving tutorial Dreamcaller. */
 export type TutorialDreamcallerOwner = "player" | "enemy";
+
+/** Character whose portrait anchors an authored tutorial speech bubble. */
+export type TutorialSpeechBubbleSpeaker = "mira" | TutorialDreamcallerOwner;
 
 /** Fields shared by every authored tutorial action. */
 export interface TutorialActionBase {
@@ -15,15 +17,15 @@ export interface TutorialActionBase {
 }
 
 /** Shows Mira's tutorial dialogue with authored plain text. */
-export interface DisplaySpeechBubbleTutorialAction
-  extends TutorialActionBase {
+export interface DisplaySpeechBubbleTutorialAction extends TutorialActionBase {
   readonly action: "display-speech-bubble";
+  /** Defaults to Mira for tutorial snapshots authored before speaker selection. */
+  readonly speaker?: TutorialSpeechBubbleSpeaker;
   readonly text: string;
 }
 
 /** Presents a Dreamcaller at large scale, then moves it into battle status. */
-export interface AnimateDreamcallerPortraitTutorialAction
-  extends TutorialActionBase {
+export interface AnimateDreamcallerPortraitTutorialAction extends TutorialActionBase {
   readonly action: "animate-dreamcaller-portrait";
   readonly owner: TutorialDreamcallerOwner;
   /** Seconds the fully revealed portrait remains large before it travels. */
@@ -34,15 +36,10 @@ export interface AnimateDreamcallerPortraitTutorialAction
 
 /** Exhaustive authored tutorial action model. */
 export type TutorialAction =
-  | DisplaySpeechBubbleTutorialAction
-  | AnimateDreamcallerPortraitTutorialAction;
+  DisplaySpeechBubbleTutorialAction | AnimateDreamcallerPortraitTutorialAction;
 
 /** Local filesystem persistence state shown by the Tutorial Editor. */
-export type TutorialEditorSaveStatus =
-  | "idle"
-  | "saving"
-  | "saved"
-  | "error";
+export type TutorialEditorSaveStatus = "idle" | "saving" | "saved" | "error";
 
 /** Event-log-owned progress for one shared tutorial playback. */
 export interface TutorialPlaybackState {

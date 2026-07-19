@@ -6,6 +6,7 @@ import type {
 import type { TutorialView } from "../../cumulus/screens/TutorialScreen";
 import type {
   DisplaySpeechBubbleTutorialAction,
+  TutorialAction,
   TutorialDreamcallerOwner,
   TutorialPlaybackState,
 } from "../../types/tutorial";
@@ -15,9 +16,26 @@ const TUTORIAL_DECK_SIZE = 30;
 const TUTORIAL_DREAMCALLER_ID = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
 const TUTORIAL_OPPONENT_DREAMCALLER_ID = "86026206-1B11-4F38-A24E-FD3C697F5353";
 
-function tutorialDeckIds(
-  owner: "enemy" | "player",
-): readonly string[] {
+/** Reconstruction fields logged whenever an authored tutorial action appears. */
+export function tutorialActionLogDetails(action: TutorialAction) {
+  return action.action === "animate-dreamcaller-portrait"
+    ? {
+        actionId: action.id,
+        action: action.action,
+        waitSeconds: action.wait,
+        owner: action.owner,
+        portraitPauseSeconds: action.pause,
+        portraitTravelSeconds: action.duration,
+      }
+    : {
+        actionId: action.id,
+        action: action.action,
+        waitSeconds: action.wait,
+        speaker: action.speaker ?? "mira",
+      };
+}
+
+function tutorialDeckIds(owner: "enemy" | "player"): readonly string[] {
   return Array.from(
     { length: TUTORIAL_DECK_SIZE },
     (_unused, index) => `tutorial-${owner}-deck-${String(index + 1)}`,
@@ -142,12 +160,24 @@ export function buildTutorialView(
     dialogue:
       dialogueAction === null
         ? null
-        : {
-            portrait: { kind: "character-portrait", characterId: "mira" },
-            portraitAlt: "Mira",
-            speakerName: "Mira",
-            text: dialogueAction.text,
-          },
+        : dialogueAction.speaker === "player" ||
+            dialogueAction.speaker === "enemy"
+          ? {
+              kind: "dreamcaller",
+              owner: dialogueAction.speaker,
+              speakerName:
+                dialogueAction.speaker === "player" ? "Tensho" : "Vrakmoth",
+              text: dialogueAction.text,
+            }
+          : {
+              kind: "guide",
+              model: {
+                portrait: { kind: "character-portrait", characterId: "mira" },
+                portraitAlt: "Mira",
+                speakerName: "Mira",
+                text: dialogueAction.text,
+              },
+            },
     playbackRunId: playback?.runId ?? null,
     currentAction,
     battle: {

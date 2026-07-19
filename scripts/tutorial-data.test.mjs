@@ -14,6 +14,7 @@ const FIXTURE_ACTIONS = [
   {
     id: "opening-line",
     action: "display-speech-bubble",
+    speaker: "mira",
     text: "First line.\nSecond line.",
     wait: 1.5,
   },
@@ -40,7 +41,9 @@ describe("tutorial data", () => {
     const result = refreshTutorialDataJson({ rootDir });
     expect(result.actions).toEqual(FIXTURE_ACTIONS);
     expect(
-      JSON.parse(readFileSync(join(rootDir, "public", "tutorial-data.json"), "utf8")),
+      JSON.parse(
+        readFileSync(join(rootDir, "public", "tutorial-data.json"), "utf8"),
+      ),
     ).toEqual({ actions: FIXTURE_ACTIONS });
     expect(parse(serializeTutorialToml(FIXTURE_ACTIONS)).actions).toEqual(
       FIXTURE_ACTIONS,
@@ -48,15 +51,20 @@ describe("tutorial data", () => {
   });
 
   it("rejects duplicate ids, blank speech, and negative timings", () => {
-    expect(() => validateTutorialActions([...FIXTURE_ACTIONS, ...FIXTURE_ACTIONS])).toThrow(
-      /duplicated/u,
-    );
+    expect(() =>
+      validateTutorialActions([...FIXTURE_ACTIONS, ...FIXTURE_ACTIONS]),
+    ).toThrow(/duplicated/u);
     expect(() =>
       validateTutorialActions([{ ...FIXTURE_ACTIONS[0], text: "  " }]),
     ).toThrow(/speech text/u);
     expect(() =>
       validateTutorialActions([{ ...FIXTURE_ACTIONS[0], wait: -1 }]),
     ).toThrow(/non-negative wait/u);
+    expect(() =>
+      validateTutorialActions([
+        { ...FIXTURE_ACTIONS[0], speaker: "spectator" },
+      ]),
+    ).toThrow(/Mira, the player, or the enemy/u);
     expect(() =>
       validateTutorialActions([{ ...FIXTURE_ACTIONS[1], pause: -1 }]),
     ).toThrow(/non-negative portrait pause/u);

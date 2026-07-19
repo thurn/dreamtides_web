@@ -82,7 +82,7 @@ describe("CharacterDialogue", () => {
     expect(bubble?.style.padding).toBe(
       "var(--space-5) var(--space-5) var(--space-5) calc(14px + var(--space-5))",
     );
-    expect(bubble?.dataset.speechBubblePointerAlignment).toBe("center");
+    expect(bubble?.dataset.speechBubblePointerPlacement).toBe("left-center");
     expect(bubble?.dataset.speechBubbleSize).toBe("standard");
     expect(portraitImage?.getAttribute("src")).toBe(resolveArtRef(portrait));
     expect(frameImage?.getAttribute("src")).toBe("/atlas/Round_frame.png");

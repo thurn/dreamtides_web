@@ -19,6 +19,7 @@ import type {
   TutorialActionName,
   TutorialDreamcallerOwner,
   TutorialEditorSaveStatus,
+  TutorialSpeechBubbleSpeaker,
 } from "../../types/tutorial";
 
 export interface TutorialEditorRailProps {
@@ -46,6 +47,12 @@ const DREAMCALLER_OWNER_OPTIONS = [
   { value: "enemy", label: "Opponent" },
 ] satisfies readonly { value: TutorialDreamcallerOwner; label: string }[];
 
+const SPEECH_BUBBLE_SPEAKER_OPTIONS = [
+  { value: "mira", label: "Mira" },
+  { value: "player", label: "Player Dreamcaller" },
+  { value: "enemy", label: "Opposing Dreamcaller" },
+] satisfies readonly { value: TutorialSpeechBubbleSpeaker; label: string }[];
+
 function nextActionId(
   actionName: TutorialActionName,
   actions: readonly TutorialAction[],
@@ -66,6 +73,7 @@ function defaultAction(
     ? {
         id,
         action: "display-speech-bubble",
+        speaker: "mira",
         text: "New tutorial message.",
         wait: 3,
       }
@@ -87,6 +95,10 @@ function changedActionType(
     return {
       id: action.id,
       action: actionName,
+      speaker:
+        action.action === "display-speech-bubble"
+          ? (action.speaker ?? "mira")
+          : "mira",
       text:
         action.action === "display-speech-bubble"
           ? action.text
@@ -101,14 +113,9 @@ function changedActionType(
       action.action === "animate-dreamcaller-portrait"
         ? action.owner
         : "player",
-    pause:
-      action.action === "animate-dreamcaller-portrait"
-        ? action.pause
-        : 1,
+    pause: action.action === "animate-dreamcaller-portrait" ? action.pause : 1,
     duration:
-      action.action === "animate-dreamcaller-portrait"
-        ? action.duration
-        : 0.6,
+      action.action === "animate-dreamcaller-portrait" ? action.duration : 0.6,
     wait: action.wait,
   };
 }
@@ -216,7 +223,11 @@ function TutorialActionRow({
               touchAction: "none",
             }}
           >
-            <GlowIcon iconClass={GLYPHS.dragHandle} color="text-secondary" size="1.4em" />
+            <GlowIcon
+              iconClass={GLYPHS.dragHandle}
+              color="text-secondary"
+              size="1.4em"
+            />
           </Pressable>
           <div style={{ minWidth: 0 }}>
             <Select
@@ -251,14 +262,37 @@ function TutorialActionRow({
         </div>
 
         {action.action === "display-speech-bubble" ? (
-          <TextArea
-            label="Text"
-            value={action.text}
-            error={action.text.trim().length === 0 ? "Text cannot be blank." : undefined}
-            testId={`tutorial-action-text-${action.id}`}
-            onChange={(text) => update({ ...action, text }, false)}
-            onCommit={(text) => update({ ...action, text }, true)}
-          />
+          <>
+            <Select
+              full
+              size="sm"
+              ariaLabel={`Speech bubble speaker for action ${String(index + 1)}`}
+              options={[...SPEECH_BUBBLE_SPEAKER_OPTIONS]}
+              value={action.speaker ?? "mira"}
+              onChange={(speaker) => {
+                if (
+                  speaker !== "mira" &&
+                  speaker !== "player" &&
+                  speaker !== "enemy"
+                ) {
+                  return;
+                }
+                update({ ...action, speaker }, true);
+              }}
+            />
+            <TextArea
+              label="Text"
+              value={action.text}
+              error={
+                action.text.trim().length === 0
+                  ? "Text cannot be blank."
+                  : undefined
+              }
+              testId={`tutorial-action-text-${action.id}`}
+              onChange={(text) => update({ ...action, text }, false)}
+              onCommit={(text) => update({ ...action, text }, true)}
+            />
+          </>
         ) : null}
 
         {action.action === "animate-dreamcaller-portrait" ? (
@@ -328,8 +362,7 @@ function TutorialActionRow({
                 update(
                   {
                     ...action,
-                    duration:
-                      Math.round((action.duration + 0.1) * 10) / 10,
+                    duration: Math.round((action.duration + 0.1) * 10) / 10,
                   },
                   true,
                 )
@@ -348,7 +381,10 @@ function TutorialActionRow({
           decrementDisabled={action.wait <= 0}
           onDecrement={() =>
             update(
-              { ...action, wait: Math.max(0, Math.round((action.wait - 0.5) * 10) / 10) },
+              {
+                ...action,
+                wait: Math.max(0, Math.round((action.wait - 0.5) * 10) / 10),
+              },
               true,
             )
           }
@@ -391,8 +427,12 @@ function SaveStatus({
       role="status"
       aria-label={label}
       title={label}
-      animate={status === "saving" ? { opacity: [0.4, 1, 0.4] } : { opacity: 1 }}
-      transition={status === "saving" ? { repeat: Infinity, duration: 1.2 } : undefined}
+      animate={
+        status === "saving" ? { opacity: [0.4, 1, 0.4] } : { opacity: 1 }
+      }
+      transition={
+        status === "saving" ? { repeat: Infinity, duration: 1.2 } : undefined
+      }
       style={{ display: "inline-flex" }}
     >
       <GlowIcon
@@ -407,10 +447,7 @@ function SaveStatus({
 function TutorialEditorContent({
   actions,
   onActionsChange,
-}: Pick<
-  TutorialEditorRailProps,
-  "actions" | "onActionsChange"
->): ReactElement {
+}: Pick<TutorialEditorRailProps, "actions" | "onActionsChange">): ReactElement {
   return (
     <div style={{ display: "grid", gap: token("--space-5") }}>
       <Reorder.Group

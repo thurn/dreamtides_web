@@ -9,11 +9,15 @@ function SpeechBubbleDemo(args: Record<string, unknown>) {
       ? args.text
       : "The frost reveals what is hidden.";
   const size = args.size === "prominent" ? "prominent" : "standard";
-  const pointerAlignment =
-    args.pointerAlignment === "center" ? "center" : "lower";
+  const pointerPlacement =
+    args.pointerPlacement === "left-center" ||
+    args.pointerPlacement === "top-left" ||
+    args.pointerPlacement === "bottom-left"
+      ? args.pointerPlacement
+      : "left-lower";
   return (
     <SpeechBubble
-      pointerAlignment={pointerAlignment}
+      pointerPlacement={pointerPlacement}
       size={size}
       speakerName={speakerName}
       text={text}
@@ -25,15 +29,15 @@ export const speechBubbleDemo: CumulusComponent = {
   id: "speech-bubble",
   title: "Speech Bubble",
   blurb:
-    "A guide-dialog bubble for character-led site screens: the same frosted information material as an InfoCard, with a left arrow that points back to the speaker.",
+    "A guide-dialog bubble for character-led screens: the same frosted information material as an InfoCard, with a strict left, top-left, or bottom-left pointer toward the speaker.",
   callout:
-    "Use it to the right of character art, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, named display scales, and pointer geometry; use centered pointer alignment beside circular portraits.",
+    "Use it beside character art or attached above/below a battle portrait, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, named display scales, and pointer geometry. Top-left and bottom-left pointer bases stay clear of the rounded corners.",
   group: "Components",
   docName: "SpeechBubble",
   Component: SpeechBubbleDemo,
   usage: [
     {
-      note: "The bubble sits to the right of the character, so the arrow points left.",
+      note: "The default bubble sits to the right of the character, so the arrow points left.",
       code: `import { SpeechBubble } from "src/cumulus/components/overlay/SpeechBubble";
 
 <SpeechBubble
@@ -44,7 +48,7 @@ export const speechBubbleDemo: CumulusComponent = {
   ],
   demo: {
     defaultArgs: {
-      pointerAlignment: "lower",
+      pointerPlacement: "left-lower",
       size: "standard",
       speakerName: "Sigrún",
       text: "The frost reveals what is hidden.",

@@ -4,8 +4,11 @@ import { parseTutorialActions } from "../../data/tutorial-actions";
 import { logEvent } from "../../logging";
 import { useFrontDoor } from "../../state/front-door-context";
 import { useTutorialEditor } from "../../state/use-tutorial-editor";
-import type { TutorialAction, TutorialDreamcallerOwner } from "../../types/tutorial";
-import { buildTutorialView } from "./tutorial-view-model";
+import type {
+  TutorialAction,
+  TutorialDreamcallerOwner,
+} from "../../types/tutorial";
+import { buildTutorialView, tutorialActionLogDetails } from "./tutorial-view-model";
 
 /** Standalone `/tutorial` wiring, shared playback, and local authoring saves. */
 export function TutorialScreenAdapter() {
@@ -23,17 +26,26 @@ export function TutorialScreenAdapter() {
   authoredActionsRef.current = authoredActions;
 
   useEffect(() => {
-    if (!actionsLoaded || state.tutorial !== null || state.journeyId === null) return;
+    if (!actionsLoaded || state.tutorial !== null || state.journeyId === null)
+      return;
     const intentKey = `tutorial:${state.journeyId}:begin`;
     if (beginRequestedKey.current === intentKey) return;
     beginRequestedKey.current = intentKey;
-    void mutations.beginTutorial(authoredActions, intentKey).catch((error: unknown) => {
-      beginRequestedKey.current = null;
-      logEvent("tutorial_begin_failed", {
-        message: error instanceof Error ? error.message : String(error),
+    void mutations
+      .beginTutorial(authoredActions, intentKey)
+      .catch((error: unknown) => {
+        beginRequestedKey.current = null;
+        logEvent("tutorial_begin_failed", {
+          message: error instanceof Error ? error.message : String(error),
+        });
       });
-    });
-  }, [actionsLoaded, authoredActions, mutations, state.journeyId, state.tutorial]);
+  }, [
+    actionsLoaded,
+    authoredActions,
+    mutations,
+    state.journeyId,
+    state.tutorial,
+  ]);
 
   const view = useMemo(() => buildTutorialView(state.tutorial), [state.tutorial]);
 
@@ -45,18 +57,14 @@ export function TutorialScreenAdapter() {
     loggedActionKey.current = key;
     logEvent("tutorial_action_presented", {
       runId: view.playbackRunId,
-      actionId: current.id,
-      action: current.action,
-      waitSeconds: current.wait,
+      ...tutorialActionLogDetails(current),
       dialogueVisible: view.dialogue !== null,
-      dialogueText: view.dialogue?.text ?? null,
-      ...(current.action === "animate-dreamcaller-portrait"
-        ? {
-            owner: current.owner,
-            portraitPauseSeconds: current.pause,
-            portraitTravelSeconds: current.duration,
-          }
-        : {}),
+      dialogueText:
+        view.dialogue === null
+          ? null
+          : view.dialogue.kind === "guide"
+            ? view.dialogue.model.text
+            : view.dialogue.text,
       actionIndex: state.tutorial?.currentActionIndex ?? null,
       actionCount: state.tutorial?.actions.length ?? 0,
     });
@@ -65,13 +73,15 @@ export function TutorialScreenAdapter() {
   const handleActionComplete = useCallback(
     (runId: string, actionId: string): void => {
       logEvent("tutorial_action_completion_requested", { runId, actionId });
-      void mutations.completeTutorialAction(runId, actionId).catch((error: unknown) => {
-        logEvent("tutorial_action_completion_failed", {
-          runId,
-          actionId,
-          message: error instanceof Error ? error.message : String(error),
+      void mutations
+        .completeTutorialAction(runId, actionId)
+        .catch((error: unknown) => {
+          logEvent("tutorial_action_completion_failed", {
+            runId,
+            actionId,
+            message: error instanceof Error ? error.message : String(error),
+          });
         });
-      });
     },
     [mutations],
   );

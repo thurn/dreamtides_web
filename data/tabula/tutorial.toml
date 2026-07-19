@@ -27,3 +27,10 @@ owner = "enemy"
 pause = 1
 duration = 0.6
 wait = 0
+
+[[actions]]
+id = "vrakmoth-taunt"
+action = "display-speech-bubble"
+speaker = "enemy"
+text = "For the Abyss!"
+wait = 3

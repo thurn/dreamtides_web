@@ -13,14 +13,13 @@ const ACTIONS_RESPONSE = {
 };
 
 function successfulFetcher() {
-  return vi.fn(
-    () =>
-      Promise.resolve(
-        new Response(JSON.stringify(ACTIONS_RESPONSE), {
-          status: 200,
-          headers: { "Content-Type": "application/json" },
-        }),
-      ),
+  return vi.fn(() =>
+    Promise.resolve(
+      new Response(JSON.stringify(ACTIONS_RESPONSE), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    ),
   );
 }
 
@@ -37,16 +36,46 @@ describe("loadTutorialActions", () => {
   it("loads generated data for a production runtime", async () => {
     const fetcher = successfulFetcher();
 
-    await loadTutorialActions(
-      fetcher as unknown as typeof fetch,
-      "runtime",
-    );
+    await loadTutorialActions(fetcher as unknown as typeof fetch, "runtime");
 
     expect(fetcher).toHaveBeenCalledWith("/tutorial-data.json");
   });
 });
 
 describe("parseTutorialActions", () => {
+  it("preserves a Dreamcaller speech target and rejects unknown speakers", () => {
+    expect(
+      parseTutorialActions([
+        {
+          id: "enemy-taunt",
+          action: "display-speech-bubble",
+          speaker: "enemy",
+          text: "For the Abyss!",
+          wait: 3,
+        },
+      ]),
+    ).toEqual([
+      {
+        id: "enemy-taunt",
+        action: "display-speech-bubble",
+        speaker: "enemy",
+        text: "For the Abyss!",
+        wait: 3,
+      },
+    ]);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "bad-speaker",
+          action: "display-speech-bubble",
+          speaker: "spectator",
+          text: "No.",
+          wait: 1,
+        },
+      ]),
+    ).toThrow(/Mira, the player, or the enemy/u);
+  });
+
   it("normalizes legacy portrait actions and preserves opponent pauses", () => {
     expect(
       parseTutorialActions([

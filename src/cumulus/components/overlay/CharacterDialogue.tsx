@@ -157,7 +157,7 @@ export function CharacterDialogue({
         }}
       >
         <SpeechBubble
-          pointerAlignment="center"
+          pointerPlacement="left-center"
           speakerName={dialogue.speakerName}
           text={dialogue.text}
           size={size === "prominent" ? "prominent" : "standard"}

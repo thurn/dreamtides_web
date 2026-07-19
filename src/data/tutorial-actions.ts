@@ -3,14 +3,20 @@ import type { TutorialAction } from "../types/tutorial";
 const ACTION_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
 
 /** Validate untrusted generated or event-log tutorial action data. */
-export function parseTutorialActions(value: unknown): readonly TutorialAction[] {
+export function parseTutorialActions(
+  value: unknown,
+): readonly TutorialAction[] {
   if (!Array.isArray(value)) {
     throw new Error("Tutorial data must contain an actions array.");
   }
 
   const ids = new Set<string>();
   return value.map((candidate, index) => {
-    if (candidate === null || typeof candidate !== "object" || Array.isArray(candidate)) {
+    if (
+      candidate === null ||
+      typeof candidate !== "object" ||
+      Array.isArray(candidate)
+    ) {
       throw new Error(`Tutorial action ${String(index + 1)} must be a table.`);
     }
     const record = candidate as Record<string, unknown>;
@@ -21,22 +27,40 @@ export function parseTutorialActions(value: unknown): readonly TutorialAction[] 
       );
     }
     if (ids.has(id)) {
-      throw new Error(`Tutorial action id ${JSON.stringify(id)} is duplicated.`);
+      throw new Error(
+        `Tutorial action id ${JSON.stringify(id)} is duplicated.`,
+      );
     }
     ids.add(id);
 
     const wait = record.wait;
     if (typeof wait !== "number" || !Number.isFinite(wait) || wait < 0) {
-      throw new Error(`Tutorial action ${JSON.stringify(id)} must have a non-negative wait.`);
+      throw new Error(
+        `Tutorial action ${JSON.stringify(id)} must have a non-negative wait.`,
+      );
     }
 
     if (record.action === "display-speech-bubble") {
       if (typeof record.text !== "string" || record.text.trim().length === 0) {
-        throw new Error(`Tutorial action ${JSON.stringify(id)} must have speech text.`);
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must have speech text.`,
+        );
+      }
+      const speaker = record.speaker;
+      if (
+        speaker !== undefined &&
+        speaker !== "mira" &&
+        speaker !== "player" &&
+        speaker !== "enemy"
+      ) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must target Mira, the player, or the enemy.`,
+        );
       }
       return {
         id,
         action: "display-speech-bubble",
+        ...(speaker === undefined ? {} : { speaker }),
         text: record.text,
         wait,
       } satisfies TutorialAction;
@@ -95,7 +119,9 @@ export async function loadTutorialActions(
     source === "editor" ? "/api/editor/tutorial" : "/tutorial-data.json";
   const response = await fetcher(path);
   if (!response.ok) {
-    throw new Error(`Failed to load tutorial actions (${String(response.status)}).`);
+    throw new Error(
+      `Failed to load tutorial actions (${String(response.status)}).`,
+    );
   }
   const body: unknown = await response.json();
   if (body === null || typeof body !== "object" || Array.isArray(body)) {

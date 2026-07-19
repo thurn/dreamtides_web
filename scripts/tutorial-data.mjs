@@ -4,7 +4,11 @@ import { fileURLToPath } from "node:url";
 import { parse, stringify } from "smol-toml";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-export const DEFAULT_TUTORIAL_TOML_PATH = join("data", "tabula", "tutorial.toml");
+export const DEFAULT_TUTORIAL_TOML_PATH = join(
+  "data",
+  "tabula",
+  "tutorial.toml",
+);
 export const DEFAULT_TUTORIAL_JSON_PATH = join("public", "tutorial-data.json");
 const ACTION_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
 
@@ -21,7 +25,11 @@ export function validateTutorialActions(value) {
   }
   const ids = new Set();
   return value.map((candidate, index) => {
-    if (candidate === null || typeof candidate !== "object" || Array.isArray(candidate)) {
+    if (
+      candidate === null ||
+      typeof candidate !== "object" ||
+      Array.isArray(candidate)
+    ) {
       throw invalid(`Tutorial action ${index + 1} must be a table.`);
     }
     const { id, action, wait } = candidate;
@@ -35,13 +43,37 @@ export function validateTutorialActions(value) {
     }
     ids.add(id);
     if (typeof wait !== "number" || !Number.isFinite(wait) || wait < 0) {
-      throw invalid(`Tutorial action ${JSON.stringify(id)} must have a non-negative wait.`);
+      throw invalid(
+        `Tutorial action ${JSON.stringify(id)} must have a non-negative wait.`,
+      );
     }
     if (action === "display-speech-bubble") {
-      if (typeof candidate.text !== "string" || candidate.text.trim().length === 0) {
-        throw invalid(`Tutorial action ${JSON.stringify(id)} must have speech text.`);
+      if (
+        typeof candidate.text !== "string" ||
+        candidate.text.trim().length === 0
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must have speech text.`,
+        );
       }
-      return { id, action, text: candidate.text, wait };
+      const speaker = candidate.speaker;
+      if (
+        speaker !== undefined &&
+        speaker !== "mira" &&
+        speaker !== "player" &&
+        speaker !== "enemy"
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must target Mira, the player, or the enemy.`,
+        );
+      }
+      return {
+        id,
+        action,
+        ...(speaker === undefined ? {} : { speaker }),
+        text: candidate.text,
+        wait,
+      };
     }
     if (action === "animate-dreamcaller-portrait") {
       const owner = candidate.owner ?? "player";

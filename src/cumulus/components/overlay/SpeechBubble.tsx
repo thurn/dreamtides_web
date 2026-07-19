@@ -12,28 +12,22 @@ import {
 } from "react";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { token } from "../../primitives/tokens";
+import {
+  makeSpeechBubblePath,
+  speechBubblePointerDepth,
+  type SpeechBubblePointerPlacement,
+} from "./speech-bubble-geometry";
 
 const SPEECH_GLASS_FILL = token("--glass-fill-popover");
 const SPEECH_GLASS_BACKGROUND = `${token("--glass-sheen")}, ${SPEECH_GLASS_FILL}`;
-const SPEECH_TAIL_DEPTH = 14;
-const SPEECH_TAIL_HALF_HEIGHT = 10;
-const SPEECH_CORNER_SIZE = 8;
 const SPEECH_CONTENT_PADDING = token("--space-5");
 
 /** Named bubble scales that preserve the component's authored geometry. */
 export type SpeechBubbleSize = "standard" | "prominent";
 
-/** Named pointer alignments for full-height guides or circular portraits. */
-export type SpeechBubblePointerAlignment = "lower" | "center";
-
 const SPEECH_BUBBLE_ZOOM: Record<SpeechBubbleSize, number> = {
   standard: 1,
   prominent: 1.25,
-};
-
-const SPEECH_TAIL_CENTER_RATIO: Record<SpeechBubblePointerAlignment, number> = {
-  lower: 0.68,
-  center: 0.5,
 };
 
 export interface SpeechBubbleProps {
@@ -43,8 +37,8 @@ export interface SpeechBubbleProps {
   text: string;
   /** Authored display scale for compact or prominent character dialogue. */
   size?: SpeechBubbleSize;
-  /** Vertical pointer placement for the speaker art beside the bubble. */
-  pointerAlignment?: SpeechBubblePointerAlignment;
+  /** Edge and alignment of the pointer toward the speaking character. */
+  pointerPlacement?: SpeechBubblePointerPlacement;
   /** Optional stable test id for product-screen QA. */
   testId?: string;
 }
@@ -58,18 +52,18 @@ export function SpeechBubble({
   speakerName,
   text,
   size = "standard",
-  pointerAlignment = "lower",
+  pointerPlacement = "left-lower",
   testId,
 }: SpeechBubbleProps): ReactElement {
   const reactId = useId();
   const clipId = `speech-bubble-${reactId.replace(/:/g, "")}`;
   const bubbleRef = useRef<HTMLElement | null>(null);
   const [bubbleSize, setBubbleSize] = useState({ width: 0, height: 0 });
-  const tail = `${String(SPEECH_TAIL_DEPTH)}px`;
+  const tail = `${String(speechBubblePointerDepth())}px`;
   const path = makeSpeechBubblePath(
     bubbleSize.width,
     bubbleSize.height,
-    pointerAlignment,
+    pointerPlacement,
   );
   const bubbleZoom = SPEECH_BUBBLE_ZOOM[size];
 
@@ -97,15 +91,30 @@ export function SpeechBubble({
     return () => observer.disconnect();
   }, [bubbleZoom]);
 
+  const pointerLayout: CSSProperties =
+    pointerPlacement === "top-left"
+      ? {
+          width: "100%",
+          padding: `calc(${tail} + ${SPEECH_CONTENT_PADDING}) ${SPEECH_CONTENT_PADDING} ${SPEECH_CONTENT_PADDING}`,
+        }
+      : pointerPlacement === "bottom-left"
+        ? {
+            width: "100%",
+            padding: `${SPEECH_CONTENT_PADDING} ${SPEECH_CONTENT_PADDING} calc(${tail} + ${SPEECH_CONTENT_PADDING})`,
+          }
+        : {
+            width: `calc(100% + ${tail})`,
+            marginLeft: `calc(-1 * ${tail})`,
+            padding: `${SPEECH_CONTENT_PADDING} ${SPEECH_CONTENT_PADDING} ${SPEECH_CONTENT_PADDING} calc(${tail} + ${SPEECH_CONTENT_PADDING})`,
+          };
+
   const bubbleStyle: CSSProperties = {
     position: "relative",
     ...glassSurfaceStyle({ radius: null }),
     background: SPEECH_GLASS_BACKGROUND,
     border: "none",
     boxSizing: "border-box",
-    width: `calc(100% + ${tail})`,
-    marginLeft: `calc(-1 * ${tail})`,
-    padding: `${SPEECH_CONTENT_PADDING} ${SPEECH_CONTENT_PADDING} ${SPEECH_CONTENT_PADDING} calc(${tail} + ${SPEECH_CONTENT_PADDING})`,
+    ...pointerLayout,
     boxShadow: "none",
     clipPath: path !== null ? `url(#${clipId})` : undefined,
     WebkitClipPath: path !== null ? `url(#${clipId})` : undefined,
@@ -117,7 +126,7 @@ export function SpeechBubble({
   return (
     <aside
       ref={bubbleRef}
-      data-speech-bubble-pointer-alignment={pointerAlignment}
+      data-speech-bubble-pointer-placement={pointerPlacement}
       data-speech-bubble-size={size}
       data-testid={testId}
       style={bubbleStyle}
@@ -163,45 +172,4 @@ export function SpeechBubble({
       </p>
     </aside>
   );
-}
-
-function makeSpeechBubblePath(
-  width: number,
-  height: number,
-  pointerAlignment: SpeechBubblePointerAlignment,
-): string | null {
-  if (width <= 0 || height <= 0) {
-    return null;
-  }
-
-  const tail = SPEECH_TAIL_DEPTH;
-  const halfTail = Math.min(SPEECH_TAIL_HALF_HEIGHT, height / 4);
-  const corner = Math.min(SPEECH_CORNER_SIZE, height / 2, width / 2);
-  const tailCenter = clamp(
-    height * SPEECH_TAIL_CENTER_RATIO[pointerAlignment],
-    corner + halfTail,
-    height - corner - halfTail,
-  );
-  const tailTop = tailCenter - halfTail;
-  const tailBottom = tailCenter + halfTail;
-
-  return [
-    `M ${tail + corner} 0`,
-    `H ${width - corner}`,
-    `Q ${width} 0 ${width} ${corner}`,
-    `V ${height - corner}`,
-    `Q ${width} ${height} ${width - corner} ${height}`,
-    `H ${tail + corner}`,
-    `Q ${tail} ${height} ${tail} ${height - corner}`,
-    `V ${tailBottom}`,
-    `L 0 ${tailCenter}`,
-    `L ${tail} ${tailTop}`,
-    `V ${corner}`,
-    `Q ${tail} 0 ${tail + corner} 0`,
-    "Z",
-  ].join(" ");
-}
-
-function clamp(value: number, min: number, max: number): number {
-  return Math.min(Math.max(value, min), max);
 }
