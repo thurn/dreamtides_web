@@ -111,6 +111,46 @@ describe("buildTutorialView", () => {
     });
   });
 
+  it("keeps the latest speech visible while a portrait action plays", () => {
+    const actions = [
+      {
+        id: "welcome",
+        action: "display-speech-bubble" as const,
+        text: "Welcome, Dreamer.",
+        wait: 3,
+      },
+      {
+        id: "dreamcaller-arrival",
+        action: "animate-dreamcaller-portrait" as const,
+        owner: "player" as const,
+        pause: 1,
+        duration: 0.6,
+        wait: 0,
+      },
+      {
+        id: "nightmare-call",
+        action: "display-speech-bubble" as const,
+        text: "The next line.",
+        wait: 3,
+      },
+    ];
+
+    expect(
+      buildTutorialView({
+        runId: "event:overlap",
+        currentActionIndex: 1,
+        actions,
+      }).dialogue?.text,
+    ).toBe("Welcome, Dreamer.");
+    expect(
+      buildTutorialView({
+        runId: "event:overlap",
+        currentActionIndex: 2,
+        actions,
+      }).dialogue?.text,
+    ).toBe("The next line.");
+  });
+
   it("settles Vrakmoth only after the opponent portrait action advances", () => {
     const actions = [
       {
@@ -145,6 +185,7 @@ describe("buildTutorialView", () => {
     expect(arriving.dreamcallers.player.settled).toBe(true);
     expect(arriving.dreamcallers.enemy.settled).toBe(false);
     expect(arriving.currentAction?.id).toBe("vrakmoth-arrival");
+    expect(arriving.dialogue?.text).toContain("power of Nightmare");
 
     const complete = buildTutorialView({
       runId: "event:10",
@@ -153,5 +194,6 @@ describe("buildTutorialView", () => {
     });
     expect(complete.dreamcallers.player.settled).toBe(true);
     expect(complete.dreamcallers.enemy.settled).toBe(true);
+    expect(complete.dialogue).toBeNull();
   });
 });

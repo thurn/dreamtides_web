@@ -115,6 +115,8 @@ describe("TutorialScreenAdapter", () => {
           runId: "event:1",
           actionId: "dreamcaller-arrival",
           action: "animate-dreamcaller-portrait",
+          dialogueVisible: true,
+          dialogueText: "Adapter fixture.",
           owner: "player",
           portraitPauseSeconds: 1,
           portraitTravelSeconds: 0.6,

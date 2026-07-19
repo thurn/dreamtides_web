@@ -5,6 +5,7 @@ import type {
 } from "../../cumulus/screens/MobileBattleScreen";
 import type { TutorialView } from "../../cumulus/screens/TutorialScreen";
 import type {
+  DisplaySpeechBubbleTutorialAction,
   TutorialDreamcallerOwner,
   TutorialPlaybackState,
 } from "../../types/tutorial";
@@ -72,6 +73,17 @@ function emptyInspectorSide(
   };
 }
 
+function activeDialogueAction(
+  playback: TutorialPlaybackState | null,
+): DisplaySpeechBubbleTutorialAction | null {
+  if (playback?.currentActionIndex === null || playback === null) return null;
+  for (let index = playback.currentActionIndex; index >= 0; index -= 1) {
+    const action = playback.actions[index];
+    if (action?.action === "display-speech-bubble") return action;
+  }
+  return null;
+}
+
 /** Build the quest-independent opening state for the tutorial battle. */
 export function buildTutorialView(
   playback: TutorialPlaybackState | null = null,
@@ -81,6 +93,7 @@ export function buildTutorialView(
     playback?.currentActionIndex === undefined
       ? null
       : (playback.actions[playback.currentActionIndex] ?? null);
+  const dialogueAction = activeDialogueAction(playback);
   const dreamcallerSettled = (owner: TutorialDreamcallerOwner): boolean => {
     const actionIndex =
       playback?.actions.findIndex(
@@ -127,14 +140,14 @@ export function buildTutorialView(
       },
     },
     dialogue:
-      currentAction?.action === "display-speech-bubble"
-        ? {
+      dialogueAction === null
+        ? null
+        : {
             portrait: { kind: "character-portrait", characterId: "mira" },
             portraitAlt: "Mira",
             speakerName: "Mira",
-            text: currentAction.text,
-          }
-        : null,
+            text: dialogueAction.text,
+          },
     playbackRunId: playback?.runId ?? null,
     currentAction,
     battle: {

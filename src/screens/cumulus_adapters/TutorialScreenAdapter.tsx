@@ -4,10 +4,7 @@ import { parseTutorialActions } from "../../data/tutorial-actions";
 import { logEvent } from "../../logging";
 import { useFrontDoor } from "../../state/front-door-context";
 import { useTutorialEditor } from "../../state/use-tutorial-editor";
-import type {
-  TutorialAction,
-  TutorialDreamcallerOwner,
-} from "../../types/tutorial";
+import type { TutorialAction, TutorialDreamcallerOwner } from "../../types/tutorial";
 import { buildTutorialView } from "./tutorial-view-model";
 
 /** Standalone `/tutorial` wiring, shared playback, and local authoring saves. */
@@ -51,6 +48,8 @@ export function TutorialScreenAdapter() {
       actionId: current.id,
       action: current.action,
       waitSeconds: current.wait,
+      dialogueVisible: view.dialogue !== null,
+      dialogueText: view.dialogue?.text ?? null,
       ...(current.action === "animate-dreamcaller-portrait"
         ? {
             owner: current.owner,
@@ -61,7 +60,7 @@ export function TutorialScreenAdapter() {
       actionIndex: state.tutorial?.currentActionIndex ?? null,
       actionCount: state.tutorial?.actions.length ?? 0,
     });
-  }, [state.tutorial, view.currentAction, view.playbackRunId]);
+  }, [state.tutorial, view.currentAction, view.dialogue, view.playbackRunId]);
 
   const handleActionComplete = useCallback(
     (runId: string, actionId: string): void => {

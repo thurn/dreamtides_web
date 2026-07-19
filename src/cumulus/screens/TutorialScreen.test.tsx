@@ -152,7 +152,17 @@ const TUTORIAL_DREAMCALLERS: TutorialView["dreamcallers"] = {
 };
 
 class ResizeObserverStub {
-  constructor(_callback: ResizeObserverCallback) {}
+  static callbacks: ResizeObserverCallback[] = [];
+
+  static flush(): void {
+    for (const callback of ResizeObserverStub.callbacks) {
+      callback([], {} as ResizeObserver);
+    }
+  }
+
+  constructor(callback: ResizeObserverCallback) {
+    ResizeObserverStub.callbacks.push(callback);
+  }
   observe(_target: Element) {}
   unobserve(_target: Element) {}
   disconnect() {}
@@ -173,6 +183,7 @@ beforeEach(() => {
     dispatchEvent: vi.fn(),
   }));
   globalThis.ResizeObserver = ResizeObserverStub;
+  ResizeObserverStub.callbacks = [];
   screenMocks.props = null;
   screenMocks.dialogueProps = null;
   screenMocks.sceneInitial = null;
@@ -313,6 +324,18 @@ describe("TutorialScreen", () => {
     act(() => screenMocks.sceneAnimationComplete?.());
 
     expect(screenMocks.dialogueProps?.visible).toBe(true);
+
+    const dialogue = container.querySelector<HTMLElement>(
+      "[data-character-dialogue]",
+    );
+    tutorialScreen!.style.setProperty("--space-6", "16px");
+    tutorialScreen!.getBoundingClientRect = () =>
+      DOMRect.fromRect({ width: 390, height: 844 });
+    dialogue!.getBoundingClientRect = () =>
+      DOMRect.fromRect({ width: 300, height: 64 });
+    act(() => ResizeObserverStub.flush());
+    expect(dialogueAnchor?.style.top).toBe("310px");
+
     act(() => root.unmount());
     container.remove();
   });
@@ -331,7 +354,12 @@ describe("TutorialScreen", () => {
           <TutorialScreen
             view={{
               dreamcallers: TUTORIAL_DREAMCALLERS,
-              dialogue: null,
+              dialogue: {
+                portrait: { kind: "character-portrait", characterId: "mira" },
+                portraitAlt: "Mira",
+                speakerName: "Mira",
+                text: "Welcome, Dreamer.",
+              },
               playbackRunId: "event:2",
               currentAction: {
                 id: "dreamcaller-arrival",
@@ -366,24 +394,33 @@ describe("TutorialScreen", () => {
     const playerTarget = container.querySelector<HTMLElement>(
       '[data-testid="player-battle-status"] [data-battle-status-dreamcaller-placeholder]',
     );
+    const dialoguePortrait = container.querySelector<HTMLElement>(
+      "[data-character-dialogue-portrait-frame]",
+    );
     tutorialScreen!.getBoundingClientRect = () =>
       DOMRect.fromRect({ x: 0, y: 0, width: 390, height: 844 });
     playerTarget!.getBoundingClientRect = () =>
       DOMRect.fromRect({ x: 173, y: 700, width: 44, height: 44 });
+    dialoguePortrait!.getBoundingClientRect = () =>
+      DOMRect.fromRect({ x: 18, y: 334, width: 176, height: 176 });
 
     act(() => screenMocks.sceneAnimationComplete?.());
 
     expect(
       container.querySelector("[data-tutorial-dreamcaller-arrival]"),
     ).not.toBeNull();
+    expect(screenMocks.dialogueProps).toMatchObject({
+      dialogue: { text: "Welcome, Dreamer." },
+      visible: true,
+    });
     expect(screenMocks.arrivalInitial).toMatchObject({
       x: 173,
       y: 400,
-      scale: 1,
+      scale: 4,
     });
     expect(screenMocks.arrivalAnimate).toMatchObject({
       y: [400, 400, 700],
-      scale: [1, 1, 1],
+      scale: [4, 4, 1],
     });
     const arrivalTransition = screenMocks.arrivalTransition as {
       readonly duration: number;

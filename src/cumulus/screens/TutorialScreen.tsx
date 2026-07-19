@@ -437,9 +437,18 @@ export function TutorialScreen({
             ) / 10,
         };
       } else {
+        const dialogueGap = Number.parseFloat(
+          window.getComputedStyle(screen).getPropertyValue("--space-6"),
+        );
         next = {
           left: 0,
-          top: Math.round((screenBox.height - dialogueBox.height) * 5) / 10,
+          top:
+            Math.round(
+              ((screenBox.height - dialogueBox.height) / 2 -
+                dialogueBox.height -
+                (Number.isFinite(dialogueGap) ? dialogueGap : 0)) *
+                10,
+            ) / 10,
         };
       }
       setDialogueAnchor((current) =>
