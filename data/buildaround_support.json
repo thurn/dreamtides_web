@@ -1543,7 +1543,7 @@
       ]
     },
     "b6bad2a1-b857-4dd7-8b22-050eb68433a5": {
-      "name": "Ferryman of the Falls",
+      "name": "God of Ruin",
       "needs": [
         {
           "theme": "cheap-characters",
@@ -2003,7 +2003,7 @@
       ]
     },
     "0637b453-4362-4f01-b3e6-07c27af9c847": {
-      "name": "Herald of the Last Light",
+      "name": "Pyreling",
       "needs": [
         {
           "theme": "abandon",
@@ -3556,7 +3556,7 @@
       ]
     },
     "d755cfa4-d7c0-46d8-a836-909c45c68890": {
-      "name": "Shoreline Penitent",
+      "name": "Threshold Seeker",
       "needs": [
         {
           "theme": "discard",
@@ -4505,7 +4505,7 @@
       "supports": []
     },
     "8adfa141-6864-4f5f-a9ca-59306eaf5432": {
-      "name": "Urban Cipher",
+      "name": "Skybreak Ascendant",
       "needs": [],
       "supports": [
         "discard",
@@ -4594,7 +4594,7 @@
       ]
     },
     "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc": {
-      "name": "Verdant Wayfarer",
+      "name": "Salvage Colossus",
       "needs": [
         {
           "theme": "void",
@@ -4810,7 +4810,7 @@
       ]
     },
     "0e1209c3-1041-4079-9b1c-f96816a7deb5": {
-      "name": "Wistful Angler",
+      "name": "Wildpath Companions",
       "needs": [],
       "supports": [
         "void",
@@ -4828,7 +4828,7 @@
       "supports": []
     },
     "87f075b1-b058-4570-a75f-c4f8f544e192": {
-      "name": "Wondrous Clearing",
+      "name": "Aether Diver",
       "needs": [
         {
           "theme": "cheap-characters",
