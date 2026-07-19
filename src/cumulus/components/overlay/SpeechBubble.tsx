@@ -66,6 +66,8 @@ export function SpeechBubble({
     pointerPlacement,
   );
   const bubbleZoom = SPEECH_BUBBLE_ZOOM[size];
+  const isTopOrBottomPointer =
+    pointerPlacement === "top-left" || pointerPlacement === "bottom-left";
 
   useLayoutEffect(() => {
     const bubble = bubbleRef.current;
@@ -94,12 +96,14 @@ export function SpeechBubble({
   const pointerLayout: CSSProperties =
     pointerPlacement === "top-left"
       ? {
-          width: "100%",
+          width: "max-content",
+          maxWidth: "100%",
           padding: `calc(${tail} + ${SPEECH_CONTENT_PADDING}) ${SPEECH_CONTENT_PADDING} ${SPEECH_CONTENT_PADDING}`,
         }
       : pointerPlacement === "bottom-left"
         ? {
-            width: "100%",
+            width: "max-content",
+            maxWidth: "100%",
             padding: `${SPEECH_CONTENT_PADDING} ${SPEECH_CONTENT_PADDING} calc(${tail} + ${SPEECH_CONTENT_PADDING})`,
           }
         : {
@@ -164,6 +168,7 @@ export function SpeechBubble({
           zIndex: 1,
           margin: 0,
           font: token("--t-serif-body"),
+          lineHeight: isTopOrBottomPointer ? 1.1 : undefined,
           color: token("--text-primary"),
           whiteSpace: "pre-line",
         }}

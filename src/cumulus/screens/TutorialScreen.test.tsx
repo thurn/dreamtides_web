@@ -571,7 +571,7 @@ describe("TutorialScreen", () => {
           return DOMRect.fromRect({ x: 173, y: 100, width: 44, height: 44 });
         }
         if (this.matches("[data-tutorial-dreamcaller-dialogue] aside")) {
-          return DOMRect.fromRect({ x: 0, y: 0, width: 220, height: 90 });
+          return DOMRect.fromRect({ x: 0, y: 0, width: 150, height: 90 });
         }
         return DOMRect.fromRect();
       },
@@ -640,10 +640,15 @@ describe("TutorialScreen", () => {
       height: 44,
     });
     expect(bubble?.getBoundingClientRect()).toMatchObject({
-      width: 220,
+      width: 150,
       height: 90,
     });
-    expect(overlay?.style.left).toBe("146.6px");
+    expect(overlay?.style.width).toBe("max-content");
+    expect(overlay?.style.maxWidth).toBe("220px");
+    expect(bubble?.style.width).toBe("max-content");
+    expect(bubble?.style.maxWidth).toBe("100%");
+    expect(bubble?.querySelector("p")?.style.lineHeight).toBe("1.1");
+    expect(overlay?.style.left).toBe("162px");
     expect(overlay?.style.top).toBe("142px");
     expect(overlay?.style.zIndex).toBe("var(--layer-reveal)");
     expect(overlay?.style.visibility).toBe("visible");

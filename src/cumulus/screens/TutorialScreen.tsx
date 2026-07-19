@@ -224,7 +224,8 @@ function TutorialDreamcallerDialogue({
         zIndex: token("--layer-reveal"),
         top: anchor?.top ?? 0,
         left: anchor?.left ?? 0,
-        width: desktop ? 300 : 220,
+        width: "max-content",
+        maxWidth: desktop ? 300 : 220,
         visibility: visible && anchor !== null ? "visible" : "hidden",
         pointerEvents: "none",
       }}
