@@ -90,9 +90,6 @@ interface TutorialDreamcallerTrajectory {
 const TUTORIAL_FADE_SECONDS = motionTimeSeconds(
   "--dur-loading-screen-fade",
 );
-const TUTORIAL_DREAMCALLER_ARRIVAL_SECONDS = motionTimeSeconds(
-  "--dur-loading-screen-fade",
-);
 const TUTORIAL_DREAMCALLER_FADE_SECONDS = motionTimeSeconds("--dur-fast");
 const TUTORIAL_EDITOR_DOCK_MIN_WIDTH = 1280;
 
@@ -101,12 +98,14 @@ function TutorialDreamcallerArrival({
   dreamcaller,
   owner,
   pause,
+  duration,
   onComplete,
 }: {
   readonly screen: HTMLElement;
   readonly dreamcaller: DreamcallerVisual;
   readonly owner: TutorialDreamcallerOwner;
   readonly pause: number;
+  readonly duration: number;
   readonly onComplete: () => void;
 }): ReactElement | null {
   const [trajectory, setTrajectory] =
@@ -171,13 +170,13 @@ function TutorialDreamcallerArrival({
         duration:
           TUTORIAL_DREAMCALLER_FADE_SECONDS +
           pause +
-          TUTORIAL_DREAMCALLER_ARRIVAL_SECONDS,
+          duration,
         times: [
           0,
           (TUTORIAL_DREAMCALLER_FADE_SECONDS + pause) /
             (TUTORIAL_DREAMCALLER_FADE_SECONDS +
               pause +
-              TUTORIAL_DREAMCALLER_ARRIVAL_SECONDS),
+              duration),
           1,
         ],
         ease: [0.22, 0.61, 0.36, 1],
@@ -231,6 +230,7 @@ export function TutorialScreen({
             key: `${view.playbackRunId}:${view.currentAction.id}`,
             owner: view.currentAction.owner,
             pause: view.currentAction.pause,
+            duration: view.currentAction.duration,
             dreamcaller: view.dreamcallers[view.currentAction.owner],
           }
         : null,
@@ -534,6 +534,7 @@ export function TutorialScreen({
           dreamcaller={dreamcallerArrival.dreamcaller.visual}
           owner={dreamcallerArrival.owner}
           pause={dreamcallerArrival.pause}
+          duration={dreamcallerArrival.duration}
           onComplete={completeDreamcallerArrival}
         />
       ) : null}

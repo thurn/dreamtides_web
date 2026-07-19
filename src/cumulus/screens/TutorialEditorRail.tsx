@@ -74,6 +74,7 @@ function defaultAction(
         action: "animate-dreamcaller-portrait",
         owner: "player",
         pause: 1,
+        duration: 0.6,
         wait: 0,
       };
 }
@@ -104,6 +105,10 @@ function changedActionType(
       action.action === "animate-dreamcaller-portrait"
         ? action.pause
         : 1,
+    duration:
+      action.action === "animate-dreamcaller-portrait"
+        ? action.duration
+        : 0.6,
     wait: action.wait,
   };
 }
@@ -294,6 +299,37 @@ function TutorialActionRow({
                   {
                     ...action,
                     pause: Math.round((action.pause + 0.5) * 10) / 10,
+                  },
+                  true,
+                )
+              }
+            />
+            <NumberStepper
+              label="Scale & Travel Duration"
+              value={action.duration}
+              displayValue={`${waitLabel(action.duration)}s`}
+              size="sm"
+              decrementLabel={`Decrease scale and travel duration for action ${String(index + 1)}`}
+              incrementLabel={`Increase scale and travel duration for action ${String(index + 1)}`}
+              decrementDisabled={action.duration <= 0}
+              onDecrement={() =>
+                update(
+                  {
+                    ...action,
+                    duration: Math.max(
+                      0,
+                      Math.round((action.duration - 0.1) * 10) / 10,
+                    ),
+                  },
+                  true,
+                )
+              }
+              onIncrement={() =>
+                update(
+                  {
+                    ...action,
+                    duration:
+                      Math.round((action.duration + 0.1) * 10) / 10,
                   },
                   true,
                 )

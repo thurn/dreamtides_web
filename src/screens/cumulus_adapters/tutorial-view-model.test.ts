@@ -18,6 +18,7 @@ describe("buildTutorialView", () => {
           action: "animate-dreamcaller-portrait",
           owner: "player",
           pause: 1,
+          duration: 0.6,
           wait: 0,
         },
         {
@@ -88,6 +89,7 @@ describe("buildTutorialView", () => {
           action: "animate-dreamcaller-portrait",
           owner: "player",
           pause: 1,
+          duration: 0.6,
           wait: 0,
         },
         {
@@ -116,6 +118,7 @@ describe("buildTutorialView", () => {
         action: "animate-dreamcaller-portrait" as const,
         owner: "player" as const,
         pause: 1,
+        duration: 0.6,
         wait: 0,
       },
       {
@@ -129,6 +132,7 @@ describe("buildTutorialView", () => {
         action: "animate-dreamcaller-portrait" as const,
         owner: "enemy" as const,
         pause: 1,
+        duration: 0.6,
         wait: 0,
       },
     ];

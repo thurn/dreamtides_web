@@ -33,6 +33,7 @@ const mocks = vi.hoisted(() => ({
           action: "animate-dreamcaller-portrait" as const,
           owner: "player" as const,
           pause: 1,
+          duration: 0.6,
           wait: 0,
         },
         {
@@ -116,6 +117,7 @@ describe("TutorialScreenAdapter", () => {
           action: "animate-dreamcaller-portrait",
           owner: "player",
           portraitPauseSeconds: 1,
+          portraitTravelSeconds: 0.6,
           waitSeconds: 0,
         }),
       ]),

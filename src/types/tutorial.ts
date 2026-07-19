@@ -28,6 +28,8 @@ export interface AnimateDreamcallerPortraitTutorialAction
   readonly owner: TutorialDreamcallerOwner;
   /** Seconds the fully revealed portrait remains large before it travels. */
   readonly pause: number;
+  /** Seconds the portrait takes to scale down and travel into battle status. */
+  readonly duration: number;
 }
 
 /** Exhaustive authored tutorial action model. */

@@ -22,6 +22,7 @@ const FIXTURE_ACTIONS = [
     action: "animate-dreamcaller-portrait",
     owner: "player",
     pause: 1,
+    duration: 0.6,
     wait: 0,
   },
 ];
@@ -59,6 +60,9 @@ describe("tutorial data", () => {
     expect(() =>
       validateTutorialActions([{ ...FIXTURE_ACTIONS[1], pause: -1 }]),
     ).toThrow(/non-negative portrait pause/u);
+    expect(() =>
+      validateTutorialActions([{ ...FIXTURE_ACTIONS[1], duration: -1 }]),
+    ).toThrow(/non-negative portrait duration/u);
   });
 
   it("normalizes legacy portrait actions to the player with no pause", () => {
@@ -76,6 +80,7 @@ describe("tutorial data", () => {
         action: "animate-dreamcaller-portrait",
         owner: "player",
         pause: 0,
+        duration: 1.2,
         wait: 0,
       },
     ]);

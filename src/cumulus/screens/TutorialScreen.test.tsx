@@ -338,6 +338,7 @@ describe("TutorialScreen", () => {
                 action: "animate-dreamcaller-portrait",
                 owner: "player",
                 pause: 1,
+                duration: 0.6,
                 wait: 0.5,
               },
               battle: {
@@ -384,14 +385,13 @@ describe("TutorialScreen", () => {
       y: [400, 400, 700],
       scale: [1, 1, 1],
     });
-    expect(screenMocks.arrivalTransition).toMatchObject({
-      duration: 2.34,
-    });
     const arrivalTransition = screenMocks.arrivalTransition as {
+      readonly duration: number;
       readonly times: readonly number[];
     };
+    expect(arrivalTransition.duration).toBeCloseTo(1.74);
     expect(arrivalTransition.times[0]).toBe(0);
-    expect(arrivalTransition.times[1]).toBeCloseTo(1.14 / 2.34);
+    expect(arrivalTransition.times[1]).toBeCloseTo(1.14 / 1.74);
     expect(arrivalTransition.times[2]).toBe(1);
     expect(onActionComplete).not.toHaveBeenCalled();
 
@@ -440,6 +440,7 @@ describe("TutorialScreen", () => {
                 action: "animate-dreamcaller-portrait",
                 owner: "enemy",
                 pause: 1.5,
+                duration: 0.6,
                 wait: 0,
               },
               battle: {

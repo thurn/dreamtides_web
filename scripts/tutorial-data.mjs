@@ -46,6 +46,7 @@ export function validateTutorialActions(value) {
     if (action === "animate-dreamcaller-portrait") {
       const owner = candidate.owner ?? "player";
       const pause = candidate.pause ?? 0;
+      const duration = candidate.duration ?? 1.2;
       if (owner !== "player" && owner !== "enemy") {
         throw invalid(
           `Tutorial action ${JSON.stringify(id)} must target the player or enemy.`,
@@ -56,7 +57,16 @@ export function validateTutorialActions(value) {
           `Tutorial action ${JSON.stringify(id)} must have a non-negative portrait pause.`,
         );
       }
-      return { id, action, owner, pause, wait };
+      if (
+        typeof duration !== "number" ||
+        !Number.isFinite(duration) ||
+        duration < 0
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must have a non-negative portrait duration.`,
+        );
+      }
+      return { id, action, owner, pause, duration, wait };
     }
     throw invalid(
       `Tutorial action ${JSON.stringify(id)} has unsupported action ${JSON.stringify(action)}.`,

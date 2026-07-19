@@ -44,6 +44,7 @@ export function parseTutorialActions(value: unknown): readonly TutorialAction[] 
     if (record.action === "animate-dreamcaller-portrait") {
       const owner = record.owner ?? "player";
       const pause = record.pause ?? 0;
+      const duration = record.duration ?? 1.2;
       if (owner !== "player" && owner !== "enemy") {
         throw new Error(
           `Tutorial action ${JSON.stringify(id)} must target the player or enemy.`,
@@ -54,11 +55,21 @@ export function parseTutorialActions(value: unknown): readonly TutorialAction[] 
           `Tutorial action ${JSON.stringify(id)} must have a non-negative portrait pause.`,
         );
       }
+      if (
+        typeof duration !== "number" ||
+        !Number.isFinite(duration) ||
+        duration < 0
+      ) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must have a non-negative portrait duration.`,
+        );
+      }
       return {
         id,
         action: "animate-dreamcaller-portrait",
         owner,
         pause,
+        duration,
         wait,
       } satisfies TutorialAction;
     }

@@ -52,7 +52,11 @@ export function TutorialScreenAdapter() {
       action: current.action,
       waitSeconds: current.wait,
       ...(current.action === "animate-dreamcaller-portrait"
-        ? { owner: current.owner, portraitPauseSeconds: current.pause }
+        ? {
+            owner: current.owner,
+            portraitPauseSeconds: current.pause,
+            portraitTravelSeconds: current.duration,
+          }
         : {}),
       actionIndex: state.tutorial?.currentActionIndex ?? null,
       actionCount: state.tutorial?.actions.length ?? 0,

@@ -60,6 +60,7 @@ describe("parseTutorialActions", () => {
           action: "animate-dreamcaller-portrait",
           owner: "enemy",
           pause: 2.5,
+          duration: 0.7,
           wait: 1,
         },
       ]),
@@ -69,6 +70,7 @@ describe("parseTutorialActions", () => {
         action: "animate-dreamcaller-portrait",
         owner: "player",
         pause: 0,
+        duration: 1.2,
         wait: 0,
       },
       {
@@ -76,6 +78,7 @@ describe("parseTutorialActions", () => {
         action: "animate-dreamcaller-portrait",
         owner: "enemy",
         pause: 2.5,
+        duration: 0.7,
         wait: 1,
       },
     ]);
@@ -89,6 +92,7 @@ describe("parseTutorialActions", () => {
           action: "animate-dreamcaller-portrait",
           owner: "spectator",
           pause: 1,
+          duration: 0.6,
           wait: 0,
         },
       ]),
@@ -100,9 +104,22 @@ describe("parseTutorialActions", () => {
           action: "animate-dreamcaller-portrait",
           owner: "player",
           pause: -1,
+          duration: 0.6,
           wait: 0,
         },
       ]),
     ).toThrow(/non-negative portrait pause/u);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "bad-duration",
+          action: "animate-dreamcaller-portrait",
+          owner: "player",
+          pause: 1,
+          duration: -1,
+          wait: 0,
+        },
+      ]),
+    ).toThrow(/non-negative portrait duration/u);
   });
 });

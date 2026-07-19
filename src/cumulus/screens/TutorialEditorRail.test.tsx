@@ -132,6 +132,7 @@ describe("TutorialEditorRail", () => {
           action: "animate-dreamcaller-portrait",
           owner: "player",
           pause: 1,
+          duration: 0.6,
           wait: 0,
         },
       ],
@@ -158,6 +159,7 @@ describe("TutorialEditorRail", () => {
           action: "animate-dreamcaller-portrait",
           owner: "enemy",
           pause: 1,
+          duration: 0.6,
           wait: 0,
         },
       ],
@@ -176,6 +178,26 @@ describe("TutorialEditorRail", () => {
           action: "animate-dreamcaller-portrait",
           owner: "enemy",
           pause: 1.5,
+          duration: 0.6,
+          wait: 0,
+        },
+      ],
+      true,
+    );
+
+    const decreaseDuration = container.querySelector<HTMLButtonElement>(
+      'button[aria-label="Decrease scale and travel duration for action 2"]',
+    );
+    act(() => decreaseDuration?.click());
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        INITIAL_ACTIONS[0],
+        {
+          id: "animate-dreamcaller-portrait",
+          action: "animate-dreamcaller-portrait",
+          owner: "enemy",
+          pause: 1.5,
+          duration: 0.5,
           wait: 0,
         },
       ],

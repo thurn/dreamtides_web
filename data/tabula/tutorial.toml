@@ -11,6 +11,7 @@ id = "dreamcaller-arrival"
 action = "animate-dreamcaller-portrait"
 owner = "player"
 pause = 1
+duration = 0.6
 wait = 0
 
 [[actions]]
@@ -24,4 +25,5 @@ id = "vrakmoth-arrival"
 action = "animate-dreamcaller-portrait"
 owner = "enemy"
 pause = 1
+duration = 0.6
 wait = 0
