@@ -63,6 +63,7 @@ function EditorHarness({
           setActions(next);
         }}
         onReplay={vi.fn()}
+        onPlayFromAction={vi.fn()}
         onClose={vi.fn()}
       />
     </CumulusRoot>
@@ -70,6 +71,80 @@ function EditorHarness({
 }
 
 describe("TutorialEditorRail", () => {
+  it("replays the whole sequence, its last three actions, or one selected action", () => {
+    const actions: readonly TutorialAction[] = [
+      INITIAL_ACTIONS[0],
+      {
+        id: "second",
+        action: "display-speech-bubble",
+        text: "Second.",
+        wait: 1,
+      },
+      {
+        id: "third",
+        action: "draw-opponent-card",
+        wait: 0,
+      },
+      {
+        id: "fourth",
+        action: "reveal-and-play-opponent-card",
+        revealDuration: 2,
+        wait: 0,
+      },
+    ];
+    const onReplay = vi.fn();
+    const onPlayFromAction = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() =>
+      root.render(
+        <CumulusRoot>
+          <TutorialEditorRail
+            actions={actions}
+            saveStatus="idle"
+            saveError={null}
+            onActionsChange={vi.fn()}
+            onReplay={onReplay}
+            onPlayFromAction={onPlayFromAction}
+            onClose={vi.fn()}
+          />
+        </CumulusRoot>,
+      ),
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="tutorial-editor-replay-all"]',
+        )
+        ?.click(),
+    );
+    expect(onReplay).toHaveBeenCalledOnce();
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="tutorial-editor-replay-tail"]',
+        )
+        ?.click(),
+    );
+    expect(onPlayFromAction).toHaveBeenLastCalledWith("second");
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="tutorial-action-play-fourth"]',
+        )
+        ?.click(),
+    );
+    expect(onPlayFromAction).toHaveBeenLastCalledWith("fourth");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("adds the first action type and persists structural edits", () => {
     const onChange = vi.fn();
     const container = document.createElement("div");

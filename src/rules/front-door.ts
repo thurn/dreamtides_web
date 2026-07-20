@@ -66,12 +66,23 @@ export function beginTutorial(
   } catch {
     return null;
   }
+  const startActionId = payload.startActionId;
+  if (startActionId !== undefined && typeof startActionId !== "string") {
+    return null;
+  }
+  const startActionIndex =
+    startActionId === undefined
+      ? actions.length === 0
+        ? null
+        : 0
+      : actions.findIndex((action) => action.id === startActionId);
+  if (startActionIndex === -1) return null;
   return {
     ...state,
     tutorial: {
       runId: `event:${String(ctx.seq)}`,
       actions,
-      currentActionIndex: actions.length === 0 ? null : 0,
+      currentActionIndex: startActionIndex,
     },
   };
 }
@@ -97,7 +108,8 @@ export function completeTutorialAction(
     ...state,
     tutorial: {
       ...tutorial,
-      currentActionIndex: nextIndex < tutorial.actions.length ? nextIndex : null,
+      currentActionIndex:
+        nextIndex < tutorial.actions.length ? nextIndex : null,
     },
   };
 }

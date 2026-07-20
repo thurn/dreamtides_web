@@ -219,4 +219,41 @@ describe("front-door reducer", () => {
     expect(second.outcome).toBe("applied");
     expect(second.state.frontDoor.tutorial?.currentActionIndex).toBeNull();
   });
+
+  it("starts a tutorial at a validated authored action id", () => {
+    const start = genesisFoldState({ ...GENESIS, frontDoorEntry: "tutorial" });
+    const actions = [
+      {
+        id: "welcome",
+        action: "display-speech-bubble",
+        text: "A first line.",
+        wait: 1,
+      },
+      {
+        id: "tail-start",
+        action: "display-speech-bubble",
+        text: "The testable tail.",
+        wait: 1,
+      },
+    ];
+
+    const begun = reduceGameEvent(
+      start,
+      event("BEGIN_TUTORIAL", { actions, startActionId: "tail-start" }),
+      context(1),
+    );
+    expect(begun.outcome).toBe("applied");
+    expect(begun.state.frontDoor.tutorial).toMatchObject({
+      runId: "event:1",
+      actions,
+      currentActionIndex: 1,
+    });
+
+    const staleId = reduceGameEvent(
+      start,
+      event("BEGIN_TUTORIAL", { actions, startActionId: "missing" }),
+      context(2),
+    );
+    expect(staleId.outcome).toBe("bounced");
+  });
 });

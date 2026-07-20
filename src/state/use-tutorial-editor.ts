@@ -6,6 +6,7 @@ import {
 import { saveTutorialActions } from "../data/tutorial-editor-api";
 import { logEvent } from "../logging";
 import type {
+  BeginTutorialOptions,
   TutorialAction,
   TutorialEditorSaveStatus,
 } from "../types/tutorial";
@@ -24,37 +25,61 @@ export interface TutorialEditorState {
 /** Build the replay callback around the latest unsaved editor draft. */
 export function useTutorialReplay(
   actions: readonly TutorialAction[],
-  beginTutorial: (actions: readonly TutorialAction[]) => Promise<number>,
-): () => void {
+  beginTutorial: (
+    actions: readonly TutorialAction[],
+    options?: BeginTutorialOptions,
+  ) => Promise<number>,
+): (startActionId?: string) => void {
   const actionsRef = useRef(actions);
   actionsRef.current = actions;
-  return useCallback((): void => {
-    let normalized: readonly TutorialAction[];
-    try {
-      normalized = parseTutorialActions(actionsRef.current);
-    } catch (error) {
-      logEvent("tutorial_replay_failed", {
-        message: error instanceof Error ? error.message : String(error),
+  return useCallback(
+    (startActionId?: string): void => {
+      let normalized: readonly TutorialAction[];
+      try {
+        normalized = parseTutorialActions(actionsRef.current);
+      } catch (error) {
+        logEvent("tutorial_replay_failed", {
+          message: error instanceof Error ? error.message : String(error),
+        });
+        return;
+      }
+      const startActionIndex =
+        startActionId === undefined
+          ? normalized.length === 0
+            ? null
+            : 0
+          : normalized.findIndex((action) => action.id === startActionId);
+      if (startActionIndex === -1) {
+        logEvent("tutorial_replay_failed", {
+          message: `Tutorial action ${JSON.stringify(startActionId)} was not found.`,
+        });
+        return;
+      }
+      logEvent("tutorial_replay_requested", {
+        actionCount: normalized.length,
+        actionIds: normalized.map((action) => action.id),
+        startActionId: startActionId ?? null,
+        startActionIndex,
       });
-      return;
-    }
-    logEvent("tutorial_replay_requested", {
-      actionCount: normalized.length,
-      actionIds: normalized.map((action) => action.id),
-    });
-    void beginTutorial(normalized).catch((error: unknown) => {
-      logEvent("tutorial_replay_failed", {
-        message: error instanceof Error ? error.message : String(error),
+      void beginTutorial(
+        normalized,
+        startActionId === undefined ? undefined : { startActionId },
+      ).catch((error: unknown) => {
+        logEvent("tutorial_replay_failed", {
+          message: error instanceof Error ? error.message : String(error),
+        });
       });
-    });
-  }, [beginTutorial]);
+    },
+    [beginTutorial],
+  );
 }
 
 /** Own local tutorial authoring drafts and serialize filesystem saves. */
 export function useTutorialEditor(): TutorialEditorState {
   const [actions, setActions] = useState<readonly TutorialAction[]>([]);
   const [loaded, setLoaded] = useState(false);
-  const [saveStatus, setSaveStatus] = useState<TutorialEditorSaveStatus>("idle");
+  const [saveStatus, setSaveStatus] =
+    useState<TutorialEditorSaveStatus>("idle");
   const [saveError, setSaveError] = useState<string | null>(null);
   const saveQueue = useRef<Promise<void>>(Promise.resolve());
   const newestSaveSerial = useRef(0);
@@ -122,7 +147,8 @@ export function useTutorialEditor(): TutorialEditorState {
         })
         .catch((error: unknown) => {
           if (serial !== newestSaveSerial.current) return;
-          const message = error instanceof Error ? error.message : String(error);
+          const message =
+            error instanceof Error ? error.message : String(error);
           setSaveStatus("error");
           setSaveError(message);
           logEvent("tutorial_actions_save_failed", { message });

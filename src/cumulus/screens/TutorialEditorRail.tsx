@@ -5,6 +5,7 @@ import {
   type ReactElement,
 } from "react";
 import { GlowIcon } from "../components/controls/GlowIcon";
+import { GlassButton } from "../components/controls/GlassButton";
 import { IconButton } from "../components/controls/IconButton";
 import { NumberStepper } from "../components/controls/NumberStepper";
 import { Select } from "../components/controls/Select";
@@ -31,8 +32,11 @@ export interface TutorialEditorRailProps {
     persist: boolean,
   ) => void;
   readonly onReplay: () => void;
+  readonly onPlayFromAction: (actionId: string) => void;
   readonly onClose: () => void;
 }
+
+const TUTORIAL_TAIL_ACTION_COUNT = 3;
 
 const ACTION_OPTIONS = [
   { value: "display-speech-bubble", label: "Display Speech Bubble" },
@@ -180,11 +184,13 @@ function TutorialActionRow({
   index,
   actions,
   onActionsChange,
+  onPlayFromAction,
 }: {
   readonly action: TutorialAction;
   readonly index: number;
   readonly actions: readonly TutorialAction[];
   readonly onActionsChange: TutorialEditorRailProps["onActionsChange"];
+  readonly onPlayFromAction: TutorialEditorRailProps["onPlayFromAction"];
 }): ReactElement {
   const controls = useDragControls();
   const update = (nextAction: TutorialAction, persist: boolean): void =>
@@ -219,7 +225,7 @@ function TutorialActionRow({
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "auto minmax(0, 1fr) auto",
+            gridTemplateColumns: "auto minmax(0, 1fr) auto auto",
             alignItems: "center",
             gap: token("--space-2"),
           }}
@@ -280,6 +286,14 @@ function TutorialActionRow({
               }}
             />
           </div>
+          <IconButton
+            glyph={GLYPHS.play}
+            size="sm"
+            placement="onGlass"
+            label={`Play tutorial from action ${String(index + 1)}`}
+            testId={`tutorial-action-play-${action.id}`}
+            onPress={() => onPlayFromAction(action.id)}
+          />
           <IconButton
             glyph={GLYPHS.trash}
             size="sm"
@@ -514,9 +528,46 @@ function SaveStatus({
 function TutorialEditorContent({
   actions,
   onActionsChange,
-}: Pick<TutorialEditorRailProps, "actions" | "onActionsChange">): ReactElement {
+  onReplay,
+  onPlayFromAction,
+}: Pick<
+  TutorialEditorRailProps,
+  "actions" | "onActionsChange" | "onReplay" | "onPlayFromAction"
+>): ReactElement {
+  const tailStartAction =
+    actions[Math.max(0, actions.length - TUTORIAL_TAIL_ACTION_COUNT)];
+  const tailActionCount = Math.min(TUTORIAL_TAIL_ACTION_COUNT, actions.length);
   return (
     <div style={{ display: "grid", gap: token("--space-5") }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+          gap: token("--space-3"),
+        }}
+      >
+        <GlassButton
+          glyph={GLYPHS.play}
+          label="Replay All"
+          placement="onGlass"
+          disabled={actions.length === 0}
+          testId="tutorial-editor-replay-all"
+          onPress={onReplay}
+        />
+        <GlassButton
+          glyph={GLYPHS.play}
+          label={`Replay Last ${String(tailActionCount)}`}
+          placement="onGlass"
+          variant="accent"
+          disabled={tailStartAction === undefined}
+          testId="tutorial-editor-replay-tail"
+          onPress={() => {
+            if (tailStartAction !== undefined) {
+              onPlayFromAction(tailStartAction.id);
+            }
+          }}
+        />
+      </div>
       <Reorder.Group
         as="ol"
         axis="y"
@@ -539,6 +590,7 @@ function TutorialEditorContent({
             index={index}
             actions={actions}
             onActionsChange={onActionsChange}
+            onPlayFromAction={onPlayFromAction}
           />
         ))}
       </Reorder.Group>
@@ -590,6 +642,7 @@ export function TutorialEditorRail({
   saveError,
   onActionsChange,
   onReplay,
+  onPlayFromAction,
   onClose,
 }: TutorialEditorRailProps): ReactElement {
   return (
@@ -599,13 +652,6 @@ export function TutorialEditorRail({
       title="Tutorial Editor"
       subtitle={`${String(actions.length)} ${actions.length === 1 ? "action" : "actions"}`}
       onClose={onClose}
-      headerAction={{
-        glyph: GLYPHS.play,
-        label: "Replay tutorial from start",
-        onPress: onReplay,
-        disabled: actions.length === 0,
-        testId: "tutorial-editor-replay",
-      }}
       footer={
         <TutorialEditorSaveFooter
           saveStatus={saveStatus}
@@ -616,6 +662,8 @@ export function TutorialEditorRail({
       <TutorialEditorContent
         actions={actions}
         onActionsChange={onActionsChange}
+        onReplay={onReplay}
+        onPlayFromAction={onPlayFromAction}
       />
     </DeveloperRail>
   );
@@ -628,6 +676,7 @@ export function TutorialEditorTakeover({
   saveError,
   onActionsChange,
   onReplay,
+  onPlayFromAction,
   onClose,
 }: TutorialEditorRailProps): ReactElement {
   return (
@@ -650,17 +699,11 @@ export function TutorialEditorTakeover({
           marginInline: "auto",
         }}
       >
-        <div style={{ justifySelf: "start" }}>
-          <IconButton
-            glyph={GLYPHS.play}
-            label="Replay tutorial from start"
-            disabled={actions.length === 0}
-            onPress={onReplay}
-          />
-        </div>
         <TutorialEditorContent
           actions={actions}
           onActionsChange={onActionsChange}
+          onReplay={onReplay}
+          onPlayFromAction={onPlayFromAction}
         />
         <TutorialEditorSaveFooter
           saveStatus={saveStatus}

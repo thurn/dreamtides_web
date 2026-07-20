@@ -2,16 +2,10 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import { TutorialScreen } from "../../cumulus/screens/TutorialScreen";
 import { logEvent } from "../../logging";
 import { useFrontDoor } from "../../state/front-door-context";
-import {
-  useTutorialEditor,
-  useTutorialReplay,
-} from "../../state/use-tutorial-editor";
+import * as tutorialEditor from "../../state/use-tutorial-editor";
 import { useTutorialOpponentCard } from "../../state/use-tutorial-opponent-card";
 import type { TutorialDreamcallerOwner } from "../../types/tutorial";
-import {
-  buildTutorialView,
-  tutorialActionLogDetails,
-} from "./tutorial-view-model";
+import * as tutorialView from "./tutorial-view-model";
 /** Standalone `/tutorial` wiring, shared playback, and local authoring saves. */
 export function TutorialScreenAdapter() {
   const { state, mutations } = useFrontDoor();
@@ -21,11 +15,14 @@ export function TutorialScreenAdapter() {
     saveStatus,
     saveError,
     onActionsChange: handleEditorActionsChange,
-  } = useTutorialEditor();
+  } = tutorialEditor.useTutorialEditor();
   const beginRequestedKey = useRef<string | null>(null);
   const loggedActionKey = useRef<string | null>(null);
   const opponentCard = useTutorialOpponentCard();
-  const handleReplay = useTutorialReplay(authoredActions, mutations.beginTutorial);
+  const handleReplay = tutorialEditor.useTutorialReplay(
+    authoredActions,
+    mutations.beginTutorial,
+  );
   useEffect(() => {
     if (
       !actionsLoaded ||
@@ -38,7 +35,7 @@ export function TutorialScreenAdapter() {
     if (beginRequestedKey.current === intentKey) return;
     beginRequestedKey.current = intentKey;
     void mutations
-      .beginTutorial(authoredActions, intentKey)
+      .beginTutorial(authoredActions, { intentKey })
       .catch((error: unknown) => {
         beginRequestedKey.current = null;
         logEvent("tutorial_begin_failed", {
@@ -54,7 +51,7 @@ export function TutorialScreenAdapter() {
     state.tutorial,
   ]);
   const view = useMemo(
-    () => buildTutorialView(state.tutorial, opponentCard),
+    () => tutorialView.buildTutorialView(state.tutorial, opponentCard),
     [opponentCard, state.tutorial],
   );
 
@@ -66,7 +63,7 @@ export function TutorialScreenAdapter() {
     loggedActionKey.current = key;
     logEvent("tutorial_action_presented", {
       runId: view.playbackRunId,
-      ...tutorialActionLogDetails(current),
+      ...tutorialView.tutorialActionLogDetails(current),
       dialogueVisible: view.dialogue !== null,
       dialogueText:
         view.dialogue === null
@@ -120,6 +117,7 @@ export function TutorialScreenAdapter() {
       onDreamcallerArrivalComplete={handleDreamcallerArrivalComplete}
       onEditorActionsChange={handleEditorActionsChange}
       onReplay={handleReplay}
+      onPlayFromAction={handleReplay}
     />
   );
 }

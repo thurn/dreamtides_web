@@ -69,7 +69,7 @@ function captureAllDrafts(): EventDraft[] {
   // is about the event type + routing, not the payload's game meaning.
   void actions.frontDoorAction("main", "new-journey");
   void actions.advanceFrontDoor("loading", "journey-1");
-  void actions.beginTutorial([], "tutorial:journey-1:begin");
+  void actions.beginTutorial([], { intentKey: "tutorial:journey-1:begin" });
   void actions.completeTutorialAction("event:1", "welcome");
   void actions.changeEssence(1);
   void actions.setEssence(1);
@@ -213,6 +213,35 @@ describe("coop actions facade", () => {
       "accept-essence:quest:12:site-7",
       "complete-site:quest:12:site-7",
       "battle:b-1:dreamwell:player:2",
+    ]);
+  });
+
+  it("carries the shared tutorial start cursor in the begin event", () => {
+    const captured: EventDraft[] = [];
+    const actions = makeActions((draft) => {
+      captured.push(draft);
+      return Promise.resolve(captured.length);
+    });
+    const tutorialActions = [
+      {
+        id: "tail-start",
+        action: "display-speech-bubble" as const,
+        text: "Begin here.",
+        wait: 1,
+      },
+    ];
+
+    void actions.beginTutorial(tutorialActions, {
+      startActionId: "tail-start",
+      intentKey: "tutorial:test:tail-start",
+    });
+
+    expect(captured).toEqual([
+      {
+        type: "BEGIN_TUTORIAL",
+        payload: { actions: tutorialActions, startActionId: "tail-start" },
+        intentKey: "tutorial:test:tail-start",
+      },
     ]);
   });
 

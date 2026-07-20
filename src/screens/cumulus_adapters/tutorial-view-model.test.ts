@@ -24,6 +24,67 @@ const OPPONENT_CARD: CardData = {
 };
 
 describe("buildTutorialView", () => {
+  it("reconstructs the completed prefix when playback starts at the last three actions", () => {
+    const actions = [
+      {
+        id: "welcome",
+        action: "display-speech-bubble" as const,
+        text: "Welcome.",
+        wait: 1,
+      },
+      {
+        id: "player-arrival",
+        action: "animate-dreamcaller-portrait" as const,
+        owner: "player" as const,
+        pause: 1,
+        duration: 0.6,
+        wait: 0,
+      },
+      {
+        id: "enemy-arrival",
+        action: "animate-dreamcaller-portrait" as const,
+        owner: "enemy" as const,
+        pause: 1,
+        duration: 0.6,
+        wait: 0,
+      },
+      {
+        id: "enemy-taunt",
+        action: "display-speech-bubble" as const,
+        speaker: "enemy" as const,
+        text: "For the Abyss!",
+        wait: 1,
+      },
+      {
+        id: "enemy-draw",
+        action: "draw-opponent-card" as const,
+        wait: 0,
+      },
+      {
+        id: "enemy-play",
+        action: "reveal-and-play-opponent-card" as const,
+        revealDuration: 2,
+        wait: 0,
+      },
+    ];
+
+    const tail = buildTutorialView(
+      { runId: "event:tail", actions, currentActionIndex: actions.length - 3 },
+      OPPONENT_CARD,
+    );
+
+    expect(tail.currentAction?.id).toBe("enemy-taunt");
+    expect(tail.dreamcallers.player.settled).toBe(true);
+    expect(tail.dreamcallers.enemy.settled).toBe(true);
+    expect(tail.battle.enemy.deckCardIds).toHaveLength(30);
+    expect(tail.battle.enemyHandCardIds).toEqual([]);
+    expect(tail.dialogue).toMatchObject({
+      kind: "dreamcaller",
+      owner: "enemy",
+      text: "For the Abyss!",
+    });
+  });
+
   it("logs the selected speech portrait for sequence reconstruction", () => {
     expect(
       tutorialActionLogDetails({
@@ -300,11 +361,14 @@ describe("buildTutorialView", () => {
     expect(drawing.enemy.deckCardIds).toHaveLength(30);
     expect(drawing.enemyHandCardIds).toEqual([]);
 
-    const drawn = buildTutorialView({
-      runId: "event:draw",
-      currentActionIndex: 2,
-      actions,
-    }, OPPONENT_CARD).battle;
+    const drawn = buildTutorialView(
+      {
+        runId: "event:draw",
+        currentActionIndex: 2,
+        actions,
+      },
+      OPPONENT_CARD,
+    ).battle;
     expect(drawn.enemy.deckCardIds[0]).toBe("tutorial-enemy-deck-2");
     expect(drawn.enemy.deckCardIds).toHaveLength(29);
     expect(drawn.enemyHandCardIds).toEqual(["tutorial-enemy-deck-1"]);
@@ -319,11 +383,14 @@ describe("buildTutorialView", () => {
       hand: 1,
     });
 
-    const played = buildTutorialView({
-      runId: "event:draw",
-      currentActionIndex: null,
-      actions,
-    }, OPPONENT_CARD).battle;
+    const played = buildTutorialView(
+      {
+        runId: "event:draw",
+        currentActionIndex: null,
+        actions,
+      },
+      OPPONENT_CARD,
+    ).battle;
     expect(played.enemyHandCardIds).toEqual([]);
     expect(played.enemyHand).toEqual([]);
     expect(played.enemy.backRank[0]?.card).toMatchObject({
@@ -373,9 +440,7 @@ describe("buildTutorialView", () => {
     expect(arriving.dreamcallers.enemy.settled).toBe(false);
     expect(arriving.currentAction?.id).toBe("vrakmoth-arrival");
     expect(
-      arriving.dialogue?.kind === "guide"
-        ? arriving.dialogue.model.text
-        : null,
+      arriving.dialogue?.kind === "guide" ? arriving.dialogue.model.text : null,
     ).toContain("power of Nightmare");
 
     const complete = buildTutorialView({

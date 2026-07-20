@@ -100,6 +100,7 @@ export interface TutorialScreenProps {
     persist: boolean,
   ) => void;
   readonly onReplay?: () => void;
+  readonly onPlayFromAction?: (actionId: string) => void;
 }
 
 interface TutorialDialogueAnchor {
@@ -152,10 +153,13 @@ function expandedTutorialSide(
     rank: "back" | "front",
   ) => [
     ...slots,
-    ...Array.from({ length: Math.max(0, count - slots.length) }, (_, offset) => ({
-      id: `${owner}-${rank}-${String(slots.length + offset)}`,
-      card: null,
-    })),
+    ...Array.from(
+      { length: Math.max(0, count - slots.length) },
+      (_, offset) => ({
+        id: `${owner}-${rank}-${String(slots.length + offset)}`,
+        card: null,
+      }),
+    ),
   ];
   const backRank = pad(side.backRank, 10, "back");
   const existingCard = side.backRank.find((slot) => slot.card !== null)?.card;
@@ -448,8 +452,9 @@ function TutorialOpponentCardPlay({
   readonly reduceMotion: boolean;
   readonly onComplete: () => void;
 }): ReactElement | null {
-  const [trajectory, setTrajectory] =
-    useState<TutorialCardTrajectory | null>(null);
+  const [trajectory, setTrajectory] = useState<TutorialCardTrajectory | null>(
+    null,
+  );
 
   useLayoutEffect(() => {
     const source = [
@@ -495,12 +500,12 @@ function TutorialOpponentCardPlay({
       const screenBox = screen.getBoundingClientRect();
       const sourceBox = source.getBoundingClientRect();
       const destinationBox = destination.getBoundingClientRect();
-      const [enemyPenultimate, enemyLast] = enemyFront.slice(-2).map((slot) =>
-        slot.getBoundingClientRect(),
-      );
-      const [playerPenultimate, playerLast] = playerFront.slice(-2).map((slot) =>
-        slot.getBoundingClientRect(),
-      );
+      const [enemyPenultimate, enemyLast] = enemyFront
+        .slice(-2)
+        .map((slot) => slot.getBoundingClientRect());
+      const [playerPenultimate, playerLast] = playerFront
+        .slice(-2)
+        .map((slot) => slot.getBoundingClientRect());
       if (
         enemyPenultimate === undefined ||
         enemyLast === undefined ||
@@ -565,9 +570,7 @@ function TutorialOpponentCardPlay({
   const totalDuration = travelDuration * 2 + revealDuration;
   const revealStart = totalDuration === 0 ? 0 : travelDuration / totalDuration;
   const revealEnd =
-    totalDuration === 0
-      ? 1
-      : (travelDuration + revealDuration) / totalDuration;
+    totalDuration === 0 ? 1 : (travelDuration + revealDuration) / totalDuration;
   const times = [0, revealStart, revealEnd, 1];
   const frames = reduceMotion
     ? [trajectory.reveal, trajectory.reveal]
@@ -708,6 +711,7 @@ export function TutorialScreen({
   onDreamcallerArrivalComplete,
   onEditorActionsChange,
   onReplay,
+  onPlayFromAction,
 }: TutorialScreenProps): ReactElement {
   const desktop = useIsDesktop();
   const dockEditor = useIsDesktop(TUTORIAL_EDITOR_DOCK_MIN_WIDTH);
@@ -1133,12 +1137,14 @@ export function TutorialScreen({
   const editorSurface =
     editor === undefined ||
     onEditorActionsChange === undefined ||
-    onReplay === undefined
+    onReplay === undefined ||
+    onPlayFromAction === undefined
       ? null
       : {
           ...editor,
           onActionsChange: onEditorActionsChange,
           onReplay,
+          onPlayFromAction,
           onClose: () => setEditorOpen(false),
         };
 

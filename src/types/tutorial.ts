@@ -43,8 +43,7 @@ export interface DrawOpponentCardTutorialAction extends TutorialActionBase {
 }
 
 /** Reveals the opponent's hand card at reading scale, then plays it. */
-export interface RevealAndPlayOpponentCardTutorialAction
-  extends TutorialActionBase {
+export interface RevealAndPlayOpponentCardTutorialAction extends TutorialActionBase {
   readonly action: "reveal-and-play-opponent-card";
   /** Seconds the face-up card remains at reading scale before it travels. */
   readonly revealDuration: number;
@@ -59,6 +58,14 @@ export type TutorialAction =
 
 /** Local filesystem persistence state shown by the Tutorial Editor. */
 export type TutorialEditorSaveStatus = "idle" | "saving" | "saved" | "error";
+
+/** Optional cursor and transport metadata for a shared tutorial playback. */
+export interface BeginTutorialOptions {
+  /** Stable authored action id that should animate first. */
+  readonly startActionId?: string;
+  /** Durable deduplication key for automatic tutorial starts. */
+  readonly intentKey?: string;
+}
 
 /** Event-log-owned progress for one shared tutorial playback. */
 export interface TutorialPlaybackState {

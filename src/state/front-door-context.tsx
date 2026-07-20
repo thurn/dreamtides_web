@@ -1,7 +1,7 @@
 import { createContext, useContext, useMemo, type ReactNode } from "react";
 import { useActions, useGameState } from "../coop/hooks";
 import type { FrontDoorState } from "../rules/fold-state";
-import type { TutorialAction } from "../types/tutorial";
+import type { BeginTutorialOptions, TutorialAction } from "../types/tutorial";
 
 export interface FrontDoorMutations {
   action: (
@@ -15,7 +15,7 @@ export interface FrontDoorMutations {
   ) => Promise<number>;
   beginTutorial: (
     actions: readonly TutorialAction[],
-    intentKey?: string,
+    options?: BeginTutorialOptions,
   ) => Promise<number>;
   completeTutorialAction: (runId: string, actionId: string) => Promise<number>;
 }
