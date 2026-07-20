@@ -138,6 +138,10 @@ const TUTORIAL_REVEAL_CARD_MOBILE_WIDTH_RATIO = 0.45;
 // The pointer overlaps the portrait rim so it visibly connects to the frame.
 const TUTORIAL_PORTRAIT_POINTER_OVERLAP = 2;
 
+function tutorialOpponentBackRankIndex(slotCount: number): number {
+  return Math.max(0, Math.floor(slotCount / 2) - 1);
+}
+
 function expandedTutorialSide(
   side: MobileBattleSideView,
   owner: "enemy" | "player",
@@ -160,7 +164,10 @@ function expandedTutorialSide(
       ? backRank
       : backRank.map((slot, index, slots) => ({
           ...slot,
-          card: index === Math.floor(slots.length / 2) ? existingCard : null,
+          card:
+            index === tutorialOpponentBackRankIndex(slots.length)
+              ? existingCard
+              : null,
         }));
   return {
     ...side,
@@ -175,7 +182,8 @@ function withOpponentCardPlayed(
 ): MobileBattleView {
   const backRank = battle.enemy.backRank.map((slot, index, slots) => ({
     ...slot,
-    card: index === Math.floor(slots.length / 2) ? card : slot.card,
+    card:
+      index === tutorialOpponentBackRankIndex(slots.length) ? card : slot.card,
   }));
   return {
     ...battle,
@@ -464,7 +472,8 @@ function TutorialOpponentCardPlay({
         '[data-battle-rank="enemy-back"] [data-battle-slot-id]',
       ),
     ];
-    const destination = enemyBack[Math.floor(enemyBack.length / 2)];
+    const destination =
+      enemyBack[tutorialOpponentBackRankIndex(enemyBack.length)];
     if (
       source === undefined ||
       destination === undefined ||

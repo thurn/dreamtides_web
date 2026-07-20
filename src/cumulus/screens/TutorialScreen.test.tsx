@@ -842,7 +842,7 @@ describe("TutorialScreen", () => {
       height: 81.2,
     });
     expect(screenMocks.cardAnimate).toEqual({
-      x: [931, 1278.18, 1278.18, 961.98],
+      x: [931, 1278.18, 1278.18, 836.78],
       y: [0, 285.6, 285.6, 205.2],
       width: [58, 240, 240, 121.2],
       height: [81.2, 336, 336, 121.2],
@@ -883,9 +883,10 @@ describe("TutorialScreen", () => {
     });
 
     expect(screenMocks.props?.view.enemyHandCardIds).toEqual([]);
-    expect(screenMocks.props?.view.enemy.backRank[5]?.card?.model.cardId).toBe(
+    expect(screenMocks.props?.view.enemy.backRank[4]?.card?.model.cardId).toBe(
       "229ab3a1-3720-41a2-924c-8fe112188f8e",
     );
+    expect(screenMocks.props?.view.enemy.backRank[5]?.card).toBeNull();
     expect(onActionComplete).toHaveBeenCalledWith(
       "event:play",
       "vrakmoth-reveal-and-play",

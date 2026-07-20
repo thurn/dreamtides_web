@@ -18,6 +18,7 @@ const TUTORIAL_BATTLE_ID = "tutorial-battle";
 const TUTORIAL_DECK_SIZE = 30;
 const TUTORIAL_DREAMCALLER_ID = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
 const TUTORIAL_OPPONENT_DREAMCALLER_ID = "86026206-1B11-4F38-A24E-FD3C697F5353";
+const TUTORIAL_OPPONENT_BACK_RANK_INDEX = 0;
 export { TUTORIAL_OPPONENT_CARD_ID } from "../../data/tutorial-opponent-card";
 
 /** Reconstruction fields logged whenever an authored tutorial action appears. */
@@ -199,7 +200,7 @@ export function buildTutorialView(
   };
   const enemy = emptySide("enemy");
   const enemyBackRank = enemy.backRank.map((slot, index) =>
-    opponentCardPlayed && index === Math.floor(enemy.backRank.length / 2)
+    opponentCardPlayed && index === TUTORIAL_OPPONENT_BACK_RANK_INDEX
       ? { ...slot, card: tutorialCard }
       : slot,
   );

@@ -326,11 +326,11 @@ describe("buildTutorialView", () => {
     }, OPPONENT_CARD).battle;
     expect(played.enemyHandCardIds).toEqual([]);
     expect(played.enemyHand).toEqual([]);
-    expect(played.enemy.backRank[Math.floor(played.enemy.backRank.length / 2)]?.card)
-      .toMatchObject({
-        layoutMotion: "snap",
-        model: { cardId: TUTORIAL_OPPONENT_CARD_ID },
-      });
+    expect(played.enemy.backRank[0]?.card).toMatchObject({
+      layoutMotion: "snap",
+      model: { cardId: TUTORIAL_OPPONENT_CARD_ID },
+    });
+    expect(played.enemy.backRank[1]?.card).toBeNull();
     expect(played.inspector.sides.enemy.zones).toMatchObject({
       deck: 29,
       hand: 0,
