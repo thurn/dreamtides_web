@@ -28,5 +28,6 @@ model.
 `944e15d2-d680-4ebe-8d18-36826f4b1535` and UUID
 `229ab3a1-3720-41a2-924c-8fe112188f8e`. The duplicate breaks
 `src/data/starter-cards.test.ts` and makes any number-keyed card database retain
-only one of the two records. Assign distinct card numbers and regenerate the
-runtime card catalogs.
+only one of the two records. The full suite reconfirmed this failure on
+2026-07-20. Assign distinct card numbers and regenerate the runtime card
+catalogs.

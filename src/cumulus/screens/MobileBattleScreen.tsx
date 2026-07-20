@@ -343,6 +343,22 @@ const PHASE_LIGHT_STREAK_HEIGHT = 2;
 const PHASE_COMET_TAIL_START_SCALE = 0.35;
 const PHASE_COMET_TAIL_PEAK_SCALE = 1.55;
 const PHASE_CHALLENGE_PULSE_PEAK_SCALE = 1.65;
+// Five slow motion beats: arrive, settle, hold, and dissolve. The timer only
+// removes the inert presentation layer after its token-driven motion finishes.
+const TURN_ANNOUNCEMENT_DURATION_MS = 2_100;
+const TURN_ANNOUNCEMENT_DESKTOP_SIZE = 236;
+const TURN_ANNOUNCEMENT_MOBILE_SIZE = 184;
+const TURN_ANNOUNCEMENT_Z_INDEX = 55;
+const TURN_DISC_ARRIVAL_SCALE = 0.48;
+const TURN_DISC_OVERSHOOT_SCALE = 1.08;
+const TURN_DISC_EXIT_SCALE = 0.86;
+const TURN_ORBIT_ARRIVAL_SCALE = 0.64;
+const TURN_ORBIT_EXIT_SCALE = 1.24;
+const TURN_RIPPLE_ARRIVAL_SCALE = 0.68;
+const TURN_RIPPLE_EXIT_SCALE = 1.42;
+const TURN_COPY_ARRIVAL_SCALE = 0.72;
+const TURN_COPY_OVERSHOOT_SCALE = 1.06;
+const TURN_COPY_EXIT_SCALE = 0.94;
 const PHASE_LIGHT_LEFT = {
   dawn: "10%",
   day: "30%",
@@ -366,6 +382,37 @@ const PHASE_GLYPH = {
 } satisfies Record<MobileBattlePhase, (typeof GLYPHS)[keyof typeof GLYPHS]>;
 
 const BATTLE_PHASE_LIGHT_CSS = `
+  body:has([data-battle-turn-announcement]) [data-cumulus-reveal-portal] {
+    visibility: hidden;
+  }
+
+  @keyframes battle-turn-announcement-disc {
+    0% { opacity: 0; transform: scale(${String(TURN_DISC_ARRIVAL_SCALE)}) rotate(-12deg); }
+    18% { opacity: 1; transform: scale(${String(TURN_DISC_OVERSHOOT_SCALE)}) rotate(3deg); }
+    30%, 72% { opacity: 1; transform: scale(1) rotate(0deg); }
+    100% { opacity: 0; transform: scale(${String(TURN_DISC_EXIT_SCALE)}) rotate(0deg); }
+  }
+
+  @keyframes battle-turn-announcement-orbit {
+    0% { opacity: 0; transform: scale(${String(TURN_ORBIT_ARRIVAL_SCALE)}) rotate(-70deg); }
+    24% { opacity: 0.88; }
+    74% { opacity: 0.42; }
+    100% { opacity: 0; transform: scale(${String(TURN_ORBIT_EXIT_SCALE)}) rotate(250deg); }
+  }
+
+  @keyframes battle-turn-announcement-ripple {
+    0%, 18% { opacity: 0; transform: scale(${String(TURN_RIPPLE_ARRIVAL_SCALE)}); }
+    36% { opacity: 0.7; }
+    100% { opacity: 0; transform: scale(${String(TURN_RIPPLE_EXIT_SCALE)}); }
+  }
+
+  @keyframes battle-turn-announcement-copy {
+    0%, 14% { opacity: 0; transform: scale(${String(TURN_COPY_ARRIVAL_SCALE)}); }
+    28% { opacity: 1; transform: scale(${String(TURN_COPY_OVERSHOOT_SCALE)}); }
+    38%, 72% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(${String(TURN_COPY_EXIT_SCALE)}); }
+  }
+
   @keyframes battle-phase-comet-tail {
     0% { transform: translateY(-50%) scaleX(${String(PHASE_COMET_TAIL_START_SCALE)}); opacity: 0.12; }
     45% { transform: translateY(-50%) scaleX(${String(PHASE_COMET_TAIL_PEAK_SCALE)}); opacity: 0.52; }
@@ -378,6 +425,10 @@ const BATTLE_PHASE_LIGHT_CSS = `
   }
 
   @media (prefers-reduced-motion: reduce) {
+    [data-battle-turn-announcement-disc],
+    [data-battle-turn-announcement-orbit],
+    [data-battle-turn-announcement-ripple],
+    [data-battle-turn-announcement-copy],
     [data-battle-phase-light],
     [data-battle-phase-light-halo],
     [data-battle-phase-light-streak] {
@@ -460,6 +511,119 @@ function BattleBackdrop({ isDesktop }: { readonly isDesktop: boolean }) {
         pointerEvents: "none",
       }}
     />
+  );
+}
+
+function BattleTurnAnnouncement({
+  activeSide,
+  isDesktop,
+}: {
+  readonly activeSide: MobileBattleOwner;
+  readonly isDesktop: boolean;
+}) {
+  const sequence = useRef(1);
+  const previousSide = useRef(activeSide);
+  const [announcement, setAnnouncement] = useState<{
+    readonly key: number;
+    readonly side: MobileBattleOwner;
+  } | null>({ key: 0, side: activeSide });
+
+  useEffect(() => {
+    if (previousSide.current === activeSide) return;
+    previousSide.current = activeSide;
+    setAnnouncement({ key: sequence.current, side: activeSide });
+    sequence.current += 1;
+  }, [activeSide]);
+
+  useEffect(() => {
+    if (announcement === null) return;
+    const announcementKey = announcement.key;
+    const timeout = window.setTimeout(() => {
+      setAnnouncement((current) =>
+        current?.key === announcementKey ? null : current,
+      );
+    }, TURN_ANNOUNCEMENT_DURATION_MS);
+    return () => window.clearTimeout(timeout);
+  }, [announcement]);
+
+  if (announcement === null) return null;
+
+  const label = announcement.side === "player" ? "Your Turn" : "Opponent Turn";
+  const size = isDesktop
+    ? TURN_ANNOUNCEMENT_DESKTOP_SIZE
+    : TURN_ANNOUNCEMENT_MOBILE_SIZE;
+  const animationDuration = `calc(${token("--dur-slow")} * 5)`;
+
+  return (
+    <div
+      key={announcement.key}
+      role="status"
+      aria-live="polite"
+      data-battle-turn-announcement={announcement.side}
+      style={{
+        position: "absolute",
+        inset: 0,
+        zIndex: TURN_ANNOUNCEMENT_Z_INDEX,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        pointerEvents: "none",
+      }}
+    >
+      <div
+        data-battle-turn-announcement-disc=""
+        style={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: size,
+          height: size,
+          borderRadius: token("--radius-pill"),
+          background:
+            `radial-gradient(circle at 38% 28%, ${token("--surface-raised")} 0%, ${token("--surface-card")} 56%, ${token("--bg-sunken")} 100%)`,
+          boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,
+          animation: `battle-turn-announcement-disc ${animationDuration} ${token("--ease-in-out")} both`,
+        }}
+      >
+        <span
+          aria-hidden="true"
+          data-battle-turn-announcement-orbit=""
+          style={{
+            position: "absolute",
+            inset: token("--space-4"),
+            border: `${token("--space-1")} solid ${token("--border-accent")}`,
+            borderTopColor: token("--accent-bright"),
+            borderRadius: token("--radius-pill"),
+            animation: `battle-turn-announcement-orbit ${animationDuration} ${token("--ease-dream")} both`,
+          }}
+        />
+        <span
+          aria-hidden="true"
+          data-battle-turn-announcement-ripple=""
+          style={{
+            position: "absolute",
+            inset: `calc(-1 * ${token("--space-4")})`,
+            border: `${token("--space-1")} solid ${token("--border-accent")}`,
+            borderRadius: token("--radius-pill"),
+            animation: `battle-turn-announcement-ripple ${animationDuration} ${token("--ease-out")} both`,
+          }}
+        />
+        <span
+          data-battle-turn-announcement-copy=""
+          style={{
+            position: "relative",
+            color: token("--text-primary"),
+            font: token("--t-title"),
+            textAlign: "center",
+            textShadow: token("--text-outline-media"),
+            animation: `battle-turn-announcement-copy ${animationDuration} ${token("--ease-out")} both`,
+          }}
+        >
+          {label}
+        </span>
+      </div>
+    </div>
   );
 }
 
@@ -2857,6 +3021,13 @@ export function MobileBattleScreen({
     >
       <BattleBackdrop isDesktop={isDesktop} />
       <div aria-hidden="true" data-battle-mobile-safe-area-backdrop="" style={SAFE_AREA_BACKDROP_STYLE} />
+      {view.result === null ? (
+        <BattleTurnAnnouncement
+          key={view.battleId}
+          activeSide={view.activeSide}
+          isDesktop={isDesktop}
+        />
+      ) : null}
       <LayoutGroup id={`mobile-battle:${view.battleId}`}>
         <EnemyHand
           cardIds={view.enemyHandCardIds}

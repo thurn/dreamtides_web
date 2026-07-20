@@ -1060,6 +1060,52 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("announces each turn with only the requested text on a circular surface", () => {
+    vi.useFakeTimers();
+    const view = makeView();
+    const { container, root } = mount(view);
+    const render = (nextView: MobileBattleView): void => {
+      act(() => {
+        root.render(
+          <CumulusRoot>
+            <MobileBattleScreen view={nextView} />
+          </CumulusRoot>,
+        );
+      });
+    };
+
+    const playerAnnouncement = container.querySelector<HTMLElement>(
+      '[data-battle-turn-announcement="player"]',
+    );
+    const playerDisc = playerAnnouncement?.querySelector<HTMLElement>(
+      "[data-battle-turn-announcement-disc]",
+    );
+
+    expect(playerAnnouncement?.textContent).toBe("Your Turn");
+    expect(playerAnnouncement?.querySelector("i, svg")).toBeNull();
+    expect(playerDisc?.style.width).toBe("184px");
+    expect(playerDisc?.style.height).toBe("184px");
+    expect(playerDisc?.style.borderRadius).toBe("var(--radius-pill)");
+    expect(playerDisc?.style.animation).toContain(
+      "battle-turn-announcement-disc",
+    );
+
+    render({ ...view, activeSide: "enemy" });
+    const opponentAnnouncement = container.querySelector<HTMLElement>(
+      '[data-battle-turn-announcement="enemy"]',
+    );
+    expect(opponentAnnouncement?.textContent).toBe("Opponent Turn");
+    expect(opponentAnnouncement?.querySelector("i, svg")).toBeNull();
+
+    act(() => {
+      vi.advanceTimersByTime(2_500);
+    });
+    expect(container.querySelector("[data-battle-turn-announcement]")).toBeNull();
+
+    act(() => root.unmount());
+    vi.useRealTimers();
+  });
+
   it("moves one glowing phase light above the active player status", () => {
     const { container, root } = mount();
     const indicator = container.querySelector<HTMLElement>(
