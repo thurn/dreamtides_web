@@ -59,6 +59,10 @@ import {
 } from "./BattleResultSurface";
 import battleBackgroundUrl from "../assets/battle-background.png";
 
+/** Canonical visual treatment for an exhausted battlefield card body. */
+export const BATTLEFIELD_CARD_EXHAUSTED_FILTER =
+  "grayscale(0.5) brightness(0.62)";
+
 /** One physical face-up card instance rendered by the battle board. */
 export interface MobileBattleCardView {
   readonly id: string;
@@ -66,6 +70,8 @@ export interface MobileBattleCardView {
   readonly exhausted: boolean;
   readonly figment: boolean;
   readonly figmentTitleBar: boolean;
+  /** Whether this rendered location should participate in shared-layout travel. */
+  readonly layoutMotion?: "travel" | "snap";
   /** Number of physical Figments represented by this battle instance. */
   readonly figmentCount: number;
   /** Stored-time counters held by this battle instance. */
@@ -1031,6 +1037,7 @@ function FaceUpCard({
   } | null>(null);
   const draggable = interaction?.draggable === true;
   const activatable = interaction?.onActivate !== undefined;
+  const snapLayoutMotion = snapLayout || card.layoutMotion === "snap";
   const restingTransform = "";
   const cancelPendingTap = (): void => {
     if (pendingTapRef.current === null) return;
@@ -1232,14 +1239,14 @@ function FaceUpCard({
       }}
     >
       <motion.div
-        layoutId={snapLayout ? undefined : `battle-card:${card.id}`}
+        layoutId={snapLayoutMotion ? undefined : `battle-card:${card.id}`}
         data-battle-card-motion=""
-        data-battle-card-layout-motion={snapLayout ? "snap" : "travel"}
+        data-battle-card-layout-motion={snapLayoutMotion ? "snap" : "travel"}
         style={{
           width: "100%",
           height: "100%",
           filter: card.exhausted
-            ? "grayscale(0.5) brightness(0.62)"
+            ? BATTLEFIELD_CARD_EXHAUSTED_FILTER
             : undefined,
         }}
       >

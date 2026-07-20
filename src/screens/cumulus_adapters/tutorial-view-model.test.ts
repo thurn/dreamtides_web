@@ -311,6 +311,7 @@ describe("buildTutorialView", () => {
     expect(drawn.enemyHand).toHaveLength(1);
     expect(drawn.enemyHand[0]).toMatchObject({
       id: "tutorial-enemy-deck-1",
+      layoutMotion: "snap",
       model: { cardId: TUTORIAL_OPPONENT_CARD_ID },
     });
     expect(drawn.inspector.sides.enemy.zones).toMatchObject({
@@ -326,7 +327,10 @@ describe("buildTutorialView", () => {
     expect(played.enemyHandCardIds).toEqual([]);
     expect(played.enemyHand).toEqual([]);
     expect(played.enemy.backRank[Math.floor(played.enemy.backRank.length / 2)]?.card)
-      .toMatchObject({ model: { cardId: TUTORIAL_OPPONENT_CARD_ID } });
+      .toMatchObject({
+        layoutMotion: "snap",
+        model: { cardId: TUTORIAL_OPPONENT_CARD_ID },
+      });
     expect(played.inspector.sides.enemy.zones).toMatchObject({
       deck: 29,
       hand: 0,

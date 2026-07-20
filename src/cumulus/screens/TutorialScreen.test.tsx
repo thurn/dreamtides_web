@@ -27,6 +27,10 @@ const screenMocks = vi.hoisted(() => ({
   cardAnimate: null as unknown,
   cardTransition: null as unknown,
   cardAnimationComplete: null as (() => void) | null,
+  cardFullAnimate: null as unknown,
+  cardFullTransition: null as unknown,
+  cardBattlefieldAnimate: null as unknown,
+  cardBattlefieldTransition: null as unknown,
 }));
 
 interface MotionMainStubInput {
@@ -45,6 +49,8 @@ interface MotionDivStubInput {
   readonly animate?: unknown;
   readonly children?: ReactNode;
   readonly "data-tutorial-dreamcaller-arrival"?: string;
+  readonly "data-tutorial-card-battlefield-layer"?: string;
+  readonly "data-tutorial-card-full-layer"?: string;
   readonly "data-tutorial-opponent-card-play"?: string;
   readonly initial?: unknown;
   readonly onAnimationComplete?: () => void;
@@ -82,6 +88,16 @@ vi.mock("framer-motion", () => ({
         screenMocks.cardAnimate = animate;
         screenMocks.cardTransition = transition;
         screenMocks.cardAnimationComplete = onAnimationComplete ?? null;
+      } else if (
+        elementProps["data-tutorial-card-full-layer"] !== undefined
+      ) {
+        screenMocks.cardFullAnimate = animate;
+        screenMocks.cardFullTransition = transition;
+      } else if (
+        elementProps["data-tutorial-card-battlefield-layer"] !== undefined
+      ) {
+        screenMocks.cardBattlefieldAnimate = animate;
+        screenMocks.cardBattlefieldTransition = transition;
       } else {
         screenMocks.arrivalInitial = initial;
         screenMocks.arrivalAnimate = animate;
@@ -271,6 +287,10 @@ beforeEach(() => {
   screenMocks.cardAnimate = null;
   screenMocks.cardTransition = null;
   screenMocks.cardAnimationComplete = null;
+  screenMocks.cardFullAnimate = null;
+  screenMocks.cardFullTransition = null;
+  screenMocks.cardBattlefieldAnimate = null;
+  screenMocks.cardBattlefieldTransition = null;
 });
 
 afterEach(() => {
@@ -828,6 +848,26 @@ describe("TutorialScreen", () => {
       height: [81.2, 336, 336, 121.2],
     });
     expect(screenMocks.cardTransition).toMatchObject({ duration: 2.84 });
+    expect(screenMocks.cardFullAnimate).toEqual({ opacity: 0 });
+    expect(screenMocks.cardFullTransition).toMatchObject({
+      delay: 2.42,
+      duration: 0.42,
+    });
+    expect(screenMocks.cardBattlefieldAnimate).toEqual({ opacity: 1 });
+    expect(screenMocks.cardBattlefieldTransition).toMatchObject({
+      delay: 2.42,
+      duration: 0.42,
+    });
+    expect(
+      container.querySelector(
+        '[data-testid="tutorial-opponent-card-battlefield"][data-game-card-presentation="battlefield"]',
+      ),
+    ).not.toBeNull();
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-tutorial-card-battlefield-layer]",
+      )?.style.filter,
+    ).toBe("grayscale(0.5) brightness(0.62)");
     expect(
       container.querySelector('[data-tutorial-card-id="229ab3a1-3720-41a2-924c-8fe112188f8e"]'),
     ).not.toBeNull();

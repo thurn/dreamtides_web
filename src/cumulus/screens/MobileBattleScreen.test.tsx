@@ -2729,6 +2729,34 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("honors view-authored snap layout for a card whose travel is already rendered", () => {
+    const view = makeView();
+    const card = view.enemy.backRank[1]?.card;
+    expect(card).not.toBeNull();
+    expect(card).not.toBeUndefined();
+    const snapView: MobileBattleView = {
+      ...view,
+      enemy: {
+        ...view.enemy,
+        backRank: view.enemy.backRank.map((slot, index) =>
+          index === 1 && card !== null && card !== undefined
+            ? { ...slot, card: { ...card, layoutMotion: "snap" } }
+            : slot,
+        ),
+      },
+    };
+    const { container, root } = mount(snapView);
+
+    expect(
+      container
+        .querySelector<HTMLElement>('[data-battle-card-id="enemy-back-card"]')
+        ?.querySelector<HTMLElement>(":scope > [data-battle-card-motion]")
+        ?.dataset.battleCardLayoutMotion,
+    ).toBe("snap");
+
+    act(() => root.unmount());
+  });
+
   it("keeps a dragged battlefield card out of shared layout motion through its committed reposition", () => {
     const interactions = {
       canInteract: true,

@@ -16,7 +16,10 @@ import { IconButton } from "../components/controls/IconButton";
 import type { BattleStatusDreamcallerProfile } from "../components/battle/BattleStatusDisplay";
 import { CardBack } from "../components/battle/CardBack";
 import { GameCard } from "../components/card/CardView";
-import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
+import {
+  BATTLEFIELD_CARD_ASPECT_RATIO,
+  CARD_ASPECT_RATIO_VALUE,
+} from "../components/card/card-aspect";
 import {
   DreamcallerPortrait,
   type DreamcallerVisual,
@@ -31,6 +34,7 @@ import {
   type SpeechBubblePointerPlacement,
 } from "../components/overlay/speech-bubble-geometry";
 import {
+  BATTLEFIELD_CARD_EXHAUSTED_FILTER,
   MobileBattleScreen,
   type MobileBattleCardView,
   type MobileBattleSideView,
@@ -600,40 +604,88 @@ function TutorialOpponentCardPlay({
       {reduceMotion ? (
         <GameCard model={card.model} testId="tutorial-opponent-card-reveal" />
       ) : (
-        <motion.div
-          initial={{ rotateY: 0 }}
-          animate={{ rotateY: [0, 180, 180, 180] }}
-          transition={{ duration: totalDuration, times }}
-          style={{
-            position: "relative",
-            width: "100%",
-            height: "100%",
-            transformStyle: "preserve-3d",
-          }}
-        >
-          <div
+        <div style={{ position: "absolute", inset: 0 }}>
+          <motion.div
+            data-tutorial-card-full-layer=""
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 0 }}
+            transition={{
+              delay: travelDuration + revealDuration,
+              duration: travelDuration,
+              ease: [0.22, 0.61, 0.36, 1],
+            }}
             style={{
               position: "absolute",
-              inset: 0,
-              backfaceVisibility: "hidden",
+              top: "50%",
+              left: 0,
+              width: "100%",
+              aspectRatio: CARD_ASPECT_RATIO_VALUE,
+              transform: "translateY(-50%)",
             }}
           >
-            <CardBack label="Opponent card flipping face up" />
-          </div>
-          <div
+            <motion.div
+              initial={{ rotateY: 0 }}
+              animate={{ rotateY: [0, 180, 180, 180] }}
+              transition={{ duration: totalDuration, times }}
+              style={{
+                position: "relative",
+                width: "100%",
+                height: "100%",
+                transformStyle: "preserve-3d",
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  backfaceVisibility: "hidden",
+                }}
+              >
+                <CardBack label="Opponent card flipping face up" />
+              </div>
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  transform: "rotateY(180deg)",
+                  backfaceVisibility: "hidden",
+                }}
+              >
+                <GameCard
+                  model={card.model}
+                  testId="tutorial-opponent-card-reveal"
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+          <motion.div
+            data-tutorial-card-battlefield-layer=""
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              delay: travelDuration + revealDuration,
+              duration: travelDuration,
+              ease: [0.22, 0.61, 0.36, 1],
+            }}
             style={{
               position: "absolute",
-              inset: 0,
-              transform: "rotateY(180deg)",
-              backfaceVisibility: "hidden",
+              top: "50%",
+              left: 0,
+              width: "100%",
+              aspectRatio: BATTLEFIELD_CARD_ASPECT_RATIO,
+              transform: "translateY(-50%)",
+              filter: card.exhausted
+                ? BATTLEFIELD_CARD_EXHAUSTED_FILTER
+                : undefined,
             }}
           >
             <GameCard
               model={card.model}
-              testId="tutorial-opponent-card-reveal"
+              presentation="battlefield"
+              testId="tutorial-opponent-card-battlefield"
             />
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       )}
     </motion.div>
   );

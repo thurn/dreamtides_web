@@ -74,6 +74,7 @@ function tutorialOpponentCardView(
     exhausted: true,
     figment: false,
     figmentTitleBar: false,
+    layoutMotion: "snap",
     figmentCount: 0,
     storedTime: 0,
     showPlayableOutline: false,
