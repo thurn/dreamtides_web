@@ -308,7 +308,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Twilight Suppressor
 - 1× Vigilant Howler
 - 1× Embersummoner
-- 1× Winterbough Monk
+- 1× Relic Collector
 - 1× Seeker of Lost Paths
 - 1× Cloaked Sentinel
 - 1× Ebonwing
@@ -522,7 +522,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Sky Collapse
 - 1× The Dread Sovereign
 - 1× Embersummoner
-- 1× Winterbough Monk
+- 1× Relic Collector
 - 1× Entropy Spike
 - 1× Salvage Colossus
 - 1× Apocalypse
@@ -1450,7 +1450,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Clifftop Marksman
 - 1× The Dread Sovereign
 - 1× Dawnhorn Elder
-- 1× Winterbough Monk
+- 1× Relic Collector
 - 1× Cloaked Sentinel
 - 1× Eclipse Herald
 - 1× Ebonwing
@@ -1545,7 +1545,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 1× Momentum's Edge
 - 1× The Bondweaver
 - 1× Dawnhorn Elder
-- 1× Winterbough Monk
+- 1× Relic Collector
 - 1× Ambersting
 - 1× Amber Aurelia
 - 1× Horizon Chaser
@@ -1627,7 +1627,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 1× Soulcleft Spinner
 - 1× The Bondweaver
 - 1× Dawnhorn Elder
-- 1× Winterbough Monk
+- 1× Relic Collector
 - 1× Ambersting
 - 1× Angel of Memory
 - 1× Horizon Chaser
@@ -1709,7 +1709,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× The Bondweaver
 - 1× The Dread Sovereign
 - 1× Dawnhorn Elder
-- 1× Winterbough Monk
+- 1× Relic Collector
 - 1× Terminus
 - 1× Ambersting
 - 1× Horizon Chaser
@@ -2446,7 +2446,7 @@ Tide-fac-07 runs an even split of events and characters (22/23) built around two
 - 1× Eternal Stag
 - 1× Curio Dealer
 - 1× Vigilant Howler
-- 1× Winterbough Monk
+- 1× Relic Collector
 - 1× Ambersting
 - 1× Ethereal Courser
 - 1× God of Wrath
@@ -3972,7 +3972,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Specter of Silent Snow
 - 1× Collateral Damage
 - 1× Soulkindler
-- 1× Winterbough Monk
+- 1× Relic Collector
 - 1× First Encounter
 - 1× Wake the Fallen
 - 1× Flesh Cultivator

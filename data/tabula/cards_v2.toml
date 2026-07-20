@@ -14,7 +14,7 @@ tags = ["Art Rework", "July20", "Art OK"]
 image-number = 454095982
 art-owned = false
 card-number = 1
-art = { x = -0.426, y = 1, scale = 1.47 }
+art = { x = -0.426, y = 1, scale = 1.37 }
 
 [[cards]]
 name = "Starlight Guide"
@@ -2752,7 +2752,7 @@ art-owned = false
 card-number = 146
 
 [[cards]]
-name = "Winterbough Monk"
+name = "Relic Collector"
 mtg-name = "Eternal Witness"
 id = "6af8cf81-9e9e-481f-b518-f5dadad99b27"
 rendered-text = "▸Materialized: Return a card from your void to your hand."
@@ -2763,10 +2763,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July20"]
-image-number = 1726923520
+tags = ["Art Rework", "July20", "Art OK"]
+image-number = 2018848973
 art-owned = false
 card-number = 147
+art = { x = 0, y = -0.617, scale = 1.91 }
 
 [[cards]]
 name = "Blood Moon Triad"

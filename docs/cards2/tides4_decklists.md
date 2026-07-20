@@ -1427,7 +1427,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Clifftop Marksman
 - 1× The Dread Sovereign
 - 1× Dawnhorn Elder
-- 1× Winterbough Monk
+- 1× Relic Collector
 - 1× Assault Leader
 - 1× Eclipse Herald
 - 1× He Who Lies Dreaming
@@ -1520,7 +1520,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 1× Ashen Remnant
 - 1× The Dread Sovereign
 - 1× Dawnhorn Elder
-- 1× Winterbough Monk
+- 1× Relic Collector
 - 1× Ambersting
 - 1× Angel of Memory
 - 1× Amber Aurelia
@@ -1602,7 +1602,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 1× Ashen Remnant
 - 1× The Dread Sovereign
 - 1× Dawnhorn Elder
-- 1× Winterbough Monk
+- 1× Relic Collector
 - 1× Ambersting
 - 1× Angel of Memory
 - 1× Amber Aurelia
@@ -1681,7 +1681,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Ashen Remnant
 - 1× The Dread Sovereign
 - 1× Dawnhorn Elder
-- 1× Winterbough Monk
+- 1× Relic Collector
 - 1× Ambersting
 - 1× Angel of Memory
 - 1× Amber Aurelia
