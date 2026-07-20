@@ -1,19 +1,20 @@
 [[cards]]
-name = "Gatebound Warden"
+name = "Windcutter"
 mtg-name = "Phelia, Exuberant Shepherd"
 id = "7be2e6d7-abff-4c44-a0c3-35460da1693c"
 rendered-text = "▸Challenge: Banish an enemy until end of turn."
 energy-cost = 3
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Warrior"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July20"]
-image-number = 287269511
+tags = ["Art Rework", "July20", "Art OK"]
+image-number = 454095982
 art-owned = false
 card-number = 1
+art = { x = -0.426, y = 1, scale = 1.47 }
 
 [[cards]]
 name = "Starlight Guide"
@@ -5597,21 +5598,22 @@ card-number = 300
 art = { x = 0, y = -0.142, scale = 1.47 }
 
 [[cards]]
-name = "Featherlight Summoner"
+name = "Nightmare Shepherd"
 mtg-name = "Blade Splicer"
 id = "b4754e5a-29e6-418c-bdfa-8e0230a21b7b"
 rendered-text = "▸Materialized: Materialize a 4✦ monstrosity figment."
 energy-cost = 4
 card-type = "Character"
-subtype = "Explorer"
+subtype = "Mage"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July20"]
-image-number = 662452573
+tags = ["Art Rework", "July20", "Art OK"]
+image-number = 695511784
 art-owned = false
 card-number = 301
+art = { x = 0, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Endless Projection"
@@ -6815,7 +6817,7 @@ art = { x = 0, y = 1, scale = 1.17 }
 name = "Aspiring Guardian"
 mtg-name = "Memnite"
 id = "66959155-9e79-459e-afdb-eb4c0fbdeb11"
-rendered-text = "(no ability)"
+rendered-text = ""
 energy-cost = 0
 card-type = "Character"
 subtype = "Warrior"
@@ -9585,7 +9587,7 @@ art = { x = 0.042, y = 1, scale = 1.17 }
 name = "Marked Direwolf"
 mtg-name = ""
 id = "e83014d3-9d35-4e80-a1b3-9b25360ad2af"
-rendered-text = "(no ability)"
+rendered-text = ""
 energy-cost = 4
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -9723,6 +9725,25 @@ image-number = 1225878700
 art-owned = false
 card-number = 519
 art = { x = -0.672, y = 0.839, scale = 1.17 }
+
+[[cards]]
+name = "Twilight Troubadour"
+mtg-name = ""
+id = "229ab3a1-3720-41a2-924c-8fe112188f8e"
+rendered-text = ""
+energy-cost = 2
+card-type = "Character"
+subtype = "Musician"
+rarity = "Tutorial"
+is-fast = false
+is-interrupt = false
+spark = "2"
+tags = ["Ally Audit"]
+image-number = 1792373848
+art-owned = false
+card-number = 519
+art = { x = 0.4, y = -0.3, scale = 2.17 }
+
 
 [metadata]
 schema_version = 1

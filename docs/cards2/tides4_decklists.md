@@ -1431,7 +1431,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Assault Leader
 - 1× Eclipse Herald
 - 1× He Who Lies Dreaming
-- 1× Gatebound Warden
+- 1× Windcutter
 - 1× Ambersting
 - 1× Angel of Memory
 - 1× Amber Aurelia
@@ -1443,7 +1443,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Shapeshifter Spirit
 - 1× Ambush Operative
 - 1× Verdant Pioneer
-- 1× Featherlight Summoner
+- 1× Nightmare Shepherd
 - 1× Infernal Cavalier
 - 1× Looming Oracle
 - 1× Angel of the Eclipse
@@ -1785,7 +1785,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Bloodbroker
 - 1× Riftwalker
 - 1× Seeker of the Radiant Wilds
-- 1× Featherlight Summoner
+- 1× Nightmare Shepherd
 - 1× Infernal Cavalier
 - 1× Blood Altar Monarch
 - 1× Flamestride Rider
@@ -4005,7 +4005,7 @@ Tide-neu-12 is a character-heavy deck (26 of 30 cards are characters) built arou
 - 1× Assault Leader
 - 1× Spirit Field Reclaimer
 - 1× Shard Wielder
-- 1× Gatebound Warden
+- 1× Windcutter
 - 1× Company Commander
 - 1× Bladefall
 - 1× Young Huntress

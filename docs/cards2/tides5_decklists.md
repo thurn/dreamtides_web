@@ -1468,7 +1468,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Empyreal Light
 - 1× Ambush Operative
 - 1× Verdant Pioneer
-- 1× Featherlight Summoner
+- 1× Nightmare Shepherd
 - 1× Infernal Cavalier
 - 1× Starsea Traveler
 - 1× Looming Oracle
@@ -1823,7 +1823,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Dawnblade Wanderer
 - 1× Riftwalker
 - 1× Seeker of the Radiant Wilds
-- 1× Featherlight Summoner
+- 1× Nightmare Shepherd
 - 1× Infernal Cavalier
 - 1× Blood Altar Monarch
 - 1× Wolfbond Chieftain
@@ -1920,7 +1920,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 1× Shapeshifter Spirit
 - 1× Bloodbroker
 - 1× Riftwalker
-- 1× Featherlight Summoner
+- 1× Nightmare Shepherd
 - 1× Blood Altar Monarch
 - 1× Wolfbond Chieftain
 - 1× Lightningborn
@@ -2017,7 +2017,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× Bloodbroker
 - 1× Riftwalker
 - 1× Seeker of the Radiant Wilds
-- 1× Featherlight Summoner
+- 1× Nightmare Shepherd
 - 1× Blood Altar Monarch
 - 1× Wolfbond Chieftain
 - 1× Lightningborn
@@ -2857,7 +2857,7 @@ This tide is almost entirely characters (43 of 45 copies), with warriors making 
 - 1× Winterbough Guide
 - 1× Riftwalker
 - 1× Silent Observer
-- 1× Featherlight Summoner
+- 1× Nightmare Shepherd
 - 1× Starbound Striker
 - 1× Infernal Cavalier
 - 1× Revered Prince
@@ -3782,7 +3782,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Aurora Rider
 - 1× Young Huntress
 - 1× Silent Observer
-- 1× Featherlight Summoner
+- 1× Nightmare Shepherd
 - 1× Starbound Striker
 - 1× Infernal Cavalier
 - 1× Wolfbond Chieftain
@@ -3877,7 +3877,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Winterbough Guide
 - 1× Riftwalker
 - 1× Silent Observer
-- 1× Featherlight Summoner
+- 1× Nightmare Shepherd
 - 1× Starbound Striker
 - 1× Infernal Cavalier
 - 1× Revered Prince
