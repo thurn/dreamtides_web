@@ -131,6 +131,35 @@ describe("parseTutorialActions", () => {
     ]);
   });
 
+  it("normalizes and validates the opponent card reveal duration", () => {
+    expect(
+      parseTutorialActions([
+        {
+          id: "vrakmoth-reveal-and-play",
+          action: "reveal-and-play-opponent-card",
+          wait: 0,
+        },
+      ]),
+    ).toEqual([
+      {
+        id: "vrakmoth-reveal-and-play",
+        action: "reveal-and-play-opponent-card",
+        revealDuration: 2,
+        wait: 0,
+      },
+    ]);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "bad-card-reveal",
+          action: "reveal-and-play-opponent-card",
+          revealDuration: -0.5,
+          wait: 0,
+        },
+      ]),
+    ).toThrow(/non-negative card reveal duration/u);
+  });
+
   it("rejects invalid portrait owners and pauses", () => {
     expect(() =>
       parseTutorialActions([

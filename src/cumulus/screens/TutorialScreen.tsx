@@ -14,6 +14,9 @@ import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { GLYPHS } from "../primitives/glyph";
 import { IconButton } from "../components/controls/IconButton";
 import type { BattleStatusDreamcallerProfile } from "../components/battle/BattleStatusDisplay";
+import { CardBack } from "../components/battle/CardBack";
+import { GameCard } from "../components/card/CardView";
+import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
 import {
   DreamcallerPortrait,
   type DreamcallerVisual,
@@ -29,6 +32,8 @@ import {
 } from "../components/overlay/speech-bubble-geometry";
 import {
   MobileBattleScreen,
+  type MobileBattleCardView,
+  type MobileBattleSideView,
   type MobileBattleView,
 } from "./MobileBattleScreen";
 import { useIsDesktop } from "./use-is-desktop";
@@ -107,12 +112,88 @@ interface TutorialDreamcallerTrajectory {
   readonly height: number;
 }
 
+interface TutorialCardFrame {
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
+}
+
+interface TutorialCardTrajectory {
+  readonly source: TutorialCardFrame;
+  readonly reveal: TutorialCardFrame;
+  readonly destination: TutorialCardFrame;
+}
+
 const TUTORIAL_FADE_SECONDS = motionTimeSeconds("--dur-loading-screen-fade");
 const TUTORIAL_DREAMCALLER_FADE_SECONDS = motionTimeSeconds("--dur-fast");
 const TUTORIAL_CARD_TRAVEL_SECONDS = motionTimeSeconds("--dur-slow");
 const TUTORIAL_EDITOR_DOCK_MIN_WIDTH = 1280;
+const TUTORIAL_REVEAL_CARD_DESKTOP_WIDTH = 240;
+const TUTORIAL_REVEAL_CARD_MOBILE_WIDTH_RATIO = 0.45;
 // The pointer overlaps the portrait rim so it visibly connects to the frame.
 const TUTORIAL_PORTRAIT_POINTER_OVERLAP = 2;
+
+function expandedTutorialSide(
+  side: MobileBattleSideView,
+  owner: "enemy" | "player",
+): MobileBattleSideView {
+  const pad = (
+    slots: MobileBattleSideView["backRank"],
+    count: number,
+    rank: "back" | "front",
+  ) => [
+    ...slots,
+    ...Array.from({ length: Math.max(0, count - slots.length) }, (_, offset) => ({
+      id: `${owner}-${rank}-${String(slots.length + offset)}`,
+      card: null,
+    })),
+  ];
+  const backRank = pad(side.backRank, 10, "back");
+  const existingCard = side.backRank.find((slot) => slot.card !== null)?.card;
+  const centeredBackRank =
+    existingCard === undefined || existingCard === null
+      ? backRank
+      : backRank.map((slot, index, slots) => ({
+          ...slot,
+          card: index === Math.floor(slots.length / 2) ? existingCard : null,
+        }));
+  return {
+    ...side,
+    backRank: centeredBackRank,
+    frontRank: pad(side.frontRank, 9, "front"),
+  };
+}
+
+function withOpponentCardPlayed(
+  battle: MobileBattleView,
+  card: MobileBattleCardView,
+): MobileBattleView {
+  const backRank = battle.enemy.backRank.map((slot, index, slots) => ({
+    ...slot,
+    card: index === Math.floor(slots.length / 2) ? card : slot.card,
+  }));
+  return {
+    ...battle,
+    enemyHandCardIds: battle.enemyHandCardIds.filter((id) => id !== card.id),
+    enemyHand: battle.enemyHand.filter((candidate) => candidate.id !== card.id),
+    enemy: { ...battle.enemy, backRank },
+    inspector: {
+      ...battle.inspector,
+      sides: {
+        ...battle.inspector.sides,
+        enemy: {
+          ...battle.inspector.sides.enemy,
+          zones: {
+            ...battle.inspector.sides.enemy.zones,
+            hand: Math.max(0, battle.inspector.sides.enemy.zones.hand - 1),
+            backRank: battle.inspector.sides.enemy.zones.backRank + 1,
+          },
+        },
+      },
+    },
+  };
+}
 
 interface TutorialDreamcallerDialogueAnchor {
   readonly left: number;
@@ -342,6 +423,222 @@ function TutorialDreamcallerArrival({
   );
 }
 
+function TutorialOpponentCardPlay({
+  screen,
+  card,
+  revealDuration,
+  reduceMotion,
+  onComplete,
+}: {
+  readonly screen: HTMLElement;
+  readonly card: MobileBattleCardView;
+  readonly revealDuration: number;
+  readonly reduceMotion: boolean;
+  readonly onComplete: () => void;
+}): ReactElement | null {
+  const [trajectory, setTrajectory] =
+    useState<TutorialCardTrajectory | null>(null);
+
+  useLayoutEffect(() => {
+    const source = [
+      ...screen.querySelectorAll<HTMLElement>(
+        '[data-battle-card-zone="enemy-hand"][data-battle-card-id]',
+      ),
+    ].find((element) => element.dataset.battleCardId === card.id);
+    const enemyFront = [
+      ...screen.querySelectorAll<HTMLElement>(
+        '[data-battle-rank="enemy-front"] [data-battle-slot-id]',
+      ),
+    ];
+    const playerFront = [
+      ...screen.querySelectorAll<HTMLElement>(
+        '[data-battle-rank="player-front"] [data-battle-slot-id]',
+      ),
+    ];
+    const enemyBack = [
+      ...screen.querySelectorAll<HTMLElement>(
+        '[data-battle-rank="enemy-back"] [data-battle-slot-id]',
+      ),
+    ];
+    const destination = enemyBack[Math.floor(enemyBack.length / 2)];
+    if (
+      source === undefined ||
+      destination === undefined ||
+      enemyFront.length < 2 ||
+      playerFront.length < 2
+    ) {
+      return undefined;
+    }
+
+    source.style.visibility = "hidden";
+    const measuredElements = [
+      screen,
+      source,
+      destination,
+      ...enemyFront.slice(-2),
+      ...playerFront.slice(-2),
+    ];
+    const updateTrajectory = (): void => {
+      const screenBox = screen.getBoundingClientRect();
+      const sourceBox = source.getBoundingClientRect();
+      const destinationBox = destination.getBoundingClientRect();
+      const [enemyPenultimate, enemyLast] = enemyFront.slice(-2).map((slot) =>
+        slot.getBoundingClientRect(),
+      );
+      const [playerPenultimate, playerLast] = playerFront.slice(-2).map((slot) =>
+        slot.getBoundingClientRect(),
+      );
+      if (
+        enemyPenultimate === undefined ||
+        enemyLast === undefined ||
+        playerPenultimate === undefined ||
+        playerLast === undefined
+      ) {
+        return;
+      }
+      const revealWidth = Math.min(
+        TUTORIAL_REVEAL_CARD_DESKTOP_WIDTH,
+        screenBox.width * TUTORIAL_REVEAL_CARD_MOBILE_WIDTH_RATIO,
+      );
+      const revealHeight = revealWidth / CARD_ASPECT_RATIO_VALUE;
+      const revealCenterX =
+        (enemyPenultimate.right +
+          enemyLast.left +
+          playerPenultimate.right +
+          playerLast.left) /
+        4;
+      const revealCenterY =
+        (enemyPenultimate.bottom +
+          enemyLast.bottom +
+          playerPenultimate.top +
+          playerLast.top) /
+        4;
+      setTrajectory({
+        source: {
+          x: sourceBox.left - screenBox.left,
+          y: sourceBox.top - screenBox.top,
+          width: sourceBox.width,
+          height: sourceBox.height,
+        },
+        reveal: {
+          x: revealCenterX - screenBox.left - revealWidth / 2,
+          y: revealCenterY - screenBox.top - revealHeight / 2,
+          width: revealWidth,
+          height: revealHeight,
+        },
+        destination: {
+          x: destinationBox.left - screenBox.left,
+          y: destinationBox.top - screenBox.top,
+          width: destinationBox.width,
+          height: destinationBox.height,
+        },
+      });
+    };
+
+    updateTrajectory();
+    const observer = new ResizeObserver(updateTrajectory);
+    for (const element of measuredElements) observer.observe(element);
+    window.addEventListener("resize", updateTrajectory);
+    return () => {
+      source.style.visibility = "";
+      observer.disconnect();
+      window.removeEventListener("resize", updateTrajectory);
+    };
+  }, [card.id, screen]);
+
+  if (trajectory === null) return null;
+
+  const travelDuration = reduceMotion ? 0 : TUTORIAL_CARD_TRAVEL_SECONDS;
+  const totalDuration = travelDuration * 2 + revealDuration;
+  const revealStart = totalDuration === 0 ? 0 : travelDuration / totalDuration;
+  const revealEnd =
+    totalDuration === 0
+      ? 1
+      : (travelDuration + revealDuration) / totalDuration;
+  const times = [0, revealStart, revealEnd, 1];
+  const frames = reduceMotion
+    ? [trajectory.reveal, trajectory.reveal]
+    : [
+        trajectory.source,
+        trajectory.reveal,
+        trajectory.reveal,
+        trajectory.destination,
+      ];
+  const motionTimes = reduceMotion ? [0, 1] : times;
+
+  return (
+    <motion.div
+      data-tutorial-opponent-card-play=""
+      data-tutorial-card-id={card.model.cardId}
+      initial={{
+        x: frames[0]?.x,
+        y: frames[0]?.y,
+        width: frames[0]?.width,
+        height: frames[0]?.height,
+      }}
+      animate={{
+        x: frames.map((frame) => frame.x),
+        y: frames.map((frame) => frame.y),
+        width: frames.map((frame) => frame.width),
+        height: frames.map((frame) => frame.height),
+      }}
+      transition={{
+        duration: totalDuration,
+        times: motionTimes,
+        ease: [0.22, 0.61, 0.36, 1],
+      }}
+      onAnimationComplete={onComplete}
+      style={{
+        position: "absolute",
+        zIndex: token("--layer-reveal"),
+        top: 0,
+        left: 0,
+        pointerEvents: "none",
+        perspective: 1200,
+      }}
+    >
+      {reduceMotion ? (
+        <GameCard model={card.model} testId="tutorial-opponent-card-reveal" />
+      ) : (
+        <motion.div
+          initial={{ rotateY: 0 }}
+          animate={{ rotateY: [0, 180, 180, 180] }}
+          transition={{ duration: totalDuration, times }}
+          style={{
+            position: "relative",
+            width: "100%",
+            height: "100%",
+            transformStyle: "preserve-3d",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backfaceVisibility: "hidden",
+            }}
+          >
+            <CardBack label="Opponent card flipping face up" />
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              transform: "rotateY(180deg)",
+              backfaceVisibility: "hidden",
+            }}
+          >
+            <GameCard
+              model={card.model}
+              testId="tutorial-opponent-card-reveal"
+            />
+          </div>
+        </motion.div>
+      )}
+    </motion.div>
+  );
+}
+
 /** Standalone tutorial battle presentation entered from the loading scene. */
 export function TutorialScreen({
   view,
@@ -360,8 +657,10 @@ export function TutorialScreen({
   const [battleInspectorOpen, setBattleInspectorOpen] = useState(false);
   const [arrivedActionKey, setArrivedActionKey] = useState<string | null>(null);
   const [drawnActionKey, setDrawnActionKey] = useState<string | null>(null);
+  const [playedActionKey, setPlayedActionKey] = useState<string | null>(null);
   const reportedDrawKeys = useRef<Set<string>>(new Set());
   const reportedArrivalKeys = useRef<Set<string>>(new Set());
+  const reportedPlayKeys = useRef<Set<string>>(new Set());
   const [dialogueAnchor, setDialogueAnchor] =
     useState<TutorialDialogueAnchor | null>(null);
   const lastDialogue = useRef<TutorialDialogueView | null>(view.dialogue);
@@ -394,6 +693,22 @@ export function TutorialScreen({
         : null,
     [opponentDeckCardIds, view.currentAction, view.playbackRunId],
   );
+  const opponentCardPlay = useMemo(() => {
+    if (
+      view.playbackRunId === null ||
+      view.currentAction?.action !== "reveal-and-play-opponent-card"
+    ) {
+      return null;
+    }
+    const card = view.battle.enemyHand[0];
+    return card === undefined
+      ? null
+      : {
+          key: `${view.playbackRunId}:${view.currentAction.id}`,
+          card,
+          revealDuration: view.currentAction.revealDuration,
+        };
+  }, [view.battle.enemyHand, view.currentAction, view.playbackRunId]);
   const dreamcallerSettled = useCallback(
     (owner: TutorialDreamcallerOwner): boolean =>
       view.dreamcallers[owner].settled ||
@@ -403,23 +718,35 @@ export function TutorialScreen({
   );
 
   const battleView = useMemo<MobileBattleView>(() => {
+    const sourceBattle = desktop
+      ? {
+          ...view.battle,
+          enemy: expandedTutorialSide(view.battle.enemy, "enemy"),
+          player: expandedTutorialSide(view.battle.player, "player"),
+        }
+      : view.battle;
     const playerSettled = dreamcallerSettled("player");
     const enemySettled = dreamcallerSettled("enemy");
     const drawnCardId =
       opponentCardDraw !== null && drawnActionKey === opponentCardDraw.key
         ? opponentCardDraw.cardId
         : null;
-    if (!playerSettled && !enemySettled && drawnCardId === null) {
-      return view.battle;
+    if (
+      !playerSettled &&
+      !enemySettled &&
+      drawnCardId === null &&
+      (opponentCardPlay === null || playedActionKey !== opponentCardPlay.key)
+    ) {
+      return sourceBattle;
     }
-    return {
-      ...view.battle,
+    const updatedBattle: MobileBattleView = {
+      ...sourceBattle,
       ...(playerSettled
         ? {
             player: {
-              ...view.battle.player,
+              ...sourceBattle.player,
               status: {
-                ...view.battle.player.status,
+                ...sourceBattle.player.status,
                 dreamcaller: view.dreamcallers.player.visual,
                 dreamcallerProfile: view.dreamcallers.player.profile,
               },
@@ -429,15 +756,15 @@ export function TutorialScreen({
       ...(enemySettled
         ? {
             enemy: {
-              ...view.battle.enemy,
+              ...sourceBattle.enemy,
               status: {
-                ...view.battle.enemy.status,
+                ...sourceBattle.enemy.status,
                 dreamcaller: view.dreamcallers.enemy.visual,
                 dreamcallerProfile: view.dreamcallers.enemy.profile,
               },
             },
             inspector: {
-              ...view.battle.inspector,
+              ...sourceBattle.inspector,
               opponentName: view.dreamcallers.enemy.visual.name,
             },
           }
@@ -445,42 +772,53 @@ export function TutorialScreen({
       ...(drawnCardId === null
         ? {}
         : {
-            enemyHandCardIds: [...view.battle.enemyHandCardIds, drawnCardId],
+            enemyHandCardIds: [...sourceBattle.enemyHandCardIds, drawnCardId],
             enemy: {
-              ...view.battle.enemy,
+              ...sourceBattle.enemy,
               ...(enemySettled
                 ? {
                     status: {
-                      ...view.battle.enemy.status,
+                      ...sourceBattle.enemy.status,
                       dreamcaller: view.dreamcallers.enemy.visual,
                       dreamcallerProfile: view.dreamcallers.enemy.profile,
                     },
                   }
                 : {}),
-              deckCardIds: view.battle.enemy.deckCardIds.filter(
+              deckCardIds: sourceBattle.enemy.deckCardIds.filter(
                 (cardId) => cardId !== drawnCardId,
               ),
             },
             inspector: {
-              ...view.battle.inspector,
+              ...sourceBattle.inspector,
               ...(enemySettled
                 ? { opponentName: view.dreamcallers.enemy.visual.name }
                 : {}),
               sides: {
-                ...view.battle.inspector.sides,
+                ...sourceBattle.inspector.sides,
                 enemy: {
-                  ...view.battle.inspector.sides.enemy,
+                  ...sourceBattle.inspector.sides.enemy,
                   zones: {
-                    ...view.battle.inspector.sides.enemy.zones,
-                    hand: view.battle.enemyHandCardIds.length + 1,
-                    deck: view.battle.enemy.deckCardIds.length - 1,
+                    ...sourceBattle.inspector.sides.enemy.zones,
+                    hand: sourceBattle.enemyHandCardIds.length + 1,
+                    deck: sourceBattle.enemy.deckCardIds.length - 1,
                   },
                 },
               },
             },
           }),
     };
-  }, [drawnActionKey, dreamcallerSettled, opponentCardDraw, view]);
+    return opponentCardPlay !== null && playedActionKey === opponentCardPlay.key
+      ? withOpponentCardPlayed(updatedBattle, opponentCardPlay.card)
+      : updatedBattle;
+  }, [
+    desktop,
+    drawnActionKey,
+    dreamcallerSettled,
+    opponentCardDraw,
+    opponentCardPlay,
+    playedActionKey,
+    view,
+  ]);
 
   const completeDreamcallerArrival = useCallback((): void => {
     if (dreamcallerArrival === null) return;
@@ -492,6 +830,13 @@ export function TutorialScreen({
       dreamcallerArrival.owner,
     );
   }, [dreamcallerArrival, onDreamcallerArrivalComplete]);
+
+  const completeOpponentCardPlay = useCallback((): void => {
+    if (opponentCardPlay === null) return;
+    if (reportedPlayKeys.current.has(opponentCardPlay.key)) return;
+    reportedPlayKeys.current.add(opponentCardPlay.key);
+    setPlayedActionKey(opponentCardPlay.key);
+  }, [opponentCardPlay]);
 
   useEffect(() => {
     if (
@@ -537,6 +882,30 @@ export function TutorialScreen({
     drawnActionKey,
     onActionComplete,
     opponentCardDraw,
+    view.currentAction,
+    view.playbackRunId,
+  ]);
+
+  useEffect(() => {
+    if (
+      opponentCardPlay === null ||
+      playedActionKey !== opponentCardPlay.key ||
+      view.currentAction?.action !== "reveal-and-play-opponent-card" ||
+      view.playbackRunId === null
+    ) {
+      return undefined;
+    }
+    const { id, wait } = view.currentAction;
+    const runId = view.playbackRunId;
+    const timeout = window.setTimeout(
+      () => onActionComplete?.(runId, id),
+      wait * 1_000,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [
+    onActionComplete,
+    opponentCardPlay,
+    playedActionKey,
     view.currentAction,
     view.playbackRunId,
   ]);
@@ -779,6 +1148,18 @@ export function TutorialScreen({
           pause={dreamcallerArrival.pause}
           duration={dreamcallerArrival.duration}
           onComplete={completeDreamcallerArrival}
+        />
+      ) : null}
+      {sceneEntered &&
+      opponentCardPlay !== null &&
+      playedActionKey !== opponentCardPlay.key &&
+      screenRef.current !== null ? (
+        <TutorialOpponentCardPlay
+          screen={screenRef.current}
+          card={opponentCardPlay.card}
+          revealDuration={opponentCardPlay.revealDuration}
+          reduceMotion={reduceMotion}
+          onComplete={completeOpponentCardPlay}
         />
       ) : null}
       {editorSurface !== null && !editorOpen ? (

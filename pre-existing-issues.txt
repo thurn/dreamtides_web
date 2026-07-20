@@ -23,3 +23,10 @@ Atlas CSS mixes live `--dt-*` bridge roles with raw palette literals. Define an
 Atlas semantic material layer and migrate the map surface to it so the
 production bridge and component-local palette have one documented ownership
 model.
+
+`data/tabula/cards_v2.toml` assigns card number 519 to both UUID
+`944e15d2-d680-4ebe-8d18-36826f4b1535` and UUID
+`229ab3a1-3720-41a2-924c-8fe112188f8e`. The duplicate breaks
+`src/data/starter-cards.test.ts` and makes any number-keyed card database retain
+only one of the two records. Assign distinct card numbers and regenerate the
+runtime card catalogs.

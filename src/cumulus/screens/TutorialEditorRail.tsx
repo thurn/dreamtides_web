@@ -41,6 +41,10 @@ const ACTION_OPTIONS = [
     label: "Animate Dreamcaller Portrait",
   },
   { value: "draw-opponent-card", label: "Draw Opponent Card" },
+  {
+    value: "reveal-and-play-opponent-card",
+    label: "Reveal & Play Opponent Card",
+  },
 ] satisfies readonly { value: TutorialActionName; label: string }[];
 
 const DREAMCALLER_OWNER_OPTIONS = [
@@ -89,6 +93,14 @@ function defaultAction(
       wait: 0,
     };
   }
+  if (actionName === "reveal-and-play-opponent-card") {
+    return {
+      id,
+      action: "reveal-and-play-opponent-card",
+      revealDuration: 2,
+      wait: 0,
+    };
+  }
   return { id, action: "draw-opponent-card", wait: 0 };
 }
 
@@ -113,6 +125,17 @@ function changedActionType(
   }
   if (actionName === "draw-opponent-card") {
     return { id: action.id, action: actionName, wait: action.wait };
+  }
+  if (actionName === "reveal-and-play-opponent-card") {
+    return {
+      id: action.id,
+      action: actionName,
+      revealDuration:
+        action.action === "reveal-and-play-opponent-card"
+          ? action.revealDuration
+          : 2,
+      wait: action.wait,
+    };
   }
   return {
     id: action.id,
@@ -248,7 +271,8 @@ function TutorialActionRow({
                 if (
                   value !== "display-speech-bubble" &&
                   value !== "animate-dreamcaller-portrait" &&
-                  value !== "draw-opponent-card"
+                  value !== "draw-opponent-card" &&
+                  value !== "reveal-and-play-opponent-card"
                 ) {
                   return;
                 }
@@ -380,6 +404,40 @@ function TutorialActionRow({
           </>
         ) : null}
 
+        {action.action === "reveal-and-play-opponent-card" ? (
+          <NumberStepper
+            label="Face-Up Reading Time"
+            value={action.revealDuration}
+            displayValue={`${waitLabel(action.revealDuration)}s`}
+            size="sm"
+            decrementLabel={`Decrease face-up reading time for action ${String(index + 1)}`}
+            incrementLabel={`Increase face-up reading time for action ${String(index + 1)}`}
+            decrementDisabled={action.revealDuration <= 0}
+            onDecrement={() =>
+              update(
+                {
+                  ...action,
+                  revealDuration: Math.max(
+                    0,
+                    Math.round((action.revealDuration - 0.5) * 10) / 10,
+                  ),
+                },
+                true,
+              )
+            }
+            onIncrement={() =>
+              update(
+                {
+                  ...action,
+                  revealDuration:
+                    Math.round((action.revealDuration + 0.5) * 10) / 10,
+                },
+                true,
+              )
+            }
+          />
+        ) : null}
+
         <NumberStepper
           label="Wait"
           value={action.wait}
@@ -494,7 +552,8 @@ function TutorialEditorContent({
           if (
             value !== "display-speech-bubble" &&
             value !== "animate-dreamcaller-portrait" &&
-            value !== "draw-opponent-card"
+            value !== "draw-opponent-card" &&
+            value !== "reveal-and-play-opponent-card"
           ) {
             return;
           }

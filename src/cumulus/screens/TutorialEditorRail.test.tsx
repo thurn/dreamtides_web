@@ -287,6 +287,63 @@ describe("TutorialEditorRail", () => {
     container.remove();
   });
 
+  it("authors the face-up reading time for an opponent card play", () => {
+    const onChange = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<EditorHarness onChange={onChange} />));
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>('button[aria-label="Add an action"]')
+        ?.click(),
+    );
+    const playOption = [
+      ...document.body.querySelectorAll<HTMLButtonElement>(
+        'button[role="option"]',
+      ),
+    ].find((option) => option.textContent?.includes("Reveal"));
+    expect(playOption).toBeDefined();
+    act(() => playOption?.click());
+
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        INITIAL_ACTIONS[0],
+        {
+          id: "reveal-and-play-opponent-card",
+          action: "reveal-and-play-opponent-card",
+          revealDuration: 2,
+          wait: 0,
+        },
+      ],
+      true,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          'button[aria-label="Increase face-up reading time for action 2"]',
+        )
+        ?.click(),
+    );
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        INITIAL_ACTIONS[0],
+        {
+          id: "reveal-and-play-opponent-card",
+          action: "reveal-and-play-opponent-card",
+          revealDuration: 2.5,
+          wait: 0,
+        },
+      ],
+      true,
+    );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("keeps the bottom-left save icon absent while idle", () => {
     const container = document.createElement("div");
     document.body.append(container);

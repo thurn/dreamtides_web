@@ -1,9 +1,12 @@
 import type {
+  MobileBattleCardView,
   MobileBattleInspectorSideView,
   MobileBattleSideView,
   MobileBattleSlotView,
 } from "../../cumulus/screens/MobileBattleScreen";
 import type { TutorialView } from "../../cumulus/screens/TutorialScreen";
+import type { CardData } from "../../types/cards";
+import { TUTORIAL_OPPONENT_CARD_ID } from "../../data/tutorial-opponent-card";
 import type {
   DisplaySpeechBubbleTutorialAction,
   TutorialAction,
@@ -15,6 +18,7 @@ const TUTORIAL_BATTLE_ID = "tutorial-battle";
 const TUTORIAL_DECK_SIZE = 30;
 const TUTORIAL_DREAMCALLER_ID = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
 const TUTORIAL_OPPONENT_DREAMCALLER_ID = "86026206-1B11-4F38-A24E-FD3C697F5353";
+export { TUTORIAL_OPPONENT_CARD_ID } from "../../data/tutorial-opponent-card";
 
 /** Reconstruction fields logged whenever an authored tutorial action appears. */
 export function tutorialActionLogDetails(action: TutorialAction) {
@@ -36,6 +40,20 @@ export function tutorialActionLogDetails(action: TutorialAction) {
       speaker: action.speaker ?? "mira",
     };
   }
+  if (action.action === "reveal-and-play-opponent-card") {
+    return {
+      actionId: action.id,
+      action: action.action,
+      waitSeconds: action.wait,
+      cardId: TUTORIAL_OPPONENT_CARD_ID,
+      cardFace: "up",
+      revealDurationSeconds: action.revealDuration,
+      revealPlacement: "right-front-rank-intersection",
+      sourceZone: "opponent-hand",
+      destinationZone: "opponent-back-rank",
+      destinationSlot: "center",
+    };
+  }
   return {
     actionId: action.id,
     action: action.action,
@@ -43,6 +61,22 @@ export function tutorialActionLogDetails(action: TutorialAction) {
     cardFace: "down",
     sourceZone: "opponent-deck",
     destinationZone: "opponent-hand",
+  };
+}
+
+function tutorialOpponentCardView(
+  card: CardData,
+  instanceId: string,
+): MobileBattleCardView {
+  return {
+    id: instanceId,
+    model: { cardId: card.id, displaySnapshot: card },
+    exhausted: true,
+    figment: false,
+    figmentTitleBar: false,
+    figmentCount: 0,
+    storedTime: 0,
+    showPlayableOutline: false,
   };
 }
 
@@ -116,6 +150,7 @@ function activeDialogueAction(
 /** Build the quest-independent opening state for the tutorial battle. */
 export function buildTutorialView(
   playback: TutorialPlaybackState | null = null,
+  opponentCard: CardData | null = null,
 ): TutorialView {
   const currentAction =
     playback?.currentActionIndex === null ||
@@ -131,9 +166,21 @@ export function buildTutorialView(
     playback?.actions
       .slice(0, completedActionCount)
       .filter((action) => action.action === "draw-opponent-card").length ?? 0;
+  const completedOpponentPlays =
+    playback?.actions
+      .slice(0, completedActionCount)
+      .filter((action) => action.action === "reveal-and-play-opponent-card")
+      .length ?? 0;
   const enemyDeckCardIds = tutorialDeckIds("enemy");
-  const enemyHandCardIds = enemyDeckCardIds.slice(0, completedOpponentDraws);
+  const drawnEnemyCardIds = enemyDeckCardIds.slice(0, completedOpponentDraws);
+  const enemyHandCardIds = drawnEnemyCardIds.slice(completedOpponentPlays);
   const enemyDeck = enemyDeckCardIds.slice(completedOpponentDraws);
+  const tutorialCardInstanceId = drawnEnemyCardIds[0] ?? null;
+  const tutorialCard =
+    opponentCard !== null && tutorialCardInstanceId !== null
+      ? tutorialOpponentCardView(opponentCard, tutorialCardInstanceId)
+      : null;
+  const opponentCardPlayed = completedOpponentPlays > 0;
   const enemyInspector = emptyInspectorSide("enemy");
   const dreamcallerSettled = (owner: TutorialDreamcallerOwner): boolean => {
     const actionIndex =
@@ -149,6 +196,12 @@ export function buildTutorialView(
         playback.currentActionIndex > actionIndex)
     );
   };
+  const enemy = emptySide("enemy");
+  const enemyBackRank = enemy.backRank.map((slot, index) =>
+    opponentCardPlayed && index === Math.floor(enemy.backRank.length / 2)
+      ? { ...slot, card: tutorialCard }
+      : slot,
+  );
   return {
     dreamcallers: {
       player: {
@@ -212,10 +265,12 @@ export function buildTutorialView(
       activeSide: "enemy",
       phase: "day",
       enemyHandCardIds,
-      enemyHand: [],
+      enemyHand:
+        tutorialCard === null || opponentCardPlayed ? [] : [tutorialCard],
       enemy: {
-        ...emptySide("enemy"),
+        ...enemy,
         deckCardIds: enemyDeck,
+        backRank: enemyBackRank,
       },
       player: emptySide("player"),
       playerHand: [],
@@ -236,6 +291,7 @@ export function buildTutorialView(
               ...enemyInspector.zones,
               hand: enemyHandCardIds.length,
               deck: enemyDeck.length,
+              backRank: opponentCardPlayed && tutorialCard !== null ? 1 : 0,
             },
           },
         },

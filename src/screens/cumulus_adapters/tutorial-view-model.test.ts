@@ -1,8 +1,27 @@
 import { describe, expect, it } from "vitest";
+import { asCardId, asCardName } from "../../types/card-identity";
+import type { CardData } from "../../types/cards";
 import {
   buildTutorialView,
+  TUTORIAL_OPPONENT_CARD_ID,
   tutorialActionLogDetails,
 } from "./tutorial-view-model";
+
+const OPPONENT_CARD: CardData = {
+  id: asCardId(TUTORIAL_OPPONENT_CARD_ID),
+  name: asCardName("Tutorial Opponent Card"),
+  cardNumber: 519,
+  cardType: "Character",
+  subtype: "Musician",
+  isStarter: false,
+  rarity: "Special",
+  energyCost: 2,
+  spark: 2,
+  isFast: false,
+  renderedText: "",
+  imageNumber: 1792373848,
+  artOwned: false,
+};
 
 describe("buildTutorialView", () => {
   it("logs the selected speech portrait for sequence reconstruction", () => {
@@ -36,6 +55,28 @@ describe("buildTutorialView", () => {
       cardFace: "down",
       sourceZone: "opponent-deck",
       destinationZone: "opponent-hand",
+    });
+  });
+
+  it("logs the UUID, reading time, and destination of the opponent card play", () => {
+    expect(
+      tutorialActionLogDetails({
+        id: "vrakmoth-reveal-and-play",
+        action: "reveal-and-play-opponent-card",
+        revealDuration: 2,
+        wait: 0,
+      }),
+    ).toEqual({
+      actionId: "vrakmoth-reveal-and-play",
+      action: "reveal-and-play-opponent-card",
+      waitSeconds: 0,
+      cardId: TUTORIAL_OPPONENT_CARD_ID,
+      cardFace: "up",
+      revealDurationSeconds: 2,
+      revealPlacement: "right-front-rank-intersection",
+      sourceZone: "opponent-hand",
+      destinationZone: "opponent-back-rank",
+      destinationSlot: "center",
     });
   });
 
@@ -228,7 +269,7 @@ describe("buildTutorialView", () => {
     });
   });
 
-  it("keeps the current opponent draw in the deck, then persists it face down in hand", () => {
+  it("keeps the current opponent draw in the deck, then reveals and plays that UUID-backed card", () => {
     const actions = [
       {
         id: "vrakmoth-taunt",
@@ -243,10 +284,10 @@ describe("buildTutorialView", () => {
         wait: 0,
       },
       {
-        id: "next",
-        action: "display-speech-bubble" as const,
-        text: "The battle begins.",
-        wait: 1,
+        id: "vrakmoth-reveal-and-play",
+        action: "reveal-and-play-opponent-card" as const,
+        revealDuration: 2,
+        wait: 0,
       },
     ];
 
@@ -263,14 +304,33 @@ describe("buildTutorialView", () => {
       runId: "event:draw",
       currentActionIndex: 2,
       actions,
-    }).battle;
+    }, OPPONENT_CARD).battle;
     expect(drawn.enemy.deckCardIds[0]).toBe("tutorial-enemy-deck-2");
     expect(drawn.enemy.deckCardIds).toHaveLength(29);
     expect(drawn.enemyHandCardIds).toEqual(["tutorial-enemy-deck-1"]);
-    expect(drawn.enemyHand).toEqual([]);
+    expect(drawn.enemyHand).toHaveLength(1);
+    expect(drawn.enemyHand[0]).toMatchObject({
+      id: "tutorial-enemy-deck-1",
+      model: { cardId: TUTORIAL_OPPONENT_CARD_ID },
+    });
     expect(drawn.inspector.sides.enemy.zones).toMatchObject({
       deck: 29,
       hand: 1,
+    });
+
+    const played = buildTutorialView({
+      runId: "event:draw",
+      currentActionIndex: null,
+      actions,
+    }, OPPONENT_CARD).battle;
+    expect(played.enemyHandCardIds).toEqual([]);
+    expect(played.enemyHand).toEqual([]);
+    expect(played.enemy.backRank[Math.floor(played.enemy.backRank.length / 2)]?.card)
+      .toMatchObject({ model: { cardId: TUTORIAL_OPPONENT_CARD_ID } });
+    expect(played.inspector.sides.enemy.zones).toMatchObject({
+      deck: 29,
+      hand: 0,
+      backRank: 1,
     });
   });
 

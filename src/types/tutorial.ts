@@ -2,7 +2,8 @@
 export type TutorialActionName =
   | "display-speech-bubble"
   | "animate-dreamcaller-portrait"
-  | "draw-opponent-card";
+  | "draw-opponent-card"
+  | "reveal-and-play-opponent-card";
 
 /** Battle-status destination for an arriving tutorial Dreamcaller. */
 export type TutorialDreamcallerOwner = "player" | "enemy";
@@ -41,11 +42,20 @@ export interface DrawOpponentCardTutorialAction extends TutorialActionBase {
   readonly action: "draw-opponent-card";
 }
 
+/** Reveals the opponent's hand card at reading scale, then plays it. */
+export interface RevealAndPlayOpponentCardTutorialAction
+  extends TutorialActionBase {
+  readonly action: "reveal-and-play-opponent-card";
+  /** Seconds the face-up card remains at reading scale before it travels. */
+  readonly revealDuration: number;
+}
+
 /** Exhaustive authored tutorial action model. */
 export type TutorialAction =
   | DisplaySpeechBubbleTutorialAction
   | AnimateDreamcallerPortraitTutorialAction
-  | DrawOpponentCardTutorialAction;
+  | DrawOpponentCardTutorialAction
+  | RevealAndPlayOpponentCardTutorialAction;
 
 /** Local filesystem persistence state shown by the Tutorial Editor. */
 export type TutorialEditorSaveStatus = "idle" | "saving" | "saved" | "error";

@@ -104,6 +104,24 @@ export function parseTutorialActions(
         wait,
       } satisfies TutorialAction;
     }
+    if (record.action === "reveal-and-play-opponent-card") {
+      const revealDuration = record.revealDuration ?? 2;
+      if (
+        typeof revealDuration !== "number" ||
+        !Number.isFinite(revealDuration) ||
+        revealDuration < 0
+      ) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must have a non-negative card reveal duration.`,
+        );
+      }
+      return {
+        id,
+        action: "reveal-and-play-opponent-card",
+        revealDuration,
+        wait,
+      } satisfies TutorialAction;
+    }
 
     throw new Error(
       `Tutorial action ${JSON.stringify(id)} has unsupported action ${JSON.stringify(record.action)}.`,

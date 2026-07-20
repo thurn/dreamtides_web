@@ -21,6 +21,35 @@ export interface TutorialEditorState {
   ) => void;
 }
 
+/** Build the replay callback around the latest unsaved editor draft. */
+export function useTutorialReplay(
+  actions: readonly TutorialAction[],
+  beginTutorial: (actions: readonly TutorialAction[]) => Promise<number>,
+): () => void {
+  const actionsRef = useRef(actions);
+  actionsRef.current = actions;
+  return useCallback((): void => {
+    let normalized: readonly TutorialAction[];
+    try {
+      normalized = parseTutorialActions(actionsRef.current);
+    } catch (error) {
+      logEvent("tutorial_replay_failed", {
+        message: error instanceof Error ? error.message : String(error),
+      });
+      return;
+    }
+    logEvent("tutorial_replay_requested", {
+      actionCount: normalized.length,
+      actionIds: normalized.map((action) => action.id),
+    });
+    void beginTutorial(normalized).catch((error: unknown) => {
+      logEvent("tutorial_replay_failed", {
+        message: error instanceof Error ? error.message : String(error),
+      });
+    });
+  }, [beginTutorial]);
+}
+
 /** Own local tutorial authoring drafts and serialize filesystem saves. */
 export function useTutorialEditor(): TutorialEditorState {
   const [actions, setActions] = useState<readonly TutorialAction[]>([]);

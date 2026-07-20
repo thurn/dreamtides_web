@@ -1,15 +1,17 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { TutorialScreen } from "../../cumulus/screens/TutorialScreen";
-import { parseTutorialActions } from "../../data/tutorial-actions";
 import { logEvent } from "../../logging";
 import { useFrontDoor } from "../../state/front-door-context";
-import { useTutorialEditor } from "../../state/use-tutorial-editor";
-import type {
-  TutorialAction,
-  TutorialDreamcallerOwner,
-} from "../../types/tutorial";
-import { buildTutorialView, tutorialActionLogDetails } from "./tutorial-view-model";
-
+import {
+  useTutorialEditor,
+  useTutorialReplay,
+} from "../../state/use-tutorial-editor";
+import { useTutorialOpponentCard } from "../../state/use-tutorial-opponent-card";
+import type { TutorialDreamcallerOwner } from "../../types/tutorial";
+import {
+  buildTutorialView,
+  tutorialActionLogDetails,
+} from "./tutorial-view-model";
 /** Standalone `/tutorial` wiring, shared playback, and local authoring saves. */
 export function TutorialScreenAdapter() {
   const { state, mutations } = useFrontDoor();
@@ -20,13 +22,17 @@ export function TutorialScreenAdapter() {
     saveError,
     onActionsChange: handleEditorActionsChange,
   } = useTutorialEditor();
-  const authoredActionsRef = useRef(authoredActions);
   const beginRequestedKey = useRef<string | null>(null);
   const loggedActionKey = useRef<string | null>(null);
-  authoredActionsRef.current = authoredActions;
-
+  const opponentCard = useTutorialOpponentCard();
+  const handleReplay = useTutorialReplay(authoredActions, mutations.beginTutorial);
   useEffect(() => {
-    if (!actionsLoaded || state.tutorial !== null || state.journeyId === null)
+    if (
+      !actionsLoaded ||
+      opponentCard === null ||
+      state.tutorial !== null ||
+      state.journeyId === null
+    )
       return;
     const intentKey = `tutorial:${state.journeyId}:begin`;
     if (beginRequestedKey.current === intentKey) return;
@@ -43,11 +49,14 @@ export function TutorialScreenAdapter() {
     actionsLoaded,
     authoredActions,
     mutations,
+    opponentCard,
     state.journeyId,
     state.tutorial,
   ]);
-
-  const view = useMemo(() => buildTutorialView(state.tutorial), [state.tutorial]);
+  const view = useMemo(
+    () => buildTutorialView(state.tutorial, opponentCard),
+    [opponentCard, state.tutorial],
+  );
 
   useEffect(() => {
     const current = view.currentAction;
@@ -98,27 +107,6 @@ export function TutorialScreenAdapter() {
     },
     [view.battle.battleId, view.currentAction?.id],
   );
-
-  const handleReplay = useCallback((): void => {
-    let normalized: readonly TutorialAction[];
-    try {
-      normalized = parseTutorialActions(authoredActionsRef.current);
-    } catch (error) {
-      logEvent("tutorial_replay_failed", {
-        message: error instanceof Error ? error.message : String(error),
-      });
-      return;
-    }
-    logEvent("tutorial_replay_requested", {
-      actionCount: normalized.length,
-      actionIds: normalized.map((action) => action.id),
-    });
-    void mutations.beginTutorial(normalized).catch((error: unknown) => {
-      logEvent("tutorial_replay_failed", {
-        message: error instanceof Error ? error.message : String(error),
-      });
-    });
-  }, [mutations]);
 
   return (
     <TutorialScreen

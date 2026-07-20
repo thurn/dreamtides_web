@@ -103,6 +103,19 @@ export function validateTutorialActions(value) {
     if (action === "draw-opponent-card") {
       return { id, action, wait };
     }
+    if (action === "reveal-and-play-opponent-card") {
+      const revealDuration = candidate.revealDuration ?? 2;
+      if (
+        typeof revealDuration !== "number" ||
+        !Number.isFinite(revealDuration) ||
+        revealDuration < 0
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must have a non-negative card reveal duration.`,
+        );
+      }
+      return { id, action, revealDuration, wait };
+    }
     throw invalid(
       `Tutorial action ${JSON.stringify(id)} has unsupported action ${JSON.stringify(action)}.`,
     );

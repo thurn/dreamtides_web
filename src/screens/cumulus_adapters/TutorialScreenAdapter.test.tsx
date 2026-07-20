@@ -65,6 +65,23 @@ vi.mock("../../data/tutorial-actions", async (importOriginal) => {
   };
 });
 
+vi.mock("../../state/use-tutorial-opponent-card", () => ({
+  useTutorialOpponentCard: () => ({
+    id: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+    name: "Tutorial Opponent Card",
+    cardNumber: 519,
+    cardType: "Character",
+    subtype: "Musician",
+    isStarter: false,
+    energyCost: 2,
+    spark: 2,
+    isFast: false,
+    renderedText: "",
+    imageNumber: 1792373848,
+    artOwned: false,
+  }),
+}));
+
 vi.mock("../../cumulus/screens/TutorialScreen", () => ({
   TutorialScreen: (props: TutorialScreenProps) => {
     adapterMocks.props = props;

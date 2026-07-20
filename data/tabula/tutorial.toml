@@ -39,3 +39,9 @@ wait = 3
 id = "vrakmoth-draw"
 action = "draw-opponent-card"
 wait = 0
+
+[[actions]]
+id = "vrakmoth-reveal-and-play"
+action = "reveal-and-play-opponent-card"
+revealDuration = 2
+wait = 0

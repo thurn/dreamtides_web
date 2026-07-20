@@ -10,6 +10,7 @@ import type {
   MobileBattleScreenProps,
   MobileBattleView,
 } from "./MobileBattleScreen";
+import { asCardId, asCardName } from "../../types/card-identity";
 
 const screenMocks = vi.hoisted(() => ({
   props: null as MobileBattleScreenProps | null,
@@ -22,6 +23,10 @@ const screenMocks = vi.hoisted(() => ({
   arrivalAnimate: null as unknown,
   arrivalTransition: null as unknown,
   arrivalAnimationComplete: null as (() => void) | null,
+  cardInitial: null as unknown,
+  cardAnimate: null as unknown,
+  cardTransition: null as unknown,
+  cardAnimationComplete: null as (() => void) | null,
 }));
 
 interface MotionMainStubInput {
@@ -40,6 +45,7 @@ interface MotionDivStubInput {
   readonly animate?: unknown;
   readonly children?: ReactNode;
   readonly "data-tutorial-dreamcaller-arrival"?: string;
+  readonly "data-tutorial-opponent-card-play"?: string;
   readonly initial?: unknown;
   readonly onAnimationComplete?: () => void;
   readonly style?: CSSProperties;
@@ -71,10 +77,17 @@ vi.mock("framer-motion", () => ({
       transition,
       ...elementProps
     }: MotionDivStubInput) => {
-      screenMocks.arrivalInitial = initial;
-      screenMocks.arrivalAnimate = animate;
-      screenMocks.arrivalTransition = transition;
-      screenMocks.arrivalAnimationComplete = onAnimationComplete ?? null;
+      if (elementProps["data-tutorial-opponent-card-play"] !== undefined) {
+        screenMocks.cardInitial = initial;
+        screenMocks.cardAnimate = animate;
+        screenMocks.cardTransition = transition;
+        screenMocks.cardAnimationComplete = onAnimationComplete ?? null;
+      } else {
+        screenMocks.arrivalInitial = initial;
+        screenMocks.arrivalAnimate = animate;
+        screenMocks.arrivalTransition = transition;
+        screenMocks.arrivalAnimationComplete = onAnimationComplete ?? null;
+      }
       return <div {...elementProps}>{children}</div>;
     },
   },
@@ -105,6 +118,28 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
       const playerStatus = props.view.player?.status;
       return (
         <div data-battle-mobile={props.view.battleId}>
+          {(props.view.enemyHandCardIds ?? []).map((cardId) => (
+            <div
+              key={cardId}
+              data-battle-card-id={cardId}
+              data-battle-card-zone="enemy-hand"
+            />
+          ))}
+          <div data-battle-rank="enemy-back">
+            {props.view.enemy?.backRank?.map((slot) => (
+              <div key={slot.id} data-battle-slot-id={slot.id} />
+            ))}
+          </div>
+          <div data-battle-rank="enemy-front">
+            {props.view.enemy?.frontRank?.map((slot) => (
+              <div key={slot.id} data-battle-slot-id={slot.id} />
+            ))}
+          </div>
+          <div data-battle-rank="player-front">
+            {props.view.player?.frontRank?.map((slot) => (
+              <div key={slot.id} data-battle-slot-id={slot.id} />
+            ))}
+          </div>
           <div data-testid="enemy-battle-status">
             {enemyStatus?.dreamcaller === undefined ||
             enemyStatus.dreamcaller === null ? (
@@ -162,6 +197,33 @@ const TUTORIAL_DREAMCALLERS: TutorialView["dreamcallers"] = {
   },
 };
 
+const TUTORIAL_OPPONENT_CARD: MobileBattleView["enemyHand"][number] = {
+  id: "tutorial-enemy-deck-1",
+  model: {
+    cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+    displaySnapshot: {
+      id: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+      name: asCardName("Tutorial Opponent Card"),
+      cardNumber: 519,
+      cardType: "Character",
+      subtype: "Musician",
+      isStarter: false,
+      energyCost: 2,
+      spark: 2,
+      isFast: false,
+      renderedText: "",
+      imageNumber: 1792373848,
+      artOwned: false,
+    },
+  },
+  exhausted: true,
+  figment: false,
+  figmentTitleBar: false,
+  figmentCount: 0,
+  storedTime: 0,
+  showPlayableOutline: false,
+};
+
 class ResizeObserverStub {
   static callbacks: ResizeObserverCallback[] = [];
 
@@ -205,6 +267,10 @@ beforeEach(() => {
   screenMocks.arrivalAnimate = null;
   screenMocks.arrivalTransition = null;
   screenMocks.arrivalAnimationComplete = null;
+  screenMocks.cardInitial = null;
+  screenMocks.cardAnimate = null;
+  screenMocks.cardTransition = null;
+  screenMocks.cardAnimationComplete = null;
 });
 
 afterEach(() => {
@@ -299,7 +365,9 @@ describe("TutorialScreen", () => {
               },
               battle: {
                 battleId: "tutorial-battle",
-              } as MobileBattleView,
+                enemy: { backRank: [], frontRank: [] },
+                player: { backRank: [], frontRank: [] },
+              } as unknown as MobileBattleView,
             }}
           />
         </CumulusRoot>,
@@ -402,7 +470,7 @@ describe("TutorialScreen", () => {
                     points: 0,
                   },
                 },
-              } as MobileBattleView,
+              } as unknown as MobileBattleView,
             }}
             onActionComplete={onActionComplete}
             onDreamcallerArrivalComplete={onDreamcallerArrivalComplete}
@@ -645,6 +713,148 @@ describe("TutorialScreen", () => {
     container.remove();
   });
 
+  it("flips the UUID-backed hand card at the mirrored grid intersection, then plays it in the back-rank center", () => {
+    vi.useFakeTimers();
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches: query.includes("min-width"),
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function rectForElement(this: HTMLElement) {
+        if (this.matches("[data-tutorial-screen]")) {
+          return DOMRect.fromRect({ width: 1920, height: 1080 });
+        }
+        if (this.matches('[data-battle-card-zone="enemy-hand"]')) {
+          return DOMRect.fromRect({ x: 931, y: 0, width: 58, height: 81.2 });
+        }
+        const slotId = this.dataset.battleSlotId;
+        const rank = this.parentElement?.dataset.battleRank;
+        if (slotId !== undefined && rank !== undefined) {
+          const slotParts = slotId.split("-");
+          const index = Number(slotParts[slotParts.length - 1]);
+          if (rank === "enemy-back") {
+            return DOMRect.fromRect({
+              x: 335.98 + index * 125.2,
+              y: 205.2,
+              width: 121.2,
+              height: 121.2,
+            });
+          }
+          return DOMRect.fromRect({
+            x: 398.58 + index * 125.2,
+            y: rank === "enemy-front" ? 330.4 : 455.6,
+            width: 121.2,
+            height: 121.2,
+          });
+        }
+        return DOMRect.fromRect();
+      },
+    );
+    const onActionComplete = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    const emptySide = (owner: "enemy" | "player") => ({
+      deckCardIds: [],
+      banishedCardCount: 0,
+      voidCards: [],
+      backRank: Array.from({ length: 3 }, (_, index) => ({
+        id: `${owner}-back-${String(index)}`,
+        card: null,
+      })),
+      frontRank: Array.from({ length: 2 }, (_, index) => ({
+        id: `${owner}-front-${String(index)}`,
+        card: null,
+      })),
+      status: {
+        dreamcaller: null,
+        currentEnergy: 0,
+        maxEnergy: 0,
+        points: 0,
+      },
+    });
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamcallers: TUTORIAL_DREAMCALLERS,
+              dialogue: null,
+              playbackRunId: "event:play",
+              currentAction: {
+                id: "vrakmoth-reveal-and-play",
+                action: "reveal-and-play-opponent-card",
+                revealDuration: 2,
+                wait: 0,
+              },
+              battle: {
+                battleId: "tutorial-battle",
+                enemyHandCardIds: [TUTORIAL_OPPONENT_CARD.id],
+                enemyHand: [TUTORIAL_OPPONENT_CARD],
+                enemy: emptySide("enemy"),
+                player: emptySide("player"),
+                inspector: {
+                  sides: {
+                    enemy: { zones: { hand: 1, backRank: 0 } },
+                    player: { zones: {} },
+                  },
+                },
+              } as unknown as MobileBattleView,
+            }}
+            onActionComplete={onActionComplete}
+          />
+        </CumulusRoot>,
+      );
+    });
+    act(() => screenMocks.sceneAnimationComplete?.());
+
+    expect(screenMocks.cardInitial).toMatchObject({
+      x: 931,
+      y: 0,
+      width: 58,
+      height: 81.2,
+    });
+    expect(screenMocks.cardAnimate).toEqual({
+      x: [931, 1278.18, 1278.18, 961.98],
+      y: [0, 285.6, 285.6, 205.2],
+      width: [58, 240, 240, 121.2],
+      height: [81.2, 336, 336, 121.2],
+    });
+    expect(screenMocks.cardTransition).toMatchObject({ duration: 2.84 });
+    expect(
+      container.querySelector('[data-tutorial-card-id="229ab3a1-3720-41a2-924c-8fe112188f8e"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-battle-card-zone="enemy-hand"]',
+      )?.style.visibility,
+    ).toBe("hidden");
+
+    act(() => screenMocks.cardAnimationComplete?.());
+    act(() => {
+      vi.advanceTimersByTime(0);
+    });
+
+    expect(screenMocks.props?.view.enemyHandCardIds).toEqual([]);
+    expect(screenMocks.props?.view.enemy.backRank[5]?.card?.model.cardId).toBe(
+      "229ab3a1-3720-41a2-924c-8fe112188f8e",
+    );
+    expect(onActionComplete).toHaveBeenCalledWith(
+      "event:play",
+      "vrakmoth-reveal-and-play",
+    );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("places opposing speech above all UI with a top-left pointer on the portrait rim", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
       function rectForElement(this: HTMLElement) {
@@ -785,7 +995,9 @@ describe("TutorialScreen", () => {
               },
               battle: {
                 battleId: "tutorial-battle",
-              } as MobileBattleView,
+                enemy: { backRank: [], frontRank: [] },
+                player: { backRank: [], frontRank: [] },
+              } as unknown as MobileBattleView,
             }}
           />
         </CumulusRoot>,
