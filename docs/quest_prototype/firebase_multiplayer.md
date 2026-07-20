@@ -1,13 +1,13 @@
 # Firebase Multiplayer
 
-The V2 quest prototype uses Firebase Realtime Database for shared quest rooms
-and Firebase Hosting for deployed share links. Default URLs use the local
-Realtime Database emulator with project `demo-quest-prototype`. Cloud RTDB
-rooms use URLs that include `?realtime=1`.
+The quest prototype stores each shared game in Firebase Realtime Database.
+Local URLs connect to the emulator for project `demo-quest-prototype`; URLs
+with `?realtime=1` connect to the configured cloud database. Firebase Hosting
+serves deployed share links.
 
 ## Environment
 
-Cloud RTDB mode reads the Firebase web app values from `.env.local`:
+Cloud mode reads these Vite variables:
 
 - `VITE_FIREBASE_API_KEY`
 - `VITE_FIREBASE_AUTH_DOMAIN`
@@ -17,8 +17,11 @@ Cloud RTDB mode reads the Firebase web app values from `.env.local`:
 - `VITE_FIREBASE_STORAGE_BUCKET`
 - `VITE_FIREBASE_MESSAGING_SENDER_ID`
 
-Emulator mode uses the demo project config built into
-`src/firebase/app-config.ts`.
+The API key, auth domain, database URL, project id, and app id are required.
+Emulator mode uses the built-in demo project configuration. `npm start`
+passes the selected emulator host and port through
+`VITE_FIREBASE_DATABASE_EMULATOR_HOST` and
+`VITE_FIREBASE_DATABASE_EMULATOR_PORT`.
 
 ## Database Rules
 
@@ -37,56 +40,122 @@ The prototype uses open room data for low-friction remote testing:
 
 ## Room Schema
 
-Each room lives at `rooms/<roomId>` with the following shape:
+Each room lives at `rooms/<roomId>`:
 
-- `metadata`
-  - `schemaVersion` — currently `2`.
-  - `createdAt`, `updatedAt` — ISO timestamps.
-- `questState` — the shared quest run, or `null` before quest start.
-- `battleState` — the shared battle slice, or `null` between battles.
-- `presence` — `clientId` -> `{ connected, lastSeenAt }`.
-- `actionLog` — bounded recent action history for diagnostics.
-- `logs` — bounded mirror of the room's quest log, for the `?viewLogs=` viewer.
+```text
+rooms/<roomId>/
+  log/
+    genesis
+    baseSeq
+    baseSnapshot
+    head
+    events/<seq>
+    appliedIndex
+    intentKeyIndex
+    compactionError
+  presence/<clientId>/
+    connected
+    lastSeenAt
+  logs/<pushId>
+```
 
-### Battle Slot
+`genesis`, `baseSnapshot`, each `events/<seq>` value, `appliedIndex`,
+`intentKeyIndex`, and each `logs/<pushId>` value are JSON strings. Opaque
+strings preserve empty arrays and objects and give fold hashes byte-stable
+input across Realtime Database round trips.
 
-`battleState` is `null` until a battle site is entered. While a battle runs:
+### Genesis
 
-- `battleState.init` — the frozen `BattleInit` (deck order, seed, reward
-  options, enemy descriptor, dreamcaller summary, atlas snapshot). Written
-  once per battle by the first client to enter via a race-safe transaction.
-- `battleState.reducer`
-  - `mutable` — the live `BattleMutableState`.
-  - `history.past` / `history.future` — full undo/redo stack with
-    before/after snapshots and per-entry metadata.
-  - `lastTransition` — the most recent transition's data, used by clients
-    to drive animations and judgment-pause overlays.
-  - `commandSerial` — monotonic counter; each client deduplicates local
-    effects (logging, judgment pause) by tracking the last serial it
-    observed.
+`genesis` is written once when the room is created and contains:
 
-The slot clears to `null` after the post-victory hand-off, after the
-failure route, and on quest reset.
+- `seed` — the deterministic room seed.
+- `reducerVersion` — the build hash required to fold the room.
+- `createdAt` — epoch milliseconds used by stale-room eviction.
+- `contentConfig` — the pinned pool variant, draft mode, and fresh-pack size.
+- `frontDoorEntry` — an optional `main`, `loading`, or `tutorial`
+  starting phase for standalone front-door routes.
 
-### Action Log
+`RoomGate` compares the room's reducer version and content configuration with
+the joining client before mounting gameplay. A build mismatch opens the version
+gate; a content mismatch opens the configuration gate.
 
-Quest mutations and battle commands both append entries to the room's
-shared `actionLog`. Battle entries use the action key `battle:<KIND>`
-(for example `battle:PLAY_CARD`, `battle:UNDO`, `battle:RESET`,
-`battle:CLEAR_FORCED_RESULT`). The log is capped at 50 entries and
-pruned via a transaction.
+### Event log
 
-### Quest Log Mirror
+`head` is the newest committed sequence number. `events` contains a dense
+live window keyed by sequence number in `(baseSeq, head]`. Each decoded event
+contains:
 
-Every `logEvent` entry for a room (each already stamped with its `gameId`) is
-mirrored into `rooms/<roomId>/logs` by the sink the room gate installs
-(`createRoomLogSink` in `src/multiplayer/room-log-service.ts`). Each child is a
-push-keyed, single-line JSON string of one entry; storing entries as strings
-keeps arbitrary entry shapes safe from Realtime Database's forbidden-key,
-dropped-empty, and numeric-array-coercion rules. Writes are batched and the node
-is pruned to the newest `ROOM_LOG_LIMIT` (2000) entries. This persists a run's
-log past the playing tab closing so `?viewLogs=<roomId>` can read it back; see
-`docs/quest_prototype/url_parameters.md`.
+- `type` and a UUID/index-based `payload`.
+- `actor` and a display-only `clientTimestamp`.
+- `basedOnSeq`, the confirmed head the actor saw.
+- `nonce`, used to reconcile the actor's optimistic echo.
+- an optional logical `intentKey`, used to deduplicate automatic work across
+  remounts and clients.
+- an optional `stateHashAfter` divergence tripwire for a clean one-step
+  prediction.
+
+`appendEvent` runs one transaction on `rooms/<roomId>/log`. Realtime
+Database serializes concurrent transactions, so the winning updater assigns
+`head + 1` and writes the event at that sequence. A repeated nonce or logical
+intent key resolves to the existing log without creating another event.
+
+The pure rules reducer resolves every committed event as `applied` or
+`bounced`. It receives deterministic time and random input through the event
+context. The fold records only applied events in its intervening-event index,
+so bounced intents do not create conflicts for later work.
+
+### Compaction
+
+When the live window grows past 200 events, the append transaction folds the
+oldest events into `baseSnapshot`, advances `baseSeq`, and leaves 100 live
+events. The same transaction writes `appliedIndex`, preserving the actor and
+type of applied events below the snapshot horizon. `intentKeyIndex` preserves
+logical deduplication across compacted history.
+
+A compaction failure leaves the append committed, retains the live window, and
+stores `compactionError`; the next append attempts compaction again. Folding
+`baseSnapshot` plus the live window produces the same `FoldState` as folding
+the complete event sequence from genesis.
+
+### Presence
+
+`RoomGate` mints a per-tab client id and writes
+`presence/<clientId> = { connected: true, lastSeenAt }` after the room is
+ready. The writer arms `onDisconnect().remove()` and removes the entry during
+normal cleanup. Connected counts are derived from entries whose `connected`
+field is true.
+
+Room creation preserves rooms created within the last 24 hours and rooms with a
+connected presence entry. A creation pass may evict older inactive rooms whose
+genesis can be parsed safely.
+
+### Quest log mirror
+
+The diagnostic sink stores single-line JSON records under
+`rooms/<roomId>/logs`. It batches writes, retains the newest 2,000 records,
+and mirrors quest-generation diagnostics plus single-writer coop outcome
+records. `?viewLogs=<roomId>` reads this node without joining the game.
+
+## Client Read And Write Flow
+
+`RoomGate` subscribes to `rooms/<roomId>/log`, validates genesis, installs
+presence and logging, then mounts one `CoopProvider`. The provider owns one
+`LogClient`:
+
+1. `subscribeToLog` decodes the room node.
+2. `LogClient` folds the confirmed sequence into `FoldState`.
+3. `useGameState()` publishes the confirmed fold plus optimistic local
+   intents.
+4. Screens call the named creators from `useActions()` or the quest-context
+   adapter.
+5. `LogClient.submit` stamps the event envelope, echoes the intent
+   optimistically, and calls `appendEvent`.
+6. Subscription confirmation reconciles the pending intent by nonce or
+   `intentKey`; an invalid or conflicting intent surfaces as a bounce.
+
+`FoldState` contains the shared front-door, quest, and active-battle slices.
+Quest navigation, site decisions, battle commands, prompts, rewards, and battle
+completion therefore share one room ordering.
 
 ## Local Testing
 
@@ -96,78 +165,61 @@ Run:
 npm start
 ```
 
-This starts the Realtime Database emulator on `127.0.0.1:9000`, the Emulator UI
-on `127.0.0.1:4000`, refreshes generated assets, and serves Vite on
-`http://localhost:5173/`. When an emulator port is occupied, `npm start`
-selects the next available local ports and prints the selected database, UI,
-hub, and logging ports before Vite starts. The selected database host and port
-are passed to Vite as `VITE_FIREBASE_DATABASE_EMULATOR_HOST` and
-`VITE_FIREBASE_DATABASE_EMULATOR_PORT`.
+This starts the Realtime Database emulator, refreshes generated assets, and
+serves Vite. The emulator usually starts at `127.0.0.1:9000` with its UI at
+`127.0.0.1:4000`; occupied ports are replaced with available ports and the
+selected values are printed.
 
-Open `http://localhost:5173/`, create a game, then open the generated
-`?game=<roomId>` URL in a second browser window. Inspect the emulator room data
-with:
+Open the Vite URL, let the app create a room, then open the resulting
+`?game=<roomId>` URL in a second browser window. Inspect the emulator with:
 
 ```bash
 curl "http://127.0.0.1:<database-port>/rooms.json?ns=demo-quest-prototype"
 ```
 
-Use the Vite-only script to inspect the visible emulator connection error state:
-
-```bash
-npm run dev:vite
-```
+Use `npm run dev:vite` when testing the visible emulator-connection error
+state without starting Firebase.
 
 ## Manual Two-Window QA
 
-1. Run `npm start`.
-2. Create a room in the first window.
-3. Open the share URL in a second window.
-4. Pick a Dreamcaller in either window and verify both windows enter the same
-   dreamscape.
-5. Open a draft site, pick a card in one window, and verify the other window
-   shows the updated deck and next offer.
-6. Trigger an essence-changing action in one window while taking a different
-   shared action in the other window, then verify both changes are present.
-7. Open a reward, shop, Dreamsign, or essence site and verify both windows show
-   the same revealed result.
-8. Refresh both windows and verify they reload the room state.
-9. Reset the quest and verify both windows return to the shared start state.
-10. Enter a Battle site from the atlas in either window. Confirm both windows
-    show the same enemy, deck order, and reward options.
-11. Play a card in one window. Confirm the other window renders the same
-    play and animation within one round-trip.
-12. Issue concurrent commands from both windows (e.g. play a card in window
-    A while moving a card in window B). Confirm both apply without state
-    corruption.
-13. Press Undo in one window. Confirm both windows rewind together. Press
-    Redo in either window. Confirm both windows advance together.
-14. Press Reset Battle in one window. Confirm both windows reset history
-    and return to the prepared initial state.
-15. Win a battle, select a reward in either window. Confirm both windows
-    apply the reward, return to the atlas, and clear the battle slot.
-16. Lose or draw a battle, dismiss the result overlay. Confirm both windows
-    surface the failed screen and clear the battle slot.
-17. Trigger Reset Quest while a battle is active. Confirm both rooms clear
-    `questState` and `battleState`.
-18. Refresh either window mid-battle and confirm the same shared state
-    reloads.
+1. Run `npm start` and open the printed Vite URL.
+2. Confirm room creation adds `?game=<roomId>`.
+3. Open that URL in a second window and confirm both windows show two connected
+   clients.
+4. Choose a Dreamcaller and confirm both clients render the same dreamscape.
+5. Open a draft site, pick a card in one client, and confirm the other client
+   advances to the same next offer and deck.
+6. Trigger two valid actions from separate clients and confirm both appear in
+   committed sequence order.
+7. Trigger conflicting choices and confirm one applies while the other shows
+   bounce feedback.
+8. Enter a battle and confirm both clients render the same opponent, board,
+   and battle phase.
+9. Commit a battle action, prompt resolution, and debug gesture from one client;
+   confirm the other client folds each result.
+10. Complete the battle and confirm both clients apply the same reward and
+    return to the same quest route.
+11. Reload each window during quest play and during battle; confirm the room
+    replays to the same state.
+12. Open `?viewLogs=<roomId>` and confirm the persisted diagnostic records are
+    readable.
 
 ## Cloud Smoke QA
 
-Open `http://localhost:5173/?realtime=1`, create a room, and confirm the URL
-contains both `realtime=1` and `game=<roomId>`. Verify the room exists in the
-configured cloud Realtime Database, then delete the smoke-test room.
+Open the local app with `?realtime=1`, create a room, and confirm the URL
+preserves both `realtime=1` and `game=<roomId>`. Join from a second window,
+exercise one shared action, verify the room under the configured cloud
+database, and remove the smoke-test room afterward.
 
 ## Deploy
 
 Run:
 
 ```bash
-npm run build
-firebase deploy
+npm run deploy
 ```
 
-Firebase Hosting serves `dist/` and rewrites all routes to `index.html`, so
-share links with `?game=<roomId>` load the app shell. Hosted cloud RTDB rooms
-use share links with `?realtime=1&game=<roomId>`.
+The deploy script builds `dist/`, deploys Firebase Hosting, and uploads binary
+art to the configured Storage bucket. Hosting rewrites app routes to
+`index.html`, so share links with `?realtime=1&game=<roomId>` load the room
+gate and replay the cloud event log.

@@ -89,7 +89,7 @@ Hairlines and dividers.
 | `--border-mid` | `var(--primitive-line-mid)` |  |
 | `--border-strong` | `var(--primitive-line-strong)` |  |
 | `--border-accent` | `var(--primitive-line-violet)` |  |
-| `--line-strong` | `var(--dt-line-strong)` | rgba(168,85,247,.42) |
+| `--line-strong` | `var(--atlas-badge-border)` | rgba(168,85,247,.42) |
 
 ## Radius
 
@@ -228,26 +228,18 @@ Re-exports under the production codebase's --dt-* and --color-* token names. Gam
 
 | Token | Value | Notes |
 | --- | --- | --- |
-| `--dt-bg-0` | `var(--primitive-void-800)` |  |
 | `--dt-bg-1` | `var(--primitive-void-700)` |  |
 | `--dt-bg-2` | `var(--primitive-plum-700)` |  |
 | `--dt-surface-light` | `var(--primitive-plum-500)` |  |
 | `--dt-border` | `rgba(168, 85, 247, 0.22)` |  |
 | `--dt-line` | `rgba(168, 85, 247, 0.18)` |  |
-| `--dt-line-strong` | `rgba(168, 85, 247, 0.42)` |  |
-| `--dt-accent-glow` | `rgba(168, 85, 247, 0.6)` |  |
-| `--dt-gold-glow` | `rgba(250, 204, 21, 0.5)` |  |
 | `--dt-primary` | `var(--primitive-violet-600)` | #7c3aed |
 | `--dt-primary-light` | `var(--primitive-violet-400)` |  |
-| `--dt-accent-strong` | `var(--primitive-violet-400)` | atlas #a855f7 |
 | `--dt-energy` | `var(--primitive-violet-300)` | atlas reuses #c084fc here |
 | `--dt-energy-border` | `var(--primitive-energy-600)` |  |
-| `--dt-gold` | `var(--primitive-gold-600)` | #d4a017 — completed/traveled |
 | `--dt-spark` | `var(--primitive-spark-500)` | #f3c33f |
 | `--dt-spark-border` | `var(--primitive-spark-600)` |  |
-| `--dt-enemy` | `var(--primitive-ember-500)` |  |
 | `--dt-player` | `var(--primitive-sap-400)` |  |
-| `--dt-wash-journey` | `radial-gradient(120% 95% at 50% 30%, #241a3a, #140e22 55%, #0a0612)` |  |
 | `--color-bg` | `#0a0612` |  |
 | `--color-primary` | `#7c3aed` |  |
 | `--color-gold-light` | `#fbbf24` |  |
@@ -258,6 +250,38 @@ Re-exports under the production codebase's --dt-* and --color-* token names. Gam
 
 | Token | Value | Notes |
 | --- | --- | --- |
+| `--atlas-map-background` | `radial-gradient(120% 95% at 50% 30%, #241a3a, #140e22 55%, #0a0612)` |  |
+| `--atlas-edge-dim` | `rgba(206, 192, 236, 0.92)` |  |
+| `--atlas-edge-locked` | `rgba(182, 154, 248, 0.9)` |  |
+| `--atlas-edge-shadow` | `rgba(0, 0, 0, 0.7)` |  |
+| `--atlas-edge-traveled-from` | `var(--primitive-gold-400)` |  |
+| `--atlas-edge-traveled-to` | `var(--primitive-gold-600)` |  |
+| `--atlas-edge-traveled-glow` | `rgba(251, 191, 36, 0.55)` |  |
+| `--atlas-edge-open-from` | `var(--primitive-violet-400)` |  |
+| `--atlas-edge-open-to` | `var(--primitive-violet-600)` |  |
+| `--atlas-edge-open-glow` | `rgba(168, 85, 247, 0.6)` |  |
+| `--atlas-edge-open-flow` | `#ede0ff` |  |
+| `--atlas-node-completed-halo` | `rgba(212, 160, 23, 0.22)` |  |
+| `--atlas-node-completed-glow` | `rgba(212, 160, 23, 0.45)` |  |
+| `--atlas-node-available-halo` | `rgba(168, 85, 247, 0.32)` |  |
+| `--atlas-node-available-glow` | `rgba(168, 85, 247, 0.6)` |  |
+| `--atlas-node-revealed-locked-glow` | `rgba(124, 58, 237, 0.22)` |  |
+| `--atlas-node-unrevealed-glow` | `rgba(80, 70, 110, 0.22)` |  |
+| `--atlas-node-boss-halo` | `rgba(239, 68, 68, 0.3)` |  |
+| `--atlas-node-boss-glow` | `rgba(239, 68, 68, 0.5)` |  |
+| `--atlas-node-active-glow` | `rgba(168, 85, 247, 0.85)` |  |
+| `--atlas-node-unrevealed-face` | `radial-gradient(closest-side, #4a4658, #322e40)` |  |
+| `--atlas-badge-border` | `rgba(168, 85, 247, 0.42)` |  |
+| `--atlas-badge-accent` | `var(--primitive-violet-400)` |  |
+| `--atlas-badge-shadow` | `rgba(0, 0, 0, 0.55)` |  |
+| `--atlas-boss-badge-background` | `radial-gradient(closest-side, var(--primitive-ember-500), #7f1d1d)` |  |
+| `--atlas-boss-badge-border` | `var(--primitive-void-800)` |  |
+| `--atlas-boss-badge-glow` | `rgba(239, 68, 68, 0.8)` |  |
+| `--atlas-known-badge-border` | `var(--primitive-gold-600)` |  |
+| `--atlas-known-badge-glow` | `rgba(250, 204, 21, 0.6)` |  |
+| `--atlas-known-image-shadow` | `rgba(0, 0, 0, 0.6)` |  |
+| `--atlas-known-pulse-glow` | `rgba(250, 204, 21, 0.5)` |  |
+| `--atlas-known-pulse-clear` | `rgba(250, 204, 21, 0)` |  |
 | `--battlefield-slot-border` | `2px dotted var(--primitive-line-battlefield)` |  |
 | `--layer-reveal` | `2147483647` |  |
 | `--hover-scale` | `1.03` |  |

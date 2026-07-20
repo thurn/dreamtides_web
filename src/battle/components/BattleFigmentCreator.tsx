@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { GlassButton } from "../../cumulus/components/controls/GlassButton";
-import { SegmentedControl } from "../../cumulus/components/controls/SegmentedControl";
-import { Select } from "../../cumulus/components/controls/Select";
-import { TextField } from "../../cumulus/components/controls/TextField";
-import { GlassDialog } from "../../cumulus/components/overlay/GlassDialog";
-import { GLYPHS } from "../../cumulus/primitives/glyph";
-import { token } from "../../cumulus/primitives/tokens";
+import {
+  BattleFigmentCreatorOverlay,
+  type BattleFigmentDeckPosition,
+  type BattleFigmentZone,
+} from "../../cumulus/screens/battle-overlays/BattleFigmentCreatorOverlay";
 import type { BattleDebugEdit, BattleDebugZoneDestination } from "../debug/commands";
 import type { BattleMutableState, BattleSide, FrontRankSlotId, BackRankSlotId } from "../types";
 import {
@@ -27,8 +25,6 @@ import {
   type FigmentKeyword,
 } from "../state/figment-catalog";
 
-type FigmentZone = "hand" | "backRank" | "frontRank" | "void" | "banished" | "deck";
-type FigmentDeckPosition = "top" | "bottom";
 type FigmentBattlefieldSlotId = BackRankSlotId | FrontRankSlotId;
 const DEFAULT_FIGMENT_SUBTYPE = "Shadow";
 
@@ -71,8 +67,8 @@ export function BattleFigmentCreator({
   const [name, setName] = useState(defaultFigmentName(defaultEntry));
   const [sparkText, setSparkText] = useState(String(defaultEntry.baseSpark));
   const [side, setSide] = useState<BattleSide>(initialSide);
-  const [zone, setZone] = useState<FigmentZone>("backRank");
-  const [position, setPosition] = useState<FigmentDeckPosition>("top");
+  const [zone, setZone] = useState<BattleFigmentZone>("backRank");
+  const [position, setPosition] = useState<BattleFigmentDeckPosition>("top");
   const [slot, setSlot] = useState<FigmentBattlefieldSlotId>(
     () => findFirstOpenReserveSlot(state, initialSide) ?? "B0",
   );
@@ -154,100 +150,43 @@ export function BattleFigmentCreator({
     : frontRankSlotIds(selectPlayAreaSize(state).frontSize + 1);
 
   return (
-    <GlassDialog
-      title="Synthesize a Figment"
-      subtitle="Choose a figment type and a valid destination."
-      closeLabel="Cancel figment creation"
-      onClose={onClose}
-      desktopCenterTarget="battlefield"
-    >
-      <div
-        className="cumulus"
-        data-battle-figment-creator=""
-        style={{ display: "grid", gap: token("--space-5") }}
-      >
-        <div data-battle-figment-field="name">
-          <TextField
-            label="Name"
-            value={name}
-            onChange={setName}
-            inputRef={nameInputRef}
-            supportingText="The displayed name for this created figment."
-          />
-        </div>
-        <div data-battle-figment-field="subtype" style={{ display: "grid", gap: token("--space-2") }}>
-          <Select
-            ariaLabel="Figment type"
-            leadingGlyph={GLYPHS.spark}
-            full
-            options={figmentCatalogEntries().map((entry) => ({
-              value: entry.id,
-              label: formatCatalogOptionLabel(entry),
-            }))}
-            value={figmentTypeId}
-            onChange={handleSelectType}
-          />
-          <span data-battle-figment-keyword="" style={{ color: token("--text-on-glass-muted"), font: token("--t-caption") }}>
-            {selectedKeyword === undefined ? "No keyword." : `Keyword: ${FIGMENT_KEYWORD_LABELS[selectedKeyword]}.`}
-          </span>
-        </div>
-        <div data-battle-figment-field="spark">
-          <TextField
-            label="Spark"
-            value={sparkText}
-            onChange={setSparkText}
-            error={sparkIsValid ? undefined : "Spark must be a non-negative whole number."}
-            supportingText={`Base spark ${String(selectedEntry.baseSpark)} — editable.`}
-          />
-        </div>
-        <div data-battle-figment-field="side" style={{ display: "grid", gap: token("--space-2") }}>
-          <span style={{ color: token("--text-on-glass-muted"), font: token("--t-caption") }}>Side</span>
-          <SegmentedControl options={[{ value: "player", label: "Player" }, { value: "enemy", label: "Enemy" }]} value={side} onChange={(value) => setSide(value as BattleSide)} full />
-        </div>
-        <div data-battle-figment-field="zone" style={{ display: "grid", gap: token("--space-2") }}>
-          <span style={{ color: token("--text-on-glass-muted"), font: token("--t-caption") }}>Destination</span>
-          <Select
-            ariaLabel="Figment destination"
-            leadingGlyph={GLYPHS.grid}
-            full
-            options={(["hand", "backRank", "frontRank", "void", "banished", "deck"] as const).map((option) => ({ value: option, label: formatZoneLabel(option) }))}
-            value={zone}
-            onChange={(value) => {
-              const nextZone = value as FigmentZone;
-              setZone(nextZone);
-              if (nextZone === "backRank" && !isReserveSlot(slot)) setSlot("B0");
-              if (nextZone === "frontRank" && !isDeploySlot(slot)) setSlot("F0");
-            }}
-          />
-        </div>
-        {zone === "deck" ? (
-          <div data-battle-figment-field="position" style={{ display: "grid", gap: token("--space-2") }}>
-            <span style={{ color: token("--text-on-glass-muted"), font: token("--t-caption") }}>Deck Position</span>
-            <SegmentedControl options={[{ value: "top", label: "Top" }, { value: "bottom", label: "Bottom" }]} value={position} onChange={(value) => setPosition(value as FigmentDeckPosition)} full />
-          </div>
-        ) : null}
-        {zone === "backRank" || zone === "frontRank" ? (
-          <div data-battle-figment-field="slot" style={{ display: "grid", gap: token("--space-2") }}>
-            <span style={{ color: token("--text-on-glass-muted"), font: token("--t-caption") }}>Slot</span>
-            <Select
-              ariaLabel="Figment battlefield slot"
-              leadingGlyph={GLYPHS.grid}
-              full
-              options={slotOptions.map((option) => ({ value: option, label: option }))}
-              value={slot}
-              onChange={(value) => setSlot(value as FigmentBattlefieldSlotId)}
-            />
-          </div>
-        ) : null}
-        {canSubmit || disabledReason === null ? null : (
-          <p data-battle-figment-submit-hint="" style={{ color: token("--text-on-glass-muted"), font: token("--t-caption") }}>{disabledReason}</p>
-        )}
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: token("--space-3") }}>
-          <GlassButton label="Cancel" placement="onGlass" testId="battle-figment-cancel" onPress={onClose} />
-          <GlassButton label="Create Figment" placement="onGlass" variant="accent" disabled={!canSubmit} testId="battle-figment-submit" onPress={handleSubmit} />
-        </div>
-      </div>
-    </GlassDialog>
+    <BattleFigmentCreatorOverlay
+      name={name}
+      nameInputRef={nameInputRef}
+      typeId={figmentTypeId}
+      typeOptions={figmentCatalogEntries().map((entry) => ({
+        value: entry.id,
+        label: formatCatalogOptionLabel(entry),
+      }))}
+      keywordText={selectedKeyword === undefined
+        ? "No keyword."
+        : `Keyword: ${FIGMENT_KEYWORD_LABELS[selectedKeyword]}.`}
+      sparkText={sparkText}
+      sparkError={sparkIsValid
+        ? undefined
+        : "Spark must be a non-negative whole number."}
+      baseSpark={selectedEntry.baseSpark}
+      side={side}
+      zone={zone}
+      position={position}
+      slot={slot}
+      slotOptions={slotOptions}
+      canSubmit={canSubmit}
+      disabledReason={disabledReason}
+      onNameChange={setName}
+      onTypeChange={handleSelectType}
+      onSparkChange={setSparkText}
+      onSideChange={setSide}
+      onZoneChange={(nextZone) => {
+        setZone(nextZone);
+        if (nextZone === "backRank" && !isReserveSlot(slot)) setSlot("B0");
+        if (nextZone === "frontRank" && !isDeploySlot(slot)) setSlot("F0");
+      }}
+      onPositionChange={setPosition}
+      onSlotChange={(value) => setSlot(value as FigmentBattlefieldSlotId)}
+      onCancel={onClose}
+      onSubmit={handleSubmit}
+    />
   );
 }
 
@@ -257,10 +196,10 @@ function buildDestination({
   slot,
   zone,
 }: {
-  position: FigmentDeckPosition;
+  position: BattleFigmentDeckPosition;
   side: BattleSide;
   slot: FigmentBattlefieldSlotId;
-  zone: FigmentZone;
+  zone: BattleFigmentZone;
 }): BattleDebugZoneDestination {
   if (zone === "backRank" || zone === "frontRank") {
     return {
@@ -306,23 +245,6 @@ function isAutoDerivedFigmentName(name: string): boolean {
   );
 }
 
-function formatZoneLabel(zone: FigmentZone): string {
-  switch (zone) {
-    case "hand":
-      return "Hand";
-    case "backRank":
-      return "Back Rank";
-    case "frontRank":
-      return "Front Rank";
-    case "void":
-      return "Void";
-    case "banished":
-      return "Banished";
-    case "deck":
-      return "Deck";
-  }
-}
-
 function isReserveSlot(value: FigmentBattlefieldSlotId): value is BackRankSlotId {
   return isBackRankSlotId(value);
 }
@@ -334,7 +256,7 @@ function isDeploySlot(value: FigmentBattlefieldSlotId): value is FrontRankSlotId
 function isBattlefieldSlotOccupied(
   state: BattleMutableState,
   side: BattleSide,
-  zone: FigmentZone,
+  zone: BattleFigmentZone,
   slot: FigmentBattlefieldSlotId,
 ): boolean {
   // bug-114: peek into the live battlefield to gate the submit button against
@@ -371,7 +293,7 @@ function findFirstOpenDeploySlot(
 function canStackIntoBattlefieldSlot(
   state: BattleMutableState,
   side: BattleSide,
-  zone: FigmentZone,
+  zone: BattleFigmentZone,
   slot: FigmentBattlefieldSlotId,
   subtype: string,
 ): boolean {
@@ -388,7 +310,7 @@ function canStackIntoBattlefieldSlot(
 function selectBattlefieldSlotOccupant(
   state: BattleMutableState,
   side: BattleSide,
-  zone: FigmentZone,
+  zone: BattleFigmentZone,
   slot: FigmentBattlefieldSlotId,
 ): string | null {
   if (zone === "backRank" && isReserveSlot(slot)) {

@@ -33,7 +33,7 @@ function view(
 }
 
 function stubMatchMedia(): void {
-  window.matchMedia = ((query: string) => ({
+  window.matchMedia = (query: string) => ({
     matches: query.includes("min-width"),
     media: query,
     onchange: null,
@@ -42,7 +42,7 @@ function stubMatchMedia(): void {
     addListener: () => undefined,
     removeListener: () => undefined,
     dispatchEvent: () => false,
-  })) as unknown as typeof window.matchMedia;
+  });
 }
 
 class ResizeObserverStub {

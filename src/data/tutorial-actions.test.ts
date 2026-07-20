@@ -36,7 +36,7 @@ describe("loadTutorialActions", () => {
   it("loads generated data for a production runtime", async () => {
     const fetcher = successfulFetcher();
 
-    await loadTutorialActions(fetcher as unknown as typeof fetch, "runtime");
+    await loadTutorialActions(fetcher, "runtime");
 
     expect(fetcher).toHaveBeenCalledWith("/tutorial-data.json");
   });

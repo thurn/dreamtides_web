@@ -85,11 +85,9 @@
    ================================================================ */
 
 .cumulus {
-  /* ---- Color: dream backgrounds (darkest -> lifted) ----
-     Anchored to the parent ramp: void-800 = parent --dt-bg-0,
-     void-700 = bg-1, plum-700 = bg-2/surface, plum-500 = surface-light. */
+  /* ---- Color: dream backgrounds (darkest -> lifted) ---- */
   --primitive-void-900: #060410;   /* the deepest backdrop, behind everything */
-  --primitive-void-800: #0a0612;   /* default app background (parent --dt-bg-0) */
+  --primitive-void-800: #0a0612;   /* default app background */
   --primitive-void-700: #14101f;   /* raised background band   (parent --dt-bg-1) */
   --primitive-plum-700: #1a1525;   /* card / sheet surface      (parent --dt-bg-2) */
   --primitive-plum-600: #221a31;   /* elevated surface, popover */
@@ -101,11 +99,11 @@
   --primitive-violet-600: #7c3aed;  /* parent --dt-primary */
   --primitive-violet-500: #9333ea;
   --primitive-violet-400: #a855f7;  /* primary accent (parent --dt-primary-light) */
-  --primitive-violet-300: #c084fc;  /* bright glow / highlight (parent --dt-accent-strong) */
+  --primitive-violet-300: #c084fc;  /* bright glow / highlight */
   --primitive-violet-200: #d8b4fe;  /* pale violet highlight */
 
   /* ---- Color: gold (omens, reward, victory) — matches parent ---- */
-  --primitive-gold-600: #d4a017;    /* parent --dt-gold */
+  --primitive-gold-600: #d4a017;
   --primitive-gold-500: #e0a82a;
   --primitive-gold-400: #fbbf24;    /* omens value */
   --primitive-gold-300: #ffd34d;
@@ -116,7 +114,7 @@
   --primitive-energy-300: #38bdf8;
   --primitive-spark-500: #f3c33f;   /* spark sparkle — production SPARK_ICON_COLOR (parent --dt-spark) */
   --primitive-spark-600: #854d0e;   /* spark border (parent --dt-spark-border) */
-  --primitive-ember-500: #ef4444;   /* danger / boss / purge / close (parent --dt-enemy) */
+  --primitive-ember-500: #ef4444;   /* danger / boss / purge / close */
   --primitive-ember-400: #f87171;
   --primitive-ember-600: #c0341f;
   --primitive-sap-500: #16a34a;     /* deep player/grant green */
@@ -188,6 +186,43 @@
   --surface-status-badge: var(--primitive-line-black); /* high-contrast in-card status mark */
   --surface-placeholder: var(--primitive-neutral-500); /* content reserved for imminent media */
 
+  /* ---- Dream Atlas material ----
+     The map owns a semantic palette because edges, node halos, badges, and the
+     journey field form one authored material. Atlas components consume only
+     these roles; production aliases remain compatibility exports. */
+  --atlas-map-background: radial-gradient(120% 95% at 50% 30%, #241a3a, #140e22 55%, #0a0612);
+  --atlas-edge-dim: rgba(206, 192, 236, 0.92);
+  --atlas-edge-locked: rgba(182, 154, 248, 0.9);
+  --atlas-edge-shadow: rgba(0, 0, 0, 0.7);
+  --atlas-edge-traveled-from: var(--primitive-gold-400);
+  --atlas-edge-traveled-to: var(--primitive-gold-600);
+  --atlas-edge-traveled-glow: rgba(251, 191, 36, 0.55);
+  --atlas-edge-open-from: var(--primitive-violet-400);
+  --atlas-edge-open-to: var(--primitive-violet-600);
+  --atlas-edge-open-glow: rgba(168, 85, 247, 0.6);
+  --atlas-edge-open-flow: #ede0ff;
+  --atlas-node-completed-halo: rgba(212, 160, 23, 0.22);
+  --atlas-node-completed-glow: rgba(212, 160, 23, 0.45);
+  --atlas-node-available-halo: rgba(168, 85, 247, 0.32);
+  --atlas-node-available-glow: rgba(168, 85, 247, 0.6);
+  --atlas-node-revealed-locked-glow: rgba(124, 58, 237, 0.22);
+  --atlas-node-unrevealed-glow: rgba(80, 70, 110, 0.22);
+  --atlas-node-boss-halo: rgba(239, 68, 68, 0.3);
+  --atlas-node-boss-glow: rgba(239, 68, 68, 0.5);
+  --atlas-node-active-glow: rgba(168, 85, 247, 0.85);
+  --atlas-node-unrevealed-face: radial-gradient(closest-side, #4a4658, #322e40);
+  --atlas-badge-border: rgba(168, 85, 247, 0.42);
+  --atlas-badge-accent: var(--primitive-violet-400);
+  --atlas-badge-shadow: rgba(0, 0, 0, 0.55);
+  --atlas-boss-badge-background: radial-gradient(closest-side, var(--primitive-ember-500), #7f1d1d);
+  --atlas-boss-badge-border: var(--primitive-void-800);
+  --atlas-boss-badge-glow: rgba(239, 68, 68, 0.8);
+  --atlas-known-badge-border: var(--primitive-gold-600);
+  --atlas-known-badge-glow: rgba(250, 204, 21, 0.6);
+  --atlas-known-image-shadow: rgba(0, 0, 0, 0.6);
+  --atlas-known-pulse-glow: rgba(250, 204, 21, 0.5);
+  --atlas-known-pulse-clear: rgba(250, 204, 21, 0);
+
   /* ---- Text ---- */
   --text-primary: var(--primitive-ink-100);
   --text-secondary: var(--primitive-ink-300);
@@ -254,7 +289,7 @@
      PRODUCTION ALIASES — cross-system bridge
      ================================================================
      The desktop/production codebase references its resources through
-     two other namespaces: --dt-* (atlas, atlas.css) and --color-* (global).
+     two other namespaces: --dt-* (production surfaces) and --color-* (global).
      CardView's local --cv-* variables remain in components/card/CardView.css.
      The mobile DS holds the
      same VALUES under mobile-flavored names; these aliases re-export them
@@ -265,31 +300,21 @@
 
      NOTE: --dt-spark resolves to #f3c33f to match production SPARK_ICON_COLOR. */
 
-  /* --dt-* — atlas / shared (values authoritative from atlas.css `.dream-atlas`).
-     The extra --dt-bg-* / -spark/-enemy/-player names are the parent ramp the
-     atlas reads from; the overlapping names are pinned to atlas.css. */
-  --dt-bg-0: var(--primitive-void-800);
+  /* --dt-* — compatibility exports for active production consumers. Atlas
+     owns its authored material through `--atlas-*`. */
   --dt-bg-1: var(--primitive-void-700);
   --dt-bg-2: var(--primitive-plum-700);
   --dt-surface-light: var(--primitive-plum-500);
   /* purple-tinted hairline (a plum-lifted line, not a neutral slate). */
   --dt-border: rgba(168, 85, 247, 0.22);
   --dt-line: rgba(168, 85, 247, 0.18);
-  --dt-line-strong: rgba(168, 85, 247, 0.42);
-  --dt-accent-glow: rgba(168, 85, 247, 0.6);  /* @kind color — atlas violet node/edge glow */
-  --dt-gold-glow: rgba(250, 204, 21, 0.5);    /* @kind color — atlas gold known-badge pulse */
   --dt-primary: var(--primitive-violet-600);        /* #7c3aed */
   --dt-primary-light: var(--primitive-violet-400);
-  --dt-accent-strong: var(--primitive-violet-400);  /* atlas #a855f7 */
   --dt-energy: var(--primitive-violet-300);         /* atlas reuses #c084fc here */
   --dt-energy-border: var(--primitive-energy-600);
-  --dt-gold: var(--primitive-gold-600);             /* #d4a017 — completed/traveled */
   --dt-spark: var(--primitive-spark-500);           /* #f3c33f */
   --dt-spark-border: var(--primitive-spark-600);
-  --dt-enemy: var(--primitive-ember-500);
   --dt-player: var(--primitive-sap-400);
-  /* Atlas-specific gradients & washes (atlas.css `.dream-atlas`) */
-  --dt-wash-journey: radial-gradient(120% 95% at 50% 30%, #241a3a, #140e22 55%, #0a0612); /* @kind other */
 
   /* --color-* — global (index.css :root), production literals so desktop code
      referencing them resolves to the exact same values. */
@@ -311,7 +336,7 @@
      the semantic block above; the `--font-*` roles live there too. Listed
      here as the canonical contract.) */
   --text-faint: var(--primitive-ink-500); /* #bba994 warm muted */
-  --line-strong: var(--dt-line-strong);/* rgba(168,85,247,.42) */
+  --line-strong: var(--atlas-badge-border); /* rgba(168,85,247,.42) */
   --gold: var(--primitive-gold-600);  /* #d4a017 reward / completed / victory */
   /* canonical font faces (same faces as the --font-* roles above) */
   --font-serif-canon: var(--primitive-font-serif);  /* EB Garamond — titles, names */

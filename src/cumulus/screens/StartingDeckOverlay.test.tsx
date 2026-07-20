@@ -136,7 +136,7 @@ function setDesktopViewport(isDesktop: boolean, roomy = false): void {
     addListener: vi.fn(),
     removeListener: vi.fn(),
     dispatchEvent: vi.fn(),
-  })) as unknown as typeof window.matchMedia;
+  }));
 }
 
 beforeEach(() => {

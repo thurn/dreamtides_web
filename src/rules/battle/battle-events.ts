@@ -694,17 +694,17 @@ function coerceBattleCommand(raw: unknown): BattleCommand | null {
   const id = raw.id;
   if (id === "DEBUG_EDIT") {
     const edit = coerceBattleDebugEdit(raw.edit);
-    return edit === null ? null : { ...(raw as object), id, edit } as BattleCommand;
+    return edit === null ? null : { ...(raw as object), id, edit };
   }
   if (id === "FORCE_RESULT") {
     const result = raw.result;
     if (!isBattleResult(result)) {
       return null;
     }
-    return { ...(raw as object), id, result } as BattleCommand;
+    return { ...(raw as object), id, result };
   }
   if (id === "SKIP_TO_REWARDS") {
-    return { ...(raw as object), id } as BattleCommand;
+    return { ...(raw as object), id };
   }
   return null;
 }

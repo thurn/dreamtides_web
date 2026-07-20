@@ -44,7 +44,7 @@ beforeEach(() => {
     observe() {}
     unobserve() {}
     disconnect() {}
-  } as unknown as typeof ResizeObserver;
+  };
   vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
     if (this.dataset.revealMeasure === "primary") return { x: 0, y: 0, left: 0, top: 0, right: 100, bottom: measuredPrimaryHeight, width: 100, height: measuredPrimaryHeight, toJSON: () => ({}) };
     if (this.dataset.revealMeasure === "secondary") {

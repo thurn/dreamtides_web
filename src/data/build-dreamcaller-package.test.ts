@@ -189,7 +189,7 @@ describe("buildDreamcallerPackage draft_pool_constructed logging", () => {
       (e) => e.event === "draft_pool_constructed",
     );
     expect(events).toHaveLength(1);
-    return events[0] as Record<string, unknown>;
+    return events[0];
   }
 
   it("records the algorithm, seed, and size for every variant", () => {

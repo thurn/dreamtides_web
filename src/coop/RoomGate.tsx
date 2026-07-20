@@ -365,7 +365,7 @@ export function RoomGate({
     return (
       <ConfigGateScreen
         roomContentConfig={
-          gateState.genesis.contentConfig as ContentConfig | undefined
+          gateState.genesis.contentConfig
         }
         localContentConfig={localContentConfig}
       />

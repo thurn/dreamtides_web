@@ -168,7 +168,7 @@ function makeSide(
     fatigueCount: 0,
     dreamwellCardIndex: null,
     dreamwellDrawnTurn: null,
-  } as BattleMutableState["sides"][BattleSide];
+  };
 }
 
 function makeInstance(
@@ -223,7 +223,7 @@ function makeInstance(
       transfiguration: null,
       isBane: false,
     },
-  } as BattleMutableState["cardInstances"][string];
+  };
 }
 
 // A board richly populated so pick-cards prompts always find candidates in
@@ -258,7 +258,7 @@ function makeBoard(): BattleMutableState {
       enemy: makeSide(),
     },
     cardInstances,
-  } as BattleMutableState;
+  };
 }
 
 // A minimal deterministic BattleInit. The driver never reads init fields — it

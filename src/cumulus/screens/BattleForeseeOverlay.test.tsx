@@ -97,7 +97,7 @@ function stubMatchMedia(matches: boolean): void {
     addListener: vi.fn(),
     removeListener: vi.fn(),
     dispatchEvent: vi.fn(),
-  }) as unknown as typeof window.matchMedia;
+  });
 }
 
 beforeEach(() => {

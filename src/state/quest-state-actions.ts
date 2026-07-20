@@ -408,7 +408,7 @@ export function generateQuestSeed(): string {
   const cryptoCandidate: { randomUUID?: () => string } | undefined =
     typeof crypto === "undefined"
       ? undefined
-      : (crypto as { randomUUID?: () => string });
+      : (crypto);
   if (cryptoCandidate?.randomUUID !== undefined) {
     return cryptoCandidate.randomUUID();
   }

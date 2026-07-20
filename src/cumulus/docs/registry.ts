@@ -105,9 +105,9 @@ export interface CumulusComponent {
    * "incubating" for a component that is documented deliberately ahead of its
    * adoption, before any real (non-doc, non-test) code consumes it. It renders
    * a visible "Incubating" badge on the doc page so the gap reads as
-   * intentional rather than dead. Omit for shipped components: every entry
-   * should earn a real consumer by Phase 3, at which point the field is
-   * dropped.
+   * intentional rather than dead. The catalog lifecycle permits one subsequent
+   * health sweep for adoption; a component that remains unconsumed at the next
+   * sweep is adopted or deleted. Omit for shipped components.
    */
   status?: "incubating";
   /** Table-of-contents grouping, e.g. "Primitives" | "Components". */

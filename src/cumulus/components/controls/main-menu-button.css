@@ -17,6 +17,10 @@
   text-shadow: var(--text-outline-media);
 }
 
+.main-menu-button[data-main-menu-button-size="hero"] {
+  zoom: 1.5;
+}
+
 .main-menu-button__glass {
   position: absolute;
   z-index: 0;

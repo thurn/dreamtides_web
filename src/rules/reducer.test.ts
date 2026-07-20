@@ -208,7 +208,7 @@ function makeBattleSide(): BattleMutableState["sides"][BattleSide] {
     fatigueCount: 0,
     dreamwellCardIndex: null,
     dreamwellDrawnTurn: null,
-  } as BattleMutableState["sides"][BattleSide];
+  };
 }
 
 function makeCardInstance(battleCardId: string): BattleCardInstance {
@@ -280,7 +280,7 @@ function stateWithBattleCard(cardId: string, promptId?: number): FoldState {
     nextBattleCardOrdinal: 100,
     sides: { player: makeBattleSide(), enemy: makeBattleSide() },
     cardInstances: { [cardId]: makeCardInstance(cardId) },
-  } as BattleMutableState;
+  };
   const battle = {
     init: {} as never,
     board,
@@ -509,7 +509,7 @@ describe("isMatchingResolve (rule 2)", () => {
       {},
     ] as unknown[]) {
       const ev = event("RESOLVE_PROMPT", {
-        promptId: bad as never,
+        promptId: bad,
         resolution: {},
       });
       expect(() => isMatchingResolve(state, ev)).not.toThrow();
@@ -673,7 +673,7 @@ function stateWithPoisonedPrompt(promptId: number): FoldState {
     nextBattleCardOrdinal: 100,
     sides: { player: makeBattleSide(), enemy: makeBattleSide() },
     cardInstances: {},
-  } as BattleMutableState;
+  };
   const run = { scriptRef: { table: "dreamwell", id: "" }, cursor: [0, 0], side: "player" };
   const battle = {
     init: {} as never,

@@ -97,7 +97,7 @@ export function EntityRevealConformanceDemo() {
       className="cumulus"
       data-entity-reveal-conformance=""
       data-active-conformance-scenario={scenario}
-      style={{ minHeight: "100vh", padding: topEdge ? "4px 24px 40px" : "72px 24px 40px", color: "var(--text-primary)", background: "#100c19", boxSizing: "border-box", ...(scenario === "safe-area" ? { "--safe-area-inset-top": "52px", paddingTop: "52px" } : {}) } as React.CSSProperties}
+      style={{ minHeight: "100vh", padding: topEdge ? "4px 24px 40px" : "72px 24px 40px", color: "var(--text-primary)", background: "#100c19", boxSizing: "border-box", ...(scenario === "safe-area" ? { "--safe-area-inset-top": "52px", paddingTop: "52px" } : {}) }}
     >
       <h1 style={{ font: "var(--t-title)", margin: "0 0 12px" }}>Entity reveal conformance</h1>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 24 }}>

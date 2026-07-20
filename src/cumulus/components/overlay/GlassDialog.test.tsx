@@ -34,7 +34,7 @@ function stubMatchMedia(matches: boolean): void {
     addListener: () => {},
     removeListener: () => {},
     dispatchEvent: () => false,
-  })) as typeof window.matchMedia;
+  }));
 }
 
 beforeEach(() => {

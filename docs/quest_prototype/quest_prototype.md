@@ -5,7 +5,9 @@ A standalone web prototype of Dreamtides Quest Mode living in this repository
 the player chooses from 3 Dreamcallers, the selected Dreamcaller resolves a
 fixed package once at quest start, and the run proceeds through draft sites,
 Dreamsign surfaces, playable battles, and atlas progression. All state is
-in memory and resets on page load.
+derived from a Firebase room event log, so connected clients share the same
+quest, battle, and front-door flow and a reload replays the room to the same
+state.
 
 ## Running The Prototype
 
@@ -48,34 +50,55 @@ file I/O should mock `fetch` or use Vitest's `node` environment.
 
 ## Architecture
 
-All game state lives in one `QuestState` object provided by
-`src/state/quest-context.tsx`. The current screen is stored in `state.screen`
-and drives the router. The important runtime pieces are:
+The authoritative room value is an append-only sequence of player intents.
+`src/rules/reducer.ts` folds that sequence into one `FoldState` with three
+slices: shared front-door/tutorial progress, quest state, and an optional active
+battle. React renders the displayed fold and owns presentation-local state such
+as hover, open dialogs, and draft input.
 
 ```text
-src/
-  data/            normalized quest content and synthetic data
-  draft/           fixed-multiset draft engine
-  screens/         one file per screen
-  state/           quest context and mutations
-  types/           quest, content, and draft types
+screen intent
+  -> CoopQuestProvider / useActions
+  -> LogClient.submit
+  -> appendEvent transaction at rooms/<roomId>/log
+  -> subscribeToLog
+  -> deterministic rules fold
+  -> useGameState
+  -> quest and battle presentation
 ```
 
-Current quest state includes:
+The important ownership boundaries are:
 
-- `essence`
-- `deck`
-- `dreamcaller`
-- `resolvedPackage`
-- `remainingDreamsignPool`
-- `dreamsigns`
-- `completionLevel`
-- `atlas`
-- `currentDreamscape`
-- `visitedSites`
-- `draftState`
-- `screen`
-- `activeSiteId`
+- `src/eventlog/` is the game-agnostic room engine: encoded room nodes,
+  transactional append, subscription decoding, deterministic folding,
+  compaction, optimistic echo, and reconciliation.
+- `src/rules/` defines `FoldState`, the event union, and the pure Dreamtides
+  reducer. Time and randomness enter through the event context, keyed by the
+  room seed and committed sequence number.
+- `src/coop/RoomGate.tsx` creates or joins a room, validates its reducer build
+  and fold-relevant content configuration, writes presence, and installs the
+  room quest-log sink.
+- `src/coop/hooks.ts` mounts one `LogClient` per ready room. `useGameState()`
+  exposes the confirmed fold plus optimistic local intents; `useAppend()` and
+  `useActions()` are the write surfaces.
+- `src/coop/actions.ts` maps named player actions to one intent event apiece.
+  Payloads carry UUIDs, entry ids, indices, and node ids.
+- `src/state/coop-quest-context.tsx` adapts the folded quest slice and action
+  facade to the `QuestContextValue` interface used by quest screens.
+- `src/App.tsx` mounts `RoomGate`, `CoopProvider`, `CoopQuestProvider`, and the
+  routed quest UI in that order.
+
+`LogClient` keeps a confirmed fold and an ordered pending-intent queue. A local
+intent is optimistically folded for immediate feedback, then reconciled by its
+nonce or logical `intentKey` when Firebase confirms the committed event. A
+conflicting or invalid event is recorded as a deterministic bounce; displayed
+state is recomputed from the confirmed fold plus the pending queue.
+
+The room log carries quest and battle transitions in one sequence. Battle
+commands, undo/redo gestures, rewards, and the return to the atlas therefore
+share the same ordering and conflict rules as quest navigation and site
+choices. Anything both players must agree on is an event; component-local
+interaction state stays in the presenting client.
 
 The hidden package stays out of normal player UI. Debug surfaces can show the
 resolved package, selected optional subset, draft pool size, and the remaining

@@ -55,7 +55,7 @@ export function AtlasScreen({ view, onEnterNode }: AtlasScreenProps) {
         position: "fixed",
         inset: 0,
         overflow: "hidden",
-        background: token("--dt-wash-journey"),
+        background: token("--atlas-map-background"),
       }}
     >
       <Motes on tint="violet" zIndex={1} />

@@ -425,7 +425,7 @@ export function DreamwellEditorPreview({
           // outer ring); the card edge reads from the soft inner rim below.
           boxShadow: "0 4px 14px rgba(0, 0, 0, 0.55)",
           userSelect: "none",
-        } as CSSProperties
+        }
       }
     >
       {/* Dark base behind the band, so any sliver the extended art does not

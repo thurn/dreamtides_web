@@ -47,7 +47,7 @@ function stubMatchMedia({
   desktop?: boolean;
   wideDraft?: boolean;
 } = {}): void {
-  window.matchMedia = ((query: string) => ({
+  window.matchMedia = (query: string) => ({
     matches:
       (desktop && query.includes("min-width: 900px")) ||
       (wideDraft && query.includes("min-width: 1000px")),
@@ -58,7 +58,7 @@ function stubMatchMedia({
     addListener: () => undefined,
     removeListener: () => undefined,
     dispatchEvent: () => false,
-  })) as unknown as typeof window.matchMedia;
+  });
 }
 
 beforeEach(() => {

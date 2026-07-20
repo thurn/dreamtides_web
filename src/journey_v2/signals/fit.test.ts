@@ -4,7 +4,6 @@ import { fitScores, fitLooByEntry, centrality } from "./fit";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { MerchantDeckCard } from "../types";
-import type { DeckEntry } from "../../types/quest";
 
 // ---------------------------------------------------------------------------
 // Fixture helpers
@@ -46,7 +45,7 @@ function makeDeckCard(card: CardData, entryId: string): MerchantDeckCard {
       cardNumber: card.cardNumber,
       transfiguration: null,
       isBane: false,
-    } as DeckEntry,
+    },
     displayName: card.name,
   };
 }

@@ -124,6 +124,37 @@ moves):
 - `AtlasNode` → `atlas-display`.
 - `DreamscapeSiteNode` → `dreamscape-scatter`.
 
+### Catalog lifecycle
+
+Consumer count is an audit signal, not a reuse target. A component may have one
+production consumer when it owns a named game object, scene action, or workflow
+whose semantics and interaction contract belong in Cumulus. `AtlasMap`,
+`BattleStatusDisplay`, `MainMenuButton`, and `CardOrderEditor` are examples of
+deliberately narrow roles: their value is one canonical implementation and a
+strict typed API, even when the product has one place to render that concept.
+
+Every health sweep assigns each one-consumer component one disposition:
+
+- **Retain as a narrow role** when the component owns a coherent semantic
+  object or workflow and its public API prevents the consumer from authoring a
+  parallel treatment.
+- **Fold into its containing component or screen** when the public API only
+  exposes an implementation detail of that one composition.
+- **Delete** when the production consumer disappears or the same job is fully
+  expressed by another catalog component.
+
+This is a review decision recorded by the sweep, rather than a permanent source
+exemption. A general-purpose-looking component with one consumer must either
+gain evidence that its abstraction is useful or be folded into its owner.
+
+Zero-consumer components are permitted only with the visible `incubating`
+catalog status and a named adoption role. Incubation lasts through one
+subsequent health sweep: a component that still has no production consumer at
+the following sweep is adopted or deleted. `CardTermDefinitions` is currently
+the incubating normal-flow glossary stack intended for definitions placed
+beside or beneath rules text; entity-reveal glossary cards are a separate
+coordinator-owned surface and do not count as its adoption.
+
 ### Product screens
 
 Every gameplay screen uses Cumulus and splits into **three roles** — a pure
@@ -293,9 +324,12 @@ a **Primitives** tier below it, each grouped by kind and name-prefix family.
 - **Color** — semantic surface / text / accent / resource / status / category
   roles (`--surface-*`, `--text-*`, `--accent`, `--energy`, `--danger`,
   `--tide-earthy`, `--scrim`, …) over the primitive ramps (void / plum / violet /
-  gold / energy / spark / ember / sap / …). The Shared Canonical Layer (`--text`,
-  `--surface`, `--line`, `--gold`) and the production bridge (`--dt-*`,
-  `--color-*`, `--cv-*`) are semantic re-exports.
+  gold / energy / spark / ember / sap / …). The Dream Atlas material is the
+  `--atlas-*` semantic family: journey field, edges, node halos, and badges all
+  resolve through it. Atlas components consume that family directly. The
+  Shared Canonical Layer (`--text`, `--surface`, `--line`, `--gold`) and the
+  production bridge (`--dt-*`, `--color-*`, `--cv-*`) are compatibility
+  re-exports and do not own component-local palettes.
 - **Typography** — the type scale (`--t-*`) and font roles (`--font-ui` = Inter,
   `--font-title` = EB Garamond, `--font-rules-text` = Fira Sans Condensed,
   `--font-numeral` = Anton, `--font-meta` = JetBrains Mono) over the primitive

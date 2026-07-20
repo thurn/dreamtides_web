@@ -385,7 +385,7 @@ runWithEmulator("eventlog emulator integration", () => {
       const rawEvents = eventsSnapshot.val() as unknown;
       const liveCount = Array.isArray(rawEvents)
         ? rawEvents.filter((v) => v !== null && v !== undefined).length
-        : Object.keys((rawEvents ?? {}) as Record<string, unknown>).length;
+        : Object.keys((rawEvents ?? {})).length;
       expect(liveCount).toBeLessThanOrEqual(COMPACT_THRESHOLD);
 
       // Outcome-immutability below the horizon: a THIRD client joins fresh now,

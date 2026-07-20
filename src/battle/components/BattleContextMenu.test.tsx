@@ -16,7 +16,7 @@ function state(): BattleMutableState {
 
 beforeEach(() => {
   (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
-  window.matchMedia = ((media: string) => ({ matches: media.includes("min-width"), media, onchange: null, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, dispatchEvent: () => false })) as unknown as typeof window.matchMedia;
+  window.matchMedia = (media: string) => ({ matches: media.includes("min-width"), media, onchange: null, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, dispatchEvent: () => false });
 });
 afterEach(() => { document.body.innerHTML = ""; });
 

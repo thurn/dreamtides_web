@@ -139,8 +139,12 @@ describe("Cumulus MainMenuScreen", () => {
     expect(actions?.style.left).toBe("var(--space-12)");
     expect(actions?.style.bottom).toBe("var(--space-11)");
     expect(actions?.style.width).toBe("280px");
-    expect(stack?.style.zoom).toBe("1.5");
     expect(stack?.style.gap).toBe("0px");
+    expect(
+      container
+        .querySelector("[data-testid='main-menu-action-new-journey']")
+        ?.getAttribute("data-main-menu-button-size"),
+    ).toBe("hero");
     expect(
       container.querySelector<HTMLElement>("[data-main-menu-button-glass]")
         ?.style.background,

@@ -57,7 +57,7 @@ beforeEach(() => {
       addListener: () => {},
       removeListener: () => {},
       dispatchEvent: () => false,
-    })) as typeof window.matchMedia;
+    }));
   }
 });
 

@@ -19,8 +19,11 @@ export type AtlasEdgeKind = "traveled" | "open" | "dim" | "locked";
  * here.
  */
 const EDGE_GRADIENT_STOPS: Partial<Record<AtlasEdgeKind, [string, string]>> = {
-  traveled: ["#fbbf24", "#d4a017"],
-  open: ["#a855f7", "#7c3aed"],
+  traveled: [
+    "var(--atlas-edge-traveled-from)",
+    "var(--atlas-edge-traveled-to)",
+  ],
+  open: ["var(--atlas-edge-open-from)", "var(--atlas-edge-open-to)"],
 };
 
 interface AtlasEdgeProps {

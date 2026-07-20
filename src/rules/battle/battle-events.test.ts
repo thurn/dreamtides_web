@@ -120,7 +120,7 @@ function makeSide(
     fatigueCount: 0,
     dreamwellCardIndex: null,
     dreamwellDrawnTurn: null,
-  } as BattleMutableState["sides"][BattleSide];
+  };
 }
 
 function makeBoard(
@@ -145,7 +145,7 @@ function makeBoard(
       enemy: makeSide({ score: overrides.enemyScore ?? 25 }),
     },
     cardInstances: {},
-  } as BattleMutableState;
+  };
 }
 
 // A minimal deterministic BattleInit carrying the win / turn-limit thresholds
@@ -573,7 +573,7 @@ function makeRichBoard(over: {
       enemy: makeSide(),
     },
     cardInstances,
-  } as BattleMutableState;
+  };
 }
 
 function battleFrom(

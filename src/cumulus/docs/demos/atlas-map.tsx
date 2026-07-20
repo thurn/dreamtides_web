@@ -113,7 +113,7 @@ function AtlasMapDemo({
         position: "relative",
         width: "100%",
         height: 560,
-        background: token("--dt-wash-journey"),
+        background: token("--atlas-map-background"),
         borderRadius: 12,
         overflow: "hidden",
         touchAction: "none",

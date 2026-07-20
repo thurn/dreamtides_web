@@ -35,7 +35,7 @@ beforeEach(() => {
   globalThis.ResizeObserver = class {
     constructor(callback: ResizeObserverCallback) { resizeCallbacks.push(callback); }
     observe() {} unobserve() {} disconnect() {}
-  } as unknown as typeof ResizeObserver;
+  };
   vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function rect(this: HTMLElement) {
     if (this.hasAttribute("data-game-card-source")) return DOMRect.fromRect({ x: 80, y: 300, width: 160, height: 224 });
     if (this.dataset.revealMeasure === "primary") return DOMRect.fromRect({ width: 240, height: 336 });

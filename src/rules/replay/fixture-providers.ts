@@ -359,7 +359,7 @@ function makeInstance(
       createdAtSide: null,
       createdAtMs: null,
     },
-  } as BattleCardInstance;
+  };
 }
 
 function makeSide(): BattleMutableState["sides"][BattleSide] {
@@ -377,7 +377,7 @@ function makeSide(): BattleMutableState["sides"][BattleSide] {
     fatigueCount: 0,
     dreamwellCardIndex: null,
     dreamwellDrawnTurn: null,
-  } as BattleMutableState["sides"][BattleSide];
+  };
 }
 
 function makeInit(siteId: string): BattleInit {
@@ -434,7 +434,7 @@ export function fixtureBattleInitProvider(): BattleInitProvider {
             "player",
           ),
         },
-      } as BattleMutableState;
+      };
       const battle: BattleFoldState = {
         init: makeInit(siteId),
         board,

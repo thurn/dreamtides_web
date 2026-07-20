@@ -20,9 +20,10 @@ device class. Adapters only choose the data and callbacks to pass to the screen.
 ## Backdrop And Motes
 
 Each screen decides its backdrop policy. A dreamscape screen renders the current
-dreamscape's scene art and owns its atmospheric `Motes` layer. The atlas renders
-its map surface. Site screens render their own full-bleed site scene so the site
-and its quest chrome read as one surface.
+dreamscape's scene art and owns its atmospheric `Motes` layer. The Atlas screen
+and its map components share the `--atlas-*` semantic material for the journey
+field, connectors, node halos, and badges. Site screens render their own
+full-bleed site scene so the site and its quest chrome read as one surface.
 
 Use one atmospheric layer per screen. A nested feature that needs particles
 should route through the screen's existing `Motes` policy or become a documented
@@ -95,6 +96,21 @@ battle floating controller. Retained diagnostics are Cumulus screens supplied
 by state adapters; standalone operator tools remain under their named route
 owners. Direct overlay QA uses `?goto=deckviewer`, `?goto=poolviewer`, and
 `?goto=startingdeck`; battle overlays begin at `?goto=battle-playable`.
+
+### Battle overlay ownership
+
+The playable battle remains an event-sourced outer controller. Modules under
+`src/battle/components/` resolve live battle data, validate targets, subscribe
+to diagnostic sources, construct commands, and append player intent. Stable
+overlay presentation lives under
+`src/cumulus/screens/battle-overlays/` and receives plain view data plus
+callbacks.
+
+Local interaction state such as a note draft, a reordered card sequence, or an
+expanded log disclosure may live in the pure overlay. Anything that affects the
+shared battle result is represented by the callback's UUID-keyed payload and is
+committed by the outer controller as one room event. The card-note, figment,
+deck-order, battle-log, and Dreamwell-history workflows follow this boundary.
 
 ## Transitions
 

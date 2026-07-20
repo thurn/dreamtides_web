@@ -39,7 +39,7 @@ const OFFERED: DreamcallerOfferView[] = [
 /** Stub matchMedia so the desktop breakpoint (`min-width`) reports `desktop`,
  * driving the screen onto its side-by-side layout. */
 function stubViewport(desktop: boolean): void {
-  window.matchMedia = ((query: string) => ({
+  window.matchMedia = (query: string) => ({
     matches: query.includes("min-width") ? desktop : false,
     media: query,
     onchange: null,
@@ -48,7 +48,7 @@ function stubViewport(desktop: boolean): void {
     addListener: () => undefined,
     removeListener: () => undefined,
     dispatchEvent: () => false,
-  })) as unknown as typeof window.matchMedia;
+  });
 }
 
 beforeEach(() => {

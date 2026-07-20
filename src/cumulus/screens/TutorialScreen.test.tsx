@@ -12,25 +12,46 @@ import type {
 } from "./MobileBattleScreen";
 import { asCardId, asCardName } from "../../types/card-identity";
 
-const screenMocks = vi.hoisted(() => ({
+interface ScreenMockState {
+  props: MobileBattleScreenProps | null;
+  dialogueProps: CharacterDialogueProps | null;
+  sceneInitial: unknown;
+  sceneAnimate: unknown;
+  sceneTransition: unknown;
+  sceneAnimationComplete: (() => void) | null;
+  arrivalInitial: unknown;
+  arrivalAnimate: unknown;
+  arrivalTransition: unknown;
+  arrivalAnimationComplete: (() => void) | null;
+  cardInitial: unknown;
+  cardAnimate: unknown;
+  cardTransition: unknown;
+  cardAnimationComplete: (() => void) | null;
+  cardFullAnimate: unknown;
+  cardFullTransition: unknown;
+  cardBattlefieldAnimate: unknown;
+  cardBattlefieldTransition: unknown;
+}
+
+const screenMocks = vi.hoisted<ScreenMockState>(() => ({
   props: null as MobileBattleScreenProps | null,
   dialogueProps: null as CharacterDialogueProps | null,
-  sceneInitial: null as unknown,
-  sceneAnimate: null as unknown,
-  sceneTransition: null as unknown,
+  sceneInitial: null,
+  sceneAnimate: null,
+  sceneTransition: null,
   sceneAnimationComplete: null as (() => void) | null,
-  arrivalInitial: null as unknown,
-  arrivalAnimate: null as unknown,
-  arrivalTransition: null as unknown,
+  arrivalInitial: null,
+  arrivalAnimate: null,
+  arrivalTransition: null,
   arrivalAnimationComplete: null as (() => void) | null,
-  cardInitial: null as unknown,
-  cardAnimate: null as unknown,
-  cardTransition: null as unknown,
+  cardInitial: null,
+  cardAnimate: null,
+  cardTransition: null,
   cardAnimationComplete: null as (() => void) | null,
-  cardFullAnimate: null as unknown,
-  cardFullTransition: null as unknown,
-  cardBattlefieldAnimate: null as unknown,
-  cardBattlefieldTransition: null as unknown,
+  cardFullAnimate: null,
+  cardFullTransition: null,
+  cardBattlefieldAnimate: null,
+  cardBattlefieldTransition: null,
 }));
 
 interface MotionMainStubInput {

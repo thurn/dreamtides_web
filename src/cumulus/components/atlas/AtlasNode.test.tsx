@@ -87,7 +87,7 @@ beforeEach(() => {
     observe() {}
     unobserve() {}
     disconnect() {}
-  } as unknown as typeof ResizeObserver;
+  };
   container = document.createElement("div");
   document.body.append(container);
   root = createRoot(container);

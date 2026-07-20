@@ -21,8 +21,8 @@ function view(): MobileDeckView {
 
 beforeEach(() => {
   (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
-  window.matchMedia = (() => ({ matches: false, media: "", onchange: null,
-    addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, dispatchEvent: () => false })) as unknown as typeof window.matchMedia;
+  window.matchMedia = () => ({ matches: false, media: "", onchange: null,
+    addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, dispatchEvent: () => false });
 });
 
 describe("MobileDeckViewer", () => {

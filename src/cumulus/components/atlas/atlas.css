@@ -5,10 +5,9 @@
  *
  * Everything is scoped under `.dream-atlas` (the atlas screen's root) so the
  * generic class names (.node, .edge, ...) never collide with the rest of the
- * app. The `--dt-*` design tokens these rules read are declared on the
- * `.dream-atlas` root by the live screen and by Cumulus's `cumulus-tokens.css`
- * under `.cumulus`; the /cumulus demo nests its `.dream-atlas` stage inside `.cumulus`
- * so the tokens resolve in both contexts.
+ * app. The `--atlas-*` semantic material tokens are declared by
+ * `cumulus-tokens.css`; the live screen and /cumulus specimens both nest this
+ * surface inside `.cumulus`, so the same authored material resolves everywhere.
  */
 
 /* ---- Connections ---- */
@@ -22,35 +21,35 @@
   fill: none;
 }
 .dream-atlas .edge-dim {
-  stroke: rgba(206, 192, 236, 0.92);
+  stroke: var(--atlas-edge-dim);
   stroke-width: 3.5;
   stroke-linecap: round;
   /* A soft dark halo so the pale line stays legible where it crosses the
      brighter node glows and the lighter centre of the wash. */
-  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.7));
+  filter: drop-shadow(0 0 2px var(--atlas-edge-shadow));
 }
 .dream-atlas .edge-locked {
-  stroke: rgba(182, 154, 248, 0.9);
+  stroke: var(--atlas-edge-locked);
   stroke-width: 3.5;
   stroke-dasharray: 4 8;
   stroke-linecap: round;
-  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.7));
+  filter: drop-shadow(0 0 2px var(--atlas-edge-shadow));
 }
 .dream-atlas .edge-traveled {
   /* Stroke is a per-edge userSpaceOnUse gradient set inline by AtlasEdge so it
      survives horizontal/vertical orientations; see AtlasEdge.tsx. */
   stroke-width: 5;
   stroke-linecap: round;
-  filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.55));
+  filter: drop-shadow(0 0 6px var(--atlas-edge-traveled-glow));
 }
 .dream-atlas .edge-open {
   /* Stroke is a per-edge userSpaceOnUse gradient set inline by AtlasEdge. */
   stroke-width: 4;
   stroke-linecap: round;
-  filter: drop-shadow(0 0 8px var(--dt-accent-glow));
+  filter: drop-shadow(0 0 8px var(--atlas-edge-open-glow));
 }
 .dream-atlas .edge-open-flow {
-  stroke: #ede0ff;
+  stroke: var(--atlas-edge-open-flow);
   stroke-width: 2;
   stroke-dasharray: 2 16;
   stroke-linecap: round;
@@ -117,26 +116,26 @@
 }
 
 .dream-atlas .node-completed .node-glow {
-  background: radial-gradient(closest-side, rgba(212, 160, 23, 0.22), transparent);
-  box-shadow: 0 0 26px 3px rgba(212, 160, 23, 0.45);
+  background: radial-gradient(closest-side, var(--atlas-node-completed-halo), transparent);
+  box-shadow: 0 0 26px 3px var(--atlas-node-completed-glow);
 }
 .dream-atlas .node-available {
   cursor: pointer;
 }
 .dream-atlas .node-available .node-glow {
-  background: radial-gradient(closest-side, rgba(168, 85, 247, 0.32), transparent);
-  box-shadow: 0 0 32px 6px var(--dt-accent-glow);
+  background: radial-gradient(closest-side, var(--atlas-node-available-halo), transparent);
+  box-shadow: 0 0 32px 6px var(--atlas-node-available-glow);
   animation: dream-atlas-pulse 2.6s ease-in-out infinite;
 }
 .dream-atlas .node-revealedLocked .node-glow {
-  box-shadow: 0 0 16px 2px rgba(124, 58, 237, 0.22);
+  box-shadow: 0 0 16px 2px var(--atlas-node-revealed-locked-glow);
 }
 .dream-atlas .node-unrevealed .node-glow {
-  box-shadow: 0 0 14px 2px rgba(80, 70, 110, 0.22);
+  box-shadow: 0 0 14px 2px var(--atlas-node-unrevealed-glow);
 }
 .dream-atlas .node-boss .node-glow {
-  background: radial-gradient(closest-side, rgba(239, 68, 68, 0.3), transparent);
-  box-shadow: 0 0 42px 9px rgba(239, 68, 68, 0.5);
+  background: radial-gradient(closest-side, var(--atlas-node-boss-halo), transparent);
+  box-shadow: 0 0 42px 9px var(--atlas-node-boss-glow);
   animation: dream-atlas-pulse 3.4s ease-in-out infinite;
 }
 @keyframes dream-atlas-pulse {
@@ -162,7 +161,7 @@
 }
 
 .dream-atlas .node-available[data-reveal-active="true"] .node-glow {
-  box-shadow: 0 0 42px 10px rgba(168, 85, 247, 0.85);
+  box-shadow: 0 0 42px 10px var(--atlas-node-active-glow);
 }
 .dream-atlas .node-glow[data-ambient-paused="true"] {
   animation-play-state: paused;
@@ -184,7 +183,7 @@
   height: 72%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: radial-gradient(closest-side, #4a4658, #322e40);
+  background: var(--atlas-node-unrevealed-face);
   z-index: 0;
 }
 .dream-atlas .unrevealed-face .frame-img {
@@ -216,12 +215,12 @@
   height: calc(var(--atlas-node-size) * 0.27 * var(--atlas-badge-scale, 1));
   border-radius: 50%;
   background: var(--badge-disc-gradient);
-  border: 1px solid var(--dt-line-strong);
+  border: 1px solid var(--atlas-badge-border);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--dt-accent-strong);
-  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.55);
+  color: var(--atlas-badge-accent);
+  box-shadow: 0 2px 7px var(--atlas-badge-shadow);
 }
 .dream-atlas .site-badge-glyph {
   font-size: calc(var(--atlas-node-size) * 0.16 * var(--atlas-badge-scale, 1));
@@ -235,14 +234,14 @@
   height: calc(var(--atlas-node-size) * 0.23);
   border-radius: 50%;
   z-index: 6;
-  background: radial-gradient(closest-side, var(--dt-enemy), #7f1d1d);
+  background: var(--atlas-boss-badge-background);
   color: var(--text-on-accent);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: calc(var(--atlas-node-size) * 0.12);
-  border: 2px solid var(--dt-bg-0);
-  box-shadow: 0 0 14px rgba(239, 68, 68, 0.8);
+  border: 2px solid var(--atlas-boss-badge-border);
+  box-shadow: 0 0 14px var(--atlas-boss-badge-glow);
 }
 .dream-atlas .known-badge {
   position: absolute;
@@ -256,14 +255,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid var(--dt-gold);
-  box-shadow: 0 0 14px rgba(250, 204, 21, 0.6);
+  border: 2px solid var(--atlas-known-badge-border);
+  box-shadow: 0 0 14px var(--atlas-known-badge-glow);
 }
 .dream-atlas .known-badge img {
   width: calc(var(--atlas-node-size) * 0.26 * var(--atlas-badge-scale, 1));
   height: calc(var(--atlas-node-size) * 0.26 * var(--atlas-badge-scale, 1));
   object-fit: contain;
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
+  filter: drop-shadow(0 1px 3px var(--atlas-known-image-shadow));
   pointer-events: none;
 }
 .dream-atlas .known-badge::after {
@@ -271,16 +270,16 @@
   position: absolute;
   inset: -2px;
   border-radius: 50%;
-  box-shadow: 0 0 0 0 var(--dt-gold-glow);
+  box-shadow: 0 0 0 0 var(--atlas-known-pulse-glow);
   animation: dream-atlas-signpulse 2.4s ease-out infinite;
 }
 @keyframes dream-atlas-signpulse {
   0% {
-    box-shadow: 0 0 0 0 var(--dt-gold-glow);
+    box-shadow: 0 0 0 0 var(--atlas-known-pulse-glow);
   }
   70%,
   100% {
-    box-shadow: 0 0 0 10px rgba(250, 204, 21, 0);
+    box-shadow: 0 0 0 10px var(--atlas-known-pulse-clear);
   }
 }
 

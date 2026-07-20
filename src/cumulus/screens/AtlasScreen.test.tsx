@@ -20,7 +20,7 @@ import { AtlasScreen, type AtlasView } from "./AtlasScreen";
  * on pointer-up instead).
  */
 function stubViewport(desktop: boolean, fine = true): void {
-  window.matchMedia = ((query: string) => ({
+  window.matchMedia = (query: string) => ({
     matches: query.includes("min-width")
       ? desktop
       : query.includes("hover")
@@ -33,7 +33,7 @@ function stubViewport(desktop: boolean, fine = true): void {
     addListener: () => undefined,
     removeListener: () => undefined,
     dispatchEvent: () => false,
-  })) as unknown as typeof window.matchMedia;
+  });
 }
 
 beforeEach(() => {
@@ -125,7 +125,7 @@ function domRect(x: number, y: number, width: number, height: number): DOMRect {
     width,
     height,
     toJSON: () => ({}),
-  } as DOMRect;
+  };
 }
 
 function mockRevealCardMeasurements(primary: { width: number; height: number }): void {

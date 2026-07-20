@@ -21,7 +21,7 @@ describe("resolveBattleInspectorIntent", () => {
     [{ kind: "skip-to-rewards" }, "SKIP_TO_REWARDS"],
     [{ kind: "force-result", result: "defeat" }, "FORCE_RESULT"],
   ] as const)("maps %o to an inspector-sourced command", (action, expected) => {
-    const resolution = resolveBattleInspectorIntent(action as MobileBattleInspectorAction, state());
+    const resolution = resolveBattleInspectorIntent(action, state());
     expect(resolution.kind).toBe("command");
     if (resolution.kind !== "command") return;
     expect(resolution.command.sourceSurface).toBe("inspector");

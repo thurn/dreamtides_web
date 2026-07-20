@@ -22,7 +22,7 @@ let container: HTMLDivElement;
 let resizeCallbacks: ResizeObserverCallback[];
 
 function rect(width: number, height: number): DOMRect {
-  return { x: 40, y: 40, left: 40, top: 40, right: 40 + width, bottom: 40 + height, width, height, toJSON: () => ({}) } as DOMRect;
+  return { x: 40, y: 40, left: 40, top: 40, right: 40 + width, bottom: 40 + height, width, height, toJSON: () => ({}) };
 }
 
 function activeSources(): HTMLElement[] {
@@ -36,14 +36,14 @@ function pointer(target: HTMLElement, type: "pointerover" | "pointerout", pointe
 beforeEach(() => {
   (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
   Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 420, offsetLeft: 0, offsetTop: 0 } });
-  window.matchMedia = ((query: string) => ({ matches: query.includes("pointer: fine"), media: query, onchange: null, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, dispatchEvent: () => false })) as unknown as typeof window.matchMedia;
+  window.matchMedia = (query: string) => ({ matches: query.includes("pointer: fine"), media: query, onchange: null, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, dispatchEvent: () => false });
   resizeCallbacks = [];
   globalThis.ResizeObserver = class {
     constructor(callback: ResizeObserverCallback) { resizeCallbacks.push(callback); }
     observe() {}
     unobserve() {}
     disconnect() {}
-  } as unknown as typeof ResizeObserver;
+  };
   vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
     if (this.dataset.revealMeasure === "primary") return rect(340, 360);
     if (this.dataset.revealMeasure === "secondary") return rect(248, 180);

@@ -136,7 +136,7 @@ function stubMatchMedia(
   desktop = true,
   compactShowcase = false,
 ): void {
-  window.matchMedia = ((query: string) => ({
+  window.matchMedia = (query: string) => ({
     matches: query.includes("prefers-reduced-motion")
       ? reducedMotion
       : query.includes("max-width")
@@ -149,7 +149,7 @@ function stubMatchMedia(
     addListener: () => undefined,
     removeListener: () => undefined,
     dispatchEvent: () => false,
-  })) as unknown as typeof window.matchMedia;
+  });
 }
 
 class ResizeObserverStub {

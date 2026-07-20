@@ -5,11 +5,13 @@ import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FrontDoorRouter } from "./FrontDoorRouter";
 
-const stateMocks = vi.hoisted(() => ({
-  frontDoor: { phase: "main", journeyId: null } as {
+const stateMocks = vi.hoisted<{
+  frontDoor: {
     phase: "main" | "mainExiting" | "loading" | "tutorial";
     journeyId: string | null;
-  },
+  };
+}>(() => ({
+  frontDoor: { phase: "main", journeyId: null },
 }));
 
 vi.mock("../state/front-door-context", () => ({

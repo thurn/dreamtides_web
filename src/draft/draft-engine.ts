@@ -268,7 +268,7 @@ function revealOffer(
     if (offerDeps === undefined) {
       throw new Error("revealOffer requires replayDeps for a replay draft state");
     }
-    state.currentOffer = buildReplayOffer(state, offerDeps as ReplayDeps);
+    state.currentOffer = buildReplayOffer(state, offerDeps);
     if (options.logEvents) {
       logEvent("draft_offer_revealed", {
         pickNumber: state.pickNumber,

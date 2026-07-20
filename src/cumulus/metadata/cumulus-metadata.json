@@ -3087,6 +3087,17 @@
       "description": "Reports activation to the route adapter."
     },
     {
+      "name": "size",
+      "tsType": "\"standard\" | \"hero\"",
+      "unionMembers": [
+        "standard",
+        "hero"
+      ],
+      "required": false,
+      "defaultValue": "standard",
+      "description": "Named action hierarchy for the main-menu scene. Defaults to `standard`."
+    },
+    {
       "name": "testId",
       "tsType": "string",
       "unionMembers": [],

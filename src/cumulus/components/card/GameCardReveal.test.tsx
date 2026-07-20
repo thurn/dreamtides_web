@@ -43,7 +43,7 @@ function mount(element: React.ReactElement): { container: HTMLDivElement; root: 
 
 function rect(width: number, left = 80, top = 120): DOMRect {
   const height = width * 1.5;
-  return { x: left, y: top, left, top, width, height, right: left + width, bottom: top + height, toJSON: () => ({}) } as DOMRect;
+  return { x: left, y: top, left, top, width, height, right: left + width, bottom: top + height, toJSON: () => ({}) };
 }
 
 function pointer(type: string, init: PointerEventInit): Event {
@@ -52,11 +52,11 @@ function pointer(type: string, init: PointerEventInit): Event {
 
 beforeEach(() => {
   (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
-  window.matchMedia = ((query: string) => ({
+  window.matchMedia = (query: string) => ({
     matches: query.includes("pointer: fine"), media: query, onchange: null,
     addEventListener: () => undefined, removeEventListener: () => undefined,
     addListener: () => undefined, removeListener: () => undefined, dispatchEvent: () => false,
-  })) as unknown as typeof window.matchMedia;
+  });
   Object.defineProperty(window, "innerWidth", { configurable: true, value: 1200 });
   Object.defineProperty(window, "innerHeight", { configurable: true, value: 900 });
   resizeCallbacks = [];
@@ -65,7 +65,7 @@ beforeEach(() => {
     observe() {}
     unobserve() {}
     disconnect() {}
-  } as unknown as typeof ResizeObserver;
+  };
   vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function getRect(this: HTMLElement) {
     if (this.hasAttribute("data-game-card-source")) return rect(Number(this.parentElement?.dataset.testWidth ?? 160));
     if (this.getAttribute("data-reveal-measure") === "primary") return rect(240, 0, 0);

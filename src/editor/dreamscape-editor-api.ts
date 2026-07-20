@@ -17,7 +17,7 @@ function readApiError(body: unknown): EditorApiErrorBody["error"] | undefined {
     body.error !== null &&
     typeof body.error === "object"
   ) {
-    return body.error as EditorApiErrorBody["error"];
+    return body.error;
   }
 
   return undefined;

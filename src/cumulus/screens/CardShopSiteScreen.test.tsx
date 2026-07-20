@@ -55,7 +55,7 @@ function view(): CardShopSiteView {
 }
 
 function stubMatchMedia(matches = false): void {
-  window.matchMedia = ((query: string) => ({
+  window.matchMedia = (query: string) => ({
     matches,
     media: query,
     onchange: null,
@@ -64,7 +64,7 @@ function stubMatchMedia(matches = false): void {
     addListener: () => undefined,
     removeListener: () => undefined,
     dispatchEvent: () => false,
-  })) as unknown as typeof window.matchMedia;
+  });
 }
 
 class ResizeObserverStub {

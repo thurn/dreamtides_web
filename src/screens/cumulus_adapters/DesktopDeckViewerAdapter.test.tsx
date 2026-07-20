@@ -8,10 +8,7 @@ import { DesktopDeckViewerAdapter } from "./DesktopDeckViewerAdapter";
 import { logEvent } from "../../logging";
 import { useQuest } from "../../state/quest-context";
 import type { QuestContent } from "../../data/quest-content";
-import type {
-  QuestContextValue,
-  QuestMutations,
-} from "../../state/quest-context";
+import type { QuestMutations } from "../../state/quest-context";
 import type { CardData } from "../../types/cards";
 import type { QuestState } from "../../types/quest";
 import { asCardId, asCardName } from "../../types/card-identity";
@@ -126,7 +123,7 @@ function setQuestContext(state: QuestState): void {
     questContent: {
       cardDatabase,
     } as QuestContent,
-  } as QuestContextValue);
+  });
 }
 
 function mount(element: ReactElement): {

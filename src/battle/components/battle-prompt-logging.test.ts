@@ -19,7 +19,7 @@ function side(): BattleMutableState["sides"][BattleSide] {
     fatigueCount: 0,
     dreamwellCardIndex: null,
     dreamwellDrawnTurn: null,
-  } as BattleMutableState["sides"][BattleSide];
+  };
 }
 
 function board(): BattleMutableState {

@@ -137,7 +137,7 @@ function makeQuestState(
     cardSourceDebug = null,
     completionLevel = 3,
     currentDreamscape = "dreamscape-2",
-    screen = { type: "site", siteId: "site-7" } as Screen,
+    screen = { type: "site", siteId: "site-7" },
     visitedSites = [] as string[],
   } = overrides;
   const battleState = makeBattleTestState();
@@ -178,7 +178,7 @@ function setQuestState(
       guides: [],
       atlasConfig: MINIMAL_ATLAS_CONFIG,
     },
-  } as unknown as ReturnType<typeof useQuest>);
+  });
 }
 
 function mount(element: ReactElement): {

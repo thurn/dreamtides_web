@@ -48,7 +48,7 @@ vi.mock("../components/card/CardView", async () => {
 const roots: Root[] = [];
 
 function stubMatchMedia(matches: boolean): void {
-  window.matchMedia = ((query: string) => ({
+  window.matchMedia = (query: string) => ({
     matches,
     media: query,
     onchange: null,
@@ -57,7 +57,7 @@ function stubMatchMedia(matches: boolean): void {
     addListener: () => undefined,
     removeListener: () => undefined,
     dispatchEvent: () => false,
-  })) as unknown as typeof window.matchMedia;
+  });
 }
 
 function card(index: number): CardData {

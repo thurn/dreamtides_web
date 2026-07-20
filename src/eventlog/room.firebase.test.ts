@@ -1,8 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ContentConfig, Genesis } from "./types";
 
-const firebase = vi.hoisted(() => ({
-  snapshotValue: null as unknown,
+interface FirebaseMocks {
+  snapshotValue: unknown;
+  updates: Array<{ path: string; value: Record<string, unknown> }>;
+  sets: Array<{ path: string; value: unknown }>;
+  onDisconnectRemoves: string[];
+  deferOnDisconnectRemove: boolean;
+  onDisconnectRemoveResolvers: Array<() => void>;
+  connectionCallbacks: Array<(snapshot: { val: () => unknown }) => void>;
+  unsubscribe: ReturnType<typeof vi.fn>;
+}
+
+const firebase = vi.hoisted<FirebaseMocks>(() => ({
+  snapshotValue: null,
   updates: [] as Array<{ path: string; value: Record<string, unknown> }>,
   sets: [] as Array<{ path: string; value: unknown }>,
   onDisconnectRemoves: [] as string[],

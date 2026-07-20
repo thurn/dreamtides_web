@@ -13,11 +13,12 @@ const screenMocks = vi.hoisted(() => ({
   onSocial: null as null | ((socialId: string) => void),
 }));
 
-const coopMocks = vi.hoisted(() => ({
-  frontDoor: { phase: "main", journeyId: null } as {
-    phase: string;
-    journeyId: string | null;
-  },
+const coopMocks = vi.hoisted<{
+  frontDoor: { phase: string; journeyId: string | null };
+  frontDoorAction: ReturnType<typeof vi.fn>;
+  advanceFrontDoor: ReturnType<typeof vi.fn>;
+}>(() => ({
+  frontDoor: { phase: "main", journeyId: null },
   frontDoorAction: vi.fn().mockResolvedValue(1),
   advanceFrontDoor: vi.fn().mockResolvedValue(2),
 }));

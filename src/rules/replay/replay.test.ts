@@ -35,9 +35,9 @@ interface ReplayFixture {
 }
 
 const FIXTURES: Array<{ name: string; fixture: ReplayFixture }> = [
-  { name: "quest-only", fixture: questOnly as unknown as ReplayFixture },
-  { name: "battle", fixture: battle as unknown as ReplayFixture },
-  { name: "adversarial", fixture: adversarial as unknown as ReplayFixture },
+  { name: "quest-only", fixture: questOnly },
+  { name: "battle", fixture: battle },
+  { name: "adversarial", fixture: adversarial },
 ];
 
 beforeAll(() => {

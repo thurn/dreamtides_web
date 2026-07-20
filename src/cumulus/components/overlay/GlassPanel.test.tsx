@@ -13,7 +13,7 @@ beforeEach(() => {
       IS_REACT_ACT_ENVIRONMENT?: boolean;
     }
   ).IS_REACT_ACT_ENVIRONMENT = true;
-  window.matchMedia = (() => ({
+  window.matchMedia = () => ({
     matches: false,
     media: "",
     onchange: null,
@@ -22,7 +22,7 @@ beforeEach(() => {
     addListener() {},
     removeListener() {},
     dispatchEvent: () => false,
-  })) as unknown as typeof window.matchMedia;
+  });
 });
 
 describe("GlassPanel", () => {

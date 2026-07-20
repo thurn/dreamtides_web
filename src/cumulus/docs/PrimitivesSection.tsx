@@ -35,10 +35,7 @@ interface TokenEntry {
 }
 
 /** Every generated token, keyed by its `--name`, widened to `TokenEntry`. */
-const TOKEN_MAP: Record<string, TokenEntry> = TOKENS as unknown as Record<
-  string,
-  TokenEntry
->;
+const TOKEN_MAP: Record<string, TokenEntry> = TOKENS;
 
 /** All generated tokens as `[name, entry]` pairs, in the source CSS's
  * declaration order (the order `Object.entries` preserves from `TOKENS`). */

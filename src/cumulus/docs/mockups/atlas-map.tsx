@@ -98,7 +98,7 @@ export function AtlasMapMockup() {
   return (
     <div
       className="dream-atlas"
-      style={{ ...sceneRoot, background: token("--dt-wash-journey") }}
+      style={{ ...sceneRoot, background: token("--atlas-map-background") }}
     >
       <AtlasMap
         stageWidth={ATLAS_STAGE_WIDTH}

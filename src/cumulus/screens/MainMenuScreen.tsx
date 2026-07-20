@@ -50,7 +50,6 @@ const EDGE_INLINE = token("--space-12");
 const EDGE_BOTTOM = token("--space-11");
 const BACKGROUND_POSITION = { desktop: "54% 49%", mobile: "58% 51%" } as const;
 const BUTTON_BACKGROUND_WIDTH = 280;
-const BUTTON_SCALE = 1.5;
 const SCREEN_FADE_SECONDS = motionTimeSeconds("--dur-slow");
 
 /** Full-bleed Dreamtides menu presentation; route effects stay in its adapter. */
@@ -134,13 +133,13 @@ export function MainMenuScreen({
             width: "100%",
             flexDirection: "column",
             gap: 0,
-            zoom: BUTTON_SCALE,
           }}
         >
           {view.actions.map((action) => (
             <MainMenuButton
               key={action.id}
               label={action.label}
+              size="hero"
               testId={`main-menu-action-${action.id}`}
               onPress={() => onAction(action.id)}
             />
