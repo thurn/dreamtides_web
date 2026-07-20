@@ -6,56 +6,91 @@ sites, Dreamsign surfaces, playable battles, and atlas progression. All
 quest runs are stored in Firebase Realtime Database rooms. Default local URLs
 use the Firebase emulator, and cloud RTDB rooms use `?realtime=1`.
 
-## Quick Start
-
-One command installs deps, starts the Firebase Realtime Database emulator,
-regenerates assets, starts Vite, and opens the app in your default browser:
-
-```bash
-cd ~/quest_prototype && npm run launch
-```
-
-If deps are already installed and you don't need a new browser tab, use:
-
-```bash
-npm start              # starts emulator, refreshes assets, starts Vite on :5173
-```
-
-What `npm start` does:
-
-1. Starts the Firebase Realtime Database emulator on `127.0.0.1:9000` with
-   project `demo-quest-prototype`.
-2. Starts the Emulator UI on `127.0.0.1:4000`.
-3. Refreshes `public/card-data.json`, `public/dreamcallers-v2-data.json`,
-   `public/dreamsign-data.json`, and the symlinks under `public/cards/`,
-   `public/dreamcallers/`, and `public/dreamsigns/`.
-4. Starts Vite on `http://localhost:5173/` with `--strictPort` so a port
-   collision fails loudly instead of drifting to 5174.
-
-`npm run launch` is just `npm install && npm start -- --open`, so Vite opens
-the URL once the server is actually ready.
-
 ## Prerequisites
 
-- Node 20+ and npm.
+- Node 24 and npm. CI uses Node 24.16.0. The dependency set also supports
+  Node 20.19+ and Node 22.12+, but not Node 26.
+- JDK 21, used by the local Firebase Realtime Database emulator. On macOS with
+  Homebrew, install it with `brew install openjdk@21`; the start script finds
+  Homebrew's keg-only installation without requiring a system-wide symlink.
 - The TV image cache populated at
-  `~/Library/Caches/io.github.dreamtides.tv/image_cache/` (run TV at least
-  once against `cards.toml` to fill it). Without it, card art symlinks log
-  warnings and render as broken images.
+  `~/Library/Caches/io.github.dreamtides.tv/image_cache/` is optional. Run TV
+  at least once against `cards.toml` to fill it. Missing artwork produces
+  setup warnings and broken images, but does not prevent the app from starting.
 - Optional: dreamcaller and dreamsign portraits at
   `~/Documents/synty/dreamcallers/` and `~/Documents/dreamsigns/filtered/`.
-  Missing portraits are logged as warnings and rendered as broken images
-  but do not block the rest of the prototype.
+  Missing portraits behave like missing card artwork.
 
 The bundled card, dreamcaller, and dreamsign TOML data live under `data/` in
 this repo, so no sibling dreamtides checkout is required.
+
+## Setup On A New Machine
+
+From the repository root, install the Java prerequisite and the project's npm
+dependencies, then start the development stack:
+
+```bash
+# macOS only; use any JDK 21 distribution on other platforms
+brew install openjdk@21
+
+cd /path/to/quest_prototype
+npm install
+npm start
+```
+
+No `.env` file, Firebase project, Firebase login, or global Firebase CLI is
+needed for local development. `npm install` provides the Firebase CLI used by
+the start script, and the app connects to a disposable local database.
+
+The first start may take a minute while Firebase downloads its database
+emulator and Emulator UI. Wait for output resembling:
+
+```text
+✔  All emulators ready! It is now safe to connect your app.
+VITE ready
+➜  Local: http://localhost:5173/
+```
+
+Open the exact `Local` URL printed by Vite. The app creates a room in the local
+emulator, adds `?game=<room-id>` to the URL, and opens the Dreamcaller selection
+screen. Press `Ctrl-C` in the terminal to stop Vite and all emulators started by
+that command.
+
+`npm start` performs the following work each time:
+
+1. Starts the Firebase Realtime Database emulator, normally on
+   `127.0.0.1:9000`, with project `demo-quest-prototype`.
+2. Starts the Emulator UI, normally on `http://127.0.0.1:4000/`.
+3. Refreshes generated JSON and the local artwork symlinks under `public/`.
+4. Starts Vite on `http://localhost:5173/`.
+
+The emulator ports automatically move when their preferred ports are busy.
+Vite treats port 5173 as strict; to use another Vite port explicitly, run:
+
+```bash
+npm start -- --port 5174
+```
+
+For an all-in-one command after installing JDK 21, `npm run launch` runs
+`npm install`, starts the stack, and opens the app in the default browser.
+
+### Setup Troubleshooting
+
+- `Unable to locate a Java Runtime`: install JDK 21. On macOS, run
+  `brew install openjdk@21` and retry `npm start`.
+- `Unsupported engine` during `npm install`: switch to Node 24. CI uses
+  24.16.0.
+- `Port 5173 is already in use`: stop the process using it or pass a different
+  port as shown above.
+- Many `missing ... art` warnings: the optional local image libraries are not
+  populated. The server can still start and the game flow remains usable.
 
 ## Other Commands
 
 ```bash
 npm run launch          # install + start + open browser (the all-in-one command)
-npm run dev             # same as start
-npm run dev:vite        # Vite on :5173 with the emulator managed separately
+npm run dev             # same as npm start
+npm run dev:vite        # Vite only; requires a separately managed emulator
 npm run setup-assets    # regenerate JSON + symlinks without starting Vite
 npm run typecheck       # tsc --noEmit
 npm run lint            # eslint src/

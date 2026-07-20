@@ -31,3 +31,9 @@ model.
 only one of the two records. The full suite reconfirmed this failure on
 2026-07-20. Assign distinct card numbers and regenerate the runtime card
 catalogs.
+
+`npm install` reports one high-severity audit finding for `brace-expansion`
+(GHSA-3jxr-9vmj-r5cp), affecting vulnerable transitive copies under ESLint,
+Firebase Tools, glob, and readdir-glob. `npm audit` reports that a fix is
+available. Update the owning dependency chains and verify lint, Firebase
+emulator startup, and the core test suite.
