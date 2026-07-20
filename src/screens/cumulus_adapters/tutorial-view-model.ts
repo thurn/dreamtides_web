@@ -18,21 +18,32 @@ const TUTORIAL_OPPONENT_DREAMCALLER_ID = "86026206-1B11-4F38-A24E-FD3C697F5353";
 
 /** Reconstruction fields logged whenever an authored tutorial action appears. */
 export function tutorialActionLogDetails(action: TutorialAction) {
-  return action.action === "animate-dreamcaller-portrait"
-    ? {
-        actionId: action.id,
-        action: action.action,
-        waitSeconds: action.wait,
-        owner: action.owner,
-        portraitPauseSeconds: action.pause,
-        portraitTravelSeconds: action.duration,
-      }
-    : {
-        actionId: action.id,
-        action: action.action,
-        waitSeconds: action.wait,
-        speaker: action.speaker ?? "mira",
-      };
+  if (action.action === "animate-dreamcaller-portrait") {
+    return {
+      actionId: action.id,
+      action: action.action,
+      waitSeconds: action.wait,
+      owner: action.owner,
+      portraitPauseSeconds: action.pause,
+      portraitTravelSeconds: action.duration,
+    };
+  }
+  if (action.action === "display-speech-bubble") {
+    return {
+      actionId: action.id,
+      action: action.action,
+      waitSeconds: action.wait,
+      speaker: action.speaker ?? "mira",
+    };
+  }
+  return {
+    actionId: action.id,
+    action: action.action,
+    waitSeconds: action.wait,
+    cardFace: "down",
+    sourceZone: "opponent-deck",
+    destinationZone: "opponent-hand",
+  };
 }
 
 function tutorialDeckIds(owner: "enemy" | "player"): readonly string[] {
@@ -112,6 +123,18 @@ export function buildTutorialView(
       ? null
       : (playback.actions[playback.currentActionIndex] ?? null);
   const dialogueAction = activeDialogueAction(playback);
+  const completedActionCount =
+    playback === null
+      ? 0
+      : (playback.currentActionIndex ?? playback.actions.length);
+  const completedOpponentDraws =
+    playback?.actions
+      .slice(0, completedActionCount)
+      .filter((action) => action.action === "draw-opponent-card").length ?? 0;
+  const enemyDeckCardIds = tutorialDeckIds("enemy");
+  const enemyHandCardIds = enemyDeckCardIds.slice(0, completedOpponentDraws);
+  const enemyDeck = enemyDeckCardIds.slice(completedOpponentDraws);
+  const enemyInspector = emptyInspectorSide("enemy");
   const dreamcallerSettled = (owner: TutorialDreamcallerOwner): boolean => {
     const actionIndex =
       playback?.actions.findIndex(
@@ -188,9 +211,12 @@ export function buildTutorialView(
       dreamwell: null,
       activeSide: "enemy",
       phase: "day",
-      enemyHandCardIds: [],
+      enemyHandCardIds,
       enemyHand: [],
-      enemy: emptySide("enemy"),
+      enemy: {
+        ...emptySide("enemy"),
+        deckCardIds: enemyDeck,
+      },
       player: emptySide("player"),
       playerHand: [],
       inspector: {
@@ -204,7 +230,14 @@ export function buildTutorialView(
         isPlayerHandHidden: false,
         sides: {
           player: emptyInspectorSide("player"),
-          enemy: emptyInspectorSide("enemy"),
+          enemy: {
+            ...enemyInspector,
+            zones: {
+              ...enemyInspector.zones,
+              hand: enemyHandCardIds.length,
+              deck: enemyDeck.length,
+            },
+          },
         },
         ai: null,
       },

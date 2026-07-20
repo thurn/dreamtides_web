@@ -40,6 +40,7 @@ const ACTION_OPTIONS = [
     value: "animate-dreamcaller-portrait",
     label: "Animate Dreamcaller Portrait",
   },
+  { value: "draw-opponent-card", label: "Draw Opponent Card" },
 ] satisfies readonly { value: TutorialActionName; label: string }[];
 
 const DREAMCALLER_OWNER_OPTIONS = [
@@ -69,22 +70,26 @@ function defaultAction(
   actions: readonly TutorialAction[],
 ): TutorialAction {
   const id = nextActionId(actionName, actions);
-  return actionName === "display-speech-bubble"
-    ? {
-        id,
-        action: "display-speech-bubble",
-        speaker: "mira",
-        text: "New tutorial message.",
-        wait: 3,
-      }
-    : {
-        id,
-        action: "animate-dreamcaller-portrait",
-        owner: "player",
-        pause: 1,
-        duration: 0.6,
-        wait: 0,
-      };
+  if (actionName === "display-speech-bubble") {
+    return {
+      id,
+      action: "display-speech-bubble",
+      speaker: "mira",
+      text: "New tutorial message.",
+      wait: 3,
+    };
+  }
+  if (actionName === "animate-dreamcaller-portrait") {
+    return {
+      id,
+      action: "animate-dreamcaller-portrait",
+      owner: "player",
+      pause: 1,
+      duration: 0.6,
+      wait: 0,
+    };
+  }
+  return { id, action: "draw-opponent-card", wait: 0 };
 }
 
 function changedActionType(
@@ -105,6 +110,9 @@ function changedActionType(
           : "New tutorial message.",
       wait: action.wait,
     };
+  }
+  if (actionName === "draw-opponent-card") {
+    return { id: action.id, action: actionName, wait: action.wait };
   }
   return {
     id: action.id,
@@ -239,7 +247,8 @@ function TutorialActionRow({
               onChange={(value) => {
                 if (
                   value !== "display-speech-bubble" &&
-                  value !== "animate-dreamcaller-portrait"
+                  value !== "animate-dreamcaller-portrait" &&
+                  value !== "draw-opponent-card"
                 ) {
                   return;
                 }
@@ -484,7 +493,8 @@ function TutorialEditorContent({
         onChange={(value) => {
           if (
             value !== "display-speech-bubble" &&
-            value !== "animate-dreamcaller-portrait"
+            value !== "animate-dreamcaller-portrait" &&
+            value !== "draw-opponent-card"
           ) {
             return;
           }

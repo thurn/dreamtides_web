@@ -34,3 +34,8 @@ action = "display-speech-bubble"
 speaker = "enemy"
 text = "For the Abyss!"
 wait = 3
+
+[[actions]]
+id = "vrakmoth-draw"
+action = "draw-opponent-card"
+wait = 0

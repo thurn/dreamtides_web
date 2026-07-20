@@ -97,6 +97,13 @@ export function parseTutorialActions(
         wait,
       } satisfies TutorialAction;
     }
+    if (record.action === "draw-opponent-card") {
+      return {
+        id,
+        action: "draw-opponent-card",
+        wait,
+      } satisfies TutorialAction;
+    }
 
     throw new Error(
       `Tutorial action ${JSON.stringify(id)} has unsupported action ${JSON.stringify(record.action)}.`,

@@ -561,6 +561,90 @@ describe("TutorialScreen", () => {
     container.remove();
   });
 
+  it("moves the opponent deck's top card face down into hand before completing the action", () => {
+    vi.useFakeTimers();
+    const onActionComplete = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamcallers: TUTORIAL_DREAMCALLERS,
+              dialogue: {
+                kind: "dreamcaller",
+                owner: "enemy",
+                speakerName: "Vrakmoth",
+                text: "For the Abyss!",
+              },
+              playbackRunId: "event:draw",
+              currentAction: {
+                id: "vrakmoth-draw",
+                action: "draw-opponent-card",
+                wait: 0,
+              },
+              battle: {
+                battleId: "tutorial-battle",
+                enemyHandCardIds: [],
+                enemyHand: [],
+                enemy: {
+                  deckCardIds: [
+                    "tutorial-enemy-deck-1",
+                    "tutorial-enemy-deck-2",
+                  ],
+                },
+                inspector: {
+                  sides: {
+                    enemy: { zones: { deck: 2, hand: 0 } },
+                    player: { zones: {} },
+                  },
+                },
+              } as unknown as MobileBattleView,
+            }}
+            onActionComplete={onActionComplete}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    expect(screenMocks.props?.view.enemy.deckCardIds).toEqual([
+      "tutorial-enemy-deck-1",
+      "tutorial-enemy-deck-2",
+    ]);
+    expect(screenMocks.props?.view.enemyHandCardIds).toEqual([]);
+
+    act(() => screenMocks.sceneAnimationComplete?.());
+
+    expect(screenMocks.props?.view.enemy.deckCardIds).toEqual([
+      "tutorial-enemy-deck-2",
+    ]);
+    expect(screenMocks.props?.view.enemyHandCardIds).toEqual([
+      "tutorial-enemy-deck-1",
+    ]);
+    expect(screenMocks.props?.view.enemyHand).toEqual([]);
+    expect(screenMocks.props?.view.inspector.sides.enemy.zones).toMatchObject({
+      deck: 1,
+      hand: 1,
+    });
+    act(() => {
+      vi.advanceTimersByTime(419);
+    });
+    expect(onActionComplete).not.toHaveBeenCalled();
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(onActionComplete).toHaveBeenCalledWith(
+      "event:draw",
+      "vrakmoth-draw",
+    );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("places opposing speech above all UI with a top-left pointer on the portrait rim", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
       function rectForElement(this: HTMLElement) {

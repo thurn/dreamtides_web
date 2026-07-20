@@ -1,6 +1,8 @@
 /** Stable action names authored by the Tutorial Editor. */
 export type TutorialActionName =
-  "display-speech-bubble" | "animate-dreamcaller-portrait";
+  | "display-speech-bubble"
+  | "animate-dreamcaller-portrait"
+  | "draw-opponent-card";
 
 /** Battle-status destination for an arriving tutorial Dreamcaller. */
 export type TutorialDreamcallerOwner = "player" | "enemy";
@@ -34,9 +36,16 @@ export interface AnimateDreamcallerPortraitTutorialAction extends TutorialAction
   readonly duration: number;
 }
 
+/** Moves the top face-down card of the opponent's deck into their hand. */
+export interface DrawOpponentCardTutorialAction extends TutorialActionBase {
+  readonly action: "draw-opponent-card";
+}
+
 /** Exhaustive authored tutorial action model. */
 export type TutorialAction =
-  DisplaySpeechBubbleTutorialAction | AnimateDreamcallerPortraitTutorialAction;
+  | DisplaySpeechBubbleTutorialAction
+  | AnimateDreamcallerPortraitTutorialAction
+  | DrawOpponentCardTutorialAction;
 
 /** Local filesystem persistence state shown by the Tutorial Editor. */
 export type TutorialEditorSaveStatus = "idle" | "saving" | "saved" | "error";

@@ -113,6 +113,24 @@ describe("parseTutorialActions", () => {
     ]);
   });
 
+  it("preserves a face-down opponent draw action", () => {
+    expect(
+      parseTutorialActions([
+        {
+          id: "vrakmoth-draw",
+          action: "draw-opponent-card",
+          wait: 0.5,
+        },
+      ]),
+    ).toEqual([
+      {
+        id: "vrakmoth-draw",
+        action: "draw-opponent-card",
+        wait: 0.5,
+      },
+    ]);
+  });
+
   it("rejects invalid portrait owners and pauses", () => {
     expect(() =>
       parseTutorialActions([

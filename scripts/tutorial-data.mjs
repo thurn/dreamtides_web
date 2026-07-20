@@ -100,6 +100,9 @@ export function validateTutorialActions(value) {
       }
       return { id, action, owner, pause, duration, wait };
     }
+    if (action === "draw-opponent-card") {
+      return { id, action, wait };
+    }
     throw invalid(
       `Tutorial action ${JSON.stringify(id)} has unsupported action ${JSON.stringify(action)}.`,
     );

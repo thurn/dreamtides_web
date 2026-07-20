@@ -22,6 +22,23 @@ describe("buildTutorialView", () => {
     });
   });
 
+  it("logs the face-down opponent draw path for sequence reconstruction", () => {
+    expect(
+      tutorialActionLogDetails({
+        id: "vrakmoth-draw",
+        action: "draw-opponent-card",
+        wait: 0,
+      }),
+    ).toEqual({
+      actionId: "vrakmoth-draw",
+      action: "draw-opponent-card",
+      waitSeconds: 0,
+      cardFace: "down",
+      sourceZone: "opponent-deck",
+      destinationZone: "opponent-hand",
+    });
+  });
+
   it("builds a quest-independent opposing Day phase with full decks and empty hands", () => {
     const tutorial = buildTutorialView({
       runId: "event:7",
@@ -208,6 +225,52 @@ describe("buildTutorialView", () => {
       owner: "enemy",
       speakerName: "Vrakmoth",
       text: "For the Abyss!",
+    });
+  });
+
+  it("keeps the current opponent draw in the deck, then persists it face down in hand", () => {
+    const actions = [
+      {
+        id: "vrakmoth-taunt",
+        action: "display-speech-bubble" as const,
+        speaker: "enemy" as const,
+        text: "For the Abyss!",
+        wait: 3,
+      },
+      {
+        id: "vrakmoth-draw",
+        action: "draw-opponent-card" as const,
+        wait: 0,
+      },
+      {
+        id: "next",
+        action: "display-speech-bubble" as const,
+        text: "The battle begins.",
+        wait: 1,
+      },
+    ];
+
+    const drawing = buildTutorialView({
+      runId: "event:draw",
+      currentActionIndex: 1,
+      actions,
+    }).battle;
+    expect(drawing.enemy.deckCardIds[0]).toBe("tutorial-enemy-deck-1");
+    expect(drawing.enemy.deckCardIds).toHaveLength(30);
+    expect(drawing.enemyHandCardIds).toEqual([]);
+
+    const drawn = buildTutorialView({
+      runId: "event:draw",
+      currentActionIndex: 2,
+      actions,
+    }).battle;
+    expect(drawn.enemy.deckCardIds[0]).toBe("tutorial-enemy-deck-2");
+    expect(drawn.enemy.deckCardIds).toHaveLength(29);
+    expect(drawn.enemyHandCardIds).toEqual(["tutorial-enemy-deck-1"]);
+    expect(drawn.enemyHand).toEqual([]);
+    expect(drawn.inspector.sides.enemy.zones).toMatchObject({
+      deck: 29,
+      hand: 1,
     });
   });
 

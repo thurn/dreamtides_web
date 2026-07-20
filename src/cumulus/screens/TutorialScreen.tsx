@@ -109,6 +109,7 @@ interface TutorialDreamcallerTrajectory {
 
 const TUTORIAL_FADE_SECONDS = motionTimeSeconds("--dur-loading-screen-fade");
 const TUTORIAL_DREAMCALLER_FADE_SECONDS = motionTimeSeconds("--dur-fast");
+const TUTORIAL_CARD_TRAVEL_SECONDS = motionTimeSeconds("--dur-slow");
 const TUTORIAL_EDITOR_DOCK_MIN_WIDTH = 1280;
 // The pointer overlaps the portrait rim so it visibly connects to the frame.
 const TUTORIAL_PORTRAIT_POINTER_OVERLAP = 2;
@@ -358,12 +359,15 @@ export function TutorialScreen({
   const [editorOpen, setEditorOpen] = useState(false);
   const [battleInspectorOpen, setBattleInspectorOpen] = useState(false);
   const [arrivedActionKey, setArrivedActionKey] = useState<string | null>(null);
+  const [drawnActionKey, setDrawnActionKey] = useState<string | null>(null);
+  const reportedDrawKeys = useRef<Set<string>>(new Set());
   const reportedArrivalKeys = useRef<Set<string>>(new Set());
   const [dialogueAnchor, setDialogueAnchor] =
     useState<TutorialDialogueAnchor | null>(null);
   const lastDialogue = useRef<TutorialDialogueView | null>(view.dialogue);
   if (view.dialogue !== null) lastDialogue.current = view.dialogue;
   const renderedDialogue = view.dialogue ?? lastDialogue.current;
+  const opponentDeckCardIds = view.battle.enemy?.deckCardIds ?? [];
   const dreamcallerArrival = useMemo(
     () =>
       view.playbackRunId !== null &&
@@ -378,6 +382,18 @@ export function TutorialScreen({
         : null,
     [view.currentAction, view.dreamcallers, view.playbackRunId],
   );
+  const opponentCardDraw = useMemo(
+    () =>
+      view.playbackRunId !== null &&
+      view.currentAction?.action === "draw-opponent-card" &&
+      opponentDeckCardIds[0] !== undefined
+        ? {
+            key: `${view.playbackRunId}:${view.currentAction.id}`,
+            cardId: opponentDeckCardIds[0],
+          }
+        : null,
+    [opponentDeckCardIds, view.currentAction, view.playbackRunId],
+  );
   const dreamcallerSettled = useCallback(
     (owner: TutorialDreamcallerOwner): boolean =>
       view.dreamcallers[owner].settled ||
@@ -389,7 +405,13 @@ export function TutorialScreen({
   const battleView = useMemo<MobileBattleView>(() => {
     const playerSettled = dreamcallerSettled("player");
     const enemySettled = dreamcallerSettled("enemy");
-    if (!playerSettled && !enemySettled) return view.battle;
+    const drawnCardId =
+      opponentCardDraw !== null && drawnActionKey === opponentCardDraw.key
+        ? opponentCardDraw.cardId
+        : null;
+    if (!playerSettled && !enemySettled && drawnCardId === null) {
+      return view.battle;
+    }
     return {
       ...view.battle,
       ...(playerSettled
@@ -420,8 +442,45 @@ export function TutorialScreen({
             },
           }
         : {}),
+      ...(drawnCardId === null
+        ? {}
+        : {
+            enemyHandCardIds: [...view.battle.enemyHandCardIds, drawnCardId],
+            enemy: {
+              ...view.battle.enemy,
+              ...(enemySettled
+                ? {
+                    status: {
+                      ...view.battle.enemy.status,
+                      dreamcaller: view.dreamcallers.enemy.visual,
+                      dreamcallerProfile: view.dreamcallers.enemy.profile,
+                    },
+                  }
+                : {}),
+              deckCardIds: view.battle.enemy.deckCardIds.filter(
+                (cardId) => cardId !== drawnCardId,
+              ),
+            },
+            inspector: {
+              ...view.battle.inspector,
+              ...(enemySettled
+                ? { opponentName: view.dreamcallers.enemy.visual.name }
+                : {}),
+              sides: {
+                ...view.battle.inspector.sides,
+                enemy: {
+                  ...view.battle.inspector.sides.enemy,
+                  zones: {
+                    ...view.battle.inspector.sides.enemy.zones,
+                    hand: view.battle.enemyHandCardIds.length + 1,
+                    deck: view.battle.enemy.deckCardIds.length - 1,
+                  },
+                },
+              },
+            },
+          }),
     };
-  }, [dreamcallerSettled, view]);
+  }, [drawnActionKey, dreamcallerSettled, opponentCardDraw, view]);
 
   const completeDreamcallerArrival = useCallback((): void => {
     if (dreamcallerArrival === null) return;
@@ -450,6 +509,37 @@ export function TutorialScreen({
     );
     return () => window.clearTimeout(timeout);
   }, [onActionComplete, sceneEntered, view.currentAction, view.playbackRunId]);
+
+  useEffect(() => {
+    if (!sceneEntered || opponentCardDraw === null) return;
+    if (reportedDrawKeys.current.has(opponentCardDraw.key)) return;
+    reportedDrawKeys.current.add(opponentCardDraw.key);
+    setDrawnActionKey(opponentCardDraw.key);
+  }, [opponentCardDraw, sceneEntered]);
+
+  useEffect(() => {
+    if (
+      opponentCardDraw === null ||
+      drawnActionKey !== opponentCardDraw.key ||
+      view.currentAction?.action !== "draw-opponent-card" ||
+      view.playbackRunId === null
+    ) {
+      return undefined;
+    }
+    const { id, wait } = view.currentAction;
+    const runId = view.playbackRunId;
+    const timeout = window.setTimeout(
+      () => onActionComplete?.(runId, id),
+      (TUTORIAL_CARD_TRAVEL_SECONDS + wait) * 1_000,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [
+    drawnActionKey,
+    onActionComplete,
+    opponentCardDraw,
+    view.currentAction,
+    view.playbackRunId,
+  ]);
 
   useEffect(() => {
     if (

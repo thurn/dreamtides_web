@@ -26,6 +26,11 @@ const FIXTURE_ACTIONS = [
     duration: 0.6,
     wait: 0,
   },
+  {
+    id: "opponent-draw",
+    action: "draw-opponent-card",
+    wait: 0.5,
+  },
 ];
 
 describe("tutorial data", () => {
