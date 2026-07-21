@@ -555,7 +555,13 @@ describe("MobileBattleScreen", () => {
     expect(container.querySelector('[data-battle-play-area="enemy"]')?.getAttribute("style")).toContain("grid-row: 4");
     expect(container.querySelector('[data-battle-play-area="player"]')?.getAttribute("style")).toContain("grid-row: 3");
     expect(container.querySelector('[data-battle-mobile-row="near-hand"]')?.getAttribute("data-battle-hand-owner")).toBe("enemy");
-    const toggle = container.querySelector<HTMLButtonElement>('[data-testid="battle-perspective-toggle"]');
+    expect(container.querySelector('[data-testid="battle-perspective-toggle"]')).toBeNull();
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-testid="battle-inspector-trigger"]')?.click();
+    });
+    const inspector = container.querySelector('[data-battle-inspector="takeover"]');
+    expect(inspector).not.toBeNull();
+    const toggle = inspector?.querySelector<HTMLButtonElement>('[data-testid="battle-perspective-toggle"]');
     expect(toggle?.textContent).toContain("Return to Your Side");
     expect(toggle?.getAttribute("aria-pressed")).toBe("true");
     act(() => toggle?.click());
@@ -766,6 +772,7 @@ describe("MobileBattleScreen", () => {
   it("opens the unified rail on desktop and dispatches side-scoped actions", () => {
     mockDesktopViewport(true);
     const onInspectorAction = vi.fn();
+    const onPerspectiveToggle = vi.fn();
     const interactions: MobileBattleInteractions = {
       canInteract: true,
       pendingCardId: null,
@@ -776,6 +783,7 @@ describe("MobileBattleScreen", () => {
       onZoneDrop: vi.fn(),
       onPreviousPhase: vi.fn(),
       onNextPhase: vi.fn(),
+      onPerspectiveToggle,
       onInspectorAction,
     };
     const { container, root } = mount(makeView(), interactions);
@@ -786,8 +794,18 @@ describe("MobileBattleScreen", () => {
     expect(container.textContent).toContain("Player Resources");
     expect(container.textContent).toContain("Back Rank");
     expect(container.textContent).not.toContain("Stack cards");
+    const inspector = container.querySelector('[data-battle-inspector="docked"]');
+    const perspectiveToggle = inspector?.querySelector<HTMLButtonElement>(
+      '[data-testid="battle-perspective-toggle"]',
+    );
+    expect(perspectiveToggle?.textContent).toContain("Control Opponent");
+    expect(perspectiveToggle?.getAttribute("aria-pressed")).toBe("false");
+    expect(
+      container.querySelector('[data-battle-top-right-controls] [data-testid="battle-perspective-toggle"]'),
+    ).toBeNull();
 
     act(() => {
+      perspectiveToggle?.click();
       container.querySelector<HTMLButtonElement>('[data-testid="battle-inspector-draw-player"]')?.click();
       Array.from(container.querySelectorAll<HTMLButtonElement>("button"))
         .find((button) => button.textContent === "Open Banished")
@@ -804,6 +822,7 @@ describe("MobileBattleScreen", () => {
       zone: "banished",
     });
     expect(onInspectorAction).toHaveBeenCalledWith({ kind: "side-selected", side: "enemy" });
+    expect(onPerspectiveToggle).toHaveBeenCalledOnce();
     expect(container.textContent).toContain("Enemy Resources");
 
     act(() => root.unmount());
@@ -2417,7 +2436,7 @@ describe("MobileBattleScreen", () => {
     const controls = container.querySelectorAll(
       "button, input, select, textarea, [role=button]",
     );
-    expect(controls).toHaveLength(5);
+    expect(controls).toHaveLength(4);
     expect(
       container.querySelector('[data-testid="battle-debug-menu-trigger"]'),
     ).not.toBeNull();
@@ -2562,7 +2581,7 @@ describe("MobileBattleScreen", () => {
     expect(interactions.onSlotDrop).not.toHaveBeenCalled();
     expect(interactions.onZoneDrop).not.toHaveBeenCalled();
     expect(interactions.onCardDragEnd).not.toHaveBeenCalled();
-    expect(container.querySelectorAll("button")).toHaveLength(5);
+    expect(container.querySelectorAll("button")).toHaveLength(4);
 
     act(() => root.unmount());
   });

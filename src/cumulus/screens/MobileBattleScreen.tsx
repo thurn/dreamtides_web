@@ -2713,13 +2713,17 @@ function InspectorButton({
 
 function BattleInspectorContent({
   inspector,
+  perspective,
   selectedSide,
   onSelectSide,
+  onPerspectiveToggle,
   onAction,
 }: {
   readonly inspector: MobileBattleInspectorView;
+  readonly perspective: BattlePerspectiveSide;
   readonly selectedSide: MobileBattleOwner;
   readonly onSelectSide: (side: MobileBattleOwner) => void;
+  readonly onPerspectiveToggle?: () => void;
   readonly onAction?: (action: MobileBattleInspectorAction) => void;
 }) {
   const side = inspector.sides[selectedSide];
@@ -2740,6 +2744,22 @@ function BattleInspectorContent({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("--space-4") }}>
+      <div data-battle-inspector-perspective-control="" style={{ minWidth: 0 }}>
+        <GlassButton
+          label={perspective === "player" ? "Control Opponent" : "Return to Your Side"}
+          widthReservations={[
+            { label: "Control Opponent" },
+            { label: "Return to Your Side" },
+          ]}
+          placement="onGlass"
+          variant={perspective === "enemy" ? "accent" : "default"}
+          pressed={perspective === "enemy"}
+          disabled={onPerspectiveToggle === undefined}
+          testId="battle-perspective-toggle"
+          onPress={() => onPerspectiveToggle?.()}
+        />
+      </div>
+
       <GroupPanel>
         <div style={{ ...groupLayout, gap: token("--space-3") }}>
           <h3 style={{ margin: 0, color: token("--text-on-glass"), font: token("--t-title-sm") }}>Battle Snapshot</h3>
@@ -2877,15 +2897,19 @@ function BattleInspectorContent({
 
 function BattleInspectorRail({
   inspector,
+  perspective,
   selectedSide,
   onSelectSide,
   onClose,
+  onPerspectiveToggle,
   onAction,
 }: {
   readonly inspector: MobileBattleInspectorView;
+  readonly perspective: BattlePerspectiveSide;
   readonly selectedSide: MobileBattleOwner;
   readonly onSelectSide: (side: MobileBattleOwner) => void;
   readonly onClose: () => void;
+  readonly onPerspectiveToggle?: () => void;
   readonly onAction?: (action: MobileBattleInspectorAction) => void;
 }) {
   return (
@@ -2897,7 +2921,14 @@ function BattleInspectorRail({
         subtitle={`Opponent: ${inspector.opponentName} · Perspective: ${inspector.perspective}`}
         onClose={onClose}
       >
-        <BattleInspectorContent inspector={inspector} selectedSide={selectedSide} onSelectSide={onSelectSide} onAction={onAction} />
+        <BattleInspectorContent
+          inspector={inspector}
+          perspective={perspective}
+          selectedSide={selectedSide}
+          onSelectSide={onSelectSide}
+          onPerspectiveToggle={onPerspectiveToggle}
+          onAction={onAction}
+        />
       </DeveloperRail>
     </div>
   );
@@ -3198,6 +3229,7 @@ export function MobileBattleScreen({
         />
       </div>
       <div
+        data-battle-top-right-controls=""
         style={{
           position: "absolute",
           top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-4")})`,
@@ -3208,18 +3240,6 @@ export function MobileBattleScreen({
           gap: token("--space-3"),
         }}
       >
-        <GlassButton
-          label={view.perspective === "player" ? "Control Opponent" : "Return to Your Side"}
-          widthReservations={[
-            { label: "Control Opponent" },
-            { label: "Return to Your Side" },
-          ]}
-          variant={view.perspective === "enemy" ? "accent" : "default"}
-          pressed={view.perspective === "enemy"}
-          disabled={interactions?.onPerspectiveToggle === undefined}
-          testId="battle-perspective-toggle"
-          onPress={() => interactions?.onPerspectiveToggle?.()}
-        />
         <BattleDebugMenu
           onFillBattlefieldPreview={interactions?.onFillBattlefieldPreview}
           onFillTwentyCardBattlefieldPreview={interactions?.onFillTwentyCardBattlefieldPreview}
@@ -3282,9 +3302,11 @@ export function MobileBattleScreen({
         {isDockLayout && isInspectorOpen ? (
           <BattleInspectorRail
             inspector={view.inspector}
+            perspective={view.perspective}
             selectedSide={selectedSide}
             onSelectSide={selectSide}
             onClose={closeInspector}
+            onPerspectiveToggle={interactions?.onPerspectiveToggle}
             onAction={handleInspectorAction}
           />
         ) : null}
@@ -3305,8 +3327,10 @@ export function MobileBattleScreen({
           >
             <BattleInspectorContent
               inspector={view.inspector}
+              perspective={view.perspective}
               selectedSide={selectedSide}
               onSelectSide={selectSide}
+              onPerspectiveToggle={interactions?.onPerspectiveToggle}
               onAction={handleInspectorAction}
             />
           </div>
