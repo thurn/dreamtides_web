@@ -8642,7 +8642,7 @@ card-number = 461
 art = { x = 0, y = 0.869, scale = 1.17 }
 
 [[cards]]
-name = "Wandering Archivist"
+name = "Mnemonic Operator"
 mtg-name = "Glint-Horn Buccaneer"
 id = "faadc87f-98fe-4a58-b1a9-a7c0cff70e08"
 rendered-text = """
@@ -8656,10 +8656,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Score Trigger", "Art Rework", "July21"]
-image-number = 2606475971
+tags = ["Score Trigger", "Art Rework", "July21", "Art OK"]
+image-number = 1926604865
 art-owned = false
 card-number = 462
+art = { x = -0.086, y = 1, scale = 1.1 }
 
 [[cards]]
 name = "Rubble Diviner"
@@ -8900,13 +8901,13 @@ card-number = 475
 art = { x = -0.002, y = 1, scale = 1.07 }
 
 [[cards]]
-name = "Ambush Operative"
+name = "Obliterator of Worlds"
 mtg-name = "Solitude"
 id = "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5"
-rendered-text = """
+rendered-text = '''
 Offering
 
-▸Materialized: Banish an enemy."""
+▸Materialized: Dissolve an enemy.'''
 energy-cost = 5
 card-type = "Character"
 subtype = "Visitor"
@@ -8914,7 +8915,7 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = 4
-tags = ["Removal", "Art Rework", "July21"]
+tags = ["Removal", "Art Rework", "July21", "Art OK"]
 image-number = 443761822
 art-owned = false
 card-number = 476

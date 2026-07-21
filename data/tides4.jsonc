@@ -378,7 +378,7 @@
         {"id":"9d14885c-a757-40cc-b43e-87dbec7ec379","name":"Annihilation from Below","text":"Dissolve a ≤2✦ enemy.\n\nWhen you discard this card, it gains reclaim 0●.\n","copies":2},
         {"id":"d1c25546-dcf2-481e-8f00-9afef3adf24b","name":"Rubble Diviner","subtype":"Visitor","text":"▸Challenge: You may pay 2● and discard a card to draw two cards.","copies":2},
         {"id":"e4e8d3b9-3463-4b92-8fbe-35064f72402d","name":"Pinnacle Ascendant","subtype":"Synth","text":"Characters you control have awakened.\n\nWhen you discard or erode this card, it gains reclaim 0●.","copies":2},
-        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Wandering Archivist","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":2},
+        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Mnemonic Operator","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":2},
         {"id":"006e2f95-59a2-4cda-a777-e64f4aa31060","name":"Unleashed Destruction","text":"Dissolve a ≤2● cost enemy.\n\nReclaim 5●.","copies":1},
         {"id":"01d53e49-7833-4122-a970-b72c73ad2c28","name":"Crimson Pilgrimage","text":"Look at the top 4 cards of your deck. Choose one: Draw 1 of the cards, or draw 2 of the cards and they gain ephemeral.","copies":1},
         {"id":"027ae231-6569-49bb-866f-7c36ec794a11","name":"Scorched Reckoning","text":"Dissolve a ≤3✦ enemy.","copies":1},
@@ -675,7 +675,7 @@
         {"id":"ecf77f27-df0f-47c4-99c2-48d7fa46a137","name":"Scrapyard Custodian","subtype":"Synth","text":"▸Materialized: Gain 1⍟.\n\nAbandon a non-figment character: Materialize this character from your void.","copies":1},
         {"id":"ed4d5342-0690-40b7-ab48-6b76035466f2","name":"Chaos Crasher","subtype":"Visitor","text":"☪, Discard a card: Erode 2.\n\n4●, Abandon this character: Return a character from your void to your hand.","copies":1},
         {"id":"f1452b45-51dc-453a-916e-88bd9d29e36e","name":"The Calling Night","subtype":"Visitor","text":"▸Dawn: Draw a card. The opponent gains 2⍟.","copies":1},
-        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Wandering Archivist","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":1},
+        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Mnemonic Operator","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":1},
         {"id":"fbf32510-0bad-4567-859f-b3db6d7be5d5","name":"Shared Ruin","text":"The opponent discards a card.\n\nReclaim – Discard a card.","copies":1},
         {"id":"fd355778-abea-4513-844c-91bf75929ebe","name":"Immortal Reaper","subtype":"Warrior","text":"2●, Banish a card from your void: Materialize this character from your void.","copies":1},
         {"id":"ffec9fdd-d948-4756-b7df-39b9e982613e","name":"Skull Weaver","subtype":"Ancient","text":"When a character you control leaves play, gain 1⍟.","copies":1}
@@ -784,7 +784,7 @@
         {"id":"f3985df4-0867-4fd6-8312-6b358dc26883","name":"Flagbearer of Decay","subtype":"Survivor","text":"When a character card leaves your void, materialize a 2✦ shadow figment.","copies":1},
         {"id":"f68774ce-0e94-489f-90a5-68e03a549ff6","name":"Vigil Keeper","subtype":"Survivor","text":"When a survivor you control is dissolved, draw a card.","copies":1},
         {"id":"f7c68226-def4-4eb0-bdfe-b028482e1351","name":"Forgotten Sleeper","subtype":"Synth","text":"If you've discarded a card this turn, this character costs 3● less.","copies":1},
-        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Wandering Archivist","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":1},
+        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Mnemonic Operator","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":1},
         {"id":"fbf32510-0bad-4567-859f-b3db6d7be5d5","name":"Shared Ruin","text":"The opponent discards a card.\n\nReclaim – Discard a card.","copies":1},
         {"id":"ffec9fdd-d948-4756-b7df-39b9e982613e","name":"Skull Weaver","subtype":"Ancient","text":"When a character you control leaves play, gain 1⍟.","copies":1}
       ]
@@ -1325,7 +1325,7 @@
         {"id":"e7c93c3b-14db-4131-ab50-71d152331777","name":"Sundown Surfer","subtype":"Visitor","text":"Awakened\n\nAbandon this character: Characters you control gain awakened this turn.","copies":1},
         {"id":"f3f97e2c-3bb6-4a20-9880-f59c50e5af93","name":"Eviscerator of Hope","subtype":"Ancient","text":"Abandon a character: Store 1⧗.\n\nX⧗: Dissolve an enemy with X✦.","copies":1},
         {"id":"f7c68226-def4-4eb0-bdfe-b028482e1351","name":"Forgotten Sleeper","subtype":"Synth","text":"If you've discarded a card this turn, this character costs 3● less.","copies":1},
-        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Wandering Archivist","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":1},
+        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Mnemonic Operator","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":1},
         {"id":"fc4b06d6-3b30-4769-af98-88fcea5b54dd","name":"Cascade of Reflections","text":"Until end of turn, when you play an event, copy it.","copies":1}
       ]
     },
@@ -1355,7 +1355,7 @@
         {"id":"b957466e-f748-4a95-89b2-8509dc762223","name":"Trance Diviner","subtype":"Visionary","text":"Discard a card: Draw two cards with ephemeral.","copies":2},
         {"id":"be72bd04-21a6-4035-a117-2b7213ad1a34","name":"Arc Gate Opening","text":"Gain 4●.","copies":2},
         {"id":"d1c25546-dcf2-481e-8f00-9afef3adf24b","name":"Rubble Diviner","subtype":"Visitor","text":"▸Challenge: You may pay 2● and discard a card to draw two cards.","copies":2},
-        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Wandering Archivist","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":2},
+        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Mnemonic Operator","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":2},
         {"id":"fb967cc1-4199-4a08-8070-724e07cebea5","name":"Entropy Cascade","text":"The next time you play an event this turn, copy it twice.\n\nReclaim 5●.","copies":2},
         {"id":"006e2f95-59a2-4cda-a777-e64f4aa31060","name":"Unleashed Destruction","text":"Dissolve a ≤2● cost enemy.\n\nReclaim 5●.","copies":1},
         {"id":"0211963d-d097-4427-9d16-5e857621e481","name":"Sanctum Awakened","text":"Draw two cards.\n\nReclaim 2●","copies":1},
@@ -1512,7 +1512,7 @@
         {"id":"98f16d26-be71-49ad-9034-5fafb5d3f053","name":"Aurora Conductor","subtype":"Musician","text":"▸Night: If you have only one challenger, give that character +3✦.","copies":1},
         {"id":"9b9c2743-75b3-499d-b5fb-c3429c92d420","name":"Kindlehorn","subtype":"Spirit Animal","text":"▸Dawn: Gain 1●.\n\n4●, ☪: This character gains +1✦.","copies":1},
         {"id":"9d51dca1-28d7-4e8e-bc13-c5b665d6db72","name":"Shapeshifter Spirit","subtype":"X","text":"This character has all character types.","copies":1},
-        {"id":"a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5","name":"Ambush Operative","subtype":"Visitor","text":"Offering\n\n▸Materialized: Banish an enemy.","copies":1},
+        {"id":"a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5","name":"Obliterator of Worlds","subtype":"Visitor","text":"Offering\n\n▸Materialized: Dissolve an enemy.","copies":1},
         {"id":"ae90a3e1-c650-4f21-83af-de3208151b11","name":"Verdant Pioneer","subtype":"Explorer","text":"▸Materialized: Discover a ≤1● cost character and materialize it.","copies":1},
         {"id":"b4754e5a-29e6-418c-bdfa-8e0230a21b7b","name":"Nightmare Shepherd","subtype":"Mage","text":"▸Materialized: Materialize a 4✦ monstrosity figment.","copies":1},
         {"id":"b64f0beb-6ba4-4559-b6ab-091c2f60a613","name":"Infernal Cavalier","subtype":"Warrior","text":"▸Dissolved: Return another warrior from your void to your hand.","copies":1},
@@ -2634,7 +2634,7 @@
         {"id":"d1c25546-dcf2-481e-8f00-9afef3adf24b","name":"Rubble Diviner","subtype":"Visitor","text":"▸Challenge: You may pay 2● and discard a card to draw two cards.","copies":1},
         {"id":"d26d31c0-7bd2-4d58-bed9-444e032a1087","name":"Door to Possibility","text":"Choose a value of X. Discover an event with cost X.","copies":1},
         {"id":"e4e8d3b9-3463-4b92-8fbe-35064f72402d","name":"Pinnacle Ascendant","subtype":"Synth","text":"Characters you control have awakened.\n\nWhen you discard or erode this card, it gains reclaim 0●.","copies":1},
-        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Wandering Archivist","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":1},
+        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Mnemonic Operator","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":1},
         {"id":"fb967cc1-4199-4a08-8070-724e07cebea5","name":"Entropy Cascade","text":"The next time you play an event this turn, copy it twice.\n\nReclaim 5●.","copies":1},
         {"id":"fc4b06d6-3b30-4769-af98-88fcea5b54dd","name":"Cascade of Reflections","text":"Until end of turn, when you play an event, copy it.","copies":1}
       ]
@@ -3596,7 +3596,7 @@
         {"id":"ed4d5342-0690-40b7-ab48-6b76035466f2","name":"Chaos Crasher","subtype":"Visitor","text":"☪, Discard a card: Erode 2.\n\n4●, Abandon this character: Return a character from your void to your hand.","copies":1},
         {"id":"f3f97e2c-3bb6-4a20-9880-f59c50e5af93","name":"Eviscerator of Hope","subtype":"Ancient","text":"Abandon a character: Store 1⧗.\n\nX⧗: Dissolve an enemy with X✦.","copies":1},
         {"id":"f7c68226-def4-4eb0-bdfe-b028482e1351","name":"Forgotten Sleeper","subtype":"Synth","text":"If you've discarded a card this turn, this character costs 3● less.","copies":1},
-        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Wandering Archivist","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":1}
+        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Mnemonic Operator","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":1}
       ]
     },
     {
@@ -3653,7 +3653,7 @@
         {"id":"d26d31c0-7bd2-4d58-bed9-444e032a1087","name":"Door to Possibility","text":"Choose a value of X. Discover an event with cost X.","copies":1},
         {"id":"e455225f-c444-44a2-8796-805cae2b755f","name":"Oracle of Shifting Skies","subtype":"Visionary","text":"When you play an event, foresee 1.","copies":1},
         {"id":"e4e8d3b9-3463-4b92-8fbe-35064f72402d","name":"Pinnacle Ascendant","subtype":"Synth","text":"Characters you control have awakened.\n\nWhen you discard or erode this card, it gains reclaim 0●.","copies":1},
-        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Wandering Archivist","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":1},
+        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Mnemonic Operator","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":1},
         {"id":"fb967cc1-4199-4a08-8070-724e07cebea5","name":"Entropy Cascade","text":"The next time you play an event this turn, copy it twice.\n\nReclaim 5●.","copies":1},
         {"id":"fc4b06d6-3b30-4769-af98-88fcea5b54dd","name":"Cascade of Reflections","text":"Until end of turn, when you play an event, copy it.","copies":1}
       ]
@@ -3877,7 +3877,7 @@
         {"id":"e455225f-c444-44a2-8796-805cae2b755f","name":"Oracle of Shifting Skies","subtype":"Visionary","text":"When you play an event, foresee 1.","copies":1},
         {"id":"e4e8d3b9-3463-4b92-8fbe-35064f72402d","name":"Pinnacle Ascendant","subtype":"Synth","text":"Characters you control have awakened.\n\nWhen you discard or erode this card, it gains reclaim 0●.","copies":1},
         {"id":"f7c68226-def4-4eb0-bdfe-b028482e1351","name":"Forgotten Sleeper","subtype":"Synth","text":"If you've discarded a card this turn, this character costs 3● less.","copies":1},
-        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Wandering Archivist","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":1}
+        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Mnemonic Operator","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":1}
       ]
     },
     {
@@ -4135,7 +4135,7 @@
         {"id":"d755cfa4-d7c0-46d8-a836-909c45c68890","name":"Threshold Seeker","subtype":"Explorer","text":"2●, ☪, Discard a card: Draw a card.\n\nWhen you discard a card, it gains reclaim.","copies":1},
         {"id":"e4e8d3b9-3463-4b92-8fbe-35064f72402d","name":"Pinnacle Ascendant","subtype":"Synth","text":"Characters you control have awakened.\n\nWhen you discard or erode this card, it gains reclaim 0●.","copies":1},
         {"id":"f7c68226-def4-4eb0-bdfe-b028482e1351","name":"Forgotten Sleeper","subtype":"Synth","text":"If you've discarded a card this turn, this character costs 3● less.","copies":1},
-        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Wandering Archivist","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":1}
+        {"id":"faadc87f-98fe-4a58-b1a9-a7c0cff70e08","name":"Mnemonic Operator","subtype":"Explorer","text":"2●, ☪: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟.","copies":1}
       ]
     },
     {
@@ -4383,7 +4383,7 @@
         {"id":"9629a58a-9f30-40f0-9199-835ea2dddc76","name":"Vault Infiltrator","subtype":"Warrior","text":"Players may only play one card per turn.","copies":1},
         {"id":"96e2c30c-930c-47af-abb0-d4fbab454d56","name":"Winterbough Guide","subtype":"Warrior","text":"▸Materialized, Dawn: Erode 1.\n\nOnce per turn, you may play a warrior from your void.","copies":1},
         {"id":"97bc4b48-9ea1-40e9-94bb-a88ae4f55d83","name":"Epiphany Unfolded","text":"Draw 3 cards.","copies":1},
-        {"id":"a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5","name":"Ambush Operative","subtype":"Visitor","text":"Offering\n\n▸Materialized: Banish an enemy.","copies":1},
+        {"id":"a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5","name":"Obliterator of Worlds","subtype":"Visitor","text":"Offering\n\n▸Materialized: Dissolve an enemy.","copies":1},
         {"id":"b1bea643-1a7b-4e5e-b072-7174d3405421","name":"Silent Observer","subtype":"Warrior","text":"Once per turn, when the opponent plays an event, draw a card.","copies":1},
         {"id":"bbdc6ee7-e9b1-488b-90b9-19337b65fee6","name":"Revered Prince","subtype":"Warrior","text":"This character costs 1● less for each warrior you control.","copies":1},
         {"id":"be7cf049-29df-4801-9ca6-0e39dc1101af","name":"Shattering Gambit","text":"Banish an enemy. The opponent gains 5⍟.","copies":1},

@@ -376,7 +376,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 2× Rubble Diviner
 - 2× Pinnacle Ascendant
 - 2× Forgotten Sleeper
-- 2× Wandering Archivist
+- 2× Mnemonic Operator
 - 1× Unleashed Destruction
 - 1× Silent Gatherer
 - 1× Scorched Reckoning
@@ -589,7 +589,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 2× Fractured Vessel
 - 2× Rubble Diviner
 - 2× Forgotten Sleeper
-- 2× Wandering Archivist
+- 2× Mnemonic Operator
 - 1× Unleashed Destruction
 - 1× Iron Pharaoh
 - 1× Ridge Vortex Explorer
@@ -769,7 +769,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Ghostcaller
 - 1× Forgotten Sleeper
 - 1× Ossuary Offering
-- 1× Wandering Archivist
+- 1× Mnemonic Operator
 - 1× Shared Ruin
 - 1× Immortal Reaper
 - 1× Skull Weaver
@@ -1101,7 +1101,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 2× Arc Gate Opening
 - 2× Flash of Power
 - 2× Rubble Diviner
-- 2× Wandering Archivist
+- 2× Mnemonic Operator
 - 2× Entropy Cascade
 - 2× Cascade of Reflections
 - 1× Unleashed Destruction
@@ -1198,7 +1198,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 2× Torchbearer of the Abyss
 - 2× Rubble Diviner
 - 2× Pinnacle Ascendant
-- 2× Wandering Archivist
+- 2× Mnemonic Operator
 - 2× Cascade of Reflections
 - 1× Unleashed Destruction
 - 1× Gloomantler
@@ -1304,7 +1304,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 2× Fractured Vessel
 - 2× Rubble Diviner
 - 2× Threshold Seeker
-- 2× Wandering Archivist
+- 2× Mnemonic Operator
 - 2× Cascade of Reflections
 - 1× Unleashed Destruction
 - 1× Crimson Pilgrimage
@@ -1466,7 +1466,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Kindlehorn
 - 1× Shapeshifter Spirit
 - 1× Empyreal Light
-- 1× Ambush Operative
+- 1× Obliterator of Worlds
 - 1× Verdant Pioneer
 - 1× Nightmare Shepherd
 - 1× Infernal Cavalier
@@ -1819,7 +1819,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Ash Sower
 - 1× Voidsire
 - 1× Shapeshifter Spirit
-- 1× Ambush Operative
+- 1× Obliterator of Worlds
 - 1× Dawnblade Wanderer
 - 1× Riftwalker
 - 1× Seeker of the Radiant Wilds
@@ -2569,7 +2569,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 1× Chaos Crasher
 - 1× Eviscerator of Hope
 - 1× Forgotten Sleeper
-- 1× Wandering Archivist
+- 1× Mnemonic Operator
 
 ## Lean: Architect of Memory — Discard Event Engine
 
@@ -2621,7 +2621,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Chaos Crasher
 - 1× Eviscerator of Hope
 - 1× Forgotten Sleeper
-- 1× Wandering Archivist
+- 1× Mnemonic Operator
 - 1× Immortal Reaper
 
 ## Lean: Harbor Warden — Warrior Recursion Draw
@@ -2928,7 +2928,7 @@ Tide-fac-16 is almost entirely characters (43 of 45 copies), nearly all warriors
 This tide is almost entirely composed of warriors (43 of 45 copies), built around a repeating dissolution-return loop: Cinderblade Legionnaire and Starbound Striker each appear at two copies and both trigger on dissolution to return another warrior from the void to hand, and Burning Revenant extends this further by returning a lesser-cost warrior from the void whenever any allied warrior is dissolved. Blood Reaver at two copies provides the energy engine, turning an abandoned warrior into 2●, which funds the loop and feeds Spellweaver's ability to convert abandoned warriors into 1✦ figments. With a persistent board of warriors established, the tide scales hard through anthem effects: Inspiring Templar grants +1✦ per allied warrior to itself and its allies, Dreadmount Sovereign reduces its own cost per warrior and uses Support to hand out +3✦, and Assault Leader buffs every allied warrior each Dawn. Eclipse Herald serves as an in-faction removal piece, storing ⧗ charges to dissolve enemies of matching size, which can also feed the dissolution-return triggers. Compared to tide-fac-12, which anchors on Burning Revenant at two copies but leans into grow-and-burst dissolution payoffs via Inferno's Herald and mass resurrection through Wake the Fallen, this tide prioritizes redundancy across three distinct dissolution-return triggers to keep the loop running at low spark thresholds; compared to tide-fac-29, which shares Blood Reaver as its highest-copy card but channels abandonment primarily into figment-token production and cost reduction, this tide treats dissolution and void-return as the central engine rather than a supporting tool.
 
 - 2× Rubble Diviner
-- 2× Wandering Archivist
+- 2× Mnemonic Operator
 - 1× Unleashed Destruction
 - 1× Scorched Reckoning
 - 1× Fell the Mighty
@@ -3065,7 +3065,7 @@ Tide-fac-20 is an event-heavy combo tide (34 events, 11 characters) built around
 - 1× Rubble Diviner
 - 1× Echoes of Eternity
 - 1× Oracle of Shifting Skies
-- 1× Wandering Archivist
+- 1× Mnemonic Operator
 - 1× Entropy Cascade
 
 ## Lean: Nightprowler Panther
@@ -3393,7 +3393,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Chaos Crasher
 - 1× Eviscerator of Hope
 - 1× Forgotten Sleeper
-- 1× Wandering Archivist
+- 1× Mnemonic Operator
 
 ## Lean: Oracle of Shifting Skies — Event Copy Ramp
 
@@ -3445,7 +3445,7 @@ This tide is split between characters and events (22 characters, 23 events), wit
 - 1× Chaos Crasher
 - 1× Eviscerator of Hope
 - 1× Forgotten Sleeper
-- 1× Wandering Archivist
+- 1× Mnemonic Operator
 - 1× Immortal Reaper
 
 ## Lean: Dragonward
@@ -3890,12 +3890,12 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Fury of the Clan
 - 1× Night Prowler
 
-## Broad: Rubble Diviner / Wandering Archivist
+## Broad: Rubble Diviner / Mnemonic Operator
 
 `tide-neu-10` — neutral tide, 28 distinct cards, 30 copies
 
 - 2× Rubble Diviner
-- 2× Wandering Archivist
+- 2× Mnemonic Operator
 - 1× Unleashed Destruction
 - 1× Scorched Reckoning
 - 1× Fell the Mighty

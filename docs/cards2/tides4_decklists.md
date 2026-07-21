@@ -367,7 +367,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 2× Annihilation from Below
 - 2× Rubble Diviner
 - 2× Pinnacle Ascendant
-- 2× Wandering Archivist
+- 2× Mnemonic Operator
 - 1× Unleashed Destruction
 - 1× Crimson Pilgrimage
 - 1× Scorched Reckoning
@@ -652,7 +652,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 1× Scrapyard Custodian
 - 1× Chaos Crasher
 - 1× The Calling Night
-- 1× Wandering Archivist
+- 1× Mnemonic Operator
 - 1× Shared Ruin
 - 1× Immortal Reaper
 - 1× Skull Weaver
@@ -755,7 +755,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Flagbearer of Decay
 - 1× Vigil Keeper
 - 1× Forgotten Sleeper
-- 1× Wandering Archivist
+- 1× Mnemonic Operator
 - 1× Shared Ruin
 - 1× Skull Weaver
 
@@ -1266,7 +1266,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Sundown Surfer
 - 1× Eviscerator of Hope
 - 1× Forgotten Sleeper
-- 1× Wandering Archivist
+- 1× Mnemonic Operator
 - 1× Cascade of Reflections
 
 ## Ovanel signature — Event Storm Ramp
@@ -1290,7 +1290,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 2× Trance Diviner
 - 2× Arc Gate Opening
 - 2× Rubble Diviner
-- 2× Wandering Archivist
+- 2× Mnemonic Operator
 - 2× Entropy Cascade
 - 1× Unleashed Destruction
 - 1× Sanctum Awakened
@@ -1441,7 +1441,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Aurora Conductor
 - 1× Kindlehorn
 - 1× Shapeshifter Spirit
-- 1× Ambush Operative
+- 1× Obliterator of Worlds
 - 1× Verdant Pioneer
 - 1× Nightmare Shepherd
 - 1× Infernal Cavalier
@@ -2467,7 +2467,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Rubble Diviner
 - 1× Door to Possibility
 - 1× Pinnacle Ascendant
-- 1× Wandering Archivist
+- 1× Mnemonic Operator
 - 1× Entropy Cascade
 - 1× Cascade of Reflections
 
@@ -3327,7 +3327,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 1× Chaos Crasher
 - 1× Eviscerator of Hope
 - 1× Forgotten Sleeper
-- 1× Wandering Archivist
+- 1× Mnemonic Operator
 
 ## Lean: Oracle of Shifting Skies — Event Copy Ramp
 
@@ -3378,7 +3378,7 @@ This tide is split between characters and events (22 characters, 23 events), wit
 - 1× Door to Possibility
 - 1× Oracle of Shifting Skies
 - 1× Pinnacle Ascendant
-- 1× Wandering Archivist
+- 1× Mnemonic Operator
 - 1× Entropy Cascade
 - 1× Cascade of Reflections
 
@@ -3578,7 +3578,7 @@ This is a character-heavy discard engine (35 characters, 10 events) whose lean a
 - 1× Oracle of Shifting Skies
 - 1× Pinnacle Ascendant
 - 1× Forgotten Sleeper
-- 1× Wandering Archivist
+- 1× Mnemonic Operator
 
 ## Broad: Crimson Pilgrimage / Data Pulse — Event Interrupt Tempo
 
@@ -3800,7 +3800,7 @@ Tide-neu-06 is a character-dense discard engine built around accumulating a larg
 - 1× Threshold Seeker
 - 1× Pinnacle Ascendant
 - 1× Forgotten Sleeper
-- 1× Wandering Archivist
+- 1× Mnemonic Operator
 
 ## Broad: Guide of Lost Souls / Spirit of the Lightgrove — Abandon into Removal
 
@@ -4012,7 +4012,7 @@ Tide-neu-12 is a character-heavy deck (26 of 30 cards are characters) built arou
 - 1× Vault Infiltrator
 - 1× Winterbough Guide
 - 1× Epiphany Unfolded
-- 1× Ambush Operative
+- 1× Obliterator of Worlds
 - 1× Silent Observer
 - 1× Revered Prince
 - 1× Shattering Gambit
