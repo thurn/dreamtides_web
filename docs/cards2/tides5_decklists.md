@@ -130,7 +130,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Plunge into the Abyss
 - 1× Cost of Victory
 - 1× Exile
-- 1× Planetgazer
+- 1× Cloud Drifter
 - 1× Paradox Corps Enforcer
 - 1× Pyrokinetic Surge
 - 1× Haunted Mariner
@@ -437,7 +437,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Blight Weaver
 - 1× Defiant Holdout
 - 1× Spiral Offering
-- 1× Torchbearer of the Abyss
+- 1× Thought Merchant
 - 1× Gateweaver
 - 1× Aerie Defender
 - 1× Titan of Forgotten Echoes
@@ -648,7 +648,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 1× Kindred Sparks
 - 1× Blight Weaver
 - 1× Defiant Holdout
-- 1× Torchbearer of the Abyss
+- 1× Thought Merchant
 - 1× Exiles of the Last Light
 - 1× Soul Harvester
 - 1× Lurking Dread
@@ -883,7 +883,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 2× Vanishing Inquisitor
 - 2× Skysign
 - 2× Dark Lord's Champion
-- 2× Planetgazer
+- 2× Cloud Drifter
 - 2× Last Beacon
 - 2× Abyssal Deputy
 - 2× Mind's Door
@@ -986,7 +986,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 2× Vanishing Inquisitor
 - 2× Skysign
 - 2× Dark Lord's Champion
-- 2× Planetgazer
+- 2× Cloud Drifter
 - 2× Last Beacon
 - 2× Abyssal Deputy
 - 2× Mind's Door
@@ -1162,7 +1162,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Revelation Explorer
 - 1× Fractured Vessel
 - 1× Renounce Reality
-- 1× Torchbearer of the Abyss
+- 1× Thought Merchant
 - 1× Gateweaver
 - 1× Surge of Fury
 - 1× Aerie Defender
@@ -1195,7 +1195,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 2× Catastrophe Broker
 - 2× Pyrestone Avatar
 - 2× Annihilation from Below
-- 2× Torchbearer of the Abyss
+- 2× Thought Merchant
 - 2× Threshold Scout
 - 2× Pinnacle Ascendant
 - 2× Mnemonic Operator
@@ -1369,7 +1369,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Annihilation from Below
 - 1× Spiral Offering
 - 1× Renounce Reality
-- 1× Torchbearer of the Abyss
+- 1× Thought Merchant
 - 1× Cloudback Courier
 - 1× Gateweaver
 - 1× Trance Diviner
@@ -1641,7 +1641,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 1× Starsea Traveler
 - 1× Looming Oracle
 - 1× Reckless Vigilante
-- 1× Forgotten Factory Titan
+- 1× Ancient Battlesuit
 - 1× Paleclaw Panther
 - 1× Amythest Aurelia
 - 1× Ruin Scavenger
@@ -1725,7 +1725,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Looming Oracle
 - 1× Angel of the Eclipse
 - 1× Reckless Vigilante
-- 1× Forgotten Factory Titan
+- 1× Ancient Battlesuit
 - 1× Paleclaw Panther
 - 1× Amythest Aurelia
 - 1× Ruin Scavenger
@@ -2216,7 +2216,7 @@ Tide-fac-04 is built almost entirely around spirit animals, with 35 characters a
 - 1× Shadowpaw
 - 1× Angel of the Eclipse
 - 1× Celestial Reverie
-- 1× Forgotten Factory Titan
+- 1× Ancient Battlesuit
 - 1× Dreamborne Leviathan
 - 1× Sunshadow Eagle
 - 1× Blood Moon Triad
@@ -2286,7 +2286,7 @@ This tide splits evenly between characters and events, with its central engine b
 
 - 2× Defiant Parry
 - 2× Dark Lord's Champion
-- 2× Planetgazer
+- 2× Cloud Drifter
 - 2× Abyssal Deputy
 - 1× Fractured Veil
 - 1× Consumed Berserker
@@ -2333,7 +2333,7 @@ This tide splits evenly between characters and events, with its central engine b
 - 2× Consumed Berserker
 - 2× Impending Fury
 - 2× Dark Lord's Champion
-- 2× Planetgazer
+- 2× Cloud Drifter
 - 2× Last Beacon
 - 2× Abyssal Deputy
 - 2× Soul Channeling
@@ -2533,7 +2533,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 2× Sunrise Virtuoso
 - 2× Shaper of Memory
 - 2× Pyrestone Avatar
-- 2× Torchbearer of the Abyss
+- 2× Thought Merchant
 - 2× Pinnacle Ascendant
 - 1× Unleashed Destruction
 - 1× Fathomless Maw
@@ -2612,7 +2612,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Ash Harbinger
 - 1× Pattern Seeker
 - 1× Fractured Vessel
-- 1× Torchbearer of the Abyss
+- 1× Thought Merchant
 - 1× Aerie Defender
 - 1× Titan of Forgotten Echoes
 - 1× Threshold Scout
@@ -2959,7 +2959,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Annihilation from Below
 - 1× Spiral Offering
 - 1× Fractured Vessel
-- 1× Torchbearer of the Abyss
+- 1× Thought Merchant
 - 1× Cloudback Courier
 - 1× Gateweaver
 - 1× Wasteland Arbitrator
@@ -3166,7 +3166,7 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 
 - 2× Defiant Parry
 - 2× Dark Lord's Champion
-- 2× Planetgazer
+- 2× Cloud Drifter
 - 2× Abyssal Deputy
 - 1× Fractured Veil
 - 1× Consumed Berserker
@@ -3218,7 +3218,7 @@ This tide runs an even split of characters and events, with its mechanical ident
 - 2× Vanishing Inquisitor
 - 2× Skysign
 - 2× Dark Lord's Champion
-- 2× Planetgazer
+- 2× Cloud Drifter
 - 2× Last Beacon
 - 2× Abyssal Deputy
 - 2× Mind's Door
@@ -3357,7 +3357,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 2× Sunrise Virtuoso
 - 2× Shaper of Memory
 - 2× Pyrestone Avatar
-- 2× Torchbearer of the Abyss
+- 2× Thought Merchant
 - 2× Pinnacle Ascendant
 - 1× Unleashed Destruction
 - 1× Fathomless Maw
@@ -3435,7 +3435,7 @@ This tide is split between characters and events (22 characters, 23 events), wit
 - 1× Ash Harbinger
 - 1× Pattern Seeker
 - 1× Fractured Vessel
-- 1× Torchbearer of the Abyss
+- 1× Thought Merchant
 - 1× Aerie Defender
 - 1× Titan of Forgotten Echoes
 - 1× Threshold Scout
@@ -3847,7 +3847,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Pilgrim of Old Stones
 - 1× Resilient Wanderer
 - 1× Breach Artist
-- 1× Planetgazer
+- 1× Cloud Drifter
 - 1× Paradox Corps Enforcer
 - 1× Keeper of the Tides
 - 1× Light of Emergence
@@ -3918,7 +3918,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Pattern Seeker
 - 1× Annihilation from Below
 - 1× Fractured Vessel
-- 1× Torchbearer of the Abyss
+- 1× Thought Merchant
 - 1× Aerie Defender
 - 1× Pinnacle Ascendant
 - 1× Forgotten Sleeper

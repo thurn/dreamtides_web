@@ -1787,7 +1787,7 @@
       ]
     },
     "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4": {
-      "name": "Gearwright",
+      "name": "Synapse Engineer",
       "needs": [
         {
           "theme": "events",
@@ -2597,7 +2597,7 @@
       ]
     },
     "34ef6c0c-1a23-4870-a52c-90d34e9769be": {
-      "name": "Moonlit Dancer",
+      "name": "Minstrel of Falling Light",
       "needs": [
         {
           "theme": "events",
@@ -2953,7 +2953,7 @@
       ]
     },
     "8cb543d7-e70b-4526-b473-bb17dcaee2a7": {
-      "name": "Planetgazer",
+      "name": "Cloud Drifter",
       "needs": [],
       "supports": [
         "cheap-characters"
@@ -4362,7 +4362,7 @@
       ]
     },
     "b4838d67-f055-4fd3-a64d-0a4d2b6678cc": {
-      "name": "Torchbearer of the Abyss",
+      "name": "Thought Merchant",
       "needs": [
         {
           "theme": "discard",

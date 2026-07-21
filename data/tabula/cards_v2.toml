@@ -280,7 +280,7 @@ card-number = 15
 art = { x = -0.294, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Gearwright"
+name = "Synapse Engineer"
 mtg-name = "Jeskai Ascendancy"
 id = "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4"
 rendered-text = "When you play an event, draw a card, then discard a card."
@@ -291,10 +291,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Event Payoff", "Art Rework", "July21"]
-image-number = 730423171
+tags = ["Event Payoff", "Art Rework", "July21", "Art OK"]
+image-number = 686903233
 art-owned = false
 card-number = 16
+art = { x = 0, y = 0.489, scale = 1.47 }
 
 [[cards]]
 name = "Shadow Balladeer"
@@ -315,19 +316,19 @@ card-number = 17
 art = { x = 0, y = 0.798, scale = 1.17 }
 
 [[cards]]
-name = "Moonlit Dancer"
+name = "Minstrel of Falling Light"
 mtg-name = "Jeskai Ascendancy"
 id = "34ef6c0c-1a23-4870-a52c-90d34e9769be"
 rendered-text = "When you play an event, characters you control gain +1✦ until end of turn."
 energy-cost = 1
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Musician"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Event Payoff", "Art Rework", "July21", "Ally Audit"]
-image-number = 1790126252
+tags = ["Event Payoff", "Art Rework", "July21", "Ally Audit", "Art OK"]
+image-number = 1794244540
 art-owned = false
 card-number = 18
 
@@ -4773,7 +4774,7 @@ card-number = 255
 art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Torchbearer of the Abyss"
+name = "Thought Merchant"
 mtg-name = "Monument to Endurance"
 id = "b4838d67-f055-4fd3-a64d-0a4d2b6678cc"
 rendered-text = "Once per turn, when you discard a card, draw a card and gain 1●."
@@ -4784,11 +4785,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "July21"]
-image-number = 695511787
+tags = ["Art Rework", "July21", "Art OK"]
+image-number = 2155438711
 art-owned = true
 card-number = 256
-art = { x = -0.462, y = 0.369, scale = 1.17 }
+art = { x = -0.002, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Crescent Dancer"
@@ -6704,7 +6705,7 @@ card-number = 358
 art = { x = 0.192, y = 1, scale = 1.1 }
 
 [[cards]]
-name = "Planetgazer"
+name = "Cloud Drifter"
 mtg-name = "Faerie Seer"
 id = "8cb543d7-e70b-4526-b473-bb17dcaee2a7"
 rendered-text = """
@@ -6713,15 +6714,16 @@ rendered-text = """
 ❖ – 1●: Move this character to an unoccupied character position."""
 energy-cost = 1
 card-type = "Character"
-subtype = "Child"
+subtype = "Explorer"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July21"]
-image-number = 313784345
+tags = ["Art Rework", "July21", "Art OK"]
+image-number = 316023017
 art-owned = false
 card-number = 359
+art = { x = -0.07, y = 0.897, scale = 1.07 }
 
 [[cards]]
 name = "God of the Veil"
@@ -8257,7 +8259,7 @@ art-owned = false
 card-number = 440
 
 [[cards]]
-name = "Forgotten Factory Titan"
+name = "Ancient Battlesuit"
 mtg-name = "Kor Skyfisher"
 id = "cc1c1acd-f0ff-46cc-94d9-401b9daf253f"
 rendered-text = """
@@ -8270,11 +8272,12 @@ subtype = "Synth"
 rarity = ""
 is-fast = false
 is-interrupt = false
-spark = 2
-tags = ["ETB Bounce", "Art Rework", "July21", "Ally Audit"]
+spark = 3
+tags = ["ETB Bounce", "Art Rework", "July21", "Ally Audit", "Art OK"]
 image-number = 539227192
 art-owned = false
 card-number = 441
+art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "The Power Within"
