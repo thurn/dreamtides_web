@@ -193,6 +193,11 @@ function withOpponentCardPlayed(
     ...battle,
     enemyHandCardIds: battle.enemyHandCardIds.filter((id) => id !== card.id),
     enemyHand: battle.enemyHand.filter((candidate) => candidate.id !== card.id),
+    farHand: {
+      ...battle.farHand,
+      cardIds: battle.farHand.cardIds.filter((id) => id !== card.id),
+      cards: battle.farHand.cards.filter((candidate) => candidate.id !== card.id),
+    },
     enemy: { ...battle.enemy, backRank },
     inspector: {
       ...battle.inspector,
@@ -838,6 +843,10 @@ export function TutorialScreen({
         ? {}
         : {
             enemyHandCardIds: [...sourceBattle.enemyHandCardIds, drawnCardId],
+            farHand: {
+              ...sourceBattle.farHand,
+              cardIds: [...sourceBattle.farHand.cardIds, drawnCardId],
+            },
             enemy: {
               ...sourceBattle.enemy,
               ...(enemySettled

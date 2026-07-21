@@ -155,7 +155,7 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
       const playerStatus = props.view.player?.status;
       return (
         <div data-battle-mobile={props.view.battleId}>
-          {(props.view.enemyHandCardIds ?? []).map((cardId) => (
+          {(props.view.farHand?.cardIds ?? []).map((cardId) => (
             <div
               key={cardId}
               data-battle-card-id={cardId}
@@ -699,6 +699,12 @@ describe("TutorialScreen", () => {
                 battleId: "tutorial-battle",
                 enemyHandCardIds: [],
                 enemyHand: [],
+                farHand: {
+                  owner: "enemy",
+                  position: "far",
+                  cardIds: [],
+                  cards: [],
+                },
                 enemy: {
                   deckCardIds: [
                     "tutorial-enemy-deck-1",
@@ -724,6 +730,7 @@ describe("TutorialScreen", () => {
       "tutorial-enemy-deck-2",
     ]);
     expect(screenMocks.props?.view.enemyHandCardIds).toEqual([]);
+    expect(screenMocks.props?.view.farHand.cardIds).toEqual([]);
 
     act(() => screenMocks.sceneAnimationComplete?.());
 
@@ -731,6 +738,9 @@ describe("TutorialScreen", () => {
       "tutorial-enemy-deck-2",
     ]);
     expect(screenMocks.props?.view.enemyHandCardIds).toEqual([
+      "tutorial-enemy-deck-1",
+    ]);
+    expect(screenMocks.props?.view.farHand.cardIds).toEqual([
       "tutorial-enemy-deck-1",
     ]);
     expect(screenMocks.props?.view.enemyHand).toEqual([]);
@@ -839,6 +849,12 @@ describe("TutorialScreen", () => {
                 battleId: "tutorial-battle",
                 enemyHandCardIds: [TUTORIAL_OPPONENT_CARD.id],
                 enemyHand: [TUTORIAL_OPPONENT_CARD],
+                farHand: {
+                  owner: "enemy",
+                  position: "far",
+                  cardIds: [TUTORIAL_OPPONENT_CARD.id],
+                  cards: [TUTORIAL_OPPONENT_CARD],
+                },
                 enemy: emptySide("enemy"),
                 player: emptySide("player"),
                 inspector: {
@@ -904,6 +920,10 @@ describe("TutorialScreen", () => {
     });
 
     expect(screenMocks.props?.view.enemyHandCardIds).toEqual([]);
+    expect(screenMocks.props?.view.farHand).toMatchObject({
+      cardIds: [],
+      cards: [],
+    });
     expect(screenMocks.props?.view.enemy.backRank[4]?.card?.model.cardId).toBe(
       "229ab3a1-3720-41a2-924c-8fe112188f8e",
     );
