@@ -159,7 +159,7 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
             <div
               key={cardId}
               data-battle-card-id={cardId}
-              data-battle-card-zone="enemy-hand"
+              data-battle-card-zone="far-hand"
             />
           ))}
           <div data-battle-rank="enemy-back">
@@ -771,7 +771,7 @@ describe("TutorialScreen", () => {
         if (this.matches("[data-tutorial-screen]")) {
           return DOMRect.fromRect({ width: 1920, height: 1080 });
         }
-        if (this.matches('[data-battle-card-zone="enemy-hand"]')) {
+        if (this.matches('[data-battle-card-zone="far-hand"]')) {
           return DOMRect.fromRect({ x: 931, y: 0, width: 58, height: 81.2 });
         }
         const slotId = this.dataset.battleSlotId;
@@ -894,7 +894,7 @@ describe("TutorialScreen", () => {
     ).not.toBeNull();
     expect(
       container.querySelector<HTMLElement>(
-        '[data-battle-card-zone="enemy-hand"]',
+        '[data-battle-card-zone="far-hand"]',
       )?.style.visibility,
     ).toBe("hidden");
 

@@ -459,7 +459,7 @@ function TutorialOpponentCardPlay({
   useLayoutEffect(() => {
     const source = [
       ...screen.querySelectorAll<HTMLElement>(
-        '[data-battle-card-zone="enemy-hand"][data-battle-card-id]',
+        '[data-battle-card-zone="far-hand"][data-battle-card-id]',
       ),
     ].find((element) => element.dataset.battleCardId === card.id);
     const enemyFront = [
