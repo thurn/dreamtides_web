@@ -365,7 +365,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 2× Twice-Lit Portal
 - 2× Seek Answers
 - 2× Annihilation from Below
-- 2× Rubble Diviner
+- 2× Threshold Scout
 - 2× Pinnacle Ascendant
 - 2× Mnemonic Operator
 - 1× Unleashed Destruction
@@ -644,7 +644,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 1× Shadowcaller
 - 1× Key Sifter
 - 1× The Rising God
-- 1× Rubble Diviner
+- 1× Threshold Scout
 - 1× Vessel of Echoes
 - 1× Threshold Seeker
 - 1× Return to Nowhere
@@ -744,7 +744,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Shadowcaller
 - 1× Silent Mourner
 - 1× Ruin Scavenger
-- 1× Rubble Diviner
+- 1× Threshold Scout
 - 1× Evacuation Enforcer
 - 1× Vessel of Echoes
 - 1× Threshold Seeker
@@ -1255,7 +1255,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Flash of Power
 - 1× Thornwood Delver
 - 1× Simulacra
-- 1× Rubble Diviner
+- 1× Threshold Scout
 - 1× Echoes of Eternity
 - 1× Evacuation Enforcer
 - 1× Threshold Seeker
@@ -1289,7 +1289,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 2× Starcatcher
 - 2× Trance Diviner
 - 2× Arc Gate Opening
-- 2× Rubble Diviner
+- 2× Threshold Scout
 - 2× Mnemonic Operator
 - 2× Entropy Cascade
 - 1× Unleashed Destruction
@@ -1777,7 +1777,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Worldbreacher
 - 1× Ash Sower
 - 1× Young Huntress
-- 1× Voidsire
+- 1× Battle Herald
 - 1× Vault Infiltrator
 - 1× Epiphany Unfolded
 - 1× Shapeshifter Spirit
@@ -1874,7 +1874,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 1× Crescendo Channeler
 - 1× Prophet of the Consumed
 - 1× Worldbreacher
-- 1× Voidsire
+- 1× Battle Herald
 - 1× Vault Infiltrator
 - 1× Shapeshifter Spirit
 - 1× Riftwalker
@@ -1964,7 +1964,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× Aurora Rider
 - 1× Prophet of the Consumed
 - 1× Worldbreacher
-- 1× Voidsire
+- 1× Battle Herald
 - 1× Vault Infiltrator
 - 1× Bloodbroker
 - 1× Riftwalker
@@ -2464,7 +2464,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Aerie Defender
 - 1× Flash of Power
 - 1× Key Sifter
-- 1× Rubble Diviner
+- 1× Threshold Scout
 - 1× Door to Possibility
 - 1× Pinnacle Ascendant
 - 1× Mnemonic Operator
@@ -2503,7 +2503,7 @@ Tide-fac-30 is built almost entirely around spirit animal characters (36 of 45 c
 - 1× Dreadmount Sovereign
 - 1× Aurora Rider
 - 1× Young Huntress
-- 1× Voidsire
+- 1× Battle Herald
 - 1× Winterbough Guide
 - 1× Shapeshifter Spirit
 - 1× Bloodbroker
@@ -2651,7 +2651,7 @@ This tide is almost entirely characters (43 of 45 copies), with warriors making 
 - 1× Company Commander
 - 1× Crescendo Channeler
 - 1× Young Huntress
-- 1× Voidsire
+- 1× Battle Herald
 - 1× Vault Infiltrator
 - 1× Winterbough Guide
 - 1× Shapeshifter Spirit
@@ -2708,7 +2708,7 @@ This tide is almost entirely warriors (43 of 45 cards) built around a tight loop
 - 1× Aurora Rider
 - 1× Worldbreacher
 - 1× Young Huntress
-- 1× Voidsire
+- 1× Battle Herald
 - 1× Winterbough Guide
 - 1× Bloodbroker
 - 1× Riftwalker
@@ -3317,7 +3317,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 1× Fractured Vessel
 - 1× Wasteland Arbitrator
 - 1× Key Sifter
-- 1× Rubble Diviner
+- 1× Threshold Scout
 - 1× Evacuation Enforcer
 - 1× Threshold Seeker
 - 1× Skies of Change
@@ -3374,7 +3374,7 @@ This tide is split between characters and events (22 characters, 23 events), wit
 - 1× Aerie Defender
 - 1× Flash of Power
 - 1× Key Sifter
-- 1× Rubble Diviner
+- 1× Threshold Scout
 - 1× Door to Possibility
 - 1× Oracle of Shifting Skies
 - 1× Pinnacle Ascendant
@@ -3414,7 +3414,7 @@ This is a 43-character warrior tide with only two events, so its card flow and r
 - 1× Crescendo Channeler
 - 1× Aurora Rider
 - 1× Young Huntress
-- 1× Voidsire
+- 1× Battle Herald
 - 1× Vault Infiltrator
 - 1× Winterbough Guide
 - 1× Bloodbroker
@@ -3573,7 +3573,7 @@ This is a character-heavy discard engine (35 characters, 10 events) whose lean a
 - 1× Wasteland Arbitrator
 - 1× Aerie Defender
 - 1× Key Sifter
-- 1× Rubble Diviner
+- 1× Threshold Scout
 - 1× Threshold Seeker
 - 1× Oracle of Shifting Skies
 - 1× Pinnacle Ascendant
@@ -3795,7 +3795,7 @@ Tide-neu-06 is a character-dense discard engine built around accumulating a larg
 - 1× Pattern Seeker
 - 1× Torchbearer of the Abyss
 - 1× Aerie Defender
-- 1× Rubble Diviner
+- 1× Threshold Scout
 - 1× Evacuation Enforcer
 - 1× Threshold Seeker
 - 1× Pinnacle Ascendant

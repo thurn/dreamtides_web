@@ -3226,7 +3226,7 @@
       ]
     },
     "d1c25546-dcf2-481e-8f00-9afef3adf24b": {
-      "name": "Rubble Diviner",
+      "name": "Threshold Scout",
       "needs": [],
       "supports": [
         "discard"
@@ -4663,7 +4663,7 @@
       ]
     },
     "90a6a7a0-b739-475e-8379-647741aab423": {
-      "name": "Voidsire",
+      "name": "Battle Herald",
       "needs": [
         {
           "theme": "warriors",

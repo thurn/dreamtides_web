@@ -564,15 +564,16 @@ id = "4124a05c-b6dd-4334-b202-59fa17d77668"
 rendered-text = "When you discard a card, this character gains +1✦."
 energy-cost = 1
 card-type = "Character"
-subtype = "Renegade"
+subtype = "Warrior"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July21"]
+tags = ["Art Rework", "July21", "Art OK"]
 image-number = 1791664445
 art-owned = false
 card-number = 31
+art = { x = 0, y = -0.236, scale = 1.87 }
 
 [[cards]]
 name = "Cloudstrider"
@@ -1530,21 +1531,22 @@ card-number = 81
 art = { x = 0, y = 1, scale = 1.36 }
 
 [[cards]]
-name = "Voidsire"
+name = "Battle Herald"
 mtg-name = "Sai, Master Thopterist"
 id = "90a6a7a0-b739-475e-8379-647741aab423"
 rendered-text = "When you play a warrior, materialize a 1✦ warrior figment."
 energy-cost = 3
 card-type = "Character"
-subtype = "Ancient"
+subtype = "Emissary"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Figment Maker", "Art Rework", "July21"]
-image-number = 2186149281
+tags = ["Figment Maker", "Art Rework", "July21", "Art OK"]
+image-number = 309018608
 art-owned = false
 card-number = 82
+art = { x = 0.206, y = -0.374, scale = 2.57 }
 
 [[cards]]
 name = "Pilgrim of Old Stones"
@@ -8651,7 +8653,7 @@ rendered-text = """
 When you discard a card, gain 1⍟."""
 energy-cost = 3
 card-type = "Character"
-subtype = "Explorer"
+subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
@@ -8663,21 +8665,22 @@ card-number = 462
 art = { x = -0.086, y = 1, scale = 1.1 }
 
 [[cards]]
-name = "Rubble Diviner"
+name = "Threshold Scout"
 mtg-name = "Glint-Horn Buccaneer"
 id = "d1c25546-dcf2-481e-8f00-9afef3adf24b"
 rendered-text = "▸Challenge: You may pay 2● and discard a card to draw two cards."
 energy-cost = 3
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Explorer"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "July21"]
-image-number = 2218612335
+tags = ["Art Rework", "July21", "Art OK"]
+image-number = 772547359
 art-owned = false
 card-number = 463
+art = { x = 0, y = -0.478, scale = 1.67 }
 
 [[cards]]
 name = "Veilpiercer"
